@@ -58,7 +58,7 @@ module dmac_data_mover (
 	output m_axi_last,
 
 	input req_valid,
-	output reg req_ready,
+	output req_ready,
 	input [3:0] req_last_burst_length
 );
 
@@ -72,19 +72,24 @@ reg [3:0] last_burst_length;
 reg [C_ID_WIDTH-1:0] id = 'h00;
 reg [C_ID_WIDTH-1:0] id_next;
 reg [3:0] beat_counter = 'h00;
-wire [3:0] beat_counter_next;
 wire last;
+wire last_load;
 reg pending_burst;
+reg active;
 
 assign response_id = id;
 
-assign beat_counter_next = s_axi_ready && s_axi_valid ? beat_counter + 1'b1 : beat_counter;
 assign last = beat_counter == (eot ? last_burst_length : 4'hf);
 
-assign s_axi_ready = m_axi_ready & pending_burst & ~req_ready;
-assign m_axi_valid = s_axi_valid & pending_burst & ~req_ready;
+assign s_axi_ready = m_axi_ready & pending_burst & active;
+assign m_axi_valid = s_axi_valid & pending_burst & active;
 assign m_axi_data = s_axi_data;
 assign m_axi_last = last;
+
+// If we want to support zero delay between transfers we have to assert
+// req_ready on the same cycle on which the last load happens.
+assign last_load = s_axi_ready && s_axi_valid && last && eot;
+assign req_ready = last_load || ~active;
 
 always @(posedge clk) begin
 	if (resetn == 1'b0) begin
@@ -111,20 +116,31 @@ end
 always @(posedge clk) begin
 	if (resetn == 1'b0) begin
 		beat_counter <= 'h0;
-		req_ready <= 1'b1;
+	end else begin
+		if (req_ready && req_valid) begin
+			beat_counter <= 'h0;
+		end else if (s_axi_ready && s_axi_valid) begin
+			beat_counter <= beat_counter + 1'b1;
+		end
+	end
+end
+
+always @(posedge clk) begin
+	if (req_ready && req_valid) begin
+		last_burst_length <= req_last_burst_length;
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		active <= 1'b0;
 	end else begin
 		if (~enabled) begin
-			req_ready <= 1'b1;
-		end else if (req_ready) begin
-			if (req_valid && enabled) begin
-				last_burst_length <= req_last_burst_length;
-				req_ready <= 1'b0;
-				beat_counter <= 'h0;
-			end
-		end else if (s_axi_ready && s_axi_valid) begin
-			if (last && eot)
-				req_ready <= 1'b1;
-			beat_counter <= beat_counter + 1'b1;
+			active <= 1'b0;
+		end else if (req_ready && req_valid) begin
+			active <= 1'b1;
+		end else if (last_load) begin
+			active <= 1'b0;
 		end
 	end
 end
@@ -141,6 +157,7 @@ end
 always @(posedge clk) begin
 	if (resetn == 1'b0) begin
 		id <= 'h0;
+		pending_burst <= 1'b0;
 	end else begin
 		id <= id_next;
 		pending_burst <= id_next != request_id;
