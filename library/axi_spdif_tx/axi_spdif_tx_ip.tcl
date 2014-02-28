@@ -1,13 +1,14 @@
 # ip
 
-source ../scripts/adi_ip.tcl
+source ../scripts/adi_env.tcl
+source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_spdif_tx
 adi_ip_files axi_spdif_tx [list \
-  "../common/axi_ctrlif.vhd" \
-  "../common/axi_streaming_dma_tx_fifo.vhd" \
-  "../common/pl330_dma_fifo.vhd" \
-  "../common/dma_fifo.vhd" \
+  "$ad_hdl_dir/library/common/axi_ctrlif.vhd" \
+  "$ad_hdl_dir/library/common/axi_streaming_dma_tx_fifo.vhd" \
+  "$ad_hdl_dir/library/common/pl330_dma_fifo.vhd" \
+  "$ad_hdl_dir/library/common/dma_fifo.vhd" \
   "tx_package.vhd" \
   "tx_encoder.vhd" \
   "axi_spdif_tx.vhd" ]

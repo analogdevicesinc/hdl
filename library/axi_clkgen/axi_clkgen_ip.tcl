@@ -1,14 +1,15 @@
 # ip
 
-source ../scripts/adi_ip.tcl
+source ../scripts/adi_env.tcl
+source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_clkgen
 adi_ip_files axi_clkgen [list \
-  "../common/ad_rst.v" \
-  "../common/ad_mmcm_drp.v" \
-  "../common/up_axi.v" \
-  "../common/up_drp_cntrl.v" \
-  "../common/up_clkgen.v" \
+  "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/common/ad_mmcm_drp.v" \
+  "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/common/up_drp_cntrl.v" \
+  "$ad_hdl_dir/library/common/up_clkgen.v" \
   "axi_clkgen.v" ]
 
 adi_ip_properties axi_clkgen

@@ -1,21 +1,22 @@
 # ip
 
-source ../scripts/adi_ip.tcl
+source ../scripts/adi_env.tcl
+source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_hdmi_tx
 adi_ip_files axi_hdmi_tx [list \
-  "../common/ad_mem.v" \
-  "../common/ad_rst.v" \
-  "../common/ad_csc_1_mul.v" \
-  "../common/ad_csc_1_add.v" \
-  "../common/ad_csc_1.v" \
-  "../common/ad_csc_RGB2CrYCb.v" \
-  "../common/ad_ss_444to422.v" \
-  "../common/up_axi.v" \
-  "../common/up_xfer_cntrl.v" \
-  "../common/up_xfer_status.v" \
-  "../common/up_clock_mon.v" \
-  "../common/up_hdmi_tx.v" \
+  "$ad_hdl_dir/library/common/ad_mem.v" \
+  "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/common/ad_csc_1_mul.v" \
+  "$ad_hdl_dir/library/common/ad_csc_1_add.v" \
+  "$ad_hdl_dir/library/common/ad_csc_1.v" \
+  "$ad_hdl_dir/library/common/ad_csc_RGB2CrYCb.v" \
+  "$ad_hdl_dir/library/common/ad_ss_444to422.v" \
+  "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
+  "$ad_hdl_dir/library/common/up_xfer_status.v" \
+  "$ad_hdl_dir/library/common/up_clock_mon.v" \
+  "$ad_hdl_dir/library/common/up_hdmi_tx.v" \
   "axi_hdmi_tx_vdma.v" \
   "axi_hdmi_tx_core.v" \
   "axi_hdmi_tx.v" ]
