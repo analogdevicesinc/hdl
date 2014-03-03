@@ -2,6 +2,9 @@
 
 proc adi_project_create {project_name} {
 
+  global ad_hdl_dir
+  global ad_phdl_dir
+
   set project_part "none"
   set project_board "none"
 
@@ -34,7 +37,13 @@ proc adi_project_create {project_name} {
 
   create_project $project_name . -part $project_part -force
   set_property board $project_board [current_project]
-  set_property ip_repo_paths ../../../library [current_fileset]
+
+  set lib_dirs $ad_hdl_dir/library
+  if {$ad_hdl_dir ne $ad_phdl_dir} {
+    lappend lib_dirs $ad_phdl_dir/library
+  }
+
+  set_property ip_repo_paths $lib_dirs [current_fileset]
   update_ip_catalog
 
   create_bd_design "system"
@@ -47,11 +56,17 @@ proc adi_project_create {project_name} {
 
 proc adi_project_files {project_name project_files} {
 
+  global ad_hdl_dir
+  global ad_phdl_dir
+
   add_files -norecurse -fileset sources_1 $project_files
   set_property top system_top [current_fileset]
 }
 
 proc adi_project_run {project_name} {
+
+  global ad_hdl_dir
+  global ad_phdl_dir
 
   set project_system_dir "./$project_name.srcs/sources_1/bd/system"
 
