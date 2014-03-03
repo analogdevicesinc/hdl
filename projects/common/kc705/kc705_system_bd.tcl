@@ -89,7 +89,7 @@ set proc_const_vcc_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0
 
 set axi_ddr_cntrl_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.0 axi_ddr_cntrl_1]
 set axi_ddr_cntrl_1_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl_1]]]
-file copy -force ../../scripts/kc705_system_mig.prj "$axi_ddr_cntrl_1_dir/"
+file copy -force $ad_hdl_dir/projects/common/kc705/kc705_system_mig.prj "$axi_ddr_cntrl_1_dir/"
 set_property -dict [list CONFIG.XML_INPUT_FILE {kc705_system_mig.prj}] $axi_ddr_cntrl_1
 set_property -dict [list CONFIG.RESET_BOARD_INTERFACE {Custom}] $axi_ddr_cntrl_1
 
