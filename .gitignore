@@ -1,0 +1,10 @@
+*.data
+*.xpr
+*.log
+component.xml
+*.jou
+xgui
+*.runs
+*.srcs
+*.sdk
+.Xil
