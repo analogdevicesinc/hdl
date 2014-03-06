@@ -4,12 +4,11 @@ set sys_clk_p       [create_bd_port -dir I sys_clk_p]
 set sys_clk_n       [create_bd_port -dir I sys_clk_n]
 set fan_pwm         [create_bd_port -dir O fan_pwm]
 
-set ddr3_1_p        [create_bd_port -dir O -from 1 -to 0 ddr3_1_p]
-set ddr3_1_n        [create_bd_port -dir O -from 2 -to 0 ddr3_1_n]
 set ddr3            [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr3]
 
-set mdio            [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_rtl:1.0 mdio]
-set mii             [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mii_rtl:1.0 mii]
+set phy_rst_n       [create_bd_port -dir O -type rst phy_rst_n]
+set mdio            [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_io:1.0 mdio]
+set rgmii           [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:rgmii_rtl:1.0 rgmii]
 
 set gpio_sw         [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_sw]
 set gpio_led        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_led]
@@ -25,7 +24,7 @@ set hdmi_out_clk    [create_bd_port -dir O hdmi_out_clk]
 set hdmi_hsync      [create_bd_port -dir O hdmi_hsync]
 set hdmi_vsync      [create_bd_port -dir O hdmi_vsync]
 set hdmi_data_e     [create_bd_port -dir O hdmi_data_e]
-set hdmi_data       [create_bd_port -dir O -from 15 -to 0 hdmi_data]
+set hdmi_data       [create_bd_port -dir O -from 23 -to 0 hdmi_data]
 
 # spdif audio
 
@@ -83,16 +82,8 @@ set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sy
 
 set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.0 axi_ddr_cntrl]
 set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
-file copy -force $ad_hdl_dir/projects/common/kc705/kc705_system_mig.prj "$axi_ddr_cntrl_dir/"
-set_property -dict [list CONFIG.XML_INPUT_FILE {kc705_system_mig.prj}] $axi_ddr_cntrl
-
-set sys_const_ddr3_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sys_const_ddr3_0]
-set_property -dict [list CONFIG.CONST_WIDTH {3}] $sys_const_ddr3_0
-set_property -dict [list CONFIG.CONST_VAL {0}] $sys_const_ddr3_0
-
-set sys_const_ddr3_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sys_const_ddr3_1]
-set_property -dict [list CONFIG.CONST_WIDTH {2}] $sys_const_ddr3_1
-set_property -dict [list CONFIG.CONST_VAL {1}] $sys_const_ddr3_1
+file copy -force $ad_hdl_dir/projects/common/ac701/ac701_system_mig.prj "$axi_ddr_cntrl_dir/"
+set_property -dict [list CONFIG.XML_INPUT_FILE {ac701_system_mig.prj}] $axi_ddr_cntrl
 
 # instance: axi interconnect (lite)
 
@@ -109,10 +100,17 @@ set_property -dict [list CONFIG.XBAR_DATA_WIDTH {512}] $axi_mem_interconnect
 
 # instance: default peripherals
 
-set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernetlite:2.0 axi_ethernet]
-set_property -dict [list CONFIG.USE_BOARD_FLOW {true}] $axi_ethernet
-set_property -dict [list CONFIG.MII_BOARD_INTERFACE {mii}] $axi_ethernet
-set_property -dict [list CONFIG.MDIO_BOARD_INTERFACE {mdio_mdc}] $axi_ethernet
+set sys_ethernet_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 sys_ethernet_clkgen]
+set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_ethernet_clkgen
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {125.000}] $sys_ethernet_clkgen
+
+set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.0 axi_ethernet]
+set_property -dict [list CONFIG.PHY_TYPE {RGMII}] $axi_ethernet
+
+set axi_ethernet_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_ethernet_dma]
+set_property -dict [list CONFIG.c_include_mm2s_dre {1}] $axi_ethernet_dma
+set_property -dict [list CONFIG.c_sg_use_stsapp_length {1}] $axi_ethernet_dma
+set_property -dict [list CONFIG.c_include_s2mm_dre {1}] $axi_ethernet_dma
 
 set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
 
@@ -128,7 +126,7 @@ set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_lcd
 set axi_gpio_sw_led [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_sw_led]
 set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio_sw_led
 set_property -dict [list CONFIG.C_GPIO_WIDTH {9}] $axi_gpio_sw_led
-set_property -dict [list CONFIG.C_GPIO2_WIDTH {8}] $axi_gpio_sw_led
+set_property -dict [list CONFIG.C_GPIO2_WIDTH {4}] $axi_gpio_sw_led
 set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_sw_led
 
 # instance: interrupt
@@ -137,7 +135,7 @@ set axi_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_intc]
 set_property -dict [list CONFIG.C_HAS_FAST {0}] $axi_intc
 
 set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {8}] $sys_concat_intc
+set_property -dict [list CONFIG.NUM_PORTS {10}] $sys_concat_intc
 
 # hdmi peripherals
 
@@ -200,8 +198,8 @@ connect_bd_net -net axi_ddr_cntrl_mmcm_locked [get_bd_pins axi_ddr_cntrl/mmcm_lo
 
 set sys_100m_resetn_source [get_bd_pins sys_rstgen/peripheral_aresetn]
 set sys_200m_resetn_source [get_bd_pins sys_rstgen/interconnect_aresetn]
-set sys_100m_clk_source [get_bd_pins axi_ddr_cntrl/ui_addn_clk_0]
-set sys_200m_clk_source [get_bd_pins axi_ddr_cntrl/ui_clk]
+set sys_100m_clk_source [get_bd_pins axi_ddr_cntrl/ui_clk]
+set sys_200m_clk_source [get_bd_pins axi_ddr_cntrl/ui_addn_clk_0]
 
 connect_bd_net -net sys_100m_resetn $sys_100m_resetn_source
 connect_bd_net -net sys_200m_resetn $sys_200m_resetn_source
@@ -209,19 +207,20 @@ connect_bd_net -net sys_100m_clk $sys_100m_clk_source
 connect_bd_net -net sys_200m_clk $sys_200m_clk_source
 
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_200m_resetn [get_bd_pins axi_mem_interconnect/ARESETN] $sys_200m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/ACLK] $sys_200m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/ACLK] $sys_100m_clk_source
 
 connect_bd_net -net sys_100m_resetn [get_bd_pins sys_mb_debug/S_AXI_ARESETN] 
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ddr_cntrl/aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ethernet/s_axi_aresetn] 
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ethernet/s_axi_lite_resetn] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_uart/s_axi_aresetn] 
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_timer/s_axi_aresetn] 
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_intc/s_axi_aresetn] 
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_gpio_lcd/s_axi_aresetn] 
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_gpio_sw_led/s_axi_aresetn] 
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_iic_main/s_axi_aresetn] 
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ethernet_dma/axi_resetn] 
 
 connect_bd_net -net sys_100m_clk [get_bd_pins sys_rstgen/slowest_sync_clk] 
 connect_bd_net -net sys_100m_clk [get_bd_pins sys_mb/Clk] 
@@ -230,13 +229,20 @@ connect_bd_net -net sys_100m_clk [get_bd_pins sys_dlmb/LMB_Clk]
 connect_bd_net -net sys_100m_clk [get_bd_pins sys_ilmb/LMB_Clk] 
 connect_bd_net -net sys_100m_clk [get_bd_pins sys_dlmb_cntlr/LMB_Clk] 
 connect_bd_net -net sys_100m_clk [get_bd_pins sys_ilmb_cntlr/LMB_Clk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ethernet/s_axi_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ethernet/s_axi_lite_clk] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ethernet/axis_clk] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ethernet_dma/m_axi_sg_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ethernet_dma/m_axi_mm2s_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ethernet_dma/m_axi_s2mm_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ethernet_dma/s_axi_lite_aclk] 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_uart/s_axi_aclk] 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_timer/s_axi_aclk] 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_intc/s_axi_aclk] 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_gpio_lcd/s_axi_aclk] 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_gpio_sw_led/s_axi_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_iic_main/s_axi_aclk] 
+
+connect_bd_net -net sys_200m_clk [get_bd_pins axi_ethernet/ref_clk] $sys_200m_clk_source
 
 # defaults (interconnect - processor)
 
@@ -249,6 +255,7 @@ connect_bd_intf_net -intf_net axi_cpu_interconnect_m04 [get_bd_intf_pins axi_cpu
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m05 [get_bd_intf_pins axi_cpu_interconnect/M05_AXI] [get_bd_intf_pins axi_gpio_lcd/s_axi]
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m06 [get_bd_intf_pins axi_cpu_interconnect/M06_AXI] [get_bd_intf_pins axi_gpio_sw_led/s_axi]
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m07 [get_bd_intf_pins axi_cpu_interconnect/M07_AXI] [get_bd_intf_pins axi_iic_main/s_axi]
+connect_bd_intf_net -intf_net axi_cpu_interconnect_m13 [get_bd_intf_pins axi_cpu_interconnect/M13_AXI] [get_bd_intf_pins axi_ethernet_dma/S_AXI_LITE]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/S00_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M00_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M01_ARESETN] $sys_100m_resetn_source
@@ -275,31 +282,51 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M13_ACLK] $sy
 connect_bd_intf_net -intf_net axi_mem_interconnect_m00 [get_bd_intf_pins axi_mem_interconnect/M00_AXI] [get_bd_intf_pins axi_ddr_cntrl/S_AXI]
 connect_bd_intf_net -intf_net axi_mem_interconnect_s00 [get_bd_intf_pins axi_mem_interconnect/S00_AXI] [get_bd_intf_pins sys_mb/M_AXI_DC]
 connect_bd_intf_net -intf_net axi_mem_interconnect_s01 [get_bd_intf_pins axi_mem_interconnect/S01_AXI] [get_bd_intf_pins sys_mb/M_AXI_IC]
-connect_bd_net -net sys_200m_resetn [get_bd_pins axi_mem_interconnect/M00_ARESETN] $sys_200m_resetn_source
+connect_bd_intf_net -intf_net axi_mem_interconnect_s05 [get_bd_intf_pins axi_mem_interconnect/S05_AXI] [get_bd_intf_pins axi_ethernet_dma/M_AXI_SG]
+connect_bd_intf_net -intf_net axi_mem_interconnect_s06 [get_bd_intf_pins axi_mem_interconnect/S06_AXI] [get_bd_intf_pins axi_ethernet_dma/M_AXI_MM2S]
+connect_bd_intf_net -intf_net axi_mem_interconnect_s07 [get_bd_intf_pins axi_mem_interconnect/S07_AXI] [get_bd_intf_pins axi_ethernet_dma/M_AXI_S2MM]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/M00_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S00_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S01_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S05_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S06_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S07_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/M00_ACLK] $sys_200m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/M00_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S00_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S01_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S05_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S06_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S07_ACLK] $sys_100m_clk_source
 
+# ethernet & ethernet dma
+
+connect_bd_net -net sys_200m_clk [get_bd_pins sys_ethernet_clkgen/clk_in1]
+connect_bd_net -net sys_ethernet_clkgen_clk [get_bd_pins sys_ethernet_clkgen/clk_out1] [get_bd_pins axi_ethernet/gtx_clk]
+
+connect_bd_net -net axi_ethernet_dma_txd_rstn [get_bd_pins axi_ethernet/axi_txd_arstn] [get_bd_pins axi_ethernet_dma/mm2s_prmry_reset_out_n]
+connect_bd_net -net axi_ethernet_dma_txc_rstn [get_bd_pins axi_ethernet/axi_txc_arstn] [get_bd_pins axi_ethernet_dma/mm2s_cntrl_reset_out_n]
+connect_bd_net -net axi_ethernet_dma_rxd_rstn [get_bd_pins axi_ethernet/axi_rxd_arstn] [get_bd_pins axi_ethernet_dma/s2mm_prmry_reset_out_n]
+connect_bd_net -net axi_ethernet_dma_rxs_rstn [get_bd_pins axi_ethernet/axi_rxs_arstn] [get_bd_pins axi_ethernet_dma/s2mm_sts_reset_out_n]
+
+connect_bd_intf_net -intf_net axi_ethernet_dma_txd [get_bd_intf_pins axi_ethernet/s_axis_txd] [get_bd_intf_pins axi_ethernet_dma/M_AXIS_MM2S]
+connect_bd_intf_net -intf_net axi_ethernet_dma_txc [get_bd_intf_pins axi_ethernet/s_axis_txc] [get_bd_intf_pins axi_ethernet_dma/M_AXIS_CNTRL]
+connect_bd_intf_net -intf_net axi_ethernet_dma_rxd [get_bd_intf_pins axi_ethernet/m_axis_rxd] [get_bd_intf_pins axi_ethernet_dma/S_AXIS_S2MM]
+connect_bd_intf_net -intf_net axi_ethernet_dma_rxs [get_bd_intf_pins axi_ethernet/m_axis_rxs] [get_bd_intf_pins axi_ethernet_dma/S_AXIS_STS]
+
 # defaults (interrupts)
 
 connect_bd_net -net sys_concat_intc_intr_00 [get_bd_pins sys_concat_intc/In0] [get_bd_pins axi_timer/interrupt]
-connect_bd_net -net sys_concat_intc_intr_01 [get_bd_pins sys_concat_intc/In1] [get_bd_pins axi_ethernet/ip2intc_irpt]
+connect_bd_net -net sys_concat_intc_intr_01 [get_bd_pins sys_concat_intc/In1] [get_bd_pins axi_ethernet/interrupt]
 connect_bd_net -net sys_concat_intc_intr_02 [get_bd_pins sys_concat_intc/In2] [get_bd_pins axi_uart/interrupt]
 connect_bd_net -net sys_concat_intc_intr_03 [get_bd_pins sys_concat_intc/In3] [get_bd_pins axi_gpio_lcd/ip2intc_irpt]
 connect_bd_net -net sys_concat_intc_intr_04 [get_bd_pins sys_concat_intc/In4] [get_bd_pins axi_gpio_sw_led/ip2intc_irpt]
 connect_bd_net -net sys_concat_intc_intr_05 [get_bd_pins sys_concat_intc/In5] [get_bd_pins axi_iic_main/iic2intc_irpt]
+connect_bd_net -net sys_concat_intc_intr_08 [get_bd_pins sys_concat_intc/In8] [get_bd_pins axi_ethernet_dma/mm2s_introut]
+connect_bd_net -net sys_concat_intc_intr_09 [get_bd_pins sys_concat_intc/In9] [get_bd_pins axi_ethernet_dma/s2mm_introut]
 
 # defaults (external interface)
 
-connect_bd_net -net sys_const_vcc_vcc [get_bd_pins sys_const_vcc/const] [get_bd_ports fan_pwm] 
+connect_bd_net -net sys_const_vcc_vcc [get_bd_pins sys_const_vcc/const] [get_bd_ports fan_pwm]
 connect_bd_net -net sys_rst_s [get_bd_ports sys_rst] 
 connect_bd_net -net sys_rst_s [get_bd_pins sys_rstgen/ext_reset_in]
 connect_bd_net -net sys_rst_s [get_bd_pins axi_ddr_cntrl/sys_rst]
@@ -307,11 +334,10 @@ connect_bd_net -net sys_rst_s [get_bd_pins axi_ddr_cntrl/sys_rst]
 connect_bd_net -net sys_clk_p_s [get_bd_ports sys_clk_p] [get_bd_pins axi_ddr_cntrl/sys_clk_p]
 connect_bd_net -net sys_clk_n_s [get_bd_ports sys_clk_n] [get_bd_pins axi_ddr_cntrl/sys_clk_n]
 
-connect_bd_net -net sys_const_ddr3_0_const [get_bd_ports ddr3_1_n] [get_bd_pins sys_const_ddr3_0/const]
-connect_bd_net -net sys_const_ddr3_1_const [get_bd_ports ddr3_1_p] [get_bd_pins sys_const_ddr3_1/const]
-connect_bd_intf_net -intf_net axi_ddr_cntrl_ddr3 [get_bd_intf_ports ddr3] [get_bd_intf_pins axi_ddr_cntrl/DDR3]
-connect_bd_intf_net -intf_net axi_ethernet_mdio [get_bd_intf_ports mdio] [get_bd_intf_pins axi_ethernet/mdio]
-connect_bd_intf_net -intf_net axi_ethernet_mii [get_bd_intf_ports mii] [get_bd_intf_pins axi_ethernet/mii]
+connect_bd_intf_net -intf_net axi_ddr_cntrl_ddr3 [get_bd_intf_ports ddr3]  [get_bd_intf_pins axi_ddr_cntrl/DDR3]
+connect_bd_intf_net -intf_net axi_ethernet_mdio  [get_bd_intf_ports mdio]  [get_bd_intf_pins axi_ethernet/mdio]
+connect_bd_intf_net -intf_net axi_ethernet_rgmii [get_bd_intf_ports rgmii] [get_bd_intf_pins axi_ethernet/rgmii]
+connect_bd_net -net axi_ethernet_phy_rst_n [get_bd_ports phy_rst_n] [get_bd_pins axi_ethernet/phy_rst_n]
 
 connect_bd_net -net axi_uart_sin [get_bd_ports uart_sin] [get_bd_pins axi_uart/rx]
 connect_bd_net -net axi_uart_sout [get_bd_ports uart_sout] [get_bd_pins axi_uart/tx]
@@ -354,10 +380,10 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S02_ACLK] $sy
 connect_bd_net -net sys_concat_intc_intr_06 [get_bd_pins sys_concat_intc/In6] [get_bd_pins axi_hdmi_dma/mm2s_introut]
 
 connect_bd_net -net axi_hdmi_core_hdmi_out_clk  [get_bd_ports hdmi_out_clk] [get_bd_pins axi_hdmi_core/hdmi_out_clk]
-connect_bd_net -net axi_hdmi_core_hdmi_hsync    [get_bd_ports hdmi_hsync]   [get_bd_pins axi_hdmi_core/hdmi_16_hsync]
-connect_bd_net -net axi_hdmi_core_hdmi_vsync    [get_bd_ports hdmi_vsync]   [get_bd_pins axi_hdmi_core/hdmi_16_vsync]
-connect_bd_net -net axi_hdmi_core_hdmi_data_e   [get_bd_ports hdmi_data_e]  [get_bd_pins axi_hdmi_core/hdmi_16_data_e]
-connect_bd_net -net axi_hdmi_core_hdmi_data     [get_bd_ports hdmi_data]    [get_bd_pins axi_hdmi_core/hdmi_16_data]
+connect_bd_net -net axi_hdmi_core_hdmi_hsync    [get_bd_ports hdmi_hsync]   [get_bd_pins axi_hdmi_core/hdmi_24_hsync]
+connect_bd_net -net axi_hdmi_core_hdmi_vsync    [get_bd_ports hdmi_vsync]   [get_bd_pins axi_hdmi_core/hdmi_24_vsync]
+connect_bd_net -net axi_hdmi_core_hdmi_data_e   [get_bd_ports hdmi_data_e]  [get_bd_pins axi_hdmi_core/hdmi_24_data_e]
+connect_bd_net -net axi_hdmi_core_hdmi_data     [get_bd_ports hdmi_data]    [get_bd_pins axi_hdmi_core/hdmi_24_data]
 
 connect_bd_net -net axi_hdmi_clkgen_clk [get_bd_pins axi_hdmi_clkgen/clk_0]           [get_bd_pins axi_hdmi_core/hdmi_clk]
 connect_bd_net -net axi_hdmi_core_valid [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tvalid] [get_bd_pins axi_hdmi_core/m_axis_mm2s_tvalid]
@@ -378,13 +404,12 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/s_axi_lite_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_core/S_AXIS_ACLK]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/m_axi_mm2s_aclk] 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/m_axi_sg_aclk] 
-
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m11 [get_bd_intf_pins axi_cpu_interconnect/M11_AXI] [get_bd_intf_pins axi_spdif_tx_core/s_axi]
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m12 [get_bd_intf_pins axi_cpu_interconnect/M12_AXI] [get_bd_intf_pins axi_spdif_tx_dma/S_AXI_LITE]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M11_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M12_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M11_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M12_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M11_ACLK] $sys_100m_clk_source 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M12_ACLK] $sys_100m_clk_source 
 
 connect_bd_intf_net -intf_net axi_mem_interconnect_s03 [get_bd_intf_pins axi_mem_interconnect/S03_AXI] [get_bd_intf_pins axi_spdif_tx_dma/M_AXI_SG]
 connect_bd_intf_net -intf_net axi_mem_interconnect_s04 [get_bd_intf_pins axi_mem_interconnect/S04_AXI] [get_bd_intf_pins axi_spdif_tx_dma/M_AXI_MM2S]
@@ -399,7 +424,7 @@ connect_bd_net -net axi_spdif_tx_dma_mm2s_last  [get_bd_pins axi_spdif_tx_core/S
 connect_bd_net -net axi_spdif_tx_dma_mm2s_ready [get_bd_pins axi_spdif_tx_core/S_AXIS_TREADY] [get_bd_pins axi_spdif_tx_dma/m_axis_mm2s_tready]
 
 connect_bd_net -net sys_concat_intc_intr_07 [get_bd_pins sys_concat_intc/In7] [get_bd_pins axi_spdif_tx_dma/mm2s_introut]
-
+ 
 connect_bd_net -net sys_200m_clk [get_bd_pins sys_audio_clkgen/clk_in1]
 connect_bd_net -net sys_audio_clkgen_clk [get_bd_pins sys_audio_clkgen/clk_out1] [get_bd_pins axi_spdif_tx_core/spdif_data_clk]
 connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/spdif_tx_o]
@@ -409,7 +434,8 @@ connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/
 create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem]          SEG_data_dlmb_cntlr
 create_bd_addr_seg -range 0x00001000 -offset 0x41400000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs sys_mb_debug/S_AXI/Reg]           SEG_data_mb_debug
 create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_data_ddr_cntrl
-create_bd_addr_seg -range 0x00002000 -offset 0x40E00000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_ethernet/s_axi/Reg]           SEG_data_ethernetlite
+create_bd_addr_seg -range 0x00040000 -offset 0x40E00000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_ethernet/eth_buf/S_AXI/REG]   SEG_data_ethernetlite
+create_bd_addr_seg -range 0x00010000 -offset 0x41E10000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_ethernet_dma/S_AXI_LITE/Reg]  SEG_data_ethernet_dma
 create_bd_addr_seg -range 0x00010000 -offset 0x40010000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_gpio_lcd/s_axi/Reg]           SEG_data_gpio_lcd
 create_bd_addr_seg -range 0x00010000 -offset 0x40020000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_gpio_sw_led/s_axi/Reg]        SEG_data_gpio_sw_led
 create_bd_addr_seg -range 0x00010000 -offset 0x41200000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_intc/s_axi/Reg]               SEG_data_intc
@@ -423,11 +449,15 @@ create_bd_addr_seg -range 0x00010000 -offset 0x70e00000 [get_bd_addr_spaces sys_
 create_bd_addr_seg -range 0x00010000 -offset 0x75c00000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_spdif_tx_core/S_AXI/reg0]     SEG_data_spdif_tx_core
 create_bd_addr_seg -range 0x00010000 -offset 0x41E00000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_spdif_tx_dma/S_AXI_LITE/Reg]  SEG_data_spdif_tx_dma
 
-create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Instruction]   [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem]        SEG_instr_ilmb_cntlr
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces sys_mb/Instruction]   [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]   SEG_instr_ddr_cntrl
+create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Instruction]  [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem]          SEG_instr_ilmb_cntlr
+create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces sys_mb/Instruction]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_instr_ddr_cntrl
 
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_hdmi_dma/Data_MM2S]     [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]   SEG_axi_ddr_cntrl
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_SG]   [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]   SEG_axi_ddr_cntrl
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_MM2S] [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]   SEG_axi_ddr_cntrl
+create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_hdmi_dma/Data_MM2S]      [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_SG]    [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_MM2S]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_SG]    [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_MM2S]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_S2MM]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
 
+create_bd_addr_seg -range 0x00001000 -offset 0x00000000 [get_bd_addr_spaces axi_ethernet/eth_buf/S_AXI_2TEMAC] [get_bd_addr_segs axi_ethernet/eth_mac/s_axi/Reg] SEG_eth_mac_reg
 
