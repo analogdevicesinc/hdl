@@ -126,10 +126,10 @@ set_property -dict  {PACKAGE_PIN  J17   IOSTANDARD  LVCMOS25} [get_ports spdif]
 
 # clocks
 
-create_clock -name cpu_clk      -period 10.00 [get_nets i_system_wrapper/system_i/proc_sys_clk_1_100mhz]
-create_clock -name m200_clk     -period  5.00 [get_nets i_system_wrapper/system_i/axi_ddr_cntrl_1_200mhz]
-create_clock -name hdmi_clk     -period  6.73 [get_nets i_system_wrapper/system_i/axi_hdmi_clkgen/inst/i_mmcm_drp/mmcm_clk_0_s]
-create_clock -name spdif_clk    -period 50.00 [get_nets i_system_wrapper/system_i/sys_audio_clkgen_clk]
+create_clock -name cpu_clk      -period 10.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/ui_addn_clk_0]
+create_clock -name m200_clk     -period  5.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/ui_clk]
+create_clock -name hdmi_clk     -period  6.73 [get_pins i_system_wrapper/system_i/axi_hdmi_clkgen/clk_0]
+create_clock -name spdif_clk    -period 50.00 [get_pins i_system_wrapper/system_i/sys_audio_clkgen/clk_out1]
 
 set_clock_groups -asynchronous -group {cpu_clk}
 set_clock_groups -asynchronous -group {m200_clk}

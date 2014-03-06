@@ -137,9 +137,9 @@ module system_top (
 
   output          fan_pwm;
 
-  output  [ 6:0]  gpio_lcd;
-  output  [ 7:0]  gpio_led;
-  input   [ 8:0]  gpio_sw;
+  inout   [ 6:0]  gpio_lcd;
+  inout   [ 7:0]  gpio_led;
+  inout   [ 8:0]  gpio_sw;
 
   output          iic_rstn;
   inout           iic_scl;
@@ -174,9 +174,9 @@ module system_top (
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
     .fan_pwm (fan_pwm),
-    .gpio_lcd_tri_o (gpio_lcd),
-    .gpio_led_tri_o (gpio_led),
-    .gpio_sw_tri_i (gpio_sw),
+    .gpio_lcd_tri_io (gpio_lcd),
+    .gpio_led_tri_io (gpio_led),
+    .gpio_sw_tri_io (gpio_sw),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),

@@ -1,8 +1,8 @@
 
-source ../../scripts/kc705_system_bd.tcl
-set_property -dict [list CONFIG.NUM_MI {13}] $axi_interconnect_1
-set_property -dict [list CONFIG.NUM_SI {5}] $axi_interconnect_2
-set_property -dict [list CONFIG.NUM_MI {1}] $axi_interconnect_2
-set_property -dict [list CONFIG.NUM_PORTS {8}] $concat_intc_1
+source $ad_hdl_dir/projects/common/kc705/kc705_system_bd.tcl
+set_property -dict [list CONFIG.NUM_MI {14}] $axi_cpu_interconnect
+set_property -dict [list CONFIG.NUM_SI {8}] $axi_mem_interconnect
+set_property -dict [list CONFIG.NUM_MI {1}] $axi_mem_interconnect
+set_property -dict [list CONFIG.NUM_PORTS {8}] $sys_concat_intc
 
 

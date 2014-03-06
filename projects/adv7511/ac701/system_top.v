@@ -64,16 +64,15 @@ module system_top (
   ddr3_reset_n,
   ddr3_we_n,
 
-  sgmii_rxp,
-  sgmii_rxn,
-  sgmii_txp,
-  sgmii_txn,
-
-  phy_rstn,
-  mgt_clk_p,
-  mgt_clk_n,
-  mdio_mdc,
-  mdio_mdio,
+  phy_reset_n,
+  phy_mdc,
+  phy_mdio,
+  phy_tx_clk,
+  phy_tx_ctrl,
+  phy_tx_data,
+  phy_rx_clk,
+  phy_rx_ctrl,
+  phy_rx_data,
 
   fan_pwm,
 
@@ -116,22 +115,21 @@ module system_top (
   output          ddr3_reset_n;
   output          ddr3_we_n;
 
-  input           sgmii_rxp;
-  input           sgmii_rxn;
-  output          sgmii_txp;
-  output          sgmii_txn;
-
-  output          phy_rstn;
-  input           mgt_clk_p;
-  input           mgt_clk_n;
-  output          mdio_mdc;
-  inout           mdio_mdio;
+  output          phy_reset_n;
+  output          phy_mdc;
+  inout           phy_mdio;
+  output          phy_tx_clk;
+  output          phy_tx_ctrl;
+  output  [ 3:0]  phy_tx_data;
+  input           phy_rx_clk;
+  input           phy_rx_ctrl;
+  input   [ 3:0]  phy_rx_data;
 
   output          fan_pwm;
 
-  output  [ 6:0]  gpio_lcd;
-  output  [ 7:0]  gpio_led;
-  input   [12:0]  gpio_sw;
+  inout   [ 6:0]  gpio_lcd;
+  inout   [ 3:0]  gpio_led;
+  inout   [ 8:0]  gpio_sw;
 
   output          iic_rstn;
   inout           iic_scl;
@@ -144,6 +142,10 @@ module system_top (
   output  [23:0]  hdmi_data;
 
   output          spdif;
+
+  // assignments
+
+  assign mgt_clk_sel = 2'd0;
 
   // instantiations
 
@@ -164,9 +166,9 @@ module system_top (
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
     .fan_pwm (fan_pwm),
-    .gpio_lcd_tri_o (gpio_lcd),
-    .gpio_led_tri_o (gpio_led),
-    .gpio_sw_tri_i (gpio_sw),
+    .gpio_lcd_tri_io (gpio_lcd),
+    .gpio_led_tri_io (gpio_led),
+    .gpio_sw_tri_io (gpio_sw),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -175,15 +177,15 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .iic_rstn (iic_rstn),
-    .mdio_mdc (mdio_mdc),
-    .mdio_mdio_io (mdio_mdio),
-    .mgt_clk_clk_n (mgt_clk_n),
-    .mgt_clk_clk_p (mgt_clk_p),
-    .phy_rstn (phy_rstn),
-    .sgmii_rxn (sgmii_rxn),
-    .sgmii_rxp (sgmii_rxp),
-    .sgmii_txn (sgmii_txn),
-    .sgmii_txp (sgmii_txp),
+    .mdio_io (phy_mdio),
+    .mdio_mdc (phy_mdc),
+    .phy_rst_n (phy_reset_n),
+    .rgmii_rd (phy_rx_data),
+    .rgmii_rx_ctl (phy_rx_ctrl),
+    .rgmii_rxc (phy_rx_clk),
+    .rgmii_td (phy_tx_data),
+    .rgmii_tx_ctl (phy_tx_ctrl),
+    .rgmii_txc (phy_tx_clk),
     .spdif (spdif),
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),

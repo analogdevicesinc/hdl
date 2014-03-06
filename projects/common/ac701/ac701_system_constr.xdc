@@ -12,16 +12,24 @@ create_clock -name sys_clk      -period  5.00 [get_ports sys_clk_p]
 
 # ethernet
 
-set_property PACKAGE_PIN AC10 [get_ports sfp_txp]
-set_property PACKAGE_PIN AD10 [get_ports sfp_txn]
-set_property PACKAGE_PIN AC12 [get_ports sfp_rxp]
-set_property PACKAGE_PIN AD12 [get_ports sfp_rxn]
+set_property -dict  {PACKAGE_PIN V18    IOSTANDARD  LVCMOS18} [get_ports phy_reset_n]
 
-set_property PACKAGE_PIN AA13 [get_ports mgt_clk_p]
-set_property PACKAGE_PIN AB13 [get_ports mgt_clk_n]
+set_property -dict  {PACKAGE_PIN W18    IOSTANDARD  LVCMOS18} [get_ports phy_mdc]
+set_property -dict  {PACKAGE_PIN T14    IOSTANDARD  LVCMOS18} [get_ports phy_mdio]
 
-set_property -dict  {PACKAGE_PIN  C24   IOSTANDARD  LVCMOS18} [get_ports mgt_clk_sel[1]]
-set_property -dict  {PACKAGE_PIN  B26   IOSTANDARD  LVCMOS18} [get_ports mgt_clk_sel[0]]
+set_property -dict  {PACKAGE_PIN U22    IOSTANDARD  LVCMOS18} [get_ports phy_tx_clk]
+set_property -dict  {PACKAGE_PIN T15    IOSTANDARD  LVCMOS18} [get_ports phy_tx_ctrl]
+set_property -dict  {PACKAGE_PIN T17    IOSTANDARD  LVCMOS18} [get_ports phy_tx_data[3]]
+set_property -dict  {PACKAGE_PIN T18    IOSTANDARD  LVCMOS18} [get_ports phy_tx_data[2]]
+set_property -dict  {PACKAGE_PIN U15    IOSTANDARD  LVCMOS18} [get_ports phy_tx_data[1]]
+set_property -dict  {PACKAGE_PIN U16    IOSTANDARD  LVCMOS18} [get_ports phy_tx_data[0]]
+
+set_property -dict  {PACKAGE_PIN U21    IOSTANDARD  LVCMOS18} [get_ports phy_rx_clk]
+set_property -dict  {PACKAGE_PIN U14    IOSTANDARD  LVCMOS18} [get_ports phy_rx_ctrl]
+set_property -dict  {PACKAGE_PIN V14    IOSTANDARD  LVCMOS18} [get_ports phy_rx_data[3]]
+set_property -dict  {PACKAGE_PIN V16    IOSTANDARD  LVCMOS18} [get_ports phy_rx_data[2]]
+set_property -dict  {PACKAGE_PIN V17    IOSTANDARD  LVCMOS18} [get_ports phy_rx_data[1]]
+set_property -dict  {PACKAGE_PIN U17    IOSTANDARD  LVCMOS18} [get_ports phy_rx_data[0]]
 
 # uart
 
@@ -98,15 +106,15 @@ set_property -dict  {PACKAGE_PIN  Y21   IOSTANDARD  LVCMOS18} [get_ports spdif]
 
 # clocks
 
-# create_generated_clock -source sys_clk  -name cpu_clk      -multiply_by 1 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl_1/ui_clk]
-# create_generated_clock -source cpu_clk  -name m200_clk     -multiply_by 2 [get_pins i_system_wrapper/system_i/proc_sys_clock_1/clk_out1]
-# create_generated_clock -source m200_clk -name hdmi_clk     -period  6.73 [get_pins i_system_wrapper/system_i/axi_hdmi_clkgen/clk_0]
-# create_generated_clock -source m200_clk -name spdif_clk    -period 50.00 [get_pins i_system_wrapper/system_i/sys_audio_clkgen/clk_out1]
+create_clock -name cpu_clk      -period 10.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/ui_clk]
+create_clock -name m200_clk     -period  5.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/ui_addn_clk_0]
+create_clock -name m125_clk     -period  8.00 [get_pins i_system_wrapper/system_i/sys_ethernet_clkgen/clk_out_1]
+create_clock -name hdmi_clk     -period  6.73 [get_pins i_system_wrapper/system_i/axi_hdmi_clkgen/clk_0]
+create_clock -name spdif_clk    -period 50.00 [get_pins i_system_wrapper/system_i/sys_audio_clkgen/clk_out1]
 
-# set_clock_groups -asynchronous -group {cpu_clk}
-# set_clock_groups -asynchronous -group {m200_clk}
-# set_clock_groups -asynchronous -group {hdmi_clk}
-# set_clock_groups -asynchronous -group {spdif_clk}
-
-
+set_clock_groups -asynchronous -group {cpu_clk}
+set_clock_groups -asynchronous -group {m200_clk}
+set_clock_groups -asynchronous -group {m125_clk}
+set_clock_groups -asynchronous -group {hdmi_clk}
+set_clock_groups -asynchronous -group {spdif_clk}
 
