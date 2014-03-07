@@ -70,6 +70,8 @@ proc adi_project_run {project_name} {
 
   set project_system_dir "./$project_name.srcs/sources_1/bd/system"
 
+  set_property constrs_type XDC [current_fileset -constrset]
+
   launch_runs synth_1
   wait_on_run synth_1
   open_run synth_1
