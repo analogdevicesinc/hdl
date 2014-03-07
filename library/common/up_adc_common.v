@@ -88,7 +88,6 @@ module up_adc_common (
 
   up_usr_chanmax,
   adc_usr_chanmax,
-  dma_bw,
 
   // bus interface
 
@@ -153,7 +152,6 @@ module up_adc_common (
 
   output  [ 7:0]  up_usr_chanmax;
   input   [ 7:0]  adc_usr_chanmax;
-  input   [31:0]  dma_bw;
 
   // bus interface
 
@@ -298,7 +296,7 @@ module up_adc_common (
           8'h1c: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr, up_drp_wdata};
           8'h1d: up_rdata <= {14'd0, up_drp_locked_s, up_drp_status_s, up_drp_rdata_s};
           8'h22: up_rdata <= {29'd0, up_status_ovf, up_status_unf, 1'b0};
-          8'h23: up_rdata <= dma_bw;
+          8'h23: up_rdata <= 32'd8;
           8'h28: up_rdata <= {24'd0, adc_usr_chanmax};
           default: up_rdata <= 0;
         endcase
