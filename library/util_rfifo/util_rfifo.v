@@ -39,31 +39,32 @@
 
 `timescale 1ns/100ps
 
-module util_wfifo (
+module util_rfifo (
 
   rstn,
   clk,
 
-  src_wr,
-  src_wdata,
-  src_wovf,
-  dst_wr,
-  dst_wdata,
-  dst_wovf,
+  m_rd,
+  m_rdata,
+  m_runf,
+  s_rd,
+  s_rdata,
+  s_runf,
 
   fifo_rst,
   fifo_wr,
   fifo_wdata,
   fifo_wfull,
-  fifo_wovf,
   fifo_rd,
   fifo_rdata,
-  fifo_rempty);
+  fifo_rempty,
+  fifo_runf);
 
-  // parameters (read (S) bus width must be greater than write (M))
+  // parameters (S) bus width must be greater than (M)
 
-  parameter SRC_DATA_WIDTH = 32;
-  parameter DST_DATA_WIDTH = 64;
+  parameter M_DATA_WIDTH = 32;
+  parameter S_DATA_WIDTH = 64;
+  parameter READ_SELECT = 1;
  
   // common clock
 
@@ -72,29 +73,29 @@ module util_wfifo (
 
   // master/slave write 
 
-  input                           src_wr;
-  input   [SRC_DATA_WIDTH-1:0]    src_wdata;
-  output                          src_wovf;
-  output                          dst_wr;
-  output  [DST_DATA_WIDTH-1:0]    dst_wdata;
-  input                           dst_wovf;
+  input                           m_rd;
+  output  [M_DATA_WIDTH-1:0]      m_rdata;
+  output                          m_runf;
+  output                          s_rd;
+  input   [S_DATA_WIDTH-1:0]      s_rdata;
+  input                           s_runf;
 
   // fifo interface
 
   output                          fifo_rst;
   output                          fifo_wr;
-  output  [SRC_DATA_WIDTH-1:0]    fifo_wdata;
+  output  [S_DATA_WIDTH-1:0]      fifo_wdata;
   input                           fifo_wfull;
-  input                           fifo_wovf;
   output                          fifo_rd;
-  input   [DST_DATA_WIDTH-1:0]    fifo_rdata;
+  input   [M_DATA_WIDTH-1:0]      fifo_rdata;
   input                           fifo_rempty;
+  input                           fifo_runf;
 
   // internal registers
 
   reg                             fifo_rst = 'd0;
-  reg                             src_wovf = 'd0;
-  reg                             dst_wr = 'd0;
+  reg     [READ_SELECT-1:0]       s_rd_cnt = 'd0;
+  reg                             m_runf = 'd0;
 
   // defaults
 
@@ -106,33 +107,36 @@ module util_wfifo (
     end
   end
 
-  // write is pass through (fifo can never become full nor overflow)
+  // write depends on bus width change
 
-  assign fifo_wr = src_wr;
+  assign s_rd = s_rd_cnt[READ_SELECT-1];
+  assign fifo_wr = s_rd_cnt[READ_SELECT-1];
 
-  genvar m;
+  genvar s;
   generate
-  for (m = 0; m < SRC_DATA_WIDTH; m = m + 1) begin: g_wdata
-  assign fifo_wdata[m] = src_wdata[(SRC_DATA_WIDTH-1)-m];
+  for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_wdata
+  assign fifo_wdata[s] = s_rdata[(S_DATA_WIDTH-1)-s];
   end
   endgenerate
 
   always @(posedge clk) begin
-    src_wovf <= dst_wovf | fifo_wfull | fifo_wovf;
+    if (m_rd == 1'b1) begin
+      s_rd_cnt <= s_rd_cnt + 1'b1;
+    end
   end
 
   // read is non-destructive
 
-  assign fifo_rd = ~fifo_rempty;
+  assign fifo_rd = m_rd;
 
   always @(posedge clk) begin
-    dst_wr <= fifo_rd;
+    m_runf <= s_runf | fifo_wfull | fifo_runf | fifo_rempty;
   end
   
-  genvar s;
+  genvar m;
   generate
-  for (s = 0; s < DST_DATA_WIDTH; s = s + 1) begin: g_rdata
-  assign dst_wdata[s] = fifo_rdata[(DST_DATA_WIDTH-1)-s];
+  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_rdata
+  assign m_rdata[m] = fifo_rdata[(M_DATA_WIDTH-1)-m];
   end
   endgenerate
 
