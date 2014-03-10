@@ -1,4 +1,6 @@
 hdl
 ===
 
-HDL libraries and projects
+Analog Devices HDL libraries and projects
+
+http://wiki.analog.com/resources/fpga/docs/hdl/github
