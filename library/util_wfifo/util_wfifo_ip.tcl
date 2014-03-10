@@ -8,6 +8,16 @@ adi_ip_files util_wfifo [list \
   "util_wfifo.v" ]
 
 adi_ip_properties_lite util_wfifo
+
+ipx::remove_bus_interface {dst} [ipx::current_core]
+ipx::remove_bus_interface {src} [ipx::current_core]
+ipx::remove_bus_interface {fifo} [ipx::current_core]
+ipx::remove_bus_interface {signal_clock} [ipx::current_core]
+
+ipx::remove_memory_map {src} [ipx::current_core]
+ipx::remove_address_space {dst} [ipx::current_core]
+ipx::remove_address_space {fifo} [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 
 
