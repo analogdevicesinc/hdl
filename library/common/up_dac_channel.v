@@ -93,10 +93,10 @@ module up_dac_channel (
 
   input           dac_clk;
   input           dac_rst;
-  output  [ 3:0]  dac_dds_scale_1;
+  output  [15:0]  dac_dds_scale_1;
   output  [15:0]  dac_dds_init_1;
   output  [15:0]  dac_dds_incr_1;
-  output  [ 3:0]  dac_dds_scale_2;
+  output  [15:0]  dac_dds_scale_2;
   output  [15:0]  dac_dds_init_2;
   output  [15:0]  dac_dds_incr_2;
   output  [15:0]  dac_dds_patt_1;
@@ -135,10 +135,10 @@ module up_dac_channel (
 
   // internal registers
 
-  reg     [ 3:0]  up_dac_dds_scale_1 = 'd0;
+  reg     [15:0]  up_dac_dds_scale_1 = 'd0;
   reg     [15:0]  up_dac_dds_init_1 = 'd0;
   reg     [15:0]  up_dac_dds_incr_1 = 'd0;
-  reg     [ 3:0]  up_dac_dds_scale_2 = 'd0;
+  reg     [15:0]  up_dac_dds_scale_2 = 'd0;
   reg     [15:0]  up_dac_dds_init_2 = 'd0;
   reg     [15:0]  up_dac_dds_incr_2 = 'd0;
   reg     [15:0]  up_dac_dds_patt_2 = 'd0;
@@ -190,14 +190,14 @@ module up_dac_channel (
       up_usr_interpolation_n <= 'd0;
     end else begin
       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h0)) begin
-        up_dac_dds_scale_1 <= up_wdata[3:0];
+        up_dac_dds_scale_1 <= up_wdata[15:0];
       end
       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h1)) begin
         up_dac_dds_init_1 <= up_wdata[31:16];
         up_dac_dds_incr_1 <= up_wdata[15:0];
       end
       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h2)) begin
-        up_dac_dds_scale_2 <= up_wdata[3:0];
+        up_dac_dds_scale_2 <= up_wdata[15:0];
       end
       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h3)) begin
         up_dac_dds_init_2 <= up_wdata[31:16];
@@ -238,9 +238,9 @@ module up_dac_channel (
       up_ack <= up_sel_s;
       if (up_sel_s == 1'b1) begin
         case (up_addr[3:0])
-          4'h0: up_rdata <= {28'd0, up_dac_dds_scale_1};
+          4'h0: up_rdata <= {16'd0, up_dac_dds_scale_1};
           4'h1: up_rdata <= {up_dac_dds_init_1, up_dac_dds_incr_1};
-          4'h2: up_rdata <= {28'd0, up_dac_dds_scale_2};
+          4'h2: up_rdata <= {16'd0, up_dac_dds_scale_2};
           4'h3: up_rdata <= {up_dac_dds_init_2, up_dac_dds_incr_2};
           4'h4: up_rdata <= {up_dac_dds_patt_2, up_dac_dds_patt_1};
           4'h5: up_rdata <= {30'd0, up_dac_lb_enb, up_dac_pn_enb};
@@ -259,7 +259,7 @@ module up_dac_channel (
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(110)) i_dac_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(134)) i_dac_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_dds_scale_1,

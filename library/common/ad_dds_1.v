@@ -44,27 +44,86 @@ module ad_dds_1 (
   // interface
 
   clk,
-  sclr,
-  phase_in,
-  sine);
+  angle,
+  scale,
+  dds_data);
 
   // interface
 
   input           clk;
-  input           sclr;
-  input   [15:0]  phase_in;
-  output  [15:0]  sine;
+  input   [15:0]  angle;
+  input   [15:0]  scale;
+  output  [15:0]  dds_data;
 
-  // xilinx dds ip
+  // internal registers
 
-  ad_dds_1_xip i_dds_1_xip (
-    .aclk (clk),
-    .aresetn (~sclr),
-    .s_axis_phase_tvalid (1'b1),
-    .s_axis_phase_tdata (phase_in),
-    .m_axis_data_tvalid (),
-    .m_axis_data_tdata (sine));
-  
+  reg             sine_sign = 'd0;
+  reg     [14:0]  sine_magn = 'd0;
+  reg     [14:0]  sine_scale_p = 'd0;
+  reg     [14:0]  sine_scale_n = 'd0;
+  reg             sine_scale_sign = 'd0;
+  reg     [15:0]  dds_data = 'd0;
+
+  // internal signals
+
+  wire    [15:0]  sine_s;
+  wire    [14:0]  sine_p_s;
+  wire    [14:0]  sine_n_s;
+  wire    [31:0]  sine_scale_s;
+  wire            sine_sign_s;
+  wire            scale_sign_s;
+  wire    [14:0]  sine_scale_p_s;
+  wire    [14:0]  sine_scale_n_s;
+  wire            sine_scale_sign_s;
+
+  // sine generator
+
+  ad_dds_sine #(.DELAY_DATA_WIDTH(1)) i_dds_sine (
+    .clk (clk),
+    .angle (angle),
+    .sine (sine_s),
+    .ddata_in (1'b0),
+    .ddata_out ());
+
+  // sign-magnitude
+
+  assign sine_p_s = sine_s[14:0];
+  assign sine_n_s = ~sine_s[14:0] + 1'b1;
+
+  always @(posedge clk) begin
+    sine_sign <= sine_s[15];
+    if (sine_s[15] == 1'b1) begin
+      sine_magn <= sine_n_s;
+    end else begin
+      sine_magn <= sine_p_s;
+    end
+  end
+
+  // scale
+
+  ad_mul_u16 #(.DELAY_DATA_WIDTH(2)) i_mul_u16 (
+    .clk (clk),
+    .data_a ({1'b0, sine_magn}),
+    .data_b ({1'b0, scale[14:0]}),
+    .data_p (sine_scale_s),
+    .ddata_in ({sine_sign, scale[15]}),
+    .ddata_out ({sine_sign_s, scale_sign_s}));
+
+  assign sine_scale_p_s = sine_scale_s[28:14];
+  assign sine_scale_n_s = ~sine_scale_s[28:14] + 1'b1;
+  assign sine_scale_sign_s = sine_sign_s ^ scale_sign_s;
+
+  always @(posedge clk) begin
+    sine_scale_p <= sine_scale_p_s;
+    sine_scale_n <= sine_scale_n_s;
+    sine_scale_sign <= sine_scale_sign_s;
+    if (sine_scale_sign == 1'b1) begin
+      dds_data <= {1'b1, sine_scale_n};
+    end else begin
+      dds_data <= {1'b0, sine_scale_p};
+    end
+  end
+
 endmodule
 
 // ***************************************************************************

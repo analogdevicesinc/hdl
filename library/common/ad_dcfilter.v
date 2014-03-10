@@ -73,6 +73,7 @@ module ad_dcfilter (
   // internal registers
 
   reg     [15:0]  dc_offset = 'd0;
+  reg     [15:0]  dc_offset_d = 'd0;
   reg             valid_d = 'd0;
   reg     [15:0]  data_d = 'd0;
   reg             valid_out = 'd0;
@@ -80,12 +81,14 @@ module ad_dcfilter (
 
   // internal signals
 
+  wire    [14:0]  dc_offset_15_s;
   wire    [32:0]  dc_offset_33_s;
 
   // cancelling the dc offset
 
   always @(posedge clk) begin
     dc_offset <= dc_offset_33_s[32:17];
+    dc_offset_d <= dc_offset;
     valid_d <= valid;
     if (valid == 1'b1) begin
       data_d <= data + dcfilt_offset;
@@ -99,13 +102,84 @@ module ad_dcfilter (
     end
   end
 
-  ad_dcfilter_1 i_dcfilter_1 (
-    .clk (clk),
-    .d (data_d),
-    .b (dcfilt_coeff),
-    .a (dc_offset_33_s[32:17]),
-    .c (dc_offset_33_s[32:17]),
-    .p (dc_offset_33_s));
+  // dsp slice instance ((D-A)*B)+C
+
+  DSP48E1 #(
+    .ACASCREG (1),
+    .ADREG (1),
+    .ALUMODEREG (0),
+    .AREG (1),
+    .AUTORESET_PATDET ("NO_RESET"),
+    .A_INPUT ("DIRECT"),
+    .BCASCREG (1),
+    .BREG (1),
+    .B_INPUT ("DIRECT"),
+    .CARRYINREG (0),
+    .CARRYINSELREG (0),
+    .CREG (1),
+    .DREG (0),
+    .INMODEREG (0),
+    .MASK (48'h3fffffffffff),
+    .MREG (1),
+    .OPMODEREG (0),
+    .PATTERN (48'h000000000000),
+    .PREG (0),
+    .SEL_MASK ("MASK"),
+    .SEL_PATTERN ("PATTERN"),
+    .USE_DPORT ("TRUE"),
+    .USE_MULT ("MULTIPLY"),
+    .USE_PATTERN_DETECT ("NO_PATDET"),
+    .USE_SIMD ("ONE48"))
+  i_dsp48e1 (
+    .CLK (clk),
+    .A ({{14{dc_offset_33_s[32]}}, dc_offset_33_s[32:17]}),
+    .B ({{2{dcfilt_coeff[15]}}, dcfilt_coeff}),
+    .C ({{32{dc_offset_d[15]}}, dc_offset_d}),
+    .D ({{9{data_d[15]}}, data_d}),
+    .MULTSIGNIN (1'd0),
+    .CARRYIN (1'd0),
+    .CARRYCASCIN (1'd0),
+    .ACIN (30'd0),
+    .BCIN (18'd0),
+    .PCIN (48'd0),
+    .P ({dc_offset_15_s, dc_offset_33_s}),
+    .MULTSIGNOUT (),
+    .CARRYOUT (),
+    .CARRYCASCOUT (),
+    .ACOUT (),
+    .BCOUT (),
+    .PCOUT (),
+    .ALUMODE (4'd0),
+    .CARRYINSEL (3'd0),
+    .INMODE (5'b01100),
+    .OPMODE (7'b0110101),
+    .PATTERNBDETECT (),
+    .PATTERNDETECT (),
+    .OVERFLOW (),
+    .UNDERFLOW (),
+    .CEA1 (1'd0),
+    .CEA2 (1'd1),
+    .CEAD (1'd1),
+    .CEALUMODE (1'd0),
+    .CEB1 (1'd0),
+    .CEB2 (1'd1),
+    .CEC (1'd1),
+    .CECARRYIN (1'd0),
+    .CECTRL (1'd0),
+    .CED (1'd1),
+    .CEINMODE (1'd0),
+    .CEM (1'd1),
+    .CEP (1'd0),
+    .RSTA (1'd0),
+    .RSTALLCARRYIN (1'd0),
+    .RSTALUMODE (1'd0),
+    .RSTB (1'd0),
+    .RSTC (1'd0),
+    .RSTCTRL (1'd0),
+    .RSTD (1'd0),
+    .RSTINMODE (1'd0),
+    .RSTM (1'd0),
+    .RSTP (1'd0));
 
 endmodule
 
