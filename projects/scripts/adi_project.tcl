@@ -1,34 +1,43 @@
 
+set xl_board "none"
 
 proc adi_project_create {project_name} {
 
   global ad_hdl_dir
   global ad_phdl_dir
+  global xl_board
 
+  set xl_board "none"
   set project_part "none"
   set project_board "none"
 
   if [regexp "_ac701$" $project_name] {
+    set xl_board "ac701"
     set project_part "xc7a200tfbg676-2"
     set project_board "xilinx.com:artix7:ac701:1.0"
   }
   if [regexp "_kc705$" $project_name] {
+    set xl_board "kc705"
     set project_part "xc7k325tffg900-2"
     set project_board "xilinx.com:kintex7:kc705:1.1"
   }
   if [regexp "_vc707$" $project_name] {
+    set xl_board "vc707"
     set project_part "xc7vx485tffg1761-2"
     set project_board "xilinx.com:virtex7:vc707:1.1"
   }
   if [regexp "_zed$" $project_name] {
+    set xl_board "zed"
     set project_part "xc7z020clg484-1"
     set project_board "em.avnet.com:zynq:zed:d"
   }
   if [regexp "_zc702$" $project_name] {
+    set xl_board "zc702"
     set project_part "xc7z020clg484-1"
     set project_board "xilinx.com:zynq:zc702:1.0"
   }
   if [regexp "_zc706$" $project_name] {
+    set xl_board "zc706"
     set project_part "xc7z045ffg900-2"
     set project_board "xilinx.com:zynq:zc706:1.1"
   }
