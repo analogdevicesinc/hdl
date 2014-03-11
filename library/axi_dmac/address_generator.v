@@ -115,7 +115,7 @@ always @(posedge clk) begin
 				addr_valid <= 1'b0;
 				if (eot)
 					req_ready <= 1'b1;
-			end else if (id != wait_id) begin
+			end else if (id != wait_id && enable) begin
 				addr_valid <= 1'b1;
 			end
 		end
