@@ -96,7 +96,7 @@ module ad_mul_u16 (
     .LATENCY (3),
     .WIDTH_A (17),
     .WIDTH_B (17))
-  MULT_MACRO_inst (
+  i_mult_macro (
     .CE (1'b1),
     .RST (1'b0),
     .CLK (clk),

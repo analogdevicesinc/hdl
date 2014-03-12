@@ -105,7 +105,7 @@ module ad_csc_1_mul (
     .LATENCY (3),
     .WIDTH_A (17),
     .WIDTH_B (9))
-  MULT_MACRO_inst (
+  i_mult_macro (
     .CE (1'b1),
     .RST (1'b0),
     .CLK (clk),
