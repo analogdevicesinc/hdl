@@ -62,13 +62,13 @@ set_property LEFT 48 [get_bd_ports GPIO_T]
 
 # connections (spi)
 
-connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]    [get_bd_pins sys_ps7/spi_csn_i]
-connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]    [get_bd_pins sys_ps7/spi_csn_o]
-connect_bd_net -net spi_sclk_i  [get_bd_ports spi_sclk_i]   [get_bd_pins sys_ps7/spi_sclk_i]
-connect_bd_net -net spi_sclk_o  [get_bd_ports spi_sclk_o]   [get_bd_pins sys_ps7/spi_sclk_o]
-connect_bd_net -net spi_mosi_i  [get_bd_ports spi_mosi_i]   [get_bd_pins sys_ps7/spi_mosi_i]
-connect_bd_net -net spi_mosi_o  [get_bd_ports spi_mosi_o]   [get_bd_pins sys_ps7/spi_mosi_o]
-connect_bd_net -net spi_miso_i  [get_bd_ports spi_miso_i]   [get_bd_pins sys_ps7/spi_miso_i]
+connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]    [get_bd_pins sys_ps7/SPI0_SS_I]
+connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]    [get_bd_pins sys_ps7/SPI0_SS_O]
+connect_bd_net -net spi_sclk_i  [get_bd_ports spi_sclk_i]   [get_bd_pins sys_ps7/SPI0_SCLK_I]
+connect_bd_net -net spi_sclk_o  [get_bd_ports spi_sclk_o]   [get_bd_pins sys_ps7/SPI0_SCLK_O]
+connect_bd_net -net spi_mosi_i  [get_bd_ports spi_mosi_i]   [get_bd_pins sys_ps7/SPI0_MOSI_I]
+connect_bd_net -net spi_mosi_o  [get_bd_ports spi_mosi_o]   [get_bd_pins sys_ps7/SPI0_MOSI_O]
+connect_bd_net -net spi_miso_i  [get_bd_ports spi_miso_i]   [get_bd_pins sys_ps7/SPI0_MISO_I]
 
 # connections (ad9361)
 
@@ -159,8 +159,8 @@ set_property -dict [list CONFIG.C_PROBE1_WIDTH {48}] $ila_adc
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 
 connect_bd_net -net axi_ad9361_clk  [get_bd_pins ila_adc/clk]
-connect_bd_net -net axi_ad9361_adc_mon_valid  [get_bd_pins axi_ad9361/adc_mon_valid]  [get_bd_pins ila_0/probe0]
-connect_bd_net -net axi_ad9361_adc_mon_data   [get_bd_pins axi_ad9361/adc_mon_data]   [get_bd_pins ila_0/probe1]
+connect_bd_net -net axi_ad9361_adc_mon_valid  [get_bd_pins axi_ad9361/adc_mon_valid]  [get_bd_pins ila_adc/probe0]
+connect_bd_net -net axi_ad9361_adc_mon_data   [get_bd_pins axi_ad9361/adc_mon_data]   [get_bd_pins ila_adc/probe1]
 
 # address map
 
