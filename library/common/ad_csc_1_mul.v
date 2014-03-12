@@ -74,109 +74,44 @@ module ad_csc_1_mul (
 
   // internal registers
 
-  reg             p1_sign = 'd0;
   reg     [DW:0]  p1_ddata = 'd0;
-  reg     [23:0]  p1_data_p_0 = 'd0;
-  reg     [23:0]  p1_data_p_1 = 'd0;
-  reg     [23:0]  p1_data_p_2 = 'd0;
-  reg     [23:0]  p1_data_p_3 = 'd0;
-  reg     [23:0]  p1_data_p_4 = 'd0;
-  reg             p2_sign = 'd0;
   reg     [DW:0]  p2_ddata = 'd0;
-  reg     [23:0]  p2_data_p_0 = 'd0;
-  reg     [23:0]  p2_data_p_1 = 'd0;
-  reg             p3_sign = 'd0;
-  reg     [DW:0]  p3_ddata = 'd0;
-  reg     [23:0]  p3_data_p_0 = 'd0;
   reg     [DW:0]  ddata_out = 'd0;
-  reg     [24:0]  data_p = 'd0;
+  reg             p1_sign = 'd0;
+  reg             p2_sign = 'd0;
+  reg             sign_p = 'd0;
 
-  // internal wires
+  // internal signals
 
-  wire    [16:0]  p1_data_a_1p_17_s;
-  wire    [16:0]  p1_data_a_1n_17_s;
-  wire    [23:0]  p1_data_a_1p_s;
-  wire    [23:0]  p1_data_a_1n_s;
-  wire    [23:0]  p1_data_a_2p_s;
-  wire    [23:0]  p1_data_a_2n_s;
+  wire    [25:0]  data_p_s;
 
-  // pipe line stage 1, get the two's complement versions
+  // a/b reg, m-reg, p-reg delay match
 
-  assign p1_data_a_1p_17_s = {1'b0, data_a[15:0]};
-  assign p1_data_a_1n_17_s = ~p1_data_a_1p_17_s + 1'b1;
-
-  assign p1_data_a_1p_s = {{7{p1_data_a_1p_17_s[16]}}, p1_data_a_1p_17_s};
-  assign p1_data_a_1n_s = {{7{p1_data_a_1n_17_s[16]}}, p1_data_a_1n_17_s};
-  assign p1_data_a_2p_s = {{6{p1_data_a_1p_17_s[16]}}, p1_data_a_1p_17_s, 1'b0};
-  assign p1_data_a_2n_s = {{6{p1_data_a_1n_17_s[16]}}, p1_data_a_1n_17_s, 1'b0};
-
-  // pipe line stage 1, get the partial products
+  always @(posedge clk) begin
+    p1_ddata <= ddata_in;
+    p2_ddata <= p1_ddata;
+    ddata_out <= p2_ddata;
+  end
 
   always @(posedge clk) begin
     p1_sign <= data_a[16];
-    p1_ddata <= ddata_in;
-    case (data_b[1:0])
-      2'b11: p1_data_p_0 <= p1_data_a_1n_s;
-      2'b10: p1_data_p_0 <= p1_data_a_2n_s;
-      2'b01: p1_data_p_0 <= p1_data_a_1p_s;
-      default: p1_data_p_0 <= 24'd0;
-    endcase
-    case (data_b[3:1])
-      3'b011: p1_data_p_1 <= {p1_data_a_2p_s[21:0], 2'd0};
-      3'b100: p1_data_p_1 <= {p1_data_a_2n_s[21:0], 2'd0};
-      3'b001: p1_data_p_1 <= {p1_data_a_1p_s[21:0], 2'd0};
-      3'b010: p1_data_p_1 <= {p1_data_a_1p_s[21:0], 2'd0};
-      3'b101: p1_data_p_1 <= {p1_data_a_1n_s[21:0], 2'd0};
-      3'b110: p1_data_p_1 <= {p1_data_a_1n_s[21:0], 2'd0};
-      default: p1_data_p_1 <= 24'd0;
-    endcase
-    case (data_b[5:3])
-      3'b011: p1_data_p_2 <= {p1_data_a_2p_s[19:0], 4'd0};
-      3'b100: p1_data_p_2 <= {p1_data_a_2n_s[19:0], 4'd0};
-      3'b001: p1_data_p_2 <= {p1_data_a_1p_s[19:0], 4'd0};
-      3'b010: p1_data_p_2 <= {p1_data_a_1p_s[19:0], 4'd0};
-      3'b101: p1_data_p_2 <= {p1_data_a_1n_s[19:0], 4'd0};
-      3'b110: p1_data_p_2 <= {p1_data_a_1n_s[19:0], 4'd0};
-      default: p1_data_p_2 <= 24'd0;
-    endcase
-    case (data_b[7:5])
-      3'b011: p1_data_p_3 <= {p1_data_a_2p_s[17:0], 6'd0};
-      3'b100: p1_data_p_3 <= {p1_data_a_2n_s[17:0], 6'd0};
-      3'b001: p1_data_p_3 <= {p1_data_a_1p_s[17:0], 6'd0};
-      3'b010: p1_data_p_3 <= {p1_data_a_1p_s[17:0], 6'd0};
-      3'b101: p1_data_p_3 <= {p1_data_a_1n_s[17:0], 6'd0};
-      3'b110: p1_data_p_3 <= {p1_data_a_1n_s[17:0], 6'd0};
-      default: p1_data_p_3 <= 24'd0;
-    endcase
-    case (data_b[7])
-      1'b1: p1_data_p_4 <= {p1_data_a_1p_s[15:0], 8'd0};
-      default: p1_data_p_4 <= 24'd0;
-    endcase
-  end
-
-  // pipe line stage 2, get the sum (intermediate 5 -> 2)
-
-  always @(posedge clk) begin
     p2_sign <= p1_sign;
-    p2_ddata <= p1_ddata;
-    p2_data_p_0 <= p1_data_p_0 + p1_data_p_1 + p1_data_p_4;
-    p2_data_p_1 <= p1_data_p_2 + p1_data_p_3;
+    sign_p <= p2_sign;
   end
 
-  // pipe line stage 2, get the sum (final 2 -> 1)
+  assign data_p = {sign_p, data_p_s[23:0]};
 
-  always @(posedge clk) begin
-    p3_sign <= p2_sign;
-    p3_ddata <= p2_ddata;
-    p3_data_p_0 <= p2_data_p_0 + p2_data_p_1;
-  end
-
-  // output registers (truncation occurs after addition, see ad_csc_1_add.v)
-
-  always @(posedge clk) begin
-    ddata_out <= p3_ddata;
-    data_p <= {p3_sign, p3_data_p_0};
-  end
+  MULT_MACRO #(
+    .LATENCY (3),
+    .WIDTH_A (17),
+    .WIDTH_B (9))
+  MULT_MACRO_inst (
+    .CE (1'b1),
+    .RST (1'b0),
+    .CLK (clk),
+    .A ({1'b0, data_a[15:0]}),
+    .B ({1'b0, data_b}),
+    .P (data_p_s));
 
 endmodule
 
