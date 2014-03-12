@@ -155,7 +155,7 @@ module axi_ad9643 (
   // debug signals
 
   output          adc_mon_valid;
-  output  [28:0]  adc_mon_data;
+  output  [27:0]  adc_mon_data;
 
   // internal registers
 
