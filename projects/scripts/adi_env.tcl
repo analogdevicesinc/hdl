@@ -1,8 +1,8 @@
 
 # environment related stuff
 
-set ad_hdl_dir  ".."
-set ad_phdl_dir ".."
+set ad_hdl_dir  "../../.."
+set ad_phdl_dir "../../.."
 
 if [info exists ::env(ADI_HDL_DIR)] {
   set ad_hdl_dir $::env(ADI_HDL_DIR)
