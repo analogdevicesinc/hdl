@@ -43,8 +43,8 @@ module dmac_dest_mm_axi (
 	input                               req_valid,
 	output                              req_ready,
 	input [31:C_ADDR_ALIGN_BITS]        req_address,
-	input [3:0]                         req_last_burst_length,
-	input [2:0]                         req_last_beat_bytes,
+	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+	input [C_BYTES_PER_BEAT_WIDTH-1:0]  req_last_beat_bytes,
 
 	input                               enable,
 	output                              enabled,
@@ -68,7 +68,7 @@ module dmac_dest_mm_axi (
 
 	input                               fifo_valid,
 	output                              fifo_ready,
-	input [C_M_AXI_DATA_WIDTH-1:0]      fifo_data,
+	input [C_DMA_DATA_WIDTH-1:0]        fifo_data,
 
 	// Write address
 	input                               m_axi_awready,
@@ -81,8 +81,8 @@ module dmac_dest_mm_axi (
 	output [ 3:0]                       m_axi_awcache,
 
 	// Write data
-	output [C_M_AXI_DATA_WIDTH-1:0]     m_axi_wdata,
-	output [(C_M_AXI_DATA_WIDTH/8)-1:0] m_axi_wstrb,
+	output [C_DMA_DATA_WIDTH-1:0]     m_axi_wdata,
+	output [(C_DMA_DATA_WIDTH/8)-1:0] m_axi_wstrb,
 	input                               m_axi_wready,
 	output                              m_axi_wvalid,
 	output                              m_axi_wlast,
@@ -94,14 +94,15 @@ module dmac_dest_mm_axi (
 );
 
 parameter C_ID_WIDTH = 3;
-parameter C_M_AXI_DATA_WIDTH = 64;
+parameter C_DMA_DATA_WIDTH = 64;
 parameter C_ADDR_ALIGN_BITS = 3;
-parameter C_DMA_LENGTH_WIDTH = 24;
+parameter C_BEATS_PER_BURST_WIDTH = 4;
+parameter C_BYTES_PER_BEAT_WIDTH = 3;
 
 wire [C_ID_WIDTH-1:0] data_id;
 wire [C_ID_WIDTH-1:0] address_id;
 
-reg [(C_M_AXI_DATA_WIDTH/8)-1:0] wstrb;
+reg [(C_DMA_DATA_WIDTH/8)-1:0] wstrb;
 
 wire address_req_valid;
 wire address_req_ready;
@@ -111,6 +112,9 @@ wire data_req_ready;
 wire address_enabled;
 wire data_enabled;
 assign sync_id_ret = sync_id;
+
+wire _fifo_ready;
+assign fifo_ready = _fifo_ready | ~enabled;
 
 splitter #(
 	.C_NUM_M(2)
@@ -130,9 +134,10 @@ splitter #(
 );
 
 dmac_address_generator #(
-	.C_DMA_LENGTH_WIDTH(C_DMA_LENGTH_WIDTH),
+	.C_ID_WIDTH(C_ID_WIDTH),
 	.C_ADDR_ALIGN_BITS(C_ADDR_ALIGN_BITS),
-	.C_ID_WIDTH(C_ID_WIDTH)
+	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH),
+	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH)
 ) i_addr_gen (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),
@@ -162,11 +167,10 @@ dmac_address_generator #(
 	.cache(m_axi_awcache)
 );
 
-wire _fifo_ready;
-
 dmac_data_mover # (
 	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_M_AXI_DATA_WIDTH)
+	.C_DATA_WIDTH(C_DMA_DATA_WIDTH),
+	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH)
 ) i_data_mover (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),
@@ -191,8 +195,6 @@ dmac_data_mover # (
 	.m_axi_data(m_axi_wdata),
 	.m_axi_last(m_axi_wlast)
 );
-
-assign fifo_ready = _fifo_ready | ~enabled;
 
 always @(*)
 begin

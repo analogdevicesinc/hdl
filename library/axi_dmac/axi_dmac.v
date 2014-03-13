@@ -79,8 +79,8 @@ module axi_dmac (
 	input                                    m_dest_axi_awready,
 
 	// Write data
-	output [C_M_DEST_AXI_DATA_WIDTH-1:0]     m_dest_axi_wdata,
-	output [(C_M_DEST_AXI_DATA_WIDTH/8)-1:0] m_dest_axi_wstrb,
+	output [C_DMA_DATA_WIDTH_DEST-1:0]       m_dest_axi_wdata,
+	output [(C_DMA_DATA_WIDTH_DEST/8)-1:0]   m_dest_axi_wstrb,
 	input                                    m_dest_axi_wready,
 	output                                   m_dest_axi_wvalid,
 	output                                   m_dest_axi_wlast,
@@ -101,7 +101,7 @@ module axi_dmac (
 	output [ 3:0]                            m_src_axi_arcache,
 
 	// Read data and response
-	input  [C_M_DEST_AXI_DATA_WIDTH-1:0]     m_src_axi_rdata,
+	input  [C_DMA_DATA_WIDTH_SRC-1:0]        m_src_axi_rdata,
 	output                                   m_src_axi_rready,
 	input                                    m_src_axi_rvalid,
 	input  [ 1:0]                            m_src_axi_rresp,
@@ -110,19 +110,19 @@ module axi_dmac (
 	input                                    s_axis_aclk,
 	output                                   s_axis_ready,
 	input                                    s_axis_valid,
-	input  [C_M_DEST_AXI_DATA_WIDTH-1:0]     s_axis_data,
+	input  [C_DMA_DATA_WIDTH_SRC-1:0]        s_axis_data,
 	input  [0:0]                             s_axis_user,
 
 	// Master streaming AXI interface
 	input                                    m_axis_aclk,
 	input                                    m_axis_ready,
 	output                                   m_axis_valid,
-	output [C_M_DEST_AXI_DATA_WIDTH-1:0]     m_axis_data,
+	output [C_DMA_DATA_WIDTH_DEST-1:0]       m_axis_data,
 
 	// Input FIFO interface
 	input                                    fifo_wr_clk,
 	input                                    fifo_wr_en,
-	input  [C_M_DEST_AXI_DATA_WIDTH-1:0]     fifo_wr_din,
+	input  [C_DMA_DATA_WIDTH_SRC-1:0]        fifo_wr_din,
 	output                                   fifo_wr_overflow,
 	input                                    fifo_wr_sync,
 
@@ -130,7 +130,7 @@ module axi_dmac (
 	input                                    fifo_rd_clk,
 	input                                    fifo_rd_en,
 	output                                   fifo_rd_valid,
-	output [C_M_DEST_AXI_DATA_WIDTH-1:0]     fifo_rd_dout,
+	output [C_DMA_DATA_WIDTH_DEST-1:0]       fifo_rd_dout,
 	output                                   fifo_rd_underflow
 );
 
@@ -138,10 +138,11 @@ parameter PCORE_ID = 0;
 
 parameter C_BASEADDR = 32'hffffffff;
 parameter C_HIGHADDR = 32'h00000000;
-parameter C_M_DEST_AXI_DATA_WIDTH = 64;
+parameter C_DMA_DATA_WIDTH_SRC = 64;
+parameter C_DMA_DATA_WIDTH_DEST = 64;
 parameter C_ADDR_ALIGN_BITS = 3;
-parameter C_DMA_LENGTH_WIDTH = 24;
-parameter C_2D_TRANSFER = 0;
+parameter C_DMA_LENGTH_WIDTH = 14;
+parameter C_2D_TRANSFER = 1;
 
 parameter C_CLKS_ASYNC_REQ_SRC = 1;
 parameter C_CLKS_ASYNC_SRC_DEST = 1;
@@ -150,10 +151,10 @@ parameter C_CLKS_ASYNC_DEST_REQ = 1;
 parameter C_AXI_SLICE_DEST = 0;
 parameter C_AXI_SLICE_SRC = 0;
 parameter C_SYNC_TRANSFER_START = 0;
-parameter C_CYCLIC = 0;
+parameter C_CYCLIC = 1;
 
-parameter C_DMA_TYPE_DEST = 0;
-parameter C_DMA_TYPE_SRC = 0;
+parameter C_DMA_TYPE_DEST = DMA_TYPE_AXI_MM;
+parameter C_DMA_TYPE_SRC = DMA_TYPE_FIFO;
 
 localparam DMA_TYPE_AXI_MM = 0;
 localparam DMA_TYPE_AXI_STREAM = 1;
@@ -344,7 +345,7 @@ begin
 		12'h10e: up_rdata <= m_src_axi_araddr; //HAS_SRC_ADDR ? 'h00 : 'h00; // Current src address
 		12'h10f: up_rdata <= {src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0, src_request_id,
 							1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0, dest_address_id, 1'b0, dest_request_id};
-		12'h110: up_rdata <= {dbg_status};
+		12'h110: up_rdata <= dbg_status;
 		default: up_rdata <= 'h00;
 		endcase
 	end
@@ -426,7 +427,8 @@ end endgenerate
 
 dmac_request_arb #(
 	.C_ID_WIDTH(3),
-	.C_M_AXI_DATA_WIDTH(C_M_DEST_AXI_DATA_WIDTH),
+	.C_DMA_DATA_WIDTH_SRC(C_DMA_DATA_WIDTH_SRC),
+	.C_DMA_DATA_WIDTH_DEST(C_DMA_DATA_WIDTH_DEST),
 	.C_DMA_LENGTH_WIDTH(C_DMA_LENGTH_WIDTH),
 	.C_ADDR_ALIGN_BITS(C_ADDR_ALIGN_BITS),
 	.C_DMA_TYPE_DEST(C_DMA_TYPE_DEST),

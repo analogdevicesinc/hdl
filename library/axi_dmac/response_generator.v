@@ -70,10 +70,10 @@ always @(posedge clk) begin
 	if (resetn == 1'b0) begin
 		enabled <= 1'b0;
 	end else begin
-	if (enable)
-		enabled <= 1'b1;
-	else if (request_id == response_id)
-		enabled <= 1'b0;
+		if (enable)
+			enabled <= 1'b1;
+		else if (request_id == response_id)
+			enabled <= 1'b0;
 	end
 end
 

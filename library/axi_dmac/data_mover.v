@@ -59,27 +59,31 @@ module dmac_data_mover (
 
 	input req_valid,
 	output req_ready,
-	input [3:0] req_last_burst_length
+	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length
 );
 
 parameter C_ID_WIDTH = 3;
 parameter C_DATA_WIDTH = 64;
 parameter C_DISABLE_WAIT_FOR_ID = 1;
+parameter C_BEATS_PER_BURST_WIDTH = 4;
+localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
 
 `include "inc_id.h"
 
-reg [3:0] last_burst_length;
+reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_length = 'h00;
+reg [C_BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
 reg [C_ID_WIDTH-1:0] id = 'h00;
-reg [C_ID_WIDTH-1:0] id_next;
-reg [3:0] beat_counter = 'h00;
+reg [C_ID_WIDTH-1:0] id_next = 'h00;
+
+reg pending_burst = 1'b0;
+reg active = 1'b0;
+
 wire last;
 wire last_load;
-reg pending_burst;
-reg active;
 
 assign response_id = id;
 
-assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+assign last = beat_counter == (eot ? last_burst_length : MAX_BEATS_PER_BURST - 1);
 
 assign s_axi_ready = m_axi_ready & pending_burst & active;
 assign m_axi_valid = s_axi_valid & pending_burst & active;

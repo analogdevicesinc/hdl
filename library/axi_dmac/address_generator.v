@@ -42,7 +42,7 @@ module dmac_address_generator (
 	input                        req_valid,
 	output reg                   req_ready,
 	input [31:C_ADDR_ALIGN_BITS] req_address,
-	input [3:0]                  req_last_burst_length,
+	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
 	output reg [C_ID_WIDTH-1:0]  id,
 	input [C_ID_WIDTH-1:0]       wait_id,
@@ -64,22 +64,23 @@ module dmac_address_generator (
 	output     [ 3:0]            cache
 );
 
+parameter C_BEATS_PER_BURST_WIDTH = 4;
+parameter C_DMA_DATA_WIDTH = 64;
+
 parameter C_ID_WIDTH = 3;
 parameter C_ADDR_ALIGN_BITS = 3;
-parameter C_BURST_ALIGN_BITS = 7;
-parameter C_DMA_LENGTH_WIDTH = 24;
-localparam MAX_BURST_SIZE_BEATS = 2**(C_BURST_ALIGN_BITS-C_ADDR_ALIGN_BITS);
+localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
 
 `include "inc_id.h"
 
 assign burst = 2'b01;
 assign prot = 3'b000;
 assign cache = 4'b0011;
-assign len = eot ? req_last_burst_length : MAX_BURST_SIZE_BEATS - 1;
-assign size = 3'b011;
+assign len = eot ? req_last_burst_length : MAX_BEATS_PER_BURST - 1;
+assign size = $clog2(C_DMA_DATA_WIDTH/8);
 
 reg [31-C_ADDR_ALIGN_BITS:0] address = 'h00;
-reg [C_BURST_ALIGN_BITS-C_ADDR_ALIGN_BITS-1:0] last_burst_len = 'h00;
+reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
 assign addr = {address, {C_ADDR_ALIGN_BITS{1'b0}}};
 
 // If we already asserted addr_valid we have to wait until it is accepted before
@@ -111,7 +112,7 @@ always @(posedge clk) begin
 			end
 		end else begin
 			if (addr_valid && addr_ready) begin
-				address <= address + MAX_BURST_SIZE_BEATS;
+				address <= address + MAX_BEATS_PER_BURST;
 				addr_valid <= 1'b0;
 				if (eot)
 					req_ready <= 1'b1;

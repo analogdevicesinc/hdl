@@ -26,7 +26,8 @@ adi_ip_files axi_dmac [list \
   "src_fifo_inf.v" \
   "splitter.v" \
   "response_generator.v" \
-  "axi_dmac.v" ]
+  "axi_dmac.v" \
+  "axi_repack.v" ]
 
 adi_ip_properties axi_dmac
 

@@ -36,61 +36,99 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_request_generator (
-	input req_aclk,
-	input req_aresetn,
+module axi_repack (
+	input                       clk,
+	input                       resetn,
 
-	output [C_ID_WIDTH-1:0] request_id,
-	input [C_ID_WIDTH-1:0] response_id,
+	input                       s_valid,
+	output                      s_ready,
+	input [C_S_DATA_WIDTH-1:0]  s_data,
 
-	input req_valid,
-	output reg req_ready,
-	input [C_BURSTS_PER_TRANSFER_WIDTH-1:0] req_burst_count,
-
-	input enable,
-	input pause,
-
-	output eot
+	output                      m_valid,
+	input                       m_ready,
+	output [C_M_DATA_WIDTH-1:0] m_data
 );
 
-parameter C_ID_WIDTH = 3;
-parameter C_BURSTS_PER_TRANSFER_WIDTH = 17;
+parameter C_M_DATA_WIDTH = 64;
+parameter C_S_DATA_WIDTH = 64;
 
-`include "inc_id.h"
+generate if (C_S_DATA_WIDTH == C_M_DATA_WIDTH) begin
 
-/*
- * Here we only need to count the number of bursts, which means we can ignore
- * the lower bits of the byte count. The last last burst may not contain the
- * maximum number of bytes, but the address_generator and data_mover will take
- * care that only the requested ammount of bytes is transfered.
- */
+assign m_valid = s_valid;
+assign s_ready = m_ready;
+assign m_data = s_data;
 
-reg [C_BURSTS_PER_TRANSFER_WIDTH-1:0] burst_count = 'h00;
-reg [C_ID_WIDTH-1:0] id;
-wire [C_ID_WIDTH-1:0] id_next = inc_id(id);
+end else if (C_S_DATA_WIDTH < C_M_DATA_WIDTH) begin
 
-assign eot = burst_count == 'h00;
-assign request_id = id;
+localparam RATIO = C_M_DATA_WIDTH / C_S_DATA_WIDTH;
 
-always @(posedge req_aclk)
+reg [C_M_DATA_WIDTH-1:0] data;
+reg [$clog2(RATIO)-1:0] count;
+reg valid;
+
+always @(posedge clk)
 begin
-	if (req_aresetn == 1'b0) begin
-		burst_count <= 'h00;
-		id <= 'h0;
-		req_ready <= 1'b1;
+	if (resetn == 1'b0) begin
+		count <= RATIO - 1;
+		valid <= 1'b0;
 	end else begin
-		if (req_ready) begin
-			if (req_valid && enable) begin
-				burst_count <= req_burst_count;
-				req_ready <= 1'b0;
-			end
-		end else if (response_id != id_next && ~pause) begin
-			if (eot)
-				req_ready <= 1'b1;
-			burst_count <= burst_count - 1'b1;
-			id <= id_next;
-		end
+		if (count == 'h00 && s_ready == 1'b1 && s_valid == 1'b1)
+			valid <= 1'b1;
+		else if (m_ready == 1'b1)
+			valid <= 1'b0;
+
+		if (s_ready == 1'b1 && s_valid == 1'b1)
+			count <= count - 1'b1;
 	end
 end
+
+always @(posedge clk)
+begin
+	if (s_ready == 1'b1 && s_valid == 1'b1)
+		data <= {s_data, data[C_M_DATA_WIDTH-1:C_S_DATA_WIDTH]};
+end
+
+assign s_ready = ~valid || m_ready;
+assign m_valid = valid;
+assign m_data = data;
+
+end else begin
+
+localparam RATIO = C_S_DATA_WIDTH / C_M_DATA_WIDTH;
+
+reg [C_S_DATA_WIDTH-1:0] data;
+reg [$clog2(RATIO)-1:0] count;
+reg valid;
+
+always @(posedge clk)
+begin
+	if (resetn == 1'b0) begin
+		count <= RATIO - 1;
+		valid <= 1'b0;
+	end else begin
+		if (s_valid == 1'b1 && s_ready == 1'b1)
+			valid <= 1'b1;
+		else if (count == 'h0 && m_ready == 1'b1 && m_valid == 1'b1)
+			valid <= 1'b0;
+
+		if (m_ready == 1'b1 && m_valid == 1'b1)
+			count <= count - 1'b1;
+	end
+end
+
+always @(posedge clk)
+begin
+	if (s_ready == 1'b1 && s_valid == 1'b1)
+		data <= s_data;
+	else if (m_ready == 1'b1 && m_valid == 1'b1)
+		data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0] <= data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH];
+end
+
+assign s_ready = ~valid || (m_ready && count == 'h0);
+assign m_valid = valid;
+assign m_data = data[C_M_DATA_WIDTH-1:0];
+
+end
+endgenerate
 
 endmodule

@@ -43,8 +43,7 @@ module dmac_src_mm_axi (
 	input                           req_valid,
 	output                          req_ready,
 	input [31:C_ADDR_ALIGN_BITS]    req_address,
-	input [3:0]                     req_last_burst_length,
-	input [2:0]                     req_last_beat_bytes,
+	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
 	input                           enable,
 	output                          enabled,
@@ -66,7 +65,7 @@ module dmac_src_mm_axi (
 
 	output                          fifo_valid,
 	input                           fifo_ready,
-	output [C_M_AXI_DATA_WIDTH-1:0] fifo_data,
+	output [C_DMA_DATA_WIDTH-1:0]   fifo_data,
 
 	// Read address
 	input                            m_axi_arready,
@@ -79,16 +78,16 @@ module dmac_src_mm_axi (
 	output [ 3:0]                    m_axi_arcache,
 
 	// Read data and response
-	input  [C_M_AXI_DATA_WIDTH-1:0]  m_axi_rdata,
+	input  [C_DMA_DATA_WIDTH-1:0]    m_axi_rdata,
 	output                           m_axi_rready,
 	input                            m_axi_rvalid,
 	input  [ 1:0]                    m_axi_rresp
 );
 
 parameter C_ID_WIDTH = 3;
-parameter C_M_AXI_DATA_WIDTH = 64;
+parameter C_DMA_DATA_WIDTH = 64;
 parameter C_ADDR_ALIGN_BITS = 3;
-parameter C_DMA_LENGTH_WIDTH = 24;
+parameter C_BEATS_PER_BURST_WIDTH = 4;
 
 wire [C_ID_WIDTH-1:0] data_id;
 wire [C_ID_WIDTH-1:0] address_id;
@@ -121,9 +120,10 @@ splitter #(
 );
 
 dmac_address_generator #(
-	.C_DMA_LENGTH_WIDTH(C_DMA_LENGTH_WIDTH),
 	.C_ADDR_ALIGN_BITS(C_ADDR_ALIGN_BITS),
-	.C_ID_WIDTH(C_ID_WIDTH)
+	.C_ID_WIDTH(C_ID_WIDTH),
+	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH),
+	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH)
 ) i_addr_gen (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),
@@ -154,7 +154,8 @@ dmac_address_generator #(
 
 dmac_data_mover # (
 	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_M_AXI_DATA_WIDTH)
+	.C_DATA_WIDTH(C_DMA_DATA_WIDTH),
+	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH)
 ) i_data_mover (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),

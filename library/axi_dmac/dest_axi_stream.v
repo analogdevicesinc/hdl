@@ -61,7 +61,7 @@ module dmac_dest_axi_stream (
 
 	input req_valid,
 	output req_ready,
-	input [3:0] req_last_burst_length,
+	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
 	output response_valid,
 	input response_ready,
@@ -71,7 +71,7 @@ module dmac_dest_axi_stream (
 
 parameter C_ID_WIDTH = 3;
 parameter C_S_AXIS_DATA_WIDTH = 64;
-parameter C_LENGTH_WIDTH = 24;
+parameter C_BEATS_PER_BURST_WIDTH = 4;
 
 assign sync_id_ret = sync_id;
 wire data_enabled;
@@ -86,6 +86,7 @@ wire _fifo_ready;
 dmac_data_mover # (
 	.C_ID_WIDTH(C_ID_WIDTH),
 	.C_DATA_WIDTH(C_S_AXIS_DATA_WIDTH),
+	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH),
 	.C_DISABLE_WAIT_FOR_ID(0)
 ) i_data_mover (
 	.clk(s_axis_aclk),
