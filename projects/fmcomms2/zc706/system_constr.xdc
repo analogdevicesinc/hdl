@@ -60,9 +60,9 @@ set_property  -dict {PACKAGE_PIN  AJ29  IOSTANDARD LVCMOS25} [get_ports spi_miso
 
 # clocks
 
-create_clock -name rx_clk       -period  8.00 [get_ports rx_clk_in_p]
+create_clock -name rx_clk       -period  4.00 [get_ports rx_clk_in_p]
 create_clock -name ad9361_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_ad9361/clk]
-create_clock -name fmc_dma_clk  -period  5.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
+create_clock -name fmc_dma_clk  -period  8.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
 
 set_clock_groups -asynchronous -group {ad9361_clk}
 set_clock_groups -asynchronous -group {fmc_dma_clk}

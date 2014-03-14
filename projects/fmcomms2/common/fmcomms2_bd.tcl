@@ -51,7 +51,7 @@ set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
+set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {125.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {49}] $sys_ps7
 set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
@@ -165,8 +165,8 @@ connect_bd_net -net axi_ad9361_adc_mon_data   [get_bd_pins axi_ad9361/adc_mon_da
 # address map
 
 create_bd_addr_seg -range 0x00010000 -offset 0x79020000 [get_bd_addr_spaces sys_ps7/Data] [get_bd_addr_segs axi_ad9361/s_axi/axi_lite]          SEG_data_ad9361
-create_bd_addr_seg -range 0x00010000 -offset 0x7C400000 [get_bd_addr_spaces sys_ps7/Data] [get_bd_addr_segs axi_ad9361_dac_dma/s_axi/axi_lite]  SEG_data_ad9361_dac_dma
-create_bd_addr_seg -range 0x00010000 -offset 0x7C420000 [get_bd_addr_spaces sys_ps7/Data] [get_bd_addr_segs axi_ad9361_adc_dma/s_axi/axi_lite]  SEG_data_ad9361_adc_dma
+create_bd_addr_seg -range 0x00010000 -offset 0x7C420000 [get_bd_addr_spaces sys_ps7/Data] [get_bd_addr_segs axi_ad9361_dac_dma/s_axi/axi_lite]  SEG_data_ad9361_dac_dma
+create_bd_addr_seg -range 0x00010000 -offset 0x7C400000 [get_bd_addr_spaces sys_ps7/Data] [get_bd_addr_segs axi_ad9361_adc_dma/s_axi/axi_lite]  SEG_data_ad9361_adc_dma
 
 create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9361_adc_dma/m_dest_axi] [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_hp1_ddr_lowocm
 create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9361_dac_dma/m_src_axi]  [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] SEG_sys_ps7_hp2_ddr_lowocm
