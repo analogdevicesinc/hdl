@@ -108,7 +108,6 @@ module axi_ad9361 (
   // parameters
 
   parameter   PCORE_ID = 0;
-  parameter   PCORE_VERSION = 32'h00060061;
   parameter   PCORE_BUFTYPE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
   parameter   PCORE_DAC_DP_DISABLE = 0;
@@ -344,7 +343,6 @@ module axi_ad9361 (
 
   axi_ad9361_rx #(
     .PCORE_ID (PCORE_ID),
-    .PCORE_VERSION (PCORE_VERSION),
     .DP_DISABLE (PCORE_ADC_DP_DISABLE))
   i_rx (
     .adc_clk (clk),
@@ -394,7 +392,6 @@ module axi_ad9361 (
 
   axi_ad9361_tx #(
     .PCORE_ID (PCORE_ID),
-    .PCORE_VERSION (PCORE_VERSION),
     .DP_DISABLE (PCORE_DAC_DP_DISABLE))
   i_tx (
     .dac_clk (clk),

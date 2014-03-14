@@ -92,7 +92,7 @@ module up_dac_common (
 
   // parameters
 
-  parameter   PCORE_VERSION = 32'h00040062;
+  localparam  PCORE_VERSION = 32'h00070061;
   parameter   PCORE_ID = 0;
 
   // mmcm reset

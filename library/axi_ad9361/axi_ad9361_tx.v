@@ -81,7 +81,6 @@ module axi_ad9361_tx (
 
   parameter   DP_DISABLE = 0;
   parameter   PCORE_ID = 0;
-  parameter   PCORE_VERSION = 32'h00060061;
 
   // dac interface
 
@@ -349,10 +348,7 @@ module axi_ad9361_tx (
 
   // dac common processor interface
 
-  up_dac_common #(
-    .PCORE_ID (PCORE_ID),
-    .PCORE_VERSION (PCORE_VERSION)
-  ) i_up_dac_common (
+  up_dac_common #(.PCORE_ID (PCORE_ID)) i_up_dac_common (
     .mmcm_rst (),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),

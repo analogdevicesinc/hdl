@@ -84,7 +84,7 @@ module up_hdmi_tx (
 
   // parameters
 
-  parameter   PCORE_VERSION = 32'h00040062;
+  localparam  PCORE_VERSION = 32'h00040062;
   parameter   PCORE_ID = 0;
 
   // hdmi interface

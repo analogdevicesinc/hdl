@@ -134,7 +134,7 @@ module up_gt (
 
   // parameters
 
-  parameter   PCORE_VERSION = 32'h00040062;
+  localparam  PCORE_VERSION = 32'h00050062;
   parameter   PCORE_ID = 0;
 
   // gt interface

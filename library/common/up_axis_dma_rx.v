@@ -71,7 +71,7 @@ module up_axis_dma_rx (
 
   // parameters
 
-  parameter   PCORE_VERSION = 32'h00050062;
+  localparam  PCORE_VERSION = 32'h00050062;
   parameter   PCORE_ID = 0;
 
   // adc interface

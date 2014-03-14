@@ -106,7 +106,6 @@ module axi_ad9361_rx (
 
   parameter   DP_DISABLE = 0;
   parameter   PCORE_ID = 0;
-  parameter   PCORE_VERSION = 32'h00060061;
 
   // adc interface
 
@@ -664,10 +663,7 @@ module axi_ad9361_rx (
 
   // common processor control
 
-  up_adc_common #(
-    .PCORE_ID (PCORE_ID),
-    .PCORE_VERSION (PCORE_VERSION)
-  ) i_up_adc_common (
+  up_adc_common #(.PCORE_ID (PCORE_ID)) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
