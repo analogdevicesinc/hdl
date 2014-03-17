@@ -28,9 +28,11 @@ set ref_clk         [create_bd_port -dir O ref_clk]
 set axi_ad9122 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9122:1.0 axi_ad9122]
 
 set axi_ad9122_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9122_dma]
+set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9122_dma
 set_property -dict [list CONFIG.C_DMA_TYPE_DEST {2}] $axi_ad9122_dma
-set_property -dict [list CONFIG.C_ADDR_ALIGN_BITS {4}] $axi_ad9122_dma
+set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9122_dma
 set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9122_dma
+set_property -dict [list CONFIG.C_ADDR_ALIGN_BITS {3}] $axi_ad9122_dma
 set_property -dict [list CONFIG.C_M_DEST_AXI_DATA_WIDTH {64}] $axi_ad9122_dma
 
 set axi_ad9122_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9122_dma_interconnect]
@@ -54,6 +56,10 @@ set_property -dict [list CONFIG.S_DATA_WIDTH {64}] $sys_ad9643_util_wfifo
 
 set axi_ad9643_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9643_dma]
 set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9643_dma
+set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9643_dma
+set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9643_dma
+set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9643_dma
+set_property -dict [list CONFIG.C_ADDR_ALIGN_BITS {3}] $axi_ad9643_dma
 set_property -dict [list CONFIG.C_M_DEST_AXI_DATA_WIDTH {64}] $axi_ad9643_dma
 
 set axi_ad9643_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9643_dma_interconnect]
@@ -184,15 +190,31 @@ connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9643_dma_interconnect/
 connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9643_dma_interconnect/S00_ARESETN] $sys_fmc_dma_resetn_source
 connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9643_dma/m_dest_axi_aresetn]
 
-# ila (adc)
+# ila (adc) - need a fifo, zed ila can not run at 250MHz
+
+set ila_adc_fifo  [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:11.0 ila_adc_fifo]
+set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $ila_adc_fifo
+set_property -dict [list CONFIG.Input_Data_Width {28}] $ila_adc_fifo
+set_property -dict [list CONFIG.Input_Depth {32}] $ila_adc_fifo
+set_property -dict [list CONFIG.Output_Data_Width {56}] $ila_adc_fifo
+set_property -dict [list CONFIG.Overflow_Flag {true}] $ila_adc_fifo
+set_property -dict [list CONFIG.Reset_Pin {false}] $ila_adc_fifo
 
 set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc]
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {28}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {56}] $ila_adc
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 
-connect_bd_net -net adc_clk [get_bd_pins ila_adc/clk]
-connect_bd_net -net axi_ad9643_adc_mon_data   [get_bd_pins axi_ad9643/adc_mon_data]   [get_bd_pins ila_adc/probe0]
+set ila_constant_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 ila_constant_1]
+
+
+connect_bd_net -net axi_ad9643_adc_mon_data [get_bd_pins axi_ad9643/adc_mon_data] [get_bd_pins ila_adc_fifo/din]
+connect_bd_net -net adc_clk [get_bd_pins axi_ad9643/adc_clk] [get_bd_pins ila_adc_fifo/wr_clk]
+connect_bd_net -net sys_fmc_dma_clk  [get_bd_pins ila_adc_fifo/rd_clk]
+connect_bd_net -net xlconstant_0_const [get_bd_pins ila_adc_fifo/rd_en] [get_bd_pins ila_adc_fifo/wr_en] [get_bd_pins ila_constant_1/const]
+
+connect_bd_net -net sys_fmc_dma_clk [get_bd_pins ila_adc/clk]
+connect_bd_net -net ila_adc_fifo_dout [get_bd_pins ila_adc_fifo/dout] [get_bd_pins ila_adc/probe0]
 
 # reference clock
 
