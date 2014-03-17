@@ -202,7 +202,11 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout));
+    .uart_sout (uart_sout),
+    .unc_int0 (1'b0),
+    .unc_int1 (1'b0),
+    .unc_int2 (1'b0),
+    .unc_int3 (1'b0));
 
 endmodule
 
