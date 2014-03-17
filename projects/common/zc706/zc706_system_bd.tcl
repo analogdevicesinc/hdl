@@ -190,7 +190,6 @@ set sys_zynq 1
 set sys_mem_size 0x40000000 
 set sys_addr_cntrl_space [get_bd_addr_spaces sys_ps7/Data]
 
-
 create_bd_addr_seg -range 0x00010000 -offset 0x41600000 $sys_addr_cntrl_space [get_bd_addr_segs axi_iic_main/s_axi/Reg]             SEG_data_iic_main
 create_bd_addr_seg -range 0x00010000 -offset 0x79000000 $sys_addr_cntrl_space [get_bd_addr_segs axi_hdmi_clkgen/s_axi/axi_lite]     SEG_data_hdmi_clkgen
 create_bd_addr_seg -range 0x00010000 -offset 0x43000000 $sys_addr_cntrl_space [get_bd_addr_segs axi_hdmi_dma/S_AXI_LITE/Reg]        SEG_data_hdmi_dma
