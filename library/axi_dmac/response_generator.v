@@ -63,7 +63,7 @@ parameter C_ID_WIDTH = 3;
 assign resp_resp = RESP_OKAY;
 assign resp_eot = eot;
 
-assign resp_valid = request_id != response_id;
+assign resp_valid = request_id != response_id && enabled;
 
 // We have to wait for all responses before we can disable the response handler
 always @(posedge clk) begin
