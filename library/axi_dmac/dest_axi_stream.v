@@ -75,7 +75,6 @@ parameter C_BEATS_PER_BURST_WIDTH = 4;
 
 assign sync_id_ret = sync_id;
 wire data_enabled;
-wire [C_ID_WIDTH-1:0] data_id;
 wire _fifo_ready;
 
 // We are not allowed to just de-assert valid, but if the streaming target does

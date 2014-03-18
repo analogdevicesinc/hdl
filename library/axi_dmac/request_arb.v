@@ -432,8 +432,26 @@ dmac_dest_mm_axi #(
 	.m_axi_bready(m_axi_bready)
 );
 
-end else if (C_DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
+end else begin
 
+assign m_axi_awvalid = 1'b0;
+assign m_axi_awaddr = 'h00;
+assign m_axi_awlen = 'h00;
+assign m_axi_awsize = 'h00;
+assign m_axi_awburst = 'h00;
+assign m_axi_awprot = 'h00;
+assign m_axi_awcache = 'h00;
+
+assign m_axi_wvalid = 1'b0;
+assign m_axi_wdata = 'h00;
+assign m_axi_wstrb = 'h00;
+assign m_axi_wlast = 1'b0;
+
+assign m_axi_bready = 1'b0;
+
+end
+
+if (C_DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
 
 assign dest_clk = m_axis_aclk;
 
@@ -483,7 +501,14 @@ dmac_dest_axi_stream #(
 	.m_axis_data(m_axis_data)
 );
 
-end else /* if (C_DMA_TYPE_DEST == DMA_TYPE_FIFO) */ begin
+end else begin
+
+assign m_axis_valid = 1'b0;
+assign m_axis_data = 'h00;
+
+end 
+
+if (C_DMA_TYPE_DEST == DMA_TYPE_FIFO) begin
 
 assign dest_clk = fifo_rd_clk;
 
@@ -534,6 +559,12 @@ dmac_dest_fifo_inf #(
 	.underflow(fifo_rd_underflow)
 );
 
+end else begin
+
+assign fifo_rd_valid = 1'b0;
+assign fifo_rd_dout = 'h0;
+assign fifo_rd_underflow = 1'b0;
+
 end endgenerate
 
 generate if (C_DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
@@ -558,6 +589,7 @@ dmac_src_mm_axi #(
 	.m_axi_aclk(m_src_axi_aclk),
 	.m_axi_aresetn(m_src_axi_aresetn),
 
+	.pause(pause),
 	.enable(src_enable),
 	.enabled(src_enabled),
 	.sync_id(src_sync_id),
@@ -599,7 +631,20 @@ dmac_src_mm_axi #(
 	.m_axi_rresp(m_axi_rresp)
 );
 
-end else if (C_DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
+end else begin
+
+assign m_axi_arvalid = 1'b0;
+assign m_axi_araddr = 'h00;
+assign m_axi_arlen = 'h00;
+assign m_axi_arsize = 'h00;
+assign m_axi_arburst = 'h00;
+assign m_axi_arcache = 'h00;
+assign m_axi_arprot = 'h00;
+assign m_axi_rready = 1'b0;
+
+end 
+
+if (C_DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
 
 assign src_clk = s_axis_aclk;
 
@@ -607,6 +652,10 @@ wire src_eot = eot_mem_src[src_response_id];
 
 assign dbg_src_address_id = 'h00;
 assign dbg_src_data_id = 'h00;
+
+/* TODO */
+assign src_response_valid = 1'b0;
+assign src_response_resp = 2'b0;
 
 dmac_src_axi_stream #(
 	.C_ID_WIDTH(C_ID_WIDTH),
@@ -641,7 +690,13 @@ dmac_src_axi_stream #(
 	.s_axis_user(s_axis_user)
 );
 
-end else /* if (C_DMA_TYPE_SRC == DMA_TYPE_FIFO) */ begin
+end else begin
+
+assign s_axis_ready = 1'b0;
+
+end
+
+if (C_DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
 
 assign src_clk = fifo_wr_clk;
 
@@ -649,6 +704,10 @@ wire src_eot = eot_mem_src[src_response_id];
 
 assign dbg_src_address_id = 'h00;
 assign dbg_src_data_id = 'h00;
+
+/* TODO */
+assign src_response_valid = 1'b0;
+assign src_response_resp = 2'b0;
 
 dmac_src_fifo_inf #(
 	.C_ID_WIDTH(C_ID_WIDTH),
@@ -682,6 +741,10 @@ dmac_src_fifo_inf #(
 	.overflow(fifo_wr_overflow),
 	.sync(fifo_wr_sync)
 );
+
+end else begin
+
+assign fifo_wr_overflow = 1'b0;
 
 end endgenerate
 

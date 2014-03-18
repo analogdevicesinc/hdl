@@ -99,9 +99,6 @@ parameter C_ADDR_ALIGN_BITS = 3;
 parameter C_BEATS_PER_BURST_WIDTH = 4;
 parameter C_BYTES_PER_BEAT_WIDTH = 3;
 
-wire [C_ID_WIDTH-1:0] data_id;
-wire [C_ID_WIDTH-1:0] address_id;
-
 reg [(C_DMA_DATA_WIDTH/8)-1:0] wstrb;
 
 wire address_req_valid;
@@ -147,7 +144,7 @@ dmac_address_generator #(
 	.pause(pause),
 
 	.id(address_id),
-	.wait_id(request_id),
+	.request_id(request_id),
 	.sync_id(sync_id),
 
 	.req_valid(address_req_valid),
@@ -220,7 +217,7 @@ dmac_response_handler #(
 	.enabled(enabled),
 
 	.id(response_id),
-	.wait_id(data_id),
+	.request_id(data_id),
 	.sync_id(sync_id),
 
 	.eot(response_eot),

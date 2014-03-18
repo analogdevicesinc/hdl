@@ -89,8 +89,7 @@ parameter C_DMA_DATA_WIDTH = 64;
 parameter C_ADDR_ALIGN_BITS = 3;
 parameter C_BEATS_PER_BURST_WIDTH = 4;
 
-wire [C_ID_WIDTH-1:0] data_id;
-wire [C_ID_WIDTH-1:0] address_id;
+`include "resp.h"
 
 wire address_enabled;
 
@@ -101,6 +100,9 @@ wire data_req_ready;
 
 assign sync_id_ret = sync_id;
 assign response_id = data_id;
+
+assign response_valid = 1'b0;
+assign response_resp = RESP_OKAY;
 
 splitter #(
 	.C_NUM_M(2)
@@ -130,10 +132,11 @@ dmac_address_generator #(
 
 	.enable(enable),
 	.enabled(address_enabled),
+	.pause(pause),
 	.sync_id(sync_id),
 
+	.request_id(request_id),
 	.id(address_id),
-	.wait_id(request_id),
 
 	.req_valid(address_req_valid),
 	.req_ready(address_req_ready),
@@ -177,7 +180,8 @@ dmac_data_mover # (
 	.s_axi_data(m_axi_rdata),
 	.m_axi_valid(fifo_valid),
 	.m_axi_ready(fifo_ready),
-	.m_axi_data(fifo_data)
+	.m_axi_data(fifo_data),
+	.m_axi_last()
 );
 
 reg [1:0] rresp;

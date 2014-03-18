@@ -76,7 +76,6 @@ parameter C_BEATS_PER_BURST_WIDTH = 4;
 
 assign sync_id_ret = sync_id;
 wire data_enabled;
-wire [C_ID_WIDTH-1:0] data_id;
 
 wire _fifo_ready;
 assign fifo_ready = _fifo_ready | ~enabled;
@@ -129,7 +128,8 @@ dmac_data_mover # (
 	.s_axi_data(fifo_data),
 	.m_axi_ready(data_ready),
 	.m_axi_valid(data_valid),
-	.m_axi_data(dout)
+	.m_axi_data(dout),
+	.m_axi_last()
 );
 
 dmac_response_generator # (

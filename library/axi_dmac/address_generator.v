@@ -45,7 +45,7 @@ module dmac_address_generator (
 	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
 	output reg [C_ID_WIDTH-1:0]  id,
-	input [C_ID_WIDTH-1:0]       wait_id,
+	input [C_ID_WIDTH-1:0]       request_id,
 	input                        sync_id,
 
 	input                        eot,
@@ -116,7 +116,7 @@ always @(posedge clk) begin
 				addr_valid <= 1'b0;
 				if (eot)
 					req_ready <= 1'b1;
-			end else if (id != wait_id && enable) begin
+			end else if (id != request_id && enable) begin
 				addr_valid <= 1'b1;
 			end
 		end
@@ -128,7 +128,7 @@ always @(posedge clk) begin
 		id <='h0;
 	end else begin
 		if ((addr_valid && addr_ready) ||
-			(sync_id && id != wait_id))
+			(sync_id && id != request_id))
 			id <= inc_id(id);
 	end
 end
