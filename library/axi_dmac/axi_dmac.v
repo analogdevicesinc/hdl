@@ -153,8 +153,8 @@ parameter C_AXI_SLICE_SRC = 0;
 parameter C_SYNC_TRANSFER_START = 0;
 parameter C_CYCLIC = 1;
 
-parameter C_DMA_TYPE_DEST = DMA_TYPE_AXI_MM;
-parameter C_DMA_TYPE_SRC = DMA_TYPE_FIFO;
+parameter C_DMA_TYPE_DEST = 0;
+parameter C_DMA_TYPE_SRC = 2;
 
 localparam DMA_TYPE_AXI_MM = 0;
 localparam DMA_TYPE_AXI_STREAM = 1;
