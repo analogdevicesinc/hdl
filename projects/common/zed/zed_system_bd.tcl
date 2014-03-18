@@ -271,15 +271,17 @@ connect_bd_net -net sys_concat_intc_din_4 [get_bd_pins sys_concat_intc/In4] [get
 
 # address map
 
+set sys_zynq 1
 set sys_mem_size 0x20000000 
+set sys_addr_cntrl_space [get_bd_addr_spaces sys_ps7/Data]
 
-create_bd_addr_seg -range 0x00010000 -offset 0x41600000 [get_bd_addr_spaces sys_ps7/Data]  [get_bd_addr_segs axi_iic_main/s_axi/Reg]             SEG_data_iic_main
-create_bd_addr_seg -range 0x00010000 -offset 0x79000000 [get_bd_addr_spaces sys_ps7/Data]  [get_bd_addr_segs axi_hdmi_clkgen/s_axi/axi_lite]     SEG_data_hdmi_clkgen
-create_bd_addr_seg -range 0x00010000 -offset 0x43000000 [get_bd_addr_spaces sys_ps7/Data]  [get_bd_addr_segs axi_hdmi_dma/S_AXI_LITE/Reg]        SEG_data_hdmi_dma
-create_bd_addr_seg -range 0x00010000 -offset 0x70e00000 [get_bd_addr_spaces sys_ps7/Data]  [get_bd_addr_segs axi_hdmi_core/s_axi/axi_lite]       SEG_data_hdmi_core
-create_bd_addr_seg -range 0x00010000 -offset 0x75c00000 [get_bd_addr_spaces sys_ps7/Data]  [get_bd_addr_segs axi_spdif_tx_core/S_AXI/reg0]       SEG_data_spdif_core
-create_bd_addr_seg -range 0x00010000 -offset 0x77600000 [get_bd_addr_spaces sys_ps7/Data]  [get_bd_addr_segs axi_i2s_adi/S_AXI/reg0]             SEG_data_i2s_adi
-create_bd_addr_seg -range 0x00010000 -offset 0x41620000 [get_bd_addr_spaces sys_ps7/Data]  [get_bd_addr_segs axi_iic_fmc/s_axi/Reg]              SEG_data_iic_fmc
+create_bd_addr_seg -range 0x00010000 -offset 0x41600000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_iic_main/s_axi/Reg]             SEG_data_iic_main
+create_bd_addr_seg -range 0x00010000 -offset 0x79000000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_hdmi_clkgen/s_axi/axi_lite]     SEG_data_hdmi_clkgen
+create_bd_addr_seg -range 0x00010000 -offset 0x43000000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_hdmi_dma/S_AXI_LITE/Reg]        SEG_data_hdmi_dma
+create_bd_addr_seg -range 0x00010000 -offset 0x70e00000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_hdmi_core/s_axi/axi_lite]       SEG_data_hdmi_core
+create_bd_addr_seg -range 0x00010000 -offset 0x75c00000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_spdif_tx_core/S_AXI/reg0]       SEG_data_spdif_core
+create_bd_addr_seg -range 0x00010000 -offset 0x77600000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_i2s_adi/S_AXI/reg0]             SEG_data_i2s_adi
+create_bd_addr_seg -range 0x00010000 -offset 0x41620000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_iic_fmc/s_axi/Reg]              SEG_data_iic_fmc
 
 create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_hdmi_dma/Data_MM2S]     [get_bd_addr_segs sys_ps7/S_AXI_HP0/HP0_DDR_LOWOCM] SEG_sys_ps7_hp0_ddr_lowocm
 
