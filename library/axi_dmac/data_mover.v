@@ -152,7 +152,7 @@ end
 always @(*)
 begin
 	if ((s_axi_ready && s_axi_valid && last) ||
-		(sync_id && id != request_id))
+		(sync_id && pending_burst))
 		id_next <= inc_id(id);
 	else
 		id_next <= id;
