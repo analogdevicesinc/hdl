@@ -86,6 +86,9 @@ proc adi_project_run {project_name} {
   open_run synth_1
   report_timing_summary -file timing_synth.log
 
+  set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+  set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE Explore [get_runs impl_1]
+
   launch_runs impl_1 -to_step write_bitstream
   wait_on_run impl_1
   open_run impl_1
