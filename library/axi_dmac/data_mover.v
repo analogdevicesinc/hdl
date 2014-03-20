@@ -78,12 +78,15 @@ reg [C_ID_WIDTH-1:0] id_next = 'h00;
 reg pending_burst = 1'b0;
 reg active = 1'b0;
 
+reg [C_ID_WIDTH-1:0] request_id_d1 = 'h0;
+reg eot_d1 = 1'b0;
+
 wire last;
 wire last_load;
 
 assign response_id = id;
 
-assign last = beat_counter == (eot ? last_burst_length : MAX_BEATS_PER_BURST - 1);
+assign last = beat_counter == (eot_d1 ? last_burst_length : MAX_BEATS_PER_BURST - 1);
 
 assign s_axi_ready = m_axi_ready & pending_burst & active;
 assign m_axi_valid = s_axi_valid & pending_burst & active;
@@ -92,7 +95,7 @@ assign m_axi_last = last;
 
 // If we want to support zero delay between transfers we have to assert
 // req_ready on the same cycle on which the last load happens.
-assign last_load = s_axi_ready && s_axi_valid && last && eot;
+assign last_load = s_axi_ready && s_axi_valid && last && eot_d1;
 assign req_ready = last_load || ~active;
 
 always @(posedge clk) begin
@@ -110,11 +113,16 @@ always @(posedge clk) begin
 			end else begin
 				// For memory mapped AXI busses we have to complete all pending
 				// burst requests before we can disable the data mover.
-				if (response_id == request_id)
+				if (response_id == request_id_d1)
 					enabled <= 1'b0;
 			end
 		end
 	end
+end
+
+always @(posedge clk) begin
+	eot_d1 <= eot;
+	request_id_d1 <= request_id;
 end
 
 always @(posedge clk) begin
@@ -152,7 +160,7 @@ end
 always @(*)
 begin
 	if ((s_axi_ready && s_axi_valid && last) ||
-		(sync_id && pending_burst))
+		(sync_id && id != request_id))
 		id_next <= inc_id(id);
 	else
 		id_next <= id;
@@ -164,7 +172,8 @@ always @(posedge clk) begin
 		pending_burst <= 1'b0;
 	end else begin
 		id <= id_next;
-		pending_burst <= id_next != request_id;
+		pending_burst <= id_next != request_id_d1;
+    
 	end
 end
 
