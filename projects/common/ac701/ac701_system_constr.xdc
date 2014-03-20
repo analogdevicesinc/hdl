@@ -42,22 +42,22 @@ set_property -dict  {PACKAGE_PIN  J26   IOSTANDARD  LVCMOS25} [get_ports fan_pwm
 
 # lcd
 
-set_property -dict  {PACKAGE_PIN  L20   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[6]]   ; ## lcd_e    
-set_property -dict  {PACKAGE_PIN  L23   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[5]]   ; ## lcd_rs   
-set_property -dict  {PACKAGE_PIN  L24   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[4]]   ; ## lcd_rw   
+set_property -dict  {PACKAGE_PIN  L20   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[6]]   ; ## lcd_e
+set_property -dict  {PACKAGE_PIN  L23   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[5]]   ; ## lcd_rs
+set_property -dict  {PACKAGE_PIN  L24   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[4]]   ; ## lcd_rw
 set_property -dict  {PACKAGE_PIN  L22   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[3]]   ; ## lcd_db[7]
 set_property -dict  {PACKAGE_PIN  M25   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[2]]   ; ## lcd_db[6]
 set_property -dict  {PACKAGE_PIN  M24   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[1]]   ; ## lcd_db[5]
 set_property -dict  {PACKAGE_PIN  L25   IOSTANDARD  LVCMOS15} [get_ports gpio_lcd[0]]   ; ## lcd_db[4]
-set_property -dict  {PACKAGE_PIN  R8    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[0]]    ; ## GPIO_DIP_SW0  
-set_property -dict  {PACKAGE_PIN  P8    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[1]]    ; ## GPIO_DIP_SW1  
-set_property -dict  {PACKAGE_PIN  R7    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[2]]    ; ## GPIO_DIP_SW2  
-set_property -dict  {PACKAGE_PIN  R6    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[3]]    ; ## GPIO_DIP_SW3  
-set_property -dict  {PACKAGE_PIN  P6    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[4]]    ; ## GPIO_SW_N     
-set_property -dict  {PACKAGE_PIN  U5    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[5]]    ; ## GPIO_SW_E     
-set_property -dict  {PACKAGE_PIN  T5    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[6]]    ; ## GPIO_SW_S     
-set_property -dict  {PACKAGE_PIN  R5    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[7]]    ; ## GPIO_SW_W     
-set_property -dict  {PACKAGE_PIN  U6    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[8]]    ; ## GPIO_SW_C     
+set_property -dict  {PACKAGE_PIN  R8    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[0]]    ; ## GPIO_DIP_SW0
+set_property -dict  {PACKAGE_PIN  P8    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[1]]    ; ## GPIO_DIP_SW1
+set_property -dict  {PACKAGE_PIN  R7    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[2]]    ; ## GPIO_DIP_SW2
+set_property -dict  {PACKAGE_PIN  R6    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[3]]    ; ## GPIO_DIP_SW3
+set_property -dict  {PACKAGE_PIN  P6    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[4]]    ; ## GPIO_SW_N
+set_property -dict  {PACKAGE_PIN  U5    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[5]]    ; ## GPIO_SW_E
+set_property -dict  {PACKAGE_PIN  T5    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[6]]    ; ## GPIO_SW_S
+set_property -dict  {PACKAGE_PIN  R5    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[7]]    ; ## GPIO_SW_W
+set_property -dict  {PACKAGE_PIN  U6    IOSTANDARD  LVCMOS15} [get_ports gpio_sw[8]]    ; ## GPIO_SW_C
 set_property -dict  {PACKAGE_PIN  M26   IOSTANDARD  LVCMOS15} [get_ports gpio_led[0]]   ; ## GPIO_LED_0_LS
 set_property -dict  {PACKAGE_PIN  T24   IOSTANDARD  LVCMOS15} [get_ports gpio_led[1]]   ; ## GPIO_LED_1_LS
 set_property -dict  {PACKAGE_PIN  T25   IOSTANDARD  LVCMOS15} [get_ports gpio_led[2]]   ; ## GPIO_LED_2_LS
@@ -72,8 +72,8 @@ set_property -dict  {PACKAGE_PIN  K25   IOSTANDARD  LVCMOS15  DRIVE 8 SLEW SLOW}
 # hdmi
 
 set_property -dict  {PACKAGE_PIN  V21   IOSTANDARD  LVCMOS18} [get_ports hdmi_out_clk]
-set_property -dict  {PACKAGE_PIN  AC26  IOSTANDARD  LVCMOS18} [get_ports hdmi_hsync]
-set_property -dict  {PACKAGE_PIN  AA22  IOSTANDARD  LVCMOS18} [get_ports hdmi_vsync]
+set_property -dict  {PACKAGE_PIN  AA22  IOSTANDARD  LVCMOS18} [get_ports hdmi_hsync]
+set_property -dict  {PACKAGE_PIN  AC26  IOSTANDARD  LVCMOS18} [get_ports hdmi_vsync]
 set_property -dict  {PACKAGE_PIN  AB26  IOSTANDARD  LVCMOS18} [get_ports hdmi_data_e]
 set_property -dict  {PACKAGE_PIN  AA24  IOSTANDARD  LVCMOS18} [get_ports hdmi_data[0]]
 set_property -dict  {PACKAGE_PIN  Y25   IOSTANDARD  LVCMOS18} [get_ports hdmi_data[1]]
