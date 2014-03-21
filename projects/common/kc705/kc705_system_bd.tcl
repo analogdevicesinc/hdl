@@ -17,7 +17,7 @@ set mii             [create_bd_intf_port -mode Master -vlnv xilinx.com:interface
 set gpio_sw         [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_sw]
 set gpio_led        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_led]
 set gpio_lcd        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_lcd]
- 
+
 set iic_rstn        [create_bd_port -dir O iic_rstn]
 set iic_main        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main]
 
@@ -185,14 +185,14 @@ set_property -dict [list CONFIG.c_sg_include_stscntrl_strm {0}] $axi_spdif_tx_dm
 connect_bd_net -net mdm_1_debug_sys_rst [get_bd_pins sys_mb_debug/Debug_SYS_Rst]
 connect_bd_net -net mdm_1_debug_sys_rst [get_bd_pins sys_rstgen/mb_debug_sys_rst]
 
-connect_bd_net -net sys_rstgen_mb_reset [get_bd_pins sys_rstgen/mb_reset] 
-connect_bd_net -net sys_rstgen_mb_reset [get_bd_pins sys_mb/Reset] 
+connect_bd_net -net sys_rstgen_mb_reset [get_bd_pins sys_rstgen/mb_reset]
+connect_bd_net -net sys_rstgen_mb_reset [get_bd_pins sys_mb/Reset]
 
-connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_rstgen/bus_struct_reset] 
-connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_dlmb/SYS_Rst] 
-connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_ilmb/SYS_Rst] 
-connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_dlmb_cntlr/LMB_Rst] 
-connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_ilmb_cntlr/LMB_Rst] 
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_rstgen/bus_struct_reset]
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_dlmb/SYS_Rst]
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_ilmb/SYS_Rst]
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_dlmb_cntlr/LMB_Rst]
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_ilmb_cntlr/LMB_Rst]
 
 # microblaze local memory
 
@@ -233,34 +233,34 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/ACLK] $sy
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/ACLK] $sys_200m_clk_source
 
-connect_bd_net -net sys_100m_resetn [get_bd_pins sys_mb_debug/S_AXI_ARESETN] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ddr_cntrl/aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ethernet/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_uart/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_timer/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_intc/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_gpio_lcd/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_gpio_sw_led/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_iic_main/s_axi_aresetn] 
+connect_bd_net -net sys_100m_resetn [get_bd_pins sys_mb_debug/S_AXI_ARESETN]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ddr_cntrl/aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ethernet/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_uart/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_timer/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_intc/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_gpio_lcd/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_gpio_sw_led/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_iic_main/s_axi_aresetn]
 
-connect_bd_net -net sys_100m_clk [get_bd_pins sys_rstgen/slowest_sync_clk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins sys_mb/Clk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins sys_mb_debug/S_AXI_ACLK] 
-connect_bd_net -net sys_100m_clk [get_bd_pins sys_dlmb/LMB_Clk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins sys_ilmb/LMB_Clk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins sys_dlmb_cntlr/LMB_Clk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins sys_ilmb_cntlr/LMB_Clk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ethernet/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_uart/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_timer/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_intc/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_gpio_lcd/s_axi_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins sys_rstgen/slowest_sync_clk]
+connect_bd_net -net sys_100m_clk [get_bd_pins sys_mb/Clk]
+connect_bd_net -net sys_100m_clk [get_bd_pins sys_mb_debug/S_AXI_ACLK]
+connect_bd_net -net sys_100m_clk [get_bd_pins sys_dlmb/LMB_Clk]
+connect_bd_net -net sys_100m_clk [get_bd_pins sys_ilmb/LMB_Clk]
+connect_bd_net -net sys_100m_clk [get_bd_pins sys_dlmb_cntlr/LMB_Clk]
+connect_bd_net -net sys_100m_clk [get_bd_pins sys_ilmb_cntlr/LMB_Clk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ethernet/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_uart/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_timer/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_intc/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_gpio_lcd/s_axi_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_gpio_sw_led/s_axi_aclk]
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_iic_main/s_axi_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_iic_main/s_axi_aclk]
 
 # defaults (interconnect - processor)
 
-connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_s00_axi [get_bd_intf_pins axi_cpu_aux_interconnect/S00_AXI] [get_bd_intf_pins axi_cpu_interconnect/M06_AXI] 
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_s00_axi [get_bd_intf_pins axi_cpu_aux_interconnect/S00_AXI] [get_bd_intf_pins axi_cpu_interconnect/M06_AXI]
 connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m00_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M00_AXI] [get_bd_intf_pins sys_mb_debug/S_AXI]
 connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m01_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M01_AXI] [get_bd_intf_pins axi_ethernet/s_axi]
 connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m03_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M03_AXI] [get_bd_intf_pins axi_uart/s_axi]
@@ -316,7 +316,7 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S07_ACLK] $sy
 
 connect_bd_net -net sys_concat_aux_intc_intr_00 [get_bd_pins sys_concat_aux_intc/In0] [get_bd_pins axi_timer/interrupt]
 connect_bd_net -net sys_concat_aux_intc_intr_01 [get_bd_pins sys_concat_aux_intc/In1] [get_bd_pins axi_ethernet/ip2intc_irpt]
-connect_bd_net -net sys_concat_aux_intc_intr_02 [get_bd_pins sys_concat_aux_intc/In2] [get_bd_ports unc_int0] 
+connect_bd_net -net sys_concat_aux_intc_intr_02 [get_bd_pins sys_concat_aux_intc/In2] [get_bd_ports unc_int0]
 connect_bd_net -net sys_concat_aux_intc_intr_03 [get_bd_pins sys_concat_aux_intc/In3] [get_bd_pins axi_uart/interrupt]
 connect_bd_net -net sys_concat_aux_intc_intr_04 [get_bd_pins sys_concat_aux_intc/In4] [get_bd_pins axi_gpio_lcd/ip2intc_irpt]
 connect_bd_net -net sys_concat_aux_intc_intr_05 [get_bd_pins sys_concat_aux_intc/In5] [get_bd_pins axi_gpio_sw_led/ip2intc_irpt]
@@ -327,8 +327,8 @@ connect_bd_net -net sys_concat_intc_din_4 [get_bd_pins sys_concat_intc/In4] [get
 
 # defaults (external interface)
 
-connect_bd_net -net sys_const_vcc_vcc [get_bd_pins sys_const_vcc/const] [get_bd_ports fan_pwm] 
-connect_bd_net -net sys_rst_s [get_bd_ports sys_rst] 
+connect_bd_net -net sys_const_vcc_vcc [get_bd_pins sys_const_vcc/const] [get_bd_ports fan_pwm]
+connect_bd_net -net sys_rst_s [get_bd_ports sys_rst]
 connect_bd_net -net sys_rst_s [get_bd_pins sys_rstgen/ext_reset_in]
 connect_bd_net -net sys_rst_s [get_bd_pins axi_ddr_cntrl/sys_rst]
 
@@ -353,7 +353,7 @@ connect_bd_intf_net -intf_net axi_iic_main_iic [get_bd_intf_ports iic_main] [get
 
 # hdmi
 
-connect_bd_net -net sys_200m_clk [get_bd_pins axi_hdmi_clkgen/clk] 
+connect_bd_net -net sys_200m_clk [get_bd_pins axi_hdmi_clkgen/clk]
 
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m01_axi [get_bd_intf_pins axi_cpu_interconnect/M01_AXI] [get_bd_intf_pins axi_hdmi_clkgen/s_axi]
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m02_axi [get_bd_intf_pins axi_cpu_interconnect/M02_AXI] [get_bd_intf_pins axi_hdmi_core/s_axi]
@@ -365,13 +365,13 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M01_ACLK] $sy
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M02_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M03_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S02_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_clkgen/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_clkgen/drp_clk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_core/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_core/m_axis_mm2s_clk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_dma/s_axi_lite_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_dma/m_axi_mm2s_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_dma/m_axis_mm2s_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_clkgen/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_clkgen/drp_clk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_core/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_core/m_axis_mm2s_clk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_dma/s_axi_lite_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_dma/m_axi_mm2s_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_dma/m_axis_mm2s_aclk]
 
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M01_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M02_ARESETN] $sys_100m_resetn_source
@@ -381,18 +381,18 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_hdmi_clkgen/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_hdmi_core/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_hdmi_dma/axi_resetn]
 
-connect_bd_net -net axi_hdmi_tx_core_hdmi_clk      [get_bd_pins axi_hdmi_core/hdmi_clk]              [get_bd_pins axi_hdmi_clkgen/clk_0]           
-connect_bd_net -net axi_hdmi_tx_core_hdmi_out_clk  [get_bd_pins axi_hdmi_core/hdmi_out_clk]          [get_bd_ports hdmi_out_clk]                   
-connect_bd_net -net axi_hdmi_tx_core_hdmi_hsync    [get_bd_pins axi_hdmi_core/hdmi_16_hsync]         [get_bd_ports hdmi_hsync]                     
-connect_bd_net -net axi_hdmi_tx_core_hdmi_vsync    [get_bd_pins axi_hdmi_core/hdmi_16_vsync]         [get_bd_ports hdmi_vsync]                     
-connect_bd_net -net axi_hdmi_tx_core_hdmi_data_e   [get_bd_pins axi_hdmi_core/hdmi_16_data_e]        [get_bd_ports hdmi_data_e]                    
-connect_bd_net -net axi_hdmi_tx_core_hdmi_data     [get_bd_pins axi_hdmi_core/hdmi_16_data]          [get_bd_ports hdmi_data]                      
+connect_bd_net -net axi_hdmi_tx_core_hdmi_clk      [get_bd_pins axi_hdmi_core/hdmi_clk]              [get_bd_pins axi_hdmi_clkgen/clk_0]
+connect_bd_net -net axi_hdmi_tx_core_hdmi_out_clk  [get_bd_pins axi_hdmi_core/hdmi_out_clk]          [get_bd_ports hdmi_out_clk]
+connect_bd_net -net axi_hdmi_tx_core_hdmi_hsync    [get_bd_pins axi_hdmi_core/hdmi_16_hsync]         [get_bd_ports hdmi_hsync]
+connect_bd_net -net axi_hdmi_tx_core_hdmi_vsync    [get_bd_pins axi_hdmi_core/hdmi_16_vsync]         [get_bd_ports hdmi_vsync]
+connect_bd_net -net axi_hdmi_tx_core_hdmi_data_e   [get_bd_pins axi_hdmi_core/hdmi_16_data_e]        [get_bd_ports hdmi_data_e]
+connect_bd_net -net axi_hdmi_tx_core_hdmi_data     [get_bd_pins axi_hdmi_core/hdmi_16_data]          [get_bd_ports hdmi_data]
 connect_bd_net -net axi_hdmi_tx_core_mm2s_tvalid   [get_bd_pins axi_hdmi_core/m_axis_mm2s_tvalid]    [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tvalid]
-connect_bd_net -net axi_hdmi_tx_core_mm2s_tdata    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tdata]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tdata]  
-connect_bd_net -net axi_hdmi_tx_core_mm2s_tkeep    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tkeep]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tkeep]  
-connect_bd_net -net axi_hdmi_tx_core_mm2s_tlast    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tlast]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tlast]  
+connect_bd_net -net axi_hdmi_tx_core_mm2s_tdata    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tdata]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tdata]
+connect_bd_net -net axi_hdmi_tx_core_mm2s_tkeep    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tkeep]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tkeep]
+connect_bd_net -net axi_hdmi_tx_core_mm2s_tlast    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tlast]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tlast]
 connect_bd_net -net axi_hdmi_tx_core_mm2s_tready   [get_bd_pins axi_hdmi_core/m_axis_mm2s_tready]    [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tready]
-connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync]     [get_bd_pins axi_hdmi_dma/mm2s_fsync]         
+connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync]     [get_bd_pins axi_hdmi_dma/mm2s_fsync]
 connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync_ret]
 
 connect_bd_net -net sys_concat_intc_din_0 [get_bd_pins sys_concat_intc/In0] [get_bd_pins axi_hdmi_dma/mm2s_introut]
@@ -405,9 +405,9 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M04_ACLK] $sy
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M05_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_core/S_AXI_ACLK]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_core/S_AXIS_ACLK]
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/s_axi_lite_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/m_axi_mm2s_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/m_axi_sg_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/s_axi_lite_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/m_axi_mm2s_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/m_axi_sg_aclk]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M04_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M05_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_spdif_tx_core/S_AXI_ARESETN]
@@ -435,7 +435,7 @@ connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/
 # address map
 
 set sys_zynq 0
-set sys_mem_size 0x40000000 
+set sys_mem_size 0x40000000
 set sys_addr_cntrl_space [get_bd_addr_spaces sys_mb/Data]
 
 create_bd_addr_seg -range 0x00002000 -offset 0x00000000 $sys_addr_cntrl_space [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem]          SEG_data_dlmb_cntlr
