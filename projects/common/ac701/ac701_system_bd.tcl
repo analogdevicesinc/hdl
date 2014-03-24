@@ -92,9 +92,11 @@ file copy -force $ad_hdl_dir/projects/common/ac701/ac701_system_mig.prj "$axi_dd
 set_property -dict [list CONFIG.XML_INPUT_FILE {ac701_system_mig.prj}] $axi_ddr_cntrl
 
 # instance: axi interconnect (lite)
+set axi_cpu_aux_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_aux_interconnect]
+set_property -dict [list CONFIG.NUM_MI {8}] $axi_cpu_aux_interconnect
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
-set_property -dict [list CONFIG.NUM_MI {14}] $axi_cpu_interconnect
+set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
 
 # instance: axi interconnect
 
@@ -218,8 +220,12 @@ connect_bd_net -net sys_200m_resetn $sys_200m_resetn_source
 connect_bd_net -net sys_100m_clk $sys_100m_clk_source
 connect_bd_net -net sys_200m_clk $sys_200m_clk_source
 
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M06_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M06_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/ACLK] $sys_100m_clk_source
 
@@ -258,36 +264,40 @@ connect_bd_net -net sys_200m_clk [get_bd_pins axi_ethernet/ref_clk] $sys_200m_cl
 
 # defaults (interconnect - processor)
 
-connect_bd_intf_net -intf_net axi_cpu_interconnect_s00 [get_bd_intf_pins axi_cpu_interconnect/S00_AXI] [get_bd_intf_pins sys_mb/M_AXI_DP]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m00 [get_bd_intf_pins axi_cpu_interconnect/M00_AXI] [get_bd_intf_pins sys_mb_debug/S_AXI]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m01 [get_bd_intf_pins axi_cpu_interconnect/M01_AXI] [get_bd_intf_pins axi_ethernet/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m02 [get_bd_intf_pins axi_cpu_interconnect/M02_AXI] [get_bd_intf_pins axi_uart/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m03 [get_bd_intf_pins axi_cpu_interconnect/M03_AXI] [get_bd_intf_pins axi_timer/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m04 [get_bd_intf_pins axi_cpu_interconnect/M04_AXI] [get_bd_intf_pins axi_intc/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m05 [get_bd_intf_pins axi_cpu_interconnect/M05_AXI] [get_bd_intf_pins axi_gpio_lcd/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m06 [get_bd_intf_pins axi_cpu_interconnect/M06_AXI] [get_bd_intf_pins axi_gpio_sw_led/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m07 [get_bd_intf_pins axi_cpu_interconnect/M07_AXI] [get_bd_intf_pins axi_iic_main/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m13 [get_bd_intf_pins axi_cpu_interconnect/M13_AXI] [get_bd_intf_pins axi_ethernet_dma/S_AXI_LITE]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_s00_axi [get_bd_intf_pins axi_cpu_aux_interconnect/S00_AXI] [get_bd_intf_pins axi_cpu_interconnect/M06_AXI]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m00_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M00_AXI] [get_bd_intf_pins sys_mb_debug/S_AXI]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m01_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M01_AXI] [get_bd_intf_pins axi_ethernet/s_axi]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m02_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M02_AXI] [get_bd_intf_pins axi_ethernet_dma/S_AXI_LITE]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m03_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M03_AXI] [get_bd_intf_pins axi_uart/s_axi]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m04_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M04_AXI] [get_bd_intf_pins axi_timer/s_axi]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m05_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M05_AXI] [get_bd_intf_pins axi_intc/s_axi]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m06_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M06_AXI] [get_bd_intf_pins axi_gpio_lcd/s_axi]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m07_axi [get_bd_intf_pins axi_cpu_aux_interconnect/M07_AXI] [get_bd_intf_pins axi_gpio_sw_led/s_axi]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/S00_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M00_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M01_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M02_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M03_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M04_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M05_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M06_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M07_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/S00_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M00_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M01_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M02_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M03_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M04_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M05_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M06_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M07_ACLK] $sys_100m_clk_source
+
+connect_bd_intf_net -intf_net axi_cpu_interconnect_s00_axi [get_bd_intf_pins axi_cpu_interconnect/S00_AXI] [get_bd_intf_pins sys_mb/M_AXI_DP]
+connect_bd_intf_net -intf_net axi_cpu_interconnect_m00_axi [get_bd_intf_pins axi_cpu_interconnect/M00_AXI] [get_bd_intf_pins axi_iic_main/s_axi]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/S00_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M00_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M01_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M02_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M03_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M04_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M05_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M06_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M07_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M13_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/S00_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M00_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M01_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M02_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M03_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M04_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M05_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M06_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M07_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M13_ACLK] $sys_100m_clk_source
 
 # defaults (interconnect - memory)
 
@@ -380,15 +390,15 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_core/s_axi_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_hdmi_core/m_axis_mm2s_clk]
 connect_bd_net -net sys_200m_clk [get_bd_pins axi_hdmi_clkgen/clk]
 
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m08 [get_bd_intf_pins axi_cpu_interconnect/M08_AXI] [get_bd_intf_pins axi_hdmi_clkgen/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m09 [get_bd_intf_pins axi_cpu_interconnect/M09_AXI] [get_bd_intf_pins axi_hdmi_dma/S_AXI_LITE]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m10 [get_bd_intf_pins axi_cpu_interconnect/M10_AXI] [get_bd_intf_pins axi_hdmi_core/s_axi]
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M08_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M09_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M10_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M08_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M09_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M10_ACLK] $sys_100m_clk_source
+connect_bd_intf_net -intf_net axi_cpu_interconnect_m01 [get_bd_intf_pins axi_cpu_interconnect/M01_AXI] [get_bd_intf_pins axi_hdmi_clkgen/s_axi]
+connect_bd_intf_net -intf_net axi_cpu_interconnect_m02 [get_bd_intf_pins axi_cpu_interconnect/M02_AXI] [get_bd_intf_pins axi_hdmi_dma/S_AXI_LITE]
+connect_bd_intf_net -intf_net axi_cpu_interconnect_m03 [get_bd_intf_pins axi_cpu_interconnect/M03_AXI] [get_bd_intf_pins axi_hdmi_core/s_axi]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M01_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M02_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M03_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M01_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M02_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M03_ACLK] $sys_100m_clk_source
 
 connect_bd_intf_net -intf_net axi_mem_interconnect_s02 [get_bd_intf_pins axi_mem_interconnect/S02_AXI] [get_bd_intf_pins axi_hdmi_dma/M_AXI_MM2S]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S02_ARESETN] $sys_100m_resetn_source
@@ -419,12 +429,12 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/s_axi_lite_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_core/S_AXIS_ACLK]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/m_axi_mm2s_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_spdif_tx_dma/m_axi_sg_aclk]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m11 [get_bd_intf_pins axi_cpu_interconnect/M11_AXI] [get_bd_intf_pins axi_spdif_tx_core/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m12 [get_bd_intf_pins axi_cpu_interconnect/M12_AXI] [get_bd_intf_pins axi_spdif_tx_dma/S_AXI_LITE]
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M11_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M12_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M11_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M12_ACLK] $sys_100m_clk_source
+connect_bd_intf_net -intf_net axi_cpu_interconnect_m04 [get_bd_intf_pins axi_cpu_interconnect/M04_AXI] [get_bd_intf_pins axi_spdif_tx_core/s_axi]
+connect_bd_intf_net -intf_net axi_cpu_interconnect_m05 [get_bd_intf_pins axi_cpu_interconnect/M05_AXI] [get_bd_intf_pins axi_spdif_tx_dma/S_AXI_LITE]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M04_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M05_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M04_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M05_ACLK] $sys_100m_clk_source
 
 connect_bd_intf_net -intf_net axi_mem_interconnect_s03 [get_bd_intf_pins axi_mem_interconnect/S03_AXI] [get_bd_intf_pins axi_spdif_tx_dma/M_AXI_SG]
 connect_bd_intf_net -intf_net axi_mem_interconnect_s04 [get_bd_intf_pins axi_mem_interconnect/S04_AXI] [get_bd_intf_pins axi_spdif_tx_dma/M_AXI_MM2S]
