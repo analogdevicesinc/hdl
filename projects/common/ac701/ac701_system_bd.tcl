@@ -20,6 +20,12 @@ set iic_main        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface
 set uart_sin        [create_bd_port -dir I uart_sin]
 set uart_sout       [create_bd_port -dir O uart_sout]
 
+set unc_int0        [create_bd_port -dir I unc_int0]
+set unc_int1        [create_bd_port -dir I unc_int1]
+set unc_int2        [create_bd_port -dir I unc_int2]
+set unc_int3        [create_bd_port -dir I unc_int3]
+set unc_int4        [create_bd_port -dir I unc_int4]
+
 set hdmi_out_clk    [create_bd_port -dir O hdmi_out_clk]
 set hdmi_hsync      [create_bd_port -dir O hdmi_hsync]
 set hdmi_vsync      [create_bd_port -dir O hdmi_vsync]
@@ -135,8 +141,12 @@ set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_sw_led
 set axi_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_intc]
 set_property -dict [list CONFIG.C_HAS_FAST {0}] $axi_intc
 
+set sys_concat_aux_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_concat_aux_intc]
+set_property -dict [list CONFIG.NUM_PORTS {9}] $sys_concat_aux_intc
+set_property -dict [list CONFIG.IN9_WIDTH {5}] $sys_concat_aux_intc
+
 set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {10}] $sys_concat_intc
+set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
 
 # hdmi peripherals
 
@@ -191,7 +201,8 @@ connect_bd_intf_net -intf_net sys_mb_ilmb [get_bd_intf_pins sys_mb/ILMB] [get_bd
 
 connect_bd_intf_net -intf_net sys_mb_debug_intf [get_bd_intf_pins sys_mb_debug/MBDEBUG_0] [get_bd_intf_pins sys_mb/DEBUG]
 connect_bd_intf_net -intf_net sys_mb_interrupt [get_bd_intf_pins axi_intc/interrupt] [get_bd_intf_pins sys_mb/INTERRUPT]
-connect_bd_net -net sys_concat_intc_intr [get_bd_pins sys_concat_intc/dout] [get_bd_pins axi_intc/intr]
+connect_bd_net -net sys_concat_aux_intc_intr [get_bd_pins sys_concat_aux_intc/dout] [get_bd_pins axi_intc/intr]
+connect_bd_net -net sys_concat_intc_intr [get_bd_pins sys_concat_intc/dout] [get_bd_pins sys_concat_aux_intc/In8]
 
 # defaults (peripherals)
 
@@ -316,14 +327,19 @@ connect_bd_intf_net -intf_net axi_ethernet_dma_rxs [get_bd_intf_pins axi_etherne
 
 # defaults (interrupts)
 
-connect_bd_net -net sys_concat_intc_intr_00 [get_bd_pins sys_concat_intc/In0] [get_bd_pins axi_timer/interrupt]
-connect_bd_net -net sys_concat_intc_intr_01 [get_bd_pins sys_concat_intc/In1] [get_bd_pins axi_ethernet/interrupt]
-connect_bd_net -net sys_concat_intc_intr_02 [get_bd_pins sys_concat_intc/In2] [get_bd_pins axi_uart/interrupt]
-connect_bd_net -net sys_concat_intc_intr_03 [get_bd_pins sys_concat_intc/In3] [get_bd_pins axi_gpio_lcd/ip2intc_irpt]
-connect_bd_net -net sys_concat_intc_intr_04 [get_bd_pins sys_concat_intc/In4] [get_bd_pins axi_gpio_sw_led/ip2intc_irpt]
-connect_bd_net -net sys_concat_intc_intr_05 [get_bd_pins sys_concat_intc/In5] [get_bd_pins axi_iic_main/iic2intc_irpt]
-connect_bd_net -net sys_concat_intc_intr_08 [get_bd_pins sys_concat_intc/In8] [get_bd_pins axi_ethernet_dma/mm2s_introut]
-connect_bd_net -net sys_concat_intc_intr_09 [get_bd_pins sys_concat_intc/In9] [get_bd_pins axi_ethernet_dma/s2mm_introut]
+connect_bd_net -net sys_concat_aux_intc_intr_00 [get_bd_pins sys_concat_aux_intc/In0] [get_bd_pins axi_timer/interrupt]
+connect_bd_net -net sys_concat_aux_intc_intr_01 [get_bd_pins sys_concat_aux_intc/In1] [get_bd_pins axi_ethernet/interrupt]
+connect_bd_net -net sys_concat_aux_intc_intr_02 [get_bd_pins sys_concat_aux_intc/In2] [get_bd_pins axi_ethernet_dma/mm2s_introut]
+connect_bd_net -net sys_concat_aux_intc_intr_03 [get_bd_pins sys_concat_aux_intc/In3] [get_bd_pins axi_ethernet_dma/s2mm_introut]
+connect_bd_net -net sys_concat_aux_intc_intr_04 [get_bd_pins sys_concat_aux_intc/In4] [get_bd_pins axi_uart/interrupt]
+connect_bd_net -net sys_concat_aux_intc_intr_05 [get_bd_pins sys_concat_aux_intc/In5] [get_bd_pins axi_gpio_lcd/ip2intc_irpt]
+connect_bd_net -net sys_concat_aux_intc_intr_06 [get_bd_pins sys_concat_aux_intc/In6] [get_bd_pins axi_gpio_sw_led/ip2intc_irpt]
+connect_bd_net -net sys_concat_aux_intc_intr_07 [get_bd_pins sys_concat_aux_intc/In7] [get_bd_pins axi_spdif_tx_dma/mm2s_introut]
+connect_bd_net -net sys_concat_intc_din_0 [get_bd_pins sys_concat_intc/In0] [get_bd_pins axi_hdmi_dma/mm2s_introut]
+connect_bd_net -net sys_concat_intc_din_1 [get_bd_pins sys_concat_intc/In1] [get_bd_pins axi_iic_main/iic2intc_irpt]
+connect_bd_net -net sys_concat_intc_din_2 [get_bd_pins sys_concat_intc/In2] [get_bd_ports unc_int2]
+connect_bd_net -net sys_concat_intc_din_3 [get_bd_pins sys_concat_intc/In3] [get_bd_ports unc_int3]
+connect_bd_net -net sys_concat_intc_din_4 [get_bd_pins sys_concat_intc/In4] [get_bd_ports unc_int4]
 
 # defaults (external interface)
 
@@ -378,8 +394,6 @@ connect_bd_intf_net -intf_net axi_mem_interconnect_s02 [get_bd_intf_pins axi_mem
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S02_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S02_ACLK] $sys_100m_clk_source
 
-connect_bd_net -net sys_concat_intc_intr_06 [get_bd_pins sys_concat_intc/In6] [get_bd_pins axi_hdmi_dma/mm2s_introut]
-
 connect_bd_net -net axi_hdmi_core_hdmi_out_clk  [get_bd_ports hdmi_out_clk] [get_bd_pins axi_hdmi_core/hdmi_out_clk]
 connect_bd_net -net axi_hdmi_core_hdmi_hsync    [get_bd_ports hdmi_hsync]   [get_bd_pins axi_hdmi_core/hdmi_24_hsync]
 connect_bd_net -net axi_hdmi_core_hdmi_vsync    [get_bd_ports hdmi_vsync]   [get_bd_pins axi_hdmi_core/hdmi_24_vsync]
@@ -424,7 +438,7 @@ connect_bd_net -net axi_spdif_tx_dma_mm2s_data  [get_bd_pins axi_spdif_tx_core/S
 connect_bd_net -net axi_spdif_tx_dma_mm2s_last  [get_bd_pins axi_spdif_tx_core/S_AXIS_TLAST]  [get_bd_pins axi_spdif_tx_dma/m_axis_mm2s_tlast]
 connect_bd_net -net axi_spdif_tx_dma_mm2s_ready [get_bd_pins axi_spdif_tx_core/S_AXIS_TREADY] [get_bd_pins axi_spdif_tx_dma/m_axis_mm2s_tready]
 
-connect_bd_net -net sys_concat_intc_intr_07 [get_bd_pins sys_concat_intc/In7] [get_bd_pins axi_spdif_tx_dma/mm2s_introut]
+
 
 connect_bd_net -net sys_200m_clk [get_bd_pins sys_audio_clkgen/clk_in1]
 connect_bd_net -net sys_audio_clkgen_clk [get_bd_pins sys_audio_clkgen/clk_out1] [get_bd_pins axi_spdif_tx_core/spdif_data_clk]
