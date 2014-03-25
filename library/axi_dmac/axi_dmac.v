@@ -170,6 +170,7 @@ localparam HAS_SRC_ADDR = C_DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
 
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
+reg          up_ack = 1'b0;
 wire         up_wr;
 wire         up_sel;
 wire [31:0]  up_wdata;
@@ -249,7 +250,7 @@ up_axi #(
 	.up_addr(up_addr),
 	.up_wdata(up_wdata),
 	.up_rdata(up_rdata),
-	.up_ack(up_sel)
+	.up_ack(up_ack)
 );
 
 // IRQ handling
@@ -291,7 +292,9 @@ begin
 		up_irq_mask <= 3'b11;
 		up_dma_req_valid <= 1'b0;
 		up_scratch <= 'h00;
+		up_ack <= 1'b0;
 	end else begin
+		up_ack <= up_sel;
 		if (up_enable == 1'b1) begin
 			if (up_write && up_addr[11:0] == 12'h102) begin
 				up_dma_req_valid <= up_dma_req_valid | up_wdata[0];
