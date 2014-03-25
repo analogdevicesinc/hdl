@@ -186,7 +186,7 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9643_dma/s_axi_aresetn]
 
 if {$sys_zynq == 0} {
   set sys_fmc_dma_clk_source [get_bd_pins  sys_audio_clkgen/clk_out3]
-  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source`
+  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
 } else {
   set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
   set sys_fmc_dma_resetn_source [get_bd_pins sys_ps7/FCLK_RESET2_N]
