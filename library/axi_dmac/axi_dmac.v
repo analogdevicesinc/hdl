@@ -70,7 +70,7 @@ module axi_dmac (
 
 	// Write address
 	output [31:0]                            m_dest_axi_awaddr,
-	output [ 7:0]                            m_dest_axi_awlen,
+	output [7-(4*C_DMA_AXI_PROTOCOL_DEST):0] m_dest_axi_awlen,
 	output [ 2:0]                            m_dest_axi_awsize,
 	output [ 1:0]                            m_dest_axi_awburst,
 	output [ 2:0]                            m_dest_axi_awprot,
@@ -94,7 +94,7 @@ module axi_dmac (
 	input                                    m_src_axi_arready,
 	output                                   m_src_axi_arvalid,
 	output [31:0]                            m_src_axi_araddr,
-	output [ 7:0]                            m_src_axi_arlen,
+	output [7-(4*C_DMA_AXI_PROTOCOL_SRC):0]  m_src_axi_arlen,
 	output [ 2:0]                            m_src_axi_arsize,
 	output [ 1:0]                            m_src_axi_arburst,
 	output [ 2:0]                            m_src_axi_arprot,
@@ -153,6 +153,8 @@ parameter C_AXI_SLICE_SRC = 0;
 parameter C_SYNC_TRANSFER_START = 0;
 parameter C_CYCLIC = 1;
 
+parameter C_DMA_AXI_PROTOCOL_DEST = 0;
+parameter C_DMA_AXI_PROTOCOL_SRC = 0;
 parameter C_DMA_TYPE_DEST = 0;
 parameter C_DMA_TYPE_SRC = 2;
 
