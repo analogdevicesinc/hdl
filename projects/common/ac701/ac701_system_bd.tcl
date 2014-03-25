@@ -456,6 +456,10 @@ connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/
 
 # address mapping
 
+set sys_zynq 0
+set sys_mem_size 0x40000000
+set sys_addr_cntrl_space [get_bd_addr_spaces sys_mb/Data]
+
 create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem]          SEG_data_dlmb_cntlr
 create_bd_addr_seg -range 0x00001000 -offset 0x41400000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs sys_mb_debug/S_AXI/Reg]           SEG_data_mb_debug
 create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces sys_mb/Data]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_data_ddr_cntrl
@@ -477,12 +481,12 @@ create_bd_addr_seg -range 0x00010000 -offset 0x41E00000 [get_bd_addr_spaces sys_
 create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Instruction]  [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem]          SEG_instr_ilmb_cntlr
 create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces sys_mb/Instruction]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_instr_ddr_cntrl
 
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_hdmi_dma/Data_MM2S]      [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_SG]    [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_MM2S]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_SG]    [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_MM2S]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_S2MM]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_hdmi_dma/Data_MM2S]      [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_SG]    [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_MM2S]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_SG]    [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_MM2S]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_S2MM]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]     SEG_axi_ddr_cntrl
 
 create_bd_addr_seg -range 0x00001000 -offset 0x00000000 [get_bd_addr_spaces axi_ethernet/eth_buf/S_AXI_2TEMAC] [get_bd_addr_segs axi_ethernet/eth_mac/s_axi/Reg] SEG_eth_mac_reg
 
