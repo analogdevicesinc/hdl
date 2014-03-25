@@ -1,5 +1,4 @@
 
-
 module util_sync_reset (
 	input async_resetn,
 	input clk,
@@ -7,15 +6,15 @@ module util_sync_reset (
 );
 
 // Keep it asserted for three clock cycles
-reg [2:0] reset = 3'b111;
+reg [2:0] resetn = 3'b000;
 
-assign sync_resetn = reset[2];
+assign sync_resetn = resetn[2];
 
 always @(posedge clk or negedge async_resetn) begin
 	if (async_resetn == 1'b0) begin
-		reset <= 3'b111;
+		resetn <= 3'b000;
 	end else begin
-		reset <= {reset[1:0], 1'b0};
+		resetn <= {resetn[1:0], 1'b1};
 	end
 
 end
