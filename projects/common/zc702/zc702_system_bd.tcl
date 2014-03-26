@@ -46,6 +46,9 @@ set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
 set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
 
+set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
+set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
+
 # hdmi peripherals
 
 set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]
@@ -71,12 +74,22 @@ set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_tx_core
 set_property -dict [list CONFIG.C_HIGHADDR {0xffffffff}] $axi_spdif_tx_core
 set_property -dict [list CONFIG.C_BASEADDR {0x00000000}] $axi_spdif_tx_core
 
-# interface connections
+# system reset/clock definitions
 
-set sys_100m_resetn_source [get_bd_pins sys_ps7/FCLK_RESET0_N]
-set sys_200m_resetn_source [get_bd_pins sys_ps7/FCLK_RESET1_N]
 set sys_100m_clk_source [get_bd_pins sys_ps7/FCLK_CLK0]
 set sys_200m_clk_source [get_bd_pins sys_ps7/FCLK_CLK1]
+
+connect_bd_net -net sys_100m_clk $sys_100m_clk_source
+connect_bd_net -net sys_200m_clk $sys_200m_clk_source
+
+connect_bd_net -net sys_100m_clk [get_bd_pins sys_rstgen/slowest_sync_clk]
+connect_bd_net -net sys_aux_reset [get_bd_pins sys_rstgen/ext_reset_in] [get_bd_pins sys_ps7/FCLK_RESET0_N]
+
+set sys_100m_resetn_source [get_bd_pins sys_rstgen/peripheral_aresetn]
+set sys_200m_resetn_source [get_bd_pins sys_rstgen/interconnect_aresetn]
+connect_bd_net -net sys_100m_resetn $sys_100m_resetn_source
+connect_bd_net -net sys_200m_resetn $sys_200m_resetn_source
+# interface connections
 
 connect_bd_intf_net -intf_net sys_ps7_ddr [get_bd_intf_ports DDR] [get_bd_intf_pins sys_ps7/DDR]
 connect_bd_net -net sys_ps7_GPIO_I [get_bd_ports GPIO_I] [get_bd_pins sys_ps7/GPIO_I]
@@ -84,11 +97,6 @@ connect_bd_net -net sys_ps7_GPIO_O [get_bd_ports GPIO_O] [get_bd_pins sys_ps7/GP
 connect_bd_net -net sys_ps7_GPIO_T [get_bd_ports GPIO_T] [get_bd_pins sys_ps7/GPIO_T]
 connect_bd_intf_net -intf_net sys_ps7_fixed_io [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins sys_ps7/FIXED_IO]
 connect_bd_intf_net -intf_net axi_iic_main_iic [get_bd_intf_ports IIC_MAIN] [get_bd_intf_pins axi_iic_main/iic]
-
-connect_bd_net -net sys_100m_clk $sys_100m_clk_source
-connect_bd_net -net sys_200m_clk $sys_200m_clk_source
-
-connect_bd_net -net sys_100m_resetn $sys_100m_resetn_source
 
 connect_bd_net -net sys_100m_clk [get_bd_pins sys_ps7/M_AXI_GP0_ACLK]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/ACLK] $sys_100m_clk_source
@@ -144,20 +152,20 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_hdmi_core/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_hdmi_dma/axi_resetn]
 
 connect_bd_net -net axi_hdmi_tx_core_hdmi_clk      [get_bd_pins axi_hdmi_core/hdmi_clk]              [get_bd_pins axi_hdmi_clkgen/clk_0]
-connect_bd_net -net axi_hdmi_tx_core_hdmi_out_clk  [get_bd_pins axi_hdmi_core/hdmi_out_clk]          [get_bd_ports hdmi_out_clk] 
-connect_bd_net -net axi_hdmi_tx_core_hdmi_hsync    [get_bd_pins axi_hdmi_core/hdmi_16_hsync]         [get_bd_ports hdmi_hsync]   
-connect_bd_net -net axi_hdmi_tx_core_hdmi_vsync    [get_bd_pins axi_hdmi_core/hdmi_16_vsync]         [get_bd_ports hdmi_vsync]   
-connect_bd_net -net axi_hdmi_tx_core_hdmi_data_e   [get_bd_pins axi_hdmi_core/hdmi_16_data_e]        [get_bd_ports hdmi_data_e]  
-connect_bd_net -net axi_hdmi_tx_core_hdmi_data     [get_bd_pins axi_hdmi_core/hdmi_16_data]          [get_bd_ports hdmi_data]    
+connect_bd_net -net axi_hdmi_tx_core_hdmi_out_clk  [get_bd_pins axi_hdmi_core/hdmi_out_clk]          [get_bd_ports hdmi_out_clk]
+connect_bd_net -net axi_hdmi_tx_core_hdmi_hsync    [get_bd_pins axi_hdmi_core/hdmi_16_hsync]         [get_bd_ports hdmi_hsync]
+connect_bd_net -net axi_hdmi_tx_core_hdmi_vsync    [get_bd_pins axi_hdmi_core/hdmi_16_vsync]         [get_bd_ports hdmi_vsync]
+connect_bd_net -net axi_hdmi_tx_core_hdmi_data_e   [get_bd_pins axi_hdmi_core/hdmi_16_data_e]        [get_bd_ports hdmi_data_e]
+connect_bd_net -net axi_hdmi_tx_core_hdmi_data     [get_bd_pins axi_hdmi_core/hdmi_16_data]          [get_bd_ports hdmi_data]
 connect_bd_net -net axi_hdmi_tx_core_mm2s_tvalid   [get_bd_pins axi_hdmi_core/m_axis_mm2s_tvalid]    [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tvalid]
-connect_bd_net -net axi_hdmi_tx_core_mm2s_tdata    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tdata]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tdata] 
-connect_bd_net -net axi_hdmi_tx_core_mm2s_tkeep    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tkeep]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tkeep] 
-connect_bd_net -net axi_hdmi_tx_core_mm2s_tlast    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tlast]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tlast] 
+connect_bd_net -net axi_hdmi_tx_core_mm2s_tdata    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tdata]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tdata]
+connect_bd_net -net axi_hdmi_tx_core_mm2s_tkeep    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tkeep]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tkeep]
+connect_bd_net -net axi_hdmi_tx_core_mm2s_tlast    [get_bd_pins axi_hdmi_core/m_axis_mm2s_tlast]     [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tlast]
 connect_bd_net -net axi_hdmi_tx_core_mm2s_tready   [get_bd_pins axi_hdmi_core/m_axis_mm2s_tready]    [get_bd_pins axi_hdmi_dma/m_axis_mm2s_tready]
-connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync]     [get_bd_pins axi_hdmi_dma/mm2s_fsync]        
+connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync]     [get_bd_pins axi_hdmi_dma/mm2s_fsync]
 connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync_ret]
 
-connect_bd_net -net sys_concat_intc_din_0 [get_bd_pins sys_concat_intc/In0] [get_bd_pins axi_hdmi_dma/mm2s_introut] 
+connect_bd_net -net sys_concat_intc_din_0 [get_bd_pins sys_concat_intc/In0] [get_bd_pins axi_hdmi_dma/mm2s_introut]
 
 # spdif audio
 
@@ -187,7 +195,7 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M06_ARESET
 # address map
 
 set sys_zynq 1
-set sys_mem_size 0x40000000 
+set sys_mem_size 0x40000000
 set sys_addr_cntrl_space [get_bd_addr_spaces sys_ps7/Data]
 
 create_bd_addr_seg -range 0x00010000 -offset 0x41600000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_iic_main/s_axi/Reg]             SEG_data_iic_main
