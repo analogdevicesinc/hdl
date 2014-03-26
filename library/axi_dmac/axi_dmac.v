@@ -158,6 +158,9 @@ parameter C_DMA_AXI_PROTOCOL_SRC = 0;
 parameter C_DMA_TYPE_DEST = 0;
 parameter C_DMA_TYPE_SRC = 2;
 
+parameter C_MAX_BYTES_PER_BURST = 128;
+parameter C_FIFO_SIZE = 4; // In bursts
+
 localparam DMA_TYPE_AXI_MM = 0;
 localparam DMA_TYPE_AXI_STREAM = 1;
 localparam DMA_TYPE_FIFO = 2;
@@ -431,7 +434,6 @@ assign up_req_eot = dma_req_eot;
 end endgenerate
 
 dmac_request_arb #(
-	.C_ID_WIDTH(3),
 	.C_DMA_DATA_WIDTH_SRC(C_DMA_DATA_WIDTH_SRC),
 	.C_DMA_DATA_WIDTH_DEST(C_DMA_DATA_WIDTH_DEST),
 	.C_DMA_LENGTH_WIDTH(C_DMA_LENGTH_WIDTH),
@@ -442,7 +444,9 @@ dmac_request_arb #(
 	.C_CLKS_ASYNC_SRC_DEST(C_CLKS_ASYNC_SRC_DEST),
 	.C_CLKS_ASYNC_DEST_REQ(C_CLKS_ASYNC_DEST_REQ),
 	.C_AXI_SLICE_DEST(C_AXI_SLICE_DEST),
-	.C_AXI_SLICE_SRC(C_AXI_SLICE_SRC)
+	.C_AXI_SLICE_SRC(C_AXI_SLICE_SRC),
+	.C_MAX_BYTES_PER_BURST(C_MAX_BYTES_PER_BURST),
+	.C_FIFO_SIZE(C_FIFO_SIZE)
 ) i_request_arb (
 	.req_aclk(s_axi_aclk),
 	.req_aresetn(s_axi_aresetn),

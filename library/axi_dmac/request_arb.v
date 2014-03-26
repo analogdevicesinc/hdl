@@ -134,7 +134,6 @@ module dmac_request_arb (
 	output [7:0]                        dbg_status
 );
 
-parameter C_ID_WIDTH = 3;
 parameter C_DMA_DATA_WIDTH_SRC = 64;
 parameter C_DMA_DATA_WIDTH_DEST = 64;
 parameter C_DMA_LENGTH_WIDTH = 24;
@@ -150,6 +149,11 @@ parameter C_CLKS_ASYNC_DEST_REQ = 1;
 parameter C_AXI_SLICE_DEST = 0;
 parameter C_AXI_SLICE_SRC = 0;
 
+parameter C_MAX_BYTES_PER_BURST = 128;
+parameter C_FIFO_SIZE = 4;
+
+parameter C_ID_WIDTH = $clog2(C_FIFO_SIZE * 2);
+
 localparam DMA_TYPE_MM_AXI = 0;
 localparam DMA_TYPE_STREAM_AXI = 1;
 localparam DMA_TYPE_FIFO = 2;
@@ -160,12 +164,11 @@ localparam DMA_DATA_WIDTH = C_DMA_DATA_WIDTH_SRC < C_DMA_DATA_WIDTH_DEST ?
 	C_DMA_DATA_WIDTH_DEST : C_DMA_DATA_WIDTH_SRC;
 
 
-localparam MAX_BYTES_PER_BURST = 128;
 
 // Bytes per burst is the same for both dest and src, but bytes per beat may
 // differ, so beats per burst may also differ
 
-parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST);
+parameter BYTES_PER_BURST_WIDTH = $clog2(C_MAX_BYTES_PER_BURST);
 parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(C_DMA_DATA_WIDTH_SRC/8);
 parameter BYTES_PER_BEAT_WIDTH_DEST = $clog2(C_DMA_DATA_WIDTH_DEST/8);
 localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
@@ -809,7 +812,7 @@ axi_repack #(
 
 axi_fifo #(
 	.C_DATA_WIDTH(DMA_DATA_WIDTH),
-	.C_ADDRESS_WIDTH(6),
+	.C_ADDRESS_WIDTH($clog2(C_MAX_BYTES_PER_BURST / (DMA_DATA_WIDTH / 8) * C_FIFO_SIZE)),
 	.C_CLKS_ASYNC(C_CLKS_ASYNC_SRC_DEST)
 ) i_fifo (
 	.s_axis_aclk(src_clk),
