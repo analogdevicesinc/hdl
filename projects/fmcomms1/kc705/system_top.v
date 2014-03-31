@@ -279,8 +279,7 @@ module system_top (
     .uart_sout (uart_sout),
     .unc_int0 (1'b0),
     .unc_int1 (1'b0),
-    .unc_int2 (1'b0),
-    .unc_int3 (1'b0));
+    .unc_int4 (1'b0));
 
 endmodule
 
