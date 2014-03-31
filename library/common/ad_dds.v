@@ -45,6 +45,7 @@ module ad_dds (
 
   clk,
   dds_format,
+  dds_enable,
   dds_phase_0,
   dds_scale_0,
   dds_phase_1,
@@ -55,6 +56,7 @@ module ad_dds (
 
   input           clk;
   input           dds_format;
+  input           dds_enable;
   input   [15:0]  dds_phase_0;
   input   [15:0]  dds_scale_0;
   input   [15:0]  dds_phase_1;
@@ -68,14 +70,21 @@ module ad_dds (
 
   // internal signals
 
+  wire    [15:0]  dds_data_int_s;
   wire    [15:0]  dds_data_0_s;
   wire    [15:0]  dds_data_1_s;
 
   // dds channel output
 
+  assign dds_data_int_s = {(dds_format ^ dds_data_int[15]), dds_data_int[14:0]};
+
   always @(posedge clk) begin
     dds_data_int <= dds_data_0_s + dds_data_1_s;
-    dds_data <= {(dds_format ^ dds_data_int[15]), dds_data_int[14:0]};
+    if (dds_enable == 1'b1) begin
+      dds_data <= dds_data_int_s;
+    end else begin
+      dds_data <= 16'd0;
+    end
   end
 
   // dds-1

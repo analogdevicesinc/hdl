@@ -162,6 +162,7 @@ module axi_ad9122_dds (
   ad_dds i_dds_0 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
+    .dds_enable (dac_dds_enable),
     .dds_phase_0 (dac_dds_phase_0_0),
     .dds_scale_0 (dac_dds_scale_1),
     .dds_phase_1 (dac_dds_phase_0_1),
@@ -177,6 +178,7 @@ module axi_ad9122_dds (
   ad_dds i_dds_1 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
+    .dds_enable (dac_dds_enable),
     .dds_phase_0 (dac_dds_phase_1_0),
     .dds_scale_0 (dac_dds_scale_1),
     .dds_phase_1 (dac_dds_phase_1_1),
@@ -192,6 +194,7 @@ module axi_ad9122_dds (
   ad_dds i_dds_2 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
+    .dds_enable (dac_dds_enable),
     .dds_phase_0 (dac_dds_phase_2_0),
     .dds_scale_0 (dac_dds_scale_1),
     .dds_phase_1 (dac_dds_phase_2_1),
@@ -207,6 +210,7 @@ module axi_ad9122_dds (
   ad_dds i_dds_3 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
+    .dds_enable (dac_dds_enable),
     .dds_phase_0 (dac_dds_phase_3_0),
     .dds_scale_0 (dac_dds_scale_1),
     .dds_phase_1 (dac_dds_phase_3_1),

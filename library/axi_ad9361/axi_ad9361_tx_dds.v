@@ -134,6 +134,7 @@ module axi_ad9361_tx_dds (
   ad_dds i_dds_0 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
+    .dds_enable (dac_dds_enable),
     .dds_phase_0 (dac_dds_phase_0),
     .dds_scale_0 (dac_dds_scale_1),
     .dds_phase_1 (dac_dds_phase_1),
