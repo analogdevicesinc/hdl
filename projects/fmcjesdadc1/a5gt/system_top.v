@@ -37,7 +37,7 @@
 
 `timescale 1ns/100ps
 
-module fmcjesdadc1_top (
+module system_top (
 
   // clock and resets
 
@@ -275,7 +275,7 @@ module fmcjesdadc1_top (
     .spi3_clk (spi_clk),
     .spi3_sdio (spi_sdio));
 
-  fmcjesdadc1 i_fmcjesdadc1 (
+  system i_system (
     .sys_clk_clk (sys_clk),
     .sys_reset_reset_n (sys_resetn),
     .sys_125m_clk_clk (sys_125m_clk),
