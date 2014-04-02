@@ -697,8 +697,8 @@ set_location_assignment PIN_N14 -to eth_rx_data[0]
 set_location_assignment PIN_N15 -to eth_rx_data[1]
 set_location_assignment PIN_P15 -to eth_rx_data[2]
 set_location_assignment PIN_B9  -to eth_rx_data[3]
-set_location_assignment PIN_C9  -to eth_rx_cntrl[4]
-set_location_assignment PIN_K18 -to eth_tx_clk_out[5]
+set_location_assignment PIN_C9  -to eth_rx_cntrl
+set_location_assignment PIN_K18 -to eth_tx_clk_out
 set_location_assignment PIN_L18 -to eth_tx_data[0]
 set_location_assignment PIN_R11 -to eth_tx_data[1]
 set_location_assignment PIN_T11 -to eth_tx_data[2]
