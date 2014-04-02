@@ -185,13 +185,13 @@ module system_top (
   wire              adc0_dovf_s;
   wire              adc0_dwr_s;
   wire              adc0_mon_valid_s;
-  wire    [119:0]   adc0_mon_data_s;
+  wire    [ 55:0]   adc0_mon_data_s;
   wire    [ 63:0]   adc1_ddata_s;
   wire              adc1_dsync_s;
   wire              adc1_dovf_s;
   wire              adc1_dwr_s;
   wire              adc1_mon_valid_s;
-  wire    [119:0]   adc1_mon_data_s;
+  wire    [ 55:0]   adc1_mon_data_s;
   wire    [  3:0]   rx_ip_sof_s;
   wire    [127:0]   rx_ip_data_s;
   wire    [127:0]   rx_data_s;
@@ -246,12 +246,18 @@ module system_top (
   end
   endgenerate
 
-  assign rx_xcvr_status_s[15:14] = 2'd0;
+  assign rx_xcvr_status_s[15:15] = 1'd0;
+  assign rx_xcvr_status_s[14:14] = rx_sync;
   assign rx_xcvr_status_s[13:13] = rx_ready_s;
   assign rx_xcvr_status_s[12:12] = rx_pll_locked_s;
   assign rx_xcvr_status_s[11: 8] = rx_rst_state_s;
   assign rx_xcvr_status_s[ 7: 4] = rx_cdr_locked_s;
   assign rx_xcvr_status_s[ 3: 0] = rx_cal_busy_s;
+
+  system_adc_mon i_adc_mon (
+	  .acq_clk (rx_clk),
+	  .acq_data_in ({adc1_mon_data_s, adc0_mon_data_s}),
+	  .acq_trigger_in ({adc1_mon_valid_s, adc0_mon_valid_s}));
 
   ad_xcvr_rx_rst #(.NUM_OF_LANES (4)) i_xcvr_rx_rst (
     .rx_clk (rx_clk),
@@ -275,7 +281,7 @@ module system_top (
     .spi3_clk (spi_clk),
     .spi3_sdio (spi_sdio));
 
-  system i_system (
+  system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
     .sys_reset_reset_n (sys_resetn),
     .sys_125m_clk_clk (sys_125m_clk),

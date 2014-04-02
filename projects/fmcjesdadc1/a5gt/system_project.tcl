@@ -1,4 +1,6 @@
 
+load_package flow
+
 source ../../scripts/adi_env.tcl
 project_new fmcjesdadc1_a5gt -overwrite
 
@@ -7,6 +9,7 @@ set_global_assignment -name DEVICE 5AGTFD7K3F40I5
 set_global_assignment -name TOP_LEVEL_ENTITY system_top
 set_global_assignment -name SDC_FILE system_constr.sdc
 set_global_assignment -name QSYS_FILE system_bd.qsys
+set_global_assignment -name QIP_FILE system_adc_mon.qip
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_jesd_align.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_xcvr_rx_rst.v
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
@@ -64,8 +67,9 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_sdio
 set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
 set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
 set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
-set_global_assignment -name TIMEQUEST_REPORT_SCRIPT fmcjesdadc1_sta.tcl
+set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
+set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
-execute_flow --compile
+execute_flow -compile
 

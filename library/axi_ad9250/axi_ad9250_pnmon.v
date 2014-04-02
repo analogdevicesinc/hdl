@@ -177,7 +177,7 @@ module axi_ad9250_pnmon (
   // if oos is de-asserted, any spurious mismatches sets the error register.
   // ideally, processor should make sure both oos == 0x0 and err == 0x0.
 
-  assign adc_pn_data_in_s = {~adc_data[27], adc_data[26:14], ~adc_data[13], adc_data[12:0]};
+  assign adc_pn_data_in_s = {~adc_data[13], adc_data[12:0], ~adc_data[27], adc_data[26:14]};
   assign adc_pn_match_d_1_s = (adc_pn_data_in_s[27:14] == adc_pn_data[27:14]) ? 1'b1 : 1'b0;
   assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13: 0] == adc_pn_data[13: 0]) ? 1'b1 : 1'b0;
   assign adc_pn_match_z_s = (adc_pn_data_in_s == 28'd0) ? 1'b0 : 1'b1;
