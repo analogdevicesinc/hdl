@@ -235,6 +235,16 @@ module system_top (
     rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
   end
 
+  sld_signaltap #(
+    .sld_data_bits (112),
+    .sld_mem_address_bits (10),
+    .sld_sample_depth (1024),
+    .sld_trigger_bits (2))
+  i_signaltap (
+    .acq_clk (rx_clk),
+    .acq_data_in ({rx_sysref, rx_sync, adc1_mon_data_s, adc0_mon_data_s}),
+    .acq_trigger_in ({rx_sysref, rx_sync}));
+
   genvar n;
   generate
   for (n = 0; n < 4; n = n + 1) begin: g_align_1
@@ -253,11 +263,6 @@ module system_top (
   assign rx_xcvr_status_s[11: 8] = rx_rst_state_s;
   assign rx_xcvr_status_s[ 7: 4] = rx_cdr_locked_s;
   assign rx_xcvr_status_s[ 3: 0] = rx_cal_busy_s;
-
-  system_adc_mon i_adc_mon (
-	  .acq_clk (rx_clk),
-	  .acq_data_in ({adc1_mon_data_s, adc0_mon_data_s}),
-	  .acq_trigger_in ({adc1_mon_valid_s, adc0_mon_valid_s}));
 
   ad_xcvr_rx_rst #(.NUM_OF_LANES (4)) i_xcvr_rx_rst (
     .rx_clk (rx_clk),
