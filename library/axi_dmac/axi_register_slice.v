@@ -79,11 +79,14 @@ assign fwd_valid_s = fwd_valid;
 assign fwd_data_s = fwd_data;
 
 always @(posedge clk) begin
+	if (~fwd_valid | m_axi_ready)
+		fwd_data <= bwd_data_s;
+end
+
+always @(posedge clk) begin
 	if (resetn == 1'b0) begin
 		fwd_valid <= 1'b0;
 	end else begin 
-		if (~fwd_valid | m_axi_ready)
-			fwd_data <= bwd_data_s;
 		if (bwd_valid_s)
 			fwd_valid <= 1'b1;
 		else if (m_axi_ready)
@@ -108,11 +111,14 @@ assign bwd_data_s = bwd_ready ? s_axi_data : bwd_data;
 assign bwd_ready_s = bwd_ready;
 
 always @(posedge clk) begin
+	if (bwd_ready)
+		bwd_data <= s_axi_data;
+end
+
+always @(posedge clk) begin
 	if (resetn == 1'b0) begin
 		bwd_ready <= 1'b1;
 	end else begin
-		if (bwd_ready)
-			bwd_data <= s_axi_data;
 		if (fwd_ready_s)
 			bwd_ready <= 1'b1;
 		else if (s_axi_valid)
