@@ -212,6 +212,7 @@ reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_x_length = 'h00;
 reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
 reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
 reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
+reg up_dma_cyclic = C_CYCLIC;
 wire up_dma_sync_transfer_start = C_SYNC_TRANSFER_START ? 1'b1 : 1'b0;
 
 // ID signals from the DMAC, just for debugging
@@ -313,6 +314,7 @@ begin
 			12'h002: up_scratch <= up_wdata;
 			12'h020: up_irq_mask <= up_wdata;
 			12'h100: {up_pause, up_enable} <= up_wdata[1:0];
+			12'h103: if (C_CYCLIC) up_dma_cyclic <= up_wdata[0];
 			12'h104: up_dma_dest_address <= up_wdata[31:C_ADDR_ALIGN_BITS];
 			12'h105: up_dma_src_address <= up_wdata[31:C_ADDR_ALIGN_BITS];
 			12'h106: up_dma_x_length <= up_wdata[C_DMA_LENGTH_WIDTH-1:0];
@@ -339,7 +341,7 @@ begin
 		12'h100: up_rdata <= {up_pause, up_enable};
 		12'h101: up_rdata <= up_transfer_id;
 		12'h102: up_rdata <= up_dma_req_valid;
-		12'h103: up_rdata <= 'h00; // Flags
+		12'h103: up_rdata <= {31'h00, up_dma_cyclic}; // Flags
 		12'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{C_ADDR_ALIGN_BITS{1'b0}}} : 'h00;
 		12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{C_ADDR_ALIGN_BITS{1'b0}}} : 'h00;
 		12'h106: up_rdata <= up_dma_x_length;
@@ -387,8 +389,8 @@ wire dma_req_eot;
 wire dma_req_sync_transfer_start;
 wire up_req_eot;
 
-assign up_sot = C_CYCLIC ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
-assign up_eot = C_CYCLIC ? 1'b0 : up_req_eot;
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : up_req_eot;
 
 
 generate if (C_2D_TRANSFER == 1) begin
