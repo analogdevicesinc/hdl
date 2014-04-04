@@ -146,14 +146,6 @@
          type = "String";
       }
    }
-   element sys_jesd204b_s1_connect.s0
-   {
-      datum baseAddress
-      {
-         value = "67108864";
-         type = "String";
-      }
-   }
    element sys_ddr3_interconnect.s0
    {
       datum _lockedAddress
@@ -175,19 +167,11 @@
          type = "String";
       }
    }
-   element sys_gpio.s1
+   element sys_jesd204b_s1_connect.s0
    {
       datum baseAddress
       {
-         value = "86041792";
-         type = "String";
-      }
-   }
-   element sys_ethernet_desc_mem.s1
-   {
-      datum baseAddress
-      {
-         value = "0";
+         value = "67108864";
          type = "String";
       }
    }
@@ -196,6 +180,14 @@
       datum baseAddress
       {
          value = "86032384";
+         type = "String";
+      }
+   }
+   element sys_timer.s1
+   {
+      datum baseAddress
+      {
+         value = "86041760";
          type = "String";
       }
    }
@@ -212,19 +204,19 @@
          type = "String";
       }
    }
-   element sys_timer.s1
+   element sys_ethernet_desc_mem.s1
    {
       datum baseAddress
       {
-         value = "86041760";
+         value = "0";
          type = "String";
       }
    }
-   element sys_tcm_mem.s2
+   element sys_gpio.s1
    {
       datum baseAddress
       {
-         value = "86032384";
+         value = "86041792";
          type = "String";
       }
    }
@@ -238,6 +230,14 @@
       datum baseAddress
       {
          value = "83886080";
+         type = "String";
+      }
+   }
+   element sys_tcm_mem.s2
+   {
+      datum baseAddress
+      {
+         value = "86032384";
          type = "String";
       }
    }
@@ -542,7 +542,7 @@
    }
 }
 ]]></parameter>
- <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="clockCrossingAdapter" value="FIFO" />
  <parameter name="device" value="5AGTFD7K3F40I3" />
  <parameter name="deviceFamily" value="Arria V" />
  <parameter name="deviceSpeedGrade" value="3_H3" />
@@ -551,7 +551,7 @@
  <parameter name="generationId" value="0" />
  <parameter name="globalResetBus" value="false" />
  <parameter name="hdlLanguage" value="VERILOG" />
- <parameter name="maxAdditionalLatency" value="1" />
+ <parameter name="maxAdditionalLatency" value="2" />
  <parameter name="projectName">fmcjesdadc1_a5gt.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
@@ -1016,7 +1016,7 @@
   <parameter name="setting_breakslaveoveride" value="false" />
   <parameter name="muldiv_divider" value="false" />
   <parameter name="mpu_useLimit" value="false" />
-  <parameter name="mpu_enabled" value="false" />
+  <parameter name="mpu_enabled" value="true" />
   <parameter name="mmu_enabled" value="false" />
   <parameter name="mmu_autoAssignTlbPtrSz" value="true" />
   <parameter name="manuallyAssignCpuID" value="true" />
@@ -2728,7 +2728,7 @@
   <parameter name="baseAddress" value="0x0520c000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
- <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
 </system>
