@@ -236,10 +236,23 @@ module system_top (
   end
 
   sld_signaltap #(
-    .sld_data_bits (112),
+    .sld_advanced_trigger_entity ("basic,1,"),
+    .sld_data_bits (114),
+    .sld_data_bit_cntr_bits (8),
+    .sld_enable_advanced_trigger (0),
     .sld_mem_address_bits (10),
+    .sld_node_crc_bits (32),
+    .sld_node_crc_hiword (10311),
+    .sld_node_crc_loword (14297),
+    .sld_node_info (1076736),
+    .sld_ram_block_type ("AUTO"),
     .sld_sample_depth (1024),
-    .sld_trigger_bits (2))
+    .sld_storage_qualifier_gap_record (0),
+    .sld_storage_qualifier_mode ("OFF"),
+    .sld_trigger_bits (2),
+    .sld_trigger_in_enabled (0),
+    .sld_trigger_level (1),
+    .sld_trigger_level_pipeline (1))
   i_signaltap (
     .acq_clk (rx_clk),
     .acq_data_in ({rx_sysref, rx_sync, adc1_mon_data_s, adc0_mon_data_s}),

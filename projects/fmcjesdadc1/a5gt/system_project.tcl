@@ -5,7 +5,7 @@ source ../../scripts/adi_env.tcl
 project_new fmcjesdadc1_a5gt -overwrite
 
 set_global_assignment -name FAMILY "Arria V"
-set_global_assignment -name DEVICE 5AGTFD7K3F40I5
+set_global_assignment -name DEVICE 5AGTFD7K3F40I3
 set_global_assignment -name TOP_LEVEL_ENTITY system_top
 set_global_assignment -name SDC_FILE system_constr.sdc
 set_global_assignment -name QSYS_FILE system_bd.qsys
