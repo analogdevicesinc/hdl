@@ -76,9 +76,10 @@ localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
 assign burst = 2'b01;
 assign prot = 3'b000;
 assign cache = 4'b0011;
-assign len = eot ? req_last_burst_length : MAX_BEATS_PER_BURST - 1;
+assign len = length;
 assign size = $clog2(C_DMA_DATA_WIDTH/8);
 
+reg [7:0] length = 'h0;
 reg [31-C_ADDR_ALIGN_BITS:0] address = 'h00;
 reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
 assign addr = {address, {C_ADDR_ALIGN_BITS{1'b0}}};
@@ -94,6 +95,13 @@ always @(posedge clk) begin
 		else if (~addr_valid)
 			enabled <= 1'b0;
 	end
+end
+
+always @(posedge clk) begin
+	if (eot == 1'b1)
+		length <= req_last_burst_length;
+	else
+		length <= MAX_BEATS_PER_BURST - 1;
 end
 
 always @(posedge clk) begin
