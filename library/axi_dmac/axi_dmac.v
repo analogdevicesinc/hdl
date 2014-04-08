@@ -141,7 +141,7 @@ parameter C_HIGHADDR = 32'h00000000;
 parameter C_DMA_DATA_WIDTH_SRC = 64;
 parameter C_DMA_DATA_WIDTH_DEST = 64;
 parameter C_ADDR_ALIGN_BITS = 3;
-parameter C_DMA_LENGTH_WIDTH = 14;
+parameter C_DMA_LENGTH_WIDTH = 24;
 parameter C_2D_TRANSFER = 1;
 
 parameter C_CLKS_ASYNC_REQ_SRC = 1;
