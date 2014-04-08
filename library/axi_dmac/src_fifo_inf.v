@@ -92,14 +92,20 @@ end
 
 always @(posedge clk)
 begin
+	if (en) begin
+		buffer <= din;
+		buffer_sync <= sync;
+	end
+end
+
+always @(posedge clk)
+begin
 	if (resetn == 1'b0) begin
 		valid <= 1'b0;
 		overflow <= 1'b0;
 	end else begin
 		if (enable) begin
 			if (en) begin
-				buffer <= din;
-				buffer_sync <= sync;
 				valid <= 1'b1;
 			end else if (ready) begin
 				valid <= 1'b0;
