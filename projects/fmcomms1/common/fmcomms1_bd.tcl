@@ -32,7 +32,6 @@
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {2}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9122_dma
-  set_property -dict [list CONFIG.C_ADDR_ALIGN_BITS {3}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9122_dma
 
 if {$sys_zynq == 1} {
@@ -61,7 +60,6 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_ADDR_ALIGN_BITS {3}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9643_dma
 
 if {$sys_zynq == 1} {

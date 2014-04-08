@@ -140,7 +140,6 @@ parameter C_BASEADDR = 32'hffffffff;
 parameter C_HIGHADDR = 32'h00000000;
 parameter C_DMA_DATA_WIDTH_SRC = 64;
 parameter C_DMA_DATA_WIDTH_DEST = 64;
-parameter C_ADDR_ALIGN_BITS = 3;
 parameter C_DMA_LENGTH_WIDTH = 24;
 parameter C_2D_TRANSFER = 1;
 
@@ -166,10 +165,27 @@ localparam DMA_TYPE_AXI_STREAM = 1;
 localparam DMA_TYPE_FIFO = 2;
 
 localparam PCORE_VERSION = 'h00040061;
-localparam DMA_ADDR_WIDTH = 32 - C_ADDR_ALIGN_BITS;
 
 localparam HAS_DEST_ADDR = C_DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
 localparam HAS_SRC_ADDR = C_DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
+
+// Argh... "[Synth 8-2722] system function call clog2 is not allowed here"
+localparam BYTES_PER_BEAT_WIDTH_DEST = C_DMA_DATA_WIDTH_DEST > 1024 ? 8 :
+	C_DMA_DATA_WIDTH_DEST > 512 ? 7 :
+	C_DMA_DATA_WIDTH_DEST > 256 ? 6 :
+	C_DMA_DATA_WIDTH_DEST > 128 ? 5 :
+	C_DMA_DATA_WIDTH_DEST > 64 ? 4 :
+	C_DMA_DATA_WIDTH_DEST > 32 ? 3 :
+	C_DMA_DATA_WIDTH_DEST > 16 ? 2 :
+	C_DMA_DATA_WIDTH_DEST > 8 ? 1 : 0;
+localparam BYTES_PER_BEAT_WIDTH_SRC = C_DMA_DATA_WIDTH_SRC > 1024 ? 8 :
+	C_DMA_DATA_WIDTH_SRC > 512 ? 7 :
+	C_DMA_DATA_WIDTH_SRC > 256 ? 6 :
+	C_DMA_DATA_WIDTH_SRC > 128 ? 5 :
+	C_DMA_DATA_WIDTH_SRC > 64 ? 4 :
+	C_DMA_DATA_WIDTH_SRC > 32 ? 3 :
+	C_DMA_DATA_WIDTH_SRC > 16 ? 2 :
+	C_DMA_DATA_WIDTH_SRC > 8 ? 1 : 0;
 
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
@@ -206,8 +222,8 @@ reg [1:0] up_transfer_id;
 reg [1:0] up_transfer_id_eot;
 reg [3:0] up_transfer_done_bitmap;
 
-reg [31:C_ADDR_ALIGN_BITS]   up_dma_dest_address = 'h00;
-reg [31:C_ADDR_ALIGN_BITS]   up_dma_src_address = 'h00;
+reg [31:BYTES_PER_BEAT_WIDTH_DEST]   up_dma_dest_address = 'h00;
+reg [31:BYTES_PER_BEAT_WIDTH_SRC]   up_dma_src_address = 'h00;
 reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_x_length = 'h00;
 reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
 reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
@@ -315,8 +331,8 @@ begin
 			12'h020: up_irq_mask <= up_wdata;
 			12'h100: {up_pause, up_enable} <= up_wdata[1:0];
 			12'h103: if (C_CYCLIC) up_dma_cyclic <= up_wdata[0];
-			12'h104: up_dma_dest_address <= up_wdata[31:C_ADDR_ALIGN_BITS];
-			12'h105: up_dma_src_address <= up_wdata[31:C_ADDR_ALIGN_BITS];
+			12'h104: up_dma_dest_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_DEST];
+			12'h105: up_dma_src_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_SRC];
 			12'h106: up_dma_x_length <= up_wdata[C_DMA_LENGTH_WIDTH-1:0];
 			12'h107: up_dma_y_length <= up_wdata[C_DMA_LENGTH_WIDTH-1:0];
 			12'h108: up_dma_dest_stride <= up_wdata[C_DMA_LENGTH_WIDTH-1:0];
@@ -342,8 +358,8 @@ begin
 		12'h101: up_rdata <= up_transfer_id;
 		12'h102: up_rdata <= up_dma_req_valid;
 		12'h103: up_rdata <= {31'h00, up_dma_cyclic}; // Flags
-		12'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{C_ADDR_ALIGN_BITS{1'b0}}} : 'h00;
-		12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{C_ADDR_ALIGN_BITS{1'b0}}} : 'h00;
+		12'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
+		12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
 		12'h106: up_rdata <= up_dma_x_length;
 		12'h107: up_rdata <= C_2D_TRANSFER ? up_dma_y_length : 'h00;
 		12'h108: up_rdata <= C_2D_TRANSFER ? up_dma_dest_stride : 'h00;
@@ -382,8 +398,8 @@ end
 
 wire dma_req_valid;
 wire dma_req_ready;
-wire [31:C_ADDR_ALIGN_BITS] dma_req_dest_address;
-wire [31:C_ADDR_ALIGN_BITS] dma_req_src_address;
+wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
+wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
 wire [C_DMA_LENGTH_WIDTH-1:0] dma_req_length;
 wire dma_req_eot;
 wire dma_req_sync_transfer_start;
@@ -397,7 +413,8 @@ generate if (C_2D_TRANSFER == 1) begin
 
 dmac_2d_transfer #(
 	.C_DMA_LENGTH_WIDTH(C_DMA_LENGTH_WIDTH),
-	.C_ADDR_ALIGN_BITS(C_ADDR_ALIGN_BITS)
+	.BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
+	.BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC)
 ) i_2d_transfer (
 	.req_aclk(s_axi_aclk),
 	.req_aresetn(s_axi_aresetn),
@@ -439,7 +456,8 @@ dmac_request_arb #(
 	.C_DMA_DATA_WIDTH_SRC(C_DMA_DATA_WIDTH_SRC),
 	.C_DMA_DATA_WIDTH_DEST(C_DMA_DATA_WIDTH_DEST),
 	.C_DMA_LENGTH_WIDTH(C_DMA_LENGTH_WIDTH),
-	.C_ADDR_ALIGN_BITS(C_ADDR_ALIGN_BITS),
+	.C_BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
+	.C_BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
 	.C_DMA_TYPE_DEST(C_DMA_TYPE_DEST),
 	.C_DMA_TYPE_SRC(C_DMA_TYPE_SRC),
 	.C_CLKS_ASYNC_REQ_SRC(C_CLKS_ASYNC_REQ_SRC),

@@ -43,8 +43,8 @@ module dmac_2d_transfer (
 	input req_valid,
 	output reg req_ready,
 
-	input [31:C_ADDR_ALIGN_BITS] req_dest_address,
-	input [31:C_ADDR_ALIGN_BITS] req_src_address,
+	input [31:C_BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
+	input [31:C_BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
 	input [C_DMA_LENGTH_WIDTH-1:0] req_x_length,
 	input [C_DMA_LENGTH_WIDTH-1:0] req_y_length,
 	input [C_DMA_LENGTH_WIDTH-1:0] req_dest_stride,
@@ -54,18 +54,19 @@ module dmac_2d_transfer (
 	
 	output reg out_req_valid,
 	input out_req_ready,
-	output [31:C_ADDR_ALIGN_BITS] out_req_dest_address,
-	output [31:C_ADDR_ALIGN_BITS] out_req_src_address,
+	output [31:C_BYTES_PER_BEAT_WIDTH_DEST] out_req_dest_address,
+	output [31:C_BYTES_PER_BEAT_WIDTH_SRC] out_req_src_address,
 	output [C_DMA_LENGTH_WIDTH-1:0] out_req_length,
 	output reg out_req_sync_transfer_start,
 	input out_eot
 );
 
 parameter C_DMA_LENGTH_WIDTH = 24;
-parameter C_ADDR_ALIGN_BITS = 3;
+parameter C_BYTES_PER_BEAT_WIDTH_SRC = 3;
+parameter C_BYTES_PER_BEAT_WIDTH_DEST = 3;
 
-reg [31:C_ADDR_ALIGN_BITS] dest_address;
-reg [31:C_ADDR_ALIGN_BITS] src_address;
+reg [31:C_BYTES_PER_BEAT_WIDTH_DEST] dest_address;
+reg [31:C_BYTES_PER_BEAT_WIDTH_SRC] src_address;
 reg [C_DMA_LENGTH_WIDTH-1:0] x_length;
 reg [C_DMA_LENGTH_WIDTH-1:0] y_length;
 reg [C_DMA_LENGTH_WIDTH-1:0] dest_stride;
@@ -125,8 +126,8 @@ begin
 			end
 		end else begin
 			if (out_req_valid && out_req_ready) begin
-				dest_address <= dest_address + dest_stride[C_DMA_LENGTH_WIDTH-1:C_ADDR_ALIGN_BITS];
-				src_address <= src_address + src_stride[C_DMA_LENGTH_WIDTH-1:C_ADDR_ALIGN_BITS];
+				dest_address <= dest_address + dest_stride[C_DMA_LENGTH_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_DEST];
+				src_address <= src_address + src_stride[C_DMA_LENGTH_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_SRC];
 				y_length <= y_length - 1'b1;
 				out_req_sync_transfer_start <= 1'b0;
 				if (y_length == 0) begin

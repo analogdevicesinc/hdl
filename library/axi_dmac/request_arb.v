@@ -42,8 +42,8 @@ module dmac_request_arb (
 
 	input req_valid,
 	output req_ready,
-	input [31:C_ADDR_ALIGN_BITS] req_dest_address,
-	input [31:C_ADDR_ALIGN_BITS] req_src_address,
+	input [31:C_BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
+	input [31:C_BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
 	input [C_DMA_LENGTH_WIDTH-1:0] req_length,
 	input req_sync_transfer_start,
 
@@ -137,7 +137,9 @@ module dmac_request_arb (
 parameter C_DMA_DATA_WIDTH_SRC = 64;
 parameter C_DMA_DATA_WIDTH_DEST = 64;
 parameter C_DMA_LENGTH_WIDTH = 24;
-parameter C_ADDR_ALIGN_BITS = 3;
+
+parameter C_BYTES_PER_BEAT_WIDTH_DEST = $clog2(C_DMA_DATA_WIDTH_DEST/8);
+parameter C_BYTES_PER_BEAT_WIDTH_SRC = $clog2(C_DMA_DATA_WIDTH_SRC/8);
 
 parameter C_DMA_TYPE_DEST = DMA_TYPE_MM_AXI;
 parameter C_DMA_TYPE_SRC = DMA_TYPE_FIFO;
@@ -158,7 +160,8 @@ localparam DMA_TYPE_MM_AXI = 0;
 localparam DMA_TYPE_STREAM_AXI = 1;
 localparam DMA_TYPE_FIFO = 2;
 
-localparam DMA_ADDR_WIDTH = 32 - C_ADDR_ALIGN_BITS;
+localparam DMA_ADDR_WIDTH_DEST = 32 - C_BYTES_PER_BEAT_WIDTH_DEST;
+localparam DMA_ADDR_WIDTH_SRC = 32 - C_BYTES_PER_BEAT_WIDTH_SRC;
 
 localparam DMA_DATA_WIDTH = C_DMA_DATA_WIDTH_SRC < C_DMA_DATA_WIDTH_DEST ?
 	C_DMA_DATA_WIDTH_DEST : C_DMA_DATA_WIDTH_SRC;
@@ -169,10 +172,8 @@ localparam DMA_DATA_WIDTH = C_DMA_DATA_WIDTH_SRC < C_DMA_DATA_WIDTH_DEST ?
 // differ, so beats per burst may also differ
 
 parameter BYTES_PER_BURST_WIDTH = $clog2(C_MAX_BYTES_PER_BURST);
-parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(C_DMA_DATA_WIDTH_SRC/8);
-parameter BYTES_PER_BEAT_WIDTH_DEST = $clog2(C_DMA_DATA_WIDTH_DEST/8);
-localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
-localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
+localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_SRC;
+localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_DEST;
 
 localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
 
@@ -211,9 +212,9 @@ wire dest_clk;
 wire dest_resetn;
 wire dest_req_valid;
 wire dest_req_ready;
-wire [DMA_ADDR_WIDTH-1:0] dest_req_address;
+wire [DMA_ADDR_WIDTH_DEST-1:0] dest_req_address;
 wire [BEATS_PER_BURST_WIDTH_DEST-1:0] dest_req_last_burst_length;
-wire [BYTES_PER_BEAT_WIDTH_DEST-1:0] dest_req_last_beat_bytes;
+wire [C_BYTES_PER_BEAT_WIDTH_DEST-1:0] dest_req_last_beat_bytes;
 
 wire dest_response_valid;
 wire dest_response_ready;
@@ -238,7 +239,7 @@ wire src_clk;
 wire src_resetn;
 wire src_req_valid;
 wire src_req_ready;
-wire [DMA_ADDR_WIDTH-1:0] src_req_address;
+wire [DMA_ADDR_WIDTH_SRC-1:0] src_req_address;
 wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_req_last_burst_length;
 wire src_req_sync_transfer_start;
 
@@ -378,9 +379,8 @@ assign dbg_dest_data_id = dest_data_id;
 dmac_dest_mm_axi #(
 	.C_ID_WIDTH(C_ID_WIDTH),
 	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH_DEST),
-	.C_ADDR_ALIGN_BITS(C_ADDR_ALIGN_BITS),
 	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST),
-	.C_BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_DEST)
+	.C_BYTES_PER_BEAT_WIDTH(C_BYTES_PER_BEAT_WIDTH_DEST)
 ) i_dest_dma_mm (
 	.m_axi_aclk(m_dest_axi_aclk),
 	.m_axi_aresetn(m_dest_axi_aresetn),
@@ -586,8 +586,8 @@ assign dbg_src_data_id = src_data_id;
 dmac_src_mm_axi #(
 	.C_ID_WIDTH(C_ID_WIDTH),
 	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
-	.C_ADDR_ALIGN_BITS(C_ADDR_ALIGN_BITS),
-	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
+	.C_BYTES_PER_BEAT_WIDTH(C_BYTES_PER_BEAT_WIDTH_SRC)
 ) i_src_dma_mm (
 	.m_axi_aclk(m_src_axi_aclk),
 	.m_axi_aresetn(m_src_axi_aresetn),
@@ -901,7 +901,7 @@ splitter #(
 );
 
 axi_fifo #(
-	.C_DATA_WIDTH(DMA_ADDR_WIDTH + BEATS_PER_BURST_WIDTH_DEST + BYTES_PER_BEAT_WIDTH_DEST),
+	.C_DATA_WIDTH(DMA_ADDR_WIDTH_DEST + BEATS_PER_BURST_WIDTH_DEST + C_BYTES_PER_BEAT_WIDTH_DEST),
 	.C_ADDRESS_WIDTH(0),
 	.C_CLKS_ASYNC(C_CLKS_ASYNC_DEST_REQ)
 ) i_dest_req_fifo (
@@ -912,8 +912,8 @@ axi_fifo #(
 	.s_axis_empty(req_dest_empty),
 	.s_axis_data({
 		req_dest_address,
-		req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST],
-		req_length[BYTES_PER_BEAT_WIDTH_DEST-1:0]
+		req_length[BYTES_PER_BURST_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_DEST],
+		req_length[C_BYTES_PER_BEAT_WIDTH_DEST-1:0]
 	}),
 	.m_axis_aclk(dest_clk),
 	.m_axis_aresetn(dest_resetn),
@@ -927,7 +927,7 @@ axi_fifo #(
 );
 
 axi_fifo #(
-	.C_DATA_WIDTH(DMA_ADDR_WIDTH + BEATS_PER_BURST_WIDTH_SRC + 1),
+	.C_DATA_WIDTH(DMA_ADDR_WIDTH_SRC + BEATS_PER_BURST_WIDTH_SRC + 1),
 	.C_ADDRESS_WIDTH(0),
 	.C_CLKS_ASYNC(C_CLKS_ASYNC_REQ_SRC)
 ) i_src_req_fifo (
@@ -938,7 +938,7 @@ axi_fifo #(
 	.s_axis_empty(req_src_empty),
 	.s_axis_data({
 		req_src_address,
-		req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC],
+		req_length[BYTES_PER_BURST_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_SRC],
 		req_sync_transfer_start
 	}),
 	.m_axis_aclk(src_clk),

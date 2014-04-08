@@ -189,7 +189,6 @@ module axi_dmac_alt (
   parameter PCORE_ID = 0;
   parameter C_DMA_DATA_WIDTH_SRC = 64;
   parameter C_DMA_DATA_WIDTH_DEST = 64;
-  parameter C_ADDR_ALIGN_BITS = 3;
   parameter C_DMA_LENGTH_WIDTH = 14;
   parameter C_2D_TRANSFER = 1;
   parameter C_CLKS_ASYNC_REQ_SRC = 1;
@@ -361,7 +360,6 @@ module axi_dmac_alt (
     .C_HIGHADDR (32'hffffffff),
     .C_DMA_DATA_WIDTH_SRC (C_DMA_DATA_WIDTH_SRC),
     .C_DMA_DATA_WIDTH_DEST (C_DMA_DATA_WIDTH_DEST),
-    .C_ADDR_ALIGN_BITS (C_ADDR_ALIGN_BITS),
     .C_DMA_LENGTH_WIDTH (C_DMA_LENGTH_WIDTH),
     .C_2D_TRANSFER (C_2D_TRANSFER),
     .C_CLKS_ASYNC_REQ_SRC (C_CLKS_ASYNC_REQ_SRC),
