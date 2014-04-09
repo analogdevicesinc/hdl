@@ -107,7 +107,7 @@ module up_xfer_cntrl (
       d_xfer_toggle_m1 <= 'd0;
       d_xfer_toggle_m2 <= 'd0;
       d_xfer_toggle_m3 <= 'd0;
-      d_data_cntrl <= 'd0;;
+      d_data_cntrl <= 'd0;
     end else begin
       d_xfer_toggle_m1 <= up_xfer_toggle;
       d_xfer_toggle_m2 <= d_xfer_toggle_m1;
