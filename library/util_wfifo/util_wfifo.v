@@ -42,11 +42,12 @@
 module util_wfifo (
 
   rstn,
-  clk,
 
+  m_clk,
   m_wr,
   m_wdata,
   m_wovf,
+  s_clk,
   s_wr,
   s_wdata,
   s_wovf,
@@ -68,13 +69,14 @@ module util_wfifo (
   // common clock
 
   input                           rstn;
-  input                           clk;
 
   // master/slave write 
 
+  input                           m_clk;
   input                           m_wr;
   input   [M_DATA_WIDTH-1:0]      m_wdata;
   output                          m_wovf;
+  input                           s_clk;
   output                          s_wr;
   output  [S_DATA_WIDTH-1:0]      s_wdata;
   input                           s_wovf;
@@ -92,23 +94,23 @@ module util_wfifo (
 
   // internal registers
 
-  reg                             fifo_rst = 'd0;
+  reg                             m_wovf_m1 = 'd0;
+  reg                             m_wovf_m2 = 'd0;
   reg                             m_wovf = 'd0;
   reg                             s_wr = 'd0;
 
+  // internal signals
+
+  wire                            m_wovf_s;
+
   // defaults
 
-  always @(posedge clk or negedge rstn) begin
-    if (rstn == 1'b0) begin
-      fifo_rst <= 1'b1;
-    end else begin
-      fifo_rst <= 1'b0;
-    end
-  end
+  assign fifo_rst = ~rstn;
 
-  // write is pass through (fifo can never become full nor overflow)
+  // write is pass through
 
   assign fifo_wr = m_wr;
+  assign m_wovf_s = s_wovf | fifo_wfull | fifo_wovf;
 
   genvar m;
   generate
@@ -117,15 +119,17 @@ module util_wfifo (
   end
   endgenerate
 
-  always @(posedge clk) begin
-    m_wovf <= s_wovf | fifo_wfull | fifo_wovf;
+  always @(posedge m_clk) begin
+    m_wovf_m1 <= m_wovf_s;
+    m_wovf_m2 <= m_wovf_m1;
+    m_wovf <= m_wovf_m2;
   end
 
   // read is non-destructive
 
   assign fifo_rd = ~fifo_rempty;
 
-  always @(posedge clk) begin
+  always @(posedge s_clk) begin
     s_wr <= fifo_rd;
   end
   

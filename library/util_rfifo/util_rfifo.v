@@ -42,11 +42,12 @@
 module util_rfifo (
 
   rstn,
-  clk,
 
+  m_clk,
   m_rd,
   m_rdata,
   m_runf,
+  s_clk,
   s_rd,
   s_rdata,
   s_runf,
@@ -64,18 +65,18 @@ module util_rfifo (
 
   parameter M_DATA_WIDTH = 32;
   parameter S_DATA_WIDTH = 64;
-  parameter READ_SELECT = 1;
  
   // common clock
 
   input                           rstn;
-  input                           clk;
 
   // master/slave write 
 
+  input                           m_clk;
   input                           m_rd;
   output  [M_DATA_WIDTH-1:0]      m_rdata;
   output                          m_runf;
+  input                           s_clk;
   output                          s_rd;
   input   [S_DATA_WIDTH-1:0]      s_rdata;
   input                           s_runf;
@@ -93,24 +94,27 @@ module util_rfifo (
 
   // internal registers
 
-  reg                             fifo_rst = 'd0;
-  reg     [READ_SELECT-1:0]       s_rd_cnt = 'd0;
+  reg                             s_rd = 'd0;
+  reg                             fifo_wr = 'd0;
+  reg                             m_runf_m1 = 'd0;
+  reg                             m_runf_m2 = 'd0;
   reg                             m_runf = 'd0;
+
+  // internal signals
+
+  wire                            m_runf_s;
 
   // defaults
 
-  always @(posedge clk or negedge rstn) begin
-    if (rstn == 1'b0) begin
-      fifo_rst <= 1'b1;
-    end else begin
-      fifo_rst <= 1'b0;
-    end
+  assign fifo_rst = ~rstn;
+
+  // independent clocks and buswidths- simply expect
+  // user to set a reasonable threshold on the full signal
+
+  always @(posedge s_clk) begin
+    s_rd <= ~fifo_wfull;
+    fifo_wr <= ~fifo_wfull;
   end
-
-  // write depends on bus width change
-
-  assign s_rd = s_rd_cnt[READ_SELECT-1];
-  assign fifo_wr = s_rd_cnt[READ_SELECT-1];
 
   genvar s;
   generate
@@ -119,18 +123,15 @@ module util_rfifo (
   end
   endgenerate
 
-  always @(posedge clk) begin
-    if (m_rd == 1'b1) begin
-      s_rd_cnt <= s_rd_cnt + 1'b1;
-    end
-  end
-
   // read is non-destructive
 
   assign fifo_rd = m_rd;
+  assign m_runf_s = s_runf | fifo_runf | fifo_rempty;
 
-  always @(posedge clk) begin
-    m_runf <= s_runf | fifo_wfull | fifo_runf | fifo_rempty;
+  always @(posedge m_clk) begin
+    m_runf_m1 <= m_runf_s;
+    m_runf_m2 <= m_runf_m1;
+    m_runf <= m_runf_m2;
   end
   
   genvar m;
