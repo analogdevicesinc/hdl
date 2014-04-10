@@ -71,19 +71,20 @@ module system_top (
   hdmi_hsync,
   hdmi_data_e,
   hdmi_data,
-  hdmi_int,
+
+  spdif,
 
   iic_scl,
   iic_sda,
 
   rx_ref_clk_p,
   rx_ref_clk_n,
-  rx_data_p,
-  rx_data_n,
   rx_sysref_p,
   rx_sysref_n,
   rx_sync_p,
   rx_sync_n,
+  rx_data_p,
+  rx_data_n,
 
   spi_fout_enb_clk,
   spi_fout_enb_mlo,
@@ -150,19 +151,20 @@ module system_top (
   output          hdmi_hsync;
   output          hdmi_data_e;
   output  [23:0]  hdmi_data;
-  input           hdmi_int;
+
+  output          spdif;
 
   inout           iic_scl;
   inout           iic_sda;
 
   input           rx_ref_clk_p;
   input           rx_ref_clk_n;
-  input   [ 7:0]  rx_data_p;
-  input   [ 7:0]  rx_data_n;
   output          rx_sysref_p;
   output          rx_sysref_n;
   output          rx_sync_p;
   output          rx_sync_n;
+  input   [ 7:0]  rx_data_p;
+  input   [ 7:0]  rx_data_n;
 
   output          spi_fout_enb_clk;
   output          spi_fout_enb_mlo;
@@ -211,6 +213,32 @@ module system_top (
   wire            rx_sync;
   wire    [ 1:0]  gpio_open;
 
+  wire   [511:0]  adc_ddata;
+  wire   [127:0]  adc_ddata_0;
+  wire   [127:0]  adc_ddata_1;
+  wire   [127:0]  adc_ddata_2;
+  wire   [127:0]  adc_ddata_3;
+  wire            adc_dovf;
+  wire            adc_dovf_0;
+  wire            adc_dovf_1;
+  wire            adc_dovf_2;
+  wire            adc_dovf_3;
+  wire            adc_dsync;
+  wire            adc_dsync_0;
+  wire            adc_dsync_1;
+  wire            adc_dsync_2;
+  wire            adc_dsync_3;
+  wire            adc_dwr;
+  wire            adc_dwr_0;
+  wire            adc_dwr_1;
+  wire            adc_dwr_2;
+  wire            adc_dwr_3;
+  wire   [255:0]  gt_rx_data;
+  wire    [63:0]  gt_rx_data_0;
+  wire    [63:0]  gt_rx_data_1;
+  wire    [63:0]  gt_rx_data_2;
+  wire    [63:0]  gt_rx_data_3;
+
   // spi assignments
 
   assign spi_fout_enb_clk     = spi_csn[10:10];
@@ -225,6 +253,22 @@ module system_top (
   assign spi_fout_clk         = spi_clk;
   assign spi_afe_clk          = spi_clk;
   assign spi_clk_clk          = spi_clk;
+
+  // single dma for all channels
+
+  assign gt_rx_data_3 = gt_rx_data[255:192];
+  assign gt_rx_data_2 = gt_rx_data[191:128];
+  assign gt_rx_data_1 = gt_rx_data[127: 64];
+  assign gt_rx_data_0 = gt_rx_data[ 63:  0];
+
+  assign adc_dwr = adc_dwr_3 | adc_dwr_2 | adc_dwr_1 | adc_dwr_0;
+  assign adc_dsync = adc_dsync_3 | adc_dsync_2 | adc_dsync_1 | adc_dsync_0;
+  assign adc_ddata = {adc_ddata_3, adc_ddata_2, adc_ddata_1, adc_ddata_0};
+
+  assign adc_dovf_0 = adc_dovf;
+  assign adc_dovf_1 = adc_dovf;
+  assign adc_dovf_2 = adc_dovf;
+  assign adc_dovf_3 = adc_dovf;
 
   // instantiations
 
@@ -380,10 +424,34 @@ module system_top (
     .GPIO_I (gpio_i),
     .GPIO_O (gpio_o),
     .GPIO_T (gpio_t),
+    .adc_ddata (adc_ddata),
+    .adc_ddata_0 (adc_ddata_0),
+    .adc_ddata_1 (adc_ddata_1),
+    .adc_ddata_2 (adc_ddata_2),
+    .adc_ddata_3 (adc_ddata_3),
+    .adc_dovf (adc_dovf),
+    .adc_dovf_0 (adc_dovf_0),
+    .adc_dovf_1 (adc_dovf_1),
+    .adc_dovf_2 (adc_dovf_2),
+    .adc_dovf_3 (adc_dovf_3),
+    .adc_dsync (adc_dsync),
+    .adc_dsync_0 (adc_dsync_0),
+    .adc_dsync_1 (adc_dsync_1),
+    .adc_dsync_2 (adc_dsync_2),
+    .adc_dsync_3 (adc_dsync_3),
+    .adc_dwr (adc_dwr),
+    .adc_dwr_0 (adc_dwr_0),
+    .adc_dwr_1 (adc_dwr_1),
+    .adc_dwr_2 (adc_dwr_2),
+    .adc_dwr_3 (adc_dwr_3),
+    .gt_rx_data (gt_rx_data),
+    .gt_rx_data_0 (gt_rx_data_0),
+    .gt_rx_data_1 (gt_rx_data_1),
+    .gt_rx_data_2 (gt_rx_data_2),
+    .gt_rx_data_3 (gt_rx_data_3),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
-    .hdmi_int (hdmi_int),
     .hdmi_out_clk (hdmi_out_clk),
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
@@ -394,6 +462,7 @@ module system_top (
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
+    .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
     .spi_csn_i (spi_csn),

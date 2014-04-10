@@ -82,8 +82,8 @@ set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_usdrx1_dma
-set_property -dict [list CONFIG.C_M_DEST_AXI_DATA_WIDTH {512}] $axi_usdrx1_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_usdrx1_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {512}] $axi_usdrx1_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {512}] $axi_usdrx1_dma
 
 set axi_usdrx1_gt_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_usdrx1_gt_interconnect]
 set_property -dict [list CONFIG.NUM_MI {1}] $axi_usdrx1_gt_interconnect
@@ -100,16 +100,16 @@ set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_usdrx1_spi
 
 # additions to default configuration
 
-set_property -dict [list CONFIG.NUM_MI {12}] $axi_cpu_interconnect
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $processing_system7_1
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP3 {1}] $processing_system7_1
-set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $processing_system7_1
-set_property -dict [list CONFIG.PCW_EN_CLK3_PORT {1}] $processing_system7_1
-set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $processing_system7_1
-set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $processing_system7_1
-set_property -dict [list CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ {40}] $processing_system7_1
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $processing_system7_1
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {44}] $processing_system7_1
+set_property -dict [list CONFIG.NUM_MI {15}] $axi_cpu_interconnect
+set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USE_S_AXI_HP3 {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_EN_CLK3_PORT {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
+set_property -dict [list CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ {40}] $sys_ps7
+set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {44}] $sys_ps7
 
 set_property LEFT 43 [get_bd_ports GPIO_I]
 set_property LEFT 43 [get_bd_ports GPIO_O]
@@ -126,7 +126,7 @@ connect_bd_net -net axi_spi_1_sdo_o [get_bd_ports spi_sdo_o]  [get_bd_pins axi_u
 connect_bd_net -net axi_spi_1_sdi_i [get_bd_ports spi_sdi_i]  [get_bd_pins axi_usdrx1_spi/io1_i]
 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_spi/ext_spi_clk] 
-connect_bd_net -net axi_spi_1_irq [get_bd_pins axi_usdrx1_spi/ip2intc_irpt] [get_bd_pins sys_concat_intc/In2] 
+connect_bd_net -net axi_spi_1_irq [get_bd_pins axi_usdrx1_spi/ip2intc_irpt] [get_bd_pins sys_concat_intc/In3] 
 
 # connections (gt)
 
@@ -182,7 +182,7 @@ connect_bd_net -net axi_ad9671_dma_adc_dwr          [get_bd_pins axi_usdrx1_dma/
 connect_bd_net -net axi_ad9671_dma_adc_dsync        [get_bd_pins axi_usdrx1_dma/fifo_wr_sync]       [get_bd_ports adc_dsync]
 connect_bd_net -net axi_ad9671_dma_adc_ddata        [get_bd_pins axi_usdrx1_dma/fifo_wr_din]        [get_bd_ports adc_ddata]
 connect_bd_net -net axi_ad9671_dma_adc_dovf         [get_bd_pins axi_usdrx1_dma/fifo_wr_overflow]   [get_bd_ports adc_dovf]
-connect_bd_net -net axi_ad9671_dma_irq              [get_bd_pins axi_usdrx1_dma/irq]                [get_bd_pins sys_concat_intc/In2] 
+connect_bd_net -net axi_usdrx1_dma_irq              [get_bd_pins axi_usdrx1_dma/irq]                [get_bd_pins sys_concat_intc/In2] 
 
 # interconnect (cpu)
 
@@ -230,7 +230,7 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_usdrx1_spi/s_axi_aresetn]
 # interconnect (gt es)
 
 connect_bd_intf_net -intf_net axi_usdrx1_gt_interconnect_s00_axi [get_bd_intf_pins axi_usdrx1_gt_interconnect/S00_AXI] [get_bd_intf_pins axi_usdrx1_gt/m_axi]
-connect_bd_intf_net -intf_net axi_usdrx1_gt_interconnect_m00_axi [get_bd_intf_pins axi_usdrx1_gt_interconnect/M00_AXI] [get_bd_intf_pins processing_system7_1/S_AXI_HP3]
+connect_bd_intf_net -intf_net axi_usdrx1_gt_interconnect_m00_axi [get_bd_intf_pins axi_usdrx1_gt_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP3]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_gt_interconnect/ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_gt_interconnect/S00_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_gt_interconnect/M00_ACLK] $sys_100m_clk_source
@@ -250,7 +250,7 @@ set sys_fmc_dma_resetn_source [get_bd_pins sys_ps7/FCLK_RESET2_N]
 connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
 connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
 
-connect_bd_intf_net -intf_net axi_usdrx1_dma_interconnect_m00_axi [get_bd_intf_pins axi_usdrx1_dma_interconnect/M00_AXI]  [get_bd_intf_pins processing_system7_1/S_AXI_HP2]
+connect_bd_intf_net -intf_net axi_usdrx1_dma_interconnect_m00_axi [get_bd_intf_pins axi_usdrx1_dma_interconnect/M00_AXI]  [get_bd_intf_pins sys_ps7/S_AXI_HP2]
 connect_bd_intf_net -intf_net axi_usdrx1_dma_interconnect_s00_axi [get_bd_intf_pins axi_usdrx1_dma_interconnect/S00_AXI]  [get_bd_intf_pins axi_usdrx1_dma/m_dest_axi] 
 connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_usdrx1_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
 connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_usdrx1_dma_interconnect/S00_ACLK] $sys_fmc_dma_clk_source
@@ -277,15 +277,15 @@ connect_bd_net -net axi_usdrx1_gt_rx_mon_trigger    [get_bd_pins ila_jesd_rx_mon
 
 # address map
 
-create_bd_addr_seg -range 0x00010000 -offset 0x44A00000 [get_bd_addr_spaces processing_system7_1/Data]  [get_bd_addr_segs axi_ad9671_core_0/s_axi/axi_lite]   SEG_data_ad9671_core_0
-create_bd_addr_seg -range 0x00010000 -offset 0x44A10000 [get_bd_addr_spaces processing_system7_1/Data]  [get_bd_addr_segs axi_ad9671_core_1/s_axi/axi_lite]   SEG_data_ad9671_core_1
-create_bd_addr_seg -range 0x00010000 -offset 0x44A20000 [get_bd_addr_spaces processing_system7_1/Data]  [get_bd_addr_segs axi_ad9671_core_2/s_axi/axi_lite]   SEG_data_ad9671_core_2
-create_bd_addr_seg -range 0x00010000 -offset 0x44A30000 [get_bd_addr_spaces processing_system7_1/Data]  [get_bd_addr_segs axi_ad9671_core_3/s_axi/axi_lite]   SEG_data_ad9671_core_3
+create_bd_addr_seg -range 0x00010000 -offset 0x44A00000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9671_core_0/s_axi/axi_lite]   SEG_data_ad9671_core_0
+create_bd_addr_seg -range 0x00010000 -offset 0x44A10000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9671_core_1/s_axi/axi_lite]   SEG_data_ad9671_core_1
+create_bd_addr_seg -range 0x00010000 -offset 0x44A20000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9671_core_2/s_axi/axi_lite]   SEG_data_ad9671_core_2
+create_bd_addr_seg -range 0x00010000 -offset 0x44A30000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9671_core_3/s_axi/axi_lite]   SEG_data_ad9671_core_3
 
-create_bd_addr_seg -range 0x00010000 -offset 0x44A60000 [get_bd_addr_spaces processing_system7_1/Data]  [get_bd_addr_segs axi_usdrx1_gt/s_axi/axi_lite]       SEG_data_usdrx1_gt
-create_bd_addr_seg -range 0x00001000 -offset 0x44A91000 [get_bd_addr_spaces processing_system7_1/Data]  [get_bd_addr_segs axi_usdrx1_jesd/s_axi/Reg]          SEG_data_usdrx1_jesd
-create_bd_addr_seg -range 0x00010000 -offset 0x7c400000 [get_bd_addr_spaces processing_system7_1/Data]  [get_bd_addr_segs axi_usdrx1_dma/s_axi/axi_lite]      SEG_data_usdrx1_dma
-create_bd_addr_seg -range 0x00010000 -offset 0x7c420000 [get_bd_addr_spaces processing_system7_1/Data]  [get_bd_addr_segs axi_usdrx1_spi/axi_lite/Reg]        SEG_data_usdrx1_spi
+create_bd_addr_seg -range 0x00010000 -offset 0x44A60000 $sys_addr_cntrl_space [get_bd_addr_segs axi_usdrx1_gt/s_axi/axi_lite]       SEG_data_usdrx1_gt
+create_bd_addr_seg -range 0x00001000 -offset 0x44A91000 $sys_addr_cntrl_space [get_bd_addr_segs axi_usdrx1_jesd/s_axi/Reg]          SEG_data_usdrx1_jesd
+create_bd_addr_seg -range 0x00010000 -offset 0x7c400000 $sys_addr_cntrl_space [get_bd_addr_segs axi_usdrx1_dma/s_axi/axi_lite]      SEG_data_usdrx1_dma
+create_bd_addr_seg -range 0x00010000 -offset 0x7c420000 $sys_addr_cntrl_space [get_bd_addr_segs axi_usdrx1_spi/axi_lite/Reg]        SEG_data_usdrx1_spi
 
 create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_usdrx1_dma/m_dest_axi]  [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] SEG_sys_ps7_hp2_ddr_lowocm
 create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_usdrx1_gt/m_axi]        [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM] SEG_sys_ps7_hp3_ddr_lowocm
