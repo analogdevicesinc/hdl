@@ -303,12 +303,10 @@ module up_gt (
   reg             es_ready = 'd0;
   reg     [15:0]  drp_rdata_int = 'd0;
   reg             drp_ready_int = 'd0;
-  reg             es_start_m1 = 'd0;
-  reg             es_start_m2 = 'd0;
-  reg             es_start_m3 = 'd0;
-  reg             es_stop_m1 = 'd0;
-  reg             es_stop_m2 = 'd0;
-  reg             es_stop_m3 = 'd0;
+  reg             es_start_d1 = 'd0;
+  reg             es_start_d2 = 'd0;
+  reg             es_stop_d1 = 'd0;
+  reg             es_stop_d2 = 'd0;
   reg             es_start = 'd0;
   reg             es_stop = 'd0;
 
@@ -335,6 +333,8 @@ module up_gt (
   wire    [15:0]  up_drp_rdata_s;
   wire            up_drp_status_s;
   wire    [ 7:0]  up_drp_rx_rate_s;
+  wire            es_start_s;
+  wire            es_stop_s;
   wire            up_es_dmaerr_s;
   wire            up_es_status_s;
 
@@ -711,32 +711,30 @@ module up_gt (
 
   always @(posedge drp_clk) begin
     if (drp_rst == 1'b1) begin
-      es_start_m1 <= 'd0;
-      es_start_m2 <= 'd0;
-      es_start_m3 <= 'd0;
-      es_stop_m1 <= 'd0;
-      es_stop_m2 <= 'd0;
-      es_stop_m3 <= 'd0;
+      es_start_d1 <= 'd0;
+      es_start_d2 <= 'd0;
+      es_stop_d1 <= 'd0;
+      es_stop_d2 <= 'd0;
       es_start <= 'd0;
       es_stop <= 'd0;
     end else begin
-      es_start_m1 <= up_es_start;
-      es_start_m2 <= es_start_m1;
-      es_start_m3 <= es_start_m2;
-      es_stop_m1 <= up_es_stop;
-      es_stop_m2 <= es_stop_m1;
-      es_stop_m3 <= es_stop_m2;
-      es_start <= es_start_m2 & ~es_start_m3;
-      es_stop <= es_stop_m2 & ~es_stop_m3;
+      es_start_d1 <= es_start_s;
+      es_start_d2 <= es_start_d1;
+      es_stop_d1 <= es_stop_s;
+      es_stop_d2 <= es_stop_d1;
+      es_start <= es_start_d1 & ~es_start_d2;
+      es_stop <= es_stop_d1 & ~es_stop_d2;
     end
   end
 
   // es control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(258)) i_es_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(260)) i_es_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_cntrl ({ up_es_init,
+    .up_data_cntrl ({ up_es_start,
+                      up_es_stop,
+                      up_es_init,
                       up_es_prescale,
                       up_es_voffset_step,
                       up_es_voffset_max,
@@ -757,7 +755,9 @@ module up_gt (
                       up_es_qdata4}),
     .d_rst (drp_rst),
     .d_clk (drp_clk),
-    .d_data_cntrl ({  es_init,
+    .d_data_cntrl ({  es_start_s,
+                      es_stop_s,
+                      es_init,
                       es_prescale,
                       es_voffset_step,
                       es_voffset_max,

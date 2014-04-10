@@ -131,6 +131,8 @@ module ad_gt_es (
   // state machine
 
   parameter ES_FSM_IDLE             = 6'h00;
+  parameter ES_FSM_STATUS           = 6'h30;
+  parameter ES_FSM_INIT             = 6'h31;
   parameter ES_FSM_CTRLINIT_READ    = 6'h01;
   parameter ES_FSM_CTRLINIT_RRDY    = 6'h02;
   parameter ES_FSM_CTRLINIT_WRITE   = 6'h03;
@@ -451,15 +453,25 @@ module ad_gt_es (
     end else begin
       case (es_fsm)
         ES_FSM_IDLE: begin // idle
-          if (es_start == 1'b0) begin
+          if (es_start == 1'b1) begin
+            es_fsm <= ES_FSM_STATUS;
+          end else begin
             es_fsm <= ES_FSM_IDLE;
-          end else if (es_init == 1'b1) begin
+          end
+        end
+
+        ES_FSM_STATUS: begin // set status
+          es_fsm <= ES_FSM_INIT;
+        end
+
+        ES_FSM_INIT: begin // initialize
+          if (es_init == 1'b1) begin
             es_fsm <= ES_FSM_CTRLINIT_READ;
           end else begin
             es_fsm <= ES_FSM_HOFFSET_READ;
           end
         end
-     
+
         ES_FSM_CTRLINIT_READ: begin // control read
           es_fsm <= ES_FSM_CTRLINIT_RRDY;
         end

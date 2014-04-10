@@ -3,7 +3,8 @@ hdl
 
 Analog Devices HDL libraries and projects
 
-http://wiki.analog.com/resources/fpga/docs/hdl/github
+First time users, it is highly recommended to go through our HDL user guide at the following url:
 
-http://wiki.analog.com/resources/fpga/docs/hdl/regmap
+http://wiki.analog.com/resources/fpga/docs/hdl
+
 
