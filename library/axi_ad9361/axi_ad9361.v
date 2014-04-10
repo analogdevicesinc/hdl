@@ -49,6 +49,10 @@ module axi_ad9361 (
   rx_frame_in_n,
   rx_data_in_p,
   rx_data_in_n,
+  
+  // receive master/slave
+  adc_start_in,
+  adc_start_out,
 
   // physical interface (transmit)
 
@@ -58,6 +62,11 @@ module axi_ad9361 (
   tx_frame_out_n,
   tx_data_out_p,
   tx_data_out_n,
+  
+  // transmit master/slave
+  
+  dac_enable_in,
+  dac_enable_out,
 
   // delay clock
 
@@ -124,6 +133,10 @@ module axi_ad9361 (
   input           rx_frame_in_n;
   input   [ 5:0]  rx_data_in_p;
   input   [ 5:0]  rx_data_in_n;
+  
+  // receive master/slave
+  input           adc_start_in;
+  output          adc_start_out;
 
   // physical interface (transmit)
 
@@ -133,6 +146,10 @@ module axi_ad9361 (
   output          tx_frame_out_n;
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
+  
+  // transmit master/slave
+  input           dac_enable_in;
+  output          dac_enable_out;
 
   // delay clock
 
@@ -263,7 +280,8 @@ module axi_ad9361 (
 
   axi_ad9361_dev_if #(
     .PCORE_BUFTYPE (PCORE_BUFTYPE),
-    .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP),
+    .PCORE_ID(PCORE_ID))
   i_dev_if (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),
@@ -278,6 +296,8 @@ module axi_ad9361 (
     .tx_data_out_p (tx_data_out_p),
     .tx_data_out_n (tx_data_out_n),
     .clk (clk),
+    .adc_start_in (adc_start_in),
+    .adc_start_out (adc_start_out),
     .adc_valid (adc_valid_s),
     .adc_data_i1 (adc_data_i1_s),
     .adc_data_q1 (adc_data_q1_s),
@@ -409,6 +429,8 @@ module axi_ad9361 (
     .dac_pn_enb_q2 (dac_pn_enb_q2_s),
     .dac_data_q2 (dac_data_pl_q2_s),
     .dac_r1_mode (dac_r1_mode_s),
+    .dac_enable_in (dac_enable_in),
+    .dac_enable_out (dac_enable_out),
     .dac_drd (dac_drd),
     .dac_ddata (dac_ddata),
     .dac_dovf (dac_dovf),

@@ -58,6 +58,10 @@ module axi_ad9361_tx (
   dac_pn_enb_q2,
   dac_data_q2,
   dac_r1_mode,
+  
+  // transmit master/slave
+  dac_enable_in,
+  dac_enable_out,
 
   // dma interface
 
@@ -99,6 +103,10 @@ module axi_ad9361_tx (
   output          dac_pn_enb_q2;
   output  [11:0]  dac_data_q2;
   output          dac_r1_mode;
+  
+  // transmit master/slave
+  input           dac_enable_in;
+  output          dac_enable_out;
 
   // dma interface
 
@@ -120,6 +128,7 @@ module axi_ad9361_tx (
 
   // internal registers
 
+  reg             dac_enable = 'd0;
   reg     [ 7:0]  dac_rate_cnt = 'd0;
   reg             dac_dds_enable = 'd0;
   reg             dac_dds_data_enable = 'd0;
@@ -163,6 +172,13 @@ module axi_ad9361_tx (
   wire    [31:0]  up_rdata_s;
   wire            up_ack_s;
 
+  // master/slave
+  assign dac_enable_s = (PCORE_ID == 0) ? dac_enable_out : dac_enable_in;
+  
+  always @(posedge dac_clk) begin
+    dac_enable <= dac_enable_s;
+  end
+  
   // dds rate counters, dds phases are updated using data enables
 
   always @(posedge dac_clk) begin
@@ -186,9 +202,9 @@ module axi_ad9361_tx (
       dac_dds_data_enable_toggle <= ~dac_dds_data_enable_toggle;
     end
     if (dac_r1_mode == 1'b1) begin
-      dac_drd <= dac_dds_data_enable & dac_dds_data_enable_toggle;
+      dac_drd <= dac_dds_data_enable & dac_dds_data_enable_toggle & dac_enable;
     end else begin
-      dac_drd <= dac_dds_data_enable;
+      dac_drd <= dac_dds_data_enable & dac_enable;
     end
     if (dac_drd == 1'b1) begin
       dac_dma_data <= dac_ddata;
@@ -352,7 +368,7 @@ module axi_ad9361_tx (
     .mmcm_rst (),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_enable (dac_enable_s),
+    .dac_enable (dac_enable_out),
     .dac_frame (),
     .dac_par_type (),
     .dac_par_enb (),

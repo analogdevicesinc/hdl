@@ -74,6 +74,10 @@ module axi_ad9361_dev_if (
   adc_data_q2,
   adc_status,
   adc_r1_mode,
+  
+  // receive master/slave
+  adc_start_in,
+  adc_start_out,
 
   // transmit data path interface
 
@@ -105,6 +109,7 @@ module axi_ad9361_dev_if (
 
   parameter   PCORE_BUFTYPE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
+  parameter   PCORE_ID = 0;
   localparam  PCORE_7SERIES = 0;
   localparam  PCORE_VIRTEX6 = 1;
 
@@ -139,6 +144,10 @@ module axi_ad9361_dev_if (
   output  [11:0]  adc_data_q2;
   output          adc_status;
   input           adc_r1_mode;
+  
+  // receive master/slave
+  input           adc_start_in;
+  output          adc_start_out;
 
   // transmit data path interface
 
@@ -168,6 +177,7 @@ module axi_ad9361_dev_if (
 
   // internal registers
 
+  reg             adc_start_out;
   reg     [ 5:0]  rx_data_n = 'd0;
   reg             rx_frame_n = 'd0;
   reg     [11:0]  rx_data = 'd0;
@@ -204,6 +214,7 @@ module axi_ad9361_dev_if (
 
   // internal signals
 
+  wire            adc_start_s;
   wire    [ 3:0]  rx_frame_s;
   wire    [ 3:0]  tx_data_sel_s;
   wire    [ 4:0]  delay_rdata_s[6:0];
@@ -273,6 +284,13 @@ module axi_ad9361_dev_if (
   assign dev_dbg_data[285:274] = adc_data_i2;
   assign dev_dbg_data[297:286] = adc_data_q2;
 
+  // multiple instances synchronization
+  assign adc_start_s = (PCORE_ID == 32'd0) ? adc_start_out : adc_start_in;
+  
+  always @(posedge clk) begin
+    adc_start_out <= 1'b1;  
+  end
+  
   // receive data path interface
 
   assign rx_frame_s = {rx_frame_d, rx_frame};
@@ -317,14 +335,14 @@ module axi_ad9361_dev_if (
 
   always @(posedge clk) begin
     if (adc_r1_mode == 1'b1) begin
-      adc_valid <= rx_valid_r1;
+      adc_valid <= rx_valid_r1 & adc_start_s;
       adc_data_i1 <= rx_data_i_r1;
       adc_data_q1 <= rx_data_q_r1;
       adc_data_i2 <= 12'd0;
       adc_data_q2 <= 12'd0;
       adc_status <= ~rx_error_r1;
     end else begin
-      adc_valid <= rx_valid_r2;
+      adc_valid <= rx_valid_r2 & adc_start_s;
       adc_data_i1 <= rx_data_i1_r2;
       adc_data_q1 <= rx_data_q1_r2;
       adc_data_i2 <= rx_data_i2_r2;
