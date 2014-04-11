@@ -204,16 +204,12 @@ module system_top (
   // internal signals
 
   wire    [10:0]  spi_csn;
-
-  wire    [43:0]  gpio_i;
-  wire    [43:0]  gpio_o;
-  wire    [43:0]  gpio_t;
-  wire            afe_mlo;
+  wire            spi_clk;
+  wire            spi_mosi;
+  wire            spi_miso;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
-  wire    [ 1:0]  gpio_open;
-
   wire   [511:0]  adc_ddata;
   wire   [127:0]  adc_ddata_0;
   wire   [127:0]  adc_ddata_1;
@@ -239,6 +235,10 @@ module system_top (
   wire    [63:0]  gt_rx_data_1;
   wire    [63:0]  gt_rx_data_2;
   wire    [63:0]  gt_rx_data_3;
+  wire    [43:0]  gpio_i;
+  wire    [43:0]  gpio_o;
+  wire    [43:0]  gpio_t;
+  wire            afe_mlo;
 
   // spi assignments
 
@@ -275,13 +275,12 @@ module system_top (
   assign adc_dwr = adc_dwr_3 | adc_dwr_2 | adc_dwr_1 | adc_dwr_0;
   assign adc_dsync = adc_dsync_3 | adc_dsync_2 | adc_dsync_1 | adc_dsync_0;
   assign adc_ddata = {adc_ddata_3, adc_ddata_2, adc_ddata_1, adc_ddata_0};
-
   assign adc_dovf_0 = adc_dovf;
   assign adc_dovf_1 = adc_dovf;
   assign adc_dovf_2 = adc_dovf;
   assign adc_dovf_3 = adc_dovf;
 
-  // instantiations
+  // data interface
 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk (
     .CEB (1'd0),
@@ -299,6 +298,8 @@ module system_top (
     .I (rx_sync),
     .O (rx_sync_p),
     .OB (rx_sync_n));
+
+  // gpio/control interface
 
   OBUFDS i_obufds_mlo (
     .I (afe_mlo),
