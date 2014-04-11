@@ -280,8 +280,7 @@ module axi_ad9361 (
 
   axi_ad9361_dev_if #(
     .PCORE_BUFTYPE (PCORE_BUFTYPE),
-    .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP),
-    .PCORE_ID(PCORE_ID))
+    .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP))
   i_dev_if (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),
@@ -296,8 +295,6 @@ module axi_ad9361 (
     .tx_data_out_p (tx_data_out_p),
     .tx_data_out_n (tx_data_out_n),
     .clk (clk),
-    .adc_start_in (adc_start_in),
-    .adc_start_out (adc_start_out),
     .adc_valid (adc_valid_s),
     .adc_data_i1 (adc_data_i1_s),
     .adc_data_q1 (adc_data_q1_s),
@@ -381,6 +378,8 @@ module axi_ad9361 (
     .adc_data_q2 (adc_data_q2_s),
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode_s),
+    .adc_start_in (adc_start_in),
+    .adc_start_out (adc_start_out),    
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_sel (delay_sel_s),

@@ -60,6 +60,10 @@ module axi_ad9361_rx (
   adc_data_q2,
   adc_status,
   adc_r1_mode,
+  
+  // receive master/slave
+  adc_start_in,
+  adc_start_out,
 
   // delay interface
 
@@ -125,6 +129,10 @@ module axi_ad9361_rx (
   input   [11:0]  adc_data_q2;
   input           adc_status;
   output          adc_r1_mode;
+  
+  // receive master/slave
+  input           adc_start_in;
+  output          adc_start_out;
 
   // delay interface
 
@@ -189,6 +197,7 @@ module axi_ad9361_rx (
   reg             up_adc_status_or = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg             up_ack = 'd0;
+  reg             adc_start_out;
 
   // internal clocks and resets
 
@@ -237,10 +246,24 @@ module axi_ad9361_rx (
   wire            up_ack_3_s;
   wire    [31:0]  up_rdata_s;
   wire            up_ack_s;
+  wire            adc_start_cond;
+  wire            adc_valid_cond;
+  
+  assign adc_start_cond = (PCORE_ID == 32'd0) ? adc_start_out : adc_start_in;
+  
+  always @(posedge adc_clk) begin
+    if(adc_rst == 1'b1) begin
+        adc_start_out <= 1'b0;
+    end else begin
+        adc_start_out <= 1'b1;  
+    end
+  end  
 
+  assign adc_valid_cond = adc_valid & adc_start_cond;
+  
   // monitor signals
 
-  assign adc_mon_valid = adc_valid;
+  assign adc_mon_valid = adc_valid_cond;
   assign adc_mon_data[11: 0] = adc_data_i1;
   assign adc_mon_data[23:12] = adc_data_q1;
   assign adc_mon_data[35:24] = adc_data_i2;
@@ -249,7 +272,7 @@ module axi_ad9361_rx (
   // debug signals
 
   assign adc_dbg_trigger[0] = adc_iqcor_valid_s;
-  assign adc_dbg_trigger[1] = adc_valid;
+  assign adc_dbg_trigger[1] = adc_valid_cond;
 
   assign adc_dbg_data[ 15:  0] = adc_iqcor_data_0_s;
   assign adc_dbg_data[ 31: 16] = adc_iqcor_data_1_s;
@@ -263,7 +286,7 @@ module axi_ad9361_rx (
   assign adc_dbg_data[ 91: 80] = adc_data_q1;
   assign adc_dbg_data[103: 92] = adc_data_i2;
   assign adc_dbg_data[115:104] = adc_data_q2;
-  assign adc_dbg_data[116:116] = adc_valid;
+  assign adc_dbg_data[116:116] = adc_valid_cond;
 
   // adc channels - dma interface
 
@@ -526,7 +549,7 @@ module axi_ad9361_rx (
   i_rx_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_valid (adc_valid),
+    .adc_valid (adc_valid_cond),
     .adc_pn_oos_pl (adc_pn_oos_i1),
     .adc_pn_err_pl (adc_pn_err_i1),
     .adc_data (adc_data_i1),
@@ -562,7 +585,7 @@ module axi_ad9361_rx (
   i_rx_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_valid (adc_valid),
+    .adc_valid (adc_valid_cond),
     .adc_pn_oos_pl (adc_pn_oos_q1),
     .adc_pn_err_pl (adc_pn_err_q1),
     .adc_data (adc_data_q1),
@@ -598,7 +621,7 @@ module axi_ad9361_rx (
   i_rx_channel_2 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_valid (adc_valid),
+    .adc_valid (adc_valid_cond),
     .adc_pn_oos_pl (adc_pn_oos_i2),
     .adc_pn_err_pl (adc_pn_err_i2),
     .adc_data (adc_data_i2),
@@ -634,7 +657,7 @@ module axi_ad9361_rx (
   i_rx_channel_3 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_valid (adc_valid),
+    .adc_valid (adc_valid_cond),
     .adc_pn_oos_pl (adc_pn_oos_q2),
     .adc_pn_err_pl (adc_pn_err_q2),
     .adc_data (adc_data_q2),
