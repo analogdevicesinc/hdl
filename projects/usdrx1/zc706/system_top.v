@@ -203,10 +203,11 @@ module system_top (
 
   // internal signals
 
+  wire    [10:0]  spi_csn;
+
   wire    [43:0]  gpio_i;
   wire    [43:0]  gpio_o;
   wire    [43:0]  gpio_t;
-  wire    [10:0]  spi_csn;
   wire            afe_mlo;
   wire            rx_ref_clk;
   wire            rx_sysref;
@@ -249,10 +250,20 @@ module system_top (
   assign spi_fout_enb_trig    = spi_csn[ 5: 5];
   assign spi_afe_csn          = spi_csn[ 4: 1];
   assign spi_clk_csn          = spi_csn[ 0: 0];
-
   assign spi_fout_clk         = spi_clk;
   assign spi_afe_clk          = spi_clk;
   assign spi_clk_clk          = spi_clk;
+
+  usdrx1_spi i_spi (
+    .spi_fout_csn (spi_csn[10:5]),
+    .spi_afe_csn (spi_csn[4:1]),
+    .spi_clk_csn (spi_csn[0]),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_fout_sdio (spi_fout_sdio),
+    .spi_afe_sdio (spi_afe_sdio),
+    .spi_clk_sdio (spi_clk_sdio));
 
   // single dma for all channels
 
@@ -387,17 +398,6 @@ module system_top (
     .IO (gpio_bd[n]));
   end
   endgenerate
-
-  usdrx1_spi i_spi (
-    .spi_fout_csn (spi_csn[10:5]),
-    .spi_afe_csn (spi_csn[4:1]),
-    .spi_clk_csn (spi_csn[0]),
-    .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi),
-    .spi_miso (spi_miso),
-    .spi_fout_sdio (spi_fout_sdio),
-    .spi_afe_sdio (spi_afe_sdio),
-    .spi_clk_sdio (spi_clk_sdio));
 
   system_wrapper i_system_wrapper (
     .DDR_addr (DDR_addr),

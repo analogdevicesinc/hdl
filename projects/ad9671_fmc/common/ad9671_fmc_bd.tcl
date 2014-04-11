@@ -180,8 +180,8 @@ connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9671_dma/m_dest_axi_ar
 
 set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {662}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {10}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon
 
 connect_bd_net -net axi_ad9671_gt_rx_mon_data       [get_bd_pins axi_ad9671_gt/rx_mon_data]
 connect_bd_net -net axi_ad9671_gt_rx_mon_trigger    [get_bd_pins axi_ad9671_gt/rx_mon_trigger]
