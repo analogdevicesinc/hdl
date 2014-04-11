@@ -42,7 +42,7 @@ module dmac_src_mm_axi (
 
 	input                           req_valid,
 	output                          req_ready,
-	input [31:C_ADDR_ALIGN_BITS]    req_address,
+	input [31:C_BYTES_PER_BEAT_WIDTH]    req_address,
 	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
 	input                           enable,
@@ -86,7 +86,7 @@ module dmac_src_mm_axi (
 
 parameter C_ID_WIDTH = 3;
 parameter C_DMA_DATA_WIDTH = 64;
-parameter C_ADDR_ALIGN_BITS = 3;
+parameter C_BYTES_PER_BEAT_WIDTH = 3;
 parameter C_BEATS_PER_BURST_WIDTH = 4;
 
 `include "resp.h"
@@ -122,9 +122,9 @@ splitter #(
 );
 
 dmac_address_generator #(
-	.C_ADDR_ALIGN_BITS(C_ADDR_ALIGN_BITS),
 	.C_ID_WIDTH(C_ID_WIDTH),
 	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH),
+	.C_BYTES_PER_BEAT_WIDTH(C_BYTES_PER_BEAT_WIDTH),
 	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH)
 ) i_addr_gen (
 	.clk(m_axi_aclk),

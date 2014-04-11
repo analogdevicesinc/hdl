@@ -34,111 +34,106 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
-module util_wfifo (
+module usdrx1_spi (
 
-  rstn,
+  spi_fout_csn,
+  spi_afe_csn,
+  spi_clk_csn,
+  spi_clk,
+  spi_mosi,
+  spi_miso,
 
-  m_clk,
-  m_wr,
-  m_wdata,
-  m_wovf,
-  s_clk,
-  s_wr,
-  s_wdata,
-  s_wovf,
+  spi_fout_sdio,
+  spi_afe_sdio,
+  spi_clk_sdio);
 
-  fifo_rst,
-  fifo_wr,
-  fifo_wdata,
-  fifo_wfull,
-  fifo_wovf,
-  fifo_rd,
-  fifo_rdata,
-  fifo_rempty);
+  // 4 wire
 
-  // parameters (read (S) bus width must be greater than write (M))
+  input   [ 5:0]  spi_fout_csn;
+  input   [ 3:0]  spi_afe_csn;
+  input           spi_clk_csn;
+  input           spi_clk;
+  input           spi_mosi;
+  output          spi_miso;
 
-  parameter M_DATA_WIDTH = 32;
-  parameter S_DATA_WIDTH = 64;
- 
-  // common clock
+  // 3 wire
 
-  input                           rstn;
-
-  // master/slave write 
-
-  input                           m_clk;
-  input                           m_wr;
-  input   [M_DATA_WIDTH-1:0]      m_wdata;
-  output                          m_wovf;
-  input                           s_clk;
-  output                          s_wr;
-  output  [S_DATA_WIDTH-1:0]      s_wdata;
-  input                           s_wovf;
-
-  // fifo interface
-
-  output                          fifo_rst;
-  output                          fifo_wr;
-  output  [M_DATA_WIDTH-1:0]      fifo_wdata;
-  input                           fifo_wfull;
-  input                           fifo_wovf;
-  output                          fifo_rd;
-  input   [S_DATA_WIDTH-1:0]      fifo_rdata;
-  input                           fifo_rempty;
+  inout           spi_fout_sdio;
+  inout           spi_afe_sdio;
+  input           spi_clk_sdio;
 
   // internal registers
 
-  reg                             m_wovf_m1 = 'd0;
-  reg                             m_wovf_m2 = 'd0;
-  reg                             m_wovf = 'd0;
-  reg                             s_wr = 'd0;
+  reg     [ 5:0]  spi_count = 'd0;
+  reg             spi_rd_wr_n = 'd0;
+  reg             spi_enable = 'd0;
 
   // internal signals
 
-  wire                            m_wovf_s;
+  wire    [ 2:0]  spi_csn_3_s;
+  wire            spi_csn_s;
+  wire            spi_enable_s;
+  wire            spi_fout_miso_s;
+  wire            spi_afe_miso_s;
+  wire            spi_clk_miso_s;
 
-  // defaults
+  // check on rising edge and change on falling edge
 
-  assign fifo_rst = ~rstn;
+  assign spi_csn_3_s[2] = & spi_fout_csn;
+  assign spi_csn_3_s[1] = & spi_afe_csn;
+  assign spi_csn_3_s[0] = spi_clk_csn;
+  assign spi_csn_s = & spi_csn_3_s;
+  assign spi_enable_s = spi_enable & ~spi_csn_s;
 
-  // write is pass through
-
-  assign fifo_wr = m_wr;
-  assign m_wovf_s = s_wovf | fifo_wfull | fifo_wovf;
-
-  genvar m;
-  generate
-  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_wdata
-  assign fifo_wdata[m] = m_wdata[(M_DATA_WIDTH-1)-m];
+  always @(posedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
+    end else begin
+      spi_count <= spi_count + 1'b1;
+      if (spi_count == 6'd0) begin
+        spi_rd_wr_n <= spi_mosi;
+      end
+    end
   end
-  endgenerate
 
-  always @(posedge m_clk) begin
-    m_wovf_m1 <= m_wovf_s;
-    m_wovf_m2 <= m_wovf_m1;
-    m_wovf <= m_wovf_m2;
+  always @(negedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+      if (((spi_count == 6'd16)  && (spi_csn_3_s[1] == 1'b0)) ||
+          ((spi_count == 6'd16) && (spi_csn_3_s[0] == 1'b0))) begin
+        spi_enable <= spi_rd_wr_n;
+      end
+    end
   end
 
-  // read is non-destructive
+  assign spi_miso =  ((spi_fout_miso_s & ~spi_csn_3_s[2]) |
+                      (spi_afe_miso_s  & ~spi_csn_3_s[1]) |
+                      (spi_clk_miso_s  & ~spi_csn_3_s[0]));
 
-  assign fifo_rd = ~fifo_rempty;
+  // io buffers
 
-  always @(posedge s_clk) begin
-    s_wr <= fifo_rd;
-  end
-  
-  genvar s;
-  generate
-  for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_rdata
-  assign s_wdata[s] = fifo_rdata[(S_DATA_WIDTH-1)-s];
-  end
-  endgenerate
+  IOBUF i_iobuf_fout_sdio (
+    .T (spi_enable_s),
+    .I (spi_mosi),
+    .O (spi_fout_miso_s),
+    .IO (spi_fout_sdio));
+
+  IOBUF i_iobuf_afe_sdio (
+    .T (spi_enable_s),
+    .I (spi_mosi),
+    .O (spi_afe_miso_s),
+    .IO (spi_afe_sdio));
+
+  IOBUF i_iobuf_clk_sdio (
+    .T (spi_enable_s),
+    .I (spi_mosi),
+    .O (spi_clk_miso_s),
+    .IO (spi_clk_sdio));
 
 endmodule
 

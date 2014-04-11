@@ -377,7 +377,6 @@ module axi_ad9671 (
     .drp_locked (1'd0),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd7),
-    .dma_bw (32'd128),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),

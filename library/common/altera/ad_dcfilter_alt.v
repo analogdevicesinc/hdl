@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2011(c) Analog Devices, Inc.
-// 
+// Copyright 2014(c) Analog Devices, Inc.
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,100 +21,82 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
 // ***************************************************************************
 // ***************************************************************************
+// dc filter- y(n) = c*x(n) + (1-c)*y(n-1)
 
-`timescale 1ns/100ps
+`timescale 1ps/1ps
 
-module up_xfer_cntrl (
+module ad_dcfilter (
 
-  // up interface
+  // data interface
 
-  up_rstn,
-  up_clk,
-  up_data_cntrl,
+  clk,
+  valid,
+  data,
+  valid_out,
+  data_out,
 
-  // device interface
+  // control interface
 
-  d_rst,
-  d_clk,
-  d_data_cntrl);
+  dcfilt_enb,
+  dcfilt_coeff,
+  dcfilt_offset);
 
-  // parameters
+  // data interface
 
-  parameter     DATA_WIDTH = 8;
-  localparam    DW = DATA_WIDTH - 1;
+  input           clk;
+  input           valid;
+  input   [15:0]  data;
+  output          valid_out;
+  output  [15:0]  data_out;
 
-  // up interface
+  // control interface
 
-  input           up_rstn;
-  input           up_clk;
-  input   [DW:0]  up_data_cntrl;
-
-  // device interface
-
-  input           d_rst;
-  input           d_clk;
-  output  [DW:0]  d_data_cntrl;
+  input           dcfilt_enb;
+  input   [15:0]  dcfilt_coeff;
+  input   [15:0]  dcfilt_offset;
 
   // internal registers
 
-  reg     [ 5:0]  up_xfer_count = 'd0;
-  reg             up_xfer_toggle = 'd0;
-  reg     [DW:0]  up_xfer_data = 'd0;
-  reg             d_xfer_toggle_m1 = 'd0;
-  reg             d_xfer_toggle_m2 = 'd0;
-  reg             d_xfer_toggle_m3 = 'd0;
-  reg     [DW:0]  d_data_cntrl = 'd0;
+  reg             valid_d = 'd0;
+  reg     [15:0]  data_d = 'd0;
+  reg             valid_2d = 'd0;
+  reg     [15:0]  data_2d = 'd0;
+  reg             valid_out = 'd0;
+  reg     [15:0]  data_out = 'd0;
 
-  // internal signals
 
-  wire            d_xfer_toggle_s;
 
-  // device control transfer
+  // cancelling the dc offset
 
-  always @(negedge up_rstn or posedge up_clk) begin
-    if (up_rstn == 1'b0) begin
-      up_xfer_count <= 'd0;
-      up_xfer_toggle <= 'd0;
-      up_xfer_data <= 'd0;
-    end else begin
-      up_xfer_count <= up_xfer_count + 1'd1;
-      if (up_xfer_count == 6'd1) begin
-        up_xfer_toggle <= ~up_xfer_toggle;
-        up_xfer_data <= up_data_cntrl;
-      end
+  always @(posedge clk) begin
+    dc_offset <= 16'h0;
+    valid_d <= valid;
+    if (valid == 1'b1) begin
+      data_d <= data + dcfilt_offset;
     end
-  end
-
-  assign d_xfer_toggle_s = d_xfer_toggle_m3 ^ d_xfer_toggle_m2;
-
-  always @(posedge d_clk) begin
-    if (d_rst == 1'b1) begin
-      d_xfer_toggle_m1 <= 'd0;
-      d_xfer_toggle_m2 <= 'd0;
-      d_xfer_toggle_m3 <= 'd0;
-      d_data_cntrl <= 'd0;
+    valid_2d <= valid_d;
+    data_2d <= data_d - dc_offset;
+    if (dcfilt_enb == 1'b1) begin
+      valid_out <= valid_2d;
+      data_out <= data_d; // DC filter not implemented in this version
     end else begin
-      d_xfer_toggle_m1 <= up_xfer_toggle;
-      d_xfer_toggle_m2 <= d_xfer_toggle_m1;
-      d_xfer_toggle_m3 <= d_xfer_toggle_m2;
-      if (d_xfer_toggle_s == 1'b1) begin
-        d_data_cntrl <= up_xfer_data;
-      end
+      valid_out <= valid_d;
+      data_out <= data_d;
     end
   end
 

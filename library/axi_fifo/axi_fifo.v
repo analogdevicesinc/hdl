@@ -89,12 +89,16 @@ assign s_axis_ready = s_axis_raddr == s_axis_waddr;
 assign s_axis_empty = s_axis_raddr == s_axis_waddr;
 
 always @(posedge s_axis_aclk) begin
+	if (s_axis_ready)
+		ram <= s_axis_data;
+end
+
+always @(posedge s_axis_aclk) begin
 	if (s_axis_aresetn == 1'b0) begin
 		s_axis_waddr <= 1'b0;
 	end else begin
 		if (s_axis_ready & s_axis_valid) begin
 			s_axis_waddr <= s_axis_waddr + 1'b1;
-			ram <= s_axis_data;
 		end
 	end
 end
@@ -179,7 +183,7 @@ always @(posedge m_axis_aclk) begin
 end
 
 always @(posedge m_axis_aclk) begin
-	if ((~valid || m_axis_ready) && _m_axis_valid)
+	if (~valid || m_axis_ready)
 		data <= ram[m_axis_raddr];
 end
 

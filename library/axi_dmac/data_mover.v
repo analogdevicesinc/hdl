@@ -77,16 +77,15 @@ reg [C_ID_WIDTH-1:0] id_next = 'h00;
 
 reg pending_burst = 1'b0;
 reg active = 1'b0;
+reg last_eot = 1'b0;
+reg last_non_eot = 1'b0;
 
-reg [C_ID_WIDTH-1:0] request_id_d1 = 'h0;
-reg eot_d1 = 1'b0;
-
-wire last;
 wire last_load;
+wire last;
 
 assign response_id = id;
 
-assign last = beat_counter == (eot_d1 ? last_burst_length : MAX_BEATS_PER_BURST - 1);
+assign last = eot ? last_eot : last_non_eot;
 
 assign s_axi_ready = m_axi_ready & pending_burst & active;
 assign m_axi_valid = s_axi_valid & pending_burst & active;
@@ -95,7 +94,7 @@ assign m_axi_last = last;
 
 // If we want to support zero delay between transfers we have to assert
 // req_ready on the same cycle on which the last load happens.
-assign last_load = s_axi_ready && s_axi_valid && last && eot_d1;
+assign last_load = s_axi_ready && s_axi_valid && last_eot && eot;
 assign req_ready = last_load || ~active;
 
 always @(posedge clk) begin
@@ -113,7 +112,7 @@ always @(posedge clk) begin
 			end else begin
 				// For memory mapped AXI busses we have to complete all pending
 				// burst requests before we can disable the data mover.
-				if (response_id == request_id_d1)
+				if (response_id == request_id)
 					enabled <= 1'b0;
 			end
 		end
@@ -121,46 +120,36 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-	eot_d1 <= eot;
-	request_id_d1 <= request_id;
-end
-
-always @(posedge clk) begin
-	if (resetn == 1'b0) begin
-		beat_counter <= 'h0;
-	end else begin
-		if (req_ready && req_valid) begin
-			beat_counter <= 'h0;
-		end else if (s_axi_ready && s_axi_valid) begin
-			beat_counter <= beat_counter + 1'b1;
-		end
+	if (req_ready) begin
+		last_eot <= req_last_burst_length == 'h0; 
+		last_non_eot <= 1'b0;
+		beat_counter <= 'h1;
+	end else if (s_axi_ready && s_axi_valid) begin
+		last_eot <= beat_counter == last_burst_length;
+		last_non_eot <= beat_counter == MAX_BEATS_PER_BURST - 1;
+		beat_counter <= beat_counter + 1;
 	end
 end
 
 always @(posedge clk) begin
-	if (req_ready && req_valid) begin
+	if (req_ready)
 		last_burst_length <= req_last_burst_length;
-	end
 end
 
 always @(posedge clk) begin
-	if (resetn == 1'b0) begin
+	if (enabled == 1'b0 || resetn == 1'b0) begin
 		active <= 1'b0;
-	end else begin
-		if (~enabled) begin
-			active <= 1'b0;
-		end else if (req_ready && req_valid) begin
-			active <= 1'b1;
-		end else if (last_load) begin
-			active <= 1'b0;
-		end
+	end else if (req_valid) begin
+		active <= 1'b1;
+	end else if (last_load) begin
+		active <= 1'b0;
 	end
 end
 
 always @(*)
 begin
 	if ((s_axi_ready && s_axi_valid && last) ||
-		(sync_id && id != request_id))
+		(sync_id && pending_burst))
 		id_next <= inc_id(id);
 	else
 		id_next <= id;
@@ -169,12 +158,13 @@ end
 always @(posedge clk) begin
 	if (resetn == 1'b0) begin
 		id <= 'h0;
-		pending_burst <= 1'b0;
 	end else begin
 		id <= id_next;
-		pending_burst <= id_next != request_id_d1;
-    
 	end
+end
+
+always @(posedge clk) begin
+	pending_burst <= id_next != request_id;
 end
 
 endmodule
