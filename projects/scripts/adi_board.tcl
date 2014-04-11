@@ -56,8 +56,9 @@ proc adi_interconnect_lite { p_name } {
 proc adi_assign_base_address {p_addr p_name} {
 
   set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
-  set p_seg_fields [split $p_seg "/"]
+  set p_seg [lsearch -inline -regexp $p_seg (?i)/.*s_axi\/|axi_lite.*/]
 
+  set p_seg_fields [split $p_seg "/"]
   lassign $p_seg_fields no_use p_seg_name p_seg_intf p_seg_base
 
   set p_seg_range [get_property range $p_seg]
