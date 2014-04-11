@@ -57,6 +57,7 @@ proc adi_assign_base_address {p_addr p_name} {
 
   set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
   set p_seg_fields [split $p_seg "/"]
+
   lassign $p_seg_fields no_use p_seg_name p_seg_intf p_seg_base
 
   set p_seg_range [get_property range $p_seg]
@@ -88,7 +89,7 @@ proc adi_add_interrupt { intr_port } {
   # incrase the auxiliary concat last input port
   if { $::sys_zynq == 0 } {
     set p_aux_intr [get_property CONFIG.IN9_WIDTH [get_bd_cells sys_concat_aux_intc]]
-    set i_aux_intc [expr $p_aux_intr + 1]
+    set i_aux_intr [expr $p_aux_intr + 1]
     set_property CONFIG.IN9_WIDTH $i_aux_intr [get_bd_cells sys_concat_aux_intc]
   }
 }
@@ -99,13 +100,13 @@ proc adi_add_interrupt { intr_port } {
 proc adi_spi_core { spi_addr spi_ss spi_name } {
 
   # define SPI ports
-  create_bd_port -dir I ${spi_name}_sclk_i
-  create_bd_port -dir O ${spi_name}_sclk_o
-  create_bd_port -dir I ${spi_name}_mosi_i
-  create_bd_port -dir O ${spi_name}_mosi_o
-  create_bd_port -dir I ${spi_name}_miso_i
-  create_bd_port -dir I ${spi_name}_csn_i
-  create_bd_port -dir O -from [expr $spi_ss - 1] -to 0 ${spi_name}_csn_o
+  create_bd_port -dir I "${spi_name}_sclk_i"
+  create_bd_port -dir O "${spi_name}_sclk_o"
+  create_bd_port -dir I "${spi_name}_mosi_i"
+  create_bd_port -dir O "${spi_name}_mosi_o"
+  create_bd_port -dir I "${spi_name}_miso_i"
+  create_bd_port -dir I "${spi_name}_csn_i"
+  create_bd_port -dir O -from [expr $spi_ss - 1] -to 0 "${spi_name}_csn_o"
 
   # check processor type, connect system clock and reset to the peripheral
   if { $::sys_zynq == 1 } {
@@ -124,12 +125,12 @@ proc adi_spi_core { spi_addr spi_ss spi_name } {
 
     # connect chipselect lines to the ports
     if { $spi_ss > 1 } {
-      create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 ${spi_name}_csn_concat
-      set_property CONFIG.NUM_PORTS $spi_ss [get_bd_cells ${spi_name}_csn_concat]
+      create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 "${spi_name}_csn_concat"
+      set_property CONFIG.NUM_PORTS $spi_ss [get_bd_cells "${spi_name}_csn_concat"]
 
-      connect_bd_net -net ${spi_name}_csn_o \
-        [get_bd_ports ${spi_name}_csn_o] \
-        [get_bd_pins ${spi_name}_csn_concat/dout]
+      connect_bd_net -net "${spi_name}_csn_o" \
+        [get_bd_ports "${spi_name}_csn_o"] \
+        [get_bd_pins "${spi_name}_csn_concat/dout"]
 
       set i 0
       set j [expr $spi_ss - 1]
@@ -139,36 +140,36 @@ proc adi_spi_core { spi_addr spi_ss spi_name } {
         } else {
           set ss_number SS${j}
         }
-        connect_bd_net [get_bd_pins ${spi_name}_csn_concat/In${i}] \
-          [get_bd_pins sys_ps7/${if_spi}_${ss_number}_O]
+        connect_bd_net [get_bd_pins "${spi_name}_csn_concat/In${i}"] \
+          [get_bd_pins "sys_ps7/${if_spi}_${ss_number}_O"]
 
         incr i
         incr j -1
       }
     } else {
-      connect_bd_net -net ${spi_name}_csn_o \
-        [get_bd_ports ${spi_name}_csn_o] \
-        [get_bd_pins sys_ps7/${if_spi}_SS_O]
+      connect_bd_net -net "${spi_name}_csn_o" \
+        [get_bd_ports "${spi_name}_csn_o"] \
+        [get_bd_pins "sys_ps7/${if_spi}_SS_O"]
     }
     # connect remaining nets to the ports
     connect_bd_net -net spi_csn_i \
-      [get_bd_ports spi_csn_i] \
-      [get_bd_pins sys_ps7/${if_spi}_SS_I]
+      [get_bd_ports "${spi_name}_csn_i"] \
+      [get_bd_pins "sys_ps7/${if_spi}_SS_I"]
     connect_bd_net -net spi_sclk_i  \
-      [get_bd_ports spi_sclk_i] \
-      [get_bd_pins sys_ps7/${if_spi}_SCLK_I]
+      [get_bd_ports "${spi_name}_sclk_i"] \
+      [get_bd_pins "sys_ps7/${if_spi}_SCLK_I"]
     connect_bd_net -net spi_sclk_o  \
-      [get_bd_ports spi_sclk_o] \
-      [get_bd_pins sys_ps7/${if_spi}_SCLK_O]
+      [get_bd_ports "${spi_name}_sclk_o"] \
+      [get_bd_pins "sys_ps7/${if_spi}_SCLK_O"]
     connect_bd_net -net spi_mosi_i  \
-      [get_bd_ports spi_mosi_i] \
-      [get_bd_pins sys_ps7/${if_spi}_MOSI_I]
+      [get_bd_ports "${spi_name}_mosi_i"] \
+      [get_bd_pins "sys_ps7/${if_spi}_MOSI_I"]
     connect_bd_net -net spi_mosi_o  \
-      [get_bd_ports spi_mosi_o] \
-      [get_bd_pins sys_ps7/${if_spi}_MOSI_O]
+      [get_bd_ports "${spi_name}_mosi_o"] \
+      [get_bd_pins "sys_ps7/${if_spi}_MOSI_O"]
     connect_bd_net -net spi_miso_i \
-      [get_bd_ports spi_miso_i] \
-      [get_bd_pins sys_ps7/${if_spi}_MISO_I]
+      [get_bd_ports "${spi_name}_miso_i"] \
+      [get_bd_pins "sys_ps7/${if_spi}_MISO_I"]
   } else {
 
       # instanciate AXI_SPI core
@@ -185,25 +186,25 @@ proc adi_spi_core { spi_addr spi_ss spi_name } {
 
       # spi external ports
       connect_bd_net -net spi_csn_o \
-        [get_bd_ports spi_csn_o] \
+        [get_bd_ports "${spi_name}_csn_o"] \
         [get_bd_pins "${spi_name}/ss_o"]
       connect_bd_net -net spi_csn_i \
-        [get_bd_ports spi_csn_i] \
+        [get_bd_ports "${spi_name}_csn_i"] \
         [get_bd_pins "${spi_name}/ss_i"]
       connect_bd_net -net spi_sclk_o \
-        [get_bd_ports spi_sclk_o] \
+        [get_bd_ports "${spi_name}_sclk_o"] \
         [get_bd_pins "${spi_name}/sck_o"]
       connect_bd_net -net spi_sclk_i \
-        [get_bd_ports spi_sclk_i] \
+        [get_bd_ports "${spi_name}_sclk_i"] \
         [get_bd_pins "${spi_name}/sck_i"]
       connect_bd_net -net spi_mosi_o \
-        [get_bd_ports spi_mosi_o] \
+        [get_bd_ports "${spi_name}_mosi_o"] \
         [get_bd_pins "${spi_name}/io0_o"]
       connect_bd_net -net spi_mosi_i \
-        [get_bd_ports spi_mosi_i] \
+        [get_bd_ports "${spi_name}_mosi_i"] \
         [get_bd_pins "${spi_name}/io0_i"]
       connect_bd_net -net spi_miso_i \
-        [get_bd_ports spi_miso_i] \
+        [get_bd_ports "${spi_name}_miso_i"] \
         [get_bd_pins "${spi_name}/io1_i"]
   }
 }
@@ -236,15 +237,14 @@ proc adi_dma_interconnect { dma_if dma_clk ic_name } {
   # connect clk and reset for the interconnect
   connect_bd_net [get_bd_pins "${ic_name}/S${i_str}_ACLK"] \
     ${dma_clk}
-  connect_bd_net -net "${dma_name}_ic_resetn" \
-    [get_bd_pins "${ic_name}/S${i_str}_ARESETN"] \
+  connect_bd_net [get_bd_pins "${ic_name}/S${i_str}_ARESETN"] \
     $::sys_100m_resetn_source
 
   # connect clk and reset for the peripheral port
-  connect_bd_net -net "${dma_name}_aclk" \
-    [get_bd_pins "${dma_name}/${dma_if_port}_aclk"]
-  connect_bd_net -net sys_100m_resetn \
-    [get_bd_pins "${dma_name}/${dma_if_port}_aresetn"]
+  connect_bd_net [get_bd_pins "${dma_name}/${dma_if_port}_aclk"] \
+    ${dma_clk}
+  connect_bd_net [get_bd_pins "${dma_name}/${dma_if_port}_aresetn"] \
+    $::sys_100m_resetn_source
 
   # make the port connection
   connect_bd_intf_net -intf_net "${dma_name}_${i_str}" \
@@ -258,7 +258,7 @@ proc adi_dma_interconnect { dma_if dma_clk ic_name } {
 #------------------------------------------------------------------------------
 # usage : adi_hp_assign 1
 #------------------------------------------------------------------------------
-proc adi_hp_assign { hp_port } {
+proc adi_hp_assign { hp_port hp_clk } {
 
   # check is hp port is enabled
   if { [get_property "CONFIG.PCW_USE_S_AXI_HP${hp_port}" [get_bd_cells sys_ps7]] == 1 } {
@@ -269,11 +269,23 @@ proc adi_hp_assign { hp_port } {
     set ic_hp [lreplace $hp_net_cells $idx $idx]
   } else {
     set_property -dict [list "CONFIG.PCW_USE_S_AXI_HP${hp_port}" {1}] [get_bd_cells sys_ps7]
-    create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp${hp_port}_interconnect
-    connect_bd_intf_net -intf_net "axi_hp${hp_port}_interconnect_m00_axi" \
-      [get_bd_intf_pins "axi_hp${hp_port}_interconnect/M00_AXI"] \
-      [get_bd_intf_pins "sys_ps7/S_AXI_HP${hp_port}"]
+
     set ic_hp "axi_hp${hp_port}_interconnect"
+    create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 $ic_hp
+    set_property -dict [list CONFIG.NUM_MI {1}] [get_bd_cells $ic_hp]
+
+    connect_bd_intf_net -intf_net "${ic_hp}_m00_axi" \
+      [get_bd_intf_pins "${ic_hp}/M00_AXI"] \
+      [get_bd_intf_pins "sys_ps7/S_AXI_HP${hp_port}"]
+
+    # connect interconnect clock and reset
+    connect_bd_net [get_bd_pins "${ic_hp}/ACLK"] \
+      [get_bd_pins "${ic_hp}/M00_ACLK"] \
+      [get_bd_pins "sys_ps7/S_AXI_HP${hp_port}_ACLK"] \
+      $hp_clk
+    connect_bd_net [get_bd_pins "${ic_hp}/ARESETN"] \
+      [get_bd_pins "${ic_hp}/M00_ARESETN"] \
+      $::sys_100m_resetn_source
   }
 
 return $ic_hp
