@@ -116,7 +116,8 @@ if {$sys_zynq == 0} {
 
   connect_bd_net -net adc_clk [get_bd_pins axi_ad9643/adc_clk]
   connect_bd_net -net adc_clk [get_bd_pins axi_ad9643_dma/fifo_wr_clk]
-  connect_bd_net -net adc_clk [get_bd_pins sys_ad9643_util_wfifo/clk]
+  connect_bd_net -net adc_clk [get_bd_pins sys_ad9643_util_wfifo/m_clk]
+  connect_bd_net -net adc_clk [get_bd_pins sys_ad9643_util_wfifo/s_clk]
   connect_bd_net -net adc_clk [get_bd_pins sys_ad9643_fifo/wr_clk]
   connect_bd_net -net adc_clk [get_bd_pins sys_ad9643_fifo/rd_clk]
   connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9643/delay_clk]
