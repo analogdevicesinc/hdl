@@ -19,6 +19,9 @@ proc get_numstr {number} {
 #------------------------------------------------------------------------------
 proc adi_interconnect_lite { p_name } {
 
+  global sys_100m_clk_source
+  global sys_100m_resetn_source
+
   set axi_cpu_interconnect [get_bd_cells axi_cpu_interconnect]
 
   # increment the number of the master ports of the interconnect
@@ -36,12 +39,12 @@ proc adi_interconnect_lite { p_name } {
   connect_bd_net -net sys_100m_clk \
     [get_bd_pins "$axi_cpu_interconnect/M${i_str}_ACLK"] \
     [get_bd_pins "${p_name}/s_axi_aclk"] \
-    $::sys_100m_clk_source
+    $sys_100m_clk_source
 
   connect_bd_net -net sys_100m_resetn \
     [get_bd_pins "${axi_cpu_interconnect}/M${i_str}_ARESETN"] \
     [get_bd_pins "${p_name}/s_axi_aresetn"] \
-    $::sys_100m_resetn_source
+    $sys_100m_resetn_source
 
   # make the interface connection
   connect_bd_intf_net -intf_net "${p_name}axi_lite" \
@@ -55,6 +58,8 @@ proc adi_interconnect_lite { p_name } {
 #------------------------------------------------------------------------------
 proc adi_assign_base_address {p_addr p_name} {
 
+  global sys_addr_cntrl_space
+
   set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
   set p_seg [lsearch -inline -regexp $p_seg (?i)/.*s_axi\/|axi_lite.*/]
 
@@ -64,7 +69,7 @@ proc adi_assign_base_address {p_addr p_name} {
   set p_seg_range [get_property range $p_seg]
 
   create_bd_addr_seg -range $p_seg_range \
-    -offset $p_addr $::sys_addr_cntrl_space \
+    -offset $p_addr $sys_addr_cntrl_space \
     $p_seg "SEG_data_${p_name}"
 }
 
@@ -72,6 +77,8 @@ proc adi_assign_base_address {p_addr p_name} {
 # usage : adi_add_interrupt axi_ad9467_dma/irq
 #------------------------------------------------------------------------------
 proc adi_add_interrupt { intr_port } {
+
+  global sys_zynq
 
   if { [get_bd_ports unc_int2] != {} } {
     delete_bd_objs [get_bd_nets sys_concat_intc_din_2] [get_bd_ports unc_int2]
@@ -88,7 +95,7 @@ proc adi_add_interrupt { intr_port } {
       [get_bd_pins $intr_port]
   }
   # incrase the auxiliary concat last input port
-  if { $::sys_zynq == 0 } {
+  if { $sys_zynq == 0 } {
     set p_aux_intr [get_property CONFIG.IN9_WIDTH [get_bd_cells sys_concat_aux_intc]]
     set i_aux_intr [expr $p_aux_intr + 1]
     set_property CONFIG.IN9_WIDTH $i_aux_intr [get_bd_cells sys_concat_aux_intc]
@@ -100,6 +107,9 @@ proc adi_add_interrupt { intr_port } {
 #------------------------------------------------------------------------------
 proc adi_spi_core { spi_addr spi_ss spi_name } {
 
+  global sys_zynq
+  global sys_100m_clk_source
+
   # define SPI ports
   create_bd_port -dir I "${spi_name}_sclk_i"
   create_bd_port -dir O "${spi_name}_sclk_o"
@@ -110,7 +120,7 @@ proc adi_spi_core { spi_addr spi_ss spi_name } {
   create_bd_port -dir O -from [expr $spi_ss - 1] -to 0 "${spi_name}_csn_o"
 
   # check processor type, connect system clock and reset to the peripheral
-  if { $::sys_zynq == 1 } {
+  if { $sys_zynq == 1 } {
     set sys_ps7 [get_bd_cells sys_ps7]
 
     # add SPI interface to ps7, first check which SPI is free
@@ -183,7 +193,7 @@ proc adi_spi_core { spi_addr spi_ss spi_name } {
 
       connect_bd_net -net sys_100m_clk \
         [get_bd_pins "${spi_name}/ext_spi_clk"] \
-        $::sys_100m_clk_source
+        $sys_100m_clk_source
 
       # spi external ports
       connect_bd_net -net spi_csn_o \
@@ -215,6 +225,8 @@ proc adi_spi_core { spi_addr spi_ss spi_name } {
 #------------------------------------------------------------------------------
 proc adi_dma_interconnect { dma_if dma_clk ic_name } {
 
+  global sys_100m_resetn_source
+
   set dma_atrb [split $dma_if "/"]
   lassign $dma_atrb dma_name dma_if_port
 
@@ -239,13 +251,13 @@ proc adi_dma_interconnect { dma_if dma_clk ic_name } {
   connect_bd_net [get_bd_pins "${ic_name}/S${i_str}_ACLK"] \
     ${dma_clk}
   connect_bd_net [get_bd_pins "${ic_name}/S${i_str}_ARESETN"] \
-    $::sys_100m_resetn_source
+    $sys_100m_resetn_source
 
   # connect clk and reset for the peripheral port
   connect_bd_net [get_bd_pins "${dma_name}/${dma_if_port}_aclk"] \
     ${dma_clk}
   connect_bd_net [get_bd_pins "${dma_name}/${dma_if_port}_aresetn"] \
-    $::sys_100m_resetn_source
+    $sys_100m_resetn_source
 
   # make the port connection
   connect_bd_intf_net -intf_net "${dma_name}_${i_str}" \
@@ -260,6 +272,8 @@ proc adi_dma_interconnect { dma_if dma_clk ic_name } {
 # usage : adi_hp_assign 1
 #------------------------------------------------------------------------------
 proc adi_hp_assign { hp_port hp_clk } {
+
+  global sys_100m_resetn_source
 
   # check is hp port is enabled
   if { [get_property "CONFIG.PCW_USE_S_AXI_HP${hp_port}" [get_bd_cells sys_ps7]] == 1 } {
@@ -286,7 +300,7 @@ proc adi_hp_assign { hp_port hp_clk } {
       $hp_clk
     connect_bd_net [get_bd_pins "${ic_hp}/ARESETN"] \
       [get_bd_pins "${ic_hp}/M00_ARESETN"] \
-      $::sys_100m_resetn_source
+      $sys_100m_resetn_source
   }
 
 return $ic_hp
