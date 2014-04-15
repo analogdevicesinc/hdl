@@ -7,4 +7,6 @@ First time users, it is highly recommended to go through our HDL user guide at t
 
 http://wiki.analog.com/resources/fpga/docs/hdl
 
+For support please visit our FPGA Reference Designs Support Community on EngineerZone:
 
+http://ez.analog.com/community/fpga
