@@ -272,16 +272,16 @@ module ad_gt_channel_1 (
 
   // user ready
 
-  always @(posedge rx_clk or posedge rx_rst) begin
-    if (rx_rst == 1'b1) begin
+  always @(posedge drp_clk) begin
+    if ((rx_rst == 1'b1) || (rx_pll_locked == 1'b0)) begin
       rx_user_ready <= 4'd0;
     end else begin
       rx_user_ready <= {rx_user_ready[2:0], 1'b1};
     end
   end
 
-  always @(posedge tx_clk or posedge tx_rst) begin
-    if (tx_rst == 1'b1) begin
+  always @(posedge drp_clk) begin
+    if ((tx_rst == 1'b1) || (tx_pll_locked == 1'b0)) begin
       tx_user_ready <= 4'd0;
     end else begin
       tx_user_ready <= {tx_user_ready[2:0], 1'b1};

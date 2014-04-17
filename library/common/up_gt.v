@@ -572,8 +572,8 @@ module up_gt (
 
   ad_rst i_drp_rst_reg    (.preset(up_drp_preset_s),    .clk(drp_clk),  .rst(drp_rst));
   ad_rst i_gt_pll_rst_reg (.preset(up_gt_pll_preset_s), .clk(drp_clk),  .rst(gt_pll_rst));
-  ad_rst i_gt_rx_rst_reg  (.preset(up_gt_rx_preset_s),  .clk(rx_clk),   .rst(gt_rx_rst));
-  ad_rst i_gt_tx_rst_reg  (.preset(up_gt_tx_preset_s),  .clk(tx_clk),   .rst(gt_tx_rst));
+  ad_rst i_gt_rx_rst_reg  (.preset(up_gt_rx_preset_s),  .clk(drp_clk),  .rst(gt_rx_rst));
+  ad_rst i_gt_tx_rst_reg  (.preset(up_gt_tx_preset_s),  .clk(drp_clk),  .rst(gt_tx_rst));
   ad_rst i_rx_rst_reg     (.preset(up_rx_preset_s),     .clk(rx_clk),   .rst(rx_rst));
   ad_rst i_tx_rst_reg     (.preset(up_tx_preset_s),     .clk(tx_clk),   .rst(tx_rst));
 
