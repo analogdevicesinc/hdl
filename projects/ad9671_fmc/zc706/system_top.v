@@ -194,9 +194,9 @@ module system_top (
   assign spi_ad9553_clk = spi_clk;
 
   ad9671_fmc_spi i_spi (
-    .spi_ad9671_csn (spi_csn[2]),
+    .spi_ad9671_csn (spi_csn[0]),
     .spi_ad9516_csn (spi_csn[1]),
-    .spi_ad9553_csn (spi_csn[0]),
+    .spi_ad9553_csn (spi_csn[2]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
