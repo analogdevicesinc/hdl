@@ -179,15 +179,19 @@ connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9671_dma/m_dest_axi_ar
 # ila
 
 set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {128}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE3_WIDTH {128}] $ila_jesd_rx_mon
 
 connect_bd_net -net axi_ad9671_gt_rx_mon_data       [get_bd_pins axi_ad9671_gt/rx_mon_data]
 connect_bd_net -net axi_ad9671_gt_rx_mon_trigger    [get_bd_pins axi_ad9671_gt/rx_mon_trigger]
 connect_bd_net -net axi_ad9671_gt_rx_clk            [get_bd_pins ila_jesd_rx_mon/CLK]
 connect_bd_net -net axi_ad9671_gt_rx_mon_data       [get_bd_pins ila_jesd_rx_mon/PROBE0]
 connect_bd_net -net axi_ad9671_gt_rx_mon_trigger    [get_bd_pins ila_jesd_rx_mon/PROBE1]
+connect_bd_net -net axi_ad9671_gt_rx_data           [get_bd_pins ila_jesd_rx_mon/PROBE2]
+connect_bd_net -net axi_ad9671_core_adc_ddata       [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
 # address map
 

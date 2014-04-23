@@ -192,7 +192,7 @@ module axi_ad9671_pnmon (
   // ideally, processor should make sure both oos == 0x0 and err == 0x0.
 
   assign adc_pn_valid_s = adc_valid & adc_pn_en;
-  assign adc_pn_data_in_s = {~adc_data[15], adc_data[14:0], ~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_data_in_s = {~adc_data_d[15], adc_data_d[14:0], ~adc_data[15], adc_data[14:0]};
   assign adc_pn_match_d_1_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
   assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
   assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
