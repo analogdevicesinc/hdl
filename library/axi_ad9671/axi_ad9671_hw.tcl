@@ -45,11 +45,11 @@ set_parameter_property PCORE_DEVICE_TYPE UNITS None
 set_parameter_property PCORE_DEVICE_TYPE HDL_PARAMETER true
 
 add_parameter PCORE_4L_2L_N INTEGER 0
-set_parameter_property PCORE_AXI_ID_WIDTH DEFAULT_VALUE 1
-set_parameter_property PCORE_AXI_ID_WIDTH DISPLAY_NAME PCORE_4L_2L_N
-set_parameter_property PCORE_AXI_ID_WIDTH TYPE INTEGER
-set_parameter_property PCORE_AXI_ID_WIDTH UNITS None
-set_parameter_property PCORE_AXI_ID_WIDTH HDL_PARAMETER true
+set_parameter_property PCORE_4L_2L_N DEFAULT_VALUE 1
+set_parameter_property PCORE_4L_2L_N DISPLAY_NAME PCORE_4L_2L_N
+set_parameter_property PCORE_4L_2L_N TYPE INTEGER
+set_parameter_property PCORE_4L_2L_N UNITS None
+set_parameter_property PCORE_4L_2L_N HDL_PARAMETER true
 
 add_parameter PCORE_AXI_ID_WIDTH INTEGER 0
 set_parameter_property PCORE_AXI_ID_WIDTH DEFAULT_VALUE 3
