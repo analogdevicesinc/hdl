@@ -184,9 +184,12 @@ module axi_dmac_alt (
 	fifo_rd_en,
 	fifo_rd_valid,
 	fifo_rd_dout,
-	fifo_rd_underflow);
+	fifo_rd_underflow,
+
+  irq);
 
   parameter PCORE_ID = 0;
+  parameter PCORE_AXI_ID_WIDTH = 3;
   parameter C_DMA_DATA_WIDTH_SRC = 64;
   parameter C_DMA_DATA_WIDTH_DEST = 64;
   parameter C_DMA_LENGTH_WIDTH = 14;
@@ -207,7 +210,7 @@ module axi_dmac_alt (
   input                                     s_axi_aresetn;
   input                                     s_axi_awvalid;
   input   [13:0]                            s_axi_awaddr;
-  input   [ 2:0]                            s_axi_awid;
+  input   [(PCORE_AXI_ID_WIDTH-1):0]        s_axi_awid;
   input   [ 7:0]                            s_axi_awlen;
   input   [ 2:0]                            s_axi_awsize;
   input   [ 1:0]                            s_axi_awburst;
@@ -222,11 +225,11 @@ module axi_dmac_alt (
   output                                    s_axi_wready;
   output                                    s_axi_bvalid;
   output  [ 1:0]                            s_axi_bresp;
-  output  [ 2:0]                            s_axi_bid;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]        s_axi_bid;
   input                                     s_axi_bready;
   input                                     s_axi_arvalid;
   input   [13:0]                            s_axi_araddr;
-  input   [ 2:0]                            s_axi_arid;
+  input   [(PCORE_AXI_ID_WIDTH-1):0]        s_axi_arid;
   input   [ 7:0]                            s_axi_arlen;
   input   [ 2:0]                            s_axi_arsize;
   input   [ 1:0]                            s_axi_arburst;
@@ -237,7 +240,7 @@ module axi_dmac_alt (
   output                                    s_axi_rvalid;
   output  [ 1:0]                            s_axi_rresp;
   output  [31:0]                            s_axi_rdata;
-  output  [ 2:0]                            s_axi_rid;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]        s_axi_rid;
   output                                    s_axi_rlast;
   input                                     s_axi_rready;
 
@@ -247,7 +250,7 @@ module axi_dmac_alt (
 	input                                     m_dest_axi_aresetn;
 	output                                    m_dest_axi_awvalid;
 	output  [31:0]                            m_dest_axi_awaddr;
-  output  [ 2:0]                            m_dest_axi_awid;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]        m_dest_axi_awid;
 	output  [ 7:0]                            m_dest_axi_awlen;
 	output  [ 2:0]                            m_dest_axi_awsize;
 	output  [ 1:0]                            m_dest_axi_awburst;
@@ -262,11 +265,11 @@ module axi_dmac_alt (
 	input                                     m_dest_axi_wready;
 	input                                     m_dest_axi_bvalid;
 	input   [ 1:0]                            m_dest_axi_bresp;
-	input   [ 2:0]                            m_dest_axi_bid;
+	input   [(PCORE_AXI_ID_WIDTH-1):0]        m_dest_axi_bid;
 	output                                    m_dest_axi_bready;
   output                                    m_dest_axi_arvalid;
   output  [31:0]                            m_dest_axi_araddr;
-  output  [ 2:0]                            m_dest_axi_arid;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]        m_dest_axi_arid;
   output  [ 7:0]                            m_dest_axi_arlen;
   output  [ 2:0]                            m_dest_axi_arsize;
   output  [ 1:0]                            m_dest_axi_arburst;
@@ -277,7 +280,7 @@ module axi_dmac_alt (
   input                                     m_dest_axi_rvalid;
   input   [ 1:0]                            m_dest_axi_rresp;
   input   [C_DMA_DATA_WIDTH_DEST-1:0]       m_dest_axi_rdata;
-  input   [ 2:0]                            m_dest_axi_rid;
+  input   [(PCORE_AXI_ID_WIDTH-1):0]        m_dest_axi_rid;
   input                                     m_dest_axi_rlast;
   output                                    m_dest_axi_rready;
 
@@ -287,7 +290,7 @@ module axi_dmac_alt (
 	input                                     m_src_axi_aresetn;
 	output                                    m_src_axi_awvalid;
 	output  [31:0]                            m_src_axi_awaddr;
-  output  [ 2:0]                            m_src_axi_awid;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]        m_src_axi_awid;
 	output  [ 7:0]                            m_src_axi_awlen;
 	output  [ 2:0]                            m_src_axi_awsize;
 	output  [ 1:0]                            m_src_axi_awburst;
@@ -302,11 +305,11 @@ module axi_dmac_alt (
 	input                                     m_src_axi_wready;
 	input                                     m_src_axi_bvalid;
 	input   [ 1:0]                            m_src_axi_bresp;
-	input   [ 2:0]                            m_src_axi_bid;
+	input   [(PCORE_AXI_ID_WIDTH-1):0]        m_src_axi_bid;
 	output                                    m_src_axi_bready;
 	output                                    m_src_axi_arvalid;
 	output  [31:0]                            m_src_axi_araddr;
-  output  [ 2:0]                            m_src_axi_arid;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]        m_src_axi_arid;
 	output  [ 7:0]                            m_src_axi_arlen;
 	output  [ 2:0]                            m_src_axi_arsize;
 	output  [ 1:0]                            m_src_axi_arburst;
@@ -317,7 +320,7 @@ module axi_dmac_alt (
 	input                                     m_src_axi_rvalid;
 	input   [ 1:0]                            m_src_axi_rresp;
 	input   [C_DMA_DATA_WIDTH_SRC-1:0]        m_src_axi_rdata;
-  input   [ 2:0]                            m_src_axi_rid;
+  input   [(PCORE_AXI_ID_WIDTH-1):0]        m_src_axi_rid;
   input                                     m_src_axi_rlast;
 	output                                    m_src_axi_rready;
 
@@ -346,10 +349,12 @@ module axi_dmac_alt (
 	output  [C_DMA_DATA_WIDTH_DEST-1:0]       fifo_rd_dout;
 	output                                    fifo_rd_underflow;
 
+  output                                    irq;
+
   // defaults
 
-  assign s_axi_bid = 3'd0;
-  assign s_axi_rid = 3'd0;
+  assign s_axi_bid = 'd0;
+  assign s_axi_rid = 'd0;
   assign s_axi_rlast = 1'd0;
 
   // instantiation

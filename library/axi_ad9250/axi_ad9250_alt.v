@@ -102,72 +102,73 @@ module axi_ad9250_alt (
   adc_mon_data);
 
   parameter PCORE_ID = 0;
+  parameter PCORE_AXI_ID_WIDTH = 3;
   parameter PCORE_DEVICE_TYPE = 0;
 
   // jesd interface 
   // rx_clk is (line-rate/40)
 
-  input           rx_clk;
-  input   [63:0]  rx_data;
+  input                               rx_clk;
+  input   [63:0]                      rx_data;
 
   // dma interface
 
-  output          adc_clk;
-  output          adc_dwr;
-  output  [63:0]  adc_ddata;
-  output          adc_dsync;
-  input           adc_dovf;
-  input           adc_dunf;
+  output                              adc_clk;
+  output                              adc_dwr;
+  output  [63:0]                      adc_ddata;
+  output                              adc_dsync;
+  input                               adc_dovf;
+  input                               adc_dunf;
 
   // axi interface
 
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [13:0]  s_axi_awaddr;
-  input   [ 2:0]  s_axi_awid;
-  input   [ 7:0]  s_axi_awlen;
-  input   [ 2:0]  s_axi_awsize;
-  input   [ 1:0]  s_axi_awburst;
-  input   [ 0:0]  s_axi_awlock;
-  input   [ 3:0]  s_axi_awcache;
-  input   [ 2:0]  s_axi_awprot;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  input           s_axi_wlast;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  output  [ 2:0]  s_axi_bid;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [13:0]  s_axi_araddr;
-  input   [ 2:0]  s_axi_arid;
-  input   [ 7:0]  s_axi_arlen;
-  input   [ 2:0]  s_axi_arsize;
-  input   [ 1:0]  s_axi_arburst;
-  input   [ 0:0]  s_axi_arlock;
-  input   [ 3:0]  s_axi_arcache;
-  input   [ 2:0]  s_axi_arprot;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [ 1:0]  s_axi_rresp;
-  output  [31:0]  s_axi_rdata;
-  output  [ 2:0]  s_axi_rid;
-  output          s_axi_rlast;
-  input           s_axi_rready;
+  input                               s_axi_aclk;
+  input                               s_axi_aresetn;
+  input                               s_axi_awvalid;
+  input   [13:0]                      s_axi_awaddr;
+  input   [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_awid;
+  input   [ 7:0]                      s_axi_awlen;
+  input   [ 2:0]                      s_axi_awsize;
+  input   [ 1:0]                      s_axi_awburst;
+  input   [ 0:0]                      s_axi_awlock;
+  input   [ 3:0]                      s_axi_awcache;
+  input   [ 2:0]                      s_axi_awprot;
+  output                              s_axi_awready;
+  input                               s_axi_wvalid;
+  input   [31:0]                      s_axi_wdata;
+  input   [ 3:0]                      s_axi_wstrb;
+  input                               s_axi_wlast;
+  output                              s_axi_wready;
+  output                              s_axi_bvalid;
+  output  [ 1:0]                      s_axi_bresp;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_bid;
+  input                               s_axi_bready;
+  input                               s_axi_arvalid;
+  input   [13:0]                      s_axi_araddr;
+  input   [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_arid;
+  input   [ 7:0]                      s_axi_arlen;
+  input   [ 2:0]                      s_axi_arsize;
+  input   [ 1:0]                      s_axi_arburst;
+  input   [ 0:0]                      s_axi_arlock;
+  input   [ 3:0]                      s_axi_arcache;
+  input   [ 2:0]                      s_axi_arprot;
+  output                              s_axi_arready;
+  output                              s_axi_rvalid;
+  output  [ 1:0]                      s_axi_rresp;
+  output  [31:0]                      s_axi_rdata;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_rid;
+  output                              s_axi_rlast;
+  input                               s_axi_rready;
 
   // debug signals
 
-  output          adc_mon_valid;
-  output [119:0]  adc_mon_data;
+  output                              adc_mon_valid;
+  output [119:0]                      adc_mon_data;
 
   // defaults
 
-  assign s_axi_bid = 3'd0;
-  assign s_axi_rid = 3'd0;
+  assign s_axi_bid = 'd0;
+  assign s_axi_rid = 'd0;
   assign s_axi_rlast = 1'd0;
 
   // ad9250 lite version

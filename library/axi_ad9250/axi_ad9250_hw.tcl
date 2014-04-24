@@ -44,6 +44,13 @@ set_parameter_property PCORE_DEVICE_TYPE TYPE INTEGER
 set_parameter_property PCORE_DEVICE_TYPE UNITS None
 set_parameter_property PCORE_DEVICE_TYPE HDL_PARAMETER true
 
+add_parameter PCORE_AXI_ID_WIDTH INTEGER 0
+set_parameter_property PCORE_AXI_ID_WIDTH DEFAULT_VALUE 3
+set_parameter_property PCORE_AXI_ID_WIDTH DISPLAY_NAME PCORE_AXI_ID_WIDTH
+set_parameter_property PCORE_AXI_ID_WIDTH TYPE INTEGER
+set_parameter_property PCORE_AXI_ID_WIDTH UNITS None
+set_parameter_property PCORE_AXI_ID_WIDTH HDL_PARAMETER true
+
 # axi4 slave
 
 add_interface s_axi_clock clock end
@@ -73,7 +80,7 @@ add_interface_port s_axi s_axi_rvalid rvalid Output 1
 add_interface_port s_axi s_axi_rresp rresp Output 2
 add_interface_port s_axi s_axi_rdata rdata Output 32
 add_interface_port s_axi s_axi_rready rready Input 1
-add_interface_port s_axi s_axi_awid awid Input 3
+add_interface_port s_axi s_axi_awid awid Input PCORE_AXI_ID_WIDTH
 add_interface_port s_axi s_axi_awlen awlen Input 8
 add_interface_port s_axi s_axi_awsize awsize Input 3
 add_interface_port s_axi s_axi_awburst awburst Input 2
@@ -81,15 +88,15 @@ add_interface_port s_axi s_axi_awlock awlock Input 1
 add_interface_port s_axi s_axi_awcache awcache Input 4
 add_interface_port s_axi s_axi_awprot awprot Input 3
 add_interface_port s_axi s_axi_wlast wlast Input 1
-add_interface_port s_axi s_axi_bid bid Output 3
-add_interface_port s_axi s_axi_arid arid Input 3
+add_interface_port s_axi s_axi_bid bid Output PCORE_AXI_ID_WIDTH
+add_interface_port s_axi s_axi_arid arid Input PCORE_AXI_ID_WIDTH
 add_interface_port s_axi s_axi_arlen arlen Input 8
 add_interface_port s_axi s_axi_arsize arsize Input 3
 add_interface_port s_axi s_axi_arburst arburst Input 2
 add_interface_port s_axi s_axi_arlock arlock Input 1
 add_interface_port s_axi s_axi_arcache arcache Input 4
 add_interface_port s_axi s_axi_arprot arprot Input 3
-add_interface_port s_axi s_axi_rid rid Output 3
+add_interface_port s_axi s_axi_rid rid Output PCORE_AXI_ID_WIDTH
 add_interface_port s_axi s_axi_rlast rlast Output 1
 
 
