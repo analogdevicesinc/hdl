@@ -144,11 +144,11 @@
          type = "String";
       }
    }
-   element sys_gpio.s1
+   element sys_tcm_mem.s1
    {
       datum baseAddress
       {
-         value = "86025408";
+         value = "86016000";
          type = "String";
       }
    }
@@ -157,6 +157,14 @@
       datum baseAddress
       {
          value = "0";
+         type = "String";
+      }
+   }
+   element sys_timer.s1
+   {
+      datum baseAddress
+      {
+         value = "86025376";
          type = "String";
       }
    }
@@ -173,27 +181,11 @@
          type = "String";
       }
    }
-   element sys_tcm_mem.s1
+   element sys_gpio.s1
    {
       datum baseAddress
       {
-         value = "86016000";
-         type = "String";
-      }
-   }
-   element sys_timer.s1
-   {
-      datum baseAddress
-      {
-         value = "86025376";
-         type = "String";
-      }
-   }
-   element sys_tcm_mem.s2
-   {
-      datum baseAddress
-      {
-         value = "86016000";
+         value = "86025408";
          type = "String";
       }
    }
@@ -210,11 +202,11 @@
          type = "String";
       }
    }
-   element axi_dmac.s_axi
+   element sys_tcm_mem.s2
    {
       datum baseAddress
       {
-         value = "85999616";
+         value = "86016000";
          type = "String";
       }
    }
@@ -223,6 +215,14 @@
       datum baseAddress
       {
          value = "85983232";
+         type = "String";
+      }
+   }
+   element axi_dmac.s_axi
+   {
+      datum baseAddress
+      {
+         value = "85999616";
          type = "String";
       }
    }
@@ -513,7 +513,7 @@
  <parameter name="globalResetBus" value="false" />
  <parameter name="hdlLanguage" value="VERILOG" />
  <parameter name="maxAdditionalLatency" value="2" />
- <parameter name="projectName">fmcjesdadc1_a5gt.qpf</parameter>
+ <parameter name="projectName" value="ad9671_fmc_a5gt.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="timeStamp" value="0" />
@@ -1561,7 +1561,7 @@
   <parameter name="insertSync" value="false" />
   <parameter name="lsbOrderedFirst" value="false" />
   <parameter name="masterSPI" value="true" />
-  <parameter name="numberOfSlaves" value="1" />
+  <parameter name="numberOfSlaves" value="3" />
   <parameter name="syncRegDepth" value="2" />
   <parameter name="targetClockRate" value="128000" />
   <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
@@ -1570,9 +1570,9 @@
  </module>
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac">
   <parameter name="PCORE_ID" value="0" />
+  <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="128" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="128" />
-  <parameter name="C_ADDR_ALIGN_BITS" value="3" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
   <parameter name="C_2D_TRANSFER" value="1" />
   <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />

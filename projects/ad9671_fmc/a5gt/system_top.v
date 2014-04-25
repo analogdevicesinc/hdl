@@ -92,9 +92,27 @@ module system_top (
 
   // spi
 
-  spi_csn,
-  spi_clk,
-  spi_sdio);
+  spi_ad9671_csn,
+  spi_ad9671_clk,
+  spi_ad9671_sdio,
+  spi_ad9516_csn,
+  spi_ad9516_clk,
+  spi_ad9516_sdio,
+  spi_ad9553_csn,
+  spi_ad9553_clk,
+  spi_ad9553_sdio,
+
+  // gpio
+
+  reset_ad9516,
+  reset_ad9671,
+  trig,
+  prci_sck,
+  prci_cnv,
+  prci_sdo,
+  prcq_sck,
+  prcq_cnv,
+  prcq_sdo);
 
   // clock and resets
 
@@ -149,9 +167,27 @@ module system_top (
 
   // spi
 
-  output            spi_csn;
-  output            spi_clk;
-  inout             spi_sdio;
+  output            spi_ad9671_csn;
+  output            spi_ad9671_clk;
+  inout             spi_ad9671_sdio;
+  output            spi_ad9516_csn;
+  output            spi_ad9516_clk;
+  inout             spi_ad9516_sdio;
+  output            spi_ad9553_csn;
+  output            spi_ad9553_clk;
+  inout             spi_ad9553_sdio;
+
+  // gpio
+
+  output            reset_ad9516;
+  output            reset_ad9671;
+  output            trig;
+  output            prci_sck;
+  output            prci_cnv;
+  input             prci_sdo;
+  output            prcq_sck;
+  output            prcq_cnv;
+  input             prcq_sdo;
 
   // internal registers
 
@@ -167,7 +203,7 @@ module system_top (
   wire              sys_2m5_clk;
   wire              eth_tx_clk;
   wire              rx_clk;
-  wire              adc0_clk;
+  wire              adc_clk;
   wire              adc1_clk;
 
   // internal signals
@@ -176,22 +212,16 @@ module system_top (
   wire              eth_tx_reset_s;
   wire              eth_tx_mode_1g_s;
   wire              eth_tx_mode_10m_100m_n_s;
-  wire              spi_csn_s;
+  wire    [  2:0]   spi_csn_s;
   wire              spi_clk_s;
   wire              spi_mosi_s;
   wire              spi_miso_s;
-  wire    [ 63:0]   adc0_ddata_s;
-  wire              adc0_dsync_s;
-  wire              adc0_dovf_s;
-  wire              adc0_dwr_s;
-  wire              adc0_mon_valid_s;
-  wire    [ 55:0]   adc0_mon_data_s;
-  wire    [ 63:0]   adc1_ddata_s;
-  wire              adc1_dsync_s;
-  wire              adc1_dovf_s;
-  wire              adc1_dwr_s;
-  wire              adc1_mon_valid_s;
-  wire    [ 55:0]   adc1_mon_data_s;
+  wire    [ 63:0]   adc_ddata_s;
+  wire              adc_dsync_s;
+  wire              adc_dovf_s;
+  wire              adc_dwr_s;
+  wire              adc_mon_valid_s;
+  wire    [127:0]   adc_mon_data_s;
   wire    [  3:0]   rx_ip_sof_s;
   wire    [127:0]   rx_ip_data_s;
   wire    [127:0]   rx_data_s;
@@ -237,7 +267,7 @@ module system_top (
 
   sld_signaltap #(
     .sld_advanced_trigger_entity ("basic,1,"),
-    .sld_data_bits (114),
+    .sld_data_bits (130),
     .sld_data_bit_cntr_bits (8),
     .sld_enable_advanced_trigger (0),
     .sld_mem_address_bits (10),
@@ -255,7 +285,7 @@ module system_top (
     .sld_trigger_level_pipeline (1))
   i_signaltap (
     .acq_clk (rx_clk),
-    .acq_data_in ({rx_sysref, rx_sync, adc1_mon_data_s, adc0_mon_data_s}),
+    .acq_data_in ({rx_sysref, rx_sync, adc_mon_data_s}),
     .acq_trigger_in ({rx_sysref, rx_sync}));
 
   genvar n;
@@ -289,15 +319,23 @@ module system_top (
     .rx_ready (rx_ready_s),
     .rx_rst_state (rx_rst_state_s));
 
-  fmcjesdadc1_spi i_fmcjesdadc1_spi (
-    .sys_clk (sys_clk),
-    .spi4_csn (spi_csn_s),
-    .spi4_clk (spi_clk_s),
-    .spi4_mosi (spi_mosi_s),
-    .spi4_miso (spi_miso_s),
-    .spi3_csn (spi_csn),
-    .spi3_clk (spi_clk),
-    .spi3_sdio (spi_sdio));
+  assign spi_ad9671_csn = spi_csn_s[0];
+  assign spi_ad9516_csn = spi_csn_s[1];
+  assign spi_ad9553_csn = spi_csn_s[2];
+  assign spi_ad9671_clk = spi_clk_s;
+  assign spi_ad9516_clk = spi_clk_s;
+  assign spi_ad9553_clk = spi_clk_s;
+
+  ad9671_fmc_spi i_ad9671_fmc_spi (
+    .spi_ad9671_csn (spi_csn_s[0]),
+    .spi_ad9516_csn (spi_csn_s[1]),
+    .spi_ad9553_csn (spi_csn_s[2]),
+    .spi_clk (spi_clk_s),
+    .spi_mosi (spi_mosi_s),
+    .spi_miso (spi_miso_s),
+    .spi_ad9671_sdio (spi_ad9671_sdio),
+    .spi_ad9516_sdio (spi_ad9516_sdio),
+    .spi_ad9553_sdio (spi_ad9553_sdio));
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
@@ -336,42 +374,19 @@ module system_top (
     .sys_ethernet_mdio_mdio_in (eth_mdio_i),
     .sys_ethernet_mdio_mdio_out (eth_mdio_o),
     .sys_ethernet_mdio_mdio_oen (eth_mdio_t),
-    .sys_gpio_in_port ({rx_xcvr_status_s, 5'd0, push_buttons, dip_switches}),
-    .sys_gpio_out_port ({14'd0, rx_sw_rstn_s, rx_sysref_s, led_grn, led_red}),
+    .sys_gpio_in_port ({rx_xcvr_status_s, 3'd0, prci_sdo, prcq_sdo, push_buttons, dip_switches}),
+    .sys_gpio_out_port ({7'd0, reset_ad9516,
+      reset_ad9671, trig, prci_sck, prci_cnv, prcq_sck, prcq_cnv,
+      rx_sw_rstn_s, rx_sysref_s, led_grn, led_red}),
     .sys_spi_MISO (spi_miso_s),
     .sys_spi_MOSI (spi_mosi_s),
     .sys_spi_SCLK (spi_clk_s),
     .sys_spi_SS_n (spi_csn_s),
-    .axi_ad9250_0_xcvr_clk_clk (rx_clk),
-    .axi_ad9250_0_xcvr_data_data (rx_data_s[63:0]),
-    .axi_ad9250_0_adc_clock_clk (adc0_clk),
-    .axi_ad9250_0_adc_dma_if_ddata (adc0_ddata_s),
-    .axi_ad9250_0_adc_dma_if_dsync (adc0_dsync_s),
-    .axi_ad9250_0_adc_dma_if_dovf (adc0_dovf_s),
-    .axi_ad9250_0_adc_dma_if_dunf (1'b0),
-    .axi_ad9250_0_adc_dma_if_dwr (adc0_dwr_s),
-    .axi_ad9250_0_adc_mon_if_valid (adc0_mon_valid_s),
-    .axi_ad9250_0_adc_mon_if_data (adc0_mon_data_s),
-    .axi_dmac_0_fifo_wr_clock_clk (adc0_clk),
-    .axi_dmac_0_fifo_wr_if_ovf (adc0_dovf_s),
-    .axi_dmac_0_fifo_wr_if_wren (adc0_dwr_s),
-    .axi_dmac_0_fifo_wr_if_data (adc0_ddata_s),
-    .axi_dmac_0_fifo_wr_if_sync (adc0_dsync_s),
-    .axi_ad9250_1_xcvr_clk_clk (rx_clk),
-    .axi_ad9250_1_xcvr_data_data (rx_data_s[127:64]),
-    .axi_ad9250_1_adc_clock_clk (adc1_clk),
-    .axi_ad9250_1_adc_dma_if_ddata (adc1_ddata_s),
-    .axi_ad9250_1_adc_dma_if_dsync (adc1_dsync_s),
-    .axi_ad9250_1_adc_dma_if_dovf (adc1_dovf_s),
-    .axi_ad9250_1_adc_dma_if_dunf (1'b0),
-    .axi_ad9250_1_adc_dma_if_dwr (adc1_dwr_s),
-    .axi_ad9250_1_adc_mon_if_valid (adc1_mon_valid_s),
-    .axi_ad9250_1_adc_mon_if_data (adc1_mon_data_s),
-    .axi_dmac_1_fifo_wr_clock_clk (adc1_clk),
-    .axi_dmac_1_fifo_wr_if_ovf (adc1_dovf_s),
-    .axi_dmac_1_fifo_wr_if_wren (adc1_dwr_s),
-    .axi_dmac_1_fifo_wr_if_data (adc1_ddata_s),
-    .axi_dmac_1_fifo_wr_if_sync (adc1_dsync_s),
+    .axi_dmac_0_fifo_wr_clock_clk (adc_clk),
+    .axi_dmac_0_fifo_wr_if_ovf (adc_dovf_s),
+    .axi_dmac_0_fifo_wr_if_wren (adc_dwr_s),
+    .axi_dmac_0_fifo_wr_if_data (adc_ddata_s),
+    .axi_dmac_0_fifo_wr_if_sync (adc_dsync_s),
     .sys_jesd204b_s1_rx_link_data (rx_ip_data_s),
     .sys_jesd204b_s1_rx_link_valid (),
     .sys_jesd204b_s1_rx_link_ready (1'b1),
@@ -388,7 +403,17 @@ module system_top (
     .sys_jesd204b_s1_rx_cal_busy_export (rx_cal_busy_s),
     .sys_jesd204b_s1_ref_clk_clk (ref_clk),
     .sys_jesd204b_s1_rx_clk_clk (rx_clk),
-    .sys_jesd204b_s1_pll_locked_export (rx_pll_locked_s));
+    .sys_jesd204b_s1_pll_locked_export (rx_pll_locked_s),
+    .axi_ad9671_1_xcvr_clk_clk (rx_clk),
+    .axi_ad9671_1_xcvr_data_data (rx_data_s),
+    .axi_ad9671_1_adc_clock_clk (adc_clk),
+    .axi_ad9671_1_adc_dma_if_ddata (adc_ddata_s),
+    .axi_ad9671_1_adc_dma_if_dsync (adc_dsync_s),
+    .axi_ad9671_1_adc_dma_if_dovf (adc_dovf_s),
+    .axi_ad9671_1_adc_dma_if_dunf (1'b0),
+    .axi_ad9671_1_adc_dma_if_dwr (adc_dwr_s),
+    .axi_ad9671_1_adc_mon_if_valid (adc_mon_valid_s),
+    .axi_ad9671_1_adc_mon_if_data (adc_mon_data_s));
 
 endmodule
 
