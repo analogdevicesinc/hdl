@@ -1,3 +1,4 @@
+*.cache
 *.data
 *.xpr
 *.log
