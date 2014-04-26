@@ -37,7 +37,9 @@ proc adi_ip_properties {ip_name} {
   set_property value {0x00000000} [ipx::get_hdl_parameter C_BASEADDR [ipx::current_core]]
 
   set_property supported_families \
-    {{virtex7}    {Production} \
+    {{kintexu}    {Pre-Production} \
+     {virtexu}    {Pre-Production} \
+     {virtex7}    {Production} \
      {qvirtex7}   {Production} \
      {kintex7}    {Production} \
      {kintex7l}   {Production} \
@@ -64,7 +66,9 @@ proc adi_ip_properties_lite {ip_name} {
   set_property company_url {www.analog.com} [ipx::current_core]
 
   set_property supported_families \
-    {{virtex7}    {Production} \
+    {{kintexu}    {Pre-Production} \
+     {virtexu}    {Pre-Production} \
+     {virtex7}    {Production} \
      {qvirtex7}   {Production} \
      {kintex7}    {Production} \
      {kintex7l}   {Production} \

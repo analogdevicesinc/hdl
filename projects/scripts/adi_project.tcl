@@ -26,6 +26,11 @@ proc adi_project_create {project_name} {
     set project_part "xc7vx485tffg1761-2"
     set project_board "xilinx.com:virtex7:vc707:1.1"
   }
+  if [regexp "_kcu105$" $project_name] {
+    set xl_board "kcu105"
+    set project_part "xcku040-ffva1156-2-e-es1"
+    set project_board "not-applicable"
+  }
   if [regexp "_zed$" $project_name] {
     set xl_board "zed"
     set project_part "xc7z020clg484-1"
@@ -45,7 +50,9 @@ proc adi_project_create {project_name} {
   set project_system_dir "./$project_name.srcs/sources_1/bd/system"
 
   create_project $project_name . -part $project_part -force
-  set_property board $project_board [current_project]
+  if {$project_board ne "not-applicable"} {
+    set_property board $project_board [current_project]
+  }
 
   set lib_dirs $ad_hdl_dir/library
   if {$ad_hdl_dir ne $ad_phdl_dir} {
