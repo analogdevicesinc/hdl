@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2013(c) Analog Devices, Inc.
+// Copyright 2014(c) Analog Devices, Inc.
 //
 // All rights reserved.
 //
@@ -37,7 +37,7 @@
 
 `timescale 1ns/100ps
 
-module axi_mc_torque_ctrl
+module axi_mc_controller
 #(
     parameter C_S_AXI_MIN_SIZE = 32'hffff,
     parameter C_BASEADDR = 32'hffffffff,
@@ -58,14 +58,23 @@ module axi_mc_torque_ctrl
     output          pwm_cl_o,
     output  [7:0]   gpo_o,
 
+//  controller connections
+
+    input   [31:0]  err_i,
+    input   [31:0]  pwm_i,
+    input   [31:0]  speed_rpm_i,
+    output          ctrl_rst_o,
+    output  [31:0]  ref_speed_o,
+    output  [31:0]  kp_o,
+    output  [31:0]  ki_o,
+    output  [31:0]  kd_o,
+
 // interconnection with other modules
 
     output  [1:0]   sensors_o,
     input   [2:0]   position_i,
     input           new_speed_i,
     input   [31:0]  speed_i,
-    input   [15:0]  it_i,
-    input           i_ready_i,
 
 // dma interface
 
@@ -112,11 +121,7 @@ reg             adc_valid       = 'd0;
 reg     [31:0]  adc_data        = 'd0;
 reg     [31:0]  up_rdata        = 'd0;
 reg             up_ack          = 'd0;
-reg     [15:0]  tmr_dv_reg      = 'd0;
-reg             datavalid_reg   = 'd0;
-reg     [15:0]  tmr_ctrl_reg   = 'd0;
 reg             pwm_gen_clk     = 'd0;
-reg             ctrl_gen_clk    = 'd0;
 reg             one_chan_reg    = 'd0;
 
 //------------------------------------------------------------------------------
@@ -145,25 +150,14 @@ wire            ack_actual_speed_s;
 wire            run_s;
 wire            star_delta_s;
 wire            oloop_matlab_s;         // 0 - open loop, 1 matlab controlls pwm
+wire            dir_s;
 wire    [10:0]  pwm_open_s;
-wire    [31:0]  pwm_controller_s;
 wire    [10:0]  pwm_s;
-wire    [31:0]  err_s;
-wire    [31:0]  pid_s;
-wire    [2:0]   position_s;
-wire    [31:0]  ki_s;
-wire    [31:0]  kp_s;
-wire    [31:0]  ki1_s;
-wire    [31:0]  kp1_s;
-wire    [31:0]  kd1_s;
-wire    [31:0]  reference_speed_s;
-wire    [31:0]  speed_rpm_s;            // speed in RPM from the controller
 
 wire            enable_ref_speed_s;
 wire            enable_actual_speed_s;
 
 wire    [10:0]  gpo_s;
-wire    [31:0]  it_max_s;
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
@@ -171,79 +165,50 @@ wire    [31:0]  it_max_s;
 
 // signal name changes
 
-assign up_clk               = s_axi_aclk;
-assign up_rstn              = s_axi_aresetn;
+assign up_clk         = s_axi_aclk;
+assign up_rstn        = s_axi_aresetn;
 
-assign adc_clk_o            = ref_clk;
-assign adc_dwr_o            = adc_valid;
-assign adc_ddata_o          = adc_data;
+assign adc_clk_o      = ref_clk;
+assign adc_dwr_o      = adc_valid;
+assign adc_ddata_o    = adc_data;
+
+assign ctrl_rst_o     = !run_s;
 
 // monitor signals
 
-assign adc_mon_valid    = i_ready_i;
-assign adc_mon_data     =  {25'h0 ,fmc_m1_en_o, pwm_ah_o, pwm_al_o, pwm_bh_o, pwm_bl_o, pwm_ch_o, pwm_cl_o};
+assign adc_mon_valid  = adc_valid;
+assign adc_mon_data   =  {25'h0 ,fmc_m1_en_o, pwm_ah_o, pwm_al_o, pwm_bh_o, pwm_bl_o, pwm_ch_o, pwm_cl_o};
 
-// multiple instances synchronization
-
-assign pid_s = 32'd0;
-
-assign fmc_m1_en_o  = run_s;
-assign pwm_s        = oloop_matlab_s ? pwm_controller_s[10:0] : pwm_open_s ;
-assign position_s   = position_i;
+assign fmc_m1_en_o    = run_s;
+assign pwm_s          = oloop_matlab_s ? pwm_i[10:0] : pwm_open_s ;
 
 // assign gpo
 
- assign gpo_o[7:4] = gpo_s[10:7];
- assign gpo_o[3:0] = gpo_s[3:0];
+assign gpo_o[7:4] = gpo_s[10:7];
+assign gpo_o[3:0] = gpo_s[3:0];
 
-// clock generation for controller
-
-always @(posedge ref_clk)
-begin
-    pwm_gen_clk <= ~pwm_gen_clk; // generate 50 MHz clk
-
-    if(tmr_ctrl_reg == 16'd4)  // generate 10 MHz clk
-    begin
-        tmr_ctrl_reg <= 16'd0;
-        ctrl_gen_clk <= ~ctrl_gen_clk;
-    end
-    else
-    begin
-        tmr_ctrl_reg <= tmr_ctrl_reg + 16'd1;
-    end
-end
-
-// CE generation for controller
+// clock generation
 
 always @(posedge ref_clk)
 begin
-    if(tmr_dv_reg == 16'd999)
-    begin
-        datavalid_reg   <= 1'b1;
-        tmr_dv_reg      <= 16'd0;
-    end
-    else
-    begin
-        datavalid_reg   <= 1'b0;
-        tmr_dv_reg      <= tmr_dv_reg + 16'd1;
-    end
+  pwm_gen_clk <= ~pwm_gen_clk; // generate 50 MHz clk
 end
 
 // adc channels - dma interface
 
 always @(posedge ref_clk)
 begin
-    if(datavalid_reg == 1)
+    if(new_speed_i == 1)
     begin
         case({enable_actual_speed_s , enable_ref_speed_s})
             2'b11:
             begin
-                adc_data  <= {speed_rpm_s[29:14],reference_speed_s[15:0]};
+                adc_data  <= {speed_rpm_i[31:16], ref_speed_o[15:0]};
                 adc_valid <= 1'b1;
             end
             2'b01:
             begin
-                adc_data <= { adc_data[15:0], reference_speed_s[15:0]};
+                adc_data <= { adc_data[15:0], ref_speed_o[15:0]};
                 one_chan_reg <= ~one_chan_reg;
                 if(one_chan_reg == 1'b1)
                 begin
@@ -256,7 +221,7 @@ begin
             end
             2'b10:
             begin
-                adc_data <= { adc_data[15:0], speed_rpm_s[29:14]};
+                adc_data <= { adc_data[15:0], speed_rpm_i[31:16]};
                 one_chan_reg <= ~one_chan_reg;
                 if(one_chan_reg == 1'b1)
                 begin
@@ -302,9 +267,9 @@ motor_driver_inst(
     .pwm_clk_i(pwm_gen_clk),
     .rst_n_i(up_rstn) ,
     .run_i(run_s),
-    .star_delta_i(1'b0),
-    //.dir_i(1'b1),
-    .position_i(position_s),
+    .star_delta_i(star_delta_s),
+    .dir_i(dir_s),
+    .position_i(position_i),
     .pwm_duty_i(pwm_s),
     .AH_o(pwm_ah_o),
     .BH_o(pwm_bh_o),
@@ -323,44 +288,23 @@ control_registers control_reg_inst(
     .up_rdata(up_control_rdata_s),
     .up_ack(up_control_ack_s),
 
-//control pins
-
     .run_o(run_s),
     .break_o(),
+    .dir_o(dir_s),
     .star_delta_o(star_delta_s),
     .sensors_o(sensors_o),
-    .kp_o(kp_s),
-    .ki_o(ki_s),
-    .kp1_o(kp1_s),
-    .ki1_o(ki1_s),
-    .kd1_o(kd1_s),
+    .kp_o(kp_o),
+    .ki_o(ki_o),
+    .kd_o(kd_o),
+    .kp1_o(),
+    .ki1_o(),
+    .kd1_o(),
     .gpo_o(gpo_s),
-    .reference_speed_o(reference_speed_s),
+    .reference_speed_o(ref_speed_o),
     .oloop_matlab_o(oloop_matlab_s),
-    .err_i(err_s),
+    .err_i(err_i),
     .calibrate_adcs_o(),
     .pwm_open_o( pwm_open_s));
-
-bldc_sim_fpga_cw torque_controller(
-    .ce(1'b1),
-    .clk(ctrl_gen_clk),
-    .clk_x0(ctrl_gen_clk),
-    .it({16'h0,it_i}),
-    .kd1(kd1_s),
-    .ki(ki_s),
-    .ki1(ki1_s),
-    .kp(kp_s),
-    .kp1(kp1_s),
-    .motor_speed(speed_i),
-    .new_current(i_ready_i),
-    .new_speed(new_speed_i),
-    .ref_speed(reference_speed_s),
-    .reset(!up_rstn),
-    .reset_acc(!run_s),
-    .err(err_s),
-    .it_max(it_max_s),
-    .pwm(pwm_controller_s),
-    .speed(speed_rpm_s));
 
 up_adc_channel #(.PCORE_ADC_CHID(0)) adc_channel_ref_speed(
     .adc_clk(ref_clk),
@@ -380,8 +324,8 @@ up_adc_channel #(.PCORE_ADC_CHID(0)) adc_channel_ref_speed(
     .adc_pn_err(1'b0),
     .adc_pn_oos(1'b0),
     .adc_or(1'b0),
-    .up_adc_pn_err(1'b0),
-    .up_adc_pn_oos(1'b0),
+    .up_adc_pn_err(),
+    .up_adc_pn_oos(),
     .up_adc_or(),
     .up_usr_datatype_be(),
     .up_usr_datatype_signed(),
@@ -405,7 +349,6 @@ up_adc_channel #(.PCORE_ADC_CHID(0)) adc_channel_ref_speed(
     .up_wdata(up_wdata_s),
     .up_rdata(rdata_ref_speed_s),
     .up_ack(ack_ref_speed_s));
-
 
 up_adc_channel #(.PCORE_ADC_CHID(1)) adc_channel_actual_speed(
     .adc_clk(ref_clk),
@@ -451,8 +394,8 @@ up_adc_channel #(.PCORE_ADC_CHID(1)) adc_channel_actual_speed(
     .up_rdata(rdata_actual_speed_s),
     .up_ack(ack_actual_speed_s));
 
-
 // common processor control
+
 up_adc_common i_up_adc_common(
     .mmcm_rst(),
     .adc_clk(ref_clk),

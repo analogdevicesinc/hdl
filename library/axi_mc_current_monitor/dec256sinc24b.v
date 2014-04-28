@@ -92,7 +92,7 @@ reg         word_clk;
 
 assign data_rdy_o = word_clk;
 
-/* Perform the Sinc ACTION*/
+/* Perform the Sinc ACTION */
 always @(mdata_i)
 begin
     if(mdata_i == 0)

@@ -56,11 +56,13 @@ module control_registers
     output [31:0]  reference_speed_o,
     output [31:0]  kp_o,
     output [31:0]  ki_o,
+    output [31:0]  kd_o,
     output [31:0]  kp1_o,
     output [31:0]  ki1_o,
     output [31:0]  kd1_o,
     output         run_o,
     output         break_o,
+    output         dir_o,
     output         star_delta_o,
     output [1:0]   sensors_o,
     output [10:0]  gpo_o,
@@ -71,6 +73,7 @@ module control_registers
 //------------------------------------------------------------------------------
 //----------- Registers Declarations -------------------------------------------
 //------------------------------------------------------------------------------
+
 //internal registers
 
 reg [31:0] control_r;
@@ -84,12 +87,13 @@ reg [31:0] pwm_open_r;
 reg [31:0] pwm_break_r;
 reg [31:0] status_r;
 reg [31:0] reserved_r1;
-reg [31:0] reserved_r2;
+reg [31:0] kd_r;
 reg [10:0] gpo_r;
 
 //------------------------------------------------------------------------------
 //----------- Wires Declarations -----------------------------------------------
 //------------------------------------------------------------------------------
+
 //internal signals
 
 wire        up_sel_s;
@@ -98,27 +102,27 @@ wire        up_wr_s;
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
 //------------------------------------------------------------------------------
-//decode block select
 
 assign up_sel_s = (up_addr[13:4] == 10'h00) ? up_sel : 1'b0;
 assign up_wr_s = up_sel_s & up_wr;
 
 assign run_o                    = control_r[0];     // Run the motor
 assign break_o                  = control_r[2];     // Activate the Break circuit
+assign dir_o                    = control_r[3];     // 0 CCW, 1 CW
 assign star_delta_o             = control_r[4];     // Select between star [0] or delta [1] controller
 assign sensors_o                = control_r[9:8];   // Select between Hall[00] and BEMF[01] sensors
 assign calibrate_adcs_o         = control_r[16];
-assign oloop_matlab_o           = control_r[12];   // Select between open loop control [0] and matlab control [1]
+assign oloop_matlab_o           = control_r[12];    // Select between open loop control [0] and matlab control [1]
 assign gpo_o                    = control_r[30:20];
 
 assign pwm_open_o               = pwm_open_r;       // PWM value, for open loop control
 assign reference_speed_o        = reference_speed_r;
-assign kp_o                     = kp_r;
-assign ki_o                     = ki_r;
+assign kp_o                     = kp_r;             // KP controller parameter
+assign ki_o                     = ki_r;             // KI controller parameter
+assign kd_o                     = kd_r;             // KD controller parameter
 assign kp1_o                    = kp1_r;
 assign kd1_o                    = kd1_r;
 assign ki1_o                    = ki1_r;
-
 
 // processor write interface
 
@@ -128,11 +132,12 @@ begin
    begin
        control_r            <= 'h0;
        reference_speed_r    <= 'd1000;
-       kp_r                 <= 'd35000;
-       ki_r                 <= 'd30;
-       kp1_r                <= 'd400000;
-       ki1_r                <= 'd250;
-       kd1_r                <= 'd200000;
+       kp_r                 <= 'd6554;
+       ki_r                 <= 'd26;
+       kd_r                 <= 'd655360;
+       kp1_r                <= 'd0;
+       ki1_r                <= 'd0;
+       kd1_r                <= 'd0;
        pwm_open_r           <= 'h5ff;
        pwm_break_r          <= 'd0;
        status_r             <= 'd0;
@@ -161,7 +166,7 @@ begin
        end
        if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h8))
        begin
-           reserved_r2          <= up_wdata;
+           kd_r                 <= up_wdata;
        end
        if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h9))
        begin
@@ -208,7 +213,7 @@ begin
                 4'h5: up_rdata <= reference_speed_r;
                 4'h6: up_rdata <= kp_r;
                 4'h7: up_rdata <= ki_r;
-                4'h8: up_rdata <= reserved_r2;
+                4'h8: up_rdata <= kd_r;
                 4'h9: up_rdata <= kp1_r;
                 4'ha: up_rdata <= ki1_r;
                 4'hb: up_rdata <= kd1_r;

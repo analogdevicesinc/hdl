@@ -42,7 +42,7 @@ module axi_mc_speed
     parameter C_S_AXI_MIN_SIZE = 32'hffff,
     parameter C_BASEADDR = 32'hffffffff,
     parameter C_HIGHADDR = 32'h00000000,
-    parameter MOTOR_CONTROL_REVISION = 1
+    parameter MOTOR_CONTROL_REVISION = 2
 )
 //----------- Ports Declarations -----------------------------------------------
 (
@@ -155,8 +155,8 @@ assign speed_o          = speed_data_s;
 
 always @(posedge ref_clk)
 begin
-    adc_data  <= speed_data_s;
-    adc_valid <= new_speed_s;
+    adc_data      <= speed_data_s;
+    adc_valid     <= new_speed_s;
 end
 
 // processor read interface
@@ -233,9 +233,9 @@ delay_30_degrees delay_30_degrees_i1(
     .position_o(bemf_delayed_s));
 
 speed_detector
-#( .AVERAGE_WINDOW(1024),
+#(  .AVERAGE_WINDOW(1024),
     .LOG_2_AW(10),
-    .SAMPLE_CLK_DECIM(10000))
+    .SAMPLE_CLK_DECIM(1000))
 speed_detector_inst(
     .clk_i(ref_clk),
     .rst_i(adc_rst),

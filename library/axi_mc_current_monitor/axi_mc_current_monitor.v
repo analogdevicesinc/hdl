@@ -39,7 +39,6 @@
 
 module axi_mc_current_monitor
 #(
-
     parameter C_S_AXI_MIN_SIZE = 32'hffff,
     parameter C_BASEADDR = 32'hffffffff,
     parameter C_HIGHADDR = 32'h00000000
@@ -169,6 +168,8 @@ wire            adc_enable_ib;
 wire            adc_enable_it;
 wire            adc_enable_vbus;
 
+wire            adc_clk_s;
+
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
 //------------------------------------------------------------------------------
@@ -182,6 +183,7 @@ assign adc_clk_o            = ref_clk; // use reference clock to send data to th
 assign adc_dwr_o            = adc_valid;
 assign adc_ddata_o          = adc_data;
 assign adc_dsync_o          = adc_dsync_r;
+
 // monitor signals
 
 assign adc_mon_valid        = data_rd_ready_ia_s;
@@ -190,13 +192,14 @@ assign adc_mon_data[31:16]  = {adc_enable_vbus, adc_enable_it, adc_enable_ib, ad
 
 // current outputs
 
-assign i_ready_o = data_rd_ready_ia_s;
-assign ia_o      = adc_data_ia_s;
-assign ib_o      = adc_data_ib_s;
-assign it_o      = adc_data_it_n_s;
-assign adc_data_it_n_s = 65535 - adc_data_it_s;
+assign i_ready_o        = data_rd_ready_ia_s;
+assign ia_o             = adc_data_ia_s;
+assign ib_o             = adc_data_ib_s;
+assign it_o             = adc_data_it_n_s;
+assign adc_data_it_n_s  = 65535 - adc_data_it_s;
 
 // adc clock
+
 assign adc_clk_s            = adc_clk_reg;
 
 // ADC clock generation
@@ -551,8 +554,8 @@ up_adc_channel #(.PCORE_ADC_CHID(0)) i_up_adc_channel_ia(
     .adc_pn_err(1'b0),
     .adc_pn_oos(1'b0),
     .adc_or(1'b0),
-    .up_adc_pn_err(1'b0),
-    .up_adc_pn_oos(1'b0),
+    .up_adc_pn_err(),
+    .up_adc_pn_oos(),
     .up_adc_or(),
     .up_usr_datatype_be(),
     .up_usr_datatype_signed(),

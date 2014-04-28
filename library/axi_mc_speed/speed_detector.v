@@ -78,9 +78,9 @@ module speed_detector
 //----------- Local Parameters -------------------------------------------------
 //------------------------------------------------------------------------------
 
-localparam AW           = LOG_2_AW - 1;
+localparam AW             = LOG_2_AW - 1;
 
-localparam MAX_SPEED_CNT= 32'h10000;
+localparam MAX_SPEED_CNT  = 32'h10000;
 
 //State machine
 localparam RESET            = 8'b00000001;
@@ -95,7 +95,7 @@ localparam IDLE             = 8'b10000000;
 //----------- Registers Declarations -------------------------------------------
 //------------------------------------------------------------------------------
 
-reg [2:0]   position_old;
+reg [ 2:0]  position_old;
 reg [63:0]  avg_register;
 reg [63:0]  avg_register_stable;
 reg [31:0]  cnt_period;
@@ -107,8 +107,8 @@ reg [AW:0]  read_addr;
 
 reg [31:0]  sample_clk_div;
 
-reg [7:0] state;
-reg [7:0] next_state;
+reg [ 7:0]  state;
+reg [ 7:0]  next_state;
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
@@ -244,7 +244,7 @@ begin
     end
     else
     begin
-        if(sample_clk_div == SAMPLE_CLK_DECIM )
+        if(sample_clk_div == SAMPLE_CLK_DECIM)
         begin
             sample_clk_div  <= 0;
             speed_o         <=(avg_register_stable >> LOG_2_AW);
@@ -253,8 +253,8 @@ begin
         end
         else
         begin
-            sample_clk_div  <= sample_clk_div + 1;
             new_speed_o     <= 0;
+            sample_clk_div  <= sample_clk_div + 1;
         end
     end
 end

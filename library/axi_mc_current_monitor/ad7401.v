@@ -116,7 +116,7 @@ localparam WAIT_DATA_RDY_LOW_STATE  = 5'b10000;
 assign adc_mclkin_o             = adc_clk_i;    // use clock signal for driver and for ADC
 
 // synchronize data on fpga_clki
-always @(posedge fpga_clk_i )
+always @(posedge fpga_clk_i)
 begin
     data_rdy_s_d1 <= data_rdy_s;
     data_rdy_s_d2 <= data_rdy_s_d1;
@@ -160,7 +160,7 @@ begin
     end
 end
 
-always @(present_state, data_rdy_s_d2 )
+always @(present_state, data_rdy_s_d2)
 begin
     next_state <= present_state;
     case (present_state)

@@ -66,7 +66,6 @@
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_current_monitor_1_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_current_monitor_1_dma
   set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_current_monitor_1_dma
-#  set_property -dict [list CONFIG.C_ADDR_ALIGN_BITS {3}] $axi_current_monitor_1_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_current_monitor_1_dma
   set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_current_monitor_1_dma
 
@@ -79,7 +78,6 @@
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_current_monitor_2_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_current_monitor_2_dma
   set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_current_monitor_2_dma
-#  set_property -dict [list CONFIG.C_ADDR_ALIGN_BITS {3}] $axi_current_monitor_2_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_current_monitor_2_dma
   set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_current_monitor_2_dma
 
@@ -92,22 +90,22 @@
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_speed_detector_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_speed_detector_dma
   set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_speed_detector_dma
-#  set_property -dict [list CONFIG.C_ADDR_ALIGN_BITS {2}] $axi_speed_detector_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_speed_detector_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {32}] $axi_speed_detector_dma
 
-  # torque controller
+  # controller
 
-  set axi_mc_torque_controller [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_torque_ctrl:1.0 axi_mc_torque_controller ]
+  set axi_mc_controller [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_controller:1.0 axi_mc_controller ]
 
-  set axi_torque_controller_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_torque_controller_dma]
-  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_torque_controller_dma
-  set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_torque_controller_dma
-  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_torque_controller_dma
-  set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_torque_controller_dma
-#  set_property -dict [list CONFIG.C_ADDR_ALIGN_BITS {2}] $axi_torque_controller_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_torque_controller_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC  {32}] $axi_torque_controller_dma
+  set pid_controller [create_bd_cell -type ip -vlnv analog.com:user:ip_pid_controller:1.0 pid_controller]
+
+  set axi_controller_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_controller_dma]
+  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_controller_dma
+  set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_controller_dma
+  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_controller_dma
+  set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_controller_dma
+  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_controller_dma
+  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC  {32}] $axi_controller_dma
 
   # xadc
 
@@ -147,15 +145,11 @@
   connect_bd_net -net axi_mc_current_monitor_1_adc_it_clk_o [get_bd_ports adc_it_clk_o] [get_bd_pins axi_mc_current_monitor_1/adc_it_clk_o]
   connect_bd_net -net axi_mc_current_monitor_1_adc_vbus_clk_o [get_bd_ports adc_vbus_clk_o] [get_bd_pins axi_mc_current_monitor_1/adc_vbus_clk_o]
 
-  connect_bd_net -net axi_mc_current_monitor_1_adc_clk    [get_bd_pins axi_mc_current_monitor_1/adc_clk_o]      [get_bd_pins axi_current_monitor_1_dma/fifo_wr_clk]
-  connect_bd_net -net axi_mc_current_monitor_1_adc_dwr    [get_bd_pins axi_mc_current_monitor_1/adc_dwr_o]      [get_bd_pins axi_current_monitor_1_dma/fifo_wr_en]
-  connect_bd_net -net axi_mc_current_monitor_1_adc_ddata  [get_bd_pins axi_mc_current_monitor_1/adc_ddata_o]    [get_bd_pins axi_current_monitor_1_dma/fifo_wr_din]
-  connect_bd_net -net axi_mc_current_monitor_1_adc_dsync  [get_bd_pins axi_mc_current_monitor_1/adc_dsync_o]    [get_bd_pins axi_current_monitor_1_dma/fifo_wr_sync]
-  connect_bd_net -net axi_mc_current_monitor_1_adc_mon_data   [get_bd_pins axi_mc_current_monitor_1/adc_mon_data]
-  #connect_bd_net -net axi_mc_current_monitor_1_adc_dovf   [get_bd_pins axi_mc_current_monitor_1/adc_dovf_i]
-  #connect_bd_net -net axi_mc_current_monitor_1_adc_dunf   [get_bd_pins axi_mc_current_monitor_1/adc_dunf_i]
-
-  connect_bd_net [get_bd_pins axi_mc_current_monitor_1/i_ready_o] [get_bd_pins axi_mc_torque_controller/i_ready_i]
+  connect_bd_net -net axi_mc_current_monitor_1_adc_clk    [get_bd_pins axi_mc_current_monitor_1/adc_clk_o] [get_bd_pins axi_current_monitor_1_dma/fifo_wr_clk]
+  connect_bd_net -net axi_mc_current_monitor_1_adc_dwr    [get_bd_pins axi_mc_current_monitor_1/adc_dwr_o] [get_bd_pins axi_current_monitor_1_dma/fifo_wr_en]
+  connect_bd_net -net axi_mc_current_monitor_1_adc_ddata  [get_bd_pins axi_mc_current_monitor_1/adc_ddata_o] [get_bd_pins axi_current_monitor_1_dma/fifo_wr_din]
+  connect_bd_net -net axi_mc_current_monitor_1_adc_dsync  [get_bd_pins axi_mc_current_monitor_1/adc_dsync_o] [get_bd_pins axi_current_monitor_1_dma/fifo_wr_sync]
+  connect_bd_net -net axi_mc_current_monitor_1_adc_dovf   [get_bd_pins axi_mc_current_monitor_1/adc_dovf_i] [get_bd_pins axi_current_monitor_1_dma/fifo_wr_overflow]
 
   # interrupt
 
@@ -172,12 +166,11 @@
   connect_bd_net -net adc_it_dat_d_i [get_bd_ports adc_it_dat_d_i] [get_bd_pins axi_mc_current_monitor_2/adc_it_dat_i]
   connect_bd_net -net axi_mc_current_monitor_2_adc_it_clk_o [get_bd_ports adc_it_clk_d_o] [get_bd_pins axi_mc_current_monitor_2/adc_it_clk_o]
 
-  connect_bd_net -net axi_mc_current_monitor_2_adc_clk    [get_bd_pins axi_mc_current_monitor_2/adc_clk_o]      [get_bd_pins axi_current_monitor_2_dma/fifo_wr_clk]
-  connect_bd_net -net axi_mc_current_monitor_2_adc_dwr    [get_bd_pins axi_mc_current_monitor_2/adc_dwr_o]      [get_bd_pins axi_current_monitor_2_dma/fifo_wr_en]
-  connect_bd_net -net axi_mc_current_monitor_2_adc_ddata  [get_bd_pins axi_mc_current_monitor_2/adc_ddata_o]    [get_bd_pins axi_current_monitor_2_dma/fifo_wr_din]
-  connect_bd_net -net axi_mc_current_monitor_2_adc_dsync  [get_bd_pins axi_mc_current_monitor_2/adc_dsync_o]    [get_bd_pins axi_current_monitor_2_dma/fifo_wr_sync]
-  #connect_bd_net -net axi_mc_current_monitor_2_adc_dovf   [get_bd_pins axi_mc_current_monitor_2/adc_dovf_i]
-  #connect_bd_net -net axi_mc_current_monitor_2_adc_dunf   [get_bd_pins axi_mc_current_monitor_2/adc_dunf_i]
+  connect_bd_net -net axi_mc_current_monitor_2_adc_clk    [get_bd_pins axi_mc_current_monitor_2/adc_clk_o] [get_bd_pins axi_current_monitor_2_dma/fifo_wr_clk]
+  connect_bd_net -net axi_mc_current_monitor_2_adc_dwr    [get_bd_pins axi_mc_current_monitor_2/adc_dwr_o] [get_bd_pins axi_current_monitor_2_dma/fifo_wr_en]
+  connect_bd_net -net axi_mc_current_monitor_2_adc_ddata  [get_bd_pins axi_mc_current_monitor_2/adc_ddata_o] [get_bd_pins axi_current_monitor_2_dma/fifo_wr_din]
+  connect_bd_net -net axi_mc_current_monitor_2_adc_dsync  [get_bd_pins axi_mc_current_monitor_2/adc_dsync_o] [get_bd_pins axi_current_monitor_2_dma/fifo_wr_sync]
+  connect_bd_net -net axi_mc_current_monitor_2_adc_dovf   [get_bd_pins axi_mc_current_monitor_2/adc_dovf_i] [get_bd_pins axi_current_monitor_2_dma/fifo_wr_overflow]
 
   #interrupt
 
@@ -188,49 +181,55 @@
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_mc_speed_1/ref_clk] $sys_100m_clk_source
 
   connect_bd_net -net axi_mc_speed_1_position_o [get_bd_pins axi_mc_speed_1/position_o]
-  connect_bd_net -net axi_mc_speed_1_position_o [get_bd_pins axi_mc_speed_1/position_o]  [get_bd_pins axi_mc_torque_controller/position_i]
+  connect_bd_net -net axi_mc_speed_1_position_o [get_bd_pins axi_mc_speed_1/position_o]  [get_bd_pins axi_mc_controller/position_i]
   connect_bd_net -net axi_mc_speed_1_new_speed_o [get_bd_pins axi_mc_speed_1/new_speed_o]
-  connect_bd_net -net axi_mc_speed_1_new_speed_o [get_bd_pins axi_mc_speed_1/new_speed_o] [get_bd_pins axi_mc_torque_controller/new_speed_i]
+  connect_bd_net -net axi_mc_speed_1_new_speed_o [get_bd_pins axi_mc_speed_1/new_speed_o] [get_bd_pins pid_controller/new_motor_speed]
   connect_bd_net -net axi_mc_speed_1_speed_o [get_bd_pins axi_mc_speed_1/speed_o]
-  connect_bd_net -net axi_mc_speed_1_speed_o [get_bd_pins axi_mc_speed_1/speed_o] [get_bd_pins axi_mc_torque_controller/speed_i]
+  connect_bd_net -net axi_mc_speed_1_speed_o [get_bd_pins axi_mc_speed_1/speed_o] [get_bd_pins pid_controller/motor_speed] [get_bd_pins axi_mc_controller/new_speed_i]
 
-  connect_bd_net [get_bd_pins /axi_mc_torque_controller/fmc_m1_fault_i] [get_bd_ports /fmc_m1_fault_i]
-
-  connect_bd_net -net speed_detector_adc_clk    [get_bd_pins axi_mc_speed_1/adc_clk_o]      [get_bd_pins axi_speed_detector_dma/fifo_wr_clk]
-  connect_bd_net -net speed_detector_adc_dwr    [get_bd_pins axi_mc_speed_1/adc_dwr_o]      [get_bd_pins axi_speed_detector_dma/fifo_wr_en]
-  connect_bd_net -net speed_detector_adc_ddata  [get_bd_pins axi_mc_speed_1/adc_ddata_o]    [get_bd_pins axi_speed_detector_dma/fifo_wr_din]
-  #connect_bd_net -net speed_detector_adc_dovf   [get_bd_pins axi_mc_speed_1/adc_dovf_i]
-  #connect_bd_net -net speed_detector_adc_dunf   [get_bd_pins axi_mc_speed_1/adc_dunf_i]
+  connect_bd_net -net speed_detector_adc_clk    [get_bd_pins axi_mc_speed_1/adc_clk_o] [get_bd_pins axi_speed_detector_dma/fifo_wr_clk]
+  connect_bd_net -net speed_detector_adc_dwr    [get_bd_pins axi_mc_speed_1/adc_dwr_o] [get_bd_pins axi_speed_detector_dma/fifo_wr_en]
+  connect_bd_net -net speed_detector_adc_ddata  [get_bd_pins axi_mc_speed_1/adc_ddata_o] [get_bd_pins axi_speed_detector_dma/fifo_wr_din]
+  connect_bd_net -net speed_detector_adc_dovf   [get_bd_pins axi_mc_speed_1/adc_dovf_i] [get_bd_pins axi_speed_detector_dma/fifo_wr_overflow]
 
   # interrupt
 
   connect_bd_net -net axi_speed_detector_dma_irq [get_bd_pins axi_speed_detector_dma/irq] [get_bd_pins sys_concat_intc/In3]
 
-  # torque controller
+  # controller
 
-  connect_bd_net -net sys_100m_clk [get_bd_pins axi_mc_torque_controller/ref_clk] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_mc_controller/ref_clk] $sys_100m_clk_source
 
-  connect_bd_net -net axi_mc_current_monitor_1_it_o [get_bd_pins axi_mc_current_monitor_1/it_o] [get_bd_pins axi_mc_torque_controller/it_i]
-  connect_bd_net -net axi_mc_torque_controller_fmc_m1_en_o [get_bd_ports fmc_m1_en_o] [get_bd_pins axi_mc_torque_controller/fmc_m1_en_o]
-  connect_bd_net -net axi_mc_torque_controller_pwm_al_o [get_bd_ports pwm_al_o] [get_bd_pins axi_mc_torque_controller/pwm_al_o]
-  connect_bd_net -net axi_mc_torque_controller_pwm_ah_o [get_bd_ports pwm_ah_o] [get_bd_pins axi_mc_torque_controller/pwm_ah_o]
-  connect_bd_net -net axi_mc_torque_controller_pwm_cl_o [get_bd_ports pwm_cl_o] [get_bd_pins axi_mc_torque_controller/pwm_cl_o]
-  connect_bd_net -net axi_mc_torque_controller_pwm_ch_o [get_bd_ports pwm_ch_o] [get_bd_pins axi_mc_torque_controller/pwm_ch_o]
-  connect_bd_net -net axi_mc_torque_controller_pwm_bl_o [get_bd_ports pwm_bl_o] [get_bd_pins axi_mc_torque_controller/pwm_bl_o]
-  connect_bd_net -net axi_mc_torque_controller_pwm_bh_o [get_bd_ports pwm_bh_o] [get_bd_pins axi_mc_torque_controller/pwm_bh_o]
-  connect_bd_net -net axi_mc_torque_controller_gpo_o [get_bd_ports gpo_o] [get_bd_pins axi_mc_torque_controller/gpo_o]
-  connect_bd_net -net axi_mc_torque_controller_sensors_o [get_bd_pins axi_mc_torque_controller/sensors_o] [get_bd_pins axi_mc_speed_1/hall_bemf_i]
+  connect_bd_net -net axi_mc_controller_fmc_m1_en_o [get_bd_ports fmc_m1_en_o] [get_bd_pins axi_mc_controller/fmc_m1_en_o]
+  connect_bd_net -net axi_mc_controller_pwm_al_o [get_bd_ports pwm_al_o] [get_bd_pins axi_mc_controller/pwm_al_o]
+  connect_bd_net -net axi_mc_controller_pwm_ah_o [get_bd_ports pwm_ah_o] [get_bd_pins axi_mc_controller/pwm_ah_o]
+  connect_bd_net -net axi_mc_controller_pwm_cl_o [get_bd_ports pwm_cl_o] [get_bd_pins axi_mc_controller/pwm_cl_o]
+  connect_bd_net -net axi_mc_controller_pwm_ch_o [get_bd_ports pwm_ch_o] [get_bd_pins axi_mc_controller/pwm_ch_o]
+  connect_bd_net -net axi_mc_controller_pwm_bl_o [get_bd_ports pwm_bl_o] [get_bd_pins axi_mc_controller/pwm_bl_o]
+  connect_bd_net -net axi_mc_controller_pwm_bh_o [get_bd_ports pwm_bh_o] [get_bd_pins axi_mc_controller/pwm_bh_o]
+  connect_bd_net -net axi_mc_controller_gpo_o [get_bd_ports gpo_o] [get_bd_pins axi_mc_controller/gpo_o]
+  connect_bd_net -net axi_mc_controller_sensors_o [get_bd_pins axi_mc_controller/sensors_o] [get_bd_pins axi_mc_speed_1/hall_bemf_i]
+  connect_bd_net -net axi_mc_controller_fault [get_bd_pins /axi_mc_controller/fmc_m1_fault_i] [get_bd_ports /fmc_m1_fault_i]
 
-  connect_bd_net -net axi_mc_torque_controller_adc_clk    [get_bd_pins axi_mc_torque_controller/adc_clk_o]      [get_bd_pins axi_torque_controller_dma/fifo_wr_clk]
-  connect_bd_net -net axi_mc_torque_controller_adc_dwr    [get_bd_pins axi_mc_torque_controller/adc_dwr_o]      [get_bd_pins axi_torque_controller_dma/fifo_wr_en]
-  connect_bd_net -net axi_mc_torque_controller_adc_ddata  [get_bd_pins axi_mc_torque_controller/adc_ddata_o]    [get_bd_pins axi_torque_controller_dma/fifo_wr_din]
-  #connect_bd_net -net axi_mc_torque_controller_adc_dsync  [get_bd_pins axi_mc_torque_controller/adc_dsync_o]    [get_bd_pins axi_torque_controller_dma/fifo_wr_sync]
-  #connect_bd_net -net axi_mc_torque_controller_adc_dovf   [get_bd_pins axi_mc_torque_controller/adc_dovf_i]
-  #connect_bd_net -net axi_mc_torque_controller_adc_dunf   [get_bd_pins axi_mc_torque_controller/adc_dunf_i]
+  connect_bd_net -net axi_mc_controller_adc_clk    [get_bd_pins axi_mc_controller/adc_clk_o] [get_bd_pins axi_controller_dma/fifo_wr_clk]
+  connect_bd_net -net axi_mc_controller_adc_dwr    [get_bd_pins axi_mc_controller/adc_dwr_o] [get_bd_pins axi_controller_dma/fifo_wr_en]
+  connect_bd_net -net axi_mc_controller_adc_ddata  [get_bd_pins axi_mc_controller/adc_ddata_o] [get_bd_pins axi_controller_dma/fifo_wr_din]
+  connect_bd_net -net axi_mc_controller_adc_dovf   [get_bd_pins axi_mc_controller/adc_dovf_i] [get_bd_pins axi_controller_dma/fifo_wr_overflow]
+
+  connect_bd_net -net sys_100m_clk  [get_bd_pins pid_controller/clk]
+
+  connect_bd_net -net axi_mc_controller_ctrl_rst_o  [get_bd_pins axi_mc_controller/ctrl_rst_o] [get_bd_pins pid_controller/rst]
+  connect_bd_net -net axi_mc_controller_err_i [get_bd_pins axi_mc_controller/err_i] [get_bd_pins pid_controller/err]
+  connect_bd_net -net axi_mc_controller_pwm_i [get_bd_pins axi_mc_controller/pwm_i] [get_bd_pins pid_controller/pwm]
+  connect_bd_net -net axi_mc_controller_speed_rpm_i [get_bd_pins axi_mc_controller/speed_rpm_i] [get_bd_pins pid_controller/speed]
+  connect_bd_net -net axi_mc_controller_ref_speed_o [get_bd_pins axi_mc_controller/ref_speed_o] [get_bd_pins pid_controller/ref_speed]
+  connect_bd_net -net axi_mc_controller_kp_o [get_bd_pins axi_mc_controller/kp_o] [get_bd_pins pid_controller/kp]
+  connect_bd_net -net axi_mc_controller_ki_o [get_bd_pins axi_mc_controller/ki_o] [get_bd_pins pid_controller/ki]
+  connect_bd_net -net axi_mc_controller_kd_o [get_bd_pins axi_mc_controller/kd_o] [get_bd_pins pid_controller/kd]
 
   # interrupt
 
-  connect_bd_net -net axi_torque_controller_dma_irq [get_bd_pins axi_torque_controller_dma/irq] [get_bd_pins sys_concat_intc/In5]
+  connect_bd_net -net axi_controller_dma_irq [get_bd_pins axi_controller_dma/irq] [get_bd_pins sys_concat_intc/In5]
 
   # xadc
 
@@ -245,35 +244,17 @@
   connect_bd_net -net vauxn8_1 [get_bd_ports vauxn8] [get_bd_pins xadc_wiz_1/vauxn8]
   connect_bd_net -net xadc_wiz_1_muxaddr_out [get_bd_ports muxaddr_out] [get_bd_pins xadc_wiz_1/muxaddr_out]
 
-  # ila
-  set ila_current_monitor [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_current_monitor]
-  set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_current_monitor
-  set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_current_monitor
-  set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_current_monitor
-  set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $ila_current_monitor
-  set_property -dict [list CONFIG.C_PROBE3_WIDTH {64}] $ila_current_monitor
-  set_property -dict [list CONFIG.C_PROBE4_WIDTH {32}] $ila_current_monitor
-  set_property -dict [list CONFIG.C_EN_STRG_QUAL {1} ]  $ila_current_monitor
-  set_property -dict [list CONFIG.C_ADV_TRIGGER {true}]  $ila_current_monitor
-
-  connect_bd_net -net axi_mc_current_monitor_1_adc_clk        [get_bd_pins ila_current_monitor/probe0]
-  connect_bd_net -net axi_mc_current_monitor_1_adc_dwr        [get_bd_pins ila_current_monitor/probe1]
-  connect_bd_net -net axi_mc_current_monitor_1_adc_dsync      [get_bd_pins ila_current_monitor/probe2]
-  connect_bd_net -net axi_mc_current_monitor_1_adc_ddata      [get_bd_pins ila_current_monitor/probe3]
-  connect_bd_net -net axi_mc_current_monitor_1_adc_mon_data   [get_bd_pins ila_current_monitor/probe4]
-  connect_bd_net -net sys_100m_clk                            [get_bd_pins ila_current_monitor/clk]
-
   # interconnect (cpu)
 
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m07_axi [get_bd_intf_pins axi_cpu_interconnect/M07_AXI] [get_bd_intf_pins axi_mc_current_monitor_1/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m08_axi [get_bd_intf_pins axi_cpu_interconnect/M08_AXI] [get_bd_intf_pins axi_mc_speed_1/s_axi]
-  connect_bd_intf_net -intf_net axi_cpu_interconnect_m09_axi [get_bd_intf_pins axi_cpu_interconnect/M09_AXI] [get_bd_intf_pins axi_mc_torque_controller/s_axi]
+  connect_bd_intf_net -intf_net axi_cpu_interconnect_m09_axi [get_bd_intf_pins axi_cpu_interconnect/M09_AXI] [get_bd_intf_pins axi_mc_controller/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m10_axi [get_bd_intf_pins axi_cpu_interconnect/M10_AXI] [get_bd_intf_pins axi_mc_current_monitor_2/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m11_axi [get_bd_intf_pins axi_cpu_interconnect/M11_AXI] [get_bd_intf_pins xadc_wiz_1/s_axi_lite]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m12_axi [get_bd_intf_pins axi_cpu_interconnect/M12_AXI] [get_bd_intf_pins axi_speed_detector_dma/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m13_axi [get_bd_intf_pins axi_cpu_interconnect/M13_AXI] [get_bd_intf_pins axi_current_monitor_1_dma/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m14_axi [get_bd_intf_pins axi_cpu_interconnect/M14_AXI] [get_bd_intf_pins axi_current_monitor_2_dma/s_axi]
-  connect_bd_intf_net -intf_net axi_cpu_interconnect_m15_axi [get_bd_intf_pins axi_cpu_interconnect/M15_AXI] [get_bd_intf_pins axi_torque_controller_dma/s_axi]
+  connect_bd_intf_net -intf_net axi_cpu_interconnect_m15_axi [get_bd_intf_pins axi_cpu_interconnect/M15_AXI] [get_bd_intf_pins axi_controller_dma/s_axi]
 
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M07_ACLK] $sys_100m_clk_source
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M08_ACLK] $sys_100m_clk_source
@@ -337,17 +318,17 @@
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S00_ACLK] $sys_100m_clk_source
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S00_ARESETN] $sys_100m_resetn_source
 
-  # interconnect (torque controller)
+  # interconnect (controller)
 
-  connect_bd_net -net sys_100m_clk [get_bd_pins axi_mc_torque_controller/s_axi_aclk] $sys_100m_clk_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mc_torque_controller/s_axi_aresetn] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_mc_controller/s_axi_aclk] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mc_controller/s_axi_aresetn] $sys_100m_resetn_source
 
-  connect_bd_net -net sys_100m_clk [get_bd_pins axi_torque_controller_dma/s_axi_aclk] $sys_100m_clk_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_torque_controller_dma/s_axi_aresetn] $sys_100m_resetn_source
-  connect_bd_net -net sys_100m_clk [get_bd_pins axi_torque_controller_dma/m_dest_axi_aclk] $sys_100m_clk_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_torque_controller_dma/m_dest_axi_aresetn] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_controller_dma/s_axi_aclk] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_controller_dma/s_axi_aresetn] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_controller_dma/m_dest_axi_aclk] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_controller_dma/m_dest_axi_aresetn] $sys_100m_resetn_source
 
-  connect_bd_intf_net -intf_net axi_mem_interconnect_s03_axi [get_bd_intf_pins axi_mem_interconnect/S03_AXI] [get_bd_intf_pins axi_torque_controller_dma/m_dest_axi]
+  connect_bd_intf_net -intf_net axi_mem_interconnect_s03_axi [get_bd_intf_pins axi_mem_interconnect/S03_AXI] [get_bd_intf_pins axi_controller_dma/m_dest_axi]
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S03_ACLK] $sys_100m_clk_source
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S03_ARESETN] $sys_100m_resetn_source
 
@@ -366,15 +347,15 @@
 
   create_bd_addr_seg -range 0x10000 -offset 0x40400000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_current_monitor_1_dma/s_axi/axi_lite] SEG_data_c_m_1_dma
   create_bd_addr_seg -range 0x10000 -offset 0x40410000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_speed_detector_dma/s_axi/axi_lite] SEG_data_s_d_dma
-  create_bd_addr_seg -range 0x10000 -offset 0x40420000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_torque_controller_dma/s_axi/axi_lite] SEG_data_t_c_dma
+  create_bd_addr_seg -range 0x10000 -offset 0x40420000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_controller_dma/s_axi/axi_lite] SEG_data_t_c_dma
   create_bd_addr_seg -range 0x10000 -offset 0x40430000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_current_monitor_2_dma/s_axi/axi_lite] SEG_data_c_m_2_dma
   create_bd_addr_seg -range 0x10000 -offset 0x40500000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_current_monitor_1/s_axi/axi_lite] SEG_data_c_m_1
   create_bd_addr_seg -range 0x10000 -offset 0x40510000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_speed_1/s_axi/axi_lite] SEG_data_s_d
-  create_bd_addr_seg -range 0x10000 -offset 0x40520000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_torque_controller/s_axi/axi_lite] SEG_data_t_c
+  create_bd_addr_seg -range 0x10000 -offset 0x40520000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_controller/s_axi/axi_lite] SEG_data_t_c
   create_bd_addr_seg -range 0x10000 -offset 0x40530000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_current_monitor_2/s_axi/axi_lite] SEG_data_c_m_2
   create_bd_addr_seg -range 0x10000 -offset 0x43200000 $sys_addr_cntrl_space  [get_bd_addr_segs xadc_wiz_1/s_axi_lite/Reg] SEG_data_xadc
 
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_current_monitor_1_dma/m_dest_axi] [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_hp1_ddr_lowocm
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_speed_detector_dma/m_dest_axi] [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_hp1_ddr_lowocm
-  create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_torque_controller_dma/m_dest_axi] [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_hp1_ddr_lowocm
+  create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_controller_dma/m_dest_axi] [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_hp1_ddr_lowocm
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_current_monitor_2_dma/m_dest_axi] [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_hp1_ddr_lowocm
