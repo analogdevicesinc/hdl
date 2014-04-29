@@ -63,7 +63,7 @@ module ad9671_fmc_spi (
 
   inout           spi_ad9671_sdio;
   inout           spi_ad9516_sdio;
-  input           spi_ad9553_sdio;
+  inout           spi_ad9553_sdio;
 
   // internal registers
 
@@ -114,23 +114,14 @@ module ad9671_fmc_spi (
 
   // io buffers
 
-  IOBUF i_iobuf_ad9671_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_ad9671_miso_s),
-    .IO (spi_ad9671_sdio));
+  assign spi_ad9671_miso_s = spi_ad9671_sdio;
+  assign spi_ad9671_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
-  IOBUF i_iobuf_ad9516_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_ad9516_miso_s),
-    .IO (spi_ad9516_sdio));
+  assign spi_ad9516_miso_s = spi_ad9516_sdio;
+  assign spi_ad9516_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
-  IOBUF i_iobuf_clk_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_ad9553_miso_s),
-    .IO (spi_ad9553_sdio));
+  assign spi_ad9553_miso_s = spi_ad9553_sdio;
+  assign spi_ad9553_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
 
