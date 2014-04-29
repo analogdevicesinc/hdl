@@ -78,19 +78,19 @@
          type = "String";
       }
    }
-   element sys_ethernet_dma_tx.csr
-   {
-      datum baseAddress
-      {
-         value = "86025216";
-         type = "String";
-      }
-   }
    element sys_ethernet_dma_rx.csr
    {
       datum baseAddress
       {
          value = "86025280";
+         type = "String";
+      }
+   }
+   element sys_ethernet_dma_tx.csr
+   {
+      datum baseAddress
+      {
+         value = "86025216";
          type = "String";
       }
    }
@@ -115,14 +115,6 @@
          type = "String";
       }
    }
-   element sys_ddr3_dmaconnect.s0
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
    element sys_ddr3_interconnect.s0
    {
       datum _lockedAddress
@@ -130,6 +122,14 @@
          value = "0";
          type = "boolean";
       }
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
+   element sys_ddr3_dmaconnect.s0
+   {
       datum baseAddress
       {
          value = "0";
@@ -144,19 +144,11 @@
          type = "String";
       }
    }
-   element sys_tcm_mem.s1
+   element sys_gpio.s1
    {
       datum baseAddress
       {
-         value = "86016000";
-         type = "String";
-      }
-   }
-   element sys_ethernet_desc_mem.s1
-   {
-      datum baseAddress
-      {
-         value = "0";
+         value = "86025408";
          type = "String";
       }
    }
@@ -165,6 +157,14 @@
       datum baseAddress
       {
          value = "86025376";
+         type = "String";
+      }
+   }
+   element sys_ethernet_desc_mem.s1
+   {
+      datum baseAddress
+      {
+         value = "0";
          type = "String";
       }
    }
@@ -181,11 +181,11 @@
          type = "String";
       }
    }
-   element sys_gpio.s1
+   element sys_tcm_mem.s1
    {
       datum baseAddress
       {
-         value = "86025408";
+         value = "86016000";
          type = "String";
       }
    }
@@ -1595,7 +1595,7 @@
   <parameter name="sdc_constraint" value="1.0" />
   <parameter name="DEVICE_FAMILY" value="Arria V" />
   <parameter name="DATA_PATH" value="RX" />
-  <parameter name="SUBCLASSV" value="1" />
+  <parameter name="SUBCLASSV" value="0" />
   <parameter name="lane_rate" value="1600" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="bonded_mode" value="bonded" />

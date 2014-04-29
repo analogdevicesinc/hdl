@@ -47,11 +47,11 @@ set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[3]
 
 set_location_assignment PIN_AL8   -to rx_sync
 set_location_assignment PIN_AK8   -to "rx_sync(n)"
-set_instance_assignment -name IO_STANDARD "2.5 V" -to rx_sync
+set_instance_assignment -name IO_STANDARD LVDS -to rx_sync
 
 set_location_assignment PIN_AP7   -to rx_sysref
 set_location_assignment PIN_AN7   -to "rx_sysref(n)"
-set_instance_assignment -name IO_STANDARD "2.5 V" -to rx_sysref
+set_instance_assignment -name IO_STANDARD LVDS -to rx_sysref
 
 # spi
 
