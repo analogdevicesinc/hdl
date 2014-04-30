@@ -113,32 +113,34 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio41
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio42
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio43
 
-# gpio
+# led & switches
 
-set_location_assignment PIN_AW23 -to fpga_button_pio[3]
-set_location_assignment PIN_AW24 -to fpga_button_pio[2]
-set_location_assignment PIN_AP24 -to fpga_button_pio[1]
-set_location_assignment PIN_AT23 -to fpga_button_pio[0]
-set_location_assignment PIN_AU23 -to fpga_dipsw_pio[3]
-set_location_assignment PIN_AE24 -to fpga_dipsw_pio[2]
-set_location_assignment PIN_AF24 -to fpga_dipsw_pio[1]
-set_location_assignment PIN_AL24 -to fpga_dipsw_pio[0]
-set_location_assignment PIN_AD24 -to fpga_led_pio[3]
-set_location_assignment PIN_AT24 -to fpga_led_pio[2]
-set_location_assignment PIN_AU24 -to fpga_led_pio[1]
-set_location_assignment PIN_AH24 -to fpga_led_pio[0]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_button_pio[3]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_button_pio[2]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_button_pio[1]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_button_pio[0]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_dipsw_pio[3]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_dipsw_pio[2]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_dipsw_pio[1]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_dipsw_pio[0]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_led_pio[3]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_led_pio[2]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_led_pio[1]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to fpga_led_pio[0]
+set_location_assignment PIN_AD24 -to led[3]
+set_location_assignment PIN_AT24 -to led[2]
+set_location_assignment PIN_AU24 -to led[1]
+set_location_assignment PIN_AH24 -to led[0]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to led[3]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to led[2]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to led[1]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to led[0]
+
+set_location_assignment PIN_AW23 -to push_buttons[3]
+set_location_assignment PIN_AW24 -to push_buttons[2]
+set_location_assignment PIN_AP24 -to push_buttons[1]
+set_location_assignment PIN_AT23 -to push_buttons[0]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to push_buttons[3]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to push_buttons[2]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to push_buttons[1]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to push_buttons[0]
+
+set_location_assignment PIN_AU23 -to dip_switches[3]
+set_location_assignment PIN_AE24 -to dip_switches[2]
+set_location_assignment PIN_AF24 -to dip_switches[1]
+set_location_assignment PIN_AL24 -to dip_switches[0]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to dip_switches[3]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to dip_switches[2]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to dip_switches[1]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to dip_switches[0]
 
 # ddr
 
