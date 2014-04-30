@@ -160,15 +160,15 @@ set_property -dict  {PACKAGE_PIN  AJ9   IOSTANDARD  LVCMOS18} [get_ports fan_pwm
 
 # sw/led
 
-set_property -dict  {PACKAGE_PIN  AN16  IOSTANDARD  LVCMOS12} [get_ports gpio_sw[0]]  ## GPIO_DIP_SW0
-set_property -dict  {PACKAGE_PIN  AN19  IOSTANDARD  LVCMOS12} [get_ports gpio_sw[1]]  ## GPIO_DIP_SW1
-set_property -dict  {PACKAGE_PIN  AP18  IOSTANDARD  LVCMOS12} [get_ports gpio_sw[2]]  ## GPIO_DIP_SW2
-set_property -dict  {PACKAGE_PIN  AN14  IOSTANDARD  LVCMOS12} [get_ports gpio_sw[3]]  ## GPIO_DIP_SW3
-set_property -dict  {PACKAGE_PIN  AD10  IOSTANDARD  LVCMOS18} [get_ports gpio_sw[4]]  ## GPIO_SW_N
-set_property -dict  {PACKAGE_PIN  AE8   IOSTANDARD  LVCMOS18} [get_ports gpio_sw[5]]  ## GPIO_SW_E
-set_property -dict  {PACKAGE_PIN  AF8   IOSTANDARD  LVCMOS18} [get_ports gpio_sw[6]]  ## GPIO_SW_S
-set_property -dict  {PACKAGE_PIN  AF9   IOSTANDARD  LVCMOS18} [get_ports gpio_sw[7]]  ## GPIO_SW_W
-set_property -dict  {PACKAGE_PIN  AE10  IOSTANDARD  LVCMOS18} [get_ports gpio_sw[8]]  ## GPIO_SW_C
+set_property -dict  {PACKAGE_PIN  AN16  IOSTANDARD  LVCMOS12  DRIVE 8} [get_ports gpio_sw[0]];   ## GPIO_DIP_SW0
+set_property -dict  {PACKAGE_PIN  AN19  IOSTANDARD  LVCMOS12  DRIVE 8} [get_ports gpio_sw[1]];   ## GPIO_DIP_SW1
+set_property -dict  {PACKAGE_PIN  AP18  IOSTANDARD  LVCMOS12  DRIVE 8} [get_ports gpio_sw[2]];   ## GPIO_DIP_SW2
+set_property -dict  {PACKAGE_PIN  AN14  IOSTANDARD  LVCMOS12  DRIVE 8} [get_ports gpio_sw[3]];   ## GPIO_DIP_SW3
+set_property -dict  {PACKAGE_PIN  AD10  IOSTANDARD  LVCMOS18  DRIVE 8} [get_ports gpio_sw[4]];   ## GPIO_SW_N
+set_property -dict  {PACKAGE_PIN  AE8   IOSTANDARD  LVCMOS18  DRIVE 8} [get_ports gpio_sw[5]];   ## GPIO_SW_E
+set_property -dict  {PACKAGE_PIN  AF8   IOSTANDARD  LVCMOS18  DRIVE 8} [get_ports gpio_sw[6]];   ## GPIO_SW_S
+set_property -dict  {PACKAGE_PIN  AF9   IOSTANDARD  LVCMOS18  DRIVE 8} [get_ports gpio_sw[7]];   ## GPIO_SW_W
+set_property -dict  {PACKAGE_PIN  AE10  IOSTANDARD  LVCMOS18  DRIVE 8} [get_ports gpio_sw[8]];   ## GPIO_SW_C
 
 set_property -dict  {PACKAGE_PIN  AP8   IOSTANDARD  LVCMOS18} [get_ports gpio_led[0]]
 set_property -dict  {PACKAGE_PIN  H23   IOSTANDARD  LVCMOS18} [get_ports gpio_led[1]]
@@ -215,13 +215,13 @@ set_property -dict  {PACKAGE_PIN  AE12  IOSTANDARD  LVCMOS18} [get_ports spdif]
 # clocks
 
 create_clock -name cpu_clk      -period 10.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/addn_ui_clkout1]
-create_clock -name mem_clk      -period  5.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/c0_ddr4_ui_clk]
+#create_clock -name mem_clk      -period  5.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/c0_ddr4_ui_clk]
 create_clock -name m200_clk     -period  5.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/addn_ui_clkout2]
 create_clock -name hdmi_clk     -period  6.73 [get_pins i_system_wrapper/system_i/axi_hdmi_clkgen/clk_0]
 create_clock -name spdif_clk    -period 50.00 [get_pins i_system_wrapper/system_i/sys_audio_clkgen/clk_out1]
 
 set_clock_groups -asynchronous -group {cpu_clk}
-set_clock_groups -asynchronous -group {mem_clk}
+#set_clock_groups -asynchronous -group {mem_clk}
 set_clock_groups -asynchronous -group {m200_clk}
 set_clock_groups -asynchronous -group {hdmi_clk}
 set_clock_groups -asynchronous -group {spdif_clk}

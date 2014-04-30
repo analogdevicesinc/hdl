@@ -109,6 +109,9 @@ module axi_hdmi_tx (
   parameter   C_BASEADDR = 32'hffffffff;
   parameter   C_HIGHADDR = 32'h00000000;
 
+  localparam  XILINX_7SERIES = 0;
+  localparam  XILINX_ULTRASCALE = 1;
+
   // hdmi interface
 
   input           hdmi_clk;
@@ -362,6 +365,16 @@ module axi_hdmi_tx (
 
   // hdmi output clock
 
+  generate
+  if (PCORE_DEVICE_TYPE == XILINX_ULTRASCALE) begin
+  ODDRE1 #(.SRVAL(1'b0)) i_clk_oddr (
+    .SR (1'b0),
+    .D1 (1'b1),
+    .D2 (1'b0),
+    .C (hdmi_clk),
+    .Q (hdmi_out_clk));
+  end
+  if (PCORE_DEVICE_TYPE == XILINX_7SERIES) begin
   ODDR #(.INIT(1'b0)) i_clk_oddr (
     .R (1'b0),
     .S (1'b0),
@@ -370,6 +383,8 @@ module axi_hdmi_tx (
     .D2 (1'b0),
     .C (hdmi_clk),
     .Q (hdmi_out_clk));
+  end
+  endgenerate
 
 endmodule
 

@@ -126,7 +126,6 @@ module system_top (
 
   output          fan_pwm;
 
-  inout   [ 6:0]  gpio_lcd;
   inout   [ 7:0]  gpio_led;
   inout   [ 8:0]  gpio_sw;
 
@@ -141,6 +140,34 @@ module system_top (
   output  [15:0]  hdmi_data;
 
   output          spdif;
+
+  // internal registers
+
+  reg     [31:0]  sys_reset_m = 'd0;
+  reg             sys_cpu_rst = 'd0;
+  reg             sys_cpu_rstn = 'd0;
+
+  // internal signals
+
+  wire            mdm_reset;
+  wire            mig_reset;
+  wire            mig_ready;
+  wire            sys_cpu_clk;
+
+  // default logic
+
+  assign fan_pwm = 1'b1;
+  assign sys_reset_req = mdm_reset | mig_reset | ~mig_ready;
+
+  always @(posedge sys_cpu_clk) begin
+    if (sys_reset_req == 1'b1) begin
+      sys_reset_m <= {32{1'b1}};
+    end else begin
+      sys_reset_m <= {sys_reset_m[30:0], 1'b0};
+    end
+    sys_cpu_rst <= sys_reset_m[31];
+    sys_cpu_rstn <= ~sys_reset_m[31];
+  end
 
   // instantiations
 
@@ -160,7 +187,6 @@ module system_top (
     .c0_ddr4_odt (ddr4_odt),
     .c0_ddr4_par (ddr4_par),
     .c0_ddr4_reset_n (ddr4_reset_n),
-    .fan_pwm (fan_pwm),
     .gpio_lcd_tri_io (),
     .gpio_led_tri_io (gpio_led),
     .gpio_sw_tri_io (gpio_sw),
@@ -174,21 +200,26 @@ module system_top (
     .iic_rstn (iic_rstn),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio_io),
-    .mgt_clk_clk_n (sgmii_clk_n),
-    .mgt_clk_clk_p (sgmii_clk_p),
+    .mdm_reset (mdm_reset),
+    .mig_ready (mig_ready),
+    .mig_reset (mig_reset),
     .phy_rst_n (phy_rst_n),
-    .sgmii_rxn (sgmii_rxn),
-    .sgmii_rxp (sgmii_rxp),
-    .sgmii_txn (sgmii_txn),
-    .sgmii_txp (sgmii_txp),
+    .phy_sd (1'b1),
+    .sgmii_clk_n (sgmii_clk_n),
+    .sgmii_clk_p (sgmii_clk_p),
+    .sgmii_rx_n (sgmii_rx_n),
+    .sgmii_rx_p (sgmii_rx_p),
+    .sgmii_tx_n (sgmii_tx_n),
+    .sgmii_tx_p (sgmii_tx_p),
     .spdif (spdif),
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
+    .sys_cpu_clk (sys_cpu_clk),
+    .sys_cpu_rst (sys_cpu_rst),
+    .sys_cpu_rstn (sys_cpu_rstn),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
-    .unc_int0 (1'b0),
-    .unc_int1 (1'b0),
     .unc_int2 (1'b0),
     .unc_int3 (1'b0),
     .unc_int4 (1'b0));
