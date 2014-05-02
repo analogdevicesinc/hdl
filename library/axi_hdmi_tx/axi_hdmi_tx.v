@@ -111,6 +111,7 @@ module axi_hdmi_tx (
 
   localparam  XILINX_7SERIES = 0;
   localparam  XILINX_ULTRASCALE = 1;
+  localparam  ALTERA_5SERIES = 16;
 
   // hdmi interface
 
@@ -373,6 +374,20 @@ module axi_hdmi_tx (
     .D2 (1'b0),
     .C (hdmi_clk),
     .Q (hdmi_out_clk));
+  end
+  if (PCORE_DEVICE_TYPE == ALTERA_5SERIES) begin
+  altddio_out #(.WIDTH(1)) i_clk_oddr (
+    .aclr (1'b0),
+    .aset (1'b0),
+    .sclr (1'b0),
+    .sset (1'b0),
+    .oe (1'b1),
+    .outclocken (1'b1),
+    .datain_h (1'b1),
+    .datain_l (1'b0),
+    .outclock (hdmi_clk),
+    .oe_out (),
+    .dataout (hdmi_out_clk));
   end
   if (PCORE_DEVICE_TYPE == XILINX_7SERIES) begin
   ODDR #(.INIT(1'b0)) i_clk_oddr (
