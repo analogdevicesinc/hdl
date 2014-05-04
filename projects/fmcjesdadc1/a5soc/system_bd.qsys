@@ -16,7 +16,7 @@
    {
       datum baseAddress
       {
-         value = "66576";
+         value = "83280";
          type = "String";
       }
    }
@@ -24,11 +24,55 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "13";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element axi_ad9250_1
+   {
+      datum _sortIndex
+      {
+         value = "15";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element axi_dmac_0
+   {
+      datum _sortIndex
+      {
+         value = "14";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element axi_dmac_1
+   {
+      datum _sortIndex
+      {
+         value = "16";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element axi_hdmi_dma
    {
       datum _sortIndex
       {
@@ -36,15 +80,7 @@
          type = "int";
       }
    }
-   element axi_dmac_0
-   {
-      datum _sortIndex
-      {
-         value = "10";
-         type = "int";
-      }
-   }
-   element axi_dmac_1
+   element axi_hdmi_tx
    {
       datum _sortIndex
       {
@@ -56,7 +92,15 @@
    {
       datum baseAddress
       {
-         value = "66584";
+         value = "83288";
+         type = "String";
+      }
+   }
+   element axi_hdmi_dma.csr
+   {
+      datum baseAddress
+      {
+         value = "83200";
          type = "String";
       }
    }
@@ -88,15 +132,15 @@
    {
       datum baseAddress
       {
-         value = "65536";
+         value = "81920";
          type = "String";
       }
    }
-   element sys_gpio.s1
+   element sys_hdmi_pll_reconfig.mgmt_avalon_slave
    {
       datum baseAddress
       {
-         value = "66560";
+         value = "82944";
          type = "String";
       }
    }
@@ -108,15 +152,23 @@
          type = "String";
       }
    }
-   element axi_dmac_0.s_axi
+   element sys_gpio.s1
    {
       datum baseAddress
       {
-         value = "32768";
+         value = "83264";
          type = "String";
       }
    }
    element axi_ad9250_0.s_axi
+   {
+      datum baseAddress
+      {
+         value = "65536";
+         type = "String";
+      }
+   }
+   element axi_dmac_0.s_axi
    {
       datum baseAddress
       {
@@ -128,7 +180,15 @@
    {
       datum baseAddress
       {
-         value = "16384";
+         value = "32768";
+         type = "String";
+      }
+   }
+   element axi_hdmi_tx.s_axi
+   {
+      datum baseAddress
+      {
+         value = "0";
          type = "String";
       }
    }
@@ -136,7 +196,7 @@
    {
       datum baseAddress
       {
-         value = "0";
+         value = "16384";
          type = "String";
       }
    }
@@ -153,6 +213,22 @@
       datum _sortIndex
       {
          value = "8";
+         type = "int";
+      }
+   }
+   element sys_hdmi_pll
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+   }
+   element sys_hdmi_pll_reconfig
+   {
+      datum _sortIndex
+      {
+         value = "10";
          type = "int";
       }
    }
@@ -184,32 +260,52 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "20";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_jesd204b_s1_pll
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "18";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_jesd204b_s1_ref_clk
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "17";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_jesd204b_s1_rx_clk
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "19";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_jtag_hps_axi
@@ -255,7 +351,7 @@
  <parameter name="generationId" value="0" />
  <parameter name="globalResetBus" value="false" />
  <parameter name="hdlLanguage" value="VERILOG" />
- <parameter name="maxAdditionalLatency" value="2" />
+ <parameter name="maxAdditionalLatency" value="4" />
  <parameter name="projectName">fmcjesdadc1_a5soc.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
@@ -451,6 +547,31 @@
  <interface
    name="sys_gpio_external_connection"
    internal="sys_gpio.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="axi_hdmi_tx_0_hdmi_if"
+   internal="axi_hdmi_tx.hdmi_if"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sys_hdmi_pll_reconfig_to_pll"
+   internal="sys_hdmi_pll.reconfig_to_pll"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sys_hdmi_pll_reconfig_from_pll"
+   internal="sys_hdmi_pll.reconfig_from_pll"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sys_hdmi_pll_reconfig_reconfig_to_pll"
+   internal="sys_hdmi_pll_reconfig.reconfig_to_pll"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sys_hdmi_pll_reconfig_reconfig_from_pll"
+   internal="sys_hdmi_pll_reconfig.reconfig_from_pll"
    type="conduit"
    dir="end" />
  <module kind="altera_hps" version="13.1" enabled="1" name="sys_hps">
@@ -671,6 +792,7 @@
   <parameter name="USE_FAKE_PHY" value="false" />
   <parameter name="FORCE_MAX_LATENCY_COUNT_WIDTH" value="0" />
   <parameter name="ENABLE_NON_DESTRUCTIVE_CALIB" value="false" />
+  <parameter name="ENABLE_DELAY_CHAIN_WRITE" value="false" />
   <parameter name="TRACKING_ERROR_TEST" value="false" />
   <parameter name="TRACKING_WATCH_TEST" value="false" />
   <parameter name="MARGIN_VARIATION_TEST" value="false" />
@@ -848,20 +970,20 @@
   <parameter name="GPIO_Enable">Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,No,Yes,No,Yes,No,Yes,Yes,No,No,No,No,No,No,No,Yes,No,No,No,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
   <parameter name="LOANIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
   <parameter name="S2FCLK_USER0CLK_Enable" value="true" />
-  <parameter name="S2FCLK_USER0CLK_FREQ" value="200" />
+  <parameter name="S2FCLK_USER0CLK_FREQ" value="150" />
   <parameter name="S2FCLK_USER1CLK_Enable" value="false" />
-  <parameter name="S2FCLK_USER1CLK_FREQ" value="100" />
+  <parameter name="S2FCLK_USER1CLK_FREQ" value="150" />
   <parameter name="S2FCLK_USER2CLK_Enable" value="false" />
   <parameter name="S2FCLK_USER2CLK_FREQ" value="100" />
   <parameter name="F2SCLK_PERIPHCLK_Enable" value="false" />
   <parameter name="F2SCLK_PERIPHCLK_FREQ" value="100" />
   <parameter name="F2SCLK_SDRAMCLK_Enable" value="false" />
   <parameter name="F2SCLK_SDRAMCLK_FREQ" value="100" />
-  <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
-  <parameter name="H2F_AXI_CLOCK_FREQ" value="50000000" />
-  <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="50000000" />
-  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="50000000" />
-  <parameter name="F2H_SDRAM1_CLOCK_FREQ" value="200000000" />
+  <parameter name="F2H_AXI_CLOCK_FREQ" value="100000000" />
+  <parameter name="H2F_AXI_CLOCK_FREQ" value="100000000" />
+  <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="100000000" />
+  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="100000000" />
+  <parameter name="F2H_SDRAM1_CLOCK_FREQ" value="150000000" />
   <parameter name="F2H_SDRAM2_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM3_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM4_CLOCK_FREQ" value="100" />
@@ -946,7 +1068,7 @@
    name="sys_id">
   <parameter name="id" value="-1395322095" />
   <parameter name="timestamp" value="0" />
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
  </module>
  <module
@@ -979,7 +1101,7 @@
   <parameter name="simDoTestBenchWiring" value="false" />
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="32" />
-  <parameter name="clockRate" value="50000000" />
+  <parameter name="clockRate" value="100000000" />
  </module>
  <module
    kind="altera_avalon_onchip_memory2"
@@ -1022,7 +1144,7 @@
   <parameter name="AUTO_DEVICE" value="5ASTFD5K3F40I3ES" />
  </module>
  <module kind="clock_source" version="13.1" enabled="1" name="sys_clk">
-  <parameter name="clockFrequency" value="50000000" />
+  <parameter name="clockFrequency" value="100000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
@@ -1031,7 +1153,7 @@
   <parameter name="PCORE_ID" value="0" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
   <parameter name="PCORE_AXI_ID_WIDTH" value="14" />
-  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_0">
@@ -1050,13 +1172,13 @@
   <parameter name="C_CYCLIC" value="1" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
   <parameter name="C_DMA_TYPE_SRC" value="2" />
-  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
  </module>
  <module kind="axi_ad9250" version="1.0" enabled="1" name="axi_ad9250_1">
   <parameter name="PCORE_ID" value="1" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
   <parameter name="PCORE_AXI_ID_WIDTH" value="14" />
-  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_1">
@@ -1075,7 +1197,7 @@
   <parameter name="C_CYCLIC" value="1" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
   <parameter name="C_DMA_TYPE_SRC" value="2" />
-  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
  </module>
  <module
    kind="altera_jesd204"
@@ -1353,6 +1475,252 @@
   <parameter name="EXPLICIT_CLOCK_RATE" value="125000000" />
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
+ <module kind="axi_hdmi_tx" version="1.0" enabled="1" name="axi_hdmi_tx">
+  <parameter name="PCORE_ID" value="0" />
+  <parameter name="PCORE_DEVICE_TYPE" value="16" />
+  <parameter name="PCORE_AXI_ID_WIDTH" value="14" />
+  <parameter name="PCORE_Cr_Cb_N" value="0" />
+  <parameter name="PCORE_EMBEDDED_SYNC" value="0" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_HDMI_CLOCK_CLOCK_RATE" value="148484848" />
+  <parameter name="AUTO_VDMA_CLOCK_CLOCK_RATE" value="100000000" />
+ </module>
+ <module kind="altera_pll" version="13.1" enabled="1" name="sys_hdmi_pll">
+  <parameter name="debug_print_output" value="false" />
+  <parameter name="debug_use_rbc_taf_method" value="false" />
+  <parameter name="device_family" value="Arria V" />
+  <parameter name="device" value="5ASTFD5K3F40I3ES" />
+  <parameter name="gui_device_speed_grade" value="2" />
+  <parameter name="gui_pll_mode" value="Integer-N PLL" />
+  <parameter name="gui_reference_clock_frequency" value="100.0" />
+  <parameter name="gui_channel_spacing" value="0.0" />
+  <parameter name="gui_operation_mode" value="direct" />
+  <parameter name="gui_feedback_clock" value="Global Clock" />
+  <parameter name="gui_fractional_cout" value="32" />
+  <parameter name="gui_dsm_out_sel" value="1st_order" />
+  <parameter name="gui_use_locked" value="false" />
+  <parameter name="gui_en_adv_params" value="false" />
+  <parameter name="gui_number_of_clocks" value="1" />
+  <parameter name="gui_multiply_factor" value="1" />
+  <parameter name="gui_frac_multiply_factor" value="1" />
+  <parameter name="gui_divide_factor_n" value="1" />
+  <parameter name="gui_cascade_counter0" value="false" />
+  <parameter name="gui_output_clock_frequency0" value="148.484848" />
+  <parameter name="gui_divide_factor_c0" value="1" />
+  <parameter name="gui_actual_output_clock_frequency0" value="0 MHz" />
+  <parameter name="gui_ps_units0" value="ps" />
+  <parameter name="gui_phase_shift0" value="0" />
+  <parameter name="gui_phase_shift_deg0" value="0.0" />
+  <parameter name="gui_actual_phase_shift0" value="0" />
+  <parameter name="gui_duty_cycle0" value="50" />
+  <parameter name="gui_cascade_counter1" value="false" />
+  <parameter name="gui_output_clock_frequency1" value="100.0" />
+  <parameter name="gui_divide_factor_c1" value="1" />
+  <parameter name="gui_actual_output_clock_frequency1" value="0 MHz" />
+  <parameter name="gui_ps_units1" value="ps" />
+  <parameter name="gui_phase_shift1" value="0" />
+  <parameter name="gui_phase_shift_deg1" value="0.0" />
+  <parameter name="gui_actual_phase_shift1" value="0" />
+  <parameter name="gui_duty_cycle1" value="50" />
+  <parameter name="gui_cascade_counter2" value="false" />
+  <parameter name="gui_output_clock_frequency2" value="100.0" />
+  <parameter name="gui_divide_factor_c2" value="1" />
+  <parameter name="gui_actual_output_clock_frequency2" value="0 MHz" />
+  <parameter name="gui_ps_units2" value="ps" />
+  <parameter name="gui_phase_shift2" value="0" />
+  <parameter name="gui_phase_shift_deg2" value="0.0" />
+  <parameter name="gui_actual_phase_shift2" value="0" />
+  <parameter name="gui_duty_cycle2" value="50" />
+  <parameter name="gui_cascade_counter3" value="false" />
+  <parameter name="gui_output_clock_frequency3" value="100.0" />
+  <parameter name="gui_divide_factor_c3" value="1" />
+  <parameter name="gui_actual_output_clock_frequency3" value="0 MHz" />
+  <parameter name="gui_ps_units3" value="ps" />
+  <parameter name="gui_phase_shift3" value="0" />
+  <parameter name="gui_phase_shift_deg3" value="0.0" />
+  <parameter name="gui_actual_phase_shift3" value="0" />
+  <parameter name="gui_duty_cycle3" value="50" />
+  <parameter name="gui_cascade_counter4" value="false" />
+  <parameter name="gui_output_clock_frequency4" value="100.0" />
+  <parameter name="gui_divide_factor_c4" value="1" />
+  <parameter name="gui_actual_output_clock_frequency4" value="0 MHz" />
+  <parameter name="gui_ps_units4" value="ps" />
+  <parameter name="gui_phase_shift4" value="0" />
+  <parameter name="gui_phase_shift_deg4" value="0.0" />
+  <parameter name="gui_actual_phase_shift4" value="0" />
+  <parameter name="gui_duty_cycle4" value="50" />
+  <parameter name="gui_cascade_counter5" value="false" />
+  <parameter name="gui_output_clock_frequency5" value="100.0" />
+  <parameter name="gui_divide_factor_c5" value="1" />
+  <parameter name="gui_actual_output_clock_frequency5" value="0 MHz" />
+  <parameter name="gui_ps_units5" value="ps" />
+  <parameter name="gui_phase_shift5" value="0" />
+  <parameter name="gui_phase_shift_deg5" value="0.0" />
+  <parameter name="gui_actual_phase_shift5" value="0" />
+  <parameter name="gui_duty_cycle5" value="50" />
+  <parameter name="gui_cascade_counter6" value="false" />
+  <parameter name="gui_output_clock_frequency6" value="100.0" />
+  <parameter name="gui_divide_factor_c6" value="1" />
+  <parameter name="gui_actual_output_clock_frequency6" value="0 MHz" />
+  <parameter name="gui_ps_units6" value="ps" />
+  <parameter name="gui_phase_shift6" value="0" />
+  <parameter name="gui_phase_shift_deg6" value="0.0" />
+  <parameter name="gui_actual_phase_shift6" value="0" />
+  <parameter name="gui_duty_cycle6" value="50" />
+  <parameter name="gui_cascade_counter7" value="false" />
+  <parameter name="gui_output_clock_frequency7" value="100.0" />
+  <parameter name="gui_divide_factor_c7" value="1" />
+  <parameter name="gui_actual_output_clock_frequency7" value="0 MHz" />
+  <parameter name="gui_ps_units7" value="ps" />
+  <parameter name="gui_phase_shift7" value="0" />
+  <parameter name="gui_phase_shift_deg7" value="0.0" />
+  <parameter name="gui_actual_phase_shift7" value="0" />
+  <parameter name="gui_duty_cycle7" value="50" />
+  <parameter name="gui_cascade_counter8" value="false" />
+  <parameter name="gui_output_clock_frequency8" value="100.0" />
+  <parameter name="gui_divide_factor_c8" value="1" />
+  <parameter name="gui_actual_output_clock_frequency8" value="0 MHz" />
+  <parameter name="gui_ps_units8" value="ps" />
+  <parameter name="gui_phase_shift8" value="0" />
+  <parameter name="gui_phase_shift_deg8" value="0.0" />
+  <parameter name="gui_actual_phase_shift8" value="0" />
+  <parameter name="gui_duty_cycle8" value="50" />
+  <parameter name="gui_cascade_counter9" value="false" />
+  <parameter name="gui_output_clock_frequency9" value="100.0" />
+  <parameter name="gui_divide_factor_c9" value="1" />
+  <parameter name="gui_actual_output_clock_frequency9" value="0 MHz" />
+  <parameter name="gui_ps_units9" value="ps" />
+  <parameter name="gui_phase_shift9" value="0" />
+  <parameter name="gui_phase_shift_deg9" value="0.0" />
+  <parameter name="gui_actual_phase_shift9" value="0" />
+  <parameter name="gui_duty_cycle9" value="50" />
+  <parameter name="gui_cascade_counter10" value="false" />
+  <parameter name="gui_output_clock_frequency10" value="100.0" />
+  <parameter name="gui_divide_factor_c10" value="1" />
+  <parameter name="gui_actual_output_clock_frequency10" value="0 MHz" />
+  <parameter name="gui_ps_units10" value="ps" />
+  <parameter name="gui_phase_shift10" value="0" />
+  <parameter name="gui_phase_shift_deg10" value="0.0" />
+  <parameter name="gui_actual_phase_shift10" value="0" />
+  <parameter name="gui_duty_cycle10" value="50" />
+  <parameter name="gui_cascade_counter11" value="false" />
+  <parameter name="gui_output_clock_frequency11" value="100.0" />
+  <parameter name="gui_divide_factor_c11" value="1" />
+  <parameter name="gui_actual_output_clock_frequency11" value="0 MHz" />
+  <parameter name="gui_ps_units11" value="ps" />
+  <parameter name="gui_phase_shift11" value="0" />
+  <parameter name="gui_phase_shift_deg11" value="0.0" />
+  <parameter name="gui_actual_phase_shift11" value="0" />
+  <parameter name="gui_duty_cycle11" value="50" />
+  <parameter name="gui_cascade_counter12" value="false" />
+  <parameter name="gui_output_clock_frequency12" value="100.0" />
+  <parameter name="gui_divide_factor_c12" value="1" />
+  <parameter name="gui_actual_output_clock_frequency12" value="0 MHz" />
+  <parameter name="gui_ps_units12" value="ps" />
+  <parameter name="gui_phase_shift12" value="0" />
+  <parameter name="gui_phase_shift_deg12" value="0.0" />
+  <parameter name="gui_actual_phase_shift12" value="0" />
+  <parameter name="gui_duty_cycle12" value="50" />
+  <parameter name="gui_cascade_counter13" value="false" />
+  <parameter name="gui_output_clock_frequency13" value="100.0" />
+  <parameter name="gui_divide_factor_c13" value="1" />
+  <parameter name="gui_actual_output_clock_frequency13" value="0 MHz" />
+  <parameter name="gui_ps_units13" value="ps" />
+  <parameter name="gui_phase_shift13" value="0" />
+  <parameter name="gui_phase_shift_deg13" value="0.0" />
+  <parameter name="gui_actual_phase_shift13" value="0" />
+  <parameter name="gui_duty_cycle13" value="50" />
+  <parameter name="gui_cascade_counter14" value="false" />
+  <parameter name="gui_output_clock_frequency14" value="100.0" />
+  <parameter name="gui_divide_factor_c14" value="1" />
+  <parameter name="gui_actual_output_clock_frequency14" value="0 MHz" />
+  <parameter name="gui_ps_units14" value="ps" />
+  <parameter name="gui_phase_shift14" value="0" />
+  <parameter name="gui_phase_shift_deg14" value="0.0" />
+  <parameter name="gui_actual_phase_shift14" value="0" />
+  <parameter name="gui_duty_cycle14" value="50" />
+  <parameter name="gui_cascade_counter15" value="false" />
+  <parameter name="gui_output_clock_frequency15" value="100.0" />
+  <parameter name="gui_divide_factor_c15" value="1" />
+  <parameter name="gui_actual_output_clock_frequency15" value="0 MHz" />
+  <parameter name="gui_ps_units15" value="ps" />
+  <parameter name="gui_phase_shift15" value="0" />
+  <parameter name="gui_phase_shift_deg15" value="0.0" />
+  <parameter name="gui_actual_phase_shift15" value="0" />
+  <parameter name="gui_duty_cycle15" value="50" />
+  <parameter name="gui_cascade_counter16" value="false" />
+  <parameter name="gui_output_clock_frequency16" value="100.0" />
+  <parameter name="gui_divide_factor_c16" value="1" />
+  <parameter name="gui_actual_output_clock_frequency16" value="0 MHz" />
+  <parameter name="gui_ps_units16" value="ps" />
+  <parameter name="gui_phase_shift16" value="0" />
+  <parameter name="gui_phase_shift_deg16" value="0.0" />
+  <parameter name="gui_actual_phase_shift16" value="0" />
+  <parameter name="gui_duty_cycle16" value="50" />
+  <parameter name="gui_cascade_counter17" value="false" />
+  <parameter name="gui_output_clock_frequency17" value="100.0" />
+  <parameter name="gui_divide_factor_c17" value="1" />
+  <parameter name="gui_actual_output_clock_frequency17" value="0 MHz" />
+  <parameter name="gui_ps_units17" value="ps" />
+  <parameter name="gui_phase_shift17" value="0" />
+  <parameter name="gui_phase_shift_deg17" value="0.0" />
+  <parameter name="gui_actual_phase_shift17" value="0" />
+  <parameter name="gui_duty_cycle17" value="50" />
+  <parameter name="gui_pll_auto_reset" value="Off" />
+  <parameter name="gui_pll_bandwidth_preset" value="Auto" />
+  <parameter name="gui_en_reconf" value="true" />
+  <parameter name="gui_en_dps_ports" value="false" />
+  <parameter name="gui_en_phout_ports" value="false" />
+  <parameter name="gui_phout_division" value="1" />
+  <parameter name="gui_en_lvds_ports" value="false" />
+  <parameter name="gui_mif_generate" value="false" />
+  <parameter name="gui_enable_mif_dps" value="false" />
+  <parameter name="gui_dps_cntr" value="C0" />
+  <parameter name="gui_dps_num" value="1" />
+  <parameter name="gui_dps_dir" value="Positive" />
+  <parameter name="gui_refclk_switch" value="false" />
+  <parameter name="gui_refclk1_frequency" value="100.0" />
+  <parameter name="gui_switchover_mode">Automatic Switchover</parameter>
+  <parameter name="gui_switchover_delay" value="0" />
+  <parameter name="gui_active_clk" value="false" />
+  <parameter name="gui_clk_bad" value="false" />
+  <parameter name="gui_enable_cascade_out" value="false" />
+  <parameter name="gui_cascade_outclk_index" value="0" />
+  <parameter name="gui_enable_cascade_in" value="false" />
+  <parameter name="gui_pll_cascading_mode">Create an adjpllin signal to connect with an upstream PLL</parameter>
+  <parameter name="AUTO_REFCLK_CLOCK_RATE" value="100000000" />
+ </module>
+ <module
+   kind="altera_pll_reconfig"
+   version="13.1"
+   enabled="1"
+   name="sys_hdmi_pll_reconfig">
+  <parameter name="device_family" value="Arria V" />
+  <parameter name="ENABLE_MIF" value="0" />
+  <parameter name="MIF_FILE_NAME" value="" />
+  <parameter name="AUTO_MGMT_CLK_CLOCK_RATE" value="100000000" />
+ </module>
+ <module
+   kind="altera_avalon_sgdma"
+   version="13.1"
+   enabled="1"
+   name="axi_hdmi_dma">
+  <parameter name="addressWidth" value="32" />
+  <parameter name="alwaysDoMaxBurst" value="true" />
+  <parameter name="avalonMMByteReorderMode" value="0" />
+  <parameter name="dataTransferFIFODepth" value="2" />
+  <parameter name="enableBurstTransfers" value="false" />
+  <parameter name="enableDescriptorReadMasterBurst" value="false" />
+  <parameter name="enableUnalignedTransfers" value="false" />
+  <parameter name="internalFIFODepth" value="2" />
+  <parameter name="readBlockDataWidth" value="64" />
+  <parameter name="readBurstcountWidth" value="4" />
+  <parameter name="sinkErrorWidth" value="0" />
+  <parameter name="sourceErrorWidth" value="0" />
+  <parameter name="transferMode" value="MEMORY_TO_STREAM" />
+  <parameter name="writeBurstcountWidth" value="4" />
+  <parameter name="deviceFamilyString" value="Arria V" />
+ </module>
  <connection kind="clock" version="13.1" start="sys_clk.clk" end="sys_jtag_pl.clk" />
  <connection kind="clock" version="13.1" start="sys_clk.clk" end="sys_uart.clk" />
  <connection kind="clock" version="13.1" start="sys_clk.clk" end="sys_gpio.clk" />
@@ -1363,7 +1731,7 @@
    start="sys_jtag_pl.master"
    end="sys_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00010410" />
+  <parameter name="baseAddress" value="0x00014550" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1372,7 +1740,7 @@
    start="sys_jtag_pl.master"
    end="sys_gpio.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00010400" />
+  <parameter name="baseAddress" value="0x00014540" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1381,7 +1749,7 @@
    start="sys_jtag_pl.master"
    end="sys_id.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00010418" />
+  <parameter name="baseAddress" value="0x00014558" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1472,7 +1840,7 @@
    start="sys_hps.h2f_lw_axi_master"
    end="sys_id.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00010418" />
+  <parameter name="baseAddress" value="0x00014558" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1481,7 +1849,7 @@
    start="sys_hps.h2f_lw_axi_master"
    end="sys_gpio.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00010400" />
+  <parameter name="baseAddress" value="0x00014540" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1490,7 +1858,7 @@
    start="sys_hps.h2f_lw_axi_master"
    end="sys_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00010410" />
+  <parameter name="baseAddress" value="0x00014550" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1533,7 +1901,7 @@
    start="sys_hps.h2f_lw_axi_master"
    end="axi_ad9250_0.s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xc000" />
+  <parameter name="baseAddress" value="0x00010000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1552,7 +1920,7 @@
    start="sys_hps.h2f_lw_axi_master"
    end="axi_dmac_0.s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x8000" />
+  <parameter name="baseAddress" value="0xc000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1564,16 +1932,6 @@
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="clock"
-   version="13.1"
-   start="sys_hps.h2f_user0_clock"
-   end="sys_hps.f2h_sdram1_clock" />
- <connection
-   kind="clock"
-   version="13.1"
-   start="sys_hps.h2f_user0_clock"
-   end="axi_dmac_0.m_dest_axi_clock" />
  <connection
    kind="reset"
    version="13.1"
@@ -1595,7 +1953,7 @@
    start="sys_hps.h2f_lw_axi_master"
    end="axi_ad9250_1.s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x4000" />
+  <parameter name="baseAddress" value="0x8000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1619,14 +1977,9 @@
    start="sys_hps.h2f_lw_axi_master"
    end="axi_dmac_1.s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x4000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="clock"
-   version="13.1"
-   start="sys_hps.h2f_user0_clock"
-   end="axi_dmac_1.m_dest_axi_clock" />
  <connection
    kind="avalon"
    version="13.1"
@@ -1677,7 +2030,7 @@
    start="sys_hps.h2f_lw_axi_master"
    end="sys_jesd204b_s1.jesd204_rx_avs">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00010000" />
+  <parameter name="baseAddress" value="0x00014000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1713,7 +2066,131 @@
    end="axi_dmac_1.interrupt_sender">
   <parameter name="irqNumber" value="3" />
  </connection>
+ <connection
+   kind="clock"
+   version="13.1"
+   start="sys_clk.clk"
+   end="axi_hdmi_tx.s_axi_clock" />
+ <connection
+   kind="reset"
+   version="13.1"
+   start="sys_clk.clk_reset"
+   end="axi_hdmi_tx.s_axi_reset" />
+ <connection
+   kind="avalon"
+   version="13.1"
+   start="sys_hps.h2f_lw_axi_master"
+   end="axi_hdmi_tx.s_axi">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="clock"
+   version="13.1"
+   start="sys_hdmi_pll.outclk0"
+   end="axi_hdmi_tx.hdmi_clock" />
+ <connection
+   kind="clock"
+   version="13.1"
+   start="sys_clk.clk"
+   end="sys_hdmi_pll_reconfig.mgmt_clk" />
+ <connection
+   kind="reset"
+   version="13.1"
+   start="sys_clk.clk_reset"
+   end="sys_hdmi_pll_reconfig.mgmt_reset" />
+ <connection
+   kind="avalon"
+   version="13.1"
+   start="sys_hps.h2f_lw_axi_master"
+   end="sys_hdmi_pll_reconfig.mgmt_avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00014400" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="clock"
+   version="13.1"
+   start="sys_clk.clk"
+   end="axi_hdmi_dma.clk" />
+ <connection
+   kind="reset"
+   version="13.1"
+   start="sys_clk.clk_reset"
+   end="axi_hdmi_dma.reset" />
+ <connection
+   kind="avalon"
+   version="13.1"
+   start="sys_hps.h2f_lw_axi_master"
+   end="axi_hdmi_dma.csr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00014500" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon_streaming"
+   version="13.1"
+   start="axi_hdmi_dma.out"
+   end="axi_hdmi_tx.vdma_if" />
+ <connection
+   kind="clock"
+   version="13.1"
+   start="sys_clk.clk"
+   end="axi_hdmi_tx.vdma_clock" />
+ <connection
+   kind="avalon"
+   version="13.1"
+   start="axi_hdmi_dma.descriptor_read"
+   end="sys_hps.f2h_sdram1_data">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="13.1"
+   start="axi_hdmi_dma.descriptor_write"
+   end="sys_hps.f2h_sdram1_data">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="13.1"
+   start="axi_hdmi_dma.m_read"
+   end="sys_hps.f2h_sdram1_data">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="reset"
+   version="13.1"
+   start="sys_clk.clk_reset"
+   end="sys_hdmi_pll.reset" />
+ <connection
+   kind="clock"
+   version="13.1"
+   start="sys_clk.clk"
+   end="sys_hdmi_pll.refclk" />
+ <connection
+   kind="clock"
+   version="13.1"
+   start="sys_hps.h2f_user0_clock"
+   end="sys_hps.f2h_sdram1_clock" />
+ <connection
+   kind="clock"
+   version="13.1"
+   start="sys_hps.h2f_user0_clock"
+   end="axi_dmac_0.m_dest_axi_clock" />
+ <connection
+   kind="clock"
+   version="13.1"
+   start="sys_hps.h2f_user0_clock"
+   end="axi_dmac_1.m_dest_axi_clock" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
- <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />
- <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="4" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
 </system>

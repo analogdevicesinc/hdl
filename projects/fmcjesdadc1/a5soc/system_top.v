@@ -133,6 +133,11 @@ module system_top (
   push_buttons,
   dip_switches,
 
+  // hdmi
+
+  hdmi_out_clk,
+  hdmi_data,
+
   // lane interface
 
   ref_clk,
@@ -240,6 +245,11 @@ module system_top (
   input   [  3:0]   push_buttons;
   input   [  3:0]   dip_switches;
 
+  // hdmi
+
+  output            hdmi_out_clk;
+  output  [  3:0]   hdmi_data;
+
   // lane interface
 
   input             ref_clk;
@@ -259,6 +269,8 @@ module system_top (
   reg               rx_sysref_m2 = 'd0;
   reg               rx_sysref_m3 = 'd0;
   reg               rx_sysref = 'd0;
+  reg     [ 63:0]   sys_hdmi_pll_reconfig_in = 'd0;
+  reg     [ 63:0]   sys_hdmi_pll_reconfig_reconfig_in = 'd0;
 
   // internal clocks and resets
 
@@ -301,6 +313,10 @@ module system_top (
   wire    [  3:0]   rx_cal_busy_s;
   wire              rx_pll_locked_s;
   wire    [ 15:0]   rx_xcvr_status_s;
+  wire    [ 63:0]   sys_hdmi_pll_reconfig_out;
+  wire    [ 63:0]   sys_hdmi_pll_reconfig_reconfig_out;
+
+  // instantiations
 
   always @(posedge rx_clk) begin
     rx_sysref_m1 <= rx_sysref_s;
@@ -372,6 +388,13 @@ module system_top (
     .spi3_csn (spi_csn),
     .spi3_clk (spi_clk),
     .spi3_sdio (spi_sdio));
+
+  // pipe line to fix timing
+
+  always @(posedge sys_clk) begin
+    sys_hdmi_pll_reconfig_in <= sys_hdmi_pll_reconfig_reconfig_out;
+    sys_hdmi_pll_reconfig_reconfig_in <= sys_hdmi_pll_reconfig_out;
+  end
 
   system_bd i_system_bd (
     .memory_mem_a (ddr3_a),
@@ -516,7 +539,25 @@ module system_top (
     .hps_io_hps_io_gpio_inst_GPIO43 (gpio_gpio43),
     .sys_hps_h2f_reset_reset_n (sys_resetn),
     .sys_gpio_external_connection_in_port ({rx_xcvr_status_s, 4'd0, push_buttons, 4'd0, dip_switches}),
-    .sys_gpio_external_connection_out_port ({14'd0, rx_sw_rstn_s, rx_sysref_s, 12'd0, led}));
+    .sys_gpio_external_connection_out_port ({14'd0, rx_sw_rstn_s, rx_sysref_s, 12'd0, led}),
+    .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
+    .axi_hdmi_tx_0_hdmi_if_h16_hsync (),
+    .axi_hdmi_tx_0_hdmi_if_h16_vsync (),
+    .axi_hdmi_tx_0_hdmi_if_h16_data_e (),
+    .axi_hdmi_tx_0_hdmi_if_h16_data (),
+    .axi_hdmi_tx_0_hdmi_if_h16_es_data (hdmi_data),
+    .axi_hdmi_tx_0_hdmi_if_h24_hsync (),
+    .axi_hdmi_tx_0_hdmi_if_h24_vsync (),
+    .axi_hdmi_tx_0_hdmi_if_h24_data_e (),
+    .axi_hdmi_tx_0_hdmi_if_h24_data (),
+    .axi_hdmi_tx_0_hdmi_if_h36_hsync (),
+    .axi_hdmi_tx_0_hdmi_if_h36_vsync (),
+    .axi_hdmi_tx_0_hdmi_if_h36_data_e (),
+    .axi_hdmi_tx_0_hdmi_if_h36_data (),
+    .sys_hdmi_pll_reconfig_to_pll_reconfig_to_pll (sys_hdmi_pll_reconfig_in),
+    .sys_hdmi_pll_reconfig_from_pll_reconfig_from_pll (sys_hdmi_pll_reconfig_out),
+    .sys_hdmi_pll_reconfig_reconfig_to_pll_reconfig_to_pll (sys_hdmi_pll_reconfig_reconfig_out),
+    .sys_hdmi_pll_reconfig_reconfig_from_pll_reconfig_from_pll (sys_hdmi_pll_reconfig_reconfig_in));
 
 endmodule
 
