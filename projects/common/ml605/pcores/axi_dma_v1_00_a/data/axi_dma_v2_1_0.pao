@@ -1,0 +1,8 @@
+##############################################################################
+## Filename:          pcores/axi_dma_v1_00_a/data/axi_dma_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Fri Aug 26 11:12:50 2011 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib axi_dma_v1_00_a axi_dma verilog
+

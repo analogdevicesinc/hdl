@@ -1,0 +1,33 @@
+#Please do not modify this file by hand
+XmpVersion: 14.7
+VerMgmt: 14.7
+IntStyle: default
+Flow: ise
+MHS File: system.mhs
+Architecture: virtex6
+Device: xc6vlx240t
+Package: ff1156
+SpeedGrade: -1
+UserCmd1: 
+UserCmd1Type: 0
+UserCmd2: 
+UserCmd2Type: 0
+GenSimTB: 0
+SdkExportBmmBit: 1
+SdkExportDir: SDK/SDK_Export
+InsertNoPads: 0
+WarnForEAArch: 1
+HdlLang: verilog
+SimModel: BEHAVIORAL
+ExternalMemSim: 0
+UcfFile: data/system.ucf
+EnableParTimingError: 1
+ShowLicenseDialog: 1
+BInfo: ML605
+ICacheAddr: sys_ddr3_mem,C_S_AXI_BASEADDR
+ICacheAddr: sys_ddr3_mem,C_S_AXI_CTRL_BASEADDR
+DCacheAddr: sys_ddr3_mem,C_S_AXI_BASEADDR
+DCacheAddr: sys_ddr3_mem,C_S_AXI_CTRL_BASEADDR
+Processor: sys_cpu
+ElfImp: 
+ElfSim: 

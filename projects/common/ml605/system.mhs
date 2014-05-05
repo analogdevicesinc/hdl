@@ -1,0 +1,678 @@
+
+# ##############################################################################
+# Created by Base System Builder Wizard for Xilinx EDK 13.4 Build EDK_O.61xd
+# Thu Aug 25 15:18:16 2011
+# Target Board:  xilinx.com ml605 Rev D
+# Family:    virtex6
+# Device:    xc6vlx240t
+# Package:   ff1156
+# Speed Grade:  -1
+# ##############################################################################
+ PARAMETER VERSION = 2.1.0
+
+
+ PORT sys_rst = sys_rst, DIR = I, SIGIS = RST, RST_POLARITY = 1
+ PORT sys_clk_p = sys_clk, DIR = I, DIFFERENTIAL_POLARITY = P, SIGIS = CLK, CLK_FREQ = 200000000
+ PORT sys_clk_n = sys_clk, DIR = I, DIFFERENTIAL_POLARITY = N, SIGIS = CLK, CLK_FREQ = 200000000
+ PORT ddr3_a13 = net_gnd, DIR = O
+ PORT ddr3_we_n = ddr3_we_n, DIR = O
+ PORT ddr3_ras_n = ddr3_ras_n, DIR = O
+ PORT ddr3_odt = ddr3_odt, DIR = O
+ PORT ddr3_dqs_n = ddr3_dqs_n, DIR = IO, VEC = [7:0]
+ PORT ddr3_dqs = ddr3_dqs, DIR = IO, VEC = [7:0]
+ PORT ddr3_dq = ddr3_dq, DIR = IO, VEC = [63:0]
+ PORT ddr3_dm = ddr3_dm, DIR = O, VEC = [7:0]
+ PORT ddr3_rst = ddr3_rst, DIR = O
+ PORT ddr3_cs_n = ddr3_cs_n, DIR = O
+ PORT ddr3_clk_n = ddr3_clk_n, DIR = O
+ PORT ddr3_clk = ddr3_clk, DIR = O
+ PORT ddr3_cke = ddr3_cke, DIR = O
+ PORT ddr3_cas_n = ddr3_cas_n, DIR = O
+ PORT ddr3_ba = ddr3_ba, DIR = O, VEC = [2:0]
+ PORT ddr3_addr = ddr3_addr, DIR = O, VEC = [12:0]
+ PORT uart_tx = uart_tx, DIR = O
+ PORT uart_rx = uart_rx, DIR = I
+ PORT phy_rstn = phy_rstn, DIR = O
+ PORT phy_mdc = phy_mdc, DIR = O
+ PORT phy_mdio = phy_mdio, DIR = IO
+ PORT phy_crs = phy_crs, DIR = I
+ PORT phy_col = phy_col, DIR = I
+ PORT phy_tx_clk = phy_tx_clk, DIR = I
+ PORT phy_tx_en = phy_tx_en, DIR = O
+ PORT phy_tx_d = phy_tx_d, DIR = O, VEC = [3:0]
+ PORT phy_rx_clk = phy_rx_clk, DIR = I
+ PORT phy_rx_dv = phy_rx_dv, DIR = I
+ PORT phy_rx_d = phy_rx_d, DIR = I, VEC = [3:0]
+ PORT phy_rx_er = phy_rx_er, DIR = I
+ PORT iic_scl = iic_scl, DIR = IO
+ PORT iic_sda = iic_sda, DIR = IO
+ PORT lcd = lcd, DIR = IO, VEC = [6:0]
+ PORT sw = sw, DIR = IO, VEC = [12:0]
+ PORT led = led, DIR = IO, VEC = [12:0]
+ PORT axi_gpio_fmc_i0 = axi_gpio_fmc_i0, DIR = I, VEC = [31:0]
+ PORT axi_gpio_fmc_o0 = axi_gpio_fmc_o0, DIR = O, VEC = [31:0]
+ PORT axi_gpio_fmc_t0 = axi_gpio_fmc_t0, DIR = O, VEC = [31:0]
+ PORT axi_gpio_fmc_i1 = axi_gpio_fmc_i1, DIR = I, VEC = [31:0]
+ PORT axi_gpio_fmc_o1 = axi_gpio_fmc_o1, DIR = O, VEC = [31:0]
+ PORT axi_gpio_fmc_t1 = axi_gpio_fmc_t1, DIR = O, VEC = [31:0]
+ PORT axi_spi_fmc_sel = axi_spi_fmc_sel, DIR = I
+ PORT axi_spi_fmc_csn_i = axi_spi_fmc_csn_i, DIR = I, VEC = [7:0]
+ PORT axi_spi_fmc_csn_o = axi_spi_fmc_csn_o, DIR = O, VEC = [7:0]
+ PORT axi_spi_fmc_csn_t = axi_spi_fmc_csn_t, DIR = O
+ PORT axi_spi_fmc_clk_i = axi_spi_fmc_clk_i, DIR = I
+ PORT axi_spi_fmc_clk_o = axi_spi_fmc_clk_o, DIR = O
+ PORT axi_spi_fmc_clk_t = axi_spi_fmc_clk_t, DIR = O
+ PORT axi_spi_fmc_mosi_i = axi_spi_fmc_mosi_i, DIR = I
+ PORT axi_spi_fmc_mosi_o = axi_spi_fmc_mosi_o, DIR = O
+ PORT axi_spi_fmc_mosi_t = axi_spi_fmc_mosi_t, DIR = O
+ PORT axi_spi_fmc_miso_i = axi_spi_fmc_miso_i, DIR = I
+ PORT axi_spi_fmc_miso_o = axi_spi_fmc_miso_o, DIR = O
+ PORT axi_spi_fmc_miso_t = axi_spi_fmc_miso_t, DIR = O
+ PORT axi_dma_tx_axil_aclk = axi_dma_tx_axil_aclk, DIR = O, SIGIS = CLK
+ PORT axi_dma_tx_axil_aresetn = axi_dma_tx_axil_aresetn, DIR = O, SIGIS = RST
+ PORT axi_dma_tx_axil_awvalid = axi_dma_tx_axil_awvalid, DIR = O
+ PORT axi_dma_tx_axil_awaddr = axi_dma_tx_axil_awaddr, DIR = O, VEC = [31:0]
+ PORT axi_dma_tx_axil_awready = axi_dma_tx_axil_awready, DIR = I
+ PORT axi_dma_tx_axil_wvalid = axi_dma_tx_axil_wvalid, DIR = O
+ PORT axi_dma_tx_axil_wdata = axi_dma_tx_axil_wdata, DIR = O, VEC = [31:0]
+ PORT axi_dma_tx_axil_wstrb = axi_dma_tx_axil_wstrb, DIR = O, VEC = [3:0]
+ PORT axi_dma_tx_axil_wready = axi_dma_tx_axil_wready, DIR = I
+ PORT axi_dma_tx_axil_bvalid = axi_dma_tx_axil_bvalid, DIR = I
+ PORT axi_dma_tx_axil_bresp = axi_dma_tx_axil_bresp, DIR = I, VEC = [1:0]
+ PORT axi_dma_tx_axil_bready = axi_dma_tx_axil_bready, DIR = O
+ PORT axi_dma_tx_axil_arvalid = axi_dma_tx_axil_arvalid, DIR = O
+ PORT axi_dma_tx_axil_araddr = axi_dma_tx_axil_araddr, DIR = O, VEC = [31:0]
+ PORT axi_dma_tx_axil_arready = axi_dma_tx_axil_arready, DIR = I
+ PORT axi_dma_tx_axil_rvalid = axi_dma_tx_axil_rvalid, DIR = I
+ PORT axi_dma_tx_axil_rdata = axi_dma_tx_axil_rdata, DIR = I, VEC = [31:0]
+ PORT axi_dma_tx_axil_rresp = axi_dma_tx_axil_rresp, DIR = I, VEC = [1:0]
+ PORT axi_dma_tx_axil_rready = axi_dma_tx_axil_rready, DIR = O
+ PORT axi_dma_tx_axim_s_aclk = axi_dma_tx_axim_s_aclk, DIR = O, SIGIS = CLK
+ PORT axi_dma_tx_axim_s_aresetn = axi_dma_tx_axim_s_aresetn, DIR = O, SIGIS = RST
+ PORT axi_dma_tx_axim_s_araddr = axi_dma_tx_axim_s_araddr, DIR = I, VEC = [31:0]
+ PORT axi_dma_tx_axim_s_arlen = axi_dma_tx_axim_s_arlen, DIR = I, VEC = [7:0]
+ PORT axi_dma_tx_axim_s_arsize = axi_dma_tx_axim_s_arsize, DIR = I, VEC = [2:0]
+ PORT axi_dma_tx_axim_s_arburst = axi_dma_tx_axim_s_arburst, DIR = I, VEC = [1:0]
+ PORT axi_dma_tx_axim_s_arprot = axi_dma_tx_axim_s_arprot, DIR = I, VEC = [2:0]
+ PORT axi_dma_tx_axim_s_arcache = axi_dma_tx_axim_s_arcache, DIR = I, VEC = [3:0]
+ PORT axi_dma_tx_axim_s_arready = axi_dma_tx_axim_s_arready, DIR = O
+ PORT axi_dma_tx_axim_s_arvalid = axi_dma_tx_axim_s_arvalid, DIR = I
+ PORT axi_dma_tx_axim_s_rresp = axi_dma_tx_axim_s_rresp, DIR = O, VEC = [1:0]
+ PORT axi_dma_tx_axim_s_rdata = axi_dma_tx_axim_s_rdata, DIR = O, VEC = [63:0]
+ PORT axi_dma_tx_axim_s_rready = axi_dma_tx_axim_s_rready, DIR = I
+ PORT axi_dma_tx_axim_s_rvalid = axi_dma_tx_axim_s_rvalid, DIR = O
+ PORT axi_dma_tx_axim_irq = axi_dma_tx_axim_irq, DIR = I
+ PORT axi_dma_rx_axil_aclk = axi_dma_rx_axil_aclk, DIR = O, SIGIS = CLK
+ PORT axi_dma_rx_axil_aresetn = axi_dma_rx_axil_aresetn, DIR = O, SIGIS = RST
+ PORT axi_dma_rx_axil_awvalid = axi_dma_rx_axil_awvalid, DIR = O
+ PORT axi_dma_rx_axil_awaddr = axi_dma_rx_axil_awaddr, DIR = O, VEC = [31:0]
+ PORT axi_dma_rx_axil_awready = axi_dma_rx_axil_awready, DIR = I
+ PORT axi_dma_rx_axil_wvalid = axi_dma_rx_axil_wvalid, DIR = O
+ PORT axi_dma_rx_axil_wdata = axi_dma_rx_axil_wdata, DIR = O, VEC = [31:0]
+ PORT axi_dma_rx_axil_wstrb = axi_dma_rx_axil_wstrb, DIR = O, VEC = [3:0]
+ PORT axi_dma_rx_axil_wready = axi_dma_rx_axil_wready, DIR = I
+ PORT axi_dma_rx_axil_bvalid = axi_dma_rx_axil_bvalid, DIR = I
+ PORT axi_dma_rx_axil_bresp = axi_dma_rx_axil_bresp, DIR = I, VEC = [1:0]
+ PORT axi_dma_rx_axil_bready = axi_dma_rx_axil_bready, DIR = O
+ PORT axi_dma_rx_axil_arvalid = axi_dma_rx_axil_arvalid, DIR = O
+ PORT axi_dma_rx_axil_araddr = axi_dma_rx_axil_araddr, DIR = O, VEC = [31:0]
+ PORT axi_dma_rx_axil_arready = axi_dma_rx_axil_arready, DIR = I
+ PORT axi_dma_rx_axil_rvalid = axi_dma_rx_axil_rvalid, DIR = I
+ PORT axi_dma_rx_axil_rdata = axi_dma_rx_axil_rdata, DIR = I, VEC = [31:0]
+ PORT axi_dma_rx_axil_rresp = axi_dma_rx_axil_rresp, DIR = I, VEC = [1:0]
+ PORT axi_dma_rx_axil_rready = axi_dma_rx_axil_rready, DIR = O
+ PORT axi_dma_rx_axim_d_aclk = axi_dma_rx_axim_d_aclk, DIR = O, SIGIS = CLK
+ PORT axi_dma_rx_axim_d_aresetn = axi_dma_rx_axim_d_aresetn, DIR = O, SIGIS = RST
+ PORT axi_dma_rx_axim_d_awaddr = axi_dma_rx_axim_d_awaddr, DIR = I, VEC = [31:0]
+ PORT axi_dma_rx_axim_d_awlen = axi_dma_rx_axim_d_awlen, DIR = I, VEC = [7:0]
+ PORT axi_dma_rx_axim_d_awsize = axi_dma_rx_axim_d_awsize, DIR = I, VEC = [2:0]
+ PORT axi_dma_rx_axim_d_awburst = axi_dma_rx_axim_d_awburst, DIR = I, VEC = [1:0]
+ PORT axi_dma_rx_axim_d_awprot = axi_dma_rx_axim_d_awprot, DIR = I, VEC = [2:0]
+ PORT axi_dma_rx_axim_d_awcache = axi_dma_rx_axim_d_awcache, DIR = I, VEC = [3:0]
+ PORT axi_dma_rx_axim_d_awvalid = axi_dma_rx_axim_d_awvalid, DIR = I
+ PORT axi_dma_rx_axim_d_awready = axi_dma_rx_axim_d_awready, DIR = O
+ PORT axi_dma_rx_axim_d_wdata = axi_dma_rx_axim_d_wdata, DIR = I, VEC = [63:0]
+ PORT axi_dma_rx_axim_d_wstrb = axi_dma_rx_axim_d_wstrb, DIR = I, VEC = [7:0]
+ PORT axi_dma_rx_axim_d_wready = axi_dma_rx_axim_d_wready, DIR = O
+ PORT axi_dma_rx_axim_d_wvalid = axi_dma_rx_axim_d_wvalid, DIR = I
+ PORT axi_dma_rx_axim_d_wlast = axi_dma_rx_axim_d_wlast, DIR = I
+ PORT axi_dma_rx_axim_d_bready = axi_dma_rx_axim_d_bready, DIR = I
+ PORT axi_dma_rx_axim_d_bresp = axi_dma_rx_axim_d_bresp, DIR = O, VEC = [1:0]
+ PORT axi_dma_rx_axim_d_bvalid = axi_dma_rx_axim_d_bvalid, DIR = O
+ PORT axi_dma_rx_axim_irq = axi_dma_rx_axim_irq, DIR = I
+ PORT axi_dev_tx_axil_aclk = axi_dev_tx_axil_aclk, DIR = O, SIGIS = CLK
+ PORT axi_dev_tx_axil_aresetn = axi_dev_tx_axil_aresetn, DIR = O, SIGIS = RST
+ PORT axi_dev_tx_axil_awvalid = axi_dev_tx_axil_awvalid, DIR = O
+ PORT axi_dev_tx_axil_awaddr = axi_dev_tx_axil_awaddr, DIR = O, VEC = [31:0]
+ PORT axi_dev_tx_axil_awready = axi_dev_tx_axil_awready, DIR = I
+ PORT axi_dev_tx_axil_wvalid = axi_dev_tx_axil_wvalid, DIR = O
+ PORT axi_dev_tx_axil_wdata = axi_dev_tx_axil_wdata, DIR = O, VEC = [31:0]
+ PORT axi_dev_tx_axil_wstrb = axi_dev_tx_axil_wstrb, DIR = O, VEC = [3:0]
+ PORT axi_dev_tx_axil_wready = axi_dev_tx_axil_wready, DIR = I
+ PORT axi_dev_tx_axil_bvalid = axi_dev_tx_axil_bvalid, DIR = I
+ PORT axi_dev_tx_axil_bresp = axi_dev_tx_axil_bresp, DIR = I, VEC = [1:0]
+ PORT axi_dev_tx_axil_bready = axi_dev_tx_axil_bready, DIR = O
+ PORT axi_dev_tx_axil_arvalid = axi_dev_tx_axil_arvalid, DIR = O
+ PORT axi_dev_tx_axil_araddr = axi_dev_tx_axil_araddr, DIR = O, VEC = [31:0]
+ PORT axi_dev_tx_axil_arready = axi_dev_tx_axil_arready, DIR = I
+ PORT axi_dev_tx_axil_rvalid = axi_dev_tx_axil_rvalid, DIR = I
+ PORT axi_dev_tx_axil_rdata = axi_dev_tx_axil_rdata, DIR = I, VEC = [31:0]
+ PORT axi_dev_tx_axil_rresp = axi_dev_tx_axil_rresp, DIR = I, VEC = [1:0]
+ PORT axi_dev_tx_axil_rready = axi_dev_tx_axil_rready, DIR = O
+ PORT axi_dev_rx_axil_aclk = axi_dev_rx_axil_aclk, DIR = O, SIGIS = CLK
+ PORT axi_dev_rx_axil_aresetn = axi_dev_rx_axil_aresetn, DIR = O, SIGIS = RST
+ PORT axi_dev_rx_axil_awvalid = axi_dev_rx_axil_awvalid, DIR = O
+ PORT axi_dev_rx_axil_awaddr = axi_dev_rx_axil_awaddr, DIR = O, VEC = [31:0]
+ PORT axi_dev_rx_axil_awready = axi_dev_rx_axil_awready, DIR = I
+ PORT axi_dev_rx_axil_wvalid = axi_dev_rx_axil_wvalid, DIR = O
+ PORT axi_dev_rx_axil_wdata = axi_dev_rx_axil_wdata, DIR = O, VEC = [31:0]
+ PORT axi_dev_rx_axil_wstrb = axi_dev_rx_axil_wstrb, DIR = O, VEC = [3:0]
+ PORT axi_dev_rx_axil_wready = axi_dev_rx_axil_wready, DIR = I
+ PORT axi_dev_rx_axil_bvalid = axi_dev_rx_axil_bvalid, DIR = I
+ PORT axi_dev_rx_axil_bresp = axi_dev_rx_axil_bresp, DIR = I, VEC = [1:0]
+ PORT axi_dev_rx_axil_bready = axi_dev_rx_axil_bready, DIR = O
+ PORT axi_dev_rx_axil_arvalid = axi_dev_rx_axil_arvalid, DIR = O
+ PORT axi_dev_rx_axil_araddr = axi_dev_rx_axil_araddr, DIR = O, VEC = [31:0]
+ PORT axi_dev_rx_axil_arready = axi_dev_rx_axil_arready, DIR = I
+ PORT axi_dev_rx_axil_rvalid = axi_dev_rx_axil_rvalid, DIR = I
+ PORT axi_dev_rx_axil_rdata = axi_dev_rx_axil_rdata, DIR = I, VEC = [31:0]
+ PORT axi_dev_rx_axil_rresp = axi_dev_rx_axil_rresp, DIR = I, VEC = [1:0]
+ PORT axi_dev_rx_axil_rready = axi_dev_rx_axil_rready, DIR = O
+ PORT sys_200m_clk = sys_200m_clk, DIR = O, SIGIS = CLK
+
+BEGIN clock_generator
+ PARAMETER INSTANCE = sys_clkgen
+ PARAMETER HW_VER = 4.03.a
+ PARAMETER C_CLKIN_FREQ = 200000000
+ PARAMETER C_CLKOUT0_FREQ = 100000000
+ PARAMETER C_CLKOUT0_GROUP = MMCM0
+ PARAMETER C_CLKOUT1_FREQ = 200000000
+ PARAMETER C_CLKOUT1_GROUP = MMCM0
+ PARAMETER C_CLKOUT2_FREQ = 400000000
+ PARAMETER C_CLKOUT2_GROUP = MMCM0
+ PARAMETER C_CLKOUT3_FREQ = 400000000
+ PARAMETER C_CLKOUT3_GROUP = MMCM0
+ PARAMETER C_CLKOUT3_BUF = FALSE
+ PARAMETER C_CLKOUT3_VARIABLE_PHASE = TRUE
+ PARAMETER C_CLKOUT4_FREQ = 30000000
+ PORT RST = sys_rst
+ PORT CLKIN = sys_clk
+ PORT LOCKED = sys_clkgen_locked
+ PORT CLKOUT0 = sys_100m_clk
+ PORT CLKOUT1 = sys_200m_clk
+ PORT CLKOUT2 = sys_400m_clk
+ PORT CLKOUT3 = sys_400m_nobuf_clk
+ PORT PSCLK = sys_200m_clk
+ PORT PSEN = psen
+ PORT PSINCDEC = psincdec
+ PORT PSDONE = psdone
+END
+
+BEGIN proc_sys_reset
+ PARAMETER INSTANCE = sys_rstgen
+ PARAMETER HW_VER = 3.00.a
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PORT Ext_Reset_In = sys_rst
+ PORT Dcm_locked = sys_clkgen_locked
+ PORT Slowest_sync_clk = sys_100m_clk
+ PORT MB_Reset = sys_mb_rst
+ PORT MB_Debug_Sys_Rst = sys_mdm_rst
+ PORT BUS_STRUCT_RESET = sys_lmb_rst
+ PORT Interconnect_aresetn = sys_interconnect_rstn
+END
+
+BEGIN microblaze
+ PARAMETER INSTANCE = sys_cpu
+ PARAMETER HW_VER = 8.50.c
+ PARAMETER C_INTERCONNECT = 2
+ PARAMETER C_USE_BARREL = 1
+ PARAMETER C_USE_FPU = 0
+ PARAMETER C_DEBUG_ENABLED = 1
+ PARAMETER C_ICACHE_BASEADDR = 0xc0000000
+ PARAMETER C_ICACHE_HIGHADDR = 0xdfffffff
+ PARAMETER C_USE_ICACHE = 1
+ PARAMETER C_CACHE_BYTE_SIZE = 16384
+ PARAMETER C_ICACHE_ALWAYS_USED = 1
+ PARAMETER C_DCACHE_BASEADDR = 0xc0000000
+ PARAMETER C_DCACHE_HIGHADDR = 0xdfffffff
+ PARAMETER C_USE_DCACHE = 1
+ PARAMETER C_DCACHE_BYTE_SIZE = 16384
+ PARAMETER C_DCACHE_ALWAYS_USED = 1
+ PARAMETER C_PVR = 2
+ PARAMETER C_USE_MMU = 3
+ PARAMETER C_MMU_ZONES = 2
+ PARAMETER C_ICACHE_LINE_LEN = 8
+ PARAMETER C_ICACHE_STREAMS = 1
+ PARAMETER C_ICACHE_VICTIMS = 8
+ PARAMETER C_DIV_ZERO_EXCEPTION = 1
+ PARAMETER C_M_AXI_I_BUS_EXCEPTION = 1
+ PARAMETER C_M_AXI_D_BUS_EXCEPTION = 1
+ PARAMETER C_ILL_OPCODE_EXCEPTION = 1
+ PARAMETER C_OPCODE_0x0_ILLEGAL = 1
+ PARAMETER C_UNALIGNED_EXCEPTIONS = 1
+ PARAMETER C_USE_HW_MUL = 2
+ PARAMETER C_USE_DIV = 1
+ BUS_INTERFACE M_AXI_DP = sys_cpu_interconnect
+ BUS_INTERFACE M_AXI_DC = sys_mem_interconnect
+ BUS_INTERFACE M_AXI_IC = sys_mem_interconnect
+ BUS_INTERFACE DEBUG = mdm_debug
+ BUS_INTERFACE DLMB = sys_dlmb
+ BUS_INTERFACE ILMB = sys_ilmb
+ PORT MB_RESET = sys_mb_rst
+ PORT CLK = sys_100m_clk
+ PORT INTERRUPT = axi_intc_m_irq
+END
+
+BEGIN mdm
+ PARAMETER INSTANCE = sys_debug
+ PARAMETER HW_VER = 2.10.a
+ PARAMETER C_INTERCONNECT = 2
+ PARAMETER C_USE_UART = 1
+ PARAMETER C_BASEADDR = 0x41400000
+ PARAMETER C_HIGHADDR = 0x4140ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ BUS_INTERFACE MBDEBUG_0 = mdm_debug
+ PORT Debug_SYS_Rst = sys_mdm_rst
+ PORT S_AXI_ACLK = sys_100m_clk
+END
+
+BEGIN lmb_v10
+ PARAMETER INSTANCE = sys_ilmb
+ PARAMETER HW_VER = 2.00.b
+ PORT SYS_RST = sys_lmb_rst
+ PORT LMB_CLK = sys_100m_clk
+END
+
+BEGIN lmb_bram_if_cntlr
+ PARAMETER INSTANCE = sys_imem_ctrl
+ PARAMETER HW_VER = 3.10.c
+ PARAMETER C_BASEADDR = 0x00000000
+ PARAMETER C_HIGHADDR = 0x0001ffff
+ BUS_INTERFACE SLMB = sys_ilmb
+ BUS_INTERFACE BRAM_PORT = sys_ilmb_bram
+END
+
+BEGIN lmb_v10
+ PARAMETER INSTANCE = sys_dlmb
+ PARAMETER HW_VER = 2.00.b
+ PORT SYS_RST = sys_lmb_rst
+ PORT LMB_CLK = sys_100m_clk
+END
+
+BEGIN lmb_bram_if_cntlr
+ PARAMETER INSTANCE = sys_dmem_ctrl
+ PARAMETER HW_VER = 3.10.c
+ PARAMETER C_BASEADDR = 0x00000000
+ PARAMETER C_HIGHADDR = 0x0001ffff
+ BUS_INTERFACE SLMB = sys_dlmb
+ BUS_INTERFACE BRAM_PORT = sys_dlmb_bram
+END
+
+BEGIN bram_block
+ PARAMETER INSTANCE = sys_int_mem
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE PORTA = sys_ilmb_bram
+ BUS_INTERFACE PORTB = sys_dlmb_bram
+END
+
+BEGIN axi_interconnect
+ PARAMETER INSTANCE = sys_cpu_interconnect
+ PARAMETER HW_VER = 1.06.a
+ PARAMETER C_INTERCONNECT_CONNECTIVITY_MODE = 0
+ PORT INTERCONNECT_ARESETN = sys_interconnect_rstn
+ PORT INTERCONNECT_ACLK = sys_100m_clk
+END
+
+BEGIN axi_interconnect
+ PARAMETER INSTANCE = sys_mem_interconnect
+ PARAMETER HW_VER = 1.06.a
+ PARAMETER C_INTERCONNECT_DATA_WIDTH = 256
+ PORT interconnect_aclk = sys_200m_clk
+ PORT INTERCONNECT_ARESETN = sys_interconnect_rstn
+END
+
+BEGIN axi_v6_ddrx
+ PARAMETER INSTANCE = sys_ddr3_mem
+ PARAMETER HW_VER = 1.06.a
+ PARAMETER C_MEM_PARTNO = MT4JSF6464HY-1G1
+ PARAMETER C_INTERCONNECT_S_AXI_MASTERS = sys_cpu.M_AXI_DC & sys_cpu.M_AXI_IC & axi_dma_tx.M_SRC_AXI & axi_dma_rx.M_DEST_AXI
+ PARAMETER C_MMCM_EXT_LOC = MMCM_ADV_X0Y8
+ PARAMETER C_INTERCONNECT_S_AXI_AW_REGISTER = 8
+ PARAMETER C_INTERCONNECT_S_AXI_AR_REGISTER = 8
+ PARAMETER C_INTERCONNECT_S_AXI_W_REGISTER = 8
+ PARAMETER C_INTERCONNECT_S_AXI_R_REGISTER = 8
+ PARAMETER C_INTERCONNECT_S_AXI_B_REGISTER = 8
+ PARAMETER C_S_AXI_DATA_WIDTH = 256
+ PARAMETER C_RD_WR_ARB_ALGORITHM = RD_PRI_REG
+ PARAMETER C_S_AXI_BASEADDR = 0xc0000000
+ PARAMETER C_S_AXI_HIGHADDR = 0xdfffffff
+ BUS_INTERFACE S_AXI = sys_mem_interconnect
+ PORT ddr_we_n = ddr3_we_n
+ PORT ddr_ras_n = ddr3_ras_n
+ PORT ddr_odt = ddr3_odt
+ PORT ddr_dqs_n = ddr3_dqs_n
+ PORT ddr_dqs_p = ddr3_dqs
+ PORT ddr_dq = ddr3_dq
+ PORT ddr_dm = ddr3_dm
+ PORT ddr_reset_n = ddr3_rst
+ PORT ddr_cs_n = ddr3_cs_n
+ PORT ddr_ck_n = ddr3_clk_n
+ PORT ddr_ck_p = ddr3_clk
+ PORT ddr_cke = ddr3_cke
+ PORT ddr_cas_n = ddr3_cas_n
+ PORT ddr_ba = ddr3_ba
+ PORT ddr_addr = ddr3_addr
+ PORT clk_rd_base = sys_400m_nobuf_clk
+ PORT clk_mem = sys_400m_clk
+ PORT clk = sys_200m_clk
+ PORT clk_ref = sys_200m_clk
+ PORT PD_PSEN = psen
+ PORT PD_PSINCDEC = psincdec
+ PORT PD_PSDONE = psdone
+END
+
+BEGIN axi_intc
+ PARAMETER INSTANCE = axi_intc_m
+ PARAMETER HW_VER = 1.04.a
+ PARAMETER C_BASEADDR = 0x41200000
+ PARAMETER C_HIGHADDR = 0x4120ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT Irq = axi_intc_m_irq
+ PORT S_AXI_ACLK = sys_100m_clk
+ PORT Intr = axi_uart_m_irq & axi_ethernet_m_irq & axi_timer_m_irq & axi_iic_main_irq & axi_gpio_lcd_irq & axi_gpio_bd_irq & axi_gpio_fmc_irq & axi_spi_fmc_irq & axi_dma_tx_irq & axi_dma_rx_irq
+END
+
+BEGIN axi_uartlite
+ PARAMETER INSTANCE = axi_uart_m
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_BAUDRATE = 115200
+ PARAMETER C_DATA_BITS = 8
+ PARAMETER C_USE_PARITY = 0
+ PARAMETER C_ODD_PARITY = 1
+ PARAMETER C_BASEADDR = 0x40600000
+ PARAMETER C_HIGHADDR = 0x4060ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT Interrupt = axi_uart_m_irq
+ PORT S_AXI_ACLK = sys_100m_clk
+ PORT TX = uart_tx
+ PORT RX = uart_rx
+END
+
+BEGIN axi_ethernetlite
+ PARAMETER INSTANCE = axi_ethernet_m
+ PARAMETER HW_VER = 1.01.b
+ PARAMETER C_BASEADDR = 0x40e00000
+ PARAMETER C_HIGHADDR = 0x40e0ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT IP2INTC_Irpt = axi_ethernet_m_irq
+ PORT S_AXI_ACLK = sys_100m_clk
+ PORT PHY_rst_n = phy_rstn
+ PORT PHY_MDC = phy_mdc
+ PORT PHY_MDIO = phy_mdio
+ PORT PHY_crs = phy_crs
+ PORT PHY_col = phy_col
+ PORT PHY_tx_clk = phy_tx_clk
+ PORT PHY_tx_en = phy_tx_en
+ PORT PHY_tx_data = phy_tx_d
+ PORT PHY_rx_clk = phy_rx_clk
+ PORT PHY_dv = phy_rx_dv
+ PORT PHY_rx_data = phy_rx_d
+ PORT PHY_rx_er = phy_rx_er
+END
+
+BEGIN axi_timer
+ PARAMETER INSTANCE = axi_timer_m
+ PARAMETER HW_VER = 1.03.a
+ PARAMETER C_BASEADDR = 0x41c00000
+ PARAMETER C_HIGHADDR = 0x41c0ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT Interrupt = axi_timer_m_irq
+ PORT S_AXI_ACLK = sys_100m_clk
+END
+
+BEGIN axi_iic
+ PARAMETER INSTANCE = axi_iic_main
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_IIC_FREQ = 100000
+ PARAMETER C_TEN_BIT_ADR = 0
+ PARAMETER C_SCL_INERTIAL_DELAY = 5
+ PARAMETER C_SDA_INERTIAL_DELAY = 5
+ PARAMETER C_BASEADDR = 0x40800000
+ PARAMETER C_HIGHADDR = 0x4080ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT IIC2INTC_Irpt = axi_iic_main_irq
+ PORT S_AXI_ACLK = sys_100m_clk
+ PORT Scl = iic_scl
+ PORT Sda = iic_sda
+END
+
+BEGIN axi_gpio
+ PARAMETER INSTANCE = axi_gpio_lcd
+ PARAMETER HW_VER = 1.01.b
+ PARAMETER C_GPIO_WIDTH = 7
+ PARAMETER C_INTERRUPT_PRESENT = 1
+ PARAMETER C_BASEADDR = 0x40040000
+ PARAMETER C_HIGHADDR = 0x4004ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT IP2INTC_Irpt = axi_gpio_lcd_irq
+ PORT S_AXI_ACLK = sys_100m_clk
+ PORT GPIO_IO = lcd
+END
+
+BEGIN axi_gpio
+ PARAMETER INSTANCE = axi_gpio_bd
+ PARAMETER HW_VER = 1.01.b
+ PARAMETER C_IS_DUAL = 1
+ PARAMETER C_GPIO_WIDTH = 13
+ PARAMETER C_GPIO2_WIDTH = 13
+ PARAMETER C_INTERRUPT_PRESENT = 1
+ PARAMETER C_BASEADDR = 0x40020000
+ PARAMETER C_HIGHADDR = 0x4002ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT IP2INTC_Irpt = axi_gpio_bd_irq
+ PORT S_AXI_ACLK = sys_100m_clk
+ PORT GPIO_IO = sw
+ PORT GPIO2_IO = led
+END
+
+BEGIN axi_gpio
+ PARAMETER INSTANCE = axi_gpio_fmc
+ PARAMETER HW_VER = 1.01.b
+ PARAMETER C_INTERRUPT_PRESENT = 1
+ PARAMETER C_IS_DUAL = 1
+ PARAMETER C_GPIO_WIDTH = 32
+ PARAMETER C_GPIO2_WIDTH = 32
+ PARAMETER C_BASEADDR = 0x40000000
+ PARAMETER C_HIGHADDR = 0x4000ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT IP2INTC_Irpt = axi_gpio_fmc_irq
+ PORT S_AXI_ACLK = sys_100m_clk
+ PORT GPIO_IO_I = axi_gpio_fmc_i0
+ PORT GPIO_IO_O = axi_gpio_fmc_o0
+ PORT GPIO_IO_T = axi_gpio_fmc_t0
+ PORT GPIO2_IO_I = axi_gpio_fmc_i1
+ PORT GPIO2_IO_O = axi_gpio_fmc_o1
+ PORT GPIO2_IO_T = axi_gpio_fmc_t1
+END
+
+BEGIN axi_spi
+ PARAMETER INSTANCE = axi_spi_fmc
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_NUM_SS_BITS = 8
+ PARAMETER C_SCK_RATIO = 8
+ PARAMETER C_BASEADDR = 0x40a00000
+ PARAMETER C_HIGHADDR = 0x40a0ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT IP2INTC_Irpt = axi_spi_fmc_irq
+ PORT S_AXI_ACLK = sys_100m_clk
+ PORT SPISEL = axi_spi_fmc_sel
+ PORT SS_I = axi_spi_fmc_csn_i
+ PORT SS_O = axi_spi_fmc_csn_o
+ PORT SS_T = axi_spi_fmc_csn_t
+ PORT SCK_I = axi_spi_fmc_clk_i
+ PORT SCK_O = axi_spi_fmc_clk_o
+ PORT SCK_T = axi_spi_fmc_clk_t
+ PORT MOSI_I = axi_spi_fmc_mosi_i
+ PORT MOSI_O = axi_spi_fmc_mosi_o
+ PORT MOSI_T = axi_spi_fmc_mosi_t
+ PORT MISO_I = axi_spi_fmc_miso_i
+ PORT MISO_O = axi_spi_fmc_miso_o
+ PORT MISO_T = axi_spi_fmc_miso_t
+END
+
+BEGIN axi_dma
+ PARAMETER INSTANCE = axi_dma_tx
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_DMA_TYPE_DEST = 2
+ PARAMETER C_BASEADDR = 0x7e240000
+ PARAMETER C_HIGHADDR = 0x7e24ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ BUS_INTERFACE M_SRC_AXI = sys_mem_interconnect
+ PORT irq = axi_dma_tx_irq
+ PORT s_axi_aclk = sys_100m_clk
+ PORT m_dest_axi_aclk = sys_100m_clk
+ PORT m_src_axi_aclk = sys_100m_clk
+ PORT axil_aclk = axi_dma_tx_axil_aclk
+ PORT axil_aresetn = axi_dma_tx_axil_aresetn
+ PORT axil_awvalid = axi_dma_tx_axil_awvalid
+ PORT axil_awaddr = axi_dma_tx_axil_awaddr
+ PORT axil_awready = axi_dma_tx_axil_awready
+ PORT axil_wvalid = axi_dma_tx_axil_wvalid
+ PORT axil_wdata = axi_dma_tx_axil_wdata
+ PORT axil_wstrb = axi_dma_tx_axil_wstrb
+ PORT axil_wready = axi_dma_tx_axil_wready
+ PORT axil_bvalid = axi_dma_tx_axil_bvalid
+ PORT axil_bresp = axi_dma_tx_axil_bresp
+ PORT axil_bready = axi_dma_tx_axil_bready
+ PORT axil_arvalid = axi_dma_tx_axil_arvalid
+ PORT axil_araddr = axi_dma_tx_axil_araddr
+ PORT axil_arready = axi_dma_tx_axil_arready
+ PORT axil_rvalid = axi_dma_tx_axil_rvalid
+ PORT axil_rdata = axi_dma_tx_axil_rdata
+ PORT axil_rresp = axi_dma_tx_axil_rresp
+ PORT axil_rready = axi_dma_tx_axil_rready
+ PORT axim_s_aclk = axi_dma_tx_axim_s_aclk
+ PORT axim_s_aresetn = axi_dma_tx_axim_s_aresetn
+ PORT axim_s_araddr = axi_dma_tx_axim_s_araddr
+ PORT axim_s_arlen = axi_dma_tx_axim_s_arlen
+ PORT axim_s_arsize = axi_dma_tx_axim_s_arsize
+ PORT axim_s_arburst = axi_dma_tx_axim_s_arburst
+ PORT axim_s_arprot = axi_dma_tx_axim_s_arprot
+ PORT axim_s_arcache = axi_dma_tx_axim_s_arcache
+ PORT axim_s_arready = axi_dma_tx_axim_s_arready
+ PORT axim_s_arvalid = axi_dma_tx_axim_s_arvalid
+ PORT axim_s_rresp = axi_dma_tx_axim_s_rresp
+ PORT axim_s_rdata = axi_dma_tx_axim_s_rdata
+ PORT axim_s_rready = axi_dma_tx_axim_s_rready
+ PORT axim_s_rvalid = axi_dma_tx_axim_s_rvalid
+ PORT axim_irq = axi_dma_tx_axim_irq
+END
+
+BEGIN axi_dma
+ PARAMETER INSTANCE = axi_dma_rx
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_DMA_TYPE_SRC = 2
+ PARAMETER C_BASEADDR = 0x7e220000
+ PARAMETER C_HIGHADDR = 0x7e22ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ BUS_INTERFACE M_DEST_AXI = sys_mem_interconnect
+ PORT irq = axi_dma_rx_irq
+ PORT s_axi_aclk = sys_100m_clk
+ PORT m_dest_axi_aclk = sys_100m_clk
+ PORT m_src_axi_aclk = sys_100m_clk
+ PORT axil_aclk = axi_dma_rx_axil_aclk
+ PORT axil_aresetn = axi_dma_rx_axil_aresetn
+ PORT axil_awvalid = axi_dma_rx_axil_awvalid
+ PORT axil_awaddr = axi_dma_rx_axil_awaddr
+ PORT axil_awready = axi_dma_rx_axil_awready
+ PORT axil_wvalid = axi_dma_rx_axil_wvalid
+ PORT axil_wdata = axi_dma_rx_axil_wdata
+ PORT axil_wstrb = axi_dma_rx_axil_wstrb
+ PORT axil_wready = axi_dma_rx_axil_wready
+ PORT axil_bvalid = axi_dma_rx_axil_bvalid
+ PORT axil_bresp = axi_dma_rx_axil_bresp
+ PORT axil_bready = axi_dma_rx_axil_bready
+ PORT axil_arvalid = axi_dma_rx_axil_arvalid
+ PORT axil_araddr = axi_dma_rx_axil_araddr
+ PORT axil_arready = axi_dma_rx_axil_arready
+ PORT axil_rvalid = axi_dma_rx_axil_rvalid
+ PORT axil_rdata = axi_dma_rx_axil_rdata
+ PORT axil_rresp = axi_dma_rx_axil_rresp
+ PORT axil_rready = axi_dma_rx_axil_rready
+ PORT axim_d_aclk = axi_dma_rx_axim_d_aclk
+ PORT axim_d_aresetn = axi_dma_rx_axim_d_aresetn
+ PORT axim_d_awaddr = axi_dma_rx_axim_d_awaddr
+ PORT axim_d_awlen = axi_dma_rx_axim_d_awlen
+ PORT axim_d_awsize = axi_dma_rx_axim_d_awsize
+ PORT axim_d_awburst = axi_dma_rx_axim_d_awburst
+ PORT axim_d_awprot = axi_dma_rx_axim_d_awprot
+ PORT axim_d_awcache = axi_dma_rx_axim_d_awcache
+ PORT axim_d_awvalid = axi_dma_rx_axim_d_awvalid
+ PORT axim_d_awready = axi_dma_rx_axim_d_awready
+ PORT axim_d_wdata = axi_dma_rx_axim_d_wdata
+ PORT axim_d_wstrb = axi_dma_rx_axim_d_wstrb
+ PORT axim_d_wready = axi_dma_rx_axim_d_wready
+ PORT axim_d_wvalid = axi_dma_rx_axim_d_wvalid
+ PORT axim_d_wlast = axi_dma_rx_axim_d_wlast
+ PORT axim_d_bready = axi_dma_rx_axim_d_bready
+ PORT axim_d_bresp = axi_dma_rx_axim_d_bresp
+ PORT axim_d_bvalid = axi_dma_rx_axim_d_bvalid
+ PORT axim_irq = axi_dma_rx_axim_irq
+END
+
+BEGIN axi_dev
+ PARAMETER INSTANCE = axi_dev_tx
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0x7c800000
+ PARAMETER C_HIGHADDR = 0x7c80ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT s_axi_aclk = sys_100m_clk
+ PORT axil_aclk = axi_dev_tx_axil_aclk
+ PORT axil_aresetn = axi_dev_tx_axil_aresetn
+ PORT axil_awvalid = axi_dev_tx_axil_awvalid
+ PORT axil_awaddr = axi_dev_tx_axil_awaddr
+ PORT axil_awready = axi_dev_tx_axil_awready
+ PORT axil_wvalid = axi_dev_tx_axil_wvalid
+ PORT axil_wdata = axi_dev_tx_axil_wdata
+ PORT axil_wstrb = axi_dev_tx_axil_wstrb
+ PORT axil_wready = axi_dev_tx_axil_wready
+ PORT axil_bvalid = axi_dev_tx_axil_bvalid
+ PORT axil_bresp = axi_dev_tx_axil_bresp
+ PORT axil_bready = axi_dev_tx_axil_bready
+ PORT axil_arvalid = axi_dev_tx_axil_arvalid
+ PORT axil_araddr = axi_dev_tx_axil_araddr
+ PORT axil_arready = axi_dev_tx_axil_arready
+ PORT axil_rvalid = axi_dev_tx_axil_rvalid
+ PORT axil_rdata = axi_dev_tx_axil_rdata
+ PORT axil_rresp = axi_dev_tx_axil_rresp
+ PORT axil_rready = axi_dev_tx_axil_rready
+END
+
+BEGIN axi_dev
+ PARAMETER INSTANCE = axi_dev_rx
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0x7e200000
+ PARAMETER C_HIGHADDR = 0x7e20ffff
+ BUS_INTERFACE S_AXI = sys_cpu_interconnect
+ PORT s_axi_aclk = sys_100m_clk
+ PORT axil_aclk = axi_dev_rx_axil_aclk
+ PORT axil_aresetn = axi_dev_rx_axil_aresetn
+ PORT axil_awvalid = axi_dev_rx_axil_awvalid
+ PORT axil_awaddr = axi_dev_rx_axil_awaddr
+ PORT axil_awready = axi_dev_rx_axil_awready
+ PORT axil_wvalid = axi_dev_rx_axil_wvalid
+ PORT axil_wdata = axi_dev_rx_axil_wdata
+ PORT axil_wstrb = axi_dev_rx_axil_wstrb
+ PORT axil_wready = axi_dev_rx_axil_wready
+ PORT axil_bvalid = axi_dev_rx_axil_bvalid
+ PORT axil_bresp = axi_dev_rx_axil_bresp
+ PORT axil_bready = axi_dev_rx_axil_bready
+ PORT axil_arvalid = axi_dev_rx_axil_arvalid
+ PORT axil_araddr = axi_dev_rx_axil_araddr
+ PORT axil_arready = axi_dev_rx_axil_arready
+ PORT axil_rvalid = axi_dev_rx_axil_rvalid
+ PORT axil_rdata = axi_dev_rx_axil_rdata
+ PORT axil_rresp = axi_dev_rx_axil_rresp
+ PORT axil_rready = axi_dev_rx_axil_rready
+END
+

@@ -1,0 +1,70 @@
+
+NET sys_rst       LOC = H10   | IOSTANDARD = SSTL15   | TIG;
+NET sys_clk_p     LOC = J9    | IOSTANDARD = LVDS_25  | DIFF_TERM = TRUE;
+NET sys_clk_n     LOC = H9    | IOSTANDARD = LVDS_25  | DIFF_TERM = TRUE;
+NET ddr3_a13      LOC = J15   | IOSTANDARD = SSTL15   | TIG;
+
+NET sys_clk_p TNM_NET = sys_clk_p;
+TIMESPEC ts_sys_clk_p = PERIOD sys_clk_p 200 MHz;
+
+NET uart_tx       LOC = J25   | IOSTANDARD = LVCMOS25;
+NET uart_rx       LOC = J24   | IOSTANDARD = LVCMOS25;
+
+NET phy_rstn      LOC = AH13  | IOSTANDARD = LVCMOS25 |  TIG;
+NET phy_mdc       LOC = AP14  | IOSTANDARD = LVCMOS25;
+NET phy_mdio      LOC = AN14  | IOSTANDARD = LVCMOS25;
+NET phy_crs       LOC = AL13  | IOSTANDARD = LVCMOS25;
+NET phy_col       LOC = AK13  | IOSTANDARD = LVCMOS25;
+NET phy_tx_clk    LOC = AD12  | IOSTANDARD = LVCMOS25;
+NET phy_tx_en     LOC = AJ10  | IOSTANDARD = LVCMOS25;
+NET phy_tx_d[0]   LOC = AM11  | IOSTANDARD = LVCMOS25;
+NET phy_tx_d[1]   LOC = AL11  | IOSTANDARD = LVCMOS25;
+NET phy_tx_d[2]   LOC = AG10  | IOSTANDARD = LVCMOS25;
+NET phy_tx_d[3]   LOC = AG11  | IOSTANDARD = LVCMOS25;
+NET phy_rx_clk    LOC = AP11  | IOSTANDARD = LVCMOS25;
+NET phy_rx_dv     LOC = AM13  | IOSTANDARD = LVCMOS25;
+NET phy_rx_d[0]   LOC = AN13  | IOSTANDARD = LVCMOS25;
+NET phy_rx_d[1]   LOC = AF14  | IOSTANDARD = LVCMOS25;
+NET phy_rx_d[2]   LOC = AE14  | IOSTANDARD = LVCMOS25;
+NET phy_rx_d[3]   LOC = AN12  | IOSTANDARD = LVCMOS25;
+NET phy_rx_er     LOC = AG12  | IOSTANDARD = LVCMOS25;
+
+NET iic_scl       LOC = AF13  | IOSTANDARD = LVCMOS25;
+NET iic_sda       LOC = AG13  | IOSTANDARD = LVCMOS25;
+
+NET lcd[6]        LOC = AK12  | IOSTANDARD = LVCMOS25;  ## lcd_e
+NET lcd[5]        LOC = T28   | IOSTANDARD = LVCMOS25;  ## lcd_rs
+NET lcd[4]        LOC = AC14  | IOSTANDARD = LVCMOS25;  ## lcd_rw
+NET lcd[3]        LOC = AE12  | IOSTANDARD = LVCMOS25;  ## lcd_db[7]
+NET lcd[2]        LOC = AJ11  | IOSTANDARD = LVCMOS25;  ## lcd_db[6]
+NET lcd[1]        LOC = AK11  | IOSTANDARD = LVCMOS25;  ## lcd_db[5]
+NET lcd[0]        LOC = AD14  | IOSTANDARD = LVCMOS25;  ## lcd_db[4]
+
+NET sw[0]         LOC = D22   | IOSTANDARD = LVCMOS15;
+NET sw[1]         LOC = C22   | IOSTANDARD = LVCMOS15;
+NET sw[2]         LOC = L21   | IOSTANDARD = LVCMOS15;
+NET sw[3]         LOC = L20   | IOSTANDARD = LVCMOS15;
+NET sw[4]         LOC = C18   | IOSTANDARD = LVCMOS15;
+NET sw[5]         LOC = B18   | IOSTANDARD = LVCMOS15;
+NET sw[6]         LOC = K22   | IOSTANDARD = LVCMOS15;
+NET sw[7]         LOC = K21   | IOSTANDARD = LVCMOS15;
+NET sw[8]         LOC = G26   | IOSTANDARD = LVCMOS15;
+NET sw[9]         LOC = A19   | IOSTANDARD = LVCMOS15;
+NET sw[10]        LOC = G17   | IOSTANDARD = LVCMOS15;
+NET sw[11]        LOC = A18   | IOSTANDARD = LVCMOS15;
+NET sw[12]        LOC = H17   | IOSTANDARD = LVCMOS15;
+
+NET led[0]        LOC = AC22  | IOSTANDARD = LVCMOS25;
+NET led[1]        LOC = AC24  | IOSTANDARD = LVCMOS25;
+NET led[2]        LOC = AE22  | IOSTANDARD = LVCMOS25;
+NET led[3]        LOC = AE23  | IOSTANDARD = LVCMOS25;
+NET led[4]        LOC = AB23  | IOSTANDARD = LVCMOS25;
+NET led[5]        LOC = AG23  | IOSTANDARD = LVCMOS25;
+NET led[6]        LOC = AE24  | IOSTANDARD = LVCMOS25;
+NET led[7]        LOC = AD24  | IOSTANDARD = LVCMOS25;
+NET led[8]        LOC = AP24  | IOSTANDARD = LVCMOS25;
+NET led[9]        LOC = AE21  | IOSTANDARD = LVCMOS25;
+NET led[10]       LOC = AH27  | IOSTANDARD = LVCMOS25;
+NET led[11]       LOC = AH28  | IOSTANDARD = LVCMOS25;
+NET led[12]       LOC = AD21  | IOSTANDARD = LVCMOS25;
+
