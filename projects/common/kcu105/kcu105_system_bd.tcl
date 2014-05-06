@@ -5,18 +5,15 @@
 set sys_rst         [create_bd_port -dir I -type rst sys_rst]
 set sys_clk_p       [create_bd_port -dir I sys_clk_p]
 set sys_clk_n       [create_bd_port -dir I sys_clk_n]
+set sys_125m_clk_p  [create_bd_port -dir I sys_125m_clk_p]
+set sys_125m_clk_n  [create_bd_port -dir I sys_125m_clk_n]
 
 set c0_ddr4         [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 c0_ddr4]
 
 set phy_rst_n       [create_bd_port -dir O -type rst phy_rst_n]
 set phy_sd          [create_bd_port -dir I phy_sd]
 set mdio            [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_rtl:1.0 mdio]
-set sgmii_clk_p     [create_bd_port -dir I sgmii_clk_p]
-set sgmii_clk_n     [create_bd_port -dir I sgmii_clk_n]
-set sgmii_rx_p      [create_bd_port -dir I sgmii_rx_p]
-set sgmii_rx_n      [create_bd_port -dir I sgmii_rx_n]
-set sgmii_tx_p      [create_bd_port -dir O sgmii_tx_p]
-set sgmii_tx_n      [create_bd_port -dir O sgmii_tx_n]
+set sgmii           [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:sgmii_rtl:1.0 sgmii]
 
 set gpio_sw         [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_sw]
 set gpio_led        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_led]
@@ -119,6 +116,7 @@ set_property -dict [list CONFIG.STRATEGY {2}] $axi_mem_interconnect
 
 set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.1 axi_ethernet]
 set_property -dict [list CONFIG.PHY_TYPE {SGMII}] $axi_ethernet
+set_property -dict [list CONFIG.ENABLE_LVDS {true}] $axi_ethernet
 
 set axi_ethernet_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_ethernet_dma]
 set_property -dict [list CONFIG.c_include_mm2s_dre {1}] $axi_ethernet_dma
@@ -264,7 +262,6 @@ connect_bd_net -net sys_cpu_clk [get_bd_pins axi_gpio_lcd/s_axi_aclk]
 connect_bd_net -net sys_cpu_clk [get_bd_pins axi_gpio_sw_led/s_axi_aclk]
 connect_bd_net -net sys_cpu_clk [get_bd_pins axi_iic_main/s_axi_aclk]
 
-connect_bd_net -net sys_200m_clk [get_bd_pins axi_ethernet/ref_clk] $sys_200m_clk_source
 
 # defaults (interconnect - processor)
 
@@ -364,12 +361,9 @@ connect_bd_intf_net -intf_net axi_ddr_cntrl_c0_ddr4 [get_bd_intf_ports c0_ddr4] 
 
 connect_bd_net -net axi_ethernet_phy_rst_n [get_bd_ports phy_rst_n] [get_bd_pins axi_ethernet/phy_rst_n]
 connect_bd_intf_net -intf_net axi_ethernet_mdio [get_bd_intf_ports mdio] [get_bd_intf_pins axi_ethernet/mdio]
-connect_bd_net -net axi_ethernet_sgmii_clk_p [get_bd_ports sgmii_clk_p] [get_bd_pins axi_ethernet/mgt_clk_clk_p]
-connect_bd_net -net axi_ethernet_sgmii_clk_n [get_bd_ports sgmii_clk_n] [get_bd_pins axi_ethernet/mgt_clk_clk_n]
-connect_bd_net -net axi_ethernet_sgmii_rx_p  [get_bd_ports sgmii_rx_p]  [get_bd_pins axi_ethernet/sgmii_rxp]
-connect_bd_net -net axi_ethernet_sgmii_rx_n  [get_bd_ports sgmii_rx_n]  [get_bd_pins axi_ethernet/sgmii_rxn]
-connect_bd_net -net axi_ethernet_sgmii_tx_p  [get_bd_ports sgmii_tx_p]  [get_bd_pins axi_ethernet/sgmii_txp]
-connect_bd_net -net axi_ethernet_sgmii_tx_n  [get_bd_ports sgmii_tx_n]  [get_bd_pins axi_ethernet/sgmii_txn]
+connect_bd_intf_net -intf_net axi_ethernet_sgmii [get_bd_intf_ports sgmii] [get_bd_intf_pins axi_ethernet/sgmii]
+connect_bd_net -net sys_125m_clk_p [get_bd_ports sys_125m_clk_p] [get_bd_pins axi_ethernet/ref_clk_125_p]
+connect_bd_net -net sys_125m_clk_n [get_bd_ports sys_125m_clk_n] [get_bd_pins axi_ethernet/ref_clk_125_n]
 
 connect_bd_net -net axi_uart_sin [get_bd_ports uart_sin] [get_bd_pins axi_uart/rx]
 connect_bd_net -net axi_uart_sout [get_bd_ports uart_sout] [get_bd_pins axi_uart/tx]
@@ -464,7 +458,7 @@ set sys_zynq 0
 set sys_mem_size 0x40000000
 set sys_addr_cntrl_space [get_bd_addr_spaces sys_mb/Data]
 
-create_bd_addr_seg -range 0x00002000 -offset 0x00000000 $sys_addr_cntrl_space [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem]          SEG_data_dlmb_cntlr
+create_bd_addr_seg -range 0x00020000 -offset 0x00000000 $sys_addr_cntrl_space [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem]          SEG_data_dlmb_cntlr
 create_bd_addr_seg -range 0x00001000 -offset 0x41400000 $sys_addr_cntrl_space [get_bd_addr_segs sys_mb_debug/S_AXI/Reg]           SEG_data_mb_debug
 create_bd_addr_seg -range 0x00040000 -offset 0x40E00000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ethernet/eth_buf/S_AXI/REG]   SEG_data_ethernet
 create_bd_addr_seg -range 0x00010000 -offset 0x41E10000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ethernet_dma/S_AXI_LITE/Reg]  SEG_data_ethernet_dma
@@ -481,7 +475,7 @@ create_bd_addr_seg -range 0x00010000 -offset 0x70e00000 $sys_addr_cntrl_space [g
 create_bd_addr_seg -range 0x00010000 -offset 0x75c00000 $sys_addr_cntrl_space [get_bd_addr_segs axi_spdif_tx_core/S_AXI/reg0]     SEG_data_spdif_core
 create_bd_addr_seg -range 0x00010000 -offset 0x41E00000 $sys_addr_cntrl_space [get_bd_addr_segs axi_spdif_tx_dma/S_AXI_LITE/Reg]  SEG_data_spdif_tx_dma
 
-create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Instruction] [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_instr_ilmb_cntlr
+create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Instruction] [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_instr_ilmb_cntlr
 create_bd_addr_seg -range 0x00010000 -offset 0x00000000 [get_bd_addr_spaces axi_ethernet/eth_buf/S_AXI_2TEMAC] [get_bd_addr_segs axi_ethernet/eth_mac/s_axi/Reg] SEG_ethernet_mac
 
 create_bd_addr_seg -range 0x20000000 -offset 0x20000000 [get_bd_addr_spaces sys_mb/Data]                [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl

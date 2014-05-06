@@ -12,6 +12,11 @@ set_property -dict  {PACKAGE_PIN  AK16  IOSTANDARD  DIFF_SSTL12_DCI ODT RTT_48} 
 
 create_clock -name sys_clk      -period  3.33 [get_ports sys_clk_p]
 
+set_property -dict  {PACKAGE_PIN  G10   IOSTANDARD  LVDS DIFF_TERM TRUE} [get_ports sys_125m_clk_p] 
+set_property -dict  {PACKAGE_PIN  F10   IOSTANDARD  LVDS DIFF_TERM TRUE} [get_ports sys_125m_clk_n] 
+
+create_clock -name sys_clk      -period  8.00 [get_ports sys_125m_clk_p]
+
 # ddr
 
 set_property -dict  {PACKAGE_PIN  AH14  IOSTANDARD  SSTL12}     [get_ports ddr4_act_n] 
@@ -137,22 +142,17 @@ set_property -dict  {PACKAGE_PIN  AL18  IOSTANDARD  LVCMOS12}   [get_ports ddr4_
 # ethernet
 
 set_property -dict  {PACKAGE_PIN  L25   IOSTANDARD  LVCMOS18}       [get_ports mdio_mdc] 
-set_property -dict  {PACKAGE_PIN  H26   IOSTANDARD  LVCMOS18}       [get_ports mdio_mdio_io] 
+set_property -dict  {PACKAGE_PIN  H26   IOSTANDARD  LVCMOS18}       [get_ports mdio_mdio] 
 set_property -dict  {PACKAGE_PIN  J23   IOSTANDARD  LVCMOS18}       [get_ports phy_rst_n] 
-set_property -dict  {PACKAGE_PIN  P26   IOSTANDARD  LVDS_25}        [get_ports sgmii_clk_p]
-set_property -dict  {PACKAGE_PIN  N26   IOSTANDARD  LVDS_25}        [get_ports sgmii_clk_n] 
-set_property -dict  {PACKAGE_PIN  P24   IOSTANDARD  DIFF_HSTL_I_18} [get_ports sgmii_rx_p] 
-set_property -dict  {PACKAGE_PIN  P25   IOSTANDARD  DIFF_HSTL_I_18} [get_ports sgmii_rx_n] 
-set_property -dict  {PACKAGE_PIN  N24   IOSTANDARD  DIFF_HSTL_I_18} [get_ports sgmii_tx_p] 
-set_property -dict  {PACKAGE_PIN  M24   IOSTANDARD  DIFF_HSTL_I_18} [get_ports sgmii_tx_n] 
-
-set_false_path -through [get_ports phy_rst_n]
-create_clock -name sgmii_clk -period  8.00 [get_ports sgmii_clk_p]
+set_property -dict  {PACKAGE_PIN  N24   IOSTANDARD  DIFF_HSTL_I_18} [get_ports phy_tx_p] 
+set_property -dict  {PACKAGE_PIN  M24   IOSTANDARD  DIFF_HSTL_I_18} [get_ports phy_tx_n] 
+set_property -dict  {PACKAGE_PIN  P24   IOSTANDARD  DIFF_HSTL_I_18} [get_ports phy_rx_p] 
+set_property -dict  {PACKAGE_PIN  P25   IOSTANDARD  DIFF_HSTL_I_18} [get_ports phy_rx_n] 
 
 # uart
 
-set_property -dict  {PACKAGE_PIN  K26   IOSTANDARD  LVCMOS18} [get_ports uart_sin] 
-set_property -dict  {PACKAGE_PIN  G25   IOSTANDARD  LVCMOS18} [get_ports uart_sout] 
+set_property -dict  {PACKAGE_PIN  K26   IOSTANDARD  LVCMOS18} [get_ports uart_sout]
+set_property -dict  {PACKAGE_PIN  G25   IOSTANDARD  LVCMOS18} [get_ports uart_sin] 
 
 # fan
 
