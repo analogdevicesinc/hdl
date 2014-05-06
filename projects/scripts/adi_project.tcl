@@ -11,6 +11,11 @@ proc adi_project_create {project_name} {
   set project_part "none"
   set project_board "none"
 
+  if [regexp "_ml605$" $project_name] {
+    set xl_board "ml605"
+    set project_part "xc6vlx240tff1156-1"
+    set project_board "ml605"
+  }
   if [regexp "_ac701$" $project_name] {
     set xl_board "ac701"
     set project_part "xc7a200tfbg676-2"
@@ -46,6 +51,26 @@ proc adi_project_create {project_name} {
     set project_part "xc7z045ffg900-2"
     set project_board "xilinx.com:zynq:zc706:1.1"
   }
+
+  # planahead - 6 and down
+
+  if {$xl_board eq "ml605"} {
+
+    set project_system_dir "./$project_name.srcs/sources_1/edk/$xl_board"
+
+    create_project $project_name . -part $project_part  -force
+    set_property board $project_board [current_project]
+
+    import_files -norecurse $ad_hdl_dir/projects/common/ml605/system.xmp
+
+    generate_target {synthesis implementation} [get_files $project_system_dir/system.xmp]
+    make_wrapper -files [get_files $project_system_dir/system.xmp] -top
+    import_files -force -norecurse -fileset sources_1 $project_system_dir/system_stub.v
+
+    return
+  }
+
+  # vivado - 7 and up
 
   set project_system_dir "./$project_name.srcs/sources_1/bd/system"
 
@@ -83,6 +108,39 @@ proc adi_project_run {project_name} {
 
   global ad_hdl_dir
   global ad_phdl_dir
+  global xl_board
+
+  # planahead - 6 and down
+
+  if {$xl_board eq "ml605"} {
+
+    set project_system_dir "./$project_name.srcs/sources_1/edk/$xl_board"
+
+    set_property strategy MapTiming [get_runs impl_1]
+    set_property strategy TimingWithIOBPacking [get_runs synth_1]
+
+    launch_runs synth_1
+    wait_on_run synth_1
+    open_run synth_1
+    report_timing -file timing_synth.log
+
+    launch_runs impl_1 -to_step bitgen
+    wait_on_run impl_1
+    open_run impl_1
+    report_timing -file timing_impl.log
+
+    # -- Unable to find an equivalent
+    #if [expr [get_property SLACK [get_timing_paths]] < 0] {
+    #  puts "ERROR: Timing Constraints NOT met."
+    #  use_this_invalid_command_to_crash
+    #}
+
+    export_hardware [get_files $project_system_dir/system.xmp] [get_runs impl_1] -bitstream
+
+    return
+  }
+
+  # vivado - 7 and up
 
   set project_system_dir "./$project_name.srcs/sources_1/bd/system"
 
