@@ -148,8 +148,8 @@ module system_top (
   output          rx_sysref_n;
   output          rx_sync_p;
   output          rx_sync_n;
-  input   [ 3:0]  rx_data_p;
-  input   [ 3:0]  rx_data_n;
+  input   [ 1:0]  rx_data_p;
+  input   [ 1:0]  rx_data_n;
 
   output          spi_ad9671_csn;
   output          spi_ad9671_clk;

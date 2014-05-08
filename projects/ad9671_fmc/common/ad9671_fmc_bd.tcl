@@ -14,27 +14,27 @@ set spi_sdi_i       [create_bd_port -dir I spi_sdi_i]
 set rx_ref_clk      [create_bd_port -dir I rx_ref_clk]
 set rx_sync         [create_bd_port -dir O rx_sync]
 set rx_sysref       [create_bd_port -dir O rx_sysref]
-set rx_data_p       [create_bd_port -dir I -from 3 -to 0 rx_data_p]
-set rx_data_n       [create_bd_port -dir I -from 3 -to 0 rx_data_n]
+set rx_data_p       [create_bd_port -dir I -from 1 -to 0 rx_data_p]
+set rx_data_n       [create_bd_port -dir I -from 1 -to 0 rx_data_n]
 
 # adc peripherals
 
 set axi_ad9671_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core]
-set_property -dict [list CONFIG.PCORE_4L_2L_N {1}] [get_bd_cells axi_ad9671_core]
+set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core]
 
 set axi_ad9671_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9671_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9671_jesd
-set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9671_jesd
+set_property -dict [list CONFIG.C_LANES {2}] $axi_ad9671_jesd
 
 set axi_ad9671_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_ad9671_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {4}] [get_bd_cells axi_ad9671_gt]
+set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {2}] [get_bd_cells axi_ad9671_gt]
 set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {4}] $axi_ad9671_gt
-set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {2}] $axi_ad9671_gt
-set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {2}] $axi_ad9671_gt
+set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_ad9671_gt
+set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_ad9671_gt
 set_property -dict [list CONFIG.PCORE_RX_CLK25_DIV {4}] $axi_ad9671_gt
 set_property -dict [list CONFIG.PCORE_TX_CLK25_DIV {4}] $axi_ad9671_gt
 set_property -dict [list CONFIG.PCORE_PMA_RSV {0x00018480}] $axi_ad9671_gt
-set_property -dict [list CONFIG.PCORE_RX_CDR_CFG {0x03000023ff40200020}] $axi_ad9671_gt
+set_property -dict [list CONFIG.PCORE_RX_CDR_CFG {0x03000023ff20400020}] $axi_ad9671_gt
 
 set axi_ad9671_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9671_dma]
 set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9671_dma
@@ -180,9 +180,9 @@ connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9671_dma/m_dest_axi_ar
 
 set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {128}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {170}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {4}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {64}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE3_WIDTH {128}] $ila_jesd_rx_mon
 
 connect_bd_net -net axi_ad9671_gt_rx_mon_data       [get_bd_pins axi_ad9671_gt/rx_mon_data]

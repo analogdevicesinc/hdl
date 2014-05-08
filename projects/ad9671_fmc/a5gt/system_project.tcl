@@ -28,20 +28,12 @@ set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to ref_clk
 
 set_location_assignment PIN_R1    -to rx_data[0]
 set_location_assignment PIN_R2    -to "rx_data[0](n)"
-set_location_assignment PIN_AE1   -to rx_data[1]
-set_location_assignment PIN_AE2   -to "rx_data[1](n)"
-set_location_assignment PIN_U1    -to rx_data[2]
-set_location_assignment PIN_U2    -to "rx_data[2](n)"
-set_location_assignment PIN_AA1   -to rx_data[3]
-set_location_assignment PIN_AA2   -to "rx_data[3](n)"
+set_location_assignment PIN_U1    -to rx_data[1]
+set_location_assignment PIN_U2    -to "rx_data[1](n)"
 set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[0]
 set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[1]
-set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[2]
-set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[3]
 set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[0]
 set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[1]
-set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[2]
-set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[3]
 
 # jesd signals
 

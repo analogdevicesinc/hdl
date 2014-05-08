@@ -6,12 +6,8 @@ set_property  -dict {PACKAGE_PIN  AD10} [get_ports rx_ref_clk_p]                
 set_property  -dict {PACKAGE_PIN  AD9}  [get_ports rx_ref_clk_n]                              ; ## D05  FMC_HPC_GBTCLK0_M2C_N      
 set_property  -dict {PACKAGE_PIN  AE8}  [get_ports rx_data_p[0]]                              ; ## A10  FMC_HPC_DP3_M2C_P          
 set_property  -dict {PACKAGE_PIN  AE7}  [get_ports rx_data_n[0]]                              ; ## A11  FMC_HPC_DP3_M2C_N          
-set_property  -dict {PACKAGE_PIN  AH10} [get_ports rx_data_p[1]]                              ; ## C06  FMC_HPC_DP0_M2C_P          
-set_property  -dict {PACKAGE_PIN  AH9}  [get_ports rx_data_n[1]]                              ; ## C07  FMC_HPC_DP0_M2C_N          
-set_property  -dict {PACKAGE_PIN  AG8}  [get_ports rx_data_p[2]]                              ; ## A06  FMC_HPC_DP2_M2C_P          
-set_property  -dict {PACKAGE_PIN  AG7}  [get_ports rx_data_n[2]]                              ; ## A07  FMC_HPC_DP2_M2C_N          
-set_property  -dict {PACKAGE_PIN  AJ8}  [get_ports rx_data_p[3]]                              ; ## A02  FMC_HPC_DP1_M2C_P          
-set_property  -dict {PACKAGE_PIN  AJ7}  [get_ports rx_data_n[3]]                              ; ## A03  FMC_HPC_DP1_M2C_N          
+set_property  -dict {PACKAGE_PIN  AG8}  [get_ports rx_data_p[1]]                              ; ## A06  FMC_HPC_DP2_M2C_P          
+set_property  -dict {PACKAGE_PIN  AG7}  [get_ports rx_data_n[1]]                              ; ## A07  FMC_HPC_DP2_M2C_N          
 set_property  -dict {PACKAGE_PIN  AH23  IOSTANDARD LVDS_25} [get_ports rx_sysref_p]           ; ## D11  FMC_HPC_LA05_P
 set_property  -dict {PACKAGE_PIN  AH24  IOSTANDARD LVDS_25} [get_ports rx_sysref_n]           ; ## D12  FMC_HPC_LA05_N
 set_property  -dict {PACKAGE_PIN  AJ20  IOSTANDARD LVDS_25} [get_ports rx_sync_p]             ; ## H10  FMC_HPC_LA04_P

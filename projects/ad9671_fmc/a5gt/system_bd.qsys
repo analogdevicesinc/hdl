@@ -115,6 +115,14 @@
          type = "String";
       }
    }
+   element sys_ddr3_dmaconnect.s0
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element sys_ddr3_interconnect.s0
    {
       datum _lockedAddress
@@ -122,14 +130,6 @@
          value = "0";
          type = "boolean";
       }
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
-   element sys_ddr3_dmaconnect.s0
-   {
       datum baseAddress
       {
          value = "0";
@@ -152,19 +152,19 @@
          type = "String";
       }
    }
-   element sys_timer.s1
-   {
-      datum baseAddress
-      {
-         value = "86025376";
-         type = "String";
-      }
-   }
    element sys_ethernet_desc_mem.s1
    {
       datum baseAddress
       {
          value = "0";
+         type = "String";
+      }
+   }
+   element sys_timer.s1
+   {
+      datum baseAddress
+      {
+         value = "86025376";
          type = "String";
       }
    }
@@ -189,6 +189,14 @@
          type = "String";
       }
    }
+   element sys_tcm_mem.s2
+   {
+      datum baseAddress
+      {
+         value = "86016000";
+         type = "String";
+      }
+   }
    element sys_int_mem.s2
    {
       datum _lockedAddress
@@ -199,14 +207,6 @@
       datum baseAddress
       {
          value = "83886080";
-         type = "String";
-      }
-   }
-   element sys_tcm_mem.s2
-   {
-      datum baseAddress
-      {
-         value = "86016000";
          type = "String";
       }
    }
@@ -1596,18 +1596,18 @@
   <parameter name="DEVICE_FAMILY" value="Arria V" />
   <parameter name="DATA_PATH" value="RX" />
   <parameter name="SUBCLASSV" value="0" />
-  <parameter name="lane_rate" value="1600" />
+  <parameter name="lane_rate" value="3200" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="bonded_mode" value="bonded" />
   <parameter name="REFCLK_FREQ" value="80.0" />
   <parameter name="pll_reconfig_enable" value="false" />
   <parameter name="bitrev_en" value="false" />
-  <parameter name="L" value="4" />
+  <parameter name="L" value="2" />
   <parameter name="M" value="8" />
   <parameter name="N" value="16" />
   <parameter name="N_PRIME" value="16" />
   <parameter name="S" value="1" />
-  <parameter name="K" value="8" />
+  <parameter name="K" value="4" />
   <parameter name="SCR" value="1" />
   <parameter name="CS" value="0" />
   <parameter name="CF" value="0" />
@@ -1640,7 +1640,7 @@
    version="13.1"
    enabled="1"
    name="sys_jesd204b_s1_rx_clk">
-  <parameter name="DERIVED_CLOCK_RATE" value="40000000" />
+  <parameter name="DERIVED_CLOCK_RATE" value="80000000" />
   <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
@@ -1668,7 +1668,7 @@
   <parameter name="gui_frac_multiply_factor" value="1" />
   <parameter name="gui_divide_factor_n" value="1" />
   <parameter name="gui_cascade_counter0" value="false" />
-  <parameter name="gui_output_clock_frequency0" value="40.0" />
+  <parameter name="gui_output_clock_frequency0" value="80.0" />
   <parameter name="gui_divide_factor_c0" value="1" />
   <parameter name="gui_actual_output_clock_frequency0" value="0 MHz" />
   <parameter name="gui_ps_units0" value="ps" />
@@ -1910,7 +1910,7 @@
   <parameter name="RESPONSE_FIFO_DEPTH" value="4" />
   <parameter name="MASTER_SYNC_DEPTH" value="2" />
   <parameter name="SLAVE_SYNC_DEPTH" value="2" />
-  <parameter name="AUTO_M0_CLK_CLOCK_RATE" value="40000000" />
+  <parameter name="AUTO_M0_CLK_CLOCK_RATE" value="80000000" />
   <parameter name="AUTO_S0_CLK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
  </module>
@@ -1944,7 +1944,7 @@
  <module kind="axi_ad9671" version="1.0" enabled="1" name="axi_ad9671">
   <parameter name="PCORE_ID" value="0" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_4L_2L_N" value="1" />
+  <parameter name="PCORE_4L_2L_N" value="0" />
   <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />

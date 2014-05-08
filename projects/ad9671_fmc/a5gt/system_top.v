@@ -161,7 +161,7 @@ module system_top (
   // lane interface
 
   input             ref_clk;
-  input   [  3:0]   rx_data;
+  input   [  1:0]   rx_data;
   output            rx_sync;
   output            rx_sysref;
 
@@ -223,18 +223,18 @@ module system_top (
   wire              adc_mon_valid_s;
   wire    [127:0]   adc_mon_data_s;
   wire    [  3:0]   rx_ip_sof_s;
-  wire    [127:0]   rx_ip_data_s;
-  wire    [127:0]   rx_data_s;
+  wire    [ 63:0]   rx_ip_data_s;
+  wire    [ 63:0]   rx_data_s;
   wire              rx_sw_rstn_s;
   wire              rx_sysref_s;
   wire              rx_err_s;
   wire              rx_ready_s;
   wire    [  3:0]   rx_rst_state_s;
   wire              rx_lane_aligned_s;
-  wire    [  3:0]   rx_analog_reset_s;
-  wire    [  3:0]   rx_digital_reset_s;
-  wire    [  3:0]   rx_cdr_locked_s;
-  wire    [  3:0]   rx_cal_busy_s;
+  wire    [  1:0]   rx_analog_reset_s;
+  wire    [  1:0]   rx_digital_reset_s;
+  wire    [  1:0]   rx_cdr_locked_s;
+  wire    [  1:0]   rx_cal_busy_s;
   wire              rx_pll_locked_s;
   wire    [ 15:0]   rx_xcvr_status_s;
 
@@ -290,7 +290,7 @@ module system_top (
 
   genvar n;
   generate
-  for (n = 0; n < 4; n = n + 1) begin: g_align_1
+  for (n = 0; n < 2; n = n + 1) begin: g_align_1
   ad_jesd_align i_jesd_align (
     .rx_clk (rx_clk),
     .rx_sof (rx_ip_sof_s),
@@ -299,15 +299,15 @@ module system_top (
   end
   endgenerate
 
-  assign rx_xcvr_status_s[15:15] = 1'd0;
-  assign rx_xcvr_status_s[14:14] = rx_sync;
-  assign rx_xcvr_status_s[13:13] = rx_ready_s;
-  assign rx_xcvr_status_s[12:12] = rx_pll_locked_s;
-  assign rx_xcvr_status_s[11: 8] = rx_rst_state_s;
-  assign rx_xcvr_status_s[ 7: 4] = rx_cdr_locked_s;
-  assign rx_xcvr_status_s[ 3: 0] = rx_cal_busy_s;
+  assign rx_xcvr_status_s[15:11] = 5'd0;
+  assign rx_xcvr_status_s[10:10] = rx_sync;
+  assign rx_xcvr_status_s[ 9: 9] = rx_ready_s;
+  assign rx_xcvr_status_s[ 8: 8] = rx_pll_locked_s;
+  assign rx_xcvr_status_s[ 7: 4] = rx_rst_state_s;
+  assign rx_xcvr_status_s[ 3: 2] = rx_cdr_locked_s;
+  assign rx_xcvr_status_s[ 1: 0] = rx_cal_busy_s;
 
-  ad_xcvr_rx_rst #(.NUM_OF_LANES (4)) i_xcvr_rx_rst (
+  ad_xcvr_rx_rst #(.NUM_OF_LANES (2)) i_xcvr_rx_rst (
     .rx_clk (rx_clk),
     .rx_rstn (sys_resetn),
     .rx_sw_rstn (rx_sw_rstn_s),
