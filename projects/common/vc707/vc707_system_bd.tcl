@@ -212,11 +212,13 @@ connect_bd_net -net sys_concat_intc_intr [get_bd_pins sys_concat_intc/dout] [get
 connect_bd_net -net axi_ddr_cntrl_mmcm_locked [get_bd_pins axi_ddr_cntrl/mmcm_locked] [get_bd_pins sys_rstgen/dcm_locked]
 
 set sys_100m_resetn_source [get_bd_pins sys_rstgen/peripheral_aresetn]
+set sys_100m_reset_source [get_bd_pins sys_rstgen/peripheral_reset]
 set sys_200m_resetn_source [get_bd_pins sys_rstgen/interconnect_aresetn]
 set sys_100m_clk_source [get_bd_pins axi_ddr_cntrl/ui_clk]
 set sys_200m_clk_source [get_bd_pins axi_ddr_cntrl/ui_addn_clk_0]
 
 connect_bd_net -net sys_100m_resetn $sys_100m_resetn_source
+connect_bd_net -net sys_100m_reset $sys_100m_reset_source
 connect_bd_net -net sys_200m_resetn $sys_200m_resetn_source
 connect_bd_net -net sys_100m_clk $sys_100m_clk_source
 connect_bd_net -net sys_200m_clk $sys_200m_clk_source
@@ -449,6 +451,7 @@ connect_bd_net -net axi_spdif_tx_dma_mm2s_last  [get_bd_pins axi_spdif_tx_core/S
 connect_bd_net -net axi_spdif_tx_dma_mm2s_ready [get_bd_pins axi_spdif_tx_core/S_AXIS_TREADY] [get_bd_pins axi_spdif_tx_dma/m_axis_mm2s_tready]
 
 connect_bd_net -net sys_200m_clk [get_bd_pins sys_audio_clkgen/clk_in1] $sys_200m_clk_source
+connect_bd_net -net sys_100m_reset [get_bd_pins sys_audio_clkgen/reset] $sys_100m_reset_source
 connect_bd_net -net sys_audio_clkgen_clk [get_bd_pins sys_audio_clkgen/clk_out1] [get_bd_pins axi_spdif_tx_core/spdif_data_clk]
 connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/spdif_tx_o]
 
@@ -488,3 +491,4 @@ create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces a
 create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_MM2S] [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl
 create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_S2MM] [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl
 
+create_bd_addr_seg -range 0x00001000 -offset 0x00000000 [get_bd_addr_spaces axi_ethernet/eth_buf/S_AXI_2TEMAC] [get_bd_addr_segs axi_ethernet/eth_mac/s_axi/Reg] SEG_eth_mac_reg
