@@ -217,6 +217,7 @@ module axi_ad9361_rx (
   wire            up_adc_or_0_s;
   wire    [31:0]  up_rdata_0_s;
   wire            up_ack_0_s;
+  wire    [15:0]  adc_dcfilter_data_out_1_s;
   wire            adc_iqcor_valid_1_s;
   wire    [15:0]  adc_iqcor_data_1_s;
   wire            adc_enable_1_s;
@@ -236,6 +237,7 @@ module axi_ad9361_rx (
   wire            up_adc_or_2_s;
   wire    [31:0]  up_rdata_2_s;
   wire            up_ack_2_s;
+  wire    [15:0]  adc_dcfilter_data_out_3_s;
   wire            adc_iqcor_valid_3_s;
   wire    [15:0]  adc_iqcor_data_3_s;
   wire            adc_enable_3_s;
@@ -558,7 +560,7 @@ module axi_ad9361_rx (
     .adc_dcfilter_data_out (adc_dcfilter_data_out_0_s),
     .adc_pn_oos_out (adc_pn_oos_out_0_s),
     .adc_pn_err_out (adc_pn_err_out_0_s),
-    .adc_dcfilter_data_in (16'd0),
+    .adc_dcfilter_data_in (adc_dcfilter_data_out_1_s),
     .adc_pn_oos_in (1'd0),
     .adc_pn_err_in (1'd0),
     .adc_iqcor_valid (adc_iqcor_valid_0_s),
@@ -591,7 +593,7 @@ module axi_ad9361_rx (
     .adc_data (adc_data_q1),
     .adc_data_q (12'd0),
     .adc_or (1'b0),
-    .adc_dcfilter_data_out (),
+    .adc_dcfilter_data_out (adc_dcfilter_data_out_1_s),
     .adc_pn_oos_out (),
     .adc_pn_err_out (),
     .adc_dcfilter_data_in (adc_dcfilter_data_out_0_s),
@@ -630,7 +632,7 @@ module axi_ad9361_rx (
     .adc_dcfilter_data_out (adc_dcfilter_data_out_2_s),
     .adc_pn_oos_out (adc_pn_oos_out_2_s),
     .adc_pn_err_out (adc_pn_err_out_2_s),
-    .adc_dcfilter_data_in (16'd0),
+    .adc_dcfilter_data_in (adc_dcfilter_data_out_3_s),
     .adc_pn_oos_in (1'd0),
     .adc_pn_err_in (1'd0),
     .adc_iqcor_valid (adc_iqcor_valid_2_s),
@@ -663,7 +665,7 @@ module axi_ad9361_rx (
     .adc_data (adc_data_q2),
     .adc_data_q (12'd0),
     .adc_or (1'b0),
-    .adc_dcfilter_data_out (),
+    .adc_dcfilter_data_out (adc_dcfilter_data_out_3_s),
     .adc_pn_oos_out (),
     .adc_pn_err_out (),
     .adc_dcfilter_data_in (adc_dcfilter_data_out_2_s),
