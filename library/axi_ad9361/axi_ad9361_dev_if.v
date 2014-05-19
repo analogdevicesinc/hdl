@@ -64,6 +64,7 @@ module axi_ad9361_dev_if (
   // clock (common to both receive and transmit)
 
   clk,
+  l_clk,
 
   // receive data path interface
 
@@ -98,8 +99,8 @@ module axi_ad9361_dev_if (
 
   // chipscope signals
 
-  dev_dbg_trigger,
-  dev_dbg_data);
+  dev_dbg_data,
+  dev_l_dbg_data);
 
   // this parameter controls the buffer type based on the target device.
 
@@ -128,7 +129,8 @@ module axi_ad9361_dev_if (
 
   // clock (common to both receive and transmit)
 
-  output          clk;
+  input           clk;
+  output          l_clk;
 
   // receive data path interface
 
@@ -163,8 +165,8 @@ module axi_ad9361_dev_if (
 
   // chipscope signals
 
-  output  [ 3:0]  dev_dbg_trigger;
-  output [297:0]  dev_dbg_data;
+  output [111:0]  dev_dbg_data;
+  output [ 61:0]  dev_l_dbg_data;
 
   // internal registers
 
@@ -184,6 +186,18 @@ module axi_ad9361_dev_if (
   reg     [11:0]  rx_data_q1_r2 = 'd0;
   reg     [11:0]  rx_data_i2_r2 = 'd0;
   reg     [11:0]  rx_data_q2_r2 = 'd0;
+  reg             adc_p_valid = 'd0;
+  reg     [11:0]  adc_p_data_i1 = 'd0;
+  reg     [11:0]  adc_p_data_q1 = 'd0;
+  reg     [11:0]  adc_p_data_i2 = 'd0;
+  reg     [11:0]  adc_p_data_q2 = 'd0;
+  reg             adc_p_status = 'd0;
+  reg             adc_n_valid = 'd0;
+  reg     [11:0]  adc_n_data_i1 = 'd0;
+  reg     [11:0]  adc_n_data_q1 = 'd0;
+  reg     [11:0]  adc_n_data_i2 = 'd0;
+  reg     [11:0]  adc_n_data_q2 = 'd0;
+  reg             adc_n_status = 'd0;
   reg             adc_valid = 'd0;
   reg     [11:0]  adc_data_i1 = 'd0;
   reg     [11:0]  adc_data_q1 = 'd0;
@@ -198,6 +212,12 @@ module axi_ad9361_dev_if (
   reg             tx_frame = 'd0;
   reg     [ 5:0]  tx_data_p = 'd0;
   reg     [ 5:0]  tx_data_n = 'd0;
+  reg             tx_n_frame = 'd0;
+  reg     [ 5:0]  tx_n_data_p = 'd0;
+  reg     [ 5:0]  tx_n_data_n = 'd0;
+  reg             tx_p_frame = 'd0;
+  reg     [ 5:0]  tx_p_data_p = 'd0;
+  reg     [ 5:0]  tx_p_data_n = 'd0;
   reg     [ 6:0]  delay_ld = 'd0;
   reg     [ 4:0]  delay_rdata = 'd0;
   reg             delay_ack_t = 'd0;
@@ -224,60 +244,35 @@ module axi_ad9361_dev_if (
 
   // device debug signals
 
-  assign dev_dbg_trigger[0] = rx_frame[0];
-  assign dev_dbg_trigger[1] = rx_frame[1];
-  assign dev_dbg_trigger[2] = tx_frame;
-  assign dev_dbg_trigger[3] = adc_status;
-
   assign dev_dbg_data[  5:  0] = tx_data_n;
   assign dev_dbg_data[ 11:  6] = tx_data_p;
-  assign dev_dbg_data[ 23: 12] = tx_data_i1_d;
-  assign dev_dbg_data[ 35: 24] = tx_data_q1_d;
-  assign dev_dbg_data[ 47: 36] = tx_data_i2_d;
-  assign dev_dbg_data[ 59: 48] = tx_data_q2_d;
-  assign dev_dbg_data[ 63: 60] = tx_data_sel_s;
-  assign dev_dbg_data[ 66: 64] = tx_data_cnt;
-  assign dev_dbg_data[ 67: 67] = tx_frame;
-  assign dev_dbg_data[ 68: 68] = dac_r1_mode;
-  assign dev_dbg_data[ 69: 69] = dac_valid;
-  assign dev_dbg_data[ 81: 70] = dac_data_i1;
-  assign dev_dbg_data[ 93: 82] = dac_data_q1;
-  assign dev_dbg_data[105: 94] = dac_data_i2;
-  assign dev_dbg_data[117:106] = dac_data_q2;
-  assign dev_dbg_data[118:118] = rx_frame_p_s;
-  assign dev_dbg_data[119:119] = rx_frame_n_s;
-  assign dev_dbg_data[120:120] = rx_frame_n;
-  assign dev_dbg_data[122:121] = rx_frame;
-  assign dev_dbg_data[124:123] = rx_frame_d;
-  assign dev_dbg_data[128:125] = rx_frame_s;
-  assign dev_dbg_data[134:129] = rx_data_p_s;
-  assign dev_dbg_data[140:135] = rx_data_n_s;
-  assign dev_dbg_data[146:141] = rx_data_n;
-  assign dev_dbg_data[158:147] = rx_data;
-  assign dev_dbg_data[170:159] = rx_data_d;
-  assign dev_dbg_data[171:171] = rx_error_r1;
-  assign dev_dbg_data[172:172] = rx_valid_r1;
-  assign dev_dbg_data[184:173] = rx_data_i_r1;
-  assign dev_dbg_data[196:185] = rx_data_q_r1;
-  assign dev_dbg_data[197:197] = rx_error_r2;
-  assign dev_dbg_data[198:198] = rx_valid_r2;
-  assign dev_dbg_data[210:199] = rx_data_i1_r2;
-  assign dev_dbg_data[222:211] = rx_data_q1_r2;
-  assign dev_dbg_data[234:223] = rx_data_i2_r2;
-  assign dev_dbg_data[246:235] = rx_data_q2_r2;
-  assign dev_dbg_data[247:247] = adc_r1_mode;
-  assign dev_dbg_data[248:248] = adc_status;
-  assign dev_dbg_data[249:249] = adc_valid;
-  assign dev_dbg_data[261:250] = adc_data_i1;
-  assign dev_dbg_data[273:262] = adc_data_q1;
-  assign dev_dbg_data[285:274] = adc_data_i2;
-  assign dev_dbg_data[297:286] = adc_data_q2;
+  assign dev_dbg_data[ 23: 12] = dac_data_i1;
+  assign dev_dbg_data[ 35: 24] = dac_data_q1;
+  assign dev_dbg_data[ 47: 36] = dac_data_i2;
+  assign dev_dbg_data[ 59: 48] = dac_data_q2;
+  assign dev_dbg_data[ 71: 60] = adc_data_i1;
+  assign dev_dbg_data[ 83: 72] = adc_data_q1;
+  assign dev_dbg_data[ 95: 84] = adc_data_i2;
+  assign dev_dbg_data[107: 96] = adc_data_q2;
+  assign dev_dbg_data[108:108] = tx_frame;
+  assign dev_dbg_data[109:109] = dac_valid;
+  assign dev_dbg_data[110:110] = adc_status;
+  assign dev_dbg_data[111:111] = adc_valid;
+
+  assign dev_l_dbg_data[  5:  0] = tx_p_data_n;
+  assign dev_l_dbg_data[ 11:  6] = tx_p_data_p;
+  assign dev_l_dbg_data[ 23: 12] = adc_p_data_i1;
+  assign dev_l_dbg_data[ 35: 24] = adc_p_data_q1;
+  assign dev_l_dbg_data[ 47: 36] = adc_p_data_i2;
+  assign dev_l_dbg_data[ 59: 48] = adc_p_data_q2;
+  assign dev_l_dbg_data[ 60: 60] = tx_p_frame;
+  assign dev_l_dbg_data[ 61: 61] = adc_p_valid;
 
   // receive data path interface
 
   assign rx_frame_s = {rx_frame_d, rx_frame};
 
-  always @(posedge clk) begin
+  always @(posedge l_clk) begin
     rx_data_n <= rx_data_n_s;
     rx_frame_n <= rx_frame_n_s;
     rx_data <= {rx_data_n, rx_data_p_s};
@@ -288,7 +283,7 @@ module axi_ad9361_dev_if (
 
   // receive data path for single rf, frame is expected to qualify i/q msb only
 
-  always @(posedge clk) begin
+  always @(posedge l_clk) begin
     rx_error_r1 <= ((rx_frame_s == 4'b1100) || (rx_frame_s == 4'b0011)) ? 1'b0 : 1'b1;
     rx_valid_r1 <= (rx_frame_s == 4'b1100) ? 1'b1 : 1'b0;
     if (rx_frame_s == 4'b1100) begin
@@ -299,7 +294,7 @@ module axi_ad9361_dev_if (
 
   // receive data path for dual rf, frame is expected to qualify i/q msb and lsb for rf-1 only
 
-  always @(posedge clk) begin
+  always @(posedge l_clk) begin
     rx_error_r2 <= ((rx_frame_s == 4'b1111) || (rx_frame_s == 4'b1100) ||
       (rx_frame_s == 4'b0000) || (rx_frame_s == 4'b0011)) ? 1'b0 : 1'b1;
     rx_valid_r2 <= (rx_frame_s == 4'b0000) ? 1'b1 : 1'b0;
@@ -315,22 +310,42 @@ module axi_ad9361_dev_if (
 
   // receive data path mux
 
-  always @(posedge clk) begin
+  always @(posedge l_clk) begin
     if (adc_r1_mode == 1'b1) begin
-      adc_valid <= rx_valid_r1;
-      adc_data_i1 <= rx_data_i_r1;
-      adc_data_q1 <= rx_data_q_r1;
-      adc_data_i2 <= 12'd0;
-      adc_data_q2 <= 12'd0;
-      adc_status <= ~rx_error_r1;
+      adc_p_valid <= rx_valid_r1;
+      adc_p_data_i1 <= rx_data_i_r1;
+      adc_p_data_q1 <= rx_data_q_r1;
+      adc_p_data_i2 <= 12'd0;
+      adc_p_data_q2 <= 12'd0;
+      adc_p_status <= ~rx_error_r1;
     end else begin
-      adc_valid <= rx_valid_r2;
-      adc_data_i1 <= rx_data_i1_r2;
-      adc_data_q1 <= rx_data_q1_r2;
-      adc_data_i2 <= rx_data_i2_r2;
-      adc_data_q2 <= rx_data_q2_r2;
-      adc_status <= ~rx_error_r2;
+      adc_p_valid <= rx_valid_r2;
+      adc_p_data_i1 <= rx_data_i1_r2;
+      adc_p_data_q1 <= rx_data_q1_r2;
+      adc_p_data_i2 <= rx_data_i2_r2;
+      adc_p_data_q2 <= rx_data_q2_r2;
+      adc_p_status <= ~rx_error_r2;
     end
+  end
+
+  // transfer to a synchronous common clock
+
+  always @(negedge l_clk) begin
+    adc_n_valid <= adc_p_valid;
+    adc_n_data_i1 <= adc_p_data_i1;
+    adc_n_data_q1 <= adc_p_data_q1;
+    adc_n_data_i2 <= adc_p_data_i2;
+    adc_n_data_q2 <= adc_p_data_q2;
+    adc_n_status <= adc_p_status;
+  end
+
+  always @(posedge clk) begin
+    adc_valid <= adc_n_valid;
+    adc_data_i1 <= adc_n_data_i1;
+    adc_data_q1 <= adc_n_data_q1;
+    adc_data_i2 <= adc_n_data_i2;
+    adc_data_q2 <= adc_n_data_q2;
+    adc_status <= adc_n_status;
   end
 
   // transmit data path mux (reverse of what receive does above)
@@ -397,6 +412,20 @@ module axi_ad9361_dev_if (
         tx_data_n <= 6'd0;
       end
     endcase
+  end
+
+  // transfer data from a synchronous clock (skew less than 2ns)
+
+  always @(negedge clk) begin
+    tx_n_frame <= tx_frame;
+    tx_n_data_p <= tx_data_p;
+    tx_n_data_n <= tx_data_n;
+  end
+
+  always @(posedge l_clk) begin
+    tx_p_frame <= tx_n_frame;
+    tx_p_data_p <= tx_n_data_p;
+    tx_p_data_n <= tx_n_data_n;
   end
 
   // delay write interface, each delay element can be individually
@@ -517,7 +546,7 @@ module axi_ad9361_dev_if (
     .CE (1'b1),
     .R (1'b0),
     .S (1'b0),
-    .C (clk),
+    .C (l_clk),
     .D (rx_data_idelay_s[l_inst]),
     .Q1 (rx_data_p_s[l_inst]),
     .Q2 (rx_data_n_s[l_inst]));
@@ -595,7 +624,7 @@ module axi_ad9361_dev_if (
     .CE (1'b1),
     .R (1'b0),
     .S (1'b0),
-    .C (clk),
+    .C (l_clk),
     .D (rx_frame_idelay_s),
     .Q1 (rx_frame_p_s),
     .Q2 (rx_frame_n_s));
@@ -613,9 +642,9 @@ module axi_ad9361_dev_if (
     .CE (1'b1),
     .R (1'b0),
     .S (1'b0),
-    .C (clk),
-    .D1 (tx_data_p[l_inst]),
-    .D2 (tx_data_n[l_inst]),
+    .C (l_clk),
+    .D1 (tx_p_data_p[l_inst]),
+    .D2 (tx_p_data_n[l_inst]),
     .Q (tx_data_oddr_s[l_inst]));
 
   OBUFDS i_tx_data_obuf (
@@ -636,9 +665,9 @@ module axi_ad9361_dev_if (
     .CE (1'b1),
     .R (1'b0),
     .S (1'b0),
-    .C (clk),
-    .D1 (tx_frame),
-    .D2 (tx_frame),
+    .C (l_clk),
+    .D1 (tx_p_frame),
+    .D2 (tx_p_frame),
     .Q (tx_frame_oddr_s));
 
   OBUFDS i_tx_frame_obuf (
@@ -656,7 +685,7 @@ module axi_ad9361_dev_if (
     .CE (1'b1),
     .R (1'b0),
     .S (1'b0),
-    .C (clk),
+    .C (l_clk),
     .D1 (1'b0),
     .D2 (1'b1),
     .Q (tx_clk_oddr_s));
@@ -679,11 +708,11 @@ module axi_ad9361_dev_if (
     .CLR (1'b0),
     .CE (1'b1),
     .I (clk_ibuf_s),
-    .O (clk));
+    .O (l_clk));
   end else begin
   BUFG i_clk_gbuf (
     .I (clk_ibuf_s),
-    .O (clk));
+    .O (l_clk));
   end
   endgenerate
 

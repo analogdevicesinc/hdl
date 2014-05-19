@@ -59,7 +59,8 @@ module axi_ad9361_tx (
   dac_data_q2,
   dac_r1_mode,
   
-  // transmit master/slave
+  // master/slave
+
   dac_enable_in,
   dac_enable_out,
 
@@ -104,7 +105,8 @@ module axi_ad9361_tx (
   output  [11:0]  dac_data_q2;
   output          dac_r1_mode;
   
-  // transmit master/slave
+  // master/slave
+
   input           dac_enable_in;
   output          dac_enable_out;
 
@@ -173,6 +175,7 @@ module axi_ad9361_tx (
   wire            up_ack_s;
 
   // master/slave
+
   assign dac_enable_s = (PCORE_ID == 0) ? dac_enable_out : dac_enable_in;
   
   always @(posedge dac_clk) begin

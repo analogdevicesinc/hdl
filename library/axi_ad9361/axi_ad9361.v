@@ -50,10 +50,6 @@ module axi_ad9361 (
   rx_data_in_p,
   rx_data_in_n,
   
-  // receive master/slave
-  adc_start_in,
-  adc_start_out,
-
   // physical interface (transmit)
 
   tx_clk_out_p,
@@ -74,6 +70,7 @@ module axi_ad9361 (
 
   // dma interface
 
+  l_clk,
   clk,
 
   adc_dwr,
@@ -112,7 +109,12 @@ module axi_ad9361 (
   // monitor signals
 
   adc_mon_valid,
-  adc_mon_data);
+  adc_mon_data,
+
+  // chipscope signals
+
+  dev_dbg_data,
+  dev_l_dbg_data);
 
   // parameters
 
@@ -134,10 +136,6 @@ module axi_ad9361 (
   input   [ 5:0]  rx_data_in_p;
   input   [ 5:0]  rx_data_in_n;
   
-  // receive master/slave
-  input           adc_start_in;
-  output          adc_start_out;
-
   // physical interface (transmit)
 
   output          tx_clk_out_p;
@@ -147,7 +145,8 @@ module axi_ad9361 (
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
   
-  // transmit master/slave
+  // master/slave
+
   input           dac_enable_in;
   output          dac_enable_out;
 
@@ -157,7 +156,9 @@ module axi_ad9361 (
 
   // dma interface
 
-  output          clk;
+  output          l_clk;
+
+  input           clk;
   output          adc_dwr;
   output  [63:0]  adc_ddata;
   output          adc_dsync;
@@ -195,6 +196,11 @@ module axi_ad9361 (
 
   output          adc_mon_valid;
   output  [47:0]  adc_mon_data;
+
+  // chipscope signals
+
+  output [111:0]  dev_dbg_data;
+  output [ 61:0]  dev_l_dbg_data;
 
   // internal registers
 
@@ -294,6 +300,7 @@ module axi_ad9361 (
     .tx_frame_out_n (tx_frame_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_data_out_n (tx_data_out_n),
+    .l_clk (l_clk),
     .clk (clk),
     .adc_valid (adc_valid_s),
     .adc_data_i1 (adc_data_i1_s),
@@ -317,8 +324,8 @@ module axi_ad9361 (
     .delay_rdata (delay_rdata_s),
     .delay_ack_t (delay_ack_t_s),
     .delay_locked (delay_locked_s),
-    .dev_dbg_trigger (),
-    .dev_dbg_data ());
+    .dev_dbg_data (dev_dbg_data),
+    .dev_l_dbg_data (dev_l_dbg_data));
 
   // prbs/loopback interface
 
@@ -378,8 +385,6 @@ module axi_ad9361 (
     .adc_data_q2 (adc_data_q2_s),
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode_s),
-    .adc_start_in (adc_start_in),
-    .adc_start_out (adc_start_out),    
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_sel (delay_sel_s),
