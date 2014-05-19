@@ -59,6 +59,7 @@ module axi_jesd_gt (
   // core interface
 
   rx_rst,
+  rx_clk_g,
   rx_clk,
   rx_data,
   rx_gt_charisk,
@@ -72,6 +73,7 @@ module axi_jesd_gt (
   rx_ip_data,
   
   tx_rst,
+  tx_clk_g,
   tx_clk,
   tx_data,
   tx_gt_charisk,
@@ -182,7 +184,8 @@ module axi_jesd_gt (
   // core interface
 
   output                                    rx_rst;
-  output                                    rx_clk;
+  output                                    rx_clk_g;
+  input                                     rx_clk;
   output  [((PCORE_NUM_OF_LANES*32)-1):0]   rx_data;
   output  [((PCORE_NUM_OF_LANES* 4)-1):0]   rx_gt_charisk;
   output  [((PCORE_NUM_OF_LANES* 4)-1):0]   rx_gt_disperr;
@@ -195,7 +198,8 @@ module axi_jesd_gt (
   input   [((PCORE_NUM_OF_LANES*32)-1):0]   rx_ip_data;
 
   output                                    tx_rst;
-  output                                    tx_clk;
+  output                                    tx_clk_g;
+  input                                     tx_clk;
   input   [((PCORE_NUM_OF_LANES*32)-1):0]   tx_data;
   input   [((PCORE_NUM_OF_LANES* 4)-1):0]   tx_gt_charisk;
   input   [((PCORE_NUM_OF_LANES*32)-1):0]   tx_gt_data;
@@ -413,11 +417,11 @@ module axi_jesd_gt (
 
   BUFG i_bufg_rx_clk (
     .I (rx_out_clk[0]),
-    .O (rx_clk));
+    .O (rx_clk_g));
 
   BUFG i_bufg_tx_clk (
     .I (tx_out_clk[0]),
-    .O (tx_clk));
+    .O (tx_clk_g));
 
   // transceivers
 
