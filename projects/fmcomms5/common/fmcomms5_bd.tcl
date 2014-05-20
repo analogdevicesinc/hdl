@@ -325,31 +325,47 @@ if {$sys_zynq == 0} {
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9361_adc_dma/m_dest_axi_aresetn] 
 }    
 
-# ila (adc) master
+if {$xl_board eq "zc702"} {
 
-set ila_adc_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc_0]
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_adc_0
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {62}] $ila_adc_0
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {112}] $ila_adc_0
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {112}] $ila_adc_0
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}] $ila_adc_0
-set_property -dict [list CONFIG.C_PROBE4_WIDTH {128}] $ila_adc_0
+  # ila (adc) master
 
-connect_bd_net -net axi_ad9361_0_clk  [get_bd_pins ila_adc_0/clk]
-connect_bd_net -net axi_ad9361_0_dev_l_dbg_data   [get_bd_pins axi_ad9361_0/dev_l_dbg_data]   [get_bd_pins ila_adc_0/probe0]
-connect_bd_net -net axi_ad9361_0_dev_dbg_data     [get_bd_pins axi_ad9361_0/dev_dbg_data]     [get_bd_pins ila_adc_0/probe1]
-connect_bd_net -net axi_ad9361_1_dev_dbg_data     [get_bd_pins axi_ad9361_1/dev_dbg_data]     [get_bd_pins ila_adc_0/probe2]
-connect_bd_net -net axi_ad9361_0_adc_dwr          [get_bd_pins ila_adc_0/probe3]
-connect_bd_net -net axi_ad9361_adc_ddata          [get_bd_pins ila_adc_0/probe4]
+  set ila_adc_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc_0]
+  set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc_0
+  set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc_0
+  set_property -dict [list CONFIG.C_PROBE1_WIDTH {128}] $ila_adc_0
 
-# ila (adc) slave
+  connect_bd_net -net axi_ad9361_0_clk [get_bd_pins ila_adc_0/clk]
+  connect_bd_net -net axi_ad9361_0_adc_dwr [get_bd_pins ila_adc_0/probe0]
+  connect_bd_net -net axi_ad9361_adc_ddata [get_bd_pins ila_adc_0/probe1]
 
-set ila_adc_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc_1]
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_adc_1
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {62}] $ila_adc_1
+} else {
 
-connect_bd_net -net axi_ad9361_1_clk  [get_bd_pins ila_adc_1/clk]
-connect_bd_net -net axi_ad9361_1_dev_l_dbg_data  [get_bd_pins axi_ad9361_1/dev_l_dbg_data]    [get_bd_pins ila_adc_1/probe0]    
+  # ila (adc) master
+
+  set ila_adc_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc_0]
+  set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_adc_0
+  set_property -dict [list CONFIG.C_PROBE0_WIDTH {62}] $ila_adc_0
+  set_property -dict [list CONFIG.C_PROBE1_WIDTH {112}] $ila_adc_0
+  set_property -dict [list CONFIG.C_PROBE2_WIDTH {112}] $ila_adc_0
+  set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}] $ila_adc_0
+  set_property -dict [list CONFIG.C_PROBE4_WIDTH {128}] $ila_adc_0
+
+  connect_bd_net -net axi_ad9361_0_clk [get_bd_pins ila_adc_0/clk]
+  connect_bd_net -net axi_ad9361_0_dev_l_dbg_data [get_bd_pins axi_ad9361_0/dev_l_dbg_data] [get_bd_pins ila_adc_0/probe0]
+  connect_bd_net -net axi_ad9361_0_dev_dbg_data [get_bd_pins axi_ad9361_0/dev_dbg_data] [get_bd_pins ila_adc_0/probe1]
+  connect_bd_net -net axi_ad9361_1_dev_dbg_data [get_bd_pins axi_ad9361_1/dev_dbg_data] [get_bd_pins ila_adc_0/probe2]
+  connect_bd_net -net axi_ad9361_0_adc_dwr [get_bd_pins ila_adc_0/probe3]
+  connect_bd_net -net axi_ad9361_adc_ddata [get_bd_pins ila_adc_0/probe4]
+
+  # ila (adc) slave
+
+  set ila_adc_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc_1]
+  set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_adc_1
+  set_property -dict [list CONFIG.C_PROBE0_WIDTH {62}] $ila_adc_1
+
+  connect_bd_net -net axi_ad9361_1_clk [get_bd_pins ila_adc_1/clk]
+  connect_bd_net -net axi_ad9361_1_dev_l_dbg_data [get_bd_pins axi_ad9361_1/dev_l_dbg_data] [get_bd_pins ila_adc_1/probe0]    
+}
 
 # address map
 
