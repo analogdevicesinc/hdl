@@ -143,6 +143,7 @@ if {$sys_zynq == 0} {
     # connections (ad9361)
 
     connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9361/delay_clk]
+    connect_bd_net -net axi_ad9361_clk [get_bd_pins axi_ad9361/l_clk]
     connect_bd_net -net axi_ad9361_clk [get_bd_pins axi_ad9361/clk]
     connect_bd_net -net axi_ad9361_clk [get_bd_pins axi_ad9361_adc_dma/fifo_wr_clk]
     connect_bd_net -net axi_ad9361_clk [get_bd_pins axi_ad9361_dac_dma/fifo_rd_clk]
