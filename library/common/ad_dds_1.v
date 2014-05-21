@@ -117,7 +117,9 @@ module ad_dds_1 (
     sine_scale_p <= sine_scale_p_s;
     sine_scale_n <= sine_scale_n_s;
     sine_scale_sign <= sine_scale_sign_s;
-    if (sine_scale_sign == 1'b1) begin
+    if (scale[14:0] == 15'd0) begin
+      dds_data <= 16'd0;
+    end else if (sine_scale_sign == 1'b1) begin
       dds_data <= {1'b1, sine_scale_n};
     end else begin
       dds_data <= {1'b0, sine_scale_p};
