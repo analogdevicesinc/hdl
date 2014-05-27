@@ -46,6 +46,7 @@ module up_adc_channel (
   adc_clk,
   adc_rst,
   adc_enable,
+  adc_lb_enb,
   adc_pn_sel,
   adc_iqcor_enb,
   adc_dcfilt_enb,
@@ -101,6 +102,7 @@ module up_adc_channel (
   input           adc_clk;
   input           adc_rst;
   output          adc_enable;
+  output          adc_lb_enb;
   output          adc_pn_sel;
   output          adc_iqcor_enb;
   output          adc_dcfilt_enb;
@@ -149,6 +151,7 @@ module up_adc_channel (
 
   // internal registers
 
+  reg             up_adc_lb_enb = 'd0;
   reg             up_adc_pn_sel = 'd0;
   reg             up_adc_iqcor_enb = 'd0;
   reg             up_adc_dcfilt_enb = 'd0;
@@ -191,6 +194,7 @@ module up_adc_channel (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_adc_lb_enb <= 'd0;
       up_adc_pn_sel <= 'd0;
       up_adc_iqcor_enb <= 'd0;
       up_adc_dcfilt_enb <= 'd0;
@@ -215,6 +219,7 @@ module up_adc_channel (
       up_usr_decimation_n <= 'd0;
     end else begin
       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h0)) begin
+        up_adc_lb_enb <= up_wdata[11];
         up_adc_pn_sel <= up_wdata[10];
         up_adc_iqcor_enb <= up_wdata[9];
         up_adc_dcfilt_enb <= up_wdata[8];
@@ -271,7 +276,7 @@ module up_adc_channel (
       up_ack <= up_sel_s;
       if (up_sel_s == 1'b1) begin
         case (up_addr[3:0])
-          4'h0: up_rdata <= {21'd0, up_adc_pn_sel, up_adc_iqcor_enb, up_adc_dcfilt_enb,
+          4'h0: up_rdata <= {20'd0, up_adc_lb_enb, up_adc_pn_sel, up_adc_iqcor_enb, up_adc_dcfilt_enb,
                               1'd0, up_adc_dfmt_se, up_adc_dfmt_type, up_adc_dfmt_enable,
                               2'd0, up_adc_pn_type, up_adc_enable};
           4'h1: up_rdata <= {29'd0, up_adc_pn_err, up_adc_pn_oos, up_adc_or};
@@ -291,10 +296,11 @@ module up_adc_channel (
 
   // adc control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(72)) i_adc_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(73)) i_adc_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_cntrl ({ up_adc_pn_sel,
+    .up_data_cntrl ({ up_adc_lb_enb,
+                      up_adc_pn_sel,
                       up_adc_iqcor_enb,
                       up_adc_dcfilt_enb,
                       up_adc_dfmt_se,
@@ -308,7 +314,8 @@ module up_adc_channel (
                       up_adc_iqcor_coeff_2}),
     .d_rst (adc_rst),
     .d_clk (adc_clk),
-    .d_data_cntrl ({  adc_pn_sel,
+    .d_data_cntrl ({  adc_lb_enb,
+                      adc_pn_sel,
                       adc_iqcor_enb,
                       adc_dcfilt_enb,
                       adc_dfmt_se,

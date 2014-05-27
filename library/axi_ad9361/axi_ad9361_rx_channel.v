@@ -64,6 +64,7 @@ module axi_ad9361_rx_channel (
   adc_iqcor_valid,
   adc_iqcor_data,
   adc_enable,
+  adc_lb_enb,
   up_adc_pn_err,
   up_adc_pn_oos,
   up_adc_or,
@@ -107,6 +108,7 @@ module axi_ad9361_rx_channel (
   output          adc_iqcor_valid;
   output  [15:0]  adc_iqcor_data;
   output          adc_enable;
+  input           adc_lb_enb;
   output          up_adc_pn_err;
   output          up_adc_pn_oos;
   output          up_adc_or;
@@ -220,6 +222,7 @@ module axi_ad9361_rx_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),
+    .adc_lb_enb (adc_lb_enb),
     .adc_pn_sel (adc_pn_sel_s),
     .adc_iqcor_enb (adc_iqcor_enb_s),
     .adc_dcfilt_enb (adc_dcfilt_enb_s),

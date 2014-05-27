@@ -46,18 +46,22 @@ module axi_ad9361_rx (
 
   adc_clk,
   adc_valid,
+  adc_data_i1,
+  adc_data_q1,
+  adc_data_i2,
+  adc_data_q2,
+  adc_lb_enb_i1,
   adc_pn_oos_i1,
   adc_pn_err_i1,
-  adc_data_i1,
+  adc_lb_enb_q1,
   adc_pn_oos_q1,
   adc_pn_err_q1,
-  adc_data_q1,
+  adc_lb_enb_i2,
   adc_pn_oos_i2,
   adc_pn_err_i2,
-  adc_data_i2,
+  adc_lb_enb_q2,
   adc_pn_oos_q2,
   adc_pn_err_q2,
-  adc_data_q2,
   adc_status,
   adc_r1_mode,
   
@@ -111,18 +115,22 @@ module axi_ad9361_rx (
 
   input           adc_clk;
   input           adc_valid;
+  input   [11:0]  adc_data_i1;
+  input   [11:0]  adc_data_q1;
+  input   [11:0]  adc_data_i2;
+  input   [11:0]  adc_data_q2;
+  output          adc_lb_enb_i1;
   input           adc_pn_oos_i1;
   input           adc_pn_err_i1;
-  input   [11:0]  adc_data_i1;
+  output          adc_lb_enb_q1;
   input           adc_pn_oos_q1;
   input           adc_pn_err_q1;
-  input   [11:0]  adc_data_q1;
+  output          adc_lb_enb_i2;
   input           adc_pn_oos_i2;
   input           adc_pn_err_i2;
-  input   [11:0]  adc_data_i2;
+  output          adc_lb_enb_q2;
   input           adc_pn_oos_q2;
   input           adc_pn_err_q2;
-  input   [11:0]  adc_data_q2;
   input           adc_status;
   output          adc_r1_mode;
   
@@ -543,6 +551,7 @@ module axi_ad9361_rx (
     .adc_iqcor_valid (adc_iqcor_valid_0_s),
     .adc_iqcor_data (adc_iqcor_data_0_s),
     .adc_enable (adc_enable_0_s),
+    .adc_lb_enb (adc_lb_enb_i1),
     .up_adc_pn_err (up_adc_pn_err_0_s),
     .up_adc_pn_oos (up_adc_pn_oos_0_s),
     .up_adc_or (up_adc_or_0_s),
@@ -579,6 +588,7 @@ module axi_ad9361_rx (
     .adc_iqcor_valid (adc_iqcor_valid_1_s),
     .adc_iqcor_data (adc_iqcor_data_1_s),
     .adc_enable (adc_enable_1_s),
+    .adc_lb_enb (adc_lb_enb_q1),
     .up_adc_pn_err (up_adc_pn_err_1_s),
     .up_adc_pn_oos (up_adc_pn_oos_1_s),
     .up_adc_or (up_adc_or_1_s),
@@ -615,6 +625,7 @@ module axi_ad9361_rx (
     .adc_iqcor_valid (adc_iqcor_valid_2_s),
     .adc_iqcor_data (adc_iqcor_data_2_s),
     .adc_enable (adc_enable_2_s),
+    .adc_lb_enb (adc_lb_enb_i2),
     .up_adc_pn_err (up_adc_pn_err_2_s),
     .up_adc_pn_oos (up_adc_pn_oos_2_s),
     .up_adc_or (up_adc_or_2_s),
@@ -651,6 +662,7 @@ module axi_ad9361_rx (
     .adc_iqcor_valid (adc_iqcor_valid_3_s),
     .adc_iqcor_data (adc_iqcor_data_3_s),
     .adc_enable (adc_enable_3_s),
+    .adc_lb_enb (adc_lb_enb_q2),
     .up_adc_pn_err (up_adc_pn_err_3_s),
     .up_adc_pn_oos (up_adc_pn_oos_3_s),
     .up_adc_or (up_adc_or_3_s),

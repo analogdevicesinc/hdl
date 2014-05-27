@@ -235,6 +235,11 @@ module axi_ad9361 (
   wire    [ 4:0]  delay_rdata_s;
   wire            delay_ack_t_s;
   wire            delay_locked_s;
+  wire            adc_valid_pl_s;
+  wire    [11:0]  adc_data_pl_i1_s;
+  wire    [11:0]  adc_data_pl_q1_s;
+  wire    [11:0]  adc_data_pl_i2_s;
+  wire    [11:0]  adc_data_pl_q2_s;
   wire            dac_valid_pl_s;
   wire    [11:0]  dac_data_pl_i1_s;
   wire    [11:0]  dac_data_pl_q1_s;
@@ -248,12 +253,16 @@ module axi_ad9361 (
   wire            dac_pn_enb_i2_s;
   wire            dac_lb_enb_q2_s;
   wire            dac_pn_enb_q2_s;
+  wire            adc_lb_enb_i1_s;
   wire            adc_pn_oos_i1_s;
   wire            adc_pn_err_i1_s;
+  wire            adc_lb_enb_q1_s;
   wire            adc_pn_oos_q1_s;
   wire            adc_pn_err_q1_s;
+  wire            adc_lb_enb_i2_s;
   wire            adc_pn_oos_i2_s;
   wire            adc_pn_err_i2_s;
+  wire            adc_lb_enb_q2_s;
   wire            adc_pn_oos_q2_s;
   wire            adc_pn_err_q2_s;
   wire            up_sel_s;
@@ -341,17 +350,26 @@ module axi_ad9361 (
     .dac_data_in_q1 (dac_data_pl_q1_s),
     .dac_data_in_i2 (dac_data_pl_i2_s),
     .dac_data_in_q2 (dac_data_pl_q2_s),
+    .adc_valid (adc_pl_valid_s),
+    .adc_data_i1 (adc_pl_data_i1_s),
+    .adc_data_q1 (adc_pl_data_q1_s),
+    .adc_data_i2 (adc_pl_data_i2_s),
+    .adc_data_q2 (adc_pl_data_q2_s),
     .dac_valid (dac_valid_s),
     .dac_data_i1 (dac_data_i1_s),
     .dac_data_q1 (dac_data_q1_s),
     .dac_data_i2 (dac_data_i2_s),
     .dac_data_q2 (dac_data_q2_s),
+    .adc_lb_enb_i1 (adc_lb_enb_i1_s),
     .dac_lb_enb_i1 (dac_lb_enb_i1_s),
     .dac_pn_enb_i1 (dac_pn_enb_i1_s),
+    .adc_lb_enb_q1 (adc_lb_enb_q1_s),
     .dac_lb_enb_q1 (dac_lb_enb_q1_s),
     .dac_pn_enb_q1 (dac_pn_enb_q1_s),
+    .adc_lb_enb_i2 (adc_lb_enb_i2_s),
     .dac_lb_enb_i2 (dac_lb_enb_i2_s),
     .dac_pn_enb_i2 (dac_pn_enb_i2_s),
+    .adc_lb_enb_q2 (adc_lb_enb_q2_s),
     .dac_lb_enb_q2 (dac_lb_enb_q2_s),
     .dac_pn_enb_q2 (dac_pn_enb_q2_s),
     .adc_pn_oos_i1 (adc_pn_oos_i1_s),
@@ -370,19 +388,23 @@ module axi_ad9361 (
     .DP_DISABLE (PCORE_ADC_DP_DISABLE))
   i_rx (
     .adc_clk (clk),
-    .adc_valid (adc_valid_s),
+    .adc_valid (adc_pl_valid_s),
+    .adc_data_i1 (adc_pl_data_i1_s),
+    .adc_data_q1 (adc_pl_data_q1_s),
+    .adc_data_i2 (adc_pl_data_i2_s),
+    .adc_data_q2 (adc_pl_data_q2_s),
+    .adc_lb_enb_i1 (adc_lb_enb_i1_s),
     .adc_pn_oos_i1 (adc_pn_oos_i1_s),
     .adc_pn_err_i1 (adc_pn_err_i1_s),
-    .adc_data_i1 (adc_data_i1_s),
+    .adc_lb_enb_q1 (adc_lb_enb_q1_s),
     .adc_pn_oos_q1 (adc_pn_oos_q1_s),
     .adc_pn_err_q1 (adc_pn_err_q1_s),
-    .adc_data_q1 (adc_data_q1_s),
+    .adc_lb_enb_i2 (adc_lb_enb_i2_s),
     .adc_pn_oos_i2 (adc_pn_oos_i2_s),
     .adc_pn_err_i2 (adc_pn_err_i2_s),
-    .adc_data_i2 (adc_data_i2_s),
+    .adc_lb_enb_q2 (adc_lb_enb_q2_s),
     .adc_pn_oos_q2 (adc_pn_oos_q2_s),
     .adc_pn_err_q2 (adc_pn_err_q2_s),
-    .adc_data_q2 (adc_data_q2_s),
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode_s),
     .delay_clk (delay_clk),

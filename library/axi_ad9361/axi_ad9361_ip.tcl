@@ -24,6 +24,7 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "axi_ad9361_dev_if.v" \
+  "axi_ad9361_pnlb_1.v" \
   "axi_ad9361_pnlb.v" \
   "axi_ad9361_rx_pnmon.v" \
   "axi_ad9361_rx_channel.v" \
