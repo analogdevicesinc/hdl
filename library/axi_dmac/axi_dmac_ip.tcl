@@ -60,5 +60,25 @@ adi_set_ports_dependency "fifo_wr" \
 adi_set_ports_dependency "fifo_rd" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_DEST')) = 2)"
 
+ipx::add_bus_interface {fifo_wr} [ipx::current_core]
+set_property abstraction_type_vlnv {xilinx.com:interface:fifo_write_rtl:1.0} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
+set_property bus_type_vlnv {xilinx.com:interface:fifo_write:1.0} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
+set_property display_name {fifo_wr} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
+
+ipx::add_port_map {WR_DATA} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
+set_property physical_name {fifo_wr_din} [ipx::get_port_map WR_DATA [ipx::get_bus_interface fifo_wr [ipx::current_core]]]
+ipx::add_port_map {WR_EN} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
+set_property physical_name {fifo_wr_en} [ipx::get_port_map WR_EN [ipx::get_bus_interface fifo_wr [ipx::current_core]]]
+
+ipx::add_bus_interface {fifo_wr_clock} [ipx::current_core]
+set_property abstraction_type_vlnv {xilinx.com:signal:clock_rtl:1.0} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
+set_property bus_type_vlnv {xilinx.com:signal:clock:1.0} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
+set_property display_name {fifo_wr_clock} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
+ipx::add_port_map {CLK} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
+set_property physical_name {fifo_wr_clk} [ipx::get_port_map CLK [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]]
+
+ipx::add_bus_parameter {ASSOCIATED_BUSIF} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
+set_property value {fifo_wr} [ipx::get_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]]
+
 ipx::save_core [ipx::current_core]
 
