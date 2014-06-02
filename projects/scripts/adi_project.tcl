@@ -52,6 +52,12 @@ proc adi_project_create {project_name} {
     set project_board "xilinx.com:zynq:zc706:1.1"
   }
 
+   if [regexp "_mitx045$" $project_name] {
+    set xl_board "mitx045"
+    set project_part "xc7z045ffg900-2"
+    set project_board "not-applicable"
+  }
+
   # planahead - 6 and down
 
   if {$xl_board eq "ml605"} {

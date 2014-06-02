@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE project PUBLIC "project" "project.dtd" >
+<project version="1.0" >
+  <set param="PCW::UART1::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::CAN0::PERIPHERAL::ENABLE" value="0" />
+  <set param="PCW::SD0::GRP_CD::IO" value="MIO 14" />
+  <set param="PCW::ENET1::RESET::IO" value="-1" />
+  <set param="PCW::USB0::RESET::IO" value="MIO 7" />
+  <set param="PCW::USB0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::USB0::RESET::ENABLE" value="1" />
+  <set param="PCW::QSPI::GRP_FBCLK::ENABLE" value="1" />
+  <set param="PCW::QSPI::GRP_IO1::ENABLE" value="1" />
+  <set param="PCW::QSPI::GRP_SS1::ENABLE" value="1" />
+  <set param="PCW::QSPI::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::WDT::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::PJTAG::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::MIO::MIO[1]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[0]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[1]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[7]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[7]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[6]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[3]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[5]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[5]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[4]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[3]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[8]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[8]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[7]::DIRECTION" value="in" />
+  <set param="PCW::MIO::MIO[6]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[6]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[5]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[4]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[2]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[4]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[3]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[2]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[2]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[20]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[20]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[19]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[18]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[18]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[17]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[16]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[16]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[15]::DIRECTION" value="in" />
+  <set param="PCW::MIO::MIO[14]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[20]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[19]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[19]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[18]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[17]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[17]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[16]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[15]::PULLUP" value="enabled" />
+  <set param="PCW::MIO::MIO[15]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[13]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[27]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[26]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[26]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[25]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[24]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[24]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[23]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[22]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[22]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[21]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[28]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[28]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[27]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[27]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[26]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[25]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[25]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[24]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[23]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[23]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[22]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[21]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[21]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[35]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[34]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[34]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[33]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[32]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[32]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[31]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[30]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[30]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[29]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[28]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[35]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[35]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[34]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[33]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[33]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[32]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[31]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[31]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[30]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[29]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[29]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[11]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[11]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[9]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[9]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[13]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[12]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[12]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[10]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[10]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[39]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[38]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[38]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[37]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[37]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[36]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[39]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[39]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[38]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[36]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[36]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[37]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[40]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[41]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[40]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[43]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[43]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[42]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[41]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[41]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[43]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[42]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[42]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[40]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[44]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[44]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[47]::PULLUP" value="enabled" />
+  <set param="PCW::MIO::MIO[47]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[46]::DIRECTION" value="in" />
+  <set param="PCW::MIO::MIO[48]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[48]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[47]::DIRECTION" value="in" />
+  <set param="PCW::MIO::MIO[46]::PULLUP" value="enabled" />
+  <set param="PCW::MIO::MIO[46]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[45]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[45]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[45]::SLEW" value="slow" />
+  <set param="PCW::MIO::MIO[44]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[50]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[49]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[49]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[51]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[53]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[53]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::MIO::MIO[52]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[52]::IOTYPE" value="LVCMOS 1.8V" />
+  <set param="PCW::UIPARAM::DDR::CWL" value="6" />
+  <set param="PCW::UIPARAM::DDR::CL" value="7" />
+  <set param="PCW::UIPARAM::DDR::COL_ADDR_COUNT" value="10" />
+  <set param="PCW::UIPARAM::DDR::FREQ_MHZ" value="533.333313" />
+  <set param="PCW::UIPARAM::DDR::SPEED_BIN" value="DDR3_1066F" />
+  <set param="PCW::UIPARAM::DDR::DEVICE_CAPACITY" value="4096 MBits" />
+  <set param="PCW::UIPARAM::DDR::DRAM_WIDTH" value="16 Bits" />
+  <set param="PCW::UIPARAM::DDR::BL" value="8" />
+  <set param="PCW::UIPARAM::DDR::BUS_WIDTH" value="32 Bit" />
+  <set param="PCW::UIPARAM::DDR::MEMORY_TYPE" value="DDR 3" />
+  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_3" value="-0.055" />
+  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_1" value="0.074" />
+  <set param="PCW::UIPARAM::DDR::T_RAS_MIN" value="36.0" />
+  <set param="PCW::UIPARAM::DDR::T_RP" value="7" />
+  <set param="PCW::UIPARAM::DDR::PARTNO" value="Custom" />
+  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_2" value="-0.059" />
+  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_0" value="0.078" />
+  <set param="PCW::UIPARAM::DDR::T_FAW" value="45.0" />
+  <set param="PCW::UIPARAM::DDR::T_RC" value="49.5" />
+  <set param="PCW::UIPARAM::DDR::T_RCD" value="7" />
+  <set param="PCW::UIPARAM::DDR::CLOCK_0_LENGTH_MM" value="80.36" />
+  <set param="PCW::UIPARAM::DDR::DQ_3_LENGTH_MM" value="67.56" />
+  <set param="PCW::UIPARAM::DDR::DQ_2_LENGTH_MM" value="67.56" />
+  <set param="PCW::UIPARAM::DDR::DQ_1_LENGTH_MM" value="67.56" />
+  <set param="PCW::UIPARAM::DDR::DQS_3_LENGTH_MM" value="67.56" />
+  <set param="PCW::UIPARAM::DDR::DQS_1_LENGTH_MM" value="67.56" />
+  <set param="PCW::UIPARAM::DDR::BOARD_DELAY3" value="0.416" />
+  <set param="PCW::UIPARAM::DDR::BOARD_DELAY1" value="0.484" />
+  <set param="PCW::UIPARAM::DDR::TRAIN_DATA_EYE" value="1" />
+  <set param="PCW::UIPARAM::DDR::TRAIN_WRITE_LEVEL" value="1" />
+  <set param="PCW::UIPARAM::DDR::DQ_0_LENGTH_MM" value="67.56" />
+  <set param="PCW::UIPARAM::DDR::DQS_2_LENGTH_MM" value="67.56" />
+  <set param="PCW::UIPARAM::DDR::DQS_0_LENGTH_MM" value="67.56" />
+  <set param="PCW::UIPARAM::DDR::BOARD_DELAY2" value="0.417" />
+  <set param="PCW::UIPARAM::DDR::BOARD_DELAY0" value="0.482" />
+  <set param="PCW::UIPARAM::DDR::USE_INTERNAL_VREF" value="1" />
+  <set param="PCW::UIPARAM::DDR::TRAIN_READ_GATE" value="1" />
+  <set param="PCW::UIPARAM::DDR::CLOCK_2_LENGTH_MM" value="59.26" />
+  <set param="PCW::UIPARAM::DDR::CLOCK_3_LENGTH_MM" value="59.26" />
+  <set param="PCW::UIPARAM::DDR::CLOCK_1_LENGTH_MM" value="80.36" />
+  <set param="PCW::GPIO::GPIO::IO" value="MIO" />
+  <set param="PCW::GPIO::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::CAN::PERIPHERAL::FREQMHZ" value="100" />
+  <set param="PCW::UART::PERIPHERAL::FREQMHZ" value="50" />
+  <set param="PCW::ENET0::PERIPHERAL::FREQMHZ" value="1000 Mbps" />
+  <set param="PCW::APU::PERIPHERAL::FREQMHZ" value="667.000000" />
+  <set param="PCW::PRESET::GLOBAL::DEFAULT" value="powerup" />
+  <set param="PCW::SDIO::PERIPHERAL::FREQMHZ" value="50" />
+  <set param="PCW::PRESET::GLOBAL::CONFIG" value="Default" />
+  <set param="PCW::PRESET::BANK1::VOLTAGE" value="LVCMOS 1.8V" />
+  <set param="PCW::PRESET::FPGA::PARTNUMBER" value="xc7z045ffg900-2" />
+  <set param="PCW::PRESET::BANK0::VOLTAGE" value="LVCMOS 1.8V" />
+  <set param="PCW::PRESET::FPGA::SPEED" value="-2" />
+  <set param="PCW::TTC0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::I2C0::RESET::IO" value="MIO 46" />
+  <set param="PCW::I2C0::RESET::ENABLE" value="1" />
+  <set param="PCW::I2C0::I2C0::IO" value="MIO 50 .. 51" />
+  <set param="PCW::I2C0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::SD0::GRP_WP::ENABLE" value="1" />
+  <set param="PCW::SD0::GRP_CD::ENABLE" value="1" />
+  <set param="PCW::SD0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::ENET0::GRP_MDIO::IO" value="MIO 52 .. 53" />
+  <set param="PCW::ENET0::RESET::IO" value="MIO 47" />
+  <set param="PCW::ENET0::RESET::ENABLE" value="1" />
+  <set param="PCW::ENET0::GRP_MDIO::ENABLE" value="1" />
+  <set param="PCW::ENET0::ENET0::IO" value="MIO 16 .. 27" />
+  <set param="PCW::ENET0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::USB1::RESET::IO" value="-1" />
+</project>
