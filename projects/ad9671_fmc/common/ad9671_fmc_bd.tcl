@@ -95,6 +95,7 @@ connect_bd_net -net axi_ad9671_gt_rx_sysref         [get_bd_pins axi_ad9671_gt/r
 
 # connections (adc)
 
+connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_gt/rx_clk_g]
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_gt/rx_clk]
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_core/rx_clk]          
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_jesd/rx_core_clk]
