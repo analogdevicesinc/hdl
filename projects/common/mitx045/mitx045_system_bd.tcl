@@ -24,7 +24,7 @@ set spdif           [create_bd_port -dir O spdif]
 # instance: sys_ps7
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.3 sys_ps7]
-set_property -dict [list CONFIG.PCW_IMPORT_BOARD_PRESET {../../common/mitx045/mitx045.xml} ] [get_bd_cells sys_ps7]
+set_property -dict [list CONFIG.PCW_IMPORT_BOARD_PRESET $ad_hdl_dir/projects/common/mitx045/mitx045.xml ] [get_bd_cells sys_ps7]
 set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {1} ] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
