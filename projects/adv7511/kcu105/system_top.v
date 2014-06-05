@@ -157,8 +157,9 @@ module system_top (
   // default logic
 
   assign fan_pwm = 1'b1;
-  //assign sys_reset_req = mdm_reset | mig_reset | ~mig_ready;
-  assign sys_reset_req = mdm_reset;
+  // assign sys_reset_req = mdm_reset | mig_reset | ~mig_ready;
+  // assign sys_reset_req = mdm_reset;
+  assign sys_reset_req = 1'b0;
 
   always @(posedge sys_cpu_clk) begin
     if (sys_reset_req == 1'b1) begin

@@ -86,10 +86,6 @@ set_property -dict [list CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.use_bram
 set sys_mb_debug [create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.1 sys_mb_debug]
 set_property -dict [list CONFIG.C_USE_UART {1}] $sys_mb_debug
 
-# instance: system reset/clocks
-
-set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sys_const_vcc]
-
 # instance: ddr (mig)
 
 set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig:5.0 axi_ddr_cntrl]
@@ -145,11 +141,11 @@ set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_sw_led
 set axi_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_intc]
 set_property -dict [list CONFIG.C_HAS_FAST {0}] $axi_intc
 
-set sys_concat_aux_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.0 sys_concat_aux_intc]
+set sys_concat_aux_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_aux_intc]
 set_property -dict [list CONFIG.NUM_PORTS {9}] $sys_concat_aux_intc
 set_property -dict [list CONFIG.IN8_WIDTH {5}] $sys_concat_aux_intc
 
-set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.0 sys_concat_intc]
+set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
 set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
 
 # hdmi peripherals

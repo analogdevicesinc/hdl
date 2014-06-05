@@ -415,13 +415,31 @@ module axi_jesd_gt (
 
   // clock buffers
 
+  generate
+  if (PCORE_DEVICE_TYPE == 0) begin
   BUFG i_bufg_rx_clk (
     .I (rx_out_clk[0]),
     .O (rx_clk_g));
+  end
 
+  if (PCORE_DEVICE_TYPE == 0) begin
   BUFG i_bufg_tx_clk (
     .I (tx_out_clk[0]),
     .O (tx_clk_g));
+  end
+
+  if (PCORE_DEVICE_TYPE == 1) begin
+  BUFG_GT i_bufg_rx_clk (
+    .I (rx_out_clk[0]),
+    .O (rx_clk_g));
+  end
+
+  if (PCORE_DEVICE_TYPE == 1) begin
+  BUFG_GT i_bufg_tx_clk (
+    .I (tx_out_clk[0]),
+    .O (tx_clk_g));
+  end
+  endgenerate
 
   // transceivers
 
@@ -431,6 +449,7 @@ module axi_jesd_gt (
 
   ad_gt_common_1 #(
     .DRP_ID (14),
+    .GTH_GTX_N (PCORE_DEVICE_TYPE),
     .QPLL_REFCLK_DIV (PCORE_QPLL_REFCLK_DIV),
     .QPLL_CFG (PCORE_QPLL_CFG),
     .QPLL_FBDIV_RATIO (PCORE_QPLL_FBDIV_RATIO),
@@ -453,6 +472,7 @@ module axi_jesd_gt (
 
   ad_gt_common_1 #(
     .DRP_ID (15),
+    .GTH_GTX_N (PCORE_DEVICE_TYPE),
     .QPLL_REFCLK_DIV (PCORE_QPLL_REFCLK_DIV),
     .QPLL_CFG (PCORE_QPLL_CFG),
     .QPLL_FBDIV_RATIO (PCORE_QPLL_FBDIV_RATIO),
@@ -485,6 +505,7 @@ module axi_jesd_gt (
 
   ad_gt_channel_1 #(
     .DRP_ID (n),
+    .GTH_GTX_N (PCORE_DEVICE_TYPE),
     .CPLL_FBDIV (PCORE_CPLL_FBDIV),
     .RX_OUT_DIV (PCORE_RX_OUT_DIV),
     .TX_OUT_DIV (PCORE_TX_OUT_DIV),

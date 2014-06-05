@@ -2,12 +2,12 @@
 # ddr controller
 
 set_property -dict [list CONFIG.C0.ControllerType {DDR4_SDRAM}] [get_bd_cells axi_ddr_cntrl]
-set_property -dict [list CONFIG.C0.DDR4_TimePeriod {1000}] [get_bd_cells axi_ddr_cntrl]
+set_property -dict [list CONFIG.C0.DDR4_TimePeriod {833}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_InputClockPeriod {3333}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_MemoryPart {MT40A256M16HA-083}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_DataWidth {64}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_Mem_Add_Map {ROW_BANK_COLUMN}] [get_bd_cells axi_ddr_cntrl]
-set_property -dict [list CONFIG.C0.DDR4_CasWriteLatency {14}] [get_bd_cells axi_ddr_cntrl]
+set_property -dict [list CONFIG.C0.DDR4_CasWriteLatency {12}] [get_bd_cells axi_ddr_cntrl]
 
 set_property -dict [list CONFIG.C0.DDR4_AxiDataWidth {512}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_AxiNarrowBurst {true}] [get_bd_cells axi_ddr_cntrl]
