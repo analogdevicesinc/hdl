@@ -74,6 +74,12 @@ module system_top (
 
   spdif,
 
+  i2s_mclk,
+  i2s_bclk,
+  i2s_lrclk,
+  i2s_sdata_out,
+  i2s_sdata_in,
+
   iic_scl,
   iic_sda);
 
@@ -109,6 +115,12 @@ module system_top (
   output  [15:0]  hdmi_data;
 
   output          spdif;
+
+  output          i2s_mclk;
+  output          i2s_bclk;
+  output          i2s_lrclk;
+  output          i2s_sdata_out;
+  input           i2s_sdata_in;
 
   inout           iic_scl;
   inout           iic_sda;
@@ -159,6 +171,11 @@ module system_top (
     .hdmi_hsync (hdmi_hsync),
     .hdmi_out_clk (hdmi_out_clk),
     .hdmi_vsync (hdmi_vsync),
+    .i2s_bclk (i2s_bclk),
+    .i2s_lrclk (i2s_lrclk),
+    .i2s_mclk (i2s_mclk),
+    .i2s_sdata_in (i2s_sdata_in),
+    .i2s_sdata_out (i2s_sdata_out),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .spdif (spdif));

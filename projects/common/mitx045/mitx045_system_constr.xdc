@@ -27,6 +27,14 @@ set_property  -dict {PACKAGE_PIN  E12  IOSTANDARD LVCMOS18} [get_ports hdmi_data
 
 set_property  -dict {PACKAGE_PIN  F17  IOSTANDARD LVCMOS18} [get_ports spdif]
 
+# i2s
+
+set_property  -dict {PACKAGE_PIN  C14   IOSTANDARD LVCMOS18} [get_ports i2s_mclk]
+set_property  -dict {PACKAGE_PIN  B17   IOSTANDARD LVCMOS18} [get_ports i2s_bclk]
+set_property  -dict {PACKAGE_PIN  A17   IOSTANDARD LVCMOS18} [get_ports i2s_lrclk]
+set_property  -dict {PACKAGE_PIN  C17   IOSTANDARD LVCMOS18} [get_ports i2s_sdata_out]
+set_property  -dict {PACKAGE_PIN  B16   IOSTANDARD LVCMOS18} [get_ports i2s_sdata_in]
+
 # iic
 
 set_property  -dict {PACKAGE_PIN  B15  IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports iic_scl]
