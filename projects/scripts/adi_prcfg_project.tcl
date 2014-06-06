@@ -3,13 +3,10 @@
 #-------------------------------------------------------------------------------
 
 # Initialize the workspace
-proc prcfg_init_workspace {} {
+proc prcfg_init_workspace {prcfg_name_list} {
 
   # directory names
   set static_dir "prcfg_static"
-  set default_dir "prcfg_default"
-  set bist_dir "prcfg_bist"
-  set qpsk_dir "prcfg_qpsk"
   set sdk_dir "sdk_export"
 
   # make/clean all directory for design files
@@ -19,24 +16,16 @@ proc prcfg_init_workspace {} {
     file delete -force $static_dir
     file mkdir $static_dir
   }
-  if {![file exists $default_dir]} {
-    file mkdir $default_dir
-  } else {
-    file delete -force $default_dir
-    file mkdir $default_dir
+
+  foreach i $prcfg_name_list {
+    if {![file exists prcfg_$i]} {
+      file mkdir prcfg_$i
+    } else {
+      file delete -force prcfg_$i
+      file mkdir prcfg_$i
+    }
   }
-  if {![file exists $bist_dir]} {
-    file mkdir $bist_dir
-  } else {
-    file delete -force $bist_dir
-    file mkdir $bist_dir
-  }
-  if {![file exists $qpsk_dir]} {
-    file mkdir $qpsk_dir
-  } else {
-    file delete -force $qpsk_dir
-    file mkdir $qpsk_dir
-  }
+
   if {![file exists $sdk_dir]} {
     file mkdir $sdk_dir
   } else {
@@ -178,7 +167,7 @@ proc save_results { prcfg_name } {
 
 }
 
-# Verify the compatibility of diffrent configurations
+# Verify the compatibility of different configurations
 proc prcfg_verify { prcfg_name_list } {
   set counter 0
   set list_length [llength $prcfg_name_list]
