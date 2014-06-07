@@ -66,8 +66,18 @@ module axi_ad9361_tx (
 
   // dma interface
 
-  dac_drd,
-  dac_ddata,
+  dac_data_0,
+  dac_enable_0,
+  dac_drd_0,
+  dac_data_1,
+  dac_enable_1,
+  dac_drd_1,
+  dac_data_2,
+  dac_enable_2,
+  dac_drd_2,
+  dac_data_3,
+  dac_enable_3,
+  dac_drd_3,
   dac_dovf,
   dac_dunf,
 
@@ -112,8 +122,18 @@ module axi_ad9361_tx (
 
   // dma interface
 
-  output          dac_drd;
-  input   [63:0]  dac_ddata;
+  input   [15:0]  dac_data_0;
+  output          dac_enable_0;
+  output          dac_drd_0;
+  input   [15:0]  dac_data_1;
+  output          dac_enable_1;
+  output          dac_drd_1;
+  input   [15:0]  dac_data_2;
+  output          dac_enable_2;
+  output          dac_drd_2;
+  input   [15:0]  dac_data_3;
+  output          dac_enable_3;
+  output          dac_drd_3;
   input           dac_dovf;
   input           dac_dunf;
 
@@ -177,11 +197,20 @@ module axi_ad9361_tx (
   // master/slave
 
   assign dac_enable_s = (PCORE_ID == 0) ? dac_enable_out : dac_enable_in;
-  
+  assign dac_drd_0    = dac_drd;
+  assign dac_drd_1    = dac_drd;
+  assign dac_drd_2    = dac_drd;
+  assign dac_drd_3    = dac_drd;
+
+  assign dac_enable_0 = dac_enable_s;
+  assign dac_enable_1 = dac_enable_s;
+  assign dac_enable_2 = dac_enable_s;
+  assign dac_enable_3 = dac_enable_s;
+
   always @(posedge dac_clk) begin
     dac_enable <= dac_enable_s;
   end
-  
+
   // dds rate counters, dds phases are updated using data enables
 
   always @(posedge dac_clk) begin
@@ -210,7 +239,7 @@ module axi_ad9361_tx (
       dac_drd <= dac_dds_data_enable & dac_enable;
     end
     if (dac_drd == 1'b1) begin
-      dac_dma_data <= dac_ddata;
+      dac_dma_data <= {dac_data_3, dac_data_2, dac_data_1, dac_data_0};
     end
     if (dac_dds_data_enable == 1'b1) begin
       if (dac_r1_mode == 1'b0) begin

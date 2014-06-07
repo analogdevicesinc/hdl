@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -49,7 +49,7 @@ module axi_ad9361 (
   rx_frame_in_n,
   rx_data_in_p,
   rx_data_in_n,
-  
+
   // physical interface (transmit)
 
   tx_clk_out_p,
@@ -58,9 +58,9 @@ module axi_ad9361 (
   tx_frame_out_n,
   tx_data_out_p,
   tx_data_out_n,
-  
+
   // transmit master/slave
-  
+
   dac_enable_in,
   dac_enable_out,
 
@@ -73,14 +73,33 @@ module axi_ad9361 (
   l_clk,
   clk,
 
-  adc_dwr,
-  adc_ddata,
-  adc_dsync,
+  adc_chan_i1,
+  adc_enable_0,
+  adc_valid_0,
+  adc_chan_q1,
+  adc_enable_1,
+  adc_valid_1,
+  adc_chan_i2,
+  adc_enable_2,
+  adc_valid_2,
+  adc_chan_q2,
+  adc_enable_3,
+  adc_valid_3,
   adc_dovf,
   adc_dunf,
 
-  dac_drd,
-  dac_ddata,
+  dac_data_0,
+  dac_enable_0,
+  dac_drd_0,
+  dac_data_1,
+  dac_enable_1,
+  dac_drd_1,
+  dac_data_2,
+  dac_enable_2,
+  dac_drd_2,
+  dac_data_3,
+  dac_enable_3,
+  dac_drd_3,
   dac_dovf,
   dac_dunf,
 
@@ -135,7 +154,7 @@ module axi_ad9361 (
   input           rx_frame_in_n;
   input   [ 5:0]  rx_data_in_p;
   input   [ 5:0]  rx_data_in_n;
-  
+
   // physical interface (transmit)
 
   output          tx_clk_out_p;
@@ -144,7 +163,7 @@ module axi_ad9361 (
   output          tx_frame_out_n;
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
-  
+
   // master/slave
 
   input           dac_enable_in;
@@ -159,14 +178,34 @@ module axi_ad9361 (
   output          l_clk;
 
   input           clk;
-  output          adc_dwr;
-  output  [63:0]  adc_ddata;
-  output          adc_dsync;
+
+  output  [15:0]  adc_chan_i1;
+  output          adc_enable_0;
+  output          adc_valid_0;
+  output  [15:0]  adc_chan_q1;
+  output          adc_enable_1;
+  output          adc_valid_1;
+  output  [15:0]  adc_chan_i2;
+  output          adc_enable_2;
+  output          adc_valid_2;
+  output  [15:0]  adc_chan_q2;
+  output          adc_enable_3;
+  output          adc_valid_3;
   input           adc_dovf;
   input           adc_dunf;
 
-  output          dac_drd;
-  input   [63:0]  dac_ddata;
+  input   [15:0]  dac_data_0;
+  output          dac_enable_0;
+  output          dac_drd_0;
+  input   [15:0]  dac_data_1;
+  output          dac_enable_1;
+  output          dac_drd_1;
+  input   [15:0]  dac_data_2;
+  output          dac_enable_2;
+  output          dac_drd_2;
+  input   [15:0]  dac_data_3;
+  output          dac_enable_3;
+  output          dac_drd_3;
   input           dac_dovf;
   input           dac_dunf;
 
@@ -416,11 +455,20 @@ module axi_ad9361 (
     .delay_rdata (delay_rdata_s),
     .delay_ack_t (delay_ack_t_s),
     .delay_locked (delay_locked_s),
-    .adc_dwr (adc_dwr),
-    .adc_ddata (adc_ddata),
-    .adc_dsync (adc_dsync),
+    .adc_chan_i1 (adc_chan_i1),
+    .adc_chan_q1 (adc_chan_q1),
+    .adc_chan_i2 (adc_chan_i2),
+    .adc_chan_q2 (adc_chan_q2),
     .adc_dovf (adc_dovf),
     .adc_dunf (adc_dunf),
+    .adc_enable_0 (adc_enable_0),
+    .adc_enable_1 (adc_enable_1),
+    .adc_enable_2 (adc_enable_2),
+    .adc_enable_3 (adc_enable_3),
+    .adc_valid_0(adc_valid_0),
+    .adc_valid_1(adc_valid_1),
+    .adc_valid_2(adc_valid_2),
+    .adc_valid_3(adc_valid_3),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
@@ -457,10 +505,20 @@ module axi_ad9361 (
     .dac_r1_mode (dac_r1_mode_s),
     .dac_enable_in (dac_enable_in),
     .dac_enable_out (dac_enable_out),
-    .dac_drd (dac_drd),
-    .dac_ddata (dac_ddata),
-    .dac_dovf (dac_dovf),
-    .dac_dunf (dac_dunf),
+    .dac_drd_0(dac_drd_0),
+    .dac_drd_1(dac_drd_1),
+    .dac_drd_2(dac_drd_2),
+    .dac_drd_3(dac_drd_3),
+    .dac_enable_0(dac_enable_0),
+    .dac_enable_1(dac_enable_1),
+    .dac_enable_2(dac_enable_2),
+    .dac_enable_3(dac_enable_3),
+    .dac_data_0(dac_data_0),
+    .dac_data_1(dac_data_1),
+    .dac_data_2(dac_data_2),
+    .dac_data_3(dac_data_3),
+    .dac_dovf(dac_dovf),
+    .dac_dunf(dac_dunf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
