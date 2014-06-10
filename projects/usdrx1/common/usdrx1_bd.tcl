@@ -138,6 +138,7 @@ connect_bd_net -net axi_usdrx1_gt_rx_sysref         [get_bd_pins axi_usdrx1_gt/r
 
 # connections (adc)
 
+connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_usdrx1_gt/rx_clk_g]
 connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_usdrx1_gt/rx_clk]
 connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_0/rx_clk]          
 connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_1/rx_clk]          
