@@ -56,6 +56,9 @@ module axi_ad9625 (
   adc_dovf,
   adc_dunf,
   adc_enable,
+  adc_sref,
+  adc_raddr_in,
+  adc_raddr_out,
 
   // axi interface
 
@@ -77,12 +80,7 @@ module axi_ad9625 (
   s_axi_rvalid,
   s_axi_rresp,
   s_axi_rdata,
-  s_axi_rready,
-
-  // debug signals
-
-  adc_mon_valid,
-  adc_mon_data);
+  s_axi_rready);
 
   parameter PCORE_ID = 0;
   parameter PCORE_DEVICE_TYPE = 0;
@@ -106,6 +104,9 @@ module axi_ad9625 (
   input           adc_dovf;
   input           adc_dunf;
   output          adc_enable;
+  output  [ 15:0] adc_sref;
+  input   [  3:0] adc_raddr_in;
+  output  [  3:0] adc_raddr_out;
 
   // axi interface
 
@@ -128,11 +129,6 @@ module axi_ad9625 (
   output  [  1:0] s_axi_rresp;
   output  [ 31:0] s_axi_rdata;
   input           s_axi_rready;
-
-  // debug signals
-
-  output          adc_mon_valid;
-  output  [191:0] adc_mon_data;
 
   // internal registers
 
@@ -171,11 +167,6 @@ module axi_ad9625 (
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  // monitor signals
-
-  assign adc_mon_valid = 1'b1;
-  assign adc_mon_data = adc_data_s;
-
   // adc channels - dma interface
 
   always @(posedge adc_clk) begin
@@ -198,14 +189,17 @@ module axi_ad9625 (
 
   // main (device interface)
 
-  axi_ad9625_if i_if (
+  axi_ad9625_if #(.PCORE_ID(PCORE_ID)) i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_data (adc_data_s),
     .adc_or (adc_or_s),
-    .adc_status (adc_status_s));
+    .adc_status (adc_status_s),
+    .adc_sref (adc_sref),
+    .adc_raddr_in (adc_raddr_in),
+    .adc_raddr_out (adc_raddr_out));
 
   // channel
 
