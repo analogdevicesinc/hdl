@@ -231,12 +231,6 @@ module system_top (
   inout             drst_0;
   inout             arst_0;
 
-  // internal registers
-
-  reg     [511:0]   adc_ddata = 'd0;
-  reg     [255:0]   core_rx_data_0 = 'd0;
-  reg     [255:0]   core_rx_data_1 = 'd0;
-
   // internal signals
 
   wire    [ 18:0]   gpio_i;
@@ -250,52 +244,44 @@ module system_top (
   wire              spi_clk;
   wire              spi_miso;
   wire              spi_mosi;
-  wire              gt_rx_clk;
-  wire    [255:0]   gt_rx_data_0;
-  wire    [255:0]   gt_rx_data_1;
-  wire              adc_dwr;
-  wire              adc_dovf;
   wire    [255:0]   adc_ddata_0;
   wire    [255:0]   adc_ddata_1;
+  wire    [511:0]   adc_ddata;
 
   // interleaving
 
-  always @(posedge gt_rx_clk) begin
-    core_rx_data_0 <= gt_rx_data_0;
-    core_rx_data_1 <= gt_rx_data_1;
-    adc_ddata[((16*31)+15):(16*31)] = adc_ddata_1[((16*15)+15):(16*15)];
-    adc_ddata[((16*30)+15):(16*30)] = adc_ddata_0[((16*15)+15):(16*15)];
-    adc_ddata[((16*29)+15):(16*29)] = adc_ddata_1[((16*14)+15):(16*14)];
-    adc_ddata[((16*28)+15):(16*28)] = adc_ddata_0[((16*14)+15):(16*14)];
-    adc_ddata[((16*27)+15):(16*27)] = adc_ddata_1[((16*13)+15):(16*13)];
-    adc_ddata[((16*26)+15):(16*26)] = adc_ddata_0[((16*13)+15):(16*13)];
-    adc_ddata[((16*25)+15):(16*25)] = adc_ddata_1[((16*12)+15):(16*12)];
-    adc_ddata[((16*24)+15):(16*24)] = adc_ddata_0[((16*12)+15):(16*12)];
-    adc_ddata[((16*23)+15):(16*23)] = adc_ddata_1[((16*11)+15):(16*11)];
-    adc_ddata[((16*22)+15):(16*22)] = adc_ddata_0[((16*11)+15):(16*11)];
-    adc_ddata[((16*21)+15):(16*21)] = adc_ddata_1[((16*10)+15):(16*10)];
-    adc_ddata[((16*20)+15):(16*20)] = adc_ddata_0[((16*10)+15):(16*10)];
-    adc_ddata[((16*19)+15):(16*19)] = adc_ddata_1[((16* 9)+15):(16* 9)];
-    adc_ddata[((16*18)+15):(16*18)] = adc_ddata_0[((16* 9)+15):(16* 9)];
-    adc_ddata[((16*17)+15):(16*17)] = adc_ddata_1[((16* 8)+15):(16* 8)];
-    adc_ddata[((16*16)+15):(16*16)] = adc_ddata_0[((16* 8)+15):(16* 8)];
-    adc_ddata[((16*15)+15):(16*15)] = adc_ddata_1[((16* 7)+15):(16* 7)];
-    adc_ddata[((16*14)+15):(16*14)] = adc_ddata_0[((16* 7)+15):(16* 7)];
-    adc_ddata[((16*13)+15):(16*13)] = adc_ddata_1[((16* 6)+15):(16* 6)];
-    adc_ddata[((16*12)+15):(16*12)] = adc_ddata_0[((16* 6)+15):(16* 6)];
-    adc_ddata[((16*11)+15):(16*11)] = adc_ddata_1[((16* 5)+15):(16* 5)];
-    adc_ddata[((16*10)+15):(16*10)] = adc_ddata_0[((16* 5)+15):(16* 5)];
-    adc_ddata[((16* 9)+15):(16* 9)] = adc_ddata_1[((16* 4)+15):(16* 4)];
-    adc_ddata[((16* 8)+15):(16* 8)] = adc_ddata_0[((16* 4)+15):(16* 4)];
-    adc_ddata[((16* 7)+15):(16* 7)] = adc_ddata_1[((16* 3)+15):(16* 3)];
-    adc_ddata[((16* 6)+15):(16* 6)] = adc_ddata_0[((16* 3)+15):(16* 3)];
-    adc_ddata[((16* 5)+15):(16* 5)] = adc_ddata_1[((16* 2)+15):(16* 2)];
-    adc_ddata[((16* 4)+15):(16* 4)] = adc_ddata_0[((16* 2)+15):(16* 2)];
-    adc_ddata[((16* 3)+15):(16* 3)] = adc_ddata_1[((16* 1)+15):(16* 1)];
-    adc_ddata[((16* 2)+15):(16* 2)] = adc_ddata_0[((16* 1)+15):(16* 1)];
-    adc_ddata[((16* 1)+15):(16* 1)] = adc_ddata_1[((16* 0)+15):(16* 0)];
-    adc_ddata[((16* 0)+15):(16* 0)] = adc_ddata_0[((16* 0)+15):(16* 0)];
-  end
+  assign adc_ddata[((16*31)+15):(16*31)] = adc_ddata_1[((16*15)+15):(16*15)];
+  assign adc_ddata[((16*30)+15):(16*30)] = adc_ddata_0[((16*15)+15):(16*15)];
+  assign adc_ddata[((16*29)+15):(16*29)] = adc_ddata_1[((16*14)+15):(16*14)];
+  assign adc_ddata[((16*28)+15):(16*28)] = adc_ddata_0[((16*14)+15):(16*14)];
+  assign adc_ddata[((16*27)+15):(16*27)] = adc_ddata_1[((16*13)+15):(16*13)];
+  assign adc_ddata[((16*26)+15):(16*26)] = adc_ddata_0[((16*13)+15):(16*13)];
+  assign adc_ddata[((16*25)+15):(16*25)] = adc_ddata_1[((16*12)+15):(16*12)];
+  assign adc_ddata[((16*24)+15):(16*24)] = adc_ddata_0[((16*12)+15):(16*12)];
+  assign adc_ddata[((16*23)+15):(16*23)] = adc_ddata_1[((16*11)+15):(16*11)];
+  assign adc_ddata[((16*22)+15):(16*22)] = adc_ddata_0[((16*11)+15):(16*11)];
+  assign adc_ddata[((16*21)+15):(16*21)] = adc_ddata_1[((16*10)+15):(16*10)];
+  assign adc_ddata[((16*20)+15):(16*20)] = adc_ddata_0[((16*10)+15):(16*10)];
+  assign adc_ddata[((16*19)+15):(16*19)] = adc_ddata_1[((16* 9)+15):(16* 9)];
+  assign adc_ddata[((16*18)+15):(16*18)] = adc_ddata_0[((16* 9)+15):(16* 9)];
+  assign adc_ddata[((16*17)+15):(16*17)] = adc_ddata_1[((16* 8)+15):(16* 8)];
+  assign adc_ddata[((16*16)+15):(16*16)] = adc_ddata_0[((16* 8)+15):(16* 8)];
+  assign adc_ddata[((16*15)+15):(16*15)] = adc_ddata_1[((16* 7)+15):(16* 7)];
+  assign adc_ddata[((16*14)+15):(16*14)] = adc_ddata_0[((16* 7)+15):(16* 7)];
+  assign adc_ddata[((16*13)+15):(16*13)] = adc_ddata_1[((16* 6)+15):(16* 6)];
+  assign adc_ddata[((16*12)+15):(16*12)] = adc_ddata_0[((16* 6)+15):(16* 6)];
+  assign adc_ddata[((16*11)+15):(16*11)] = adc_ddata_1[((16* 5)+15):(16* 5)];
+  assign adc_ddata[((16*10)+15):(16*10)] = adc_ddata_0[((16* 5)+15):(16* 5)];
+  assign adc_ddata[((16* 9)+15):(16* 9)] = adc_ddata_1[((16* 4)+15):(16* 4)];
+  assign adc_ddata[((16* 8)+15):(16* 8)] = adc_ddata_0[((16* 4)+15):(16* 4)];
+  assign adc_ddata[((16* 7)+15):(16* 7)] = adc_ddata_1[((16* 3)+15):(16* 3)];
+  assign adc_ddata[((16* 6)+15):(16* 6)] = adc_ddata_0[((16* 3)+15):(16* 3)];
+  assign adc_ddata[((16* 5)+15):(16* 5)] = adc_ddata_1[((16* 2)+15):(16* 2)];
+  assign adc_ddata[((16* 4)+15):(16* 4)] = adc_ddata_0[((16* 2)+15):(16* 2)];
+  assign adc_ddata[((16* 3)+15):(16* 3)] = adc_ddata_1[((16* 1)+15):(16* 1)];
+  assign adc_ddata[((16* 2)+15):(16* 2)] = adc_ddata_0[((16* 1)+15):(16* 1)];
+  assign adc_ddata[((16* 1)+15):(16* 1)] = adc_ddata_1[((16* 0)+15):(16* 0)];
+  assign adc_ddata[((16* 0)+15):(16* 0)] = adc_ddata_0[((16* 0)+15):(16* 0)];
 
   // instantiations
 
@@ -371,17 +357,8 @@ module system_top (
 
   system_wrapper i_system_wrapper (
     .adc_ddata (adc_ddata),
-    .adc_dovf (adc_dovf),
-    .adc_dsync (1'b1),
-    .adc_dwr (adc_dwr),
-    .core_ddata_0 (adc_ddata_0),
-    .core_ddata_1 (adc_ddata_1),
-    .core_dovf_0 (adc_dovf),
-    .core_dovf_1 (adc_dovf),
-    .core_dwr_0 (adc_dwr),
-    .core_dwr_1 (),
-    .core_rx_data_0 (core_rx_data_0),
-    .core_rx_data_1 (core_rx_data_1),
+    .adc_ddata_0 (adc_ddata_0),
+    .adc_ddata_1 (adc_ddata_1),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -404,9 +381,6 @@ module system_top (
     .gpio_lcd_tri_o (gpio_lcd),
     .gpio_led_tri_o (gpio_led),
     .gpio_sw_tri_i (gpio_sw),
-    .gt_rx_clk (gt_rx_clk),
-    .gt_rx_data_0 (gt_rx_data_0),
-    .gt_rx_data_1 (gt_rx_data_1),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
