@@ -154,9 +154,10 @@ set_property -dict  {PACKAGE_PIN  P25   IOSTANDARD  DIFF_HSTL_I_18} [get_ports p
 set_property -dict  {PACKAGE_PIN  K26   IOSTANDARD  LVCMOS18} [get_ports uart_sout]
 set_property -dict  {PACKAGE_PIN  G25   IOSTANDARD  LVCMOS18} [get_ports uart_sin] 
 
-# fan
+# fan & pwr-good
 
 set_property -dict  {PACKAGE_PIN  AJ9   IOSTANDARD  LVCMOS18} [get_ports fan_pwm] 
+set_property -dict  {PACKAGE_PIN  L24   IOSTANDARD  LVCMOS18} [get_ports pwr_good] 
 
 # sw/led
 

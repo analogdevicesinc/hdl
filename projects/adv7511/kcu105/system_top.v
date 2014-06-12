@@ -75,6 +75,7 @@ module system_top (
   phy_tx_n,
 
   fan_pwm,
+  pwr_good,
 
   gpio_led,
   gpio_sw,
@@ -125,6 +126,7 @@ module system_top (
   output          phy_tx_n;
 
   output          fan_pwm;
+  output          pwr_good;
 
   inout   [ 7:0]  gpio_led;
   inout   [ 8:0]  gpio_sw;
@@ -157,6 +159,8 @@ module system_top (
   // default logic
 
   assign fan_pwm = 1'b1;
+  assign pwr_good = 1'b1;
+
   // assign sys_reset_req = mdm_reset | mig_reset | ~mig_ready;
   // assign sys_reset_req = mdm_reset;
   assign sys_reset_req = 1'b0;
