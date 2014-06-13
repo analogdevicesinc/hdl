@@ -74,10 +74,15 @@ module prcfg_dac(
   output  [31:0]    dst_dac_ddata;
   output            dst_dac_dunf;
 
+  reg               src_dac_drd;
+  reg     [31:0]    dst_dac_ddata;
+  reg               dst_dac_dunf;
+
   assign status = {24'h0, RP_ID};
 
-  assign src_dac_drd    = dst_dac_drd;
-  assign dst_dac_ddata  = src_dac_ddata;
-  assign dst_dac_dunf   = src_dac_dunf;
-
+  always @(posedge clk) begin
+    src_dac_drd    <= dst_dac_drd;
+    dst_dac_ddata  <= src_dac_ddata;
+    dst_dac_dunf   <= src_dac_dunf;
+  end
 endmodule

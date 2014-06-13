@@ -77,6 +77,11 @@ module prcfg_adc (
   output  [31:0]    dst_adc_ddata;
   input             dst_adc_dovf;
 
+  reg               dst_adc_dwr;
+  reg               dst_adc_dsync;
+  reg     [31:0]    dst_adc_ddata;
+  reg               src_adc_dovf;
+
   reg     [31:0]    status            = 0;
   reg     [31:0]    adc_pn_data       = 0;
   reg               adc_dvalid_d      = 0;
@@ -170,11 +175,12 @@ module prcfg_adc (
   end
 
   // rx path are passed through on test mode
-  assign dst_adc_dwr    = src_adc_dwr;
-  assign dst_adc_dsync  = src_adc_dsync;
-  assign dst_adc_ddata  = src_adc_ddata;
-  assign src_adc_dovf   = dst_adc_dovf;
-
+  always @(posedge clk) begin
+    dst_adc_dwr    <= src_adc_dwr;
+    dst_adc_dsync  <= src_adc_dsync;
+    dst_adc_ddata  <= src_adc_ddata;
+    src_adc_dovf   <= dst_adc_dovf;
+  end
   // setup status bits for gpio_out
   always @(posedge clk) begin
     if((mode == 3'd2) && (channel_sel == CHANNEL_ID)) begin

@@ -77,11 +77,17 @@ module prcfg_adc (
   output  [31:0]    dst_adc_ddata;
   input             dst_adc_dovf;
 
+  reg               dst_adc_dwr;
+  reg               dst_adc_dsync;
+  reg     [31:0]    dst_adc_ddata;
+  reg               src_adc_dovf;
+
   assign status = {24'h0, RP_ID};
 
-  assign dst_adc_dwr    = src_adc_dwr;
-  assign dst_adc_dsync  = src_adc_dsync;
-  assign dst_adc_ddata  = src_adc_ddata;
-  assign src_adc_dovf   = dst_adc_dovf;
-
+  always @(posedge clk) begin
+    dst_adc_dwr    <= src_adc_dwr;
+    dst_adc_dsync  <= src_adc_dsync;
+    dst_adc_ddata  <= src_adc_ddata;
+    src_adc_dovf   <= dst_adc_dovf;
+  end
 endmodule

@@ -77,6 +77,10 @@ module prcfg_adc (
   output  [31:0]    dst_adc_ddata;
   input             dst_adc_dovf;
 
+  reg               src_adc_dovf;
+  reg               dst_adc_dwr;
+  reg               dst_adc_dsync;
+
   reg     [31:0]    dst_adc_ddata     = 0;
   reg     [31:0]    status            = 0;
   reg     [ 7:0]    adc_pn_data       = 0;
@@ -155,13 +159,13 @@ module prcfg_adc (
     .data_output(adc_ddata_s)
   );
 
-  // output logic for rx side
-  assign src_adc_dovf   = dst_adc_dovf;
-  assign dst_adc_dwr    = src_adc_dwr;
-  assign dst_adc_dsync  = src_adc_dsync;
-
   // output logic for data ans status
   always @(posedge clk) begin
+
+    src_adc_dovf   <= dst_adc_dovf;
+    dst_adc_dwr    <= src_adc_dwr;
+    dst_adc_dsync  <= src_adc_dsync;
+
     if(mode == 0) begin
       dst_adc_ddata <= src_adc_ddata;
     end else begin

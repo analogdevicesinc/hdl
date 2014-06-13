@@ -101,6 +101,8 @@ module prcfg_top(
   output  [(DBUS_WIDTH - 1):0]      dma_adc_ddata;
   input                             dma_adc_ovf;
 
+  reg     [31:0]                    gpio_output;
+
   wire    [31:0]                    adc_status_s[(NUM_CHANNEL - 1):0];
   wire    [31:0]                    dac_status_s[(NUM_CHANNEL - 1):0];
 
@@ -174,8 +176,9 @@ module prcfg_top(
           );
         end
       end
-
-      assign gpio_output = gpio_output | adc_status_s[l_inst] | dac_status_s[l_inst];
+      always @(posedge clk) begin
+        gpio_output <= gpio_output | adc_status_s[l_inst] | dac_status_s[l_inst];
+      end
     end
   endgenerate
 
