@@ -35,10 +35,11 @@ proc prcfg_init_workspace {prcfg_name_list} {
 }
 
 # Create and synthesize the static part of the project
-proc prcfg_synth_static { part verilog_files xdc_files } {
+proc prcfg_synth_static { verilog_files xdc_files } {
 
   global ad_hdl_dir
   global ad_phdl_dir
+  global part
 
   # location of the generated block design file
   set system_project_dir ".srcs/sources_1/bd/system"
@@ -80,10 +81,11 @@ proc prcfg_synth_static { part verilog_files xdc_files } {
 }
 
 # Create and synthesize the reconfigurable part of the project
-proc prcfg_synth_reconf { part prcfg_name verilog_files } {
+proc prcfg_synth_reconf { prcfg_name verilog_files } {
 
   global ad_hdl_dir
   global ad_phdl_dir
+  global part
 
   create_project -in_memory -part $part
 
@@ -101,11 +103,13 @@ proc prcfg_synth_reconf { part prcfg_name verilog_files } {
 }
 
 # Make the implementation of the project
-proc prcfg_impl { part xdc_file reconfig_name_list } {
+proc prcfg_impl { xdc_file reconfig_name_list } {
 
-  foreach i $reconfig_name_list {
-    set prcfg_name $i
-    if { i == 0 } {
+  global part
+
+  for { set i 0 } { $i < [llength $reconfig_name_list] } { incr i } {
+    set prcfg_name [lindex $reconfig_name_list $i]
+    if { $i == 0 } {
 
       open_checkpoint "./prcfg_static/checkpoints/synth_static.dcp" -part $part
 
@@ -114,11 +118,10 @@ proc prcfg_impl { part xdc_file reconfig_name_list } {
       read_checkpoint -cell i_prcfg_system_top "./prcfg_${prcfg_name}/checkpoints/synth_${prcfg_name}.dcp"
       set_property HD.RECONFIGURABLE 1 [get_cells i_prcfg_system_top]
       # implement the first configurations
-      opt_design -directive Explore > "./prfcg_${prcfg_name}/logs/opt_${prcfg_name}.rds"
-      #generate ltx file for debug probes
+      opt_design > "./prcfg_${prcfg_name}/logs/opt_${prcfg_name}.rds"
+      # generate ltx file for debug probes
       write_debug_probes -force "./debug_nets.ltx"
-      place_design -directive Explore > "./prcfg_${prcfg_name}/logs/place_${prcfg_name}.rds"
-      phy_opt_design -directive Explore > "./prcfg_${prcfg_name}/logs/phy_opt_${prcfg_name}.rds"
+      place_design > "./prcfg_${prcfg_name}/logs/place_${prcfg_name}.rds"
       route_design > "./prcfg_${prcfg_name}/logs/route_${prcfg_name}.rds"
 
       # save results
@@ -140,9 +143,8 @@ proc prcfg_impl { part xdc_file reconfig_name_list } {
       lock_design -level routing
 
       read_checkpoint -cell i_prcfg_system_top "./prcfg_${prcfg_name}/checkpoints/synth_${prcfg_name}.dcp"
-      opt_design -directive Explore > "./prcfg_${prcfg_name}/logs/opt_${prcfg_name}.rds"
-      place_design -directive Explore > "./prcfg_${prcfg_name}/logs/place_${prcfg_name}.rds"
-      phys_opt_design -directive Explore > "./prcfg_${prcfg_name}/logs/phy_opt_${prcfg_name}.rds"
+      opt_design > "./prcfg_${prcfg_name}/logs/opt_${prcfg_name}.rds"
+      place_design > "./prcfg_${prcfg_name}/logs/place_${prcfg_name}.rds"
       route_design > "./prcfg_${prcfg_name}/logs/route_${prcfg_name}.rds"
 
       # save results
@@ -163,7 +165,7 @@ proc save_results { prcfg_name } {
   report_utilization -file "./prcfg_${prcfg_name}/results/top_utilization.rpt"
   report_timing_summary -file "./prcfg_${prcfg_name}/results/top_timing_summary.rpt"
   # checkpoint to the routed RP
-  write_checkpoint -force -cell i_rmodule "./prcfg_${prcfg_name}/checkpoints/route_rm_${prcfg_name}.dcp"
+  write_checkpoint -force -cell i_prcfg_system_top "./prcfg_${prcfg_name}/checkpoints/route_rm_${prcfg_name}.dcp"
 
 }
 
@@ -175,19 +177,22 @@ proc prcfg_verify { prcfg_name_list } {
   file mkdir "./verify_design"
 
   for {set i 0} {$i < [expr $list_length - 1]} {incr i} {
-    for {set j i} {$j < $list_length} {incr j} {
+    for {set j [expr $i + 1]} {$j < $list_length} {incr j} {
       set prcfg_name_a [lindex $prcfg_name_list $i]
       set prcfg_name_b [lindex $prcfg_name_list $j]
-      pr_verify -full_check "./prcfg_${prcfg_name_a}/results/top_route_design.dcp" \
-                            "./prcfg_${prcfg_name_b}/results/top_route_design.dcp" > \
-                            "./verify_design/pr_verify_${counter}.rpt"
+      pr_verify -full_check ./prcfg_${prcfg_name_a}/results/top_route_design.dcp \
+                            ./prcfg_${prcfg_name_b}/results/top_route_design.dcp > \
+                            ./verify_design/pr_verify_${counter}.rpt
       incr counter
     }
   }
 }
 
 # Generate bitstream
-proc prcfg_gen_bit { part prcfg_name_list } {
+proc prcfg_gen_bit { prcfg_name_list } {
+
+  global part
+
   foreach i $prcfg_name_list {
     open_checkpoint "./prcfg_${i}/results/top_route_design.dcp" -part $part
     file mkdir "./prcfg_${i}/bit"
