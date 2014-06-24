@@ -69,20 +69,14 @@ module axi_ad9361_dev_if (
   // receive data path interface
 
   adc_valid,
-  adc_data_i1,
-  adc_data_q1,
-  adc_data_i2,
-  adc_data_q2,
+  adc_data,
   adc_status,
   adc_r1_mode,
 
   // transmit data path interface
 
   dac_valid,
-  dac_data_i1,
-  dac_data_q1,
-  dac_data_i2,
-  dac_data_q2,
+  dac_data,
   dac_r1_mode,
 
   // delay control signals
@@ -135,20 +129,14 @@ module axi_ad9361_dev_if (
   // receive data path interface
 
   output          adc_valid;
-  output  [11:0]  adc_data_i1;
-  output  [11:0]  adc_data_q1;
-  output  [11:0]  adc_data_i2;
-  output  [11:0]  adc_data_q2;
+  output  [47:0]  adc_data;
   output          adc_status;
   input           adc_r1_mode;
 
   // transmit data path interface
 
   input           dac_valid;
-  input   [11:0]  dac_data_i1;
-  input   [11:0]  dac_data_q1;
-  input   [11:0]  dac_data_i2;
-  input   [11:0]  dac_data_q2;
+  input   [47:0]  dac_data;
   input           dac_r1_mode;
 
   // delay control signals
@@ -178,37 +166,24 @@ module axi_ad9361_dev_if (
   reg     [ 1:0]  rx_frame_d = 'd0;
   reg             rx_error_r1 = 'd0;
   reg             rx_valid_r1 = 'd0;
-  reg     [11:0]  rx_data_i_r1 = 'd0;
-  reg     [11:0]  rx_data_q_r1 = 'd0;
+  reg     [23:0]  rx_data_r1 = 'd0;
   reg             rx_error_r2 = 'd0;
   reg             rx_valid_r2 = 'd0;
-  reg     [11:0]  rx_data_i1_r2 = 'd0;
-  reg     [11:0]  rx_data_q1_r2 = 'd0;
-  reg     [11:0]  rx_data_i2_r2 = 'd0;
-  reg     [11:0]  rx_data_q2_r2 = 'd0;
+  reg     [47:0]  rx_data_r2 = 'd0;
   reg             adc_p_valid = 'd0;
-  reg     [11:0]  adc_p_data_i1 = 'd0;
-  reg     [11:0]  adc_p_data_q1 = 'd0;
-  reg     [11:0]  adc_p_data_i2 = 'd0;
-  reg     [11:0]  adc_p_data_q2 = 'd0;
+  reg     [47:0]  adc_p_data = 'd0;
   reg             adc_p_status = 'd0;
   reg             adc_n_valid = 'd0;
-  reg     [11:0]  adc_n_data_i1 = 'd0;
-  reg     [11:0]  adc_n_data_q1 = 'd0;
-  reg     [11:0]  adc_n_data_i2 = 'd0;
-  reg     [11:0]  adc_n_data_q2 = 'd0;
+  reg     [47:0]  adc_n_data = 'd0;
   reg             adc_n_status = 'd0;
+  reg             adc_valid_int = 'd0;
+  reg     [47:0]  adc_data_int = 'd0;
+  reg             adc_status_int = 'd0;
   reg             adc_valid = 'd0;
-  reg     [11:0]  adc_data_i1 = 'd0;
-  reg     [11:0]  adc_data_q1 = 'd0;
-  reg     [11:0]  adc_data_i2 = 'd0;
-  reg     [11:0]  adc_data_q2 = 'd0;
+  reg     [47:0]  adc_data = 'd0;
   reg             adc_status = 'd0;
   reg     [ 2:0]  tx_data_cnt = 'd0;
-  reg     [11:0]  tx_data_i1_d = 'd0;
-  reg     [11:0]  tx_data_q1_d = 'd0;
-  reg     [11:0]  tx_data_i2_d = 'd0;
-  reg     [11:0]  tx_data_q2_d = 'd0;
+  reg     [47:0]  tx_data = 'd0;
   reg             tx_frame = 'd0;
   reg     [ 5:0]  tx_data_p = 'd0;
   reg     [ 5:0]  tx_data_n = 'd0;
@@ -246,14 +221,14 @@ module axi_ad9361_dev_if (
 
   assign dev_dbg_data[  5:  0] = tx_data_n;
   assign dev_dbg_data[ 11:  6] = tx_data_p;
-  assign dev_dbg_data[ 23: 12] = dac_data_i1;
-  assign dev_dbg_data[ 35: 24] = dac_data_q1;
-  assign dev_dbg_data[ 47: 36] = dac_data_i2;
-  assign dev_dbg_data[ 59: 48] = dac_data_q2;
-  assign dev_dbg_data[ 71: 60] = adc_data_i1;
-  assign dev_dbg_data[ 83: 72] = adc_data_q1;
-  assign dev_dbg_data[ 95: 84] = adc_data_i2;
-  assign dev_dbg_data[107: 96] = adc_data_q2;
+  assign dev_dbg_data[ 23: 12] = dac_data[11: 0];
+  assign dev_dbg_data[ 35: 24] = dac_data[23:12];
+  assign dev_dbg_data[ 47: 36] = dac_data[35:24];
+  assign dev_dbg_data[ 59: 48] = dac_data[47:36];
+  assign dev_dbg_data[ 71: 60] = adc_data[11: 0];
+  assign dev_dbg_data[ 83: 72] = adc_data[23:12];
+  assign dev_dbg_data[ 95: 84] = adc_data[35:24];
+  assign dev_dbg_data[107: 96] = adc_data[47:36];
   assign dev_dbg_data[108:108] = tx_frame;
   assign dev_dbg_data[109:109] = dac_valid;
   assign dev_dbg_data[110:110] = adc_status;
@@ -261,10 +236,10 @@ module axi_ad9361_dev_if (
 
   assign dev_l_dbg_data[  5:  0] = tx_p_data_n;
   assign dev_l_dbg_data[ 11:  6] = tx_p_data_p;
-  assign dev_l_dbg_data[ 23: 12] = adc_p_data_i1;
-  assign dev_l_dbg_data[ 35: 24] = adc_p_data_q1;
-  assign dev_l_dbg_data[ 47: 36] = adc_p_data_i2;
-  assign dev_l_dbg_data[ 59: 48] = adc_p_data_q2;
+  assign dev_l_dbg_data[ 23: 12] = adc_p_data[11: 0];
+  assign dev_l_dbg_data[ 35: 24] = adc_p_data[23:12];
+  assign dev_l_dbg_data[ 47: 36] = adc_p_data[35:24];
+  assign dev_l_dbg_data[ 59: 48] = adc_p_data[47:36];
   assign dev_l_dbg_data[ 60: 60] = tx_p_frame;
   assign dev_l_dbg_data[ 61: 61] = adc_p_valid;
 
@@ -287,8 +262,8 @@ module axi_ad9361_dev_if (
     rx_error_r1 <= ((rx_frame_s == 4'b1100) || (rx_frame_s == 4'b0011)) ? 1'b0 : 1'b1;
     rx_valid_r1 <= (rx_frame_s == 4'b1100) ? 1'b1 : 1'b0;
     if (rx_frame_s == 4'b1100) begin
-      rx_data_i_r1 <= {rx_data_d[11:6], rx_data[11:6]};
-      rx_data_q_r1 <= {rx_data_d[ 5:0], rx_data[ 5:0]};
+      rx_data_r1[11: 0] <= {rx_data_d[11:6], rx_data[11:6]};
+      rx_data_r1[23:12] <= {rx_data_d[ 5:0], rx_data[ 5:0]};
     end
   end
 
@@ -299,12 +274,12 @@ module axi_ad9361_dev_if (
       (rx_frame_s == 4'b0000) || (rx_frame_s == 4'b0011)) ? 1'b0 : 1'b1;
     rx_valid_r2 <= (rx_frame_s == 4'b0000) ? 1'b1 : 1'b0;
     if (rx_frame_s == 4'b1111) begin
-      rx_data_i1_r2 <= {rx_data_d[11:6], rx_data[11:6]};
-      rx_data_q1_r2 <= {rx_data_d[ 5:0], rx_data[ 5:0]};
+      rx_data_r2[11: 0] <= {rx_data_d[11:6], rx_data[11:6]};
+      rx_data_r2[23:12] <= {rx_data_d[ 5:0], rx_data[ 5:0]};
     end
     if (rx_frame_s == 4'b0000) begin
-      rx_data_i2_r2 <= {rx_data_d[11:6], rx_data[11:6]};
-      rx_data_q2_r2 <= {rx_data_d[ 5:0], rx_data[ 5:0]};
+      rx_data_r2[35:24] <= {rx_data_d[11:6], rx_data[11:6]};
+      rx_data_r2[47:36] <= {rx_data_d[ 5:0], rx_data[ 5:0]};
     end
   end
 
@@ -313,17 +288,11 @@ module axi_ad9361_dev_if (
   always @(posedge l_clk) begin
     if (adc_r1_mode == 1'b1) begin
       adc_p_valid <= rx_valid_r1;
-      adc_p_data_i1 <= rx_data_i_r1;
-      adc_p_data_q1 <= rx_data_q_r1;
-      adc_p_data_i2 <= 12'd0;
-      adc_p_data_q2 <= 12'd0;
+      adc_p_data <= {24'd0, rx_data_r1};
       adc_p_status <= ~rx_error_r1;
     end else begin
       adc_p_valid <= rx_valid_r2;
-      adc_p_data_i1 <= rx_data_i1_r2;
-      adc_p_data_q1 <= rx_data_q1_r2;
-      adc_p_data_i2 <= rx_data_i2_r2;
-      adc_p_data_q2 <= rx_data_q2_r2;
+      adc_p_data <= rx_data_r2;
       adc_p_status <= ~rx_error_r2;
     end
   end
@@ -332,20 +301,19 @@ module axi_ad9361_dev_if (
 
   always @(negedge l_clk) begin
     adc_n_valid <= adc_p_valid;
-    adc_n_data_i1 <= adc_p_data_i1;
-    adc_n_data_q1 <= adc_p_data_q1;
-    adc_n_data_i2 <= adc_p_data_i2;
-    adc_n_data_q2 <= adc_p_data_q2;
+    adc_n_data <= adc_p_data;
     adc_n_status <= adc_p_status;
   end
 
   always @(posedge clk) begin
-    adc_valid <= adc_n_valid;
-    adc_data_i1 <= adc_n_data_i1;
-    adc_data_q1 <= adc_n_data_q1;
-    adc_data_i2 <= adc_n_data_i2;
-    adc_data_q2 <= adc_n_data_q2;
-    adc_status <= adc_n_status;
+    adc_valid_int <= adc_n_valid;
+    adc_data_int <= adc_n_data;
+    adc_status_int <= adc_n_status;
+    adc_valid <= adc_valid_int;
+    if (adc_valid_int == 1'b1) begin
+      adc_data <= adc_data_int;
+    end
+    adc_status <= adc_status_int;
   end
 
   // transmit data path mux (reverse of what receive does above)
@@ -360,51 +328,48 @@ module axi_ad9361_dev_if (
       tx_data_cnt <= tx_data_cnt + 1'b1;
     end
     if (dac_valid == 1'b1) begin
-      tx_data_i1_d <= dac_data_i1;
-      tx_data_q1_d <= dac_data_q1;
-      tx_data_i2_d <= dac_data_i2;
-      tx_data_q2_d <= dac_data_q2;
+      tx_data <= dac_data;
     end
     case (tx_data_sel_s)
       4'b1111: begin
         tx_frame <= 1'b0;
-        tx_data_p <= tx_data_i1_d[ 5:0];
-        tx_data_n <= tx_data_q1_d[ 5:0];
+        tx_data_p <= tx_data[ 5: 0];
+        tx_data_n <= tx_data[17:12];
       end
       4'b1110: begin
         tx_frame <= 1'b1;
-        tx_data_p <= tx_data_i1_d[11:6];
-        tx_data_n <= tx_data_q1_d[11:6];
+        tx_data_p <= tx_data[11: 6];
+        tx_data_n <= tx_data[23:18];
       end
       4'b1101: begin
         tx_frame <= 1'b0;
-        tx_data_p <= tx_data_i1_d[ 5:0];
-        tx_data_n <= tx_data_q1_d[ 5:0];
+        tx_data_p <= tx_data[ 5: 0];
+        tx_data_n <= tx_data[17:12];
       end
       4'b1100: begin
         tx_frame <= 1'b1;
-        tx_data_p <= tx_data_i1_d[11:6];
-        tx_data_n <= tx_data_q1_d[11:6];
+        tx_data_p <= tx_data[11: 6];
+        tx_data_n <= tx_data[23:18];
       end
       4'b1011: begin
         tx_frame <= 1'b0;
-        tx_data_p <= tx_data_i2_d[ 5:0];
-        tx_data_n <= tx_data_q2_d[ 5:0];
+        tx_data_p <= tx_data[29:24];
+        tx_data_n <= tx_data[41:36];
       end
       4'b1010: begin
         tx_frame <= 1'b0;
-        tx_data_p <= tx_data_i2_d[11:6];
-        tx_data_n <= tx_data_q2_d[11:6];
+        tx_data_p <= tx_data[35:30];
+        tx_data_n <= tx_data[47:42];
       end
       4'b1001: begin
         tx_frame <= 1'b1;
-        tx_data_p <= tx_data_i1_d[ 5:0];
-        tx_data_n <= tx_data_q1_d[ 5:0];
+        tx_data_p <= tx_data[ 5: 0];
+        tx_data_n <= tx_data[17:12];
       end
       4'b1000: begin
         tx_frame <= 1'b1;
-        tx_data_p <= tx_data_i1_d[11:6];
-        tx_data_n <= tx_data_q1_d[11:6];
+        tx_data_p <= tx_data[11: 6];
+        tx_data_n <= tx_data[23:18];
       end
       default: begin
         tx_frame <= 1'b0;

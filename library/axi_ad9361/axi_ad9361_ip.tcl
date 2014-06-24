@@ -6,7 +6,8 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_ad9361
 adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/common/ad_mul_u16.v" \
+  "$ad_hdl_dir/library/common/ad_mul.v" \
+  "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \
@@ -24,12 +25,9 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "axi_ad9361_dev_if.v" \
-  "axi_ad9361_pnlb_1.v" \
-  "axi_ad9361_pnlb.v" \
   "axi_ad9361_rx_pnmon.v" \
   "axi_ad9361_rx_channel.v" \
   "axi_ad9361_rx.v" \
-  "axi_ad9361_tx_dds.v" \
   "axi_ad9361_tx_channel.v" \
   "axi_ad9361_tx.v" \
   "axi_ad9361.v" ]

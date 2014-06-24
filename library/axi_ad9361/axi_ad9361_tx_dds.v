@@ -127,22 +127,6 @@ module axi_ad9361_tx_dds (
 
   // dds
 
-  generate
-  if (DP_DISABLE == 1) begin
-  assign dac_dds_data_s = 16'd0;
-  end else begin
-  ad_dds i_dds_0 (
-    .clk (dac_clk),
-    .dds_format (dac_dds_format),
-    .dds_enable (dac_dds_enable),
-    .dds_phase_0 (dac_dds_phase_0),
-    .dds_scale_0 (dac_dds_scale_1),
-    .dds_phase_1 (dac_dds_phase_1),
-    .dds_scale_1 (dac_dds_scale_2),
-    .dds_data (dac_dds_data_s));
-  end
-  endgenerate
-
 endmodule
 
 // ***************************************************************************
