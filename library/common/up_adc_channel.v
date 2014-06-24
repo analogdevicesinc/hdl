@@ -46,18 +46,17 @@ module up_adc_channel (
   adc_clk,
   adc_rst,
   adc_enable,
-  adc_lb_enb,
-  adc_pn_sel,
   adc_iqcor_enb,
   adc_dcfilt_enb,
   adc_dfmt_se,
   adc_dfmt_type,
   adc_dfmt_enable,
-  adc_pn_type,
   adc_dcfilt_offset,
   adc_dcfilt_coeff,
   adc_iqcor_coeff_1,
   adc_iqcor_coeff_2,
+  adc_pnseq_sel,
+  adc_data_sel,
   adc_pn_err,
   adc_pn_oos,
   adc_or,
@@ -102,18 +101,17 @@ module up_adc_channel (
   input           adc_clk;
   input           adc_rst;
   output          adc_enable;
-  output          adc_lb_enb;
-  output          adc_pn_sel;
   output          adc_iqcor_enb;
   output          adc_dcfilt_enb;
   output          adc_dfmt_se;
   output          adc_dfmt_type;
   output          adc_dfmt_enable;
-  output          adc_pn_type;
   output  [15:0]  adc_dcfilt_offset;
   output  [15:0]  adc_dcfilt_coeff;
   output  [15:0]  adc_iqcor_coeff_1;
   output  [15:0]  adc_iqcor_coeff_2;
+  output  [ 3:0]  adc_pnseq_sel;
+  output  [ 3:0]  adc_data_sel;
   input           adc_pn_err;
   input           adc_pn_oos;
   input           adc_or;
@@ -167,6 +165,8 @@ module up_adc_channel (
   reg     [15:0]  up_adc_dcfilt_coeff = 'd0;
   reg     [15:0]  up_adc_iqcor_coeff_1 = 'd0;
   reg     [15:0]  up_adc_iqcor_coeff_2 = 'd0;
+  reg     [ 3:0]  up_adc_pnseq_sel = 'd0;
+  reg     [ 3:0]  up_adc_data_sel = 'd0;
   reg             up_usr_datatype_be = 'd0;
   reg             up_usr_datatype_signed = 'd0;
   reg     [ 7:0]  up_usr_datatype_shift = 'd0;
@@ -176,6 +176,10 @@ module up_adc_channel (
   reg     [15:0]  up_usr_decimation_n = 'd0;
   reg             up_ack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
+  reg     [15:0]  up_adc_iqcor_coeff_tc_1 = 'd0;
+  reg     [15:0]  up_adc_iqcor_coeff_tc_2 = 'd0;
+  reg     [ 3:0]  up_adc_pnseq_sel_m = 'd0;
+  reg     [ 3:0]  up_adc_data_sel_m = 'd0;
 
   // internal signals
 
@@ -184,6 +188,21 @@ module up_adc_channel (
   wire            up_adc_pn_err_s;
   wire            up_adc_pn_oos_s;
   wire            up_adc_or_s;
+
+  // 2's complement function
+
+  function [15:0] sm2tc;
+    input [15:0]  din;
+    reg   [15:0]  dp;
+    reg   [15:0]  dn;
+    reg   [15:0]  dout;
+    begin
+      dp = {1'b0, din[14:0]};
+      dn = ~dp + 1'b1;
+      dout = (din[15] == 1'b1) ? dn : dp;
+      sm2tc = dout;
+    end
+  endfunction
 
   // decode block select
 
@@ -210,6 +229,8 @@ module up_adc_channel (
       up_adc_dcfilt_coeff <= 'd0;
       up_adc_iqcor_coeff_1 <= 'd0;
       up_adc_iqcor_coeff_2 <= 'd0;
+      up_adc_pnseq_sel <= 'd0;
+      up_adc_data_sel <= 'd0;
       up_usr_datatype_be <= 'd0;
       up_usr_datatype_signed <= 'd0;
       up_usr_datatype_shift <= 'd0;
@@ -252,6 +273,10 @@ module up_adc_channel (
         up_adc_iqcor_coeff_1 <= up_wdata[31:16];
         up_adc_iqcor_coeff_2 <= up_wdata[15:0];
       end
+      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h6)) begin
+        up_adc_pnseq_sel <= up_wdata[19:16];
+        up_adc_data_sel <= up_wdata[3:0];
+      end
       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h8)) begin
         up_usr_datatype_be <= up_wdata[25];
         up_usr_datatype_signed <= up_wdata[24];
@@ -276,12 +301,14 @@ module up_adc_channel (
       up_ack <= up_sel_s;
       if (up_sel_s == 1'b1) begin
         case (up_addr[3:0])
-          4'h0: up_rdata <= {20'd0, up_adc_lb_enb, up_adc_pn_sel, up_adc_iqcor_enb, up_adc_dcfilt_enb,
+          4'h0: up_rdata <= {20'd0, up_adc_lb_enb, up_adc_pn_sel,
+                              up_adc_iqcor_enb, up_adc_dcfilt_enb,
                               1'd0, up_adc_dfmt_se, up_adc_dfmt_type, up_adc_dfmt_enable,
                               2'd0, up_adc_pn_type, up_adc_enable};
           4'h1: up_rdata <= {29'd0, up_adc_pn_err, up_adc_pn_oos, up_adc_or};
           4'h4: up_rdata <= {up_adc_dcfilt_offset, up_adc_dcfilt_coeff};
           4'h5: up_rdata <= {up_adc_iqcor_coeff_1, up_adc_iqcor_coeff_2};
+          4'h6: up_rdata <= {12'd0, up_adc_pnseq_sel, 12'd0, up_adc_data_sel};
           4'h8: up_rdata <= {6'd0, adc_usr_datatype_be, adc_usr_datatype_signed,
                               adc_usr_datatype_shift, adc_usr_datatype_total_bits,
                               adc_usr_datatype_bits};
@@ -294,39 +321,70 @@ module up_adc_channel (
     end
   end
 
+  // change coefficients to 2's complements
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_adc_iqcor_coeff_tc_1 <= 16'd0;
+      up_adc_iqcor_coeff_tc_2 <= 16'd0;
+    end else begin
+      up_adc_iqcor_coeff_tc_1 <= sm2tc(up_adc_iqcor_coeff_1);
+      up_adc_iqcor_coeff_tc_2 <= sm2tc(up_adc_iqcor_coeff_2);
+    end
+  end
+
+  // data/pn sources
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_adc_pnseq_sel_m <= 4'd0;
+      up_adc_data_sel_m <= 4'd0;
+    end else begin
+      case ({up_adc_pn_type, up_adc_pn_sel})
+        2'b10: up_adc_pnseq_sel_m <= 4'h1;
+        2'b01: up_adc_pnseq_sel_m <= 4'h9;
+        default: up_adc_pnseq_sel_m <= up_adc_pnseq_sel;
+      endcase
+      if (up_adc_lb_enb == 1'b1) begin
+        up_adc_data_sel_m <= 4'h1;
+      end else begin
+        up_adc_data_sel_m <= up_adc_data_sel;
+      end
+    end
+  end
+
   // adc control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(73)) i_adc_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(78)) i_adc_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_cntrl ({ up_adc_lb_enb,
-                      up_adc_pn_sel,
-                      up_adc_iqcor_enb,
+    .up_data_cntrl ({ up_adc_iqcor_enb,
                       up_adc_dcfilt_enb,
                       up_adc_dfmt_se,
                       up_adc_dfmt_type,
                       up_adc_dfmt_enable,
-                      up_adc_pn_type,
                       up_adc_enable,
                       up_adc_dcfilt_offset,
                       up_adc_dcfilt_coeff,
-                      up_adc_iqcor_coeff_1,
-                      up_adc_iqcor_coeff_2}),
+                      up_adc_iqcor_coeff_tc_1,
+                      up_adc_iqcor_coeff_tc_2,
+                      up_adc_pnseq_sel_m,
+                      up_adc_data_sel_m}),
+    .up_xfer_done (),
     .d_rst (adc_rst),
     .d_clk (adc_clk),
-    .d_data_cntrl ({  adc_lb_enb,
-                      adc_pn_sel,
-                      adc_iqcor_enb,
+    .d_data_cntrl ({  adc_iqcor_enb,
                       adc_dcfilt_enb,
                       adc_dfmt_se,
                       adc_dfmt_type,
                       adc_dfmt_enable,
-                      adc_pn_type,
                       adc_enable,
                       adc_dcfilt_offset,
                       adc_dcfilt_coeff,
                       adc_iqcor_coeff_1,
-                      adc_iqcor_coeff_2}));
+                      adc_iqcor_coeff_2,
+                      adc_pnseq_sel,
+                      adc_data_sel}));
 
   up_xfer_status #(.DATA_WIDTH(3)) i_adc_xfer_status (
     .up_rstn (up_rstn),

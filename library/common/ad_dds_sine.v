@@ -58,135 +58,158 @@ module ad_dds_sine (
 
   // sine = sin(angle)
 
-  input           clk;
-  input   [15:0]  angle;
-  output  [15:0]  sine;
-  input   [DW:0]  ddata_in;
-  output  [DW:0]  ddata_out;
+  input             clk;
+  input   [ 15:0]   angle;
+  output  [ 15:0]   sine;
+  input   [ DW:0]   ddata_in;
+  output  [ DW:0]   ddata_out;
 
   // internal registers
 
-  reg     [DW:0]  ddata_s2_i = 'd0;
-  reg             data_msb_s2_i = 'd0;
-  reg     [15:0]  data_delay_s2_i = 'd0;
-  reg     [15:0]  data_sine_s2_i = 'd0;
-  reg     [DW:0]  ddata_s2 = 'd0;
-  reg             data_msb_s2 = 'd0;
-  reg     [15:0]  data_sine_s2 = 'd0;
-  reg     [DW:0]  ddata_s3_i = 'd0;
-  reg             data_msb_s3_i = 'd0;
-  reg     [15:0]  data_delay_s3_i = 'd0;
-  reg     [15:0]  data_sine_s3_i = 'd0;
-  reg     [DW:0]  ddata_s4 = 'd0;
-  reg             data_msb = 'd0;
-  reg     [14:0]  data_sine_p = 'd0;
-  reg     [14:0]  data_sine_n = 'd0;
-  reg     [DW:0]  ddata_out = 'd0;
-  reg     [15:0]  sine = 'd0;
+  reg     [ 33:0]   s1_data_p = 'd0;
+  reg     [ 33:0]   s1_data_n = 'd0;
+  reg     [ 15:0]   s1_angle = 'd0;
+  reg     [ DW:0]   s1_ddata = 'd0;
+  reg     [ 18:0]   s2_data_0 = 'd0;
+  reg     [ 18:0]   s2_data_1 = 'd0;
+  reg     [ DW:0]   s2_ddata = 'd0;
+  reg     [ 18:0]   s3_data = 'd0;
+  reg     [ DW:0]   s3_ddata = 'd0;
+  reg     [ 33:0]   s4_data2_p = 'd0;
+  reg     [ 33:0]   s4_data2_n = 'd0;
+  reg     [ 16:0]   s4_data1_p = 'd0;
+  reg     [ 16:0]   s4_data1_n = 'd0;
+  reg     [ DW:0]   s4_ddata = 'd0;
+  reg     [ 16:0]   s5_data2_0 = 'd0;
+  reg     [ 16:0]   s5_data2_1 = 'd0;
+  reg     [ 16:0]   s5_data1 = 'd0;
+  reg     [ DW:0]   s5_ddata = 'd0;
+  reg     [ 16:0]   s6_data2 = 'd0;
+  reg     [ 16:0]   s6_data1 = 'd0;
+  reg     [ DW:0]   s6_ddata = 'd0;
+  reg     [ 33:0]   s7_data = 'd0;
+  reg     [ DW:0]   s7_ddata = 'd0;
+  reg     [ 15:0]   sine = 'd0;
+  reg     [ DW:0]   ddata_out = 'd0;
 
   // internal signals
 
-  wire    [DW:0]  ddata_s1_s;
-  wire            data_msb_s1_s;
-  wire    [31:0]  data_sine_s1_s;
-  wire    [DW:0]  ddata_s2_i_s;
-  wire            data_msb_s2_i_s;
-  wire    [15:0]  data_delay_s2_i_s;
-  wire    [31:0]  data_sine_s2_i_s;
-  wire    [DW:0]  ddata_s2_s;
-  wire            data_msb_s2_s;
-  wire    [31:0]  data_sine_s2_s;
-  wire    [DW:0]  ddata_s3_i_s;
-  wire            data_msb_s3_i_s;
-  wire    [15:0]  data_delay_s3_i_s;
-  wire    [31:0]  data_sine_s3_i_s;
-  wire    [DW:0]  ddata_s3_s;
-  wire            data_msb_s3_s;
-  wire    [31:0]  data_sine_s3_s;
+  wire    [ 15:0]   angle_s;
+  wire    [ 33:0]   s1_data_s;
+  wire    [ DW:0]   s1_ddata_s;
+  wire    [ 15:0]   s1_angle_s;
+  wire    [ 33:0]   s4_data2_s;
+  wire    [ DW:0]   s4_ddata_s;
+  wire    [ 16:0]   s4_data1_s;
+  wire    [ 33:0]   s7_data2_s;
+  wire    [ 33:0]   s7_data1_s;
+  wire    [ DW:0]   s7_ddata_s;
 
-  // level 1 (intermediate) A*x;
+  // make angle 2's complement
 
-  ad_mul_u16 #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+1)) i_mul_s1 (
+  assign angle_s = {~angle[15], angle[14:0]};
+
+  // level 1 - intermediate
+
+  ad_mul #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+16)) i_mul_s1 (
     .clk (clk),
-    .data_a ({1'b0, angle[14:0]}),
-    .data_b (16'hc90f),
-    .data_p (data_sine_s1_s),
-    .ddata_in ({ddata_in, angle[15]}),
-    .ddata_out ({ddata_s1_s, data_msb_s1_s}));
+    .data_a ({angle_s[15], angle_s}),
+    .data_b ({angle_s[15], angle_s}),
+    .data_p (s1_data_s),
+    .ddata_in ({ddata_in, angle_s}),
+    .ddata_out ({s1_ddata_s, s1_angle_s}));
 
-  // level 1, (final) B*x;
-
-  ad_mul_u16 #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+17)) i_mul_s2_i (
-    .clk (clk),
-    .data_a (data_sine_s1_s[30:15]),
-    .data_b (16'h19f0),
-    .data_p (data_sine_s2_i_s),
-    .ddata_in ({ddata_s1_s, data_msb_s1_s, data_sine_s1_s[30:15]}),
-    .ddata_out ({ddata_s2_i_s, data_msb_s2_i_s, data_delay_s2_i_s}));
-
-  // level 2 inputs, B*x and (1-A*x)
+  // 2's complement versions
 
   always @(posedge clk) begin
-    ddata_s2_i <= ddata_s2_i_s;
-    data_msb_s2_i <= data_msb_s2_i_s;
-    data_delay_s2_i <= data_delay_s2_i_s;
-    data_sine_s2_i <= 16'ha2f9 - data_sine_s2_i_s[28:13];
+    s1_data_p <= s1_data_s;
+    s1_data_n <= ~s1_data_s + 1'b1;
+    s1_angle <= s1_angle_s;
+    s1_ddata <= s1_ddata_s;
   end
 
-  // level 2, second order (A*x2 + B*x)
-
-  ad_mul_u16 #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+1)) i_mul_s2 (
-    .clk (clk),
-    .data_a (data_delay_s2_i),
-    .data_b (data_sine_s2_i),
-    .data_p (data_sine_s2_s),
-    .ddata_in ({ddata_s2_i, data_msb_s2_i}),
-    .ddata_out ({ddata_s2_s, data_msb_s2_s}));
+  // select partial products
 
   always @(posedge clk) begin
-    ddata_s2 <= ddata_s2_s;
-    data_msb_s2 <= data_msb_s2_s;
-    if (data_sine_s2_s[31:29] == 0) begin
-      data_sine_s2 <= data_sine_s2_s[28:13];
-    end else begin
-      data_sine_s2 <= 16'hffff;
-    end
+    s2_data_0 <= (s1_angle[15] == 1'b0) ? s1_data_n[31:13] : s1_data_p[31:13];
+    s2_data_1 <= {s1_angle[15], s1_angle[15:0], 2'b00};
+    s2_ddata <= s1_ddata;
   end
 
-  // level 2, intermediate (B*y)
-
-  ad_mul_u16 #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+17)) i_mul_s3_i (
-    .clk (clk),
-    .data_a (data_sine_s2),
-    .data_b (16'h3999),
-    .data_p (data_sine_s3_i_s),
-    .ddata_in ({ddata_s2, data_msb_s2, data_sine_s2}),
-    .ddata_out ({ddata_s3_i_s, data_msb_s3_i_s, data_delay_s3_i_s}));
+  // unit-sine
 
   always @(posedge clk) begin
-    ddata_s3_i <= ddata_s3_i_s;
-    data_msb_s3_i <= data_msb_s3_i_s;
-    data_delay_s3_i <= data_delay_s3_i_s;
-    data_sine_s3_i <= 16'hc666 + data_sine_s3_i_s[31:16];
+    s3_data <= s2_data_0 + s2_data_1;
+    s3_ddata <= s2_ddata;
   end
 
-  // level 2, second order (A*y2 + B*y)
+  // level 2 - final
 
-  ad_mul_u16 #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+1)) i_mul_s3 (
+  ad_mul #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH+17)) i_mul_s2 (
     .clk (clk),
-    .data_a (data_delay_s3_i),
-    .data_b (data_sine_s3_i),
-    .data_p (data_sine_s3_s),
-    .ddata_in ({ddata_s3_i, data_msb_s3_i}),
-    .ddata_out ({ddata_s3_s, data_msb_s3_s}));
+    .data_a (s3_data[16:0]),
+    .data_b (s3_data[16:0]),
+    .data_p (s4_data2_s),
+    .ddata_in ({s3_ddata, s3_data[16:0]}),
+    .ddata_out ({s4_ddata_s, s4_data1_s}));
+
+  // 2's complement versions
 
   always @(posedge clk) begin
-    ddata_s4 <= ddata_s3_s;
-    data_msb <= data_msb_s3_s;
-    data_sine_p <= data_sine_s3_s[31:17];
-    data_sine_n <= ~data_sine_s3_s[31:17] + 1'b1;
-    ddata_out <= ddata_s4;
-    sine <= (data_msb == 1'b1) ? {1'b1, data_sine_n} : {1'b0, data_sine_p};
+    s4_data2_p <= s4_data2_s;
+    s4_data2_n <= ~s4_data2_s + 1'b1;
+    s4_data1_p <= s4_data1_s;
+    s4_data1_n <= ~s4_data1_s + 1'b1;
+    s4_ddata <= s4_ddata_s;
+  end
+
+  // select partial products
+
+  always @(posedge clk) begin
+    s5_data2_0 <= (s4_data1_p[16] == 1'b1) ? s4_data2_n[31:15] : s4_data2_p[31:15];
+    s5_data2_1 <= s4_data1_n;
+    s5_data1 <= s4_data1_p;
+    s5_ddata <= s4_ddata;
+  end
+
+  // corrected-sine
+
+  always @(posedge clk) begin
+    s6_data2 <= s5_data2_0 + s5_data2_1;
+    s6_data1 <= s5_data1;
+    s6_ddata <= s5_ddata;
+  end
+
+  // full-scale
+
+  ad_mul #(.DELAY_DATA_WIDTH(1)) i_mul_s3_2 (
+    .clk (clk),
+    .data_a (s6_data2),
+    .data_b (17'h1d08),
+    .data_p (s7_data2_s),
+    .ddata_in (1'b0),
+    .ddata_out ());
+
+  ad_mul #(.DELAY_DATA_WIDTH(DELAY_DATA_WIDTH)) i_mul_s3_1 (
+    .clk (clk),
+    .data_a (s6_data1),
+    .data_b (17'h7fff),
+    .data_p (s7_data1_s),
+    .ddata_in (s6_ddata),
+    .ddata_out (s7_ddata_s));
+
+  // corrected sum
+
+  always @(posedge clk) begin
+    s7_data <= s7_data2_s + s7_data1_s;
+    s7_ddata <= s7_ddata_s;
+  end
+
+  // output registers
+
+  always @(posedge clk) begin
+    sine <= s7_data[30:15];
+    ddata_out <= s7_ddata;
   end
 
 endmodule

@@ -37,63 +37,63 @@
 // ***************************************************************************
 // ***************************************************************************
 
-`timescale 1ns/100ps
+`timescale 1ps/1ps
 
-module ad_dds (
+module ad_mul (
 
-  // interface
+  // data_p = data_a * data_b;
 
   clk,
-  dds_format,
-  dds_phase_0,
-  dds_scale_0,
-  dds_phase_1,
-  dds_scale_1,
-  dds_data);
+  data_a,
+  data_b,
+  data_p,
 
-  // interface
+  // delay interface
 
-  input           clk;
-  input           dds_format;
-  input   [15:0]  dds_phase_0;
-  input   [15:0]  dds_scale_0;
-  input   [15:0]  dds_phase_1;
-  input   [15:0]  dds_scale_1;
-  output  [15:0]  dds_data;
+  ddata_in,
+  ddata_out);
+
+  // delayed data bus width
+
+  parameter   DELAY_DATA_WIDTH = 16;
+
+  // data_p = data_a * data_b;
+
+  input                               clk;
+  input   [16:0]                      data_a;
+  input   [16:0]                      data_b;
+  output  [33:0]                      data_p;
+
+  // delay interface
+
+  input   [(DELAY_DATA_WIDTH-1):0]    ddata_in;
+  output  [(DELAY_DATA_WIDTH-1):0]    ddata_out;
 
   // internal registers
 
-  reg     [15:0]  dds_data_int = 'd0;
-  reg     [15:0]  dds_data = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]    p1_ddata = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]    p2_ddata = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]    ddata_out = 'd0;
 
-  // internal signals
-
-  wire    [15:0]  dds_data_0_s;
-  wire    [15:0]  dds_data_1_s;
-
-  // dds channel output
+  // a/b reg, m-reg, p-reg delay match
 
   always @(posedge clk) begin
-    dds_data_int <= dds_data_0_s + dds_data_1_s;
-    dds_data[15:15] <= dds_data_int[15] ^ dds_format;
-    dds_data[14: 0] <= dds_data_int[14:0];
+    p1_ddata <= ddata_in;
+    p2_ddata <= p1_ddata;
+    ddata_out <= p2_ddata;
   end
 
-  // dds-1
-
-  ad_dds_1 i_dds_1_0 (
-    .clk (clk),
-    .angle (dds_phase_0),
-    .scale (dds_scale_0),
-    .dds_data (dds_data_0_s));
-
-  // dds-2
-
-  ad_dds_1 i_dds_1_1 (
-    .clk (clk),
-    .angle (dds_phase_1),
-    .scale (dds_scale_1),
-    .dds_data (dds_data_1_s));
+  MULT_MACRO #(
+    .LATENCY (3),
+    .WIDTH_A (17),
+    .WIDTH_B (17))
+  i_mult_macro (
+    .CE (1'b1),
+    .RST (1'b0),
+    .CLK (clk),
+    .A (data_a),
+    .B (data_b),
+    .P (data_p));
 
 endmodule
 

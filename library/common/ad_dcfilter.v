@@ -78,6 +78,7 @@ module ad_dcfilter (
   reg     [15:0]  data_d = 'd0;
   reg             valid_2d = 'd0;
   reg     [15:0]  data_2d = 'd0;
+  reg     [15:0]  data_dcfilt = 'd0;
   reg             valid_out = 'd0;
   reg     [15:0]  data_out = 'd0;
 
@@ -96,13 +97,14 @@ module ad_dcfilter (
       data_d <= data + dcfilt_offset;
     end
     valid_2d <= valid_d;
-    data_2d <= data_d - dc_offset;
+    data_2d <= data_d;
+    data_dcfilt <= data_d - dc_offset;
     if (dcfilt_enb == 1'b1) begin
       valid_out <= valid_2d;
-      data_out <= data_2d;
+      data_out <= data_dcfilt;
     end else begin
-      valid_out <= valid_d;
-      data_out <= data_d;
+      valid_out <= valid_2d;
+      data_out <= data_2d;
     end
   end
 

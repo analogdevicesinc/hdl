@@ -53,12 +53,15 @@ module up_adc_common (
   adc_ddr_edgesel,
   adc_pin_mode,
   adc_status,
-  adc_status_pn_err,
-  adc_status_pn_oos,
-  adc_status_or,
   adc_status_ovf,
   adc_status_unf,
   adc_clk_ratio,
+
+  // channel interface
+
+  up_status_pn_err,
+  up_status_pn_oos,
+  up_status_or,
 
   // delay interface
 
@@ -102,7 +105,7 @@ module up_adc_common (
 
   // parameters
 
-  localparam  PCORE_VERSION = 32'h00060061;
+  localparam  PCORE_VERSION = 32'h00080061;
   parameter   PCORE_ID = 0;
 
   // clock reset
@@ -117,12 +120,15 @@ module up_adc_common (
   output          adc_ddr_edgesel;
   output          adc_pin_mode;
   input           adc_status;
-  input           adc_status_pn_err;
-  input           adc_status_pn_oos;
-  input           adc_status_or;
   input           adc_status_ovf;
   input           adc_status_unf;
   input   [31:0]  adc_clk_ratio;
+
+  // channel interface
+
+  input           up_status_pn_err;
+  input           up_status_pn_oos;
+  input           up_status_or;
 
   // delay interface
 
@@ -192,9 +198,6 @@ module up_adc_common (
   wire            up_wr_s;
   wire            up_preset_s;
   wire            up_mmcm_preset_s;
-  wire            up_status_pn_err_s;
-  wire            up_status_pn_oos_s;
-  wire            up_status_or_s;
   wire            up_status_s;
   wire    [31:0]  up_adc_clk_count_s;
   wire    [ 4:0]  up_delay_rdata_s;
@@ -290,7 +293,7 @@ module up_adc_common (
           8'h11: up_rdata <= {29'd0, up_adc_r1_mode, up_adc_ddr_edgesel, up_adc_pin_mode};
           8'h15: up_rdata <= up_adc_clk_count_s;
           8'h16: up_rdata <= adc_clk_ratio;
-          8'h17: up_rdata <= {28'd0, up_status_pn_err_s, up_status_pn_oos_s, up_status_or_s, up_status_s};
+          8'h17: up_rdata <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
           8'h18: up_rdata <= {14'd0, up_delay_sel, up_delay_rwn, up_delay_addr, 3'd0, up_delay_wdata};
           8'h19: up_rdata <= {22'd0, up_delay_locked_s, up_delay_status_s, 3'd0, up_delay_rdata_s};
           8'h1c: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr, up_drp_wdata};
@@ -321,27 +324,22 @@ module up_adc_common (
     .up_data_cntrl ({ up_adc_r1_mode,
                       up_adc_ddr_edgesel,
                       up_adc_pin_mode}),
+    .up_xfer_done (),
     .d_rst (adc_rst),
     .d_clk (adc_clk),
     .d_data_cntrl ({  adc_r1_mode,
                       adc_ddr_edgesel,
                       adc_pin_mode}));
 
-  up_xfer_status #(.DATA_WIDTH(6)) i_adc_xfer_status (
+  up_xfer_status #(.DATA_WIDTH(3)) i_adc_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_status ({up_status_pn_err_s,
-                      up_status_pn_oos_s,
-                      up_status_or_s,
-                      up_status_s,
+    .up_data_status ({up_status_s,
                       up_status_ovf_s,
                       up_status_unf_s}),
     .d_rst (adc_rst),
     .d_clk (adc_clk),
-    .d_data_status ({ adc_status_pn_err,
-                      adc_status_pn_oos,
-                      adc_status_or,
-                      adc_status,
+    .d_data_status ({ adc_status,
                       adc_status_ovf,
                       adc_status_unf}));
 

@@ -49,13 +49,12 @@ module up_dac_common (
 
   dac_clk,
   dac_rst,
-  dac_enable,
+  dac_sync,
   dac_frame,
   dac_par_type,
   dac_par_enb,
   dac_r1_mode,
   dac_datafmt,
-  dac_datasel,
   dac_datarate,
   dac_status,
   dac_status_ovf,
@@ -92,7 +91,7 @@ module up_dac_common (
 
   // parameters
 
-  localparam  PCORE_VERSION = 32'h00070061;
+  localparam  PCORE_VERSION = 32'h00080061;
   parameter   PCORE_ID = 0;
 
   // mmcm reset
@@ -103,13 +102,12 @@ module up_dac_common (
 
   input           dac_clk;
   output          dac_rst;
-  output          dac_enable;
+  output          dac_sync;
   output          dac_frame;
   output          dac_par_type;
   output          dac_par_enb;
   output          dac_r1_mode;
   output          dac_datafmt;
-  output  [ 3:0]  dac_datasel;
   output  [ 7:0]  dac_datarate;
   input           dac_status;
   input           dac_status_ovf;
@@ -149,12 +147,11 @@ module up_dac_common (
   reg     [31:0]  up_scratch = 'd0;
   reg             up_mmcm_resetn = 'd0;
   reg             up_resetn = 'd0;
-  reg             up_dac_enable = 'd0;
+  reg             up_dac_sync = 'd0;
   reg             up_dac_par_type = 'd0;
   reg             up_dac_par_enb = 'd0;
   reg             up_dac_r1_mode = 'd0;
   reg             up_dac_datafmt = 'd0;
-  reg     [ 3:0]  up_dac_datasel = 'd0;
   reg     [ 7:0]  up_dac_datarate = 'd0;
   reg             up_dac_frame = 'd0;
   reg             up_drp_sel_t = 'd0;
@@ -166,6 +163,10 @@ module up_dac_common (
   reg     [ 7:0]  up_usr_chanmax = 'd0;
   reg             up_ack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
+  reg             dac_sync_d = 'd0;
+  reg             dac_sync_2d = 'd0;
+  reg     [ 5:0]  dac_sync_count = 'd0;
+  reg             dac_sync = 'd0;
   reg             dac_frame_d = 'd0;
   reg             dac_frame_2d = 'd0;
   reg             dac_frame = 'd0;
@@ -176,9 +177,11 @@ module up_dac_common (
   wire            up_wr_s;
   wire            up_preset_s;
   wire            up_mmcm_preset_s;
+  wire            up_xfer_done_s;
   wire            up_status_s;
   wire            up_status_ovf_s;
   wire            up_status_unf_s;
+  wire            dac_sync_s;
   wire            dac_frame_s;
   wire    [31:0]  up_dac_clk_count_s;
   wire    [15:0]  up_drp_rdata_s;
@@ -199,12 +202,11 @@ module up_dac_common (
       up_scratch <= 'd0;
       up_mmcm_resetn <= 'd0;
       up_resetn <= 'd0;
-      up_dac_enable <= 'd0;
+      up_dac_sync <= 'd0;
       up_dac_par_type <= 'd0;
       up_dac_par_enb <= 'd0;
       up_dac_r1_mode <= 'd0;
       up_dac_datafmt <= 'd0;
-      up_dac_datasel <= 'd0;
       up_dac_datarate <= 'd0;
       up_dac_frame <= 'd0;
       up_drp_sel_t <= 'd0;
@@ -222,20 +224,27 @@ module up_dac_common (
         up_mmcm_resetn <= up_wdata[1];
         up_resetn <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h11)) begin
-        up_dac_enable <= up_wdata[0];
+      if (up_dac_sync == 1'b1) begin
+        if (up_xfer_done_s == 1'b1) begin
+          up_dac_sync <= 1'b0;
+        end
+      end else if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h11)) begin
+        up_dac_sync <= up_wdata[0];
       end
       if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h12)) begin
         up_dac_par_type <= up_wdata[7];
         up_dac_par_enb <= up_wdata[6];
         up_dac_r1_mode <= up_wdata[5];
         up_dac_datafmt <= up_wdata[4];
-        up_dac_datasel <= up_wdata[3:0];
       end
       if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h13)) begin
         up_dac_datarate <= up_wdata[7:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h14)) begin
+      if (up_dac_frame == 1'b1) begin
+        if (up_xfer_done_s == 1'b1) begin
+          up_dac_frame <= 1'b0;
+        end
+      end else if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h14)) begin
         up_dac_frame <= up_wdata[0];
       end
       if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h1c)) begin
@@ -274,9 +283,9 @@ module up_dac_common (
           8'h01: up_rdata <= PCORE_ID;
           8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {30'd0, up_mmcm_resetn, up_resetn};
-          8'h11: up_rdata <= {31'd0, up_dac_enable};
+          8'h11: up_rdata <= {31'd0, up_dac_sync};
           8'h12: up_rdata <= {24'd0, up_dac_par_type, up_dac_par_enb, up_dac_r1_mode,
-                              up_dac_datafmt, up_dac_datasel};
+                              up_dac_datafmt, 4'd0};
           8'h13: up_rdata <= {24'd0, up_dac_datarate};
           8'h14: up_rdata <= {31'd0, up_dac_frame};
           8'h15: up_rdata <= up_dac_clk_count_s;
@@ -302,26 +311,25 @@ module up_dac_common (
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(18)) i_dac_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(14)) i_dac_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_cntrl ({ up_dac_enable,
+    .up_data_cntrl ({ up_dac_sync,
                       up_dac_frame,
                       up_dac_par_type,
                       up_dac_par_enb,
                       up_dac_r1_mode,
                       up_dac_datafmt,
-                      up_dac_datasel,
                       up_dac_datarate}),
+    .up_xfer_done (up_xfer_done_s),
     .d_rst (dac_rst),
     .d_clk (dac_clk),
-    .d_data_cntrl ({  dac_enable,
+    .d_data_cntrl ({  dac_sync_s,
                       dac_frame_s,
                       dac_par_type,
                       dac_par_enb,
                       dac_r1_mode,
                       dac_datafmt,
-                      dac_datasel,
                       dac_datarate}));
 
   up_xfer_status #(.DATA_WIDTH(3)) i_dac_xfer_status (
@@ -336,9 +344,17 @@ module up_dac_common (
                       dac_status_ovf,
                       dac_status_unf}));
 
-  // frame needs to be a pulse
+  // generate frame and enable
 
   always @(posedge dac_clk) begin
+    dac_sync_d <= dac_sync_s;
+    dac_sync_2d <= dac_sync_d;
+    if (dac_sync_count[5] == 1'b1) begin
+      dac_sync_count <= dac_sync_count + 1'b1;
+    end else if ((dac_sync_d == 1'b1) && (dac_sync_2d == 1'b0)) begin
+      dac_sync_count <= 6'h20;
+    end
+    dac_sync <= dac_sync_count[5];
     dac_frame_d <= dac_frame_s;
     dac_frame_2d <= dac_frame_d;
     dac_frame <= dac_frame_d & ~dac_frame_2d;

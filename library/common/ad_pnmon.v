@@ -36,66 +36,87 @@
 // ***************************************************************************
 // ***************************************************************************
 // ***************************************************************************
+// PN monitors
 
 `timescale 1ns/100ps
 
-module ad_dds (
+module ad_pnmon (
 
-  // interface
+  // adc interface
 
-  clk,
-  dds_format,
-  dds_phase_0,
-  dds_scale_0,
-  dds_phase_1,
-  dds_scale_1,
-  dds_data);
+  adc_clk,
+  adc_valid_in,
+  adc_data_in,
+  adc_data_pn,
 
-  // interface
+  // pn out of sync and error
 
-  input           clk;
-  input           dds_format;
-  input   [15:0]  dds_phase_0;
-  input   [15:0]  dds_scale_0;
-  input   [15:0]  dds_phase_1;
-  input   [15:0]  dds_scale_1;
-  output  [15:0]  dds_data;
+  adc_pn_oos,
+  adc_pn_err);
+
+  // parameters
+
+  parameter DATA_WIDTH = 16;
+  localparam DW = DATA_WIDTH - 1;
+
+  // adc interface
+
+  input           adc_clk;
+  input           adc_valid_in;
+  input   [DW:0]  adc_data_in;
+  input   [DW:0]  adc_data_pn;
+
+  // pn out of sync and error
+
+  output          adc_pn_oos;
+  output          adc_pn_err;
 
   // internal registers
 
-  reg     [15:0]  dds_data_int = 'd0;
-  reg     [15:0]  dds_data = 'd0;
+  reg             adc_valid_d = 'd0;
+  reg             adc_pn_match_d = 'd0;
+  reg             adc_pn_match_z = 'd0;
+  reg             adc_pn_err = 'd0;
+  reg             adc_pn_oos = 'd0;
+  reg     [ 3:0]  adc_pn_oos_count = 'd0;
 
   // internal signals
 
-  wire    [15:0]  dds_data_0_s;
-  wire    [15:0]  dds_data_1_s;
+  wire            adc_pn_match_d_s;
+  wire            adc_pn_match_z_s;
+  wire            adc_pn_match_s;
+  wire            adc_pn_update_s;
+  wire            adc_pn_err_s;
 
-  // dds channel output
+  // make sure data is not 0, sequence will fail.
 
-  always @(posedge clk) begin
-    dds_data_int <= dds_data_0_s + dds_data_1_s;
-    dds_data[15:15] <= dds_data_int[15] ^ dds_format;
-    dds_data[14: 0] <= dds_data_int[14:0];
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+
+  always @(posedge adc_clk) begin
+    adc_valid_d <= adc_valid_in;
+    adc_pn_match_d <= adc_pn_match_d_s;
+    adc_pn_match_z <= adc_pn_match_z_s;
+    if (adc_valid_d == 1'b1) begin
+      adc_pn_err <= adc_pn_err_s;
+      if ((adc_pn_update_s == 1'b1) && (adc_pn_oos_count >= 15)) begin
+        adc_pn_oos <= ~adc_pn_oos;
+      end
+      if (adc_pn_update_s == 1'b1) begin
+        adc_pn_oos_count <= adc_pn_oos_count + 1'b1;
+      end else begin
+        adc_pn_oos_count <= 'd0;
+      end
+    end
   end
-
-  // dds-1
-
-  ad_dds_1 i_dds_1_0 (
-    .clk (clk),
-    .angle (dds_phase_0),
-    .scale (dds_scale_0),
-    .dds_data (dds_data_0_s));
-
-  // dds-2
-
-  ad_dds_1 i_dds_1_1 (
-    .clk (clk),
-    .angle (dds_phase_1),
-    .scale (dds_scale_1),
-    .dds_data (dds_data_1_s));
 
 endmodule
 
 // ***************************************************************************
 // ***************************************************************************
+

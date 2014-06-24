@@ -36,6 +36,8 @@
 // ***************************************************************************
 // iq correction = a*(i+x) + b*(q+y); offsets are added in dcfilter.
 
+`timescale 1ns/100ps
+
 module ad_iqcor (
 
   // data interface
@@ -77,106 +79,57 @@ module ad_iqcor (
   reg             p1_valid = 'd0;
   reg     [15:0]  p1_data_i = 'd0;
   reg     [15:0]  p1_data_q = 'd0;
-  reg             p2_valid = 'd0;
-  reg             p2_sign_i = 'd0;
-  reg             p2_sign_q = 'd0;
-  reg     [14:0]  p2_magn_i = 'd0;
-  reg     [14:0]  p2_magn_q = 'd0;
-  reg             p3_valid = 'd0;
-  reg     [15:0]  p3_data_i = 'd0;
-  reg     [15:0]  p3_data_q = 'd0;
-  reg             p4_valid = 'd0;
-  reg     [15:0]  p4_data = 'd0;
+  reg     [33:0]  p1_data_p = 'd0;
   reg             valid_out = 'd0;
   reg     [15:0]  data_out = 'd0;
 
   // internal signals
 
-  wire    [15:0]  p2_data_i_s;
-  wire    [15:0]  p2_data_q_s;
-  wire            p3_valid_s;
-  wire    [31:0]  p3_magn_i_s;
-  wire            p3_sign_i_s;
-  wire    [31:0]  p3_magn_q_s;
-  wire            p3_sign_q_s;
-  wire    [15:0]  p3_data_2s_i_p_s;
-  wire    [15:0]  p3_data_2s_q_p_s;
-  wire    [15:0]  p3_data_2s_i_n_s;
-  wire    [15:0]  p3_data_2s_q_n_s;
-
-  // apply offsets first
-
-  always @(posedge clk) begin
-    p1_valid <= valid;
-    p1_data_i <= data_i;
-    p1_data_q <= data_q;
-  end
-
-  // convert to sign-magnitude
-
-  assign p2_data_i_s = ~p1_data_i + 1'b1;
-  assign p2_data_q_s = ~p1_data_q + 1'b1;
-
-  always @(posedge clk) begin
-    p2_valid <= p1_valid;
-    p2_sign_i <= p1_data_i[15] ^ iqcor_coeff_1[15];
-    p2_sign_q <= p1_data_q[15] ^ iqcor_coeff_2[15];
-    p2_magn_i <= (p1_data_i[15] == 1'b1) ? p2_data_i_s[14:0] : p1_data_i[14:0];
-    p2_magn_q <= (p1_data_q[15] == 1'b1) ? p2_data_q_s[14:0] : p1_data_q[14:0];
-  end
+  wire    [33:0]  p1_data_p_i_s;
+  wire            p1_valid_s;
+  wire    [15:0]  p1_data_i_s;
+  wire    [33:0]  p1_data_p_q_s;
+  wire    [15:0]  p1_data_q_s;
 
   // scaling functions - i
 
-  ad_mul_u16 #(.DELAY_DATA_WIDTH(2)) i_mul_u16_i (
+  ad_mul #(.DELAY_DATA_WIDTH(17)) i_mul_i (
     .clk (clk),
-    .data_a ({1'b0, p2_magn_i}),
-    .data_b ({1'b0, iqcor_coeff_1[14:0]}),
-    .data_p (p3_magn_i_s),
-    .ddata_in ({p2_valid, p2_sign_i}),
-    .ddata_out ({p3_valid_s, p3_sign_i_s}));
+    .data_a ({data_i[15], data_i}),
+    .data_b ({iqcor_coeff_1[15], iqcor_coeff_1}),
+    .data_p (p1_data_p_i_s),
+    .ddata_in ({valid, data_i}),
+    .ddata_out ({p1_valid_s, p1_data_i_s}));
 
   // scaling functions - q
 
-  ad_mul_u16 #(.DELAY_DATA_WIDTH(1)) i_mul_u16_q (
+  ad_mul #(.DELAY_DATA_WIDTH(16)) i_mul_q (
     .clk (clk),
-    .data_a ({1'b0, p2_magn_q}),
-    .data_b ({1'b0, iqcor_coeff_2[14:0]}),
-    .data_p (p3_magn_q_s),
-    .ddata_in (p2_sign_q),
-    .ddata_out (p3_sign_q_s));
+    .data_a ({data_q[15], data_q}),
+    .data_b ({iqcor_coeff_2[15], iqcor_coeff_2}),
+    .data_p (p1_data_p_q_s),
+    .ddata_in (data_q),
+    .ddata_out (p1_data_q_s));
 
-  // convert to 2s-complements
-
-  assign p3_data_2s_i_p_s = {1'b0, p3_magn_i_s[28:14]};
-  assign p3_data_2s_q_p_s = {1'b0, p3_magn_q_s[28:14]};
-  assign p3_data_2s_i_n_s = ~p3_data_2s_i_p_s + 1'b1;
-  assign p3_data_2s_q_n_s = ~p3_data_2s_q_p_s + 1'b1;
+  // sum
 
   always @(posedge clk) begin
-    p3_valid <= p3_valid_s;
-    p3_data_i <= (p3_sign_i_s == 1'b1) ? p3_data_2s_i_n_s : p3_data_2s_i_p_s;
-    p3_data_q <= (p3_sign_q_s == 1'b1) ? p3_data_2s_q_n_s : p3_data_2s_q_p_s;
-  end
-
-  // corrected output is sum of two
-
-  always @(posedge clk) begin
-    p4_valid <= p3_valid;
-    p4_data <= p3_data_i + p3_data_q;
+    p1_valid <= p1_valid_s;
+    p1_data_i <= p1_data_i_s;
+    p1_data_q <= p1_data_q_s;
+    p1_data_p <= p1_data_p_i_s + p1_data_p_q_s;
   end
 
   // output registers
 
   always @(posedge clk) begin
+    valid_out <= p1_valid;
     if (iqcor_enable == 1'b1) begin
-      valid_out <= p4_valid;
-      data_out <= p4_data;
+      data_out <= p1_data_p[29:14];
     end else if (IQSEL == 1) begin
-      valid_out <= valid;
-      data_out <= data_q;
+      data_out <= p1_data_q;
     end else begin
-      valid_out <= valid;
-      data_out <= data_i;
+      data_out <= p1_data_i;
     end
   end
 

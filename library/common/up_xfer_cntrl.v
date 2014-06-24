@@ -46,6 +46,7 @@ module up_xfer_cntrl (
   up_rstn,
   up_clk,
   up_data_cntrl,
+  up_xfer_done,
 
   // device interface
 
@@ -63,6 +64,7 @@ module up_xfer_cntrl (
   input           up_rstn;
   input           up_clk;
   input   [DW:0]  up_data_cntrl;
+  output          up_xfer_done;
 
   // device interface
 
@@ -73,6 +75,7 @@ module up_xfer_cntrl (
   // internal registers
 
   reg     [ 5:0]  up_xfer_count = 'd0;
+  reg             up_xfer_done = 'd0;
   reg             up_xfer_toggle = 'd0;
   reg     [DW:0]  up_xfer_data = 'd0;
   reg             d_xfer_toggle_m1 = 'd0;
@@ -89,10 +92,12 @@ module up_xfer_cntrl (
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_xfer_count <= 'd0;
+      up_xfer_done <= 'd0;
       up_xfer_toggle <= 'd0;
       up_xfer_data <= 'd0;
     end else begin
       up_xfer_count <= up_xfer_count + 1'd1;
+      up_xfer_done <= (up_xfer_count == 6'd1) ? 1'b1 : 1'b0;
       if (up_xfer_count == 6'd1) begin
         up_xfer_toggle <= ~up_xfer_toggle;
         up_xfer_data <= up_data_cntrl;
