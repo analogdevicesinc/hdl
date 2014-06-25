@@ -94,14 +94,12 @@ module axi_ad9250_if (
   // adc channels
 
   assign adc_data_a = {adc_data_a_s1_s[13:0], adc_data_a_s0_s[13:0]};
-
   assign adc_data_b = {adc_data_b_s1_s[13:0], adc_data_b_s0_s[13:0]};
 
   // data multiplex
 
   assign adc_data_a_s1_s = {rx_data[25:24], rx_data[23:16], rx_data[31:26]}; 
   assign adc_data_a_s0_s = {rx_data[ 9: 8], rx_data[ 7: 0], rx_data[15:10]};
-
   assign adc_data_b_s1_s = {rx_data[57:56], rx_data[55:48], rx_data[63:58]}; 
   assign adc_data_b_s0_s = {rx_data[41:40], rx_data[39:32], rx_data[47:42]};
 

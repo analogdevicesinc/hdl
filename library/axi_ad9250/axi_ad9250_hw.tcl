@@ -13,6 +13,7 @@ set_module_property DISPLAY_NAME axi_ad9250
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9250_alt
 add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_rst.v
+add_fileset_file ad_pnmon.v           VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
 add_fileset_file ad_datafmt.v         VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
 add_fileset_file up_axi.v             VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
 add_fileset_file up_xfer_cntrl.v      VERILOG PATH $ad_hdl_dir/library/common/up_xfer_cntrl.v
@@ -116,16 +117,12 @@ add_interface_port adc_clock adc_clk clk Output 1
 
 add_interface adc_dma_if conduit end
 set_interface_property adc_dma_if associatedClock adc_clock
-add_interface_port adc_dma_if adc_ddata ddata Output 64
-add_interface_port adc_dma_if adc_dsync dsync Output 1
-add_interface_port adc_dma_if adc_dovf dovf Input 1
-add_interface_port adc_dma_if adc_dunf dunf Input 1
-add_interface_port adc_dma_if adc_dwr dwr Output 1
-
-# signal tap
-
-add_interface adc_mon_if conduit end
-set_interface_property adc_mon_if associatedClock adc_clock
-add_interface_port adc_mon_if adc_mon_valid valid Output 1
-add_interface_port adc_mon_if adc_mon_data data Output 56
+add_interface_port adc_dma_if adc_valid_a adc_valid_a Output 1
+add_interface_port adc_dma_if adc_enable_a adc_enable_a Output 1
+add_interface_port adc_dma_if adc_data_a adc_data_a Output 32
+add_interface_port adc_dma_if adc_valid_b adc_valid_b Output 1
+add_interface_port adc_dma_if adc_enable_b adc_enable_b Output 1
+add_interface_port adc_dma_if adc_data_b adc_data_b Output 32
+add_interface_port adc_dma_if adc_dovf adc_dovf Input 1
+add_interface_port adc_dma_if adc_dunf adc_dunf Input 1
 

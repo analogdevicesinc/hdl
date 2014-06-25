@@ -160,11 +160,11 @@
          type = "String";
       }
    }
-   element axi_ad9250_0.s_axi
+   element axi_hdmi_tx.s_axi
    {
       datum baseAddress
       {
-         value = "65536";
+         value = "0";
          type = "String";
       }
    }
@@ -184,11 +184,11 @@
          type = "String";
       }
    }
-   element axi_hdmi_tx.s_axi
+   element axi_ad9250_0.s_axi
    {
       datum baseAddress
       {
-         value = "0";
+         value = "65536";
          type = "String";
       }
    }
@@ -389,11 +389,7 @@
    internal="axi_ad9250_0.adc_dma_if"
    type="conduit"
    dir="end" />
- <interface
-   name="axi_ad9250_0_adc_mon_if"
-   internal="axi_ad9250_0.adc_mon_if"
-   type="conduit"
-   dir="end" />
+ <interface name="axi_ad9250_0_adc_mon_if" internal="axi_ad9250_0.adc_mon_if" />
  <interface
    name="axi_dmac_0_fifo_wr_clock"
    internal="axi_dmac_0.fifo_wr_clock"
@@ -424,11 +420,7 @@
    internal="axi_ad9250_1.adc_dma_if"
    type="conduit"
    dir="end" />
- <interface
-   name="axi_ad9250_1_adc_mon_if"
-   internal="axi_ad9250_1.adc_mon_if"
-   type="conduit"
-   dir="end" />
+ <interface name="axi_ad9250_1_adc_mon_if" internal="axi_ad9250_1.adc_mon_if" />
  <interface
    name="axi_dmac_1_fifo_wr_clock"
    internal="axi_dmac_1.fifo_wr_clock"

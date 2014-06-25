@@ -269,6 +269,10 @@ module system_top (
   reg               rx_sysref_m2 = 'd0;
   reg               rx_sysref_m3 = 'd0;
   reg               rx_sysref = 'd0;
+  reg               dma0_wr = 'd0;
+  reg     [ 63:0]   dma0_wdata = 'd0;
+  reg               dma1_wr = 'd0;
+  reg     [ 63:0]   dma1_wdata = 'd0;
   reg     [ 63:0]   sys_hdmi_pll_reconfig_in = 'd0;
   reg     [ 63:0]   sys_hdmi_pll_reconfig_reconfig_in = 'd0;
 
@@ -286,18 +290,16 @@ module system_top (
   wire              spi_clk_s;
   wire              spi_mosi_s;
   wire              spi_miso_s;
-  wire    [ 63:0]   adc0_ddata_s;
-  wire              adc0_dsync_s;
+  wire              adc0_enable_a_s;
+  wire    [ 31:0]   adc0_data_a_s;
+  wire              adc0_enable_b_s;
+  wire    [ 31:0]   adc0_data_b_s;
   wire              adc0_dovf_s;
-  wire              adc0_dwr_s;
-  wire              adc0_mon_valid_s;
-  wire    [ 55:0]   adc0_mon_data_s;
-  wire    [ 63:0]   adc1_ddata_s;
-  wire              adc1_dsync_s;
+  wire              adc1_enable_a_s;
+  wire    [ 31:0]   adc1_data_a_s;
+  wire              adc1_enable_b_s;
+  wire    [ 31:0]   adc1_data_b_s;
   wire              adc1_dovf_s;
-  wire              adc1_dwr_s;
-  wire              adc1_mon_valid_s;
-  wire    [ 55:0]   adc1_mon_data_s;
   wire    [  3:0]   rx_ip_sof_s;
   wire    [127:0]   rx_ip_data_s;
   wire    [127:0]   rx_data_s;
@@ -325,9 +327,22 @@ module system_top (
     rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
   end
 
+  always @(posedge rx_clk) begin
+    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
+    dma0_wdata <= { adc0_data_b_s[31:16],
+                    adc0_data_a_s[31:16],
+                    adc0_data_b_s[15: 0],
+                    adc0_data_a_s[15: 0]};
+    dma1_wr <= adc1_enable_a_s & adc1_enable_b_s;
+    dma1_wdata <= { adc1_data_b_s[31:16],
+                    adc1_data_a_s[31:16],
+                    adc1_data_b_s[15: 0],
+                    adc1_data_a_s[15: 0]};
+  end
+
   sld_signaltap #(
     .sld_advanced_trigger_entity ("basic,1,"),
-    .sld_data_bits (114),
+    .sld_data_bits (130),
     .sld_data_bit_cntr_bits (8),
     .sld_enable_advanced_trigger (0),
     .sld_mem_address_bits (10),
@@ -345,7 +360,12 @@ module system_top (
     .sld_trigger_level_pipeline (1))
   i_signaltap (
     .acq_clk (rx_clk),
-    .acq_data_in ({rx_sysref, rx_sync, adc1_mon_data_s, adc0_mon_data_s}),
+    .acq_data_in ({ rx_sysref,
+                    rx_sync,
+                    adc1_data_b_s,
+                    adc1_data_a_s,
+                    adc0_data_b_s,
+                    adc0_data_a_s}),
     .acq_trigger_in ({rx_sysref, rx_sync}));
 
   genvar n;
@@ -418,33 +438,35 @@ module system_top (
     .axi_ad9250_0_xcvr_clk_clk (rx_clk),
     .axi_ad9250_0_xcvr_data_data (rx_data_s[63:0]),
     .axi_ad9250_0_adc_clock_clk (adc0_clk),
-    .axi_ad9250_0_adc_dma_if_ddata (adc0_ddata_s),
-    .axi_ad9250_0_adc_dma_if_dsync (adc0_dsync_s),
-    .axi_ad9250_0_adc_dma_if_dovf (adc0_dovf_s),
-    .axi_ad9250_0_adc_dma_if_dunf (1'b0),
-    .axi_ad9250_0_adc_dma_if_dwr (adc0_dwr_s),
-    .axi_ad9250_0_adc_mon_if_valid (adc0_mon_valid_s),
-    .axi_ad9250_0_adc_mon_if_data (adc0_mon_data_s),
+    .axi_ad9250_0_adc_dma_if_adc_valid_a (),
+    .axi_ad9250_0_adc_dma_if_adc_enable_a (adc0_enable_a_s),
+    .axi_ad9250_0_adc_dma_if_adc_data_a (adc0_data_a_s),
+    .axi_ad9250_0_adc_dma_if_adc_valid_b (),
+    .axi_ad9250_0_adc_dma_if_adc_enable_b (adc0_enable_b_s),
+    .axi_ad9250_0_adc_dma_if_adc_data_b (adc0_data_b_s),
+    .axi_ad9250_0_adc_dma_if_adc_dovf (adc0_dovf_s),
+    .axi_ad9250_0_adc_dma_if_adc_dunf (1'b0),
     .axi_dmac_0_fifo_wr_clock_clk (adc0_clk),
     .axi_dmac_0_fifo_wr_if_ovf (adc0_dovf_s),
-    .axi_dmac_0_fifo_wr_if_wren (adc0_dwr_s),
-    .axi_dmac_0_fifo_wr_if_data (adc0_ddata_s),
-    .axi_dmac_0_fifo_wr_if_sync (adc0_dsync_s),
+    .axi_dmac_0_fifo_wr_if_wren (dma0_wr),
+    .axi_dmac_0_fifo_wr_if_data (dma0_wdata),
+    .axi_dmac_0_fifo_wr_if_sync (1'b1),
     .axi_ad9250_1_xcvr_clk_clk (rx_clk),
     .axi_ad9250_1_xcvr_data_data (rx_data_s[127:64]),
     .axi_ad9250_1_adc_clock_clk (adc1_clk),
-    .axi_ad9250_1_adc_dma_if_ddata (adc1_ddata_s),
-    .axi_ad9250_1_adc_dma_if_dsync (adc1_dsync_s),
-    .axi_ad9250_1_adc_dma_if_dovf (adc1_dovf_s),
-    .axi_ad9250_1_adc_dma_if_dunf (1'b0),
-    .axi_ad9250_1_adc_dma_if_dwr (adc1_dwr_s),
-    .axi_ad9250_1_adc_mon_if_valid (adc1_mon_valid_s),
-    .axi_ad9250_1_adc_mon_if_data (adc1_mon_data_s),
+    .axi_ad9250_1_adc_dma_if_adc_valid_a (),
+    .axi_ad9250_1_adc_dma_if_adc_enable_a (adc1_enable_a_s),
+    .axi_ad9250_1_adc_dma_if_adc_data_a (adc1_data_a_s),
+    .axi_ad9250_1_adc_dma_if_adc_valid_b (),
+    .axi_ad9250_1_adc_dma_if_adc_enable_b (adc1_enable_b_s),
+    .axi_ad9250_1_adc_dma_if_adc_data_b (adc1_data_b_s),
+    .axi_ad9250_1_adc_dma_if_adc_dovf (adc1_dovf_s),
+    .axi_ad9250_1_adc_dma_if_adc_dunf (1'b0),
     .axi_dmac_1_fifo_wr_clock_clk (adc1_clk),
     .axi_dmac_1_fifo_wr_if_ovf (adc1_dovf_s),
-    .axi_dmac_1_fifo_wr_if_wren (adc1_dwr_s),
-    .axi_dmac_1_fifo_wr_if_data (adc1_ddata_s),
-    .axi_dmac_1_fifo_wr_if_sync (adc1_dsync_s),
+    .axi_dmac_1_fifo_wr_if_wren (dma1_wr),
+    .axi_dmac_1_fifo_wr_if_data (dma1_wdata),
+    .axi_dmac_1_fifo_wr_if_sync (1'b1),
     .sys_jesd204b_s1_ref_clk_in_clk_clk (ref_clk),
     .sys_jesd204b_s1_rx_clk_out_clk_clk (rx_clk),
     .sys_jesd204b_s1_jesd204_rx_link_data (rx_ip_data_s),
