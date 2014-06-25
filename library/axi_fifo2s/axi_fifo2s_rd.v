@@ -84,6 +84,9 @@ module axi_fifo2s_rd (
   parameter   DATA_WIDTH = 32;
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 16;
+  parameter   AXI_ADDRESS = 32'h00000000;
+  parameter   AXI_ADDRLIMIT = 32'h00000000;
+  localparam  AXI_AWINCR = (AXI_LENGTH * DATA_WIDTH)/8;
   localparam  BUF_THRESHOLD_LO = 6'd3;
   localparam  BUF_THRESHOLD_HI = 6'd60;
 
@@ -127,16 +130,10 @@ module axi_fifo2s_rd (
 
   // internal registers
 
-  reg     [  5:0]                 axi_waddr = 'd0;
-  reg     [  5:0]                 axi_raddr = 'd0;
   reg                             axi_rd = 'd0;
-  reg                             axi_rd_d = 'd0;
-  reg     [ 31:0]                 axi_rdata_d = 'd0;
-  reg     [  5:0]                 axi_addr_diff = 'd0;
-  reg                             axi_almost_full = 'd0;
-  reg                             axi_unf = 'd0;
-  reg                             axi_almost_empty = 'd0;
-  reg                             axi_ovf = 'd0;
+  reg                             axi_rd_active = 'd0;
+  reg     [  2:0]                 axi_xfer_req_m = 'd0;
+  reg                             axi_xfer_init = 'd0;
   reg                             axi_arerror = 'd0;
   reg                             axi_arvalid = 'd0;
   reg     [ 31:0]                 axi_araddr = 'd0;
@@ -149,78 +146,30 @@ module axi_fifo2s_rd (
 
   // internal signals
 
-  wire                            axi_wr_s;
-  wire    [ 31:0]                 axi_wdata_s;
-  wire                            axi_arready_s;
-  wire                            axi_fifo_ready_s;
-  wire                            axi_rd_s;
-  wire    [  6:0]                 axi_addr_diff_s;
-  wire    [ 31:0]                 axi_rdata_s;
+  wire                            axi_ready_s;
 
-  // queue requests
+  // read is way too slow- buffer mode 
 
-  assign axi_wr_s = axi_rd_req;
-  assign axi_wdata_s = axi_rd_addr;
+  assign axi_ready_s = (~axi_arvalid | axi_arready) & ~axi_mwpfull;
 
   always @(posedge axi_clk or negedge axi_resetn) begin
     if (axi_resetn == 1'b0) begin
-      axi_waddr <= 'd0;
-    end else begin
-      if (axi_wr_s == 1'b1) begin
-        axi_waddr <= axi_waddr + 1'b1;
-      end
-    end
-  end
-
-  // read queue
-
-  assign axi_arready_s = ~axi_arvalid | axi_arready;
-  assign axi_fifo_ready_s = ~axi_xfer_req | ~axi_mwpfull;
-  assign axi_rd_s = (axi_waddr == axi_raddr) ? 1'b0 : (axi_arready_s & axi_fifo_ready_s);
-
-  always @(posedge axi_clk or negedge axi_resetn) begin
-    if (axi_resetn == 1'b0) begin
-      axi_raddr <= 'd0;
       axi_rd <= 'd0;
-      axi_rd_d <= 'd0;
-      axi_rdata_d <= 'd0;
+      axi_rd_active <= 'd0;
+      axi_xfer_req_m <= 'd0;
+      axi_xfer_init <= 'd0;
     end else begin
-      if (axi_rd_s == 1'b1) begin
-        axi_raddr <= axi_raddr + 1'b1;
+      if (axi_rd_active == 1'b1) begin
+        axi_rd <= 1'b0;
+        if (axi_rlast == 1'b1) begin
+          axi_rd_active <= 1'b0;
+        end
+      end else if ((axi_ready_s == 1'b1) && (axi_araddr < axi_rd_addr)) begin
+        axi_rd <= 1'b1;
+        axi_rd_active <= 1'b1;
       end
-      axi_rd <= axi_rd_s;
-      axi_rd_d <= axi_rd;
-      axi_rdata_d <= axi_rdata_s;
-    end
-  end
-
-  // overflow (no underflow possible)
-
-  assign axi_addr_diff_s = {1'b1, axi_waddr} - axi_raddr;
-
-  always @(posedge axi_clk or negedge axi_resetn) begin
-    if (axi_resetn == 1'b0) begin
-      axi_addr_diff <= 'd0;
-      axi_almost_full <= 'd0;
-      axi_unf <= 'd0;
-      axi_almost_empty <= 'd0;
-      axi_ovf <= 'd0;
-    end else begin
-      axi_addr_diff <= axi_addr_diff_s[5:0];
-      if (axi_addr_diff > BUF_THRESHOLD_HI) begin
-        axi_almost_full <= 1'b1;
-        axi_unf <= axi_almost_empty;
-      end else begin
-        axi_almost_full <= 1'b0;
-        axi_unf <= 1'b0;
-      end
-      if (axi_addr_diff < BUF_THRESHOLD_LO) begin
-        axi_almost_empty <= 1'b1;
-        axi_ovf <= axi_almost_full;
-      end else begin
-        axi_almost_empty <= 1'b0;
-        axi_ovf <= 1'b0;
-      end
+      axi_xfer_req_m <= {axi_xfer_req_m[1:0], axi_xfer_req};
+      axi_xfer_init <= axi_xfer_req_m[1] & ~axi_xfer_req_m[2];
     end
   end
 
@@ -242,18 +191,20 @@ module axi_fifo2s_rd (
       axi_arvalid <= 'd0;
       axi_araddr <= 'd0;
     end else begin
-      axi_arerror <= axi_rd_d & axi_arvalid;
+      axi_arerror <= axi_rd & axi_arvalid;
       if (axi_arvalid == 1'b1) begin
         if (axi_arready == 1'b1) begin
           axi_arvalid <= 1'b0;
         end
       end else begin
-        if (axi_rd_d == 1'b1) begin
+        if (axi_rd == 1'b1) begin
           axi_arvalid <= 1'b1;
         end
       end
-      if ((axi_rd_d == 1'b1) && (axi_arvalid == 1'b0)) begin
-        axi_araddr <= axi_rdata_d;
+      if (axi_xfer_init == 1'b1) begin
+        axi_araddr <= AXI_ADDRESS;
+      end else if ((axi_arvalid == 1'b1) && (axi_arready == 1'b1)) begin
+        axi_araddr <= axi_araddr + AXI_AWINCR;
       end
     end
   end
@@ -268,7 +219,7 @@ module axi_fifo2s_rd (
     end else begin
       axi_mwr <= axi_rvalid & axi_rready;
       axi_mwdata <= axi_rdata;
-      axi_rready <= axi_fifo_ready_s;
+      axi_rready <= 1'b1;
     end
   end
 
@@ -296,20 +247,9 @@ module axi_fifo2s_rd (
     if (axi_resetn == 1'b0) begin
       axi_rd_status <= 'd0;
     end else begin
-      axi_rd_status <= axi_mwovf | axi_ovf | axi_unf | axi_arerror | axi_rerror;
+      axi_rd_status <= axi_mwovf | axi_arerror | axi_rerror;
     end
   end
-
-  // buffer
-
-  ad_mem #(.DATA_WIDTH(32), .ADDR_WIDTH(6)) i_mem (
-    .clka (axi_clk),
-    .wea (axi_wr_s),
-    .addra (axi_waddr),
-    .dina (axi_wdata_s),
-    .clkb (axi_clk),
-    .addrb (axi_raddr),
-    .doutb (axi_rdata_s));
 
 endmodule
 

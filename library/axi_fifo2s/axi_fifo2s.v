@@ -101,6 +101,12 @@ module axi_fifo2s (
   axi_rdata,
   axi_rready,
 
+  dbg_adc_clk,
+  dbg_adc_data,
+
+  dbg_axi_clk,
+  dbg_axi_data,
+
   // transfer request
 
   axi_xfer_req);
@@ -111,6 +117,7 @@ module axi_fifo2s (
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 16;
   parameter   AXI_ADDRESS = 32'h00000000;
+  parameter   AXI_ADDRLIMIT = 32'h00000000;
 
   // fifo interface
 
@@ -176,11 +183,52 @@ module axi_fifo2s (
 
   input                           axi_xfer_req;
 
+  output                          dbg_adc_clk;
+  output  [ 17:0]                 dbg_adc_data;
+
+  output                          dbg_axi_clk;
+  output  [165:0]                 dbg_axi_data;
+
   // internal signals
 
   wire                            axi_rd_req_s;
   wire    [ 31:0]                 axi_rd_addr_s;
   wire                            axi_rd_status_s;
+
+  // debug
+
+  assign dbg_adc_clk = m_clk;
+  assign dbg_adc_data[15: 0] = m_wdata[15:0];
+  assign dbg_adc_data[16:16] = m_wr;
+  assign dbg_adc_data[17:17] = m_wovf;
+
+  assign dbg_axi_clk = axi_clk;
+  assign dbg_axi_data[ 15:  0] = axi_mwdata[15:0];
+  assign dbg_axi_data[ 16: 16] = axi_mwr;
+  assign dbg_axi_data[ 17: 17] = axi_mwovf;
+  assign dbg_axi_data[ 18: 18] = axi_mwpfull;
+  assign dbg_axi_data[ 19: 19] = axi_awvalid;
+  assign dbg_axi_data[ 51: 20] = axi_awaddr;
+  assign dbg_axi_data[ 52: 52] = axi_awready;
+  assign dbg_axi_data[ 53: 53] = axi_wvalid;
+  assign dbg_axi_data[ 69: 54] = axi_wdata[15:0];
+  assign dbg_axi_data[ 70: 70] = axi_wlast;
+  assign dbg_axi_data[ 71: 71] = axi_wready;
+  assign dbg_axi_data[ 72: 72] = axi_bvalid;
+  assign dbg_axi_data[ 74: 73] = axi_bresp;
+  assign dbg_axi_data[ 75: 75] = axi_bready;
+  assign dbg_axi_data[ 76: 76] = axi_arvalid;
+  assign dbg_axi_data[108: 77] = axi_araddr;
+  assign dbg_axi_data[109:109] = axi_arready;
+  assign dbg_axi_data[110:110] = axi_rvalid;
+  assign dbg_axi_data[112:111] = axi_rresp;
+  assign dbg_axi_data[113:113] = axi_rlast;
+  assign dbg_axi_data[129:114] = axi_rdata[15:0];
+  assign dbg_axi_data[130:130] = axi_rready;
+  assign dbg_axi_data[131:131] = axi_xfer_req;
+  assign dbg_axi_data[132:132] = axi_rd_req_s;
+  assign dbg_axi_data[164:133] = axi_rd_addr_s;
+  assign dbg_axi_data[165:165] = axi_rd_status_s;
 
   // instantiations
 
@@ -188,7 +236,8 @@ module axi_fifo2s (
     .DATA_WIDTH (DATA_WIDTH),
     .AXI_SIZE (AXI_SIZE),
     .AXI_LENGTH (AXI_LENGTH),
-    .AXI_ADDRESS (AXI_ADDRESS))
+    .AXI_ADDRESS (AXI_ADDRESS),
+    .AXI_ADDRLIMIT (AXI_ADDRLIMIT))
   i_wr (
     .axi_xfer_req (axi_xfer_req),
     .axi_rd_req (axi_rd_req_s),
@@ -228,7 +277,9 @@ module axi_fifo2s (
   axi_fifo2s_rd #(
     .DATA_WIDTH (DATA_WIDTH),
     .AXI_SIZE (AXI_SIZE),
-    .AXI_LENGTH (AXI_LENGTH))
+    .AXI_LENGTH (AXI_LENGTH),
+    .AXI_ADDRESS (AXI_ADDRESS),
+    .AXI_ADDRLIMIT (AXI_ADDRLIMIT))
   i_rd (
     .axi_xfer_req (axi_xfer_req),
     .axi_rd_req (axi_rd_req_s),
