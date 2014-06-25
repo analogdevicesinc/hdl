@@ -96,6 +96,9 @@ proc adi_project_create {project_name} {
   create_bd_design "system"
   source system_bd.tcl
 
+  save_bd_design
+  validate_bd_design
+
   generate_target {synthesis implementation} [get_files  $project_system_dir/system.bd]
   make_wrapper -files [get_files $project_system_dir/system.bd] -top
   import_files -force -norecurse -fileset sources_1 $project_system_dir/hdl/system_wrapper.v

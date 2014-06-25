@@ -46,7 +46,6 @@ module axi_fifo2s_wr (
   axi_xfer_req,
   axi_rd_req,
   axi_rd_addr,
-  axi_rd_status,
 
   // fifo interface
 
@@ -54,7 +53,6 @@ module axi_fifo2s_wr (
   m_clk,
   m_wr,
   m_wdata,
-  m_wovf,
 
   // axi interface
 
@@ -82,7 +80,13 @@ module axi_fifo2s_wr (
   axi_bid,
   axi_bresp,
   axi_buser,
-  axi_bready);
+  axi_bready,
+
+  // axi status
+
+  axi_dwovf,
+  axi_dwunf,
+  axi_werror);
 
   // parameters
 
@@ -90,6 +94,7 @@ module axi_fifo2s_wr (
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 16;
   parameter   AXI_ADDRESS = 32'h00000000;
+  parameter   AXI_ADDRLIMIT = 32'h00000000;
   localparam  AXI_AWINCR = (AXI_LENGTH * DATA_WIDTH)/8;
   localparam  BUF_THRESHOLD_LO = 6'd3;
   localparam  BUF_THRESHOLD_HI = 6'd60;
@@ -99,7 +104,6 @@ module axi_fifo2s_wr (
   input                           axi_xfer_req;
   output                          axi_rd_req;
   output  [ 31:0]                 axi_rd_addr;
-  input                           axi_rd_status;
 
   // fifo interface
 
@@ -107,7 +111,6 @@ module axi_fifo2s_wr (
   input                           m_clk;
   input                           m_wr;
   input   [DATA_WIDTH-1:0]        m_wdata;
-  output                          m_wovf;
 
   // axi interface
 
@@ -137,15 +140,24 @@ module axi_fifo2s_wr (
   input   [  3:0]                 axi_buser;
   output                          axi_bready;
 
+  // axi status
+
+  output                          axi_dwovf;
+  output                          axi_dwunf;
+  output                          axi_werror;
+
   // internal registers
 
+  reg     [  2:0]                 m_xfer_req_m = 'd0;
+  reg                             m_xfer_init = 'd0;
+  reg                             m_xfer_limit = 'd0;
+  reg                             m_xfer_enable = 'd0;
+  reg     [ 31:0]                 m_xfer_addr = 'd0;
   reg     [  5:0]                 m_waddr = 'd0;
   reg     [  5:0]                 m_waddr_g = 'd0;
   reg                             m_rel_enable = 'd0;
   reg                             m_rel_toggle = 'd0;
   reg     [  5:0]                 m_rel_waddr = 'd0;
-  reg     [  2:0]                 m_status_m = 'd0;
-  reg                             m_wovf = 'd0;
   reg     [  2:0]                 axi_rel_toggle_m = 'd0;
   reg     [  5:0]                 axi_rel_waddr = 'd0;
   reg     [  5:0]                 axi_waddr_m1 = 'd0;
@@ -153,11 +165,11 @@ module axi_fifo2s_wr (
   reg     [  5:0]                 axi_waddr = 'd0;
   reg     [  5:0]                 axi_addr_diff = 'd0;
   reg                             axi_almost_full = 'd0;
-  reg                             axi_unf = 'd0;
+  reg                             axi_dwunf = 'd0;
   reg                             axi_almost_empty = 'd0;
-  reg                             axi_ovf = 'd0;
-  reg     [  2:0]                 axi_xfer_enable_m = 'd0;
-  reg                             axi_xfer_enable = 'd0;
+  reg                             axi_dwovf = 'd0;
+  reg     [  2:0]                 axi_xfer_req_m = 'd0;
+  reg                             axi_xfer_init = 'd0;
   reg     [  5:0]                 axi_raddr = 'd0;
   reg                             axi_rd = 'd0;
   reg                             axi_rlast = 'd0;
@@ -166,13 +178,10 @@ module axi_fifo2s_wr (
   reg     [DATA_WIDTH-1:0]        axi_rdata_d = 'd0;
   reg                             axi_rd_req = 'd0;
   reg     [ 31:0]                 axi_rd_addr = 'd0;
-  reg                             axi_awerror = 'd0;
   reg                             axi_awvalid = 'd0;
   reg     [ 31:0]                 axi_awaddr = 'd0;
   reg                             axi_werror = 'd0;
   reg                             axi_reset = 'd0;
-  reg     [  4:0]                 axi_status_cnt = 'd0;
-  reg                             axi_status = 'd0;
 
   // internal signals
 
@@ -182,7 +191,6 @@ module axi_fifo2s_wr (
   wire                            axi_rd_s;
   wire                            axi_req_s;
   wire                            axi_rlast_s;
-  wire                            axi_status_s;
   wire    [DATA_WIDTH-1:0]        axi_rdata_s;
 
   // binary to grey conversion
@@ -223,16 +231,33 @@ module axi_fifo2s_wr (
     if (m_rst == 1'b1) begin
       m_waddr <= 'd0;
       m_waddr_g <= 'd0;
+      m_xfer_req_m <= 'd0;
+      m_xfer_init <= 'd0;
+      m_xfer_limit <= 'd0;
+      m_xfer_enable <= 'd0;
+      m_xfer_addr <= 'd0;
       m_rel_enable <= 'd0;
       m_rel_toggle <= 'd0;
       m_rel_waddr <= 'd0;
-      m_status_m <= 'd0;
-      m_wovf <= 'd0;
     end else begin
-      if (m_wr == 1'b1) begin
+      if ((m_wr == 1'b1) && (m_xfer_enable == 1'b1)) begin
         m_waddr <= m_waddr + 1'b1;
       end
       m_waddr_g <= b2g(m_waddr);
+      m_xfer_req_m <= {m_xfer_req_m[1:0], axi_xfer_req};
+      m_xfer_init <= m_xfer_req_m[1] & ~m_xfer_req_m[2];
+      if (m_xfer_init == 1'b1) begin
+        m_xfer_limit <= 1'd1;
+      end else if (m_xfer_addr >= AXI_ADDRLIMIT) begin
+        m_xfer_limit <= 1'd0;
+      end
+      if (m_xfer_init == 1'b1) begin
+        m_xfer_enable <= 1'b1;
+        m_xfer_addr <= AXI_ADDRESS;
+      end else if ((m_waddr[1:0] == 2'h3) && (m_wr == 1'b1)) begin
+        m_xfer_enable <= m_xfer_req_m[2] & m_xfer_limit;
+        m_xfer_addr <= m_xfer_addr + AXI_AWINCR;
+      end
       if (m_waddr[1:0] == 2'h3) begin
         m_rel_enable <= m_wr;
       end else begin
@@ -242,8 +267,6 @@ module axi_fifo2s_wr (
         m_rel_toggle <= ~m_rel_toggle;
         m_rel_waddr <= m_waddr;
       end
-      m_status_m <= {m_status_m[1:0], axi_status};
-      m_wovf <= m_status_m[2];
     end
   end
 
@@ -277,24 +300,24 @@ module axi_fifo2s_wr (
     if (axi_resetn == 1'b0) begin
       axi_addr_diff <= 'd0;
       axi_almost_full <= 'd0;
-      axi_unf <= 'd0;
+      axi_dwunf <= 'd0;
       axi_almost_empty <= 'd0;
-      axi_ovf <= 'd0;
+      axi_dwovf <= 'd0;
     end else begin
       axi_addr_diff <= axi_addr_diff_s[5:0];
       if (axi_addr_diff > BUF_THRESHOLD_HI) begin
         axi_almost_full <= 1'b1;
-        axi_unf <= axi_almost_empty;
+        axi_dwunf <= axi_almost_empty;
       end else begin
         axi_almost_full <= 1'b0;
-        axi_unf <= 1'b0;
+        axi_dwunf <= 1'b0;
       end
       if (axi_addr_diff < BUF_THRESHOLD_LO) begin
         axi_almost_empty <= 1'b1;
-        axi_ovf <= axi_almost_full;
+        axi_dwovf <= axi_almost_full;
       end else begin
         axi_almost_empty <= 1'b0;
-        axi_ovf <= 1'b0;
+        axi_dwovf <= 1'b0;
       end
     end
   end
@@ -303,20 +326,18 @@ module axi_fifo2s_wr (
 
   always @(posedge axi_clk or negedge axi_resetn) begin
     if (axi_resetn == 1'b0) begin
-      axi_xfer_enable_m <= 'd0;
-      axi_xfer_enable <= 'd0;
+      axi_xfer_req_m <= 'd0;
+      axi_xfer_init <= 'd0;
     end else begin
-      axi_xfer_enable_m <= {axi_xfer_enable_m[1:0], axi_xfer_req};
-      if (axi_rel_toggle_s == 1'b1) begin
-        axi_xfer_enable <= axi_xfer_enable_m[2];
-      end
+      axi_xfer_req_m <= {axi_xfer_req_m[1:0], axi_xfer_req};
+      axi_xfer_init <= axi_xfer_req_m[1] & ~axi_xfer_req_m[2];
     end
   end
 
   // read is initiated if xfer enabled
 
   assign axi_wready_s = ~axi_wvalid | axi_wready;
-  assign axi_rd_s = (axi_rel_waddr == axi_raddr) ? 1'b0 : (axi_wready_s & axi_xfer_enable);
+  assign axi_rd_s = (axi_rel_waddr == axi_raddr) ? 1'b0 : axi_wready_s;
   assign axi_req_s = (axi_raddr[1:0] == 2'h0) ? axi_rd_s : 1'b0;
   assign axi_rlast_s = (axi_raddr[1:0] == 2'h3) ? axi_rd_s : 1'b0;
 
@@ -329,9 +350,7 @@ module axi_fifo2s_wr (
       axi_rlast_d <= 'd0;
       axi_rdata_d <= 'd0;
     end else begin
-      if (axi_xfer_enable == 1'b0) begin
-        axi_raddr <= axi_rel_waddr;
-      end else if (axi_rd_s == 1'b1) begin
+      if (axi_rd_s == 1'b1) begin
         axi_raddr <= axi_raddr + 1'b1;
       end
       axi_rd <= axi_rd_s;
@@ -350,7 +369,7 @@ module axi_fifo2s_wr (
       axi_rd_addr <= 'd0;
     end else begin
       axi_rd_req <= axi_rlast_s;
-      if (axi_xfer_enable == 1'b0) begin
+      if (axi_xfer_init == 1'b1) begin
         axi_rd_addr <= AXI_ADDRESS;
       end else if (axi_rd_req == 1'b1) begin
         axi_rd_addr <= axi_rd_addr + AXI_AWINCR;
@@ -372,11 +391,9 @@ module axi_fifo2s_wr (
 
   always @(posedge axi_clk or negedge axi_resetn) begin
     if (axi_resetn == 1'b0) begin
-      axi_awerror <= 'd0;
       axi_awvalid <= 'd0;
       axi_awaddr <= 'd0;
     end else begin
-      axi_awerror <= axi_req_s & axi_awvalid;
       if (axi_awvalid == 1'b1) begin
         if (axi_awready == 1'b1) begin
           axi_awvalid <= 1'b0;
@@ -386,7 +403,7 @@ module axi_fifo2s_wr (
           axi_awvalid <= 1'b1;
         end
       end
-      if (axi_xfer_enable == 1'b0) begin
+      if (axi_xfer_init == 1'b1) begin
         axi_awaddr <= AXI_ADDRESS;
       end else if ((axi_awvalid == 1'b1) && (axi_awready == 1'b1)) begin
         axi_awaddr <= axi_awaddr + AXI_AWINCR;
@@ -418,24 +435,6 @@ module axi_fifo2s_wr (
       axi_reset <= 1'b1;
     end else begin
       axi_reset <= 1'b0;
-    end
-  end
-
-  // combined status
-
-  assign axi_status_s = axi_ovf | axi_unf | axi_awerror | axi_werror | axi_rd_status;
-
-  always @(posedge axi_clk or negedge axi_resetn) begin
-    if (axi_resetn == 1'b0) begin
-      axi_status_cnt <= 'd0;
-      axi_status <= 'd0;
-    end else begin
-      if (axi_status_s == 1'b1) begin
-        axi_status_cnt <= 5'h1f;
-      end else if (axi_status_cnt[4] == 1'b1) begin
-        axi_status_cnt <= axi_status_cnt + 1'b1;
-      end
-      axi_status <= axi_status_cnt[4];
     end
   end
 

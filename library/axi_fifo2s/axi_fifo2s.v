@@ -103,7 +103,8 @@ module axi_fifo2s (
 
   // transfer request
 
-  axi_xfer_req);
+  axi_xfer_req,
+  axi_xfer_status);
 
   // parameters
 
@@ -111,6 +112,7 @@ module axi_fifo2s (
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 16;
   parameter   AXI_ADDRESS = 32'h00000000;
+  parameter   AXI_ADDRLIMIT = 32'h00000000;
 
   // fifo interface
 
@@ -172,15 +174,58 @@ module axi_fifo2s (
   input   [DATA_WIDTH-1:0]        axi_rdata;
   output                          axi_rready;
 
-  // transfer request
+  // transfer request & status
 
   input                           axi_xfer_req;
+  output  [  4:0]                 axi_xfer_status;
+
+  // internal registers
+
+  reg     [  4:0]                 axi_xfer_status = 'd0;
+  reg     [  4:0]                 axi_status_cnt = 'd0;
+  reg                             m_wovf_m = 'd0;
+  reg                             m_wovf = 'd0;
 
   // internal signals
 
   wire                            axi_rd_req_s;
   wire    [ 31:0]                 axi_rd_addr_s;
-  wire                            axi_rd_status_s;
+  wire                            axi_dwovf_s;
+  wire                            axi_dwunf_s;
+  wire                            axi_werror_s;
+  wire                            axi_rerror_s;
+
+  // status signals
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_xfer_status <= 'd0;
+      axi_status_cnt <= 'd0;
+    end else begin
+      axi_xfer_status[4] <= axi_rerror_s;
+      axi_xfer_status[3] <= axi_werror_s;
+      axi_xfer_status[2] <= axi_dwunf_s;
+      axi_xfer_status[1] <= axi_dwovf_s;
+      axi_xfer_status[0] <= axi_mwovf;
+      if (axi_xfer_status == 0) begin
+        if (axi_status_cnt[4] == 1'b1) begin
+          axi_status_cnt <= axi_status_cnt + 1'b1;
+        end
+      end else begin
+        axi_status_cnt <= 5'd10;
+      end
+    end
+  end
+
+  always @(posedge m_clk) begin
+    if (m_rst == 1'b1) begin
+      m_wovf_m <= 'd0;
+      m_wovf <= 'd0;
+    end else begin
+      m_wovf_m <= axi_status_cnt[4];
+      m_wovf <= m_wovf_m;
+    end
+  end
 
   // instantiations
 
@@ -188,17 +233,16 @@ module axi_fifo2s (
     .DATA_WIDTH (DATA_WIDTH),
     .AXI_SIZE (AXI_SIZE),
     .AXI_LENGTH (AXI_LENGTH),
-    .AXI_ADDRESS (AXI_ADDRESS))
+    .AXI_ADDRESS (AXI_ADDRESS),
+    .AXI_ADDRLIMIT (AXI_ADDRLIMIT))
   i_wr (
     .axi_xfer_req (axi_xfer_req),
     .axi_rd_req (axi_rd_req_s),
     .axi_rd_addr (axi_rd_addr_s),
-    .axi_rd_status (axi_rd_status_s),
     .m_rst (m_rst),
     .m_clk (m_clk),
     .m_wr (m_wr),
     .m_wdata (m_wdata),
-    .m_wovf (m_wovf),
     .axi_clk (axi_clk),
     .axi_resetn (axi_resetn),
     .axi_awvalid (axi_awvalid),
@@ -223,17 +267,21 @@ module axi_fifo2s (
     .axi_bid (axi_bid),
     .axi_bresp (axi_bresp),
     .axi_buser (axi_buser),
-    .axi_bready (axi_bready));
+    .axi_bready (axi_bready),
+    .axi_dwovf (axi_dwovf_s),
+    .axi_dwunf (axi_dwunf_s),
+    .axi_werror (axi_werror_s));
 
   axi_fifo2s_rd #(
     .DATA_WIDTH (DATA_WIDTH),
     .AXI_SIZE (AXI_SIZE),
-    .AXI_LENGTH (AXI_LENGTH))
+    .AXI_LENGTH (AXI_LENGTH),
+    .AXI_ADDRESS (AXI_ADDRESS),
+    .AXI_ADDRLIMIT (AXI_ADDRLIMIT))
   i_rd (
     .axi_xfer_req (axi_xfer_req),
     .axi_rd_req (axi_rd_req_s),
     .axi_rd_addr (axi_rd_addr_s),
-    .axi_rd_status (axi_rd_status_s),
     .axi_clk (axi_clk),
     .axi_resetn (axi_resetn),
     .axi_arvalid (axi_arvalid),
@@ -255,9 +303,9 @@ module axi_fifo2s (
     .axi_rlast (axi_rlast),
     .axi_rdata (axi_rdata),
     .axi_rready (axi_rready),
+    .axi_rerror (axi_rerror_s),
     .axi_mwr (axi_mwr),
     .axi_mwdata (axi_mwdata),
-    .axi_mwovf (axi_mwovf),
     .axi_mwpfull (axi_mwpfull));
 
 endmodule
