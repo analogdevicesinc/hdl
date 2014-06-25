@@ -59,24 +59,52 @@ module axi_ad9361_alt (
   tx_data_out_p,
   tx_data_out_n,
 
+  // transmit master/slave
+
+  dac_sync_in,
+  dac_sync_out,
+
   // delay clock
 
   delay_clk,
 
-  // dma interface
+  // master interface
 
+  l_clk,
   clk,
 
-  adc_dwr,
-  adc_ddata,
-  adc_dsync,
+  // dma interface
+
+  adc_enable_i0,
+  adc_valid_i0,
+  adc_data_i0,
+  adc_enable_q0,
+  adc_valid_q0,
+  adc_data_q0,
+  adc_enable_i1,
+  adc_valid_i1,
+  adc_data_i1,
+  adc_enable_q1,
+  adc_valid_q1,
+  adc_data_q1,
   adc_dovf,
   adc_dunf,
 
-  dac_drd,
-  dac_ddata,
+  dac_enable_i0,
+  dac_valid_i0,
+  dac_data_i0,
+  dac_enable_q0,
+  dac_valid_q0,
+  dac_data_q0,
+  dac_enable_i1,
+  dac_valid_i1,
+  dac_data_i1,
+  dac_enable_q1,
+  dac_valid_q1,
+  dac_data_q1,
   dac_dovf,
   dac_dunf,
+
 
   // axi interface
 
@@ -120,97 +148,125 @@ module axi_ad9361_alt (
 
   // debug signals
 
-  adc_mon_valid,
-  adc_mon_data);
+  dev_dbg_data,
+  dev_l_dbg_data);
 
-  parameter   PCORE_ID = 0;
+  parameter PCORE_ID = 0;
+  parameter PCORE_AXI_ID_WIDTH = 3;
   parameter PCORE_DEVICE_TYPE = 0;
 
- // physical interface (receive)
+  // physical interface (receive)
 
-  input           rx_clk_in_p;
-  input           rx_clk_in_n;
-  input           rx_frame_in_p;
-  input           rx_frame_in_n;
-  input   [ 5:0]  rx_data_in_p;
-  input   [ 5:0]  rx_data_in_n;
+  input                               rx_clk_in_p;
+  input                               rx_clk_in_n;
+  input                               rx_frame_in_p;
+  input                               rx_frame_in_n;
+  input   [  5:0]                     rx_data_in_p;
+  input   [  5:0]                     rx_data_in_n;
 
   // physical interface (transmit)
 
-  output          tx_clk_out_p;
-  output          tx_clk_out_n;
-  output          tx_frame_out_p;
-  output          tx_frame_out_n;
-  output  [ 5:0]  tx_data_out_p;
-  output  [ 5:0]  tx_data_out_n;
+  output                              tx_clk_out_p;
+  output                              tx_clk_out_n;
+  output                              tx_frame_out_p;
+  output                              tx_frame_out_n;
+  output  [  5:0]                     tx_data_out_p;
+  output  [  5:0]                     tx_data_out_n;
+
+  // master/slave
+
+  input                               dac_sync_in;
+  output                              dac_sync_out;
 
   // delay clock
 
-  input           delay_clk;
+  input                               delay_clk;
+
+  // master interface
+
+  output                              l_clk;
+  input                               clk;
 
   // dma interface
 
-  output          adc_clk;
-  output          adc_dwr;
-  output  [63:0]  adc_ddata;
-  output          adc_dsync;
-  input           adc_dovf;
-  input           adc_dunf;
-
-  output          dac_drd;
-  input   [63:0]  dac_ddata;
-  input           dac_dovf;
-  input           dac_dunf;
+  output                              adc_enable_i0;
+  output                              adc_valid_i0;
+  output  [ 15:0]                     adc_data_i0;
+  output                              adc_enable_q0;
+  output                              adc_valid_q0;
+  output  [ 15:0]                     adc_data_q0;
+  output                              adc_enable_i1;
+  output                              adc_valid_i1;
+  output  [ 15:0]                     adc_data_i1;
+  output                              adc_enable_q1;
+  output                              adc_valid_q1;
+  output  [ 15:0]                     adc_data_q1;
+  input                               adc_dovf;
+  input                               adc_dunf;
+  output                              dac_enable_i0;
+  output                              dac_valid_i0;
+  input   [ 15:0]                     dac_data_i0;
+  output                              dac_enable_q0;
+  output                              dac_valid_q0;
+  input   [ 15:0]                     dac_data_q0;
+  output                              dac_enable_i1;
+  output                              dac_valid_i1;
+  input   [ 15:0]                     dac_data_i1;
+  output                              dac_enable_q1;
+  output                              dac_valid_q1;
+  input   [ 15:0]                     dac_data_q1;
+  input                               dac_dovf;
+  input                               dac_dunf;
 
   // axi interface
 
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [13:0]  s_axi_awaddr;
-  input   [ 2:0]  s_axi_awid;
-  input   [ 7:0]  s_axi_awlen;
-  input   [ 2:0]  s_axi_awsize;
-  input   [ 1:0]  s_axi_awburst;
-  input   [ 0:0]  s_axi_awlock;
-  input   [ 3:0]  s_axi_awcache;
-  input   [ 2:0]  s_axi_awprot;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  input           s_axi_wlast;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  output  [ 2:0]  s_axi_bid;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [13:0]  s_axi_araddr;
-  input   [ 2:0]  s_axi_arid;
-  input   [ 7:0]  s_axi_arlen;
-  input   [ 2:0]  s_axi_arsize;
-  input   [ 1:0]  s_axi_arburst;
-  input   [ 0:0]  s_axi_arlock;
-  input   [ 3:0]  s_axi_arcache;
-  input   [ 2:0]  s_axi_arprot;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [ 1:0]  s_axi_rresp;
-  output  [31:0]  s_axi_rdata;
-  output  [ 2:0]  s_axi_rid;
-  output          s_axi_rlast;
-  input           s_axi_rready;
+  input                               s_axi_aclk;
+  input                               s_axi_aresetn;
+  input                               s_axi_awvalid;
+  input   [ 13:0]                     s_axi_awaddr;
+  input   [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_awid;
+  input   [  7:0]                     s_axi_awlen;
+  input   [  2:0]                     s_axi_awsize;
+  input   [  1:0]                     s_axi_awburst;
+  input   [  0:0]                     s_axi_awlock;
+  input   [  3:0]                     s_axi_awcache;
+  input   [  2:0]                     s_axi_awprot;
+  output                              s_axi_awready;
+  input                               s_axi_wvalid;
+  input   [ 31:0]                     s_axi_wdata;
+  input   [  3:0]                     s_axi_wstrb;
+  input                               s_axi_wlast;
+  output                              s_axi_wready;
+  output                              s_axi_bvalid;
+  output  [  1:0]                     s_axi_bresp;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_bid;
+  input                               s_axi_bready;
+  input                               s_axi_arvalid;
+  input   [ 13:0]                     s_axi_araddr;
+  input   [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_arid;
+  input   [  7:0]                     s_axi_arlen;
+  input   [  2:0]                     s_axi_arsize;
+  input   [  1:0]                     s_axi_arburst;
+  input   [  0:0]                     s_axi_arlock;
+  input   [  3:0]                     s_axi_arcache;
+  input   [  2:0]                     s_axi_arprot;
+  output                              s_axi_arready;
+  output                              s_axi_rvalid;
+  output  [  1:0]                     s_axi_rresp;
+  output  [ 31:0]                     s_axi_rdata;
+  output  [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_rid;
+  output                              s_axi_rlast;
+  input                               s_axi_rready;
 
   // debug signals
 
-  output          adc_mon_valid;
-  output [47:0]   adc_mon_data;
+  output [111:0]                      dev_dbg_data;
+  output [ 61:0]                      dev_l_dbg_data;
 
   // defaults
 
-  assign s_axi_bid = 3'd0;
-  assign s_axi_rid = 3'd0;
+  assign s_axi_bid = 'd0;
+  assign s_axi_rid = 'd0;
   assign s_axi_rlast = 1'd0;
 
   // ad9361 lite version
@@ -218,7 +274,7 @@ module axi_ad9361_alt (
   axi_ad9361 #(
     .PCORE_ID (PCORE_ID),
     .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .PCORE_IODELAY_GROUP ("adc_if_delay_group"),
+    .PCORE_IODELAY_GROUP ("dev_if_delay_group"),
     .C_S_AXI_MIN_SIZE (32'hffff),
     .C_BASEADDR (32'h00000000),
     .C_HIGHADDR (32'hffffffff))
@@ -229,28 +285,45 @@ module axi_ad9361_alt (
     .rx_frame_in_n (rx_frame_in_n),
     .rx_data_in_p (rx_data_in_p),
     .rx_data_in_n (rx_data_in_n),
-
     .tx_clk_out_p (tx_clk_out_p),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_frame_out_p (tx_frame_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_data_out_n (tx_data_out_n),
-
+    .dac_sync_in (dac_sync_in),
+    .dac_sync_out (dac_sync_out),
     .delay_clk (delay_clk),
-
-    .clk (adc_clk),
-    .adc_dwr (adc_dwr),
-    .adc_ddata (adc_ddata),
-    .adc_dsync (adc_dsync),
+    .l_clk (l_clk),
+    .clk (clk),
+    .adc_enable_i0 (adc_enable_i0),
+    .adc_valid_i0 (adc_valid_i0),
+    .adc_data_i0 (adc_data_i0),
+    .adc_enable_q0 (adc_enable_q0),
+    .adc_valid_q0 (adc_valid_q0),
+    .adc_data_q0 (adc_data_q0),
+    .adc_enable_i1 (adc_enable_i1),
+    .adc_valid_i1 (adc_valid_i1),
+    .adc_data_i1 (adc_data_i1),
+    .adc_enable_q1 (adc_enable_q1),
+    .adc_valid_q1 (adc_valid_q1),
+    .adc_data_q1 (adc_data_q1),
     .adc_dovf (adc_dovf),
     .adc_dunf (adc_dunf),
-
-    .dac_drd (dac_drd),
-    .dac_ddata (dac_ddata),
+    .dac_enable_i0 (dac_enable_i0),
+    .dac_valid_i0 (dac_valid_i0),
+    .dac_data_i0 (dac_data_i0),
+    .dac_enable_q0 (dac_enable_q0),
+    .dac_valid_q0 (dac_valid_q0),
+    .dac_data_q0 (dac_data_q0),
+    .dac_enable_i1 (dac_enable_i1),
+    .dac_valid_i1 (dac_valid_i1),
+    .dac_data_i1 (dac_data_i1),
+    .dac_enable_q1 (dac_enable_q1),
+    .dac_valid_q1 (dac_valid_q1),
+    .dac_data_q1 (dac_data_q1),
     .dac_dovf (dac_dovf),
     .dac_dunf (dac_dunf),
-
     .s_axi_aclk (s_axi_aclk),
     .s_axi_aresetn (s_axi_aresetn),
     .s_axi_awvalid (s_axi_awvalid),
@@ -270,8 +343,8 @@ module axi_ad9361_alt (
     .s_axi_rresp (s_axi_rresp),
     .s_axi_rdata (s_axi_rdata),
     .s_axi_rready (s_axi_rready),
-    .adc_mon_valid (adc_mon_valid),
-    .adc_mon_data (adc_mon_data));
+    .dev_dbg_data (dev_dbg_data),
+    .dev_l_dbg_data (dev_l_dbg_data));
 
 endmodule
 

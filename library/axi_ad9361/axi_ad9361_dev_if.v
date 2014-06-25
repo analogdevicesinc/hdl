@@ -98,7 +98,7 @@ module axi_ad9361_dev_if (
 
   // this parameter controls the buffer type based on the target device.
 
-  parameter   PCORE_BUFTYPE = 0;
+  parameter   PCORE_DEVICE_TYPE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
   localparam  PCORE_7SERIES = 0;
   localparam  PCORE_VIRTEX6 = 1;
@@ -450,7 +450,7 @@ module axi_ad9361_dev_if (
     .IB (rx_data_in_n[l_inst]),
     .O (rx_data_ibuf_s[l_inst]));
 
-  if (PCORE_BUFTYPE == PCORE_VIRTEX6) begin
+  if (PCORE_DEVICE_TYPE == PCORE_VIRTEX6) begin
   (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
   IODELAYE1 #(
     .CINVCTRL_SEL ("FALSE"),
@@ -527,7 +527,7 @@ module axi_ad9361_dev_if (
     .O (rx_frame_ibuf_s));
 
   generate
-  if (PCORE_BUFTYPE == PCORE_VIRTEX6) begin
+  if (PCORE_DEVICE_TYPE == PCORE_VIRTEX6) begin
   (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
   IODELAYE1 #(
     .CINVCTRL_SEL ("FALSE"),
@@ -668,7 +668,7 @@ module axi_ad9361_dev_if (
     .O (clk_ibuf_s));
 
   generate
-  if (PCORE_BUFTYPE == PCORE_VIRTEX6) begin
+  if (PCORE_DEVICE_TYPE == PCORE_VIRTEX6) begin
   BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_rbuf (
     .CLR (1'b0),
     .CE (1'b1),

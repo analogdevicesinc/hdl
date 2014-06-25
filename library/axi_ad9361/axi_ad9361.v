@@ -135,7 +135,7 @@ module axi_ad9361 (
   // parameters
 
   parameter   PCORE_ID = 0;
-  parameter   PCORE_BUFTYPE = 0;
+  parameter   PCORE_DEVICE_TYPE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
   parameter   PCORE_DAC_DP_DISABLE = 0;
   parameter   PCORE_ADC_DP_DISABLE = 0;
@@ -290,7 +290,7 @@ module axi_ad9361 (
   // device interface
 
   axi_ad9361_dev_if #(
-    .PCORE_BUFTYPE (PCORE_BUFTYPE),
+    .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
     .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP))
   i_dev_if (
     .rx_clk_in_p (rx_clk_in_p),
