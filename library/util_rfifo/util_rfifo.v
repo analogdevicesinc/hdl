@@ -126,7 +126,7 @@ module util_rfifo (
   // read is non-destructive
 
   assign fifo_rd = m_rd;
-  assign m_runf_s = s_runf | fifo_runf | fifo_rempty;
+  assign m_runf_s = s_runf | fifo_runf;
 
   always @(posedge m_clk) begin
     m_runf_m1 <= m_runf_s;

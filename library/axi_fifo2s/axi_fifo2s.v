@@ -101,15 +101,10 @@ module axi_fifo2s (
   axi_rdata,
   axi_rready,
 
-  dbg_adc_clk,
-  dbg_adc_data,
-
-  dbg_axi_clk,
-  dbg_axi_data,
-
   // transfer request
 
-  axi_xfer_req);
+  axi_xfer_req,
+  axi_xfer_status);
 
   // parameters
 
@@ -179,56 +174,58 @@ module axi_fifo2s (
   input   [DATA_WIDTH-1:0]        axi_rdata;
   output                          axi_rready;
 
-  // transfer request
+  // transfer request & status
 
   input                           axi_xfer_req;
+  output  [  4:0]                 axi_xfer_status;
 
-  output                          dbg_adc_clk;
-  output  [ 17:0]                 dbg_adc_data;
+  // internal registers
 
-  output                          dbg_axi_clk;
-  output  [165:0]                 dbg_axi_data;
+  reg     [  4:0]                 axi_xfer_status = 'd0;
+  reg     [  4:0]                 axi_status_cnt = 'd0;
+  reg                             m_wovf_m = 'd0;
+  reg                             m_wovf = 'd0;
 
   // internal signals
 
   wire                            axi_rd_req_s;
   wire    [ 31:0]                 axi_rd_addr_s;
-  wire                            axi_rd_status_s;
+  wire                            axi_dwovf_s;
+  wire                            axi_dwunf_s;
+  wire                            axi_werror_s;
+  wire                            axi_rerror_s;
 
-  // debug
+  // status signals
 
-  assign dbg_adc_clk = m_clk;
-  assign dbg_adc_data[15: 0] = m_wdata[15:0];
-  assign dbg_adc_data[16:16] = m_wr;
-  assign dbg_adc_data[17:17] = m_wovf;
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_xfer_status <= 'd0;
+      axi_status_cnt <= 'd0;
+    end else begin
+      axi_xfer_status[4] <= axi_rerror_s;
+      axi_xfer_status[3] <= axi_werror_s;
+      axi_xfer_status[2] <= axi_dwunf_s;
+      axi_xfer_status[1] <= axi_dwovf_s;
+      axi_xfer_status[0] <= axi_mwovf;
+      if (axi_xfer_status == 0) begin
+        if (axi_status_cnt[4] == 1'b1) begin
+          axi_status_cnt <= axi_status_cnt + 1'b1;
+        end
+      end else begin
+        axi_status_cnt <= 5'd10;
+      end
+    end
+  end
 
-  assign dbg_axi_clk = axi_clk;
-  assign dbg_axi_data[ 15:  0] = axi_mwdata[15:0];
-  assign dbg_axi_data[ 16: 16] = axi_mwr;
-  assign dbg_axi_data[ 17: 17] = axi_mwovf;
-  assign dbg_axi_data[ 18: 18] = axi_mwpfull;
-  assign dbg_axi_data[ 19: 19] = axi_awvalid;
-  assign dbg_axi_data[ 51: 20] = axi_awaddr;
-  assign dbg_axi_data[ 52: 52] = axi_awready;
-  assign dbg_axi_data[ 53: 53] = axi_wvalid;
-  assign dbg_axi_data[ 69: 54] = axi_wdata[15:0];
-  assign dbg_axi_data[ 70: 70] = axi_wlast;
-  assign dbg_axi_data[ 71: 71] = axi_wready;
-  assign dbg_axi_data[ 72: 72] = axi_bvalid;
-  assign dbg_axi_data[ 74: 73] = axi_bresp;
-  assign dbg_axi_data[ 75: 75] = axi_bready;
-  assign dbg_axi_data[ 76: 76] = axi_arvalid;
-  assign dbg_axi_data[108: 77] = axi_araddr;
-  assign dbg_axi_data[109:109] = axi_arready;
-  assign dbg_axi_data[110:110] = axi_rvalid;
-  assign dbg_axi_data[112:111] = axi_rresp;
-  assign dbg_axi_data[113:113] = axi_rlast;
-  assign dbg_axi_data[129:114] = axi_rdata[15:0];
-  assign dbg_axi_data[130:130] = axi_rready;
-  assign dbg_axi_data[131:131] = axi_xfer_req;
-  assign dbg_axi_data[132:132] = axi_rd_req_s;
-  assign dbg_axi_data[164:133] = axi_rd_addr_s;
-  assign dbg_axi_data[165:165] = axi_rd_status_s;
+  always @(posedge m_clk) begin
+    if (m_rst == 1'b1) begin
+      m_wovf_m <= 'd0;
+      m_wovf <= 'd0;
+    end else begin
+      m_wovf_m <= axi_status_cnt[4];
+      m_wovf <= m_wovf_m;
+    end
+  end
 
   // instantiations
 
@@ -242,12 +239,10 @@ module axi_fifo2s (
     .axi_xfer_req (axi_xfer_req),
     .axi_rd_req (axi_rd_req_s),
     .axi_rd_addr (axi_rd_addr_s),
-    .axi_rd_status (axi_rd_status_s),
     .m_rst (m_rst),
     .m_clk (m_clk),
     .m_wr (m_wr),
     .m_wdata (m_wdata),
-    .m_wovf (m_wovf),
     .axi_clk (axi_clk),
     .axi_resetn (axi_resetn),
     .axi_awvalid (axi_awvalid),
@@ -272,7 +267,10 @@ module axi_fifo2s (
     .axi_bid (axi_bid),
     .axi_bresp (axi_bresp),
     .axi_buser (axi_buser),
-    .axi_bready (axi_bready));
+    .axi_bready (axi_bready),
+    .axi_dwovf (axi_dwovf_s),
+    .axi_dwunf (axi_dwunf_s),
+    .axi_werror (axi_werror_s));
 
   axi_fifo2s_rd #(
     .DATA_WIDTH (DATA_WIDTH),
@@ -284,7 +282,6 @@ module axi_fifo2s (
     .axi_xfer_req (axi_xfer_req),
     .axi_rd_req (axi_rd_req_s),
     .axi_rd_addr (axi_rd_addr_s),
-    .axi_rd_status (axi_rd_status_s),
     .axi_clk (axi_clk),
     .axi_resetn (axi_resetn),
     .axi_arvalid (axi_arvalid),
@@ -306,9 +303,9 @@ module axi_fifo2s (
     .axi_rlast (axi_rlast),
     .axi_rdata (axi_rdata),
     .axi_rready (axi_rready),
+    .axi_rerror (axi_rerror_s),
     .axi_mwr (axi_mwr),
     .axi_mwdata (axi_mwdata),
-    .axi_mwovf (axi_mwovf),
     .axi_mwpfull (axi_mwpfull));
 
 endmodule

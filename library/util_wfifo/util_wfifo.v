@@ -110,7 +110,7 @@ module util_wfifo (
   // write is pass through
 
   assign fifo_wr = m_wr;
-  assign m_wovf_s = s_wovf | fifo_wfull | fifo_wovf;
+  assign m_wovf_s = s_wovf | fifo_wovf;
 
   genvar m;
   generate

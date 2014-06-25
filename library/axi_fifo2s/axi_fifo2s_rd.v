@@ -46,7 +46,6 @@ module axi_fifo2s_rd (
   axi_xfer_req,
   axi_rd_req,
   axi_rd_addr,
-  axi_rd_status,
 
   // axi interface
 
@@ -72,11 +71,14 @@ module axi_fifo2s_rd (
   axi_rdata,
   axi_rready,
 
+  // axi status
+
+  axi_rerror,
+
   // fifo interface
 
   axi_mwr,
   axi_mwdata,
-  axi_mwovf,
   axi_mwpfull);
 
   // parameters
@@ -95,7 +97,6 @@ module axi_fifo2s_rd (
   input                           axi_xfer_req;
   input                           axi_rd_req;
   input   [ 31:0]                 axi_rd_addr;
-  output                          axi_rd_status;
 
   // axi interface
 
@@ -121,11 +122,14 @@ module axi_fifo2s_rd (
   input   [DATA_WIDTH-1:0]        axi_rdata;
   output                          axi_rready;
 
+  // axi status
+
+  output                          axi_rerror;
+
   // fifo interface
 
   output                          axi_mwr;
   output  [DATA_WIDTH-1:0]        axi_mwdata;
-  input                           axi_mwovf;
   input                           axi_mwpfull;
 
   // internal registers
@@ -134,7 +138,6 @@ module axi_fifo2s_rd (
   reg                             axi_rd_active = 'd0;
   reg     [  2:0]                 axi_xfer_req_m = 'd0;
   reg                             axi_xfer_init = 'd0;
-  reg                             axi_arerror = 'd0;
   reg                             axi_arvalid = 'd0;
   reg     [ 31:0]                 axi_araddr = 'd0;
   reg                             axi_mwr = 'd0;
@@ -142,7 +145,6 @@ module axi_fifo2s_rd (
   reg                             axi_rready = 'd0;
   reg                             axi_rerror = 'd0;
   reg                             axi_reset = 'd0;
-  reg                             axi_rd_status = 'd0;
 
   // internal signals
 
@@ -187,11 +189,9 @@ module axi_fifo2s_rd (
 
   always @(posedge axi_clk or negedge axi_resetn) begin
     if (axi_resetn == 1'b0) begin
-      axi_arerror <= 'd0;
       axi_arvalid <= 'd0;
       axi_araddr <= 'd0;
     end else begin
-      axi_arerror <= axi_rd & axi_arvalid;
       if (axi_arvalid == 1'b1) begin
         if (axi_arready == 1'b1) begin
           axi_arvalid <= 1'b0;
@@ -238,16 +238,6 @@ module axi_fifo2s_rd (
       axi_reset <= 1'b1;
     end else begin
       axi_reset <= 1'b0;
-    end
-  end
-
-  // combined status
-
-  always @(posedge axi_clk or negedge axi_resetn) begin
-    if (axi_resetn == 1'b0) begin
-      axi_rd_status <= 'd0;
-    end else begin
-      axi_rd_status <= axi_mwovf | axi_arerror | axi_rerror;
     end
   end
 
