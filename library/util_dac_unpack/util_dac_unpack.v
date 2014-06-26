@@ -41,26 +41,49 @@
 
 module util_dac_unpack (
 
-  chan_data_0,
-  chan_data_1,
-  chan_data_2,
-  chan_data_3,
+  dac_enable_00,
+  dac_valid_00,
+  dac_data_00,
 
-  dma_data
+  dac_enable_01,
+  dac_valid_01,
+  dac_data_01,
 
-  );
+  dac_enable_02,
+  dac_valid_02,
+  dac_data_02,
 
-  output  [15:0]  chan_data_0;
-  output  [15:0]  chan_data_1;
-  output  [15:0]  chan_data_2;
-  output  [15:0]  chan_data_3;
+  dac_enable_03,
+  dac_valid_03,
+  dac_data_03,
 
-  input   [63:0]  dma_data;
+  dma_rd,
+  dma_data);
 
-  assign chan_data_0 = dma_data[15:0 ];
-  assign chan_data_1 = dma_data[31:16];
-  assign chan_data_2 = dma_data[47:32];
-  assign chan_data_3 = dma_data[63:48];
+  input           dac_enable_00;
+  input           dac_valid_00;
+  output  [ 15:0] dac_data_00;
+
+  input           dac_enable_01;
+  input           dac_valid_01;
+  output  [ 15:0] dac_data_01;
+
+  input           dac_enable_02;
+  input           dac_valid_02;
+  output  [ 15:0] dac_data_02;
+
+  input           dac_enable_03;
+  input           dac_valid_03;
+  output  [ 15:0] dac_data_03;
+
+  output          dma_rd;
+  input   [ 63:0] dma_data;
+
+  assign dma_rd = dac_valid_00 | dac_valid_01 | dac_valid_02 | dac_valid_03;
+  assign dac_data_00 = dma_data[15: 0];
+  assign dac_data_01 = dma_data[31:16];
+  assign dac_data_02 = dma_data[47:32];
+  assign dac_data_03 = dma_data[63:48];
 
 endmodule
 
