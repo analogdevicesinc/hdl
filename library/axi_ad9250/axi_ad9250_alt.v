@@ -163,8 +163,8 @@ module axi_ad9250_alt (
 
   // defaults
 
-  assign s_axi_bid = 'd0;
-  assign s_axi_rid = 'd0;
+  assign s_axi_bid = s_axi_awid;
+  assign s_axi_rid = s_axi_arid;
   assign s_axi_rlast = 1'd0;
 
   // ad9250 lite version

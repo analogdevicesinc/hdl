@@ -317,6 +317,7 @@ module up_hdmi_tx (
                       up_vs_width,
                       up_ve_max,
                       up_ve_min}),
+    .up_xfer_done (),
     .d_rst (hdmi_rst),
     .d_clk (hdmi_clk),
     .d_data_cntrl ({  hdmi_full_range,

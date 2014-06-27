@@ -122,6 +122,7 @@ add_interface_port hdmi_clock hdmi_clk clk Input 1
 
 add_interface hdmi_if conduit end
 set_interface_property hdmi_if associatedClock hdmi_clock
+set_interface_property hdmi_if associatedReset s_axi_reset
 add_interface_port hdmi_if hdmi_out_clk h_clk Output 1
 add_interface_port hdmi_if hdmi_16_hsync h16_hsync Output 1
 add_interface_port hdmi_if hdmi_16_vsync h16_vsync Output 1
@@ -144,6 +145,7 @@ add_interface_port vdma_clock vdma_clk clk Input 1
 
 add_interface vdma_if avalon_streaming end
 set_interface_property vdma_if associatedClock vdma_clock
+set_interface_property vdma_if associatedReset s_axi_reset
 add_interface_port vdma_if vdma_valid valid Input 1
 add_interface_port vdma_if vdma_data data Input 64
 add_interface_port vdma_if vdma_ready ready Output 1

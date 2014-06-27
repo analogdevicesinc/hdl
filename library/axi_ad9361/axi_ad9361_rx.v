@@ -80,6 +80,11 @@ module axi_ad9361_rx (
   adc_dovf,
   adc_dunf,
 
+  // gpio
+
+  up_adc_gpio_in,
+  up_adc_gpio_out,
+
   // processor interface
 
   up_rstn,
@@ -133,6 +138,11 @@ module axi_ad9361_rx (
   output  [15:0]  adc_data_q1;
   input           adc_dovf;
   input           adc_dunf;
+
+  // gpio
+
+  input   [31:0]  up_adc_gpio_in;
+  output  [31:0]  up_adc_gpio_out;
 
   // processor interface
 
@@ -347,6 +357,8 @@ module axi_ad9361_rx (
     .drp_locked (1'd1),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd3),
+    .up_adc_gpio_in (up_adc_gpio_in),
+    .up_adc_gpio_out (up_adc_gpio_out),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel),

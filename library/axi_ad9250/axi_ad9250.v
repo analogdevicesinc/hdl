@@ -278,6 +278,8 @@ module axi_ad9250 (
     .drp_locked (1'd1),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd1),
+    .up_adc_gpio_in (32'd0),
+    .up_adc_gpio_out (),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),

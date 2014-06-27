@@ -77,6 +77,8 @@ module up_dac_common (
 
   up_usr_chanmax,
   dac_usr_chanmax,
+  up_dac_gpio_in,
+  up_dac_gpio_out,
 
   // bus interface
 
@@ -130,6 +132,8 @@ module up_dac_common (
 
   output  [ 7:0]  up_usr_chanmax;
   input   [ 7:0]  dac_usr_chanmax;
+  input   [31:0]  up_dac_gpio_in;
+  output  [31:0]  up_dac_gpio_out;
 
   // bus interface
 
@@ -161,6 +165,7 @@ module up_dac_common (
   reg             up_status_ovf = 'd0;
   reg             up_status_unf = 'd0;
   reg     [ 7:0]  up_usr_chanmax = 'd0;
+  reg     [31:0]  up_dac_gpio_out = 'd0;
   reg             up_ack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg             dac_sync_d = 'd0;
@@ -216,6 +221,7 @@ module up_dac_common (
       up_status_ovf <= 'd0;
       up_status_ovf <= 'd0;
       up_usr_chanmax <= 'd0;
+      up_dac_gpio_out <= 'd0;
     end else begin
       if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
@@ -266,6 +272,9 @@ module up_dac_common (
       if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h28)) begin
         up_usr_chanmax <= up_wdata[7:0];
       end
+      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h2f)) begin
+        up_dac_gpio_out <= up_wdata;
+      end
     end
   end
 
@@ -295,6 +304,8 @@ module up_dac_common (
           8'h1d: up_rdata <= {14'd0, up_drp_locked_s, up_drp_status_s, up_drp_rdata_s};
           8'h22: up_rdata <= {30'd0, up_status_ovf, up_status_unf};
           8'h28: up_rdata <= {24'd0, dac_usr_chanmax};
+          8'h2e: up_rdata <= up_dac_gpio_in;
+          8'h2f: up_rdata <= up_dac_gpio_out;
           default: up_rdata <= 0;
         endcase
       end else begin

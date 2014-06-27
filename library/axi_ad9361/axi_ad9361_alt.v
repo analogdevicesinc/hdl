@@ -265,8 +265,8 @@ module axi_ad9361_alt (
 
   // defaults
 
-  assign s_axi_bid = 'd0;
-  assign s_axi_rid = 'd0;
+  assign s_axi_bid = s_axi_awid;
+  assign s_axi_rid = s_axi_arid;
   assign s_axi_rlast = 1'd0;
 
   // ad9361 lite version
@@ -343,6 +343,10 @@ module axi_ad9361_alt (
     .s_axi_rresp (s_axi_rresp),
     .s_axi_rdata (s_axi_rdata),
     .s_axi_rready (s_axi_rready),
+    .up_dac_gpio_in (32'd0),
+    .up_dac_gpio_out (),
+    .up_adc_gpio_in (32'd0),
+    .up_adc_gpio_out (),
     .dev_dbg_data (dev_dbg_data),
     .dev_l_dbg_data (dev_l_dbg_data));
 

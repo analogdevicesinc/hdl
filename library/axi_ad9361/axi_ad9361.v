@@ -127,6 +127,13 @@ module axi_ad9361 (
   s_axi_rresp,
   s_axi_rready,
 
+  // gpio
+
+  up_dac_gpio_in,
+  up_dac_gpio_out,
+  up_adc_gpio_in,
+  up_adc_gpio_out,
+
   // chipscope signals
 
   dev_dbg_data,
@@ -228,6 +235,13 @@ module axi_ad9361 (
   output  [31:0]  s_axi_rdata;
   output  [ 1:0]  s_axi_rresp;
   input           s_axi_rready;
+
+  // gpio
+
+  input   [31:0]  up_dac_gpio_in;
+  output  [31:0]  up_dac_gpio_out;
+  input   [31:0]  up_adc_gpio_in;
+  output  [31:0]  up_adc_gpio_out;
 
   // chipscope signals
 
@@ -361,6 +375,8 @@ module axi_ad9361 (
     .adc_data_q1 (adc_data_q1),
     .adc_dovf (adc_dovf),
     .adc_dunf (adc_dunf),
+    .up_adc_gpio_in (up_adc_gpio_in),
+    .up_adc_gpio_out (up_adc_gpio_out),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
@@ -397,6 +413,8 @@ module axi_ad9361 (
     .dac_data_q1 (dac_data_q1),
     .dac_dovf(dac_dovf),
     .dac_dunf(dac_dunf),
+    .up_dac_gpio_in (up_dac_gpio_in),
+    .up_dac_gpio_out (up_dac_gpio_out),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),

@@ -119,6 +119,8 @@ module axi_ad9361_tx_channel (
   reg     [15:0]  dac_pat_data = 'd0;
   reg     [15:0]  dac_dds_phase_0 = 'd0;
   reg     [15:0]  dac_dds_phase_1 = 'd0;
+  reg     [15:0]  dac_dds_incr_0 = 'd0;
+  reg     [15:0]  dac_dds_incr_1 = 'd0;
   reg     [15:0]  dac_dds_data = 'd0;
 
   // internal signals
@@ -345,10 +347,14 @@ module axi_ad9361_tx_channel (
     if (dac_data_sync == 1'b1) begin
       dac_dds_phase_0 <= dac_dds_init_1_s;
       dac_dds_phase_1 <= dac_dds_init_2_s;
+      dac_dds_incr_0 <= dac_dds_incr_1_s;
+      dac_dds_incr_1 <= dac_dds_incr_2_s;
       dac_dds_data <= 16'd0;
     end else if (dac_valid == 1'b1) begin
-      dac_dds_phase_0 <= dac_dds_phase_0 + dac_dds_incr_1_s;
-      dac_dds_phase_1 <= dac_dds_phase_1 + dac_dds_incr_2_s;
+      dac_dds_phase_0 <= dac_dds_phase_0 + dac_dds_incr_0;
+      dac_dds_phase_1 <= dac_dds_phase_1 + dac_dds_incr_1;
+      dac_dds_incr_0 <= dac_dds_incr_0;
+      dac_dds_incr_1 <= dac_dds_incr_1;
       dac_dds_data <= dac_dds_data_s;
     end
   end
