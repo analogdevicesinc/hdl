@@ -248,7 +248,7 @@ module system_top (
   // hdmi
 
   output            hdmi_out_clk;
-  output  [  3:0]   hdmi_data;
+  output  [ 15:0]   hdmi_data;
 
   // lane interface
 
@@ -285,11 +285,8 @@ module system_top (
 
   // internal signals
 
-  wire              sys_pll_locked_s;
-  wire              spi_csn_s;
-  wire              spi_clk_s;
-  wire              spi_mosi_s;
-  wire              spi_miso_s;
+  wire              spi_mosi;
+  wire              spi_miso;
   wire              adc0_enable_a_s;
   wire    [ 31:0]   adc0_data_a_s;
   wire              adc0_enable_b_s;
@@ -342,6 +339,34 @@ module system_top (
 
   sld_signaltap #(
     .sld_advanced_trigger_entity ("basic,1,"),
+    .sld_data_bits (5),
+    .sld_data_bit_cntr_bits (8),
+    .sld_enable_advanced_trigger (0),
+    .sld_mem_address_bits (10),
+    .sld_node_crc_bits (32),
+    .sld_node_crc_hiword (10311),
+    .sld_node_crc_loword (14297),
+    .sld_node_info (1076736),
+    .sld_ram_block_type ("AUTO"),
+    .sld_sample_depth (1024),
+    .sld_storage_qualifier_gap_record (0),
+    .sld_storage_qualifier_mode ("OFF"),
+    .sld_trigger_bits (2),
+    .sld_trigger_in_enabled (0),
+    .sld_trigger_level (1),
+    .sld_trigger_level_pipeline (1))
+  i_signaltap (
+    .acq_clk (sys_clk),
+    .acq_data_in ({ spi_csn,
+                    spi_clk,
+                    spi_mosi,
+                    spi_miso,
+                    spi_sdio}),
+    .acq_trigger_in ({spi_csn, spi_clk}));
+
+  /*
+  sld_signaltap #(
+    .sld_advanced_trigger_entity ("basic,1,"),
     .sld_data_bits (130),
     .sld_data_bit_cntr_bits (8),
     .sld_enable_advanced_trigger (0),
@@ -367,6 +392,8 @@ module system_top (
                     adc0_data_b_s,
                     adc0_data_a_s}),
     .acq_trigger_in ({rx_sysref, rx_sync}));
+
+  */
 
   genvar n;
   generate
@@ -400,14 +427,11 @@ module system_top (
     .rx_rst_state (rx_rst_state_s));
 
   fmcjesdadc1_spi i_fmcjesdadc1_spi (
-    .sys_clk (sys_clk),
-    .spi4_csn (spi_csn_s),
-    .spi4_clk (spi_clk_s),
-    .spi4_mosi (spi_mosi_s),
-    .spi4_miso (spi_miso_s),
-    .spi3_csn (spi_csn),
-    .spi3_clk (spi_clk),
-    .spi3_sdio (spi_sdio));
+    .spi_csn (spi_csn),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_sdio (spi_sdio));
 
   // pipe line to fix timing
 
@@ -483,16 +507,16 @@ module system_top (
     .sys_jesd204b_s1_rx_digitalreset_rx_digitalreset (rx_digital_reset_s),
     .sys_jesd204b_s1_rx_islockedtodata_export (rx_cdr_locked_s),
     .sys_jesd204b_s1_rx_cal_busy_export (rx_cal_busy_s),
-    .sys_hps_spim0_txd (spi_mosi_s),
-    .sys_hps_spim0_rxd (spi_miso_s),
+    .sys_hps_spim0_txd (spi_mosi),
+    .sys_hps_spim0_rxd (spi_miso),
     .sys_hps_spim0_ss_in_n (1'b1),
     .sys_hps_spim0_ssi_oe_n (),
-    .sys_hps_spim0_ss_0_n (spi_csn_s),
+    .sys_hps_spim0_ss_0_n (spi_csn),
     .sys_hps_spim0_ss_1_n (),
     .sys_hps_spim0_ss_2_n (),
     .sys_hps_spim0_ss_3_n (),
     .sys_jesd204b_s1_pll_locked_export (rx_pll_locked_s),
-    .sys_hps_spim0_sclk_out_clk (spi_clk_s),
+    .sys_hps_spim0_sclk_out_clk (spi_clk),
     .sys_hps_f2h_stm_hw_events_stm_hwevents ({16'd0, led, push_buttons, dip_switches}),
     .hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
     .hps_io_hps_io_emac1_inst_TXD0 (eth1_txd0),

@@ -41,22 +41,12 @@
 
 module fmcjesdadc1_spi (
 
-  // master clock
+  spi_csn,
+  spi_clk,
+  spi_mosi,
+  spi_miso,
 
-  sys_clk,
-
-  // 4-wire spi interface
-
-  spi4_csn,
-  spi4_clk,
-  spi4_mosi,
-  spi4_miso,
-
-  // 3-wire spi interface
-
-  spi3_csn,
-  spi3_clk,
-  spi3_sdio);
+  spi_sdio);
 
   // parameters
 
@@ -67,82 +57,64 @@ module fmcjesdadc1_spi (
   localparam  FMC27X_AD9129_0 = 8'h82;
   localparam  FMC27X_AD9129_1 = 8'h83;
 
-  // master clock
+  // 4-wire
 
-  input           sys_clk;
+  input           spi_csn;
+  input           spi_clk;
+  input           spi_mosi;
+  output          spi_miso;
 
-  // 4-wire spi interface
+  // 3-wire
 
-  input           spi4_csn;
-  input           spi4_clk;
-  input           spi4_mosi;
-  output          spi4_miso;
-
-  // 3-wire spi interface
-
-  output          spi3_csn;
-  output          spi3_clk;
-  inout           spi3_sdio;
+  inout           spi_sdio;
 
   // internal registers
 
-  reg             spi4_clk_d = 'd0;
-  reg             spi4_csn_d = 'd0;
-  reg     [ 5:0]  spi4_clkcnt = 'd0;
-  reg     [ 6:0]  spi4_bitcnt = 'd0;
-  reg     [ 7:0]  spi4_devid = 'd0;
-  reg             spi4_rwn = 'd0;
-  reg             spi3_enable = 'd0;
+  reg     [ 7:0]  spi_devid = 'd0;
+  reg     [ 5:0]  spi_count = 'd0;
+  reg             spi_rd_wr_n = 'd0;
+  reg             spi_enable = 'd0;
 
-  // pass through most of the stuff (no need to change clock or miso or mosi)
+  // internal signals
 
-  assign spi4_miso = spi3_sdio;
-  assign spi3_csn = spi4_csn;
-  assign spi3_clk = spi4_clk;
-  assign spi3_sdio = ((spi4_csn == 1'b0) && (spi3_enable == 1'b1)) ? 1'bz : spi4_mosi;
+  wire            spi_enable_s;
 
-  // the spi4 format is a preamble that selects a particular device, so all we need
-  // to do is collect the first 8 bits, then control the tristate based on the
-  // device's address and data widths. the details of the spi formats can be found
-  // in the data sheet of the devices.
+  // check on rising edge and change on falling edge
 
-  always @(posedge sys_clk) begin
-    spi4_clk_d <= spi4_clk;
-    spi4_csn_d <= spi4_csn;
-    if ((spi4_clk == 1'b1) && (spi4_clk_d == 1'b0)) begin
-      spi4_clkcnt <= 6'd0;
+  assign spi_enable_s = spi_enable & ~spi_csn;
+
+  always @(posedge spi_clk or posedge spi_csn) begin
+    if (spi_csn == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
     end else begin
-      spi4_clkcnt <= spi4_clkcnt + 1'b1;
-    end
-    if ((spi4_csn == 1'b1) && (spi4_csn_d == 1'b0)) begin
-      spi4_bitcnt <= 7'd0;
-      spi4_devid <= 8'd0;
-      spi4_rwn <= 1'd0;
-    end else if ((spi4_clk == 1'b1) && (spi4_clk_d == 1'b0)) begin
-      spi4_bitcnt <= spi4_bitcnt + 1'b1;
-      if (spi4_bitcnt < 8) begin
-        spi4_devid <= {spi4_devid[6:0], spi4_mosi};
+      spi_count <= spi_count + 1'b1;
+      if (spi_count <= 6'd7) begin
+        spi_devid <= {spi_devid[6:0], spi_mosi};
       end
-      if (spi4_bitcnt == 8) begin
-        spi4_rwn <= spi4_mosi;
+      if (spi_count == 6'd8) begin
+        spi_rd_wr_n <= spi_mosi;
       end
-    end
-    if (spi4_csn == 1'b0) begin
-      if ((spi4_devid == FMC27X_CPLD) || (spi4_devid == FMC27X_AD9129_0) ||
-        (spi4_devid == FMC27X_AD9129_1)) begin
-        if ((spi4_bitcnt == 16) && (spi4_clkcnt == 8)) begin
-          spi3_enable <= spi4_rwn;
-        end
-      end else if ((spi4_devid == FMC27X_AD9517) || (spi4_devid == FMC27X_AD9250_0) || 
-        (spi4_devid == FMC27X_AD9250_1)) begin
-        if ((spi4_bitcnt == 24) && (spi4_clkcnt == 8)) begin
-          spi3_enable <= spi4_rwn;
-        end
-      end
-    end else begin
-      spi3_enable <= 1'b0;
     end
   end
+
+  always @(negedge spi_clk or posedge spi_csn) begin
+    if (spi_csn == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+      if (((spi_count == 6'd16) && (spi_devid == FMC27X_CPLD)) ||
+          ((spi_count == 6'd16) && (spi_devid == FMC27X_AD9129_0)) ||
+          ((spi_count == 6'd16) && (spi_devid == FMC27X_AD9129_1)) ||
+          ((spi_count == 6'd24) && (spi_devid == FMC27X_AD9517)) ||
+          ((spi_count == 6'd24) && (spi_devid == FMC27X_AD9250_0)) ||
+          ((spi_count == 6'd24) && (spi_devid == FMC27X_AD9250_1))) begin
+        spi_enable <= spi_rd_wr_n;
+      end
+    end
+  end
+
+  assign spi_miso = spi_sdio;
+  assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
 

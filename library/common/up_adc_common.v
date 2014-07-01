@@ -204,6 +204,8 @@ module up_adc_common (
   wire            up_preset_s;
   wire            up_mmcm_preset_s;
   wire            up_status_s;
+  wire            up_status_ovf_s;
+  wire            up_status_unf_s;
   wire    [31:0]  up_adc_clk_count_s;
   wire    [ 4:0]  up_delay_rdata_s;
   wire            up_delay_status_s;

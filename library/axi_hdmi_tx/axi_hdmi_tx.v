@@ -217,6 +217,9 @@ module axi_hdmi_tx (
   wire    [47:0]  vdma_wdata_s;
   wire            vdma_fs_ret_toggle_s;
   wire    [ 8:0]  vdma_fs_waddr_s;
+  wire            vdma_ovf_s;
+  wire            vdma_unf_s;
+  wire            vdma_tpm_oos_s;
 
   // signal name changes
 
