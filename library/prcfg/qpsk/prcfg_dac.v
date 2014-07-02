@@ -78,7 +78,9 @@ module prcfg_dac(
   reg     [31:0]    dst_dac_ddata  = 0;
   reg               dst_dac_dvalid = 0;
   reg               src_dac_drd    = 0;
-  reg     [ 1:0]    pn_data        = 0;
+
+  reg     [ 7:0]    pn_data        = 8'hF2;
+  reg     [31:0]    status         = 0;
 
   wire    [ 1:0]    dac_data;
   wire    [15:0]    dac_data_fltr_i;
@@ -100,13 +102,15 @@ module prcfg_dac(
       dout[4] = din[3];
       dout[3] = din[2];
       dout[2] = din[1];
-      dout[1] = din[8] ^ din[4];
-      dout[0] = din[7] ^ din[3];
+      dout[1] = din[7] ^ din[4];
+      dout[0] = din[6] ^ din[3];
       pn = dout;
     end
   endfunction
 
-  assign status = { 24'h0, RP_ID };
+  always @(posedge clk) begin
+    status <= { 24'h0, RP_ID };
+  end
   assign mode   = control[ 7:4];
 
   // pass through mode
@@ -120,7 +124,7 @@ module prcfg_dac(
   end
 
   // data source for the modulator
-  assign dac_data = (mode == 1) ? pn_data : src_dac_ddata[ 1: 0];
+  assign dac_data = (mode == 1) ? pn_data[ 1:0] : src_dac_ddata[ 1:0];
 
   // modulated data
   assign dac_data_mode1_2 = { dac_data_fltr_q, dac_data_fltr_i };
