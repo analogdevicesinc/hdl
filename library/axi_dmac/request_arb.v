@@ -115,6 +115,7 @@ module dmac_request_arb (
 	input  [C_DMA_DATA_WIDTH_SRC-1:0]   fifo_wr_din,
 	output                              fifo_wr_overflow,
 	input                               fifo_wr_sync,
+	output                              fifo_wr_xfer_req,
 
 	// Input FIFO interface
 	input                               fifo_rd_clk,
@@ -742,7 +743,8 @@ dmac_src_fifo_inf #(
 	.en(fifo_wr_en),
 	.din(fifo_wr_din),
 	.overflow(fifo_wr_overflow),
-	.sync(fifo_wr_sync)
+	.sync(fifo_wr_sync),
+	.xfer_req(fifo_wr_xfer_req)
 );
 
 end else begin

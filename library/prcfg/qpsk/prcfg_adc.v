@@ -111,8 +111,8 @@ module prcfg_adc (
       dout[4] = din[3];
       dout[3] = din[2];
       dout[2] = din[1];
-      dout[1] = din[8] ^ din[4];
-      dout[0] = din[7] ^ din[3];
+      dout[1] = din[7] ^ din[4];
+      dout[0] = din[6] ^ din[3];
       pn = dout;
     end
   endfunction

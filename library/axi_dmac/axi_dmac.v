@@ -125,6 +125,7 @@ module axi_dmac (
 	input  [C_DMA_DATA_WIDTH_SRC-1:0]        fifo_wr_din,
 	output                                   fifo_wr_overflow,
 	input                                    fifo_wr_sync,
+	output                                   fifo_wr_xfer_req,
 
 	// Input FIFO interface
 	input                                    fifo_rd_clk,
@@ -546,6 +547,7 @@ dmac_request_arb #(
 	.fifo_wr_din(fifo_wr_din),
 	.fifo_wr_overflow(fifo_wr_overflow),
 	.fifo_wr_sync(fifo_wr_sync),
+	.fifo_wr_xfer_req(fifo_wr_xfer_req),
 
 	
 	.fifo_rd_clk(fifo_rd_clk),
