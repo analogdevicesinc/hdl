@@ -78,7 +78,7 @@ module prcfg_dac(
   reg     [31:0]    dst_dac_ddata  = 0;
   reg               src_dac_drd    = 0;
 
-  reg     [31:0]    dac_prbs       = 0;
+  reg     [31:0]    dac_prbs       = 32'hA2F19C;
 
   reg     [ 2:0]    counter        = 0;
   reg               pattern        = 0;
@@ -166,7 +166,7 @@ module prcfg_dac(
               end
       3'd4  : begin
                 sin_tone <= 16'h0000;
-                cos_tone <= 16'h7FFF;
+                cos_tone <= 16'h8001;
               end
       3'd5  : begin
                 sin_tone <= 16'hA57E;
@@ -183,7 +183,7 @@ module prcfg_dac(
     endcase
   end
 
-  assign dac_data_mode1 = {sin_tone, cos_tone};
+  assign dac_data_mode1 = {cos_tone, sin_tone};
 
   // prbs generation
   always @(posedge clk) begin
