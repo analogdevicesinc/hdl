@@ -53,6 +53,7 @@ module dmac_src_fifo_inf (
 	input [C_DATA_WIDTH-1:0] din,
 	output reg overflow,
 	input sync,
+	output xfer_req,
 
 	input fifo_ready,
 	output fifo_valid,
@@ -133,6 +134,8 @@ dmac_data_mover # (
 	.enable(enable),
 	.enabled(enabled),
 	.sync_id(sync_id),
+
+	.xfer_req(xfer_req),
 
 	.request_id(request_id),
 	.response_id(response_id),

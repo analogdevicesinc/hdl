@@ -48,6 +48,8 @@ module dmac_data_mover (
 	input enable,
 	output reg enabled,
 
+	output xfer_req,
+
 	output s_axi_ready,
 	input s_axi_valid,
 	input [C_DATA_WIDTH-1:0] s_axi_data,
@@ -82,6 +84,8 @@ reg last_non_eot = 1'b0;
 
 wire last_load;
 wire last;
+
+assign xfer_req = active;
 
 assign response_id = id;
 
