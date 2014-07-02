@@ -45,27 +45,37 @@ module axi_ad9144_core (
 
   dac_clk,
   dac_rst,
-  dac_data_i0_0,
-  dac_data_i0_1,
-  dac_data_i0_2,
-  dac_data_i0_3,
-  dac_data_q0_0,
-  dac_data_q0_1,
-  dac_data_q0_2,
-  dac_data_q0_3,
-  dac_data_i1_0,
-  dac_data_i1_1,
-  dac_data_i1_2,
-  dac_data_i1_3,
-  dac_data_q1_0,
-  dac_data_q1_1,
-  dac_data_q1_2,
-  dac_data_q1_3,
+  dac_data_0_0,
+  dac_data_0_1,
+  dac_data_0_2,
+  dac_data_0_3,
+  dac_data_1_0,
+  dac_data_1_1,
+  dac_data_1_2,
+  dac_data_1_3,
+  dac_data_2_0,
+  dac_data_2_1,
+  dac_data_2_2,
+  dac_data_2_3,
+  dac_data_3_0,
+  dac_data_3_1,
+  dac_data_3_2,
+  dac_data_3_3,
 
   // dma interface
 
-  dac_drd,
-  dac_ddata,
+  dac_valid_0,
+  dac_enable_0,
+  dac_ddata_0,
+  dac_valid_1,
+  dac_enable_1,
+  dac_ddata_1,
+  dac_valid_2,
+  dac_enable_2,
+  dac_ddata_2,
+  dac_valid_3,
+  dac_enable_3,
+  dac_ddata_3,
   dac_dovf,
   dac_dunf,
 
@@ -89,27 +99,37 @@ module axi_ad9144_core (
 
   input           dac_clk;
   output          dac_rst;
-  output  [15:0]  dac_data_i0_0;
-  output  [15:0]  dac_data_i0_1;
-  output  [15:0]  dac_data_i0_2;
-  output  [15:0]  dac_data_i0_3;
-  output  [15:0]  dac_data_q0_0;
-  output  [15:0]  dac_data_q0_1;
-  output  [15:0]  dac_data_q0_2;
-  output  [15:0]  dac_data_q0_3;
-  output  [15:0]  dac_data_i1_0;
-  output  [15:0]  dac_data_i1_1;
-  output  [15:0]  dac_data_i1_2;
-  output  [15:0]  dac_data_i1_3;
-  output  [15:0]  dac_data_q1_0;
-  output  [15:0]  dac_data_q1_1;
-  output  [15:0]  dac_data_q1_2;
-  output  [15:0]  dac_data_q1_3;
+  output  [15:0]  dac_data_0_0;
+  output  [15:0]  dac_data_0_1;
+  output  [15:0]  dac_data_0_2;
+  output  [15:0]  dac_data_0_3;
+  output  [15:0]  dac_data_1_0;
+  output  [15:0]  dac_data_1_1;
+  output  [15:0]  dac_data_1_2;
+  output  [15:0]  dac_data_1_3;
+  output  [15:0]  dac_data_2_0;
+  output  [15:0]  dac_data_2_1;
+  output  [15:0]  dac_data_2_2;
+  output  [15:0]  dac_data_2_3;
+  output  [15:0]  dac_data_3_0;
+  output  [15:0]  dac_data_3_1;
+  output  [15:0]  dac_data_3_2;
+  output  [15:0]  dac_data_3_3;
 
   // dma interface
 
-  output          dac_drd;
-  input  [255:0]  dac_ddata;
+  output          dac_valid_0;
+  output          dac_enable_0;
+  input   [63:0]  dac_ddata_0;
+  output          dac_valid_1;
+  output          dac_enable_1;
+  input   [63:0]  dac_ddata_1;
+  output          dac_valid_2;
+  output          dac_enable_2;
+  input   [63:0]  dac_ddata_2;
+  output          dac_valid_3;
+  output          dac_enable_3;
+  input   [63:0]  dac_ddata_3;
   input           dac_dovf;
   input           dac_dunf;
 
@@ -126,47 +146,13 @@ module axi_ad9144_core (
 
   // internal registers
 
-  reg             dac_enable = 'd0;
-  reg     [15:0]  dac_data_i0_0 = 'd0;
-  reg     [15:0]  dac_data_i0_1 = 'd0;
-  reg     [15:0]  dac_data_i0_2 = 'd0;
-  reg     [15:0]  dac_data_i0_3 = 'd0;
-  reg     [15:0]  dac_data_q0_0 = 'd0;
-  reg     [15:0]  dac_data_q0_1 = 'd0;
-  reg     [15:0]  dac_data_q0_2 = 'd0;
-  reg     [15:0]  dac_data_q0_3 = 'd0;
-  reg     [15:0]  dac_data_i1_0 = 'd0;
-  reg     [15:0]  dac_data_i1_1 = 'd0;
-  reg     [15:0]  dac_data_i1_2 = 'd0;
-  reg     [15:0]  dac_data_i1_3 = 'd0;
-  reg     [15:0]  dac_data_q1_0 = 'd0;
-  reg     [15:0]  dac_data_q1_1 = 'd0;
-  reg     [15:0]  dac_data_q1_2 = 'd0;
-  reg     [15:0]  dac_data_q1_3 = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg             up_ack = 'd0;
 
   // internal signals
 
-  wire            dac_enable_s;
+  wire            dac_sync_s;
   wire            dac_datafmt_s;
-  wire    [ 3:0]  dac_datasel_s;
-  wire    [15:0]  dac_dds_data_0_0_s;
-  wire    [15:0]  dac_dds_data_0_1_s;
-  wire    [15:0]  dac_dds_data_0_2_s;
-  wire    [15:0]  dac_dds_data_0_3_s;
-  wire    [15:0]  dac_dds_data_1_0_s;
-  wire    [15:0]  dac_dds_data_1_1_s;
-  wire    [15:0]  dac_dds_data_1_2_s;
-  wire    [15:0]  dac_dds_data_1_3_s;
-  wire    [15:0]  dac_dds_data_2_0_s;
-  wire    [15:0]  dac_dds_data_2_1_s;
-  wire    [15:0]  dac_dds_data_2_2_s;
-  wire    [15:0]  dac_dds_data_2_3_s;
-  wire    [15:0]  dac_dds_data_3_0_s;
-  wire    [15:0]  dac_dds_data_3_1_s;
-  wire    [15:0]  dac_dds_data_3_2_s;
-  wire    [15:0]  dac_dds_data_3_3_s;
   wire    [31:0]  up_rdata_0_s;
   wire            up_ack_0_s;
   wire    [31:0]  up_rdata_1_s;
@@ -178,53 +164,12 @@ module axi_ad9144_core (
   wire    [31:0]  up_rdata_s;
   wire            up_ack_s;
 
-  // dac dma read
+  // dac valid
 
-  assign dac_drd = dac_enable;
-
-  always @(posedge dac_clk) begin
-    dac_enable <= dac_enable_s;
-  end
-
-  // dac outputs
-
-  always @(posedge dac_clk) begin
-    if (dac_datasel_s[3:1] == 3'd1) begin
-      dac_data_i0_0 <= dac_ddata[ 15:  0];
-      dac_data_i0_1 <= dac_ddata[ 79: 64];
-      dac_data_i0_2 <= dac_ddata[143:128];
-      dac_data_i0_3 <= dac_ddata[207:192];
-      dac_data_q0_0 <= dac_ddata[ 31: 16];
-      dac_data_q0_1 <= dac_ddata[ 95: 80];
-      dac_data_q0_2 <= dac_ddata[159:144];
-      dac_data_q0_3 <= dac_ddata[223:208];
-      dac_data_i1_0 <= dac_ddata[ 47: 32];
-      dac_data_i1_1 <= dac_ddata[111: 96];
-      dac_data_i1_2 <= dac_ddata[175:160];
-      dac_data_i1_3 <= dac_ddata[239:224];
-      dac_data_q1_0 <= dac_ddata[ 63: 48];
-      dac_data_q1_1 <= dac_ddata[127:112];
-      dac_data_q1_2 <= dac_ddata[191:176];
-      dac_data_q1_3 <= dac_ddata[255:240];
-    end else begin
-      dac_data_i0_0 <= dac_dds_data_0_0_s;
-      dac_data_i0_1 <= dac_dds_data_0_1_s;
-      dac_data_i0_2 <= dac_dds_data_0_2_s;
-      dac_data_i0_3 <= dac_dds_data_0_3_s;
-      dac_data_q0_0 <= dac_dds_data_1_0_s;
-      dac_data_q0_1 <= dac_dds_data_1_1_s;
-      dac_data_q0_2 <= dac_dds_data_1_2_s;
-      dac_data_q0_3 <= dac_dds_data_1_3_s;
-      dac_data_i1_0 <= dac_dds_data_2_0_s;
-      dac_data_i1_1 <= dac_dds_data_2_1_s;
-      dac_data_i1_2 <= dac_dds_data_2_2_s;
-      dac_data_i1_3 <= dac_dds_data_2_3_s;
-      dac_data_q1_0 <= dac_dds_data_3_0_s;
-      dac_data_q1_1 <= dac_dds_data_3_1_s;
-      dac_data_q1_2 <= dac_dds_data_3_2_s;
-      dac_data_q1_3 <= dac_dds_data_3_3_s;
-    end
-  end
+  assign dac_valid_0 = 1'b1;
+  assign dac_valid_1 = 1'b1;
+  assign dac_valid_2 = 1'b1;
+  assign dac_valid_3 = 1'b1;
 
   // processor read interface
 
@@ -240,17 +185,13 @@ module axi_ad9144_core (
 
   // dac channel
   
-  axi_ad9144_channel #(
-    .CHID(0),
-    .DP_DISABLE(DP_DISABLE))
-  i_channel_0 (
+  axi_ad9144_channel #(.CHID(0), .DP_DISABLE(DP_DISABLE)) i_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_dds_data_0 (dac_dds_data_0_0_s),
-    .dac_dds_data_1 (dac_dds_data_0_1_s),
-    .dac_dds_data_2 (dac_dds_data_0_2_s),
-    .dac_dds_data_3 (dac_dds_data_0_3_s),
-    .dac_dds_enable (dac_enable),
+    .dac_enable (dac_enable_0),
+    .dac_data ({dac_data_0_3, dac_data_0_2, dac_data_0_1, dac_data_0_0}),
+    .dma_data (dac_ddata_0),
+    .dac_data_sync (dac_sync_s),
     .dac_dds_format (dac_datafmt_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -263,17 +204,13 @@ module axi_ad9144_core (
 
   // dac channel
   
-  axi_ad9144_channel #(
-    .CHID(1),
-    .DP_DISABLE(DP_DISABLE))
-  i_channel_1 (
+  axi_ad9144_channel #(.CHID(1), .DP_DISABLE(DP_DISABLE)) i_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_dds_data_0 (dac_dds_data_1_0_s),
-    .dac_dds_data_1 (dac_dds_data_1_1_s),
-    .dac_dds_data_2 (dac_dds_data_1_2_s),
-    .dac_dds_data_3 (dac_dds_data_1_3_s),
-    .dac_dds_enable (dac_enable),
+    .dac_enable (dac_enable_1),
+    .dac_data ({dac_data_1_3, dac_data_1_2, dac_data_1_1, dac_data_1_0}),
+    .dma_data (dac_ddata_1),
+    .dac_data_sync (dac_sync_s),
     .dac_dds_format (dac_datafmt_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -286,17 +223,13 @@ module axi_ad9144_core (
 
   // dac channel
   
-  axi_ad9144_channel #(
-    .CHID(2),
-    .DP_DISABLE(DP_DISABLE))
-  i_channel_2 (
+  axi_ad9144_channel #(.CHID(2), .DP_DISABLE(DP_DISABLE)) i_channel_2 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_dds_data_0 (dac_dds_data_2_0_s),
-    .dac_dds_data_1 (dac_dds_data_2_1_s),
-    .dac_dds_data_2 (dac_dds_data_2_2_s),
-    .dac_dds_data_3 (dac_dds_data_2_3_s),
-    .dac_dds_enable (dac_enable),
+    .dac_enable (dac_enable_2),
+    .dac_data ({dac_data_2_3, dac_data_2_2, dac_data_2_1, dac_data_2_0}),
+    .dma_data (dac_ddata_2),
+    .dac_data_sync (dac_sync_s),
     .dac_dds_format (dac_datafmt_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -309,17 +242,13 @@ module axi_ad9144_core (
 
   // dac channel
   
-  axi_ad9144_channel #(
-    .CHID(3),
-    .DP_DISABLE(DP_DISABLE))
-  i_channel_3 (
+  axi_ad9144_channel #(.CHID(3), .DP_DISABLE(DP_DISABLE)) i_channel_3 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_dds_data_0 (dac_dds_data_3_0_s),
-    .dac_dds_data_1 (dac_dds_data_3_1_s),
-    .dac_dds_data_2 (dac_dds_data_3_2_s),
-    .dac_dds_data_3 (dac_dds_data_3_3_s),
-    .dac_dds_enable (dac_enable),
+    .dac_enable (dac_enable_3),
+    .dac_data ({dac_data_3_3, dac_data_3_2, dac_data_3_1, dac_data_3_0}),
+    .dma_data (dac_ddata_3),
+    .dac_data_sync (dac_sync_s),
     .dac_dds_format (dac_datafmt_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -336,13 +265,12 @@ module axi_ad9144_core (
     .mmcm_rst (),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_enable (dac_enable_s),
+    .dac_sync (dac_sync_s),
     .dac_frame (),
     .dac_par_type (),
     .dac_par_enb (),
     .dac_r1_mode (),
     .dac_datafmt (dac_datafmt_s),
-    .dac_datasel (dac_datasel_s),
     .dac_datarate (),
     .dac_status (1'b1),
     .dac_status_ovf (dac_dovf),
@@ -359,6 +287,8 @@ module axi_ad9144_core (
     .drp_locked (1'd1),
     .up_usr_chanmax (),
     .dac_usr_chanmax (8'd3),
+    .up_dac_gpio_in (32'd0),
+    .up_dac_gpio_out (),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel),

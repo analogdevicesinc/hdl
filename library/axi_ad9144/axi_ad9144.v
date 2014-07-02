@@ -50,8 +50,18 @@ module axi_ad9144 (
   // dma interface
 
   dac_clk,
-  dac_drd,
-  dac_ddata,
+  dac_valid_0,
+  dac_enable_0,
+  dac_ddata_0,
+  dac_valid_1,
+  dac_enable_1,
+  dac_ddata_1,
+  dac_valid_2,
+  dac_enable_2,
+  dac_ddata_2,
+  dac_valid_3,
+  dac_enable_3,
+  dac_ddata_3,
   dac_dovf,
   dac_dunf,
 
@@ -83,8 +93,8 @@ module axi_ad9144 (
   parameter   PCORE_QUAD_DUAL_N = 1;
   parameter   PCORE_DAC_DP_DISABLE = 0;
   parameter   C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter   C_BASEADDR = 32'hffffffff;
-  parameter   C_HIGHADDR = 32'h00000000;
+  parameter   C_HIGHADDR = 32'hffffffff;
+  parameter   C_BASEADDR = 32'h00000000;
 
   // jesd interface
   // tx_clk is (line-rate/40)
@@ -95,8 +105,18 @@ module axi_ad9144 (
   // dma interface
 
   output                                    dac_clk;
-  output                                    dac_drd;
-  input   [(128*PCORE_QUAD_DUAL_N)+127:0]   dac_ddata;
+  output                                    dac_valid_0;
+  output                                    dac_enable_0;
+  input   [63:0]                            dac_ddata_0;
+  output                                    dac_valid_1;
+  output                                    dac_enable_1;
+  input   [63:0]                            dac_ddata_1;
+  output                                    dac_valid_2;
+  output                                    dac_enable_2;
+  input   [63:0]                            dac_ddata_2;
+  output                                    dac_valid_3;
+  output                                    dac_enable_3;
+  input   [63:0]                            dac_ddata_3;
   input                                     dac_dovf;
   input                                     dac_dunf;
 
@@ -131,23 +151,22 @@ module axi_ad9144 (
   // internal signals
 
   wire    [255:0]                           tx_data_s;
-  wire    [255:0]                           dac_ddata_s;
-  wire    [ 15:0]                           dac_data_i0_0_s;
-  wire    [ 15:0]                           dac_data_i0_1_s;
-  wire    [ 15:0]                           dac_data_i0_2_s;
-  wire    [ 15:0]                           dac_data_i0_3_s;
-  wire    [ 15:0]                           dac_data_q0_0_s;
-  wire    [ 15:0]                           dac_data_q0_1_s;
-  wire    [ 15:0]                           dac_data_q0_2_s;
-  wire    [ 15:0]                           dac_data_q0_3_s;
-  wire    [ 15:0]                           dac_data_i1_0_s;
-  wire    [ 15:0]                           dac_data_i1_1_s;
-  wire    [ 15:0]                           dac_data_i1_2_s;
-  wire    [ 15:0]                           dac_data_i1_3_s;
-  wire    [ 15:0]                           dac_data_q1_0_s;
-  wire    [ 15:0]                           dac_data_q1_1_s;
-  wire    [ 15:0]                           dac_data_q1_2_s;
-  wire    [ 15:0]                           dac_data_q1_3_s;
+  wire    [ 15:0]                           dac_data_0_0_s;
+  wire    [ 15:0]                           dac_data_0_1_s;
+  wire    [ 15:0]                           dac_data_0_2_s;
+  wire    [ 15:0]                           dac_data_0_3_s;
+  wire    [ 15:0]                           dac_data_1_0_s;
+  wire    [ 15:0]                           dac_data_1_1_s;
+  wire    [ 15:0]                           dac_data_1_2_s;
+  wire    [ 15:0]                           dac_data_1_3_s;
+  wire    [ 15:0]                           dac_data_2_0_s;
+  wire    [ 15:0]                           dac_data_2_1_s;
+  wire    [ 15:0]                           dac_data_2_2_s;
+  wire    [ 15:0]                           dac_data_2_3_s;
+  wire    [ 15:0]                           dac_data_3_0_s;
+  wire    [ 15:0]                           dac_data_3_1_s;
+  wire    [ 15:0]                           dac_data_3_2_s;
+  wire    [ 15:0]                           dac_data_3_3_s;
   wire                                      up_sel_s;
   wire                                      up_wr_s;
   wire    [ 13:0]                           up_addr_s;
@@ -163,8 +182,6 @@ module axi_ad9144 (
   // dual/quad cores
 
   assign tx_data = (PCORE_QUAD_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
-  assign dac_ddata_s = (PCORE_QUAD_DUAL_N == 1) ? dac_ddata : {32'd0, dac_ddata[127:96],
-    32'd0, dac_ddata[95:64], 32'd0, dac_ddata[63:32], 32'd0, dac_ddata[31:0]};
 
   // device interface
 
@@ -173,46 +190,56 @@ module axi_ad9144 (
     .tx_data (tx_data_s),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_data_i0_0 (dac_data_i0_0_s),
-    .dac_data_i0_1 (dac_data_i0_1_s),
-    .dac_data_i0_2 (dac_data_i0_2_s),
-    .dac_data_i0_3 (dac_data_i0_3_s),
-    .dac_data_q0_0 (dac_data_q0_0_s),
-    .dac_data_q0_1 (dac_data_q0_1_s),
-    .dac_data_q0_2 (dac_data_q0_2_s),
-    .dac_data_q0_3 (dac_data_q0_3_s),
-    .dac_data_i1_0 (dac_data_i1_0_s),
-    .dac_data_i1_1 (dac_data_i1_1_s),
-    .dac_data_i1_2 (dac_data_i1_2_s),
-    .dac_data_i1_3 (dac_data_i1_3_s),
-    .dac_data_q1_0 (dac_data_q1_0_s),
-    .dac_data_q1_1 (dac_data_q1_1_s),
-    .dac_data_q1_2 (dac_data_q1_2_s),
-    .dac_data_q1_3 (dac_data_q1_3_s));
+    .dac_data_0_0 (dac_data_0_0_s),
+    .dac_data_0_1 (dac_data_0_1_s),
+    .dac_data_0_2 (dac_data_0_2_s),
+    .dac_data_0_3 (dac_data_0_3_s),
+    .dac_data_1_0 (dac_data_1_0_s),
+    .dac_data_1_1 (dac_data_1_1_s),
+    .dac_data_1_2 (dac_data_1_2_s),
+    .dac_data_1_3 (dac_data_1_3_s),
+    .dac_data_2_0 (dac_data_2_0_s),
+    .dac_data_2_1 (dac_data_2_1_s),
+    .dac_data_2_2 (dac_data_2_2_s),
+    .dac_data_2_3 (dac_data_2_3_s),
+    .dac_data_3_0 (dac_data_3_0_s),
+    .dac_data_3_1 (dac_data_3_1_s),
+    .dac_data_3_2 (dac_data_3_2_s),
+    .dac_data_3_3 (dac_data_3_3_s));
 
   // core
 
   axi_ad9144_core #(.PCORE_ID(PCORE_ID), .DP_DISABLE(PCORE_DAC_DP_DISABLE)) i_core (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
-    .dac_data_i0_0 (dac_data_i0_0_s),
-    .dac_data_i0_1 (dac_data_i0_1_s),
-    .dac_data_i0_2 (dac_data_i0_2_s),
-    .dac_data_i0_3 (dac_data_i0_3_s),
-    .dac_data_q0_0 (dac_data_q0_0_s),
-    .dac_data_q0_1 (dac_data_q0_1_s),
-    .dac_data_q0_2 (dac_data_q0_2_s),
-    .dac_data_q0_3 (dac_data_q0_3_s),
-    .dac_data_i1_0 (dac_data_i1_0_s),
-    .dac_data_i1_1 (dac_data_i1_1_s),
-    .dac_data_i1_2 (dac_data_i1_2_s),
-    .dac_data_i1_3 (dac_data_i1_3_s),
-    .dac_data_q1_0 (dac_data_q1_0_s),
-    .dac_data_q1_1 (dac_data_q1_1_s),
-    .dac_data_q1_2 (dac_data_q1_2_s),
-    .dac_data_q1_3 (dac_data_q1_3_s),
-    .dac_drd (dac_drd),
-    .dac_ddata (dac_ddata_s),
+    .dac_data_0_0 (dac_data_0_0_s),
+    .dac_data_0_1 (dac_data_0_1_s),
+    .dac_data_0_2 (dac_data_0_2_s),
+    .dac_data_0_3 (dac_data_0_3_s),
+    .dac_data_1_0 (dac_data_1_0_s),
+    .dac_data_1_1 (dac_data_1_1_s),
+    .dac_data_1_2 (dac_data_1_2_s),
+    .dac_data_1_3 (dac_data_1_3_s),
+    .dac_data_2_0 (dac_data_2_0_s),
+    .dac_data_2_1 (dac_data_2_1_s),
+    .dac_data_2_2 (dac_data_2_2_s),
+    .dac_data_2_3 (dac_data_2_3_s),
+    .dac_data_3_0 (dac_data_3_0_s),
+    .dac_data_3_1 (dac_data_3_1_s),
+    .dac_data_3_2 (dac_data_3_2_s),
+    .dac_data_3_3 (dac_data_3_3_s),
+    .dac_valid_0 (dac_valid_0),
+    .dac_enable_0 (dac_enable_0),
+    .dac_ddata_0 (dac_ddata_0),
+    .dac_valid_1 (dac_valid_1),
+    .dac_enable_1 (dac_enable_1),
+    .dac_ddata_1 (dac_ddata_1),
+    .dac_valid_2 (dac_valid_2),
+    .dac_enable_2 (dac_enable_2),
+    .dac_ddata_2 (dac_ddata_2),
+    .dac_valid_3 (dac_valid_3),
+    .dac_enable_3 (dac_enable_3),
+    .dac_ddata_3 (dac_ddata_3),
     .dac_dovf (dac_dovf),
     .dac_dunf (dac_dunf),
     .up_rstn (up_rstn),
@@ -226,10 +253,7 @@ module axi_ad9144 (
 
   // up bus interface
 
-  up_axi #(
-    .PCORE_BASEADDR (C_BASEADDR),
-    .PCORE_HIGHADDR (C_HIGHADDR))
-  i_up_axi (
+  up_axi #(.PCORE_BASEADDR (C_BASEADDR), .PCORE_HIGHADDR (C_HIGHADDR)) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),
