@@ -103,10 +103,10 @@ module axi_ad9680_channel (
 
   wire            adc_pn_oos_s;
   wire            adc_pn_err_s;
-  wire            adc_pn_type_s;
   wire            adc_dfmt_enable_s;
   wire            adc_dfmt_type_s;
   wire            adc_dfmt_se_s;
+  wire    [ 3:0]  adc_pnseq_sel_s;
 
   // instantiations
 
@@ -115,7 +115,7 @@ module axi_ad9680_channel (
     .adc_data (adc_data),
     .adc_pn_oos (adc_pn_oos_s),
     .adc_pn_err (adc_pn_err_s),
-    .adc_pn_type (adc_pn_type_s));
+    .adc_pnseq_sel (adc_pnseq_sel_s));
 
   genvar n;
   generate
@@ -136,17 +136,17 @@ module axi_ad9680_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),
-    .adc_pn_sel (),
     .adc_iqcor_enb (),
     .adc_dcfilt_enb (),
     .adc_dfmt_se (adc_dfmt_se_s),
     .adc_dfmt_type (adc_dfmt_type_s),
     .adc_dfmt_enable (adc_dfmt_enable_s),
-    .adc_pn_type (adc_pn_type_s),
     .adc_dcfilt_offset (),
     .adc_dcfilt_coeff (),
     .adc_iqcor_coeff_1 (),
     .adc_iqcor_coeff_2 (),
+    .adc_pnseq_sel (adc_pnseq_sel_s),
+    .adc_data_sel (),
     .adc_pn_err (adc_pn_err_s),
     .adc_pn_oos (adc_pn_oos_s),
     .adc_or (adc_or),

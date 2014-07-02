@@ -50,9 +50,12 @@ module axi_ad9680 (
   // dma interface
 
   adc_clk,
-  adc_dwr,
-  adc_ddata,
-  adc_dsync,
+  adc_enable_0,
+  adc_valid_0,
+  adc_data_0,
+  adc_enable_1,
+  adc_valid_1,
+  adc_data_1,
   adc_dovf,
   adc_dunf,
 
@@ -76,19 +79,14 @@ module axi_ad9680 (
   s_axi_rvalid,
   s_axi_rresp,
   s_axi_rdata,
-  s_axi_rready,
-
-  // debug signals
-
-  adc_mon_valid,
-  adc_mon_data);
+  s_axi_rready);
 
   parameter PCORE_ID = 0;
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
   parameter C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter C_BASEADDR = 32'hffffffff;
-  parameter C_HIGHADDR = 32'h00000000;
+  parameter C_HIGHADDR = 32'hffffffff;
+  parameter C_BASEADDR = 32'h00000000;
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -99,9 +97,12 @@ module axi_ad9680 (
   // dma interface
 
   output          adc_clk;
-  output          adc_dwr;
-  output [127:0]  adc_ddata;
-  output          adc_dsync;
+  output          adc_enable_0;
+  output          adc_valid_0;
+  output  [63:0]  adc_data_0;
+  output          adc_enable_1;
+  output          adc_valid_1;
+  output  [63:0]  adc_data_1;
   input           adc_dovf;
   input           adc_dunf;
 
@@ -127,20 +128,11 @@ module axi_ad9680 (
   output  [31:0]  s_axi_rdata;
   input           s_axi_rready;
 
-  // debug signals
-
-  output          adc_mon_valid;
-  output [239:0]  adc_mon_data;
-
   // internal registers
 
-  reg             adc_data_cnt = 'd0;
-  reg             adc_dsync = 'd0;
-  reg             adc_dwr = 'd0;
-  reg    [127:0]  adc_ddata = 'd0;
-  reg             up_adc_status_pn_err = 'd0;
-  reg             up_adc_status_pn_oos = 'd0;
-  reg             up_adc_status_or = 'd0;
+  reg             up_status_pn_err = 'd0;
+  reg             up_status_pn_oos = 'd0;
+  reg             up_status_or = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg             up_ack = 'd0;
 
@@ -157,22 +149,11 @@ module axi_ad9680 (
   wire            adc_or_a_s;
   wire            adc_or_b_s;
   wire            adc_status_s;
-  wire            adc_enable_a_s;
-  wire    [63:0]  adc_channel_data_a_s;
-  wire            adc_enable_b_s;
-  wire    [63:0]  adc_channel_data_b_s;
-  wire            up_adc_pn_err_a_s;
-  wire            up_adc_pn_oos_a_s;
-  wire            up_adc_or_a_s;
-  wire    [31:0]  up_adc_channel_rdata_a_s;
-  wire            up_adc_channel_ack_a_s;
-  wire            up_adc_pn_err_b_s;
-  wire            up_adc_pn_oos_b_s;
-  wire            up_adc_or_b_s;
-  wire    [31:0]  up_adc_channel_rdata_b_s;
-  wire            up_adc_channel_ack_b_s;
-  wire    [31:0]  up_adc_common_rdata_s;
-  wire            up_adc_common_ack_s;
+  wire    [ 1:0]  up_adc_pn_err_s;
+  wire    [ 1:0]  up_adc_pn_oos_s;
+  wire    [ 1:0]  up_adc_or_s;
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_ack_s[0:2];
   wire            up_sel_s;
   wire            up_wr_s;
   wire    [13:0]  up_addr_s;
@@ -183,60 +164,26 @@ module axi_ad9680 (
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  // monitor signals
+  // defaults
 
-  assign adc_mon_valid = 1'b1;
-  assign adc_mon_data[ 63:  0] = adc_channel_data_a_s;
-  assign adc_mon_data[127: 64] = adc_channel_data_b_s;
-  assign adc_mon_data[183:128] = adc_data_a_s;
-  assign adc_mon_data[239:184] = adc_data_b_s;
-
-  // adc channels - dma interface
-
-  always @(posedge adc_clk) begin
-    adc_data_cnt <= ~adc_data_cnt;
-    case ({adc_enable_b_s, adc_enable_a_s})
-      2'b11: begin // both I and Q
-        adc_dsync <= 1'b1;
-        adc_dwr <= 1'b1;
-        adc_ddata <= {adc_channel_data_b_s[63:48], adc_channel_data_a_s[63:48],
-                      adc_channel_data_b_s[47:32], adc_channel_data_a_s[47:32],
-                      adc_channel_data_b_s[31:16], adc_channel_data_a_s[31:16],
-                      adc_channel_data_b_s[15: 0], adc_channel_data_a_s[15: 0]};
-      end
-      2'b10: begin // Q only
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_data_cnt;
-        adc_ddata <= {adc_channel_data_b_s, adc_ddata[127:64]};
-      end
-      2'b01: begin // I only
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_data_cnt;
-        adc_ddata <= {adc_channel_data_a_s, adc_ddata[127:64]};
-      end
-      default: begin // no channels
-        adc_dsync <= 1'b1;
-        adc_dwr <= 1'b1;
-        adc_ddata <= {8{16'hdead}};
-      end
-    endcase
-  end
+  assign adc_valid_0 = 1'b1;
+  assign adc_valid_1 = 1'b1;
 
   // processor read interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_adc_status_pn_err <= 'd0;
-      up_adc_status_pn_oos <= 'd0;
-      up_adc_status_or <= 'd0;
+      up_status_pn_err <= 'd0;
+      up_status_pn_oos <= 'd0;
+      up_status_or <= 'd0;
       up_rdata <= 'd0;
       up_ack <= 'd0;
     end else begin
-      up_adc_status_pn_err <= up_adc_pn_err_a_s | up_adc_pn_err_b_s;
-      up_adc_status_pn_oos <= up_adc_pn_oos_a_s | up_adc_pn_oos_b_s;
-      up_adc_status_or <= up_adc_or_a_s | up_adc_or_b_s;
-      up_rdata <= up_adc_common_rdata_s | up_adc_channel_rdata_a_s | up_adc_channel_rdata_b_s;
-      up_ack <= up_adc_common_ack_s | up_adc_channel_ack_a_s | up_adc_channel_ack_b_s;
+      up_status_pn_err <= | up_adc_pn_err_s;
+      up_status_pn_oos <= | up_adc_pn_oos_s;
+      up_status_or <= | up_adc_or_s;
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+      up_ack <= up_ack_s[0] | up_ack_s[1] | up_ack_s[2];
     end
   end
 
@@ -260,19 +207,19 @@ module axi_ad9680 (
     .adc_rst (adc_rst),
     .adc_data (adc_data_a_s),
     .adc_or (adc_or_a_s),
-    .adc_dfmt_data (adc_channel_data_a_s),
-    .adc_enable (adc_enable_a_s),
-    .up_adc_pn_err (up_adc_pn_err_a_s),
-    .up_adc_pn_oos (up_adc_pn_oos_a_s),
-    .up_adc_or (up_adc_or_a_s),
+    .adc_dfmt_data (adc_data_0),
+    .adc_enable (adc_enable_0),
+    .up_adc_pn_err (up_adc_pn_err_s[0]),
+    .up_adc_pn_oos (up_adc_pn_oos_s[0]),
+    .up_adc_or (up_adc_or_s[0]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
     .up_wr (up_wr_s),
     .up_addr (up_addr_s),
     .up_wdata (up_wdata_s),
-    .up_rdata (up_adc_channel_rdata_a_s),
-    .up_ack (up_adc_channel_ack_a_s));
+    .up_rdata (up_rdata_s[0]),
+    .up_ack (up_ack_s[0]));
 
   // channel
 
@@ -281,19 +228,19 @@ module axi_ad9680 (
     .adc_rst (adc_rst),
     .adc_data (adc_data_b_s),
     .adc_or (adc_or_b_s),
-    .adc_dfmt_data (adc_channel_data_b_s),
-    .adc_enable (adc_enable_b_s),
-    .up_adc_pn_err (up_adc_pn_err_b_s),
-    .up_adc_pn_oos (up_adc_pn_oos_b_s),
-    .up_adc_or (up_adc_or_b_s),
+    .adc_dfmt_data (adc_data_1),
+    .adc_enable (adc_enable_1),
+    .up_adc_pn_err (up_adc_pn_err_s[1]),
+    .up_adc_pn_oos (up_adc_pn_oos_s[1]),
+    .up_adc_or (up_adc_or_s[1]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
     .up_wr (up_wr_s),
     .up_addr (up_addr_s),
     .up_wdata (up_wdata_s),
-    .up_rdata (up_adc_channel_rdata_b_s),
-    .up_ack (up_adc_channel_ack_b_s));
+    .up_rdata (up_rdata_s[1]),
+    .up_ack (up_ack_s[1]));
 
   // common processor control
 
@@ -305,12 +252,12 @@ module axi_ad9680 (
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (adc_status_s),
-    .adc_status_pn_err (up_adc_status_pn_err),
-    .adc_status_pn_oos (up_adc_status_pn_oos),
-    .adc_status_or (up_adc_status_or),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd40),
+    .up_status_pn_err (up_status_pn_err),
+    .up_status_pn_oos (up_status_pn_oos),
+    .up_status_or (up_status_or),
     .delay_clk (1'b0),
     .delay_rst (),
     .delay_sel (),
@@ -331,14 +278,16 @@ module axi_ad9680 (
     .drp_locked (1'd1),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd1),
+    .up_adc_gpio_in (32'd0),
+    .up_adc_gpio_out (),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
     .up_wr (up_wr_s),
     .up_addr (up_addr_s),
     .up_wdata (up_wdata_s),
-    .up_rdata (up_adc_common_rdata_s),
-    .up_ack (up_adc_common_ack_s));
+    .up_rdata (up_rdata_s[2]),
+    .up_ack (up_ack_s[2]));
 
   // up bus interface
 
