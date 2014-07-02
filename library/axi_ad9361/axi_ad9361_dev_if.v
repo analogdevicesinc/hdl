@@ -202,18 +202,10 @@ module axi_ad9361_dev_if (
   wire    [ 3:0]  rx_frame_s;
   wire    [ 3:0]  tx_data_sel_s;
   wire    [ 4:0]  delay_rdata_s[6:0];
-  wire    [ 5:0]  rx_data_ibuf_s;
-  wire    [ 5:0]  rx_data_idelay_s;
   wire    [ 5:0]  rx_data_p_s;
   wire    [ 5:0]  rx_data_n_s;
-  wire            rx_frame_ibuf_s;
-  wire            rx_frame_idelay_s;
   wire            rx_frame_p_s;
   wire            rx_frame_n_s;
-  wire    [ 5:0]  tx_data_oddr_s;
-  wire            tx_frame_oddr_s;
-  wire            tx_clk_oddr_s;
-  wire            clk_ibuf_s;
 
   genvar          l_inst;
 
@@ -432,254 +424,93 @@ module axi_ad9361_dev_if (
     end
   end
 
-  // delay controller
-
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IDELAYCTRL i_delay_ctrl (
-    .RST (delay_rst),
-    .REFCLK (delay_clk),
-    .RDY (delay_locked));
-
   // receive data interface, ibuf -> idelay -> iddr
 
   generate
   for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_rx_data
-
-  IBUFDS i_rx_data_ibuf (
-    .I (rx_data_in_p[l_inst]),
-    .IB (rx_data_in_n[l_inst]),
-    .O (rx_data_ibuf_s[l_inst]));
-
-  if (PCORE_DEVICE_TYPE == PCORE_VIRTEX6) begin
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IODELAYE1 #(
-    .CINVCTRL_SEL ("FALSE"),
-    .DELAY_SRC ("I"),
-    .HIGH_PERFORMANCE_MODE ("TRUE"),
-    .IDELAY_TYPE ("VAR_LOADABLE"),
-    .IDELAY_VALUE (0),
-    .ODELAY_TYPE ("FIXED"),
-    .ODELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
-    .SIGNAL_PATTERN ("DATA"))
-  i_rx_data_idelay (
-    .T (1'b1),
-    .CE (1'b0),
-    .INC (1'b0),
-    .CLKIN (1'b0),
-    .DATAIN (1'b0),
-    .ODATAIN (1'b0),
-    .CINVCTRL (1'b0),
-    .C (delay_clk),
-    .IDATAIN (rx_data_ibuf_s[l_inst]),
-    .DATAOUT (rx_data_idelay_s[l_inst]),
-    .RST (delay_ld[l_inst]),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata_s[l_inst]));
-  end else begin
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IDELAYE2 #(
-    .CINVCTRL_SEL ("FALSE"),
-    .DELAY_SRC ("IDATAIN"),
-    .HIGH_PERFORMANCE_MODE ("FALSE"),
-    .IDELAY_TYPE ("VAR_LOAD"),
-    .IDELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
-    .PIPE_SEL ("FALSE"),
-    .SIGNAL_PATTERN ("DATA"))
-  i_rx_data_idelay (
-    .CE (1'b0),
-    .INC (1'b0),
-    .DATAIN (1'b0),
-    .LDPIPEEN (1'b0),
-    .CINVCTRL (1'b0),
-    .REGRST (1'b0),
-    .C (delay_clk),
-    .IDATAIN (rx_data_ibuf_s[l_inst]),
-    .DATAOUT (rx_data_idelay_s[l_inst]),
-    .LD (delay_ld[l_inst]),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata_s[l_inst]));
-  end
-
-  IDDR #(
-    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
-    .INIT_Q1 (1'b0),
-    .INIT_Q2 (1'b0),
-    .SRTYPE ("ASYNC"))
-  i_rx_data_iddr (
-    .CE (1'b1),
-    .R (1'b0),
-    .S (1'b0),
-    .C (l_clk),
-    .D (rx_data_idelay_s[l_inst]),
-    .Q1 (rx_data_p_s[l_inst]),
-    .Q2 (rx_data_n_s[l_inst]));
-
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_rx_data (
+    .rx_clk (l_clk),
+    .rx_data_in_p (rx_data_in_p[l_inst]),
+    .rx_data_in_n (rx_data_in_n[l_inst]),
+    .rx_data_p (rx_data_p_s[l_inst]),
+    .rx_data_n (rx_data_n_s[l_inst]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_ld (delay_ld[l_inst]),
+    .delay_wdata (delay_wdata),
+    .delay_rdata (delay_rdata_s[l_inst]),
+    .delay_locked ());
   end
   endgenerate
 
   // receive frame interface, ibuf -> idelay -> iddr
 
-  IBUFDS i_rx_frame_ibuf (
-    .I (rx_frame_in_p),
-    .IB (rx_frame_in_n),
-    .O (rx_frame_ibuf_s));
-
-  generate
-  if (PCORE_DEVICE_TYPE == PCORE_VIRTEX6) begin
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IODELAYE1 #(
-    .CINVCTRL_SEL ("FALSE"),
-    .DELAY_SRC ("I"),
-    .HIGH_PERFORMANCE_MODE ("TRUE"),
-    .IDELAY_TYPE ("VAR_LOADABLE"),
-    .IDELAY_VALUE (0),
-    .ODELAY_TYPE ("FIXED"),
-    .ODELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
-    .SIGNAL_PATTERN ("DATA"))
-  i_rx_frame_idelay (
-    .T (1'b1),
-    .CE (1'b0),
-    .INC (1'b0),
-    .CLKIN (1'b0),
-    .DATAIN (1'b0),
-    .ODATAIN (1'b0),
-    .CINVCTRL (1'b0),
-    .C (delay_clk),
-    .IDATAIN (rx_frame_ibuf_s),
-    .DATAOUT (rx_frame_idelay_s),
-    .RST (delay_ld[6]),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata_s[6]));
-  end else begin
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IDELAYE2 #(
-    .CINVCTRL_SEL ("FALSE"),
-    .DELAY_SRC ("IDATAIN"),
-    .HIGH_PERFORMANCE_MODE ("FALSE"),
-    .IDELAY_TYPE ("VAR_LOAD"),
-    .IDELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
-    .PIPE_SEL ("FALSE"),
-    .SIGNAL_PATTERN ("DATA"))
-  i_rx_frame_idelay (
-    .CE (1'b0),
-    .INC (1'b0),
-    .DATAIN (1'b0),
-    .LDPIPEEN (1'b0),
-    .CINVCTRL (1'b0),
-    .REGRST (1'b0),
-    .C (delay_clk),
-    .IDATAIN (rx_frame_ibuf_s),
-    .DATAOUT (rx_frame_idelay_s),
-    .LD (delay_ld[6]),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata_s[6]));
-  end
-  endgenerate
-
-  IDDR #(
-    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
-    .INIT_Q1 (1'b0),
-    .INIT_Q2 (1'b0),
-    .SRTYPE ("ASYNC"))
-  i_rx_frame_iddr (
-    .CE (1'b1),
-    .R (1'b0),
-    .S (1'b0),
-    .C (l_clk),
-    .D (rx_frame_idelay_s),
-    .Q1 (rx_frame_p_s),
-    .Q2 (rx_frame_n_s));
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .IODELAY_CTRL (1),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_rx_frame (
+    .rx_clk (l_clk),
+    .rx_data_in_p (rx_frame_in_p),
+    .rx_data_in_n (rx_frame_in_n),
+    .rx_data_p (rx_frame_p_s),
+    .rx_data_n (rx_frame_n_s),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_ld (delay_ld[6]),
+    .delay_wdata (delay_wdata),
+    .delay_rdata (delay_rdata_s[6]),
+    .delay_locked (delay_locked));
 
   // transmit data interface, oddr -> obuf
 
   generate
   for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_tx_data
-
-  ODDR #(
-    .DDR_CLK_EDGE ("SAME_EDGE"),
-    .INIT (1'b0),
-    .SRTYPE ("ASYNC"))
-  i_tx_data_oddr (
-    .CE (1'b1),
-    .R (1'b0),
-    .S (1'b0),
-    .C (l_clk),
-    .D1 (tx_p_data_p[l_inst]),
-    .D2 (tx_p_data_n[l_inst]),
-    .Q (tx_data_oddr_s[l_inst]));
-
-  OBUFDS i_tx_data_obuf (
-    .I (tx_data_oddr_s[l_inst]),
-    .O (tx_data_out_p[l_inst]),
-    .OB (tx_data_out_n[l_inst]));
-
+  ad_lvds_out #(
+    .BUFTYPE (PCORE_DEVICE_TYPE))
+  i_tx_data (
+    .tx_clk (l_clk),
+    .tx_data_p (tx_p_data_p[l_inst]),
+    .tx_data_n (tx_p_data_n[l_inst]),
+    .tx_data_out_p (tx_data_out_p[l_inst]),
+    .tx_data_out_n (tx_data_out_n[l_inst]));
   end
   endgenerate
 
   // transmit frame interface, oddr -> obuf
 
-  ODDR #(
-    .DDR_CLK_EDGE ("SAME_EDGE"),
-    .INIT (1'b0),
-    .SRTYPE ("ASYNC"))
-  i_tx_frame_oddr (
-    .CE (1'b1),
-    .R (1'b0),
-    .S (1'b0),
-    .C (l_clk),
-    .D1 (tx_p_frame),
-    .D2 (tx_p_frame),
-    .Q (tx_frame_oddr_s));
-
-  OBUFDS i_tx_frame_obuf (
-    .I (tx_frame_oddr_s),
-    .O (tx_frame_out_p),
-    .OB (tx_frame_out_n));
+  ad_lvds_out #(
+    .BUFTYPE (PCORE_DEVICE_TYPE))
+  i_tx_frame (
+    .tx_clk (l_clk),
+    .tx_data_p (tx_p_frame),
+    .tx_data_n (tx_p_frame),
+    .tx_data_out_p (tx_frame_out_p),
+    .tx_data_out_n (tx_frame_out_n));
 
   // transmit clock interface, oddr -> obuf
 
-  ODDR #(
-    .DDR_CLK_EDGE ("SAME_EDGE"),
-    .INIT (1'b0),
-    .SRTYPE ("ASYNC"))
-  i_tx_clk_oddr (
-    .CE (1'b1),
-    .R (1'b0),
-    .S (1'b0),
-    .C (l_clk),
-    .D1 (1'b0),
-    .D2 (1'b1),
-    .Q (tx_clk_oddr_s));
-
-  OBUFDS i_tx_clk_obuf (
-    .I (tx_clk_oddr_s),
-    .O (tx_clk_out_p),
-    .OB (tx_clk_out_n));
+  ad_lvds_out #(
+    .BUFTYPE (PCORE_DEVICE_TYPE))
+  i_tx_clk (
+    .tx_clk (l_clk),
+    .tx_data_p (1'b0),
+    .tx_data_n (1'b1),
+    .tx_data_out_p (tx_clk_out_p),
+    .tx_data_out_n (tx_clk_out_n));
 
   // device clock interface (receive clock)
 
-  IBUFGDS i_rx_clk_ibuf (
-    .I (rx_clk_in_p),
-    .IB (rx_clk_in_n),
-    .O (clk_ibuf_s));
-
-  generate
-  if (PCORE_DEVICE_TYPE == PCORE_VIRTEX6) begin
-  BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_rbuf (
-    .CLR (1'b0),
-    .CE (1'b1),
-    .I (clk_ibuf_s),
-    .O (l_clk));
-  end else begin
-  BUFG i_clk_gbuf (
-    .I (clk_ibuf_s),
-    .O (l_clk));
-  end
-  endgenerate
+  ad_lvds_clk #(
+    .BUFTYPE (PCORE_DEVICE_TYPE))
+  i_clk (
+    .clk_in_p (rx_clk_in_p),
+    .clk_in_n (rx_clk_in_n),
+    .clk (l_clk));
 
 endmodule
 

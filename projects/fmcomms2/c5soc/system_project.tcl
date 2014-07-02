@@ -2,68 +2,81 @@
 load_package flow
 
 source ../../scripts/adi_env.tcl
-project_new fmcjesdadc1_a5soc -overwrite
+project_new fmcomms2_c5soc -overwrite
 
-set_global_assignment -name FAMILY "Arria V"
-set_global_assignment -name DEVICE 5ASTFD5K3F40I3ES
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name QSYS_FILE system_bd.qsys
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_jesd_align.v
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_xcvr_rx_rst.v
-set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
-set_global_assignment -name VERILOG_FILE system_top.v
+source $ad_hdl_dir/projects/common/c5soc/c5soc_system_assign.tcl
 
-source $ad_hdl_dir/projects/common/a5soc/a5soc_system_assign.tcl
+set_instance_assignment -name IO_STANDARD LVDS -to rx_clk_in
+set_instance_assignment -name IO_STANDARD LVDS -to rx_frame_in
+set_instance_assignment -name IO_STANDARD LVDS -to rx_data_in[0]
+set_instance_assignment -name IO_STANDARD LVDS -to rx_data_in[1]
+set_instance_assignment -name IO_STANDARD LVDS -to rx_data_in[2]
+set_instance_assignment -name IO_STANDARD LVDS -to rx_data_in[3]
+set_instance_assignment -name IO_STANDARD LVDS -to rx_data_in[4]
+set_instance_assignment -name IO_STANDARD LVDS -to rx_data_in[5]
+set_instance_assignment -name IO_STANDARD LVDS -to tx_clk_out
+set_instance_assignment -name IO_STANDARD LVDS -to tx_frame_out
+set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[0]
+set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[1]
+set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[2]
+set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[3]
+set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[4]
+set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[5]
 
-# reference clock
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_clk_in
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_frame_in
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[0]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[1]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[2]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[3]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[4]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_data_in[5]
 
-set_location_assignment PIN_AG32  -to ref_clk
-set_location_assignment PIN_AG33  -to "ref_clk(n)"
-set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to ref_clk
-set_instance_assignment -name XCVR_REFCLK_PIN_TERMINATION AC_COUPLING -to ref_clk
-set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to ref_clk
+set_location_assignment PIN_H15 -to rx_clk_in
+set_location_assignment PIN_G15 -to "rx_clk_in(n)"
+set_location_assignment PIN_F13 -to rx_frame_in
+set_location_assignment PIN_E13 -to "rx_frame_in(n)"
+set_location_assignment PIN_D11 -to rx_data_in[0]
+set_location_assignment PIN_D10 -to "rx_data_in[0](n)"
+set_location_assignment PIN_E12 -to rx_data_in[1]
+set_location_assignment PIN_D12 -to "rx_data_in[1](n)"
+set_location_assignment PIN_E9  -to rx_data_in[2]
+set_location_assignment PIN_D9  -to "rx_data_in[2](n)"
+set_location_assignment PIN_B6  -to rx_data_in[3]
+set_location_assignment PIN_B5  -to "rx_data_in[3](n)"
+set_location_assignment PIN_F11 -to rx_data_in[4]
+set_location_assignment PIN_E11 -to "rx_data_in[4](n)"
+set_location_assignment PIN_C13 -to rx_data_in[5]
+set_location_assignment PIN_B12 -to "rx_data_in[5](n)"
 
-# lane data
+set_location_assignment PIN_A11 -to tx_clk_out
+set_location_assignment PIN_A10 -to "tx_clk_out(n)"
+set_location_assignment PIN_E3  -to tx_frame_out
+set_location_assignment PIN_E2  -to "tx_frame_out(n)"
+set_location_assignment PIN_E1  -to tx_data_out[0]
+set_location_assignment PIN_D1  -to "tx_data_out[0](n)"
+set_location_assignment PIN_D2  -to tx_data_out[1]
+set_location_assignment PIN_C2  -to "tx_data_out[1](n)"
+set_location_assignment PIN_C3  -to tx_data_out[2]
+set_location_assignment PIN_B3  -to "tx_data_out[2](n)"
+set_location_assignment PIN_B2  -to tx_data_out[3]
+set_location_assignment PIN_B1  -to "tx_data_out[3](n)"
+set_location_assignment PIN_A4  -to tx_data_out[4]
+set_location_assignment PIN_A3  -to "tx_data_out[4](n)"
+set_location_assignment PIN_E4  -to tx_data_out[5]
+set_location_assignment PIN_D4  -to "tx_data_out[5](n)"
 
-set_location_assignment PIN_AW37  -to rx_data[0]
-set_location_assignment PIN_AW36  -to "rx_data[0](n)"
-set_location_assignment PIN_AP39  -to rx_data[1]
-set_location_assignment PIN_AP38  -to "rx_data[1](n)"
-set_location_assignment PIN_AM39  -to rx_data[2]
-set_location_assignment PIN_AM38  -to "rx_data[2](n)"
-set_location_assignment PIN_AH39  -to rx_data[3]
-set_location_assignment PIN_AH38  -to "rx_data[3](n)"
-set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[0]
-set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[1]
-set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[2]
-set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[3]
-set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[0]
-set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[1]
-set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[2]
-set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[3]
-
-# jesd signals
-
-set_location_assignment PIN_A29   -to rx_sync
-set_instance_assignment -name IO_STANDARD "2.5 V" -to rx_sync
-
-set_location_assignment PIN_A28   -to rx_sysref
-set_instance_assignment -name IO_STANDARD "2.5 V" -to rx_sysref
-
-# spi
-
-set_location_assignment PIN_C29   -to spi_csn
-set_location_assignment PIN_B28   -to spi_clk
-set_location_assignment PIN_C32   -to spi_sdio
-
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_resetb
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_csn
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_clk
-set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_sdio
+set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_mosi
+set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_miso
 
-#set_global_assignment -name SEARCH_PATH db/ip/system_bd
-#set_global_assignment -name SEARCH_PATH db/ip/system_bd/submodules
-#set_global_assignment -name SEARCH_PATH db/ip/system_bd/submodules/sequencer
+set_location_assignment PIN_C4  -to ad9361_resetb
+set_location_assignment PIN_A8  -to spi_csn
+set_location_assignment PIN_H12 -to spi_clk
+set_location_assignment PIN_G11 -to spi_mosi
+set_location_assignment PIN_H13 -to spi_miso
 
 execute_flow -compile
 
