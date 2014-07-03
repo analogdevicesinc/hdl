@@ -15,27 +15,27 @@ connect_bd_intf_net -intf_net DDR3    [get_bd_intf_ports DDR3]    [get_bd_intf_p
 connect_bd_intf_net -intf_net sys_clk [get_bd_intf_ports sys_clk] [get_bd_intf_pins plddr3_fifo/sys_clk]
 
 delete_bd_objs [get_bd_nets axi_ad9625_adc_clk]
-delete_bd_objs [get_bd_nets axi_ad9625_adc_dwr]
-delete_bd_objs [get_bd_nets axi_ad9625_adc_ddata]
+delete_bd_objs [get_bd_nets axi_ad9625_adc_enable]
+delete_bd_objs [get_bd_nets axi_ad9625_adc_data]
 delete_bd_objs [get_bd_nets axi_ad9625_adc_dovf]
-delete_bd_objs [get_bd_nets axi_ad9625_adc_dsync]
+delete_bd_objs [get_bd_nets axi_ad9625_adc_valid]
 
 connect_bd_net -net [get_bd_nets axi_ad9625_gt_rx_rst] [get_bd_pins plddr3_fifo/adc_rst]  [get_bd_pins axi_ad9625_gt/rx_rst]
 connect_bd_net -net [get_bd_nets sys_fmc_dma_resetn]   [get_bd_pins plddr3_fifo/dma_rstn] [get_bd_pins sys_ps7/FCLK_RESET2_N]
+connect_bd_net -net axi_ad9625_dma_xfer_req [get_bd_pins axi_ad9625_dma/fifo_wr_xfer_req] [get_bd_pins plddr3_fifo/axi_xfer_req]
 
 connect_bd_net -net axi_ad9625_adc_clk      [get_bd_pins axi_ad9625_core/adc_clk]     [get_bd_pins plddr3_fifo/adc_clk]
-connect_bd_net -net axi_ad9625_adc_dwr      [get_bd_pins axi_ad9625_core/adc_dwr]     [get_bd_pins plddr3_fifo/adc_wr]
-connect_bd_net -net axi_ad9625_adc_ddata    [get_bd_pins axi_ad9625_core/adc_ddata]   [get_bd_pins plddr3_fifo/adc_wdata]
+connect_bd_net -net axi_ad9625_adc_enable   [get_bd_pins axi_ad9625_core/adc_enable]  [get_bd_pins plddr3_fifo/adc_wr]
+connect_bd_net -net axi_ad9625_adc_data     [get_bd_pins axi_ad9625_core/adc_data]    [get_bd_pins plddr3_fifo/adc_wdata]
 connect_bd_net -net axi_ad9625_adc_dovf     [get_bd_pins axi_ad9625_core/adc_dovf]    [get_bd_pins plddr3_fifo/adc_wovf]
-connect_bd_net -net axi_ad9625_adc_enable   [get_bd_pins axi_ad9625_core/adc_enable]  [get_bd_pins plddr3_fifo/axi_xfer_req]
 
 connect_bd_net -net axi_ad9625_dma_clk      [get_bd_pins plddr3_fifo/dma_clk]         [get_bd_pins axi_ad9625_dma/fifo_wr_clk]
 connect_bd_net -net axi_ad9625_dma_dwr      [get_bd_pins plddr3_fifo/dma_wr]          [get_bd_pins axi_ad9625_dma/fifo_wr_en]       
 connect_bd_net -net axi_ad9625_dma_ddata    [get_bd_pins plddr3_fifo/dma_wdata]       [get_bd_pins axi_ad9625_dma/fifo_wr_din]      
 connect_bd_net -net axi_ad9625_dma_dovf     [get_bd_pins plddr3_fifo/dma_wovf]        [get_bd_pins axi_ad9625_dma/fifo_wr_overflow] 
-connect_bd_net -net axi_ad9625_adc_dsync    [get_bd_pins axi_ad9625_core/adc_dsync]   [get_bd_pins axi_ad9625_dma/fifo_wr_sync]
+connect_bd_net -net axi_ad9625_adc_valid    [get_bd_pins axi_ad9625_core/adc_valid]   [get_bd_pins axi_ad9625_dma/fifo_wr_sync]
 
-connect_bd_net -net axi_ad9625_adc_ddata    [get_bd_pins ila_jesd_rx_mon/PROBE3]
+connect_bd_net -net axi_ad9625_adc_data     [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
 set ila_dma_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_dma_mon]
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_dma_mon
@@ -46,7 +46,7 @@ set_property -dict [list CONFIG.C_PROBE3_WIDTH {5}] $ila_dma_mon
 
 connect_bd_net -net axi_ad9625_dma_clk      [get_bd_pins ila_dma_mon/clk] 
 connect_bd_net -net axi_ad9625_dma_dwr      [get_bd_pins ila_dma_mon/probe0] 
-connect_bd_net -net axi_ad9625_adc_enable   [get_bd_pins ila_dma_mon/probe1] 
+connect_bd_net -net axi_ad9625_dma_xfer_req [get_bd_pins ila_dma_mon/probe1] 
 connect_bd_net -net axi_ad9625_dma_ddata    [get_bd_pins ila_dma_mon/probe2] 
 connect_bd_net -net axi_xfer_status         [get_bd_pins ila_dma_mon/probe3]  [get_bd_pins plddr3_fifo/axi_xfer_status]
 

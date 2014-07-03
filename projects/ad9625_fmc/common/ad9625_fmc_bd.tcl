@@ -175,9 +175,9 @@ connect_bd_net -net axi_ad9625_gt_rx_ip_sof         [get_bd_pins axi_ad9625_gt/r
 connect_bd_net -net axi_ad9625_gt_rx_ip_data        [get_bd_pins axi_ad9625_gt/rx_ip_data]        [get_bd_pins axi_ad9625_jesd/rx_tdata]
 connect_bd_net -net axi_ad9625_gt_rx_data           [get_bd_pins axi_ad9625_gt/rx_data]           [get_bd_pins axi_ad9625_core/rx_data]
 connect_bd_net -net axi_ad9625_adc_clk              [get_bd_pins axi_ad9625_core/adc_clk]         [get_bd_pins axi_ad9625_dma/fifo_wr_clk]
-connect_bd_net -net axi_ad9625_adc_dwr              [get_bd_pins axi_ad9625_core/adc_dwr]         [get_bd_pins axi_ad9625_dma/fifo_wr_en]
-connect_bd_net -net axi_ad9625_adc_dsync            [get_bd_pins axi_ad9625_core/adc_dsync]       [get_bd_pins axi_ad9625_dma/fifo_wr_sync]
-connect_bd_net -net axi_ad9625_adc_ddata            [get_bd_pins axi_ad9625_core/adc_ddata]       [get_bd_pins axi_ad9625_dma/fifo_wr_din]
+connect_bd_net -net axi_ad9625_adc_enable           [get_bd_pins axi_ad9625_core/adc_enable]      [get_bd_pins axi_ad9625_dma/fifo_wr_en]
+connect_bd_net -net axi_ad9625_adc_valid            [get_bd_pins axi_ad9625_core/adc_valid]       [get_bd_pins axi_ad9625_dma/fifo_wr_sync]
+connect_bd_net -net axi_ad9625_adc_data             [get_bd_pins axi_ad9625_core/adc_data]        [get_bd_pins axi_ad9625_dma/fifo_wr_din]
 connect_bd_net -net axi_ad9625_adc_dovf             [get_bd_pins axi_ad9625_core/adc_dovf]        [get_bd_pins axi_ad9625_dma/fifo_wr_overflow]
 connect_bd_net -net axi_ad9625_dma_irq              [get_bd_pins axi_ad9625_dma/irq]              [get_bd_pins sys_concat_intc/In2] 
 
@@ -290,7 +290,7 @@ connect_bd_net -net axi_ad9625_gt_rx_clk            [get_bd_pins ila_jesd_rx_mon
 connect_bd_net -net axi_ad9625_gt_rx_mon_data       [get_bd_pins ila_jesd_rx_mon/PROBE0]
 connect_bd_net -net axi_ad9625_gt_rx_mon_trigger    [get_bd_pins ila_jesd_rx_mon/PROBE1]
 connect_bd_net -net axi_ad9625_gt_rx_data           [get_bd_pins ila_jesd_rx_mon/PROBE2]
-connect_bd_net -net axi_ad9625_adc_ddata            [get_bd_pins ila_jesd_rx_mon/PROBE3]
+connect_bd_net -net axi_ad9625_adc_data             [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
 # address map
 
