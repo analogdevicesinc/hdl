@@ -54,7 +54,7 @@ module axi_ad9625_pnmon (
 
   // processor interface PN9 (0x0), PN23 (0x1)
 
-  adc_pn_type);
+  adc_pnseq_sel);
 
   // adc interface
 
@@ -68,29 +68,16 @@ module axi_ad9625_pnmon (
 
   // processor interface PN9 (0x0), PN23 (0x1)
 
-  input           adc_pn_type;
+  input   [ 3:0]  adc_pnseq_sel;
 
   // internal registers
 
-  reg     [191:0] adc_pn_data = 'd0;
-  reg             adc_pn_match_d_1 = 'd0;
-  reg             adc_pn_match_d_0 = 'd0;
-  reg             adc_pn_match_z = 'd0;
-  reg             adc_pn_err = 'd0;
-  reg     [  6:0] adc_pn_oos_count = 'd0;
-  reg             adc_pn_oos = 'd0;
+  reg     [191:0] adc_pn_data_in = 'd0;
+  reg     [191:0] adc_pn_data_pn = 'd0;
 
   // internal signals
 
-  wire   [191:0]  adc_pn_data_rev_s;
-  wire   [191:0]  adc_pn_data_in_s;
-  wire            adc_pn_match_d_1_s;
-  wire            adc_pn_match_d_0_s;
-  wire            adc_pn_match_z_s;
-  wire            adc_pn_match_s;
-  wire   [191:0]  adc_pn_data_s;
-  wire            adc_pn_update_s;
-  wire            adc_pn_err_s;
+  wire   [191:0]  adc_pn_data_pn_s;
 
   // PN23 function
 
@@ -496,60 +483,43 @@ module axi_ad9625_pnmon (
     end
   endfunction
 
-  // pn sequence checking algorithm is commonly used in most applications.
-  // if oos is asserted (pn is out of sync):
-  //    the next sequence is generated from the incoming data.
-  //    if 16 sequences match consecutively, oos is cleared (de-asserted).
-  // if oos is de-asserted (pn is in sync)
-  //    the next sequence is generated from the current sequence.
-  //    if 64 sequences mismatch consecutively, oos is set (asserted).
-  // if oos is de-asserted, any spurious mismatches sets the error register.
-  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+  // pn sequence select
 
-  assign adc_pn_data_rev_s = {adc_data[ 11:  0], adc_data[ 23: 12],
-    adc_data[ 35: 24], adc_data[ 47: 36], adc_data[ 59: 48], adc_data[ 71: 60],
-    adc_data[ 83: 72], adc_data[ 95: 84], adc_data[107: 96], adc_data[119:108],
-    adc_data[131:120], adc_data[143:132], adc_data[155:144], adc_data[167:156],
-    adc_data[179:168], adc_data[191:180]};
-  assign adc_pn_data_in_s = adc_pn_data_rev_s ^ {{16{12'h800}}};
-  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[191: 96] == adc_pn_data[191: 96]) ? 1'b1 : 1'b0;
-  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[ 95:  0] == adc_pn_data[ 95:  0]) ? 1'b1 : 1'b0;
-  assign adc_pn_match_z_s = (adc_pn_data_in_s == 192'd0) ? 1'b0 : 1'b1;
-  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
-  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
-  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
-  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
-
-  // pn running sequence
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
 
   always @(posedge adc_clk) begin
-    if (adc_pn_type == 1'b0) begin
-      adc_pn_data <= pn9(adc_pn_data_s);
+    adc_pn_data_in <= { ~adc_data[ 11], adc_data[ 10:  0],
+                        ~adc_data[ 23], adc_data[ 22: 12],
+                        ~adc_data[ 35], adc_data[ 34: 24],
+                        ~adc_data[ 47], adc_data[ 46: 36],
+                        ~adc_data[ 59], adc_data[ 58: 48],
+                        ~adc_data[ 71], adc_data[ 70: 60],
+                        ~adc_data[ 83], adc_data[ 82: 72],
+                        ~adc_data[ 95], adc_data[ 94: 84],
+                        ~adc_data[107], adc_data[106: 96],
+                        ~adc_data[119], adc_data[118:108],
+                        ~adc_data[131], adc_data[130:120],
+                        ~adc_data[143], adc_data[142:132],
+                        ~adc_data[155], adc_data[154:144],
+                        ~adc_data[167], adc_data[166:156],
+                        ~adc_data[179], adc_data[178:168],
+                        ~adc_data[191], adc_data[190:180]};
+    if (adc_pnseq_sel == 4'd0) begin
+      adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
     end else begin
-      adc_pn_data <= pn23(adc_pn_data_s);
+      adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
     end
   end
 
-  // pn oos and counters (64 to clear and set).
+  // pn oos & pn error
 
-  always @(posedge adc_clk) begin
-    adc_pn_match_d_1 <= adc_pn_match_d_1_s;
-    adc_pn_match_d_0 <= adc_pn_match_d_0_s;
-    adc_pn_match_z <= adc_pn_match_z_s;
-    adc_pn_err <= adc_pn_err_s;
-    if (adc_pn_update_s == 1'b1) begin
-      if (adc_pn_oos_count >= 16) begin
-        adc_pn_oos_count <= 'd0;
-        adc_pn_oos <= ~adc_pn_oos;
-      end else begin
-        adc_pn_oos_count <= adc_pn_oos_count + 1'b1;
-        adc_pn_oos <= adc_pn_oos;
-      end
-    end else begin
-      adc_pn_oos_count <= 'd0;
-      adc_pn_oos <= adc_pn_oos;
-    end
-  end
+  ad_pnmon #(.DATA_WIDTH(192)) i_pnmon (
+    .adc_clk (adc_clk),
+    .adc_valid_in (1'b1),
+    .adc_data_in (adc_pn_data_in),
+    .adc_data_pn (adc_pn_data_pn),
+    .adc_pn_oos (adc_pn_oos),
+    .adc_pn_err (adc_pn_err));
 
 endmodule
 

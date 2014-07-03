@@ -50,12 +50,11 @@ module axi_ad9625 (
   // dma interface
 
   adc_clk,
-  adc_dwr,
-  adc_ddata,
-  adc_dsync,
+  adc_valid,
+  adc_enable,
+  adc_data,
   adc_dovf,
   adc_dunf,
-  adc_enable,
   adc_sref,
   adc_raddr_in,
   adc_raddr_out,
@@ -86,8 +85,8 @@ module axi_ad9625 (
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
   parameter C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter C_BASEADDR = 32'hffffffff;
-  parameter C_HIGHADDR = 32'h00000000;
+  parameter C_HIGHADDR = 32'hffffffff;
+  parameter C_BASEADDR = 32'h00000000;
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -98,12 +97,11 @@ module axi_ad9625 (
   // dma interface
 
   output          adc_clk;
-  output          adc_dwr;
-  output  [255:0] adc_ddata;
-  output          adc_dsync;
+  output          adc_valid;
+  output          adc_enable;
+  output  [255:0] adc_data;
   input           adc_dovf;
   input           adc_dunf;
-  output          adc_enable;
   output  [ 15:0] adc_sref;
   input   [  3:0] adc_raddr_in;
   output  [  3:0] adc_raddr_out;
@@ -132,9 +130,6 @@ module axi_ad9625 (
 
   // internal registers
 
-  reg             adc_dsync = 'd0;
-  reg             adc_dwr = 'd0;
-  reg     [255:0] adc_ddata = 'd0;
   reg     [ 31:0] up_rdata = 'd0;
   reg             up_ack = 'd0;
 
@@ -149,31 +144,20 @@ module axi_ad9625 (
   wire    [191:0] adc_data_s;
   wire            adc_or_s;
   wire            adc_status_s;
-  wire    [255:0] adc_channel_data_s;
   wire            up_adc_pn_err_s;
   wire            up_adc_pn_oos_s;
   wire            up_adc_or_s;
-  wire    [ 31:0] up_adc_channel_rdata_s;
-  wire            up_adc_channel_ack_s;
   wire            up_sel_s;
   wire            up_wr_s;
   wire    [ 13:0] up_addr_s;
   wire    [ 31:0] up_wdata_s;
-  wire    [ 31:0] up_adc_common_rdata_s;
-  wire            up_adc_common_ack_s;
+  wire    [ 31:0] up_rdata_s[0:1];
+  wire            up_ack_s[0:1];
 
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
-
-  // adc channels - dma interface
-
-  always @(posedge adc_clk) begin
-    adc_dsync <= 1'b1;
-    adc_dwr <= 1'b1;
-    adc_ddata <= adc_channel_data_s;
-  end
 
   // processor read interface
 
@@ -182,12 +166,14 @@ module axi_ad9625 (
       up_rdata <= 'd0;
       up_ack <= 'd0;
     end else begin
-      up_rdata <= up_adc_common_rdata_s | up_adc_channel_rdata_s;
-      up_ack <= up_adc_common_ack_s | up_adc_channel_ack_s;
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1];
+      up_ack <= up_ack_s[0] | up_ack_s[1] ;
     end
   end
 
   // main (device interface)
+
+  assign adc_valid = 1'b1;
 
   axi_ad9625_if #(.PCORE_ID(PCORE_ID)) i_if (
     .rx_clk (rx_clk),
@@ -208,8 +194,8 @@ module axi_ad9625 (
     .adc_rst (adc_rst),
     .adc_data (adc_data_s),
     .adc_or (adc_or_s),
+    .adc_dfmt_data (adc_data),
     .adc_enable (adc_enable),
-    .adc_dfmt_data (adc_channel_data_s),
     .up_adc_pn_err (up_adc_pn_err_s),
     .up_adc_pn_oos (up_adc_pn_oos_s),
     .up_adc_or (up_adc_or_s),
@@ -219,8 +205,8 @@ module axi_ad9625 (
     .up_wr (up_wr_s),
     .up_addr (up_addr_s),
     .up_wdata (up_wdata_s),
-    .up_rdata (up_adc_channel_rdata_s),
-    .up_ack (up_adc_channel_ack_s));
+    .up_rdata (up_rdata_s[0]),
+    .up_ack (up_ack_s[0]));
 
   // common processor control
 
@@ -232,12 +218,12 @@ module axi_ad9625 (
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (adc_status_s),
-    .adc_status_pn_err (up_adc_pn_err_s),
-    .adc_status_pn_oos (up_adc_pn_oos_s),
-    .adc_status_or (up_adc_or_s),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
+    .up_status_pn_err (up_adc_pn_err_s),
+    .up_status_pn_oos (up_adc_pn_oos_s),
+    .up_status_or (up_adc_or_s),
     .delay_clk (1'b0),
     .delay_rst (),
     .delay_sel (),
@@ -258,14 +244,16 @@ module axi_ad9625 (
     .drp_locked (1'd1),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd1),
+    .up_adc_gpio_in (32'd0),
+    .up_adc_gpio_out (),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
     .up_wr (up_wr_s),
     .up_addr (up_addr_s),
     .up_wdata (up_wdata_s),
-    .up_rdata (up_adc_common_rdata_s),
-    .up_ack (up_adc_common_ack_s));
+    .up_rdata (up_rdata_s[1]),
+    .up_ack (up_ack_s[1]));
 
   // up bus interface
 
