@@ -75,8 +75,8 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_miso
 set_location_assignment PIN_C4  -to ad9361_resetb
 set_location_assignment PIN_A8  -to spi_csn
 set_location_assignment PIN_H12 -to spi_clk
-set_location_assignment PIN_G11 -to spi_mosi
-set_location_assignment PIN_H13 -to spi_miso
+set_location_assignment PIN_H13 -to spi_mosi
+set_location_assignment PIN_G11 -to spi_miso
 
 execute_flow -compile
 
