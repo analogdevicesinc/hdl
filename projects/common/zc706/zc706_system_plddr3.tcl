@@ -44,6 +44,7 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   set_property -dict [list CONFIG.INTERFACE_TYPE {Native}] $wfifo_mem
   set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $wfifo_mem
   set_property -dict [list CONFIG.Input_Data_Width $m_width] $wfifo_mem
+  set_property -dict [list CONFIG.Input_Depth {32}] $wfifo_mem
   set_property -dict [list CONFIG.Output_Data_Width {512}] $wfifo_mem
   set_property -dict [list CONFIG.Overflow_Flag {true}] $wfifo_mem
 
@@ -51,10 +52,12 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   set_property -dict [list CONFIG.INTERFACE_TYPE {Native}] $rfifo_mem
   set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $rfifo_mem
   set_property -dict [list CONFIG.Input_Data_Width {512}] $rfifo_mem
+  set_property -dict [list CONFIG.Input_Depth {32}] $rfifo_mem
   set_property -dict [list CONFIG.Output_Data_Width {64}] $rfifo_mem
   set_property -dict [list CONFIG.Overflow_Flag {true}] $rfifo_mem
-  set_property -dict [list CONFIG.Programmable_Full_Type {Single_Programmable_Full_Threshold_Constant}] $rfifo_mem
-  set_property -dict [list CONFIG.Full_Threshold_Assert_Value {800}] $rfifo_mem
+  set_property -dict [list CONFIG.Programmable_Full_Type {Multiple_Programmable_Full_Threshold_Constants}] $rfifo_mem
+  set_property -dict [list CONFIG.Full_Threshold_Assert_Value {24}] $rfifo_mem
+  set_property -dict [list CONFIG.Full_Threshold_Negate_Value {12}] $rfifo_mem
 
   set axi_fifo2s [create_bd_cell -type ip -vlnv analog.com:user:axi_fifo2s:1.0 axi_fifo2s]
   set_property -dict [list CONFIG.AXI_ADDRESS {0x80000000}] $axi_fifo2s

@@ -96,8 +96,8 @@ module axi_fifo2s_wr (
   parameter   AXI_ADDRESS = 32'h00000000;
   parameter   AXI_ADDRLIMIT = 32'h00000000;
   localparam  AXI_AWINCR = (AXI_LENGTH * DATA_WIDTH)/8;
-  localparam  BUF_THRESHOLD_LO = 6'd3;
-  localparam  BUF_THRESHOLD_HI = 6'd60;
+  localparam  BUF_THRESHOLD_LO = 8'd6;
+  localparam  BUF_THRESHOLD_HI = 8'd250;
 
   // request and synchronization
 
@@ -153,24 +153,24 @@ module axi_fifo2s_wr (
   reg                             m_xfer_limit = 'd0;
   reg                             m_xfer_enable = 'd0;
   reg     [ 31:0]                 m_xfer_addr = 'd0;
-  reg     [  5:0]                 m_waddr = 'd0;
-  reg     [  5:0]                 m_waddr_g = 'd0;
+  reg     [  7:0]                 m_waddr = 'd0;
+  reg     [  7:0]                 m_waddr_g = 'd0;
   reg                             m_rel_enable = 'd0;
   reg                             m_rel_toggle = 'd0;
-  reg     [  5:0]                 m_rel_waddr = 'd0;
+  reg     [  7:0]                 m_rel_waddr = 'd0;
   reg     [  2:0]                 axi_rel_toggle_m = 'd0;
-  reg     [  5:0]                 axi_rel_waddr = 'd0;
-  reg     [  5:0]                 axi_waddr_m1 = 'd0;
-  reg     [  5:0]                 axi_waddr_m2 = 'd0;
-  reg     [  5:0]                 axi_waddr = 'd0;
-  reg     [  5:0]                 axi_addr_diff = 'd0;
+  reg     [  7:0]                 axi_rel_waddr = 'd0;
+  reg     [  7:0]                 axi_waddr_m1 = 'd0;
+  reg     [  7:0]                 axi_waddr_m2 = 'd0;
+  reg     [  7:0]                 axi_waddr = 'd0;
+  reg     [  7:0]                 axi_addr_diff = 'd0;
   reg                             axi_almost_full = 'd0;
   reg                             axi_dwunf = 'd0;
   reg                             axi_almost_empty = 'd0;
   reg                             axi_dwovf = 'd0;
   reg     [  2:0]                 axi_xfer_req_m = 'd0;
   reg                             axi_xfer_init = 'd0;
-  reg     [  5:0]                 axi_raddr = 'd0;
+  reg     [  7:0]                 axi_raddr = 'd0;
   reg                             axi_rd = 'd0;
   reg                             axi_rlast = 'd0;
   reg                             axi_rd_d = 'd0;
@@ -186,7 +186,7 @@ module axi_fifo2s_wr (
   // internal signals
 
   wire                            axi_rel_toggle_s;
-  wire    [  6:0]                 axi_addr_diff_s;
+  wire    [  8:0]                 axi_addr_diff_s;
   wire                            axi_wready_s;
   wire                            axi_rd_s;
   wire                            axi_req_s;
@@ -195,11 +195,13 @@ module axi_fifo2s_wr (
 
   // binary to grey conversion
 
-  function [5:0] b2g;
-    input [5:0] b;
-    reg   [5:0] g;
+  function [7:0] b2g;
+    input [7:0] b;
+    reg   [7:0] g;
     begin
-      g[5] = b[5];
+      g[7] = b[7];
+      g[6] = b[7] ^ b[6];
+      g[5] = b[6] ^ b[5];
       g[4] = b[5] ^ b[4];
       g[3] = b[4] ^ b[3];
       g[2] = b[3] ^ b[2];
@@ -211,11 +213,13 @@ module axi_fifo2s_wr (
 
   // grey to binary conversion
 
-  function [5:0] g2b;
-    input [5:0] g;
-    reg   [5:0] b;
+  function [7:0] g2b;
+    input [7:0] g;
+    reg   [7:0] b;
     begin
-      b[5] = g[5];
+      b[7] = g[7];
+      b[6] = b[7] ^ g[6];
+      b[5] = b[6] ^ g[5];
       b[4] = b[5] ^ g[4];
       b[3] = b[4] ^ g[3];
       b[2] = b[3] ^ g[2];
@@ -304,7 +308,7 @@ module axi_fifo2s_wr (
       axi_almost_empty <= 'd0;
       axi_dwovf <= 'd0;
     end else begin
-      axi_addr_diff <= axi_addr_diff_s[5:0];
+      axi_addr_diff <= axi_addr_diff_s[7:0];
       if (axi_addr_diff > BUF_THRESHOLD_HI) begin
         axi_almost_full <= 1'b1;
         axi_dwunf <= axi_almost_empty;
@@ -453,7 +457,7 @@ module axi_fifo2s_wr (
 
   // buffer
 
-  ad_mem #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(6)) i_mem (
+  ad_mem #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(8)) i_mem (
     .clka (m_clk),
     .wea (m_wr),
     .addra (m_waddr),
