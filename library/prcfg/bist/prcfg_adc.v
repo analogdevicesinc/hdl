@@ -59,7 +59,7 @@ module prcfg_adc (
   dst_adc_dovf
 );
 
-  localparam  RP_ID       = 8'hA0;
+  localparam  RP_ID       = 8'hA1;
   parameter   CHANNEL_ID  = 0;
 
   input             clk;
@@ -90,8 +90,8 @@ module prcfg_adc (
   reg               adc_pn_oos        = 0;
   reg               adc_pn_err        = 0;
 
-  wire    [ 3:0]    mode;
-  wire    [ 3:0]    channel_sel;
+  reg     [ 3:0]    mode;
+  reg     [ 3:0]    channel_sel;
 
   wire              adc_dvalid;
   wire    [31:0]    adc_pn_data_s;
@@ -140,10 +140,12 @@ module prcfg_adc (
     end
   endfunction
 
-  assign channel_sel  = control[3:0];
-  assign mode         = control[7:4];
-
   assign adc_dvalid = src_adc_dwr & src_adc_dsync;
+
+  always @(posedge clk) begin
+    channel_sel  <= control[3:0];
+    mode         <= control[7:4];
+  end
 
   // prbs monitor
   assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? src_adc_ddata : adc_pn_data;

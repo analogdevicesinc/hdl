@@ -90,8 +90,8 @@ module prcfg_adc (
   reg               adc_pn_oos        = 0;
   reg               adc_pn_err        = 0;
 
-  wire    [ 3:0]    mode;
-  wire    [ 3:0]    channel_sel;
+  reg     [ 3:0]    mode;
+  reg     [ 3:0]    channel_sel;
 
   wire              adc_dvalid;
   wire    [ 1:0]    adc_ddata_s;
@@ -117,8 +117,11 @@ module prcfg_adc (
     end
   endfunction
 
-  assign channel_sel = control[ 3:0];
-  assign mode        = control[ 7:4];
+  always @(posedge clk) begin
+    channel_sel <= control[ 3:0];
+    mode        <= control[ 7:4];
+  end
+
   assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
 
   // prbs monitor

@@ -82,11 +82,11 @@ module prcfg_dac(
   reg     [ 7:0]    pn_data        = 8'hF2;
   reg     [31:0]    status         = 0;
 
+  reg     [ 3:0]    mode;
+
   wire    [ 1:0]    dac_data;
   wire    [15:0]    dac_data_fltr_i;
   wire    [15:0]    dac_data_fltr_q;
-
-  wire    [ 3:0]    mode;
 
   wire    [31:0]    dac_data_mode0;
   wire    [31:0]    dac_data_mode1_2;
@@ -110,8 +110,8 @@ module prcfg_dac(
 
   always @(posedge clk) begin
     status <= { 24'h0, RP_ID };
+    mode   <= control[ 7:4];
   end
-  assign mode   = control[ 7:4];
 
   // pass through mode
   assign dac_data_mode0 = src_dac_ddata;

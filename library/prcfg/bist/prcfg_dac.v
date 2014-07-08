@@ -79,13 +79,14 @@ module prcfg_dac(
   reg               src_dac_drd    = 0;
 
   reg     [31:0]    dac_prbs       = 32'hA2F19C;
+  reg     [31:0]    status         = 0;
 
   reg     [ 2:0]    counter        = 0;
   reg               pattern        = 0;
   reg     [15:0]    sin_tone       = 0;
   reg     [15:0]    cos_tone       = 0;
 
-  wire    [ 3:0]    mode;
+  reg     [ 3:0]    mode;
 
   wire    [31:0]    dac_data_mode0;
   wire    [31:0]    dac_data_mode1;
@@ -133,8 +134,10 @@ module prcfg_dac(
     end
   endfunction
 
-  assign status = {24'h0, RP_ID};
-  assign mode   = control[7:4];
+  always @(posedge clk) begin
+    status <= {24'h0, RP_ID};
+    mode   <= control[7:4];
+  end
 
   // pass through for tx/rx side
   assign dac_data_mode0 = src_dac_ddata;
