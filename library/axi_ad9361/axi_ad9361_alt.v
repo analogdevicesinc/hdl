@@ -223,7 +223,7 @@ module axi_ad9361_alt (
   input                               s_axi_aclk;
   input                               s_axi_aresetn;
   input                               s_axi_awvalid;
-  input   [ 13:0]                     s_axi_awaddr;
+  input   [ 15:0]                     s_axi_awaddr;
   input   [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_awid;
   input   [  7:0]                     s_axi_awlen;
   input   [  2:0]                     s_axi_awsize;
@@ -242,7 +242,7 @@ module axi_ad9361_alt (
   output  [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_bid;
   input                               s_axi_bready;
   input                               s_axi_arvalid;
-  input   [ 13:0]                     s_axi_araddr;
+  input   [ 15:0]                     s_axi_araddr;
   input   [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_arid;
   input   [  7:0]                     s_axi_arlen;
   input   [  2:0]                     s_axi_arsize;
@@ -327,7 +327,7 @@ module axi_ad9361_alt (
     .s_axi_aclk (s_axi_aclk),
     .s_axi_aresetn (s_axi_aresetn),
     .s_axi_awvalid (s_axi_awvalid),
-    .s_axi_awaddr ({18'd0, s_axi_awaddr}),
+    .s_axi_awaddr ({16'd0, s_axi_awaddr}),
     .s_axi_awready (s_axi_awready),
     .s_axi_wvalid (s_axi_wvalid),
     .s_axi_wdata (s_axi_wdata),

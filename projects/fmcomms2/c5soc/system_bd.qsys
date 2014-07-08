@@ -106,7 +106,7 @@
    {
       datum baseAddress
       {
-         value = "32768";
+         value = "131072";
          type = "String";
       }
    }
@@ -915,7 +915,7 @@
    start="sys_hps.h2f_lw_axi_master"
    end="axi_ad9361.s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x8000" />
+  <parameter name="baseAddress" value="0x00020000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
