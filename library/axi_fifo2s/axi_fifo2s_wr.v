@@ -82,6 +82,7 @@ module axi_fifo2s_wr (
   axi_buser,
   axi_bready,
 
+
   // axi status
 
   axi_dwovf,
@@ -252,7 +253,7 @@ module axi_fifo2s_wr (
       m_xfer_init <= m_xfer_req_m[1] & ~m_xfer_req_m[2];
       if (m_xfer_init == 1'b1) begin
         m_xfer_limit <= 1'd1;
-      end else if (m_xfer_addr >= AXI_ADDRLIMIT) begin
+      end else if ((m_xfer_addr >= AXI_ADDRLIMIT) || (m_xfer_enable == 1'b0)) begin
         m_xfer_limit <= 1'd0;
       end
       if (m_xfer_init == 1'b1) begin

@@ -134,6 +134,7 @@ module axi_fifo2s_rd (
 
   // internal registers
 
+  reg     [ 31:0]                 axi_rd_addr_h = 'd0;
   reg                             axi_rd = 'd0;
   reg                             axi_rd_active = 'd0;
   reg     [  2:0]                 axi_xfer_req_m = 'd0;
@@ -156,17 +157,23 @@ module axi_fifo2s_rd (
 
   always @(posedge axi_clk or negedge axi_resetn) begin
     if (axi_resetn == 1'b0) begin
+      axi_rd_addr_h <= 'd0;
       axi_rd <= 'd0;
       axi_rd_active <= 'd0;
       axi_xfer_req_m <= 'd0;
       axi_xfer_init <= 'd0;
     end else begin
+      if (axi_xfer_init == 1'b1) begin
+        axi_rd_addr_h <= AXI_ADDRESS;
+      end else if (axi_rd_req == 1'b1) begin
+        axi_rd_addr_h <= axi_rd_addr;
+      end
       if (axi_rd_active == 1'b1) begin
         axi_rd <= 1'b0;
         if (axi_rlast == 1'b1) begin
           axi_rd_active <= 1'b0;
         end
-      end else if ((axi_ready_s == 1'b1) && (axi_araddr < axi_rd_addr)) begin
+      end else if ((axi_ready_s == 1'b1) && (axi_araddr < axi_rd_addr_h)) begin
         axi_rd <= 1'b1;
         axi_rd_active <= 1'b1;
       end

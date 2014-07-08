@@ -103,6 +103,10 @@ module ad_axis_inf_rx (
   reg             inf_last = 'd0;
   reg     [DW:0]  inf_data = 'd0;
 
+  // internal signals
+
+  wire            inf_ready_s;
+
   // write interface
 
   always @(posedge clk) begin
@@ -147,13 +151,15 @@ module ad_axis_inf_rx (
 
   // read interface
 
+  assign inf_ready_s = inf_ready | ~inf_valid;
+
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       rcnt <= 'd0;
       inf_valid <= 'd0;
       inf_last <= 'b0;
       inf_data <= 'd0;
-    end else if ((inf_ready == 1'b1) || (inf_valid == 1'b0)) begin
+    end else if (inf_ready_s == 1'b1) begin
       if (rcnt == wcnt) begin
         rcnt <= rcnt;
         inf_valid <= 1'd0;
