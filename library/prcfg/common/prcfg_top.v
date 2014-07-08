@@ -45,8 +45,10 @@ module prcfg_top(
   clk,
 
   // gpio
-  gpio_input,
-  gpio_output,
+  dac_gpio_input,
+  dac_gpio_output,
+  adc_gpio_input,
+  adc_gpio_output,
 
   // TX side
   dma_dac_drd,
@@ -80,8 +82,10 @@ module prcfg_top(
 
   input                             clk;
 
-  input   [31:0]                    gpio_input;
-  output  [31:0]                    gpio_output;
+  input   [31:0]                    dac_gpio_input;
+  output  [31:0]                    dac_gpio_output;
+  input   [31:0]                    adc_gpio_input;
+  output  [31:0]                    adc_gpio_output;
 
   output                            dma_dac_drd;
   input                             dma_dac_dunf;
@@ -101,11 +105,11 @@ module prcfg_top(
   output  [(DBUS_WIDTH - 1):0]      dma_adc_ddata;
   input                             dma_adc_ovf;
 
-  wire    [31:0]                  gpio_output_s[(NUM_CHANNEL - 1):0];
-  wire    [(NUM_CHANNEL - 1):0]   gpio_output_s_inv[31:0];
+  wire    [31:0]                    adc_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     adc_gpio_out_s_inv[31:0];
 
-  wire    [31:0]                  adc_status_s[(NUM_CHANNEL - 1):0];
-  wire    [31:0]                  dac_status_s[(NUM_CHANNEL - 1):0];
+  wire    [31:0]                    dac_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     dac_gpio_out_s_inv[31:0];
 
   genvar l_inst;
 
@@ -117,8 +121,8 @@ module prcfg_top(
             .CHANNEL_ID(l_inst)
           ) i_prcfg_adc_1 (
             .clk(clk),
-            .control(gpio_input),
-            .status(adc_status_s[l_inst]),
+            .control(adc_gpio_input),
+            .status(adc_gpio_out_s[l_inst]),
             .src_adc_dwr(core_adc_dwr),
             .src_adc_dsync(core_adc_dsync),
             .src_adc_ddata(core_adc_ddata[(DATA_WIDTH - 1):0]),
@@ -133,8 +137,8 @@ module prcfg_top(
             .CHANNEL_ID(l_inst)
           ) i_prcfg_adc_1 (
             .clk(clk),
-            .control(gpio_input),
-            .status(adc_status_s[l_inst]),
+            .control(adc_gpio_input),
+            .status(adc_gpio_out_s[l_inst]),
             .src_adc_dwr(core_adc_dwr),
             .src_adc_dsync(core_adc_dsync),
             .src_adc_ddata(core_adc_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
@@ -152,8 +156,8 @@ module prcfg_top(
             .CHANNEL_ID(l_inst)
           ) i_prcfg_dac_1 (
             .clk(clk),
-            .control(gpio_input),
-            .status(dac_status_s[l_inst]),
+            .control(dac_gpio_input),
+            .status(dac_gpio_out_s[l_inst]),
             .src_dac_drd(dma_dac_drd),
             .src_dac_ddata(dma_dac_ddata[(DATA_WIDTH - 1):0]),
             .src_dac_dunf(dma_dac_dunf),
@@ -166,8 +170,8 @@ module prcfg_top(
             .CHANNEL_ID(l_inst)
           ) i_prcfg_dac_1 (
             .clk(clk),
-            .control(gpio_input),
-            .status(dac_status_s[l_inst]),
+            .control(dac_gpio_input),
+            .status(dac_gpio_out_s[l_inst]),
             .src_dac_drd(),
             .src_dac_ddata(dma_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
             .src_dac_dunf(dma_dac_dunf),
@@ -177,7 +181,6 @@ module prcfg_top(
           );
         end
       end
-      assign gpio_output_s[l_inst] = adc_status_s[l_inst] | dac_status_s[l_inst];
 
     end
   endgenerate
@@ -188,15 +191,17 @@ module prcfg_top(
   generate
   for(i = 0; i < 32; i = i + 1) begin
     for(j = 0; j < NUM_CHANNEL; j = j + 1) begin
-      assign gpio_output_s_inv[i][j] = gpio_output_s[j][i];
+      assign adc_gpio_out_s_inv[i][j] = adc_gpio_out_s[j][i];
+      assign dac_gpio_out_s_inv[i][j] = dac_gpio_out_s[j][i];
     end
   end
   endgenerate
 
-  // generate gpio_output
+  // generate gpio_outputs
   generate
   for(i = 0; i < 32; i = i + 1) begin
-    assign gpio_output[i] = |gpio_output_s_inv[i];
+    assign adc_gpio_output[i] = |adc_gpio_out_s_inv[i];
+    assign dac_gpio_output[i] = |dac_gpio_out_s_inv[i];
   end
   endgenerate
 
