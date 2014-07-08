@@ -394,7 +394,7 @@ module system_top (
     .sys_hps_h2f_reset_reset_n (sys_resetn),
 		.sys_hps_spim0_txd (spi_mosi),
 		.sys_hps_spim0_rxd (spi_miso),
-		.sys_hps_spim0_ss_in_n (1'b0),
+		.sys_hps_spim0_ss_in_n (1'b1),
 		.sys_hps_spim0_ssi_oe_n (),
 		.sys_hps_spim0_ss_0_n (spi_csn),
 		.sys_hps_spim0_ss_1_n (),
