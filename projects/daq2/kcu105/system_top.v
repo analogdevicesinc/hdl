@@ -215,6 +215,14 @@ module system_top (
   
   // internal registers
 
+  reg             dac_drd = 'd0;
+  reg     [63:0]  dac_ddata_0 = 'd0;
+  reg     [63:0]  dac_ddata_1 = 'd0;
+  reg     [63:0]  dac_ddata_2 = 'd0;
+  reg     [63:0]  dac_ddata_3 = 'd0;
+  reg             adc_dsync = 'd0;
+  reg             adc_dwr = 'd0;
+  reg    [127:0]  adc_ddata = 'd0;
   reg     [31:0]  sys_reset_m = 'd0;
   reg             sys_cpu_rst = 'd0;
   reg             sys_cpu_rstn = 'd0;
@@ -234,6 +242,23 @@ module system_top (
   wire    [ 2:0]  spi_csn;
   wire            spi_mosi;
   wire            spi_miso;
+  wire            dac_clk;
+  wire   [127:0]  dac_ddata;
+  wire            dac_enable_0;
+  wire            dac_enable_1;
+  wire            dac_enable_2;
+  wire            dac_enable_3;
+  wire            dac_valid_0;
+  wire            dac_valid_1;
+  wire            dac_valid_2;
+  wire            dac_valid_3;
+  wire            adc_clk;
+  wire    [63:0]  adc_data_0;
+  wire    [63:0]  adc_data_1;
+  wire            adc_enable_0;
+  wire            adc_enable_1;
+  wire            adc_valid_0;
+  wire            adc_valid_1;
   wire    [ 5:0]  gpio_ctl_i;
   wire    [ 5:0]  gpio_ctl_o;
   wire    [ 5:0]  gpio_ctl_t;
@@ -241,7 +266,114 @@ module system_top (
   wire    [ 4:0]  gpio_status_o;
   wire    [ 4:0]  gpio_status_t;
 
-  // assignments
+  // adc-dac data
+
+  always @(posedge dac_clk) begin
+    case ({dac_enable_1, dac_enable_0})
+      2'b11: begin
+        dac_drd <= dac_valid_0 & dac_valid_1;
+        dac_ddata_0[63:48] <= dac_ddata[111: 96];
+        dac_ddata_0[47:32] <= dac_ddata[ 79: 64];
+        dac_ddata_0[31:16] <= dac_ddata[ 47: 32];
+        dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
+        dac_ddata_1[63:48] <= dac_ddata[127:112];
+        dac_ddata_1[47:32] <= dac_ddata[ 95: 80];
+        dac_ddata_1[31:16] <= dac_ddata[ 63: 48];
+        dac_ddata_1[15: 0] <= dac_ddata[ 31: 16];
+        dac_ddata_2 <= 64'd0;
+        dac_ddata_3 <= 64'd0;
+      end
+      2'b10: begin
+        dac_drd <= dac_valid_1 & ~dac_drd;
+        dac_ddata_0 <= 64'd0;
+        if (dac_drd == 1'b1) begin
+          dac_ddata_1[63:48] <= dac_ddata[127:112];
+          dac_ddata_1[47:32] <= dac_ddata[111: 96];
+          dac_ddata_1[31:16] <= dac_ddata[ 95: 80];
+          dac_ddata_1[15: 0] <= dac_ddata[ 79: 64];
+        end else begin
+          dac_ddata_1[63:48] <= dac_ddata[ 63: 48];
+          dac_ddata_1[47:32] <= dac_ddata[ 47: 32];
+          dac_ddata_1[31:16] <= dac_ddata[ 31: 16];
+          dac_ddata_1[15: 0] <= dac_ddata[ 15:  0];
+        end
+        dac_ddata_2 <= 64'd0;
+        dac_ddata_3 <= 64'd0;
+      end
+      2'b01: begin
+        dac_drd <= dac_valid_0 & ~dac_drd;
+        if (dac_drd == 1'b1) begin
+          dac_ddata_0[63:48] <= dac_ddata[127:112];
+          dac_ddata_0[47:32] <= dac_ddata[111: 96];
+          dac_ddata_0[31:16] <= dac_ddata[ 95: 80];
+          dac_ddata_0[15: 0] <= dac_ddata[ 79: 64];
+        end else begin
+          dac_ddata_0[63:48] <= dac_ddata[ 63: 48];
+          dac_ddata_0[47:32] <= dac_ddata[ 47: 32];
+          dac_ddata_0[31:16] <= dac_ddata[ 31: 16];
+          dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
+        end
+        dac_ddata_1 <= 64'd0;
+        dac_ddata_2 <= 64'd0;
+        dac_ddata_3 <= 64'd0;
+      end
+      default: begin
+        dac_drd <= 1'b0;
+        dac_ddata_0 <= 64'd0;
+        dac_ddata_1 <= 64'd0;
+        dac_ddata_2 <= 64'd0;
+        dac_ddata_3 <= 64'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_enable_1, adc_enable_0})
+      2'b11: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_1 & adc_valid_0;
+        adc_ddata[127:112] <= adc_data_1[63:48];
+        adc_ddata[111: 96] <= adc_data_0[63:48];
+        adc_ddata[ 95: 80] <= adc_data_1[47:32];
+        adc_ddata[ 79: 64] <= adc_data_0[47:32];
+        adc_ddata[ 63: 48] <= adc_data_1[31:16];
+        adc_ddata[ 47: 32] <= adc_data_0[31:16];
+        adc_ddata[ 31: 16] <= adc_data_1[15: 0];
+        adc_ddata[ 15:  0] <= adc_data_0[15: 0];
+      end
+      2'b10: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_1 & ~adc_dwr;
+        adc_ddata[127:112] <= adc_data_1[63:48];
+        adc_ddata[111: 96] <= adc_data_1[47:32];
+        adc_ddata[ 95: 80] <= adc_data_1[31:16];
+        adc_ddata[ 79: 64] <= adc_data_1[15: 0];
+        adc_ddata[ 63: 48] <= adc_ddata[127:112];
+        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+      end
+      2'b01: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_0 & ~adc_dwr;
+        adc_ddata[127:112] <= adc_data_0[63:48];
+        adc_ddata[111: 96] <= adc_data_0[47:32];
+        adc_ddata[ 95: 80] <= adc_data_0[31:16];
+        adc_ddata[ 79: 64] <= adc_data_0[15: 0];
+        adc_ddata[ 63: 48] <= adc_ddata[127:112];
+        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+      end
+      default: begin
+        adc_dsync <= 1'b0;
+        adc_dwr <= 1'b0;
+        adc_ddata <= 128'd0;
+      end
+    endcase
+  end
+
+  // spi
 
   assign spi_csn_adc = spi_csn[2];
   assign spi_csn_dac = spi_csn[1];
@@ -399,6 +531,31 @@ module system_top (
     .gpio_status_o (gpio_status_o),
     .gpio_status_t (gpio_status_t),
     .gpio_sw_tri_io (gpio_sw),
+    .adc_clk (adc_clk),
+    .adc_data_0 (adc_data_0),
+    .adc_data_1 (adc_data_1),
+    .adc_ddata (adc_ddata),
+    .adc_dsync (adc_dsync),
+    .adc_dwr (adc_dwr),
+    .adc_enable_0 (adc_enable_0),
+    .adc_enable_1 (adc_enable_1),
+    .adc_valid_0 (adc_valid_0),
+    .adc_valid_1 (adc_valid_1),
+    .dac_clk (dac_clk),
+    .dac_ddata (dac_ddata),
+    .dac_ddata_0 (dac_ddata_0),
+    .dac_ddata_1 (dac_ddata_1),
+    .dac_ddata_2 (dac_ddata_2),
+    .dac_ddata_3 (dac_ddata_3),
+    .dac_drd (dac_drd),
+    .dac_enable_0 (dac_enable_0),
+    .dac_enable_1 (dac_enable_1),
+    .dac_enable_2 (dac_enable_2),
+    .dac_enable_3 (dac_enable_3),
+    .dac_valid_0 (dac_valid_0),
+    .dac_valid_1 (dac_valid_1),
+    .dac_valid_2 (dac_valid_2),
+    .dac_valid_3 (dac_valid_3),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),

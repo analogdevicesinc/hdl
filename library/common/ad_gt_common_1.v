@@ -295,7 +295,7 @@ module ad_gt_common_1 (
     .QPLLRSVD4 (8'd0),
     .QPLL0CLKRSVD0 (1'd0),
     .QPLL0CLKRSVD1 (1'd0),
-    .QPLL0LOCKDETCLK (1'd0),
+    .QPLL0LOCKDETCLK (drp_clk),
     .QPLL0LOCKEN (1'd1),
     .QPLL0PD (1'd0),
     .QPLL0REFCLKSEL (3'b001),

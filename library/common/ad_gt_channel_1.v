@@ -268,8 +268,16 @@ module ad_gt_channel_1 (
 
   // pll locked
 
+  generate
+  if (GTH_GTX_N == 0) begin
   assign rx_pll_locked = (rx_sys_clk_sel[0] == 1'b1) ? qpll_locked : cpll_locked_s;
   assign tx_pll_locked = (tx_sys_clk_sel[0] == 1'b1) ? qpll_locked : cpll_locked_s;
+  end
+  if (GTH_GTX_N == 1) begin
+  assign rx_pll_locked = (rx_sys_clk_sel[1] == 1'b1) ? qpll_locked : cpll_locked_s;
+  assign tx_pll_locked = (tx_sys_clk_sel[1] == 1'b1) ? qpll_locked : cpll_locked_s;
+  end
+  endgenerate
 
   // user ready
 
@@ -799,9 +807,9 @@ module ad_gt_channel_1 (
     .CLK_COR_SEQ_2_ENABLE (4'b1111),
     .CLK_COR_SEQ_2_USE ("FALSE"),
     .CLK_COR_SEQ_LEN (1),
-    .CPLL_CFG0 (16'b0010001111111110),
+    .CPLL_CFG0 (16'b0110011111111010),
     .CPLL_CFG1 (16'b1010010010010100),
-    .CPLL_CFG2 (16'b1111000000000100),
+    .CPLL_CFG2 (16'b1111000000000111),
     .CPLL_CFG3 (6'b000000),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_45 (5),
@@ -872,7 +880,7 @@ module ad_gt_channel_1 (
     .PD_TRANS_TIME_TO_P2 (8'b01100100),
     .PLL_SEL_MODE_GEN12 (2'b11),
     .PLL_SEL_MODE_GEN3 (2'b11),
-    .PMA_RSV1 (16'b0000000000000000),
+    .PMA_RSV1 (16'b0001000000000000),
     .PROCESS_PAR (3'b010),
     .RATE_SW_USE_DRP (1'b0),
     .RESET_POWERSAVE_DISABLE (1'b0),
@@ -1029,7 +1037,7 @@ module ad_gt_channel_1 (
     .RX_FABINT_USRCLK_FLOP (1'b0),
     .RX_INT_DATAWIDTH (1),
     .RX_PMA_POWER_SAVE (1'b0),
-    .RX_PROGDIV_CFG (20.000000),
+    .RX_PROGDIV_CFG (20.0),
     .RX_SAMPLE_PERIOD (3'b101),
     .RX_SIG_VALID_DLY (11),
     .RX_SUM_DFETAPREP_EN (1'b0),
@@ -1128,7 +1136,7 @@ module ad_gt_channel_1 (
     .TX_PMADATA_OPT (1'b0),
     .TX_PMA_POWER_SAVE (1'b0),
     .TX_PROGCLK_SEL ("PREPI"),
-    .TX_PROGDIV_CFG (20.000000),
+    .TX_PROGDIV_CFG (20.0),
     .TX_QPI_STATUS_EN (1'b0),
     .TX_RXDETECT_CFG (14'b00000000110010),
     .TX_RXDETECT_REF (3'b100),
@@ -1141,7 +1149,7 @@ module ad_gt_channel_1 (
     .CFGRESET (1'd0),
     .CLKRSVD0 (1'd0),
     .CLKRSVD1 (1'd0),
-    .CPLLLOCKDETCLK (1'd0),
+    .CPLLLOCKDETCLK (drp_clk),
     .CPLLLOCKEN (1'd1),
     .CPLLPD (cpll_pd),
     .CPLLREFCLKSEL (3'b001),
@@ -1285,7 +1293,7 @@ module ad_gt_channel_1 (
     .RXPOLARITY (1'd0),
     .RXPRBSCNTRESET (1'd0),
     .RXPRBSSEL (4'd0),
-    .RXPROGDIVRESET (rx_rst),
+    .RXPROGDIVRESET (1'd0),
     .RXQPIEN (1'd0),
     .RXRATE (rx_rate_p_s),
     .RXRATEMODE (1'd0),
@@ -1344,7 +1352,7 @@ module ad_gt_channel_1 (
     .TXPIPPMSEL (1'd0),
     .TXPIPPMSTEPSIZE (5'd0),
     .TXPISOPD (1'd0),
-    .TXPLLCLKSEL (2'd0),
+    .TXPLLCLKSEL (2'd3),
     .TXPMARESET (1'd0),
     .TXPOLARITY (1'd0),
     .TXPOSTCURSOR (5'd0),
