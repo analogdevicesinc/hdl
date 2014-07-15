@@ -77,6 +77,7 @@ module axi_fifo2s_rd (
 
   // fifo interface
 
+  axi_mrstn,
   axi_mwr,
   axi_mwdata,
   axi_mwpfull);
@@ -128,6 +129,7 @@ module axi_fifo2s_rd (
 
   // fifo interface
 
+  output                          axi_mrstn;
   output                          axi_mwr;
   output  [DATA_WIDTH-1:0]        axi_mwdata;
   input                           axi_mwpfull;
@@ -139,13 +141,14 @@ module axi_fifo2s_rd (
   reg                             axi_rd_active = 'd0;
   reg     [  2:0]                 axi_xfer_req_m = 'd0;
   reg                             axi_xfer_init = 'd0;
+  reg                             axi_xfer_enable = 'd0;
   reg                             axi_arvalid = 'd0;
   reg     [ 31:0]                 axi_araddr = 'd0;
+  reg                             axi_mrstn = 'd0;
   reg                             axi_mwr = 'd0;
   reg     [DATA_WIDTH-1:0]        axi_mwdata = 'd0;
   reg                             axi_rready = 'd0;
   reg                             axi_rerror = 'd0;
-  reg                             axi_reset = 'd0;
 
   // internal signals
 
@@ -162,6 +165,7 @@ module axi_fifo2s_rd (
       axi_rd_active <= 'd0;
       axi_xfer_req_m <= 'd0;
       axi_xfer_init <= 'd0;
+      axi_xfer_enable <= 'd0;
     end else begin
       if (axi_xfer_init == 1'b1) begin
         axi_rd_addr_h <= AXI_ADDRESS;
@@ -174,11 +178,12 @@ module axi_fifo2s_rd (
           axi_rd_active <= 1'b0;
         end
       end else if ((axi_ready_s == 1'b1) && (axi_araddr < axi_rd_addr_h)) begin
-        axi_rd <= 1'b1;
-        axi_rd_active <= 1'b1;
+        axi_rd <= axi_xfer_enable;
+        axi_rd_active <= axi_xfer_enable;
       end
       axi_xfer_req_m <= {axi_xfer_req_m[1:0], axi_xfer_req};
       axi_xfer_init <= axi_xfer_req_m[1] & ~axi_xfer_req_m[2];
+      axi_xfer_enable <= axi_xfer_req_m[2];
     end
   end
 
@@ -220,10 +225,12 @@ module axi_fifo2s_rd (
 
   always @(posedge axi_clk or negedge axi_resetn) begin
     if (axi_resetn == 1'b0) begin
+      axi_mrstn <= 'd0;
       axi_mwr <= 'd0;
       axi_mwdata <= 'd0;
       axi_rready <= 'd0;
     end else begin
+      axi_mrstn <= axi_xfer_enable;
       axi_mwr <= axi_rvalid & axi_rready;
       axi_mwdata <= axi_rdata;
       axi_rready <= 1'b1;
@@ -235,16 +242,6 @@ module axi_fifo2s_rd (
       axi_rerror <= 'd0;
     end else begin
       axi_rerror <= axi_rvalid & axi_rready & axi_rresp[1];
-    end
-  end
-
-  // fifo needs a reset
-
-  always @(posedge axi_clk or negedge axi_resetn) begin
-    if (axi_resetn == 1'b0) begin
-      axi_reset <= 1'b1;
-    end else begin
-      axi_reset <= 1'b0;
     end
   end
 

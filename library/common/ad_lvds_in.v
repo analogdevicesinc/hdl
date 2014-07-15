@@ -83,8 +83,13 @@ module ad_lvds_in (
   output      [ 4:0]  delay_rdata;
   output              delay_locked;
 
+  // internal registers
+
+  reg                 rx_data_n;
+
   // internal signals
 
+  wire                rx_data_n_s;
   wire                rx_data_ibuf_s;
   wire                rx_data_idelay_s;
 
@@ -173,7 +178,11 @@ module ad_lvds_in (
     .C (rx_clk),
     .D (rx_data_idelay_s),
     .Q1 (rx_data_p),
-    .Q2 (rx_data_n));
+    .Q2 (rx_data_n_s));
+
+  always @(posedge rx_clk) begin
+    rx_data_n <= rx_data_n_s;
+  end
 
 endmodule
 

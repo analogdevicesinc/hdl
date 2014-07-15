@@ -279,6 +279,7 @@ module system_top (
   assign ad9361_resetb = 1'b1;
 
   // instantiations
+  /*
 
   sld_signaltap #(
     .sld_advanced_trigger_entity ("basic,1,"),
@@ -325,6 +326,8 @@ module system_top (
     .acq_clk (clk),
     .acq_data_in (dev_dbg_data),
     .acq_trigger_in (adc_valid));
+
+  */
 
   system_bd i_system_bd (
     .clk_clk (sys_clk),

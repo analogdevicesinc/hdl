@@ -49,6 +49,7 @@ module axi_fifo2s (
   m_wdata,
   m_wovf,
 
+  axi_mrstn,
   axi_mwr,
   axi_mwdata,
   axi_mwovf,
@@ -122,6 +123,7 @@ module axi_fifo2s (
   input   [DATA_WIDTH-1:0]        m_wdata;
   output                          m_wovf;
 
+  output                          axi_mrstn;
   output                          axi_mwr;
   output  [DATA_WIDTH-1:0]        axi_mwdata;
   input                           axi_mwovf;
@@ -304,6 +306,7 @@ module axi_fifo2s (
     .axi_rdata (axi_rdata),
     .axi_rready (axi_rready),
     .axi_rerror (axi_rerror_s),
+    .axi_mrstn (axi_mrstn),
     .axi_mwr (axi_mwr),
     .axi_mwdata (axi_mwdata),
     .axi_mwpfull (axi_mwpfull));

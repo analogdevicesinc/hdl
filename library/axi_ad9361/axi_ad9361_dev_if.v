@@ -158,8 +158,6 @@ module axi_ad9361_dev_if (
 
   // internal registers
 
-  reg     [ 5:0]  rx_data_n = 'd0;
-  reg             rx_frame_n = 'd0;
   reg     [11:0]  rx_data = 'd0;
   reg     [ 1:0]  rx_frame = 'd0;
   reg     [11:0]  rx_data_d = 'd0;
@@ -240,10 +238,8 @@ module axi_ad9361_dev_if (
   assign rx_frame_s = {rx_frame_d, rx_frame};
 
   always @(posedge l_clk) begin
-    rx_data_n <= rx_data_n_s;
-    rx_frame_n <= rx_frame_n_s;
-    rx_data <= {rx_data_n, rx_data_p_s};
-    rx_frame <= {rx_frame_n, rx_frame_p_s};
+    rx_data <= {rx_data_n_s, rx_data_p_s};
+    rx_frame <= {rx_frame_n_s, rx_frame_p_s};
     rx_data_d <= rx_data;
     rx_frame_d <= rx_frame;
   end
