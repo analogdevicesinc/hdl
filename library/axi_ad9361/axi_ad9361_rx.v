@@ -44,6 +44,7 @@ module axi_ad9361_rx (
 
   // adc interface
 
+  adc_rst,
   adc_clk,
   adc_valid,
   adc_data,
@@ -103,6 +104,7 @@ module axi_ad9361_rx (
 
   // adc interface
 
+  output          adc_rst;
   input           adc_clk;
   input           adc_valid;
   input   [47:0]  adc_data;
@@ -162,10 +164,6 @@ module axi_ad9361_rx (
   reg             up_status_or = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg             up_ack = 'd0;
-
-  // internal clocks and resets
-
-  wire            adc_rst;
 
   // internal signals
 

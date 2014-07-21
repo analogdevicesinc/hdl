@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014(c) Analog Devices, Inc.
-//
+// Copyright 2011(c) Analog Devices, Inc.
+// 
 // All rights reserved.
-//
+// 
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//
+//    
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -63,25 +63,21 @@ module axi_ad9361_dev_if (
 
   // clock (common to both receive and transmit)
 
+  rst,
   clk,
+  l_clk,
 
   // receive data path interface
 
   adc_valid,
-  adc_data_i1,
-  adc_data_q1,
-  adc_data_i2,
-  adc_data_q2,
+  adc_data,
   adc_status,
   adc_r1_mode,
 
   // transmit data path interface
 
   dac_valid,
-  dac_data_i1,
-  dac_data_q1,
-  dac_data_i2,
-  dac_data_q2,
+  dac_data,
   dac_r1_mode,
 
   // delay control signals
@@ -98,15 +94,15 @@ module axi_ad9361_dev_if (
 
   // chipscope signals
 
-  dev_dbg_trigger,
-  dev_dbg_data);
+  dev_dbg_data,
+  dev_l_dbg_data);
 
   // this parameter controls the buffer type based on the target device.
 
-  parameter   PCORE_BUFTYPE = 0;
+  parameter   PCORE_DEVICE_TYPE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
-  localparam  PCORE_CYCLONEV = 0;
-  localparam  PCORE_ARRIAV = 1;
+  localparam  PCORE_7SERIES = 0;
+  localparam  PCORE_VIRTEX6 = 1;
 
   // physical interface (receive)
 
@@ -128,25 +124,21 @@ module axi_ad9361_dev_if (
 
   // clock (common to both receive and transmit)
 
-  output          clk;
+  input           rst;
+  input           clk;
+  output          l_clk;
 
   // receive data path interface
 
   output          adc_valid;
-  output  [11:0]  adc_data_i1;
-  output  [11:0]  adc_data_q1;
-  output  [11:0]  adc_data_i2;
-  output  [11:0]  adc_data_q2;
+  output  [47:0]  adc_data;
   output          adc_status;
   input           adc_r1_mode;
 
   // transmit data path interface
 
   input           dac_valid;
-  input   [11:0]  dac_data_i1;
-  input   [11:0]  dac_data_q1;
-  input   [11:0]  dac_data_i2;
-  input   [11:0]  dac_data_q2;
+  input   [47:0]  dac_data;
   input           dac_r1_mode;
 
   // delay control signals
@@ -163,41 +155,44 @@ module axi_ad9361_dev_if (
 
   // chipscope signals
 
-  output  [ 3:0]  dev_dbg_trigger;
-  output [297:0]  dev_dbg_data;
+  output [111:0]  dev_dbg_data;
+  output [ 61:0]  dev_l_dbg_data;
 
   // internal registers
 
-  reg     [ 5:0]  rx_data_n = 'd0;
-  reg             rx_frame_n = 'd0;
   reg     [11:0]  rx_data = 'd0;
   reg     [ 1:0]  rx_frame = 'd0;
   reg     [11:0]  rx_data_d = 'd0;
   reg     [ 1:0]  rx_frame_d = 'd0;
   reg             rx_error_r1 = 'd0;
   reg             rx_valid_r1 = 'd0;
-  reg     [11:0]  rx_data_i_r1 = 'd0;
-  reg     [11:0]  rx_data_q_r1 = 'd0;
+  reg     [23:0]  rx_data_r1 = 'd0;
   reg             rx_error_r2 = 'd0;
   reg             rx_valid_r2 = 'd0;
-  reg     [11:0]  rx_data_i1_r2 = 'd0;
-  reg     [11:0]  rx_data_q1_r2 = 'd0;
-  reg     [11:0]  rx_data_i2_r2 = 'd0;
-  reg     [11:0]  rx_data_q2_r2 = 'd0;
+  reg     [47:0]  rx_data_r2 = 'd0;
+  reg             adc_p_valid = 'd0;
+  reg     [47:0]  adc_p_data = 'd0;
+  reg             adc_p_status = 'd0;
+  reg             adc_n_valid = 'd0;
+  reg     [47:0]  adc_n_data = 'd0;
+  reg             adc_n_status = 'd0;
+  reg             adc_valid_int = 'd0;
+  reg     [47:0]  adc_data_int = 'd0;
+  reg             adc_status_int = 'd0;
   reg             adc_valid = 'd0;
-  reg     [11:0]  adc_data_i1 = 'd0;
-  reg     [11:0]  adc_data_q1 = 'd0;
-  reg     [11:0]  adc_data_i2 = 'd0;
-  reg     [11:0]  adc_data_q2 = 'd0;
+  reg     [47:0]  adc_data = 'd0;
   reg             adc_status = 'd0;
   reg     [ 2:0]  tx_data_cnt = 'd0;
-  reg     [11:0]  tx_data_i1_d = 'd0;
-  reg     [11:0]  tx_data_q1_d = 'd0;
-  reg     [11:0]  tx_data_i2_d = 'd0;
-  reg     [11:0]  tx_data_q2_d = 'd0;
+  reg     [47:0]  tx_data = 'd0;
   reg             tx_frame = 'd0;
   reg     [ 5:0]  tx_data_p = 'd0;
   reg     [ 5:0]  tx_data_n = 'd0;
+  reg             tx_n_frame = 'd0;
+  reg     [ 5:0]  tx_n_data_p = 'd0;
+  reg     [ 5:0]  tx_n_data_n = 'd0;
+  reg             tx_p_frame = 'd0;
+  reg     [ 5:0]  tx_p_data_p = 'd0;
+  reg     [ 5:0]  tx_p_data_n = 'd0;
   reg     [ 6:0]  delay_ld = 'd0;
   reg     [ 4:0]  delay_rdata = 'd0;
   reg             delay_ack_t = 'd0;
@@ -207,130 +202,108 @@ module axi_ad9361_dev_if (
   wire    [ 3:0]  rx_frame_s;
   wire    [ 3:0]  tx_data_sel_s;
   wire    [ 4:0]  delay_rdata_s[6:0];
-  wire    [ 5:0]  rx_data_ibuf_s;
-  wire    [ 5:0]  rx_data_idelay_s;
   wire    [ 5:0]  rx_data_p_s;
   wire    [ 5:0]  rx_data_n_s;
-  wire            rx_frame_ibuf_s;
-  wire            rx_frame_idelay_s;
   wire            rx_frame_p_s;
   wire            rx_frame_n_s;
-  wire    [ 5:0]  tx_data_oddr_s;
-  wire            tx_frame_oddr_s;
-  wire            tx_clk_oddr_s;
-  wire            clk_ibuf_s;
 
   genvar          l_inst;
 
   // device debug signals
 
-  assign dev_dbg_trigger[0] = rx_frame[0];
-  assign dev_dbg_trigger[1] = rx_frame[1];
-  assign dev_dbg_trigger[2] = tx_frame;
-  assign dev_dbg_trigger[3] = adc_status;
-
   assign dev_dbg_data[  5:  0] = tx_data_n;
   assign dev_dbg_data[ 11:  6] = tx_data_p;
-  assign dev_dbg_data[ 23: 12] = tx_data_i1_d;
-  assign dev_dbg_data[ 35: 24] = tx_data_q1_d;
-  assign dev_dbg_data[ 47: 36] = tx_data_i2_d;
-  assign dev_dbg_data[ 59: 48] = tx_data_q2_d;
-  assign dev_dbg_data[ 63: 60] = tx_data_sel_s;
-  assign dev_dbg_data[ 66: 64] = tx_data_cnt;
-  assign dev_dbg_data[ 67: 67] = tx_frame;
-  assign dev_dbg_data[ 68: 68] = dac_r1_mode;
-  assign dev_dbg_data[ 69: 69] = dac_valid;
-  assign dev_dbg_data[ 81: 70] = dac_data_i1;
-  assign dev_dbg_data[ 93: 82] = dac_data_q1;
-  assign dev_dbg_data[105: 94] = dac_data_i2;
-  assign dev_dbg_data[117:106] = dac_data_q2;
-  assign dev_dbg_data[118:118] = rx_frame_p_s;
-  assign dev_dbg_data[119:119] = rx_frame_n_s;
-  assign dev_dbg_data[120:120] = rx_frame_n;
-  assign dev_dbg_data[122:121] = rx_frame;
-  assign dev_dbg_data[124:123] = rx_frame_d;
-  assign dev_dbg_data[128:125] = rx_frame_s;
-  assign dev_dbg_data[134:129] = rx_data_p_s;
-  assign dev_dbg_data[140:135] = rx_data_n_s;
-  assign dev_dbg_data[146:141] = rx_data_n;
-  assign dev_dbg_data[158:147] = rx_data;
-  assign dev_dbg_data[170:159] = rx_data_d;
-  assign dev_dbg_data[171:171] = rx_error_r1;
-  assign dev_dbg_data[172:172] = rx_valid_r1;
-  assign dev_dbg_data[184:173] = rx_data_i_r1;
-  assign dev_dbg_data[196:185] = rx_data_q_r1;
-  assign dev_dbg_data[197:197] = rx_error_r2;
-  assign dev_dbg_data[198:198] = rx_valid_r2;
-  assign dev_dbg_data[210:199] = rx_data_i1_r2;
-  assign dev_dbg_data[222:211] = rx_data_q1_r2;
-  assign dev_dbg_data[234:223] = rx_data_i2_r2;
-  assign dev_dbg_data[246:235] = rx_data_q2_r2;
-  assign dev_dbg_data[247:247] = adc_r1_mode;
-  assign dev_dbg_data[248:248] = adc_status;
-  assign dev_dbg_data[249:249] = adc_valid;
-  assign dev_dbg_data[261:250] = adc_data_i1;
-  assign dev_dbg_data[273:262] = adc_data_q1;
-  assign dev_dbg_data[285:274] = adc_data_i2;
-  assign dev_dbg_data[297:286] = adc_data_q2;
+  assign dev_dbg_data[ 23: 12] = dac_data[11: 0];
+  assign dev_dbg_data[ 35: 24] = dac_data[23:12];
+  assign dev_dbg_data[ 47: 36] = dac_data[35:24];
+  assign dev_dbg_data[ 59: 48] = dac_data[47:36];
+  assign dev_dbg_data[ 71: 60] = adc_data[11: 0];
+  assign dev_dbg_data[ 83: 72] = adc_data[23:12];
+  assign dev_dbg_data[ 95: 84] = adc_data[35:24];
+  assign dev_dbg_data[107: 96] = adc_data[47:36];
+  assign dev_dbg_data[108:108] = tx_frame;
+  assign dev_dbg_data[109:109] = dac_valid;
+  assign dev_dbg_data[110:110] = adc_status;
+  assign dev_dbg_data[111:111] = adc_valid;
+
+  assign dev_l_dbg_data[  5:  0] = tx_p_data_n;
+  assign dev_l_dbg_data[ 11:  6] = tx_p_data_p;
+  assign dev_l_dbg_data[ 23: 12] = adc_p_data[11: 0];
+  assign dev_l_dbg_data[ 35: 24] = adc_p_data[23:12];
+  assign dev_l_dbg_data[ 47: 36] = adc_p_data[35:24];
+  assign dev_l_dbg_data[ 59: 48] = adc_p_data[47:36];
+  assign dev_l_dbg_data[ 60: 60] = tx_p_frame;
+  assign dev_l_dbg_data[ 61: 61] = adc_p_valid;
 
   // receive data path interface
 
   assign rx_frame_s = {rx_frame_d, rx_frame};
 
-  always @(posedge clk) begin
-    rx_data_n <= rx_data_n_s;
-    rx_frame_n <= rx_frame_n_s;
-    rx_data <= {rx_data_n, rx_data_p_s};
-    rx_frame <= {rx_frame_n, rx_frame_p_s};
+  always @(posedge l_clk) begin
+    rx_data <= {rx_data_n_s, rx_data_p_s};
+    rx_frame <= {rx_frame_n_s, rx_frame_p_s};
     rx_data_d <= rx_data;
     rx_frame_d <= rx_frame;
   end
 
   // receive data path for single rf, frame is expected to qualify i/q msb only
 
-  always @(posedge clk) begin
+  always @(posedge l_clk) begin
     rx_error_r1 <= ((rx_frame_s == 4'b1100) || (rx_frame_s == 4'b0011)) ? 1'b0 : 1'b1;
     rx_valid_r1 <= (rx_frame_s == 4'b1100) ? 1'b1 : 1'b0;
     if (rx_frame_s == 4'b1100) begin
-      rx_data_i_r1 <= {rx_data_d[11:6], rx_data[11:6]};
-      rx_data_q_r1 <= {rx_data_d[ 5:0], rx_data[ 5:0]};
+      rx_data_r1[11: 0] <= {rx_data_d[11:6], rx_data[11:6]};
+      rx_data_r1[23:12] <= {rx_data_d[ 5:0], rx_data[ 5:0]};
     end
   end
 
   // receive data path for dual rf, frame is expected to qualify i/q msb and lsb for rf-1 only
 
-  always @(posedge clk) begin
+  always @(posedge l_clk) begin
     rx_error_r2 <= ((rx_frame_s == 4'b1111) || (rx_frame_s == 4'b1100) ||
       (rx_frame_s == 4'b0000) || (rx_frame_s == 4'b0011)) ? 1'b0 : 1'b1;
     rx_valid_r2 <= (rx_frame_s == 4'b0000) ? 1'b1 : 1'b0;
     if (rx_frame_s == 4'b1111) begin
-      rx_data_i1_r2 <= {rx_data_d[11:6], rx_data[11:6]};
-      rx_data_q1_r2 <= {rx_data_d[ 5:0], rx_data[ 5:0]};
+      rx_data_r2[11: 0] <= {rx_data_d[11:6], rx_data[11:6]};
+      rx_data_r2[23:12] <= {rx_data_d[ 5:0], rx_data[ 5:0]};
     end
     if (rx_frame_s == 4'b0000) begin
-      rx_data_i2_r2 <= {rx_data_d[11:6], rx_data[11:6]};
-      rx_data_q2_r2 <= {rx_data_d[ 5:0], rx_data[ 5:0]};
+      rx_data_r2[35:24] <= {rx_data_d[11:6], rx_data[11:6]};
+      rx_data_r2[47:36] <= {rx_data_d[ 5:0], rx_data[ 5:0]};
     end
   end
 
   // receive data path mux
 
-  always @(posedge clk) begin
+  always @(posedge l_clk) begin
     if (adc_r1_mode == 1'b1) begin
-      adc_valid <= rx_valid_r1;
-      adc_data_i1 <= rx_data_i_r1;
-      adc_data_q1 <= rx_data_q_r1;
-      adc_data_i2 <= 12'd0;
-      adc_data_q2 <= 12'd0;
-      adc_status <= ~rx_error_r1;
+      adc_p_valid <= rx_valid_r1;
+      adc_p_data <= {24'd0, rx_data_r1};
+      adc_p_status <= ~rx_error_r1;
     end else begin
-      adc_valid <= rx_valid_r2;
-      adc_data_i1 <= rx_data_i1_r2;
-      adc_data_q1 <= rx_data_q1_r2;
-      adc_data_i2 <= rx_data_i2_r2;
-      adc_data_q2 <= rx_data_q2_r2;
-      adc_status <= ~rx_error_r2;
+      adc_p_valid <= rx_valid_r2;
+      adc_p_data <= rx_data_r2;
+      adc_p_status <= ~rx_error_r2;
     end
+  end
+
+  // transfer to a synchronous common clock
+
+  always @(negedge l_clk) begin
+    adc_n_valid <= adc_p_valid;
+    adc_n_data <= adc_p_data;
+    adc_n_status <= adc_p_status;
+  end
+
+  always @(posedge clk) begin
+    adc_valid_int <= adc_n_valid;
+    adc_data_int <= adc_n_data;
+    adc_status_int <= adc_n_status;
+    adc_valid <= adc_valid_int;
+    if (adc_valid_int == 1'b1) begin
+      adc_data <= adc_data_int;
+    end
+    adc_status <= adc_status_int;
   end
 
   // transmit data path mux (reverse of what receive does above)
@@ -345,51 +318,48 @@ module axi_ad9361_dev_if (
       tx_data_cnt <= tx_data_cnt + 1'b1;
     end
     if (dac_valid == 1'b1) begin
-      tx_data_i1_d <= dac_data_i1;
-      tx_data_q1_d <= dac_data_q1;
-      tx_data_i2_d <= dac_data_i2;
-      tx_data_q2_d <= dac_data_q2;
+      tx_data <= dac_data;
     end
     case (tx_data_sel_s)
       4'b1111: begin
         tx_frame <= 1'b0;
-        tx_data_p <= tx_data_i1_d[ 5:0];
-        tx_data_n <= tx_data_q1_d[ 5:0];
+        tx_data_p <= tx_data[ 5: 0];
+        tx_data_n <= tx_data[17:12];
       end
       4'b1110: begin
         tx_frame <= 1'b1;
-        tx_data_p <= tx_data_i1_d[11:6];
-        tx_data_n <= tx_data_q1_d[11:6];
+        tx_data_p <= tx_data[11: 6];
+        tx_data_n <= tx_data[23:18];
       end
       4'b1101: begin
         tx_frame <= 1'b0;
-        tx_data_p <= tx_data_i1_d[ 5:0];
-        tx_data_n <= tx_data_q1_d[ 5:0];
+        tx_data_p <= tx_data[ 5: 0];
+        tx_data_n <= tx_data[17:12];
       end
       4'b1100: begin
         tx_frame <= 1'b1;
-        tx_data_p <= tx_data_i1_d[11:6];
-        tx_data_n <= tx_data_q1_d[11:6];
+        tx_data_p <= tx_data[11: 6];
+        tx_data_n <= tx_data[23:18];
       end
       4'b1011: begin
         tx_frame <= 1'b0;
-        tx_data_p <= tx_data_i2_d[ 5:0];
-        tx_data_n <= tx_data_q2_d[ 5:0];
+        tx_data_p <= tx_data[29:24];
+        tx_data_n <= tx_data[41:36];
       end
       4'b1010: begin
         tx_frame <= 1'b0;
-        tx_data_p <= tx_data_i2_d[11:6];
-        tx_data_n <= tx_data_q2_d[11:6];
+        tx_data_p <= tx_data[35:30];
+        tx_data_n <= tx_data[47:42];
       end
       4'b1001: begin
         tx_frame <= 1'b1;
-        tx_data_p <= tx_data_i1_d[ 5:0];
-        tx_data_n <= tx_data_q1_d[ 5:0];
+        tx_data_p <= tx_data[ 5: 0];
+        tx_data_n <= tx_data[17:12];
       end
       4'b1000: begin
         tx_frame <= 1'b1;
-        tx_data_p <= tx_data_i1_d[11:6];
-        tx_data_n <= tx_data_q1_d[11:6];
+        tx_data_p <= tx_data[11: 6];
+        tx_data_n <= tx_data[23:18];
       end
       default: begin
         tx_frame <= 1'b0;
@@ -397,6 +367,20 @@ module axi_ad9361_dev_if (
         tx_data_n <= 6'd0;
       end
     endcase
+  end
+
+  // transfer data from a synchronous clock (skew less than 2ns)
+
+  always @(negedge clk) begin
+    tx_n_frame <= tx_frame;
+    tx_n_data_p <= tx_data_p;
+    tx_n_data_n <= tx_data_n;
+  end
+
+  always @(posedge l_clk) begin
+    tx_p_frame <= tx_n_frame;
+    tx_p_data_p <= tx_n_data_p;
+    tx_p_data_n <= tx_n_data_n;
   end
 
   // delay write interface, each delay element can be individually
@@ -438,265 +422,93 @@ module axi_ad9361_dev_if (
     end
   end
 
-  // delay controller
-  generate
-  if (PCORE_BUFTYPE == PCORE_CYCLONEV) begin
-    cyclonev_io_config   ioconfiga_0
-    ( 
-      .clk(io_config_clk),
-      .datain(io_config_datain),
-      .dataout(),
-      .dutycycledelaysettings(),
-      .ena(io_config_clkena),
-      .outputenabledelaysetting(),
-      .outputfinedelaysetting1(),
-      .outputfinedelaysetting2(),
-      .outputhalfratebypass(),
-      .outputonlydelaysetting2(),
-      .outputonlyfinedelaysetting2(),
-      .outputregdelaysetting(),
-      .padtoinputregisterdelaysetting(wire_ioconfiga_padtoinputregisterdelaysetting[4:0]),
-      .padtoinputregisterfinedelaysetting(),
-      .readfifomode(),
-      .readfiforeadclockselect(),
-      .update(io_config_update));
-  end
-  endgenerate
-
   // receive data interface, ibuf -> idelay -> iddr
 
   generate
-  if (PCORE_BUFTYPE == PCORE_CYCLONEV) begin
-    for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_rx_data
-      cyclonev_io_ibuf   i_rx_data_ibuf (
-        .i(rx_data_in_p[l_inst]),
-        .ibar(rx_data_in_n[l_inst]),
-        .o(rx_data_ibuf_s[l_inst]),
-        .dynamicterminationcontrol(1'b0)
-      );
-      defparam
-      i_rx_data_ibuf.bus_hold = "false",
-        i_rx_data_ibuf.differential_mode = "true",
-        i_rx_data_ibuf.lpm_type = "cyclonev_io_ibuf";
-
-      cyclonev_delay_chain   i_rx_data_idelay
-      ( 
-        .datain((rx_data_ibuf_s[l_inst]),
-        .dataout(rx_data_idelay_s[l_inst]),
-        .delayctrlin({wire_ioconfiga_padtoinputregisterdelaysetting[4:0]}));
-
-      altddio_in  i_rx_data_iddr (
-        .datain (rx_data_idelay_s[l_inst]),
-        .inclock (clk),
-        .dataout_h (rx_data_p_s[l_inst]),
-        .dataout_l (rx_data_n_s[l_inst]),
-        .aclr (1'b0),
-        .aset (1'b0),
-        .inclocken (1'b1),
-        .sclr (1'b0),
-        .sset (1'b0));
-      defparam
-      i_rx_data_iddr.intended_device_family = "Cyclone V",
-        i_rx_data_iddr.invert_input_clocks = "OFF",
-        i_rx_data_iddr.lpm_hint = "UNUSED",
-        i_rx_data_iddr.lpm_type = "altddio_in",
-        i_rx_data_iddr.power_up_high = "OFF",
-        i_rx_data_iddr.width = 1;
-    end
+  for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_rx_data
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_rx_data (
+    .rx_clk (l_clk),
+    .rx_data_in_p (rx_data_in_p[l_inst]),
+    .rx_data_in_n (rx_data_in_n[l_inst]),
+    .rx_data_p (rx_data_p_s[l_inst]),
+    .rx_data_n (rx_data_n_s[l_inst]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_ld (delay_ld[l_inst]),
+    .delay_wdata (delay_wdata),
+    .delay_rdata (delay_rdata_s[l_inst]),
+    .delay_locked ());
   end
   endgenerate
 
   // receive frame interface, ibuf -> idelay -> iddr
-  generate
-  if (PCORE_BUFTYPE == PCORE_CYCLONEV) begin
-    cyclonev_io_ibuf
-    #( 
-      i_rx_frame_ibuf(
 
-      .i(rx_frame_in_p),
-      .ibar(rx_frame_in_n),
-      .o(rx_frame_ibuf_s[0:0]),
-      .dynamicterminationcontrol(1'b0)
-    );
-    defparam
-    i_rx_frame_ibuf.bus_hold = "false",
-      i_rx_frame_ibuf.differential_mode = "true",
-      i_rx_frame_ibuf.lpm_type = "cyclonev_io_ibuf";
-
-    cyclonev_delay_chain   i_rx_frame_idelay
-    ( 
-      .datain(rx_frame_ibuf_s),
-      .dataout(rx_frame_idelay_s),
-      .delayctrlin({wire_ioconfiga_padtoinputregisterdelaysetting[4:0]}));
-    altddio_in  i_rx_frame_iddr (
-      .datain (rx_frame_idelay_s),
-      .inclock (clk),
-      .dataout_h (rx_frame_p_s),
-      .dataout_l (rx_frame_n_s),
-      .aclr (1'b0),
-      .aset (1'b0),
-      .inclocken (1'b1),
-      .sclr (1'b0),
-      .sset (1'b0));
-    defparam
-    i_rx_frame_iddr.intended_device_family = "Cyclone V",
-      i_rx_frame_iddr.invert_input_clocks = "OFF",
-      i_rx_frame_iddr.lpm_hint = "UNUSED",
-      i_rx_frame_iddr.lpm_type = "altddio_in",
-      i_rx_frame_iddr.power_up_high = "OFF",
-      i_rx_frame_iddr.width = 1;
-  end
-  endgenerate
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .IODELAY_CTRL (1),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_rx_frame (
+    .rx_clk (l_clk),
+    .rx_data_in_p (rx_frame_in_p),
+    .rx_data_in_n (rx_frame_in_n),
+    .rx_data_p (rx_frame_p_s),
+    .rx_data_n (rx_frame_n_s),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_ld (delay_ld[6]),
+    .delay_wdata (delay_wdata),
+    .delay_rdata (delay_rdata_s[6]),
+    .delay_locked (delay_locked));
 
   // transmit data interface, oddr -> obuf
 
   generate
-  if (PCORE_BUFTYPE == PCORE_CYCLONEV) begin
-    for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_tx_data
-      ltddio_out i_tx_data_oddr (
-        .datain_h (tx_data_p[l_inst]),
-        .datain_l (tx_data_n[l_inst]),
-        .outclock (clk),
-        .dataout (tx_data_oddr_s[l_inst]),
-        .aclr (1'b0),
-        .aset (1'b0),
-        .oe (1'b1),
-        .oe_out (),
-        .outclocken (1'b1),
-        .sclr (1'b0),
-        .sset (1'b0));
-      defparam
-      i_tx_frame_oddr.extend_oe_disable = "OFF",
-        i_tx_frame_oddr.intended_device_family = "Cyclone V",
-        i_tx_frame_oddr.invert_output = "OFF",
-        i_tx_frame_oddr.lpm_hint = "UNUSED",
-        i_tx_frame_oddr.lpm_type = "altddio_out",
-        i_tx_frame_oddr.oe_reg = "UNREGISTERED",
-        i_tx_frame_oddr.power_up_high = "OFF",
-        i_tx_frame_oddr.width = 1;
-
-      cyclonev_io_obuf   i_tx_data_obuf
-      (
-        .i(tx_data_oddr_s[l_inst]),
-        .o(tx_data_out_p[l_inst]),
-        .obar(tx_data_out_n[l_inst]),
-        .oe(1'b1) ,
-        .dynamicterminationcontrol(1'b0),
-        .parallelterminationcontrol({16{1'b0}}),
-        .seriesterminationcontrol({16{1'b0}}) ,
-        .devoe(1'b1)
-      );
-      defparam
-      i_tx_frame_obuf.bus_hold = "false",
-        i_tx_frame_obuf.open_drain_output = "false",
-        i_tx_frame_obuf.lpm_type = "cyclonev_io_obuf";
-    end
+  for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_tx_data
+  ad_lvds_out #(
+    .BUFTYPE (PCORE_DEVICE_TYPE))
+  i_tx_data (
+    .tx_clk (l_clk),
+    .tx_data_p (tx_p_data_p[l_inst]),
+    .tx_data_n (tx_p_data_n[l_inst]),
+    .tx_data_out_p (tx_data_out_p[l_inst]),
+    .tx_data_out_n (tx_data_out_n[l_inst]));
   end
   endgenerate
 
   // transmit frame interface, oddr -> obuf
-  generate
-  if (PCORE_BUFTYPE == PCORE_CYCLONEV) begin
-    cyclonev_io_obuf   i_tx_frame_obuf
-    (
-      .i(tx_frame_oddr_s),
-      .o(tx_frame_out_p),
-      .obar(tx_frame_out_n),
-      .oe(1'b1) ,
-      .dynamicterminationcontrol(1'b0),
-      .parallelterminationcontrol({16{1'b0}}),
-      .seriesterminationcontrol({16{1'b0}}) ,
-      .devoe(1'b1)
-    );
-    defparam
-      i_tx_frame_obuf.bus_hold = "false",
-      i_tx_frame_obuf.open_drain_output = "false",
-      i_tx_frame_obuf.lpm_type = "cyclonev_io_obuf";
 
-    altddio_out i_tx_frame_oddr (
-      .datain_h (tx_frame),
-      .datain_l (tx_frame),
-      .outclock (clk),
-      .dataout (tx_frame_oddr_s),
-      .aclr (1'b0),
-      .aset (1'b0),
-      .oe (1'b1),
-      .oe_out (),
-      .outclocken (1'b1),
-      .sclr (1'b0),
-      .sset (1'b0));
-    defparam
-      i_tx_frame_oddr.extend_oe_disable = "OFF",
-      i_tx_frame_oddr.intended_device_family = "Cyclone V",
-      i_tx_frame_oddr.invert_output = "OFF",
-      i_tx_frame_oddr.lpm_hint = "UNUSED",
-      i_tx_frame_oddr.lpm_type = "altddio_out",
-      i_tx_frame_oddr.oe_reg = "UNREGISTERED",
-      i_tx_frame_oddr.power_up_high = "OFF",
-      i_tx_frame_oddr.width = 1;
+  ad_lvds_out #(
+    .BUFTYPE (PCORE_DEVICE_TYPE))
+  i_tx_frame (
+    .tx_clk (l_clk),
+    .tx_data_p (tx_p_frame),
+    .tx_data_n (tx_p_frame),
+    .tx_data_out_p (tx_frame_out_p),
+    .tx_data_out_n (tx_frame_out_n));
 
-      // transmit clock interface, oddr -> obuf
+  // transmit clock interface, oddr -> obuf
 
-    altddio_out i_tx_clk_oddr (
-      .datain_h (1'b1),
-      .datain_l (1'b1),
-      .outclock (clk),
-      .dataout (tx_clk_oddr_s),
-      .aclr (1'b0),
-      .aset (1'b0),
-      .oe (1'b1),
-      .oe_out (),
-      .outclocken (1'b1),
-      .sclr (1'b0),
-      .sset (1'b0));
-    defparam
-      i_tx_frame_oddr.extend_oe_disable = "OFF",
-      i_tx_clk_oddr.intended_device_family = "Cyclone V",
-      i_tx_clk_oddr.invert_output = "OFF",
-      i_tx_clk_oddr.lpm_hint = "UNUSED",
-      i_tx_clk_oddr.lpm_type = "altddio_out",
-      i_tx_clk_oddr.oe_reg = "UNREGISTERED",
-      i_tx_clk_oddr.power_up_high = "OFF",
-      i_tx_clk_oddr.width = 1;
-
-    cyclonev_io_obuf i_tx_clk_obuf(
-      .i(tx_clk_oddr_s),
-      .o(tx_clk_out_p),
-      .obar(tx_clk_out_n),
-      .oe(1'b1) ,
-      .dynamicterminationcontrol(1'b0),
-      .parallelterminationcontrol({16{1'b0}}),
-      .seriesterminationcontrol({16{1'b0}}) ,
-      .devoe(1'b1)
-    );
-    defparam
-      i_tx_clk_obuf.bus_hold = "false",
-      i_tx_clk_obuf.open_drain_output = "false",
-      i_tx_clk_obuf.lpm_type = "cyclonev_io_obuf";
-  end
-  endgenerate
+  ad_lvds_out #(
+    .BUFTYPE (PCORE_DEVICE_TYPE))
+  i_tx_clk (
+    .tx_clk (l_clk),
+    .tx_data_p (1'b0),
+    .tx_data_n (1'b1),
+    .tx_data_out_p (tx_clk_out_p),
+    .tx_data_out_n (tx_clk_out_n));
 
   // device clock interface (receive clock)
 
-  generate
-  if (PCORE_BUFTYPE == PCORE_CYCLONEV) begin
-    cyclonev_io_ibuf   i_rx_clk_ibuf (
-      .i(rx_clk_in_p),
-      .ibar(rx_clk_in_n),
-      .o(clk_ibuf_s),
-      .dynamicterminationcontrol(1'b0)
-    );
-
-    cyclonev_clkena   i_clk_gbuf(
-      .ena(1'b1),
-      .enaout(),
-      .inclk(clk_ibuf_s),
-      .outclk(clk));
-    defparam
-      sd1.clock_type = "Auto",
-      sd1.ena_register_mode = "always enabled",
-      sd1.lpm_type = "cyclonev_clkena";
-    endgenerate
+  ad_lvds_clk #(
+    .BUFTYPE (PCORE_DEVICE_TYPE))
+  i_clk (
+    .clk_in_p (rx_clk_in_p),
+    .clk_in_n (rx_clk_in_n),
+    .clk (l_clk));
 
 endmodule
 

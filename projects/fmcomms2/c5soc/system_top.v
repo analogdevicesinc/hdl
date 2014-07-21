@@ -279,11 +279,10 @@ module system_top (
   assign ad9361_resetb = 1'b1;
 
   // instantiations
-  /*
 
   sld_signaltap #(
     .sld_advanced_trigger_entity ("basic,1,"),
-    .sld_data_bits (62),
+    .sld_data_bits (64),
     .sld_data_bit_cntr_bits (7),
     .sld_enable_advanced_trigger (0),
     .sld_mem_address_bits (10),
@@ -299,35 +298,10 @@ module system_top (
     .sld_trigger_in_enabled (0),
     .sld_trigger_level (1),
     .sld_trigger_level_pipeline (1))
-  i_ila_1 (
+  i_ila_adc (
     .acq_clk (clk),
-    .acq_data_in (dev_l_dbg_data),
+    .acq_data_in (adc_ddata),
     .acq_trigger_in (adc_valid));
-
-  sld_signaltap #(
-    .sld_advanced_trigger_entity ("basic,1,"),
-    .sld_data_bits (112),
-    .sld_data_bit_cntr_bits (8),
-    .sld_enable_advanced_trigger (0),
-    .sld_mem_address_bits (10),
-    .sld_node_crc_bits (32),
-    .sld_node_crc_hiword (13176),
-    .sld_node_crc_loword (31925),
-    .sld_node_info (1076736),
-    .sld_ram_block_type ("AUTO"),
-    .sld_sample_depth (1024),
-    .sld_storage_qualifier_gap_record (0),
-    .sld_storage_qualifier_mode ("OFF"),
-    .sld_trigger_bits (1),
-    .sld_trigger_in_enabled (0),
-    .sld_trigger_level (1),
-    .sld_trigger_level_pipeline (1))
-  i_ila_0 (
-    .acq_clk (clk),
-    .acq_data_in (dev_dbg_data),
-    .acq_trigger_in (adc_valid));
-
-  */
 
   system_bd i_system_bd (
     .clk_clk (sys_clk),

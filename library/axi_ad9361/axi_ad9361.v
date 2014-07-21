@@ -255,6 +255,7 @@ module axi_ad9361 (
 
   // internal clocks and resets
 
+  wire            rst;
   wire            up_clk;
   wire            up_rstn;
   wire            delay_rst;
@@ -319,6 +320,7 @@ module axi_ad9361 (
     .tx_frame_out_n (tx_frame_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_data_out_n (tx_data_out_n),
+    .rst (rst),
     .l_clk (l_clk),
     .clk (clk),
     .adc_valid (adc_valid_s),
@@ -346,6 +348,7 @@ module axi_ad9361 (
     .PCORE_ID (PCORE_ID),
     .DP_DISABLE (PCORE_ADC_DP_DISABLE))
   i_rx (
+    .adc_rst (rst),
     .adc_clk (clk),
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),

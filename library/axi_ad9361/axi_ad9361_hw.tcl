@@ -36,7 +36,7 @@ add_fileset_file up_adc_common.v          VERILOG PATH $ad_hdl_dir/library/commo
 add_fileset_file up_adc_channel.v         VERILOG PATH $ad_hdl_dir/library/common/up_adc_channel.v
 add_fileset_file up_dac_common.v          VERILOG PATH $ad_hdl_dir/library/common/up_dac_common.v
 add_fileset_file up_dac_channel.v         VERILOG PATH $ad_hdl_dir/library/common/up_dac_channel.v
-add_fileset_file axi_ad9361_dev_if.v      VERILOG PATH axi_ad9361_dev_if.v
+add_fileset_file axi_ad9361_dev_if_alt.v  VERILOG PATH axi_ad9361_dev_if_alt.v
 add_fileset_file axi_ad9361_rx_pnmon.v    VERILOG PATH axi_ad9361_rx_pnmon.v
 add_fileset_file axi_ad9361_rx_channel.v  VERILOG PATH axi_ad9361_rx_channel.v
 add_fileset_file axi_ad9361_rx.v          VERILOG PATH axi_ad9361_rx.v

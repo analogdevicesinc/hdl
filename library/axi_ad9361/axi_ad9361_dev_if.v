@@ -63,6 +63,7 @@ module axi_ad9361_dev_if (
 
   // clock (common to both receive and transmit)
 
+  rst,
   clk,
   l_clk,
 
@@ -123,6 +124,7 @@ module axi_ad9361_dev_if (
 
   // clock (common to both receive and transmit)
 
+  input           rst;
   input           clk;
   output          l_clk;
 
