@@ -116,7 +116,7 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   connect_bd_net -net wfifo_ctl_fifo_rd       [get_bd_pins wfifo_ctl/fifo_rd]         [get_bd_pins wfifo_mem/rd_en]
   connect_bd_net -net wfifo_ctl_fifo_rdata    [get_bd_pins wfifo_ctl/fifo_rdata]      [get_bd_pins wfifo_mem/dout]
   connect_bd_net -net wfifo_ctl_fifo_rempty   [get_bd_pins wfifo_ctl/fifo_rempty]     [get_bd_pins wfifo_mem/empty]
-  connect_bd_net -net rfifo_ctl_fifo_rst      [get_bd_pins rfifo_ctl/fifo_rst]        [get_bd_pins rfifo_mem/rst]       
+  connect_bd_net -net rfifo_ctl_fifo_rst      [get_bd_pins rfifo_ctl/fifo_rst]        [get_bd_pins rfifo_mem/rst]
   connect_bd_net -net rfifo_ctl_fifo_wr       [get_bd_pins rfifo_ctl/fifo_wr]         [get_bd_pins rfifo_mem/wr_en]
   connect_bd_net -net rfifo_ctl_fifo_wdata    [get_bd_pins rfifo_ctl/fifo_wdata]      [get_bd_pins rfifo_mem/din]
   connect_bd_net -net rfifo_ctl_fifo_wfull    [get_bd_pins rfifo_ctl/fifo_wfull]      [get_bd_pins rfifo_mem/full]
@@ -124,12 +124,12 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   connect_bd_net -net axi_fifo2s_swr          [get_bd_pins axi_fifo2s/m_wr]           [get_bd_pins wfifo_ctl/s_wr]
   connect_bd_net -net axi_fifo2s_swdata       [get_bd_pins axi_fifo2s/m_wdata]        [get_bd_pins wfifo_ctl/s_wdata]
   connect_bd_net -net axi_fifo2s_swovf        [get_bd_pins axi_fifo2s/m_wovf]         [get_bd_pins wfifo_ctl/s_wovf]
-  connect_bd_net -net axi_fifo2s_axi_mrst     [get_bd_pins axi_fifo2s/axi_mrst]       [get_bd_pins rfifo_ctl/rstn]
+  connect_bd_net -net axi_fifo2s_axi_mrst     [get_bd_pins axi_fifo2s/axi_mrstn]      [get_bd_pins rfifo_ctl/rstn]
   connect_bd_net -net axi_fifo2s_axi_mwr      [get_bd_pins axi_fifo2s/axi_mwr]        [get_bd_pins rfifo_ctl/m_wr]
   connect_bd_net -net axi_fifo2s_axi_mwdata   [get_bd_pins axi_fifo2s/axi_mwdata]     [get_bd_pins rfifo_ctl/m_wdata]
   connect_bd_net -net axi_fifo2s_axi_mwovf    [get_bd_pins axi_fifo2s/axi_mwovf]      [get_bd_pins rfifo_ctl/m_wovf]
   connect_bd_net -net axi_fifo2s_axi_mwpfull  [get_bd_pins axi_fifo2s/axi_mwpfull]    [get_bd_pins rfifo_mem/prog_full]
- 
+
   current_bd_instance $c_instance
 }
 
