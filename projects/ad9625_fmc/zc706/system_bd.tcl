@@ -30,9 +30,9 @@ connect_bd_net -net axi_ad9625_adc_data     [get_bd_pins axi_ad9625_core/adc_dat
 connect_bd_net -net axi_ad9625_adc_dovf     [get_bd_pins axi_ad9625_core/adc_dovf]    [get_bd_pins plddr3_fifo/adc_wovf]
 
 connect_bd_net -net axi_ad9625_dma_clk      [get_bd_pins plddr3_fifo/dma_clk]         [get_bd_pins axi_ad9625_dma/fifo_wr_clk]
-connect_bd_net -net axi_ad9625_dma_dwr      [get_bd_pins plddr3_fifo/dma_wr]          [get_bd_pins axi_ad9625_dma/fifo_wr_en]       
-connect_bd_net -net axi_ad9625_dma_ddata    [get_bd_pins plddr3_fifo/dma_wdata]       [get_bd_pins axi_ad9625_dma/fifo_wr_din]      
-connect_bd_net -net axi_ad9625_dma_dovf     [get_bd_pins plddr3_fifo/dma_wovf]        [get_bd_pins axi_ad9625_dma/fifo_wr_overflow] 
+connect_bd_net -net axi_ad9625_dma_dwr      [get_bd_pins plddr3_fifo/dma_wr]          [get_bd_pins axi_ad9625_dma/fifo_wr_en]
+connect_bd_net -net axi_ad9625_dma_ddata    [get_bd_pins plddr3_fifo/dma_wdata]       [get_bd_pins axi_ad9625_dma/fifo_wr_din]
+connect_bd_net -net axi_ad9625_dma_dovf     [get_bd_pins plddr3_fifo/dma_wovf]        [get_bd_pins axi_ad9625_dma/fifo_wr_overflow]
 connect_bd_net -net axi_ad9625_adc_valid    [get_bd_pins axi_ad9625_core/adc_valid]   [get_bd_pins axi_ad9625_dma/fifo_wr_sync]
 
 connect_bd_net -net axi_ad9625_adc_data     [get_bd_pins ila_jesd_rx_mon/PROBE3]
@@ -44,12 +44,11 @@ set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_dma_mon
 set_property -dict [list CONFIG.C_PROBE2_WIDTH {64}] $ila_dma_mon
 set_property -dict [list CONFIG.C_PROBE3_WIDTH {5}] $ila_dma_mon
 
-connect_bd_net -net axi_ad9625_dma_clk      [get_bd_pins ila_dma_mon/clk] 
-connect_bd_net -net axi_ad9625_dma_dwr      [get_bd_pins ila_dma_mon/probe0] 
-connect_bd_net -net axi_ad9625_dma_xfer_req [get_bd_pins ila_dma_mon/probe1] 
-connect_bd_net -net axi_ad9625_dma_ddata    [get_bd_pins ila_dma_mon/probe2] 
+connect_bd_net -net axi_ad9625_dma_clk      [get_bd_pins ila_dma_mon/clk]
+connect_bd_net -net axi_ad9625_dma_dwr      [get_bd_pins ila_dma_mon/probe0]
+connect_bd_net -net axi_ad9625_dma_xfer_req [get_bd_pins ila_dma_mon/probe1]
+connect_bd_net -net axi_ad9625_dma_ddata    [get_bd_pins ila_dma_mon/probe2]
 connect_bd_net -net axi_xfer_status         [get_bd_pins ila_dma_mon/probe3]  [get_bd_pins plddr3_fifo/axi_xfer_status]
-
 
 create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces plddr3_fifo/axi_fifo2s/axi] [get_bd_addr_segs plddr3_fifo/axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl_memaddr
 
