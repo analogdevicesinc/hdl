@@ -490,8 +490,8 @@ if {$sys_zynq == 0} {
   create_bd_addr_seg -range 0x00010000 -offset 0x44A00000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9144_core/s_axi/axi_lite]   SEG_data_ad9144_core
   create_bd_addr_seg -range 0x00010000 -offset 0x44A10000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9680_core/s_axi/axi_lite]   SEG_data_ad9680_core
   create_bd_addr_seg -range 0x00010000 -offset 0x44A60000 $sys_addr_cntrl_space [get_bd_addr_segs axi_daq2_gt/s_axi/axi_lite]       SEG_data_daq2_gt
-  create_bd_addr_seg -range 0x00001000 -offset 0x44A90000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9144_jesd/s_axi/Reg]        SEG_data_ad9144_jesd
-  create_bd_addr_seg -range 0x00001000 -offset 0x44A91000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9680_jesd/s_axi/Reg]        SEG_data_ad9680_jesd
+  create_bd_addr_seg -range 0x00010000 -offset 0x44A90000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9144_jesd/s_axi/Reg]        SEG_data_ad9144_jesd
+  create_bd_addr_seg -range 0x00010000 -offset 0x44A80000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9680_jesd/s_axi/Reg]        SEG_data_ad9680_jesd
   create_bd_addr_seg -range 0x00010000 -offset 0x7c400000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9680_dma/s_axi/axi_lite]    SEG_data_ad9680_dma
   create_bd_addr_seg -range 0x00010000 -offset 0x7c420000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9144_dma/s_axi/axi_lite]    SEG_data_ad9144_dma
 
@@ -503,9 +503,9 @@ if {$sys_zynq == 0} {
 
 if {$sys_zynq == 0} {
 
-  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9144_dma/m_src_axi]   [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK]        SEG_axi_ddr_cntrl
-  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9680_dma/m_dest_axi]  [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK]        SEG_axi_ddr_cntrl
-  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_daq2_gt/m_axi]          [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK]        SEG_axi_ddr_cntrl
+  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9144_dma/m_src_axi]   [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK]        SEG_mem_ddr_cntrl
+  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9680_dma/m_dest_axi]  [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK]        SEG_mem_ddr_cntrl
+  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_daq2_gt/m_axi]          [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK]        SEG_mem_ddr_cntrl
 
 } else {
 
@@ -513,4 +513,7 @@ if {$sys_zynq == 0} {
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9680_dma/m_dest_axi]  [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM]    SEG_sys_ps7_hp2_ddr_lowocm
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_daq2_gt/m_axi]          [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM]    SEG_sys_ps7_hp3_ddr_lowocm
 }
+
+
+
 

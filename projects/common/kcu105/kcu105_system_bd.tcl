@@ -25,13 +25,6 @@ set iic_main        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface
 set uart_sin        [create_bd_port -dir I uart_sin]
 set uart_sout       [create_bd_port -dir O uart_sout]
 
-set mdm_reset       [create_bd_port -dir O mdm_reset]
-set mig_reset       [create_bd_port -dir O mig_reset]
-set mig_ready       [create_bd_port -dir O mig_ready]
-set sys_cpu_clk     [create_bd_port -dir O sys_cpu_clk]
-set sys_cpu_rst     [create_bd_port -dir I -type rst sys_cpu_rst]
-set sys_cpu_rstn    [create_bd_port -dir I -type rst sys_cpu_rstn]
-
 set unc_int2        [create_bd_port -dir I unc_int2]
 set unc_int3        [create_bd_port -dir I unc_int3]
 set unc_int4        [create_bd_port -dir I unc_int4]
@@ -47,8 +40,6 @@ set hdmi_data       [create_bd_port -dir O -from 15 -to 0 hdmi_data]
 set spdif           [create_bd_port -dir O spdif]
 
 set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] $sys_rst
-set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] $sys_cpu_rst
-set_property -dict [list CONFIG.POLARITY {ACTIVE_LOW}] $sys_cpu_rstn
 
 # instance: microblaze - processor
 
@@ -85,6 +76,10 @@ set_property -dict [list CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.use_bram
 
 set sys_mb_debug [create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.1 sys_mb_debug]
 set_property -dict [list CONFIG.C_USE_UART {1}] $sys_mb_debug
+
+# instance: system reset/clocks
+
+set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 
 # instance: ddr (mig)
 
@@ -175,31 +170,19 @@ set axi_spdif_tx_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 ax
 set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_spdif_tx_dma
 set_property -dict [list CONFIG.c_sg_include_stscntrl_strm {0}] $axi_spdif_tx_dma
 
-# connections (reset and clocks)
+# connections
 
-connect_bd_net -net mdm_reset [get_bd_pins sys_mb_debug/Debug_SYS_Rst] [get_bd_ports mdm_reset]
-connect_bd_net -net mig_reset [get_bd_pins axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst] [get_bd_ports mig_reset]
-connect_bd_net -net mig_ready [get_bd_pins axi_ddr_cntrl/c0_init_calib_complete] [get_bd_ports mig_ready]
+connect_bd_net -net mdm_1_debug_sys_rst [get_bd_pins sys_mb_debug/Debug_SYS_Rst]
+connect_bd_net -net mdm_1_debug_sys_rst [get_bd_pins sys_rstgen/mb_debug_sys_rst]
 
-set sys_reset_source [get_bd_ports sys_cpu_rst]
-set sys_resetn_source [get_bd_ports sys_cpu_rstn]
-set sys_cpu_clk_source [get_bd_pins axi_ddr_cntrl/addn_ui_clkout1]
-set sys_mem_clk_source [get_bd_pins axi_ddr_cntrl/c0_ddr4_ui_clk]
-set sys_200m_clk_source [get_bd_pins axi_ddr_cntrl/addn_ui_clkout2]
+connect_bd_net -net sys_rstgen_mb_reset [get_bd_pins sys_rstgen/mb_reset]
+connect_bd_net -net sys_rstgen_mb_reset [get_bd_pins sys_mb/Reset]
 
-connect_bd_net -net sys_cpu_rst $sys_reset_source
-connect_bd_net -net sys_cpu_rstn $sys_resetn_source
-connect_bd_net -net sys_cpu_clk $sys_cpu_clk_source
-connect_bd_net -net sys_mem_clk $sys_mem_clk_source
-connect_bd_net -net sys_200m_clk $sys_200m_clk_source
-
-connect_bd_net -net sys_cpu_rst [get_bd_pins sys_mb/Reset]
-connect_bd_net -net sys_cpu_rst [get_bd_pins sys_dlmb/SYS_Rst]
-connect_bd_net -net sys_cpu_rst [get_bd_pins sys_ilmb/SYS_Rst]
-connect_bd_net -net sys_cpu_rst [get_bd_pins sys_dlmb_cntlr/LMB_Rst]
-connect_bd_net -net sys_cpu_rst [get_bd_pins sys_ilmb_cntlr/LMB_Rst]
-
-connect_bd_net -net sys_cpu_clk [get_bd_ports sys_cpu_clk]
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_rstgen/bus_struct_reset]
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_dlmb/SYS_Rst]
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_ilmb/SYS_Rst]
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_dlmb_cntlr/LMB_Rst]
+connect_bd_net -net sys_rstgen_bus_struct_reset [get_bd_pins sys_ilmb_cntlr/LMB_Rst]
 
 # microblaze local memory
 
@@ -218,6 +201,18 @@ connect_bd_net -net sys_concat_aux_intc_intr [get_bd_pins sys_concat_aux_intc/do
 connect_bd_net -net sys_concat_intc_intr [get_bd_pins sys_concat_intc/dout] [get_bd_pins sys_concat_aux_intc/In8]
 
 # defaults (peripherals)
+
+set sys_reset_source [get_bd_pins sys_rstgen/peripheral_reset]
+set sys_resetn_source [get_bd_pins sys_rstgen/peripheral_aresetn]
+set sys_mem_clk_source [get_bd_pins axi_ddr_cntrl/c0_ddr4_ui_clk]
+set sys_cpu_clk_source [get_bd_pins axi_ddr_cntrl/addn_ui_clkout1]
+set sys_200m_clk_source [get_bd_pins axi_ddr_cntrl/addn_ui_clkout2]
+
+connect_bd_net -net sys_cpu_rst $sys_reset_source
+connect_bd_net -net sys_cpu_rstn $sys_resetn_source
+connect_bd_net -net sys_cpu_clk $sys_cpu_clk_source
+connect_bd_net -net sys_mem_clk $sys_mem_clk_source
+connect_bd_net -net sys_200m_clk $sys_200m_clk_source
 
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_cpu_interconnect/M06_ARESETN] $sys_resetn_source
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_cpu_aux_interconnect/ARESETN] $sys_resetn_source
@@ -239,6 +234,7 @@ connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_gpio_sw_led/s_axi_aresetn]
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_iic_main/s_axi_aresetn]
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_ethernet_dma/axi_resetn]
 
+connect_bd_net -net sys_cpu_clk [get_bd_pins sys_rstgen/slowest_sync_clk]
 connect_bd_net -net sys_cpu_clk [get_bd_pins sys_mb/Clk]
 connect_bd_net -net sys_cpu_clk [get_bd_pins sys_mb_debug/S_AXI_ACLK]
 connect_bd_net -net sys_cpu_clk [get_bd_pins sys_dlmb/LMB_Clk]
@@ -257,7 +253,6 @@ connect_bd_net -net sys_cpu_clk [get_bd_pins axi_intc/s_axi_aclk]
 connect_bd_net -net sys_cpu_clk [get_bd_pins axi_gpio_lcd/s_axi_aclk]
 connect_bd_net -net sys_cpu_clk [get_bd_pins axi_gpio_sw_led/s_axi_aclk]
 connect_bd_net -net sys_cpu_clk [get_bd_pins axi_iic_main/s_axi_aclk]
-
 
 # defaults (interconnect - processor)
 
@@ -347,11 +342,12 @@ connect_bd_net -net sys_concat_intc_din_4 [get_bd_pins sys_concat_intc/In4] [get
 
 # defaults (external interface)
 
-connect_bd_net -net phy_sd [get_bd_ports phy_sd] [get_bd_pins axi_ethernet/signal_detect]
-connect_bd_net -net sys_rst [get_bd_ports sys_rst] [get_bd_pins axi_ddr_cntrl/sys_rst]
+connect_bd_net [get_bd_ports phy_sd]  [get_bd_pins axi_ethernet/signal_detect]
+connect_bd_net [get_bd_ports sys_rst] [get_bd_pins axi_ddr_cntrl/sys_rst]
+connect_bd_net [get_bd_pins axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst] [get_bd_pins sys_rstgen/ext_reset_in]
 
-connect_bd_net -net sys_clk_p [get_bd_ports sys_clk_p] [get_bd_pins axi_ddr_cntrl/c0_sys_clk_p]
-connect_bd_net -net sys_clk_n [get_bd_ports sys_clk_n] [get_bd_pins axi_ddr_cntrl/c0_sys_clk_n]
+connect_bd_net -net sys_clk_p_s [get_bd_ports sys_clk_p] [get_bd_pins axi_ddr_cntrl/c0_sys_clk_p]
+connect_bd_net -net sys_clk_n_s [get_bd_ports sys_clk_n] [get_bd_pins axi_ddr_cntrl/c0_sys_clk_n]
 
 connect_bd_intf_net -intf_net axi_ddr_cntrl_c0_ddr4 [get_bd_intf_ports c0_ddr4] [get_bd_intf_pins axi_ddr_cntrl/C0_DDR4]
 
@@ -474,13 +470,13 @@ create_bd_addr_seg -range 0x00010000 -offset 0x41E00000 $sys_addr_cntrl_space [g
 create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Instruction] [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_instr_ilmb_cntlr
 create_bd_addr_seg -range 0x00010000 -offset 0x00000000 [get_bd_addr_spaces axi_ethernet/eth_buf/S_AXI_2TEMAC] [get_bd_addr_segs axi_ethernet/eth_mac/s_axi/Reg] SEG_ethernet_mac
 
-create_bd_addr_seg -range 0x20000000 -offset 0x20000000 [get_bd_addr_spaces sys_mb/Data]                [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
-create_bd_addr_seg -range 0x20000000 -offset 0x20000000 [get_bd_addr_spaces sys_mb/Instruction]         [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
-create_bd_addr_seg -range 0x20000000 -offset 0x20000000 [get_bd_addr_spaces axi_ethernet_dma/Data_SG]   [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
-create_bd_addr_seg -range 0x20000000 -offset 0x20000000 [get_bd_addr_spaces axi_ethernet_dma/Data_MM2S] [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
-create_bd_addr_seg -range 0x20000000 -offset 0x20000000 [get_bd_addr_spaces axi_ethernet_dma/Data_S2MM] [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
-create_bd_addr_seg -range 0x20000000 -offset 0x20000000 [get_bd_addr_spaces axi_hdmi_dma/Data_MM2S]     [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
-create_bd_addr_seg -range 0x20000000 -offset 0x20000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_SG]   [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
-create_bd_addr_seg -range 0x20000000 -offset 0x20000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_MM2S] [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces sys_mb/Data]                [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces sys_mb/Instruction]         [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_SG]   [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_MM2S] [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_S2MM] [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_hdmi_dma/Data_MM2S]     [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_SG]   [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_MM2S] [get_bd_addr_segs axi_ddr_cntrl/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_mem_ddr_cntrl
 
 

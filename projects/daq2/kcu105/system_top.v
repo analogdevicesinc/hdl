@@ -223,16 +223,9 @@ module system_top (
   reg             adc_dsync = 'd0;
   reg             adc_dwr = 'd0;
   reg    [127:0]  adc_ddata = 'd0;
-  reg     [31:0]  sys_reset_m = 'd0;
-  reg             sys_cpu_rst = 'd0;
-  reg             sys_cpu_rstn = 'd0;
 
   // internal signals
 
-  wire            mdm_reset;
-  wire            mig_reset;
-  wire            mig_ready;
-  wire            sys_cpu_clk;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
@@ -382,20 +375,6 @@ module system_top (
   // default logic
 
   assign fan_pwm = 1'b1;
-
-  // assign sys_reset_req = mdm_reset | mig_reset | ~mig_ready;
-  // assign sys_reset_req = mdm_reset;
-  assign sys_reset_req = 1'b0;
-
-  always @(posedge sys_cpu_clk) begin
-    if (sys_reset_req == 1'b1) begin
-      sys_reset_m <= {32{1'b1}};
-    end else begin
-      sys_reset_m <= {sys_reset_m[30:0], 1'b0};
-    end
-    sys_cpu_rst <= sys_reset_m[31];
-    sys_cpu_rstn <= ~sys_reset_m[31];
-  end
 
   // instantiations
 
@@ -566,9 +545,6 @@ module system_top (
     .iic_rstn (iic_rstn),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
-    .mdm_reset (mdm_reset),
-    .mig_ready (mig_ready),
-    .mig_reset (mig_reset),
     .phy_rst_n (phy_rst_n),
     .phy_sd (1'b1),
     .sgmii_rxn (phy_rx_n),
@@ -592,9 +568,6 @@ module system_top (
     .spi_sdo_o (spi_mosi),
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
-    .sys_cpu_clk (sys_cpu_clk),
-    .sys_cpu_rst (sys_cpu_rst),
-    .sys_cpu_rstn (sys_cpu_rstn),
     .sys_rst (sys_rst),
     .tx_data_n (tx_data_n),
     .tx_data_p (tx_data_p),

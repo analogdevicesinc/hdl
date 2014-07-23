@@ -5,9 +5,12 @@ set_property -dict [list CONFIG.C0.ControllerType {DDR4_SDRAM}] [get_bd_cells ax
 set_property -dict [list CONFIG.C0.DDR4_TimePeriod {833}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_InputClockPeriod {3333}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_MemoryPart {MT40A256M16HA-083}] [get_bd_cells axi_ddr_cntrl]
+set_property -dict [list CONFIG.C0.DDR4_MemoryVoltage {1.2V}] [get_bd_cells axi_ddr_cntrl]
+set_property -dict [list CONFIG.C0.Internal_Vref {true}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_DataWidth {64}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_Mem_Add_Map {ROW_BANK_COLUMN}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_CasWriteLatency {12}] [get_bd_cells axi_ddr_cntrl]
+set_property -dict [list CONFIG.C0.Debug_Signal {Enable}] [get_bd_cells axi_ddr_cntrl]
 
 set_property -dict [list CONFIG.C0.DDR4_AxiDataWidth {512}] [get_bd_cells axi_ddr_cntrl]
 set_property -dict [list CONFIG.C0.DDR4_AxiNarrowBurst {true}] [get_bd_cells axi_ddr_cntrl]
@@ -141,18 +144,9 @@ set_property -dict [list CONFIG.c0_act_n               {bank45.byte2.pin12}] [ge
 set_property -dict [list CONFIG.c0_ck_t                {bank45.byte3.pin6}]  [get_bd_cells axi_ddr_cntrl]  
 set_property -dict [list CONFIG.c0_ck_c                {bank45.byte3.pin7}]  [get_bd_cells axi_ddr_cntrl]  
 
-# This loc of sys_clk should be removed from MIG once DRC is fixed - CR782609
-
 set_property -dict [list CONFIG.c0_sys_clk_p           {bank45.byte1.pin10}] [get_bd_cells axi_ddr_cntrl]  
 set_property -dict [list CONFIG.c0_sys_clk_n           {bank45.byte1.pin11}] [get_bd_cells axi_ddr_cntrl]  
-
-# Currently, it is required to manually unassign the pins in MIG IO Placer
-
-#set_property -dict [list CONFIG.sys_rst                {bank45.byte0.pin5}]  [get_bd_cells axi_ddr_cntrl]  
-#set_property -dict [list CONFIG.c0_data_compare_error  {bank65.byte3.pin2}]  [get_bd_cells axi_ddr_cntrl]  
-#set_property -dict [list CONFIG.c0_init_calib_complete {bank65.byte3.pin3}] [get_bd_cells axi_ddr_cntrl]  
-
-set_property -dict [list CONFIG.sys_rst {Unassigned}] [get_bd_cells axi_ddr_cntrl]
-set_property -dict [list CONFIG.c0_data_compare_error {Unassigned}] [get_bd_cells axi_ddr_cntrl]
-set_property -dict [list CONFIG.c0_init_calib_complete {Unassigned}] [get_bd_cells axi_ddr_cntrl]
+set_property -dict [list CONFIG.sys_rst                {bank64.byte2.pin2}]  [get_bd_cells axi_ddr_cntrl]  
+set_property -dict [list CONFIG.c0_data_compare_error  {bank65.byte3.pin2}]  [get_bd_cells axi_ddr_cntrl]  
+set_property -dict [list CONFIG.c0_init_calib_complete {bank65.byte3.pin3}]  [get_bd_cells axi_ddr_cntrl]  
 
