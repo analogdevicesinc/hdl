@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -98,7 +98,7 @@ module ad_axis_inf_rx (
   reg     [DW:0]  wdata_6 = 'd0;
   reg             wlast_7 = 'd0;
   reg     [DW:0]  wdata_7 = 'd0;
-  reg     [ 2:0]  rcnt = 'd0;
+  reg     [ 2:0]  rcnt    = 'd0;
   reg             inf_valid = 'd0;
   reg             inf_last = 'd0;
   reg     [DW:0]  inf_data = 'd0;
@@ -106,6 +106,8 @@ module ad_axis_inf_rx (
   // internal signals
 
   wire            inf_ready_s;
+  reg             inf_last_s;
+  reg     [DW:0]  inf_data_s;
 
   // write interface
 
@@ -153,6 +155,45 @@ module ad_axis_inf_rx (
 
   assign inf_ready_s = inf_ready | ~inf_valid;
 
+  always @(rcnt or wlast_0 or wdata_0 or wlast_1 or wdata_1 or
+    wlast_2 or wdata_2 or wlast_3 or wdata_3 or wlast_4 or wdata_4 or
+    wlast_5 or wdata_5 or wlast_6 or wdata_6 or wlast_7 or wdata_7) begin
+    case (rcnt)
+      3'd0: begin
+        inf_last_s = wlast_0;
+        inf_data_s = wdata_0;
+      end
+      3'd1: begin
+        inf_last_s = wlast_1;
+        inf_data_s = wdata_1;
+      end
+      3'd2: begin
+        inf_last_s = wlast_2;
+        inf_data_s = wdata_2;
+      end
+      3'd3: begin
+        inf_last_s = wlast_3;
+        inf_data_s = wdata_3;
+      end
+      3'd4: begin
+        inf_last_s = wlast_4;
+        inf_data_s = wdata_4;
+      end
+      3'd5: begin
+        inf_last_s = wlast_5;
+        inf_data_s = wdata_5;
+      end
+      3'd6: begin
+        inf_last_s = wlast_6;
+        inf_data_s = wdata_6;
+      end
+      default: begin
+        inf_last_s = wlast_7;
+        inf_data_s = wdata_7;
+      end
+    endcase
+  end
+
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       rcnt <= 'd0;
@@ -168,40 +209,8 @@ module ad_axis_inf_rx (
       end else begin
         rcnt <= rcnt + 1'b1;
         inf_valid <= 1'b1;
-        case (rcnt)
-          3'd0: begin
-            inf_last <= wlast_0;
-            inf_data <= wdata_0;
-          end
-          3'd1: begin
-            inf_last <= wlast_1;
-            inf_data <= wdata_1;
-          end
-          3'd2: begin
-            inf_last <= wlast_2;
-            inf_data <= wdata_2;
-          end
-          3'd3: begin
-            inf_last <= wlast_3;
-            inf_data <= wdata_3;
-          end
-          3'd4: begin
-            inf_last <= wlast_4;
-            inf_data <= wdata_4;
-          end
-          3'd5: begin
-            inf_last <= wlast_5;
-            inf_data <= wdata_5;
-          end
-          3'd6: begin
-            inf_last <= wlast_6;
-            inf_data <= wdata_6;
-          end
-          default: begin
-            inf_last <= wlast_7;
-            inf_data <= wdata_7;
-          end
-        endcase
+        inf_last <= inf_last_s;
+        inf_data <= inf_data_s;
       end
     end
   end

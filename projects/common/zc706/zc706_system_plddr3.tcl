@@ -52,7 +52,7 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   set_property -dict [list CONFIG.INTERFACE_TYPE {Native}] $rfifo_mem
   set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $rfifo_mem
   set_property -dict [list CONFIG.Input_Data_Width {512}] $rfifo_mem
-  set_property -dict [list CONFIG.Input_Depth {32}] $rfifo_mem
+  set_property -dict [list CONFIG.Input_Depth {64}] $rfifo_mem
   set_property -dict [list CONFIG.Output_Data_Width {64}] $rfifo_mem
   set_property -dict [list CONFIG.Overflow_Flag {true}] $rfifo_mem
   set_property -dict [list CONFIG.Programmable_Full_Type {Multiple_Programmable_Full_Threshold_Constants}] $rfifo_mem
