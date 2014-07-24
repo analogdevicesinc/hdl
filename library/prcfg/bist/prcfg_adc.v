@@ -100,6 +100,7 @@ module prcfg_adc (
   wire              adc_pn_err_s;
 
   // prbs function
+
   function [31:0] pn;
     input [31:0] din;
     reg   [31:0] dout;
@@ -150,12 +151,11 @@ module prcfg_adc (
   // prbs monitor
   assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? src_adc_ddata : adc_pn_data;
   assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
-  assign adc_pn_match_s   = (adc_data == adc_pn_data) ? 1'b1 : 1'b0;
+  assign adc_pn_match_s   = (src_adc_ddata == adc_pn_data) ? 1'b1 : 1'b0;
   assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
 
   always @(posedge clk) begin
     if(adc_dvalid == 1'b1) begin
-      adc_data    <= src_adc_ddata;
       adc_pn_data <= pn(adc_pn_data_s);
     end
     adc_dvalid_d <= adc_dvalid;
