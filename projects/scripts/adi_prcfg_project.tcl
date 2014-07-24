@@ -196,7 +196,7 @@ proc prcfg_gen_bit { prcfg_name_list } {
   foreach i $prcfg_name_list {
     open_checkpoint "./prcfg_${i}/results/top_route_design.dcp" -part $part
     file mkdir "./prcfg_${i}/bit"
-    write_bitstream -force -file "./prcfg_${i}/bit/config_${i}.bit"
+    write_bitstream -force -bin_file -file "./prcfg_${i}/bit/config_${i}.bit"
     close_project
   }
 }
