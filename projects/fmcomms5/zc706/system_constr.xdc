@@ -120,6 +120,7 @@ set_property  -dict {PACKAGE_PIN  AK26  IOSTANDARD LVCMOS25}  [get_ports gpio_ct
 set_property  -dict {PACKAGE_PIN  AF30  IOSTANDARD LVCMOS25}  [get_ports gpio_ctl_1[2]]                         ; ## H28  FMC_LPC_LA24_P             
 set_property  -dict {PACKAGE_PIN  AG30  IOSTANDARD LVCMOS25}  [get_ports gpio_ctl_1[3]]                         ; ## H29  FMC_LPC_LA24_N             
 set_property  -dict {PACKAGE_PIN  AF29  IOSTANDARD LVCMOS25}  [get_ports gpio_en_agc_1]                         ; ## G27  FMC_LPC_LA25_P             
+set_property  -dict {PACKAGE_PIN  AE25  IOSTANDARD LVCMOS25}  [get_ports gpio_resetb_1]                         ; ## G30  FMC_LPC_29_P         
 set_property  -dict {PACKAGE_PIN  AE18  IOSTANDARD LVCMOS25}  [get_ports gpio_enable_1]                         ; ## G18  FMC_LPC_LA16_P             
 set_property  -dict {PACKAGE_PIN  AE17  IOSTANDARD LVCMOS25}  [get_ports gpio_txnrx_1]                          ; ## G19  FMC_LPC_LA16_N                    
 set_property  -dict {PACKAGE_PIN  AJ28  IOSTANDARD LVCMOS25}  [get_ports gpio_debug_3_1]                        ; ## C26  FMC_LPC_LA27_P             

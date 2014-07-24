@@ -118,6 +118,7 @@ module system_top (
   gpio_status_1,  
   gpio_ctl_1,
   gpio_en_agc_1,
+  gpio_resetb_1,
   gpio_enable_1,
   gpio_txnrx_1,
   gpio_debug_3_1,
@@ -212,6 +213,7 @@ module system_top (
   inout   [  7:0] gpio_status_1;
   inout   [  3:0] gpio_ctl_1;
   inout           gpio_en_agc_1;
+  inout           gpio_resetb_1;
   inout           gpio_enable_1;
   inout           gpio_txnrx_1;
   inout           gpio_debug_3_1;
@@ -276,11 +278,12 @@ module system_top (
     .I (ref_clk_s),
     .O (ref_clk));
 
-  ad_iobuf #(.DATA_WIDTH(59)) i_iobuf (
-    .dt (gpio_t[58:0]),
-    .di (gpio_o[58:0]),
-    .do (gpio_i[58:0]),
-    .dio ({ gpio_ad5355_lock, // 58
+  ad_iobuf #(.DATA_WIDTH(60)) i_iobuf (
+    .dt (gpio_t[59:0]),
+    .di (gpio_o[59:0]),
+    .do (gpio_i[59:0]),
+    .dio ({ gpio_resetb_1,    // 59
+            gpio_ad5355_lock, // 58
             gpio_ad5355_rfen, // 57
             gpio_calsw_4_1,   // 56
             gpio_calsw_3_1,   // 55
