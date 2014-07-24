@@ -162,6 +162,8 @@ module up_dac_channel (
   reg     [31:0]  up_rdata = 'd0;
   reg     [15:0]  up_dac_dds_scale_tc_1 = 'd0;
   reg     [15:0]  up_dac_dds_scale_tc_2 = 'd0;
+  reg     [15:0]  up_dac_iqcor_coeff_tc_1 = 'd0;
+  reg     [15:0]  up_dac_iqcor_coeff_tc_2 = 'd0;
   reg     [ 3:0]  up_dac_data_sel_m = 'd0;
 
   // internal signals
@@ -295,9 +297,13 @@ module up_dac_channel (
     if (up_rstn == 0) begin
       up_dac_dds_scale_tc_1 <= 16'd0;
       up_dac_dds_scale_tc_2 <= 16'd0;
+      up_dac_iqcor_coeff_tc_1 <= 16'd0;
+      up_dac_iqcor_coeff_tc_2 <= 16'd0;
     end else begin
       up_dac_dds_scale_tc_1 <= sm2tc(up_dac_dds_scale_1);
       up_dac_dds_scale_tc_2 <= sm2tc(up_dac_dds_scale_2);
+      up_dac_iqcor_coeff_tc_1 <= sm2tc(up_dac_iqcor_coeff_1);
+      up_dac_iqcor_coeff_tc_2 <= sm2tc(up_dac_iqcor_coeff_2);
     end
   end
 
@@ -321,8 +327,8 @@ module up_dac_channel (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_iqcor_enb,
-                      up_dac_iqcor_coeff_1,
-                      up_dac_iqcor_coeff_2,
+                      up_dac_iqcor_coeff_tc_1,
+                      up_dac_iqcor_coeff_tc_2,
                       up_dac_dds_scale_tc_1,
                       up_dac_dds_init_1,
                       up_dac_dds_incr_1,
