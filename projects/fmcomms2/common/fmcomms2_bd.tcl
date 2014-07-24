@@ -45,11 +45,16 @@
     set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_dac_dma
     set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9361_dac_dma
     set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_dac_dma
+    set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9361_dac_dma
 
     # channel packing for the ADC
     set util_adc_pack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 util_adc_pack]
 
     set util_dac_unpack [create_bd_cell -type ip -vlnv analog.com:user:util_dac_unpack:1.0 util_dac_unpack]
+
+    # constant 0
+    set constant_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 constant_0]
+    set_property -dict [list CONFIG.CONST_VAL {0}] $constant_0
 
 if {$sys_zynq == 1} {
     set axi_ad9361_dac_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9361_dac_dma_interconnect]
@@ -67,6 +72,7 @@ if {$sys_zynq == 1} {
     set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_adc_dma
     set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9361_adc_dma
     set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_adc_dma
+    set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}]  $axi_ad9361_adc_dma
 
 if {$sys_zynq == 1} {
     set axi_ad9361_adc_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9361_adc_dma_interconnect]
@@ -167,6 +173,14 @@ if {$sys_zynq == 0} {
     connect_bd_net -net axi_ad9361_tx_data_out_n    [get_bd_ports tx_data_out_n]          [get_bd_pins axi_ad9361/tx_data_out_n]
 
     connect_bd_net -net axi_ad9361_clk              [get_bd_pins util_adc_pack/clk]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_adc_pack/chan_valid_4]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_adc_pack/chan_valid_5]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_adc_pack/chan_valid_6]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_adc_pack/chan_valid_7]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_adc_pack/chan_enable_4]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_adc_pack/chan_enable_5]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_adc_pack/chan_enable_6]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_adc_pack/chan_enable_7]
     connect_bd_net -net axi_ad9361_adc_valid_0      [get_bd_pins axi_ad9361/adc_valid_i0]  [get_bd_pins util_adc_pack/chan_valid_0]
     connect_bd_net -net axi_ad9361_adc_valid_1      [get_bd_pins axi_ad9361/adc_valid_q0]  [get_bd_pins util_adc_pack/chan_valid_1]
     connect_bd_net -net axi_ad9361_adc_valid_2      [get_bd_pins axi_ad9361/adc_valid_i1]  [get_bd_pins util_adc_pack/chan_valid_2]
@@ -184,20 +198,30 @@ if {$sys_zynq == 0} {
     connect_bd_net -net util_adc_pack_ddata         [get_bd_pins util_adc_pack/ddata]  [get_bd_pins axi_ad9361_adc_dma/fifo_wr_din]
     connect_bd_net -net axi_ad9361_adc_dovf         [get_bd_pins axi_ad9361/adc_dovf]   [get_bd_pins axi_ad9361_adc_dma/fifo_wr_overflow]
 
+    connect_bd_net -net axi_ad9361_clk              [get_bd_pins util_dac_unpack/clk]
     connect_bd_net -net axi_ad9361_dac_valid_0      [get_bd_pins util_dac_unpack/dac_valid_00] [get_bd_pins axi_ad9361/dac_valid_i0]
     connect_bd_net -net axi_ad9361_dac_valid_1      [get_bd_pins util_dac_unpack/dac_valid_01] [get_bd_pins axi_ad9361/dac_valid_q0]
     connect_bd_net -net axi_ad9361_dac_valid_2      [get_bd_pins util_dac_unpack/dac_valid_02] [get_bd_pins axi_ad9361/dac_valid_i1]
     connect_bd_net -net axi_ad9361_dac_valid_3      [get_bd_pins util_dac_unpack/dac_valid_03] [get_bd_pins axi_ad9361/dac_valid_q1]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_dac_unpack/dac_valid_04]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_dac_unpack/dac_valid_05]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_dac_unpack/dac_valid_06]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_dac_unpack/dac_valid_07]
     connect_bd_net -net axi_ad9361_dac_enable_0     [get_bd_pins util_dac_unpack/dac_enable_00] [get_bd_pins axi_ad9361/dac_enable_i0]
     connect_bd_net -net axi_ad9361_dac_enable_1     [get_bd_pins util_dac_unpack/dac_enable_01] [get_bd_pins axi_ad9361/dac_enable_q0]
     connect_bd_net -net axi_ad9361_dac_enable_2     [get_bd_pins util_dac_unpack/dac_enable_02] [get_bd_pins axi_ad9361/dac_enable_i1]
     connect_bd_net -net axi_ad9361_dac_enable_3     [get_bd_pins util_dac_unpack/dac_enable_03] [get_bd_pins axi_ad9361/dac_enable_q1]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_dac_unpack/dac_enable_04]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_dac_unpack/dac_enable_05]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_dac_unpack/dac_enable_06]
+    connect_bd_net -net gnd                         [get_bd_pins constant_0/const] [get_bd_pins util_dac_unpack/dac_enable_07]
     connect_bd_net -net axi_ad9361_dac_data_0       [get_bd_pins util_dac_unpack/dac_data_00] [get_bd_pins axi_ad9361/dac_data_i0]
     connect_bd_net -net axi_ad9361_dac_data_1       [get_bd_pins util_dac_unpack/dac_data_01] [get_bd_pins axi_ad9361/dac_data_q0]
     connect_bd_net -net axi_ad9361_dac_data_2       [get_bd_pins util_dac_unpack/dac_data_02] [get_bd_pins axi_ad9361/dac_data_i1]
     connect_bd_net -net axi_ad9361_dac_data_3       [get_bd_pins util_dac_unpack/dac_data_03] [get_bd_pins axi_ad9361/dac_data_q1]
 
-    connect_bd_net -net fifo_data                   [get_bd_pins util_dac_unpack/dma_data] [get_bd_pins axi_ad9361_dac_dma/fifo_rd_dout] 
+    connect_bd_net -net fifo_data                   [get_bd_pins util_dac_unpack/dma_data] [get_bd_pins axi_ad9361_dac_dma/fifo_rd_dout]
+    connect_bd_net -net fifo_valid                  [get_bd_pins axi_ad9361_dac_dma/fifo_rd_valid] [get_bd_pins util_dac_unpack/fifo_valid]
     connect_bd_net -net axi_ad9361_dac_drd          [get_bd_pins util_dac_unpack/dma_rd]  [get_bd_pins axi_ad9361_dac_dma/fifo_rd_en]
     connect_bd_net -net axi_ad9361_dac_dunf         [get_bd_pins axi_ad9361/dac_dunf]   [get_bd_pins axi_ad9361_dac_dma/fifo_rd_underflow]
 
@@ -299,6 +323,7 @@ if {$sys_zynq == 0} {
     set_property -dict [list CONFIG.C_PROBE3_WIDTH {16}] $ila_adc
     set_property -dict [list CONFIG.C_PROBE4_WIDTH {16}] $ila_adc
     set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
+    set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc
 
     connect_bd_net -net axi_ad9361_clk            [get_bd_pins ila_adc/clk]
     connect_bd_net -net axi_ad9361_adc_valid_0    [get_bd_pins ila_adc/probe0]

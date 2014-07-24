@@ -248,10 +248,6 @@ module system_top (
   wire            gpio_open_45_45;
   wire            gpio_open_44_44;
   wire            gpio_open_15_15;
-  wire    [ 63:0] ad9361_0_adc_ddata;
-  wire    [ 63:0] ad9361_0_dac_ddata;
-  wire    [ 63:0] ad9361_1_adc_ddata;
-  wire    [ 63:0] ad9361_1_dac_ddata;
 
   // multi-chip synchronization
 
@@ -334,12 +330,6 @@ module system_top (
     .GPIO_I (gpio_i),
     .GPIO_O (gpio_o),
     .GPIO_T (gpio_t),
-    .ad9361_0_adc_ddata (ad9361_0_adc_ddata),
-    .ad9361_0_dac_ddata (ad9361_0_dac_ddata),
-    .ad9361_1_adc_ddata (ad9361_1_adc_ddata),
-    .ad9361_1_dac_ddata (ad9361_1_dac_ddata),    
-    .ad9361_adc_ddata ({ad9361_0_adc_ddata, ad9361_1_adc_ddata}),
-    .ad9361_dac_ddata ({ad9361_0_dac_ddata, ad9361_1_dac_ddata}), 
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
