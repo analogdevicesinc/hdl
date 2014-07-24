@@ -160,355 +160,220 @@ module axi_ad9361_dev_if (
 
   // internal registers
 
-  reg     [11:0]  rx_data = 'd0;
-  reg     [ 1:0]  rx_frame = 'd0;
-  reg     [11:0]  rx_data_d = 'd0;
-  reg     [ 1:0]  rx_frame_d = 'd0;
-  reg             rx_error_r1 = 'd0;
-  reg             rx_valid_r1 = 'd0;
-  reg     [23:0]  rx_data_r1 = 'd0;
+  reg     [ 3:0]  rx_frame = 'd0;
+  reg     [ 5:0]  rx_data_3 = 'd0;
+  reg     [ 5:0]  rx_data_2 = 'd0;
+  reg     [ 5:0]  rx_data_1 = 'd0;
+  reg     [ 5:0]  rx_data_0 = 'd0;
   reg             rx_error_r2 = 'd0;
   reg             rx_valid_r2 = 'd0;
-  reg     [47:0]  rx_data_r2 = 'd0;
-  reg             adc_p_valid = 'd0;
-  reg     [47:0]  adc_p_data = 'd0;
-  reg             adc_p_status = 'd0;
-  reg             adc_n_valid = 'd0;
-  reg     [47:0]  adc_n_data = 'd0;
-  reg             adc_n_status = 'd0;
-  reg             adc_valid_int = 'd0;
-  reg     [47:0]  adc_data_int = 'd0;
-  reg             adc_status_int = 'd0;
+  reg     [23:0]  rx_data_r2 = 'd0;
   reg             adc_valid = 'd0;
   reg     [47:0]  adc_data = 'd0;
   reg             adc_status = 'd0;
-  reg     [ 2:0]  tx_data_cnt = 'd0;
+  reg             tx_data_sel = 'd0;
   reg     [47:0]  tx_data = 'd0;
-  reg             tx_frame = 'd0;
-  reg     [ 5:0]  tx_data_p = 'd0;
-  reg     [ 5:0]  tx_data_n = 'd0;
-  reg             tx_n_frame = 'd0;
-  reg     [ 5:0]  tx_n_data_p = 'd0;
-  reg     [ 5:0]  tx_n_data_n = 'd0;
-  reg             tx_p_frame = 'd0;
-  reg     [ 5:0]  tx_p_data_p = 'd0;
-  reg     [ 5:0]  tx_p_data_n = 'd0;
-  reg     [ 6:0]  delay_ld = 'd0;
-  reg     [ 4:0]  delay_rdata = 'd0;
-  reg             delay_ack_t = 'd0;
+  reg     [ 3:0]  tx_frame = 'd0;
+  reg     [11:0]  tx_data_0 = 'd0;
+  reg     [11:0]  tx_data_1 = 'd0;
+  reg     [11:0]  tx_data_2 = 'd0;
+  reg     [11:0]  tx_data_3 = 'd0;
 
   // internal signals
 
+  wire    [ 3:0]  rx_frame_inv_s;
+  wire            tx_locked_s;
   wire    [ 3:0]  rx_frame_s;
-  wire    [ 3:0]  tx_data_sel_s;
-  wire    [ 4:0]  delay_rdata_s[6:0];
-  wire    [ 5:0]  rx_data_p_s;
-  wire    [ 5:0]  rx_data_n_s;
-  wire            rx_frame_p_s;
-  wire            rx_frame_n_s;
+  wire    [ 5:0]  rx_data_0_s;
+  wire    [ 5:0]  rx_data_1_s;
+  wire    [ 5:0]  rx_data_2_s;
+  wire    [ 5:0]  rx_data_3_s;
+  wire            rx_locked_s;
 
-  genvar          l_inst;
+  // signal tap
 
-  // device debug signals
+  wire    [255:0] acq_data_s;
+  wire    [  1:0] acq_trigger_s;
 
-  assign dev_dbg_data[  5:  0] = tx_data_n;
-  assign dev_dbg_data[ 11:  6] = tx_data_p;
-  assign dev_dbg_data[ 23: 12] = dac_data[11: 0];
-  assign dev_dbg_data[ 35: 24] = dac_data[23:12];
-  assign dev_dbg_data[ 47: 36] = dac_data[35:24];
-  assign dev_dbg_data[ 59: 48] = dac_data[47:36];
-  assign dev_dbg_data[ 71: 60] = adc_data[11: 0];
-  assign dev_dbg_data[ 83: 72] = adc_data[23:12];
-  assign dev_dbg_data[ 95: 84] = adc_data[35:24];
-  assign dev_dbg_data[107: 96] = adc_data[47:36];
-  assign dev_dbg_data[108:108] = tx_frame;
-  assign dev_dbg_data[109:109] = dac_valid;
-  assign dev_dbg_data[110:110] = adc_status;
-  assign dev_dbg_data[111:111] = adc_valid;
+  assign acq_data_s[  3:  0] = rx_frame;
+  assign acq_data_s[  9:  4] = rx_data_3;
+  assign acq_data_s[ 15: 10] = rx_data_2;
+  assign acq_data_s[ 21: 16] = rx_data_1;
+  assign acq_data_s[ 27: 22] = rx_data_0;
+  assign acq_data_s[ 28: 28] = rx_error_r2;
+  assign acq_data_s[ 29: 29] = rx_valid_r2;
+  assign acq_data_s[ 53: 30] = rx_data_r2;
+  assign acq_data_s[ 54: 54] = adc_valid;
+  assign acq_data_s[102: 55] = adc_data;
+  assign acq_data_s[103:103] = adc_status;
+  assign acq_data_s[104:104] = rx_locked_s;
+  assign acq_data_s[105:105] = dac_valid;
+  assign acq_data_s[153:106] = dac_data;
+  assign acq_data_s[154:154] = tx_data_sel;
+  assign acq_data_s[202:155] = tx_data;
+  assign acq_data_s[206:203] = tx_frame;
+  assign acq_data_s[218:207] = tx_data_0;
+  assign acq_data_s[230:219] = tx_data_1;
+  assign acq_data_s[242:231] = tx_data_2;
+  assign acq_data_s[254:243] = tx_data_3;
+  assign acq_data_s[255:255] = tx_locked_s;
 
-  assign dev_l_dbg_data[  5:  0] = tx_p_data_n;
-  assign dev_l_dbg_data[ 11:  6] = tx_p_data_p;
-  assign dev_l_dbg_data[ 23: 12] = adc_p_data[11: 0];
-  assign dev_l_dbg_data[ 35: 24] = adc_p_data[23:12];
-  assign dev_l_dbg_data[ 47: 36] = adc_p_data[35:24];
-  assign dev_l_dbg_data[ 59: 48] = adc_p_data[47:36];
-  assign dev_l_dbg_data[ 60: 60] = tx_p_frame;
-  assign dev_l_dbg_data[ 61: 61] = adc_p_valid;
+  assign acq_trigger_s[1] = tx_locked_s;
+  assign acq_trigger_s[0] = rx_locked_s;
+
+  sld_signaltap #(
+    .sld_data_bits (256),
+    .sld_sample_depth (128),
+    .sld_ram_block_type ("AUTO"),
+    .sld_storage_qualifier_mode ("OFF"),
+    .sld_trigger_bits (2),
+    .sld_trigger_level (1),
+    .sld_trigger_in_enabled (0),
+    .sld_enable_advanced_trigger (0),
+    .sld_trigger_level_pipeline (1),
+    .sld_node_info (1076736),
+    .sld_node_crc_bits (32),
+    .sld_node_crc_hiword (17890),
+    .sld_node_crc_loword (38728))
+  i_ila_dev_if (
+    .acq_clk (clk),
+    .acq_data_in (acq_data_s),
+    .acq_trigger_in (acq_trigger_s));
+
+  // defaults
+
+  assign delay_rdata = 5'd0;
+  assign delay_ack_t = 1'd0;
+  assign delay_locked = 1'd1;
+  assign dev_dbg_data = 112'd0;
+  assign dev_l_dbg_data = 62'd0;
 
   // receive data path interface
 
-  assign rx_frame_s = {rx_frame_d, rx_frame};
+  assign rx_frame_inv_s = ~rx_frame;
 
   always @(posedge l_clk) begin
-    rx_data <= {rx_data_n_s, rx_data_p_s};
-    rx_frame <= {rx_frame_n_s, rx_frame_p_s};
-    rx_data_d <= rx_data;
-    rx_frame_d <= rx_frame;
-  end
-
-  // receive data path for single rf, frame is expected to qualify i/q msb only
-
-  always @(posedge l_clk) begin
-    rx_error_r1 <= ((rx_frame_s == 4'b1100) || (rx_frame_s == 4'b0011)) ? 1'b0 : 1'b1;
-    rx_valid_r1 <= (rx_frame_s == 4'b1100) ? 1'b1 : 1'b0;
-    if (rx_frame_s == 4'b1100) begin
-      rx_data_r1[11: 0] <= {rx_data_d[11:6], rx_data[11:6]};
-      rx_data_r1[23:12] <= {rx_data_d[ 5:0], rx_data[ 5:0]};
-    end
-  end
-
-  // receive data path for dual rf, frame is expected to qualify i/q msb and lsb for rf-1 only
-
-  always @(posedge l_clk) begin
-    rx_error_r2 <= ((rx_frame_s == 4'b1111) || (rx_frame_s == 4'b1100) ||
-      (rx_frame_s == 4'b0000) || (rx_frame_s == 4'b0011)) ? 1'b0 : 1'b1;
-    rx_valid_r2 <= (rx_frame_s == 4'b0000) ? 1'b1 : 1'b0;
-    if (rx_frame_s == 4'b1111) begin
-      rx_data_r2[11: 0] <= {rx_data_d[11:6], rx_data[11:6]};
-      rx_data_r2[23:12] <= {rx_data_d[ 5:0], rx_data[ 5:0]};
-    end
-    if (rx_frame_s == 4'b0000) begin
-      rx_data_r2[35:24] <= {rx_data_d[11:6], rx_data[11:6]};
-      rx_data_r2[47:36] <= {rx_data_d[ 5:0], rx_data[ 5:0]};
-    end
-  end
-
-  // receive data path mux
-
-  always @(posedge l_clk) begin
-    if (adc_r1_mode == 1'b1) begin
-      adc_p_valid <= rx_valid_r1;
-      adc_p_data <= {24'd0, rx_data_r1};
-      adc_p_status <= ~rx_error_r1;
+    rx_frame <= rx_frame_s;
+    rx_data_3 <= rx_data_3_s;
+    rx_data_2 <= rx_data_2_s;
+    rx_data_1 <= rx_data_1_s;
+    rx_data_0 <= rx_data_0_s;
+    if (rx_frame_inv_s == rx_frame_s) begin
+      rx_error_r2 <= 1'b0;
     end else begin
-      adc_p_valid <= rx_valid_r2;
-      adc_p_data <= rx_data_r2;
-      adc_p_status <= ~rx_error_r2;
+      rx_error_r2 <= 1'b1;
     end
-  end
-
-  // transfer to a synchronous common clock
-
-  always @(negedge l_clk) begin
-    adc_n_valid <= adc_p_valid;
-    adc_n_data <= adc_p_data;
-    adc_n_status <= adc_p_status;
-  end
-
-  always @(posedge clk) begin
-    adc_valid_int <= adc_n_valid;
-    adc_data_int <= adc_n_data;
-    adc_status_int <= adc_n_status;
-    adc_valid <= adc_valid_int;
-    if (adc_valid_int == 1'b1) begin
-      adc_data <= adc_data_int;
-    end
-    adc_status <= adc_status_int;
-  end
-
-  // transmit data path mux (reverse of what receive does above)
-  // the count simply selets the data muxing on the ddr outputs
-
-  assign tx_data_sel_s = {tx_data_cnt[2], dac_r1_mode, tx_data_cnt[1:0]};
-
-  always @(posedge clk) begin
-    if (dac_valid == 1'b1) begin
-      tx_data_cnt <= 3'b100;
-    end else if (tx_data_cnt[2] == 1'b1) begin
-      tx_data_cnt <= tx_data_cnt + 1'b1;
-    end
-    if (dac_valid == 1'b1) begin
-      tx_data <= dac_data;
-    end
-    case (tx_data_sel_s)
+    case (rx_frame)
       4'b1111: begin
-        tx_frame <= 1'b0;
-        tx_data_p <= tx_data[ 5: 0];
-        tx_data_n <= tx_data[17:12];
+        rx_valid_r2 <= 1'b1;
+        rx_data_r2[23:12] <= {rx_data_1,   rx_data_3};
+        rx_data_r2[11: 0] <= {rx_data_0,   rx_data_2};
       end
       4'b1110: begin
-        tx_frame <= 1'b1;
-        tx_data_p <= tx_data[11: 6];
-        tx_data_n <= tx_data[23:18];
-      end
-      4'b1101: begin
-        tx_frame <= 1'b0;
-        tx_data_p <= tx_data[ 5: 0];
-        tx_data_n <= tx_data[17:12];
+        rx_valid_r2 <= 1'b1;
+        rx_data_r2[23:12] <= {rx_data_2,   rx_data_0_s};
+        rx_data_r2[11: 0] <= {rx_data_1,   rx_data_3};
       end
       4'b1100: begin
-        tx_frame <= 1'b1;
-        tx_data_p <= tx_data[11: 6];
-        tx_data_n <= tx_data[23:18];
-      end
-      4'b1011: begin
-        tx_frame <= 1'b0;
-        tx_data_p <= tx_data[29:24];
-        tx_data_n <= tx_data[41:36];
-      end
-      4'b1010: begin
-        tx_frame <= 1'b0;
-        tx_data_p <= tx_data[35:30];
-        tx_data_n <= tx_data[47:42];
-      end
-      4'b1001: begin
-        tx_frame <= 1'b1;
-        tx_data_p <= tx_data[ 5: 0];
-        tx_data_n <= tx_data[17:12];
+        rx_valid_r2 <= 1'b1;
+        rx_data_r2[23:12] <= {rx_data_3,   rx_data_1_s};
+        rx_data_r2[11: 0] <= {rx_data_2,   rx_data_0_s};
       end
       4'b1000: begin
-        tx_frame <= 1'b1;
-        tx_data_p <= tx_data[11: 6];
-        tx_data_n <= tx_data[23:18];
+        rx_valid_r2 <= 1'b1;
+        rx_data_r2[23:12] <= {rx_data_0_s, rx_data_2_s};
+        rx_data_r2[11: 0] <= {rx_data_3,   rx_data_1_s};
+      end
+      4'b0000: begin
+        rx_valid_r2 <= 1'b0;
+        rx_data_r2[23:12] <= {rx_data_1,   rx_data_3};
+        rx_data_r2[11: 0] <= {rx_data_0,   rx_data_2};
+      end
+      4'b0001: begin
+        rx_valid_r2 <= 1'b0;
+        rx_data_r2[23:12] <= {rx_data_2,   rx_data_0_s};
+        rx_data_r2[11: 0] <= {rx_data_1,   rx_data_3};
+      end
+      4'b0011: begin
+        rx_valid_r2 <= 1'b0;
+        rx_data_r2[23:12] <= {rx_data_3,   rx_data_1_s};
+        rx_data_r2[11: 0] <= {rx_data_2,   rx_data_0_s};
+      end
+      4'b0111: begin
+        rx_valid_r2 <= 1'b0;
+        rx_data_r2[23:12] <= {rx_data_0_s, rx_data_2_s};
+        rx_data_r2[11: 0] <= {rx_data_3,   rx_data_1_s};
       end
       default: begin
-        tx_frame <= 1'b0;
-        tx_data_p <= 6'd0;
-        tx_data_n <= 6'd0;
+        rx_valid_r2 <= 1'b0;
+        rx_data_r2[23:12] <= 12'd0;
+        rx_data_r2[11: 0] <= 12'd0;
       end
     endcase
+    if (rx_valid_r2 == 1'b1) begin
+      adc_valid <= 1'b0;
+      adc_data <= {24'd0, rx_data_r2};
+    end else begin
+      adc_valid <= 1'b1;
+      adc_data <= {rx_data_r2, adc_data[23:0]};
+    end
+    adc_status <= ~rx_error_r2 & rx_locked_s & tx_locked_s;
   end
 
-  // transfer data from a synchronous clock (skew less than 2ns)
-
-  always @(negedge clk) begin
-    tx_n_frame <= tx_frame;
-    tx_n_data_p <= tx_data_p;
-    tx_n_data_n <= tx_data_n;
-  end
+  // transmit data path mux
 
   always @(posedge l_clk) begin
-    tx_p_frame <= tx_n_frame;
-    tx_p_data_p <= tx_n_data_p;
-    tx_p_data_n <= tx_n_data_n;
-  end
-
-  // delay write interface, each delay element can be individually
-  // addressed, and a delay value can be directly loaded (no inc/dec stuff)
-
-  always @(posedge delay_clk) begin
-    if ((delay_sel == 1'b1) && (delay_rwn == 1'b0)) begin
-      case (delay_addr)
-        8'h06: delay_ld <= 7'h40;
-        8'h05: delay_ld <= 7'h20;
-        8'h04: delay_ld <= 7'h10;
-        8'h03: delay_ld <= 7'h08;
-        8'h02: delay_ld <= 7'h04;
-        8'h01: delay_ld <= 7'h02;
-        8'h00: delay_ld <= 7'h01;
-        default: delay_ld <= 7'h00;
-      endcase
+    tx_data_sel <= dac_valid;
+    tx_data <= dac_data;
+    if (tx_data_sel == 1'b1) begin
+      tx_frame <= 4'b1111;
+      tx_data_0 <= tx_data[11: 6];
+      tx_data_1 <= tx_data[23:18];
+      tx_data_2 <= tx_data[ 5: 0];
+      tx_data_3 <= tx_data[17:12];
     end else begin
-      delay_ld <= 7'h00;
+      tx_frame <= 4'b0000;
+      tx_data_0 <= tx_data[35:30];
+      tx_data_1 <= tx_data[47:42];
+      tx_data_2 <= tx_data[29:24];
+      tx_data_3 <= tx_data[41:36];
     end
   end
 
-  // delay read interface, a delay ack toggle is used to transfer data to the
-  // processor side- delay locked is independently transferred
+  // interface (transmit)
 
-  always @(posedge delay_clk) begin
-    case (delay_addr)
-      8'h06: delay_rdata <= delay_rdata_s[6];
-      8'h05: delay_rdata <= delay_rdata_s[5];
-      8'h04: delay_rdata <= delay_rdata_s[4];
-      8'h03: delay_rdata <= delay_rdata_s[3];
-      8'h02: delay_rdata <= delay_rdata_s[2];
-      8'h01: delay_rdata <= delay_rdata_s[1];
-      8'h00: delay_rdata <= delay_rdata_s[0];
-      default: delay_rdata <= 5'd0;
-    endcase
-    if (delay_sel == 1'b1) begin
-      delay_ack_t <= ~delay_ack_t;
-    end
-  end
+  axi_ad9361_alt_lvds_tx i_tx (
+    .tx_clk_out_p (tx_clk_out_p),
+    .tx_clk_out_n (tx_clk_out_n),
+    .tx_frame_out_p (tx_frame_out_p),
+    .tx_frame_out_n (tx_frame_out_n),
+    .tx_data_out_p (tx_data_out_p),
+    .tx_data_out_n (tx_data_out_n),
+    .tx_clk (rx_clk_in_p),
+    .clk (l_clk),
+    .tx_frame (tx_frame),
+    .tx_data_0 (tx_data_0),
+    .tx_data_1 (tx_data_1),
+    .tx_data_2 (tx_data_2),
+    .tx_data_3 (tx_data_3),
+    .tx_locked (tx_locked_s));
 
-  // receive data interface, ibuf -> idelay -> iddr
+  // interface (receive)
 
-  generate
-  for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_rx_data
-  ad_lvds_in #(
-    .BUFTYPE (PCORE_DEVICE_TYPE),
-    .IODELAY_CTRL (0),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
-  i_rx_data (
-    .rx_clk (l_clk),
-    .rx_data_in_p (rx_data_in_p[l_inst]),
-    .rx_data_in_n (rx_data_in_n[l_inst]),
-    .rx_data_p (rx_data_p_s[l_inst]),
-    .rx_data_n (rx_data_n_s[l_inst]),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_ld (delay_ld[l_inst]),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata_s[l_inst]),
-    .delay_locked ());
-  end
-  endgenerate
-
-  // receive frame interface, ibuf -> idelay -> iddr
-
-  ad_lvds_in #(
-    .BUFTYPE (PCORE_DEVICE_TYPE),
-    .IODELAY_CTRL (1),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
-  i_rx_frame (
-    .rx_clk (l_clk),
-    .rx_data_in_p (rx_frame_in_p),
-    .rx_data_in_n (rx_frame_in_n),
-    .rx_data_p (rx_frame_p_s),
-    .rx_data_n (rx_frame_n_s),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_ld (delay_ld[6]),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata_s[6]),
-    .delay_locked (delay_locked));
-
-  // transmit data interface, oddr -> obuf
-
-  generate
-  for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_tx_data
-  ad_lvds_out #(
-    .BUFTYPE (PCORE_DEVICE_TYPE))
-  i_tx_data (
-    .tx_clk (l_clk),
-    .tx_data_p (tx_p_data_p[l_inst]),
-    .tx_data_n (tx_p_data_n[l_inst]),
-    .tx_data_out_p (tx_data_out_p[l_inst]),
-    .tx_data_out_n (tx_data_out_n[l_inst]));
-  end
-  endgenerate
-
-  // transmit frame interface, oddr -> obuf
-
-  ad_lvds_out #(
-    .BUFTYPE (PCORE_DEVICE_TYPE))
-  i_tx_frame (
-    .tx_clk (l_clk),
-    .tx_data_p (tx_p_frame),
-    .tx_data_n (tx_p_frame),
-    .tx_data_out_p (tx_frame_out_p),
-    .tx_data_out_n (tx_frame_out_n));
-
-  // transmit clock interface, oddr -> obuf
-
-  ad_lvds_out #(
-    .BUFTYPE (PCORE_DEVICE_TYPE))
-  i_tx_clk (
-    .tx_clk (l_clk),
-    .tx_data_p (1'b0),
-    .tx_data_n (1'b1),
-    .tx_data_out_p (tx_clk_out_p),
-    .tx_data_out_n (tx_clk_out_n));
-
-  // device clock interface (receive clock)
-
-  ad_lvds_clk #(
-    .BUFTYPE (PCORE_DEVICE_TYPE))
-  i_clk (
-    .clk_in_p (rx_clk_in_p),
-    .clk_in_n (rx_clk_in_n),
-    .clk (l_clk));
+  axi_ad9361_alt_lvds_rx i_rx (
+    .rx_clk_in_p (rx_clk_in_p),
+    .rx_clk_in_n (rx_clk_in_n),
+    .rx_frame_in_p (rx_frame_in_p),
+    .rx_frame_in_n (rx_frame_in_n),
+    .rx_data_in_p (rx_data_in_p),
+    .rx_data_in_n (rx_data_in_n),
+    .clk (l_clk),
+    .rx_frame (rx_frame_s),
+    .rx_data_0 (rx_data_0_s),
+    .rx_data_1 (rx_data_1_s),
+    .rx_data_2 (rx_data_2_s),
+    .rx_data_3 (rx_data_3_s),
+    .rx_locked (rx_locked_s));
 
 endmodule
 
