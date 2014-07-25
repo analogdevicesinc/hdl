@@ -128,6 +128,7 @@ module util_dac_unpack (
   wire [ 2:0] position_7;
 
   reg [  7:0] path_enabled = 0;
+  reg [  7:0] path_enabled_d1 = 0;
   reg [  2:0] counter_0 = 0;
   reg [  2:0] counter_d1 = 0;
   reg [ 15:0] dac_data_00 = 16'h0;
@@ -216,7 +217,8 @@ module util_dac_unpack (
 
   always @(posedge clk)
   begin
-    if (path_enabled == 8'h0)
+    path_enabled_d1 <= path_enabled;
+    if ((path_enabled == 8'h0) || (path_enabled_d1 != path_enabled))
     begin
       counter_0 <= 3'h0;
     end

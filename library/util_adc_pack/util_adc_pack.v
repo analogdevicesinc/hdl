@@ -121,10 +121,9 @@ module util_adc_pack (
   output          dvalid;
   output          dsync;
 
-  wire            chan_valid;
-  wire [3:0]      enable_cnt;
-  wire [2:0]      enable_cnt_0;
-  wire [2:0]      enable_cnt_1;
+  reg  [3:0]      enable_cnt;
+  reg  [2:0]      enable_cnt_0;
+  reg  [2:0]      enable_cnt_1;
 
   reg  [127:0]    packed_data = 0;
   reg  [63:0]     temp_data_0 = 0;
@@ -137,46 +136,71 @@ module util_adc_pack (
   reg  [7:0]      en4 = 0;
   reg  [127:0]    ddata = 0;
   reg             dvalid = 0;
+  reg             chan_valid = 0;
   reg             chan_valid_d1 = 0;
+  reg  [15:0]     chan_data_0_r;
+  reg  [15:0]     chan_data_1_r;
+  reg  [15:0]     chan_data_2_r;
+  reg  [15:0]     chan_data_3_r;
+  reg  [15:0]     chan_data_4_r;
+  reg  [15:0]     chan_data_5_r;
+  reg  [15:0]     chan_data_6_r;
+  reg  [15:0]     chan_data_7_r;
 
-  assign enable_cnt   = enable_cnt_0 + enable_cnt_1;
-  assign enable_cnt_0 = chan_enable_0 + chan_enable_1 + chan_enable_2 + chan_enable_3;
-  assign enable_cnt_1 = chan_enable_4 + chan_enable_5 + chan_enable_6 + chan_enable_7;
-  assign chan_valid   = chan_valid_0 | chan_valid_1 | chan_valid_2 | chan_valid_3 | chan_valid_4 | chan_valid_5 | chan_valid_6 | chan_valid_7 ;
   assign dsync        = dvalid;
 
-  always @(chan_data_0, chan_data_1, chan_data_2, chan_data_3, chan_enable_0, chan_enable_1, chan_enable_2, chan_enable_3, chan_valid)
+  always @(posedge clk)
+  begin
+    enable_cnt   = enable_cnt_0 + enable_cnt_1;
+    enable_cnt_0 = chan_enable_0 + chan_enable_1 + chan_enable_2 + chan_enable_3;
+    enable_cnt_1 = chan_enable_4 + chan_enable_5 + chan_enable_6 + chan_enable_7;
+  end
+
+  always @(posedge clk)
+  begin
+    chan_valid    <= chan_valid_0 | chan_valid_1 | chan_valid_2 | chan_valid_3 | chan_valid_4 | chan_valid_5 | chan_valid_6 | chan_valid_7 ;
+    chan_data_0_r <= chan_data_0;
+    chan_data_1_r <= chan_data_1;
+    chan_data_2_r <= chan_data_2;
+    chan_data_3_r <= chan_data_3;
+    chan_data_4_r <= chan_data_4;
+    chan_data_5_r <= chan_data_5;
+    chan_data_6_r <= chan_data_6;
+    chan_data_7_r <= chan_data_7;
+  end
+
+  always @(chan_data_0_r, chan_data_1_r, chan_data_2_r, chan_data_3_r, chan_enable_0, chan_enable_1, chan_enable_2, chan_enable_3, chan_valid)
   begin
     if(chan_valid == 1'b1)
     begin
       casex ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
-        4'bxxx1: temp_data_0[15:0] = chan_data_0;
-        4'bxx10: temp_data_0[15:0] = chan_data_1;
-        4'bx100: temp_data_0[15:0] = chan_data_2;
-        4'b1000: temp_data_0[15:0] = chan_data_3;
+        4'bxxx1: temp_data_0[15:0] = chan_data_0_r;
+        4'bxx10: temp_data_0[15:0] = chan_data_1_r;
+        4'bx100: temp_data_0[15:0] = chan_data_2_r;
+        4'b1000: temp_data_0[15:0] = chan_data_3_r;
         default: temp_data_0 [15:0] = 16'h0000;
       endcase
 
        casex ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
-        4'bxx11: temp_data_0[31:16] = chan_data_1;
-        4'bx110: temp_data_0[31:16] = chan_data_2;
-        4'bx101: temp_data_0[31:16] = chan_data_2;
-        4'b1001: temp_data_0[31:16] = chan_data_3;
-        4'b1010: temp_data_0[31:16] = chan_data_3;
-        4'b1100: temp_data_0[31:16] = chan_data_3;
+        4'bxx11: temp_data_0[31:16] = chan_data_1_r;
+        4'bx110: temp_data_0[31:16] = chan_data_2_r;
+        4'bx101: temp_data_0[31:16] = chan_data_2_r;
+        4'b1001: temp_data_0[31:16] = chan_data_3_r;
+        4'b1010: temp_data_0[31:16] = chan_data_3_r;
+        4'b1100: temp_data_0[31:16] = chan_data_3_r;
         default: temp_data_0[31:16] = 16'h0000;
       endcase
 
       casex ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
-        4'bx111: temp_data_0[47:32] = chan_data_2;
-        4'b1011: temp_data_0[47:32] = chan_data_3;
-        4'b1101: temp_data_0[47:32] = chan_data_3;
-        4'b1110: temp_data_0[47:32] = chan_data_3;
+        4'bx111: temp_data_0[47:32] = chan_data_2_r;
+        4'b1011: temp_data_0[47:32] = chan_data_3_r;
+        4'b1101: temp_data_0[47:32] = chan_data_3_r;
+        4'b1110: temp_data_0[47:32] = chan_data_3_r;
         default: temp_data_0[47:32] = 16'h0000;
       endcase
 
       case ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
-        4'b1111: temp_data_0[63:48] = chan_data_3;
+        4'b1111: temp_data_0[63:48] = chan_data_3_r;
         default: temp_data_0[63:48] = 16'h0000;
       endcase
     end
@@ -186,38 +210,38 @@ module util_adc_pack (
     end
   end
 
-  always @(chan_data_4, chan_data_5, chan_data_6, chan_data_7, chan_enable_4, chan_enable_5, chan_enable_6, chan_enable_7, chan_valid)
+  always @(chan_data_4_r, chan_data_5_r, chan_data_6_r, chan_data_7_r, chan_enable_4, chan_enable_5, chan_enable_6, chan_enable_7, chan_valid)
   begin
     if(chan_valid == 1'b1)
     begin
       casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
-        4'bxxx1: temp_data_1[15:0] = chan_data_4;
-        4'bxx10: temp_data_1[15:0] = chan_data_5;
-        4'bx100: temp_data_1[15:0] = chan_data_6;
-        4'b1000: temp_data_1[15:0] = chan_data_7;
+        4'bxxx1: temp_data_1[15:0] = chan_data_4_r;
+        4'bxx10: temp_data_1[15:0] = chan_data_5_r;
+        4'bx100: temp_data_1[15:0] = chan_data_6_r;
+        4'b1000: temp_data_1[15:0] = chan_data_7_r;
         default: temp_data_1 [15:0] = 16'h0000;
       endcase
 
        casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
-        4'bxx11: temp_data_1[31:16] = chan_data_5;
-        4'bx110: temp_data_1[31:16] = chan_data_6;
-        4'bx101: temp_data_1[31:16] = chan_data_6;
-        4'b1001: temp_data_1[31:16] = chan_data_7;
-        4'b1010: temp_data_1[31:16] = chan_data_7;
-        4'b1100: temp_data_1[31:16] = chan_data_7;
+        4'bxx11: temp_data_1[31:16] = chan_data_5_r;
+        4'bx110: temp_data_1[31:16] = chan_data_6_r;
+        4'bx101: temp_data_1[31:16] = chan_data_6_r;
+        4'b1001: temp_data_1[31:16] = chan_data_7_r;
+        4'b1010: temp_data_1[31:16] = chan_data_7_r;
+        4'b1100: temp_data_1[31:16] = chan_data_7_r;
         default: temp_data_1[31:16] = 16'h0000;
       endcase
 
       casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
-        4'bx111: temp_data_1[47:32] = chan_data_6;
-        4'b1011: temp_data_1[47:32] = chan_data_7;
-        4'b1101: temp_data_1[47:32] = chan_data_7;
-        4'b1110: temp_data_1[47:32] = chan_data_7;
+        4'bx111: temp_data_1[47:32] = chan_data_6_r;
+        4'b1011: temp_data_1[47:32] = chan_data_7_r;
+        4'b1101: temp_data_1[47:32] = chan_data_7_r;
+        4'b1110: temp_data_1[47:32] = chan_data_7_r;
         default: temp_data_1[47:32] = 16'h0000;
       endcase
 
       case ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
-        4'b1111: temp_data_1[63:48] = chan_data_7;
+        4'b1111: temp_data_1[63:48] = chan_data_7_r;
         default: temp_data_1[63:48] = 16'h0000;
       endcase
     end
