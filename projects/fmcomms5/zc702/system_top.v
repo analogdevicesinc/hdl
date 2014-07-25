@@ -118,6 +118,7 @@ module system_top (
   gpio_status_1,  
   gpio_ctl_1,
   gpio_en_agc_1,
+  gpio_resetb_1,
   gpio_enable_1,
   gpio_txnrx_1,
   gpio_debug_3_1,
@@ -212,6 +213,7 @@ module system_top (
   inout   [  7:0] gpio_status_1;
   inout   [  3:0] gpio_ctl_1;
   inout           gpio_en_agc_1;
+  inout           gpio_resetb_1;
   inout           gpio_enable_1;
   inout           gpio_txnrx_1;
   inout           gpio_debug_3_1;
@@ -245,10 +247,6 @@ module system_top (
   wire    [ 63:0] gpio_t;
   wire            gpio_open_45_45;
   wire            gpio_open_44_44;
-  wire    [ 63:0] ad9361_0_adc_ddata;
-  wire    [ 63:0] ad9361_0_dac_ddata;
-  wire    [ 63:0] ad9361_1_adc_ddata;
-  wire    [ 63:0] ad9361_1_dac_ddata;
 
   // multi-chip synchronization
 
@@ -275,11 +273,12 @@ module system_top (
     .I (ref_clk_s),
     .O (ref_clk));
 
-  ad_iobuf #(.DATA_WIDTH(59)) i_iobuf (
-    .dt (gpio_t[58:0]),
-    .di (gpio_o[58:0]),
-    .do (gpio_i[58:0]),
-    .dio ({ gpio_ad5355_lock, // 58
+  ad_iobuf #(.DATA_WIDTH(60)) i_iobuf (
+    .dt (gpio_t[59:0]),
+    .di (gpio_o[59:0]),
+    .do (gpio_i[59:0]),
+    .dio ({ gpio_resetb_1,    // 59
+            gpio_ad5355_lock, // 58
             gpio_ad5355_rfen, // 57
             gpio_calsw_4_1,   // 56
             gpio_calsw_3_1,   // 55
@@ -329,12 +328,6 @@ module system_top (
     .GPIO_I (gpio_i),
     .GPIO_O (gpio_o),
     .GPIO_T (gpio_t),
-    .ad9361_0_adc_ddata (ad9361_0_adc_ddata),
-    .ad9361_0_dac_ddata (ad9361_0_dac_ddata),
-    .ad9361_1_adc_ddata (ad9361_1_adc_ddata),
-    .ad9361_1_dac_ddata (ad9361_1_dac_ddata),    
-    .ad9361_adc_ddata ({ad9361_0_adc_ddata, ad9361_1_adc_ddata}),
-    .ad9361_dac_ddata ({ad9361_0_dac_ddata, ad9361_1_dac_ddata}), 
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
