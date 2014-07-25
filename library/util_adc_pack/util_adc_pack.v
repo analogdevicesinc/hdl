@@ -130,6 +130,7 @@ module util_adc_pack (
   reg  [63:0]     temp_data_0 = 0;
   reg  [63:0]     temp_data_1 = 0;
   reg  [7:0]      path_enabled = 0;
+  reg  [7:0]      path_enabled_d1 = 0;
   reg  [6:0]      counter_0 = 0;
   reg  [7:0]      en1 = 0;
   reg  [7:0]      en2 = 0;
@@ -244,7 +245,8 @@ module util_adc_pack (
 
   always @(posedge clk)
   begin
-    if (path_enabled == 8'h0)
+    path_enabled_d1 <= path_enabled;
+    if (path_enabled == 8'h0 || path_enabled_d1 != path_enabled )
     begin
       counter_0 <= 7'h0;
     end
