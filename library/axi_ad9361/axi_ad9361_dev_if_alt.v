@@ -174,10 +174,10 @@ module axi_ad9361_dev_if (
   reg             tx_data_sel = 'd0;
   reg     [47:0]  tx_data = 'd0;
   reg     [ 3:0]  tx_frame = 'd0;
-  reg     [11:0]  tx_data_0 = 'd0;
-  reg     [11:0]  tx_data_1 = 'd0;
-  reg     [11:0]  tx_data_2 = 'd0;
-  reg     [11:0]  tx_data_3 = 'd0;
+  reg     [ 5:0]  tx_data_0 = 'd0;
+  reg     [ 5:0]  tx_data_1 = 'd0;
+  reg     [ 5:0]  tx_data_2 = 'd0;
+  reg     [ 5:0]  tx_data_3 = 'd0;
 
   // internal signals
 
@@ -189,56 +189,6 @@ module axi_ad9361_dev_if (
   wire    [ 5:0]  rx_data_2_s;
   wire    [ 5:0]  rx_data_3_s;
   wire            rx_locked_s;
-
-  // signal tap
-
-  wire    [255:0] acq_data_s;
-  wire    [  1:0] acq_trigger_s;
-
-  assign acq_data_s[  3:  0] = rx_frame;
-  assign acq_data_s[  9:  4] = rx_data_3;
-  assign acq_data_s[ 15: 10] = rx_data_2;
-  assign acq_data_s[ 21: 16] = rx_data_1;
-  assign acq_data_s[ 27: 22] = rx_data_0;
-  assign acq_data_s[ 28: 28] = rx_error_r2;
-  assign acq_data_s[ 29: 29] = rx_valid_r2;
-  assign acq_data_s[ 53: 30] = rx_data_r2;
-  assign acq_data_s[ 54: 54] = adc_valid;
-  assign acq_data_s[102: 55] = adc_data;
-  assign acq_data_s[103:103] = adc_status;
-  assign acq_data_s[104:104] = rx_locked_s;
-  assign acq_data_s[105:105] = dac_valid;
-  assign acq_data_s[153:106] = dac_data;
-  assign acq_data_s[154:154] = tx_data_sel;
-  assign acq_data_s[202:155] = tx_data;
-  assign acq_data_s[206:203] = tx_frame;
-  assign acq_data_s[218:207] = tx_data_0;
-  assign acq_data_s[230:219] = tx_data_1;
-  assign acq_data_s[242:231] = tx_data_2;
-  assign acq_data_s[254:243] = tx_data_3;
-  assign acq_data_s[255:255] = tx_locked_s;
-
-  assign acq_trigger_s[1] = tx_locked_s;
-  assign acq_trigger_s[0] = rx_locked_s;
-
-  sld_signaltap #(
-    .sld_data_bits (256),
-    .sld_sample_depth (128),
-    .sld_ram_block_type ("AUTO"),
-    .sld_storage_qualifier_mode ("OFF"),
-    .sld_trigger_bits (2),
-    .sld_trigger_level (1),
-    .sld_trigger_in_enabled (0),
-    .sld_enable_advanced_trigger (0),
-    .sld_trigger_level_pipeline (1),
-    .sld_node_info (1076736),
-    .sld_node_crc_bits (32),
-    .sld_node_crc_hiword (17890),
-    .sld_node_crc_loword (38728))
-  i_ila_dev_if (
-    .acq_clk (clk),
-    .acq_data_in (acq_data_s),
-    .acq_trigger_in (acq_trigger_s));
 
   // defaults
 

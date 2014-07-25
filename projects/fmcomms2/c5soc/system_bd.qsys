@@ -73,6 +73,14 @@
          type = "String";
       }
    }
+   element sys_int_mem.s1
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element sys_gpio.s1
    {
       datum _lockedAddress
@@ -86,11 +94,11 @@
          type = "String";
       }
    }
-   element sys_int_mem.s1
+   element axi_ad9361.s_axi
    {
       datum baseAddress
       {
-         value = "0";
+         value = "131072";
          type = "String";
       }
    }
@@ -99,14 +107,6 @@
       datum baseAddress
       {
          value = "16384";
-         type = "String";
-      }
-   }
-   element axi_ad9361.s_axi
-   {
-      datum baseAddress
-      {
-         value = "131072";
          type = "String";
       }
    }
@@ -611,7 +611,7 @@
   <parameter name="dbg_trace_clk_div" value="0" />
   <parameter name="desired_l4_mp_clk_mhz" value="100.0" />
   <parameter name="desired_l4_sp_clk_mhz" value="100.0" />
-  <parameter name="desired_cfg_clk_mhz" value="100.0" />
+  <parameter name="desired_cfg_clk_mhz" value="80.0" />
   <parameter name="desired_sdmmc_clk_mhz" value="200.0" />
   <parameter name="desired_nand_clk_mhz" value="12.5" />
   <parameter name="desired_qspi_clk_mhz" value="400.0" />
@@ -737,7 +737,7 @@
   <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
   <parameter name="H2F_AXI_CLOCK_FREQ" value="50000000" />
   <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="50000000" />
-  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="100000000" />
+  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="80000000" />
   <parameter name="F2H_SDRAM1_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM2_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM3_CLOCK_FREQ" value="100" />

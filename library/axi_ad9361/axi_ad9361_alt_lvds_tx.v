@@ -73,10 +73,10 @@ module axi_ad9361_alt_lvds_tx (
   input           tx_clk;
   input           clk;
   input   [ 3:0]  tx_frame;
-  input   [11:0]  tx_data_0;
-  input   [11:0]  tx_data_1;
-  input   [11:0]  tx_data_2;
-  input   [11:0]  tx_data_3;
+  input   [ 5:0]  tx_data_0;
+  input   [ 5:0]  tx_data_1;
+  input   [ 5:0]  tx_data_2;
+  input   [ 5:0]  tx_data_3;
   output          tx_locked;
 
   // internal registers
