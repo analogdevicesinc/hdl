@@ -54,15 +54,18 @@ module axi_ad9122 (
 
   // master/slave
 
-  dac_enable_out,
-  dac_enable_in,
+  dac_sync_out,
+  dac_sync_in,
 
   // dma interface
 
   dac_div_clk,
-  dac_drd,
-  dac_ddata,
-  dac_ddata_64,
+  dac_valid_0,
+  dac_enable_0,
+  dac_ddata_0,
+  dac_valid_1,
+  dac_enable_1,
+  dac_ddata_1,
   dac_dovf,
   dac_dunf,
 
@@ -97,8 +100,8 @@ module axi_ad9122 (
   parameter   PCORE_DAC_DP_DISABLE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
   parameter   C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter   C_BASEADDR = 32'hffffffff;
-  parameter   C_HIGHADDR = 32'h00000000;
+  parameter   C_HIGHADDR = 32'hffffffff;
+  parameter   C_BASEADDR = 32'h00000000;
 
   // dac interface
 
@@ -113,15 +116,18 @@ module axi_ad9122 (
 
   // master/slave
 
-  output          dac_enable_out;
-  input           dac_enable_in;
+  output          dac_sync_out;
+  input           dac_sync_in;
 
   // dma interface
 
   output          dac_div_clk;
-  output          dac_drd;
-  input  [127:0]  dac_ddata;
-  input   [63:0]  dac_ddata_64;
+  output          dac_valid_0;
+  output          dac_enable_0;
+  input   [63:0]  dac_ddata_0;
+  output          dac_valid_1;
+  output          dac_enable_1;
+  input   [63:0]  dac_ddata_1;
   input           dac_dovf;
   input           dac_dunf;
 
@@ -157,7 +163,6 @@ module axi_ad9122 (
 
   // internal signals
 
-  wire   [127:0]  dac_ddata_s;
   wire            dac_frame_i0_s;
   wire    [15:0]  dac_data_i0_s;
   wire            dac_frame_i1_s;
@@ -188,13 +193,6 @@ module axi_ad9122 (
   wire    [31:0]  up_wdata_s;
   wire    [31:0]  up_rdata_s;
   wire            up_ack_s;
-
-  // dac dma data - requires 128bits.
-  // however, it can be sourced either from a 128bit bus or a 64bit bus.
-  // 64bit interface is for low bandwidth designs.
-  // only one of the source can be used at a time and the other one must be tied to 0x0.
-
-  assign dac_ddata_s = dac_ddata | {{2{dac_ddata_64[63:32]}}, {2{dac_ddata_64[31:0]}}};
 
   // signal name changes
 
@@ -269,10 +267,14 @@ module axi_ad9122 (
     .dac_frame_q3 (dac_frame_q3_s),
     .dac_data_q3 (dac_data_q3_s),
     .dac_status (dac_status_s),
-    .dac_enable_out (dac_enable_out),
-    .dac_enable_in (dac_enable_in),
-    .dac_drd (dac_drd),
-    .dac_ddata (dac_ddata_s),
+    .dac_sync_out (dac_sync_out),
+    .dac_sync_in (dac_sync_in),
+    .dac_valid_0 (dac_valid_0),
+    .dac_enable_0 (dac_enable_0),
+    .dac_ddata_0 (dac_ddata_0),
+    .dac_valid_1 (dac_valid_1),
+    .dac_enable_1 (dac_enable_1),
+    .dac_ddata_1 (dac_ddata_1),
     .dac_dovf (dac_dovf),
     .dac_dunf (dac_dunf),
     .mmcm_rst (mmcm_rst),
