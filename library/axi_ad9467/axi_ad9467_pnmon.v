@@ -43,47 +43,36 @@
 module axi_ad9467_pnmon (
 
   // adc interface
+
   adc_clk,
   adc_data,
 
   // pn out of sync and error
+
   adc_pn_oos,
   adc_pn_err,
-
-  // processor interface PN9 (0x0), PN23 (0x1)
-  up_pn_type);
+  adc_pnseq_sel);
 
   // adc interface
+
   input           adc_clk;
   input   [15:0]  adc_data;
 
   // pn out of sync and error
+
   output          adc_pn_oos;
   output          adc_pn_err;
+  input   [ 3:0]  adc_pnseq_sel;
 
-  // processor interface PN9 (0x0), PN23 (0x1)
-  input           up_pn_type;
+  // internal registers
+  
+  reg             adc_valid_in = 'd0;
+  reg     [31:0]  adc_pn_data_in = 'd0;
+  reg     [31:0]  adc_pn_data_pn = 'd0;
 
-  reg             adc_pn_type_m1 = 'd0;
-  reg             adc_pn_type_m2 = 'd0;
-  reg             adc_pn_type = 'd0;
-  reg             adc_pn_en = 'd0;
-  reg     [15:0]  adc_data_d = 'd0;
-  reg     [31:0]  adc_pn_data = 'd0;
-  reg             adc_pn_en_d = 'd0;
-  reg             adc_pn_match = 'd0;
-  reg     [ 6:0]  adc_pn_oos_count = 'd0;
-  reg             adc_pn_oos = 'd0;
-  reg     [ 4:0]  adc_pn_err_count = 'd0;
-  reg             adc_pn_err = 'd0;
+  // internal signals
 
   wire    [31:0]  adc_pn_data_in_s;
-  wire            adc_pn_match0_s;
-  wire            adc_pn_match1_s;
-  wire            adc_pn_match2_s;
-  wire            adc_pn_match_s;
-  wire    [31:0]  adc_pn_data_s;
-  wire            adc_pn_err_s;
 
   // PN23 function
 
@@ -169,93 +158,29 @@ module axi_ad9467_pnmon (
     end
   endfunction
 
-  // This PN sequence checking algorithm is commonly used is most applications.
-  // It is a simple function generated based on the OOS status.
-  // If OOS is asserted (PN is OUT of sync):
-  //    The next sequence is generated from the incoming data.
-  //    If 16 sequences match CONSECUTIVELY, OOS is cleared (de-asserted).
-  // If OOS is de-asserted (PN is IN sync)
-  //    The next sequence is generated from the current sequence.
-  //    If 64 sequences mismatch CONSECUTIVELY, OOS is set (asserted).
-  // If OOS is de-asserted, any spurious mismatches sets the ERROR register.
-  // Ideally, processor should make sure both OOS == 0x0 AND ERR == 0x0.
+  // pn sequence select
 
-  assign adc_pn_data_in_s[31:16] = {~adc_data_d[15], adc_data_d[14:0]};
-  assign adc_pn_data_in_s[15:0] = {~adc_data[15], adc_data[14:0]};
-  assign adc_pn_match0_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
-  assign adc_pn_match1_s = (adc_pn_data_in_s[15:0] == adc_pn_data[15:0]) ? 1'b1 : 1'b0;
-  assign adc_pn_match2_s = ((adc_data == 16'd0) && (adc_data_d == 16'd0)) ? 1'b0 : 1'b1;
-  assign adc_pn_match_s = adc_pn_match0_s & adc_pn_match1_s & adc_pn_match2_s;
-  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
-  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match);
-
-  // PN running sequence
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
 
   always @(posedge adc_clk) begin
-    adc_pn_type_m1 <= up_pn_type;
-    adc_pn_type_m2 <= adc_pn_type_m1;
-    adc_pn_type <= adc_pn_type_m2;
-    adc_pn_en <= ~adc_pn_en;
-    adc_data_d <= adc_data;
-    if (adc_pn_en == 1'b1) begin
-      if (adc_pn_type == 1'b0) begin
-        adc_pn_data <= pn9(adc_pn_data_s);
-      end else begin
-        adc_pn_data <= pn23(adc_pn_data_s);
-      end
+    adc_valid_in <= ~adc_valid_in;
+    adc_pn_data_in <= {adc_pn_data_in[15:0], ~adc_data[15], adc_data[14:0]};
+    if (adc_pnseq_sel == 4'd0) begin
+      adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+    end else begin
+      adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
     end
   end
 
-  // PN OOS and counters (16 to clear, 64 to set). These numbers are actually determined
-  // based on BER parameters set by the system (usually in network applications).
+  // pn oos & pn err
 
-  always @(posedge adc_clk) begin
-    adc_pn_en_d <= adc_pn_en;
-    adc_pn_match <= adc_pn_match_s;
-    if (adc_pn_en_d == 1'b1) begin
-      if (adc_pn_oos == 1'b1) begin
-        if (adc_pn_match == 1'b1) begin
-          if (adc_pn_oos_count >= 16) begin
-            adc_pn_oos_count <= 'd0;
-            adc_pn_oos <= 'd0;
-          end else begin
-            adc_pn_oos_count <= adc_pn_oos_count + 1'b1;
-            adc_pn_oos <= 'd1;
-          end
-        end else begin
-          adc_pn_oos_count <= 'd0;
-          adc_pn_oos <= 'd1;
-        end
-      end else begin
-        if (adc_pn_match == 1'b0) begin
-          if (adc_pn_oos_count >= 64) begin
-            adc_pn_oos_count <= 'd0;
-            adc_pn_oos <= 'd1;
-          end else begin
-            adc_pn_oos_count <= adc_pn_oos_count + 1'b1;
-            adc_pn_oos <= 'd0;
-          end
-        end else begin
-          adc_pn_oos_count <= 'd0;
-          adc_pn_oos <= 'd0;
-        end
-      end
-    end
-  end
-
-  // The error state is streched to multiple adc clocks such that processor
-  // has enough time to sample the error condition.
-
-  always @(posedge adc_clk) begin
-    if (adc_pn_en_d == 1'b1) begin
-      if (adc_pn_err_s == 1'b1) begin
-        adc_pn_err_count <= 5'h10;
-      end else if (adc_pn_err_count[4] == 1'b1) begin
-        adc_pn_err_count <= adc_pn_err_count + 1'b1;
-      end
-    end
-    adc_pn_err <= adc_pn_err_count[4];
-  end
+  ad_pnmon #(.DATA_WIDTH(32)) i_pnmon (
+    .adc_clk (adc_clk),
+    .adc_valid_in (adc_valid_in),
+    .adc_data_in (adc_pn_data_in),
+    .adc_data_pn (adc_pn_data_pn),
+    .adc_pn_oos (adc_pn_oos),
+    .adc_pn_err (adc_pn_err));
 
 endmodule
 
