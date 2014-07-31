@@ -114,7 +114,7 @@ module axi_ad9467_if (
 
   reg     [ 7:0]  adc_data_p = 'd0;
   reg     [ 7:0]  adc_data_n = 'd0;
-  reg     [ 7:0]  adc_data_n_d = 'd0;
+  reg     [ 7:0]  adc_data_p_d = 'd0;
   reg     [ 7:0]  adc_dmux_a = 'd0;
   reg     [ 7:0]  adc_dmux_b = 'd0;
   reg     [15:0]  adc_data = 'd0;
@@ -140,9 +140,9 @@ module axi_ad9467_if (
   always @(posedge adc_clk) begin
     adc_data_p <= adc_data_p_s;
     adc_data_n <= adc_data_n_s;
-    adc_data_n_d <= adc_data_n;
-    adc_dmux_a <= (adc_ddr_edgesel == 1'b1) ? adc_data_n : adc_data_p;
-    adc_dmux_b <= (adc_ddr_edgesel == 1'b1) ? adc_data_p : adc_data_n_d;
+    adc_data_p_d <= adc_data_p;
+    adc_dmux_a <= (adc_ddr_edgesel == 1'b1) ? adc_data_n   : adc_data_p;
+    adc_dmux_b <= (adc_ddr_edgesel == 1'b1) ? adc_data_p_d : adc_data_n;
     adc_data[15] <= adc_dmux_b[7];
     adc_data[14] <= adc_dmux_a[7];
     adc_data[13] <= adc_dmux_b[6];
@@ -190,11 +190,10 @@ module axi_ad9467_if (
     end
   end
 
+  // delay read interface, a delay ack toggle is used to transfer data to the
+  // processor side- delay locked is independently transferred
 
- // delay read interface, a delay ack toggle is used to transfer data to the
- // processor side- delay locked is independently transferred
-
- always @(posedge delay_clk) begin
+  always @(posedge delay_clk) begin
     case (delay_addr)
       8'd8 : delay_rdata <= delay_rdata_s[8];
       8'd7 : delay_rdata <= delay_rdata_s[7];

@@ -72,7 +72,7 @@ module axi_ad9467_pnmon (
 
   // internal signals
 
-  wire    [31:0]  adc_pn_data_in_s;
+  wire    [31:0]  adc_pn_data_pn_s;
 
   // PN23 function
 

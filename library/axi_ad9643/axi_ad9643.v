@@ -50,11 +50,6 @@ module axi_ad9643 (
   adc_or_in_p,
   adc_or_in_n,
 
-  // master-slave interface
-
-  adc_start_out,
-  adc_start_in,
-
   // delay interface
 
   delay_clk,
@@ -62,11 +57,16 @@ module axi_ad9643 (
   // dma interface
 
   adc_clk,
-  adc_dwr,
-  adc_dsync,
-  adc_ddata,
+  adc_valid_0,
+  adc_enable_0,
+  adc_data_0,
+  adc_valid_1,
+  adc_enable_1,
+  adc_data_1,
   adc_dovf,
   adc_dunf,
+  up_adc_gpio_in,
+  up_adc_gpio_out,
 
   // axi interface
 
@@ -88,20 +88,17 @@ module axi_ad9643 (
   s_axi_rvalid,
   s_axi_rresp,
   s_axi_rdata,
-  s_axi_rready,
+  s_axi_rready);
 
-  // debug signals
-
-  adc_mon_valid,
-  adc_mon_data);
+  // parameters
 
   parameter PCORE_ID = 0;
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_ADC_DP_DISABLE = 0;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
   parameter C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter C_BASEADDR = 32'hffffffff;
-  parameter C_HIGHADDR = 32'h00000000;
+  parameter C_HIGHADDR = 32'hffffffff;
+  parameter C_BASEADDR = 32'h00000000;
 
   // adc interface (clk, data, over-range)
 
@@ -112,11 +109,6 @@ module axi_ad9643 (
   input           adc_or_in_p;
   input           adc_or_in_n;
 
-  // master-slave interface
-
-  output          adc_start_out;
-  input           adc_start_in;
-
   // delay interface
 
   input           delay_clk;
@@ -124,11 +116,16 @@ module axi_ad9643 (
   // dma interface
 
   output          adc_clk;
-  output          adc_dwr;
-  output          adc_dsync;
-  output  [31:0]  adc_ddata;
+  output          adc_valid_0;
+  output          adc_enable_0;
+  output  [15:0]  adc_data_0;
+  output          adc_valid_1;
+  output          adc_enable_1;
+  output  [15:0]  adc_data_1;
   input           adc_dovf;
   input           adc_dunf;
+  input   [31:0]  up_adc_gpio_in;
+  output  [31:0]  up_adc_gpio_out;
 
   // axi interface
 
@@ -152,20 +149,11 @@ module axi_ad9643 (
   output  [31:0]  s_axi_rdata;
   input           s_axi_rready;
 
-  // debug signals
-
-  output          adc_mon_valid;
-  output  [27:0]  adc_mon_data;
-
   // internal registers
 
-  reg             adc_start_out = 'd0;
-  reg             adc_data_cnt = 'd0;
-  reg             adc_valid = 'd0;
-  reg     [31:0]  adc_data = 'd0;
-  reg             up_adc_status_pn_err = 'd0;
-  reg             up_adc_status_pn_oos = 'd0;
-  reg             up_adc_status_or = 'd0;
+  reg             up_status_pn_err = 'd0;
+  reg             up_status_pn_oos = 'd0;
+  reg             up_status_or = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg             up_ack = 'd0;
 
@@ -177,7 +165,6 @@ module axi_ad9643 (
 
   // internal signals
 
-  wire            adc_start_s;
   wire    [13:0]  adc_data_a_s;
   wire    [13:0]  adc_data_b_s;
   wire            adc_or_a_s;
@@ -186,14 +173,9 @@ module axi_ad9643 (
   wire    [15:0]  adc_dcfilter_data_b_s;
   wire    [15:0]  adc_channel_data_a_s;
   wire    [15:0]  adc_channel_data_b_s;
-  wire            adc_enable_a_s;
-  wire            adc_enable_b_s;
-  wire            up_adc_pn_err_a_s;
-  wire            up_adc_pn_oos_a_s;
-  wire            up_adc_or_a_s;
-  wire            up_adc_pn_err_b_s;
-  wire            up_adc_pn_oos_b_s;
-  wire            up_adc_or_b_s;
+  wire    [ 1:0]  up_status_pn_err_s;
+  wire    [ 1:0]  up_status_pn_oos_s;
+  wire    [ 1:0]  up_status_or_s;
   wire            adc_ddr_edgesel_s;
   wire            adc_pin_mode_s;
   wire            adc_status_s;
@@ -209,81 +191,34 @@ module axi_ad9643 (
   wire            up_wr_s;
   wire    [13:0]  up_addr_s;
   wire    [31:0]  up_wdata_s;
-  wire    [31:0]  up_adc_common_rdata_s;
-  wire            up_adc_common_ack_s;
-  wire    [31:0]  up_adc_channel_rdata_a_s;
-  wire            up_adc_channel_ack_a_s;
-  wire    [31:0]  up_adc_channel_rdata_b_s;
-  wire            up_adc_channel_ack_b_s;
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_ack_s[0:2];
 
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  // monitor signals
-
-  assign adc_mon_valid = 1'b1;
-  assign adc_mon_data[13: 0] = adc_data_a_s;
-  assign adc_mon_data[27:14] = adc_data_b_s;
-
   // dma interface
 
-  assign adc_dwr = adc_valid;
-  assign adc_dsync = 1'b1;
-  assign adc_ddata = adc_data;
-
-  // multiple instances synchronization
-
-  assign adc_start_s = (PCORE_ID == 32'd0) ? adc_start_out : adc_start_in;
-
-  always @(posedge adc_clk) begin
-    if (adc_rst == 1'b1) begin
-      adc_start_out <= 1'b0;
-    end else begin
-      adc_start_out <= 1'b1;
-    end
-  end
-
-  // adc channels - dma interface
-
-  always @(posedge adc_clk) begin
-    adc_data_cnt <= ~adc_data_cnt;
-    case ({adc_enable_b_s, adc_enable_a_s})
-      2'b11: begin // both I and Q
-        adc_valid <= adc_start_s;
-        adc_data <= {adc_channel_data_b_s, adc_channel_data_a_s};
-      end
-      2'b10: begin // Q only
-        adc_valid <= adc_data_cnt & adc_start_s;
-        adc_data <= {adc_channel_data_b_s, adc_data[31:16]};
-      end
-      2'b01: begin // I only
-        adc_valid <= adc_data_cnt & adc_start_s;
-        adc_data <= {adc_channel_data_a_s, adc_data[31:16]};
-      end
-      default: begin // no channels
-        adc_valid <= adc_start_s;
-        adc_data <= {2{16'hdead}};
-      end
-    endcase
-  end
+  assign adc_valid_0 = 1'b1;
+  assign adc_valid_1 = 1'b1;
 
   // processor read interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_adc_status_pn_err <= 'd0;
-      up_adc_status_pn_oos <= 'd0;
-      up_adc_status_or <= 'd0;
+      up_status_pn_err <= 'd0;
+      up_status_pn_oos <= 'd0;
+      up_status_or <= 'd0;
       up_rdata <= 'd0;
       up_ack <= 'd0;
     end else begin
-      up_adc_status_pn_err <= up_adc_pn_err_a_s | up_adc_pn_err_b_s;
-      up_adc_status_pn_oos <= up_adc_pn_oos_a_s | up_adc_pn_oos_b_s;
-      up_adc_status_or <= up_adc_or_a_s | up_adc_or_b_s;
-      up_rdata <= up_adc_common_rdata_s | up_adc_channel_rdata_a_s | up_adc_channel_rdata_b_s;
-      up_ack <= up_adc_common_ack_s | up_adc_channel_ack_a_s | up_adc_channel_ack_b_s;
+      up_status_pn_err <= up_status_pn_err_s[0] | up_status_pn_err_s[1];
+      up_status_pn_oos <= up_status_pn_oos_s[0] | up_status_pn_oos_s[1];
+      up_status_or <= up_status_or_s[0] | up_status_or_s[1];
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+      up_ack <= up_ack_s[0] | up_ack_s[1] | up_ack_s[2];
     end
   end
 
@@ -300,19 +235,19 @@ module axi_ad9643 (
     .adc_or (adc_or_a_s),
     .adc_dcfilter_data_out (adc_dcfilter_data_a_s),
     .adc_dcfilter_data_in (adc_dcfilter_data_b_s),
-    .adc_iqcor_data (adc_channel_data_a_s),
-    .adc_enable (adc_enable_a_s),
-    .up_adc_pn_err (up_adc_pn_err_a_s),
-    .up_adc_pn_oos (up_adc_pn_oos_a_s),
-    .up_adc_or (up_adc_or_a_s),
+    .adc_iqcor_data (adc_data_0),
+    .adc_enable (adc_enable_0),
+    .up_adc_pn_err (up_status_pn_err_s[0]),
+    .up_adc_pn_oos (up_status_pn_oos_s[0]),
+    .up_adc_or (up_status_or_s[0]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
     .up_wr (up_wr_s),
     .up_addr (up_addr_s),
     .up_wdata (up_wdata_s),
-    .up_rdata (up_adc_channel_rdata_a_s),
-    .up_ack (up_adc_channel_ack_a_s));
+    .up_rdata (up_rdata_s[0]),
+    .up_ack (up_ack_s[0]));
 
   // channel
 
@@ -327,24 +262,24 @@ module axi_ad9643 (
     .adc_or (adc_or_b_s),
     .adc_dcfilter_data_out (adc_dcfilter_data_b_s),
     .adc_dcfilter_data_in (adc_dcfilter_data_a_s),
-    .adc_iqcor_data (adc_channel_data_b_s),
-    .adc_enable (adc_enable_b_s),
-    .up_adc_pn_err (up_adc_pn_err_b_s),
-    .up_adc_pn_oos (up_adc_pn_oos_b_s),
-    .up_adc_or (up_adc_or_b_s),
+    .adc_iqcor_data (adc_data_1),
+    .adc_enable (adc_enable_1),
+    .up_adc_pn_err (up_status_pn_err_s[1]),
+    .up_adc_pn_oos (up_status_pn_oos_s[1]),
+    .up_adc_or (up_status_or_s[1]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
     .up_wr (up_wr_s),
     .up_addr (up_addr_s),
     .up_wdata (up_wdata_s),
-    .up_rdata (up_adc_channel_rdata_b_s),
-    .up_ack (up_adc_channel_ack_b_s));
+    .up_rdata (up_rdata_s[1]),
+    .up_ack (up_ack_s[1]));
 
   // main (device interface)
 
   axi_ad9643_if #(
-    .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
+    .PCORE_BUFTYPE (PCORE_DEVICE_TYPE),
     .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP))
   i_if (
     .adc_clk_in_p (adc_clk_in_p),
@@ -381,12 +316,12 @@ module axi_ad9643 (
     .adc_ddr_edgesel (adc_ddr_edgesel_s),
     .adc_pin_mode (adc_pin_mode_s),
     .adc_status (adc_status_s),
-    .adc_status_pn_err (up_adc_status_pn_err),
-    .adc_status_pn_oos (up_adc_status_pn_oos),
-    .adc_status_or (up_adc_status_or),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
+    .up_status_pn_err (up_status_pn_err),
+    .up_status_pn_oos (up_status_pn_oos),
+    .up_status_or (up_status_or),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst_s),
     .delay_sel (delay_sel_s),
@@ -407,14 +342,16 @@ module axi_ad9643 (
     .drp_locked (1'd1),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd0),
+    .up_adc_gpio_in (up_adc_gpio_in),
+    .up_adc_gpio_out (up_adc_gpio_out),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel_s),
     .up_wr (up_wr_s),
     .up_addr (up_addr_s),
     .up_wdata (up_wdata_s),
-    .up_rdata (up_adc_common_rdata_s),
-    .up_ack (up_adc_common_ack_s));
+    .up_rdata (up_rdata_s[2]),
+    .up_ack (up_ack_s[2]));
 
   // up bus interface
 
