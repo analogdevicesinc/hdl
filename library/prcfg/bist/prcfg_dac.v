@@ -49,13 +49,15 @@ module prcfg_dac(
   status,
 
   // FIFO interface
-  src_dac_drd,
+  src_dac_en,
   src_dac_ddata,
   src_dac_dunf,
+  src_dac_dvalid,
 
-  dst_dac_drd,
+  dst_dac_en,
   dst_dac_ddata,
-  dst_dac_dunf
+  dst_dac_dunf,
+  dst_dac_dvalid
 );
 
   localparam  RP_ID      = 8'hA1;
@@ -66,17 +68,20 @@ module prcfg_dac(
   input   [31:0]    control;
   output  [31:0]    status;
 
-  output            src_dac_drd;
+  output            src_dac_en;
   input   [31:0]    src_dac_ddata;
   input             src_dac_dunf;
+  input             src_dac_dvalid;
 
-  input             dst_dac_drd;
+  input             dst_dac_en;
   output  [31:0]    dst_dac_ddata;
   output            dst_dac_dunf;
+  output            dst_dac_dvalid;
 
   reg               dst_dac_dunf   = 0;
   reg     [31:0]    dst_dac_ddata  = 0;
-  reg               src_dac_drd    = 0;
+  reg               dst_dac_dvalid = 0;
+  reg               src_dac_en     = 0;
 
   reg     [31:0]    dac_prbs       = 32'hA2F19C;
   reg     [31:0]    status         = 0;
@@ -144,7 +149,7 @@ module prcfg_dac(
 
   // sine tone generation
   always @(posedge clk) begin
-    if (dst_dac_drd == 1'h1) begin
+    if (dst_dac_en == 1'h1) begin
       counter <= counter + 1;
     end
   end
@@ -190,7 +195,7 @@ module prcfg_dac(
 
   // prbs generation
   always @(posedge clk) begin
-    if(dst_dac_drd == 1'h1) begin
+    if(dst_dac_en == 1'h1) begin
       dac_prbs <= pn(dac_prbs);
     end
   end
@@ -199,7 +204,7 @@ module prcfg_dac(
 
   // constant pattern generator
   always @(posedge clk) begin
-    if(dst_dac_drd == 1'h1) begin
+    if(dst_dac_en == 1'h1) begin
       pattern <= ~pattern;
     end
   end
@@ -210,8 +215,10 @@ module prcfg_dac(
 
   // output mux for tx side
   always @(posedge clk) begin
-    src_dac_drd   <= (mode == 0) ? dst_dac_drd  : 1'b0;
-    dst_dac_dunf  <= (mode == 0) ? src_dac_dunf : 1'b0;
+    src_dac_en     <= (mode == 0) ? dst_dac_en  : 1'b0;
+    dst_dac_dvalid <= (mode == 0) ? src_dac_dvalid  :
+                                  ((dst_dac_en == 1'b1) ? 1'b1 : 1'b0);
+    dst_dac_dunf   <= (mode == 0) ? src_dac_dunf : 1'b0;
   end
 
   always @(posedge clk) begin
