@@ -152,11 +152,11 @@
          type = "String";
       }
    }
-   element axi_ad9250_1.s_axi
+   element axi_ad9250_0.s_axi
    {
       datum baseAddress
       {
-         value = "32768";
+         value = "65536";
          type = "String";
       }
    }
@@ -176,11 +176,11 @@
          type = "String";
       }
    }
-   element axi_ad9250_0.s_axi
+   element axi_ad9250_1.s_axi
    {
       datum baseAddress
       {
-         value = "65536";
+         value = "32768";
          type = "String";
       }
    }
@@ -222,6 +222,11 @@
       {
          value = "1";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_id
@@ -303,14 +308,20 @@
  <parameter name="generationId" value="0" />
  <parameter name="globalResetBus" value="false" />
  <parameter name="hdlLanguage" value="VERILOG" />
- <parameter name="maxAdditionalLatency" value="4" />
+ <parameter name="hideFromIPCatalog" value="false" />
+ <parameter name="maxAdditionalLatency" value="2" />
  <parameter name="projectName">fmcjesdadc1_a5soc.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
- <interface name="memory" internal="sys_hps.memory" type="conduit" dir="end" />
+ <interface
+   name="sys_hps_memory"
+   internal="sys_hps.memory"
+   type="conduit"
+   dir="end" />
  <interface name="clk" internal="sys_clk.clk_in" type="clock" dir="end" />
  <interface name="reset" internal="sys_clk.clk_in_reset" type="reset" dir="end" />
  <interface name="hps_0_emac0" internal="sys_hps.emac0" />
@@ -477,12 +488,8 @@
  <interface
    name="sys_hps_f2h_warm_reset_req"
    internal="sys_hps.f2h_warm_reset_req" />
- <interface
-   name="sys_hps_f2h_stm_hw_events"
-   internal="sys_hps.f2h_stm_hw_events"
-   type="conduit"
-   dir="end" />
- <interface name="hps_io" internal="sys_hps.hps_io" type="conduit" dir="end" />
+ <interface name="sys_hps_f2h_stm_hw_events" internal="sys_hps.f2h_stm_hw_events" />
+ <interface name="sys_hps_io" internal="sys_hps.hps_io" type="conduit" dir="end" />
  <interface
    name="sys_hps_h2f_reset"
    internal="sys_hps.h2f_reset"
@@ -498,33 +505,14 @@
    internal="axi_hdmi_tx.hdmi_if"
    type="conduit"
    dir="end" />
- <interface
-   name="sys_hdmi_pll_reconfig_to_pll"
-   internal="sys_hdmi_pll.reconfig_to_pll"
-   type="conduit"
-   dir="end" />
- <interface
-   name="sys_hdmi_pll_reconfig_from_pll"
-   internal="sys_hdmi_pll.reconfig_from_pll"
-   type="conduit"
-   dir="end" />
- <interface
-   name="sys_hdmi_pll_reconfig_reconfig_to_pll"
-   internal="sys_hdmi_pll_reconfig.reconfig_to_pll"
-   type="conduit"
-   dir="end" />
- <interface
-   name="sys_hdmi_pll_reconfig_reconfig_from_pll"
-   internal="sys_hdmi_pll_reconfig.reconfig_from_pll"
-   type="conduit"
-   dir="end" />
- <module kind="altera_hps" version="13.1" enabled="1" name="sys_hps">
+ <module kind="altera_hps" version="14.0" enabled="1" name="sys_hps">
   <parameter name="MEM_VENDOR" value="JEDEC" />
   <parameter name="MEM_FORMAT" value="DISCRETE" />
   <parameter name="RDIMM_CONFIG" value="0000000000000000" />
   <parameter name="LRDIMM_EXTENDED_CONFIG">0x000000000000000000</parameter>
   <parameter name="DISCRETE_FLY_BY" value="true" />
   <parameter name="DEVICE_DEPTH" value="1" />
+  <parameter name="DEVICE_WIDTH" value="1" />
   <parameter name="MEM_MIRROR_ADDRESSING" value="0" />
   <parameter name="MEM_CLK_FREQ_MAX" value="800.0" />
   <parameter name="MEM_ROW_ADDR_WIDTH" value="15" />
@@ -548,6 +536,7 @@
   <parameter name="MEM_GUARANTEED_WRITE_INIT" value="false" />
   <parameter name="MEM_VERBOSE" value="true" />
   <parameter name="PINGPONGPHY_EN" value="false" />
+  <parameter name="DUPLICATE_AC" value="false" />
   <parameter name="REFRESH_BURST_VALIDATION" value="false" />
   <parameter name="MEM_BL" value="OTF" />
   <parameter name="MEM_BT" value="Sequential" />
@@ -726,7 +715,6 @@
   <parameter name="ENABLE_ISS_PROBES" value="false" />
   <parameter name="CALIB_REG_WIDTH" value="8" />
   <parameter name="USE_SEQUENCER_BFM" value="false" />
-  <parameter name="DEFAULT_FAST_SIM_MODEL" value="true" />
   <parameter name="PLL_SHARING_MODE" value="None" />
   <parameter name="NUM_PLL_SHARING_INTERFACES" value="1" />
   <parameter name="EXPORT_AFI_HALF_CLK" value="false" />
@@ -826,10 +814,74 @@
   <parameter name="NUM_DLL_SHARING_INTERFACES" value="1" />
   <parameter name="OCT_SHARING_MODE" value="None" />
   <parameter name="NUM_OCT_SHARING_INTERFACES" value="1" />
+  <parameter name="show_advanced_parameters" value="false" />
+  <parameter name="configure_advanced_parameters" value="false" />
+  <parameter name="customize_device_pll_info" value="false" />
+  <parameter name="device_pll_info_manual">{320000000 1600000000} {320000000 1000000000} {800000000 400000000 400000000}</parameter>
+  <parameter name="show_debug_info_as_warning_msg" value="false" />
+  <parameter name="show_warning_as_error_msg" value="false" />
+  <parameter name="eosc1_clk_mhz" value="25.0" />
+  <parameter name="eosc2_clk_mhz" value="25.0" />
+  <parameter name="F2SCLK_SDRAMCLK_Enable" value="false" />
+  <parameter name="F2SCLK_PERIPHCLK_Enable" value="false" />
+  <parameter name="F2SCLK_SDRAMCLK_FREQ" value="0" />
+  <parameter name="F2SCLK_PERIPHCLK_FREQ" value="0" />
+  <parameter name="periph_pll_source" value="0" />
+  <parameter name="sdmmc_clk_source" value="2" />
+  <parameter name="nand_clk_source" value="2" />
+  <parameter name="qspi_clk_source" value="1" />
+  <parameter name="l4_mp_clk_source" value="1" />
+  <parameter name="l4_sp_clk_source" value="1" />
+  <parameter name="use_default_mpu_clk" value="false" />
+  <parameter name="desired_mpu_clk_mhz" value="800.0" />
+  <parameter name="l3_mp_clk_div" value="1" />
+  <parameter name="l3_sp_clk_div" value="1" />
+  <parameter name="dbctrl_stayosc1" value="true" />
+  <parameter name="dbg_at_clk_div" value="0" />
+  <parameter name="dbg_clk_div" value="1" />
+  <parameter name="dbg_trace_clk_div" value="0" />
+  <parameter name="desired_l4_mp_clk_mhz" value="100.0" />
+  <parameter name="desired_l4_sp_clk_mhz" value="100.0" />
+  <parameter name="desired_cfg_clk_mhz" value="100.0" />
+  <parameter name="desired_sdmmc_clk_mhz" value="200.0" />
+  <parameter name="desired_nand_clk_mhz" value="12.5" />
+  <parameter name="desired_qspi_clk_mhz" value="400.0" />
+  <parameter name="desired_emac0_clk_mhz" value="250.0" />
+  <parameter name="desired_emac1_clk_mhz" value="250.0" />
+  <parameter name="desired_usb_mp_clk_mhz" value="200.0" />
+  <parameter name="desired_spi_m_clk_mhz" value="200.0" />
+  <parameter name="desired_can0_clk_mhz" value="100.0" />
+  <parameter name="desired_can1_clk_mhz" value="100.0" />
+  <parameter name="desired_gpio_db_clk_hz" value="32000" />
+  <parameter name="S2FCLK_USER0CLK_Enable" value="true" />
+  <parameter name="S2FCLK_USER1CLK_Enable" value="false" />
+  <parameter name="S2FCLK_USER2CLK_Enable" value="false" />
+  <parameter name="S2FCLK_USER1CLK_FREQ" value="150.0" />
+  <parameter name="S2FCLK_USER2CLK_FREQ" value="100.0" />
+  <parameter name="main_pll_m" value="63" />
+  <parameter name="main_pll_n" value="0" />
+  <parameter name="main_pll_c3" value="3" />
+  <parameter name="main_pll_c4" value="3" />
+  <parameter name="main_pll_c5" value="15" />
+  <parameter name="periph_pll_m" value="79" />
+  <parameter name="periph_pll_n" value="1" />
+  <parameter name="periph_pll_c0" value="3" />
+  <parameter name="periph_pll_c1" value="3" />
+  <parameter name="periph_pll_c2" value="1" />
+  <parameter name="periph_pll_c3" value="19" />
+  <parameter name="periph_pll_c4" value="4" />
+  <parameter name="periph_pll_c5" value="9" />
+  <parameter name="usb_mp_clk_div" value="0" />
+  <parameter name="spi_m_clk_div" value="0" />
+  <parameter name="can0_clk_div" value="1" />
+  <parameter name="can1_clk_div" value="1" />
+  <parameter name="gpio_db_clk_div" value="6249" />
+  <parameter name="l4_mp_clk_div" value="1" />
+  <parameter name="l4_sp_clk_div" value="1" />
   <parameter name="MPU_EVENTS_Enable" value="false" />
   <parameter name="GP_Enable" value="false" />
   <parameter name="DEBUGAPB_Enable" value="false" />
-  <parameter name="STM_Enable" value="true" />
+  <parameter name="STM_Enable" value="false" />
   <parameter name="CTI_Enable" value="false" />
   <parameter name="TPIUFPGA_Enable" value="false" />
   <parameter name="BOOTFROMFPGA_Enable" value="false" />
@@ -895,8 +947,8 @@
   <parameter name="SPIS1_Mode" value="N/A" />
   <parameter name="UART0_PinMuxing" value="HPS I/O Set 1" />
   <parameter name="UART0_Mode" value="No Flow Control" />
-  <parameter name="UART1_PinMuxing" value="HPS I/O Set 0" />
-  <parameter name="UART1_Mode" value="No Flow Control" />
+  <parameter name="UART1_PinMuxing" value="Unused" />
+  <parameter name="UART1_Mode" value="N/A" />
   <parameter name="I2C0_PinMuxing" value="HPS I/O Set 0" />
   <parameter name="I2C0_Mode" value="I2C" />
   <parameter name="I2C1_PinMuxing" value="Unused" />
@@ -909,24 +961,14 @@
   <parameter name="CAN0_Mode" value="N/A" />
   <parameter name="CAN1_PinMuxing" value="Unused" />
   <parameter name="CAN1_Mode" value="N/A" />
-  <parameter name="TRACE_PinMuxing" value="HPS I/O Set 0" />
-  <parameter name="TRACE_Mode" value="HPS" />
-  <parameter name="GPIO_Enable">Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,No,Yes,No,Yes,No,Yes,Yes,No,No,No,No,No,No,No,Yes,No,No,No,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
+  <parameter name="TRACE_PinMuxing" value="Unused" />
+  <parameter name="TRACE_Mode" value="N/A" />
+  <parameter name="GPIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
   <parameter name="LOANIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
-  <parameter name="S2FCLK_USER0CLK_Enable" value="true" />
-  <parameter name="S2FCLK_USER0CLK_FREQ" value="150" />
-  <parameter name="S2FCLK_USER1CLK_Enable" value="false" />
-  <parameter name="S2FCLK_USER1CLK_FREQ" value="150" />
-  <parameter name="S2FCLK_USER2CLK_Enable" value="false" />
-  <parameter name="S2FCLK_USER2CLK_FREQ" value="100" />
-  <parameter name="F2SCLK_PERIPHCLK_Enable" value="false" />
-  <parameter name="F2SCLK_PERIPHCLK_FREQ" value="100" />
-  <parameter name="F2SCLK_SDRAMCLK_Enable" value="false" />
-  <parameter name="F2SCLK_SDRAMCLK_FREQ" value="100" />
-  <parameter name="F2H_AXI_CLOCK_FREQ" value="100000000" />
-  <parameter name="H2F_AXI_CLOCK_FREQ" value="100000000" />
-  <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="100000000" />
-  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="150000000" />
+  <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
+  <parameter name="H2F_AXI_CLOCK_FREQ" value="50000000" />
+  <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="50000000" />
+  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="100000000" />
   <parameter name="F2H_SDRAM1_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM2_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM3_CLOCK_FREQ" value="100" />
@@ -981,15 +1023,15 @@
  </module>
  <module
    kind="altera_avalon_sysid_qsys"
-   version="13.1"
+   version="14.0"
    enabled="1"
    name="sys_id">
   <parameter name="id" value="-1395322095" />
   <parameter name="timestamp" value="0" />
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
  </module>
- <module kind="altera_avalon_pio" version="13.1" enabled="1" name="sys_gpio">
+ <module kind="altera_avalon_pio" version="14.0" enabled="1" name="sys_gpio">
   <parameter name="bitClearingEdgeCapReg" value="true" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="true" />
@@ -1001,11 +1043,11 @@
   <parameter name="simDoTestBenchWiring" value="false" />
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="32" />
-  <parameter name="clockRate" value="100000000" />
+  <parameter name="clockRate" value="50000000" />
  </module>
  <module
    kind="altera_avalon_onchip_memory2"
-   version="13.1"
+   version="14.0"
    enabled="1"
    name="sys_int_mem">
   <parameter name="allowInSystemMemoryContentEditor" value="false" />
@@ -1026,12 +1068,13 @@
   <parameter name="useShallowMemBlocks" value="false" />
   <parameter name="writable" value="true" />
   <parameter name="ecc_enabled" value="false" />
+  <parameter name="resetrequest_enabled" value="true" />
   <parameter name="autoInitializationFileName">$${FILENAME}_sys_int_mem</parameter>
   <parameter name="deviceFamily" value="Arria V" />
-  <parameter name="deviceFeatures">ADDRESS_STALL 1 ADVANCED_INFO 0 ANY_QFP 0 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 1 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 0 EMUL 0 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 1 ENABLE_PIN_PLANNER 0 ENGINEERING_SAMPLE 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FAMILY_LEVEL_INSTALLATION_ONLY 0 FASTEST 0 FINAL_TIMING_MODEL 0 FITTER_USE_FALLING_EDGE_DELAY 1 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 1 HARDCOPY 0 HAS_18_BIT_MULTS 1 HAS_ACE_SUPPORT 1 HAS_ACTIVE_PARALLEL_FLASH_SUPPORT 0 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 1 HAS_ADVANCED_IO_INVERTED_CORNER 1 HAS_ADVANCED_IO_POWER_SUPPORT 1 HAS_ADVANCED_IO_TIMING_SUPPORT 1 HAS_ALM_SUPPORT 1 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 1 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 0 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 1 HAS_BSDL_FILE_GENERATION 1 HAS_CDB_RE_NETWORK_PRESERVATION_SUPPORT 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 1 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 0 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DAP_JTAG_FROM_HPS 0 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 1 HAS_DDB_FDI_SUPPORT 1 HAS_DESIGN_ANALYZER_SUPPORT 1 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 0 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 0 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 1 HAS_ERROR_DETECTION_SUPPORT 1 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_EARLY_TIMING_ESTIMATE_SUPPORT 0 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 1 HAS_FPGA_XCHANGE_SUPPORT 1 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 1 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 0 HAS_FUNCTIONAL_VERILOG_SIMULATION_SUPPORT 1 HAS_FUNCTIONAL_VHDL_SIMULATION_SUPPORT 1 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HARDCOPYII_SUPPORT 0 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 1 HAS_HSSI_POWER_CALCULATOR 1 HAS_IBISO_WRITER_SUPPORT 0 HAS_ICD_DATA_IP 0 HAS_INCREMENTAL_DAT_SUPPORT 1 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_INTERFACE_PLANNER_SUPPORT 1 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 1 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_SMART_RECOMPILE_SUPPORT 0 HAS_JITTER_SUPPORT 1 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LIMITED_TCL_FITTER_SUPPORT 1 HAS_LOGICAL_FLOORPLANNER_SUPPORT 0 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 1 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 0 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_HARDBLOCK_PARTITION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 0 HAS_PARTIAL_RECONFIG_SUPPORT 1 HAS_PASSIVE_PARALLEL_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 1 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 1 HAS_PLDM_REF_SUPPORT 0 HAS_POWER_BINNING_LIMITS_DATA 1 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 1 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 1 HAS_PVA_SUPPORT 1 HAS_RAPID_RECOMPILE_SUPPORT 0 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 1 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 0 HAS_SPLIT_IO_SUPPORT 1 HAS_SPLIT_LC_SUPPORT 1 HAS_STRICT_PRESERVATION_SUPPORT 0 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 0 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TCL_FITTER_SUPPORT 0 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 1 HAS_TIMING_SIMULATION_SUPPORT 0 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 1 HAS_U2B2_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 0 HAS_VCCPD_POWER_RAIL 1 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 0 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 1 HAS_XIBISO_WRITER_SUPPORT 1 IFP_USE_LEGACY_IO_CHECKER 1 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 0 INSTALLED 0 INTERNAL_POF_SUPPORT_ENABLED 0 INTERNAL_USE_ONLY 0 ISSUE_MILITARY_TEMPERATURE_WARNING 0 IS_CONFIG_ROM 0 IS_DEFAULT_FAMILY 0 IS_HARDCOPY_FAMILY 0 IS_HBGA_PACKAGE 0 IS_HIGH_CURRENT_PART 0 IS_LOW_POWER_PART 0 IS_SDM_ONLY_PACKAGE 0 LVDS_IO 1 M10K_MEMORY 1 M144K_MEMORY 1 M20K_MEMORY 0 M4K_MEMORY 0 M512_MEMORY 0 M9K_MEMORY 0 MLAB_MEMORY 1 MRAM_MEMORY 0 NOT_LISTED 0 NOT_MIGRATABLE 0 NO_FITTER_DELAY_CACHE_GENERATED 0 NO_PIN_OUT 0 NO_POF 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 1 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 0 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 1 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 1 PROGRAMMER_SUPPORT 1 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 1 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 1 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RISEFALL_SUPPORT_IS_HIDDEN 0 SHOW_HIDDEN_FAMILY_IN_PROGRAMMER 0 STRICT_TIMING_DB_CHECKS 1 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 1 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 1 SUPPORTS_MAC_CHAIN_OUT_ADDER 1 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 TMV_RUN_CUSTOMIZABLE_VIEWER 1 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 0 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 1 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 1 TRANSCEIVER_6G_BLOCK 1 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 1 USES_ALTERA_LNSIM 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_THIRD_GENERATION_TIMING_MODELS_TIS 1 USES_U2B2_TIMING_MODELS 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 1 USE_ADVANCED_IO_TIMING_BY_DEFAULT 1 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 1 USE_RELAX_IO_ASSIGNMENT_RULES 0 USE_RISEFALL_ONLY 1 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 1 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 1 USING_28NM_OR_OLDER_TIMING_METHODOLOGY 1 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 1</parameter>
+  <parameter name="deviceFeatures">ADDRESS_STALL 1 ADVANCED_INFO 0 ALLOWS_COMPILING_OTHER_FAMILY_IP 1 ANY_QFP 0 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 1 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 0 EMUL 0 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 1 ENABLE_PIN_PLANNER 0 ENGINEERING_SAMPLE 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FAMILY_LEVEL_INSTALLATION_ONLY 0 FASTEST 0 FINAL_TIMING_MODEL 0 FITTER_USE_FALLING_EDGE_DELAY 1 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 1 HARDCOPY 0 HAS_18_BIT_MULTS 1 HAS_ACE_SUPPORT 1 HAS_ACTIVE_PARALLEL_FLASH_SUPPORT 0 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 1 HAS_ADVANCED_IO_INVERTED_CORNER 1 HAS_ADVANCED_IO_POWER_SUPPORT 1 HAS_ADVANCED_IO_TIMING_SUPPORT 1 HAS_ALM_SUPPORT 1 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 1 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 0 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 1 HAS_BSDL_FILE_GENERATION 1 HAS_CDB_RE_NETWORK_PRESERVATION_SUPPORT 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 1 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 0 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DAP_JTAG_FROM_HPS 0 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 1 HAS_DDB_FDI_SUPPORT 1 HAS_DESIGN_ANALYZER_SUPPORT 1 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 0 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 0 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 1 HAS_ERROR_DETECTION_SUPPORT 1 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_EARLY_TIMING_ESTIMATE_SUPPORT 0 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 1 HAS_FPGA_XCHANGE_SUPPORT 1 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 1 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 0 HAS_FUNCTIONAL_VERILOG_SIMULATION_SUPPORT 1 HAS_FUNCTIONAL_VHDL_SIMULATION_SUPPORT 1 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HARDCOPYII_SUPPORT 0 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 1 HAS_HSSI_POWER_CALCULATOR 1 HAS_IBISO_WRITER_SUPPORT 0 HAS_ICD_DATA_IP 0 HAS_INCREMENTAL_DAT_SUPPORT 1 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_INTERFACE_PLANNER_SUPPORT 0 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 1 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_SMART_RECOMPILE_SUPPORT 0 HAS_JITTER_SUPPORT 1 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LIMITED_TCL_FITTER_SUPPORT 1 HAS_LOGICAL_FLOORPLANNER_SUPPORT 0 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 1 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 0 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_HARDBLOCK_PARTITION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 0 HAS_PARTIAL_RECONFIG_SUPPORT 1 HAS_PASSIVE_PARALLEL_SUPPORT 0 HAS_PHYSICAL_DESIGN_PLANNER_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 1 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 1 HAS_PLDM_REF_SUPPORT 0 HAS_POWER_BINNING_LIMITS_DATA 1 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 1 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 1 HAS_PVA_SUPPORT 1 HAS_RAPID_RECOMPILE_SUPPORT 1 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 1 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 0 HAS_SPLIT_IO_SUPPORT 1 HAS_SPLIT_LC_SUPPORT 1 HAS_STRICT_PRESERVATION_SUPPORT 0 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 0 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TCL_FITTER_SUPPORT 0 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 1 HAS_TIMING_SIMULATION_SUPPORT 0 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 1 HAS_U2B2_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 0 HAS_VCCPD_POWER_RAIL 1 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 0 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 1 HAS_XIBISO_WRITER_SUPPORT 1 IFP_USE_LEGACY_IO_CHECKER 1 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 0 INSTALLED 0 INTERNAL_POF_SUPPORT_ENABLED 0 INTERNAL_USE_ONLY 0 ISSUE_MILITARY_TEMPERATURE_WARNING 0 IS_CONFIG_ROM 0 IS_DEFAULT_FAMILY 0 IS_HARDCOPY_FAMILY 0 IS_HBGA_PACKAGE 0 IS_HIGH_CURRENT_PART 0 IS_LOW_POWER_PART 0 IS_SDM_ONLY_PACKAGE 0 LVDS_IO 1 M10K_MEMORY 1 M144K_MEMORY 1 M20K_MEMORY 0 M4K_MEMORY 0 M512_MEMORY 0 M9K_MEMORY 0 MLAB_MEMORY 1 MRAM_MEMORY 0 NOT_LISTED 0 NOT_MIGRATABLE 0 NO_FITTER_DELAY_CACHE_GENERATED 0 NO_PIN_OUT 0 NO_POF 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 1 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 0 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 1 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 1 PROGRAMMER_SUPPORT 1 PVA_SUPPORTS_ONLY_SUBSET_OF_ATOMS 0 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 1 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 1 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RISEFALL_SUPPORT_IS_HIDDEN 0 SHOW_HIDDEN_FAMILY_IN_PROGRAMMER 0 STRICT_TIMING_DB_CHECKS 1 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 1 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 1 SUPPORTS_HIPI_RETIMING 0 SUPPORTS_MAC_CHAIN_OUT_ADDER 1 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 TMV_RUN_CUSTOMIZABLE_VIEWER 1 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 0 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 1 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 1 TRANSCEIVER_6G_BLOCK 1 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 1 USES_ALTERA_LNSIM 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_NETWORK_ROUTING_POWER_CALCULATOR 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_PVAFAM2 0 USES_THIRD_GENERATION_TIMING_MODELS_TIS 1 USES_U2B2_TIMING_MODELS 0 USES_XML_FORMAT_FOR_EMIF_PIN_MAP_FILE 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 1 USE_ADVANCED_IO_TIMING_BY_DEFAULT 1 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 1 USE_RELAX_IO_ASSIGNMENT_RULES 0 USE_RISEFALL_ONLY 1 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 1 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 1 USING_28NM_OR_OLDER_TIMING_METHODOLOGY 1 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 1</parameter>
  </module>
- <module kind="clock_source" version="13.1" enabled="1" name="sys_clk">
-  <parameter name="clockFrequency" value="100000000" />
+ <module kind="clock_source" version="14.0" enabled="1" name="sys_clk">
+  <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
@@ -1040,7 +1083,7 @@
   <parameter name="PCORE_ID" value="0" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
   <parameter name="PCORE_AXI_ID_WIDTH" value="14" />
-  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_0">
@@ -1059,13 +1102,13 @@
   <parameter name="C_CYCLIC" value="1" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
   <parameter name="C_DMA_TYPE_SRC" value="2" />
-  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
  <module kind="axi_ad9250" version="1.0" enabled="1" name="axi_ad9250_1">
   <parameter name="PCORE_ID" value="1" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
   <parameter name="PCORE_AXI_ID_WIDTH" value="14" />
-  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_1">
@@ -1084,11 +1127,11 @@
   <parameter name="C_CYCLIC" value="1" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
   <parameter name="C_DMA_TYPE_SRC" value="2" />
-  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
  <module
    kind="altera_jesd204"
-   version="13.1"
+   version="14.0"
    enabled="1"
    name="sys_jesd204b_s1">
   <parameter name="wrapper_opt" value="base_phy" />
@@ -1096,7 +1139,8 @@
   <parameter name="DEVICE_FAMILY" value="Arria V" />
   <parameter name="DATA_PATH" value="RX" />
   <parameter name="SUBCLASSV" value="1" />
-  <parameter name="lane_rate" value="5000" />
+  <parameter name="lane_rate" value="5000.0" />
+  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG1" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="bonded_mode" value="bonded" />
   <parameter name="REFCLK_FREQ" value="250.0" />
@@ -1137,7 +1181,7 @@
  </module>
  <module
    kind="altera_clock_bridge"
-   version="13.1"
+   version="14.0"
    enabled="1"
    name="sys_jesd204b_s1_ref_clk">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
@@ -1146,7 +1190,7 @@
  </module>
  <module
    kind="altera_pll"
-   version="13.1"
+   version="14.0"
    enabled="1"
    name="sys_jesd204b_s1_pll">
   <parameter name="debug_print_output" value="false" />
@@ -1355,7 +1399,7 @@
  </module>
  <module
    kind="altera_clock_bridge"
-   version="13.1"
+   version="14.0"
    enabled="1"
    name="sys_jesd204b_s1_rx_clk">
   <parameter name="DERIVED_CLOCK_RATE" value="125000000" />
@@ -1368,11 +1412,11 @@
   <parameter name="PCORE_AXI_ID_WIDTH" value="14" />
   <parameter name="PCORE_Cr_Cb_N" value="0" />
   <parameter name="PCORE_EMBEDDED_SYNC" value="0" />
-  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_HDMI_CLOCK_CLOCK_RATE" value="148484848" />
-  <parameter name="AUTO_VDMA_CLOCK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_VDMA_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
- <module kind="altera_pll" version="13.1" enabled="1" name="sys_hdmi_pll">
+ <module kind="altera_pll" version="14.0" enabled="1" name="sys_hdmi_pll">
   <parameter name="debug_print_output" value="false" />
   <parameter name="debug_use_rbc_taf_method" value="false" />
   <parameter name="device_family" value="Arria V" />
@@ -1575,21 +1619,22 @@
   <parameter name="gui_cascade_outclk_index" value="0" />
   <parameter name="gui_enable_cascade_in" value="false" />
   <parameter name="gui_pll_cascading_mode">Create an adjpllin signal to connect with an upstream PLL</parameter>
-  <parameter name="AUTO_REFCLK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_REFCLK_CLOCK_RATE" value="50000000" />
  </module>
  <module
    kind="altera_pll_reconfig"
-   version="13.1"
+   version="14.0"
    enabled="1"
    name="sys_hdmi_pll_reconfig">
   <parameter name="device_family" value="Arria V" />
-  <parameter name="ENABLE_MIF" value="0" />
+  <parameter name="ENABLE_MIF" value="false" />
   <parameter name="MIF_FILE_NAME" value="" />
-  <parameter name="AUTO_MGMT_CLK_CLOCK_RATE" value="100000000" />
+  <parameter name="ENABLE_BYTEENABLE" value="false" />
+  <parameter name="AUTO_MGMT_CLK_CLOCK_RATE" value="50000000" />
  </module>
  <module
    kind="altera_avalon_sgdma"
-   version="13.1"
+   version="14.0"
    enabled="1"
    name="axi_hdmi_dma">
   <parameter name="addressWidth" value="32" />
@@ -1608,46 +1653,46 @@
   <parameter name="writeBurstcountWidth" value="4" />
   <parameter name="deviceFamilyString" value="Arria V" />
  </module>
- <connection kind="clock" version="13.1" start="sys_clk.clk" end="sys_gpio.clk" />
- <connection kind="clock" version="13.1" start="sys_clk.clk" end="sys_id.clk" />
+ <connection kind="clock" version="14.0" start="sys_clk.clk" end="sys_gpio.clk" />
+ <connection kind="clock" version="14.0" start="sys_clk.clk" end="sys_id.clk" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="sys_int_mem.clk1" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="sys_gpio.reset" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="sys_id.reset" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="sys_int_mem.reset1" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="sys_hps.f2h_axi_clock" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="sys_hps.h2f_axi_clock" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="sys_hps.h2f_lw_axi_clock" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_axi_master"
    end="sys_int_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
@@ -1656,17 +1701,17 @@
  </connection>
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="axi_ad9250_0.s_axi_clock" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="axi_ad9250_0.s_axi_reset" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="axi_ad9250_0.s_axi">
   <parameter name="arbitrationPriority" value="1" />
@@ -1675,17 +1720,17 @@
  </connection>
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="axi_dmac_0.s_axi_clock" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="axi_dmac_0.s_axi_reset" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="axi_dmac_0.s_axi">
   <parameter name="arbitrationPriority" value="1" />
@@ -1694,22 +1739,22 @@
  </connection>
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="axi_dmac_0.m_dest_axi_reset" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="axi_ad9250_1.s_axi_clock" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="axi_ad9250_1.s_axi_reset" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="axi_ad9250_1.s_axi">
   <parameter name="arbitrationPriority" value="1" />
@@ -1718,22 +1763,22 @@
  </connection>
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="axi_dmac_1.s_axi_clock" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="axi_dmac_1.s_axi_reset" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="axi_dmac_1.m_dest_axi_reset" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="axi_dmac_1.s_axi">
   <parameter name="arbitrationPriority" value="1" />
@@ -1742,42 +1787,42 @@
  </connection>
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_jesd204b_s1_ref_clk.out_clk"
    end="sys_jesd204b_s1.pll_ref_clk" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_jesd204b_s1_ref_clk.out_clk"
    end="sys_jesd204b_s1_pll.refclk" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="sys_jesd204b_s1_pll.reset" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_jesd204b_s1_pll.outclk0"
    end="sys_jesd204b_s1.rxlink_clk" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="sys_jesd204b_s1.rxlink_rst_n" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="sys_jesd204b_s1.jesd204_rx_avs_rst_n" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="sys_jesd204b_s1.jesd204_rx_avs_clk" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="sys_jesd204b_s1.jesd204_rx_avs">
   <parameter name="arbitrationPriority" value="1" />
@@ -1786,43 +1831,43 @@
  </connection>
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_jesd204b_s1_pll.outclk0"
    end="sys_jesd204b_s1_rx_clk.in_clk" />
  <connection
    kind="interrupt"
-   version="13.1"
+   version="14.0"
    start="sys_hps.f2h_irq0"
    end="sys_gpio.irq">
   <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="interrupt"
-   version="13.1"
+   version="14.0"
    start="sys_hps.f2h_irq0"
    end="axi_dmac_0.interrupt_sender">
   <parameter name="irqNumber" value="2" />
  </connection>
  <connection
    kind="interrupt"
-   version="13.1"
+   version="14.0"
    start="sys_hps.f2h_irq0"
    end="axi_dmac_1.interrupt_sender">
   <parameter name="irqNumber" value="3" />
  </connection>
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="axi_hdmi_tx.s_axi_clock" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="axi_hdmi_tx.s_axi_reset" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="axi_hdmi_tx.s_axi">
   <parameter name="arbitrationPriority" value="1" />
@@ -1831,22 +1876,22 @@
  </connection>
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_hdmi_pll.outclk0"
    end="axi_hdmi_tx.hdmi_clock" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="sys_hdmi_pll_reconfig.mgmt_clk" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="sys_hdmi_pll_reconfig.mgmt_reset" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="sys_hdmi_pll_reconfig.mgmt_avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
@@ -1855,17 +1900,17 @@
  </connection>
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="axi_hdmi_dma.clk" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="axi_hdmi_dma.reset" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="axi_hdmi_dma.csr">
   <parameter name="arbitrationPriority" value="1" />
@@ -1874,37 +1919,37 @@
  </connection>
  <connection
    kind="avalon_streaming"
-   version="13.1"
+   version="14.0"
    start="axi_hdmi_dma.out"
    end="axi_hdmi_tx.vdma_if" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="axi_hdmi_tx.vdma_clock" />
  <connection
    kind="reset"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk_reset"
    end="sys_hdmi_pll.reset" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_clk.clk"
    end="sys_hdmi_pll.refclk" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_user0_clock"
    end="axi_dmac_0.m_dest_axi_clock" />
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_user0_clock"
    end="axi_dmac_1.m_dest_axi_clock" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="axi_hdmi_dma.descriptor_read"
    end="sys_hps.f2h_sdram0_data">
   <parameter name="arbitrationPriority" value="1" />
@@ -1913,7 +1958,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="axi_hdmi_dma.descriptor_write"
    end="sys_hps.f2h_sdram0_data">
   <parameter name="arbitrationPriority" value="1" />
@@ -1922,7 +1967,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="axi_hdmi_dma.m_read"
    end="sys_hps.f2h_sdram0_data">
   <parameter name="arbitrationPriority" value="1" />
@@ -1931,7 +1976,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="axi_dmac_0.m_dest_axi"
    end="sys_hps.f2h_sdram0_data">
   <parameter name="arbitrationPriority" value="1" />
@@ -1940,7 +1985,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="axi_dmac_1.m_dest_axi"
    end="sys_hps.f2h_sdram0_data">
   <parameter name="arbitrationPriority" value="1" />
@@ -1949,12 +1994,12 @@
  </connection>
  <connection
    kind="clock"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_user0_clock"
    end="sys_hps.f2h_sdram0_clock" />
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="sys_gpio.s1">
   <parameter name="arbitrationPriority" value="1" />
@@ -1963,7 +2008,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="13.1"
+   version="14.0"
    start="sys_hps.h2f_lw_axi_master"
    end="sys_id.control_slave">
   <parameter name="arbitrationPriority" value="1" />
@@ -1972,12 +2017,34 @@
  </connection>
  <connection
    kind="interrupt"
-   version="13.1"
+   version="14.0"
    start="sys_hps.f2h_irq0"
    end="axi_hdmi_dma.csr_irq">
   <parameter name="irqNumber" value="0" />
  </connection>
+ <connection
+   kind="conduit"
+   version="14.0"
+   start="sys_hdmi_pll.reconfig_to_pll"
+   end="sys_hdmi_pll_reconfig.reconfig_to_pll">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="14.0"
+   start="sys_hdmi_pll.reconfig_from_pll"
+   end="sys_hdmi_pll_reconfig.reconfig_from_pll">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
- <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="4" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
 </system>

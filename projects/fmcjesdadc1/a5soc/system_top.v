@@ -101,31 +101,8 @@ module system_top (
   usb1_d7,
   uart0_rx,
   uart0_tx,
-  uart1_rx,
-  uart1_tx,
   i2c0_scl,
   i2c0_sda,
-  trace_clk,
-  trace_d0,
-  trace_d1,
-  trace_d2,
-  trace_d3,
-  trace_d4,
-  trace_d5,
-  trace_d6,
-  trace_d7,
-  gpio_gpio00,
-  gpio_gpio17,
-  gpio_gpio18,
-  gpio_gpio22,
-  gpio_gpio24,
-  gpio_gpio26,
-  gpio_gpio27,
-  gpio_gpio35,
-  gpio_gpio40,
-  gpio_gpio41,
-  gpio_gpio42,
-  gpio_gpio43,
 
   // board gpio
 
@@ -213,31 +190,8 @@ module system_top (
   inout             usb1_d7;
   input             uart0_rx;
   output            uart0_tx;
-  input             uart1_rx;
-  output            uart1_tx;
   inout             i2c0_scl;
   inout             i2c0_sda;
-  output            trace_clk;
-  output            trace_d0;
-  output            trace_d1;
-  output            trace_d2;
-  output            trace_d3;
-  output            trace_d4;
-  output            trace_d5;
-  output            trace_d6;
-  output            trace_d7;
-  inout             gpio_gpio00;
-  inout             gpio_gpio17;
-  inout             gpio_gpio18;
-  inout             gpio_gpio22;
-  inout             gpio_gpio24;
-  inout             gpio_gpio26;
-  inout             gpio_gpio27;
-  inout             gpio_gpio35;
-  inout             gpio_gpio40;
-  inout             gpio_gpio41;
-  inout             gpio_gpio42;
-  inout             gpio_gpio43;
 
   // board gpio
 
@@ -273,8 +227,6 @@ module system_top (
   reg     [ 63:0]   dma0_wdata = 'd0;
   reg               dma1_wr = 'd0;
   reg     [ 63:0]   dma1_wdata = 'd0;
-  reg     [ 63:0]   sys_hdmi_pll_reconfig_in = 'd0;
-  reg     [ 63:0]   sys_hdmi_pll_reconfig_reconfig_in = 'd0;
 
   // internal clocks and resets
 
@@ -312,8 +264,6 @@ module system_top (
   wire    [  3:0]   rx_cal_busy_s;
   wire              rx_pll_locked_s;
   wire    [ 15:0]   rx_xcvr_status_s;
-  wire    [ 63:0]   sys_hdmi_pll_reconfig_out;
-  wire    [ 63:0]   sys_hdmi_pll_reconfig_reconfig_out;
 
   // instantiations
 
@@ -337,34 +287,6 @@ module system_top (
                     adc1_data_a_s[15: 0]};
   end
 
-  sld_signaltap #(
-    .sld_advanced_trigger_entity ("basic,1,"),
-    .sld_data_bits (5),
-    .sld_data_bit_cntr_bits (8),
-    .sld_enable_advanced_trigger (0),
-    .sld_mem_address_bits (10),
-    .sld_node_crc_bits (32),
-    .sld_node_crc_hiword (10311),
-    .sld_node_crc_loword (14297),
-    .sld_node_info (1076736),
-    .sld_ram_block_type ("AUTO"),
-    .sld_sample_depth (1024),
-    .sld_storage_qualifier_gap_record (0),
-    .sld_storage_qualifier_mode ("OFF"),
-    .sld_trigger_bits (2),
-    .sld_trigger_in_enabled (0),
-    .sld_trigger_level (1),
-    .sld_trigger_level_pipeline (1))
-  i_signaltap (
-    .acq_clk (sys_clk),
-    .acq_data_in ({ spi_csn,
-                    spi_clk,
-                    spi_mosi,
-                    spi_miso,
-                    spi_sdio}),
-    .acq_trigger_in ({spi_csn, spi_clk}));
-
-  /*
   sld_signaltap #(
     .sld_advanced_trigger_entity ("basic,1,"),
     .sld_data_bits (130),
@@ -392,8 +314,6 @@ module system_top (
                     adc0_data_b_s,
                     adc0_data_a_s}),
     .acq_trigger_in ({rx_sysref, rx_sync}));
-
-  */
 
   genvar n;
   generate
@@ -433,30 +353,23 @@ module system_top (
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
 
-  // pipe line to fix timing
-
-  always @(posedge sys_clk) begin
-    sys_hdmi_pll_reconfig_in <= sys_hdmi_pll_reconfig_reconfig_out;
-    sys_hdmi_pll_reconfig_reconfig_in <= sys_hdmi_pll_reconfig_out;
-  end
-
   system_bd i_system_bd (
-    .memory_mem_a (ddr3_a),
-    .memory_mem_ba (ddr3_ba),
-    .memory_mem_ck (ddr3_ck_p),
-    .memory_mem_ck_n (ddr3_ck_n),
-    .memory_mem_cke (ddr3_cke),
-    .memory_mem_cs_n (ddr3_cs_n),
-    .memory_mem_ras_n (ddr3_ras_n),
-    .memory_mem_cas_n (ddr3_cas_n),
-    .memory_mem_we_n (ddr3_we_n),
-    .memory_mem_reset_n (ddr3_reset_n),
-    .memory_mem_dq (ddr3_dq),
-    .memory_mem_dqs (ddr3_dqs_p),
-    .memory_mem_dqs_n (ddr3_dqs_n),
-    .memory_mem_odt (ddr3_odt),
-    .memory_mem_dm (ddr3_dm),
-    .memory_oct_rzqin (ddr3_oct_rzqin),
+    .sys_hps_memory_mem_a (ddr3_a),
+    .sys_hps_memory_mem_ba (ddr3_ba),
+    .sys_hps_memory_mem_ck (ddr3_ck_p),
+    .sys_hps_memory_mem_ck_n (ddr3_ck_n),
+    .sys_hps_memory_mem_cke (ddr3_cke),
+    .sys_hps_memory_mem_cs_n (ddr3_cs_n),
+    .sys_hps_memory_mem_ras_n (ddr3_ras_n),
+    .sys_hps_memory_mem_cas_n (ddr3_cas_n),
+    .sys_hps_memory_mem_we_n (ddr3_we_n),
+    .sys_hps_memory_mem_reset_n (ddr3_reset_n),
+    .sys_hps_memory_mem_dq (ddr3_dq),
+    .sys_hps_memory_mem_dqs (ddr3_dqs_p),
+    .sys_hps_memory_mem_dqs_n (ddr3_dqs_n),
+    .sys_hps_memory_mem_odt (ddr3_odt),
+    .sys_hps_memory_mem_dm (ddr3_dm),
+    .sys_hps_memory_oct_rzqin (ddr3_oct_rzqin),
     .clk_clk (sys_clk),
     .reset_reset_n (sys_resetn),
     .axi_ad9250_0_xcvr_clk_clk (rx_clk),
@@ -510,79 +423,55 @@ module system_top (
     .sys_hps_spim0_txd (spi_mosi),
     .sys_hps_spim0_rxd (spi_miso),
     .sys_hps_spim0_ss_in_n (1'b1),
-    .sys_hps_spim0_ssi_oe_n (),
-    .sys_hps_spim0_ss_0_n (spi_csn),
+    .sys_hps_spim0_ssi_oe_n (spi_csn),
+    .sys_hps_spim0_ss_0_n (),
     .sys_hps_spim0_ss_1_n (),
     .sys_hps_spim0_ss_2_n (),
     .sys_hps_spim0_ss_3_n (),
     .sys_jesd204b_s1_pll_locked_export (rx_pll_locked_s),
     .sys_hps_spim0_sclk_out_clk (spi_clk),
-    .sys_hps_f2h_stm_hw_events_stm_hwevents ({16'd0, led, push_buttons, dip_switches}),
-    .hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
-    .hps_io_hps_io_emac1_inst_TXD0 (eth1_txd0),
-    .hps_io_hps_io_emac1_inst_TXD1 (eth1_txd1),
-    .hps_io_hps_io_emac1_inst_TX_CTL (eth1_tx_ctl),
-    .hps_io_hps_io_emac1_inst_RXD0 (eth1_rxd0),
-    .hps_io_hps_io_emac1_inst_RXD1 (eth1_rxd1),
-    .hps_io_hps_io_emac1_inst_TXD2 (eth1_txd2),
-    .hps_io_hps_io_emac1_inst_TXD3 (eth1_txd3),
-    .hps_io_hps_io_emac1_inst_MDIO (eth1_mdio),
-    .hps_io_hps_io_emac1_inst_MDC (eth1_mdc),
-    .hps_io_hps_io_emac1_inst_RX_CTL (eth1_rx_ctl),
-    .hps_io_hps_io_emac1_inst_RX_CLK (eth1_rx_clk),
-    .hps_io_hps_io_emac1_inst_RXD2 (eth1_rxd2),
-    .hps_io_hps_io_emac1_inst_RXD3 (eth1_rxd3),
-    .hps_io_hps_io_qspi_inst_IO0 (qspi_io0),
-    .hps_io_hps_io_qspi_inst_IO1 (qspi_io1),
-    .hps_io_hps_io_qspi_inst_IO2 (qspi_io2),
-    .hps_io_hps_io_qspi_inst_IO3 (qspi_io3),
-    .hps_io_hps_io_qspi_inst_SS0 (qspi_ss0),
-    .hps_io_hps_io_qspi_inst_CLK (qspi_clk),
-    .hps_io_hps_io_sdio_inst_CMD (sdio_cmd),
-    .hps_io_hps_io_sdio_inst_D0 (sdio_d0),
-    .hps_io_hps_io_sdio_inst_D1 (sdio_d1),
-    .hps_io_hps_io_sdio_inst_CLK (sdio_clk),
-    .hps_io_hps_io_sdio_inst_D2 (sdio_d2),
-    .hps_io_hps_io_sdio_inst_D3 (sdio_d3),
-    .hps_io_hps_io_usb1_inst_D0 (usb1_d0),
-    .hps_io_hps_io_usb1_inst_D1 (usb1_d1),
-    .hps_io_hps_io_usb1_inst_D2 (usb1_d2),
-    .hps_io_hps_io_usb1_inst_D3 (usb1_d3),
-    .hps_io_hps_io_usb1_inst_D4 (usb1_d4),
-    .hps_io_hps_io_usb1_inst_D5 (usb1_d5),
-    .hps_io_hps_io_usb1_inst_D6 (usb1_d6),
-    .hps_io_hps_io_usb1_inst_D7 (usb1_d7),
-    .hps_io_hps_io_usb1_inst_CLK (usb1_clk),
-    .hps_io_hps_io_usb1_inst_STP (usb1_stp),
-    .hps_io_hps_io_usb1_inst_DIR (usb1_dir),
-    .hps_io_hps_io_usb1_inst_NXT (usb1_nxt),
-    .hps_io_hps_io_uart0_inst_RX (uart0_rx),
-    .hps_io_hps_io_uart0_inst_TX (uart0_tx),
-    .hps_io_hps_io_uart1_inst_RX (uart1_rx),
-    .hps_io_hps_io_uart1_inst_TX (uart1_tx),
-    .hps_io_hps_io_i2c0_inst_SDA (i2c0_sda),
-    .hps_io_hps_io_i2c0_inst_SCL (i2c0_scl),
-    .hps_io_hps_io_trace_inst_CLK (trace_clk),
-    .hps_io_hps_io_trace_inst_D0 (trace_d0),
-    .hps_io_hps_io_trace_inst_D1 (trace_d1),
-    .hps_io_hps_io_trace_inst_D2 (trace_d2),
-    .hps_io_hps_io_trace_inst_D3 (trace_d3),
-    .hps_io_hps_io_trace_inst_D4 (trace_d4),
-    .hps_io_hps_io_trace_inst_D5 (trace_d5),
-    .hps_io_hps_io_trace_inst_D6 (trace_d6),
-    .hps_io_hps_io_trace_inst_D7 (trace_d7),
-    .hps_io_hps_io_gpio_inst_GPIO00 (gpio_gpio00),
-    .hps_io_hps_io_gpio_inst_GPIO17 (gpio_gpio17),
-    .hps_io_hps_io_gpio_inst_GPIO18 (gpio_gpio18),
-    .hps_io_hps_io_gpio_inst_GPIO22 (gpio_gpio22),
-    .hps_io_hps_io_gpio_inst_GPIO24 (gpio_gpio24),
-    .hps_io_hps_io_gpio_inst_GPIO26 (gpio_gpio26),
-    .hps_io_hps_io_gpio_inst_GPIO27 (gpio_gpio27),
-    .hps_io_hps_io_gpio_inst_GPIO35 (gpio_gpio35),
-    .hps_io_hps_io_gpio_inst_GPIO40 (gpio_gpio40),
-    .hps_io_hps_io_gpio_inst_GPIO41 (gpio_gpio41),
-    .hps_io_hps_io_gpio_inst_GPIO42 (gpio_gpio42),
-    .hps_io_hps_io_gpio_inst_GPIO43 (gpio_gpio43),
+    .sys_hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
+    .sys_hps_io_hps_io_emac1_inst_TXD0 (eth1_txd0),
+    .sys_hps_io_hps_io_emac1_inst_TXD1 (eth1_txd1),
+    .sys_hps_io_hps_io_emac1_inst_TX_CTL (eth1_tx_ctl),
+    .sys_hps_io_hps_io_emac1_inst_RXD0 (eth1_rxd0),
+    .sys_hps_io_hps_io_emac1_inst_RXD1 (eth1_rxd1),
+    .sys_hps_io_hps_io_emac1_inst_TXD2 (eth1_txd2),
+    .sys_hps_io_hps_io_emac1_inst_TXD3 (eth1_txd3),
+    .sys_hps_io_hps_io_emac1_inst_MDIO (eth1_mdio),
+    .sys_hps_io_hps_io_emac1_inst_MDC (eth1_mdc),
+    .sys_hps_io_hps_io_emac1_inst_RX_CTL (eth1_rx_ctl),
+    .sys_hps_io_hps_io_emac1_inst_RX_CLK (eth1_rx_clk),
+    .sys_hps_io_hps_io_emac1_inst_RXD2 (eth1_rxd2),
+    .sys_hps_io_hps_io_emac1_inst_RXD3 (eth1_rxd3),
+    .sys_hps_io_hps_io_qspi_inst_IO0 (qspi_io0),
+    .sys_hps_io_hps_io_qspi_inst_IO1 (qspi_io1),
+    .sys_hps_io_hps_io_qspi_inst_IO2 (qspi_io2),
+    .sys_hps_io_hps_io_qspi_inst_IO3 (qspi_io3),
+    .sys_hps_io_hps_io_qspi_inst_SS0 (qspi_ss0),
+    .sys_hps_io_hps_io_qspi_inst_CLK (qspi_clk),
+    .sys_hps_io_hps_io_sdio_inst_CMD (sdio_cmd),
+    .sys_hps_io_hps_io_sdio_inst_D0 (sdio_d0),
+    .sys_hps_io_hps_io_sdio_inst_D1 (sdio_d1),
+    .sys_hps_io_hps_io_sdio_inst_CLK (sdio_clk),
+    .sys_hps_io_hps_io_sdio_inst_D2 (sdio_d2),
+    .sys_hps_io_hps_io_sdio_inst_D3 (sdio_d3),
+    .sys_hps_io_hps_io_usb1_inst_D0 (usb1_d0),
+    .sys_hps_io_hps_io_usb1_inst_D1 (usb1_d1),
+    .sys_hps_io_hps_io_usb1_inst_D2 (usb1_d2),
+    .sys_hps_io_hps_io_usb1_inst_D3 (usb1_d3),
+    .sys_hps_io_hps_io_usb1_inst_D4 (usb1_d4),
+    .sys_hps_io_hps_io_usb1_inst_D5 (usb1_d5),
+    .sys_hps_io_hps_io_usb1_inst_D6 (usb1_d6),
+    .sys_hps_io_hps_io_usb1_inst_D7 (usb1_d7),
+    .sys_hps_io_hps_io_usb1_inst_CLK (usb1_clk),
+    .sys_hps_io_hps_io_usb1_inst_STP (usb1_stp),
+    .sys_hps_io_hps_io_usb1_inst_DIR (usb1_dir),
+    .sys_hps_io_hps_io_usb1_inst_NXT (usb1_nxt),
+    .sys_hps_io_hps_io_uart0_inst_RX (uart0_rx),
+    .sys_hps_io_hps_io_uart0_inst_TX (uart0_tx),
+    .sys_hps_io_hps_io_i2c0_inst_SDA (i2c0_sda),
+    .sys_hps_io_hps_io_i2c0_inst_SCL (i2c0_scl),
     .sys_hps_h2f_reset_reset_n (sys_resetn),
     .sys_gpio_external_connection_in_port ({rx_xcvr_status_s, 4'd0, push_buttons, 4'd0, dip_switches}),
     .sys_gpio_external_connection_out_port ({14'd0, rx_sw_rstn_s, rx_sysref_s, 12'd0, led}),
@@ -599,11 +488,7 @@ module system_top (
     .axi_hdmi_tx_0_hdmi_if_h36_hsync (),
     .axi_hdmi_tx_0_hdmi_if_h36_vsync (),
     .axi_hdmi_tx_0_hdmi_if_h36_data_e (),
-    .axi_hdmi_tx_0_hdmi_if_h36_data (),
-    .sys_hdmi_pll_reconfig_to_pll_reconfig_to_pll (sys_hdmi_pll_reconfig_in),
-    .sys_hdmi_pll_reconfig_from_pll_reconfig_from_pll (sys_hdmi_pll_reconfig_out),
-    .sys_hdmi_pll_reconfig_reconfig_to_pll_reconfig_to_pll (sys_hdmi_pll_reconfig_reconfig_out),
-    .sys_hdmi_pll_reconfig_reconfig_from_pll_reconfig_from_pll (sys_hdmi_pll_reconfig_reconfig_in));
+    .axi_hdmi_tx_0_hdmi_if_h36_data ());
 
 endmodule
 

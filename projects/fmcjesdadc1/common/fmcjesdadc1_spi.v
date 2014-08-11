@@ -86,6 +86,7 @@ module fmcjesdadc1_spi (
   always @(posedge spi_clk or posedge spi_csn) begin
     if (spi_csn == 1'b1) begin
       spi_count <= 6'd0;
+      spi_devid <= 8'd0;
       spi_rd_wr_n <= 1'd0;
     end else begin
       spi_count <= spi_count + 1'b1;

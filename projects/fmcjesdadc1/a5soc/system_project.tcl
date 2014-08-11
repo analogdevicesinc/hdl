@@ -4,17 +4,12 @@ load_package flow
 source ../../scripts/adi_env.tcl
 project_new fmcjesdadc1_a5soc -overwrite
 
-set_global_assignment -name FAMILY "Arria V"
-set_global_assignment -name DEVICE 5ASTFD5K3F40I3ES
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name QSYS_FILE system_bd.qsys
+source $ad_hdl_dir/projects/common/a5soc/a5soc_system_assign.tcl
+
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_jesd_align.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_xcvr_rx_rst.v
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
-set_global_assignment -name VERILOG_FILE system_top.v
 
-source $ad_hdl_dir/projects/common/a5soc/a5soc_system_assign.tcl
 
 # reference clock
 
@@ -60,10 +55,6 @@ set_location_assignment PIN_C32   -to spi_sdio
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_csn
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_sdio
-
-#set_global_assignment -name SEARCH_PATH db/ip/system_bd
-#set_global_assignment -name SEARCH_PATH db/ip/system_bd/submodules
-#set_global_assignment -name SEARCH_PATH db/ip/system_bd/submodules/sequencer
 
 execute_flow -compile
 
