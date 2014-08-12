@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -72,8 +72,8 @@ module ad_dcfilter (
 
   // internal registers
 
-  reg     [15:0]  dc_offset = 'd0;
-  reg     [15:0]  dc_offset_d = 'd0;
+  reg     [47:0]  dc_offset = 'd0;
+  reg     [47:0]  dc_offset_d = 'd0;
   reg             valid_d = 'd0;
   reg     [15:0]  data_d = 'd0;
   reg             valid_2d = 'd0;
@@ -84,27 +84,26 @@ module ad_dcfilter (
 
   // internal signals
 
-  wire    [14:0]  dc_offset_15_s;
-  wire    [32:0]  dc_offset_33_s;
+  wire    [47:0]  dc_offset_s;
 
   // cancelling the dc offset
 
   always @(posedge clk) begin
-    dc_offset <= dc_offset_33_s[32:17];
+    dc_offset   <= dc_offset_s;
     dc_offset_d <= dc_offset;
     valid_d <= valid;
     if (valid == 1'b1) begin
       data_d <= data + dcfilt_offset;
     end
     valid_2d <= valid_d;
-    data_2d <= data_d;
-    data_dcfilt <= data_d - dc_offset;
+    data_2d  <= data_d;
+    data_dcfilt <= data_d - dc_offset[32:17];
     if (dcfilt_enb == 1'b1) begin
       valid_out <= valid_2d;
-      data_out <= data_dcfilt;
+      data_out  <= data_dcfilt;
     end else begin
       valid_out <= valid_2d;
-      data_out <= data_2d;
+      data_out  <= data_2d;
     end
   end
 
@@ -138,9 +137,9 @@ module ad_dcfilter (
     .USE_SIMD ("ONE48"))
   i_dsp48e1 (
     .CLK (clk),
-    .A ({{14{dc_offset_33_s[32]}}, dc_offset_33_s[32:17]}),
+    .A ({{14{dc_offset_s[32]}}, dc_offset_s[32:17]}),
     .B ({{2{dcfilt_coeff[15]}}, dcfilt_coeff}),
-    .C ({{32{dc_offset_d[15]}}, dc_offset_d}),
+    .C (dc_offset_d),
     .D ({{9{data_d[15]}}, data_d}),
     .MULTSIGNIN (1'd0),
     .CARRYIN (1'd0),
@@ -148,7 +147,7 @@ module ad_dcfilter (
     .ACIN (30'd0),
     .BCIN (18'd0),
     .PCIN (48'd0),
-    .P ({dc_offset_15_s, dc_offset_33_s}),
+    .P (dc_offset_s),
     .MULTSIGNOUT (),
     .CARRYOUT (),
     .CARRYCASCOUT (),
