@@ -101,8 +101,6 @@ module system_top (
   usb1_d7,
   uart0_rx,
   uart0_tx,
-  i2c0_scl,
-  i2c0_sda,
 
   // board gpio
 
@@ -114,6 +112,9 @@ module system_top (
 
   hdmi_out_clk,
   hdmi_data,
+  hdmi_scl,
+  hdmi_sda,
+  hdmi_rstn,
 
   // lane interface
 
@@ -190,8 +191,6 @@ module system_top (
   inout             usb1_d7;
   input             uart0_rx;
   output            uart0_tx;
-  inout             i2c0_scl;
-  inout             i2c0_sda;
 
   // board gpio
 
@@ -203,6 +202,9 @@ module system_top (
 
   output            hdmi_out_clk;
   output  [ 15:0]   hdmi_data;
+  inout             hdmi_scl;
+  inout             hdmi_sda;
+  output            hdmi_rstn;
 
   // lane interface
 
@@ -239,6 +241,8 @@ module system_top (
 
   wire              spi_mosi;
   wire              spi_miso;
+  wire              hdmi_scl_oe;
+  wire              hdmi_sda_oe;
   wire              adc0_enable_a_s;
   wire    [ 31:0]   adc0_data_a_s;
   wire              adc0_enable_b_s;
@@ -352,6 +356,10 @@ module system_top (
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
+
+  assign hdmi_rstn = 1'b1;
+  assign hdmi_scl = (hdmi_scl_oe == 1'b1) ? 1'b0 : 1'bz;
+  assign hdmi_sda = (hdmi_sda_oe == 1'b1) ? 1'b0 : 1'bz;
 
   system_bd i_system_bd (
     .sys_hps_memory_mem_a (ddr3_a),
@@ -470,8 +478,6 @@ module system_top (
     .sys_hps_io_hps_io_usb1_inst_NXT (usb1_nxt),
     .sys_hps_io_hps_io_uart0_inst_RX (uart0_rx),
     .sys_hps_io_hps_io_uart0_inst_TX (uart0_tx),
-    .sys_hps_io_hps_io_i2c0_inst_SDA (i2c0_sda),
-    .sys_hps_io_hps_io_i2c0_inst_SCL (i2c0_scl),
     .sys_hps_h2f_reset_reset_n (sys_resetn),
     .sys_gpio_external_connection_in_port ({rx_xcvr_status_s, 4'd0, push_buttons, 4'd0, dip_switches}),
     .sys_gpio_external_connection_out_port ({14'd0, rx_sw_rstn_s, rx_sysref_s, 12'd0, led}),
@@ -488,7 +494,11 @@ module system_top (
     .axi_hdmi_tx_0_hdmi_if_h36_hsync (),
     .axi_hdmi_tx_0_hdmi_if_h36_vsync (),
     .axi_hdmi_tx_0_hdmi_if_h36_data_e (),
-    .axi_hdmi_tx_0_hdmi_if_h36_data ());
+    .axi_hdmi_tx_0_hdmi_if_h36_data (),
+		.sys_hps_i2c0_scl_in_clk (hdmi_scl),
+		.sys_hps_i2c0_clk_clk (hdmi_scl_oe),
+		.sys_hps_i2c0_out_data (hdmi_sda_oe),
+		.sys_hps_i2c0_sda (hdmi_sda));
 
 endmodule
 

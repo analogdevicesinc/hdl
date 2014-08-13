@@ -144,11 +144,11 @@
          type = "String";
       }
    }
-   element axi_hdmi_tx.s_axi
+   element axi_dmac_0.s_axi
    {
       datum baseAddress
       {
-         value = "0";
+         value = "49152";
          type = "String";
       }
    }
@@ -160,19 +160,19 @@
          type = "String";
       }
    }
+   element axi_hdmi_tx.s_axi
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element axi_dmac_1.s_axi
    {
       datum baseAddress
       {
          value = "16384";
-         type = "String";
-      }
-   }
-   element axi_dmac_0.s_axi
-   {
-      datum baseAddress
-      {
-         value = "49152";
          type = "String";
       }
    }
@@ -505,6 +505,17 @@
    internal="axi_hdmi_tx.hdmi_if"
    type="conduit"
    dir="end" />
+ <interface
+   name="sys_hps_i2c0_scl_in"
+   internal="sys_hps.i2c0_scl_in"
+   type="clock"
+   dir="end" />
+ <interface
+   name="sys_hps_i2c0_clk"
+   internal="sys_hps.i2c0_clk"
+   type="clock"
+   dir="start" />
+ <interface name="sys_hps_i2c0" internal="sys_hps.i2c0" type="conduit" dir="end" />
  <module kind="altera_hps" version="14.0" enabled="1" name="sys_hps">
   <parameter name="MEM_VENDOR" value="JEDEC" />
   <parameter name="MEM_FORMAT" value="DISCRETE" />
@@ -949,8 +960,8 @@
   <parameter name="UART0_Mode" value="No Flow Control" />
   <parameter name="UART1_PinMuxing" value="Unused" />
   <parameter name="UART1_Mode" value="N/A" />
-  <parameter name="I2C0_PinMuxing" value="HPS I/O Set 0" />
-  <parameter name="I2C0_Mode" value="I2C" />
+  <parameter name="I2C0_PinMuxing" value="FPGA" />
+  <parameter name="I2C0_Mode" value="Full" />
   <parameter name="I2C1_PinMuxing" value="Unused" />
   <parameter name="I2C1_Mode" value="N/A" />
   <parameter name="I2C2_PinMuxing" value="Unused" />
@@ -997,7 +1008,7 @@
   <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_SPIM1_SCLK_OUT" value="100" />
   <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_SPIS0_SCLK_IN" value="100" />
   <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_SPIS1_SCLK_IN" value="100" />
-  <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_I2C0_SCL_IN" value="100" />
+  <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_I2C0_SCL_IN" value="0" />
   <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2C0_CLK" value="100" />
   <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_I2C1_SCL_IN" value="100" />
   <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2C1_CLK" value="100" />
@@ -1411,9 +1422,9 @@
   <parameter name="PCORE_DEVICE_TYPE" value="16" />
   <parameter name="PCORE_AXI_ID_WIDTH" value="14" />
   <parameter name="PCORE_Cr_Cb_N" value="0" />
-  <parameter name="PCORE_EMBEDDED_SYNC" value="0" />
+  <parameter name="PCORE_EMBEDDED_SYNC" value="1" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_HDMI_CLOCK_CLOCK_RATE" value="148484848" />
+  <parameter name="AUTO_HDMI_CLOCK_CLOCK_RATE" value="148437500" />
   <parameter name="AUTO_VDMA_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
  <module kind="altera_pll" version="14.0" enabled="1" name="sys_hdmi_pll">
@@ -1423,7 +1434,7 @@
   <parameter name="device" value="5ASTFD5K3F40I3ES" />
   <parameter name="gui_device_speed_grade" value="2" />
   <parameter name="gui_pll_mode" value="Integer-N PLL" />
-  <parameter name="gui_reference_clock_frequency" value="100.0" />
+  <parameter name="gui_reference_clock_frequency" value="50.0" />
   <parameter name="gui_channel_spacing" value="0.0" />
   <parameter name="gui_operation_mode" value="direct" />
   <parameter name="gui_feedback_clock" value="Global Clock" />

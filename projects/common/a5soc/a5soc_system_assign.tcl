@@ -15,7 +15,7 @@ set_instance_assignment -name IO_STANDARD "1.5 V" -to sys_clk
 
 # hdmi
 # data[6] (C23) and data[10] (C22) are not populated
-# replacing with C19) and C18 for now
+# replacing with C19 and C18 for now
 
 set_location_assignment PIN_A21 -to hdmi_out_clk
 set_location_assignment PIN_B25 -to hdmi_data[0]
@@ -51,6 +51,17 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[12]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[13]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[14]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[15]
+
+# i2c (hdmi)
+
+set_location_assignment PIN_F26 -to hdmi_scl
+set_location_assignment PIN_G26 -to hdmi_sda
+set_location_assignment PIN_N23 -to hdmi_rstn
+set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_scl
+set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_sda
+set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_rstn
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hdmi_scl
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hdmi_sda
 
 # led & switches
 
@@ -135,13 +146,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd2
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd3
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_mdc
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_mdio
-
-# i2c
-
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c0_scl
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c0_sda
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to i2c0_scl
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to i2c0_sda
 
 # ddr
 
