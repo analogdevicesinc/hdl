@@ -104,6 +104,7 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_mem_interconnect
 set_property -dict [list CONFIG.ENABLE_ADVANCED_OPTIONS {1}] $axi_mem_interconnect
 set_property -dict [list CONFIG.XBAR_DATA_WIDTH {512}] $axi_mem_interconnect
 set_property -dict [list CONFIG.STRATEGY {2}] $axi_mem_interconnect
+set_property -dict [list CONFIG.M00_HAS_REGSLICE {4}] $axi_mem_interconnect
 
 # instance: default peripherals
 

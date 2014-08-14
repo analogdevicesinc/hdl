@@ -15,6 +15,12 @@ adi_ip_files axi_spdif_tx [list \
 
 adi_ip_properties_lite axi_spdif_tx
 
+set ip_constr_files "axi_spdif_tx_constr.xdc"
+set proj_filegroup [ipx::get_file_group xilinx_vhdlsynthesis [ipx::current_core]]
+ipx::add_file $ip_constr_files $proj_filegroup
+set_property type {{xdc}} [ipx::get_file $ip_constr_files $proj_filegroup]
+set_property library_name {} [ipx::get_file $ip_constr_files $proj_filegroup]
+
 adi_add_bus "S_AXIS" "axis" "slave" \
 	[list {"S_AXIS_ACLK" "ACLK"} \
 	  {"S_AXIS_ARESETN" "ARESETN"} \

@@ -10,12 +10,9 @@ set_false_path -through [get_ports sys_rst]
 set_property -dict  {PACKAGE_PIN  AK17  IOSTANDARD  DIFF_SSTL12} [get_ports sys_clk_p] 
 set_property -dict  {PACKAGE_PIN  AK16  IOSTANDARD  DIFF_SSTL12} [get_ports sys_clk_n]
 
-create_clock -name sys_clk      -period  3.33 [get_ports sys_clk_p]
 
 set_property -dict  {PACKAGE_PIN  P26   IOSTANDARD  LVDS_25} [get_ports phy_clk_p] 
 set_property -dict  {PACKAGE_PIN  N26   IOSTANDARD  LVDS_25} [get_ports phy_clk_n] 
-
-create_clock -name phy_clk      -period  1.60 [get_ports phy_clk_p]
 
 # ethernet
 
@@ -89,18 +86,4 @@ set_property -dict  {PACKAGE_PIN  AJ11  IOSTANDARD  LVCMOS18} [get_ports hdmi_da
 # spdif
 
 set_property -dict  {PACKAGE_PIN  AE12  IOSTANDARD  LVCMOS18} [get_ports spdif]
-
-# clocks
-
-#create_clock -name mem_clk      -period  5.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/c0_ddr4_ui_clk]
-create_clock -name cpu_clk      -period 10.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/addn_ui_clkout1]
-create_clock -name m200_clk     -period  5.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/addn_ui_clkout2]
-create_clock -name hdmi_clk     -period  6.73 [get_pins i_system_wrapper/system_i/axi_hdmi_clkgen/clk_0]
-create_clock -name spdif_clk    -period 50.00 [get_pins i_system_wrapper/system_i/sys_audio_clkgen/clk_out1]
-
-#set_clock_groups -asynchronous -group {mem_clk}
-set_clock_groups -asynchronous -group {cpu_clk}
-set_clock_groups -asynchronous -group {m200_clk}
-set_clock_groups -asynchronous -group {hdmi_clk}
-set_clock_groups -asynchronous -group {spdif_clk}
 
