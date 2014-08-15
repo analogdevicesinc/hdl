@@ -419,71 +419,20 @@ module system_top (
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
 
-  IOBUF i_iobuf_gpio_adc_pd (
-    .I (gpio_ctl_o[5]),
-    .O (gpio_ctl_i[5]),
-    .T (gpio_ctl_t[5]),
-    .IO (adc_pd));
-
-  IOBUF i_iobuf_gpio_dac_txen (
-    .I (gpio_ctl_o[4]),
-    .O (gpio_ctl_i[4]),
-    .T (gpio_ctl_t[4]),
-    .IO (dac_txen));
-
-  IOBUF i_iobuf_gpio_dac_reset (
-    .I (gpio_ctl_o[3]),
-    .O (gpio_ctl_i[3]),
-    .T (gpio_ctl_t[3]),
-    .IO (dac_reset));
-
-  IOBUF i_iobuf_gpio_clkd_pd (
-    .I (gpio_ctl_o[2]),
-    .O (gpio_ctl_i[2]),
-    .T (gpio_ctl_t[2]),
-    .IO (clkd_pd));
-
-  IOBUF i_iobuf_gpio_clkd_sync (
-    .I (gpio_ctl_o[1]),
-    .O (gpio_ctl_i[1]),
-    .T (gpio_ctl_t[1]),
-    .IO (clkd_sync));
-
-  IOBUF i_iobuf_gpio_clkd_reset (
-    .I (gpio_ctl_o[0]),
-    .O (gpio_ctl_i[0]),
-    .T (gpio_ctl_t[0]),
-    .IO (clkd_reset));
-
-  IOBUF i_iobuf_gpio_adc_fdb (
-    .I (gpio_status_o[4]),
-    .O (gpio_status_i[4]),
-    .T (gpio_status_t[4]),
-    .IO (adc_fdb));
-
-  IOBUF i_iobuf_gpio_adc_fda (
-    .I (gpio_status_o[3]),
-    .O (gpio_status_i[3]),
-    .T (gpio_status_t[3]),
-    .IO (adc_fda));
-
-  IOBUF i_iobuf_gpio_dac_irq (
-    .I (gpio_status_o[2]),
-    .O (gpio_status_i[2]),
-    .T (gpio_status_t[2]),
-    .IO (dac_irq));
-
-  IOBUF i_iobuf_gpio_clkd_status_1 (
-    .I (gpio_status_o[1]),
-    .O (gpio_status_i[1]),
-    .T (gpio_status_t[1]),
-    .IO (clkd_status[1]));
-
-  IOBUF i_iobuf_gpio_clkd_status_0 (
-    .I (gpio_status_o[0]),
-    .O (gpio_status_i[0]),
-    .T (gpio_status_t[0]),
-    .IO (clkd_status[0]));
+  ad_iobuf #(.DATA_WIDTH(26)) i_iobuf (
+    .dt ({gpio_ctl_t[5:0], gpio_status_t[4:0]}),
+    .di ({gpio_ctl_o[5:0], gpio_status_o[4:0]}),
+    .do ({gpio_ctl_i[5:0], gpio_status_i[4:0]}),
+    .dio ({ adc_pd,          // 10
+            dac_txen,        //  9
+            dac_reset,       //  8
+            clkd_pd,         //  7
+            clkd_sync,       //  6
+            clkd_reset,      //  5
+            adc_fdb,         //  4
+            adc_fda,         //  3
+            dac_irq,         //  2
+            clkd_status}));  //  0
 
   system_wrapper i_system_wrapper (
     .adc_clk (adc_clk),
