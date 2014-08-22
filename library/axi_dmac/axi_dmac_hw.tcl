@@ -56,6 +56,13 @@ set_parameter_property PCORE_AXI_ID_WIDTH TYPE INTEGER
 set_parameter_property PCORE_AXI_ID_WIDTH UNITS None
 set_parameter_property PCORE_AXI_ID_WIDTH HDL_PARAMETER true
 
+add_parameter PCORE_AXIM_ID_WIDTH INTEGER 0
+set_parameter_property PCORE_AXIM_ID_WIDTH DEFAULT_VALUE 3
+set_parameter_property PCORE_AXIM_ID_WIDTH DISPLAY_NAME PCORE_AXIM_ID_WIDTH
+set_parameter_property PCORE_AXIM_ID_WIDTH TYPE INTEGER
+set_parameter_property PCORE_AXIM_ID_WIDTH UNITS None
+set_parameter_property PCORE_AXIM_ID_WIDTH HDL_PARAMETER true
+
 add_parameter C_DMA_DATA_WIDTH_SRC INTEGER 0
 set_parameter_property C_DMA_DATA_WIDTH_SRC DEFAULT_VALUE 64
 set_parameter_property C_DMA_DATA_WIDTH_SRC DISPLAY_NAME C_DMA_DATA_WIDTH_SRC
@@ -241,7 +248,7 @@ proc axi_dmac_elaborate {} {
     add_interface_port m_dest_axi m_dest_axi_rresp rresp Input 2
     add_interface_port m_dest_axi m_dest_axi_rdata rdata Input C_DMA_DATA_WIDTH_DEST
     add_interface_port m_dest_axi m_dest_axi_rready rready Output 1
-    add_interface_port m_dest_axi m_dest_axi_awid awid Output PCORE_AXI_ID_WIDTH
+    add_interface_port m_dest_axi m_dest_axi_awid awid Output PCORE_AXIM_ID_WIDTH
     add_interface_port m_dest_axi m_dest_axi_awlen awlen Output 8
     add_interface_port m_dest_axi m_dest_axi_awsize awsize Output 3
     add_interface_port m_dest_axi m_dest_axi_awburst awburst Output 2
@@ -249,15 +256,15 @@ proc axi_dmac_elaborate {} {
     add_interface_port m_dest_axi m_dest_axi_awcache awcache Output 4
     add_interface_port m_dest_axi m_dest_axi_awprot awprot Output 3
     add_interface_port m_dest_axi m_dest_axi_wlast wlast Output 1
-    add_interface_port m_dest_axi m_dest_axi_bid bid Input PCORE_AXI_ID_WIDTH
-    add_interface_port m_dest_axi m_dest_axi_arid arid Output PCORE_AXI_ID_WIDTH
+    add_interface_port m_dest_axi m_dest_axi_bid bid Input PCORE_AXIM_ID_WIDTH
+    add_interface_port m_dest_axi m_dest_axi_arid arid Output PCORE_AXIM_ID_WIDTH
     add_interface_port m_dest_axi m_dest_axi_arlen arlen Output 8
     add_interface_port m_dest_axi m_dest_axi_arsize arsize Output 3
     add_interface_port m_dest_axi m_dest_axi_arburst arburst Output 2
     add_interface_port m_dest_axi m_dest_axi_arlock arlock Output 1
     add_interface_port m_dest_axi m_dest_axi_arcache arcache Output 4
     add_interface_port m_dest_axi m_dest_axi_arprot arprot Output 3
-    add_interface_port m_dest_axi m_dest_axi_rid rid Input PCORE_AXI_ID_WIDTH
+    add_interface_port m_dest_axi m_dest_axi_rid rid Input PCORE_AXIM_ID_WIDTH
     add_interface_port m_dest_axi m_dest_axi_rlast rlast Input 1
   }
 
@@ -290,7 +297,7 @@ proc axi_dmac_elaborate {} {
     add_interface_port m_src_axi m_src_axi_rresp rresp Input 2
     add_interface_port m_src_axi m_src_axi_rdata rdata Input C_DMA_DATA_WIDTH_SRC
     add_interface_port m_src_axi m_src_axi_rready rready Output 1
-    add_interface_port m_src_axi m_src_axi_awid awid Output PCORE_AXI_ID_WIDTH
+    add_interface_port m_src_axi m_src_axi_awid awid Output PCORE_AXIM_ID_WIDTH
     add_interface_port m_src_axi m_src_axi_awlen awlen Output 8
     add_interface_port m_src_axi m_src_axi_awsize awsize Output 3
     add_interface_port m_src_axi m_src_axi_awburst awburst Output 2
@@ -298,15 +305,15 @@ proc axi_dmac_elaborate {} {
     add_interface_port m_src_axi m_src_axi_awcache awcache Output 4
     add_interface_port m_src_axi m_src_axi_awprot awprot Output 3
     add_interface_port m_src_axi m_src_axi_wlast wlast Output 1
-    add_interface_port m_src_axi m_src_axi_bid bid Input PCORE_AXI_ID_WIDTH
-    add_interface_port m_src_axi m_src_axi_arid arid Output PCORE_AXI_ID_WIDTH
+    add_interface_port m_src_axi m_src_axi_bid bid Input PCORE_AXIM_ID_WIDTH
+    add_interface_port m_src_axi m_src_axi_arid arid Output PCORE_AXIM_ID_WIDTH
     add_interface_port m_src_axi m_src_axi_arlen arlen Output 8
     add_interface_port m_src_axi m_src_axi_arsize arsize Output 3
     add_interface_port m_src_axi m_src_axi_arburst arburst Output 2
     add_interface_port m_src_axi m_src_axi_arlock arlock Output 1
     add_interface_port m_src_axi m_src_axi_arcache arcache Output 4
     add_interface_port m_src_axi m_src_axi_arprot arprot Output 3
-    add_interface_port m_src_axi m_src_axi_rid rid Input PCORE_AXI_ID_WIDTH
+    add_interface_port m_src_axi m_src_axi_rid rid Input PCORE_AXIM_ID_WIDTH
     add_interface_port m_src_axi m_src_axi_rlast rlast Input 1
   }
 

@@ -83,27 +83,27 @@ module axi_dmac_alt (
 
   // axi master interface (destination)
 
-	m_dest_axi_aclk,
-	m_dest_axi_aresetn,
-	m_dest_axi_awvalid,
-	m_dest_axi_awaddr,
+  m_dest_axi_aclk,
+  m_dest_axi_aresetn,
+  m_dest_axi_awvalid,
+  m_dest_axi_awaddr,
   m_dest_axi_awid,
-	m_dest_axi_awlen,
-	m_dest_axi_awsize,
-	m_dest_axi_awburst,
+  m_dest_axi_awlen,
+  m_dest_axi_awsize,
+  m_dest_axi_awburst,
   m_dest_axi_awlock,
-	m_dest_axi_awcache,
-	m_dest_axi_awprot,
-	m_dest_axi_awready,
-	m_dest_axi_wvalid,
-	m_dest_axi_wdata,
-	m_dest_axi_wstrb,
-	m_dest_axi_wlast,
-	m_dest_axi_wready,
-	m_dest_axi_bvalid,
-	m_dest_axi_bresp,
-	m_dest_axi_bid,
-	m_dest_axi_bready,
+  m_dest_axi_awcache,
+  m_dest_axi_awprot,
+  m_dest_axi_awready,
+  m_dest_axi_wvalid,
+  m_dest_axi_wdata,
+  m_dest_axi_wstrb,
+  m_dest_axi_wlast,
+  m_dest_axi_wready,
+  m_dest_axi_bvalid,
+  m_dest_axi_bresp,
+  m_dest_axi_bid,
+  m_dest_axi_bready,
   m_dest_axi_arvalid,
   m_dest_axi_araddr,
   m_dest_axi_arid,
@@ -123,73 +123,74 @@ module axi_dmac_alt (
 
   // axi master interface (source)
 
-	m_src_axi_aclk,
-	m_src_axi_aresetn,
-	m_src_axi_awvalid,
-	m_src_axi_awaddr,
+  m_src_axi_aclk,
+  m_src_axi_aresetn,
+  m_src_axi_awvalid,
+  m_src_axi_awaddr,
   m_src_axi_awid,
-	m_src_axi_awlen,
-	m_src_axi_awsize,
-	m_src_axi_awburst,
+  m_src_axi_awlen,
+  m_src_axi_awsize,
+  m_src_axi_awburst,
   m_src_axi_awlock,
-	m_src_axi_awcache,
-	m_src_axi_awprot,
-	m_src_axi_awready,
-	m_src_axi_wvalid,
-	m_src_axi_wdata,
-	m_src_axi_wstrb,
-	m_src_axi_wlast,
-	m_src_axi_wready,
-	m_src_axi_bvalid,
-	m_src_axi_bresp,
-	m_src_axi_bid,
-	m_src_axi_bready,
-	m_src_axi_arvalid,
-	m_src_axi_araddr,
+  m_src_axi_awcache,
+  m_src_axi_awprot,
+  m_src_axi_awready,
+  m_src_axi_wvalid,
+  m_src_axi_wdata,
+  m_src_axi_wstrb,
+  m_src_axi_wlast,
+  m_src_axi_wready,
+  m_src_axi_bvalid,
+  m_src_axi_bresp,
+  m_src_axi_bid,
+  m_src_axi_bready,
+  m_src_axi_arvalid,
+  m_src_axi_araddr,
   m_src_axi_arid,
-	m_src_axi_arlen,
-	m_src_axi_arsize,
-	m_src_axi_arburst,
+  m_src_axi_arlen,
+  m_src_axi_arsize,
+  m_src_axi_arburst,
   m_src_axi_arlock,
-	m_src_axi_arcache,
-	m_src_axi_arprot,
-	m_src_axi_arready,
-	m_src_axi_rvalid,
-	m_src_axi_rresp,
-	m_src_axi_rdata,
+  m_src_axi_arcache,
+  m_src_axi_arprot,
+  m_src_axi_arready,
+  m_src_axi_rvalid,
+  m_src_axi_rresp,
+  m_src_axi_rdata,
   m_src_axi_rid,
   m_src_axi_rlast,
-	m_src_axi_rready,
+  m_src_axi_rready,
 
   // axis
 
-	s_axis_aclk,
-	s_axis_ready,
-	s_axis_valid,
-	s_axis_data,
-	s_axis_user,
-	m_axis_aclk,
-	m_axis_ready,
-	m_axis_valid,
-	m_axis_data,
+  s_axis_aclk,
+  s_axis_ready,
+  s_axis_valid,
+  s_axis_data,
+  s_axis_user,
+  m_axis_aclk,
+  m_axis_ready,
+  m_axis_valid,
+  m_axis_data,
 
   // fifo
 
-	fifo_wr_clk,
-	fifo_wr_en,
-	fifo_wr_din,
-	fifo_wr_overflow,
-	fifo_wr_sync,
-	fifo_rd_clk,
-	fifo_rd_en,
-	fifo_rd_valid,
-	fifo_rd_dout,
-	fifo_rd_underflow,
+  fifo_wr_clk,
+  fifo_wr_en,
+  fifo_wr_din,
+  fifo_wr_overflow,
+  fifo_wr_sync,
+  fifo_rd_clk,
+  fifo_rd_en,
+  fifo_rd_valid,
+  fifo_rd_dout,
+  fifo_rd_underflow,
 
   irq);
 
   parameter PCORE_ID = 0;
   parameter PCORE_AXI_ID_WIDTH = 3;
+  parameter PCORE_AXIM_ID_WIDTH = 3;
   parameter C_DMA_DATA_WIDTH_SRC = 64;
   parameter C_DMA_DATA_WIDTH_DEST = 64;
   parameter C_DMA_LENGTH_WIDTH = 14;
@@ -246,30 +247,30 @@ module axi_dmac_alt (
 
   // axi master interface (destination)
 
-	input                                     m_dest_axi_aclk;
-	input                                     m_dest_axi_aresetn;
-	output                                    m_dest_axi_awvalid;
-	output  [31:0]                            m_dest_axi_awaddr;
-  output  [(PCORE_AXI_ID_WIDTH-1):0]        m_dest_axi_awid;
-	output  [ 7:0]                            m_dest_axi_awlen;
-	output  [ 2:0]                            m_dest_axi_awsize;
-	output  [ 1:0]                            m_dest_axi_awburst;
+  input                                     m_dest_axi_aclk;
+  input                                     m_dest_axi_aresetn;
+  output                                    m_dest_axi_awvalid;
+  output  [31:0]                            m_dest_axi_awaddr;
+  output  [(PCORE_AXIM_ID_WIDTH-1):0]       m_dest_axi_awid;
+  output  [ 7:0]                            m_dest_axi_awlen;
+  output  [ 2:0]                            m_dest_axi_awsize;
+  output  [ 1:0]                            m_dest_axi_awburst;
   output  [ 0:0]                            m_dest_axi_awlock;
-	output  [ 3:0]                            m_dest_axi_awcache;
-	output  [ 2:0]                            m_dest_axi_awprot;
-	input                                     m_dest_axi_awready;
-	output                                    m_dest_axi_wvalid;
-	output  [C_DMA_DATA_WIDTH_DEST-1:0]       m_dest_axi_wdata;
-	output  [(C_DMA_DATA_WIDTH_DEST/8)-1:0]   m_dest_axi_wstrb;
-	output                                    m_dest_axi_wlast;
-	input                                     m_dest_axi_wready;
-	input                                     m_dest_axi_bvalid;
-	input   [ 1:0]                            m_dest_axi_bresp;
-	input   [(PCORE_AXI_ID_WIDTH-1):0]        m_dest_axi_bid;
-	output                                    m_dest_axi_bready;
+  output  [ 3:0]                            m_dest_axi_awcache;
+  output  [ 2:0]                            m_dest_axi_awprot;
+  input                                     m_dest_axi_awready;
+  output                                    m_dest_axi_wvalid;
+  output  [C_DMA_DATA_WIDTH_DEST-1:0]       m_dest_axi_wdata;
+  output  [(C_DMA_DATA_WIDTH_DEST/8)-1:0]   m_dest_axi_wstrb;
+  output                                    m_dest_axi_wlast;
+  input                                     m_dest_axi_wready;
+  input                                     m_dest_axi_bvalid;
+  input   [ 1:0]                            m_dest_axi_bresp;
+  input   [(PCORE_AXIM_ID_WIDTH-1):0]       m_dest_axi_bid;
+  output                                    m_dest_axi_bready;
   output                                    m_dest_axi_arvalid;
   output  [31:0]                            m_dest_axi_araddr;
-  output  [(PCORE_AXI_ID_WIDTH-1):0]        m_dest_axi_arid;
+  output  [(PCORE_AXIM_ID_WIDTH-1):0]       m_dest_axi_arid;
   output  [ 7:0]                            m_dest_axi_arlen;
   output  [ 2:0]                            m_dest_axi_arsize;
   output  [ 1:0]                            m_dest_axi_arburst;
@@ -280,74 +281,74 @@ module axi_dmac_alt (
   input                                     m_dest_axi_rvalid;
   input   [ 1:0]                            m_dest_axi_rresp;
   input   [C_DMA_DATA_WIDTH_DEST-1:0]       m_dest_axi_rdata;
-  input   [(PCORE_AXI_ID_WIDTH-1):0]        m_dest_axi_rid;
+  input   [(PCORE_AXIM_ID_WIDTH-1):0]       m_dest_axi_rid;
   input                                     m_dest_axi_rlast;
   output                                    m_dest_axi_rready;
 
   // axi master interface (source)
 
-	input                                     m_src_axi_aclk;
-	input                                     m_src_axi_aresetn;
-	output                                    m_src_axi_awvalid;
-	output  [31:0]                            m_src_axi_awaddr;
-  output  [(PCORE_AXI_ID_WIDTH-1):0]        m_src_axi_awid;
-	output  [ 7:0]                            m_src_axi_awlen;
-	output  [ 2:0]                            m_src_axi_awsize;
-	output  [ 1:0]                            m_src_axi_awburst;
+  input                                     m_src_axi_aclk;
+  input                                     m_src_axi_aresetn;
+  output                                    m_src_axi_awvalid;
+  output  [31:0]                            m_src_axi_awaddr;
+  output  [(PCORE_AXIM_ID_WIDTH-1):0]       m_src_axi_awid;
+  output  [ 7:0]                            m_src_axi_awlen;
+  output  [ 2:0]                            m_src_axi_awsize;
+  output  [ 1:0]                            m_src_axi_awburst;
   output  [ 0:0]                            m_src_axi_awlock;
-	output  [ 3:0]                            m_src_axi_awcache;
-	output  [ 2:0]                            m_src_axi_awprot;
-	input                                     m_src_axi_awready;
-	output                                    m_src_axi_wvalid;
-	output  [C_DMA_DATA_WIDTH_SRC-1:0]        m_src_axi_wdata;
-	output  [(C_DMA_DATA_WIDTH_SRC/8)-1:0]    m_src_axi_wstrb;
-	output                                    m_src_axi_wlast;
-	input                                     m_src_axi_wready;
-	input                                     m_src_axi_bvalid;
-	input   [ 1:0]                            m_src_axi_bresp;
-	input   [(PCORE_AXI_ID_WIDTH-1):0]        m_src_axi_bid;
-	output                                    m_src_axi_bready;
-	output                                    m_src_axi_arvalid;
-	output  [31:0]                            m_src_axi_araddr;
-  output  [(PCORE_AXI_ID_WIDTH-1):0]        m_src_axi_arid;
-	output  [ 7:0]                            m_src_axi_arlen;
-	output  [ 2:0]                            m_src_axi_arsize;
-	output  [ 1:0]                            m_src_axi_arburst;
+  output  [ 3:0]                            m_src_axi_awcache;
+  output  [ 2:0]                            m_src_axi_awprot;
+  input                                     m_src_axi_awready;
+  output                                    m_src_axi_wvalid;
+  output  [C_DMA_DATA_WIDTH_SRC-1:0]        m_src_axi_wdata;
+  output  [(C_DMA_DATA_WIDTH_SRC/8)-1:0]    m_src_axi_wstrb;
+  output                                    m_src_axi_wlast;
+  input                                     m_src_axi_wready;
+  input                                     m_src_axi_bvalid;
+  input   [ 1:0]                            m_src_axi_bresp;
+  input   [(PCORE_AXIM_ID_WIDTH-1):0]       m_src_axi_bid;
+  output                                    m_src_axi_bready;
+  output                                    m_src_axi_arvalid;
+  output  [31:0]                            m_src_axi_araddr;
+  output  [(PCORE_AXIM_ID_WIDTH-1):0]       m_src_axi_arid;
+  output  [ 7:0]                            m_src_axi_arlen;
+  output  [ 2:0]                            m_src_axi_arsize;
+  output  [ 1:0]                            m_src_axi_arburst;
   output  [ 0:0]                            m_src_axi_arlock;
-	output  [ 3:0]                            m_src_axi_arcache;
-	output  [ 2:0]                            m_src_axi_arprot;
-	input                                     m_src_axi_arready;
-	input                                     m_src_axi_rvalid;
-	input   [ 1:0]                            m_src_axi_rresp;
-	input   [C_DMA_DATA_WIDTH_SRC-1:0]        m_src_axi_rdata;
-  input   [(PCORE_AXI_ID_WIDTH-1):0]        m_src_axi_rid;
+  output  [ 3:0]                            m_src_axi_arcache;
+  output  [ 2:0]                            m_src_axi_arprot;
+  input                                     m_src_axi_arready;
+  input                                     m_src_axi_rvalid;
+  input   [ 1:0]                            m_src_axi_rresp;
+  input   [C_DMA_DATA_WIDTH_SRC-1:0]        m_src_axi_rdata;
+  input   [(PCORE_AXIM_ID_WIDTH-1):0]       m_src_axi_rid;
   input                                     m_src_axi_rlast;
-	output                                    m_src_axi_rready;
+  output                                    m_src_axi_rready;
 
   // axis
 
-	input                                     s_axis_aclk;
-	output                                    s_axis_ready;
-	input                                     s_axis_valid;
-	input   [C_DMA_DATA_WIDTH_SRC-1:0]        s_axis_data;
-	input   [ 0:0]                            s_axis_user;
-	input                                     m_axis_aclk;
-	input                                     m_axis_ready;
-	output                                    m_axis_valid;
-	output  [C_DMA_DATA_WIDTH_DEST-1:0]       m_axis_data;
+  input                                     s_axis_aclk;
+  output                                    s_axis_ready;
+  input                                     s_axis_valid;
+  input   [C_DMA_DATA_WIDTH_SRC-1:0]        s_axis_data;
+  input   [ 0:0]                            s_axis_user;
+  input                                     m_axis_aclk;
+  input                                     m_axis_ready;
+  output                                    m_axis_valid;
+  output  [C_DMA_DATA_WIDTH_DEST-1:0]       m_axis_data;
 
   // fifo
 
-	input                                     fifo_wr_clk;
-	input                                     fifo_wr_en;
-	input   [C_DMA_DATA_WIDTH_SRC-1:0]        fifo_wr_din;
-	output                                    fifo_wr_overflow;
-	input                                     fifo_wr_sync;
-	input                                     fifo_rd_clk;
-	input                                     fifo_rd_en;
-	output                                    fifo_rd_valid;
-	output  [C_DMA_DATA_WIDTH_DEST-1:0]       fifo_rd_dout;
-	output                                    fifo_rd_underflow;
+  input                                     fifo_wr_clk;
+  input                                     fifo_wr_en;
+  input   [C_DMA_DATA_WIDTH_SRC-1:0]        fifo_wr_din;
+  output                                    fifo_wr_overflow;
+  input                                     fifo_wr_sync;
+  input                                     fifo_rd_clk;
+  input                                     fifo_rd_en;
+  output                                    fifo_rd_valid;
+  output  [C_DMA_DATA_WIDTH_DEST-1:0]       fifo_rd_dout;
+  output                                    fifo_rd_underflow;
 
   output                                    irq;
 
@@ -377,77 +378,77 @@ module axi_dmac_alt (
     .C_DMA_TYPE_DEST (C_DMA_TYPE_DEST),
     .C_DMA_TYPE_SRC (C_DMA_TYPE_SRC))
   i_axi_dmac (
-	  .s_axi_aclk (s_axi_aclk),
-	  .s_axi_aresetn (s_axi_aresetn),
-	  .s_axi_awvalid (s_axi_awvalid),
-	  .s_axi_awaddr ({18'd0, s_axi_awaddr}),
-	  .s_axi_awready (s_axi_awready),
-	  .s_axi_wvalid (s_axi_wvalid),
-	  .s_axi_wdata (s_axi_wdata),
-	  .s_axi_wstrb (s_axi_wstrb),
-	  .s_axi_wready (s_axi_wready),
-	  .s_axi_bvalid (s_axi_bvalid),
-	  .s_axi_bresp (s_axi_bresp),
-	  .s_axi_bready (s_axi_bready),
-	  .s_axi_arvalid (s_axi_arvalid),
-	  .s_axi_araddr ({18'd0, s_axi_araddr}),
-	  .s_axi_arready (s_axi_arready),
-	  .s_axi_rvalid (s_axi_rvalid),
-	  .s_axi_rready (s_axi_rready),
-	  .s_axi_rresp (s_axi_rresp),
-	  .s_axi_rdata (s_axi_rdata),
-	  .irq (irq),
-	  .m_dest_axi_aclk (m_dest_axi_aclk),
-	  .m_dest_axi_aresetn (m_dest_axi_aresetn),
-	  .m_src_axi_aclk (m_src_axi_aclk),
-	  .m_src_axi_aresetn (m_src_axi_aresetn),
-	  .m_dest_axi_awaddr (m_dest_axi_awaddr),
-	  .m_dest_axi_awlen (m_dest_axi_awlen),
-	  .m_dest_axi_awsize (m_dest_axi_awsize),
-	  .m_dest_axi_awburst (m_dest_axi_awburst),
-	  .m_dest_axi_awprot (m_dest_axi_awprot),
-	  .m_dest_axi_awcache (m_dest_axi_awcache),
-	  .m_dest_axi_awvalid (m_dest_axi_awvalid),
-	  .m_dest_axi_awready (m_dest_axi_awready),
-	  .m_dest_axi_wdata (m_dest_axi_wdata),
-	  .m_dest_axi_wstrb (m_dest_axi_wstrb),
-	  .m_dest_axi_wready (m_dest_axi_wready),
-	  .m_dest_axi_wvalid (m_dest_axi_wvalid),
-	  .m_dest_axi_wlast (m_dest_axi_wlast),
-	  .m_dest_axi_bvalid (m_dest_axi_bvalid),
-	  .m_dest_axi_bresp (m_dest_axi_bresp),
-	  .m_dest_axi_bready (m_dest_axi_bready),
-	  .m_src_axi_arready (m_src_axi_arready),
-	  .m_src_axi_arvalid (m_src_axi_arvalid),
-	  .m_src_axi_araddr (m_src_axi_araddr),
-	  .m_src_axi_arlen (m_src_axi_arlen),
-	  .m_src_axi_arsize (m_src_axi_arsize),
-	  .m_src_axi_arburst (m_src_axi_arburst),
-	  .m_src_axi_arprot (m_src_axi_arprot),
-	  .m_src_axi_arcache (m_src_axi_arcache),
-	  .m_src_axi_rdata (m_src_axi_rdata),
-	  .m_src_axi_rready (m_src_axi_rready),
-	  .m_src_axi_rvalid (m_src_axi_rvalid),
-	  .m_src_axi_rresp (m_src_axi_rresp),
-	  .s_axis_aclk (s_axis_aclk),
-	  .s_axis_ready (s_axis_ready),
-	  .s_axis_valid (s_axis_valid),
-	  .s_axis_data (s_axis_data),
-	  .s_axis_user (s_axis_user),
-	  .m_axis_aclk (m_axis_aclk),
-	  .m_axis_ready (m_axis_ready),
-	  .m_axis_valid (m_axis_valid),
-	  .m_axis_data (m_axis_data),
-	  .fifo_wr_clk (fifo_wr_clk),
-	  .fifo_wr_en (fifo_wr_en),
-	  .fifo_wr_din (fifo_wr_din),
-	  .fifo_wr_overflow (fifo_wr_overflow),
-	  .fifo_wr_sync (fifo_wr_sync),
-	  .fifo_rd_clk (fifo_rd_clk),
-	  .fifo_rd_en (fifo_rd_en),
-	  .fifo_rd_valid (fifo_rd_valid),
-	  .fifo_rd_dout (fifo_rd_dout),
-	  .fifo_rd_underflow (fifo_rd_underflow));
+    .s_axi_aclk (s_axi_aclk),
+    .s_axi_aresetn (s_axi_aresetn),
+    .s_axi_awvalid (s_axi_awvalid),
+    .s_axi_awaddr ({18'd0, s_axi_awaddr}),
+    .s_axi_awready (s_axi_awready),
+    .s_axi_wvalid (s_axi_wvalid),
+    .s_axi_wdata (s_axi_wdata),
+    .s_axi_wstrb (s_axi_wstrb),
+    .s_axi_wready (s_axi_wready),
+    .s_axi_bvalid (s_axi_bvalid),
+    .s_axi_bresp (s_axi_bresp),
+    .s_axi_bready (s_axi_bready),
+    .s_axi_arvalid (s_axi_arvalid),
+    .s_axi_araddr ({18'd0, s_axi_araddr}),
+    .s_axi_arready (s_axi_arready),
+    .s_axi_rvalid (s_axi_rvalid),
+    .s_axi_rready (s_axi_rready),
+    .s_axi_rresp (s_axi_rresp),
+    .s_axi_rdata (s_axi_rdata),
+    .irq (irq),
+    .m_dest_axi_aclk (m_dest_axi_aclk),
+    .m_dest_axi_aresetn (m_dest_axi_aresetn),
+    .m_src_axi_aclk (m_src_axi_aclk),
+    .m_src_axi_aresetn (m_src_axi_aresetn),
+    .m_dest_axi_awaddr (m_dest_axi_awaddr),
+    .m_dest_axi_awlen (m_dest_axi_awlen),
+    .m_dest_axi_awsize (m_dest_axi_awsize),
+    .m_dest_axi_awburst (m_dest_axi_awburst),
+    .m_dest_axi_awprot (m_dest_axi_awprot),
+    .m_dest_axi_awcache (m_dest_axi_awcache),
+    .m_dest_axi_awvalid (m_dest_axi_awvalid),
+    .m_dest_axi_awready (m_dest_axi_awready),
+    .m_dest_axi_wdata (m_dest_axi_wdata),
+    .m_dest_axi_wstrb (m_dest_axi_wstrb),
+    .m_dest_axi_wready (m_dest_axi_wready),
+    .m_dest_axi_wvalid (m_dest_axi_wvalid),
+    .m_dest_axi_wlast (m_dest_axi_wlast),
+    .m_dest_axi_bvalid (m_dest_axi_bvalid),
+    .m_dest_axi_bresp (m_dest_axi_bresp),
+    .m_dest_axi_bready (m_dest_axi_bready),
+    .m_src_axi_arready (m_src_axi_arready),
+    .m_src_axi_arvalid (m_src_axi_arvalid),
+    .m_src_axi_araddr (m_src_axi_araddr),
+    .m_src_axi_arlen (m_src_axi_arlen),
+    .m_src_axi_arsize (m_src_axi_arsize),
+    .m_src_axi_arburst (m_src_axi_arburst),
+    .m_src_axi_arprot (m_src_axi_arprot),
+    .m_src_axi_arcache (m_src_axi_arcache),
+    .m_src_axi_rdata (m_src_axi_rdata),
+    .m_src_axi_rready (m_src_axi_rready),
+    .m_src_axi_rvalid (m_src_axi_rvalid),
+    .m_src_axi_rresp (m_src_axi_rresp),
+    .s_axis_aclk (s_axis_aclk),
+    .s_axis_ready (s_axis_ready),
+    .s_axis_valid (s_axis_valid),
+    .s_axis_data (s_axis_data),
+    .s_axis_user (s_axis_user),
+    .m_axis_aclk (m_axis_aclk),
+    .m_axis_ready (m_axis_ready),
+    .m_axis_valid (m_axis_valid),
+    .m_axis_data (m_axis_data),
+    .fifo_wr_clk (fifo_wr_clk),
+    .fifo_wr_en (fifo_wr_en),
+    .fifo_wr_din (fifo_wr_din),
+    .fifo_wr_overflow (fifo_wr_overflow),
+    .fifo_wr_sync (fifo_wr_sync),
+    .fifo_rd_clk (fifo_rd_clk),
+    .fifo_rd_en (fifo_rd_en),
+    .fifo_rd_valid (fifo_rd_valid),
+    .fifo_rd_dout (fifo_rd_dout),
+    .fifo_rd_underflow (fifo_rd_underflow));
 
 endmodule
 

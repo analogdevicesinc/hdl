@@ -57,23 +57,7 @@
          type = "String";
       }
    }
-   element sys_hps.f2h_axi_slave
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
    element sys_hps.f2h_sdram0_data
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
-   element sys_int_mem.s1
    {
       datum baseAddress
       {
@@ -94,11 +78,11 @@
          type = "String";
       }
    }
-   element axi_ad9361.s_axi
+   element sys_int_mem.s1
    {
       datum baseAddress
       {
-         value = "131072";
+         value = "0";
          type = "String";
       }
    }
@@ -107,6 +91,14 @@
       datum baseAddress
       {
          value = "16384";
+         type = "String";
+      }
+   }
+   element axi_ad9361.s_axi
+   {
+      datum baseAddress
+      {
+         value = "131072";
          type = "String";
       }
    }
@@ -660,10 +652,10 @@
   <parameter name="BSEL" value="1" />
   <parameter name="CSEL_EN" value="false" />
   <parameter name="CSEL" value="0" />
-  <parameter name="F2S_Width" value="2" />
+  <parameter name="F2S_Width" value="0" />
   <parameter name="S2F_Width" value="2" />
   <parameter name="LWH2F_Enable" value="true" />
-  <parameter name="F2SDRAM_Type">Avalon-MM Bidirectional</parameter>
+  <parameter name="F2SDRAM_Type" value="AXI-3" />
   <parameter name="F2SDRAM_Width" value="64" />
   <parameter name="BONDING_OUT_ENABLED" value="false" />
   <parameter name="S2FCLK_COLDRST_Enable" value="false" />
@@ -734,7 +726,7 @@
   <parameter name="TRACE_Mode" value="N/A" />
   <parameter name="GPIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
   <parameter name="LOANIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
-  <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
+  <parameter name="F2H_AXI_CLOCK_FREQ" value="100" />
   <parameter name="H2F_AXI_CLOCK_FREQ" value="50000000" />
   <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="50000000" />
   <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="80000000" />
@@ -853,6 +845,7 @@
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_dac">
   <parameter name="PCORE_ID" value="0" />
   <parameter name="PCORE_AXI_ID_WIDTH" value="12" />
+  <parameter name="PCORE_AXIM_ID_WIDTH" value="3" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
@@ -871,6 +864,7 @@
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_adc">
   <parameter name="PCORE_ID" value="0" />
   <parameter name="PCORE_AXI_ID_WIDTH" value="12" />
+  <parameter name="PCORE_AXIM_ID_WIDTH" value="3" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
@@ -886,11 +880,6 @@
   <parameter name="C_DMA_TYPE_SRC" value="2" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
- <connection
-   kind="clock"
-   version="14.0"
-   start="sys_clk.clk"
-   end="sys_hps.f2h_axi_clock" />
  <connection
    kind="avalon"
    version="14.0"
