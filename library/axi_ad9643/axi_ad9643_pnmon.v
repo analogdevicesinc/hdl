@@ -165,20 +165,23 @@ module axi_ad9643_pnmon (
   always @(posedge adc_clk) begin
     adc_valid_in <= ~adc_valid_in;
     adc_pn_data_in <= adc_pn_data_in_s;
-    if (adc_pnseq_sel == 4'd0) begin
-      adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
-    end else begin
-      adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+    if (adc_valid_in == 1'b1) begin
+      if (adc_pnseq_sel == 4'd0) begin
+        adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+      end else begin
+        adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+      end
     end
   end
 
   // pn oos & pn err
 
-  ad_pnmon #(.DATA_WIDTH(28)) i_pnmon (
+  ad_pnmon #(.DATA_WIDTH(30)) i_pnmon (
     .adc_clk (adc_clk),
     .adc_valid_in (adc_valid_in),
-    .adc_data_in (adc_pn_data_in),
-    .adc_data_pn ({adc_pn_data_pn[28:15], adc_pn_data_pn[13:0]}),
+    .adc_data_in ({ adc_pn_data_pn[29], adc_pn_data_in[27:14],
+                    adc_pn_data_pn[14], adc_pn_data_in[13: 0]}),
+    .adc_data_pn (adc_pn_data_pn),
     .adc_pn_oos (adc_pn_oos),
     .adc_pn_err (adc_pn_err));
 
