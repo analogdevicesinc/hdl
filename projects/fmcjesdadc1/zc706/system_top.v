@@ -41,22 +41,6 @@
 
 module system_top (
 
-  DDR3_addr,
-  DDR3_ba,
-  DDR3_cas_n,
-  DDR3_ck_n,
-  DDR3_ck_p,
-  DDR3_cke,
-  DDR3_cs_n,
-  DDR3_dm,
-  DDR3_dq,
-  DDR3_dqs_n,
-  DDR3_dqs_p,
-  DDR3_odt,
-  DDR3_ras_n,
-  DDR3_reset_n,
-  DDR3_we_n,
-
   DDR_addr,
   DDR_ba,
   DDR_cas_n,
@@ -82,9 +66,6 @@ module system_top (
 
   gpio_bd,
 
-  sys_clk_p,
-  sys_clk_n,
-
   hdmi_out_clk,
   hdmi_vsync,
   hdmi_hsync,
@@ -98,38 +79,14 @@ module system_top (
 
   rx_ref_clk_p,
   rx_ref_clk_n,
-  rx_sysref_p,
-  rx_sysref_n,
-  rx_sync_p,
-  rx_sync_n,
+  rx_sysref,
+  rx_sync,
   rx_data_p,
   rx_data_n,
 
-  adc_irq,
-  adc_fd,
-
-  spi_adc_csn,
-  spi_adc_clk,
-  spi_adc_sdio,
-  spi_clk_csn,
-  spi_clk_clk,
-  spi_clk_sdio);
-
-  output  [13:0]  DDR3_addr;
-  output  [ 2:0]  DDR3_ba;
-  output          DDR3_cas_n;
-  output  [ 0:0]  DDR3_ck_n;
-  output  [ 0:0]  DDR3_ck_p;
-  output  [ 0:0]  DDR3_cke;
-  output  [ 0:0]  DDR3_cs_n;
-  output  [ 7:0]  DDR3_dm;
-  inout   [63:0]  DDR3_dq;
-  inout   [ 7:0]  DDR3_dqs_n;
-  inout   [ 7:0]  DDR3_dqs_p;
-  output  [ 0:0]  DDR3_odt;
-  output          DDR3_ras_n;
-  output          DDR3_reset_n;
-  output          DDR3_we_n;
+  spi_csn,
+  spi_clk,
+  spi_sdio);
 
   inout   [14:0]  DDR_addr;
   inout   [ 2:0]  DDR_ba;
@@ -156,9 +113,6 @@ module system_top (
 
   inout   [14:0]  gpio_bd;
 
-  input           sys_clk_p;
-  input           sys_clk_n;
-
   output          hdmi_out_clk;
   output          hdmi_vsync;
   output          hdmi_hsync;
@@ -172,34 +126,108 @@ module system_top (
 
   input           rx_ref_clk_p;
   input           rx_ref_clk_n;
-  output          rx_sysref_p;
-  output          rx_sysref_n;
-  output          rx_sync_p;
-  output          rx_sync_n;
-  input   [ 7:0]  rx_data_p;
-  input   [ 7:0]  rx_data_n;
+  output          rx_sysref;
+  output          rx_sync;
+  input   [ 3:0]  rx_data_p;
+  input   [ 3:0]  rx_data_n;
 
-  inout           adc_irq;
-  inout           adc_fd;
+  output          spi_csn;
+  output          spi_clk;
+  inout           spi_sdio;
 
-  output          spi_adc_csn;
-  output          spi_adc_clk;
-  inout           spi_adc_sdio;
-  output          spi_clk_csn;
-  output          spi_clk_clk;
-  inout           spi_clk_sdio;
+  // internal registers
+
+  reg             dma_0_wr = 'd0;
+  reg    [63:0]   dma_0_data = 'd0;
+  reg             dma_1_wr = 'd0;
+  reg    [63:0]   dma_1_data = 'd0;
 
   // internal signals
 
-  wire    [16:0]  gpio_i;
-  wire    [16:0]  gpio_o;
-  wire    [16:0]  gpio_t;
+  wire    [14:0]  gpio_i;
+  wire    [14:0]  gpio_o;
+  wire    [14:0]  gpio_t;
   wire            rx_ref_clk;
-  wire            rx_sysref;
-  wire            rx_sync;
-  wire            spi_clk;
   wire            spi_miso;
   wire            spi_mosi;
+  wire            adc_clk;
+  wire   [127:0]  rx_gt_data;
+  wire            adc_0_enable_a;
+  wire    [31:0]  adc_0_data_a;
+  wire            adc_0_enable_b;
+  wire    [31:0]  adc_0_data_b;
+  wire            adc_1_enable_a;
+  wire    [31:0]  adc_1_data_a;
+  wire            adc_1_enable_b;
+  wire    [31:0]  adc_1_data_b;
+
+  // pack & unpack here
+
+  always @(posedge adc_clk) begin
+    case ({adc_0_enable_b, adc_0_enable_a})
+      2'b11: begin
+        dma_0_wr <= 1'b1;
+        dma_0_data[63:48] <= adc_0_data_b[31:16];
+        dma_0_data[47:32] <= adc_0_data_a[31:16];
+        dma_0_data[31:16] <= adc_0_data_b[15: 0];
+        dma_0_data[15: 0] <= adc_0_data_a[15: 0];
+      end
+      2'b10: begin
+        dma_0_wr <= ~dma_0_wr;
+        dma_0_data[63:48] <= adc_0_data_b[31:16];
+        dma_0_data[47:32] <= adc_0_data_b[15: 0];
+        dma_0_data[31:16] <= dma_0_data[63:48];
+        dma_0_data[15: 0] <= dma_0_data[47:32];
+      end
+      2'b01: begin
+        dma_0_wr <= ~dma_0_wr;
+        dma_0_data[63:48] <= adc_0_data_a[31:16];
+        dma_0_data[47:32] <= adc_0_data_a[15: 0];
+        dma_0_data[31:16] <= dma_0_data[63:48];
+        dma_0_data[15: 0] <= dma_0_data[47:32];
+      end
+      default: begin
+        dma_0_wr <= 1'b0;
+        dma_0_data[63:48] <= 16'd0;
+        dma_0_data[47:32] <= 16'd0;
+        dma_0_data[31:16] <= 16'd0;
+        dma_0_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_1_enable_b, adc_1_enable_a})
+      2'b11: begin
+        dma_1_wr <= 1'b1;
+        dma_1_data[63:48] <= adc_1_data_b[31:16];
+        dma_1_data[47:32] <= adc_1_data_a[31:16];
+        dma_1_data[31:16] <= adc_1_data_b[15: 0];
+        dma_1_data[15: 0] <= adc_1_data_a[15: 0];
+      end
+      2'b10: begin
+        dma_1_wr <= ~dma_1_wr;
+        dma_1_data[63:48] <= adc_1_data_b[31:16];
+        dma_1_data[47:32] <= adc_1_data_b[15: 0];
+        dma_1_data[31:16] <= dma_1_data[63:48];
+        dma_1_data[15: 0] <= dma_1_data[47:32];
+      end
+      2'b01: begin
+        dma_1_wr <= ~dma_1_wr;
+        dma_1_data[63:48] <= adc_1_data_a[31:16];
+        dma_1_data[47:32] <= adc_1_data_a[15: 0];
+        dma_1_data[31:16] <= dma_1_data[63:48];
+        dma_1_data[15: 0] <= dma_1_data[47:32];
+      end
+      default: begin
+        dma_1_wr <= 1'b0;
+        dma_1_data[63:48] <= 16'd0;
+        dma_1_data[47:32] <= 16'd0;
+        dma_1_data[31:16] <= 16'd0;
+        dma_1_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
 
   // instantiations
 
@@ -210,52 +238,23 @@ module system_top (
     .O (rx_ref_clk),
     .ODIV2 ());
 
-  OBUFDS i_obufds_rx_sysref (
-    .I (rx_sysref),
-    .O (rx_sysref_p),
-    .OB (rx_sysref_n));
-
-  OBUFDS i_obufds_rx_sync (
-    .I (rx_sync),
-    .O (rx_sync_p),
-    .OB (rx_sync_n));
-
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf (
     .dt (gpio_t),
     .di (gpio_o),
     .do (gpio_i),
-    .dio ({ adc_irq,    // 16
-            adc_fd,     // 15
-            gpio_bd})); //  0
+    .dio (gpio_bd));
 
   assign spi_adc_clk = spi_clk;
   assign spi_clk_clk = spi_clk;
 
-  ad9625_fmc_spi i_ad9625_fmc_spi (
-    .spi_adc_csn (spi_adc_csn),
-    .spi_clk_csn (spi_clk_csn),
+  fmcjesdadc1_spi i_fmcjesdadc1_spi (
+    .spi_csn (spi_csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
-    .spi_adc_sdio (spi_adc_sdio),
-    .spi_clk_sdio (spi_clk_sdio));
+    .spi_sdio (spi_sdio));
 
   system_wrapper i_system_wrapper (
-    .DDR3_addr (DDR3_addr),
-    .DDR3_ba (DDR3_ba),
-    .DDR3_cas_n (DDR3_cas_n),
-    .DDR3_ck_n (DDR3_ck_n),
-    .DDR3_ck_p (DDR3_ck_p),
-    .DDR3_cke (DDR3_cke),
-    .DDR3_cs_n (DDR3_cs_n),
-    .DDR3_dm (DDR3_dm),
-    .DDR3_dq (DDR3_dq),
-    .DDR3_dqs_n (DDR3_dqs_n),
-    .DDR3_dqs_p (DDR3_dqs_p),
-    .DDR3_odt (DDR3_odt),
-    .DDR3_ras_n (DDR3_ras_n),
-    .DDR3_reset_n (DDR3_reset_n),
-    .DDR3_we_n (DDR3_we_n),
     .DDR_addr (DDR_addr),
     .DDR_ba (DDR_ba),
     .DDR_cas_n (DDR_cas_n),
@@ -280,8 +279,25 @@ module system_top (
     .GPIO_I (gpio_i),
     .GPIO_O (gpio_o),
     .GPIO_T (gpio_t),
-    .sys_clk_clk_n (sys_clk_n),
-    .sys_clk_clk_p (sys_clk_p),
+    .adc_0_data_a (adc_0_data_a),
+    .adc_0_data_b (adc_0_data_b),
+    .adc_0_enable_a (adc_0_enable_a),
+    .adc_0_enable_b (adc_0_enable_b),
+    .adc_0_valid_a (),
+    .adc_0_valid_b (),
+    .adc_1_data_a (adc_1_data_a),
+    .adc_1_data_b (adc_1_data_b),
+    .adc_1_enable_a (adc_1_enable_a),
+    .adc_1_enable_b (adc_1_enable_b),
+    .adc_1_valid_a (),
+    .adc_1_valid_b (),
+    .adc_clk (adc_clk),
+    .dma_0_data (dma_0_data),
+    .dma_0_sync (1'b1),
+    .dma_0_wr (dma_0_wr),
+    .dma_1_data (dma_1_data),
+    .dma_1_sync (1'b1),
+    .dma_1_wr (dma_1_wr),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -291,6 +307,9 @@ module system_top (
     .iic_main_sda_io (iic_sda),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
+    .rx_gt_data (rx_gt_data),
+    .rx_gt_data_0 (rx_gt_data[63:0]),
+    .rx_gt_data_1 (rx_gt_data[127:64]),
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
@@ -298,8 +317,7 @@ module system_top (
     .spi_clk_i (1'b0),
     .spi_clk_o (spi_clk),
     .spi_csn_i (1'b1),
-    .spi_csn_0_o (spi_adc_csn),
-    .spi_csn_1_o (spi_clk_csn),
+    .spi_csn_o (spi_csn),
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (1'b0),
     .spi_sdo_o (spi_mosi));
