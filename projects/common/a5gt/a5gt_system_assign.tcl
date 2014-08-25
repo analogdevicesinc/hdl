@@ -1,4 +1,13 @@
 
+# device settings
+
+set_global_assignment -name FAMILY "Arria V"
+set_global_assignment -name DEVICE 5AGTFD7K3F40I3
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name QSYS_FILE system_bd.qsys
+set_global_assignment -name VERILOG_FILE system_top.v
+
 # clocks and resets
 
 set_location_assignment PIN_C34   -to sys_clk
@@ -783,5 +792,15 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[4]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[5]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[6]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[7]
+
+# globals
+
+set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
+set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
+set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
+set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
+set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
+set_global_assignment -name TIMEQUEST_REPORT_SCRIPT system_timing.tcl
+set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
 
