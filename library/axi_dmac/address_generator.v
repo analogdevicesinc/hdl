@@ -84,6 +84,8 @@ reg [31-C_BYTES_PER_BEAT_WIDTH:0] address = 'h00;
 reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
 assign addr = {address, {C_BYTES_PER_BEAT_WIDTH{1'b0}}};
 
+reg addr_valid_d1;
+
 // If we already asserted addr_valid we have to wait until it is accepted before
 // we can disable the address generator.
 always @(posedge clk) begin
@@ -134,10 +136,13 @@ end
 always @(posedge clk) begin
 	if (resetn == 1'b0) begin
 		id <='h0;
+    addr_valid_d1 <= 1'b0;
 	end else begin
-		if ((addr_valid && addr_ready) ||
+    addr_valid_d1 <= addr_valid;
+    if (( addr_valid && ~addr_valid_d1) ||
 			(sync_id && id != request_id))
 			id <= inc_id(id);
+
 	end
 end
 
