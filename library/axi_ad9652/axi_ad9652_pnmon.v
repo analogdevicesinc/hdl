@@ -164,11 +164,13 @@ module axi_ad9652_pnmon (
 
   always @(posedge adc_clk) begin
     adc_valid_in <= ~adc_valid_in;
-    adc_pn_data_in <= {adc_pn_data_in[15:0], ~adc_data[15], adc_data[14:0]};
-    if (adc_pnseq_sel == 4'd0) begin
-      adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
-    end else begin
-      adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+    adc_pn_data_in <= {adc_pn_data_in[15:0], adc_data[15:0]};
+    if (adc_valid_in == 1'b1) begin
+      if (adc_pnseq_sel == 4'd0) begin
+        adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+      end else begin
+        adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+      end
     end
   end
 
