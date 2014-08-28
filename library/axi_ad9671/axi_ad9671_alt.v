@@ -50,9 +50,9 @@ module axi_ad9671_alt (
   // dma interface
 
   adc_clk,
-  adc_dwr,
-  adc_ddata,
-  adc_dsync,
+  adc_valid,
+  adc_enable,
+  adc_data,
   adc_dovf,
   adc_dunf,
 
@@ -94,12 +94,7 @@ module axi_ad9671_alt (
   s_axi_rdata,
   s_axi_rid,
   s_axi_rlast,
-  s_axi_rready,
-
-  // debug signals
-
-  adc_mon_valid,
-  adc_mon_data);
+  s_axi_rready);
 
   parameter PCORE_ID = 0;
   parameter PCORE_AXI_ID_WIDTH = 3;
@@ -115,9 +110,9 @@ module axi_ad9671_alt (
   // dma interface
 
   output                              adc_clk;
-  output                              adc_dwr;
-  output  [127:0]                     adc_ddata;
-  output                              adc_dsync;
+  output  [ 7:0]                      adc_valid;
+  output  [ 7:0]                      adc_enable;
+  output  [127:0]                     adc_data;
   input                               adc_dovf;
   input                               adc_dunf;
 
@@ -161,15 +156,10 @@ module axi_ad9671_alt (
   output                              s_axi_rlast;
   input                               s_axi_rready;
 
-  // debug signals
-
-  output                              adc_mon_valid;
-  output [127:0]                      adc_mon_data;
-
   // defaults
 
-  assign s_axi_bid = 'd0;
-  assign s_axi_rid = 'd0;
+  assign s_axi_bid = s_axi_awid;
+  assign s_axi_rid = s_axi_arid;
   assign s_axi_rlast = 1'd0;
 
   // ad9671 lite version
@@ -186,9 +176,9 @@ module axi_ad9671_alt (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
     .adc_clk (adc_clk),
-    .adc_dwr (adc_dwr),
-    .adc_ddata (adc_ddata),
-    .adc_dsync (adc_dsync),
+    .adc_valid (adc_valid),
+    .adc_enable (adc_enable),
+    .adc_data (adc_data),
     .adc_dovf (adc_dovf),
     .adc_dunf (adc_dunf),
     .s_axi_aclk (s_axi_aclk),
@@ -209,9 +199,7 @@ module axi_ad9671_alt (
     .s_axi_rvalid (s_axi_rvalid),
     .s_axi_rresp (s_axi_rresp),
     .s_axi_rdata (s_axi_rdata),
-    .s_axi_rready (s_axi_rready),
-    .adc_mon_valid (adc_mon_valid),
-    .adc_mon_data (adc_mon_data));
+    .s_axi_rready (s_axi_rready));
 
 endmodule
 
