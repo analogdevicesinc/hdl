@@ -45,6 +45,7 @@ module axi_mc_controller
 )
 (
     input           ref_clk,       // 100 MHz
+	input 			ctrl_data_clk,
 
 // physical interface
 
@@ -60,29 +61,55 @@ module axi_mc_controller
 
 //  controller connections
 
-    input   [31:0]  err_i,
-    input   [31:0]  pwm_i,
-    input   [31:0]  speed_rpm_i,
-    output          ctrl_rst_o,
-    output  [31:0]  ref_speed_o,
-    output  [31:0]  kp_o,
-    output  [31:0]  ki_o,
-    output  [31:0]  kd_o,
+	input 			pwm_a_i,
+	input 			pwm_b_i,
+	input 			pwm_c_i,
+	input			ctrl_data_valid_i,
+	input	[31:0]	ctrl_data0_i,
+	input	[31:0]	ctrl_data1_i,
+	input	[31:0]	ctrl_data2_i,
+	input	[31:0]	ctrl_data3_i,
+	input	[31:0]	ctrl_data4_i,
+	input	[31:0]	ctrl_data5_i,
+	input	[31:0]	ctrl_data6_i,
+	input	[31:0]	ctrl_data7_i,
 
 // interconnection with other modules
 
     output  [1:0]   sensors_o,
     input   [2:0]   position_i,
-    input           new_speed_i,
-    input   [31:0]  speed_i,
 
 // dma interface
 
     output          adc_clk_o,
-    output          adc_dwr_o,
-    output  [31:0]  adc_ddata_o,
     input           adc_dovf_i,
     input           adc_dunf_i,
+	output			adc_enable_c0,
+	output			adc_enable_c1,
+	output			adc_enable_c2,
+	output			adc_enable_c3,
+	output			adc_enable_c4,
+	output			adc_enable_c5,
+	output			adc_enable_c6,
+	output			adc_enable_c7,
+	
+	output			adc_valid_c0,
+	output			adc_valid_c1,
+	output			adc_valid_c2,
+	output			adc_valid_c3,
+	output			adc_valid_c4,
+	output			adc_valid_c5,
+	output			adc_valid_c6,
+	output			adc_valid_c7,
+	
+	output	[31:0]	adc_data_c0,
+	output	[31:0]	adc_data_c1,
+	output	[31:0]	adc_data_c2,
+	output	[31:0]	adc_data_c3,
+	output	[31:0]	adc_data_c4,
+	output	[31:0]	adc_data_c5,
+	output	[31:0]	adc_data_c6,
+	output	[31:0]	adc_data_c7,
 
 // axi interface
 
@@ -104,12 +131,7 @@ module axi_mc_controller
     output          s_axi_rvalid,
     output  [1:0]   s_axi_rresp,
     output  [31:0]  s_axi_rdata,
-    input           s_axi_rready,
-
-// debug signals
-
-    output          adc_mon_valid,
-    output  [31:0]  adc_mon_data
+    input           s_axi_rready
 );
 
 //------------------------------------------------------------------------------
@@ -141,23 +163,40 @@ wire    [13:0]  up_addr_s;
 wire    [31:0]  up_wdata_s;
 wire    [31:0]  up_adc_common_rdata_s;
 wire    [31:0]  up_control_rdata_s;
-wire    [31:0]  rdata_ref_speed_s;
-wire    [31:0]  rdata_actual_speed_s;
+wire    [31:0]  rdata_c0_s;
+wire    [31:0]  rdata_c1_s;
+wire    [31:0]  rdata_c2_s;
+wire    [31:0]  rdata_c3_s;
+wire    [31:0]  rdata_c4_s;
+wire    [31:0]  rdata_c5_s;
+wire    [31:0]  rdata_c6_s;
+wire    [31:0]  rdata_c7_s;
 wire            up_adc_common_ack_s;
 wire            up_control_ack_s;
-wire            ack_ref_speed_s;
-wire            ack_actual_speed_s;
+wire            ack_c0_s;
+wire            ack_c1_s;
+wire            ack_c2_s;
+wire            ack_c3_s;
+wire            ack_c4_s;
+wire            ack_c5_s;
+wire            ack_c6_s;
+wire            ack_c7_s;
 wire            run_s;
 wire            star_delta_s;
-wire            oloop_matlab_s;         // 0 - open loop, 1 matlab controlls pwm
 wire            dir_s;
 wire    [10:0]  pwm_open_s;
 wire    [10:0]  pwm_s;
 
-wire            enable_ref_speed_s;
-wire            enable_actual_speed_s;
-
 wire    [10:0]  gpo_s;
+
+wire          dpwm_ah_s;
+wire          dpwm_al_s;
+wire          dpwm_bh_s;
+wire          dpwm_bl_s;
+wire          dpwm_ch_s;
+wire          dpwm_cl_s;
+
+wire 		  foc_ctrl_s;
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
@@ -168,19 +207,40 @@ wire    [10:0]  gpo_s;
 assign up_clk         = s_axi_aclk;
 assign up_rstn        = s_axi_aresetn;
 
-assign adc_clk_o      = ref_clk;
-assign adc_dwr_o      = adc_valid;
-assign adc_ddata_o    = adc_data;
+assign adc_clk_o      = ctrl_data_clk;
+
+assign adc_valid_c0	  = ctrl_data_valid_i;
+assign adc_valid_c1	  = ctrl_data_valid_i;
+assign adc_valid_c2	  = ctrl_data_valid_i;
+assign adc_valid_c3	  = ctrl_data_valid_i;
+assign adc_valid_c4	  = ctrl_data_valid_i;
+assign adc_valid_c5	  = ctrl_data_valid_i;
+assign adc_valid_c6	  = ctrl_data_valid_i;
+assign adc_valid_c7	  = ctrl_data_valid_i;
+
+assign adc_data_c0	  = ctrl_data0_i;
+assign adc_data_c1	  = ctrl_data1_i;
+assign adc_data_c2	  = ctrl_data2_i;
+assign adc_data_c3	  = ctrl_data3_i;
+assign adc_data_c4	  = ctrl_data4_i;
+assign adc_data_c5	  = ctrl_data5_i;
+assign adc_data_c6	  = ctrl_data6_i;
+assign adc_data_c7	  = ctrl_data7_i;
+
 
 assign ctrl_rst_o     = !run_s;
 
 // monitor signals
 
-assign adc_mon_valid  = adc_valid;
-assign adc_mon_data   =  {25'h0 ,fmc_m1_en_o, pwm_ah_o, pwm_al_o, pwm_bh_o, pwm_bl_o, pwm_ch_o, pwm_cl_o};
-
 assign fmc_m1_en_o    = run_s;
-assign pwm_s          = oloop_matlab_s ? pwm_i[10:0] : pwm_open_s ;
+assign pwm_s          = pwm_open_s ;
+
+assign pwm_ah_o = foc_ctrl_s ? !pwm_a_i : dpwm_ah_s;
+assign pwm_al_o = foc_ctrl_s ? pwm_a_i : dpwm_al_s;
+assign pwm_bh_o = foc_ctrl_s ? !pwm_b_i : dpwm_bh_s;
+assign pwm_bl_o = foc_ctrl_s ? pwm_b_i : dpwm_bl_s;
+assign pwm_ch_o = foc_ctrl_s ? !pwm_c_i : dpwm_ch_s;
+assign pwm_cl_o = foc_ctrl_s ? pwm_c_i : dpwm_cl_s;
 
 // assign gpo
 
@@ -194,57 +254,6 @@ begin
   pwm_gen_clk <= ~pwm_gen_clk; // generate 50 MHz clk
 end
 
-// adc channels - dma interface
-
-always @(posedge ref_clk)
-begin
-    if(new_speed_i == 1)
-    begin
-        case({enable_actual_speed_s , enable_ref_speed_s})
-            2'b11:
-            begin
-                adc_data  <= {speed_rpm_i[31:16], ref_speed_o[15:0]};
-                adc_valid <= 1'b1;
-            end
-            2'b01:
-            begin
-                adc_data <= { adc_data[15:0], ref_speed_o[15:0]};
-                one_chan_reg <= ~one_chan_reg;
-                if(one_chan_reg == 1'b1)
-                begin
-                    adc_valid <= 1'b1;
-                end
-                else
-                begin
-                    adc_valid <= 1'b0;
-                end
-            end
-            2'b10:
-            begin
-                adc_data <= { adc_data[15:0], speed_rpm_i[31:16]};
-                one_chan_reg <= ~one_chan_reg;
-                if(one_chan_reg == 1'b1)
-                begin
-                    adc_valid <= 1'b1;
-                end
-                else
-                begin
-                    adc_valid <= 1'b0;
-                end
-            end
-            2'b00:
-            begin
-                adc_data <= 32'hdeadbeef;
-                adc_valid <= 1'b1;
-            end
-        endcase
-    end
-    else
-    begin
-        adc_data    <= adc_data;
-        adc_valid   <= 1'b0;
-    end
-end
 
 // processor read interface
 
@@ -253,8 +262,8 @@ always @(negedge up_rstn or posedge up_clk) begin
         up_rdata  <= 'd0;
         up_ack    <= 'd0;
     end else begin
-        up_rdata  <= up_control_rdata_s | up_adc_common_rdata_s | rdata_ref_speed_s | rdata_actual_speed_s ;
-        up_ack    <= up_control_ack_s | up_adc_common_ack_s | ack_ref_speed_s | ack_actual_speed_s;
+        up_rdata  <= up_control_rdata_s | up_adc_common_rdata_s | rdata_c0_s | rdata_c1_s | rdata_c2_s | rdata_c3_s | rdata_c4_s | rdata_c5_s | rdata_c6_s | rdata_c7_s;
+        up_ack    <= up_control_ack_s | up_adc_common_ack_s | ack_c0_s | ack_c1_s | ack_c2_s | ack_c3_s | ack_c4_s | ack_c5_s | ack_c6_s | ack_c7_s;
     end
 end
 
@@ -271,12 +280,12 @@ motor_driver_inst(
     .dir_i(dir_s),
     .position_i(position_i),
     .pwm_duty_i(pwm_s),
-    .AH_o(pwm_ah_o),
-    .BH_o(pwm_bh_o),
-    .CH_o(pwm_ch_o),
-    .AL_o(pwm_al_o),
-    .BL_o(pwm_bl_o),
-    .CL_o(pwm_cl_o));
+    .AH_o(dpwm_ah_s),
+    .BH_o(dpwm_bh_s),
+    .CH_o(dpwm_ch_s),
+    .AL_o(dpwm_al_s),
+    .BL_o(dpwm_bl_s),
+    .CL_o(dpwm_cl_s));
 
 control_registers control_reg_inst(
     .up_rstn(up_rstn),
@@ -301,15 +310,15 @@ control_registers control_reg_inst(
     .kd1_o(),
     .gpo_o(gpo_s),
     .reference_speed_o(ref_speed_o),
-    .oloop_matlab_o(oloop_matlab_s),
+    .oloop_matlab_o(foc_ctrl_s),
     .err_i(err_i),
     .calibrate_adcs_o(),
     .pwm_open_o( pwm_open_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(0)) adc_channel_ref_speed(
+up_adc_channel #(.PCORE_ADC_CHID(0)) adc_channel0(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
-    .adc_enable(enable_ref_speed_s),
+    .adc_enable(adc_enable_c0),
     .adc_iqcor_enb(),
     .adc_dcfilt_enb(),
     .adc_dfmt_se(),
@@ -345,13 +354,13 @@ up_adc_channel #(.PCORE_ADC_CHID(0)) adc_channel_ref_speed(
     .up_wr(up_wr_s),
     .up_addr(up_addr_s),
     .up_wdata(up_wdata_s),
-    .up_rdata(rdata_ref_speed_s),
-    .up_ack(ack_ref_speed_s));
+    .up_rdata(rdata_c0_s),
+    .up_ack(ack_c0_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(1)) adc_channel_actual_speed(
+up_adc_channel #(.PCORE_ADC_CHID(1)) adc_channel1(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
-    .adc_enable(enable_actual_speed_s),
+    .adc_enable(adc_enable_c1),
     .adc_iqcor_enb(),
     .adc_dcfilt_enb(),
     .adc_dfmt_se(),
@@ -387,9 +396,261 @@ up_adc_channel #(.PCORE_ADC_CHID(1)) adc_channel_actual_speed(
     .up_wr(up_wr_s),
     .up_addr(up_addr_s),
     .up_wdata(up_wdata_s),
-    .up_rdata(rdata_actual_speed_s),
-    .up_ack(ack_actual_speed_s));
+    .up_rdata(rdata_c1_s),
+    .up_ack(ack_c1_s));
+	
+up_adc_channel #(.PCORE_ADC_CHID(2)) adc_channel2(
+    .adc_clk(ref_clk),
+    .adc_rst(adc_rst),
+    .adc_enable(adc_enable_c2),
+    .adc_iqcor_enb(),
+    .adc_dcfilt_enb(),
+    .adc_dfmt_se(),
+    .adc_dfmt_type(),
+    .adc_dfmt_enable(),
+    .adc_dcfilt_offset(),
+    .adc_dcfilt_coeff(),
+    .adc_iqcor_coeff_1(),
+    .adc_iqcor_coeff_2(),
+    .adc_pn_err(1'b0),
+    .adc_pn_oos(1'b0),
+    .adc_or(1'b0),
+    .up_adc_pn_err(),
+    .up_adc_pn_oos(),
+    .up_adc_or(),
+    .up_usr_datatype_be(),
+    .up_usr_datatype_signed(),
+    .up_usr_datatype_shift(),
+    .up_usr_datatype_total_bits(),
+    .up_usr_datatype_bits(),
+    .up_usr_decimation_m(),
+    .up_usr_decimation_n(),
+    .adc_usr_datatype_be(1'b0),
+    .adc_usr_datatype_signed(1'b1),
+    .adc_usr_datatype_shift(8'd0),
+    .adc_usr_datatype_total_bits(8'd16),
+    .adc_usr_datatype_bits(8'd16),
+    .adc_usr_decimation_m(16'd1),
+    .adc_usr_decimation_n(16'd1),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_sel(up_sel_s),
+    .up_wr(up_wr_s),
+    .up_addr(up_addr_s),
+    .up_wdata(up_wdata_s),
+    .up_rdata(rdata_c2_s),
+    .up_ack(ack_c2_s));
 
+up_adc_channel #(.PCORE_ADC_CHID(3)) adc_channel3(
+    .adc_clk(ref_clk),
+    .adc_rst(adc_rst),
+    .adc_enable(adc_enable_c3),
+    .adc_iqcor_enb(),
+    .adc_dcfilt_enb(),
+    .adc_dfmt_se(),
+    .adc_dfmt_type(),
+    .adc_dfmt_enable(),
+    .adc_dcfilt_offset(),
+    .adc_dcfilt_coeff(),
+    .adc_iqcor_coeff_1(),
+    .adc_iqcor_coeff_2(),
+    .adc_pn_err(1'b0),
+    .adc_pn_oos(1'b0),
+    .adc_or(1'b0),
+    .up_adc_pn_err(),
+    .up_adc_pn_oos(),
+    .up_adc_or(),
+    .up_usr_datatype_be(),
+    .up_usr_datatype_signed(),
+    .up_usr_datatype_shift(),
+    .up_usr_datatype_total_bits(),
+    .up_usr_datatype_bits(),
+    .up_usr_decimation_m(),
+    .up_usr_decimation_n(),
+    .adc_usr_datatype_be(1'b0),
+    .adc_usr_datatype_signed(1'b1),
+    .adc_usr_datatype_shift(8'd0),
+    .adc_usr_datatype_total_bits(8'd16),
+    .adc_usr_datatype_bits(8'd16),
+    .adc_usr_decimation_m(16'd1),
+    .adc_usr_decimation_n(16'd1),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_sel(up_sel_s),
+    .up_wr(up_wr_s),
+    .up_addr(up_addr_s),
+    .up_wdata(up_wdata_s),
+    .up_rdata(rdata_c3_s),
+    .up_ack(ack_c3_s));
+
+up_adc_channel #(.PCORE_ADC_CHID(4)) adc_channel4(
+    .adc_clk(ref_clk),
+    .adc_rst(adc_rst),
+    .adc_enable(adc_enable_c4),
+    .adc_iqcor_enb(),
+    .adc_dcfilt_enb(),
+    .adc_dfmt_se(),
+    .adc_dfmt_type(),
+    .adc_dfmt_enable(),
+    .adc_dcfilt_offset(),
+    .adc_dcfilt_coeff(),
+    .adc_iqcor_coeff_1(),
+    .adc_iqcor_coeff_2(),
+    .adc_pn_err(1'b0),
+    .adc_pn_oos(1'b0),
+    .adc_or(1'b0),
+    .up_adc_pn_err(),
+    .up_adc_pn_oos(),
+    .up_adc_or(),
+    .up_usr_datatype_be(),
+    .up_usr_datatype_signed(),
+    .up_usr_datatype_shift(),
+    .up_usr_datatype_total_bits(),
+    .up_usr_datatype_bits(),
+    .up_usr_decimation_m(),
+    .up_usr_decimation_n(),
+    .adc_usr_datatype_be(1'b0),
+    .adc_usr_datatype_signed(1'b1),
+    .adc_usr_datatype_shift(8'd0),
+    .adc_usr_datatype_total_bits(8'd16),
+    .adc_usr_datatype_bits(8'd16),
+    .adc_usr_decimation_m(16'd1),
+    .adc_usr_decimation_n(16'd1),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_sel(up_sel_s),
+    .up_wr(up_wr_s),
+    .up_addr(up_addr_s),
+    .up_wdata(up_wdata_s),
+    .up_rdata(rdata_c4_s),
+    .up_ack(ack_c4_s));
+	
+up_adc_channel #(.PCORE_ADC_CHID(5)) adc_channel5(
+    .adc_clk(ref_clk),
+    .adc_rst(adc_rst),
+    .adc_enable(adc_enable_c5),
+    .adc_iqcor_enb(),
+    .adc_dcfilt_enb(),
+    .adc_dfmt_se(),
+    .adc_dfmt_type(),
+    .adc_dfmt_enable(),
+    .adc_dcfilt_offset(),
+    .adc_dcfilt_coeff(),
+    .adc_iqcor_coeff_1(),
+    .adc_iqcor_coeff_2(),
+    .adc_pn_err(1'b0),
+    .adc_pn_oos(1'b0),
+    .adc_or(1'b0),
+    .up_adc_pn_err(),
+    .up_adc_pn_oos(),
+    .up_adc_or(),
+    .up_usr_datatype_be(),
+    .up_usr_datatype_signed(),
+    .up_usr_datatype_shift(),
+    .up_usr_datatype_total_bits(),
+    .up_usr_datatype_bits(),
+    .up_usr_decimation_m(),
+    .up_usr_decimation_n(),
+    .adc_usr_datatype_be(1'b0),
+    .adc_usr_datatype_signed(1'b1),
+    .adc_usr_datatype_shift(8'd0),
+    .adc_usr_datatype_total_bits(8'd16),
+    .adc_usr_datatype_bits(8'd16),
+    .adc_usr_decimation_m(16'd1),
+    .adc_usr_decimation_n(16'd1),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_sel(up_sel_s),
+    .up_wr(up_wr_s),
+    .up_addr(up_addr_s),
+    .up_wdata(up_wdata_s),
+    .up_rdata(rdata_c5_s),
+    .up_ack(ack_c5_s));
+
+up_adc_channel #(.PCORE_ADC_CHID(6)) adc_channel6(
+    .adc_clk(ref_clk),
+    .adc_rst(adc_rst),
+    .adc_enable(adc_enable_c6),
+    .adc_iqcor_enb(),
+    .adc_dcfilt_enb(),
+    .adc_dfmt_se(),
+    .adc_dfmt_type(),
+    .adc_dfmt_enable(),
+    .adc_dcfilt_offset(),
+    .adc_dcfilt_coeff(),
+    .adc_iqcor_coeff_1(),
+    .adc_iqcor_coeff_2(),
+    .adc_pn_err(1'b0),
+    .adc_pn_oos(1'b0),
+    .adc_or(1'b0),
+    .up_adc_pn_err(),
+    .up_adc_pn_oos(),
+    .up_adc_or(),
+    .up_usr_datatype_be(),
+    .up_usr_datatype_signed(),
+    .up_usr_datatype_shift(),
+    .up_usr_datatype_total_bits(),
+    .up_usr_datatype_bits(),
+    .up_usr_decimation_m(),
+    .up_usr_decimation_n(),
+    .adc_usr_datatype_be(1'b0),
+    .adc_usr_datatype_signed(1'b1),
+    .adc_usr_datatype_shift(8'd0),
+    .adc_usr_datatype_total_bits(8'd16),
+    .adc_usr_datatype_bits(8'd16),
+    .adc_usr_decimation_m(16'd1),
+    .adc_usr_decimation_n(16'd1),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_sel(up_sel_s),
+    .up_wr(up_wr_s),
+    .up_addr(up_addr_s),
+    .up_wdata(up_wdata_s),
+    .up_rdata(rdata_c6_s),
+    .up_ack(ack_c6_s));
+	
+up_adc_channel #(.PCORE_ADC_CHID(7)) adc_channel7(
+    .adc_clk(ref_clk),
+    .adc_rst(adc_rst),
+    .adc_enable(adc_enable_c7),
+    .adc_iqcor_enb(),
+    .adc_dcfilt_enb(),
+    .adc_dfmt_se(),
+    .adc_dfmt_type(),
+    .adc_dfmt_enable(),
+    .adc_dcfilt_offset(),
+    .adc_dcfilt_coeff(),
+    .adc_iqcor_coeff_1(),
+    .adc_iqcor_coeff_2(),
+    .adc_pn_err(1'b0),
+    .adc_pn_oos(1'b0),
+    .adc_or(1'b0),
+    .up_adc_pn_err(),
+    .up_adc_pn_oos(),
+    .up_adc_or(),
+    .up_usr_datatype_be(),
+    .up_usr_datatype_signed(),
+    .up_usr_datatype_shift(),
+    .up_usr_datatype_total_bits(),
+    .up_usr_datatype_bits(),
+    .up_usr_decimation_m(),
+    .up_usr_decimation_n(),
+    .adc_usr_datatype_be(1'b0),
+    .adc_usr_datatype_signed(1'b1),
+    .adc_usr_datatype_shift(8'd0),
+    .adc_usr_datatype_total_bits(8'd16),
+    .adc_usr_datatype_bits(8'd16),
+    .adc_usr_decimation_m(16'd1),
+    .adc_usr_decimation_n(16'd1),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_sel(up_sel_s),
+    .up_wr(up_wr_s),
+    .up_addr(up_addr_s),
+    .up_wdata(up_wdata_s),
+    .up_rdata(rdata_c7_s),
+    .up_ack(ack_c7_s));
+	
 // common processor control
 
 up_adc_common i_up_adc_common(

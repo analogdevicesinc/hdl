@@ -58,9 +58,9 @@ module axi_mc_current_monitor
 
     input   ref_clk,
 
-    output [15:0]   ia_o,
-    output [15:0]   ib_o,
-    output [15:0]   it_o,
+    output [17:0]   ia_o,
+    output [17:0]   ib_o,
+    output [17:0]   it_o,
     output          i_ready_o,
 
   // dma interface
@@ -193,9 +193,9 @@ assign adc_mon_data[31:16]  = {adc_enable_vbus, adc_enable_it, adc_enable_ib, ad
 // current outputs
 
 assign i_ready_o        = data_rd_ready_ia_s;
-assign ia_o             = adc_data_ia_s;
-assign ib_o             = adc_data_ib_s;
-assign it_o             = adc_data_it_n_s;
+assign ia_o             = {adc_data_ia_s - 16'h7FFF, 2'b00};
+assign ib_o             = {adc_data_ib_s - 16'h7FFF, 2'b00};
+assign it_o             = {adc_data_it_s, 2'b00};
 assign adc_data_it_n_s  = 65535 - adc_data_it_s;
 
 // adc clock
