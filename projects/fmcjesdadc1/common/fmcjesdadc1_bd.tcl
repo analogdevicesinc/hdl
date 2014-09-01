@@ -123,7 +123,7 @@ if {$sys_zynq == 1} {
 
   set_property -dict [list CONFIG.NUM_MI {14}] $axi_cpu_interconnect
   set_property -dict [list CONFIG.NUM_SI {11}] $axi_mem_interconnect
-  set_property -dict [list CONFIG.NUM_PORTS {7}] $sys_concat_intc
+  set_property -dict [list CONFIG.NUM_PORTS {6}] $sys_concat_intc
 
   delete_bd_objs [get_bd_nets sys_concat_intc_din_2]
   delete_bd_objs [get_bd_ports unc_int2]
