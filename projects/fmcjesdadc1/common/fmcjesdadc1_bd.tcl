@@ -158,11 +158,11 @@ if {$sys_zynq == 1 } {
 
 # connections (gt)
 
-connect_bd_net -net axi_ad9250_gt_ref_clk_c         [get_bd_pins axi_ad9250_gt/ref_clk_c]         [get_bd_ports rx_ref_clk]   
-connect_bd_net -net axi_ad9250_gt_rx_data_p         [get_bd_pins axi_ad9250_gt/rx_data_p]         [get_bd_ports rx_data_p]   
-connect_bd_net -net axi_ad9250_gt_rx_data_n         [get_bd_pins axi_ad9250_gt/rx_data_n]         [get_bd_ports rx_data_n]   
-connect_bd_net -net axi_ad9250_gt_rx_sync           [get_bd_pins axi_ad9250_gt/rx_sync]           [get_bd_ports rx_sync]   
-connect_bd_net -net axi_ad9250_gt_rx_sysref         [get_bd_pins axi_ad9250_gt/rx_sysref]         [get_bd_ports rx_sysref]   
+connect_bd_net -net axi_ad9250_gt_ref_clk_c         [get_bd_pins axi_ad9250_gt/ref_clk_c]         [get_bd_ports rx_ref_clk]
+connect_bd_net -net axi_ad9250_gt_rx_data_p         [get_bd_pins axi_ad9250_gt/rx_data_p]         [get_bd_ports rx_data_p]
+connect_bd_net -net axi_ad9250_gt_rx_data_n         [get_bd_pins axi_ad9250_gt/rx_data_n]         [get_bd_ports rx_data_n]
+connect_bd_net -net axi_ad9250_gt_rx_sync           [get_bd_pins axi_ad9250_gt/rx_sync]           [get_bd_ports rx_sync]
+connect_bd_net -net axi_ad9250_gt_rx_sysref         [get_bd_pins axi_ad9250_gt/rx_sysref]         [get_bd_ports rx_sysref]
 
 # connections (adc)
 
@@ -215,8 +215,8 @@ connect_bd_net -net axi_ad9250_1_dma_data           [get_bd_pins axi_ad9250_1_dm
 
 connect_bd_net -net axi_ad9250_0_adc_dovf           [get_bd_pins axi_ad9250_0_core/adc_dovf]      [get_bd_pins axi_ad9250_0_dma/fifo_wr_overflow]
 connect_bd_net -net axi_ad9250_1_adc_dovf           [get_bd_pins axi_ad9250_1_core/adc_dovf]      [get_bd_pins axi_ad9250_1_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad9250_0_dma_irq            [get_bd_pins axi_ad9250_0_dma/irq]            [get_bd_pins sys_concat_intc/In2] 
-connect_bd_net -net axi_ad9250_1_dma_irq            [get_bd_pins axi_ad9250_1_dma/irq]            [get_bd_pins sys_concat_intc/In3] 
+connect_bd_net -net axi_ad9250_0_dma_irq            [get_bd_pins axi_ad9250_0_dma/irq]            [get_bd_pins sys_concat_intc/In2]
+connect_bd_net -net axi_ad9250_1_dma_irq            [get_bd_pins axi_ad9250_1_dma/irq]            [get_bd_pins sys_concat_intc/In3]
 
 # interconnect (cpu)
 
@@ -232,22 +232,22 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M09_ACLK] $sy
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M10_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M11_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M12_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_gt/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_0_core/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_1_core/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_jesd/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_0_dma/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_1_dma/s_axi_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_gt/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_0_core/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_1_core/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_jesd/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_0_dma/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_1_dma/s_axi_aclk]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M07_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M08_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M09_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M10_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M11_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M12_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_gt/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_0_core/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_1_core/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_jesd/s_axi_aresetn] 
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_gt/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_0_core/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_1_core/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_jesd/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_0_dma/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_1_dma/s_axi_aresetn]
 
@@ -284,7 +284,7 @@ if {$sys_zynq == 1} {
 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_gt/m_axi_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9250_gt/drp_clk]
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_gt/m_axi_aresetn] 
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9250_gt/m_axi_aresetn]
 
 # interconnect (dma)
 
@@ -297,21 +297,21 @@ if {$sys_zynq == 1} {
   connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
 
   connect_bd_intf_net -intf_net axi_ad9250_dma_interconnect_m00_axi [get_bd_intf_pins axi_ad9250_dma_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP2]
-  connect_bd_intf_net -intf_net axi_ad9250_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9250_dma_interconnect/S00_AXI] [get_bd_intf_pins axi_ad9250_0_dma/m_dest_axi]    
-  connect_bd_intf_net -intf_net axi_ad9250_dma_interconnect_s01_axi [get_bd_intf_pins axi_ad9250_dma_interconnect/S01_AXI] [get_bd_intf_pins axi_ad9250_1_dma/m_dest_axi]    
+  connect_bd_intf_net -intf_net axi_ad9250_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9250_dma_interconnect/S00_AXI] [get_bd_intf_pins axi_ad9250_0_dma/m_dest_axi]
+  connect_bd_intf_net -intf_net axi_ad9250_dma_interconnect_s01_axi [get_bd_intf_pins axi_ad9250_dma_interconnect/S01_AXI] [get_bd_intf_pins axi_ad9250_1_dma/m_dest_axi]
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9250_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9250_dma_interconnect/M00_ACLK] $sys_fmc_dma_clk_source
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9250_dma_interconnect/S00_ACLK] $sys_fmc_dma_clk_source
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9250_dma_interconnect/S01_ACLK] $sys_fmc_dma_clk_source
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_ps7/S_AXI_HP2_ACLK]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9250_0_dma/m_dest_axi_aclk] 
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9250_1_dma/m_dest_axi_aclk] 
+  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9250_0_dma/m_dest_axi_aclk]
+  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9250_1_dma/m_dest_axi_aclk]
   connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_dma_interconnect/ARESETN] $sys_fmc_dma_resetn_source
   connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_dma_interconnect/M00_ARESETN] $sys_fmc_dma_resetn_source
   connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_dma_interconnect/S00_ARESETN] $sys_fmc_dma_resetn_source
   connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_dma_interconnect/S01_ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_0_dma/m_dest_axi_aresetn] 
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_1_dma/m_dest_axi_aresetn] 
+  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_0_dma/m_dest_axi_aresetn]
+  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_1_dma/m_dest_axi_aresetn]
 
 } else {
 
