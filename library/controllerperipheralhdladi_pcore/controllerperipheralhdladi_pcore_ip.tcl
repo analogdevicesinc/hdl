@@ -111,6 +111,10 @@ adi_ip_files controllerperipheralhdladi_pcore [list \
 
 adi_ip_properties controllerperipheralhdladi_pcore
 
-ipx::save_core [ipx::current_core]
+set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
+  [ipx::get_bus_interface s_axi_signal_clock [ipx::current_core]]]
 
+ipx::remove_bus_interface {signal_clock} [ipx::current_core]
+
+ipx::save_core [ipx::current_core]
 

@@ -34,17 +34,17 @@ module controllerperipheralhdladi_pcore
            encoder_a,
            encoder_b,
            encoder_index,
-           AXI_Lite_ACLK,
-           AXI_Lite_ARESETN,
-           AXI_Lite_AWADDR,
-           AXI_Lite_AWVALID,
-           AXI_Lite_WDATA,
-           AXI_Lite_WSTRB,
-           AXI_Lite_WVALID,
-           AXI_Lite_BREADY,
-           AXI_Lite_ARADDR,
-           AXI_Lite_ARVALID,
-           AXI_Lite_RREADY,
+           s_axi_aclk,
+           s_axi_aresetn,
+           s_axi_awaddr,
+           s_axi_awvalid,
+           s_axi_wdata,
+           s_axi_wstrb,
+           s_axi_wvalid,
+           s_axi_bready,
+           s_axi_araddr,
+           s_axi_arvalid,
+           s_axi_rready,
            pwm_a,
            pwm_b,
            pwm_c,
@@ -57,16 +57,18 @@ module controllerperipheralhdladi_pcore
            mon_rotor_velocity,
            mon_d_current,
            mon_q_current,
-           AXI_Lite_AWREADY,
-           AXI_Lite_WREADY,
-           AXI_Lite_BRESP,
-           AXI_Lite_BVALID,
-           AXI_Lite_ARREADY,
-           AXI_Lite_RDATA,
-           AXI_Lite_RRESP,
-           AXI_Lite_RVALID
+           s_axi_awready,
+           s_axi_wready,
+           s_axi_bresp,
+           s_axi_bvalid,
+           s_axi_arready,
+           s_axi_rdata,
+           s_axi_rresp,
+           s_axi_rvalid
           );
 
+          parameter C_BASEADDR = 32'h00000000;
+          parameter C_HIGHADDR = 32'hffffffff;
 
   input   IPCORE_CLK;  // ufix1
   input   IPCORE_RESETN;  // ufix1
@@ -75,17 +77,17 @@ module controllerperipheralhdladi_pcore
   input   encoder_a;  // ufix1
   input   encoder_b;  // ufix1
   input   encoder_index;  // ufix1
-  input   AXI_Lite_ACLK;  // ufix1
-  input   AXI_Lite_ARESETN;  // ufix1
-  input   [31:0] AXI_Lite_AWADDR;  // ufix32
-  input   AXI_Lite_AWVALID;  // ufix1
-  input   [31:0] AXI_Lite_WDATA;  // ufix32
-  input   [3:0] AXI_Lite_WSTRB;  // ufix4
-  input   AXI_Lite_WVALID;  // ufix1
-  input   AXI_Lite_BREADY;  // ufix1
-  input   [31:0] AXI_Lite_ARADDR;  // ufix32
-  input   AXI_Lite_ARVALID;  // ufix1
-  input   AXI_Lite_RREADY;  // ufix1
+  input   s_axi_aclk;  // ufix1
+  input   s_axi_aresetn;  // ufix1
+  input   [31:0] s_axi_awaddr;  // ufix32
+  input   s_axi_awvalid;  // ufix1
+  input   [31:0] s_axi_wdata;  // ufix32
+  input   [3:0] s_axi_wstrb;  // ufix4
+  input   s_axi_wvalid;  // ufix1
+  input   s_axi_bready;  // ufix1
+  input   [31:0] s_axi_araddr;  // ufix32
+  input   s_axi_arvalid;  // ufix1
+  input   s_axi_rready;  // ufix1
   output  pwm_a;  // ufix1
   output  pwm_b;  // ufix1
   output  pwm_c;  // ufix1
@@ -98,14 +100,14 @@ module controllerperipheralhdladi_pcore
   output  [31:0] mon_rotor_velocity;  // ufix32
   output  [31:0] mon_d_current;  // ufix32
   output  [31:0] mon_q_current;  // ufix32
-  output  AXI_Lite_AWREADY;  // ufix1
-  output  AXI_Lite_WREADY;  // ufix1
-  output  [1:0] AXI_Lite_BRESP;  // ufix2
-  output  AXI_Lite_BVALID;  // ufix1
-  output  AXI_Lite_ARREADY;  // ufix1
-  output  [31:0] AXI_Lite_RDATA;  // ufix32
-  output  [1:0] AXI_Lite_RRESP;  // ufix2
-  output  AXI_Lite_RVALID;  // ufix1
+  output  s_axi_awready;  // ufix1
+  output  s_axi_wready;  // ufix1
+  output  [1:0] s_axi_bresp;  // ufix2
+  output  s_axi_bvalid;  // ufix1
+  output  s_axi_arready;  // ufix1
+  output  [31:0] s_axi_rdata;  // ufix32
+  output  [1:0] s_axi_rresp;  // ufix2
+  output  s_axi_rvalid;  // ufix1
 
 
   wire reset;
@@ -147,26 +149,26 @@ module controllerperipheralhdladi_pcore
 
 
   controllerperipheralhdladi_pcore_axi_lite   u_controllerperipheralhdladi_pcore_axi_lite_inst   (.reset(reset),
-                                                                                                  .AXI_Lite_ACLK(AXI_Lite_ACLK),  // ufix1
-                                                                                                  .AXI_Lite_ARESETN(AXI_Lite_ARESETN),  // ufix1
-                                                                                                  .AXI_Lite_AWADDR(AXI_Lite_AWADDR),  // ufix32
-                                                                                                  .AXI_Lite_AWVALID(AXI_Lite_AWVALID),  // ufix1
-                                                                                                  .AXI_Lite_WDATA(AXI_Lite_WDATA),  // ufix32
-                                                                                                  .AXI_Lite_WSTRB(AXI_Lite_WSTRB),  // ufix4
-                                                                                                  .AXI_Lite_WVALID(AXI_Lite_WVALID),  // ufix1
-                                                                                                  .AXI_Lite_BREADY(AXI_Lite_BREADY),  // ufix1
-                                                                                                  .AXI_Lite_ARADDR(AXI_Lite_ARADDR),  // ufix32
-                                                                                                  .AXI_Lite_ARVALID(AXI_Lite_ARVALID),  // ufix1
-                                                                                                  .AXI_Lite_RREADY(AXI_Lite_RREADY),  // ufix1
+                                                                                                  .AXI_Lite_ACLK(s_axi_aclk),  // ufix1
+                                                                                                  .AXI_Lite_ARESETN(s_axi_aresetn),  // ufix1
+                                                                                                  .AXI_Lite_AWADDR(s_axi_awaddr),  // ufix32
+                                                                                                  .AXI_Lite_AWVALID(s_axi_awvalid),  // ufix1
+                                                                                                  .AXI_Lite_WDATA(s_axi_wdata),  // ufix32
+                                                                                                  .AXI_Lite_WSTRB(s_axi_wstrb),  // ufix4
+                                                                                                  .AXI_Lite_WVALID(s_axi_wvalid),  // ufix1
+                                                                                                  .AXI_Lite_BREADY(s_axi_bready),  // ufix1
+                                                                                                  .AXI_Lite_ARADDR(s_axi_araddr),  // ufix32
+                                                                                                  .AXI_Lite_ARVALID(s_axi_arvalid),  // ufix1
+                                                                                                  .AXI_Lite_RREADY(s_axi_rready),  // ufix1
                                                                                                   .read_axi_electrical_pos_err(axi_electrical_pos_err_sig),  // sfix19_En14
-                                                                                                  .AXI_Lite_AWREADY(AXI_Lite_AWREADY),  // ufix1
-                                                                                                  .AXI_Lite_WREADY(AXI_Lite_WREADY),  // ufix1
-                                                                                                  .AXI_Lite_BRESP(AXI_Lite_BRESP),  // ufix2
-                                                                                                  .AXI_Lite_BVALID(AXI_Lite_BVALID),  // ufix1
-                                                                                                  .AXI_Lite_ARREADY(AXI_Lite_ARREADY),  // ufix1
-                                                                                                  .AXI_Lite_RDATA(AXI_Lite_RDATA),  // ufix32
-                                                                                                  .AXI_Lite_RRESP(AXI_Lite_RRESP),  // ufix2
-                                                                                                  .AXI_Lite_RVALID(AXI_Lite_RVALID),  // ufix1
+                                                                                                  .AXI_Lite_AWREADY(s_axi_awready),  // ufix1
+                                                                                                  .AXI_Lite_WREADY(s_axi_wready),  // ufix1
+                                                                                                  .AXI_Lite_BRESP(s_axi_bresp),  // ufix2
+                                                                                                  .AXI_Lite_BVALID(s_axi_bvalid),  // ufix1
+                                                                                                  .AXI_Lite_ARREADY(s_axi_arready),  // ufix1
+                                                                                                  .AXI_Lite_RDATA(s_axi_rdata),  // ufix32
+                                                                                                  .AXI_Lite_RRESP(s_axi_rresp),  // ufix2
+                                                                                                  .AXI_Lite_RVALID(s_axi_rvalid),  // ufix1
                                                                                                   .write_axi_enable(dut_enable),  // ufix1
                                                                                                   .write_axi_controller_mode(axi_controller_mode_sig),  // ufix2
                                                                                                   .write_axi_command(axi_command_sig),  // sfix18_En8

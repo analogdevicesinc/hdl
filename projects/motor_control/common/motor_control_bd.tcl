@@ -221,9 +221,7 @@
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_mc_speed_1/ref_clk] $sys_100m_clk_source
 
   connect_bd_net -net axi_mc_speed_1_position_o   [get_bd_pins axi_mc_speed_1/position_o]  [get_bd_pins axi_mc_controller/position_i]
-  connect_bd_net -net axi_mc_speed_1_new_speed_o  [get_bd_pins axi_mc_speed_1/new_speed_o]
-  connect_bd_net -net axi_mc_speed_1_speed_o      [get_bd_pins axi_mc_speed_1/speed_o]
-  
+
   connect_bd_net -net speed_detector_adc_clk    [get_bd_pins axi_mc_speed_1/adc_clk_o] [get_bd_pins axi_speed_detector_dma/fifo_wr_clk]
   connect_bd_net -net speed_detector_adc_dwr    [get_bd_pins axi_mc_speed_1/adc_dwr_o] [get_bd_pins axi_speed_detector_dma/fifo_wr_en]
   connect_bd_net -net speed_detector_adc_ddata  [get_bd_pins axi_mc_speed_1/adc_ddata_o] [get_bd_pins axi_speed_detector_dma/fifo_wr_din]
@@ -282,15 +280,15 @@
   connect_bd_net -net util_adc_pack_0_dsync           [get_bd_pins axi_controller_dma/fifo_wr_sync] [get_bd_pins util_adc_pack_0/dsync]
 
   #foc_controller
-  connect_bd_net -net sys_100m_clk  [get_bd_pins foc_controller/AXI_Lite_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk  [get_bd_pins foc_controller/s_axi_aclk] $sys_100m_clk_source
   connect_bd_net -net sys_ps7_FCLK_CLK2 [get_bd_pins foc_controller/IPCORE_CLK] [get_bd_pins sys_ps7/FCLK_CLK2]
 
-  connect_bd_net -net sys_100m_resetn [get_bd_pins foc_controller/AXI_Lite_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins foc_controller/s_axi_aresetn] $sys_100m_resetn_source
   connect_bd_net -net sys_100m_resetn [get_bd_pins foc_controller/IPCORE_RESETN] $sys_100m_resetn_source
 
   connect_bd_net -net foc_controller_mon_d_current [get_bd_pins axi_mc_controller/ctrl_data6_i]
   connect_bd_net -net foc_controller_mon_d_current [get_bd_pins foc_controller/mon_d_current]
-  
+
   connect_bd_net -net foc_controller_pwm_a [get_bd_pins axi_mc_controller/pwm_a_i] [get_bd_pins foc_controller/pwm_a]
   connect_bd_net -net foc_controller_pwm_b [get_bd_pins axi_mc_controller/pwm_b_i] [get_bd_pins foc_controller/pwm_b]
   connect_bd_net -net foc_controller_pwm_c [get_bd_pins axi_mc_controller/pwm_c_i] [get_bd_pins foc_controller/pwm_c]
@@ -342,7 +340,7 @@
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m13_axi [get_bd_intf_pins axi_cpu_interconnect/M13_AXI] [get_bd_intf_pins axi_current_monitor_1_dma/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m14_axi [get_bd_intf_pins axi_cpu_interconnect/M14_AXI] [get_bd_intf_pins axi_current_monitor_2_dma/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m15_axi [get_bd_intf_pins axi_cpu_interconnect/M15_AXI] [get_bd_intf_pins axi_controller_dma/s_axi]
-  connect_bd_intf_net -intf_net axi_cpu_interconnect_m16_axi [get_bd_intf_pins axi_cpu_interconnect/M16_AXI] [get_bd_intf_pins foc_controller/AXI_Lite]
+  connect_bd_intf_net -intf_net axi_cpu_interconnect_m16_axi [get_bd_intf_pins axi_cpu_interconnect/M16_AXI] [get_bd_intf_pins foc_controller/s_axi]
 
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M07_ACLK] $sys_100m_clk_source
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M08_ACLK] $sys_100m_clk_source
@@ -444,7 +442,7 @@
   create_bd_addr_seg -range 0x10000   -offset 0x40520000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_controller/s_axi/axi_lite] SEG_data_t_c
   create_bd_addr_seg -range 0x10000   -offset 0x40530000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_current_monitor_2/s_axi/axi_lite] SEG_data_c_m_2
   create_bd_addr_seg -range 0x10000   -offset 0x43200000 $sys_addr_cntrl_space  [get_bd_addr_segs xadc_wiz_1/s_axi_lite/Reg] SEG_data_xadc
-  create_bd_addr_seg -range 0x4000000 -offset 0x7C000000 $sys_addr_cntrl_space  [get_bd_addr_segs foc_controller/AXI_Lite/reg0] SEG_foc_controller_reg0
+  create_bd_addr_seg -range 0x4000000 -offset 0x7C000000 $sys_addr_cntrl_space  [get_bd_addr_segs foc_controller/s_axi/axi_lite] SEG_foc_controller_f_c
 
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_current_monitor_1_dma/m_dest_axi] [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_hp1_ddr_lowocm
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_speed_detector_dma/m_dest_axi] [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_hp1_ddr_lowocm
