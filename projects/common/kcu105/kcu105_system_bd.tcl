@@ -98,13 +98,31 @@ set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
 
 # instance: axi interconnect
 
+set axi_mem_aux_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_mem_aux_interconnect]
+set_property -dict [list CONFIG.NUM_SI {2}] $axi_mem_aux_interconnect
+set_property -dict [list CONFIG.NUM_MI {1}] $axi_mem_aux_interconnect
+set_property -dict [list CONFIG.ENABLE_ADVANCED_OPTIONS {1}] $axi_mem_aux_interconnect
+set_property -dict [list CONFIG.XBAR_DATA_WIDTH {512}] $axi_mem_aux_interconnect
+set_property -dict [list CONFIG.STRATEGY {2}] $axi_mem_aux_interconnect
+# set_property -dict [list CONFIG.S00_HAS_REGSLICE {4}] $axi_mem_aux_interconnect
+# set_property -dict [list CONFIG.S01_HAS_REGSLICE {4}] $axi_mem_aux_interconnect
+set_property -dict [list CONFIG.M00_HAS_REGSLICE {4}] $axi_mem_aux_interconnect
+
 set axi_mem_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_mem_interconnect]
 set_property -dict [list CONFIG.NUM_SI {8}] $axi_mem_interconnect
 set_property -dict [list CONFIG.NUM_MI {1}] $axi_mem_interconnect
 set_property -dict [list CONFIG.ENABLE_ADVANCED_OPTIONS {1}] $axi_mem_interconnect
 set_property -dict [list CONFIG.XBAR_DATA_WIDTH {512}] $axi_mem_interconnect
 set_property -dict [list CONFIG.STRATEGY {2}] $axi_mem_interconnect
-set_property -dict [list CONFIG.M00_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S00_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S01_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S02_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S03_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S04_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S05_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S06_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S07_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.M00_HAS_REGSLICE {4}] $axi_mem_interconnect
 
 # instance: default peripherals
 
@@ -249,11 +267,13 @@ connect_bd_net -net sys_200m_clk $sys_200m_clk_source
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_cpu_interconnect/M06_ARESETN] $sys_resetn_source
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_cpu_aux_interconnect/ARESETN] $sys_resetn_source
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_cpu_interconnect/ARESETN] $sys_resetn_source
-connect_bd_net -net sys_mem_rstn [get_bd_pins axi_mem_interconnect/ARESETN] $sys_mem_resetn_source
-connect_bd_net -net sys_cpu_clk [get_bd_pins axi_cpu_interconnect/M06_ACLK] $sys_cpu_clk_source
-connect_bd_net -net sys_cpu_clk [get_bd_pins axi_cpu_aux_interconnect/ACLK] $sys_cpu_clk_source
-connect_bd_net -net sys_cpu_clk [get_bd_pins axi_cpu_interconnect/ACLK] $sys_cpu_clk_source
-connect_bd_net -net sys_mem_clk [get_bd_pins axi_mem_interconnect/ACLK] $sys_mem_clk_source
+connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_interconnect/ARESETN] $sys_resetn_source
+connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_aux_interconnect/ARESETN] $sys_resetn_source
+connect_bd_net -net sys_cpu_clk  [get_bd_pins axi_cpu_interconnect/M06_ACLK] $sys_cpu_clk_source
+connect_bd_net -net sys_cpu_clk  [get_bd_pins axi_cpu_aux_interconnect/ACLK] $sys_cpu_clk_source
+connect_bd_net -net sys_cpu_clk  [get_bd_pins axi_cpu_interconnect/ACLK] $sys_cpu_clk_source
+connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/ACLK] $sys_200m_clk_source
+connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_aux_interconnect/ACLK] $sys_200m_clk_source
 
 connect_bd_net -net sys_cpu_rstn [get_bd_pins sys_mb_debug/S_AXI_ARESETN]
 connect_bd_net -net sys_mem_rstn [get_bd_pins axi_ddr_cntrl/c0_ddr4_aresetn]
@@ -325,19 +345,27 @@ connect_bd_net -net sys_cpu_clk [get_bd_pins axi_cpu_interconnect/M00_ACLK] $sys
 
 # defaults (interconnect - memory)
 
-connect_bd_intf_net -intf_net axi_mem_interconnect_m00 [get_bd_intf_pins axi_mem_interconnect/M00_AXI] [get_bd_intf_pins axi_ddr_cntrl/C0_DDR4_S_AXI]
+connect_bd_intf_net -intf_net axi_mem_aux_interconnect_m00 [get_bd_intf_pins axi_mem_aux_interconnect/M00_AXI] [get_bd_intf_pins axi_ddr_cntrl/C0_DDR4_S_AXI] 
+connect_bd_intf_net -intf_net axi_mem_aux_interconnect_s00 [get_bd_intf_pins axi_mem_aux_interconnect/S00_AXI] [get_bd_intf_pins axi_mem_interconnect/M00_AXI]
+connect_bd_net -net sys_mem_rstn [get_bd_pins axi_mem_aux_interconnect/M00_ARESETN] $sys_mem_resetn_source
+connect_bd_net -net sys_mem_clk [get_bd_pins axi_mem_aux_interconnect/M00_ACLK] $sys_mem_clk_source
+connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_aux_interconnect/S00_ARESETN] $sys_resetn_source
+connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_aux_interconnect/S00_ACLK] $sys_200m_clk_source
+connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_aux_interconnect/S01_ARESETN] $sys_resetn_source
+connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_aux_interconnect/S01_ACLK] $sys_200m_clk_source
+connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_interconnect/M00_ARESETN] $sys_resetn_source
+connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/M00_ACLK] $sys_200m_clk_source
+
 connect_bd_intf_net -intf_net axi_mem_interconnect_s00 [get_bd_intf_pins axi_mem_interconnect/S00_AXI] [get_bd_intf_pins sys_mb/M_AXI_DC]
 connect_bd_intf_net -intf_net axi_mem_interconnect_s01 [get_bd_intf_pins axi_mem_interconnect/S01_AXI] [get_bd_intf_pins sys_mb/M_AXI_IC]
 connect_bd_intf_net -intf_net axi_mem_interconnect_s05 [get_bd_intf_pins axi_mem_interconnect/S05_AXI] [get_bd_intf_pins axi_ethernet_dma/M_AXI_SG]
 connect_bd_intf_net -intf_net axi_mem_interconnect_s06 [get_bd_intf_pins axi_mem_interconnect/S06_AXI] [get_bd_intf_pins axi_ethernet_dma/M_AXI_MM2S]
 connect_bd_intf_net -intf_net axi_mem_interconnect_s07 [get_bd_intf_pins axi_mem_interconnect/S07_AXI] [get_bd_intf_pins axi_ethernet_dma/M_AXI_S2MM]
-connect_bd_net -net sys_mem_rstn [get_bd_pins axi_mem_interconnect/M00_ARESETN] $sys_mem_resetn_source
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_interconnect/S00_ARESETN] $sys_resetn_source
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_interconnect/S01_ARESETN] $sys_resetn_source
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_interconnect/S05_ARESETN] $sys_resetn_source
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_interconnect/S06_ARESETN] $sys_resetn_source
 connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_interconnect/S07_ARESETN] $sys_resetn_source
-connect_bd_net -net sys_mem_clk [get_bd_pins axi_mem_interconnect/M00_ACLK] $sys_mem_clk_source
 connect_bd_net -net sys_cpu_clk [get_bd_pins axi_mem_interconnect/S00_ACLK] $sys_cpu_clk_source
 connect_bd_net -net sys_cpu_clk [get_bd_pins axi_mem_interconnect/S01_ACLK] $sys_cpu_clk_source
 connect_bd_net -net sys_cpu_clk [get_bd_pins axi_mem_interconnect/S05_ACLK] $sys_cpu_clk_source
