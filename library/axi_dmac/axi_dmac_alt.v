@@ -226,7 +226,7 @@ module axi_dmac_alt (
   output                                    s_axi_wready;
   output                                    s_axi_bvalid;
   output  [ 1:0]                            s_axi_bresp;
-  output  [(PCORE_AXI_ID_WIDTH-1):0]        s_axi_bid;
+  output reg  [(PCORE_AXI_ID_WIDTH-1):0]    s_axi_bid;
   input                                     s_axi_bready;
   input                                     s_axi_arvalid;
   input   [13:0]                            s_axi_araddr;
@@ -241,7 +241,7 @@ module axi_dmac_alt (
   output                                    s_axi_rvalid;
   output  [ 1:0]                            s_axi_rresp;
   output  [31:0]                            s_axi_rdata;
-  output  [(PCORE_AXI_ID_WIDTH-1):0]        s_axi_rid;
+  output reg [(PCORE_AXI_ID_WIDTH-1):0]     s_axi_rid;
   output                                    s_axi_rlast;
   input                                     s_axi_rready;
 
@@ -354,9 +354,15 @@ module axi_dmac_alt (
 
   // defaults
 
-  assign s_axi_bid = s_axi_awid;
-  assign s_axi_rid = s_axi_arid;
-  assign s_axi_rlast = 1'd0;
+  always @(posedge s_axi_aclk) begin
+    if (s_axi_awready)
+	    s_axi_bid <= s_axi_awid;
+  end
+  always @(posedge s_axi_aclk) begin
+    if (s_axi_arready)
+	    s_axi_rid <= s_axi_arid;
+  end
+  assign s_axi_rlast = 1'b1;
 
   // instantiation
 
