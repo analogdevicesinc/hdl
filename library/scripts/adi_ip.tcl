@@ -16,6 +16,14 @@ proc adi_ip_files {ip_name ip_files} {
   set_property "top" "$ip_name" $proj_fileset
 }
 
+proc adi_ip_constraints {ip_name ip_constr_files} {
+
+  set proj_filegroup [ipx::get_file_group xilinx_verilogsynthesis [ipx::current_core]]
+  ipx::add_file $ip_constr_files $proj_filegroup
+  set_property type {{xdc}} [ipx::get_file $ip_constr_files $proj_filegroup]
+  set_property library_name {} [ipx::get_file $ip_constr_files $proj_filegroup]
+}
+
 proc adi_ip_properties {ip_name} {
 
   ipx::package_project -root_dir .

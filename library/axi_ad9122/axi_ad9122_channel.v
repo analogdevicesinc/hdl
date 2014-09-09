@@ -45,16 +45,16 @@ module axi_ad9122_channel (
 
   dac_div_clk,
   dac_rst,
-  dac_dds_data_0,
-  dac_dds_data_1,
-  dac_dds_data_2,
-  dac_dds_data_3,
+  dac_enable,
+  dac_data,
+  dac_frame,
+  dma_data,
 
   // processor interface
 
-  dac_dds_enable,
+  dac_data_frame,
+  dac_data_sync,
   dac_dds_format,
-  dac_dds_pattenb,
 
   // bus interface
 
@@ -76,16 +76,16 @@ module axi_ad9122_channel (
 
   input           dac_div_clk;
   input           dac_rst;
-  output  [15:0]  dac_dds_data_0;
-  output  [15:0]  dac_dds_data_1;
-  output  [15:0]  dac_dds_data_2;
-  output  [15:0]  dac_dds_data_3;
+  output          dac_enable;
+  output  [63:0]  dac_data;
+  output  [ 3:0]  dac_frame;
+  input   [63:0]  dma_data;
 
   // processor interface
 
-  input           dac_dds_enable;
+  input           dac_data_frame;
+  input           dac_data_sync;
   input           dac_dds_format;
-  input           dac_dds_pattenb;
 
   // bus interface
 
@@ -98,38 +98,147 @@ module axi_ad9122_channel (
   output  [31:0]  up_rdata;
   output          up_ack;
 
+  // internal registers
+
+  reg             dac_enable = 'd0;
+  reg     [63:0]  dac_data = 'd0;
+  reg     [ 3:0]  dac_frame = 'd0;
+  reg     [15:0]  dac_dds_phase_0_0 = 'd0;
+  reg     [15:0]  dac_dds_phase_0_1 = 'd0;
+  reg     [15:0]  dac_dds_phase_1_0 = 'd0;
+  reg     [15:0]  dac_dds_phase_1_1 = 'd0;
+  reg     [15:0]  dac_dds_phase_2_0 = 'd0;
+  reg     [15:0]  dac_dds_phase_2_1 = 'd0;
+  reg     [15:0]  dac_dds_phase_3_0 = 'd0;
+  reg     [15:0]  dac_dds_phase_3_1 = 'd0;
+  reg     [15:0]  dac_dds_incr_0 = 'd0;
+  reg     [15:0]  dac_dds_incr_1 = 'd0;
+  reg     [63:0]  dac_dds_data = 'd0;
+
   // internal signals
 
-  wire    [15:0]  dac_dds_patt_1_s;
+  wire    [15:0]  dac_dds_data_0_s;
+  wire    [15:0]  dac_dds_data_1_s;
+  wire    [15:0]  dac_dds_data_2_s;
+  wire    [15:0]  dac_dds_data_3_s;
+  wire    [15:0]  dac_dds_scale_1_s;
   wire    [15:0]  dac_dds_init_1_s;
   wire    [15:0]  dac_dds_incr_1_s;
-  wire    [15:0]  dac_dds_scale_1_s;
-  wire    [15:0]  dac_dds_patt_2_s;
+  wire    [15:0]  dac_dds_scale_2_s;
   wire    [15:0]  dac_dds_init_2_s;
   wire    [15:0]  dac_dds_incr_2_s;
-  wire    [15:0]  dac_dds_scale_2_s;
+  wire    [15:0]  dac_pat_data_1_s;
+  wire    [15:0]  dac_pat_data_2_s;
+  wire    [ 3:0]  dac_data_sel_s;
+
+  // dac data select
+
+  always @(posedge dac_div_clk) begin
+    dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
+    case (dac_data_sel_s)
+      4'h2: dac_data <= dma_data;
+      4'h1: dac_data <= { dac_pat_data_2_s, dac_pat_data_1_s,
+                          dac_pat_data_2_s, dac_pat_data_1_s};
+      default: dac_data <= dac_dds_data;
+    endcase
+    if (dac_data_sel_s == 4'h1) begin
+      dac_frame <= 4'b0101;
+    end else begin
+      dac_frame <= {3'd0, dac_data_frame};
+    end
+  end
 
   // single channel dds
 
-  axi_ad9122_dds #(.DP_DISABLE(DP_DISABLE)) i_dds (
-    .dac_div_clk (dac_div_clk),
-    .dac_rst (dac_rst),
-    .dac_dds_data_0 (dac_dds_data_0),
-    .dac_dds_data_1 (dac_dds_data_1),
-    .dac_dds_data_2 (dac_dds_data_2),
-    .dac_dds_data_3 (dac_dds_data_3),
-    .dac_dds_enable (dac_dds_enable),
-    .dac_dds_format (dac_dds_format),
-    .dac_dds_pattenb (dac_dds_pattenb),
-    .dac_dds_patt_1 (dac_dds_patt_1_s),
-    .dac_dds_init_1 (dac_dds_init_1_s),
-    .dac_dds_incr_1 (dac_dds_incr_1_s),
-    .dac_dds_scale_1 (dac_dds_scale_1_s),
-    .dac_dds_patt_2 (dac_dds_patt_2_s),
-    .dac_dds_init_2 (dac_dds_init_2_s),
-    .dac_dds_incr_2 (dac_dds_incr_2_s),
-    .dac_dds_scale_2 (dac_dds_scale_2_s));
+  always @(posedge dac_div_clk) begin
+    if (dac_data_sync == 1'b1) begin
+      dac_dds_phase_0_0 <= dac_dds_init_1_s;
+      dac_dds_phase_0_1 <= dac_dds_init_2_s;
+      dac_dds_phase_1_0 <= dac_dds_phase_0_0 + dac_dds_incr_1_s;
+      dac_dds_phase_1_1 <= dac_dds_phase_0_1 + dac_dds_incr_2_s;
+      dac_dds_phase_2_0 <= dac_dds_phase_1_0 + dac_dds_incr_1_s;
+      dac_dds_phase_2_1 <= dac_dds_phase_1_1 + dac_dds_incr_2_s;
+      dac_dds_phase_3_0 <= dac_dds_phase_2_0 + dac_dds_incr_1_s;
+      dac_dds_phase_3_1 <= dac_dds_phase_2_1 + dac_dds_incr_2_s;
+      dac_dds_incr_0 <= {dac_dds_incr_1_s[13:0], 2'd0};
+      dac_dds_incr_1 <= {dac_dds_incr_2_s[13:0], 2'd0};
+      dac_dds_data <= 64'd0;
+    end else begin
+      dac_dds_phase_0_0 <= dac_dds_phase_0_0 + dac_dds_incr_0;
+      dac_dds_phase_0_1 <= dac_dds_phase_0_1 + dac_dds_incr_1;
+      dac_dds_phase_1_0 <= dac_dds_phase_1_0 + dac_dds_incr_0;
+      dac_dds_phase_1_1 <= dac_dds_phase_1_1 + dac_dds_incr_1;
+      dac_dds_phase_2_0 <= dac_dds_phase_2_0 + dac_dds_incr_0;
+      dac_dds_phase_2_1 <= dac_dds_phase_2_1 + dac_dds_incr_1;
+      dac_dds_phase_3_0 <= dac_dds_phase_3_0 + dac_dds_incr_0;
+      dac_dds_phase_3_1 <= dac_dds_phase_3_1 + dac_dds_incr_1;
+      dac_dds_incr_0 <= dac_dds_incr_0;
+      dac_dds_incr_1 <= dac_dds_incr_1;
+      dac_dds_data <= { dac_dds_data_3_s, dac_dds_data_2_s,
+                        dac_dds_data_1_s, dac_dds_data_0_s};
+    end
+  end
 
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_dds_data_0_s = 16'd0;
+  end else begin
+  ad_dds i_dds_0 (
+    .clk (dac_div_clk),
+    .dds_format (dac_dds_format),
+    .dds_phase_0 (dac_dds_phase_0_0),
+    .dds_scale_0 (dac_dds_scale_1_s),
+    .dds_phase_1 (dac_dds_phase_0_1),
+    .dds_scale_1 (dac_dds_scale_2_s),
+    .dds_data (dac_dds_data_0_s));
+  end
+  endgenerate
+  
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_dds_data_1_s = 16'd0;
+  end else begin
+  ad_dds i_dds_1 (
+    .clk (dac_div_clk),
+    .dds_format (dac_dds_format),
+    .dds_phase_0 (dac_dds_phase_1_0),
+    .dds_scale_0 (dac_dds_scale_1_s),
+    .dds_phase_1 (dac_dds_phase_1_1),
+    .dds_scale_1 (dac_dds_scale_2_s),
+    .dds_data (dac_dds_data_1_s));
+  end
+  endgenerate
+  
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_dds_data_2_s = 16'd0;
+  end else begin
+  ad_dds i_dds_2 (
+    .clk (dac_div_clk),
+    .dds_format (dac_dds_format),
+    .dds_phase_0 (dac_dds_phase_2_0),
+    .dds_scale_0 (dac_dds_scale_1_s),
+    .dds_phase_1 (dac_dds_phase_2_1),
+    .dds_scale_1 (dac_dds_scale_2_s),
+    .dds_data (dac_dds_data_2_s));
+  end
+  endgenerate
+  
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_dds_data_3_s = 16'd0;
+  end else begin
+  ad_dds i_dds_3 (
+    .clk (dac_div_clk),
+    .dds_format (dac_dds_format),
+    .dds_phase_0 (dac_dds_phase_3_0),
+    .dds_scale_0 (dac_dds_scale_1_s),
+    .dds_phase_1 (dac_dds_phase_3_1),
+    .dds_scale_1 (dac_dds_scale_2_s),
+    .dds_data (dac_dds_data_3_s));
+  end
+  endgenerate
+  
   // single channel processor
 
   up_dac_channel #(.PCORE_DAC_CHID(CHID)) i_up_dac_channel (
@@ -141,11 +250,12 @@ module axi_ad9122_channel (
     .dac_dds_scale_2 (dac_dds_scale_2_s),
     .dac_dds_init_2 (dac_dds_init_2_s),
     .dac_dds_incr_2 (dac_dds_incr_2_s),
-    .dac_dds_patt_1 (dac_dds_patt_1_s),
-    .dac_dds_patt_2 (dac_dds_patt_2_s),
-    .dac_dds_sel (),
-    .dac_lb_enb (),
-    .dac_pn_enb (),
+    .dac_pat_data_1 (dac_pat_data_1_s),
+    .dac_pat_data_2 (dac_pat_data_2_s),
+    .dac_data_sel (dac_data_sel_s),
+    .dac_iqcor_enb (),
+    .dac_iqcor_coeff_1 (),
+    .dac_iqcor_coeff_2 (),
     .up_usr_datatype_be (),
     .up_usr_datatype_signed (),
     .up_usr_datatype_shift (),

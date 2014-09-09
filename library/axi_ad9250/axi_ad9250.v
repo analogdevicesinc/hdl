@@ -266,7 +266,7 @@ module axi_ad9250 (
     .delay_wdata (),
     .delay_rdata (5'd0),
     .delay_ack_t (1'b0),
-    .delay_locked (1'b0),
+    .delay_locked (1'b1),
     .drp_clk (1'd0),
     .drp_rst (),
     .drp_sel (),

@@ -51,13 +51,15 @@ module prcfg_top(
   adc_gpio_output,
 
   // TX side
-  dma_dac_drd,
+  dma_dac_en,
   dma_dac_dunf,
   dma_dac_ddata,
+  dma_dac_dvalid,
 
-  core_dac_drd,
+  core_dac_en,
   core_dac_dunf,
   core_dac_ddata,
+  core_dac_dvalid,
 
   // RX side
   core_adc_dwr,
@@ -87,13 +89,15 @@ module prcfg_top(
   input   [31:0]                    adc_gpio_input;
   output  [31:0]                    adc_gpio_output;
 
-  output                            dma_dac_drd;
+  output                            dma_dac_en;
   input                             dma_dac_dunf;
   input   [(DBUS_WIDTH - 1):0]      dma_dac_ddata;
+  input                             dma_dac_dvalid;
 
-  input                             core_dac_drd;
+  input                             core_dac_en;
   output                            core_dac_dunf;
   output  [(DBUS_WIDTH - 1):0]      core_dac_ddata;
+  output                            core_dac_dvalid;
 
   input                             core_adc_dwr;
   input                             core_adc_dsync;
@@ -158,12 +162,14 @@ module prcfg_top(
             .clk(clk),
             .control(dac_gpio_input),
             .status(dac_gpio_out_s[l_inst]),
-            .src_dac_drd(dma_dac_drd),
+            .src_dac_en(dma_dac_en),
             .src_dac_ddata(dma_dac_ddata[(DATA_WIDTH - 1):0]),
             .src_dac_dunf(dma_dac_dunf),
-            .dst_dac_drd(core_dac_drd),
+            .src_dac_dvalid(dma_dac_dvalid),
+            .dst_dac_en(core_dac_en),
             .dst_dac_ddata(core_dac_ddata[(DATA_WIDTH - 1):0]),
-            .dst_dac_dunf(core_dac_dunf)
+            .dst_dac_dunf(core_dac_dunf),
+            .dst_dac_dvalid(core_dac_dvalid)
           );
         end else begin
           prcfg_dac #(
@@ -172,12 +178,14 @@ module prcfg_top(
             .clk(clk),
             .control(dac_gpio_input),
             .status(dac_gpio_out_s[l_inst]),
-            .src_dac_drd(),
+            .src_dac_en(),
             .src_dac_ddata(dma_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
             .src_dac_dunf(dma_dac_dunf),
-            .dst_dac_drd(core_dac_drd),
+            .src_dac_dvalid(dma_dac_dvalid),
+            .dst_dac_en(core_dac_en),
             .dst_dac_ddata(core_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
-            .dst_dac_dunf()
+            .dst_dac_dunf(),
+            .dst_dac_dvalid()
           );
         end
       end

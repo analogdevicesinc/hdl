@@ -231,6 +231,12 @@ module system_top (
   inout             drst_0;
   inout             arst_0;
 
+  // internal registers
+
+  reg               dma_wr = 'd0;
+  reg               dma_sync = 'd0;
+  reg     [511:0]   dma_data = 'd0;
+
   // internal signals
 
   wire    [ 18:0]   gpio_i;
@@ -244,44 +250,52 @@ module system_top (
   wire              spi_clk;
   wire              spi_miso;
   wire              spi_mosi;
-  wire    [255:0]   adc_ddata_0;
-  wire    [255:0]   adc_ddata_1;
-  wire    [511:0]   adc_ddata;
+  wire              adc_clk;
+  wire              adc_valid_0;
+  wire              adc_enable_0;
+  wire    [255:0]   adc_data_0;
+  wire              adc_valid_1;
+  wire              adc_enable_1;
+  wire    [255:0]   adc_data_1;
 
   // interleaving
 
-  assign adc_ddata[((16*31)+15):(16*31)] = adc_ddata_1[((16*15)+15):(16*15)];
-  assign adc_ddata[((16*30)+15):(16*30)] = adc_ddata_0[((16*15)+15):(16*15)];
-  assign adc_ddata[((16*29)+15):(16*29)] = adc_ddata_1[((16*14)+15):(16*14)];
-  assign adc_ddata[((16*28)+15):(16*28)] = adc_ddata_0[((16*14)+15):(16*14)];
-  assign adc_ddata[((16*27)+15):(16*27)] = adc_ddata_1[((16*13)+15):(16*13)];
-  assign adc_ddata[((16*26)+15):(16*26)] = adc_ddata_0[((16*13)+15):(16*13)];
-  assign adc_ddata[((16*25)+15):(16*25)] = adc_ddata_1[((16*12)+15):(16*12)];
-  assign adc_ddata[((16*24)+15):(16*24)] = adc_ddata_0[((16*12)+15):(16*12)];
-  assign adc_ddata[((16*23)+15):(16*23)] = adc_ddata_1[((16*11)+15):(16*11)];
-  assign adc_ddata[((16*22)+15):(16*22)] = adc_ddata_0[((16*11)+15):(16*11)];
-  assign adc_ddata[((16*21)+15):(16*21)] = adc_ddata_1[((16*10)+15):(16*10)];
-  assign adc_ddata[((16*20)+15):(16*20)] = adc_ddata_0[((16*10)+15):(16*10)];
-  assign adc_ddata[((16*19)+15):(16*19)] = adc_ddata_1[((16* 9)+15):(16* 9)];
-  assign adc_ddata[((16*18)+15):(16*18)] = adc_ddata_0[((16* 9)+15):(16* 9)];
-  assign adc_ddata[((16*17)+15):(16*17)] = adc_ddata_1[((16* 8)+15):(16* 8)];
-  assign adc_ddata[((16*16)+15):(16*16)] = adc_ddata_0[((16* 8)+15):(16* 8)];
-  assign adc_ddata[((16*15)+15):(16*15)] = adc_ddata_1[((16* 7)+15):(16* 7)];
-  assign adc_ddata[((16*14)+15):(16*14)] = adc_ddata_0[((16* 7)+15):(16* 7)];
-  assign adc_ddata[((16*13)+15):(16*13)] = adc_ddata_1[((16* 6)+15):(16* 6)];
-  assign adc_ddata[((16*12)+15):(16*12)] = adc_ddata_0[((16* 6)+15):(16* 6)];
-  assign adc_ddata[((16*11)+15):(16*11)] = adc_ddata_1[((16* 5)+15):(16* 5)];
-  assign adc_ddata[((16*10)+15):(16*10)] = adc_ddata_0[((16* 5)+15):(16* 5)];
-  assign adc_ddata[((16* 9)+15):(16* 9)] = adc_ddata_1[((16* 4)+15):(16* 4)];
-  assign adc_ddata[((16* 8)+15):(16* 8)] = adc_ddata_0[((16* 4)+15):(16* 4)];
-  assign adc_ddata[((16* 7)+15):(16* 7)] = adc_ddata_1[((16* 3)+15):(16* 3)];
-  assign adc_ddata[((16* 6)+15):(16* 6)] = adc_ddata_0[((16* 3)+15):(16* 3)];
-  assign adc_ddata[((16* 5)+15):(16* 5)] = adc_ddata_1[((16* 2)+15):(16* 2)];
-  assign adc_ddata[((16* 4)+15):(16* 4)] = adc_ddata_0[((16* 2)+15):(16* 2)];
-  assign adc_ddata[((16* 3)+15):(16* 3)] = adc_ddata_1[((16* 1)+15):(16* 1)];
-  assign adc_ddata[((16* 2)+15):(16* 2)] = adc_ddata_0[((16* 1)+15):(16* 1)];
-  assign adc_ddata[((16* 1)+15):(16* 1)] = adc_ddata_1[((16* 0)+15):(16* 0)];
-  assign adc_ddata[((16* 0)+15):(16* 0)] = adc_ddata_0[((16* 0)+15):(16* 0)];
+  always @(posedge adc_clk) begin
+    dma_wr <= adc_enable_0 & adc_enable_1;
+    dma_sync <= 1'b1;
+    dma_data[((16*31)+15):(16*31)] <= adc_data_1[((16*15)+15):(16*15)];
+    dma_data[((16*30)+15):(16*30)] <= adc_data_0[((16*15)+15):(16*15)];
+    dma_data[((16*29)+15):(16*29)] <= adc_data_1[((16*14)+15):(16*14)];
+    dma_data[((16*28)+15):(16*28)] <= adc_data_0[((16*14)+15):(16*14)];
+    dma_data[((16*27)+15):(16*27)] <= adc_data_1[((16*13)+15):(16*13)];
+    dma_data[((16*26)+15):(16*26)] <= adc_data_0[((16*13)+15):(16*13)];
+    dma_data[((16*25)+15):(16*25)] <= adc_data_1[((16*12)+15):(16*12)];
+    dma_data[((16*24)+15):(16*24)] <= adc_data_0[((16*12)+15):(16*12)];
+    dma_data[((16*23)+15):(16*23)] <= adc_data_1[((16*11)+15):(16*11)];
+    dma_data[((16*22)+15):(16*22)] <= adc_data_0[((16*11)+15):(16*11)];
+    dma_data[((16*21)+15):(16*21)] <= adc_data_1[((16*10)+15):(16*10)];
+    dma_data[((16*20)+15):(16*20)] <= adc_data_0[((16*10)+15):(16*10)];
+    dma_data[((16*19)+15):(16*19)] <= adc_data_1[((16* 9)+15):(16* 9)];
+    dma_data[((16*18)+15):(16*18)] <= adc_data_0[((16* 9)+15):(16* 9)];
+    dma_data[((16*17)+15):(16*17)] <= adc_data_1[((16* 8)+15):(16* 8)];
+    dma_data[((16*16)+15):(16*16)] <= adc_data_0[((16* 8)+15):(16* 8)];
+    dma_data[((16*15)+15):(16*15)] <= adc_data_1[((16* 7)+15):(16* 7)];
+    dma_data[((16*14)+15):(16*14)] <= adc_data_0[((16* 7)+15):(16* 7)];
+    dma_data[((16*13)+15):(16*13)] <= adc_data_1[((16* 6)+15):(16* 6)];
+    dma_data[((16*12)+15):(16*12)] <= adc_data_0[((16* 6)+15):(16* 6)];
+    dma_data[((16*11)+15):(16*11)] <= adc_data_1[((16* 5)+15):(16* 5)];
+    dma_data[((16*10)+15):(16*10)] <= adc_data_0[((16* 5)+15):(16* 5)];
+    dma_data[((16* 9)+15):(16* 9)] <= adc_data_1[((16* 4)+15):(16* 4)];
+    dma_data[((16* 8)+15):(16* 8)] <= adc_data_0[((16* 4)+15):(16* 4)];
+    dma_data[((16* 7)+15):(16* 7)] <= adc_data_1[((16* 3)+15):(16* 3)];
+    dma_data[((16* 6)+15):(16* 6)] <= adc_data_0[((16* 3)+15):(16* 3)];
+    dma_data[((16* 5)+15):(16* 5)] <= adc_data_1[((16* 2)+15):(16* 2)];
+    dma_data[((16* 4)+15):(16* 4)] <= adc_data_0[((16* 2)+15):(16* 2)];
+    dma_data[((16* 3)+15):(16* 3)] <= adc_data_1[((16* 1)+15):(16* 1)];
+    dma_data[((16* 2)+15):(16* 2)] <= adc_data_0[((16* 1)+15):(16* 1)];
+    dma_data[((16* 1)+15):(16* 1)] <= adc_data_1[((16* 0)+15):(16* 0)];
+    dma_data[((16* 0)+15):(16* 0)] <= adc_data_0[((16* 0)+15):(16* 0)];
+  end
 
   // instantiations
 
@@ -356,9 +370,13 @@ module system_top (
     .spi_dirn (spi_dirn));
 
   system_wrapper i_system_wrapper (
-    .adc_ddata (adc_ddata),
-    .adc_ddata_0 (adc_ddata_0),
-    .adc_ddata_1 (adc_ddata_1),
+    .adc_clk (adc_clk),
+    .adc_data_0 (adc_data_0),
+    .adc_data_1 (adc_data_1),
+    .adc_enable_0 (adc_enable_0),
+    .adc_enable_1 (adc_enable_1),
+    .adc_valid_0 (adc_valid_0),
+    .adc_valid_1 (adc_valid_1),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -374,6 +392,9 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
+    .dma_data (dma_data),
+    .dma_sync (dma_sync),
+    .dma_wr (dma_wr),
     .fan_pwm (fan_pwm),
     .gpio_ad9625_i (gpio_i),
     .gpio_ad9625_o (gpio_o),

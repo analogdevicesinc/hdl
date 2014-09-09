@@ -171,6 +171,12 @@ module system_top (
   inout           prcq_cnv;
   inout           prcq_sdo;
 
+  // internal registers
+
+  reg             dma_wr = 'd0;
+  reg             dma_sync = 'd0;
+  reg    [127:0]  dma_data = 'd0;
+
   // internal signals
 
   wire    [ 2:0]  spi_csn;
@@ -183,6 +189,18 @@ module system_top (
   wire    [23:0]  gpio_i;
   wire    [23:0]  gpio_o;
   wire    [23:0]  gpio_t;
+  wire            adc_clk;
+  wire    [ 7:0]  adc_enable;
+  wire    [ 7:0]  adc_valid;
+  wire   [127:0]  adc_data;
+
+  // pack place holder
+
+  always @(posedge adc_clk) begin
+    dma_wr <= | adc_enable;
+    dma_sync <= 1'b1;
+    dma_data <= adc_data;
+  end
 
   // spi
 
@@ -225,70 +243,20 @@ module system_top (
 
   // gpio/ctl interface
 
-  IOBUF i_iobuf_gpio_reset_ad9516 (
-    .I (gpio_o[23]),
-    .O (gpio_i[23]),
-    .T (gpio_t[23]),
-    .IO (reset_ad9516));
-
-  IOBUF i_iobuf_gpio_reset_ad9671 (
-    .I (gpio_o[22]),
-    .O (gpio_i[22]),
-    .T (gpio_t[22]),
-    .IO (reset_ad9671));
-
-  IOBUF i_iobuf_gpio_trig (
-    .I (gpio_o[21]),
-    .O (gpio_i[21]),
-    .T (gpio_t[21]),
-    .IO (trig));
-
-  IOBUF i_iobuf_gpio_prci_sck (
-    .I (gpio_o[20]),
-    .O (gpio_i[20]),
-    .T (gpio_t[20]),
-    .IO (prci_sck));
-
-  IOBUF i_iobuf_gpio_prci_cnv (
-    .I (gpio_o[19]),
-    .O (gpio_i[19]),
-    .T (gpio_t[19]),
-    .IO (prci_cnv));
-
-  IOBUF i_iobuf_gpio_prci_sdo (
-    .I (gpio_o[18]),
-    .O (gpio_i[18]),
-    .T (gpio_t[18]),
-    .IO (prci_sdo));
-
-  IOBUF i_iobuf_gpio_prcq_sck (
-    .I (gpio_o[17]),
-    .O (gpio_i[17]),
-    .T (gpio_t[17]),
-    .IO (prcq_sck));
-
-  IOBUF i_iobuf_gpio_prcq_cnv (
-    .I (gpio_o[16]),
-    .O (gpio_i[16]),
-    .T (gpio_t[16]),
-    .IO (prcq_cnv));
-
-  IOBUF i_iobuf_gpio_prcq_sdo (
-    .I (gpio_o[15]),
-    .O (gpio_i[15]),
-    .T (gpio_t[15]),
-    .IO (prcq_sdo));
-
-  genvar n;
-  generate
-  for (n = 0; n <= 14; n = n + 1) begin: g_iobuf_gpio_bd
-  IOBUF i_iobuf_gpio_bd (
-    .I (gpio_o[n]),
-    .O (gpio_i[n]),
-    .T (gpio_t[n]),
-    .IO (gpio_bd[n]));
-  end
-  endgenerate
+  ad_iobuf #(.DATA_WIDTH(24)) i_iobuf (
+    .dt (gpio_t[23:0]),
+    .di (gpio_o[23:0]),
+    .do (gpio_i[23:0]),
+    .dio ({ reset_ad9516,  // 23
+            reset_ad9671,  // 22
+            trig,          // 21
+            prci_sck,      // 20
+            prci_cnv,      // 19
+            prci_sdo,      // 18
+            prcq_sck,      // 17
+            prcq_cnv,      // 16
+            prcq_sdo,      // 15
+            gpio_bd}));    //  0
 
   system_wrapper i_system_wrapper (
     .DDR_addr (DDR_addr),
@@ -315,6 +283,13 @@ module system_top (
     .GPIO_I (gpio_i),
     .GPIO_O (gpio_o),
     .GPIO_T (gpio_t),
+    .adc_clk (adc_clk),
+    .adc_data (adc_data),
+    .adc_enable (adc_enable),
+    .adc_valid (adc_valid),
+    .dma_data (dma_data),
+    .dma_sync (dma_sync),
+    .dma_wr (dma_wr),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),

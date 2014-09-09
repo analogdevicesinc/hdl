@@ -17,6 +17,15 @@ set rx_sysref       [create_bd_port -dir O rx_sysref]
 set rx_data_p       [create_bd_port -dir I -from 1 -to 0 rx_data_p]
 set rx_data_n       [create_bd_port -dir I -from 1 -to 0 rx_data_n]
 
+set adc_clk         [create_bd_port -dir O adc_clk]
+set adc_enable      [create_bd_port -dir O -from 7 -to 0 adc_enable]
+set adc_valid       [create_bd_port -dir O -from 7 -to 0 adc_valid]
+set adc_data        [create_bd_port -dir O -from 127 -to 0 adc_data]
+set dma_wr          [create_bd_port -dir I dma_wr]
+set dma_sync        [create_bd_port -dir I dma_sync]
+set dma_data        [create_bd_port -dir I -from 127 -to 0 dma_data]
+
+
 # adc peripherals
 
 set axi_ad9671_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core]
@@ -99,6 +108,7 @@ connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_gt/rx_clk_g]
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_gt/rx_clk]
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_core/rx_clk]          
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_jesd/rx_core_clk]
+connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_ports adc_clk]
 
 connect_bd_net -net axi_ad9671_gt_rx_rst            [get_bd_pins axi_ad9671_gt/rx_rst]              [get_bd_pins axi_ad9671_jesd/rx_reset]
 connect_bd_net -net axi_ad9671_gt_rx_sysref         [get_bd_pins axi_ad9671_jesd/rx_sysref]
@@ -113,9 +123,12 @@ connect_bd_net -net axi_ad9671_gt_rx_ip_sof         [get_bd_pins axi_ad9671_gt/r
 connect_bd_net -net axi_ad9671_gt_rx_ip_data        [get_bd_pins axi_ad9671_gt/rx_ip_data]          [get_bd_pins axi_ad9671_jesd/rx_tdata]
 connect_bd_net -net axi_ad9671_gt_rx_data           [get_bd_pins axi_ad9671_gt/rx_data]             [get_bd_pins axi_ad9671_core/rx_data]
 connect_bd_net -net axi_ad9671_core_adc_clk         [get_bd_pins axi_ad9671_core/adc_clk]           [get_bd_pins axi_ad9671_dma/fifo_wr_clk]
-connect_bd_net -net axi_ad9671_core_adc_dwr         [get_bd_pins axi_ad9671_core/adc_dwr]           [get_bd_pins axi_ad9671_dma/fifo_wr_en]
-connect_bd_net -net axi_ad9671_core_adc_dsync       [get_bd_pins axi_ad9671_core/adc_dsync]         [get_bd_pins axi_ad9671_dma/fifo_wr_sync]    
-connect_bd_net -net axi_ad9671_core_adc_ddata       [get_bd_pins axi_ad9671_core/adc_ddata]         [get_bd_pins axi_ad9671_dma/fifo_wr_din]     
+connect_bd_net -net axi_ad9671_core_adc_enable      [get_bd_pins axi_ad9671_core/adc_enable]        [get_bd_ports adc_enable]
+connect_bd_net -net axi_ad9671_core_adc_valid       [get_bd_pins axi_ad9671_core/adc_valid]         [get_bd_ports adc_valid]
+connect_bd_net -net axi_ad9671_core_adc_data        [get_bd_pins axi_ad9671_core/adc_data]          [get_bd_ports adc_data]
+connect_bd_net -net axi_ad9671_core_adc_dwr         [get_bd_ports dma_wr]                           [get_bd_pins axi_ad9671_dma/fifo_wr_en]
+connect_bd_net -net axi_ad9671_core_adc_dsync       [get_bd_ports dma_sync]                         [get_bd_pins axi_ad9671_dma/fifo_wr_sync]    
+connect_bd_net -net axi_ad9671_core_adc_ddata       [get_bd_ports dma_data]                         [get_bd_pins axi_ad9671_dma/fifo_wr_din]     
 connect_bd_net -net axi_ad9671_core_adc_dovf        [get_bd_pins axi_ad9671_core/adc_dovf]          [get_bd_pins axi_ad9671_dma/fifo_wr_overflow]
 connect_bd_net -net axi_ad9671_dma_irq              [get_bd_pins axi_ad9671_dma/irq]                [get_bd_pins sys_concat_intc/In2] 
 

@@ -22,6 +22,8 @@ adi_ip_files axi_ad9680 [list \
   "axi_ad9680.v" ]
 
 adi_ip_properties axi_ad9680
+adi_ip_constraints axi_ad9680 [list \
+  "axi_ad9680_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 

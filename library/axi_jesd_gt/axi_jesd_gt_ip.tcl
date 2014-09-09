@@ -18,6 +18,8 @@ adi_ip_files axi_jesd_gt [list \
   "axi_jesd_gt.v" ]
 
 adi_ip_properties axi_jesd_gt
+adi_ip_constraints axi_jesd_gt [list \
+  "axi_jesd_gt_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 

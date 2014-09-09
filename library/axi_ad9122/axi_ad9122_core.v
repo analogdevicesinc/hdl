@@ -65,13 +65,17 @@ module axi_ad9122_core (
 
   // master/slave
 
-  dac_enable_out,
-  dac_enable_in,
+  dac_sync_out,
+  dac_sync_in,
 
   // dma interface
 
-  dac_drd,
-  dac_ddata,
+  dac_valid_0,
+  dac_enable_0,
+  dac_ddata_0,
+  dac_valid_1,
+  dac_enable_1,
+  dac_ddata_1,
   dac_dovf,
   dac_dunf,
 
@@ -130,13 +134,17 @@ module axi_ad9122_core (
 
   // master/slave
 
-  output          dac_enable_out;
-  input           dac_enable_in;
+  output          dac_sync_out;
+  input           dac_sync_in;
 
   // dma interface
 
-  output          dac_drd;
-  input  [127:0]  dac_ddata;
+  output          dac_valid_0;
+  output          dac_enable_0;
+  input   [63:0]  dac_ddata_0;
+  output          dac_valid_1;
+  output          dac_enable_1;
+  input   [63:0]  dac_ddata_1;
   input           dac_dovf;
   input           dac_dunf;
 
@@ -168,40 +176,14 @@ module axi_ad9122_core (
 
   // internal registers
 
-  reg             dac_enable = 'd0;
-  reg     [15:0]  dac_data_i0 = 'd0;
-  reg     [15:0]  dac_data_i1 = 'd0;
-  reg     [15:0]  dac_data_i2 = 'd0;
-  reg     [15:0]  dac_data_i3 = 'd0;
-  reg     [15:0]  dac_data_q0 = 'd0;
-  reg     [15:0]  dac_data_q1 = 'd0;
-  reg     [15:0]  dac_data_q2 = 'd0;
-  reg     [15:0]  dac_data_q3 = 'd0;
-  reg             dac_frame_i0 = 'd0;
-  reg             dac_frame_i1 = 'd0;
-  reg             dac_frame_i2 = 'd0;
-  reg             dac_frame_i3 = 'd0;
-  reg             dac_frame_q0 = 'd0;
-  reg             dac_frame_q1 = 'd0;
-  reg             dac_frame_q2 = 'd0;
-  reg             dac_frame_q3 = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg             up_ack = 'd0;
 
   // internal signals
 
-  wire            dac_enable_s;
+  wire            dac_sync_s;
   wire            dac_frame_s;
   wire            dac_datafmt_s;
-  wire    [ 3:0]  dac_datasel_s;
-  wire    [15:0]  dac_dds_data_0_0_s;
-  wire    [15:0]  dac_dds_data_0_1_s;
-  wire    [15:0]  dac_dds_data_0_2_s;
-  wire    [15:0]  dac_dds_data_0_3_s;
-  wire    [15:0]  dac_dds_data_1_0_s;
-  wire    [15:0]  dac_dds_data_1_1_s;
-  wire    [15:0]  dac_dds_data_1_2_s;
-  wire    [15:0]  dac_dds_data_1_3_s;
   wire    [31:0]  up_rdata_0_s;
   wire            up_ack_0_s;
   wire    [31:0]  up_rdata_1_s;
@@ -209,60 +191,14 @@ module axi_ad9122_core (
   wire    [31:0]  up_rdata_s;
   wire            up_ack_s;
 
-  // dac dma read
+  // defaults
 
-  assign dac_drd = dac_enable;
+  assign dac_valid_0 = 1'b1;
+  assign dac_valid_1 = 1'b1;
 
   // master/slave (clocks must be synchronous)
 
-  assign dac_enable_s = (PCORE_ID == 0) ? dac_enable_out : dac_enable_in;
-
-  always @(posedge dac_div_clk) begin
-    dac_enable <= dac_enable_s;
-  end
-
-  // dac outputs
-
-  always @(posedge dac_div_clk) begin
-    if (dac_datasel_s[3:1] == 3'd1) begin
-      dac_data_i0 <= dac_ddata[ 15:  0];
-      dac_data_i1 <= dac_ddata[ 47: 32];
-      dac_data_i2 <= dac_ddata[ 79: 64];
-      dac_data_i3 <= dac_ddata[111: 96];
-      dac_data_q0 <= dac_ddata[ 31: 16];
-      dac_data_q1 <= dac_ddata[ 63: 48];
-      dac_data_q2 <= dac_ddata[ 95: 80];
-      dac_data_q3 <= dac_ddata[127:112];
-    end else begin
-      dac_data_i0 <= dac_dds_data_0_0_s;
-      dac_data_i1 <= dac_dds_data_0_1_s;
-      dac_data_i2 <= dac_dds_data_0_2_s;
-      dac_data_i3 <= dac_dds_data_0_3_s;
-      dac_data_q0 <= dac_dds_data_1_0_s;
-      dac_data_q1 <= dac_dds_data_1_1_s;
-      dac_data_q2 <= dac_dds_data_1_2_s;
-      dac_data_q3 <= dac_dds_data_1_3_s;
-    end
-    if (dac_datasel_s[0] == 3'd1) begin
-      dac_frame_i0 <= 1'b1;
-      dac_frame_i1 <= 1'b0;
-      dac_frame_i2 <= 1'b1;
-      dac_frame_i3 <= 1'b0;
-      dac_frame_q0 <= 1'b1;
-      dac_frame_q1 <= 1'b0;
-      dac_frame_q2 <= 1'b1;
-      dac_frame_q3 <= 1'b0;
-    end else begin
-      dac_frame_i0 <= dac_frame_s;
-      dac_frame_i1 <= 1'b0;
-      dac_frame_i2 <= 1'b0;
-      dac_frame_i3 <= 1'b0;
-      dac_frame_q0 <= dac_frame_s;
-      dac_frame_q1 <= 1'b0;
-      dac_frame_q2 <= 1'b0;
-      dac_frame_q3 <= 1'b0;
-    end
-  end
+  assign dac_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
 
   // processor read interface
 
@@ -284,13 +220,13 @@ module axi_ad9122_core (
   i_channel_0 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
-    .dac_dds_data_0 (dac_dds_data_0_0_s),
-    .dac_dds_data_1 (dac_dds_data_0_1_s),
-    .dac_dds_data_2 (dac_dds_data_0_2_s),
-    .dac_dds_data_3 (dac_dds_data_0_3_s),
-    .dac_dds_enable (dac_enable),
+    .dac_enable (dac_enable_0),
+    .dac_data ({dac_data_i3, dac_data_i2, dac_data_i1, dac_data_i0}),
+    .dac_frame ({dac_frame_i3, dac_frame_i2, dac_frame_i1, dac_frame_i0}),
+    .dma_data (dac_ddata_0),
+    .dac_data_frame (dac_frame_s),
+    .dac_data_sync (dac_sync_s),
     .dac_dds_format (dac_datafmt_s),
-    .dac_dds_pattenb (dac_datasel_s[0]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel),
@@ -308,13 +244,13 @@ module axi_ad9122_core (
   i_channel_1 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
-    .dac_dds_data_0 (dac_dds_data_1_0_s),
-    .dac_dds_data_1 (dac_dds_data_1_1_s),
-    .dac_dds_data_2 (dac_dds_data_1_2_s),
-    .dac_dds_data_3 (dac_dds_data_1_3_s),
-    .dac_dds_enable (dac_enable),
+    .dac_enable (dac_enable_1),
+    .dac_data ({dac_data_q3, dac_data_q2, dac_data_q1, dac_data_q0}),
+    .dac_frame ({dac_frame_q3, dac_frame_q2, dac_frame_q1, dac_frame_q0}),
+    .dma_data (dac_ddata_1),
+    .dac_data_frame (dac_frame_s),
+    .dac_data_sync (dac_sync_s),
     .dac_dds_format (dac_datafmt_s),
-    .dac_dds_pattenb (dac_datasel_s[0]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_sel),
@@ -330,13 +266,12 @@ module axi_ad9122_core (
     .mmcm_rst (mmcm_rst),
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),
-    .dac_enable (dac_enable_out),
+    .dac_sync (dac_sync_out),
     .dac_frame (dac_frame_s),
     .dac_par_type (),
     .dac_par_enb (),
     .dac_r1_mode (),
     .dac_datafmt (dac_datafmt_s),
-    .dac_datasel (dac_datasel_s),
     .dac_datarate (),
     .dac_status (dac_status),
     .dac_status_ovf (dac_dovf),

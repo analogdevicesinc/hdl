@@ -4,17 +4,11 @@ load_package flow
 source ../../scripts/adi_env.tcl
 project_new ad9671_fmc_a5gt -overwrite
 
-set_global_assignment -name FAMILY "Arria V"
-set_global_assignment -name DEVICE 5AGTFD7K3F40I3
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name QSYS_FILE system_bd.qsys
+source $ad_hdl_dir/projects/common/a5gt/a5gt_system_assign.tcl
+
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_jesd_align.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_xcvr_rx_rst.v
 set_global_assignment -name VERILOG_FILE ../common/ad9671_fmc_spi.v
-set_global_assignment -name VERILOG_FILE system_top.v
-
-source $ad_hdl_dir/projects/common/a5gt/a5gt_system_assign.tcl
 
 # reference clock
 
@@ -86,16 +80,6 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to prci_sdo
 set_instance_assignment -name IO_STANDARD "2.5 V" -to prcq_sck
 set_instance_assignment -name IO_STANDARD "2.5 V" -to prcq_cnv
 set_instance_assignment -name IO_STANDARD "2.5 V" -to prcq_sdo
-
-# globals
-
-set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
-set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
-set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
-set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
-set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
-set_global_assignment -name TIMEQUEST_REPORT_SCRIPT system_timing.tcl
-set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
 execute_flow -compile
 

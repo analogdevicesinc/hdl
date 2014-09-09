@@ -63,7 +63,7 @@ module usdrx1_spi (
 
   inout           spi_fout_sdio;
   inout           spi_afe_sdio;
-  input           spi_clk_sdio;
+  inout           spi_clk_sdio;
 
   // internal registers
 

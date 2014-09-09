@@ -161,6 +161,9 @@ if {$sys_zynq == 0} {
 if {$sys_zynq == 0} {
 
   set_property -dict [list CONFIG.NUM_SI {11}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S08_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S09_HAS_REGSLICE {4}] $axi_mem_interconnect
+# set_property -dict [list CONFIG.S10_HAS_REGSLICE {4}] $axi_mem_interconnect
   set_property -dict [list CONFIG.NUM_PORTS {7}] $sys_concat_intc
 }
 
@@ -417,14 +420,14 @@ if {$sys_zynq == 1} {
 if {$sys_zynq == 0} {
 
   connect_bd_intf_net -intf_net axi_mem_interconnect_s09_axi [get_bd_intf_pins axi_mem_interconnect/S09_AXI] [get_bd_intf_pins axi_ad9144_dma/m_src_axi]
-  connect_bd_net -net sys_mem_clk [get_bd_pins axi_mem_interconnect/S09_ACLK] $sys_mem_clk_source
-  connect_bd_net -net sys_mem_clk [get_bd_pins axi_ad9144_dma/m_src_axi_aclk] 
+  connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/S09_ACLK] $sys_200m_clk_source
+  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9144_dma/m_src_axi_aclk] 
   connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_interconnect/S09_ARESETN] $sys_resetn_source
   connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_ad9144_dma/m_src_axi_aresetn] 
 
   connect_bd_intf_net -intf_net axi_mem_interconnect_s10_axi [get_bd_intf_pins axi_mem_interconnect/S10_AXI] [get_bd_intf_pins axi_ad9680_dma/m_dest_axi]    
-  connect_bd_net -net sys_mem_clk [get_bd_pins axi_mem_interconnect/S10_ACLK] $sys_mem_clk_source
-  connect_bd_net -net sys_mem_clk [get_bd_pins axi_ad9680_dma/m_dest_axi_aclk] 
+  connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/S10_ACLK] $sys_200m_clk_source
+  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9680_dma/m_dest_axi_aclk] 
   connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_mem_interconnect/S10_ARESETN] $sys_resetn_source
   connect_bd_net -net sys_cpu_rstn [get_bd_pins axi_ad9680_dma/m_dest_axi_aresetn] 
 
@@ -457,6 +460,10 @@ if {$sys_zynq == 0} {
 
   # ila
 
+set ila_gt_enabled 0
+
+if {$ila_gt_enabled == 1} {
+
   set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_jesd_rx_mon
@@ -484,6 +491,17 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_daq2_gt_tx_clk            [get_bd_pins ila_jesd_tx_mon/CLK]
   connect_bd_net -net axi_daq2_gt_tx_mon_data       [get_bd_pins ila_jesd_tx_mon/PROBE0]
   connect_bd_net -net axi_daq2_gt_tx_mon_trigger    [get_bd_pins ila_jesd_tx_mon/PROBE1]
+
+} else {
+
+  set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
+  set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
+  set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_jesd_rx_mon
+  set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_jesd_rx_mon
+
+  connect_bd_net -net axi_daq2_gt_rx_clk            [get_bd_pins ila_jesd_rx_mon/CLK]
+  connect_bd_net -net axi_ad9680_adc_ddata          [get_bd_pins ila_jesd_rx_mon/PROBE0]
+}
 
   # address map
 

@@ -49,6 +49,7 @@
 
     # channel packing for the ADC
     set util_adc_pack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 util_adc_pack]
+    set_property -dict [list CONFIG.CHANNELS {4}] $util_adc_pack
 
     set util_dac_unpack [create_bd_cell -type ip -vlnv analog.com:user:util_dac_unpack:1.0 util_dac_unpack]
 
@@ -72,7 +73,7 @@ if {$sys_zynq == 1} {
     set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_adc_dma
     set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9361_adc_dma
     set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_adc_dma
-    set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}]  $axi_ad9361_adc_dma
+    set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}]  $axi_ad9361_adc_dma
 
 if {$sys_zynq == 1} {
     set axi_ad9361_adc_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9361_adc_dma_interconnect]

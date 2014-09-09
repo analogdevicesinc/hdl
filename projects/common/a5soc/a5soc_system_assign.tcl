@@ -1,12 +1,21 @@
 
+# device settings
+
+set_global_assignment -name FAMILY "Arria V"
+set_global_assignment -name DEVICE 5ASTFD5K3F40I3ES
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name QSYS_FILE system_bd.qsys
+set_global_assignment -name VERILOG_FILE system_top.v
+
 # clocks
 
-set_location_assignment PIN_AL20 -to sys_clk
+set_location_assignment PIN_AU32 -to sys_clk
 set_instance_assignment -name IO_STANDARD "1.5 V" -to sys_clk
 
 # hdmi
 # data[6] (C23) and data[10] (C22) are not populated
-# replacing with C19) and C18 for now
+# replacing with C19 and C18 for now
 
 set_location_assignment PIN_A21 -to hdmi_out_clk
 set_location_assignment PIN_B25 -to hdmi_data[0]
@@ -43,114 +52,16 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[13]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[14]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[15]
 
-# ethernet
+# i2c (hdmi)
 
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_tx_clk
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_tx_ctl
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_txd0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_txd1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_txd2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_txd3
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rx_clk
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rx_ctl
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd3
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_mdc
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_mdio
-
-# qspi
-
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_ss0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_clk
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_io0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_io1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_io2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_io3
-
-# sdio
-
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_clk
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_cmd
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_d0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_d1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_d2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_d3
-
-# usb
-
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_clk
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_stp
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_dir
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_nxt
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d3
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d4
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d5
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d6
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d7
-
-# uart
-
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart0_rx
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart0_tx
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart1_rx
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart1_tx
-
-# i2c
-
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c0_scl
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c0_sda
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to i2c0_scl
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to i2c0_sda
-
-# trace
-
-set_instance_assignment -name SLEW_RATE 1 -to trace_clk
-set_instance_assignment -name SLEW_RATE 1 -to trace_d0
-set_instance_assignment -name SLEW_RATE 1 -to trace_d1
-set_instance_assignment -name SLEW_RATE 1 -to trace_d2
-set_instance_assignment -name SLEW_RATE 1 -to trace_d3
-set_instance_assignment -name SLEW_RATE 1 -to trace_d4
-set_instance_assignment -name SLEW_RATE 1 -to trace_d5
-set_instance_assignment -name SLEW_RATE 1 -to trace_d6
-set_instance_assignment -name SLEW_RATE 1 -to trace_d7
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to trace_clk
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to trace_d0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to trace_d1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to trace_d2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to trace_d3
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to trace_d4
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to trace_d5
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to trace_d6
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to trace_d7
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to trace_clk
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to trace_d0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to trace_d1
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to trace_d2
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to trace_d3
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to trace_d4
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to trace_d5
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to trace_d6
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to trace_d7
-
-# gpio
-
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio00
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio17
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio18
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio22
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio24
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio26
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio27
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio35
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio40
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio41
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio42
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to gpio_gpio43
+set_location_assignment PIN_F26 -to hdmi_scl
+set_location_assignment PIN_G26 -to hdmi_sda
+set_location_assignment PIN_N23 -to hdmi_rstn
+set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_scl
+set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_sda
+set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_rstn
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hdmi_scl
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hdmi_sda
 
 # led & switches
 
@@ -180,6 +91,61 @@ set_instance_assignment -name IO_STANDARD "1.5 V" -to dip_switches[3]
 set_instance_assignment -name IO_STANDARD "1.5 V" -to dip_switches[2]
 set_instance_assignment -name IO_STANDARD "1.5 V" -to dip_switches[1]
 set_instance_assignment -name IO_STANDARD "1.5 V" -to dip_switches[0]
+
+# uart
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart0_rx
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart0_tx
+
+# usb
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_stp
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_dir
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_nxt
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d4
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d5
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d6
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb1_d7
+
+# sdio
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_cmd
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_d0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_d1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_d2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdio_d3
+
+# qspi
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_ss0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_io0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_io1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_io2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qspi_io3
+
+# ethernet
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_tx_clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_tx_ctl
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_txd0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_txd1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_txd2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_txd3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rx_clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rx_ctl
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_rxd3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_mdc
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to eth1_mdio
 
 # ddr
 
@@ -515,12 +481,19 @@ set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to i_system_bd|sys_h
 set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
 set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
+set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
 set_global_assignment -name ECO_REGENERATE_REPORT ON
 set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
 set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
 set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
+set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
 set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name TIMEQUEST_REPORT_SCRIPT system_timing.tcl
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
+
+
+
+
 

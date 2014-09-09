@@ -25,9 +25,16 @@ set gpio_ad9625_i   [create_bd_port -dir I -from 18 -to 0 gpio_ad9625_i]
 set gpio_ad9625_o   [create_bd_port -dir O -from 18 -to 0 gpio_ad9625_o]
 set gpio_ad9625_t   [create_bd_port -dir O -from 18 -to 0 gpio_ad9625_t]
 
-set adc_ddata_0     [create_bd_port -dir O -from 255 -to 0 adc_ddata_0]
-set adc_ddata_1     [create_bd_port -dir O -from 255 -to 0 adc_ddata_1]
-set adc_ddata       [create_bd_port -dir I -from 511 -to 0 adc_ddata]
+set adc_clk         [create_bd_port -dir O adc_clk]
+set adc_valid_0     [create_bd_port -dir O adc_valid_0]
+set adc_enable_0    [create_bd_port -dir O adc_enable_0]
+set adc_data_0      [create_bd_port -dir O -from 255 -to 0 adc_data_0]
+set adc_valid_1     [create_bd_port -dir O adc_valid_1]
+set adc_enable_1    [create_bd_port -dir O adc_enable_1]
+set adc_data_1      [create_bd_port -dir O -from 255 -to 0 adc_data_1]
+set dma_wr          [create_bd_port -dir I dma_wr]
+set dma_sync        [create_bd_port -dir I dma_sync]
+set dma_data        [create_bd_port -dir I -from 511 -to 0 dma_data]
 
 # adc peripherals
 
@@ -143,6 +150,7 @@ connect_bd_net -net axi_ad9625_0_gt_rx_clk            [get_bd_pins axi_ad9625_1_
 connect_bd_net -net axi_ad9625_0_gt_rx_clk            [get_bd_pins axi_ad9625_1_core/rx_clk]
 connect_bd_net -net axi_ad9625_0_gt_rx_clk            [get_bd_pins axi_ad9625_1_jesd/rx_core_clk]
 connect_bd_net -net axi_ad9625_0_gt_rx_clk            [get_bd_pins axi_ad9625_dma/fifo_wr_clk]
+connect_bd_net -net axi_ad9625_0_gt_rx_clk            [get_bd_ports adc_clk]
 
 connect_bd_net -net axi_ad9625_0_gt_rx_sysref         [get_bd_pins axi_ad9625_0_jesd/rx_sysref]
 connect_bd_net -net axi_ad9625_0_gt_rx_sysref         [get_bd_pins axi_ad9625_1_jesd/rx_sysref]
@@ -173,13 +181,18 @@ connect_bd_net -net axi_ad9625_1_gt_rx_ip_data        [get_bd_pins axi_ad9625_1_
 connect_bd_net -net axi_ad9625_0_gt_rx_data           [get_bd_pins axi_ad9625_0_gt/rx_data]           [get_bd_pins axi_ad9625_0_core/rx_data]
 connect_bd_net -net axi_ad9625_1_gt_rx_data           [get_bd_pins axi_ad9625_1_gt/rx_data]           [get_bd_pins axi_ad9625_1_core/rx_data]
 
-connect_bd_net -net axi_ad9625_0_core_adc_dwr         [get_bd_pins axi_ad9625_0_core/adc_dwr]         [get_bd_pins axi_ad9625_dma/fifo_wr_en]
-connect_bd_net -net axi_ad9625_0_core_adc_dsync       [get_bd_pins axi_ad9625_0_core/adc_dsync]       [get_bd_pins axi_ad9625_dma/fifo_wr_sync]
-connect_bd_net -net axi_ad9625_0_core_adc_dovf        [get_bd_pins axi_ad9625_0_core/adc_dovf]        [get_bd_pins axi_ad9625_dma/fifo_wr_overflow]
+connect_bd_net -net axi_ad9625_0_core_adc_valid       [get_bd_pins axi_ad9625_0_core/adc_valid]       [get_bd_ports adc_valid_0]
+connect_bd_net -net axi_ad9625_0_core_adc_enable      [get_bd_pins axi_ad9625_0_core/adc_enable]      [get_bd_ports adc_enable_0]
+connect_bd_net -net axi_ad9625_0_core_adc_data        [get_bd_pins axi_ad9625_0_core/adc_data]        [get_bd_ports adc_data_0]
+connect_bd_net -net axi_ad9625_1_core_adc_valid       [get_bd_pins axi_ad9625_1_core/adc_valid]       [get_bd_ports adc_valid_1]
+connect_bd_net -net axi_ad9625_1_core_adc_enable      [get_bd_pins axi_ad9625_1_core/adc_enable]      [get_bd_ports adc_enable_1]
+connect_bd_net -net axi_ad9625_1_core_adc_data        [get_bd_pins axi_ad9625_1_core/adc_data]        [get_bd_ports adc_data_1]
 
-connect_bd_net -net axi_ad9625_0_core_adc_ddata       [get_bd_pins axi_ad9625_0_core/adc_ddata]       [get_bd_ports adc_ddata_0]
-connect_bd_net -net axi_ad9625_1_core_adc_ddata       [get_bd_pins axi_ad9625_1_core/adc_ddata]       [get_bd_ports adc_ddata_1]
-connect_bd_net -net axi_ad9625_dma_adc_ddata          [get_bd_pins axi_ad9625_dma/fifo_wr_din]        [get_bd_ports adc_ddata]
+connect_bd_net -net axi_ad9625_dma_adc_dwr            [get_bd_pins axi_ad9625_dma/fifo_wr_en]         [get_bd_ports dma_wr]
+connect_bd_net -net axi_ad9625_dma_adc_dsync          [get_bd_pins axi_ad9625_dma/fifo_wr_sync]       [get_bd_ports dma_sync]
+connect_bd_net -net axi_ad9625_dma_adc_ddata          [get_bd_pins axi_ad9625_dma/fifo_wr_din]        [get_bd_ports dma_data]
+
+connect_bd_net -net axi_ad9625_dma_adc_dovf           [get_bd_pins axi_ad9625_0_core/adc_dovf]        [get_bd_pins axi_ad9625_dma/fifo_wr_overflow]
 connect_bd_net -net axi_ad9625_dma_irq                [get_bd_pins axi_ad9625_dma/irq]                [get_bd_pins sys_concat_intc/In2]
 
 # interconnect (cpu)

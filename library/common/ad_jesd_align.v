@@ -59,19 +59,24 @@ module ad_jesd_align (
   // internal registers
 
   reg     [31:0]  rx_ip_data_d = 'd0;
+  reg     [ 3:0]  rx_sof_d = 'd0;
   reg     [31:0]  rx_data = 'd0;
 
   // dword may contain more than one frame per clock
 
   always @(posedge rx_clk) begin
-    rx_ip_data_d <= rx_ip_data;
-    if (rx_sof[0] == 1'b1) begin
+    rx_ip_data_d  <= rx_ip_data;
+    if (rx_sof != 4'h0)
+    begin
+      rx_sof_d      <= rx_sof;
+    end
+    if (rx_sof_d[0] == 1'b1) begin
       rx_data <= rx_ip_data;
-    end else if (rx_sof[1] == 1'b1) begin
+    end else if (rx_sof_d[1] == 1'b1) begin
       rx_data <= {rx_ip_data[ 7:0], rx_ip_data_d[31: 8]};
-    end else if (rx_sof[2] == 1'b1) begin
+    end else if (rx_sof_d[2] == 1'b1) begin
       rx_data <= {rx_ip_data[15:0], rx_ip_data_d[31:16]};
-    end else if (rx_sof[3] == 1'b1) begin
+    end else if (rx_sof_d[3] == 1'b1) begin
       rx_data <= {rx_ip_data[23:0], rx_ip_data_d[31:24]};
     end else begin
       rx_data <= 32'd0;

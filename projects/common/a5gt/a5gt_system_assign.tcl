@@ -1,4 +1,13 @@
 
+# device settings
+
+set_global_assignment -name FAMILY "Arria V"
+set_global_assignment -name DEVICE 5AGTFD7K3F40I3
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name QSYS_FILE system_bd.qsys
+set_global_assignment -name VERILOG_FILE system_top.v
+
 # clocks and resets
 
 set_location_assignment PIN_C34   -to sys_clk
@@ -654,77 +663,102 @@ set_instance_assignment -name MEM_INTERFACE_DELAY_CHAIN_CONFIG FLEXIBLE_TIMING -
 set_instance_assignment -name MEM_INTERFACE_DELAY_CHAIN_CONFIG FLEXIBLE_TIMING -to ddr3_dq[30] 
 set_instance_assignment -name MEM_INTERFACE_DELAY_CHAIN_CONFIG FLEXIBLE_TIMING -to ddr3_dq[31] 
 
-set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to i_fmcjesdadc1|sys_ddr3_cntrl 
+set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to i_system_bd|sys_ddr3_cntrl 
 
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_fmcjesdadc1|sys_ddr3_cntrl|pll0|pll_addr_cmd_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_fmcjesdadc1|sys_ddr3_cntrl|pll0|pll_avl_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_fmcjesdadc1|sys_ddr3_cntrl|pll0|pll_config_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to i_fmcjesdadc1|sys_ddr3_cntrl|pll0|pll_afi_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to i_fmcjesdadc1|sys_ddr3_cntrl|pll0|pll_hr_clk 
+set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_addr_cmd_clk 
+set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_avl_clk 
+set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_config_clk 
+set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_afi_clk 
+set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_hr_clk 
 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[0].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[1].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[2].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[3].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[4].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[5].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[6].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[7].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[2] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[3] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[4] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[5] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[6] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[7] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[0] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[2] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[3] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[4] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[5] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[6] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[7] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|ureset|phy_reset_mem_stable_n 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|p0|umemphy|ureset|phy_reset_n 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_fmcjesdadc1|sys_ddr3_cntrl|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[0].read_capture_clk_buffer 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[1].read_capture_clk_buffer 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[2].read_capture_clk_buffer 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[3].read_capture_clk_buffer 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[4].read_capture_clk_buffer 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[5].read_capture_clk_buffer 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[6].read_capture_clk_buffer 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[7].read_capture_clk_buffer 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[2] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[3] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[4] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[5] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[6] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[7] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[0] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[2] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[3] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[4] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[5] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[6] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[7] 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|ureset|phy_reset_mem_stable_n 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|ureset|phy_reset_n 
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n 
 
 # ethernet interface
 
-set_location_assignment PIN_M14 -to eth_rx_clk
-set_location_assignment PIN_N14 -to eth_rx_data[0]
-set_location_assignment PIN_N15 -to eth_rx_data[1]
-set_location_assignment PIN_P15 -to eth_rx_data[2]
-set_location_assignment PIN_B9  -to eth_rx_data[3]
-set_location_assignment PIN_C9  -to eth_rx_cntrl
-set_location_assignment PIN_K18 -to eth_tx_clk_out
-set_location_assignment PIN_L18 -to eth_tx_data[0]
-set_location_assignment PIN_R11 -to eth_tx_data[1]
-set_location_assignment PIN_T11 -to eth_tx_data[2]
-set_location_assignment PIN_H9  -to eth_tx_data[3]
-set_location_assignment PIN_J9  -to eth_tx_cntrl
-set_location_assignment PIN_F7  -to eth_mdc
-set_location_assignment PIN_G7  -to eth_mdio_i
-set_location_assignment PIN_F9  -to eth_mdio_o
-set_location_assignment PIN_G9  -to eth_mdio_t
+set_location_assignment PIN_P12 -to eth_rx_clk
+set_location_assignment PIN_R12 -to "eth_rx_clk(n)"
+set_location_assignment PIN_D13 -to eth_rx_cntrl
+set_location_assignment PIN_E13 -to "eth_rx_cntrl(n)"
+set_location_assignment PIN_A13 -to eth_rx_data[0]
+set_location_assignment PIN_A12 -to "eth_rx_data[0](n)"
+set_location_assignment PIN_D12 -to eth_rx_data[1]
+set_location_assignment PIN_E12 -to "eth_rx_data[1](n)"
+set_location_assignment PIN_P13 -to eth_rx_data[2]
+set_location_assignment PIN_R13 -to "eth_rx_data[2](n)"
+set_location_assignment PIN_B10 -to eth_rx_data[3]
+set_location_assignment PIN_C10 -to "eth_rx_data[3](n)"
 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_rx_clk
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_rx_data[0]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_rx_data[1]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_rx_data[2]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_rx_data[3]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_rx_cntrl[4]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_tx_clk_out[5]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_tx_data[0]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_tx_data[1]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_tx_data[2]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_tx_data[3]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_tx_cntrl
+set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_clk
+set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_cntrl
+set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[0]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[1]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[2]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[3]
+
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_clk
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_cntrl
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_data[0]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_data[1]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_data[2]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_data[3]
+
+set_location_assignment PIN_M13 -to eth_tx_clk_out
+set_location_assignment PIN_N13 -to "eth_tx_clk_out(n)"
+set_location_assignment PIN_J11 -to eth_tx_cntrl
+set_location_assignment PIN_K11 -to "eth_tx_cntrl(n)"
+set_location_assignment PIN_K12 -to eth_tx_data[0]
+set_location_assignment PIN_L12 -to "eth_tx_data[0](n)"
+set_location_assignment PIN_F12 -to eth_tx_data[1]
+set_location_assignment PIN_G12 -to "eth_tx_data[1](n)"
+set_location_assignment PIN_H10 -to eth_tx_data[2]
+set_location_assignment PIN_J10 -to "eth_tx_data[2](n)"
+set_location_assignment PIN_A14 -to eth_tx_data[3]
+set_location_assignment PIN_B13 -to "eth_tx_data[3](n)"
+
+set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_clk_out
+set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_cntrl
+set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[0]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[1]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[2]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[3]
+
+set_location_assignment PIN_E15 -to eth_mdc
+set_location_assignment PIN_F15 -to eth_mdio_i
+set_location_assignment PIN_G16 -to eth_mdio_o
+set_location_assignment PIN_H16 -to eth_mdio_t
+
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdc
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdio_i
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdio_o
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdio_t
+
+set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to eth_rx_clk
 
 # leds
 
@@ -783,5 +817,15 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[4]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[5]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[6]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[7]
+
+# globals
+
+set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
+set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
+set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
+set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
+set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
+set_global_assignment -name TIMEQUEST_REPORT_SCRIPT system_timing.tcl
+set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
 

@@ -110,3 +110,10 @@ set_property PACKAGE_PIN M12 [get_ports vn_in]
 set_property IOSTANDARD LVCMOS25 [get_ports vn_in]
 set_property PACKAGE_PIN L11 [get_ports vp_in]
 set_property IOSTANDARD LVCMOS25 [get_ports vp_in]
+
+
+create_clock -name ctrl_clk   -period 20.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
+create_clock -name ps7_clk_2  -period 20.00 [get_pins i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]]
+
+set_clock_groups -asynchronous -group {ctrl_clk}
+set_clock_groups -asynchronous -group {ps7_clk_2}
