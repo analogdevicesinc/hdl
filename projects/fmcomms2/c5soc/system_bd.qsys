@@ -937,7 +937,7 @@
   <parameter name="PCORE_AXIM_ID_WIDTH" value="3" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
-  <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
+  <parameter name="C_DMA_LENGTH_WIDTH" value="24" />
   <parameter name="C_2D_TRANSFER" value="0" />
   <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
   <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
@@ -956,7 +956,7 @@
   <parameter name="PCORE_AXIM_ID_WIDTH" value="3" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
-  <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
+  <parameter name="C_DMA_LENGTH_WIDTH" value="24" />
   <parameter name="C_2D_TRANSFER" value="0" />
   <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
   <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
