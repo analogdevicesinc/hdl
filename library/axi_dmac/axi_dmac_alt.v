@@ -193,7 +193,7 @@ module axi_dmac_alt (
   parameter PCORE_AXIM_ID_WIDTH = 3;
   parameter C_DMA_DATA_WIDTH_SRC = 64;
   parameter C_DMA_DATA_WIDTH_DEST = 64;
-  parameter C_DMA_LENGTH_WIDTH = 14;
+  parameter C_DMA_LENGTH_WIDTH = 24;
   parameter C_2D_TRANSFER = 1;
   parameter C_CLKS_ASYNC_REQ_SRC = 1;
   parameter C_CLKS_ASYNC_SRC_DEST = 1;
