@@ -151,7 +151,7 @@ module up_axi (
     (up_axi_awvalid & up_axi_wvalid & ~up_axi_access) : 1'b0;
 
   assign up_axi_rd_s = ((up_axi_araddr >= PCORE_BASEADDR) && (up_axi_araddr <= PCORE_HIGHADDR)) ?
-    (up_axi_arvalid & ~up_axi_access) : 1'b0;
+    (up_axi_arvalid & ~up_axi_access & ~up_axi_wr_s) : 1'b0;
 
   assign up_axi_ack_s = ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) ||
     ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1));
