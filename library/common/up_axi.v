@@ -136,6 +136,7 @@ module up_axi (
 
   wire            up_axi_wr_s;
   wire            up_axi_rd_s;
+  wire            up_axi_ack_s;
   wire    [31:0]  up_rdata_s;
   wire            up_ack_s;
 
@@ -151,6 +152,9 @@ module up_axi (
 
   assign up_axi_rd_s = ((up_axi_araddr >= PCORE_BASEADDR) && (up_axi_araddr <= PCORE_HIGHADDR)) ?
     (up_axi_arvalid & ~up_axi_access) : 1'b0;
+
+  assign up_axi_ack_s = ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) ||
+    ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1));
 
   // return address and data channel ready right away, response depends on ack
  
@@ -202,7 +206,7 @@ module up_axi (
       up_wdata <= 'd0;
     end else begin
       if (up_axi_access == 1'b1) begin
-        if (up_ack_s == 1'b1) begin
+        if (up_axi_ack_s == 1'b1) begin
           up_axi_access <= 1'b0;
         end
         up_sel <= 1'b0;
