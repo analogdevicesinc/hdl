@@ -119,7 +119,9 @@ module system_top (
   vga_sync_n,
   vga_hs,
   vga_vs,
-  vga_data,
+  vga_r,
+  vga_g,
+  vga_b,
 
   // data interface
 
@@ -221,7 +223,9 @@ module system_top (
   output            vga_sync_n;
   output            vga_hs;
   output            vga_vs;
-  output  [ 23:0]   vga_data;
+  output  [  7:0]   vga_r;
+  output  [  7:0]   vga_g;
+  output  [  7:0]   vga_b;
 
   // data interface
 
@@ -251,9 +255,20 @@ module system_top (
 
   // internal signals
 
-  wire              adc_enable;
-  wire              adc_valid;
+  wire              adc_enable_i0;
+  wire              adc_enable_q0;
+  wire              adc_enable_i1;
+  wire              adc_enable_q2;
+  wire              adc_valid_i0;
+  wire              adc_valid_q0;
+  wire              adc_valid_i1;
+  wire              adc_valid_q1;
   wire              adc_dwr;
+  wire              adc_dsync;
+  wire    [ 15:0]   adc_chan_i0;
+  wire    [ 15:0]   adc_chan_q0;
+  wire    [ 15:0]   adc_chan_i1;
+  wire    [ 15:0]   adc_chan_q1;
   wire    [ 63:0]   adc_ddata;
   wire              adc_dovf;
   wire              dac_enable;
@@ -263,18 +278,21 @@ module system_top (
   wire              dac_dunf;
   wire    [111:0]   dev_dbg_data;
   wire    [ 61:0]   dev_l_dbg_data;
+  wire              vga_pixel_clock;
+  wire              vid_v_sync;
+  wire              vid_h_sync;
+  wire    [7:0]     vid_r,vid_g,vid_b;
 
   // defaults
 
   assign adc_drd = dac_enable & dac_valid;
-  assign adc_dwr = adc_enable & adc_valid;
-
-  assign vga_clk = 1'd0;
-  assign vga_blank_n = 1'd0;
-  assign vga_sync_n = 1'd0;
-  assign vga_hs = 1'd0;
-  assign vga_vs = 1'd0;
-  assign vga_data = 24'd0;
+  
+  assign vga_clk = vga_pixel_clock;
+  assign vga_blank_n = 1'b1;
+  assign vga_sync_n = 1'b0;
+  assign vga_hs = vid_h_sync;
+  assign vga_vs = vid_v_sync;
+  assign {vga_b,vga_g,vga_r} =  {vid_b,vid_g,vid_r};
 
   assign ad9361_resetb = 1'b1;
 
@@ -369,15 +387,15 @@ module system_top (
     .sys_gpio_external_connection_in_port ({16'd0, 4'd0, led, push_buttons, dip_switches}),
     .sys_gpio_external_connection_out_port ({gpio_open[31:16], gpio_open[15:12], led, gpio_open[7:0]}),
     .sys_hps_h2f_reset_reset_n (sys_resetn),
-		.sys_hps_spim0_txd (spi_mosi),
-		.sys_hps_spim0_rxd (spi_miso),
+		.sys_hps_spim0_txd (),
+		.sys_hps_spim0_rxd (),
 		.sys_hps_spim0_ss_in_n (1'b1),
 		.sys_hps_spim0_ssi_oe_n (),
-		.sys_hps_spim0_ss_0_n (spi_csn),
+		.sys_hps_spim0_ss_0_n (),
 		.sys_hps_spim0_ss_1_n (),
 		.sys_hps_spim0_ss_2_n (),
 		.sys_hps_spim0_ss_3_n (),
-		.sys_hps_spim0_sclk_out_clk (spi_clk),
+		.sys_hps_spim0_sclk_out_clk (),
 		.axi_ad9361_device_clock_clk (clk),
 		.axi_ad9361_device_if_rx_clk_in_p (rx_clk_in),
 		.axi_ad9361_device_if_rx_clk_in_n (1'b0),
@@ -394,18 +412,18 @@ module system_top (
 		.axi_ad9361_master_if_l_clk (clk),
 		.axi_ad9361_master_if_dac_sync_in (1'b0),
 		.axi_ad9361_master_if_dac_sync_out (),
-		.axi_ad9361_dma_if_adc_enable_i0 (adc_enable),
-		.axi_ad9361_dma_if_adc_valid_i0 (adc_valid),
-		.axi_ad9361_dma_if_adc_data_i0 (adc_ddata[15:0]),
-		.axi_ad9361_dma_if_adc_enable_q0 (),
-		.axi_ad9361_dma_if_adc_valid_q0 (),
-		.axi_ad9361_dma_if_adc_data_q0 (adc_ddata[31:16]),
-		.axi_ad9361_dma_if_adc_enable_i1 (),
-		.axi_ad9361_dma_if_adc_valid_i1 (),
-		.axi_ad9361_dma_if_adc_data_i1 (adc_ddata[47:32]),
-		.axi_ad9361_dma_if_adc_enable_q1 (),
-		.axi_ad9361_dma_if_adc_valid_q1 (),
-		.axi_ad9361_dma_if_adc_data_q1 (adc_ddata[63:48]),
+		.axi_ad9361_dma_if_adc_enable_i0 (adc_enable_i0),
+		.axi_ad9361_dma_if_adc_valid_i0 (adc_valid_i0),
+		.axi_ad9361_dma_if_adc_data_i0 (adc_chan_i0),
+		.axi_ad9361_dma_if_adc_enable_q0 (adc_enable_q0),
+		.axi_ad9361_dma_if_adc_valid_q0 (adc_valid_q0),
+		.axi_ad9361_dma_if_adc_data_q0 (adc_chan_q0),
+		.axi_ad9361_dma_if_adc_enable_i1 (adc_enable_i1),
+		.axi_ad9361_dma_if_adc_valid_i1 (adc_valid_i1),
+		.axi_ad9361_dma_if_adc_data_i1 (adc_chan_i1),
+		.axi_ad9361_dma_if_adc_enable_q1 (adc_enable_q1),
+		.axi_ad9361_dma_if_adc_valid_q1 (adc_valid_q1),
+		.axi_ad9361_dma_if_adc_data_q1 (adc_chan_q1),
 		.axi_ad9361_dma_if_adc_dovf (adc_dovf),
 		.axi_ad9361_dma_if_adc_dunf (),
 		.axi_ad9361_dma_if_dac_enable_i0 (dac_enable),
@@ -433,7 +451,37 @@ module system_top (
 		.axi_dmac_adc_fifo_wr_if_ovf (adc_dovf),
 		.axi_dmac_adc_fifo_wr_if_wren (adc_dwr),
 		.axi_dmac_adc_fifo_wr_if_data (adc_ddata),
-		.axi_dmac_adc_fifo_wr_if_sync (1'b1));
+		.axi_dmac_adc_fifo_wr_if_sync (adc_dsync),
+		.spi_ad9361_external_MISO (spi_miso),
+		.spi_ad9361_external_MOSI (spi_mosi),
+		.spi_ad9361_external_SCLK (spi_clk),
+		.spi_ad9361_external_SS_n (spi_csn),
+		.vga_pixel_clock_bridge_out_clk_clk (vga_pixel_clock),
+		.vga_clock_video_output_clocked_video_vid_clk (vga_pixel_clock),
+		.vga_clock_video_output_clocked_video_vid_data ({vid_r,vid_g,vid_b}),
+		.vga_clock_video_output_clocked_video_underflow (),
+		.vga_clock_video_output_clocked_video_vid_datavalid (),
+		.vga_clock_video_output_clocked_video_vid_v_sync (vid_v_sync),
+		.vga_clock_video_output_clocked_video_vid_h_sync (vid_h_sync),
+		.vga_clock_video_output_clocked_video_vid_f (),
+		.vga_clock_video_output_clocked_video_vid_h (),
+		.vga_clock_video_output_clocked_video_vid_v (),
+		.adc_pack_data_clock_clk (clk),
+		.adc_pack_channels_data_chan_enable_0 (adc_enable_i0),
+		.adc_pack_channels_data_chan_valid_0 (adc_valid_i0),
+		.adc_pack_channels_data_chan_data_0 (adc_chan_i0),
+		.adc_pack_channels_data_chan_enable_1 (adc_enable_q0),
+		.adc_pack_channels_data_chan_valid_1 (adc_valid_q0),
+		.adc_pack_channels_data_chan_data_1 (adc_chan_q0),
+		.adc_pack_channels_data_chan_enable_2 (adc_enable_i1),
+		.adc_pack_channels_data_chan_valid_2 (adc_valid_i1),
+		.adc_pack_channels_data_chan_data_2 (adc_chan_i1),
+		.adc_pack_channels_data_chan_enable_3 (adc_enable_q1),
+		.adc_pack_channels_data_chan_valid_3 (adc_valid_q1),
+		.adc_pack_channels_data_chan_data_3 (adc_chan_q1),
+		.adc_pack_channels_data_dvalid (adc_dwr),
+		.adc_pack_channels_data_dsync (adc_dsync),
+		.adc_pack_channels_data_ddata (adc_ddata));
 
 endmodule
 

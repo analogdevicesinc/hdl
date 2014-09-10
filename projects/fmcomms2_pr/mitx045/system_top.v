@@ -187,15 +187,17 @@ module system_top (
   wire            clk;
   wire            dma_dac_dunf;
   wire            core_dac_dunf;
-  wire    [63:0]  dma_dac_ddata;
-  wire    [63:0]  core_dac_ddata;
-  wire            dma_dac_drd;
-  wire            core_dac_drd;
+  wire    [127:0] dma_dac_ddata;
+  wire    [127:0] core_dac_ddata;
+  wire            dma_dac_en;
+  wire            core_dac_en;
+  wire            dma_dac_dvalid;
+  wire            core_dac_dvalid;
 
   wire            dma_adc_ovf;
   wire            core_adc_ovf;
-  wire    [63:0]  dma_adc_ddata;
-  wire    [63:0]  core_adc_ddata;
+  wire    [127:0] dma_adc_ddata;
+  wire    [127:0] core_adc_ddata;
   wire            dma_adc_dwr;
   wire            core_adc_dwr;
   wire            dma_adc_dsync;
@@ -227,12 +229,14 @@ module system_top (
     .adc_gpio_output(adc_gpio_output),
     .dac_gpio_input(dac_gpio_input),
     .dac_gpio_output(dac_gpio_output),
-    .dma_dac_drd(dma_dac_drd),
+    .dma_dac_en(dma_dac_en),
     .dma_dac_dunf(dma_dac_dunf),
     .dma_dac_ddata(dma_dac_ddata),
-    .core_dac_drd(core_dac_drd),
+    .dma_dac_dvalid(dma_dac_dvalid),
+    .core_dac_en(core_dac_en),
     .core_dac_dunf(core_dac_dunf),
     .core_dac_ddata(core_dac_ddata),
+    .core_dac_dvalid(core_dac_dvalid),
     .core_adc_dwr(core_adc_dwr),
     .core_adc_dsync(core_adc_dsync),
     .core_adc_ddata(core_adc_ddata),
@@ -310,12 +314,14 @@ module system_top (
     // pr related ports
     .clk(clk),
 
-    .dma_dac_drd(dma_dac_drd),
+    .dma_dac_en(dma_dac_en),
     .dma_dac_dunf(dma_dac_dunf),
     .dma_dac_ddata(dma_dac_ddata),
-    .core_dac_drd(core_dac_drd),
+    .dma_dac_dvalid(dma_dac_dvalid),
+    .core_dac_en(core_dac_en),
     .core_dac_dunf(core_dac_dunf),
     .core_dac_ddata(core_dac_ddata),
+    .core_dac_dvalid(core_dac_dvalid),
 
     .core_adc_dwr(core_adc_dwr),
     .core_adc_dsync(core_adc_dsync),
@@ -340,19 +346,21 @@ endmodule
   output      [31:0]    adc_gpio_output,
   input       [31:0]    dac_gpio_input,
   output      [31:0]    dac_gpio_output,
-  output                dma_dac_drd,
+  output                dma_dac_en,
   input                 dma_dac_dunf,
-  input       [63:0]    dma_dac_ddata,
-  input                 core_dac_drd,
+  input       [127:0]   dma_dac_ddata,
+  input                 dma_dac_dvalid,
+  input                 core_dac_en,
   output                core_dac_dunf,
-  output      [63:0]    core_dac_ddata,
+  output      [127:0]   core_dac_ddata,
+  output                core_dac_dvalid,
   input                 core_adc_dwr,
   input                 core_adc_dsync,
-  input       [63:0]    core_adc_ddata,
+  input       [127:0]   core_adc_ddata,
   output                core_adc_ovf,
   output                dma_adc_dwr,
   output                dma_adc_dsync,
-  output      [63:0]    dma_adc_ddata,
+  output      [127:0]   dma_adc_ddata,
   input                 dma_adc_ovf);
 
 endmodule

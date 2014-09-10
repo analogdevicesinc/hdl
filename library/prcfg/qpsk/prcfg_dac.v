@@ -49,13 +49,15 @@ module prcfg_dac(
   status,
 
   // FIFO interface
-  src_dac_drd,
+  src_dac_en,
   src_dac_ddata,
   src_dac_dunf,
+  src_dac_dvalid,
 
-  dst_dac_drd,
+  dst_dac_en,
   dst_dac_ddata,
-  dst_dac_dunf
+  dst_dac_dunf,
+  dst_dac_dvalid
 );
 
   localparam  RP_ID       = 8'hA2;
@@ -66,18 +68,20 @@ module prcfg_dac(
   input   [31:0]    control;
   output  [31:0]    status;
 
-  output            src_dac_drd;
+  output            src_dac_en;
   input   [31:0]    src_dac_ddata;
   input             src_dac_dunf;
+  input             src_dac_dvalid;
 
-  input             dst_dac_drd;
+  input             dst_dac_en;
   output  [31:0]    dst_dac_ddata;
   output            dst_dac_dunf;
+  output            dst_dac_dvalid;
 
   reg               dst_dac_dunf   = 0;
   reg     [31:0]    dst_dac_ddata  = 0;
   reg               dst_dac_dvalid = 0;
-  reg               src_dac_drd    = 0;
+  reg               src_dac_en     = 0;
 
   reg     [ 7:0]    pn_data        = 8'hF2;
   reg     [31:0]    status         = 0;
@@ -118,7 +122,7 @@ module prcfg_dac(
 
   // prbs geenration
   always @(posedge clk) begin
-    if(dst_dac_drd == 1) begin
+    if(dst_dac_en == 1) begin
       pn_data = pn(pn_data);
     end
   end
@@ -133,16 +137,18 @@ module prcfg_dac(
   qpsk_mod i_qpsk_mod (
     .clk(clk),
     .data_input(dac_data),
-    .data_valid(dst_dac_drd),
+    .data_valid(dst_dac_en),
     .data_qpsk_i(dac_data_fltr_i),
     .data_qpsk_q(dac_data_fltr_q)
   );
 
   // output logic for tx side
   always @(posedge clk) begin
-    src_dac_drd   <= (mode == 1) ? 1'b0 : dst_dac_drd;
-    dst_dac_dunf  <= (mode == 1) ? 1'b0 : src_dac_dunf;
-    dst_dac_ddata <= (mode == 0) ? dac_data_mode0 : dac_data_mode1_2;
+    src_dac_en      <= (mode == 1) ? 1'b0 : dst_dac_en;
+    dst_dac_dunf    <= (mode == 1) ? 1'b0 : src_dac_dunf;
+    dst_dac_ddata   <= (mode == 0) ? dac_data_mode0 : dac_data_mode1_2;
+    dst_dac_dvalid  <= (mode == 0) ? src_dac_dvalid  :
+                                  ((dst_dac_en == 1'b1) ? 1'b1 : 1'b0);
   end
 
 endmodule

@@ -34,133 +34,140 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
-`timescale 1ns/1ns
+`timescale 1ns/100ps
 
-//------------------------------------------------------------------------------
-//----------- Module Declaration -----------------------------------------------
-//------------------------------------------------------------------------------
 module axi_ad9467_channel(
 
-    // adc interface
-    adc_clk,
-    adc_rst,
-    adc_data,
-    adc_or,
+  // adc interface
 
-    // channel interface
-    adc_dfmt_data,
-    adc_enable,
-    up_adc_pn_err,
-    up_adc_pn_oos,
-    up_adc_or,
+  adc_clk,
+  adc_rst,
+  adc_data,
+  adc_or,
 
-    // processor interface
-    up_rstn,
-    up_clk,
-    up_sel,
-    up_wr,
-    up_addr,
-    up_wdata,
-    up_rdata,
-    up_ack);
+  // channel interface
 
-    // core parameter
-    parameter CHID = 0;
+  adc_dfmt_data,
+  adc_enable,
+  up_adc_pn_err,
+  up_adc_pn_oos,
+  up_adc_or,
 
-    // adc interface
-    input           adc_clk;
-    input           adc_rst;
-    input [15:0]    adc_data;
-    input           adc_or;
+  // processor interface
 
-    // channel interface
-    output [15:0]   adc_dfmt_data;
-    output          adc_enable;
-    output          up_adc_pn_err;
-    output          up_adc_pn_oos;
-    output          up_adc_or;
+  up_rstn,
+  up_clk,
+  up_sel,
+  up_wr,
+  up_addr,
+  up_wdata,
+  up_rdata,
+  up_ack);
 
-    // processor interface
-    input           up_rstn;
-    input           up_clk;
-    input           up_sel;
-    input           up_wr;
-    input   [13:0]  up_addr;
-    input   [31:0]  up_wdata;
-    output  [31:0]  up_rdata;
-    output          up_ack;
+  // parameters
 
-    wire            adc_pn_err_s;
-    wire            adc_pn_oos_s;
-    wire            adc_pn_type_s;
-    wire            adc_dfmt_enable_s;
-    wire            adc_dfmt_type_s;
-    wire            adc_dfmt_se_s;
+  parameter CHID = 0;
 
-   // PN sequence monitor
-    axi_ad9467_pnmon i_axi_ad9467_pnmon (
-        .adc_clk (adc_clk),
-        .adc_data (adc_data),
-        .adc_pn_oos (adc_pn_oos_s),
-        .adc_pn_err (adc_pn_err_s),
-        .up_pn_type (adc_pn_type_s));
+  // adc interface
 
-    ad_datafmt #(.DATA_WIDTH(16)) i_datafmt (
-        .clk(adc_clk),
-        .valid(1'b1),
-        .data(adc_data),
-        .valid_out(),
-        .data_out(adc_dfmt_data),
-        .dfmt_enable(adc_dfmt_enable_s),
-        .dfmt_type(adc_dfmt_type_s),
-        .dfmt_se(adc_dfmt_se_s));
+  input           adc_clk;
+  input           adc_rst;
+  input   [15:0]  adc_data;
+  input           adc_or;
 
-    // adc channel control
-    up_adc_channel #(.PCORE_ADC_CHID(0)) i_up_adc_channel (
-        .adc_clk (adc_clk),
-        .adc_rst (adc_rst),
-        .adc_enable (adc_enable),
-        .adc_pn_sel (),
-        .adc_iqcor_enb (),
-        .adc_dcfilt_enb (),
-        .adc_dfmt_se (adc_dfmt_se_s),
-        .adc_dfmt_type (adc_dfmt_type_s),
-        .adc_dfmt_enable (adc_dfmt_enable_s),
-        .adc_pn_type (adc_pn_type_s),
-        .adc_dcfilt_offset (),
-        .adc_dcfilt_coeff (),
-        .adc_iqcor_coeff_1 (),
-        .adc_iqcor_coeff_2 (),
-        .adc_pn_err (adc_pn_err_s),
-        .adc_pn_oos (adc_pn_oos_s),
-        .adc_or (adc_or),
-        .up_adc_pn_err (up_adc_pn_err),
-        .up_adc_pn_oos (up_adc_pn_oos),
-        .up_adc_or (up_adc_or),
-        .up_usr_datatype_be (),
-        .up_usr_datatype_signed (),
-        .up_usr_datatype_shift (),
-        .up_usr_datatype_total_bits (),
-        .up_usr_datatype_bits (),
-        .up_usr_decimation_m (),
-        .up_usr_decimation_n (),
-        .adc_usr_datatype_be (1'b0),
-        .adc_usr_datatype_signed (1'b1),
-        .adc_usr_datatype_shift (8'd0),
-        .adc_usr_datatype_total_bits (8'd16),
-        .adc_usr_datatype_bits (8'd16),
-        .adc_usr_decimation_m (16'd1),
-        .adc_usr_decimation_n (16'd1),
-        .up_rstn (up_rstn),
-        .up_clk (up_clk),
-        .up_sel (up_sel),
-        .up_wr (up_wr),
-        .up_addr (up_addr),
-        .up_wdata (up_wdata),
-        .up_rdata (up_rdata),
-        .up_ack (up_ack));
+  // channel interface
+
+  output  [15:0]  adc_dfmt_data;
+  output          adc_enable;
+  output          up_adc_pn_err;
+  output          up_adc_pn_oos;
+  output          up_adc_or;
+
+  // processor interface
+
+  input           up_rstn;
+  input           up_clk;
+  input           up_sel;
+  input           up_wr;
+  input   [13:0]  up_addr;
+  input   [31:0]  up_wdata;
+  output  [31:0]  up_rdata;
+  output          up_ack;
+
+  // internal signals
+
+  wire            adc_pn_oos_s;
+  wire            adc_pn_err_s;
+  wire    [ 3:0]  adc_pnseq_sel_s;
+  wire            adc_dfmt_enable_s;
+  wire            adc_dfmt_type_s;
+  wire            adc_dfmt_se_s;
+
+  // instantiations
+
+  axi_ad9467_pnmon i_axi_ad9467_pnmon (
+    .adc_clk (adc_clk),
+    .adc_data (adc_data),
+    .adc_pn_oos (adc_pn_oos_s),
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pnseq_sel (adc_pnseq_sel_s));
+  
+  ad_datafmt #(.DATA_WIDTH(16)) i_datafmt (
+    .clk(adc_clk),
+    .valid(1'b1),
+    .data(adc_data),
+    .valid_out(),
+    .data_out(adc_dfmt_data),
+    .dfmt_enable(adc_dfmt_enable_s),
+    .dfmt_type(adc_dfmt_type_s),
+    .dfmt_se(adc_dfmt_se_s));
+  
+  up_adc_channel #(.PCORE_ADC_CHID(0)) i_up_adc_channel (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_enable (adc_enable),
+    .adc_iqcor_enb (),
+    .adc_dcfilt_enb (),
+    .adc_dfmt_se (adc_dfmt_se_s),
+    .adc_dfmt_type (adc_dfmt_type_s),
+    .adc_dfmt_enable (adc_dfmt_enable_s),
+    .adc_dcfilt_offset (),
+    .adc_dcfilt_coeff (),
+    .adc_iqcor_coeff_1 (),
+    .adc_iqcor_coeff_2 (),
+    .adc_pnseq_sel (adc_pnseq_sel_s),
+    .adc_data_sel (),
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pn_oos (adc_pn_oos_s),
+    .adc_or (adc_or),
+    .up_adc_pn_err (up_adc_pn_err),
+    .up_adc_pn_oos (up_adc_pn_oos),
+    .up_adc_or (up_adc_or),
+    .up_usr_datatype_be (),
+    .up_usr_datatype_signed (),
+    .up_usr_datatype_shift (),
+    .up_usr_datatype_total_bits (),
+    .up_usr_datatype_bits (),
+    .up_usr_decimation_m (),
+    .up_usr_decimation_n (),
+    .adc_usr_datatype_be (1'b0),
+    .adc_usr_datatype_signed (1'b1),
+    .adc_usr_datatype_shift (8'd0),
+    .adc_usr_datatype_total_bits (8'd16),
+    .adc_usr_datatype_bits (8'd16),
+    .adc_usr_decimation_m (16'd1),
+    .adc_usr_decimation_n (16'd1),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_sel (up_sel),
+    .up_wr (up_wr),
+    .up_addr (up_addr),
+    .up_wdata (up_wdata),
+    .up_rdata (up_rdata),
+    .up_ack (up_ack));
 
 endmodule
+
+// ***************************************************************************
+// ***************************************************************************

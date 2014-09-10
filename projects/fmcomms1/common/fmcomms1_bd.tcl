@@ -1,4 +1,6 @@
 
+  source $ad_hdl_dir/projects/common/xilinx/sys_wfifo.tcl
+
   # dac interface
 
   set dac_clk_in_p    [create_bd_port -dir I dac_clk_in_p]
@@ -23,6 +25,29 @@
 
   set ref_clk         [create_bd_port -dir O ref_clk]
 
+  # dma interface
+
+  set dac_clk         [create_bd_port -dir O dac_clk]
+  set dac_valid_0     [create_bd_port -dir O dac_valid_0]
+  set dac_enable_0    [create_bd_port -dir O dac_enable_0]
+  set dac_ddata_0     [create_bd_port -dir I -from 63 -to 0 dac_ddata_0]
+  set dac_valid_1     [create_bd_port -dir O dac_valid_1]
+  set dac_enable_1    [create_bd_port -dir O dac_enable_1]
+  set dac_ddata_1     [create_bd_port -dir I -from 63 -to 0 dac_ddata_1]
+  set dac_dma_rd      [create_bd_port -dir I dac_dma_rd]
+  set dac_dma_rdata   [create_bd_port -dir O -from 63 -to 0 dac_dma_rdata]
+
+  set adc_clk         [create_bd_port -dir O adc_clk]
+  set adc_valid_0     [create_bd_port -dir O adc_valid_0]
+  set adc_enable_0    [create_bd_port -dir O adc_enable_0]
+  set adc_data_0      [create_bd_port -dir O -from 15 -to 0 adc_data_0]
+  set adc_valid_1     [create_bd_port -dir O adc_valid_1]
+  set adc_enable_1    [create_bd_port -dir O adc_enable_1]
+  set adc_data_1      [create_bd_port -dir O -from 15 -to 0 adc_data_1]
+  set adc_dma_wr      [create_bd_port -dir I adc_dma_wr]
+  set adc_dma_sync    [create_bd_port -dir I adc_dma_sync]
+  set adc_dma_wdata   [create_bd_port -dir I -from 31 -to 0 adc_dma_wdata]
+
   # dac peripherals
 
   set axi_ad9122 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9122:1.0 axi_ad9122]
@@ -42,18 +67,6 @@ if {$sys_zynq == 1} {
   # adc peripherals
 
   set axi_ad9643 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9643:1.0 axi_ad9643]
-
-  set sys_ad9643_fifo  [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:11.0 sys_ad9643_fifo]
-  set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $sys_ad9643_fifo
-  set_property -dict [list CONFIG.Input_Data_Width {32}] $sys_ad9643_fifo
-  set_property -dict [list CONFIG.Input_Depth {32}] $sys_ad9643_fifo
-  set_property -dict [list CONFIG.Output_Data_Width {64}] $sys_ad9643_fifo
-  set_property -dict [list CONFIG.Overflow_Flag {true}] $sys_ad9643_fifo
-  set_property -dict [list CONFIG.Reset_Pin {true}] $sys_ad9643_fifo
-
-  set sys_ad9643_util_wfifo [ create_bd_cell -type ip -vlnv analog.com:user:util_wfifo:1.0 sys_ad9643_util_wfifo]
-  set_property -dict [list CONFIG.M_DATA_WIDTH {32}] $sys_ad9643_util_wfifo
-  set_property -dict [list CONFIG.S_DATA_WIDTH {64}] $sys_ad9643_util_wfifo
 
   set axi_ad9643_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9643_dma]
   set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9643_dma
@@ -96,8 +109,7 @@ if {$sys_zynq == 0} {
 
 # connections (dac)
 
-  connect_bd_net -net dac_div_clk [get_bd_pins axi_ad9122/dac_div_clk]
-  connect_bd_net -net dac_div_clk [get_bd_pins axi_ad9122_dma/fifo_rd_clk]
+  connect_bd_net -net dac_div_clk [get_bd_ports dac_clk] [get_bd_pins axi_ad9122/dac_div_clk] [get_bd_pins axi_ad9122_dma/fifo_rd_clk]
 
   connect_bd_net -net axi_ad9122_dac_clk_in_p     [get_bd_ports dac_clk_in_p]                       [get_bd_pins axi_ad9122/dac_clk_in_p]
   connect_bd_net -net axi_ad9122_dac_clk_in_n     [get_bd_ports dac_clk_in_n]                       [get_bd_pins axi_ad9122/dac_clk_in_n]
@@ -107,21 +119,26 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9122_dac_frame_out_n  [get_bd_ports dac_frame_out_n]                    [get_bd_pins axi_ad9122/dac_frame_out_n]
   connect_bd_net -net axi_ad9122_dac_data_out_p   [get_bd_ports dac_data_out_p]                     [get_bd_pins axi_ad9122/dac_data_out_p]
   connect_bd_net -net axi_ad9122_dac_data_out_n   [get_bd_ports dac_data_out_n]                     [get_bd_pins axi_ad9122/dac_data_out_n]
-  connect_bd_net -net axi_ad9122_dac_drd          [get_bd_pins axi_ad9122/dac_drd]                  [get_bd_pins axi_ad9122_dma/fifo_rd_en]
-  connect_bd_net -net axi_ad9122_dac_ddata        [get_bd_pins axi_ad9122/dac_ddata_64]             [get_bd_pins axi_ad9122_dma/fifo_rd_dout]
+
+  connect_bd_net -net axi_ad9122_dac_valid_0      [get_bd_pins axi_ad9122/dac_valid_0]              [get_bd_ports dac_valid_0]
+  connect_bd_net -net axi_ad9122_dac_enable_0     [get_bd_pins axi_ad9122/dac_enable_0]             [get_bd_ports dac_enable_0]
+  connect_bd_net -net axi_ad9122_dac_ddata_0      [get_bd_pins axi_ad9122/dac_ddata_0]              [get_bd_ports dac_ddata_0] 
+  connect_bd_net -net axi_ad9122_dac_valid_1      [get_bd_pins axi_ad9122/dac_valid_1]              [get_bd_ports dac_valid_1]
+  connect_bd_net -net axi_ad9122_dac_enable_1     [get_bd_pins axi_ad9122/dac_enable_1]             [get_bd_ports dac_enable_1]
+  connect_bd_net -net axi_ad9122_dac_ddata_1      [get_bd_pins axi_ad9122/dac_ddata_1]              [get_bd_ports dac_ddata_1] 
   connect_bd_net -net axi_ad9122_dac_dunf         [get_bd_pins axi_ad9122/dac_dunf]                 [get_bd_pins axi_ad9122_dma/fifo_rd_underflow]
+
+  connect_bd_net -net axi_ad9122_dma_drd          [get_bd_pins axi_ad9122_dma/fifo_rd_en]           [get_bd_ports dac_dma_rd]
+  connect_bd_net -net axi_ad9122_dma_ddata        [get_bd_pins axi_ad9122_dma/fifo_rd_dout]         [get_bd_ports dac_dma_rdata]
   connect_bd_net -net axi_ad9122_dma_irq          [get_bd_pins axi_ad9122_dma/irq]                  [get_bd_pins sys_concat_intc/In3]
 
   # connections (adc)
 
-  connect_bd_net -net adc_clk [get_bd_pins axi_ad9643/adc_clk]
-  connect_bd_net -net adc_clk [get_bd_pins axi_ad9643_dma/fifo_wr_clk]
-  connect_bd_net -net adc_clk [get_bd_pins sys_ad9643_util_wfifo/m_clk]
-  connect_bd_net -net adc_clk [get_bd_pins sys_ad9643_util_wfifo/s_clk]
-  connect_bd_net -net adc_clk [get_bd_pins sys_ad9643_fifo/wr_clk]
-  connect_bd_net -net adc_clk [get_bd_pins sys_ad9643_fifo/rd_clk]
-  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9643/delay_clk]
-  connect_bd_net -net sys_100m_resetn [get_bd_pins sys_ad9643_util_wfifo/rstn]
+  p_sys_wfifo [current_bd_instance .] sys_wfifo 32 64
+
+  connect_bd_net -net adc_clk [get_bd_ports adc_clk] [get_bd_pins axi_ad9643/adc_clk] [get_bd_pins sys_wfifo/m_clk]
+  connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo/s_clk] [get_bd_pins axi_ad9643_dma/fifo_wr_clk] [get_bd_pins axi_ad9643/delay_clk]
+  connect_bd_net -net sys_100m_resetn [get_bd_pins sys_wfifo/rstn] $sys_100m_resetn_source
 
   connect_bd_net -net axi_ad9643_adc_clk_in_p     [get_bd_ports adc_clk_in_p]                       [get_bd_pins axi_ad9643/adc_clk_in_p]
   connect_bd_net -net axi_ad9643_adc_clk_in_n     [get_bd_ports adc_clk_in_n]                       [get_bd_pins axi_ad9643/adc_clk_in_n]
@@ -129,23 +146,24 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9643_adc_or_in_n      [get_bd_ports adc_or_in_n]                        [get_bd_pins axi_ad9643/adc_or_in_n]
   connect_bd_net -net axi_ad9643_adc_data_in_p    [get_bd_ports adc_data_in_p]                      [get_bd_pins axi_ad9643/adc_data_in_p]
   connect_bd_net -net axi_ad9643_adc_data_in_n    [get_bd_ports adc_data_in_n]                      [get_bd_pins axi_ad9643/adc_data_in_n]
-  connect_bd_net -net axi_ad9643_adc_dsync        [get_bd_pins axi_ad9643/adc_dsync]                [get_bd_pins axi_ad9643_dma/fifo_wr_sync]
-  connect_bd_net -net axi_ad9643_adc_dwr          [get_bd_pins axi_ad9643/adc_dwr]                  [get_bd_pins sys_ad9643_util_wfifo/m_wr]
-  connect_bd_net -net axi_ad9643_adc_ddata        [get_bd_pins axi_ad9643/adc_ddata]                [get_bd_pins sys_ad9643_util_wfifo/m_wdata]
-  connect_bd_net -net axi_ad9643_adc_dovf         [get_bd_pins axi_ad9643/adc_dovf]                 [get_bd_pins sys_ad9643_util_wfifo/m_wovf]
-  connect_bd_net -net axi_ad9643_dma_dwr          [get_bd_pins sys_ad9643_util_wfifo/s_wr]          [get_bd_pins axi_ad9643_dma/fifo_wr_en]
-  connect_bd_net -net axi_ad9643_dma_ddata        [get_bd_pins sys_ad9643_util_wfifo/s_wdata]       [get_bd_pins axi_ad9643_dma/fifo_wr_din]
-  connect_bd_net -net axi_ad9643_dma_dovf         [get_bd_pins sys_ad9643_util_wfifo/s_wovf]        [get_bd_pins axi_ad9643_dma/fifo_wr_overflow]
+
+  connect_bd_net -net axi_ad9643_adc_valid_0      [get_bd_ports adc_valid_0]                        [get_bd_pins axi_ad9643/adc_valid_0]
+  connect_bd_net -net axi_ad9643_adc_enable_0     [get_bd_ports adc_enable_0]                       [get_bd_pins axi_ad9643/adc_enable_0]
+  connect_bd_net -net axi_ad9643_adc_data_0       [get_bd_ports adc_data_0]                         [get_bd_pins axi_ad9643/adc_data_0]
+  connect_bd_net -net axi_ad9643_adc_valid_1      [get_bd_ports adc_valid_1]                        [get_bd_pins axi_ad9643/adc_valid_1]
+  connect_bd_net -net axi_ad9643_adc_enable_1     [get_bd_ports adc_enable_1]                       [get_bd_pins axi_ad9643/adc_enable_1]
+  connect_bd_net -net axi_ad9643_adc_data_1       [get_bd_ports adc_data_1]                         [get_bd_pins axi_ad9643/adc_data_1]
+  connect_bd_net -net axi_ad9643_adc_dovf         [get_bd_pins axi_ad9643/adc_dovf]                 [get_bd_pins sys_wfifo/m_wovf]
+
+  connect_bd_net -net axi_ad9643_fifo_wr          [get_bd_ports adc_dma_wr]                         [get_bd_pins sys_wfifo/m_wr]
+  connect_bd_net -net axi_ad9643_fifo_wdata       [get_bd_ports adc_dma_wdata]                      [get_bd_pins sys_wfifo/m_wdata]
+
+  connect_bd_net -net axi_ad9643_dma_dwr          [get_bd_pins sys_wfifo/s_wr]                      [get_bd_pins axi_ad9643_dma/fifo_wr_en]
+  connect_bd_net -net axi_ad9643_dma_dsync        [get_bd_ports adc_dma_sync]                       [get_bd_pins axi_ad9643_dma/fifo_wr_sync]
+  connect_bd_net -net axi_ad9643_dma_ddata        [get_bd_pins sys_wfifo/s_wdata]                   [get_bd_pins axi_ad9643_dma/fifo_wr_din]
+  connect_bd_net -net axi_ad9643_dma_dovf         [get_bd_pins sys_wfifo/s_wovf]                    [get_bd_pins axi_ad9643_dma/fifo_wr_overflow]
   connect_bd_net -net axi_ad9643_dma_irq          [get_bd_pins axi_ad9643_dma/irq]                  [get_bd_pins sys_concat_intc/In2]
 
-  connect_bd_net -net axi_ad9643_fifo_rst         [get_bd_pins sys_ad9643_util_wfifo/fifo_rst]      [get_bd_pins sys_ad9643_fifo/rst]
-  connect_bd_net -net axi_ad9643_fifo_wr          [get_bd_pins sys_ad9643_util_wfifo/fifo_wr]       [get_bd_pins sys_ad9643_fifo/wr_en]
-  connect_bd_net -net axi_ad9643_fifo_wdata       [get_bd_pins sys_ad9643_util_wfifo/fifo_wdata]    [get_bd_pins sys_ad9643_fifo/din]
-  connect_bd_net -net axi_ad9643_fifo_wfull       [get_bd_pins sys_ad9643_util_wfifo/fifo_wfull]    [get_bd_pins sys_ad9643_fifo/full]
-  connect_bd_net -net axi_ad9643_fifo_wovf        [get_bd_pins sys_ad9643_util_wfifo/fifo_wovf]     [get_bd_pins sys_ad9643_fifo/overflow]
-  connect_bd_net -net axi_ad9643_fifo_rd          [get_bd_pins sys_ad9643_util_wfifo/fifo_rd]       [get_bd_pins sys_ad9643_fifo/rd_en]
-  connect_bd_net -net axi_ad9643_fifo_rdata       [get_bd_pins sys_ad9643_util_wfifo/fifo_rdata]    [get_bd_pins sys_ad9643_fifo/dout]
-  connect_bd_net -net axi_ad9643_fifo_rempty      [get_bd_pins sys_ad9643_util_wfifo/fifo_rempty]   [get_bd_pins sys_ad9643_fifo/empty]
 
   # interconnect (cpu)
 
@@ -174,7 +192,6 @@ if {$sys_zynq == 0} {
 
 if {$sys_zynq == 1} {
   set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
-
   connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
 }
 
@@ -222,45 +239,17 @@ if {$sys_zynq == 0 } {
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9643_dma/m_dest_axi_aresetn]
 }
 
-  # ila (adc) - need a fifo, zed ila can not run at 250MHz
-
-  set ila_adc_fifo  [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:11.0 ila_adc_fifo]
-  set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $ila_adc_fifo
-  set_property -dict [list CONFIG.Input_Data_Width {28}] $ila_adc_fifo
-  set_property -dict [list CONFIG.Input_Depth {32}] $ila_adc_fifo
-  set_property -dict [list CONFIG.Output_Data_Width {56}] $ila_adc_fifo
-  set_property -dict [list CONFIG.Overflow_Flag {true}] $ila_adc_fifo
-  set_property -dict [list CONFIG.Reset_Pin {false}] $ila_adc_fifo
+  # ila (adc)
 
   set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc]
-  set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_adc
-  set_property -dict [list CONFIG.C_PROBE0_WIDTH {56}] $ila_adc
+  set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc
+  set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
+  set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_adc
   set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 
-  set ila_constant_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 ila_constant_1]
-
-  connect_bd_net -net axi_ad9643_adc_mon_data [get_bd_pins axi_ad9643/adc_mon_data] [get_bd_pins ila_adc_fifo/din]
-  connect_bd_net -net adc_clk [get_bd_pins axi_ad9643/adc_clk] [get_bd_pins ila_adc_fifo/wr_clk]
-  connect_bd_net -net xlconstant_0_const [get_bd_pins ila_adc_fifo/rd_en] [get_bd_pins ila_adc_fifo/wr_en] [get_bd_pins ila_constant_1/const]
-
-if {$sys_zynq == 0} {
-
-  set ila_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 ila_clkgen]
-  set_property -dict [list CONFIG.PRIM_IN_FREQ {200}] $ila_clkgen
-  set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {125}] $ila_clkgen
-  set_property -dict [list CONFIG.USE_LOCKED {false}] $ila_clkgen
-  set_property -dict [list CONFIG.USE_RESET {false}] $ila_clkgen
-
-  connect_bd_net -net sys_200m_clk [get_bd_pins ila_clkgen/clk_in1]
-  connect_bd_net -net ila_clkgen_clk [get_bd_pins ila_clkgen/clk_out1]
-
-  connect_bd_net -net ila_clkgen_clk [get_bd_pins ila_adc_fifo/rd_clk]
-  connect_bd_net -net ila_clkgen_clk [get_bd_pins ila_adc/clk]
-} else {
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins ila_adc_fifo/rd_clk]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins ila_adc/clk]
-}
-  connect_bd_net -net ila_adc_fifo_dout [get_bd_pins ila_adc_fifo/dout] [get_bd_pins ila_adc/probe0]
+  connect_bd_net -net sys_200m_clk [get_bd_pins ila_adc/clk]
+  connect_bd_net -net axi_ad9643_dma_dwr [get_bd_pins ila_adc/probe0]
+  connect_bd_net -net axi_ad9643_dma_ddata [get_bd_pins ila_adc/probe1]
 
   # reference clock
 

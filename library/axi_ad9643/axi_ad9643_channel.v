@@ -114,11 +114,11 @@ module axi_ad9643_channel (
   wire            adc_dfmt_se_s;
   wire            adc_dfmt_type_s;
   wire            adc_dfmt_enable_s;
-  wire            adc_pn_type_s;
   wire    [15:0]  adc_dcfilt_offset_s;
   wire    [15:0]  adc_dcfilt_coeff_s;
   wire    [15:0]  adc_iqcor_coeff_1_s;
   wire    [15:0]  adc_iqcor_coeff_2_s;
+  wire    [ 3:0]  adc_pnseq_sel_s;
   wire            adc_pn_err_s;
   wire            adc_pn_oos_s;
 
@@ -132,7 +132,7 @@ module axi_ad9643_channel (
     .adc_data (adc_data),
     .adc_pn_oos (adc_pn_oos_s),
     .adc_pn_err (adc_pn_err_s),
-    .adc_pn_type (adc_pn_type_s));
+    .adc_pnseq_sel (adc_pnseq_sel_s));
 
   generate
   if (DP_DISABLE == 1) begin
@@ -192,11 +192,12 @@ module axi_ad9643_channel (
     .adc_dfmt_se (adc_dfmt_se_s),
     .adc_dfmt_type (adc_dfmt_type_s),
     .adc_dfmt_enable (adc_dfmt_enable_s),
-    .adc_pn_type (adc_pn_type_s),
     .adc_dcfilt_offset (adc_dcfilt_offset_s),
     .adc_dcfilt_coeff (adc_dcfilt_coeff_s),
     .adc_iqcor_coeff_1 (adc_iqcor_coeff_1_s),
     .adc_iqcor_coeff_2 (adc_iqcor_coeff_2_s),
+    .adc_pnseq_sel (adc_pnseq_sel_s),
+    .adc_data_sel (),
     .adc_pn_err (adc_pn_err_s),
     .adc_pn_oos (adc_pn_oos_s),
     .adc_or (adc_or),

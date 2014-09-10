@@ -19,9 +19,12 @@ adi_ip_files axi_hdmi_tx [list \
   "$ad_hdl_dir/library/common/up_hdmi_tx.v" \
   "axi_hdmi_tx_vdma.v" \
   "axi_hdmi_tx_core.v" \
-  "axi_hdmi_tx.v" ]
+  "axi_hdmi_tx.v" \
+  "axi_hdmi_tx_constr.xdc" ]
 
 adi_ip_properties axi_hdmi_tx
+adi_ip_constraints axi_hdmi_tx [list \
+  "axi_hdmi_tx_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 

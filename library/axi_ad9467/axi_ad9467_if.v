@@ -44,68 +44,77 @@
 module axi_ad9467_if (
 
   // adc interface (clk, data, over-range)
+
   adc_clk_in_p,
   adc_clk_in_n,
   adc_data_in_p,
   adc_data_in_n,
-  adc_data_or_p,
-  adc_data_or_n,
+  adc_or_in_p,
+  adc_or_in_n,
 
   // interface outputs
+
   adc_clk,
   adc_data,
   adc_or,
 
+  // processor interface
+
   adc_ddr_edgesel,
 
   // delay control signals
+
+  delay_clk,
+  delay_rst,
   delay_sel,
   delay_rwn,
   delay_addr,
   delay_wdata,
-  delay_clk,
-  delay_ack,
-  delay_rst,
   delay_rdata,
+  delay_ack_t,
   delay_locked);
 
-  // This parameter controls the buffer type based on the target device.
+  // buffer type based on the target device.
+
   parameter PCORE_BUFTYPE = 0;
-  parameter C_DEVICE_7SERIES = 0;
-  parameter C_DEVICE_VIRTEX6 = 1;
-
-
   parameter PCORE_IODELAY_GROUP = "dev_if_delay_group";
 
   // adc interface (clk, data, over-range)
+
   input           adc_clk_in_p;
   input           adc_clk_in_n;
   input   [ 7:0]  adc_data_in_p;
   input   [ 7:0]  adc_data_in_n;
-  input           adc_data_or_p;
-  input           adc_data_or_n;
+  input           adc_or_in_p;
+  input           adc_or_in_n;
 
   // interface outputs
+
   output          adc_clk;
   output  [15:0]  adc_data;
   output          adc_or;
 
+  // processor interface
+
   input           adc_ddr_edgesel;
 
   // delay control signals
+
+  input           delay_clk;
+  input           delay_rst;
   input           delay_sel;
   input           delay_rwn;
   input   [ 7:0]  delay_addr;
   input   [ 4:0]  delay_wdata;
-  input           delay_clk;
-  input           delay_rst;
-  output          delay_ack;
   output  [ 4:0]  delay_rdata;
+  output          delay_ack_t;
   output          delay_locked;
+
+  // internal registers
 
   reg     [ 7:0]  adc_data_p = 'd0;
   reg     [ 7:0]  adc_data_n = 'd0;
-  reg     [ 7:0]  adc_data_n_d = 'd0;
+  reg     [ 7:0]  adc_data_p_d = 'd0;
   reg     [ 7:0]  adc_dmux_a = 'd0;
   reg     [ 7:0]  adc_dmux_b = 'd0;
   reg     [15:0]  adc_data = 'd0;
@@ -113,32 +122,27 @@ module axi_ad9467_if (
   reg             adc_or_n = 'd0;
   reg             adc_or = 'd0;
   reg     [ 8:0]  delay_ld = 'd0;
-  reg             delay_ack = 'd0;
+  reg             delay_ack_t = 'd0;
   reg     [ 4:0]  delay_rdata = 'd0;
 
+  // internal signals
+
   wire    [ 4:0]  delay_rdata_s[8:0];
-  wire    [ 7:0]  adc_data_ibuf_s;
-  wire    [ 7:0]  adc_data_idelay_s;
   wire    [ 7:0]  adc_data_p_s;
   wire    [ 7:0]  adc_data_n_s;
-  wire            adc_or_ibuf_s;
-  wire            adc_or_idelay_s;
   wire            adc_or_p_s;
   wire            adc_or_n_s;
-  wire            adc_clk_ibuf_s;
 
   genvar          l_inst;
 
-  // The adc data is 8bits ddr, and here it is demuxed to 16bits.
-  // The samples may be selected to be either positive first,
-  // or negative first.
+  // sample select (p/n) swap
 
   always @(posedge adc_clk) begin
     adc_data_p <= adc_data_p_s;
     adc_data_n <= adc_data_n_s;
-    adc_data_n_d <= adc_data_n;
-    adc_dmux_a <= (adc_ddr_edgesel == 1'b1) ? adc_data_n : adc_data_p;
-    adc_dmux_b <= (adc_ddr_edgesel == 1'b1) ? adc_data_p : adc_data_n_d;
+    adc_data_p_d <= adc_data_p;
+    adc_dmux_a <= (adc_ddr_edgesel == 1'b1) ? adc_data_n   : adc_data_p;
+    adc_dmux_b <= (adc_ddr_edgesel == 1'b1) ? adc_data_p_d : adc_data_n;
     adc_data[15] <= adc_dmux_b[7];
     adc_data[14] <= adc_dmux_a[7];
     adc_data[13] <= adc_dmux_b[6];
@@ -164,8 +168,8 @@ module axi_ad9467_if (
     end
   end
 
-  // The delay write interface, each delay element can be individually
-  // addressed, and a delay value can be directly loaded (no INC/DEC stuff)
+  // delay write interface, each delay element can be individually
+  // addressed, and a delay value can be directly loaded (no inc/dec stuff)
 
   always @(posedge delay_clk) begin
     if ((delay_sel == 1'b1) && (delay_rwn == 1'b0)) begin
@@ -186,11 +190,10 @@ module axi_ad9467_if (
     end
   end
 
+  // delay read interface, a delay ack toggle is used to transfer data to the
+  // processor side- delay locked is independently transferred
 
- // delay read interface, a delay ack toggle is used to transfer data to the
- // processor side- delay locked is independently transferred
-
- always @(posedge delay_clk) begin
+  always @(posedge delay_clk) begin
     case (delay_addr)
       8'd8 : delay_rdata <= delay_rdata_s[8];
       8'd7 : delay_rdata <= delay_rdata_s[7];
@@ -204,198 +207,60 @@ module axi_ad9467_if (
       default: delay_rdata <= 5'd0;
     endcase
     if (delay_sel == 1'b1) begin
-      delay_ack <= ~delay_ack;
+      delay_ack_t <= ~delay_ack_t;
     end
   end
 
-  // The data interface, data signals goes through a LVDS input buffer, then
-  // a delay element (1/32th of a 200MHz clock) and finally an input DDR demux.
+  // data interface
 
   generate
   for (l_inst = 0; l_inst <= 7; l_inst = l_inst + 1) begin : g_adc_if
-
-  IBUFDS i_data_ibuf (
-    .I (adc_data_in_p[l_inst]),
-    .IB (adc_data_in_n[l_inst]),
-    .O (adc_data_ibuf_s[l_inst]));
-
-  if (PCORE_BUFTYPE == C_DEVICE_VIRTEX6) begin
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IODELAYE1 #(
-    .CINVCTRL_SEL ("FALSE"),
-    .DELAY_SRC ("I"),
-    .HIGH_PERFORMANCE_MODE ("TRUE"),
-    .IDELAY_TYPE ("VAR_LOADABLE"),
-    .IDELAY_VALUE (0),
-    .ODELAY_TYPE ("FIXED"),
-    .ODELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
-    .SIGNAL_PATTERN ("DATA"))
-  i_data_idelay (
-    .T (1'b1),
-    .CE (1'b0),
-    .INC (1'b0),
-    .CLKIN (1'b0),
-    .DATAIN (1'b0),
-    .ODATAIN (1'b0),
-    .CINVCTRL (1'b0),
-    .C (delay_clk),
-    .IDATAIN (adc_data_ibuf_s[l_inst]),
-    .DATAOUT (adc_data_idelay_s[l_inst]),
-    .RST (delay_ld[l_inst]),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata_s[l_inst]));
-  end else begin
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IDELAYE2 #(
-    .CINVCTRL_SEL ("FALSE"),
-    .DELAY_SRC ("IDATAIN"),
-    .HIGH_PERFORMANCE_MODE ("FALSE"),
-    .IDELAY_TYPE ("VAR_LOAD"),
-    .IDELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
-    .PIPE_SEL ("FALSE"),
-    .SIGNAL_PATTERN ("DATA"))
-  i_data_idelay (
-    .CE (1'b0),
-    .INC (1'b0),
-    .DATAIN (1'b0),
-    .LDPIPEEN (1'b0),
-    .CINVCTRL (1'b0),
-    .REGRST (1'b0),
-    .C (delay_clk),
-    .IDATAIN (adc_data_ibuf_s[l_inst]),
-    .DATAOUT (adc_data_idelay_s[l_inst]),
-    .LD (delay_ld[l_inst]),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata_s[l_inst]));
-  end
-
-  IDDR #(
-    .INIT_Q1 (1'b0),
-    .INIT_Q2 (1'b0),
-    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
-    .SRTYPE ("ASYNC"))
-  i_data_ddr (
-    .CE (1'b1),
-    .R (1'b0),
-    .S (1'b0),
-    .C (adc_clk),
-    .D (adc_data_idelay_s[l_inst]),
-    .Q1 (adc_data_p_s[l_inst]),
-    .Q2 (adc_data_n_s[l_inst]));
-
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_BUFTYPE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_adc_data (
+    .rx_clk (adc_clk),
+    .rx_data_in_p (adc_data_in_p[l_inst]),
+    .rx_data_in_n (adc_data_in_n[l_inst]),
+    .rx_data_p (adc_data_p_s[l_inst]),
+    .rx_data_n (adc_data_n_s[l_inst]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_ld (delay_ld[l_inst]),
+    .delay_wdata (delay_wdata),
+    .delay_rdata (delay_rdata_s[l_inst]),
+    .delay_locked ());
   end
   endgenerate
 
-  // The over-range interface, it follows a similar path as the data signals.
+  // over-range interface
 
-  IBUFDS i_or_ibuf (
-    .I (adc_data_or_p),
-    .IB (adc_data_or_n),
-    .O (adc_or_ibuf_s));
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_BUFTYPE),
+    .IODELAY_CTRL (1),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_adc_or (
+    .rx_clk (adc_clk),
+    .rx_data_in_p (adc_or_in_p),
+    .rx_data_in_n (adc_or_in_n),
+    .rx_data_p (adc_or_p_s),
+    .rx_data_n (adc_or_n_s),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_ld (delay_ld[8]),
+    .delay_wdata (delay_wdata),
+    .delay_rdata (delay_rdata_s[8]),
+    .delay_locked (delay_locked));
 
-  generate
-  if (PCORE_BUFTYPE == C_DEVICE_VIRTEX6) begin
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IODELAYE1 #(
-    .CINVCTRL_SEL ("FALSE"),
-    .DELAY_SRC ("I"),
-    .HIGH_PERFORMANCE_MODE ("TRUE"),
-    .IDELAY_TYPE ("VAR_LOADABLE"),
-    .IDELAY_VALUE (0),
-    .ODELAY_TYPE ("FIXED"),
-    .ODELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
-    .SIGNAL_PATTERN ("DATA"))
-  i_or_idelay (
-    .T (1'b1),
-    .CE (1'b0),
-    .INC (1'b0),
-    .CLKIN (1'b0),
-    .DATAIN (1'b0),
-    .ODATAIN (1'b0),
-    .CINVCTRL (1'b0),
-    .C (delay_clk),
-    .IDATAIN (adc_or_ibuf_s),
-    .DATAOUT (adc_or_idelay_s),
-    .RST (delay_ld[8]),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata_s[8]));
-  end else begin
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IDELAYE2 #(
-    .CINVCTRL_SEL ("FALSE"),
-    .DELAY_SRC ("IDATAIN"),
-    .HIGH_PERFORMANCE_MODE ("FALSE"),
-    .IDELAY_TYPE ("VAR_LOAD"),
-    .IDELAY_VALUE (0),
-    .REFCLK_FREQUENCY (200.0),
-    .PIPE_SEL ("FALSE"),
-    .SIGNAL_PATTERN ("DATA"))
-  i_or_idelay (
-    .CE (1'b0),
-    .INC (1'b0),
-    .DATAIN (1'b0),
-    .LDPIPEEN (1'b0),
-    .CINVCTRL (1'b0),
-    .REGRST (1'b0),
-    .C (delay_clk),
-    .IDATAIN (adc_or_ibuf_s),
-    .DATAOUT (adc_or_idelay_s),
-    .LD (delay_ld[8]),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata_s[8]));
-  end
-  endgenerate
+  // clock
 
-  IDDR #(
-    .INIT_Q1 (1'b0),
-    .INIT_Q2 (1'b0),
-    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
-    .SRTYPE ("ASYNC"))
-  i_or_ddr (
-    .CE (1'b1),
-    .R (1'b0),
-    .S (1'b0),
-    .C (adc_clk),
-    .D (adc_or_idelay_s),
-    .Q1 (adc_or_p_s),
-    .Q2 (adc_or_n_s));
-
-  // The clock path is a simple clock buffer after a LVDS input buffer.
-  // It is possible for this logic to be replaced with a OSERDES based data capture.
-  // The reason for such a simple interface here is because this reference design
-  // is used for various boards (native fmc and/or evaluation boards). The pinouts
-  // of the FPGA - ADC interface is probably do not allow a OSERDES placement.
-
-  IBUFGDS i_clk_ibuf (
-    .I (adc_clk_in_p),
-    .IB (adc_clk_in_n),
-    .O (adc_clk_ibuf_s));
-
-  generate
-  if (PCORE_BUFTYPE == C_DEVICE_VIRTEX6) begin
-  BUFR #(.BUFR_DIVIDE ("BYPASS")) i_clk_gbuf (
-    .CLR (1'b0),
-    .CE (1'b1),
-    .I (adc_clk_ibuf_s),
-    .O (adc_clk));
-  end else begin
-  BUFG i_clk_gbuf (
-    .I (adc_clk_ibuf_s),
-    .O (adc_clk));
-  end
-  endgenerate
-
-  // The delay controller. Refer to Xilinx doc. for details.
-  // The GROUP directive controls which delay elements this is associated with.
-
-  (* IODELAY_GROUP = PCORE_IODELAY_GROUP *)
-  IDELAYCTRL i_delay_ctrl (
-    .RST (delay_rst),
-    .REFCLK (delay_clk),
-    .RDY (delay_locked));
+  ad_lvds_clk #(
+    .BUFTYPE (PCORE_BUFTYPE))
+  i_adc_clk (
+    .clk_in_p (adc_clk_in_p),
+    .clk_in_n (adc_clk_in_n),
+    .clk (adc_clk));
 
 endmodule
 

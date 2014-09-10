@@ -134,7 +134,9 @@ create_clock -name rx_0_clk       -period   4.00 [get_ports rx_clk_in_0_p]
 create_clock -name rx_1_clk       -period   4.00 [get_ports rx_clk_in_1_p]
 create_clock -name ad9361_clk     -period   4.00 [get_pins i_system_wrapper/system_i/axi_ad9361_0/clk]
 create_clock -name fmc_dma_clk    -period  10.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
+create_clock -name ps7_clk_2      -period 10.00 [get_pins i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]]
 
 set_clock_groups -asynchronous -group {ad9361_clk}
 set_clock_groups -asynchronous -group {fmc_dma_clk}
+set_clock_groups -asynchronous -group {ps7_clk_2}
 

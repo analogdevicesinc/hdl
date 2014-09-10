@@ -8,12 +8,16 @@ derive_clock_uncertainty
 
 set clk_125m [get_clocks {i_system_bd|axi_ad9361|i_ad9361|i_dev_if|i_rx|i_altlvds_rx|auto_generated|pll_sclk~PLL_OUTPUT_COUNTER|divclk}]
 
+set clk_vga [get_clocks {i_system_bd|vga_pll|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}]
+ 
 set_false_path -from clk_50m     -to clk_80m
 set_false_path -from clk_50m     -to $clk_125m
 set_false_path -from clk_80m     -to clk_50m 
 set_false_path -from clk_80m     -to $clk_125m
 set_false_path -from $clk_125m   -to clk_50m 
 set_false_path -from $clk_125m   -to clk_80m 
+set_false_path -from clk_50m     -to $clk_vga
+set_false_path -from $clk_vga    -to clk_50m
 
 create_clock -period 4.0 -name v_rx_clk
 

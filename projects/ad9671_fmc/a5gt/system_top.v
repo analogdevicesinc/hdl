@@ -206,6 +206,12 @@ module system_top (
   wire              adc_clk;
   wire              adc1_clk;
 
+  // internal registers
+
+  reg               dma_sync = 'd0;
+  reg               dma_wr = 'd0;
+  reg     [127:0]   dma_data = 'd0;
+
   // internal signals
 
   wire              sys_pll_locked_s;
@@ -216,12 +222,10 @@ module system_top (
   wire              spi_clk_s;
   wire              spi_mosi_s;
   wire              spi_miso_s;
-  wire    [ 63:0]   adc_ddata_s;
-  wire              adc_dsync_s;
+  wire    [  7:0]   adc_valid_s;
+  wire    [  7:0]   adc_enable_s;
+  wire    [127:0]   adc_data_s;
   wire              adc_dovf_s;
-  wire              adc_dwr_s;
-  wire              adc_mon_valid_s;
-  wire    [127:0]   adc_mon_data_s;
   wire    [  3:0]   rx_ip_sof_s;
   wire    [ 63:0]   rx_ip_data_s;
   wire    [ 63:0]   rx_data_s;
@@ -258,6 +262,12 @@ module system_top (
 
   assign eth_tx_reset_s = ~sys_pll_locked_s;
 
+  always @(posedge adc_clk) begin
+    dma_sync <= 1'b1;
+    dma_wr <= | adc_enable_s;
+    dma_data <= adc_data_s;
+  end
+
   always @(posedge rx_clk) begin
     rx_sysref_m1 <= rx_sysref_s;
     rx_sysref_m2 <= rx_sysref_m1;
@@ -285,7 +295,7 @@ module system_top (
     .sld_trigger_level_pipeline (1))
   i_signaltap (
     .acq_clk (rx_clk),
-    .acq_data_in ({rx_sysref, rx_sync, adc_mon_data_s}),
+    .acq_data_in ({rx_sysref, rx_sync, adc_data_s}),
     .acq_trigger_in ({rx_sysref, rx_sync}));
 
   genvar n;
@@ -384,9 +394,9 @@ module system_top (
     .sys_spi_SS_n (spi_csn_s),
     .axi_dmac_0_fifo_wr_clock_clk (adc_clk),
     .axi_dmac_0_fifo_wr_if_ovf (adc_dovf_s),
-    .axi_dmac_0_fifo_wr_if_wren (adc_dwr_s),
-    .axi_dmac_0_fifo_wr_if_data (adc_ddata_s),
-    .axi_dmac_0_fifo_wr_if_sync (adc_dsync_s),
+    .axi_dmac_0_fifo_wr_if_wren (dma_wr),
+    .axi_dmac_0_fifo_wr_if_data (dma_data),
+    .axi_dmac_0_fifo_wr_if_sync (dma_sync),
     .sys_jesd204b_s1_rx_link_data (rx_ip_data_s),
     .sys_jesd204b_s1_rx_link_valid (),
     .sys_jesd204b_s1_rx_link_ready (1'b1),
@@ -407,13 +417,11 @@ module system_top (
     .axi_ad9671_1_xcvr_clk_clk (rx_clk),
     .axi_ad9671_1_xcvr_data_data (rx_data_s),
     .axi_ad9671_1_adc_clock_clk (adc_clk),
-    .axi_ad9671_1_adc_dma_if_ddata (adc_ddata_s),
-    .axi_ad9671_1_adc_dma_if_dsync (adc_dsync_s),
+    .axi_ad9671_1_adc_dma_if_valid (adc_valid_s),
+    .axi_ad9671_1_adc_dma_if_enable (adc_enable_s),
+    .axi_ad9671_1_adc_dma_if_data (adc_data_s),
     .axi_ad9671_1_adc_dma_if_dovf (adc_dovf_s),
-    .axi_ad9671_1_adc_dma_if_dunf (1'b0),
-    .axi_ad9671_1_adc_dma_if_dwr (adc_dwr_s),
-    .axi_ad9671_1_adc_mon_if_valid (adc_mon_valid_s),
-    .axi_ad9671_1_adc_mon_if_data (adc_mon_data_s));
+    .axi_ad9671_1_adc_dma_if_dunf (1'b0));
 
 endmodule
 

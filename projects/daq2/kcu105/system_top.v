@@ -44,8 +44,6 @@ module system_top (
   sys_rst,
   sys_clk_p,
   sys_clk_n,
-  sys_125m_clk_p,
-  sys_125m_clk_n,
 
   uart_sin,
   uart_sout,
@@ -68,6 +66,8 @@ module system_top (
 
   mdio_mdc,
   mdio_mdio,
+  phy_clk_p,
+  phy_clk_n,
   phy_rst_n,
   phy_rx_p,
   phy_rx_n,
@@ -130,8 +130,6 @@ module system_top (
   input           sys_rst;
   input           sys_clk_p;
   input           sys_clk_n;
-  input           sys_125m_clk_p;
-  input           sys_125m_clk_n;
 
   input           uart_sin;
   output          uart_sout;
@@ -154,6 +152,8 @@ module system_top (
 
   output          mdio_mdc;
   inout           mdio_mdio;
+  input           phy_clk_p;
+  input           phy_clk_n;
   output          phy_rst_n;
   input           phy_rx_p;
   input           phy_rx_n;
@@ -419,73 +419,32 @@ module system_top (
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
 
-  IOBUF i_iobuf_gpio_adc_pd (
-    .I (gpio_ctl_o[5]),
-    .O (gpio_ctl_i[5]),
-    .T (gpio_ctl_t[5]),
-    .IO (adc_pd));
-
-  IOBUF i_iobuf_gpio_dac_txen (
-    .I (gpio_ctl_o[4]),
-    .O (gpio_ctl_i[4]),
-    .T (gpio_ctl_t[4]),
-    .IO (dac_txen));
-
-  IOBUF i_iobuf_gpio_dac_reset (
-    .I (gpio_ctl_o[3]),
-    .O (gpio_ctl_i[3]),
-    .T (gpio_ctl_t[3]),
-    .IO (dac_reset));
-
-  IOBUF i_iobuf_gpio_clkd_pd (
-    .I (gpio_ctl_o[2]),
-    .O (gpio_ctl_i[2]),
-    .T (gpio_ctl_t[2]),
-    .IO (clkd_pd));
-
-  IOBUF i_iobuf_gpio_clkd_sync (
-    .I (gpio_ctl_o[1]),
-    .O (gpio_ctl_i[1]),
-    .T (gpio_ctl_t[1]),
-    .IO (clkd_sync));
-
-  IOBUF i_iobuf_gpio_clkd_reset (
-    .I (gpio_ctl_o[0]),
-    .O (gpio_ctl_i[0]),
-    .T (gpio_ctl_t[0]),
-    .IO (clkd_reset));
-
-  IOBUF i_iobuf_gpio_adc_fdb (
-    .I (gpio_status_o[4]),
-    .O (gpio_status_i[4]),
-    .T (gpio_status_t[4]),
-    .IO (adc_fdb));
-
-  IOBUF i_iobuf_gpio_adc_fda (
-    .I (gpio_status_o[3]),
-    .O (gpio_status_i[3]),
-    .T (gpio_status_t[3]),
-    .IO (adc_fda));
-
-  IOBUF i_iobuf_gpio_dac_irq (
-    .I (gpio_status_o[2]),
-    .O (gpio_status_i[2]),
-    .T (gpio_status_t[2]),
-    .IO (dac_irq));
-
-  IOBUF i_iobuf_gpio_clkd_status_1 (
-    .I (gpio_status_o[1]),
-    .O (gpio_status_i[1]),
-    .T (gpio_status_t[1]),
-    .IO (clkd_status[1]));
-
-  IOBUF i_iobuf_gpio_clkd_status_0 (
-    .I (gpio_status_o[0]),
-    .O (gpio_status_i[0]),
-    .T (gpio_status_t[0]),
-    .IO (clkd_status[0]));
+  ad_iobuf #(.DATA_WIDTH(26)) i_iobuf (
+    .dt ({gpio_ctl_t[5:0], gpio_status_t[4:0]}),
+    .di ({gpio_ctl_o[5:0], gpio_status_o[4:0]}),
+    .do ({gpio_ctl_i[5:0], gpio_status_i[4:0]}),
+    .dio ({ adc_pd,          // 10
+            dac_txen,        //  9
+            dac_reset,       //  8
+            clkd_pd,         //  7
+            clkd_sync,       //  6
+            clkd_reset,      //  5
+            adc_fdb,         //  4
+            adc_fda,         //  3
+            dac_irq,         //  2
+            clkd_status}));  //  0
 
   system_wrapper i_system_wrapper (
+    .adc_clk (adc_clk),
+    .adc_data_0 (adc_data_0),
+    .adc_data_1 (adc_data_1),
+    .adc_ddata (adc_ddata),
+    .adc_dsync (adc_dsync),
+    .adc_dwr (adc_dwr),
+    .adc_enable_0 (adc_enable_0),
+    .adc_enable_1 (adc_enable_1),
+    .adc_valid_0 (adc_valid_0),
+    .adc_valid_1 (adc_valid_1),
     .c0_ddr4_act_n (ddr4_act_n),
     .c0_ddr4_adr (ddr4_addr),
     .c0_ddr4_ba (ddr4_ba),
@@ -501,25 +460,6 @@ module system_top (
     .c0_ddr4_odt (ddr4_odt),
     .c0_ddr4_par (ddr4_par),
     .c0_ddr4_reset_n (ddr4_reset_n),
-    .gpio_ctl_i (gpio_ctl_i),
-    .gpio_ctl_o (gpio_ctl_o),
-    .gpio_ctl_t (gpio_ctl_t),
-    .gpio_lcd_tri_io (),
-    .gpio_led_tri_io (gpio_led),
-    .gpio_status_i (gpio_status_i),
-    .gpio_status_o (gpio_status_o),
-    .gpio_status_t (gpio_status_t),
-    .gpio_sw_tri_io (gpio_sw),
-    .adc_clk (adc_clk),
-    .adc_data_0 (adc_data_0),
-    .adc_data_1 (adc_data_1),
-    .adc_ddata (adc_ddata),
-    .adc_dsync (adc_dsync),
-    .adc_dwr (adc_dwr),
-    .adc_enable_0 (adc_enable_0),
-    .adc_enable_1 (adc_enable_1),
-    .adc_valid_0 (adc_valid_0),
-    .adc_valid_1 (adc_valid_1),
     .dac_clk (dac_clk),
     .dac_ddata (dac_ddata),
     .dac_ddata_0 (dac_ddata_0),
@@ -535,6 +475,15 @@ module system_top (
     .dac_valid_1 (dac_valid_1),
     .dac_valid_2 (dac_valid_2),
     .dac_valid_3 (dac_valid_3),
+    .gpio_ctl_i (gpio_ctl_i),
+    .gpio_ctl_o (gpio_ctl_o),
+    .gpio_ctl_t (gpio_ctl_t),
+    .gpio_lcd_tri_io (),
+    .gpio_led_tri_io (gpio_led),
+    .gpio_status_i (gpio_status_i),
+    .gpio_status_o (gpio_status_o),
+    .gpio_status_t (gpio_status_t),
+    .gpio_sw_tri_io (gpio_sw),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -545,20 +494,20 @@ module system_top (
     .iic_rstn (iic_rstn),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
+    .phy_clk_clk_n (phy_clk_n),
+    .phy_clk_clk_p (phy_clk_p),
     .phy_rst_n (phy_rst_n),
     .phy_sd (1'b1),
-    .sgmii_rxn (phy_rx_n),
-    .sgmii_rxp (phy_rx_p),
-    .sgmii_txn (phy_tx_n),
-    .sgmii_txp (phy_tx_p),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
+    .sgmii_rxn (phy_rx_n),
+    .sgmii_rxp (phy_rx_p),
+    .sgmii_txn (phy_tx_n),
+    .sgmii_txp (phy_tx_p),
     .spdif (spdif),
-    .sys_125m_clk_n (sys_125m_clk_n),
-    .sys_125m_clk_p (sys_125m_clk_p),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
     .spi_csn_i (spi_csn),
@@ -566,8 +515,8 @@ module system_top (
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
     .spi_sdo_o (spi_mosi),
-    .sys_clk_n (sys_clk_n),
-    .sys_clk_p (sys_clk_p),
+    .sys_clk_clk_n (sys_clk_n),
+    .sys_clk_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .tx_data_n (tx_data_n),
     .tx_data_p (tx_data_p),
