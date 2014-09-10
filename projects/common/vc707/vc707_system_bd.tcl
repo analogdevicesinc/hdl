@@ -59,6 +59,8 @@ set_property -dict [list CONFIG.C_ICACHE_HIGHADDR {0xBFFFFFFF}] $sys_mb
 set_property -dict [list CONFIG.C_ICACHE_BASEADDR {0x80000000}] $sys_mb
 set_property -dict [list CONFIG.C_DCACHE_HIGHADDR {0xBFFFFFFF}] $sys_mb
 set_property -dict [list CONFIG.C_DCACHE_BASEADDR {0x80000000}] $sys_mb
+set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
+
 
 # instance: microblaze - local memory & bus
 
