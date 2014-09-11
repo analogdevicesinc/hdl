@@ -258,7 +258,7 @@ module system_top (
   wire              adc_enable_i0;
   wire              adc_enable_q0;
   wire              adc_enable_i1;
-  wire              adc_enable_q2;
+  wire              adc_enable_q1;
   wire              adc_valid_i0;
   wire              adc_valid_q0;
   wire              adc_valid_i1;
