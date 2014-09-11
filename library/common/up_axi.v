@@ -77,6 +77,7 @@ module up_axi (
 
   // parameters
 
+  parameter   PCORE_ADDR_WIDTH = 14;
 
   // reset and clocks
 
@@ -107,7 +108,7 @@ module up_axi (
 
   output          up_sel;
   output          up_wr;
-  output  [13:0]  up_addr;
+  output  [PCORE_ADDR_WIDTH-1:0] up_addr;
   output  [31:0]  up_wdata;
   input   [31:0]  up_rdata;
   input           up_ack;
@@ -123,7 +124,7 @@ module up_axi (
   reg             up_axi_access = 'd0;
   reg             up_sel = 'd0;
   reg             up_wr = 'd0;
-  reg     [13:0]  up_addr = 'd0;
+  reg     [PCORE_ADDR_WIDTH-1:0] up_addr = 'd0;
   reg     [31:0]  up_wdata = 'd0;
   reg             up_access = 'd0;
   reg     [ 2:0]  up_access_count = 'd0;
@@ -213,10 +214,10 @@ module up_axi (
       if (up_axi_access == 1'b0) begin
         up_wr <= up_axi_wr_s;
         if (up_axi_wr_s == 1'b1) begin
-          up_addr <= up_axi_awaddr[15:2];
+          up_addr <= up_axi_awaddr[PCORE_ADDR_WIDTH+1:2];
           up_wdata <= up_axi_wdata;
         end else begin
-          up_addr <= up_axi_araddr[15:2];
+          up_addr <= up_axi_araddr[PCORE_ADDR_WIDTH+1:2];
           up_wdata <= 32'd0;
         end
       end
