@@ -85,8 +85,6 @@ module axi_ad9250 (
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
   parameter C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter C_BASEADDR = 32'h00000000;
-  parameter C_HIGHADDR = 32'hffffffff;
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -291,10 +289,7 @@ module axi_ad9250 (
 
   // up bus interface
 
-  up_axi #(
-    .PCORE_BASEADDR (C_BASEADDR),
-    .PCORE_HIGHADDR (C_HIGHADDR))
-  i_up_axi (
+  up_axi i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

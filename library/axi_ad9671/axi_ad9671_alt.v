@@ -169,9 +169,7 @@ module axi_ad9671_alt (
     .PCORE_4L_2L_N (PCORE_4L_2L_N),
     .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
     .PCORE_IODELAY_GROUP ("adc_if_delay_group"),
-    .C_S_AXI_MIN_SIZE (32'hffff),
-    .C_BASEADDR (32'h00000000),
-    .C_HIGHADDR (32'hffffffff))
+    .C_S_AXI_MIN_SIZE (32'hffff))
   i_ad9671 (
     .rx_clk (rx_clk),
     .rx_data (rx_data),

@@ -137,8 +137,6 @@ module axi_dmac (
 
 parameter PCORE_ID = 0;
 
-parameter C_BASEADDR = 32'hffffffff;
-parameter C_HIGHADDR = 32'h00000000;
 parameter C_DMA_DATA_WIDTH_SRC = 64;
 parameter C_DMA_DATA_WIDTH_DEST = 64;
 parameter C_DMA_LENGTH_WIDTH = 24;
@@ -244,8 +242,6 @@ wire [2:0] src_response_id;
 wire [7:0] dbg_status;
 
 up_axi #(
-	.PCORE_BASEADDR (C_BASEADDR),
-	.PCORE_HIGHADDR (C_HIGHADDR)
 ) i_up_axi (
 	.up_rstn(s_axi_aresetn),
 	.up_clk(s_axi_aclk),

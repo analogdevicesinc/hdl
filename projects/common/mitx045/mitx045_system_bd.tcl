@@ -85,14 +85,10 @@ set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}]
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
 set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_tx_core
 set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_HIGHADDR {0xffffffff}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_BASEADDR {0x00000000}] $axi_spdif_tx_core
 
 set axi_i2s_adi [create_bd_cell -type ip -vlnv analog.com:user:axi_i2s_adi:1.0 axi_i2s_adi]
 set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_i2s_adi
 set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_i2s_adi
-set_property -dict [list CONFIG.C_HIGHADDR {0xffffffff}] $axi_i2s_adi
-set_property -dict [list CONFIG.C_BASEADDR {0x00000000}] $axi_i2s_adi
 
 # system reset/clock definitions
 
