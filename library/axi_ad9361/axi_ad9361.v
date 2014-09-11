@@ -147,8 +147,6 @@ module axi_ad9361 (
   parameter   PCORE_DAC_DP_DISABLE = 0;
   parameter   PCORE_ADC_DP_DISABLE = 0;
   parameter   C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter   C_HIGHADDR = 32'hffffffff;
-  parameter   C_BASEADDR = 32'h00000000;
 
   // physical interface (receive)
 
@@ -429,10 +427,7 @@ module axi_ad9361 (
 
   // axi interface
 
-  up_axi #(
-    .PCORE_BASEADDR (C_BASEADDR),
-    .PCORE_HIGHADDR (C_HIGHADDR))
-  i_up_axi (
+  up_axi i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

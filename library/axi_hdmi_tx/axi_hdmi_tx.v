@@ -106,8 +106,6 @@ module axi_hdmi_tx (
   parameter   PCORE_DEVICE_TYPE = 0;
   parameter   PCORE_EMBEDDED_SYNC = 0;
   parameter   C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter   C_HIGHADDR = 32'hffffffff;
-  parameter   C_BASEADDR = 32'h00000000;
 
   localparam  XILINX_7SERIES = 0;
   localparam  XILINX_ULTRASCALE = 1;
@@ -234,10 +232,7 @@ module axi_hdmi_tx (
 
   // axi interface
 
-  up_axi #(
-    .PCORE_BASEADDR (C_BASEADDR),
-    .PCORE_HIGHADDR (C_HIGHADDR))
-  i_up_axi (
+  up_axi i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

@@ -161,8 +161,6 @@ module axi_jesd_gt (
   parameter   PCORE_PMA_RSV  = 32'h001E7080;
   parameter   PCORE_RX_CDR_CFG  = 72'h0b000023ff10400020;
   parameter   C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter   C_BASEADDR = 32'h00000000;
-  parameter   C_HIGHADDR = 32'hffffffff;
 
   // physical interface
 
@@ -696,10 +694,7 @@ module axi_jesd_gt (
 
   // axi interface
 
-  up_axi #(
-    .PCORE_BASEADDR (C_BASEADDR),
-    .PCORE_HIGHADDR (C_HIGHADDR))
-  i_up_axi (
+  up_axi i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

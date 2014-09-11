@@ -173,9 +173,7 @@ module axi_ad9250_alt (
     .PCORE_ID (PCORE_ID),
     .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
     .PCORE_IODELAY_GROUP ("adc_if_delay_group"),
-    .C_S_AXI_MIN_SIZE (32'hffff),
-    .C_BASEADDR (32'h00000000),
-    .C_HIGHADDR (32'hffffffff))
+    .C_S_AXI_MIN_SIZE (32'hffff))
   i_ad9250 (
     .rx_clk (rx_clk),
     .rx_data (rx_data),

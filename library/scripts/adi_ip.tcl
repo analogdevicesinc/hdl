@@ -41,9 +41,6 @@ proc adi_ip_properties {ip_name} {
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
   set_property company_url {www.analog.com} [ipx::current_core]
 
-  set_property value {0xFFFFFFFF} [ipx::get_hdl_parameter C_HIGHADDR [ipx::current_core]]
-  set_property value {0x00000000} [ipx::get_hdl_parameter C_BASEADDR [ipx::current_core]]
-
   set_property supported_families \
     {{kintexu}    {Pre-Production} \
      {virtexu}    {Pre-Production} \
