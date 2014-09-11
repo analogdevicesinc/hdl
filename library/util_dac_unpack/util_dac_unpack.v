@@ -141,7 +141,6 @@ module util_dac_unpack (
   reg [ 15:0] dac_data_07 = 16'h0;
   reg [127:0] buffer_r = 128'h0;
   reg         dma_rd = 1'b0;
-  reg         start = 1'b0;
 
   assign enable_cnt = dac_enable_07 + dac_enable_06 + dac_enable_05 + dac_enable_04 + dac_enable_03 + dac_enable_02 + dac_enable_01 + dac_enable_00;
 
