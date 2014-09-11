@@ -16,7 +16,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "8";
          type = "int";
       }
    }
@@ -40,7 +40,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "9";
          type = "int";
       }
    }
@@ -81,6 +81,14 @@
          type = "String";
       }
    }
+   element sys_int_mem.s1
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element sys_gpio.s1
    {
       datum _lockedAddress
@@ -94,19 +102,11 @@
          type = "String";
       }
    }
-   element sys_int_mem.s1
+   element axi_ad9361.s_axi
    {
       datum baseAddress
       {
-         value = "0";
-         type = "String";
-      }
-   }
-   element axi_dmac_adc.s_axi
-   {
-      datum baseAddress
-      {
-         value = "0";
+         value = "131072";
          type = "String";
       }
    }
@@ -118,11 +118,11 @@
          type = "String";
       }
    }
-   element axi_ad9361.s_axi
+   element axi_dmac_adc.s_axi
    {
       datum baseAddress
       {
-         value = "131072";
+         value = "0";
          type = "String";
       }
    }
@@ -130,7 +130,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "10";
          type = "int";
       }
    }
@@ -182,11 +182,19 @@
          type = "int";
       }
    }
+   element util_dac_unpack
+   {
+      datum _sortIndex
+      {
+         value = "7";
+         type = "int";
+      }
+   }
    element vga_clock_video_output
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "14";
          type = "int";
       }
    }
@@ -194,7 +202,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "13";
          type = "int";
       }
    }
@@ -202,7 +210,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "12";
          type = "int";
       }
    }
@@ -210,7 +218,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "11";
          type = "int";
       }
    }
@@ -347,6 +355,16 @@
  <interface
    name="adc_pack_channels_data"
    internal="adc_pack.channels_data"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="util_dac_unpack_data_clock"
+   internal="util_dac_unpack.data_clock"
+   type="clock"
+   dir="end" />
+ <interface
+   name="util_dac_unpack_channels_data"
+   internal="util_dac_unpack.channels_data"
    type="conduit"
    dir="end" />
  <module kind="clock_source" version="14.0" enabled="1" name="sys_clk">
@@ -926,17 +944,14 @@
  <module kind="axi_ad9361" version="1.0" enabled="1" name="axi_ad9361">
   <parameter name="PCORE_ID" value="0" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="12" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_CLOCK_CLOCK_RATE" value="0" />
   <parameter name="AUTO_DELAY_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_dac">
   <parameter name="PCORE_ID" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="12" />
-  <parameter name="PCORE_AXIM_ID_WIDTH" value="3" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
+  <parameter name="C_DMA_DATA_WIDTH_DEST" value="128" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="24" />
   <parameter name="C_2D_TRANSFER" value="0" />
   <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
@@ -952,8 +967,6 @@
  </module>
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_adc">
   <parameter name="PCORE_ID" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="12" />
-  <parameter name="PCORE_AXIM_ID_WIDTH" value="3" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="24" />
@@ -1257,6 +1270,13 @@
  <module kind="util_adc_pack" version="1.0" enabled="1" name="adc_pack">
   <parameter name="CHANNELS" value="4" />
   <parameter name="DATA_WIDTH" value="16" />
+  <parameter name="AUTO_DATA_CLOCK_CLOCK_RATE" value="0" />
+ </module>
+ <module
+   kind="util_dac_unpack"
+   version="1.0"
+   enabled="1"
+   name="util_dac_unpack">
   <parameter name="AUTO_DATA_CLOCK_CLOCK_RATE" value="0" />
  </module>
  <connection

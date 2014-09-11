@@ -138,7 +138,6 @@ module util_adc_pack (
   reg  [7:0]      en4 = 0;
   reg             dvalid = 0;
   reg             chan_valid = 0;
-  reg             chan_valid_d1 = 0;
 
   reg  [(DATA_WIDTH*CHANNELS-1):0]  ddata = 0;
   reg  [(DATA_WIDTH-1):0]           chan_data_0_r;
