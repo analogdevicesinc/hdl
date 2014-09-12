@@ -83,7 +83,14 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_ad9250_dma_interconnect
 # dac/adc common gt/gpio
 
 set axi_daq1_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_daq1_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {2}] [get_bd_cells axi_daq1_gt]
+set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {2}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {2}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_RX_CLK25_DIV {10}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_TX_CLK25_DIV {10}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_PMA_RSV {0x00018480}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_RX_CDR_CFG {0x03000023ff20400020}] $axi_daq1_gt
 
 set axi_daq1_gt_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_daq1_gt_interconnect]
 set_property -dict [list CONFIG.NUM_MI {1}] $axi_daq1_gt_interconnect
@@ -122,7 +129,7 @@ connect_bd_net -net spi_sdi_i [get_bd_ports spi_sdi_i]  [get_bd_pins sys_ps7/SPI
 
 # connections (gt)
 
-connect_bd_net -net axi_daq1_gt_ref_clk_q         [get_bd_pins axi_daq1_gt/ref_clk_q]           [get_bd_ports rx_ref_clk]
+connect_bd_net -net axi_daq1_gt_ref_clk_c         [get_bd_pins axi_daq1_gt/ref_clk_c]           [get_bd_ports rx_ref_clk]
 connect_bd_net -net axi_daq1_gt_rx_data_p         [get_bd_pins axi_daq1_gt/rx_data_p]           [get_bd_ports rx_data_p]
 connect_bd_net -net axi_daq1_gt_rx_data_n         [get_bd_pins axi_daq1_gt/rx_data_n]           [get_bd_ports rx_data_n]
 connect_bd_net -net axi_daq1_gt_rx_sync           [get_bd_pins axi_daq1_gt/rx_sync]             [get_bd_ports rx_sync]
@@ -259,15 +266,29 @@ connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_dma/m_dest_axi_ar
 # ila
 
 set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {170}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {4}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {9}   ] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE0_WIDTH  {170} ] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE1_WIDTH  {4}   ] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE2_WIDTH  {64}  ] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE3_WIDTH  {1}   ] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE4_WIDTH  {1}   ] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE5_WIDTH  {32}  ] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE6_WIDTH  {1}   ] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE7_WIDTH  {1}   ] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE8_WIDTH  {32}  ] $ila_jesd_rx_mon
 
 connect_bd_net -net axi_daq1_gt_rx_mon_data     [get_bd_pins axi_daq1_gt/rx_mon_data]
 connect_bd_net -net axi_daq1_gt_rx_mon_trigger  [get_bd_pins axi_daq1_gt/rx_mon_trigger]
 connect_bd_net -net axi_daq1_gt_rx_clk          [get_bd_pins ila_jesd_rx_mon/CLK]
 connect_bd_net -net axi_daq1_gt_rx_mon_data     [get_bd_pins ila_jesd_rx_mon/PROBE0]
 connect_bd_net -net axi_daq1_gt_rx_mon_trigger  [get_bd_pins ila_jesd_rx_mon/PROBE1]
+connect_bd_net -net axi_daq1_gt_rx_data         [get_bd_pins ila_jesd_rx_mon/PROBE2]
+connect_bd_net -net axi_ad9250_adc_valid_a      [get_bd_pins ila_jesd_rx_mon/PROBE3]
+connect_bd_net -net axi_ad9250_adc_enable_a     [get_bd_pins ila_jesd_rx_mon/PROBE4]
+connect_bd_net -net axi_ad9250_adc_data_a       [get_bd_pins ila_jesd_rx_mon/PROBE5]
+connect_bd_net -net axi_ad9250_adc_valid_b      [get_bd_pins ila_jesd_rx_mon/PROBE6]
+connect_bd_net -net axi_ad9250_adc_enable_b     [get_bd_pins ila_jesd_rx_mon/PROBE7]
+connect_bd_net -net axi_ad9250_adc_data_b       [get_bd_pins ila_jesd_rx_mon/PROBE8]
 
 # address mapping
 
