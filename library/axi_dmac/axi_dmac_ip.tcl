@@ -11,6 +11,7 @@ adi_ip_files axi_dmac [list \
   "$ad_hdl_dir/library/axi_fifo/axi_fifo.v" \
   "$ad_hdl_dir/library/axi_fifo/address_gray.v" \
   "$ad_hdl_dir/library/axi_fifo/address_gray_pipelined.v" \
+  "$ad_hdl_dir/library/axi_fifo/address_sync.v" \
   "address_generator.v" \
   "data_mover.v" \
   "request_arb.v" \
