@@ -108,12 +108,12 @@ begin
 		if (enable) begin
 			if (en) begin
 				valid <= 1'b1;
-			end else if (ready) begin
+			end else if (ready || ~xfer_req) begin
 				valid <= 1'b0;
 			end
 			overflow <= en & valid & ~ready;
 		end else begin
-			if (ready)
+			if (ready || ~xfer_req)
 				valid <= 1'b0;
 			overflow <= en;
 		end
