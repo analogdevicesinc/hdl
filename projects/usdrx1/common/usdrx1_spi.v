@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -117,23 +117,14 @@ module usdrx1_spi (
 
   // io buffers
 
-  IOBUF i_iobuf_fout_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_fout_miso_s),
-    .IO (spi_fout_sdio));
+  assign spi_fout_miso_s = spi_fout_sdio;
+  assign spi_fout_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
-  IOBUF i_iobuf_afe_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_afe_miso_s),
-    .IO (spi_afe_sdio));
+  assign spi_afe_miso_s = spi_afe_sdio;
+  assign spi_afe_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
-  IOBUF i_iobuf_clk_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_clk_miso_s),
-    .IO (spi_clk_sdio));
+  assign spi_clk_miso_s = spi_clk_sdio;
+  assign spi_clk_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
 
