@@ -101,8 +101,6 @@ module system_top (
   spi_clk_clk,
   spi_clk_sdio,
 
- // afe_mlo_p,
- // afe_mlo_n,
   afe_rst_p,
   afe_rst_n,
   afe_trig_p,
@@ -181,21 +179,19 @@ module system_top (
   output          spi_clk_clk;
   inout           spi_clk_sdio;
 
- // output          afe_mlo_p;
-  //output          afe_mlo_n;
   output          afe_rst_p;
   output          afe_rst_n;
   output          afe_trig_p;
   output          afe_trig_n;
 
-  inout           dac_sleep;
-  inout   [13:0]  dac_data;
-  inout           afe_pdn;
-  inout           afe_stby;
-  inout           clk_resetn;
-  inout           clk_syncn;
-  inout           clk_status;
-  inout           amp_disbn;
+  output          dac_sleep;
+  output  [13:0]  dac_data;
+  output          afe_pdn;
+  output          afe_stby;
+  output          clk_resetn;
+  output          clk_syncn;
+  input           clk_status;
+  output          amp_disbn;
   inout           prc_sck;
   inout           prc_cnv;
   inout           prc_sdo_i;
@@ -234,13 +230,10 @@ module system_top (
   wire    [63:0]  gt_rx_data_1;
   wire    [63:0]  gt_rx_data_2;
   wire    [63:0]  gt_rx_data_3;
-  wire    [43:0]  gpio_i;
-  wire    [43:0]  gpio_o;
-  wire    [43:0]  gpio_t;
-  wire            afe_mlo;
+  wire    [58:0]  gpio_i;
+  wire    [58:0]  gpio_o;
+  wire    [58:0]  gpio_t;
 
-  reg           afe_trig_d;
-  reg           afe_trig_s;
   // spi assignments
 
   assign spi_fout_enb_clk     = ~spi_csn[10:10];
@@ -301,11 +294,6 @@ module system_top (
 
   // gpio/control interface
 
- /* OBUFDS i_obufds_mlo (
-    .I (afe_mlo),
-    .O (afe_mlo_p),
-    .OB (afe_mlo_n));*/
-
   IOBUF i_iobuf_gpio_prc_sdo_q  (
     .I (gpio_o[43]),
     .O (gpio_i[43]),
@@ -330,48 +318,14 @@ module system_top (
     .T (gpio_t[40]),
     .IO (prc_sck));
 
-  IOBUF i_iobuf_gpio_amp_disbn  (
-    .I (gpio_o[39]),
-    .O (gpio_i[39]),
-    .T (gpio_t[39]),
-    .IO (amp_disbn));
+  assign dac_sleep  = gpio_o[44];
+  assign amp_disbn  = gpio_o[39];
+  assign gpio_i[38] = clk_status;
+  assign clk_syncn  = gpio_o[37];
+  assign clk_resetn = gpio_o[36];
+  assign afe_stby   = gpio_o[35];
+  assign afe_pdn    = gpio_o[34];
 
-  IOBUF i_iobuf_gpio_clk_status (
-    .I (gpio_o[38]),
-    .O (gpio_i[38]),
-    .T (gpio_t[38]),
-    .IO (clk_status));
-
-  IOBUF i_iobuf_gpio_clk_syncn  (
-    .I (gpio_o[37]),
-    .O (gpio_i[37]),
-    .T (gpio_t[37]),
-    .IO (clk_syncn));
-
-  IOBUF i_iobuf_gpio_clk_resetn (
-    .I (gpio_o[36]),
-    .O (gpio_i[36]),
-    .T (gpio_t[36]),
-    .IO (clk_resetn));
-
-  IOBUF i_iobuf_gpio_afe_stby (
-    .I (gpio_o[35]),
-    .O (gpio_i[35]),
-    .T (gpio_t[35]),
-    .IO (afe_stby));
-
-  IOBUF i_iobuf_gpio_afe_pdn (
-    .I (gpio_o[34]),
-    .O (gpio_i[34]),
-    .T (gpio_t[34]),
-    .IO (afe_pdn));
-
-  // synchronize the gpio with ref_clk
- /* always @(negedge rx_ref_clk)
-  begin
-    afe_trig_d <= gpio_o[33];
-    afe_trig_s <= afe_trig_d;
-  end*/
   OBUFDS i_obufds_gpio_afe_trig (
     .I (gpio_o[33]),
     .O (afe_trig_p),
@@ -382,20 +336,10 @@ module system_top (
     .O (afe_rst_p),
     .OB (afe_rst_n));
 
-  IOBUF i_iobuf_gpio_dac_sleep (
-    .I (gpio_o[30]),
-    .O (gpio_i[30]),
-    .T (gpio_t[30]),
-    .IO (dac_sleep));
-
   genvar n;
   generate
   for (n = 0; n <= 13; n = n + 1) begin: g_iobuf_gpio_dac_data
-  IOBUF i_iobuf_gpio_dac_data (
-    .I (gpio_o[16+n]),
-    .O (gpio_i[16+n]),
-    .T (gpio_t[16+n]),
-    .IO (dac_data[n]));
+    assign dac_data[n]   = gpio_o[45+n];
   end
   for (n = 0; n <= 14; n = n + 1) begin: g_iobuf_gpio_bd
   IOBUF i_iobuf_gpio_bd (
@@ -462,7 +406,6 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-   // .mlo_clk (afe_mlo),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),
