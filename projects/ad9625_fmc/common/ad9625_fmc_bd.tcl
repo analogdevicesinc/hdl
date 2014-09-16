@@ -35,7 +35,7 @@ if {$sys_zynq == 0} {
 
 set axi_ad9625_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9625:1.0 axi_ad9625_core]
 
-set axi_ad9625_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9625_jesd]
+set axi_ad9625_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9625_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9625_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9625_jesd
 
@@ -81,7 +81,7 @@ if {$sys_zynq == 0} {
   set_property -dict [list CONFIG.C_GPIO_WIDTH {2}] $axi_ad9625_gpio
   set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_ad9625_gpio
 
-  set axi_ad9625_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_ad9625_spi]
+  set axi_ad9625_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_ad9625_spi]
   set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_ad9625_spi
   set_property -dict [list CONFIG.C_NUM_SS_BITS {2}] $axi_ad9625_spi
   set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_ad9625_spi
@@ -277,7 +277,7 @@ if {$sys_zynq == 1} {
 
 # ila
 
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
+set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {662}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {10}] $ila_jesd_rx_mon
