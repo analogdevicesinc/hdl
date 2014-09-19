@@ -161,9 +161,8 @@ if {$sys_zynq == 0} {
 if {$sys_zynq == 0} {
 
   set_property -dict [list CONFIG.NUM_SI {11}] $axi_mem_interconnect
-# set_property -dict [list CONFIG.S08_HAS_REGSLICE {4}] $axi_mem_interconnect
-# set_property -dict [list CONFIG.S09_HAS_REGSLICE {4}] $axi_mem_interconnect
-# set_property -dict [list CONFIG.S10_HAS_REGSLICE {4}] $axi_mem_interconnect
+  set_property -dict [list CONFIG.S09_HAS_REGSLICE {3}] $axi_mem_interconnect
+  set_property -dict [list CONFIG.S10_HAS_REGSLICE {3}] $axi_mem_interconnect
   set_property -dict [list CONFIG.NUM_PORTS {7}] $sys_concat_intc
 }
 
