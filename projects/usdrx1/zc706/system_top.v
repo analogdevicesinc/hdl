@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -171,7 +171,7 @@ module system_top (
   output          spi_fout_enb_sysref;
   output          spi_fout_enb_trig;
   output          spi_fout_clk;
-  inout           spi_fout_sdio;
+  output          spi_fout_sdio;
   output  [ 3:0]  spi_afe_csn;
   output          spi_afe_clk;
   inout           spi_afe_sdio;
@@ -199,7 +199,7 @@ module system_top (
 
   // internal signals
 
-  wire    [10:0]  spi_csn;
+  wire    [ 4:0]  spi_csn;
   wire            spi_clk;
   wire            spi_mosi;
   wire            spi_miso;
@@ -236,26 +236,25 @@ module system_top (
 
   // spi assignments
 
-  assign spi_fout_enb_clk     = ~spi_csn[10:10];
-  assign spi_fout_enb_mlo     = ~spi_csn[ 9: 9];
-  assign spi_fout_enb_rst     = ~spi_csn[ 8: 8];
-  assign spi_fout_enb_sync    = ~spi_csn[ 7: 7];
-  assign spi_fout_enb_sysref  = ~spi_csn[ 6: 6];
-  assign spi_fout_enb_trig    = ~spi_csn[ 5: 5];
+  assign spi_fout_enb_clk     = 1'b0;
+  assign spi_fout_enb_mlo     = 1'b0;
+  assign spi_fout_enb_rst     = 1'b0;
+  assign spi_fout_enb_sync    = 1'b0;
+  assign spi_fout_enb_sysref  = 1'b0;
+  assign spi_fout_enb_trig    = 1'b0;
+  assign spi_fout_sdio        = 1'b0;
   assign spi_afe_csn          = spi_csn[ 4: 1];
   assign spi_clk_csn          = spi_csn[ 0: 0];
-  assign spi_fout_clk         = spi_clk;
+  assign spi_fout_clk         = 1'b0;
   assign spi_afe_clk          = spi_clk;
   assign spi_clk_clk          = spi_clk;
 
   usdrx1_spi i_spi (
-    .spi_fout_csn (spi_csn[10:5]),
     .spi_afe_csn (spi_csn[4:1]),
     .spi_clk_csn (spi_csn[0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
-    .spi_fout_sdio (spi_fout_sdio),
     .spi_afe_sdio (spi_afe_sdio),
     .spi_clk_sdio (spi_clk_sdio));
 

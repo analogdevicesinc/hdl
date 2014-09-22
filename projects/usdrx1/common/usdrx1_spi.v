@@ -39,20 +39,17 @@
 
 module usdrx1_spi (
 
-  spi_fout_csn,
   spi_afe_csn,
   spi_clk_csn,
   spi_clk,
   spi_mosi,
   spi_miso,
 
-  spi_fout_sdio,
   spi_afe_sdio,
   spi_clk_sdio);
 
   // 4 wire
 
-  input   [ 5:0]  spi_fout_csn;
   input   [ 3:0]  spi_afe_csn;
   input           spi_clk_csn;
   input           spi_clk;
@@ -61,7 +58,6 @@ module usdrx1_spi (
 
   // 3 wire
 
-  inout           spi_fout_sdio;
   inout           spi_afe_sdio;
   inout           spi_clk_sdio;
 
@@ -73,16 +69,14 @@ module usdrx1_spi (
 
   // internal signals
 
-  wire    [ 2:0]  spi_csn_3_s;
+  wire    [ 1:0]  spi_csn_3_s;
   wire            spi_csn_s;
   wire            spi_enable_s;
-  wire            spi_fout_miso_s;
   wire            spi_afe_miso_s;
   wire            spi_clk_miso_s;
 
   // check on rising edge and change on falling edge
 
-  assign spi_csn_3_s[2] = & spi_fout_csn;
   assign spi_csn_3_s[1] = & spi_afe_csn;
   assign spi_csn_3_s[0] = spi_clk_csn;
   assign spi_csn_s = & spi_csn_3_s;
@@ -111,14 +105,10 @@ module usdrx1_spi (
     end
   end
 
-  assign spi_miso =  ((spi_fout_miso_s & ~spi_csn_3_s[2]) |
-                      (spi_afe_miso_s  & ~spi_csn_3_s[1]) |
+  assign spi_miso =  ((spi_afe_miso_s  & ~spi_csn_3_s[1]) |
                       (spi_clk_miso_s  & ~spi_csn_3_s[0]));
 
   // io buffers
-
-  assign spi_fout_miso_s = spi_fout_sdio;
-  assign spi_fout_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
   assign spi_afe_miso_s = spi_afe_sdio;
   assign spi_afe_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
