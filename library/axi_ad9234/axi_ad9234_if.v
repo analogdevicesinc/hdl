@@ -40,7 +40,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9680_if (
+module axi_ad9234_if (
 
   // jesd interface 
   // rx_clk is (line-rate/40)
