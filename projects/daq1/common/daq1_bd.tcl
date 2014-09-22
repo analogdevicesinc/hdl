@@ -59,7 +59,7 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_ad9122_dma_interconnect
 
 set axi_ad9250_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_core]
 
-set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9250_jesd]
+set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9250_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9250_jesd
 set_property -dict [list CONFIG.C_LANES {2}] $axi_ad9250_jesd
 
@@ -113,12 +113,12 @@ set_property LEFT 39 [get_bd_ports GPIO_O]
 set_property LEFT 39 [get_bd_ports GPIO_T]
 
 # connections (spi)
-set sys_spi_csn_concat [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_spi_csn_concat]
+set sys_spi_csn_concat [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_spi_csn_concat]
 set_property -dict [list CONFIG.NUM_PORTS {3}] $sys_spi_csn_concat
 
-connect_bd_net -net spi_csn0  [get_bd_pins sys_spi_csn_concat/In2] [get_bd_pins sys_ps7/SPI0_SS_O]
+connect_bd_net -net spi_csn0  [get_bd_pins sys_spi_csn_concat/In2] [get_bd_pins sys_ps7/SPI0_SS2_O]
 connect_bd_net -net spi_csn1  [get_bd_pins sys_spi_csn_concat/In1] [get_bd_pins sys_ps7/SPI0_SS1_O]
-connect_bd_net -net spi_csn2  [get_bd_pins sys_spi_csn_concat/In0] [get_bd_pins sys_ps7/SPI0_SS2_O]
+connect_bd_net -net spi_csn2  [get_bd_pins sys_spi_csn_concat/In0] [get_bd_pins sys_ps7/SPI0_SS_O]
 connect_bd_net -net spi_csn_i [get_bd_ports spi_csn_i]  [get_bd_pins sys_ps7/SPI0_SS_I]
 connect_bd_net -net spi_csn_o [get_bd_ports spi_csn_o]  [get_bd_pins sys_spi_csn_concat/dout]
 connect_bd_net -net spi_clk_i [get_bd_ports spi_clk_i]  [get_bd_pins sys_ps7/SPI0_SCLK_I]
@@ -265,7 +265,7 @@ connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_dma/m_dest_axi_ar
 
 # ila
 
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
+set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {9}   ] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH  {170} ] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH  {4}   ] $ila_jesd_rx_mon
