@@ -40,7 +40,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9680_channel (
+module axi_ad9234_channel (
 
   // adc interface
 
@@ -110,7 +110,7 @@ module axi_ad9680_channel (
 
   // instantiations
 
-  axi_ad9680_pnmon i_pnmon (
+  axi_ad9234_pnmon i_pnmon (
     .adc_clk (adc_clk),
     .adc_data (adc_data),
     .adc_pn_oos (adc_pn_oos_s),

@@ -39,7 +39,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9680 (
+module axi_ad9234 (
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -187,7 +187,7 @@ module axi_ad9680 (
 
   // main (device interface)
 
-  axi_ad9680_if i_if (
+  axi_ad9234_if i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
     .adc_clk (adc_clk),
@@ -200,7 +200,7 @@ module axi_ad9680 (
 
   // channel
 
-  axi_ad9680_channel #(.IQSEL(0), .CHID(0)) i_channel_0 (
+  axi_ad9234_channel #(.IQSEL(0), .CHID(0)) i_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_data (adc_data_a_s),
@@ -221,7 +221,7 @@ module axi_ad9680 (
 
   // channel
 
-  axi_ad9680_channel #(.IQSEL(1), .CHID(1)) i_channel_1 (
+  axi_ad9234_channel #(.IQSEL(1), .CHID(1)) i_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_data (adc_data_b_s),

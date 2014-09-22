@@ -40,7 +40,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9680_pnmon (
+module axi_ad9234_pnmon (
 
   // adc interface
 

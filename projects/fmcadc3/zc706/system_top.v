@@ -100,35 +100,27 @@ module system_top (
   rx_ref_clk_n,
   rx_sysref_p,
   rx_sysref_n,
-  rx_sync_p,
-  rx_sync_n,
+  rx_sync_0_p,
+  rx_sync_0_n,
+  rx_sync_1_p,
+  rx_sync_1_n,
   rx_data_p,
   rx_data_n,
   
-  tx_ref_clk_p,
-  tx_ref_clk_n,
-  tx_sysref_p,
-  tx_sysref_n,
-  tx_sync_p,
-  tx_sync_n,
-  tx_data_p,
-  tx_data_n,
-  
-  adc_fdb,
-  adc_fda,
-  dac_irq,
-  clkd_status,
-  
-  adc_pd,
-  dac_txen,
-  dac_reset,
-  clkd_pd,
-  clkd_sync,
-  clkd_reset,
+  ad9528_rstn,
+  ad9528_status,
+  ad9234_1_fda;
+  ad9234_1_fdb;
+  ad9234_2_fda;
+  ad9234_2_fdb;
  
-  spi_csn_clk,
-  spi_csn_dac,
-  spi_csn_adc,
+  ad9528_csn,
+  ada4961_1a_csn,
+  ada4961_1b_csn,
+  ad9234_1_csn,
+  ada4961_2a_csn,
+  ada4961_2b_csn,
+  ad9234_2_csn,
   spi_clk,
   spi_sdio);
 
@@ -191,175 +183,162 @@ module system_top (
   input           rx_ref_clk_n;
   input           rx_sysref_p;
   input           rx_sysref_n;
-  output          rx_sync_p;
-  output          rx_sync_n;
-  input   [ 3:0]  rx_data_p;
-  input   [ 3:0]  rx_data_n;
+  output          rx_sync_0_p;
+  output          rx_sync_0_n;
+  output          rx_sync_1_p;
+  output          rx_sync_1_n;
+  input   [ 7:0]  rx_data_p;
+  input   [ 7:0]  rx_data_n;
   
-  input           tx_ref_clk_p;
-  input           tx_ref_clk_n;
-  input           tx_sysref_p;
-  input           tx_sysref_n;
-  input           tx_sync_p;
-  input           tx_sync_n;
-  output  [ 3:0]  tx_data_p;
-  output  [ 3:0]  tx_data_n;
+  inout           ad9528_rstn;
+  inout           ad9528_status;
+  inout           ad9234_1_fda;
+  inout           ad9234_1_fdb;
+  inout           ad9234_2_fda;
+  inout           ad9234_2_fdb;
   
-  inout           adc_fdb;
-  inout           adc_fda;
-  inout           dac_irq;
-  inout   [ 1:0]  clkd_status;
-  
-  inout           adc_pd;
-  inout           dac_txen;
-  inout           dac_reset;
-  inout           clkd_pd;
-  inout           clkd_sync;
-  inout           clkd_reset;
-  
-  output          spi_csn_clk;
-  output          spi_csn_dac;
-  output          spi_csn_adc;
+  output          ad9528_csn;
+  output          ada4961_1a_csn;
+  output          ada4961_1b_csn;
+  output          ad9234_1_csn;
+  output          ada4961_2a_csn;
+  output          ada4961_2b_csn;
+  output          ad9234_2_csn;
   output          spi_clk;
   inout           spi_sdio;
 
   // internal registers
 
-  reg             dac_drd = 'd0;
-  reg     [63:0]  dac_ddata_0 = 'd0;
-  reg     [63:0]  dac_ddata_1 = 'd0;
-  reg     [63:0]  dac_ddata_2 = 'd0;
-  reg     [63:0]  dac_ddata_3 = 'd0;
+  reg     [ 1:0]  adc_dcnt = 'd0;
   reg             adc_dsync = 'd0;
   reg             adc_dwr = 'd0;
-  reg    [127:0]  adc_ddata = 'd0;
+  reg    [255:0]  adc_ddata = 'd0;
   
   // internal signals
 
-  wire    [42:0]  gpio_i;
-  wire    [42:0]  gpio_o;
-  wire    [42:0]  gpio_t;
+  wire    [37:0]  gpio_i;
+  wire    [37:0]  gpio_o;
+  wire    [37:0]  gpio_t;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
-  wire            tx_ref_clk;
-  wire            tx_sysref;
-  wire            tx_sync;
-  wire    [ 2:0]  spi_csn;
   wire            spi_mosi;
   wire            spi_miso;
-  wire            dac_clk;
-  wire   [127:0]  dac_ddata;
-  wire            dac_enable_0;
-  wire            dac_enable_1;
-  wire            dac_enable_2;
-  wire            dac_enable_3;
-  wire            dac_valid_0;
-  wire            dac_valid_1;
-  wire            dac_valid_2;
-  wire            dac_valid_3;
   wire            adc_clk;
   wire    [63:0]  adc_data_0;
   wire    [63:0]  adc_data_1;
+  wire    [63:0]  adc_data_2;
+  wire    [63:0]  adc_data_3;
   wire            adc_enable_0;
   wire            adc_enable_1;
+  wire            adc_enable_2;
+  wire            adc_enable_3;
   wire            adc_valid_0;
   wire            adc_valid_1;
+  wire            adc_valid_2;
+  wire            adc_valid_3;
+  wire   [255:0]  gt_data;
 
-  // adc-dac data
-
-  always @(posedge dac_clk) begin
-    case ({dac_enable_1, dac_enable_0})
-      2'b11: begin
-        dac_drd <= dac_valid_0 & dac_valid_1;
-        dac_ddata_0[63:48] <= dac_ddata[111: 96];
-        dac_ddata_0[47:32] <= dac_ddata[ 79: 64];
-        dac_ddata_0[31:16] <= dac_ddata[ 47: 32];
-        dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
-        dac_ddata_1[63:48] <= dac_ddata[127:112];
-        dac_ddata_1[47:32] <= dac_ddata[ 95: 80];
-        dac_ddata_1[31:16] <= dac_ddata[ 63: 48];
-        dac_ddata_1[15: 0] <= dac_ddata[ 31: 16];
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
-      end
-      2'b10: begin
-        dac_drd <= dac_valid_1 & ~dac_drd;
-        dac_ddata_0 <= 64'd0;
-        if (dac_drd == 1'b1) begin
-          dac_ddata_1[63:48] <= dac_ddata[127:112];
-          dac_ddata_1[47:32] <= dac_ddata[111: 96];
-          dac_ddata_1[31:16] <= dac_ddata[ 95: 80];
-          dac_ddata_1[15: 0] <= dac_ddata[ 79: 64];
-        end else begin
-          dac_ddata_1[63:48] <= dac_ddata[ 63: 48];
-          dac_ddata_1[47:32] <= dac_ddata[ 47: 32];
-          dac_ddata_1[31:16] <= dac_ddata[ 31: 16];
-          dac_ddata_1[15: 0] <= dac_ddata[ 15:  0];
-        end
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
-      end
-      2'b01: begin
-        dac_drd <= dac_valid_0 & ~dac_drd;
-        if (dac_drd == 1'b1) begin
-          dac_ddata_0[63:48] <= dac_ddata[127:112];
-          dac_ddata_0[47:32] <= dac_ddata[111: 96];
-          dac_ddata_0[31:16] <= dac_ddata[ 95: 80];
-          dac_ddata_0[15: 0] <= dac_ddata[ 79: 64];
-        end else begin
-          dac_ddata_0[63:48] <= dac_ddata[ 63: 48];
-          dac_ddata_0[47:32] <= dac_ddata[ 47: 32];
-          dac_ddata_0[31:16] <= dac_ddata[ 31: 16];
-          dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
-        end
-        dac_ddata_1 <= 64'd0;
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
-      end
-      default: begin
-        dac_drd <= 1'b0;
-        dac_ddata_0 <= 64'd0;
-        dac_ddata_1 <= 64'd0;
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
-      end
-    endcase
-  end
+  // adc-pack place holder
 
   always @(posedge adc_clk) begin
-    case ({adc_enable_1, adc_enable_0})
-      2'b11: begin
+    adc_dcnt <= adc_dcnt + 1'b1;
+    case ({adc_enable_3, adc_enable_2, adc_enable_1, adc_enable_0})
+      4'b1111: begin
         adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_1 & adc_valid_0;
-        adc_ddata[127:112] <= adc_data_1[63:48];
-        adc_ddata[111: 96] <= adc_data_0[63:48];
-        adc_ddata[ 95: 80] <= adc_data_1[47:32];
-        adc_ddata[ 79: 64] <= adc_data_0[47:32];
-        adc_ddata[ 63: 48] <= adc_data_1[31:16];
-        adc_ddata[ 47: 32] <= adc_data_0[31:16];
+        adc_dwr <= adc_valid_3 & adc_valid_2 & adc_valid_1 & adc_valid_0;
+        adc_ddata[255:240] <= adc_data_3[63:48];
+        adc_ddata[239:224] <= adc_data_2[63:48];
+        adc_ddata[223:208] <= adc_data_1[63:48];
+        adc_ddata[207:192] <= adc_data_0[63:48];
+        adc_ddata[191:176] <= adc_data_3[47:32];
+        adc_ddata[175:160] <= adc_data_2[47:32];
+        adc_ddata[159:144] <= adc_data_1[47:32];
+        adc_ddata[143:128] <= adc_data_0[47:32];
+        adc_ddata[127:112] <= adc_data_3[31:16];
+        adc_ddata[111: 96] <= adc_data_2[31:16];
+        adc_ddata[ 95: 80] <= adc_data_1[31:16];
+        adc_ddata[ 79: 64] <= adc_data_0[31:16];
+        adc_ddata[ 63: 48] <= adc_data_3[15: 0];
+        adc_ddata[ 47: 32] <= adc_data_2[15: 0];
         adc_ddata[ 31: 16] <= adc_data_1[15: 0];
         adc_ddata[ 15:  0] <= adc_data_0[15: 0];
       end
-      2'b10: begin
+      4'b0001: begin
         adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_1 & ~adc_dwr;
-        adc_ddata[127:112] <= adc_data_1[63:48];
-        adc_ddata[111: 96] <= adc_data_1[47:32];
-        adc_ddata[ 95: 80] <= adc_data_1[31:16];
-        adc_ddata[ 79: 64] <= adc_data_1[15: 0];
+        adc_dwr <= adc_valid_0 & adc_dcnt[0] & adc_dcnt[1];
+        adc_ddata[255:240] <= adc_data_0[63:48];
+        adc_ddata[239:224] <= adc_data_0[47:32];
+        adc_ddata[223:208] <= adc_data_0[31:16];
+        adc_ddata[207:192] <= adc_data_0[15: 0];
+        adc_ddata[191:176] <= adc_ddata[255:240];
+        adc_ddata[175:160] <= adc_ddata[239:224];
+        adc_ddata[159:144] <= adc_ddata[223:208];
+        adc_ddata[143:128] <= adc_ddata[207:192];
+        adc_ddata[127:112] <= adc_ddata[191:176];
+        adc_ddata[111: 96] <= adc_ddata[175:160];
+        adc_ddata[ 95: 80] <= adc_ddata[159:144];
+        adc_ddata[ 79: 64] <= adc_ddata[143:128];
         adc_ddata[ 63: 48] <= adc_ddata[127:112];
         adc_ddata[ 47: 32] <= adc_ddata[111: 96];
         adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
         adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
       end
-      2'b01: begin
+      4'b0010: begin
         adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_0 & ~adc_dwr;
-        adc_ddata[127:112] <= adc_data_0[63:48];
-        adc_ddata[111: 96] <= adc_data_0[47:32];
-        adc_ddata[ 95: 80] <= adc_data_0[31:16];
-        adc_ddata[ 79: 64] <= adc_data_0[15: 0];
+        adc_dwr <= adc_valid_1 & adc_dcnt[0] & adc_dcnt[1];
+        adc_ddata[255:240] <= adc_data_1[63:48];
+        adc_ddata[239:224] <= adc_data_1[47:32];
+        adc_ddata[223:208] <= adc_data_1[31:16];
+        adc_ddata[207:192] <= adc_data_1[15: 0];
+        adc_ddata[191:176] <= adc_ddata[255:240];
+        adc_ddata[175:160] <= adc_ddata[239:224];
+        adc_ddata[159:144] <= adc_ddata[223:208];
+        adc_ddata[143:128] <= adc_ddata[207:192];
+        adc_ddata[127:112] <= adc_ddata[191:176];
+        adc_ddata[111: 96] <= adc_ddata[175:160];
+        adc_ddata[ 95: 80] <= adc_ddata[159:144];
+        adc_ddata[ 79: 64] <= adc_ddata[143:128];
+        adc_ddata[ 63: 48] <= adc_ddata[127:112];
+        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+      end
+      4'b0100: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_2 & adc_dcnt[0] & adc_dcnt[1];
+        adc_ddata[255:240] <= adc_data_2[63:48];
+        adc_ddata[239:224] <= adc_data_2[47:32];
+        adc_ddata[223:208] <= adc_data_2[31:16];
+        adc_ddata[207:192] <= adc_data_2[15: 0];
+        adc_ddata[191:176] <= adc_ddata[255:240];
+        adc_ddata[175:160] <= adc_ddata[239:224];
+        adc_ddata[159:144] <= adc_ddata[223:208];
+        adc_ddata[143:128] <= adc_ddata[207:192];
+        adc_ddata[127:112] <= adc_ddata[191:176];
+        adc_ddata[111: 96] <= adc_ddata[175:160];
+        adc_ddata[ 95: 80] <= adc_ddata[159:144];
+        adc_ddata[ 79: 64] <= adc_ddata[143:128];
+        adc_ddata[ 63: 48] <= adc_ddata[127:112];
+        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+      end
+      4'b1000: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_3 & adc_dcnt[0] & adc_dcnt[1];
+        adc_ddata[255:240] <= adc_data_3[63:48];
+        adc_ddata[239:224] <= adc_data_3[47:32];
+        adc_ddata[223:208] <= adc_data_3[31:16];
+        adc_ddata[207:192] <= adc_data_3[15: 0];
+        adc_ddata[191:176] <= adc_ddata[255:240];
+        adc_ddata[175:160] <= adc_ddata[239:224];
+        adc_ddata[159:144] <= adc_ddata[223:208];
+        adc_ddata[143:128] <= adc_ddata[207:192];
+        adc_ddata[127:112] <= adc_ddata[191:176];
+        adc_ddata[111: 96] <= adc_ddata[175:160];
+        adc_ddata[ 95: 80] <= adc_ddata[159:144];
+        adc_ddata[ 79: 64] <= adc_ddata[143:128];
         adc_ddata[ 63: 48] <= adc_ddata[127:112];
         adc_ddata[ 47: 32] <= adc_ddata[111: 96];
         adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
@@ -368,16 +347,10 @@ module system_top (
       default: begin
         adc_dsync <= 1'b0;
         adc_dwr <= 1'b0;
-        adc_ddata <= 128'd0;
+        adc_ddata <= 256'd0;
       end
     endcase
   end
-
-  // spi
-
-  assign spi_csn_adc = spi_csn[2];
-  assign spi_csn_dac = spi_csn[1];
-  assign spi_csn_clk = spi_csn[0];
 
   // instantiations
 
@@ -393,49 +366,40 @@ module system_top (
     .IB (rx_sysref_n),
     .O (rx_sysref));
 
-  OBUFDS i_obufds_rx_sync (
+  OBUFDS i_obufds_rx_sync_0 (
     .I (rx_sync),
-    .O (rx_sync_p),
-    .OB (rx_sync_n));
+    .O (rx_sync_0_p),
+    .OB (rx_sync_0_n));
 
-  IBUFDS_GTE2 i_ibufds_tx_ref_clk (
-    .CEB (1'd0),
-    .I (tx_ref_clk_p),
-    .IB (tx_ref_clk_n),
-    .O (tx_ref_clk),
-    .ODIV2 ());
+  OBUFDS i_obufds_rx_sync_1 (
+    .I (rx_sync),
+    .O (rx_sync_1_p),
+    .OB (rx_sync_1_n));
 
-  IBUFDS i_ibufds_tx_sysref (
-    .I (tx_sysref_p),
-    .IB (tx_sysref_n),
-    .O (tx_sysref));
+  assign ada4961_1a_csn = 1'b1;
+  assign ada4961_1b_csn = 1'b1;
+  assign ada4961_2a_csn = 1'b1;
+  assign ada4961_2b_csn = 1'b1;
 
-  IBUFDS i_ibufds_tx_sync (
-    .I (tx_sync_p),
-    .IB (tx_sync_n),
-    .O (tx_sync));
-
-  daq2_spi i_spi (
-    .spi_csn (spi_csn),
+  fmcadc3_spi i_spi (
+    .ad9528_csn (ad9528_csn),
+    .ad9234_1_csn (ad9234_1_csn),
+    .ad9234_2_csn (ad9234_2_csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
 
-  ad_iobuf #(.DATA_WIDTH(26)) i_iobuf (
-    .dt ({gpio_t[42:32], gpio_t[14:0]}),
-    .di ({gpio_o[42:32], gpio_o[14:0]}),
-    .do ({gpio_i[42:32], gpio_i[14:0]}),
-    .dio ({ adc_pd,        // 42
-            dac_txen,      // 41
-            dac_reset,     // 40
-            clkd_pd,       // 39
-            clkd_sync,     // 38
-            clkd_reset,    // 37
-            adc_fdb,       // 36
-            adc_fda,       // 35
-            dac_irq,       // 34
-            clkd_status,   // 32
+  ad_iobuf #(.DATA_WIDTH(38)) i_iobuf (
+    .dt ({gpio_t[37:32], gpio_t[14:0]}),
+    .di ({gpio_o[37:32], gpio_o[14:0]}),
+    .do ({gpio_i[37:32], gpio_i[14:0]}),
+    .dio ({ ad9234_2_fdb,  // 37
+            ad9234_2_fda,  // 36
+            ad9234_1_fdb,  // 35
+            ad9234_1_fda,  // 34
+            ad9528_status, // 33
+            ad9528_rstn,   // 32
             gpio_bd}));    //  0
 
   system_wrapper i_system_wrapper (
@@ -481,28 +445,22 @@ module system_top (
     .adc_clk (adc_clk),
     .adc_data_0 (adc_data_0),
     .adc_data_1 (adc_data_1),
+    .adc_data_2 (adc_data_2),
+    .adc_data_3 (adc_data_3),
     .adc_ddata (adc_ddata),
     .adc_dsync (adc_dsync),
     .adc_dwr (adc_dwr),
     .adc_enable_0 (adc_enable_0),
     .adc_enable_1 (adc_enable_1),
+    .adc_enable_2 (adc_enable_2),
+    .adc_enable_3 (adc_enable_3),
     .adc_valid_0 (adc_valid_0),
     .adc_valid_1 (adc_valid_1),
-    .dac_clk (dac_clk),
-    .dac_ddata (dac_ddata),
-    .dac_ddata_0 (dac_ddata_0),
-    .dac_ddata_1 (dac_ddata_1),
-    .dac_ddata_2 (dac_ddata_2),
-    .dac_ddata_3 (dac_ddata_3),
-    .dac_drd (dac_drd),
-    .dac_enable_0 (dac_enable_0),
-    .dac_enable_1 (dac_enable_1),
-    .dac_enable_2 (dac_enable_2),
-    .dac_enable_3 (dac_enable_3),
-    .dac_valid_0 (dac_valid_0),
-    .dac_valid_1 (dac_valid_1),
-    .dac_valid_2 (dac_valid_2),
-    .dac_valid_3 (dac_valid_3),
+    .adc_valid_2 (adc_valid_2),
+    .adc_valid_3 (adc_valid_3),
+    .gt_data (gt_data),
+    .gt_data_0 (gt_data[127:0]),
+    .gt_data_1 (gt_data[255:128]),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -518,18 +476,15 @@ module system_top (
     .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
+    .spi_csn_0 (ad9528_csn),
+    .spi_csn_1 (ad9234_1_csn),
+    .spi_csn_2 (ad9234_2_csn),
+    .spi_csn_i (1'b1),
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
     .spi_sdo_o (spi_mosi),
     .sys_clk_clk_n (sys_clk_n),
-    .sys_clk_clk_p (sys_clk_p),
-    .tx_data_n (tx_data_n),
-    .tx_data_p (tx_data_p),
-    .tx_ref_clk (tx_ref_clk),
-    .tx_sync (tx_sync),
-    .tx_sysref (tx_sysref));
+    .sys_clk_clk_p (sys_clk_p));
 
 endmodule
 
