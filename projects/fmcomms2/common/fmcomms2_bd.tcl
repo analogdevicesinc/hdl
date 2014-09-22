@@ -274,10 +274,10 @@ if {$sys_zynq == 0} {
     # memory interconnects share the same clock (fclk2)
 
 if {$sys_zynq == 1} {
-    set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
-
-    connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
+  set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
+  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
 }
+
 
     # interconnect (mem/dac)
 
@@ -339,19 +339,28 @@ if {$sys_zynq == 0} {
     p_sys_wfifo [current_bd_instance .] sys_wfifo_2 16 16
     p_sys_wfifo [current_bd_instance .] sys_wfifo_3 16 16
 
-    connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_0/m_clk] [get_bd_pins axi_ad9361/l_clk]
-    connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_1/m_clk] [get_bd_pins axi_ad9361/l_clk]
-    connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_2/m_clk] [get_bd_pins axi_ad9361/l_clk]
-    connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_3/m_clk] [get_bd_pins axi_ad9361/l_clk]
+    if {$sys_zynq == 0} {
+    connect_bd_net -net sys_200m_clk [get_bd_pins ila_adc/clk]
+    connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_0/s_clk] $sys_200m_clk_source
+    connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_1/s_clk] $sys_200m_clk_source
+    connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_2/s_clk] $sys_200m_clk_source
+    connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_3/s_clk] $sys_200m_clk_source
+  } else {
+    connect_bd_net -net sys_fmc_dma_clk [get_bd_pins ila_adc/clk]
     connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_0/s_clk] $sys_fmc_dma_clk_source
     connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_1/s_clk] $sys_fmc_dma_clk_source
     connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_2/s_clk] $sys_fmc_dma_clk_source
     connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_3/s_clk] $sys_fmc_dma_clk_source
+  }
+
+    connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_0/m_clk] [get_bd_pins axi_ad9361/l_clk]
+    connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_1/m_clk] [get_bd_pins axi_ad9361/l_clk]
+    connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_2/m_clk] [get_bd_pins axi_ad9361/l_clk]
+    connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_3/m_clk] [get_bd_pins axi_ad9361/l_clk]
     connect_bd_net -net sys_100m_resetn [get_bd_pins sys_wfifo_0/rstn] $sys_100m_resetn_source
     connect_bd_net -net sys_100m_resetn [get_bd_pins sys_wfifo_1/rstn] $sys_100m_resetn_source
     connect_bd_net -net sys_100m_resetn [get_bd_pins sys_wfifo_2/rstn] $sys_100m_resetn_source
     connect_bd_net -net sys_100m_resetn [get_bd_pins sys_wfifo_3/rstn] $sys_100m_resetn_source
-
     connect_bd_net -net axi_ad9361_adc_valid_i0 [get_bd_pins sys_wfifo_0/m_wr] [get_bd_pins axi_ad9361/adc_valid_i0]
     connect_bd_net -net axi_ad9361_adc_valid_q0 [get_bd_pins sys_wfifo_1/m_wr] [get_bd_pins axi_ad9361/adc_valid_q0]
     connect_bd_net -net axi_ad9361_adc_valid_i1 [get_bd_pins sys_wfifo_2/m_wr] [get_bd_pins axi_ad9361/adc_valid_i1]
@@ -361,7 +370,6 @@ if {$sys_zynq == 0} {
     connect_bd_net -net axi_ad9361_adc_chan_i1  [get_bd_pins sys_wfifo_2/m_wdata] [get_bd_pins axi_ad9361/adc_data_i1]
     connect_bd_net -net axi_ad9361_adc_chan_q1  [get_bd_pins sys_wfifo_3/m_wdata] [get_bd_pins axi_ad9361/adc_data_q1]
 
-    connect_bd_net -net sys_fmc_dma_clk       [get_bd_pins ila_adc/clk]
     connect_bd_net -net util_wfifo_0_s_wr     [get_bd_pins sys_wfifo_0/s_wr]  [get_bd_pins ila_adc/probe0]
     connect_bd_net -net util_wfifo_1_s_wr     [get_bd_pins sys_wfifo_1/s_wr]  [get_bd_pins ila_adc/probe1]
     connect_bd_net -net util_wfifo_2_s_wr     [get_bd_pins sys_wfifo_2/s_wr]  [get_bd_pins ila_adc/probe2]
