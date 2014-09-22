@@ -49,7 +49,7 @@ proc adi_project_create {project_name} {
   if [regexp "_zc706$" $project_name] {
     set xl_board "zc706"
     set project_part "xc7z045ffg900-2"
-    set project_board "xilinx.com:zynq:zc706:1.1"
+    set project_board "xilinx.com:zc706:part0:1.0"
   }
 
    if [regexp "_mitx045$" $project_name] {
