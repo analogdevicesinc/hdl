@@ -15,6 +15,16 @@ set rx_sysref       [create_bd_port -dir I rx_sysref]
 set rx_data_p       [create_bd_port -dir I -from 1 -to 0 rx_data_p]
 set rx_data_n       [create_bd_port -dir I -from 1 -to 0 rx_data_n]
 
+set dac_clk         [create_bd_port -dir O dac_clk]
+set dac_valid_0     [create_bd_port -dir O dac_valid_0]
+set dac_enable_0    [create_bd_port -dir O dac_enable_0]
+set dac_ddata_0     [create_bd_port -dir I -from 63 -to 0 dac_ddata_0]
+set dac_valid_1     [create_bd_port -dir O dac_valid_1]
+set dac_enable_1    [create_bd_port -dir O dac_enable_1]
+set dac_ddata_1     [create_bd_port -dir I -from 63 -to 0 dac_ddata_1]
+set dac_drd         [create_bd_port -dir I dac_drd]
+set dac_ddata       [create_bd_port -dir O -from 127 -to 0 dac_ddata]
+
 set adc_clk         [create_bd_port -dir O adc_clk]
 set adc_enable_a    [create_bd_port -dir O adc_enable_a]
 set adc_valid_a     [create_bd_port -dir O adc_valid_a]
@@ -22,9 +32,9 @@ set adc_data_a      [create_bd_port -dir O -from 31 -to 0 adc_data_a]
 set adc_enable_b    [create_bd_port -dir O adc_enable_b]
 set adc_valid_b     [create_bd_port -dir O adc_valid_b]
 set adc_data_b      [create_bd_port -dir O -from 31 -to 0 adc_data_b]
-set dma_wr          [create_bd_port -dir I dma_wr]
-set dma_sync        [create_bd_port -dir I dma_sync]
-set dma_data        [create_bd_port -dir I -from 63 -to 0 dma_data]
+set adc_dwr         [create_bd_port -dir I adc_dwr]
+set adc_dsync       [create_bd_port -dir I adc_dsync]
+set adc_ddata       [create_bd_port -dir I -from 63 -to 0 adc_ddata]
 
 set tx_ref_clk_p    [create_bd_port -dir I tx_ref_clk_p]
 set tx_ref_clk_n    [create_bd_port -dir I tx_ref_clk_n]
@@ -136,6 +146,7 @@ connect_bd_net -net axi_daq1_gt_rx_sync           [get_bd_pins axi_daq1_gt/rx_sy
 connect_bd_net -net axi_daq1_gt_rx_ext_sysref     [get_bd_pins axi_daq1_gt/rx_ext_sysref]       [get_bd_ports rx_sysref]
 
 # connections (adc)
+
 connect_bd_net -net axi_daq1_gt_rx_clk [get_bd_pins axi_daq1_gt/rx_clk_g]
 connect_bd_net -net axi_daq1_gt_rx_clk [get_bd_pins axi_daq1_gt/rx_clk]
 connect_bd_net -net axi_daq1_gt_rx_clk [get_bd_pins axi_ad9250_core/rx_clk]
@@ -153,17 +164,20 @@ connect_bd_net -net axi_daq1_gt_rx_ip_sync        [get_bd_pins axi_daq1_gt/rx_ip
 connect_bd_net -net axi_daq1_gt_rx_ip_sof         [get_bd_pins axi_daq1_gt/rx_ip_sof]           [get_bd_pins axi_ad9250_jesd/rx_start_of_frame]
 connect_bd_net -net axi_daq1_gt_rx_ip_data        [get_bd_pins axi_daq1_gt/rx_ip_data]          [get_bd_pins axi_ad9250_jesd/rx_tdata]
 connect_bd_net -net axi_daq1_gt_rx_data           [get_bd_pins axi_daq1_gt/rx_data]             [get_bd_pins axi_ad9250_core/rx_data]
-connect_bd_net -net axi_ad9250_adc_clk            [get_bd_pins axi_ad9250_core/adc_clk]         [get_bd_pins axi_ad9250_dma/fifo_wr_clk]                [get_bd_ports adc_clk]
+connect_bd_net -net axi_ad9250_adc_clk            [get_bd_pins axi_ad9250_core/adc_clk]         [get_bd_pins axi_ad9250_dma/fifo_wr_clk]
 connect_bd_net -net axi_ad9250_adc_enable_a       [get_bd_pins axi_ad9250_core/adc_enable_a]    [get_bd_ports adc_enable_a]
 connect_bd_net -net axi_ad9250_adc_valid_a        [get_bd_pins axi_ad9250_core/adc_valid_a]     [get_bd_ports adc_valid_a]
 connect_bd_net -net axi_ad9250_adc_data_a         [get_bd_pins axi_ad9250_core/adc_data_a]      [get_bd_ports adc_data_a]
 connect_bd_net -net axi_ad9250_adc_enable_b       [get_bd_pins axi_ad9250_core/adc_enable_b]    [get_bd_ports adc_enable_b]
 connect_bd_net -net axi_ad9250_adc_valid_b        [get_bd_pins axi_ad9250_core/adc_valid_b]     [get_bd_ports adc_valid_b]
 connect_bd_net -net axi_ad9250_adc_data_b         [get_bd_pins axi_ad9250_core/adc_data_b]      [get_bd_ports adc_data_b]
-connect_bd_net -net axi_ad9250_dma_wr             [get_bd_pins axi_ad9250_dma/fifo_wr_en]       [get_bd_ports dma_wr]
-connect_bd_net -net axi_ad9250_dma_sync           [get_bd_pins axi_ad9250_dma/fifo_wr_sync]     [get_bd_ports dma_sync]
-connect_bd_net -net axi_ad9250_dma_data           [get_bd_pins axi_ad9250_dma/fifo_wr_din]      [get_bd_ports dma_data]
+connect_bd_net -net axi_ad9250_adc_dovf           [get_bd_pins axi_ad9250_core/adc_dovf]        [get_bd_pins axi_ad9250_dma/fifo_wr_overflow]
+connect_bd_net -net axi_ad9250_dma_wr             [get_bd_pins axi_ad9250_dma/fifo_wr_en]       [get_bd_ports adc_dwr]
+connect_bd_net -net axi_ad9250_dma_sync           [get_bd_pins axi_ad9250_dma/fifo_wr_sync]     [get_bd_ports adc_dsync]
+connect_bd_net -net axi_ad9250_dma_data           [get_bd_pins axi_ad9250_dma/fifo_wr_din]      [get_bd_ports adc_ddata]
 connect_bd_net -net axi_ad9250_dma_irq            [get_bd_pins axi_ad9250_dma/irq]              [get_bd_pins sys_concat_intc/In2]
+
+connect_bd_net -net axi_ad9250_adc_clk            [get_bd_ports adc_clk]
 
 # connections (dac)
 
@@ -176,10 +190,18 @@ connect_bd_net -net axi_ad9122_dac_frame_out_n    [get_bd_pins axi_ad9122_core/d
 connect_bd_net -net axi_ad9122_dac_data_out_p     [get_bd_pins axi_ad9122_core/dac_data_out_p]  [get_bd_ports tx_data_p]
 connect_bd_net -net axi_ad9122_dac_data_out_n     [get_bd_pins axi_ad9122_core/dac_data_out_n]  [get_bd_ports tx_data_n]
 connect_bd_net -net axi_ad9122_dac_div_clk        [get_bd_pins axi_ad9122_core/dac_div_clk]     [get_bd_pins axi_ad9122_dma/fifo_rd_clk]
-connect_bd_net -net axi_ad9122_dac_drd            [get_bd_pins axi_ad9122_core/dac_drd]         [get_bd_pins axi_ad9122_dma/fifo_rd_en]
-connect_bd_net -net axi_ad9122_dac_ddata          [get_bd_pins axi_ad9122_core/dac_ddata]       [get_bd_pins axi_ad9122_dma/fifo_rd_dout]
+connect_bd_net -net axi_ad9122_dac_valid_0        [get_bd_pins axi_ad9122_core/dac_valid_0]     [get_bd_ports dac_valid_0]
+connect_bd_net -net axi_ad9122_dac_enable_0       [get_bd_pins axi_ad9122_core/dac_enable_0]    [get_bd_ports dac_enable_0]
+connect_bd_net -net axi_ad9122_dac_ddata_0        [get_bd_pins axi_ad9122_core/dac_ddata_0]     [get_bd_ports dac_ddata_0]
+connect_bd_net -net axi_ad9122_dac_valid_1        [get_bd_pins axi_ad9122_core/dac_valid_1]     [get_bd_ports dac_valid_1]
+connect_bd_net -net axi_ad9122_dac_enable_1       [get_bd_pins axi_ad9122_core/dac_enable_1]    [get_bd_ports dac_enable_1]
+connect_bd_net -net axi_ad9122_dac_ddata_1        [get_bd_pins axi_ad9122_core/dac_ddata_1]     [get_bd_ports dac_ddata_1]
+connect_bd_net -net axi_ad9122_dma_drd            [get_bd_pins axi_ad9122_dma/fifo_rd_en]       [get_bd_ports dac_drd]
+connect_bd_net -net axi_ad9122_dma_ddata          [get_bd_pins axi_ad9122_dma/fifo_rd_dout]     [get_bd_ports dac_ddata]
 connect_bd_net -net axi_ad9122_dac_dunf           [get_bd_pins axi_ad9122_core/dac_dunf]        [get_bd_pins axi_ad9122_dma/fifo_rd_underflow]
 connect_bd_net -net axi_ad9122_dma_irq            [get_bd_pins axi_ad9122_dma/irq]              [get_bd_pins sys_concat_intc/In3]
+
+connect_bd_net -net axi_ad9122_dac_div_clk        [get_bd_ports dac_clk]
 
 # interconnect (cpu)
 

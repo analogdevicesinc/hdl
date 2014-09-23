@@ -180,57 +180,94 @@ module system_top (
   inout           spi_sdio;
 
   // internal registers
-  reg             dma_wr    = 'd0;
-  reg    [63:0]   dma_data  = 'd0;
+
+  reg             dac_drd = 'd0;
+  reg    [63:0]   dac_ddata_0 = 'd0;
+  reg    [63:0]   dac_ddata_1 = 'd0;
+  reg             adc_dwr    = 'd0;
+  reg    [63:0]   adc_ddata  = 'd0;
 
   // internal signals
 
   wire    [39:0]  gpio_i;
   wire    [39:0]  gpio_o;
   wire    [39:0]  gpio_t;
-
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
   wire    [ 2:0]  spi_csn;
-
   wire            adc_clk;
-  wire            adc_enable_a;
   wire    [31:0]  adc_data_a;
-  wire            adc_enable_b;
   wire    [31:0]  adc_data_b;
+  wire            adc_enable_a;
+  wire            adc_enable_b;
+  wire            dac_clk;
+  wire   [127:0]  dac_ddata;
+  wire            dac_enable_0;
+  wire            dac_enable_1;
 
   // pack & unpack data
+
+  always @(posedge dac_clk) begin
+    case ({dac_enable_1, dac_enable_0})
+      2'b11: begin
+        dac_drd <= 1'b1;
+        dac_ddata_1[63:48] <= dac_ddata[127:112];
+        dac_ddata_1[47:32] <= dac_ddata[ 95: 80];
+        dac_ddata_1[31:16] <= dac_ddata[ 63: 48];
+        dac_ddata_1[15: 0] <= dac_ddata[ 31: 16];
+        dac_ddata_0[63:48] <= dac_ddata[111: 96];
+        dac_ddata_0[47:32] <= dac_ddata[ 79: 64];
+        dac_ddata_0[31:16] <= dac_ddata[ 47: 32];
+        dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
+      end
+      2'b01: begin
+        dac_drd <= ~dac_drd;
+        dac_ddata_1 <= 64'd0;
+        dac_ddata_0 <= (dac_drd == 1'b1) ? dac_ddata[127:64] : dac_ddata[63:0];
+      end
+      2'b10: begin
+        dac_drd <= ~dac_drd;
+        dac_ddata_1 <= (dac_drd == 1'b1) ? dac_ddata[127:64] : dac_ddata[63:0];
+        dac_ddata_0 <= 64'd0;
+      end
+      default: begin
+        dac_drd <= 1'b0;
+        dac_ddata_1 <= 64'd0;
+        dac_ddata_0 <= 64'd0;
+      end
+    endcase
+  end
 
   always @(posedge adc_clk) begin
     case ({adc_enable_b, adc_enable_a})
       2'b11: begin
-        dma_wr <= 1'b1;
-        dma_data[63:48] <= adc_data_b[31:16];
-        dma_data[47:32] <= adc_data_a[31:16];
-        dma_data[31:16] <= adc_data_b[15: 0];
-        dma_data[15: 0] <= adc_data_a[15: 0];
+        adc_dwr <= 1'b1;
+        adc_ddata[63:48] <= adc_data_b[31:16];
+        adc_ddata[47:32] <= adc_data_a[31:16];
+        adc_ddata[31:16] <= adc_data_b[15: 0];
+        adc_ddata[15: 0] <= adc_data_a[15: 0];
       end
       2'b10: begin
-        dma_wr <= ~dma_wr;
-        dma_data[63:48] <= adc_data_b[31:16];
-        dma_data[47:32] <= adc_data_b[15: 0];
-        dma_data[31:16] <= dma_data[63:48];
-        dma_data[15: 0] <= dma_data[47:32];
+        adc_dwr <= ~adc_dwr;
+        adc_ddata[63:48] <= adc_data_b[31:16];
+        adc_ddata[47:32] <= adc_data_b[15: 0];
+        adc_ddata[31:16] <= adc_ddata[63:48];
+        adc_ddata[15: 0] <= adc_ddata[47:32];
       end
       2'b01: begin
-        dma_wr <= ~dma_wr;
-        dma_data[63:48] <= adc_data_a[31:16];
-        dma_data[47:32] <= adc_data_a[15: 0];
-        dma_data[31:16] <= dma_data[63:48];
-        dma_data[15: 0] <= dma_data[47:32];
+        adc_dwr <= ~adc_dwr;
+        adc_ddata[63:48] <= adc_data_a[31:16];
+        adc_ddata[47:32] <= adc_data_a[15: 0];
+        adc_ddata[31:16] <= adc_ddata[63:48];
+        adc_ddata[15: 0] <= adc_ddata[47:32];
       end
       default: begin
-        dma_wr <= 1'b0;
-        dma_data[63:48] <= 16'd0;
-        dma_data[47:32] <= 16'd0;
-        dma_data[31:16] <= 16'd0;
-        dma_data[15: 0] <= 16'd0;
+        adc_dwr <= 1'b0;
+        adc_ddata[63:48] <= 16'd0;
+        adc_ddata[47:32] <= 16'd0;
+        adc_ddata[31:16] <= 16'd0;
+        adc_ddata[15: 0] <= 16'd0;
       end
     endcase
   end
@@ -305,6 +342,25 @@ module system_top (
     .GPIO_I (gpio_i),
     .GPIO_O (gpio_o),
     .GPIO_T (gpio_t),
+    .adc_clk (adc_clk),
+    .adc_data_a (adc_data_a),
+    .adc_data_b (adc_data_b),
+    .adc_ddata (adc_ddata),
+    .adc_dsync (1'b1),
+    .adc_dwr (adc_dwr),
+    .adc_enable_a (adc_enable_a),
+    .adc_enable_b (adc_enable_b),
+    .adc_valid_a (),
+    .adc_valid_b (),
+    .dac_clk (dac_clk),
+    .dac_ddata (dac_ddata),
+    .dac_ddata_0 (dac_ddata_0),
+    .dac_ddata_1 (dac_ddata_1),
+    .dac_drd (dac_drd),
+    .dac_enable_0 (dac_enable_0),
+    .dac_enable_1 (dac_enable_1),
+    .dac_valid_0 (),
+    .dac_valid_1 (),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -317,16 +373,6 @@ module system_top (
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
-    .adc_clk (adc_clk),
-    .adc_data_a (adc_data_a),
-    .adc_data_b (adc_data_b),
-    .adc_enable_a (adc_enable_a),
-    .adc_enable_b (adc_enable_b),
-    .adc_valid_a (),
-    .adc_valid_b (),
-    .dma_data (dma_data),
-    .dma_sync (1'b1),
-    .dma_wr (dma_wr),
     .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
