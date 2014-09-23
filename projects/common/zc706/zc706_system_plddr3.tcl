@@ -40,7 +40,7 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   set_property -dict [list CONFIG.M_DATA_WIDTH {512}] $rfifo_ctl
   set_property -dict [list CONFIG.S_DATA_WIDTH {64}] $rfifo_ctl
 
-  set wfifo_mem [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:11.0 wfifo_mem]
+  set wfifo_mem [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:12.0 wfifo_mem]
   set_property -dict [list CONFIG.INTERFACE_TYPE {Native}] $wfifo_mem
   set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $wfifo_mem
   set_property -dict [list CONFIG.Input_Data_Width $m_width] $wfifo_mem
@@ -48,7 +48,7 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   set_property -dict [list CONFIG.Output_Data_Width {512}] $wfifo_mem
   set_property -dict [list CONFIG.Overflow_Flag {true}] $wfifo_mem
 
-  set rfifo_mem [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:11.0 rfifo_mem]
+  set rfifo_mem [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:12.0 rfifo_mem]
   set_property -dict [list CONFIG.INTERFACE_TYPE {Native}] $rfifo_mem
   set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $rfifo_mem
   set_property -dict [list CONFIG.Input_Data_Width {512}] $rfifo_mem
@@ -66,7 +66,7 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   set_property -dict [list CONFIG.AXI_SIZE {6}] $axi_fifo2s
   set_property -dict [list CONFIG.DATA_WIDTH {512}] $axi_fifo2s
 
-  set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.0 axi_ddr_cntrl]
+  set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.1 axi_ddr_cntrl]
   set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
   file copy -force $ad_hdl_dir/projects/common/zc706/zc706_system_mig.prj "$axi_ddr_cntrl_dir/"
   set_property -dict [list CONFIG.XML_INPUT_FILE {zc706_system_mig.prj}] $axi_ddr_cntrl

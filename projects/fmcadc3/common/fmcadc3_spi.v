@@ -37,7 +37,7 @@
 
 `timescale 1ns/100ps
 
-module daq2_spi (
+module fmcadc3_spi (
 
   ad9528_csn,
   ad9234_1_csn,

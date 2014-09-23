@@ -109,10 +109,10 @@ module system_top (
   
   ad9528_rstn,
   ad9528_status,
-  ad9234_1_fda;
-  ad9234_1_fdb;
-  ad9234_2_fda;
-  ad9234_2_fdb;
+  ad9234_1_fda,
+  ad9234_1_fdb,
+  ad9234_2_fda,
+  ad9234_2_fdb,
  
   ad9528_csn,
   ada4961_1a_csn,
