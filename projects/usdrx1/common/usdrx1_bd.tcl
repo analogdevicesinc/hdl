@@ -59,7 +59,7 @@ set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core
 set axi_ad9671_core_3 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_3]
 set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core_3]
 
-set axi_usdrx1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_usdrx1_jesd]
+set axi_usdrx1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_usdrx1_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_usdrx1_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_usdrx1_jesd
 
@@ -85,7 +85,7 @@ set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {512}] $axi_usdrx1_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {512}] $axi_usdrx1_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_usdrx1_dma
 
 set axi_usdrx1_gt_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_usdrx1_gt_interconnect]
 set_property -dict [list CONFIG.NUM_MI {1}] $axi_usdrx1_gt_interconnect
@@ -95,7 +95,7 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_usdrx1_dma_interconnect
 
 # gpio and spi
 
-set axi_usdrx1_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_usdrx1_spi]
+set axi_usdrx1_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_usdrx1_spi]
 set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_usdrx1_spi
 set_property -dict [list CONFIG.C_NUM_SS_BITS {5}] $axi_usdrx1_spi
 set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_usdrx1_spi
@@ -271,7 +271,8 @@ connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_usdrx1_dma/m_dest_axi_ar
 
 # ila
 
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
+set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {662}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {10}] $ila_jesd_rx_mon
@@ -283,7 +284,8 @@ connect_bd_net -net axi_usdrx1_gt_rx_clk            [get_bd_pins ila_jesd_rx_mon
 connect_bd_net -net axi_usdrx1_gt_rx_mon_data       [get_bd_pins ila_jesd_rx_mon/PROBE0]
 connect_bd_net -net axi_usdrx1_gt_rx_mon_trigger    [get_bd_pins ila_jesd_rx_mon/PROBE1]
 
-set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_ad9671]
+set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_ad9671]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9671
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {8}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {8}] $ila_ad9671
