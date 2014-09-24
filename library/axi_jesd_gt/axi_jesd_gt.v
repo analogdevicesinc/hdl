@@ -62,6 +62,7 @@ module axi_jesd_gt (
   rx_clk_g,
   rx_clk,
   rx_data,
+  rx_data_sof,
   rx_gt_charisk,
   rx_gt_disperr,
   rx_gt_notintable,
@@ -71,7 +72,7 @@ module axi_jesd_gt (
   rx_ip_sync,
   rx_ip_sof,
   rx_ip_data,
-  
+
   tx_rst,
   tx_clk_g,
   tx_clk,
@@ -185,6 +186,7 @@ module axi_jesd_gt (
   output                                    rx_clk_g;
   input                                     rx_clk;
   output  [((PCORE_NUM_OF_LANES*32)-1):0]   rx_data;
+  output  [((PCORE_NUM_OF_LANES* 1)-1):0]   rx_data_sof;
   output  [((PCORE_NUM_OF_LANES* 4)-1):0]   rx_gt_charisk;
   output  [((PCORE_NUM_OF_LANES* 4)-1):0]   rx_gt_disperr;
   output  [((PCORE_NUM_OF_LANES* 4)-1):0]   rx_gt_notintable;
@@ -499,6 +501,7 @@ module axi_jesd_gt (
     .rx_clk (rx_clk),
     .rx_sof (rx_ip_sof),
     .rx_ip_data (rx_ip_data[n*32+31:n*32]),
+    .rx_data_sof(rx_data_sof[n]),
     .rx_data (rx_data[n*32+31:n*32]));
 
   ad_gt_channel_1 #(

@@ -46,6 +46,7 @@ module axi_ad9671_if (
   // rx_clk is (line-rate/40)
 
   rx_clk,
+  rx_data_sof,
   rx_data,
 
   // adc data output
@@ -79,6 +80,7 @@ module axi_ad9671_if (
   // rx_clk is (line-rate/40)
 
   input                                 rx_clk;
+  input                                 rx_data_sof;
   input   [(64*PCORE_4L_2L_N)+63:0]     rx_data;
 
   // adc data output
@@ -138,8 +140,9 @@ module axi_ad9671_if (
       int_valid <= 1'b1;
       int_data <= rx_data;
     end else begin
-      int_valid <= ~int_valid;
-      int_data <= {rx_data[63:0], int_data[127:64]};
+      int_valid         <= !rx_data_sof;
+      int_data[63:0]    <= {rx_data[31:0], int_data[63:32]};
+      int_data[127:64]  <= {rx_data[63:32], int_data[127:96]};
     end
   end
 

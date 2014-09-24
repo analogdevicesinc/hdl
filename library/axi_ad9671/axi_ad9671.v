@@ -46,6 +46,7 @@ module axi_ad9671 (
 
   rx_clk,
   rx_data,
+  rx_data_sof,
 
   // dma interface
 
@@ -89,6 +90,7 @@ module axi_ad9671 (
 
   input                                 rx_clk;
   input   [(64*PCORE_4L_2L_N)+63:0]     rx_data;
+  input                                 rx_data_sof;
 
   // dma interface
 
@@ -181,6 +183,7 @@ module axi_ad9671 (
   axi_ad9671_if #(.PCORE_4L_2L_N(PCORE_4L_2L_N)) i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
+    .rx_data_sof (rx_data_sof),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_valid (adc_valid_s),
