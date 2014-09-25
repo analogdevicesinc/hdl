@@ -33,10 +33,10 @@ set_property  -dict {PACKAGE_PIN  AC12  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_
 
 # spi
 
-set_property  -dict {PACKAGE_PIN  Y30   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports spi_csn_clk]      ; ## G36  FMC_LPC_LA33_P
-set_property  -dict {PACKAGE_PIN  AA30  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports spi_csn_adc]      ; ## G37  FMC_LPC_LA33_N
-set_property  -dict {PACKAGE_PIN  Y27   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports spi_sclk]         ; ## H38  FMC_LPC_LA32_N
-set_property  -dict {PACKAGE_PIN  Y26   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports spi_dio[]         ; ## H37  FMC_LPC_LA32_P
+set_property  -dict {PACKAGE_PIN  Y30   IOSTANDARD LVDS_25}                 [get_ports spi_csn_clk]     ; ## G36  FMC_LPC_LA33_P
+set_property  -dict {PACKAGE_PIN  AA30  IOSTANDARD LVDS_25}                 [get_ports spi_csn_adc]     ; ## G37  FMC_LPC_LA33_N
+set_property  -dict {PACKAGE_PIN  Y27   IOSTANDARD LVDS_25}                 [get_ports spi_sclk]        ; ## H38  FMC_LPC_LA32_N
+set_property  -dict {PACKAGE_PIN  Y26   IOSTANDARD LVDS_25}                 [get_ports spi_dio]         ; ## H37  FMC_LPC_LA32_P
 
 # clocks
 
