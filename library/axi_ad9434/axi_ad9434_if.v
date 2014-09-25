@@ -158,11 +158,9 @@ module axi_ad9434_if (
   reg             adc_status_m1 = 'd0;
 
   // internal signals
-  wire    [11:0]  adc_data_p_s;
-  wire    [11:0]  adc_data_n_s;
-  wire            adc_or_p_s;
-  wire            adc_or_n_s;
   wire    [ 4:0]  delay_rdata_s[12:0];
+
+  wire    [3:0]   adc_or_s;
 
   wire            adc_clk_in;
   wire            adc_div_clk;
@@ -224,43 +222,58 @@ module axi_ad9434_if (
   // data interface
   generate
   for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin : g_adc_if
-  ad_lvds_in #(
-    .BUFTYPE (PCORE_BUFTYPE),
-    .IODELAY_CTRL (0),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
-  i_adc_data (
-    .rx_clk (adc_clk_in),
-    .rx_data_in_p (adc_data_in_p[l_inst]),
-    .rx_data_in_n (adc_data_in_n[l_inst]),
-    .rx_data_p (adc_data_p_s[l_inst]),
-    .rx_data_n (adc_data_n_s[l_inst]),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_ld (delay_ld[l_inst]),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata_s[l_inst]),
-    .delay_locked ());
-  end
+    ad_serdes_in #(
+      .DEVICE_TYPE(PCORE_DEVTYPE),
+      .IODELAY_CTRL(0),
+      .IODELAY_GROUP(PCORE_IODELAY_GROUP))
+    i_adc_data (
+      .rst(adc_rst),
+      .clk(adc_clk_in),
+      .div_clk(adc_div_clk),
+      .data_s0(adc_data[(0*12)+l_inst]),
+      .data_s1(adc_data[(1*12)+l_inst]),
+      .data_s2(adc_data[(2*12)+l_inst]),
+      .data_s3(adc_data[(3*12)+l_inst]),
+      .data_s4(),
+      .data_s5(),
+      .data_s6(),
+      .data_s7(),
+      .data_in_p(adc_data_in_p[l_inst]),
+      .data_in_n(adc_data_in_n[l_inst]),
+      .delay_clk(delay_clk),
+      .delay_rst(delay_rst),
+      .delay_ld(delay_ld[l_inst]),
+      .delay_wdata(delay_wdata),
+      .delay_rdata(delay_rdata_s[l_inst]),
+      .delay_locked());
+    end
   endgenerate
 
   // over-range interface
-
-  ad_lvds_in #(
-    .BUFTYPE (PCORE_BUFTYPE),
-    .IODELAY_CTRL (1),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
-  i_adc_or (
-    .rx_clk (adc_clk_in),
-    .rx_data_in_p (adc_or_in_p),
-    .rx_data_in_n (adc_or_in_n),
-    .rx_data_p (adc_or_p_s),
-    .rx_data_n (adc_or_n_s),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_ld (delay_ld[12]),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata_s[12]),
-    .delay_locked (delay_locked));
+  ad_serdes_in #(
+    .DEVICE_TYPE(PCORE_DEVTYPE),
+    .IODELAY_CTRL(1),
+    .IODELAY_GROUP(PCORE_IODELAY_GROUP))
+  i_adc_data (
+    .rst(adc_rst),
+    .clk(adc_clk_in),
+    .div_clk(adc_div_clk),
+    .data_s0(adc_or_s[0]),
+    .data_s1(adc_or_s[1]),
+    .data_s2(adc_or_s[2]),
+    .data_s3(adc_or_s[3]),
+    .data_s4(),
+    .data_s5(),
+    .data_s6(),
+    .data_s7(),
+    .data_in_p(adc_or_in_p),
+    .data_in_n(adc_or_in_n),
+    .delay_clk(delay_clk),
+    .delay_rst(delay_rst),
+    .delay_ld(delay_ld[12]),
+    .delay_wdata(delay_wdata),
+    .delay_rdata(delay_rdata_s[12]),
+    .delay_locked(delay_locked));
 
   // clock input buffers and MMCM
   ad_serdes_clk #(
@@ -286,47 +299,8 @@ module axi_ad9434_if (
     .drp_ready (drp_ready),
     .drp_locked (drp_locked));
 
-  // input SERDES for data
-  ad_serdes_in #(
-    .DEVICE_TYPE(PCORE_DEVTYPE),
-    .SERDES(1),
-    .DATA_WIDTH(12),
-    .PARALLEL_DATA_WIDTH(4))
-  i_serdes_data (
-    .rst(adc_rst),
-    .clk(adc_clk_in),
-    .div_clk(adc_div_clk),
-    .data_s0(adc_data_s0),
-    .data_s1(adc_data_s1),
-    .data_s2(adc_data_s2),
-    .data_s3(adc_data_s3),
-    .data_s4(),
-    .data_s5(),
-    .data_s6(),
-    .data_s7(),
-    .data_in_p(adc_data_p_s),
-    .data_in_n(adc_data_n_s));
-
-  // input SERDES for overrange
-  ad_serdes_in #(
-    .DEVICE_TYPE(PCORE_DEVTYPE),
-    .SERDES(1),
-    .DATA_WIDTH(1),
-    .PARALLEL_DATA_WIDTH(4))
-  i_serdes_or (
-    .rst(adc_rst),
-    .clk(adc_clk_in),
-    .div_clk(adc_div_clk),
-    .data_s0(adc_or_s0),
-    .data_s1(adc_or_s1),
-    .data_s2(adc_or_s2),
-    .data_s3(adc_or_s3),
-    .data_s4(),
-    .data_s5(),
-    .data_s6(),
-    .data_s7(),
-    .data_in_p(adc_or_p_s),
-    .data_in_n(adc_or_n_s));
+  // adc overange
+  assign adc_or = adc_or_s[0] | adc_or_s[1] | adc_or_s[2] | adc_or_s[3];
 
   // adc status: adc is up, if both the MMCM and DELAY blocks are up
   always @(posedge adc_div_clk) begin
