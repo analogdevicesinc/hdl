@@ -171,11 +171,33 @@ module system_top (
 
   input           otg_vbusoc;
 
+  // internal registers
+
+  reg     [63:0]  dac_ddata_0 = 'd0;
+  reg     [63:0]  dac_ddata_1 = 'd0;
+  reg             dac_dma_rd = 'd0;
+  reg             adc_data_cnt = 'd0;
+  reg             adc_dma_wr = 'd0;
+  reg     [31:0]  adc_dma_wdata = 'd0;
+
   // internal signals
 
   wire    [31:0]  gpio_i;
   wire    [31:0]  gpio_o;
   wire    [31:0]  gpio_t;
+  wire            dac_clk;
+  wire            dac_valid_0;
+  wire            dac_enable_0;
+  wire            dac_valid_1;
+  wire            dac_enable_1;
+  wire    [63:0]  dac_dma_rdata;
+  wire            adc_clk;
+  wire            adc_valid_0;
+  wire            adc_enable_0;
+  wire    [15:0]  adc_data_0;
+  wire            adc_valid_1;
+  wire            adc_enable_1;
+  wire    [15:0]  adc_data_1;
   wire            ref_clk;
   wire            oddr_ref_clk;
 
@@ -222,6 +244,36 @@ module system_top (
   IOBUF i_iic_mux_sda_0 (.I(iic_mux_sda_o_s[0]), .O(iic_mux_sda_i_s[0]), .T(iic_mux_sda_t_s), .IO(iic_mux_sda[0]));
   IOBUF i_iic_mux_sda_1 (.I(iic_mux_sda_o_s[1]), .O(iic_mux_sda_i_s[1]), .T(iic_mux_sda_t_s), .IO(iic_mux_sda[1]));
 
+  always @(posedge dac_clk) begin
+    dac_dma_rd <= dac_valid_0 & dac_enable_0;
+    dac_ddata_1[63:48] <= dac_dma_rdata[63:48];
+    dac_ddata_1[47:32] <= dac_dma_rdata[63:48];
+    dac_ddata_1[31:16] <= dac_dma_rdata[31:16];
+    dac_ddata_1[15: 0] <= dac_dma_rdata[31:16];
+    dac_ddata_0[63:48] <= dac_dma_rdata[47:32];
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt ;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
+      end
+      default: begin
+        adc_dma_wr <= 1'b1;
+        adc_dma_wdata <= {adc_data_1, adc_data_0};
+      end
+    endcase
+  end
+
   system_wrapper i_system_wrapper (
     .DDR_addr (DDR_addr),
     .DDR_ba (DDR_ba),
@@ -247,20 +299,39 @@ module system_top (
     .GPIO_I (gpio_i),
     .GPIO_O (gpio_o),
     .GPIO_T (gpio_t),
+    .adc_clk (adc_clk),
     .adc_clk_in_n (adc_clk_in_n),
     .adc_clk_in_p (adc_clk_in_p),
+    .adc_data_0 (adc_data_0),
+    .adc_data_1 (adc_data_1),
     .adc_data_in_n (adc_data_in_n),
     .adc_data_in_p (adc_data_in_p),
+    .adc_dma_sync (1'b1),
+    .adc_dma_wdata (adc_dma_wdata),
+    .adc_dma_wr (adc_dma_wr),
+    .adc_enable_0 (adc_enable_0),
+    .adc_enable_1 (adc_enable_1),
     .adc_or_in_n (adc_or_in_n),
     .adc_or_in_p (adc_or_in_p),
+    .adc_valid_0 (adc_valid_0),
+    .adc_valid_1 (adc_valid_1),
+    .dac_clk (dac_clk),
     .dac_clk_in_n (dac_clk_in_n),
     .dac_clk_in_p (dac_clk_in_p),
     .dac_clk_out_n (dac_clk_out_n),
     .dac_clk_out_p (dac_clk_out_p),
     .dac_data_out_n (dac_data_out_n),
     .dac_data_out_p (dac_data_out_p),
+    .dac_ddata_0 (dac_ddata_0),
+    .dac_ddata_1 (dac_ddata_1),
+    .dac_dma_rd (dac_dma_rd),
+    .dac_dma_rdata (dac_dma_rdata),
+    .dac_enable_0 (dac_enable_0),
+    .dac_enable_1 (dac_enable_1),
     .dac_frame_out_n (dac_frame_out_n),
     .dac_frame_out_p (dac_frame_out_p),
+    .dac_valid_0 (dac_valid_0),
+    .dac_valid_1 (dac_valid_1),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),

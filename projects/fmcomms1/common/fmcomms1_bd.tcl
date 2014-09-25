@@ -245,6 +245,7 @@ if {$sys_zynq == 0 } {
   set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc
   set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
   set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_adc
+  set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]  $ila_adc
   set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 
   connect_bd_net -net sys_200m_clk [get_bd_pins ila_adc/clk]

@@ -156,9 +156,9 @@ module system_top (
   reg     [63:0]  dac_ddata_0 = 'd0;
   reg     [63:0]  dac_ddata_1 = 'd0;
   reg             dac_dma_rd = 'd0;
-  reg     [ 1:0]  adc_data_cnt = 'd0;
+  reg             adc_data_cnt = 'd0;
   reg             adc_dma_wr = 'd0;
-  reg     [63:0]  adc_dma_wdata = 'd0;
+  reg     [31:0]  adc_dma_wdata = 'd0;
 
   // internal signals
 
@@ -224,20 +224,20 @@ module system_top (
     dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
   end
 
-  always @(posedge adc_clk) begin 
-    adc_data_cnt <= adc_data_cnt + 1'b1;
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt ;
     case ({adc_enable_1, adc_enable_0})
       2'b10: begin
-        adc_dma_wr <= adc_data_cnt[0] & adc_data_cnt[1];
-        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[63:16]};
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
       end
       2'b01: begin
-        adc_dma_wr <= adc_data_cnt[0] & adc_data_cnt[1];
-        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[63:16]};
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
       end
       default: begin
-        adc_dma_wr <= adc_data_cnt[0];
-        adc_dma_wdata <= {adc_data_1, adc_data_0, adc_dma_wdata[63:32]};
+        adc_dma_wr <= 1'b1;
+        adc_dma_wdata <= {adc_data_1, adc_data_0};
       end
     endcase
   end
