@@ -65,7 +65,9 @@ module axi_ad9434_core (
   drp_rdata,
   drp_ready,
   drp_locked,
+
   // delay interface
+
   delay_clk,
   delay_rst,
   delay_sel,
@@ -75,7 +77,9 @@ module axi_ad9434_core (
   delay_rdata,
   delay_ack_t,
   delay_locked,
+
   // processor interface
+
   up_rstn,
   up_clk,
   up_sel,
@@ -86,6 +90,7 @@ module axi_ad9434_core (
   up_ack,
 
   // status and control signals
+
   mmcm_rst,
   adc_rst,
   adc_status);
@@ -139,6 +144,9 @@ module axi_ad9434_core (
   output          adc_rst;
   input           adc_status;
 
+  reg     [31:0]  up_rdata;
+  reg             up_ack;  
+
   // internal signals
   wire            up_status_pn_err_s;
   wire            up_status_pn_oos_s;
@@ -179,6 +187,18 @@ module axi_ad9434_core (
     .dfmt_se(adc_dfmt_se_s));
   end
   endgenerate
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rdata <= 'd0;
+      up_ack <= 'd0;
+    end else begin
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1];
+      up_ack <= up_ack_s[0] | up_ack_s[1];
+    end
+  end
 
   up_adc_common #(
     .PCORE_ID(PCORE_ID))
@@ -224,8 +244,8 @@ module axi_ad9434_core (
     .up_wr(up_wr),
     .up_addr(up_addr),
     .up_wdata(up_wdata),
-    .up_rdata(up_rdata),
-    .up_ack(up_ack));
+    .up_rdata(up_rdata_s[0]),
+    .up_ack(up_ack_s[0]));
 
   up_adc_channel #(
     .PCORE_ADC_CHID(0))
@@ -246,7 +266,7 @@ module axi_ad9434_core (
     .adc_data_sel(),
     .adc_pn_err(adc_pn_err_s),
     .adc_pn_oos(adc_pn_oos_s),
-    .adc_or(adc_or_s),
+    .adc_or(adc_or),
     .up_adc_pn_err(up_status_pn_err_s),
     .up_adc_pn_oos(up_status_pn_oos_s),
     .up_adc_or(up_status_or_s),
@@ -270,7 +290,7 @@ module axi_ad9434_core (
     .up_wr(up_wr),
     .up_addr(up_addr),
     .up_wdata(up_wdata),
-    .up_rdata(up_rdata),
-    .up_ack(up_ack));
+    .up_rdata(up_rdata_s[1]),
+    .up_ack(up_ack_s[1]));
 
 endmodule
