@@ -167,14 +167,8 @@ module axi_ad9434 (
   wire            drp_ready_s;
   wire            drp_locked_s;
 
-  wire    [11:0]  adc_data_s0_s;
-  wire            adc_or_s0_s;
-  wire    [11:0]  adc_data_s1_s;
-  wire            adc_or_s1_s;
-  wire    [11:0]  adc_data_s2_s;
-  wire            adc_or_s2_s;
-  wire    [11:0]  adc_data_s3_s;
-  wire            adc_or_s3_s;
+  wire    [47:0]  adc_data_if_s;
+  wire            adc_or_if_s;
 
   // clock/reset assignments
   assign up_clk  = s_axi_aclk;
@@ -191,14 +185,8 @@ module axi_ad9434 (
     .adc_data_in_n(adc_data_in_n),
     .adc_or_in_p(adc_or_in_p),
     .adc_or_in_n(adc_or_in_n),
-    .adc_data_s0(adc_data_s0_s),
-    .adc_or_s0(adc_or_s0_s),
-    .adc_data_s1(adc_data_s1_s),
-    .adc_or_s1(adc_or_s1_s),
-    .adc_data_s2(adc_data_s2_s),
-    .adc_or_s2(adc_or_s2_s),
-    .adc_data_s3(adc_data_s3_s),
-    .adc_or_s3(adc_or_s3_s),
+    .adc_data(adc_data_if_s),
+    .adc_or(adc_or_if_s),
     .adc_clk(adc_clk),
     .adc_rst(adc_rst),
     .adc_status(adc_status_s),
@@ -226,14 +214,8 @@ module axi_ad9434 (
   axi_ad9434_core #(.PCORE_ID(PCORE_ID))
   i_core (
     .adc_clk(adc_clk),
-    .adc_data_s0(adc_data_s0_s),
-    .adc_or_s0(adc_or_s0_s),
-    .adc_data_s1(adc_data_s1_s),
-    .adc_or_s1(adc_or_s1_s),
-    .adc_data_s2(adc_data_s2_s),
-    .adc_or_s2(adc_or_s2_s),
-    .adc_data_s3(adc_data_s3_s),
-    .adc_or_s3(adc_or_s3_s),
+    .adc_data(adc_data_if_s),
+    .adc_or(adc_or_if_s),
     .mmcm_rst (mmcm_rst),
     .adc_rst (adc_rst),
     .adc_status (adc_status_s),

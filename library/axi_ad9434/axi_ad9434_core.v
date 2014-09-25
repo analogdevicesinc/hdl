@@ -43,15 +43,6 @@
 module axi_ad9434_core (
   // device interface
   adc_clk,
-  adc_data_s0,
-  adc_or_s0,
-  adc_data_s1,
-  adc_or_s1,
-  adc_data_s2,
-  adc_or_s2,
-  adc_data_s3,
-  adc_or_s3,
-  // dma interface
   adc_valid,
   adc_data,
   adc_dovf,
@@ -95,19 +86,13 @@ module axi_ad9434_core (
 
   // device interface
   input           adc_clk;
-  input  [11:0]   adc_data_s0;
-  input           adc_or_s0;
-  input  [11:0]   adc_data_s1;
-  input           adc_or_s1;
-  input  [11:0]   adc_data_s2;
-  input           adc_or_s2;
-  input  [11:0]   adc_data_s3;
-  input           adc_or_s3;
+  input  [47:0]   adc_data;
+  input           adc_or;
 
   // dma interface
-  output          adc_valid;
-  output [63:0]   adc_data;
-  input           adc_dovf;
+  output          dma_dvalid;
+  output [63:0]   dma_data;
+  input           dma_dovf;
 
   // drp interface
   input           drp_clk;
@@ -154,20 +139,17 @@ module axi_ad9434_core (
   wire            adc_dfmt_type_s;
   wire            adc_dfmt_enable_s;
 
-  wire            adc_or_s;
-  wire    [47:0]  adc_data_in_s;
   wire    [ 3:0]  adc_pnseq_sel_s;
   wire            adc_pn_err_s;
   wire            adc_pn_oos_s;
 
-  // internal assignments
-  assign adc_or_s       = adc_or_s0 & adc_or_s1 & adc_or_s2 & adc_or_s3;
-  assign adc_data_in_s  = {adc_data_s3, adc_data_s2, adc_data_s1, adc_data_s0};
+  wire    [31:0]  up_rdata_s[0:1];
+  wire            up_ack_s[0:1];
 
   // instantiations
   axi_ad9434_pnmon i_pnmon (
     .adc_clk(adc_clk),
-    .adc_data(adc_data_in_s),
+    .adc_data(adc_data),
     .adc_pnseq_sel(adc_pnseq_sel_s),
     .adc_pn_err(adc_pn_err_s),
     .adc_pn_oos(adc_pn_oos_s));
@@ -180,9 +162,9 @@ module axi_ad9434_core (
   i_datafmt (
     .clk(adc_clk),
     .valid(1'b1),
-    .data(adc_data_in_s[n*12+11:n*12]),
-    .valid_out(adc_valid),
-    .data_out(adc_data[n*16+15:n*16]),
+    .data(adc_data[n*12+11:n*12]),
+    .valid_out(dma_dvalid),
+    .data_out(dma_data[n*16+15:n*16]),
     .dfmt_enable(adc_dfmt_enable_s),
     .dfmt_type(adc_dfmt_type_s),
     .dfmt_se(adc_dfmt_se_s));

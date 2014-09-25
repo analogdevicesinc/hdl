@@ -51,14 +51,8 @@ module axi_ad9434_if (
   adc_or_in_n,
 
   // interface outputs
-  adc_data_s0,
-  adc_or_s0,
-  adc_data_s1,
-  adc_or_s1,
-  adc_data_s2,
-  adc_or_s2,
-  adc_data_s3,
-  adc_or_s3,
+  adc_data,
+  adc_or,
 
   // internl reset and clocks
   adc_clk,
@@ -106,14 +100,8 @@ module axi_ad9434_if (
   input           adc_or_in_n;
 
   // interface outputs
-  output  [11:0]  adc_data_s0;
-  output          adc_or_s0;
-  output  [11:0]  adc_data_s1;
-  output          adc_or_s1;
-  output  [11:0]  adc_data_s2;
-  output          adc_or_s2;
-  output  [11:0]  adc_data_s3;
-  output          adc_or_s3;
+  output  [47:0]  adc_data;
+  output          adc_or;
 
   // internal reset and clocks
 
@@ -149,8 +137,6 @@ module axi_ad9434_if (
   // output registers
   reg     [ 4:0]  delay_rdata   = 'b0;
   reg             delay_ack_t   = 'b0;
-  reg     [47:0]  adc_data      = 'b0;
-  reg             adc_or        = 'b0;
 
   // internal registers
   reg     [12:0]  delay_ld      = 'd0;
