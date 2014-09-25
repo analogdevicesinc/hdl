@@ -41,12 +41,21 @@
 `timescale 1ns/100ps
 
 module axi_ad9434_core (
+
   // device interface
+
   adc_clk,
-  adc_valid,
   adc_data,
-  adc_dovf,
+  adc_or,
+
+  // dma interface
+
+  dma_dvalid,
+  dma_data,
+  dma_dovf,
+
   // drp interface
+
   drp_clk,
   drp_rst,
   drp_sel,
@@ -181,7 +190,7 @@ module axi_ad9434_core (
     .adc_ddr_edgesel(),
     .adc_pin_mode(),
     .adc_status(adc_status),
-    .adc_status_ovf(adc_dovf),
+    .adc_status_ovf(dma_dovf),
     .adc_status_unf(1'b0),
     .adc_clk_ratio(32'd4),
     .up_status_pn_err(up_status_pn_err_s),

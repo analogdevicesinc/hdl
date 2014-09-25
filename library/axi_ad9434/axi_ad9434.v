@@ -55,7 +55,8 @@ module axi_ad9434 (
 
   // dma interface
   adc_clk,
-  adc_dwr,
+  adc_enable,
+  adc_valid,
   adc_data,
   adc_dovf,
 
@@ -103,7 +104,8 @@ module axi_ad9434 (
 
   // dma interface
   output          adc_clk;
-  output          adc_dwr;
+  output          adc_valid;
+  output          adc_enable;
   output [63:0]   adc_data;
   input           adc_dovf;
 
@@ -175,6 +177,9 @@ module axi_ad9434 (
   assign up_rstn = s_axi_aresetn;
   assign drp_clk = up_clk;
 
+  // single channel always enable
+  assign adc_enable = 1'b1;
+
   axi_ad9434_if #(
     .PCORE_DEVTYPE(PCORE_DEVTYPE),
     .PCORE_IODELAY_GROUP(PCORE_IODELAY_GROUP))
@@ -219,9 +224,9 @@ module axi_ad9434 (
     .mmcm_rst (mmcm_rst),
     .adc_rst (adc_rst),
     .adc_status (adc_status_s),
-    .adc_valid (adc_dwr),
-    .adc_data (adc_data),
-    .adc_dovf (adc_dovf),
+    .dma_dvalid (adc_valid),
+    .dma_data (adc_data),
+    .dma_dovf (adc_dovf),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst_s),
     .delay_sel (delay_sel_s),
