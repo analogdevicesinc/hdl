@@ -40,7 +40,7 @@ set_property  -dict {PACKAGE_PIN  Y26   IOSTANDARD LVDS_25}                 [get
 
 # clocks
 
-create_clock -name adc_clk          -period 1.66667 [get_ports adc_clk_in_p]
+create_clock -name adc_clk          -period 2.00    [get_ports adc_clk_in_p]
 create_clock -name adc_core_clk     -period 8.00    [get_pins i_system_wrapper/system_i/axi_ad9434/adc_clk]
 create_clock -name dma_clk          -period 5.00    [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
 
