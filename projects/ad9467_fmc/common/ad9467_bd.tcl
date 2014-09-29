@@ -91,13 +91,13 @@ if {$sys_zynq == 1} {
 
 # connections (spi)
 if {$sys_zynq == 0} {
-    connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]    [get_bd_pins axi_ad9467_spi/ss_i]
-    connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]    [get_bd_pins axi_ad9467_spi/ss_o]
-    connect_bd_net -net spi_sclk_i  [get_bd_ports spi_clk_i]    [get_bd_pins axi_ad9467_spi/sck_i]
-    connect_bd_net -net spi_sclk_o  [get_bd_ports spi_clk_o]    [get_bd_pins axi_ad9467_spi/sck_o]
-    connect_bd_net -net spi_mosi_i  [get_bd_ports spi_sdo_i]    [get_bd_pins axi_ad9467_spi/io0_i]
-    connect_bd_net -net spi_mosi_o  [get_bd_ports spi_sdo_o]    [get_bd_pins axi_ad9467_spi/io0_o]
-    connect_bd_net -net spi_miso_i  [get_bd_ports spi_sdi_i]    [get_bd_pins axi_ad9467_spi/io1_i]
+    connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]              [get_bd_pins axi_ad9467_spi/ss_i]
+    connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]              [get_bd_pins axi_ad9467_spi/ss_o]
+    connect_bd_net -net spi_sclk_i  [get_bd_ports spi_clk_i]              [get_bd_pins axi_ad9467_spi/sck_i]
+    connect_bd_net -net spi_sclk_o  [get_bd_ports spi_clk_o]              [get_bd_pins axi_ad9467_spi/sck_o]
+    connect_bd_net -net spi_mosi_i  [get_bd_ports spi_sdo_i]              [get_bd_pins axi_ad9467_spi/io0_i]
+    connect_bd_net -net spi_mosi_o  [get_bd_ports spi_sdo_o]              [get_bd_pins axi_ad9467_spi/io0_o]
+    connect_bd_net -net spi_miso_i  [get_bd_ports spi_sdi_i]              [get_bd_pins axi_ad9467_spi/io1_i]
 
     delete_bd_objs [get_bd_nets sys_concat_intc_din_2]
     delete_bd_objs [get_bd_ports unc_int2]
@@ -132,8 +132,8 @@ connect_bd_net -net sys_200m_clk    [get_bd_pins axi_ad9467/delay_clk]
 connect_bd_net -net axi_ad9467_dma_dwr          [get_bd_pins axi_ad9467/adc_dwr]           [get_bd_pins axi_ad9467_dma/fifo_wr_en]
 connect_bd_net -net axi_ad9467_dma_ddata        [get_bd_pins axi_ad9467/adc_ddata]        [get_bd_pins axi_ad9467_dma/fifo_wr_din]
 connect_bd_net -net axi_ad9467_dma_dovf         [get_bd_pins axi_ad9467/adc_doverflow]    [get_bd_pins axi_ad9467_dma/fifo_wr_overflow]
+connect_bd_net -net axi_ad9467_dma_irq          [get_bd_pins axi_ad9467_dma/irq]    [get_bd_pins sys_concat_intc/In2]
 
-connect_bd_net -net axi_ad9467_dma_irq          [get_bd_pins axi_ad9467_dma/irq]                [get_bd_pins sys_concat_intc/In2]
 # interconnect (cpu)
 connect_bd_net -net sys_100m_clk    [get_bd_pins axi_cpu_interconnect/M07_ACLK]     [get_bd_pins $sys_100m_clk_source]
 connect_bd_net -net sys_100m_clk    [get_bd_pins axi_cpu_interconnect/M08_ACLK]     [get_bd_pins $sys_100m_clk_source]
