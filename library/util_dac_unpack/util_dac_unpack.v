@@ -164,6 +164,11 @@ module util_dac_unpack (
       assign dac_data_05 = dac_data[DATA_WIDTH*6-1:DATA_WIDTH*5];
       assign dac_data_06 = dac_data[DATA_WIDTH*7-1:DATA_WIDTH*6];
       assign dac_data_07 = dac_data[DATA_WIDTH*8-1:DATA_WIDTH*7];
+    end else begin
+      assign dac_data_04 = 'h0;
+      assign dac_data_05 = 'h0;
+      assign dac_data_06 = 'h0;
+      assign dac_data_07 = 'h0;
     end
   endgenerate
 
