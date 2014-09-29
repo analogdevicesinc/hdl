@@ -121,17 +121,18 @@ connect_bd_net -net axi_ad9467_adc_clk_in_n     [get_bd_ports adc_clk_in_p]     
 connect_bd_net -net axi_ad9467_adc_clk_in_p     [get_bd_ports adc_clk_in_n]     [get_bd_pins axi_ad9467/adc_clk_in_n]
 connect_bd_net -net axi_ad9467_adc_data_in_n    [get_bd_ports adc_data_in_n]    [get_bd_pins axi_ad9467/adc_data_in_n]
 connect_bd_net -net axi_ad9467_adc_data_in_p    [get_bd_ports adc_data_in_p]    [get_bd_pins axi_ad9467/adc_data_in_p]
-connect_bd_net -net axi_ad9467_adc_data_or_n    [get_bd_ports adc_data_or_p]    [get_bd_pins axi_ad9467/adc_data_or_p]
-connect_bd_net -net axi_ad9467_adc_data_or_p    [get_bd_ports adc_data_or_n]    [get_bd_pins axi_ad9467/adc_data_or_n]
+connect_bd_net -net axi_ad9467_adc_data_or_n    [get_bd_ports adc_data_or_p]    [get_bd_pins axi_ad9467/adc_or_in_p]
+connect_bd_net -net axi_ad9467_adc_data_or_p    [get_bd_ports adc_data_or_n]    [get_bd_pins axi_ad9467/adc_or_in_n]
 
 set adc_250m_clk_source [get_bd_pins axi_ad9467/adc_clk]
 
 connect_bd_net -net adc_250m_clk    [get_bd_pins axi_ad9467_dma/fifo_wr_clk] $adc_250m_clk_source
 connect_bd_net -net sys_200m_clk    [get_bd_pins axi_ad9467/delay_clk]
 
-connect_bd_net -net axi_ad9467_dma_dwr          [get_bd_pins axi_ad9467/adc_dwr]           [get_bd_pins axi_ad9467_dma/fifo_wr_en]
-connect_bd_net -net axi_ad9467_dma_ddata        [get_bd_pins axi_ad9467/adc_ddata]        [get_bd_pins axi_ad9467_dma/fifo_wr_din]
-connect_bd_net -net axi_ad9467_dma_dovf         [get_bd_pins axi_ad9467/adc_doverflow]    [get_bd_pins axi_ad9467_dma/fifo_wr_overflow]
+connect_bd_net -net axi_ad9467_dma_dwr          [get_bd_pins axi_ad9467/adc_valid]  [get_bd_pins axi_ad9467_dma/fifo_wr_en]
+connect_bd_net -net axi_ad9467_dma_ddata        [get_bd_pins axi_ad9467/adc_data]   [get_bd_pins axi_ad9467_dma/fifo_wr_din]
+connect_bd_net -net axi_ad9467_dma_dovf         [get_bd_pins axi_ad9467/adc_dovf]   [get_bd_pins axi_ad9467_dma/fifo_wr_overflow]
+
 connect_bd_net -net axi_ad9467_dma_irq          [get_bd_pins axi_ad9467_dma/irq]    [get_bd_pins sys_concat_intc/In2]
 
 # interconnect (cpu)
