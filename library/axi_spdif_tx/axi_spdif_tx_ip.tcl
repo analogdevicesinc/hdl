@@ -32,6 +32,9 @@ adi_add_bus "DMA_REQ" "axis" "master" \
 		{"DMA_REQ_DRTYPE" "TUSER"} \
 		{"DMA_REQ_DRLAST" "TLAST"} ]
 
+# Clock and reset are for both DMA_REQ and DMA_ACK
+adi_add_bus_clock "DMA_REQ_ACLK" "DMA_REQ:DMA_ACK" "DMA_REQ_RSTN"
+
 adi_set_bus_dependency "S_AXIS" "S_AXIS" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 0)"
 
