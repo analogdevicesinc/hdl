@@ -33,6 +33,7 @@ set i2s_sdata_in    [create_bd_port -dir I i2s_sdata_in]
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.4 sys_ps7]
 set_property -dict [list CONFIG.PCW_IMPORT_BOARD_PRESET "$ad_hdl_dir/projects/common/mitx045/mitx045.xml" ] $sys_ps7
+set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {1} ] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7

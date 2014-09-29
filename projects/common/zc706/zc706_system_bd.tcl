@@ -26,6 +26,7 @@ set spdif           [create_bd_port -dir O spdif]
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.4 sys_ps7]
 set_property -dict [list CONFIG.preset {ZC706}] $sys_ps7
+set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
