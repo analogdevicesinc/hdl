@@ -81,7 +81,6 @@ module util_dac_unpack (
 
   parameter CHANNELS = 8; // valid values are 4 and 8
   parameter DATA_WIDTH = 16;
-  localparam DMA_WIDTH = CHANNELS * DATA_WIDTH;
 
   input                   clk;
 
@@ -117,11 +116,12 @@ module util_dac_unpack (
   input                    dac_valid_07;
   output  [DATA_WIDTH-1:0] dac_data_07;
 
-  input                    fifo_valid;
-  output                   dma_rd;
-  input   [DMA_WIDTH-1:0]  dma_data;
+  input                             fifo_valid;
+  output                            dma_rd;
+  input   [CHANNELS*DATA_WIDTH-1:0] dma_data;
 
 
+  localparam DMA_WIDTH = CHANNELS*DATA_WIDTH;
 
   wire [CHANNELS-1:0]            dac_enable;
   wire [CHANNELS-1:0]            dac_valid;
