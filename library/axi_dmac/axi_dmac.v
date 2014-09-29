@@ -275,6 +275,22 @@ wire [2:0] src_address_id;
 wire [2:0] src_response_id;
 wire [7:0] dbg_status;
 
+assign m_dest_axi_araddr = 'd0;
+assign m_dest_axi_arlen = 'd0;
+assign m_dest_axi_arsize = 'd0;
+assign m_dest_axi_arburst = 'd0;
+assign m_dest_axi_arcache = 'd0;
+assign m_dest_axi_arprot = 'd0;
+assign m_src_axi_awaddr = 'd0;
+assign m_src_axi_awlen = 'd0;
+assign m_src_axi_awsize = 'd0;
+assign m_src_axi_awburst = 'd0;
+assign m_src_axi_awcache = 'd0;
+assign m_src_axi_awprot = 'd0;
+assign m_src_axi_wdata = 'd0;
+assign m_src_axi_wstrb = 'd0;
+assign m_src_axi_wlast = 'd0;
+
 up_axi #(
 	.PCORE_ADDR_WIDTH (12)
 ) i_up_axi (

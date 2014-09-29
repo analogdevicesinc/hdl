@@ -142,8 +142,8 @@ module axi_ad9234 (
 
   // internal signals
 
-  wire    [55:0]  adc_data_a_s;
-  wire    [55:0]  adc_data_b_s;
+  wire    [63:0]  adc_data_a_s;
+  wire    [63:0]  adc_data_b_s;
   wire            adc_or_a_s;
   wire            adc_or_b_s;
   wire            adc_status_s;

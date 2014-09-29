@@ -390,7 +390,7 @@ module system_top (
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
 
-  ad_iobuf #(.DATA_WIDTH(38)) i_iobuf (
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf (
     .dt ({gpio_t[37:32], gpio_t[14:0]}),
     .di ({gpio_o[37:32], gpio_o[14:0]}),
     .do ({gpio_i[37:32], gpio_i[14:0]}),

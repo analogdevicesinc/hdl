@@ -77,7 +77,7 @@ module axi_ad9234_channel (
 
   input           adc_clk;
   input           adc_rst;
-  input   [55:0]  adc_data;
+  input   [63:0]  adc_data;
   input           adc_or;
 
   // channel interface
@@ -120,10 +120,10 @@ module axi_ad9234_channel (
   genvar n;
   generate
   for (n = 0; n < 4; n = n + 1) begin: g_ad_datafmt_1
-  ad_datafmt #(.DATA_WIDTH(14)) i_ad_datafmt (
+  ad_datafmt #(.DATA_WIDTH(12)) i_ad_datafmt (
     .clk (adc_clk),
     .valid (1'b1),
-    .data (adc_data[n*14+13:n*14]),
+    .data (adc_data[n*12+11:n*12]),
     .valid_out (),
     .data_out (adc_dfmt_data[n*16+15:n*16]),
     .dfmt_enable (adc_dfmt_enable_s),
