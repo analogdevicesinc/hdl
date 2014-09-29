@@ -623,9 +623,26 @@ dmac_request_arb #(
 
 assign m_dest_axi_arvalid = 1'b0;
 assign m_dest_axi_rready = 1'b0;
+assign m_dest_axi_araddr = 'h0;
+assign m_dest_axi_arlen = 'h0;
+assign m_dest_axi_arsize = 'h0;
+assign m_dest_axi_arburst = 'h0;
+assign m_dest_axi_arcache = 'h0;
+assign m_dest_axi_arprot = 'h0;
 
 assign m_src_axi_awvalid = 1'b0;
 assign m_src_axi_wvalid = 1'b0;
 assign m_src_axi_bready = 1'b0;
+assign m_src_axi_awvalid = 'h0;
+assign m_src_axi_awaddr = 'h0;
+assign m_src_axi_awlen = 'h0;
+assign m_src_axi_awsize = 'h0;
+assign m_src_axi_awburst = 'h0;
+assign m_src_axi_awcache = 'h0;
+assign m_src_axi_awprot = 'h0;
+assign m_src_axi_wvalid = 'h0;
+assign m_src_axi_wdata = 'h0;
+assign m_src_axi_wstrb = 'h0;
+assign m_src_axi_wlast = 'h0;
 
 endmodule
