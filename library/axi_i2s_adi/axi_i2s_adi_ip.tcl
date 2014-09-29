@@ -19,22 +19,6 @@ adi_ip_files axi_i2s_adi [list \
 
 adi_ip_properties_lite axi_i2s_adi
 
-adi_add_bus "M_AXIS" "axis" "master" \
-	[list {"M_AXIS_ACLK" "ACLK"} \
-	  {"M_AXIS_TREADY" "TREADY"} \
-	  {"M_AXIS_TVALID" "VALID"} \
-	  {"M_AXIS_TDATA" "TDATA"} \
-	  {"M_AXIS_TLAST" "TLAST"} \
-	  {"M_AXIS_TKEEP" "TKEEP"} ]
-
-adi_add_bus "S_AXIS" "axis" "slave" \
-	[list {"S_AXIS_ACLK" "ACLK"} \
-	  {"S_AXIS_ARESETN" "ARESETN"} \
-	  {"S_AXIS_TREADY" "TREADY"} \
-	  {"S_AXIS_TVALID" "VALID"} \
-	  {"S_AXIS_TDATA" "TDATA"} \
-	  {"S_AXIS_TLAST" "TLAST"} ]
-
 adi_add_bus "DMA_ACK_RX" "axis" "slave" \
 	[list {"DMA_REQ_RX_DAVALID" "TVALID"} \
 		{"DMA_REQ_RX_DAREADY" "TREADY"} \

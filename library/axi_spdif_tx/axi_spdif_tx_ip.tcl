@@ -21,14 +21,6 @@ ipx::add_file $ip_constr_files $proj_filegroup
 set_property type {{xdc}} [ipx::get_file $ip_constr_files $proj_filegroup]
 set_property library_name {} [ipx::get_file $ip_constr_files $proj_filegroup]
 
-adi_add_bus "S_AXIS" "axis" "slave" \
-	[list {"S_AXIS_ACLK" "ACLK"} \
-	  {"S_AXIS_ARESETN" "ARESETN"} \
-	  {"S_AXIS_TREADY" "TREADY"} \
-	  {"S_AXIS_TVALID" "VALID"} \
-	  {"S_AXIS_TDATA" "TDATA"} \
-	  {"S_AXIS_TLAST" "TLAST"} ]
-
 adi_add_bus "DMA_ACK" "axis" "slave" \
 	[list {"DMA_REQ_DAVALID" "TVALID"} \
 		{"DMA_REQ_DAREADY" "TREADY"} \
