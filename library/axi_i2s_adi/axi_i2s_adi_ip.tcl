@@ -28,6 +28,8 @@ adi_add_bus "DMA_REQ_RX" "axis" "master" \
 		{"DMA_REQ_RX_DRREADY" "TREADY"} \
 		{"DMA_REQ_RX_DRTYPE" "TUSER"} \
 		{"DMA_REQ_RX_DRLAST" "TLAST"} ]
+# Clock and reset are for both DMA_REQ and DMA_ACK
+adi_add_bus_clock "DMA_REQ_RX_ACLK" "DMA_REQ_RX:DMA_ACK_RX" "DMA_REQ_RX_RSTN"
 
 adi_add_bus "DMA_ACK_TX" "axis" "slave" \
 	[list {"DMA_REQ_TX_DAVALID" "TVALID"} \
@@ -38,6 +40,8 @@ adi_add_bus "DMA_REQ_TX" "axis" "master" \
 		{"DMA_REQ_TX_DRREADY" "TREADY"} \
 		{"DMA_REQ_TX_DRTYPE" "TUSER"} \
 		{"DMA_REQ_TX_DRLAST" "TLAST"} ]
+# Clock and reset are for both DMA_REQ and DMA_ACK
+adi_add_bus_clock "DMA_REQ_TX_ACLK" "DMA_REQ_TX:DMA_ACK_TX" "DMA_REQ_TX_RSTN"
 
 adi_set_bus_dependency "S_AXIS" "S_AXIS" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 0)"
