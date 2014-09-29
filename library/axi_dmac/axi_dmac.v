@@ -95,7 +95,7 @@ module axi_dmac (
 	// Unused read interface
 	output                                   m_dest_axi_arvalid,
 	output [31:0]                            m_dest_axi_araddr,
-	output [ 7:0]                            m_dest_axi_arlen,
+	output [7-(4*C_DMA_AXI_PROTOCOL_DEST):0] m_dest_axi_arlen,
 	output [ 2:0]                            m_dest_axi_arsize,
 	output [ 1:0]                            m_dest_axi_arburst,
 	output [ 3:0]                            m_dest_axi_arcache,
@@ -125,7 +125,7 @@ module axi_dmac (
 	// Unused write interface
 	output                                   m_src_axi_awvalid,
 	output [31:0]                            m_src_axi_awaddr,
-	output [ 7:0]                            m_src_axi_awlen,
+	output [7-(4*C_DMA_AXI_PROTOCOL_SRC):0]  m_src_axi_awlen,
 	output [ 2:0]                            m_src_axi_awsize,
 	output [ 1:0]                            m_src_axi_awburst,
 	output [ 3:0]                            m_src_axi_awcache,
