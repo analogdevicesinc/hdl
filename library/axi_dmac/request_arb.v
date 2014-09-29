@@ -750,6 +750,7 @@ dmac_src_fifo_inf #(
 end else begin
 
 assign fifo_wr_overflow = 1'b0;
+assign fifo_wr_xfer_req = 1'b0;
 
 end endgenerate
 
