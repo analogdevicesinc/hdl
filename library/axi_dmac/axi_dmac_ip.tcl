@@ -59,8 +59,6 @@ adi_set_bus_dependency "s_axis" "s_axis" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 1)"
 adi_set_bus_dependency "m_axis" "m_axis" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_DEST')) = 1)"
-adi_set_ports_dependency "fifo_wr" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 2)"
 adi_set_ports_dependency "fifo_rd" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_DEST')) = 2)"
 
@@ -84,5 +82,7 @@ set_property physical_name {fifo_wr_clk} [ipx::get_port_map CLK [ipx::get_bus_in
 ipx::add_bus_parameter {ASSOCIATED_BUSIF} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
 set_property value {fifo_wr} [ipx::get_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]]
 
-ipx::save_core [ipx::current_core]
+adi_set_bus_dependency "fifo_wr" "fifo_wr" \
+	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 2)"
 
+ipx::save_core [ipx::current_core]
