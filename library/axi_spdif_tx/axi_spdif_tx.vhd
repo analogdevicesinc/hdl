@@ -311,7 +311,7 @@ begin
 		end if;
 	end process;
 
-	process (rd_addr)
+	process (rd_addr, config_reg, chstatus_reg)
 	begin
 		case rd_addr is
 			when 0 => rd_data <= config_reg;
