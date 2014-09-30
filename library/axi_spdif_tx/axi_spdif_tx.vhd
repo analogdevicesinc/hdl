@@ -158,6 +158,10 @@ begin
 			);
 	end generate;
 
+	no_streaming_dma_gen: if C_DMA_TYPE /= 0 generate
+		S_AXIS_TREADY <= '0';
+	end generate;
+
 	pl330_dma_gen: if C_DMA_TYPE = 1 generate
 		tx_fifo_stb <= '1' when wr_addr = 3 and wr_stb = '1' else '0';
 
@@ -189,6 +193,13 @@ begin
 				drtype		=> DMA_REQ_DRTYPE,
 				drlast		=> DMA_REQ_DRLAST
 			);
+	end generate;
+
+	no_pl330_dma_gen: if C_DMA_TYPE /= 1 generate
+		DMA_REQ_DAREADY <= '0';
+		DMA_REQ_DRVALID <= '0';
+		DMA_REQ_DRTYPE <= (others => '0');
+		DMA_REQ_DRLAST <= '0';
 	end generate;
 
 	sample_data_mux: process (fifo_data_out, channel) is
