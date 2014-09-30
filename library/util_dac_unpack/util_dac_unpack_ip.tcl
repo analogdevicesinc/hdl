@@ -18,6 +18,19 @@ ipx::remove_memory_map {m} [ipx::current_core]
 ipx::remove_address_space {s} [ipx::current_core]
 ipx::remove_address_space {fifo} [ipx::current_core]
 
+for {set i 0} {$i < 8} {incr i} {
+	foreach port {"dac_enable" "dac_valid" "dac_data"} {
+		set name [format "%s_%.2d" $port $i]
+		set_property ENABLEMENT_DEPENDENCY \
+		"(spirit:decode(id('MODELPARAM_VALUE.CHANNELS')) > $i)" \
+		[ipx::get_ports $name]
+	}
+	foreach port {"dac_enable" "dac_valid"} {
+		set name [format "%s_%.2d" $port $i]
+		set_property DRIVER_VALUE "0" [ipx::get_ports $name]
+	}
+}
+
 ipx::save_core [ipx::current_core]
 
 
