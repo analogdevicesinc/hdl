@@ -55,6 +55,7 @@ set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
 set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
+set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_interconnect
 
 set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen

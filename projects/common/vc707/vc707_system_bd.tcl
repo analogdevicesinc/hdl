@@ -98,9 +98,11 @@ set_property -dict [list CONFIG.RESET_BOARD_INTERFACE {Custom}] $axi_ddr_cntrl
 # instance: axi interconnect (lite)
 set axi_cpu_aux_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_aux_interconnect]
 set_property -dict [list CONFIG.NUM_MI {8}] $axi_cpu_aux_interconnect
+set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_aux_interconnect
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
 set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
+set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_interconnect
 
 # instance: axi interconnect
 
