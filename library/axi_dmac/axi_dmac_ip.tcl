@@ -87,4 +87,13 @@ set_property ENABLEMENT_DEPENDENCY \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 2 and spirit:decode(id('MODELPARAM_VALUE.C_SYNC_TRANSFER_START')) = 1)" \
 	[ipx::get_ports "fifo_wr_sync"]
 
+foreach port {"m_dest_axi_aresetn" "m_src_axi_aresetn" "s_axis_valid" \
+	"s_axis_data" "m_axis_ready" "fifo_wr_en" "fifo_wr_din" "fifo_rd_en"} {
+	set_property DRIVER_VALUE "0" [ipx::get_ports $port]
+}
+
+foreach port {"s_axis_user" "fifo_wr_sync"} {
+	set_property DRIVER_VALUE "1" [ipx::get_ports $port]
+}
+
 ipx::save_core [ipx::current_core]
