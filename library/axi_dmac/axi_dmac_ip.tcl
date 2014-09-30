@@ -37,17 +37,17 @@ set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
   [ipx::get_bus_interface s_axi_signal_clock [ipx::current_core]]]
 
 adi_add_bus "s_axis" "axis" "slave" \
-	[list {"s_axis_aclk" "ACLK"} \
-	  {"s_axis_ready" "TREADY"} \
-	  {"s_axis_valid" "VALID"} \
+	[list {"s_axis_ready" "TREADY"} \
+	  {"s_axis_valid" "TVALID"} \
 	  {"s_axis_data" "TDATA"} \
 	  {"s_axis_user" "TUSER"} ]
+adi_add_bus_clock "s_axis_aclk" "s_axis"
 
 adi_add_bus "m_axis" "axis" "master" \
-	[list {"m_axis_aclk" "ACLK"} \
-	  {"m_axis_ready" "TREADY"} \
-	  {"m_axis_valid" "VALID"} \
+	[list {"m_axis_ready" "TREADY"} \
+	  {"m_axis_valid" "TVALID"} \
 	  {"m_axis_data" "TDATA"} ]
+adi_add_bus_clock "m_axis_aclk" "m_axis"
    
 adi_set_bus_dependency "m_src_axi" "m_src_axi" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 0)"
