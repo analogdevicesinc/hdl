@@ -407,7 +407,7 @@ begin
 			wr_stb			=> wr_stb
 		);
 
-	process(rd_addr)
+	process(rd_addr, I2S_CONTROL_REG, I2S_CLK_CONTROL_REG, PERIOD_LEN_REG, rx_sample, cnt)
 	begin
 		case rd_addr is
 			when 1 => rd_data <=  I2S_CONTROL_REG and x"00000003"; 
