@@ -82,5 +82,8 @@ set_property value {fifo_wr} [ipx::get_bus_parameter ASSOCIATED_BUSIF [ipx::get_
 
 adi_set_bus_dependency "fifo_wr" "fifo_wr" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 2)"
+set_property ENABLEMENT_DEPENDENCY \
+	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 2 and spirit:decode(id('MODELPARAM_VALUE.C_SYNC_TRANSFER_START')) = 1)" \
+	[ipx::get_ports "fifo_wr_sync"]
 
 ipx::save_core [ipx::current_core]
