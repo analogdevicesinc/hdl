@@ -29,7 +29,7 @@ proc p_sys_wfifo {p_name m_name m_width s_width} {
   set_property -dict [list CONFIG.M_DATA_WIDTH $m_width] $wfifo_ctl
   set_property -dict [list CONFIG.S_DATA_WIDTH $s_width] $wfifo_ctl
 
-  set wfifo_mem [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:11.0 wfifo_mem]
+  set wfifo_mem [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:12.0 wfifo_mem]
   set_property -dict [list CONFIG.INTERFACE_TYPE {Native}] $wfifo_mem
   set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $wfifo_mem
   set_property -dict [list CONFIG.Input_Data_Width $m_width] $wfifo_mem

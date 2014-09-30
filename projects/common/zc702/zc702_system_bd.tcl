@@ -24,7 +24,7 @@ set spdif           [create_bd_port -dir O spdif]
 
 # instance: sys_ps7
 
-set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.3 sys_ps7]
+set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.4 sys_ps7]
 set_property -dict [list CONFIG.PCW_IMPORT_BOARD_PRESET {ZC702}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
@@ -40,7 +40,7 @@ set_property -dict [list CONFIG.PCW_USE_DMA0 {1}] $sys_ps7
 set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
 set_property -dict [list CONFIG.USE_BOARD_FLOW {true} CONFIG.IIC_BOARD_INTERFACE {IIC_MAIN}] $axi_iic_main
 
-set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_concat_intc]
+set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
 set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
@@ -54,7 +54,7 @@ set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
 set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]
 set axi_hdmi_core [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_tx:1.0 axi_hdmi_core]
 
-set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.1 axi_hdmi_dma]
+set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_hdmi_dma]
 set_property -dict [list CONFIG.c_m_axis_mm2s_tdata_width {64}] $axi_hdmi_dma
 set_property -dict [list CONFIG.c_use_mm2s_fsync {1}] $axi_hdmi_dma
 set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma

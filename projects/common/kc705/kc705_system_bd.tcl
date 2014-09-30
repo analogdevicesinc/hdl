@@ -44,7 +44,7 @@ set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] $sys_rst
 
 # instance: microblaze - processor
 
-set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.2 sys_mb]
+set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.3 sys_mb]
 set_property -dict [list CONFIG.C_FAULT_TOLERANT {0}] $sys_mb
 set_property -dict [list CONFIG.C_D_AXI {1}] $sys_mb
 set_property -dict [list CONFIG.C_D_LMB {1}] $sys_mb
@@ -74,32 +74,32 @@ set_property -dict [list CONFIG.C_ECC {0}] $sys_dlmb_cntlr
 set sys_ilmb_cntlr [create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 sys_ilmb_cntlr]
 set_property -dict [list CONFIG.C_ECC {0}] $sys_ilmb_cntlr
 
-set sys_lmb_bram [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.1 sys_lmb_bram]
+set sys_lmb_bram [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.2 sys_lmb_bram]
 set_property -dict [list CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.use_bram_block {BRAM_Controller}] $sys_lmb_bram
 
 # instance: microblaze- mdm
 
-set sys_mb_debug [create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.0 sys_mb_debug]
+set sys_mb_debug [create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.1 sys_mb_debug]
 set_property -dict [list CONFIG.C_USE_UART {1}] $sys_mb_debug
 
 # instance: system reset/clocks
 
 set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 
-set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sys_const_vcc]
+set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_vcc]
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.0 axi_ddr_cntrl]
+set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.1 axi_ddr_cntrl]
 set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
 file copy -force $ad_hdl_dir/projects/common/kc705/kc705_system_mig.prj "$axi_ddr_cntrl_dir/"
 set_property -dict [list CONFIG.XML_INPUT_FILE {kc705_system_mig.prj}] $axi_ddr_cntrl
 
-set sys_const_ddr3_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sys_const_ddr3_0]
+set sys_const_ddr3_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_ddr3_0]
 set_property -dict [list CONFIG.CONST_WIDTH {3}] $sys_const_ddr3_0
 set_property -dict [list CONFIG.CONST_VAL {0}] $sys_const_ddr3_0
 
-set sys_const_ddr3_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sys_const_ddr3_1]
+set sys_const_ddr3_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_ddr3_1]
 set_property -dict [list CONFIG.CONST_WIDTH {2}] $sys_const_ddr3_1
 set_property -dict [list CONFIG.CONST_VAL {1}] $sys_const_ddr3_1
 
@@ -122,7 +122,7 @@ set_property -dict [list CONFIG.STRATEGY {2}] $axi_mem_interconnect
 
 # instance: default peripherals
 
-set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernetlite:2.0 axi_ethernet]
+set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernetlite:3.0 axi_ethernet]
 set_property -dict [list CONFIG.USE_BOARD_FLOW {true}] $axi_ethernet
 set_property -dict [list CONFIG.MII_BOARD_INTERFACE {mii}] $axi_ethernet
 set_property -dict [list CONFIG.MDIO_BOARD_INTERFACE {mdio_mdc}] $axi_ethernet
@@ -149,11 +149,11 @@ set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_sw_led
 set axi_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_intc]
 set_property -dict [list CONFIG.C_HAS_FAST {0}] $axi_intc
 
-set sys_concat_aux_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_concat_aux_intc]
+set sys_concat_aux_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_aux_intc]
 set_property -dict [list CONFIG.NUM_PORTS {9}] $sys_concat_aux_intc
 set_property -dict [list CONFIG.IN9_WIDTH {5}] $sys_concat_aux_intc
 
-set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_concat_intc]
+set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
 set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
 
 # hdmi peripherals
@@ -161,7 +161,7 @@ set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
 set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]
 set axi_hdmi_core [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_tx:1.0 axi_hdmi_core]
 
-set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.1 axi_hdmi_dma]
+set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_hdmi_dma]
 set_property -dict [list CONFIG.c_m_axis_mm2s_tdata_width {64}] $axi_hdmi_dma
 set_property -dict [list CONFIG.c_use_mm2s_fsync {1}] $axi_hdmi_dma
 set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
