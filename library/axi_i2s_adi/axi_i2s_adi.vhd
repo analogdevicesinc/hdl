@@ -200,6 +200,10 @@ begin
 			);
 	end generate;
 
+	no_streaming_dma_tx_gen: if C_DMA_TYPE /= 0 or C_HAS_TX /= 1 generate
+		S_AXIS_TREADY <= '0';
+	end generate;
+
 	streaming_dma_rx_gen: if C_DMA_TYPE = 0 and C_HAS_RX = 1 generate
 		rx_fifo : entity axi_streaming_dma_rx_fifo	
 			generic map(
@@ -228,6 +232,15 @@ begin
 
 			M_AXIS_TDATA(7 downto 0) <= (others => '0');
 	end generate;
+
+	no_streaming_dma_rx_gen: if C_DMA_TYPE /= 0 or C_HAS_RX /= 1 generate
+		M_AXIS_TDATA <= (others => '0');
+		M_AXIS_TLAST <= '0';
+		M_AXIS_TVALID <= '0';
+		M_AXIS_TKEEP <= (others => '0');
+	end generate;
+
+
 
 	pl330_dma_tx_gen: if C_DMA_TYPE = 1 and C_HAS_TX = 1 generate
 		tx_fifo_stb <= '1' when wr_addr = 11 and wr_stb = '1' else '0';
@@ -263,6 +276,12 @@ begin
 			);
 	end generate;
 
+	no_pl330_dma_tx_gen: if C_DMA_TYPE /= 1 or C_HAS_TX /= 1 generate
+		DMA_REQ_TX_DAREADY <= '0';
+		DMA_REQ_TX_DRVALID <= '0';
+		DMA_REQ_TX_DRTYPE <= (others => '0');
+		DMA_REQ_TX_DRLAST <= '0';
+	end generate;
 
 	pl330_dma_rx_gen: if C_DMA_TYPE = 1 and C_HAS_RX = 1 generate
 		rx_fifo_ack <= '1' when rd_addr = 10 and rd_ack = '1' else '0';
@@ -296,6 +315,14 @@ begin
 				drtype => DMA_REQ_RX_DRTYPE,
 				drlast => DMA_REQ_RX_DRLAST
 			);
+
+	end generate;
+
+	no_pl330_dma_rx_gen: if C_DMA_TYPE /= 1 or C_HAS_RX /= 1 generate
+		DMA_REQ_RX_DAREADY <= '0';
+		DMA_REQ_RX_DRVALID <= '0';
+		DMA_REQ_RX_DRTYPE <= (others => '0');
+		DMA_REQ_RX_DRLAST <= '0';
 	end generate;
 
 	ctrl : entity i2s_controller
