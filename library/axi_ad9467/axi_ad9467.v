@@ -211,7 +211,7 @@ module axi_ad9467(
     .delay_addr (delay_addr_s),
     .delay_wdata (delay_wdata_s),
     .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t),
+    .delay_ack_t (delay_ack_t_s),
     .delay_locked (delay_locked_s));
 
   // channel
@@ -258,7 +258,7 @@ module axi_ad9467(
     .delay_addr (delay_addr_s),
     .delay_wdata (delay_wdata_s),
     .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t),
+    .delay_ack_t (delay_ack_t_s),
     .delay_locked (delay_locked_s),
     .drp_clk (1'b0),
     .drp_rst (),
