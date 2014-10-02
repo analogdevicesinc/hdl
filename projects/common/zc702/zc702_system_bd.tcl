@@ -69,6 +69,8 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_hdmi_interconnect
 set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 sys_audio_clkgen]
 set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
+set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
+set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
 set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_tx_core
@@ -182,6 +184,7 @@ connect_bd_intf_net -intf_net axi_spdif_dma_req_tx [get_bd_intf_pins sys_ps7/DMA
 connect_bd_intf_net -intf_net axi_spdif_dma_ack_tx [get_bd_intf_pins sys_ps7/DMA0_ACK] [get_bd_intf_pins axi_spdif_tx_core/DMA_ACK]
 
 connect_bd_net -net sys_200m_clk [get_bd_pins sys_audio_clkgen/clk_in1]
+connect_bd_net -net sys_100m_resetn [get_bd_pins sys_audio_clkgen/resetn] $sys_100m_resetn_source
 connect_bd_net -net sys_audio_clkgen_clk [get_bd_pins sys_audio_clkgen/clk_out1] [get_bd_pins axi_spdif_tx_core/spdif_data_clk]
 connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/spdif_tx_o]
 
