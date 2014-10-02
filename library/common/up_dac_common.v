@@ -84,16 +84,18 @@ module up_dac_common (
 
   up_rstn,
   up_clk,
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack);
+  up_rack);
 
   // parameters
 
-  localparam  PCORE_VERSION = 32'h00080061;
+  localparam  PCORE_VERSION = 32'h00080062;
   parameter   PCORE_ID = 0;
 
   // mmcm reset
@@ -139,15 +141,18 @@ module up_dac_common (
 
   input           up_rstn;
   input           up_clk;
-  input           up_sel;
-  input           up_wr;
-  input   [13:0]  up_addr;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
   input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
   output  [31:0]  up_rdata;
-  output          up_ack;
+  output          up_rack;
 
   // internal registers
 
+  reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_mmcm_resetn = 'd0;
   reg             up_resetn = 'd0;
@@ -166,7 +171,7 @@ module up_dac_common (
   reg             up_status_unf = 'd0;
   reg     [ 7:0]  up_usr_chanmax = 'd0;
   reg     [31:0]  up_dac_gpio_out = 'd0;
-  reg             up_ack = 'd0;
+  reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg             dac_sync_d = 'd0;
   reg             dac_sync_2d = 'd0;
@@ -178,8 +183,8 @@ module up_dac_common (
 
   // internal signals
 
-  wire            up_sel_s;
-  wire            up_wr_s;
+  wire            up_wreq_s;
+  wire            up_rreq_s;
   wire            up_preset_s;
   wire            up_mmcm_preset_s;
   wire            up_xfer_done_s;
@@ -195,8 +200,8 @@ module up_dac_common (
 
   // decode block select
 
-  assign up_sel_s = (up_addr[13:8] == 6'h10) ? up_sel : 1'b0;
-  assign up_wr_s = up_sel_s & up_wr;
+  assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
   assign up_preset_s = ~up_resetn;
   assign up_mmcm_preset_s = ~up_mmcm_resetn;
 
@@ -204,6 +209,7 @@ module up_dac_common (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_wack <= 'd0;
       up_scratch <= 'd0;
       up_mmcm_resetn <= 'd0;
       up_resetn <= 'd0;
@@ -223,10 +229,11 @@ module up_dac_common (
       up_usr_chanmax <= 'd0;
       up_dac_gpio_out <= 'd0;
     end else begin
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h02)) begin
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h10)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
         up_mmcm_resetn <= up_wdata[1];
         up_resetn <= up_wdata[0];
       end
@@ -234,26 +241,26 @@ module up_dac_common (
         if (up_xfer_done_s == 1'b1) begin
           up_dac_sync <= 1'b0;
         end
-      end else if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h11)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
         up_dac_sync <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h12)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
         up_dac_par_type <= up_wdata[7];
         up_dac_par_enb <= up_wdata[6];
         up_dac_r1_mode <= up_wdata[5];
         up_dac_datafmt <= up_wdata[4];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h13)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h13)) begin
         up_dac_datarate <= up_wdata[7:0];
       end
       if (up_dac_frame == 1'b1) begin
         if (up_xfer_done_s == 1'b1) begin
           up_dac_frame <= 1'b0;
         end
-      end else if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h14)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
         up_dac_frame <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h1c)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
         up_drp_sel_t <= ~up_drp_sel_t;
         up_drp_rwn <= up_wdata[28];
         up_drp_addr <= up_wdata[27:16];
@@ -261,18 +268,18 @@ module up_dac_common (
       end
       if (up_status_ovf_s == 1'b1) begin
         up_status_ovf <= 1'b1;
-      end else if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h22)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
         up_status_ovf <= up_status_ovf & ~up_wdata[1];
       end
       if (up_status_unf_s == 1'b1) begin
         up_status_unf <= 1'b1;
-      end else if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h22)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
         up_status_unf <= up_status_unf & ~up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h28)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
         up_usr_chanmax <= up_wdata[7:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h2f)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2f)) begin
         up_dac_gpio_out <= up_wdata;
       end
     end
@@ -282,12 +289,12 @@ module up_dac_common (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_ack <= 'd0;
+      up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_ack <= up_sel_s;
-      if (up_sel_s == 1'b1) begin
-        case (up_addr[7:0])
+      up_rack <= up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
+        case (up_raddr[7:0])
           8'h00: up_rdata <= PCORE_VERSION;
           8'h01: up_rdata <= PCORE_ID;
           8'h02: up_rdata <= up_scratch;

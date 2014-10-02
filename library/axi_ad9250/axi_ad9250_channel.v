@@ -61,12 +61,14 @@ module axi_ad9250_channel (
 
   up_rstn,
   up_clk,
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack);
+  up_rack);
 
   // parameters
 
@@ -92,12 +94,14 @@ module axi_ad9250_channel (
 
   input           up_rstn;
   input           up_clk;
-  input           up_sel;
-  input           up_wr;
-  input   [13:0]  up_addr;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
   input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
   output  [31:0]  up_rdata;
-  output          up_ack;
+  output          up_rack;
 
   // internal signals
 
@@ -169,12 +173,14 @@ module axi_ad9250_channel (
     .adc_usr_decimation_n (16'd1),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata),
-    .up_ack (up_ack));
+    .up_rack (up_rack));
 
 endmodule
 

@@ -75,16 +75,18 @@ module up_hdmi_tx (
 
   up_rstn,
   up_clk,
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack);
+  up_rack);
 
   // parameters
 
-  localparam  PCORE_VERSION = 32'h00040062;
+  localparam  PCORE_VERSION = 32'h00040063;
   parameter   PCORE_ID = 0;
 
   // hdmi interface
@@ -121,15 +123,18 @@ module up_hdmi_tx (
 
   input           up_rstn;
   input           up_clk;
-  input           up_sel;
-  input           up_wr;
-  input   [13:0]  up_addr;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
   input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
   output  [31:0]  up_rdata;
-  output          up_ack;
+  output          up_rack;
 
   // internal registers
 
+  reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_resetn = 'd0;
   reg             up_full_range = 'd0;
@@ -150,13 +155,13 @@ module up_hdmi_tx (
   reg     [15:0]  up_vs_width = 'd0;
   reg     [15:0]  up_ve_max = 'd0;
   reg     [15:0]  up_ve_min = 'd0;
-  reg             up_ack = 'd0;
+  reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
 
   // internal signals
 
-  wire            up_sel_s;
-  wire            up_wr_s;
+  wire            up_wreq_s;
+  wire            up_rreq_s;
   wire            up_preset_s;
   wire            up_hdmi_status_s;
   wire            up_hdmi_tpm_oos_s;
@@ -167,14 +172,15 @@ module up_hdmi_tx (
 
   // decode block select
 
-  assign up_sel_s = (up_addr[13:12] == 2'd0) ? up_sel : 1'b0;
-  assign up_wr_s = up_sel_s & up_wr;
+  assign up_wreq_s = (up_waddr[13:12] == 2'd0) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:12] == 2'd0) ? up_rreq : 1'b0;
   assign up_preset_s = ~up_resetn;
 
   // processor write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_wack <= 'd0;
       up_scratch <= 'd0;
       up_resetn <= 'd0;
       up_full_range <= 'd0;
@@ -196,61 +202,62 @@ module up_hdmi_tx (
       up_ve_max <= 'd0;
       up_ve_min <= 'd0;
     end else begin
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h002)) begin
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h002)) begin
         up_scratch <= up_wdata;
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h010)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h010)) begin
         up_resetn <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h011)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h011)) begin
         up_full_range <= up_wdata[1];
         up_csc_bypass <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h012)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h012)) begin
         up_srcsel <= up_wdata[1:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h013)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h013)) begin
         up_const_rgb <= up_wdata[23:0];
       end
       if (up_vdma_ovf_s == 1'b1) begin
         up_vdma_ovf <= 1'b1;
-      end else if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h018)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h018)) begin
         up_vdma_ovf <= up_vdma_ovf & ~up_wdata[1];
       end
       if (up_vdma_unf_s == 1'b1) begin
         up_vdma_unf <= 1'b1;
-      end else if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h018)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h018)) begin
         up_vdma_unf <= up_vdma_unf & ~up_wdata[0];
       end
       if (up_hdmi_tpm_oos_s == 1'b1) begin
         up_hdmi_tpm_oos <= 1'b1;
-      end else if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h019)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
         up_hdmi_tpm_oos <= up_hdmi_tpm_oos & ~up_wdata[1];
       end
       if (up_vdma_tpm_oos_s == 1'b1) begin
         up_vdma_tpm_oos <= 1'b1;
-      end else if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h019)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
         up_vdma_tpm_oos <= up_vdma_tpm_oos & ~up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h100)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h100)) begin
         up_hl_active <= up_wdata[31:16];
         up_hl_width <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h101)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h101)) begin
         up_hs_width <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h102)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h102)) begin
         up_he_max <= up_wdata[31:16];
         up_he_min <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h110)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h110)) begin
         up_vf_active <= up_wdata[31:16];
         up_vf_width <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h111)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h111)) begin
         up_vs_width <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[11:0] == 12'h112)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h112)) begin
         up_ve_max <= up_wdata[31:16];
         up_ve_min <= up_wdata[15:0];
       end
@@ -261,12 +268,12 @@ module up_hdmi_tx (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_ack <= 'd0;
+      up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_ack <= up_sel_s;
-      if (up_sel_s == 1'b1) begin
-        case (up_addr[11:0])
+      up_rack <= up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
+        case (up_raddr[11:0])
           12'h000: up_rdata <= PCORE_VERSION;
           12'h001: up_rdata <= PCORE_ID;
           12'h002: up_rdata <= up_scratch;

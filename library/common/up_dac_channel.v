@@ -79,12 +79,14 @@ module up_dac_channel (
 
   up_rstn,
   up_clk,
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack);
+  up_rack);
 
   // parameters
 
@@ -128,15 +130,18 @@ module up_dac_channel (
 
   input           up_rstn;
   input           up_clk;
-  input           up_sel;
-  input           up_wr;
-  input   [13:0]  up_addr;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
   input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
   output  [31:0]  up_rdata;
-  output          up_ack;
+  output          up_rack;
 
   // internal registers
 
+  reg             up_wack = 'd0;
   reg     [15:0]  up_dac_dds_scale_1 = 'd0;
   reg     [15:0]  up_dac_dds_init_1 = 'd0;
   reg     [15:0]  up_dac_dds_incr_1 = 'd0;
@@ -158,7 +163,7 @@ module up_dac_channel (
   reg     [ 7:0]  up_usr_datatype_bits = 'd0;
   reg     [15:0]  up_usr_interpolation_m = 'd0;
   reg     [15:0]  up_usr_interpolation_n = 'd0;
-  reg             up_ack = 'd0;
+  reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg     [15:0]  up_dac_dds_scale_tc_1 = 'd0;
   reg     [15:0]  up_dac_dds_scale_tc_2 = 'd0;
@@ -168,8 +173,8 @@ module up_dac_channel (
 
   // internal signals
 
-  wire            up_sel_s;
-  wire            up_wr_s;
+  wire            up_wreq_s;
+  wire            up_rreq_s;
 
   // 2's complement function
 
@@ -188,13 +193,14 @@ module up_dac_channel (
 
   // decode block select
 
-  assign up_sel_s = ((up_addr[13:8] == 6'h11) && (up_addr[7:4] == PCORE_DAC_CHID)) ? up_sel : 1'b0;
-  assign up_wr_s = up_sel_s & up_wr;
+  assign up_wreq_s = ((up_waddr[13:8] == 6'h11) && (up_waddr[7:4] == PCORE_DAC_CHID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == 6'h11) && (up_raddr[7:4] == PCORE_DAC_CHID)) ? up_rreq : 1'b0;
 
   // processor write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_wack <= 'd0;
       up_dac_dds_scale_1 <= 'd0;
       up_dac_dds_init_1 <= 'd0;
       up_dac_dds_incr_1 <= 'd0;
@@ -217,44 +223,45 @@ module up_dac_channel (
       up_usr_interpolation_m <= 'd0;
       up_usr_interpolation_n <= 'd0;
     end else begin
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h0)) begin
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h0)) begin
         up_dac_dds_scale_1 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h1)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h1)) begin
         up_dac_dds_init_1 <= up_wdata[31:16];
         up_dac_dds_incr_1 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h2)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h2)) begin
         up_dac_dds_scale_2 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h3)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h3)) begin
         up_dac_dds_init_2 <= up_wdata[31:16];
         up_dac_dds_incr_2 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h4)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h4)) begin
         up_dac_pat_data_2 <= up_wdata[31:16];
         up_dac_pat_data_1 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h5)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h5)) begin
         up_dac_iqcor_enb <= up_wdata[2];
         up_dac_lb_enb <= up_wdata[1];
         up_dac_pn_enb <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h6)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h6)) begin
         up_dac_data_sel <= up_wdata[3:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h7)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h7)) begin
         up_dac_iqcor_coeff_1 <= up_wdata[31:16];
         up_dac_iqcor_coeff_2 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h8)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h8)) begin
         up_usr_datatype_be <= up_wdata[25];
         up_usr_datatype_signed <= up_wdata[24];
         up_usr_datatype_shift <= up_wdata[23:16];
         up_usr_datatype_total_bits <= up_wdata[15:8];
         up_usr_datatype_bits <= up_wdata[7:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h9)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h9)) begin
         up_usr_interpolation_m <= up_wdata[31:16];
         up_usr_interpolation_n <= up_wdata[15:0];
       end
@@ -265,12 +272,12 @@ module up_dac_channel (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_ack <= 'd0;
+      up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_ack <= up_sel_s;
-      if (up_sel_s == 1'b1) begin
-        case (up_addr[3:0])
+      up_rack <= up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
+        case (up_raddr[3:0])
           4'h0: up_rdata <= {16'd0, up_dac_dds_scale_1};
           4'h1: up_rdata <= {up_dac_dds_init_1, up_dac_dds_incr_1};
           4'h2: up_rdata <= {16'd0, up_dac_dds_scale_2};

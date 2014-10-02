@@ -83,12 +83,14 @@ module axi_ad9144_core (
 
   up_rstn,
   up_clk,
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack);
+  up_rack);
 
   // parameters
 
@@ -137,32 +139,40 @@ module axi_ad9144_core (
 
   input           up_rstn;
   input           up_clk;
-  input           up_sel;
-  input           up_wr;
-  input   [13:0]  up_addr;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
   input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
   output  [31:0]  up_rdata;
-  output          up_ack;
+  output          up_rack;
 
   // internal registers
 
   reg     [31:0]  up_rdata = 'd0;
-  reg             up_ack = 'd0;
+  reg             up_rack = 'd0;
+  reg             up_wack = 'd0;
 
   // internal signals
 
   wire            dac_sync_s;
   wire            dac_datafmt_s;
   wire    [31:0]  up_rdata_0_s;
-  wire            up_ack_0_s;
+  wire            up_rack_0_s;
+  wire            up_wack_0_s;
   wire    [31:0]  up_rdata_1_s;
-  wire            up_ack_1_s;
+  wire            up_rack_1_s;
+  wire            up_wack_1_s;
   wire    [31:0]  up_rdata_2_s;
-  wire            up_ack_2_s;
+  wire            up_rack_2_s;
+  wire            up_wack_2_s;
   wire    [31:0]  up_rdata_3_s;
-  wire            up_ack_3_s;
+  wire            up_rack_3_s;
+  wire            up_wack_3_s;
   wire    [31:0]  up_rdata_s;
-  wire            up_ack_s;
+  wire            up_rack_s;
+  wire            up_wack_s;
 
   // dac valid
 
@@ -176,10 +186,12 @@ module axi_ad9144_core (
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rdata <= 'd0;
-      up_ack <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
     end else begin
       up_rdata <= up_rdata_s | up_rdata_0_s | up_rdata_1_s | up_rdata_2_s | up_rdata_3_s;
-      up_ack <= up_ack_s | up_ack_0_s | up_ack_1_s | up_ack_2_s | up_ack_3_s;
+      up_rack <= up_rack_s | up_rack_0_s | up_rack_1_s | up_rack_2_s | up_rack_3_s;
+      up_wack <= up_wack_s | up_wack_0_s | up_wack_1_s | up_wack_2_s | up_wack_3_s;
     end
   end
 
@@ -195,12 +207,14 @@ module axi_ad9144_core (
     .dac_dds_format (dac_datafmt_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_0_s),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_0_s),
-    .up_ack (up_ack_0_s));
+    .up_rack (up_rack_0_s));
 
   // dac channel
   
@@ -214,12 +228,14 @@ module axi_ad9144_core (
     .dac_dds_format (dac_datafmt_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_1_s),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_1_s),
-    .up_ack (up_ack_1_s));
+    .up_rack (up_rack_1_s));
 
   // dac channel
   
@@ -233,12 +249,14 @@ module axi_ad9144_core (
     .dac_dds_format (dac_datafmt_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_2_s),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_2_s),
-    .up_ack (up_ack_2_s));
+    .up_rack (up_rack_2_s));
 
   // dac channel
   
@@ -252,12 +270,14 @@ module axi_ad9144_core (
     .dac_dds_format (dac_datafmt_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_3_s),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_3_s),
-    .up_ack (up_ack_3_s));
+    .up_rack (up_rack_3_s));
 
   // dac common processor interface
 
@@ -291,12 +311,14 @@ module axi_ad9144_core (
     .up_dac_gpio_out (),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_s),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_s),
-    .up_ack (up_ack_s));
+    .up_rack (up_rack_s));
   
 endmodule
 
