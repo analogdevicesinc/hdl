@@ -143,7 +143,8 @@ module axi_ad9265 (
   reg             up_status_pn_oos = 'd0;
   reg             up_status_or = 'd0;
   reg     [31:0]  up_rdata = 'd0;
-  reg             up_ack = 'd0;
+  reg             up_wack = 'd0;
+  reg             up_rack = 'd0;
 
   // internal clocks & resets
 
@@ -167,12 +168,14 @@ module axi_ad9265 (
   wire    [ 4:0]  delay_rdata_s;
   wire            delay_ack_t_s;
   wire            delay_locked_s;
-  wire            up_sel_s;
-  wire            up_wr_s;
-  wire    [13:0]  up_addr_s;
-  wire    [31:0]  up_wdata_s;
+  wire    [13:0]  up_raddr_s;
   wire    [31:0]  up_rdata_s[0:1];
-  wire            up_ack_s[0:1];
+  wire            up_rack_s[0:1];
+  wire            up_wack_s[0:1];
+  wire            up_wreq_s;
+  wire    [13:0]  up_waddr_s;
+  wire    [31:0]  up_wdata_s;
+  wire            up_rreq_s;
 
   // signal name changes
 
@@ -187,13 +190,15 @@ module axi_ad9265 (
       up_status_pn_oos <= 'd0;
       up_status_or <= 'd0;
       up_rdata <= 'd0;
-      up_ack <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
     end else begin
       up_status_pn_err <= up_status_pn_err_s;
       up_status_pn_oos <= up_status_pn_oos_s;
       up_status_or <= up_status_or_s;
       up_rdata <= up_rdata_s[0] | up_rdata_s[1];
-      up_ack <= up_ack_s[0] | up_ack_s[1];
+      up_rack <= up_rack_s[0] | up_rack_s[1];
+      up_wack <= up_wack_s[0] | up_wack_s[1];
     end
   end
 
@@ -215,12 +220,14 @@ module axi_ad9265 (
     .up_adc_or (up_status_or_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[0]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[0]),
-    .up_ack (up_ack_s[0]));
+    .up_rack (up_rack_s[0]));
 
   // main (device interface)
 
@@ -288,12 +295,14 @@ module axi_ad9265 (
     .up_adc_gpio_out (),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[1]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[1]),
-    .up_ack (up_ack_s[1]));
+    .up_rack (up_rack_s[1]));
 
   // up bus interface
 
@@ -317,12 +326,14 @@ module axi_ad9265 (
     .up_axi_rresp (s_axi_rresp),
     .up_axi_rdata (s_axi_rdata),
     .up_axi_rready (s_axi_rready),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata),
-    .up_ack (up_ack));
+    .up_rack (up_rack));
 
 endmodule
 
