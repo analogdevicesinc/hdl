@@ -39,7 +39,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9144_channel (
+module axi_ad9152_channel (
 
   // dac interface
 

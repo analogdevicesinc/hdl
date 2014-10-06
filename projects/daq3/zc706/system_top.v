@@ -114,6 +114,8 @@ module system_top (
   tx_data_p,
   tx_data_n,
   
+  trig_p,
+  trig_n,
   adc_fdb,
   adc_fda,
   dac_irq,
@@ -121,16 +123,15 @@ module system_top (
   
   adc_pd,
   dac_txen,
-  dac_reset,
-  clkd_pd,
-  clkd_sync,
-  clkd_reset,
+  sysref_p,
+  sysref_n,
  
   spi_csn_clk,
   spi_csn_dac,
   spi_csn_adc,
   spi_clk,
-  spi_sdio);
+  spi_sdio,
+  spi_dir);
 
   input           sys_clk_p;
   input           sys_clk_n;
@@ -205,6 +206,8 @@ module system_top (
   output  [ 3:0]  tx_data_p;
   output  [ 3:0]  tx_data_n;
   
+  input           trig_p;
+  input           trig_n;
   inout           adc_fdb;
   inout           adc_fda;
   inout           dac_irq;
@@ -212,24 +215,21 @@ module system_top (
   
   inout           adc_pd;
   inout           dac_txen;
-  inout           dac_reset;
-  inout           clkd_pd;
-  inout           clkd_sync;
-  inout           clkd_reset;
+  output          sysref_p;
+  output          sysref_n;
   
   output          spi_csn_clk;
   output          spi_csn_dac;
   output          spi_csn_adc;
   output          spi_clk;
   inout           spi_sdio;
+  output          spi_dir;
 
   // internal registers
 
   reg             dac_drd = 'd0;
   reg     [63:0]  dac_ddata_0 = 'd0;
   reg     [63:0]  dac_ddata_1 = 'd0;
-  reg     [63:0]  dac_ddata_2 = 'd0;
-  reg     [63:0]  dac_ddata_3 = 'd0;
   reg             adc_dsync = 'd0;
   reg             adc_dwr = 'd0;
   reg    [127:0]  adc_ddata = 'd0;
@@ -239,6 +239,8 @@ module system_top (
   wire    [42:0]  gpio_i;
   wire    [42:0]  gpio_o;
   wire    [42:0]  gpio_t;
+  wire            sysref;
+  wire            trig;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
@@ -252,12 +254,8 @@ module system_top (
   wire   [127:0]  dac_ddata;
   wire            dac_enable_0;
   wire            dac_enable_1;
-  wire            dac_enable_2;
-  wire            dac_enable_3;
   wire            dac_valid_0;
   wire            dac_valid_1;
-  wire            dac_valid_2;
-  wire            dac_valid_3;
   wire            adc_clk;
   wire    [63:0]  adc_data_0;
   wire    [63:0]  adc_data_1;
@@ -280,8 +278,6 @@ module system_top (
         dac_ddata_1[47:32] <= dac_ddata[ 95: 80];
         dac_ddata_1[31:16] <= dac_ddata[ 63: 48];
         dac_ddata_1[15: 0] <= dac_ddata[ 31: 16];
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
       end
       2'b10: begin
         dac_drd <= dac_valid_1 & ~dac_drd;
@@ -297,8 +293,6 @@ module system_top (
           dac_ddata_1[31:16] <= dac_ddata[ 31: 16];
           dac_ddata_1[15: 0] <= dac_ddata[ 15:  0];
         end
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
       end
       2'b01: begin
         dac_drd <= dac_valid_0 & ~dac_drd;
@@ -314,15 +308,11 @@ module system_top (
           dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
         end
         dac_ddata_1 <= 64'd0;
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
       end
       default: begin
         dac_drd <= 1'b0;
         dac_ddata_0 <= 64'd0;
         dac_ddata_1 <= 64'd0;
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
       end
     endcase
   end
@@ -415,23 +405,32 @@ module system_top (
     .IB (tx_sync_n),
     .O (tx_sync));
 
-  daq2_spi i_spi (
+  daq3_spi i_spi (
     .spi_csn (spi_csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
-    .spi_sdio (spi_sdio));
+    .spi_sdio (spi_sdio),
+    .spi_dir (spi_dir));
 
-  ad_iobuf #(.DATA_WIDTH(26)) i_iobuf (
-    .dt ({gpio_t[42:32], gpio_t[14:0]}),
-    .di ({gpio_o[42:32], gpio_o[14:0]}),
-    .do ({gpio_i[42:32], gpio_i[14:0]}),
-    .dio ({ adc_pd,        // 42
-            dac_txen,      // 41
-            dac_reset,     // 40
-            clkd_pd,       // 39
-            clkd_sync,     // 38
-            clkd_reset,    // 37
+  OBUFDS i_obufds_sysref (
+    .I (gpio_o[40]),
+    .O (sysref_p),
+    .OB (sysref_n));
+
+  IBUFDS i_ibufds_trig (
+    .I (trig_p),
+    .IB (trig_n),
+    .O (trig));
+
+  assign gpio_i[39] = trig;
+
+  ad_iobuf #(.DATA_WIDTH(22)) i_iobuf (
+    .dt ({gpio_t[38:32], gpio_t[14:0]}),
+    .di ({gpio_o[38:32], gpio_o[14:0]}),
+    .do ({gpio_i[38:32], gpio_i[14:0]}),
+    .dio ({ adc_pd,        // 38
+            dac_txen,      // 37
             adc_fdb,       // 36
             adc_fda,       // 35
             dac_irq,       // 34
@@ -492,17 +491,11 @@ module system_top (
     .dac_ddata (dac_ddata),
     .dac_ddata_0 (dac_ddata_0),
     .dac_ddata_1 (dac_ddata_1),
-    .dac_ddata_2 (dac_ddata_2),
-    .dac_ddata_3 (dac_ddata_3),
     .dac_drd (dac_drd),
     .dac_enable_0 (dac_enable_0),
     .dac_enable_1 (dac_enable_1),
-    .dac_enable_2 (dac_enable_2),
-    .dac_enable_3 (dac_enable_3),
     .dac_valid_0 (dac_valid_0),
     .dac_valid_1 (dac_valid_1),
-    .dac_valid_2 (dac_valid_2),
-    .dac_valid_3 (dac_valid_3),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -518,8 +511,10 @@ module system_top (
     .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
+    .spi_csn_i (1'b1),
+    .spi_csn_0_o (spi_csn[0]),
+    .spi_csn_1_o (spi_csn[1]),
+    .spi_csn_2_o (spi_csn[2]),
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
     .spi_sdo_o (spi_mosi),

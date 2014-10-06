@@ -39,7 +39,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9144_core (
+module axi_ad9152_core (
 
   // dac interface
 
@@ -53,14 +53,6 @@ module axi_ad9144_core (
   dac_data_1_1,
   dac_data_1_2,
   dac_data_1_3,
-  dac_data_2_0,
-  dac_data_2_1,
-  dac_data_2_2,
-  dac_data_2_3,
-  dac_data_3_0,
-  dac_data_3_1,
-  dac_data_3_2,
-  dac_data_3_3,
 
   // dma interface
 
@@ -70,12 +62,6 @@ module axi_ad9144_core (
   dac_valid_1,
   dac_enable_1,
   dac_ddata_1,
-  dac_valid_2,
-  dac_enable_2,
-  dac_ddata_2,
-  dac_valid_3,
-  dac_enable_3,
-  dac_ddata_3,
   dac_dovf,
   dac_dunf,
 
@@ -109,14 +95,6 @@ module axi_ad9144_core (
   output  [15:0]  dac_data_1_1;
   output  [15:0]  dac_data_1_2;
   output  [15:0]  dac_data_1_3;
-  output  [15:0]  dac_data_2_0;
-  output  [15:0]  dac_data_2_1;
-  output  [15:0]  dac_data_2_2;
-  output  [15:0]  dac_data_2_3;
-  output  [15:0]  dac_data_3_0;
-  output  [15:0]  dac_data_3_1;
-  output  [15:0]  dac_data_3_2;
-  output  [15:0]  dac_data_3_3;
 
   // dma interface
 
@@ -126,12 +104,6 @@ module axi_ad9144_core (
   output          dac_valid_1;
   output          dac_enable_1;
   input   [63:0]  dac_ddata_1;
-  output          dac_valid_2;
-  output          dac_enable_2;
-  input   [63:0]  dac_ddata_2;
-  output          dac_valid_3;
-  output          dac_enable_3;
-  input   [63:0]  dac_ddata_3;
   input           dac_dovf;
   input           dac_dunf;
 
@@ -164,12 +136,6 @@ module axi_ad9144_core (
   wire    [31:0]  up_rdata_1_s;
   wire            up_rack_1_s;
   wire            up_wack_1_s;
-  wire    [31:0]  up_rdata_2_s;
-  wire            up_rack_2_s;
-  wire            up_wack_2_s;
-  wire    [31:0]  up_rdata_3_s;
-  wire            up_rack_3_s;
-  wire            up_wack_3_s;
   wire    [31:0]  up_rdata_s;
   wire            up_rack_s;
   wire            up_wack_s;
@@ -189,15 +155,15 @@ module axi_ad9144_core (
       up_rack <= 'd0;
       up_wack <= 'd0;
     end else begin
-      up_rdata <= up_rdata_s | up_rdata_0_s | up_rdata_1_s | up_rdata_2_s | up_rdata_3_s;
-      up_rack <= up_rack_s | up_rack_0_s | up_rack_1_s | up_rack_2_s | up_rack_3_s;
-      up_wack <= up_wack_s | up_wack_0_s | up_wack_1_s | up_wack_2_s | up_wack_3_s;
+      up_rdata <= up_rdata_s | up_rdata_0_s | up_rdata_1_s;
+      up_rack <= up_rack_s | up_rack_0_s | up_rack_1_s;
+      up_wack <= up_wack_s | up_wack_0_s | up_wack_1_s;
     end
   end
 
   // dac channel
   
-  axi_ad9144_channel #(.CHID(0), .DP_DISABLE(DP_DISABLE)) i_channel_0 (
+  axi_ad9152_channel #(.CHID(0), .DP_DISABLE(DP_DISABLE)) i_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_0),
@@ -218,7 +184,7 @@ module axi_ad9144_core (
 
   // dac channel
   
-  axi_ad9144_channel #(.CHID(1), .DP_DISABLE(DP_DISABLE)) i_channel_1 (
+  axi_ad9152_channel #(.CHID(1), .DP_DISABLE(DP_DISABLE)) i_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_1),
@@ -236,48 +202,6 @@ module axi_ad9144_core (
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_1_s),
     .up_rack (up_rack_1_s));
-
-  // dac channel
-  
-  axi_ad9144_channel #(.CHID(2), .DP_DISABLE(DP_DISABLE)) i_channel_2 (
-    .dac_clk (dac_clk),
-    .dac_rst (dac_rst),
-    .dac_enable (dac_enable_2),
-    .dac_data ({dac_data_2_3, dac_data_2_2, dac_data_2_1, dac_data_2_0}),
-    .dma_data (dac_ddata_2),
-    .dac_data_sync (dac_sync_s),
-    .dac_dds_format (dac_datafmt_s),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_2_s),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_2_s),
-    .up_rack (up_rack_2_s));
-
-  // dac channel
-  
-  axi_ad9144_channel #(.CHID(3), .DP_DISABLE(DP_DISABLE)) i_channel_3 (
-    .dac_clk (dac_clk),
-    .dac_rst (dac_rst),
-    .dac_enable (dac_enable_3),
-    .dac_data ({dac_data_3_3, dac_data_3_2, dac_data_3_1, dac_data_3_0}),
-    .dma_data (dac_ddata_3),
-    .dac_data_sync (dac_sync_s),
-    .dac_dds_format (dac_datafmt_s),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_3_s),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_3_s),
-    .up_rack (up_rack_3_s));
 
   // dac common processor interface
 

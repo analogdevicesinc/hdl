@@ -1,10 +1,10 @@
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3.tcl
-source ../common/daq2_bd.tcl
+source ../common/daq3_bd.tcl
 
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9144_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9152_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9152_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9680_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9680_dma
 
@@ -22,7 +22,7 @@ delete_bd_objs [get_bd_nets axi_ad9680_adc_ddata]
 delete_bd_objs [get_bd_nets axi_ad9680_adc_dsync]
 delete_bd_objs [get_bd_nets axi_ad9680_adc_dovf]
 
-connect_bd_net -net [get_bd_nets axi_daq2_gt_rx_rst]   [get_bd_pins plddr3_fifo/adc_rst]  [get_bd_pins axi_daq2_gt/rx_rst]
+connect_bd_net -net [get_bd_nets axi_daq3_gt_rx_rst]   [get_bd_pins plddr3_fifo/adc_rst]  [get_bd_pins axi_daq3_gt/rx_rst]
 connect_bd_net -net [get_bd_nets sys_fmc_dma_resetn]   [get_bd_pins plddr3_fifo/dma_rstn] [get_bd_pins sys_fmc_dma_sync_reset/sync_resetn]
 connect_bd_net -net axi_ad9680_dma_xfer_req [get_bd_pins axi_ad9680_dma/fifo_wr_xfer_req] [get_bd_pins plddr3_fifo/axi_xfer_req]
 
@@ -40,18 +40,17 @@ connect_bd_net -net axi_ad9680_adc_dsync    [get_bd_ports adc_dsync]            
 connect_bd_net -net axi_ad9680_adc_clk      [get_bd_ports adc_clk]
 connect_bd_net -net axi_ad9680_adc_ddata    [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
-set ila_dma_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_dma_mon]
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_dma_mon
+set ila_dma_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_dma_mon]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_dma_mon
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {3}] $ila_dma_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_dma_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_dma_mon
 set_property -dict [list CONFIG.C_PROBE2_WIDTH {64}] $ila_dma_mon
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {5}] $ila_dma_mon
 
 connect_bd_net -net axi_ad9680_dma_clk      [get_bd_pins ila_dma_mon/clk] 
 connect_bd_net -net axi_ad9680_dma_dwr      [get_bd_pins ila_dma_mon/probe0] 
 connect_bd_net -net axi_ad9680_dma_xfer_req [get_bd_pins ila_dma_mon/probe1] 
 connect_bd_net -net axi_ad9680_dma_ddata    [get_bd_pins ila_dma_mon/probe2] 
-connect_bd_net -net axi_xfer_status         [get_bd_pins ila_dma_mon/probe3]  [get_bd_pins plddr3_fifo/axi_xfer_status]
 
 
 create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces plddr3_fifo/axi_fifo2s/axi] [get_bd_addr_segs plddr3_fifo/axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl_memaddr

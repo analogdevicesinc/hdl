@@ -37,7 +37,8 @@ connect_bd_net -net axi_ad9625_adc_valid    [get_bd_pins axi_ad9625_core/adc_val
 
 connect_bd_net -net axi_ad9625_adc_data     [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
-set ila_dma_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_dma_mon]
+set ila_dma_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_dma_mon]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_dma_mon
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_dma_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_dma_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_dma_mon
