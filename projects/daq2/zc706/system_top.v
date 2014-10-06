@@ -114,6 +114,9 @@ module system_top (
   tx_data_p,
   tx_data_n,
   
+  trig_p,
+  trig_n,
+
   adc_fdb,
   adc_fda,
   dac_irq,
@@ -122,15 +125,14 @@ module system_top (
   adc_pd,
   dac_txen,
   dac_reset,
-  clkd_pd,
   clkd_sync,
-  clkd_reset,
  
   spi_csn_clk,
   spi_csn_dac,
   spi_csn_adc,
   spi_clk,
-  spi_sdio);
+  spi_sdio,
+  spi_dir);
 
   input           sys_clk_p;
   input           sys_clk_n;
@@ -204,7 +206,10 @@ module system_top (
   input           tx_sync_n;
   output  [ 3:0]  tx_data_p;
   output  [ 3:0]  tx_data_n;
-  
+ 
+  input           trig_p;
+  input           trig_n;
+ 
   inout           adc_fdb;
   inout           adc_fda;
   inout           dac_irq;
@@ -213,15 +218,14 @@ module system_top (
   inout           adc_pd;
   inout           dac_txen;
   inout           dac_reset;
-  inout           clkd_pd;
   inout           clkd_sync;
-  inout           clkd_reset;
   
   output          spi_csn_clk;
   output          spi_csn_dac;
   output          spi_csn_adc;
   output          spi_clk;
   inout           spi_sdio;
+  output          spi_dir;
 
   // internal registers
 
@@ -236,9 +240,10 @@ module system_top (
   
   // internal signals
 
-  wire    [42:0]  gpio_i;
-  wire    [42:0]  gpio_o;
-  wire    [42:0]  gpio_t;
+  wire            trig;
+  wire    [43:0]  gpio_i;
+  wire    [43:0]  gpio_o;
+  wire    [43:0]  gpio_t;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
@@ -420,18 +425,24 @@ module system_top (
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
-    .spi_sdio (spi_sdio));
+    .spi_sdio (spi_sdio),
+    .spi_dir (spi_dir));
 
-  ad_iobuf #(.DATA_WIDTH(26)) i_iobuf (
-    .dt ({gpio_t[42:32], gpio_t[14:0]}),
-    .di ({gpio_o[42:32], gpio_o[14:0]}),
-    .do ({gpio_i[42:32], gpio_i[14:0]}),
+  IBUFDS i_ibufds_trig (
+    .I (trig_p),
+    .IB (trig_n),
+    .O (trig));
+
+  assign gpio_i[43] = trig;
+
+  ad_iobuf #(.DATA_WIDTH(24)) i_iobuf (
+    .dt ({gpio_t[42:40], gpio_t[38], gpio_t[36:32], gpio_t[14:0]}),
+    .di ({gpio_o[42:40], gpio_o[38], gpio_o[36:32], gpio_o[14:0]}),
+    .do ({gpio_i[42:40], gpio_i[38], gpio_i[36:32], gpio_i[14:0]}),
     .dio ({ adc_pd,        // 42
             dac_txen,      // 41
             dac_reset,     // 40
-            clkd_pd,       // 39
             clkd_sync,     // 38
-            clkd_reset,    // 37
             adc_fdb,       // 36
             adc_fda,       // 35
             dac_irq,       // 34
@@ -518,8 +529,10 @@ module system_top (
     .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
+    .spi_csn_i (1'b1),
+    .spi_csn_0_o (spi_csn[0]),
+    .spi_csn_1_o (spi_csn[1]),
+    .spi_csn_2_o (spi_csn[2]),
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
     .spi_sdo_o (spi_mosi),

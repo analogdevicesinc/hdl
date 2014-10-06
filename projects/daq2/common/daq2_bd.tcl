@@ -1,8 +1,19 @@
 
   # daq2
 
-  set spi_csn_i       [create_bd_port -dir I -from 2 -to 0 spi_csn_i]
+if {$sys_zynq == 1} {
+
+  set spi_csn_2_o     [create_bd_port -dir O spi_csn_2_o]
+  set spi_csn_1_o     [create_bd_port -dir O spi_csn_1_o]
+  set spi_csn_0_o     [create_bd_port -dir O spi_csn_0_o]
+  set spi_csn_i       [create_bd_port -dir I spi_csn_i]
+
+} else {
+
   set spi_csn_o       [create_bd_port -dir O -from 2 -to 0 spi_csn_o]
+  set spi_csn_i       [create_bd_port -dir I -from 2 -to 0 spi_csn_i]
+}
+
   set spi_clk_i       [create_bd_port -dir I spi_clk_i]
   set spi_clk_o       [create_bd_port -dir O spi_clk_o]
   set spi_sdo_i       [create_bd_port -dir I spi_sdo_i]
@@ -63,7 +74,7 @@ if {$sys_zynq == 0} {
   set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
   set_property -dict [list CONFIG.PCORE_QUAD_DUAL_N {0}] $axi_ad9144_core
 
-  set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9144_jesd]
+  set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9144_jesd]
   set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
   set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9144_jesd
 
@@ -90,7 +101,7 @@ if {$sys_zynq == 1} {
 
   set axi_ad9680_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core]
 
-  set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9680_jesd]
+  set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9680_jesd]
   set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
   set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
 
@@ -129,7 +140,7 @@ if {$sys_zynq == 1} {
 
 if {$sys_zynq == 0} {
 
-  set axi_daq2_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_daq2_spi]
+  set axi_daq2_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_daq2_spi]
   set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_daq2_spi
   set_property -dict [list CONFIG.C_NUM_SS_BITS {3}] $axi_daq2_spi
   set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_daq2_spi
@@ -188,22 +199,16 @@ if {$sys_zynq == 0} {
   connect_bd_net -net spi_sdi_i [get_bd_ports spi_sdi_i]  [get_bd_pins axi_daq2_spi/io1_i]
 
 } else {
-  set sys_spi_csn_concat [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_spi_csn_concat]
-  set_property -dict [list CONFIG.NUM_PORTS {3}] $sys_spi_csn_concat
 
-  set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sys_const_vcc]
-  set_property -dict [list CONFIG.CONST_WIDTH {1} CONFIG.CONST_VAL {1}] $sys_const_vcc
-
-  connect_bd_net -net spi_csn0  [get_bd_pins sys_spi_csn_concat/In2] [get_bd_pins sys_ps7/SPI0_SS_O]
-  connect_bd_net -net spi_csn1  [get_bd_pins sys_spi_csn_concat/In1] [get_bd_pins sys_ps7/SPI0_SS1_O]
-  connect_bd_net -net spi_csn2  [get_bd_pins sys_spi_csn_concat/In0] [get_bd_pins sys_ps7/SPI0_SS2_O]
-  connect_bd_net -net spi_csn_o [get_bd_ports spi_csn_o]             [get_bd_pins sys_spi_csn_concat/dout]
-  connect_bd_net -net spi_csn_i [get_bd_pins sys_const_vcc/const]    [get_bd_pins sys_ps7/SPI0_SS_I]
-  connect_bd_net -net spi_clk_i [get_bd_ports spi_clk_i]             [get_bd_pins sys_ps7/SPI0_SCLK_I]
-  connect_bd_net -net spi_clk_o [get_bd_ports spi_clk_o]             [get_bd_pins sys_ps7/SPI0_SCLK_O]
-  connect_bd_net -net spi_sdo_i [get_bd_ports spi_sdo_i]             [get_bd_pins sys_ps7/SPI0_MOSI_I]
-  connect_bd_net -net spi_sdo_o [get_bd_ports spi_sdo_o]             [get_bd_pins sys_ps7/SPI0_MOSI_O]
-  connect_bd_net -net spi_sdi_i [get_bd_ports spi_sdi_i]             [get_bd_pins sys_ps7/SPI0_MISO_I]
+  connect_bd_net -net spi_csn_2_o [get_bd_ports spi_csn_2_o]  [get_bd_pins sys_ps7/SPI0_SS2_O]
+  connect_bd_net -net spi_csn_1_o [get_bd_ports spi_csn_1_o]  [get_bd_pins sys_ps7/SPI0_SS1_O]
+  connect_bd_net -net spi_csn_0_o [get_bd_ports spi_csn_0_o]  [get_bd_pins sys_ps7/SPI0_SS_O]
+  connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]    [get_bd_pins sys_ps7/SPI0_SS_I]
+  connect_bd_net -net spi_clk_i   [get_bd_ports spi_clk_i]    [get_bd_pins sys_ps7/SPI0_SCLK_I]
+  connect_bd_net -net spi_clk_o   [get_bd_ports spi_clk_o]    [get_bd_pins sys_ps7/SPI0_SCLK_O]
+  connect_bd_net -net spi_sdo_i   [get_bd_ports spi_sdo_i]    [get_bd_pins sys_ps7/SPI0_MOSI_I]
+  connect_bd_net -net spi_sdo_o   [get_bd_ports spi_sdo_o]    [get_bd_pins sys_ps7/SPI0_MOSI_O]
+  connect_bd_net -net spi_sdi_i   [get_bd_ports spi_sdi_i]    [get_bd_pins sys_ps7/SPI0_MISO_I]
 }
 
 if {$sys_zynq == 0} {
@@ -451,7 +456,8 @@ if {$sys_zynq == 0} {
 
   # ila
 
-  set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
+  set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
+  set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon
@@ -466,7 +472,8 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_daq2_gt_rx_data           [get_bd_pins ila_jesd_rx_mon/PROBE2]
   connect_bd_net -net axi_ad9680_adc_ddata          [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
-  set ila_jesd_tx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_tx_mon]
+  set ila_jesd_tx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_tx_mon]
+  set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_tx_mon
   set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_jesd_tx_mon
   set_property -dict [list CONFIG.C_PROBE0_WIDTH {150}] $ila_jesd_tx_mon
   set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_tx_mon
