@@ -19,7 +19,8 @@ adi_ip_files axi_ad9680 [list \
   "axi_ad9680_pnmon.v" \
   "axi_ad9680_channel.v" \
   "axi_ad9680_if.v" \
-  "axi_ad9680.v" ]
+  "axi_ad9680.v" \
+  "axi_ad9680_constr.xdc" ]
 
 adi_ip_properties axi_ad9680
 adi_ip_constraints axi_ad9680 [list \

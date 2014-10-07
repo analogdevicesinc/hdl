@@ -11,7 +11,8 @@ adi_ip_files axi_spdif_tx [list \
   "$ad_hdl_dir/library/common/dma_fifo.vhd" \
   "tx_package.vhd" \
   "tx_encoder.vhd" \
-  "axi_spdif_tx.vhd" ]
+  "axi_spdif_tx.vhd" \
+  "axi_spdif_tx_constr.xdc" ]
 
 adi_ip_properties_lite axi_spdif_tx
 

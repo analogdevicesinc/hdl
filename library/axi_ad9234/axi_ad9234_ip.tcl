@@ -19,7 +19,8 @@ adi_ip_files axi_ad9234 [list \
   "axi_ad9234_pnmon.v" \
   "axi_ad9234_channel.v" \
   "axi_ad9234_if.v" \
-  "axi_ad9234.v" ]
+  "axi_ad9234.v" \
+  "axi_ad9234_constr.xdc" ]
 
 adi_ip_properties axi_ad9234
 adi_ip_constraints axi_ad9234 [list \

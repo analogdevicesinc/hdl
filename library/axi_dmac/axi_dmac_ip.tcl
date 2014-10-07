@@ -28,7 +28,8 @@ adi_ip_files axi_dmac [list \
   "splitter.v" \
   "response_generator.v" \
   "axi_dmac.v" \
-  "axi_repack.v" ]
+  "axi_repack.v" \
+  "axi_dmac_constr.xdc" ]
 
 adi_ip_properties axi_dmac
 adi_ip_constraints axi_dmac [list \
