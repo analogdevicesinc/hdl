@@ -77,7 +77,7 @@ connect_bd_net -net axi_ad9434_data_in_n  [get_bd_ports adc_data_n]           [g
 connect_bd_net -net axi_ad9434_or_in_p    [get_bd_ports adc_or_p]             [get_bd_pins axi_ad9434/adc_or_in_p]
 connect_bd_net -net axi_ad9434_or_in_n    [get_bd_ports adc_or_n]             [get_bd_pins axi_ad9434/adc_or_in_n]
 
-connect_bd_net -net axi_ad9434_denable    [get_bd_pins axi_ad9434/adc_dvalid] [get_bd_pins axi_ad9434_dma/fifo_wr_en]
+connect_bd_net -net axi_ad9434_denable    [get_bd_pins axi_ad9434/adc_valid]  [get_bd_pins axi_ad9434_dma/fifo_wr_en]
 connect_bd_net -net axi_ad9434_data       [get_bd_pins axi_ad9434/adc_data]   [get_bd_pins axi_ad9434_dma/fifo_wr_din]
 connect_bd_net -net axi_ad9434_ovf        [get_bd_pins axi_ad9434/adc_dovf]   [get_bd_pins axi_ad9434_dma/fifo_wr_overflow]
 
