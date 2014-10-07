@@ -49,8 +49,7 @@ module axi_ad9434_pnmon (
   // pn interface
   adc_pnseq_sel,
   adc_pn_err,
-  adc_pn_oos
-);
+  adc_pn_oos);
 
   // adc interface
   input           adc_clk;
@@ -62,7 +61,6 @@ module axi_ad9434_pnmon (
   output          adc_pn_oos;
 
   // internal registers
-  reg     [47:0]  adc_pn_data_in = 'd0;
   reg     [47:0]  adc_pn_data_pn = 'd0;
 
   // internal signals
@@ -183,11 +181,9 @@ module axi_ad9434_pnmon (
   endfunction
 
   // pn sequence selection
-  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_data : adc_pn_data_pn;
 
   always @(posedge adc_clk) begin
-    // TODO: verify if this works
-    adc_pn_data_in <= adc_data;
     if(adc_pnseq_sel == 4'b0) begin
       adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
     end else begin
@@ -199,7 +195,7 @@ module axi_ad9434_pnmon (
   ad_pnmon #(.DATA_WIDTH(48)) i_pnmon (
     .adc_clk (adc_clk),
     .adc_valid_in (1'b1),
-    .adc_data_in (adc_pn_data_in),
+    .adc_data_in (adc_data),
     .adc_data_pn (adc_pn_data_pn),
     .adc_pn_oos (adc_pn_oos),
     .adc_pn_err (adc_pn_err));
