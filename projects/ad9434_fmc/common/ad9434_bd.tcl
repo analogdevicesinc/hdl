@@ -9,13 +9,14 @@ set adc_or_n    [create_bd_port -dir I adc_or_n]
 
 # spi interface
 
-set spi_clk_i   [create_bd_port -dir I spi_clk_i]
-set spi_clk_o   [create_bd_port -dir O spi_clk_o]
-set spi_csn_i   [create_bd_port -dir I spi_csn_i]
-set spi_csn_o   [create_bd_port -dir O spi_csn_o]
-set spi_mosi_i  [create_bd_port -dir I spi_mosi_i]
-set spi_mosi_o  [create_bd_port -dir O spi_mosi_o]
-set spi_miso_i  [create_bd_port -dir I spi_miso_i]
+set spi_clk_i       [create_bd_port -dir I spi_clk_i]
+set spi_clk_o       [create_bd_port -dir O spi_clk_o]
+set spi_csn_i       [create_bd_port -dir I spi_csn_i]
+set spi_csn_adc_o   [create_bd_port -dir O spi_csn_adc_o]
+set spi_csn_clk_o   [create_bd_port -dir O spi_csn_clk_o]
+set spi_mosi_i      [create_bd_port -dir I spi_mosi_i]
+set spi_mosi_o      [create_bd_port -dir O spi_mosi_o]
+set spi_miso_i      [create_bd_port -dir I spi_miso_i]
 
 # ad9434
 
@@ -54,13 +55,14 @@ set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
 
 # spi connections
 
-connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]  [get_bd_pins sys_ps7/SPI0_SS_I]
-connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]  [get_bd_pins sys_ps7/SPI0_SS_O]
-connect_bd_net -net spi_clk_i   [get_bd_ports spi_clk_i]  [get_bd_pins sys_ps7/SPI0_SCLK_I]
-connect_bd_net -net spi_clk_o   [get_bd_ports spi_clk_o]  [get_bd_pins sys_ps7/SPI0_SCLK_0]
-connect_bd_net -net spi_mosi_i  [get_bd_ports spi_mosi_i] [get_bd_pins sys_ps7/SPI0_MOSI_I]
-connect_bd_net -net spi_mosi_o  [get_bd_ports spi_mosi_o] [get_bd_pins sys_ps7/SPI0_MOSI_O]
-connect_bd_net -net spi_miso_i  [get_bd_ports spi_miso_i] [get_bd_pins sys_ps7/SPI0_MISO_I]
+connect_bd_net -net spi_csn_i       [get_bd_ports spi_csn_i]      [get_bd_pins sys_ps7/SPI0_SS_I]
+connect_bd_net -net spi_csn_adc_o   [get_bd_ports spi_csn_adc_o]  [get_bd_pins sys_ps7/SPI0_SS_O]
+connect_bd_net -net spi_csn_clk_o   [get_bd_ports spi_csn_clk_o]  [get_bd_pins sys_ps7/SPI0_SS1_O]
+connect_bd_net -net spi_clk_i       [get_bd_ports spi_clk_i]      [get_bd_pins sys_ps7/SPI0_SCLK_I]
+connect_bd_net -net spi_clk_o       [get_bd_ports spi_clk_o]      [get_bd_pins sys_ps7/SPI0_SCLK_O]
+connect_bd_net -net spi_mosi_i      [get_bd_ports spi_mosi_i]     [get_bd_pins sys_ps7/SPI0_MOSI_I]
+connect_bd_net -net spi_mosi_o      [get_bd_ports spi_mosi_o]     [get_bd_pins sys_ps7/SPI0_MOSI_O]
+connect_bd_net -net spi_miso_i      [get_bd_ports spi_miso_i]     [get_bd_pins sys_ps7/SPI0_MISO_I]
 
 # ad9434 connections
 

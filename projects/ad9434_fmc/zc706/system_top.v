@@ -142,9 +142,11 @@ module system_top (
   wire    [31:0]  gpio_i;
   wire    [31:0]  gpio_o;
   wire    [31:0]  gpio_t;
-  wire    [ 1:0]  spi_csn;
   wire            spi_miso;
   wire            spi_mosi;
+
+  wire            spi_csn_adc;
+  wire            spi_csn_clk;
 
   // instantiations
 
@@ -159,11 +161,8 @@ module system_top (
   end
   endgenerate
 
-  assign spi_csn_adc = spi_csn[0];
-  assign spi_csn_clk = spi_csn[1];
-
   ad9434_spi i_spi (
-    .spi_csn(spi_csn),
+    .spi_csn({spi_csn_clk, spi_csn_adc}),
     .spi_clk(spi_sclk),
     .spi_mosi(spi_mosi),
     .spi_miso(spi_miso),
@@ -212,10 +211,11 @@ module system_top (
     .spi_clk_i(1'b0),
     .spi_clk_o(spi_sclk),
     .spi_csn_i(1'b1),
-    .spi_csn_o(spi_csn),
-    .spi_mosi_i(spi_miso),
-    .spi_mosi_o(1'b0),
-    .spi_miso_i(spi_mosi));
+    .spi_csn_adc_o(spi_csn_adc),
+    .spi_csn_clk_o(spi_csn_clk),
+    .spi_mosi_i(spi_mosi),
+    .spi_mosi_o(spi_mosi),
+    .spi_miso_i(spi_miso));
 
 endmodule
 
