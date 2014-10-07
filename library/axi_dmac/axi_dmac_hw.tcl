@@ -12,13 +12,14 @@ set_module_property ELABORATION_CALLBACK axi_dmac_elaborate
 # files
 
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
-set_fileset_property quartus_synth TOP_LEVEL axi_dmac_alt
+set_fileset_property quartus_synth TOP_LEVEL axi_dmac
 add_fileset_file sync_bits.v              VERILOG PATH $ad_hdl_dir/library/common/sync_bits.v
 add_fileset_file sync_gray.v              VERILOG PATH $ad_hdl_dir/library/common/sync_gray.v
 add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
 add_fileset_file axi_fifo.v               VERILOG PATH $ad_hdl_dir/library/axi_fifo/axi_fifo.v
 add_fileset_file address_gray.v           VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_gray.v
 add_fileset_file address_gray_pipelined.v VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_gray_pipelined.v
+add_fileset_file address_sync.v           VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_sync.v
 add_fileset_file inc_id.h                 VERILOG_INCLUDE PATH inc_id.h
 add_fileset_file resp.h                   VERILOG_INCLUDE PATH resp.h
 add_fileset_file address_generator.v      VERILOG PATH address_generator.v
@@ -38,7 +39,6 @@ add_fileset_file splitter.v               VERILOG PATH splitter.v
 add_fileset_file response_generator.v     VERILOG PATH response_generator.v
 add_fileset_file axi_dmac.v               VERILOG PATH axi_dmac.v
 add_fileset_file axi_repack.v             VERILOG PATH axi_repack.v
-add_fileset_file axi_dmac_alt.v           VERILOG PATH axi_dmac_alt.v
 
 # parameters
 
@@ -48,20 +48,6 @@ set_parameter_property PCORE_ID DISPLAY_NAME PCORE_ID
 set_parameter_property PCORE_ID TYPE INTEGER
 set_parameter_property PCORE_ID UNITS None
 set_parameter_property PCORE_ID HDL_PARAMETER true
-
-add_parameter PCORE_AXI_ID_WIDTH INTEGER 0
-set_parameter_property PCORE_AXI_ID_WIDTH DEFAULT_VALUE 3
-set_parameter_property PCORE_AXI_ID_WIDTH DISPLAY_NAME PCORE_AXI_ID_WIDTH
-set_parameter_property PCORE_AXI_ID_WIDTH TYPE INTEGER
-set_parameter_property PCORE_AXI_ID_WIDTH UNITS None
-set_parameter_property PCORE_AXI_ID_WIDTH HDL_PARAMETER true
-
-add_parameter PCORE_AXIM_ID_WIDTH INTEGER 0
-set_parameter_property PCORE_AXIM_ID_WIDTH DEFAULT_VALUE 3
-set_parameter_property PCORE_AXIM_ID_WIDTH DISPLAY_NAME PCORE_AXIM_ID_WIDTH
-set_parameter_property PCORE_AXIM_ID_WIDTH TYPE INTEGER
-set_parameter_property PCORE_AXIM_ID_WIDTH UNITS None
-set_parameter_property PCORE_AXIM_ID_WIDTH HDL_PARAMETER true
 
 add_parameter C_DMA_DATA_WIDTH_SRC INTEGER 0
 set_parameter_property C_DMA_DATA_WIDTH_SRC DEFAULT_VALUE 64
@@ -163,7 +149,7 @@ add_interface s_axi_reset reset end
 set_interface_property s_axi_reset associatedClock s_axi_clock
 add_interface_port s_axi_reset s_axi_aresetn reset_n Input 1
 
-add_interface s_axi axi4 end
+add_interface s_axi axi4lite end
 set_interface_property s_axi associatedClock s_axi_clock
 set_interface_property s_axi associatedReset s_axi_reset
 add_interface_port s_axi s_axi_awvalid awvalid Input 1
@@ -183,24 +169,8 @@ add_interface_port s_axi s_axi_rvalid rvalid Output 1
 add_interface_port s_axi s_axi_rresp rresp Output 2
 add_interface_port s_axi s_axi_rdata rdata Output 32
 add_interface_port s_axi s_axi_rready rready Input 1
-add_interface_port s_axi s_axi_awid awid Input PCORE_AXI_ID_WIDTH
-add_interface_port s_axi s_axi_awlen awlen Input 8
-add_interface_port s_axi s_axi_awsize awsize Input 3
-add_interface_port s_axi s_axi_awburst awburst Input 2
-add_interface_port s_axi s_axi_awlock awlock Input 1
-add_interface_port s_axi s_axi_awcache awcache Input 4
 add_interface_port s_axi s_axi_awprot awprot Input 3
-add_interface_port s_axi s_axi_wlast wlast Input 1
-add_interface_port s_axi s_axi_bid bid Output PCORE_AXI_ID_WIDTH
-add_interface_port s_axi s_axi_arid arid Input PCORE_AXI_ID_WIDTH
-add_interface_port s_axi s_axi_arlen arlen Input 8
-add_interface_port s_axi s_axi_arsize arsize Input 3
-add_interface_port s_axi s_axi_arburst arburst Input 2
-add_interface_port s_axi s_axi_arlock arlock Input 1
-add_interface_port s_axi s_axi_arcache arcache Input 4
 add_interface_port s_axi s_axi_arprot arprot Input 3
-add_interface_port s_axi s_axi_rid rid Output PCORE_AXI_ID_WIDTH
-add_interface_port s_axi s_axi_rlast rlast Output 1
 
 add_interface interrupt_sender interrupt end
 set_interface_property interrupt_sender associatedAddressablePoint ""
@@ -248,24 +218,17 @@ proc axi_dmac_elaborate {} {
     add_interface_port m_dest_axi m_dest_axi_rresp rresp Input 2
     add_interface_port m_dest_axi m_dest_axi_rdata rdata Input C_DMA_DATA_WIDTH_DEST
     add_interface_port m_dest_axi m_dest_axi_rready rready Output 1
-    add_interface_port m_dest_axi m_dest_axi_awid awid Output PCORE_AXIM_ID_WIDTH
     add_interface_port m_dest_axi m_dest_axi_awlen awlen Output 8
     add_interface_port m_dest_axi m_dest_axi_awsize awsize Output 3
     add_interface_port m_dest_axi m_dest_axi_awburst awburst Output 2
-    add_interface_port m_dest_axi m_dest_axi_awlock awlock Output 1
     add_interface_port m_dest_axi m_dest_axi_awcache awcache Output 4
     add_interface_port m_dest_axi m_dest_axi_awprot awprot Output 3
     add_interface_port m_dest_axi m_dest_axi_wlast wlast Output 1
-    add_interface_port m_dest_axi m_dest_axi_bid bid Input PCORE_AXIM_ID_WIDTH
-    add_interface_port m_dest_axi m_dest_axi_arid arid Output PCORE_AXIM_ID_WIDTH
     add_interface_port m_dest_axi m_dest_axi_arlen arlen Output 8
     add_interface_port m_dest_axi m_dest_axi_arsize arsize Output 3
     add_interface_port m_dest_axi m_dest_axi_arburst arburst Output 2
-    add_interface_port m_dest_axi m_dest_axi_arlock arlock Output 1
     add_interface_port m_dest_axi m_dest_axi_arcache arcache Output 4
     add_interface_port m_dest_axi m_dest_axi_arprot arprot Output 3
-    add_interface_port m_dest_axi m_dest_axi_rid rid Input PCORE_AXIM_ID_WIDTH
-    add_interface_port m_dest_axi m_dest_axi_rlast rlast Input 1
   }
 
   if {[get_parameter_value C_DMA_TYPE_SRC] == 0} {
@@ -297,24 +260,17 @@ proc axi_dmac_elaborate {} {
     add_interface_port m_src_axi m_src_axi_rresp rresp Input 2
     add_interface_port m_src_axi m_src_axi_rdata rdata Input C_DMA_DATA_WIDTH_SRC
     add_interface_port m_src_axi m_src_axi_rready rready Output 1
-    add_interface_port m_src_axi m_src_axi_awid awid Output PCORE_AXIM_ID_WIDTH
     add_interface_port m_src_axi m_src_axi_awlen awlen Output 8
     add_interface_port m_src_axi m_src_axi_awsize awsize Output 3
     add_interface_port m_src_axi m_src_axi_awburst awburst Output 2
-    add_interface_port m_src_axi m_src_axi_awlock awlock Output 1
     add_interface_port m_src_axi m_src_axi_awcache awcache Output 4
     add_interface_port m_src_axi m_src_axi_awprot awprot Output 3
     add_interface_port m_src_axi m_src_axi_wlast wlast Output 1
-    add_interface_port m_src_axi m_src_axi_bid bid Input PCORE_AXIM_ID_WIDTH
-    add_interface_port m_src_axi m_src_axi_arid arid Output PCORE_AXIM_ID_WIDTH
     add_interface_port m_src_axi m_src_axi_arlen arlen Output 8
     add_interface_port m_src_axi m_src_axi_arsize arsize Output 3
     add_interface_port m_src_axi m_src_axi_arburst arburst Output 2
-    add_interface_port m_src_axi m_src_axi_arlock arlock Output 1
     add_interface_port m_src_axi m_src_axi_arcache arcache Output 4
     add_interface_port m_src_axi m_src_axi_arprot arprot Output 3
-    add_interface_port m_src_axi m_src_axi_rid rid Input PCORE_AXIM_ID_WIDTH
-    add_interface_port m_src_axi m_src_axi_rlast rlast Input 1
   }
 
   # axis destination/source

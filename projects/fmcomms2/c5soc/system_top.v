@@ -258,7 +258,7 @@ module system_top (
   wire              adc_enable_i0;
   wire              adc_enable_q0;
   wire              adc_enable_i1;
-  wire              adc_enable_q2;
+  wire              adc_enable_q1;
   wire              adc_valid_i0;
   wire              adc_valid_q0;
   wire              adc_valid_i1;
@@ -271,11 +271,22 @@ module system_top (
   wire    [ 15:0]   adc_chan_q1;
   wire    [ 63:0]   adc_ddata;
   wire              adc_dovf;
-  wire              dac_enable;
-  wire              dac_valid;
-  wire              adc_drd;
+  wire              dac_enable_i0;
+  wire              dac_enable_q0;
+  wire              dac_enable_i1;
+  wire              dac_enable_q1;
+  wire              dac_valid_i0;
+  wire              dac_valid_q0;
+  wire              dac_valid_i1;
+  wire              dac_valid_q1;
+  wire    [ 15:0]   dac_data_i0;
+  wire    [ 15:0]   dac_data_q0;
+  wire    [ 15:0]   dac_data_i1;
+  wire    [ 15:0]   dac_data_q1;
   wire    [ 63:0]   dac_ddata;
   wire              dac_dunf;
+  wire              dac_rd_en;
+  wire              dac_fifo_valid;  
   wire    [111:0]   dev_dbg_data;
   wire    [ 61:0]   dev_l_dbg_data;
   wire              vga_pixel_clock;
@@ -284,8 +295,6 @@ module system_top (
   wire    [7:0]     vid_r,vid_g,vid_b;
 
   // defaults
-
-  assign adc_drd = dac_enable & dac_valid;
   
   assign vga_clk = vga_pixel_clock;
   assign vga_blank_n = 1'b1;
@@ -319,7 +328,7 @@ module system_top (
   i_ila_adc (
     .acq_clk (clk),
     .acq_data_in (adc_ddata),
-    .acq_trigger_in (adc_valid));
+    .acq_trigger_in (adc_valid_i0));
 
   system_bd i_system_bd (
     .clk_clk (sys_clk),
@@ -426,25 +435,25 @@ module system_top (
 		.axi_ad9361_dma_if_adc_data_q1 (adc_chan_q1),
 		.axi_ad9361_dma_if_adc_dovf (adc_dovf),
 		.axi_ad9361_dma_if_adc_dunf (),
-		.axi_ad9361_dma_if_dac_enable_i0 (dac_enable),
-		.axi_ad9361_dma_if_dac_valid_i0 (dac_valid),
-		.axi_ad9361_dma_if_dac_data_i0 (dac_ddata[15:0]),
-		.axi_ad9361_dma_if_dac_enable_q0 (),
-		.axi_ad9361_dma_if_dac_valid_q0 (),
-		.axi_ad9361_dma_if_dac_data_q0 (dac_ddata[31:16]),
-		.axi_ad9361_dma_if_dac_enable_i1 (),
-		.axi_ad9361_dma_if_dac_valid_i1 (),
-		.axi_ad9361_dma_if_dac_data_i1 (dac_ddata[47:32]),
-		.axi_ad9361_dma_if_dac_enable_q1 (),
-		.axi_ad9361_dma_if_dac_valid_q1 (),
-		.axi_ad9361_dma_if_dac_data_q1 (dac_ddata[63:48]),
+		.axi_ad9361_dma_if_dac_enable_i0 (dac_enable_i0),
+		.axi_ad9361_dma_if_dac_valid_i0 (dac_valid_i0),
+		.axi_ad9361_dma_if_dac_data_i0 (dac_data_i0),
+		.axi_ad9361_dma_if_dac_enable_q0 (dac_enable_q0),
+		.axi_ad9361_dma_if_dac_valid_q0 (dac_valid_q0),
+		.axi_ad9361_dma_if_dac_data_q0 (dac_data_q0),
+		.axi_ad9361_dma_if_dac_enable_i1 (dac_enable_i1),
+		.axi_ad9361_dma_if_dac_valid_i1 (dac_valid_i1),
+		.axi_ad9361_dma_if_dac_data_i1 (dac_data_i1),
+		.axi_ad9361_dma_if_dac_enable_q1 (dac_enable_q1),
+		.axi_ad9361_dma_if_dac_valid_q1 (dac_valid_q1),
+		.axi_ad9361_dma_if_dac_data_q1 (dac_data_q1),
 		.axi_ad9361_dma_if_dac_dovf (),
 		.axi_ad9361_dma_if_dac_dunf (dac_dunf),
 		.axi_ad9361_debug_if_dev_dbg_data (dev_dbg_data),
 		.axi_ad9361_debug_if_dev_l_dbg_data (dev_l_dbg_data),
 		.axi_dmac_dac_fifo_rd_clock_clk (clk),
-		.axi_dmac_dac_fifo_rd_if_rden (adc_drd),
-		.axi_dmac_dac_fifo_rd_if_valid (),
+		.axi_dmac_dac_fifo_rd_if_rden (dac_rd_en),
+		.axi_dmac_dac_fifo_rd_if_valid (dac_fifo_valid),
 		.axi_dmac_dac_fifo_rd_if_data (dac_ddata),
 		.axi_dmac_dac_fifo_rd_if_unf (dac_dunf),
 		.axi_dmac_adc_fifo_wr_clock_clk (clk),
@@ -481,7 +490,24 @@ module system_top (
 		.adc_pack_channels_data_chan_data_3 (adc_chan_q1),
 		.adc_pack_channels_data_dvalid (adc_dwr),
 		.adc_pack_channels_data_dsync (adc_dsync),
-		.adc_pack_channels_data_ddata (adc_ddata));
+		.adc_pack_channels_data_ddata (adc_ddata),
+		.util_dac_unpack_data_clock_clk (clk),
+		.util_dac_unpack_channels_data_dac_enable_00 (dac_enable_i0),
+		.util_dac_unpack_channels_data_dac_valid_00 (dac_valid_i0),
+		.util_dac_unpack_channels_data_dac_data_00 (dac_data_i0),
+		.util_dac_unpack_channels_data_dac_enable_01 (dac_enable_q0),
+		.util_dac_unpack_channels_data_dac_valid_01 (dac_valid_q0),
+		.util_dac_unpack_channels_data_dac_data_01 (dac_data_q0),
+		.util_dac_unpack_channels_data_dac_enable_02 (dac_enable_i1),
+		.util_dac_unpack_channels_data_dac_valid_02 (dac_valid_i1),
+		.util_dac_unpack_channels_data_dac_data_02 (dac_data_i1),
+		.util_dac_unpack_channels_data_dac_enable_03 (dac_enable_q1),
+		.util_dac_unpack_channels_data_dac_valid_03 (dac_valid_q1),
+		.util_dac_unpack_channels_data_dac_data_03 (dac_data_q1),
+		.util_dac_unpack_channels_data_fifo_valid (dac_fifo_valid),
+		.util_dac_unpack_channels_data_dma_rd (dac_rd_en),
+		.util_dac_unpack_channels_data_dma_data (dac_ddata)
+	);
 
 endmodule
 

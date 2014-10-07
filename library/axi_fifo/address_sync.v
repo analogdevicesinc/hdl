@@ -36,122 +36,71 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_src_fifo_inf (
+module fifo_address_sync (
 	input clk,
 	input resetn,
 
-	input enable,
-	output enabled,
-	input sync_id,
-	output sync_id_ret,
+	input m_axis_ready,
+	output reg m_axis_valid,
+	output reg  [C_ADDRESS_WIDTH-1:0] m_axis_raddr,
+	output reg [C_ADDRESS_WIDTH-1:0] m_axis_raddr_next,
 
-	input [C_ID_WIDTH-1:0] request_id,
-	output [C_ID_WIDTH-1:0] response_id,
-	input eot,
-
-	input en,
-	input [C_DATA_WIDTH-1:0] din,
-	output reg overflow,
-	input sync,
-	output xfer_req,
-
-	input fifo_ready,
-	output fifo_valid,
-	output [C_DATA_WIDTH-1:0] fifo_data,
-
-	input req_valid,
-	output req_ready,
-	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
-	input req_sync_transfer_start
+	output reg s_axis_ready,
+	input s_axis_valid,
+	output reg s_axis_empty,
+	output reg [C_ADDRESS_WIDTH-1:0] s_axis_waddr
 );
 
-parameter C_ID_WIDTH = 3;
-parameter C_DATA_WIDTH = 64;
-parameter C_BEATS_PER_BURST_WIDTH = 4;
+parameter C_ADDRESS_WIDTH = 4;
 
-reg valid = 1'b0;
-wire ready;
-reg [C_DATA_WIDTH-1:0] buffer = 'h00;
-reg buffer_sync = 1'b0;
+reg [C_ADDRESS_WIDTH:0] level;
+reg [C_ADDRESS_WIDTH:0] level_next;
 
-reg needs_sync = 1'b0;
-wire has_sync = ~needs_sync | buffer_sync;
-wire sync_valid = valid & has_sync;
+wire read = m_axis_ready & m_axis_valid;
+wire write = s_axis_ready & s_axis_valid;
 
-always @(posedge clk)
+always @(*)
 begin
-	if (resetn == 1'b0) begin
-		needs_sync <= 1'b0;
-	end else begin
-		if (ready && valid && buffer_sync) begin
-			needs_sync <= 1'b0;
-		end else if (req_valid && req_ready) begin
-			needs_sync <= req_sync_transfer_start;
-		end
-	end
-end
-
-always @(posedge clk)
-begin
-	if (en) begin
-		buffer <= din;
-		buffer_sync <= sync;
-	end
+	if (read)
+		m_axis_raddr_next <= m_axis_raddr + 1'b1;
+	else
+		m_axis_raddr_next <= m_axis_raddr;
 end
 
 always @(posedge clk)
 begin
 	if (resetn == 1'b0) begin
-		valid <= 1'b0;
-		overflow <= 1'b0;
+		s_axis_waddr <= 'h00;
+		m_axis_raddr <= 'h00;
 	end else begin
-		if (enable) begin
-			if (en) begin
-				valid <= 1'b1;
-			end else if (ready || ~xfer_req) begin
-				valid <= 1'b0;
-			end
-			overflow <= en & valid & ~ready;
-		end else begin
-			if (ready || ~xfer_req)
-				valid <= 1'b0;
-			overflow <= en;
-		end
+		if (write)
+			s_axis_waddr <= s_axis_waddr + 1'b1;
+		m_axis_raddr <= m_axis_raddr_next;
 	end
 end
 
-assign sync_id_ret = sync_id;
+always @(*)
+begin
+	if (read & ~write)
+		level_next <= level - 1'b1;
+	else if (~read & write)
+		level_next <= level + 1'b1;
+	else
+		level_next <= level;
+end
 
-dmac_data_mover # (
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_DATA_WIDTH),
-	.C_DISABLE_WAIT_FOR_ID(0),
-	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH)
-) i_data_mover (
-	.clk(clk),
-	.resetn(resetn),
-
-	.enable(enable),
-	.enabled(enabled),
-	.sync_id(sync_id),
-
-	.xfer_req(xfer_req),
-
-	.request_id(request_id),
-	.response_id(response_id),
-	.eot(eot),
-	
-	.req_valid(req_valid),
-	.req_ready(req_ready),
-	.req_last_burst_length(req_last_burst_length),
-
-	.s_axi_ready(ready),
-	.s_axi_valid(sync_valid),
-	.s_axi_data(buffer),
-	.m_axi_ready(fifo_ready),
-	.m_axi_valid(fifo_valid),
-	.m_axi_data(fifo_data),
-	.m_axi_last()
-);
+always @(posedge clk)
+begin
+	if (resetn == 1'b0) begin
+		m_axis_valid <= 1'b0;
+		s_axis_ready <= 1'b0;
+	end else begin
+		level <= level_next;
+		m_axis_valid <= level_next != 0;
+		s_axis_ready <= level_next != 2**C_ADDRESS_WIDTH;
+		s_axis_empty <= level_next == 0;
+	end
+end
 
 endmodule
+

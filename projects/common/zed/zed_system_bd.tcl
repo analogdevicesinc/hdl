@@ -45,6 +45,7 @@ set spdif           [create_bd_port -dir O spdif]
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.3 sys_ps7]
 set_property -dict [list CONFIG.PCW_IMPORT_BOARD_PRESET {ZedBoard}] $sys_ps7
+set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
@@ -68,6 +69,7 @@ set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
 set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
+set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_interconnect
 
 set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
@@ -94,18 +96,16 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_hdmi_interconnect
 set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 sys_audio_clkgen]
 set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
+set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
+set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
 set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_tx_core
 set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_HIGHADDR {0xffffffff}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_BASEADDR {0x00000000}] $axi_spdif_tx_core
 
 set axi_i2s_adi [create_bd_cell -type ip -vlnv analog.com:user:axi_i2s_adi:1.0 axi_i2s_adi]
 set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_i2s_adi
 set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_i2s_adi
-set_property -dict [list CONFIG.C_HIGHADDR {0xffffffff}] $axi_i2s_adi
-set_property -dict [list CONFIG.C_BASEADDR {0x00000000}] $axi_i2s_adi
 
 # iic (fmc)
 
@@ -236,6 +236,7 @@ connect_bd_intf_net -intf_net axi_spdif_dma_req_tx [get_bd_intf_pins sys_ps7/DMA
 connect_bd_intf_net -intf_net axi_spdif_dma_ack_tx [get_bd_intf_pins sys_ps7/DMA0_ACK] [get_bd_intf_pins axi_spdif_tx_core/DMA_ACK]
 
 connect_bd_net -net sys_200m_clk [get_bd_pins sys_audio_clkgen/clk_in1]
+connect_bd_net -net sys_100m_resetn [get_bd_pins sys_audio_clkgen/resetn] $sys_100m_resetn_source
 connect_bd_net -net sys_audio_clkgen_clk [get_bd_pins sys_audio_clkgen/clk_out1] [get_bd_pins axi_spdif_tx_core/spdif_data_clk]
 connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/spdif_tx_o]
 

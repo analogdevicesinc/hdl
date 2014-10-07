@@ -94,9 +94,11 @@ set_property -dict [list CONFIG.XML_INPUT_FILE {ac701_system_mig.prj}] $axi_ddr_
 # instance: axi interconnect (lite)
 set axi_cpu_aux_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_aux_interconnect]
 set_property -dict [list CONFIG.NUM_MI {8}] $axi_cpu_aux_interconnect
+set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_aux_interconnect
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
 set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
+set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_interconnect
 
 # instance: axi interconnect
 
@@ -165,12 +167,12 @@ set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
 set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 sys_audio_clkgen]
 set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
+set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
+set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
 set_property -dict [list CONFIG.C_DMA_TYPE {0}] $axi_spdif_tx_core
 set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_HIGHADDR {0xffffffff}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_BASEADDR {0x00000000}] $axi_spdif_tx_core
 
 set axi_spdif_tx_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_spdif_tx_dma]
 set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_spdif_tx_dma
@@ -451,6 +453,7 @@ connect_bd_net -net axi_spdif_tx_dma_mm2s_ready [get_bd_pins axi_spdif_tx_core/S
 
 
 connect_bd_net -net sys_200m_clk [get_bd_pins sys_audio_clkgen/clk_in1]
+connect_bd_net -net sys_100m_resetn [get_bd_pins sys_audio_clkgen/resetn] $sys_100m_resetn_source
 connect_bd_net -net sys_audio_clkgen_clk [get_bd_pins sys_audio_clkgen/clk_out1] [get_bd_pins axi_spdif_tx_core/spdif_data_clk]
 connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/spdif_tx_o]
 

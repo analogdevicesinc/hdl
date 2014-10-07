@@ -1,5 +1,4 @@
 
-
 package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
 
@@ -56,34 +55,31 @@ add_interface_port channels_data chan_enable_3 chan_enable_3 Input 1
 add_interface_port channels_data chan_valid_3 chan_valid_3 Input 1
 add_interface_port channels_data chan_data_3 chan_data_3 Input DATA_WIDTH
 
-
-
-
 proc util_adc_pack_elaborate {} {
 
-set DW [ get_parameter_value DATA_WIDTH ]
-set CHAN [ get_parameter_value CHANNELS ]
-add_interface_port channels_data dvalid dvalid Output 1
-add_interface_port channels_data dsync dsync Output 1
-add_interface_port channels_data ddata ddata Output [expr {$DW * $CHAN}]
+  set DW [ get_parameter_value DATA_WIDTH ]
+  set CHAN [ get_parameter_value CHANNELS ]
+  add_interface_port channels_data dvalid dvalid Output 1
+  add_interface_port channels_data dsync dsync Output 1
+  add_interface_port channels_data ddata ddata Output [expr {$DW * $CHAN}]
 
-if {[get_parameter_value CHANNELS] == 8} {
+  if {[get_parameter_value CHANNELS] == 8} {
 
-add_interface_port channels_data chan_enable_4 chan_enable_4 Input 1
-add_interface_port channels_data chan_valid_4 chan_valid_4 Input 1
-add_interface_port channels_data chan_data_4 chan_data_4 Input DATA_WIDTH
+    add_interface_port channels_data chan_enable_4 chan_enable_4 Input 1
+    add_interface_port channels_data chan_valid_4 chan_valid_4 Input 1
+    add_interface_port channels_data chan_data_4 chan_data_4 Input DATA_WIDTH
 
-add_interface_port channels_data chan_enable_5 chan_enable_5 Input 1
-add_interface_port channels_data chan_valid_5 chan_valid_5 Input 1
-add_interface_port channels_data chan_data_5 chan_data_5 Input DATA_WIDTH
+    add_interface_port channels_data chan_enable_5 chan_enable_5 Input 1
+    add_interface_port channels_data chan_valid_5 chan_valid_5 Input 1
+    add_interface_port channels_data chan_data_5 chan_data_5 Input DATA_WIDTH
 
-add_interface_port channels_data chan_enable_6 chan_enable_6 Input 1
-add_interface_port channels_data chan_valid_6 chan_valid_6 Input 1
-add_interface_port channels_data chan_data_6 chan_data_6 Input DATA_WIDTH
+    add_interface_port channels_data chan_enable_6 chan_enable_6 Input 1
+    add_interface_port channels_data chan_valid_6 chan_valid_6 Input 1
+    add_interface_port channels_data chan_data_6 chan_data_6 Input DATA_WIDTH
 
-add_interface_port channels_data chan_enable_7 chan_enable_7 Input 1
-add_interface_port channels_data chan_valid_7 chan_valid_7 Input 1
-add_interface_port channels_data chan_data_7 chan_data_7 Input DATA_WIDTH
+    add_interface_port channels_data chan_enable_7 chan_enable_7 Input 1
+    add_interface_port channels_data chan_valid_7 chan_valid_7 Input 1
+    add_interface_port channels_data chan_data_7 chan_data_7 Input DATA_WIDTH
 }
 
 }

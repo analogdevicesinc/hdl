@@ -19,22 +19,6 @@ adi_ip_files axi_i2s_adi [list \
 
 adi_ip_properties_lite axi_i2s_adi
 
-adi_add_bus "M_AXIS" "axis" "master" \
-	[list {"M_AXIS_ACLK" "ACLK"} \
-	  {"M_AXIS_TREADY" "TREADY"} \
-	  {"M_AXIS_TVALID" "VALID"} \
-	  {"M_AXIS_TDATA" "TDATA"} \
-	  {"M_AXIS_TLAST" "TLAST"} \
-	  {"M_AXIS_TKEEP" "TKEEP"} ]
-
-adi_add_bus "S_AXIS" "axis" "slave" \
-	[list {"S_AXIS_ACLK" "ACLK"} \
-	  {"S_AXIS_ARESETN" "ARESETN"} \
-	  {"S_AXIS_TREADY" "TREADY"} \
-	  {"S_AXIS_TVALID" "VALID"} \
-	  {"S_AXIS_TDATA" "TDATA"} \
-	  {"S_AXIS_TLAST" "TLAST"} ]
-
 adi_add_bus "DMA_ACK_RX" "axis" "slave" \
 	[list {"DMA_REQ_RX_DAVALID" "TVALID"} \
 		{"DMA_REQ_RX_DAREADY" "TREADY"} \
@@ -44,6 +28,8 @@ adi_add_bus "DMA_REQ_RX" "axis" "master" \
 		{"DMA_REQ_RX_DRREADY" "TREADY"} \
 		{"DMA_REQ_RX_DRTYPE" "TUSER"} \
 		{"DMA_REQ_RX_DRLAST" "TLAST"} ]
+# Clock and reset are for both DMA_REQ and DMA_ACK
+adi_add_bus_clock "DMA_REQ_RX_ACLK" "DMA_REQ_RX:DMA_ACK_RX" "DMA_REQ_RX_RSTN"
 
 adi_add_bus "DMA_ACK_TX" "axis" "slave" \
 	[list {"DMA_REQ_TX_DAVALID" "TVALID"} \
@@ -54,6 +40,8 @@ adi_add_bus "DMA_REQ_TX" "axis" "master" \
 		{"DMA_REQ_TX_DRREADY" "TREADY"} \
 		{"DMA_REQ_TX_DRTYPE" "TUSER"} \
 		{"DMA_REQ_TX_DRLAST" "TLAST"} ]
+# Clock and reset are for both DMA_REQ and DMA_ACK
+adi_add_bus_clock "DMA_REQ_TX_ACLK" "DMA_REQ_TX:DMA_ACK_TX" "DMA_REQ_TX_RSTN"
 
 adi_set_bus_dependency "S_AXIS" "S_AXIS" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 0)"

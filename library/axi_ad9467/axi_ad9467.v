@@ -91,8 +91,6 @@ module axi_ad9467(
   parameter PCORE_BUFTYPE = 0;
   parameter PCORE_IODELAY_GROUP = "dev_if_delay_group";
   parameter C_S_AXI_MIN_SIZE = 32'hffff;
-  parameter C_HIGHADDR = 32'hffffffff;
-  parameter C_BASEADDR = 32'h00000000;
 
   // physical interface
 
@@ -213,7 +211,7 @@ module axi_ad9467(
     .delay_addr (delay_addr_s),
     .delay_wdata (delay_wdata_s),
     .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t),
+    .delay_ack_t (delay_ack_t_s),
     .delay_locked (delay_locked_s));
 
   // channel
@@ -260,7 +258,7 @@ module axi_ad9467(
     .delay_addr (delay_addr_s),
     .delay_wdata (delay_wdata_s),
     .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t),
+    .delay_ack_t (delay_ack_t_s),
     .delay_locked (delay_locked_s),
     .drp_clk (1'b0),
     .drp_rst (),
@@ -286,10 +284,7 @@ module axi_ad9467(
 
   // up bus interface
 
-  up_axi #(
-    .PCORE_BASEADDR (C_BASEADDR),
-    .PCORE_HIGHADDR (C_HIGHADDR))
-  i_up_axi (
+  up_axi i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

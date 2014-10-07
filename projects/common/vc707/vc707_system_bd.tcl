@@ -98,9 +98,11 @@ set_property -dict [list CONFIG.RESET_BOARD_INTERFACE {Custom}] $axi_ddr_cntrl
 # instance: axi interconnect (lite)
 set axi_cpu_aux_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_aux_interconnect]
 set_property -dict [list CONFIG.NUM_MI {8}] $axi_cpu_aux_interconnect
+set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_aux_interconnect
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
 set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
+set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_interconnect
 
 # instance: axi interconnect
 
@@ -170,12 +172,12 @@ set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
 set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 sys_audio_clkgen]
 set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
+set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
+set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
 set_property -dict [list CONFIG.C_DMA_TYPE {0}] $axi_spdif_tx_core
 set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_HIGHADDR {0xffffffff}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_BASEADDR {0x00000000}] $axi_spdif_tx_core
 
 set axi_spdif_tx_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_spdif_tx_dma]
 set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_spdif_tx_dma
@@ -216,13 +218,11 @@ connect_bd_net -net sys_concat_intc_intr [get_bd_pins sys_concat_intc/dout] [get
 connect_bd_net -net axi_ddr_cntrl_mmcm_locked [get_bd_pins axi_ddr_cntrl/mmcm_locked] [get_bd_pins sys_rstgen/dcm_locked]
 
 set sys_100m_resetn_source [get_bd_pins sys_rstgen/peripheral_aresetn]
-set sys_100m_reset_source [get_bd_pins sys_rstgen/peripheral_reset]
 set sys_200m_resetn_source [get_bd_pins sys_rstgen/interconnect_aresetn]
 set sys_100m_clk_source [get_bd_pins axi_ddr_cntrl/ui_clk]
 set sys_200m_clk_source [get_bd_pins axi_ddr_cntrl/ui_addn_clk_0]
 
 connect_bd_net -net sys_100m_resetn $sys_100m_resetn_source
-connect_bd_net -net sys_100m_reset $sys_100m_reset_source
 connect_bd_net -net sys_200m_resetn $sys_200m_resetn_source
 connect_bd_net -net sys_100m_clk $sys_100m_clk_source
 connect_bd_net -net sys_200m_clk $sys_200m_clk_source
@@ -455,7 +455,7 @@ connect_bd_net -net axi_spdif_tx_dma_mm2s_last  [get_bd_pins axi_spdif_tx_core/S
 connect_bd_net -net axi_spdif_tx_dma_mm2s_ready [get_bd_pins axi_spdif_tx_core/S_AXIS_TREADY] [get_bd_pins axi_spdif_tx_dma/m_axis_mm2s_tready]
 
 connect_bd_net -net sys_200m_clk [get_bd_pins sys_audio_clkgen/clk_in1] $sys_200m_clk_source
-connect_bd_net -net sys_100m_reset [get_bd_pins sys_audio_clkgen/reset] $sys_100m_reset_source
+connect_bd_net -net sys_100m_reset [get_bd_pins sys_audio_clkgen/resetn] $sys_100m_resetn_source
 connect_bd_net -net sys_audio_clkgen_clk [get_bd_pins sys_audio_clkgen/clk_out1] [get_bd_pins axi_spdif_tx_core/spdif_data_clk]
 connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/spdif_tx_o]
 

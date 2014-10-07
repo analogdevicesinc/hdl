@@ -44,6 +44,7 @@ module axi_dmac (
 	input         s_axi_awvalid,
 	input  [31:0] s_axi_awaddr,
 	output        s_axi_awready,
+	input   [2:0] s_axi_awprot,
 	input         s_axi_wvalid,
 	input  [31:0] s_axi_wdata,
 	input  [ 3:0] s_axi_wstrb,
@@ -54,6 +55,7 @@ module axi_dmac (
 	input         s_axi_arvalid,
 	input  [31:0] s_axi_araddr,
 	output        s_axi_arready,
+	input   [2:0] s_axi_arprot,
 	output        s_axi_rvalid,
 	input         s_axi_rready,
 	output [ 1:0] s_axi_rresp,
@@ -90,6 +92,20 @@ module axi_dmac (
 	input  [ 1:0]                            m_dest_axi_bresp,
 	output                                   m_dest_axi_bready,
 
+	// Unused read interface
+	output                                   m_dest_axi_arvalid,
+	output [31:0]                            m_dest_axi_araddr,
+	output [7-(4*C_DMA_AXI_PROTOCOL_DEST):0] m_dest_axi_arlen,
+	output [ 2:0]                            m_dest_axi_arsize,
+	output [ 1:0]                            m_dest_axi_arburst,
+	output [ 3:0]                            m_dest_axi_arcache,
+	output [ 2:0]                            m_dest_axi_arprot,
+	input                                    m_dest_axi_arready,
+	input                                    m_dest_axi_rvalid,
+	input  [ 1:0]                            m_dest_axi_rresp,
+	input  [C_DMA_DATA_WIDTH_DEST-1:0]       m_dest_axi_rdata,
+	output                                   m_dest_axi_rready,
+
 	// Read address
 	input                                    m_src_axi_arready,
 	output                                   m_src_axi_arvalid,
@@ -105,6 +121,24 @@ module axi_dmac (
 	output                                   m_src_axi_rready,
 	input                                    m_src_axi_rvalid,
 	input  [ 1:0]                            m_src_axi_rresp,
+
+	// Unused write interface
+	output                                   m_src_axi_awvalid,
+	output [31:0]                            m_src_axi_awaddr,
+	output [7-(4*C_DMA_AXI_PROTOCOL_SRC):0]  m_src_axi_awlen,
+	output [ 2:0]                            m_src_axi_awsize,
+	output [ 1:0]                            m_src_axi_awburst,
+	output [ 3:0]                            m_src_axi_awcache,
+	output [ 2:0]                            m_src_axi_awprot,
+	input                                    m_src_axi_awready,
+	output                                   m_src_axi_wvalid,
+	output [C_DMA_DATA_WIDTH_SRC-1:0]        m_src_axi_wdata,
+	output [(C_DMA_DATA_WIDTH_SRC/8)-1:0]    m_src_axi_wstrb,
+	output                                   m_src_axi_wlast,
+	input                                    m_src_axi_wready,
+	input                                    m_src_axi_bvalid,
+	input  [ 1:0]                            m_src_axi_bresp,
+	output                                   m_src_axi_bready,
 
 	// Slave streaming AXI interface
 	input                                    s_axis_aclk,
@@ -137,8 +171,6 @@ module axi_dmac (
 
 parameter PCORE_ID = 0;
 
-parameter C_BASEADDR = 32'hffffffff;
-parameter C_HIGHADDR = 32'h00000000;
 parameter C_DMA_DATA_WIDTH_SRC = 64;
 parameter C_DMA_DATA_WIDTH_DEST = 64;
 parameter C_DMA_LENGTH_WIDTH = 24;
@@ -194,7 +226,7 @@ reg          up_ack = 1'b0;
 wire         up_wr;
 wire         up_sel;
 wire [31:0]  up_wdata;
-wire [13:0]  up_addr;
+wire [11:0]  up_addr;
 wire         up_write;
 
 // Scratch register
@@ -244,8 +276,7 @@ wire [2:0] src_response_id;
 wire [7:0] dbg_status;
 
 up_axi #(
-	.PCORE_BASEADDR (C_BASEADDR),
-	.PCORE_HIGHADDR (C_HIGHADDR)
+	.PCORE_ADDR_WIDTH (12)
 ) i_up_axi (
 	.up_rstn(s_axi_aresetn),
 	.up_clk(s_axi_aclk),
@@ -277,7 +308,7 @@ up_axi #(
 // IRQ handling
 assign up_irq_pending = ~up_irq_mask & up_irq_source;
 assign up_irq_trigger  = {up_eot, up_sot};
-assign up_irq_source_clear = (up_write == 1'b1 && up_addr[11:0] == 12'h021) ? up_wdata[1:0] : 0;
+assign up_irq_source_clear = (up_write == 1'b1 && up_addr == 12'h021) ? up_wdata[1:0] : 0;
 
 always @(posedge s_axi_aclk)
 begin
@@ -317,7 +348,7 @@ begin
 	end else begin
 		up_ack <= up_sel;
 		if (up_enable == 1'b1) begin
-			if (up_write && up_addr[11:0] == 12'h102) begin
+			if (up_write && up_addr == 12'h102) begin
 				up_dma_req_valid <= up_dma_req_valid | up_wdata[0];
 			end else if (up_sot) begin
 				up_dma_req_valid <= 1'b0;
@@ -327,7 +358,7 @@ begin
 		end
 
 		if (up_write) begin
-			case (up_addr[11:0])
+			case (up_addr)
 			12'h002: up_scratch <= up_wdata;
 			12'h020: up_irq_mask <= up_wdata;
 			12'h100: {up_pause, up_enable} <= up_wdata[1:0];
@@ -348,7 +379,7 @@ begin
 	if (s_axi_aresetn == 1'b0) begin
 		up_rdata <= 'h00;
 	end else begin
-		case (up_addr[11:0])
+		case (up_addr)
 		12'h000: up_rdata <= PCORE_VERSION;
 		12'h001: up_rdata <= PCORE_ID;
 		12'h002: up_rdata <= up_scratch;
@@ -567,5 +598,29 @@ dmac_request_arb #(
 	.dbg_src_response_id(src_response_id),
 	.dbg_status(dbg_status)
 );
+
+assign m_dest_axi_arvalid = 1'b0;
+assign m_dest_axi_rready = 1'b0;
+assign m_dest_axi_araddr = 'h0;
+assign m_dest_axi_arlen = 'h0;
+assign m_dest_axi_arsize = 'h0;
+assign m_dest_axi_arburst = 'h0;
+assign m_dest_axi_arcache = 'h0;
+assign m_dest_axi_arprot = 'h0;
+
+assign m_src_axi_awvalid = 1'b0;
+assign m_src_axi_wvalid = 1'b0;
+assign m_src_axi_bready = 1'b0;
+assign m_src_axi_awvalid = 'h0;
+assign m_src_axi_awaddr = 'h0;
+assign m_src_axi_awlen = 'h0;
+assign m_src_axi_awsize = 'h0;
+assign m_src_axi_awburst = 'h0;
+assign m_src_axi_awcache = 'h0;
+assign m_src_axi_awprot = 'h0;
+assign m_src_axi_wvalid = 'h0;
+assign m_src_axi_wdata = 'h0;
+assign m_src_axi_wstrb = 'h0;
+assign m_src_axi_wlast = 'h0;
 
 endmodule
