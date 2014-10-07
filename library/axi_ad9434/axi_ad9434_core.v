@@ -82,12 +82,14 @@ module axi_ad9434_core (
 
   up_rstn,
   up_clk,
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack,
+  up_rack,
 
   // status and control signals
 
@@ -133,19 +135,23 @@ module axi_ad9434_core (
   // processor interface
   input           up_clk;
   input           up_rstn;
-  input           up_sel;
-  input           up_wr;
-  input   [13:0]  up_addr;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
   input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
   output  [31:0]  up_rdata;
-  output          up_ack;
+  output          up_rack;
 
   output          mmcm_rst;
   output          adc_rst;
   input           adc_status;
 
+  // internal registers
+  reg             up_wack;
   reg     [31:0]  up_rdata;
-  reg             up_ack;  
+  reg             up_rack;
 
   // internal signals
   wire            up_status_pn_err_s;
@@ -160,16 +166,17 @@ module axi_ad9434_core (
   wire            adc_pn_err_s;
   wire            adc_pn_oos_s;
 
+  wire            up_wack_s[0:1];
   wire    [31:0]  up_rdata_s[0:1];
-  wire            up_ack_s[0:1];
+  wire            up_rack_s[0:1];
 
   // instantiations
   axi_ad9434_pnmon i_pnmon (
-    .adc_clk(adc_clk),
-    .adc_data(adc_data),
-    .adc_pnseq_sel(adc_pnseq_sel_s),
-    .adc_pn_err(adc_pn_err_s),
-    .adc_pn_oos(adc_pn_oos_s));
+    .adc_clk (adc_clk),
+    .adc_data (adc_data),
+    .adc_pnseq_sel (adc_pnseq_sel_s),
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pn_oos (adc_pn_oos_s));
 
   genvar n;
   generate
@@ -177,14 +184,14 @@ module axi_ad9434_core (
    ad_datafmt # (
     .DATA_WIDTH(12))
   i_datafmt (
-    .clk(adc_clk),
-    .valid(1'b1),
-    .data(adc_data[n*12+11:n*12]),
-    .valid_out(dma_dvalid),
-    .data_out(dma_data[n*16+15:n*16]),
-    .dfmt_enable(adc_dfmt_enable_s),
-    .dfmt_type(adc_dfmt_type_s),
-    .dfmt_se(adc_dfmt_se_s));
+    .clk (adc_clk),
+    .valid (1'b1),
+    .data (adc_data[n*12+11:n*12]),
+    .valid_out (dma_dvalid),
+    .data_out (dma_data[n*16+15:n*16]),
+    .dfmt_enable (adc_dfmt_enable_s),
+    .dfmt_type (adc_dfmt_type_s),
+    .dfmt_se (adc_dfmt_se_s));
   end
   endgenerate
 
@@ -193,104 +200,110 @@ module axi_ad9434_core (
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rdata <= 'd0;
-      up_ack <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
     end else begin
       up_rdata <= up_rdata_s[0] | up_rdata_s[1];
-      up_ack <= up_ack_s[0] | up_ack_s[1];
+      up_rack <= up_rack_s[0] | up_rack_s[1];
+      up_wack <= up_wack_s[0] | up_wack_s[1];
     end
   end
 
   up_adc_common #(
     .PCORE_ID(PCORE_ID))
   i_adc_common(
-    .mmcm_rst(mmcm_rst),
-    .adc_clk(adc_clk),
-    .adc_rst(adc_rst),
-    .adc_r1_mode(),
-    .adc_ddr_edgesel(),
-    .adc_pin_mode(),
-    .adc_status(adc_status),
-    .adc_status_ovf(dma_dovf),
-    .adc_status_unf(1'b0),
-    .adc_clk_ratio(32'd4),
-    .up_status_pn_err(up_status_pn_err_s),
-    .up_status_pn_oos(up_status_pn_oos_s),
-    .up_status_or(up_status_or_s),
-    .delay_clk(delay_clk),
-    .delay_rst(delay_rst),
-    .delay_sel(delay_sel),
-    .delay_rwn(delay_rwn),
-    .delay_addr(delay_addr),
-    .delay_wdata(delay_wdata),
-    .delay_rdata(delay_rdata),
-    .delay_ack_t(delay_ack_t),
-    .delay_locked(delay_locked),
-    .drp_clk(drp_clk),
-    .drp_rst(drp_rst),
-    .drp_sel(drp_sel),
-    .drp_wr(drp_wr),
-    .drp_addr(drp_addr),
-    .drp_wdata(drp_wdata),
-    .drp_rdata(drp_rdata),
-    .drp_ready(drp_ready),
-    .drp_locked(drp_locked),
-    .up_usr_chanmax(),
-    .adc_usr_chanmax(),
-    .up_adc_gpio_in(),
-    .up_adc_gpio_out(),
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_sel(up_sel),
-    .up_wr(up_wr),
-    .up_addr(up_addr),
-    .up_wdata(up_wdata),
-    .up_rdata(up_rdata_s[0]),
-    .up_ack(up_ack_s[0]));
+    .mmcm_rst (mmcm_rst),
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_r1_mode (),
+    .adc_ddr_edgesel (),
+    .adc_pin_mode (),
+    .adc_status (adc_status),
+    .adc_status_ovf (dma_dovf),
+    .adc_status_unf (1'b0),
+    .adc_clk_ratio (32'd4),
+    .up_status_pn_err (up_status_pn_err_s),
+    .up_status_pn_oos (up_status_pn_oos_s),
+    .up_status_or (up_status_or_s),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_sel (delay_sel),
+    .delay_rwn (delay_rwn),
+    .delay_addr (delay_addr),
+    .delay_wdata (delay_wdata),
+    .delay_rdata (delay_rdata),
+    .delay_ack_t (delay_ack_t),
+    .delay_locked (delay_locked),
+    .drp_clk (drp_clk),
+    .drp_rst (drp_rst),
+    .drp_sel (drp_sel),
+    .drp_wr (drp_wr),
+    .drp_addr (drp_addr),
+    .drp_wdata (drp_wdata),
+    .drp_rdata (drp_rdata),
+    .drp_ready (drp_ready),
+    .drp_locked (drp_locked),
+    .up_usr_chanmax (),
+    .adc_usr_chanmax (8'd0),
+    .up_adc_gpio_in (32'd0),
+    .up_adc_gpio_out (),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[0]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[0]),
+    .up_rack (up_rack_s[0]));
 
   up_adc_channel #(
     .PCORE_ADC_CHID(0))
   i_adc_channel(
-    .adc_clk(adc_clk),
-    .adc_rst(adc_rst),
-    .adc_enable(),
-    .adc_iqcor_enb(),
-    .adc_dcfilt_enb(),
-    .adc_dfmt_se(adc_dfmt_se_s),
-    .adc_dfmt_type(adc_dfmt_type_s),
-    .adc_dfmt_enable(adc_dfmt_enable_s),
-    .adc_dcfilt_offset(),
-    .adc_dcfilt_coeff(),
-    .adc_iqcor_coeff_1(),
-    .adc_iqcor_coeff_2(),
-    .adc_pnseq_sel(adc_pnseq_sel_s),
-    .adc_data_sel(),
-    .adc_pn_err(adc_pn_err_s),
-    .adc_pn_oos(adc_pn_oos_s),
-    .adc_or(adc_or),
-    .up_adc_pn_err(up_status_pn_err_s),
-    .up_adc_pn_oos(up_status_pn_oos_s),
-    .up_adc_or(up_status_or_s),
-    .up_usr_datatype_be(),
-    .up_usr_datatype_signed(),
-    .up_usr_datatype_shift(),
-    .up_usr_datatype_total_bits(),
-    .up_usr_datatype_bits(),
-    .up_usr_decimation_m(),
-    .up_usr_decimation_n(),
-    .adc_usr_datatype_be(1'b0),
-    .adc_usr_datatype_signed(1'b1),
-    .adc_usr_datatype_shift(8'd0),
-    .adc_usr_datatype_total_bits(8'd16),
-    .adc_usr_datatype_bits(8'd16),
-    .adc_usr_decimation_m(16'd1),
-    .adc_usr_decimation_n(16'd1),
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_sel(up_sel),
-    .up_wr(up_wr),
-    .up_addr(up_addr),
-    .up_wdata(up_wdata),
-    .up_rdata(up_rdata_s[1]),
-    .up_ack(up_ack_s[1]));
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_enable (),
+    .adc_iqcor_enb (),
+    .adc_dcfilt_enb (),
+    .adc_dfmt_se (adc_dfmt_se_s),
+    .adc_dfmt_type (adc_dfmt_type_s),
+    .adc_dfmt_enable (adc_dfmt_enable_s),
+    .adc_dcfilt_offset (),
+    .adc_dcfilt_coeff (),
+    .adc_iqcor_coeff_1 (),
+    .adc_iqcor_coeff_2 (),
+    .adc_pnseq_sel (adc_pnseq_sel_s),
+    .adc_data_sel (),
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pn_oos (adc_pn_oos_s),
+    .adc_or (adc_or),
+    .up_adc_pn_err (up_status_pn_err_s),
+    .up_adc_pn_oos (up_status_pn_oos_s),
+    .up_adc_or (up_status_or_s),
+    .up_usr_datatype_be (),
+    .up_usr_datatype_signed (),
+    .up_usr_datatype_shift (),
+    .up_usr_datatype_total_bits (),
+    .up_usr_datatype_bits (),
+    .up_usr_decimation_m (),
+    .up_usr_decimation_n (),
+    .adc_usr_datatype_be (1'b0),
+    .adc_usr_datatype_signed (1'b1),
+    .adc_usr_datatype_shift (8'd0),
+    .adc_usr_datatype_total_bits (8'd16),
+    .adc_usr_datatype_bits (8'd16),
+    .adc_usr_decimation_m (16'd1),
+    .adc_usr_decimation_n (16'd1),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[1]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[1]),
+    .up_rack (up_rack_s[1]));
 
 endmodule
