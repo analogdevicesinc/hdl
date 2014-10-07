@@ -74,9 +74,15 @@ module ad_serdes_in (
   parameter   DEVICE_TYPE     = 0;
   parameter   IODELAY_CTRL    = 0;
   parameter   IODELAY_GROUP   = "dev_if_delay_group";
+  // SDR = 0 / DDR = 1
+  parameter   IF_TYPE         = 0;
+  // serialization factor
+  parameter   PARALLEL_WIDTH  = 8;
 
   localparam  DEVICE_6SERIES  = 1;
   localparam  DEVICE_7SERIES  = 0;
+  localparam  SDR             = 0;
+  localparam  DDR             = 1;
 
   // reset and clocks
 
@@ -161,9 +167,11 @@ module ad_serdes_in (
       .CNTVALUEIN (delay_wdata),
       .CNTVALUEOUT (delay_rdata));
 
+    // Note: The first sample in time will be data_s7, the last data_s0!
+    if(IF_TYPE == SDR) begin
       ISERDESE2 #(
-        .DATA_RATE("DDR"),
-        .DATA_WIDTH(8),
+        .DATA_RATE("SDR"),
+        .DATA_WIDTH(PARALLEL_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
         .DYN_CLK_INV_EN("FALSE"),
         .INIT_Q1(1'b0),
@@ -171,8 +179,8 @@ module ad_serdes_in (
         .INIT_Q3(1'b0),
         .INIT_Q4(1'b0),
         .INTERFACE_TYPE("NETWORKING"),
-        .IOBDELAY("NONE"),
-        .NUM_CE(1),
+        .IOBDELAY("IFD"),
+        .NUM_CE(2),
         .OFB_USED("FALSE"),
         .SERDES_MODE("MASTER"),
         .SRVAL_Q1(1'b0),
@@ -193,23 +201,74 @@ module ad_serdes_in (
         .SHIFTOUT2(),
         .BITSLIP(1'b0),
         .CE1(1'b1),
-        .CE2(1'b0),
+        .CE2(1'b1),
         .CLKDIVP(1'b0),
         .CLK(clk),
-        .CLKB(1'b0),
+        .CLKB(~clk),
         .CLKDIV(div_clk),
         .OCLK(1'b0),
         .DYNCLKDIVSEL(1'b0),
         .DYNCLKSEL(1'b0),
-        .D(data_in_idelay_s),
-        .DDLY(1'b0),
+        .D(1'b0),
+        .DDLY(data_in_idelay_s),
         .OFB(1'b0),
         .OCLKB(1'b0),
         .RST(rst),
         .SHIFTIN1(1'b0),
         .SHIFTIN2(1'b0)
       );
-      end
+    end else begin
+
+      ISERDESE2 #(
+        .DATA_RATE("DDR"),
+        .DATA_WIDTH(PARALLEL_WIDTH),
+        .DYN_CLKDIV_INV_EN("FALSE"),
+        .DYN_CLK_INV_EN("FALSE"),
+        .INIT_Q1(1'b0),
+        .INIT_Q2(1'b0),
+        .INIT_Q3(1'b0),
+        .INIT_Q4(1'b0),
+        .INTERFACE_TYPE("NETWORKING"),
+        .IOBDELAY("IFD"),
+        .NUM_CE(2),
+        .OFB_USED("FALSE"),
+        .SERDES_MODE("MASTER"),
+        .SRVAL_Q1(1'b0),
+        .SRVAL_Q2(1'b0),
+        .SRVAL_Q3(1'b0),
+        .SRVAL_Q4(1'b0))
+      ISERDESE2_inst (
+        .O(),
+        .Q1(data_s0),
+        .Q2(data_s1),
+        .Q3(data_s2),
+        .Q4(data_s3),
+        .Q5(data_s4),
+        .Q6(data_s5),
+        .Q7(data_s6),
+        .Q8(data_s7),
+        .SHIFTOUT1(),
+        .SHIFTOUT2(),
+        .BITSLIP(1'b0),
+        .CE1(1'b1),
+        .CE2(1'b1),
+        .CLKDIVP(1'b0),
+        .CLK(clk),
+        .CLKB(~clk),
+        .CLKDIV(div_clk),
+        .OCLK(1'b0),
+        .DYNCLKDIVSEL(1'b0),
+        .DYNCLKSEL(1'b0),
+        .D(1'b0),
+        .DDLY(data_in_idelay_s),
+        .OFB(1'b0),
+        .OCLKB(1'b0),
+        .RST(rst),
+        .SHIFTIN1(1'b0),
+        .SHIFTIN2(1'b0)
+      );
+    end
+  end
 
     if(DEVICE_TYPE == DEVICE_6SERIES) begin
       (* IODELAY_GROUP = IODELAY_GROUP *)
@@ -240,7 +299,7 @@ module ad_serdes_in (
 
       ISERDESE1 #(
         .DATA_RATE("DDR"),
-        .DATA_WIDTH(8),
+        .DATA_WIDTH(PARALLEL_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
         .DYN_CLK_INV_EN("FALSE"),
         .INIT_Q1(1'b0),
@@ -285,7 +344,7 @@ module ad_serdes_in (
 
       ISERDESE1 #(
         .DATA_RATE("DDR"),
-        .DATA_WIDTH(8),
+        .DATA_WIDTH(PARALLEL_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
         .DYN_CLK_INV_EN("FALSE"),
         .INIT_Q1(1'b0),

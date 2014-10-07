@@ -90,6 +90,7 @@ module axi_ad9434_if (
 
   // buffer type based on the target device.
   localparam PCORE_BUFTYPE = PCORE_DEVTYPE;
+  localparam SDR = 0;
 
   // adc interface (clk, data, over-range)
   input           adc_clk_in_p;
@@ -211,7 +212,9 @@ module axi_ad9434_if (
     ad_serdes_in #(
       .DEVICE_TYPE(PCORE_DEVTYPE),
       .IODELAY_CTRL(0),
-      .IODELAY_GROUP(PCORE_IODELAY_GROUP))
+      .IODELAY_GROUP(PCORE_IODELAY_GROUP),
+      .IF_TYPE(SDR),
+      .PARALLEL_WIDTH(4))
     i_adc_data (
       .rst(adc_rst),
       .clk(adc_clk_in),
@@ -239,7 +242,9 @@ module axi_ad9434_if (
   ad_serdes_in #(
     .DEVICE_TYPE(PCORE_DEVTYPE),
     .IODELAY_CTRL(1),
-    .IODELAY_GROUP(PCORE_IODELAY_GROUP))
+    .IODELAY_GROUP(PCORE_IODELAY_GROUP),
+    .IF_TYPE(SDR),
+    .PARALLEL_WIDTH(4))
   i_adc_data (
     .rst(adc_rst),
     .clk(adc_clk_in),
