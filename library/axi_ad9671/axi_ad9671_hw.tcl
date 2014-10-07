@@ -116,6 +116,7 @@ add_interface_port xcvr_clk rx_clk clk Input 1
 add_interface xcvr_data conduit end
 set_interface_property xcvr_data associatedClock xcvr_clk
 add_interface_port xcvr_data rx_data data Input 64*PCORE_4L_2L_N+64
+add_interface_port xcvr_data rx_data_sof data_sof Input 1
 
 # dma interface
 
@@ -124,8 +125,8 @@ add_interface_port adc_clock adc_clk clk Output 1
 
 add_interface adc_dma_if conduit end
 set_interface_property adc_dma_if associatedClock adc_clock
-add_interface_port adc_dma_if adc_valid valid Output 7
-add_interface_port adc_dma_if adc_enable enable Output 7
+add_interface_port adc_dma_if adc_valid valid Output 8
+add_interface_port adc_dma_if adc_enable enable Output 8
 add_interface_port adc_dma_if adc_data data Output 128
 add_interface_port adc_dma_if adc_dovf dovf Input 1
 add_interface_port adc_dma_if adc_dunf dunf Input 1

@@ -292,7 +292,9 @@ module axi_ad9671 (
 
   // up bus interface
 
-  up_axi i_up_axi (
+  up_axi #(
+    .PCORE_ADDR_WIDTH (14)
+  ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

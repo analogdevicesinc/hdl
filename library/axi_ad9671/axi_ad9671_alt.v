@@ -46,6 +46,7 @@ module axi_ad9671_alt (
 
   rx_clk,
   rx_data,
+  rx_data_sof,
 
   // dma interface
 
@@ -106,6 +107,7 @@ module axi_ad9671_alt (
 
   input                               rx_clk;
   input   [(64*PCORE_4L_2L_N)+63:0]   rx_data;
+  input                               rx_data_sof;
 
   // dma interface
 
@@ -160,7 +162,7 @@ module axi_ad9671_alt (
 
   assign s_axi_bid = s_axi_awid;
   assign s_axi_rid = s_axi_arid;
-  assign s_axi_rlast = 1'd0;
+  assign s_axi_rlast = 1'd1;
 
   // ad9671 lite version
 
@@ -173,6 +175,7 @@ module axi_ad9671_alt (
   i_ad9671 (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
+    .rx_data_sof (rx_data_sof),
     .adc_clk (adc_clk),
     .adc_valid (adc_valid),
     .adc_enable (adc_enable),
