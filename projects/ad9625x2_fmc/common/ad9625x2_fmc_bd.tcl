@@ -41,7 +41,7 @@ set dma_data        [create_bd_port -dir I -from 511 -to 0 dma_data]
 set axi_ad9625_0_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9625:1.0 axi_ad9625_0_core]
 set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9625_0_core
 
-set axi_ad9625_0_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9625_0_jesd]
+set axi_ad9625_0_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9625_0_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9625_0_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9625_0_jesd
 
@@ -58,7 +58,7 @@ set_property -dict [list CONFIG.PCORE_RX_CDR_CFG {0x03000023ff20400020}] $axi_ad
 set axi_ad9625_1_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9625:1.0 axi_ad9625_1_core]
 set_property -dict [list CONFIG.PCORE_ID {1}] $axi_ad9625_1_core
 
-set axi_ad9625_1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9625_1_jesd]
+set axi_ad9625_1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9625_1_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9625_1_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9625_1_jesd
 
@@ -91,7 +91,7 @@ set_property -dict [list CONFIG.C_IS_DUAL {0}] $axi_ad9625_gpio
 set_property -dict [list CONFIG.C_GPIO_WIDTH {19}] $axi_ad9625_gpio
 set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_ad9625_gpio
 
-set axi_ad9625_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_ad9625_spi]
+set axi_ad9625_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_ad9625_spi]
 set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_ad9625_spi
 set_property -dict [list CONFIG.C_NUM_SS_BITS {2}] $axi_ad9625_spi
 set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_ad9625_spi
@@ -266,7 +266,8 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9625_1_gt/m_axi_aresetn]
 
 # ila
 
-set ila_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_rx_mon]
+set ila_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_rx_mon]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_rx_mon
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {512}] $ila_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {256}] $ila_rx_mon
