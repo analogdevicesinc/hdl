@@ -9,7 +9,12 @@ set adc_data_in_n   [create_bd_port -dir I -from 7 -to 0 adc_data_in_n]
 set adc_data_in_p   [create_bd_port -dir I -from 7 -to 0 adc_data_in_p]
 
 set spi_csn_i       [create_bd_port -dir I spi_csn_i]
-set spi_csn_o       [create_bd_port -dir O -from 1 -to 0 spi_csn_o]
+if {$sys_zynq == 0} {
+  set spi_csn_o       [create_bd_port -dir O -from 1 -to 0 spi_csn_o]
+} else {
+  set spi_csn_adc_o   [create_bd_port -dir O spi_csn_adc_o]
+  set spi_csn_clk_o   [create_bd_port -dir O spi_csn_clk_o]
+}
 set spi_clk_i       [create_bd_port -dir I spi_clk_i]
 set spi_clk_o       [create_bd_port -dir O spi_clk_o]
 set spi_sdo_o       [create_bd_port -dir O spi_sdo_o]
@@ -102,12 +107,8 @@ if {$sys_zynq == 0} {
     delete_bd_objs [get_bd_nets sys_concat_intc_din_2]
     delete_bd_objs [get_bd_ports unc_int2]
 } else {
-    set sys_spi_csn_concat [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_spi_csn_concat]
-    set_property -dict [list CONFIG.NUM_PORTS {2}] $sys_spi_csn_concat
-
-    connect_bd_net -net spi_csn0    [get_bd_pins sys_spi_csn_concat/In1]  [get_bd_pins sys_ps7/SPI0_SS_O]
-    connect_bd_net -net spi_csn1    [get_bd_pins sys_spi_csn_concat/In0]  [get_bd_pins sys_ps7/SPI0_SS1_O]
-    connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]              [get_bd_pins sys_spi_csn_concat/dout]
+    connect_bd_net -net spi_csn_adc [get_bd_ports spi_csn_adc_o]          [get_bd_pins sys_ps7/SPI0_SS_O]
+    connect_bd_net -net spi_csn_clk [get_bd_ports spi_csn_clk_o]          [get_bd_pins sys_ps7/SPI0_SS1_O]
     connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]              [get_bd_pins sys_ps7/SPI0_SS_I]
     connect_bd_net -net spi_sclk_i  [get_bd_ports spi_clk_i]              [get_bd_pins sys_ps7/SPI0_SCLK_I]
     connect_bd_net -net spi_sclk_o  [get_bd_ports spi_clk_o]              [get_bd_pins sys_ps7/SPI0_SCLK_O]

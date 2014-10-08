@@ -254,7 +254,8 @@ system_wrapper i_system_wrapper (
     .spi_clk_i(1'b0),
     .spi_clk_o(spi_clk),
     .spi_csn_i(1'b1),
-    .spi_csn_o(spi_csn),
+    .spi_csn_adc_o(spi_csn[0]),
+    .spi_csn_clk_o(spi_csn[1]),
     .spi_sdi_i(spi_miso),
     .spi_sdo_i(1'b0),
     .spi_sdo_o(spi_mosi));
