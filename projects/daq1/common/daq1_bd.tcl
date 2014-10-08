@@ -153,7 +153,7 @@ connect_bd_net -net axi_daq1_gt_rx_ip_sync        [get_bd_pins axi_daq1_gt/rx_ip
 connect_bd_net -net axi_daq1_gt_rx_ip_sof         [get_bd_pins axi_daq1_gt/rx_ip_sof]           [get_bd_pins axi_ad9250_jesd/rx_start_of_frame]
 connect_bd_net -net axi_daq1_gt_rx_ip_data        [get_bd_pins axi_daq1_gt/rx_ip_data]          [get_bd_pins axi_ad9250_jesd/rx_tdata]
 connect_bd_net -net axi_daq1_gt_rx_data           [get_bd_pins axi_daq1_gt/rx_data]             [get_bd_pins axi_ad9250_core/rx_data]
-connect_bd_net -net axi_ad9250_adc_clk            [get_bd_pins axi_ad9250_core/adc_clk]         [get_bd_pins axi_ad9250_dma/fifo_wr_clk]
+connect_bd_net -net axi_ad9250_adc_clk            [get_bd_pins axi_ad9250_core/adc_clk]         [get_bd_pins axi_ad9250_dma/fifo_wr_clk]                [get_bd_ports adc_clk]
 connect_bd_net -net axi_ad9250_adc_enable_a       [get_bd_pins axi_ad9250_core/adc_enable_a]    [get_bd_ports adc_enable_a]
 connect_bd_net -net axi_ad9250_adc_valid_a        [get_bd_pins axi_ad9250_core/adc_valid_a]     [get_bd_ports adc_valid_a]
 connect_bd_net -net axi_ad9250_adc_data_a         [get_bd_pins axi_ad9250_core/adc_data_a]      [get_bd_ports adc_data_a]
