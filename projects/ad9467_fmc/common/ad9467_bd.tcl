@@ -46,7 +46,7 @@ if {$sys_zynq == 1} {
 
 # spi
 if {$sys_zynq == 0} {
-    set axi_ad9467_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_ad9467_spi]
+    set axi_ad9467_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_ad9467_spi]
     set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_ad9467_spi
     set_property -dict [list CONFIG.C_NUM_SS_BITS {2}] $axi_ad9467_spi
     set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_ad9467_spi
