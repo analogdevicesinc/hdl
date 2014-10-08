@@ -184,7 +184,7 @@ if {$sys_zynq == 0} {
 }
 
 # ila (with fifo to prevent timing failure)
-set ila_fifo  [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:11.0 ila_fifo]
+set ila_fifo  [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:12.0 ila_fifo]
 set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $ila_fifo
 set_property -dict [list CONFIG.Input_Data_Width {16}] $ila_fifo
 set_property -dict [list CONFIG.Input_Depth {128}] $ila_fifo
@@ -192,11 +192,11 @@ set_property -dict [list CONFIG.Output_Data_Width {32}] $ila_fifo
 set_property -dict [list CONFIG.Overflow_Flag {true}] $ila_fifo
 set_property -dict [list CONFIG.Reset_Pin {false}] $ila_fifo
 
-set ila_ad9467_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_ad9467_mon]
+set ila_ad9467_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_ad9467_mon]
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_ad9467_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {32}] $ila_ad9467_mon
 
-set ila_constant_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 ila_constant_1]
+set ila_constant_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 ila_constant_1]
 
 connect_bd_net -net axi_ad9467_dma_ddata [get_bd_pins ila_fifo/din] [get_bd_pins axi_ad9467/adc_ddata]
 connect_bd_net -net adc_250m_clk [get_bd_pins axi_ad9467/adc_clk] [get_bd_pins ila_fifo/wr_clk]
