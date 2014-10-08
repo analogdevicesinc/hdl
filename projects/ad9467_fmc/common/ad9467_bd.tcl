@@ -122,8 +122,8 @@ connect_bd_net -net axi_ad9467_adc_clk_in_n     [get_bd_ports adc_clk_in_p]     
 connect_bd_net -net axi_ad9467_adc_clk_in_p     [get_bd_ports adc_clk_in_n]     [get_bd_pins axi_ad9467/adc_clk_in_n]
 connect_bd_net -net axi_ad9467_adc_data_in_n    [get_bd_ports adc_data_in_n]    [get_bd_pins axi_ad9467/adc_data_in_n]
 connect_bd_net -net axi_ad9467_adc_data_in_p    [get_bd_ports adc_data_in_p]    [get_bd_pins axi_ad9467/adc_data_in_p]
-connect_bd_net -net axi_ad9467_adc_data_or_n    [get_bd_ports adc_data_or_p]    [get_bd_pins axi_ad9467/adc_or_in_p]
-connect_bd_net -net axi_ad9467_adc_data_or_p    [get_bd_ports adc_data_or_n]    [get_bd_pins axi_ad9467/adc_or_in_n]
+connect_bd_net -net axi_ad9467_adc_data_or_p    [get_bd_ports adc_data_or_p]    [get_bd_pins axi_ad9467/adc_or_in_p]
+connect_bd_net -net axi_ad9467_adc_data_or_n    [get_bd_ports adc_data_or_n]    [get_bd_pins axi_ad9467/adc_or_in_n]
 
 set adc_250m_clk_source [get_bd_pins axi_ad9467/adc_clk]
 
