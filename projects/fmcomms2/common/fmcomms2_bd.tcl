@@ -56,7 +56,7 @@
     set util_dac_unpack [create_bd_cell -type ip -vlnv analog.com:user:util_dac_unpack:1.0 util_dac_unpack]
 
     # constant 0
-    set constant_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 constant_0]
+    set constant_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 constant_0]
     set_property -dict [list CONFIG.CONST_VAL {0}] $constant_0
 
 if {$sys_zynq == 1} {
@@ -84,7 +84,7 @@ if {$sys_zynq == 1} {
 
     # spi
 if {$sys_zynq == 0} {
-    set axi_fmcomms2_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_fmcomms2_spi]
+    set axi_fmcomms2_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_fmcomms2_spi]
     set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_fmcomms2_spi
     set_property -dict [list CONFIG.C_NUM_SS_BITS {1}] $axi_fmcomms2_spi
     set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_fmcomms2_spi
@@ -321,7 +321,7 @@ if {$sys_zynq == 0} {
 
     # ila (adc)
 
-    set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc]
+    set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_adc]
     set_property -dict [list CONFIG.C_NUM_OF_PROBES {8}] $ila_adc
     set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
     set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_adc
