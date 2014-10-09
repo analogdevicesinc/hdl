@@ -8,10 +8,6 @@
   <set param="PCW::USB0::RESET::IO" value="MIO 7" />
   <set param="PCW::USB0::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::USB0::RESET::ENABLE" value="1" />
-  <set param="PCW::QSPI::GRP_FBCLK::ENABLE" value="1" />
-  <set param="PCW::QSPI::GRP_IO1::ENABLE" value="1" />
-  <set param="PCW::QSPI::GRP_SS1::ENABLE" value="1" />
-  <set param="PCW::QSPI::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::WDT::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::PJTAG::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::MIO::MIO[1]::SLEW" value="slow" />
