@@ -138,6 +138,8 @@ module up_axi (
   reg     [ 2:0]  up_rcount = 'd0;
   reg             up_rack_int = 'd0;
   reg     [31:0]  up_rdata_int = 'd0;
+  reg             up_rack_int_d = 'd0;
+  reg     [31:0]  up_rdata_int_d = 'd0;
 
   // write channel interface
  
@@ -223,9 +225,9 @@ module up_axi (
       if ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1)) begin
         up_axi_rvalid <= 1'b0;
         up_axi_rdata <= 32'd0;
-      end else if (up_rack_int == 1'b1) begin
+      end else if (up_rack_int_d == 1'b1) begin
         up_axi_rvalid <= 1'b1;
-        up_axi_rdata <= up_rdata_int;
+        up_axi_rdata <= up_rdata_int_d;
       end
     end
   end       
@@ -257,6 +259,8 @@ module up_axi (
     if (up_rstn == 0) begin
       up_rack_int <= 'd0;
       up_rdata_int <= 'd0;
+      up_rack_int_d <= 'd0;
+      up_rdata_int_d <= 'd0;
     end else begin
       if ((up_rcount == 3'h7) && (up_rack == 1'b0)) begin
         up_rack_int <= 1'b1;
@@ -265,6 +269,8 @@ module up_axi (
         up_rack_int <= up_rack;
         up_rdata_int <= up_rdata;
       end
+      up_rack_int_d <= up_rack_int;
+      up_rdata_int_d <= up_rdata_int;
     end
   end
 
