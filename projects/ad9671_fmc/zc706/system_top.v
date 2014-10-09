@@ -186,13 +186,17 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
-  wire    [23:0]  gpio_i;
-  wire    [23:0]  gpio_o;
-  wire    [23:0]  gpio_t;
+  wire  [  1:0]   gt_rx_data_sof;
+  wire            ad9671_sof;
+  wire  [ 23:0]   gpio_i;
+  wire  [ 23:0]   gpio_o;
+  wire  [ 23:0]   gpio_t;
   wire            adc_clk;
-  wire    [ 7:0]  adc_enable;
-  wire    [ 7:0]  adc_valid;
+  wire  [  7:0]   adc_enable;
+  wire  [  7:0]   adc_valid;
   wire   [127:0]  adc_data;
+
+  assign ad9671_sof = |gt_rx_data_sof;
 
   // pack place holder
 
@@ -302,6 +306,8 @@ module system_top (
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
+    .gt_rx_data_sof(gt_rx_data_sof),
+    .ad9671_sof(ad9671_sof),
     .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
@@ -314,6 +320,5 @@ module system_top (
     .spi_sdo_o (spi_mosi));
 
 endmodule
-
 // ***************************************************************************
 // ***************************************************************************
