@@ -171,119 +171,115 @@ module system_top (
 
   // lane interface
 
-  input           ref_clk;
-  input   [ 7:0]  rx_data;
-  output          rx_sysref;
-  output          rx_sync;
+  input             ref_clk;
+  input   [  7:0]   rx_data;
+  output            rx_sysref;
+  output            rx_sync;
 
   // spi
 
-  output          spi_fout_enb_clk;
-  output          spi_fout_enb_mlo;
-  output          spi_fout_enb_rst;
-  output          spi_fout_enb_sync;
-  output          spi_fout_enb_sysref;
-  output          spi_fout_enb_trig;
-  output          spi_fout_clk;
-  output          spi_fout_sdio;
-  output  [ 3:0]  spi_afe_csn;
-  output          spi_afe_clk;
-  inout           spi_afe_sdio;
-  output          spi_clk_csn;
-  output          spi_clk_clk;
-  inout           spi_clk_sdio;
+  output            spi_fout_enb_clk;
+  output            spi_fout_enb_mlo;
+  output            spi_fout_enb_rst;
+  output            spi_fout_enb_sync;
+  output            spi_fout_enb_sysref;
+  output            spi_fout_enb_trig;
+  output            spi_fout_clk;
+  output            spi_fout_sdio;
+  output  [  3:0]   spi_afe_csn;
+  output            spi_afe_clk;
+  inout             spi_afe_sdio;
+  output            spi_clk_csn;
+  output            spi_clk_clk;
+  inout             spi_clk_sdio;
 
-  output          afe_rst;
-  output          afe_trig;
+  output            afe_rst;
+  output            afe_trig;
+
   // gpio
 
-  output          dac_sleep;
-  output  [13:0]  dac_data;
-  output          afe_pdn;
-  output          afe_stby;
-  output          clk_resetn;
-  output          clk_syncn;
-  input           clk_status;
-  output          amp_disbn;
-  inout           prc_sck;
-  inout           prc_cnv;
-  inout           prc_sdo_i;
-  inout           prc_sdo_q;
+  output            dac_sleep;
+  output  [ 13:0]   dac_data;
+  output            afe_pdn;
+  output            afe_stby;
+  output            clk_resetn;
+  output            clk_syncn;
+  input             clk_status;
+  output            amp_disbn;
+  inout             prc_sck;
+  inout             prc_cnv;
+  inout             prc_sdo_i;
+  inout             prc_sdo_q;
 
   // internal registers
 
-  reg             rx_sysref_m1 = 'd0;
-  reg             rx_sysref_m2 = 'd0;
-  reg             rx_sysref_m3 = 'd0;
-  reg             rx_sysref = 'd0;
+  reg               rx_sysref_m1 = 'd0;
+  reg               rx_sysref_m2 = 'd0;
+  reg               rx_sysref_m3 = 'd0;
+  reg               rx_sysref = 'd0;
+  reg               dma_sync = 'd0;
+  reg               dma_wr = 'd0;
+  reg               adc_dovf;
+  reg     [511:0]   dma_data = 'd0;
+  reg               rx_sof_0_s = 'd0;
+  reg               rx_sof_1_s = 'd0;
+  reg               rx_sof_2_s = 'd0;
+  reg               rx_sof_3_s = 'd0;
 
   // internal clocks and resets
 
-  wire            sys_125m_clk;
-  wire            sys_25m_clk;
-  wire            sys_2m5_clk;
-  wire            eth_tx_clk;
-  wire            rx_clk;
-  wire            adc_clk;
-
-  // internal registers
-
-  reg             dma_sync = 'd0;
-  reg             dma_wr = 'd0;
-  reg             adc_dovf;
-  reg     [511:0] dma_data = 'd0;
-  reg             rx_sof_0_s = 'd0;
-  reg             rx_sof_1_s = 'd0;
-  reg             rx_sof_2_s = 'd0;
-  reg             rx_sof_3_s = 'd0;
+  wire              sys_125m_clk;
+  wire              sys_25m_clk;
+  wire              sys_2m5_clk;
+  wire              eth_tx_clk;
+  wire              rx_clk;
+  wire              adc_clk;
 
   // internal signals
 
-  wire            sys_pll_locked_s;
-  wire            eth_tx_reset_s;
-  wire            eth_tx_mode_1g_s;
-  wire            eth_tx_mode_10m_100m_n_s;
-
-  wire    [ 4:0]  spi_csn;
-  wire            spi_clk;
-  wire            spi_mosi;
-  wire            spi_miso;
-  wire            rx_ref_clk;
-  wire            rx_sync;
-  wire   [127:0]  adc_data_0;
-  wire   [127:0]  adc_data_1;
-  wire   [127:0]  adc_data_2;
-  wire   [127:0]  adc_data_3;
-  wire            adc_valid;
-  wire   [  7:0]  adc_valid_0;
-  wire   [  7:0]  adc_valid_1;
-  wire   [  7:0]  adc_valid_2;
-  wire   [  7:0]  adc_valid_3;
-  wire   [  7:0]  adc_enable_0;
-  wire   [  7:0]  adc_enable_1;
-  wire   [  7:0]  adc_enable_2;
-  wire   [  7:0]  adc_enable_3;
-  wire            adc_dovf_0;
-  wire            adc_dovf_1;
-  wire            adc_dovf_2;
-  wire            adc_dovf_3;
-
-  wire   [  3:0]  rx_ip_sof_s;
-  wire   [255:0]  rx_ip_data_s;
-  wire   [255:0]  rx_data_s;
-  wire            rx_sw_rstn_s;
-  wire            rx_sysref_s;
-  wire            rx_err_s;
-  wire            rx_ready_s;
-  wire    [  3:0] rx_rst_state_s;
-  wire            rx_lane_aligned_s;
-  wire    [  7:0] rx_analog_reset_s;
-  wire    [  7:0] rx_digital_reset_s;
-  wire    [  7:0] rx_cdr_locked_s;
-  wire    [  7:0] rx_cal_busy_s;
-  wire            rx_pll_locked_s;
-  wire    [ 22:0] rx_xcvr_status_s;
-  wire    [  7:0] rx_data_sof;
+  wire              sys_pll_locked_s;
+  wire              eth_tx_reset_s;
+  wire              eth_tx_mode_1g_s;
+  wire              eth_tx_mode_10m_100m_n_s;
+  wire    [  4:0]   spi_csn;
+  wire              spi_clk;
+  wire              spi_mosi;
+  wire              spi_miso;
+  wire              rx_ref_clk;
+  wire              rx_sync;
+  wire    [127:0]   adc_data_0;
+  wire    [127:0]   adc_data_1;
+  wire    [127:0]   adc_data_2;
+  wire    [127:0]   adc_data_3;
+  wire              adc_valid;
+  wire    [  7:0]   adc_valid_0;
+  wire    [  7:0]   adc_valid_1;
+  wire    [  7:0]   adc_valid_2;
+  wire    [  7:0]   adc_valid_3;
+  wire    [  7:0]   adc_enable_0;
+  wire    [  7:0]   adc_enable_1;
+  wire    [  7:0]   adc_enable_2;
+  wire    [  7:0]   adc_enable_3;
+  wire              adc_dovf_0;
+  wire              adc_dovf_1;
+  wire              adc_dovf_2;
+  wire              adc_dovf_3;
+  wire    [  3:0]   rx_ip_sof_s;
+  wire    [255:0]   rx_ip_data_s;
+  wire    [255:0]   rx_data_s;
+  wire              rx_sw_rstn_s;
+  wire              rx_sysref_s;
+  wire              rx_err_s;
+  wire              rx_ready_s;
+  wire    [  3:0]   rx_rst_state_s;
+  wire              rx_lane_aligned_s;
+  wire    [  7:0]   rx_analog_reset_s;
+  wire    [  7:0]   rx_digital_reset_s;
+  wire    [  7:0]   rx_cdr_locked_s;
+  wire    [  7:0]   rx_cal_busy_s;
+  wire              rx_pll_locked_s;
+  wire    [ 22:0]   rx_xcvr_status_s;
+  wire    [  7:0]   rx_data_sof;
 
   // ethernet transmit clock
 
@@ -394,7 +390,7 @@ module system_top (
     rx_sof_3_s <= rx_data_sof[6] | rx_data_sof[7];
   end
 
-   usdrx1_spi i_spi (
+  usdrx1_spi i_spi (
     .spi_afe_csn (spi_csn[4:1]),
     .spi_clk_csn (spi_csn[0]),
     .spi_clk (spi_clk),
