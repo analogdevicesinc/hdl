@@ -44,7 +44,7 @@ set dma_1_data      [create_bd_port -dir I -from 63 -to 0 dma_1_data]
 set axi_ad9250_0_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_0_core]
 set axi_ad9250_1_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_1_core]
 
-set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9250_jesd]
+set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9250_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9250_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9250_jesd
 
@@ -100,7 +100,7 @@ if {$sys_zynq == 1} {
 
 if {$sys_zynq == 0} {
 
-  set axi_ad9250_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_ad9250_spi]
+  set axi_ad9250_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_ad9250_spi]
   set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_ad9250_spi
   set_property -dict [list CONFIG.C_NUM_SS_BITS {1}] $axi_ad9250_spi
   set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_ad9250_spi
@@ -329,7 +329,7 @@ if {$sys_zynq == 1} {
 
 # ila
 
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
+set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {7}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon
