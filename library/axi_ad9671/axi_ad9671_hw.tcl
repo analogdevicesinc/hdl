@@ -11,7 +11,7 @@ set_module_property DISPLAY_NAME axi_ad9671
 # files
 
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
-set_fileset_property quartus_synth TOP_LEVEL axi_ad9671_alt
+set_fileset_property quartus_synth TOP_LEVEL axi_ad9671
 add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_rst.v
 add_fileset_file ad_pnmon.v           VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
 add_fileset_file ad_datafmt.v         VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
@@ -26,8 +26,7 @@ add_fileset_file up_adc_channel.v     VERILOG PATH $ad_hdl_dir/library/common/up
 add_fileset_file axi_ad9671_pnmon.v   VERILOG PATH axi_ad9671_pnmon.v
 add_fileset_file axi_ad9671_if.v      VERILOG PATH axi_ad9671_if.v
 add_fileset_file axi_ad9671_channel.v VERILOG PATH axi_ad9671_channel.v
-add_fileset_file axi_ad9671.v         VERILOG PATH axi_ad9671.v
-add_fileset_file axi_ad9671_alt.v     VERILOG PATH axi_ad9671_alt.v TOP_LEVEL_FILE
+add_fileset_file axi_ad9671.v         VERILOG PATH axi_ad9671.v TOP_LEVEL_FILE
 
 # parameters
 
@@ -52,13 +51,6 @@ set_parameter_property PCORE_4L_2L_N TYPE INTEGER
 set_parameter_property PCORE_4L_2L_N UNITS None
 set_parameter_property PCORE_4L_2L_N HDL_PARAMETER true
 
-add_parameter PCORE_AXI_ID_WIDTH INTEGER 0
-set_parameter_property PCORE_AXI_ID_WIDTH DEFAULT_VALUE 3
-set_parameter_property PCORE_AXI_ID_WIDTH DISPLAY_NAME PCORE_AXI_ID_WIDTH
-set_parameter_property PCORE_AXI_ID_WIDTH TYPE INTEGER
-set_parameter_property PCORE_AXI_ID_WIDTH UNITS None
-set_parameter_property PCORE_AXI_ID_WIDTH HDL_PARAMETER true
-
 # axi4 slave
 
 add_interface s_axi_clock clock end
@@ -68,11 +60,12 @@ add_interface s_axi_reset reset end
 set_interface_property s_axi_reset associatedClock s_axi_clock
 add_interface_port s_axi_reset s_axi_aresetn reset_n Input 1
 
-add_interface s_axi axi4 end
+add_interface s_axi axi4lite end
 set_interface_property s_axi associatedClock s_axi_clock
 set_interface_property s_axi associatedReset s_axi_reset
 add_interface_port s_axi s_axi_awvalid awvalid Input 1
 add_interface_port s_axi s_axi_awaddr awaddr Input 14
+add_interface_port s_axi s_axi_awprot awprot Input 3
 add_interface_port s_axi s_axi_awready awready Output 1
 add_interface_port s_axi s_axi_wvalid wvalid Input 1
 add_interface_port s_axi s_axi_wdata wdata Input 32
@@ -83,30 +76,12 @@ add_interface_port s_axi s_axi_bresp bresp Output 2
 add_interface_port s_axi s_axi_bready bready Input 1
 add_interface_port s_axi s_axi_arvalid arvalid Input 1
 add_interface_port s_axi s_axi_araddr araddr Input 14
+add_interface_port s_axi s_axi_arprot arprot Input 3
 add_interface_port s_axi s_axi_arready arready Output 1
 add_interface_port s_axi s_axi_rvalid rvalid Output 1
 add_interface_port s_axi s_axi_rresp rresp Output 2
 add_interface_port s_axi s_axi_rdata rdata Output 32
 add_interface_port s_axi s_axi_rready rready Input 1
-add_interface_port s_axi s_axi_awid awid Input PCORE_AXI_ID_WIDTH
-add_interface_port s_axi s_axi_awlen awlen Input 8
-add_interface_port s_axi s_axi_awsize awsize Input 3
-add_interface_port s_axi s_axi_awburst awburst Input 2
-add_interface_port s_axi s_axi_awlock awlock Input 1
-add_interface_port s_axi s_axi_awcache awcache Input 4
-add_interface_port s_axi s_axi_awprot awprot Input 3
-add_interface_port s_axi s_axi_wlast wlast Input 1
-add_interface_port s_axi s_axi_bid bid Output PCORE_AXI_ID_WIDTH
-add_interface_port s_axi s_axi_arid arid Input PCORE_AXI_ID_WIDTH
-add_interface_port s_axi s_axi_arlen arlen Input 8
-add_interface_port s_axi s_axi_arsize arsize Input 3
-add_interface_port s_axi s_axi_arburst arburst Input 2
-add_interface_port s_axi s_axi_arlock arlock Input 1
-add_interface_port s_axi s_axi_arcache arcache Input 4
-add_interface_port s_axi s_axi_arprot arprot Input 3
-add_interface_port s_axi s_axi_rid rid Output PCORE_AXI_ID_WIDTH
-add_interface_port s_axi s_axi_rlast rlast Output 1
-
 
 # transceiver interface
 
