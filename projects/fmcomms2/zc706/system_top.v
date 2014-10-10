@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -65,7 +65,7 @@ module system_top (
   FIXED_IO_ps_srstb,
 
   gpio_bd,
-  
+
   hdmi_out_clk,
   hdmi_vsync,
   hdmi_hsync,
@@ -73,7 +73,7 @@ module system_top (
   hdmi_data,
 
   spdif,
-  
+
   iic_scl,
   iic_sda,
 
@@ -97,7 +97,7 @@ module system_top (
   gpio_en_agc,
   gpio_ctl,
   gpio_status,
-  
+
   spi_csn,
   spi_clk,
   spi_mosi,
@@ -127,7 +127,7 @@ module system_top (
   inout           FIXED_IO_ps_srstb;
 
   inout   [14:0]  gpio_bd;
-  
+
   output          hdmi_out_clk;
   output          hdmi_vsync;
   output          hdmi_hsync;
@@ -135,7 +135,7 @@ module system_top (
   output  [23:0]  hdmi_data;
 
   output          spdif;
-  
+
   inout           iic_scl;
   inout           iic_sda;
 
@@ -159,7 +159,7 @@ module system_top (
   inout           gpio_en_agc;
   inout   [ 3:0]  gpio_ctl;
   inout   [ 7:0]  gpio_status;
-  
+
   output          spi_csn;
   output          spi_clk;
   output          spi_mosi;
@@ -268,7 +268,7 @@ module system_top (
     .rx_frame_in_p (rx_frame_in_p),
     .spdif (spdif),
     .spi_csn_i (1'b1),
-    .spi_csn_o (spi_csn),    
+    .spi_csn_o (spi_csn),
     .spi_miso_i (spi_miso),
     .spi_mosi_i (1'b0),
     .spi_mosi_o (spi_mosi),
