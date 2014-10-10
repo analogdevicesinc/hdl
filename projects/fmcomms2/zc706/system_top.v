@@ -173,60 +173,18 @@ module system_top (
 
   // instantiations
 
-  IOBUF i_iobuf_gpio_txnrx (
-    .I (gpio_o[48]),
-    .O (gpio_i[48]),
-    .T (gpio_t[48]),
-    .IO (gpio_txnrx));
-
-  IOBUF i_iobuf_gpio_enable (
-    .I (gpio_o[47]),
-    .O (gpio_i[47]),
-    .T (gpio_t[47]),
-    .IO (gpio_enable));
-
-  IOBUF i_iobuf_gpio_resetb (
-    .I (gpio_o[46]),
-    .O (gpio_i[46]),
-    .T (gpio_t[46]),
-    .IO (gpio_resetb));
-
-  IOBUF i_iobuf_gpio_sync (
-    .I (gpio_o[45]),
-    .O (gpio_i[45]),
-    .T (gpio_t[45]),
-    .IO (gpio_sync));
-
-  IOBUF i_iobuf_gpio_en_agc (
-    .I (gpio_o[44]),
-    .O (gpio_i[44]),
-    .T (gpio_t[44]),
-    .IO (gpio_en_agc));
-
-  genvar n;
-  generate
-  for (n = 0; n <= 3; n = n + 1) begin: g_iobuf_gpio_ctl
-  IOBUF i_iobuf_gpio_ctl (
-    .I (gpio_o[40+n]),
-    .O (gpio_i[40+n]),
-    .T (gpio_t[40+n]),
-    .IO (gpio_ctl[n]));
-  end
-  for (n = 0; n <= 7; n = n + 1) begin: g_iobuf_gpio_status
-  IOBUF i_iobuf_gpio_status (
-    .I (gpio_o[32+n]),
-    .O (gpio_i[32+n]),
-    .T (gpio_t[32+n]),
-    .IO (gpio_status[n]));
-  end
-  for (n = 0; n <= 14; n = n + 1) begin: g_iobuf_gpio_bd
-  IOBUF i_iobuf_gpio_bd (
-    .I (gpio_o[n]),
-    .O (gpio_i[n]),
-    .T (gpio_t[n]),
-    .IO (gpio_bd[n]));
-  end
-  endgenerate
+  ad_iobuf #(.DATA_WIDTH(32)) i_iobuf (
+    .dt ({gpio_t[48:32],gpio_t[14:0]}),
+    .di ({gpio_o[48:32],gpio_o[14:0]}),
+    .do ({gpio_i[48:32],gpio_i[14:0]}),
+    .dio({  gpio_txnrx,
+            gpio_enable,
+            gpio_resetb,
+            gpio_sync,
+            gpio_en_agc,
+            gpio_ctl,
+            gpio_status,
+            gpio_bd}));
 
   system_wrapper i_system_wrapper (
     .DDR_addr (DDR_addr),
