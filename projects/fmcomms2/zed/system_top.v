@@ -111,7 +111,12 @@ module system_top (
   spi_csn,
   spi_clk,
   spi_mosi,
-  spi_miso);
+  spi_miso,
+
+  spi_udc_csn_tx,
+  spi_udc_csn_rx,
+  spi_udc_sclk,
+  spi_udc_data);
 
   inout   [14:0]  DDR_addr;
   inout   [ 2:0]  DDR_ba;
@@ -184,6 +189,11 @@ module system_top (
   output          spi_clk;
   output          spi_mosi;
   input           spi_miso;
+
+  output          spi_udc_csn_tx;
+  output          spi_udc_csn_rx;
+  output          spi_udc_sclk;
+  output          spi_udc_data;
 
   // internal signals
 
@@ -287,7 +297,15 @@ module system_top (
     .tx_data_out_n (tx_data_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
-    .tx_frame_out_p (tx_frame_out_p));
+    .tx_frame_out_p (tx_frame_out_p),
+    .spi_udc_clk_i (1'b0),
+    .spi_udc_clk_o (spi_udc_sclk),
+    .spi_udc_csn_i (1'b1),
+    .spi_udc_csn_tx_o (spi_udc_csn_tx),
+    .spi_udc_csn_rx_o (spi_udc_csn_rx),
+    .spi_udc_mosi_i (spi_udc_data),
+    .spi_udc_mosi_o (spi_udc_data),
+    .spi_udc_miso_i (1'b0));
 
 endmodule
 

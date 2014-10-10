@@ -31,6 +31,17 @@ if {$sys_zynq == 0} {
   set gpio_fmcomms2_t  [create_bd_port -dir O -from 16 -to 0 gpio_fmcomms2_t]
 }
 
+if {$sys_zynq == 1} {
+  set spi_udc_clk_i       [create_bd_port -dir I spi_udc_clk_i]
+  set spi_udc_clk_o       [create_bd_port -dir O spi_udc_clk_o]
+  set spi_udc_csn_i       [create_bd_port -dir I spi_udc_csn_i]
+  set spi_udc_csn_tx_o    [create_bd_port -dir O spi_udc_csn_tx_o]
+  set spi_udc_csn_rx_o    [create_bd_port -dir O spi_udc_csn_rx_o]
+  set spi_udc_mosi_i      [create_bd_port -dir I spi_udc_mosi_i]
+  set spi_udc_mosi_o      [create_bd_port -dir O spi_udc_mosi_o]
+  set spi_udc_miso_i      [create_bd_port -dir I spi_udc_miso_i]
+}
+
   # ad9361 core
 
   set axi_ad9361 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361]
@@ -129,6 +140,13 @@ if {$sys_zynq == 1} {
   set_property LEFT 48 [get_bd_ports GPIO_T]
 }
 
+  # additional spi for up/down converter
+
+if {$sys_zynq == 1} {
+  set_property -dict [list CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {1}] $sys_ps7
+  set_property -dict [list CONFIG.PCW_SPI1_SPI1_IO {EMIO}] $sys_ps7
+}
+
   # connections (spi)
 
 if {$sys_zynq == 0} {
@@ -157,6 +175,19 @@ if {$sys_zynq == 0} {
   connect_bd_net -net gpio_fmcomms2_o [get_bd_ports gpio_fmcomms2_o]    [get_bd_pins axi_fmcomms2_gpio/gpio_io_o]
   connect_bd_net -net gpio_fmcomms2_t [get_bd_ports gpio_fmcomms2_t]    [get_bd_pins axi_fmcomms2_gpio/gpio_io_t]
   connect_bd_net -net axi_fmcomms2_gpio_irq [get_bd_pins axi_fmcomms2_gpio/ip2intc_irpt] [get_bd_pins sys_concat_intc/In8]
+}
+
+  # connections (up/down converter spi)
+
+if {$sys_zynq == 1} {
+  connect_bd_net -net spi_udc_csn_i       [get_bd_ports spi_udc_csn_i]      [get_bd_pins sys_ps7/SPI1_SS_I]
+  connect_bd_net -net spi_udc_csn_tx_o    [get_bd_ports spi_udc_csn_tx_o]   [get_bd_pins sys_ps7/SPI1_SS_O]
+  connect_bd_net -net spi_udc_csn_rx_o    [get_bd_ports spi_udc_csn_rx_o]   [get_bd_pins sys_ps7/SPI1_SS1_O]
+  connect_bd_net -net spi_udc_clk_i       [get_bd_ports spi_udc_clk_i]      [get_bd_pins sys_ps7/SPI1_SCLK_I]
+  connect_bd_net -net spi_udc_clk_o       [get_bd_ports spi_udc_clk_o]      [get_bd_pins sys_ps7/SPI1_SCLK_O]
+  connect_bd_net -net spi_udc_mosi_i      [get_bd_ports spi_udc_mosi_i]     [get_bd_pins sys_ps7/SPI1_MOSI_I]
+  connect_bd_net -net spi_udc_mosi_o      [get_bd_ports spi_udc_mosi_o]     [get_bd_pins sys_ps7/SPI1_MOSI_O]
+  connect_bd_net -net spi_udc_miso_i      [get_bd_ports spi_udc_miso_i]     [get_bd_pins sys_ps7/SPI1_MISO_I]
 }
   # connections (ad9361)
 
@@ -262,7 +293,6 @@ if {$sys_zynq == 1} {
   set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
   connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
 }
-
 
   # interconnect (mem/dac)
 

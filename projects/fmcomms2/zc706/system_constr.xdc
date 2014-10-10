@@ -58,6 +58,13 @@ set_property  -dict {PACKAGE_PIN  AK30  IOSTANDARD LVCMOS25} [get_ports spi_clk]
 set_property  -dict {PACKAGE_PIN  AJ28  IOSTANDARD LVCMOS25} [get_ports spi_mosi]                         ; ## C26  FMC_LPC_LA27_P
 set_property  -dict {PACKAGE_PIN  AJ29  IOSTANDARD LVCMOS25} [get_ports spi_miso]                         ; ## C27  FMC_LPC_LA27_N
 
+# spi pmod J58
+
+set_property  -dict {PACKAGE_PIN  AJ21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_csn_tx]       ; ## PMOD1_0_LS
+set_property  -dict {PACKAGE_PIN  AK21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_csn_rx]       ; ## PMOD1_1_LS
+set_property  -dict {PACKAGE_PIN  AB16    IOSTANDARD LVCMOS25}     [get_ports spi_udc_sclk]         ; ## PMOD1_3_LS
+set_property  -dict {PACKAGE_PIN  AB21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_data]         ; ## PMOD1_2_LS
+
 # clocks
 
 create_clock -name rx_clk       -period  4.00 [get_ports rx_clk_in_p]
