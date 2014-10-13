@@ -48,16 +48,20 @@ set adc_dovf          [create_bd_port -dir O adc_dovf]
 # adc peripherals
 
 set axi_ad9671_core_0 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_0]
-set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core_0]
+set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] $axi_ad9671_core_0
+set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9671_core_0
 
 set axi_ad9671_core_1 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_1]
-set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core_1]
+set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] $axi_ad9671_core_1
+set_property -dict [list CONFIG.PCORE_ID {1}] $axi_ad9671_core_1
 
 set axi_ad9671_core_2 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_2]
-set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core_2]
+set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] $axi_ad9671_core_2
+set_property -dict [list CONFIG.PCORE_ID {2}] $axi_ad9671_core_2
 
 set axi_ad9671_core_3 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_3]
-set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core_3]
+set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] $axi_ad9671_core_3
+set_property -dict [list CONFIG.PCORE_ID {3}] $axi_ad9671_core_3
 
 set axi_usdrx1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_usdrx1_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_usdrx1_jesd
@@ -190,6 +194,10 @@ connect_bd_net -net axi_ad9671_dma_wr_en            [get_bd_pins axi_usdrx1_dma/
 connect_bd_net -net axi_ad9671_dma_adc_data         [get_bd_pins axi_usdrx1_dma/fifo_wr_din]        [get_bd_ports adc_data]
 connect_bd_net -net axi_ad9671_dma_adc_dovf         [get_bd_pins axi_usdrx1_dma/fifo_wr_overflow]   [get_bd_ports adc_dovf]
 connect_bd_net -net axi_usdrx1_dma_irq              [get_bd_pins axi_usdrx1_dma/irq]                [get_bd_pins sys_concat_intc/In2] 
+connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_0/adc_raddr_out]
+connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_1/adc_raddr_in]
+connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_2/adc_raddr_in]
+connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_3/adc_raddr_in]
 
 # interconnect (cpu)
 

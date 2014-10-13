@@ -1,6 +1,6 @@
 
 
-package require -exact qsys 13.0
+package require -exact qsys 14.0
 source ../scripts/adi_env.tcl
 
 set_module_property NAME axi_ad9671
@@ -23,6 +23,7 @@ add_fileset_file up_drp_cntrl.v       VERILOG PATH $ad_hdl_dir/library/common/up
 add_fileset_file up_delay_cntrl.v     VERILOG PATH $ad_hdl_dir/library/common/up_delay_cntrl.v
 add_fileset_file up_adc_common.v      VERILOG PATH $ad_hdl_dir/library/common/up_adc_common.v
 add_fileset_file up_adc_channel.v     VERILOG PATH $ad_hdl_dir/library/common/up_adc_channel.v
+add_fileset_file ad_mem.v             VERILOG PATH $ad_hdl_dir/library/common/ad_mem.v
 add_fileset_file axi_ad9671_pnmon.v   VERILOG PATH axi_ad9671_pnmon.v
 add_fileset_file axi_ad9671_if.v      VERILOG PATH axi_ad9671_if.v
 add_fileset_file axi_ad9671_channel.v VERILOG PATH axi_ad9671_channel.v

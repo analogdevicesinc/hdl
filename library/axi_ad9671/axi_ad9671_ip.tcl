@@ -16,6 +16,7 @@ adi_ip_files axi_ad9671 [list \
   "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
+  "$ad_hdl_dir/library/common/ad_mem.v" \
   "axi_ad9671_pnmon.v" \
   "axi_ad9671_channel.v" \
   "axi_ad9671_if.v" \

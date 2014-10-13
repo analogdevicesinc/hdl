@@ -317,7 +317,7 @@ module system_top (
 
   sld_signaltap #(
     .sld_advanced_trigger_entity ("basic,1,"),
-    .sld_data_bits (258),
+    .sld_data_bits (514),
     .sld_data_bit_cntr_bits (8),
     .sld_enable_advanced_trigger (0),
     .sld_mem_address_bits (10),
@@ -334,8 +334,8 @@ module system_top (
     .sld_trigger_level (1),
     .sld_trigger_level_pipeline (1))
   i_signaltap (
-    .acq_clk (rx_clk),
-    .acq_data_in ({rx_sysref, rx_sync, rx_ip_data_s}),
+    .acq_clk (adc_clk),
+    .acq_data_in ({rx_sysref, rx_sync, dma_data}),
     .acq_trigger_in ({rx_sysref, rx_sync}));
 
   genvar n;

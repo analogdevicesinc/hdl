@@ -56,6 +56,8 @@ module axi_ad9671 (
   adc_data,
   adc_dovf,
   adc_dunf,
+  adc_raddr_in,
+  adc_raddr_out,
 
   // axi interface
 
@@ -102,6 +104,8 @@ module axi_ad9671 (
   output  [127:0]                       adc_data;
   input                                 adc_dovf;
   input                                 adc_dunf;
+  input   [  3:0]                       adc_raddr_in;
+  output  [  3:0]                       adc_raddr_out;
 
   // axi interface
 
@@ -190,7 +194,7 @@ module axi_ad9671 (
 
   // main (device interface)
 
-  axi_ad9671_if #(.PCORE_4L_2L_N(PCORE_4L_2L_N)) i_if (
+  axi_ad9671_if #(.PCORE_4L_2L_N(PCORE_4L_2L_N), .PCORE_ID(PCORE_ID)) i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
     .rx_data_sof (rx_data_sof),
@@ -213,7 +217,9 @@ module axi_ad9671 (
     .adc_or_g (adc_or_s[6]),
     .adc_data_h (adc_data_s[7]),
     .adc_or_h (adc_or_s[7]),
-    .adc_status (adc_status_s));
+    .adc_status (adc_status_s),
+    .adc_raddr_in(adc_raddr_in),
+    .adc_raddr_out(adc_raddr_out));
 
   // channels
 
