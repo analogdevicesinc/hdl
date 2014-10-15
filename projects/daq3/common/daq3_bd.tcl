@@ -63,6 +63,12 @@ if {$sys_zynq == 0} {
   set adc_dsync       [create_bd_port -dir I adc_dsync]
   set adc_ddata       [create_bd_port -dir I -from 127 -to 0 adc_ddata]
 
+if {$sys_zynq == 1} {
+
+  set DDR3    [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR3]
+  set sys_clk [create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk]
+}
+
   # dac peripherals
 
   set axi_ad9152_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9152:1.0 axi_ad9152_core]
@@ -99,7 +105,7 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
 
   set axi_ad9680_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9680_dma]
-  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9680_dma
+  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_ad9680_dma
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9680_dma
   set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9680_dma
   set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9680_dma
@@ -109,8 +115,13 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9680_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9680_dma
   set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9680_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}] $axi_ad9680_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9680_dma
+  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9680_dma
+  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9680_dma
+
+if {$sys_zynq == 1} {
+
+  p_plddr3_fifo [current_bd_instance .] axi_ad9680_fifo 128
+}
 
 if {$sys_zynq == 1} {
 
@@ -122,6 +133,10 @@ if {$sys_zynq == 1} {
 
   set axi_daq3_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_daq3_gt]
   set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {4}] $axi_daq3_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_0 {0}] $axi_daq3_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_1 {3}] $axi_daq3_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_2 {1}] $axi_daq3_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_3 {2}] $axi_daq3_gt
 
 if {$sys_zynq == 1} {
 
@@ -177,6 +192,31 @@ if {$sys_zynq == 1} {
   set_property LEFT 42 [get_bd_ports GPIO_I]
   set_property LEFT 42 [get_bd_ports GPIO_O]
   set_property LEFT 42 [get_bd_ports GPIO_T]
+}
+
+  # connections (pl ddr3)
+
+if {$sys_zynq == 1} {
+
+  connect_bd_intf_net -intf_net DDR3    [get_bd_intf_ports DDR3]    [get_bd_intf_pins axi_ad9680_fifo/DDR3]
+  connect_bd_intf_net -intf_net sys_clk [get_bd_intf_ports sys_clk] [get_bd_intf_pins axi_ad9680_fifo/sys_clk]
+}
+
+  # fmc dma clocks
+
+if {$sys_zynq == 1} {
+
+  set sys_fmc_dma_sync_reset [create_bd_cell -type ip -vlnv analog.com:user:util_sync_reset:1.0 sys_fmc_dma_sync_reset]
+  set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
+  set sys_fmc_dma_resetn_source [get_bd_pins sys_fmc_dma_sync_reset/sync_resetn]
+
+  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_fmc_dma_sync_reset/clk]
+  connect_bd_net -net sys_fmc_dma_async_reset \
+	[get_bd_pins sys_fmc_dma_sync_reset/async_resetn] \
+	[get_bd_pins sys_ps7/FCLK_RESET2_N]
+
+  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
+  connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
 }
 
   # connections (spi and gpio)
@@ -280,18 +320,29 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_daq3_gt_rx_ip_sof         [get_bd_pins axi_daq3_gt/rx_ip_sof]         [get_bd_pins axi_ad9680_jesd/rx_start_of_frame]
   connect_bd_net -net axi_daq3_gt_rx_ip_data        [get_bd_pins axi_daq3_gt/rx_ip_data]        [get_bd_pins axi_ad9680_jesd/rx_tdata]
   connect_bd_net -net axi_daq3_gt_rx_data           [get_bd_pins axi_daq3_gt/rx_data]           [get_bd_pins axi_ad9680_core/rx_data]
-  connect_bd_net -net axi_ad9680_adc_clk            [get_bd_pins axi_ad9680_core/adc_clk]       [get_bd_pins axi_ad9680_dma/fifo_wr_clk]
+
+if {$sys_zynq == 1} {
+
+  connect_bd_net -net axi_daq3_gt_rx_rst            [get_bd_pins axi_ad9680_fifo/adc_rst]       [get_bd_pins axi_daq3_gt/rx_rst]
+  connect_bd_net -net sys_fmc_dma_resetn            [get_bd_pins axi_ad9680_fifo/dma_rstn]      $sys_fmc_dma_resetn_source
+
+  connect_bd_net -net axi_ad9680_adc_clk            [get_bd_pins axi_ad9680_core/adc_clk]       [get_bd_pins axi_ad9680_fifo/adc_clk]
+  connect_bd_net -net axi_ad9680_adc_dovf           [get_bd_pins axi_ad9680_core/adc_dovf]      [get_bd_pins axi_ad9680_fifo/adc_wovf]
   connect_bd_net -net axi_ad9680_adc_enable_0       [get_bd_pins axi_ad9680_core/adc_enable_0]  [get_bd_ports adc_enable_0]
   connect_bd_net -net axi_ad9680_adc_valid_0        [get_bd_pins axi_ad9680_core/adc_valid_0]   [get_bd_ports adc_valid_0]
   connect_bd_net -net axi_ad9680_adc_data_0         [get_bd_pins axi_ad9680_core/adc_data_0]    [get_bd_ports adc_data_0]
   connect_bd_net -net axi_ad9680_adc_enable_1       [get_bd_pins axi_ad9680_core/adc_enable_1]  [get_bd_ports adc_enable_1]
   connect_bd_net -net axi_ad9680_adc_valid_1        [get_bd_pins axi_ad9680_core/adc_valid_1]   [get_bd_ports adc_valid_1]
   connect_bd_net -net axi_ad9680_adc_data_1         [get_bd_pins axi_ad9680_core/adc_data_1]    [get_bd_ports adc_data_1]
-  connect_bd_net -net axi_ad9680_adc_dwr            [get_bd_ports adc_dwr]                      [get_bd_pins axi_ad9680_dma/fifo_wr_en]
-  connect_bd_net -net axi_ad9680_adc_dsync          [get_bd_ports adc_dsync]                    [get_bd_pins axi_ad9680_dma/fifo_wr_sync]
-  connect_bd_net -net axi_ad9680_adc_ddata          [get_bd_ports adc_ddata]                    [get_bd_pins axi_ad9680_dma/fifo_wr_din]
-  connect_bd_net -net axi_ad9680_adc_dovf           [get_bd_pins axi_ad9680_core/adc_dovf]      [get_bd_pins axi_ad9680_dma/fifo_wr_overflow]
+  connect_bd_net -net axi_ad9680_adc_dwr            [get_bd_ports adc_dwr]                      [get_bd_pins axi_ad9680_fifo/adc_wr]
+  connect_bd_net -net axi_ad9680_adc_ddata          [get_bd_ports adc_ddata]                    [get_bd_pins axi_ad9680_fifo/adc_wdata]
+
+  connect_bd_net -net sys_fmc_dma_clk               [get_bd_pins axi_ad9680_fifo/dma_clk]       [get_bd_pins axi_ad9680_dma/s_axis_aclk]
+  connect_bd_net -net axi_ad9680_dma_dvalid         [get_bd_pins axi_ad9680_fifo/dma_wvalid]    [get_bd_pins axi_ad9680_dma/s_axis_valid]       
+  connect_bd_net -net axi_ad9680_dma_dready         [get_bd_pins axi_ad9680_fifo/dma_wready]    [get_bd_pins axi_ad9680_dma/s_axis_ready]       
+  connect_bd_net -net axi_ad9680_dma_ddata          [get_bd_pins axi_ad9680_fifo/dma_wdata]     [get_bd_pins axi_ad9680_dma/s_axis_data]      
   connect_bd_net -net axi_ad9680_dma_irq            [get_bd_pins axi_ad9680_dma/irq]            [get_bd_pins sys_concat_intc/In2] 
+}
 
   # dac/adc clocks
 
@@ -383,21 +434,6 @@ if {$sys_zynq == 0} {
 
   # memory interconnects share the same clock (fclk2)
 
-if {$sys_zynq == 1} {
-  set sys_fmc_dma_sync_reset [create_bd_cell -type ip -vlnv analog.com:user:util_sync_reset:1.0 sys_fmc_dma_sync_reset]
-
-  set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
-  set sys_fmc_dma_resetn_source [get_bd_pins sys_fmc_dma_sync_reset/sync_resetn]
-
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_fmc_dma_sync_reset/clk]
-  connect_bd_net -net sys_fmc_dma_async_reset \
-	[get_bd_pins sys_fmc_dma_sync_reset/async_resetn] \
-	[get_bd_pins sys_ps7/FCLK_RESET2_N]
-
-  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
-}
-
   # interconnect (mem/dac)
 
 if {$sys_zynq == 0} {
@@ -445,11 +481,10 @@ if {$sys_zynq == 0} {
 
   set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_jesd_rx_mon
+  set_property -dict [list CONFIG.C_NUM_OF_PROBES {3}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE2_WIDTH {128}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE3_WIDTH {128}] $ila_jesd_rx_mon
 
   connect_bd_net -net axi_daq3_gt_rx_mon_data       [get_bd_pins axi_daq3_gt/rx_mon_data]
   connect_bd_net -net axi_daq3_gt_rx_mon_trigger    [get_bd_pins axi_daq3_gt/rx_mon_trigger]
@@ -457,7 +492,6 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_daq3_gt_rx_mon_data       [get_bd_pins ila_jesd_rx_mon/PROBE0]
   connect_bd_net -net axi_daq3_gt_rx_mon_trigger    [get_bd_pins ila_jesd_rx_mon/PROBE1]
   connect_bd_net -net axi_daq3_gt_rx_data           [get_bd_pins ila_jesd_rx_mon/PROBE2]
-  connect_bd_net -net axi_ad9680_adc_ddata          [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
   set ila_jesd_tx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_tx_mon]
   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_tx_mon
@@ -498,5 +532,7 @@ if {$sys_zynq == 0} {
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9152_dma/m_src_axi]   [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM]    SEG_sys_ps7_hp1_ddr_lowocm
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9680_dma/m_dest_axi]  [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM]    SEG_sys_ps7_hp2_ddr_lowocm
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_daq3_gt/m_axi]          [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM]    SEG_sys_ps7_hp3_ddr_lowocm
+
+  create_bd_addr_seg -range 0x40000000    -offset 0x80000000 [get_bd_addr_spaces axi_ad9680_fifo/axi_fifo2s/axi] [get_bd_addr_segs axi_ad9680_fifo/axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl_memaddr
 }
 
