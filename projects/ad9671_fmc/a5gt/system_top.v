@@ -195,6 +195,7 @@ module system_top (
   reg               rx_sysref_m2 = 'd0;
   reg               rx_sysref_m3 = 'd0;
   reg               rx_sysref = 'd0;
+  reg               rx_sof_0 = 'd0;
 
   // internal clocks and resets
 
@@ -204,7 +205,6 @@ module system_top (
   wire              eth_tx_clk;
   wire              rx_clk;
   wire              adc_clk;
-  wire              adc1_clk;
 
   // internal registers
 
@@ -241,6 +241,7 @@ module system_top (
   wire    [  1:0]   rx_cal_busy_s;
   wire              rx_pll_locked_s;
   wire    [ 15:0]   rx_xcvr_status_s;
+  wire    [  1:0]   rx_data_sof;
 
   // ethernet transmit clock
 
@@ -295,7 +296,7 @@ module system_top (
     .sld_trigger_level_pipeline (1))
   i_signaltap (
     .acq_clk (rx_clk),
-    .acq_data_in ({rx_sysref, rx_sync, adc_data_s}),
+    .acq_data_in ({rx_sysref, rx_sync, rx_ip_data_s}),
     .acq_trigger_in ({rx_sysref, rx_sync}));
 
   genvar n;
@@ -305,9 +306,15 @@ module system_top (
     .rx_clk (rx_clk),
     .rx_sof (rx_ip_sof_s),
     .rx_ip_data (rx_ip_data_s[n*32+31:n*32]),
+    .rx_data_sof(rx_data_sof[n]),
     .rx_data (rx_data_s[n*32+31:n*32]));
   end
   endgenerate
+
+  always @(rx_clk)
+  begin
+    rx_sof_0 <= |rx_data_sof ;
+  end
 
   assign rx_xcvr_status_s[15:11] = 5'd0;
   assign rx_xcvr_status_s[10:10] = rx_sync;
@@ -416,6 +423,7 @@ module system_top (
     .sys_jesd204b_s1_pll_locked_export (rx_pll_locked_s),
     .axi_ad9671_1_xcvr_clk_clk (rx_clk),
     .axi_ad9671_1_xcvr_data_data (rx_data_s),
+    .axi_ad9671_1_xcvr_data_data_sof (rx_sof_0),
     .axi_ad9671_1_adc_clock_clk (adc_clk),
     .axi_ad9671_1_adc_dma_if_valid (adc_valid_s),
     .axi_ad9671_1_adc_dma_if_enable (adc_enable_s),

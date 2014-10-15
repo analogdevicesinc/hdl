@@ -78,19 +78,19 @@
          type = "String";
       }
    }
-   element sys_ethernet_dma_rx.csr
-   {
-      datum baseAddress
-      {
-         value = "86025280";
-         type = "String";
-      }
-   }
    element sys_ethernet_dma_tx.csr
    {
       datum baseAddress
       {
          value = "86025216";
+         type = "String";
+      }
+   }
+   element sys_ethernet_dma_rx.csr
+   {
+      datum baseAddress
+      {
+         value = "86025280";
          type = "String";
       }
    }
@@ -144,11 +144,16 @@
          type = "String";
       }
    }
-   element sys_ethernet_desc_mem.s1
+   element sys_int_mem.s1
    {
-      datum baseAddress
+      datum _lockedAddress
       {
          value = "0";
+         type = "boolean";
+      }
+      datum baseAddress
+      {
+         value = "83886080";
          type = "String";
       }
    }
@@ -168,6 +173,14 @@
          type = "String";
       }
    }
+   element sys_ethernet_desc_mem.s1
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element sys_gpio.s1
    {
       datum baseAddress
@@ -176,16 +189,11 @@
          type = "String";
       }
    }
-   element sys_int_mem.s1
+   element sys_tcm_mem.s2
    {
-      datum _lockedAddress
-      {
-         value = "0";
-         type = "boolean";
-      }
       datum baseAddress
       {
-         value = "83886080";
+         value = "86016000";
          type = "String";
       }
    }
@@ -199,14 +207,6 @@
       datum baseAddress
       {
          value = "83886080";
-         type = "String";
-      }
-   }
-   element sys_tcm_mem.s2
-   {
-      datum baseAddress
-      {
-         value = "86016000";
          type = "String";
       }
    }
@@ -693,11 +693,7 @@
    internal="axi_ad9671.adc_dma_if"
    type="conduit"
    dir="end" />
- <interface
-   name="axi_ad9671_1_adc_mon_if"
-   internal="axi_ad9671.adc_mon_if"
-   type="conduit"
-   dir="end" />
+ <interface name="axi_ad9671_1_adc_mon_if" internal="axi_ad9671.adc_mon_if" />
  <module kind="clock_source" version="14.0" enabled="1" name="sys_clk">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -1617,7 +1613,7 @@
   <parameter name="bitrev_en" value="false" />
   <parameter name="L" value="2" />
   <parameter name="M" value="8" />
-  <parameter name="N" value="16" />
+  <parameter name="N" value="14" />
   <parameter name="N_PRIME" value="16" />
   <parameter name="S" value="1" />
   <parameter name="K" value="4" />
