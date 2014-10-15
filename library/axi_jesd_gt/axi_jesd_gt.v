@@ -161,6 +161,15 @@ module axi_jesd_gt (
   parameter   PCORE_TX_CLK25_DIV  = 20;
   parameter   PCORE_PMA_RSV  = 32'h001E7080;
   parameter   PCORE_RX_CDR_CFG  = 72'h0b000023ff10400020;
+  parameter   PCORE_TX_LANE_SEL_0 = 0;
+  parameter   PCORE_TX_LANE_SEL_1 = 1;
+  parameter   PCORE_TX_LANE_SEL_2 = 2;
+  parameter   PCORE_TX_LANE_SEL_3 = 3;
+  parameter   PCORE_TX_LANE_SEL_4 = 4;
+  parameter   PCORE_TX_LANE_SEL_5 = 5;
+  parameter   PCORE_TX_LANE_SEL_6 = 6;
+  parameter   PCORE_TX_LANE_SEL_7 = 7;
+  parameter   PCORE_TX_LANE_SEL_8 = 8;
   parameter   C_S_AXI_MIN_SIZE = 32'hffff;
 
   // physical interface
@@ -302,6 +311,9 @@ module axi_jesd_gt (
   wire    [ 15:0]                           drp_rdata_gt_s[15:0];
   wire                                      drp_ready_gt_s[15:0];
   wire    [  7:0]                           drp_rx_rate_gt_s[15:0];
+  wire    [287:0]                           tx_gt_data_extn_zero_s;
+  wire    [287:0]                           tx_gt_data_extn_s;
+  wire    [287:0]                           tx_gt_data_mux_s;
   wire                                      qpll_locked_0_s;
   wire                                      qpll_locked_1_s;
   wire    [  7:0]                           qpll_locked_s;
@@ -413,7 +425,22 @@ module axi_jesd_gt (
                           drp_rx_rate_gt_s[ 3] | drp_rx_rate_gt_s[ 2] |
                           drp_rx_rate_gt_s[ 1] | drp_rx_rate_gt_s[ 0];
 
+  // transmit data interleave -- since transceivers are shared, lane assignments may not match pin assignments
+
   assign tx_ip_data = tx_data;
+
+  assign tx_gt_data_extn_zero_s = 288'd0;
+  assign tx_gt_data_extn_s = {tx_gt_data_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*32)-1):0], tx_gt_data};
+
+  assign tx_gt_data_mux_s[((8*32)+31):(8*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_8*32)+31):(PCORE_TX_LANE_SEL_8*32)];
+  assign tx_gt_data_mux_s[((7*32)+31):(7*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_7*32)+31):(PCORE_TX_LANE_SEL_7*32)];
+  assign tx_gt_data_mux_s[((6*32)+31):(6*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_6*32)+31):(PCORE_TX_LANE_SEL_6*32)];
+  assign tx_gt_data_mux_s[((5*32)+31):(5*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_5*32)+31):(PCORE_TX_LANE_SEL_5*32)];
+  assign tx_gt_data_mux_s[((4*32)+31):(4*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_4*32)+31):(PCORE_TX_LANE_SEL_4*32)];
+  assign tx_gt_data_mux_s[((3*32)+31):(3*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_3*32)+31):(PCORE_TX_LANE_SEL_3*32)];
+  assign tx_gt_data_mux_s[((2*32)+31):(2*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_2*32)+31):(PCORE_TX_LANE_SEL_2*32)];
+  assign tx_gt_data_mux_s[((1*32)+31):(1*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_1*32)+31):(PCORE_TX_LANE_SEL_1*32)];
+  assign tx_gt_data_mux_s[((0*32)+31):(0*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_0*32)+31):(PCORE_TX_LANE_SEL_0*32)];
 
   // clock buffers
 
@@ -547,7 +574,7 @@ module axi_jesd_gt (
     .tx_pll_locked (tx_pll_locked_s[n]),
     .tx_clk (tx_clk),
     .tx_charisk (tx_gt_charisk[n*4+3:n*4]),
-    .tx_data (tx_gt_data[n*32+31:n*32]),
+    .tx_data (tx_gt_data_mux_s[n*32+31:n*32]),
     .drp_clk (drp_clk),
     .drp_sel (drp_sel_s),
     .drp_addr (drp_addr_s),
