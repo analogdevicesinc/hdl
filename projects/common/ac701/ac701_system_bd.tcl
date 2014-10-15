@@ -352,7 +352,7 @@ connect_bd_net -net sys_concat_intc_din_4 [get_bd_pins sys_concat_intc/In4] [get
 
 # defaults (external interface)
 
-connect_bd_net -net sys_const_vcc_vcc [get_bd_pins sys_const_vcc/const] [get_bd_ports fan_pwm]
+connect_bd_net -net sys_const_vcc_vcc [get_bd_pins sys_const_vcc/dout] [get_bd_ports fan_pwm]
 connect_bd_net -net sys_rst_s [get_bd_ports sys_rst]
 connect_bd_net -net sys_rst_s [get_bd_pins sys_rstgen/ext_reset_in]
 connect_bd_net -net sys_rst_s [get_bd_pins axi_ddr_cntrl/sys_rst]

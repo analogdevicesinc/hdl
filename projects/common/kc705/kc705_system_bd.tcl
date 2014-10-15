@@ -331,7 +331,7 @@ connect_bd_net -net sys_concat_intc_din_4 [get_bd_pins sys_concat_intc/In4] [get
 
 # defaults (external interface)
 
-connect_bd_net -net sys_const_vcc_vcc [get_bd_pins sys_const_vcc/const] [get_bd_ports fan_pwm]
+connect_bd_net -net sys_const_vcc_vcc [get_bd_pins sys_const_vcc/dout] [get_bd_ports fan_pwm]
 connect_bd_net -net sys_rst_s [get_bd_ports sys_rst]
 connect_bd_net -net sys_rst_s [get_bd_pins sys_rstgen/ext_reset_in]
 connect_bd_net -net sys_rst_s [get_bd_pins axi_ddr_cntrl/sys_rst]
@@ -339,8 +339,8 @@ connect_bd_net -net sys_rst_s [get_bd_pins axi_ddr_cntrl/sys_rst]
 connect_bd_net -net sys_clk_p_s [get_bd_ports sys_clk_p] [get_bd_pins axi_ddr_cntrl/sys_clk_p]
 connect_bd_net -net sys_clk_n_s [get_bd_ports sys_clk_n] [get_bd_pins axi_ddr_cntrl/sys_clk_n]
 
-connect_bd_net -net sys_const_ddr3_0_const [get_bd_ports ddr3_1_n] [get_bd_pins sys_const_ddr3_0/const]
-connect_bd_net -net sys_const_ddr3_1_const [get_bd_ports ddr3_1_p] [get_bd_pins sys_const_ddr3_1/const]
+connect_bd_net -net sys_const_ddr3_0_const [get_bd_ports ddr3_1_n] [get_bd_pins sys_const_ddr3_0/dout]
+connect_bd_net -net sys_const_ddr3_1_const [get_bd_ports ddr3_1_p] [get_bd_pins sys_const_ddr3_1/dout]
 connect_bd_intf_net -intf_net axi_ddr_cntrl_ddr3 [get_bd_intf_ports ddr3] [get_bd_intf_pins axi_ddr_cntrl/DDR3]
 connect_bd_intf_net -intf_net axi_ethernet_mdio [get_bd_intf_ports mdio] [get_bd_intf_pins axi_ethernet/mdio]
 connect_bd_intf_net -intf_net axi_ethernet_mii [get_bd_intf_ports mii] [get_bd_intf_pins axi_ethernet/mii]
