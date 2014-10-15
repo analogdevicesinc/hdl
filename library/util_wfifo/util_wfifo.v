@@ -50,6 +50,7 @@ module util_wfifo (
   s_clk,
   s_wr,
   s_wdata,
+  s_wready,
   s_wovf,
 
   fifo_rst,
@@ -65,6 +66,7 @@ module util_wfifo (
 
   parameter M_DATA_WIDTH = 32;
   parameter S_DATA_WIDTH = 64;
+  parameter S_READY_ENABLE = 0;
  
   // common clock
 
@@ -79,6 +81,7 @@ module util_wfifo (
   input                           s_clk;
   output                          s_wr;
   output  [S_DATA_WIDTH-1:0]      s_wdata;
+  input                           s_wready;
   input                           s_wovf;
 
   // fifo interface
@@ -97,11 +100,13 @@ module util_wfifo (
   reg                             m_wovf_m1 = 'd0;
   reg                             m_wovf_m2 = 'd0;
   reg                             m_wovf = 'd0;
-  reg                             s_wr = 'd0;
+  reg                             s_wr_int = 'd0;
 
   // internal signals
 
   wire                            m_wovf_s;
+  wire    [S_DATA_WIDTH-1:0]      s_wdata_s;
+  wire                            s_wready_s;
 
   // defaults
 
@@ -130,15 +135,28 @@ module util_wfifo (
   assign fifo_rd = ~fifo_rempty;
 
   always @(posedge s_clk) begin
-    s_wr <= fifo_rd;
+    s_wr_int <= fifo_rd;
   end
   
   genvar s;
   generate
   for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_rdata
-  assign s_wdata[s] = fifo_rdata[(S_DATA_WIDTH-1)-s];
+  assign s_wdata_s[s] = fifo_rdata[(S_DATA_WIDTH-1)-s];
   end
   endgenerate
+
+  assign s_wready_s = (S_READY_ENABLE == 0) ? 1'b1 : s_wready;
+
+  ad_axis_inf_rx #(.DATA_WIDTH(S_DATA_WIDTH)) i_axis_inf (
+    .clk (s_clk),
+    .rst (fifo_rst),
+    .valid (s_wr_int),
+    .last (1'd0),
+    .data (s_wdata_s),
+    .inf_valid (s_wr),
+    .inf_last (),
+    .inf_data (s_wdata),
+    .inf_ready (s_wready_s));
 
 endmodule
 
