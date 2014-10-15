@@ -9,9 +9,12 @@ adi_ip_files axi_fifo2s [list \
   "$ad_hdl_dir/library/common/ad_axis_inf_rx.v" \
   "axi_fifo2s_wr.v" \
   "axi_fifo2s_rd.v" \
-  "axi_fifo2s.v" ]
+  "axi_fifo2s.v" \
+  "axi_fifo2s_constr.xdc" ]
 
 adi_ip_properties_lite axi_fifo2s
+adi_ip_constraints axi_fifo2s [list \
+  "axi_fifo2s_constr.xdc" ]
 
 ipx::infer_bus_interfaces {{xilinx.com:interface:aximm:1.0}} [ipx::current_core]
 ipx::remove_bus_interface {m} [ipx::current_core]
