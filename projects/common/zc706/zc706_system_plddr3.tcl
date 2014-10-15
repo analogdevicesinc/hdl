@@ -27,18 +27,26 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   create_bd_pin -dir I -from [expr ($m_width-1)] -to 0 adc_wdata
 
   create_bd_pin -dir I dma_rstn
-  create_bd_pin -dir O -type clk dma_clk
-  create_bd_pin -dir O dma_wr
+  create_bd_pin -dir I -type clk dma_clk
+  create_bd_pin -dir O dma_wvalid
+  create_bd_pin -dir I dma_wready
   create_bd_pin -dir I dma_wovf
   create_bd_pin -dir O -from 63 -to 0 dma_wdata
+
+  set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.1 axi_ddr_cntrl]
+  set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
+  file copy -force $ad_hdl_dir/projects/common/zc706/zc706_system_mig.prj "$axi_ddr_cntrl_dir/"
+  set_property -dict [list CONFIG.XML_INPUT_FILE {zc706_system_mig.prj}] $axi_ddr_cntrl
 
   set wfifo_ctl [create_bd_cell -type ip -vlnv analog.com:user:util_wfifo:1.0 wfifo_ctl]
   set_property -dict [list CONFIG.M_DATA_WIDTH $m_width] $wfifo_ctl
   set_property -dict [list CONFIG.S_DATA_WIDTH {512}] $wfifo_ctl
+  set_property -dict [list CONFIG.S_READY_ENABLE {0}] $wfifo_ctl
 
   set rfifo_ctl [create_bd_cell -type ip -vlnv analog.com:user:util_wfifo:1.0 rfifo_ctl]
   set_property -dict [list CONFIG.M_DATA_WIDTH {512}] $rfifo_ctl
   set_property -dict [list CONFIG.S_DATA_WIDTH {64}] $rfifo_ctl
+  set_property -dict [list CONFIG.S_READY_ENABLE {1}] $rfifo_ctl
 
   set wfifo_mem [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:12.0 wfifo_mem]
   set_property -dict [list CONFIG.INTERFACE_TYPE {Native}] $wfifo_mem
@@ -66,11 +74,6 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   set_property -dict [list CONFIG.AXI_SIZE {6}] $axi_fifo2s
   set_property -dict [list CONFIG.DATA_WIDTH {512}] $axi_fifo2s
 
-  set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.1 axi_ddr_cntrl]
-  set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
-  file copy -force $ad_hdl_dir/projects/common/zc706/zc706_system_mig.prj "$axi_ddr_cntrl_dir/"
-  set_property -dict [list CONFIG.XML_INPUT_FILE {zc706_system_mig.prj}] $axi_ddr_cntrl
-
   connect_bd_intf_net -intf_net sys_clk [get_bd_intf_pins sys_clk] [get_bd_intf_pins axi_ddr_cntrl/SYS_CLK]
   connect_bd_intf_net -intf_net DDR3 [get_bd_intf_pins DDR3] [get_bd_intf_pins axi_ddr_cntrl/DDR3]
   connect_bd_intf_net -intf_net axi_ddr3 [get_bd_intf_pins axi_ddr_cntrl/S_AXI] [get_bd_intf_pins axi_fifo2s/axi]
@@ -92,10 +95,9 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   connect_bd_net -net dma_rstn                [get_bd_pins axi_ddr_cntrl/aresetn]
   connect_bd_net -net dma_rstn                [get_bd_pins axi_fifo2s/axi_resetn]
   connect_bd_net -net dma_rstn                [get_bd_pins wfifo_ctl/rstn]
-  connect_bd_net -net dma_clk                 [get_bd_pins axi_ddr_cntrl/ui_addn_clk_0]
+  connect_bd_net -net dma_clk                 [get_bd_pins dma_clk]
   connect_bd_net -net dma_clk                 [get_bd_pins rfifo_ctl/s_clk]
   connect_bd_net -net dma_clk                 [get_bd_pins rfifo_mem/rd_clk]
-  connect_bd_net -net dma_clk                 [get_bd_pins dma_clk]
 
   connect_bd_net -net adc_wr                  [get_bd_pins adc_wr]                    [get_bd_pins wfifo_ctl/m_wr]
   connect_bd_net -net adc_wdata               [get_bd_pins adc_wdata]                 [get_bd_pins wfifo_ctl/m_wdata]
@@ -107,7 +109,8 @@ proc p_plddr3_fifo {p_name m_name m_width} {
   connect_bd_net -net wfifo_ctl_fifo_wdata    [get_bd_pins wfifo_ctl/fifo_wdata]      [get_bd_pins wfifo_mem/din]
   connect_bd_net -net wfifo_ctl_fifo_wfull    [get_bd_pins wfifo_ctl/fifo_wfull]      [get_bd_pins wfifo_mem/full]
   connect_bd_net -net wfifo_ctl_fifo_wovf     [get_bd_pins wfifo_ctl/fifo_wovf]       [get_bd_pins wfifo_mem/overflow]
-  connect_bd_net -net dma_wr                  [get_bd_pins dma_wr]                    [get_bd_pins rfifo_ctl/s_wr]
+  connect_bd_net -net dma_wvalid              [get_bd_pins dma_wvalid]                [get_bd_pins rfifo_ctl/s_wr]
+  connect_bd_net -net dma_wready              [get_bd_pins dma_wready]                [get_bd_pins rfifo_ctl/s_wready]
   connect_bd_net -net dma_wdata               [get_bd_pins dma_wdata]                 [get_bd_pins rfifo_ctl/s_wdata]
   connect_bd_net -net dma_wovf                [get_bd_pins dma_wovf]                  [get_bd_pins rfifo_ctl/s_wovf]
   connect_bd_net -net rfifo_ctl_fifo_rd       [get_bd_pins rfifo_ctl/fifo_rd]         [get_bd_pins rfifo_mem/rd_en]
