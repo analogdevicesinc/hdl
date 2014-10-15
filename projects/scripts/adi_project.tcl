@@ -93,6 +93,10 @@ proc adi_project_create {project_name} {
   set_property ip_repo_paths $lib_dirs [current_fileset]
   update_ip_catalog
 
+  set_msg_config -id {BD 41-1306} -new_severity info
+  set_msg_config -id {IP_Flow 19-1687} -new_severity info
+  set_msg_config -id {filemgmt 20-1763} -new_severity info
+
   create_bd_design "system"
   source system_bd.tcl
 
