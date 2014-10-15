@@ -17,14 +17,14 @@ set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_
 
 set_property  -dict {PACKAGE_PIN  AD10} [get_ports tx_ref_clk_p]                                      ; ## D04  FMC_HPC_GBTCLK0_M2C_P     
 set_property  -dict {PACKAGE_PIN  AD9 } [get_ports tx_ref_clk_n]                                      ; ## D05  FMC_HPC_GBTCLK0_M2C_N     
-set_property  -dict {PACKAGE_PIN  AK2 } [get_ports tx_data_p[0]]                                      ; ## A30  FMC_HPC_DP3_C2M_P         
-set_property  -dict {PACKAGE_PIN  AK1 } [get_ports tx_data_n[0]]                                      ; ## A31  FMC_HPC_DP3_C2M_N         
-set_property  -dict {PACKAGE_PIN  AJ4 } [get_ports tx_data_p[1]]                                      ; ## A26  FMC_HPC_DP2_C2M_P         
-set_property  -dict {PACKAGE_PIN  AJ3 } [get_ports tx_data_n[1]]                                      ; ## A27  FMC_HPC_DP2_C2M_N         
-set_property  -dict {PACKAGE_PIN  AK6 } [get_ports tx_data_p[2]]                                      ; ## A22  FMC_HPC_DP1_C2M_P         
-set_property  -dict {PACKAGE_PIN  AK5 } [get_ports tx_data_n[2]]                                      ; ## A23  FMC_HPC_DP1_C2M_N         
-set_property  -dict {PACKAGE_PIN  AK10} [get_ports tx_data_p[3]]                                      ; ## C02  FMC_HPC_DP0_C2M_P         
-set_property  -dict {PACKAGE_PIN  AK9 } [get_ports tx_data_n[3]]                                      ; ## C03  FMC_HPC_DP0_C2M_N         
+set_property  -dict {PACKAGE_PIN  AK2 } [get_ports tx_data_p[0]]                                      ; ## A30  FMC_HPC_DP3_C2M_P  (tx_data_p[0])
+set_property  -dict {PACKAGE_PIN  AK1 } [get_ports tx_data_n[0]]                                      ; ## A31  FMC_HPC_DP3_C2M_N  (tx_data_n[0])
+set_property  -dict {PACKAGE_PIN  AK10} [get_ports tx_data_p[1]]                                      ; ## C02  FMC_HPC_DP0_C2M_P  (tx_data_p[3])
+set_property  -dict {PACKAGE_PIN  AK9 } [get_ports tx_data_n[1]]                                      ; ## C03  FMC_HPC_DP0_C2M_N  (tx_data_n[3])
+set_property  -dict {PACKAGE_PIN  AJ4 } [get_ports tx_data_p[2]]                                      ; ## A26  FMC_HPC_DP2_C2M_P  (tx_data_p[1])
+set_property  -dict {PACKAGE_PIN  AJ3 } [get_ports tx_data_n[2]]                                      ; ## A27  FMC_HPC_DP2_C2M_N  (tx_data_n[1])
+set_property  -dict {PACKAGE_PIN  AK6 } [get_ports tx_data_p[3]]                                      ; ## A22  FMC_HPC_DP1_C2M_P  (tx_data_p[2])
+set_property  -dict {PACKAGE_PIN  AK5 } [get_ports tx_data_n[3]]                                      ; ## A23  FMC_HPC_DP1_C2M_N  (tx_data_n[2])
 set_property  -dict {PACKAGE_PIN  AK17  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync_p]      ; ## H07  FMC_HPC_LA02_P            
 set_property  -dict {PACKAGE_PIN  AK18  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync_n]      ; ## H08  FMC_HPC_LA02_N            
 set_property  -dict {PACKAGE_PIN  AJ20  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sysref_p]    ; ## H10  FMC_HPC_LA04_P            
@@ -56,7 +56,4 @@ create_clock -name tx_ref_clk   -period  2.00 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  2.00 [get_ports rx_ref_clk_p]
 create_clock -name tx_div_clk   -period  4.00 [get_nets i_system_wrapper/system_i/axi_daq3_gt_tx_clk]
 create_clock -name rx_div_clk   -period  4.00 [get_nets i_system_wrapper/system_i/axi_daq3_gt_rx_clk]
-
-set_clock_groups -asynchronous -group {tx_div_clk}
-set_clock_groups -asynchronous -group {rx_div_clk}
 

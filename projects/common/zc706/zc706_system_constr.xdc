@@ -60,20 +60,3 @@ set_property  -dict {PACKAGE_PIN  J15   IOSTANDARD LVCMOS15} [get_ports gpio_bd[
 set_property  -dict {PACKAGE_PIN  J16   IOSTANDARD LVCMOS15} [get_ports gpio_bd[13]]          ; ## XADC_GPIO_2
 set_property  -dict {PACKAGE_PIN  J14   IOSTANDARD LVCMOS15} [get_ports gpio_bd[14]]          ; ## XADC_GPIO_3
 
-# clocks
-
-create_clock -name cpu_clk      -period 10.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK0]
-create_clock -name m200_clk     -period  5.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK1]
-create_clock -name hdmi_clk     -period  6.73 [get_pins i_system_wrapper/system_i/axi_hdmi_clkgen/clk_0]
-create_clock -name spdif_clk    -period 50.00 [get_pins i_system_wrapper/system_i/sys_audio_clkgen/clk_out1]
-
-create_clock -name clk_fpga_0  -period 10.00 [get_pins i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[0]]
-create_clock -name clk_fpga_1  -period 5.00  [get_pins i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[1]]
-
-set_clock_groups -asynchronous -group {cpu_clk}
-set_clock_groups -asynchronous -group {m200_clk}
-set_clock_groups -asynchronous -group {hdmi_clk}
-set_clock_groups -asynchronous -group {spdif_clk}
-set_clock_groups -asynchronous -group {clk_fpga_0}
-set_clock_groups -asynchronous -group {clk_fpga_1}
-
