@@ -123,13 +123,15 @@ module util_adc_pack (
   output                              dvalid;
   output                              dsync;
 
+  reg  [(DATA_WIDTH*CHANNELS-1):0]    packed_data = 0;
+  reg  [(DATA_WIDTH*CHANNELS-1):0]    temp_data_0 = 0;
+  reg  [(DATA_WIDTH*CHANNELS-1):0]    temp_data_1 = 0;
+
   reg  [3:0]      enable_cnt;
   reg  [2:0]      enable_cnt_0;
   reg  [2:0]      enable_cnt_1;
 
-  reg  [255:0]    packed_data = 0;
-  reg  [127:0]    temp_data_0 = 0;
-  reg  [127:0]    temp_data_1 = 0;
+
   reg  [7:0]      path_enabled = 0;
   reg  [7:0]      path_enabled_d1 = 0;
   reg  [6:0]      counter_0 = 0;
@@ -137,7 +139,6 @@ module util_adc_pack (
   reg  [7:0]      en2 = 0;
   reg  [7:0]      en4 = 0;
   reg             dvalid = 0;
-  reg             chan_valid = 0;
 
   reg  [(DATA_WIDTH*CHANNELS-1):0]  ddata = 0;
   reg  [(DATA_WIDTH-1):0]           chan_data_0_r;
@@ -149,7 +150,10 @@ module util_adc_pack (
   reg  [(DATA_WIDTH-1):0]           chan_data_6_r;
   reg  [(DATA_WIDTH-1):0]           chan_data_7_r;
 
+  wire            chan_valid;
+
   assign dsync        = dvalid;
+  assign chan_valid   = chan_valid_0 | chan_valid_1 | chan_valid_2 | chan_valid_3 | chan_valid_4 | chan_valid_5 | chan_valid_6 | chan_valid_7 ;
 
   always @(posedge clk)
   begin
@@ -167,97 +171,85 @@ module util_adc_pack (
 
   always @(posedge clk)
   begin
-    chan_valid    <= chan_valid_0 | chan_valid_1 | chan_valid_2 | chan_valid_3 | chan_valid_4 | chan_valid_5 | chan_valid_6 | chan_valid_7 ;
-    chan_data_0_r <= chan_data_0;
-    chan_data_1_r <= chan_data_1;
-    chan_data_2_r <= chan_data_2;
-    chan_data_3_r <= chan_data_3;
-    chan_data_4_r <= chan_data_4;
-    chan_data_5_r <= chan_data_5;
-    chan_data_6_r <= chan_data_6;
-    chan_data_7_r <= chan_data_7;
-  end
-
-  always @(chan_data_0_r, chan_data_1_r, chan_data_2_r, chan_data_3_r, chan_enable_0, chan_enable_1, chan_enable_2, chan_enable_3, chan_valid)
-  begin
     if(chan_valid == 1'b1)
     begin
-      casex ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
-        4'bxxx1: temp_data_0[(DATA_WIDTH-1):0] = chan_data_0_r;
-        4'bxx10: temp_data_0[(DATA_WIDTH-1):0] = chan_data_1_r;
-        4'bx100: temp_data_0[(DATA_WIDTH-1):0] = chan_data_2_r;
-        4'b1000: temp_data_0[(DATA_WIDTH-1):0] = chan_data_3_r;
-        default: temp_data_0 [(DATA_WIDTH-1):0] = 0;
-      endcase
-
-       casex ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
-        4'bxx11: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_1_r;
-        4'bx110: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_2_r;
-        4'bx101: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_2_r;
-        4'b1001: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_3_r;
-        4'b1010: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_3_r;
-        4'b1100: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_3_r;
-        default: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = 0;
-      endcase
-
-      casex ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
-        4'bx111: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_2_r;
-        4'b1011: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_3_r;
-        4'b1101: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_3_r;
-        4'b1110: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_3_r;
-        default: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = 0;
-      endcase
-
-      case ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
-        4'b1111: temp_data_0[4*DATA_WIDTH-1:3*DATA_WIDTH] = chan_data_3_r;
-        default: temp_data_0[4*DATA_WIDTH-1:3*DATA_WIDTH] = 0;
-      endcase
-    end
-    else
-    begin
-      temp_data_0 = 0;
+      chan_data_0_r <= chan_data_0;
+      chan_data_1_r <= chan_data_1;
+      chan_data_2_r <= chan_data_2;
+      chan_data_3_r <= chan_data_3;
+      chan_data_4_r <= chan_data_4;
+      chan_data_5_r <= chan_data_5;
+      chan_data_6_r <= chan_data_6;
+      chan_data_7_r <= chan_data_7;
     end
   end
 
-  always @(chan_data_4_r, chan_data_5_r, chan_data_6_r, chan_data_7_r, chan_enable_4, chan_enable_5, chan_enable_6, chan_enable_7, chan_valid)
+  always @(chan_data_0_r, chan_data_1_r, chan_data_2_r, chan_data_3_r, chan_enable_0, chan_enable_1, chan_enable_2, chan_enable_3 )
   begin
-    if(chan_valid == 1'b1)
-    begin
-      casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
-        4'bxxx1: temp_data_1[(DATA_WIDTH-1):0] = chan_data_4_r;
-        4'bxx10: temp_data_1[(DATA_WIDTH-1):0] = chan_data_5_r;
-        4'bx100: temp_data_1[(DATA_WIDTH-1):0] = chan_data_6_r;
-        4'b1000: temp_data_1[(DATA_WIDTH-1):0] = chan_data_7_r;
-        default: temp_data_1[(DATA_WIDTH-1):0] = 0;
-      endcase
+    casex ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
+      4'bxxx1: temp_data_0[(DATA_WIDTH-1):0] = chan_data_0_r;
+      4'bxx10: temp_data_0[(DATA_WIDTH-1):0] = chan_data_1_r;
+      4'bx100: temp_data_0[(DATA_WIDTH-1):0] = chan_data_2_r;
+      4'b1000: temp_data_0[(DATA_WIDTH-1):0] = chan_data_3_r;
+      default: temp_data_0 [(DATA_WIDTH-1):0] = 0;
+    endcase
 
-       casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
-        4'bxx11: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_5_r;
-        4'bx110: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_6_r;
-        4'bx101: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_6_r;
-        4'b1001: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_7_r;
-        4'b1010: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_7_r;
-        4'b1100: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_7_r;
-        default: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = 0;
-      endcase
+    casex ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
+      4'bxx11: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_1_r;
+      4'bx110: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_2_r;
+      4'bx101: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_2_r;
+      4'b1001: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_3_r;
+      4'b1010: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_3_r;
+      4'b1100: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_3_r;
+      default: temp_data_0[2*DATA_WIDTH-1:DATA_WIDTH] = 0;
+    endcase
 
-      casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
-        4'bx111: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_6_r;
-        4'b1011: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_7_r;
-        4'b1101: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_7_r;
-        4'b1110: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_7_r;
-        default: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = 0;
-      endcase
+    casex ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
+      4'bx111: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_2_r;
+      4'b1011: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_3_r;
+      4'b1101: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_3_r;
+      4'b1110: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_3_r;
+      default: temp_data_0[3*DATA_WIDTH-1:2*DATA_WIDTH] = 0;
+    endcase
 
-      case ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
-        4'b1111: temp_data_1[4*DATA_WIDTH-1:3*DATA_WIDTH] = chan_data_7_r;
-        default: temp_data_1[4*DATA_WIDTH-1:3*DATA_WIDTH] = 0;
-      endcase
-    end
-    else
-    begin
-      temp_data_1 = 0;
-    end
+    case ({chan_enable_3,chan_enable_2,chan_enable_1,chan_enable_0})
+      4'b1111: temp_data_0[4*DATA_WIDTH-1:3*DATA_WIDTH] = chan_data_3_r;
+      default: temp_data_0[4*DATA_WIDTH-1:3*DATA_WIDTH] = 0;
+    endcase
+  end
+
+  always @(chan_data_4_r, chan_data_5_r, chan_data_6_r, chan_data_7_r, chan_enable_4, chan_enable_5, chan_enable_6, chan_enable_7)
+  begin
+    casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
+      4'bxxx1: temp_data_1[(DATA_WIDTH-1):0] = chan_data_4_r;
+      4'bxx10: temp_data_1[(DATA_WIDTH-1):0] = chan_data_5_r;
+      4'bx100: temp_data_1[(DATA_WIDTH-1):0] = chan_data_6_r;
+      4'b1000: temp_data_1[(DATA_WIDTH-1):0] = chan_data_7_r;
+      default: temp_data_1[(DATA_WIDTH-1):0] = 0;
+    endcase
+
+    casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
+      4'bxx11: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_5_r;
+      4'bx110: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_6_r;
+      4'bx101: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_6_r;
+      4'b1001: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_7_r;
+      4'b1010: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_7_r;
+      4'b1100: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = chan_data_7_r;
+      default: temp_data_1[2*DATA_WIDTH-1:DATA_WIDTH] = 0;
+    endcase
+
+    casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
+      4'bx111: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_6_r;
+      4'b1011: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_7_r;
+      4'b1101: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_7_r;
+      4'b1110: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = chan_data_7_r;
+      default: temp_data_1[3*DATA_WIDTH-1:2*DATA_WIDTH] = 0;
+    endcase
+
+    case ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
+      4'b1111: temp_data_1[4*DATA_WIDTH-1:3*DATA_WIDTH] = chan_data_7_r;
+      default: temp_data_1[4*DATA_WIDTH-1:3*DATA_WIDTH] = 0;
+    endcase
   end
 
   always @(enable_cnt)
