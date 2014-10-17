@@ -38,18 +38,4 @@ set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVCMOS25} [get_ports adc_fd] 
 
 create_clock -name rx_ref_clk   -period  1.60 [get_ports rx_ref_clk_p]
 create_clock -name rx_div_clk   -period  6.40 [get_nets i_system_wrapper/system_i/axi_ad9625_gt_rx_clk]
-create_clock -name fmc_dma_clk  -period  5.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
-create_clock -name pl_ddr_clk   -period  5.00 [get_pins i_system_wrapper/system_i/plddr3_fifo/axi_ddr_cntrl/ui_clk]
-create_clock -name pl_dma_clk   -period 15.62 [get_pins i_system_wrapper/system_i/plddr3_fifo/axi_ddr_cntrl/ui_addn_clk_0]
 
-set_clock_groups -asynchronous -group {rx_div_clk}
-set_clock_groups -asynchronous -group {fmc_dma_clk}
-set_clock_groups -asynchronous -group {pl_ddr_clk}
-set_clock_groups -asynchronous -group {pl_dma_clk}
-
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_gt/inst/i_up_gt/i_drp_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_gt/inst/i_up_gt/i_gt_pll_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_gt/inst/i_up_gt/i_gt_rx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_gt/inst/i_up_gt/i_gt_tx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_gt/inst/i_up_gt/i_rx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_gt/inst/i_up_gt/i_tx_rst_reg/i_rst_reg/PRE]
