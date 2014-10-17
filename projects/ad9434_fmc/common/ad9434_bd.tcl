@@ -52,6 +52,11 @@ set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
+set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {15}] $sys_ps7
+
+set_property LEFT 14 [get_bd_ports GPIO_I]
+set_property LEFT 14 [get_bd_ports GPIO_O]
+set_property LEFT 14 [get_bd_ports GPIO_T]
 
 # spi connections
 

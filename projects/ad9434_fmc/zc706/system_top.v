@@ -139,9 +139,9 @@ module system_top (
 
   // internal signals
 
-  wire    [31:0]  gpio_i;
-  wire    [31:0]  gpio_o;
-  wire    [31:0]  gpio_t;
+  wire    [14:0]  gpio_i;
+  wire    [14:0]  gpio_o;
+  wire    [14:0]  gpio_t;
   wire            spi_miso;
   wire            spi_mosi;
 
