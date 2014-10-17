@@ -58,6 +58,4 @@ create_clock -name rx_ref_clk   -period  2.00 [get_ports rx_ref_clk_p]
 create_clock -name tx_div_clk   -period  4.00 [get_nets i_system_wrapper/system_i/axi_daq2_gt_tx_clk]
 create_clock -name rx_div_clk   -period  4.00 [get_nets i_system_wrapper/system_i/axi_daq2_gt_rx_clk]
 
-set_clock_groups -asynchronous -group {tx_div_clk}
-set_clock_groups -asynchronous -group {rx_div_clk}
 
