@@ -44,8 +44,6 @@ module system_top (
   sys_rst,
   sys_clk_p,
   sys_clk_n,
-  sys_125m_clk_p,
-  sys_125m_clk_n,
 
   uart_sin,
   uart_sout,
@@ -68,6 +66,8 @@ module system_top (
 
   mdio_mdc,
   mdio_mdio,
+  phy_clk_p,
+  phy_clk_n,
   phy_rst_n,
   phy_rx_p,
   phy_rx_n,
@@ -94,8 +94,6 @@ module system_top (
   input           sys_rst;
   input           sys_clk_p;
   input           sys_clk_n;
-  input           sys_125m_clk_p;
-  input           sys_125m_clk_n;
 
   input           uart_sin;
   output          uart_sout;
@@ -118,6 +116,8 @@ module system_top (
 
   output          mdio_mdc;
   inout           mdio_mdio;
+  input           phy_clk_p;
+  input           phy_clk_n;
   output          phy_rst_n;
   input           phy_rx_p;
   input           phy_rx_n;
@@ -141,36 +141,9 @@ module system_top (
 
   output          spdif;
 
-  // internal registers
-
-  reg     [31:0]  sys_reset_m = 'd0;
-  reg             sys_cpu_rst = 'd0;
-  reg             sys_cpu_rstn = 'd0;
-
-  // internal signals
-
-  wire            mdm_reset;
-  wire            mig_reset;
-  wire            mig_ready;
-  wire            sys_cpu_clk;
-
   // default logic
 
   assign fan_pwm = 1'b1;
-
-  // assign sys_reset_req = mdm_reset | mig_reset | ~mig_ready;
-  // assign sys_reset_req = mdm_reset;
-  assign sys_reset_req = 1'b0;
-
-  always @(posedge sys_cpu_clk) begin
-    if (sys_reset_req == 1'b1) begin
-      sys_reset_m <= {32{1'b1}};
-    end else begin
-      sys_reset_m <= {sys_reset_m[30:0], 1'b0};
-    end
-    sys_cpu_rst <= sys_reset_m[31];
-    sys_cpu_rstn <= ~sys_reset_m[31];
-  end
 
   // instantiations
 
@@ -203,9 +176,8 @@ module system_top (
     .iic_rstn (iic_rstn),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
-    .mdm_reset (mdm_reset),
-    .mig_ready (mig_ready),
-    .mig_reset (mig_reset),
+    .phy_clk_clk_n (phy_clk_n),
+    .phy_clk_clk_p (phy_clk_p),
     .phy_rst_n (phy_rst_n),
     .phy_sd (1'b1),
     .sgmii_rxn (phy_rx_n),
@@ -213,13 +185,8 @@ module system_top (
     .sgmii_txn (phy_tx_n),
     .sgmii_txp (phy_tx_p),
     .spdif (spdif),
-    .sys_125m_clk_n (sys_125m_clk_n),
-    .sys_125m_clk_p (sys_125m_clk_p),
-    .sys_clk_n (sys_clk_n),
-    .sys_clk_p (sys_clk_p),
-    .sys_cpu_clk (sys_cpu_clk),
-    .sys_cpu_rst (sys_cpu_rst),
-    .sys_cpu_rstn (sys_cpu_rstn),
+    .sys_clk_clk_n (sys_clk_n),
+    .sys_clk_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
