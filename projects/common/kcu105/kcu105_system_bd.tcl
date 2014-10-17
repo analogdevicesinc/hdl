@@ -205,8 +205,6 @@ set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
 set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 sys_audio_clkgen]
 set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
 set_property -dict [list CONFIG.C_DMA_TYPE {0}] $axi_spdif_tx_core
@@ -410,7 +408,7 @@ connect_bd_intf_net -intf_net axi_ethernet_dma_rxd      [get_bd_intf_pins axi_et
 connect_bd_intf_net -intf_net axi_ethernet_dma_rxs      [get_bd_intf_pins axi_ethernet/m_axis_rxs]          [get_bd_intf_pins axi_ethernet_dma/S_AXIS_STS]
 
 connect_bd_net -net phy_sd                         [get_bd_ports phy_sd]                               [get_bd_pins axi_ethernet/signal_detect]
-connect_bd_net -net phy_rst_n                      [get_bd_ports phy_rst_n]                            [get_bd_pins axi_ethernet/phy_rst_n]
+connect_bd_net -net sys_cpu_rstn                   [get_bd_ports phy_rst_n]                            $sys_resetn_source
 connect_bd_net -net axi_ethernet_clkgen_125m_clk   [get_bd_pins axi_ethernet_clkgen/clk_out1]          [get_bd_pins axi_ethernet/clk125m]
 connect_bd_net -net axi_ethernet_clkgen_312m_clk   [get_bd_pins axi_ethernet_clkgen/clk_out2]          [get_bd_pins axi_ethernet/clk312] 
 connect_bd_net -net axi_ethernet_clkgen_625m_clk   [get_bd_pins axi_ethernet_clkgen/clk_out3]          [get_bd_pins axi_ethernet/clk625] 
