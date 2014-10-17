@@ -6,6 +6,7 @@ if {$sys_zynq == 1} {
   set spi_csn_1_o     [create_bd_port -dir O spi_csn_1_o]
   set spi_csn_0_o     [create_bd_port -dir O spi_csn_0_o]
   set spi_csn_i       [create_bd_port -dir I spi_csn_i]
+
 } else {
 
   set spi_csn_o       [create_bd_port -dir O -from 1 -to 0 spi_csn_o]
@@ -50,7 +51,7 @@ set_property -dict [list CONFIG.PCORE_PMA_RSV {0x00018480}] $axi_ad9625_gt
 set_property -dict [list CONFIG.PCORE_RX_CDR_CFG {0x03000023ff20400020}] $axi_ad9625_gt
 
 set axi_ad9625_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9625_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9625_dma
+set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_ad9625_dma
 set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9625_dma
 set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9625_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9625_dma
@@ -60,8 +61,8 @@ set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9625_dma
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9625_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9625_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {256}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {256}] $axi_ad9625_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9625_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
 
 if {$sys_zynq == 1} {
 
@@ -70,6 +71,19 @@ if {$sys_zynq == 1} {
 
   set axi_ad9625_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9625_dma_interconnect]
   set_property -dict [list CONFIG.NUM_MI {1}] $axi_ad9625_dma_interconnect
+}
+
+if {$sys_zynq == 1} {
+
+  set DDR3    [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR3]
+  set sys_clk [create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk]
+
+  p_plddr3_fifo [current_bd_instance .] axi_ad9625_fifo 256
+
+  connect_bd_intf_net -intf_net DDR3    [get_bd_intf_ports DDR3]    [get_bd_intf_pins axi_ad9625_fifo/DDR3]
+  connect_bd_intf_net -intf_net sys_clk [get_bd_intf_ports sys_clk] [get_bd_intf_pins axi_ad9625_fifo/sys_clk]
+
+} else {
 }
 
 # spi
@@ -146,6 +160,17 @@ if {$sys_zynq == 1 } {
   connect_bd_net -net axi_ad9625_gpio_irq [get_bd_pins axi_ad9625_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In6]
 }
 
+if {$sys_zynq == 1 } {
+
+  set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
+  set sys_fmc_dma_resetn_source [get_bd_pins sys_ps7/FCLK_RESET2_N]
+
+  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
+  connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
+
+} else {
+}
+
 # connections (gt)
 
 connect_bd_net -net axi_ad9625_gt_ref_clk_c         [get_bd_pins axi_ad9625_gt/ref_clk_c]         [get_bd_ports rx_ref_clk]   
@@ -162,6 +187,8 @@ connect_bd_net -net axi_ad9625_gt_rx_clk [get_bd_pins axi_ad9625_core/rx_clk]
 connect_bd_net -net axi_ad9625_gt_rx_clk [get_bd_pins axi_ad9625_jesd/rx_core_clk]
 connect_bd_net -net axi_ad9625_gt_rx_rst [get_bd_pins axi_ad9625_gt/rx_rst]
 connect_bd_net -net axi_ad9625_gt_rx_rst [get_bd_pins axi_ad9625_jesd/rx_reset]
+connect_bd_net -net axi_ad9625_gt_rx_rst [get_bd_pins axi_ad9625_fifo/adc_rst]  [get_bd_pins axi_ad9625_gt/rx_rst]
+connect_bd_net -net sys_fmc_dma_resetn   [get_bd_pins axi_ad9625_fifo/dma_rstn] $sys_fmc_dma_resetn_source
 
 connect_bd_net -net axi_ad9625_gt_rx_sysref         [get_bd_pins axi_ad9625_jesd/rx_sysref]
 connect_bd_net -net axi_ad9625_gt_rx_gt_charisk     [get_bd_pins axi_ad9625_gt/rx_gt_charisk]     [get_bd_pins axi_ad9625_jesd/gt_rxcharisk_in]
@@ -174,11 +201,15 @@ connect_bd_net -net axi_ad9625_gt_rx_ip_sync        [get_bd_pins axi_ad9625_gt/r
 connect_bd_net -net axi_ad9625_gt_rx_ip_sof         [get_bd_pins axi_ad9625_gt/rx_ip_sof]         [get_bd_pins axi_ad9625_jesd/rx_start_of_frame]
 connect_bd_net -net axi_ad9625_gt_rx_ip_data        [get_bd_pins axi_ad9625_gt/rx_ip_data]        [get_bd_pins axi_ad9625_jesd/rx_tdata]
 connect_bd_net -net axi_ad9625_gt_rx_data           [get_bd_pins axi_ad9625_gt/rx_data]           [get_bd_pins axi_ad9625_core/rx_data]
-connect_bd_net -net axi_ad9625_adc_clk              [get_bd_pins axi_ad9625_core/adc_clk]         [get_bd_pins axi_ad9625_dma/fifo_wr_clk]
-connect_bd_net -net axi_ad9625_adc_enable           [get_bd_pins axi_ad9625_core/adc_enable]      [get_bd_pins axi_ad9625_dma/fifo_wr_en]
-connect_bd_net -net axi_ad9625_adc_valid            [get_bd_pins axi_ad9625_core/adc_valid]       [get_bd_pins axi_ad9625_dma/fifo_wr_sync]
-connect_bd_net -net axi_ad9625_adc_data             [get_bd_pins axi_ad9625_core/adc_data]        [get_bd_pins axi_ad9625_dma/fifo_wr_din]
-connect_bd_net -net axi_ad9625_adc_dovf             [get_bd_pins axi_ad9625_core/adc_dovf]        [get_bd_pins axi_ad9625_dma/fifo_wr_overflow]
+connect_bd_net -net axi_ad9625_adc_clk              [get_bd_pins axi_ad9625_core/adc_clk]         [get_bd_pins axi_ad9625_fifo/adc_clk]
+connect_bd_net -net axi_ad9625_adc_enable           [get_bd_pins axi_ad9625_core/adc_enable]      [get_bd_pins axi_ad9625_fifo/adc_wr]
+connect_bd_net -net axi_ad9625_adc_data             [get_bd_pins axi_ad9625_core/adc_data]        [get_bd_pins axi_ad9625_fifo/adc_wdata]
+connect_bd_net -net axi_ad9625_adc_dovf             [get_bd_pins axi_ad9625_core/adc_dovf]        [get_bd_pins axi_ad9625_fifo/adc_wovf]
+
+connect_bd_net -net sys_fmc_dma_clk                 [get_bd_pins axi_ad9625_fifo/dma_clk]         [get_bd_pins axi_ad9625_dma/s_axis_aclk]
+connect_bd_net -net axi_ad9625_dma_dvalid           [get_bd_pins axi_ad9625_fifo/dma_wvalid]      [get_bd_pins axi_ad9625_dma/s_axis_valid]
+connect_bd_net -net axi_ad9625_dma_dready           [get_bd_pins axi_ad9625_fifo/dma_wready]      [get_bd_pins axi_ad9625_dma/s_axis_ready]
+connect_bd_net -net axi_ad9625_dma_ddata            [get_bd_pins axi_ad9625_fifo/dma_wdata]       [get_bd_pins axi_ad9625_dma/s_axis_data]
 connect_bd_net -net axi_ad9625_dma_irq              [get_bd_pins axi_ad9625_dma/irq]              [get_bd_pins sys_concat_intc/In2] 
 
 # interconnect (cpu)
@@ -248,12 +279,6 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9625_gt/m_axi_aresetn]
 
 if {$sys_zynq == 1} {
 
-  set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
-  set sys_fmc_dma_resetn_source [get_bd_pins sys_ps7/FCLK_RESET2_N]
-
-  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
-
   connect_bd_intf_net -intf_net axi_ad9625_dma_interconnect_m00_axi [get_bd_intf_pins axi_ad9625_dma_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP2]
   connect_bd_intf_net -intf_net axi_ad9625_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9625_dma_interconnect/S00_AXI] [get_bd_intf_pins axi_ad9625_dma/m_dest_axi]    
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9625_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
@@ -279,11 +304,10 @@ if {$sys_zynq == 1} {
 
 set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {3}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {662}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {10}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE2_WIDTH {256}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {256}] $ila_jesd_rx_mon
 
 connect_bd_net -net axi_ad9625_gt_rx_mon_data       [get_bd_pins axi_ad9625_gt/rx_mon_data]
 connect_bd_net -net axi_ad9625_gt_rx_mon_trigger    [get_bd_pins axi_ad9625_gt/rx_mon_trigger]
@@ -291,7 +315,6 @@ connect_bd_net -net axi_ad9625_gt_rx_clk            [get_bd_pins ila_jesd_rx_mon
 connect_bd_net -net axi_ad9625_gt_rx_mon_data       [get_bd_pins ila_jesd_rx_mon/PROBE0]
 connect_bd_net -net axi_ad9625_gt_rx_mon_trigger    [get_bd_pins ila_jesd_rx_mon/PROBE1]
 connect_bd_net -net axi_ad9625_gt_rx_data           [get_bd_pins ila_jesd_rx_mon/PROBE2]
-connect_bd_net -net axi_ad9625_adc_data             [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
 # address map
 
@@ -309,6 +332,7 @@ if {$sys_zynq == 1} {
 
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9625_dma/m_dest_axi]  [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM]    SEG_sys_ps7_hp2_ddr_lowocm
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9625_gt/m_axi]        [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM]    SEG_sys_ps7_hp3_ddr_lowocm
+  create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_ad9625_fifo/axi_fifo2s/axi] [get_bd_addr_segs axi_ad9625_fifo/axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl_memaddr
 
 } else {
 
