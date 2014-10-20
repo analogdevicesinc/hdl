@@ -39,13 +39,9 @@ set_property  -dict {PACKAGE_PIN  Y27   IOSTANDARD LVCMOS25}               [get_
 set_property  -dict {PACKAGE_PIN  Y26   IOSTANDARD LVCMOS25}               [get_ports spi_dio]          ; ## H37  FMC_LPC_LA32_P
 
 # clocks
-
-create_clock -name adc_clk          -period 2.00    [get_ports adc_clk_in_p]
+create_clock -name adc_clk          -period 2.00    [get_ports adc_clk_p]
 create_clock -name adc_core_clk     -period 8.00    [get_pins i_system_wrapper/system_i/axi_ad9434/adc_clk]
-create_clock -name dma_clk          -period 5.00    [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
 
-set_clock_groups -asynchronous -group {adc_clk}
-set_clock_groups -asynchronous -group {adc_core_clk}
-set_clock_groups -asynchronous -group {dma_clk}
-
+set_clock_groups -asynchronous -group [get_clocks adc_clk]
+set_clock_groups -asynchronous -group [get_clocks adc_core_clk]
 
