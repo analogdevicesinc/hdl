@@ -60,19 +60,16 @@ set_property  -dict {PACKAGE_PIN  AJ29  IOSTANDARD LVCMOS25} [get_ports spi_miso
 
 # spi pmod J58
 
-set_property  -dict {PACKAGE_PIN  AJ21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_csn_tx]       ; ## PMOD1_0_LS
-set_property  -dict {PACKAGE_PIN  AK21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_csn_rx]       ; ## PMOD1_1_LS
-set_property  -dict {PACKAGE_PIN  AB16    IOSTANDARD LVCMOS25}     [get_ports spi_udc_sclk]         ; ## PMOD1_3_LS
-set_property  -dict {PACKAGE_PIN  AB21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_data]         ; ## PMOD1_2_LS
+set_property  -dict {PACKAGE_PIN  AJ21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_csn_tx]             ; ## PMOD1_0_LS
+set_property  -dict {PACKAGE_PIN  AK21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_csn_rx]             ; ## PMOD1_1_LS
+set_property  -dict {PACKAGE_PIN  AB16    IOSTANDARD LVCMOS25}     [get_ports spi_udc_sclk]               ; ## PMOD1_3_LS
+set_property  -dict {PACKAGE_PIN  AB21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_data]               ; ## PMOD1_2_LS
 
 # clocks
 
 create_clock -name rx_clk       -period  4.00 [get_ports rx_clk_in_p]
 create_clock -name ad9361_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_ad9361/clk]
-create_clock -name fmc_dma_clk  -period  10.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
-create_clock -name ps7_clk_2	-period 10.00 [get_pins i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]]
 
 set_clock_groups -asynchronous -group {ad9361_clk}
-set_clock_groups -asynchronous -group {fmc_dma_clk}
-set_clock_groups -asynchronous -group {ps7_clk_2}
+set_clock_groups -asynchronous -group {rx_clk}
 
