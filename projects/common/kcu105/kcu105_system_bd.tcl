@@ -17,7 +17,6 @@ set gpio_sw         [create_bd_intf_port -mode Master -vlnv xilinx.com:interface
 set gpio_led        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_led]
 set gpio_lcd        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_lcd]
 
-set iic_rstn        [create_bd_port -dir O iic_rstn]
 set iic_main        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main]
 
 set uart_sin        [create_bd_port -dir I uart_sin]
@@ -428,7 +427,6 @@ connect_bd_intf_net -intf_net gpio_led  [get_bd_intf_ports gpio_led]  [get_bd_in
 connect_bd_intf_net -intf_net iic_main  [get_bd_intf_ports iic_main]  [get_bd_intf_pins axi_iic_main/iic]
 connect_bd_net -net uart_sin       [get_bd_ports uart_sin]       [get_bd_pins axi_uart/rx]
 connect_bd_net -net uart_sout      [get_bd_ports uart_sout]      [get_bd_pins axi_uart/tx]
-connect_bd_net -net iic_rstn       [get_bd_ports iic_rstn]       [get_bd_pins axi_iic_main/gpo]
 
 # hdmi
 
