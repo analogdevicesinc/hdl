@@ -128,7 +128,7 @@ if {$sys_zynq == 0} {
 
   connect_bd_net -net axi_ad9122_dma_drd          [get_bd_pins axi_ad9122_dma/fifo_rd_en]           [get_bd_ports dac_dma_rd]
   connect_bd_net -net axi_ad9122_dma_ddata        [get_bd_pins axi_ad9122_dma/fifo_rd_dout]         [get_bd_ports dac_dma_rdata]
-  connect_bd_net -net axi_ad9122_dma_irq          [get_bd_pins axi_ad9122_dma/irq]                  [get_bd_pins sys_concat_intc/In3]
+  connect_bd_net -net axi_ad9122_dma_irq          [get_bd_pins axi_ad9122_dma/irq]                  [get_bd_pins sys_concat_intc/In12]
 
   # connections (adc)
 
@@ -160,7 +160,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9643_dma_dsync        [get_bd_ports adc_dma_sync]                       [get_bd_pins axi_ad9643_dma/fifo_wr_sync]
   connect_bd_net -net axi_ad9643_dma_ddata        [get_bd_pins sys_wfifo/s_wdata]                   [get_bd_pins axi_ad9643_dma/fifo_wr_din]
   connect_bd_net -net axi_ad9643_dma_dovf         [get_bd_pins sys_wfifo/s_wovf]                    [get_bd_pins axi_ad9643_dma/fifo_wr_overflow]
-  connect_bd_net -net axi_ad9643_dma_irq          [get_bd_pins axi_ad9643_dma/irq]                  [get_bd_pins sys_concat_intc/In2]
+  connect_bd_net -net axi_ad9643_dma_irq          [get_bd_pins axi_ad9643_dma/irq]                  [get_bd_pins sys_concat_intc/In13]
 
 
   # interconnect (cpu)

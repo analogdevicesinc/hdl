@@ -272,7 +272,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9144_dac_drd            [get_bd_ports dac_drd]                      [get_bd_pins axi_ad9144_dma/fifo_rd_en]
   connect_bd_net -net axi_ad9144_dac_ddata          [get_bd_ports dac_ddata]                    [get_bd_pins axi_ad9144_dma/fifo_rd_dout]
   connect_bd_net -net axi_ad9144_dac_dunf           [get_bd_pins axi_ad9144_core/dac_dunf]      [get_bd_pins axi_ad9144_dma/fifo_rd_underflow]
-  connect_bd_net -net axi_ad9144_dma_irq            [get_bd_pins axi_ad9144_dma/irq]            [get_bd_pins sys_concat_intc/In3] 
+  connect_bd_net -net axi_ad9144_dma_irq            [get_bd_pins axi_ad9144_dma/irq]            [get_bd_pins sys_concat_intc/In12]
 
   # connections (adc)
 
@@ -304,7 +304,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9680_adc_dsync          [get_bd_ports adc_dsync]                    [get_bd_pins axi_ad9680_dma/fifo_wr_sync]
   connect_bd_net -net axi_ad9680_adc_ddata          [get_bd_ports adc_ddata]                    [get_bd_pins axi_ad9680_dma/fifo_wr_din]
   connect_bd_net -net axi_ad9680_adc_dovf           [get_bd_pins axi_ad9680_core/adc_dovf]      [get_bd_pins axi_ad9680_dma/fifo_wr_overflow]
-  connect_bd_net -net axi_ad9680_dma_irq            [get_bd_pins axi_ad9680_dma/irq]            [get_bd_pins sys_concat_intc/In2] 
+  connect_bd_net -net axi_ad9680_dma_irq            [get_bd_pins axi_ad9680_dma/irq]            [get_bd_pins sys_concat_intc/In13]
 
   # dac/adc clocks
 

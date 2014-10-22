@@ -132,7 +132,7 @@ connect_bd_net -net axi_spi_1_sdo_o [get_bd_ports spi_sdo_o]  [get_bd_pins axi_u
 connect_bd_net -net axi_spi_1_sdi_i [get_bd_ports spi_sdi_i]  [get_bd_pins axi_usdrx1_spi/io1_i]
 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_spi/ext_spi_clk] 
-connect_bd_net -net axi_spi_1_irq [get_bd_pins axi_usdrx1_spi/ip2intc_irpt] [get_bd_pins sys_concat_intc/In3] 
+connect_bd_net -net axi_spi_1_irq [get_bd_pins axi_usdrx1_spi/ip2intc_irpt] [get_bd_pins sys_concat_intc/In12]
 
 # connections (gt)
 
@@ -193,7 +193,7 @@ connect_bd_net -net axi_ad9671_core_adc_dovf_3      [get_bd_pins axi_ad9671_core
 connect_bd_net -net axi_ad9671_dma_wr_en            [get_bd_pins axi_usdrx1_dma/fifo_wr_en]         [get_bd_ports adc_wr_en]
 connect_bd_net -net axi_ad9671_dma_adc_data         [get_bd_pins axi_usdrx1_dma/fifo_wr_din]        [get_bd_ports adc_data]
 connect_bd_net -net axi_ad9671_dma_adc_dovf         [get_bd_pins axi_usdrx1_dma/fifo_wr_overflow]   [get_bd_ports adc_dovf]
-connect_bd_net -net axi_usdrx1_dma_irq              [get_bd_pins axi_usdrx1_dma/irq]                [get_bd_pins sys_concat_intc/In2] 
+connect_bd_net -net axi_usdrx1_dma_irq              [get_bd_pins axi_usdrx1_dma/irq]                [get_bd_pins sys_concat_intc/In13]
 connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_0/adc_raddr_out]
 connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_1/adc_raddr_in]
 connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_2/adc_raddr_in]

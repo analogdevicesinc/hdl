@@ -139,7 +139,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9467_dma_ddata        [get_bd_pins axi_ad9467/adc_data]   [get_bd_pins axi_ad9467_dma/fifo_wr_din]
   connect_bd_net -net axi_ad9467_dma_dovf         [get_bd_pins axi_ad9467/adc_dovf]   [get_bd_pins axi_ad9467_dma/fifo_wr_overflow]
 
-  connect_bd_net -net axi_ad9467_dma_irq          [get_bd_pins axi_ad9467_dma/irq]    [get_bd_pins sys_concat_intc/In2]
+  connect_bd_net -net axi_ad9467_dma_irq          [get_bd_pins axi_ad9467_dma/irq]    [get_bd_pins sys_concat_intc/In13]
 
   # interconnect (cpu)
 
