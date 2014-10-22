@@ -251,8 +251,8 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9361_adc_dma_irq      [get_bd_pins axi_ad9361_adc_dma/irq]  [get_bd_pins sys_concat_intc/In5]
   connect_bd_net -net axi_ad9361_dac_dma_irq      [get_bd_pins axi_ad9361_dac_dma/irq]  [get_bd_pins sys_concat_intc/In6]
 } else {
-  connect_bd_net -net axi_ad9361_adc_dma_irq      [get_bd_pins axi_ad9361_adc_dma/irq]  [get_bd_pins sys_concat_intc/In2]
-  connect_bd_net -net axi_ad9361_dac_dma_irq      [get_bd_pins axi_ad9361_dac_dma/irq]  [get_bd_pins sys_concat_intc/In3]
+  connect_bd_net -net axi_ad9361_adc_dma_irq      [get_bd_pins axi_ad9361_adc_dma/irq]  [get_bd_pins sys_concat_intc/In13]
+  connect_bd_net -net axi_ad9361_dac_dma_irq      [get_bd_pins axi_ad9361_dac_dma/irq]  [get_bd_pins sys_concat_intc/In12]
 }
 
   # interconnect (cpu)

@@ -455,7 +455,7 @@ connect_bd_net -net axi_spdif_tx_dma_mm2s_last  [get_bd_pins axi_spdif_tx_core/S
 connect_bd_net -net axi_spdif_tx_dma_mm2s_ready [get_bd_pins axi_spdif_tx_core/S_AXIS_TREADY] [get_bd_pins axi_spdif_tx_dma/m_axis_mm2s_tready]
 
 connect_bd_net -net sys_200m_clk [get_bd_pins sys_audio_clkgen/clk_in1] $sys_200m_clk_source
-connect_bd_net -net sys_100m_reset [get_bd_pins sys_audio_clkgen/resetn] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins sys_audio_clkgen/resetn] $sys_100m_resetn_source
 connect_bd_net -net sys_audio_clkgen_clk [get_bd_pins sys_audio_clkgen/clk_out1] [get_bd_pins axi_spdif_tx_core/spdif_data_clk]
 connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/spdif_tx_o]
 

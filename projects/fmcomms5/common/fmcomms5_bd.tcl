@@ -129,8 +129,7 @@ if {$sys_zynq == 0} {
   set_property -dict [list CONFIG.NUM_PORTS {9}] $sys_concat_intc
 } else {
   set_property -dict [list CONFIG.NUM_MI {11}] $axi_cpu_interconnect
-  set_property -dict [list CONFIG.NUM_PORTS {6}] $sys_concat_intc
-}    
+}
 
 if {$sys_zynq == 1} {    
   set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
@@ -277,9 +276,9 @@ connect_bd_net -net axi_ad9361_0_dac_drd          [get_bd_pins util_dac_unpack_0
 connect_bd_net -net axi_ad9361_dac_ddata          [get_bd_pins util_dac_unpack_0/dma_data]  [get_bd_pins axi_ad9361_dac_dma/fifo_rd_dout]
 connect_bd_net -net axi_ad9361_fifo_valid         [get_bd_pins util_dac_unpack_0/fifo_valid] [get_bd_pins axi_ad9361_dac_dma/fifo_rd_valid]
 connect_bd_net -net axi_ad9361_0_adc_dovf         [get_bd_pins axi_ad9361_0/adc_dovf]       [get_bd_pins axi_ad9361_adc_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad9361_adc_dma_irq        [get_bd_pins axi_ad9361_adc_dma/irq]      [get_bd_pins sys_concat_intc/In2]
+connect_bd_net -net axi_ad9361_adc_dma_irq        [get_bd_pins axi_ad9361_adc_dma/irq]      [get_bd_pins sys_concat_intc/In13]
 connect_bd_net -net axi_ad9361_0_dac_dunf         [get_bd_pins axi_ad9361_0/dac_dunf]       [get_bd_pins axi_ad9361_dac_dma/fifo_rd_underflow]
-connect_bd_net -net axi_ad9361_dac_dma_irq        [get_bd_pins axi_ad9361_dac_dma/irq]      [get_bd_pins sys_concat_intc/In3]
+connect_bd_net -net axi_ad9361_dac_dma_irq        [get_bd_pins axi_ad9361_dac_dma/irq]      [get_bd_pins sys_concat_intc/In12]
 
 # interconnect (cpu)
 

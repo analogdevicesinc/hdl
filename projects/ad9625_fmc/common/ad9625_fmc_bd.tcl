@@ -156,8 +156,8 @@ if {$sys_zynq == 1 } {
   connect_bd_net -net gpio_ad9625_o [get_bd_ports gpio_ad9625_o]    [get_bd_pins axi_ad9625_gpio/gpio_io_o]
   connect_bd_net -net gpio_ad9625_t [get_bd_ports gpio_ad9625_t]    [get_bd_pins axi_ad9625_gpio/gpio_io_t]
 
-  connect_bd_net -net axi_ad9625_spi_irq  [get_bd_pins axi_ad9625_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In5]
-  connect_bd_net -net axi_ad9625_gpio_irq [get_bd_pins axi_ad9625_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In6]
+  connect_bd_net -net axi_ad9625_spi_irq  [get_bd_pins axi_ad9625_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In10]
+  connect_bd_net -net axi_ad9625_gpio_irq [get_bd_pins axi_ad9625_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In9]
 }
 
 if {$sys_zynq == 1 } {
@@ -210,7 +210,7 @@ connect_bd_net -net sys_fmc_dma_clk                 [get_bd_pins axi_ad9625_fifo
 connect_bd_net -net axi_ad9625_dma_dvalid           [get_bd_pins axi_ad9625_fifo/dma_wvalid]      [get_bd_pins axi_ad9625_dma/s_axis_valid]
 connect_bd_net -net axi_ad9625_dma_dready           [get_bd_pins axi_ad9625_fifo/dma_wready]      [get_bd_pins axi_ad9625_dma/s_axis_ready]
 connect_bd_net -net axi_ad9625_dma_ddata            [get_bd_pins axi_ad9625_fifo/dma_wdata]       [get_bd_pins axi_ad9625_dma/s_axis_data]
-connect_bd_net -net axi_ad9625_dma_irq              [get_bd_pins axi_ad9625_dma/irq]              [get_bd_pins sys_concat_intc/In2] 
+connect_bd_net -net axi_ad9625_dma_irq              [get_bd_pins axi_ad9625_dma/irq]              [get_bd_pins sys_concat_intc/In13]
 
 # interconnect (cpu)
 
