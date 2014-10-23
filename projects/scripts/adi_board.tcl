@@ -166,7 +166,6 @@ proc ad_cpu_interconnect {p_address p_name} {
   if {($sys_cpu_interconnect_index == 0) && ($sys_zynq == 0)} {
 
     connect_bd_net -net sys_cpu_clk \
-      [get_bd_pins sys_ps7/M_AXI_GP0_ACLK] \
       [get_bd_pins axi_cpu_interconnect/ACLK] \
       [get_bd_pins axi_cpu_interconnect/S00_ACLK] \
       $m_clk_source
@@ -176,24 +175,21 @@ proc ad_cpu_interconnect {p_address p_name} {
       [get_bd_pins axi_cpu_interconnect/S00_ARESETN] \
       $m_reset_source
 
-    connect_bd_intf_net -intf_net sys_ps7_axi \
+    connect_bd_intf_net -intf_net sys_mb_axi \
       [get_bd_intf_pins axi_cpu_interconnect/S00_AXI] \
-      [get_bd_intf_pins sys_ps7/M_AXI_GP0]
+      [get_bd_intf_pins sys_mb/M_AXI_DP]
 
   }
 
   set sys_cpu_interconnect_index [expr $sys_cpu_interconnect_index + 1]
-  set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
-  set p_seg_range [get_property range $p_seg]
-  set p_seg_fields [split $p_seg "/"]
-
-  lassign $p_seg_fields no_use p_seg_name p_seg_intf p_seg_base
+  set p_intf [filter [get_bd_intf_pins -of_objects [get_bd_cells $p_name]] \
+    -regexp "MODE == Slave && VLNV == xilinx.com:interface:aximm_rtl:1.0"]
+  set p_intf_name [lrange [split $p_intf "/"] end end]
+  set p_clock [filter [get_bd_pins -quiet -of_objects [get_bd_cells $p_name]] \
+    -regexp "CONFIG.ASSOCIATED_BUSIF == ${p_intf_name}"]
+  set p_reset [get_property CONFIG.ASSOCIATED_RESET [get_bd_pins ${p_clock}]]
 
   set_property CONFIG.NUM_MI $sys_cpu_interconnect_index [get_bd_cells axi_cpu_interconnect]
-
-  set p_clock [filter [get_bd_pins -quiet -of_objects [get_bd_cells $p_name]] \
-    -regexp "CONFIG.ASSOCIATED_BUSIF == ${p_seg_intf}"]
-  set p_reset [get_property CONFIG.ASSOCIATED_RESET [get_bd_pins ${p_clock}]]
 
   connect_bd_net -net sys_cpu_clk \
     [get_bd_pins "axi_cpu_interconnect/${i_str}_ACLK"] \
@@ -207,11 +203,21 @@ proc ad_cpu_interconnect {p_address p_name} {
 
   connect_bd_intf_net -intf_net "${p_name}_axi_lite" \
     [get_bd_intf_pins "axi_cpu_interconnect/${i_str}_AXI"] \
-    [get_bd_intf_pins ${p_seg_name}/${p_seg_intf}]
+    [get_bd_intf_pins ${p_intf}]
 
-  create_bd_addr_seg -range $p_seg_range \
-    -offset $p_address $sys_addr_cntrl_space \
-    $p_seg "SEG_data_${p_name}"
+  set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
+  set p_index 0
+  foreach p_seg_name $p_seg {
+    if {$p_index == 0} {
+      set p_seg_range [get_property range $p_seg_name]
+      create_bd_addr_seg -range $p_seg_range \
+        -offset $p_address $sys_addr_cntrl_space \
+        $p_seg_name "SEG_data_${p_name}"
+    } else {
+      assign_bd_address $p_seg_name
+    }
+    incr p_index
+  }
 }
 
 ###################################################################################################
