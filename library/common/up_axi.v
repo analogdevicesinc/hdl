@@ -135,7 +135,7 @@ module up_axi (
   reg             up_rsel = 'd0;
   reg             up_rreq = 'd0;
   reg     [AW:0]  up_raddr = 'd0;
-  reg     [ 2:0]  up_rcount = 'd0;
+  reg     [ 3:0]  up_rcount = 'd0;
   reg             up_rack_int = 'd0;
   reg     [31:0]  up_rdata_int = 'd0;
   reg             up_rack_int_d = 'd0;
@@ -245,12 +245,17 @@ module up_axi (
         end
         up_rreq <= 1'b0;
         up_raddr <= up_raddr;
-        up_rcount <= up_rcount + 1'b1;
       end else begin
         up_rsel <= up_axi_arvalid;
         up_rreq <= up_axi_arvalid;
         up_raddr <= up_axi_araddr[AW+2:2];
-        up_rcount <= 3'd0;
+      end
+      if (up_rack_int == 1'b1) begin
+        up_rcount <= 4'd0;
+      end else if (up_rcount[3] == 1'b1) begin
+        up_rcount <= up_rcount + 1'b1;
+      end else if (up_rreq == 1'b1) begin
+        up_rcount <= 4'd8;
       end
     end
   end
@@ -262,10 +267,10 @@ module up_axi (
       up_rack_int_d <= 'd0;
       up_rdata_int_d <= 'd0;
     end else begin
-      if ((up_rcount == 3'h7) && (up_rack == 1'b0)) begin
+      if ((up_rcount == 4'hf) && (up_rack == 1'b0)) begin
         up_rack_int <= 1'b1;
         up_rdata_int <= {2{16'hdead}};
-      end else if (up_rsel == 1'b1) begin
+      end else begin
         up_rack_int <= up_rack;
         up_rdata_int <= up_rdata;
       end
