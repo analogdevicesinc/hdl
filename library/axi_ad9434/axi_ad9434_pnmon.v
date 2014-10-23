@@ -66,6 +66,8 @@ module axi_ad9434_pnmon (
   // internal signals
   wire    [47:0]  adc_pn_data_pn_s;
 
+  wire    [47:0]  adc_data_inv_s;
+
   // prbs pn9 function
   function [47:0] pn9;
     input [47:0] din;
@@ -181,7 +183,8 @@ module axi_ad9434_pnmon (
   endfunction
 
   // pn sequence selection
-  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_data : adc_pn_data_pn;
+  assign adc_data_inv_s = {adc_data[11:0], adc_data[23:12], adc_data[35:24], adc_data[47:36]};
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_data_inv_s : adc_pn_data_pn;
 
   always @(posedge adc_clk) begin
     if(adc_pnseq_sel == 4'b0) begin
@@ -195,7 +198,7 @@ module axi_ad9434_pnmon (
   ad_pnmon #(.DATA_WIDTH(48)) i_pnmon (
     .adc_clk (adc_clk),
     .adc_valid_in (1'b1),
-    .adc_data_in (adc_data),
+    .adc_data_in (adc_data_inv_s),
     .adc_data_pn (adc_pn_data_pn),
     .adc_pn_oos (adc_pn_oos),
     .adc_pn_err (adc_pn_err));
