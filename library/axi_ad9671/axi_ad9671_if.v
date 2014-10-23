@@ -70,6 +70,11 @@ module axi_ad9671_if (
   adc_or_g,
   adc_data_h,
   adc_or_h,
+  adc_start_code,
+  adc_sync_in,
+  adc_sync_out,
+  adc_sync,
+  adc_sync_status,
   adc_status,
   adc_raddr_in,
   adc_raddr_out);
@@ -107,6 +112,11 @@ module axi_ad9671_if (
   output                                adc_or_g;
   output  [ 15:0]                       adc_data_h;
   output                                adc_or_h;
+  input   [ 31:0]                       adc_start_code;
+  input                                 adc_sync_in;
+  output                                adc_sync_out;
+  input                                 adc_sync;
+  output                                adc_sync_status;
   output                                adc_status;
   input   [ 3:0]                        adc_raddr_in;
   output  [ 3:0]                        adc_raddr_out;
@@ -124,13 +134,14 @@ module axi_ad9671_if (
   wire    [ 15:0]                       adc_data_g_s;
   wire    [ 15:0]                       adc_data_h_s;
   wire    [  3:0]                       adc_raddr_s;
+  wire                                  adc_sync_s;
 
   // internal registers
 
   reg                                   int_valid = 'd0;
   reg     [127:0]                       int_data = 'd0;
   reg                                   adc_status = 'd0;
-  reg                                   adc_start = 'd0;
+  reg                                   adc_sync_status = 'd0;
 
   reg     [  3:0]                       adc_waddr = 'd0;
   reg     [  3:0]                       adc_raddr_out = 'd0;
@@ -146,7 +157,8 @@ module axi_ad9671_if (
   // adc clock & valid
 
   assign adc_clk = rx_clk;
-  assign adc_valid = int_valid & adc_start;
+  assign adc_valid = int_valid;
+  assign adc_sync_out = adc_sync;
 
   assign adc_or_a = 'd0;
   assign adc_or_b = 'd0;
@@ -170,9 +182,9 @@ module axi_ad9671_if (
                       adc_data_d_s, adc_data_c_s, adc_data_b_s, adc_data_a_s};
 
   assign adc_raddr_s = (PCORE_ID == 0) ? adc_raddr_out : adc_raddr_in;
+  assign adc_sync_s  = (PCORE_ID == 0) ? adc_sync_out : adc_sync_in;
 
-  always @(posedge rx_clk)
-  begin
+  always @(posedge rx_clk) begin
     adc_data_a <= adc_rdata[ 15:  0];
     adc_data_b <= adc_rdata[ 31: 16];
     adc_data_c <= adc_rdata[ 47: 32];
@@ -185,17 +197,21 @@ module axi_ad9671_if (
 
   always @(posedge rx_clk) begin
     if (adc_rst == 1'b1) begin
-      adc_waddr <= 4'h0;
-      adc_raddr_out <= 4'h8;
-      adc_start <= 1'b0;
-    end
-    else begin
-      if (int_valid == 1'b1 && adc_data_a_s == 16'hbeef) begin
-        adc_start <= 1'b1;
+      adc_waddr       <= 4'h0;
+      adc_raddr_out   <= 4'h8;
+      adc_sync_status <= 1'b0;
+    end else begin
+      if (adc_data_a_s == adc_start_code[15:0] && adc_sync_status == 1'b1) begin
+        adc_sync_status <= 1'b0;
+      end else if(adc_sync_s == 1'b1) begin
+        adc_sync_status <= 1'b1;
       end
-      if (int_valid == 1'b1 && adc_start == 1'b1) begin
-        adc_waddr     <= adc_waddr + 1;
-        adc_raddr_out <= adc_raddr_out + 1;
+      if (adc_data_a_s == adc_start_code[15:0] && adc_sync_status == 1'b1) begin
+        adc_waddr       <= 4'h0;
+        adc_raddr_out   <= 4'h8;
+      end else if (int_valid == 1'b1) begin
+        adc_waddr       <= adc_waddr + 1;
+        adc_raddr_out   <= adc_raddr_out + 1;
       end
     end
   end

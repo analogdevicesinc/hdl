@@ -216,8 +216,8 @@ connect_bd_net -net axi_ad9250_1_dma_data           [get_bd_pins axi_ad9250_1_dm
 
 connect_bd_net -net axi_ad9250_0_adc_dovf           [get_bd_pins axi_ad9250_0_core/adc_dovf]      [get_bd_pins axi_ad9250_0_dma/fifo_wr_overflow]
 connect_bd_net -net axi_ad9250_1_adc_dovf           [get_bd_pins axi_ad9250_1_core/adc_dovf]      [get_bd_pins axi_ad9250_1_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad9250_0_dma_irq            [get_bd_pins axi_ad9250_0_dma/irq]            [get_bd_pins sys_concat_intc/In2]
-connect_bd_net -net axi_ad9250_1_dma_irq            [get_bd_pins axi_ad9250_1_dma/irq]            [get_bd_pins sys_concat_intc/In3]
+connect_bd_net -net axi_ad9250_0_dma_irq            [get_bd_pins axi_ad9250_0_dma/irq]            [get_bd_pins sys_concat_intc/In13]
+connect_bd_net -net axi_ad9250_1_dma_irq            [get_bd_pins axi_ad9250_1_dma/irq]            [get_bd_pins sys_concat_intc/In12]
 
 # interconnect (cpu)
 

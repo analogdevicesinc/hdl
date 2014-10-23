@@ -79,7 +79,6 @@ module system_top (
   gpio_led,
   gpio_sw,
 
-  iic_rstn,
   iic_scl,
   iic_sda,
 
@@ -129,7 +128,6 @@ module system_top (
   inout   [ 7:0]  gpio_led;
   inout   [ 8:0]  gpio_sw;
 
-  output          iic_rstn;
   inout           iic_scl;
   inout           iic_sda;
 
@@ -173,7 +171,6 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .phy_clk_clk_n (phy_clk_n),
