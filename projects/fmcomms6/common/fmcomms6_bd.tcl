@@ -229,7 +229,7 @@ if {$sys_zynq == 0} {
 
 # ila (adc)
 
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc]
+set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_adc]
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_adc
