@@ -94,6 +94,7 @@ proc adi_project_create {project_name} {
   update_ip_catalog
 
   set_msg_config -id {BD 41-1348} -new_severity info
+  set_msg_config -id {BD 41-1343} -new_severity info
   set_msg_config -id {BD 41-1306} -new_severity info
   set_msg_config -id {IP_Flow 19-1687} -new_severity info
   set_msg_config -id {filemgmt 20-1763} -new_severity info
