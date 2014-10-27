@@ -128,6 +128,10 @@ if {$sys_zynq == 1} {
 if {$sys_zynq == 1} {
 
   p_plddr3_fifo [current_bd_instance .] axi_ad9680_fifo 128
+
+} else {
+
+  p_sys_dmafifo [current_bd_instance .] axi_ad9680_fifo 128
 }
 
 if {$sys_zynq == 1} {
@@ -207,23 +211,6 @@ if {$sys_zynq == 1} {
 
   connect_bd_intf_net -intf_net DDR3    [get_bd_intf_ports DDR3]    [get_bd_intf_pins axi_ad9680_fifo/DDR3]
   connect_bd_intf_net -intf_net sys_clk [get_bd_intf_ports sys_clk] [get_bd_intf_pins axi_ad9680_fifo/sys_clk]
-}
-
-  # fmc dma clocks
-
-if {$sys_zynq == 1} {
-
-  set sys_fmc_dma_sync_reset [create_bd_cell -type ip -vlnv analog.com:user:util_sync_reset:1.0 sys_fmc_dma_sync_reset]
-  set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
-  set sys_fmc_dma_resetn_source [get_bd_pins sys_fmc_dma_sync_reset/sync_resetn]
-
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_fmc_dma_sync_reset/clk]
-  connect_bd_net -net sys_fmc_dma_async_reset \
-	[get_bd_pins sys_fmc_dma_sync_reset/async_resetn] \
-	[get_bd_pins sys_ps7/FCLK_RESET2_N]
-
-  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
 }
 
   # connections (spi and gpio)
@@ -334,10 +321,8 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_daq2_gt_rx_ip_data        [get_bd_pins axi_daq2_gt/rx_ip_data]        [get_bd_pins axi_ad9680_jesd/rx_tdata]
   connect_bd_net -net axi_daq2_gt_rx_data           [get_bd_pins axi_daq2_gt/rx_data]           [get_bd_pins axi_ad9680_core/rx_data]
 
-if {$sys_zynq == 1} {
-
   connect_bd_net -net axi_daq2_gt_rx_rst            [get_bd_pins axi_ad9680_fifo/adc_rst]       [get_bd_pins axi_daq2_gt/rx_rst]
-  connect_bd_net -net sys_fmc_dma_resetn            [get_bd_pins axi_ad9680_fifo/dma_rstn]      $sys_fmc_dma_resetn_source
+  connect_bd_net -net sys_100m_resetn               [get_bd_pins axi_ad9680_fifo/dma_rstn]      $sys_100m_resetn_source
 
   connect_bd_net -net axi_ad9680_adc_clk            [get_bd_pins axi_ad9680_core/adc_clk]       [get_bd_pins axi_ad9680_fifo/adc_clk]
   connect_bd_net -net axi_ad9680_adc_dovf           [get_bd_pins axi_ad9680_core/adc_dovf]      [get_bd_pins axi_ad9680_fifo/adc_wovf]
@@ -350,17 +335,21 @@ if {$sys_zynq == 1} {
   connect_bd_net -net axi_ad9680_adc_dwr            [get_bd_ports adc_dwr]                      [get_bd_pins axi_ad9680_fifo/adc_wr]
   connect_bd_net -net axi_ad9680_adc_ddata          [get_bd_ports adc_ddata]                    [get_bd_pins axi_ad9680_fifo/adc_wdata]
 
-  connect_bd_net -net sys_fmc_dma_clk               [get_bd_pins axi_ad9680_fifo/dma_clk]       [get_bd_pins axi_ad9680_dma/s_axis_aclk]
+  connect_bd_net -net sys_100m_clk                  [get_bd_pins axi_ad9680_fifo/dma_clk]       [get_bd_pins axi_ad9680_dma/s_axis_aclk]
   connect_bd_net -net axi_ad9680_dma_dvalid         [get_bd_pins axi_ad9680_fifo/dma_wvalid]    [get_bd_pins axi_ad9680_dma/s_axis_valid]       
   connect_bd_net -net axi_ad9680_dma_dready         [get_bd_pins axi_ad9680_fifo/dma_wready]    [get_bd_pins axi_ad9680_dma/s_axis_ready]       
   connect_bd_net -net axi_ad9680_dma_ddata          [get_bd_pins axi_ad9680_fifo/dma_wdata]     [get_bd_pins axi_ad9680_dma/s_axis_data]      
   connect_bd_net -net axi_ad9680_dma_irq            [get_bd_pins axi_ad9680_dma/irq]            [get_bd_pins sys_concat_intc/In13] 
-}
 
   # dac/adc clocks
 
   connect_bd_net -net axi_ad9144_dac_clk [get_bd_ports dac_clk]
   connect_bd_net -net axi_ad9680_adc_clk [get_bd_ports adc_clk]
+
+if {$sys_zynq == 0} {
+
+  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9680_fifo/axi_clk] $sys_200m_clk_source
+}
 
   # interconnect (cpu)
 
@@ -452,42 +441,42 @@ if {$sys_zynq == 0} {
 if {$sys_zynq == 0} {
 
   connect_bd_intf_net -intf_net axi_mem_interconnect_s09_axi [get_bd_intf_pins axi_mem_interconnect/S09_AXI] [get_bd_intf_pins axi_ad9144_dma/m_src_axi]
-  connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/S09_ACLK] $sys_200m_clk_source
-  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9144_dma/m_src_axi_aclk] 
-  connect_bd_net -net sys_200m_resetn [get_bd_pins axi_mem_interconnect/S09_ARESETN] $sys_200m_resetn_source
-  connect_bd_net -net sys_200m_resetn [get_bd_pins axi_ad9144_dma/m_src_axi_aresetn] 
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S09_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9144_dma/m_src_axi_aclk] 
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S09_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9144_dma/m_src_axi_aresetn] 
 
   connect_bd_intf_net -intf_net axi_mem_interconnect_s10_axi [get_bd_intf_pins axi_mem_interconnect/S10_AXI] [get_bd_intf_pins axi_ad9680_dma/m_dest_axi]    
-  connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/S10_ACLK] $sys_200m_clk_source
-  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9680_dma/m_dest_axi_aclk] 
-  connect_bd_net -net sys_200m_resetn [get_bd_pins axi_mem_interconnect/S10_ARESETN] $sys_200m_resetn_source
-  connect_bd_net -net sys_200m_resetn [get_bd_pins axi_ad9680_dma/m_dest_axi_aresetn] 
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S10_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9680_dma/m_dest_axi_aclk] 
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S10_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9680_dma/m_dest_axi_aresetn] 
 
 } else {
 
   connect_bd_intf_net -intf_net axi_ad9144_dma_interconnect_m00_axi [get_bd_intf_pins axi_ad9144_dma_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP1]
   connect_bd_intf_net -intf_net axi_ad9144_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9144_dma_interconnect/S00_AXI] [get_bd_intf_pins axi_ad9144_dma/m_src_axi]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9144_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9144_dma_interconnect/M00_ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9144_dma_interconnect/S00_ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_ps7/S_AXI_HP1_ACLK]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9144_dma/m_src_axi_aclk] 
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9144_dma_interconnect/ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9144_dma_interconnect/M00_ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9144_dma_interconnect/S00_ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9144_dma/m_src_axi_aresetn] 
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9144_dma_interconnect/ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9144_dma_interconnect/M00_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9144_dma_interconnect/S00_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins sys_ps7/S_AXI_HP1_ACLK]
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9144_dma/m_src_axi_aclk] 
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9144_dma_interconnect/ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9144_dma_interconnect/M00_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9144_dma_interconnect/S00_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9144_dma/m_src_axi_aresetn] 
 
   connect_bd_intf_net -intf_net axi_ad9680_dma_interconnect_m00_axi [get_bd_intf_pins axi_ad9680_dma_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP2]
   connect_bd_intf_net -intf_net axi_ad9680_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9680_dma_interconnect/S00_AXI] [get_bd_intf_pins axi_ad9680_dma/m_dest_axi]    
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9680_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9680_dma_interconnect/M00_ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9680_dma_interconnect/S00_ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_ps7/S_AXI_HP2_ACLK]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9680_dma/m_dest_axi_aclk] 
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9680_dma_interconnect/ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9680_dma_interconnect/M00_ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9680_dma_interconnect/S00_ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9680_dma/m_dest_axi_aresetn] 
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9680_dma_interconnect/ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9680_dma_interconnect/M00_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9680_dma_interconnect/S00_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins sys_ps7/S_AXI_HP2_ACLK]
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9680_dma/m_dest_axi_aclk] 
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9680_dma_interconnect/ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9680_dma_interconnect/M00_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9680_dma_interconnect/S00_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9680_dma/m_dest_axi_aresetn] 
 }
 
   # ila
@@ -536,9 +525,11 @@ if {$sys_zynq == 0} {
 
 if {$sys_zynq == 0} {
 
-  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9144_dma/m_src_axi]   [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]        SEG_axi_ddr_cntrl
-  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9680_dma/m_dest_axi]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]        SEG_axi_ddr_cntrl
-  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_daq2_gt/m_axi]          [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]        SEG_axi_ddr_cntrl
+  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9144_dma/m_src_axi]   $sys_addr_mem_seg SEG_axi_ddr_cntrl
+  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9680_dma/m_dest_axi]  $sys_addr_mem_seg SEG_axi_ddr_cntrl
+  create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_daq2_gt/m_axi]          $sys_addr_mem_seg SEG_axi_ddr_cntrl
+
+  create_bd_addr_seg -range 0x00100000 -offset 0xc0000000 [get_bd_addr_spaces axi_ad9680_fifo/axi_fifo2s/axi] [get_bd_addr_segs axi_ad9680_fifo/axi_bram_ctl/S_AXI/Mem0] SEG_axi_bram_ctl_mem
 
 } else {
 
