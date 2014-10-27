@@ -16,11 +16,11 @@ variable sys_interrupts_q
 ###################################################################################################
 
 set sys_cpu_interconnect_index 0
-set sys_hp0_interconnect_index 0
-set sys_hp1_interconnect_index 0
-set sys_hp2_interconnect_index 0
-set sys_hp3_interconnect_index 0
-set sys_mem_interconnect_index 0
+set sys_hp0_interconnect_index -1
+set sys_hp1_interconnect_index -1
+set sys_hp2_interconnect_index -1
+set sys_hp3_interconnect_index -1
+set sys_mem_interconnect_index -1
 set sys_interrupts_n 0
 
 ###################################################################################################
@@ -65,13 +65,137 @@ proc ad_connect {p_name_1 p_name_2} {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_mem_interconnect {p_sel p_name p_clk} {
+proc ad_mem_interconnect {p_clk p_name} {
 
-  set m_clk_source [filter [get_bd_pins -of_objects [get_bd_nets $p_clk]] -regexp "DIR == O"]
+  ad_mem_interconnect_int "MEM" $p_clk $p_name
+}
 
-  if {($p_sel == "HP0") && ($sys_zynq == 1)} {
+proc ad_hp0_interconnect {p_clk p_name} {
+
+  ad_mem_interconnect_int "HP0" $p_clk $p_name
+}
+
+proc ad_hp1_interconnect {p_clk p_name} {
+
+  ad_mem_interconnect_int "HP1" $p_clk $p_name
+}
+
+proc ad_hp2_interconnect {p_clk p_name} {
+
+  ad_mem_interconnect_int "HP2" $p_clk $p_name
+}
+
+proc ad_hp3_interconnect {p_name p_clk} {
+
+  ad_mem_interconnect_int "HP3" $p_clk $p_name
+}
+
+###################################################################################################
+###################################################################################################
+
+proc ad_mem_interconnect_int {p_sel p_clk p_name} {
+
+  global sys_zynq
+  global sys_hp0_interconnect_index
+  global sys_hp1_interconnect_index
+  global sys_hp2_interconnect_index
+  global sys_hp3_interconnect_index
+  global sys_mem_interconnect_index
+
+  set p_intf_name [lrange [split $p_name "/"] end end]
+  set p_cell_name [lrange [split $p_name "/"] 0 0]
+  set p_intf_clock [filter [get_bd_pins -quiet -of_objects [get_bd_cells $p_cell_name]] \
+    -regexp "CONFIG.ASSOCIATED_BUSIF == ${p_intf_name}"]
+
+  if {($p_sel eq "HP0") && ($sys_zynq == 1)} {
     if {$sys_hp0_interconnect_index == 0} {
     }
+  }
+
+
+  if {($p_sel eq "MEM") && ($sys_zynq == 1)} {
+
+    set i_str "S$sys_mem_interconnect_index"
+    if {$sys_mem_interconnect_index < 10} {
+      set i_str "S0$sys_mem_interconnect_index"
+    }
+
+    if {$sys_mem_interconnect_index == -1} {
+      ad_connect sys_cpu_resetn axi_mem_interconnect/ARESETN
+      ad_connect $p_clk axi_mem_interconnect/ACLK
+      ad_connect sys_cpu_resetn axi_mem_interconnect/M00_ARESETN
+      ad_connect $p_clk axi_mem_interconnect/M00_ACLK
+      ad_connect axi_mem_interconnect/M00_AXI $p_name
+    } else {
+      ad_connect sys_cpu_resetn axi_mem_interconnect/${i_str}_ARESETN
+      ad_connect $p_clk axi_mem_interconnect/${i_str}_ACLK
+      ad_connect axi_mem_interconnect/${i_str}_AXI $p_name
+      ad_connect $p_clk $p_intf_clock
+    }
+
+    set sys_mem_interconnect_index [expr $sys_mem_interconnect_index + 1]
+  }
+}
+
+###################################################################################################
+###################################################################################################
+
+proc ad_cpu_interconnect {p_address p_name} {
+
+  global sys_zynq
+  global sys_addr_cntrl_space
+  global sys_cpu_interconnect_index
+
+  set i_str "M$sys_cpu_interconnect_index"
+  if {$sys_cpu_interconnect_index < 10} {
+    set i_str "M0$sys_cpu_interconnect_index"
+  }
+
+  if {($sys_cpu_interconnect_index == 0) && ($sys_zynq == 1)} {
+    ad_connect sys_cpu_clk sys_ps7/M_AXI_GP0_ACLK
+    ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
+    ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
+    ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
+    ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
+    ad_connect axi_cpu_interconnect/S00_AXI sys_ps7/M_AXI_GP0
+  }
+
+  if {($sys_cpu_interconnect_index == 0) && ($sys_zynq == 0)} {
+    ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
+    ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
+    ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
+    ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
+    ad_connect axi_cpu_interconnect/S00_AXI sys_mb/M_AXI_DP
+  }
+
+  set sys_cpu_interconnect_index [expr $sys_cpu_interconnect_index + 1]
+  set p_intf [filter [get_bd_intf_pins -of_objects [get_bd_cells $p_name]] \
+    -regexp "MODE == Slave && VLNV == xilinx.com:interface:aximm_rtl:1.0"]
+  set p_intf_name [lrange [split $p_intf "/"] end end]
+  set p_intf_clock [filter [get_bd_pins -quiet -of_objects [get_bd_cells $p_name]] \
+    -regexp "CONFIG.ASSOCIATED_BUSIF == ${p_intf_name}"]
+  set p_intf_reset [get_property CONFIG.ASSOCIATED_RESET [get_bd_pins ${p_intf_clock}]]
+
+  set_property CONFIG.NUM_MI $sys_cpu_interconnect_index [get_bd_cells axi_cpu_interconnect]
+
+  ad_connect sys_cpu_clk axi_cpu_interconnect/${i_str}_ACLK
+  ad_connect sys_cpu_clk ${p_intf_clock}
+  ad_connect sys_cpu_resetn axi_cpu_interconnect/${i_str}_ARESETN
+  ad_connect sys_cpu_resetn ${p_name}/${p_intf_reset}
+  ad_connect axi_cpu_interconnect/${i_str}_AXI ${p_intf}
+
+  set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
+  set p_index 0
+  foreach p_seg_name $p_seg {
+    if {$p_index == 0} {
+      set p_seg_range [get_property range $p_seg_name]
+      create_bd_addr_seg -range $p_seg_range \
+        -offset $p_address $sys_addr_cntrl_space \
+        $p_seg_name "SEG_data_${p_name}"
+    } else {
+      assign_bd_address $p_seg_name
+    }
+    incr p_index
   }
 }
 
@@ -130,95 +254,3 @@ proc ad_cpu_interrupt_update {} {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_cpu_interconnect {p_address p_name} {
-
-  global sys_zynq
-  global sys_addr_cntrl_space
-  global sys_cpu_interconnect_index
-
-  set i_str "M$sys_cpu_interconnect_index"
-  if {$sys_cpu_interconnect_index < 10} {
-    set i_str "M0$sys_cpu_interconnect_index"
-  }
-
-  set m_clk_source [filter [get_bd_pins -of_objects [get_bd_nets sys_cpu_clk]] -regexp "DIR == O"]
-  set m_reset_source [filter [get_bd_pins -of_objects [get_bd_nets sys_cpu_resetn]] -regexp "DIR == O"]
-
-  if {($sys_cpu_interconnect_index == 0) && ($sys_zynq == 1)} {
-
-    connect_bd_net -net sys_cpu_clk \
-      [get_bd_pins sys_ps7/M_AXI_GP0_ACLK] \
-      [get_bd_pins axi_cpu_interconnect/ACLK] \
-      [get_bd_pins axi_cpu_interconnect/S00_ACLK] \
-      $m_clk_source
-
-    connect_bd_net -net sys_cpu_resetn \
-      [get_bd_pins axi_cpu_interconnect/ARESETN] \
-      [get_bd_pins axi_cpu_interconnect/S00_ARESETN] \
-      $m_reset_source
-
-    connect_bd_intf_net -intf_net sys_ps7_axi \
-      [get_bd_intf_pins axi_cpu_interconnect/S00_AXI] \
-      [get_bd_intf_pins sys_ps7/M_AXI_GP0]
-
-  }
-
-  if {($sys_cpu_interconnect_index == 0) && ($sys_zynq == 0)} {
-
-    connect_bd_net -net sys_cpu_clk \
-      [get_bd_pins axi_cpu_interconnect/ACLK] \
-      [get_bd_pins axi_cpu_interconnect/S00_ACLK] \
-      $m_clk_source
-
-    connect_bd_net -net sys_cpu_resetn \
-      [get_bd_pins axi_cpu_interconnect/ARESETN] \
-      [get_bd_pins axi_cpu_interconnect/S00_ARESETN] \
-      $m_reset_source
-
-    connect_bd_intf_net -intf_net sys_mb_axi \
-      [get_bd_intf_pins axi_cpu_interconnect/S00_AXI] \
-      [get_bd_intf_pins sys_mb/M_AXI_DP]
-
-  }
-
-  set sys_cpu_interconnect_index [expr $sys_cpu_interconnect_index + 1]
-  set p_intf [filter [get_bd_intf_pins -of_objects [get_bd_cells $p_name]] \
-    -regexp "MODE == Slave && VLNV == xilinx.com:interface:aximm_rtl:1.0"]
-  set p_intf_name [lrange [split $p_intf "/"] end end]
-  set p_clock [filter [get_bd_pins -quiet -of_objects [get_bd_cells $p_name]] \
-    -regexp "CONFIG.ASSOCIATED_BUSIF == ${p_intf_name}"]
-  set p_reset [get_property CONFIG.ASSOCIATED_RESET [get_bd_pins ${p_clock}]]
-
-  set_property CONFIG.NUM_MI $sys_cpu_interconnect_index [get_bd_cells axi_cpu_interconnect]
-
-  connect_bd_net -net sys_cpu_clk \
-    [get_bd_pins "axi_cpu_interconnect/${i_str}_ACLK"] \
-    [get_bd_pins ${p_clock}] \
-    $m_clk_source
-
-  connect_bd_net -net sys_cpu_resetn \
-    [get_bd_pins "axi_cpu_interconnect/${i_str}_ARESETN"] \
-    [get_bd_pins ${p_name}/${p_reset}] \
-    $m_reset_source
-
-  connect_bd_intf_net -intf_net "${p_name}_axi_lite" \
-    [get_bd_intf_pins "axi_cpu_interconnect/${i_str}_AXI"] \
-    [get_bd_intf_pins ${p_intf}]
-
-  set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
-  set p_index 0
-  foreach p_seg_name $p_seg {
-    if {$p_index == 0} {
-      set p_seg_range [get_property range $p_seg_name]
-      create_bd_addr_seg -range $p_seg_range \
-        -offset $p_address $sys_addr_cntrl_space \
-        $p_seg_name "SEG_data_${p_name}"
-    } else {
-      assign_bd_address $p_seg_name
-    }
-    incr p_index
-  }
-}
-
-###################################################################################################
-###################################################################################################
