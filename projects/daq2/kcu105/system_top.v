@@ -108,6 +108,9 @@ module system_top (
   tx_data_p,
   tx_data_n,
   
+  trig_p,
+  trig_n,
+
   adc_fdb,
   adc_fda,
   dac_irq,
@@ -116,15 +119,14 @@ module system_top (
   adc_pd,
   dac_txen,
   dac_reset,
-  clkd_pd,
   clkd_sync,
-  clkd_reset,
  
   spi_csn_clk,
   spi_csn_dac,
   spi_csn_adc,
   spi_clk,
-  spi_sdio);
+  spi_sdio,
+  spi_dir);
 
   input           sys_rst;
   input           sys_clk_p;
@@ -193,6 +195,9 @@ module system_top (
   output  [ 3:0]  tx_data_p;
   output  [ 3:0]  tx_data_n;
   
+  input           trig_p;
+  input           trig_n;
+ 
   inout           adc_fdb;
   inout           adc_fda;
   inout           dac_irq;
@@ -201,15 +206,14 @@ module system_top (
   inout           adc_pd;
   inout           dac_txen;
   inout           dac_reset;
-  inout           clkd_pd;
   inout           clkd_sync;
-  inout           clkd_reset;
   
   output          spi_csn_clk;
   output          spi_csn_dac;
   output          spi_csn_adc;
   output          spi_clk;
   inout           spi_sdio;
+  output          spi_dir;
   
   // internal registers
 
@@ -224,6 +228,7 @@ module system_top (
 
   // internal signals
 
+  wire            trig;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
@@ -415,18 +420,24 @@ module system_top (
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
-    .spi_sdio (spi_sdio));
+    .spi_sdio (spi_sdio),
+    .spi_dir (spi_dir));
 
-  ad_iobuf #(.DATA_WIDTH(26)) i_iobuf (
-    .dt ({gpio_ctl_t[5:0], gpio_status_t[4:0]}),
-    .di ({gpio_ctl_o[5:0], gpio_status_o[4:0]}),
-    .do ({gpio_ctl_i[5:0], gpio_status_i[4:0]}),
+  IBUFDS i_ibufds_trig (
+    .I (trig_p),
+    .IB (trig_n),
+    .O (trig));
+
+  assign gpio_ctl_i[0] = trig;
+
+  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
+    .dt ({gpio_ctl_t[5:3], gpio_ctl_t[1], gpio_status_t[4:0]}),
+    .di ({gpio_ctl_o[5:3], gpio_ctl_o[1], gpio_status_o[4:0]}),
+    .do ({gpio_ctl_i[5:3], gpio_ctl_i[1], gpio_status_i[4:0]}),
     .dio ({ adc_pd,          // 10
             dac_txen,        //  9
             dac_reset,       //  8
-            clkd_pd,         //  7
             clkd_sync,       //  6
-            clkd_reset,      //  5
             adc_fdb,         //  4
             adc_fda,         //  3
             dac_irq,         //  2
