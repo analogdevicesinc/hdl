@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -147,6 +147,48 @@ module system_top (
 
   assign mgt_clk_sel = 2'd0;
 
+  wire            timer_irq;
+  wire            eth_irq;
+  wire            eth_dma_mm2s_irq;
+  wire            eth_dma_s2mm_irq;
+  wire            uart_irq;
+  wire            gpio_lcd_irq;
+  wire            gpio_sw_irq;
+  wire            spdif_dma_irq;
+  wire            iic_irq;
+  wire            hdmi_dma_irq;
+  wire   [31:0]   mb_axi_intr;
+
+  ad_interrupts #(
+    .C_PROC_TYPE(0)
+  ) i_ad_interrupts (
+    .timer_irq(timer_irq),
+    .eth_irq(eth_irq),
+    .eth_dma_mm2s_irq(eth_dma_mm2s),
+    .eth_dma_s2mm_irq(eth_dma_s2mm),
+    .uart_irq(uart_irq),
+    .gpio_lcd_irq(gpio_lcd_irq),
+    .gpio_sw_irq(gpio_sw_irq),
+    .spdif_dma_irq(spdif_dma_irq),
+    .hdmi_dma_irq(hdmi_dma_irq),
+    .iic_irq(iic_irq),
+    .dev0_dma_irq(1'b0),
+    .dev1_dma_irq(1'b0),
+    .dev2_dma_irq(1'b0),
+    .dev3_dma_irq(1'b0),
+    .dev4_dma_irq(1'b0),
+    .dev5_dma_irq(1'b0),
+    .spi0_irq(1'b0),
+    .spi1_irq(1'b0),
+    .spi2_irq(1'b0),
+    .spi3_irq(1'b0),
+    .gpio0_irq(1'b0),
+    .gpio1_irq(1'b0),
+    .gpio2_irq(1'b0),
+    .gpio3_irq(1'b0),
+    .mb_axi_intr(mb_axi_intr),
+    .ps7_irq_f2p());
+
   // instantiations
 
   system_wrapper i_system_wrapper (
@@ -191,7 +233,18 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout));
+    .uart_sout (uart_sout),
+    .timer_irq (timer_irq),
+    .eth_irq (eth_irq),
+    .eth_dma_mm2s_irq (eth_dma_mm2s_irq),
+    .eth_dma_s2mm_irq (eth_dma_s2mm_irq),
+    .uart_irq (uart_irq),
+    .gpio_lcd_irq (gpio_lcd_irq),
+    .gpio_sw_irq (gpio_sw_irq),
+    .spdif_dma_irq (spdif_dma_irq),
+    .iic_irq (iic_irq),
+    .hdmi_dma_irq (hdmi_dma_irq),
+    .mb_axi_intr (mb_axi_intr));
 
 endmodule
 
