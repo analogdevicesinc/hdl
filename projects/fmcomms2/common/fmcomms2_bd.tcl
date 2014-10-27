@@ -68,11 +68,6 @@ if {$sys_zynq == 1} {
   set util_dac_unpack [create_bd_cell -type ip -vlnv analog.com:user:util_dac_unpack:1.0 util_dac_unpack]
   set_property -dict [list CONFIG.CHANNELS {4}] $util_dac_unpack
 
-  # constant 0
-
-  set constant_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 constant_0]
-  set_property -dict [list CONFIG.CONST_VAL {0}] $constant_0
-
 if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.C_DMA_AXI_PROTOCOL_SRC {1}] $axi_ad9361_dac_dma
 }
@@ -323,6 +318,7 @@ if {$sys_zynq == 0} {
   # ila (adc)
 
   set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_adc]
+  set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
   set_property -dict [list CONFIG.C_NUM_OF_PROBES {8}] $ila_adc
   set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
   set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_adc
