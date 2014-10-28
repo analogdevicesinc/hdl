@@ -1,40 +1,44 @@
-// -----------------------------------------------------------------------------
-//
-// Copyright 2012(c) Analog Devices, Inc.
+// ***************************************************************************
+// ***************************************************************************
+// Copyright 2011(c) Analog Devices, Inc.
 //
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
-//  - Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-//  - Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in
-//    the documentation and/or other materials provided with the
-//    distribution.
-//  - Neither the name of Analog Devices, Inc. nor the names of its
-//    contributors may be used to endorse or promote products derived
-//    from this software without specific prior written permission.
-//  - The use of this software may or may not infringe the patent rights
-//    of one or more patent holders.  This license does not release you
-//    from the requirement that you obtain separate licenses from these
-//    patent holders to use this software.
-//  - Use of the software either in source or binary form, must be run
-//    on or directly connected to an Analog Devices Inc. component.
+//     - Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     - Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in
+//       the documentation and/or other materials provided with the
+//       distribution.
+//     - Neither the name of Analog Devices, Inc. nor the names of its
+//       contributors may be used to endorse or promote products derived
+//       from this software without specific prior written permission.
+//     - The use of this software may or may not infringe the patent rights
+//       of one or more patent holders.  This license does not release you
+//       from the requirement that you obtain separate licenses from these
+//       patent holders to use this software.
+//     - Use of the software either in source or binary form, must be run
+//       on or directly connected to an Analog Devices Inc. component.
 //
-// THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY
-// AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-// IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-`timescale 1ns / 1ps
+// THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+// INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
+// PARTICULAR PURPOSE ARE DISCLAIMED.
+//
+// IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+// BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+// THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// ***************************************************************************
+// ***************************************************************************
+// ***************************************************************************
+// ***************************************************************************
+
+`timescale 1ns/100ps
+
 //------------------------------------------------------------------------------   
 //----------- Module Declaration -----------------------------------------------
 //------------------------------------------------------------------------------ 
@@ -157,12 +161,30 @@ begin
     case(present_state)
         ADC_IDLE_STATE:
             begin
-                // If start conversion has been requested
-                if(start_conversion_i == 1'b1)
+                // If transmit data is required
+                if(start_transmission_i == 1'b1)
+                begin
+                    next_state <= ADC_PREP_SEND_DATA_STATE;
+                end
+                // If read data is required
+                else if(start_read_i == 1'b1) 
+                begin
+                    next_state <= ADC_PREP_READ_DATA_STATE; 
+                end
+				// If start conversion has been requested
+                else if(start_conversion_i == 1'b1)
                 begin
                     next_state <= ADC_WAIT_FOR_DATA_STATE;
                 end
-                // If transmit data is required
+            end
+        ADC_WAIT_FOR_DATA_STATE:
+            begin
+                // If new data is available
+                if(adc_sdo_i == 1'b0)
+                begin
+                    next_state <= ADC_PREP_READ_RESULT_STATE;
+                end
+				// If transmit data is required
                 else if(start_transmission_i == 1'b1)
                 begin
                     next_state <= ADC_PREP_SEND_DATA_STATE;
@@ -172,13 +194,10 @@ begin
                 begin
                     next_state <= ADC_PREP_READ_DATA_STATE; 
                 end
-            end
-        ADC_WAIT_FOR_DATA_STATE:
-            begin
-                // If new data is available
-                if(adc_sdo_i == 1'b0)
+				// If transmit data is not required anymore
+                else if(start_conversion_i == 1'b0)
                 begin
-                    next_state <= ADC_PREP_READ_RESULT_STATE;
+                    next_state <= ADC_IDLE_STATE;
                 end
             end
         ADC_PREP_READ_RESULT_STATE:
@@ -261,8 +280,8 @@ begin
             ADC_IDLE_STATE:
                 begin
                     dma_rdy_int <= 1'b0;
-                    tx_data_rdy_int <= 1'b1;
-                    rx_data_rdy_int <= 1'b1;
+                    tx_data_rdy_int <= 1'b0;
+                    rx_data_rdy_int <= 1'b0;
                     cs_int <= 1'b1;
                 end
             ADC_WAIT_FOR_DATA_STATE:
@@ -309,7 +328,7 @@ begin
                     // Maximum 32 bits transmission (that is why I add 16'd0 to the LSB)
                     cs_int <= 1'b1;
                     rx_data_rdy_int <= 1'b1;
-                    tx_data_reg_switch <= {tx_data_i, 16'd0};
+                    tx_data_reg_switch <= {2'b01, tx_data_i[29:0], 16'd0};
                 end
             ADC_READ_DATA_STATE:
                 begin

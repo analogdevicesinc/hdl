@@ -2,7 +2,6 @@
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {32}] $sys_ps7
 set_property -dict [list CONFIG.NUM_MI {9}] $axi_cpu_interconnect
-set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
 
 set_property LEFT 31 [get_bd_ports GPIO_I]
 set_property LEFT 31 [get_bd_ports GPIO_O]
@@ -12,9 +11,12 @@ set adc_sdo_i    [create_bd_port -dir I adc_sdo_i]
 set adc_sdi_o    [create_bd_port -dir O adc_sdi_o]
 set adc_cs_o     [create_bd_port -dir O adc_cs_o]
 set adc_sclk_o   [create_bd_port -dir O adc_sclk_o]
-set dma_data     [create_bd_port -dir I -from 63 -to 0  dma_data]
+set led_clk_o    [create_bd_port -dir O led_clk_o]
+set dma_data     [create_bd_port -dir I -from 127 -to 0  dma_data]
 set adc_data_0   [create_bd_port -dir O -from 31 -to 0  adc_data_0]
 set adc_data_1   [create_bd_port -dir O -from 31 -to 0  adc_data_1]
+set adc_data_2   [create_bd_port -dir O -from 31 -to 0  adc_data_2]
+set adc_data_3   [create_bd_port -dir O -from 31 -to 0  adc_data_3]
 
 set axi_ad7175  [create_bd_cell -type ip -vlnv analog.com:user:axi_ad7175:1.0 axi_ad7175]
 
@@ -29,7 +31,7 @@ set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad7175_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad7175_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad7175_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad7175_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad7175_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}] $axi_ad7175_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad7175_dma
 
 set axi_ad7175_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad7175_dma_interconnect]
@@ -45,14 +47,18 @@ connect_bd_net -net axi_ad7175_adc_sdo_i     [get_bd_ports adc_sdo_i]     [get_b
 connect_bd_net -net axi_ad7175_adc_sdi_o     [get_bd_ports adc_sdi_o]     [get_bd_pins axi_ad7175/adc_sdi_o]
 connect_bd_net -net axi_ad7175_adc_cs_o      [get_bd_ports adc_cs_o]      [get_bd_pins axi_ad7175/adc_cs_o]
 connect_bd_net -net axi_ad7175_adc_sclk_o    [get_bd_ports adc_sclk_o]    [get_bd_pins axi_ad7175/adc_sclk_o]
+connect_bd_net -net axi_ad7175_led_clk_o     [get_bd_ports led_clk_o]     [get_bd_pins axi_ad7175/led_clk_o]
 
-connect_bd_net -net axi_ad7175_dma_valid       [get_bd_pins axi_ad7175/adc_valid_1] [get_bd_pins axi_ad7175_dma/fifo_wr_en]
+connect_bd_net -net axi_ad7175_dma_valid       [get_bd_pins axi_ad7175/adc_valid_3] [get_bd_pins axi_ad7175_dma/fifo_wr_en]
 
 connect_bd_net -net axi_ad7175_dma_data_0      [get_bd_pins axi_ad7175/adc_data_0]  [get_bd_ports adc_data_0]
 connect_bd_net -net axi_ad7175_dma_data_1      [get_bd_pins axi_ad7175/adc_data_1]  [get_bd_ports adc_data_1]
+connect_bd_net -net axi_ad7175_dma_data_2      [get_bd_pins axi_ad7175/adc_data_2]  [get_bd_ports adc_data_2]
+connect_bd_net -net axi_ad7175_dma_data_3      [get_bd_pins axi_ad7175/adc_data_3]  [get_bd_ports adc_data_3]
 connect_bd_net -net axi_ad7175_dma_data        [get_bd_ports dma_data]              [get_bd_pins axi_ad7175_dma/fifo_wr_din]
 
 connect_bd_net -net axi_ad7175_dma_dovf        [get_bd_pins axi_ad7175/adc_dovf]  [get_bd_pins axi_ad7175_dma/fifo_wr_overflow]
+connect_bd_net -net axi_ad7175_dma_irq         [get_bd_pins axi_ad7175_dma/irq]   [get_bd_pins sys_concat_intc/In13]
 
 connect_bd_net -net sys_adc_clk_source     [get_bd_pins axi_ad7175/adc_clk_i] $sys_adc_clk_source
 connect_bd_net -net sys_adc_dma_clk        [get_bd_pins axi_ad7175_dma/fifo_wr_clk] [get_bd_pins axi_ad7175/adc_clk]
@@ -74,11 +80,11 @@ connect_bd_net -net sys_100m_resetn   [get_bd_pins axi_cpu_interconnect/M08_ARES
 connect_bd_intf_net -intf_net axi_ad7175_dma_interconnect_s0 [get_bd_intf_pins axi_ad7175_dma_interconnect/S00_AXI] [get_bd_intf_pins axi_ad7175_dma/m_dest_axi]
 connect_bd_intf_net -intf_net axi_ad7175_dma_interconnect_m00_axi [get_bd_intf_pins axi_ad7175_dma_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP2]
 
-connect_bd_net -net sys_200m_clk  [get_bd_pins axi_ad7175_dma_interconnect/S00_ACLK] $sys_200m_clk_source
-connect_bd_net -net sys_200m_clk  [get_bd_pins axi_ad7175_dma/m_dest_axi_aclk]
-connect_bd_net -net sys_200m_clk  [get_bd_pins sys_ps7/S_AXI_HP2_ACLK]
-connect_bd_net -net sys_200m_clk  [get_bd_pins axi_ad7175_dma_interconnect/ACLK] $sys_200m_clk_source
-connect_bd_net -net sys_200m_clk  [get_bd_pins axi_ad7175_dma_interconnect/M00_ACLK] $sys_200m_clk_source
+connect_bd_net -net sys_100m_clk  [get_bd_pins axi_ad7175_dma_interconnect/S00_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk  [get_bd_pins axi_ad7175_dma/m_dest_axi_aclk]
+connect_bd_net -net sys_100m_clk  [get_bd_pins sys_ps7/S_AXI_HP2_ACLK]
+connect_bd_net -net sys_100m_clk  [get_bd_pins axi_ad7175_dma_interconnect/ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk  [get_bd_pins axi_ad7175_dma_interconnect/M00_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_resetn   [get_bd_pins axi_ad7175_dma_interconnect/ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn   [get_bd_pins axi_ad7175_dma_interconnect/M00_ARESETN] $sys_100m_resetn_source
 

@@ -48,6 +48,7 @@ module axi_ad7175 (
   adc_cs_o,
   adc_sclk_o,
   adc_clk_i,
+  led_clk_o,
 
   // dma interface
 
@@ -58,6 +59,12 @@ module axi_ad7175 (
   adc_valid_1,
   adc_enable_1,
   adc_data_1,
+  adc_valid_2,
+  adc_enable_2,
+  adc_data_2,
+  adc_valid_3,
+  adc_enable_3,
+  adc_data_3,
   adc_dovf,
   adc_dunf,
 
@@ -98,6 +105,7 @@ module axi_ad7175 (
   output 			adc_cs_o;
   output 			adc_sclk_o;
   input				adc_clk_i;
+  output			led_clk_o;
 
   // dma interface
 
@@ -108,6 +116,12 @@ module axi_ad7175 (
   output          adc_valid_1;
   output          adc_enable_1;
   output  [31:0]  adc_data_1;
+  output          adc_valid_2;
+  output          adc_enable_2;
+  output  [31:0]  adc_data_2;
+  output          adc_valid_3;
+  output          adc_enable_3;
+  output  [31:0]  adc_data_3;  
   input           adc_dovf;
   input           adc_dunf;
 
@@ -155,9 +169,9 @@ module axi_ad7175 (
   wire            up_wr_s;
   wire    [13:0]  up_addr_s;
   wire    [31:0]  up_wdata_s;
-  wire    [31:0]  up_rdata_s[0:2];
-  wire            up_rack_s[0:2];
-  wire            up_wack_s[0:2];
+  wire    [31:0]  up_rdata_s[0:4];
+  wire            up_rack_s[0:4];
+  wire            up_wack_s[0:4];
   
   wire    [31:0]   adc_data_s;
   wire 	  [ 1:0]   adc_reg_rw_s;
@@ -166,6 +180,10 @@ module axi_ad7175 (
   wire    [31:0]   adc_rx_data_s;
   wire             adc_rx_data_rdy_s;
   wire			   adc_tx_data_rdy_s;
+  wire    [31:0]   adc_gpio_out;
+  
+  wire             clk_div_update_rdy_s;
+  wire    [23:0]   phase_data_s;
 
   // signal name changes
   assign adc_clk = s_axi_aclk;
@@ -180,9 +198,9 @@ module axi_ad7175 (
       up_rack <= 'd0;
       up_wack <= 'd0;
     end else begin      
-      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
-      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
-      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3] | up_rdata_s[4];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3] | up_rack_s[4];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3] | up_wack_s[4];
     end
   end
 
@@ -209,8 +227,8 @@ module axi_ad7175 (
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[0]),
     .up_rack (up_rack_s[0]));
-
-  // channel
+	
+// channel
 
   axi_ad7175_channel #(
     .CHID(1),
@@ -218,8 +236,8 @@ module axi_ad7175 (
   i_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_data ({8'b0, adc_data_s[23:0]}),
-	.adc_valid_in(data_rd_ready_s && (adc_data_s[25:24] == 2'b1)),
+    .adc_data ({8'b0, phase_data_s}),
+	.adc_valid_in(data_rd_ready_s && (adc_data_s[25:24] == 2'b0)),
     .adc_data_out (adc_data_1),
 	.adc_valid (adc_valid_1),
     .adc_enable (adc_enable_1),
@@ -232,24 +250,82 @@ module axi_ad7175 (
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[1]),
-    .up_rack (up_rack_s[1]));
+    .up_rack (up_rack_s[1]));	
 
+  // channel
+
+  axi_ad7175_channel #(
+    .CHID(3),
+    .DP_DISABLE (PCORE_ADC_DP_DISABLE))
+  i_channel_2 (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_data ({8'b0, adc_data_s[23:0]}),
+	.adc_valid_in(data_rd_ready_s && (adc_data_s[25:24] == 2'b1)),
+    .adc_data_out (adc_data_2),
+	.adc_valid (adc_valid_2),
+    .adc_enable (adc_enable_2),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[2]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_s[2]),
+    .up_rack (up_rack_s[2]));
+
+  axi_ad7175_channel #(
+    .CHID(4),
+    .DP_DISABLE (PCORE_ADC_DP_DISABLE))
+  i_channel_3 (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_data ({8'b0, phase_data_s}),
+	.adc_valid_in(data_rd_ready_s && (adc_data_s[25:24] == 2'b1)),
+    .adc_data_out (adc_data_3),
+	.adc_valid (adc_valid_3),
+    .adc_enable (adc_enable_3),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[3]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_s[3]),
+    .up_rack (up_rack_s[3]));
+
+  // clock divider
+    clk_div clk_div_i (
+    .clk_i(s_axi_aclk),
+	.reset_n_i(up_rstn),
+	.new_div_i(adc_reg_rw_s[1] && (adc_reg_address_s[7:0] == 8'h40)),
+	.div_i(adc_reg_data_w_s[31:0]),
+	.new_phase_inc_i(adc_reg_rw_s[1] && (adc_reg_address_s[7:0] == 8'h41)),
+	.phase_inc_i(adc_reg_data_w_s[31:0]),
+	.reg_update_rdy_o(clk_div_update_rdy_s),
+	.clk_o(led_clk_o),
+	.phase_o(phase_data_s));	
+	
   // main (device interface)
 
-ad7175_if ad7175_if_i(
+  ad7175_if ad7175_if_i(
 	.fpga_clk_i(s_axi_aclk),
     .adc_clk_i(adc_clk_i),
     .reset_n_i(~adc_rst),
 	
-	.start_conversion_i(1'b1),
+	.start_conversion_i(adc_gpio_out[0]),
     .dma_data_o(adc_data_s),
     .dma_data_rdy_o(data_rd_ready_s),
 	
-	.start_transmission_i(adc_reg_rw_s[1]),
+	.start_transmission_i(adc_reg_rw_s[1] && (adc_reg_address_s[7:0] < 8'h39)),
 	.tx_data_i({adc_reg_address_s[7:0], adc_reg_data_w_s[23:0]}),
 	.tx_data_rdy_o(adc_tx_data_rdy_s),
 	
-	.start_read_i(adc_reg_rw_s[0]),       
+	.start_read_i(adc_reg_rw_s[0] && (adc_reg_address_s[7:0] < 8'h39)),       
 	.rx_data_o(adc_rx_data_s),
 	.rx_data_rdy_o(adc_rx_data_rdy_s),
     
@@ -258,7 +334,7 @@ ad7175_if ad7175_if_i(
     .adc_cs_o(adc_cs_o),
     .adc_sclk_o(adc_sclk_o),
     .adc_status_o(adc_status_s));
-
+	
   // common processor control
 
   up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
@@ -277,7 +353,7 @@ ad7175_if ad7175_if_i(
     .adc_reg_data_r(adc_rx_data_s),
     .adc_reg_data_w(adc_reg_data_w_s),
     .adc_reg_rw(adc_reg_rw_s),
-    .adc_reg_done(adc_tx_data_rdy_s | adc_rx_data_rdy_s),  
+    .adc_reg_done(adc_tx_data_rdy_s | adc_rx_data_rdy_s | clk_div_update_rdy_s),  
 
     .up_status_pn_err (1'b0),
     .up_status_pn_oos (1'b0),
@@ -303,17 +379,17 @@ ad7175_if ad7175_if_i(
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd0),
     .up_adc_gpio_in (),
-    .up_adc_gpio_out (),
+    .up_adc_gpio_out (adc_gpio_out),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
     .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
-    .up_wack (up_wack_s[2]),
+    .up_wack (up_wack_s[4]),
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s[2]),
-    .up_rack (up_rack_s[2]));
+    .up_rdata (up_rdata_s[4]),
+    .up_rack (up_rack_s[4]));
 
   // up bus interface
 

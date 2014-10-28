@@ -89,6 +89,7 @@ module system_top (
   adc_sdi_o,
   adc_cs_o,
   adc_sclk_o,
+  led_clk_o,
   
   otg_vbusoc);
 
@@ -141,6 +142,7 @@ module system_top (
   output 			adc_sdi_o;
   output 			adc_cs_o;
   output 			adc_sclk_o;
+  output            led_clk_o;
 
   input           otg_vbusoc;
 
@@ -157,7 +159,9 @@ module system_top (
   wire            iic_mux_sda_t_s;
   wire    [31:0]  adc_data_0;
   wire    [31:0]  adc_data_1;
-  wire    [63:0]  dma_data;
+  wire    [31:0]  adc_data_2;
+  wire    [31:0]  adc_data_3;
+  wire    [127:0]  dma_data;
 
   // instantiations
 
@@ -224,7 +228,10 @@ module system_top (
     .adc_sdi_o (adc_sdi_o),
     .adc_cs_o (adc_cs_o),
     .adc_sclk_o (adc_sclk_o),
-	.dma_data ({adc_data_1, adc_data_0}),
+	.led_clk_o (led_clk_o),
+	.dma_data ({adc_data_3, adc_data_2, adc_data_1, adc_data_0}),
+	.adc_data_3(adc_data_3),
+	.adc_data_2(adc_data_2),
 	.adc_data_1(adc_data_1),
 	.adc_data_0(adc_data_0),
     .otg_vbusoc (otg_vbusoc),
