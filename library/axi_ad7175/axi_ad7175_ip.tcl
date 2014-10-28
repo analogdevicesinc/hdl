@@ -11,7 +11,7 @@ adi_ip_files axi_ad7175 [list \
   "$ad_hdl_dir/library/common/up_drp_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
-  "$ad_hdl_dir/library/common/up_clock_mon.v" \  
+  "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "up_adc_common.v" \
   "ad_datafmt.v" \

@@ -53,18 +53,15 @@ module axi_ad7175 (
   // dma interface
 
   adc_clk,
-  adc_valid_0,
   adc_enable_0,
   adc_data_0,
-  adc_valid_1,
   adc_enable_1,
   adc_data_1,
-  adc_valid_2,
   adc_enable_2,
   adc_data_2,
-  adc_valid_3,
   adc_enable_3,
   adc_data_3,
+  adc_valid_o,
   adc_dovf,
   adc_dunf,
 
@@ -110,18 +107,15 @@ module axi_ad7175 (
   // dma interface
 
   output          adc_clk;
-  output          adc_valid_0;
   output          adc_enable_0;
   output  [31:0]  adc_data_0;
-  output          adc_valid_1;
   output          adc_enable_1;
   output  [31:0]  adc_data_1;
-  output          adc_valid_2;
   output          adc_enable_2;
   output  [31:0]  adc_data_2;
-  output          adc_valid_3;
   output          adc_enable_3;
   output  [31:0]  adc_data_3;  
+  output          adc_valid_o;
   input           adc_dovf;
   input           adc_dunf;
 
@@ -153,6 +147,8 @@ module axi_ad7175 (
   reg     [31:0]  up_rdata = 'd0;
   reg             up_rack = 'd0;
   reg             up_wack = 'd0;
+  wire			  adc_valid_s;
+  reg			  adc_valid_d1;
 
   // internal clocks & resets
 
@@ -183,12 +179,13 @@ module axi_ad7175 (
   wire    [31:0]   adc_gpio_out;
   
   wire             clk_div_update_rdy_s;
-  wire    [23:0]   phase_data_s;
+  wire    [31:0]   phase_data_s;
 
   // signal name changes
   assign adc_clk = s_axi_aclk;
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+  assign adc_valid_o = adc_valid_s & ~adc_valid_d1;
 
   // processor read interface
 
@@ -201,6 +198,7 @@ module axi_ad7175 (
       up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3] | up_rdata_s[4];
       up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3] | up_rack_s[4];
       up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3] | up_wack_s[4];
+	  adc_valid_d1 <= adc_valid_s;
     end
   end
 
@@ -215,7 +213,7 @@ module axi_ad7175 (
     .adc_data ({8'b0, adc_data_s[23:0]}),
 	.adc_valid_in(data_rd_ready_s && (adc_data_s[25:24] == 2'b0)),
     .adc_data_out (adc_data_0),
-	.adc_valid (adc_valid_0),
+	.adc_valid (),
     .adc_enable (adc_enable_0),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -236,10 +234,10 @@ module axi_ad7175 (
   i_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_data ({8'b0, phase_data_s}),
+    .adc_data (phase_data_s),
 	.adc_valid_in(data_rd_ready_s && (adc_data_s[25:24] == 2'b0)),
     .adc_data_out (adc_data_1),
-	.adc_valid (adc_valid_1),
+	.adc_valid (),
     .adc_enable (adc_enable_1),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -263,7 +261,7 @@ module axi_ad7175 (
     .adc_data ({8'b0, adc_data_s[23:0]}),
 	.adc_valid_in(data_rd_ready_s && (adc_data_s[25:24] == 2'b1)),
     .adc_data_out (adc_data_2),
-	.adc_valid (adc_valid_2),
+	.adc_valid (),
     .adc_enable (adc_enable_2),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -282,10 +280,10 @@ module axi_ad7175 (
   i_channel_3 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_data ({8'b0, phase_data_s}),
+    .adc_data (phase_data_s),
 	.adc_valid_in(data_rd_ready_s && (adc_data_s[25:24] == 2'b1)),
     .adc_data_out (adc_data_3),
-	.adc_valid (adc_valid_3),
+	.adc_valid (adc_valid_s),
     .adc_enable (adc_enable_3),
     .up_rstn (up_rstn),
     .up_clk (up_clk),

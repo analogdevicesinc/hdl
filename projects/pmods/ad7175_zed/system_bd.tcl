@@ -49,7 +49,7 @@ connect_bd_net -net axi_ad7175_adc_cs_o      [get_bd_ports adc_cs_o]      [get_b
 connect_bd_net -net axi_ad7175_adc_sclk_o    [get_bd_ports adc_sclk_o]    [get_bd_pins axi_ad7175/adc_sclk_o]
 connect_bd_net -net axi_ad7175_led_clk_o     [get_bd_ports led_clk_o]     [get_bd_pins axi_ad7175/led_clk_o]
 
-connect_bd_net -net axi_ad7175_dma_valid       [get_bd_pins axi_ad7175/adc_valid_3] [get_bd_pins axi_ad7175_dma/fifo_wr_en]
+connect_bd_net -net axi_ad7175_dma_valid       [get_bd_pins axi_ad7175/adc_valid_o] [get_bd_pins axi_ad7175_dma/fifo_wr_en]
 
 connect_bd_net -net axi_ad7175_dma_data_0      [get_bd_pins axi_ad7175/adc_data_0]  [get_bd_ports adc_data_0]
 connect_bd_net -net axi_ad7175_dma_data_1      [get_bd_pins axi_ad7175/adc_data_1]  [get_bd_ports adc_data_1]
