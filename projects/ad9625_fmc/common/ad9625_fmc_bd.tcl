@@ -84,6 +84,8 @@ if {$sys_zynq == 1} {
   connect_bd_intf_net -intf_net sys_clk [get_bd_intf_ports sys_clk] [get_bd_intf_pins axi_ad9625_fifo/sys_clk]
 
 } else {
+
+  p_sys_dmafifo [current_bd_instance .] axi_ad9625_fifo 256
 }
 
 # spi
@@ -200,6 +202,11 @@ connect_bd_net -net axi_ad9625_dma_dvalid           [get_bd_pins axi_ad9625_fifo
 connect_bd_net -net axi_ad9625_dma_dready           [get_bd_pins axi_ad9625_fifo/dma_wready]      [get_bd_pins axi_ad9625_dma/s_axis_ready]
 connect_bd_net -net axi_ad9625_dma_ddata            [get_bd_pins axi_ad9625_fifo/dma_wdata]       [get_bd_pins axi_ad9625_dma/s_axis_data]
 connect_bd_net -net axi_ad9625_dma_irq              [get_bd_pins axi_ad9625_dma/irq]              [get_bd_pins sys_concat_intc/In13]
+
+if {$sys_zynq == 0} {
+
+  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9625_fifo/axi_clk] $sys_200m_clk_source
+}
 
 # interconnect (cpu)
 
@@ -327,4 +334,5 @@ if {$sys_zynq == 1} {
 
   create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9625_dma/m_dest_axi]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]    SEG_axi_ddr_cntrl
   create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9625_gt/m_axi]        [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]    SEG_axi_ddr_cntrl
+  create_bd_addr_seg -range 0x00200000 -offset 0xc0000000 [get_bd_addr_spaces axi_ad9625_fifo/axi_fifo2s/axi] [get_bd_addr_segs axi_ad9625_fifo/axi_bram_ctl/S_AXI/Mem0] SEG_axi_bram_ctl_mem
 }
