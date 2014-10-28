@@ -75,6 +75,11 @@ if {$sys_zynq == 1} {
   set sys_clk [create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk]
 }
 
+  set axi_ad9144_dma_intr [create_bd_port -dir O axi_ad9144_dma_intr]
+  set axi_ad9680_dma_intr [create_bd_port -dir O axi_ad9680_dma_intr]
+  set axi_daq2_spi_intr   [create_bd_port -dir O axi_daq2_spi_intr  ]  
+  set axi_daq2_gpio_intr  [create_bd_port -dir O axi_daq2_gpio_intr ] 
+
   # dac peripherals
 
   set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
@@ -185,7 +190,6 @@ if {$sys_zynq == 0} {
 if {$sys_zynq == 0} {
 
   set_property -dict [list CONFIG.NUM_SI {11}] $axi_mem_interconnect
-  set_property -dict [list CONFIG.NUM_PORTS {7}] $sys_concat_intc
 }
 
 if {$sys_zynq == 1} {
@@ -248,12 +252,6 @@ if {$sys_zynq == 0} {
   connect_bd_net -net gpio_ctl_t    [get_bd_ports gpio_ctl_t]     [get_bd_pins axi_daq2_gpio/gpio2_io_t]  
 }
 
-if {$sys_zynq == 0} {
-
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_2] [get_bd_ports unc_int2]
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_3] [get_bd_ports unc_int3]
-}
-
   # connections (gt)
 
   connect_bd_net -net axi_daq2_gt_ref_clk_q         [get_bd_pins axi_daq2_gt/ref_clk_q]         [get_bd_ports rx_ref_clk]   
@@ -299,7 +297,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9144_dac_drd            [get_bd_ports dac_drd]                      [get_bd_pins axi_ad9144_dma/fifo_rd_en]
   connect_bd_net -net axi_ad9144_dac_ddata          [get_bd_ports dac_ddata]                    [get_bd_pins axi_ad9144_dma/fifo_rd_dout]
   connect_bd_net -net axi_ad9144_dac_dunf           [get_bd_pins axi_ad9144_core/dac_dunf]      [get_bd_pins axi_ad9144_dma/fifo_rd_underflow]
-  connect_bd_net -net axi_ad9144_dma_irq            [get_bd_pins axi_ad9144_dma/irq]            [get_bd_pins sys_concat_intc/In12]
+  connect_bd_net -net axi_ad9144_dma_intr           [get_bd_pins axi_ad9144_dma/irq]            [get_bd_ports axi_ad9144_dma_intr]
 
   # connections (adc)
 
@@ -339,7 +337,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9680_dma_dvalid         [get_bd_pins axi_ad9680_fifo/dma_wvalid]    [get_bd_pins axi_ad9680_dma/s_axis_valid]       
   connect_bd_net -net axi_ad9680_dma_dready         [get_bd_pins axi_ad9680_fifo/dma_wready]    [get_bd_pins axi_ad9680_dma/s_axis_ready]       
   connect_bd_net -net axi_ad9680_dma_ddata          [get_bd_pins axi_ad9680_fifo/dma_wdata]     [get_bd_pins axi_ad9680_dma/s_axis_data]      
-  connect_bd_net -net axi_ad9680_dma_irq            [get_bd_pins axi_ad9680_dma/irq]            [get_bd_pins sys_concat_intc/In13] 
+  connect_bd_net -net axi_ad9680_dma_intr           [get_bd_pins axi_ad9680_dma/irq]            [get_bd_ports axi_ad9680_dma_intr]
 
   # dac/adc clocks
 
@@ -403,8 +401,8 @@ if {$sys_zynq == 0} {
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_daq2_spi/s_axi_aresetn] 
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_daq2_gpio/s_axi_aresetn] 
 
-  connect_bd_net -net axi_daq2_spi_irq  [get_bd_pins axi_daq2_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In5]  
-  connect_bd_net -net axi_daq2_gpio_irq [get_bd_pins axi_daq2_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In6] 
+  connect_bd_net -net axi_daq2_spi_intr  [get_bd_pins axi_daq2_spi/ip2intc_irpt]   [get_bd_ports axi_daq2_spi_intr]  
+  connect_bd_net -net axi_daq2_gpio_intr [get_bd_pins axi_daq2_gpio/ip2intc_irpt]  [get_bd_ports axi_daq2_gpio_intr] 
 }
 
   # gt uses hp3, and 100MHz clock for both DRP and AXI4
