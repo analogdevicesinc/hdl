@@ -94,6 +94,13 @@ set_interface_property xcvr_data associatedClock xcvr_clk
 add_interface_port xcvr_data rx_data data Input 64*PCORE_4L_2L_N+64
 add_interface_port xcvr_data rx_data_sof data_sof Input 1
 
+add_interface xcvr_sync conduit end
+set_interface_property xcvr_sync associatedClock xcvr_clk
+add_interface_port xcvr_sync adc_sync_in sync_in Input 1
+add_interface_port xcvr_sync adc_sync_out sync_out Output 1
+add_interface_port xcvr_sync adc_raddr_in raddr_in Input 4
+add_interface_port xcvr_sync adc_raddr_out raddr_out Output 4
+
 # dma interface
 
 add_interface adc_clock clock start
