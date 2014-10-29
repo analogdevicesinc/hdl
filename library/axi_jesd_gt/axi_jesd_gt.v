@@ -312,8 +312,11 @@ module axi_jesd_gt (
   wire                                      drp_ready_gt_s[15:0];
   wire    [  7:0]                           drp_rx_rate_gt_s[15:0];
   wire    [287:0]                           tx_gt_data_extn_zero_s;
+  wire    [ 35:0]                           tx_gt_charisk_extn_zero_s;
   wire    [287:0]                           tx_gt_data_extn_s;
+  wire    [ 35:0]                           tx_gt_charisk_extn_s;
   wire    [287:0]                           tx_gt_data_mux_s;
+  wire    [ 35:0]                           tx_gt_charisk_mux_s;
   wire                                      qpll_locked_0_s;
   wire                                      qpll_locked_1_s;
   wire    [  7:0]                           qpll_locked_s;
@@ -430,7 +433,9 @@ module axi_jesd_gt (
   assign tx_ip_data = tx_data;
 
   assign tx_gt_data_extn_zero_s = 288'd0;
+  assign tx_gt_charisk_extn_zero_s = 36'd0;
   assign tx_gt_data_extn_s = {tx_gt_data_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*32)-1):0], tx_gt_data};
+  assign tx_gt_charisk_extn_s = {tx_gt_charisk_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*4)-1):0], tx_gt_charisk};
 
   assign tx_gt_data_mux_s[((8*32)+31):(8*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_8*32)+31):(PCORE_TX_LANE_SEL_8*32)];
   assign tx_gt_data_mux_s[((7*32)+31):(7*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_7*32)+31):(PCORE_TX_LANE_SEL_7*32)];
@@ -441,6 +446,15 @@ module axi_jesd_gt (
   assign tx_gt_data_mux_s[((2*32)+31):(2*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_2*32)+31):(PCORE_TX_LANE_SEL_2*32)];
   assign tx_gt_data_mux_s[((1*32)+31):(1*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_1*32)+31):(PCORE_TX_LANE_SEL_1*32)];
   assign tx_gt_data_mux_s[((0*32)+31):(0*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_0*32)+31):(PCORE_TX_LANE_SEL_0*32)];
+  assign tx_gt_charisk_mux_s[((8*4)+3):(8*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_8*4)+3):(PCORE_TX_LANE_SEL_8*4)];
+  assign tx_gt_charisk_mux_s[((7*4)+3):(7*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_7*4)+3):(PCORE_TX_LANE_SEL_7*4)];
+  assign tx_gt_charisk_mux_s[((6*4)+3):(6*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_6*4)+3):(PCORE_TX_LANE_SEL_6*4)];
+  assign tx_gt_charisk_mux_s[((5*4)+3):(5*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_5*4)+3):(PCORE_TX_LANE_SEL_5*4)];
+  assign tx_gt_charisk_mux_s[((4*4)+3):(4*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_4*4)+3):(PCORE_TX_LANE_SEL_4*4)];
+  assign tx_gt_charisk_mux_s[((3*4)+3):(3*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_3*4)+3):(PCORE_TX_LANE_SEL_3*4)];
+  assign tx_gt_charisk_mux_s[((2*4)+3):(2*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_2*4)+3):(PCORE_TX_LANE_SEL_2*4)];
+  assign tx_gt_charisk_mux_s[((1*4)+3):(1*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_1*4)+3):(PCORE_TX_LANE_SEL_1*4)];
+  assign tx_gt_charisk_mux_s[((0*4)+3):(0*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_0*4)+3):(PCORE_TX_LANE_SEL_0*4)];
 
   // clock buffers
 
@@ -573,7 +587,7 @@ module axi_jesd_gt (
     .tx_rst_done (tx_rst_done_s[n]),
     .tx_pll_locked (tx_pll_locked_s[n]),
     .tx_clk (tx_clk),
-    .tx_charisk (tx_gt_charisk[n*4+3:n*4]),
+    .tx_charisk (tx_gt_charisk_mux_s[n*4+3:n*4]),
     .tx_data (tx_gt_data_mux_s[n*32+31:n*32]),
     .drp_clk (drp_clk),
     .drp_sel (drp_sel_s),

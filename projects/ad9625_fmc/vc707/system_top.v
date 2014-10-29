@@ -185,15 +185,16 @@ module system_top (
 
   // internal signals
 
-  wire    [1:0]   gpio_i;
-  wire    [1:0]   gpio_o;
-  wire    [1:0]   gpio_t;
+  wire    [ 1:0]  gpio_i;
+  wire    [ 1:0]  gpio_o;
+  wire    [ 1:0]  gpio_t;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
   wire            spi_clk;
   wire            spi_miso;
   wire            spi_mosi;
+  wire    [31:0]  mb_intrs;
 
   // instantiations
 
@@ -233,7 +234,12 @@ module system_top (
     .spi_adc_sdio (spi_adc_sdio),
     .spi_clk_sdio (spi_clk_sdio));
 
+  assign fan_pwm = 1'b1;
+
   system_wrapper i_system_wrapper (
+    .ad9625_dma_intr (mb_intrs[13]),
+    .ad9625_gpio_intr (mb_intrs[12]),
+    .ad9625_spi_intr (mb_intrs[11]),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -249,7 +255,6 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .fan_pwm (fan_pwm),
     .gpio_lcd_tri_o (gpio_lcd),
     .gpio_led_tri_o (gpio_led),
     .gpio_sw_tri_i (gpio_sw),
@@ -261,11 +266,34 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .iic_rstn (iic_rstn),
+    .mb_intr_10 (mb_intrs[10]),
+    .mb_intr_11 (mb_intrs[11]),
+    .mb_intr_12 (mb_intrs[12]),
+    .mb_intr_13 (mb_intrs[13]),
+    .mb_intr_14 (mb_intrs[14]),
+    .mb_intr_15 (mb_intrs[15]),
+    .mb_intr_16 (mb_intrs[16]),
+    .mb_intr_17 (mb_intrs[17]),
+    .mb_intr_18 (mb_intrs[18]),
+    .mb_intr_19 (mb_intrs[19]),
+    .mb_intr_20 (mb_intrs[20]),
+    .mb_intr_21 (mb_intrs[21]),
+    .mb_intr_22 (mb_intrs[22]),
+    .mb_intr_23 (mb_intrs[23]),
+    .mb_intr_24 (mb_intrs[24]),
+    .mb_intr_25 (mb_intrs[25]),
+    .mb_intr_26 (mb_intrs[26]),
+    .mb_intr_27 (mb_intrs[27]),
+    .mb_intr_28 (mb_intrs[28]),
+    .mb_intr_29 (mb_intrs[29]),
+    .mb_intr_30 (mb_intrs[30]),
+    .mb_intr_31 (mb_intrs[31]),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .mgt_clk_clk_n (mgt_clk_n),
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
+    .phy_sd (1'b1),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),

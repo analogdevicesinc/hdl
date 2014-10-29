@@ -56,7 +56,6 @@ set_property -dict  {PACKAGE_PIN  P23   IOSTANDARD  LVCMOS18} [get_ports gpio_le
 
 # iic
 
-set_property -dict  {PACKAGE_PIN  AP10  IOSTANDARD  LVCMOS18} [get_ports iic_rstn] 
 set_property -dict  {PACKAGE_PIN  J24   IOSTANDARD  LVCMOS18} [get_ports iic_scl] 
 set_property -dict  {PACKAGE_PIN  J25   IOSTANDARD  LVCMOS18} [get_ports iic_sda] 
 

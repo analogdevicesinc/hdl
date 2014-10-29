@@ -44,6 +44,7 @@ proc p_sys_dmafifo {p_name m_name m_width} {
   set wfifo_mem [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:12.0 wfifo_mem]
   set_property -dict [list CONFIG.INTERFACE_TYPE {Native}] $wfifo_mem
   set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $wfifo_mem
+  set_property -dict [list CONFIG.asymmetric_port_width {true}] $wfifo_mem
   set_property -dict [list CONFIG.Input_Data_Width $m_width] $wfifo_mem
   set_property -dict [list CONFIG.Input_Depth {64}] $wfifo_mem
   set_property -dict [list CONFIG.Output_Data_Width {512}] $wfifo_mem
@@ -52,6 +53,7 @@ proc p_sys_dmafifo {p_name m_name m_width} {
   set rfifo_mem [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:12.0 rfifo_mem]
   set_property -dict [list CONFIG.INTERFACE_TYPE {Native}] $rfifo_mem
   set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $rfifo_mem
+  set_property -dict [list CONFIG.asymmetric_port_width {true}] $rfifo_mem
   set_property -dict [list CONFIG.Input_Data_Width {512}] $rfifo_mem
   set_property -dict [list CONFIG.Input_Depth {64}] $rfifo_mem
   set_property -dict [list CONFIG.Output_Data_Width {64}] $rfifo_mem
@@ -62,7 +64,7 @@ proc p_sys_dmafifo {p_name m_name m_width} {
 
   set axi_fifo2s [create_bd_cell -type ip -vlnv analog.com:user:axi_fifo2s:1.0 axi_fifo2s]
   set_property -dict [list CONFIG.AXI_ADDRESS {0xc0000000}] $axi_fifo2s
-  set_property -dict [list CONFIG.AXI_ADDRLIMIT {0xc01fff00}] $axi_fifo2s
+  set_property -dict [list CONFIG.AXI_ADDRLIMIT {0xc00fff00}] $axi_fifo2s
   set_property -dict [list CONFIG.AXI_LENGTH {4}] $axi_fifo2s
   set_property -dict [list CONFIG.AXI_SIZE {6}] $axi_fifo2s
   set_property -dict [list CONFIG.DATA_WIDTH {512}] $axi_fifo2s

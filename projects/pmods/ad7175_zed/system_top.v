@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-//
+// 
 // All rights reserved.
-//
+// 
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//
+//    
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -72,10 +72,26 @@ module system_top (
   hdmi_data_e,
   hdmi_data,
 
+  i2s_mclk,
+  i2s_bclk,
+  i2s_lrclk,
+  i2s_sdata_out,
+  i2s_sdata_in,
+
   spdif,
 
   iic_scl,
-  iic_sda);
+  iic_sda,
+  iic_mux_scl,
+  iic_mux_sda,
+
+  adc_sdo_i,
+  adc_sdi_o,
+  adc_cs_o,
+  adc_sclk_o,
+  led_clk_o,
+  
+  otg_vbusoc);
 
   inout   [14:0]  DDR_addr;
   inout   [ 2:0]  DDR_ba;
@@ -100,68 +116,70 @@ module system_top (
   inout           FIXED_IO_ps_porb;
   inout           FIXED_IO_ps_srstb;
 
-  inout   [14:0]  gpio_bd;
+  inout   [31:0]  gpio_bd;
 
   output          hdmi_out_clk;
   output          hdmi_vsync;
   output          hdmi_hsync;
   output          hdmi_data_e;
-  output  [23:0]  hdmi_data;
+  output  [15:0]  hdmi_data;
 
   output          spdif;
 
+  output          i2s_mclk;
+  output          i2s_bclk;
+  output          i2s_lrclk;
+  output          i2s_sdata_out;
+  input           i2s_sdata_in;
+
+
   inout           iic_scl;
   inout           iic_sda;
+  inout   [ 1:0]  iic_mux_scl;
+  inout   [ 1:0]  iic_mux_sda;
+  
+  input 			adc_sdo_i;
+  output 			adc_sdi_o;
+  output 			adc_cs_o;
+  output 			adc_sclk_o;
+  output            led_clk_o;
+
+  input           otg_vbusoc;
 
   // internal signals
 
-  wire    [14:0]  gpio_i;
-  wire    [14:0]  gpio_o;
-  wire    [14:0]  gpio_t;
-
-  wire            hdmi_dma_irq;
-  wire            iic_irq;
-  wire    [15:0]  ps7_irq_f2p;
+  wire    [31:0]  gpio_i;
+  wire    [31:0]  gpio_o;
+  wire    [31:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+  wire    [31:0]  adc_data_0;
+  wire    [31:0]  adc_data_1;
+  wire    [31:0]  adc_data_2;
+  wire    [31:0]  adc_data_3;
+  wire    [127:0]  dma_data;
 
   // instantiations
 
-  ad_iobuf #(
-    .DATA_WIDTH(15)
-  ) i_gpio_bd (
-    .dt(gpio_t),
-    .di(gpio_o),
-    .do(gpio_i),
-    .dio(gpio_bd));
+  genvar n;
+  generate
+  for (n = 0; n <= 31; n = n + 1) begin: g_iobuf_gpio_bd
+  IOBUF i_iobuf_gpio_bd (
+    .I (gpio_o[n]),
+    .O (gpio_i[n]),
+    .T (gpio_t[n]),
+    .IO (gpio_bd[n]));
+  end
+  endgenerate
 
-  ad_interrupts #(
-    .C_PROC_TYPE(1)
-  ) i_ad_interrupts (
-    .timer_irq(1'b0),
-    .eth_irq(1'b0),
-    .eth_dma_mm2s_irq(1'b0),
-    .eth_dma_s2mm_irq(1'b0),
-    .uart_irq(1'b0),
-    .gpio_lcd_irq(1'b0),
-    .gpio_sw_irq(1'b0),
-    .spdif_dma_irq(1'b0),
-    .hdmi_dma_irq(hdmi_dma_irq),
-    .iic_irq(iic_irq),
-    .dev0_dma_irq(1'b0),
-    .dev1_dma_irq(1'b0),
-    .dev2_dma_irq(1'b0),
-    .dev3_dma_irq(1'b0),
-    .dev4_dma_irq(1'b0),
-    .dev5_dma_irq(1'b0),
-    .spi0_irq(1'b0),
-    .spi1_irq(1'b0),
-    .spi2_irq(1'b0),
-    .spi3_irq(1'b0),
-    .gpio0_irq(1'b0),
-    .gpio1_irq(1'b0),
-    .gpio2_irq(1'b0),
-    .gpio3_irq(1'b0),
-    .mb_axi_intr(),
-    .ps7_irq_f2p(ps7_irq_f2p));
+  IOBUF i_iic_mux_scl_0 (.I(iic_mux_scl_o_s[0]), .O(iic_mux_scl_i_s[0]), .T(iic_mux_scl_t_s), .IO(iic_mux_scl[0]));
+  IOBUF i_iic_mux_scl_1 (.I(iic_mux_scl_o_s[1]), .O(iic_mux_scl_i_s[1]), .T(iic_mux_scl_t_s), .IO(iic_mux_scl[1]));
+  IOBUF i_iic_mux_sda_0 (.I(iic_mux_sda_o_s[0]), .O(iic_mux_sda_i_s[0]), .T(iic_mux_sda_t_s), .IO(iic_mux_sda[0]));
+  IOBUF i_iic_mux_sda_1 (.I(iic_mux_sda_o_s[1]), .O(iic_mux_sda_i_s[1]), .T(iic_mux_sda_t_s), .IO(iic_mux_sda[1]));
 
   system_wrapper i_system_wrapper (
     .DDR_addr (DDR_addr),
@@ -193,12 +211,31 @@ module system_top (
     .hdmi_hsync (hdmi_hsync),
     .hdmi_out_clk (hdmi_out_clk),
     .hdmi_vsync (hdmi_vsync),
-    .iic_main_scl_io (iic_scl),
-    .iic_main_sda_io (iic_sda),
-    .spdif (spdif),
-    .hdmi_dma_irq (hdmi_dma_irq),
-    .iic_irq (iic_irq),
-    .ps7_irq_f2p (ps7_irq_f2p));
+    .i2s_bclk (i2s_bclk),
+    .i2s_lrclk (i2s_lrclk),
+    .i2s_mclk (i2s_mclk),
+    .i2s_sdata_in (i2s_sdata_in),
+    .i2s_sdata_out (i2s_sdata_out),
+    .iic_fmc_scl_io (iic_scl),
+    .iic_fmc_sda_io (iic_sda),
+    .iic_mux_scl_I (iic_mux_scl_i_s),
+    .iic_mux_scl_O (iic_mux_scl_o_s),
+    .iic_mux_scl_T (iic_mux_scl_t_s),
+    .iic_mux_sda_I (iic_mux_sda_i_s),
+    .iic_mux_sda_O (iic_mux_sda_o_s),
+    .iic_mux_sda_T (iic_mux_sda_t_s),
+	.adc_sdo_i (adc_sdo_i),
+    .adc_sdi_o (adc_sdi_o),
+    .adc_cs_o (adc_cs_o),
+    .adc_sclk_o (adc_sclk_o),
+	.led_clk_o (led_clk_o),
+	.dma_data ({adc_data_3, adc_data_2, adc_data_1, adc_data_0}),
+	.adc_data_3(adc_data_3),
+	.adc_data_2(adc_data_2),
+	.adc_data_1(adc_data_1),
+	.adc_data_0(adc_data_0),
+    .otg_vbusoc (otg_vbusoc),
+    .spdif (spdif));
 
 endmodule
 

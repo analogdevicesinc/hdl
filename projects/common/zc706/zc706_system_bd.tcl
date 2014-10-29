@@ -22,6 +22,12 @@ set hdmi_data       [create_bd_port -dir O -from 23 -to 0 hdmi_data]
 
 set spdif           [create_bd_port -dir O spdif]
 
+# interrupts
+
+set iic_irq         [create_bd_port -dir O iic_irq]
+set hdmi_dma_irq    [create_bd_port -dir O hdmi_dma_irq]
+set ps7_irq_f2p     [create_bd_port -dir I -from 15 -to 0 -type intr ps7_irq_f2p]
+
 # instance: sys_ps7
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.4 sys_ps7]
@@ -41,9 +47,6 @@ set_property -dict [list CONFIG.PCW_IRQ_F2P_MODE {REVERSE}] $sys_ps7
 
 set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
 set_property -dict [list CONFIG.USE_BOARD_FLOW {true} CONFIG.IIC_BOARD_INTERFACE {IIC_MAIN}] $axi_iic_main
-
-set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
 set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
@@ -115,9 +118,8 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M00_ACLK] $sy
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M00_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_iic_main/s_axi_aclk]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_iic_main/s_axi_aresetn]
-connect_bd_net -net sys_concat_intc_din_1 [get_bd_pins sys_concat_intc/In14] [get_bd_pins axi_iic_main/iic2intc_irpt]
+connect_bd_net -net iic_irq_net   [get_bd_pins axi_iic_main/iic2intc_irpt] [get_bd_ports iic_irq]
 
-connect_bd_net -net sys_ps7_interrupt [get_bd_pins sys_concat_intc/dout] [get_bd_pins sys_ps7/IRQ_F2P]
 
 # hdmi
 
@@ -169,7 +171,10 @@ connect_bd_net -net axi_hdmi_tx_core_mm2s_tready   [get_bd_pins axi_hdmi_core/m_
 connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync]     [get_bd_pins axi_hdmi_dma/mm2s_fsync]
 connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync_ret]
 
-connect_bd_net -net sys_concat_intc_din_0 [get_bd_pins sys_concat_intc/In15] [get_bd_pins axi_hdmi_dma/mm2s_introut]
+connect_bd_net -net hdmi_dma_irq_net    [get_bd_pins axi_hdmi_dma/mm2s_introut]   [get_bd_ports hdmi_dma_irq]
+
+connect_bd_net -net sys_ps7_interrupt   [get_bd_pins sys_ps7/IRQ_F2P]             [get_bd_ports ps7_irq_f2p]
+set_property -dict [list CONFIG.PortWidth {16}]   [get_bd_ports ps7_irq_f2p]
 
 # spdif audio
 

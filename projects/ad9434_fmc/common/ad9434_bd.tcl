@@ -86,7 +86,7 @@ connect_bd_net -net axi_ad9434_denable    [get_bd_pins axi_ad9434/adc_valid]  [g
 connect_bd_net -net axi_ad9434_data       [get_bd_pins axi_ad9434/adc_data]   [get_bd_pins axi_ad9434_dma/fifo_wr_din]
 connect_bd_net -net axi_ad9434_ovf        [get_bd_pins axi_ad9434/adc_dovf]   [get_bd_pins axi_ad9434_dma/fifo_wr_overflow]
 
-connect_bd_net -net axi_ad9434_dma_irq    [get_bd_pins axi_ad9434_dma/irq]    [get_bd_pins sys_concat_intc/In2]
+connect_bd_net -net axi_ad9434_dma_irq    [get_bd_pins axi_ad9434_dma/irq]    [get_bd_pins sys_concat_intc/In13]
 
 # cpu interconnect
 

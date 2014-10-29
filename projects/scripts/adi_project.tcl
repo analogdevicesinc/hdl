@@ -94,6 +94,7 @@ proc adi_project_create {project_name} {
   update_ip_catalog
 
   set_msg_config -id {BD 41-1348} -new_severity info
+  set_msg_config -id {BD 41-1343} -new_severity info
   set_msg_config -id {BD 41-1306} -new_severity info
   set_msg_config -id {IP_Flow 19-1687} -new_severity info
   set_msg_config -id {filemgmt 20-1763} -new_severity info
@@ -178,11 +179,11 @@ proc adi_project_run {project_name} {
   #get_property STATS.TNS [get_runs impl_1]
   #get_property STATS.TPWS [get_runs impl_1]
 
+  export_hardware [get_files $project_system_dir/system.bd] [get_runs impl_1] -bitstream
+
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
     puts "ERROR: Timing Constraints NOT met."
     use_this_invalid_command_to_crash
   }
-
-  export_hardware [get_files $project_system_dir/system.bd] [get_runs impl_1] -bitstream
 }
 
