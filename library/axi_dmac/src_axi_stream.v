@@ -53,6 +53,7 @@ module dmac_src_axi_stream (
 	input s_axis_valid,
 	input [C_S_AXIS_DATA_WIDTH-1:0] s_axis_data,
 	input [0:0] s_axis_user,
+	output s_axis_xfer_req,
 
 	input fifo_ready,
 	output fifo_valid,
@@ -100,6 +101,8 @@ dmac_data_mover # (
 	.enable(enable),
 	.enabled(enabled),
 	.sync_id(sync_id),
+
+	.xfer_req(s_axis_xfer_req),
 
 	.request_id(request_id),
 	.response_id(response_id),

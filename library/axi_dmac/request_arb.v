@@ -102,6 +102,7 @@ module dmac_request_arb (
 	input                               s_axis_valid,
 	input  [C_DMA_DATA_WIDTH_SRC-1:0]   s_axis_data,
 	input  [0:0]                        s_axis_user,
+	output                              s_axis_xfer_req,
 
 	// Master streaming AXI interface
 	input                               m_axis_aclk,
@@ -691,7 +692,8 @@ dmac_src_axi_stream #(
 	.s_axis_valid(s_axis_valid),
 	.s_axis_ready(s_axis_ready),
 	.s_axis_data(s_axis_data),
-	.s_axis_user(s_axis_user)
+	.s_axis_user(s_axis_user),
+	.s_axis_xfer_req(s_axis_xfer_req)
 );
 
 end else begin
