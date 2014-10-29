@@ -334,9 +334,10 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9680_adc_ddata          [get_bd_ports adc_ddata]                    [get_bd_pins axi_ad9680_fifo/adc_wdata]
 
   connect_bd_net -net sys_100m_clk                  [get_bd_pins axi_ad9680_fifo/dma_clk]       [get_bd_pins axi_ad9680_dma/s_axis_aclk]
-  connect_bd_net -net axi_ad9680_dma_dvalid         [get_bd_pins axi_ad9680_fifo/dma_wvalid]    [get_bd_pins axi_ad9680_dma/s_axis_valid]       
-  connect_bd_net -net axi_ad9680_dma_dready         [get_bd_pins axi_ad9680_fifo/dma_wready]    [get_bd_pins axi_ad9680_dma/s_axis_ready]       
-  connect_bd_net -net axi_ad9680_dma_ddata          [get_bd_pins axi_ad9680_fifo/dma_wdata]     [get_bd_pins axi_ad9680_dma/s_axis_data]      
+  connect_bd_net -net axi_ad9680_dma_dvalid         [get_bd_pins axi_ad9680_fifo/dma_wvalid]    [get_bd_pins axi_ad9680_dma/s_axis_valid]
+  connect_bd_net -net axi_ad9680_dma_dready         [get_bd_pins axi_ad9680_fifo/dma_wready]    [get_bd_pins axi_ad9680_dma/s_axis_ready]
+  connect_bd_net -net axi_ad9680_dma_ddata          [get_bd_pins axi_ad9680_fifo/dma_wdata]     [get_bd_pins axi_ad9680_dma/s_axis_data]
+  connect_bd_net -net axi_ad9680_dma_xfer_req       [get_bd_pins axi_ad9680_fifo/axi_xfer_req]  [get_bd_pins axi_ad9680_dma/s_axis_xfer_req]
   connect_bd_net -net axi_ad9680_dma_intr           [get_bd_pins axi_ad9680_dma/irq]            [get_bd_ports axi_ad9680_dma_intr]
 
   # dac/adc clocks
