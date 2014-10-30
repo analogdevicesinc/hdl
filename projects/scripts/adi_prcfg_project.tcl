@@ -118,7 +118,7 @@ proc prcfg_impl { xdc_file reconfig_name_list } {
       read_checkpoint -cell i_prcfg_system_top "./prcfg_${prcfg_name}/checkpoints/synth_${prcfg_name}.dcp"
       set_property HD.RECONFIGURABLE 1 [get_cells i_prcfg_system_top]
       # implement the first configurations
-      opt_design > "./prcfg_${prcfg_name}/logs/opt_${prcfg_name}.rds"
+      opt_design -directive ExploreSequentialArea > "./prcfg_${prcfg_name}/logs/opt_${prcfg_name}.rds"
       # generate ltx file for debug probes
       write_debug_probes -force "./debug_nets.ltx"
       place_design > "./prcfg_${prcfg_name}/logs/place_${prcfg_name}.rds"
@@ -162,7 +162,7 @@ proc save_results { prcfg_name } {
   # checkpoint to the routed design
   write_checkpoint -force "./prcfg_${prcfg_name}/results/top_route_design.dcp"
   # reports
-  report_utilization -file "./prcfg_${prcfg_name}/results/top_utilization.rpt"
+  report_utilization -pblocks pblock_adi -file "./prcfg_${prcfg_name}/results/top_utilization.rpt"
   report_timing_summary -file "./prcfg_${prcfg_name}/results/top_timing_summary.rpt"
   # checkpoint to the routed RP
   write_checkpoint -force -cell i_prcfg_system_top "./prcfg_${prcfg_name}/checkpoints/route_rm_${prcfg_name}.dcp"
@@ -171,21 +171,18 @@ proc save_results { prcfg_name } {
 
 # Verify the compatibility of different configurations
 proc prcfg_verify { prcfg_name_list } {
-  set counter 0
-  set list_length [llength $prcfg_name_list]
 
   file mkdir "./verify_design"
 
-  for {set i 0} {$i < [expr $list_length - 1]} {incr i} {
-    for {set j [expr $i + 1]} {$j < $list_length} {incr j} {
-      set prcfg_name_a [lindex $prcfg_name_list $i]
-      set prcfg_name_b [lindex $prcfg_name_list $j]
-      pr_verify -full_check ./prcfg_${prcfg_name_a}/results/top_route_design.dcp \
-                            ./prcfg_${prcfg_name_b}/results/top_route_design.dcp > \
-                            ./verify_design/pr_verify_${counter}.rpt
-      incr counter
-    }
+  set prcfg_init_path "./prcfg_[lindex $prcfg_name_list 0]/results/top_route_design.dcp"
+  set prcfg_additional_paths ""
+
+  for {set i 1} {$i < [llength $prcfg_name_list]} {incr i} {
+    lappend prcfg_additional_paths "./prcfg_[lindex $prcfg_name_list $i]/results/top_route_design.dcp"
   }
+
+  pr_verify -full_check -initial $prcfg_init_path -additional $prcfg_additional_paths -file ./verify_design/pr_verify.log
+
 }
 
 # Generate bitstream
