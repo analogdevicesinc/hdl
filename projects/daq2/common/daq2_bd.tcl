@@ -480,6 +480,8 @@ if {$sys_zynq == 0} {
 
   # ila
 
+if {$sys_zynq == 1} {
+
   set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_NUM_OF_PROBES {3}] $ila_jesd_rx_mon
@@ -505,6 +507,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_daq2_gt_tx_clk            [get_bd_pins ila_jesd_tx_mon/CLK]
   connect_bd_net -net axi_daq2_gt_tx_mon_data       [get_bd_pins ila_jesd_tx_mon/PROBE0]
   connect_bd_net -net axi_daq2_gt_tx_mon_trigger    [get_bd_pins ila_jesd_tx_mon/PROBE1]
+}
 
   # address map
 
@@ -527,8 +530,6 @@ if {$sys_zynq == 0} {
   create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9144_dma/m_src_axi]   $sys_addr_mem_seg SEG_axi_ddr_cntrl
   create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9680_dma/m_dest_axi]  $sys_addr_mem_seg SEG_axi_ddr_cntrl
   create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_daq2_gt/m_axi]          $sys_addr_mem_seg SEG_axi_ddr_cntrl
-
-  create_bd_addr_seg -range 0x00100000 -offset 0xc0000000 [get_bd_addr_spaces axi_ad9680_fifo/axi_fifo2s/axi] [get_bd_addr_segs axi_ad9680_fifo/axi_bram_ctl/S_AXI/Mem0] SEG_axi_bram_ctl_mem
 
 } else {
 
