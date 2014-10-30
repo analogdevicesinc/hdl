@@ -54,23 +54,18 @@ module axi_fifo2f (
   dma_wready,
   dma_wovf,
   dma_xfer_req,
-  dma_xfer_status,
-
-  fifo_rst,
-  fifo_wr,
-  fifo_wdata,
-  fifo_wfull,
-  fifo_wovf,
-  fifo_rd,
-  fifo_rdata,
-  fifo_rempty);
+  dma_xfer_status);
 
   // parameters
 
-  parameter ADC_DATA_WIDTH = 32;
-  parameter DMA_DATA_WIDTH = 64;
-  parameter DMA_READY_ENABLE = 0;
-  parameter MEM_ADDRLIMIT = 32'h00100000;
+  parameter   ADC_ADDR_WIDTH =   8;
+  parameter   ADC_DATA_WIDTH = 256;
+  parameter   DMA_ADDR_WIDTH =  10;
+  parameter   DMA_DATA_WIDTH =  64;
+  parameter   DMA_READY_ENABLE = 1;
+
+  localparam  ADC_ADDR_LIMIT = (2**ADC_ADDR_WIDTH)-1;
+  localparam  MEM_RATIO = ADC_DATA_WIDTH/DMA_DATA_WIDTH;
  
   // adc write
 
@@ -91,120 +86,172 @@ module axi_fifo2f (
   input                           dma_xfer_req;
   output  [  4:0]                 dma_xfer_status;
 
-  // fifo interface
-
-  output                          fifo_rst;
-  output                          fifo_wr;
-  output  [ADC_DATA_WIDTH-1:0]    fifo_wdata;
-  input                           fifo_wfull;
-  input                           fifo_wovf;
-  output                          fifo_rd;
-  input   [DMA_DATA_WIDTH-1:0]    fifo_rdata;
-  input                           fifo_rempty;
-
   // internal registers
 
   reg     [  2:0]                 adc_xfer_req_m = 'd0;
   reg                             adc_xfer_init = 'd0;
-  reg     [ 31:0]                 adc_xfer_addr = 'd0;
   reg                             adc_xfer_enable = 'd0;
-  reg                             adc_wovf_m1 = 'd0;
-  reg                             adc_wovf_m2 = 'd0;
-  reg                             adc_wovf = 'd0;
-  reg                             fifo_rst = 'd0;
-  reg                             fifo_wr = 'd0;
-  reg     [ADC_DATA_WIDTH-1:0]    fifo_wdata = 'd0;
+  reg                             adc_wr_int = 'd0;
+  reg     [ADC_DATA_WIDTH-1:0]    adc_wdata_int = 'd0;
+  reg     [ADC_ADDR_WIDTH-1:0]    adc_waddr_int = 'd0;
+  reg                             adc_waddr_rel_t = 'd0;
+  reg     [ADC_ADDR_WIDTH-1:0]    adc_waddr_rel = 'd0;
   reg                             dma_rst = 'd0;
-  reg                             dma_wr_int = 'd0;
+  reg     [  2:0]                 dma_waddr_rel_t_m = 'd0;
+  reg     [ADC_ADDR_WIDTH-1:0]    dma_waddr_rel = 'd0;
+  reg                             dma_xfer_req_d = 'd0;
+  reg                             dma_xfer_init = 'd0;
+  reg                             dma_rd = 'd0;
+  reg                             dma_rd_d = 'd0;
+  reg     [DMA_DATA_WIDTH-1:0]    dma_rdata_d = 'd0;
+  reg     [DMA_ADDR_WIDTH-1:0]    dma_raddr = 'd0;
 
   // internal signals
 
-  wire                            adc_wovf_s;
-  wire                            fifo_wr_s;
-  wire    [ADC_DATA_WIDTH-1:0]    fifo_wdata_s;
-  wire    [DMA_DATA_WIDTH-1:0]    dma_wdata_s;
+  wire                            dma_waddr_rel_t_s;
+  wire    [DMA_ADDR_WIDTH-1:0]    dma_waddr_rel_s;
   wire                            dma_wready_s;
+  wire                            dma_rd_enable_s;
+  wire                            dma_rd_s;
+  wire    [DMA_DATA_WIDTH-1:0]    dma_rdata_s;
 
-  // write when dma is active and within limits
+  // write interface
 
-  assign adc_wovf_s = dma_wovf | fifo_wovf;
-  assign fifo_wr_s = adc_wr & adc_xfer_enable;
-
-  genvar m;
-  generate
-  for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
-  assign fifo_wdata_s[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
-  end
-  endgenerate
+  assign adc_wovf = 1'd0;
 
   always @(posedge adc_clk or posedge adc_rst) begin
     if (adc_rst == 1'b1) begin
-      adc_xfer_req_m <= 3'd0;
-      adc_xfer_init <= 1'd0;
-      adc_xfer_addr <= 32'd0;
-      adc_xfer_enable <= 1'd0;
-      adc_wovf_m1 <= 1'b0;
-      adc_wovf_m2 <= 1'b0;
-      adc_wovf <= 1'b0;
+      adc_xfer_req_m <= 'd0;
+      adc_xfer_init <= 'd0;
+      adc_xfer_enable <= 'd0;
     end else begin
       adc_xfer_req_m <= {adc_xfer_req_m[1:0], dma_xfer_req};
       adc_xfer_init <= adc_xfer_req_m[1] & ~adc_xfer_req_m[2];
       if (adc_xfer_init == 1'b1) begin
-        adc_xfer_addr <= 32'd0;
-      end else if ((fifo_wr == 1'b1) && (adc_xfer_addr < MEM_ADDRLIMIT)) begin
-        adc_xfer_addr <= adc_xfer_addr + 1'b1;
-      end
-      if (adc_xfer_init == 1'b1) begin
         adc_xfer_enable <= 1'b1;
-      end else if (adc_xfer_addr >= MEM_ADDRLIMIT) begin
+      end else if ((adc_waddr_int >= ADC_ADDR_LIMIT) ||
+        (adc_xfer_req_m[2] == 1'b0)) begin
         adc_xfer_enable <= 1'b0;
       end
-      adc_wovf_m1 <= adc_wovf_s;
-      adc_wovf_m2 <= adc_wovf_m1;
-      adc_wovf <= adc_wovf_m2;
     end
   end
 
-  always @(posedge adc_clk) begin
-    fifo_rst <= ~adc_xfer_req_m[1];
-    fifo_wr <= fifo_wr_s;
-    fifo_wdata <= fifo_wdata_s;
+  always @(posedge adc_clk or posedge adc_rst) begin
+    if (adc_rst == 1'b1) begin
+      adc_wr_int <= 'd0;
+      adc_wdata_int <= 'd0;
+      adc_waddr_int <= 'd0;
+    end else begin
+      if (adc_xfer_init == 1'b1) begin
+        adc_wr_int <= 'd0;
+        adc_wdata_int <= 'd0;
+        adc_waddr_int <= 'd0;
+      end else begin
+        adc_wr_int <= adc_wr & adc_xfer_enable;
+        adc_wdata_int <= adc_wdata;
+        if (adc_wr_int == 1'b1) begin
+          adc_waddr_int <= adc_waddr_int + 1'b1;
+        end
+      end
+    end
   end
 
-  // read is non-destructive
+  always @(posedge adc_clk or posedge adc_rst) begin
+    if (adc_rst == 1'b1) begin
+      adc_waddr_rel_t <= 'd0;
+      adc_waddr_rel <= 'd0;
+    end else begin
+      if ((adc_wr_int == 1'b1) && (adc_waddr_int[2:0] == 3'd7)) begin
+        adc_waddr_rel_t <= ~adc_waddr_rel_t;
+        adc_waddr_rel <= adc_waddr_int;
+      end
+    end
+  end
 
-  assign dma_xfer_status = 5'd0;
-  assign fifo_rd = dma_wready & ~fifo_rempty;
+  // read interface
+
+  assign dma_xfer_status = 1'd0;
+  assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
+  assign dma_waddr_rel_s = (MEM_RATIO == 2) ? {dma_waddr_rel, 1'd0} :
+    ((MEM_RATIO == 4) ? {dma_waddr_rel, 2'd0} : {dma_waddr_rel, 3'd0});
 
   always @(posedge dma_clk or negedge dma_rstn) begin
     if (dma_rstn == 1'b0) begin
       dma_rst <= 1'b1;
-      dma_wr_int <= 1'b0;
+      dma_waddr_rel_t_m <= 'd0;
+      dma_waddr_rel <= 'd0;
     end else begin
       dma_rst <= 1'b0;
-      dma_wr_int <= fifo_rd;
+      dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
+      if (dma_waddr_rel_t_s == 1'b1) begin
+        dma_waddr_rel <= adc_waddr_rel;
+      end
     end
   end
   
-  genvar s;
-  generate
-  for (s = 0; s < DMA_DATA_WIDTH; s = s + 1) begin: g_rdata
-  assign dma_wdata_s[s] = fifo_rdata[(DMA_DATA_WIDTH-1)-s];
+  always @(posedge dma_clk or negedge dma_rstn) begin
+    if (dma_rstn == 1'b0) begin
+      dma_xfer_req_d <= 'd0;
+      dma_xfer_init <= 'd0;
+    end else begin
+      dma_xfer_req_d <= dma_xfer_req;
+      dma_xfer_init <= dma_xfer_req & ~dma_xfer_req_d;
+    end
   end
-  endgenerate
 
   assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+  assign dma_rd_enable_s = dma_wready_s & dma_xfer_req_d;
+  assign dma_rd_s = (dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_rd_enable_s;
+
+  always @(posedge dma_clk or negedge dma_rstn) begin
+    if (dma_rstn == 1'b0) begin
+      dma_rd <= 'd0;
+      dma_rd_d <= 'd0;
+      dma_rdata_d <= 'd0;
+      dma_raddr <= 'd0;
+    end else begin
+      if (dma_xfer_init == 1'b1) begin
+        dma_rd <= 'd0;
+        dma_rd_d <= 'd0;
+        dma_rdata_d <= 'd0;
+        dma_raddr <= 'd0;
+      end else begin
+        dma_rd <= dma_rd_s;
+        dma_rd_d <= dma_rd;
+        dma_rdata_d <= dma_rdata_s;
+        if (dma_rd_s == 1'b1) begin
+          dma_raddr <= dma_raddr + 1'b1;
+        end
+      end
+    end
+  end
+
+  // instantiations
+
+  ad_mem_asym #(
+    .ADDR_WIDTH_A (ADC_ADDR_WIDTH),
+    .DATA_WIDTH_A (ADC_DATA_WIDTH),
+    .ADDR_WIDTH_B (DMA_ADDR_WIDTH),
+    .DATA_WIDTH_B (DMA_DATA_WIDTH))
+  i_mem_asym (
+    .clka (adc_clk),
+    .wea (adc_wr_int),
+    .addra (adc_waddr_int),
+    .dina (adc_wdata_int),
+    .clkb (dma_clk),
+    .addrb (dma_raddr),
+    .doutb (dma_rdata_s));
 
   ad_axis_inf_rx #(.DATA_WIDTH(DMA_DATA_WIDTH)) i_axis_inf (
     .clk (dma_clk),
     .rst (dma_rst),
-    .valid (dma_wr_int),
+    .valid (dma_rd_d),
     .last (1'd0),
-    .data (dma_wdata_s),
+    .data (dma_rdata_d),
     .inf_valid (dma_wr),
     .inf_last (),
     .inf_data (dma_wdata),
-    .inf_ready (dma_wready_s));
+    .inf_ready (dma_wready));
 
 endmodule
 
