@@ -180,14 +180,6 @@
          type = "String";
       }
    }
-   element sys_gpio.s1
-   {
-      datum baseAddress
-      {
-         value = "86025408";
-         type = "String";
-      }
-   }
    element sys_timer.s1
    {
       datum baseAddress
@@ -209,19 +201,27 @@
          type = "String";
       }
    }
-   element sys_tcm_mem.s1
-   {
-      datum baseAddress
-      {
-         value = "86016000";
-         type = "String";
-      }
-   }
    element sys_ethernet_desc_mem.s1
    {
       datum baseAddress
       {
          value = "0";
+         type = "String";
+      }
+   }
+   element sys_gpio.s1
+   {
+      datum baseAddress
+      {
+         value = "86025408";
+         type = "String";
+      }
+   }
+   element sys_tcm_mem.s1
+   {
+      datum baseAddress
+      {
+         value = "86016000";
          type = "String";
       }
    }
@@ -246,19 +246,19 @@
          type = "String";
       }
    }
-   element axi_ad9671_2.s_axi
-   {
-      datum baseAddress
-      {
-         value = "86114304";
-         type = "String";
-      }
-   }
    element axi_ad9671_3.s_axi
    {
       datum baseAddress
       {
          value = "86179840";
+         type = "String";
+      }
+   }
+   element axi_ad9671_2.s_axi
+   {
+      datum baseAddress
+      {
+         value = "86114304";
          type = "String";
       }
    }
@@ -846,6 +846,26 @@
    type="conduit"
    dir="end" />
  <interface name="sys_clk" internal="sys_clk.clk_in" type="clock" dir="end" />
+ <interface
+   name="axi_ad9671_1_xcvr_sync"
+   internal="axi_ad9671_1.xcvr_sync"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="axi_ad9671_0_xcvr_sync"
+   internal="axi_ad9671_0.xcvr_sync"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="axi_ad9671_2_xcvr_sync"
+   internal="axi_ad9671_2.xcvr_sync"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="axi_ad9671_3_xcvr_sync"
+   internal="axi_ad9671_3.xcvr_sync"
+   type="conduit"
+   dir="end" />
  <module kind="clock_source" version="14.0" enabled="1" name="sys_clk">
   <parameter name="clockFrequency" value="100000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -2089,31 +2109,27 @@
   <parameter name="PCORE_ID" value="0" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
   <parameter name="PCORE_4L_2L_N" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>
  <module kind="axi_ad9671" version="1.0" enabled="1" name="axi_ad9671_1">
-  <parameter name="PCORE_ID" value="0" />
+  <parameter name="PCORE_ID" value="1" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
   <parameter name="PCORE_4L_2L_N" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>
  <module kind="axi_ad9671" version="1.0" enabled="1" name="axi_ad9671_2">
-  <parameter name="PCORE_ID" value="0" />
+  <parameter name="PCORE_ID" value="2" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
   <parameter name="PCORE_4L_2L_N" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>
  <module kind="axi_ad9671" version="1.0" enabled="1" name="axi_ad9671_3">
-  <parameter name="PCORE_ID" value="0" />
+  <parameter name="PCORE_ID" value="3" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
   <parameter name="PCORE_4L_2L_N" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>

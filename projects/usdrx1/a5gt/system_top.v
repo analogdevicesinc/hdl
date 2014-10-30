@@ -280,6 +280,8 @@ module system_top (
   wire              rx_pll_locked_s;
   wire    [ 22:0]   rx_xcvr_status_s;
   wire    [  7:0]   rx_data_sof;
+  wire    [  3:0]   sync_raddr;
+  wire              sync_signal;
 
   // ethernet transmit clock
 
@@ -503,7 +505,23 @@ module system_top (
     .axi_ad9671_3_adc_dma_if_enable (adc_enable_3),
     .axi_ad9671_3_adc_dma_if_data (adc_data_3),
     .axi_ad9671_3_adc_dma_if_dovf (adc_dovf_3),
-    .axi_ad9671_3_adc_dma_if_dunf (1'b0));
+    .axi_ad9671_3_adc_dma_if_dunf (1'b0),
+    .axi_ad9671_0_xcvr_sync_sync_in (),
+    .axi_ad9671_0_xcvr_sync_sync_out (sync_signal),
+    .axi_ad9671_0_xcvr_sync_raddr_in (),
+    .axi_ad9671_0_xcvr_sync_raddr_out (sync_raddr),
+    .axi_ad9671_1_xcvr_sync_sync_in (sync_signal),
+    .axi_ad9671_1_xcvr_sync_sync_out (),
+    .axi_ad9671_1_xcvr_sync_raddr_in (sync_raddr),
+    .axi_ad9671_1_xcvr_sync_raddr_out(),
+    .axi_ad9671_2_xcvr_sync_sync_in (sync_signal),
+    .axi_ad9671_2_xcvr_sync_sync_out (),
+    .axi_ad9671_2_xcvr_sync_raddr_in (sync_raddr),
+    .axi_ad9671_2_xcvr_sync_raddr_out (),
+    .axi_ad9671_3_xcvr_sync_sync_in (sync_signal),
+    .axi_ad9671_3_xcvr_sync_sync_out (),
+    .axi_ad9671_3_xcvr_sync_raddr_in (sync_raddr),
+    .axi_ad9671_3_xcvr_sync_raddr_out ());
 
 endmodule
 
