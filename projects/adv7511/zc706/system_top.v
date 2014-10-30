@@ -119,9 +119,7 @@ module system_top (
   wire    [14:0]  gpio_o;
   wire    [14:0]  gpio_t;
 
-  wire            hdmi_dma_irq;
-  wire            iic_irq;
-  wire    [15:0]  ps7_irq_f2p;
+  wire    [15:0]  ps_intrs;
 
   // instantiations
 
@@ -132,36 +130,6 @@ module system_top (
     .di(gpio_o),
     .do(gpio_i),
     .dio(gpio_bd));
-
-  ad_interrupts #(
-    .C_PROC_TYPE(1)
-  ) i_ad_interrupts (
-    .timer_irq(1'b0),
-    .eth_irq(1'b0),
-    .eth_dma_mm2s_irq(1'b0),
-    .eth_dma_s2mm_irq(1'b0),
-    .uart_irq(1'b0),
-    .gpio_lcd_irq(1'b0),
-    .gpio_sw_irq(1'b0),
-    .spdif_dma_irq(1'b0),
-    .hdmi_dma_irq(hdmi_dma_irq),
-    .iic_irq(iic_irq),
-    .dev0_dma_irq(1'b0),
-    .dev1_dma_irq(1'b0),
-    .dev2_dma_irq(1'b0),
-    .dev3_dma_irq(1'b0),
-    .dev4_dma_irq(1'b0),
-    .dev5_dma_irq(1'b0),
-    .spi0_irq(1'b0),
-    .spi1_irq(1'b0),
-    .spi2_irq(1'b0),
-    .spi3_irq(1'b0),
-    .gpio0_irq(1'b0),
-    .gpio1_irq(1'b0),
-    .gpio2_irq(1'b0),
-    .gpio3_irq(1'b0),
-    .mb_axi_intr(),
-    .ps7_irq_f2p(ps7_irq_f2p));
 
   system_wrapper i_system_wrapper (
     .DDR_addr (DDR_addr),
@@ -195,10 +163,21 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .spdif (spdif),
-    .hdmi_dma_irq (hdmi_dma_irq),
-    .iic_irq (iic_irq),
-    .ps7_irq_f2p (ps7_irq_f2p));
+    .ps_intr_0 (ps_intrs[0]),
+    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_2 (ps_intrs[2]),
+    .ps_intr_3 (ps_intrs[3]),
+    .ps_intr_4 (ps_intrs[4]),
+    .ps_intr_5 (ps_intrs[5]),
+    .ps_intr_6 (ps_intrs[6]),
+    .ps_intr_7 (ps_intrs[7]),
+    .ps_intr_8 (ps_intrs[8]),
+    .ps_intr_9 (ps_intrs[9]),
+    .ps_intr_10 (ps_intrs[10]),
+    .ps_intr_11 (ps_intrs[11]),
+    .ps_intr_12 (ps_intrs[12]),
+    .ps_intr_13 (ps_intrs[13]),
+    .spdif (spdif));
 
 endmodule
 
