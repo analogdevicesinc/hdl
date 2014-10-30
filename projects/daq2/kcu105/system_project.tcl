@@ -10,7 +10,8 @@ adi_project_files daq2_kcu105 [list \
   "system_top.v" \
   "system_constr.xdc"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc" ]
+  "$ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc" \
+  "$ad_hdl_dir/projects/common/kcu105/kcu105_system_lutram_constr.xdc" ]
 
 set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc]
 set_property PROCESSING_ORDER EARLY [get_files system_constr.xdc]
