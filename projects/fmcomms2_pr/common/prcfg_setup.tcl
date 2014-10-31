@@ -1,4 +1,4 @@
-set data_width 127
+set data_width 64
 
 #
 # Port definitions
@@ -81,28 +81,28 @@ set ila_adc_core [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc_co
 set_property -dict [list CONFIG.Component_Name {"pr2adc_core_ila"}] $ila_adc_core
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}]                $ila_adc_core
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}]                 $ila_adc_core
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {128}]               $ila_adc_core
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}]                $ila_adc_core
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]                 $ila_adc_core
 
 set ila_dac_core [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_dac_core]
 set_property -dict [list CONFIG.Component_Name {"pr2dac_core_ila"}] $ila_dac_core
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}]                $ila_dac_core
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}]                 $ila_dac_core
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {128}]               $ila_dac_core
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}]                $ila_dac_core
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]                 $ila_dac_core
 
 set ila_adc_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc_dma]
 set_property -dict [list CONFIG.Component_Name {"pr2adc_dma_ila"}]  $ila_adc_dma
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}]                $ila_adc_dma
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}]                 $ila_adc_dma
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {128}]               $ila_adc_dma
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}]                $ila_adc_dma
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]                 $ila_adc_dma
 
 set ila_dac_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_dac_dma]
 set_property -dict [list CONFIG.Component_Name {"pr2dac_dma_ila"}]  $ila_dac_dma
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}]                $ila_dac_dma
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}]                 $ila_dac_dma
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {128}]               $ila_dac_dma
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}]                $ila_dac_dma
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]                 $ila_dac_dma
 
 connect_bd_net [get_bd_pins ila_adc_core/clk] [get_bd_ports clk]
