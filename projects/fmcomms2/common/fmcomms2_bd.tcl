@@ -42,6 +42,11 @@ if {$sys_zynq == 1} {
   set spi_udc_miso_i      [create_bd_port -dir I spi_udc_miso_i]
 }
 
+  # interrupts
+
+  set ad9361_adc_dma_irq  [create_bd_port -dir O ad9361_adc_dma_irq]
+  set ad9361_dac_dma_irq  [create_bd_port -dir O ad9361_dac_dma_irq]
+
   # ad9361 core
 
   set axi_ad9361 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361]
@@ -242,13 +247,8 @@ if {$sys_zynq == 1} {
   connect_bd_net -net axi_ad9361_dac_drd          [get_bd_pins util_dac_unpack/dma_rd]        [get_bd_pins axi_ad9361_dac_dma/fifo_rd_en]
   connect_bd_net -net axi_ad9361_dac_dunf         [get_bd_pins axi_ad9361/dac_dunf]           [get_bd_pins axi_ad9361_dac_dma/fifo_rd_underflow]
 
-if {$sys_zynq == 0} {
-  connect_bd_net -net axi_ad9361_adc_dma_irq      [get_bd_pins axi_ad9361_adc_dma/irq]  [get_bd_pins sys_concat_intc/In5]
-  connect_bd_net -net axi_ad9361_dac_dma_irq      [get_bd_pins axi_ad9361_dac_dma/irq]  [get_bd_pins sys_concat_intc/In6]
-} else {
-  connect_bd_net -net axi_ad9361_adc_dma_irq      [get_bd_pins axi_ad9361_adc_dma/irq]  [get_bd_pins sys_concat_intc/In13]
-  connect_bd_net -net axi_ad9361_dac_dma_irq      [get_bd_pins axi_ad9361_dac_dma/irq]  [get_bd_pins sys_concat_intc/In12]
-}
+  connect_bd_net -net axi_ad9361_adc_dma_irq      [get_bd_pins axi_ad9361_adc_dma/irq]  [get_bd_pins ad9361_adc_dma_irq]
+  connect_bd_net -net axi_ad9361_dac_dma_irq      [get_bd_pins axi_ad9361_dac_dma/irq]  [get_bd_pins ad9361_dac_dma_irq]
 
   # interconnect (cpu)
 
