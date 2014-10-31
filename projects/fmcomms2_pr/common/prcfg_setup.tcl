@@ -77,29 +77,33 @@ connect_bd_net -net adc_gpio_in     [get_bd_pins axi_ad9361/up_adc_gpio_in]     
 connect_bd_net -net dac_gpio_out    [get_bd_pins axi_ad9361/up_dac_gpio_out]          [get_bd_ports up_dac_gpio_out]
 connect_bd_net -net adc_gpio_out    [get_bd_pins axi_ad9361/up_adc_gpio_out]          [get_bd_ports up_adc_gpio_out]
 
-set ila_adc_core [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc_core]
+set ila_adc_core [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_adc_core]
 set_property -dict [list CONFIG.Component_Name {"pr2adc_core_ila"}] $ila_adc_core
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}]            $ila_adc_core
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}]                $ila_adc_core
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}]                 $ila_adc_core
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}]                $ila_adc_core
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]                 $ila_adc_core
 
-set ila_dac_core [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_dac_core]
+set ila_dac_core [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_dac_core]
 set_property -dict [list CONFIG.Component_Name {"pr2dac_core_ila"}] $ila_dac_core
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}]            $ila_dac_core
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}]                $ila_dac_core
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}]                 $ila_dac_core
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}]                $ila_dac_core
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]                 $ila_dac_core
 
-set ila_adc_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc_dma]
+set ila_adc_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_adc_dma]
 set_property -dict [list CONFIG.Component_Name {"pr2adc_dma_ila"}]  $ila_adc_dma
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}]            $ila_adc_dma
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}]                $ila_adc_dma
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}]                 $ila_adc_dma
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}]                $ila_adc_dma
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]                 $ila_adc_dma
 
-set ila_dac_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_dac_dma]
+set ila_dac_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_dac_dma]
 set_property -dict [list CONFIG.Component_Name {"pr2dac_dma_ila"}]  $ila_dac_dma
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}]            $ila_dac_dma
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}]                $ila_dac_dma
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}]                 $ila_dac_dma
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}]                $ila_dac_dma
