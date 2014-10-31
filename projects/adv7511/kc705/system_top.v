@@ -153,45 +153,7 @@ module system_top (
 
   output          spdif;
 
-  wire            timer_irq;
-  wire            eth_irq;
-  wire            uart_irq;
-  wire            gpio_lcd_irq;
-  wire            gpio_sw_irq;
-  wire            spdif_dma_irq;
-  wire            iic_irq;
-  wire            hdmi_dma_irq;
-  wire   [31:0]   mb_axi_intr;
-
-  ad_interrupts #(
-    .C_PROC_TYPE(0)
-  ) i_ad_interrupts (
-    .timer_irq(timer_irq),
-    .eth_irq(eth_irq),
-    .eth_dma_mm2s_irq(),
-    .eth_dma_s2mm_irq(),
-    .uart_irq(uart_irq),
-    .gpio_lcd_irq(gpio_lcd_irq),
-    .gpio_sw_irq(gpio_sw_irq),
-    .spdif_dma_irq(spdif_dma_irq),
-    .hdmi_dma_irq(hdmi_dma_irq),
-    .iic_irq(iic_irq),
-    .dev0_dma_irq(1'b0),
-    .dev1_dma_irq(1'b0),
-    .dev2_dma_irq(1'b0),
-    .dev3_dma_irq(1'b0),
-    .dev4_dma_irq(1'b0),
-    .dev5_dma_irq(1'b0),
-    .spi0_irq(1'b0),
-    .spi1_irq(1'b0),
-    .spi2_irq(1'b0),
-    .spi3_irq(1'b0),
-    .gpio0_irq(1'b0),
-    .gpio1_irq(1'b0),
-    .gpio2_irq(1'b0),
-    .gpio3_irq(1'b0),
-    .mb_axi_intr(mb_axi_intr),
-    .ps7_irq_f2p());
+  wire   [31:0]   mb_intrs;
 
   // instantiations
 
@@ -225,6 +187,28 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .iic_rstn (iic_rstn),
+    .mb_intr_10 (mb_intrs[10]),
+    .mb_intr_11 (mb_intrs[11]),
+    .mb_intr_12 (mb_intrs[12]),
+    .mb_intr_13 (mb_intrs[13]),
+    .mb_intr_14 (mb_intrs[14]),
+    .mb_intr_15 (mb_intrs[15]),
+    .mb_intr_16 (mb_intrs[16]),
+    .mb_intr_17 (mb_intrs[17]),
+    .mb_intr_18 (mb_intrs[18]),
+    .mb_intr_19 (mb_intrs[19]),
+    .mb_intr_20 (mb_intrs[20]),
+    .mb_intr_21 (mb_intrs[21]),
+    .mb_intr_22 (mb_intrs[22]),
+    .mb_intr_23 (mb_intrs[23]),
+    .mb_intr_24 (mb_intrs[24]),
+    .mb_intr_25 (mb_intrs[25]),
+    .mb_intr_26 (mb_intrs[26]),
+    .mb_intr_27 (mb_intrs[27]),
+    .mb_intr_28 (mb_intrs[28]),
+    .mb_intr_29 (mb_intrs[29]),
+    .mb_intr_30 (mb_intrs[30]),
+    .mb_intr_31 (mb_intrs[31]),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio_io),
     .mii_col (mii_col),
@@ -242,16 +226,7 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .timer_irq (timer_irq),
-    .eth_irq (eth_irq),
-    .uart_irq (uart_irq),
-    .gpio_lcd_irq (gpio_lcd_irq),
-    .gpio_sw_irq (gpio_sw_irq),
-    .spdif_dma_irq (spdif_dma_irq),
-    .iic_irq (iic_irq),
-    .hdmi_dma_irq (hdmi_dma_irq),
-    .mb_axi_intr (mb_axi_intr));
+    .uart_sout (uart_sout));
 
 endmodule
 
