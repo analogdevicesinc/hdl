@@ -29,7 +29,7 @@ connect_bd_net -net axi_ad9234_adc_dovf     [get_bd_pins axi_ad9234_core_0/adc_d
 connect_bd_net -net axi_ad9234_adc_dwr      [get_bd_ports adc_dwr]                    [get_bd_pins plddr3_fifo/adc_wr]
 connect_bd_net -net axi_ad9234_adc_ddata    [get_bd_ports adc_ddata]                  [get_bd_pins plddr3_fifo/adc_wdata]
 
-connect_bd_net -net axi_ad9234_dma_clk      [get_bd_pins plddr3_fifo/dma_clk]         [get_bd_pins axi_ad9234_dma/fifo_wr_clk]
+connect_bd_net -net sys_100m_clk            [get_bd_pins plddr3_fifo/dma_clk]         [get_bd_pins axi_ad9234_dma/fifo_wr_clk]
 connect_bd_net -net axi_ad9234_dma_dwr      [get_bd_pins plddr3_fifo/dma_wr]          [get_bd_pins axi_ad9234_dma/fifo_wr_en]       
 connect_bd_net -net axi_ad9234_dma_ddata    [get_bd_pins plddr3_fifo/dma_wdata]       [get_bd_pins axi_ad9234_dma/fifo_wr_din]      
 connect_bd_net -net axi_ad9234_dma_dovf     [get_bd_pins plddr3_fifo/dma_wovf]        [get_bd_pins axi_ad9234_dma/fifo_wr_overflow] 
@@ -46,7 +46,7 @@ set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_dma_mon
 set_property -dict [list CONFIG.C_PROBE2_WIDTH {64}] $ila_dma_mon
 set_property -dict [list CONFIG.C_PROBE3_WIDTH {5}] $ila_dma_mon
 
-connect_bd_net -net axi_ad9234_dma_clk      [get_bd_pins ila_dma_mon/clk] 
+connect_bd_net -net sys_100m_clk            [get_bd_pins ila_dma_mon/clk] 
 connect_bd_net -net axi_ad9234_dma_dwr      [get_bd_pins ila_dma_mon/probe0] 
 connect_bd_net -net axi_ad9234_dma_xfer_req [get_bd_pins ila_dma_mon/probe1] 
 connect_bd_net -net axi_ad9234_dma_ddata    [get_bd_pins ila_dma_mon/probe2] 
