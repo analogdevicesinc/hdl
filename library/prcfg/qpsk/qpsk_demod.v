@@ -54,15 +54,15 @@ module qpsk_demod (
 
   wire    [15:0]    filtered_data_i;
   wire    [15:0]    filtered_data_q;
-  wire    [ 1:0]    demodulated_data;
+  wire    [ 7:0]    demodulated_data;
 
   // output logic
-  assign data_output = demodulated_data;
+  assign data_output = demodulated_data[1:0];
 
   // instantiation
-  Raised_Cosine_Rx_Filter i_rx_filter (
+  Raised_Cosine_Receive_Filter i_rx_filter (
     .clk(clk),
-    .reset(),
+    .reset(1'b0),
     .enb_1_1_1(data_valid),
     .In1_re(data_qpsk_i),
     .In1_im(data_qpsk_q),
