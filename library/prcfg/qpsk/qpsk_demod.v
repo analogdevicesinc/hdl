@@ -66,8 +66,8 @@ module qpsk_demod (
     .enb_1_1_1(data_valid),
     .In1_re(data_qpsk_i),
     .In1_im(data_qpsk_q),
-    .Out1_im(filtered_data_i),
-    .Out1_re(filtered_data_q)
+    .Out1_re(filtered_data_i),
+    .Out1_im(filtered_data_q)
   );
 
   QPSK_Demodulator_Baseband i_qpsk_demod(
