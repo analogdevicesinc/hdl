@@ -60,40 +60,53 @@ module prcfg_dac(
   dst_dac_dvalid
 );
 
-  localparam  RP_ID       = 8'hA2;
-  parameter   CHANNEL_ID  = 0;
+  parameter   CHANNEL_ID    = 0;
+  parameter   DATA_WIDTH    = 32;
+  parameter   SYMBOL_WIDTH  = 2;
 
-  input             clk;
+  localparam  RP_ID         = 8'hA2;
+  localparam  SYMBOL_CNTR_WIDTH = $clog2(DATA_WIDTH/SYMBOL_WIDTH);
+  localparam  NROF_SYMBOLES = DATA_WIDTH/SYMBOL_WIDTH;
 
-  input   [31:0]    control;
-  output  [31:0]    status;
+  input                               clk;
 
-  output            src_dac_en;
-  input   [31:0]    src_dac_ddata;
-  input             src_dac_dunf;
-  input             src_dac_dvalid;
+  input   [31:0]                      control;
+  output  [31:0]                      status;
 
-  input             dst_dac_en;
-  output  [31:0]    dst_dac_ddata;
-  output            dst_dac_dunf;
-  output            dst_dac_dvalid;
+  output                              src_dac_en;
+  input   [(DATA_WIDTH-1):0]          src_dac_ddata;
+  input                               src_dac_dunf;
+  input                               src_dac_dvalid;
 
-  reg               dst_dac_dunf   = 0;
-  reg     [31:0]    dst_dac_ddata  = 0;
-  reg               dst_dac_dvalid = 0;
-  reg               src_dac_en     = 0;
+  input                               dst_dac_en;
+  output  [(DATA_WIDTH-1):0]          dst_dac_ddata;
+  output                              dst_dac_dunf;
+  output                              dst_dac_dvalid;
 
-  reg     [ 7:0]    pn_data        = 8'hF2;
-  reg     [31:0]    status         = 0;
+  // output register to improve timing
+  reg                                 dst_dac_dunf   = 'h0;
+  reg     [(DATA_WIDTH-1):0]          dst_dac_ddata  = 'h0;
+  reg                                 dst_dac_dvalid = 'h0;
+  reg                                 src_dac_en     = 'h0;
 
-  reg     [ 3:0]    mode;
+  // internal registers
+  reg     [ 7:0]                      pn_data        = 'hF2;
+  reg     [31:0]                      status         = 'h0;
+  reg     [ 3:0]                      mode           = 'h0;
 
-  wire    [ 1:0]    dac_data;
-  wire    [15:0]    dac_data_fltr_i;
-  wire    [15:0]    dac_data_fltr_q;
+  reg     [(SYMBOL_WIDTH-1):0]        dac_data_buf[(NROF_SYMBOLES-1):0];
+  reg     [(SYMBOL_CNTR_WIDTH-1):0]   symbole_counter = 'd0;
+  reg     [2:0]                       sample_counter  = 'd0;
 
-  wire    [31:0]    dac_data_mode0;
-  wire    [31:0]    dac_data_mode1_2;
+  // internal wires
+  wire    [(SYMBOL_WIDTH-1):0]        mod_data;
+  wire    [15:0]                      dac_data_fltr_i;
+  wire    [15:0]                      dac_data_fltr_q;
+
+  wire    [(DATA_WIDTH-1):0]          dac_data_mode0;
+  wire    [(DATA_WIDTH-1):0]          dac_data_mode1_2;
+
+  wire                                mod_en;
 
   // prbs function
   function [ 7:0] pn;
@@ -112,43 +125,69 @@ module prcfg_dac(
     end
   endfunction
 
+  // update control and status registers
   always @(posedge clk) begin
     status <= { 24'h0, RP_ID };
     mode   <= control[ 7:4];
   end
 
-  // pass through mode
-  assign dac_data_mode0 = src_dac_ddata;
-
-  // prbs geenration
+  // prbs generation
   always @(posedge clk) begin
     if(dst_dac_en == 1) begin
-      pn_data = pn(pn_data);
+      pn_data <= pn(pn_data);
     end
   end
 
-  // data source for the modulator
-  assign dac_data = (mode == 1) ? pn_data[ 1:0] : src_dac_ddata[ 1:0];
+  // symbol wrapper, data is transmitted MSB first
+  genvar i;
+  generate
+    for (i = 0; i < NROF_SYMBOLES; i = i + 1) begin : SYMBOLE_WRAPPER
+        // flop the incoming data when it's valid and all the symbols are pushed out
+        always @(posedge clk) begin
+            if((src_dac_dvalid == 1'b1) && (symbole_counter == 'd0)) begin
+                 dac_data_buf[(NROF_SYMBOLES-i-1)] <= src_dac_ddata[((i+1)*SYMBOL_WIDTH)-1:(i*SYMBOL_WIDTH)];
+            end
+        end
+    end
+  endgenerate
 
-  // modulated data
-  assign dac_data_mode1_2 = { dac_data_fltr_q, dac_data_fltr_i };
+  // increment to counter for the symbol mux
+  always @(posedge clk) begin
+    if((src_dac_dvalid == 1'b1) && (dst_dac_en == 1'b1)) begin
+      if(mod_en == 1'b1) begin
+        symbole_counter <= symbole_counter + 1;
+      end
+      sample_counter <= sample_counter + 1;
+    end
+  end
+
+  // the modulator generate eight samples from each symbol
+  // to prevent data loss, need to keep each symbol at data_input port for 8 samples
+  assign mod_en = (sample_counter == 7) ? 1'b1 : 1'b0;
+
+  // data for the modulator (prbs or dma)
+  assign mod_data = (mode == 1) ? pn_data[ 1:0] : dac_data_buf[symbole_counter];
 
   // qpsk modulator
   qpsk_mod i_qpsk_mod (
     .clk(clk),
-    .data_input(dac_data),
+    .data_input(mod_data),
     .data_valid(dst_dac_en),
     .data_qpsk_i(dac_data_fltr_i),
     .data_qpsk_q(dac_data_fltr_q)
   );
 
-  // output logic for tx side
+  // pass through mode
+  assign dac_data_mode0 = src_dac_ddata;
+  // modulated data
+  assign dac_data_mode1_2 = { dac_data_fltr_q, dac_data_fltr_i };
+
+  // output logic
   always @(posedge clk) begin
-    src_dac_en      <= (mode == 1) ? 1'b0 : dst_dac_en;
+    src_dac_en      <= (& symbole_counter) & (& sample_counter);
     dst_dac_dunf    <= (mode == 1) ? 1'b0 : src_dac_dunf;
     dst_dac_ddata   <= (mode == 0) ? dac_data_mode0 : dac_data_mode1_2;
-    dst_dac_dvalid  <= (mode == 0) ? src_dac_dvalid  :
-                                  ((dst_dac_en == 1'b1) ? 1'b1 : 1'b0);
+    dst_dac_dvalid  <= (mode == 0) ? src_dac_dvalid  : ((dst_dac_en == 1'b1) ? 1'b1 : 1'b0);
   end
 
 endmodule

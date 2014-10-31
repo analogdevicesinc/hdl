@@ -59,46 +59,52 @@ module prcfg_adc (
   dst_adc_dovf
 );
 
-  localparam  RP_ID       = 8'hA2;
-  parameter   CHANNEL_ID  = 0;
+  parameter   CHANNEL_ID    = 0;
+  parameter   DATA_WIDTH    = 32;
+  parameter   SYMBOL_WIDTH = 2;
 
-  input             clk;
+  localparam  RP_ID         = 8'hA2;
+  localparam  SYMBOLE_CNTR_WIDTH = $clog2(DATA_WIDTH/SYMBOLE_WIDTH);
+  localparam  NROF_SYMBOLS = DATA_WIDTH/SYMBOL_WIDTH;
 
-  input   [31:0]    control;
-  output  [31:0]    status;
+  input                               clk;
 
-  input             src_adc_dwr;
-  input             src_adc_dsync;
-  input   [31:0]    src_adc_ddata;
-  output            src_adc_dovf;
+  input   [31:0]                      control;
+  output  [31:0]                      status;
 
-  output            dst_adc_dwr;
-  output            dst_adc_dsync;
-  output  [31:0]    dst_adc_ddata;
-  input             dst_adc_dovf;
+  input                               src_adc_dwr;
+  input                               src_adc_dsync;
+  input   [(DATA_WIDTH-1):0]          src_adc_ddata;
+  output                              src_adc_dovf;
 
-  reg               src_adc_dovf;
-  reg               dst_adc_dwr;
-  reg               dst_adc_dsync;
+  output                              dst_adc_dwr;
+  output                              dst_adc_dsync;
+  output  [(DATA_WIDTH-1):0]          dst_adc_ddata;
+  input                               dst_adc_dovf;
 
-  reg     [31:0]    dst_adc_ddata     = 0;
-  reg     [31:0]    status            = 0;
-  reg     [ 7:0]    adc_pn_data       = 0;
-  reg               adc_dvalid_d      = 0;
-  reg     [ 1:0]    adc_ddata         = 0;
-  reg     [ 7:0]    adc_pn_oos_count  = 0;
-  reg               adc_pn_oos        = 0;
-  reg               adc_pn_err        = 0;
+  reg                                 src_adc_dovf    = 'h0;
+  reg                                 dst_adc_dwr     = 'h0;
+  reg                                 dst_adc_dsync   = 'h0;
+  reg     [(DATA_WIDTH-1):0]          dst_adc_ddata   = 'h0;
 
-  reg     [ 3:0]    mode;
-  reg     [ 3:0]    channel_sel;
+  reg     [(DATA_WIDTH-1):0]          adc_ddata       = 'h0;
+  reg     [ 7:0]                      adc_pn_data     = 'hF1;
 
-  wire              adc_dvalid;
-  wire    [ 1:0]    adc_ddata_s;
-  wire    [31:0]    adc_pn_data_s;
-  wire              adc_pn_update_s;
-  wire              adc_pn_match_s;
-  wire              adc_pn_err_s;
+  reg     [31:0]                      status          = 'h0;
+  reg     [ 3:0]                      mode            = 'h0;
+  reg     [ 3:0]                      channel_sel     = 'h0;
+
+  reg     [(SYMBOL_WIDTH-1):0]        adc_data_buf[(NROF_SYMBOLS-1):0];
+  reg     [(SYMBOL_CNTR_WIDTH-1):0]   symbole_counter = 'h0;
+  reg     [2:0]                       sample_counter = 'd0;
+
+  wire                                adc_dvalid;
+  wire                                dma_dvalid;
+  wire    [(SYMBOL_WIDTH-1):0]        adc_ddata_s;
+  wire                                adc_pn_err_s;
+  wire                                adc_pn_oos_s;
+
+  wire                                demod_en;
 
   // prbs function
   function [ 7:0] pn;
@@ -117,6 +123,7 @@ module prcfg_adc (
     end
   endfunction
 
+  // update control and status registers
   always @(posedge clk) begin
     channel_sel <= control[ 3:0];
     mode        <= control[ 7:4];
@@ -124,34 +131,55 @@ module prcfg_adc (
 
   assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
 
-  // prbs monitor
-  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? {adc_pn_data[7:2], src_adc_ddata} : adc_pn_data;
-  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
-  assign adc_pn_match_s   = (adc_ddata == adc_pn_data[1:0]) ? 1'b1 : 1'b0;
-  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+  // data concatanation (MSB first)
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_data_buf[(NROF_SYMBOLS - symbole_counter - 1)] <= adc_ddata_s;
+    end
+  end
+
+  genvar i;
+  generate
+    for (i=0; i < NROF_SYMBOLS; i = i + 1) begin: SYMBOL_WRAPPER
+      always @(posedge clk) begin
+        if((adc_dvalid == 1'b1) &&
+           (& symbole_counter == 1'b1) &&
+           (sample_counter == 'b1) &&
+           (mode != 0)) begin
+          adc_ddata[((i+1)*SYMBOL_WIDTH)-1:(i*SYMBOL_WIDTH)] <= adc_data_buf[i];
+        end
+      end
+    end
+  endgenerate
+
+  ad_pnmon #(
+    .DATA_WIDTH(8)
+  ) i_pn_mon (
+    .adc_clk(clk),
+    .adc_valid_in(adc_dvalid),
+    .adc_data_in({adc_pn_data[7:2], adc_ddata_s}),
+    .adc_data_pn(adc_pn_data),
+    .adc_pn_oos(adc_pn_oos_s),
+    .adc_pn_err(adc_pn_err_s));
+
+
+  // prbs generation
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_pn_data <= pn(adc_pn_data);
+    end
+  end
 
   always @(posedge clk) begin
     if(adc_dvalid == 1'b1) begin
-      adc_ddata    <= src_adc_ddata;
-      adc_pn_data <= pn(adc_pn_data_s);
-    end
-    adc_dvalid_d <= adc_dvalid;
-    if(adc_dvalid_d == 1'b1) begin
-      adc_pn_err <= adc_pn_err_s;
-      if(adc_pn_update_s == 1'b1) begin
-        if(adc_pn_oos_count >= 'd16) begin
-          adc_pn_oos_count <= 'd0;
-          adc_pn_oos <= ~adc_pn_oos;
-        end else begin
-          adc_pn_oos_count <= adc_pn_oos_count + 1;
-          adc_pn_oos <= adc_pn_oos;
-        end
-      end else begin
-        adc_pn_oos_count <= 'd0;
-        adc_pn_oos <= adc_pn_oos;
+      if(demod_en == 1'b1) begin
+        symbole_counter <= symbole_counter + 1;
       end
+      sample_counter <= sample_counter + 1;
     end
   end
+
+  assign demod_en = (sample_counter == 7) ? 1'b1 : 1'b0;
 
   // qpsk demodulator
   qpsk_demod i_qpsk_demod1 (
@@ -166,19 +194,21 @@ module prcfg_adc (
   always @(posedge clk) begin
 
     src_adc_dovf   <= dst_adc_dovf;
-    dst_adc_dwr    <= src_adc_dwr;
     dst_adc_dsync  <= src_adc_dsync;
 
     if(mode == 0) begin
+      dst_adc_dwr   <= src_adc_dwr;
       dst_adc_ddata <= src_adc_ddata;
     end else begin
-      dst_adc_ddata <= {30'h0, adc_ddata};
+      dst_adc_ddata <= adc_ddata;
+      dst_adc_dwr   <= (& symbole_counter) & (& sample_counter);
     end
     if((mode == 3'd2) && (channel_sel == CHANNEL_ID)) begin
-      status <= {22'h0, adc_pn_err, adc_pn_oos, RP_ID};
+      status <= {22'h0, adc_pn_err_s, adc_pn_oos_s, RP_ID};
     end else begin
       status <= {24'h0, RP_ID};
     end
   end
 
 endmodule
+
