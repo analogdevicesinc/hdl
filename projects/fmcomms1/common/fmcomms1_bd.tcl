@@ -48,6 +48,11 @@
   set adc_dma_sync    [create_bd_port -dir I adc_dma_sync]
   set adc_dma_wdata   [create_bd_port -dir I -from 31 -to 0 adc_dma_wdata]
 
+  # interrupts
+
+  set ad9122_dma_irq  [create_bd_port -dir O ad9122_dma_irq]
+  set ad9643_dma_irq  [create_bd_port -dir O ad9643_dma_irq]
+
   # dac peripherals
 
   set axi_ad9122 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9122:1.0 axi_ad9122]
@@ -94,16 +99,10 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {125.0}] $sys_ps7
 }
 
-if {$sys_zynq == 0} {
-
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_2] [get_bd_ports unc_int2]
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_3] [get_bd_ports unc_int3]
-}
-
 # reference clock shared with audio clock
 
   set_property -dict [list CONFIG.CLKOUT2_USED {true}] $sys_audio_clkgen
-  set_property -dict [list CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {30}] $sys_audio_clkgen
+  set_property -dict [list CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {30.3030}] $sys_audio_clkgen
 
 # connections (dac)
 
@@ -120,15 +119,15 @@ if {$sys_zynq == 0} {
 
   connect_bd_net -net axi_ad9122_dac_valid_0      [get_bd_pins axi_ad9122/dac_valid_0]              [get_bd_ports dac_valid_0]
   connect_bd_net -net axi_ad9122_dac_enable_0     [get_bd_pins axi_ad9122/dac_enable_0]             [get_bd_ports dac_enable_0]
-  connect_bd_net -net axi_ad9122_dac_ddata_0      [get_bd_pins axi_ad9122/dac_ddata_0]              [get_bd_ports dac_ddata_0] 
+  connect_bd_net -net axi_ad9122_dac_ddata_0      [get_bd_pins axi_ad9122/dac_ddata_0]              [get_bd_ports dac_ddata_0]
   connect_bd_net -net axi_ad9122_dac_valid_1      [get_bd_pins axi_ad9122/dac_valid_1]              [get_bd_ports dac_valid_1]
   connect_bd_net -net axi_ad9122_dac_enable_1     [get_bd_pins axi_ad9122/dac_enable_1]             [get_bd_ports dac_enable_1]
-  connect_bd_net -net axi_ad9122_dac_ddata_1      [get_bd_pins axi_ad9122/dac_ddata_1]              [get_bd_ports dac_ddata_1] 
+  connect_bd_net -net axi_ad9122_dac_ddata_1      [get_bd_pins axi_ad9122/dac_ddata_1]              [get_bd_ports dac_ddata_1]
   connect_bd_net -net axi_ad9122_dac_dunf         [get_bd_pins axi_ad9122/dac_dunf]                 [get_bd_pins axi_ad9122_dma/fifo_rd_underflow]
 
   connect_bd_net -net axi_ad9122_dma_drd          [get_bd_pins axi_ad9122_dma/fifo_rd_en]           [get_bd_ports dac_dma_rd]
   connect_bd_net -net axi_ad9122_dma_ddata        [get_bd_pins axi_ad9122_dma/fifo_rd_dout]         [get_bd_ports dac_dma_rdata]
-  connect_bd_net -net axi_ad9122_dma_irq          [get_bd_pins axi_ad9122_dma/irq]                  [get_bd_pins sys_concat_intc/In12]
+  connect_bd_net -net axi_ad9122_dma_irq          [get_bd_pins axi_ad9122_dma/irq]                  [get_bd_ports ad9122_dma_irq]
 
   # connections (adc)
 
@@ -160,8 +159,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9643_dma_dsync        [get_bd_ports adc_dma_sync]                       [get_bd_pins axi_ad9643_dma/fifo_wr_sync]
   connect_bd_net -net axi_ad9643_dma_ddata        [get_bd_pins sys_wfifo/s_wdata]                   [get_bd_pins axi_ad9643_dma/fifo_wr_din]
   connect_bd_net -net axi_ad9643_dma_dovf         [get_bd_pins sys_wfifo/s_wovf]                    [get_bd_pins axi_ad9643_dma/fifo_wr_overflow]
-  connect_bd_net -net axi_ad9643_dma_irq          [get_bd_pins axi_ad9643_dma/irq]                  [get_bd_pins sys_concat_intc/In13]
-
+  connect_bd_net -net axi_ad9643_dma_irq          [get_bd_pins axi_ad9643_dma/irq]                  [get_bd_ports ad9643_dma_irq]
 
   # interconnect (cpu)
 
@@ -195,7 +193,7 @@ if {$sys_zynq == 1} {
 
 # interconnect (mem/dac)
 
-if {$sys_zynq == 0 } { 
+if {$sys_zynq == 0 } {
   connect_bd_intf_net -intf_net axi_mem_interconnect_s08_axi [get_bd_intf_pins axi_mem_interconnect/S08_AXI] [get_bd_intf_pins axi_ad9122_dma/m_src_axi]
   connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/S08_ACLK] $sys_200m_clk_source
   connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9122_dma/m_src_axi_aclk]
