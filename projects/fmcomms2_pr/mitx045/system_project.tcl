@@ -32,7 +32,7 @@ if { $runSynth == 1 } {
 
   prcfg_synth_static [list "./system_top.v" \
                            "${ad_hdl_dir}/library/common/ad_iobuf.v"] \
-                     "${ad_hdl_dir}/projects/common/mitx045/mitx045_system_constr.xdc"
+                           "${ad_hdl_dir}/projects/common/mitx045/mitx045_system_constr.xdc"
 
   ###########               Reconfigurable part
   # Default
@@ -52,6 +52,7 @@ if { $runSynth == 1 } {
   set prcfg_name "qpsk"
   prcfg_synth_reconf $prcfg_name [list "../common/prcfg_system_top.v" \
                                        "${ad_hdl_dir}/library/prcfg/common/prcfg_top.v" \
+                                       "${ad_hdl_dir}/library/common/ad_pnmon.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/prcfg_dac.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/prcfg_adc.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/qpsk_mod.v" \
@@ -68,10 +69,9 @@ if { $runSynth == 1 } {
 #### IMPLEMENTATION ####
 ###############################################################################
 if { $runImpl == 1 } {
-
-  prcfg_impl "prcfg_constr.xdc" [list "default" \
-                                       "bist" \
-                                       "qpsk"]
+  prcfg_impl "prcfg_constr.xdc" [list "qpsk" \
+                                      "bist" \
+                                      "default"]
 }
 
 ###############################################################################
