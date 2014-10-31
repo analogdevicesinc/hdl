@@ -132,7 +132,8 @@ module util_wfifo (
 
   // read is non-destructive
 
-  assign fifo_rd = ~fifo_rempty;
+  assign s_wready_s = (S_READY_ENABLE == 0) ? 1'b1 : s_wready;
+  assign fifo_rd = ~fifo_rempty & s_wready_s;
 
   always @(posedge s_clk) begin
     s_wr_int <= fifo_rd;
@@ -144,8 +145,6 @@ module util_wfifo (
   assign s_wdata_s[s] = fifo_rdata[(S_DATA_WIDTH-1)-s];
   end
   endgenerate
-
-  assign s_wready_s = (S_READY_ENABLE == 0) ? 1'b1 : s_wready;
 
   ad_axis_inf_rx #(.DATA_WIDTH(S_DATA_WIDTH)) i_axis_inf (
     .clk (s_clk),
