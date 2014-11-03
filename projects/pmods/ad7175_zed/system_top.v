@@ -90,6 +90,7 @@ module system_top (
   adc_cs_o,
   adc_sclk_o,
   led_clk_o,
+  gain_o,
   
   otg_vbusoc);
 
@@ -138,19 +139,20 @@ module system_top (
   inout   [ 1:0]  iic_mux_scl;
   inout   [ 1:0]  iic_mux_sda;
   
-  input 			adc_sdo_i;
-  output 			adc_sdi_o;
-  output 			adc_cs_o;
-  output 			adc_sclk_o;
-  output            led_clk_o;
+  input           adc_sdo_i;
+  output          adc_sdi_o;
+  output          adc_cs_o;
+  output          adc_sclk_o;
+  output          led_clk_o;
+  output          gain_o;
 
   input           otg_vbusoc;
 
   // internal signals
 
-  wire    [31:0]  gpio_i;
-  wire    [31:0]  gpio_o;
-  wire    [31:0]  gpio_t;
+  wire    [32:0]  gpio_i;
+  wire    [32:0]  gpio_o;
+  wire    [32:0]  gpio_t;
   wire    [ 1:0]  iic_mux_scl_i_s;
   wire    [ 1:0]  iic_mux_scl_o_s;
   wire            iic_mux_scl_t_s;
@@ -175,6 +177,8 @@ module system_top (
     .IO (gpio_bd[n]));
   end
   endgenerate
+
+  assign gain_o = gpio_o[32];
 
   IOBUF i_iic_mux_scl_0 (.I(iic_mux_scl_o_s[0]), .O(iic_mux_scl_i_s[0]), .T(iic_mux_scl_t_s), .IO(iic_mux_scl[0]));
   IOBUF i_iic_mux_scl_1 (.I(iic_mux_scl_o_s[1]), .O(iic_mux_scl_i_s[1]), .T(iic_mux_scl_t_s), .IO(iic_mux_scl[1]));
@@ -224,16 +228,16 @@ module system_top (
     .iic_mux_sda_I (iic_mux_sda_i_s),
     .iic_mux_sda_O (iic_mux_sda_o_s),
     .iic_mux_sda_T (iic_mux_sda_t_s),
-	.adc_sdo_i (adc_sdo_i),
+    .adc_sdo_i (adc_sdo_i),
     .adc_sdi_o (adc_sdi_o),
     .adc_cs_o (adc_cs_o),
     .adc_sclk_o (adc_sclk_o),
-	.led_clk_o (led_clk_o),
-	.dma_data ({adc_data_3, adc_data_2, adc_data_1, adc_data_0}),
-	.adc_data_3(adc_data_3),
-	.adc_data_2(adc_data_2),
-	.adc_data_1(adc_data_1),
-	.adc_data_0(adc_data_0),
+    .led_clk_o (led_clk_o),
+    .dma_data ({adc_data_3, adc_data_2, adc_data_1, adc_data_0}),
+    .adc_data_3(adc_data_3),
+    .adc_data_2(adc_data_2),
+    .adc_data_1(adc_data_1),
+    .adc_data_0(adc_data_0),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
