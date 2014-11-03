@@ -82,6 +82,8 @@ set_property -dict [list CONFIG.C_USE_UART {1}] $sys_mb_debug
 set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 
 set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_vcc]
+set sys_const_gnd [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_gnd]
+set_property -dict [list CONFIG.CONST_VAL {0}] $sys_const_gnd
 
 # instance: ddr (mig)
 
@@ -310,6 +312,8 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S07_ACLK] $sy
 
 connect_bd_net [get_bd_pins sys_concat_intc/In0]  [get_bd_pins axi_timer/interrupt]
 connect_bd_net [get_bd_pins sys_concat_intc/In1]  [get_bd_pins axi_ethernet/ip2intc_irpt]
+connect_bd_net [get_bd_pins sys_concat_intc/In2]  [get_bd_pins sys_const_gnd/dout]
+connect_bd_net [get_bd_pins sys_concat_intc/In3]  [get_bd_pins sys_const_gnd/dout]
 connect_bd_net [get_bd_pins sys_concat_intc/In4]  [get_bd_pins axi_uart/interrupt]
 connect_bd_net [get_bd_pins sys_concat_intc/In5]  [get_bd_pins axi_gpio_lcd/ip2intc_irpt]
 connect_bd_net [get_bd_pins sys_concat_intc/In6]  [get_bd_pins axi_gpio_sw_led/ip2intc_irpt]
