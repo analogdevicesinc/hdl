@@ -83,19 +83,5 @@ create_clock -name rx_ref_clk_0   -period  1.60 [get_ports rx_ref_clk_0_p]
 create_clock -name rx_ref_clk_1   -period  1.60 [get_ports rx_ref_clk_1_p]
 create_clock -name rx_div_clk_0   -period  6.40 [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/rx_clk_g]
 
-set_clock_groups -asynchronous -group {rx_div_clk_0}
-
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/inst/i_up_gt/i_drp_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/inst/i_up_gt/i_gt_pll_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/inst/i_up_gt/i_gt_rx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/inst/i_up_gt/i_gt_tx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/inst/i_up_gt/i_rx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/inst/i_up_gt/i_tx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_1_gt/inst/i_up_gt/i_drp_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_1_gt/inst/i_up_gt/i_gt_pll_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_1_gt/inst/i_up_gt/i_gt_rx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_1_gt/inst/i_up_gt/i_gt_tx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_1_gt/inst/i_up_gt/i_rx_rst_reg/i_rst_reg/PRE]
-set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9625_1_gt/inst/i_up_gt/i_tx_rst_reg/i_rst_reg/PRE]
 
 
