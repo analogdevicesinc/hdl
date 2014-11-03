@@ -39,6 +39,13 @@ set dma_1_wr        [create_bd_port -dir I dma_1_wr]
 set dma_1_sync      [create_bd_port -dir I dma_1_sync]
 set dma_1_data      [create_bd_port -dir I -from 63 -to 0 dma_1_data]
 
+#interrupts
+set ad9250_0_dma_intr [create_bd_port -dir O ad9250_0_dma_intr]
+set ad9250_1_dma_intr [create_bd_port -dir O ad9250_1_dma_intr]
+if { $sys_zynq == 0 } {
+  set ad9250_spi_intr [create_bd_port -dir O ad9250_spi_intr]
+}
+
 # adc peripherals
 
 set axi_ad9250_0_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_0_core]
@@ -154,7 +161,7 @@ if {$sys_zynq == 1 } {
   connect_bd_net -net spi_sdo_o   [get_bd_ports spi_sdo_o]                [get_bd_pins axi_ad9250_spi/io0_o]
   connect_bd_net -net spi_sdi_i   [get_bd_ports spi_sdi_i]                [get_bd_pins axi_ad9250_spi/io1_i]
 
-  connect_bd_net -net axi_ad9250_spi_irq  [get_bd_pins axi_ad9250_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In5]
+  connect_bd_net -net axi_ad9250_spi_irq  [get_bd_pins axi_ad9250_spi/ip2intc_irpt]   [get_bd_ports ad9250_spi_intr]
 }
 
 # connections (gt)
@@ -216,8 +223,8 @@ connect_bd_net -net axi_ad9250_1_dma_data           [get_bd_pins axi_ad9250_1_dm
 
 connect_bd_net -net axi_ad9250_0_adc_dovf           [get_bd_pins axi_ad9250_0_core/adc_dovf]      [get_bd_pins axi_ad9250_0_dma/fifo_wr_overflow]
 connect_bd_net -net axi_ad9250_1_adc_dovf           [get_bd_pins axi_ad9250_1_core/adc_dovf]      [get_bd_pins axi_ad9250_1_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad9250_0_dma_irq            [get_bd_pins axi_ad9250_0_dma/irq]            [get_bd_pins sys_concat_intc/In13]
-connect_bd_net -net axi_ad9250_1_dma_irq            [get_bd_pins axi_ad9250_1_dma/irq]            [get_bd_pins sys_concat_intc/In12]
+connect_bd_net -net axi_ad9250_0_dma_irq            [get_bd_pins axi_ad9250_0_dma/irq]            [get_bd_ports ad9250_0_dma_intr]
+connect_bd_net -net axi_ad9250_1_dma_irq            [get_bd_pins axi_ad9250_1_dma/irq]            [get_bd_ports ad9250_1_dma_intr]
 
 # interconnect (cpu)
 
