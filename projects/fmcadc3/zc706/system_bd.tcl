@@ -30,7 +30,7 @@ connect_bd_net -net axi_ad9234_adc_dwr      [get_bd_ports adc_dwr]              
 connect_bd_net -net axi_ad9234_adc_ddata    [get_bd_ports adc_ddata]                  [get_bd_pins plddr3_fifo/adc_wdata]
 
 connect_bd_net -net sys_100m_clk            [get_bd_pins plddr3_fifo/dma_clk]         [get_bd_pins axi_ad9234_dma/fifo_wr_clk]
-connect_bd_net -net axi_ad9234_dma_dwr      [get_bd_pins plddr3_fifo/dma_wr]          [get_bd_pins axi_ad9234_dma/fifo_wr_en]       
+connect_bd_net -net axi_ad9234_dma_dwr      [get_bd_pins plddr3_fifo/dma_wvalid]      [get_bd_pins axi_ad9234_dma/fifo_wr_en]
 connect_bd_net -net axi_ad9234_dma_ddata    [get_bd_pins plddr3_fifo/dma_wdata]       [get_bd_pins axi_ad9234_dma/fifo_wr_din]      
 connect_bd_net -net axi_ad9234_dma_dovf     [get_bd_pins plddr3_fifo/dma_wovf]        [get_bd_pins axi_ad9234_dma/fifo_wr_overflow] 
 connect_bd_net -net axi_ad9234_adc_dsync    [get_bd_ports adc_dsync]                  [get_bd_pins axi_ad9234_dma/fifo_wr_sync]
