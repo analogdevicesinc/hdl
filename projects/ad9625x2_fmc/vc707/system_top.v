@@ -233,9 +233,8 @@ module system_top (
 
   // internal registers
 
-  reg               dma_wr = 'd0;
-  reg               dma_sync = 'd0;
-  reg     [511:0]   dma_data = 'd0;
+  reg               adc_wr = 'd0;
+  reg     [511:0]   adc_wdata = 'd0;
 
   // internal signals
 
@@ -250,6 +249,7 @@ module system_top (
   wire              spi_clk;
   wire              spi_miso;
   wire              spi_mosi;
+  wire    [ 31:0]   mb_intrs;
   wire              adc_clk;
   wire              adc_valid_0;
   wire              adc_enable_0;
@@ -261,40 +261,39 @@ module system_top (
   // interleaving
 
   always @(posedge adc_clk) begin
-    dma_wr <= adc_enable_0 & adc_enable_1;
-    dma_sync <= 1'b1;
-    dma_data[((16*31)+15):(16*31)] <= adc_data_1[((16*15)+15):(16*15)];
-    dma_data[((16*30)+15):(16*30)] <= adc_data_0[((16*15)+15):(16*15)];
-    dma_data[((16*29)+15):(16*29)] <= adc_data_1[((16*14)+15):(16*14)];
-    dma_data[((16*28)+15):(16*28)] <= adc_data_0[((16*14)+15):(16*14)];
-    dma_data[((16*27)+15):(16*27)] <= adc_data_1[((16*13)+15):(16*13)];
-    dma_data[((16*26)+15):(16*26)] <= adc_data_0[((16*13)+15):(16*13)];
-    dma_data[((16*25)+15):(16*25)] <= adc_data_1[((16*12)+15):(16*12)];
-    dma_data[((16*24)+15):(16*24)] <= adc_data_0[((16*12)+15):(16*12)];
-    dma_data[((16*23)+15):(16*23)] <= adc_data_1[((16*11)+15):(16*11)];
-    dma_data[((16*22)+15):(16*22)] <= adc_data_0[((16*11)+15):(16*11)];
-    dma_data[((16*21)+15):(16*21)] <= adc_data_1[((16*10)+15):(16*10)];
-    dma_data[((16*20)+15):(16*20)] <= adc_data_0[((16*10)+15):(16*10)];
-    dma_data[((16*19)+15):(16*19)] <= adc_data_1[((16* 9)+15):(16* 9)];
-    dma_data[((16*18)+15):(16*18)] <= adc_data_0[((16* 9)+15):(16* 9)];
-    dma_data[((16*17)+15):(16*17)] <= adc_data_1[((16* 8)+15):(16* 8)];
-    dma_data[((16*16)+15):(16*16)] <= adc_data_0[((16* 8)+15):(16* 8)];
-    dma_data[((16*15)+15):(16*15)] <= adc_data_1[((16* 7)+15):(16* 7)];
-    dma_data[((16*14)+15):(16*14)] <= adc_data_0[((16* 7)+15):(16* 7)];
-    dma_data[((16*13)+15):(16*13)] <= adc_data_1[((16* 6)+15):(16* 6)];
-    dma_data[((16*12)+15):(16*12)] <= adc_data_0[((16* 6)+15):(16* 6)];
-    dma_data[((16*11)+15):(16*11)] <= adc_data_1[((16* 5)+15):(16* 5)];
-    dma_data[((16*10)+15):(16*10)] <= adc_data_0[((16* 5)+15):(16* 5)];
-    dma_data[((16* 9)+15):(16* 9)] <= adc_data_1[((16* 4)+15):(16* 4)];
-    dma_data[((16* 8)+15):(16* 8)] <= adc_data_0[((16* 4)+15):(16* 4)];
-    dma_data[((16* 7)+15):(16* 7)] <= adc_data_1[((16* 3)+15):(16* 3)];
-    dma_data[((16* 6)+15):(16* 6)] <= adc_data_0[((16* 3)+15):(16* 3)];
-    dma_data[((16* 5)+15):(16* 5)] <= adc_data_1[((16* 2)+15):(16* 2)];
-    dma_data[((16* 4)+15):(16* 4)] <= adc_data_0[((16* 2)+15):(16* 2)];
-    dma_data[((16* 3)+15):(16* 3)] <= adc_data_1[((16* 1)+15):(16* 1)];
-    dma_data[((16* 2)+15):(16* 2)] <= adc_data_0[((16* 1)+15):(16* 1)];
-    dma_data[((16* 1)+15):(16* 1)] <= adc_data_1[((16* 0)+15):(16* 0)];
-    dma_data[((16* 0)+15):(16* 0)] <= adc_data_0[((16* 0)+15):(16* 0)];
+    adc_wr <= adc_enable_0 & adc_enable_1;
+    adc_wdata[((16*31)+15):(16*31)] <= adc_data_1[((16*15)+15):(16*15)];
+    adc_wdata[((16*30)+15):(16*30)] <= adc_data_0[((16*15)+15):(16*15)];
+    adc_wdata[((16*29)+15):(16*29)] <= adc_data_1[((16*14)+15):(16*14)];
+    adc_wdata[((16*28)+15):(16*28)] <= adc_data_0[((16*14)+15):(16*14)];
+    adc_wdata[((16*27)+15):(16*27)] <= adc_data_1[((16*13)+15):(16*13)];
+    adc_wdata[((16*26)+15):(16*26)] <= adc_data_0[((16*13)+15):(16*13)];
+    adc_wdata[((16*25)+15):(16*25)] <= adc_data_1[((16*12)+15):(16*12)];
+    adc_wdata[((16*24)+15):(16*24)] <= adc_data_0[((16*12)+15):(16*12)];
+    adc_wdata[((16*23)+15):(16*23)] <= adc_data_1[((16*11)+15):(16*11)];
+    adc_wdata[((16*22)+15):(16*22)] <= adc_data_0[((16*11)+15):(16*11)];
+    adc_wdata[((16*21)+15):(16*21)] <= adc_data_1[((16*10)+15):(16*10)];
+    adc_wdata[((16*20)+15):(16*20)] <= adc_data_0[((16*10)+15):(16*10)];
+    adc_wdata[((16*19)+15):(16*19)] <= adc_data_1[((16* 9)+15):(16* 9)];
+    adc_wdata[((16*18)+15):(16*18)] <= adc_data_0[((16* 9)+15):(16* 9)];
+    adc_wdata[((16*17)+15):(16*17)] <= adc_data_1[((16* 8)+15):(16* 8)];
+    adc_wdata[((16*16)+15):(16*16)] <= adc_data_0[((16* 8)+15):(16* 8)];
+    adc_wdata[((16*15)+15):(16*15)] <= adc_data_1[((16* 7)+15):(16* 7)];
+    adc_wdata[((16*14)+15):(16*14)] <= adc_data_0[((16* 7)+15):(16* 7)];
+    adc_wdata[((16*13)+15):(16*13)] <= adc_data_1[((16* 6)+15):(16* 6)];
+    adc_wdata[((16*12)+15):(16*12)] <= adc_data_0[((16* 6)+15):(16* 6)];
+    adc_wdata[((16*11)+15):(16*11)] <= adc_data_1[((16* 5)+15):(16* 5)];
+    adc_wdata[((16*10)+15):(16*10)] <= adc_data_0[((16* 5)+15):(16* 5)];
+    adc_wdata[((16* 9)+15):(16* 9)] <= adc_data_1[((16* 4)+15):(16* 4)];
+    adc_wdata[((16* 8)+15):(16* 8)] <= adc_data_0[((16* 4)+15):(16* 4)];
+    adc_wdata[((16* 7)+15):(16* 7)] <= adc_data_1[((16* 3)+15):(16* 3)];
+    adc_wdata[((16* 6)+15):(16* 6)] <= adc_data_0[((16* 3)+15):(16* 3)];
+    adc_wdata[((16* 5)+15):(16* 5)] <= adc_data_1[((16* 2)+15):(16* 2)];
+    adc_wdata[((16* 4)+15):(16* 4)] <= adc_data_0[((16* 2)+15):(16* 2)];
+    adc_wdata[((16* 3)+15):(16* 3)] <= adc_data_1[((16* 1)+15):(16* 1)];
+    adc_wdata[((16* 2)+15):(16* 2)] <= adc_data_0[((16* 1)+15):(16* 1)];
+    adc_wdata[((16* 1)+15):(16* 1)] <= adc_data_1[((16* 0)+15):(16* 0)];
+    adc_wdata[((16* 0)+15):(16* 0)] <= adc_data_0[((16* 0)+15):(16* 0)];
   end
 
   // instantiations
@@ -369,7 +368,12 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dirn (spi_dirn));
 
+  assign fan_pwm = 1'b1;
+
   system_wrapper i_system_wrapper (
+    .ad9625_dma_intr (mb_intrs[13]),
+    .ad9625_gpio_intr (mb_intrs[12]),
+    .ad9625_spi_intr (mb_intrs[11]),
     .adc_clk (adc_clk),
     .adc_data_0 (adc_data_0),
     .adc_data_1 (adc_data_1),
@@ -377,6 +381,8 @@ module system_top (
     .adc_enable_1 (adc_enable_1),
     .adc_valid_0 (adc_valid_0),
     .adc_valid_1 (adc_valid_1),
+    .adc_wdata (adc_wdata),
+    .adc_wr (adc_wr),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -392,10 +398,6 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .dma_data (dma_data),
-    .dma_sync (dma_sync),
-    .dma_wr (dma_wr),
-    .fan_pwm (fan_pwm),
     .gpio_ad9625_i (gpio_i),
     .gpio_ad9625_o (gpio_o),
     .gpio_ad9625_t (gpio_t),
@@ -410,11 +412,34 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .iic_rstn (iic_rstn),
+    .mb_intr_10 (mb_intrs[10]),
+    .mb_intr_11 (mb_intrs[11]),
+    .mb_intr_12 (mb_intrs[12]),
+    .mb_intr_13 (mb_intrs[13]),
+    .mb_intr_14 (mb_intrs[14]),
+    .mb_intr_15 (mb_intrs[15]),
+    .mb_intr_16 (mb_intrs[16]),
+    .mb_intr_17 (mb_intrs[17]),
+    .mb_intr_18 (mb_intrs[18]),
+    .mb_intr_19 (mb_intrs[19]),
+    .mb_intr_20 (mb_intrs[20]),
+    .mb_intr_21 (mb_intrs[21]),
+    .mb_intr_22 (mb_intrs[22]),
+    .mb_intr_23 (mb_intrs[23]),
+    .mb_intr_24 (mb_intrs[24]),
+    .mb_intr_25 (mb_intrs[25]),
+    .mb_intr_26 (mb_intrs[26]),
+    .mb_intr_27 (mb_intrs[27]),
+    .mb_intr_28 (mb_intrs[28]),
+    .mb_intr_29 (mb_intrs[29]),
+    .mb_intr_30 (mb_intrs[30]),
+    .mb_intr_31 (mb_intrs[31]),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .mgt_clk_clk_n (mgt_clk_n),
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
+    .phy_sd (1'b1),
     .rx_data_0_n (rx_data_0_n),
     .rx_data_0_p (rx_data_0_p),
     .rx_data_1_n (rx_data_1_n),
@@ -440,11 +465,7 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .unc_int0 (1'b0),
-    .unc_int1 (1'b0),
-    .unc_int3 (1'b0),
-    .unc_int4 (1'b0));
+    .uart_sout (uart_sout));
 
 endmodule
 
