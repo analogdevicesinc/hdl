@@ -3,6 +3,7 @@ source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3.tcl
 source ../common/fmcadc3_bd.tcl
 
+set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_ad9234_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9234_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9234_dma
 
@@ -22,18 +23,17 @@ delete_bd_objs [get_bd_nets axi_ad9234_adc_dovf]
 
 connect_bd_net -net [get_bd_nets axi_fmcadc3_gt_rx_rst]   [get_bd_pins plddr3_fifo/adc_rst]             [get_bd_pins axi_fmcadc3_gt/rx_rst]
 connect_bd_net -net [get_bd_nets sys_fmc_dma_resetn]      [get_bd_pins plddr3_fifo/dma_rstn]            [get_bd_pins sys_fmc_dma_sync_reset/sync_resetn]
-connect_bd_net -net axi_ad9234_dma_xfer_req               [get_bd_pins axi_ad9234_dma/fifo_wr_xfer_req] [get_bd_pins plddr3_fifo/axi_xfer_req]
+connect_bd_net -net axi_ad9234_dma_xfer_req               [get_bd_pins axi_ad9234_dma/s_axis_xfer_req]  [get_bd_pins plddr3_fifo/axi_xfer_req]
 
 connect_bd_net -net axi_ad9234_adc_clk      [get_bd_pins axi_ad9234_core_0/adc_clk]   [get_bd_pins plddr3_fifo/adc_clk]
 connect_bd_net -net axi_ad9234_adc_dovf     [get_bd_pins axi_ad9234_core_0/adc_dovf]  [get_bd_pins plddr3_fifo/adc_wovf]
 connect_bd_net -net axi_ad9234_adc_dwr      [get_bd_ports adc_dwr]                    [get_bd_pins plddr3_fifo/adc_wr]
 connect_bd_net -net axi_ad9234_adc_ddata    [get_bd_ports adc_ddata]                  [get_bd_pins plddr3_fifo/adc_wdata]
 
-connect_bd_net -net sys_100m_clk            [get_bd_pins plddr3_fifo/dma_clk]         [get_bd_pins axi_ad9234_dma/fifo_wr_clk]
-connect_bd_net -net axi_ad9234_dma_dwr      [get_bd_pins plddr3_fifo/dma_wvalid]      [get_bd_pins axi_ad9234_dma/fifo_wr_en]
-connect_bd_net -net axi_ad9234_dma_ddata    [get_bd_pins plddr3_fifo/dma_wdata]       [get_bd_pins axi_ad9234_dma/fifo_wr_din]      
-connect_bd_net -net axi_ad9234_dma_dovf     [get_bd_pins plddr3_fifo/dma_wovf]        [get_bd_pins axi_ad9234_dma/fifo_wr_overflow] 
-connect_bd_net -net axi_ad9234_adc_dsync    [get_bd_ports adc_dsync]                  [get_bd_pins axi_ad9234_dma/fifo_wr_sync]
+connect_bd_net -net sys_100m_clk            [get_bd_pins plddr3_fifo/dma_clk]         [get_bd_pins axi_ad9234_dma/s_axis_aclk]
+connect_bd_net -net axi_ad9234_dma_ready    [get_bd_pins plddr3_fifo/dma_wready]      [get_bd_pins axi_ad9234_dma/s_axis_ready]
+connect_bd_net -net axi_ad9234_dma_dwr      [get_bd_pins axi_ad9234_dma/s_axis_valid] [get_bd_pins plddr3_fifo/dma_wvalid]
+connect_bd_net -net axi_ad9234_dma_ddata    [get_bd_pins axi_ad9234_dma/s_axis_data]  [get_bd_pins plddr3_fifo/dma_wdata]
 
 connect_bd_net -net axi_ad9234_adc_clk      [get_bd_ports adc_clk]
 connect_bd_net -net axi_ad9234_adc_ddata    [get_bd_pins ila_jesd_rx_mon/PROBE3]

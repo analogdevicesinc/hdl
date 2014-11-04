@@ -72,7 +72,6 @@ if {$sys_zynq == 0} {
   set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9234_dma
-  set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9234_dma
