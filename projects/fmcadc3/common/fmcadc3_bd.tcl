@@ -357,11 +357,12 @@ if {$sys_zynq == 0} {
 
   set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_jesd_rx_mon
+  set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE0_WIDTH {662}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE1_WIDTH {10}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE2_WIDTH {256}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE3_WIDTH {256}] $ila_jesd_rx_mon
+  set_property -dict [list CONFIG.C_PROBE4_WIDTH {1}] $ila_jesd_rx_mon
 
   connect_bd_net -net axi_fmcadc3_gt_rx_mon_data       [get_bd_pins axi_fmcadc3_gt/rx_mon_data]
   connect_bd_net -net axi_fmcadc3_gt_rx_mon_trigger    [get_bd_pins axi_fmcadc3_gt/rx_mon_trigger]
