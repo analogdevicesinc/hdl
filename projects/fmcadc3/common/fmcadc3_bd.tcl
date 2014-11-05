@@ -56,6 +56,10 @@ if {$sys_zynq == 0} {
   set adc_dsync       [create_bd_port -dir I adc_dsync]
   set adc_ddata       [create_bd_port -dir I -from 255 -to 0 adc_ddata]
 
+  set fmcadc3_spi_intr    [create_bd_port -dir O fmcadc3_spi_intr]
+  set fmcadc3_gpio_intr   [create_bd_port -dir O fmcadc3_gpio_intr]
+  set fmcadc3_dma_intr    [create_bd_port -dir O fmcadc3_dma_intr]
+
   # adc peripherals
 
   set axi_ad9234_core_0 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9234:1.0 axi_ad9234_core_0]
@@ -125,7 +129,6 @@ if {$sys_zynq == 0} {
 if {$sys_zynq == 0} {
 
   set_property -dict [list CONFIG.NUM_SI {11}] $axi_mem_interconnect
-  set_property -dict [list CONFIG.NUM_PORTS {7}] $sys_concat_intc
 }
 
 if {$sys_zynq == 1} {
@@ -179,12 +182,6 @@ if {$sys_zynq == 0} {
   connect_bd_net -net gpio_ctl_t    [get_bd_ports gpio_ctl_t]     [get_bd_pins axi_fmcadc3_gpio/gpio2_io_t]  
 }
 
-if {$sys_zynq == 0} {
-
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_2] [get_bd_ports unc_int2]
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_3] [get_bd_ports unc_int3]
-}
-
   # connections (gt)
 
   connect_bd_net -net axi_fmcadc3_gt_ref_clk_q         [get_bd_pins axi_fmcadc3_gt/ref_clk_q]         [get_bd_ports rx_ref_clk]   
@@ -232,7 +229,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9234_adc_dsync             [get_bd_ports adc_dsync]                       [get_bd_pins axi_ad9234_dma/fifo_wr_sync]
   connect_bd_net -net axi_ad9234_adc_ddata             [get_bd_ports adc_ddata]                       [get_bd_pins axi_ad9234_dma/fifo_wr_din]
   connect_bd_net -net axi_ad9234_adc_dovf              [get_bd_pins axi_ad9234_core_0/adc_dovf]       [get_bd_pins axi_ad9234_dma/fifo_wr_overflow]
-  connect_bd_net -net axi_ad9234_dma_irq               [get_bd_pins axi_ad9234_dma/irq]               [get_bd_pins sys_concat_intc/In2] 
+  connect_bd_net -net axi_ad9234_dma_irq               [get_bd_pins axi_ad9234_dma/irq]               [get_bd_ports fmcadc3_dma_intr]
 
   # dac/adc clocks
 
@@ -280,8 +277,8 @@ if {$sys_zynq == 0} {
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_fmcadc3_spi/s_axi_aresetn] 
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_fmcadc3_gpio/s_axi_aresetn] 
 
-  connect_bd_net -net axi_fmcadc3_spi_irq  [get_bd_pins axi_fmcadc3_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In5]  
-  connect_bd_net -net axi_fmcadc3_gpio_irq [get_bd_pins axi_fmcadc3_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In6] 
+  connect_bd_net -net axi_fmcadc3_spi_irq  [get_bd_pins axi_fmcadc3_spi/ip2intc_irpt]   [get_bd_ports fmcadc3_spi_intr]
+  connect_bd_net -net axi_fmcadc3_gpio_irq [get_bd_pins axi_fmcadc3_gpio/ip2intc_irpt]  [get_bd_ports fmcadc3_gpio_intr]
 }
 
   # gt uses hp3, and 100MHz clock for both DRP and AXI4
