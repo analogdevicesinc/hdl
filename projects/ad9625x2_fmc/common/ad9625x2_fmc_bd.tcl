@@ -282,7 +282,7 @@ set_property -dict [list CONFIG.C_PROBE3_WIDTH {16}] $ila_rx_mon
 set_property -dict [list CONFIG.C_PROBE4_WIDTH {16}] $ila_rx_mon
 
 connect_bd_net -net axi_ad9625_0_gt_rx_clk            [get_bd_pins ila_rx_mon/CLK]
-connect_bd_net -net axi_ad9625_dma_adc_ddata          [get_bd_pins ila_rx_mon/probe0]
+connect_bd_net -net axi_ad9625_adc_wdata              [get_bd_pins ila_rx_mon/probe0]
 connect_bd_net -net axi_ad9625_0_gt_rx_data           [get_bd_pins ila_rx_mon/probe1]
 connect_bd_net -net axi_ad9625_1_gt_rx_data           [get_bd_pins ila_rx_mon/probe2]
 connect_bd_net -net axi_ad9625_0_core_adc_sref        [get_bd_pins axi_ad9625_0_core/adc_sref]  [get_bd_pins ila_rx_mon/probe3]
