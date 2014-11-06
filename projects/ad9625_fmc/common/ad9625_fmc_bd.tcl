@@ -335,5 +335,4 @@ if {$sys_zynq == 1} {
 
   create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9625_dma/m_dest_axi]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]    SEG_axi_ddr_cntrl
   create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9625_gt/m_axi]        [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]    SEG_axi_ddr_cntrl
-  create_bd_addr_seg -range 0x00200000 -offset 0xc0000000 [get_bd_addr_spaces axi_ad9625_fifo/axi_fifo2s/axi] [get_bd_addr_segs axi_ad9625_fifo/axi_bram_ctl/S_AXI/Mem0] SEG_axi_bram_ctl_mem
 }
