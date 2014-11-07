@@ -420,7 +420,7 @@ module system_top (
     .IB (tx_sync_n),
     .O (tx_sync));
 
-  daq2_spi i_spi (
+  fmcomms7_spi i_spi (
     .spi_csn (spi_csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
@@ -434,6 +434,11 @@ module system_top (
     .O (trig));
 
   assign gpio_i[43] = trig;
+
+
+  assign spi_adf4355_1_csn = spi2_csn[0];
+
+
 
   ad_iobuf #(.DATA_WIDTH(24)) i_iobuf (
     .dt ({gpio_t[42:40], gpio_t[38], gpio_t[36:32], gpio_t[14:0]}),
