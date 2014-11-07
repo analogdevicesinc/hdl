@@ -37,7 +37,7 @@
 
 `timescale 1ns/100ps
 
-module daq2_spi (
+module fmcomms7_spi (
 
   spi_csn,
   spi_clk,
