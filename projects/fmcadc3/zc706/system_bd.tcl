@@ -38,6 +38,8 @@ connect_bd_net -net axi_ad9234_dma_ddata    [get_bd_pins axi_ad9234_dma/s_axis_d
 connect_bd_net -net axi_ad9234_adc_clk      [get_bd_ports adc_clk]
 connect_bd_net -net axi_ad9234_adc_ddata    [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
+connect_bd_net -net axi_ad9234_dma_irq      [get_bd_ports fmcadc3_dma_intr]           [get_bd_pins sys_concat_intc/In2]
+
 set ila_dma_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_dma_mon]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_dma_mon
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_dma_mon
