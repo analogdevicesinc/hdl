@@ -206,6 +206,7 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
+  wire    [15:0]  ps_intrs;
 
   // instantiations
 
@@ -223,13 +224,13 @@ module system_top (
             gpio_bd}));
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
-    .dt (iic_mux_scl_t_s),
+    .dt ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
     .di (iic_mux_scl_i_s),
     .do (iic_mux_scl_o_s),
     .dio(iic_mux_scl));
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_sda (
-    .dt (iic_mux_sda_t_s),
+    .dt ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
     .di (iic_mux_sda_i_s),
     .do (iic_mux_sda_o_s),
     .dio(iic_mux_sda));
@@ -277,6 +278,22 @@ module system_top (
     .iic_mux_sda_I (iic_mux_sda_i_s),
     .iic_mux_sda_O (iic_mux_sda_o_s),
     .iic_mux_sda_T (iic_mux_sda_t_s),
+    .ps_intr_0 (ps_intrs[0]),
+    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_10 (ps_intrs[10]),
+    .ps_intr_11 (ps_intrs[11]),
+    .ps_intr_12 (ps_intrs[12]),
+    .ps_intr_13 (ps_intrs[13]),
+    .ps_intr_2 (ps_intrs[2]),
+    .ps_intr_3 (ps_intrs[3]),
+    .ps_intr_4 (ps_intrs[4]),
+    .ps_intr_5 (ps_intrs[5]),
+    .ps_intr_6 (ps_intrs[6]),
+    .ps_intr_7 (ps_intrs[7]),
+    .ps_intr_8 (ps_intrs[8]),
+    .ps_intr_9 (ps_intrs[9]),
+    .ad9361_dac_dma_irq (ps_intrs[12]),
+    .ad9361_adc_dma_irq (ps_intrs[13]),
     .otg_vbusoc (otg_vbusoc),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
