@@ -50,6 +50,15 @@ if {$sys_zynq == 0} {
   set gpio_status_t   [create_bd_port -dir O -from 4 -to 0 gpio_status_t]
 }
 
+  set gt_rxcharisk    [create_bd_port -dir O -from 31 -to 0 gt_rxcharisk]
+  set gt_rxdisperr    [create_bd_port -dir O -from 31 -to 0 gt_rxdisperr]
+  set gt_rxnotintable [create_bd_port -dir O -from 31 -to 0 gt_rxnotintable]
+  set gt_rxdata       [create_bd_port -dir O -from 255 -to 0 gt_rxdata]
+  set ip_rxcharisk    [create_bd_port -dir O -from 15 -to 0 ip_rxcharisk]
+  set ip_rxdisperr    [create_bd_port -dir O -from 15 -to 0 ip_rxdisperr]
+  set ip_rxnotintable [create_bd_port -dir O -from 15 -to 0 ip_rxnotintable]
+  set ip_rxdata       [create_bd_port -dir O -from 127 -to 0 ip_rxdata]
+
   set dac_clk         [create_bd_port -dir O dac_clk]
   set dac_valid_0     [create_bd_port -dir O dac_valid_0]
   set dac_enable_0    [create_bd_port -dir O dac_enable_0]
@@ -64,7 +73,7 @@ if {$sys_zynq == 0} {
   set dac_enable_3    [create_bd_port -dir O dac_enable_3]
   set dac_ddata_3     [create_bd_port -dir I -from 63 -to 0 dac_ddata_3]
   set dac_drd         [create_bd_port -dir I dac_drd]
-  set dac_ddata       [create_bd_port -dir O -from 127 -to 0 dac_ddata]
+  set dac_ddata       [create_bd_port -dir O -from 255 -to 0 dac_ddata]
 
   set adc_clk         [create_bd_port -dir O adc_clk]
   set adc_enable_0    [create_bd_port -dir O adc_enable_0]
@@ -86,6 +95,7 @@ if {$sys_zynq == 1} {
   set axi_ad9144_dma_intr [create_bd_port -dir O axi_ad9144_dma_intr]
   set axi_ad9680_dma_intr [create_bd_port -dir O axi_ad9680_dma_intr]
   set axi_fmcomms7_spi_intr   [create_bd_port -dir O axi_fmcomms7_spi_intr  ]  
+  set axi_fmcomms7_spi2_intr  [create_bd_port -dir O axi_fmcomms7_spi2_intr ]  
   set axi_fmcomms7_gpio_intr  [create_bd_port -dir O axi_fmcomms7_gpio_intr ] 
 
   # dac peripherals
@@ -107,8 +117,8 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9144_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9144_dma
   set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9144_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}] $axi_ad9144_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9144_dma
+  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {256}] $axi_ad9144_dma
+  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {256}] $axi_ad9144_dma
 
 if {$sys_zynq == 1} {
 
@@ -161,6 +171,10 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_1 {3}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_2 {1}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_3 {2}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_4 {4}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_5 {5}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_6 {6}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_7 {7}] $axi_fmcomms7_gt
 
 if {$sys_zynq == 1} {
 
@@ -213,13 +227,13 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
-  set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {44}] $sys_ps7
+  set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {64}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
 
-  set_property LEFT 43 [get_bd_ports GPIO_I]
-  set_property LEFT 43 [get_bd_ports GPIO_O]
-  set_property LEFT 43 [get_bd_ports GPIO_T]
+  set_property LEFT 63 [get_bd_ports GPIO_I]
+  set_property LEFT 63 [get_bd_ports GPIO_O]
+  set_property LEFT 63 [get_bd_ports GPIO_T]
 }
 
   # connections (pl ddr3)
@@ -302,23 +316,23 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_fmcomms7_gt_tx_ip_sof         [get_bd_pins axi_fmcomms7_gt/tx_ip_sof]         [get_bd_pins axi_ad9144_jesd/tx_start_of_frame]
   connect_bd_net -net axi_fmcomms7_gt_tx_ip_data        [get_bd_pins axi_fmcomms7_gt/tx_ip_data]        [get_bd_pins axi_ad9144_jesd/tx_tdata]
   connect_bd_net -net axi_fmcomms7_gt_tx_data           [get_bd_pins axi_fmcomms7_gt/tx_data]           [get_bd_pins axi_ad9144_core/tx_data]
-  connect_bd_net -net axi_ad9144_dac_clk            [get_bd_pins axi_ad9144_core/dac_clk]       [get_bd_pins axi_ad9144_dma/fifo_rd_clk]
-  connect_bd_net -net axi_ad9144_dac_valid_0        [get_bd_pins axi_ad9144_core/dac_valid_0]   [get_bd_ports dac_valid_0]  
-  connect_bd_net -net axi_ad9144_dac_enable_0       [get_bd_pins axi_ad9144_core/dac_enable_0]  [get_bd_ports dac_enable_0]
-  connect_bd_net -net axi_ad9144_dac_ddata_0        [get_bd_pins axi_ad9144_core/dac_ddata_0]   [get_bd_ports dac_ddata_0]
-  connect_bd_net -net axi_ad9144_dac_valid_1        [get_bd_pins axi_ad9144_core/dac_valid_1]   [get_bd_ports dac_valid_1]
-  connect_bd_net -net axi_ad9144_dac_enable_1       [get_bd_pins axi_ad9144_core/dac_enable_1]  [get_bd_ports dac_enable_1]
-  connect_bd_net -net axi_ad9144_dac_ddata_1        [get_bd_pins axi_ad9144_core/dac_ddata_1]   [get_bd_ports dac_ddata_1]
-  connect_bd_net -net axi_ad9144_dac_valid_2        [get_bd_pins axi_ad9144_core/dac_valid_2]   [get_bd_ports dac_valid_2]
-  connect_bd_net -net axi_ad9144_dac_enable_2       [get_bd_pins axi_ad9144_core/dac_enable_2]  [get_bd_ports dac_enable_2]
-  connect_bd_net -net axi_ad9144_dac_ddata_2        [get_bd_pins axi_ad9144_core/dac_ddata_2]   [get_bd_ports dac_ddata_2]
-  connect_bd_net -net axi_ad9144_dac_valid_3        [get_bd_pins axi_ad9144_core/dac_valid_3]   [get_bd_ports dac_valid_3]
-  connect_bd_net -net axi_ad9144_dac_enable_3       [get_bd_pins axi_ad9144_core/dac_enable_3]  [get_bd_ports dac_enable_3]
-  connect_bd_net -net axi_ad9144_dac_ddata_3        [get_bd_pins axi_ad9144_core/dac_ddata_3]   [get_bd_ports dac_ddata_3]
-  connect_bd_net -net axi_ad9144_dac_drd            [get_bd_ports dac_drd]                      [get_bd_pins axi_ad9144_dma/fifo_rd_en]
-  connect_bd_net -net axi_ad9144_dac_ddata          [get_bd_ports dac_ddata]                    [get_bd_pins axi_ad9144_dma/fifo_rd_dout]
-  connect_bd_net -net axi_ad9144_dac_dunf           [get_bd_pins axi_ad9144_core/dac_dunf]      [get_bd_pins axi_ad9144_dma/fifo_rd_underflow]
-  connect_bd_net -net axi_ad9144_dma_intr           [get_bd_pins axi_ad9144_dma/irq]            [get_bd_ports axi_ad9144_dma_intr]
+  connect_bd_net -net axi_ad9144_dac_clk                [get_bd_pins axi_ad9144_core/dac_clk]           [get_bd_pins axi_ad9144_dma/fifo_rd_clk]
+  connect_bd_net -net axi_ad9144_dac_valid_0            [get_bd_pins axi_ad9144_core/dac_valid_0]       [get_bd_ports dac_valid_0]  
+  connect_bd_net -net axi_ad9144_dac_enable_0           [get_bd_pins axi_ad9144_core/dac_enable_0]      [get_bd_ports dac_enable_0]
+  connect_bd_net -net axi_ad9144_dac_ddata_0            [get_bd_pins axi_ad9144_core/dac_ddata_0]       [get_bd_ports dac_ddata_0]
+  connect_bd_net -net axi_ad9144_dac_valid_1            [get_bd_pins axi_ad9144_core/dac_valid_1]       [get_bd_ports dac_valid_1]
+  connect_bd_net -net axi_ad9144_dac_enable_1           [get_bd_pins axi_ad9144_core/dac_enable_1]      [get_bd_ports dac_enable_1]
+  connect_bd_net -net axi_ad9144_dac_ddata_1            [get_bd_pins axi_ad9144_core/dac_ddata_1]       [get_bd_ports dac_ddata_1]
+  connect_bd_net -net axi_ad9144_dac_valid_2            [get_bd_pins axi_ad9144_core/dac_valid_2]       [get_bd_ports dac_valid_2]
+  connect_bd_net -net axi_ad9144_dac_enable_2           [get_bd_pins axi_ad9144_core/dac_enable_2]      [get_bd_ports dac_enable_2]
+  connect_bd_net -net axi_ad9144_dac_ddata_2            [get_bd_pins axi_ad9144_core/dac_ddata_2]       [get_bd_ports dac_ddata_2]
+  connect_bd_net -net axi_ad9144_dac_valid_3            [get_bd_pins axi_ad9144_core/dac_valid_3]       [get_bd_ports dac_valid_3]
+  connect_bd_net -net axi_ad9144_dac_enable_3           [get_bd_pins axi_ad9144_core/dac_enable_3]      [get_bd_ports dac_enable_3]
+  connect_bd_net -net axi_ad9144_dac_ddata_3            [get_bd_pins axi_ad9144_core/dac_ddata_3]       [get_bd_ports dac_ddata_3]
+  connect_bd_net -net axi_ad9144_dac_drd                [get_bd_ports dac_drd]                          [get_bd_pins axi_ad9144_dma/fifo_rd_en]
+  connect_bd_net -net axi_ad9144_dac_ddata              [get_bd_ports dac_ddata]                        [get_bd_pins axi_ad9144_dma/fifo_rd_dout]
+  connect_bd_net -net axi_ad9144_dac_dunf               [get_bd_pins axi_ad9144_core/dac_dunf]          [get_bd_pins axi_ad9144_dma/fifo_rd_underflow]
+  connect_bd_net -net axi_ad9144_dma_intr               [get_bd_pins axi_ad9144_dma/irq]                [get_bd_ports axi_ad9144_dma_intr]
 
   # connections (adc)
 
@@ -327,39 +341,40 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_fmcomms7_gt_rx_clk [get_bd_pins axi_ad9680_core/rx_clk]
   connect_bd_net -net axi_fmcomms7_gt_rx_clk [get_bd_pins axi_ad9680_jesd/rx_core_clk]
 
-  connect_bd_net -net axi_fmcomms7_gt_rx_rst            [get_bd_pins axi_fmcomms7_gt/rx_rst]            [get_bd_pins axi_ad9680_jesd/rx_reset]
-  connect_bd_net -net axi_fmcomms7_gt_rx_sysref         [get_bd_pins axi_fmcomms7_gt/rx_sysref]         [get_bd_pins axi_ad9680_jesd/rx_sysref]
-  connect_bd_net -net axi_fmcomms7_gt_rx_gt_charisk     [get_bd_pins axi_fmcomms7_gt/rx_gt_charisk]     [get_bd_pins axi_ad9680_jesd/gt_rxcharisk_in]
-  connect_bd_net -net axi_fmcomms7_gt_rx_gt_disperr     [get_bd_pins axi_fmcomms7_gt/rx_gt_disperr]     [get_bd_pins axi_ad9680_jesd/gt_rxdisperr_in]
-  connect_bd_net -net axi_fmcomms7_gt_rx_gt_notintable  [get_bd_pins axi_fmcomms7_gt/rx_gt_notintable]  [get_bd_pins axi_ad9680_jesd/gt_rxnotintable_in]
-  connect_bd_net -net axi_fmcomms7_gt_rx_gt_data        [get_bd_pins axi_fmcomms7_gt/rx_gt_data]        [get_bd_pins axi_ad9680_jesd/gt_rxdata_in]
-  connect_bd_net -net axi_fmcomms7_gt_rx_rst_done       [get_bd_pins axi_fmcomms7_gt/rx_rst_done]       [get_bd_pins axi_ad9680_jesd/rx_reset_done]
-  connect_bd_net -net axi_fmcomms7_gt_rx_ip_comma_align [get_bd_pins axi_fmcomms7_gt/rx_ip_comma_align] [get_bd_pins axi_ad9680_jesd/rxencommaalign_out]
-  connect_bd_net -net axi_fmcomms7_gt_rx_ip_sync        [get_bd_pins axi_fmcomms7_gt/rx_ip_sync]        [get_bd_pins axi_ad9680_jesd/rx_sync]
-  connect_bd_net -net axi_fmcomms7_gt_rx_ip_sof         [get_bd_pins axi_fmcomms7_gt/rx_ip_sof]         [get_bd_pins axi_ad9680_jesd/rx_start_of_frame]
-  connect_bd_net -net axi_fmcomms7_gt_rx_ip_data        [get_bd_pins axi_fmcomms7_gt/rx_ip_data]        [get_bd_pins axi_ad9680_jesd/rx_tdata]
-  connect_bd_net -net axi_fmcomms7_gt_rx_data           [get_bd_pins axi_fmcomms7_gt/rx_data]           [get_bd_pins axi_ad9680_core/rx_data]
-
-  connect_bd_net -net axi_fmcomms7_gt_rx_rst            [get_bd_pins axi_ad9680_fifo/adc_rst]       [get_bd_pins axi_fmcomms7_gt/rx_rst]
-  connect_bd_net -net sys_100m_resetn               [get_bd_pins axi_ad9680_fifo/dma_rstn]      $sys_100m_resetn_source
-
-  connect_bd_net -net axi_ad9680_adc_clk            [get_bd_pins axi_ad9680_core/adc_clk]       [get_bd_pins axi_ad9680_fifo/adc_clk]
-  connect_bd_net -net axi_ad9680_adc_dovf           [get_bd_pins axi_ad9680_core/adc_dovf]      [get_bd_pins axi_ad9680_fifo/adc_wovf]
-  connect_bd_net -net axi_ad9680_adc_enable_0       [get_bd_pins axi_ad9680_core/adc_enable_0]  [get_bd_ports adc_enable_0]
-  connect_bd_net -net axi_ad9680_adc_valid_0        [get_bd_pins axi_ad9680_core/adc_valid_0]   [get_bd_ports adc_valid_0]
-  connect_bd_net -net axi_ad9680_adc_data_0         [get_bd_pins axi_ad9680_core/adc_data_0]    [get_bd_ports adc_data_0]
-  connect_bd_net -net axi_ad9680_adc_enable_1       [get_bd_pins axi_ad9680_core/adc_enable_1]  [get_bd_ports adc_enable_1]
-  connect_bd_net -net axi_ad9680_adc_valid_1        [get_bd_pins axi_ad9680_core/adc_valid_1]   [get_bd_ports adc_valid_1]
-  connect_bd_net -net axi_ad9680_adc_data_1         [get_bd_pins axi_ad9680_core/adc_data_1]    [get_bd_ports adc_data_1]
-  connect_bd_net -net axi_ad9680_adc_dwr            [get_bd_ports adc_dwr]                      [get_bd_pins axi_ad9680_fifo/adc_wr]
-  connect_bd_net -net axi_ad9680_adc_ddata          [get_bd_ports adc_ddata]                    [get_bd_pins axi_ad9680_fifo/adc_wdata]
-
-  connect_bd_net -net sys_100m_clk                  [get_bd_pins axi_ad9680_fifo/dma_clk]       [get_bd_pins axi_ad9680_dma/s_axis_aclk]
-  connect_bd_net -net axi_ad9680_dma_dvalid         [get_bd_pins axi_ad9680_fifo/dma_wvalid]    [get_bd_pins axi_ad9680_dma/s_axis_valid]
-  connect_bd_net -net axi_ad9680_dma_dready         [get_bd_pins axi_ad9680_fifo/dma_wready]    [get_bd_pins axi_ad9680_dma/s_axis_ready]
-  connect_bd_net -net axi_ad9680_dma_ddata          [get_bd_pins axi_ad9680_fifo/dma_wdata]     [get_bd_pins axi_ad9680_dma/s_axis_data]
-  connect_bd_net -net axi_ad9680_dma_xfer_req       [get_bd_pins axi_ad9680_fifo/axi_xfer_req]  [get_bd_pins axi_ad9680_dma/s_axis_xfer_req]
-  connect_bd_net -net axi_ad9680_dma_intr           [get_bd_pins axi_ad9680_dma/irq]            [get_bd_ports axi_ad9680_dma_intr]
+  connect_bd_net -net axi_fmcomms7_gt_rx_rst            [get_bd_pins axi_fmcomms7_gt/rx_rst]              [get_bd_pins axi_ad9680_jesd/rx_reset]
+  connect_bd_net -net axi_fmcomms7_gt_rx_sysref         [get_bd_pins axi_fmcomms7_gt/rx_sysref]           [get_bd_pins axi_ad9680_jesd/rx_sysref]
+  connect_bd_net -net axi_fmcomms7_gt_rx_gt_charisk     [get_bd_pins axi_fmcomms7_gt/rx_gt_charisk]       [get_bd_ports gt_rxcharisk]
+  connect_bd_net -net axi_fmcomms7_gt_rx_gt_disperr     [get_bd_pins axi_fmcomms7_gt/rx_gt_disperr]       [get_bd_ports gt_rxdisperr]
+  connect_bd_net -net axi_fmcomms7_gt_rx_gt_notintable  [get_bd_pins axi_fmcomms7_gt/rx_gt_notintable]    [get_bd_ports gt_rxnotintable]
+  connect_bd_net -net axi_fmcomms7_gt_rx_gt_data        [get_bd_pins axi_fmcomms7_gt/rx_gt_data]          [get_bd_ports gt_rxdata]
+  connect_bd_net -net axi_fmcomms7_ip_rx_gt_charisk     [get_bd_pins axi_ad9680_jesd/gt_rxcharisk_in]     [get_bd_ports ip_rxcharisk]
+  connect_bd_net -net axi_fmcomms7_ip_rx_gt_disperr     [get_bd_pins axi_ad9680_jesd/gt_rxdisperr_in]     [get_bd_ports ip_rxdisperr]
+  connect_bd_net -net axi_fmcomms7_ip_rx_gt_notintable  [get_bd_pins axi_ad9680_jesd/gt_rxnotintable_in]  [get_bd_ports ip_rxnotintable]
+  connect_bd_net -net axi_fmcomms7_ip_rx_gt_data        [get_bd_pins axi_ad9680_jesd/gt_rxdata_in]        [get_bd_ports ip_rxdata]
+  connect_bd_net -net axi_fmcomms7_gt_rx_rst_done       [get_bd_pins axi_fmcomms7_gt/rx_rst_done]         [get_bd_pins axi_ad9680_jesd/rx_reset_done]
+  connect_bd_net -net axi_fmcomms7_gt_rx_ip_comma_align [get_bd_pins axi_fmcomms7_gt/rx_ip_comma_align]   [get_bd_pins axi_ad9680_jesd/rxencommaalign_out]
+  connect_bd_net -net axi_fmcomms7_gt_rx_ip_sync        [get_bd_pins axi_fmcomms7_gt/rx_ip_sync]          [get_bd_pins axi_ad9680_jesd/rx_sync]
+  connect_bd_net -net axi_fmcomms7_gt_rx_ip_sof         [get_bd_pins axi_fmcomms7_gt/rx_ip_sof]           [get_bd_pins axi_ad9680_jesd/rx_start_of_frame]
+  connect_bd_net -net axi_fmcomms7_gt_rx_ip_data        [get_bd_pins axi_fmcomms7_gt/rx_ip_data]          [get_bd_pins axi_ad9680_jesd/rx_tdata]
+  connect_bd_net -net axi_fmcomms7_gt_rx_data           [get_bd_pins axi_fmcomms7_gt/rx_data]             [get_bd_pins axi_ad9680_core/rx_data]
+  connect_bd_net -net axi_fmcomms7_gt_rx_rst            [get_bd_pins axi_ad9680_fifo/adc_rst]             [get_bd_pins axi_fmcomms7_gt/rx_rst]
+  connect_bd_net -net sys_100m_resetn                   [get_bd_pins axi_ad9680_fifo/dma_rstn]            $sys_100m_resetn_source
+  connect_bd_net -net axi_ad9680_adc_clk                [get_bd_pins axi_ad9680_core/adc_clk]             [get_bd_pins axi_ad9680_fifo/adc_clk]
+  connect_bd_net -net axi_ad9680_adc_dovf               [get_bd_pins axi_ad9680_core/adc_dovf]            [get_bd_pins axi_ad9680_fifo/adc_wovf]
+  connect_bd_net -net axi_ad9680_adc_enable_0           [get_bd_pins axi_ad9680_core/adc_enable_0]        [get_bd_ports adc_enable_0]
+  connect_bd_net -net axi_ad9680_adc_valid_0            [get_bd_pins axi_ad9680_core/adc_valid_0]         [get_bd_ports adc_valid_0]
+  connect_bd_net -net axi_ad9680_adc_data_0             [get_bd_pins axi_ad9680_core/adc_data_0]          [get_bd_ports adc_data_0]
+  connect_bd_net -net axi_ad9680_adc_enable_1           [get_bd_pins axi_ad9680_core/adc_enable_1]        [get_bd_ports adc_enable_1]
+  connect_bd_net -net axi_ad9680_adc_valid_1            [get_bd_pins axi_ad9680_core/adc_valid_1]         [get_bd_ports adc_valid_1]
+  connect_bd_net -net axi_ad9680_adc_data_1             [get_bd_pins axi_ad9680_core/adc_data_1]          [get_bd_ports adc_data_1]
+  connect_bd_net -net axi_ad9680_adc_dwr                [get_bd_ports adc_dwr]                            [get_bd_pins axi_ad9680_fifo/adc_wr]
+  connect_bd_net -net axi_ad9680_adc_ddata              [get_bd_ports adc_ddata]                          [get_bd_pins axi_ad9680_fifo/adc_wdata]
+  connect_bd_net -net sys_100m_clk                      [get_bd_pins axi_ad9680_fifo/dma_clk]             [get_bd_pins axi_ad9680_dma/s_axis_aclk]
+  connect_bd_net -net axi_ad9680_dma_dvalid             [get_bd_pins axi_ad9680_fifo/dma_wvalid]          [get_bd_pins axi_ad9680_dma/s_axis_valid]
+  connect_bd_net -net axi_ad9680_dma_dready             [get_bd_pins axi_ad9680_fifo/dma_wready]          [get_bd_pins axi_ad9680_dma/s_axis_ready]
+  connect_bd_net -net axi_ad9680_dma_ddata              [get_bd_pins axi_ad9680_fifo/dma_wdata]           [get_bd_pins axi_ad9680_dma/s_axis_data]
+  connect_bd_net -net axi_ad9680_dma_xfer_req           [get_bd_pins axi_ad9680_fifo/axi_xfer_req]        [get_bd_pins axi_ad9680_dma/s_axis_xfer_req]
+  connect_bd_net -net axi_ad9680_dma_intr               [get_bd_pins axi_ad9680_dma/irq]                  [get_bd_ports axi_ad9680_dma_intr]
 
   # dac/adc clocks
 
@@ -511,34 +526,13 @@ if {$sys_zynq == 0} {
 
   # ila
 
-if {$sys_zynq == 1} {
-
   set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_NUM_OF_PROBES {3}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE2_WIDTH {128}] $ila_jesd_rx_mon
+  set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_jesd_rx_mon
+  set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_jesd_rx_mon
 
-  connect_bd_net -net axi_fmcomms7_gt_rx_mon_data       [get_bd_pins axi_fmcomms7_gt/rx_mon_data]
-  connect_bd_net -net axi_fmcomms7_gt_rx_mon_trigger    [get_bd_pins axi_fmcomms7_gt/rx_mon_trigger]
-  connect_bd_net -net axi_fmcomms7_gt_rx_clk            [get_bd_pins ila_jesd_rx_mon/CLK]
-  connect_bd_net -net axi_fmcomms7_gt_rx_mon_data       [get_bd_pins ila_jesd_rx_mon/PROBE0]
-  connect_bd_net -net axi_fmcomms7_gt_rx_mon_trigger    [get_bd_pins ila_jesd_rx_mon/PROBE1]
-  connect_bd_net -net axi_fmcomms7_gt_rx_data           [get_bd_pins ila_jesd_rx_mon/PROBE2]
-
-  set ila_jesd_tx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_tx_mon]
-  set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_tx_mon
-  set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_jesd_tx_mon
-  set_property -dict [list CONFIG.C_PROBE0_WIDTH {150}] $ila_jesd_tx_mon
-  set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_tx_mon
-
-  connect_bd_net -net axi_fmcomms7_gt_tx_mon_data       [get_bd_pins axi_fmcomms7_gt/tx_mon_data]
-  connect_bd_net -net axi_fmcomms7_gt_tx_mon_trigger    [get_bd_pins axi_fmcomms7_gt/tx_mon_trigger]
-  connect_bd_net -net axi_fmcomms7_gt_tx_clk            [get_bd_pins ila_jesd_tx_mon/CLK]
-  connect_bd_net -net axi_fmcomms7_gt_tx_mon_data       [get_bd_pins ila_jesd_tx_mon/PROBE0]
-  connect_bd_net -net axi_fmcomms7_gt_tx_mon_trigger    [get_bd_pins ila_jesd_tx_mon/PROBE1]
-}
+  connect_bd_net -net axi_fmcomms7_gt_rx_clk    [get_bd_pins ila_jesd_rx_mon/CLK]
+  connect_bd_net -net axi_ad9680_adc_ddata      [get_bd_pins ila_jesd_rx_mon/PROBE0]
 
   # address map
 
