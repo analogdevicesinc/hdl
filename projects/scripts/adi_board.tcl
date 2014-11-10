@@ -65,37 +65,45 @@ proc ad_connect {p_name_1 p_name_2} {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_mem_interconnect {p_clk p_name} {
-
-  ad_mem_interconnect_int "MEM" $p_clk $p_name
-}
-
-proc ad_hp0_interconnect {p_clk p_name} {
-
-  ad_mem_interconnect_int "HP0" $p_clk $p_name
-}
-
-proc ad_hp1_interconnect {p_clk p_name} {
-
-  ad_mem_interconnect_int "HP1" $p_clk $p_name
-}
-
-proc ad_hp2_interconnect {p_clk p_name} {
-
-  ad_mem_interconnect_int "HP2" $p_clk $p_name
-}
-
-proc ad_hp3_interconnect {p_name p_clk} {
-
-  ad_mem_interconnect_int "HP3" $p_clk $p_name
-}
-
-###################################################################################################
-###################################################################################################
-
-proc ad_mem_interconnect_int {p_sel p_clk p_name} {
+proc ad_mem_hp0_interconnect {p_clk p_name} {
 
   global sys_zynq
+
+  if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
+  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
+}
+
+proc ad_mem_hp1_interconnect {p_clk p_name} {
+
+  global sys_zynq
+
+  if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
+  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
+}
+
+proc ad_mem_hp2_interconnect {p_clk p_name} {
+
+  global sys_zynq
+
+  if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
+  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
+}
+
+proc ad_mem_hp3_interconnect {p_name p_clk} {
+
+  global sys_zynq
+
+  if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
+  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
+}
+
+###################################################################################################
+###################################################################################################
+
+proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
+
+  global sys_zynq
+  global sys_ddr_addr_seg
   global sys_hp0_interconnect_index
   global sys_hp1_interconnect_index
   global sys_hp2_interconnect_index
@@ -107,34 +115,66 @@ proc ad_mem_interconnect_int {p_sel p_clk p_name} {
   set p_intf_clock [filter [get_bd_pins -quiet -of_objects [get_bd_cells $p_cell_name]] \
     -regexp "CONFIG.ASSOCIATED_BUSIF == ${p_intf_name}"]
 
-  if {($p_sel eq "HP0") && ($sys_zynq == 1)} {
-    if {$sys_hp0_interconnect_index == 0} {
-    }
+  if {$p_sel eq "MEM"} {
+    set m_interconnect_index $sys_mem_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_mem_interconnect]
+    set m_addr_seg $sys_ddr_addr_seg
   }
 
-
-  if {($p_sel eq "MEM") && ($sys_zynq == 1)} {
-
-    set i_str "S$sys_mem_interconnect_index"
-    if {$sys_mem_interconnect_index < 10} {
-      set i_str "S0$sys_mem_interconnect_index"
-    }
-
-    if {$sys_mem_interconnect_index == -1} {
-      ad_connect sys_cpu_resetn axi_mem_interconnect/ARESETN
-      ad_connect $p_clk axi_mem_interconnect/ACLK
-      ad_connect sys_cpu_resetn axi_mem_interconnect/M00_ARESETN
-      ad_connect $p_clk axi_mem_interconnect/M00_ACLK
-      ad_connect axi_mem_interconnect/M00_AXI $p_name
-    } else {
-      ad_connect sys_cpu_resetn axi_mem_interconnect/${i_str}_ARESETN
-      ad_connect $p_clk axi_mem_interconnect/${i_str}_ACLK
-      ad_connect axi_mem_interconnect/${i_str}_AXI $p_name
-      ad_connect $p_clk $p_intf_clock
-    }
-
-    set sys_mem_interconnect_index [expr $sys_mem_interconnect_index + 1]
+  if {$p_sel eq "HP0"} {
+    set m_interconnect_index $sys_hp0_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hp0_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps7/S_AXI_HP0/HP0_DDR_LOWOCM]
   }
+
+  if {$p_sel eq "HP1"} {
+    set m_interconnect_index $sys_hp1_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hp1_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM]
+  }
+
+  if {$p_sel eq "HP2"} {
+    set m_interconnect_index $sys_hp2_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hp2_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM]
+  }
+
+  if {$p_sel eq "HP3"} {
+    set m_interconnect_index $sys_hp3_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM]
+  }
+
+  set i_str "S$m_interconnect_index"
+  if {$m_interconnect_index < 10} {
+    set i_str "S0$m_interconnect_index"
+  }
+
+  set m_interconnect_index [expr $m_interconnect_index + 1]
+  set_property CONFIG.NUM_MI 1 $m_interconnect_cell
+
+  if {$m_interconnect_index == 0} {
+    set_property CONFIG.NUM_SI 1 $m_interconnect_cell
+    ad_connect sys_cpu_resetn $m_interconnect_cell/ARESETN
+    ad_connect $p_clk $m_interconnect_cell/ACLK
+    ad_connect sys_cpu_resetn $m_interconnect_cell/M00_ARESETN
+    ad_connect $p_clk $m_interconnect_cell/M00_ACLK
+    ad_connect $m_interconnect_cell/M00_AXI $p_name
+    ad_connect $p_clk $p_intf_clock
+  } else {
+    set_property CONFIG.NUM_SI $m_interconnect_index $m_interconnect_cell
+    ad_connect sys_cpu_resetn $m_interconnect_cell/${i_str}_ARESETN
+    ad_connect $p_clk $m_interconnect_cell/${i_str}_ACLK
+    ad_connect $m_interconnect_cell/${i_str}_AXI $p_name
+    ad_connect $p_clk $p_intf_clock
+    assign_bd_address $m_addr_seg
+  }
+
+  if {$p_sel eq "MEM"} {set sys_mem_interconnect_index $m_interconnect_index}
+  if {$p_sel eq "HP0"} {set sys_hp0_interconnect_index $m_interconnect_index}
+  if {$p_sel eq "HP1"} {set sys_hp1_interconnect_index $m_interconnect_index}
+  if {$p_sel eq "HP2"} {set sys_hp2_interconnect_index $m_interconnect_index}
+  if {$p_sel eq "HP3"} {set sys_hp3_interconnect_index $m_interconnect_index}
 }
 
 ###################################################################################################
