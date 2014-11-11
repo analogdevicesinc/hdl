@@ -39,9 +39,7 @@
 
 module fmcadc3_spi (
 
-  ad9528_csn,
-  ad9234_1_csn,
-  ad9234_2_csn,
+  csn,
   spi_clk,
   spi_mosi,
   spi_miso,
@@ -50,9 +48,7 @@ module fmcadc3_spi (
 
   // 4 wire
 
-  input           ad9528_csn;
-  input           ad9234_1_csn;
-  input           ad9234_2_csn;
+  input   [ 6:0]  csn;
   input           spi_clk;
   input           spi_mosi;
   output          spi_miso;
@@ -74,7 +70,7 @@ module fmcadc3_spi (
 
   // check on rising edge and change on falling edge
 
-  assign spi_csn_s = ad9528_csn & ad9234_1_csn & ad9234_2_csn;
+  assign spi_csn_s = &csn;
   assign spi_enable_s = spi_enable & ~spi_csn_s;
 
   always @(posedge spi_clk or posedge spi_csn_s) begin

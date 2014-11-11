@@ -239,6 +239,23 @@ module system_top (
   wire            adc_valid_3;
   wire   [255:0]  gt_data;
 
+  wire   [  6:0]  csn;
+  wire   [  2:0]  csn_i;
+
+  genvar i;
+
+  generate for (i = 0; i < 7; i = i + 1) begin
+    assign csn[i] = ~(csn_i == i);
+  end endgenerate
+
+  assign ad9528_csn     = csn[0];
+  assign ad9234_1_csn   = csn[1];
+  assign ad9234_2_csn   = csn[2];
+  assign ada4961_1a_csn = csn[3];
+  assign ada4961_1b_csn = csn[4];
+  assign ada4961_1c_csn = csn[5];
+  assign ada4961_1d_csn = csn[6];
+
   // adc-pack place holder
 
   always @(posedge adc_clk) begin
@@ -416,15 +433,8 @@ module system_top (
     .O (rx_sync_1_p),
     .OB (rx_sync_1_n));
 
-  assign ada4961_1a_csn = 1'b1;
-  assign ada4961_1b_csn = 1'b1;
-  assign ada4961_2a_csn = 1'b1;
-  assign ada4961_2b_csn = 1'b1;
-
   fmcadc3_spi i_spi (
-    .ad9528_csn (ad9528_csn),
-    .ad9234_1_csn (ad9234_1_csn),
-    .ad9234_2_csn (ad9234_2_csn),
+    .csn (csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
@@ -516,9 +526,9 @@ module system_top (
     .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
-    .spi_csn_0 (ad9528_csn),
-    .spi_csn_1 (ad9234_1_csn),
-    .spi_csn_2 (ad9234_2_csn),
+    .spi_csn_0 (csn_i[0]),
+    .spi_csn_1 (csn_i[1]),
+    .spi_csn_2 (csn_i[2]),
     .spi_csn_i (1'b1),
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
