@@ -45,7 +45,7 @@ set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9625_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9625_jesd
 
 set axi_ad9625_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_ad9625_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {8}] $axi_ad9625_gt
+set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {8}] $axi_ad9625_gt
 set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {1}] $axi_ad9625_gt
 set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_ad9625_gt
 set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_ad9625_gt
