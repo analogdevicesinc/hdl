@@ -31,8 +31,8 @@ if {$sys_zynq == 1} {
   set rx_ref_clk      [create_bd_port -dir I rx_ref_clk]
   set rx_sync         [create_bd_port -dir O rx_sync]
   set rx_sysref       [create_bd_port -dir I rx_sysref]
-  set rx_data_p       [create_bd_port -dir I -from 7 -to 0 rx_data_p]
-  set rx_data_n       [create_bd_port -dir I -from 7 -to 0 rx_data_n]
+  set rx_data_p       [create_bd_port -dir I -from 3 -to 0 rx_data_p]
+  set rx_data_n       [create_bd_port -dir I -from 3 -to 0 rx_data_n]
 
   set tx_ref_clk      [create_bd_port -dir I tx_ref_clk]
   set tx_sync         [create_bd_port -dir I tx_sync]
@@ -49,15 +49,6 @@ if {$sys_zynq == 0} {
   set gpio_status_o   [create_bd_port -dir O -from 4 -to 0 gpio_status_o]
   set gpio_status_t   [create_bd_port -dir O -from 4 -to 0 gpio_status_t]
 }
-
-  set gt_rxcharisk    [create_bd_port -dir O -from 31 -to 0 gt_rxcharisk]
-  set gt_rxdisperr    [create_bd_port -dir O -from 31 -to 0 gt_rxdisperr]
-  set gt_rxnotintable [create_bd_port -dir O -from 31 -to 0 gt_rxnotintable]
-  set gt_rxdata       [create_bd_port -dir O -from 255 -to 0 gt_rxdata]
-  set ip_rxcharisk    [create_bd_port -dir O -from 15 -to 0 ip_rxcharisk]
-  set ip_rxdisperr    [create_bd_port -dir O -from 15 -to 0 ip_rxdisperr]
-  set ip_rxnotintable [create_bd_port -dir O -from 15 -to 0 ip_rxnotintable]
-  set ip_rxdata       [create_bd_port -dir O -from 127 -to 0 ip_rxdata]
 
   set dac_clk         [create_bd_port -dir O dac_clk]
   set dac_valid_0     [create_bd_port -dir O dac_valid_0]
@@ -167,6 +158,7 @@ if {$sys_zynq == 1} {
 
   set axi_fmcomms7_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_fmcomms7_gt]
   set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {8}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {4}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_0 {0}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_1 {3}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_2 {1}] $axi_fmcomms7_gt
@@ -343,14 +335,10 @@ if {$sys_zynq == 0} {
 
   connect_bd_net -net axi_fmcomms7_gt_rx_rst            [get_bd_pins axi_fmcomms7_gt/rx_rst]              [get_bd_pins axi_ad9680_jesd/rx_reset]
   connect_bd_net -net axi_fmcomms7_gt_rx_sysref         [get_bd_pins axi_fmcomms7_gt/rx_sysref]           [get_bd_pins axi_ad9680_jesd/rx_sysref]
-  connect_bd_net -net axi_fmcomms7_gt_rx_gt_charisk     [get_bd_pins axi_fmcomms7_gt/rx_gt_charisk]       [get_bd_ports gt_rxcharisk]
-  connect_bd_net -net axi_fmcomms7_gt_rx_gt_disperr     [get_bd_pins axi_fmcomms7_gt/rx_gt_disperr]       [get_bd_ports gt_rxdisperr]
-  connect_bd_net -net axi_fmcomms7_gt_rx_gt_notintable  [get_bd_pins axi_fmcomms7_gt/rx_gt_notintable]    [get_bd_ports gt_rxnotintable]
-  connect_bd_net -net axi_fmcomms7_gt_rx_gt_data        [get_bd_pins axi_fmcomms7_gt/rx_gt_data]          [get_bd_ports gt_rxdata]
-  connect_bd_net -net axi_fmcomms7_ip_rx_gt_charisk     [get_bd_pins axi_ad9680_jesd/gt_rxcharisk_in]     [get_bd_ports ip_rxcharisk]
-  connect_bd_net -net axi_fmcomms7_ip_rx_gt_disperr     [get_bd_pins axi_ad9680_jesd/gt_rxdisperr_in]     [get_bd_ports ip_rxdisperr]
-  connect_bd_net -net axi_fmcomms7_ip_rx_gt_notintable  [get_bd_pins axi_ad9680_jesd/gt_rxnotintable_in]  [get_bd_ports ip_rxnotintable]
-  connect_bd_net -net axi_fmcomms7_ip_rx_gt_data        [get_bd_pins axi_ad9680_jesd/gt_rxdata_in]        [get_bd_ports ip_rxdata]
+  connect_bd_net -net axi_fmcomms7_gt_rx_gt_charisk     [get_bd_pins axi_fmcomms7_gt/rx_gt_charisk]       [get_bd_pins axi_ad9680_jesd/gt_rxcharisk_in]     
+  connect_bd_net -net axi_fmcomms7_gt_rx_gt_disperr     [get_bd_pins axi_fmcomms7_gt/rx_gt_disperr]       [get_bd_pins axi_ad9680_jesd/gt_rxdisperr_in]     
+  connect_bd_net -net axi_fmcomms7_gt_rx_gt_notintable  [get_bd_pins axi_fmcomms7_gt/rx_gt_notintable]    [get_bd_pins axi_ad9680_jesd/gt_rxnotintable_in]  
+  connect_bd_net -net axi_fmcomms7_gt_rx_gt_data        [get_bd_pins axi_fmcomms7_gt/rx_gt_data]          [get_bd_pins axi_ad9680_jesd/gt_rxdata_in]        
   connect_bd_net -net axi_fmcomms7_gt_rx_rst_done       [get_bd_pins axi_fmcomms7_gt/rx_rst_done]         [get_bd_pins axi_ad9680_jesd/rx_reset_done]
   connect_bd_net -net axi_fmcomms7_gt_rx_ip_comma_align [get_bd_pins axi_fmcomms7_gt/rx_ip_comma_align]   [get_bd_pins axi_ad9680_jesd/rxencommaalign_out]
   connect_bd_net -net axi_fmcomms7_gt_rx_ip_sync        [get_bd_pins axi_fmcomms7_gt/rx_ip_sync]          [get_bd_pins axi_ad9680_jesd/rx_sync]
