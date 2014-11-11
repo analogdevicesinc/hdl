@@ -304,10 +304,6 @@ module system_top (
   wire   [ 11:0]  spi2_csn;
   wire            spi2_mosi;
   wire            spi2_miso;
-  wire   [ 31:0]  gt_rxcharisk;
-  wire   [ 31:0]  gt_rxdisperr;
-  wire   [ 31:0]  gt_rxnotintable;
-  wire   [255:0]  gt_rxdata;
   wire            dac_clk;
   wire   [255:0]  dac_ddata;
   wire            dac_enable_0;
@@ -626,10 +622,6 @@ module system_top (
     .dac_valid_1 (dac_valid_1),
     .dac_valid_2 (dac_valid_2),
     .dac_valid_3 (dac_valid_3),
-    .gt_rxcharisk (gt_rxcharisk),
-    .gt_rxdisperr (gt_rxdisperr),
-    .gt_rxnotintable (gt_rxnotintable),
-    .gt_rxdata (gt_rxdata),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -637,10 +629,6 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .ip_rxcharisk (gt_rxcharisk[15:0]),
-    .ip_rxdisperr (gt_rxdisperr[15:0]),
-    .ip_rxnotintable (gt_rxnotintable[15:0]),
-    .ip_rxdata (gt_rxdata[127:0]),
     .ps_intr_0 (ps_intrs[0]),
     .ps_intr_1 (ps_intrs[1]),
     .ps_intr_10 (ps_intrs[10]),
@@ -655,8 +643,8 @@ module system_top (
     .ps_intr_7 (ps_intrs[7]),
     .ps_intr_8 (ps_intrs[8]),
     .ps_intr_9 (ps_intrs[9]),
-    .rx_data_n ({4'h0, rx_data_n}),
-    .rx_data_p ({4'hf, rx_data_p}),
+    .rx_data_n (rx_data_n),
+    .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
