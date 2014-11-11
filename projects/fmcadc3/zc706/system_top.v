@@ -264,30 +264,30 @@ module system_top (
       4'b1111: begin
         adc_dsync <= 1'b1;
         adc_dwr <= adc_valid_3 & adc_valid_2 & adc_valid_1 & adc_valid_0;
-        adc_ddata[255:240] <= $signed(adc_data_3[59:48]);
-        adc_ddata[239:224] <= $signed(adc_data_2[59:48]);
-        adc_ddata[223:208] <= $signed(adc_data_1[59:48]);
-        adc_ddata[207:192] <= $signed(adc_data_0[59:48]);
-        adc_ddata[191:176] <= $signed(adc_data_3[43:32]);
-        adc_ddata[175:160] <= $signed(adc_data_2[43:32]);
-        adc_ddata[159:144] <= $signed(adc_data_1[43:32]);
-        adc_ddata[143:128] <= $signed(adc_data_0[43:32]);
-        adc_ddata[127:112] <= $signed(adc_data_3[27:16]);
-        adc_ddata[111: 96] <= $signed(adc_data_2[27:16]);
-        adc_ddata[ 95: 80] <= $signed(adc_data_1[27:16]);
-        adc_ddata[ 79: 64] <= $signed(adc_data_0[27:16]);
-        adc_ddata[ 63: 48] <= $signed(adc_data_3[11: 0]);
-        adc_ddata[ 47: 32] <= $signed(adc_data_2[11: 0]);
-        adc_ddata[ 31: 16] <= $signed(adc_data_1[11: 0]);
-        adc_ddata[ 15:  0] <= $signed(adc_data_0[11: 0]);
+        adc_ddata[255:240] <= $signed(adc_data_3[63:52]);
+        adc_ddata[239:224] <= $signed(adc_data_2[63:52]);
+        adc_ddata[223:208] <= $signed(adc_data_1[63:52]);
+        adc_ddata[207:192] <= $signed(adc_data_0[63:52]);
+        adc_ddata[191:176] <= $signed(adc_data_3[47:36]);
+        adc_ddata[175:160] <= $signed(adc_data_2[47:36]);
+        adc_ddata[159:144] <= $signed(adc_data_1[47:36]);
+        adc_ddata[143:128] <= $signed(adc_data_0[47:36]);
+        adc_ddata[127:112] <= $signed(adc_data_3[31:20]);
+        adc_ddata[111: 96] <= $signed(adc_data_2[31:20]);
+        adc_ddata[ 95: 80] <= $signed(adc_data_1[31:20]);
+        adc_ddata[ 79: 64] <= $signed(adc_data_0[31:20]);
+        adc_ddata[ 63: 48] <= $signed(adc_data_3[15: 4]);
+        adc_ddata[ 47: 32] <= $signed(adc_data_2[15: 4]);
+        adc_ddata[ 31: 16] <= $signed(adc_data_1[15: 4]);
+        adc_ddata[ 15:  0] <= $signed(adc_data_0[15: 4]);
       end
       4'b0001: begin
         adc_dsync <= 1'b1;
         adc_dwr <= adc_valid_0 & adc_dcnt[0] & adc_dcnt[1];
-        adc_ddata[255:240] <= $signed(adc_data_0[59:48]);
-        adc_ddata[239:224] <= $signed(adc_data_0[43:32]);
-        adc_ddata[223:208] <= $signed(adc_data_0[27:16]);
-        adc_ddata[207:192] <= $signed(adc_data_0[11: 0]);
+        adc_ddata[255:240] <= $signed(adc_data_0[63:52]);
+        adc_ddata[239:224] <= $signed(adc_data_0[47:36]);
+        adc_ddata[223:208] <= $signed(adc_data_0[31:20]);
+        adc_ddata[207:192] <= $signed(adc_data_0[15: 4]);
         adc_ddata[191:176] <= adc_ddata[255:240];
         adc_ddata[175:160] <= adc_ddata[239:224];
         adc_ddata[159:144] <= adc_ddata[223:208];
@@ -304,10 +304,10 @@ module system_top (
       4'b0010: begin
         adc_dsync <= 1'b1;
         adc_dwr <= adc_valid_1 & adc_dcnt[0] & adc_dcnt[1];
-        adc_ddata[255:240] <= $signed(adc_data_1[59:48]);
-        adc_ddata[239:224] <= $signed(adc_data_1[43:32]);
-        adc_ddata[223:208] <= $signed(adc_data_1[27:16]);
-        adc_ddata[207:192] <= $signed(adc_data_1[11: 0]);
+        adc_ddata[255:240] <= $signed(adc_data_1[63:52]);
+        adc_ddata[239:224] <= $signed(adc_data_1[47:36]);
+        adc_ddata[223:208] <= $signed(adc_data_1[31:20]);
+        adc_ddata[207:192] <= $signed(adc_data_1[15: 4]);
         adc_ddata[191:176] <= adc_ddata[255:240];
         adc_ddata[175:160] <= adc_ddata[239:224];
         adc_ddata[159:144] <= adc_ddata[223:208];
@@ -324,14 +324,14 @@ module system_top (
       4'b0011: begin
         adc_dsync <= 1'b1;
         adc_dwr <= adc_valid_1 & adc_valid_0 & adc_dcnt[0];
-        adc_ddata[255:240] <= $signed(adc_data_1[59:48]);
-        adc_ddata[239:224] <= $signed(adc_data_0[59:48]);
-        adc_ddata[223:208] <= $signed(adc_data_1[43:32]);
-        adc_ddata[207:192] <= $signed(adc_data_0[43:32]);
-        adc_ddata[191:176] <= $signed(adc_data_1[27:16]);
-        adc_ddata[175:160] <= $signed(adc_data_0[27:16]);
-        adc_ddata[159:144] <= $signed(adc_data_1[11: 0]);
-        adc_ddata[143:128] <= $signed(adc_data_0[11: 0]);
+        adc_ddata[255:240] <= $signed(adc_data_1[63:52]);
+        adc_ddata[239:224] <= $signed(adc_data_0[63:52]);
+        adc_ddata[223:208] <= $signed(adc_data_1[47:36]);
+        adc_ddata[207:192] <= $signed(adc_data_0[47:36]);
+        adc_ddata[191:176] <= $signed(adc_data_1[31:20]);
+        adc_ddata[175:160] <= $signed(adc_data_0[31:20]);
+        adc_ddata[159:144] <= $signed(adc_data_1[15: 4]);
+        adc_ddata[143:128] <= $signed(adc_data_0[15: 4]);
         adc_ddata[127:112] <= adc_ddata[255:240];
         adc_ddata[111: 96] <= adc_ddata[239:224];
         adc_ddata[ 95: 80] <= adc_ddata[223:208];
@@ -344,10 +344,10 @@ module system_top (
       4'b0100: begin
         adc_dsync <= 1'b1;
         adc_dwr <= adc_valid_2 & adc_dcnt[0] & adc_dcnt[1];
-        adc_ddata[255:240] <= $signed(adc_data_2[59:48]);
-        adc_ddata[239:224] <= $signed(adc_data_2[43:32]);
-        adc_ddata[223:208] <= $signed(adc_data_2[27:16]);
-        adc_ddata[207:192] <= $signed(adc_data_2[11: 0]);
+        adc_ddata[255:240] <= $signed(adc_data_2[63:52]);
+        adc_ddata[239:224] <= $signed(adc_data_2[47:36]);
+        adc_ddata[223:208] <= $signed(adc_data_2[31:20]);
+        adc_ddata[207:192] <= $signed(adc_data_2[15: 4]);
         adc_ddata[191:176] <= adc_ddata[255:240];
         adc_ddata[175:160] <= adc_ddata[239:224];
         adc_ddata[159:144] <= adc_ddata[223:208];
@@ -364,10 +364,10 @@ module system_top (
       4'b1000: begin
         adc_dsync <= 1'b1;
         adc_dwr <= adc_valid_3 & adc_dcnt[0] & adc_dcnt[1];
-        adc_ddata[255:240] <= $signed(adc_data_3[59:48]);
-        adc_ddata[239:224] <= $signed(adc_data_3[43:32]);
-        adc_ddata[223:208] <= $signed(adc_data_3[27:16]);
-        adc_ddata[207:192] <= $signed(adc_data_3[11: 0]);
+        adc_ddata[255:240] <= $signed(adc_data_3[63:52]);
+        adc_ddata[239:224] <= $signed(adc_data_3[47:36]);
+        adc_ddata[223:208] <= $signed(adc_data_3[31:20]);
+        adc_ddata[207:192] <= $signed(adc_data_3[15: 4]);
         adc_ddata[191:176] <= adc_ddata[255:240];
         adc_ddata[175:160] <= adc_ddata[239:224];
         adc_ddata[159:144] <= adc_ddata[223:208];
@@ -384,14 +384,14 @@ module system_top (
       4'b1100: begin
         adc_dsync <= 1'b1;
         adc_dwr <= adc_valid_3 & adc_valid_2 & adc_dcnt[0];
-        adc_ddata[255:240] <= $signed(adc_data_3[59:48]);
-        adc_ddata[239:224] <= $signed(adc_data_2[59:48]);
-        adc_ddata[223:208] <= $signed(adc_data_3[43:32]);
-        adc_ddata[207:192] <= $signed(adc_data_2[43:32]);
-        adc_ddata[191:176] <= $signed(adc_data_3[27:16]);
-        adc_ddata[175:160] <= $signed(adc_data_2[27:16]);
-        adc_ddata[159:144] <= $signed(adc_data_3[11: 0]);
-        adc_ddata[143:128] <= $signed(adc_data_2[11: 0]);
+        adc_ddata[255:240] <= $signed(adc_data_3[63:52]);
+        adc_ddata[239:224] <= $signed(adc_data_2[63:52]);
+        adc_ddata[223:208] <= $signed(adc_data_3[47:36]);
+        adc_ddata[207:192] <= $signed(adc_data_2[47:36]);
+        adc_ddata[191:176] <= $signed(adc_data_3[31:20]);
+        adc_ddata[175:160] <= $signed(adc_data_2[31:20]);
+        adc_ddata[159:144] <= $signed(adc_data_3[15: 4]);
+        adc_ddata[143:128] <= $signed(adc_data_2[15: 4]);
         adc_ddata[127:112] <= adc_ddata[255:240];
         adc_ddata[111: 96] <= adc_ddata[239:224];
         adc_ddata[ 95: 80] <= adc_ddata[223:208];
