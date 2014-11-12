@@ -163,7 +163,7 @@ module axi_fifo2s_rd (
 
   // read is way too slow- buffer mode 
 
-  assign axi_ready_s = (~axi_arvalid | axi_arready) & ~axi_dready;
+  assign axi_ready_s = (~axi_arvalid | axi_arready) & axi_dready;
 
   always @(posedge axi_clk or negedge axi_resetn) begin
     if (axi_resetn == 1'b0) begin
