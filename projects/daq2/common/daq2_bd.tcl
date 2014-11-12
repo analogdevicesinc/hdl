@@ -124,11 +124,6 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9680_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9680_dma
 
-if {$sys_zynq == 0} {
-
-  p_sys_dmafifo [current_bd_instance .] axi_ad9680_fifo 128
-}
-
 if {$sys_zynq == 1} {
 
   set axi_ad9680_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9680_dma_interconnect]
