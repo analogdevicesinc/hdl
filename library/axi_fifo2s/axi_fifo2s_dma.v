@@ -91,8 +91,8 @@ module axi_fifo2s_dma (
   reg                             axi_waddr_rel_t = 'd0;
   reg     [AXI_ADDR_WIDTH-1:0]    axi_waddr_rel = 'd0;
   reg     [  2:0]                 axi_raddr_rel_t_m = 'd0;
-  reg     [AXI_ADDR_WIDTH-1:0]    axi_raddr_rel = 'd0;
-  reg     [DMA_ADDR_WIDTH:0]      axi_addr_diff = 'd0;
+  reg     [DMA_ADDR_WIDTH-1:0]    axi_raddr_rel = 'd0;
+  reg     [DMA_ADDR_WIDTH-1:0]    axi_addr_diff = 'd0;
   reg                             axi_dready = 'd0;
   reg                             dma_rst = 'd0;
   reg     [  2:0]                 dma_waddr_rel_t_m = 'd0;
@@ -152,7 +152,7 @@ module axi_fifo2s_dma (
       if (axi_raddr_rel_t_s == 1'b1) begin
         axi_raddr_rel <= dma_raddr_rel;
       end
-      axi_addr_diff <= axi_addr_diff_s;
+      axi_addr_diff <= axi_addr_diff_s[DMA_ADDR_WIDTH-1:0];
       if (axi_addr_diff >= 180) begin
         axi_dready <= 1'b0;
       end else if (axi_addr_diff <= 8) begin
