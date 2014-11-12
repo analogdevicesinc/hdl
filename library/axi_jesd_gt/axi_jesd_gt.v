@@ -149,9 +149,8 @@ module axi_jesd_gt (
 
   parameter   PCORE_ID = 0;
   parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_NUM_OF_LANES = 4;
-  parameter   PCORE_NUM_OF_TX_LANES = PCORE_NUM_OF_LANES;
-  parameter   PCORE_NUM_OF_RX_LANES = PCORE_NUM_OF_LANES;
+  parameter   PCORE_NUM_OF_TX_LANES = 4;
+  parameter   PCORE_NUM_OF_RX_LANES = 4;
   parameter   PCORE_QPLL_REFCLK_DIV = 1;
   parameter   PCORE_QPLL_CFG = 27'h0680181;
   parameter   PCORE_QPLL_FBDIV_RATIO = 1'b1;
@@ -173,6 +172,9 @@ module axi_jesd_gt (
   parameter   PCORE_TX_LANE_SEL_7 = 7;
   parameter   PCORE_TX_LANE_SEL_8 = 8;
   parameter   C_S_AXI_MIN_SIZE = 32'hffff;
+
+  localparam  PCORE_NUM_OF_LANES = (PCORE_NUM_OF_TX_LANES > PCORE_NUM_OF_RX_LANES) ?
+                                    PCORE_NUM_OF_TX_LANES : PCORE_NUM_OF_RX_LANES;
 
   // physical interface
 
