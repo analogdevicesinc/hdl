@@ -41,33 +41,36 @@
 
 module axi_fifo2f (
 
+  // fifo interface
+
   adc_rst,
   adc_clk,
   adc_wr,
   adc_wdata,
   adc_wovf,
 
-  dma_rstn,
+  // dma interface
+
   dma_clk,
   dma_wr,
   dma_wdata,
   dma_wready,
-  dma_wovf,
   dma_xfer_req,
   dma_xfer_status);
 
   // parameters
 
-  parameter   ADC_ADDR_WIDTH =   8;
   parameter   ADC_DATA_WIDTH = 256;
-  parameter   DMA_ADDR_WIDTH =  10;
   parameter   DMA_DATA_WIDTH =  64;
   parameter   DMA_READY_ENABLE = 1;
+  parameter   DMA_ADDR_WIDTH =  10;
 
+  localparam  DMA_MEM_RATIO = ADC_DATA_WIDTH/DMA_DATA_WIDTH;
+  localparam  ADC_ADDR_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDR_WIDTH - 1) :
+    ((DMA_MEM_RATIO == 4) ? (DMA_ADDR_WIDTH - 2) : (DMA_ADDR_WIDTH - 3));
   localparam  ADC_ADDR_LIMIT = (2**ADC_ADDR_WIDTH)-1;
-  localparam  MEM_RATIO = ADC_DATA_WIDTH/DMA_DATA_WIDTH;
  
-  // adc write
+  // adc interface
 
   input                           adc_rst;
   input                           adc_clk;
@@ -75,16 +78,14 @@ module axi_fifo2f (
   input   [ADC_DATA_WIDTH-1:0]    adc_wdata;
   output                          adc_wovf;
 
-  // dma read
+  // dma interface
 
-  input                           dma_rstn;
   input                           dma_clk;
   output                          dma_wr;
   output  [DMA_DATA_WIDTH-1:0]    dma_wdata;
   input                           dma_wready;
-  input                           dma_wovf;
   input                           dma_xfer_req;
-  output  [  4:0]                 dma_xfer_status;
+  output  [  3:0]                 dma_xfer_status;
 
   // internal registers
 
@@ -99,8 +100,6 @@ module axi_fifo2f (
   reg                             dma_rst = 'd0;
   reg     [  2:0]                 dma_waddr_rel_t_m = 'd0;
   reg     [ADC_ADDR_WIDTH-1:0]    dma_waddr_rel = 'd0;
-  reg                             dma_xfer_req_d = 'd0;
-  reg                             dma_xfer_init = 'd0;
   reg                             dma_rd = 'd0;
   reg                             dma_rd_d = 'd0;
   reg     [DMA_DATA_WIDTH-1:0]    dma_rdata_d = 'd0;
@@ -111,7 +110,6 @@ module axi_fifo2f (
   wire                            dma_waddr_rel_t_s;
   wire    [DMA_ADDR_WIDTH-1:0]    dma_waddr_rel_s;
   wire                            dma_wready_s;
-  wire                            dma_rd_enable_s;
   wire                            dma_rd_s;
   wire    [DMA_DATA_WIDTH-1:0]    dma_rdata_s;
 
@@ -170,13 +168,13 @@ module axi_fifo2f (
 
   // read interface
 
-  assign dma_xfer_status = 1'd0;
+  assign dma_xfer_status = 4'd0;
   assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
-  assign dma_waddr_rel_s = (MEM_RATIO == 2) ? {dma_waddr_rel, 1'd0} :
-    ((MEM_RATIO == 4) ? {dma_waddr_rel, 2'd0} : {dma_waddr_rel, 3'd0});
+  assign dma_waddr_rel_s = (DMA_MEM_RATIO == 2) ? {dma_waddr_rel, 1'd0} :
+    ((DMA_MEM_RATIO == 4) ? {dma_waddr_rel, 2'd0} : {dma_waddr_rel, 3'd0});
 
-  always @(posedge dma_clk or negedge dma_rstn) begin
-    if (dma_rstn == 1'b0) begin
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
       dma_rst <= 1'b1;
       dma_waddr_rel_t_m <= 'd0;
       dma_waddr_rel <= 'd0;
@@ -189,39 +187,27 @@ module axi_fifo2f (
     end
   end
   
-  always @(posedge dma_clk or negedge dma_rstn) begin
-    if (dma_rstn == 1'b0) begin
-      dma_xfer_req_d <= 'd0;
-      dma_xfer_init <= 'd0;
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
     end else begin
-      dma_xfer_req_d <= dma_xfer_req;
-      dma_xfer_init <= dma_xfer_req & ~dma_xfer_req_d;
     end
   end
 
   assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
-  assign dma_rd_enable_s = dma_wready_s & dma_xfer_req_d;
-  assign dma_rd_s = (dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_rd_enable_s;
+  assign dma_rd_s = (dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_wready_s;
 
-  always @(posedge dma_clk or negedge dma_rstn) begin
-    if (dma_rstn == 1'b0) begin
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
       dma_rd <= 'd0;
       dma_rd_d <= 'd0;
       dma_rdata_d <= 'd0;
       dma_raddr <= 'd0;
     end else begin
-      if (dma_xfer_init == 1'b1) begin
-        dma_rd <= 'd0;
-        dma_rd_d <= 'd0;
-        dma_rdata_d <= 'd0;
-        dma_raddr <= 'd0;
-      end else begin
-        dma_rd <= dma_rd_s;
-        dma_rd_d <= dma_rd;
-        dma_rdata_d <= dma_rdata_s;
-        if (dma_rd_s == 1'b1) begin
-          dma_raddr <= dma_raddr + 1'b1;
-        end
+      dma_rd <= dma_rd_s;
+      dma_rd_d <= dma_rd;
+      dma_rdata_d <= dma_rdata_s;
+      if (dma_rd_s == 1'b1) begin
+        dma_raddr <= dma_raddr + 1'b1;
       end
     end
   end
