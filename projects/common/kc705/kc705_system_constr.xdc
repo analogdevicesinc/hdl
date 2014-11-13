@@ -8,8 +8,6 @@ set_property -dict  {PACKAGE_PIN  AB7   IOSTANDARD  LVCMOS15} [get_ports sys_rst
 set_property -dict  {PACKAGE_PIN  AD12  IOSTANDARD  DIFF_SSTL15} [get_ports sys_clk_p]
 set_property -dict  {PACKAGE_PIN  AD11  IOSTANDARD  DIFF_SSTL15} [get_ports sys_clk_n]
 
-create_clock -name sys_clk      -period  5.00 [get_ports sys_clk_p]
-
 # ddr
 
 set_property -dict  {PACKAGE_PIN  AF11  IOSTANDARD SSTL15} [get_ports {ddr3_1_p[0]}]
@@ -40,18 +38,6 @@ set_property -dict  {PACKAGE_PIN  N27   IOSTANDARD  LVCMOS25} [get_ports mii_txd
 set_property -dict  {PACKAGE_PIN  N25   IOSTANDARD  LVCMOS25} [get_ports mii_txd[1]]
 set_property -dict  {PACKAGE_PIN  M29   IOSTANDARD  LVCMOS25} [get_ports mii_txd[2]]
 set_property -dict  {PACKAGE_PIN  L28   IOSTANDARD  LVCMOS25} [get_ports mii_txd[3]]
-
-set_false_path -through [get_ports mii_rst_n]
-set_property SLEW FAST [get_ports mii_txd*]
-set_property SLEW FAST [get_ports mii_tx_en]
-
-create_clock -add -name phy_rx_clk -period 8.000 [get_nets mii_rx_clk]
-create_clock -period 40.000 -name phy_tx_clk [get_ports mii_tx_clk]
-
-set_false_path -from [get_clocks phy_rx_clk] -to [get_clocks *]
-set_false_path -from [get_clocks phy_tx_clk] -to [get_clocks *]
-set_false_path -from [get_clocks *] -to [get_clocks phy_rx_clk]
-set_false_path -from [get_clocks *] -to [get_clocks phy_tx_clk]
 
 # uart
 
