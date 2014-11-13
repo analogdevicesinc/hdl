@@ -21,9 +21,6 @@ adi_ip_constraints axi_fifo2s [list \
   "axi_fifo2s_constr.xdc" ]
 
 ipx::infer_bus_interfaces {{xilinx.com:interface:aximm:1.0}} [ipx::current_core]
-#ipx::remove_bus_interface {m} [ipx::current_core]
-#ipx::remove_bus_interface {m_signal_clock} [ipx::current_core]
-#ipx::remove_memory_map {m} [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 
