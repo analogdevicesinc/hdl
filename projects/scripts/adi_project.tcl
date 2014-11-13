@@ -98,7 +98,7 @@ proc adi_project_create {project_name} {
   set_msg_config -id {BD 41-1306} -new_severity info
   set_msg_config -id {IP_Flow 19-1687} -new_severity info
   set_msg_config -id {filemgmt 20-1763} -new_severity info
-  set_msg_config -id {BD 41-1276} -new_severity error
+  set_msg_config -quiet -id {BD 41-1276} -new_severity error
 
   create_bd_design "system"
   source system_bd.tcl
