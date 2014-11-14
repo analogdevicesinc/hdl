@@ -139,7 +139,7 @@ module prcfg_top(
         end else begin
            prcfg_adc #(
             .CHANNEL_ID(l_inst)
-          ) i_prcfg_adc_1 (
+          ) i_prcfg_adc_i (
             .clk(clk),
             .control(adc_gpio_input),
             .status(adc_gpio_out_s[l_inst]),
@@ -174,7 +174,7 @@ module prcfg_top(
         end else begin
           prcfg_dac #(
             .CHANNEL_ID(l_inst)
-          ) i_prcfg_dac_1 (
+          ) i_prcfg_dac_i (
             .clk(clk),
             .control(dac_gpio_input),
             .status(dac_gpio_out_s[l_inst]),

@@ -61,11 +61,9 @@ module prcfg_adc (
 
   parameter   CHANNEL_ID    = 0;
   parameter   DATA_WIDTH    = 32;
-  parameter   SYMBOL_WIDTH = 2;
 
+  localparam  SYMBOL_WIDTH = 2;
   localparam  RP_ID         = 8'hA2;
-  localparam  SYMBOLE_CNTR_WIDTH = $clog2(DATA_WIDTH/SYMBOLE_WIDTH);
-  localparam  NROF_SYMBOLS = DATA_WIDTH/SYMBOL_WIDTH;
 
   input                               clk;
 
@@ -87,24 +85,16 @@ module prcfg_adc (
   reg                                 dst_adc_dsync   = 'h0;
   reg     [(DATA_WIDTH-1):0]          dst_adc_ddata   = 'h0;
 
-  reg     [(DATA_WIDTH-1):0]          adc_ddata       = 'h0;
   reg     [ 7:0]                      adc_pn_data     = 'hF1;
-
   reg     [31:0]                      status          = 'h0;
   reg     [ 3:0]                      mode            = 'h0;
   reg     [ 3:0]                      channel_sel     = 'h0;
 
-  reg     [(SYMBOL_WIDTH-1):0]        adc_data_buf[(NROF_SYMBOLS-1):0];
-  reg     [(SYMBOL_CNTR_WIDTH-1):0]   symbole_counter = 'h0;
-  reg     [2:0]                       sample_counter = 'd0;
-
   wire                                adc_dvalid;
-  wire                                dma_dvalid;
   wire    [(SYMBOL_WIDTH-1):0]        adc_ddata_s;
+  wire    [ 7:0]                      adc_pn_data_s;
   wire                                adc_pn_err_s;
   wire                                adc_pn_oos_s;
-
-  wire                                demod_en;
 
   // prbs function
   function [ 7:0] pn;
@@ -131,26 +121,7 @@ module prcfg_adc (
 
   assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
 
-  // data concatanation (MSB first)
-  always @(posedge clk) begin
-    if(adc_dvalid == 1'b1) begin
-      adc_data_buf[(NROF_SYMBOLS - symbole_counter - 1)] <= adc_ddata_s;
-    end
-  end
-
-  genvar i;
-  generate
-    for (i=0; i < NROF_SYMBOLS; i = i + 1) begin: SYMBOL_WRAPPER
-      always @(posedge clk) begin
-        if((adc_dvalid == 1'b1) &&
-           (& symbole_counter == 1'b1) &&
-           (sample_counter == 'b1) &&
-           (mode != 0)) begin
-          adc_ddata[((i+1)*SYMBOL_WIDTH)-1:(i*SYMBOL_WIDTH)] <= adc_data_buf[i];
-        end
-      end
-    end
-  endgenerate
+  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_ddata_s} : adc_pn_data;
 
   ad_pnmon #(
     .DATA_WIDTH(8)
@@ -158,10 +129,9 @@ module prcfg_adc (
     .adc_clk(clk),
     .adc_valid_in(adc_dvalid),
     .adc_data_in({adc_pn_data[7:2], adc_ddata_s}),
-    .adc_data_pn(adc_pn_data),
+    .adc_data_pn(adc_pn_data_s),
     .adc_pn_oos(adc_pn_oos_s),
     .adc_pn_err(adc_pn_err_s));
-
 
   // prbs generation
   always @(posedge clk) begin
@@ -169,17 +139,6 @@ module prcfg_adc (
       adc_pn_data <= pn(adc_pn_data);
     end
   end
-
-  always @(posedge clk) begin
-    if(adc_dvalid == 1'b1) begin
-      if(demod_en == 1'b1) begin
-        symbole_counter <= symbole_counter + 1;
-      end
-      sample_counter <= sample_counter + 1;
-    end
-  end
-
-  assign demod_en = (sample_counter == 7) ? 1'b1 : 1'b0;
 
   // qpsk demodulator
   qpsk_demod i_qpsk_demod1 (
@@ -193,16 +152,29 @@ module prcfg_adc (
   // output logic for data ans status
   always @(posedge clk) begin
 
-    src_adc_dovf   <= dst_adc_dovf;
     dst_adc_dsync  <= src_adc_dsync;
+    dst_adc_dwr    <= src_adc_dwr;
 
-    if(mode == 0) begin
-      dst_adc_dwr   <= src_adc_dwr;
-      dst_adc_ddata <= src_adc_ddata;
-    end else begin
-      dst_adc_ddata <= adc_ddata;
-      dst_adc_dwr   <= (& symbole_counter) & (& sample_counter);
-    end
+    case(mode)
+
+      4'h0 : begin
+        dst_adc_ddata <= src_adc_ddata;
+        src_adc_dovf   <= dst_adc_dovf;
+      end
+      4'h1 : begin
+        dst_adc_ddata <= 32'h0;
+        src_adc_dovf  <= 1'b0;
+      end
+      4'h2 : begin
+        dst_adc_ddata <= {30'h0, adc_ddata_s};
+        src_adc_dovf   <= dst_adc_dovf;
+      end
+      default : begin
+        dst_adc_ddata <= src_adc_ddata;
+        src_adc_dovf   <= dst_adc_dovf;
+      end
+    endcase
+
     if((mode == 3'd2) && (channel_sel == CHANNEL_ID)) begin
       status <= {22'h0, adc_pn_err_s, adc_pn_oos_s, RP_ID};
     end else begin
