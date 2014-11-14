@@ -45,6 +45,7 @@ if { $runSynth == 1 } {
   set prcfg_name "bist"
   prcfg_synth_reconf $prcfg_name [list "../common/prcfg_system_top.v" \
                                        "${ad_hdl_dir}/library/prcfg/common/prcfg_top.v" \
+                                       "${ad_hdl_dir}/library/common/ad_pnmon.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/prcfg_dac.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/prcfg_adc.v"]
 
@@ -52,26 +53,26 @@ if { $runSynth == 1 } {
   set prcfg_name "qpsk"
   prcfg_synth_reconf $prcfg_name [list "../common/prcfg_system_top.v" \
                                        "${ad_hdl_dir}/library/prcfg/common/prcfg_top.v" \
+                                       "${ad_hdl_dir}/library/common/ad_pnmon.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/prcfg_dac.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/prcfg_adc.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/qpsk_mod.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/qpsk_demod.v" \
-                                       "${ad_hdl_dir}/library/prcfg/${prcfg_name}/QPSK_Modulator.v" \
+                                       "${ad_hdl_dir}/library/prcfg/${prcfg_name}/QPSK_Modulator_Baseband.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/QPSK_Demodulator_Baseband.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/FIR_Interpolation.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/FIR_Decimation.v" \
-                                       "${ad_hdl_dir}/library/prcfg/${prcfg_name}/Raised_Cosine_Tx_Filter.v" \
-                                       "${ad_hdl_dir}/library/prcfg/${prcfg_name}/Raised_Cosine_Rx_Filter.v"]
+                                       "${ad_hdl_dir}/library/prcfg/${prcfg_name}/Raised_Cosine_Transmit_Filter.v" \
+                                       "${ad_hdl_dir}/library/prcfg/${prcfg_name}/Raised_Cosine_Receive_Filter.v"]
 }
 
 ###############################################################################
 #### IMPLEMENTATION ####
 ###############################################################################
 if { $runImpl == 1 } {
-
-  prcfg_impl "prcfg_constr.xdc" [list "default" \
-                                       "bist" \
-                                       "qpsk"]
+  prcfg_impl "prcfg_constr.xdc" [list "qpsk" \
+                                      "bist" \
+                                      "default"]
 }
 
 ###############################################################################
