@@ -6,9 +6,13 @@
 create_pblock pblock_adi
 add_cells_to_pblock [get_pblocks pblock_adi]  [get_cells -quiet [list i_prcfg_system_top]]
 resize_pblock [get_pblocks pblock_adi] -add {SLICE_X90Y0:SLICE_X161Y149}
+resize_pblock [get_pblocks pblock_adi] -add {SLICE_X90Y150:SLICE_X122Y199}
 resize_pblock [get_pblocks pblock_adi] -add {RAMB18_X4Y0:RAMB18_X7Y59}
+resize_pblock [get_pblocks pblock_adi] -add {RAMB18_X4Y60:RAMB18_X4Y79}
 resize_pblock [get_pblocks pblock_adi] -add {RAMB36_X4Y0:RAMB36_X7Y29}
 resize_pblock [get_pblocks pblock_adi] -add {DSP48_X4Y0:DSP48_X6Y59}
+resize_pblock [get_pblocks pblock_adi] -add {DSP48_X4Y60:DSP48_X4Y79}
+set_property SNAPPING_MODE ON [get_pblocks pblock_adi]
 set_property RESET_AFTER_RECONFIG 1 [get_pblocks pblock_adi]
 
 # constraints
