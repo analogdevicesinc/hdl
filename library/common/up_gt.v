@@ -101,6 +101,7 @@ module up_gt (
   es_stop,
   es_init,
   es_prescale,
+  es_voffset_range,
   es_voffset_step,
   es_voffset_max,
   es_voffset_min,
@@ -136,7 +137,7 @@ module up_gt (
 
   // parameters
 
-  localparam  PCORE_VERSION = 32'h00050062;
+  localparam  PCORE_VERSION = 32'h00060062;
   parameter   PCORE_ID = 0;
 
   // gt interface
@@ -199,6 +200,7 @@ module up_gt (
   output          es_stop;
   output          es_init;
   output  [ 4:0]  es_prescale;
+  output  [ 1:0]  es_voffset_range;
   output  [ 7:0]  es_voffset_step;
   output  [ 7:0]  es_voffset_max;
   output  [ 7:0]  es_voffset_min;
@@ -262,6 +264,7 @@ module up_gt (
   reg             up_es_stop = 'd0;
   reg             up_es_start = 'd0;
   reg     [ 4:0]  up_es_prescale = 'd0;
+  reg     [ 1:0]  up_es_voffset_range = 'd0;
   reg     [ 7:0]  up_es_voffset_step = 'd0;
   reg     [ 7:0]  up_es_voffset_max = 'd0;
   reg     [ 7:0]  up_es_voffset_min = 'd0;
@@ -397,6 +400,7 @@ module up_gt (
       up_es_stop <= 'd0;
       up_es_start <= 'd0;
       up_es_prescale <= 'd0;
+      up_es_voffset_range <= 'd0;
       up_es_voffset_step <= 'd0;
       up_es_voffset_max <= 'd0;
       up_es_voffset_min <= 'd0;
@@ -479,6 +483,7 @@ module up_gt (
         up_es_prescale <= up_wdata[4:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2a)) begin
+        up_es_voffset_range <= up_wdata[25:24];
         up_es_voffset_step <= up_wdata[23:16];
         up_es_voffset_max <= up_wdata[15:8];
         up_es_voffset_min <= up_wdata[7:0];
@@ -555,7 +560,7 @@ module up_gt (
           8'h25: up_rdata <= {15'd0, up_drp_status_s, up_drp_rdata_s};
           8'h28: up_rdata <= {29'd0, up_es_init, up_es_stop, up_es_start};
           8'h29: up_rdata <= {27'd0, up_es_prescale};
-          8'h2a: up_rdata <= {8'd0, up_es_voffset_step, up_es_voffset_max, up_es_voffset_min};
+          8'h2a: up_rdata <= {6'd0, up_es_voffset_range, up_es_voffset_step, up_es_voffset_max, up_es_voffset_min};
           8'h2b: up_rdata <= {4'd0, up_es_hoffset_max, 4'd0, up_es_hoffset_min};
           8'h2c: up_rdata <= {20'd0, up_es_hoffset_step};
           8'h2d: up_rdata <= up_es_start_addr;
@@ -737,13 +742,14 @@ module up_gt (
 
   // es control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(260)) i_es_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(262)) i_es_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_es_start,
                       up_es_stop,
                       up_es_init,
                       up_es_prescale,
+                      up_es_voffset_range,
                       up_es_voffset_step,
                       up_es_voffset_max,
                       up_es_voffset_min,
@@ -768,6 +774,7 @@ module up_gt (
                       es_stop_s,
                       es_init,
                       es_prescale,
+                      es_voffset_range,
                       es_voffset_step,
                       es_voffset_max,
                       es_voffset_min,
