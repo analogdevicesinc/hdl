@@ -84,11 +84,7 @@ set_property  -dict {PACKAGE_PIN N20   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_p
 
 create_clock -name dac_clk_in   -period  2.16 [get_ports dac_clk_in_p]
 create_clock -name adc_clk_in   -period  4.00 [get_ports adc_clk_in_p]
-create_clock -name dac_div_clk  -period  8.40 [get_pins i_system_wrapper/system_i/axi_ad9122/dac_div_clk]
-create_clock -name adc_clk      -period  4.00 [get_pins i_system_wrapper/system_i/axi_ad9643/adc_clk]
-create_clock -name fmc_dma_clk  -period  8.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
+create_clock -name dac_div_clk  -period  8.64 [get_pins i_system_wrapper/system_i/axi_ad9122/dac_div_clk]
 
-set_clock_groups -asynchronous -group {dac_div_clk}
-set_clock_groups -asynchronous -group {adc_clk}
-set_clock_groups -asynchronous -group {fmc_dma_clk}
-
+set_false_path -from [get_pins i_system_wrapper/system_i/axi_ad9643_dma/inst/i_request_arb/i_src_dma_fifo/overflow_reg/C] \
+               -to [get_pins i_system_wrapper/system_i/sys_wfifo/wfifo_ctl/inst/m_wovf_m1_reg/D]
