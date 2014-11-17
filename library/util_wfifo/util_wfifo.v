@@ -125,9 +125,14 @@ module util_wfifo (
   endgenerate
 
   always @(posedge m_clk) begin
-    m_wovf_m1 <= m_wovf_s;
-    m_wovf_m2 <= m_wovf_m1;
-    m_wovf <= m_wovf_m2;
+    if (rstn == 1'b0) begin
+      m_wovf_m1 <= 1'b0;
+      m_wovf_m2 <= 1'b0;
+    end else begin
+      m_wovf_m1 <= m_wovf_s;
+      m_wovf_m2 <= m_wovf_m1;
+      m_wovf    <= m_wovf_m2;
+    end
   end
 
   // read is non-destructive
