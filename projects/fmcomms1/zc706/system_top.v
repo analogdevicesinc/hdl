@@ -182,7 +182,6 @@ module system_top (
   wire            oddr_ref_clk;
   wire    [15:0]  ps_intrs;
 
-
   // instantiations
 
   ODDR #(
@@ -203,7 +202,7 @@ module system_top (
     .O (ref_clk_out_p),
     .OB (ref_clk_out_n));
 
-  ad_iobuf #(
+ ad_iobuf #(
     .DATA_WIDTH(15))
   i_gpio_bd (
     .dt(gpio_t),
