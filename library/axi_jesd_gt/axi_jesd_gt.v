@@ -380,6 +380,7 @@ module axi_jesd_gt (
   wire    [  7:0]                               es_voffset_min_s;
   wire    [  7:0]                               es_voffset_max_s;
   wire    [  7:0]                               es_voffset_step_s;
+  wire    [  1:0]                               es_voffset_range_s;
   wire    [ 31:0]                               es_start_addr_s;
   wire                                          es_dmaerr_s;
   wire                                          es_status_s;
@@ -671,7 +672,7 @@ module axi_jesd_gt (
 
   // eye scan
 
-  ad_gt_es #(.GTH_GTX_N(0)) i_gt_es (
+  ad_gt_es #(.GTH_GTX_N(PCORE_DEVICE_TYPE)) i_gt_es (
     .drp_rst (drp_rst),
     .drp_clk (drp_clk),
     .es_sel (es_sel_s),
@@ -721,6 +722,7 @@ module axi_jesd_gt (
     .es_voffset_min (es_voffset_min_s),
     .es_voffset_max (es_voffset_max_s),
     .es_voffset_step (es_voffset_step_s),
+    .es_voffset_range (es_voffset_range_s),
     .es_start_addr (es_start_addr_s),
     .es_dmaerr (es_dmaerr_s),
     .es_status (es_status_s),
@@ -776,6 +778,7 @@ module axi_jesd_gt (
     .es_stop (es_stop_s),
     .es_init (es_init_s),
     .es_prescale (es_prescale_s),
+    .es_voffset_range (es_voffset_range_s),
     .es_voffset_step (es_voffset_step_s),
     .es_voffset_max (es_voffset_max_s),
     .es_voffset_min (es_voffset_min_s),
