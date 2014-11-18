@@ -31,6 +31,8 @@ set_property  -dict {PACKAGE_PIN  AK17  IOSTANDARD LVCMOS25} [get_ports spi_clk_
 set_property  -dict {PACKAGE_PIN  AF20  IOSTANDARD LVCMOS25} [get_ports spi_clk_clk]                  ; ## G06  FMC_HPC_LA00_CC_P
 set_property  -dict {PACKAGE_PIN  AG20  IOSTANDARD LVCMOS25} [get_ports spi_clk_sdio]                 ; ## G07  FMC_HPC_LA00_CC_N
 
+set_property -dict  {PACKAGE_PIN  AG22  IOSTANDARD LVCMOS25} [get_ports clk_reset]                    ; ## C10  FMC_HPC_LA06_P
+
 set_property  -dict {PACKAGE_PIN  AH19  IOSTANDARD LVCMOS25} [get_ports adc_irq]                      ; ## G09  FMC_HPC_LA03_P
 set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVCMOS25} [get_ports adc_fd]                       ; ## G10  FMC_HPC_LA03_N
 

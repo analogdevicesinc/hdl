@@ -107,6 +107,7 @@ module system_top (
 
   adc_irq,
   adc_fd,
+  clk_reset,
 
   spi_adc_csn,
   spi_adc_clk,
@@ -181,6 +182,7 @@ module system_top (
 
   inout           adc_irq;
   inout           adc_fd;
+  inout           clk_reset;
 
   output          spi_adc_csn;
   output          spi_adc_clk;
@@ -191,9 +193,9 @@ module system_top (
 
   // internal signals
 
-  wire    [16:0]  gpio_i;
-  wire    [16:0]  gpio_o;
-  wire    [16:0]  gpio_t;
+  wire    [17:0]  gpio_i;
+  wire    [17:0]  gpio_o;
+  wire    [17:0]  gpio_t;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
@@ -221,11 +223,12 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+  ad_iobuf #(.DATA_WIDTH(18)) i_iobuf (
     .dt (gpio_t),
     .di (gpio_o),
     .do (gpio_i),
-    .dio ({ adc_irq,    // 16
+    .dio ({ clk_reset,  // 17
+            adc_irq,    // 16
             adc_fd,     // 15
             gpio_bd})); //  0
 

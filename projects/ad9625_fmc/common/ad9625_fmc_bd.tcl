@@ -31,9 +31,9 @@ set ad9625_dma_intr  [create_bd_port -dir O ad9625_dma_intr]
 
 if {$sys_zynq == 0} {
 
-  set gpio_ad9625_i   [create_bd_port -dir I -from 1 -to 0 gpio_ad9625_i]
-  set gpio_ad9625_o   [create_bd_port -dir O -from 1 -to 0 gpio_ad9625_o]
-  set gpio_ad9625_t   [create_bd_port -dir O -from 1 -to 0 gpio_ad9625_t]
+  set gpio_ad9625_i   [create_bd_port -dir I -from 2 -to 0 gpio_ad9625_i]
+  set gpio_ad9625_o   [create_bd_port -dir O -from 2 -to 0 gpio_ad9625_o]
+  set gpio_ad9625_t   [create_bd_port -dir O -from 2 -to 0 gpio_ad9625_t]
 }
 
 # adc peripherals
@@ -83,7 +83,7 @@ if {$sys_zynq == 0} {
 
   set axi_ad9625_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_ad9625_gpio]
   set_property -dict [list CONFIG.C_IS_DUAL {0}] $axi_ad9625_gpio
-  set_property -dict [list CONFIG.C_GPIO_WIDTH {2}] $axi_ad9625_gpio
+  set_property -dict [list CONFIG.C_GPIO_WIDTH {3}] $axi_ad9625_gpio
   set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_ad9625_gpio
 
   set axi_ad9625_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_ad9625_spi]
@@ -102,13 +102,13 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
-  set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {17}] $sys_ps7
+  set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {18}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
 
-  set_property LEFT 16 [get_bd_ports GPIO_I]
-  set_property LEFT 16 [get_bd_ports GPIO_O]
-  set_property LEFT 16 [get_bd_ports GPIO_T]
+  set_property LEFT 17 [get_bd_ports GPIO_I]
+  set_property LEFT 17 [get_bd_ports GPIO_O]
+  set_property LEFT 17 [get_bd_ports GPIO_T]
 
 } else {
 
