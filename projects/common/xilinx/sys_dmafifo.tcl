@@ -2,7 +2,7 @@
 # sys bram (use only when dma is not capable of keeping up).
 # generic fifo interface - existence is oblivious to software.
 
-proc p_sys_dmafifo {p_name m_name adc_data_width} {
+proc p_sys_dmafifo {p_name m_name adc_data_width dma_addr_width} {
 
   global ad_hdl_dir
 
@@ -32,7 +32,7 @@ proc p_sys_dmafifo {p_name m_name adc_data_width} {
   set_property -dict [list CONFIG.ADC_DATA_WIDTH $adc_data_width] $axi_fifo2f
   set_property -dict [list CONFIG.DMA_DATA_WIDTH {64}] $axi_fifo2f
   set_property -dict [list CONFIG.DMA_READY_ENABLE {1}] $axi_fifo2f
-  set_property -dict [list CONFIG.DMA_ADDR_WIDTH {10}] $axi_fifo2f
+  set_property -dict [list CONFIG.DMA_ADDR_WIDTH $dma_addr_width] $axi_fifo2f
 
   connect_bd_net -net adc_rst         [get_bd_pins adc_rst]                 [get_bd_pins axi_fifo2f/adc_rst]
   connect_bd_net -net adc_clk         [get_bd_pins adc_clk]                 [get_bd_pins axi_fifo2f/adc_clk]  
