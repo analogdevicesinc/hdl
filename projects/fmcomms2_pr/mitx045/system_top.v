@@ -247,7 +247,6 @@ module system_top (
     .dma_adc_ovf(dma_adc_ovf));
 
   system_wrapper i_system_wrapper (
-
     .DDR_addr (DDR_addr),
     .DDR_ba (DDR_ba),
     .DDR_cas_n (DDR_cas_n),
@@ -263,18 +262,15 @@ module system_top (
     .DDR_ras_n (DDR_ras_n),
     .DDR_reset_n (DDR_reset_n),
     .DDR_we_n (DDR_we_n),
-
     .FIXED_IO_ddr_vrn (FIXED_IO_ddr_vrn),
     .FIXED_IO_ddr_vrp (FIXED_IO_ddr_vrp),
     .FIXED_IO_mio (FIXED_IO_mio),
     .FIXED_IO_ps_clk (FIXED_IO_ps_clk),
     .FIXED_IO_ps_porb (FIXED_IO_ps_porb),
     .FIXED_IO_ps_srstb (FIXED_IO_ps_srstb),
-
     .GPIO_I (gpio_i),
     .GPIO_O (gpio_o),
     .GPIO_T (gpio_t),
-
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -294,9 +290,7 @@ module system_top (
     .rx_data_in_p (rx_data_in_p),
     .rx_frame_in_n (rx_frame_in_n),
     .rx_frame_in_p (rx_frame_in_p),
-
     .spdif (spdif),
-
     .spi_csn_i (1'b1),
     .spi_csn_o (spi_csn),
     .spi_miso_i (spi_miso),
@@ -304,7 +298,6 @@ module system_top (
     .spi_mosi_o (spi_mosi),
     .spi_sclk_i (1'b0),
     .spi_sclk_o (spi_clk),
-
     .tx_clk_out_n (tx_clk_out_n),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_data_out_n),
@@ -313,7 +306,6 @@ module system_top (
     .tx_frame_out_p (tx_frame_out_p),
     // pr related ports
     .clk(clk),
-
     .dma_dac_en(dma_dac_en),
     .dma_dac_dunf(dma_dac_dunf),
     .dma_dac_ddata(dma_dac_ddata),
@@ -322,7 +314,6 @@ module system_top (
     .core_dac_dunf(core_dac_dunf),
     .core_dac_ddata(core_dac_ddata),
     .core_dac_dvalid(core_dac_dvalid),
-
     .core_adc_dwr(core_adc_dwr),
     .core_adc_dsync(core_adc_dsync),
     .core_adc_ddata(core_adc_ddata),
@@ -331,7 +322,6 @@ module system_top (
     .dma_adc_dsync(dma_adc_dsync),
     .dma_adc_ddata(dma_adc_ddata),
     .dma_adc_ovf(dma_adc_ovf),
-
     .up_dac_gpio_in(dac_gpio_output),
     .up_adc_gpio_in(adc_gpio_output),
     .up_dac_gpio_out(dac_gpio_input),
