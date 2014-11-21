@@ -120,7 +120,7 @@ proc prcfg_impl { xdc_file reconfig_name_list } {
       read_checkpoint -cell i_prcfg_system_top "./prcfg_${prcfg_name}/checkpoints/synth_${prcfg_name}.dcp"
       set_property HD.RECONFIGURABLE 1 [get_cells i_prcfg_system_top]
       # implement the first configurations
-      opt_design -directive ExploreSequentialArea > "./prcfg_${prcfg_name}/logs/opt_${prcfg_name}.rds"
+      opt_design > "./prcfg_${prcfg_name}/logs/opt_${prcfg_name}.rds"
       # generate ltx file for debug probes
       write_debug_probes -force "./debug_nets.ltx"
       place_design > "./prcfg_${prcfg_name}/logs/place_${prcfg_name}.rds"
