@@ -78,11 +78,9 @@ module util_cpack (
 
   // parameters
 
-  parameter   ADC_CHANNEL_DATA_WIDTH = 32;
-  parameter   ADC_NUM_OF_CHANNELS = 8;
+  parameter   CH_DW     = 32;
+  parameter   CH_CNT    = 8;
 
-  localparam  CH_DW     = ADC_CHANNEL_DATA_WIDTH;
-  localparam  CH_CNT    = ADC_NUM_OF_CHANNELS;
   localparam  CH_SCNT   = CH_DW/16;
   localparam  CH_MCNT   = 8;
   localparam  P_DW      = CH_CNT*CH_DW;
@@ -122,7 +120,7 @@ module util_cpack (
 
   output                            adc_valid;
   output                            adc_sync;
-  output  [(P_DW-1):0]              adc_data;
+  output  [((CH_CNT*CH_DW)-1):0]    adc_data;
 
   // internal registers
 
@@ -133,7 +131,7 @@ module util_cpack (
   reg     [((CH_SCNT*16*79)-1):0]   adc_mux_data = 'd0;
   reg                               adc_valid = 'd0;
   reg                               adc_sync = 'd0;
-  reg     [(P_DW-1):0]              adc_data = 'd0;
+  reg     [((CH_CNT*CH_DW)-1):0]    adc_data = 'd0;
 
   // internal signals
 
