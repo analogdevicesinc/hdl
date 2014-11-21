@@ -9,6 +9,7 @@ set runBit      1
 
 # supported carrier ZC706
 set part "xc7z045ffg900-2"
+set board "xilinx.com:zc706:part0:1.0"
 
 # Load scripts for env. variables and RP design flow
 source ../../scripts/adi_env.tcl

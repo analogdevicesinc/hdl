@@ -40,12 +40,14 @@ proc prcfg_synth_static { verilog_files xdc_files } {
   global ad_hdl_dir
   global ad_phdl_dir
   global part
+  global board
 
   # location of the generated block design file
   set system_project_dir ".srcs/sources_1/bd/system"
 
   # create project in mememory
   create_project -in_memory -part $part
+  set_property board $board [current_project]
 
   # setup repo for library
   set lib_dirs $ad_hdl_dir/library

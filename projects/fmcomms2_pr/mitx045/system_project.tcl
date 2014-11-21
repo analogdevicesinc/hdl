@@ -9,6 +9,7 @@ set runBit      1
 
 # supported carrier ZC706/MITX045
 set part "xc7z045ffg900-2"
+set board "em.avnet.com:mini_itx_7z045:part0:1.0"
 
 # Load scripts for env. variables and RP design flow
 source ../../scripts/adi_env.tcl

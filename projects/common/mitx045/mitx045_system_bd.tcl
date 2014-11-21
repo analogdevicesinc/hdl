@@ -1,8 +1,6 @@
 # create board design
 # interface ports
 
-set DDR [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR]
-set FIXED_IO [create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 FIXED_IO]
 set IIC_MAIN [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 IIC_MAIN]
 
 set GPIO_I [create_bd_port -dir I -from 31 -to 0 GPIO_I]
@@ -32,7 +30,7 @@ set i2s_sdata_in    [create_bd_port -dir I i2s_sdata_in]
 # instance: sys_ps7
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.4 sys_ps7]
-set_property -dict [list CONFIG.PCW_IMPORT_BOARD_PRESET "$ad_hdl_dir/projects/common/mitx045/mitx045.xml" ] $sys_ps7
+apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {make_external "FIXED_IO, DDR" apply_board_preset "1" Master "Disable" Slave "Disable" } $sys_ps7
 set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {1} ] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
