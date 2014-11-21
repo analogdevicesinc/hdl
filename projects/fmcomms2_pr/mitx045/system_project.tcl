@@ -46,6 +46,7 @@ if { $runSynth == 1 } {
   set prcfg_name "bist"
   prcfg_synth_reconf $prcfg_name [list "../common/prcfg_system_top.v" \
                                        "${ad_hdl_dir}/library/prcfg/common/prcfg_top.v" \
+                                       "${ad_hdl_dir}/library/common/ad_pnmon.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/prcfg_dac.v" \
                                        "${ad_hdl_dir}/library/prcfg/${prcfg_name}/prcfg_adc.v"]
 
