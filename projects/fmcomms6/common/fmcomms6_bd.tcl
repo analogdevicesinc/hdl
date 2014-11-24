@@ -36,6 +36,12 @@ if {$sys_zynq == 0} {
   set gpio_fmcomms6_t   [create_bd_port -dir O gpio_fmcomms6_t]
 }
 
+# interrupts
+
+set fmcomms6_dma_irq    [create_bd_port -dir O fmcomms6_dma_irq]
+set fmcomms6_spi_irq    [create_bd_port -dir O fmcomms6_spi_irq]
+set fmcomms6_gpio_irq   [create_bd_port -dir O fmcomms6_gpio_irq]
+
 # dma interface
 
 set adc_clk         [create_bd_port -dir O adc_clk]
@@ -99,8 +105,6 @@ if {$sys_zynq == 1} {
 
   set_property -dict [list CONFIG.NUM_MI {11}] $axi_cpu_interconnect
   set_property -dict [list CONFIG.NUM_SI {9}] $axi_mem_interconnect
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_2] [get_bd_ports unc_int2]
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_3] [get_bd_ports unc_int3]
 }
 
 # connections (spi and gpio)
@@ -131,8 +135,8 @@ if {$sys_zynq == 1 } {
   connect_bd_net -net gpio_fmcomms6_o [get_bd_ports gpio_fmcomms6_o]    [get_bd_pins axi_fmcomms6_gpio/gpio_io_o]
   connect_bd_net -net gpio_fmcomms6_t [get_bd_ports gpio_fmcomms6_t]    [get_bd_pins axi_fmcomms6_gpio/gpio_io_t]
 
-  connect_bd_net -net axi_fmcomms6_spi_irq  [get_bd_pins axi_fmcomms6_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In5]
-  connect_bd_net -net axi_fmcomms6_gpio_irq [get_bd_pins axi_fmcomms6_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In6]
+  connect_bd_net -net axi_fmcomms6_spi_irq  [get_bd_pins axi_fmcomms6_spi/ip2intc_irpt]   [get_bd_ports fmcomms6_spi_irq]
+  connect_bd_net -net axi_fmcomms6_gpio_irq [get_bd_pins axi_fmcomms6_gpio/ip2intc_irpt]  [get_bd_ports fmcomms6_gpio_irq]
 }
 
 # connections (adc)
@@ -165,7 +169,7 @@ connect_bd_net -net axi_ad9652_dma_dwr          [get_bd_pins sys_wfifo/s_wr]    
 connect_bd_net -net axi_ad9652_dma_dsync        [get_bd_ports adc_dma_sync]                       [get_bd_pins axi_ad9652_dma/fifo_wr_sync]
 connect_bd_net -net axi_ad9652_dma_ddata        [get_bd_pins sys_wfifo/s_wdata]                   [get_bd_pins axi_ad9652_dma/fifo_wr_din]
 connect_bd_net -net axi_ad9652_dma_dovf         [get_bd_pins sys_wfifo/s_wovf]                    [get_bd_pins axi_ad9652_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad9652_dma_irq          [get_bd_pins axi_ad9652_dma/irq]                  [get_bd_pins sys_concat_intc/In13]
+connect_bd_net -net axi_ad9652_dma_irq          [get_bd_pins axi_ad9652_dma/irq]                  [get_bd_ports fmcomms6_dma_irq]
 
 # interconnect (cpu)
 
