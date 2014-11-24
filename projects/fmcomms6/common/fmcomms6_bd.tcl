@@ -119,13 +119,13 @@ if {$sys_zynq == 1 } {
 
 } else {
 
-  connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]                [get_bd_pins axi_fmcomms6_spi/ss_i]
-  connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]                [get_bd_pins axi_fmcomms6_spi/ss_o]
-  connect_bd_net -net spi_clk_i   [get_bd_ports spi_clk_i]                [get_bd_pins axi_fmcomms6_spi/sck_i]
-  connect_bd_net -net spi_clk_o   [get_bd_ports spi_clk_o]                [get_bd_pins axi_fmcomms6_spi/sck_o]
-  connect_bd_net -net spi_sdo_i   [get_bd_ports spi_sdo_i]                [get_bd_pins axi_fmcomms6_spi/io0_i]
-  connect_bd_net -net spi_sdo_o   [get_bd_ports spi_sdo_o]                [get_bd_pins axi_fmcomms6_spi/io0_o]
-  connect_bd_net -net spi_sdi_i   [get_bd_ports spi_sdi_i]                [get_bd_pins axi_fmcomms6_spi/io1_i]
+  connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]    [get_bd_pins axi_fmcomms6_spi/ss_i]
+  connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]    [get_bd_pins axi_fmcomms6_spi/ss_o]
+  connect_bd_net -net spi_clk_i   [get_bd_ports spi_clk_i]    [get_bd_pins axi_fmcomms6_spi/sck_i]
+  connect_bd_net -net spi_clk_o   [get_bd_ports spi_clk_o]    [get_bd_pins axi_fmcomms6_spi/sck_o]
+  connect_bd_net -net spi_sdo_i   [get_bd_ports spi_sdo_i]    [get_bd_pins axi_fmcomms6_spi/io0_i]
+  connect_bd_net -net spi_sdo_o   [get_bd_ports spi_sdo_o]    [get_bd_pins axi_fmcomms6_spi/io0_o]
+  connect_bd_net -net spi_sdi_i   [get_bd_ports spi_sdi_i]    [get_bd_pins axi_fmcomms6_spi/io1_i]
 
   connect_bd_net -net gpio_fmcomms6_i [get_bd_ports gpio_fmcomms6_i]    [get_bd_pins axi_fmcomms6_gpio/gpio_io_i]
   connect_bd_net -net gpio_fmcomms6_o [get_bd_ports gpio_fmcomms6_o]    [get_bd_pins axi_fmcomms6_gpio/gpio_io_o]
