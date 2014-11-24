@@ -175,21 +175,23 @@ wire    [15:0]  ps_intrs;
 
 // instantiations
 
-genvar n;
-generate
-for (n = 0; n <= 31; n = n + 1) begin: g_iobuf_gpio_bd
-IOBUF i_iobuf_gpio_bd (
-   .I (gpio_o[n]),
-   .O (gpio_i[n]),
-   .T (gpio_t[n]),
-   .IO (gpio_bd[n]));
-end
-endgenerate
+  ad_iobuf #(.DATA_WIDTH(32)) i_iobuf_gpio (
+    .dt ({gpio_t[31:0]}),
+    .di ({gpio_o[31:0]}),
+    .do ({gpio_i[31:0]}),
+    .dio(gpio_bd));
 
-IOBUF i_iic_mux_scl_0 (.I(iic_mux_scl_o_s[0]), .O(iic_mux_scl_i_s[0]), .T(iic_mux_scl_t_s), .IO(iic_mux_scl[0]));
-IOBUF i_iic_mux_scl_1 (.I(iic_mux_scl_o_s[1]), .O(iic_mux_scl_i_s[1]), .T(iic_mux_scl_t_s), .IO(iic_mux_scl[1]));
-IOBUF i_iic_mux_sda_0 (.I(iic_mux_sda_o_s[0]), .O(iic_mux_sda_i_s[0]), .T(iic_mux_sda_t_s), .IO(iic_mux_sda[0]));
-IOBUF i_iic_mux_sda_1 (.I(iic_mux_sda_o_s[1]), .O(iic_mux_sda_i_s[1]), .T(iic_mux_sda_t_s), .IO(iic_mux_sda[1]));
+   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
+    .dt ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
+    .di (iic_mux_scl_o_s),
+    .do (iic_mux_scl_i_s),
+    .dio(iic_mux_scl));
+
+   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_sda (
+    .dt ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
+    .di (iic_mux_sda_o_s),
+    .do (iic_mux_sda_i_s),
+    .dio(iic_mux_sda));
 
 assign spi_csn_adc = spi_csn[0];
 assign spi_csn_clk = spi_csn[1];
