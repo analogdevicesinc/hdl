@@ -101,7 +101,8 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_ad9250_dma_interconnect
 # dac/adc common gt/gpio
 
 set axi_daq1_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_daq1_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {2}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {2}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_NUM_OF_TX_LANES {2}] $axi_daq1_gt
 set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {2}] $axi_daq1_gt
 set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_daq1_gt
 set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_daq1_gt
