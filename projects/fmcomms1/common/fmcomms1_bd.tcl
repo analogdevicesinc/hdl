@@ -60,8 +60,11 @@
   set axi_ad9122_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9122_dma]
   set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {2}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.C_FIFO_SIZE {64}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.C_AXI_SLICE_SRC {1}]  $axi_ad9122_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9122_dma
 
 if {$sys_zynq == 1} {
@@ -75,12 +78,19 @@ if {$sys_zynq == 1} {
   set axi_ad9643_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9643_dma]
   set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.C_FIFO_SIZE {64}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.C_AXI_SLICE_SRC {1}]  $axi_ad9643_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9643_dma
 
 if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.C_DMA_AXI_PROTOCOL_DEST {1}] $axi_ad9643_dma
+}
+
+if {$sys_zynq == 0} {
+  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9643_dma
 }
 
   # additions to default configuration
@@ -94,9 +104,6 @@ if {$sys_zynq == 0} {
 if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $sys_ps7
-  set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
-  set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
-  set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {125.0}] $sys_ps7
 }
 
 # reference clock shared with audio clock
@@ -106,7 +113,8 @@ if {$sys_zynq == 1} {
 
 # connections (dac)
 
-  connect_bd_net -net dac_div_clk [get_bd_ports dac_clk] [get_bd_pins axi_ad9122/dac_div_clk] [get_bd_pins axi_ad9122_dma/fifo_rd_clk]
+  connect_bd_net -net dac_div_clk [get_bd_ports dac_clk] [get_bd_pins axi_ad9122/dac_div_clk] 
+  connect_bd_net -net dac_div_clk [get_bd_pins axi_ad9122_dma/fifo_rd_clk]
 
   connect_bd_net -net axi_ad9122_dac_clk_in_p     [get_bd_ports dac_clk_in_p]                       [get_bd_pins axi_ad9122/dac_clk_in_p]
   connect_bd_net -net axi_ad9122_dac_clk_in_n     [get_bd_ports dac_clk_in_n]                       [get_bd_pins axi_ad9122/dac_clk_in_n]
@@ -184,13 +192,6 @@ if {$sys_zynq == 1} {
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9643/s_axi_aresetn]
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9643_dma/s_axi_aresetn]
 
-  # memory interconnects share the same clock (fclk2)
-
-if {$sys_zynq == 1} {
-  set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
-  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
-}
-
 # interconnect (mem/dac)
 
 if {$sys_zynq == 0 } {
@@ -201,8 +202,8 @@ if {$sys_zynq == 0 } {
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9122_dma/m_src_axi_aresetn]
 } else {
   connect_bd_intf_net -intf_net axi_ad9122_dma_axi [get_bd_intf_pins sys_ps7/S_AXI_HP2] [get_bd_intf_pins axi_ad9122_dma/m_src_axi]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9122_dma/m_src_axi_aclk]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_ps7/S_AXI_HP2_ACLK]
+  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9122_dma/m_src_axi_aclk]
+  connect_bd_net -net sys_200m_clk [get_bd_pins sys_ps7/S_AXI_HP2_ACLK]
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9122_dma/m_src_axi_aresetn]
 }
 
@@ -216,8 +217,8 @@ if {$sys_zynq == 0 } {
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9643_dma/m_dest_axi_aresetn]
 } else {
   connect_bd_intf_net -intf_net axi_ad9643_dma_axi [get_bd_intf_pins sys_ps7/S_AXI_HP1] [get_bd_intf_pins axi_ad9643_dma/m_dest_axi]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9643_dma/m_dest_axi_aclk]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_ps7/S_AXI_HP1_ACLK]
+  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9643_dma/m_dest_axi_aclk]
+  connect_bd_net -net sys_200m_clk [get_bd_pins sys_ps7/S_AXI_HP1_ACLK]
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9643_dma/m_dest_axi_aresetn]
 }
 
