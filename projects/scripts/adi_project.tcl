@@ -1,11 +1,23 @@
 
 set xl_board "none"
 
+if {![info exists REQUIRED_VIVADO_VERSION]} {
+  set REQUIRED_VIVADO_VERSION "2014.2"
+}
+
+if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
+  set IGNORE_VERSION_CHECK 1
+} elseif {![info exists IGNORE_VERSION_CHECK]} {
+  set IGNORE_VERSION_CHECK 0
+}
+
 proc adi_project_create {project_name} {
 
   global ad_hdl_dir
   global ad_phdl_dir
   global xl_board
+  global REQUIRED_VIVADO_VERSION
+  global IGNORE_VERSION_CHECK
 
   set xl_board "none"
   set project_part "none"
@@ -77,6 +89,10 @@ proc adi_project_create {project_name} {
   }
 
   # vivado - 7 and up
+
+  if {!$IGNORE_VERSION_CHECK && [string compare [version -short] $REQUIRED_VIVADO_VERSION] != 0} {
+    return -code error [format "ERROR: This project requires Vivado %s." $REQUIRED_VIVADO_VERSION]
+  }
 
   set project_system_dir "./$project_name.srcs/sources_1/bd/system"
 
