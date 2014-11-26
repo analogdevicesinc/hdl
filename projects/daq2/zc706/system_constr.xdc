@@ -43,14 +43,14 @@ set_property  -dict {PACKAGE_PIN  AG25  IOSTANDARD LVCMOS25} [get_ports dac_rese
 set_property  -dict {PACKAGE_PIN  AF24  IOSTANDARD LVCMOS25} [get_ports dac_txen]                     ; ## G16  FMC_HPC_LA12_N
 set_property  -dict {PACKAGE_PIN  AG22  IOSTANDARD LVCMOS25} [get_ports adc_pd]                       ; ## C10  FMC_HPC_LA06_P
 
-set_property  -dict {PACKAGE_PIN  AA22  IOSTANDARD LVCMOS25} [get_ports clkd_status[0]]               ; ## D17  FMC_HPC_LA13_P             
-set_property  -dict {PACKAGE_PIN  AA23  IOSTANDARD LVCMOS25} [get_ports clkd_status[1]]               ; ## D18  FMC_HPC_LA13_N             
+set_property  -dict {PACKAGE_PIN  AA22  IOSTANDARD LVCMOS25} [get_ports clkd_status[0]]               ; ## D17  FMC_HPC_LA13_P
+set_property  -dict {PACKAGE_PIN  AA23  IOSTANDARD LVCMOS25} [get_ports clkd_status[1]]               ; ## D18  FMC_HPC_LA13_N
 set_property  -dict {PACKAGE_PIN  AF23  IOSTANDARD LVCMOS25} [get_ports dac_irq]                      ; ## G15  FMC_HPC_LA12_P
 set_property  -dict {PACKAGE_PIN  AD23  IOSTANDARD LVCMOS25} [get_ports adc_fda]                      ; ## H16  FMC_HPC_LA11_P
 set_property  -dict {PACKAGE_PIN  AE23  IOSTANDARD LVCMOS25} [get_ports adc_fdb]                      ; ## H17  FMC_HPC_LA11_N
 
-set_property  -dict {PACKAGE_PIN  AJ23  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports trig_p]         ; ## H13  FMC_HPC_LA07_P          
-set_property  -dict {PACKAGE_PIN  AJ24  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports trig_n]         ; ## H14  FMC_HPC_LA07_N          
+set_property  -dict {PACKAGE_PIN  AJ23  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports trig_p]         ; ## H13  FMC_HPC_LA07_P
+set_property  -dict {PACKAGE_PIN  AJ24  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports trig_n]         ; ## H14  FMC_HPC_LA07_N
 
 # clocks
 
