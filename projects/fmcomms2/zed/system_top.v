@@ -294,6 +294,7 @@ module system_top (
     .ps_intr_9 (ps_intrs[9]),
     .ad9361_dac_dma_irq (ps_intrs[12]),
     .ad9361_adc_dma_irq (ps_intrs[13]),
+    .iic_fmc_intr(ps_intrs[11]),
     .otg_vbusoc (otg_vbusoc),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
