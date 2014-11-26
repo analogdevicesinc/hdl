@@ -275,6 +275,7 @@ module system_top (
   wire    [ 4:0]  gpio_status_i;
   wire    [ 4:0]  gpio_status_o;
   wire    [ 4:0]  gpio_status_t;
+  wire    [31:0]  mb_intrs;
 
   // adc-dac data
 
@@ -516,6 +517,32 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
+    .mb_intr_10 (mb_intrs[10]),
+    .mb_intr_11 (mb_intrs[11]),
+    .mb_intr_12 (mb_intrs[12]),
+    .mb_intr_13 (mb_intrs[13]),
+    .mb_intr_14 (mb_intrs[14]),
+    .mb_intr_15 (mb_intrs[15]),
+    .mb_intr_16 (mb_intrs[16]),
+    .mb_intr_17 (mb_intrs[17]),
+    .mb_intr_18 (mb_intrs[18]),
+    .mb_intr_19 (mb_intrs[19]),
+    .mb_intr_20 (mb_intrs[20]),
+    .mb_intr_21 (mb_intrs[21]),
+    .mb_intr_22 (mb_intrs[22]),
+    .mb_intr_23 (mb_intrs[23]),
+    .mb_intr_24 (mb_intrs[24]),
+    .mb_intr_25 (mb_intrs[25]),
+    .mb_intr_26 (mb_intrs[26]),
+    .mb_intr_27 (mb_intrs[27]),
+    .mb_intr_28 (mb_intrs[28]),
+    .mb_intr_29 (mb_intrs[29]),
+    .mb_intr_30 (mb_intrs[30]),
+    .mb_intr_31 (mb_intrs[31]),
+    .axi_ad9144_dma_intr (mb_intrs[13]),
+    .axi_ad9680_dma_intr (mb_intrs[12]),
+    .axi_daq2_gpio_intr (mb_intrs[11]),
+    .axi_daq2_spi_intr (mb_intrs[10]),
     .iic_rstn (iic_rstn),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio_io),
@@ -551,10 +578,7 @@ module system_top (
     .tx_sync (tx_sync),
     .tx_sysref (tx_sysref),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .unc_int0 (1'b0),
-    .unc_int1 (1'b0),
-    .unc_int4 (1'b0));
+    .uart_sout (uart_sout));
 
 endmodule
 
