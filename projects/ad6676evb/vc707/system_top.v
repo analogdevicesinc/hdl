@@ -77,6 +77,13 @@ module system_top (
 
   fan_pwm,
 
+  linear_flash_addr,
+  linear_flash_adv_ldn,
+  linear_flash_ce_n,
+  linear_flash_oen,
+  linear_flash_wen,
+  linear_flash_dq_io,
+
   gpio_lcd,
   gpio_led,
   gpio_sw,
@@ -148,6 +155,14 @@ module system_top (
   inout           mdio_mdio;
 
   output          fan_pwm;
+
+  output  [26:1]  linear_flash_addr;
+  output          linear_flash_adv_ldn;
+  output          linear_flash_ce_n;
+  output          linear_flash_oen;
+  output          linear_flash_wen;
+  inout   [15:0]  linear_flash_dq_io;
+
 
   output  [ 6:0]  gpio_lcd;
   output  [ 7:0]  gpio_led;
@@ -244,6 +259,8 @@ module system_top (
     .T (gpio_t[0]),
     .IO (adc_agc4));
 
+  assign fan_pwm = 1'b1;
+
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
@@ -260,7 +277,12 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .fan_pwm (fan_pwm),
+    .linear_flash_addr (linear_flash_addr),
+    .linear_flash_adv_ldn (linear_flash_adv_ldn),
+    .linear_flash_ce_n (linear_flash_ce_n),
+    .linear_flash_oen (linear_flash_oen),
+    .linear_flash_wen (linear_flash_wen),
+    .linear_flash_dq_io(linear_flash_dq_io),
     .gpio_lcd_tri_o (gpio_lcd),
     .gpio_led_tri_o (gpio_led),
     .gpio_sw_tri_i (gpio_sw),
