@@ -99,17 +99,17 @@ connect_bd_net -net spi_sdi_i    [get_bd_ports spi_sdi_i]   [get_bd_pins sys_ps7
 
 # connections (gt)
 
-connect_bd_net -net axi_ad9671_gt_ref_clk_c         [get_bd_pins axi_ad9671_gt/ref_clk_c]           [get_bd_ports rx_ref_clk]   
-connect_bd_net -net axi_ad9671_gt_rx_data_p         [get_bd_pins axi_ad9671_gt/rx_data_p]           [get_bd_ports rx_data_p]   
-connect_bd_net -net axi_ad9671_gt_rx_data_n         [get_bd_pins axi_ad9671_gt/rx_data_n]           [get_bd_ports rx_data_n]   
-connect_bd_net -net axi_ad9671_gt_rx_sync           [get_bd_pins axi_ad9671_gt/rx_sync]             [get_bd_ports rx_sync]  
-connect_bd_net -net axi_ad9671_gt_rx_sysref         [get_bd_pins axi_ad9671_gt/rx_sysref]           [get_bd_ports rx_sysref]   
+connect_bd_net -net axi_ad9671_gt_ref_clk_c         [get_bd_pins axi_ad9671_gt/ref_clk_c]           [get_bd_ports rx_ref_clk]
+connect_bd_net -net axi_ad9671_gt_rx_data_p         [get_bd_pins axi_ad9671_gt/rx_data_p]           [get_bd_ports rx_data_p]
+connect_bd_net -net axi_ad9671_gt_rx_data_n         [get_bd_pins axi_ad9671_gt/rx_data_n]           [get_bd_ports rx_data_n]
+connect_bd_net -net axi_ad9671_gt_rx_sync           [get_bd_pins axi_ad9671_gt/rx_sync]             [get_bd_ports rx_sync]
+connect_bd_net -net axi_ad9671_gt_rx_sysref         [get_bd_pins axi_ad9671_gt/rx_sysref]           [get_bd_ports rx_sysref]
 
 # connections (adc)
 
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_gt/rx_clk_g]
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_gt/rx_clk]
-connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_core/rx_clk]          
+connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_core/rx_clk]
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_pins axi_ad9671_jesd/rx_core_clk]
 connect_bd_net -net axi_ad9671_gt_rx_clk  [get_bd_ports adc_clk]
 
@@ -132,8 +132,8 @@ connect_bd_net -net axi_ad9671_core_adc_valid       [get_bd_pins axi_ad9671_core
 connect_bd_net -net axi_ad9671_core_adc_data        [get_bd_pins axi_ad9671_core/adc_data]          [get_bd_ports adc_data]
 connect_bd_net -net axi_ad9671_core_sof             [get_bd_pins axi_ad9671_core/rx_data_sof]       [get_bd_ports ad9671_sof]
 connect_bd_net -net axi_ad9671_core_adc_dwr         [get_bd_ports dma_wr]                           [get_bd_pins axi_ad9671_dma/fifo_wr_en]
-connect_bd_net -net axi_ad9671_core_adc_dsync       [get_bd_ports dma_sync]                         [get_bd_pins axi_ad9671_dma/fifo_wr_sync]    
-connect_bd_net -net axi_ad9671_core_adc_ddata       [get_bd_ports dma_data]                         [get_bd_pins axi_ad9671_dma/fifo_wr_din]     
+connect_bd_net -net axi_ad9671_core_adc_dsync       [get_bd_ports dma_sync]                         [get_bd_pins axi_ad9671_dma/fifo_wr_sync]
+connect_bd_net -net axi_ad9671_core_adc_ddata       [get_bd_ports dma_data]                         [get_bd_pins axi_ad9671_dma/fifo_wr_din]
 connect_bd_net -net axi_ad9671_core_adc_dovf        [get_bd_pins axi_ad9671_core/adc_dovf]          [get_bd_pins axi_ad9671_dma/fifo_wr_overflow]
 connect_bd_net -net axi_ad9671_dma_irq              [get_bd_pins axi_ad9671_dma/irq]                [get_bd_pins sys_concat_intc/In13]
 
@@ -147,18 +147,18 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M07_ACLK] $sy
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M08_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M09_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M10_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_gt/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_jesd/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_dma/s_axi_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_gt/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_jesd/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_dma/s_axi_aclk]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M07_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M08_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M09_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M10_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_gt/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_jesd/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_dma/s_axi_aresetn] 
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_gt/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_jesd/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_dma/s_axi_aresetn]
 
 # interconnect (gt es)
 
@@ -184,7 +184,7 @@ connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
 connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
 
 connect_bd_intf_net -intf_net axi_ad9671_dma_interconnect_m00_axi [get_bd_intf_pins axi_ad9671_dma_interconnect/M00_AXI]  [get_bd_intf_pins sys_ps7/S_AXI_HP2]
-connect_bd_intf_net -intf_net axi_ad9671_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9671_dma_interconnect/S00_AXI]  [get_bd_intf_pins axi_ad9671_dma/m_dest_axi] 
+connect_bd_intf_net -intf_net axi_ad9671_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9671_dma_interconnect/S00_AXI]  [get_bd_intf_pins axi_ad9671_dma/m_dest_axi]
 connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9671_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
 connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9671_dma_interconnect/S00_ACLK] $sys_fmc_dma_clk_source
 connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9671_dma_interconnect/M00_ACLK] $sys_fmc_dma_clk_source
@@ -193,7 +193,7 @@ connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9671_dma/m_dest_axi_aclk]
 connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9671_dma_interconnect/ARESETN] $sys_fmc_dma_resetn_source
 connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9671_dma_interconnect/S00_ARESETN] $sys_fmc_dma_resetn_source
 connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9671_dma_interconnect/M00_ARESETN] $sys_fmc_dma_resetn_source
-connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9671_dma/m_dest_axi_aresetn] 
+connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9671_dma/m_dest_axi_aresetn]
 
 # ila
 
