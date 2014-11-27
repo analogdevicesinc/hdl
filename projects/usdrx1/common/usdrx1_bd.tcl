@@ -68,7 +68,7 @@ set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_usdrx1_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_usdrx1_jesd
 
 set axi_usdrx1_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_usdrx1_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {8}] [get_bd_cells axi_usdrx1_gt]
+set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {8}] [get_bd_cells axi_usdrx1_gt]
 set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {4}] $axi_usdrx1_gt
 set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_usdrx1_gt
 set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_usdrx1_gt
