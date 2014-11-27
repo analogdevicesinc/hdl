@@ -238,6 +238,7 @@ module system_top (
   wire    [58:0]  gpio_i;
   wire    [58:0]  gpio_o;
   wire    [58:0]  gpio_t;
+  wire    [15:0]  ps_intrs;
 
   // spi assignments
 
@@ -419,6 +420,22 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
+    .ps_intr_0 (ps_intrs[0]),
+    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_2 (ps_intrs[2]),
+    .ps_intr_3 (ps_intrs[3]),
+    .ps_intr_4 (ps_intrs[4]),
+    .ps_intr_5 (ps_intrs[5]),
+    .ps_intr_6 (ps_intrs[6]),
+    .ps_intr_7 (ps_intrs[7]),
+    .ps_intr_8 (ps_intrs[8]),
+    .ps_intr_9 (ps_intrs[9]),
+    .ps_intr_10 (ps_intrs[10]),
+    .ps_intr_11 (ps_intrs[11]),
+    .ps_intr_12 (ps_intrs[12]),
+    .ps_intr_13 (ps_intrs[13]),
+    .usdrx1_dma_irq (ps_intrs[13]),
+    .usdrx1_spi_irq (ps_intrs[12]),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),
