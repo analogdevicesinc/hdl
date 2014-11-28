@@ -225,14 +225,14 @@ module system_top (
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
     .dt ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
-    .di (iic_mux_scl_i_s),
-    .do (iic_mux_scl_o_s),
+    .di (iic_mux_scl_o_s),
+    .do (iic_mux_scl_i_s),
     .dio(iic_mux_scl));
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_sda (
     .dt ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
-    .di (iic_mux_sda_i_s),
-    .do (iic_mux_sda_o_s),
+    .di (iic_mux_sda_o_s),
+    .do (iic_mux_sda_i_s),
     .dio(iic_mux_sda));
 
   system_wrapper i_system_wrapper (
