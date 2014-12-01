@@ -199,6 +199,7 @@ if {$sys_zynq == 0} {
   set_property -dict [list CONFIG.Reset_Pin {false}] $ila_fifo
 
   set ila_ad9467_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_ad9467_mon]
+  set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9467_mon
   set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_ad9467_mon
   set_property -dict [list CONFIG.C_PROBE0_WIDTH {32}] $ila_ad9467_mon
 
