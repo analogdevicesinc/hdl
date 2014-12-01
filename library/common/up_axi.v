@@ -110,11 +110,11 @@ module up_axi (
   // pcore interface
 
   output          up_wreq;
-  output  [13:0]  up_waddr;
+  output  [AW:0]  up_waddr;
   output  [31:0]  up_wdata;
   input           up_wack;
   output          up_rreq;
-  output  [13:0]  up_raddr;
+  output  [AW:0]  up_raddr;
   input   [31:0]  up_rdata;
   input           up_rack;
 
