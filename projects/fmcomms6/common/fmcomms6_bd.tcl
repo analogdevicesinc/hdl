@@ -224,14 +224,16 @@ if {$sys_zynq == 0} {
 
 set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_adc]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {3}] $ila_adc
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $ila_adc
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 
 connect_bd_net -net sys_200m_clk [get_bd_pins ila_adc/clk]
 connect_bd_net -net axi_ad9652_dma_dwr [get_bd_pins ila_adc/probe0]
 connect_bd_net -net axi_ad9652_dma_ddata [get_bd_pins ila_adc/probe1]
+connect_bd_net -net axi_ad9652_dma_dovf [get_bd_pins ila_adc/probe2]
 
 # address map
 
