@@ -66,11 +66,6 @@ set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9652_dma
 
-if {$sys_zynq == 1} {
-  set axi_ad9652_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9652_dma_interconnect]
-  set_property -dict [list CONFIG.NUM_MI {1}] $axi_ad9652_dma_interconnect
-}
-
 if {$sys_zynq == 0} {
 
   set axi_fmcomms6_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_fmcomms6_gpio]
@@ -204,6 +199,7 @@ if {$sys_zynq == 0} {
 if {$sys_zynq == 1} {
   set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
   connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
+  set_property -dict [list CONFIG.C_DMA_AXI_PROTOCOL_DEST {1}] $axi_ad9652_dma
 }
 
 # interconnect (mem/adc)
@@ -218,16 +214,9 @@ if {$sys_zynq == 0} {
 
 } else {
 
-  connect_bd_intf_net -intf_net axi_ad9652_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9652_dma_interconnect/S00_AXI] [get_bd_intf_pins axi_ad9652_dma/m_dest_axi]
-  connect_bd_intf_net -intf_net axi_ad9652_dma_interconnect_m00_axi [get_bd_intf_pins axi_ad9652_dma_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP1]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9652_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9652_dma_interconnect/M00_ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9652_dma_interconnect/S00_ACLK] $sys_fmc_dma_clk_source
+  connect_bd_intf_net -intf_net axi_ad9652_dma_axi [get_bd_intf_pins axi_ad9652_dma/m_dest_axi] [get_bd_intf_pins sys_ps7/S_AXI_HP1]
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9652_dma/m_dest_axi_aclk]
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_ps7/S_AXI_HP1_ACLK]
-  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9652_dma_interconnect/ARESETN] $sys_100m_resetn_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9652_dma_interconnect/M00_ARESETN] $sys_100m_resetn_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9652_dma_interconnect/S00_ARESETN] $sys_100m_resetn_source
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9652_dma/m_dest_axi_aresetn]
 }
 
