@@ -99,7 +99,7 @@ set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_ad9625_spi
 set_property -dict [list CONFIG.C_NUM_SS_BITS {4}] $axi_ad9625_spi
 set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_ad9625_spi
 
-p_sys_dmafifo [current_bd_instance .] axi_ad9625_fifo 512 10
+p_sys_dmafifo [current_bd_instance .] axi_ad9625_fifo 512 18
 
 # additions to default configuration
 
