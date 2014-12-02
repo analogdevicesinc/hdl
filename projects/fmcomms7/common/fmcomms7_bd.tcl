@@ -77,12 +77,6 @@ if {$sys_zynq == 0} {
   set adc_dsync       [create_bd_port -dir I adc_dsync]
   set adc_ddata       [create_bd_port -dir I -from 127 -to 0 adc_ddata]
 
-if {$sys_zynq == 1} {
-
-  set DDR3    [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR3]
-  set sys_clk [create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk]
-}
-
   set axi_ad9144_dma_intr [create_bd_port -dir O axi_ad9144_dma_intr]
   set axi_ad9680_dma_intr [create_bd_port -dir O axi_ad9680_dma_intr]
   set axi_fmcomms7_spi_intr   [create_bd_port -dir O axi_fmcomms7_spi_intr  ]  
@@ -141,15 +135,6 @@ if {$sys_zynq == 1} {
 
 if {$sys_zynq == 1} {
 
-  p_plddr3_fifo [current_bd_instance .] axi_ad9680_fifo 128
-
-} else {
-
-  p_sys_dmafifo [current_bd_instance .] axi_ad9680_fifo 128
-}
-
-if {$sys_zynq == 1} {
-
   set axi_ad9680_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9680_dma_interconnect]
   set_property -dict [list CONFIG.NUM_MI {1}] $axi_ad9680_dma_interconnect
 }
@@ -157,7 +142,7 @@ if {$sys_zynq == 1} {
   # dac/adc common gt/gpio
 
   set axi_fmcomms7_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_fmcomms7_gt]
-  set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {8}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_NUM_OF_TX_LANES {8}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {4}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_0 {0}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_1 {3}] $axi_fmcomms7_gt
@@ -226,14 +211,6 @@ if {$sys_zynq == 1} {
   set_property LEFT 63 [get_bd_ports GPIO_I]
   set_property LEFT 63 [get_bd_ports GPIO_O]
   set_property LEFT 63 [get_bd_ports GPIO_T]
-}
-
-  # connections (pl ddr3)
-
-if {$sys_zynq == 1} {
-
-  connect_bd_intf_net -intf_net DDR3    [get_bd_intf_ports DDR3]    [get_bd_intf_pins axi_ad9680_fifo/DDR3]
-  connect_bd_intf_net -intf_net sys_clk [get_bd_intf_ports sys_clk] [get_bd_intf_pins axi_ad9680_fifo/sys_clk]
 }
 
   # connections (spi and gpio)
@@ -345,8 +322,8 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_fmcomms7_gt_rx_ip_sof         [get_bd_pins axi_fmcomms7_gt/rx_ip_sof]           [get_bd_pins axi_ad9680_jesd/rx_start_of_frame]
   connect_bd_net -net axi_fmcomms7_gt_rx_ip_data        [get_bd_pins axi_fmcomms7_gt/rx_ip_data]          [get_bd_pins axi_ad9680_jesd/rx_tdata]
   connect_bd_net -net axi_fmcomms7_gt_rx_data           [get_bd_pins axi_fmcomms7_gt/rx_data]             [get_bd_pins axi_ad9680_core/rx_data]
+
   connect_bd_net -net axi_fmcomms7_gt_rx_rst            [get_bd_pins axi_ad9680_fifo/adc_rst]             [get_bd_pins axi_fmcomms7_gt/rx_rst]
-  connect_bd_net -net sys_100m_resetn                   [get_bd_pins axi_ad9680_fifo/dma_rstn]            $sys_100m_resetn_source
   connect_bd_net -net axi_ad9680_adc_clk                [get_bd_pins axi_ad9680_core/adc_clk]             [get_bd_pins axi_ad9680_fifo/adc_clk]
   connect_bd_net -net axi_ad9680_adc_dovf               [get_bd_pins axi_ad9680_core/adc_dovf]            [get_bd_pins axi_ad9680_fifo/adc_wovf]
   connect_bd_net -net axi_ad9680_adc_enable_0           [get_bd_pins axi_ad9680_core/adc_enable_0]        [get_bd_ports adc_enable_0]
@@ -368,11 +345,6 @@ if {$sys_zynq == 0} {
 
   connect_bd_net -net axi_ad9144_dac_clk [get_bd_ports dac_clk]
   connect_bd_net -net axi_ad9680_adc_clk [get_bd_ports adc_clk]
-
-if {$sys_zynq == 0} {
-
-  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9680_fifo/axi_clk] $sys_200m_clk_source
-}
 
   # interconnect (cpu)
 
@@ -551,7 +523,5 @@ if {$sys_zynq == 0} {
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9144_dma/m_src_axi]   [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM]    SEG_sys_ps7_hp1_ddr_lowocm
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9680_dma/m_dest_axi]  [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM]    SEG_sys_ps7_hp2_ddr_lowocm
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_fmcomms7_gt/m_axi]          [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM]    SEG_sys_ps7_hp3_ddr_lowocm
-
-  create_bd_addr_seg -range 0x40000000    -offset 0x80000000 [get_bd_addr_spaces axi_ad9680_fifo/axi_fifo2s/axi] [get_bd_addr_segs axi_ad9680_fifo/axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl_memaddr
 }
 
