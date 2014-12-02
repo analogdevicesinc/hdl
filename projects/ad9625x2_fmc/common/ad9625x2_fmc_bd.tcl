@@ -110,12 +110,12 @@ set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_ad9625_spi
 set_property -dict [list CONFIG.C_NUM_SS_BITS {2}] $axi_ad9625_spi
 set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_ad9625_spi
 
-p_sys_dmafifo [current_bd_instance .] axi_ad9625_fifo 512 10
 set axi_dac_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_dac_spi]
 set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_dac_spi
 set_property -dict [list CONFIG.C_NUM_SS_BITS {2}] $axi_dac_spi
 set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_dac_spi
 
+p_sys_dmafifo [current_bd_instance .] axi_ad9625_fifo 512 18
 
 # additions to default configuration
 
