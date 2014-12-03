@@ -223,16 +223,15 @@ module system_top (
   inout             spi_sdio;
   output            spi_dirn;
 
-  output            dac_clk;
-  output            dac_data;
-  output            dac_sync_0;
-  output            dac_sync_1;
-
   input             trig_p;
   input             trig_n;
   output            vdither_p;
   output            vdither_n;
   inout             pwr_good;
+  inout             dac_clk;
+  inout             dac_data;
+  inout             dac_sync_0;
+  inout             dac_sync_1;
   inout             fd_1;
   inout             irq_1;
   inout             fd_0;
@@ -345,18 +344,22 @@ module system_top (
   IBUFDS i_ibufds_trig (
     .I (trig_p),
     .IB (trig_n),
-    .O (gpio_i[14]));
+    .O (gpio_i[18]));
 
   OBUFDS i_obufds_vdither (
-    .I (gpio_o[13]),
+    .I (gpio_o[17]),
     .O (vdither_p),
     .OB (vdither_n));
 
-  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf (
-    .dt (gpio_t[12:0]),
-    .di (gpio_o[12:0]),
-    .do (gpio_i[12:0]),
-    .dio ({ pwr_good,       // 12
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+    .dt (gpio_t[16:0]),
+    .di (gpio_o[16:0]),
+    .do (gpio_i[16:0]),
+    .dio ({ pwr_good,       // 16
+            dac_clk,        // 15
+            dac_data,       // 14
+            dac_sync_0,     // 13
+            dac_sync_1,     // 12
             fd_1,           // 11
             irq_1,          // 10
             fd_0,           //  9
@@ -482,14 +485,7 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .dac_sync_o ({dac_sync_1, dac_sync_0}),
-    .dac_sync_i (2'b11),
-    .dac_clk_o (dac_clk),
-    .dac_clk_i (1'b0),
-    .dac_do_o (dac_data),
-    .dac_do_i (1'b0),
-    .dac_di_i (1'b0));
+    .uart_sout (uart_sout));
 
 endmodule
 

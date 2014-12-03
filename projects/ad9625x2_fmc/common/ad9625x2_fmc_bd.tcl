@@ -24,7 +24,6 @@ set rx_sysref       [create_bd_port -dir O rx_sysref]
 set ad9625_spi_intr  [create_bd_port -dir O ad9625_spi_intr]
 set ad9625_gpio_intr [create_bd_port -dir O ad9625_gpio_intr]
 set ad9625_dma_intr  [create_bd_port -dir O ad9625_dma_intr]
-set dac_spi_intr     [create_bd_port -dir O dac_spi_intr]
 
 set gpio_ad9625_i   [create_bd_port -dir I -from 18 -to 0 gpio_ad9625_i]
 set gpio_ad9625_o   [create_bd_port -dir O -from 18 -to 0 gpio_ad9625_o]
@@ -39,16 +38,6 @@ set adc_enable_1    [create_bd_port -dir O adc_enable_1]
 set adc_data_1      [create_bd_port -dir O -from 255 -to 0 adc_data_1]
 set adc_wr          [create_bd_port -dir I adc_wr]
 set adc_wdata       [create_bd_port -dir I -from 511 -to 0 adc_wdata]
-
-# dac spi interface
-
-set dac_sync_o        [create_bd_port -dir O -from 1 -to 0 dac_sync_o]
-set dac_sync_i        [create_bd_port -dir I -from 1 -to 0 dac_sync_i]
-set dac_clk_o         [create_bd_port -dir O dac_clk_o]
-set dac_clk_i         [create_bd_port -dir I dac_clk_i]
-set dac_do_o          [create_bd_port -dir O dac_do_o]
-set dac_do_i          [create_bd_port -dir I dac_do_i]
-set dac_di_i          [create_bd_port -dir I dac_di_i]
 
 # adc peripherals
 
@@ -102,7 +91,7 @@ set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
 
 set axi_ad9625_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_ad9625_gpio]
 set_property -dict [list CONFIG.C_IS_DUAL {0}] $axi_ad9625_gpio
-set_property -dict [list CONFIG.C_GPIO_WIDTH {15}] $axi_ad9625_gpio
+set_property -dict [list CONFIG.C_GPIO_WIDTH {19}] $axi_ad9625_gpio
 set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_ad9625_gpio
 
 set axi_ad9625_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_ad9625_spi]
@@ -110,16 +99,12 @@ set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_ad9625_spi
 set_property -dict [list CONFIG.C_NUM_SS_BITS {2}] $axi_ad9625_spi
 set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_ad9625_spi
 
-set axi_dac_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_dac_spi]
-set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_dac_spi
-set_property -dict [list CONFIG.C_NUM_SS_BITS {2}] $axi_dac_spi
-set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_dac_spi
 
 p_sys_dmafifo [current_bd_instance .] axi_ad9625_fifo 512 18
 
 # additions to default configuration
 
-set_property -dict [list CONFIG.NUM_MI {17}] $axi_cpu_interconnect
+set_property -dict [list CONFIG.NUM_MI {16}] $axi_cpu_interconnect
 set_property -dict [list CONFIG.NUM_SI {11}] $axi_mem_interconnect
 
 # connections (spi and gpio)
@@ -132,21 +117,12 @@ connect_bd_net -net spi_sdo_i   [get_bd_ports spi_sdo_i]      [get_bd_pins axi_a
 connect_bd_net -net spi_sdo_o   [get_bd_ports spi_sdo_o]      [get_bd_pins axi_ad9625_spi/io0_o]
 connect_bd_net -net spi_sdi_i   [get_bd_ports spi_sdi_i]      [get_bd_pins axi_ad9625_spi/io1_i]
 
-connect_bd_net -net dac_sync_i  [get_bd_ports dac_sync_i]     [get_bd_pins axi_dac_spi/ss_i]
-connect_bd_net -net dac_sync_o  [get_bd_ports dac_sync_o]     [get_bd_pins axi_dac_spi/ss_o]
-connect_bd_net -net dac_clk_i   [get_bd_ports dac_clk_i]      [get_bd_pins axi_dac_spi/sck_i]
-connect_bd_net -net dac_clk_o   [get_bd_ports dac_clk_o]      [get_bd_pins axi_dac_spi/sck_o]
-connect_bd_net -net dac_do_i    [get_bd_ports dac_do_i]       [get_bd_pins axi_dac_spi/io0_i]
-connect_bd_net -net dac_do_o    [get_bd_ports dac_do_o]       [get_bd_pins axi_dac_spi/io0_o]
-connect_bd_net -net dac_di_i    [get_bd_ports dac_di_i]       [get_bd_pins axi_dac_spi/io1_i]
-
 connect_bd_net -net gpio_ad9625_i  [get_bd_ports gpio_ad9625_i]     [get_bd_pins axi_ad9625_gpio/gpio_io_i]
 connect_bd_net -net gpio_ad9625_o  [get_bd_ports gpio_ad9625_o]     [get_bd_pins axi_ad9625_gpio/gpio_io_o]
 connect_bd_net -net gpio_ad9625_t  [get_bd_ports gpio_ad9625_t]     [get_bd_pins axi_ad9625_gpio/gpio_io_t]
 
 connect_bd_net -net axi_ad9625_spi_irq  [get_bd_pins axi_ad9625_spi/ip2intc_irpt]   [get_bd_ports ad9625_spi_intr]
-connect_bd_net -net axi_dac_spi_irq  [get_bd_pins axi_dac_spi/ip2intc_irpt]   [get_bd_ports dac_spi_intr]
-connect_bd_net -net axi_ad9625_gpio_irq [get_bd_pins axi_ad9625_gpio/ip2intc_irpt]  [get_bd_ports ad9625_gpio_intr]
+connect_bd_net -net axi_ad9625_gpio_irq [get_bd_pins axi_ad9625_gpio/ip2intc_irpt]  [get_bd_ports ad9625_gpio_intr] 
 
 # connections (gt)
 
@@ -229,7 +205,6 @@ connect_bd_intf_net -intf_net axi_cpu_interconnect_m12_axi [get_bd_intf_pins axi
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m13_axi [get_bd_intf_pins axi_cpu_interconnect/M13_AXI] [get_bd_intf_pins axi_ad9625_1_core/s_axi]
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m14_axi [get_bd_intf_pins axi_cpu_interconnect/M14_AXI] [get_bd_intf_pins axi_ad9625_1_jesd/s_axi]
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m15_axi [get_bd_intf_pins axi_cpu_interconnect/M15_AXI] [get_bd_intf_pins axi_ad9625_1_gt/s_axi]
-connect_bd_intf_net -intf_net axi_cpu_interconnect_m16_axi [get_bd_intf_pins axi_cpu_interconnect/M16_AXI] [get_bd_intf_pins axi_dac_spi/axi_lite]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M07_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M08_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M09_ACLK] $sys_100m_clk_source
@@ -239,7 +214,6 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M12_ACLK] $sy
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M13_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M14_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M15_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M16_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9625_0_gt/s_axi_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9625_0_core/s_axi_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9625_0_jesd/s_axi_aclk]
@@ -250,8 +224,6 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9625_gpio/s_axi_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9625_1_gt/s_axi_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9625_1_core/s_axi_aclk]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9625_1_jesd/s_axi_aclk]
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_dac_spi/s_axi_aclk]
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_dac_spi/ext_spi_clk]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M07_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M08_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M09_ARESETN] $sys_100m_resetn_source
@@ -261,7 +233,6 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M12_ARESET
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M13_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M14_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M15_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M16_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9625_0_gt/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9625_0_core/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9625_0_jesd/s_axi_aresetn]
@@ -271,7 +242,6 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9625_gpio/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9625_1_gt/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9625_1_core/s_axi_aresetn]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9625_1_jesd/s_axi_aresetn]
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_dac_spi/s_axi_aresetn]
 
 # interconnect (gt es)
 
@@ -322,8 +292,6 @@ create_bd_addr_seg -range 0x00001000 -offset 0x44b91000 $sys_addr_cntrl_space [g
 create_bd_addr_seg -range 0x00010000 -offset 0x7c420000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9625_dma/s_axi/axi_lite]      SEG_data_ad9625_dma
 create_bd_addr_seg -range 0x00010000 -offset 0x44a70000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9625_spi/axi_lite/Reg]        SEG_data_ad9625_spi
 create_bd_addr_seg -range 0x00010000 -offset 0x40030000 $sys_addr_cntrl_space [get_bd_addr_segs axi_ad9625_gpio/s_axi/Reg]          SEG_data_ad9625_gpio
-create_bd_addr_seg -range 0x00010000 -offset 0x44a80000 $sys_addr_cntrl_space [get_bd_addr_segs axi_dac_spi/axi_lite/Reg]           SEG_data_dac_spi
-
 
 create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9625_dma/m_dest_axi]  [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]    SEG_axi_ddr_cntrl
 create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ad9625_0_gt/m_axi]      [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]    SEG_axi_ddr_cntrl
