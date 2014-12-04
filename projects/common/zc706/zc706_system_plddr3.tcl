@@ -36,7 +36,8 @@ proc p_plddr3_fifo {p_name m_name adc_data_width} {
   set_property -dict [list CONFIG.XML_INPUT_FILE {zc706_system_mig.prj}] $axi_ddr_cntrl
 
   set axi_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_rstgen]
-
+  set_property -dict [list CONFIG.USE_BOARD_FLOW {true}] $axi_rstgen
+  set_property -dict [list CONFIG.RESET_BOARD_INTERFACE {reset}] $axi_rstgen
 
   set axi_fifo2s [create_bd_cell -type ip -vlnv analog.com:user:axi_fifo2s:1.0 axi_fifo2s]
   set_property -dict [list CONFIG.ADC_DATA_WIDTH $adc_data_width] $axi_fifo2s
