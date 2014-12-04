@@ -65,6 +65,7 @@ set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9652_dma
+set_property -dict [list CONFIG.C_FIFO_SIZE {8}] $axi_ad9652_dma
 
 if {$sys_zynq == 0} {
 
@@ -87,7 +88,7 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
-  set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {125.0}] $sys_ps7
+  set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {170.0}] $sys_ps7
   set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {17}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
