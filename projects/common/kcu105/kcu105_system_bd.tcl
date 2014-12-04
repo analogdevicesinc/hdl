@@ -39,24 +39,8 @@ set_property -dict [list CONFIG.FREQ_HZ {625000000}] $phy_clk
 # instance: microblaze - processor
 
 set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.3 sys_mb]
-set_property -dict [list CONFIG.C_FAULT_TOLERANT {0}] $sys_mb
-set_property -dict [list CONFIG.C_D_AXI {1}] $sys_mb
-set_property -dict [list CONFIG.C_D_LMB {1}] $sys_mb
-set_property -dict [list CONFIG.C_I_LMB {1}] $sys_mb
-set_property -dict [list CONFIG.C_DEBUG_ENABLED {1}] $sys_mb
-set_property -dict [list CONFIG.C_USE_ICACHE {1}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_LINE_LEN {8}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_ALWAYS_USED {1}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
-set_property -dict [list CONFIG.C_USE_DCACHE {1}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_LINE_LEN {4}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_ALWAYS_USED {1}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_HIGHADDR {0xBFFFFFFF}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_BASEADDR {0x80000000}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_HIGHADDR {0xBFFFFFFF}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_BASEADDR {0x80000000}] $sys_mb
 set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
+set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
 
 # instance: microblaze - local memory & bus
 
