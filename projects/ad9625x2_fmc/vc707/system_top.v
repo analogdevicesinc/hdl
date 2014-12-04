@@ -222,16 +222,16 @@ module system_top (
   output            spi_clk;
   inout             spi_sdio;
   output            spi_dirn;
+  output            dac_clk;
+  output            dac_data;
+  output            dac_sync_0;
+  output            dac_sync_1;
 
   input             trig_p;
   input             trig_n;
   output            vdither_p;
   output            vdither_n;
   inout             pwr_good;
-  inout             dac_clk;
-  inout             dac_data;
-  inout             dac_sync_0;
-  inout             dac_sync_1;
   inout             fd_1;
   inout             irq_1;
   inout             fd_0;
@@ -344,22 +344,18 @@ module system_top (
   IBUFDS i_ibufds_trig (
     .I (trig_p),
     .IB (trig_n),
-    .O (gpio_i[18]));
+    .O (gpio_i[14]));
 
   OBUFDS i_obufds_vdither (
-    .I (gpio_o[17]),
+    .I (gpio_o[13]),
     .O (vdither_p),
     .OB (vdither_n));
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
-    .dt (gpio_t[16:0]),
-    .di (gpio_o[16:0]),
-    .do (gpio_i[16:0]),
-    .dio ({ pwr_good,       // 16
-            dac_clk,        // 15
-            dac_data,       // 14
-            dac_sync_0,     // 13
-            dac_sync_1,     // 12
+  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf (
+    .dt (gpio_t[12:0]),
+    .di (gpio_o[12:0]),
+    .do (gpio_i[12:0]),
+    .dio ({ pwr_good,       // 12
             fd_1,           // 11
             irq_1,          // 10
             fd_0,           //  9
@@ -381,6 +377,9 @@ module system_top (
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio),
     .spi_dirn (spi_dirn));
+
+  assign dac_clk  = spi_clk;
+  assign dac_data = spi_mosi;
 
   assign fan_pwm = 1'b1;
 
@@ -476,8 +475,8 @@ module system_top (
     .spdif (spdif),
     .spi_clk_i (1'b0),
     .spi_clk_o (spi_clk),
-    .spi_csn_i (2'b11),
-    .spi_csn_o ({spi_csn_1, spi_csn_0}),
+    .spi_csn_i (4'b1111),
+    .spi_csn_o ({dac_sync_1, dac_sync_0, spi_csn_1, spi_csn_0}),
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (1'b0),
     .spi_sdo_o (spi_mosi),

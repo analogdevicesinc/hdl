@@ -1,8 +1,8 @@
 
 # ad9625
 
-set spi_csn_o       [create_bd_port -dir O -from 1 -to 0 spi_csn_o]
-set spi_csn_i       [create_bd_port -dir I -from 1 -to 0 spi_csn_i]
+set spi_csn_o       [create_bd_port -dir O -from 3 -to 0 spi_csn_o]
+set spi_csn_i       [create_bd_port -dir I -from 3 -to 0 spi_csn_i]
 set spi_clk_i       [create_bd_port -dir I spi_clk_i]
 set spi_clk_o       [create_bd_port -dir O spi_clk_o]
 set spi_sdo_i       [create_bd_port -dir I spi_sdo_i]
@@ -91,15 +91,16 @@ set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
 
 set axi_ad9625_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_ad9625_gpio]
 set_property -dict [list CONFIG.C_IS_DUAL {0}] $axi_ad9625_gpio
-set_property -dict [list CONFIG.C_GPIO_WIDTH {19}] $axi_ad9625_gpio
+set_property -dict [list CONFIG.C_GPIO_WIDTH {15}] $axi_ad9625_gpio
 set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_ad9625_gpio
 
 set axi_ad9625_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_ad9625_spi]
 set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_ad9625_spi
-set_property -dict [list CONFIG.C_NUM_SS_BITS {2}] $axi_ad9625_spi
+set_property -dict [list CONFIG.C_NUM_SS_BITS {4}] $axi_ad9625_spi
 set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_ad9625_spi
 
-p_sys_dmafifo [current_bd_instance .] axi_ad9625_fifo 512 10
+
+p_sys_dmafifo [current_bd_instance .] axi_ad9625_fifo 512 18
 
 # additions to default configuration
 
@@ -121,7 +122,7 @@ connect_bd_net -net gpio_ad9625_o  [get_bd_ports gpio_ad9625_o]     [get_bd_pins
 connect_bd_net -net gpio_ad9625_t  [get_bd_ports gpio_ad9625_t]     [get_bd_pins axi_ad9625_gpio/gpio_io_t]
 
 connect_bd_net -net axi_ad9625_spi_irq  [get_bd_pins axi_ad9625_spi/ip2intc_irpt]   [get_bd_ports ad9625_spi_intr]
-connect_bd_net -net axi_ad9625_gpio_irq [get_bd_pins axi_ad9625_gpio/ip2intc_irpt]  [get_bd_ports ad9625_gpio_intr] 
+connect_bd_net -net axi_ad9625_gpio_irq [get_bd_pins axi_ad9625_gpio/ip2intc_irpt]  [get_bd_ports ad9625_gpio_intr]
 
 # connections (gt)
 
