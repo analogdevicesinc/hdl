@@ -120,19 +120,10 @@ set axi_ethernet_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_re
 set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.1 axi_ethernet]
 set_property -dict [list CONFIG.PHY_TYPE {SGMII}] $axi_ethernet
 set_property -dict [list CONFIG.ENABLE_LVDS {true}] $axi_ethernet
-set_property -dict [list CONFIG.Statistics_Counters {true}] $axi_ethernet
-set_property -dict [list CONFIG.MCAST_EXTEND {true}] $axi_ethernet
-set_property -dict [list CONFIG.TXVLAN_TRAN {true}] $axi_ethernet
-set_property -dict [list CONFIG.TXVLAN_TAG {true}] $axi_ethernet
-set_property -dict [list CONFIG.TXVLAN_STRP {true}] $axi_ethernet
-set_property -dict [list CONFIG.RXVLAN_TRAN {true}] $axi_ethernet
-set_property -dict [list CONFIG.RXVLAN_TAG {true}] $axi_ethernet
-set_property -dict [list CONFIG.RXVLAN_STRP {true}] $axi_ethernet
-set_property -dict [list CONFIG.TXMEM {32k}] $axi_ethernet
-set_property -dict [list CONFIG.TXCSUM {None}] $axi_ethernet
-set_property -dict [list CONFIG.RXMEM {32k}] $axi_ethernet
-set_property -dict [list CONFIG.RXCSUM {None}] $axi_ethernet
-set_property -dict [list CONFIG.SupportLevel {0}] $axi_ethernet
+set_property -dict [list CONFIG.TXCSUM {Full}] $axi_ethernet
+set_property -dict [list CONFIG.RXCSUM {Full}] $axi_ethernet
+set_property -dict [list CONFIG.TXMEM {8k}] $axi_ethernet
+set_property -dict [list CONFIG.RXMEM {8k}] $axi_ethernet
 
 set axi_ethernet_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_ethernet_dma]
 set_property -dict [list CONFIG.c_include_mm2s_dre {1}] $axi_ethernet_dma
