@@ -1,20 +1,5 @@
 # Motor Control
 
-
-#Test
-#reset_property  -dict {PACKAGE_PIN  IOSTANDARD } [get_ports gpio_bd[27]]      ; ## XADC-GIO0
-#reset_property  -dict {PACKAGE_PIN  IOSTANDARD } [get_ports gpio_bd[28]]      ; ## XADC-GIO1
-#reset_property  -dict {PACKAGE_PIN  IOSTANDARD } [get_ports gpio_bd[29]]      ; ## XADC-GIO2
-#reset_property  -dict {PACKAGE_PIN  IOSTANDARD } [get_ports gpio_bd[30]]      ; ## XADC-GIO3
-
-set_property  -dict {PACKAGE_PIN  Y21   IOSTANDARD LVCMOS33} [get_ports gpio_bd[27]]      ; ## XADC-GIO0
-set_property  -dict {PACKAGE_PIN  Y20   IOSTANDARD LVCMOS33} [get_ports gpio_bd[28]]      ; ## XADC-GIO1
-set_property  -dict {PACKAGE_PIN  AB20  IOSTANDARD LVCMOS33} [get_ports gpio_bd[29]]      ; ## XADC-GIO2
-set_property  -dict {PACKAGE_PIN  AB19  IOSTANDARD LVCMOS33} [get_ports gpio_bd[30]]      ; ## XADC-GIO3
-
-#End Test
-
-
 set_property PACKAGE_PIN J16 [get_ports {position_i[0]}]
 set_property IOSTANDARD LVCMOS25 [get_ports {position_i[0]}]
 set_property PACKAGE_PIN J17 [get_ports {position_i[1]}]
@@ -89,31 +74,13 @@ set_property PACKAGE_PIN E21 [get_ports adc_it_clk_d_o]
 set_property IOSTANDARD LVCMOS25 [get_ports adc_it_clk_d_o]
 
 
-set_property PACKAGE_PIN H15 [get_ports {muxaddr_out[0]}]
-set_property IOSTANDARD LVCMOS25 [get_ports {muxaddr_out[0]}]
-set_property PACKAGE_PIN R15 [get_ports {muxaddr_out[1]}]
-set_property IOSTANDARD LVCMOS25 [get_ports {muxaddr_out[1]}]
-set_property PACKAGE_PIN K15 [get_ports {muxaddr_out[2]}]
-set_property IOSTANDARD LVCMOS25 [get_ports {muxaddr_out[2]}]
-set_property PACKAGE_PIN J15 [get_ports {muxaddr_out[3]}]
-set_property IOSTANDARD LVCMOS25 [get_ports {muxaddr_out[3]}]
+#set_property PACKAGE_PIN H15 [get_ports {muxaddr_out[0]}]
+#set_property IOSTANDARD LVCMOS25 [get_ports {muxaddr_out[0]}]
+#set_property PACKAGE_PIN R15 [get_ports {muxaddr_out[1]}]
+#set_property IOSTANDARD LVCMOS25 [get_ports {muxaddr_out[1]}]
+#set_property PACKAGE_PIN K15 [get_ports {muxaddr_out[2]}]
+#set_property IOSTANDARD LVCMOS25 [get_ports {muxaddr_out[2]}]
+#set_property PACKAGE_PIN J15 [get_ports {muxaddr_out[3]}]
+#set_property IOSTANDARD LVCMOS25 [get_ports {muxaddr_out[3]}]
 
-set_property PACKAGE_PIN E16 [get_ports vauxn0]
-set_property IOSTANDARD LVCMOS25 [get_ports vauxn0]
-set_property PACKAGE_PIN D17 [get_ports vauxn8]
-set_property IOSTANDARD LVCMOS25 [get_ports vauxn8]
-set_property PACKAGE_PIN F16 [get_ports vauxp0]
-set_property IOSTANDARD LVCMOS25 [get_ports vauxp0]
-set_property PACKAGE_PIN D16 [get_ports vauxp8]
-set_property IOSTANDARD LVCMOS25 [get_ports vauxp8]
-set_property PACKAGE_PIN M12 [get_ports vn_in]
-set_property IOSTANDARD LVCMOS25 [get_ports vn_in]
-set_property PACKAGE_PIN L11 [get_ports vp_in]
-set_property IOSTANDARD LVCMOS25 [get_ports vp_in]
-
-
-create_clock -name ctrl_clk   -period 20.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
-create_clock -name ps7_clk_2  -period 20.00 [get_pins i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]]
-
-set_clock_groups -asynchronous -group {ctrl_clk}
-set_clock_groups -asynchronous -group {ps7_clk_2}
+set_false_path -through [get_pins {i_system_wrapper/system_i/foc_controller/inst*/*/*/*}]
