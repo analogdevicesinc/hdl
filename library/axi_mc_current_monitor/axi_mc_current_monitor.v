@@ -45,16 +45,16 @@ module axi_mc_current_monitor
 
 // physical interface
 
-    input   adc_ia_dat_i,
-    output  adc_ia_clk_o,
-    input   adc_ib_dat_i,
-    output  adc_ib_clk_o,
-    input   adc_it_dat_i,
-    output  adc_it_clk_o,
-    input   adc_vbus_dat_i,
-    output  adc_vbus_clk_o,
+    input           adc_ia_dat_i,
+    output          adc_ia_clk_o,
+    input           adc_ib_dat_i,
+    output          adc_ib_clk_o,
+    input           adc_it_dat_i,
+    output          adc_it_clk_o,
+    input           adc_vbus_dat_i,
+    output          adc_vbus_clk_o,
 
-    input   ref_clk,
+    input           ref_clk,
 
     output [17:0]   ia_o,
     output [17:0]   ib_o,
@@ -106,7 +106,8 @@ reg             adc_valid       = 'd0;
 reg     [63:0]  adc_data        = 'd0;
 reg     [47:0]  adc_data_3      = 'd0;
 reg     [31:0]  up_rdata        = 'd0;
-reg             up_ack          = 'd0;
+reg             up_wack          = 'd0;
+reg             up_rack          = 'd0;
 reg     [1:0]   adc_data_cnt    = 'd0;
 reg     [9:0]   adc_clk_cnt     = 'd0;  // used to generate 10 MHz clock for ADCs
 reg             adc_clk_reg     = 'd0;  // used to generate 10 MHz clock for ADCs
@@ -136,9 +137,10 @@ wire            up_clk;
 
 // internal signals
 
-wire            up_sel_s;
-wire            up_wr_s;
-wire    [13:0]  up_addr_s;
+wire            up_rreq_s;
+wire            up_wreq_s;
+wire    [13:0]  up_waddr_s;
+wire    [13:0]  up_raddr_s;
 wire    [31:0]  up_wdata_s;
 wire    [31:0]  up_adc_common_rdata_s;
 wire            up_adc_common_ack_s;
@@ -483,12 +485,14 @@ begin
     if(up_rstn == 0)
     begin
         up_rdata  <= 'd0;
-        up_ack    <= 'd0;
+        up_rack    <= 'd0;
+        up_wack    <= 'd0;
     end
     else
     begin
         up_rdata  <= up_adc_common_rdata_s | up_rdata_0_s | up_rdata_1_s | up_rdata_2_s | up_rdata_3_s ;
-        up_ack    <= up_adc_common_ack_s | up_ack_0_s | up_ack_1_s | up_ack_2_s | up_ack_3_s ;
+        up_rack    <= up_adc_common_rack_s | up_rack_0_s | up_rack_1_s | up_rack_2_s | up_rack_3_s ;
+        up_wack    <= up_adc_common_wack_s | up_wack_0_s | up_wack_1_s | up_wack_2_s | up_wack_3_s ;
     end
 end
 
@@ -547,6 +551,8 @@ up_adc_channel #(.PCORE_ADC_CHID(0)) i_up_adc_channel_ia(
     .adc_dcfilt_coeff(),
     .adc_iqcor_coeff_1(),
     .adc_iqcor_coeff_2(),
+    .adc_pnseq_sel(),
+    .adc_data_sel(),
     .adc_pn_err(1'b0),
     .adc_pn_oos(1'b0),
     .adc_or(1'b0),
@@ -569,12 +575,14 @@ up_adc_channel #(.PCORE_ADC_CHID(0)) i_up_adc_channel_ia(
     .adc_usr_decimation_n(16'd1),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
-    .up_sel(up_sel_s),
-    .up_wr(up_wr_s),
-    .up_addr(up_addr_s),
-    .up_wdata(up_wdata_s),
-    .up_rdata(up_rdata_0_s),
-    .up_ack(up_ack_0_s));
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_0_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_0_s),
+    .up_rack (up_rack_0_s));
 
 up_adc_channel #(.PCORE_ADC_CHID(1)) i_up_adc_channel_ib(
     .adc_clk(adc_clk_s),
@@ -611,12 +619,14 @@ up_adc_channel #(.PCORE_ADC_CHID(1)) i_up_adc_channel_ib(
     .adc_usr_decimation_n(16'd1),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
-    .up_sel(up_sel_s),
-    .up_wr(up_wr_s),
-    .up_addr(up_addr_s),
-    .up_wdata(up_wdata_s),
-    .up_rdata(up_rdata_1_s),
-    .up_ack(up_ack_1_s));
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_1_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_1_s),
+    .up_rack (up_rack_1_s));
 
 up_adc_channel #(.PCORE_ADC_CHID(2)) i_up_adc_channel_it(
     .adc_clk(adc_clk_s),
@@ -653,12 +663,14 @@ up_adc_channel #(.PCORE_ADC_CHID(2)) i_up_adc_channel_it(
     .adc_usr_decimation_n(16'd1),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
-    .up_sel(up_sel_s),
-    .up_wr(up_wr_s),
-    .up_addr(up_addr_s),
-    .up_wdata(up_wdata_s),
-    .up_rdata(up_rdata_2_s),
-    .up_ack(up_ack_2_s));
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_2_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_2_s),
+    .up_rack (up_rack_2_s));
 
 up_adc_channel #(.PCORE_ADC_CHID(3)) i_up_adc_channel_vbus(
     .adc_clk(adc_clk_s),
@@ -695,13 +707,14 @@ up_adc_channel #(.PCORE_ADC_CHID(3)) i_up_adc_channel_vbus(
     .adc_usr_decimation_n(16'd1),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
-    .up_sel(up_sel_s),
-    .up_wr(up_wr_s),
-    .up_addr(up_addr_s),
-    .up_wdata(up_wdata_s),
-    .up_rdata(up_rdata_3_s),
-    .up_ack(up_ack_3_s));
-
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_3_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_3_s),
+    .up_rack (up_rack_3_s));
 
 // common processor control
 
@@ -713,9 +726,16 @@ up_adc_common i_up_adc_common(
     .adc_ddr_edgesel(),
     .adc_pin_mode(),
     .adc_status(1'b1),
+    .adc_sync_status(1'b0),
     .adc_status_ovf(adc_dovf_i),
     .adc_status_unf(adc_dunf_i),
     .adc_clk_ratio(32'd1),
+    .adc_start_code(),
+    .adc_sync(),
+
+    .up_status_pn_err(1'b0),
+    .up_status_pn_oos(1'b0),
+    .up_status_or(1'b0),
 
     .delay_clk(1'b0),
     .delay_rst(),
@@ -739,16 +759,19 @@ up_adc_common i_up_adc_common(
 
     .up_usr_chanmax(),
     .adc_usr_chanmax(8'd0),
+    .up_adc_gpio_in(32'h0),
+    .up_adc_gpio_out(),
 
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_sel(up_sel_s),
-    .up_wr(up_wr_s),
-    .up_addr(up_addr_s),
-    .up_wdata(up_wdata_s),
-    .up_rdata(up_adc_common_rdata_s),
-    .up_ack(up_adc_common_ack_s)
-);
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_adc_common_wack_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_adc_common_rdata_s),
+    .up_rack (up_adc_common_rack_s));
 
 // up bus interface
 
@@ -772,12 +795,14 @@ up_axi i_up_axi(
         .up_axi_rresp(s_axi_rresp),
         .up_axi_rdata(s_axi_rdata),
         .up_axi_rready(s_axi_rready),
-        .up_sel(up_sel_s),
-        .up_wr(up_wr_s),
-        .up_addr(up_addr_s),
-        .up_wdata(up_wdata_s),
-        .up_rdata(up_rdata),
-        .up_ack(up_ack));
+        .up_wreq (up_wreq_s),
+        .up_waddr (up_waddr_s),
+        .up_wdata (up_wdata_s),
+        .up_wack (up_wack),
+        .up_rreq (up_rreq_s),
+        .up_raddr (up_raddr_s),
+        .up_rdata (up_rdata),
+        .up_rack (up_rack));
 
 endmodule
 
