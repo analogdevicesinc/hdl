@@ -41,22 +41,26 @@
 
   set gpo_o [ create_bd_port -dir O -from 7 -to 0 gpo_o ]
 
+  # interrupts
+
+  set motcon1_c_m_1_irq  [create_bd_port -dir O motcon1_c_m_1_irq]
+  set motcon1_c_m_2_irq  [create_bd_port -dir O motcon1_c_m_2_irq]
+  set motcon1_s_d_irq  [create_bd_port -dir O motcon1_s_d_irq]
+  set motcon1_ctrl_irq  [create_bd_port -dir O motcon1_ctrl_irq]
+
   # xadc interface
 
-  set vp_in [ create_bd_port -dir I vp_in ]
-  set vn_in [ create_bd_port -dir I vn_in ]
-  set vauxp0 [ create_bd_port -dir I vauxp0 ]
-  set vauxn0 [ create_bd_port -dir I vauxn0 ]
-  set vauxp8 [ create_bd_port -dir I vauxp8 ]
-  set vauxn8 [ create_bd_port -dir I vauxn8 ]
-  set muxaddr_out [ create_bd_port -dir O -from 4 -to 0 muxaddr_out ]
+  #create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux0
+  #create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux8
+  #create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vp_Vn
+
+  #set muxaddr_out [ create_bd_port -dir O -from 4 -to 0 muxaddr_out ]
 
   # additions to default configuration
 
-  set_property -dict [list CONFIG.NUM_PORTS {7}] $sys_concat_intc
   set_property -dict [list CONFIG.NUM_MI {17}] $axi_cpu_interconnect
-  set_property -dict [ list CONFIG.PCW_USE_S_AXI_HP1 {1} ] $sys_ps7
-  set_property -dict [ list CONFIG.PCW_EN_CLK2_PORT {1} ] $sys_ps7
+  set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1} ] $sys_ps7
+  set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1} ] $sys_ps7
 
   # current monitor 1 peripherals
 
@@ -109,7 +113,8 @@
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC  {256}] $axi_controller_dma
 
   # controller ILA
-  set ila_controller [ create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_controller ]
+  set ila_controller [ create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_controller ]
+  set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_controller
   set_property -dict [ list CONFIG.C_ADV_TRIGGER {true} ] $ila_controller
   set_property -dict [ list CONFIG.C_DATA_DEPTH {8192} ] $ila_controller
   set_property -dict [ list CONFIG.C_EN_STRG_QUAL {1} ] $ila_controller
@@ -144,16 +149,14 @@
 
   # xadc
 
-  set xadc_wiz_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.0 xadc_wiz_1 ]
-  set_property -dict [ list CONFIG.XADC_STARUP_SELECTION {simultaneous_sampling} ] $xadc_wiz_1
-  set_property -dict [ list CONFIG.OT_ALARM {false} ] $xadc_wiz_1
-  set_property -dict [ list CONFIG.USER_TEMP_ALARM {false} ] $xadc_wiz_1
-  set_property -dict [ list CONFIG.VCCINT_ALARM {false} ] $xadc_wiz_1
-  set_property -dict [ list CONFIG.VCCAUX_ALARM {false} ] $xadc_wiz_1
-  set_property -dict [ list CONFIG.ENABLE_EXTERNAL_MUX {true} ] $xadc_wiz_1
-  set_property -dict [ list CONFIG.EXTERNAL_MUX_CHANNEL {VAUXP0_VAUXN0} ] $xadc_wiz_1
-  set_property -dict [ list CONFIG.CHANNEL_ENABLE_VAUXP0_VAUXN0 {true} ] $xadc_wiz_1
-  set_property -dict [ list CONFIG.CHANNEL_ENABLE_VAUXP1_VAUXN1 {false}  ] $xadc_wiz_1
+#  set xadc_wiz_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.0 xadc_wiz_1 ]
+#  set_property -dict [ list CONFIG.XADC_STARUP_SELECTION {simultaneous_sampling} ] $xadc_wiz_1
+#  set_property -dict [ list CONFIG.OT_ALARM {false} ] $xadc_wiz_1
+#  set_property -dict [ list CONFIG.USER_TEMP_ALARM {false} ] $xadc_wiz_1
+#  set_property -dict [ list CONFIG.VCCINT_ALARM {false} ] $xadc_wiz_1
+#  set_property -dict [ list CONFIG.VCCAUX_ALARM {false} ] $xadc_wiz_1
+#  set_property -dict [ list CONFIG.ENABLE_EXTERNAL_MUX {true} ] $xadc_wiz_1
+#  set_property -dict [list CONFIG.EXTERNAL_MUX_CHANNEL {VAUXP0_VAUXN0}] $xadc_wiz_1
 
   # additional interconnect
 
@@ -164,7 +167,7 @@
 
   # position
 
-  connect_bd_net -net position_i_1 [get_bd_ports position_i] [get_bd_pins axi_mc_speed_1/position_i] 
+  connect_bd_net -net position_i_1 [get_bd_ports position_i] [get_bd_pins axi_mc_speed_1/position_i]
   connect_bd_net -net position_i_1 [get_bd_pins axi_mc_speed_1/bemf_i]
 
   # current monitor 1
@@ -193,7 +196,7 @@
 
   # interrupt
 
-  connect_bd_net -net axi_current_monitor_1_dma_irq [get_bd_pins axi_current_monitor_1_dma/irq] [get_bd_pins sys_concat_intc/In2]
+  connect_bd_net -net axi_current_monitor_1_dma_irq [get_bd_pins axi_current_monitor_1_dma/irq] [get_bd_ports motcon1_c_m_1_irq]
 
   # current monitor 2
 
@@ -214,7 +217,7 @@
 
   #interrupt
 
-  connect_bd_net -net axi_current_monitor_2_dma_irq [get_bd_pins axi_current_monitor_2_dma/irq] [get_bd_pins sys_concat_intc/In6]
+  connect_bd_net -net axi_current_monitor_2_dma_irq [get_bd_pins axi_current_monitor_2_dma/irq] [get_bd_ports motcon1_c_m_2_irq]
 
   # speed detector
 
@@ -229,7 +232,7 @@
 
   # interrupt
 
-  connect_bd_net -net axi_speed_detector_dma_irq [get_bd_pins axi_speed_detector_dma/irq] [get_bd_pins sys_concat_intc/In3]
+  connect_bd_net -net axi_speed_detector_dma_irq [get_bd_pins axi_speed_detector_dma/irq] [get_bd_ports motcon1_s_d_irq]
 
   # controller
 
@@ -314,20 +317,17 @@
 
   # interrupt
 
-  connect_bd_net -net axi_controller_dma_irq [get_bd_pins axi_controller_dma/irq] [get_bd_pins sys_concat_intc/In5]
+  connect_bd_net -net axi_controller_dma_irq [get_bd_pins axi_controller_dma/irq] [get_bd_ports motcon1_ctrl_irq]
 
   # xadc
 
-  connect_bd_net -net sys_100m_clk [get_bd_pins xadc_wiz_1/s_axi_aclk] $sys_100m_clk_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins xadc_wiz_1/s_axi_aresetn] $sys_100m_resetn_source
+#  connect_bd_net -net sys_100m_clk [get_bd_pins xadc_wiz_1/s_axi_aclk] $sys_100m_clk_source
+#  connect_bd_net -net sys_100m_resetn [get_bd_pins xadc_wiz_1/s_axi_aresetn] $sys_100m_resetn_source
 
-  connect_bd_net -net vp_in_1 [get_bd_ports vp_in] [get_bd_pins xadc_wiz_1/vp_in]
-  connect_bd_net -net vn_in_1 [get_bd_ports vn_in] [get_bd_pins xadc_wiz_1/vn_in]
-  connect_bd_net -net vauxp0_1 [get_bd_ports vauxp0] [get_bd_pins xadc_wiz_1/vauxp0]
-  connect_bd_net -net vauxn0_1 [get_bd_ports vauxn0] [get_bd_pins xadc_wiz_1/vauxn0]
-  connect_bd_net -net vauxp8_1 [get_bd_ports vauxp8] [get_bd_pins xadc_wiz_1/vauxp8]
-  connect_bd_net -net vauxn8_1 [get_bd_ports vauxn8] [get_bd_pins xadc_wiz_1/vauxn8]
-  connect_bd_net -net xadc_wiz_1_muxaddr_out [get_bd_ports muxaddr_out] [get_bd_pins xadc_wiz_1/muxaddr_out]
+#  connect_bd_intf_net [get_bd_intf_pins xadc_wiz_1/Vp_Vn] [get_bd_intf_ports Vp_Vn]
+#  connect_bd_intf_net [get_bd_intf_pins xadc_wiz_1/Vaux0] [get_bd_intf_ports Vaux0]
+#  connect_bd_intf_net [get_bd_intf_pins xadc_wiz_1/Vaux8] [get_bd_intf_ports Vaux8]
+#  connect_bd_net -net xadc_wiz_1_muxaddr_out [get_bd_ports muxaddr_out] [get_bd_pins xadc_wiz_1/muxaddr_out]
 
   # interconnect (cpu)
 
@@ -335,7 +335,7 @@
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m08_axi [get_bd_intf_pins axi_cpu_interconnect/M08_AXI] [get_bd_intf_pins axi_mc_speed_1/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m09_axi [get_bd_intf_pins axi_cpu_interconnect/M09_AXI] [get_bd_intf_pins axi_mc_controller/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m10_axi [get_bd_intf_pins axi_cpu_interconnect/M10_AXI] [get_bd_intf_pins axi_mc_current_monitor_2/s_axi]
-  connect_bd_intf_net -intf_net axi_cpu_interconnect_m11_axi [get_bd_intf_pins axi_cpu_interconnect/M11_AXI] [get_bd_intf_pins xadc_wiz_1/s_axi_lite]
+#  connect_bd_intf_net -intf_net axi_cpu_interconnect_m11_axi [get_bd_intf_pins axi_cpu_interconnect/M11_AXI] [get_bd_intf_pins xadc_wiz_1/s_axi_lite]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m12_axi [get_bd_intf_pins axi_cpu_interconnect/M12_AXI] [get_bd_intf_pins axi_speed_detector_dma/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m13_axi [get_bd_intf_pins axi_cpu_interconnect/M13_AXI] [get_bd_intf_pins axi_current_monitor_1_dma/s_axi]
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m14_axi [get_bd_intf_pins axi_cpu_interconnect/M14_AXI] [get_bd_intf_pins axi_current_monitor_2_dma/s_axi]
@@ -441,7 +441,7 @@
   create_bd_addr_seg -range 0x10000   -offset 0x40510000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_speed_1/s_axi/axi_lite] SEG_data_s_d
   create_bd_addr_seg -range 0x10000   -offset 0x40520000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_controller/s_axi/axi_lite] SEG_data_t_c
   create_bd_addr_seg -range 0x10000   -offset 0x40530000 $sys_addr_cntrl_space  [get_bd_addr_segs axi_mc_current_monitor_2/s_axi/axi_lite] SEG_data_c_m_2
-  create_bd_addr_seg -range 0x10000   -offset 0x43200000 $sys_addr_cntrl_space  [get_bd_addr_segs xadc_wiz_1/s_axi_lite/Reg] SEG_data_xadc
+#  create_bd_addr_seg -range 0x10000   -offset 0x43200000 $sys_addr_cntrl_space  [get_bd_addr_segs xadc_wiz_1/s_axi_lite/Reg] SEG_data_xadc
   create_bd_addr_seg -range 0x4000000 -offset 0x7C000000 $sys_addr_cntrl_space  [get_bd_addr_segs foc_controller/s_axi/axi_lite] SEG_foc_controller_f_c
 
   create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_current_monitor_1_dma/m_dest_axi] [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_hp1_ddr_lowocm
