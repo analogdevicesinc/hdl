@@ -120,6 +120,7 @@ set axi_ethernet_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_re
 set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.1 axi_ethernet]
 set_property -dict [list CONFIG.PHY_TYPE {SGMII}] $axi_ethernet
 set_property -dict [list CONFIG.ENABLE_LVDS {true}] $axi_ethernet
+set_property -dict [list CONFIG.SupportLevel {0}] $axi_ethernet
 set_property -dict [list CONFIG.TXCSUM {Full}] $axi_ethernet
 set_property -dict [list CONFIG.RXCSUM {Full}] $axi_ethernet
 set_property -dict [list CONFIG.TXMEM {8k}] $axi_ethernet
