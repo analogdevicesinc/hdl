@@ -211,7 +211,7 @@ system_wrapper i_system_wrapper (
     .ps_intr_8 (ps_intrs[8]),
     .ps_intr_9 (ps_intrs[9]),
     .ad9265_spi (ps_intrs[2]),
-    .ad9265_dma_irq (ps_intrs[12]),
+    .ad9265_dma_irq (ps_intrs[13]),
     .spdif (spdif),
     .adc_clk_in_n(adc_clk_in_n),
     .adc_clk_in_p(adc_clk_in_p),
