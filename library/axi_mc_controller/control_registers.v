@@ -42,17 +42,19 @@ module control_registers
 
     input              up_rstn,
     input              up_clk,
-    input              up_sel,
-    input              up_wr,
-    input      [13:0]  up_addr,
+    input              up_wreq,
+    input      [13:0]  up_waddr,
     input      [31:0]  up_wdata,
+    output reg         up_wack,
+    input              up_rreq,
+    input      [13:0]  up_raddr,
     output reg [31:0]  up_rdata,
-    output reg         up_ack,
+    output reg         up_rack,
 
 //control
 
     input  [31:0]  err_i,
-    output [31:0]  pwm_open_o,
+    output [10:0]  pwm_open_o,
     output [31:0]  reference_speed_o,
     output [31:0]  kp_o,
     output [31:0]  ki_o,
@@ -96,15 +98,15 @@ reg [10:0] gpo_r;
 
 //internal signals
 
-wire        up_sel_s;
-wire        up_wr_s;
+wire        up_wreq_s;
+wire        up_rreq_s;
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
 //------------------------------------------------------------------------------
 
-assign up_sel_s = (up_addr[13:4] == 10'h00) ? up_sel : 1'b0;
-assign up_wr_s = up_sel_s & up_wr;
+assign up_wreq_s = (up_waddr[13:4] == 10'h00) ? up_wreq : 1'b0;
+assign up_rreq_s = (up_raddr[13:4] == 10'h00) ? up_rreq : 1'b0;
 
 assign run_o                    = control_r[0];     // Run the motor
 assign break_o                  = control_r[2];     // Activate the Break circuit
@@ -115,7 +117,7 @@ assign calibrate_adcs_o         = control_r[16];
 assign oloop_matlab_o           = control_r[12];    // Select between open loop control [0] and matlab control [1]
 assign gpo_o                    = control_r[30:20];
 
-assign pwm_open_o               = pwm_open_r;       // PWM value, for open loop control
+assign pwm_open_o               = pwm_open_r[10:0];       // PWM value, for open loop control
 assign reference_speed_o        = reference_speed_r;
 assign kp_o                     = kp_r;             // KP controller parameter
 assign ki_o                     = ki_r;             // KI controller parameter
@@ -130,6 +132,7 @@ always @(negedge up_rstn or posedge up_clk)
 begin
    if (up_rstn == 0)
    begin
+       up_wack              <= 1'b0;
        control_r            <= 'h0;
        reference_speed_r    <= 'd1000;
        kp_r                 <= 'd6554;
@@ -144,51 +147,52 @@ begin
    end
    else
    begin
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h3))
+       up_wack  <= up_wreq_s;
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h3))
        begin
            reserved_r1          <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h4))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h4))
        begin
            control_r            <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h5))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h5))
        begin
            reference_speed_r    <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h6))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h6))
        begin
            kp_r                 <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h7))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h7))
        begin
            ki_r                 <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h8))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h8))
        begin
            kd_r                 <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'h9))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'h9))
        begin
            kp1_r                <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'ha))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'ha))
        begin
            ki1_r                <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'hb))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'hb))
        begin
            kd1_r                <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'hc))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'hc))
        begin
            pwm_open_r          <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'hd))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'hd))
        begin
            pwm_break_r         <= up_wdata;
        end
-       if ((up_wr_s == 1'b1) && (up_addr[3:0] == 4'he))
+       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'he))
        begin
            status_r            <= up_wdata;
        end
@@ -200,14 +204,14 @@ end
 always @(negedge up_rstn or posedge up_clk)
 begin
     if (up_rstn == 0) begin
-        up_ack <= 'd0;
+        up_rack <= 'd0;
         up_rdata <= 'd0;
     end
     else
     begin
-        up_ack <= up_sel_s;
-        if (up_sel_s == 1'b1) begin
-            case (up_addr[3:0])
+        up_rack <= up_rreq_s;
+        if (up_rreq_s == 1'b1) begin
+            case (up_raddr[3:0])
                 4'h3: up_rdata <= reserved_r1;
                 4'h4: up_rdata <= control_r;
                 4'h5: up_rdata <= reference_speed_r;
