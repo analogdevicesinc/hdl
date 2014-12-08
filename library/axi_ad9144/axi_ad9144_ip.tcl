@@ -20,7 +20,8 @@ adi_ip_files axi_ad9144 [list \
   "axi_ad9144_channel.v" \
   "axi_ad9144_core.v" \
   "axi_ad9144_if.v" \
-  "axi_ad9144.v" ]
+  "axi_ad9144.v" \
+  "axi_ad9144_constr.xdc" ]
 
 adi_ip_properties axi_ad9144
 adi_ip_constraints axi_ad9144 [list \

@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -65,7 +65,7 @@ module system_top (
   FIXED_IO_ps_srstb,
 
   gpio_bd,
-  
+
   hdmi_out_clk,
   hdmi_vsync,
   hdmi_hsync,
@@ -73,7 +73,7 @@ module system_top (
   hdmi_data,
 
   spdif,
-  
+
   iic_scl,
   iic_sda,
 
@@ -97,11 +97,16 @@ module system_top (
   gpio_en_agc,
   gpio_ctl,
   gpio_status,
-  
+
   spi_csn,
   spi_clk,
   spi_mosi,
-  spi_miso);
+  spi_miso,
+
+  spi_udc_csn_tx,
+  spi_udc_csn_rx,
+  spi_udc_sclk,
+  spi_udc_data);
 
   inout   [14:0]  DDR_addr;
   inout   [ 2:0]  DDR_ba;
@@ -127,7 +132,7 @@ module system_top (
   inout           FIXED_IO_ps_srstb;
 
   inout   [14:0]  gpio_bd;
-  
+
   output          hdmi_out_clk;
   output          hdmi_vsync;
   output          hdmi_hsync;
@@ -135,7 +140,7 @@ module system_top (
   output  [23:0]  hdmi_data;
 
   output          spdif;
-  
+
   inout           iic_scl;
   inout           iic_sda;
 
@@ -159,74 +164,38 @@ module system_top (
   inout           gpio_en_agc;
   inout   [ 3:0]  gpio_ctl;
   inout   [ 7:0]  gpio_status;
-  
+
   output          spi_csn;
   output          spi_clk;
   output          spi_mosi;
   input           spi_miso;
+
+  output          spi_udc_csn_tx;
+  output          spi_udc_csn_rx;
+  output          spi_udc_sclk;
+  output          spi_udc_data;
 
   // internal signals
 
   wire    [48:0]  gpio_i;
   wire    [48:0]  gpio_o;
   wire    [48:0]  gpio_t;
+  wire    [15:0]  ps_intrs;
 
   // instantiations
 
-  IOBUF i_iobuf_gpio_txnrx (
-    .I (gpio_o[48]),
-    .O (gpio_i[48]),
-    .T (gpio_t[48]),
-    .IO (gpio_txnrx));
-
-  IOBUF i_iobuf_gpio_enable (
-    .I (gpio_o[47]),
-    .O (gpio_i[47]),
-    .T (gpio_t[47]),
-    .IO (gpio_enable));
-
-  IOBUF i_iobuf_gpio_resetb (
-    .I (gpio_o[46]),
-    .O (gpio_i[46]),
-    .T (gpio_t[46]),
-    .IO (gpio_resetb));
-
-  IOBUF i_iobuf_gpio_sync (
-    .I (gpio_o[45]),
-    .O (gpio_i[45]),
-    .T (gpio_t[45]),
-    .IO (gpio_sync));
-
-  IOBUF i_iobuf_gpio_en_agc (
-    .I (gpio_o[44]),
-    .O (gpio_i[44]),
-    .T (gpio_t[44]),
-    .IO (gpio_en_agc));
-
-  genvar n;
-  generate
-  for (n = 0; n <= 3; n = n + 1) begin: g_iobuf_gpio_ctl
-  IOBUF i_iobuf_gpio_ctl (
-    .I (gpio_o[40+n]),
-    .O (gpio_i[40+n]),
-    .T (gpio_t[40+n]),
-    .IO (gpio_ctl[n]));
-  end
-  for (n = 0; n <= 7; n = n + 1) begin: g_iobuf_gpio_status
-  IOBUF i_iobuf_gpio_status (
-    .I (gpio_o[32+n]),
-    .O (gpio_i[32+n]),
-    .T (gpio_t[32+n]),
-    .IO (gpio_status[n]));
-  end
-  for (n = 0; n <= 14; n = n + 1) begin: g_iobuf_gpio_bd
-  IOBUF i_iobuf_gpio_bd (
-    .I (gpio_o[n]),
-    .O (gpio_i[n]),
-    .T (gpio_t[n]),
-    .IO (gpio_bd[n]));
-  end
-  endgenerate
+  ad_iobuf #(.DATA_WIDTH(32)) i_iobuf (
+    .dt ({gpio_t[48:32],gpio_t[14:0]}),
+    .di ({gpio_o[48:32],gpio_o[14:0]}),
+    .do ({gpio_i[48:32],gpio_i[14:0]}),
+    .dio({  gpio_txnrx,
+            gpio_enable,
+            gpio_resetb,
+            gpio_sync,
+            gpio_en_agc,
+            gpio_ctl,
+            gpio_status,
+            gpio_bd}));
 
   system_wrapper i_system_wrapper (
     .DDR_addr (DDR_addr),
@@ -260,6 +229,22 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
+    .ps_intr_0 (ps_intrs[0]),
+    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_10 (ps_intrs[10]),
+    .ps_intr_11 (ps_intrs[11]),
+    .ps_intr_12 (ps_intrs[12]),
+    .ps_intr_13 (ps_intrs[13]),
+    .ps_intr_2 (ps_intrs[2]),
+    .ps_intr_3 (ps_intrs[3]),
+    .ps_intr_4 (ps_intrs[4]),
+    .ps_intr_5 (ps_intrs[5]),
+    .ps_intr_6 (ps_intrs[6]),
+    .ps_intr_7 (ps_intrs[7]),
+    .ps_intr_8 (ps_intrs[8]),
+    .ps_intr_9 (ps_intrs[9]),
+    .ad9361_dac_dma_irq (ps_intrs[12]),
+    .ad9361_adc_dma_irq (ps_intrs[13]),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
     .rx_data_in_n (rx_data_in_n),
@@ -268,7 +253,7 @@ module system_top (
     .rx_frame_in_p (rx_frame_in_p),
     .spdif (spdif),
     .spi_csn_i (1'b1),
-    .spi_csn_o (spi_csn),    
+    .spi_csn_o (spi_csn),
     .spi_miso_i (spi_miso),
     .spi_mosi_i (1'b0),
     .spi_mosi_o (spi_mosi),
@@ -279,7 +264,15 @@ module system_top (
     .tx_data_out_n (tx_data_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
-    .tx_frame_out_p (tx_frame_out_p));
+    .tx_frame_out_p (tx_frame_out_p),
+    .spi_udc_clk_i (1'b0),
+    .spi_udc_clk_o (spi_udc_sclk),
+    .spi_udc_csn_i (1'b1),
+    .spi_udc_csn_tx_o (spi_udc_csn_tx),
+    .spi_udc_csn_rx_o (spi_udc_csn_rx),
+    .spi_udc_mosi_i (spi_udc_data),
+    .spi_udc_mosi_o (spi_udc_data),
+    .spi_udc_miso_i (1'b0));
 
 endmodule
 

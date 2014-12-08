@@ -61,12 +61,14 @@ module axi_ad9234_channel (
 
   up_rstn,
   up_clk,
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack);
+  up_rack);
 
   // parameters
 
@@ -77,7 +79,7 @@ module axi_ad9234_channel (
 
   input           adc_clk;
   input           adc_rst;
-  input   [55:0]  adc_data;
+  input   [63:0]  adc_data;
   input           adc_or;
 
   // channel interface
@@ -92,20 +94,19 @@ module axi_ad9234_channel (
 
   input           up_rstn;
   input           up_clk;
-  input           up_sel;
-  input           up_wr;
-  input   [13:0]  up_addr;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
   input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
   output  [31:0]  up_rdata;
-  output          up_ack;
+  output          up_rack;
 
   // internal signals
 
   wire            adc_pn_oos_s;
   wire            adc_pn_err_s;
-  wire            adc_dfmt_enable_s;
-  wire            adc_dfmt_type_s;
-  wire            adc_dfmt_se_s;
   wire    [ 3:0]  adc_pnseq_sel_s;
 
   // instantiations
@@ -117,20 +118,7 @@ module axi_ad9234_channel (
     .adc_pn_err (adc_pn_err_s),
     .adc_pnseq_sel (adc_pnseq_sel_s));
 
-  genvar n;
-  generate
-  for (n = 0; n < 4; n = n + 1) begin: g_ad_datafmt_1
-  ad_datafmt #(.DATA_WIDTH(14)) i_ad_datafmt (
-    .clk (adc_clk),
-    .valid (1'b1),
-    .data (adc_data[n*14+13:n*14]),
-    .valid_out (),
-    .data_out (adc_dfmt_data[n*16+15:n*16]),
-    .dfmt_enable (adc_dfmt_enable_s),
-    .dfmt_type (adc_dfmt_type_s),
-    .dfmt_se (adc_dfmt_se_s));
-  end
-  endgenerate
+  assign adc_dfmt_data = adc_data;
 
   up_adc_channel #(.PCORE_ADC_CHID(CHID)) i_up_adc_channel (
     .adc_clk (adc_clk),
@@ -138,9 +126,9 @@ module axi_ad9234_channel (
     .adc_enable (adc_enable),
     .adc_iqcor_enb (),
     .adc_dcfilt_enb (),
-    .adc_dfmt_se (adc_dfmt_se_s),
-    .adc_dfmt_type (adc_dfmt_type_s),
-    .adc_dfmt_enable (adc_dfmt_enable_s),
+    .adc_dfmt_se (),
+    .adc_dfmt_type (),
+    .adc_dfmt_enable (),
     .adc_dcfilt_offset (),
     .adc_dcfilt_coeff (),
     .adc_iqcor_coeff_1 (),
@@ -169,12 +157,14 @@ module axi_ad9234_channel (
     .adc_usr_decimation_n (16'd1),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata),
-    .up_ack (up_ack));
+    .up_rack (up_rack));
 
 endmodule
 

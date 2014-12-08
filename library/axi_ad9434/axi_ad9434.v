@@ -139,12 +139,14 @@ module axi_ad9434 (
   wire            drp_clk;
 
   // internal signals
-  wire            up_sel_s;
-  wire            up_wr_s;
-  wire    [13:0]  up_addr_s;
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+  wire    [13:0]  up_waddr_s;
+  wire    [13:0]  up_raddr_s;
   wire    [31:0]  up_wdata_s;
   wire    [31:0]  up_rdata_s;
-  wire            up_ack_s;
+  wire            up_wack_s;
+  wire            up_rack_s;
 
   wire    [ 1:0]  up_status_pn_err_s;
   wire    [ 1:0]  up_status_pn_oos_s;
@@ -247,12 +249,14 @@ module axi_ad9434 (
     .drp_locked (drp_locked_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s),
-    .up_ack (up_ack_s));
+    .up_rack (up_rack_s));
 
   // up bus interface
   up_axi i_up_axi (
@@ -275,11 +279,13 @@ module axi_ad9434 (
     .up_axi_rresp (s_axi_rresp),
     .up_axi_rdata (s_axi_rdata),
     .up_axi_rready (s_axi_rready),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
     .up_rdata (up_rdata_s),
-    .up_ack (up_ack_s));
+    .up_wack (up_wack_s),
+    .up_raddr (up_raddr_s),
+    .up_rreq (up_rreq_s),
+    .up_rack (up_rack_s));
 
 endmodule

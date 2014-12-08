@@ -170,13 +170,12 @@ module system_top (
   wire    [48:0]  gpio_i;
   wire    [48:0]  gpio_o;
   wire    [48:0]  gpio_t;
-  wire    [16:0]  gpio_wire;
 
   wire            clk;
   wire            dma_dac_dunf;
   wire            core_dac_dunf;
-  wire    [127:0] dma_dac_ddata;
-  wire    [127:0] core_dac_ddata;
+  wire    [63:0]  dma_dac_ddata;
+  wire    [63:0]  core_dac_ddata;
   wire            dma_dac_en;
   wire            core_dac_en;
   wire            dma_dac_dvalid;
@@ -184,8 +183,8 @@ module system_top (
 
   wire            dma_adc_ovf;
   wire            core_adc_ovf;
-  wire    [127:0] dma_adc_ddata;
-  wire    [127:0] core_adc_ddata;
+  wire    [63:0]  dma_adc_ddata;
+  wire    [63:0]  core_adc_ddata;
   wire            dma_adc_dwr;
   wire            core_adc_dwr;
   wire            dma_adc_dsync;
@@ -197,11 +196,13 @@ module system_top (
   wire    [31:0]  dac_gpio_input;
   wire    [31:0]  dac_gpio_output;
 
+  wire    [15:0]  ps_intrs;
+
   // instantiations
-  ad_iobuf #(.DATA_WIDTH(49)) i_iobuf_gpio_ps7 (
-    .dt (gpio_t[48:0]),
-    .di (gpio_o[48:0]),
-    .do (gpio_i[48:0]),
+  ad_iobuf #(.DATA_WIDTH(32)) i_iobuf_gpio_ps7 (
+    .dt ({gpio_t[48:32],gpio_t[14:0]}),
+    .di ({gpio_o[48:32],gpio_o[14:0]}),
+    .do ({gpio_i[48:32],gpio_i[14:0]}),
     .dio ({ gpio_txnrx,   // 48
             gpio_enable,  // 47
             gpio_resetb,  // 46
@@ -209,7 +210,6 @@ module system_top (
             gpio_en_agc,  // 44
             gpio_ctl,     // 40
             gpio_status,  // 32
-            gpio_wire,    // 15
             gpio_bd}));   // 0
 
   prcfg_system_top i_prcfg_system_top (
@@ -272,7 +272,22 @@ module system_top (
 
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-
+    .ps_intr_0 (ps_intrs[0]),
+    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_10 (ps_intrs[10]),
+    .ps_intr_11 (ps_intrs[11]),
+    .ps_intr_12 (ps_intrs[12]),
+    .ps_intr_13 (ps_intrs[13]),
+    .ps_intr_2 (ps_intrs[2]),
+    .ps_intr_3 (ps_intrs[3]),
+    .ps_intr_4 (ps_intrs[4]),
+    .ps_intr_5 (ps_intrs[5]),
+    .ps_intr_6 (ps_intrs[6]),
+    .ps_intr_7 (ps_intrs[7]),
+    .ps_intr_8 (ps_intrs[8]),
+    .ps_intr_9 (ps_intrs[9]),
+    .ad9361_dac_dma_irq (ps_intrs[12]),
+    .ad9361_adc_dma_irq (ps_intrs[13]),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
     .rx_data_in_n (rx_data_in_n),
@@ -333,19 +348,19 @@ endmodule
   output      [31:0]    dac_gpio_output,
   output                dma_dac_en,
   input                 dma_dac_dunf,
-  input       [127:0]   dma_dac_ddata,
+  input       [63:0]    dma_dac_ddata,
   input                 dma_dac_dvalid,
   input                 core_dac_en,
   output                core_dac_dunf,
-  output      [127:0]   core_dac_ddata,
+  output      [63:0]    core_dac_ddata,
   output                core_dac_dvalid,
   input                 core_adc_dwr,
   input                 core_adc_dsync,
-  input       [127:0]   core_adc_ddata,
+  input       [63:0]    core_adc_ddata,
   output                core_adc_ovf,
   output                dma_adc_dwr,
   output                dma_adc_dsync,
-  output      [127:0]   dma_adc_ddata,
+  output      [63:0]    dma_adc_ddata,
   input                 dma_adc_ovf);
 
 endmodule

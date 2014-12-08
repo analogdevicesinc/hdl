@@ -79,7 +79,6 @@ module system_top (
   gpio_led,
   gpio_sw,
 
-  iic_rstn,
   iic_scl,
   iic_sda,
 
@@ -109,6 +108,9 @@ module system_top (
   tx_data_p,
   tx_data_n,
   
+  trig_p,
+  trig_n,
+
   adc_fdb,
   adc_fda,
   dac_irq,
@@ -117,15 +119,14 @@ module system_top (
   adc_pd,
   dac_txen,
   dac_reset,
-  clkd_pd,
   clkd_sync,
-  clkd_reset,
  
   spi_csn_clk,
   spi_csn_dac,
   spi_csn_adc,
   spi_clk,
-  spi_sdio);
+  spi_sdio,
+  spi_dir);
 
   input           sys_rst;
   input           sys_clk_p;
@@ -165,7 +166,6 @@ module system_top (
   inout   [ 7:0]  gpio_led;
   inout   [ 8:0]  gpio_sw;
 
-  output          iic_rstn;
   inout           iic_scl;
   inout           iic_sda;
 
@@ -195,6 +195,9 @@ module system_top (
   output  [ 3:0]  tx_data_p;
   output  [ 3:0]  tx_data_n;
   
+  input           trig_p;
+  input           trig_n;
+ 
   inout           adc_fdb;
   inout           adc_fda;
   inout           dac_irq;
@@ -203,15 +206,14 @@ module system_top (
   inout           adc_pd;
   inout           dac_txen;
   inout           dac_reset;
-  inout           clkd_pd;
   inout           clkd_sync;
-  inout           clkd_reset;
   
   output          spi_csn_clk;
   output          spi_csn_dac;
   output          spi_csn_adc;
   output          spi_clk;
   inout           spi_sdio;
+  output          spi_dir;
   
   // internal registers
 
@@ -226,6 +228,7 @@ module system_top (
 
   // internal signals
 
+  wire            trig;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
@@ -258,6 +261,7 @@ module system_top (
   wire    [ 4:0]  gpio_status_i;
   wire    [ 4:0]  gpio_status_o;
   wire    [ 4:0]  gpio_status_t;
+  wire    [31:0]  mb_intrs;
 
   // adc-dac data
 
@@ -417,18 +421,24 @@ module system_top (
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
-    .spi_sdio (spi_sdio));
+    .spi_sdio (spi_sdio),
+    .spi_dir (spi_dir));
 
-  ad_iobuf #(.DATA_WIDTH(26)) i_iobuf (
-    .dt ({gpio_ctl_t[5:0], gpio_status_t[4:0]}),
-    .di ({gpio_ctl_o[5:0], gpio_status_o[4:0]}),
-    .do ({gpio_ctl_i[5:0], gpio_status_i[4:0]}),
+  IBUFDS i_ibufds_trig (
+    .I (trig_p),
+    .IB (trig_n),
+    .O (trig));
+
+  assign gpio_ctl_i[0] = trig;
+
+  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
+    .dt ({gpio_ctl_t[5:3], gpio_ctl_t[1], gpio_status_t[4:0]}),
+    .di ({gpio_ctl_o[5:3], gpio_ctl_o[1], gpio_status_o[4:0]}),
+    .do ({gpio_ctl_i[5:3], gpio_ctl_i[1], gpio_status_i[4:0]}),
     .dio ({ adc_pd,          // 10
             dac_txen,        //  9
             dac_reset,       //  8
-            clkd_pd,         //  7
             clkd_sync,       //  6
-            clkd_reset,      //  5
             adc_fdb,         //  4
             adc_fda,         //  3
             dac_irq,         //  2
@@ -445,6 +455,10 @@ module system_top (
     .adc_enable_1 (adc_enable_1),
     .adc_valid_0 (adc_valid_0),
     .adc_valid_1 (adc_valid_1),
+    .axi_ad9144_dma_intr (mb_intrs[13]),
+    .axi_ad9680_dma_intr (mb_intrs[12]),
+    .axi_daq2_gpio_intr (mb_intrs[11]),
+    .axi_daq2_spi_intr (mb_intrs[10]),
     .c0_ddr4_act_n (ddr4_act_n),
     .c0_ddr4_adr (ddr4_addr),
     .c0_ddr4_ba (ddr4_ba),
@@ -491,7 +505,28 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
+    .mb_intr_10 (mb_intrs[10]),
+    .mb_intr_11 (mb_intrs[11]),
+    .mb_intr_12 (mb_intrs[12]),
+    .mb_intr_13 (mb_intrs[13]),
+    .mb_intr_14 (mb_intrs[14]),
+    .mb_intr_15 (mb_intrs[15]),
+    .mb_intr_16 (mb_intrs[16]),
+    .mb_intr_17 (mb_intrs[17]),
+    .mb_intr_18 (mb_intrs[18]),
+    .mb_intr_19 (mb_intrs[19]),
+    .mb_intr_20 (mb_intrs[20]),
+    .mb_intr_21 (mb_intrs[21]),
+    .mb_intr_22 (mb_intrs[22]),
+    .mb_intr_23 (mb_intrs[23]),
+    .mb_intr_24 (mb_intrs[24]),
+    .mb_intr_25 (mb_intrs[25]),
+    .mb_intr_26 (mb_intrs[26]),
+    .mb_intr_27 (mb_intrs[27]),
+    .mb_intr_28 (mb_intrs[28]),
+    .mb_intr_29 (mb_intrs[29]),
+    .mb_intr_30 (mb_intrs[30]),
+    .mb_intr_31 (mb_intrs[31]),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .phy_clk_clk_n (phy_clk_n),
@@ -524,8 +559,7 @@ module system_top (
     .tx_sync (tx_sync),
     .tx_sysref (tx_sysref),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .unc_int4 (1'b0));
+    .uart_sout (uart_sout));
 
 endmodule
 

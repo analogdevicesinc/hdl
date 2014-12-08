@@ -23,9 +23,12 @@ adi_ip_files axi_ad9122 [list \
   "axi_ad9122_channel.v" \
   "axi_ad9122_core.v" \
   "axi_ad9122_if.v" \
+  "axi_ad9122_constr.xdc" \
   "axi_ad9122.v" ]
 
 adi_ip_properties axi_ad9122
+adi_ip_constraints axi_ad9122 [list \
+  "axi_ad9122_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 

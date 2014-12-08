@@ -62,13 +62,13 @@ module qpsk_mod (
   assign data_qpsk_q = filtered_data_q;
 
   // instantiations
-  QPSK_Modulator i_qpsk_mod (
-    .in0(data_input),
+  QPSK_Modulator_Baseband i_qpsk_mod (
+    .in0({6'b0, data_input}),
     .out0_re(modulated_data_i),
     .out0_im(modulated_data_q)
   );
 
-  Raised_Cosine_Tx_Filter i_tx_filter (
+  Raised_Cosine_Transmit_Filter i_tx_filter (
     .clk(clk),
     .reset(),
     .enb_1_1_1(data_valid),

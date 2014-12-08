@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -114,8 +114,8 @@ module system_top (
   tx_frame_out_1_p,
   tx_frame_out_1_n,
   tx_data_out_1_p,
-  tx_data_out_1_n,  
-  gpio_status_1,  
+  tx_data_out_1_n,
+  gpio_status_1,
   gpio_ctl_1,
   gpio_en_agc_1,
   gpio_resetb_1,
@@ -151,27 +151,27 @@ module system_top (
   inout           DDR_ras_n;
   inout           DDR_reset_n;
   inout           DDR_we_n;
-            
+
   inout           FIXED_IO_ddr_vrn;
   inout           FIXED_IO_ddr_vrp;
   inout   [ 53:0] FIXED_IO_mio;
   inout           FIXED_IO_ps_clk;
   inout           FIXED_IO_ps_porb;
   inout           FIXED_IO_ps_srstb;
-            
+
   inout   [ 15:0] gpio_bd;
-            
+
   output          hdmi_out_clk;
   output          hdmi_vsync;
   output          hdmi_hsync;
   output          hdmi_data_e;
   output  [ 15:0] hdmi_data;
-            
+
   output          spdif;
-            
+
   inout           iic_scl;
   inout           iic_sda;
-            
+
   input           rx_clk_in_0_p;
   input           rx_clk_in_0_n;
   input           rx_frame_in_0_p;
@@ -187,7 +187,7 @@ module system_top (
   inout   [  7:0] gpio_status_0;
   inout   [  3:0] gpio_ctl_0;
   inout           gpio_en_agc_0;
-  output          mcs_sync;  
+  output          mcs_sync;
   inout           gpio_resetb_0;
   inout           gpio_enable_0;
   inout           gpio_txnrx_0;
@@ -197,7 +197,7 @@ module system_top (
   inout           gpio_calsw_2_0;
   inout           gpio_ad5355_rfen;
   inout           gpio_ad5355_lock;
-            
+
   input           rx_clk_in_1_p;
   input           rx_clk_in_1_n;
   input           rx_frame_in_1_p;
@@ -209,7 +209,7 @@ module system_top (
   output          tx_frame_out_1_p;
   output          tx_frame_out_1_n;
   output  [  5:0] tx_data_out_1_p;
-  output  [  5:0] tx_data_out_1_n;  
+  output  [  5:0] tx_data_out_1_n;
   inout   [  7:0] gpio_status_1;
   inout   [  3:0] gpio_ctl_1;
   inout           gpio_en_agc_1;
@@ -220,16 +220,16 @@ module system_top (
   inout           gpio_debug_4_1;
   inout           gpio_calsw_3_1;
   inout           gpio_calsw_4_1;
-            
+
   output          spi_ad9361_0;
   output          spi_ad9361_1;
   output          spi_ad5355;
   output          spi_clk;
   output          spi_mosi;
-  input           spi_miso;  
-            
+  input           spi_miso;
+
   input           ref_clk_p;
-  input           ref_clk_n;  
+  input           ref_clk_n;
 
   // internal registers
 
@@ -245,6 +245,7 @@ module system_top (
   wire    [ 63:0] gpio_i;
   wire    [ 63:0] gpio_o;
   wire    [ 63:0] gpio_t;
+  wire    [15:0]  ps_intrs;
   wire            gpio_open_45_45;
   wire            gpio_open_44_44;
 
@@ -335,6 +336,24 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
+    .ps_intr_0 (ps_intrs[0]),
+    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_10 (ps_intrs[10]),
+    .ps_intr_11 (ps_intrs[11]),
+    .ps_intr_12 (ps_intrs[12]),
+    .ps_intr_13 (ps_intrs[13]),
+    .ps_intr_2 (ps_intrs[2]),
+    .ps_intr_3 (ps_intrs[3]),
+    .ps_intr_4 (ps_intrs[4]),
+    .ps_intr_5 (ps_intrs[5]),
+    .ps_intr_6 (ps_intrs[6]),
+    .ps_intr_7 (ps_intrs[7]),
+    .ps_intr_8 (ps_intrs[8]),
+    .ps_intr_9 (ps_intrs[9]),
+    .ad9361_dac_dma_irq (ps_intrs[12]),
+    .ad9361_adc_dma_irq (ps_intrs[13]),
+    .fmcomms5_gpio_irq(),
+    .fmcomms5_spi_irq(),
     .rx_clk_in_0_n (rx_clk_in_0_n),
     .rx_clk_in_0_p (rx_clk_in_0_p),
     .rx_clk_in_1_n (rx_clk_in_1_n),
@@ -346,12 +365,12 @@ module system_top (
     .rx_frame_in_0_n (rx_frame_in_0_n),
     .rx_frame_in_0_p (rx_frame_in_0_p),
     .rx_frame_in_1_n (rx_frame_in_1_n),
-    .rx_frame_in_1_p (rx_frame_in_1_p),   
+    .rx_frame_in_1_p (rx_frame_in_1_p),
     .spdif (spdif),
     .spi_csn_0_i (1'b1),
-    .spi_csn_0_o (spi_ad9361_0),    
+    .spi_csn_0_o (spi_ad9361_0),
     .spi_csn_1_o (spi_ad9361_1),
-    .spi_csn_2_o (spi_ad5355),    
+    .spi_csn_2_o (spi_ad5355),
     .spi_miso_i (spi_miso),
     .spi_mosi_i (1'b0),
     .spi_mosi_o (spi_mosi),

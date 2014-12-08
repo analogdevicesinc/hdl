@@ -44,7 +44,8 @@ module daq2_spi (
   spi_mosi,
   spi_miso,
 
-  spi_sdio);
+  spi_sdio,
+  spi_dir);
 
   // 4 wire
 
@@ -56,6 +57,7 @@ module daq2_spi (
   // 3 wire
 
   inout           spi_sdio;
+  output          spi_dir;
 
   // internal registers
 
@@ -71,6 +73,7 @@ module daq2_spi (
   // check on rising edge and change on falling edge
 
   assign spi_csn_s = & spi_csn;
+  assign spi_dir = ~spi_enable_s;
   assign spi_enable_s = spi_enable & ~spi_csn_s;
 
   always @(posedge spi_clk or posedge spi_csn_s) begin

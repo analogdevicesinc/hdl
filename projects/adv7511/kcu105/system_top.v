@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -44,8 +44,6 @@ module system_top (
   sys_rst,
   sys_clk_p,
   sys_clk_n,
-  sys_125m_clk_p,
-  sys_125m_clk_n,
 
   uart_sin,
   uart_sout,
@@ -68,6 +66,8 @@ module system_top (
 
   mdio_mdc,
   mdio_mdio,
+  phy_clk_p,
+  phy_clk_n,
   phy_rst_n,
   phy_rx_p,
   phy_rx_n,
@@ -79,7 +79,6 @@ module system_top (
   gpio_led,
   gpio_sw,
 
-  iic_rstn,
   iic_scl,
   iic_sda,
 
@@ -94,8 +93,6 @@ module system_top (
   input           sys_rst;
   input           sys_clk_p;
   input           sys_clk_n;
-  input           sys_125m_clk_p;
-  input           sys_125m_clk_n;
 
   input           uart_sin;
   output          uart_sout;
@@ -118,6 +115,8 @@ module system_top (
 
   output          mdio_mdc;
   inout           mdio_mdio;
+  input           phy_clk_p;
+  input           phy_clk_n;
   output          phy_rst_n;
   input           phy_rx_p;
   input           phy_rx_n;
@@ -129,7 +128,6 @@ module system_top (
   inout   [ 7:0]  gpio_led;
   inout   [ 8:0]  gpio_sw;
 
-  output          iic_rstn;
   inout           iic_scl;
   inout           iic_sda;
 
@@ -141,36 +139,12 @@ module system_top (
 
   output          spdif;
 
-  // internal registers
-
-  reg     [31:0]  sys_reset_m = 'd0;
-  reg             sys_cpu_rst = 'd0;
-  reg             sys_cpu_rstn = 'd0;
-
   // internal signals
 
-  wire            mdm_reset;
-  wire            mig_reset;
-  wire            mig_ready;
-  wire            sys_cpu_clk;
-
+  wire    [31:0]  mb_intrs;
   // default logic
 
   assign fan_pwm = 1'b1;
-
-  // assign sys_reset_req = mdm_reset | mig_reset | ~mig_ready;
-  // assign sys_reset_req = mdm_reset;
-  assign sys_reset_req = 1'b0;
-
-  always @(posedge sys_cpu_clk) begin
-    if (sys_reset_req == 1'b1) begin
-      sys_reset_m <= {32{1'b1}};
-    end else begin
-      sys_reset_m <= {sys_reset_m[30:0], 1'b0};
-    end
-    sys_cpu_rst <= sys_reset_m[31];
-    sys_cpu_rstn <= ~sys_reset_m[31];
-  end
 
   // instantiations
 
@@ -200,12 +174,32 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
+    .mb_intr_10 (mb_intrs[10]),
+    .mb_intr_11 (mb_intrs[11]),
+    .mb_intr_12 (mb_intrs[12]),
+    .mb_intr_13 (mb_intrs[13]),
+    .mb_intr_14 (mb_intrs[14]),
+    .mb_intr_15 (mb_intrs[15]),
+    .mb_intr_16 (mb_intrs[16]),
+    .mb_intr_17 (mb_intrs[17]),
+    .mb_intr_18 (mb_intrs[18]),
+    .mb_intr_19 (mb_intrs[19]),
+    .mb_intr_20 (mb_intrs[20]),
+    .mb_intr_21 (mb_intrs[21]),
+    .mb_intr_22 (mb_intrs[22]),
+    .mb_intr_23 (mb_intrs[23]),
+    .mb_intr_24 (mb_intrs[24]),
+    .mb_intr_25 (mb_intrs[25]),
+    .mb_intr_26 (mb_intrs[26]),
+    .mb_intr_27 (mb_intrs[27]),
+    .mb_intr_28 (mb_intrs[28]),
+    .mb_intr_29 (mb_intrs[29]),
+    .mb_intr_30 (mb_intrs[30]),
+    .mb_intr_31 (mb_intrs[31]),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
-    .mdm_reset (mdm_reset),
-    .mig_ready (mig_ready),
-    .mig_reset (mig_reset),
+    .phy_clk_clk_n (phy_clk_n),
+    .phy_clk_clk_p (phy_clk_p),
     .phy_rst_n (phy_rst_n),
     .phy_sd (1'b1),
     .sgmii_rxn (phy_rx_n),
@@ -213,19 +207,11 @@ module system_top (
     .sgmii_txn (phy_tx_n),
     .sgmii_txp (phy_tx_p),
     .spdif (spdif),
-    .sys_125m_clk_n (sys_125m_clk_n),
-    .sys_125m_clk_p (sys_125m_clk_p),
-    .sys_clk_n (sys_clk_n),
-    .sys_clk_p (sys_clk_p),
-    .sys_cpu_clk (sys_cpu_clk),
-    .sys_cpu_rst (sys_cpu_rst),
-    .sys_cpu_rstn (sys_cpu_rstn),
+    .sys_clk_clk_n (sys_clk_n),
+    .sys_clk_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .unc_int2 (1'b0),
-    .unc_int3 (1'b0),
-    .unc_int4 (1'b0));
+    .uart_sout (uart_sout));
 
 endmodule
 

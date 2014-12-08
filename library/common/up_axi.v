@@ -68,16 +68,19 @@ module up_axi (
 
   // pcore interface
 
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack);
+  up_rack);
 
   // parameters
 
   parameter   PCORE_ADDR_WIDTH = 14;
+  localparam  AW = PCORE_ADDR_WIDTH - 1;
 
   // reset and clocks
 
@@ -106,155 +109,173 @@ module up_axi (
 
   // pcore interface
 
-  output          up_sel;
-  output          up_wr;
-  output  [PCORE_ADDR_WIDTH-1:0] up_addr;
+  output          up_wreq;
+  output  [AW:0]  up_waddr;
   output  [31:0]  up_wdata;
+  input           up_wack;
+  output          up_rreq;
+  output  [AW:0]  up_raddr;
   input   [31:0]  up_rdata;
-  input           up_ack;
+  input           up_rack;
 
   // internal registers
 
   reg             up_axi_awready = 'd0;
   reg             up_axi_wready = 'd0;
-  reg             up_axi_arready = 'd0;
   reg             up_axi_bvalid = 'd0;
+  reg             up_wsel = 'd0;
+  reg             up_wreq = 'd0;
+  reg     [AW:0]  up_waddr = 'd0;
+  reg     [31:0]  up_wdata = 'd0;
+  reg     [ 2:0]  up_wcount = 'd0;
+  reg             up_wack_int = 'd0;
+  reg             up_axi_arready = 'd0;
   reg             up_axi_rvalid = 'd0;
   reg     [31:0]  up_axi_rdata = 'd0;
-  reg             up_axi_access = 'd0;
-  reg             up_sel = 'd0;
-  reg             up_wr = 'd0;
-  reg     [PCORE_ADDR_WIDTH-1:0] up_addr = 'd0;
-  reg     [31:0]  up_wdata = 'd0;
-  reg             up_access = 'd0;
-  reg     [ 2:0]  up_access_count = 'd0;
-  reg             up_access_ack = 'd0;
-  reg     [31:0]  up_access_rdata = 'd0;
+  reg             up_rsel = 'd0;
+  reg             up_rreq = 'd0;
+  reg     [AW:0]  up_raddr = 'd0;
+  reg     [ 3:0]  up_rcount = 'd0;
+  reg             up_rack_int = 'd0;
+  reg     [31:0]  up_rdata_int = 'd0;
+  reg             up_rack_int_d = 'd0;
+  reg     [31:0]  up_rdata_int_d = 'd0;
 
-  // internal wires
-
-  wire            up_axi_wr_s;
-  wire            up_axi_rd_s;
-  wire            up_axi_ack_s;
-  wire    [31:0]  up_rdata_s;
-  wire            up_ack_s;
-
-  // responses are always okay
-
-  assign up_axi_bresp = 2'd0;
-  assign up_axi_rresp = 2'd0;
-
-  // wait for awvalid and wvalid before asserting awready and wready
-
-  assign up_axi_wr_s = up_axi_awvalid & up_axi_wvalid & ~up_axi_access;
-
-  assign up_axi_rd_s = up_axi_arvalid & ~up_axi_access & ~up_axi_wr_s;
-
-  assign up_axi_ack_s = ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) ||
-    ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1));
-
-  // return address and data channel ready right away, response depends on ack
+  // write channel interface
  
+  assign up_axi_bresp = 2'd0;
+
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_axi_awready <= 'd0;
       up_axi_wready <= 'd0;
-      up_axi_arready <= 'd0;
       up_axi_bvalid <= 'd0;
-      up_axi_rvalid <= 'd0;
-      up_axi_rdata <= 'd0;
     end else begin
-      if ((up_axi_awready == 1'b1) && (up_axi_awvalid == 1'b1)) begin
+      if (up_axi_awready == 1'b1) begin
         up_axi_awready <= 1'b0;
-      end else if (up_axi_wr_s == 1'b1) begin
+      end else if (up_wack_int == 1'b1) begin
         up_axi_awready <= 1'b1;
       end
-      if ((up_axi_wready == 1'b1) && (up_axi_wvalid == 1'b1)) begin
+      if (up_axi_wready == 1'b1) begin
         up_axi_wready <= 1'b0;
-      end else if (up_axi_wr_s == 1'b1) begin
+      end else if (up_wack_int == 1'b1) begin
         up_axi_wready <= 1'b1;
-      end
-      if ((up_axi_arready == 1'b1) && (up_axi_arvalid == 1'b1)) begin
-        up_axi_arready <= 1'b0;
-      end else if (up_axi_rd_s == 1'b1) begin
-        up_axi_arready <= 1'b1;
       end
       if ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) begin
         up_axi_bvalid <= 1'b0;
-      end else if ((up_axi_access == 1'b1) && (up_ack_s == 1'b1) && (up_wr == 1'b1)) begin
+      end else if (up_wack_int == 1'b1) begin
         up_axi_bvalid <= 1'b1;
-      end
-      if ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1)) begin
-        up_axi_rvalid <= 1'b0;
-        up_axi_rdata <= 32'd0;
-      end else if ((up_axi_access == 1'b1) && (up_ack_s == 1'b1) && (up_wr == 1'b0)) begin
-        up_axi_rvalid <= 1'b1;
-        up_axi_rdata <= up_rdata_s;
       end
     end
   end       
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
-      up_axi_access <= 'd0;
-      up_sel <= 'd0;
-      up_wr <= 'd0;
-      up_addr <= 'd0;
+      up_wsel <= 'd0;
+      up_wreq <= 'd0;
+      up_waddr <= 'd0;
       up_wdata <= 'd0;
+      up_wcount <= 'd0;
     end else begin
-      if (up_axi_access == 1'b1) begin
-        if (up_axi_ack_s == 1'b1) begin
-          up_axi_access <= 1'b0;
+      if (up_wsel == 1'b1) begin
+        if ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) begin
+          up_wsel <= 1'b0;
         end
-        up_sel <= 1'b0;
+        up_wreq <= 1'b0;
+        up_waddr <= up_waddr;
+        up_wdata <= up_wdata;
+        up_wcount <= up_wcount + 1'b1;
       end else begin
-        up_axi_access <= up_axi_wr_s | up_axi_rd_s;
-        up_sel <= up_axi_wr_s | up_axi_rd_s;
-      end
-      if (up_axi_access == 1'b0) begin
-        up_wr <= up_axi_wr_s;
-        if (up_axi_wr_s == 1'b1) begin
-          up_addr <= up_axi_awaddr[PCORE_ADDR_WIDTH+1:2];
-          up_wdata <= up_axi_wdata;
-        end else begin
-          up_addr <= up_axi_araddr[PCORE_ADDR_WIDTH+1:2];
-          up_wdata <= 32'd0;
-        end
+        up_wsel <= up_axi_awvalid & up_axi_wvalid;
+        up_wreq <= up_axi_awvalid & up_axi_wvalid;
+        up_waddr <= up_axi_awaddr[AW+2:2];
+        up_wdata <= up_axi_wdata;
+        up_wcount <= 3'd0;
       end
     end
   end
 
-  // combine up read and ack from all the blocks
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack_int <= 'd0;
+    end else begin
+      if ((up_wcount == 3'h7) && (up_wack == 1'b0)) begin
+        up_wack_int <= 1'b1;
+      end else if (up_wsel == 1'b1) begin
+        up_wack_int <= up_wack;
+      end
+    end
+  end
 
-  assign up_rdata_s = up_rdata | up_access_rdata;
-  assign up_ack_s = up_ack | up_access_ack;
+  // read channel interface
 
-  // 8 clock cycles access time out to release bus
+  assign up_axi_rresp = 2'd0;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_axi_arready <= 'd0;
+      up_axi_rvalid <= 'd0;
+      up_axi_rdata <= 'd0;
+    end else begin
+      if (up_axi_arready == 1'b1) begin
+        up_axi_arready <= 1'b0;
+      end else if (up_rack_int == 1'b1) begin
+        up_axi_arready <= 1'b1;
+      end
+      if ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1)) begin
+        up_axi_rvalid <= 1'b0;
+        up_axi_rdata <= 32'd0;
+      end else if (up_rack_int_d == 1'b1) begin
+        up_axi_rvalid <= 1'b1;
+        up_axi_rdata <= up_rdata_int_d;
+      end
+    end
+  end       
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_rsel <= 'd0;
+      up_rreq <= 'd0;
+      up_raddr <= 'd0;
+      up_rcount <= 'd0;
+    end else begin
+      if (up_rsel == 1'b1) begin
+        if ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1)) begin
+          up_rsel <= 1'b0;
+        end
+        up_rreq <= 1'b0;
+        up_raddr <= up_raddr;
+      end else begin
+        up_rsel <= up_axi_arvalid;
+        up_rreq <= up_axi_arvalid;
+        up_raddr <= up_axi_araddr[AW+2:2];
+      end
+      if (up_rack_int == 1'b1) begin
+        up_rcount <= 4'd0;
+      end else if (up_rcount[3] == 1'b1) begin
+        up_rcount <= up_rcount + 1'b1;
+      end else if (up_rreq == 1'b1) begin
+        up_rcount <= 4'd8;
+      end
+    end
+  end
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_access <= 'd0;
-      up_access_count <= 'd0;
-      up_access_ack <= 'd0;
-      up_access_rdata <= 'd0;
+      up_rack_int <= 'd0;
+      up_rdata_int <= 'd0;
+      up_rack_int_d <= 'd0;
+      up_rdata_int_d <= 'd0;
     end else begin
-      if (up_sel == 1'b1) begin
-        up_access <= 1'b1;
-      end else if (up_ack_s == 1'b1) begin
-        up_access <= 1'b0;
-      end
-      if (up_access == 1'b1) begin
-        up_access_count <= up_access_count + 1'b1;
+      if ((up_rcount == 4'hf) && (up_rack == 1'b0)) begin
+        up_rack_int <= 1'b1;
+        up_rdata_int <= {2{16'hdead}};
       end else begin
-        up_access_count <= 3'd0;
+        up_rack_int <= up_rack;
+        up_rdata_int <= up_rdata;
       end
-      if ((up_access_count == 3'h7) && (up_ack_s == 1'b0)) begin
-        up_access_ack <= 1'b1;
-        up_access_rdata <= {2{16'hdead}};
-      end else begin
-        up_access_ack <= 1'b0;
-        up_access_rdata <= 32'd0;
-      end
+      up_rack_int_d <= up_rack_int;
+      up_rdata_int_d <= up_rdata_int;
     end
   end
 

@@ -1,8 +1,11 @@
 
 # daq1
 
-set spi_csn_i       [create_bd_port -dir I -from 2 -to 0 spi_csn_i]
-set spi_csn_o       [create_bd_port -dir O -from 2 -to 0 spi_csn_o]
+set spi_csn_2_o     [create_bd_port -dir O spi_csn_2_o]
+set spi_csn_1_o     [create_bd_port -dir O spi_csn_1_o]
+set spi_csn_0_o     [create_bd_port -dir O spi_csn_0_o]
+set spi_csn_i       [create_bd_port -dir I spi_csn_i]
+
 set spi_clk_i       [create_bd_port -dir I spi_clk_i]
 set spi_clk_o       [create_bd_port -dir O spi_clk_o]
 set spi_sdo_i       [create_bd_port -dir I spi_sdo_i]
@@ -45,6 +48,11 @@ set tx_frame_n      [create_bd_port -dir O tx_frame_n]
 set tx_data_p       [create_bd_port -dir O -from 15 -to 0 tx_data_p]
 set tx_data_n       [create_bd_port -dir O -from 15 -to 0 tx_data_n]
 
+# interrupts
+
+set ad9250_dma_irq  [create_bd_port -dir O ad9250_dma_irq]
+set ad9122_dma_irq  [create_bd_port -dir O ad9122_dma_irq]
+
 # dac peripherals
 
 set axi_ad9122_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9122:1.0 axi_ad9122_core]
@@ -69,7 +77,7 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_ad9122_dma_interconnect
 
 set axi_ad9250_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_core]
 
-set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9250_jesd]
+set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9250_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9250_jesd
 set_property -dict [list CONFIG.C_LANES {2}] $axi_ad9250_jesd
 
@@ -93,7 +101,8 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_ad9250_dma_interconnect
 # dac/adc common gt/gpio
 
 set axi_daq1_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_daq1_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {2}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {2}] $axi_daq1_gt
+set_property -dict [list CONFIG.PCORE_NUM_OF_TX_LANES {2}] $axi_daq1_gt
 set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {2}] $axi_daq1_gt
 set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_daq1_gt
 set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_daq1_gt
@@ -123,14 +132,11 @@ set_property LEFT 39 [get_bd_ports GPIO_O]
 set_property LEFT 39 [get_bd_ports GPIO_T]
 
 # connections (spi)
-set sys_spi_csn_concat [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_spi_csn_concat]
-set_property -dict [list CONFIG.NUM_PORTS {3}] $sys_spi_csn_concat
 
-connect_bd_net -net spi_csn0  [get_bd_pins sys_spi_csn_concat/In2] [get_bd_pins sys_ps7/SPI0_SS_O]
-connect_bd_net -net spi_csn1  [get_bd_pins sys_spi_csn_concat/In1] [get_bd_pins sys_ps7/SPI0_SS1_O]
-connect_bd_net -net spi_csn2  [get_bd_pins sys_spi_csn_concat/In0] [get_bd_pins sys_ps7/SPI0_SS2_O]
+connect_bd_net -net spi_csn0  [get_bd_ports spi_csn_2_o] [get_bd_pins sys_ps7/SPI0_SS2_O]
+connect_bd_net -net spi_csn1  [get_bd_ports spi_csn_1_o] [get_bd_pins sys_ps7/SPI0_SS1_O]
+connect_bd_net -net spi_csn2  [get_bd_ports spi_csn_0_o] [get_bd_pins sys_ps7/SPI0_SS_O]
 connect_bd_net -net spi_csn_i [get_bd_ports spi_csn_i]  [get_bd_pins sys_ps7/SPI0_SS_I]
-connect_bd_net -net spi_csn_o [get_bd_ports spi_csn_o]  [get_bd_pins sys_spi_csn_concat/dout]
 connect_bd_net -net spi_clk_i [get_bd_ports spi_clk_i]  [get_bd_pins sys_ps7/SPI0_SCLK_I]
 connect_bd_net -net spi_clk_o [get_bd_ports spi_clk_o]  [get_bd_pins sys_ps7/SPI0_SCLK_O]
 connect_bd_net -net spi_sdo_i [get_bd_ports spi_sdo_i]  [get_bd_pins sys_ps7/SPI0_MOSI_I]
@@ -175,7 +181,7 @@ connect_bd_net -net axi_ad9250_adc_dovf           [get_bd_pins axi_ad9250_core/a
 connect_bd_net -net axi_ad9250_dma_wr             [get_bd_pins axi_ad9250_dma/fifo_wr_en]       [get_bd_ports adc_dwr]
 connect_bd_net -net axi_ad9250_dma_sync           [get_bd_pins axi_ad9250_dma/fifo_wr_sync]     [get_bd_ports adc_dsync]
 connect_bd_net -net axi_ad9250_dma_data           [get_bd_pins axi_ad9250_dma/fifo_wr_din]      [get_bd_ports adc_ddata]
-connect_bd_net -net axi_ad9250_dma_irq            [get_bd_pins axi_ad9250_dma/irq]              [get_bd_pins sys_concat_intc/In2]
+connect_bd_net -net axi_ad9250_dma_irq            [get_bd_pins axi_ad9250_dma/irq]              [get_bd_ports ad9250_dma_irq]
 
 connect_bd_net -net axi_ad9250_adc_clk            [get_bd_ports adc_clk]
 
@@ -199,7 +205,7 @@ connect_bd_net -net axi_ad9122_dac_ddata_1        [get_bd_pins axi_ad9122_core/d
 connect_bd_net -net axi_ad9122_dma_drd            [get_bd_pins axi_ad9122_dma/fifo_rd_en]       [get_bd_ports dac_drd]
 connect_bd_net -net axi_ad9122_dma_ddata          [get_bd_pins axi_ad9122_dma/fifo_rd_dout]     [get_bd_ports dac_ddata]
 connect_bd_net -net axi_ad9122_dac_dunf           [get_bd_pins axi_ad9122_core/dac_dunf]        [get_bd_pins axi_ad9122_dma/fifo_rd_underflow]
-connect_bd_net -net axi_ad9122_dma_irq            [get_bd_pins axi_ad9122_dma/irq]              [get_bd_pins sys_concat_intc/In3]
+connect_bd_net -net axi_ad9122_dma_irq            [get_bd_pins axi_ad9122_dma/irq]              [get_bd_ports ad9122_dma_irq]
 
 connect_bd_net -net axi_ad9122_dac_div_clk        [get_bd_ports dac_clk]
 
@@ -287,7 +293,8 @@ connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9250_dma/m_dest_axi_ar
 
 # ila
 
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
+set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {9}   ] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH  {170} ] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH  {4}   ] $ila_jesd_rx_mon
@@ -324,3 +331,4 @@ create_bd_addr_seg -range 0x00010000 -offset 0x44A60000 [get_bd_addr_spaces sys_
 create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9122_dma/m_src_axi]   [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM]   SEG_sys_ps7_hp1_ddr_lowocm
 create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_ad9250_dma/m_dest_axi]  [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM]   SEG_sys_ps7_hp2_ddr_lowocm
 create_bd_addr_seg -range $sys_mem_size -offset 0x00000000 [get_bd_addr_spaces axi_daq1_gt/m_axi]          [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM]   SEG_sys_ps7_hp3_ddr_lowocm
+

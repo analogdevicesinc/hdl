@@ -165,12 +165,14 @@ module axi_ad9144 (
   wire    [ 15:0]                           dac_data_3_1_s;
   wire    [ 15:0]                           dac_data_3_2_s;
   wire    [ 15:0]                           dac_data_3_3_s;
-  wire                                      up_sel_s;
-  wire                                      up_wr_s;
-  wire    [ 13:0]                           up_addr_s;
+  wire                                      up_wreq_s;
+  wire    [ 13:0]                           up_waddr_s;
   wire    [ 31:0]                           up_wdata_s;
+  wire                                      up_wack_s;
+  wire                                      up_rreq_s;
+  wire    [ 13:0]                           up_raddr_s;
   wire    [ 31:0]                           up_rdata_s;
-  wire                                      up_ack_s;
+  wire                                      up_rack_s;
 
   // signal name changes
 
@@ -242,12 +244,14 @@ module axi_ad9144 (
     .dac_dunf (dac_dunf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s),
-    .up_ack (up_ack_s));
+    .up_rack (up_rack_s));
 
   // up bus interface
 
@@ -271,12 +275,14 @@ module axi_ad9144 (
     .up_axi_rresp (s_axi_rresp),
     .up_axi_rdata (s_axi_rdata),
     .up_axi_rready (s_axi_rready),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s),
-    .up_ack (up_ack_s));
+    .up_rack (up_rack_s));
 
 endmodule
 

@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -41,11 +41,12 @@
 
 module axi_ad9671 (
 
-  // jesd interface 
+  // jesd interface
   // rx_clk is (line-rate/40)
 
   rx_clk,
   rx_data,
+  rx_data_sof,
 
   // dma interface
 
@@ -55,6 +56,10 @@ module axi_ad9671 (
   adc_data,
   adc_dovf,
   adc_dunf,
+  adc_sync_in,
+  adc_sync_out,
+  adc_raddr_in,
+  adc_raddr_out,
 
   // axi interface
 
@@ -62,6 +67,7 @@ module axi_ad9671 (
   s_axi_aresetn,
   s_axi_awvalid,
   s_axi_awaddr,
+  s_axi_awprot,
   s_axi_awready,
   s_axi_wvalid,
   s_axi_wdata,
@@ -72,6 +78,7 @@ module axi_ad9671 (
   s_axi_bready,
   s_axi_arvalid,
   s_axi_araddr,
+  s_axi_arprot,
   s_axi_arready,
   s_axi_rvalid,
   s_axi_rresp,
@@ -84,11 +91,12 @@ module axi_ad9671 (
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
   parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
-  // jesd interface 
+  // jesd interface
   // rx_clk is the jesd clock (ref_clk/2)
 
   input                                 rx_clk;
   input   [(64*PCORE_4L_2L_N)+63:0]     rx_data;
+  input                                 rx_data_sof;
 
   // dma interface
 
@@ -98,6 +106,10 @@ module axi_ad9671 (
   output  [127:0]                       adc_data;
   input                                 adc_dovf;
   input                                 adc_dunf;
+  input                                 adc_sync_in;
+  output                                adc_sync_out;
+  input   [  3:0]                       adc_raddr_in;
+  output  [  3:0]                       adc_raddr_out;
 
   // axi interface
 
@@ -105,6 +117,7 @@ module axi_ad9671 (
   input                                 s_axi_aresetn;
   input                                 s_axi_awvalid;
   input   [ 31:0]                       s_axi_awaddr;
+  input   [  2:0]                       s_axi_awprot;
   output                                s_axi_awready;
   input                                 s_axi_wvalid;
   input   [ 31:0]                       s_axi_wdata;
@@ -115,6 +128,7 @@ module axi_ad9671 (
   input                                 s_axi_bready;
   input                                 s_axi_arvalid;
   input   [ 31:0]                       s_axi_araddr;
+  input   [  2:0]                       s_axi_arprot;
   output                                s_axi_arready;
   output                                s_axi_rvalid;
   output  [  1:0]                       s_axi_rresp;
@@ -127,7 +141,8 @@ module axi_ad9671 (
   reg                                   up_status_pn_oos = 'd0;
   reg                                   up_status_or = 'd0;
   reg     [ 31:0]                       up_rdata = 'd0;
-  reg                                   up_ack = 'd0;
+  reg                                   up_rack = 'd0;
+  reg                                   up_wack = 'd0;
 
   // internal clocks & resets
 
@@ -138,18 +153,23 @@ module axi_ad9671 (
   // internal signals
 
   wire                                  adc_status_s;
+  wire                                  adc_sync_status_s;
   wire                                  adc_valid_s;
   wire    [ 15:0]                       adc_data_s[7:0];
   wire    [  7:0]                       adc_or_s;
   wire    [  7:0]                       up_adc_pn_err_s;
   wire    [  7:0]                       up_adc_pn_oos_s;
   wire    [  7:0]                       up_adc_or_s;
-  wire                                  up_sel_s;
-  wire                                  up_wr_s;
-  wire    [ 13:0]                       up_addr_s;
+  wire                                  up_wreq_s;
+  wire    [ 13:0]                       up_waddr_s;
   wire    [ 31:0]                       up_wdata_s;
+  wire                                  up_rreq_s;
+  wire    [ 13:0]                       up_raddr_s;
   wire    [ 31:0]                       up_rdata_s[8:0];
-  wire                                  up_ack_s[8:0];
+  wire                                  up_rack_s[8:0];
+  wire                                  up_wack_s[8:0];
+  wire    [ 31:0]                       adc_start_code;
+  wire                                  adc_sync;
 
   // signal name changes
 
@@ -164,23 +184,30 @@ module axi_ad9671 (
       up_status_pn_oos <= 'd0;
       up_status_or <= 'd0;
       up_rdata <= 'd0;
-      up_ack <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
     end else begin
       up_status_pn_err <= | up_adc_pn_err_s;
       up_status_pn_oos <= | up_adc_pn_oos_s;
       up_status_or <= | up_adc_or_s;
       up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3] |
         up_rdata_s[4] | up_rdata_s[5] | up_rdata_s[6] | up_rdata_s[7] | up_rdata_s[8];
-      up_ack <=  up_ack_s[0] | up_ack_s[1] | up_ack_s[2] | up_ack_s[3] |
-        up_ack_s[4] | up_ack_s[5] | up_ack_s[6] | up_ack_s[7] | up_ack_s[8];
+      up_rack <=  up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3] |
+        up_rack_s[4] | up_rack_s[5] | up_rack_s[6] | up_rack_s[7] | up_rack_s[8];
+      up_wack <=  up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3] |
+        up_wack_s[4] | up_wack_s[5] | up_wack_s[6] | up_wack_s[7] | up_wack_s[8];
     end
   end
 
   // main (device interface)
 
-  axi_ad9671_if #(.PCORE_4L_2L_N(PCORE_4L_2L_N)) i_if (
+  axi_ad9671_if #(
+    .PCORE_4L_2L_N(PCORE_4L_2L_N),
+    .PCORE_ID(PCORE_ID)
+  ) i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
+    .rx_data_sof (rx_data_sof),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_valid (adc_valid_s),
@@ -200,7 +227,14 @@ module axi_ad9671 (
     .adc_or_g (adc_or_s[6]),
     .adc_data_h (adc_data_s[7]),
     .adc_or_h (adc_or_s[7]),
-    .adc_status (adc_status_s));
+    .adc_start_code (adc_start_code),
+    .adc_sync (adc_sync),
+    .adc_sync_in (adc_sync_in),
+    .adc_sync_out (adc_sync_out),
+    .adc_sync_status (adc_sync_status_s),
+    .adc_status (adc_status_s),
+    .adc_raddr_in(adc_raddr_in),
+    .adc_raddr_out(adc_raddr_out));
 
   // channels
 
@@ -221,24 +255,31 @@ module axi_ad9671 (
     .up_adc_or (up_adc_or_s[n]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[n]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[n]),
-    .up_ack (up_ack_s[n]));
+    .up_rack (up_rack_s[n]));
   end
   endgenerate
 
   // common processor control
 
-  up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
+  up_adc_common #(
+    .PCORE_ID(PCORE_ID)
+  ) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_r1_mode (),
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
+    .adc_start_code (adc_start_code),
+    .adc_sync (adc_sync),
+    .adc_sync_status (adc_sync_status_s),
     .adc_status (adc_status_s),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
@@ -270,16 +311,20 @@ module axi_ad9671 (
     .up_adc_gpio_out (),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[8]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[8]),
-    .up_ack (up_ack_s[8]));
+    .up_rack (up_rack_s[8]));
 
   // up bus interface
 
-  up_axi i_up_axi (
+  up_axi #(
+    .PCORE_ADDR_WIDTH (14)
+  ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),
@@ -299,12 +344,14 @@ module axi_ad9671 (
     .up_axi_rresp (s_axi_rresp),
     .up_axi_rdata (s_axi_rdata),
     .up_axi_rready (s_axi_rready),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata),
-    .up_ack (up_ack));
+    .up_rack (up_rack));
 
 endmodule
 

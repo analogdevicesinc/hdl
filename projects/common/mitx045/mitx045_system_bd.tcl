@@ -1,8 +1,6 @@
 # create board design
 # interface ports
 
-set DDR [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR]
-set FIXED_IO [create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 FIXED_IO]
 set IIC_MAIN [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 IIC_MAIN]
 
 set GPIO_I [create_bd_port -dir I -from 31 -to 0 GPIO_I]
@@ -31,8 +29,8 @@ set i2s_sdata_in    [create_bd_port -dir I i2s_sdata_in]
 
 # instance: sys_ps7
 
-set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.3 sys_ps7]
-set_property -dict [list CONFIG.PCW_IMPORT_BOARD_PRESET $ad_hdl_dir/projects/common/mitx045/mitx045.xml ] [get_bd_cells sys_ps7]
+set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.4 sys_ps7]
+apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {make_external "FIXED_IO, DDR" apply_board_preset "1" Master "Disable" Slave "Disable" } $sys_ps7
 set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {1} ] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
@@ -47,12 +45,13 @@ set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {32}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_DMA0 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_DMA1 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_DMA2 {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_IRQ_F2P_MODE {REVERSE}] $sys_ps7
 
 set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
 set_property -dict [list CONFIG.USE_BOARD_FLOW {true} CONFIG.IIC_BOARD_INTERFACE {IIC_MAIN}] $axi_iic_main
 
-set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:1.0 sys_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {5}] $sys_concat_intc
+set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
+set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
 set_property -dict [list CONFIG.NUM_MI {7}] $axi_cpu_interconnect
@@ -66,7 +65,7 @@ set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
 set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]
 set axi_hdmi_core [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_tx:1.0 axi_hdmi_core]
 
-set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.1 axi_hdmi_dma]
+set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_hdmi_dma]
 set_property -dict [list CONFIG.c_m_axis_mm2s_tdata_width {64}] $axi_hdmi_dma
 set_property -dict [list CONFIG.c_use_mm2s_fsync {1}] $axi_hdmi_dma
 set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
@@ -128,9 +127,6 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M00_ACLK] $sy
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M00_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_iic_main/s_axi_aclk]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_iic_main/s_axi_aresetn]
-connect_bd_net -net sys_concat_intc_din_1 [get_bd_pins sys_concat_intc/In1] [get_bd_pins axi_iic_main/iic2intc_irpt]
-
-connect_bd_net -net sys_ps7_interrupt [get_bd_pins sys_concat_intc/dout] [get_bd_pins sys_ps7/IRQ_F2P]
 
 # hdmi
 
@@ -182,8 +178,6 @@ connect_bd_net -net axi_hdmi_tx_core_mm2s_tready   [get_bd_pins axi_hdmi_core/m_
 connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync]     [get_bd_pins axi_hdmi_dma/mm2s_fsync]
 connect_bd_net -net axi_hdmi_tx_core_mm2s_fsync    [get_bd_pins axi_hdmi_core/m_axis_mm2s_fsync_ret]
 
-connect_bd_net -net sys_concat_intc_din_0 [get_bd_pins sys_concat_intc/In0] [get_bd_pins axi_hdmi_dma/mm2s_introut]
-
 # spdif audio
 
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m04_axi [get_bd_intf_pins axi_cpu_interconnect/M04_AXI] [get_bd_intf_pins axi_spdif_tx_core/s_axi]
@@ -234,6 +228,17 @@ connect_bd_intf_net -intf_net axi_i2s_adi_dma_ack_rx [get_bd_intf_pins sys_ps7/D
 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M06_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M06_ARESETN] $sys_100m_resetn_source
+
+# interrupts
+
+connect_bd_net [get_bd_pins sys_concat_intc/dout] [get_bd_pins sys_ps7/IRQ_F2P]
+connect_bd_net [get_bd_pins sys_concat_intc/In15] [get_bd_pins axi_hdmi_dma/mm2s_introut]
+connect_bd_net [get_bd_pins sys_concat_intc/In14] [get_bd_pins axi_iic_main/iic2intc_irpt]
+
+for {set intc_index 0} {$intc_index < 14} {incr intc_index} {
+  set ps_intr_${intc_index} [create_bd_port -dir I ps_intr_${intc_index}]
+  connect_bd_net [get_bd_pins sys_concat_intc/In${intc_index}] [get_bd_ports ps_intr_${intc_index}]
+}
 
 # address map
 

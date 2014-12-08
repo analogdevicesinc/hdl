@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -162,9 +162,9 @@ module system_top (
 
   // internal signals
 
-  wire    [31:0]  gpio_i;
-  wire    [31:0]  gpio_o;
-  wire    [31:0]  gpio_t;
+  wire    [14:0]  gpio_i;
+  wire    [14:0]  gpio_o;
+  wire    [14:0]  gpio_t;
   wire            dac_clk;
   wire            dac_valid_0;
   wire            dac_enable_0;
@@ -180,6 +180,7 @@ module system_top (
   wire    [15:0]  adc_data_1;
   wire            ref_clk;
   wire            oddr_ref_clk;
+  wire    [15:0]  ps_intrs;
 
   // instantiations
 
@@ -201,16 +202,13 @@ module system_top (
     .O (ref_clk_out_p),
     .OB (ref_clk_out_n));
 
-  genvar n;
-  generate
-  for (n = 0; n <= 14; n = n + 1) begin: g_iobuf_gpio_bd
-  IOBUF i_iobuf_gpio_bd (
-    .I (gpio_o[n]),
-    .O (gpio_i[n]),
-    .T (gpio_t[n]),
-    .IO (gpio_bd[n]));
-  end
-  endgenerate
+ ad_iobuf #(
+    .DATA_WIDTH(15))
+  i_gpio_bd (
+    .dt(gpio_t),
+    .di(gpio_o),
+    .do(gpio_i),
+    .dio(gpio_bd));
 
   always @(posedge dac_clk) begin
     dac_dma_rd <= dac_valid_0 & dac_enable_0;
@@ -307,6 +305,22 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
+    .ps_intr_0 (ps_intrs[0]),
+    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_10 (ps_intrs[10]),
+    .ps_intr_11 (ps_intrs[11]),
+    .ps_intr_12 (ps_intrs[12]),
+    .ps_intr_13 (ps_intrs[13]),
+    .ps_intr_2 (ps_intrs[2]),
+    .ps_intr_3 (ps_intrs[3]),
+    .ps_intr_4 (ps_intrs[4]),
+    .ps_intr_5 (ps_intrs[5]),
+    .ps_intr_6 (ps_intrs[6]),
+    .ps_intr_7 (ps_intrs[7]),
+    .ps_intr_8 (ps_intrs[8]),
+    .ps_intr_9 (ps_intrs[9]),
+    .ad9122_dma_irq (ps_intrs[12]),
+    .ad9643_dma_irq (ps_intrs[13]),
     .ref_clk (ref_clk),
     .spdif (spdif));
 

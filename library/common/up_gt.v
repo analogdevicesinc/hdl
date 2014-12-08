@@ -101,6 +101,7 @@ module up_gt (
   es_stop,
   es_init,
   es_prescale,
+  es_voffset_range,
   es_voffset_step,
   es_voffset_max,
   es_voffset_min,
@@ -125,16 +126,18 @@ module up_gt (
 
   up_rstn,
   up_clk,
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack);
+  up_rack);
 
   // parameters
 
-  localparam  PCORE_VERSION = 32'h00050062;
+  localparam  PCORE_VERSION = 32'h00060062;
   parameter   PCORE_ID = 0;
 
   // gt interface
@@ -197,6 +200,7 @@ module up_gt (
   output          es_stop;
   output          es_init;
   output  [ 4:0]  es_prescale;
+  output  [ 1:0]  es_voffset_range;
   output  [ 7:0]  es_voffset_step;
   output  [ 7:0]  es_voffset_max;
   output  [ 7:0]  es_voffset_min;
@@ -221,15 +225,18 @@ module up_gt (
 
   input           up_rstn;
   input           up_clk;
-  input           up_sel;
-  input           up_wr;
-  input   [13:0]  up_addr;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
   input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
   output  [31:0]  up_rdata;
-  output          up_ack;
+  output          up_rack;
 
   // internal registers
 
+  reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_cpll_pd = 'd0;
   reg             up_drp_resetn = 'd0;
@@ -257,6 +264,7 @@ module up_gt (
   reg             up_es_stop = 'd0;
   reg             up_es_start = 'd0;
   reg     [ 4:0]  up_es_prescale = 'd0;
+  reg     [ 1:0]  up_es_voffset_range = 'd0;
   reg     [ 7:0]  up_es_voffset_step = 'd0;
   reg     [ 7:0]  up_es_voffset_max = 'd0;
   reg     [ 7:0]  up_es_voffset_min = 'd0;
@@ -275,7 +283,7 @@ module up_gt (
   reg     [15:0]  up_es_qdata2 = 'd0;
   reg     [15:0]  up_es_qdata4 = 'd0;
   reg             up_es_dmaerr = 'd0;
-  reg             up_ack = 'd0;
+  reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
   reg             rx_sysref_m1 = 'd0;
   reg             rx_sysref_m2 = 'd0;
@@ -312,8 +320,8 @@ module up_gt (
 
   // internal signals
 
-  wire            up_sel_s;
-  wire            up_wr_s;
+  wire            up_wreq_s;
+  wire            up_rreq_s;
   wire            rx_rst_done_s;
   wire            rx_pll_locked_s;
   wire            tx_rst_done_s;
@@ -340,8 +348,8 @@ module up_gt (
 
   // decode block select
 
-  assign up_sel_s = (up_addr[13:8] == 6'h00) ? up_sel : 1'b0;
-  assign up_wr_s = up_sel_s & up_wr;
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
 
   // status inputs
 
@@ -364,6 +372,7 @@ module up_gt (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_wack <= 'd0;
       up_scratch <= 'd0;
       up_cpll_pd <= 'd1;
       up_drp_resetn <= 'd0;
@@ -391,6 +400,7 @@ module up_gt (
       up_es_stop <= 'd0;
       up_es_start <= 'd0;
       up_es_prescale <= 'd0;
+      up_es_voffset_range <= 'd0;
       up_es_voffset_step <= 'd0;
       up_es_voffset_max <= 'd0;
       up_es_voffset_min <= 'd0;
@@ -410,107 +420,109 @@ module up_gt (
       up_es_qdata4 <= 'd0;
       up_es_dmaerr <= 'd0;
     end else begin
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h02)) begin
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h04)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h04)) begin
         up_cpll_pd <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h05)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h05)) begin
         up_drp_resetn <= up_wdata[1];
         up_gt_pll_resetn <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h08)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h08)) begin
         up_gt_rx_resetn <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h09)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h09)) begin
         up_rx_resetn <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h0a)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0a)) begin
         up_rx_sys_clk_sel <= up_wdata[5:4];
         up_rx_out_clk_sel <= up_wdata[2:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h0b)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0b)) begin
         up_rx_sysref_sel <= up_wdata[1];
         up_rx_sysref <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h0c)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0c)) begin
         up_rx_sync <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h18)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h18)) begin
         up_gt_tx_resetn <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h19)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h19)) begin
         up_tx_resetn <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h1a)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1a)) begin
         up_tx_sys_clk_sel <= up_wdata[5:4];
         up_tx_out_clk_sel <= up_wdata[2:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h1b)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1b)) begin
         up_tx_sysref_sel <= up_wdata[1];
         up_tx_sysref <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h1c)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
         up_tx_sync <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h23)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
         up_lanesel <= up_wdata[7:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h24)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h24)) begin
         up_drp_sel_t <= ~up_drp_sel_t;
         up_drp_rwn <= up_wdata[28];
         up_drp_addr <= up_wdata[27:16];
         up_drp_wdata <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h28)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
         up_es_init <= up_wdata[2];
         up_es_stop <= up_wdata[1];
         up_es_start <= up_wdata[0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h29)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h29)) begin
         up_es_prescale <= up_wdata[4:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h2a)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2a)) begin
+        up_es_voffset_range <= up_wdata[25:24];
         up_es_voffset_step <= up_wdata[23:16];
         up_es_voffset_max <= up_wdata[15:8];
         up_es_voffset_min <= up_wdata[7:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h2b)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2b)) begin
         up_es_hoffset_max <= up_wdata[27:16];
         up_es_hoffset_min <= up_wdata[11:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h2c)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2c)) begin
         up_es_hoffset_step <= up_wdata[11:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h2d)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2d)) begin
         up_es_start_addr <= up_wdata;
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h2e)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2e)) begin
         up_es_sdata1 <= up_wdata[31:16];
         up_es_sdata0 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h2f)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2f)) begin
         up_es_sdata3 <= up_wdata[31:16];
         up_es_sdata2 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h30)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h30)) begin
         up_es_sdata4 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h31)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h31)) begin
         up_es_qdata1 <= up_wdata[31:16];
         up_es_qdata0 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h32)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h32)) begin
         up_es_qdata3 <= up_wdata[31:16];
         up_es_qdata2 <= up_wdata[15:0];
       end
-      if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h33)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h33)) begin
         up_es_qdata4 <= up_wdata[15:0];
       end
       if (up_es_dmaerr_s == 1'b1) begin
         up_es_dmaerr <= 1'b1;
-      end else if ((up_wr_s == 1'b1) && (up_addr[7:0] == 8'h38)) begin
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h38)) begin
         up_es_dmaerr <= up_es_dmaerr & ~up_wdata[1];
       end
     end
@@ -520,12 +532,12 @@ module up_gt (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_ack <= 'd0;
+      up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_ack <= up_sel_s;
-      if (up_sel_s == 1'b1) begin
-        case (up_addr[7:0])
+      up_rack <= up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
+        case (up_raddr[7:0])
           8'h00: up_rdata <= PCORE_VERSION;
           8'h01: up_rdata <= PCORE_ID;
           8'h02: up_rdata <= up_scratch;
@@ -548,7 +560,7 @@ module up_gt (
           8'h25: up_rdata <= {15'd0, up_drp_status_s, up_drp_rdata_s};
           8'h28: up_rdata <= {29'd0, up_es_init, up_es_stop, up_es_start};
           8'h29: up_rdata <= {27'd0, up_es_prescale};
-          8'h2a: up_rdata <= {8'd0, up_es_voffset_step, up_es_voffset_max, up_es_voffset_min};
+          8'h2a: up_rdata <= {6'd0, up_es_voffset_range, up_es_voffset_step, up_es_voffset_max, up_es_voffset_min};
           8'h2b: up_rdata <= {4'd0, up_es_hoffset_max, 4'd0, up_es_hoffset_min};
           8'h2c: up_rdata <= {20'd0, up_es_hoffset_step};
           8'h2d: up_rdata <= up_es_start_addr;
@@ -693,6 +705,7 @@ module up_gt (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl (up_lanesel),
+    .up_xfer_done (),
     .d_rst (drp_rst),
     .d_clk (drp_clk),
     .d_data_cntrl (drp_lanesel));
@@ -729,13 +742,14 @@ module up_gt (
 
   // es control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(260)) i_es_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(262)) i_es_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_es_start,
                       up_es_stop,
                       up_es_init,
                       up_es_prescale,
+                      up_es_voffset_range,
                       up_es_voffset_step,
                       up_es_voffset_max,
                       up_es_voffset_min,
@@ -753,12 +767,14 @@ module up_gt (
                       up_es_qdata3,
                       up_es_qdata2,
                       up_es_qdata4}),
+    .up_xfer_done (),
     .d_rst (drp_rst),
     .d_clk (drp_clk),
     .d_data_cntrl ({  es_start_s,
                       es_stop_s,
                       es_init,
                       es_prescale,
+                      es_voffset_range,
                       es_voffset_step,
                       es_voffset_max,
                       es_voffset_min,

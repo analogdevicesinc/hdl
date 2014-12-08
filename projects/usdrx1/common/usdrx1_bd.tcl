@@ -15,51 +15,64 @@ set rx_sysref       [create_bd_port -dir O rx_sysref]
 set rx_data_p       [create_bd_port -dir I -from 7 -to 0 rx_data_p]
 set rx_data_n       [create_bd_port -dir I -from 7 -to 0 rx_data_n]
 
-set gt_rx_data      [create_bd_port -dir O -from 255 -to 0 gt_rx_data]
-set gt_rx_data_0    [create_bd_port -dir I -from 63 -to 0 gt_rx_data_0]
-set gt_rx_data_1    [create_bd_port -dir I -from 63 -to 0 gt_rx_data_1]
-set gt_rx_data_2    [create_bd_port -dir I -from 63 -to 0 gt_rx_data_2]
-set gt_rx_data_3    [create_bd_port -dir I -from 63 -to 0 gt_rx_data_3]
-set adc_data_0      [create_bd_port -dir O -from 127 -to 0 adc_data_0]
-set adc_data_1      [create_bd_port -dir O -from 127 -to 0 adc_data_1]
-set adc_data_2      [create_bd_port -dir O -from 127 -to 0 adc_data_2]
-set adc_data_3      [create_bd_port -dir O -from 127 -to 0 adc_data_3]
-set adc_valid_0     [create_bd_port -dir O -from 7 -to 0 adc_valid_0]
-set adc_valid_1     [create_bd_port -dir O -from 7 -to 0 adc_valid_1]
-set adc_valid_2     [create_bd_port -dir O -from 7 -to 0 adc_valid_2]
-set adc_valid_3     [create_bd_port -dir O -from 7 -to 0 adc_valid_3]
-set adc_enable_0    [create_bd_port -dir O -from 7 -to 0 adc_enable_0]
-set adc_enable_1    [create_bd_port -dir O -from 7 -to 0 adc_enable_1]
-set adc_enable_2    [create_bd_port -dir O -from 7 -to 0 adc_enable_2]
-set adc_enable_3    [create_bd_port -dir O -from 7 -to 0 adc_enable_3]
-set adc_dovf_0      [create_bd_port -dir I adc_dovf_0]
-set adc_dovf_1      [create_bd_port -dir I adc_dovf_1]
-set adc_dovf_2      [create_bd_port -dir I adc_dovf_2]
-set adc_dovf_3      [create_bd_port -dir I adc_dovf_3]
-set adc_data       [create_bd_port -dir I -from 511 -to 0 adc_data]
-set adc_wr_en       [create_bd_port -dir I adc_wr_en]
-set adc_dovf        [create_bd_port -dir O adc_dovf]
+set gt_rx_data        [create_bd_port -dir O -from 255 -to 0 gt_rx_data]
+set gt_rx_data_sof    [create_bd_port -dir O -from 3 -to 0 gt_rx_data_sof]
+set gt_rx_data_0      [create_bd_port -dir I -from 63 -to 0 gt_rx_data_0]
+set gt_rx_data_sof_0  [create_bd_port -dir I gt_rx_data_sof_0]
+set gt_rx_data_1      [create_bd_port -dir I -from 63 -to 0 gt_rx_data_1]
+set gt_rx_data_sof_1  [create_bd_port -dir I gt_rx_data_sof_1]
+set gt_rx_data_2      [create_bd_port -dir I -from 63 -to 0 gt_rx_data_2]
+set gt_rx_data_sof_2  [create_bd_port -dir I gt_rx_data_sof_2]
+set gt_rx_data_3      [create_bd_port -dir I -from 63 -to 0 gt_rx_data_3]
+set gt_rx_data_sof_3  [create_bd_port -dir I gt_rx_data_sof_3]
+set adc_data_0        [create_bd_port -dir O -from 127 -to 0 adc_data_0]
+set adc_data_1        [create_bd_port -dir O -from 127 -to 0 adc_data_1]
+set adc_data_2        [create_bd_port -dir O -from 127 -to 0 adc_data_2]
+set adc_data_3        [create_bd_port -dir O -from 127 -to 0 adc_data_3]
+set adc_valid_0       [create_bd_port -dir O -from 7 -to 0 adc_valid_0]
+set adc_valid_1       [create_bd_port -dir O -from 7 -to 0 adc_valid_1]
+set adc_valid_2       [create_bd_port -dir O -from 7 -to 0 adc_valid_2]
+set adc_valid_3       [create_bd_port -dir O -from 7 -to 0 adc_valid_3]
+set adc_enable_0      [create_bd_port -dir O -from 7 -to 0 adc_enable_0]
+set adc_enable_1      [create_bd_port -dir O -from 7 -to 0 adc_enable_1]
+set adc_enable_2      [create_bd_port -dir O -from 7 -to 0 adc_enable_2]
+set adc_enable_3      [create_bd_port -dir O -from 7 -to 0 adc_enable_3]
+set adc_dovf_0        [create_bd_port -dir I adc_dovf_0]
+set adc_dovf_1        [create_bd_port -dir I adc_dovf_1]
+set adc_dovf_2        [create_bd_port -dir I adc_dovf_2]
+set adc_dovf_3        [create_bd_port -dir I adc_dovf_3]
+set adc_data          [create_bd_port -dir I -from 511 -to 0 adc_data]
+set adc_wr_en         [create_bd_port -dir I adc_wr_en]
+set adc_dovf          [create_bd_port -dir O adc_dovf]
+
+# interrupts
+set usdrx1_dma_irq    [create_bd_port -dir O usdrx1_dma_irq]
+set usdrx1_spi_irq    [create_bd_port -dir O usdrx1_spi_irq]
 
 # adc peripherals
 
 set axi_ad9671_core_0 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_0]
-set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core_0]
+set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] $axi_ad9671_core_0
+set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9671_core_0
 
 set axi_ad9671_core_1 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_1]
-set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core_1]
+set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] $axi_ad9671_core_1
+set_property -dict [list CONFIG.PCORE_ID {1}] $axi_ad9671_core_1
 
 set axi_ad9671_core_2 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_2]
-set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core_2]
+set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] $axi_ad9671_core_2
+set_property -dict [list CONFIG.PCORE_ID {2}] $axi_ad9671_core_2
 
 set axi_ad9671_core_3 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_3]
-set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] [get_bd_cells axi_ad9671_core_3]
+set_property -dict [list CONFIG.PCORE_4L_2L_N {0}] $axi_ad9671_core_3
+set_property -dict [list CONFIG.PCORE_ID {3}] $axi_ad9671_core_3
 
-set axi_usdrx1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_usdrx1_jesd]
+set axi_usdrx1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_usdrx1_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_usdrx1_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_usdrx1_jesd
 
 set axi_usdrx1_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_usdrx1_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {8}] [get_bd_cells axi_usdrx1_gt]
+set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {8}] [get_bd_cells axi_usdrx1_gt]
 set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {4}] $axi_usdrx1_gt
 set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_usdrx1_gt
 set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_usdrx1_gt
@@ -80,7 +93,7 @@ set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {512}] $axi_usdrx1_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {512}] $axi_usdrx1_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_usdrx1_dma
 
 set axi_usdrx1_gt_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_usdrx1_gt_interconnect]
 set_property -dict [list CONFIG.NUM_MI {1}] $axi_usdrx1_gt_interconnect
@@ -90,7 +103,7 @@ set_property -dict [list CONFIG.NUM_MI {1}] $axi_usdrx1_dma_interconnect
 
 # gpio and spi
 
-set axi_usdrx1_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_usdrx1_spi]
+set axi_usdrx1_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_usdrx1_spi]
 set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_usdrx1_spi
 set_property -dict [list CONFIG.C_NUM_SS_BITS {5}] $axi_usdrx1_spi
 set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_usdrx1_spi
@@ -108,9 +121,9 @@ set_property -dict [list CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ {40}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {59}] $sys_ps7
 
-set_property LEFT 43 [get_bd_ports GPIO_I]
-set_property LEFT 43 [get_bd_ports GPIO_O]
-set_property LEFT 43 [get_bd_ports GPIO_T]
+set_property LEFT 58 [get_bd_ports GPIO_I]
+set_property LEFT 58 [get_bd_ports GPIO_O]
+set_property LEFT 58 [get_bd_ports GPIO_T]
 
 # connections (spi and gpio)
 
@@ -122,25 +135,25 @@ connect_bd_net -net axi_spi_1_sdo_i [get_bd_ports spi_sdo_i]  [get_bd_pins axi_u
 connect_bd_net -net axi_spi_1_sdo_o [get_bd_ports spi_sdo_o]  [get_bd_pins axi_usdrx1_spi/io0_o]
 connect_bd_net -net axi_spi_1_sdi_i [get_bd_ports spi_sdi_i]  [get_bd_pins axi_usdrx1_spi/io1_i]
 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_spi/ext_spi_clk] 
-connect_bd_net -net axi_spi_1_irq [get_bd_pins axi_usdrx1_spi/ip2intc_irpt] [get_bd_pins sys_concat_intc/In3] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_spi/ext_spi_clk]
+connect_bd_net -net axi_spi_1_irq [get_bd_pins axi_usdrx1_spi/ip2intc_irpt] [get_bd_ports usdrx1_spi_irq]
 
 # connections (gt)
 
-connect_bd_net -net axi_usdrx1_gt_ref_clk_c         [get_bd_pins axi_usdrx1_gt/ref_clk_c]           [get_bd_ports rx_ref_clk]   
-connect_bd_net -net axi_usdrx1_gt_rx_data_p         [get_bd_pins axi_usdrx1_gt/rx_data_p]           [get_bd_ports rx_data_p]   
-connect_bd_net -net axi_usdrx1_gt_rx_data_n         [get_bd_pins axi_usdrx1_gt/rx_data_n]           [get_bd_ports rx_data_n]   
-connect_bd_net -net axi_usdrx1_gt_rx_sync           [get_bd_pins axi_usdrx1_gt/rx_sync]             [get_bd_ports rx_sync]  
-connect_bd_net -net axi_usdrx1_gt_rx_sysref         [get_bd_pins axi_usdrx1_gt/rx_sysref]           [get_bd_ports rx_sysref]   
+connect_bd_net -net axi_usdrx1_gt_ref_clk_c         [get_bd_pins axi_usdrx1_gt/ref_clk_c]           [get_bd_ports rx_ref_clk]
+connect_bd_net -net axi_usdrx1_gt_rx_data_p         [get_bd_pins axi_usdrx1_gt/rx_data_p]           [get_bd_ports rx_data_p]
+connect_bd_net -net axi_usdrx1_gt_rx_data_n         [get_bd_pins axi_usdrx1_gt/rx_data_n]           [get_bd_ports rx_data_n]
+connect_bd_net -net axi_usdrx1_gt_rx_sync           [get_bd_pins axi_usdrx1_gt/rx_sync]             [get_bd_ports rx_sync]
+connect_bd_net -net axi_usdrx1_gt_rx_sysref         [get_bd_pins axi_usdrx1_gt/rx_sysref]           [get_bd_ports rx_sysref]
 
 # connections (adc)
 
 connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_usdrx1_gt/rx_clk_g]
 connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_usdrx1_gt/rx_clk]
-connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_0/rx_clk]          
-connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_1/rx_clk]          
-connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_2/rx_clk]          
-connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_3/rx_clk]          
+connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_0/rx_clk]
+connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_1/rx_clk]
+connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_2/rx_clk]
+connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_ad9671_core_3/rx_clk]
 connect_bd_net -net axi_usdrx1_gt_rx_clk  [get_bd_pins axi_usdrx1_jesd/rx_core_clk]
 
 connect_bd_net -net axi_usdrx1_gt_rx_rst            [get_bd_pins axi_usdrx1_gt/rx_rst]              [get_bd_pins axi_usdrx1_jesd/rx_reset]
@@ -155,10 +168,15 @@ connect_bd_net -net axi_usdrx1_gt_rx_ip_sync        [get_bd_pins axi_usdrx1_gt/r
 connect_bd_net -net axi_usdrx1_gt_rx_ip_sof         [get_bd_pins axi_usdrx1_gt/rx_ip_sof]           [get_bd_pins axi_usdrx1_jesd/rx_start_of_frame]
 connect_bd_net -net axi_usdrx1_gt_rx_ip_data        [get_bd_pins axi_usdrx1_gt/rx_ip_data]          [get_bd_pins axi_usdrx1_jesd/rx_tdata]
 connect_bd_net -net axi_usdrx1_gt_rx_data           [get_bd_pins axi_usdrx1_gt/rx_data]             [get_bd_ports gt_rx_data]
+connect_bd_net -net axi_usdrx1_gt_rx_data_sof       [get_bd_pins axi_usdrx1_gt/rx_data_sof]         [get_bd_ports gt_rx_data_sof]
 connect_bd_net -net axi_usdrx1_gt_rx_data_0         [get_bd_pins axi_ad9671_core_0/rx_data]         [get_bd_ports gt_rx_data_0]
+connect_bd_net -net axi_usdrx1_gt_rx_data_sof_0     [get_bd_pins axi_ad9671_core_0/rx_data_sof]     [get_bd_ports gt_rx_data_sof_0]
 connect_bd_net -net axi_usdrx1_gt_rx_data_1         [get_bd_pins axi_ad9671_core_1/rx_data]         [get_bd_ports gt_rx_data_1]
+connect_bd_net -net axi_usdrx1_gt_rx_data_sof_1     [get_bd_pins axi_ad9671_core_1/rx_data_sof]     [get_bd_ports gt_rx_data_sof_1]
 connect_bd_net -net axi_usdrx1_gt_rx_data_2         [get_bd_pins axi_ad9671_core_2/rx_data]         [get_bd_ports gt_rx_data_2]
+connect_bd_net -net axi_usdrx1_gt_rx_data_sof_2     [get_bd_pins axi_ad9671_core_2/rx_data_sof]     [get_bd_ports gt_rx_data_sof_2]
 connect_bd_net -net axi_usdrx1_gt_rx_data_3         [get_bd_pins axi_ad9671_core_3/rx_data]         [get_bd_ports gt_rx_data_3]
+connect_bd_net -net axi_usdrx1_gt_rx_data_sof_3     [get_bd_pins axi_ad9671_core_3/rx_data_sof]     [get_bd_ports gt_rx_data_sof_3]
 connect_bd_net -net axi_ad9671_core_adc_clk         [get_bd_pins axi_ad9671_core_0/adc_clk]         [get_bd_pins axi_usdrx1_dma/fifo_wr_clk]
 connect_bd_net -net axi_ad9671_core_adc_data_0      [get_bd_pins axi_ad9671_core_0/adc_data]        [get_bd_ports adc_data_0]
 connect_bd_net -net axi_ad9671_core_adc_data_1      [get_bd_pins axi_ad9671_core_1/adc_data]        [get_bd_ports adc_data_1]
@@ -179,7 +197,15 @@ connect_bd_net -net axi_ad9671_core_adc_dovf_3      [get_bd_pins axi_ad9671_core
 connect_bd_net -net axi_ad9671_dma_wr_en            [get_bd_pins axi_usdrx1_dma/fifo_wr_en]         [get_bd_ports adc_wr_en]
 connect_bd_net -net axi_ad9671_dma_adc_data         [get_bd_pins axi_usdrx1_dma/fifo_wr_din]        [get_bd_ports adc_data]
 connect_bd_net -net axi_ad9671_dma_adc_dovf         [get_bd_pins axi_usdrx1_dma/fifo_wr_overflow]   [get_bd_ports adc_dovf]
-connect_bd_net -net axi_usdrx1_dma_irq              [get_bd_pins axi_usdrx1_dma/irq]                [get_bd_pins sys_concat_intc/In2] 
+connect_bd_net -net axi_usdrx1_dma_irq              [get_bd_pins axi_usdrx1_dma/irq]                [get_bd_ports usdrx1_dma_irq]
+connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_0/adc_raddr_out]
+connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_1/adc_raddr_in]
+connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_2/adc_raddr_in]
+connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_3/adc_raddr_in]
+connect_bd_net -net axi_ad9671_adc_sync             [get_bd_pins axi_ad9671_core_0/adc_sync_out]
+connect_bd_net -net axi_ad9671_adc_sync             [get_bd_pins axi_ad9671_core_1/adc_sync_in]
+connect_bd_net -net axi_ad9671_adc_sync             [get_bd_pins axi_ad9671_core_2/adc_sync_in]
+connect_bd_net -net axi_ad9671_adc_sync             [get_bd_pins axi_ad9671_core_3/adc_sync_in]
 
 # interconnect (cpu)
 
@@ -199,14 +225,14 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M11_ACLK] $sy
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M12_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M13_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M14_ACLK] $sys_100m_clk_source
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_gt/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core_0/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core_1/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core_2/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core_3/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_jesd/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_dma/s_axi_aclk] 
-connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_spi/s_axi_aclk] 
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_gt/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core_0/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core_1/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core_2/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9671_core_3/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_jesd/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_dma/s_axi_aclk]
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_spi/s_axi_aclk]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M07_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M08_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M09_ARESETN] $sys_100m_resetn_source
@@ -215,14 +241,14 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M11_ARESET
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M12_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M13_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M14_ARESETN] $sys_100m_resetn_source
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_usdrx1_gt/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core_0/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core_1/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core_2/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core_3/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_usdrx1_jesd/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_usdrx1_dma/s_axi_aresetn] 
-connect_bd_net -net sys_100m_resetn [get_bd_pins axi_usdrx1_spi/s_axi_aresetn] 
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_usdrx1_gt/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core_0/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core_1/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core_2/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9671_core_3/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_usdrx1_jesd/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_usdrx1_dma/s_axi_aresetn]
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_usdrx1_spi/s_axi_aresetn]
 
 # interconnect (gt es)
 
@@ -248,7 +274,7 @@ connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
 connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
 
 connect_bd_intf_net -intf_net axi_usdrx1_dma_interconnect_m00_axi [get_bd_intf_pins axi_usdrx1_dma_interconnect/M00_AXI]  [get_bd_intf_pins sys_ps7/S_AXI_HP2]
-connect_bd_intf_net -intf_net axi_usdrx1_dma_interconnect_s00_axi [get_bd_intf_pins axi_usdrx1_dma_interconnect/S00_AXI]  [get_bd_intf_pins axi_usdrx1_dma/m_dest_axi] 
+connect_bd_intf_net -intf_net axi_usdrx1_dma_interconnect_s00_axi [get_bd_intf_pins axi_usdrx1_dma_interconnect/S00_AXI]  [get_bd_intf_pins axi_usdrx1_dma/m_dest_axi]
 connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_usdrx1_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
 connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_usdrx1_dma_interconnect/S00_ACLK] $sys_fmc_dma_clk_source
 connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_usdrx1_dma_interconnect/M00_ACLK] $sys_fmc_dma_clk_source
@@ -257,11 +283,12 @@ connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_usdrx1_dma/m_dest_axi_aclk]
 connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_usdrx1_dma_interconnect/ARESETN] $sys_fmc_dma_resetn_source
 connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_usdrx1_dma_interconnect/S00_ARESETN] $sys_fmc_dma_resetn_source
 connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_usdrx1_dma_interconnect/M00_ARESETN] $sys_fmc_dma_resetn_source
-connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_usdrx1_dma/m_dest_axi_aresetn] 
+connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_usdrx1_dma/m_dest_axi_aresetn]
 
 # ila
 
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
+set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {662}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {10}] $ila_jesd_rx_mon
@@ -273,7 +300,8 @@ connect_bd_net -net axi_usdrx1_gt_rx_clk            [get_bd_pins ila_jesd_rx_mon
 connect_bd_net -net axi_usdrx1_gt_rx_mon_data       [get_bd_pins ila_jesd_rx_mon/PROBE0]
 connect_bd_net -net axi_usdrx1_gt_rx_mon_trigger    [get_bd_pins ila_jesd_rx_mon/PROBE1]
 
-set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_ad9671]
+set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_ad9671]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9671
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {8}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {8}] $ila_ad9671

@@ -96,6 +96,7 @@ module ad_gt_es (
   es_voffset_min,
   es_voffset_max,
   es_voffset_step,
+  es_voffset_range,
   es_start_addr,
   es_dmaerr,
   es_status,
@@ -111,22 +112,22 @@ module ad_gt_es (
 
   // gt address
 
-  localparam  ES_DRP_CTRL_ADDR    = (GTH_GTX_N == 1) ? 12'h03d : 12'h03d;
-  localparam  ES_DRP_SDATA0_ADDR  = (GTH_GTX_N == 1) ? 12'h036 : 12'h036;
-  localparam  ES_DRP_SDATA1_ADDR  = (GTH_GTX_N == 1) ? 12'h037 : 12'h037;
-  localparam  ES_DRP_SDATA2_ADDR  = (GTH_GTX_N == 1) ? 12'h038 : 12'h038;
-  localparam  ES_DRP_SDATA3_ADDR  = (GTH_GTX_N == 1) ? 12'h039 : 12'h039;
-  localparam  ES_DRP_SDATA4_ADDR  = (GTH_GTX_N == 1) ? 12'h03a : 12'h03a;
-  localparam  ES_DRP_QDATA0_ADDR  = (GTH_GTX_N == 1) ? 12'h031 : 12'h031;
-  localparam  ES_DRP_QDATA1_ADDR  = (GTH_GTX_N == 1) ? 12'h032 : 12'h032;
-  localparam  ES_DRP_QDATA2_ADDR  = (GTH_GTX_N == 1) ? 12'h033 : 12'h033;
-  localparam  ES_DRP_QDATA3_ADDR  = (GTH_GTX_N == 1) ? 12'h034 : 12'h034;
-  localparam  ES_DRP_QDATA4_ADDR  = (GTH_GTX_N == 1) ? 12'h035 : 12'h035;
-  localparam  ES_DRP_HOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h03c : 12'h03c;
-  localparam  ES_DRP_VOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h03b : 12'h03b;
-  localparam  ES_DRP_STATUS_ADDR  = (GTH_GTX_N == 1) ? 12'h153 : 12'h151;
-  localparam  ES_DRP_SCNT_ADDR    = (GTH_GTX_N == 1) ? 12'h152 : 12'h150;
-  localparam  ES_DRP_ECNT_ADDR    = (GTH_GTX_N == 1) ? 12'h151 : 12'h14f;
+  localparam  ES_DRP_CTRL_ADDR    = (GTH_GTX_N == 1) ? 12'h03c : 12'h03d; // GTH-7 12'h03d 
+  localparam  ES_DRP_SDATA0_ADDR  = (GTH_GTX_N == 1) ? 12'h049 : 12'h036; // GTH-7 12'h036 
+  localparam  ES_DRP_SDATA1_ADDR  = (GTH_GTX_N == 1) ? 12'h04a : 12'h037; // GTH-7 12'h037 
+  localparam  ES_DRP_SDATA2_ADDR  = (GTH_GTX_N == 1) ? 12'h04b : 12'h038; // GTH-7 12'h038 
+  localparam  ES_DRP_SDATA3_ADDR  = (GTH_GTX_N == 1) ? 12'h04c : 12'h039; // GTH-7 12'h039 
+  localparam  ES_DRP_SDATA4_ADDR  = (GTH_GTX_N == 1) ? 12'h04d : 12'h03a; // GTH-7 12'h03a 
+  localparam  ES_DRP_QDATA0_ADDR  = (GTH_GTX_N == 1) ? 12'h044 : 12'h031; // GTH-7 12'h031 
+  localparam  ES_DRP_QDATA1_ADDR  = (GTH_GTX_N == 1) ? 12'h045 : 12'h032; // GTH-7 12'h032 
+  localparam  ES_DRP_QDATA2_ADDR  = (GTH_GTX_N == 1) ? 12'h046 : 12'h033; // GTH-7 12'h033 
+  localparam  ES_DRP_QDATA3_ADDR  = (GTH_GTX_N == 1) ? 12'h047 : 12'h034; // GTH-7 12'h034 
+  localparam  ES_DRP_QDATA4_ADDR  = (GTH_GTX_N == 1) ? 12'h048 : 12'h035; // GTH-7 12'h035 
+  localparam  ES_DRP_HOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h04f : 12'h03c; // GTH-7 12'h03c 
+  localparam  ES_DRP_VOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h097 : 12'h03b; // GTH-7 12'h03b 
+  localparam  ES_DRP_STATUS_ADDR  = (GTH_GTX_N == 1) ? 12'h153 : 12'h151; // GTH-7 12'h153 
+  localparam  ES_DRP_SCNT_ADDR    = (GTH_GTX_N == 1) ? 12'h152 : 12'h150; // GTH-7 12'h152 
+  localparam  ES_DRP_ECNT_ADDR    = (GTH_GTX_N == 1) ? 12'h151 : 12'h14f; // GTH-7 12'h151 
 
   // state machine
 
@@ -238,6 +239,7 @@ module ad_gt_es (
   input   [ 7:0]  es_voffset_min;
   input   [ 7:0]  es_voffset_max;
   input   [ 7:0]  es_voffset_step;
+  input   [ 1:0]  es_voffset_range;
   input   [31:0]  es_start_addr;
   output          es_dmaerr;
   output          es_status;
@@ -745,7 +747,11 @@ module ad_gt_es (
         es_sel <= 1'b1;
         es_wr <= 1'b1;
         es_addr <= ES_DRP_CTRL_ADDR;
+        if (GTH_GTX_N == 1) begin
+        es_wdata <= {es_ctrl_rdata[15:10], 2'b11, es_ctrl_rdata[7:5], es_prescale};
+        end else begin
         es_wdata <= {es_ctrl_rdata[15:10], 2'b11, es_ctrl_rdata[7:0]};
+        end
       end
       ES_FSM_SDATA0_WRITE: begin
         es_sel <= 1'b1;
@@ -817,7 +823,11 @@ module ad_gt_es (
         es_sel <= 1'b1;
         es_wr <= 1'b1;
         es_addr <= ES_DRP_HOFFSET_ADDR;
+        if (GTH_GTX_N == 1) begin
+        es_wdata <= {es_hoffset, es_hoffset_rdata[3:0]};
+        end else begin
         es_wdata <= {es_hoffset_rdata[15:12], es_hoffset};
+        end
       end
       ES_FSM_VOFFSET_READ: begin
         es_sel <= 1'b1;
@@ -829,7 +839,11 @@ module ad_gt_es (
         es_sel <= 1'b1;
         es_wr <= 1'b1;
         es_addr <= ES_DRP_VOFFSET_ADDR;
+        if (GTH_GTX_N == 1) begin
+        es_wdata <= {es_voffset_rdata[15:11], es_voffset_s[7], es_ut, es_voffset_s[6:0], es_voffset_range};
+        end else begin
         es_wdata <= {es_prescale, es_voffset_rdata[10:9], es_ut, es_voffset_s};
+        end
       end
       ES_FSM_CTRLSTART_READ: begin
         es_sel <= 1'b1;
@@ -841,7 +855,11 @@ module ad_gt_es (
         es_sel <= 1'b1;
         es_wr <= 1'b1;
         es_addr <= ES_DRP_CTRL_ADDR;
+        if (GTH_GTX_N == 1) begin
+        es_wdata <= {6'd1, es_ctrl_rdata[9:0]};
+        end else begin
         es_wdata <= {es_ctrl_rdata[15:6], 6'd1};
+        end
       end
       ES_FSM_STATUS_READ: begin
         es_sel <= 1'b1;
@@ -859,7 +877,11 @@ module ad_gt_es (
         es_sel <= 1'b1;
         es_wr <= 1'b1;
         es_addr <= ES_DRP_CTRL_ADDR;
+        if (GTH_GTX_N == 1) begin
+        es_wdata <= {6'd0, es_ctrl_rdata[9:0]};
+        end else begin
         es_wdata <= {es_ctrl_rdata[15:6], 6'd0};
+        end
       end
       ES_FSM_SCNT_READ: begin
         es_sel <= 1'b1;

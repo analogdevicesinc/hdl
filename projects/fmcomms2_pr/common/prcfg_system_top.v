@@ -81,22 +81,22 @@ module prcfg_system_top (
 
   output                            dma_dac_en;
   input                             dma_dac_dunf;
-  input   [127:0]                   dma_dac_ddata;
+  input   [63:0]                    dma_dac_ddata;
   input                             dma_dac_dvalid;
 
   input                             core_dac_en;
   output                            core_dac_dunf;
-  output  [127:0]                   core_dac_ddata;
+  output  [63:0]                    core_dac_ddata;
   output                            core_dac_dvalid;
 
   input                             core_adc_dwr;
   input                             core_adc_dsync;
-  input   [127:0]                   core_adc_ddata;
+  input   [63:0]                    core_adc_ddata;
   output                            core_adc_ovf;
 
   output                            dma_adc_dwr;
   output                            dma_adc_dsync;
-  output  [127:0]                   dma_adc_ddata;
+  output  [63:0]                    dma_adc_ddata;
   input                             dma_adc_ovf;
 
 
@@ -113,7 +113,7 @@ module prcfg_system_top (
     .NUM_CHANNEL(NUM_CHANNEL),
     .ADC_EN(ENABLE),
     .DAC_EN(ENABLE)
-  )i_prcfg_top_smp0 (
+  )i_prcfg_top (
     .clk(clk),
     .adc_gpio_input(adc_gpio_input),
     .adc_gpio_output(adc_gpio_output),
@@ -121,47 +121,19 @@ module prcfg_system_top (
     .dac_gpio_output(dac_gpio_output),
     .dma_dac_en(dma_dac_en),
     .dma_dac_dunf(dma_dac_dunf),
-    .dma_dac_ddata(dma_dac_ddata[63:0]),
+    .dma_dac_ddata(dma_dac_ddata),
     .dma_dac_dvalid(dma_dac_dvalid),
     .core_dac_en(core_dac_en),
     .core_dac_dunf(core_dac_dunf),
-    .core_dac_ddata(core_dac_ddata[63:0]),
+    .core_dac_ddata(core_dac_ddata),
     .core_dac_dvalid(core_dac_dvalid),
     .core_adc_dwr(core_adc_dwr),
     .core_adc_dsync(core_adc_dsync),
-    .core_adc_ddata(core_adc_ddata[63:0]),
+    .core_adc_ddata(core_adc_ddata),
     .core_adc_ovf(core_adc_ovf),
     .dma_adc_dwr(dma_adc_dwr),
     .dma_adc_dsync(dma_adc_dsync),
-    .dma_adc_ddata(dma_adc_ddata[63:0]),
-    .dma_adc_ovf(dma_adc_ovf)
-);
+    .dma_adc_ddata(dma_adc_ddata),
+    .dma_adc_ovf(dma_adc_ovf));
 
-  prcfg_top #(
-    .NUM_CHANNEL(NUM_CHANNEL),
-    .ADC_EN(ENABLE),
-    .DAC_EN(ENABLE)
-  )i_prcfg_top_smp1 (
-    .clk(clk),
-    .adc_gpio_input(adc_gpio_input),
-    .adc_gpio_output(),
-    .dac_gpio_input(dac_gpio_input),
-    .dac_gpio_output(),
-    .dma_dac_en(),
-    .dma_dac_dunf(dma_dac_dunf),
-    .dma_dac_ddata(dma_dac_ddata[127:64]),
-    .dma_dac_dvalid(dma_dac_dvalid),
-    .core_dac_en(core_dac_en),
-    .core_dac_dunf(),
-    .core_dac_ddata(core_dac_ddata[127:64]),
-    .core_dac_dvalid(),
-    .core_adc_dwr(core_adc_dwr),
-    .core_adc_dsync(core_adc_dsync),
-    .core_adc_ddata(core_adc_ddata[127:64]),
-    .core_adc_ovf(),
-    .dma_adc_dwr(),
-    .dma_adc_dsync(),
-    .dma_adc_ddata(dma_adc_ddata[127:64]),
-    .dma_adc_ovf(dma_adc_ovf)
-);
 endmodule

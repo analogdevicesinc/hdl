@@ -39,17 +39,24 @@ set dma_1_wr        [create_bd_port -dir I dma_1_wr]
 set dma_1_sync      [create_bd_port -dir I dma_1_sync]
 set dma_1_data      [create_bd_port -dir I -from 63 -to 0 dma_1_data]
 
+#interrupts
+set ad9250_0_dma_intr [create_bd_port -dir O ad9250_0_dma_intr]
+set ad9250_1_dma_intr [create_bd_port -dir O ad9250_1_dma_intr]
+if { $sys_zynq == 0 } {
+  set ad9250_spi_intr [create_bd_port -dir O ad9250_spi_intr]
+}
+
 # adc peripherals
 
 set axi_ad9250_0_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_0_core]
 set axi_ad9250_1_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_1_core]
 
-set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.1 axi_ad9250_jesd]
+set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9250_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9250_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9250_jesd
 
 set axi_ad9250_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_ad9250_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {4}] $axi_ad9250_gt
+set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {4}] $axi_ad9250_gt
 set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {2}] $axi_ad9250_gt
 set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_ad9250_gt
 set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_ad9250_gt
@@ -100,7 +107,7 @@ if {$sys_zynq == 1} {
 
 if {$sys_zynq == 0} {
 
-  set axi_ad9250_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_ad9250_spi]
+  set axi_ad9250_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_ad9250_spi]
   set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_ad9250_spi
   set_property -dict [list CONFIG.C_NUM_SS_BITS {1}] $axi_ad9250_spi
   set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_ad9250_spi
@@ -116,6 +123,7 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
+  set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {15}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
 
@@ -153,7 +161,7 @@ if {$sys_zynq == 1 } {
   connect_bd_net -net spi_sdo_o   [get_bd_ports spi_sdo_o]                [get_bd_pins axi_ad9250_spi/io0_o]
   connect_bd_net -net spi_sdi_i   [get_bd_ports spi_sdi_i]                [get_bd_pins axi_ad9250_spi/io1_i]
 
-  connect_bd_net -net axi_ad9250_spi_irq  [get_bd_pins axi_ad9250_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In5]
+  connect_bd_net -net axi_ad9250_spi_irq  [get_bd_pins axi_ad9250_spi/ip2intc_irpt]   [get_bd_ports ad9250_spi_intr]
 }
 
 # connections (gt)
@@ -215,8 +223,8 @@ connect_bd_net -net axi_ad9250_1_dma_data           [get_bd_pins axi_ad9250_1_dm
 
 connect_bd_net -net axi_ad9250_0_adc_dovf           [get_bd_pins axi_ad9250_0_core/adc_dovf]      [get_bd_pins axi_ad9250_0_dma/fifo_wr_overflow]
 connect_bd_net -net axi_ad9250_1_adc_dovf           [get_bd_pins axi_ad9250_1_core/adc_dovf]      [get_bd_pins axi_ad9250_1_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad9250_0_dma_irq            [get_bd_pins axi_ad9250_0_dma/irq]            [get_bd_pins sys_concat_intc/In2]
-connect_bd_net -net axi_ad9250_1_dma_irq            [get_bd_pins axi_ad9250_1_dma/irq]            [get_bd_pins sys_concat_intc/In3]
+connect_bd_net -net axi_ad9250_0_dma_irq            [get_bd_pins axi_ad9250_0_dma/irq]            [get_bd_ports ad9250_0_dma_intr]
+connect_bd_net -net axi_ad9250_1_dma_irq            [get_bd_pins axi_ad9250_1_dma/irq]            [get_bd_ports ad9250_1_dma_intr]
 
 # interconnect (cpu)
 
@@ -329,7 +337,8 @@ if {$sys_zynq == 1} {
 
 # ila
 
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_jesd_rx_mon]
+set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {7}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon

@@ -146,6 +146,7 @@ module axi_dmac (
 	input                                    s_axis_valid,
 	input  [C_DMA_DATA_WIDTH_SRC-1:0]        s_axis_data,
 	input  [0:0]                             s_axis_user,
+	output                                   s_axis_xfer_req,
 
 	// Master streaming AXI interface
 	input                                    m_axis_aclk,
@@ -222,11 +223,13 @@ localparam BYTES_PER_BEAT_WIDTH_SRC = C_DMA_DATA_WIDTH_SRC > 1024 ? 8 :
 
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
-reg          up_ack = 1'b0;
-wire         up_wr;
-wire         up_sel;
+reg          up_wack = 1'b0;
+reg          up_rack = 1'b0;
+wire         up_wreq;
+wire         up_rreq;
 wire [31:0]  up_wdata;
-wire [11:0]  up_addr;
+wire [11:0]  up_waddr;
+wire [11:0]  up_raddr;
 wire         up_write;
 
 // Scratch register
@@ -275,6 +278,22 @@ wire [2:0] src_address_id;
 wire [2:0] src_response_id;
 wire [7:0] dbg_status;
 
+assign m_dest_axi_araddr = 'd0;
+assign m_dest_axi_arlen = 'd0;
+assign m_dest_axi_arsize = 'd0;
+assign m_dest_axi_arburst = 'd0;
+assign m_dest_axi_arcache = 'd0;
+assign m_dest_axi_arprot = 'd0;
+assign m_src_axi_awaddr = 'd0;
+assign m_src_axi_awlen = 'd0;
+assign m_src_axi_awsize = 'd0;
+assign m_src_axi_awburst = 'd0;
+assign m_src_axi_awcache = 'd0;
+assign m_src_axi_awprot = 'd0;
+assign m_src_axi_wdata = 'd0;
+assign m_src_axi_wstrb = 'd0;
+assign m_src_axi_wlast = 'd0;
+
 up_axi #(
 	.PCORE_ADDR_WIDTH (12)
 ) i_up_axi (
@@ -297,18 +316,20 @@ up_axi #(
 	.up_axi_rresp(s_axi_rresp),
 	.up_axi_rdata(s_axi_rdata),
 	.up_axi_rready(s_axi_rready),
-	.up_wr(up_wr),
-	.up_sel(up_sel),
-	.up_addr(up_addr),
+	.up_wreq(up_wreq),
+	.up_waddr(up_waddr),
 	.up_wdata(up_wdata),
+	.up_wack(up_wack),
+	.up_rreq(up_rreq),
+	.up_raddr(up_raddr),
 	.up_rdata(up_rdata),
-	.up_ack(up_ack)
+	.up_rack(up_rack)
 );
 
 // IRQ handling
 assign up_irq_pending = ~up_irq_mask & up_irq_source;
 assign up_irq_trigger  = {up_eot, up_sot};
-assign up_irq_source_clear = (up_write == 1'b1 && up_addr == 12'h021) ? up_wdata[1:0] : 0;
+assign up_irq_source_clear = (up_write == 1'b1 && up_waddr == 12'h021) ? up_wdata[1:0] : 0;
 
 always @(posedge s_axi_aclk)
 begin
@@ -328,7 +349,7 @@ begin
 end
 
 // Register Interface
-assign up_write = up_wr & up_sel;
+assign up_write = up_wreq;
 
 always @(posedge s_axi_aclk)
 begin
@@ -344,11 +365,11 @@ begin
 		up_irq_mask <= 3'b11;
 		up_dma_req_valid <= 1'b0;
 		up_scratch <= 'h00;
-		up_ack <= 1'b0;
+		up_wack <= 1'b0;
 	end else begin
-		up_ack <= up_sel;
+		up_wack <= up_wreq;
 		if (up_enable == 1'b1) begin
-			if (up_write && up_addr == 12'h102) begin
+			if (up_write && up_waddr == 12'h102) begin
 				up_dma_req_valid <= up_dma_req_valid | up_wdata[0];
 			end else if (up_sot) begin
 				up_dma_req_valid <= 1'b0;
@@ -358,7 +379,7 @@ begin
 		end
 
 		if (up_write) begin
-			case (up_addr)
+			case (up_waddr)
 			12'h002: up_scratch <= up_wdata;
 			12'h020: up_irq_mask <= up_wdata;
 			12'h100: {up_pause, up_enable} <= up_wdata[1:0];
@@ -377,9 +398,11 @@ end
 always @(posedge s_axi_aclk)
 begin
 	if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
 		up_rdata <= 'h00;
 	end else begin
-		case (up_addr)
+    up_rack <= up_rreq;
+		case (up_raddr)
 		12'h000: up_rdata <= PCORE_VERSION;
 		12'h001: up_rdata <= PCORE_ID;
 		12'h002: up_rdata <= up_scratch;
@@ -565,6 +588,7 @@ dmac_request_arb #(
 	.s_axis_valid(s_axis_valid),
 	.s_axis_data(s_axis_data),
 	.s_axis_user(s_axis_user),
+	.s_axis_xfer_req(s_axis_xfer_req),
 
 	
 	.m_axis_aclk(m_axis_aclk),

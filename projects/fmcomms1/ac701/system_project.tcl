@@ -10,6 +10,9 @@ adi_project_files fmcomms1_ac701 [list \
   "system_constr.xdc"\
   "$ad_hdl_dir/projects/common/ac701/ac701_system_constr.xdc" ]
 
+set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/ac701/ac701_system_constr.xdc]
+set_property PROCESSING_ORDER EARLY [get_files system_constr.xdc]
+
 adi_project_run fmcomms1_ac701
 
 

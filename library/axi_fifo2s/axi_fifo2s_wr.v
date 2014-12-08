@@ -43,16 +43,19 @@ module axi_fifo2s_wr (
 
   // request and synchronization
 
-  axi_xfer_req,
+  dma_xfer_req,
+
+  // read interface
+
   axi_rd_req,
   axi_rd_addr,
 
   // fifo interface
 
-  m_rst,
-  m_clk,
-  m_wr,
-  m_wdata,
+  adc_rst,
+  adc_clk,
+  adc_wr,
+  adc_wdata,
 
   // axi interface
 
@@ -82,7 +85,6 @@ module axi_fifo2s_wr (
   axi_buser,
   axi_bready,
 
-
   // axi status
 
   axi_dwovf,
@@ -91,27 +93,31 @@ module axi_fifo2s_wr (
 
   // parameters
 
-  parameter   DATA_WIDTH = 32;
+  parameter   AXI_DATA_WIDTH = 512;
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 16;
   parameter   AXI_ADDRESS = 32'h00000000;
   parameter   AXI_ADDRLIMIT = 32'h00000000;
-  localparam  AXI_AWINCR = (AXI_LENGTH * DATA_WIDTH)/8;
+  localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
+  localparam  AXI_AWINCR = AXI_LENGTH * AXI_BYTE_WIDTH;
   localparam  BUF_THRESHOLD_LO = 8'd6;
   localparam  BUF_THRESHOLD_HI = 8'd250;
 
   // request and synchronization
 
-  input                           axi_xfer_req;
+  input                           dma_xfer_req;
+
+  // read interface
+
   output                          axi_rd_req;
   output  [ 31:0]                 axi_rd_addr;
 
   // fifo interface
 
-  input                           m_rst;
-  input                           m_clk;
-  input                           m_wr;
-  input   [DATA_WIDTH-1:0]        m_wdata;
+  input                           adc_rst;
+  input                           adc_clk;
+  input                           adc_wr;
+  input   [AXI_DATA_WIDTH-1:0]    adc_wdata;
 
   // axi interface
 
@@ -130,8 +136,8 @@ module axi_fifo2s_wr (
   output  [ 31:0]                 axi_awaddr;
   input                           axi_awready;
   output                          axi_wvalid;
-  output  [DATA_WIDTH-1:0]        axi_wdata;
-  output  [(DATA_WIDTH/8)-1:0]    axi_wstrb;
+  output  [AXI_DATA_WIDTH-1:0]    axi_wdata;
+  output  [AXI_BYTE_WIDTH-1:0]    axi_wstrb;
   output                          axi_wlast;
   output  [  3:0]                 axi_wuser;
   input                           axi_wready;
@@ -149,16 +155,16 @@ module axi_fifo2s_wr (
 
   // internal registers
 
-  reg     [  2:0]                 m_xfer_req_m = 'd0;
-  reg                             m_xfer_init = 'd0;
-  reg                             m_xfer_limit = 'd0;
-  reg                             m_xfer_enable = 'd0;
-  reg     [ 31:0]                 m_xfer_addr = 'd0;
-  reg     [  7:0]                 m_waddr = 'd0;
-  reg     [  7:0]                 m_waddr_g = 'd0;
-  reg                             m_rel_enable = 'd0;
-  reg                             m_rel_toggle = 'd0;
-  reg     [  7:0]                 m_rel_waddr = 'd0;
+  reg     [  2:0]                 adc_xfer_req_m = 'd0;
+  reg                             adc_xfer_init = 'd0;
+  reg                             adc_xfer_limit = 'd0;
+  reg                             adc_xfer_enable = 'd0;
+  reg     [ 31:0]                 adc_xfer_addr = 'd0;
+  reg     [  7:0]                 adc_waddr = 'd0;
+  reg     [  7:0]                 adc_waddr_g = 'd0;
+  reg                             adc_rel_enable = 'd0;
+  reg                             adc_rel_toggle = 'd0;
+  reg     [  7:0]                 adc_rel_waddr = 'd0;
   reg     [  2:0]                 axi_rel_toggle_m = 'd0;
   reg     [  7:0]                 axi_rel_waddr = 'd0;
   reg     [  7:0]                 axi_waddr_m1 = 'd0;
@@ -176,7 +182,7 @@ module axi_fifo2s_wr (
   reg                             axi_rlast = 'd0;
   reg                             axi_rd_d = 'd0;
   reg                             axi_rlast_d = 'd0;
-  reg     [DATA_WIDTH-1:0]        axi_rdata_d = 'd0;
+  reg     [AXI_DATA_WIDTH-1:0]    axi_rdata_d = 'd0;
   reg                             axi_rd_req = 'd0;
   reg     [ 31:0]                 axi_rd_addr = 'd0;
   reg                             axi_awvalid = 'd0;
@@ -192,7 +198,7 @@ module axi_fifo2s_wr (
   wire                            axi_rd_s;
   wire                            axi_req_s;
   wire                            axi_rlast_s;
-  wire    [DATA_WIDTH-1:0]        axi_rdata_s;
+  wire    [AXI_DATA_WIDTH-1:0]    axi_rdata_s;
 
   // binary to grey conversion
 
@@ -232,45 +238,45 @@ module axi_fifo2s_wr (
 
   // fifo interface
 
-  always @(posedge m_clk) begin
-    if (m_rst == 1'b1) begin
-      m_waddr <= 'd0;
-      m_waddr_g <= 'd0;
-      m_xfer_req_m <= 'd0;
-      m_xfer_init <= 'd0;
-      m_xfer_limit <= 'd0;
-      m_xfer_enable <= 'd0;
-      m_xfer_addr <= 'd0;
-      m_rel_enable <= 'd0;
-      m_rel_toggle <= 'd0;
-      m_rel_waddr <= 'd0;
+  always @(posedge adc_clk) begin
+    if (adc_rst == 1'b1) begin
+      adc_waddr <= 'd0;
+      adc_waddr_g <= 'd0;
+      adc_xfer_req_m <= 'd0;
+      adc_xfer_init <= 'd0;
+      adc_xfer_limit <= 'd0;
+      adc_xfer_enable <= 'd0;
+      adc_xfer_addr <= 'd0;
+      adc_rel_enable <= 'd0;
+      adc_rel_toggle <= 'd0;
+      adc_rel_waddr <= 'd0;
     end else begin
-      if ((m_wr == 1'b1) && (m_xfer_enable == 1'b1)) begin
-        m_waddr <= m_waddr + 1'b1;
+      if ((adc_wr == 1'b1) && (adc_xfer_enable == 1'b1)) begin
+        adc_waddr <= adc_waddr + 1'b1;
       end
-      m_waddr_g <= b2g(m_waddr);
-      m_xfer_req_m <= {m_xfer_req_m[1:0], axi_xfer_req};
-      m_xfer_init <= m_xfer_req_m[1] & ~m_xfer_req_m[2];
-      if (m_xfer_init == 1'b1) begin
-        m_xfer_limit <= 1'd1;
-      end else if ((m_xfer_addr >= AXI_ADDRLIMIT) || (m_xfer_enable == 1'b0)) begin
-        m_xfer_limit <= 1'd0;
+      adc_waddr_g <= b2g(adc_waddr);
+      adc_xfer_req_m <= {adc_xfer_req_m[1:0], dma_xfer_req};
+      adc_xfer_init <= adc_xfer_req_m[1] & ~adc_xfer_req_m[2];
+      if (adc_xfer_init == 1'b1) begin
+        adc_xfer_limit <= 1'd1;
+      end else if ((adc_xfer_addr >= AXI_ADDRLIMIT) || (adc_xfer_enable == 1'b0)) begin
+        adc_xfer_limit <= 1'd0;
       end
-      if (m_xfer_init == 1'b1) begin
-        m_xfer_enable <= 1'b1;
-        m_xfer_addr <= AXI_ADDRESS;
-      end else if ((m_waddr[1:0] == 2'h3) && (m_wr == 1'b1)) begin
-        m_xfer_enable <= m_xfer_req_m[2] & m_xfer_limit;
-        m_xfer_addr <= m_xfer_addr + AXI_AWINCR;
+      if (adc_xfer_init == 1'b1) begin
+        adc_xfer_enable <= 1'b1;
+        adc_xfer_addr <= AXI_ADDRESS;
+      end else if ((adc_waddr[1:0] == 2'h3) && (adc_wr == 1'b1)) begin
+        adc_xfer_enable <= adc_xfer_req_m[2] & adc_xfer_limit;
+        adc_xfer_addr <= adc_xfer_addr + AXI_AWINCR;
       end
-      if (m_waddr[1:0] == 2'h3) begin
-        m_rel_enable <= m_wr;
+      if (adc_waddr[1:0] == 2'h3) begin
+        adc_rel_enable <= adc_wr;
       end else begin
-        m_rel_enable <= 1'd0;
+        adc_rel_enable <= 1'd0;
       end
-      if (m_rel_enable == 1'b1) begin
-        m_rel_toggle <= ~m_rel_toggle;
-        m_rel_waddr <= m_waddr;
+      if (adc_rel_enable == 1'b1) begin
+        adc_rel_toggle <= ~adc_rel_toggle;
+        adc_rel_waddr <= adc_waddr;
       end
     end
   end
@@ -287,11 +293,11 @@ module axi_fifo2s_wr (
       axi_waddr_m2 <= 'd0;
       axi_waddr <= 'd0;
     end else begin
-      axi_rel_toggle_m <= {axi_rel_toggle_m[1:0], m_rel_toggle};
+      axi_rel_toggle_m <= {axi_rel_toggle_m[1:0], adc_rel_toggle};
       if (axi_rel_toggle_s == 1'b1) begin
-        axi_rel_waddr <= m_rel_waddr;
+        axi_rel_waddr <= adc_rel_waddr;
       end
-      axi_waddr_m1 <= m_waddr_g;
+      axi_waddr_m1 <= adc_waddr_g;
       axi_waddr_m2 <= axi_waddr_m1;
       axi_waddr <= g2b(axi_waddr_m2);
     end
@@ -334,7 +340,7 @@ module axi_fifo2s_wr (
       axi_xfer_req_m <= 'd0;
       axi_xfer_init <= 'd0;
     end else begin
-      axi_xfer_req_m <= {axi_xfer_req_m[1:0], axi_xfer_req};
+      axi_xfer_req_m <= {axi_xfer_req_m[1:0], dma_xfer_req};
       axi_xfer_init <= axi_xfer_req_m[1] & ~axi_xfer_req_m[2];
     end
   end
@@ -418,7 +424,7 @@ module axi_fifo2s_wr (
 
   // write channel
 
-  assign axi_wstrb = {(DATA_WIDTH/8){1'b1}};
+  assign axi_wstrb = {AXI_BYTE_WIDTH{1'b1}};
   assign axi_wuser = 4'b0000;
 
   // response channel
@@ -445,7 +451,7 @@ module axi_fifo2s_wr (
 
   // interface handler
 
-  ad_axis_inf_rx #(.DATA_WIDTH(DATA_WIDTH)) i_axis_inf (
+  ad_axis_inf_rx #(.DATA_WIDTH(AXI_DATA_WIDTH)) i_axis_inf (
     .clk (axi_clk),
     .rst (axi_reset),
     .valid (axi_rd_d),
@@ -458,11 +464,11 @@ module axi_fifo2s_wr (
 
   // buffer
 
-  ad_mem #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(8)) i_mem (
-    .clka (m_clk),
-    .wea (m_wr),
-    .addra (m_waddr),
-    .dina (m_wdata),
+  ad_mem #(.DATA_WIDTH(AXI_DATA_WIDTH), .ADDR_WIDTH(8)) i_mem (
+    .clka (adc_clk),
+    .wea (adc_wr),
+    .addra (adc_waddr),
+    .dina (adc_wdata),
     .clkb (axi_clk),
     .addrb (axi_raddr),
     .doutb (axi_rdata_s));

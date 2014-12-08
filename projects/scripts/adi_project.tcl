@@ -1,11 +1,23 @@
 
 set xl_board "none"
 
+if {![info exists REQUIRED_VIVADO_VERSION]} {
+  set REQUIRED_VIVADO_VERSION "2014.2"
+}
+
+if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
+  set IGNORE_VERSION_CHECK 1
+} elseif {![info exists IGNORE_VERSION_CHECK]} {
+  set IGNORE_VERSION_CHECK 0
+}
+
 proc adi_project_create {project_name} {
 
   global ad_hdl_dir
   global ad_phdl_dir
   global xl_board
+  global REQUIRED_VIVADO_VERSION
+  global IGNORE_VERSION_CHECK
 
   set xl_board "none"
   set project_part "none"
@@ -49,13 +61,13 @@ proc adi_project_create {project_name} {
   if [regexp "_zc706$" $project_name] {
     set xl_board "zc706"
     set project_part "xc7z045ffg900-2"
-    set project_board "xilinx.com:zynq:zc706:1.1"
+    set project_board "xilinx.com:zc706:part0:1.0"
   }
 
    if [regexp "_mitx045$" $project_name] {
     set xl_board "mitx045"
     set project_part "xc7z045ffg900-2"
-    set project_board "not-applicable"
+    set project_board "em.avnet.com:mini_itx_7z045:part0:1.0"
   }
 
   # planahead - 6 and down
@@ -78,6 +90,10 @@ proc adi_project_create {project_name} {
 
   # vivado - 7 and up
 
+  if {!$IGNORE_VERSION_CHECK && [string compare [version -short] $REQUIRED_VIVADO_VERSION] != 0} {
+    return -code error [format "ERROR: This project requires Vivado %s." $REQUIRED_VIVADO_VERSION]
+  }
+
   set project_system_dir "./$project_name.srcs/sources_1/bd/system"
 
   create_project $project_name . -part $project_part -force
@@ -92,6 +108,13 @@ proc adi_project_create {project_name} {
 
   set_property ip_repo_paths $lib_dirs [current_fileset]
   update_ip_catalog
+
+  set_msg_config -id {BD 41-1348} -new_severity info
+  set_msg_config -id {BD 41-1343} -new_severity info
+  set_msg_config -id {BD 41-1306} -new_severity info
+  set_msg_config -id {IP_Flow 19-1687} -new_severity info
+  set_msg_config -id {filemgmt 20-1763} -new_severity info
+  set_msg_config -severity {CRITICAL WARNING} -quiet -id {BD 41-1276} -new_severity error
 
   create_bd_design "system"
   source system_bd.tcl
@@ -173,11 +196,11 @@ proc adi_project_run {project_name} {
   #get_property STATS.TNS [get_runs impl_1]
   #get_property STATS.TPWS [get_runs impl_1]
 
+  export_hardware [get_files $project_system_dir/system.bd] [get_runs impl_1] -bitstream
+
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
     puts "ERROR: Timing Constraints NOT met."
     use_this_invalid_command_to_crash
   }
-
-  export_hardware [get_files $project_system_dir/system.bd] [get_runs impl_1] -bitstream
 }
 

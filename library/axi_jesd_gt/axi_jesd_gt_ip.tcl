@@ -15,7 +15,8 @@ adi_ip_files axi_jesd_gt [list \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_drp_cntrl.v" \
   "$ad_hdl_dir/library/common/up_gt.v" \
-  "axi_jesd_gt.v" ]
+  "axi_jesd_gt.v" \
+  "axi_jesd_gt_constr.xdc" ]
 
 adi_ip_properties axi_jesd_gt
 adi_ip_constraints axi_jesd_gt [list \

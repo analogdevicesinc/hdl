@@ -20,9 +20,12 @@ adi_ip_files axi_ad9625 [list \
   "axi_ad9625_pnmon.v" \
   "axi_ad9625_channel.v" \
   "axi_ad9625_if.v" \
-  "axi_ad9625.v" ]
+  "axi_ad9625.v" \
+  "axi_ad9625_constr.xdc" ]
 
 adi_ip_properties axi_ad9625
+adi_ip_constraints axi_ad9625 [list \
+  "axi_ad9625_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 

@@ -8,8 +8,6 @@ set_property -dict  {PACKAGE_PIN  AB7   IOSTANDARD  LVCMOS15} [get_ports sys_rst
 set_property -dict  {PACKAGE_PIN  AD12  IOSTANDARD  DIFF_SSTL15} [get_ports sys_clk_p]
 set_property -dict  {PACKAGE_PIN  AD11  IOSTANDARD  DIFF_SSTL15} [get_ports sys_clk_n]
 
-create_clock -name sys_clk      -period  5.00 [get_ports sys_clk_p]
-
 # ddr
 
 set_property -dict  {PACKAGE_PIN  AF11  IOSTANDARD SSTL15} [get_ports {ddr3_1_p[0]}]
@@ -40,18 +38,6 @@ set_property -dict  {PACKAGE_PIN  N27   IOSTANDARD  LVCMOS25} [get_ports mii_txd
 set_property -dict  {PACKAGE_PIN  N25   IOSTANDARD  LVCMOS25} [get_ports mii_txd[1]]
 set_property -dict  {PACKAGE_PIN  M29   IOSTANDARD  LVCMOS25} [get_ports mii_txd[2]]
 set_property -dict  {PACKAGE_PIN  L28   IOSTANDARD  LVCMOS25} [get_ports mii_txd[3]]
-
-set_false_path -through [get_ports mii_rst_n]
-set_property SLEW FAST [get_ports mii_txd*]
-set_property SLEW FAST [get_ports mii_tx_en]
-
-create_clock -add -name phy_rx_clk -period 8.000 [get_nets mii_rx_clk]
-create_clock -period 40.000 -name phy_tx_clk [get_ports mii_tx_clk]
-
-set_false_path -from [get_clocks phy_rx_clk] -to [get_clocks *]
-set_false_path -from [get_clocks phy_tx_clk] -to [get_clocks *]
-set_false_path -from [get_clocks *] -to [get_clocks phy_rx_clk]
-set_false_path -from [get_clocks *] -to [get_clocks phy_tx_clk]
 
 # uart
 
@@ -123,16 +109,3 @@ set_property -dict  {PACKAGE_PIN  L18   IOSTANDARD  LVCMOS25} [get_ports hdmi_da
 # spdif
 
 set_property -dict  {PACKAGE_PIN  J17   IOSTANDARD  LVCMOS25} [get_ports spdif]
-
-# clocks
-
-create_clock -name cpu_clk      -period 10.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/ui_addn_clk_0]
-create_clock -name m200_clk     -period  5.00 [get_pins i_system_wrapper/system_i/axi_ddr_cntrl/ui_clk]
-create_clock -name hdmi_clk     -period  6.73 [get_pins i_system_wrapper/system_i/axi_hdmi_clkgen/clk_0]
-create_clock -name spdif_clk    -period 50.00 [get_pins i_system_wrapper/system_i/sys_audio_clkgen/clk_out1]
-
-set_clock_groups -asynchronous -group {cpu_clk}
-set_clock_groups -asynchronous -group {m200_clk}
-set_clock_groups -asynchronous -group {hdmi_clk}
-set_clock_groups -asynchronous -group {spdif_clk}
-

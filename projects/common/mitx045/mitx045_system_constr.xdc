@@ -56,15 +56,3 @@ set_property  -dict {PACKAGE_PIN  A9   IOSTANDARD LVCMOS15} [get_ports gpio_bd[9
 set_property  -dict {PACKAGE_PIN  B10  IOSTANDARD LVCMOS15} [get_ports gpio_bd[10]]          ; ## GPIO_SW_6
 set_property  -dict {PACKAGE_PIN  A10  IOSTANDARD LVCMOS15} [get_ports gpio_bd[11]]          ; ## GPIO_SW_7
 
-# clocks
-
-create_clock -name cpu_clk      -period 10.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK0]
-create_clock -name m200_clk     -period  5.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK1]
-create_clock -name hdmi_clk     -period  6.73 [get_pins i_system_wrapper/system_i/axi_hdmi_clkgen/clk_0]
-create_clock -name spdif_clk    -period 50.00 [get_pins i_system_wrapper/system_i/sys_audio_clkgen/clk_out1]
-
-set_clock_groups -asynchronous -group {cpu_clk}
-set_clock_groups -asynchronous -group {m200_clk}
-set_clock_groups -asynchronous -group {hdmi_clk}
-set_clock_groups -asynchronous -group {spdif_clk}
-

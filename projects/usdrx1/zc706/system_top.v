@@ -226,13 +226,19 @@ module system_top (
   wire            adc_dovf_2;
   wire            adc_dovf_3;
   wire   [255:0]  gt_rx_data;
+  wire     [7:0]  gt_rx_data_sof;
   wire    [63:0]  gt_rx_data_0;
+  wire            gt_rx_data_sof_0;
   wire    [63:0]  gt_rx_data_1;
+  wire            gt_rx_data_sof_1;
   wire    [63:0]  gt_rx_data_2;
+  wire            gt_rx_data_sof_2;
   wire    [63:0]  gt_rx_data_3;
+  wire            gt_rx_data_sof_3;
   wire    [58:0]  gpio_i;
   wire    [58:0]  gpio_o;
   wire    [58:0]  gpio_t;
+  wire    [15:0]  ps_intrs;
 
   // spi assignments
 
@@ -264,6 +270,10 @@ module system_top (
   assign gt_rx_data_2 = gt_rx_data[191:128];
   assign gt_rx_data_1 = gt_rx_data[127: 64];
   assign gt_rx_data_0 = gt_rx_data[ 63:  0];
+  assign gt_rx_data_sof_0 = gt_rx_data_sof [0] | gt_rx_data_sof [1];
+  assign gt_rx_data_sof_1 = gt_rx_data_sof [2] | gt_rx_data_sof [3];
+  assign gt_rx_data_sof_2 = gt_rx_data_sof [4] | gt_rx_data_sof [5];
+  assign gt_rx_data_sof_3 = gt_rx_data_sof [6] | gt_rx_data_sof [7];
 
   assign adc_data   = {adc_data_3, adc_data_2, adc_data_1, adc_data_0};
   assign adc_valid  = (|adc_valid_0) | (|adc_valid_1) | (|adc_valid_2) | (|adc_valid_3) ;
@@ -394,10 +404,15 @@ module system_top (
     .adc_dovf_2 (adc_dovf_2),
     .adc_dovf_3 (adc_dovf_3),
     .gt_rx_data (gt_rx_data),
+    .gt_rx_data_sof (gt_rx_data_sof),
     .gt_rx_data_0 (gt_rx_data_0),
+    .gt_rx_data_sof_0(gt_rx_data_sof_0),
     .gt_rx_data_1 (gt_rx_data_1),
+    .gt_rx_data_sof_1(gt_rx_data_sof_1),
     .gt_rx_data_2 (gt_rx_data_2),
+    .gt_rx_data_sof_2(gt_rx_data_sof_2),
     .gt_rx_data_3 (gt_rx_data_3),
+    .gt_rx_data_sof_3(gt_rx_data_sof_3),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -405,6 +420,22 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
+    .ps_intr_0 (ps_intrs[0]),
+    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_2 (ps_intrs[2]),
+    .ps_intr_3 (ps_intrs[3]),
+    .ps_intr_4 (ps_intrs[4]),
+    .ps_intr_5 (ps_intrs[5]),
+    .ps_intr_6 (ps_intrs[6]),
+    .ps_intr_7 (ps_intrs[7]),
+    .ps_intr_8 (ps_intrs[8]),
+    .ps_intr_9 (ps_intrs[9]),
+    .ps_intr_10 (ps_intrs[10]),
+    .ps_intr_11 (ps_intrs[11]),
+    .ps_intr_12 (ps_intrs[12]),
+    .ps_intr_13 (ps_intrs[13]),
+    .usdrx1_dma_irq (ps_intrs[13]),
+    .usdrx1_spi_irq (ps_intrs[12]),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),

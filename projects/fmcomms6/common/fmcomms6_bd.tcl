@@ -36,6 +36,12 @@ if {$sys_zynq == 0} {
   set gpio_fmcomms6_t   [create_bd_port -dir O gpio_fmcomms6_t]
 }
 
+# interrupts
+
+set fmcomms6_dma_irq    [create_bd_port -dir O fmcomms6_dma_irq]
+set fmcomms6_spi_irq    [create_bd_port -dir O fmcomms6_spi_irq]
+set fmcomms6_gpio_irq   [create_bd_port -dir O fmcomms6_gpio_irq]
+
 # dma interface
 
 set adc_clk         [create_bd_port -dir O adc_clk]
@@ -59,11 +65,7 @@ set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9652_dma
-
-if {$sys_zynq == 1} {
-  set axi_ad9652_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ad9652_dma_interconnect]
-  set_property -dict [list CONFIG.NUM_MI {1}] $axi_ad9652_dma_interconnect
-}
+set_property -dict [list CONFIG.C_FIFO_SIZE {8}] $axi_ad9652_dma
 
 if {$sys_zynq == 0} {
 
@@ -86,7 +88,7 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
-  set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {125.0}] $sys_ps7
+  set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {170.0}] $sys_ps7
   set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {17}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
@@ -99,8 +101,6 @@ if {$sys_zynq == 1} {
 
   set_property -dict [list CONFIG.NUM_MI {11}] $axi_cpu_interconnect
   set_property -dict [list CONFIG.NUM_SI {9}] $axi_mem_interconnect
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_2] [get_bd_ports unc_int2]
-  delete_bd_objs [get_bd_nets sys_concat_intc_din_3] [get_bd_ports unc_int3]
 }
 
 # connections (spi and gpio)
@@ -119,20 +119,20 @@ if {$sys_zynq == 1 } {
 
 } else {
 
-  connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]                [get_bd_pins axi_fmcomms6_spi/ss_i]
-  connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]                [get_bd_pins axi_fmcomms6_spi/ss_o]
-  connect_bd_net -net spi_clk_i   [get_bd_ports spi_clk_i]                [get_bd_pins axi_fmcomms6_spi/sck_i]
-  connect_bd_net -net spi_clk_o   [get_bd_ports spi_clk_o]                [get_bd_pins axi_fmcomms6_spi/sck_o]
-  connect_bd_net -net spi_sdo_i   [get_bd_ports spi_sdo_i]                [get_bd_pins axi_fmcomms6_spi/io0_i]
-  connect_bd_net -net spi_sdo_o   [get_bd_ports spi_sdo_o]                [get_bd_pins axi_fmcomms6_spi/io0_o]
-  connect_bd_net -net spi_sdi_i   [get_bd_ports spi_sdi_i]                [get_bd_pins axi_fmcomms6_spi/io1_i]
+  connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]    [get_bd_pins axi_fmcomms6_spi/ss_i]
+  connect_bd_net -net spi_csn_o   [get_bd_ports spi_csn_o]    [get_bd_pins axi_fmcomms6_spi/ss_o]
+  connect_bd_net -net spi_clk_i   [get_bd_ports spi_clk_i]    [get_bd_pins axi_fmcomms6_spi/sck_i]
+  connect_bd_net -net spi_clk_o   [get_bd_ports spi_clk_o]    [get_bd_pins axi_fmcomms6_spi/sck_o]
+  connect_bd_net -net spi_sdo_i   [get_bd_ports spi_sdo_i]    [get_bd_pins axi_fmcomms6_spi/io0_i]
+  connect_bd_net -net spi_sdo_o   [get_bd_ports spi_sdo_o]    [get_bd_pins axi_fmcomms6_spi/io0_o]
+  connect_bd_net -net spi_sdi_i   [get_bd_ports spi_sdi_i]    [get_bd_pins axi_fmcomms6_spi/io1_i]
 
   connect_bd_net -net gpio_fmcomms6_i [get_bd_ports gpio_fmcomms6_i]    [get_bd_pins axi_fmcomms6_gpio/gpio_io_i]
   connect_bd_net -net gpio_fmcomms6_o [get_bd_ports gpio_fmcomms6_o]    [get_bd_pins axi_fmcomms6_gpio/gpio_io_o]
   connect_bd_net -net gpio_fmcomms6_t [get_bd_ports gpio_fmcomms6_t]    [get_bd_pins axi_fmcomms6_gpio/gpio_io_t]
 
-  connect_bd_net -net axi_fmcomms6_spi_irq  [get_bd_pins axi_fmcomms6_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In5]
-  connect_bd_net -net axi_fmcomms6_gpio_irq [get_bd_pins axi_fmcomms6_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In6]
+  connect_bd_net -net axi_fmcomms6_spi_irq  [get_bd_pins axi_fmcomms6_spi/ip2intc_irpt]   [get_bd_ports fmcomms6_spi_irq]
+  connect_bd_net -net axi_fmcomms6_gpio_irq [get_bd_pins axi_fmcomms6_gpio/ip2intc_irpt]  [get_bd_ports fmcomms6_gpio_irq]
 }
 
 # connections (adc)
@@ -165,7 +165,7 @@ connect_bd_net -net axi_ad9652_dma_dwr          [get_bd_pins sys_wfifo/s_wr]    
 connect_bd_net -net axi_ad9652_dma_dsync        [get_bd_ports adc_dma_sync]                       [get_bd_pins axi_ad9652_dma/fifo_wr_sync]
 connect_bd_net -net axi_ad9652_dma_ddata        [get_bd_pins sys_wfifo/s_wdata]                   [get_bd_pins axi_ad9652_dma/fifo_wr_din]
 connect_bd_net -net axi_ad9652_dma_dovf         [get_bd_pins sys_wfifo/s_wovf]                    [get_bd_pins axi_ad9652_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad9652_dma_irq          [get_bd_pins axi_ad9652_dma/irq]                  [get_bd_pins sys_concat_intc/In2]
+connect_bd_net -net axi_ad9652_dma_irq          [get_bd_pins axi_ad9652_dma/irq]                  [get_bd_ports fmcomms6_dma_irq]
 
 # interconnect (cpu)
 
@@ -200,6 +200,7 @@ if {$sys_zynq == 0} {
 if {$sys_zynq == 1} {
   set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
   connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
+  set_property -dict [list CONFIG.C_DMA_AXI_PROTOCOL_DEST {1}] $axi_ad9652_dma
 }
 
 # interconnect (mem/adc)
@@ -214,30 +215,26 @@ if {$sys_zynq == 0} {
 
 } else {
 
-  connect_bd_intf_net -intf_net axi_ad9652_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9652_dma_interconnect/S00_AXI] [get_bd_intf_pins axi_ad9652_dma/m_dest_axi]
-  connect_bd_intf_net -intf_net axi_ad9652_dma_interconnect_m00_axi [get_bd_intf_pins axi_ad9652_dma_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP1]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9652_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9652_dma_interconnect/M00_ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9652_dma_interconnect/S00_ACLK] $sys_fmc_dma_clk_source
+  connect_bd_intf_net -intf_net axi_ad9652_dma_axi [get_bd_intf_pins axi_ad9652_dma/m_dest_axi] [get_bd_intf_pins sys_ps7/S_AXI_HP1]
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9652_dma/m_dest_axi_aclk]
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_ps7/S_AXI_HP1_ACLK]
-  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9652_dma_interconnect/ARESETN] $sys_100m_resetn_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9652_dma_interconnect/M00_ARESETN] $sys_100m_resetn_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9652_dma_interconnect/S00_ARESETN] $sys_100m_resetn_source
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9652_dma/m_dest_axi_aresetn]
 }
 
 # ila (adc)
 
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:3.0 ila_adc]
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc
+set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_adc]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {3}] $ila_adc
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $ila_adc
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 
 connect_bd_net -net sys_200m_clk [get_bd_pins ila_adc/clk]
 connect_bd_net -net axi_ad9652_dma_dwr [get_bd_pins ila_adc/probe0]
 connect_bd_net -net axi_ad9652_dma_ddata [get_bd_pins ila_adc/probe1]
+connect_bd_net -net axi_ad9652_dma_dovf [get_bd_pins ila_adc/probe2]
 
 # address map
 

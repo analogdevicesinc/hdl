@@ -62,6 +62,7 @@ module axi_jesd_gt (
   rx_clk_g,
   rx_clk,
   rx_data,
+  rx_data_sof,
   rx_gt_charisk,
   rx_gt_disperr,
   rx_gt_notintable,
@@ -71,7 +72,7 @@ module axi_jesd_gt (
   rx_ip_sync,
   rx_ip_sof,
   rx_ip_data,
-  
+
   tx_rst,
   tx_clk_g,
   tx_clk,
@@ -148,7 +149,8 @@ module axi_jesd_gt (
 
   parameter   PCORE_ID = 0;
   parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_NUM_OF_LANES = 4;
+  parameter   PCORE_NUM_OF_TX_LANES = 4;
+  parameter   PCORE_NUM_OF_RX_LANES = 4;
   parameter   PCORE_QPLL_REFCLK_DIV = 1;
   parameter   PCORE_QPLL_CFG = 27'h0680181;
   parameter   PCORE_QPLL_FBDIV_RATIO = 1'b1;
@@ -160,206 +162,241 @@ module axi_jesd_gt (
   parameter   PCORE_TX_CLK25_DIV  = 20;
   parameter   PCORE_PMA_RSV  = 32'h001E7080;
   parameter   PCORE_RX_CDR_CFG  = 72'h0b000023ff10400020;
+  parameter   PCORE_TX_LANE_SEL_0 = 0;
+  parameter   PCORE_TX_LANE_SEL_1 = 1;
+  parameter   PCORE_TX_LANE_SEL_2 = 2;
+  parameter   PCORE_TX_LANE_SEL_3 = 3;
+  parameter   PCORE_TX_LANE_SEL_4 = 4;
+  parameter   PCORE_TX_LANE_SEL_5 = 5;
+  parameter   PCORE_TX_LANE_SEL_6 = 6;
+  parameter   PCORE_TX_LANE_SEL_7 = 7;
+  parameter   PCORE_TX_LANE_SEL_8 = 8;
   parameter   C_S_AXI_MIN_SIZE = 32'hffff;
+
+  localparam  PCORE_NUM_OF_LANES = (PCORE_NUM_OF_TX_LANES > PCORE_NUM_OF_RX_LANES) ?
+                                    PCORE_NUM_OF_TX_LANES : PCORE_NUM_OF_RX_LANES;
 
   // physical interface
 
-  input                                     ref_clk_q;
-  input                                     ref_clk_c;
+  input                                         ref_clk_q;
+  input                                         ref_clk_c;
 
-  input   [((PCORE_NUM_OF_LANES* 1)-1):0]   rx_data_p;
-  input   [((PCORE_NUM_OF_LANES* 1)-1):0]   rx_data_n;
-  output                                    rx_sync;
-  output                                    rx_sysref;
-  input                                     rx_ext_sysref;
+  input   [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_data_p;
+  input   [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_data_n;
+  output                                        rx_sync;
+  output                                        rx_sysref;
+  input                                         rx_ext_sysref;
 
-  output  [((PCORE_NUM_OF_LANES* 1)-1):0]   tx_data_p;
-  output  [((PCORE_NUM_OF_LANES* 1)-1):0]   tx_data_n;
-  input                                     tx_sync;
-  output                                    tx_sysref;
-  input                                     tx_ext_sysref;
+  output  [((PCORE_NUM_OF_TX_LANES* 1)-1):0]    tx_data_p;
+  output  [((PCORE_NUM_OF_TX_LANES* 1)-1):0]    tx_data_n;
+  input                                         tx_sync;
+  output                                        tx_sysref;
+  input                                         tx_ext_sysref;
 
   // core interface
 
-  output                                    rx_rst;
-  output                                    rx_clk_g;
-  input                                     rx_clk;
-  output  [((PCORE_NUM_OF_LANES*32)-1):0]   rx_data;
-  output  [((PCORE_NUM_OF_LANES* 4)-1):0]   rx_gt_charisk;
-  output  [((PCORE_NUM_OF_LANES* 4)-1):0]   rx_gt_disperr;
-  output  [((PCORE_NUM_OF_LANES* 4)-1):0]   rx_gt_notintable;
-  output  [((PCORE_NUM_OF_LANES*32)-1):0]   rx_gt_data;
-  output                                    rx_rst_done;
-  input                                     rx_ip_comma_align;
-  input                                     rx_ip_sync;
-  input   [  3:0]                           rx_ip_sof;
-  input   [((PCORE_NUM_OF_LANES*32)-1):0]   rx_ip_data;
+  output                                        rx_rst;
+  output                                        rx_clk_g;
+  input                                         rx_clk;
+  output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_data;
+  output  [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_data_sof;
+  output  [((PCORE_NUM_OF_RX_LANES* 4)-1):0]    rx_gt_charisk;
+  output  [((PCORE_NUM_OF_RX_LANES* 4)-1):0]    rx_gt_disperr;
+  output  [((PCORE_NUM_OF_RX_LANES* 4)-1):0]    rx_gt_notintable;
+  output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_gt_data;
+  output                                        rx_rst_done;
+  input                                         rx_ip_comma_align;
+  input                                         rx_ip_sync;
+  input   [  3:0]                               rx_ip_sof;
+  input   [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_ip_data;
 
-  output                                    tx_rst;
-  output                                    tx_clk_g;
-  input                                     tx_clk;
-  input   [((PCORE_NUM_OF_LANES*32)-1):0]   tx_data;
-  input   [((PCORE_NUM_OF_LANES* 4)-1):0]   tx_gt_charisk;
-  input   [((PCORE_NUM_OF_LANES*32)-1):0]   tx_gt_data;
-  output                                    tx_rst_done;
-  output                                    tx_ip_sync;
-  input   [  3:0]                           tx_ip_sof;
-  output  [((PCORE_NUM_OF_LANES*32)-1):0]   tx_ip_data;
+  output                                        tx_rst;
+  output                                        tx_clk_g;
+  input                                         tx_clk;
+  input   [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_data;
+  input   [((PCORE_NUM_OF_TX_LANES* 4)-1):0]    tx_gt_charisk;
+  input   [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_gt_data;
+  output                                        tx_rst_done;
+  output                                        tx_ip_sync;
+  input   [  3:0]                               tx_ip_sof;
+  output  [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_ip_data;
 
   // axi interface
 
-  input                                     s_axi_aclk;
-  input                                     s_axi_aresetn;
-  input                                     s_axi_awvalid;
-  input   [ 31:0]                           s_axi_awaddr;
-  output                                    s_axi_awready;
-  input                                     s_axi_wvalid;
-  input   [ 31:0]                           s_axi_wdata;
-  input   [  3:0]                           s_axi_wstrb;
-  output                                    s_axi_wready;
-  output                                    s_axi_bvalid;
-  output  [  1:0]                           s_axi_bresp;
-  input                                     s_axi_bready;
-  input                                     s_axi_arvalid;
-  input   [ 31:0]                           s_axi_araddr;
-  output                                    s_axi_arready;
-  output                                    s_axi_rvalid;
-  output  [ 31:0]                           s_axi_rdata;
-  output  [  1:0]                           s_axi_rresp;
-  input                                     s_axi_rready;
+  input                                         s_axi_aclk;
+  input                                         s_axi_aresetn;
+  input                                         s_axi_awvalid;
+  input   [ 31:0]                               s_axi_awaddr;
+  output                                        s_axi_awready;
+  input                                         s_axi_wvalid;
+  input   [ 31:0]                               s_axi_wdata;
+  input   [  3:0]                               s_axi_wstrb;
+  output                                        s_axi_wready;
+  output                                        s_axi_bvalid;
+  output  [  1:0]                               s_axi_bresp;
+  input                                         s_axi_bready;
+  input                                         s_axi_arvalid;
+  input   [ 31:0]                               s_axi_araddr;
+  output                                        s_axi_arready;
+  output                                        s_axi_rvalid;
+  output  [ 31:0]                               s_axi_rdata;
+  output  [  1:0]                               s_axi_rresp;
+  input                                         s_axi_rready;
 
   // master interface
 
-  input                                     m_axi_aclk;
-  input                                     m_axi_aresetn;
-  output                                    m_axi_awvalid;
-  output  [ 31:0]                           m_axi_awaddr;
-  output  [  2:0]                           m_axi_awprot;
-  input                                     m_axi_awready;
-  output                                    m_axi_wvalid;
-  output  [ 31:0]                           m_axi_wdata;
-  output  [  3:0]                           m_axi_wstrb;
-  input                                     m_axi_wready;
-  input                                     m_axi_bvalid;
-  input   [  1:0]                           m_axi_bresp;
-  output                                    m_axi_bready;
-  output                                    m_axi_arvalid;
-  output  [ 31:0]                           m_axi_araddr;
-  output  [  2:0]                           m_axi_arprot;
-  input                                     m_axi_arready;
-  input                                     m_axi_rvalid;
-  input   [ 31:0]                           m_axi_rdata;
-  input   [  1:0]                           m_axi_rresp;
-  output                                    m_axi_rready;
+  input                                         m_axi_aclk;
+  input                                         m_axi_aresetn;
+  output                                        m_axi_awvalid;
+  output  [ 31:0]                               m_axi_awaddr;
+  output  [  2:0]                               m_axi_awprot;
+  input                                         m_axi_awready;
+  output                                        m_axi_wvalid;
+  output  [ 31:0]                               m_axi_wdata;
+  output  [  3:0]                               m_axi_wstrb;
+  input                                         m_axi_wready;
+  input                                         m_axi_bvalid;
+  input   [  1:0]                               m_axi_bresp;
+  output                                        m_axi_bready;
+  output                                        m_axi_arvalid;
+  output  [ 31:0]                               m_axi_araddr;
+  output  [  2:0]                               m_axi_arprot;
+  input                                         m_axi_arready;
+  input                                         m_axi_rvalid;
+  input   [ 31:0]                               m_axi_rdata;
+  input   [  1:0]                               m_axi_rresp;
+  output                                        m_axi_rready;
 
   // drp clock
 
-  input                                     drp_clk;
+  input                                         drp_clk;
 
   // es debug interface
 
-  output  [275:0]                           es_dbg_data;
-  output  [  7:0]                           es_dbg_trigger;
+  output  [275:0]                               es_dbg_data;
+  output  [  7:0]                               es_dbg_trigger;
 
   // jesd debug interface
 
-  output  [((PCORE_NUM_OF_LANES*82)+5):0]   rx_mon_data;
-  output  [((PCORE_NUM_OF_LANES* 1)+1):0]   rx_mon_trigger;
+  output  [((PCORE_NUM_OF_RX_LANES*82)+5):0]    rx_mon_data;
+  output  [((PCORE_NUM_OF_RX_LANES* 1)+1):0]    rx_mon_trigger;
 
-  output  [((PCORE_NUM_OF_LANES*36)+5):0]   tx_mon_data;
-  output  [  5:0]                           tx_mon_trigger;
+  output  [((PCORE_NUM_OF_TX_LANES*36)+5):0]    tx_mon_data;
+  output  [  5:0]                               tx_mon_trigger;
 
   // reset and clocks
 
-  wire                                      gt_pll_rst;
-  wire                                      gt_rx_rst;
-  wire                                      gt_tx_rst;
-  wire                                      qpll_clk_0;
-  wire                                      qpll_ref_clk_0;
-  wire                                      qpll_clk_1;
-  wire                                      qpll_ref_clk_1;
-  wire    [  7:0]                           qpll_clk;
-  wire    [  7:0]                           qpll_ref_clk;
-  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]   rx_out_clk;
-  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]   tx_out_clk;
-  wire                                      axi_rstn;
-  wire                                      axi_clk;
-  wire                                      up_rstn;
-  wire                                      up_clk;
-  wire                                      drp_rst;
+  wire                                          gt_pll_rst;
+  wire                                          gt_rx_rst;
+  wire                                          gt_tx_rst;
+  wire                                          qpll_clk_0;
+  wire                                          qpll_ref_clk_0;
+  wire                                          qpll_clk_1;
+  wire                                          qpll_ref_clk_1;
+  wire    [  7:0]                               qpll_clk;
+  wire    [  7:0]                               qpll_ref_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_out_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_out_clk;
+  wire                                          axi_rstn;
+  wire                                          axi_clk;
+  wire                                          up_rstn;
+  wire                                          up_clk;
+  wire                                          drp_rst;
 
   // internal signals
 
-  wire    [  8:0]                           up_status_extn_s;
-  wire    [  8:0]                           rx_rst_done_extn_s;
-  wire    [  8:0]                           rx_pll_locked_extn_s;
-  wire    [  8:0]                           tx_rst_done_extn_s;
-  wire    [  8:0]                           tx_pll_locked_extn_s;
-  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]   rx_mon_trigger_s;
-  wire    [((PCORE_NUM_OF_LANES*50)-1):0]   rx_mon_data_s;
-  wire    [ 15:0]                           drp_rdata_gt_s[15:0];
-  wire                                      drp_ready_gt_s[15:0];
-  wire    [  7:0]                           drp_rx_rate_gt_s[15:0];
-  wire                                      qpll_locked_0_s;
-  wire                                      qpll_locked_1_s;
-  wire    [  7:0]                           qpll_locked_s;
-  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]   rx_rst_done_s;
-  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]   rx_pll_locked_s;
-  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]   tx_rst_done_s;
-  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]   tx_pll_locked_s;
-  wire                                      up_cpll_pd_s;
-  wire    [  1:0]                           up_rx_sys_clk_sel_s;
-  wire    [  2:0]                           up_rx_out_clk_sel_s;
-  wire    [  1:0]                           up_tx_sys_clk_sel_s;
-  wire    [  2:0]                           up_tx_out_clk_sel_s;
-  wire                                      drp_sel_s;
-  wire                                      drp_wr_s;
-  wire    [ 11:0]                           drp_addr_s;
-  wire    [ 15:0]                           drp_wdata_s;
-  wire    [ 15:0]                           drp_rdata_s;
-  wire                                      drp_ready_s;
-  wire    [  7:0]                           drp_lanesel_s;
-  wire    [  7:0]                           drp_rx_rate_s;
-  wire                                      es_sel_s;
-  wire                                      es_wr_s;
-  wire    [ 11:0]                           es_addr_s;
-  wire    [ 15:0]                           es_wdata_s;
-  wire    [ 15:0]                           es_rdata_s;
-  wire                                      es_ready_s;
-  wire                                      es_start_s;
-  wire                                      es_stop_s;
-  wire                                      es_init_s;
-  wire    [ 15:0]                           es_sdata0_s;
-  wire    [ 15:0]                           es_sdata1_s;
-  wire    [ 15:0]                           es_sdata2_s;
-  wire    [ 15:0]                           es_sdata3_s;
-  wire    [ 15:0]                           es_sdata4_s;
-  wire    [ 15:0]                           es_qdata0_s;
-  wire    [ 15:0]                           es_qdata1_s;
-  wire    [ 15:0]                           es_qdata2_s;
-  wire    [ 15:0]                           es_qdata3_s;
-  wire    [ 15:0]                           es_qdata4_s;
-  wire    [  4:0]                           es_prescale_s;
-  wire    [ 11:0]                           es_hoffset_min_s;
-  wire    [ 11:0]                           es_hoffset_max_s;
-  wire    [ 11:0]                           es_hoffset_step_s;
-  wire    [  7:0]                           es_voffset_min_s;
-  wire    [  7:0]                           es_voffset_max_s;
-  wire    [  7:0]                           es_voffset_step_s;
-  wire    [ 31:0]                           es_start_addr_s;
-  wire                                      es_dmaerr_s;
-  wire                                      es_status_s;
-  wire                                      up_sel_s;
-  wire                                      up_wr_s;
-  wire    [ 13:0]                           up_addr_s;
-  wire    [ 31:0]                           up_wdata_s;
-  wire    [ 31:0]                           up_rdata_s;
-  wire                                      up_ack_s;
+  wire    [  8:0]                               up_status_extn_s;
+  wire    [  8:0]                               rx_rst_done_extn_s;
+  wire    [  8:0]                               rx_pll_locked_extn_s;
+  wire    [  8:0]                               tx_rst_done_extn_s;
+  wire    [  8:0]                               tx_pll_locked_extn_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_mon_trigger_s;
+  wire    [((PCORE_NUM_OF_LANES*50)-1):0]       rx_mon_data_s;
+  wire    [ 15:0]                               drp_rdata_gt_s[15:0];
+  wire                                          drp_ready_gt_s[15:0];
+  wire    [  7:0]                               drp_rx_rate_gt_s[15:0];
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_data_p_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_data_n_s;
+  wire    [((PCORE_NUM_OF_LANES*32)-1):0]       rx_data_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_data_sof_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_charisk_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_disperr_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_notintable_s;
+  wire    [((PCORE_NUM_OF_LANES*32)-1):0]       rx_gt_data_s;
+  wire    [((PCORE_NUM_OF_LANES*32)-1):0]       rx_ip_data_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_data_p_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_data_n_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       tx_gt_charisk_s;
+  wire    [((PCORE_NUM_OF_LANES*32)-1):0]       tx_gt_data_s;
+  wire    [287:0]                               tx_gt_data_extn_zero_s;
+  wire    [ 35:0]                               tx_gt_charisk_extn_zero_s;
+  wire    [287:0]                               tx_gt_data_extn_s;
+  wire    [ 35:0]                               tx_gt_charisk_extn_s;
+  wire    [287:0]                               tx_gt_data_mux_s;
+  wire    [ 35:0]                               tx_gt_charisk_mux_s;
+  wire                                          qpll_locked_0_s;
+  wire                                          qpll_locked_1_s;
+  wire    [  7:0]                               qpll_locked_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_rst_done_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_pll_locked_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_rst_done_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_pll_locked_s;
+  wire                                          up_cpll_pd_s;
+  wire    [  1:0]                               up_rx_sys_clk_sel_s;
+  wire    [  2:0]                               up_rx_out_clk_sel_s;
+  wire    [  1:0]                               up_tx_sys_clk_sel_s;
+  wire    [  2:0]                               up_tx_out_clk_sel_s;
+  wire                                          drp_sel_s;
+  wire                                          drp_wr_s;
+  wire    [ 11:0]                               drp_addr_s;
+  wire    [ 15:0]                               drp_wdata_s;
+  wire    [ 15:0]                               drp_rdata_s;
+  wire                                          drp_ready_s;
+  wire    [  7:0]                               drp_lanesel_s;
+  wire    [  7:0]                               drp_rx_rate_s;
+  wire                                          es_sel_s;
+  wire                                          es_wr_s;
+  wire    [ 11:0]                               es_addr_s;
+  wire    [ 15:0]                               es_wdata_s;
+  wire    [ 15:0]                               es_rdata_s;
+  wire                                          es_ready_s;
+  wire                                          es_start_s;
+  wire                                          es_stop_s;
+  wire                                          es_init_s;
+  wire    [ 15:0]                               es_sdata0_s;
+  wire    [ 15:0]                               es_sdata1_s;
+  wire    [ 15:0]                               es_sdata2_s;
+  wire    [ 15:0]                               es_sdata3_s;
+  wire    [ 15:0]                               es_sdata4_s;
+  wire    [ 15:0]                               es_qdata0_s;
+  wire    [ 15:0]                               es_qdata1_s;
+  wire    [ 15:0]                               es_qdata2_s;
+  wire    [ 15:0]                               es_qdata3_s;
+  wire    [ 15:0]                               es_qdata4_s;
+  wire    [  4:0]                               es_prescale_s;
+  wire    [ 11:0]                               es_hoffset_min_s;
+  wire    [ 11:0]                               es_hoffset_max_s;
+  wire    [ 11:0]                               es_hoffset_step_s;
+  wire    [  7:0]                               es_voffset_min_s;
+  wire    [  7:0]                               es_voffset_max_s;
+  wire    [  7:0]                               es_voffset_step_s;
+  wire    [  1:0]                               es_voffset_range_s;
+  wire    [ 31:0]                               es_start_addr_s;
+  wire                                          es_dmaerr_s;
+  wire                                          es_status_s;
+  wire                                          up_wreq_s;
+  wire    [ 13:0]                               up_waddr_s;
+  wire    [ 31:0]                               up_wdata_s;
+  wire                                          up_wack_s;
+  wire                                          up_rreq_s;
+  wire    [ 13:0]                               up_raddr_s;
+  wire    [ 31:0]                               up_rdata_s;
+  wire                                          up_rack_s;
 
   // debug interface
 
-  assign rx_mon_data = {rx_sync, rx_sysref, rx_ip_sof, rx_ip_data, rx_mon_data_s};
-  assign rx_mon_trigger = {rx_sync, rx_sysref, rx_mon_trigger_s};
+  assign rx_mon_data = {rx_sync, rx_sysref, rx_ip_sof, rx_ip_data, rx_mon_data_s[((PCORE_NUM_OF_RX_LANES*50)-1):0]};
+  assign rx_mon_trigger = {rx_sync, rx_sysref, rx_mon_trigger_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0]};
 
   assign tx_mon_data = {tx_sync, tx_sysref, tx_ip_sof, tx_gt_charisk, tx_gt_data};
   assign tx_mon_trigger = {tx_sync, tx_sysref, tx_ip_sof};
@@ -409,7 +446,75 @@ module axi_jesd_gt (
                           drp_rx_rate_gt_s[ 3] | drp_rx_rate_gt_s[ 2] |
                           drp_rx_rate_gt_s[ 1] | drp_rx_rate_gt_s[ 0];
 
+
+  // asymmetric widths -- receive
+
+  assign rx_data = rx_data_s[((PCORE_NUM_OF_RX_LANES*32)-1):0];
+  assign rx_data_sof = rx_data_sof_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0];
+  assign rx_gt_charisk = rx_gt_charisk_s[((PCORE_NUM_OF_RX_LANES* 4)-1):0];
+  assign rx_gt_disperr = rx_gt_disperr_s[((PCORE_NUM_OF_RX_LANES* 4)-1):0];
+  assign rx_gt_notintable = rx_gt_notintable_s[((PCORE_NUM_OF_RX_LANES* 4)-1):0];
+  assign rx_gt_data = rx_gt_data_s[((PCORE_NUM_OF_RX_LANES*32)-1):0];
+
+  generate
+  if (PCORE_NUM_OF_LANES == PCORE_NUM_OF_RX_LANES) begin
+  assign rx_data_p_s = rx_data_p;
+  assign rx_data_n_s = rx_data_n;
+  assign rx_ip_data_s = rx_ip_data;
+  end else begin
+  assign rx_data_p_s[((PCORE_NUM_OF_LANES* 1)-1):(PCORE_NUM_OF_RX_LANES* 1)] = 'd0;
+  assign rx_data_n_s[((PCORE_NUM_OF_LANES* 1)-1):(PCORE_NUM_OF_RX_LANES* 1)] = 'd0;
+  assign rx_ip_data_s[((PCORE_NUM_OF_LANES*32)-1):(PCORE_NUM_OF_RX_LANES*32)] = 'd0;
+  assign rx_data_p_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0] = rx_data_p;
+  assign rx_data_n_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0] = rx_data_n;
+  assign rx_ip_data_s[((PCORE_NUM_OF_RX_LANES*32)-1):0] = rx_ip_data;
+  end
+  endgenerate
+
+  // asymmetric widths -- transmit
+
+  assign tx_data_p = tx_data_p_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
+  assign tx_data_n = tx_data_n_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
+
+  generate
+  if (PCORE_NUM_OF_LANES == PCORE_NUM_OF_TX_LANES) begin
+  assign tx_gt_charisk_s = tx_gt_charisk;
+  assign tx_gt_data_s = tx_gt_data;
+  end else begin
+  assign tx_gt_charisk_s[((PCORE_NUM_OF_LANES* 4)-1):(PCORE_NUM_OF_TX_LANES* 4)] = 'd0;
+  assign tx_gt_data_s[((PCORE_NUM_OF_LANES*32)-1):(PCORE_NUM_OF_TX_LANES*32)] = 'd0;
+  assign tx_gt_charisk_s[((PCORE_NUM_OF_TX_LANES* 4)-1):0] = tx_gt_charisk;
+  assign tx_gt_data_s[((PCORE_NUM_OF_TX_LANES*32)-1):0] = tx_gt_data;
+  end
+  endgenerate
+
+  // transmit data interleave -- since transceivers are shared, lane assignments may not match pin assignments
+
   assign tx_ip_data = tx_data;
+
+  assign tx_gt_data_extn_zero_s = 288'd0;
+  assign tx_gt_charisk_extn_zero_s = 36'd0;
+  assign tx_gt_data_extn_s = {tx_gt_data_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*32)-1):0], tx_gt_data_s};
+  assign tx_gt_charisk_extn_s = {tx_gt_charisk_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*4)-1):0], tx_gt_charisk_s};
+
+  assign tx_gt_data_mux_s[((8*32)+31):(8*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_8*32)+31):(PCORE_TX_LANE_SEL_8*32)];
+  assign tx_gt_data_mux_s[((7*32)+31):(7*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_7*32)+31):(PCORE_TX_LANE_SEL_7*32)];
+  assign tx_gt_data_mux_s[((6*32)+31):(6*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_6*32)+31):(PCORE_TX_LANE_SEL_6*32)];
+  assign tx_gt_data_mux_s[((5*32)+31):(5*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_5*32)+31):(PCORE_TX_LANE_SEL_5*32)];
+  assign tx_gt_data_mux_s[((4*32)+31):(4*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_4*32)+31):(PCORE_TX_LANE_SEL_4*32)];
+  assign tx_gt_data_mux_s[((3*32)+31):(3*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_3*32)+31):(PCORE_TX_LANE_SEL_3*32)];
+  assign tx_gt_data_mux_s[((2*32)+31):(2*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_2*32)+31):(PCORE_TX_LANE_SEL_2*32)];
+  assign tx_gt_data_mux_s[((1*32)+31):(1*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_1*32)+31):(PCORE_TX_LANE_SEL_1*32)];
+  assign tx_gt_data_mux_s[((0*32)+31):(0*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_0*32)+31):(PCORE_TX_LANE_SEL_0*32)];
+  assign tx_gt_charisk_mux_s[((8*4)+3):(8*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_8*4)+3):(PCORE_TX_LANE_SEL_8*4)];
+  assign tx_gt_charisk_mux_s[((7*4)+3):(7*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_7*4)+3):(PCORE_TX_LANE_SEL_7*4)];
+  assign tx_gt_charisk_mux_s[((6*4)+3):(6*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_6*4)+3):(PCORE_TX_LANE_SEL_6*4)];
+  assign tx_gt_charisk_mux_s[((5*4)+3):(5*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_5*4)+3):(PCORE_TX_LANE_SEL_5*4)];
+  assign tx_gt_charisk_mux_s[((4*4)+3):(4*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_4*4)+3):(PCORE_TX_LANE_SEL_4*4)];
+  assign tx_gt_charisk_mux_s[((3*4)+3):(3*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_3*4)+3):(PCORE_TX_LANE_SEL_3*4)];
+  assign tx_gt_charisk_mux_s[((2*4)+3):(2*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_2*4)+3):(PCORE_TX_LANE_SEL_2*4)];
+  assign tx_gt_charisk_mux_s[((1*4)+3):(1*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_1*4)+3):(PCORE_TX_LANE_SEL_1*4)];
+  assign tx_gt_charisk_mux_s[((0*4)+3):(0*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_0*4)+3):(PCORE_TX_LANE_SEL_0*4)];
 
   // clock buffers
 
@@ -493,13 +598,21 @@ module axi_jesd_gt (
 
   genvar n;
   generate
+
+  for (n = PCORE_NUM_OF_LANES; n < 14; n = n + 1) begin: g_unused_1
+  assign drp_rdata_gt_s[n] = 'd0;
+  assign drp_ready_gt_s[n] = 'd0;
+  assign drp_rx_rate_gt_s[n] = 'd0;
+  end
+
   for (n = 0; n < PCORE_NUM_OF_LANES; n = n + 1) begin: g_lane_1
 
   ad_jesd_align i_jesd_align (
     .rx_clk (rx_clk),
     .rx_sof (rx_ip_sof),
-    .rx_ip_data (rx_ip_data[n*32+31:n*32]),
-    .rx_data (rx_data[n*32+31:n*32]));
+    .rx_ip_data (rx_ip_data_s[n*32+31:n*32]),
+    .rx_data_sof(rx_data_sof_s[n]),
+    .rx_data (rx_data_s[n*32+31:n*32]));
 
   ad_gt_channel_1 #(
     .DRP_ID (n),
@@ -519,30 +632,30 @@ module axi_jesd_gt (
     .qpll_ref_clk (qpll_ref_clk[n]),
     .qpll_locked (qpll_locked_s[n]),
     .rx_rst (gt_rx_rst),
-    .rx_p (rx_data_p[n]),
-    .rx_n (rx_data_n[n]),
+    .rx_p (rx_data_p_s[n]),
+    .rx_n (rx_data_n_s[n]),
     .rx_sys_clk_sel (up_rx_sys_clk_sel_s),
     .rx_out_clk_sel (up_rx_out_clk_sel_s),
     .rx_out_clk (rx_out_clk[n]),
     .rx_rst_done (rx_rst_done_s[n]),
     .rx_pll_locked (rx_pll_locked_s[n]),
     .rx_clk (rx_clk),
-    .rx_charisk (rx_gt_charisk[n*4+3:n*4]),
-    .rx_disperr (rx_gt_disperr[n*4+3:n*4]),
-    .rx_notintable (rx_gt_notintable[n*4+3:n*4]),
-    .rx_data (rx_gt_data[n*32+31:n*32]),
+    .rx_charisk (rx_gt_charisk_s[n*4+3:n*4]),
+    .rx_disperr (rx_gt_disperr_s[n*4+3:n*4]),
+    .rx_notintable (rx_gt_notintable_s[n*4+3:n*4]),
+    .rx_data (rx_gt_data_s[n*32+31:n*32]),
     .rx_comma_align_enb (rx_ip_comma_align),
     .tx_rst (gt_tx_rst),
-    .tx_p (tx_data_p[n]),
-    .tx_n (tx_data_n[n]),
+    .tx_p (tx_data_p_s[n]),
+    .tx_n (tx_data_n_s[n]),
     .tx_sys_clk_sel (up_tx_sys_clk_sel_s),
     .tx_out_clk_sel (up_tx_out_clk_sel_s),
     .tx_out_clk (tx_out_clk[n]),
     .tx_rst_done (tx_rst_done_s[n]),
     .tx_pll_locked (tx_pll_locked_s[n]),
     .tx_clk (tx_clk),
-    .tx_charisk (tx_gt_charisk[n*4+3:n*4]),
-    .tx_data (tx_gt_data[n*32+31:n*32]),
+    .tx_charisk (tx_gt_charisk_mux_s[n*4+3:n*4]),
+    .tx_data (tx_gt_data_mux_s[n*32+31:n*32]),
     .drp_clk (drp_clk),
     .drp_sel (drp_sel_s),
     .drp_addr (drp_addr_s),
@@ -559,7 +672,7 @@ module axi_jesd_gt (
 
   // eye scan
 
-  ad_gt_es #(.GTH_GTX_N(0)) i_gt_es (
+  ad_gt_es #(.GTH_GTX_N(PCORE_DEVICE_TYPE)) i_gt_es (
     .drp_rst (drp_rst),
     .drp_clk (drp_clk),
     .es_sel (es_sel_s),
@@ -609,6 +722,7 @@ module axi_jesd_gt (
     .es_voffset_min (es_voffset_min_s),
     .es_voffset_max (es_voffset_max_s),
     .es_voffset_step (es_voffset_step_s),
+    .es_voffset_range (es_voffset_range_s),
     .es_start_addr (es_start_addr_s),
     .es_dmaerr (es_dmaerr_s),
     .es_status (es_status_s),
@@ -664,6 +778,7 @@ module axi_jesd_gt (
     .es_stop (es_stop_s),
     .es_init (es_init_s),
     .es_prescale (es_prescale_s),
+    .es_voffset_range (es_voffset_range_s),
     .es_voffset_step (es_voffset_step_s),
     .es_voffset_max (es_voffset_max_s),
     .es_voffset_min (es_voffset_min_s),
@@ -685,12 +800,14 @@ module axi_jesd_gt (
     .es_status (es_status_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s),
-    .up_ack (up_ack_s));
+    .up_rack (up_rack_s));
 
   // axi interface
 
@@ -714,12 +831,14 @@ module axi_jesd_gt (
     .up_axi_rresp (s_axi_rresp),
     .up_axi_rdata (s_axi_rdata),
     .up_axi_rready (s_axi_rready),
-    .up_sel (up_sel_s),
-    .up_wr (up_wr_s),
-    .up_addr (up_addr_s),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s),
-    .up_ack (up_ack_s));
+    .up_rack (up_rack_s));
 
 endmodule
 

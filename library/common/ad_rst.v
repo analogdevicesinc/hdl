@@ -53,14 +53,22 @@ module ad_rst (
   input           clk;
   output          rst;
 
+  // internal registers
+
+  reg             rst_p = 'd0;
+  reg             rst = 'd0;
+
   // simple reset gen
 
-  FDPE #(.INIT(1'b1)) i_rst_reg (
-    .CE (1'b1),
-    .D (1'b0),
-    .PRE (preset),
-    .C (clk),
-    .Q (rst));
+  always @(posedge clk or posedge preset) begin
+    if (preset == 1'b1) begin
+      rst_p <= 1'd1;
+      rst <= 1'd1;
+    end else begin
+      rst_p <= 1'b0;
+      rst <= rst_p;
+    end
+  end
 
 endmodule
 

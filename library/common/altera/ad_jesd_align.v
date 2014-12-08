@@ -44,6 +44,7 @@ module ad_jesd_align (
   rx_clk,
   rx_sof,
   rx_ip_data,
+  rx_data_sof,
   rx_data);
 
   // jesd interface
@@ -54,6 +55,7 @@ module ad_jesd_align (
 
   // aligned data
 
+  output          rx_data_sof;
   output  [31:0]  rx_data;
 
   // internal registers
@@ -64,33 +66,33 @@ module ad_jesd_align (
 
   // internal signals
 
-  wire    [ 3:0]  rx_sof_s;
 
   // dword may contain more than one frame per clock
 
-  assign rx_sof_s = (rx_sof == 4'd0) ? rx_sof_hold : rx_sof;
+  assign rx_data_sof = |rx_sof;
+
 
   always @(posedge rx_clk) begin
     if (rx_sof != 4'd0) begin
       rx_sof_hold <= rx_sof;
     end
     rx_ip_data_d <= rx_ip_data;
-    if (rx_sof_s[3] == 1'b1) begin
+    if (rx_sof_hold[3] == 1'b1) begin
       rx_data[31:24] <= rx_ip_data[ 7: 0];
       rx_data[23:16] <= rx_ip_data[15: 8];
       rx_data[15: 8] <= rx_ip_data[23:16];
       rx_data[ 7: 0] <= rx_ip_data[31:24];
-    end else if (rx_sof_s[2] == 1'b1) begin
+    end else if (rx_sof_hold[2] == 1'b1) begin
       rx_data[31:24] <= rx_ip_data[31:24];
       rx_data[23:16] <= rx_ip_data_d[ 7: 0];
       rx_data[15: 8] <= rx_ip_data_d[15: 8];
       rx_data[ 7: 0] <= rx_ip_data_d[23:16];
-    end else if (rx_sof_s[1] == 1'b1) begin
+    end else if (rx_sof_hold[1] == 1'b1) begin
       rx_data[31:24] <= rx_ip_data[23:16];
       rx_data[23:16] <= rx_ip_data[31:24];
       rx_data[15: 8] <= rx_ip_data_d[ 7: 0];
       rx_data[ 7: 0] <= rx_ip_data_d[15: 8];
-    end else if (rx_sof_s[0] == 1'b1) begin
+    end else if (rx_sof_hold[0] == 1'b1) begin
       rx_data[31:24] <= rx_ip_data[15: 8];
       rx_data[23:16] <= rx_ip_data[23:16];
       rx_data[15: 8] <= rx_ip_data[31:24];

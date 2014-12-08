@@ -93,10 +93,7 @@ module prcfg_dac(
 
   reg     [ 3:0]    mode;
 
-  wire    [31:0]    dac_data_mode0;
-  wire    [31:0]    dac_data_mode1;
-  wire    [31:0]    dac_data_mode2;
-  wire    [31:0]    dac_data_mode3;
+  wire    [31:0]    dac_pattern_s;
 
   // prbs function
   function [31:0] pn;
@@ -144,9 +141,6 @@ module prcfg_dac(
     mode   <= control[7:4];
   end
 
-  // pass through for tx/rx side
-  assign dac_data_mode0 = src_dac_ddata;
-
   // sine tone generation
   always @(posedge clk) begin
     if (dst_dac_en == 1'h1) begin
@@ -191,16 +185,12 @@ module prcfg_dac(
     endcase
   end
 
-  assign dac_data_mode1 = {cos_tone, sin_tone};
-
   // prbs generation
   always @(posedge clk) begin
     if(dst_dac_en == 1'h1) begin
       dac_prbs <= pn(dac_prbs);
     end
   end
-
-  assign dac_data_mode2 = dac_prbs;
 
   // constant pattern generator
   always @(posedge clk) begin
@@ -209,34 +199,33 @@ module prcfg_dac(
     end
   end
 
-  assign dac_data_mode3 = (pattern == 1'h1) ?
+  assign dac_pattern_s = (pattern == 1'h1) ?
                           {16'h5555, 16'hAAAA, 16'h5555, 16'hAAAA} :
                           {16'hAAAA, 16'h5555, 16'hAAAA, 16'h5555};
 
   // output mux for tx side
   always @(posedge clk) begin
     src_dac_en     <= (mode == 0) ? dst_dac_en  : 1'b0;
-    dst_dac_dvalid <= (mode == 0) ? src_dac_dvalid  :
-                                  ((dst_dac_en == 1'b1) ? 1'b1 : 1'b0);
+    dst_dac_dvalid <= (mode == 0) ? src_dac_dvalid  : dst_dac_en;
     dst_dac_dunf   <= (mode == 0) ? src_dac_dunf : 1'b0;
   end
 
   always @(posedge clk) begin
     case(mode)
       4'h0    : begin
-                  dst_dac_ddata <= dac_data_mode0;
+                  dst_dac_ddata <= src_dac_ddata;
                 end
       4'h1    : begin
-                  dst_dac_ddata <= dac_data_mode1;
+                  dst_dac_ddata <= {cos_tone, sin_tone};
                 end
       4'h2    : begin
-                  dst_dac_ddata <= dac_data_mode2;
+                  dst_dac_ddata <= dac_prbs;
                 end
       4'h3    : begin
-                  dst_dac_ddata <= dac_data_mode3;
+                  dst_dac_ddata <= dac_pattern_s;
                 end
       default : begin
-                  dst_dac_ddata <= dac_data_mode0;
+                  dst_dac_ddata <= src_dac_ddata;
                 end
     endcase
   end

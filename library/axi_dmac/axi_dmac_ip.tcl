@@ -28,11 +28,12 @@ adi_ip_files axi_dmac [list \
   "splitter.v" \
   "response_generator.v" \
   "axi_dmac.v" \
-  "axi_repack.v" ]
+  "axi_repack.v" \
+  "axi_dmac_constr.tcl" ]
 
 adi_ip_properties axi_dmac
 adi_ip_constraints axi_dmac [list \
-  "axi_dmac_constr.xdc" ]
+  "axi_dmac_constr.tcl" ]
 
 set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
   [ipx::get_bus_interface s_axi_signal_clock [ipx::current_core]]]

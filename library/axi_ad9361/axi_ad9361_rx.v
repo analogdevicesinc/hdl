@@ -90,12 +90,14 @@ module axi_ad9361_rx (
 
   up_rstn,
   up_clk,
-  up_sel,
-  up_wr,
-  up_addr,
+  up_wreq,
+  up_waddr,
   up_wdata,
+  up_wack,
+  up_rreq,
+  up_raddr,
   up_rdata,
-  up_ack);
+  up_rack);
 
   // parameters
 
@@ -150,12 +152,14 @@ module axi_ad9361_rx (
 
   input           up_rstn;
   input           up_clk;
-  input           up_sel;
-  input           up_wr;
-  input   [13:0]  up_addr;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
   input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
   output  [31:0]  up_rdata;
-  output          up_ack;
+  output          up_rack;
 
   // internal registers
 
@@ -163,7 +167,8 @@ module axi_ad9361_rx (
   reg             up_status_pn_oos = 'd0;
   reg             up_status_or = 'd0;
   reg     [31:0]  up_rdata = 'd0;
-  reg             up_ack = 'd0;
+  reg             up_rack = 'd0;
+  reg             up_wack = 'd0;
 
   // internal signals
 
@@ -175,7 +180,8 @@ module axi_ad9361_rx (
   wire    [ 3:0]  up_adc_pn_oos_s;
   wire    [ 3:0]  up_adc_or_s;
   wire    [31:0]  up_rdata_s[0:4];
-  wire            up_ack_s[0:4];
+  wire            up_rack_s[0:4];
+  wire            up_wack_s[0:4];
 
   // processor read interface
 
@@ -185,13 +191,15 @@ module axi_ad9361_rx (
       up_status_pn_oos <= 'd0;
       up_status_or <= 'd0;
       up_rdata <= 'd0;
-      up_ack <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
     end else begin
       up_status_pn_err <= | up_adc_pn_err_s;
       up_status_pn_oos <= | up_adc_pn_oos_s;
       up_status_or <= | up_adc_or_s;
       up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3] | up_rdata_s[4];
-      up_ack <= up_ack_s[0] | up_ack_s[1] | up_ack_s[2] | up_ack_s[3] | up_ack_s[4];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3] | up_rack_s[4];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3] | up_wack_s[4];
     end
   end
 
@@ -219,12 +227,14 @@ module axi_ad9361_rx (
     .up_adc_or (up_adc_or_s[0]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_s[0]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[0]),
-    .up_ack (up_ack_s[0]));
+    .up_rack (up_rack_s[0]));
 
   // channel 1 (q)
 
@@ -250,12 +260,14 @@ module axi_ad9361_rx (
     .up_adc_or (up_adc_or_s[1]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_s[1]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[1]),
-    .up_ack (up_ack_s[1]));
+    .up_rack (up_rack_s[1]));
 
   // channel 2 (i)
 
@@ -281,12 +293,14 @@ module axi_ad9361_rx (
     .up_adc_or (up_adc_or_s[2]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_s[2]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[2]),
-    .up_ack (up_ack_s[2]));
+    .up_rack (up_rack_s[2]));
 
   // channel 3 (q)
 
@@ -312,12 +326,14 @@ module axi_ad9361_rx (
     .up_adc_or (up_adc_or_s[3]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_s[3]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[3]),
-    .up_ack (up_ack_s[3]));
+    .up_rack (up_rack_s[3]));
 
   // common processor control
 
@@ -329,9 +345,12 @@ module axi_ad9361_rx (
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (adc_status),
+    .adc_sync_status(),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
+    .adc_start_code(),
+    .adc_sync(),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),
@@ -359,12 +378,14 @@ module axi_ad9361_rx (
     .up_adc_gpio_out (up_adc_gpio_out),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_sel (up_sel),
-    .up_wr (up_wr),
-    .up_addr (up_addr),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
     .up_wdata (up_wdata),
+    .up_wack (up_wack_s[4]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[4]),
-    .up_ack (up_ack_s[4]));
+    .up_rack (up_rack_s[4]));
 
 endmodule
 

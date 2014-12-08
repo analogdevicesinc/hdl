@@ -40,22 +40,22 @@ set_property LEFT 48 [get_bd_ports GPIO_T]
 set_property -dict [list CONFIG.NUM_MI {9}] $axi_cpu_interconnect
 set_property -dict [list CONFIG.NUM_PORTS {7}] $sys_concat_intc
 
-set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sys_const_vcc]
+set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_vcc]
 set_property -dict [list CONFIG.CONST_WIDTH {1} CONFIG.CONST_VAL {1}] $sys_const_vcc
 
-set sys_const_gnd [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.0 sys_const_gnd]
+set sys_const_gnd [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_gnd]
 set_property -dict [list CONFIG.CONST_WIDTH {1} CONFIG.CONST_VAL {0}] $sys_const_gnd
 
 connect_bd_net -net net_vcc [get_bd_pins sys_const_vcc/const]
 connect_bd_net -net net_gnd [get_bd_pins sys_const_gnd/const]
 
-set axi_spi_pmod_jc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_spi_pmod_jc]
+set axi_spi_pmod_jc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_spi_pmod_jc]
 set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_spi_pmod_jc
 set_property -dict [list CONFIG.C_NUM_SS_BITS {1}] $axi_spi_pmod_jc
 set_property -dict [list CONFIG.C_SCK_RATIO {16}] $axi_spi_pmod_jc
 set_property -dict [list CONFIG.Multiples16 {4}] $axi_spi_pmod_jc
 
-set axi_spi_pmod_jd [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.1 axi_spi_pmod_jd]
+set axi_spi_pmod_jd [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_spi_pmod_jd]
 set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_spi_pmod_jd
 set_property -dict [list CONFIG.C_NUM_SS_BITS {1}] $axi_spi_pmod_jd
 set_property -dict [list CONFIG.C_SCK_RATIO {16}] $axi_spi_pmod_jd

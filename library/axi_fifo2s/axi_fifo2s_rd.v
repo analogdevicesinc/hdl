@@ -43,7 +43,10 @@ module axi_fifo2s_rd (
 
   // request and synchronization
 
-  axi_xfer_req,
+  dma_xfer_req,
+
+  // read interface
+
   axi_rd_req,
   axi_rd_addr,
 
@@ -77,25 +80,29 @@ module axi_fifo2s_rd (
 
   // fifo interface
 
-  axi_mrstn,
-  axi_mwr,
-  axi_mwdata,
-  axi_mwpfull);
+  axi_drst,
+  axi_dvalid,
+  axi_ddata,
+  axi_dready);
 
   // parameters
 
-  parameter   DATA_WIDTH = 32;
+  parameter   AXI_DATA_WIDTH = 512;
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 16;
   parameter   AXI_ADDRESS = 32'h00000000;
   parameter   AXI_ADDRLIMIT = 32'h00000000;
-  localparam  AXI_AWINCR = (AXI_LENGTH * DATA_WIDTH)/8;
+  localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
+  localparam  AXI_AWINCR = AXI_LENGTH * AXI_BYTE_WIDTH;
   localparam  BUF_THRESHOLD_LO = 6'd3;
   localparam  BUF_THRESHOLD_HI = 6'd60;
 
   // request and synchronization
 
-  input                           axi_xfer_req;
+  input                           dma_xfer_req;
+
+  // read interface
+
   input                           axi_rd_req;
   input   [ 31:0]                 axi_rd_addr;
 
@@ -120,7 +127,7 @@ module axi_fifo2s_rd (
   input   [  3:0]                 axi_ruser;
   input   [  1:0]                 axi_rresp;
   input                           axi_rlast;
-  input   [DATA_WIDTH-1:0]        axi_rdata;
+  input   [AXI_DATA_WIDTH-1:0]    axi_rdata;
   output                          axi_rready;
 
   // axi status
@@ -129,10 +136,10 @@ module axi_fifo2s_rd (
 
   // fifo interface
 
-  output                          axi_mrstn;
-  output                          axi_mwr;
-  output  [DATA_WIDTH-1:0]        axi_mwdata;
-  input                           axi_mwpfull;
+  output                          axi_drst;
+  output                          axi_dvalid;
+  output  [AXI_DATA_WIDTH-1:0]    axi_ddata;
+  input                           axi_dready;
 
   // internal registers
 
@@ -144,9 +151,9 @@ module axi_fifo2s_rd (
   reg                             axi_xfer_enable = 'd0;
   reg                             axi_arvalid = 'd0;
   reg     [ 31:0]                 axi_araddr = 'd0;
-  reg                             axi_mrstn = 'd0;
-  reg                             axi_mwr = 'd0;
-  reg     [DATA_WIDTH-1:0]        axi_mwdata = 'd0;
+  reg                             axi_drst = 'd0;
+  reg                             axi_dvalid = 'd0;
+  reg     [AXI_DATA_WIDTH-1:0]    axi_ddata = 'd0;
   reg                             axi_rready = 'd0;
   reg                             axi_rerror = 'd0;
 
@@ -156,7 +163,7 @@ module axi_fifo2s_rd (
 
   // read is way too slow- buffer mode 
 
-  assign axi_ready_s = (~axi_arvalid | axi_arready) & ~axi_mwpfull;
+  assign axi_ready_s = (~axi_arvalid | axi_arready) & axi_dready;
 
   always @(posedge axi_clk or negedge axi_resetn) begin
     if (axi_resetn == 1'b0) begin
@@ -181,7 +188,7 @@ module axi_fifo2s_rd (
         axi_rd <= axi_xfer_enable;
         axi_rd_active <= axi_xfer_enable;
       end
-      axi_xfer_req_m <= {axi_xfer_req_m[1:0], axi_xfer_req};
+      axi_xfer_req_m <= {axi_xfer_req_m[1:0], dma_xfer_req};
       axi_xfer_init <= axi_xfer_req_m[1] & ~axi_xfer_req_m[2];
       axi_xfer_enable <= axi_xfer_req_m[2];
     end
@@ -225,14 +232,14 @@ module axi_fifo2s_rd (
 
   always @(posedge axi_clk or negedge axi_resetn) begin
     if (axi_resetn == 1'b0) begin
-      axi_mrstn <= 'd0;
-      axi_mwr <= 'd0;
-      axi_mwdata <= 'd0;
+      axi_drst <= 'd1;
+      axi_dvalid <= 'd0;
+      axi_ddata <= 'd0;
       axi_rready <= 'd0;
     end else begin
-      axi_mrstn <= axi_xfer_enable;
-      axi_mwr <= axi_rvalid & axi_rready;
-      axi_mwdata <= axi_rdata;
+      axi_drst <= ~axi_xfer_req_m[1];
+      axi_dvalid <= axi_rvalid & axi_rready;
+      axi_ddata <= axi_rdata;
       axi_rready <= 1'b1;
     end
   end
