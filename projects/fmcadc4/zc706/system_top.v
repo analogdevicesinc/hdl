@@ -433,7 +433,7 @@ module system_top (
     .O (rx_sync_1_p),
     .OB (rx_sync_1_n));
 
-  fmcadc3_spi i_spi (
+  fmcadc4_spi i_spi (
     .csn (csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),

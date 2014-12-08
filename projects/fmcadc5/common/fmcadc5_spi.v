@@ -37,7 +37,7 @@
 
 `timescale 1ns/100ps
 
-module ad9625x2_fmc_spi (
+module fmcadc5_spi (
 
   spi_csn_0,
   spi_csn_1,

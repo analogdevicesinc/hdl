@@ -369,7 +369,7 @@ module system_top (
             drst_0,         //  1
             arst_0}));      //  0
 
-  ad9625x2_fmc_spi i_ad9625x2_fmc_spi (
+  fmcadc5_spi i_fmcadc5_spi (
     .spi_csn_0 (spi_csn_0),
     .spi_csn_1 (spi_csn_1),
     .spi_clk (spi_clk),

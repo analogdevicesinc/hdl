@@ -4,6 +4,6 @@ source $ad_hdl_dir/projects/common/xilinx/sys_dmafifo.tcl
 
 p_sys_dmafifo [current_bd_instance .] axi_ad9625_fifo 256 10
 
-source ../common/ad9625_fmc_bd.tcl
+source ../common/fmcadc2_bd.tcl
 
 

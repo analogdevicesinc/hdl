@@ -37,7 +37,7 @@
 
 `timescale 1ns/100ps
 
-module fmcadc3_spi (
+module fmcadc4_spi (
 
   csn,
   spi_clk,

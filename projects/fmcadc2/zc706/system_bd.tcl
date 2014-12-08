@@ -12,7 +12,7 @@ create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_
   [get_bd_addr_segs axi_ad9625_fifo/axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl_memaddr
 
 
-source ../common/ad9625_fmc_bd.tcl
+source ../common/fmcadc2_bd.tcl
 
 
 

@@ -1,7 +1,7 @@
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3.tcl
-source ../common/fmcadc3_bd.tcl
+source ../common/fmcadc4_bd.tcl
 
 set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_ad9234_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9234_dma
@@ -21,7 +21,7 @@ delete_bd_objs [get_bd_nets axi_ad9234_adc_ddata]
 delete_bd_objs [get_bd_nets axi_ad9234_adc_dsync]
 delete_bd_objs [get_bd_nets axi_ad9234_adc_dovf]
 
-connect_bd_net -net [get_bd_nets axi_fmcadc3_gt_rx_rst]   [get_bd_pins plddr3_fifo/adc_rst]             [get_bd_pins axi_fmcadc3_gt/rx_rst]
+connect_bd_net -net [get_bd_nets axi_fmcadc4_gt_rx_rst]   [get_bd_pins plddr3_fifo/adc_rst]             [get_bd_pins axi_fmcadc4_gt/rx_rst]
 connect_bd_net -net [get_bd_nets sys_fmc_dma_resetn]      [get_bd_pins plddr3_fifo/dma_rstn]            [get_bd_pins sys_fmc_dma_sync_reset/sync_resetn]
 connect_bd_net -net axi_ad9234_dma_xfer_req               [get_bd_pins axi_ad9234_dma/s_axis_xfer_req]  [get_bd_pins plddr3_fifo/axi_xfer_req]
 
@@ -38,7 +38,7 @@ connect_bd_net -net axi_ad9234_dma_ddata    [get_bd_pins axi_ad9234_dma/s_axis_d
 connect_bd_net -net axi_ad9234_adc_clk      [get_bd_ports adc_clk]
 connect_bd_net -net axi_ad9234_adc_ddata    [get_bd_pins ila_jesd_rx_mon/PROBE3]
 
-connect_bd_net -net axi_ad9234_dma_irq      [get_bd_ports fmcadc3_dma_intr]           [get_bd_pins sys_concat_intc/In2]
+connect_bd_net -net axi_ad9234_dma_irq      [get_bd_ports fmcadc4_dma_intr]           [get_bd_pins sys_concat_intc/In2]
 
 set ila_dma_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_dma_mon]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_dma_mon
