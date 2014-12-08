@@ -97,12 +97,12 @@ module system_top (
   pwm_ch_o,
   pwm_cl_o,
 
-  //vauxn0,
-  //vauxn8,
-  //vauxp0,
-  //vauxp8,
-  //vn_in,
-  //vp_in,
+  vauxn0,
+  vauxn8,
+  vauxp0,
+  vauxp8,
+  vn_in,
+  vp_in,
   //muxaddr_out,
 
   i2s_mclk,
@@ -176,12 +176,12 @@ module system_top (
   output          pwm_ch_o;
   output          pwm_cl_o;
 
-  //input           vauxn0;
-  //input           vauxn8;
-  //input           vauxp0;
-  //input           vauxp8;
-  //input           vn_in;
-  //input           vp_in;
+  input           vauxn0;
+  input           vauxn8;
+  input           vauxp0;
+  input           vauxp8;
+  input           vn_in;
+  input           vp_in;
   //output [3:0]    muxaddr_out;
 
   output          spdif;
@@ -293,12 +293,12 @@ module system_top (
     .pwm_bl_o(pwm_bl_o),
     .pwm_ch_o(pwm_ch_o),
     .pwm_cl_o(pwm_cl_o),
-    //.Vaux0_v_n(vauxn0),
-    //.Vaux0_v_p(vauxp0),
-    //.vauxn8(vauxn8),
-    //.vauxp8(vauxp8),
-    //.Vp_Vn_v_n(vn_in),
-    //.Vp_Vn_v_p(vp_in),
+    .Vaux0_v_n(vauxn0),
+    .Vaux0_v_p(vauxp0),
+    .Vaux8_v_n(vauxn8),
+    .Vaux8_v_p(vauxp8),
+    .Vp_Vn_v_n(vn_in),
+    .Vp_Vn_v_p(vp_in),
     //.muxaddr_out(muxaddr_out),
     .i2s_bclk (i2s_bclk),
     .i2s_lrclk (i2s_lrclk),
