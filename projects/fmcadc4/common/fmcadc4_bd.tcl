@@ -1,17 +1,17 @@
 
   # fmcadc4
 
-if {$sys_zynq == 0} {
+if {$sys_zynq == 1} {
 
-  set spi_csn_i       [create_bd_port -dir I -from 2 -to 0 spi_csn_i]
-  set spi_csn_o       [create_bd_port -dir O -from 2 -to 0 spi_csn_o]
+  set spi_csn_2_o     [create_bd_port -dir O spi_csn_2_o]
+  set spi_csn_1_o     [create_bd_port -dir O spi_csn_1_o]
+  set spi_csn_0_o     [create_bd_port -dir O spi_csn_0_o]
+  set spi_csn_i       [create_bd_port -dir I spi_csn_i]
 
 } else {
 
-  set spi_csn_0       [create_bd_port -dir O spi_csn_0]
-  set spi_csn_1       [create_bd_port -dir O spi_csn_1]
-  set spi_csn_2       [create_bd_port -dir O spi_csn_2]
-  set spi_csn_i       [create_bd_port -dir I spi_csn_i]
+  set spi_csn_o       [create_bd_port -dir O -from 2 -to 0 spi_csn_o]
+  set spi_csn_i       [create_bd_port -dir I -from 2 -to 0 spi_csn_i]
 }
 
   set spi_clk_i       [create_bd_port -dir I spi_clk_i]
@@ -56,9 +56,9 @@ if {$sys_zynq == 0} {
   set adc_dsync       [create_bd_port -dir I adc_dsync]
   set adc_ddata       [create_bd_port -dir I -from 255 -to 0 adc_ddata]
 
+  set fmcadc4_dma_intr    [create_bd_port -dir O fmcadc4_dma_intr]
   set fmcadc4_spi_intr    [create_bd_port -dir O fmcadc4_spi_intr]
   set fmcadc4_gpio_intr   [create_bd_port -dir O fmcadc4_gpio_intr]
-  set fmcadc4_dma_intr    [create_bd_port -dir O fmcadc4_dma_intr]
 
   # adc peripherals
 
@@ -70,17 +70,18 @@ if {$sys_zynq == 0} {
   set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9234_jesd
 
   set axi_ad9234_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9234_dma]
-  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9234_dma
+  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9234_dma
   set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9234_dma
+  set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9234_dma
   set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9234_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {256}] $axi_ad9234_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {256}] $axi_ad9234_dma
+  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9234_dma
+  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9234_dma
 
 if {$sys_zynq == 1} {
 
@@ -91,7 +92,7 @@ if {$sys_zynq == 1} {
   # dac/adc common gt/gpio
 
   set axi_fmcadc4_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_fmcadc4_gt]
-  set_property -dict [list CONFIG.PCORE_NUM_OF_LANES {8}] $axi_fmcadc4_gt
+  set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {8}] $axi_fmcadc4_gt
 
 if {$sys_zynq == 1} {
 
@@ -161,15 +162,15 @@ if {$sys_zynq == 0} {
 
 } else {
 
-  connect_bd_net -net spi_csn_0 [get_bd_ports spi_csn_0]  [get_bd_pins sys_ps7/SPI0_SS_O]
-  connect_bd_net -net spi_csn_1 [get_bd_ports spi_csn_1]  [get_bd_pins sys_ps7/SPI0_SS1_O]
-  connect_bd_net -net spi_csn_2 [get_bd_ports spi_csn_2]  [get_bd_pins sys_ps7/SPI0_SS2_O]
-  connect_bd_net -net spi_csn_i [get_bd_ports spi_csn_i]  [get_bd_pins sys_ps7/SPI0_SS_I]
-  connect_bd_net -net spi_clk_i [get_bd_ports spi_clk_i]  [get_bd_pins sys_ps7/SPI0_SCLK_I]
-  connect_bd_net -net spi_clk_o [get_bd_ports spi_clk_o]  [get_bd_pins sys_ps7/SPI0_SCLK_O]
-  connect_bd_net -net spi_sdo_i [get_bd_ports spi_sdo_i]  [get_bd_pins sys_ps7/SPI0_MOSI_I]
-  connect_bd_net -net spi_sdo_o [get_bd_ports spi_sdo_o]  [get_bd_pins sys_ps7/SPI0_MOSI_O]
-  connect_bd_net -net spi_sdi_i [get_bd_ports spi_sdi_i]  [get_bd_pins sys_ps7/SPI0_MISO_I]
+  connect_bd_net -net spi_csn_2_o [get_bd_ports spi_csn_2_o]  [get_bd_pins sys_ps7/SPI0_SS2_O]
+  connect_bd_net -net spi_csn_1_o [get_bd_ports spi_csn_1_o]  [get_bd_pins sys_ps7/SPI0_SS1_O]
+  connect_bd_net -net spi_csn_0_o [get_bd_ports spi_csn_0_o]  [get_bd_pins sys_ps7/SPI0_SS_O]
+  connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]    [get_bd_pins sys_ps7/SPI0_SS_I]
+  connect_bd_net -net spi_clk_i   [get_bd_ports spi_clk_i]    [get_bd_pins sys_ps7/SPI0_SCLK_I]
+  connect_bd_net -net spi_clk_o   [get_bd_ports spi_clk_o]    [get_bd_pins sys_ps7/SPI0_SCLK_O]
+  connect_bd_net -net spi_sdo_i   [get_bd_ports spi_sdo_i]    [get_bd_pins sys_ps7/SPI0_MOSI_I]
+  connect_bd_net -net spi_sdo_o   [get_bd_ports spi_sdo_o]    [get_bd_pins sys_ps7/SPI0_MOSI_O]
+  connect_bd_net -net spi_sdi_i   [get_bd_ports spi_sdi_i]    [get_bd_pins sys_ps7/SPI0_MISO_I]
 }
 
 if {$sys_zynq == 0} {
@@ -212,24 +213,33 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_fmcadc4_gt_rx_data           [get_bd_pins axi_fmcadc4_gt/rx_data]           [get_bd_ports gt_data]
   connect_bd_net -net axi_fmcadc4_gt_0_rx_data         [get_bd_pins axi_ad9234_core_0/rx_data]        [get_bd_ports gt_data_0]
   connect_bd_net -net axi_fmcadc4_gt_1_rx_data         [get_bd_pins axi_ad9234_core_1/rx_data]        [get_bd_ports gt_data_1]
-  connect_bd_net -net axi_ad9234_adc_clk               [get_bd_pins axi_ad9234_core_0/adc_clk]        [get_bd_pins axi_ad9234_dma/fifo_wr_clk]
+
   connect_bd_net -net axi_ad9234_0_adc_enable_0        [get_bd_pins axi_ad9234_core_0/adc_enable_0]   [get_bd_ports adc_enable_0]
   connect_bd_net -net axi_ad9234_0_adc_valid_0         [get_bd_pins axi_ad9234_core_0/adc_valid_0]    [get_bd_ports adc_valid_0]
   connect_bd_net -net axi_ad9234_0_adc_data_0          [get_bd_pins axi_ad9234_core_0/adc_data_0]     [get_bd_ports adc_data_0]
   connect_bd_net -net axi_ad9234_0_adc_enable_1        [get_bd_pins axi_ad9234_core_0/adc_enable_1]   [get_bd_ports adc_enable_1]
   connect_bd_net -net axi_ad9234_0_adc_valid_1         [get_bd_pins axi_ad9234_core_0/adc_valid_1]    [get_bd_ports adc_valid_1]
   connect_bd_net -net axi_ad9234_0_adc_data_1          [get_bd_pins axi_ad9234_core_0/adc_data_1]     [get_bd_ports adc_data_1]
+
   connect_bd_net -net axi_ad9234_1_adc_enable_0        [get_bd_pins axi_ad9234_core_1/adc_enable_0]   [get_bd_ports adc_enable_2]
   connect_bd_net -net axi_ad9234_1_adc_valid_0         [get_bd_pins axi_ad9234_core_1/adc_valid_0]    [get_bd_ports adc_valid_2]
   connect_bd_net -net axi_ad9234_1_adc_data_0          [get_bd_pins axi_ad9234_core_1/adc_data_0]     [get_bd_ports adc_data_2]
   connect_bd_net -net axi_ad9234_1_adc_enable_1        [get_bd_pins axi_ad9234_core_1/adc_enable_1]   [get_bd_ports adc_enable_3]
   connect_bd_net -net axi_ad9234_1_adc_valid_1         [get_bd_pins axi_ad9234_core_1/adc_valid_1]    [get_bd_ports adc_valid_3]
   connect_bd_net -net axi_ad9234_1_adc_data_1          [get_bd_pins axi_ad9234_core_1/adc_data_1]     [get_bd_ports adc_data_3]
-  connect_bd_net -net axi_ad9234_adc_dwr               [get_bd_ports adc_dwr]                         [get_bd_pins axi_ad9234_dma/fifo_wr_en]
-  connect_bd_net -net axi_ad9234_adc_dsync             [get_bd_ports adc_dsync]                       [get_bd_pins axi_ad9234_dma/fifo_wr_sync]
-  connect_bd_net -net axi_ad9234_adc_ddata             [get_bd_ports adc_ddata]                       [get_bd_pins axi_ad9234_dma/fifo_wr_din]
-  connect_bd_net -net axi_ad9234_adc_dovf              [get_bd_pins axi_ad9234_core_0/adc_dovf]       [get_bd_pins axi_ad9234_dma/fifo_wr_overflow]
-  connect_bd_net -net axi_ad9234_dma_irq               [get_bd_pins axi_ad9234_dma/irq]               [get_bd_ports fmcadc4_dma_intr]
+
+  connect_bd_net -net axi_fmcadc4_gt_rx_rst            [get_bd_pins axi_ad9234_fifo/adc_rst]          [get_bd_pins axi_fmcadc4_gt/rx_rst]
+  connect_bd_net -net axi_ad9234_adc_clk               [get_bd_pins axi_ad9234_core_0/adc_clk]        [get_bd_pins axi_ad9234_fifo/adc_clk]
+  connect_bd_net -net axi_ad9234_adc_dovf              [get_bd_pins axi_ad9234_core_0/adc_dovf]       [get_bd_pins axi_ad9234_fifo/adc_wovf]
+  connect_bd_net -net axi_ad9234_adc_dwr               [get_bd_ports adc_dwr]                         [get_bd_pins axi_ad9234_fifo/adc_wr]
+  connect_bd_net -net axi_ad9234_adc_ddata             [get_bd_ports adc_ddata]                       [get_bd_pins axi_ad9234_fifo/adc_wdata]
+
+  connect_bd_net -net sys_100m_clk                     [get_bd_pins axi_ad9234_fifo/dma_clk]          [get_bd_pins axi_ad9234_dma/s_axis_aclk]
+  connect_bd_net -net axi_ad9234_dma_dvalid            [get_bd_pins axi_ad9234_fifo/dma_wr]           [get_bd_pins axi_ad9234_dma/s_axis_valid]
+  connect_bd_net -net axi_ad9234_dma_ddata             [get_bd_pins axi_ad9234_fifo/dma_wdata]        [get_bd_pins axi_ad9234_dma/s_axis_data]
+  connect_bd_net -net axi_ad9234_dma_dready            [get_bd_pins axi_ad9234_fifo/dma_wready]       [get_bd_pins axi_ad9234_dma/s_axis_ready]
+  connect_bd_net -net axi_ad9234_dma_xfer_req          [get_bd_pins axi_ad9234_fifo/dma_xfer_req]     [get_bd_pins axi_ad9234_dma/s_axis_xfer_req]
+  connect_bd_net -net fmcadc4_dma_intr                 [get_bd_pins axi_ad9234_dma/irq]               [get_bd_ports fmcadc4_dma_intr]
 
   # dac/adc clocks
 
@@ -310,64 +320,40 @@ if {$sys_zynq == 0} {
 
   # memory interconnects share the same clock (fclk2)
 
-if {$sys_zynq == 1} {
-  set sys_fmc_dma_sync_reset [create_bd_cell -type ip -vlnv analog.com:user:util_sync_reset:1.0 sys_fmc_dma_sync_reset]
-
-  set sys_fmc_dma_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
-  set sys_fmc_dma_resetn_source [get_bd_pins sys_fmc_dma_sync_reset/sync_resetn]
-
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_fmc_dma_sync_reset/clk]
-  connect_bd_net -net sys_fmc_dma_async_reset \
-	[get_bd_pins sys_fmc_dma_sync_reset/async_resetn] \
-	[get_bd_pins sys_ps7/FCLK_RESET2_N]
-
-  connect_bd_net -net sys_fmc_dma_clk $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_resetn $sys_fmc_dma_resetn_source
-}
-
   # interconnect (mem/dac)
 
 if {$sys_zynq == 0} {
 
   connect_bd_intf_net -intf_net axi_mem_interconnect_s09_axi [get_bd_intf_pins axi_mem_interconnect/S09_AXI] [get_bd_intf_pins axi_ad9234_dma/m_dest_axi]    
-  connect_bd_net -net sys_200m_clk [get_bd_pins axi_mem_interconnect/S09_ACLK] $sys_200m_clk_source
-  connect_bd_net -net sys_200m_clk [get_bd_pins axi_ad9234_dma/m_dest_axi_aclk] 
-  connect_bd_net -net sys_200m_resetn [get_bd_pins axi_mem_interconnect/S09_ARESETN] $sys_200m_resetn_source
-  connect_bd_net -net sys_200m_resetn [get_bd_pins axi_ad9234_dma/m_dest_axi_aresetn] 
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_mem_interconnect/S09_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9234_dma/m_dest_axi_aclk] 
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_mem_interconnect/S09_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9234_dma/m_dest_axi_aresetn] 
 
 } else {
 
   connect_bd_intf_net -intf_net axi_ad9234_dma_interconnect_m00_axi [get_bd_intf_pins axi_ad9234_dma_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP2]
   connect_bd_intf_net -intf_net axi_ad9234_dma_interconnect_s00_axi [get_bd_intf_pins axi_ad9234_dma_interconnect/S00_AXI] [get_bd_intf_pins axi_ad9234_dma/m_dest_axi]    
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9234_dma_interconnect/ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9234_dma_interconnect/M00_ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9234_dma_interconnect/S00_ACLK] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_ps7/S_AXI_HP2_ACLK]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins axi_ad9234_dma/m_dest_axi_aclk] 
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9234_dma_interconnect/ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9234_dma_interconnect/M00_ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9234_dma_interconnect/S00_ARESETN] $sys_fmc_dma_resetn_source
-  connect_bd_net -net sys_fmc_dma_resetn [get_bd_pins axi_ad9234_dma/m_dest_axi_aresetn] 
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9234_dma_interconnect/ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9234_dma_interconnect/M00_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9234_dma_interconnect/S00_ACLK] $sys_100m_clk_source
+  connect_bd_net -net sys_100m_clk [get_bd_pins sys_ps7/S_AXI_HP2_ACLK]
+  connect_bd_net -net sys_100m_clk [get_bd_pins axi_ad9234_dma/m_dest_axi_aclk] 
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9234_dma_interconnect/ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9234_dma_interconnect/M00_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9234_dma_interconnect/S00_ARESETN] $sys_100m_resetn_source
+  connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad9234_dma/m_dest_axi_aresetn] 
 }
 
   # ila
 
   set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE0_WIDTH {662}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE1_WIDTH {10}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE2_WIDTH {256}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE3_WIDTH {256}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE4_WIDTH {1}] $ila_jesd_rx_mon
+  set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_jesd_rx_mon
+  set_property -dict [list CONFIG.C_PROBE0_WIDTH {256}] $ila_jesd_rx_mon
 
-  connect_bd_net -net axi_fmcadc4_gt_rx_mon_data       [get_bd_pins axi_fmcadc4_gt/rx_mon_data]
-  connect_bd_net -net axi_fmcadc4_gt_rx_mon_trigger    [get_bd_pins axi_fmcadc4_gt/rx_mon_trigger]
   connect_bd_net -net axi_fmcadc4_gt_rx_clk            [get_bd_pins ila_jesd_rx_mon/CLK]
-  connect_bd_net -net axi_fmcadc4_gt_rx_mon_data       [get_bd_pins ila_jesd_rx_mon/PROBE0]
-  connect_bd_net -net axi_fmcadc4_gt_rx_mon_trigger    [get_bd_pins ila_jesd_rx_mon/PROBE1]
-  connect_bd_net -net axi_fmcadc4_gt_rx_data           [get_bd_pins ila_jesd_rx_mon/PROBE2]
-  connect_bd_net -net axi_ad9234_adc_ddata             [get_bd_pins ila_jesd_rx_mon/PROBE3]
+  connect_bd_net -net axi_ad9234_adc_ddata             [get_bd_pins ila_jesd_rx_mon/PROBE0]
 
   # address map
 
