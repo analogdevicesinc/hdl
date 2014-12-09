@@ -371,6 +371,7 @@ module system_top (
     .mb_intr_31 (mb_intrs[31]),
     .ad9250_0_dma_intr (mb_intrs[10]),
     .ad9250_1_dma_intr (mb_intrs[11]),
+    .ad9250_spi_intr (mb_intrs[13]),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio_io),
     .mii_col (mii_col),
