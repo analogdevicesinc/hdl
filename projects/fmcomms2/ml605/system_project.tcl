@@ -5,7 +5,11 @@ source $ad_hdl_dir/projects/scripts/adi_project.tcl
 adi_project_create fmcomms2_ml605
 adi_project_files fmcomms2_ml605 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/common/ad_mul_u16.v" \
+  "$ad_hdl_dir/library/common/ad_lvds_clk.v" \
+  "$ad_hdl_dir/library/common/ad_lvds_in.v" \
+  "$ad_hdl_dir/library/common/ad_lvds_out.v" \
+  "$ad_hdl_dir/library/common/ad_mul.v" \
+  "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \
@@ -22,20 +26,19 @@ adi_project_files fmcomms2_ml605 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
-  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_dev_if.v" \
-  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_pnlb.v" \
-  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_rx_pnmon.v" \
-  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_rx_channel.v" \
-  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_rx.v" \
-  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_tx_dds.v" \
-  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_tx_channel.v" \
-  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_tx.v" \
-  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361.v" \
   "$ad_hdl_dir/library/common/sync_bits.v" \
   "$ad_hdl_dir/library/common/sync_gray.v" \
   "$ad_hdl_dir/library/axi_fifo/axi_fifo.v" \
   "$ad_hdl_dir/library/axi_fifo/address_gray.v" \
   "$ad_hdl_dir/library/axi_fifo/address_gray_pipelined.v" \
+  "$ad_hdl_dir/library/axi_fifo/address_sync.v" \
+  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_dev_if.v" \
+  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_rx_pnmon.v" \
+  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_rx_channel.v" \
+  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_rx.v" \
+  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_tx_channel.v" \
+  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361_tx.v" \
+  "$ad_hdl_dir/library/axi_ad9361/axi_ad9361.v" \
   "$ad_hdl_dir/library/axi_dmac/address_generator.v" \
   "$ad_hdl_dir/library/axi_dmac/data_mover.v" \
   "$ad_hdl_dir/library/axi_dmac/request_arb.v" \
@@ -53,6 +56,8 @@ adi_project_files fmcomms2_ml605 [list \
   "$ad_hdl_dir/library/axi_dmac/response_generator.v" \
   "$ad_hdl_dir/library/axi_dmac/axi_dmac.v" \
   "$ad_hdl_dir/library/axi_dmac/axi_repack.v" \
+  "$ad_hdl_dir/library/util_adc_pack/util_adc_pack.v" \
+  "$ad_hdl_dir/library/util_dac_unpack/util_dac_unpack.v" \
   "system_constr.ucf" \
   "system_top.v" ]
 
