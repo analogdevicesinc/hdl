@@ -81,10 +81,10 @@ module axi_fifo2s_adc (
 
   // internal registers
 
-  reg                             adc_wovf = 'd0;
-  reg     [  2:0]                 adc_wcnt_int = 'd0;
-  reg                             adc_dwr = 'd0;
-  reg     [AXI_DATA_WIDTH-1:0]    adc_ddata = 'd0;
+  reg                             adc_wovf      = 'd0;
+  reg     [  2:0]                 adc_wcnt_int  = 'd0;
+  reg                             adc_dwr       = 'd0;
+  reg     [AXI_DATA_WIDTH-1:0]    adc_ddata     = 'd0;
 
   // internal signals
 
@@ -100,35 +100,36 @@ module axi_fifo2s_adc (
       adc_ddata <= 'd0;
     end else begin
       adc_wovf <= | adc_xfer_status_s;
-      adc_wcnt_int <= adc_wcnt_int + 1'b1;
-      case (ADC_MEM_RATIO)
-        8: begin
-          adc_dwr <= adc_wr & adc_wcnt_int[0] & adc_wcnt_int[1] & adc_wcnt_int[2];
-          adc_ddata[((ADC_DATA_WIDTH*8)-1):(ADC_DATA_WIDTH*7)] <= adc_wdata;
-          adc_ddata[((ADC_DATA_WIDTH*7)-1):(ADC_DATA_WIDTH*0)] <= 
-            adc_ddata[((ADC_DATA_WIDTH*8)-1):(ADC_DATA_WIDTH*1)];
-        end
-        4: begin
-          adc_dwr <= adc_wr & adc_wcnt_int[0] & adc_wcnt_int[1];
-          adc_ddata[((ADC_DATA_WIDTH*4)-1):(ADC_DATA_WIDTH*3)] <= adc_wdata;
-          adc_ddata[((ADC_DATA_WIDTH*3)-1):(ADC_DATA_WIDTH*0)] <=
-            adc_ddata[((ADC_DATA_WIDTH*4)-1):(ADC_DATA_WIDTH*1)];
-        end
-        2: begin
-          adc_dwr <= adc_wr & adc_wcnt_int[0];
-          adc_ddata[((ADC_DATA_WIDTH*2)-1):(ADC_DATA_WIDTH*1)] <= adc_wdata;
-          adc_ddata[((ADC_DATA_WIDTH*1)-1):(ADC_DATA_WIDTH*0)] <=
-            adc_ddata[((ADC_DATA_WIDTH*2)-1):(ADC_DATA_WIDTH*1)];
-        end
-        1: begin
-          adc_dwr <= adc_wr;
-          adc_ddata <= adc_wdata;
-        end
-        default: begin
-          adc_dwr <= 'd0;
-          adc_ddata <= 'd0;
-        end
-      endcase
+      adc_dwr <= (ADC_MEM_RATIO == 8) ? adc_wr & adc_wcnt_int[0] & adc_wcnt_int[1] & adc_wcnt_int[2] :
+                 (ADC_MEM_RATIO == 4) ? adc_wr & adc_wcnt_int[0] & adc_wcnt_int[1] :
+                 (ADC_MEM_RATIO == 2) ? adc_wr & adc_wcnt_int[0] :
+                 (ADC_MEM_RATIO == 1) ? adc_wr : 'd0;
+      if (adc_wr == 1'b1) begin
+        adc_wcnt_int <= adc_wcnt_int + 1'b1;
+        case (ADC_MEM_RATIO)
+          8: begin
+            adc_ddata[((ADC_DATA_WIDTH*8)-1):(ADC_DATA_WIDTH*7)] <= adc_wdata;
+            adc_ddata[((ADC_DATA_WIDTH*7)-1):(ADC_DATA_WIDTH*0)] <=
+              adc_ddata[((ADC_DATA_WIDTH*8)-1):(ADC_DATA_WIDTH*1)];
+          end
+          4: begin
+            adc_ddata[((ADC_DATA_WIDTH*4)-1):(ADC_DATA_WIDTH*3)] <= adc_wdata;
+            adc_ddata[((ADC_DATA_WIDTH*3)-1):(ADC_DATA_WIDTH*0)] <=
+              adc_ddata[((ADC_DATA_WIDTH*4)-1):(ADC_DATA_WIDTH*1)];
+          end
+          2: begin
+            adc_ddata[((ADC_DATA_WIDTH*2)-1):(ADC_DATA_WIDTH*1)] <= adc_wdata;
+            adc_ddata[((ADC_DATA_WIDTH*1)-1):(ADC_DATA_WIDTH*0)] <=
+              adc_ddata[((ADC_DATA_WIDTH*2)-1):(ADC_DATA_WIDTH*1)];
+          end
+          1: begin
+            adc_ddata <= adc_wdata;
+          end
+          default: begin
+            adc_ddata <= 'd0;
+          end
+        endcase
+      end
     end
   end
 
