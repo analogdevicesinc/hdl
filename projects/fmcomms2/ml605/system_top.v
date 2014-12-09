@@ -312,6 +312,30 @@ module system_top (
   wire              axi_dev_rx_axil_rready;
   wire              sys_200m_clk;
   wire              clk;
+  wire              adc_enable_i0;
+  wire              adc_valid_i0;
+  wire    [ 15:0]   adc_data_i0;
+  wire              adc_enable_q0;
+  wire              adc_valid_q0;
+  wire    [ 15:0]   adc_data_q0;
+  wire              adc_enable_i1;
+  wire              adc_valid_i1;
+  wire    [ 15:0]   adc_data_i1;
+  wire              adc_enable_q1;
+  wire              adc_valid_q1;
+  wire    [ 15:0]   adc_data_q1;
+  wire              dac_enable_i0;
+  wire              dac_valid_i0;
+  wire    [ 15:0]   dac_data_i0;
+  wire              dac_enable_q0;
+  wire              dac_valid_q0;
+  wire    [ 15:0]   dac_data_q0;
+  wire              dac_enable_i1;
+  wire              dac_valid_i1;
+  wire    [ 15:0]   dac_data_i1;
+  wire              dac_enable_q1;
+  wire              dac_valid_q1;
+  wire    [ 15:0]   dac_data_q1;
   wire              adc_dwr;
   wire    [ 63:0]   adc_ddata;
   wire              adc_dsync;
@@ -379,36 +403,50 @@ module system_top (
 
   // instantiations
 
-  axi_ad9361 #(
-    .PCORE_BUFTYPE (1),
-    .C_BASEADDR (32'h00000000),
-    .C_HIGHADDR (32'hffffffff))
-  i_axi_ad9361 (
+  axi_ad9361 #(.PCORE_DEVICE_TYPE (1)) i_axi_ad9361 (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_frame_in_p (rx_frame_in_p),
     .rx_frame_in_n (rx_frame_in_n),
     .rx_data_in_p (rx_data_in_p),
     .rx_data_in_n (rx_data_in_n),
-    .adc_start_in (1'd0),
-    .adc_start_out (),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_frame_out_p (tx_frame_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_data_out_n (tx_data_out_n),
-    .dac_enable_in (1'd0),
-    .dac_enable_out (),
+    .dac_sync_in (1'd0),
+    .dac_sync_out (),
     .delay_clk (sys_200m_clk),
+    .l_clk (clk),
     .clk (clk),
-    .adc_dwr (adc_dwr),
-    .adc_ddata (adc_ddata),
-    .adc_dsync (adc_dsync),
+    .adc_enable_i0 (adc_enable_i0),
+    .adc_valid_i0 (adc_valid_i0),
+    .adc_data_i0 (adc_data_i0),
+    .adc_enable_q0 (adc_enable_q0),
+    .adc_valid_q0 (adc_valid_q0),
+    .adc_data_q0 (adc_data_q0),
+    .adc_enable_i1 (adc_enable_i1),
+    .adc_valid_i1 (adc_valid_i1),
+    .adc_data_i1 (adc_data_i1),
+    .adc_enable_q1 (adc_enable_q1),
+    .adc_valid_q1 (adc_valid_q1),
+    .adc_data_q1 (adc_data_q1),
     .adc_dovf (adc_dovf),
-    .adc_dunf (1'd0),
-    .dac_drd (dac_drd),
-    .dac_ddata (dac_ddata),
+    .adc_dunf (1'b0),
+    .dac_enable_i0 (dac_enable_i0),
+    .dac_valid_i0 (dac_valid_i0),
+    .dac_data_i0 (dac_data_i0),
+    .dac_enable_q0 (dac_enable_q0),
+    .dac_valid_q0 (dac_valid_q0),
+    .dac_data_q0 (dac_data_q0),
+    .dac_enable_i1 (dac_enable_i1),
+    .dac_valid_i1 (dac_valid_i1),
+    .dac_data_i1 (dac_data_i1),
+    .dac_enable_q1 (dac_enable_q1),
+    .dac_valid_q1 (dac_valid_q1),
+    .dac_data_q1 (dac_data_q1),
     .dac_dovf (1'd0),
     .dac_dunf (dac_dunf),
     .s_axi_aclk (axi_dev_tx_axil_aclk),
@@ -430,12 +468,44 @@ module system_top (
     .s_axi_rdata (axi_dev_tx_axil_rdata),
     .s_axi_rresp (axi_dev_tx_axil_rresp),
     .s_axi_rready (axi_dev_tx_axil_rready),
-    .adc_mon_valid (),
-    .adc_mon_data ());
+    .up_dac_gpio_in (32'd0),
+    .up_dac_gpio_out (),
+    .up_adc_gpio_in (32'd0),
+    .up_adc_gpio_out (),
+    .dev_dbg_data (),
+    .dev_l_dbg_data ());
+
+  util_dac_unpack #(.CHANNELS (4)) i_unpack_tx (
+    .clk (clk),
+    .dac_enable_00 (dac_enable_i0),
+    .dac_valid_00 (dac_valid_i0),
+    .dac_data_00 (dac_data_i0),
+    .dac_enable_01 (dac_enable_q0),
+    .dac_valid_01 (dac_valid_q0),
+    .dac_data_01 (dac_data_q0),
+    .dac_enable_02 (dac_enable_i1),
+    .dac_valid_02 (dac_valid_i1),
+    .dac_data_02 (dac_data_i1),
+    .dac_enable_03 (dac_enable_q1),
+    .dac_valid_03 (dac_valid_q1),
+    .dac_data_03 (dac_data_q1),
+    .dac_enable_04 (1'd0),
+    .dac_valid_04 (1'd0),
+    .dac_data_04 (),
+    .dac_enable_05 (1'd0),
+    .dac_valid_05 (1'd0),
+    .dac_data_05 (),
+    .dac_enable_06 (1'd0),
+    .dac_valid_06 (1'd0),
+    .dac_data_06 (),
+    .dac_enable_07 (1'd0),
+    .dac_valid_07 (1'd0),
+    .dac_data_07 (),
+    .fifo_valid (dac_drd),
+    .dma_rd (dac_drd),
+    .dma_data (dac_ddata));
 
   axi_dmac #(
-    .C_BASEADDR (32'h00000000),
-    .C_HIGHADDR (32'hffffffff),
     .C_DMA_TYPE_SRC (0),
     .C_DMA_TYPE_DEST (2),
     .C_CYCLIC (1),
@@ -519,9 +589,37 @@ module system_top (
     .fifo_rd_dout (dac_ddata),
     .fifo_rd_underflow (dac_dunf));
 
+  util_adc_pack #(.CHANNELS (4)) i_pack_rx (
+    .clk (clk),
+    .chan_enable_0 (adc_enable_i0),
+    .chan_valid_0 (adc_valid_i0),
+    .chan_data_0 (adc_data_i0),
+    .chan_enable_1 (adc_enable_q0),
+    .chan_valid_1 (adc_valid_q0),
+    .chan_data_1 (adc_data_q0),
+    .chan_enable_2 (adc_enable_i1),
+    .chan_valid_2 (adc_valid_i1),
+    .chan_data_2 (adc_data_i1),
+    .chan_enable_3 (adc_enable_q1),
+    .chan_valid_3 (adc_valid_q1),
+    .chan_data_3 (adc_data_q1),
+    .chan_enable_4 (1'd0),
+    .chan_valid_4 (1'd0),
+    .chan_data_4 (16'd0),
+    .chan_enable_5 (1'd0),
+    .chan_valid_5 (1'd0),
+    .chan_data_5 (16'd0),
+    .chan_enable_6 (1'd0),
+    .chan_valid_6 (1'd0),
+    .chan_data_6 (16'd0),
+    .chan_enable_7 (1'd0),
+    .chan_valid_7 (1'd0),
+    .chan_data_7 (16'd0),
+    .ddata (adc_ddata),
+    .dvalid (adc_dwr),
+    .dsync (adc_dsync));
+
   axi_dmac #(
-    .C_BASEADDR (32'h00000000),
-    .C_HIGHADDR (32'hffffffff),
     .C_DMA_TYPE_SRC (2),
     .C_DMA_TYPE_DEST (0),
     .C_CYCLIC (0),
