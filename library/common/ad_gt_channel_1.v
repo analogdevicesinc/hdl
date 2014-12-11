@@ -203,6 +203,10 @@ module ad_gt_channel_1 (
   wire            cpll_locked_s;
   wire    [15:0]  drp_rdata_s;
   wire            drp_ready_s;
+  wire    [ 1:0]  rx_sys_clk_sel_s;
+  wire    [ 1:0]  tx_sys_clk_sel_s;
+  wire    [ 1:0]  rx_pll_clk_sel_s;
+  wire    [ 1:0]  tx_pll_clk_sel_s;
 
   // monitor interface
 
@@ -268,14 +272,21 @@ module ad_gt_channel_1 (
 
   // pll locked
 
+  assign rx_pll_locked = (rx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
+  assign tx_pll_locked = (tx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
+
   generate
   if (GTH_GTX_N == 0) begin
-  assign rx_pll_locked = (rx_sys_clk_sel[0] == 1'b1) ? qpll_locked : cpll_locked_s;
-  assign tx_pll_locked = (tx_sys_clk_sel[0] == 1'b1) ? qpll_locked : cpll_locked_s;
+  assign rx_sys_clk_sel_s = rx_sys_clk_sel;
+  assign tx_sys_clk_sel_s = tx_sys_clk_sel;
+  assign rx_pll_clk_sel_s = 2'd0;
+  assign tx_pll_clk_sel_s = 2'd0;
   end
   if (GTH_GTX_N == 1) begin
-  assign rx_pll_locked = (rx_sys_clk_sel[1] == 1'b1) ? qpll_locked : cpll_locked_s;
-  assign tx_pll_locked = (tx_sys_clk_sel[1] == 1'b1) ? qpll_locked : cpll_locked_s;
+  assign rx_sys_clk_sel_s = (rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign tx_sys_clk_sel_s = (tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign rx_pll_clk_sel_s = rx_sys_clk_sel;
+  assign tx_pll_clk_sel_s = tx_sys_clk_sel;
   end
   endgenerate
 
@@ -557,8 +568,8 @@ module ad_gt_channel_1 (
     .GTREFCLKMONITOR (),
     .QPLLCLK (qpll_clk),
     .QPLLREFCLK (qpll_ref_clk),
-    .RXSYSCLKSEL (rx_sys_clk_sel),
-    .TXSYSCLKSEL (tx_sys_clk_sel),
+    .RXSYSCLKSEL (rx_sys_clk_sel_s),
+    .TXSYSCLKSEL (tx_sys_clk_sel_s),
     .DMONITOROUT (),
     .TX8B10BEN (1'd1),
     .LOOPBACK (3'd0),
@@ -1288,7 +1299,7 @@ module ad_gt_channel_1 (
     .RXPHDLYPD (1'd1),
     .RXPHDLYRESET (1'd0),
     .RXPHOVRDEN (1'd0),
-    .RXPLLCLKSEL (2'b11),
+    .RXPLLCLKSEL (rx_pll_clk_sel_s),
     .RXPMARESET (1'd0),
     .RXPOLARITY (1'd0),
     .RXPRBSCNTRESET (1'd0),
@@ -1303,7 +1314,7 @@ module ad_gt_channel_1 (
     .RXSYNCALLIN (1'd0),
     .RXSYNCIN (1'd0),
     .RXSYNCMODE (1'd0),
-    .RXSYSCLKSEL (rx_sys_clk_sel),
+    .RXSYSCLKSEL (rx_sys_clk_sel_s),
     .RXUSERRDY (rx_user_ready[3]),
     .RXUSRCLK (rx_clk),
     .RXUSRCLK2 (rx_clk),
@@ -1352,7 +1363,7 @@ module ad_gt_channel_1 (
     .TXPIPPMSEL (1'd0),
     .TXPIPPMSTEPSIZE (5'd0),
     .TXPISOPD (1'd0),
-    .TXPLLCLKSEL (2'd3),
+    .TXPLLCLKSEL (tx_pll_clk_sel_s),
     .TXPMARESET (1'd0),
     .TXPOLARITY (1'd0),
     .TXPOSTCURSOR (5'd0),
@@ -1372,7 +1383,7 @@ module ad_gt_channel_1 (
     .TXSYNCALLIN (1'd0),
     .TXSYNCIN (1'd0),
     .TXSYNCMODE (1'd0),
-    .TXSYSCLKSEL (tx_sys_clk_sel),
+    .TXSYSCLKSEL (tx_sys_clk_sel_s),
     .TXUSERRDY (tx_user_ready[3]),
     .TXUSRCLK (tx_clk),
     .TXUSRCLK2 (tx_clk),
