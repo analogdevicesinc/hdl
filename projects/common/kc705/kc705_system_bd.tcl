@@ -334,7 +334,7 @@ connect_bd_intf_net -intf_net axi_gpio_lcd_gpio [get_bd_intf_ports gpio_lcd] [ge
 connect_bd_intf_net -intf_net axi_gpio_sw_led_gpio [get_bd_intf_ports gpio_sw] [get_bd_intf_pins axi_gpio_sw_led/gpio]
 connect_bd_intf_net -intf_net axi_gpio_sw_led_gpio2 [get_bd_intf_ports gpio_led] [get_bd_intf_pins axi_gpio_sw_led/gpio2]
 
-connect_bd_net -net axi_iic_main_rstn [get_bd_ports iic_rstn] [get_bd_pins axi_iic_main/gpo]
+connect_bd_net -net sys_const_vcc_vcc [get_bd_ports iic_rstn] [get_bd_pins sys_const_vcc/dout]
 connect_bd_intf_net -intf_net axi_iic_main_iic [get_bd_intf_ports iic_main] [get_bd_intf_pins axi_iic_main/iic]
 
 # hdmi
