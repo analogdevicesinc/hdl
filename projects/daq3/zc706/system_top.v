@@ -116,6 +116,7 @@ module system_top (
   
   trig_p,
   trig_n,
+
   adc_fdb,
   adc_fda,
   dac_irq,
@@ -208,6 +209,7 @@ module system_top (
   
   input           trig_p;
   input           trig_n;
+
   inout           adc_fdb;
   inout           adc_fda;
   inout           dac_irq;
@@ -236,11 +238,11 @@ module system_top (
   
   // internal signals
 
+  wire            sysref;
+  wire            trig;
   wire    [42:0]  gpio_i;
   wire    [42:0]  gpio_o;
   wire    [42:0]  gpio_t;
-  wire            sysref;
-  wire            trig;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
@@ -263,6 +265,7 @@ module system_top (
   wire            adc_enable_1;
   wire            adc_valid_0;
   wire            adc_valid_1;
+  wire    [15:0]  ps_intrs;
 
   // adc-dac data
 
@@ -503,6 +506,22 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
+    .ps_intr_0 (ps_intrs[0]),
+    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_10 (ps_intrs[10]),
+    .ps_intr_11 (ps_intrs[11]),
+    .ps_intr_12 (ps_intrs[12]),
+    .ps_intr_13 (ps_intrs[13]),
+    .ps_intr_2 (ps_intrs[2]),
+    .ps_intr_3 (ps_intrs[3]),
+    .ps_intr_4 (ps_intrs[4]),
+    .ps_intr_5 (ps_intrs[5]),
+    .ps_intr_6 (ps_intrs[6]),
+    .ps_intr_7 (ps_intrs[7]),
+    .ps_intr_8 (ps_intrs[8]),
+    .ps_intr_9 (ps_intrs[9]),
+    .axi_ad9152_dma_intr (ps_intrs[12]),
+    .axi_ad9680_dma_intr (ps_intrs[13]),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),

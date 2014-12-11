@@ -334,7 +334,7 @@ connect_bd_intf_net -intf_net axi_gpio_lcd_gpio [get_bd_intf_ports gpio_lcd] [ge
 connect_bd_intf_net -intf_net axi_gpio_sw_led_gpio [get_bd_intf_ports gpio_sw] [get_bd_intf_pins axi_gpio_sw_led/gpio]
 connect_bd_intf_net -intf_net axi_gpio_sw_led_gpio2 [get_bd_intf_ports gpio_led] [get_bd_intf_pins axi_gpio_sw_led/gpio2]
 
-connect_bd_net -net axi_iic_main_rstn [get_bd_ports iic_rstn] [get_bd_pins axi_iic_main/gpo]
+connect_bd_net -net sys_const_vcc_vcc [get_bd_ports iic_rstn] [get_bd_pins sys_const_vcc/dout]
 connect_bd_intf_net -intf_net axi_iic_main_iic [get_bd_intf_ports iic_main] [get_bd_intf_pins axi_iic_main/iic]
 
 # hdmi
@@ -439,8 +439,8 @@ create_bd_addr_seg -range 0x00010000 -offset 0x70e00000 $sys_addr_cntrl_space [g
 create_bd_addr_seg -range 0x00010000 -offset 0x75c00000 $sys_addr_cntrl_space [get_bd_addr_segs axi_spdif_tx_core/S_AXI/reg0]     SEG_data_spdif_core
 create_bd_addr_seg -range 0x00010000 -offset 0x41E00000 $sys_addr_cntrl_space [get_bd_addr_segs axi_spdif_tx_dma/S_AXI_LITE/Reg]  SEG_data_spdif_tx_dma
 
-create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Instruction]   [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem]        SEG_instr_ilmb_cntlr
-create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces sys_mb/Instruction]   [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]   SEG_instr_ddr_cntrl
+create_bd_addr_seg -range 0x00002000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Instruction]      [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem]        SEG_instr_ilmb_cntlr
+create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces sys_mb/Instruction]   [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]   SEG_instr_ddr_cntrl
 
 create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_hdmi_dma/Data_MM2S]     [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]   SEG_axi_ddr_cntrl
 create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_spdif_tx_dma/Data_SG]   [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]   SEG_axi_ddr_cntrl
