@@ -14,6 +14,7 @@ proc p_plddr3_fifo {p_name m_name adc_data_width} {
   set m_instance [create_bd_cell -type hier $m_name]
   current_bd_instance $m_instance
 
+  create_bd_pin -dir I -type rst sys_rst
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR3
   create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk
 
@@ -68,7 +69,8 @@ proc p_plddr3_fifo {p_name m_name adc_data_width} {
   connect_bd_net -net axi_clk                 [get_bd_pins axi_ddr_cntrl/ui_clk]      [get_bd_pins axi_fifo2s/axi_clk]
 
   connect_bd_net -net adc_rst                 [get_bd_pins axi_rstgen/ext_reset_in]
-  connect_bd_net -net adc_rst                 [get_bd_pins axi_ddr_cntrl/sys_rst]
+  connect_bd_net -net sys_rst                 [get_bd_pins sys_rst]
+  connect_bd_net -net sys_rst                 [get_bd_pins axi_ddr_cntrl/sys_rst]
   connect_bd_net -net axi_clk                 [get_bd_pins axi_rstgen/slowest_sync_clk]
   connect_bd_net -net axi_resetn              [get_bd_pins axi_rstgen/peripheral_aresetn]
   connect_bd_net -net axi_resetn              [get_bd_pins axi_fifo2s/axi_resetn]
