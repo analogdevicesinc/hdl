@@ -41,6 +41,7 @@
 
 module system_top (
 
+  sys_rst,
   sys_clk_p,
   sys_clk_n,
 
@@ -555,6 +556,7 @@ module system_top (
     .spi_sdo_o (spi_mosi),
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
+    .sys_rst (sys_rst),
     .tx_data_n (tx_data_n),
     .tx_data_p (tx_data_p),
     .tx_ref_clk (tx_ref_clk),
