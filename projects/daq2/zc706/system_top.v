@@ -135,6 +135,7 @@ module system_top (
   spi_sdio,
   spi_dir);
 
+  input           sys_rst;
   input           sys_clk_p;
   input           sys_clk_n;
 
