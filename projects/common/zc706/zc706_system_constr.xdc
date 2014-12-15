@@ -1,5 +1,8 @@
 
 # constraints
+
+set_property  -dict {PACKAGE_PIN  A8    IOSTANDARD LVCMOS15} [get_ports sys_rst]
+
 # hdmi
 
 set_property  -dict {PACKAGE_PIN  P28   IOSTANDARD LVCMOS25} [get_ports hdmi_out_clk]
