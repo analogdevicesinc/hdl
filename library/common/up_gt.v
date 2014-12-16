@@ -285,6 +285,14 @@ module up_gt (
   reg             up_es_dmaerr = 'd0;
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
+  reg     [ 7:0]  up_rx_rst_done_m1 = 'd0;
+  reg     [ 7:0]  up_rx_pll_locked_m1 = 'd0;
+  reg     [ 7:0]  up_tx_rst_done_m1 = 'd0;
+  reg     [ 7:0]  up_tx_pll_locked_m1 = 'd0;
+  reg     [ 7:0]  up_rx_rst_done = 'd0;
+  reg     [ 7:0]  up_rx_pll_locked = 'd0;
+  reg     [ 7:0]  up_tx_rst_done = 'd0;
+  reg     [ 7:0]  up_tx_pll_locked = 'd0;
   reg             rx_sysref_m1 = 'd0;
   reg             rx_sysref_m2 = 'd0;
   reg             rx_sysref_m3 = 'd0;
@@ -322,10 +330,10 @@ module up_gt (
 
   wire            up_wreq_s;
   wire            up_rreq_s;
-  wire            rx_rst_done_s;
-  wire            rx_pll_locked_s;
-  wire            tx_rst_done_s;
-  wire            tx_pll_locked_s;
+  wire            up_rx_rst_done_s;
+  wire            up_rx_pll_locked_s;
+  wire            up_tx_rst_done_s;
+  wire            up_tx_pll_locked_s;
   wire            up_drp_preset_s;
   wire            up_gt_pll_preset_s;
   wire            up_gt_rx_preset_s;
@@ -353,20 +361,20 @@ module up_gt (
 
   // status inputs
 
-  assign rx_rst_done_s = & rx_rst_done;
-  assign rx_pll_locked_s = & rx_pll_locked;
+  assign up_rx_rst_done_s = & up_rx_rst_done;
+  assign up_rx_pll_locked_s = & up_rx_pll_locked;
 
-  assign tx_rst_done_s = & tx_rst_done;
-  assign tx_pll_locked_s = & tx_pll_locked;
+  assign up_tx_rst_done_s = & up_tx_rst_done;
+  assign up_tx_pll_locked_s = & up_tx_pll_locked;
 
   // resets
 
   assign up_drp_preset_s = ~up_drp_resetn;
   assign up_gt_pll_preset_s = ~up_gt_pll_resetn;
-  assign up_gt_rx_preset_s = ~(up_gt_pll_resetn & up_gt_rx_resetn & rx_pll_locked_s);
-  assign up_gt_tx_preset_s = ~(up_gt_pll_resetn & up_gt_tx_resetn & tx_pll_locked_s);
-  assign up_rx_preset_s = ~(up_gt_pll_resetn & up_gt_rx_resetn & up_rx_resetn & rx_pll_locked_s & rx_rst_done_s);
-  assign up_tx_preset_s = ~(up_gt_pll_resetn & up_gt_tx_resetn & up_tx_resetn & tx_pll_locked_s & tx_rst_done_s);
+  assign up_gt_rx_preset_s = ~(up_gt_pll_resetn & up_gt_rx_resetn & up_rx_pll_locked_s);
+  assign up_gt_tx_preset_s = ~(up_gt_pll_resetn & up_gt_tx_resetn & up_tx_pll_locked_s);
+  assign up_rx_preset_s = ~(up_gt_pll_resetn & up_gt_rx_resetn & up_rx_resetn & up_rx_pll_locked_s & up_rx_rst_done_s);
+  assign up_tx_preset_s = ~(up_gt_pll_resetn & up_gt_tx_resetn & up_tx_resetn & up_tx_pll_locked_s & up_tx_rst_done_s);
 
   // processor write interface
 
@@ -548,13 +556,13 @@ module up_gt (
           8'h0a: up_rdata <= {24'd0, 2'd0, up_rx_sys_clk_sel, 1'd0, up_rx_out_clk_sel};
           8'h0b: up_rdata <= {30'd0, up_rx_sysref_sel, up_rx_sysref};
           8'h0c: up_rdata <= {31'd0, up_rx_sync};
-          8'h0d: up_rdata <= {15'd0, up_rx_status, rx_rst_done, rx_pll_locked};
+          8'h0d: up_rdata <= {15'd0, up_rx_status, up_rx_rst_done, up_rx_pll_locked};
           8'h18: up_rdata <= {31'd0, up_gt_tx_resetn};
           8'h19: up_rdata <= {31'd0, up_tx_resetn};
           8'h1a: up_rdata <= {24'd0, 2'd0, up_tx_sys_clk_sel, 1'd0, up_tx_out_clk_sel};
           8'h1b: up_rdata <= {30'd0, up_tx_sysref_sel, up_tx_sysref};
           8'h1c: up_rdata <= {31'd0, up_tx_sync};
-          8'h1d: up_rdata <= {15'd0, up_tx_status, tx_rst_done, tx_pll_locked};
+          8'h1d: up_rdata <= {15'd0, up_tx_status, up_tx_rst_done, up_tx_pll_locked};
           8'h23: up_rdata <= {24'd0, up_lanesel};
           8'h24: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr, up_drp_wdata};
           8'h25: up_rdata <= {15'd0, up_drp_status_s, up_drp_rdata_s};
@@ -588,6 +596,30 @@ module up_gt (
   ad_rst i_gt_tx_rst_reg  (.preset(up_gt_tx_preset_s),  .clk(drp_clk),  .rst(gt_tx_rst));
   ad_rst i_rx_rst_reg     (.preset(up_rx_preset_s),     .clk(rx_clk),   .rst(rx_rst));
   ad_rst i_tx_rst_reg     (.preset(up_tx_preset_s),     .clk(tx_clk),   .rst(tx_rst));
+
+  // reset done & pll locked
+  
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rx_rst_done_m1 <= 'd0;
+      up_rx_pll_locked_m1 <= 'd0;
+      up_tx_rst_done_m1 <= 'd0;
+      up_tx_pll_locked_m1 <= 'd0;
+      up_rx_rst_done <= 'd0;
+      up_rx_pll_locked <= 'd0;
+      up_tx_rst_done <= 'd0;
+      up_tx_pll_locked <= 'd0;
+    end else begin
+      up_rx_rst_done_m1 <= rx_rst_done;
+      up_rx_pll_locked_m1 <= rx_pll_locked;
+      up_tx_rst_done_m1 <= tx_rst_done;
+      up_tx_pll_locked_m1 <= tx_pll_locked;
+      up_rx_rst_done <= up_rx_rst_done_m1;
+      up_rx_pll_locked <= up_rx_pll_locked_m1;
+      up_tx_rst_done <= up_tx_rst_done_m1;
+      up_tx_pll_locked <= up_tx_pll_locked_m1;
+    end
+  end
 
   // rx sysref & sync
 
