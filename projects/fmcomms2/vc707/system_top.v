@@ -303,6 +303,7 @@ module system_top (
     .mgt_clk_clk_n (mgt_clk_n),
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
+    .phy_sd (1'b1),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),
