@@ -84,6 +84,7 @@ module system_top (
 
   sys_clk_p,
   sys_clk_n,
+  sys_rst,
 
   hdmi_out_clk,
   hdmi_vsync,
@@ -159,6 +160,7 @@ module system_top (
 
   input           sys_clk_p;
   input           sys_clk_n;
+  input           sys_rst;
 
   output          hdmi_out_clk;
   output          hdmi_vsync;
@@ -323,7 +325,8 @@ module system_top (
     .spi_sdo_i (1'b0),
     .spi_sdo_o (spi_mosi),
     .sys_clk_clk_n (sys_clk_n),
-    .sys_clk_clk_p (sys_clk_p));
+    .sys_clk_clk_p (sys_clk_p),
+    .sys_rst (sys_rst));
 
 endmodule
 
