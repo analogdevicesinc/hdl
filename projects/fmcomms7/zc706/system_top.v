@@ -43,6 +43,7 @@ module system_top (
 
   sys_clk_p,
   sys_clk_n,
+  sys_rst,
 
   DDR3_addr,
   DDR3_ba,
@@ -159,6 +160,7 @@ module system_top (
 
   input           sys_clk_p;
   input           sys_clk_n;
+  input           sys_rst;
 
   output [ 13:0]  DDR3_addr;
   output [  2:0]  DDR3_ba;
@@ -667,6 +669,7 @@ module system_top (
     .spi_sdo_o (spi_mosi),
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
+    .sys_rst (sys_rst),
     .tx_data_n (tx_data_n),
     .tx_data_p (tx_data_p),
     .tx_ref_clk (tx_ref_clk),
