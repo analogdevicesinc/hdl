@@ -162,7 +162,21 @@ set_property -dict [list CONFIG.c_sg_include_stscntrl_strm {0}] $axi_spdif_tx_dm
 # linear flash
 
 set axi_linear_flash [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_emc:3.0 axi_linear_flash]
-set_property -dict [list CONFIG.USE_BOARD_FLOW {true} CONFIG.EMC_BOARD_INTERFACE {linear_flash}] $axi_linear_flash
+#set_property -dict [ list CONFIG.C_MEM0_TYPE {2} CONFIG.C_S_AXI_MEM_ID_WIDTH {0} CONFIG.C_TAVDV_PS_MEM_0 {96000} CONFIG.C_TCEDV_PS_MEM_0 {96000} CONFIG.C_THZCE_PS_MEM_0 {7000} CONFIG.C_TLZWE_PS_MEM_0 {0} CONFIG.C_TPACC_PS_FLASH_0 {15000} CONFIG.C_TWC_PS_MEM_0 {15000} CONFIG.C_TWPH_PS_MEM_0 {20000} CONFIG.C_TWP_PS_MEM_0 {40000} CONFIG.C_WR_REC_TIME_MEM_0 {0} CONFIG.EMC_BOARD_INTERFACE {linear_flash} CONFIG.USE_BOARD_FLOW {true}  ] $axi_linear_flash
+
+set_property -dict [list CONFIG.USE_BOARD_FLOW {true} ] $axi_linear_flash
+set_property -dict [list CONFIG.EMC_BOARD_INTERFACE {linear_flash}] $axi_linear_flash
+set_property -dict [list CONFIG.C_MEM0_TYPE {2}] $axi_linear_flash
+set_property -dict [list CONFIG.C_S_AXI_MEM_ID_WIDTH {0}] $axi_linear_flash
+set_property -dict [list CONFIG.C_THZCE_PS_MEM_0 {7000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TLZWE_PS_MEM_0 {0}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TWC_PS_MEM_0 {15000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_WR_REC_TIME_MEM_0 {0}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TWP_PS_MEM_0 {40000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TWPH_PS_MEM_0 {20000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TPACC_PS_FLASH_0 {15000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TCEDV_PS_MEM_0 {96000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TAVDV_PS_MEM_0 {96000}] $axi_linear_flash
 
 set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_vcc]
 
