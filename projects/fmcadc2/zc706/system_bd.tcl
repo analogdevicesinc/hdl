@@ -8,7 +8,7 @@ create_bd_port -dir I -type rst sys_rst
 set_property CONFIG.POLARITY {ACTIVE_HIGH} [get_bd_ports sys_rst]
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR3
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk
-connect_bd_net -net sys_rst [get_bd_ports sys_rst] [get_bd_pins axi_ad9680_fifo/sys_rst]
+connect_bd_net -net sys_rst [get_bd_ports sys_rst] [get_bd_pins axi_ad9625_fifo/sys_rst]
 connect_bd_intf_net -intf_net DDR3    [get_bd_intf_ports DDR3]    [get_bd_intf_pins axi_ad9625_fifo/DDR3]
 connect_bd_intf_net -intf_net sys_clk [get_bd_intf_ports sys_clk] [get_bd_intf_pins axi_ad9625_fifo/sys_clk]
 create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces axi_ad9625_fifo/axi_fifo2s/axi] \
