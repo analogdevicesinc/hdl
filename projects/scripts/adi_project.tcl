@@ -2,7 +2,7 @@
 set xl_board "none"
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2014.2"
+  set REQUIRED_VIVADO_VERSION "2014.4"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -64,10 +64,16 @@ proc adi_project_create {project_name} {
     set project_board "xilinx.com:zc706:part0:1.0"
   }
 
-   if [regexp "_mitx045$" $project_name] {
+  if [regexp "_mitx045$" $project_name] {
     set xl_board "mitx045"
     set project_part "xc7z045ffg900-2"
     set project_board "em.avnet.com:mini_itx_7z045:part0:1.0"
+  }
+
+  if [regexp "_rfsom$" $project_name] {
+    set xl_board "rfsom"
+    set project_part "xc7z035ifbg676-2L"
+    set project_board "not-applicable"
   }
 
   # planahead - 6 and down
