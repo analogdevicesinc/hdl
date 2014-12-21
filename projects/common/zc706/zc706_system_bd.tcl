@@ -24,7 +24,7 @@ set spdif           [create_bd_port -dir O spdif]
 
 # instance: sys_ps7
 
-set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.4 sys_ps7]
+set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 sys_ps7]
 set_property -dict [list CONFIG.preset {ZC706}] $sys_ps7
 set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
@@ -40,7 +40,8 @@ set_property -dict [list CONFIG.PCW_USE_DMA0 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_MODE {REVERSE}] $sys_ps7
 
 set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
-set_property -dict [list CONFIG.USE_BOARD_FLOW {true} CONFIG.IIC_BOARD_INTERFACE {IIC_MAIN}] $axi_iic_main
+set_property -dict [list CONFIG.USE_BOARD_FLOW {true}] $axi_iic_main
+set_property -dict [list CONFIG.IIC_BOARD_INTERFACE {Custom}] $axi_iic_main
 
 set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
 set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
