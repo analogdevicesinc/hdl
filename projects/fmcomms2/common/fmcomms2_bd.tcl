@@ -135,13 +135,13 @@ if {$sys_zynq == 1} {
   set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
-  set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {49}] $sys_ps7
+  set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {50}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
   set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
 
-  set_property LEFT 48 [get_bd_ports GPIO_I]
-  set_property LEFT 48 [get_bd_ports GPIO_O]
-  set_property LEFT 48 [get_bd_ports GPIO_T]
+  set_property LEFT 49 [get_bd_ports GPIO_I]
+  set_property LEFT 49 [get_bd_ports GPIO_O]
+  set_property LEFT 49 [get_bd_ports GPIO_T]
 }
 
   # additional spi for up/down converter
