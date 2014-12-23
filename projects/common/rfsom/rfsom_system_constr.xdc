@@ -1,65 +1,68 @@
+# ethernet-1
 
-# constraints
+set_property  -dict {PACKAGE_PIN  AA20  IOSTANDARD LVCMOS18} [get_ports ETH1_MDC]
+set_property  -dict {PACKAGE_PIN  AB20  IOSTANDARD LVCMOS18} [get_ports ETH1_MDIO]
+set_property  -dict {PACKAGE_PIN  AD20  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_rxclk]
+set_property  -dict {PACKAGE_PIN  AD21  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_rxctl]
+set_property  -dict {PACKAGE_PIN  AC23  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_rxdata[0]]
+set_property  -dict {PACKAGE_PIN  AC24  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_rxdata[1]]
+set_property  -dict {PACKAGE_PIN  AD23  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_rxdata[2]]
+set_property  -dict {PACKAGE_PIN  AD24  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_rxdata[3]]
+set_property  -dict {PACKAGE_PIN  AC18  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_txclk]
+set_property  -dict {PACKAGE_PIN  AC19  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_txctl]
+set_property  -dict {PACKAGE_PIN  W20   IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_txdata[0]]
+set_property  -dict {PACKAGE_PIN  Y20   IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_txdata[1]]
+set_property  -dict {PACKAGE_PIN  AE20  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_txdata[2]]
+set_property  -dict {PACKAGE_PIN  AE21  IOSTANDARD LVCMOS18} [get_ports ETH1_RGMII_txdata[3]]
 
-set_property  -dict {PACKAGE_PIN  A8    IOSTANDARD LVCMOS15} [get_ports sys_rst]
+# uart
+
+set_property  -dict {PACKAGE_PIN  AA15  IOSTANDARD LVCMOS18} [get_ports UART0_rxd]
+set_property  -dict {PACKAGE_PIN  AA14  IOSTANDARD LVCMOS18} [get_ports UART0_txd]
 
 # hdmi
 
-set_property  -dict {PACKAGE_PIN  P28   IOSTANDARD LVCMOS25} [get_ports hdmi_out_clk]
-set_property  -dict {PACKAGE_PIN  U21   IOSTANDARD LVCMOS25} [get_ports hdmi_vsync]
-set_property  -dict {PACKAGE_PIN  R22   IOSTANDARD LVCMOS25} [get_ports hdmi_hsync]
-set_property  -dict {PACKAGE_PIN  V24   IOSTANDARD LVCMOS25} [get_ports hdmi_data_e]
-set_property  -dict {PACKAGE_PIN  U24   IOSTANDARD LVCMOS25} [get_ports hdmi_data[0]]
-set_property  -dict {PACKAGE_PIN  T22   IOSTANDARD LVCMOS25} [get_ports hdmi_data[1]]
-set_property  -dict {PACKAGE_PIN  R23   IOSTANDARD LVCMOS25} [get_ports hdmi_data[2]]
-set_property  -dict {PACKAGE_PIN  AA25  IOSTANDARD LVCMOS25} [get_ports hdmi_data[3]]
-set_property  -dict {PACKAGE_PIN  AE28  IOSTANDARD LVCMOS25} [get_ports hdmi_data[4]]
-set_property  -dict {PACKAGE_PIN  T23   IOSTANDARD LVCMOS25} [get_ports hdmi_data[5]]
-set_property  -dict {PACKAGE_PIN  AB25  IOSTANDARD LVCMOS25} [get_ports hdmi_data[6]]
-set_property  -dict {PACKAGE_PIN  T27   IOSTANDARD LVCMOS25} [get_ports hdmi_data[7]]
-set_property  -dict {PACKAGE_PIN  AD26  IOSTANDARD LVCMOS25} [get_ports hdmi_data[8]]
-set_property  -dict {PACKAGE_PIN  AB26  IOSTANDARD LVCMOS25} [get_ports hdmi_data[9]]
-set_property  -dict {PACKAGE_PIN  AA28  IOSTANDARD LVCMOS25} [get_ports hdmi_data[10]]
-set_property  -dict {PACKAGE_PIN  AC26  IOSTANDARD LVCMOS25} [get_ports hdmi_data[11]]
-set_property  -dict {PACKAGE_PIN  AE30  IOSTANDARD LVCMOS25} [get_ports hdmi_data[12]]
-set_property  -dict {PACKAGE_PIN  Y25   IOSTANDARD LVCMOS25} [get_ports hdmi_data[13]]
-set_property  -dict {PACKAGE_PIN  AA29  IOSTANDARD LVCMOS25} [get_ports hdmi_data[14]]
-set_property  -dict {PACKAGE_PIN  AD30  IOSTANDARD LVCMOS25} [get_ports hdmi_data[15]]
-set_property  -dict {PACKAGE_PIN  Y28   IOSTANDARD LVCMOS25} [get_ports hdmi_data[16]]
-set_property  -dict {PACKAGE_PIN  AF28  IOSTANDARD LVCMOS25} [get_ports hdmi_data[17]]
-set_property  -dict {PACKAGE_PIN  V22   IOSTANDARD LVCMOS25} [get_ports hdmi_data[18]]
-set_property  -dict {PACKAGE_PIN  AA27  IOSTANDARD LVCMOS25} [get_ports hdmi_data[19]]
-set_property  -dict {PACKAGE_PIN  U22   IOSTANDARD LVCMOS25} [get_ports hdmi_data[20]]
-set_property  -dict {PACKAGE_PIN  N28   IOSTANDARD LVCMOS25} [get_ports hdmi_data[21]]
-set_property  -dict {PACKAGE_PIN  V21   IOSTANDARD LVCMOS25} [get_ports hdmi_data[22]]
-set_property  -dict {PACKAGE_PIN  AC22  IOSTANDARD LVCMOS25} [get_ports hdmi_data[23]]
+set_property  -dict {PACKAGE_PIN  AC21  IOSTANDARD LVCMOS18} [get_ports hdmi_out_clk]
+set_property  -dict {PACKAGE_PIN  AB19  IOSTANDARD LVCMOS18} [get_ports hdmi_vsync]
+set_property  -dict {PACKAGE_PIN  AA19  IOSTANDARD LVCMOS18} [get_ports hdmi_hsync]
+set_property  -dict {PACKAGE_PIN  AC22  IOSTANDARD LVCMOS18} [get_ports hdmi_data_e]
+set_property  -dict {PACKAGE_PIN  AA25  IOSTANDARD LVCMOS18} [get_ports hdmi_data[0]]
+set_property  -dict {PACKAGE_PIN  AB25  IOSTANDARD LVCMOS18} [get_ports hdmi_data[1]]
+set_property  -dict {PACKAGE_PIN  AB26  IOSTANDARD LVCMOS18} [get_ports hdmi_data[2]]
+set_property  -dict {PACKAGE_PIN  AC26  IOSTANDARD LVCMOS18} [get_ports hdmi_data[3]]
+set_property  -dict {PACKAGE_PIN  AE25  IOSTANDARD LVCMOS18} [get_ports hdmi_data[4]]
+set_property  -dict {PACKAGE_PIN  AE26  IOSTANDARD LVCMOS18} [get_ports hdmi_data[5]]
+set_property  -dict {PACKAGE_PIN  AD25  IOSTANDARD LVCMOS18} [get_ports hdmi_data[6]]
+set_property  -dict {PACKAGE_PIN  AD26  IOSTANDARD LVCMOS18} [get_ports hdmi_data[7]]
+set_property  -dict {PACKAGE_PIN  AF24  IOSTANDARD LVCMOS18} [get_ports hdmi_data[8]]
+set_property  -dict {PACKAGE_PIN  AF25  IOSTANDARD LVCMOS18} [get_ports hdmi_data[9]]
+set_property  -dict {PACKAGE_PIN  AA24  IOSTANDARD LVCMOS18} [get_ports hdmi_data[10]]
+set_property  -dict {PACKAGE_PIN  AB24  IOSTANDARD LVCMOS18} [get_ports hdmi_data[11]]
+set_property  -dict {PACKAGE_PIN  AE22  IOSTANDARD LVCMOS18} [get_ports hdmi_data[12]]
+set_property  -dict {PACKAGE_PIN  AF22  IOSTANDARD LVCMOS18} [get_ports hdmi_data[13]]
+set_property  -dict {PACKAGE_PIN  AE23  IOSTANDARD LVCMOS18} [get_ports hdmi_data[14]]
+set_property  -dict {PACKAGE_PIN  AF23  IOSTANDARD LVCMOS18} [get_ports hdmi_data[15]]
 
-# spdif
+# hdmi-spdif
 
-set_property  -dict {PACKAGE_PIN  AC21  IOSTANDARD LVCMOS25} [get_ports spdif]
+set_property  -dict {PACKAGE_PIN  AB21  IOSTANDARD LVCMOS18} [get_ports spdif]
 
-# iic
+# hdmi-iic
 
-set_property  -dict {PACKAGE_PIN  AJ14  IOSTANDARD LVCMOS25 PULLTYPE PULLUP} [get_ports iic_scl]
-set_property  -dict {PACKAGE_PIN  AJ18  IOSTANDARD LVCMOS25 PULLTYPE PULLUP} [get_ports iic_sda]
+set_property  -dict {PACKAGE_PIN  AD18  IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports iic_scl[0]]
+set_property  -dict {PACKAGE_PIN  AD19  IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports iic_sda[0]]
 
-# gpio (switches, leds and such)
+# audio
 
-set_property  -dict {PACKAGE_PIN  AB17  IOSTANDARD LVCMOS25} [get_ports gpio_bd[0]]           ; ## GPIO_DIP_SW0
-set_property  -dict {PACKAGE_PIN  AC16  IOSTANDARD LVCMOS25} [get_ports gpio_bd[1]]           ; ## GPIO_DIP_SW1
-set_property  -dict {PACKAGE_PIN  AC17  IOSTANDARD LVCMOS25} [get_ports gpio_bd[2]]           ; ## GPIO_DIP_SW2
-set_property  -dict {PACKAGE_PIN  AJ13  IOSTANDARD LVCMOS25} [get_ports gpio_bd[3]]           ; ## GPIO_DIP_SW3
-set_property  -dict {PACKAGE_PIN  AK25  IOSTANDARD LVCMOS25} [get_ports gpio_bd[4]]           ; ## GPIO_SW_LEFT
-set_property  -dict {PACKAGE_PIN  K15   IOSTANDARD LVCMOS15} [get_ports gpio_bd[5]]           ; ## GPIO_SW_CENTER
-set_property  -dict {PACKAGE_PIN  R27   IOSTANDARD LVCMOS25} [get_ports gpio_bd[6]]           ; ## GPIO_SW_RIGHT
+set_property  -dict {PACKAGE_PIN  W14   IOSTANDARD LVCMOS18} [get_ports i2s_mclk]
+set_property  -dict {PACKAGE_PIN  W17   IOSTANDARD LVCMOS18} [get_ports i2s_bclk]
+set_property  -dict {PACKAGE_PIN  V19   IOSTANDARD LVCMOS18} [get_ports i2s_lrclk]
+set_property  -dict {PACKAGE_PIN  V18   IOSTANDARD LVCMOS18} [get_ports i2s_sdata_out]
+set_property  -dict {PACKAGE_PIN  L9    IOSTANDARD LVCMOS18} [get_ports i2s_sdata_in]
 
-set_property  -dict {PACKAGE_PIN  Y21   IOSTANDARD LVCMOS25} [get_ports gpio_bd[7]]           ; ## GPIO_LED_LEFT
-set_property  -dict {PACKAGE_PIN  G2    IOSTANDARD LVCMOS15} [get_ports gpio_bd[8]]           ; ## GPIO_LED_CENTER
-set_property  -dict {PACKAGE_PIN  W21   IOSTANDARD LVCMOS25} [get_ports gpio_bd[9]]           ; ## GPIO_LED_RIGHT
-set_property  -dict {PACKAGE_PIN  A17   IOSTANDARD LVCMOS15} [get_ports gpio_bd[10]]          ; ## GPIO_LED_0
+# audio-iic
 
-set_property  -dict {PACKAGE_PIN  H14   IOSTANDARD LVCMOS15} [get_ports gpio_bd[11]]          ; ## XADC_GPIO_0
-set_property  -dict {PACKAGE_PIN  J15   IOSTANDARD LVCMOS15} [get_ports gpio_bd[12]]          ; ## XADC_GPIO_1
-set_property  -dict {PACKAGE_PIN  J16   IOSTANDARD LVCMOS15} [get_ports gpio_bd[13]]          ; ## XADC_GPIO_2
-set_property  -dict {PACKAGE_PIN  J14   IOSTANDARD LVCMOS15} [get_ports gpio_bd[14]]          ; ## XADC_GPIO_3
+set_property  -dict {PACKAGE_PIN  F13   IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports iic_scl[1]]
+set_property  -dict {PACKAGE_PIN  E13   IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports iic_sda[1]]
+
 
