@@ -89,6 +89,7 @@ module axi_ad9361 (
   adc_data_q1,
   adc_dovf,
   adc_dunf,
+  adc_r1_mode,
 
   dac_enable_i0,
   dac_valid_i0,
@@ -104,6 +105,7 @@ module axi_ad9361 (
   dac_data_q1,
   dac_dovf,
   dac_dunf,
+  dac_r1_mode,
 
   // axi interface
 
@@ -198,6 +200,7 @@ module axi_ad9361 (
   output  [15:0]  adc_data_q1;
   input           adc_dovf;
   input           adc_dunf;
+  output          adc_r1_mode;
 
   output          dac_enable_i0;
   output          dac_valid_i0;
@@ -213,6 +216,7 @@ module axi_ad9361 (
   input   [15:0]  dac_data_q1;
   input           dac_dovf;
   input           dac_dunf;
+  output          dac_r1_mode;
 
   // axi interface
 
@@ -268,10 +272,8 @@ module axi_ad9361 (
   wire            adc_valid_s;
   wire    [47:0]  adc_data_s;
   wire            adc_status_s;
-  wire            adc_r1_mode_s;
   wire            dac_valid_s;
   wire    [47:0]  dac_data_s;
-  wire            dac_r1_mode_s;
   wire            delay_sel_s;
   wire            delay_rwn_s;
   wire    [ 7:0]  delay_addr_s;
@@ -334,10 +336,10 @@ module axi_ad9361 (
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
-    .adc_r1_mode (adc_r1_mode_s),
+    .adc_r1_mode (adc_r1_mode),
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
-    .dac_r1_mode (dac_r1_mode_s),
+    .dac_r1_mode (dac_r1_mode),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_sel (delay_sel_s),
@@ -361,7 +363,7 @@ module axi_ad9361 (
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
-    .adc_r1_mode (adc_r1_mode_s),
+    .adc_r1_mode (adc_r1_mode),
     .dac_data (dac_data_s),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
@@ -408,7 +410,7 @@ module axi_ad9361 (
     .dac_clk (clk),
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
-    .dac_r1_mode (dac_r1_mode_s),
+    .dac_r1_mode (dac_r1_mode),
     .adc_data (adc_data_s),
     .dac_sync_in (dac_sync_in),
     .dac_sync_out (dac_sync_out),
