@@ -34,6 +34,22 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
+// allows conversions between the adc (or similar) interface to the dma (or similar).
+//    * asymmetric bus widths in the range allowed by the fifo
+//    * frequency -- dma can run slower at reduced channels
+//    * drop or add channels -- post processing samples
+//    * interface axis -- allows axi-stream interface
+//
+// in all cases bandwidth requirements must be met (read >= write).
+//
+// axis-interface support
+//    * set DMA_READY_ENABLE parameter to 1.
+//    * connect dma_wr as axis_valid, dma_wready as axis_ready
+//    * make sure read bandwidth >= write bandwidth (or drop samples)
+//    * some axis interface requires last (use a counter or such externally).
+//
+// the fifo is external- connect all the fifo_* signals to a fifo generator IP.
+// configure the IP to match the buswidths & clocks.
 // ***************************************************************************
 // ***************************************************************************
 
@@ -41,126 +57,138 @@
 
 module util_wfifo (
 
-  rstn,
+  // adc interface
 
-  m_clk,
-  m_wr,
-  m_wdata,
-  m_wovf,
-  s_clk,
-  s_wr,
-  s_wdata,
-  s_wready,
-  s_wovf,
+  adc_rst,
+  adc_clk,
+  adc_wr,
+  adc_wdata,
+  adc_wovf,
+
+  // dma interface
+
+  dma_clk,
+  dma_wr,
+  dma_wdata,
+  dma_wready,
+  dma_wovf,
+
+  // fifo interface
 
   fifo_rst,
+  fifo_rstn,
   fifo_wr,
   fifo_wdata,
-  fifo_wfull,
   fifo_wovf,
   fifo_rd,
   fifo_rdata,
   fifo_rempty);
 
-  // parameters (read (S) bus width must be greater than write (M))
+  // parameters
 
-  parameter M_DATA_WIDTH = 32;
-  parameter S_DATA_WIDTH = 64;
-  parameter S_READY_ENABLE = 0;
+  parameter ADC_DATA_WIDTH = 32;
+  parameter DMA_DATA_WIDTH = 64;
+  parameter DMA_READY_ENABLE = 0;
  
-  // common clock
+  // adc interface
 
-  input                           rstn;
+  input                           adc_rst;
+  input                           adc_clk;
+  input                           adc_wr;
+  input   [ADC_DATA_WIDTH-1:0]    adc_wdata;
+  output                          adc_wovf;
 
-  // master/slave write 
+  // dma interface
 
-  input                           m_clk;
-  input                           m_wr;
-  input   [M_DATA_WIDTH-1:0]      m_wdata;
-  output                          m_wovf;
-  input                           s_clk;
-  output                          s_wr;
-  output  [S_DATA_WIDTH-1:0]      s_wdata;
-  input                           s_wready;
-  input                           s_wovf;
+  input                           dma_clk;
+  output                          dma_wr;
+  output  [DMA_DATA_WIDTH-1:0]    dma_wdata;
+  input                           dma_wready;
+  input                           dma_wovf;
 
   // fifo interface
 
   output                          fifo_rst;
+  output                          fifo_rstn;
   output                          fifo_wr;
-  output  [M_DATA_WIDTH-1:0]      fifo_wdata;
-  input                           fifo_wfull;
+  output  [ADC_DATA_WIDTH-1:0]    fifo_wdata;
   input                           fifo_wovf;
   output                          fifo_rd;
-  input   [S_DATA_WIDTH-1:0]      fifo_rdata;
+  input   [DMA_DATA_WIDTH-1:0]    fifo_rdata;
   input                           fifo_rempty;
 
   // internal registers
 
-  reg                             m_wovf_m1 = 'd0;
-  reg                             m_wovf_m2 = 'd0;
-  reg                             m_wovf = 'd0;
-  reg                             s_wr_int = 'd0;
+  reg     [ 1:0]                  adc_wovf_m = 'd0;
+  reg                             adc_wovf = 'd0;
+  reg                             dma_wr_int = 'd0;
+  reg                             fifo_rst = 'd0;
+  reg                             fifo_rstn = 'd0;
 
   // internal signals
 
-  wire                            m_wovf_s;
-  wire    [S_DATA_WIDTH-1:0]      s_wdata_s;
-  wire                            s_wready_s;
+  wire                            dma_wready_s;
+  wire    [DMA_DATA_WIDTH-1:0]    dma_wdata_s;
 
-  // defaults
+  // adc overflow
 
-  assign fifo_rst = ~rstn;
-
-  // write is pass through
-
-  assign fifo_wr = m_wr;
-  assign m_wovf_s = s_wovf | fifo_wovf;
-
-  genvar m;
-  generate
-  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_wdata
-  assign fifo_wdata[m] = m_wdata[(M_DATA_WIDTH-1)-m];
-  end
-  endgenerate
-
-  always @(posedge m_clk) begin
-    if (rstn == 1'b0) begin
-      m_wovf_m1 <= 1'b0;
-      m_wovf_m2 <= 1'b0;
+  always @(posedge adc_clk) begin
+    if (adc_rst == 1'b0) begin
+      adc_wovf_m <= 2'd0;
+      adc_wovf <= 1'b0;
     end else begin
-      m_wovf_m1 <= m_wovf_s;
-      m_wovf_m2 <= m_wovf_m1;
-      m_wovf    <= m_wovf_m2;
+      adc_wovf_m[0] <= dma_wovf | fifo_wovf;
+      adc_wovf_m[1] <= adc_wovf_m[0];
+      adc_wovf <= adc_wovf_m[1];
     end
   end
 
-  // read is non-destructive
+  // write
 
-  assign s_wready_s = (S_READY_ENABLE == 0) ? 1'b1 : s_wready;
-  assign fifo_rd = ~fifo_rempty & s_wready_s;
+  assign fifo_wr = adc_wr;
 
-  always @(posedge s_clk) begin
-    s_wr_int <= fifo_rd;
+  genvar m;
+  generate
+  for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+
+  // read
+
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+  assign fifo_rd = ~fifo_rempty & dma_wready_s;
+
+  always @(posedge dma_clk) begin
+    dma_wr_int <= fifo_rd;
   end
   
   genvar s;
   generate
-  for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_rdata
-  assign s_wdata_s[s] = fifo_rdata[(S_DATA_WIDTH-1)-s];
+  for (s = 0; s < DMA_DATA_WIDTH; s = s + 1) begin: g_rdata
+  assign dma_wdata_s[s] = fifo_rdata[(DMA_DATA_WIDTH-1)-s];
   end
   endgenerate
 
-  ad_axis_inf_rx #(.DATA_WIDTH(S_DATA_WIDTH)) i_axis_inf (
-    .clk (s_clk),
+  // reset & resetn
+
+  always @(posedge adc_clk) begin
+    fifo_rst <= adc_rst;
+    fifo_rstn <= ~adc_rst;
+  end
+
+  // axis
+
+  ad_axis_inf_rx #(.DATA_WIDTH(DMA_DATA_WIDTH)) i_axis_inf (
+    .clk (dma_clk),
     .rst (fifo_rst),
-    .valid (s_wr_int),
+    .valid (dma_wr_int),
     .last (1'd0),
-    .data (s_wdata_s),
-    .inf_valid (s_wr),
+    .data (dma_wdata_s),
+    .inf_valid (dma_wr),
     .inf_last (),
-    .inf_data (s_wdata),
-    .inf_ready (s_wready_s));
+    .inf_data (dma_wdata),
+    .inf_ready (dma_wready_s));
 
 endmodule
 
