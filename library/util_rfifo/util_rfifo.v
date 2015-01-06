@@ -34,6 +34,21 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
+// allows conversions between the dac (or similar) interface to the dma (or similar).
+//    * asymmetric bus widths in the range allowed by the fifo
+//    * frequency -- dma can run slower at reduced channels
+//    * drop or add channels -- pre processing samples
+//    * interface axis -- allows axi-stream interface
+//
+// in all cases bandwidth requirements must be met (read <= write).
+//
+// axis-interface support
+//    * connect dma_rd as axis_ready, make sure data is present (use dma_rd as
+//        enable for the data pipe line). leave axis_valid open!
+//    * make sure read bandwidth <= write bandwidth (or interpolate samples)
+//
+// the fifo is external- connect all the fifo_* signals to a fifo generator IP.
+// configure the IP to match the buswidths & clocks.
 // ***************************************************************************
 // ***************************************************************************
 
@@ -41,18 +56,24 @@
 
 module util_rfifo (
 
-  rstn,
+  // dac interface
 
-  m_clk,
-  m_rd,
-  m_rdata,
-  m_runf,
-  s_clk,
-  s_rd,
-  s_rdata,
-  s_runf,
+  dac_clk,
+  dac_rd,
+  dac_rdata,
+  dac_runf,
+
+  // dma interface
+
+  dma_clk,
+  dma_rd,
+  dma_rdata,
+  dma_runf,
+
+  // fifo interface
 
   fifo_rst,
+  fifo_rstn,
   fifo_wr,
   fifo_wdata,
   fifo_wfull,
@@ -61,85 +82,83 @@ module util_rfifo (
   fifo_rempty,
   fifo_runf);
 
-  // parameters (S) bus width must be greater than (M)
+  // parameters
 
-  parameter M_DATA_WIDTH = 32;
-  parameter S_DATA_WIDTH = 64;
+  parameter DAC_DATA_WIDTH = 32;
+  parameter DMA_DATA_WIDTH = 64;
  
-  // common clock
+  // dac interface
 
-  input                           rstn;
+  input                           dac_clk;
+  input                           dac_rd;
+  output  [DAC_DATA_WIDTH-1:0]    dac_rdata;
+  output                          dac_runf;
 
-  // master/slave write 
+  // dma interface
 
-  input                           m_clk;
-  input                           m_rd;
-  output  [M_DATA_WIDTH-1:0]      m_rdata;
-  output                          m_runf;
-  input                           s_clk;
-  output                          s_rd;
-  input   [S_DATA_WIDTH-1:0]      s_rdata;
-  input                           s_runf;
+  input                           dma_clk;
+  output                          dma_rd;
+  input   [DMA_DATA_WIDTH-1:0]    dma_rdata;
+  input                           dma_runf;
 
   // fifo interface
 
   output                          fifo_rst;
+  output                          fifo_rstn;
   output                          fifo_wr;
-  output  [S_DATA_WIDTH-1:0]      fifo_wdata;
+  output  [DMA_DATA_WIDTH-1:0]    fifo_wdata;
   input                           fifo_wfull;
   output                          fifo_rd;
-  input   [M_DATA_WIDTH-1:0]      fifo_rdata;
+  input   [DAC_DATA_WIDTH-1:0]    fifo_rdata;
   input                           fifo_rempty;
   input                           fifo_runf;
 
   // internal registers
 
-  reg                             s_rd = 'd0;
-  reg                             fifo_wr = 'd0;
-  reg                             m_runf_m1 = 'd0;
-  reg                             m_runf_m2 = 'd0;
-  reg                             m_runf = 'd0;
+  reg     [ 1:0]                  dac_runf_m = 'd0;
+  reg                             dac_runf = 'd0;
+  reg                             dma_rd = 'd0;
 
-  // internal signals
+  // dac underflow
 
-  wire                            m_runf_s;
-
-  // defaults
-
-  assign fifo_rst = ~rstn;
-
-  // independent clocks and buswidths- simply expect
-  // user to set a reasonable threshold on the full signal
-
-  always @(posedge s_clk) begin
-    s_rd <= ~fifo_wfull;
-    fifo_wr <= ~fifo_wfull;
+  always @(posedge dac_clk) begin
+    dac_runf_m[0] <= dma_runf | fifo_runf;
+    dac_runf_m[1] <= dac_runf_m[0];
+    dac_runf <= dac_runf_m[1];
   end
+
+  // dma read
+
+  always @(posedge dma_clk) begin
+    dma_rd <= ~fifo_wfull;
+  end
+
+  // write
+
+  assign fifo_wr = dma_rd;
 
   genvar s;
   generate
-  for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_wdata
-  assign fifo_wdata[s] = s_rdata[(S_DATA_WIDTH-1)-s];
+  for (s = 0; s < DMA_DATA_WIDTH; s = s + 1) begin: g_wdata
+  assign fifo_wdata[s] = dma_rdata[(DMA_DATA_WIDTH-1)-s];
   end
   endgenerate
 
-  // read is non-destructive
+  // read
 
-  assign fifo_rd = m_rd;
-  assign m_runf_s = s_runf | fifo_runf;
+  assign fifo_rd = ~fifo_rempty & dac_rd;
 
-  always @(posedge m_clk) begin
-    m_runf_m1 <= m_runf_s;
-    m_runf_m2 <= m_runf_m1;
-    m_runf <= m_runf_m2;
-  end
-  
   genvar m;
   generate
-  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_rdata
-  assign m_rdata[m] = fifo_rdata[(M_DATA_WIDTH-1)-m];
+  for (m = 0; m < DAC_DATA_WIDTH; m = m + 1) begin: g_rdata
+  assign dac_rdata[m] = fifo_rdata[(DAC_DATA_WIDTH-1)-m];
   end
   endgenerate
+
+  // reset & resetn
+
+  assign fifo_rst = 1'b0;
+  assign fifo_rstn = 1'b1;
 
 endmodule
 
