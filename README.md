@@ -3,6 +3,10 @@ hdl
 
 Analog Devices HDL libraries and projects
 
+Tools version:
+- Vivado 2013.4
+- Quartus 14.0
+
 This branch supports the following projects: 
 - FMCOMMS2
 - FMCOMMS5
