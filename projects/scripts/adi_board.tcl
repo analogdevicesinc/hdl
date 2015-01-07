@@ -2,6 +2,7 @@
 ###################################################################################################
 
 variable sys_zynq
+variable sys_ddr_addr_seg
 variable sys_addr_cntrl_space
 variable sys_cpu_interconnect_index
 variable sys_hp0_interconnect_index
