@@ -174,7 +174,7 @@ module up_clkgen (
     end else begin
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
-        case (up_waddr[7:0])
+        case (up_raddr[7:0])
           8'h00: up_rdata <= PCORE_VERSION;
           8'h01: up_rdata <= PCORE_ID;
           8'h02: up_rdata <= up_scratch;
