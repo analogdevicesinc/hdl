@@ -45,7 +45,7 @@ set iic_fmc_intr [create_bd_port -dir O iic_fmc_intr]
 
 # instance: sys_ps7
 
-set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.4 sys_ps7]
+set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 sys_ps7]
 set_property -dict [list CONFIG.PCW_IMPORT_BOARD_PRESET {ZedBoard}] $sys_ps7
 set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
@@ -63,7 +63,8 @@ set_property -dict [list CONFIG.PCW_USE_DMA2 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_MODE {REVERSE}] $sys_ps7
 
 set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
-set_property -dict [list CONFIG.USE_BOARD_FLOW {true} CONFIG.IIC_BOARD_INTERFACE {IIC_MAIN}] $axi_iic_main
+set_property -dict [list CONFIG.USE_BOARD_FLOW {true} ] $axi_iic_main
+set_property -dict [list CONFIG.IIC_BOARD_INTERFACE {Custom}] $axi_iic_main
 
 set sys_i2c_mixer [create_bd_cell -type ip -vlnv analog.com:user:util_i2c_mixer:1.0 sys_i2c_mixer]
 
@@ -77,7 +78,7 @@ set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_interconnect
 set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
 
-set sys_logic_inv [create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:1.0 sys_logic_inv]
+set sys_logic_inv [create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 sys_logic_inv]
 set_property -dict [list CONFIG.C_SIZE {1}] $sys_logic_inv
 set_property -dict [list CONFIG.C_OPERATION {not}] $sys_logic_inv
 
