@@ -39,7 +39,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9122 (
+module axi_ad9739a (
 
   // dac interface
 
@@ -47,25 +47,17 @@ module axi_ad9122 (
   dac_clk_in_n,
   dac_clk_out_p,
   dac_clk_out_n,
-  dac_frame_out_p,
-  dac_frame_out_n,
-  dac_data_out_p,
-  dac_data_out_n,
-
-  // master/slave
-
-  dac_sync_out,
-  dac_sync_in,
+  dac_data_out_a_p,
+  dac_data_out_a_n,
+  dac_data_out_b_p,
+  dac_data_out_b_n,
 
   // dma interface
 
   dac_div_clk,
-  dac_valid_0,
-  dac_enable_0,
-  dac_ddata_0,
-  dac_valid_1,
-  dac_enable_1,
-  dac_ddata_1,
+  dac_valid,
+  dac_enable,
+  dac_ddata,
   dac_dovf,
   dac_dunf,
 
@@ -103,96 +95,79 @@ module axi_ad9122 (
 
   // dac interface
 
-  input           dac_clk_in_p;
-  input           dac_clk_in_n;
-  output          dac_clk_out_p;
-  output          dac_clk_out_n;
-  output          dac_frame_out_p;
-  output          dac_frame_out_n;
-  output  [15:0]  dac_data_out_p;
-  output  [15:0]  dac_data_out_n;
-
-  // master/slave
-
-  output          dac_sync_out;
-  input           dac_sync_in;
+  input             dac_clk_in_p;
+  input             dac_clk_in_n;
+  output            dac_clk_out_p;
+  output            dac_clk_out_n;
+  output  [ 13:0]   dac_data_out_a_p;
+  output  [ 13:0]   dac_data_out_a_n;
+  output  [ 13:0]   dac_data_out_b_p;
+  output  [ 13:0]   dac_data_out_b_n;
 
   // dma interface
 
-  output          dac_div_clk;
-  output          dac_valid_0;
-  output          dac_enable_0;
-  input   [63:0]  dac_ddata_0;
-  output          dac_valid_1;
-  output          dac_enable_1;
-  input   [63:0]  dac_ddata_1;
-  input           dac_dovf;
-  input           dac_dunf;
+  output            dac_div_clk;
+  output            dac_valid;
+  output            dac_enable;
+  input   [255:0]   dac_ddata;
+  input             dac_dovf;
+  input             dac_dunf;
 
   // axi interface
 
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [31:0]  s_axi_rdata;
-  output  [ 1:0]  s_axi_rresp;
-  input           s_axi_rready;
+  input             s_axi_aclk;
+  input             s_axi_aresetn;
+  input             s_axi_awvalid;
+  input   [ 31:0]   s_axi_awaddr;
+  output            s_axi_awready;
+  input             s_axi_wvalid;
+  input   [ 31:0]   s_axi_wdata;
+  input   [  3:0]   s_axi_wstrb;
+  output            s_axi_wready;
+  output            s_axi_bvalid;
+  output  [  1:0]   s_axi_bresp;
+  input             s_axi_bready;
+  input             s_axi_arvalid;
+  input   [ 31:0]   s_axi_araddr;
+  output            s_axi_arready;
+  output            s_axi_rvalid;
+  output  [ 31:0]   s_axi_rdata;
+  output  [  1:0]   s_axi_rresp;
+  input             s_axi_rready;
 
   // internal clocks and resets
 
-  wire            dac_rst;
-  wire            mmcm_rst;
-  wire            drp_rst;
-  wire            up_clk;
-  wire            up_rstn;
+  wire              dac_rst;
+  wire              up_clk;
+  wire              up_rstn;
 
   // internal signals
 
-  wire            dac_frame_i0_s;
-  wire    [15:0]  dac_data_i0_s;
-  wire            dac_frame_i1_s;
-  wire    [15:0]  dac_data_i1_s;
-  wire            dac_frame_i2_s;
-  wire    [15:0]  dac_data_i2_s;
-  wire            dac_frame_i3_s;
-  wire    [15:0]  dac_data_i3_s;
-  wire            dac_frame_q0_s;
-  wire    [15:0]  dac_data_q0_s;
-  wire            dac_frame_q1_s;
-  wire    [15:0]  dac_data_q1_s;
-  wire            dac_frame_q2_s;
-  wire    [15:0]  dac_data_q2_s;
-  wire            dac_frame_q3_s;
-  wire    [15:0]  dac_data_q3_s;
-  wire            dac_status_s;
-  wire            drp_sel_s;
-  wire            drp_wr_s;
-  wire    [11:0]  drp_addr_s;
-  wire    [15:0]  drp_wdata_s;
-  wire    [15:0]  drp_rdata_s;
-  wire            drp_ready_s;
-  wire            drp_locked_s;
-  wire            up_wreq_s;
-  wire    [13:0]  up_waddr_s;
-  wire    [31:0]  up_wdata_s;
-  wire            up_wack_s;
-  wire            up_rreq_s;
-  wire    [13:0]  up_raddr_s;
-  wire    [31:0]  up_rdata_s;
-  wire            up_rack_s;
+  wire    [ 15:0]   dac_data_00_s;
+  wire    [ 15:0]   dac_data_01_s;
+  wire    [ 15:0]   dac_data_02_s;
+  wire    [ 15:0]   dac_data_03_s;
+  wire    [ 15:0]   dac_data_04_s;
+  wire    [ 15:0]   dac_data_05_s;
+  wire    [ 15:0]   dac_data_06_s;
+  wire    [ 15:0]   dac_data_07_s;
+  wire    [ 15:0]   dac_data_08_s;
+  wire    [ 15:0]   dac_data_09_s;
+  wire    [ 15:0]   dac_data_10_s;
+  wire    [ 15:0]   dac_data_11_s;
+  wire    [ 15:0]   dac_data_12_s;
+  wire    [ 15:0]   dac_data_13_s;
+  wire    [ 15:0]   dac_data_14_s;
+  wire    [ 15:0]   dac_data_15_s;
+  wire              dac_status_s;
+  wire              up_wreq_s;
+  wire    [ 13:0]   up_waddr_s;
+  wire    [ 31:0]   up_wdata_s;
+  wire              up_wack_s;
+  wire              up_rreq_s;
+  wire    [ 13:0]   up_raddr_s;
+  wire    [ 31:0]   up_rdata_s;
+  wire              up_rack_s;
 
   // signal name changes
 
@@ -201,91 +176,63 @@ module axi_ad9122 (
 
   // device interface
 
-  axi_ad9122_if #(
-    .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .PCORE_SERDES_DDR_N (PCORE_SERDES_DDR_N),
-    .PCORE_MMCM_BUFIO_N (PCORE_MMCM_BUFIO_N))
-  i_if (
+  axi_ad9739a_if #(.PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE)) i_if (
     .dac_clk_in_p (dac_clk_in_p),
     .dac_clk_in_n (dac_clk_in_n),
     .dac_clk_out_p (dac_clk_out_p),
     .dac_clk_out_n (dac_clk_out_n),
-    .dac_frame_out_p (dac_frame_out_p),
-    .dac_frame_out_n (dac_frame_out_n),
-    .dac_data_out_p (dac_data_out_p),
-    .dac_data_out_n (dac_data_out_n),
+    .dac_data_out_a_p (dac_data_out_a_p),
+    .dac_data_out_a_n (dac_data_out_a_n),
+    .dac_data_out_b_p (dac_data_out_b_p),
+    .dac_data_out_b_n (dac_data_out_b_n),
     .dac_rst (dac_rst),
     .dac_clk (),
     .dac_div_clk (dac_div_clk),
     .dac_status (dac_status_s),
-    .dac_frame_i0 (dac_frame_i0_s),
-    .dac_data_i0 (dac_data_i0_s),
-    .dac_frame_i1 (dac_frame_i1_s),
-    .dac_data_i1 (dac_data_i1_s),
-    .dac_frame_i2 (dac_frame_i2_s),
-    .dac_data_i2 (dac_data_i2_s),
-    .dac_frame_i3 (dac_frame_i3_s),
-    .dac_data_i3 (dac_data_i3_s),
-    .dac_frame_q0 (dac_frame_q0_s),
-    .dac_data_q0 (dac_data_q0_s),
-    .dac_frame_q1 (dac_frame_q1_s),
-    .dac_data_q1 (dac_data_q1_s),
-    .dac_frame_q2 (dac_frame_q2_s),
-    .dac_data_q2 (dac_data_q2_s),
-    .dac_frame_q3 (dac_frame_q3_s),
-    .dac_data_q3 (dac_data_q3_s),
-    .mmcm_rst (mmcm_rst),
-    .drp_clk (up_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel_s),
-    .drp_wr (drp_wr_s),
-    .drp_addr (drp_addr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_s),
-    .drp_ready (drp_ready_s),
-    .drp_locked (drp_locked_s));
+    .dac_data_00 (dac_data_00_s),
+    .dac_data_01 (dac_data_01_s),
+    .dac_data_02 (dac_data_02_s),
+    .dac_data_03 (dac_data_03_s),
+    .dac_data_04 (dac_data_04_s),
+    .dac_data_05 (dac_data_05_s),
+    .dac_data_06 (dac_data_06_s),
+    .dac_data_07 (dac_data_07_s),
+    .dac_data_08 (dac_data_08_s),
+    .dac_data_09 (dac_data_09_s),
+    .dac_data_10 (dac_data_10_s),
+    .dac_data_11 (dac_data_11_s),
+    .dac_data_12 (dac_data_12_s),
+    .dac_data_13 (dac_data_13_s),
+    .dac_data_14 (dac_data_14_s),
+    .dac_data_15 (dac_data_15_s));
 
   // core
 
-  axi_ad9122_core #(.PCORE_ID(PCORE_ID), .DP_DISABLE(PCORE_DAC_DP_DISABLE)) i_core (
+  axi_ad9739a_core #(.PCORE_ID(PCORE_ID), .DP_DISABLE(PCORE_DAC_DP_DISABLE)) i_core (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
-    .dac_frame_i0 (dac_frame_i0_s),
-    .dac_data_i0 (dac_data_i0_s),
-    .dac_frame_i1 (dac_frame_i1_s),
-    .dac_data_i1 (dac_data_i1_s),
-    .dac_frame_i2 (dac_frame_i2_s),
-    .dac_data_i2 (dac_data_i2_s),
-    .dac_frame_i3 (dac_frame_i3_s),
-    .dac_data_i3 (dac_data_i3_s),
-    .dac_frame_q0 (dac_frame_q0_s),
-    .dac_data_q0 (dac_data_q0_s),
-    .dac_frame_q1 (dac_frame_q1_s),
-    .dac_data_q1 (dac_data_q1_s),
-    .dac_frame_q2 (dac_frame_q2_s),
-    .dac_data_q2 (dac_data_q2_s),
-    .dac_frame_q3 (dac_frame_q3_s),
-    .dac_data_q3 (dac_data_q3_s),
+    .dac_data_00 (dac_data_00_s),
+    .dac_data_01 (dac_data_01_s),
+    .dac_data_02 (dac_data_02_s),
+    .dac_data_03 (dac_data_03_s),
+    .dac_data_04 (dac_data_04_s),
+    .dac_data_05 (dac_data_05_s),
+    .dac_data_06 (dac_data_06_s),
+    .dac_data_07 (dac_data_07_s),
+    .dac_data_08 (dac_data_08_s),
+    .dac_data_09 (dac_data_09_s),
+    .dac_data_10 (dac_data_10_s),
+    .dac_data_11 (dac_data_11_s),
+    .dac_data_12 (dac_data_12_s),
+    .dac_data_13 (dac_data_13_s),
+    .dac_data_14 (dac_data_14_s),
+    .dac_data_15 (dac_data_15_s),
     .dac_status (dac_status_s),
-    .dac_sync_out (dac_sync_out),
-    .dac_sync_in (dac_sync_in),
-    .dac_valid_0 (dac_valid_0),
-    .dac_enable_0 (dac_enable_0),
-    .dac_ddata_0 (dac_ddata_0),
-    .dac_valid_1 (dac_valid_1),
-    .dac_enable_1 (dac_enable_1),
-    .dac_ddata_1 (dac_ddata_1),
+    .dac_valid (dac_valid),
+    .dac_enable (dac_enable),
+    .dac_ddata (dac_ddata),
     .dac_dovf (dac_dovf),
     .dac_dunf (dac_dunf),
-    .mmcm_rst (mmcm_rst),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel_s),
-    .drp_wr (drp_wr_s),
-    .drp_addr (drp_addr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_s),
-    .drp_ready (drp_ready_s),
-    .drp_locked (drp_locked_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),

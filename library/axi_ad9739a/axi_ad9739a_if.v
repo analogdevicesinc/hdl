@@ -41,7 +41,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9122_if (
+module axi_ad9739a_if (
 
   // dac interface
 
@@ -49,10 +49,10 @@ module axi_ad9122_if (
   dac_clk_in_n,
   dac_clk_out_p,
   dac_clk_out_n,
-  dac_frame_out_p,
-  dac_frame_out_n,
-  dac_data_out_p,
-  dac_data_out_n,
+  dac_data_out_a_p,
+  dac_data_out_a_n,
+  dac_data_out_b_p,
+  dac_data_out_b_n,
 
   // internal resets and clocks
 
@@ -63,46 +63,26 @@ module axi_ad9122_if (
 
   // data interface
 
-  dac_frame_i0,
-  dac_data_i0,
-  dac_frame_i1,
-  dac_data_i1,
-  dac_frame_i2,
-  dac_data_i2,
-  dac_frame_i3,
-  dac_data_i3,
-
-  dac_frame_q0,
-  dac_data_q0,
-  dac_frame_q1,
-  dac_data_q1,
-  dac_frame_q2,
-  dac_data_q2,
-  dac_frame_q3,
-  dac_data_q3,
-
-  // mmcm reset
-
-  mmcm_rst,
-
-  // drp interface
-
-  drp_clk,
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked);
+  dac_data_00,
+  dac_data_01,
+  dac_data_02,
+  dac_data_03,
+  dac_data_04,
+  dac_data_05,
+  dac_data_06,
+  dac_data_07,
+  dac_data_08,
+  dac_data_09,
+  dac_data_10,
+  dac_data_11,
+  dac_data_12,
+  dac_data_13,
+  dac_data_14,
+  dac_data_15);
 
   // parameters
 
   parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_SERDES_DDR_N = 1;
-  parameter   PCORE_MMCM_BUFIO_N = 1;
-  parameter   PCORE_IODELAY_GROUP = "dac_if_delay_group";
 
   // dac interface
 
@@ -110,10 +90,10 @@ module axi_ad9122_if (
   input           dac_clk_in_n;
   output          dac_clk_out_p;
   output          dac_clk_out_n;
-  output          dac_frame_out_p;
-  output          dac_frame_out_n;
-  output  [15:0]  dac_data_out_p;
-  output  [15:0]  dac_data_out_n;
+  output  [13:0]  dac_data_out_a_p;
+  output  [13:0]  dac_data_out_a_n;
+  output  [13:0]  dac_data_out_b_p;
+  output  [13:0]  dac_data_out_b_n;
 
   // internal resets and clocks
 
@@ -124,105 +104,90 @@ module axi_ad9122_if (
 
   // data interface
 
-  input           dac_frame_i0;
-  input   [15:0]  dac_data_i0;
-  input           dac_frame_i1;
-  input   [15:0]  dac_data_i1;
-  input           dac_frame_i2;
-  input   [15:0]  dac_data_i2;
-  input           dac_frame_i3;
-  input   [15:0]  dac_data_i3;
-
-  input           dac_frame_q0;
-  input   [15:0]  dac_data_q0;
-  input           dac_frame_q1;
-  input   [15:0]  dac_data_q1;
-  input           dac_frame_q2;
-  input   [15:0]  dac_data_q2;
-  input           dac_frame_q3;
-  input   [15:0]  dac_data_q3;
-
-  // mmcm reset
-
-  input           mmcm_rst;
-
-  // drp interface
-
-  input           drp_clk;
-  input           drp_rst;
-  input           drp_sel;
-  input           drp_wr;
-  input   [11:0]  drp_addr;
-  input   [15:0]  drp_wdata;
-  output  [15:0]  drp_rdata;
-  output          drp_ready;
-  output          drp_locked;
+  input   [15:0]  dac_data_00;
+  input   [15:0]  dac_data_01;
+  input   [15:0]  dac_data_02;
+  input   [15:0]  dac_data_03;
+  input   [15:0]  dac_data_04;
+  input   [15:0]  dac_data_05;
+  input   [15:0]  dac_data_06;
+  input   [15:0]  dac_data_07;
+  input   [15:0]  dac_data_08;
+  input   [15:0]  dac_data_09;
+  input   [15:0]  dac_data_10;
+  input   [15:0]  dac_data_11;
+  input   [15:0]  dac_data_12;
+  input   [15:0]  dac_data_13;
+  input   [15:0]  dac_data_14;
+  input   [15:0]  dac_data_15;
 
   // internal registers
 
-  reg             dac_status_m1 = 'd0;
   reg             dac_status = 'd0;
+
+  // internal signals
+
+  wire            dac_clk_in_s;
+  wire            dac_div_clk_s;
 
   // dac status
 
   always @(posedge dac_div_clk) begin
     if (dac_rst == 1'b1) begin
-      dac_status_m1 <= 1'd0;
       dac_status <= 1'd0;
     end else begin
-      dac_status_m1 <= drp_locked;
-      dac_status <= dac_status_m1;
+      dac_status <= 1'd1;
     end
   end
 
   // dac data output serdes(s) & buffers
 
   ad_serdes_out #(
-    .DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .SERDES(PCORE_SERDES_DDR_N),
-    .DATA_WIDTH(16))
-  i_serdes_out_data (
+    .SERDES(1),
+    .DATA_WIDTH(14),
+    .DEVICE_TYPE (PCORE_DEVICE_TYPE))
+  i_serdes_out_data_a (
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
-    .data_s0 (dac_data_i0),
-    .data_s1 (dac_data_q0),
-    .data_s2 (dac_data_i1),
-    .data_s3 (dac_data_q1),
-    .data_s4 (dac_data_i2),
-    .data_s5 (dac_data_q2),
-    .data_s6 (dac_data_i3),
-    .data_s7 (dac_data_q3),
-    .data_out_p (dac_data_out_p),
-    .data_out_n (dac_data_out_n));
+    .data_s0 (dac_data_00[15:2]),
+    .data_s1 (dac_data_02[15:2]),
+    .data_s2 (dac_data_04[15:2]),
+    .data_s3 (dac_data_06[15:2]),
+    .data_s4 (dac_data_08[15:2]),
+    .data_s5 (dac_data_10[15:2]),
+    .data_s6 (dac_data_12[15:2]),
+    .data_s7 (dac_data_14[15:2]),
+    .data_out_p (dac_data_out_a_p),
+    .data_out_n (dac_data_out_a_n));
 
-  // dac frame output serdes & buffer
+  // dac data output serdes(s) & buffers
   
   ad_serdes_out #(
-    .DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .SERDES(PCORE_SERDES_DDR_N),
-    .DATA_WIDTH(1))
-  i_serdes_out_frame (
+    .SERDES(1),
+    .DATA_WIDTH(14),
+    .DEVICE_TYPE (PCORE_DEVICE_TYPE))
+  i_serdes_out_data_b (
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
-    .data_s0 (dac_frame_i0),
-    .data_s1 (dac_frame_q0),
-    .data_s2 (dac_frame_i1),
-    .data_s3 (dac_frame_q1),
-    .data_s4 (dac_frame_i2),
-    .data_s5 (dac_frame_q2),
-    .data_s6 (dac_frame_i3),
-    .data_s7 (dac_frame_q3),
-    .data_out_p (dac_frame_out_p),
-    .data_out_n (dac_frame_out_n));
+    .data_s0 (dac_data_01[15:2]),
+    .data_s1 (dac_data_03[15:2]),
+    .data_s2 (dac_data_05[15:2]),
+    .data_s3 (dac_data_07[15:2]),
+    .data_s4 (dac_data_09[15:2]),
+    .data_s5 (dac_data_11[15:2]),
+    .data_s6 (dac_data_13[15:2]),
+    .data_s7 (dac_data_15[15:2]),
+    .data_out_p (dac_data_out_b_p),
+    .data_out_n (dac_data_out_b_n));
 
   // dac clock output serdes & buffer
   
   ad_serdes_out #(
-    .DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .SERDES(PCORE_SERDES_DDR_N),
-    .DATA_WIDTH(1))
+    .SERDES(1),
+    .DATA_WIDTH(1),
+    .DEVICE_TYPE (PCORE_DEVICE_TYPE))
   i_serdes_out_clk (
     .rst (dac_rst),
     .clk (dac_clk),
@@ -240,30 +205,24 @@ module axi_ad9122_if (
 
   // dac clock input buffers
 
-  ad_serdes_clk #(
-    .SERDES (PCORE_SERDES_DDR_N),
-    .MMCM (PCORE_MMCM_BUFIO_N),
-    .MMCM_DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .MMCM_CLKIN_PERIOD (1.667),
-    .MMCM_VCO_DIV (6),
-    .MMCM_VCO_MUL (12),
-    .MMCM_CLK0_DIV (2),
-    .MMCM_CLK1_DIV (8))
-  i_serdes_clk (
-    .mmcm_rst (mmcm_rst),
-    .clk_in_p (dac_clk_in_p),
-    .clk_in_n (dac_clk_in_n),
-    .clk (dac_clk),
-    .div_clk (dac_div_clk),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked));
+  IBUFGDS i_dac_clk_in_ibuf (
+    .I (dac_clk_in_p),
+    .IB (dac_clk_in_n),
+    .O (dac_clk_in_s));
+
+  BUFG i_dac_clk_in_gbuf (
+    .I (dac_clk_in_s),
+    .O (dac_clk));
+
+  BUFR #(.BUFR_DIVIDE("4")) i_dac_div_clk_rbuf (
+    .CLR (1'b0),
+    .CE (1'b1),
+    .I (dac_clk_in_s),
+    .O (dac_div_clk_s));
+
+  BUFG i_dac_div_clk_gbuf (
+    .I (dac_div_clk_s),
+    .O (dac_div_clk));
 
 endmodule
 

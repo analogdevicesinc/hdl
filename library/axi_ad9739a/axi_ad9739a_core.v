@@ -39,60 +39,37 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9122_core (
+module axi_ad9739a_core (
 
   // dac interface
 
   dac_div_clk,
   dac_rst,
-  dac_frame_i0,
-  dac_data_i0,
-  dac_frame_i1,
-  dac_data_i1,
-  dac_frame_i2,
-  dac_data_i2,
-  dac_frame_i3,
-  dac_data_i3,
-  dac_frame_q0,
-  dac_data_q0,
-  dac_frame_q1,
-  dac_data_q1,
-  dac_frame_q2,
-  dac_data_q2,
-  dac_frame_q3,
-  dac_data_q3,
+  dac_data_00,
+  dac_data_01,
+  dac_data_02,
+  dac_data_03,
+  dac_data_04,
+  dac_data_05,
+  dac_data_06,
+  dac_data_07,
+  dac_data_08,
+  dac_data_09,
+  dac_data_10,
+  dac_data_11,
+  dac_data_12,
+  dac_data_13,
+  dac_data_14,
+  dac_data_15,
   dac_status,
-
-  // master/slave
-
-  dac_sync_out,
-  dac_sync_in,
 
   // dma interface
 
-  dac_valid_0,
-  dac_enable_0,
-  dac_ddata_0,
-  dac_valid_1,
-  dac_enable_1,
-  dac_ddata_1,
+  dac_valid,
+  dac_enable,
+  dac_ddata,
   dac_dovf,
   dac_dunf,
-
-  // mmcm reset
-
-  mmcm_rst,
-
-  // drp interface
-
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked,
 
   // processor interface
 
@@ -114,99 +91,67 @@ module axi_ad9122_core (
 
   // dac interface
 
-  input           dac_div_clk;
-  output          dac_rst;
-  output          dac_frame_i0;
-  output  [15:0]  dac_data_i0;
-  output          dac_frame_i1;
-  output  [15:0]  dac_data_i1;
-  output          dac_frame_i2;
-  output  [15:0]  dac_data_i2;
-  output          dac_frame_i3;
-  output  [15:0]  dac_data_i3;
-  output          dac_frame_q0;
-  output  [15:0]  dac_data_q0;
-  output          dac_frame_q1;
-  output  [15:0]  dac_data_q1;
-  output          dac_frame_q2;
-  output  [15:0]  dac_data_q2;
-  output          dac_frame_q3;
-  output  [15:0]  dac_data_q3;
-  input           dac_status;
-
-  // master/slave
-
-  output          dac_sync_out;
-  input           dac_sync_in;
+  input             dac_div_clk;
+  output            dac_rst;
+  output  [ 15:0]   dac_data_00;
+  output  [ 15:0]   dac_data_01;
+  output  [ 15:0]   dac_data_02;
+  output  [ 15:0]   dac_data_03;
+  output  [ 15:0]   dac_data_04;
+  output  [ 15:0]   dac_data_05;
+  output  [ 15:0]   dac_data_06;
+  output  [ 15:0]   dac_data_07;
+  output  [ 15:0]   dac_data_08;
+  output  [ 15:0]   dac_data_09;
+  output  [ 15:0]   dac_data_10;
+  output  [ 15:0]   dac_data_11;
+  output  [ 15:0]   dac_data_12;
+  output  [ 15:0]   dac_data_13;
+  output  [ 15:0]   dac_data_14;
+  output  [ 15:0]   dac_data_15;
+  input             dac_status;
 
   // dma interface
 
-  output          dac_valid_0;
-  output          dac_enable_0;
-  input   [63:0]  dac_ddata_0;
-  output          dac_valid_1;
-  output          dac_enable_1;
-  input   [63:0]  dac_ddata_1;
-  input           dac_dovf;
-  input           dac_dunf;
-
-  // mmcm reset
-
-  output          mmcm_rst;
-
-  // drp interface
-
-  output          drp_rst;
-  output          drp_sel;
-  output          drp_wr;
-  output  [11:0]  drp_addr;
-  output  [15:0]  drp_wdata;
-  input   [15:0]  drp_rdata;
-  input           drp_ready;
-  input           drp_locked;
+  output            dac_valid;
+  output            dac_enable;
+  input   [255:0]   dac_ddata;
+  input             dac_dovf;
+  input             dac_dunf;
 
   // processor interface
 
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
+  input             up_rstn;
+  input             up_clk;
+  input             up_wreq;
+  input   [ 13:0]   up_waddr;
+  input   [ 31:0]   up_wdata;
+  output            up_wack;
+  input             up_rreq;
+  input   [ 13:0]   up_raddr;
+  output  [ 31:0]   up_rdata;
+  output            up_rack;
 
   // internal registers
 
-  reg     [31:0]  up_rdata = 'd0;
-  reg             up_rack = 'd0;
-  reg             up_wack = 'd0;
+  reg     [ 31:0]   up_rdata = 'd0;
+  reg               up_rack = 'd0;
+  reg               up_wack = 'd0;
 
   // internal signals
 
-  wire            dac_sync_s;
-  wire            dac_frame_s;
-  wire            dac_datafmt_s;
-  wire    [31:0]  up_rdata_0_s;
-  wire            up_rack_0_s;
-  wire            up_wack_0_s;
-  wire    [31:0]  up_rdata_1_s;
-  wire            up_rack_1_s;
-  wire            up_wack_1_s;
-  wire    [31:0]  up_rdata_s;
-  wire            up_rack_s;
-  wire            up_wack_s;
+  wire              dac_sync_s;
+  wire              dac_datafmt_s;
+  wire    [ 31:0]   up_rdata_0_s;
+  wire              up_rack_0_s;
+  wire              up_wack_0_s;
+  wire    [ 31:0]   up_rdata_s;
+  wire              up_rack_s;
+  wire              up_wack_s;
 
   // defaults
 
-  assign dac_valid_0 = 1'b1;
-  assign dac_valid_1 = 1'b1;
-
-  // master/slave (clocks must be synchronous)
-
-  assign dac_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
+  assign dac_valid = 1'b1;
 
   // processor read interface
 
@@ -216,25 +161,38 @@ module axi_ad9122_core (
       up_rack <= 'd0;
       up_wack <= 'd0;
     end else begin
-      up_rdata <= up_rdata_s | up_rdata_0_s | up_rdata_1_s;
-      up_rack <= up_rack_s | up_rack_0_s | up_rack_1_s;
-      up_wack <= up_wack_s | up_wack_0_s | up_wack_1_s;
+      up_rdata <= up_rdata_s | up_rdata_0_s;
+      up_rack <= up_rack_s | up_rack_0_s;
+      up_wack <= up_wack_s | up_wack_0_s;
     end
   end
 
   // dac channel
   
-  axi_ad9122_channel #(
+  axi_ad9739a_channel #(
     .CHID(0),
     .DP_DISABLE(DP_DISABLE))
   i_channel_0 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
-    .dac_enable (dac_enable_0),
-    .dac_data ({dac_data_i3, dac_data_i2, dac_data_i1, dac_data_i0}),
-    .dac_frame ({dac_frame_i3, dac_frame_i2, dac_frame_i1, dac_frame_i0}),
-    .dma_data (dac_ddata_0),
-    .dac_data_frame (dac_frame_s),
+    .dac_enable (dac_enable),
+    .dac_data_00 (dac_data_00),
+    .dac_data_01 (dac_data_01),
+    .dac_data_02 (dac_data_02),
+    .dac_data_03 (dac_data_03),
+    .dac_data_04 (dac_data_04),
+    .dac_data_05 (dac_data_05),
+    .dac_data_06 (dac_data_06),
+    .dac_data_07 (dac_data_07),
+    .dac_data_08 (dac_data_08),
+    .dac_data_09 (dac_data_09),
+    .dac_data_10 (dac_data_10),
+    .dac_data_11 (dac_data_11),
+    .dac_data_12 (dac_data_12),
+    .dac_data_13 (dac_data_13),
+    .dac_data_14 (dac_data_14),
+    .dac_data_15 (dac_data_15),
+    .dma_data (dac_ddata),
     .dac_data_sync (dac_sync_s),
     .dac_dds_format (dac_datafmt_s),
     .up_rstn (up_rstn),
@@ -248,40 +206,14 @@ module axi_ad9122_core (
     .up_rdata (up_rdata_0_s),
     .up_rack (up_rack_0_s));
 
-  // dac channel
-  
-  axi_ad9122_channel #(
-    .CHID(1),
-    .DP_DISABLE(DP_DISABLE))
-  i_channel_1 (
-    .dac_div_clk (dac_div_clk),
-    .dac_rst (dac_rst),
-    .dac_enable (dac_enable_1),
-    .dac_data ({dac_data_q3, dac_data_q2, dac_data_q1, dac_data_q0}),
-    .dac_frame ({dac_frame_q3, dac_frame_q2, dac_frame_q1, dac_frame_q0}),
-    .dma_data (dac_ddata_1),
-    .dac_data_frame (dac_frame_s),
-    .dac_data_sync (dac_sync_s),
-    .dac_dds_format (dac_datafmt_s),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_1_s),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_1_s),
-    .up_rack (up_rack_1_s));
-
   // dac common processor interface
 
   up_dac_common #(.PCORE_ID(PCORE_ID)) i_up_dac_common (
-    .mmcm_rst (mmcm_rst),
+    .mmcm_rst (),
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),
-    .dac_sync (dac_sync_out),
-    .dac_frame (dac_frame_s),
+    .dac_sync (dac_sync_s),
+    .dac_frame (),
     .dac_par_type (),
     .dac_par_enb (),
     .dac_r1_mode (),
@@ -292,16 +224,16 @@ module axi_ad9122_core (
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd4),
     .drp_clk (up_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked),
+    .drp_rst (),
+    .drp_sel (),
+    .drp_wr (),
+    .drp_addr (),
+    .drp_wdata (),
+    .drp_rdata (16'd0),
+    .drp_ready (1'd1),
+    .drp_locked (1'd1),
     .up_usr_chanmax (),
-    .dac_usr_chanmax (8'd3),
+    .dac_usr_chanmax (8'd1),
     .up_dac_gpio_in (32'd0),
     .up_dac_gpio_out (),
     .up_rstn (up_rstn),
