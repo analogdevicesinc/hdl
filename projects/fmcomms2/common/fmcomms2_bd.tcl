@@ -342,47 +342,42 @@ if {$sys_zynq == 0} {
 
 if {$sys_zynq == 0} {
   connect_bd_net -net sys_200m_clk [get_bd_pins ila_adc/clk]
-  connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_0/s_clk] $sys_200m_clk_source
-  connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_1/s_clk] $sys_200m_clk_source
-  connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_2/s_clk] $sys_200m_clk_source
-  connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_3/s_clk] $sys_200m_clk_source
+  connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_0/dma_clk] $sys_200m_clk_source
+  connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_1/dma_clk] $sys_200m_clk_source
+  connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_2/dma_clk] $sys_200m_clk_source
+  connect_bd_net -net sys_200m_clk [get_bd_pins sys_wfifo_3/dma_clk] $sys_200m_clk_source
 } else {
   connect_bd_net -net sys_fmc_dma_clk [get_bd_pins ila_adc/clk]
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_0/s_clk] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_1/s_clk] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_2/s_clk] $sys_fmc_dma_clk_source
-  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_3/s_clk] $sys_fmc_dma_clk_source
+  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_0/dma_clk] $sys_fmc_dma_clk_source
+  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_1/dma_clk] $sys_fmc_dma_clk_source
+  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_2/dma_clk] $sys_fmc_dma_clk_source
+  connect_bd_net -net sys_fmc_dma_clk [get_bd_pins sys_wfifo_3/dma_clk] $sys_fmc_dma_clk_source
 }
 
-  connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_0/m_clk] [get_bd_pins axi_ad9361/l_clk]
-  connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_1/m_clk] [get_bd_pins axi_ad9361/l_clk]
-  connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_2/m_clk] [get_bd_pins axi_ad9361/l_clk]
-  connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_3/m_clk] [get_bd_pins axi_ad9361/l_clk]
+  connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_0/adc_clk] [get_bd_pins axi_ad9361/l_clk]
+  connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_1/adc_clk] [get_bd_pins axi_ad9361/l_clk]
+  connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_2/adc_clk] [get_bd_pins axi_ad9361/l_clk]
+  connect_bd_net -net axi_ad9361_clk [get_bd_pins sys_wfifo_3/adc_clk] [get_bd_pins axi_ad9361/l_clk]
 
-  connect_bd_net -net sys_100m_resetn [get_bd_pins sys_wfifo_0/rstn] $sys_100m_resetn_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins sys_wfifo_1/rstn] $sys_100m_resetn_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins sys_wfifo_2/rstn] $sys_100m_resetn_source
-  connect_bd_net -net sys_100m_resetn [get_bd_pins sys_wfifo_3/rstn] $sys_100m_resetn_source
+  connect_bd_net -net axi_ad9361_adc_valid_i0 [get_bd_pins sys_wfifo_0/adc_wr] [get_bd_pins axi_ad9361/adc_valid_i0]
+  connect_bd_net -net axi_ad9361_adc_valid_q0 [get_bd_pins sys_wfifo_1/adc_wr] [get_bd_pins axi_ad9361/adc_valid_q0]
+  connect_bd_net -net axi_ad9361_adc_valid_i1 [get_bd_pins sys_wfifo_2/adc_wr] [get_bd_pins axi_ad9361/adc_valid_i1]
+  connect_bd_net -net axi_ad9361_adc_valid_q1 [get_bd_pins sys_wfifo_3/adc_wr] [get_bd_pins axi_ad9361/adc_valid_q1]
 
-  connect_bd_net -net axi_ad9361_adc_valid_i0 [get_bd_pins sys_wfifo_0/m_wr] [get_bd_pins axi_ad9361/adc_valid_i0]
-  connect_bd_net -net axi_ad9361_adc_valid_q0 [get_bd_pins sys_wfifo_1/m_wr] [get_bd_pins axi_ad9361/adc_valid_q0]
-  connect_bd_net -net axi_ad9361_adc_valid_i1 [get_bd_pins sys_wfifo_2/m_wr] [get_bd_pins axi_ad9361/adc_valid_i1]
-  connect_bd_net -net axi_ad9361_adc_valid_q1 [get_bd_pins sys_wfifo_3/m_wr] [get_bd_pins axi_ad9361/adc_valid_q1]
+  connect_bd_net -net axi_ad9361_adc_chan_i0  [get_bd_pins sys_wfifo_0/adc_wdata] [get_bd_pins axi_ad9361/adc_data_i0]
+  connect_bd_net -net axi_ad9361_adc_chan_q0  [get_bd_pins sys_wfifo_1/adc_wdata] [get_bd_pins axi_ad9361/adc_data_q0]
+  connect_bd_net -net axi_ad9361_adc_chan_i1  [get_bd_pins sys_wfifo_2/adc_wdata] [get_bd_pins axi_ad9361/adc_data_i1]
+  connect_bd_net -net axi_ad9361_adc_chan_q1  [get_bd_pins sys_wfifo_3/adc_wdata] [get_bd_pins axi_ad9361/adc_data_q1]
 
-  connect_bd_net -net axi_ad9361_adc_chan_i0  [get_bd_pins sys_wfifo_0/m_wdata] [get_bd_pins axi_ad9361/adc_data_i0]
-  connect_bd_net -net axi_ad9361_adc_chan_q0  [get_bd_pins sys_wfifo_1/m_wdata] [get_bd_pins axi_ad9361/adc_data_q0]
-  connect_bd_net -net axi_ad9361_adc_chan_i1  [get_bd_pins sys_wfifo_2/m_wdata] [get_bd_pins axi_ad9361/adc_data_i1]
-  connect_bd_net -net axi_ad9361_adc_chan_q1  [get_bd_pins sys_wfifo_3/m_wdata] [get_bd_pins axi_ad9361/adc_data_q1]
+  connect_bd_net -net util_wfifo_0_s_wr     [get_bd_pins sys_wfifo_0/dma_wr]  [get_bd_pins ila_adc/probe0]
+  connect_bd_net -net util_wfifo_1_s_wr     [get_bd_pins sys_wfifo_1/dma_wr]  [get_bd_pins ila_adc/probe1]
+  connect_bd_net -net util_wfifo_2_s_wr     [get_bd_pins sys_wfifo_2/dma_wr]  [get_bd_pins ila_adc/probe2]
+  connect_bd_net -net util_wfifo_3_s_wr     [get_bd_pins sys_wfifo_3/dma_wr]  [get_bd_pins ila_adc/probe3]
 
-  connect_bd_net -net util_wfifo_0_s_wr     [get_bd_pins sys_wfifo_0/s_wr]  [get_bd_pins ila_adc/probe0]
-  connect_bd_net -net util_wfifo_1_s_wr     [get_bd_pins sys_wfifo_1/s_wr]  [get_bd_pins ila_adc/probe1]
-  connect_bd_net -net util_wfifo_2_s_wr     [get_bd_pins sys_wfifo_2/s_wr]  [get_bd_pins ila_adc/probe2]
-  connect_bd_net -net util_wfifo_3_s_wr     [get_bd_pins sys_wfifo_3/s_wr]  [get_bd_pins ila_adc/probe3]
-
-  connect_bd_net -net util_wfifo_0_s_wdata  [get_bd_pins sys_wfifo_0/s_wdata] [get_bd_pins ila_adc/probe4]
-  connect_bd_net -net util_wfifo_1_s_wdata  [get_bd_pins sys_wfifo_1/s_wdata] [get_bd_pins ila_adc/probe5]
-  connect_bd_net -net util_wfifo_2_s_wdata  [get_bd_pins sys_wfifo_2/s_wdata] [get_bd_pins ila_adc/probe6]
-  connect_bd_net -net util_wfifo_3_s_wdata  [get_bd_pins sys_wfifo_3/s_wdata] [get_bd_pins ila_adc/probe7]
+  connect_bd_net -net util_wfifo_0_s_wdata  [get_bd_pins sys_wfifo_0/dma_wdata] [get_bd_pins ila_adc/probe4]
+  connect_bd_net -net util_wfifo_1_s_wdata  [get_bd_pins sys_wfifo_1/dma_wdata] [get_bd_pins ila_adc/probe5]
+  connect_bd_net -net util_wfifo_2_s_wdata  [get_bd_pins sys_wfifo_2/dma_wdata] [get_bd_pins ila_adc/probe6]
+  connect_bd_net -net util_wfifo_3_s_wdata  [get_bd_pins sys_wfifo_3/dma_wdata] [get_bd_pins ila_adc/probe7]
 
   # address map
 
