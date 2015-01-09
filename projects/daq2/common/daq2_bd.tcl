@@ -79,7 +79,7 @@ if {$sys_zynq == 0} {
   set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
   set_property -dict [list CONFIG.PCORE_QUAD_DUAL_N {0}] $axi_ad9144_core
 
-  set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9144_jesd]
+  set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.0 axi_ad9144_jesd]
   set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
   set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9144_jesd
 
@@ -106,7 +106,7 @@ if {$sys_zynq == 1} {
 
   set axi_ad9680_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core]
 
-  set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:5.2 axi_ad9680_jesd]
+  set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.0 axi_ad9680_jesd]
   set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
   set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
 
@@ -252,8 +252,27 @@ if {$sys_zynq == 0} {
 
   connect_bd_net -net axi_daq2_gt_tx_rst            [get_bd_pins axi_daq2_gt/tx_rst]            [get_bd_pins axi_ad9144_jesd/tx_reset]
   connect_bd_net -net axi_daq2_gt_tx_sysref         [get_bd_pins axi_daq2_gt/tx_sysref]         [get_bd_pins axi_ad9144_jesd/tx_sysref]
-  connect_bd_net -net axi_daq2_gt_tx_gt_charisk     [get_bd_pins axi_daq2_gt/tx_gt_charisk]     [get_bd_pins axi_ad9144_jesd/gt_txcharisk_out]
-  connect_bd_net -net axi_daq2_gt_tx_gt_data        [get_bd_pins axi_daq2_gt/tx_gt_data]        [get_bd_pins axi_ad9144_jesd/gt_txdata_out]
+
+  create_bd_cell -type ip -vlnv analog.com:user:util_ccat:1.0 util_ccat_tx_gt_charisk
+  set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_ccat_tx_gt_charisk]
+  set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_ccat_tx_gt_charisk]
+
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_charisk/ccat_data]  [get_bd_pins axi_daq2_gt/tx_gt_charisk]     
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_charisk/data_0]     [get_bd_pins axi_ad9144_jesd/gt0_txcharisk] 
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_charisk/data_1]     [get_bd_pins axi_ad9144_jesd/gt1_txcharisk] 
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_charisk/data_2]     [get_bd_pins axi_ad9144_jesd/gt2_txcharisk] 
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_charisk/data_3]     [get_bd_pins axi_ad9144_jesd/gt3_txcharisk] 
+
+  create_bd_cell -type ip -vlnv analog.com:user:util_ccat:1.0 util_ccat_tx_gt_data
+  set_property -dict [list CONFIG.CH_DW {32}] [get_bd_cells util_ccat_tx_gt_data]
+  set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_ccat_tx_gt_data]
+
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_data/ccat_data]     [get_bd_pins axi_daq2_gt/tx_gt_data]     
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_data/data_0]        [get_bd_pins axi_ad9144_jesd/gt0_txdata] 
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_data/data_1]        [get_bd_pins axi_ad9144_jesd/gt1_txdata] 
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_data/data_2]        [get_bd_pins axi_ad9144_jesd/gt2_txdata] 
+  connect_bd_net [get_bd_pins util_ccat_tx_gt_data/data_3]        [get_bd_pins axi_ad9144_jesd/gt3_txdata] 
+
   connect_bd_net -net axi_daq2_gt_tx_rst_done       [get_bd_pins axi_daq2_gt/tx_rst_done]       [get_bd_pins axi_ad9144_jesd/tx_reset_done]
   connect_bd_net -net axi_daq2_gt_tx_ip_sync        [get_bd_pins axi_daq2_gt/tx_ip_sync]        [get_bd_pins axi_ad9144_jesd/tx_sync]
   connect_bd_net -net axi_daq2_gt_tx_ip_sof         [get_bd_pins axi_daq2_gt/tx_ip_sof]         [get_bd_pins axi_ad9144_jesd/tx_start_of_frame]
@@ -286,10 +305,47 @@ if {$sys_zynq == 0} {
 
   connect_bd_net -net axi_daq2_gt_rx_rst            [get_bd_pins axi_daq2_gt/rx_rst]            [get_bd_pins axi_ad9680_jesd/rx_reset]
   connect_bd_net -net axi_daq2_gt_rx_sysref         [get_bd_pins axi_daq2_gt/rx_sysref]         [get_bd_pins axi_ad9680_jesd/rx_sysref]
-  connect_bd_net -net axi_daq2_gt_rx_gt_charisk     [get_bd_pins axi_daq2_gt/rx_gt_charisk]     [get_bd_pins axi_ad9680_jesd/gt_rxcharisk_in]
-  connect_bd_net -net axi_daq2_gt_rx_gt_disperr     [get_bd_pins axi_daq2_gt/rx_gt_disperr]     [get_bd_pins axi_ad9680_jesd/gt_rxdisperr_in]
-  connect_bd_net -net axi_daq2_gt_rx_gt_notintable  [get_bd_pins axi_daq2_gt/rx_gt_notintable]  [get_bd_pins axi_ad9680_jesd/gt_rxnotintable_in]
-  connect_bd_net -net axi_daq2_gt_rx_gt_data        [get_bd_pins axi_daq2_gt/rx_gt_data]        [get_bd_pins axi_ad9680_jesd/gt_rxdata_in]
+
+  create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_charisk
+  set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
+  set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
+
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_charisk/data]             [get_bd_pins axi_daq2_gt/rx_gt_charisk]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_charisk/split_data_0]     [get_bd_pins axi_ad9680_jesd/gt0_rxcharisk]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_charisk/split_data_1]     [get_bd_pins axi_ad9680_jesd/gt1_rxcharisk]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_charisk/split_data_2]     [get_bd_pins axi_ad9680_jesd/gt2_rxcharisk]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_charisk/split_data_3]     [get_bd_pins axi_ad9680_jesd/gt3_rxcharisk]
+
+  create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_disperr
+  set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
+  set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
+
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_disperr/data]             [get_bd_pins axi_daq2_gt/rx_gt_disperr]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_disperr/split_data_0]     [get_bd_pins axi_ad9680_jesd/gt0_rxdisperr]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_disperr/split_data_1]     [get_bd_pins axi_ad9680_jesd/gt1_rxdisperr]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_disperr/split_data_2]     [get_bd_pins axi_ad9680_jesd/gt2_rxdisperr]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_disperr/split_data_3]     [get_bd_pins axi_ad9680_jesd/gt3_rxdisperr]
+
+  create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_notintable
+  set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
+  set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
+
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_notintable/data]          [get_bd_pins axi_daq2_gt/rx_gt_notintable]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_notintable/split_data_0]  [get_bd_pins axi_ad9680_jesd/gt0_rxnotintable]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_notintable/split_data_1]  [get_bd_pins axi_ad9680_jesd/gt1_rxnotintable]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_notintable/split_data_2]  [get_bd_pins axi_ad9680_jesd/gt2_rxnotintable]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_notintable/split_data_3]  [get_bd_pins axi_ad9680_jesd/gt3_rxnotintable]
+
+  create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_data
+  set_property -dict [list CONFIG.CH_DW {32}] [get_bd_cells util_bsplit_rx_gt_data]
+  set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_data]
+
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_data/data]                [get_bd_pins axi_daq2_gt/rx_gt_data]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_data/split_data_0]        [get_bd_pins axi_ad9680_jesd/gt0_rxdata]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_data/split_data_1]        [get_bd_pins axi_ad9680_jesd/gt1_rxdata]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_data/split_data_2]        [get_bd_pins axi_ad9680_jesd/gt2_rxdata]
+  connect_bd_net [get_bd_pins util_bsplit_rx_gt_data/split_data_3]        [get_bd_pins axi_ad9680_jesd/gt3_rxdata]
+
   connect_bd_net -net axi_daq2_gt_rx_rst_done       [get_bd_pins axi_daq2_gt/rx_rst_done]       [get_bd_pins axi_ad9680_jesd/rx_reset_done]
   connect_bd_net -net axi_daq2_gt_rx_ip_comma_align [get_bd_pins axi_daq2_gt/rx_ip_comma_align] [get_bd_pins axi_ad9680_jesd/rxencommaalign_out]
   connect_bd_net -net axi_daq2_gt_rx_ip_sync        [get_bd_pins axi_daq2_gt/rx_ip_sync]        [get_bd_pins axi_ad9680_jesd/rx_sync]
@@ -452,7 +508,7 @@ if {$sys_zynq == 0} {
 
   # ila
 
-  set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:4.0 ila_jesd_rx_mon]
+  set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_jesd_rx_mon]
   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_jesd_rx_mon
   set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_jesd_rx_mon
