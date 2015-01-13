@@ -45,7 +45,7 @@ proc adi_project_create {project_name} {
   }
   if [regexp "_kcu105$" $project_name] {
     set xl_board "kcu105"
-    set project_part "xcku040-ffva1156-2-e-es1"
+    set project_part "xcku040-ffva1156-2-e"
     set project_board "not-applicable"
   }
   if [regexp "_zed$" $project_name] {
@@ -202,7 +202,10 @@ proc adi_project_run {project_name} {
   #get_property STATS.TNS [get_runs impl_1]
   #get_property STATS.TPWS [get_runs impl_1]
 
-  export_hardware [get_files $project_system_dir/system.bd] [get_runs impl_1] -bitstream
+  #export_hardware [get_files $project_system_dir/system.bd] [get_runs impl_1] -bitstream
+
+  file mkdir $project_name.sdk
+  file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
 
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
     puts "ERROR: Timing Constraints NOT met."
