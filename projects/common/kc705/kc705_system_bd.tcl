@@ -30,6 +30,9 @@ set hdmi_vsync      [create_bd_port -dir O hdmi_vsync]
 set hdmi_data_e     [create_bd_port -dir O hdmi_data_e]
 set hdmi_data       [create_bd_port -dir O -from 15 -to 0 hdmi_data]
 
+set linear_flash [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:emc_rtl:1.0 linear_flash ]
+
+
 # spdif audio
 
 set spdif           [create_bd_port -dir O spdif]
@@ -88,7 +91,7 @@ set_property -dict [list CONFIG.CONST_VAL {1}] $sys_const_ddr3_1
 # instance: axi interconnect (lite)
 
 set axi_cpu_aux_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_aux_interconnect]
-set_property -dict [list CONFIG.NUM_MI {8}] $axi_cpu_aux_interconnect
+set_property -dict [list CONFIG.NUM_MI {9}] $axi_cpu_aux_interconnect
 set_property -dict [list CONFIG.STRATEGY {1}] $axi_cpu_aux_interconnect
 
 set axi_cpu_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect]
@@ -161,6 +164,23 @@ set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_tx_core
 set axi_spdif_tx_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_spdif_tx_dma]
 set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_spdif_tx_dma
 set_property -dict [list CONFIG.c_sg_include_stscntrl_strm {0}] $axi_spdif_tx_dma
+
+# linear flash
+set axi_linear_flash [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_emc:3.0 axi_linear_flash]
+set_property -dict [list CONFIG.USE_BOARD_FLOW {true} ] $axi_linear_flash
+set_property -dict [list CONFIG.EMC_BOARD_INTERFACE {linear_flash}] $axi_linear_flash
+set_property -dict [list CONFIG.C_MEM0_TYPE {2}] $axi_linear_flash
+set_property -dict [list CONFIG.C_S_AXI_MEM_ID_WIDTH {0}] $axi_linear_flash
+set_property -dict [list CONFIG.C_THZCE_PS_MEM_0 {20000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TLZWE_PS_MEM_0 {0}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TWC_PS_MEM_0 {19000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_WR_REC_TIME_MEM_0 {0}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TWP_PS_MEM_0 {50000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TWPH_PS_MEM_0 {20000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TPACC_PS_FLASH_0 {25000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TCEDV_PS_MEM_0 {100000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_TAVDV_PS_MEM_0 {100000}] $axi_linear_flash
+set_property -dict [list CONFIG.C_THZOE_PS_MEM_0 {15000}] $axi_linear_flash
 
 # connections
 
@@ -249,6 +269,7 @@ connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m04 [get_bd_intf_pins axi
 connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m05 [get_bd_intf_pins axi_cpu_aux_interconnect/M05_AXI] [get_bd_intf_pins axi_intc/s_axi]
 connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m06 [get_bd_intf_pins axi_cpu_aux_interconnect/M06_AXI] [get_bd_intf_pins axi_gpio_lcd/s_axi]
 connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m07 [get_bd_intf_pins axi_cpu_aux_interconnect/M07_AXI] [get_bd_intf_pins axi_gpio_sw_led/s_axi]
+connect_bd_intf_net -intf_net axi_cpu_aux_interconnect_m08 [get_bd_intf_pins axi_cpu_aux_interconnect/M08_AXI] [get_bd_intf_pins axi_linear_flash/S_AXI_MEM]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/S00_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M00_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M01_ARESETN] $sys_100m_resetn_source
@@ -258,6 +279,7 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M04_AR
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M05_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M06_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M07_ARESETN] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_aux_interconnect/M08_ARESETN] $sys_100m_resetn_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/S00_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M00_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M01_ACLK] $sys_100m_clk_source
@@ -267,6 +289,7 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M04_ACLK]
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M05_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M06_ACLK] $sys_100m_clk_source
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M07_ACLK] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_aux_interconnect/M08_ACLK] $sys_100m_clk_source
 
 connect_bd_intf_net -intf_net axi_cpu_interconnect_s00 [get_bd_intf_pins axi_cpu_interconnect/S00_AXI] [get_bd_intf_pins sys_mb/M_AXI_DP]
 connect_bd_intf_net -intf_net axi_cpu_interconnect_m00 [get_bd_intf_pins axi_cpu_interconnect/M00_AXI] [get_bd_intf_pins axi_iic_main/s_axi]
@@ -414,6 +437,14 @@ connect_bd_net -net sys_200m_clk [get_bd_pins sys_audio_clkgen/clk_in1]
 connect_bd_net -net sys_100m_resetn [get_bd_pins sys_audio_clkgen/resetn] $sys_100m_resetn_source
 connect_bd_net -net sys_audio_clkgen_clk [get_bd_pins sys_audio_clkgen/clk_out1] [get_bd_pins axi_spdif_tx_core/spdif_data_clk]
 connect_bd_net -net spdif_s [get_bd_ports spdif] [get_bd_pins axi_spdif_tx_core/spdif_tx_o]
+
+# linear_flash
+
+connect_bd_intf_net [get_bd_intf_pins axi_linear_flash/EMC_INTF] [get_bd_intf_ports linear_flash]
+
+connect_bd_net -net sys_100m_resetn [get_bd_pins axi_linear_flash/s_axi_aresetn] $sys_100m_resetn_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_linear_flash/s_axi_aclk] $sys_100m_clk_source
+connect_bd_net -net sys_100m_clk [get_bd_pins axi_linear_flash/rdclk] $sys_100m_clk_source
 
 # address map
 
