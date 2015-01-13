@@ -61,7 +61,6 @@ module system_top (
   ddr4_dqs_p,
   ddr4_dqs_n,
   ddr4_odt,
-  ddr4_par,
   ddr4_reset_n,
 
   mdio_mdc,
@@ -148,7 +147,6 @@ module system_top (
   inout   [ 7:0]  ddr4_dqs_p;
   inout   [ 7:0]  ddr4_dqs_n;
   output  [ 0:0]  ddr4_odt;
-  output          ddr4_par;
   output          ddr4_reset_n;
 
   output          mdio_mdc;
@@ -472,7 +470,6 @@ module system_top (
     .c0_ddr4_dqs_c (ddr4_dqs_n),
     .c0_ddr4_dqs_t (ddr4_dqs_p),
     .c0_ddr4_odt (ddr4_odt),
-    .c0_ddr4_par (ddr4_par),
     .c0_ddr4_reset_n (ddr4_reset_n),
     .dac_clk (dac_clk),
     .dac_ddata (dac_ddata),
