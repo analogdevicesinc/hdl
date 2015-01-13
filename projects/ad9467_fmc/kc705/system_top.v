@@ -78,6 +78,13 @@ module system_top (
     mii_tx_en,
     mii_txd,
 
+    linear_flash_addr,
+    linear_flash_adv_ldn,
+    linear_flash_ce_n,
+    linear_flash_dq_io,
+    linear_flash_oen,
+    linear_flash_wen,
+
     fan_pwm,
 
     gpio_lcd,
@@ -145,6 +152,13 @@ input   [ 3:0]  mii_rxd;
 input           mii_tx_clk;
 output          mii_tx_en;
 output  [ 3:0]  mii_txd;
+
+output [26:1]  linear_flash_addr;
+output         linear_flash_adv_ldn;
+output         linear_flash_ce_n;
+inout   [15:0] linear_flash_dq_io;
+output         linear_flash_oen;
+output         linear_flash_wen;
 
 output          fan_pwm;
 
@@ -258,6 +272,12 @@ system_wrapper i_system_wrapper (
     .mii_tx_clk (mii_tx_clk),
     .mii_tx_en (mii_tx_en),
     .mii_txd (mii_txd),
+    .linear_flash_addr (linear_flash_addr),
+    .linear_flash_adv_ldn (linear_flash_adv_ldn),
+    .linear_flash_ce_n (linear_flash_ce_n),
+    .linear_flash_dq_io (linear_flash_dq_io),
+    .linear_flash_oen (linear_flash_oen),
+    .linear_flash_wen (linear_flash_wen),
     .spdif (spdif),
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
