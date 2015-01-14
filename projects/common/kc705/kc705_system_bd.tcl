@@ -41,7 +41,7 @@ set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] $sys_rst
 
 # instance: microblaze - processor
 
-set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.3 sys_mb]
+set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.4 sys_mb]
 set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
 set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
 
@@ -62,7 +62,7 @@ set_property -dict [list CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.use_bram
 
 # instance: microblaze- mdm
 
-set sys_mb_debug [create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.1 sys_mb_debug]
+set sys_mb_debug [create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.2 sys_mb_debug]
 set_property -dict [list CONFIG.C_USE_UART {1}] $sys_mb_debug
 
 # instance: system reset/clocks
@@ -75,7 +75,7 @@ set_property -dict [list CONFIG.CONST_VAL {0}] $sys_const_gnd
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.1 axi_ddr_cntrl]
+set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.3 axi_ddr_cntrl]
 set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
 file copy -force $ad_hdl_dir/projects/common/kc705/kc705_system_mig.prj "$axi_ddr_cntrl_dir/"
 set_property -dict [list CONFIG.XML_INPUT_FILE {kc705_system_mig.prj}] $axi_ddr_cntrl
