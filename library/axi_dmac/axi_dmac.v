@@ -232,7 +232,6 @@ wire         up_rreq;
 wire [31:0]  up_wdata;
 wire [11:0]  up_waddr;
 wire [11:0]  up_raddr;
-wire         up_write;
 
 // Scratch register
 reg [31:0] up_scratch = 'h00;
@@ -331,7 +330,7 @@ up_axi #(
 // IRQ handling
 assign up_irq_pending = ~up_irq_mask & up_irq_source;
 assign up_irq_trigger  = {up_eot, up_sot};
-assign up_irq_source_clear = (up_write == 1'b1 && up_waddr == 12'h021) ? up_wdata[1:0] : 0;
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 12'h021) ? up_wdata[1:0] : 0;
 
 always @(posedge s_axi_aclk)
 begin
@@ -351,7 +350,6 @@ begin
 end
 
 // Register Interface
-assign up_write = up_wreq;
 
 always @(posedge s_axi_aclk)
 begin
@@ -371,7 +369,7 @@ begin
 	end else begin
 		up_wack <= up_wreq;
 		if (up_enable == 1'b1) begin
-			if (up_write && up_waddr == 12'h102) begin
+			if (up_wreq && up_waddr == 12'h102) begin
 				up_dma_req_valid <= up_dma_req_valid | up_wdata[0];
 			end else if (up_sot) begin
 				up_dma_req_valid <= 1'b0;
@@ -380,7 +378,7 @@ begin
 			up_dma_req_valid <= 1'b0;
 		end
 
-		if (up_write) begin
+		if (up_wreq) begin
 			case (up_waddr)
 			12'h002: up_scratch <= up_wdata;
 			12'h020: up_irq_mask <= up_wdata;
