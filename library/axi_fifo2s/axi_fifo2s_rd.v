@@ -181,7 +181,7 @@ module axi_fifo2s_rd (
       end
       if (axi_rd_active == 1'b1) begin
         axi_rd <= 1'b0;
-        if (axi_rlast == 1'b1) begin
+        if ((axi_rvalid == 1'b1) && (axi_rlast == 1'b1)) begin
           axi_rd_active <= 1'b0;
         end
       end else if ((axi_ready_s == 1'b1) && (axi_araddr < axi_rd_addr_h)) begin
@@ -238,7 +238,7 @@ module axi_fifo2s_rd (
       axi_rready <= 'd0;
     end else begin
       axi_drst <= ~axi_xfer_req_m[1];
-      axi_dvalid <= axi_rvalid & axi_rready;
+      axi_dvalid <= axi_rvalid;
       axi_ddata <= axi_rdata;
       axi_rready <= 1'b1;
     end
@@ -248,7 +248,7 @@ module axi_fifo2s_rd (
     if (axi_resetn == 1'b0) begin
       axi_rerror <= 'd0;
     end else begin
-      axi_rerror <= axi_rvalid & axi_rready & axi_rresp[1];
+      axi_rerror <= axi_rvalid & axi_rresp[1];
     end
   end
 
