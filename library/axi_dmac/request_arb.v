@@ -967,18 +967,12 @@ axi_fifo #(
 	.s_axis_valid(dest_response_valid),
 	.s_axis_ready(dest_response_ready),
 	.s_axis_empty(dest_response_empty),
-	.s_axis_data({
-		dest_response_resp,
-		dest_response_resp_eot
-	}),
+	.s_axis_data(dest_response_resp_eot),
 	.m_axis_aclk(req_aclk),
 	.m_axis_aresetn(req_aresetn),
 	.m_axis_valid(response_dest_valid),
 	.m_axis_ready(response_dest_ready),
-	.m_axis_data({
-		response_dest_resp,
-		response_dest_resp_eot
-	})
+	.m_axis_data(response_dest_resp_eot)
 );
 
 axi_fifo #(
