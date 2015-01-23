@@ -88,18 +88,18 @@ module system_top (
   iic_cftl_scl_io,
   iic_cftl_sda_io,
 
-  spi_cftl_mosi_io,
-  spi_cftl_miso_io,
-  spi_cftl_sck_io,
-  spi_cftl_ss_io,
+  spi0_mosi,
+  spi0_miso,
+  spi0_clk,
+  spi0_csn,
 
-  spi1_cftl_mosi_io,
-  spi1_cftl_miso_io,
-  spi1_cftl_sck_io,
-  spi1_cftl_ss_io,
-  spi1_cftl_ss1_o,
+  spi1_mosi,
+  spi1_miso,
+  spi1_clk,
+  spi1_csn0,
+  spi1_csn1,
 
-  gpio_cftl_tri_io,
+  gpio_cftl,
 
   otg_vbusoc);
 
@@ -150,26 +150,26 @@ module system_top (
   inout           iic_cftl_scl_io;
   inout           iic_cftl_sda_io;
 
-  inout           spi_cftl_mosi_io;
-  inout           spi_cftl_miso_io;
-  inout           spi_cftl_sck_io;
-  inout           spi_cftl_ss_io;
+  output          spi0_mosi;
+  input           spi0_miso;
+  output          spi0_clk;
+  output          spi0_csn;
 
-  inout           spi1_cftl_mosi_io;
-  inout           spi1_cftl_miso_io;
-  inout           spi1_cftl_sck_io;
-  inout           spi1_cftl_ss_io;
-  output          spi1_cftl_ss1_o;
+  output          spi1_mosi;
+  input           spi1_miso;
+  output          spi1_clk;
+  output          spi1_csn0;
+  output          spi1_csn1;
 
-  inout   [ 1:0]  gpio_cftl_tri_io;
+  inout   [ 1:0]  gpio_cftl;
 
   input           otg_vbusoc;
 
   // internal signals
 
-  wire    [31:0]  gpio_i;
-  wire    [31:0]  gpio_o;
-  wire    [31:0]  gpio_t;
+  wire    [33:0]  gpio_i;
+  wire    [33:0]  gpio_o;
+  wire    [33:0]  gpio_t;
   wire    [ 1:0]  iic_mux_scl_i_s;
   wire    [ 1:0]  iic_mux_scl_o_s;
   wire            iic_mux_scl_t_s;
@@ -183,10 +183,18 @@ module system_top (
   ad_iobuf #(
     .DATA_WIDTH(32))
   i_gpio_bd (
-    .dt(gpio_t),
-    .di(gpio_o),
-    .do(gpio_i),
+    .dt(gpio_t[31:0]),
+    .di(gpio_o[31:0]),
+    .do(gpio_i[31:0]),
     .dio(gpio_bd));
+
+ ad_iobuf #(
+    .DATA_WIDTH(2))
+  i_gpio_cftl (
+    .dt(gpio_t[33:32]),
+    .di(gpio_o[33:32]),
+    .do(gpio_i[33:32]),
+    .dio(gpio_cftl));
 
   ad_iobuf #(
     .DATA_WIDTH(2))
@@ -261,18 +269,25 @@ module system_top (
     .ps_intr_8 (ps_intrs[8]),
     .ps_intr_9 (ps_intrs[9]),
     .iic_fmc_intr(ps_intrs[11]),
-    .spi_cftl_io0_io(spi_cftl_mosi_io),
-    .spi_cftl_io1_io(spi_cftl_miso_io),
-    .spi_cftl_sck_io(spi_cftl_sck_io),
-    .spi_cftl_ss_io(spi_cftl_ss_io),
-    .spi1_cftl_io0_io(spi1_cftl_mosi_io),
-    .spi1_cftl_io1_io(spi1_cftl_miso_io),
-    .spi1_cftl_sck_io(spi1_cftl_sck_io),
-    .spi1_cftl_ss1_o(spi1_cftl_ss1_o),
-    .spi1_cftl_ss_io(spi1_cftl_ss_io),
-    .gpio_cftl_tri_io(gpio_cftl_tri_io),
     .otg_vbusoc (otg_vbusoc),
+    .spi0_cftl_csn_i (1'b1),
+    .spi0_cftl_csn_o (spi0_csn),
+    .spi0_cftl_miso_i (spi0_miso),
+    .spi0_cftl_mosi_i (1'b0),
+    .spi0_cftl_mosi_o (spi0_mosi),
+    .spi0_cftl_sclk_i (1'b0),
+    .spi0_cftl_sclk_o (spi0_clk),
+    .spi1_cftl_csn_i (1'b1),
+    .spi1_cftl_csn0_o (spi1_csn0),
+    .spi1_cftl_csn1_o (spi1_csn1),
+    .spi1_cftl_miso_i (spi1_miso),
+    .spi1_cftl_mosi_i (spi1_mosi),
+    .spi1_cftl_mosi_o (spi1_mosi),
+    .spi1_cftl_sclk_i (1'b0),
+    .spi1_cftl_sclk_o (spi1_clk),
     .spdif (spdif));
+
+
 
 endmodule
 
