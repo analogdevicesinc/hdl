@@ -16,7 +16,7 @@
    {
       datum baseAddress
       {
-         value = "86041824";
+         value = "354477280";
          type = "String";
       }
    }
@@ -37,7 +37,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "16";
          type = "int";
       }
       datum sopceditor_expanded
@@ -50,7 +50,7 @@
    {
       datum _sortIndex
       {
-         value = "20";
+         value = "18";
          type = "int";
       }
       datum sopceditor_expanded
@@ -63,7 +63,7 @@
    {
       datum _sortIndex
       {
-         value = "19";
+         value = "17";
          type = "int";
       }
       datum sopceditor_expanded
@@ -76,7 +76,7 @@
    {
       datum _sortIndex
       {
-         value = "21";
+         value = "19";
          type = "int";
       }
       datum sopceditor_expanded
@@ -85,19 +85,11 @@
          type = "boolean";
       }
    }
-   element sys_ddr3_cpuconnect.cntl
-   {
-      datum baseAddress
-      {
-         value = "86041808";
-         type = "String";
-      }
-   }
    element sys_ethernet.control_port
    {
       datum baseAddress
       {
-         value = "86040576";
+         value = "354476032";
          type = "String";
       }
    }
@@ -105,7 +97,7 @@
    {
       datum baseAddress
       {
-         value = "86041816";
+         value = "354477272";
          type = "String";
       }
    }
@@ -113,7 +105,7 @@
    {
       datum baseAddress
       {
-         value = "86041600";
+         value = "354477056";
          type = "String";
       }
    }
@@ -121,7 +113,7 @@
    {
       datum baseAddress
       {
-         value = "86041664";
+         value = "354477120";
          type = "String";
       }
    }
@@ -142,28 +134,7 @@
       }
       datum baseAddress
       {
-         value = "86038528";
-         type = "String";
-      }
-   }
-   element sys_ddr3_interconnect.s0
-   {
-      datum _lockedAddress
-      {
-         value = "0";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
-   element sys_ddr3_dmaconnect.s0
-   {
-      datum baseAddress
-      {
-         value = "0";
+         value = "354473984";
          type = "String";
       }
    }
@@ -171,7 +142,23 @@
    {
       datum baseAddress
       {
-         value = "67108864";
+         value = "335544320";
+         type = "String";
+      }
+   }
+   element sys_ddr3_dmaconnect.s0
+   {
+      datum baseAddress
+      {
+         value = "2147483648";
+         type = "String";
+      }
+   }
+   element sys_tcm_mem.s1
+   {
+      datum baseAddress
+      {
+         value = "354467840";
          type = "String";
       }
    }
@@ -184,7 +171,7 @@
       }
       datum baseAddress
       {
-         value = "83886080";
+         value = "352321536";
          type = "String";
       }
    }
@@ -192,23 +179,7 @@
    {
       datum baseAddress
       {
-         value = "86041792";
-         type = "String";
-      }
-   }
-   element sys_timer.s1
-   {
-      datum baseAddress
-      {
-         value = "86041760";
-         type = "String";
-      }
-   }
-   element sys_tcm_mem.s1
-   {
-      datum baseAddress
-      {
-         value = "86032384";
+         value = "354477248";
          type = "String";
       }
    }
@@ -216,15 +187,15 @@
    {
       datum baseAddress
       {
-         value = "0";
+         value = "268435456";
          type = "String";
       }
    }
-   element sys_tcm_mem.s2
+   element sys_timer.s1
    {
       datum baseAddress
       {
-         value = "86032384";
+         value = "354477216";
          type = "String";
       }
    }
@@ -237,15 +208,15 @@
       }
       datum baseAddress
       {
-         value = "83886080";
+         value = "352321536";
          type = "String";
       }
    }
-   element axi_dmac_0.s_axi
+   element sys_tcm_mem.s2
    {
       datum baseAddress
       {
-         value = "85999616";
+         value = "354467840";
          type = "String";
       }
    }
@@ -253,7 +224,23 @@
    {
       datum baseAddress
       {
-         value = "85983232";
+         value = "354418688";
+         type = "String";
+      }
+   }
+   element axi_dmac_0.s_axi
+   {
+      datum baseAddress
+      {
+         value = "354435072";
+         type = "String";
+      }
+   }
+   element axi_dmac_1.s_axi
+   {
+      datum baseAddress
+      {
+         value = "356515840";
          type = "String";
       }
    }
@@ -261,7 +248,7 @@
    {
       datum baseAddress
       {
-         value = "86016000";
+         value = "354451456";
          type = "String";
       }
    }
@@ -269,7 +256,7 @@
    {
       datum baseAddress
       {
-         value = "86041728";
+         value = "354477184";
          type = "String";
       }
    }
@@ -307,88 +294,7 @@
          type = "boolean";
       }
    }
-   element sys_ddr3_cpuconnect
-   {
-      datum _sortIndex
-      {
-         value = "7";
-         type = "int";
-      }
-   }
    element sys_ddr3_dmaconnect
-   {
-      datum _sortIndex
-      {
-         value = "17";
-         type = "int";
-      }
-   }
-   element sys_ddr3_interconnect
-   {
-      datum _sortIndex
-      {
-         value = "6";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element sys_ethernet
-   {
-      datum _sortIndex
-      {
-         value = "8";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element sys_ethernet_desc_mem
-   {
-      datum _sortIndex
-      {
-         value = "11";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element sys_ethernet_dma_rx
-   {
-      datum _sortIndex
-      {
-         value = "9";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element sys_ethernet_dma_tx
-   {
-      datum _sortIndex
-      {
-         value = "10";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element sys_gpio
    {
       datum _sortIndex
       {
@@ -401,11 +307,76 @@
          type = "boolean";
       }
    }
+   element sys_ethernet
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element sys_ethernet_desc_mem
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element sys_ethernet_dma_rx
+   {
+      datum _sortIndex
+      {
+         value = "7";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element sys_ethernet_dma_tx
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element sys_gpio
+   {
+      datum _sortIndex
+      {
+         value = "13";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
    element sys_id
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "12";
          type = "int";
       }
       datum sopceditor_expanded
@@ -431,40 +402,65 @@
    {
       datum _sortIndex
       {
-         value = "26";
+         value = "24";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_jesd204b_s1_connect
    {
       datum _sortIndex
       {
-         value = "25";
+         value = "23";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_jesd204b_s1_pll
    {
       datum _sortIndex
       {
-         value = "23";
+         value = "21";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_jesd204b_s1_ref_clk
    {
       datum _sortIndex
       {
-         value = "22";
+         value = "20";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_jesd204b_s1_rx_clk
    {
       datum _sortIndex
       {
-         value = "24";
+         value = "22";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element sys_pll
@@ -484,7 +480,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "14";
          type = "int";
       }
       datum sopceditor_expanded
@@ -505,7 +501,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "11";
          type = "int";
       }
       datum sopceditor_expanded
@@ -518,26 +514,13 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "10";
          type = "int";
       }
       datum sopceditor_expanded
       {
          value = "1";
          type = "boolean";
-      }
-   }
-   element sys_ddr3_cpuconnect.windowed_slave
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
       }
    }
 }
@@ -1010,9 +993,9 @@
   <parameter name="setting_breakslaveoveride" value="false" />
   <parameter name="muldiv_divider" value="false" />
   <parameter name="mpu_useLimit" value="false" />
-  <parameter name="mpu_enabled" value="true" />
-  <parameter name="mmu_enabled" value="false" />
-  <parameter name="mmu_autoAssignTlbPtrSz" value="true" />
+  <parameter name="mpu_enabled" value="false" />
+  <parameter name="mmu_enabled" value="true" />
+  <parameter name="mmu_autoAssignTlbPtrSz" value="false" />
   <parameter name="manuallyAssignCpuID" value="true" />
   <parameter name="debug_triggerArming" value="true" />
   <parameter name="debug_embeddedPLL" value="true" />
@@ -1033,9 +1016,9 @@
   <parameter name="cpuID_stored" value="0" />
   <parameter name="breakOffset" value="32" />
   <parameter name="userDefinedSettings" value="" />
-  <parameter name="resetSlave" value="sys_int_mem.s2" />
+  <parameter name="resetSlave" value="sys_ddr3_cntrl.avl" />
   <parameter name="mmu_TLBMissExcSlave" value="sys_int_mem.s2" />
-  <parameter name="exceptionSlave" value="sys_int_mem.s2" />
+  <parameter name="exceptionSlave" value="sys_ddr3_cntrl.avl" />
   <parameter name="breakSlave">sys_cpu.jtag_debug_module</parameter>
   <parameter name="setting_perfCounterWidth" value="32" />
   <parameter name="setting_interruptControllerType" value="Internal" />
@@ -1050,7 +1033,7 @@
   <parameter name="mmu_tlbNumWays" value="16" />
   <parameter name="mmu_processIDNumBits" value="8" />
   <parameter name="impl" value="Fast" />
-  <parameter name="icache_size" value="4096" />
+  <parameter name="icache_size" value="32768" />
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="icache_ramBlockType" value="Automatic" />
   <parameter name="icache_numTCIM" value="1" />
@@ -1059,7 +1042,7 @@
   <parameter name="dcache_victim_buf_impl" value="ram" />
   <parameter name="debug_level" value="Level1" />
   <parameter name="debug_OCIOnchipTrace" value="_128" />
-  <parameter name="dcache_size" value="2048" />
+  <parameter name="dcache_size" value="32768" />
   <parameter name="dcache_tagramBlockType" value="Automatic" />
   <parameter name="dcache_ramBlockType" value="Automatic" />
   <parameter name="dcache_numTCDM" value="1" />
@@ -1076,28 +1059,28 @@
   <parameter name="ocimem_ramBlockType" value="Automatic" />
   <parameter name="mmu_ramBlockType" value="Automatic" />
   <parameter name="bht_ramBlockType" value="Automatic" />
-  <parameter name="instAddrWidth" value="27" />
-  <parameter name="dataAddrWidth" value="27" />
-  <parameter name="tightlyCoupledDataMaster0AddrWidth" value="27" />
+  <parameter name="instAddrWidth" value="29" />
+  <parameter name="dataAddrWidth" value="29" />
+  <parameter name="tightlyCoupledDataMaster0AddrWidth" value="29" />
   <parameter name="tightlyCoupledDataMaster1AddrWidth" value="1" />
   <parameter name="tightlyCoupledDataMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledDataMaster3AddrWidth" value="1" />
-  <parameter name="tightlyCoupledInstructionMaster0AddrWidth" value="27" />
+  <parameter name="tightlyCoupledInstructionMaster0AddrWidth" value="29" />
   <parameter name="tightlyCoupledInstructionMaster1AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cpuconnect.windowed_slave' start='0x0' end='0x4000000' /><slave name='sys_int_mem.s2' start='0x5000000' end='0x5180000' /><slave name='sys_cpu.jtag_debug_module' start='0x520D800' end='0x520E000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cpuconnect.windowed_slave' start='0x0' end='0x4000000' /><slave name='sys_jesd204b_s1.jesd204_rx_avs' start='0x4000000' end='0x4000400' /><slave name='sys_int_mem.s1' start='0x5000000' end='0x5180000' /><slave name='axi_ad9250_1.s_axi' start='0x5200000' end='0x5204000' /><slave name='axi_dmac_0.s_axi' start='0x5204000' end='0x5208000' /><slave name='axi_ad9250_0.s_axi' start='0x5208000' end='0x520C000' /><slave name='sys_cpu.jtag_debug_module' start='0x520D800' end='0x520E000' /><slave name='sys_ethernet.control_port' start='0x520E000' end='0x520E400' /><slave name='sys_ethernet_dma_tx.csr' start='0x520E400' end='0x520E440' /><slave name='sys_ethernet_dma_rx.csr' start='0x520E440' end='0x520E480' /><slave name='sys_spi.spi_control_port' start='0x520E480' end='0x520E4A0' /><slave name='sys_timer.s1' start='0x520E4A0' end='0x520E4C0' /><slave name='sys_gpio.s1' start='0x520E4C0' end='0x520E4D0' /><slave name='sys_ddr3_cpuconnect.cntl' start='0x520E4D0' end='0x520E4D8' /><slave name='sys_id.control_slave' start='0x520E4D8' end='0x520E4E0' /><slave name='sys_uart.avalon_jtag_slave' start='0x520E4E0' end='0x520E4E8' /></address-map>]]></parameter>
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /><slave name='sys_int_mem.s2' start='0x15000000' end='0x15180000' /><slave name='sys_cpu.jtag_debug_module' start='0x1520D800' end='0x1520E000' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /><slave name='sys_ethernet_desc_mem.s1' start='0x10000000' end='0x10002000' /><slave name='sys_jesd204b_s1.jesd204_rx_avs' start='0x14000000' end='0x14000400' /><slave name='sys_int_mem.s1' start='0x15000000' end='0x15180000' /><slave name='axi_ad9250_1.s_axi' start='0x15200000' end='0x15204000' /><slave name='axi_dmac_0.s_axi' start='0x15204000' end='0x15208000' /><slave name='axi_ad9250_0.s_axi' start='0x15208000' end='0x1520C000' /><slave name='sys_cpu.jtag_debug_module' start='0x1520D800' end='0x1520E000' /><slave name='sys_ethernet.control_port' start='0x1520E000' end='0x1520E400' /><slave name='sys_ethernet_dma_tx.csr' start='0x1520E400' end='0x1520E440' /><slave name='sys_ethernet_dma_rx.csr' start='0x1520E440' end='0x1520E480' /><slave name='sys_spi.spi_control_port' start='0x1520E480' end='0x1520E4A0' /><slave name='sys_timer.s1' start='0x1520E4A0' end='0x1520E4C0' /><slave name='sys_gpio.s1' start='0x1520E4C0' end='0x1520E4D0' /><slave name='sys_id.control_slave' start='0x1520E4D8' end='0x1520E4E0' /><slave name='sys_uart.avalon_jtag_slave' start='0x1520E4E0' end='0x1520E4E8' /><slave name='axi_dmac_1.s_axi' start='0x15400000' end='0x15404000' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="100000000" />
   <parameter name="deviceFamilyName" value="Arria V" />
-  <parameter name="internalIrqMaskSystemInfo" value="63" />
+  <parameter name="internalIrqMaskSystemInfo" value="255" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="deviceFeaturesSystemInfo">ADDRESS_STALL 1 ADVANCED_INFO 0 ALLOWS_COMPILING_OTHER_FAMILY_IP 1 ANY_QFP 0 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 1 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 0 EMUL 0 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 1 ENABLE_PIN_PLANNER 0 ENGINEERING_SAMPLE 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FAMILY_LEVEL_INSTALLATION_ONLY 0 FASTEST 0 FINAL_TIMING_MODEL 0 FITTER_USE_FALLING_EDGE_DELAY 1 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 1 HARDCOPY 0 HAS_18_BIT_MULTS 1 HAS_ACE_SUPPORT 1 HAS_ACTIVE_PARALLEL_FLASH_SUPPORT 0 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 1 HAS_ADVANCED_IO_INVERTED_CORNER 1 HAS_ADVANCED_IO_POWER_SUPPORT 1 HAS_ADVANCED_IO_TIMING_SUPPORT 1 HAS_ALM_SUPPORT 1 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 1 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 0 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 1 HAS_BSDL_FILE_GENERATION 1 HAS_CDB_RE_NETWORK_PRESERVATION_SUPPORT 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 1 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 0 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DAP_JTAG_FROM_HPS 0 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 1 HAS_DDB_FDI_SUPPORT 1 HAS_DESIGN_ANALYZER_SUPPORT 1 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 0 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 0 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 1 HAS_ERROR_DETECTION_SUPPORT 1 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_EARLY_TIMING_ESTIMATE_SUPPORT 0 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 1 HAS_FPGA_XCHANGE_SUPPORT 1 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 1 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 0 HAS_FUNCTIONAL_VERILOG_SIMULATION_SUPPORT 1 HAS_FUNCTIONAL_VHDL_SIMULATION_SUPPORT 1 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HARDCOPYII_SUPPORT 0 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 1 HAS_HSSI_POWER_CALCULATOR 1 HAS_IBISO_WRITER_SUPPORT 0 HAS_ICD_DATA_IP 0 HAS_INCREMENTAL_DAT_SUPPORT 1 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_INTERFACE_PLANNER_SUPPORT 0 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 1 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_SMART_RECOMPILE_SUPPORT 0 HAS_JITTER_SUPPORT 1 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LIMITED_TCL_FITTER_SUPPORT 1 HAS_LOGICAL_FLOORPLANNER_SUPPORT 0 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 1 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 0 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_HARDBLOCK_PARTITION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 0 HAS_PARTIAL_RECONFIG_SUPPORT 1 HAS_PASSIVE_PARALLEL_SUPPORT 0 HAS_PHYSICAL_DESIGN_PLANNER_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 1 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 1 HAS_PLDM_REF_SUPPORT 0 HAS_POWER_BINNING_LIMITS_DATA 1 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 1 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 1 HAS_PVA_SUPPORT 1 HAS_RAPID_RECOMPILE_SUPPORT 1 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 1 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 0 HAS_SPLIT_IO_SUPPORT 1 HAS_SPLIT_LC_SUPPORT 1 HAS_STRICT_PRESERVATION_SUPPORT 0 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 0 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TCL_FITTER_SUPPORT 0 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 1 HAS_TIMING_SIMULATION_SUPPORT 0 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 1 HAS_U2B2_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 0 HAS_VCCPD_POWER_RAIL 1 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 0 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 1 HAS_XIBISO_WRITER_SUPPORT 1 IFP_USE_LEGACY_IO_CHECKER 1 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 0 INSTALLED 0 INTERNAL_POF_SUPPORT_ENABLED 0 INTERNAL_USE_ONLY 0 ISSUE_MILITARY_TEMPERATURE_WARNING 0 IS_CONFIG_ROM 0 IS_DEFAULT_FAMILY 0 IS_HARDCOPY_FAMILY 0 IS_HBGA_PACKAGE 0 IS_HIGH_CURRENT_PART 0 IS_LOW_POWER_PART 0 IS_SDM_ONLY_PACKAGE 0 LVDS_IO 1 M10K_MEMORY 1 M144K_MEMORY 1 M20K_MEMORY 0 M4K_MEMORY 0 M512_MEMORY 0 M9K_MEMORY 0 MLAB_MEMORY 1 MRAM_MEMORY 0 NOT_LISTED 0 NOT_MIGRATABLE 0 NO_FITTER_DELAY_CACHE_GENERATED 0 NO_PIN_OUT 0 NO_POF 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 1 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 0 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 1 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 1 PROGRAMMER_SUPPORT 1 PVA_SUPPORTS_ONLY_SUBSET_OF_ATOMS 0 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 1 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 1 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RISEFALL_SUPPORT_IS_HIDDEN 0 SHOW_HIDDEN_FAMILY_IN_PROGRAMMER 0 STRICT_TIMING_DB_CHECKS 1 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 1 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 1 SUPPORTS_HIPI_RETIMING 0 SUPPORTS_MAC_CHAIN_OUT_ADDER 1 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 TMV_RUN_CUSTOMIZABLE_VIEWER 1 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 0 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 1 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 1 TRANSCEIVER_6G_BLOCK 1 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 1 USES_ALTERA_LNSIM 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_NETWORK_ROUTING_POWER_CALCULATOR 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_PVAFAM2 0 USES_THIRD_GENERATION_TIMING_MODELS_TIS 1 USES_U2B2_TIMING_MODELS 0 USES_XML_FORMAT_FOR_EMIF_PIN_MAP_FILE 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 1 USE_ADVANCED_IO_TIMING_BY_DEFAULT 1 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 1 USE_RELAX_IO_ASSIGNMENT_RULES 0 USE_RISEFALL_ONLY 1 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 1 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 1 USING_28NM_OR_OLDER_TIMING_METHODOLOGY 1 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 1</parameter>
-  <parameter name="tightlyCoupledDataMaster0MapParam"><![CDATA[<address-map><slave name='sys_tcm_mem.s1' start='0x520C000' end='0x520D000' /></address-map>]]></parameter>
+  <parameter name="tightlyCoupledDataMaster0MapParam"><![CDATA[<address-map><slave name='sys_tcm_mem.s1' start='0x1520C000' end='0x1520D000' /></address-map>]]></parameter>
   <parameter name="tightlyCoupledDataMaster1MapParam" value="" />
   <parameter name="tightlyCoupledDataMaster2MapParam" value="" />
   <parameter name="tightlyCoupledDataMaster3MapParam" value="" />
-  <parameter name="tightlyCoupledInstructionMaster0MapParam"><![CDATA[<address-map><slave name='sys_tcm_mem.s2' start='0x520C000' end='0x520D000' /></address-map>]]></parameter>
+  <parameter name="tightlyCoupledInstructionMaster0MapParam"><![CDATA[<address-map><slave name='sys_tcm_mem.s2' start='0x1520C000' end='0x1520D000' /></address-map>]]></parameter>
   <parameter name="tightlyCoupledInstructionMaster1MapParam" value="" />
   <parameter name="tightlyCoupledInstructionMaster2MapParam" value="" />
   <parameter name="tightlyCoupledInstructionMaster3MapParam" value="" />
@@ -1143,8 +1126,8 @@
   <parameter name="DEVICE_DEPTH" value="1" />
   <parameter name="DEVICE_WIDTH" value="1" />
   <parameter name="MEM_MIRROR_ADDRESSING" value="0" />
-  <parameter name="MEM_CLK_FREQ_MAX" value="800.0" />
-  <parameter name="MEM_ROW_ADDR_WIDTH" value="14" />
+  <parameter name="MEM_CLK_FREQ_MAX" value="666.667" />
+  <parameter name="MEM_ROW_ADDR_WIDTH" value="12" />
   <parameter name="MEM_COL_ADDR_WIDTH" value="10" />
   <parameter name="MEM_DQ_WIDTH" value="64" />
   <parameter name="MEM_DQ_PER_DQS" value="8" />
@@ -1444,26 +1427,6 @@
   <parameter name="AUTO_DEVICE" value="5AGTFD7K3F40I3" />
  </module>
  <module
-   kind="altera_avalon_mm_clock_crossing_bridge"
-   version="14.0"
-   enabled="1"
-   name="sys_ddr3_interconnect">
-  <parameter name="DATA_WIDTH" value="512" />
-  <parameter name="SYMBOL_WIDTH" value="8" />
-  <parameter name="ADDRESS_WIDTH" value="30" />
-  <parameter name="SYSINFO_ADDR_WIDTH" value="30" />
-  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="0" />
-  <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
-  <parameter name="MAX_BURST_SIZE" value="1" />
-  <parameter name="COMMAND_FIFO_DEPTH" value="4" />
-  <parameter name="RESPONSE_FIFO_DEPTH" value="4" />
-  <parameter name="MASTER_SYNC_DEPTH" value="2" />
-  <parameter name="SLAVE_SYNC_DEPTH" value="2" />
-  <parameter name="AUTO_M0_CLK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_S0_CLK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
- </module>
- <module
    kind="altera_avalon_jtag_uart"
    version="14.0"
    enabled="1"
@@ -1599,7 +1562,7 @@
   <parameter name="initMemContent" value="true" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="4096" />
+  <parameter name="memorySize" value="8192" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
   <parameter name="simMemInitOnlyFilename" value="0" />
@@ -1648,14 +1611,12 @@
  <module kind="axi_ad9250" version="1.0" enabled="1" name="axi_ad9250_0">
   <parameter name="PCORE_ID" value="0" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
+  <parameter name="PCORE_AXI_ID_WIDTH" value="5" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_0">
   <parameter name="PCORE_ID" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
-  <parameter name="PCORE_AXIM_ID_WIDTH" value="3" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
@@ -1674,14 +1635,12 @@
  <module kind="axi_ad9250" version="1.0" enabled="1" name="axi_ad9250_1">
   <parameter name="PCORE_ID" value="1" />
   <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
+  <parameter name="PCORE_AXI_ID_WIDTH" value="5" />
   <parameter name="AUTO_S_AXI_CLOCK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_XCVR_CLK_CLOCK_RATE" value="0" />
  </module>
  <module kind="axi_dmac" version="1.0" enabled="1" name="axi_dmac_1">
   <parameter name="PCORE_ID" value="1" />
-  <parameter name="PCORE_AXI_ID_WIDTH" value="3" />
-  <parameter name="PCORE_AXIM_ID_WIDTH" value="3" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
@@ -1975,30 +1934,14 @@
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
  <module
-   kind="altera_address_span_extender"
-   version="14.0"
-   enabled="1"
-   name="sys_ddr3_cpuconnect">
-  <parameter name="DATA_WIDTH" value="512" />
-  <parameter name="MASTER_ADDRESS_WIDTH" value="30" />
-  <parameter name="SLAVE_ADDRESS_WIDTH" value="20" />
-  <parameter name="BURSTCOUNT_WIDTH" value="1" />
-  <parameter name="SUB_WINDOW_COUNT" value="1" />
-  <parameter name="MASTER_ADDRESS_DEF" value="0" />
-  <parameter name="TERMINATE_SLAVE_PORT" value="false" />
-  <parameter name="MAX_PENDING_READS" value="1" />
-  <parameter name="AUTO_CLOCK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
- </module>
- <module
    kind="altera_avalon_mm_clock_crossing_bridge"
    version="14.0"
    enabled="1"
    name="sys_ddr3_dmaconnect">
   <parameter name="DATA_WIDTH" value="512" />
   <parameter name="SYMBOL_WIDTH" value="8" />
-  <parameter name="ADDRESS_WIDTH" value="30" />
-  <parameter name="SYSINFO_ADDR_WIDTH" value="30" />
+  <parameter name="ADDRESS_WIDTH" value="31" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="28" />
   <parameter name="USE_AUTO_ADDRESS_WIDTH" value="0" />
   <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
   <parameter name="MAX_BURST_SIZE" value="1" />
@@ -2070,19 +2013,9 @@
    start="sys_cpu.instruction_master"
    end="sys_cpu.jtag_debug_module">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520d800" />
+  <parameter name="baseAddress" value="0x1520d800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_cpu.jtag_debug_module">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520d800" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection kind="clock" version="14.0" start="sys_pll.outclk0" end="sys_cpu.clk" />
  <connection
    kind="reset"
    version="14.0"
@@ -2116,26 +2049,6 @@
  <connection
    kind="clock"
    version="14.0"
-   start="sys_ddr3_cntrl.afi_clk"
-   end="sys_ddr3_interconnect.m0_clk" />
- <connection
-   kind="reset"
-   version="14.0"
-   start="sys_ddr3_cntrl.afi_reset"
-   end="sys_ddr3_interconnect.m0_reset" />
- <connection
-   kind="reset"
-   version="14.0"
-   start="sys_clk.clk_reset"
-   end="sys_ddr3_interconnect.s0_reset" />
- <connection
-   kind="clock"
-   version="14.0"
-   start="sys_pll.outclk0"
-   end="sys_ddr3_interconnect.s0_clk" />
- <connection
-   kind="clock"
-   version="14.0"
    start="sys_pll.outclk0"
    end="sys_uart.clk" />
  <connection
@@ -2143,15 +2056,6 @@
    version="14.0"
    start="sys_clk.clk_reset"
    end="sys_uart.reset" />
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_uart.avalon_jtag_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520e4e0" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection
    kind="clock"
    version="14.0"
@@ -2162,15 +2066,6 @@
    version="14.0"
    start="sys_clk.clk_reset"
    end="sys_timer.reset" />
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_timer.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520e4a0" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection kind="clock" version="14.0" start="sys_pll.outclk0" end="sys_id.clk" />
  <connection
    kind="reset"
@@ -2178,86 +2073,30 @@
    start="sys_clk.clk_reset"
    end="sys_id.reset" />
  <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_id.control_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520e4d8" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
    kind="clock"
    version="14.0"
    start="sys_pll.outclk0"
    end="sys_ethernet.control_port_clock_connection" />
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_ethernet.control_port">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520e000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection
    kind="reset"
    version="14.0"
    start="sys_clk.clk_reset"
    end="sys_ethernet.reset_connection" />
  <connection
-   kind="clock"
-   version="14.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet.receive_clock_connection" />
- <connection
-   kind="clock"
-   version="14.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet.transmit_clock_connection" />
- <connection
-   kind="clock"
-   version="14.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet_dma_rx.clk" />
- <connection
    kind="reset"
    version="14.0"
    start="sys_clk.clk_reset"
    end="sys_ethernet_dma_rx.reset" />
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_ethernet_dma_rx.csr">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520e440" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection
    kind="avalon_streaming"
    version="14.0"
    start="sys_ethernet.receive"
    end="sys_ethernet_dma_rx.in" />
  <connection
-   kind="clock"
-   version="14.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet_dma_tx.clk" />
- <connection
    kind="reset"
    version="14.0"
    start="sys_clk.clk_reset"
    end="sys_ethernet_dma_tx.reset" />
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_ethernet_dma_tx.csr">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520e400" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection
    kind="avalon_streaming"
    version="14.0"
@@ -2269,17 +2108,12 @@
    start="sys_clk.clk_reset"
    end="sys_ethernet_desc_mem.reset1" />
  <connection
-   kind="clock"
-   version="14.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet_desc_mem.clk1" />
- <connection
    kind="avalon"
    version="14.0"
    start="sys_ethernet_dma_tx.descriptor_write"
    end="sys_ethernet_desc_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x10000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2288,7 +2122,7 @@
    start="sys_ethernet_dma_tx.descriptor_read"
    end="sys_ethernet_desc_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x10000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2297,7 +2131,7 @@
    start="sys_ethernet_dma_rx.descriptor_write"
    end="sys_ethernet_desc_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x10000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2306,7 +2140,7 @@
    start="sys_ethernet_dma_rx.descriptor_read"
    end="sys_ethernet_desc_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x10000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2319,24 +2153,6 @@
    version="14.0"
    start="sys_clk.clk_reset"
    end="sys_gpio.reset" />
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_gpio.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520e4c0" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_spi.spi_control_port">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520e480" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection kind="clock" version="14.0" start="sys_pll.outclk0" end="sys_spi.clk" />
  <connection
    kind="reset"
@@ -2354,15 +2170,6 @@
    start="sys_clk.clk_reset"
    end="axi_ad9250_0.s_axi_reset" />
  <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="axi_ad9250_0.s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x05208000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
    kind="clock"
    version="14.0"
    start="sys_pll.outclk0"
@@ -2372,15 +2179,6 @@
    version="14.0"
    start="sys_clk.clk_reset"
    end="axi_dmac_0.s_axi_reset" />
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="axi_dmac_0.s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x05204000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection
    kind="reset"
    version="14.0"
@@ -2396,15 +2194,6 @@
    version="14.0"
    start="sys_clk.clk_reset"
    end="axi_ad9250_1.s_axi_reset" />
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="axi_ad9250_1.s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x05200000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection
    kind="clock"
    version="14.0"
@@ -2425,7 +2214,7 @@
    version="14.0"
    start="sys_cpu.d_irq"
    end="sys_ethernet_dma_rx.csr_irq">
-  <parameter name="irqNumber" value="0" />
+  <parameter name="irqNumber" value="3" />
  </connection>
  <connection
    kind="interrupt"
@@ -2446,7 +2235,7 @@
    version="14.0"
    start="sys_cpu.d_irq"
    end="sys_timer.irq">
-  <parameter name="irqNumber" value="3" />
+  <parameter name="irqNumber" value="0" />
  </connection>
  <connection
    kind="interrupt"
@@ -2461,33 +2250,6 @@
    start="sys_cpu.d_irq"
    end="sys_gpio.irq">
   <parameter name="irqNumber" value="5" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_ddr3_interconnect.m0"
-   end="sys_ddr3_cntrl.avl">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_ethernet_dma_rx.m_write"
-   end="sys_ddr3_interconnect.s0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_ethernet_dma_tx.m_read"
-   end="sys_ddr3_interconnect.s0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="reset"
@@ -2532,65 +2294,10 @@
  <connection
    kind="avalon"
    version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_int_mem.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x05000000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.0"
    start="sys_cpu.instruction_master"
    end="sys_int_mem.s2">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x05000000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_ddr3_cpuconnect.windowed_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.instruction_master"
-   end="sys_ddr3_cpuconnect.windowed_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_ddr3_cpuconnect.expanded_master"
-   end="sys_ddr3_interconnect.s0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="clock"
-   version="14.0"
-   start="sys_pll.outclk0"
-   end="sys_ddr3_cpuconnect.clock" />
- <connection
-   kind="reset"
-   version="14.0"
-   start="sys_clk.clk_reset"
-   end="sys_ddr3_cpuconnect.reset" />
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_ddr3_cpuconnect.cntl">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520e4d0" />
+  <parameter name="baseAddress" value="0x15000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2629,7 +2336,7 @@
    start="axi_dmac_0.m_dest_axi"
    end="sys_ddr3_dmaconnect.s0">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x80000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2638,7 +2345,7 @@
    start="axi_dmac_1.m_dest_axi"
    end="sys_ddr3_dmaconnect.s0">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x80000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2658,15 +2365,6 @@
    end="sys_ddr3_cntrl.avl">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="14.0"
-   start="sys_cpu.data_master"
-   end="sys_jesd204b_s1_connect.s0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x04000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2729,7 +2427,7 @@
    start="sys_cpu.tightly_coupled_data_master_0"
    end="sys_tcm_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520c000" />
+  <parameter name="baseAddress" value="0x1520c000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2738,8 +2436,233 @@
    start="sys_cpu.tightly_coupled_instruction_master_0"
    end="sys_tcm_mem.s2">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0520c000" />
+  <parameter name="baseAddress" value="0x1520c000" />
   <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.instruction_master"
+   end="sys_ddr3_cntrl.avl">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_ddr3_cntrl.avl">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_jesd204b_s1_connect.s0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x14000000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_int_mem.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x15000000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="axi_ad9250_1.s_axi">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x15200000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="axi_dmac_0.s_axi">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x15204000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="axi_ad9250_0.s_axi">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x15208000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_spi.spi_control_port">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1520e480" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_gpio.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1520e4c0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_ethernet_dma_tx.csr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1520e400" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_ethernet_dma_rx.csr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1520e440" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_ethernet.control_port">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1520e000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_id.control_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1520e4d8" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_timer.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1520e4a0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_uart.avalon_jtag_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1520e4e0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_cpu.jtag_debug_module">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1520d800" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="clock" version="14.0" start="sys_pll.outclk0" end="sys_cpu.clk" />
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="axi_dmac_1.s_axi">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x15400000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_ethernet_dma_tx.m_read"
+   end="sys_ddr3_cntrl.avl">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_ethernet_dma_rx.m_write"
+   end="sys_ddr3_cntrl.avl">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="reset"
+   version="14.0"
+   start="sys_cpu.jtag_debug_module_reset"
+   end="sys_cpu.reset_n" />
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_cpu.data_master"
+   end="sys_ethernet_desc_mem.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x10000000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="clock"
+   version="14.0"
+   start="sys_pll.outclk0"
+   end="sys_ethernet_desc_mem.clk1" />
+ <connection
+   kind="clock"
+   version="14.0"
+   start="sys_pll.outclk0"
+   end="sys_ethernet_dma_tx.clk" />
+ <connection
+   kind="clock"
+   version="14.0"
+   start="sys_pll.outclk0"
+   end="sys_ethernet_dma_rx.clk" />
+ <connection
+   kind="clock"
+   version="14.0"
+   start="sys_pll.outclk0"
+   end="sys_ethernet.transmit_clock_connection" />
+ <connection
+   kind="clock"
+   version="14.0"
+   start="sys_pll.outclk0"
+   end="sys_ethernet.receive_clock_connection" />
+ <connection
+   kind="interrupt"
+   version="14.0"
+   start="sys_cpu.d_irq"
+   end="axi_dmac_0.interrupt_sender">
+  <parameter name="irqNumber" value="6" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="14.0"
+   start="sys_cpu.d_irq"
+   end="axi_dmac_1.interrupt_sender">
+  <parameter name="irqNumber" value="7" />
  </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />

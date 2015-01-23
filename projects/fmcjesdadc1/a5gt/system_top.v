@@ -75,6 +75,7 @@ module system_top (
   eth_mdio_i,
   eth_mdio_o,
   eth_mdio_t,
+  eth_phy_resetn,
 
   // board gpio
 
@@ -132,6 +133,7 @@ module system_top (
   input             eth_mdio_i;
   output            eth_mdio_o;
   output            eth_mdio_t;
+  output            eth_phy_resetn;
 
   // board gpio
 
@@ -208,10 +210,21 @@ module system_top (
   wire              rx_pll_locked_s;
   wire    [ 15:0]   rx_xcvr_status_s;
 
+  reg     [ 3:0]    phy_rst_cnt = 0;
+  reg               phy_rst_reg = 0;
   // ethernet transmit clock
 
   assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
     (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt +1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+    end
+  end
 
   altddio_out #(.width(1)) i_eth_tx_clk_out (
     .aset (1'b0),
