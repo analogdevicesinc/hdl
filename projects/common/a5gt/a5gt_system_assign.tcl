@@ -752,11 +752,13 @@ set_location_assignment PIN_E15 -to eth_mdc
 set_location_assignment PIN_F15 -to eth_mdio_i
 set_location_assignment PIN_G16 -to eth_mdio_o
 set_location_assignment PIN_H16 -to eth_mdio_t
+set_location_assignment PIN_K18 -to eth_phy_resetn
 
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdc
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdio_i
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdio_o
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdio_t
+set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_phy_resetn
 
 set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to eth_rx_clk
 
