@@ -37,7 +37,7 @@ set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] $sys_rst
 
 # instance: microblaze - processor
 
-set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.3 sys_mb]
+set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.4 sys_mb]
 set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
 set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
 
@@ -57,7 +57,7 @@ set_property -dict [list CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.use_bram
 
 # instance: microblaze- mdm
 
-set sys_mb_debug [create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.1 sys_mb_debug]
+set sys_mb_debug [create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.2 sys_mb_debug]
 set_property -dict [list CONFIG.C_USE_UART {1}] $sys_mb_debug
 
 # instance: system reset/clocks
@@ -66,7 +66,7 @@ set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 s
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.1 axi_ddr_cntrl]
+set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.3 axi_ddr_cntrl]
 set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
 file copy -force $ad_hdl_dir/projects/common/vc707/vc707_system_mig.prj "$axi_ddr_cntrl_dir/"
 set_property -dict [list CONFIG.XML_INPUT_FILE {vc707_system_mig.prj}] $axi_ddr_cntrl
@@ -93,7 +93,7 @@ set_property -dict [list CONFIG.STRATEGY {2}] $axi_mem_interconnect
 
 # instance: default peripherals
 
-set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.1 axi_ethernet]
+set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.2 axi_ethernet]
 set_property -dict [list CONFIG.PHY_TYPE {SGMII}] $axi_ethernet
 set_property -dict [list CONFIG.TXCSUM {Full}] $axi_ethernet
 set_property -dict [list CONFIG.RXCSUM {Full}] $axi_ethernet
@@ -473,11 +473,12 @@ connect_bd_net -net sys_100m_clk [get_bd_pins axi_linear_flash/rdclk] $sys_100m_
 set sys_zynq 0
 set sys_mem_size 0x40000000
 set sys_addr_cntrl_space [get_bd_addr_spaces sys_mb/Data]
+set sys_addr_mem_seg [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]
 
 create_bd_addr_seg -range 0x00080000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Data]          [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem]         SEG_data_dlmb_cntlr
 create_bd_addr_seg -range 0x00001000 -offset 0x41400000 [get_bd_addr_spaces sys_mb/Data]          [get_bd_addr_segs sys_mb_debug/S_AXI/Reg]          SEG_data_mb_debug
 create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces sys_mb/Data]          [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr]    SEG_data_ddr_cntrl_1
-create_bd_addr_seg -range 0x00040000 -offset 0x40E00000 [get_bd_addr_spaces sys_mb/Data]          [get_bd_addr_segs axi_ethernet/eth_buf/S_AXI/REG]  SEG_data_ethernetlite_1
+create_bd_addr_seg -range 0x00040000 -offset 0x40E00000 [get_bd_addr_spaces sys_mb/Data]          [get_bd_addr_segs axi_ethernet/s_axi/Reg]  SEG_data_ethernetlite_1
 create_bd_addr_seg -range 0x00010000 -offset 0x40010000 [get_bd_addr_spaces sys_mb/Data]          [get_bd_addr_segs axi_gpio_lcd/s_axi/Reg]          SEG_data_gpio_1
 create_bd_addr_seg -range 0x00010000 -offset 0x40020000 [get_bd_addr_spaces sys_mb/Data]          [get_bd_addr_segs axi_gpio_sw_led/s_axi/Reg]       SEG_data_gpio_2
 create_bd_addr_seg -range 0x00010000 -offset 0x41600000 [get_bd_addr_spaces sys_mb/Data]          [get_bd_addr_segs axi_iic_main/s_axi/Reg]          SEG_data_iic_1
