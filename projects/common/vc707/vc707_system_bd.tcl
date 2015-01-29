@@ -507,4 +507,3 @@ create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces a
 create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_MM2S] [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl
 create_bd_addr_seg -range $sys_mem_size -offset 0x80000000 [get_bd_addr_spaces axi_ethernet_dma/Data_S2MM] [get_bd_addr_segs axi_ddr_cntrl/memmap/memaddr] SEG_axi_ddr_cntrl
 
-create_bd_addr_seg -range 0x00001000 -offset 0x00000000 [get_bd_addr_spaces axi_ethernet/eth_buf/S_AXI_2TEMAC] [get_bd_addr_segs axi_ethernet/eth_mac/s_axi/Reg] SEG_eth_mac_reg
