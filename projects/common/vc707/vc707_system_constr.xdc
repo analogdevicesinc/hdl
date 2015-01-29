@@ -8,8 +8,6 @@ set_property -dict  {PACKAGE_PIN  AV40  IOSTANDARD  LVCMOS18} [get_ports sys_rst
 set_property -dict  {PACKAGE_PIN  E19   IOSTANDARD  LVDS} [get_ports sys_clk_p]
 set_property -dict  {PACKAGE_PIN  E18   IOSTANDARD  LVDS} [get_ports sys_clk_n]
 
-create_clock -name sys_clk      -period  5.00 [get_ports sys_clk_p]
-
 # ethernet
 
 set_property PACKAGE_PIN AN2 [get_ports sgmii_txp]
