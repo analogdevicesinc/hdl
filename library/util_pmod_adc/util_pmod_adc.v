@@ -37,10 +37,24 @@
 // ***************************************************************************
 // ***************************************************************************
 
-// This core supports pmods with AD7091R, it controls a simple three wire
-// SPI interface with an additional control line for conversion start
-// NOTE: The maximum clock rate is 100 Mhz, the SPI interface clock is always
-// half of the core's clock.
+// This core supports the following CFTL pmods:
+//        - EVAL-CN0350-PMDZ
+//        - EVAL-CN0335-PMDZ
+//        - EVAL-CN0336-PMDZ
+//        - EVAL-CN0337-PMDZ
+//
+// It controls a simple three wire SPI interface with an additional control
+// line for conversion start, and a counter which trigger the SPI read after
+// the end of ADC conversion.
+// NOTE:  - The maximum frequency of serial read clock (adc_spi_clk) is 50Mhz.
+//        - The maximum conversion rate is 1MSPS (AD7091r)
+//        - The frequency of the serial read clock need to be adjusted to the desired
+//          conversion rate, exp. for AD7091r :
+//
+//            ADC Rate >= ADC Conversion Time + SPI Word Length * ADC Serial Clock Period + Tquiet
+//        where ADC Conversion Time >= 650ns
+//              SPI Word Length = 12
+//              Tquiet >= 58ns
 
 `timescale 1ns/1ns
 
@@ -49,6 +63,7 @@ module util_pmod_adc (
   // clock and reset signals
 
   clk,
+  adc_spi_clk,
   reset,
 
   // dma interface
@@ -66,33 +81,34 @@ module util_pmod_adc (
 );
 
   // parameters and local parameters
-  parameter real    FPGA_CLOCK_FREQ   = 100;    // FPGA clock frequency [MHz] NOTE: this is the maximum supported frequency
-  parameter real    ADC_CYCLE_TIME    = 1.000;  // minimum time between two ADC conversions [us]
-  parameter real    ADC_CONVST_TIME   = 0.010;  // minimum time to keep /CONVST low [us]
-  parameter real    ADC_CONVERT_TIME  = 0.650;  // conversion time [us]
-  parameter         ADC_SCLK_PERIODS       = 5'd12;
-  parameter         ADC_RESET_SCLK_PERIODS = 4'd3;
+  parameter         FPGA_CLOCK_MHZ      = 100;  // FPGA clock frequency [MHz]
+  parameter         ADC_CONVST_NS       = 100;  // minimum time to keep /CONVST low is 10ns, default is 100ns
+  parameter         ADC_CONVERT_NS      = 650;  // conversion time [ns]
+  parameter         ADC_TQUIET_NS       = 60;   // quite time between the last SPI read and next conversion start
+  parameter         SPI_WORD_LENGTH     = 12;
+  parameter         ADC_RESET_LENGTH    = 3;
 
   // ADC states
-
-  localparam        ADC_SW_RESET_STATE        = 8'b00000001;
-  localparam        ADC_IDLE_STATE            = 8'b00000010;
-  localparam        ADC_START_CNV_STATE       = 8'b00000100;
-  localparam        ADC_WAIT_CNV_DONE_STATE   = 8'b00001000;
-  localparam        ADC_WAIT_DATA_VALID_STATE = 8'b00010000;
-  localparam        ADC_READ_CNV_RESULT       = 8'b00100000;
-  localparam        ADC_END_CNV_STATE         = 8'b01000000;
-  localparam        ADC_DATAREADY_STATE       = 8'b10000000;
+  localparam        ADC_POWERUP         = 0;
+  localparam        ADC_SW_RESET        = 1;
+  localparam        ADC_IDLE            = 2;
+  localparam        ADC_START_CNV       = 3;
+  localparam        ADC_WAIT_CNV_DONE   = 4;
+  localparam        ADC_READ_CNV_RESULT = 5;
+  localparam        ADC_DATA_VALID      = 6;
+  localparam        ADC_TQUIET          = 7;
 
   // ADC timing
 
-  localparam [6:0]  ADC_CYCLE_CNT     = FPGA_CLOCK_FREQ * ADC_CYCLE_TIME - 1;
-  localparam [6:0]  ADC_CONVST_CNT    = FPGA_CLOCK_FREQ * ADC_CONVST_TIME - 1;
-  localparam [6:0]  ADC_CONVERT_CNT   = FPGA_CLOCK_FREQ * ADC_CONVERT_TIME - 1;
+  localparam  [15:0]  FPGA_CLOCK_PERIOD_NS  = 1000 / FPGA_CLOCK_MHZ;
+  localparam  [15:0]  ADC_CONVST_CNT        = ADC_CONVST_NS / FPGA_CLOCK_PERIOD_NS;
+  localparam  [15:0]  ADC_CONVERT_CNT       = ADC_CONVERT_NS / FPGA_CLOCK_PERIOD_NS;
+  localparam  [15:0]  ADC_TQUITE_CNT        = ADC_TQUIET_NS / FPGA_CLOCK_PERIOD_NS;
 
   // clock and reset signals
 
   input           clk;                          // system clock (100 MHz)
+  input           adc_spi_clk;                  // spi rate (max 50 Mhz)
   input           reset;                        // active high reset signal
 
   // dma interface
@@ -100,7 +116,7 @@ module util_pmod_adc (
   output  [15:0]  adc_data;
   output          adc_valid;
   output          adc_enable;
-  output  [ 7:0]  adc_dbg;                      // signals that the first data acquisition has been performed
+  output  [24:0]  adc_dbg;
 
   // adc interface
 
@@ -109,107 +125,80 @@ module util_pmod_adc (
   output          adc_cs_n;
   output          adc_convst_n;
 
-  reg [15:0]      adc_data = 'd0;
-  reg             adc_valid = 'b0;
-  reg             adc_enable = 'b0;
-  reg [ 7:0]      adc_dbg = 'b0;
-  reg             adc_clk = 'd0;
+  // Internal registers
 
-  reg [ 7:0]      adc_state = 'b0;              // current state for the ADC control state machine
-  reg [ 7:0]      adc_next_state = 'b0;         // next state for the ADC control state machine
-  reg [ 7:0]      adc_state_nc_m1 = 'b0;        // current state for the ADC state machine in the ADC clock domain sampled on the falling edge
-  reg [ 7:0]      adc_state_pc_m1 = 'b0;        // current state for the ADC state machine in the ADC clock domain sampled on the rising edge
+  reg [15:0]      adc_data          = 16'b0;
+  reg             adc_valid         = 1'b0;
+  reg [24:0]      adc_dbg           = 25'b0;
 
-  reg [ 6:0]      adc_tcycle_cnt = 'b0;
-  reg [ 6:0]      adc_tconvst_cnt = 'b0;
-  reg [ 6:0]      adc_tconvert_cnt = 'b0;
-  reg [ 4:0]      sclk_clk_cnt = 'b0;
+  reg [ 2:0]      adc_state         = 3'b0;     // current state for the ADC control state machine
+  reg [ 2:0]      adc_next_state    = 3'b0;     // next state for the ADC control state machine
 
-  reg             adc_cnv_s = 'b0;
-  reg             adc_clk_en = 1'b0;
-  reg             adc_cs_n_s = 'b0;
-  reg [15:0]      adc_data_s = 'b0;
-  reg             adc_sw_reset = 'b0;
-  reg             data_rd_ready_s = 'b0;
+  reg [15:0]      adc_tconvst_cnt   = 16'b0;
+  reg [15:0]      adc_tconvert_cnt  = 16'b0;
+  reg [15:0]      adc_tquiet_cnt    = 16'b0;
+  reg [15:0]      sclk_clk_cnt      = 16'b0;
+  reg [15:0]      sclk_clk_cnt_m1   = 16'b0;
+
+  reg             adc_convst_n      = 1'b1;
+  reg             adc_clk_en        = 1'b0;
+  reg             adc_cs_n          = 1'b1;
+  reg             adc_sw_reset      = 1'b0;
+  reg             data_rd_ready     = 1'b0;
 
   // Assign/Always Blocks
 
-  assign adc_sclk     = adc_clk & adc_clk_en;
-  assign adc_cs_n     = adc_cs_n_s;
-  assign adc_convst_n = adc_cnv_s;
-
-  always @(negedge clk) begin
-    if(reset == 1'b1) begin
-      adc_valid <= 1'b0;
-      adc_enable <= 1'b0;
-    end else begin
-      adc_valid <= data_rd_ready_s;
-      adc_enable <= 1'b1;
-      if(adc_valid == 1'b1) begin
-        adc_data <= adc_data_s;
-      end
-    end
-  end
-
-  // generate ADC clock, max rate is 50 Mhz
-
-  always @(posedge clk) begin
-    adc_clk<= ~adc_clk;
-  end
+  assign adc_sclk   = adc_spi_clk & adc_clk_en;
+  assign adc_enable = 1'b1;
 
   // update the ADC timing counters
 
   always @(posedge clk)
   begin
     if(reset == 1'b1) begin
-      adc_tcycle_cnt   <= 0;
       adc_tconvst_cnt  <= ADC_CONVST_CNT;
       adc_tconvert_cnt <= ADC_CONVERT_CNT;
+      adc_tquiet_cnt   <= ADC_TQUITE_CNT;
     end else begin
-      if(adc_tcycle_cnt != 1'b0) begin
-        adc_tcycle_cnt <= adc_tcycle_cnt - 7'h1;
-      end
-      else if(adc_state == ADC_IDLE_STATE || adc_state == ADC_SW_RESET_STATE) begin
-        adc_tcycle_cnt <= ADC_CYCLE_CNT;
-      end
-
-      if(adc_state == ADC_START_CNV_STATE) begin
-        adc_tconvst_cnt <= adc_tconvst_cnt - 7'h1;
-      end
-      else begin
+      if(adc_state == ADC_START_CNV) begin
+        adc_tconvst_cnt <= adc_tconvst_cnt - 1;
+      end else begin
         adc_tconvst_cnt <= ADC_CONVST_CNT;
       end
-      if(adc_state == ADC_WAIT_CNV_DONE_STATE) begin
-        adc_tconvert_cnt <= adc_tconvert_cnt - 7'h1;
-      end
-      else begin
+      if((adc_state == ADC_START_CNV) || (adc_state == ADC_WAIT_CNV_DONE)) begin
+        adc_tconvert_cnt <= adc_tconvert_cnt - 1;
+      end else begin
         adc_tconvert_cnt <= ADC_CONVERT_CNT;
+      end
+      if(adc_state == ADC_TQUIET) begin
+        adc_tquiet_cnt <= adc_tquiet_cnt - 1;
+      end else begin
+        adc_tquiet_cnt <= ADC_TQUITE_CNT;
       end
     end
   end
 
-  // determine when the ADC clock is valid to be sent to the ADC
+  // determine when the ADC clock is valid
 
-  always @(negedge adc_clk) begin
-    adc_state_nc_m1 <= adc_state;
-    adc_clk_en      <= ((adc_state_nc_m1 == ADC_WAIT_DATA_VALID_STATE) ||
-                        (adc_state_nc_m1 == ADC_READ_CNV_RESULT) &&
-                        ((sclk_clk_cnt != 0) ||
-                        ((adc_sw_reset == 1'b1) &&
-                        (sclk_clk_cnt == ADC_SCLK_PERIODS - ADC_RESET_SCLK_PERIODS)))) ? 1'b1 : 1'b0;
+  always @(negedge adc_spi_clk) begin
+    adc_clk_en <= ((adc_state == ADC_READ_CNV_RESULT) && (sclk_clk_cnt != 0)) ? 1'b1 : 1'b0;
   end
 
   // read data from the ADC
 
-  always @(negedge adc_clk) begin
-      adc_state_pc_m1 <= adc_state;
-      if(adc_clk_en == 1'b1) begin
-          adc_data_s   <= {3'b0, adc_data_s[11:0], adc_sdo};
-          sclk_clk_cnt <= sclk_clk_cnt - 5'h1;
+  always @(negedge adc_spi_clk) begin
+      sclk_clk_cnt_m1 <= sclk_clk_cnt;
+      if((adc_clk_en == 1'b1) && (sclk_clk_cnt != 0)) begin
+          adc_data   <= {3'b0, adc_data[11:0], adc_sdo};
+          if ((adc_sw_reset == 1'b1) && (sclk_clk_cnt == SPI_WORD_LENGTH - ADC_RESET_LENGTH + 1)) begin
+            sclk_clk_cnt <= 16'b0;
+          end else begin
+            sclk_clk_cnt <= sclk_clk_cnt - 1;
+          end
       end
-      else if(adc_state_pc_m1 != ADC_READ_CNV_RESULT && adc_state_pc_m1 != ADC_END_CNV_STATE) begin
-          adc_data_s   <= 16'h0;
-          sclk_clk_cnt <= ADC_SCLK_PERIODS - 1;
+      else if(adc_state != ADC_READ_CNV_RESULT) begin
+          adc_data     <= 16'h0;
+          sclk_clk_cnt <= SPI_WORD_LENGTH - 1;
       end
   end
 
@@ -217,54 +206,55 @@ module util_pmod_adc (
 
   always @(posedge clk) begin
     if(reset == 1'b1) begin
-      adc_state <= ADC_SW_RESET_STATE;
+      adc_state <= ADC_SW_RESET;
       adc_dbg <= 1'b0;
     end
     else begin
       adc_state <= adc_next_state;
-      adc_dbg <= adc_state;
+      adc_dbg <= {adc_state, adc_clk_en, sclk_clk_cnt};
       case (adc_state)
-        ADC_SW_RESET_STATE: begin
-          adc_cnv_s       <= 1'b1;
-          adc_cs_n_s      <= 1'b1;
-          data_rd_ready_s <= 1'b0;
-          adc_sw_reset    <= 1'b1;
-        end
-        ADC_IDLE_STATE: begin
-          adc_cnv_s       <= 1'b1;
-          adc_cs_n_s      <= 1'b1;
-          data_rd_ready_s <= 1'b0;
+        ADC_POWERUP: begin
+          adc_convst_n    <= 1'b1;
+          adc_cs_n        <= 1'b1;
+          adc_valid       <= 1'b0;
           adc_sw_reset    <= 1'b0;
         end
-        ADC_START_CNV_STATE: begin
-          adc_cnv_s       <= 1'b0;
-          adc_cs_n_s      <= 1'b1;
-          data_rd_ready_s <= 1'b0;
+        ADC_SW_RESET: begin
+          adc_convst_n    <= 1'b1;
+          adc_cs_n        <= 1'b1;
+          adc_valid       <= 1'b0;
+          adc_sw_reset    <= 1'b1;
         end
-        ADC_WAIT_CNV_DONE_STATE: begin
-          adc_cnv_s       <= 1'b1;
-          adc_cs_n_s      <= 1'b1;
-          data_rd_ready_s <= 1'b0;
+        ADC_IDLE: begin
+          adc_convst_n    <= 1'b1;
+          adc_cs_n        <= 1'b1;
+          adc_valid       <= 1'b0;
+          adc_sw_reset    <= 1'b0;
         end
-        ADC_WAIT_DATA_VALID_STATE: begin
-          adc_cnv_s       <= 1'b1;
-          adc_cs_n_s      <= 1'b1;
-          data_rd_ready_s <= 1'b0;
+        ADC_START_CNV: begin
+          adc_convst_n    <= 1'b0;
+          adc_cs_n        <= 1'b1;
+          adc_valid       <= 1'b0;
+        end
+        ADC_WAIT_CNV_DONE: begin
+          adc_convst_n    <= 1'b1;
+          adc_cs_n        <= 1'b1;
+          adc_valid       <= 1'b0;
         end
         ADC_READ_CNV_RESULT: begin
-          adc_cnv_s       <= 1'b1;
-          adc_cs_n_s      <= 1'b0;
-          data_rd_ready_s <= 1'b0;
+          adc_convst_n    <= 1'b1;
+          adc_cs_n        <= 1'b0;
+          adc_valid       <= 1'b0;
         end
-        ADC_END_CNV_STATE: begin
-          adc_cnv_s       <= 1'b1;
-          adc_cs_n_s      <= 1'b0;
-          data_rd_ready_s <= 1'b0;
+        ADC_DATA_VALID: begin
+          adc_convst_n    <= 1'b1;
+          adc_cs_n        <= 1'b0;
+          adc_valid       <= 1'b1;
         end
-        ADC_DATAREADY_STATE: begin
-          adc_cnv_s       <= 1'b1;
-          adc_cs_n_s      <= 1'b0;
-          data_rd_ready_s <= 1'b1;
+        ADC_TQUIET: begin
+          adc_convst_n    <= 1'b1;
+          adc_cs_n        <= 1'b1;
+          adc_valid       <= 1'b0;
         end
       endcase
     end
@@ -272,43 +262,45 @@ module util_pmod_adc (
 
   // update the ADC next state
 
-  always @(adc_state, adc_tcycle_cnt, adc_tconvst_cnt, adc_tconvert_cnt, sclk_clk_cnt, adc_sw_reset) begin
+  always @(adc_state, adc_tconvst_cnt, adc_tconvert_cnt, sclk_clk_cnt_m1, adc_tquiet_cnt, adc_sw_reset) begin
     adc_next_state <= adc_state;
     case (adc_state)
-      ADC_SW_RESET_STATE: begin
-        adc_next_state <= ADC_START_CNV_STATE;
-      end
-      ADC_IDLE_STATE: begin
-        if(adc_tcycle_cnt == 0) begin
-          adc_next_state <= ADC_START_CNV_STATE;
+      ADC_POWERUP: begin
+        if(adc_sw_reset == 1'b1) begin
+          adc_next_state <= ADC_SW_RESET;
         end
       end
-      ADC_START_CNV_STATE: begin
+      ADC_SW_RESET: begin
+        adc_next_state <= ADC_START_CNV;
+      end
+      ADC_IDLE: begin
+          adc_next_state <= ADC_START_CNV;
+      end
+      ADC_START_CNV: begin
         if(adc_tconvst_cnt == 0) begin
-          adc_next_state <= ADC_WAIT_CNV_DONE_STATE;
+          adc_next_state <= ADC_WAIT_CNV_DONE;
         end
       end
-      ADC_WAIT_CNV_DONE_STATE: begin
+      ADC_WAIT_CNV_DONE: begin
         if(adc_tconvert_cnt == 0) begin
-          adc_next_state <= ADC_WAIT_DATA_VALID_STATE;
+          adc_next_state <= ADC_READ_CNV_RESULT;
         end
-      end
-      ADC_WAIT_DATA_VALID_STATE: begin
-        adc_next_state <= ADC_READ_CNV_RESULT;
       end
       ADC_READ_CNV_RESULT: begin
-        if((sclk_clk_cnt == 0) || ((adc_sw_reset == 1'b1) && (sclk_clk_cnt == ADC_SCLK_PERIODS - ADC_RESET_SCLK_PERIODS))) begin
-          adc_next_state <= ADC_END_CNV_STATE;
+        if(sclk_clk_cnt_m1 == 0) begin
+          adc_next_state <= ADC_DATA_VALID;
         end
       end
-      ADC_END_CNV_STATE: begin
-        adc_next_state <= ADC_DATAREADY_STATE;
+      ADC_DATA_VALID: begin
+        adc_next_state <= ADC_TQUIET;
       end
-      ADC_DATAREADY_STATE: begin
-        adc_next_state <= ADC_IDLE_STATE;
+      ADC_TQUIET: begin
+        if(adc_tquiet_cnt == 0) begin
+          adc_next_state <= ADC_IDLE;
+        end
       end
       default: begin
-        adc_next_state <= ADC_IDLE_STATE;
+        adc_next_state <= ADC_IDLE;
       end
     endcase
   end
