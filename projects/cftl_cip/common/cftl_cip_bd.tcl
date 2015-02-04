@@ -1,4 +1,6 @@
 
+  global adc_spi_freq
+
   # pmod interface
   set pmod_cs         [create_bd_port -dir O pmod_cs]
   set pmod_miso       [create_bd_port -dir I pmod_miso]
@@ -11,6 +13,7 @@
   # instances
 
   set ad_ad7091r_core [create_bd_cell -type ip -vlnv analog.com:user:util_pmod_adc:1.0 ad_ad7091r_core]
+  set_property -dict [list CONFIG.FPGA_CLOCK_MHZ {100}] $ad_ad7091r_core
 
   set ad_ad7091r_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 ad_ad7091r_dma]
   set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $ad_ad7091r_dma
@@ -32,12 +35,18 @@
   # additional configurations
   set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
   set_property -dict [list CONFIG.NUM_MI {8}] $axi_cpu_interconnect
+  set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
+  set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
+  set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ $adc_spi_freq] $sys_ps7
 
   # up axi interface connection
   connect_bd_intf_net -intf_net axi_cpu_interconnect_m07  [get_bd_intf_pins axi_cpu_interconnect/M07_AXI] [get_bd_intf_pins ad_ad7091r_dma/s_axi]
   connect_bd_intf_net -intf_net ad_ad7091r_dma_interconnect_m00_axi [get_bd_intf_pins ad_ad7091r_dma_interconnect/M00_AXI] [get_bd_intf_pins sys_ps7/S_AXI_HP1]
   connect_bd_intf_net -intf_net ad_ad7091r_dma_interconnect_s00_axi [get_bd_intf_pins ad_ad7091r_dma_interconnect/S00_AXI] [get_bd_intf_pins ad_ad7091r_dma/m_dest_axi]
 
+  set adc_clk_source [get_bd_pins sys_ps7/FCLK_CLK2]
+
+  connect_bd_net -net adc_clk      $adc_clk_source
   connect_bd_net -net sys_100m_clk [get_bd_pins sys_ps7/S_AXI_HP1_ACLK] $sys_100m_clk_source
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M07_ACLK] $sys_100m_clk_source
   connect_bd_net -net sys_100m_clk [get_bd_pins ad_ad7091r_dma_interconnect/ACLK] $sys_100m_clk_source
@@ -47,6 +56,7 @@
   connect_bd_net -net sys_100m_clk [get_bd_pins ad_ad7091r_dma/fifo_wr_clk] $sys_100m_clk_source
   connect_bd_net -net sys_100m_clk [get_bd_pins ad_ad7091r_dma/m_dest_axi_aclk] $sys_100m_clk_source
   connect_bd_net -net sys_100m_clk [get_bd_pins ad_ad7091r_core/clk] $sys_100m_clk_source
+  connect_bd_net -net adc_clk      [get_bd_pins ad_ad7091r_core/adc_spi_clk] $adc_clk_source
 
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M07_ARESETN] $sys_100m_resetn_source
   connect_bd_net -net sys_100m_resetn [get_bd_pins ad_ad7091r_dma_interconnect/ARESETN] $sys_100m_resetn_source
@@ -54,10 +64,10 @@
   connect_bd_net -net sys_100m_resetn [get_bd_pins ad_ad7091r_dma_interconnect/S00_ARESETN] $sys_100m_resetn_source
   connect_bd_net -net sys_100m_resetn [get_bd_pins ad_ad7091r_dma/s_axi_aresetn] $sys_100m_resetn_source
   connect_bd_net -net sys_100m_resetn [get_bd_pins ad_ad7091r_dma/m_dest_axi_aresetn] $sys_100m_resetn_source
-  connect_bd_net -net sys_100m_reset [get_bd_pins ad_ad7091r_core/reset] [get_bd_pins sys_rstgen/peripheral_reset]
+  connect_bd_net -net sys_100m_reset  [get_bd_pins ad_ad7091r_core/reset] [get_bd_pins sys_rstgen/peripheral_reset]
 
-  connect_bd_net -net ad_ad7091r_data   [get_bd_pins ad_ad7091r_core/adc_data] [get_bd_pins ad_ad7091r_dma/fifo_wr_din]
-  connect_bd_net -net ad_ad7091r_dvalid [get_bd_pins ad_ad7091r_core/adc_valid] [get_bd_pins ad_ad7091r_dma/fifo_wr_en]
+  connect_bd_net -net ad_ad7091r_data     [get_bd_pins ad_ad7091r_core/adc_data]      [get_bd_pins ad_ad7091r_dma/fifo_wr_din]
+  connect_bd_net -net ad_ad7091r_dvalid   [get_bd_pins ad_ad7091r_core/adc_valid]     [get_bd_pins ad_ad7091r_dma/fifo_wr_en]
 
   connect_bd_net -net ad_ad7091r_sdo      [get_bd_pins ad_ad7091r_core/adc_sdo]       [get_bd_ports pmod_miso]
   connect_bd_net -net ad_ad7091r_sclk     [get_bd_pins ad_ad7091r_core/adc_sclk]      [get_bd_ports pmod_clk]
