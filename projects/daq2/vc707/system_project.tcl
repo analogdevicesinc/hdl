@@ -1,6 +1,4 @@
 
-
-
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
 
@@ -16,5 +14,4 @@ set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/vc707
 set_property PROCESSING_ORDER EARLY [get_files system_constr.xdc]
 
 adi_project_run daq2_vc707
-
 

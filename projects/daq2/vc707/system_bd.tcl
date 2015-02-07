@@ -6,4 +6,3 @@ p_sys_dmafifo [current_bd_instance .] axi_ad9680_fifo 128 16
 
 source ../common/daq2_bd.tcl
 
-
