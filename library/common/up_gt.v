@@ -46,6 +46,7 @@ module up_gt (
   gt_pll_rst,
   gt_rx_rst,
   gt_tx_rst,
+  up_lpm_dfe_n,
   up_cpll_pd,
   up_rx_sys_clk_sel,
   up_rx_out_clk_sel,
@@ -100,6 +101,7 @@ module up_gt (
   es_start,
   es_stop,
   es_init,
+  es_lpm_dfe_n,
   es_prescale,
   es_voffset_range,
   es_voffset_step,
@@ -145,6 +147,7 @@ module up_gt (
   output          gt_pll_rst;
   output          gt_rx_rst;
   output          gt_tx_rst;
+  output          up_lpm_dfe_n;
   output          up_cpll_pd;
   output  [ 1:0]  up_rx_sys_clk_sel;
   output  [ 2:0]  up_rx_out_clk_sel;
@@ -199,6 +202,7 @@ module up_gt (
   output          es_start;
   output          es_stop;
   output          es_init;
+  output          es_lpm_dfe_n;
   output  [ 4:0]  es_prescale;
   output  [ 1:0]  es_voffset_range;
   output  [ 7:0]  es_voffset_step;
@@ -238,6 +242,7 @@ module up_gt (
 
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
+  reg             up_lpm_dfe_n = 'd0;
   reg             up_cpll_pd = 'd0;
   reg             up_drp_resetn = 'd0;
   reg             up_gt_pll_resetn = 'd0;
@@ -382,6 +387,7 @@ module up_gt (
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_scratch <= 'd0;
+      up_lpm_dfe_n <= 'd0;
       up_cpll_pd <= 'd1;
       up_drp_resetn <= 'd0;
       up_gt_pll_resetn <= 'd0;
@@ -433,6 +439,7 @@ module up_gt (
         up_scratch <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h04)) begin
+        up_lpm_dfe_n <= up_wdata[1];
         up_cpll_pd <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h05)) begin
@@ -549,7 +556,7 @@ module up_gt (
           8'h00: up_rdata <= PCORE_VERSION;
           8'h01: up_rdata <= PCORE_ID;
           8'h02: up_rdata <= up_scratch;
-          8'h04: up_rdata <= {31'd0, up_cpll_pd};
+          8'h04: up_rdata <= {30'd0, up_lpm_dfe_n, up_cpll_pd};
           8'h05: up_rdata <= {30'd0, up_drp_resetn, up_gt_pll_resetn};
           8'h08: up_rdata <= {31'd0, up_gt_rx_resetn};
           8'h09: up_rdata <= {31'd0, up_rx_resetn};
@@ -774,12 +781,13 @@ module up_gt (
 
   // es control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(262)) i_es_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(263)) i_es_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_es_start,
                       up_es_stop,
                       up_es_init,
+                      up_lpm_dfe_n,
                       up_es_prescale,
                       up_es_voffset_range,
                       up_es_voffset_step,
@@ -805,6 +813,7 @@ module up_gt (
     .d_data_cntrl ({  es_start_s,
                       es_stop_s,
                       es_init,
+                      es_lpm_dfe_n,
                       es_prescale,
                       es_voffset_range,
                       es_voffset_step,
