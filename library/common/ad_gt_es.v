@@ -79,6 +79,7 @@ module ad_gt_es (
   es_start,
   es_stop,
   es_init,
+  es_lpm_dfe_n,
   es_sdata0,
   es_sdata1,
   es_sdata2,
@@ -224,6 +225,7 @@ module ad_gt_es (
   input           es_start;
   input           es_stop;
   input           es_init;
+  input           es_lpm_dfe_n;
   input   [15:0]  es_sdata0;
   input   [15:0]  es_sdata1;
   input   [15:0]  es_sdata2;
@@ -292,6 +294,7 @@ module ad_gt_es (
   wire            es_dma_ack_s;
   wire            es_heos_s;
   wire            es_eos_s;
+  wire            es_ut_s;
   wire    [ 7:0]  es_voffset_2_s;
   wire    [ 7:0]  es_voffset_n_s;
   wire    [ 7:0]  es_voffset_s;
@@ -413,6 +416,7 @@ module ad_gt_es (
   assign es_heos_s = (es_hoffset == es_hoffset_max) ? es_ut : 1'b0;
   assign es_eos_s = (es_voffset == es_voffset_max) ? es_heos_s : 1'b0;
 
+  assign es_ut_s = es_ut & ~es_lpm_dfe_n;
   assign es_voffset_2_s = ~es_voffset + 1'b1;
   assign es_voffset_n_s = {1'b1, es_voffset_2_s[6:0]};
   assign es_voffset_s = (es_voffset[7] == 1'b1) ? es_voffset_n_s : es_voffset;
@@ -424,12 +428,12 @@ module ad_gt_es (
       es_status <= 1'b1;
     end
     if (es_fsm == ES_FSM_IDLE) begin
-      es_ut <= 1'b0;
+      es_ut <= es_lpm_dfe_n;
       es_dma_addr_int <= es_start_addr;
       es_hoffset <= es_hoffset_min;
       es_voffset <= es_voffset_min;
     end else if (es_fsm == ES_FSM_UPDATE) begin
-      es_ut <= ~es_ut;
+      es_ut <= ~es_ut | es_lpm_dfe_n;
       es_dma_addr_int <= es_dma_addr_int + 3'd4;
       if (es_heos_s == 1'b1) begin
         es_hoffset <= es_hoffset_min;
@@ -868,9 +872,9 @@ module ad_gt_es (
         es_wr <= 1'b1;
         es_addr <= ES_DRP_VOFFSET_ADDR;
         if (GTH_GTX_N == 1) begin
-        es_wdata <= {es_voffset_rdata[15:11], es_voffset_s[7], es_ut, es_voffset_s[6:0], es_voffset_range};
+        es_wdata <= {es_voffset_rdata[15:11], es_voffset_s[7], es_ut_s, es_voffset_s[6:0], es_voffset_range};
         end else begin
-        es_wdata <= {es_prescale, es_voffset_rdata[10:9], es_ut, es_voffset_s};
+        es_wdata <= {es_prescale, es_voffset_rdata[10:9], es_ut_s, es_voffset_s};
         end
       end
       ES_FSM_CTRLSTART_READ: begin
