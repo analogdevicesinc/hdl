@@ -131,56 +131,58 @@ module ad_gt_es (
 
   // state machine
 
-  parameter ES_FSM_IDLE             = 6'h00;
-  parameter ES_FSM_STATUS           = 6'h30;
-  parameter ES_FSM_INIT             = 6'h31;
-  parameter ES_FSM_CTRLINIT_READ    = 6'h01;
-  parameter ES_FSM_CTRLINIT_RRDY    = 6'h02;
-  parameter ES_FSM_CTRLINIT_WRITE   = 6'h03;
-  parameter ES_FSM_CTRLINIT_WRDY    = 6'h04;
-  parameter ES_FSM_SDATA0_WRITE     = 6'h05;
-  parameter ES_FSM_SDATA0_WRDY      = 6'h06;
-  parameter ES_FSM_SDATA1_WRITE     = 6'h07;
-  parameter ES_FSM_SDATA1_WRDY      = 6'h08;
-  parameter ES_FSM_SDATA2_WRITE     = 6'h09;
-  parameter ES_FSM_SDATA2_WRDY      = 6'h0a;
-  parameter ES_FSM_SDATA3_WRITE     = 6'h0b;
-  parameter ES_FSM_SDATA3_WRDY      = 6'h0c;
-  parameter ES_FSM_SDATA4_WRITE     = 6'h0d;
-  parameter ES_FSM_SDATA4_WRDY      = 6'h0e;
-  parameter ES_FSM_QDATA0_WRITE     = 6'h0f;
-  parameter ES_FSM_QDATA0_WRDY      = 6'h10;
-  parameter ES_FSM_QDATA1_WRITE     = 6'h11;
-  parameter ES_FSM_QDATA1_WRDY      = 6'h12;
-  parameter ES_FSM_QDATA2_WRITE     = 6'h13;
-  parameter ES_FSM_QDATA2_WRDY      = 6'h14;
-  parameter ES_FSM_QDATA3_WRITE     = 6'h15;
-  parameter ES_FSM_QDATA3_WRDY      = 6'h16;
-  parameter ES_FSM_QDATA4_WRITE     = 6'h17;
-  parameter ES_FSM_QDATA4_WRDY      = 6'h18;
-  parameter ES_FSM_HOFFSET_READ     = 6'h19;
-  parameter ES_FSM_HOFFSET_RRDY     = 6'h1a;
-  parameter ES_FSM_HOFFSET_WRITE    = 6'h1b;
-  parameter ES_FSM_HOFFSET_WRDY     = 6'h1c;
-  parameter ES_FSM_VOFFSET_READ     = 6'h1d;
-  parameter ES_FSM_VOFFSET_RRDY     = 6'h1e;
-  parameter ES_FSM_VOFFSET_WRITE    = 6'h1f;
-  parameter ES_FSM_VOFFSET_WRDY     = 6'h20;
-  parameter ES_FSM_CTRLSTART_READ   = 6'h21;
-  parameter ES_FSM_CTRLSTART_RRDY   = 6'h22;
-  parameter ES_FSM_CTRLSTART_WRITE  = 6'h23;
-  parameter ES_FSM_CTRLSTART_WRDY   = 6'h24;
-  parameter ES_FSM_STATUS_READ      = 6'h25;
-  parameter ES_FSM_STATUS_RRDY      = 6'h26;
-  parameter ES_FSM_CTRLSTOP_READ    = 6'h27;
-  parameter ES_FSM_CTRLSTOP_RRDY    = 6'h28;
-  parameter ES_FSM_CTRLSTOP_WRITE   = 6'h29;
-  parameter ES_FSM_CTRLSTOP_WRDY    = 6'h2a;
-  parameter ES_FSM_SCNT_READ        = 6'h2b;
-  parameter ES_FSM_SCNT_RRDY        = 6'h2c;
-  parameter ES_FSM_ECNT_READ        = 6'h2d;
-  parameter ES_FSM_ECNT_RRDY        = 6'h2e;
-  parameter ES_FSM_DATA             = 6'h2f;
+  localparam  ES_FSM_IDLE             = 6'h00;
+  localparam  ES_FSM_STATUS           = 6'h01;
+  localparam  ES_FSM_INIT             = 6'h02;
+  localparam  ES_FSM_CTRLINIT_READ    = 6'h03;
+  localparam  ES_FSM_CTRLINIT_RRDY    = 6'h04;
+  localparam  ES_FSM_CTRLINIT_WRITE   = 6'h05;
+  localparam  ES_FSM_CTRLINIT_WRDY    = 6'h06;
+  localparam  ES_FSM_SDATA0_WRITE     = 6'h07;
+  localparam  ES_FSM_SDATA0_WRDY      = 6'h08;
+  localparam  ES_FSM_SDATA1_WRITE     = 6'h09;
+  localparam  ES_FSM_SDATA1_WRDY      = 6'h0a;
+  localparam  ES_FSM_SDATA2_WRITE     = 6'h0b;
+  localparam  ES_FSM_SDATA2_WRDY      = 6'h0c;
+  localparam  ES_FSM_SDATA3_WRITE     = 6'h0d;
+  localparam  ES_FSM_SDATA3_WRDY      = 6'h0e;
+  localparam  ES_FSM_SDATA4_WRITE     = 6'h0f;
+  localparam  ES_FSM_SDATA4_WRDY      = 6'h10;
+  localparam  ES_FSM_QDATA0_WRITE     = 6'h11;
+  localparam  ES_FSM_QDATA0_WRDY      = 6'h12;
+  localparam  ES_FSM_QDATA1_WRITE     = 6'h13;
+  localparam  ES_FSM_QDATA1_WRDY      = 6'h14;
+  localparam  ES_FSM_QDATA2_WRITE     = 6'h15;
+  localparam  ES_FSM_QDATA2_WRDY      = 6'h16;
+  localparam  ES_FSM_QDATA3_WRITE     = 6'h17;
+  localparam  ES_FSM_QDATA3_WRDY      = 6'h18;
+  localparam  ES_FSM_QDATA4_WRITE     = 6'h19;
+  localparam  ES_FSM_QDATA4_WRDY      = 6'h1a;
+  localparam  ES_FSM_HOFFSET_READ     = 6'h1b;
+  localparam  ES_FSM_HOFFSET_RRDY     = 6'h1c;
+  localparam  ES_FSM_HOFFSET_WRITE    = 6'h1d;
+  localparam  ES_FSM_HOFFSET_WRDY     = 6'h1e;
+  localparam  ES_FSM_VOFFSET_READ     = 6'h1f;
+  localparam  ES_FSM_VOFFSET_RRDY     = 6'h20;
+  localparam  ES_FSM_VOFFSET_WRITE    = 6'h21;
+  localparam  ES_FSM_VOFFSET_WRDY     = 6'h22;
+  localparam  ES_FSM_CTRLSTART_READ   = 6'h23;
+  localparam  ES_FSM_CTRLSTART_RRDY   = 6'h24;
+  localparam  ES_FSM_CTRLSTART_WRITE  = 6'h25;
+  localparam  ES_FSM_CTRLSTART_WRDY   = 6'h26;
+  localparam  ES_FSM_STATUS_READ      = 6'h27;
+  localparam  ES_FSM_STATUS_RRDY      = 6'h28;
+  localparam  ES_FSM_CTRLSTOP_READ    = 6'h29;
+  localparam  ES_FSM_CTRLSTOP_RRDY    = 6'h2a;
+  localparam  ES_FSM_CTRLSTOP_WRITE   = 6'h2b;
+  localparam  ES_FSM_CTRLSTOP_WRDY    = 6'h2c;
+  localparam  ES_FSM_SCNT_READ        = 6'h2d;
+  localparam  ES_FSM_SCNT_RRDY        = 6'h2e;
+  localparam  ES_FSM_ECNT_READ        = 6'h2f;
+  localparam  ES_FSM_ECNT_RRDY        = 6'h30;
+  localparam  ES_FSM_DMA_WRITE        = 6'h31;
+  localparam  ES_FSM_DMA_READY        = 6'h32;
+  localparam  ES_FSM_UPDATE           = 6'h33;
 
   // drp interface
 
@@ -258,7 +260,11 @@ module ad_gt_es (
   reg     [31:0]  axi_awaddr = 'd0;
   reg             axi_wvalid = 'd0;
   reg     [31:0]  axi_wdata = 'd0;
+  reg             axi_ack_toggle = 'd0;
   reg             axi_err = 'd0;
+  reg             es_dma_ack_toggle_m1 = 'd0;
+  reg             es_dma_ack_toggle_m2 = 'd0;
+  reg             es_dma_ack_toggle_m3 = 'd0;
   reg             es_dmaerr_m1 = 'd0;
   reg             es_dmaerr = 'd0;
   reg             es_dma_req_toggle = 'd0;
@@ -283,6 +289,7 @@ module ad_gt_es (
   // internal signals
 
   wire            axi_req_s;
+  wire            es_dma_ack_s;
   wire            es_heos_s;
   wire            es_eos_s;
   wire    [ 7:0]  es_voffset_2_s;
@@ -348,6 +355,7 @@ module ad_gt_es (
       axi_awaddr <= 'd0;
       axi_wvalid <= 'b0;
       axi_wdata <= 'd0;
+      axi_ack_toggle <= 'd0;
       axi_err <= 'd0;
     end else begin
       axi_req_toggle_m1 <= es_dma_req_toggle;
@@ -368,22 +376,31 @@ module ad_gt_es (
         axi_wdata <= es_dma_data;
       end
       if (axi_bvalid == 1'b1) begin
+        axi_ack_toggle <= ~axi_ack_toggle;
         axi_err <= axi_bresp[1] | axi_bresp[0];
       end
     end
   end
 
+  assign es_dma_ack_s = es_dma_ack_toggle_m3 ^ es_dma_ack_toggle_m2;
+
   always @(posedge drp_clk) begin
     if (drp_rst == 1'b1) begin
+      es_dma_ack_toggle_m1 <= 'd0;
+      es_dma_ack_toggle_m2 <= 'd0;
+      es_dma_ack_toggle_m3 <= 'd0;
       es_dmaerr_m1 <= 'd0;
       es_dmaerr <= 'd0;
       es_dma_req_toggle <= 'd0;
       es_dma_addr <= 'd0;
       es_dma_data <= 'd0;
     end else begin
+      es_dma_ack_toggle_m1 <= axi_ack_toggle;
+      es_dma_ack_toggle_m2 <= es_dma_ack_toggle_m1;
+      es_dma_ack_toggle_m3 <= es_dma_ack_toggle_m2;
       es_dmaerr_m1 <= axi_err;
       es_dmaerr <= es_dmaerr_m1;
-      if (es_fsm == ES_FSM_DATA) begin
+      if (es_fsm == ES_FSM_DMA_WRITE) begin
         es_dma_req_toggle <= ~es_dma_req_toggle;
         es_dma_addr <= es_dma_addr_int;
         es_dma_data <= {es_scnt_rdata, es_ecnt_rdata};
@@ -411,7 +428,7 @@ module ad_gt_es (
       es_dma_addr_int <= es_start_addr;
       es_hoffset <= es_hoffset_min;
       es_voffset <= es_voffset_min;
-    end else if (es_fsm == ES_FSM_DATA) begin
+    end else if (es_fsm == ES_FSM_UPDATE) begin
       es_ut <= ~es_ut;
       es_dma_addr_int <= es_dma_addr_int + 3'd4;
       if (es_heos_s == 1'b1) begin
@@ -710,13 +727,24 @@ module ad_gt_es (
         end
         ES_FSM_ECNT_RRDY: begin // error count ready
           if (es_ready == 1'b1) begin
-            es_fsm <= ES_FSM_DATA;
+            es_fsm <= ES_FSM_DMA_WRITE;
           end else begin
             es_fsm <= ES_FSM_ECNT_RRDY;
           end
         end
+
+        ES_FSM_DMA_WRITE: begin // dma write
+          es_fsm <= ES_FSM_DMA_READY;
+        end
+        ES_FSM_DMA_READY: begin // dma ack
+          if (es_dma_ack_s == 1'b1) begin
+            es_fsm <= ES_FSM_UPDATE;
+          end else begin
+            es_fsm <= ES_FSM_DMA_READY;
+          end
+        end
      
-        ES_FSM_DATA: begin // data phase
+        ES_FSM_UPDATE: begin // update
           if (es_eos_s == 1'b1) begin
             es_fsm <= ES_FSM_IDLE;
           end else if (es_ut == 1'b1) begin
