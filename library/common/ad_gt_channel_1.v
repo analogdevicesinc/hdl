@@ -42,6 +42,7 @@ module ad_gt_channel_1 (
   // rst and clocks
 
   ref_clk,
+  lpm_dfe_n,
   cpll_pd,
   cpll_rst,
   qpll_clk,
@@ -115,6 +116,7 @@ module ad_gt_channel_1 (
   // rst and clocks
 
   input           ref_clk;
+  input           lpm_dfe_n;
   input           cpll_pd;
   input           cpll_rst;
   input           qpll_clk;
@@ -677,7 +679,7 @@ module ad_gt_channel_1 (
     .RXOOBRESET (1'd0),
     .RXPCSRESET (1'd0),
     .RXPMARESET (1'd0),
-    .RXLPMEN (1'd0),
+    .RXLPMEN (lpm_dfe_n),
     .RXCOMSASDET (),
     .RXCOMWAKEDET (),
     .RXCOMINITDET (),
@@ -1269,7 +1271,7 @@ module ad_gt_channel_1 (
     .RXELECIDLEMODE (2'b11),
     .RXGEARBOXSLIP (1'd0),
     .RXLATCLK (1'd0),
-    .RXLPMEN (1'd0),
+    .RXLPMEN (lpm_dfe_n),
     .RXLPMGCHOLD (1'd0),
     .RXLPMGCOVRDEN (1'd0),
     .RXLPMHFHOLD (1'd0),
