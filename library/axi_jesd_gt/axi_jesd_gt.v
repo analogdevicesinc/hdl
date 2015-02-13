@@ -341,6 +341,7 @@ module axi_jesd_gt (
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_pll_locked_s;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_rst_done_s;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_pll_locked_s;
+  wire                                          up_lpm_dfe_n_s;
   wire                                          up_cpll_pd_s;
   wire    [  1:0]                               up_rx_sys_clk_sel_s;
   wire    [  2:0]                               up_rx_out_clk_sel_s;
@@ -363,6 +364,7 @@ module axi_jesd_gt (
   wire                                          es_start_s;
   wire                                          es_stop_s;
   wire                                          es_init_s;
+  wire                                          es_lpm_dfe_n_s;
   wire    [ 15:0]                               es_sdata0_s;
   wire    [ 15:0]                               es_sdata1_s;
   wire    [ 15:0]                               es_sdata2_s;
@@ -626,6 +628,7 @@ module axi_jesd_gt (
     .RX_CDR_CFG (PCORE_RX_CDR_CFG))
   i_gt_channel_1 (
     .ref_clk (ref_clk_c),
+    .lpm_dfe_n (up_lpm_dfe_n_s),
     .cpll_pd (up_cpll_pd_s),
     .cpll_rst (gt_pll_rst),
     .qpll_clk (qpll_clk[n]),
@@ -705,6 +708,7 @@ module axi_jesd_gt (
     .es_start (es_start_s),
     .es_stop (es_stop_s),
     .es_init (es_init_s),
+    .es_lpm_dfe_n (es_lpm_dfe_n_s),
     .es_sdata0 (es_sdata0_s),
     .es_sdata1 (es_sdata1_s),
     .es_sdata2 (es_sdata2_s),
@@ -735,6 +739,7 @@ module axi_jesd_gt (
     .gt_pll_rst (gt_pll_rst),
     .gt_rx_rst (gt_rx_rst),
     .gt_tx_rst (gt_tx_rst),
+    .up_lpm_dfe_n (up_lpm_dfe_n_s),
     .up_cpll_pd (up_cpll_pd_s),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_s),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_s),
@@ -777,6 +782,7 @@ module axi_jesd_gt (
     .es_start (es_start_s),
     .es_stop (es_stop_s),
     .es_init (es_init_s),
+    .es_lpm_dfe_n (es_lpm_dfe_n_s),
     .es_prescale (es_prescale_s),
     .es_voffset_range (es_voffset_range_s),
     .es_voffset_step (es_voffset_step_s),
