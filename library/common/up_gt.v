@@ -141,6 +141,7 @@ module up_gt (
 
   localparam  PCORE_VERSION = 32'h00060062;
   parameter   PCORE_ID = 0;
+  parameter   PCORE_DEVICE_TYPE = 0;
 
   // gt interface
 
@@ -587,6 +588,7 @@ module up_gt (
           8'h33: up_rdata <= up_es_qdata4;
           8'h38: up_rdata <= {30'd0, up_es_dmaerr, up_es_status_s};
           8'h39: up_rdata <= {24'd0, up_drp_rx_rate_s};
+          8'h3a: up_rdata <= PCORE_DEVICE_TYPE;
           default: up_rdata <= 0;
         endcase
       end else begin
