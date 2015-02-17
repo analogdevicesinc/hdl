@@ -735,7 +735,7 @@ module axi_jesd_gt (
 
   // processor
     
-  up_gt #(.PCORE_ID(PCORE_ID)) i_up_gt (
+  up_gt #(.PCORE_ID(PCORE_ID), .PCORE_DEVICE_TYPE(PCORE_DEVICE_TYPE)) i_up_gt (
     .gt_pll_rst (gt_pll_rst),
     .gt_rx_rst (gt_rx_rst),
     .gt_tx_rst (gt_tx_rst),
