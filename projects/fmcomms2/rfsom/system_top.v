@@ -65,6 +65,7 @@ module system_top (
   ETH1_RGMII_txclk,
   ETH1_RGMII_txctl,
   ETH1_RGMII_txdata,
+  ETH1_RESETN,
 
   FIXED_IO_ddr_vrn,
   FIXED_IO_ddr_vrp,
@@ -81,8 +82,11 @@ module system_top (
   hdmi_hsync,
   hdmi_data_e,
   hdmi_data,
+  hdmi_pd,
+  hdmi_intn,
 
   spdif,
+  spdif_in,
 
   i2s_mclk,
   i2s_bclk,
@@ -92,6 +96,10 @@ module system_top (
 
   iic_scl,
   iic_sda,
+
+  gpio_pb,
+  gpio_led,
+  gpio_dip,
 
   rx_clk_in_p,
   rx_clk_in_n,
@@ -106,6 +114,7 @@ module system_top (
   tx_data_out_p,
   tx_data_out_n,
 
+  gpio_rfpwr_enable,
   gpio_clksel,
   gpio_txnrx,
   gpio_enable,
@@ -145,6 +154,7 @@ module system_top (
   output          ETH1_RGMII_txclk;
   output          ETH1_RGMII_txctl;
   output  [ 3:0]  ETH1_RGMII_txdata;
+  output          ETH1_RESETN;
 
   inout           FIXED_IO_ddr_vrn;
   inout           FIXED_IO_ddr_vrp;
@@ -161,8 +171,11 @@ module system_top (
   output          hdmi_hsync;
   output          hdmi_data_e;
   output  [15:0]  hdmi_data;
+  output          hdmi_pd;
+  input           hdmi_intn;
 
   output          spdif;
+  input           spdif_in;
 
   output          i2s_mclk;
   output          i2s_bclk;
@@ -170,8 +183,12 @@ module system_top (
   output          i2s_sdata_out;
   input           i2s_sdata_in;
 
-  inout   [ 1:0]  iic_scl;
-  inout   [ 1:0]  iic_sda;
+  inout           iic_scl;
+  inout           iic_sda;
+
+  inout   [ 3:0]  gpio_pb;
+  inout   [ 3:0]  gpio_led;
+  inout   [ 3:0]  gpio_dip;
 
   input           rx_clk_in_p;
   input           rx_clk_in_n;
@@ -186,6 +203,7 @@ module system_top (
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
 
+  inout           gpio_rfpwr_enable;
   inout           gpio_clksel;
   inout           gpio_txnrx;
   inout           gpio_enable;
@@ -203,24 +221,30 @@ module system_top (
 
   // internal signals
 
-  wire    [49:0]  gpio_i;
-  wire    [49:0]  gpio_o;
-  wire    [49:0]  gpio_t;
+  wire    [50:0]  gpio_i;
+  wire    [50:0]  gpio_o;
+  wire    [50:0]  gpio_t;
   wire    [15:0]  ps_intrs;
-  wire    [ 1:0]  iic_scl_i;
-  wire    [ 1:0]  iic_scl_o;
+  wire            iic_scl_i;
+  wire            iic_scl_o;
   wire            iic_scl_t;
-  wire    [ 1:0]  iic_sda_i;
-  wire    [ 1:0]  iic_sda_o;
+  wire            iic_sda_i;
+  wire            iic_sda_o;
   wire            iic_sda_t;
+
+  // assignments
+
+  assign ETH1_RESETN = 1'b1;
+  assign hdmi_pd = 1'b0;
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(18)) i_iobuf (
-    .dt (gpio_t[49:32]),
-    .di (gpio_o[49:32]),
-    .do (gpio_i[49:32]),
-    .dio({  gpio_clksel,
+  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf_rf (
+    .dt (gpio_t[50:32]),
+    .di (gpio_o[50:32]),
+    .do (gpio_i[50:32]),
+    .dio({  gpio_rfpwr_enable,
+            gpio_clksel,
             gpio_txnrx,
             gpio_enable,
             gpio_resetb,
@@ -229,17 +253,19 @@ module system_top (
             gpio_ctl,
             gpio_status}));
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
-    .dt ({iic_scl_t, iic_scl_t}),
-    .di (iic_scl_o),
-    .do (iic_scl_i),
-    .dio(iic_scl));
+  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_bd (
+    .dt (gpio_t[11:0]),
+    .di (gpio_o[11:0]),
+    .do (gpio_i[11:0]),
+    .dio({  gpio_dip,
+            gpio_led,
+            gpio_pb}));
 
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_sda (
-    .dt ({iic_sda_t, iic_sda_t}),
-    .di (iic_sda_o),
-    .do (iic_sda_i),
-    .dio(iic_sda));
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic (
+    .dt ({iic_scl_t, iic_sda_t}),
+    .di ({iic_scl_o, iic_sda_o}),
+    .do ({iic_scl_i, iic_sda_i}),
+    .dio({iic_scl, iic_sda}));
 
   system_wrapper i_system_wrapper (
     .DDR_addr (DDR_addr),
