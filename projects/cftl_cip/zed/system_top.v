@@ -87,10 +87,12 @@ module system_top (
 
   otg_vbusoc,
 
-  pmod_ad7091r_cs,
-  pmod_ad7091r_miso,
-  pmod_ad7091r_clk,
-  pmod_ad7091r_convst);
+  pmod_spi_cs,
+  pmod_spi_miso,
+  pmod_spi_clk,
+  pmod_spi_convst,
+
+  pmod_gpio);
 
   inout   [14:0]  DDR_addr;
   inout   [ 2:0]  DDR_ba;
@@ -139,10 +141,12 @@ module system_top (
 
   input           otg_vbusoc;
 
-  output          pmod_ad7091r_cs;
-  input           pmod_ad7091r_miso;
-  output          pmod_ad7091r_clk;
-  output          pmod_ad7091r_convst;
+  output          pmod_spi_cs;
+  input           pmod_spi_miso;
+  output          pmod_spi_clk;
+  output          pmod_spi_convst;
+
+  input           pmod_gpio;
 
   // internal signals
 
@@ -244,11 +248,12 @@ module system_top (
     .iic_fmc_intr (ps_intrs[11]),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
-    .pmod_cs (pmod_ad7091r_cs),
-    .pmod_miso (pmod_ad7091r_miso),
-    .pmod_clk (pmod_ad7091r_clk),
-    .pmod_convst (pmod_ad7091r_convst),
-    .ad_ad7091r_dma_intr (ps_intrs[13]));
+    .pmod_spi_cs (pmod_spi_cs),
+    .pmod_spi_miso (pmod_spi_miso),
+    .pmod_spi_clk (pmod_spi_clk),
+    .pmod_spi_convst (pmod_spi_convst),
+    .pmod_gpio (pmod_gpio),
+    .pmod_spi_dma_intr (ps_intrs[13]));
 
 endmodule
 
