@@ -5,9 +5,9 @@
 set DDR [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR]
 set FIXED_IO [create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 FIXED_IO]
 
-set GPIO_I [create_bd_port -dir I -from 31 -to 0 GPIO_I]
-set GPIO_O [create_bd_port -dir O -from 31 -to 0 GPIO_O]
-set GPIO_T [create_bd_port -dir O -from 31 -to 0 GPIO_T]
+set GPIO_I [create_bd_port -dir I -from 50 -to 0 GPIO_I]
+set GPIO_O [create_bd_port -dir O -from 50 -to 0 GPIO_O]
+set GPIO_T [create_bd_port -dir O -from 50 -to 0 GPIO_T]
 
 # hdmi interface
 
@@ -27,12 +27,12 @@ set i2s_sdata_in    [create_bd_port -dir I i2s_sdata_in]
 
 # iic mux
 
-set iic_mux_scl_I   [create_bd_port -dir I -from 1 -to 0 iic_mux_scl_I]
-set iic_mux_scl_O   [create_bd_port -dir O -from 1 -to 0 iic_mux_scl_O]
+set iic_mux_scl_I   [create_bd_port -dir I iic_mux_scl_I]
+set iic_mux_scl_O   [create_bd_port -dir O iic_mux_scl_O]
 set iic_mux_scl_T   [create_bd_port -dir O iic_mux_scl_T]
-set iic_mux_sda_I   [create_bd_port -dir I -from 1 -to 0 iic_mux_sda_I]
-set iic_mux_sda_O   [create_bd_port -dir O -from 1 -to 0 iic_mux_sda_O]
-set iic_mux_sda_T   [create_bd_port -dir O iic_mux_sda_T ]
+set iic_mux_sda_I   [create_bd_port -dir I iic_mux_sda_I]
+set iic_mux_sda_O   [create_bd_port -dir O iic_mux_sda_O]
+set iic_mux_sda_T   [create_bd_port -dir O iic_mux_sda_T]
 
 set otg_vbusoc      [create_bd_port -dir I otg_vbusoc]
 
@@ -53,7 +53,7 @@ set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP0 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_INTR {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {32}] $sys_ps7
+set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {51}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_DMA0 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_DMA1 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_DMA2 {1}] $sys_ps7
@@ -95,8 +95,6 @@ connect_bd_net      [get_bd_pins /sys_ps7/ENET1_EXT_INTIN]      [get_bd_ports ET
 set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
 set_property -dict [list CONFIG.USE_BOARD_FLOW {true}] $axi_iic_main
 set_property -dict [list CONFIG.IIC_BOARD_INTERFACE {Custom}] $axi_iic_main
-
-set sys_i2c_mixer [create_bd_cell -type ip -vlnv analog.com:user:util_i2c_mixer:1.0 sys_i2c_mixer]
 
 set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
 set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
@@ -179,19 +177,12 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_cpu_interconnect/M00_ARESET
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_iic_main/s_axi_aclk]
 connect_bd_net -net sys_100m_resetn [get_bd_pins axi_iic_main/s_axi_aresetn]
 
-connect_bd_net -net axi_iic_main_scl_i [get_bd_pins axi_iic_main/scl_i] [get_bd_pins sys_i2c_mixer/upstream_scl_O]
-connect_bd_net -net axi_iic_main_scl_o [get_bd_pins axi_iic_main/scl_o] [get_bd_pins sys_i2c_mixer/upstream_scl_I]
-connect_bd_net -net axi_iic_main_scl_t [get_bd_pins axi_iic_main/scl_t] [get_bd_pins sys_i2c_mixer/upstream_scl_T]
-connect_bd_net -net axi_iic_main_sda_i [get_bd_pins axi_iic_main/sda_i] [get_bd_pins sys_i2c_mixer/upstream_sda_O]
-connect_bd_net -net axi_iic_main_sda_o [get_bd_pins axi_iic_main/sda_o] [get_bd_pins sys_i2c_mixer/upstream_sda_I]
-connect_bd_net -net axi_iic_main_sda_t [get_bd_pins axi_iic_main/sda_t] [get_bd_pins sys_i2c_mixer/upstream_sda_T]
-
-connect_bd_net -net sys_i2c_mixer_downstream_scl_i [get_bd_ports iic_mux_scl_I] [get_bd_pins sys_i2c_mixer/downstream_scl_I]
-connect_bd_net -net sys_i2c_mixer_downstream_scl_o [get_bd_ports iic_mux_scl_O] [get_bd_pins sys_i2c_mixer/downstream_scl_O]
-connect_bd_net -net sys_i2c_mixer_downstream_scl_t [get_bd_ports iic_mux_scl_T] [get_bd_pins sys_i2c_mixer/downstream_scl_T]
-connect_bd_net -net sys_i2c_mixer_downstream_sda_i [get_bd_ports iic_mux_sda_I] [get_bd_pins sys_i2c_mixer/downstream_sda_I]
-connect_bd_net -net sys_i2c_mixer_downstream_sda_o [get_bd_ports iic_mux_sda_O] [get_bd_pins sys_i2c_mixer/downstream_sda_O]
-connect_bd_net -net sys_i2c_mixer_downstream_sda_t [get_bd_ports iic_mux_sda_T] [get_bd_pins sys_i2c_mixer/downstream_sda_T]
+connect_bd_net -net axi_iic_main_scl_i [get_bd_pins axi_iic_main/scl_i] [get_bd_ports iic_mux_scl_I]
+connect_bd_net -net axi_iic_main_scl_o [get_bd_pins axi_iic_main/scl_o] [get_bd_ports iic_mux_scl_O]
+connect_bd_net -net axi_iic_main_scl_t [get_bd_pins axi_iic_main/scl_t] [get_bd_ports iic_mux_scl_T]
+connect_bd_net -net axi_iic_main_sda_i [get_bd_pins axi_iic_main/sda_i] [get_bd_ports iic_mux_sda_I]
+connect_bd_net -net axi_iic_main_sda_o [get_bd_pins axi_iic_main/sda_o] [get_bd_ports iic_mux_sda_O]
+connect_bd_net -net axi_iic_main_sda_t [get_bd_pins axi_iic_main/sda_t] [get_bd_ports iic_mux_sda_T]
 
 connect_bd_net -net sys_logic_inv_o [get_bd_pins sys_logic_inv/Res] [get_bd_pins sys_ps7/USB0_VBUS_PWRFAULT]
 connect_bd_net -net sys_logic_inv_i [get_bd_pins sys_logic_inv/Op1] [get_bd_ports otg_vbusoc]
