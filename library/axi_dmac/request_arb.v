@@ -1007,7 +1007,7 @@ dmac_request_generator #(
 	.req_ready(req_gen_ready),
 	.req_burst_count(req_length[C_DMA_LENGTH_WIDTH-1:BYTES_PER_BURST_WIDTH]),
 
-	.enable(enable),
+	.enable(do_enable),
 	.pause(pause),
 
 	.eot(request_eot)
