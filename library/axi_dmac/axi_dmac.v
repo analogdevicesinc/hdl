@@ -198,7 +198,7 @@ localparam DMA_TYPE_AXI_MM = 0;
 localparam DMA_TYPE_AXI_STREAM = 1;
 localparam DMA_TYPE_FIFO = 2;
 
-localparam PCORE_VERSION = 'h00040061;
+localparam PCORE_VERSION = 'h00040062;
 
 localparam HAS_DEST_ADDR = C_DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
 localparam HAS_SRC_ADDR = C_DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
