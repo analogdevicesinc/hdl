@@ -78,6 +78,8 @@ begin
 		burst_count <= 'h00;
 		id <= 'h0;
 		req_ready <= 1'b1;
+	end else if (enable == 1'b0) begin
+		req_ready <= 1'b1;
 	end else begin
 		if (req_ready) begin
 			if (req_valid && enable) begin
