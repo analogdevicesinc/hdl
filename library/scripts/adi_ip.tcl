@@ -18,10 +18,10 @@ proc adi_ip_files {ip_name ip_files} {
 
 proc adi_ip_constraints {ip_name ip_constr_files} {
 
-  set proj_filegroup [ipx::get_file_group xilinx_verilogsynthesis [ipx::current_core]]
+  set proj_filegroup [ipx::get_file_groups xilinx_verilogsynthesis -of_objects [ipx::current_core]]
   ipx::add_file $ip_constr_files $proj_filegroup
-  set_property type {{xdc}} [ipx::get_file $ip_constr_files $proj_filegroup]
-  set_property library_name {} [ipx::get_file $ip_constr_files $proj_filegroup]
+  set_property type {{xdc}} [ipx::get_files $ip_constr_files -of_objects $proj_filegroup]
+  set_property library_name {} [ipx::get_files $ip_constr_files -of_objects $proj_filegroup]
 }
 
 proc adi_ip_properties {ip_name} {
@@ -29,11 +29,11 @@ proc adi_ip_properties {ip_name} {
   ipx::package_project -root_dir .
   ipx::remove_memory_map {s_axi} [ipx::current_core]
   ipx::add_memory_map {s_axi} [ipx::current_core]
-  set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interface s_axi [ipx::current_core]]
+  set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interfaces s_axi -of_objects [ipx::current_core]]
 
-  ipx::add_address_block {axi_lite} [ipx::get_memory_map s_axi [ipx::current_core]]
-  set_property range {65536} [ipx::get_address_block axi_lite \
-    [ipx::get_memory_map s_axi [ipx::current_core]]]
+  ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]
+  set_property range {65536} [ipx::get_address_blocks axi_lite \
+    -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
 
   set_property vendor {analog.com} [ipx::current_core]
   set_property library {user} [ipx::current_core]
@@ -96,7 +96,7 @@ proc adi_set_ports_dependency {port_prefix dependency} {
 }
 
 proc adi_set_bus_dependency {bus prefix dependency} {
-	set_property ENABLEMENT_DEPENDENCY $dependency [ipx::get_bus_interface $bus [ipx::current_core]]
+	set_property ENABLEMENT_DEPENDENCY $dependency [ipx::get_bus_interfaces $bus -of_objects [ipx::current_core]]
 	adi_set_ports_dependency $prefix $dependency
 }
 
