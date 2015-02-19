@@ -883,15 +883,30 @@ axi_register_slice #(
 
 
 // We do not accept any requests until all components are enabled
+reg _req_valid = 1'b0;
 wire _req_ready;
-assign req_ready = _req_ready & enabled;
+
+always @(posedge req_aclk)
+begin
+	if (req_aresetn == 1'b0) begin
+		_req_valid <= 1'b0;
+	end else begin
+		if (_req_valid == 1'b1 && _req_ready == 1'b1) begin
+			_req_valid <= 1'b0;
+		end else if (req_valid == 1'b1 && enabled == 1'b1) begin
+			_req_valid <= 1'b1;
+		end
+	end
+end
+
+assign req_ready = _req_ready & _req_valid & enable;
 
 splitter #(
 	.C_NUM_M(3)
 ) i_req_splitter (
 	.clk(req_aclk),
 	.resetn(req_aresetn),
-	.s_valid(req_valid & enabled),
+	.s_valid(_req_valid),
 	.s_ready(_req_ready),
 	.m_valid({
 		req_gen_valid,
