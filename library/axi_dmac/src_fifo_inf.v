@@ -69,21 +69,18 @@ parameter C_ID_WIDTH = 3;
 parameter C_DATA_WIDTH = 64;
 parameter C_BEATS_PER_BURST_WIDTH = 4;
 
-reg valid = 1'b0;
 wire ready;
-reg [C_DATA_WIDTH-1:0] buffer = 'h00;
-reg buffer_sync = 1'b0;
 
 reg needs_sync = 1'b0;
-wire has_sync = ~needs_sync | buffer_sync;
-wire sync_valid = valid & has_sync;
+wire has_sync = ~needs_sync | sync;
+wire sync_valid = en & ready & has_sync;
 
 always @(posedge clk)
 begin
 	if (resetn == 1'b0) begin
 		needs_sync <= 1'b0;
 	end else begin
-		if (ready && valid && buffer_sync) begin
+		if (ready && en && sync) begin
 			needs_sync <= 1'b0;
 		end else if (req_valid && req_ready) begin
 			needs_sync <= req_sync_transfer_start;
@@ -93,28 +90,12 @@ end
 
 always @(posedge clk)
 begin
-	if (en) begin
-		buffer <= din;
-		buffer_sync <= sync;
-	end
-end
-
-always @(posedge clk)
-begin
 	if (resetn == 1'b0) begin
-		valid <= 1'b0;
 		overflow <= 1'b0;
 	end else begin
 		if (enable) begin
-			if (en) begin
-				valid <= 1'b1;
-			end else if (ready || ~xfer_req) begin
-				valid <= 1'b0;
-			end
-			overflow <= en & valid & ~ready;
+			overflow <= en & ~ready;
 		end else begin
-			if (ready || ~xfer_req)
-				valid <= 1'b0;
 			overflow <= en;
 		end
 	end
@@ -147,7 +128,7 @@ dmac_data_mover # (
 
 	.s_axi_ready(ready),
 	.s_axi_valid(sync_valid),
-	.s_axi_data(buffer),
+	.s_axi_data(din),
 	.m_axi_ready(fifo_ready),
 	.m_axi_valid(fifo_valid),
 	.m_axi_data(fifo_data),
