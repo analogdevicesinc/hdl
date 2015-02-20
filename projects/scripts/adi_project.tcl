@@ -1,5 +1,6 @@
 
-set xl_board "none"
+variable p_board 
+variable p_device 
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
   set REQUIRED_VIVADO_VERSION "2014.4"
@@ -15,75 +16,63 @@ proc adi_project_create {project_name} {
 
   global ad_hdl_dir
   global ad_phdl_dir
-  global xl_board
+  global p_board
+  global p_device
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
 
-  set xl_board "none"
-  set project_part "none"
-  set project_board "none"
+  set p_device "none"
+  set p_board "none"
 
   if [regexp "_ml605$" $project_name] {
-    set xl_board "ml605"
-    set project_part "xc6vlx240tff1156-1"
-    set project_board "ml605"
+    set p_device "xc6vlx240tff1156-1"
+    set p_board "ml605"
   }
   if [regexp "_ac701$" $project_name] {
-    set xl_board "ac701"
-    set project_part "xc7a200tfbg676-2"
-    set project_board "xilinx.com:artix7:ac701:1.0"
+    set p_device "xc7a200tfbg676-2"
+    set p_board "xilinx.com:artix7:ac701:1.0"
   }
   if [regexp "_kc705$" $project_name] {
-    set xl_board "kc705"
-    set project_part "xc7k325tffg900-2"
-    set project_board "xilinx.com:kintex7:kc705:1.1"
+    set p_device "xc7k325tffg900-2"
+    set p_board "xilinx.com:kintex7:kc705:1.1"
   }
   if [regexp "_vc707$" $project_name] {
-    set xl_board "vc707"
-    set project_part "xc7vx485tffg1761-2"
-    set project_board "xilinx.com:virtex7:vc707:1.1"
+    set p_device "xc7vx485tffg1761-2"
+    set p_board "xilinx.com:virtex7:vc707:1.1"
   }
   if [regexp "_kcu105$" $project_name] {
-    set xl_board "kcu105"
-    set project_part "xcku040-ffva1156-2-e"
-    set project_board "not-applicable"
+    set p_device "xcku040-ffva1156-2-e"
+    set p_board "not-applicable"
   }
   if [regexp "_zed$" $project_name] {
-    set xl_board "zed"
-    set project_part "xc7z020clg484-1"
-    set project_board "em.avnet.com:zynq:zed:d"
+    set p_device "xc7z020clg484-1"
+    set p_board "em.avnet.com:zynq:zed:d"
   }
   if [regexp "_zc702$" $project_name] {
-    set xl_board "zc702"
-    set project_part "xc7z020clg484-1"
-    set project_board "xilinx.com:zynq:zc702:1.0"
+    set p_device "xc7z020clg484-1"
+    set p_board "xilinx.com:zynq:zc702:1.0"
   }
   if [regexp "_zc706$" $project_name] {
-    set xl_board "zc706"
-    set project_part "xc7z045ffg900-2"
-    set project_board "xilinx.com:zc706:part0:1.0"
+    set p_device "xc7z045ffg900-2"
+    set p_board "xilinx.com:zc706:part0:1.0"
   }
-
   if [regexp "_mitx045$" $project_name] {
-    set xl_board "mitx045"
-    set project_part "xc7z045ffg900-2"
-    set project_board "em.avnet.com:mini_itx_7z045:part0:1.0"
+    set p_device "xc7z045ffg900-2"
+    set p_board "em.avnet.com:mini_itx_7z045:part0:1.0"
   }
-
   if [regexp "_rfsom$" $project_name] {
-    set xl_board "rfsom"
-    set project_part "xc7z035ifbg676-2L"
-    set project_board "not-applicable"
+    set p_device "xc7z035ifbg676-2L"
+    set p_board "not-applicable"
   }
 
   # planahead - 6 and down
 
-  if {$xl_board eq "ml605"} {
+  if {$p_board eq "ml605"} {
 
-    set project_system_dir "./$project_name.srcs/sources_1/edk/$xl_board"
+    set project_system_dir "./$project_name.srcs/sources_1/edk/$p_board"
 
-    create_project $project_name . -part $project_part  -force
-    set_property board $project_board [current_project]
+    create_project $project_name . -part $p_device  -force
+    set_property board $p_board [current_project]
 
     import_files -norecurse $ad_hdl_dir/projects/common/ml605/system.xmp
 
@@ -102,9 +91,9 @@ proc adi_project_create {project_name} {
 
   set project_system_dir "./$project_name.srcs/sources_1/bd/system"
 
-  create_project $project_name . -part $project_part -force
-  if {$project_board ne "not-applicable"} {
-    set_property board $project_board [current_project]
+  create_project $project_name . -part $p_device -force
+  if {$p_board ne "not-applicable"} {
+    set_property board $p_board [current_project]
   }
 
   set lib_dirs $ad_hdl_dir/library
@@ -146,13 +135,13 @@ proc adi_project_run {project_name} {
 
   global ad_hdl_dir
   global ad_phdl_dir
-  global xl_board
+  global p_board
 
   # planahead - 6 and down
 
-  if {$xl_board eq "ml605"} {
+  if {$p_board eq "ml605"} {
 
-    set project_system_dir "./$project_name.srcs/sources_1/edk/$xl_board"
+    set project_system_dir "./$project_name.srcs/sources_1/edk/$p_board"
 
     set_property strategy MapTiming [get_runs impl_1]
     set_property strategy TimingWithIOBPacking [get_runs synth_1]
