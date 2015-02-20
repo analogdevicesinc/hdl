@@ -77,8 +77,7 @@ module ad7401
     output reg          adc_status_o,
 
     //AD7401 control and data interface
-    input               adc_mdata_i,    // AD7401 MDAT pin
-    output              adc_mclkin_o    // AD7401 MCLKIN pin
+    input               adc_mdata_i    // AD7401 MDAT pin
 );
 
 //------------------------------------------------------------------------------
@@ -113,7 +112,6 @@ localparam WAIT_DATA_RDY_LOW_STATE  = 5'b10000;
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
 //------------------------------------------------------------------------------
-assign adc_mclkin_o             = adc_clk_i;    // use clock signal for driver and for ADC
 
 // synchronize data on fpga_clki
 always @(posedge fpga_clk_i)

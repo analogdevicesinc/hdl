@@ -37,8 +37,7 @@
 
 `timescale 1ns/100ps
 
-module axi_mc_current_monitor
-#(
+module axi_mc_current_monitor #(
     parameter C_S_AXI_MIN_SIZE = 32'hffff
 )
 (
@@ -46,29 +45,21 @@ module axi_mc_current_monitor
 // physical interface
 
     input           adc_ia_dat_i,
-    output          adc_ia_clk_o,
+    output          adc_enable_ia,
     input           adc_ib_dat_i,
-    output          adc_ib_clk_o,
-    input           adc_it_dat_i,
-    output          adc_it_clk_o,
+    output          adc_enable_ib,
     input           adc_vbus_dat_i,
-    output          adc_vbus_clk_o,
+    output          adc_enable_vbus,
+    output          adc_enable_stub,
+    output          adc_clk_o,
 
     input           ref_clk,
+    input           adc_clk_i,
 
-    output [17:0]   ia_o,
-    output [17:0]   ib_o,
-    output [17:0]   it_o,
+    output [15:0]   ia_o,
+    output [15:0]   ib_o,
+    output [15:0]   vbus_o,
     output          i_ready_o,
-
-  // dma interface
-
-    output          adc_clk_o,
-    output          adc_dwr_o,
-    output  [63:0]  adc_ddata_o,
-    output          adc_dsync_o,
-    input           adc_dovf_i,
-    input           adc_dunf_i,
 
   // axi interface
 
@@ -90,40 +81,16 @@ module axi_mc_current_monitor
     output          s_axi_rvalid,
     output  [1:0]   s_axi_rresp,
     output  [31:0]  s_axi_rdata,
-    input           s_axi_rready,
-
-  // debug signals
-
-    output          adc_mon_valid,
-    output  [31:0]  adc_mon_data
+    input           s_axi_rready
 );
 
 //------------------------------------------------------------------------------
 //----------- Registers Declarations -------------------------------------------
 //------------------------------------------------------------------------------
 
-reg             adc_valid       = 'd0;
-reg     [63:0]  adc_data        = 'd0;
-reg     [47:0]  adc_data_3      = 'd0;
 reg     [31:0]  up_rdata        = 'd0;
-reg             up_wack          = 'd0;
-reg             up_rack          = 'd0;
-reg     [1:0]   adc_data_cnt    = 'd0;
-reg     [9:0]   adc_clk_cnt     = 'd0;  // used to generate 10 MHz clock for ADCs
-reg             adc_clk_reg     = 'd0;  // used to generate 10 MHz clock for ADCs
-
-reg             acq_run_reg     = 'd0;  // register used for synchronizing data acquisition
-reg             adc_valid_3     = 'd0;
-reg     [47:0]  adc_data_3_1110 = 'd0;
-reg     [47:0]  adc_data_3_1101 = 'd0;
-reg     [47:0]  adc_data_3_1011 = 'd0;
-reg     [47:0]  adc_data_3_0111 = 'd0;
-reg     [63:0]  adc_data_1110   = 'd0;
-reg     [63:0]  adc_data_1101   = 'd0;
-reg     [63:0]  adc_data_1011   = 'd0;
-reg     [63:0]  adc_data_0111   = 'd0;
-reg             adc_dsync_r_3   = 'd0;
-reg             adc_dsync_r     = 'd0;
+reg             up_wack         = 'd0;
+reg             up_rack         = 'd0;
 
 //------------------------------------------------------------------------------
 //----------- Wires Declarations -----------------------------------------------
@@ -148,27 +115,22 @@ wire    [31:0]  up_rdata_0_s;
 wire    [31:0]  up_rdata_1_s;
 wire    [31:0]  up_rdata_2_s;
 wire    [31:0]  up_rdata_3_s;
-wire            up_ack_0_s;
-wire            up_ack_1_s;
-wire            up_ack_2_s;
-wire            up_ack_3_s;
+wire            up_rack_0_s;
+wire            up_rack_1_s;
+wire            up_rack_2_s;
+wire            up_rack_3_s;
+wire            up_wack_0_s;
+wire            up_wack_1_s;
+wire            up_wack_2_s;
+wire            up_wack_3_s;
 
 wire            adc_status_a_s;
 wire    [15:0]  adc_data_ia_s ;
 wire            data_rd_ready_ia_s;
 wire            adc_status_b_s;
 wire    [15:0]  adc_data_ib_s;
-wire            adc_status_it_s;
-wire    [15:0]  adc_data_it_s;
-wire    [15:0]  adc_data_it_n_s;
 wire            adc_status_vbus_s;
-wire    [15:0]  adc_data_vbus_s ;
-wire            adc_enable_ia;
-wire            adc_enable_ib;
-wire            adc_enable_it;
-wire            adc_enable_vbus;
-
-wire            adc_clk_s;
+wire    [15:0]  adc_data_vbus_s;
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
@@ -179,304 +141,17 @@ wire            adc_clk_s;
 assign up_clk               = s_axi_aclk;
 assign up_rstn              = s_axi_aresetn;
 
-assign adc_clk_o            = ref_clk; // use reference clock to send data to the dma
-assign adc_dwr_o            = adc_valid;
-assign adc_ddata_o          = adc_data;
-assign adc_dsync_o          = adc_dsync_r;
-
-// monitor signals
-
-assign adc_mon_valid        = data_rd_ready_ia_s;
-assign adc_mon_data[15: 0]  = adc_data[15:0];
-assign adc_mon_data[31:16]  = {adc_enable_vbus, adc_enable_it, adc_enable_ib, adc_enable_ia, adc_rst, data_rd_ready_ia_s,  adc_data_cnt, adc_ia_clk_o, adc_data_ia_s[6:0]};
-
 // current outputs
 
-assign i_ready_o        = data_rd_ready_ia_s;
-assign ia_o             = {adc_data_ia_s - 16'h7FFF, 2'b00};
-assign ib_o             = {adc_data_ib_s - 16'h7FFF, 2'b00};
-assign it_o             = {adc_data_it_s, 2'b00};
-assign adc_data_it_n_s  = 65535 - adc_data_it_s;
+assign i_ready_o  = data_rd_ready_ia_s;
+
+assign ia_o    = adc_data_ia_s ;
+assign ib_o    = adc_data_ib_s ;
+assign vbus_o  = adc_data_vbus_s;
 
 // adc clock
 
-assign adc_clk_s            = adc_clk_reg;
-
-// ADC clock generation
-
-always @(posedge ref_clk)
-begin
-    if(adc_clk_cnt < 10'd4)
-    begin
-        adc_clk_cnt <= adc_clk_cnt + 1;
-    end
-    else
-    begin
-        adc_clk_cnt <= 10'd0;
-        adc_clk_reg <= ~adc_clk_reg;
-    end
-end
-
-// adc channels - dma interface
-
-always @(posedge ref_clk)
-begin
-    if(data_rd_ready_ia_s == 1'b1)
-    begin
-        adc_valid_3             <= adc_data_cnt[0] | adc_data_cnt[1];
-        adc_dsync_r_3           <= adc_data_cnt[0] | ~adc_data_cnt[1];
-        adc_data_3_1110[47:32]  <= adc_data_vbus_s;
-        adc_data_3_1110[31:16]  <= adc_data_it_n_s;
-        adc_data_3_1110[15:0]   <= adc_data_ib_s;
-        adc_data_3_1101[47:32]  <= adc_data_vbus_s;
-        adc_data_3_1101[31:16]  <= adc_data_it_n_s;
-        adc_data_3_1101[15:0]   <= adc_data_ia_s;
-        adc_data_3_1011[47:32]  <= adc_data_vbus_s;
-        adc_data_3_1011[31:16]  <= adc_data_ib_s;
-        adc_data_3_1011[15:0]   <= adc_data_ia_s;
-        adc_data_3_0111[47:32]  <= adc_data_it_n_s;
-        adc_data_3_0111[31:16]  <= adc_data_ib_s;
-        adc_data_3_0111[15:0]   <= adc_data_ia_s;
-        case(adc_data_cnt)
-            2'b11:
-            begin
-                adc_data_1110[63:48]    <= adc_data_vbus_s;
-                adc_data_1110[47:32]    <= adc_data_it_n_s;
-                adc_data_1110[31:16]    <= adc_data_ib_s;
-                adc_data_1110[15:0]     <= adc_data_3_1110[47:32];
-                adc_data_1101[63:48]    <= adc_data_vbus_s;
-                adc_data_1101[47:32]    <= adc_data_it_n_s;
-                adc_data_1101[31:16]    <= adc_data_ia_s;
-                adc_data_1101[15:0]     <= adc_data_3_1101[47:32];
-                adc_data_1011[63:48]    <= adc_data_vbus_s;
-                adc_data_1011[47:32]    <= adc_data_ib_s;
-                adc_data_1011[31:16]    <= adc_data_ia_s;
-                adc_data_1011[15:0]     <= adc_data_3_1011[47:32];
-                adc_data_0111[63:48]    <= adc_data_it_n_s;
-                adc_data_0111[47:32]    <= adc_data_ib_s;
-                adc_data_0111[31:16]    <= adc_data_ia_s;
-                adc_data_0111[15:0]     <= adc_data_3_0111[47:32];
-            end
-            2'b10:
-            begin
-                adc_data_1110[63:48]    <= adc_data_it_n_s;
-                adc_data_1110[47:32]    <= adc_data_ib_s;
-                adc_data_1110[31:16]    <= adc_data_3_1110[47:32];
-                adc_data_1110[15:0]     <= adc_data_3_1110[31:16];
-                adc_data_1101[63:48]    <= adc_data_it_n_s;
-                adc_data_1101[47:32]    <= adc_data_ia_s;
-                adc_data_1101[31:16]    <= adc_data_3_1101[47:32];
-                adc_data_1101[15:0]     <= adc_data_3_1101[31:16];
-                adc_data_1011[63:48]    <= adc_data_ib_s;
-                adc_data_1011[47:32]    <= adc_data_ia_s;
-                adc_data_1011[31:16]    <= adc_data_3_1011[47:32];
-                adc_data_1011[15:0]     <= adc_data_3_1011[31:16];
-                adc_data_0111[63:48]    <= adc_data_ib_s;
-                adc_data_0111[47:32]    <= adc_data_ia_s;
-                adc_data_0111[31:16]    <= adc_data_3_0111[47:32];
-                adc_data_0111[15:0]     <= adc_data_3_0111[31:16];
-            end
-            2'b01:
-            begin
-                adc_data_1110[63:48]    <= adc_data_ib_s;
-                adc_data_1110[47:32]    <= adc_data_3_1110[47:32];
-                adc_data_1110[31:16]    <= adc_data_3_1110[31:16];
-                adc_data_1110[15:0]     <= adc_data_3_1110[15:0];
-                adc_data_1101[63:48]    <= adc_data_ia_s;
-                adc_data_1101[47:32]    <= adc_data_3_1101[47:32];
-                adc_data_1101[31:16]    <= adc_data_3_1101[31:16];
-                adc_data_1101[15:0]     <= adc_data_3_1101[15:0];
-                adc_data_1011[63:48]    <= adc_data_ia_s;
-                adc_data_1011[47:32]    <= adc_data_3_1011[47:32];
-                adc_data_1011[31:16]    <= adc_data_3_1011[31:16];
-                adc_data_1011[15:0]     <= adc_data_3_1011[15:0];
-                adc_data_0111[63:48]    <= adc_data_ia_s;
-                adc_data_0111[47:32]    <= adc_data_3_0111[47:32];
-                adc_data_0111[31:16]    <= adc_data_3_0111[31:16];
-                adc_data_0111[15:0]     <= adc_data_3_0111[15:0];
-            end
-            2'b00:
-            begin
-                adc_data_1110[63:48]    <= 16'hdead;
-                adc_data_1110[47:32]    <= 16'hdead;
-                adc_data_1110[31:16]    <= 16'hdead;
-                adc_data_1110[15:0]     <= 16'hdead;
-                adc_data_1101[63:48]    <= 16'hdead;
-                adc_data_1101[47:32]    <= 16'hdead;
-                adc_data_1101[31:16]    <= 16'hdead;
-                adc_data_1101[15:0]     <= 16'hdead;
-                adc_data_1011[63:48]    <= 16'hdead;
-                adc_data_1011[47:32]    <= 16'hdead;
-                adc_data_1011[31:16]    <= 16'hdead;
-                adc_data_1011[15:0]     <= 16'hdead;
-                adc_data_0111[63:48]    <= 16'hdead;
-                adc_data_0111[47:32]    <= 16'hdead;
-                adc_data_0111[31:16]    <= 16'hdead;
-                adc_data_0111[15:0]     <= 16'hdead;
-            end
-        endcase
-    end
-end
-
-always @(posedge ref_clk)
-begin
-    if(data_rd_ready_ia_s == 1'b1)
-    begin
-        case({adc_enable_vbus, adc_enable_it, adc_enable_ib, adc_enable_ia})
-            4'b1111:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= 1'b1;
-                adc_data[63:48] <= adc_data_vbus_s;
-                adc_data[47:32] <= adc_data_it_n_s;
-                adc_data[31:16] <= adc_data_ib_s;
-                adc_data[15: 0] <= adc_data_ia_s;
-            end
-            4'b1110:
-            begin
-                adc_dsync_r     <= adc_dsync_r_3;
-                adc_valid       <= adc_valid_3;
-                adc_data        <= adc_data_1110;
-            end
-            4'b1101:
-            begin
-                adc_dsync_r     <= adc_dsync_r_3;
-                adc_valid       <= adc_valid_3;
-                adc_data        <= adc_data_1101;
-            end
-            4'b1100:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_vbus_s;
-                adc_data[47:32] <= adc_data_it_n_s;
-                adc_data[31:16] <= adc_data[63:48];
-                adc_data[15: 0] <= adc_data[47:32];
-            end
-            4'b1011:
-            begin
-                adc_dsync_r     <= adc_dsync_r_3;
-                adc_valid       <= adc_valid_3;
-                adc_data        <= adc_data_1011;
-            end
-            4'b1010:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_vbus_s;
-                adc_data[47:32] <= adc_data_ib_s;
-                adc_data[31:16] <= adc_data[63:48];
-                adc_data[15: 0] <= adc_data[47:32];
-            end
-            4'b1001:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_vbus_s;
-                adc_data[47:32] <= adc_data_ia_s;
-                adc_data[31:16] <= adc_data[63:48];
-                adc_data[15: 0] <= adc_data[47:32];
-            end
-            4'b1000:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[1] & adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_vbus_s;
-                adc_data[47:32] <= adc_data[63:48];
-                adc_data[31:16] <= adc_data[47:32];
-                adc_data[15: 0] <= adc_data[31:16];
-            end
-            4'b0111:
-            begin
-                adc_dsync_r     <= adc_dsync_r_3;
-                adc_valid       <= adc_valid_3;
-                adc_data        <= adc_data_0111;
-            end
-            4'b0110:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_it_n_s;
-                adc_data[47:32] <= adc_data_ib_s;
-                adc_data[31:16] <= adc_data[63:48];
-                adc_data[15: 0] <= adc_data[47:32];
-            end
-            4'b0101:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_it_n_s;
-                adc_data[47:32] <= adc_data_ia_s;
-                adc_data[31:16] <= adc_data[63:48];
-                adc_data[15: 0] <= adc_data[47:32];
-            end
-            4'b0100:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[1] & adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_it_n_s;
-                adc_data[47:32] <= adc_data[63:48];
-                adc_data[31:16] <= adc_data[47:32];
-                adc_data[15: 0] <= adc_data[31:16];
-            end
-            4'b0011:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_ib_s;
-                adc_data[47:32] <= adc_data_ia_s;
-                adc_data[31:16] <= adc_data[63:48];
-                adc_data[15: 0] <= adc_data[47:32];
-            end
-            4'b0010:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[1] & adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_ib_s;
-                adc_data[47:32] <= adc_data[63:48];
-                adc_data[31:16] <= adc_data[47:32];
-                adc_data[15: 0] <= adc_data[31:16];
-            end
-            4'b0001:
-            begin
-                adc_dsync_r     <= 1'b1;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= adc_data_cnt[1] & adc_data_cnt[0];
-                adc_data[63:48] <= adc_data_ia_s;
-                adc_data[47:32] <= adc_data[63:48];
-                adc_data[31:16] <= adc_data[47:32];
-                adc_data[15: 0] <= adc_data[31:16];
-            end
-            default:
-            begin
-                adc_dsync_r     <= 1'b0;
-                adc_data_3      <= 48'd0;
-                adc_valid       <= 1'b1;
-                adc_data[63:48] <= 16'hdead;
-                adc_data[47:32] <= 16'hdead;
-                adc_data[31:16] <= 16'hdead;
-                adc_data[15: 0] <= 16'hdead;
-            end
-        endcase
-        adc_data_cnt <= adc_data_cnt + 2'b1;
-    end
-    else
-    begin
-        adc_valid       <= 1'b0;
-        adc_data        <= adc_data;
-        adc_data_cnt    <= adc_data_cnt;
-    end
-end
+assign adc_clk_o  = adc_clk_i;
 
 // processor read interface
 
@@ -485,14 +160,14 @@ begin
     if(up_rstn == 0)
     begin
         up_rdata  <= 'd0;
-        up_rack    <= 'd0;
-        up_wack    <= 'd0;
+        up_rack   <= 'd0;
+        up_wack   <= 'd0;
     end
     else
     begin
-        up_rdata  <= up_adc_common_rdata_s | up_rdata_0_s | up_rdata_1_s | up_rdata_2_s | up_rdata_3_s ;
-        up_rack    <= up_adc_common_rack_s | up_rack_0_s | up_rack_1_s | up_rack_2_s | up_rack_3_s ;
-        up_wack    <= up_adc_common_wack_s | up_wack_0_s | up_wack_1_s | up_wack_2_s | up_wack_3_s ;
+        up_rdata  <= up_adc_common_rdata_s | up_rdata_0_s | up_rdata_1_s | up_rdata_2_s |up_rdata_3_s  ;
+        up_rack   <= up_adc_common_rack_s | up_rack_0_s | up_rack_1_s | up_rack_2_s | up_rack_3_s ;
+        up_wack   <= up_adc_common_wack_s | up_wack_0_s | up_wack_1_s | up_wack_2_s | up_wack_3_s;
     end
 end
 
@@ -500,46 +175,33 @@ end
 
 ad7401 ia_if(
     .fpga_clk_i(ref_clk),
-    .adc_clk_i(adc_clk_s),
+    .adc_clk_i(adc_clk_o),
     .reset_i(adc_rst),
     .adc_status_o(adc_status_a_s),
     .data_o(adc_data_ia_s),
     .data_rd_ready_o(data_rd_ready_ia_s),
-    .adc_mdata_i(adc_ia_dat_i),
-    .adc_mclkin_o(adc_ia_clk_o));
+    .adc_mdata_i(adc_ia_dat_i));
 
 ad7401 ib_if(
     .fpga_clk_i(ref_clk),
-    .adc_clk_i(adc_clk_s),
+    .adc_clk_i(adc_clk_o),
     .reset_i(adc_rst),
     .adc_status_o(adc_status_b_s),
     .data_o(adc_data_ib_s),
     .data_rd_ready_o(),
-    .adc_mdata_i(adc_ib_dat_i),
-    .adc_mclkin_o(adc_ib_clk_o));
-
-ad7401 it_if(
-    .fpga_clk_i(ref_clk),
-    .adc_clk_i(adc_clk_s),
-    .reset_i(adc_rst),
-    .adc_status_o(adc_status_it_s),
-    .data_o(adc_data_it_s),
-    .data_rd_ready_o(),
-    .adc_mdata_i(adc_it_dat_i),
-    .adc_mclkin_o(adc_it_clk_o));
+    .adc_mdata_i(adc_ib_dat_i));
 
 ad7401 vbus_if(
     .fpga_clk_i(ref_clk),
-    .adc_clk_i(adc_clk_s),
+    .adc_clk_i(adc_clk_o),
     .reset_i(adc_rst),
     .adc_status_o(adc_status_vbus_s),
     .data_o(adc_data_vbus_s),
     .data_rd_ready_o(),
-    .adc_mdata_i(adc_vbus_dat_i),
-    .adc_mclkin_o(adc_vbus_clk_o));
+    .adc_mdata_i(adc_vbus_dat_i));
 
 up_adc_channel #(.PCORE_ADC_CHID(0)) i_up_adc_channel_ia(
-    .adc_clk(adc_clk_s),
+    .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_ia),
     .adc_iqcor_enb(),
@@ -585,7 +247,7 @@ up_adc_channel #(.PCORE_ADC_CHID(0)) i_up_adc_channel_ia(
     .up_rack (up_rack_0_s));
 
 up_adc_channel #(.PCORE_ADC_CHID(1)) i_up_adc_channel_ib(
-    .adc_clk(adc_clk_s),
+    .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_ib),
     .adc_iqcor_enb(),
@@ -628,10 +290,10 @@ up_adc_channel #(.PCORE_ADC_CHID(1)) i_up_adc_channel_ib(
     .up_rdata (up_rdata_1_s),
     .up_rack (up_rack_1_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(2)) i_up_adc_channel_it(
-    .adc_clk(adc_clk_s),
+up_adc_channel #(.PCORE_ADC_CHID(2)) i_up_adc_channel_vbus(
+    .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
-    .adc_enable(adc_enable_it),
+    .adc_enable(adc_enable_vbus),
     .adc_iqcor_enb(),
     .adc_dcfilt_enb(),
     .adc_dfmt_se(),
@@ -672,10 +334,10 @@ up_adc_channel #(.PCORE_ADC_CHID(2)) i_up_adc_channel_it(
     .up_rdata (up_rdata_2_s),
     .up_rack (up_rack_2_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(3)) i_up_adc_channel_vbus(
-    .adc_clk(adc_clk_s),
+up_adc_channel #(.PCORE_ADC_CHID(3)) i_up_adc_channel_stub(
+    .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
-    .adc_enable(adc_enable_vbus),
+    .adc_enable(adc_enable_stub),
     .adc_iqcor_enb(),
     .adc_dcfilt_enb(),
     .adc_dfmt_se(),
@@ -720,15 +382,15 @@ up_adc_channel #(.PCORE_ADC_CHID(3)) i_up_adc_channel_vbus(
 
 up_adc_common i_up_adc_common(
     .mmcm_rst(),
-    .adc_clk(adc_clk_s),
+    .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_r1_mode(),
     .adc_ddr_edgesel(),
     .adc_pin_mode(),
     .adc_status(1'b1),
-    .adc_sync_status(1'b0),
-    .adc_status_ovf(adc_dovf_i),
-    .adc_status_unf(adc_dunf_i),
+    .adc_sync_status(1'b1),
+    .adc_status_ovf(),
+    .adc_status_unf(),
     .adc_clk_ratio(32'd1),
     .adc_start_code(),
     .adc_sync(),
@@ -758,7 +420,7 @@ up_adc_common i_up_adc_common(
     .drp_locked(1'b0),
 
     .up_usr_chanmax(),
-    .adc_usr_chanmax(8'd0),
+    .adc_usr_chanmax(8'd3),
     .up_adc_gpio_in(32'h0),
     .up_adc_gpio_out(),
 
@@ -808,4 +470,3 @@ endmodule
 
 // ***************************************************************************
 // ***************************************************************************
-

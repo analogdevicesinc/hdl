@@ -83,12 +83,12 @@ localparam IDLE             = 6'b100000;
 //------------------------------------------------------------------------------
 //----------- Registers Declarations -------------------------------------------
 //------------------------------------------------------------------------------
-reg [5:0]   state;              // current state
-reg [5:0]   next_state;         // next state
-reg [2:0]   position_old;       // saves the latest position
-reg [31:0]  speed_count;        // counts the current speed of rotation
-reg [31:0]  speed_divider;      // divides the speed of rotation by 2, correspoding to 30 degrees
-reg [31:0]  delay_count;        // Applied the delay to the input signal
+reg [5:0]   state         = RESET;  // current state
+reg [5:0]   next_state    = RESET;  // next state
+reg [2:0]   position_old  = 3'h0;   // saves the latest position
+reg [31:0]  speed_count   = 32'h0;  // counts the current speed of rotation
+reg [31:0]  speed_divider = 32'h0;  // divides the speed of rotation by 2, correspoding to 30 degrees
+reg [31:0]  delay_count   = 32'h0;  // Applied the delay to the input signal
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------

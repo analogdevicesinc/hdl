@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------------
 //
-// Copyright 2013(c) Analog Devices, Inc.
+// Copyright 2014(c) Analog Devices, Inc.
 //
 // All rights reserved.
 //
@@ -34,68 +34,46 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // -----------------------------------------------------------------------------
-// FILE NAME : debouncer.v
+// FILE NAME : delay.v
 // MODULE NAME : debouncer
 // AUTHOR : ACozma
-// AUTHOR'S EMAIL : andrei.cozma@analog.com
-// -----------------------------------------------------------------------------
-// KEYWORDS :
-// -----------------------------------------------------------------------------
-// PURPOSE : Module used for debouncing input signals
-// -----------------------------------------------------------------------------
-// REUSE ISSUES
-// Reset Strategy      :
-// Clock Domains       :
-// Critical Timing     :
-// Test Features       :
-// Asynchronous I/F    :
-// Instantiations      :
-// Synthesizable (y/n) : y
-// Target Device       :
-// Other               :
+// AUTHOR’S EMAIL : andrei.cozma@analog.com
+//
 // -----------------------------------------------------------------------------
 
 `timescale 1ns / 1ps
 
-module debouncer
-//----------- Paramters Declarations -------------------------------------------
+module delay
+//----------- Parameters Declarations -------------------------------------------
 #(
-    parameter DEBOUNCER_LEN = 4
+    parameter DELAY = 128
 )
 //----------- Ports Declarations -----------------------------------------------
 (
     input       clk_i,
-    input       rst_i,
+    input       rst_n_i,
     input       sig_i,
     output reg  sig_o
 );
 //------------------------------------------------------------------------------
 //----------- Registers Declarations -------------------------------------------
 //------------------------------------------------------------------------------
-reg [DEBOUNCER_LEN-1:0] shift_reg;
+reg [DELAY-1:0] shift_reg;
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
 //------------------------------------------------------------------------------
-
 always @(posedge clk_i)
 begin
-    if(rst_i == 1)
+    if(rst_n_i == 0)
     begin
         shift_reg   <= 0;
         sig_o       <= 0;
     end
     else
     begin
-        shift_reg <= {shift_reg[DEBOUNCER_LEN-2:0], sig_i};
-        if(shift_reg == {DEBOUNCER_LEN{1'b1}})
-        begin
-            sig_o <= 1'b1;
-        end
-        else if(shift_reg == {DEBOUNCER_LEN{1'b0}})
-        begin
-            sig_o <= 1'b0;
-        end
+        shift_reg   <= {shift_reg[DELAY-2:0], sig_i};
+        sig_o       <= shift_reg[DELAY-1];
     end
 end
 
