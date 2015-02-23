@@ -11,7 +11,7 @@
   set pmod_gpio           [create_bd_port -dir I pmod_gpio]
 
   # interrupts
-  set pmod_spi_dma_intr  [create_bd_port -dir O pmod_spi_dma_intr]
+  set pmod_spi_dma_intr   [create_bd_port -dir O pmod_spi_dma_intr]
 
   # instances
 
@@ -35,7 +35,7 @@
   set pmod_spi_dma_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 pmod_spi_dma_interconnect]
   set_property -dict [list CONFIG.NUM_MI {1}] $pmod_spi_dma_interconnect
 
-  set pmod_gpio_core [create_bd_cell -type ip -vlnv analog.com:user:util_pmod_ss:1.0 pmod_gpio_core]
+  set pmod_gpio_core [create_bd_cell -type ip -vlnv analog.com:user:util_pmod_fmeter:1.0 pmod_gpio_core]
 
   # additional configurations
   set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
