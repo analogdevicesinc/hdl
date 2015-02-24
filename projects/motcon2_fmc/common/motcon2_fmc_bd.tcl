@@ -555,8 +555,9 @@
 
   # ethernet
 
+
   connect_bd_net -net sys_200m_clk [get_bd_ports refclk] [get_bd_pins sys_ps7/FCLK_CLK1]
-  connect_bd_net -net sys_rstgen_peripheral_reset [get_bd_ports refclk_rst]
+  connect_bd_net -net sys_rstgen_peripheral_reset [get_bd_ports refclk_rst] [get_bd_pins sys_rstgen/peripheral_reset]
   connect_bd_net -net sys_100m_resetn [get_bd_ports eth_phy_rst_n]
   connect_bd_net [get_bd_pins /sys_ps7/ENET0_MDIO_MDC] [get_bd_ports eth_mdio_mdc]
   connect_bd_net [get_bd_pins /sys_ps7/ENET0_MDIO_O] [get_bd_ports eth_mdio_o]
@@ -565,7 +566,8 @@
     # phy 1
   connect_bd_intf_net -intf_net sys_ps7_GMII_ETHERNET_1 [get_bd_intf_pins gmii_to_rgmii_eth1/gmii] [get_bd_intf_pins sys_ps7/GMII_ETHERNET_0]
   connect_bd_intf_net -intf_net gmii_to_rgmii_eth1_rgmii [get_bd_intf_ports eth1_rgmii] [get_bd_intf_pins gmii_to_rgmii_eth1/rgmii]
-  connect_bd_net -net sys_rstgen_peripheral_reset [get_bd_pins gmii_to_rgmii_eth1/reset]
+  connect_bd_net -net sys_rstgen_peripheral_reset [get_bd_pins gmii_to_rgmii_eth1/reset] [get_bd_pins sys_rstgen/peripheral_reset]
+
   connect_bd_net -net sys_audio_clkgen_clk_out2 [get_bd_pins gmii_to_rgmii_eth1/clk_20m] [get_bd_pins sys_audio_clkgen/clk_out4]
   connect_bd_net -net sys_audio_clkgen_clk_out3 [get_bd_pins gmii_to_rgmii_eth1/clk_25m] [get_bd_pins sys_audio_clkgen/clk_out3]
   connect_bd_net -net sys_audio_clkgen_clk_out4 [get_bd_pins gmii_to_rgmii_eth1/clk_125m] [get_bd_pins sys_audio_clkgen/clk_out2]
@@ -575,7 +577,7 @@
     # phy 2
   connect_bd_intf_net -intf_net sys_ps7_GMII_ETHERNET_2 [get_bd_intf_pins gmii_to_rgmii_eth2/gmii] [get_bd_intf_pins sys_ps7/GMII_ETHERNET_1]
   connect_bd_intf_net -intf_net gmii_to_rgmii_eth2_rgmii [get_bd_intf_ports eth2_rgmii] [get_bd_intf_pins gmii_to_rgmii_eth2/rgmii]
-  connect_bd_net -net sys_rstgen_peripheral_reset [get_bd_pins gmii_to_rgmii_eth2/reset]
+  connect_bd_net -net sys_rstgen_peripheral_reset [get_bd_pins gmii_to_rgmii_eth2/reset] [get_bd_pins sys_rstgen/peripheral_reset]
   connect_bd_net -net sys_audio_clkgen_clk_out2 [get_bd_pins gmii_to_rgmii_eth2/clk_20m] [get_bd_pins sys_audio_clkgen/clk_out4]
   connect_bd_net -net sys_audio_clkgen_clk_out3 [get_bd_pins gmii_to_rgmii_eth2/clk_25m] [get_bd_pins sys_audio_clkgen/clk_out3]
   connect_bd_net -net sys_audio_clkgen_clk_out4 [get_bd_pins gmii_to_rgmii_eth2/clk_125m] [get_bd_pins sys_audio_clkgen/clk_out2]

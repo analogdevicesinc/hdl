@@ -136,9 +136,9 @@ create_clock -period 8.000 -name rgmii_rxc1 [get_ports eth1_rgmii_rxc]
 create_clock -name eth1_rx_clk_vir -period 8
 
 set_property IDELAY_VALUE 18 [get_cells */*/gmii_to_rgmii_eth1/inst/*delay_rgmii_rx_ctl]
-set_property IDELAY_VALUE 18 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth1*/*delay_rgmii_rxd*}]
+set_property IDELAY_VALUE 18 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth1*/*delay_rgmii_rd*}]
 set_property IODELAY_GROUP eth_idelay_grp [get_cells */*/gmii_to_rgmii_eth1/inst/*delay_rgmii_rx_ctl]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth1*/*delay_rgmii_rxd*}]
+set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth1*/*delay_rgmii_rd*}]
 
 set_input_delay -clock [get_clocks eth1_rx_clk_vir] -max -1.2 [get_ports {eth1_rgmii_rd[*] eth1_rgmii_rx_ctl}]
 set_input_delay -clock [get_clocks eth1_rx_clk_vir] -min -2.8 [get_ports {eth1_rgmii_rd[*] eth1_rgmii_rx_ctl}]
@@ -170,9 +170,9 @@ set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_system_wrapper/system_i/gmi
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_system_wrapper/system_i/sys_audio_clkgen/inst/clk_out3]
 
 set_property IDELAY_VALUE 18 [get_cells */*/gmii_to_rgmii_eth2/inst/*delay_rgmii_rx_ctl]
-set_property IDELAY_VALUE 18 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth2*/*delay_rgmii_rxd*}]
+set_property IDELAY_VALUE 18 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth2*/*delay_rgmii_rd*}]
 set_property IODELAY_GROUP eth_idelay_grp [get_cells */*/gmii_to_rgmii_eth2/inst/*delay_rgmii_rx_ctl]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth2*/*delay_rgmii_rxd*}]
+set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth2*/*delay_rgmii_rd*}]
 
 set_input_delay -clock [get_clocks eth2_rx_clk_vir] -max -1.2 [get_ports {eth2_rgmii_rd[*] eth2_rgmii_rx_ctl}]
 set_input_delay -clock [get_clocks eth2_rx_clk_vir] -min -2.8 [get_ports {eth2_rgmii_rd[*] eth2_rgmii_rx_ctl}]
