@@ -39,14 +39,12 @@
 
 module axi_mc_speed
 #(
-    parameter C_S_AXI_MIN_SIZE = 32'hffff,
-    parameter MOTOR_CONTROL_REVISION = 2
+    parameter C_S_AXI_MIN_SIZE = 32'hffff
 )
 //----------- Ports Declarations -----------------------------------------------
 (
 // physical interface
     input   [2:0]   position_i,
-    input   [2:0]   bemf_i,
     output  [2:0]   position_o,
     output  [31:0]  speed_o,
     output          new_speed_o,
@@ -54,16 +52,7 @@ module axi_mc_speed
 
     input           ref_clk,
 
-  // dma interface
-
-    output          adc_clk_o,
-    output          adc_dwr_o,
-    output  [31:0]  adc_ddata_o,
-    input           adc_dovf_i,
-    input           adc_dunf_i,
-
 // axi interface
-
     input           s_axi_aclk,
     input           s_axi_aresetn,
     input           s_axi_awvalid,
@@ -82,19 +71,11 @@ module axi_mc_speed
     output          s_axi_rvalid,
     output  [ 1:0]  s_axi_rresp,
     output  [31:0]  s_axi_rdata,
-    input           s_axi_rready,
-
-// debug signals
-
-    output          adc_mon_valid,
-    output  [31:0]  adc_mon_data);
+    input           s_axi_rready);
 
 //------------------------------------------------------------------------------
 //----------- Registers Declarations -------------------------------------------
 //------------------------------------------------------------------------------
-
-reg             adc_valid = 'd0;
-reg     [31:0]  adc_data = 'd0;
 reg     [31:0]  up_rdata = 'd0;
 reg             up_wack = 'd0;
 reg             up_rack = 'd0;
@@ -103,14 +84,11 @@ reg             up_rack = 'd0;
 //----------- Wires Declarations -----------------------------------------------
 //------------------------------------------------------------------------------
 // internal clocks & resets
-
 wire            adc_rst;
 wire            up_rstn;
 wire            up_clk;
 
 // internal signals
-
-wire            adc_start_s;
 wire    [31:0]  speed_data_s;
 wire            adc_enable_s;
 wire            adc_status_s;
@@ -123,45 +101,25 @@ wire    [31:0]  up_adc_common_rdata_s;
 wire            up_adc_common_wack_s;
 wire            up_adc_common_rack_s;
 wire    [31:0]  pid_s;
-
-wire  [ 2:0]  position_s;
-wire  [ 2:0]  bemf_s;
-wire  [ 2:0]  bemf_delayed_s;
-wire          new_speed_s;
-wire  [ 2:0]  bemf_multiplex_s;
+wire    [ 2:0]  position_s;
+wire    [ 2:0]  bemf_s;
+wire    [ 2:0]  bemf_delayed_s;
+wire            new_speed_s;
+wire    [ 2:0]  bemf_multiplex_s;
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
 //------------------------------------------------------------------------------
 // signal name changes
-
 assign up_clk = s_axi_aclk;
 assign up_rstn = s_axi_aresetn;
 
-assign adc_clk_o            = ref_clk;
-assign adc_dwr_o            = adc_valid;
-assign adc_ddata_o          = adc_data;
-
-// monitor signals
-
-assign adc_mon_valid = new_speed_s;
-assign adc_mon_data  = { 20'h0, bemf_multiplex_s, bemf_s, bemf_delayed_s, position_s };
-
-assign bemf_multiplex_s =(MOTOR_CONTROL_REVISION == 2) ? position_i : bemf_i;
+assign bemf_s = position_s ;
 assign position_o       =(hall_bemf_i == 2'b01) ? bemf_delayed_s :  position_s;
 assign new_speed_o      = new_speed_s;
 assign speed_o          = speed_data_s;
 
-// adc channels - dma interface
-
-always @(posedge ref_clk)
-begin
-    adc_data      <= speed_data_s;
-    adc_valid     <= new_speed_s;
-end
-
 // processor read interface
-
 always @(negedge up_rstn or posedge up_clk)
 begin
     if(up_rstn == 0)
@@ -178,7 +136,6 @@ begin
 end
 
 // HALL sensors debouncers
-
 debouncer
 #( .DEBOUNCER_LEN(400))
 position_0(
@@ -203,31 +160,6 @@ position_2(
     .sig_i(position_i[2]),
     .sig_o(position_s[2]));
 
-// BEMF debouncer
-debouncer
-#( .DEBOUNCER_LEN(400))
-bemf_0(
-    .clk_i(ref_clk),
-    .rst_i(adc_rst),
-    .sig_i(bemf_multiplex_s[0]),
-    .sig_o(bemf_s[0]));
-
-debouncer
-#( .DEBOUNCER_LEN(400))
-bemf_1(
-    .clk_i(ref_clk),
-    .rst_i(adc_rst),
-    .sig_i(bemf_multiplex_s[1]),
-    .sig_o(bemf_s[1]));
-
-debouncer
-#( .DEBOUNCER_LEN(400))
-bemf_2(
-    .clk_i(ref_clk),
-    .rst_i(adc_rst),
-    .sig_i(bemf_multiplex_s[2]),
-    .sig_o(bemf_s[2]));
-
 delay_30_degrees delay_30_degrees_i1(
     .clk_i(ref_clk),
     .rst_i(adc_rst),
@@ -247,8 +179,7 @@ speed_detector_inst(
     .current_speed_o(),
     .speed_o(speed_data_s));
 
-  // common processor control
-
+// common processor control
 up_adc_common i_up_adc_common(
   .mmcm_rst(),
   .adc_clk(ref_clk),
@@ -257,9 +188,15 @@ up_adc_common i_up_adc_common(
   .adc_ddr_edgesel(),
   .adc_pin_mode(),
   .adc_status(1'b1),
-  .adc_status_ovf(adc_dovf_i),
-  .adc_status_unf(adc_dunf_i),
+  .adc_sync_status(1'b1),
+  .adc_status_ovf(),
+  .adc_status_unf(),
   .adc_clk_ratio(32'd1),
+  .adc_start_code(),
+  .adc_sync(),
+  .up_status_pn_err(1'b0),
+  .up_status_pn_oos(1'b0),
+  .up_status_or(1'b0),
   .delay_clk(1'b0),
   .delay_rst(),
   .delay_sel(),
@@ -279,8 +216,8 @@ up_adc_common i_up_adc_common(
   .drp_ready(1'b0),
   .drp_locked(1'b0),
   .up_usr_chanmax(),
-  .adc_usr_chanmax(8'd0),
-  .up_adc_gpio_in(),
+  .adc_usr_chanmax(8'd2),
+  .up_adc_gpio_in(32'h0),
   .up_adc_gpio_out(),
   .up_rstn(up_rstn),
   .up_clk(up_clk),
@@ -294,7 +231,6 @@ up_adc_common i_up_adc_common(
   .up_rack (up_adc_common_rack_s));
 
 // up bus interface
-
 up_axi i_up_axi(
         .up_rstn(up_rstn),
         .up_clk(up_clk),
@@ -325,6 +261,5 @@ up_axi i_up_axi(
         .up_rack (up_rack));
 
 endmodule
-
 // ***************************************************************************
 // ***************************************************************************

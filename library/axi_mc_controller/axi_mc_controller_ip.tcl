@@ -17,6 +17,7 @@ adi_ip_files axi_mc_controller [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "motor_driver.v" \
+  "delay.v" \
   "control_registers.v" \
   "axi_mc_controller.v" ]
 
