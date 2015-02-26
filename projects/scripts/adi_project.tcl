@@ -3,7 +3,7 @@ variable p_board
 variable p_device 
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2014.4"
+  set REQUIRED_VIVADO_VERSION "2014.4.1"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
