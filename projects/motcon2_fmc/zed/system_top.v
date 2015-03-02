@@ -118,11 +118,11 @@ module system_top (
   pwm_m2_dh_o,
   pwm_m2_dl_o,
   vt_enable,
-/*  vauxn0,
+  vauxn0,
   vauxn8,
   vauxp0,
   vauxp8,
-  muxaddr_out,*/
+/*  muxaddr_out,*/
 
   i2s_mclk,
   i2s_bclk,
@@ -226,14 +226,14 @@ module system_top (
   output          pwm_m2_cl_o;
   output          pwm_m2_dh_o;
   output          pwm_m2_dl_o;
-  
+
   output          vt_enable;
 
-/*  input           vauxn0;
+  input           vauxn0;
   input           vauxn8;
   input           vauxp0;
   input           vauxp8;
-  output  [ 3:0]  muxaddr_out;*/
+/*  output  [ 3:0]  muxaddr_out;*/
 
   output          spdif;
 
@@ -242,7 +242,6 @@ module system_top (
   output          i2s_lrclk;
   output          i2s_sdata_out;
   input           i2s_sdata_in;
-
 
   inout           iic_scl;
   inout           iic_sda;
@@ -437,11 +436,11 @@ module system_top (
     .pwm_m2_bl_o(pwm_m2_bl_o),
     .pwm_m2_ch_o(pwm_m2_ch_o),
     .pwm_m2_cl_o(pwm_m2_cl_o),
-/*    .Vaux0_v_n(vauxn0),
+    .Vaux0_v_n(vauxn0),
     .Vaux0_v_p(vauxp0),
     .Vaux8_v_n(vauxn8),
     .Vaux8_v_p(vauxp8),
-    .muxaddr_out(muxaddr_out),*/
+    /*.muxaddr_out(muxaddr_out),*/
     .i2s_bclk (i2s_bclk),
     .i2s_lrclk (i2s_lrclk),
     .i2s_mclk (i2s_mclk),
