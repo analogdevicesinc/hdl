@@ -4,7 +4,7 @@ hdl
 Analog Devices HDL libraries and projects
 
 Tools version:
-- Vivado 2014.4
+- Vivado 2014.4.1
 - Quartus 14.0
 
 First time users, it is highly recommended to go through our HDL user guide at the following url:
