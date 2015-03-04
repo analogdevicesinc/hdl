@@ -1,18 +1,18 @@
 
-# ddr controller
+# ddr controller RevD
 
 set_property -dict [list CONFIG.C0.ControllerType {DDR4_SDRAM}] $axi_ddr_cntrl
-set_property -dict [list CONFIG.C0.DDR4_TimePeriod {1250}] $axi_ddr_cntrl
-set_property -dict [list CONFIG.C0.DDR4_InputClockPeriod {3334}] $axi_ddr_cntrl
-set_property -dict [list CONFIG.C0.DDR4_MemoryPart {MT40A256M16HA-093}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.C0.DDR4_TimePeriod {833}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.C0.DDR4_InputClockPeriod {3332}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.C0.DDR4_MemoryPart {EDY4016AABG-DR-F}] $axi_ddr_cntrl
 set_property -dict [list CONFIG.C0.DDR4_DataWidth {64}] $axi_ddr_cntrl
 set_property -dict [list CONFIG.C0.DDR4_Mem_Add_Map {ROW_BANK_COLUMN}] $axi_ddr_cntrl
-set_property -dict [list CONFIG.C0.DDR4_CasWriteLatency {9}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.C0.DDR4_CasWriteLatency {12}] $axi_ddr_cntrl
 set_property -dict [list CONFIG.Debug_Signal {Enable}] $axi_ddr_cntrl
 set_property -dict [list CONFIG.C0.DDR4_AxiDataWidth {512}] $axi_ddr_cntrl
 
-set_property -dict [list CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {99}] $axi_ddr_cntrl
-set_property -dict [list CONFIG.ADDN_UI_CLKOUT2_FREQ_HZ {199}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {100}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.ADDN_UI_CLKOUT2_FREQ_HZ {200}] $axi_ddr_cntrl
 
 set_property -dict [list CONFIG.c0_adr_0               {bank45.byte3.pin8}]  $axi_ddr_cntrl  
 set_property -dict [list CONFIG.c0_adr_1               {bank45.byte2.pin1}]  $axi_ddr_cntrl  

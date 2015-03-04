@@ -33,7 +33,7 @@ set hdmi_data       [create_bd_port -dir O -from 15 -to 0 hdmi_data]
 set spdif           [create_bd_port -dir O spdif]
 
 set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] $sys_rst
-set_property -dict [list CONFIG.FREQ_HZ {299000000}] $sys_clk
+set_property -dict [list CONFIG.FREQ_HZ {300000000}] $sys_clk
 set_property -dict [list CONFIG.FREQ_HZ {625000000}] $phy_clk
 
 # instance: microblaze - processor
@@ -170,7 +170,7 @@ set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
 # audio peripherals
 
 set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 sys_audio_clkgen]
-set_property -dict [list CONFIG.PRIM_IN_FREQ {199.000}] $sys_audio_clkgen
+set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
