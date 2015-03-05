@@ -1,7 +1,26 @@
 
+# check tool version
+
+if {![info exists REQUIRED_VIVADO_VERSION]} {
+  set REQUIRED_VIVADO_VERSION "2014.4.1"
+}
+
+if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
+  set IGNORE_VERSION_CHECK 1
+} elseif {![info exists IGNORE_VERSION_CHECK]} {
+  set IGNORE_VERSION_CHECK 0
+}
+
 # ip related stuff
 
 proc adi_ip_create {ip_name} {
+
+  global REQUIRED_VIVADO_VERSION
+  global IGNORE_VERSION_CHECK
+
+  if {!$IGNORE_VERSION_CHECK && [string compare [version -short] $REQUIRED_VIVADO_VERSION] != 0} {
+    return -code error [format "ERROR: This library requires Vivado %s." $REQUIRED_VIVADO_VERSION]
+  }
 
   create_project $ip_name . -force
 
