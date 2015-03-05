@@ -1,6 +1,7 @@
 
 variable p_board 
 variable p_device 
+variable sys_zynq
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
   set REQUIRED_VIVADO_VERSION "2014.4.1"
@@ -18,51 +19,63 @@ proc adi_project_create {project_name} {
   global ad_phdl_dir
   global p_board
   global p_device
+  global sys_zynq
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
 
   set p_device "none"
   set p_board "none"
+  set sys_zynq 0
 
   if [regexp "_ml605$" $project_name] {
     set p_device "xc6vlx240tff1156-1"
     set p_board "ml605"
+    set sys_zynq 0
   }
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
     set p_board "xilinx.com:artix7:ac701:1.0"
+    set sys_zynq 0
   }
   if [regexp "_kc705$" $project_name] {
     set p_device "xc7k325tffg900-2"
     set p_board "xilinx.com:kintex7:kc705:1.1"
+    set sys_zynq 0
   }
   if [regexp "_vc707$" $project_name] {
     set p_device "xc7vx485tffg1761-2"
     set p_board "xilinx.com:virtex7:vc707:1.1"
+    set sys_zynq 0
   }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
     set p_board "not-applicable"
+    set sys_zynq 0
   }
   if [regexp "_zed$" $project_name] {
     set p_device "xc7z020clg484-1"
     set p_board "em.avnet.com:zynq:zed:d"
+    set sys_zynq 1
   }
   if [regexp "_zc702$" $project_name] {
     set p_device "xc7z020clg484-1"
     set p_board "xilinx.com:zynq:zc702:1.0"
+    set sys_zynq 1
   }
   if [regexp "_zc706$" $project_name] {
     set p_device "xc7z045ffg900-2"
     set p_board "xilinx.com:zc706:part0:1.0"
+    set sys_zynq 1
   }
   if [regexp "_mitx045$" $project_name] {
     set p_device "xc7z045ffg900-2"
     set p_board "em.avnet.com:mini_itx_7z045:part0:1.0"
+    set sys_zynq 1
   }
   if [regexp "_rfsom$" $project_name] {
     set p_device "xc7z035ifbg676-2L"
     set p_board "not-applicable"
+    set sys_zynq 1
   }
 
   # planahead - 6 and down
