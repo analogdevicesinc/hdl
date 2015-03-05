@@ -139,7 +139,7 @@ module up_gt (
 
   // parameters
 
-  localparam  PCORE_VERSION = 32'h00060062;
+  localparam  PCORE_VERSION = 32'h00060162;
   parameter   PCORE_ID = 0;
   parameter   PCORE_DEVICE_TYPE = 0;
 
