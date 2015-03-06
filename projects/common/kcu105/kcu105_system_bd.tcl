@@ -178,11 +178,13 @@ ad_connect  axi_intc/intr sys_concat_intc/dout
 
 # defaults (peripherals)
 
+ad_connect  sys_mem_clk axi_ddr_cntrl/c0_ddr4_ui_clk
 ad_connect  sys_cpu_clk axi_ddr_cntrl/addn_ui_clkout1
 ad_connect  sys_200m_clk axi_ddr_cntrl/addn_ui_clkout2
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_mem_resetn axi_ddr_cntrl_rstgen/peripheral_aresetn
+ad_connect  sys_mem_resetn axi_ddr_cntrl/c0_ddr4_aresetn
 
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
 ad_connect  sys_cpu_clk sys_mb/Clk
@@ -301,7 +303,18 @@ ad_cpu_interconnect 0x43000000 axi_hdmi_dma
 ad_cpu_interconnect 0x75c00000 axi_spdif_tx_core
 ad_cpu_interconnect 0x41E00000 axi_spdif_tx_dma
 
-ad_mem_hp0_interconnect sys_mem_clk axi_ddr_cntrl/C0_DDR4_S_AXI
+create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ddr_interconnect
+set_property CONFIG.NUM_MI {1} [get_bd_cells axi_ddr_interconnect]
+set_property CONFIG.NUM_SI {1} [get_bd_cells axi_ddr_interconnect]
+
+ad_connect axi_ddr_interconnect/M00_AXI axi_ddr_cntrl/C0_DDR4_S_AXI
+ad_connect sys_mem_clk axi_ddr_interconnect/ACLK
+ad_connect sys_mem_clk axi_ddr_interconnect/M00_ACLK
+ad_connect sys_mem_resetn axi_ddr_interconnect/ARESETN
+ad_connect sys_mem_resetn axi_ddr_interconnect/M00_ARESETN
+ad_connect sys_cpu_resetn axi_ddr_interconnect/S00_ARESETN
+
+ad_mem_hp0_interconnect sys_cpu_clk axi_ddr_interconnect/S00_AXI
 ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_DC
 ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_IC
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_SG
