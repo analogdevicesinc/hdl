@@ -372,15 +372,6 @@ if {$sys_zynq == 0} {
   ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
   ad_mem_hp2_interconnect sys_cpu_clk axi_ad9680_dma/m_dest_axi
 
-  # ila
-
-  set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_jesd_rx_mon]
-  set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_jesd_rx_mon
-  set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_jesd_rx_mon
-
-  ad_connect  adc_clk ila_jesd_rx_mon/CLK
-  ad_connect  adc_ddata ila_jesd_rx_mon/PROBE0
 
 
 
