@@ -190,7 +190,7 @@ module ad_gt_common_1 (
   if (GTH_GTX_N == 1) begin
   GTHE3_COMMON #(
     .SIM_RESET_SPEEDUP ("TRUE"),
-    .SIM_VERSION ("Ver_1"),
+    .SIM_VERSION (2),
     .SARC_EN (1'b1),
     .SARC_SEL (1'b0),
     .SDM0_DATA_PIN_SEL (1'b0),
