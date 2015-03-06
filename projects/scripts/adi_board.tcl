@@ -45,25 +45,30 @@ proc ad_connect {p_name_1 p_name_2} {
 
   if {$m_name_1 eq ""} {
     if {[get_property CLASS $m_name_2] eq "bd_intf_pin"} {
+      puts "create_bd_intf_net $p_name_1"
       create_bd_intf_net $p_name_1
     }
     if {[get_property CLASS $m_name_2] eq "bd_pin"} {
+      puts "create_bd_net $p_name_1"
       create_bd_net $p_name_1
     }
     set m_name_1 [ad_connect_type $p_name_1]
   }
 
   if {[get_property CLASS $m_name_1] eq "bd_intf_pin"} {
+    puts "connect_bd_intf_net $m_name_1 $m_name_2"
     connect_bd_intf_net $m_name_1 $m_name_2
     return
   }
 
   if {[get_property CLASS $m_name_1] eq "bd_pin"} {
+    puts "connect_bd_net $m_name_1 $m_name_2"
     connect_bd_net $m_name_1 $m_name_2
     return
   }
 
   if {[get_property CLASS $m_name_1] eq "bd_net"} {
+    puts "connect_bd_net -net $m_name_1 $m_name_2"
     connect_bd_net -net $m_name_1 $m_name_2
     return
   }
@@ -202,6 +207,10 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
       ad_connect $p_clk $p_intf_clock
     }
     assign_bd_address $m_addr_seg
+  }
+
+  if {$m_interconnect_index == 3} {
+    set_property CONFIG.STRATEGY {2} $m_interconnect_cell
   }
 
   if {$p_sel eq "MEM"} {set sys_mem_interconnect_index $m_interconnect_index}
