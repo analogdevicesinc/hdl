@@ -75,8 +75,7 @@ module system_top (
 
   fan_pwm,
 
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_scl,
   iic_sda,
@@ -161,8 +160,7 @@ module system_top (
 
   output          fan_pwm;
 
-  inout   [ 7:0]  gpio_led;
-  inout   [ 8:0]  gpio_sw;
+  inout   [16:0]  gpio_bd;
 
   inout           iic_scl;
   inout           iic_sda;
@@ -226,6 +224,13 @@ module system_top (
 
   // internal signals
 
+  wire    [15:0]  mb_intrs;
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 7:0]  spi_csn;
+  wire            spi_mosi;
+  wire            spi_miso;
   wire            trig;
   wire            rx_ref_clk;
   wire            rx_sysref;
@@ -233,9 +238,6 @@ module system_top (
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire            tx_sync;
-  wire    [ 2:0]  spi_csn;
-  wire            spi_mosi;
-  wire            spi_miso;
   wire            dac_clk;
   wire   [127:0]  dac_ddata;
   wire            dac_enable_0;
@@ -253,13 +255,6 @@ module system_top (
   wire            adc_enable_1;
   wire            adc_valid_0;
   wire            adc_valid_1;
-  wire    [ 5:0]  gpio_ctl_i;
-  wire    [ 5:0]  gpio_ctl_o;
-  wire    [ 5:0]  gpio_ctl_t;
-  wire    [ 4:0]  gpio_status_i;
-  wire    [ 4:0]  gpio_status_o;
-  wire    [ 4:0]  gpio_status_t;
-  wire    [31:0]  mb_intrs;
 
   // adc-dac data
 
@@ -415,7 +410,7 @@ module system_top (
     .O (tx_sync));
 
   daq2_spi i_spi (
-    .spi_csn (spi_csn),
+    .spi_csn (spi_csn[2:0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
@@ -427,20 +422,26 @@ module system_top (
     .IB (trig_n),
     .O (trig));
 
-  assign gpio_ctl_i[0] = trig;
+  assign gpio_i[43] = trig;
 
   ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
-    .dt ({gpio_ctl_t[5:3], gpio_ctl_t[1], gpio_status_t[4:0]}),
-    .di ({gpio_ctl_o[5:3], gpio_ctl_o[1], gpio_status_o[4:0]}),
-    .do ({gpio_ctl_i[5:3], gpio_ctl_i[1], gpio_status_i[4:0]}),
-    .dio ({ adc_pd,          // 10
-            dac_txen,        //  9
-            dac_reset,       //  8
-            clkd_sync,       //  6
-            adc_fdb,         //  4
-            adc_fda,         //  3
-            dac_irq,         //  2
-            clkd_status}));  //  0
+    .dt ({gpio_t[42:40], gpio_t[38], gpio_t[36:32]}),
+    .di ({gpio_o[42:40], gpio_o[38], gpio_o[36:32]}),
+    .do ({gpio_i[42:40], gpio_i[38], gpio_i[36:32]}),
+    .dio ({ adc_pd,           // 42
+            dac_txen,         // 41
+            dac_reset,        // 40
+            clkd_sync,        // 38
+            adc_fdb,          // 36
+            adc_fda,          // 35
+            dac_irq,          // 34
+            clkd_status}));   // 32
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
+    .dt (gpio_t[16:0]),
+    .di (gpio_o[16:0]),
+    .do (gpio_i[16:0]),
+    .dio (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .adc_clk (adc_clk),
@@ -455,8 +456,6 @@ module system_top (
     .adc_valid_1 (adc_valid_1),
     .axi_ad9144_dma_intr (mb_intrs[13]),
     .axi_ad9680_dma_intr (mb_intrs[12]),
-    .axi_daq2_gpio_intr (mb_intrs[11]),
-    .axi_daq2_spi_intr (mb_intrs[10]),
     .c0_ddr4_act_n (ddr4_act_n),
     .c0_ddr4_adr (ddr4_addr),
     .c0_ddr4_ba (ddr4_ba),
@@ -486,15 +485,12 @@ module system_top (
     .dac_valid_1 (dac_valid_1),
     .dac_valid_2 (dac_valid_2),
     .dac_valid_3 (dac_valid_3),
-    .gpio_ctl_i (gpio_ctl_i),
-    .gpio_ctl_o (gpio_ctl_o),
-    .gpio_ctl_t (gpio_ctl_t),
-    .gpio_lcd_tri_io (),
-    .gpio_led_tri_io (gpio_led),
-    .gpio_status_i (gpio_status_i),
-    .gpio_status_o (gpio_status_o),
-    .gpio_status_t (gpio_status_t),
-    .gpio_sw_tri_io (gpio_sw),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio1_i (gpio_i[63:32]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -502,28 +498,12 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .mb_intr_10 (mb_intrs[10]),
-    .mb_intr_11 (mb_intrs[11]),
+    .mb_intr_05 (mb_intrs[5]),
+    .mb_intr_06 (mb_intrs[6]),
     .mb_intr_12 (mb_intrs[12]),
     .mb_intr_13 (mb_intrs[13]),
     .mb_intr_14 (mb_intrs[14]),
     .mb_intr_15 (mb_intrs[15]),
-    .mb_intr_16 (mb_intrs[16]),
-    .mb_intr_17 (mb_intrs[17]),
-    .mb_intr_18 (mb_intrs[18]),
-    .mb_intr_19 (mb_intrs[19]),
-    .mb_intr_20 (mb_intrs[20]),
-    .mb_intr_21 (mb_intrs[21]),
-    .mb_intr_22 (mb_intrs[22]),
-    .mb_intr_23 (mb_intrs[23]),
-    .mb_intr_24 (mb_intrs[24]),
-    .mb_intr_25 (mb_intrs[25]),
-    .mb_intr_26 (mb_intrs[26]),
-    .mb_intr_27 (mb_intrs[27]),
-    .mb_intr_28 (mb_intrs[28]),
-    .mb_intr_29 (mb_intrs[29]),
-    .mb_intr_30 (mb_intrs[30]),
-    .mb_intr_31 (mb_intrs[31]),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .phy_clk_clk_n (phy_clk_n),
