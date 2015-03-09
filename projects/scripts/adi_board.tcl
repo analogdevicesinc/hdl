@@ -126,15 +126,6 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   global sys_hp3_interconnect_index
   global sys_mem_interconnect_index
 
-  set p_intf_name [lrange [split $p_name "/"] end end]
-  set p_cell_name [lrange [split $p_name "/"] 0 0]
-  set p_intf_clock [get_bd_pins -filter "TYPE == clk && (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" -quiet -of_objects [get_bd_cells $p_cell_name]]
-  if {[find_bd_objs -quiet -relation connected_to $p_intf_clock] ne ""} {
-    set p_intf_clock ""
-  }
-
   if {$p_sel eq "MEM"} {
     if {$sys_mem_interconnect_index < 0} {
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_mem_interconnect
@@ -146,6 +137,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   if {$p_sel eq "HP0"} {
     if {$sys_hp0_interconnect_index < 0} {
+      set_property CONFIG.PCW_USE_S_AXI_HP0 {1} [get_bd_cells sys_ps7]
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp0_interconnect
     }
     set m_interconnect_index $sys_hp0_interconnect_index
@@ -155,6 +147,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   if {$p_sel eq "HP1"} {
     if {$sys_hp1_interconnect_index < 0} {
+      set_property CONFIG.PCW_USE_S_AXI_HP1 {1} [get_bd_cells sys_ps7]
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp1_interconnect
     }
     set m_interconnect_index $sys_hp1_interconnect_index
@@ -164,6 +157,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   if {$p_sel eq "HP2"} {
     if {$sys_hp2_interconnect_index < 0} {
+      set_property CONFIG.PCW_USE_S_AXI_HP2 {1} [get_bd_cells sys_ps7]
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp2_interconnect
     }
     set m_interconnect_index $sys_hp2_interconnect_index
@@ -173,6 +167,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   if {$p_sel eq "HP3"} {
     if {$sys_hp3_interconnect_index < 0} {
+      set_property CONFIG.PCW_USE_S_AXI_HP3 {1} [get_bd_cells sys_ps7]
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp3_interconnect
     }
     set m_interconnect_index $sys_hp3_interconnect_index
@@ -186,6 +181,15 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   }
 
   set m_interconnect_index [expr $m_interconnect_index + 1]
+
+  set p_intf_name [lrange [split $p_name "/"] end end]
+  set p_cell_name [lrange [split $p_name "/"] 0 0]
+  set p_intf_clock [get_bd_pins -filter "TYPE == clk && (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
+    CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
+    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" -quiet -of_objects [get_bd_cells $p_cell_name]]
+  if {[find_bd_objs -quiet -relation connected_to $p_intf_clock] ne ""} {
+    set p_intf_clock ""
+  }
 
   if {$m_interconnect_index == 0} {
     set_property CONFIG.NUM_MI 1 $m_interconnect_cell
