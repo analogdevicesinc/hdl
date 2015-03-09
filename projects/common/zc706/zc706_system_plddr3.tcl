@@ -15,7 +15,7 @@ proc p_plddr3_fifo {p_name m_name adc_data_width} {
   current_bd_instance $m_instance
 
   create_bd_pin -dir I -type rst sys_rst
-  create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR3
+  create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr3
   create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk
 
   create_bd_pin -dir I adc_rst
@@ -51,30 +51,28 @@ proc p_plddr3_fifo {p_name m_name adc_data_width} {
   set_property -dict [list CONFIG.AXI_ADDRLIMIT {0xa0000000}] $axi_fifo2s
   set_property -dict [list CONFIG.AXI_BYTE_WIDTH {64}] $axi_fifo2s
 
-  connect_bd_intf_net -intf_net sys_clk [get_bd_intf_pins sys_clk] [get_bd_intf_pins axi_ddr_cntrl/SYS_CLK]
-  connect_bd_intf_net -intf_net DDR3 [get_bd_intf_pins DDR3] [get_bd_intf_pins axi_ddr_cntrl/DDR3]
-  connect_bd_intf_net -intf_net axi_ddr3 [get_bd_intf_pins axi_ddr_cntrl/S_AXI] [get_bd_intf_pins axi_fifo2s/axi]
-
-  connect_bd_net -net adc_rst                 [get_bd_pins adc_rst]                   [get_bd_pins axi_fifo2s/adc_rst]
-  connect_bd_net -net adc_clk                 [get_bd_pins adc_clk]                   [get_bd_pins axi_fifo2s/adc_clk]
-  connect_bd_net -net adc_wr                  [get_bd_pins adc_wr]                    [get_bd_pins axi_fifo2s/adc_wr]
-  connect_bd_net -net adc_wdata               [get_bd_pins adc_wdata]                 [get_bd_pins axi_fifo2s/adc_wdata]
-  connect_bd_net -net adc_wovf                [get_bd_pins adc_wovf]                  [get_bd_pins axi_fifo2s/adc_wovf]
-  connect_bd_net -net dma_clk                 [get_bd_pins dma_clk]                   [get_bd_pins axi_fifo2s/dma_clk]
-  connect_bd_net -net dma_wr                  [get_bd_pins dma_wr]                    [get_bd_pins axi_fifo2s/dma_wr]
-  connect_bd_net -net dma_wdata               [get_bd_pins dma_wdata]                 [get_bd_pins axi_fifo2s/dma_wdata]
-  connect_bd_net -net dma_wready              [get_bd_pins dma_wready]                [get_bd_pins axi_fifo2s/dma_wready]
-  connect_bd_net -net dma_xfer_req            [get_bd_pins dma_xfer_req]              [get_bd_pins axi_fifo2s/dma_xfer_req]
-  connect_bd_net -net dma_xfer_status         [get_bd_pins dma_xfer_status]           [get_bd_pins axi_fifo2s/dma_xfer_status]
-  connect_bd_net -net axi_clk                 [get_bd_pins axi_ddr_cntrl/ui_clk]      [get_bd_pins axi_fifo2s/axi_clk]
-
-  connect_bd_net -net adc_rst                 [get_bd_pins axi_rstgen/ext_reset_in]
-  connect_bd_net -net sys_rst                 [get_bd_pins sys_rst]
-  connect_bd_net -net sys_rst                 [get_bd_pins axi_ddr_cntrl/sys_rst]
-  connect_bd_net -net axi_clk                 [get_bd_pins axi_rstgen/slowest_sync_clk]
-  connect_bd_net -net axi_resetn              [get_bd_pins axi_rstgen/peripheral_aresetn]
-  connect_bd_net -net axi_resetn              [get_bd_pins axi_fifo2s/axi_resetn]
-  connect_bd_net -net axi_resetn              [get_bd_pins axi_ddr_cntrl/aresetn]
+  ad_connect  sys_rst axi_ddr_cntrl/sys_rst
+  ad_connect  sys_clk axi_ddr_cntrl/SYS_CLK
+  ad_connect  ddr3 axi_ddr_cntrl/DDR3
+  ad_connect  axi_ddr_cntrl/S_AXI axi_fifo2s/axi
+  ad_connect  adc_rst axi_fifo2s/adc_rst
+  ad_connect  adc_rst axi_rstgen/ext_reset_in
+  ad_connect  adc_clk axi_fifo2s/adc_clk 
+  ad_connect  adc_wr axi_fifo2s/adc_wr 
+  ad_connect  adc_wdata axi_fifo2s/adc_wdata
+  ad_connect  adc_wovf axi_fifo2s/adc_wovf
+  ad_connect  dma_clk axi_fifo2s/dma_clk
+  ad_connect  dma_wr axi_fifo2s/dma_wr
+  ad_connect  dma_wdata axi_fifo2s/dma_wdata
+  ad_connect  dma_wready axi_fifo2s/dma_wready
+  ad_connect  dma_xfer_req axi_fifo2s/dma_xfer_req
+  ad_connect  dma_xfer_status axi_fifo2s/dma_xfer_status
+  ad_connect  axi_clk axi_ddr_cntrl/ui_clk
+  ad_connect  axi_clk axi_fifo2s/axi_clk
+  ad_connect  axi_clk axi_rstgen/slowest_sync_clk
+  ad_connect  axi_resetn axi_rstgen/peripheral_aresetn
+  ad_connect  axi_resetn axi_fifo2s/axi_resetn
+  ad_connect  axi_resetn axi_ddr_cntrl/aresetn
 
   current_bd_instance $c_instance
 }
