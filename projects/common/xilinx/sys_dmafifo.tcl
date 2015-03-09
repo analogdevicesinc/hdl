@@ -14,7 +14,6 @@ proc p_sys_dmafifo {p_name m_name adc_data_width dma_addr_width} {
   set m_instance [create_bd_cell -type hier $m_name]
   current_bd_instance $m_instance
 
-
   create_bd_pin -dir I adc_rst
   create_bd_pin -dir I -type clk adc_clk
   create_bd_pin -dir I adc_wr
@@ -34,17 +33,17 @@ proc p_sys_dmafifo {p_name m_name adc_data_width dma_addr_width} {
   set_property -dict [list CONFIG.DMA_READY_ENABLE {1}] $axi_fifo2f
   set_property -dict [list CONFIG.DMA_ADDR_WIDTH $dma_addr_width] $axi_fifo2f
 
-  connect_bd_net -net adc_rst         [get_bd_pins adc_rst]                 [get_bd_pins axi_fifo2f/adc_rst]
-  connect_bd_net -net adc_clk         [get_bd_pins adc_clk]                 [get_bd_pins axi_fifo2f/adc_clk]  
-  connect_bd_net -net adc_wr          [get_bd_pins adc_wr]                  [get_bd_pins axi_fifo2f/adc_wr]
-  connect_bd_net -net adc_wdata       [get_bd_pins adc_wdata]               [get_bd_pins axi_fifo2f/adc_wdata]
-  connect_bd_net -net adc_wovf        [get_bd_pins adc_wovf]                [get_bd_pins axi_fifo2f/adc_wovf]
-  connect_bd_net -net dma_clk         [get_bd_pins dma_clk]                 [get_bd_pins axi_fifo2f/dma_clk]  
-  connect_bd_net -net dma_wr          [get_bd_pins dma_wr]                  [get_bd_pins axi_fifo2f/dma_wr]
-  connect_bd_net -net dma_wdata       [get_bd_pins dma_wdata]               [get_bd_pins axi_fifo2f/dma_wdata]
-  connect_bd_net -net dma_wready      [get_bd_pins dma_wready]              [get_bd_pins axi_fifo2f/dma_wready]
-  connect_bd_net -net dma_xfer_req    [get_bd_pins dma_xfer_req]            [get_bd_pins axi_fifo2f/dma_xfer_req]
-  connect_bd_net -net dma_xfer_status [get_bd_pins dma_xfer_status]         [get_bd_pins axi_fifo2f/dma_xfer_status]
+  ad_connect  adc_rst axi_fifo2f/adc_rst
+  ad_connect  adc_clk axi_fifo2f/adc_clk
+  ad_connect  adc_wr axi_fifo2f/adc_wr
+  ad_connect  adc_wdata axi_fifo2f/adc_wdata
+  ad_connect  adc_wovf axi_fifo2f/adc_wovf
+  ad_connect  dma_clk axi_fifo2f/dma_clk
+  ad_connect  dma_wr axi_fifo2f/dma_wr
+  ad_connect  dma_wdata axi_fifo2f/dma_wdata
+  ad_connect  dma_wready axi_fifo2f/dma_wready
+  ad_connect  dma_xfer_req axi_fifo2f/dma_xfer_req
+  ad_connect  dma_xfer_status axi_fifo2f/dma_xfer_status
 
   current_bd_instance $c_instance
 }
