@@ -2,39 +2,60 @@
 # create board design
 # interface ports
 
-set sys_rst         [create_bd_port -dir I -type rst sys_rst]
-set sys_clk         [create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk]
+create_bd_port -dir I -type rst sys_rst
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 c0_ddr4
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk
 
-set c0_ddr4         [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 c0_ddr4]
+create_bd_port -dir I phy_sd
+create_bd_port -dir O -type rst phy_rst_n
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_rtl:1.0 mdio
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:sgmii_rtl:1.0 sgmii
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 phy_clk
 
-set phy_rst_n       [create_bd_port -dir O -type rst phy_rst_n]
-set phy_sd          [create_bd_port -dir I phy_sd]
-set phy_clk         [create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 phy_clk]
-set mdio            [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_rtl:1.0 mdio]
-set sgmii           [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:sgmii_rtl:1.0 sgmii]
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main
 
-set gpio_sw         [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_sw]
-set gpio_led        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_led]
-set gpio_lcd        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_lcd]
+create_bd_port -dir I uart_sin
+create_bd_port -dir O uart_sout
 
-set iic_main        [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main]
+create_bd_port -dir O -from 7 -to 0 spi_csn_o
+create_bd_port -dir I -from 7 -to 0 spi_csn_i
+create_bd_port -dir I spi_clk_i
+create_bd_port -dir O spi_clk_o
+create_bd_port -dir I spi_sdo_i
+create_bd_port -dir O spi_sdo_o
+create_bd_port -dir I spi_sdi_i
 
-set uart_sin        [create_bd_port -dir I uart_sin]
-set uart_sout       [create_bd_port -dir O uart_sout]
+create_bd_port -dir I -from 31 -to 0 gpio0_i
+create_bd_port -dir O -from 31 -to 0 gpio0_o
+create_bd_port -dir O -from 31 -to 0 gpio0_t
+create_bd_port -dir I -from 31 -to 0 gpio1_i
+create_bd_port -dir O -from 31 -to 0 gpio1_o
+create_bd_port -dir O -from 31 -to 0 gpio1_t
 
-set hdmi_out_clk    [create_bd_port -dir O hdmi_out_clk]
-set hdmi_hsync      [create_bd_port -dir O hdmi_hsync]
-set hdmi_vsync      [create_bd_port -dir O hdmi_vsync]
-set hdmi_data_e     [create_bd_port -dir O hdmi_data_e]
-set hdmi_data       [create_bd_port -dir O -from 15 -to 0 hdmi_data]
+create_bd_port -dir O hdmi_out_clk
+create_bd_port -dir O hdmi_hsync
+create_bd_port -dir O hdmi_vsync
+create_bd_port -dir O hdmi_data_e
+create_bd_port -dir O -from 15 -to 0 hdmi_data
 
 # spdif audio
 
-set spdif           [create_bd_port -dir O spdif]
+create_bd_port -dir O spdif
 
-set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] $sys_rst
-set_property -dict [list CONFIG.FREQ_HZ {300000000}] $sys_clk
-set_property -dict [list CONFIG.FREQ_HZ {625000000}] $phy_clk
+# interrupts
+
+create_bd_port -dir I mb_intr_05
+create_bd_port -dir I mb_intr_06
+create_bd_port -dir I mb_intr_12
+create_bd_port -dir I mb_intr_13
+create_bd_port -dir I mb_intr_14
+create_bd_port -dir I mb_intr_15
+
+# io settings
+
+set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] [get_bd_ports sys_rst]
+set_property -dict [list CONFIG.FREQ_HZ {300000000}] [get_bd_intf_ports sys_clk]
+set_property -dict [list CONFIG.FREQ_HZ {625000000}] [get_bd_intf_ports phy_clk]
 
 # instance: microblaze - processor
 
@@ -109,15 +130,16 @@ set_property -dict [list CONFIG.C_BAUDRATE {115200}] $axi_uart
 
 set axi_timer [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_timer:2.0 axi_timer]
 
-set axi_gpio_lcd [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_lcd]
-set_property -dict [list CONFIG.C_GPIO_WIDTH {7}] $axi_gpio_lcd
-set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_lcd
+set axi_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_spi]
+set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_spi
+set_property -dict [list CONFIG.C_NUM_SS_BITS {8}] $axi_spi
+set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_spi
 
-set axi_gpio_sw_led [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_sw_led]
-set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio_sw_led
-set_property -dict [list CONFIG.C_GPIO_WIDTH {9}] $axi_gpio_sw_led
-set_property -dict [list CONFIG.C_GPIO2_WIDTH {8}] $axi_gpio_sw_led
-set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_sw_led
+set axi_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio]
+set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio
+set_property -dict [list CONFIG.C_GPIO_WIDTH {32}] $axi_gpio
+set_property -dict [list CONFIG.C_GPIO2_WIDTH {32}] $axi_gpio
+set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio
 
 # instance: interrupt
 
@@ -125,7 +147,7 @@ set axi_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_intc]
 set_property -dict [list CONFIG.C_HAS_FAST {0}] $axi_intc
 
 set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {32}] $sys_concat_intc
+set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
 
 # hdmi peripherals
 
@@ -201,22 +223,23 @@ ad_connect  sys_concat_intc/In1 axi_ethernet/interrupt
 ad_connect  sys_concat_intc/In2 axi_ethernet_dma/mm2s_introut
 ad_connect  sys_concat_intc/In3 axi_ethernet_dma/s2mm_introut
 ad_connect  sys_concat_intc/In4 axi_uart/interrupt
-ad_connect  sys_concat_intc/In5 axi_gpio_lcd/ip2intc_irpt
-ad_connect  sys_concat_intc/In6 axi_gpio_sw_led/ip2intc_irpt
+ad_connect  sys_concat_intc/In5 mb_intr_05
+ad_connect  sys_concat_intc/In6 mb_intr_06
 ad_connect  sys_concat_intc/In7 axi_spdif_tx_dma/mm2s_introut
 ad_connect  sys_concat_intc/In8 axi_hdmi_dma/mm2s_introut
 ad_connect  sys_concat_intc/In9 axi_iic_main/iic2intc_irpt
-
-for {set intc_index 10} {$intc_index < 32} {incr intc_index} {
-  set mb_intr_${intc_index} [create_bd_port -dir I mb_intr_${intc_index}]
-  ad_connect  sys_concat_intc/In${intc_index} mb_intr_${intc_index}
-}
+ad_connect  sys_concat_intc/In10 axi_spi/ip2intc_irpt
+ad_connect  sys_concat_intc/In11 axi_gpio/ip2intc_irpt
+ad_connect  sys_concat_intc/In12 mb_intr_12
+ad_connect  sys_concat_intc/In13 mb_intr_13
+ad_connect  sys_concat_intc/In14 mb_intr_14
+ad_connect  sys_concat_intc/In15 mb_intr_15
 
 # defaults (ddr)
 
-ad_connect  sys_clk axi_ddr_cntrl/C0_SYS_CLK
-ad_connect  c0_ddr4 axi_ddr_cntrl/C0_DDR4
 ad_connect  sys_rst axi_ddr_cntrl/sys_rst
+ad_connect  c0_ddr4 axi_ddr_cntrl/C0_DDR4
+ad_connect  sys_clk axi_ddr_cntrl/C0_SYS_CLK
 
 ad_connect  axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_rstgen/ext_reset_in
 ad_connect  axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst axi_ethernet_rstgen/ext_reset_in
@@ -247,12 +270,23 @@ ad_connect  axi_ethernet/axi_rxs_arstn axi_ethernet_dma/s2mm_sts_reset_out_n
 
 # defaults (misc)
 
-ad_connect  gpio_lcd axi_gpio_lcd/gpio
-ad_connect  gpio_sw axi_gpio_sw_led/gpio
-ad_connect  gpio_led axi_gpio_sw_led/gpio2
 ad_connect  iic_main axi_iic_main/iic
 ad_connect  uart_sin axi_uart/rx
 ad_connect  uart_sout axi_uart/tx
+ad_connect  spi_csn_i axi_spi/ss_i
+ad_connect  spi_csn_o axi_spi/ss_o
+ad_connect  spi_clk_i axi_spi/sck_i
+ad_connect  spi_clk_o axi_spi/sck_o
+ad_connect  spi_sdo_i axi_spi/io0_i
+ad_connect  spi_sdo_o axi_spi/io0_o
+ad_connect  spi_sdi_i axi_spi/io1_i
+ad_connect  gpio0_i axi_gpio/gpio_io_i   
+ad_connect  gpio0_o axi_gpio/gpio_io_o   
+ad_connect  gpio0_t axi_gpio/gpio_io_t   
+ad_connect  gpio1_i axi_gpio/gpio2_io_i  
+ad_connect  gpio1_o axi_gpio/gpio2_io_o  
+ad_connect  gpio1_t axi_gpio/gpio2_io_t  
+ad_connect  sys_cpu_clk axi_spi/ext_spi_clk 
 
 # hdmi
 
@@ -294,9 +328,9 @@ ad_cpu_interconnect 0x41E10000 axi_ethernet_dma
 ad_cpu_interconnect 0x40600000 axi_uart
 ad_cpu_interconnect 0x41C00000 axi_timer
 ad_cpu_interconnect 0x41200000 axi_intc
-ad_cpu_interconnect 0x40010000 axi_gpio_lcd
-ad_cpu_interconnect 0x40020000 axi_gpio_sw_led
 ad_cpu_interconnect 0x41600000 axi_iic_main
+ad_cpu_interconnect 0x40000000 axi_gpio
+ad_cpu_interconnect 0x44A70000 axi_spi
 ad_cpu_interconnect 0x79000000 axi_hdmi_clkgen
 ad_cpu_interconnect 0x70e00000 axi_hdmi_core
 ad_cpu_interconnect 0x43000000 axi_hdmi_dma
@@ -324,6 +358,11 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_hdmi_dma/M_AXI_MM2S
 ad_mem_hp0_interconnect sys_cpu_clk axi_spdif_tx_dma/M_AXI_SG
 ad_mem_hp0_interconnect sys_cpu_clk axi_spdif_tx_dma/M_AXI_MM2S
 
-create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Data]        [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem] SEG_dlmb_cntlr
-create_bd_addr_seg -range 0x00020000 -offset 0x00000000 [get_bd_addr_spaces sys_mb/Instruction] [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_ilmb_cntlr
+create_bd_addr_seg -range 0x20000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
+  [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem] SEG_dlmb_cntlr
+create_bd_addr_seg -range 0x20000 -offset 0x0 [get_bd_addr_spaces sys_mb/Instruction] \
+  [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_ilmb_cntlr
+
+
+
 
