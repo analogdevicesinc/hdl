@@ -41,41 +41,41 @@
 
 module system_top (
 
-  DDR_addr,
-  DDR_ba,
-  DDR_cas_n,
-  DDR_ck_n,
-  DDR_ck_p,
-  DDR_cke,
-  DDR_cs_n,
-  DDR_dm,
-  DDR_dq,
-  DDR_dqs_n,
-  DDR_dqs_p,
-  DDR_odt,
-  DDR_ras_n,
-  DDR_reset_n,
-  DDR_we_n,
+  ddr_addr,
+  ddr_ba,
+  ddr_cas_n,
+  ddr_ck_n,
+  ddr_ck_p,
+  ddr_cke,
+  ddr_cs_n,
+  ddr_dm,
+  ddr_dq,
+  ddr_dqs_n,
+  ddr_dqs_p,
+  ddr_odt,
+  ddr_ras_n,
+  ddr_reset_n,
+  ddr_we_n,
 
-  ETH1_MDC,
-  ETH1_MDIO,
-  ETH1_RGMII_rxclk,
-  ETH1_RGMII_rxctl,
-  ETH1_RGMII_rxdata,
-  ETH1_RGMII_txclk,
-  ETH1_RGMII_txctl,
-  ETH1_RGMII_txdata,
-  ETH1_RESETN,
+  eth1_mdc,
+  eth1_mdio,
+  eth1_rgmii_rxclk,
+  eth1_rgmii_rxctl,
+  eth1_rgmii_rxdata,
+  eth1_rgmii_txclk,
+  eth1_rgmii_txctl,
+  eth1_rgmii_txdata,
+  eth1_resetn,
 
-  FIXED_IO_ddr_vrn,
-  FIXED_IO_ddr_vrp,
-  FIXED_IO_mio,
-  FIXED_IO_ps_clk,
-  FIXED_IO_ps_porb,
-  FIXED_IO_ps_srstb,
+  fixed_io_ddr_vrn,
+  fixed_io_ddr_vrp,
+  fixed_io_mio,
+  fixed_io_ps_clk,
+  fixed_io_ps_porb,
+  fixed_io_ps_srstb,
 
-  UART0_rxd,
-  UART0_txd,
+  uart0_rxd,
+  uart0_txd,
 
   hdmi_out_clk,
   hdmi_vsync,
@@ -97,9 +97,7 @@ module system_top (
   iic_scl,
   iic_sda,
 
-  gpio_pb,
-  gpio_led,
-  gpio_dip,
+  gpio_bd,
 
   rx_clk_in_p,
   rx_clk_in_n,
@@ -130,41 +128,41 @@ module system_top (
   spi_miso);
 
 
-  inout   [14:0]  DDR_addr;
-  inout   [ 2:0]  DDR_ba;
-  inout           DDR_cas_n;
-  inout           DDR_ck_n;
-  inout           DDR_ck_p;
-  inout           DDR_cke;
-  inout           DDR_cs_n;
-  inout   [ 3:0]  DDR_dm;
-  inout   [31:0]  DDR_dq;
-  inout   [ 3:0]  DDR_dqs_n;
-  inout   [ 3:0]  DDR_dqs_p;
-  inout           DDR_odt;
-  inout           DDR_ras_n;
-  inout           DDR_reset_n;
-  inout           DDR_we_n;
+  inout   [14:0]  ddr_addr;
+  inout   [ 2:0]  ddr_ba;
+  inout           ddr_cas_n;
+  inout           ddr_ck_n;
+  inout           ddr_ck_p;
+  inout           ddr_cke;
+  inout           ddr_cs_n;
+  inout   [ 3:0]  ddr_dm;
+  inout   [31:0]  ddr_dq;
+  inout   [ 3:0]  ddr_dqs_n;
+  inout   [ 3:0]  ddr_dqs_p;
+  inout           ddr_odt;
+  inout           ddr_ras_n;
+  inout           ddr_reset_n;
+  inout           ddr_we_n;
 
-  output          ETH1_MDC;
-  inout           ETH1_MDIO;
-  input           ETH1_RGMII_rxclk;
-  input           ETH1_RGMII_rxctl;
-  input   [ 3:0]  ETH1_RGMII_rxdata;
-  output          ETH1_RGMII_txclk;
-  output          ETH1_RGMII_txctl;
-  output  [ 3:0]  ETH1_RGMII_txdata;
-  output          ETH1_RESETN;
+  output          eth1_mdc;
+  inout           eth1_mdio;
+  input           eth1_rgmii_rxclk;
+  input           eth1_rgmii_rxctl;
+  input   [ 3:0]  eth1_rgmii_rxdata;
+  output          eth1_rgmii_txclk;
+  output          eth1_rgmii_txctl;
+  output  [ 3:0]  eth1_rgmii_txdata;
+  output          eth1_resetn;
 
-  inout           FIXED_IO_ddr_vrn;
-  inout           FIXED_IO_ddr_vrp;
-  inout   [53:0]  FIXED_IO_mio;
-  inout           FIXED_IO_ps_clk;
-  inout           FIXED_IO_ps_porb;
-  inout           FIXED_IO_ps_srstb;
+  inout           fixed_io_ddr_vrn;
+  inout           fixed_io_ddr_vrp;
+  inout   [53:0]  fixed_io_mio;
+  inout           fixed_io_ps_clk;
+  inout           fixed_io_ps_porb;
+  inout           fixed_io_ps_srstb;
 
-  input           UART0_rxd;
-  output          UART0_txd;
+  input           uart0_rxd;
+  output          uart0_txd;
 
   output          hdmi_out_clk;
   output          hdmi_vsync;
@@ -186,9 +184,7 @@ module system_top (
   inout           iic_scl;
   inout           iic_sda;
 
-  inout   [ 3:0]  gpio_pb;
-  inout   [ 3:0]  gpio_led;
-  inout   [ 3:0]  gpio_dip;
+  inout   [11:0]  gpio_bd;
 
   input           rx_clk_in_p;
   input           rx_clk_in_n;
@@ -221,25 +217,19 @@ module system_top (
 
   // internal signals
 
-  wire    [50:0]  gpio_i;
-  wire    [50:0]  gpio_o;
-  wire    [50:0]  gpio_t;
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
   wire    [15:0]  ps_intrs;
-  wire            iic_scl_i;
-  wire            iic_scl_o;
-  wire            iic_scl_t;
-  wire            iic_sda_i;
-  wire            iic_sda_o;
-  wire            iic_sda_t;
 
   // assignments
 
-  assign ETH1_RESETN = 1'b1;
+  assign eth1_resetn = 1'b1;
   assign hdmi_pd = 1'b0;
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf_rf (
+  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
     .dt (gpio_t[50:32]),
     .di (gpio_o[50:32]),
     .do (gpio_i[50:32]),
@@ -257,62 +247,52 @@ module system_top (
     .dt (gpio_t[11:0]),
     .di (gpio_o[11:0]),
     .do (gpio_i[11:0]),
-    .dio({  gpio_dip,
-            gpio_led,
-            gpio_pb}));
-
-  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic (
-    .dt ({iic_scl_t, iic_sda_t}),
-    .di ({iic_scl_o, iic_sda_o}),
-    .do ({iic_scl_i, iic_sda_i}),
-    .dio({iic_scl, iic_sda}));
+    .dio (gpio_bd));
 
   system_wrapper i_system_wrapper (
-    .DDR_addr (DDR_addr),
-    .DDR_ba (DDR_ba),
-    .DDR_cas_n (DDR_cas_n),
-    .DDR_ck_n (DDR_ck_n),
-    .DDR_ck_p (DDR_ck_p),
-    .DDR_cke (DDR_cke),
-    .DDR_cs_n (DDR_cs_n),
-    .DDR_dm (DDR_dm),
-    .DDR_dq (DDR_dq),
-    .DDR_dqs_n (DDR_dqs_n),
-    .DDR_dqs_p (DDR_dqs_p),
-    .DDR_odt (DDR_odt),
-    .DDR_ras_n (DDR_ras_n),
-    .DDR_reset_n (DDR_reset_n),
-    .DDR_we_n (DDR_we_n),
-    .ETH1_125MCLK (),
-    .ETH1_25MCLK (),
-    .ETH1_2M5CLK (),
-    .ETH1_CLOCK_SPEED (),
-    .ETH1_DUPLEX_STATUS (),
-    .ETH1_INTN (1'b1),
-    .ETH1_LINK_STATUS (),
-    .ETH1_MDIO_mdc (ETH1_MDC),
-    .ETH1_REFCLK (),
-    .ETH1_RGMII_rd (ETH1_RGMII_rxdata),
-    .ETH1_RGMII_rx_ctl (ETH1_RGMII_rxctl),
-    .ETH1_RGMII_rxc (ETH1_RGMII_rxclk),
-    .ETH1_RGMII_td (ETH1_RGMII_txdata),
-    .ETH1_RGMII_tx_ctl (ETH1_RGMII_txctl),
-    .ETH1_RGMII_txc (ETH1_RGMII_txclk),
-    .ETH1_SPEED_MODE (),
-    .FIXED_IO_ddr_vrn (FIXED_IO_ddr_vrn),
-    .FIXED_IO_ddr_vrp (FIXED_IO_ddr_vrp),
-    .FIXED_IO_mio (FIXED_IO_mio),
-    .FIXED_IO_ps_clk (FIXED_IO_ps_clk),
-    .FIXED_IO_ps_porb (FIXED_IO_ps_porb),
-    .FIXED_IO_ps_srstb (FIXED_IO_ps_srstb),
-    .GPIO_I (gpio_i),
-    .GPIO_O (gpio_o),
-    .GPIO_T (gpio_t),
-    .UART_0_rxd (UART0_rxd),
-    .UART_0_txd (UART0_txd),
     .ad9361_adc_dma_irq (ps_intrs[13]),
     .ad9361_dac_dma_irq (ps_intrs[12]),
-    .eth1_mdio_mdio_io (ETH1_MDIO),
+    .ddr_addr (ddr_addr),
+    .ddr_ba (ddr_ba),
+    .ddr_cas_n (ddr_cas_n),
+    .ddr_ck_n (ddr_ck_n),
+    .ddr_ck_p (ddr_ck_p),
+    .ddr_cke (ddr_cke),
+    .ddr_cs_n (ddr_cs_n),
+    .ddr_dm (ddr_dm),
+    .ddr_dq (ddr_dq),
+    .ddr_dqs_n (ddr_dqs_n),
+    .ddr_dqs_p (ddr_dqs_p),
+    .ddr_odt (ddr_odt),
+    .ddr_ras_n (ddr_ras_n),
+    .ddr_reset_n (ddr_reset_n),
+    .ddr_we_n (ddr_we_n),
+    .eth1_125mclk (),
+    .eth1_25mclk (),
+    .eth1_2m5clk (),
+    .eth1_clock_speed (),
+    .eth1_duplex_status (),
+    .eth1_intn (1'b1),
+    .eth1_link_status (),
+    .eth1_mdio_mdc (eth1_mdc),
+    .eth1_mdio_mdio_io (eth1_mdio),
+    .eth1_refclk (),
+    .eth1_rgmii_rd (eth1_rgmii_rxdata),
+    .eth1_rgmii_rx_ctl (eth1_rgmii_rxctl),
+    .eth1_rgmii_rxc (eth1_rgmii_rxclk),
+    .eth1_rgmii_td (eth1_rgmii_txdata),
+    .eth1_rgmii_tx_ctl (eth1_rgmii_txctl),
+    .eth1_rgmii_txc (eth1_rgmii_txclk),
+    .eth1_speed_mode (),
+    .fixed_io_ddr_vrn (fixed_io_ddr_vrn),
+    .fixed_io_ddr_vrp (fixed_io_ddr_vrp),
+    .fixed_io_mio (fixed_io_mio),
+    .fixed_io_ps_clk (fixed_io_ps_clk),
+    .fixed_io_ps_porb (fixed_io_ps_porb),
+    .fixed_io_ps_srstb (fixed_io_ps_srstb),
+    .gpio_i (gpio_i),
+    .gpio_o (gpio_o),
+    .gpio_t (gpio_t),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -323,27 +303,23 @@ module system_top (
     .i2s_mclk (i2s_mclk),
     .i2s_sdata_in (i2s_sdata_in),
     .i2s_sdata_out (i2s_sdata_out),
-    .iic_mux_scl_I (iic_scl_i),
-    .iic_mux_scl_O (iic_scl_o),
-    .iic_mux_scl_T (iic_scl_t),
-    .iic_mux_sda_I (iic_sda_i),
-    .iic_mux_sda_O (iic_sda_o),
-    .iic_mux_sda_T (iic_sda_t),
+    .iic_main_scl_io (iic_scl),
+    .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
-    .ps_intr_0 (ps_intrs[0]),
-    .ps_intr_1 (ps_intrs[1]),
+    .ps_intr_00 (ps_intrs[0]),
+    .ps_intr_01 (ps_intrs[1]),
+    .ps_intr_02 (ps_intrs[2]),
+    .ps_intr_03 (ps_intrs[3]),
+    .ps_intr_04 (ps_intrs[4]),
+    .ps_intr_05 (ps_intrs[5]),
+    .ps_intr_06 (ps_intrs[6]),
+    .ps_intr_07 (ps_intrs[7]),
+    .ps_intr_08 (ps_intrs[8]),
+    .ps_intr_09 (ps_intrs[9]),
     .ps_intr_10 (ps_intrs[10]),
     .ps_intr_11 (ps_intrs[11]),
     .ps_intr_12 (ps_intrs[12]),
     .ps_intr_13 (ps_intrs[13]),
-    .ps_intr_2 (ps_intrs[2]),
-    .ps_intr_3 (ps_intrs[3]),
-    .ps_intr_4 (ps_intrs[4]),
-    .ps_intr_5 (ps_intrs[5]),
-    .ps_intr_6 (ps_intrs[6]),
-    .ps_intr_7 (ps_intrs[7]),
-    .ps_intr_8 (ps_intrs[8]),
-    .ps_intr_9 (ps_intrs[9]),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
     .rx_data_in_n (rx_data_in_n),
@@ -351,27 +327,32 @@ module system_top (
     .rx_frame_in_n (rx_frame_in_n),
     .rx_frame_in_p (rx_frame_in_p),
     .spdif (spdif),
-    .spi_csn_i (1'b1),
-    .spi_csn_o (spi_csn),
-    .spi_miso_i (spi_miso),
-    .spi_mosi_i (1'b0),
-    .spi_mosi_o (spi_mosi),
-    .spi_sclk_i (1'b0),
-    .spi_sclk_o (spi_clk),
-    .spi_udc_clk_i (1'b0),
-    .spi_udc_clk_o (),
-    .spi_udc_csn_i (1'b1),
-    .spi_udc_csn_rx_o (),
-    .spi_udc_csn_tx_o (),
-    .spi_udc_miso_i (1'b0),
-    .spi_udc_mosi_i (1'b0),
-    .spi_udc_mosi_o (),
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (spi_clk),
+    .spi0_csn_0_o (spi_csn),
+    .spi0_csn_1_o (),
+    .spi0_csn_2_o (),
+    .spi0_csn_i (1'b1),
+    .spi0_sdi_i (spi_miso),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (spi_mosi),
+    .spi1_clk_i (1'b0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'b1),
+    .spi1_sdi_i (1'b0),
+    .spi1_sdo_i (1'b0),
+    .spi1_sdo_o (),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_data_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
-    .tx_frame_out_p (tx_frame_out_p));
+    .tx_frame_out_p (tx_frame_out_p),
+    .uart_0_rxd (uart0_rxd),
+    .uart_0_txd (uart0_txd));
 
 endmodule
 
