@@ -44,20 +44,20 @@ create_bd_port -dir O spdif
 
 # interrupts
 
-create_bd_port -dir I ps_intr_00
-create_bd_port -dir I ps_intr_01
-create_bd_port -dir I ps_intr_02
-create_bd_port -dir I ps_intr_03
-create_bd_port -dir I ps_intr_04
-create_bd_port -dir I ps_intr_05
-create_bd_port -dir I ps_intr_06
-create_bd_port -dir I ps_intr_07
-create_bd_port -dir I ps_intr_08
-create_bd_port -dir I ps_intr_09
-create_bd_port -dir I ps_intr_10
-create_bd_port -dir I ps_intr_11
-create_bd_port -dir I ps_intr_12
-create_bd_port -dir I ps_intr_13
+create_bd_port -dir I -type intr ps_intr_00
+create_bd_port -dir I -type intr ps_intr_01
+create_bd_port -dir I -type intr ps_intr_02
+create_bd_port -dir I -type intr ps_intr_03
+create_bd_port -dir I -type intr ps_intr_04
+create_bd_port -dir I -type intr ps_intr_05
+create_bd_port -dir I -type intr ps_intr_06
+create_bd_port -dir I -type intr ps_intr_07
+create_bd_port -dir I -type intr ps_intr_08
+create_bd_port -dir I -type intr ps_intr_09
+create_bd_port -dir I -type intr ps_intr_10
+create_bd_port -dir I -type intr ps_intr_11
+create_bd_port -dir I -type intr ps_intr_12
+create_bd_port -dir I -type intr ps_intr_13
 
 # instance: sys_ps7
 
