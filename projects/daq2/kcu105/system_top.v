@@ -80,14 +80,6 @@ module system_top (
   iic_scl,
   iic_sda,
 
-  hdmi_out_clk,
-  hdmi_hsync,
-  hdmi_vsync,
-  hdmi_data_e,
-  hdmi_data,
-
-  spdif,
-
   rx_ref_clk_p,
   rx_ref_clk_n,
   rx_sysref_p,
@@ -164,14 +156,6 @@ module system_top (
 
   inout           iic_scl;
   inout           iic_sda;
-
-  output          hdmi_out_clk;
-  output          hdmi_hsync;
-  output          hdmi_vsync;
-  output          hdmi_data_e;
-  output  [15:0]  hdmi_data;
-
-  output          spdif;
 
   input           rx_ref_clk_p;
   input           rx_ref_clk_n;
@@ -491,15 +475,12 @@ module system_top (
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .mb_intr_05 (mb_intrs[5]),
     .mb_intr_06 (mb_intrs[6]),
+    .mb_intr_07 (mb_intrs[7]),
+    .mb_intr_08 (mb_intrs[8]),
     .mb_intr_12 (mb_intrs[12]),
     .mb_intr_13 (mb_intrs[13]),
     .mb_intr_14 (mb_intrs[14]),
@@ -519,7 +500,6 @@ module system_top (
     .sgmii_rxp (phy_rx_p),
     .sgmii_txn (phy_tx_n),
     .sgmii_txp (phy_tx_p),
-    .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
     .spi_csn_i (spi_csn),
