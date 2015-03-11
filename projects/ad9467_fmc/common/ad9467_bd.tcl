@@ -208,7 +208,7 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9467_dma_ddata [get_bd_pins ila_fifo/din] [get_bd_pins axi_ad9467/adc_ddata]
   connect_bd_net -net adc_250m_clk [get_bd_pins axi_ad9467/adc_clk] [get_bd_pins ila_fifo/wr_clk]
   connect_bd_net -net sys_ila_clk  [get_bd_pins ila_fifo/rd_clk] [get_bd_pins ila_ad9467_mon/clk]
-  connect_bd_net -net xlconstant_0_const [get_bd_pins ila_fifo/rd_en] [get_bd_pins ila_fifo/wr_en] [get_bd_pins ila_constant_1/const]
+  connect_bd_net -net xlconstant_0_const [get_bd_pins ila_fifo/rd_en] [get_bd_pins ila_fifo/wr_en] [get_bd_pins ila_constant_1/dout]
 
   connect_bd_net -net ila_fifo_dout [get_bd_pins ila_fifo/dout] [get_bd_pins ila_ad9467_mon/probe0]
 
