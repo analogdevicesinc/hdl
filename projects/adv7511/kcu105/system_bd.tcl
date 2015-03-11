@@ -13,8 +13,11 @@ create_bd_port -dir O -from 15 -to 0 hdmi_data
 
 create_bd_port -dir O spdif
 
-ad_connect  sys_concat_intc/In7 axi_spdif_tx_dma/mm2s_introut
-ad_connect  sys_concat_intc/In8 axi_hdmi_dma/mm2s_introut
+# interrupts
+
+create_bd_port -dir O axi_hdmi_dma_intr
+create_bd_port -dir O axi_spdif_tx_dma_intr
+
 # hdmi peripherals
 
 set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]
@@ -59,6 +62,7 @@ ad_connect  axi_hdmi_core/m_axis_mm2s_tlast axi_hdmi_dma/m_axis_mm2s_tlast
 ad_connect  axi_hdmi_core/m_axis_mm2s_tready axi_hdmi_dma/m_axis_mm2s_tready
 ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_dma/mm2s_fsync
 ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_core/m_axis_mm2s_fsync_ret
+ad_connect  axi_hdmi_dma/mm2s_introut axi_hdmi_dma_intr
 
 # spdif audio
 
@@ -71,6 +75,7 @@ ad_connect  sys_audio_clkgen/clk_out1 axi_spdif_tx_core/spdif_data_clk
 ad_connect  sys_cpu_clk axi_spdif_tx_core/S_AXIS_ACLK
 ad_connect  sys_cpu_resetn axi_spdif_tx_core/S_AXIS_ARESETN
 ad_connect  spdif axi_spdif_tx_core/spdif_tx_o
+ad_connect  axi_spdif_tx_dma/mm2s_introut axi_spdif_tx_dma_intr
 
 # processor interconnects
 
