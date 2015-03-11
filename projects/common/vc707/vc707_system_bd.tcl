@@ -353,7 +353,7 @@ connect_bd_net [get_bd_pins sys_concat_intc/In8]  [get_bd_pins axi_hdmi_dma/mm2s
 connect_bd_net [get_bd_pins sys_concat_intc/In9]  [get_bd_pins axi_iic_main/iic2intc_irpt]
 
 for {set intc_index 10} {$intc_index < 32} {incr intc_index} {
-  set mb_intr_${intc_index} [create_bd_port -dir I mb_intr_${intc_index}]
+  set mb_intr_${intc_index} [create_bd_port -dir I -type intr mb_intr_${intc_index}]
   connect_bd_net [get_bd_pins sys_concat_intc/In${intc_index}] [get_bd_ports mb_intr_${intc_index}]
 }
 
