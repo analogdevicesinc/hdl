@@ -70,7 +70,6 @@ set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_INTR {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
