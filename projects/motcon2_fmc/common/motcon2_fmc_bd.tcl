@@ -107,9 +107,14 @@
   set_property -dict [ list CONFIG.CLKOUT2_USED {true} ] $sys_audio_clkgen
   set_property -dict [ list CONFIG.CLKOUT3_USED {true} ] $sys_audio_clkgen
   set_property -dict [ list CONFIG.CLKOUT4_USED {true} ] $sys_audio_clkgen
+  set_property -dict [ list CONFIG.CLKOUT5_USED {true} ] $sys_audio_clkgen
   set_property -dict [ list CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {125} ] $sys_audio_clkgen
   set_property -dict [ list CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {25} ] $sys_audio_clkgen
   set_property -dict [ list CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {20} ] $sys_audio_clkgen
+  set_property -dict [ list CONFIG.CLKOUT5_REQUESTED_OUT_FREQ {20} ] $sys_audio_clkgen
+  set_property -dict [ list CONFIG.CLKOUT2_DRIVES {No_buffer} ] $sys_audio_clkgen
+  set_property -dict [ list CONFIG.CLKOUT3_DRIVES {No_buffer} ] $sys_audio_clkgen
+  set_property -dict [ list CONFIG.CLKOUT4_DRIVES {No_buffer} ] $sys_audio_clkgen
 
   # speed detectors
     # speed detector core motor 1
@@ -281,7 +286,7 @@
   connect_bd_net -net sys_100m_resetn [get_bd_pins current_monitor_m1_dma/s_axi_aresetn]
   connect_bd_net -net sys_100m_resetn [get_bd_pins current_monitor_m1_dma/m_dest_axi_aresetn]
 
-  connect_bd_net -net sys_audio_clkgen_clk_out2      [get_bd_pins current_monitor_m1/adc_clk_i] [get_bd_pins sys_audio_clkgen/clk_out4]
+  connect_bd_net -net sys_audio_clkgen_clk_out5      [get_bd_pins current_monitor_m1/adc_clk_i] [get_bd_pins sys_audio_clkgen/clk_out5]
   connect_bd_net -net adc_m1_ia_dat_i_1 [get_bd_ports adc_m1_ia_dat_i]     [get_bd_pins current_monitor_m1/adc_ia_dat_i]
   connect_bd_net -net adc_m1_ib_dat_i_1 [get_bd_ports adc_m1_ib_dat_i]     [get_bd_pins current_monitor_m1/adc_ib_dat_i]
   connect_bd_net -net adc_m1_vbus_dat_i_1 [get_bd_ports adc_m1_vbus_dat_i] [get_bd_pins current_monitor_m1/adc_vbus_dat_i]
@@ -330,7 +335,7 @@
   connect_bd_net -net sys_100m_resetn [get_bd_pins current_monitor_m2_dma/s_axi_aresetn]
   connect_bd_net -net sys_100m_resetn [get_bd_pins current_monitor_m2_dma/m_dest_axi_aresetn]
 
-  connect_bd_net -net sys_audio_clkgen_clk_out2      [get_bd_pins current_monitor_m2/adc_clk_i] [get_bd_pins sys_audio_clkgen/clk_out4]
+  connect_bd_net -net sys_audio_clkgen_clk_out5      [get_bd_pins current_monitor_m2/adc_clk_i] [get_bd_pins sys_audio_clkgen/clk_out5]
   connect_bd_net -net adc_m2_ia_dat_i_1 [get_bd_ports adc_m2_ia_dat_i]     [get_bd_pins current_monitor_m2/adc_ia_dat_i]
   connect_bd_net -net adc_m2_ib_dat_i_1 [get_bd_ports adc_m2_ib_dat_i]     [get_bd_pins current_monitor_m2/adc_ib_dat_i]
   connect_bd_net -net adc_m2_vbus_dat_i_1 [get_bd_ports adc_m2_vbus_dat_i] [get_bd_pins current_monitor_m2/adc_vbus_dat_i]
@@ -375,7 +380,7 @@
     # motor 1
   connect_bd_net -net sys_100m_clk [get_bd_pins controller_m1/ref_clk] $sys_100m_clk_source
   connect_bd_net -net sys_100m_clk [get_bd_pins controller_m1/s_axi_aclk] $sys_100m_clk_source
-  connect_bd_net -net sys_audio_clkgen_clk_out2 [get_bd_pins controller_m1/ctrl_data_clk] [get_bd_pins sys_audio_clkgen/clk_out4]
+  connect_bd_net -net sys_audio_clkgen_clk_out5 [get_bd_pins controller_m1/ctrl_data_clk] [get_bd_pins sys_audio_clkgen/clk_out5]
   connect_bd_net -net sys_100m_resetn [get_bd_pins controller_m1/s_axi_aresetn] $sys_100m_resetn_source
 
   connect_bd_net -net sys_100m_clk [get_bd_pins controller_m1_dma/s_axi_aclk] $sys_100m_clk_source
@@ -464,7 +469,7 @@
     # motor 2
   connect_bd_net -net sys_100m_clk [get_bd_pins controller_m2/s_axi_aclk] $sys_100m_clk_source
   connect_bd_net -net sys_100m_clk [get_bd_pins controller_m2/ref_clk] $sys_100m_clk_source
-  connect_bd_net -net sys_audio_clkgen_clk_out2 [get_bd_pins controller_m2/ctrl_data_clk] [get_bd_pins sys_audio_clkgen/clk_out4]
+  connect_bd_net -net sys_audio_clkgen_clk_out5 [get_bd_pins controller_m2/ctrl_data_clk] [get_bd_pins sys_audio_clkgen/clk_out5]
   connect_bd_net -net sys_100m_resetn [get_bd_pins controller_m2/s_axi_aresetn] $sys_100m_resetn_source
 
   connect_bd_net -net sys_100m_clk [get_bd_pins controller_m2_dma/s_axi_aclk] $sys_100m_clk_source
@@ -568,9 +573,9 @@
   connect_bd_intf_net -intf_net gmii_to_rgmii_eth1_rgmii [get_bd_intf_ports eth1_rgmii] [get_bd_intf_pins gmii_to_rgmii_eth1/rgmii]
   connect_bd_net -net sys_rstgen_peripheral_reset [get_bd_pins gmii_to_rgmii_eth1/reset] [get_bd_pins sys_rstgen/peripheral_reset]
 
-  connect_bd_net -net sys_audio_clkgen_clk_out2 [get_bd_pins gmii_to_rgmii_eth1/clk_20m] [get_bd_pins sys_audio_clkgen/clk_out4]
+  connect_bd_net -net sys_audio_clkgen_clk_out4 [get_bd_pins gmii_to_rgmii_eth1/clk_20m] [get_bd_pins sys_audio_clkgen/clk_out4]
   connect_bd_net -net sys_audio_clkgen_clk_out3 [get_bd_pins gmii_to_rgmii_eth1/clk_25m] [get_bd_pins sys_audio_clkgen/clk_out3]
-  connect_bd_net -net sys_audio_clkgen_clk_out4 [get_bd_pins gmii_to_rgmii_eth1/clk_125m] [get_bd_pins sys_audio_clkgen/clk_out2]
+  connect_bd_net -net sys_audio_clkgen_clk_out2 [get_bd_pins gmii_to_rgmii_eth1/clk_125m] [get_bd_pins sys_audio_clkgen/clk_out2]
   connect_bd_net [get_bd_ports eth_mdio_mdc] [get_bd_pins gmii_to_rgmii_eth1/mdio_mdc]
   connect_bd_net [get_bd_ports eth_mdio_o] [get_bd_pins gmii_to_rgmii_eth1/mdio_in_w]
   connect_bd_net [get_bd_ports eth_mdio_i] [get_bd_pins gmii_to_rgmii_eth1/mdio_in_r]
@@ -578,9 +583,9 @@
   connect_bd_intf_net -intf_net sys_ps7_GMII_ETHERNET_2 [get_bd_intf_pins gmii_to_rgmii_eth2/gmii] [get_bd_intf_pins sys_ps7/GMII_ETHERNET_1]
   connect_bd_intf_net -intf_net gmii_to_rgmii_eth2_rgmii [get_bd_intf_ports eth2_rgmii] [get_bd_intf_pins gmii_to_rgmii_eth2/rgmii]
   connect_bd_net -net sys_rstgen_peripheral_reset [get_bd_pins gmii_to_rgmii_eth2/reset] [get_bd_pins sys_rstgen/peripheral_reset]
-  connect_bd_net -net sys_audio_clkgen_clk_out2 [get_bd_pins gmii_to_rgmii_eth2/clk_20m] [get_bd_pins sys_audio_clkgen/clk_out4]
+  connect_bd_net -net sys_audio_clkgen_clk_out4 [get_bd_pins gmii_to_rgmii_eth2/clk_20m] [get_bd_pins sys_audio_clkgen/clk_out4]
   connect_bd_net -net sys_audio_clkgen_clk_out3 [get_bd_pins gmii_to_rgmii_eth2/clk_25m] [get_bd_pins sys_audio_clkgen/clk_out3]
-  connect_bd_net -net sys_audio_clkgen_clk_out4 [get_bd_pins gmii_to_rgmii_eth2/clk_125m] [get_bd_pins sys_audio_clkgen/clk_out2]
+  connect_bd_net -net sys_audio_clkgen_clk_out2 [get_bd_pins gmii_to_rgmii_eth2/clk_125m] [get_bd_pins sys_audio_clkgen/clk_out2]
 
   connect_bd_net [get_bd_ports eth_mdio_mdc] [get_bd_pins gmii_to_rgmii_eth2/mdio_mdc]
   connect_bd_net [get_bd_ports eth_mdio_o] [get_bd_pins gmii_to_rgmii_eth2/mdio_in_w]
