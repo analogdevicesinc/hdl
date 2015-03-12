@@ -245,7 +245,6 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  wire    [15:0]  ps_intrs;
   wire    [ 2:0]  spi0_csn;
   wire            spi0_clk;
   wire            spi0_mosi;
@@ -474,8 +473,6 @@ module system_top (
     .adc_enable_1 (adc_enable_1),
     .adc_valid_0 (adc_valid_0),
     .adc_valid_1 (adc_valid_1),
-    .axi_ad9144_dma_intr (ps_intrs[12]),
-    .axi_ad9680_dma_intr (ps_intrs[13]),
     .dac_clk (dac_clk),
     .dac_ddata (dac_ddata),
     .dac_ddata_0 (dac_ddata_0),
@@ -537,20 +534,18 @@ module system_top (
     .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .ps_intr_00 (ps_intrs[0]),
-    .ps_intr_01 (ps_intrs[1]),
-    .ps_intr_02 (ps_intrs[2]),
-    .ps_intr_03 (ps_intrs[3]),
-    .ps_intr_04 (ps_intrs[4]),
-    .ps_intr_05 (ps_intrs[5]),
-    .ps_intr_06 (ps_intrs[6]),
-    .ps_intr_07 (ps_intrs[7]),
-    .ps_intr_08 (ps_intrs[8]),
-    .ps_intr_09 (ps_intrs[9]),
-    .ps_intr_10 (ps_intrs[10]),
-    .ps_intr_11 (ps_intrs[11]),
-    .ps_intr_12 (ps_intrs[12]),
-    .ps_intr_13 (ps_intrs[13]),
+    .ps_intr_00 (1'b0),
+    .ps_intr_01 (1'b0),
+    .ps_intr_02 (1'b0),
+    .ps_intr_03 (1'b0),
+    .ps_intr_04 (1'b0),
+    .ps_intr_05 (1'b0),
+    .ps_intr_06 (1'b0),
+    .ps_intr_07 (1'b0),
+    .ps_intr_08 (1'b0),
+    .ps_intr_09 (1'b0),
+    .ps_intr_10 (1'b0),
+    .ps_intr_11 (1'b0),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),
