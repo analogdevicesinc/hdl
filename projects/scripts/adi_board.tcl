@@ -7,8 +7,6 @@ variable sys_hp1_interconnect_index
 variable sys_hp2_interconnect_index
 variable sys_hp3_interconnect_index
 variable sys_mem_interconnect_index
-variable sys_interrupts_n
-variable sys_interrupts_q
 
 ###################################################################################################
 ###################################################################################################
@@ -19,7 +17,6 @@ set sys_hp1_interconnect_index -1
 set sys_hp2_interconnect_index -1
 set sys_hp3_interconnect_index -1
 set sys_mem_interconnect_index -1
-set sys_interrupts_n 0
 
 ###################################################################################################
 ###################################################################################################
@@ -316,52 +313,22 @@ proc ad_cpu_interconnect {p_address p_name} {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_cpu_interrupt {p_index p_name} {
-
-  global sys_interrupts_n
-  global sys_interrupts_q
-
-  set i_str "In$p_index"
-
-  if {$p_index >= $sys_interrupts_n} {
-    set sys_interrupts_n [expr $p_index + 1]
-    set_property CONFIG.NUM_PORTS $sys_interrupts_n [get_bd_cells sys_concat_intc]
-  }
-
-  set sys_interrupts_q($p_index) $p_name
-  set p_intr [get_bd_pins -filter "TYPE == intr" -quiet -of_objects [get_bd_cells $p_name]]
-
-  connect_bd_net -net "${p_name}_intr" \
-    [get_bd_pins sys_concat_intc/${i_str}] \
-    [get_bd_pins ${p_intr}]
-}
-
-proc ad_cpu_interrupt_update {} {
+proc ad_cpu_interrupt {p_ps_index p_mb_index p_name} {
 
   global sys_zynq
-  global sys_interrupts_n
-  global sys_interrupts_q
 
   if {$sys_zynq == 1} {
-    connect_bd_net -net sys_cpu_interrupt \
-      [get_bd_pins sys_concat_intc/dout] \
-      [get_bd_pins sys_ps7/IRQ_F2P]
+    set p_index [regsub -all {[^0-9]} $p_ps_index ""]
   } else {
-    connect_bd_net -net sys_cpu_interrupt \
-      [get_bd_pins sys_concat_intc/dout] \
-      [get_bd_pins axi_intc/intr]
+    set p_index [regsub -all {[^0-9]} $p_mb_index ""]
   }
 
-  for {set p_index 0} {$p_index < $sys_interrupts_n} {incr p_index} {
-    if {![info exists sys_interrupts_q($p_index)]} {
-      set i_str "In$p_index"
-      set o_str "unc_intr_$p_index"
-      create_bd_port -dir I ${o_str}
-      connect_bd_net -net ${o_str} \
-        [get_bd_pins sys_concat_intc/${i_str}] \
-        [get_bd_ports ${o_str}]
-    }
-  }
+  set p_net [get_bd_nets -of_objects [get_bd_pins sys_concat_intc/In$p_index]] 
+  set p_pin [find_bd_objs -relation connected_to [get_bd_pins sys_concat_intc/In$p_index]]
+
+  puts "delete_bd_objs $p_net $p_pin"
+  delete_bd_objs $p_net $p_pin
+  ad_connect sys_concat_intc/In$p_index $p_name
 }
 
 ###################################################################################################
