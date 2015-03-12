@@ -99,10 +99,10 @@ entity axi_i2s_adi is
 		S_AXI_RDATA		: out std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
 		S_AXI_RRESP		: out std_logic_vector(1 downto 0);
 		S_AXI_RVALID		: out std_logic;
-		S_AXI_WREADY		: inout std_logic;
+		S_AXI_WREADY		: out std_logic;
 		S_AXI_BRESP		: out std_logic_vector(1 downto 0);
-		S_AXI_BVALID		: inout std_logic;
-		S_AXI_AWREADY		: inout std_logic
+		S_AXI_BVALID		: out std_logic;
+		S_AXI_AWREADY		: out std_logic
 	);
 end entity axi_i2s_adi;
 
