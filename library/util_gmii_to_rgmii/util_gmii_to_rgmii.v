@@ -103,13 +103,8 @@ module util_gmii_to_rgmii (
   wire            clk_100msps;
   wire  [ 3:0]    rgmii_rd_delay;
   wire  [ 7:0]    gmii_rxd_s;
-  wire  [ 3:0]    gmii_txd_low;
   wire            rgmii_rx_ctl_delay;
-  wire            gmii_rx_er_s;
-  wire            rgmii_rxc_s;
-  wire            rgmii_rx_ctl_clk_s;
   wire            rgmii_rx_ctl_s;
-  wire            rgmii_rxc_bufmr;
 
   wire  [ 1:0]    speed_selection; // 1x gigabit, 01 100Mbps, 00 10mbps
   wire            duplex_mode;     // 1 full, 0 half
@@ -118,28 +113,43 @@ module util_gmii_to_rgmii (
   reg             tx_reset_d1;
   reg             tx_reset_sync;
   reg             rx_reset_d1;
-  reg             rx_reset_sync;
   reg   [ 7:0]    gmii_txd_r;
   reg             gmii_tx_en_r;
   reg             gmii_tx_er_r;
+  reg   [ 7:0]    gmii_txd_r_d1;
+  reg             gmii_tx_en_r_d1;
+  reg             gmii_tx_er_r_d1;
 
-  // assignments
+  reg             rgmii_tx_ctl_r;
+  reg   [ 3:0]    gmii_txd_low;
+  reg             gmii_col;
+  reg             gmii_crs;
+
+  reg  [ 7:0]     gmii_rxd;
+  reg             gmii_rx_dv;
+  reg             gmii_rx_er;
+
   assign gigabit        = speed_selection [1];
-
   assign gmii_tx_clk    = gmii_tx_clk_s;
-  assign rgmii_tx_ctl_r = gmii_tx_en_r ^ gmii_tx_er_r;
-  assign gmii_txd_low   = gigabit ? gmii_txd_r[7:4] :  gmii_txd_r[3:0];
-  assign gmii_col       = duplex_mode ? 1'b0 : (gmii_tx_en_r | gmii_tx_er_r) & ( gmii_rx_dv_s | gmii_rx_er_s) ;
-  assign gmii_crs       = duplex_mode ? 1'b0 : (gmii_tx_en_r | gmii_tx_er_r | gmii_rx_dv_s | gmii_rx_er_s);
 
-  assign gmii_rxd       = gmii_rxd_s;
-  assign gmii_rx_dv     = gmii_rx_dv_s;
-  assign gmii_rx_er     = gmii_rx_er_s;
-  assign gmii_rx_er_s   = gmii_rx_dv_s ^ rgmii_rx_ctl_s;
+  always @(posedge gmii_rx_clk)
+  begin
+    gmii_rxd       = gmii_rxd_s;
+    gmii_rx_dv     = gmii_rx_dv_s;
+    gmii_rx_er     = gmii_rx_dv_s ^ rgmii_rx_ctl_s;
+  end
 
   always @(posedge gmii_tx_clk_s) begin
     tx_reset_d1    <= reset;
     tx_reset_sync  <= tx_reset_d1;
+  end
+
+  always @(posedge gmii_tx_clk_s)
+  begin
+    rgmii_tx_ctl_r = gmii_tx_en_r ^ gmii_tx_er_r;
+    gmii_txd_low   = gigabit ? gmii_txd_r[7:4] :  gmii_txd_r[3:0];
+    gmii_col       = duplex_mode ? 1'b0 : (gmii_tx_en_r| gmii_tx_er_r) & ( gmii_rx_dv | gmii_rx_er) ;
+    gmii_crs       = duplex_mode ? 1'b0 : (gmii_tx_en_r| gmii_tx_er_r| gmii_rx_dv | gmii_rx_er);
   end
 
   always @(posedge gmii_tx_clk_s) begin
@@ -153,6 +163,9 @@ module util_gmii_to_rgmii (
       gmii_txd_r   <= gmii_txd;
       gmii_tx_en_r <= gmii_tx_en;
       gmii_tx_er_r <= gmii_tx_er;
+      gmii_txd_r_d1   <= gmii_txd_r;
+      gmii_tx_en_r_d1 <= gmii_tx_en_r;
+      gmii_tx_er_r_d1 <= gmii_tx_er_r;
     end
   end
 
@@ -201,7 +214,7 @@ module util_gmii_to_rgmii (
       .Q (rgmii_td[i]),
       .C (gmii_tx_clk_s),
       .CE(1),
-      .D1(gmii_txd_r[i]),
+      .D1(gmii_txd_r_d1[i]),
       .D2(gmii_txd_low[i]),
       .R(tx_reset_sync),
       .S(0));
@@ -214,41 +227,13 @@ module util_gmii_to_rgmii (
     .Q (rgmii_tx_ctl),
     .C (gmii_tx_clk_s),
     .CE(1),
-    .D1(gmii_tx_en_r),
+    .D1(gmii_tx_en_r_d1),
     .D2(rgmii_tx_ctl_r),
     .R(tx_reset_sync),
     .S(0));
 
-
-  always @(posedge rgmii_rxc_s) begin
-    rx_reset_d1    <= reset;
-    rx_reset_sync  <= rx_reset_d1;
-  end
-
-  BUFMR bufmr_rgmii_rxc(
+  BUFG bufmr_rgmii_rxc(
     .I(rgmii_rxc),
-    .O(rgmii_rxc_bufmr));
-
-  BUFR #(
-    .SIM_DEVICE("7SERIES"),
-    .BUFR_DIVIDE(1)
-  ) bufr_rgmii_rx_clk (
-    .I(rgmii_rxc_bufmr),
-    .CE(1),
-    .CLR(0),
-    .O(rgmii_rxc_s));
-
-  BUFR #(
-    .SIM_DEVICE("7SERIES"),
-    .BUFR_DIVIDE(1)
-  ) bufr_rgmii_rx_ctl_clk (
-    .I(rgmii_rxc_bufmr),
-    .CE(1),
-    .CLR(0),
-    .O(rgmii_rx_ctl_clk_s));
-
-  BUFG bufg_rgmii_rx_clk (
-    .I(rgmii_rxc_s),
     .O(gmii_rx_clk));
 
   IDELAYE2 #(
@@ -275,9 +260,9 @@ module util_gmii_to_rgmii (
   for (i = 0; i < 4; i = i + 1) begin
     IDELAYE2 #(
       .IDELAY_TYPE("FIXED"),
-    .HIGH_PERFORMANCE_MODE("TRUE"),
-    .REFCLK_FREQUENCY(200.0),
-    .SIGNAL_PATTERN("DATA"),
+      .HIGH_PERFORMANCE_MODE("TRUE"),
+      .REFCLK_FREQUENCY(200.0),
+      .SIGNAL_PATTERN("DATA"),
       .DELAY_SRC("IDATAIN")
     ) delay_rgmii_rd (
       .IDATAIN(rgmii_rd[i]),
@@ -298,7 +283,7 @@ module util_gmii_to_rgmii (
     ) rgmii_rx_iddr (
       .Q1(gmii_rxd_s[i]),
       .Q2(gmii_rxd_s[i+4]),
-      .C(rgmii_rxc_s),
+      .C(gmii_rx_clk),
       .CE(1),
       .D(rgmii_rd_delay[i]),
       .R(0),
@@ -311,7 +296,7 @@ module util_gmii_to_rgmii (
   ) rgmii_rx_ctl_iddr (
     .Q1(gmii_rx_dv_s),
     .Q2(rgmii_rx_ctl_s),
-    .C(rgmii_rx_ctl_clk_s),
+    .C(gmii_rx_clk),
     .CE(1),
     .D(rgmii_rx_ctl_delay),
     .R(0),
