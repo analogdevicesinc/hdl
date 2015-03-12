@@ -40,9 +40,6 @@ create_bd_port -dir I adc_dwr
 create_bd_port -dir I adc_dsync
 create_bd_port -dir I -from 127 -to 0 adc_ddata
 
-create_bd_port -dir O axi_ad9144_dma_intr
-create_bd_port -dir O axi_ad9680_dma_intr
-
 # dac peripherals
 
 set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
@@ -160,7 +157,6 @@ ad_connect  axi_ad9144_core/dac_ddata_3 dac_ddata_3
 ad_connect  dac_drd axi_ad9144_dma/fifo_rd_en
 ad_connect  dac_ddata axi_ad9144_dma/fifo_rd_dout
 ad_connect  axi_ad9144_core/dac_dunf axi_ad9144_dma/fifo_rd_underflow
-ad_connect  axi_ad9144_dma_intr axi_ad9144_dma/irq             
 ad_connect  sys_cpu_resetn axi_ad9144_dma/m_src_axi_aresetn
 
 # connections (adc)
@@ -236,7 +232,6 @@ ad_connect  axi_ad9680_fifo/dma_wr axi_ad9680_dma/s_axis_valid
 ad_connect  axi_ad9680_fifo/dma_wdata axi_ad9680_dma/s_axis_data
 ad_connect  axi_ad9680_fifo/dma_wready axi_ad9680_dma/s_axis_ready
 ad_connect  axi_ad9680_fifo/dma_xfer_req axi_ad9680_dma/s_axis_xfer_req
-ad_connect  axi_ad9680_dma_intr axi_ad9680_dma/irq             
 
 # interconnect (cpu)
 
@@ -262,6 +257,8 @@ ad_mem_hp1_interconnect sys_cpu_clk axi_ad9144_dma/m_src_axi
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_ad9680_dma/m_dest_axi
 
+# interrupts
 
-
+ad_cpu_interrupt ps-12 mb-13 axi_ad9144_dma/irq             
+ad_cpu_interrupt ps-13 mb-12 axi_ad9680_dma/irq             
 
