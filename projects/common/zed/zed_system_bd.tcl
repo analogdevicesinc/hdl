@@ -285,7 +285,7 @@ connect_bd_net [get_bd_pins sys_concat_intc/In14] [get_bd_pins axi_iic_main/iic2
 
 for {set intc_index 0} {$intc_index < 14} {incr intc_index} {
   set ps_intr_${intc_index} [create_bd_port -dir I ps_intr_${intc_index}]
-  connect_bd_net [get_bd_pins sys_concat_intc/In${intc_index}] [get_bd_ports ps_intr_${intc_index}]
+  connect_bd_net -net ps_intr_${intc_index}_s [get_bd_pins sys_concat_intc/In${intc_index}] [get_bd_ports ps_intr_${intc_index}]
 }
 
 # address map
