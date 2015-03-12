@@ -208,7 +208,6 @@ module system_top (
 
   // internal signals
 
-  wire    [15:0]  mb_intrs;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -438,8 +437,6 @@ module system_top (
     .adc_enable_1 (adc_enable_1),
     .adc_valid_0 (adc_valid_0),
     .adc_valid_1 (adc_valid_1),
-    .axi_ad9144_dma_intr (mb_intrs[13]),
-    .axi_ad9680_dma_intr (mb_intrs[12]),
     .c0_ddr4_act_n (ddr4_act_n),
     .c0_ddr4_adr (ddr4_addr),
     .c0_ddr4_ba (ddr4_ba),
@@ -477,14 +474,12 @@ module system_top (
     .gpio1_t (gpio_t[63:32]),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .mb_intr_05 (mb_intrs[5]),
-    .mb_intr_06 (mb_intrs[6]),
-    .mb_intr_07 (mb_intrs[7]),
-    .mb_intr_08 (mb_intrs[8]),
-    .mb_intr_12 (mb_intrs[12]),
-    .mb_intr_13 (mb_intrs[13]),
-    .mb_intr_14 (mb_intrs[14]),
-    .mb_intr_15 (mb_intrs[15]),
+    .mb_intr_05 (1'b0),
+    .mb_intr_06 (1'b0),
+    .mb_intr_07 (1'b0),
+    .mb_intr_08 (1'b0),
+    .mb_intr_14 (1'b0),
+    .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .phy_clk_clk_n (phy_clk_n),
