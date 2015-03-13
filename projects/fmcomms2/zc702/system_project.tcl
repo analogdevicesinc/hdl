@@ -1,8 +1,7 @@
 
-
-
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project_create fmcomms2_zc702
 adi_project_files fmcomms2_zc702 [list \
