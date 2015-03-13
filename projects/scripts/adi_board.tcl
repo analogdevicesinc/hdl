@@ -123,6 +123,8 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   global sys_hp3_interconnect_index
   global sys_mem_interconnect_index
 
+  set p_clk_source [get_bd_pins -filter {DIR == O} -of_objects [get_bd_nets $p_clk]]
+
   if {$p_sel eq "MEM"} {
     if {$sys_mem_interconnect_index < 0} {
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_mem_interconnect
@@ -184,7 +186,8 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   set p_intf_clock [get_bd_pins -filter "TYPE == clk && (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
     CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
     CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" -quiet -of_objects [get_bd_cells $p_cell_name]]
-  if {[find_bd_objs -quiet -relation connected_to $p_intf_clock] ne ""} {
+  if {[find_bd_objs -quiet -relation connected_to $p_intf_clock] ne "" ||
+      $p_intf_clock eq $p_clk_source} {
     set p_intf_clock ""
   }
 
