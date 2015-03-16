@@ -5,20 +5,14 @@
 create_bd_port -dir I -type rst sys_rst
 create_bd_port -dir I sys_clk_p
 create_bd_port -dir I sys_clk_n
-create_bd_port -dir O fan_pwm
 
-create_bd_port -dir O -from 1 -to 0 ddr3_1_p
-create_bd_port -dir O -from 2 -to 0 ddr3_1_n
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr3
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_rtl:1.0 mdio
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mii_rtl:1.0 mii
 
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_sw
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_led
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_lcd
 
-create_bd_port -dir O iic_rstn
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main
 
 create_bd_port -dir I uart_sin
@@ -45,6 +39,7 @@ create_bd_port -dir O -from 31 -to 0 gpio1_t
 
 create_bd_port -dir I -type intr mb_intr_02
 create_bd_port -dir I -type intr mb_intr_03
+create_bd_port -dir I -type intr mb_intr_06
 create_bd_port -dir I -type intr mb_intr_07
 create_bd_port -dir I -type intr mb_intr_08
 create_bd_port -dir I -type intr mb_intr_12
@@ -85,24 +80,12 @@ set_property -dict [list CONFIG.C_USE_UART {1}] $sys_mb_debug
 
 set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 
-set sys_const_vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_vcc]
-set sys_const_gnd [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_gnd]
-set_property -dict [list CONFIG.CONST_VAL {0}] $sys_const_gnd
-
 # instance: ddr (mig)
 
 set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.3 axi_ddr_cntrl]
 set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
 file copy -force $ad_hdl_dir/projects/common/kc705/kc705_system_mig.prj "$axi_ddr_cntrl_dir/"
 set_property -dict [list CONFIG.XML_INPUT_FILE {kc705_system_mig.prj}] $axi_ddr_cntrl
-
-set sys_const_ddr3_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_ddr3_0]
-set_property -dict [list CONFIG.CONST_WIDTH {3}] $sys_const_ddr3_0
-set_property -dict [list CONFIG.CONST_VAL {0}] $sys_const_ddr3_0
-
-set sys_const_ddr3_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 sys_const_ddr3_1]
-set_property -dict [list CONFIG.CONST_WIDTH {2}] $sys_const_ddr3_1
-set_property -dict [list CONFIG.CONST_VAL {1}] $sys_const_ddr3_1
 
 # instance: default peripherals
 
@@ -121,12 +104,6 @@ set axi_timer [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_timer:2.0 axi_tim
 set axi_gpio_lcd [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_lcd]
 set_property -dict [list CONFIG.C_GPIO_WIDTH {7}] $axi_gpio_lcd
 set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_lcd
-
-set axi_gpio_sw_led [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_sw_led]
-set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio_sw_led
-set_property -dict [list CONFIG.C_GPIO_WIDTH {9}] $axi_gpio_sw_led
-set_property -dict [list CONFIG.C_GPIO2_WIDTH {8}] $axi_gpio_sw_led
-set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_sw_led
 
 set axi_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_spi]
 set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_spi
@@ -193,9 +170,10 @@ ad_connect sys_concat_intc/dout   axi_intc/intr
 
 ad_connect axi_ddr_cntrl/mmcm_locked   sys_rstgen/dcm_locked
 
-ad_connect sys_cpu_clk  axi_ddr_cntrl/ui_addn_clk_0
-ad_connect sys_200m_clk axi_ddr_cntrl/ui_clk
-ad_connect sys_cpu_reset sys_rstgen/peripheral_reset
+ad_connect sys_cpu_clk    axi_ddr_cntrl/ui_addn_clk_0
+ad_connect sys_200m_clk   axi_ddr_cntrl/ui_clk
+ad_connect sys_cpu_resetn axi_ddr_cntrl/aresetn
+ad_connect sys_cpu_reset  sys_rstgen/peripheral_reset
 ad_connect sys_cpu_resetn sys_rstgen/peripheral_aresetn
 
 ad_connect sys_cpu_clk  sys_rstgen/slowest_sync_clk
@@ -214,7 +192,7 @@ ad_connect sys_concat_intc/In2    mb_intr_02
 ad_connect sys_concat_intc/In3    mb_intr_03
 ad_connect sys_concat_intc/In4    axi_uart/interrupt
 ad_connect sys_concat_intc/In5    axi_gpio_lcd/ip2intc_irpt
-ad_connect sys_concat_intc/In6    axi_gpio_sw_led/ip2intc_irpt
+ad_connect sys_concat_intc/In6    mb_intr_06
 ad_connect sys_concat_intc/In7    mb_intr_07
 ad_connect sys_concat_intc/In8    mb_intr_08
 ad_connect sys_concat_intc/In9    axi_iic_main/iic2intc_irpt
@@ -227,22 +205,16 @@ ad_connect sys_concat_intc/In15   mb_intr_15
 
 # defaults (external interface)
 
-ad_connect  sys_const_vcc/dout fan_pwm
 ad_connect  sys_rst sys_rstgen/ext_reset_in
 ad_connect  sys_rst axi_ddr_cntrl/sys_rst
 ad_connect  sys_clk_p axi_ddr_cntrl/sys_clk_p
 ad_connect  sys_clk_n axi_ddr_cntrl/sys_clk_n
-ad_connect  ddr3_1_n sys_const_ddr3_0/dout
-ad_connect  ddr3_1_p sys_const_ddr3_1/dout
 ad_connect  ddr3 axi_ddr_cntrl/DDR3
 ad_connect  mdio axi_ethernet/mdio
 ad_connect  mii axi_ethernet/mii
 ad_connect  uart_sin axi_uart/rx
 ad_connect  uart_sout axi_uart/tx
 ad_connect  gpio_lcd axi_gpio_lcd/gpio
-ad_connect  gpio_sw axi_gpio_sw_led/gpio
-ad_connect  gpio_led axi_gpio_sw_led/gpio2
-ad_connect  iic_rstn sys_const_vcc/dout
 ad_connect  iic_main axi_iic_main/iic
 
 ad_connect  spi_csn_i axi_spi/ss_i
@@ -272,15 +244,20 @@ ad_connect sys_cpu_clk axi_linear_flash/rdclk
 ad_cpu_interconnect 0x41400000 sys_mb_debug
 ad_cpu_interconnect 0x40E00000 axi_ethernet
 ad_cpu_interconnect 0x40010000 axi_gpio_lcd
-ad_cpu_interconnect 0x40020000 axi_gpio_sw_led
 ad_cpu_interconnect 0x41200000 axi_intc
 ad_cpu_interconnect 0x41C00000 axi_timer
 ad_cpu_interconnect 0x40600000 axi_uart
 ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_cpu_interconnect 0x40000000 axi_gpio
 ad_cpu_interconnect 0x44A70000 axi_spi
+ad_cpu_interconnect 0x41E00000 axi_linear_flash
 
 ad_mem_hp0_interconnect sys_200m_clk axi_ddr_cntrl/S_AXI
 ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_DC
 ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_IC
+
+create_bd_addr_seg -range 0x20000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
+  [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem] SEG_dlmb_cntlr
+create_bd_addr_seg -range 0x20000 -offset 0x0 [get_bd_addr_spaces sys_mb/Instruction] \
+  [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_ilmb_cntlr
 
