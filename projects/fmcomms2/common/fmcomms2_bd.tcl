@@ -15,11 +15,6 @@ create_bd_port -dir O tx_frame_out_n
 create_bd_port -dir O -from 5 -to 0 tx_data_out_p
 create_bd_port -dir O -from 5 -to 0 tx_data_out_n
 
-# interrupts
-
-create_bd_port -dir O ad9361_adc_dma_irq
-create_bd_port -dir O ad9361_dac_dma_irq
-
 # ad9361 core
 
 set axi_ad9361 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361]
@@ -94,7 +89,6 @@ ad_connect  util_adc_pack/dvalid axi_ad9361_adc_dma/fifo_wr_en
 ad_connect  util_adc_pack/dsync axi_ad9361_adc_dma/fifo_wr_sync
 ad_connect  util_adc_pack/ddata axi_ad9361_adc_dma/fifo_wr_din
 ad_connect  axi_ad9361/adc_dovf axi_ad9361_adc_dma/fifo_wr_overflow
-ad_connect  axi_ad9361_adc_dma/irq ad9361_adc_dma_irq
 ad_connect  axi_ad9361_clk util_dac_unpack/clk
 ad_connect  util_dac_unpack/dac_valid_00 axi_ad9361/dac_valid_i0
 ad_connect  util_dac_unpack/dac_valid_01 axi_ad9361/dac_valid_q0
@@ -113,9 +107,8 @@ ad_connect  util_dac_unpack/dma_data axi_ad9361_dac_dma/fifo_rd_dout
 ad_connect  util_dac_unpack/fifo_valid axi_ad9361_dac_dma/fifo_rd_valid
 ad_connect  util_dac_unpack/dma_rd axi_ad9361_dac_dma/fifo_rd_en
 ad_connect  axi_ad9361/dac_dunf axi_ad9361_dac_dma/fifo_rd_underflow
-ad_connect  axi_ad9361_dac_dma/irq ad9361_dac_dma_irq
 
-# interconnects 
+# interconnects
 
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
@@ -124,6 +117,12 @@ ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
+
+
+# interrupts
+
+ad_cpu_interrupt ps-13 mb-12 axi_ad9361_adc_dma/irq
+ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
 
 # ila (adc)
 
