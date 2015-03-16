@@ -96,14 +96,6 @@ module system_top (
   iic_scl,
   iic_sda,
 
-  hdmi_out_clk,
-  hdmi_hsync,
-  hdmi_vsync,
-  hdmi_data_e,
-  hdmi_data,
-
-  spdif,
-
   rx_clk_in_p,
   rx_clk_in_n,
   rx_frame_in_p,
@@ -170,12 +162,12 @@ module system_top (
   output          mii_tx_en;
   output  [ 3:0]  mii_txd;
 
-  output [26:1]  linear_flash_addr;
-  output         linear_flash_adv_ldn;
-  output         linear_flash_ce_n;
-  inout   [15:0] linear_flash_dq_io;
-  output         linear_flash_oen;
-  output         linear_flash_wen;
+  output  [26:1]  linear_flash_addr;
+  output          linear_flash_adv_ldn;
+  output          linear_flash_ce_n;
+  inout   [15:0]  linear_flash_dq_io;
+  output          linear_flash_oen;
+  output          linear_flash_wen;
 
   output          fan_pwm;
 
@@ -186,14 +178,6 @@ module system_top (
   output          iic_rstn;
   inout           iic_scl;
   inout           iic_sda;
-
-  output          hdmi_out_clk;
-  output          hdmi_hsync;
-  output          hdmi_vsync;
-  output          hdmi_data_e;
-  output  [15:0]  hdmi_data;
-
-  output          spdif;
 
   input           rx_clk_in_p;
   input           rx_clk_in_n;
@@ -223,17 +207,25 @@ module system_top (
   input           spi_miso;
 
   // internal signals
+
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
   wire    [31:0]  mb_intrs;
 
+  // default logic
+
+  assign ddr3_1_p = 2'b11;
+  assign ddr3_1_n = 3'b000;
+  assign fan_pwm  = 1'b1;
+  assign iic_rstn = 1'b1;
+
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
-    .dt (gpio_t[16:0]),
-    .di (gpio_o[16:0]),
-    .do (gpio_i[16:0]),
+    .dt (gpio_t[49:32]),
+    .di (gpio_o[49:32]),
+    .do (gpio_i[49:32]),
     .dio({  gpio_txnrx,
             gpio_enable,
             gpio_resetb,
@@ -242,9 +234,14 @@ module system_top (
             gpio_ctl,
             gpio_status}));
 
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_sw_led (
+     .dt (gpio_t[16:0]),
+     .di (gpio_o[16:0]),
+     .do (gpio_i[16:0]),
+     .dio({gpio_led,
+           gpio_sw}));
+
   system_wrapper i_system_wrapper (
-    .ddr3_1_n (ddr3_1_n),
-    .ddr3_1_p (ddr3_1_p),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -260,33 +257,21 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .fan_pwm (fan_pwm),
     .gpio_lcd_tri_io (gpio_lcd),
-    .gpio_led_tri_io (gpio_led),
-    .gpio_sw_tri_io (gpio_sw),
-    .gpio_fmcomms2_i (gpio_i),
-    .gpio_fmcomms2_o (gpio_o),
-    .gpio_fmcomms2_t (gpio_t),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio1_i (gpio_i[63:32]),
     .mb_intr_02 (mb_intrs[2]),
     .mb_intr_03 (mb_intrs[3]),
     .mb_intr_07 (mb_intrs[7]),
     .mb_intr_08 (mb_intrs[8]),
-    .mb_intr_12 (mb_intrs[12]),
-    .mb_intr_13 (mb_intrs[13]),
     .mb_intr_14 (mb_intrs[14]),
     .mb_intr_15 (mb_intrs[15]),
-    .fmcomms2_spi_irq(mb_intrs[10]),
-    .fmcomms2_gpio_irq(mb_intrs[11]),
-    .ad9361_adc_dma_irq (mb_intrs[12]),
-    .ad9361_dac_dma_irq (mb_intrs[13]),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio_io),
     .mii_col (mii_col),
@@ -305,17 +290,16 @@ module system_top (
     .linear_flash_dq_io (linear_flash_dq_io),
     .linear_flash_oen (linear_flash_oen),
     .linear_flash_wen (linear_flash_wen),
-    .spdif (spdif),
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
-    .spi_csn_i (1'b1),
+    .spi_clk_i (spi_clk),
+    .spi_clk_o (spi_clk),
+    .spi_csn_i (spi_csn),
     .spi_csn_o (spi_csn),
-    .spi_miso_i (spi_miso),
-    .spi_mosi_i (1'b0),
-    .spi_mosi_o (spi_mosi),
-    .spi_sclk_i (1'b0),
-    .spi_sclk_o (spi_clk),
+    .spi_sdi_i (spi_miso),
+    .spi_sdo_i (spi_mosi),
+    .spi_sdo_o (spi_mosi),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
     .rx_data_in_n (rx_data_in_n),
