@@ -25,10 +25,6 @@ set rx_sysref       [create_bd_port -dir O rx_sysref]
 set rx_data_p       [create_bd_port -dir I -from 7 -to 0 rx_data_p]
 set rx_data_n       [create_bd_port -dir I -from 7 -to 0 rx_data_n]
 
-set ad9625_spi_intr  [create_bd_port -dir O ad9625_spi_intr]
-set ad9625_gpio_intr [create_bd_port -dir O ad9625_gpio_intr]
-set ad9625_dma_intr  [create_bd_port -dir O ad9625_dma_intr]
-
 if {$sys_zynq == 0} {
 
   set gpio_ad9625_i   [create_bd_port -dir I -from 2 -to 0 gpio_ad9625_i]
@@ -143,8 +139,24 @@ if {$sys_zynq == 1 } {
   connect_bd_net -net gpio_ad9625_o [get_bd_ports gpio_ad9625_o]    [get_bd_pins axi_ad9625_gpio/gpio_io_o]
   connect_bd_net -net gpio_ad9625_t [get_bd_ports gpio_ad9625_t]    [get_bd_pins axi_ad9625_gpio/gpio_io_t]
 
-  connect_bd_net -net axi_ad9625_spi_intr  [get_bd_pins axi_ad9625_spi/ip2intc_irpt]   [get_bd_ports ad9625_spi_intr]
-  connect_bd_net -net axi_ad9625_gpio_intr [get_bd_pins axi_ad9625_gpio/ip2intc_irpt]  [get_bd_ports ad9625_gpio_intr]
+}
+
+# interrupts
+
+if {$sys_zynq == 0 } {
+
+  delete_bd_objs [get_bd_nets mb_intr_10_s] [get_bd_ports mb_intr_10]
+  delete_bd_objs [get_bd_nets mb_intr_13_s] [get_bd_ports mb_intr_13]
+  delete_bd_objs [get_bd_nets mb_intr_14_s] [get_bd_ports mb_intr_14]
+  connect_bd_net -net axi_ad9625_dma_intr  [get_bd_pins axi_ad9625_dma/irq]            [get_bd_pins sys_concat_intc/In10]
+  connect_bd_net -net axi_ad9625_spi_intr  [get_bd_pins axi_ad9625_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In13]
+  connect_bd_net -net axi_ad9625_gpio_intr [get_bd_pins axi_ad9625_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In14]
+
+} else {
+
+  delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+  connect_bd_net -net axi_ad9625_dma_intr  [get_bd_pins axi_ad9625_dma/irq]            [get_bd_pins sys_concat_intc/In13]
+
 }
 
 # connections (gt)
@@ -187,7 +199,6 @@ connect_bd_net -net axi_ad9625_dma_dvalid           [get_bd_pins axi_ad9625_fifo
 connect_bd_net -net axi_ad9625_dma_ddata            [get_bd_pins axi_ad9625_fifo/dma_wdata]       [get_bd_pins axi_ad9625_dma/s_axis_data]
 connect_bd_net -net axi_ad9625_dma_dready           [get_bd_pins axi_ad9625_fifo/dma_wready]      [get_bd_pins axi_ad9625_dma/s_axis_ready]
 connect_bd_net -net axi_ad9625_dma_xfer_req         [get_bd_pins axi_ad9625_fifo/dma_xfer_req]    [get_bd_pins axi_ad9625_dma/s_axis_xfer_req]
-connect_bd_net -net axi_ad9625_dma_intr             [get_bd_pins axi_ad9625_dma/irq]              [get_bd_ports ad9625_dma_intr]
 
 # interconnect (cpu)
 
