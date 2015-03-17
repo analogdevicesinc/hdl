@@ -19,10 +19,6 @@
   set spi_sdo_o       [create_bd_port -dir O spi_sdo_o]
   set spi_sdi_i       [create_bd_port -dir I spi_sdi_i]
 
-  # interrupts
-
-  set ad9739a_dma_irq  [create_bd_port -dir O ad9739a_dma_irq]
-
   # dac peripherals
 
   set axi_ad9739a [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9739a:1.0 axi_ad9739a]
@@ -60,7 +56,11 @@
   connect_bd_net -net axi_ad9739a_dac_valid           [get_bd_pins axi_ad9739a/dac_valid]     [get_bd_pins axi_ad9739a_dma/fifo_rd_en]  
   connect_bd_net -net axi_ad9739a_dac_ddata           [get_bd_pins axi_ad9739a/dac_ddata]     [get_bd_pins axi_ad9739a_dma/fifo_rd_dout]
   connect_bd_net -net axi_ad9739a_dac_dunf            [get_bd_pins axi_ad9739a/dac_dunf]      [get_bd_pins axi_ad9739a_dma/fifo_rd_underflow]
-  connect_bd_net -net axi_ad9739a_dma_irq             [get_bd_pins axi_ad9739a_dma/irq]       [get_bd_ports ad9739a_dma_irq]
+
+  #interrupt
+
+  delete_bd_objs [get_bd_nets ps_intr_12_s] [get_bd_ports ps_intr_12]
+  connect_bd_net -net axi_ad9739a_dma_irq   [get_bd_pins axi_ad9739a_dma/irq]       [get_bd_pins sys_concat_intc/In12]
 
   # interconnect (cpu)
 
