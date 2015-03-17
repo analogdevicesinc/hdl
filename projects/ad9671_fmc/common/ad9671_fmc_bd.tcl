@@ -28,10 +28,6 @@ set dma_wr          [create_bd_port -dir I dma_wr]
 set dma_sync        [create_bd_port -dir I dma_sync]
 set dma_data        [create_bd_port -dir I -from 127 -to 0 dma_data]
 
-# interrupts
-
-set ad9671_dma_irq  [create_bd_port -dir O ad9671_dma_irq]
-
 # adc peripherals
 
 set axi_ad9671_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core]
@@ -138,7 +134,11 @@ connect_bd_net -net axi_ad9671_core_adc_dwr         [get_bd_ports dma_wr]       
 connect_bd_net -net axi_ad9671_core_adc_dsync       [get_bd_ports dma_sync]                         [get_bd_pins axi_ad9671_dma/fifo_wr_sync]
 connect_bd_net -net axi_ad9671_core_adc_ddata       [get_bd_ports dma_data]                         [get_bd_pins axi_ad9671_dma/fifo_wr_din]
 connect_bd_net -net axi_ad9671_core_adc_dovf        [get_bd_pins axi_ad9671_core/adc_dovf]          [get_bd_pins axi_ad9671_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad9671_dma_irq              [get_bd_pins axi_ad9671_dma/irq]                [get_bd_ports ad9671_dma_irq]
+
+# interrupt
+
+delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+connect_bd_net -net axi_ad9671_dma_irq    [get_bd_pins axi_ad9671_dma/irq]                [get_bd_pins sys_concat_intc/In13]
 
 # interconnect (cpu)
 

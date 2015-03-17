@@ -315,8 +315,6 @@ module system_top (
     .ps_intr_10 (ps_intrs[10]),
     .ps_intr_11 (ps_intrs[11]),
     .ps_intr_12 (ps_intrs[12]),
-    .ps_intr_13 (ps_intrs[13]),
-    .ad9671_dma_irq (ps_intrs[13]),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),
