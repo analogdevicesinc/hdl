@@ -50,7 +50,6 @@ set tx_data_n       [create_bd_port -dir O -from 15 -to 0 tx_data_n]
 
 # interrupts
 
-set ad9250_dma_irq  [create_bd_port -dir O ad9250_dma_irq]
 set ad9122_dma_irq  [create_bd_port -dir O ad9122_dma_irq]
 
 # dac peripherals
@@ -181,7 +180,6 @@ connect_bd_net -net axi_ad9250_adc_dovf           [get_bd_pins axi_ad9250_core/a
 connect_bd_net -net axi_ad9250_dma_wr             [get_bd_pins axi_ad9250_dma/fifo_wr_en]       [get_bd_ports adc_dwr]
 connect_bd_net -net axi_ad9250_dma_sync           [get_bd_pins axi_ad9250_dma/fifo_wr_sync]     [get_bd_ports adc_dsync]
 connect_bd_net -net axi_ad9250_dma_data           [get_bd_pins axi_ad9250_dma/fifo_wr_din]      [get_bd_ports adc_ddata]
-connect_bd_net -net axi_ad9250_dma_irq            [get_bd_pins axi_ad9250_dma/irq]              [get_bd_ports ad9250_dma_irq]
 
 connect_bd_net -net axi_ad9250_adc_clk            [get_bd_ports adc_clk]
 
@@ -205,9 +203,15 @@ connect_bd_net -net axi_ad9122_dac_ddata_1        [get_bd_pins axi_ad9122_core/d
 connect_bd_net -net axi_ad9122_dma_drd            [get_bd_pins axi_ad9122_dma/fifo_rd_en]       [get_bd_ports dac_drd]
 connect_bd_net -net axi_ad9122_dma_ddata          [get_bd_pins axi_ad9122_dma/fifo_rd_dout]     [get_bd_ports dac_ddata]
 connect_bd_net -net axi_ad9122_dac_dunf           [get_bd_pins axi_ad9122_core/dac_dunf]        [get_bd_pins axi_ad9122_dma/fifo_rd_underflow]
-connect_bd_net -net axi_ad9122_dma_irq            [get_bd_pins axi_ad9122_dma/irq]              [get_bd_ports ad9122_dma_irq]
 
 connect_bd_net -net axi_ad9122_dac_div_clk        [get_bd_ports dac_clk]
+
+# interrupts
+
+delete_bd_objs [get_bd_nets ps_intr_12_s] [get_bd_ports ps_intr_12]
+delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+connect_bd_net -net axi_ad9122_dma_irq    [get_bd_pins axi_ad9122_dma/irq]  [get_bd_pins sys_concat_intc/In12]
+connect_bd_net -net axi_ad9250_dma_irq    [get_bd_pins axi_ad9250_dma/irq]  [get_bd_pins sys_concat_intc/In13]
 
 # interconnect (cpu)
 
