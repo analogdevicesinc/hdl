@@ -26,10 +26,6 @@ set dma_wr          [create_bd_port -dir I dma_wr]
 set dma_sync        [create_bd_port -dir I dma_sync]
 set dma_data        [create_bd_port -dir I -from 63 -to 0 dma_data]
 
-set ad6676_spi_intr  [create_bd_port -dir O ad6676_spi_intr]
-set ad6676_gpio_intr [create_bd_port -dir O ad6676_gpio_intr]
-set ad6676_dma_intr  [create_bd_port -dir O ad6676_dma_intr]
-
 if {$sys_zynq == 0} {
 
   set gpio_ctl_i      [create_bd_port -dir I -from 4 -to 0 gpio_ctl_i]
@@ -187,7 +183,25 @@ connect_bd_net -net axi_ad6676_dma_wr               [get_bd_pins axi_ad6676_dma/
 connect_bd_net -net axi_ad6676_dma_sync             [get_bd_pins axi_ad6676_dma/fifo_wr_sync]     [get_bd_ports dma_sync]
 connect_bd_net -net axi_ad6676_dma_data             [get_bd_pins axi_ad6676_dma/fifo_wr_din]      [get_bd_ports dma_data]
 connect_bd_net -net axi_ad6676_adc_dovf             [get_bd_pins axi_ad6676_core/adc_dovf]        [get_bd_pins axi_ad6676_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad6676_dma_intr             [get_bd_pins axi_ad6676_dma/irq]              [get_bd_ports ad6676_dma_intr] 
+
+# interrupts
+
+if {$sys_zynq == 0} {
+
+  delete_bd_objs [get_bd_nets mb_intr_10_s] [get_bd_ports mb_intr_10]
+  delete_bd_objs [get_bd_nets mb_intr_13_s] [get_bd_ports mb_intr_13]
+  delete_bd_objs [get_bd_nets mb_intr_14_s] [get_bd_ports mb_intr_14]
+  connect_bd_net -net axi_ad6676_dma_intr   [get_bd_pins axi_ad6676_dma/irq]            [get_bd_pins sys_concat_intc/In10]
+  connect_bd_net -net axi_ad6676_spi_intr   [get_bd_pins axi_ad6676_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In13]
+  connect_bd_net -net axi_ad6676_gpio_intr  [get_bd_pins axi_ad6676_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In14]
+
+} else {
+
+  delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+  connect_bd_net -net axi_ad6676_dma_intr   [get_bd_pins axi_ad6676_dma/irq]            [get_bd_pins sys_concat_intc/In13]
+
+}
+
 
 # interconnect (cpu)
 
@@ -226,8 +240,6 @@ if {$sys_zynq == 0} {
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad6676_spi/s_axi_aresetn] 
   connect_bd_net -net sys_100m_resetn [get_bd_pins axi_ad6676_gpio/s_axi_aresetn] 
 
-  connect_bd_net -net axi_ad6676_spi_intr   [get_bd_pins axi_ad6676_spi/ip2intc_irpt]   [get_bd_pins ad6676_spi_intr]  
-  connect_bd_net -net axi_ad6676_gpio_intr  [get_bd_pins axi_ad6676_gpio/ip2intc_irpt]  [get_bd_pins ad6676_gpio_intr] 
 }
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4
