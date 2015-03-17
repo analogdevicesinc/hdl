@@ -216,8 +216,6 @@ module system_top (
     .ps_intr_10 (ps_intrs[10]),
     .ps_intr_11 (ps_intrs[11]),
     .ps_intr_12 (ps_intrs[12]),
-    .ps_intr_13 (ps_intrs[13]),
-    .ad9434_dma_intr (ps_intrs[13]),
     .spdif (spdif),
     .adc_clk_p(adc_clk_p),
     .adc_clk_n(adc_clk_n),

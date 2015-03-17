@@ -18,9 +18,6 @@ set spi_mosi_i      [create_bd_port -dir I spi_mosi_i]
 set spi_mosi_o      [create_bd_port -dir O spi_mosi_o]
 set spi_miso_i      [create_bd_port -dir I spi_miso_i]
 
-# interrupts
-set ad9434_dma_intr [create_bd_port -dir O ad9434_dma_intr]
-
 # ad9434
 
 set axi_ad9434  [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9434:1.0 axi_ad9434]
@@ -89,7 +86,10 @@ connect_bd_net -net axi_ad9434_denable    [get_bd_pins axi_ad9434/adc_valid]  [g
 connect_bd_net -net axi_ad9434_data       [get_bd_pins axi_ad9434/adc_data]   [get_bd_pins axi_ad9434_dma/fifo_wr_din]
 connect_bd_net -net axi_ad9434_ovf        [get_bd_pins axi_ad9434/adc_dovf]   [get_bd_pins axi_ad9434_dma/fifo_wr_overflow]
 
-connect_bd_net -net axi_ad9434_dma_irq    [get_bd_pins axi_ad9434_dma/irq]    [get_bd_ports ad9434_dma_intr]
+# interrupts
+
+delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+connect_bd_net -net axi_ad9434_dma_irq    [get_bd_pins axi_ad9434_dma/irq]    [get_bd_pins sys_concat_intc/In13]
 
 # cpu interconnect
 
