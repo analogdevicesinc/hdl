@@ -21,12 +21,6 @@ if {$sys_zynq == 0} {
   set spi_sdo_i       [create_bd_port -dir I spi_sdo_i]
   set spi_sdi_i       [create_bd_port -dir I spi_sdi_i]
 
-  # interrupts
-  set ad9467_dma_irq  [create_bd_port -dir O ad9467_dma_irq]
-if {$sys_zynq == 0} {
-  set ad9467_spi_irq  [create_bd_port -dir O ad9467_spi_irq]
-}
-
   # adc peripheral
 
   set axi_ad9467  [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9467:1.0 axi_ad9467]
@@ -143,7 +137,6 @@ if {$sys_zynq == 0} {
   connect_bd_net -net axi_ad9467_dma_ddata        [get_bd_pins axi_ad9467/adc_data]   [get_bd_pins axi_ad9467_dma/fifo_wr_din]
   connect_bd_net -net axi_ad9467_dma_dovf         [get_bd_pins axi_ad9467/adc_dovf]   [get_bd_pins axi_ad9467_dma/fifo_wr_overflow]
 
-  connect_bd_net -net axi_ad9467_dma_irq          [get_bd_pins axi_ad9467_dma/irq]    [get_bd_ports ad9467_dma_irq]
 
   # interconnect (cpu)
 
@@ -168,8 +161,18 @@ if {$sys_zynq == 0} {
   connect_bd_net -net sys_100m_clk      [get_bd_pins axi_ad9467_spi/ext_spi_clk]
   connect_bd_net -net sys_100m_resetn   [get_bd_pins axi_cpu_interconnect/M09_ARESETN] $sys_100m_resetn_source
   connect_bd_net -net sys_100m_resetn   [get_bd_pins axi_ad9467_spi/s_axi_aresetn]
+}
 
-  connect_bd_net -net axi_ad9467_spi_irq [get_bd_pins axi_ad9467_spi/ip2intc_irpt] [get_bd_ports ad9467_spi_irq]
+  # interrupts
+
+if {$sys_zynq == 0} {
+  delete_bd_objs [get_bd_nets mb_intr_10_s] [get_bd_ports mb_intr_10]
+  delete_bd_objs [get_bd_nets mb_intr_13_s] [get_bd_ports mb_intr_13]
+  connect_bd_net -net axi_ad9467_dma_irq [get_bd_pins axi_ad9467_dma/irq] [get_bd_pins sys_concat_intc/In10]
+  connect_bd_net -net axi_ad9467_spi_irq [get_bd_pins axi_ad9467_spi/ip2intc_irpt] [get_bd_pins sys_concat_intc/In13]
+} else {
+  delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+  connect_bd_net -net axi_ad9467_dma_irq  [get_bd_pins axi_ad9467_dma/irq]    [get_bd_pins sys_concat_intc/In13]
 }
 
   # interconnect (mem/adc)
