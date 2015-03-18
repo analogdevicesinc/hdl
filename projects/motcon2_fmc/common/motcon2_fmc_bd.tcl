@@ -45,14 +45,6 @@
   set pwm_m2_bl_o [ create_bd_port -dir O pwm_m2_bl_o]
   set pwm_m2_bh_o [ create_bd_port -dir O pwm_m2_bh_o]
 
-  # interrupts
-  set motcon2_c_m1_intr [create_bd_port -dir O motcon2_c_m1_intr]
-  set motcon2_c_m2_intr [create_bd_port -dir O motcon2_c_m2_intr]
-  set motcon2_s_d1_intr  [create_bd_port -dir O motcon2_s_d1_intr]
-  set motcon2_s_d2_intr  [create_bd_port -dir O motcon2_s_d2_intr]
-  set motcon2_ctrl_m1_intr [ create_bd_port -dir O -type intr motcon2_ctrl_m1_intr ]
-  set motcon2_ctrl_m2_intr [ create_bd_port -dir O -type intr motcon2_ctrl_m2_intr ]
-
   # Ethernet
     # phy 1
   set eth1_rgmii [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:rgmii_rtl:1.0 eth1_rgmii ]
@@ -71,7 +63,6 @@
 
   # iic
   create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0  iic_ee2
-  set iic_ee2_intr [create_bd_port -dir O iic_ee2_intr]
 
   # spi
   set spi_csn_i       [create_bd_port -dir I spi_csn_i]
@@ -269,10 +260,6 @@
   connect_bd_net -net speed_detector_adc_new_speed_m2    [get_bd_pins speed_detector_m2/new_speed_o] [get_bd_pins speed_detector_m2_dma/fifo_wr_en]
   connect_bd_net -net speed_detector_adc_speed_m2 [get_bd_pins speed_detector_m2/speed_o] [get_bd_pins speed_detector_m2_dma/fifo_wr_din]
 
-  # interrupt
-  connect_bd_net -net speed_detector_m1_dma_intr [get_bd_pins speed_detector_m1_dma/irq] [get_bd_ports motcon2_s_d1_intr]
-  connect_bd_net -net speed_detector_m2_dma_intr [get_bd_pins speed_detector_m2_dma/irq] [get_bd_ports motcon2_s_d2_intr]
-
   # current monitor
   connect_bd_net -net current_monitor_m1_adc_clk_o   [get_bd_ports adc_clk_o]   [get_bd_pins current_monitor_m1/adc_clk_o]
     # motor 1
@@ -371,10 +358,6 @@
 #  connect_bd_net [get_bd_pins current_monitor_m2/vbus_o] [get_bd_pins current_monitor_m2_pack/adc_data_3]
 #  connect_bd_net [get_bd_pins current_monitor_m2_pack/adc_valid] [get_bd_pins current_monitor_m2_dma/fifo_wr_en]
 #  connect_bd_net [get_bd_pins current_monitor_m2_pack/adc_data] [get_bd_pins current_monitor_m2_dma/fifo_wr_din]
-
-    # interrupts
-  connect_bd_net -net axi_current_monitor_1_dma_intr [get_bd_pins current_monitor_m1_dma/irq] [get_bd_ports motcon2_c_m1_intr]
-  connect_bd_net -net axi_current_monitor_2_dma_intr [get_bd_pins current_monitor_m2_dma/irq] [get_bd_ports motcon2_c_m2_intr]
 
   #controller
     # motor 1
@@ -554,9 +537,6 @@
 
   connect_bd_net [get_bd_pins controller_m2_apack/ddata] [get_bd_pins controller_m2_dma/fifo_wr_din]
   connect_bd_net [get_bd_pins controller_m2_apack/dvalid] [get_bd_pins controller_m2_dma/fifo_wr_en]
-    # interrupts
-  connect_bd_net -net controller_m1_dma_intr [get_bd_pins controller_m1_dma/irq] [get_bd_ports motcon2_ctrl_m1_intr]
-  connect_bd_net -net controller_m2_dma_intr [get_bd_pins controller_m2_dma/irq] [get_bd_ports motcon2_ctrl_m2_intr]
 
   # ethernet
 
@@ -602,7 +582,6 @@
   connect_bd_net -net sys_100m_clk [get_bd_pins iic_ee2/s_axi_aclk]
   connect_bd_net -net sys_100m_resetn [get_bd_pins iic_ee2/s_axi_aresetn]
   connect_bd_intf_net [get_bd_intf_pins iic_ee2/IIC] [get_bd_intf_ports  iic_ee2]
-  connect_bd_net -net iic_ee2_irq [get_bd_pins iic_ee2/iic2intc_irpt] [get_bd_ports iic_ee2_intr]
 
   # spi
   connect_bd_net -net spi_csn_i   [get_bd_ports spi_csn_i]    [get_bd_pins sys_ps7/SPI0_SS_I]
@@ -612,6 +591,22 @@
   connect_bd_net -net spi_mosi_i  [get_bd_ports spi_mosi_i]   [get_bd_pins sys_ps7/SPI0_MOSI_I]
   connect_bd_net -net spi_mosi_o  [get_bd_ports spi_mosi_o]   [get_bd_pins sys_ps7/SPI0_MOSI_O]
   connect_bd_net -net spi_miso_i  [get_bd_ports spi_miso_i]   [get_bd_pins sys_ps7/SPI0_MISO_I]
+
+  # interrupts
+  delete_bd_objs [get_bd_nets ps_intr_6_s] [get_bd_ports ps_intr_6]
+  delete_bd_objs [get_bd_nets ps_intr_7_s] [get_bd_ports ps_intr_7]
+  delete_bd_objs [get_bd_nets ps_intr_8_s] [get_bd_ports ps_intr_8]
+  delete_bd_objs [get_bd_nets ps_intr_9_s] [get_bd_ports ps_intr_9]
+  delete_bd_objs [get_bd_nets ps_intr_10_s] [get_bd_ports ps_intr_10]
+  delete_bd_objs [get_bd_nets ps_intr_12_s] [get_bd_ports ps_intr_12]
+  delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+  connect_bd_net -net controller_m2_dma_intr          [get_bd_pins controller_m2_dma/irq]       [get_bd_pins sys_concat_intc/In6]
+  connect_bd_net -net axi_current_monitor_2_dma_intr  [get_bd_pins current_monitor_m2_dma/irq]  [get_bd_pins sys_concat_intc/In7]
+  connect_bd_net -net speed_detector_m2_dma_intr      [get_bd_pins speed_detector_m2_dma/irq]   [get_bd_pins sys_concat_intc/In8]
+  connect_bd_net -net controller_m1_dma_intr          [get_bd_pins controller_m1_dma/irq]       [get_bd_pins sys_concat_intc/In9]
+  connect_bd_net -net axi_current_monitor_1_dma_intr  [get_bd_pins current_monitor_m1_dma/irq]  [get_bd_pins sys_concat_intc/In10]
+  connect_bd_net -net iic_ee2_irq                     [get_bd_pins iic_ee2/iic2intc_irpt]       [get_bd_pins sys_concat_intc/In12]
+  connect_bd_net -net speed_detector_m1_dma_intr      [get_bd_pins speed_detector_m1_dma/irq]   [get_bd_pins sys_concat_intc/In13]
 
   # cpu interconnect
   connect_bd_net -net sys_100m_clk [get_bd_pins axi_cpu_interconnect/M07_ACLK] $sys_100m_clk_source
