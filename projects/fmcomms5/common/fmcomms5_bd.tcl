@@ -56,13 +56,6 @@ set spi_mosi_i          [create_bd_port -dir I spi_mosi_i]
 set spi_mosi_o          [create_bd_port -dir O spi_mosi_o]
 set spi_miso_i          [create_bd_port -dir I spi_miso_i]
 
-# interrupts
-
-set fmcomms5_gpio_irq   [create_bd_port -dir O fmcomms5_gpio_irq]
-set ad9361_adc_dma_irq  [create_bd_port -dir O ad9361_adc_dma_irq]
-set ad9361_dac_dma_irq  [create_bd_port -dir O ad9361_dac_dma_irq]
-set fmcomms5_spi_irq    [create_bd_port -dir O fmcomms5_spi_irq]
-
 # instances
 
 set axi_ad9361_0 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361_0]
@@ -163,7 +156,6 @@ if {$sys_zynq == 0} {
   connect_bd_net -net spi_mosi_i  [get_bd_pins axi_fmcomms2_spi/io0_i]          [get_bd_ports spi_mosi_i]
   connect_bd_net -net spi_mosi_o  [get_bd_pins axi_fmcomms2_spi/io0_o]          [get_bd_ports spi_mosi_o]
   connect_bd_net -net spi_miso_i  [get_bd_pins axi_fmcomms2_spi/io1_i]          [get_bd_ports spi_miso_i]
-  connect_bd_net -net spi_irq     [get_bd_pins axi_fmcomms2_spi/ip2intc_irpt]   [get_bd_ports fmcomms5_spi_irq]
 } else {
   connect_bd_net -net spi_csn_0_i [get_bd_pins sys_ps7/SPI0_SS_I]               [get_bd_ports spi_csn_0_i]
   connect_bd_net -net spi_csn_0_o [get_bd_pins sys_ps7/SPI0_SS_O]               [get_bd_ports spi_csn_0_o]
@@ -182,7 +174,6 @@ if {$sys_zynq == 0} {
   connect_bd_net -net gpio_i      [get_bd_pins axi_fmcomms2_gpio/gpio_io_i]     [get_bd_ports gpio_i]
   connect_bd_net -net gpio_o      [get_bd_pins axi_fmcomms2_gpio/gpio_io_o]     [get_bd_ports gpio_o]
   connect_bd_net -net gpio_t      [get_bd_pins axi_fmcomms2_gpio/gpio_io_t]     [get_bd_ports gpio_t]
-  connect_bd_net -net gpio_irq    [get_bd_pins axi_fmcomms2_gpio/ip2intc_irpt]  [get_bd_ports fmcomms5_gpio_irq]
 }
 
 # connections (ad9361)
@@ -283,9 +274,25 @@ connect_bd_net -net axi_ad9361_0_dac_drd          [get_bd_pins util_dac_unpack_0
 connect_bd_net -net axi_ad9361_dac_ddata          [get_bd_pins util_dac_unpack_0/dma_data]  [get_bd_pins axi_ad9361_dac_dma/fifo_rd_dout]
 connect_bd_net -net axi_ad9361_fifo_valid         [get_bd_pins util_dac_unpack_0/fifo_valid] [get_bd_pins axi_ad9361_dac_dma/fifo_rd_valid]
 connect_bd_net -net axi_ad9361_0_adc_dovf         [get_bd_pins axi_ad9361_0/adc_dovf]       [get_bd_pins axi_ad9361_adc_dma/fifo_wr_overflow]
-connect_bd_net -net axi_ad9361_adc_dma_irq        [get_bd_pins axi_ad9361_adc_dma/irq]      [get_bd_ports ad9361_adc_dma_irq]
 connect_bd_net -net axi_ad9361_0_dac_dunf         [get_bd_pins axi_ad9361_0/dac_dunf]       [get_bd_pins axi_ad9361_dac_dma/fifo_rd_underflow]
-connect_bd_net -net axi_ad9361_dac_dma_irq        [get_bd_pins axi_ad9361_dac_dma/irq]      [get_bd_ports ad9361_dac_dma_irq]
+
+# interrupts
+
+if {$sys_zynq == 0} {
+  delete_bd_objs [get_bd_nets mb_intr_10_s] [get_bd_ports mb_intr_10]
+  delete_bd_objs [get_bd_nets mb_intr_11_s] [get_bd_ports mb_intr_11]
+  delete_bd_objs [get_bd_nets mb_intr_12_s] [get_bd_ports mb_intr_12]
+  delete_bd_objs [get_bd_nets mb_intr_13_s] [get_bd_ports mb_intr_13]
+  connect_bd_net -net spi_irq     [get_bd_pins axi_fmcomms2_spi/ip2intc_irpt]   [get_bd_pins sys_concat_intc/In10]
+  connect_bd_net -net gpio_irq    [get_bd_pins axi_fmcomms2_gpio/ip2intc_irpt]  [get_bd_pins sys_concat_intc/In11]
+  connect_bd_net -net axi_ad9361_dac_dma_irq        [get_bd_pins axi_ad9361_dac_dma/irq]      [get_bd_pins sys_concat_intc/In12]
+  connect_bd_net -net axi_ad9361_adc_dma_irq        [get_bd_pins axi_ad9361_adc_dma/irq]      [get_bd_pins sys_concat_intc/In13]
+} else {
+  delete_bd_objs [get_bd_nets ps_intr_12_s] [get_bd_ports ps_intr_12]
+  delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+  connect_bd_net -net axi_ad9361_dac_dma_irq        [get_bd_pins axi_ad9361_dac_dma/irq]      [get_bd_pins sys_concat_intc/In12]
+  connect_bd_net -net axi_ad9361_adc_dma_irq        [get_bd_pins axi_ad9361_adc_dma/irq]      [get_bd_pins sys_concat_intc/In13]
+}
 
 # interconnect (cpu)
 
