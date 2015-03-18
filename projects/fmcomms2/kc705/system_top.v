@@ -211,7 +211,6 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  wire    [31:0]  mb_intrs;
 
   // default logic
 
@@ -266,12 +265,12 @@ module system_top (
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
     .gpio1_i (gpio_i[63:32]),
-    .mb_intr_02 (mb_intrs[2]),
-    .mb_intr_03 (mb_intrs[3]),
-    .mb_intr_07 (mb_intrs[7]),
-    .mb_intr_08 (mb_intrs[8]),
-    .mb_intr_14 (mb_intrs[14]),
-    .mb_intr_15 (mb_intrs[15]),
+    .mb_intr_02 (1'b0),
+    .mb_intr_03 (1'b0),
+    .mb_intr_07 (1'b0),
+    .mb_intr_08 (1'b0),
+    .mb_intr_14 (1'b0),
+    .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio_io),
     .mii_col (mii_col),

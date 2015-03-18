@@ -203,8 +203,6 @@ module system_top (
     .dio (gpio_bd));
 
   system_wrapper i_system_wrapper (
-    .ad9361_adc_dma_irq (ps_intrs[13]),
-    .ad9361_dac_dma_irq (ps_intrs[12]),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
@@ -248,8 +246,6 @@ module system_top (
     .ps_intr_09 (ps_intrs[9]),
     .ps_intr_10 (ps_intrs[10]),
     .ps_intr_11 (ps_intrs[11]),
-    .ps_intr_12 (ps_intrs[12]),
-    .ps_intr_13 (ps_intrs[13]),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
     .rx_data_in_n (rx_data_in_n),
