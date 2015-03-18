@@ -384,9 +384,6 @@ module system_top (
   assign fan_pwm = 1'b1;
 
   system_wrapper i_system_wrapper (
-    .ad9625_dma_intr (mb_intrs[13]),
-    .ad9625_gpio_intr (mb_intrs[12]),
-    .ad9625_spi_intr (mb_intrs[11]),
     .adc_clk (adc_clk),
     .adc_data_0 (adc_data_0),
     .adc_data_1 (adc_data_1),
@@ -432,9 +429,6 @@ module system_top (
     .iic_main_sda_io (iic_sda),
     .iic_rstn (iic_rstn),
     .mb_intr_10 (mb_intrs[10]),
-    .mb_intr_11 (mb_intrs[11]),
-    .mb_intr_12 (mb_intrs[12]),
-    .mb_intr_13 (mb_intrs[13]),
     .mb_intr_14 (mb_intrs[14]),
     .mb_intr_15 (mb_intrs[15]),
     .mb_intr_16 (mb_intrs[16]),
