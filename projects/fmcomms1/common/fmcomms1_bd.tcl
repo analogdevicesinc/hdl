@@ -48,11 +48,6 @@
   set adc_dma_sync    [create_bd_port -dir I adc_dma_sync]
   set adc_dma_wdata   [create_bd_port -dir I -from 31 -to 0 adc_dma_wdata]
 
-  # interrupts
-
-  set ad9122_dma_irq  [create_bd_port -dir O ad9122_dma_irq]
-  set ad9643_dma_irq  [create_bd_port -dir O ad9643_dma_irq]
-
   # dac peripherals
 
   set axi_ad9122 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9122:1.0 axi_ad9122]
@@ -135,7 +130,6 @@ if {$sys_zynq == 1} {
 
   connect_bd_net -net axi_ad9122_dma_drd          [get_bd_pins axi_ad9122_dma/fifo_rd_en]           [get_bd_ports dac_dma_rd]
   connect_bd_net -net axi_ad9122_dma_ddata        [get_bd_pins axi_ad9122_dma/fifo_rd_dout]         [get_bd_ports dac_dma_rdata]
-  connect_bd_net -net axi_ad9122_dma_irq          [get_bd_pins axi_ad9122_dma/irq]                  [get_bd_ports ad9122_dma_irq]
 
   # connections (adc)
 
@@ -167,7 +161,20 @@ if {$sys_zynq == 1} {
   connect_bd_net -net axi_ad9643_dma_dsync        [get_bd_ports adc_dma_sync]                       [get_bd_pins axi_ad9643_dma/fifo_wr_sync]
   connect_bd_net -net axi_ad9643_dma_ddata        [get_bd_pins sys_wfifo/s_wdata]                   [get_bd_pins axi_ad9643_dma/fifo_wr_din]
   connect_bd_net -net axi_ad9643_dma_dovf         [get_bd_pins sys_wfifo/s_wovf]                    [get_bd_pins axi_ad9643_dma/fifo_wr_overflow]
-  connect_bd_net -net axi_ad9643_dma_irq          [get_bd_pins axi_ad9643_dma/irq]                  [get_bd_ports ad9643_dma_irq]
+
+  # interrupts
+
+if {$sys_zynq == 0 } {
+  delete_bd_objs [get_bd_nets mb_intr_12_s] [get_bd_ports mb_intr_12]
+  delete_bd_objs [get_bd_nets mb_intr_13_s] [get_bd_ports mb_intr_13]
+  connect_bd_net -net axi_ad9122_dma_irq          [get_bd_pins axi_ad9122_dma/irq]                  [get_bd_pins sys_concat_intc/In12]
+  connect_bd_net -net axi_ad9643_dma_irq          [get_bd_pins axi_ad9643_dma/irq]                  [get_bd_pins sys_concat_intc/In13]
+} else {
+  delete_bd_objs [get_bd_nets ps_intr_12_s] [get_bd_ports ps_intr_12]
+  delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+  connect_bd_net -net axi_ad9122_dma_irq          [get_bd_pins axi_ad9122_dma/irq]                  [get_bd_pins sys_concat_intc/In12]
+  connect_bd_net -net axi_ad9643_dma_irq          [get_bd_pins axi_ad9643_dma/irq]                  [get_bd_pins sys_concat_intc/In13]
+}
 
   # interconnect (cpu)
 
