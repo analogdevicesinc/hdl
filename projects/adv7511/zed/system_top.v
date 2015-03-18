@@ -228,10 +228,8 @@ module system_top (
     .ps_intr_8 (ps_intrs[8]),
     .ps_intr_9 (ps_intrs[9]),
     .ps_intr_10 (ps_intrs[10]),
-    .ps_intr_11 (ps_intrs[11]),
     .ps_intr_12 (ps_intrs[12]),
     .ps_intr_13 (ps_intrs[13]),
-    .iic_fmc_intr (ps_intrs[11]),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
