@@ -41,8 +41,6 @@ set otg_vbusoc      [create_bd_port -dir I otg_vbusoc]
 
 set spdif           [create_bd_port -dir O spdif]
 
-set iic_fmc_intr [create_bd_port -dir O iic_fmc_intr]
-
 # instance: sys_ps7
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.4 sys_ps7]
@@ -275,8 +273,6 @@ connect_bd_net -net sys_100m_resetn [get_bd_pins axi_iic_fmc/s_axi_aresetn]
 
 connect_bd_intf_net -intf_net axi_iic_fmc_iic [get_bd_intf_ports IIC_FMC] [get_bd_intf_pins axi_iic_fmc/iic]
 
-connect_bd_net -net axi_iic_fmc_intr  [get_bd_pins axi_iic_fmc/iic2intc_irpt] [get_bd_ports iic_fmc_intr]
-
 # interrupts
 
 connect_bd_net [get_bd_pins sys_concat_intc/dout] [get_bd_pins sys_ps7/IRQ_F2P]
@@ -287,6 +283,9 @@ for {set intc_index 0} {$intc_index < 14} {incr intc_index} {
   set ps_intr_${intc_index} [create_bd_port -dir I ps_intr_${intc_index}]
   connect_bd_net -net ps_intr_${intc_index}_s [get_bd_pins sys_concat_intc/In${intc_index}] [get_bd_ports ps_intr_${intc_index}]
 }
+
+delete_bd_objs [get_bd_nets ps_intr_11_s] [get_bd_ports ps_intr_11]
+connect_bd_net -net axi_iic_fmc_intr  [get_bd_pins axi_iic_fmc/iic2intc_irpt] [get_bd_pins sys_concat_intc/In11]
 
 # address map
 
