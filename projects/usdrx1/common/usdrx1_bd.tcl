@@ -45,10 +45,6 @@ set adc_data          [create_bd_port -dir I -from 511 -to 0 adc_data]
 set adc_wr_en         [create_bd_port -dir I adc_wr_en]
 set adc_dovf          [create_bd_port -dir O adc_dovf]
 
-# interrupts
-set usdrx1_dma_irq    [create_bd_port -dir O usdrx1_dma_irq]
-set usdrx1_spi_irq    [create_bd_port -dir O usdrx1_spi_irq]
-
 # adc peripherals
 
 set axi_ad9671_core_0 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:1.0 axi_ad9671_core_0]
@@ -136,7 +132,6 @@ connect_bd_net -net axi_spi_1_sdo_o [get_bd_ports spi_sdo_o]  [get_bd_pins axi_u
 connect_bd_net -net axi_spi_1_sdi_i [get_bd_ports spi_sdi_i]  [get_bd_pins axi_usdrx1_spi/io1_i]
 
 connect_bd_net -net sys_100m_clk [get_bd_pins axi_usdrx1_spi/ext_spi_clk]
-connect_bd_net -net axi_spi_1_irq [get_bd_pins axi_usdrx1_spi/ip2intc_irpt] [get_bd_ports usdrx1_spi_irq]
 
 # connections (gt)
 
@@ -197,7 +192,6 @@ connect_bd_net -net axi_ad9671_core_adc_dovf_3      [get_bd_pins axi_ad9671_core
 connect_bd_net -net axi_ad9671_dma_wr_en            [get_bd_pins axi_usdrx1_dma/fifo_wr_en]         [get_bd_ports adc_wr_en]
 connect_bd_net -net axi_ad9671_dma_adc_data         [get_bd_pins axi_usdrx1_dma/fifo_wr_din]        [get_bd_ports adc_data]
 connect_bd_net -net axi_ad9671_dma_adc_dovf         [get_bd_pins axi_usdrx1_dma/fifo_wr_overflow]   [get_bd_ports adc_dovf]
-connect_bd_net -net axi_usdrx1_dma_irq              [get_bd_pins axi_usdrx1_dma/irq]                [get_bd_ports usdrx1_dma_irq]
 connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_0/adc_raddr_out]
 connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_1/adc_raddr_in]
 connect_bd_net -net axi_ad9671_adc_raddr            [get_bd_pins axi_ad9671_core_2/adc_raddr_in]
@@ -206,6 +200,13 @@ connect_bd_net -net axi_ad9671_adc_sync             [get_bd_pins axi_ad9671_core
 connect_bd_net -net axi_ad9671_adc_sync             [get_bd_pins axi_ad9671_core_1/adc_sync_in]
 connect_bd_net -net axi_ad9671_adc_sync             [get_bd_pins axi_ad9671_core_2/adc_sync_in]
 connect_bd_net -net axi_ad9671_adc_sync             [get_bd_pins axi_ad9671_core_3/adc_sync_in]
+
+#interrupts
+
+delete_bd_objs [get_bd_nets ps_intr_12_s] [get_bd_ports ps_intr_12]
+delete_bd_objs [get_bd_nets ps_intr_13_s] [get_bd_ports ps_intr_13]
+connect_bd_net -net axi_spi_1_irq         [get_bd_pins axi_usdrx1_spi/ip2intc_irpt] [get_bd_pins sys_concat_intc/In12]
+connect_bd_net -net axi_usdrx1_dma_irq    [get_bd_pins axi_usdrx1_dma/irq]          [get_bd_pins sys_concat_intc/In13]
 
 # interconnect (cpu)
 
