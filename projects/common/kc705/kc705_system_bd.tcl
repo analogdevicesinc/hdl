@@ -250,7 +250,7 @@ ad_cpu_interconnect 0x40600000 axi_uart
 ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_cpu_interconnect 0x40000000 axi_gpio
 ad_cpu_interconnect 0x44A70000 axi_spi
-ad_cpu_interconnect 0x41E00000 axi_linear_flash
+ad_cpu_interconnect 0x42000000 axi_linear_flash
 
 ad_mem_hp0_interconnect sys_200m_clk axi_ddr_cntrl/S_AXI
 ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_DC
