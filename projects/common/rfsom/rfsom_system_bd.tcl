@@ -3,7 +3,6 @@
 # default ports
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 uart_0
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_rtl:1.0 eth1_mdio
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:rgmii_rtl:1.0 eth1_rgmii
@@ -173,7 +172,6 @@ ad_connect  gpio_t sys_ps7/GPIO_T
 ad_connect  fixed_io sys_ps7/FIXED_IO
 ad_connect  iic_main axi_iic_main/iic
 ad_connect  sys_200m_clk axi_hdmi_clkgen/clk
-ad_connect  sys_ps7/UART_0 uart_0
 ad_connect  sys_ps7/MDIO_ETHERNET_1 sys_rgmii/MDIO_GEM
 ad_connect  sys_ps7/GMII_ETHERNET_1 sys_rgmii/GMII
 ad_connect  sys_rgmii/MDIO_PHY eth1_mdio
