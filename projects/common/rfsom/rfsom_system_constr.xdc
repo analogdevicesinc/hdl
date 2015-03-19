@@ -14,12 +14,6 @@ set_property  -dict {PACKAGE_PIN  D6    IOSTANDARD LVCMOS18} [get_ports eth1_rgm
 set_property  -dict {PACKAGE_PIN  C6    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_txdata[1]]          ; ## IO_L14N_T2_SRCC_34 
 set_property  -dict {PACKAGE_PIN  C9    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_txdata[2]]          ; ## IO_L15P_T2_DQS_34  
 set_property  -dict {PACKAGE_PIN  B9    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_txdata[3]]          ; ## IO_L15N_T2_DQS_34  
-set_property  -dict {PACKAGE_PIN  A9    IOSTANDARD LVCMOS18} [get_ports eth1_resetn]                   ; ## IO_L17P_T2_34      
-
-# uart
-
-set_property  -dict {PACKAGE_PIN  B7    IOSTANDARD LVCMOS18} [get_ports uart0_rxd]                     ; ## IO_L18P_T2_34
-set_property  -dict {PACKAGE_PIN  A7    IOSTANDARD LVCMOS18} [get_ports uart0_txd]                     ; ## IO_L18N_T2_34
 
 # hdmi
 
