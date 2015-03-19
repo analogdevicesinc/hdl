@@ -102,6 +102,16 @@ module util_upack_dsf (
 
   // bypass 
 
+  genvar i;
+  generate
+  if (CH_OCNT == P_CNT) begin
+  for (i = 0; i < CH_SCNT ; i = i +1) begin
+    assign dac_dsf_data_s[(((i +1) * M_CNT * 16)-1):(i*M_CNT*16)] =
+      dac_data[(((i+1)*16*P_CNT)-1): (i*16*P_CNT)];
+  end
+  end
+  endgenerate
+
   generate
   if (CH_OCNT == P_CNT) begin
 
@@ -109,8 +119,6 @@ module util_upack_dsf (
   assign dac_data_s = 'd0;
   assign dac_data_int_0_s = 'd0;
   assign dac_data_int_1_s = 'd0;
-  assign dac_dsf_data_s[M_WIDTH:P_WIDTH] = 'd0;
-  assign dac_dsf_data_s[(P_WIDTH-1):0] = dac_data;
 
   always @(posedge dac_clk) begin
     dac_dmx_valid <= dac_valid & dac_dmx_enable;
@@ -165,7 +173,7 @@ module util_upack_dsf (
             dac_data_int[(M_WIDTH-1):(M_WIDTH-(E_WIDTH-P_WIDTH))];
 
   assign dac_data_int_1_s[(E_WIDTH-1):(E_WIDTH-(M_WIDTH-O_WIDTH))] =
-            dac_data_int[((M_WIDTH-O_WIDTH)-1):0];
+            dac_data_int[(M_WIDTH-1):O_WIDTH];
   assign dac_data_int_1_s[((E_WIDTH-(M_WIDTH-O_WIDTH))-1):0] = 'd0;
 
   always @(posedge dac_clk) begin

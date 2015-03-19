@@ -176,11 +176,11 @@ module util_upack (
 
   generate
   if (P_CNT < M_CNT) begin
-  for (n = P_CNT; n < M_CNT; n = n + 1) begin: g_def
-  assign dac_dsf_valid_s[n] = 'd0;
-  assign dac_dsf_sync_s[n] = 'd0;
-  assign dac_dsf_data_s[n] = 'd0;
-  end
+    for (n = P_CNT; n < M_CNT; n = n + 1) begin: g_def
+      assign dac_dsf_valid_s[n] = 'd0;
+      assign dac_dsf_sync_s[n] = 'd0;
+      assign dac_dsf_data_s[n] = 'd0;
+    end
   end
 
   for (n = 0; n < P_CNT; n = n + 1) begin: g_dsf
