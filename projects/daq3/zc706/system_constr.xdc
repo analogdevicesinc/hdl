@@ -1,4 +1,3 @@
-# daq3
 
 set_property  -dict {PACKAGE_PIN  AA8 } [get_ports rx_ref_clk_p]                                      ; ## B20  FMC_HPC_GBTCLK1_M2C_P     
 set_property  -dict {PACKAGE_PIN  AA7 } [get_ports rx_ref_clk_n]                                      ; ## B21  FMC_HPC_GBTCLK1_M2C_N     
@@ -47,6 +46,7 @@ set_property  -dict {PACKAGE_PIN  AG19  IOSTANDARD LVCMOS25} [get_ports clkd_sta
 set_property  -dict {PACKAGE_PIN  AF23  IOSTANDARD LVCMOS25} [get_ports dac_irq]                      ; ## G15  FMC_HPC_LA12_P            
 set_property  -dict {PACKAGE_PIN  AD23  IOSTANDARD LVCMOS25} [get_ports adc_fda]                      ; ## H16  FMC_HPC_LA11_P            
 set_property  -dict {PACKAGE_PIN  AE23  IOSTANDARD LVCMOS25} [get_ports adc_fdb]                      ; ## H17  FMC_HPC_LA11_N            
+
 set_property  -dict {PACKAGE_PIN  AJ23  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports trig_p]         ; ## H13  FMC_HPC_LA07_P            
 set_property  -dict {PACKAGE_PIN  AJ24  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports trig_n]         ; ## H14  FMC_HPC_LA07_N            
 
@@ -54,6 +54,6 @@ set_property  -dict {PACKAGE_PIN  AJ24  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_
 
 create_clock -name tx_ref_clk   -period  2.00 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  2.00 [get_ports rx_ref_clk_p]
-create_clock -name tx_div_clk   -period  4.00 [get_nets i_system_wrapper/system_i/axi_daq3_gt_tx_clk]
-create_clock -name rx_div_clk   -period  4.00 [get_nets i_system_wrapper/system_i/axi_daq3_gt_rx_clk]
+create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_daq3_gt/inst/g_lane_1[0].i_gt_channel_1/i_gtxe2_channel/TXOUTCLK]
+create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_daq3_gt/inst/g_lane_1[0].i_gt_channel_1/i_gtxe2_channel/RXOUTCLK]
 
