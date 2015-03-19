@@ -65,7 +65,6 @@ module system_top (
   eth1_rgmii_txclk,
   eth1_rgmii_txctl,
   eth1_rgmii_txdata,
-  eth1_resetn,
 
   fixed_io_ddr_vrn,
   fixed_io_ddr_vrp,
@@ -73,9 +72,6 @@ module system_top (
   fixed_io_ps_clk,
   fixed_io_ps_porb,
   fixed_io_ps_srstb,
-
-  uart0_rxd,
-  uart0_txd,
 
   hdmi_out_clk,
   hdmi_vsync,
@@ -152,7 +148,6 @@ module system_top (
   output          eth1_rgmii_txclk;
   output          eth1_rgmii_txctl;
   output  [ 3:0]  eth1_rgmii_txdata;
-  output          eth1_resetn;
 
   inout           fixed_io_ddr_vrn;
   inout           fixed_io_ddr_vrp;
@@ -160,9 +155,6 @@ module system_top (
   inout           fixed_io_ps_clk;
   inout           fixed_io_ps_porb;
   inout           fixed_io_ps_srstb;
-
-  input           uart0_rxd;
-  output          uart0_txd;
 
   output          hdmi_out_clk;
   output          hdmi_vsync;
@@ -223,7 +215,6 @@ module system_top (
 
   // assignments
 
-  assign eth1_resetn = 1'b1;
   assign hdmi_pd = 1'b0;
 
   // instantiations
@@ -345,9 +336,7 @@ module system_top (
     .tx_data_out_n (tx_data_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
-    .tx_frame_out_p (tx_frame_out_p),
-    .uart_0_rxd (uart0_rxd),
-    .uart_0_txd (uart0_txd));
+    .tx_frame_out_p (tx_frame_out_p));
 
 endmodule
 
