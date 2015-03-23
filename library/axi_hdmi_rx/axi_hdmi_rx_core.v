@@ -66,10 +66,9 @@ module axi_hdmi_rx_core (
   hdmi_up_packed,
   hdmi_up_bgr,
 
-  // debug interface (chipscope)
+  // debug interface
 
-  debug_data,
-  debug_trigger);
+  debug_data);
 
   // hdmi interface
 
@@ -101,7 +100,6 @@ module axi_hdmi_rx_core (
   // debug interface (chipscope)
 
   output  [61:0]  debug_data;
-  output  [ 7:0]  debug_trigger;
 
   reg             hdmi_wr = 'd0;
   reg     [64:0]  hdmi_wdata = 'd0;
@@ -138,6 +136,25 @@ module axi_hdmi_rx_core (
   reg     [15:0]  hdmi_data_neg = 'd0;
   reg     [ 2:0]  hdmi_wr_count = 'd0;
 
+  reg     [15:0]  data_d = 'd0;
+  reg     [15:0]  data_2d = 'd0;
+  reg     [15:0]  data_3d = 'd0;
+  reg     [15:0]  data_4d = 'd0;
+  reg             hs_de_rcv_d = 'd0;
+  reg             hs_de_rcv_2d = 'd0;
+  reg             hs_de_rcv_3d = 'd0;
+  reg             hs_de_rcv_4d = 'd0;
+  reg             vs_de_rcv_d = 'd0;
+  reg             vs_de_rcv_2d = 'd0;
+  reg             vs_de_rcv_3d = 'd0;
+  reg             vs_de_rcv_4d = 'd0;
+  reg             hs_de_rcv = 'd0;
+  reg             vs_de_rcv = 'd0;
+  reg     [ 1:0]  preamble_cnt = 'd0;
+  reg     [15:0]  hdmi_data_de;
+  reg             hdmi_hs_de;
+  reg             hdmi_vs_de;
+
   wire            hdmi_tpm_mismatch_s;
   wire    [15:0]  hdmi_tpm_data_s;
   wire            hdmi_sof_s;
@@ -149,9 +166,9 @@ module axi_hdmi_rx_core (
   wire            ss_fs_s;
   wire            ss_de_s;
   wire    [23:0]  ss_data_s;
-  wire    [15:0]  hdmi_data_de;
-  wire            hdmi_hs_de;
-  wire            hdmi_vs_de;
+  wire    [15:0]  hdmi_data_de_s;
+  wire            hdmi_hs_de_s;
+  wire            hdmi_vs_de_s;
 
   // debug signals
 
@@ -164,18 +181,10 @@ module axi_hdmi_rx_core (
   assign debug_data[40:40] = hdmi_hs_count_mismatch;
   assign debug_data[39:39] = hdmi_vs_count_mismatch;
   assign debug_data[38:38] = hdmi_enable;
-  assign debug_data[37:37] = hdmi_vs_de;
-  assign debug_data[36:36] = hdmi_hs_de;
-  assign debug_data[35:20] = hdmi_data_de;
+  assign debug_data[37:37] = hdmi_vs_de_s;
+  assign debug_data[36:36] = hdmi_hs_de_s;
+  assign debug_data[35:20] = hdmi_data_de_s;
   assign debug_data[15: 0] = hdmi_data_p;
-
-  assign debug_trigger[7] = hdmi_tpm_mismatch_s;
-  assign debug_trigger[6] = hdmi_tpm_oos;
-  assign debug_trigger[5] = hdmi_enable;
-  assign debug_trigger[4] = hdmi_hs_de;
-  assign debug_trigger[3] = hdmi_vs_de;
-  assign debug_trigger[2] = hdmi_sof;
-
 
   always @(posedge hdmi_clk) begin
     if (hdmi_de_444_d == 1'b1) begin
@@ -222,12 +231,12 @@ module axi_hdmi_rx_core (
           end
         endcase
      end
-end
+  end
 
- if (hdmi_fs_444)
-	hdmi_wdata[64:64] <= 1'b1;
- else if (hdmi_wr)
-	hdmi_wdata[64:64] <= 1'b0;
+  if (hdmi_fs_444)
+    hdmi_wdata[64:64] <= 1'b1;
+  else if (hdmi_wr)
+    hdmi_wdata[64:64] <= 1'b0;
   end
 
   // TPM on 422 data (the data must be passed through the cable as it is transmitted
@@ -247,15 +256,14 @@ end
 
   // fs, enable and data on 422 and 444 domains
   always @(posedge hdmi_clk) begin
-    hdmi_fs_422 <= hdmi_sof & hdmi_enable;
-    hdmi_de_422 <= hdmi_hs_de & hdmi_vs_de & hdmi_enable;
-    hdmi_data_422 <= hdmi_data_de;
-
-    hdmi_fs_444_d <= hdmi_fs_444;
-    hdmi_de_444_d <= hdmi_de_444;
-    hdmi_data_444_d <= hdmi_data_444;
-    hdmi_data_444_2d <= hdmi_data_444_d;
-    hdmi_data_444_3d <= hdmi_data_444_2d;
+    hdmi_fs_422   <= hdmi_sof & hdmi_enable;
+    hdmi_de_422   <= hdmi_hs_de & hdmi_vs_de & hdmi_enable;
+    hdmi_data_422 <= hdmi_data_de_s;
+    hdmi_fs_444_d     <= hdmi_fs_444;
+    hdmi_de_444_d     <= hdmi_de_444;
+    hdmi_data_444_d   <= hdmi_data_444;
+    hdmi_data_444_2d  <= hdmi_data_444_d;
+    hdmi_data_444_3d  <= hdmi_data_444_2d;
   end
 
   // Select output data depending on the control setting
@@ -338,13 +346,52 @@ end
     hdmi_data_neg <= hdmi_data;
   end
 
-  embedded_sync_decoder es_decoder (
-	.clk (hdmi_clk),
-	.data_in (hdmi_data_p),
-	.hs_de (hdmi_hs_de),
-	.vs_de (hdmi_vs_de),
-	.data_out (hdmi_data_de)
-  );
+  // delay to get rid of eav's 4 bytes
+
+  always @(posedge hdmi_clk) begin
+
+    data_d        <= hdmi_data_p;
+    data_2d       <= data_d;
+    data_3d       <= data_2d;
+    data_4d       <= data_3d;
+    hdmi_data_de  <= data_4d;
+
+    hs_de_rcv_d   <= hs_de_rcv;
+    vs_de_rcv_d   <= vs_de_rcv;
+    hs_de_rcv_2d  <= hs_de_rcv_d;
+    vs_de_rcv_2d  <= vs_de_rcv_d;
+    hs_de_rcv_3d  <= hs_de_rcv_2d;
+    vs_de_rcv_3d  <= vs_de_rcv_2d;
+    hs_de_rcv_4d  <= hs_de_rcv_3d;
+    vs_de_rcv_4d  <= vs_de_rcv_3d;
+
+    hdmi_hs_de    <= hs_de_rcv & hs_de_rcv_4d;
+    hdmi_vs_de    <= vs_de_rcv & vs_de_rcv_4d;
+  end
+
+  assign hdmi_data_de_s = hdmi_data_de;
+  assign hdmi_hs_de_s = hdmi_hs_de;
+  assign hdmi_vs_de_s = hdmi_vs_de;
+
+  // check for sav and eav and generate the corresponding enables
+
+  always @(posedge hdmi_clk) begin
+    if ((hdmi_data_p == 16'hffff) || (hdmi_data_p == 16'h0000)) begin
+      preamble_cnt <= preamble_cnt + 1'b1;
+    end else begin
+      preamble_cnt <= 'd0;
+    end
+
+    if (preamble_cnt == 3'h3) begin
+      if ((hdmi_data_p == 16'hb6b6) || (hdmi_data_p == 16'h9d9d)) begin
+        hs_de_rcv <= 1'b0;
+        vs_de_rcv <= ~hdmi_data_p[13];
+      end else if ((hdmi_data_p == 16'habab) || (hdmi_data_p == 16'h8080)) begin
+        hs_de_rcv <= 1'b1;
+        vs_de_rcv <= ~hdmi_data_p[13];
+      end
+    end
+  end
 
   // super sampling, 422 to 444
 

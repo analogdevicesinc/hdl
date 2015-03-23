@@ -44,12 +44,12 @@ module axi_hdmi_rx (
   hdmi_clk,
   hdmi_data,
 
-  // vdma interface
-  video_clk,
-  video_valid,
-  video_data,
-  video_overflow,
-  video_sync,
+  // dma interface
+  dma_clk,
+  dma_valid,
+  dma_data,
+  dma_ovf,
+  dma_sync,
 
   // processor interface
 
@@ -76,8 +76,7 @@ module axi_hdmi_rx (
 
   // debug interface (chipscope)
 
-  hdmi_dbg_data,
-  hdmi_dbg_trigger);
+  hdmi_dbg_data);
 
   // parameters
 
@@ -90,11 +89,11 @@ module axi_hdmi_rx (
 
   // vdma interface
 
-  output          video_clk;
-  output          video_valid;
-  output  [63:0]  video_data;
-  input           video_overflow;
-  output          video_sync;
+  output          dma_clk;
+  output          dma_valid;
+  output  [63:0]  dma_data;
+  input           dma_ovf;
+  output          dma_sync;
 
   // processor interface
 
@@ -118,10 +117,9 @@ module axi_hdmi_rx (
   output  [31:0]  s_axi_rdata;
   input           s_axi_rready;
 
-  // debug interface (chipscope)
+  // debug interface
 
   output  [61:0]  hdmi_dbg_data;
-  output  [ 7:0]  hdmi_dbg_trigger;
 
   reg     [31:0]  up_scratch = 'h0;
   reg             up_packed = 'd0;
@@ -156,23 +154,21 @@ module axi_hdmi_rx (
   wire    [15:0]  hdmi_vs_count_s;
   wire            hdmi_tpm_oos_s;
   wire            hdmi_oos_s;
-  wire            hdmi_soos_hs_s;
+  wire            hdmi_oos_hs_s;
   wire            hdmi_oos_vs_s;
   wire            hdmi_wr_s;
   wire    [64:0]  hdmi_wdata_s;
   wire            up_hdmi_tpm_oos;
   wire            up_hdmi_oos;
-  wire            up_hdmi_oos_hs;
-  wire            up_hdmi_oos_vs;
 
-  wire            hdmi_up_edge_sel;
-  wire    [15:0]  hdmi_up_hs_count;
-  wire    [15:0]  hdmi_up_vs_count;
-  wire            hdmi_up_csc_bypass;
-  wire            hdmi_up_tpg_enable;
-  wire            hdmi_up_packed;
-  wire            hdmi_rst;
-  wire            hdmi_up_bgr;
+  wire            hdmi_up_edge_sel_s;
+  wire    [15:0]  hdmi_up_hs_count_s;
+  wire    [15:0]  hdmi_up_vs_count_s;
+  wire            hdmi_up_csc_bypass_s;
+  wire            hdmi_up_tpg_enable_s;
+  wire            hdmi_up_packed_s;
+  wire            hdmi_rst_s;
+  wire            hdmi_up_bgr_s;
 
   up_axi i_up_axi (
     .up_rstn(s_axi_aresetn),
@@ -205,14 +201,14 @@ module axi_hdmi_rx (
 
   up_hdmi_rx i_up_hdmi_rx (
     .hdmi_clk (hdmi_clk),
-    .hdmi_rst (hdmi_rst),
-    .hdmi_up_hs_count (hdmi_up_hs_count),
-    .hdmi_up_vs_count (hdmi_up_vs_count),
-    .hdmi_up_edge_sel (hdmi_up_edge_sel),
-    .hdmi_up_csc_bypass (hdmi_up_csc_bypass),
-    .hdmi_up_tpg_enable (hdmi_up_tpg_enable),
-    .hdmi_up_packed (hdmi_up_packed),
-    .hdmi_up_bgr (hdmi_up_bgr),
+    .hdmi_rst (hdmi_rst_s),
+    .hdmi_up_hs_count (hdmi_up_hs_count_s),
+    .hdmi_up_vs_count (hdmi_up_vs_count_s),
+    .hdmi_up_edge_sel (hdmi_up_edge_sel_s),
+    .hdmi_up_csc_bypass (hdmi_up_csc_bypass_s),
+    .hdmi_up_tpg_enable (hdmi_up_tpg_enable_s),
+    .hdmi_up_packed (hdmi_up_packed_s),
+    .hdmi_up_bgr (hdmi_up_bgr_s),
     .hdmi_hs_mismatch (hdmi_hs_count_mismatch_s),
     .hdmi_hs (hdmi_hs_count_s),
     .hdmi_vs_mismatch (hdmi_vs_count_mismatch_s),
@@ -220,7 +216,7 @@ module axi_hdmi_rx (
     .hdmi_oos_hs (hdmi_oos_hs_s),
     .hdmi_oos_vs (hdmi_oos_vs_s),
     .hdmi_tpm_oos (hdmi_tpm_oos_s),
-    .video_overflow (video_overflow),
+    .dma_ovf (dma_ovf),
     .up_clk (s_axi_aclk),
     .up_rstn (s_axi_aresetn),
     .up_rdata (up_rdata_s),
@@ -232,16 +228,16 @@ module axi_hdmi_rx (
     .up_wack  (up_wack_s),
     .up_rack  (up_rack_s));
 
-  assign  video_clk = hdmi_clk;
-  assign  video_data = hdmi_wdata_s[63:0];
-  assign  video_sync = hdmi_wdata_s[64];
-  assign  video_valid = hdmi_wr_s;
+  assign  dma_clk   = hdmi_clk;
+  assign  dma_data  = hdmi_wdata_s[63:0];
+  assign  dma_sync  = hdmi_wdata_s[64];
+  assign  dma_valid = hdmi_wr_s;
 
   // hdmi interface
 
   axi_hdmi_rx_core i_hdmi_rx_core (
     .hdmi_clk(hdmi_clk),
-    .hdmi_rst (hdmi_rst),
+    .hdmi_rst (hdmi_rst_s),
     .hdmi_data(hdmi_data),
     .hdmi_hs_count_mismatch(hdmi_hs_count_mismatch_s),
     .hdmi_hs_count_update(hdmi_hs_count_update),
@@ -254,15 +250,13 @@ module axi_hdmi_rx (
     .hdmi_oos_vs(hdmi_oos_vs_s),
     .hdmi_wr(hdmi_wr_s),
     .hdmi_wdata(hdmi_wdata_s),
-    .hdmi_up_edge_sel(hdmi_up_edge_sel),
-    .hdmi_up_hs_count(hdmi_up_hs_count),
-    .hdmi_up_vs_count(hdmi_up_vs_count),
-    .hdmi_up_csc_bypass(hdmi_up_csc_bypass),
-    .hdmi_up_tpg_enable(hdmi_up_tpg_enable),
-    .hdmi_up_packed(hdmi_up_packed),
-    .hdmi_up_bgr(hdmi_up_bgr),
-    .debug_data(hdmi_dbg_data),
-    .debug_trigger(hdmi_dbg_trigger)
-  );
+    .hdmi_up_edge_sel(hdmi_up_edge_sel_s),
+    .hdmi_up_hs_count(hdmi_up_hs_count_s),
+    .hdmi_up_vs_count(hdmi_up_vs_count_s),
+    .hdmi_up_csc_bypass(hdmi_up_csc_bypass_s),
+    .hdmi_up_tpg_enable(hdmi_up_tpg_enable_s),
+    .hdmi_up_packed(hdmi_up_packed_s),
+    .hdmi_up_bgr(hdmi_up_bgr_s),
+    .debug_data(hdmi_dbg_data));
 
 endmodule

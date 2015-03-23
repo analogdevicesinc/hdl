@@ -17,8 +17,7 @@ adi_ip_files axi_hdmi_rx [list \
   "$ad_hdl_dir/library/common/ad_ss_422to444.v" \
   "$ad_hdl_dir/library/common/ad_csc_CrYCb2RGB.v" \
   "axi_hdmi_rx.v" \
-  "axi_hdmi_rx_core.v" \
-  "embedded_sync_decoder.v" ]
+  "axi_hdmi_rx_core.v" ]
 
 adi_ip_properties axi_hdmi_rx
 adi_ip_constraints axi_hdmi_rx [list \

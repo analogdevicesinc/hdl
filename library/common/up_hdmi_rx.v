@@ -60,9 +60,9 @@ module up_hdmi_rx (
   hdmi_oos_hs,
   hdmi_oos_vs,
 
-  // vdma interface
+  // dma fifo overflow
 
-  video_overflow,
+  dma_ovf,
 
   // bus interface
 
@@ -99,7 +99,7 @@ module up_hdmi_rx (
 
   // vdma interface
 
-  input             video_overflow;
+  input             dma_ovf;
   input             hdmi_hs_mismatch;
   input   [15:0]    hdmi_hs;
   input             hdmi_vs_mismatch;
@@ -136,7 +136,7 @@ module up_hdmi_rx (
   reg     [15:0]    up_hs_count = 'd0;
   reg     [ 3:0]    up_hdmi_status_hold = 'd0;
   reg               up_status = 'd0;
-  reg               up_vdma_ovf_hold = 'd0;
+  reg               up_dma_ovf_hold = 'd0;
   reg               up_hdmi_tpm_oos_hold = 'd0;
 
   // internal signals
@@ -153,7 +153,7 @@ module up_hdmi_rx (
 
   wire [3:0]        up_hdmi_status = {up_hdmi_oos_vs, up_hdmi_oos_hs, up_hdmi_vs_mismatch, up_hdmi_hs_mismatch};
 
-  wire              up_vdma_ovf;
+  wire              up_dma_ovf;
 
   // decode block select
 
@@ -199,9 +199,9 @@ module up_hdmi_rx (
         up_hs_count <= up_wdata[15:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h018)) begin
-        up_vdma_ovf_hold <= (up_vdma_ovf_hold & ~up_wdata[0]) | up_vdma_ovf;
+        up_dma_ovf_hold <= (up_dma_ovf_hold & ~up_wdata[0]) | up_dma_ovf;
       end else begin
-        up_vdma_ovf_hold <= up_vdma_ovf_hold | up_vdma_ovf;
+        up_dma_ovf_hold <= up_dma_ovf_hold | up_dma_ovf;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
         up_hdmi_tpm_oos_hold <= (up_hdmi_tpm_oos_hold & ~up_wdata[0]) | up_hdmi_tpm_oos;
@@ -232,7 +232,7 @@ module up_hdmi_rx (
           12'h010: up_rdata <= {31'h0, up_resetn};
           12'h011: up_rdata <= {29'h0, up_bgr, up_packed, up_csc_bypass};
           12'h012: up_rdata <= {31'h0, up_tpg_enable};
-          12'h018: up_rdata <= {30'h0, up_vdma_ovf_hold, 1'b0};
+          12'h018: up_rdata <= {30'h0, up_dma_ovf_hold, 1'b0};
           12'h019: up_rdata <= {30'h0, up_hdmi_tpm_oos_hold, 1'b0};
           12'h020: up_rdata <= {28'h0, up_hdmi_status_hold};
           12'h100: up_rdata <= {up_vs_count, up_hs_count};
@@ -320,10 +320,10 @@ module up_hdmi_rx (
   ) i_vdma_xfer_status (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
-    .up_data_status(up_vdma_ovf),
+    .up_data_status(up_dma_ovf),
     .d_rst(hdmi_rst),
     .d_clk(hdmi_clk),
-    .d_data_status(video_overflow));
+    .d_data_status(dma_ovf));
 
 endmodule
 
