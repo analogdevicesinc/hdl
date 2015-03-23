@@ -19,6 +19,8 @@ set_property  -dict {PACKAGE_PIN  AB29    IOSTANDARD LVCMOS25}    [get_ports  fm
 set_property  -dict {PACKAGE_PIN  AD29    IOSTANDARD LVCMOS25}    [get_ports  fmc_hdmi_rx_data[14]]     ; ## G34  FMC_LPC_LA31_N
 set_property  -dict {PACKAGE_PIN  AC29    IOSTANDARD LVCMOS25}    [get_ports  fmc_hdmi_rx_data[15]]     ; ## G33  FMC_LPC_LA31_P
 
+set_property  -dict {PACKAGE_PIN  AF15    IOSTANDARD LVCMOS25}    [get_ports  fmc_hdmi_rx_int]          ; ## D08  FMC_LPC_LA01_CC_P
+
 # fmc hdmi tx (adv7511)
 
 set_property  -dict {PACKAGE_PIN   AD28   IOSTANDARD LVCMOS25}    [get_ports   fmc_hdmi_tx_clk]         ; ## G3   FMC_LPC_CLK1_M2C_N
@@ -48,6 +50,6 @@ set_property  -dict {PACKAGE_PIN   AG15   IOSTANDARD LVCMOS25}    [get_ports  fm
 
 # clock definition
 
-create_clock -period 6.06061  -name hdmi_rx_clk  -waveform {0.000 3.030305} [get_ports fmc_hdmi_rx_clk]
+create_clock -period 6.66667  -name hdmi_rx_clk  -waveform {0.000 3.333335} [get_ports fmc_hdmi_rx_clk]
 
 
