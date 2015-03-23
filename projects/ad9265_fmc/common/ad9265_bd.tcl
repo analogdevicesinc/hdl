@@ -170,7 +170,6 @@ if {$sys_zynq == 0} {
 } else {
   delete_bd_objs [get_bd_nets ps_intr_12_s] [get_bd_ports ps_intr_12]
   connect_bd_net -net axi_ad9265_dma_irq [get_bd_pins axi_ad9265_dma/irq]  [get_bd_pins sys_concat_intc/In12]
-  connect_bd_net -net [get_bd_nets axi_ad9265_dma_irq] [get_bd_pins sys_concat_intc/In12] [get_bd_pins axi_ad9265_dma/irq]
 }
 
 # interconnect (mem/adc)
