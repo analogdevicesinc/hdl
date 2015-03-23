@@ -81,7 +81,5 @@ set_property  -dict {PACKAGE_PIN  N40   IOSTANDARD LVCMOS18} [get_ports dac_sync
 
 create_clock -name rx_ref_clk_0   -period  1.60 [get_ports rx_ref_clk_0_p]
 create_clock -name rx_ref_clk_1   -period  1.60 [get_ports rx_ref_clk_1_p]
-create_clock -name rx_div_clk_0   -period  6.40 [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/rx_clk_g]
-
-
+create_clock -name rx_div_clk     -period  6.40 [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/inst/g_lane_1[0].i_gt_channel_1/i_gtxe2_channel/RXOUTCLK]
 
