@@ -249,7 +249,7 @@ module up_hdmi_rx (
           12'h001: up_rdata <= PCORE_ID;
           12'h002: up_rdata <= up_scratch;
           12'h010: up_rdata <= {31'h0, up_resetn};
-          12'h011: up_rdata <= {29'h0, up_bgr, up_packed, up_csc_bypass};
+          12'h011: up_rdata <= {28'h0, up_edge_sel, up_bgr, up_packed, up_csc_bypass};
           12'h012: up_rdata <= {31'h0, up_tpg_enable};
           12'h015: up_rdata <= up_clk_count_s;
           12'h016: up_rdata <= hdmi_clk_ratio;
