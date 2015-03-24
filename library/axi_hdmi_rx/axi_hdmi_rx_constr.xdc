@@ -1,4 +1,5 @@
 
-set_clock_groups -asynchronous -group [get_clocks -of_objects [get_ports -regexp .*_clk$]]
-set_clock_groups -asynchronous -group [get_clocks -of_objects [get_ports s_axi_aclk]]
-
+set_false_path -from [get_cells *d_xfer_* -hierarchical -filter {PRIMITIVE_SUBGROUP == flop}] \
+  -to [get_cells *up_xfer_* -hierarchical -filter {PRIMITIVE_SUBGROUP == flop}]
+set_false_path -from [get_cells *up_xfer_* -hierarchical -filter {PRIMITIVE_SUBGROUP == flop}] \
+  -to [get_cells *d_xfer_* -hierarchical -filter {PRIMITIVE_SUBGROUP == flop}]
