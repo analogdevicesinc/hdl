@@ -22,10 +22,8 @@ set_property  -dict {PACKAGE_PIN  P21   IOSTANDARD LVCMOS25} [get_ports spi_sdio
 
 create_clock -name rx_ref_clk   -period  4.00 [get_ports rx_ref_clk_p]
 create_clock -name rx_div_clk   -period  8.80 [get_nets i_system_wrapper/system_i/axi_ad9250_gt_rx_clk]
-create_clock -name fmc_dma_clk  -period  5.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
 
 set_clock_groups -asynchronous -group {rx_div_clk}
-set_clock_groups -asynchronous -group {fmc_dma_clk}
 
 set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9250_gt/inst/i_up_gt/i_drp_rst_reg/i_rst_reg/PRE]
 set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9250_gt/inst/i_up_gt/i_gt_pll_rst_reg/i_rst_reg/PRE]
