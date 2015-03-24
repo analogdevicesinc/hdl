@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE PoosIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 module up_hdmi_rx (
 
@@ -43,26 +41,23 @@ module up_hdmi_rx (
 
   hdmi_clk,
   hdmi_rst,
-
-  hdmi_up_edge_sel,
-  hdmi_up_hs_count,
-  hdmi_up_vs_count,
-  hdmi_up_csc_bypass,
-  hdmi_up_tpg_enable,
-  hdmi_up_packed,
-  hdmi_up_bgr,
-
+  hdmi_edge_sel,
+  hdmi_bgr,
+  hdmi_packed,
+  hdmi_csc_bypass,
+  hdmi_tpg_enable,
+  hdmi_vs_count,
+  hdmi_hs_count,
+  hdmi_dma_ovf,
+  hdmi_dma_unf,
   hdmi_tpm_oos,
-  hdmi_hs_mismatch,
-  hdmi_hs,
+  hdmi_vs_oos,
+  hdmi_hs_oos,
   hdmi_vs_mismatch,
+  hdmi_hs_mismatch,
   hdmi_vs,
-  hdmi_oos_hs,
-  hdmi_oos_vs,
-
-  // dma fifo overflow
-
-  dma_ovf,
+  hdmi_hs,
+  hdmi_clk_ratio,
 
   // bus interface
 
@@ -79,114 +74,118 @@ module up_hdmi_rx (
 
   // parameters
 
-  localparam        PCORE_VERSION = 32'h00040063;
-  parameter         PCORE_ID = 0;
+  localparam  PCORE_VERSION = 32'h00040063;
+  parameter   PCORE_ID = 0;
 
   // hdmi interface
 
-  input             hdmi_clk;
-  output            hdmi_rst;
-
-  output            hdmi_up_edge_sel;
-  output   [15:0]   hdmi_up_hs_count;
-  output   [15:0]   hdmi_up_vs_count;
-  output            hdmi_up_csc_bypass;
-  output            hdmi_up_tpg_enable;
-  output            hdmi_up_packed;
-  output            hdmi_up_bgr;
-
-  input             hdmi_tpm_oos;
-
-  // vdma interface
-
-  input             dma_ovf;
-  input             hdmi_hs_mismatch;
-  input   [15:0]    hdmi_hs;
-  input             hdmi_vs_mismatch;
-  input   [15:0]    hdmi_vs;
-  input             hdmi_oos_hs;
-  input             hdmi_oos_vs;
+  input           hdmi_clk;
+  output          hdmi_rst;
+  output          hdmi_edge_sel;
+  output          hdmi_bgr;
+  output          hdmi_packed;
+  output          hdmi_csc_bypass;
+  output          hdmi_tpg_enable;
+  output  [15:0]  hdmi_vs_count;
+  output  [15:0]  hdmi_hs_count;
+  input           hdmi_dma_ovf;
+  input           hdmi_dma_unf;
+  input           hdmi_tpm_oos;
+  input           hdmi_vs_oos;
+  input           hdmi_hs_oos;
+  input           hdmi_vs_mismatch;
+  input           hdmi_hs_mismatch;
+  input   [15:0]  hdmi_vs;
+  input   [15:0]  hdmi_hs;
+  input   [31:0]  hdmi_clk_ratio;
 
   // bus interface
 
-  input             up_rstn;
-  input             up_clk;
-  input             up_wreq;
-  input   [13:0]    up_waddr;
-  input   [31:0]    up_wdata;
-  output            up_wack;
-  input             up_rreq;
-  input   [13:0]    up_raddr;
-  output  [31:0]    up_rdata;
-  output            up_rack;
+  input           up_rstn;
+  input           up_clk;
+  input           up_wreq;
+  input   [13:0]  up_waddr;
+  input   [31:0]  up_wdata;
+  output          up_wack;
+  input           up_rreq;
+  input   [13:0]  up_raddr;
+  output  [31:0]  up_rdata;
+  output          up_rack;
 
   // internal registers
 
-  reg               up_wack = 'd0;
-  reg               up_rack = 'd0;
-  reg     [31:0]    up_rdata = 'd0;
-  reg               up_packed = 'd0;
-  reg     [31:0]    up_scratch = 'd0;
-  reg               up_bgr = 'd0;
-  reg               up_tpg_enable = 'd0;
-  reg               up_csc_bypass = 'd0;
-  reg               up_edge_sel = 'd0;
-  reg               up_resetn = 'd0;
-  reg     [15:0]    up_vs_count = 'd0;
-  reg     [15:0]    up_hs_count = 'd0;
-  reg     [ 3:0]    up_hdmi_status_hold = 'd0;
-  reg               up_status = 'd0;
-  reg               up_dma_ovf_hold = 'd0;
-  reg               up_hdmi_tpm_oos_hold = 'd0;
+  reg             up_wack = 'd0;
+  reg     [31:0]  up_scratch = 'd0;
+  reg             up_resetn = 'd0;
+  reg             up_edge_sel = 'd0;
+  reg             up_bgr = 'd0;
+  reg             up_packed = 'd0;
+  reg             up_csc_bypass = 'd0;
+  reg             up_tpg_enable = 'd0;
+  reg             up_dma_ovf = 'd0;
+  reg             up_dma_unf = 'd0;
+  reg             up_tpm_oos = 'd0;
+  reg             up_vs_oos = 'd0;
+  reg             up_hs_oos = 'd0;
+  reg             up_vs_mismatch = 'd0;
+  reg             up_hs_mismatch = 'd0;
+  reg     [15:0]  up_vs_count = 'd0;
+  reg     [15:0]  up_hs_count = 'd0;
+  reg             up_rack = 'd0;
+  reg     [31:0]  up_rdata = 'd0;
 
   // internal signals
 
-  wire              up_wreq_s;
-  wire              up_rreq_s;
-  wire              up_preset_s;
-  wire              up_hdmi_hs_mismatch;
-  wire    [15:0]    up_hdmi_hs;
-  wire              up_hdmi_vs_mismatch;
-  wire    [15:0]    up_hdmi_vs;
-  wire              up_hdmi_oos_hs;
-  wire              up_hdmi_oos_vs;
-
-  wire [3:0]        up_hdmi_status = {up_hdmi_oos_vs, up_hdmi_oos_hs, up_hdmi_vs_mismatch, up_hdmi_hs_mismatch};
-
-  wire              up_dma_ovf;
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+  wire            up_preset_s;
+  wire            up_dma_ovf_s;
+  wire            up_dma_unf_s;
+  wire            up_vs_oos_s;
+  wire            up_hs_oos_s;
+  wire            up_vs_mismatch_s;
+  wire            up_hs_mismatch_s;
+  wire    [15:0]  up_vs_s;
+  wire    [15:0]  up_hs_s;
+  wire    [31:0]  up_clk_count_s;
 
   // decode block select
 
-  assign up_wreq_s    = (up_waddr[13:12] == 2'd0) ? up_wreq : 1'b0;
-  assign up_rreq_s    = (up_raddr[13:12] == 2'd0) ? up_rreq : 1'b0;
+  assign up_wreq_s = (up_waddr[13:12] == 2'd0) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:12] == 2'd0) ? up_rreq : 1'b0;
   assign up_preset_s  = ~up_resetn;
 
-  // processor write interface (see regmap.txt for details)
+  // processor write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_wack       <= 'd0;
-      up_scratch    <= 'd0;
-      up_packed     <= 'd0;
-      up_bgr        <= 'd0;
-      up_tpg_enable <= 'd0;
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      up_resetn <= 'd0;
+      up_edge_sel <= 'd0;
+      up_bgr <= 'd0;
+      up_packed <= 'd0;
       up_csc_bypass <= 'd0;
-      up_edge_sel   <= 'd0;
-      up_resetn     <= 'd0;
-      up_vs_count   <= 'd0;
-      up_hs_count   <= 'd0;
-      up_hdmi_status_hold <= 'd0;
-      up_status     <= 'd0;
+      up_tpg_enable <= 'd0;
+      up_dma_ovf <= 'd0;
+      up_dma_unf <= 'd0;
+      up_tpm_oos <= 'd0;
+      up_vs_oos <= 'd0;
+      up_hs_oos <= 'd0;
+      up_vs_mismatch <= 'd0;
+      up_hs_mismatch <= 'd0;
+      up_vs_count <= 'd0;
+      up_hs_count <= 'd0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h002)) begin
-	up_scratch <= up_wdata;
+        up_scratch <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h010)) begin
         up_resetn <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h011)) begin
-        up_edge_sel = up_wdata[3];
+        up_edge_sel <= up_wdata[3];
         up_bgr <= up_wdata[2];
         up_packed <= up_wdata[1];
         up_csc_bypass <= up_wdata[0];
@@ -194,24 +193,44 @@ module up_hdmi_rx (
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h012)) begin
         up_tpg_enable <= up_wdata[0];
       end
+      if (up_dma_ovf_s == 1'b1) begin
+        up_dma_ovf <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h018)) begin
+        up_dma_ovf <= up_dma_ovf & ~up_wdata[1];
+      end
+      if (up_dma_unf_s == 1'b1) begin
+        up_dma_unf <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h018)) begin
+        up_dma_unf <= up_dma_unf & ~up_wdata[0];
+      end
+      if (up_tpm_oos_s == 1'b1) begin
+        up_tpm_oos <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
+        up_tpm_oos <= up_tpm_oos & ~up_wdata[0];
+      end
+      if (up_vs_oos_s == 1'b1) begin
+        up_vs_oos <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h020)) begin
+        up_vs_oos <= up_vs_oos & ~up_wdata[3];
+      end
+      if (up_hs_oos_s == 1'b1) begin
+        up_hs_oos <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h020)) begin
+        up_hs_oos <= up_hs_oos & ~up_wdata[2];
+      end
+      if (up_vs_mismatch_s == 1'b1) begin
+        up_vs_mismatch <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h020)) begin
+        up_vs_mismatch <= up_vs_mismatch & ~up_wdata[1];
+      end
+      if (up_hs_mismatch_s == 1'b1) begin
+        up_hs_mismatch <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h020)) begin
+        up_hs_mismatch <= up_hs_mismatch & ~up_wdata[0];
+      end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h100)) begin
         up_vs_count <= up_wdata[31:16];
         up_hs_count <= up_wdata[15:0];
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h018)) begin
-        up_dma_ovf_hold <= (up_dma_ovf_hold & ~up_wdata[0]) | up_dma_ovf;
-      end else begin
-        up_dma_ovf_hold <= up_dma_ovf_hold | up_dma_ovf;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
-        up_hdmi_tpm_oos_hold <= (up_hdmi_tpm_oos_hold & ~up_wdata[0]) | up_hdmi_tpm_oos;
-      end else begin
-        up_hdmi_tpm_oos_hold <= up_hdmi_tpm_oos_hold | up_hdmi_tpm_oos;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h020)) begin
-        up_hdmi_status_hold <= (up_hdmi_status_hold & ~up_wdata[3:0]) | up_hdmi_status;
-      end else begin
-        up_hdmi_status_hold <= up_hdmi_status_hold | up_hdmi_status;
       end
     end
   end
@@ -232,11 +251,14 @@ module up_hdmi_rx (
           12'h010: up_rdata <= {31'h0, up_resetn};
           12'h011: up_rdata <= {29'h0, up_bgr, up_packed, up_csc_bypass};
           12'h012: up_rdata <= {31'h0, up_tpg_enable};
-          12'h018: up_rdata <= {30'h0, up_dma_ovf_hold, 1'b0};
-          12'h019: up_rdata <= {30'h0, up_hdmi_tpm_oos_hold, 1'b0};
-          12'h020: up_rdata <= {28'h0, up_hdmi_status_hold};
+          12'h015: up_rdata <= up_clk_count_s;
+          12'h016: up_rdata <= hdmi_clk_ratio;
+          12'h018: up_rdata <= {30'h0, up_dma_ovf, up_dma_unf};
+          12'h019: up_rdata <= {30'h0, up_tpm_oos, 1'b0};
+          12'h020: up_rdata <= {28'h0, up_vs_oos, up_hs_oos,
+                                up_vs_mismatch, up_hs_mismatch};
           12'h100: up_rdata <= {up_vs_count, up_hs_count};
-          12'h101: up_rdata <= {up_hdmi_vs, up_hdmi_hs};
+          12'h101: up_rdata <= {up_vs_s, up_hs_s};
           default: up_rdata <= 0;
         endcase
       end
@@ -244,86 +266,67 @@ module up_hdmi_rx (
   end
 
   // resets
+
   ad_rst i_hdmi_rst_reg (
-    .preset(up_preset_s),
-    .clk(hdmi_clk),
-    .rst(hdmi_rst));
+    .preset (up_preset_s),
+    .clk (hdmi_clk),
+    .rst (hdmi_rst));
 
   // hdmi control & status
 
-  up_xfer_cntrl #(
-    .DATA_WIDTH(37)
-  ) i_hdmi_rx_xfer_cntrl (
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_data_cntrl({
-        up_hs_count,
-        up_vs_count,
-        up_edge_sel,
-        up_csc_bypass,
-        up_tpg_enable,
-        up_packed,
-        up_bgr
-    }),
-    .up_xfer_done(),
-    .d_rst(hdmi_rst),
-    .d_clk(hdmi_clk),
-    .d_data_cntrl({
-        hdmi_up_hs_count,
-        hdmi_up_vs_count,
-        hdmi_up_edge_sel,
-        hdmi_up_csc_bypass,
-        hdmi_up_tpg_enable,
-        hdmi_up_packed,
-        hdmi_up_bgr})
-  );
+  up_xfer_cntrl #(.DATA_WIDTH(37)) i_hdmi_xfer_cntrl (
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_data_cntrl ({ up_edge_sel,
+                      up_bgr,
+                      up_packed,
+                      up_csc_bypass,
+                      up_tpg_enable,
+                      up_vs_count,
+                      up_hs_count}),
+    .up_xfer_done (),
+    .d_rst (hdmi_rst),
+    .d_clk (hdmi_clk),
+    .d_data_cntrl ({  hdmi_edge_sel,
+                      hdmi_bgr,
+                      hdmi_packed,
+                      hdmi_csc_bypass,
+                      hdmi_tpg_enable,
+                      hdmi_vs_count,
+                      hdmi_hs_count}));
 
-  // Synchronize the detected horizontal/vertical resolution to the AXI clock domain.
-  // Synchronize status bits to the AXI clock domain
+  up_xfer_status #(.DATA_WIDTH(39)) i_hdmi_xfer_status (
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_data_status ({  up_dma_ovf_s,
+                        up_dma_unf_s,
+                        up_tpm_oos_s,
+                        up_vs_oos_s,
+                        up_hs_oos_s,
+                        up_vs_mismatch_s,
+                        up_hs_mismatch_s,
+                        up_vs_s,
+                        up_hs_s}),
+    .d_rst (hdmi_rst),
+    .d_clk (hdmi_clk),
+    .d_data_status ({   hdmi_dma_ovf,
+                        hdmi_dma_unf,
+                        hdmi_tpm_oos,
+                        hdmi_vs_oos,
+                        hdmi_hs_oos,
+                        hdmi_vs_mismatch,
+                        hdmi_hs_mismatch,
+                        hdmi_vs,
+                        hdmi_hs}));
 
-  up_xfer_status #(
-    .DATA_WIDTH(36)
-  ) i_hdmi_rx_xfer_status (
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_data_status({
-        up_hdmi_hs_mismatch,
-        up_hdmi_hs,
-        up_hdmi_vs_mismatch,
-        up_hdmi_vs,
-        up_hdmi_oos_hs,
-        up_hdmi_oos_vs}),
-    .d_rst(hdmi_rst),
-    .d_clk(hdmi_clk),
-    .d_data_status({
-        hdmi_hs_mismatch,
-        hdmi_hs,
-        hdmi_vs_mismatch,
-        hdmi_vs,
-        hdmi_oos_hs,
-        hdmi_oos_vs}));
-
-  up_xfer_status #(
-    .DATA_WIDTH(1)
-  ) i_hdmi_tpm_xfer_status (
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_data_status(up_hdmi_tpm_oos),
-    .d_rst(hdmi_rst),
-    .d_clk(hdmi_clk),
-    .d_data_status(hdmi_tpm_oos));
-
-  // vdma status
-
-  up_xfer_status #(
-    .DATA_WIDTH(1)
-  ) i_vdma_xfer_status (
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_data_status(up_dma_ovf),
-    .d_rst(hdmi_rst),
-    .d_clk(hdmi_clk),
-    .d_data_status(dma_ovf));
+  up_clock_mon i_hdmi_clock_mon (
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_d_count (up_clk_count_s),
+    .d_rst (hdmi_rst),
+    .d_clk (hdmi_clk));
 
 endmodule
 
+// ***************************************************************************
+// ***************************************************************************
