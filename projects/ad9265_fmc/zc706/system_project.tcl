@@ -1,6 +1,7 @@
 # load script
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 set project_name ad9265_fmc_zc706
 
