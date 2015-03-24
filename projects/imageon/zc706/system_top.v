@@ -77,18 +77,17 @@ module system_top (
   iic_scl,
   iic_sda,
 
-  fmc_hdmi_rx_clk,
-  fmc_hdmi_rx_data,
+  hdmi_rx_clk,
+  hdmi_rx_data,
+  hdmi_rx_int,
 
-  fmc_hdmi_tx_clk,
-  fmc_hdmi_tx_data,
-  fmc_hdmi_tx_spdif,
+  hdmi_tx_clk,
+  hdmi_tx_data,
+  hdmi_tx_spdif,
 
-  fmc_hdmi_rx_int,
-
-  fmc_iic_scl,
-  fmc_iic_sda,
-  fmc_iic_rstn);
+  hdmi_iic_scl,
+  hdmi_iic_sda,
+  hdmi_iic_rstn);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -126,18 +125,17 @@ module system_top (
   inout           iic_scl;
   inout           iic_sda;
 
-  input           fmc_hdmi_rx_clk;
-  input   [15:0]  fmc_hdmi_rx_data;
+  input           hdmi_rx_clk;
+  input   [15:0]  hdmi_rx_data;
+  inout           hdmi_rx_int;
 
-  output          fmc_hdmi_tx_clk;
-  output  [15:0]  fmc_hdmi_tx_data;
-  output          fmc_hdmi_tx_spdif;
+  output          hdmi_tx_clk;
+  output  [15:0]  hdmi_tx_data;
+  output          hdmi_tx_spdif;
 
-  inout           fmc_hdmi_rx_int;
-
-  inout           fmc_iic_scl;
-  inout           fmc_iic_sda;
-  output          fmc_iic_rstn;
+  output          hdmi_iic_rstn;
+  inout           hdmi_iic_scl;
+  inout           hdmi_iic_sda;
 
   // internal signals
 
@@ -145,25 +143,29 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  assign fmc_iic_rstn = 1'b1;
+  // base hdmi
+
+  assign hdmi_iic_rstn = 1'b1;
+  assign hdmi_out_clk = 1'd0;
+  assign hdmi_vsync = 1'd0;
+  assign hdmi_hsync = 1'd0;
+  assign hdmi_data_e = 1'd0;
+  assign hdmi_data = 24'd0;
+  assign spdif = 1'd0;
 
   // instantiations
 
-  ad_iobuf #(
-    .DATA_WIDTH(15)
-  ) i_gpio_bd (
-    .dt(gpio_t[14:0]),
-    .di(gpio_o[14:0]),
-    .do(gpio_i[14:0]),
-    .dio(gpio_bd));
+  ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi (
+    .dt (gpio_t[32]),
+    .di (gpio_o[32]),
+    .do (gpio_i[32]),
+    .dio (hdmi_rx_int));
 
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_hdmi_rx_int (
-    .dt(gpio_t[32]),
-    .di(gpio_o[32]),
-    .do(gpio_i[32]),
-    .dio(fmc_hdmi_rx_int));
+  ad_iobuf #(.DATA_WIDTH(15)) i_gpio_bd (
+    .dt (gpio_t[14:0]),
+    .di (gpio_o[14:0]),
+    .do (gpio_i[14:0]),
+    .dio (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (DDR_addr),
@@ -190,11 +192,16 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
+    .hdmi_data (),
+    .hdmi_data_e (),
+    .hdmi_es_data (hdmi_tx_data),
+    .hdmi_hsync (),
+    .hdmi_out_clk (hdmi_tx_clk),
+    .hdmi_rx_clk (hdmi_rx_clk),
+    .hdmi_rx_data (hdmi_rx_data),
+    .hdmi_vsync (),
+    .iic_imageon_scl_io (hdmi_iic_scl),
+    .iic_imageon_sda_io (hdmi_iic_sda),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .ps_intr_00 (1'b0),
@@ -208,14 +215,26 @@ module system_top (
     .ps_intr_08 (1'b0),
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
-    .spdif (spdif),
-    .fmc_hdmi_rx_clk (fmc_hdmi_rx_clk),
-    .fmc_hdmi_rx_data (fmc_hdmi_rx_data),
-    .fmc_hdmi_tx_clk (fmc_hdmi_tx_clk),
-    .fmc_hdmi_tx_spdif (fmc_hdmi_tx_spdif),
-    .fmc_hdmi_tx_data (fmc_hdmi_tx_data),
-    .iic_fmc_scl_io (fmc_iic_scl),
-    .iic_fmc_sda_io (fmc_iic_sda));
+    .ps_intr_13 (1'b0),
+    .spdif (hdmi_tx_spdif),
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
+    .spi0_csn_1_o (),
+    .spi0_csn_2_o (),
+    .spi0_csn_i (1'b0),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
+    .spi1_clk_i (1'b0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'b0),
+    .spi1_sdi_i (1'b0),
+    .spi1_sdo_i (1'b0),
+    .spi1_sdo_o ());
 
 endmodule
 
