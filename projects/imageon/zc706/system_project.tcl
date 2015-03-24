@@ -13,5 +13,8 @@ adi_project_files $project_name [list "system_top.v" \
                                       "system_constr.xdc" \
                                       "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc"]
 
+set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc]
+set_property PROCESSING_ORDER EARLY [get_files system_constr.xdc]
+
 adi_project_run $project_name
 
