@@ -133,7 +133,7 @@ module util_wfifo (
   // adc overflow
 
   always @(posedge adc_clk) begin
-    if (adc_rst == 1'b0) begin
+    if (adc_rst == 1'b1) begin
       adc_wovf_m <= 2'd0;
       adc_wovf <= 1'b0;
     end else begin
