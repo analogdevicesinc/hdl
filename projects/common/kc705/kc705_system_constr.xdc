@@ -24,7 +24,7 @@ set_property -dict  {PACKAGE_PIN  L20   IOSTANDARD  LVCMOS25} [get_ports mii_rst
 set_property -dict  {PACKAGE_PIN  W19   IOSTANDARD  LVCMOS25} [get_ports mii_col]
 set_property -dict  {PACKAGE_PIN  R30   IOSTANDARD  LVCMOS25} [get_ports mii_crs]
 set_property -dict  {PACKAGE_PIN  R23   IOSTANDARD  LVCMOS25} [get_ports mdio_mdc]
-set_property -dict  {PACKAGE_PIN  J21   IOSTANDARD  LVCMOS25} [get_ports mdio_mdio_io]
+set_property -dict  {PACKAGE_PIN  J21   IOSTANDARD  LVCMOS25} [get_ports mdio_mdio]
 set_property -dict  {PACKAGE_PIN  U27   IOSTANDARD  LVCMOS25} [get_ports mii_rx_clk]
 set_property -dict  {PACKAGE_PIN  R28   IOSTANDARD  LVCMOS25} [get_ports mii_rx_dv]
 set_property -dict  {PACKAGE_PIN  V26   IOSTANDARD  LVCMOS25} [get_ports mii_rx_er]
