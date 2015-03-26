@@ -107,7 +107,6 @@ set axi_timer [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_timer:2.0 axi_tim
 
 set axi_gpio_lcd [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_lcd]
 set_property -dict [list CONFIG.C_GPIO_WIDTH {7}] $axi_gpio_lcd
-set_property -dict [list CONFIG.C_ALL_OUTPUTS {1}] $axi_gpio_lcd
 set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_lcd
 
 set axi_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_spi]
