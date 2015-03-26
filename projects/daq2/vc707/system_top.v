@@ -441,10 +441,10 @@ module system_top (
             dac_irq,          // 34
             clkd_status}));   // 32
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
-    .dt (gpio_t[16:0]),
-    .di (gpio_o[16:0]),
-    .do (gpio_i[16:0]),
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+    .dt (gpio_t[20:0]),
+    .di (gpio_o[20:0]),
+    .do (gpio_i[20:0]),
     .dio (gpio_bd));
 
   system_wrapper i_system_wrapper (
