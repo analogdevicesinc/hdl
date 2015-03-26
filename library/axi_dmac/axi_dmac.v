@@ -153,6 +153,7 @@ module axi_dmac (
 	input                                    m_axis_ready,
 	output                                   m_axis_valid,
 	output [C_DMA_DATA_WIDTH_DEST-1:0]       m_axis_data,
+        output                                   m_axis_xfer_req,
 
 	// Input FIFO interface
 	input                                    fifo_wr_clk,
@@ -167,7 +168,8 @@ module axi_dmac (
 	input                                    fifo_rd_en,
 	output                                   fifo_rd_valid,
 	output [C_DMA_DATA_WIDTH_DEST-1:0]       fifo_rd_dout,
-	output                                   fifo_rd_underflow
+	output                                   fifo_rd_underflow,
+        output                                   fifo_rd_xfer_req
 );
 
 parameter PCORE_ID = 0;
@@ -595,8 +597,9 @@ dmac_request_arb #(
 	.m_axis_ready(m_axis_ready),
 	.m_axis_valid(m_axis_valid),
 	.m_axis_data(m_axis_data),
+        .m_axis_xfer_req(m_axis_xfer_req),
 
-	
+
 	.fifo_wr_clk(fifo_wr_clk),
 	.fifo_wr_en(fifo_wr_en),
 	.fifo_wr_din(fifo_wr_din),
@@ -610,6 +613,7 @@ dmac_request_arb #(
 	.fifo_rd_valid(fifo_rd_valid),
 	.fifo_rd_dout(fifo_rd_dout),
 	.fifo_rd_underflow(fifo_rd_underflow),
+        .fifo_rd_xfer_req(fifo_rd_xfer_req),
 
 	// DBG
 	.dbg_dest_request_id(dest_request_id),

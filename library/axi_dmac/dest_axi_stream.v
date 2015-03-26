@@ -44,6 +44,7 @@ module dmac_dest_axi_stream (
 	output enabled,
 	input sync_id,
 	output sync_id_ret,
+        output xfer_req,
 
 	input [C_ID_WIDTH-1:0] request_id,
 	output [C_ID_WIDTH-1:0] response_id,
@@ -94,6 +95,7 @@ dmac_data_mover # (
 	.enable(enable),
 	.enabled(data_enabled),
 	.sync_id(sync_id),
+        .xfer_req(xfer_req),
 
 	.request_id(request_id),
 	.response_id(data_id),

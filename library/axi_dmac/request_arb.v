@@ -109,6 +109,7 @@ module dmac_request_arb (
 	input                               m_axis_ready,
 	output                              m_axis_valid,
 	output [C_DMA_DATA_WIDTH_DEST-1:0]  m_axis_data,
+        output                              m_axis_xfer_req,
 
 	// Input FIFO interface
 	input                               fifo_wr_clk,
@@ -124,6 +125,7 @@ module dmac_request_arb (
 	output                              fifo_rd_valid,
 	output [C_DMA_DATA_WIDTH_DEST-1:0]  fifo_rd_dout,
 	output                              fifo_rd_underflow,
+        output                              fifo_rd_xfer_req,
 
 	output [C_ID_WIDTH-1:0]				dbg_dest_request_id,
 	output [C_ID_WIDTH-1:0]				dbg_dest_address_id,
@@ -493,6 +495,7 @@ dmac_dest_axi_stream #(
 	.data_id(data_id),
 	.sync_id(dest_sync_id),
 	.sync_id_ret(dest_sync_id_ret),
+        .xfer_req(m_axis_xfer_req),
 
 	.data_eot(data_eot),
 	.response_eot(response_eot),
@@ -561,7 +564,8 @@ dmac_dest_fifo_inf #(
 	.en(fifo_rd_en),
 	.valid(fifo_rd_valid),
 	.dout(fifo_rd_dout),
-	.underflow(fifo_rd_underflow)
+	.underflow(fifo_rd_underflow),
+        .xfer_req(fifo_rd_xfer_req)
 );
 
 end else begin
