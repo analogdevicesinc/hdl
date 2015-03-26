@@ -37,6 +37,29 @@ proc ad_connect_type {p_name} {
 
 proc ad_connect {p_name_1 p_name_2} {
 
+  if {($p_name_2 eq "GND") || ($p_name_2 eq "VCC")} {
+    set p_size 1
+    set p_msb [get_property left [get_bd_pins $p_name_1]]
+    set p_lsb [get_property right [get_bd_pins $p_name_1]]
+    if {($p_msb ne "") && ($p_lsb ne "")} {
+      set p_size [expr (($p_msb + 1) - $p_lsb)]
+    }
+    set p_cell_name [regsub -all {/} $p_name_1 "_"]
+    set p_cell_name "${p_cell_name}_${p_name_2}"
+    if {$p_name_2 eq "VCC"} {
+      set p_value -1
+    } else {
+      set p_value 0
+    }
+    puts "create_bd_cell(xlconstant) size($p_size) value($p_value) name($p_cell_name)"
+    create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 $p_cell_name
+    set_property CONFIG.CONST_WIDTH $p_size [get_bd_cells $p_cell_name]
+    set_property CONFIG.CONST_VAL $p_value [get_bd_cells $p_cell_name]
+    puts "connect_bd_net $p_cell_name/dout $p_name_1"
+    connect_bd_net [get_bd_pins $p_cell_name/dout] [get_bd_pins $p_name_1]
+    return
+  }
+
   set m_name_1 [ad_connect_type $p_name_1]
   set m_name_2 [ad_connect_type $p_name_2]
 
