@@ -93,6 +93,7 @@ module axi_hdmi_rx_core (
   // internal registers
 
   reg             hdmi_dma_sof = 'd0;
+  reg             hdmi_dma_sof_rcv = 'd0;
   reg             hdmi_dma_de = 'd0;
   reg     [31:0]  hdmi_dma_data = 'd0;
   reg             hdmi_sof_422 = 'd0;
@@ -164,29 +165,37 @@ module axi_hdmi_rx_core (
 
   always @(posedge hdmi_clk) begin
     if (hdmi_dma_enable == 1'b0) begin
-      hdmi_dma_sof <= 1'd0;
+      hdmi_dma_sof_rcv <= 1'd0;
       hdmi_dma_de <= 1'd0;
       hdmi_dma_data <= 32'd0;
     end else if (hdmi_csc_bypass == 1'b1) begin
       if (hdmi_packed == 1'b0) begin
-        hdmi_dma_sof <= hdmi_sof_422;
+        hdmi_dma_sof_rcv <= hdmi_sof_422;
         hdmi_dma_de <= hdmi_de_422;
         hdmi_dma_data <= {16'd0, hdmi_data_422};
       end else begin
-        hdmi_dma_sof <= hdmi_sof_422;
+        hdmi_dma_sof_rcv <= hdmi_sof_422;
         hdmi_dma_de <= ~hdmi_dma_de & hdmi_de_422;
         hdmi_dma_data <= {hdmi_data_422, hdmi_dma_data[31:16]};
       end
     end else begin
       if (hdmi_packed == 1'b0) begin
-        hdmi_dma_sof <= hdmi_sof_444;
+        hdmi_dma_sof_rcv <= hdmi_sof_444;
         hdmi_dma_de <= hdmi_de_444;
         hdmi_dma_data <= {8'd0, hdmi_data_444};
       end else begin
-        hdmi_dma_sof <= hdmi_sof_444_p;
+        hdmi_dma_sof_rcv <= hdmi_sof_444_p;
         hdmi_dma_de <= hdmi_de_444_p;
         hdmi_dma_data <= hdmi_data_444_p;
       end
+    end
+  end
+
+  always @(posedge hdmi_clk) begin
+    if(hdmi_dma_sof_rcv == 1'b1) begin
+      hdmi_dma_sof <= 1'b1;
+    end else if (hdmi_dma_de == 1'b1) begin
+      hdmi_dma_sof <= 1'b0;
     end
   end
 

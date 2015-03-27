@@ -53,8 +53,8 @@ ad_connect  axi_hdmi_rx_core/hdmi_dma_ovf axi_hdmi_rx_dma/fifo_wr_overflow
 ad_cpu_interconnect 0x43100000 axi_hdmi_rx_core
 ad_cpu_interconnect 0x43C20000 axi_hdmi_rx_dma
 
-ad_mem_hp2_interconnect hdmi_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect hdmi_clk axi_hdmi_rx_dma/m_dest_axi
+ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect sys_cpu_clk axi_hdmi_rx_dma/m_dest_axi
 ad_connect sys_cpu_resetn axi_hdmi_rx_dma/m_dest_axi_aresetn
 ad_cpu_interrupt ps-12 mb-12 axi_hdmi_rx_dma/irq
 
