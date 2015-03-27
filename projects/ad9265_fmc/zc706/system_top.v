@@ -161,13 +161,13 @@ assign spi_mosi = spi0_mosi;
 assign spi0_miso = spi_miso;
 
 ad_iobuf #(.DATA_WIDTH(15)) iobuf_gpio_bd (
-  .di (gpio_o),
-  .do (gpio_i),
-  .dt (gpio_t),
+  .di (gpio_o[14:0]),
+  .do (gpio_i[14:0]),
+  .dt (gpio_t[14:0]),
   .dio (gpio_bd));
 
 ad9265_spi i_spi (
-    .spi_csn(spi_csn),
+    .spi_csn(spi0_csn[1:0]),
     .spi_clk(spi_clk),
     .spi_mosi(spi_mosi),
     .spi_miso(spi_miso),
