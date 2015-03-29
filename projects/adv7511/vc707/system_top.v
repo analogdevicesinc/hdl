@@ -198,7 +198,7 @@ module system_top (
     .linear_flash_oen (linear_flash_oen),
     .linear_flash_wen (linear_flash_wen),
     .linear_flash_dq_io(linear_flash_dq_io),
-    .gpio_lcd_tri_o (gpio_lcd),
+    .gpio_lcd_tri_io (gpio_lcd),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
     .gpio0_i (gpio_i[31:0]),
