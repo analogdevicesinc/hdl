@@ -119,15 +119,15 @@ module system_top (
   output          ddr3_cas_n;
   output          ddr3_ras_n;
   output          ddr3_we_n;
-  output  [ 0:0]  ddr3_ck_n;
-  output  [ 0:0]  ddr3_ck_p;
-  output  [ 0:0]  ddr3_cke;
-  output  [ 0:0]  ddr3_cs_n;
+  output          ddr3_ck_n;
+  output          ddr3_ck_p;
+  output          ddr3_cke;
+  output          ddr3_cs_n;
   output  [ 7:0]  ddr3_dm;
   inout   [63:0]  ddr3_dq;
   inout   [ 7:0]  ddr3_dqs_n;
   inout   [ 7:0]  ddr3_dqs_p;
-  output  [ 0:0]  ddr3_odt;
+  output          ddr3_odt;
 
   output          mdio_mdc;
   inout           mdio_mdio_io;
@@ -142,18 +142,17 @@ module system_top (
   output          mii_tx_en;
   output  [ 3:0]  mii_txd;
 
-  output [26:1]  linear_flash_addr;
-  output         linear_flash_adv_ldn;
-  output         linear_flash_ce_n;
-  inout   [15:0] linear_flash_dq_io;
-  output         linear_flash_oen;
-  output         linear_flash_wen;
+  output  [26:1]  linear_flash_addr;
+  output          linear_flash_adv_ldn;
+  output          linear_flash_ce_n;
+  inout   [15:0]  linear_flash_dq_io;
+  output          linear_flash_oen;
+  output          linear_flash_wen;
 
   output          fan_pwm;
 
   inout   [ 6:0]  gpio_lcd;
-  inout   [ 7:0]  gpio_led;
-  inout   [ 8:0]  gpio_sw;
+  inout   [16:0]  gpio_bd;
 
   output          iic_rstn;
   inout           iic_scl;
@@ -184,8 +183,7 @@ module system_top (
      .dt (gpio_t[16:0]),
      .di (gpio_o[16:0]),
      .do (gpio_i[16:0]),
-     .dio({gpio_led,
-           gpio_sw}));
+     .dio(gpio_bd));
 
   // instantiations
 
