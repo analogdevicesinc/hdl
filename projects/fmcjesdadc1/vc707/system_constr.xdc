@@ -14,7 +14,7 @@ set_property  -dict {PACKAGE_PIN  A5 }  [get_ports rx_data_n[3]]                
 set_property  -dict {PACKAGE_PIN  U31   IOSTANDARD LVCMOS18} [get_ports rx_sync]                      ; ## G36  FMC_HPC_LA33_P
 set_property  -dict {PACKAGE_PIN  T31   IOSTANDARD LVCMOS18} [get_ports rx_sysref]                    ; ## G37  FMC_HPC_LA33_N
 
-set_property  -dict {PACKAGE_PIN  M29   IOSTANDARD LVCMOS18} [get_ports spi_csn]                      ; ## G34  FMC_HPC_LA31_N
+set_property  -dict {PACKAGE_PIN  M29   IOSTANDARD LVCMOS18} [get_ports spi_csn_0]                    ; ## G34  FMC_HPC_LA31_N
 set_property  -dict {PACKAGE_PIN  M28   IOSTANDARD LVCMOS18} [get_ports spi_clk]                      ; ## G33  FMC_HPC_LA31_P
 set_property  -dict {PACKAGE_PIN  V29   IOSTANDARD LVCMOS18} [get_ports spi_sdio]                     ; ## H37  FMC_HPC_LA32_P
 
@@ -22,10 +22,8 @@ set_property  -dict {PACKAGE_PIN  V29   IOSTANDARD LVCMOS18} [get_ports spi_sdio
 
 create_clock -name rx_ref_clk   -period  4.00 [get_ports rx_ref_clk_p]
 create_clock -name rx_div_clk   -period  8.80 [get_nets i_system_wrapper/system_i/axi_ad9250_gt_rx_clk]
-#create_clock -name fmc_dma_clk  -period  5.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
 
 set_clock_groups -asynchronous -group {rx_div_clk}
-#set_clock_groups -asynchronous -group {fmc_dma_clk}
 
 set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9250_gt/inst/i_up_gt/i_drp_rst_reg/i_rst_reg/PRE]
 set_false_path -through [get_pins i_system_wrapper/system_i/axi_ad9250_gt/inst/i_up_gt/i_gt_pll_rst_reg/i_rst_reg/PRE]
