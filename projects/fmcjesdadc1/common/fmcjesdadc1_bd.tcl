@@ -258,6 +258,6 @@ ad_connect  sys_cpu_resetn axi_ad9250_gt/m_axi_aresetn
 
 #interrupts
 
-ad_cpu_interrupt ps-13 mb-10 axi_ad9250_0_dma/irq
-ad_cpu_interrupt ps-12 mb-11 axi_ad9250_1_dma/irq
+ad_cpu_interrupt ps-13 mb-13 axi_ad9250_0_dma/irq
+ad_cpu_interrupt ps-12 mb-12 axi_ad9250_1_dma/irq
 

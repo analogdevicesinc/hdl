@@ -14,7 +14,7 @@ set_property  -dict {PACKAGE_PIN  A7 }  [get_ports rx_data_n[3]]                
 set_property  -dict {PACKAGE_PIN  H21   IOSTANDARD LVCMOS25} [get_ports rx_sync]                      ; ## G36  FMC_HPC_LA33_P
 set_property  -dict {PACKAGE_PIN  H22   IOSTANDARD LVCMOS25} [get_ports rx_sysref]                    ; ## G37  FMC_HPC_LA33_N
 
-set_property  -dict {PACKAGE_PIN  F22   IOSTANDARD LVCMOS25} [get_ports spi_csn]                      ; ## G34  FMC_HPC_LA31_N
+set_property  -dict {PACKAGE_PIN  F22   IOSTANDARD LVCMOS25} [get_ports spi_csn_0]                      ; ## G34  FMC_HPC_LA31_N
 set_property  -dict {PACKAGE_PIN  G22   IOSTANDARD LVCMOS25} [get_ports spi_clk]                      ; ## G33  FMC_HPC_LA31_P
 set_property  -dict {PACKAGE_PIN  D21   IOSTANDARD LVCMOS25} [get_ports spi_sdio]                     ; ## H37  FMC_HPC_LA32_P
 
