@@ -81,7 +81,7 @@ set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP0 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_INTR {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {62}] $sys_ps7
+set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {64}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_DMA0 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_DMA1 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_DMA2 {1}] $sys_ps7
