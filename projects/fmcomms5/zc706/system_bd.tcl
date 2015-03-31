@@ -2,6 +2,8 @@
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
 source ../common/fmcomms5_bd.tcl
 
+set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
+
 # ila (adc) master
 
 set ila_adc_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_adc_0]
