@@ -142,7 +142,7 @@ module system_top (
   output          linear_flash_wen;
   inout   [15:0]  linear_flash_dq_io;
 
-  output  [ 6:0]  gpio_lcd;
+  inout   [ 6:0]  gpio_lcd;
   inout   [20:0]  gpio_bd;
 
   output          iic_rstn;
