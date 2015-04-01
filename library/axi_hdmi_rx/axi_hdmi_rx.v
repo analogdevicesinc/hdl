@@ -89,7 +89,7 @@ module axi_hdmi_rx  (
   output          hdmi_clk;
   output          hdmi_dma_sof;
   output          hdmi_dma_de;
-  output  [31:0]  hdmi_dma_data;
+  output  [63:0]  hdmi_dma_data;
   input           hdmi_dma_ovf;
   input           hdmi_dma_unf;
 
