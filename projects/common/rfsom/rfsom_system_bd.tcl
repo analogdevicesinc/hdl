@@ -52,11 +52,8 @@ create_bd_port -dir O -from 15 -to 0 hdmi_data
 
 # i2s
 
-set i2s_mclk        [create_bd_port -dir O -type clk i2s_mclk]
-set i2s_bclk        [create_bd_port -dir O i2s_bclk]
-set i2s_lrclk       [create_bd_port -dir O i2s_lrclk]
-set i2s_sdata_out   [create_bd_port -dir O i2s_sdata_out]
-set i2s_sdata_in    [create_bd_port -dir I i2s_sdata_in]
+create_bd_port -dir O -type clk i2s_mclk
+create_bd_intf_port -mode Master -vlnv analog.com:interface:i2s_rtl:1.0 i2s
 
 # otg
 
@@ -256,10 +253,7 @@ ad_connect  sys_ps7/DMA2_REQ axi_i2s_adi/DMA_REQ_RX
 ad_connect  sys_ps7/DMA2_ACK axi_i2s_adi/DMA_ACK_RX
 ad_connect  sys_audio_clkgen/clk_out1 i2s_mclk
 ad_connect  sys_audio_clkgen/clk_out1 axi_i2s_adi/DATA_CLK_I
-ad_connect  i2s_bclk axi_i2s_adi/BCLK_O
-ad_connect  i2s_lrclk axi_i2s_adi/LRCLK_O
-ad_connect  i2s_sdata_out axi_i2s_adi/SDATA_O
-ad_connect  i2s_sdata_in axi_i2s_adi/SDATA_I
+ad_connect  i2s axi_i2s_adi/I2S
 
 # interrupts
 
