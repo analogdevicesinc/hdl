@@ -39,6 +39,8 @@ clean:
 	make -C axi_mc_current_monitor clean
 	make -C axi_mc_speed clean
 	make -C axi_spdif_tx clean
+	make -C cn0363/cn0363_dma_sequencer clean
+	make -C cn0363/cn0363_phase_data_sync clean
 	make -C controllerperipheralhdladi_pcore clean
 	make -C cordic_demod clean
 	make -C spi_engine/axi_spi_engine clean
@@ -97,6 +99,8 @@ lib:
 	-make -C axi_mc_current_monitor
 	-make -C axi_mc_speed
 	-make -C axi_spdif_tx
+	-make -C cn0363/cn0363_dma_sequencer
+	-make -C cn0363/cn0363_phase_data_sync
 	-make -C controllerperipheralhdladi_pcore
 	-make -C cordic_demod
 	-make -C spi_engine/axi_spi_engine
