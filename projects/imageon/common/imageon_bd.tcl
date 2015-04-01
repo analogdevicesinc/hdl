@@ -31,7 +31,7 @@ set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {1}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_hdmi_rx_dma
+set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_hdmi_rx_dma
@@ -53,8 +53,33 @@ ad_connect  axi_hdmi_rx_core/hdmi_dma_ovf axi_hdmi_rx_dma/fifo_wr_overflow
 ad_cpu_interconnect 0x43100000 axi_hdmi_rx_core
 ad_cpu_interconnect 0x43C20000 axi_hdmi_rx_dma
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_hdmi_rx_dma/m_dest_axi
+ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect sys_cpu_clk axi_hdmi_rx_dma/m_dest_axi
 ad_connect sys_cpu_resetn axi_hdmi_rx_dma/m_dest_axi_aresetn
+
 ad_cpu_interrupt ps-12 mb-12 axi_hdmi_rx_dma/irq
+
+# debug
+
+set ila_fifo_dma_rx [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_fifo_dma_rx]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_DATA_DEPTH {16384}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {32}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_fifo_dma_rx
+
+set ila_axi_dma_rx [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_axi_dma_rx]
+set_property -dict [list CONFIG.C_DATA_DEPTH {16384}] $ila_axi_dma_rx
+
+ad_connect  hdmi_rx_clk ila_fifo_dma_rx/clk
+ad_connect  hdmi_rx_clk ila_axi_dma_rx/clk
+
+ad_connect  ila_fifo_dma_rx/probe0 axi_hdmi_rx_dma/fifo_wr_sync
+ad_connect  ila_fifo_dma_rx/probe1 axi_hdmi_rx_dma/fifo_wr_en
+ad_connect  ila_fifo_dma_rx/probe2 axi_hdmi_rx_dma/fifo_wr_din
+ad_connect  ila_fifo_dma_rx/probe3 axi_hdmi_rx_dma/fifo_wr_overflow
+
+ad_connect  ila_axi_dma_rx/SLOT_0_AXI axi_hdmi_rx_dma/m_dest_axi
 

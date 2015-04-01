@@ -50,5 +50,3 @@ set_property  -dict {PACKAGE_PIN   AG15   IOSTANDARD LVCMOS25}    [get_ports  hd
 # clock definition
 
 create_clock -period 6.66667  -name hdmi_rx_clk  [get_ports hdmi_rx_clk]
-set_clock_groups -asynchronous -group [get_clocks hdmi_rx_clk]
-
