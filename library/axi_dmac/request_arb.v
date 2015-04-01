@@ -806,7 +806,7 @@ axi_repack #(
 	.C_M_DATA_WIDTH(DMA_DATA_WIDTH)
 ) i_src_repack (
 	.clk(src_clk),
-	.resetn(src_resetn),
+	.resetn(src_resetn & src_enable),
 	.s_valid(src_fifo_valid),
 	.s_ready(src_fifo_ready),
 	.s_data(src_fifo_data),
@@ -839,7 +839,7 @@ axi_repack #(
 	.C_M_DATA_WIDTH(C_DMA_DATA_WIDTH_DEST)
 ) i_dest_repack (
 	.clk(dest_clk),
-	.resetn(dest_resetn),
+	.resetn(dest_resetn & dest_enable),
 	.s_valid(dest_fifo_valid),
 	.s_ready(dest_fifo_ready),
 	.s_data(dest_fifo_data),
