@@ -41,6 +41,10 @@ clean:
 	make -C axi_spdif_tx clean
 	make -C controllerperipheralhdladi_pcore clean
 	make -C cordic_demod clean
+	make -C spi_engine/axi_spi_engine clean
+	make -C spi_engine/spi_engine_execution clean
+	make -C spi_engine/spi_engine_interconnect clean
+	make -C spi_engine/spi_engine_offload clean
 	make -C util_adc_pack clean
 	make -C util_adcfifo clean
 	make -C util_axis_fifo clean
@@ -94,6 +98,10 @@ lib:
 	-make -C axi_spdif_tx
 	-make -C controllerperipheralhdladi_pcore
 	-make -C cordic_demod
+	-make -C spi_engine/axi_spi_engine
+	-make -C spi_engine/spi_engine_execution
+	-make -C spi_engine/spi_engine_interconnect
+	-make -C spi_engine/spi_engine_offload
 	-make -C util_adc_pack
 	-make -C util_adcfifo
 	-make -C util_axis_fifo
