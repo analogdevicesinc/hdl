@@ -77,9 +77,7 @@ module speed_detector
 //------------------------------------------------------------------------------
 //----------- Local Parameters -------------------------------------------------
 //------------------------------------------------------------------------------
-
 localparam AW             = LOG_2_AW - 1;
-
 localparam MAX_SPEED_CNT  = 32'h10000;
 
 //State machine
@@ -94,14 +92,13 @@ localparam IDLE             = 8'b10000000;
 //------------------------------------------------------------------------------
 //----------- Registers Declarations -------------------------------------------
 //------------------------------------------------------------------------------
-
 reg [ 2:0]  position_old;
 reg [63:0]  avg_register;
 reg [63:0]  avg_register_stable;
 reg [31:0]  cnt_period;
-reg [31:0]  decimation; // register used to divide by ten the speed
+reg [31:0]  decimation;                   // register used to divide by ten the speed
 reg [31:0]  cnt_period_old;
-reg [31:0]  fifo    [0:((2**LOG_2_AW)-1)]; // 32 bit wide RAM
+reg [31:0]  fifo [0:((2**LOG_2_AW)-1)];   // 32 bit wide RAM
 reg [AW:0]  write_addr;
 reg [AW:0]  read_addr;
 
@@ -113,7 +110,6 @@ reg [ 7:0]  next_state;
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
 //------------------------------------------------------------------------------
-
 // Count ticks per position
 always @(posedge clk_i)
 begin
