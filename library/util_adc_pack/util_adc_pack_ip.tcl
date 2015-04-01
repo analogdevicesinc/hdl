@@ -28,4 +28,15 @@ for {set i 0} {$i < 8} {incr i} {
 	}
 }
 
+adi_add_bus "fifo_wr" "master" \
+	"analog.com:interface:fifo_wr_rtl:1.0" \
+	"analog.com:interface:fifo_wr:1.0" \
+	{ \
+		{"dvalid" "EN"} \
+		{"ddata" "DATA"} \
+		{"dsync" "SYNC"} \
+	}
+
+adi_add_bus_clock "clk" "fifo_wr"
+
 ipx::save_core [ipx::current_core]
