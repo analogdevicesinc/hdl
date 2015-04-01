@@ -59,6 +59,17 @@ adi_add_bus "DMA_REQ_TX" "master" \
 # Clock and reset are for both DMA_REQ and DMA_ACK
 adi_add_bus_clock "DMA_REQ_TX_ACLK" "DMA_REQ_TX:DMA_ACK_TX" "DMA_REQ_TX_RSTN"
 
+adi_add_bus "I2S" "master" \
+	"analog.com:interface:i2s_rtl:1.0" \
+	"analog.com:interface:i2s:1.0" \
+	{ \
+		{"BCLK_O" "BCLK"} \
+		{"LRCLK_O" "LRCLK"} \
+		{"SDATA_O" "SDATA_OUT"} \
+		{"SDATA_I" "SDATA_IN"} \
+	}
+adi_add_bus_clock "DATA_CLK_I" "i2s"
+
 adi_set_bus_dependency "S_AXIS" "S_AXIS" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 0)"
 adi_set_bus_dependency "M_AXIS" "M_AXIS" \
