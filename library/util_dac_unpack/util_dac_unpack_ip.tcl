@@ -31,6 +31,16 @@ for {set i 0} {$i < 8} {incr i} {
 	}
 }
 
+adi_add_bus "fifo_rd" "master" \
+	"analog.com:interface:fifo_rd_rtl:1.0" \
+	"analog.com:interface:fifo_rd:1.0" \
+	{ \
+		{"dma_rd" "EN"} \
+		{"dma_data" "DATA"} \
+		{"fifo_valid" "VALID"} \
+	}
+adi_add_bus_clock "clk" "fifo_rd"
+
 ipx::save_core [ipx::current_core]
 
 
