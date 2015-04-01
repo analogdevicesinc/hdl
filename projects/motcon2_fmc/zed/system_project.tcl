@@ -1,6 +1,7 @@
 
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project_create motcon2_fmc_zed
 adi_project_files motcon2_fmc_zed [list \
