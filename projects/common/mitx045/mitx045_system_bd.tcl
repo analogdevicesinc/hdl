@@ -177,11 +177,7 @@ ad_connect  axi_hdmi_core/hdmi_16_hsync hdmi_hsync
 ad_connect  axi_hdmi_core/hdmi_16_vsync hdmi_vsync
 ad_connect  axi_hdmi_core/hdmi_16_data_e hdmi_data_e
 ad_connect  axi_hdmi_core/hdmi_16_data hdmi_data
-ad_connect  axi_hdmi_core/m_axis_mm2s_tvalid axi_hdmi_dma/m_axis_mm2s_tvalid
-ad_connect  axi_hdmi_core/m_axis_mm2s_tdata axi_hdmi_dma/m_axis_mm2s_tdata
-ad_connect  axi_hdmi_core/m_axis_mm2s_tkeep axi_hdmi_dma/m_axis_mm2s_tkeep
-ad_connect  axi_hdmi_core/m_axis_mm2s_tlast axi_hdmi_dma/m_axis_mm2s_tlast
-ad_connect  axi_hdmi_core/m_axis_mm2s_tready axi_hdmi_dma/m_axis_mm2s_tready
+ad_connect  axi_hdmi_core/M_AXIS_MM2S axi_hdmi_dma/m_axis_mm2s
 ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_dma/mm2s_fsync
 ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_core/m_axis_mm2s_fsync_ret
 
