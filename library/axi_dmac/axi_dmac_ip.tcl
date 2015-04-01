@@ -66,31 +66,36 @@ adi_set_bus_dependency "m_axis" "m_axis" \
 adi_set_ports_dependency "fifo_rd" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_DEST')) = 2)"
 
-ipx::add_bus_interface {fifo_wr} [ipx::current_core]
-set_property abstraction_type_vlnv {xilinx.com:interface:fifo_write_rtl:1.0} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
-set_property bus_type_vlnv {xilinx.com:interface:fifo_write:1.0} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
-set_property display_name {fifo_wr} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
+adi_add_bus "fifo_wr" "slave" \
+	"analog.com:interface:fifo_wr_rtl:1.0" \
+	"analog.com:interface:fifo_wr:1.0" \
+	{ \
+		{"fifo_wr_en" "EN"} \
+		{"fifo_wr_din" "DATA"} \
+		{"fifo_wr_overflow" "OVERFLOW"} \
+		{"fifo_wr_sync" "SYNC"} \
+		{"fifo_wr_xfer_req" "XFER_REQ"} \
+	}
 
-ipx::add_port_map {WR_DATA} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
-set_property physical_name {fifo_wr_din} [ipx::get_port_map WR_DATA [ipx::get_bus_interface fifo_wr [ipx::current_core]]]
-ipx::add_port_map {WR_EN} [ipx::get_bus_interface fifo_wr [ipx::current_core]]
-set_property physical_name {fifo_wr_en} [ipx::get_port_map WR_EN [ipx::get_bus_interface fifo_wr [ipx::current_core]]]
-
-ipx::add_bus_interface {fifo_wr_clock} [ipx::current_core]
-set_property abstraction_type_vlnv {xilinx.com:signal:clock_rtl:1.0} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
-set_property bus_type_vlnv {xilinx.com:signal:clock:1.0} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
-set_property display_name {fifo_wr_clock} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
-ipx::add_port_map {CLK} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
-set_property physical_name {fifo_wr_clk} [ipx::get_port_map CLK [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]]
-
-ipx::add_bus_parameter {ASSOCIATED_BUSIF} [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]
-set_property value {fifo_wr} [ipx::get_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interface fifo_wr_clock [ipx::current_core]]]
+adi_add_bus_clock "fifo_wr_clk" "fifo_wr"
 
 adi_set_bus_dependency "fifo_wr" "fifo_wr" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 2)"
-set_property ENABLEMENT_DEPENDENCY \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 2 and spirit:decode(id('MODELPARAM_VALUE.C_SYNC_TRANSFER_START')) = 1)" \
-	[ipx::get_ports "fifo_wr_sync"]
+
+adi_add_bus "fifo_rd" "slave" \
+	"analog.com:interface:fifo_rd_rtl:1.0" \
+	"analog.com:interface:fifo_rd:1.0" \
+	{
+		{"fifo_rd_en" "EN"} \
+		{"fifo_rd_dout" "DATA"} \
+		{"fifo_rd_valid" "VALID"} \
+		{"fifo_rd_underflow" "UNDERFLOW"} \
+	}
+
+adi_add_bus_clock "fifo_rd_clk" "fifo_rd"
+
+adi_set_bus_dependency "fifo_rd" "fifo_rd" \
+	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_DEST')) = 2)"
 
 foreach port {"m_dest_axi_aresetn" "m_src_axi_aresetn" "s_axis_valid" \
 	"s_axis_data" "m_axis_ready" "fifo_wr_en" "fifo_wr_din" "fifo_rd_en"} {
