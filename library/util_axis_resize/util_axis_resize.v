@@ -77,8 +77,12 @@ begin
 		else if (m_ready == 1'b1)
 			valid <= 1'b0;
 
-		if (s_ready == 1'b1 && s_valid == 1'b1)
-			count <= count - 1'b1;
+		if (s_ready == 1'b1 && s_valid == 1'b1) begin
+			if (count == 'h00)
+				count <= RATIO - 1;
+			else
+				count <= count - 1'b1;
+		end
 	end
 end
 
@@ -111,8 +115,12 @@ begin
 		else if (count == 'h0 && m_ready == 1'b1 && m_valid == 1'b1)
 			valid <= 1'b0;
 
-		if (m_ready == 1'b1 && m_valid == 1'b1)
-			count <= count - 1'b1;
+		if (m_ready == 1'b1 && m_valid == 1'b1) begin
+			if (count == 'h00)
+				count <= RATIO - 1;
+			else
+				count <= count - 1'b1;
+		end
 	end
 end
 
