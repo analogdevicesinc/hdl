@@ -81,6 +81,22 @@
          type = "String";
       }
    }
+   element gpio
+   {
+      datum _sortIndex
+      {
+         value = "15";
+         type = "int";
+      }
+   }
+   element gpio.s1
+   {
+      datum baseAddress
+      {
+         value = "65680";
+         type = "String";
+      }
+   }
    element sys_int_mem.s1
    {
       datum baseAddress
@@ -102,6 +118,14 @@
          type = "String";
       }
    }
+   element axi_dmac_dac.s_axi
+   {
+      datum baseAddress
+      {
+         value = "16384";
+         type = "String";
+      }
+   }
    element axi_ad9361.s_axi
    {
       datum baseAddress
@@ -115,14 +139,6 @@
       datum baseAddress
       {
          value = "0";
-         type = "String";
-      }
-   }
-   element axi_dmac_dac.s_axi
-   {
-      datum baseAddress
-      {
-         value = "16384";
          type = "String";
       }
    }
@@ -365,6 +381,11 @@
  <interface
    name="util_dac_unpack_channels_data"
    internal="util_dac_unpack.channels_data"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="gpio_external_connection"
+   internal="gpio.external_connection"
    type="conduit"
    dir="end" />
  <module kind="clock_source" version="14.0" enabled="1" name="sys_clk">
@@ -1281,6 +1302,20 @@
   <parameter name="DATA_WIDTH" value="16" />
   <parameter name="AUTO_DATA_CLOCK_CLOCK_RATE" value="0" />
  </module>
+ <module kind="altera_avalon_pio" version="14.0" enabled="1" name="gpio">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="5" />
+  <parameter name="clockRate" value="50000000" />
+ </module>
  <connection
    kind="avalon"
    version="14.0"
@@ -1574,6 +1609,21 @@
    version="14.0"
    start="sys_hps.h2f_user0_clock"
    end="sys_hps.f2h_sdram1_clock" />
+ <connection kind="clock" version="14.0" start="sys_clk.clk" end="gpio.clk" />
+ <connection
+   kind="reset"
+   version="14.0"
+   start="sys_clk.clk_reset"
+   end="gpio.reset" />
+ <connection
+   kind="avalon"
+   version="14.0"
+   start="sys_hps.h2f_lw_axi_master"
+   end="gpio.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00010090" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />
  <interconnectRequirement
