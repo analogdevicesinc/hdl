@@ -51,6 +51,7 @@ module util_axis_resize (
 
 parameter C_M_DATA_WIDTH = 64;
 parameter C_S_DATA_WIDTH = 64;
+parameter C_BIG_ENDIAN = 0;
 
 generate if (C_S_DATA_WIDTH == C_M_DATA_WIDTH) begin
 
@@ -89,7 +90,11 @@ end
 always @(posedge clk)
 begin
 	if (s_ready == 1'b1 && s_valid == 1'b1)
-		data <= {s_data, data[C_M_DATA_WIDTH-1:C_S_DATA_WIDTH]};
+		if (C_BIG_ENDIAN == 1) begin
+			data <= {data[C_M_DATA_WIDTH-C_S_DATA_WIDTH-1:0], s_data};
+		end else begin
+			data <= {s_data, data[C_M_DATA_WIDTH-1:C_S_DATA_WIDTH]};
+		end
 end
 
 assign s_ready = ~valid || m_ready;
@@ -126,15 +131,22 @@ end
 
 always @(posedge clk)
 begin
-	if (s_ready == 1'b1 && s_valid == 1'b1)
+	if (s_ready == 1'b1 && s_valid == 1'b1) begin
 		data <= s_data;
-	else if (m_ready == 1'b1 && m_valid == 1'b1)
-		data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0] <= data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH];
+	end else if (m_ready == 1'b1 && m_valid == 1'b1) begin
+		if (C_BIG_ENDIAN == 1) begin
+			data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH] <= data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0];
+		end else begin
+			data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0] <= data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH];
+		end
+	end
 end
 
 assign s_ready = ~valid || (m_ready && count == 'h0);
 assign m_valid = valid;
-assign m_data = data[C_M_DATA_WIDTH-1:0];
+assign m_data = C_BIG_ENDIAN == 1 ?
+	data[C_S_DATA_WIDTH-1:C_S_DATA_WIDTH-C_M_DATA_WIDTH] :
+	data[C_M_DATA_WIDTH-1:0];
 
 end
 endgenerate
