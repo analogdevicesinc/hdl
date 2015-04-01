@@ -14,6 +14,8 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
 # ip related stuff
 
 proc adi_ip_create {ip_name} {
+  global ad_hdl_dir
+  global ad_phdl_dir
 
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
@@ -23,6 +25,14 @@ proc adi_ip_create {ip_name} {
   }
 
   create_project $ip_name . -force
+
+  set lib_dirs $ad_hdl_dir/library
+  if {$ad_hdl_dir ne $ad_phdl_dir} {
+    lappend lib_dirs $ad_phdl_dir/library
+  }
+
+  set_property ip_repo_paths $lib_dirs [current_fileset]
+  update_ip_catalog
 
   set proj_dir [get_property directory [current_project]]
   set proj_name [get_projects $ip_name]
