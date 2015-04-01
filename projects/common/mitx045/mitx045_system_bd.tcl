@@ -45,10 +45,7 @@ create_bd_port -dir O spdif
 # i2s
 
 create_bd_port -dir O -type clk i2s_mclk
-create_bd_port -dir O i2s_bclk
-create_bd_port -dir O i2s_lrclk
-create_bd_port -dir O i2s_sdata_out
-create_bd_port -dir I i2s_sdata_in
+create_bd_intf_port -mode Master -vlnv analog.com:interface:i2s_rtl:1.0 i2s
 
 # interrupts
 
@@ -203,10 +200,7 @@ ad_connect  sys_cpu_resetn axi_i2s_adi/DMA_REQ_TX_RSTN
 ad_connect  i2s_mclk sys_audio_clkgen/clk_out1
 ad_connect  axi_i2s_adi/DATA_CLK_I sys_audio_clkgen/clk_out1
 
-ad_connect  i2s_bclk       axi_i2s_adi/BCLK_O
-ad_connect  i2s_lrclk      axi_i2s_adi/LRCLK_O
-ad_connect  i2s_sdata_out  axi_i2s_adi/SDATA_O
-ad_connect  i2s_sdata_in   axi_i2s_adi/SDATA_I
+ad_connect  i2s axi_i2s_adi/I2S
 
 ad_connect  sys_ps7/DMA1_REQ  axi_i2s_adi/DMA_REQ_TX
 ad_connect  sys_ps7/DMA1_ACK  axi_i2s_adi/DMA_ACK_TX
