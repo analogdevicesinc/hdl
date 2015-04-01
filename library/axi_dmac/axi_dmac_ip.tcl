@@ -38,14 +38,18 @@ adi_ip_constraints axi_dmac [list \
 set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
   [ipx::get_bus_interface s_axi_signal_clock [ipx::current_core]]]
 
-adi_add_bus "s_axis" "axis" "slave" \
+adi_add_bus "s_axis" "slave" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
 	[list {"s_axis_ready" "TREADY"} \
 	  {"s_axis_valid" "TVALID"} \
 	  {"s_axis_data" "TDATA"} \
 	  {"s_axis_user" "TUSER"} ]
 adi_add_bus_clock "s_axis_aclk" "s_axis"
 
-adi_add_bus "m_axis" "axis" "master" \
+adi_add_bus "m_axis" "master" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
 	[list {"m_axis_ready" "TREADY"} \
 	  {"m_axis_valid" "TVALID"} \
 	  {"m_axis_data" "TDATA"} ]
