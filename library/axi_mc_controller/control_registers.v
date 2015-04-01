@@ -66,8 +66,8 @@ module control_registers
     output         break_o,
     output         dir_o,
     output         star_delta_o,
-    output [1:0]   sensors_o,
-    output [10:0]  gpo_o,
+    output [ 1:0]  sensors_o,
+    output [ 3:0]  gpo_o,
     output         oloop_matlab_o,
     output         calibrate_adcs_o
 );
@@ -96,8 +96,6 @@ reg [10:0] gpo_r;
 //----------- Wires Declarations -----------------------------------------------
 //------------------------------------------------------------------------------
 
-//internal signals
-
 wire        up_wreq_s;
 wire        up_rreq_s;
 
@@ -115,7 +113,7 @@ assign star_delta_o             = control_r[4];     // Select between star [0] o
 assign sensors_o                = control_r[9:8];   // Select between Hall[00] and BEMF[01] sensors
 assign calibrate_adcs_o         = control_r[16];
 assign oloop_matlab_o           = control_r[12];    // Select between open loop control [0] and matlab control [1]
-assign gpo_o                    = control_r[30:20];
+assign gpo_o                    = control_r[23:20];
 
 assign pwm_open_o               = pwm_open_r[10:0];       // PWM value, for open loop control
 assign reference_speed_o        = reference_speed_r;

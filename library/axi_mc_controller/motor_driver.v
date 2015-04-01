@@ -90,6 +90,19 @@ wire            align_complete;
 wire [PWMBW:0]  pwm_duty_s;
 wire [1:0]      commutation_table[0:2];
 
+wire pwm_al_s;
+wire pwm_ah_s;
+wire pwm_bl_s;
+wire pwm_bh_s;
+wire pwm_cl_s;
+wire pwm_ch_s;
+wire pwmd_al_s;
+wire pwmd_ah_s;
+wire pwmd_bl_s;
+wire pwmd_bh_s;
+wire pwmd_cl_s;
+wire pwmd_ch_s;
+
 //------------------------------------------------------------------------------
 //----------- Local Parameters -------------------------------------------------
 //------------------------------------------------------------------------------
@@ -97,9 +110,10 @@ wire [1:0]      commutation_table[0:2];
 localparam OFF    = 3'b001;
 localparam ALIGN  = 3'b010;
 localparam RUN    = 3'b100;
+localparam DT     = 20;
 
 localparam [PWMBW:0] ALIGN_PWM_DUTY = 2**(PWMBW) + 2**(PWMBW-3);
-localparam [15:0] ALIGN_TIME = 16'h4000;
+localparam [15:0] ALIGN_TIME = 16'h8000;
 
 
 localparam [1:0] COMMUTATION_TABLE_DELTA_CW_0[0:5]  = { 2'd1,-2'd1, 2'd1,-2'd1, 2'd1,-2'd1};
@@ -115,6 +129,51 @@ localparam [1:0] COMMUTATION_TABLE_STAR_CW_2[0:5]   = {-2'd1, 2'd0,-2'd1, 2'd1, 
 localparam [1:0] COMMUTATION_TABLE_STAR_CCW_0[0:5]  = {-2'd1, 2'd1, 2'd0, 2'd0, -2'd1, 2'd1};
 localparam [1:0] COMMUTATION_TABLE_STAR_CCW_1[0:5]  = { 2'd0,-2'd1,-2'd1, 2'd1,  2'd1, 2'd0};
 localparam [1:0] COMMUTATION_TABLE_STAR_CCW_2[0:5]  = { 2'd1, 2'd0, 2'd1,-2'd1,  2'd0,-2'd1};
+
+delay #(
+    .DELAY(DT))
+  delay_ah_i (
+    .clk_i   (clk_i),
+    .rst_n_i (pwm_ah_s),
+    .sig_i   (pwm_ah_s),
+  .sig_o   (pwmd_ah_s));
+delay #(
+    .DELAY(DT))
+  delay_al_i (
+    .clk_i   (clk_i),
+    .rst_n_i (pwm_al_s),
+    .sig_i   (pwm_al_s),
+  .sig_o   (pwmd_al_s));
+
+delay #(
+    .DELAY(DT))
+  delay_bh_i (
+    .clk_i   (clk_i),
+    .rst_n_i (pwm_bh_s),
+    .sig_i   (pwm_bh_s),
+  .sig_o   (pwmd_bh_s));
+delay #(
+    .DELAY(DT))
+  delay_bl_i (
+    .clk_i   (clk_i),
+    .rst_n_i (pwm_bl_s),
+    .sig_i   (pwm_bl_s),
+  .sig_o   (pwmd_bl_s));
+
+delay #(
+    .DELAY(DT))
+  delay_ch_i (
+    .clk_i   (clk_i),
+    .rst_n_i (pwm_ch_s),
+    .sig_i   (pwm_ch_s),
+  .sig_o   (pwmd_ch_s));
+delay #(
+    .DELAY(DT))
+  delay_cl_i (
+    .clk_i   (clk_i),
+    .rst_n_i (pwm_cl_s),
+    .sig_i   (pwm_cl_s),
+  .sig_o   (pwmd_cl_s));
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
@@ -136,14 +195,23 @@ assign commutation_table[2] = star_delta_i ?
 
 //Motor Phases Control
 
-assign AH_o = commutation_table[0] == 2'd1 ? ~pwm_s : commutation_table[0] == -2'd1 ?  pwm_s : 1;
-assign AL_o = commutation_table[0] == 2'd1 ?  pwm_s : commutation_table[0] == -2'd1 ? ~pwm_s : 1;
+assign pwm_ah_s = commutation_table[0] == 2'd1 ? ~pwm_s : commutation_table[0] == -2'd1 ?  pwm_s : 0;
+assign pwm_al_s = commutation_table[0] == 2'd1 ?  pwm_s : commutation_table[0] == -2'd1 ? ~pwm_s : 0;
 
-assign BH_o = commutation_table[1] == 2'd1 ? ~pwm_s : commutation_table[1] == -2'd1 ?  pwm_s : 1;
-assign BL_o = commutation_table[1] == 2'd1 ?  pwm_s : commutation_table[1] == -2'd1 ? ~pwm_s : 1;
+assign pwm_bh_s = commutation_table[1] == 2'd1 ? ~pwm_s : commutation_table[1] == -2'd1 ?  pwm_s : 0;
+assign pwm_bl_s = commutation_table[1] == 2'd1 ?  pwm_s : commutation_table[1] == -2'd1 ? ~pwm_s : 0;
 
-assign CH_o = commutation_table[2] == 2'd1 ? ~pwm_s : commutation_table[2] == -2'd1 ?  pwm_s : 1;
-assign CL_o = commutation_table[2] == 2'd1 ?  pwm_s : commutation_table[2] == -2'd1 ? ~pwm_s : 1;
+assign pwm_ch_s = commutation_table[2] == 2'd1 ? ~pwm_s : commutation_table[2] == -2'd1 ?  pwm_s : 0;
+assign pwm_cl_s = commutation_table[2] == 2'd1 ?  pwm_s : commutation_table[2] == -2'd1 ? ~pwm_s : 0;
+
+assign AL_o = pwmd_ah_s? 0 : pwmd_al_s;
+assign AH_o = pwmd_ah_s;
+
+assign BL_o = pwmd_bh_s ? 0 : pwmd_bl_s;
+assign BH_o = pwmd_bh_s;
+
+assign CL_o = pwmd_ch_s ? 0 : pwmd_cl_s;
+assign CH_o = pwmd_ch_s;
 
 //Control the current motor state
 always @(posedge clk_i)

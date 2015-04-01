@@ -47,15 +47,14 @@ module axi_mc_controller
 
 // physical interface
 
-  input           fmc_m1_fault_i,
-  output          fmc_m1_en_o,
+  output          fmc_en_o,
   output          pwm_ah_o,
   output          pwm_al_o,
   output          pwm_bh_o,
   output          pwm_bl_o,
   output          pwm_ch_o,
   output          pwm_cl_o,
-  output  [7:0]   gpo_o,
+  output  [3:0]   gpo_o,
 
 //  controller connections
 
@@ -77,11 +76,9 @@ module axi_mc_controller
   output[1:0]     sensors_o,
   input [2:0]     position_i,
 
-// dma interface
+// channel interface
 
   output          adc_clk_o,
-  input           adc_dovf_i,
-  input           adc_dunf_i,
   output          adc_enable_c0,
   output          adc_enable_c1,
   output          adc_enable_c2,
@@ -137,13 +134,10 @@ module axi_mc_controller
 //------------------------------------------------------------------------------
 // internal registers
 
-reg             adc_valid       = 'd0;
-reg     [31:0]  adc_data        = 'd0;
-reg     [31:0]  up_rdata        = 'd0;
-reg             up_wack          = 'd0;
-reg             up_rack          = 'd0;
-reg             pwm_gen_clk     = 'd0;
-reg             one_chan_reg    = 'd0;
+reg     [31:0]  up_rdata     = 'd0;
+reg             up_wack      = 'd0;
+reg             up_rack      = 'd0;
+reg             pwm_gen_clk  = 'd0;
 
 //------------------------------------------------------------------------------
 //----------- Wires Declarations -----------------------------------------------
@@ -196,16 +190,12 @@ wire            star_delta_s;
 wire            dir_s;
 wire    [10:0]  pwm_open_s;
 wire    [10:0]  pwm_s;
-
-wire    [10:0]  gpo_s;
-
 wire            dpwm_ah_s;
 wire            dpwm_al_s;
 wire            dpwm_bh_s;
 wire            dpwm_bl_s;
 wire            dpwm_ch_s;
 wire            dpwm_cl_s;
-
 wire            foc_ctrl_s;
 
 //------------------------------------------------------------------------------
@@ -237,12 +227,11 @@ assign adc_data_c5    = ctrl_data5_i;
 assign adc_data_c6    = ctrl_data6_i;
 assign adc_data_c7    = ctrl_data7_i;
 
-
 assign ctrl_rst_o     = !run_s;
 
 // monitor signals
 
-assign fmc_m1_en_o    = run_s;
+assign fmc_en_o       = run_s;
 assign pwm_s          = pwm_open_s ;
 
 assign pwm_ah_o = foc_ctrl_s ? !pwm_a_i : dpwm_ah_s;
@@ -252,18 +241,12 @@ assign pwm_bl_o = foc_ctrl_s ? pwm_b_i : dpwm_bl_s;
 assign pwm_ch_o = foc_ctrl_s ? !pwm_c_i : dpwm_ch_s;
 assign pwm_cl_o = foc_ctrl_s ? pwm_c_i : dpwm_cl_s;
 
-// assign gpo
-
-assign gpo_o[7:4] = gpo_s[10:7];
-assign gpo_o[3:0] = gpo_s[3:0];
-
 // clock generation
 
 always @(posedge ref_clk)
 begin
   pwm_gen_clk <= ~pwm_gen_clk; // generate 50 MHz clk
 end
-
 
 // processor read interface
 
@@ -284,7 +267,7 @@ end
 motor_driver
 #( .PWM_BITS(11))
 motor_driver_inst(
-    .clk_i(ref_clk),
+    .clk_i(ctrl_data_clk),
     .pwm_clk_i(pwm_gen_clk),
     .rst_n_i(up_rstn) ,
     .run_i(run_s),
@@ -322,7 +305,7 @@ control_registers control_reg_inst(
     .kp1_o(),
     .ki1_o(),
     .kd1_o(),
-    .gpo_o(gpo_s),
+    .gpo_o(gpo_o),
     .reference_speed_o(),
     .oloop_matlab_o(foc_ctrl_s),
     .err_i(),
@@ -707,9 +690,9 @@ up_adc_common i_up_adc_common(
     .adc_ddr_edgesel(),
     .adc_pin_mode(),
     .adc_status(1'b1),
-    .adc_sync_status(1'b0),
-    .adc_status_ovf(adc_dovf_i),
-    .adc_status_unf(adc_dunf_i),
+    .adc_sync_status(1'b1),
+    .adc_status_ovf(),
+    .adc_status_unf(),
     .adc_clk_ratio(32'd1),
     .adc_start_code(),
     .adc_sync(),
@@ -735,7 +718,7 @@ up_adc_common i_up_adc_common(
     .drp_ready(1'b0),
     .drp_locked(1'b0),
     .up_usr_chanmax(),
-    .adc_usr_chanmax(8'd0),
+    .adc_usr_chanmax(8'd7),
     .up_adc_gpio_in(32'h0),
     .up_adc_gpio_out(),
     .up_rstn (up_rstn),
@@ -784,4 +767,3 @@ endmodule
 
 // ***************************************************************************
 // ***************************************************************************
-
