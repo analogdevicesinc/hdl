@@ -93,9 +93,11 @@ module axi_hdmi_rx_core (
   // internal registers
 
   reg             hdmi_dma_sof = 'd0;
-  reg             hdmi_dma_sof_rcv = 'd0;
   reg             hdmi_dma_de = 'd0;
-  reg     [31:0]  hdmi_dma_data = 'd0;
+  reg     [63:0]  hdmi_dma_data = 'd0;
+  reg             hdmi_dma_sof_int = 'd0;
+  reg             hdmi_dma_de_int = 'd0;
+  reg     [31:0]  hdmi_dma_data_int = 'd0;
   reg             hdmi_sof_422 = 'd0;
   reg             hdmi_de_422 = 'd0;
   reg     [15:0]  hdmi_data_422 = 'd0;
@@ -126,24 +128,6 @@ module axi_hdmi_rx_core (
   reg     [15:0]  hdmi_vs_rcv = 'd0;
   reg     [15:0]  hdmi_vs_cur = 'd0;
   reg             hdmi_vs_oos_int = 'd0;
-  reg     [15:0]  hdmi_data_d = 'd0;
-  reg             hdmi_hs_de_rcv_d = 'd0;
-  reg             hdmi_vs_de_rcv_d = 'd0;
-  reg     [15:0]  hdmi_data_2d = 'd0;
-  reg             hdmi_hs_de_rcv_2d = 'd0;
-  reg             hdmi_vs_de_rcv_2d = 'd0;
-  reg     [15:0]  hdmi_data_3d = 'd0;
-  reg             hdmi_hs_de_rcv_3d = 'd0;
-  reg             hdmi_vs_de_rcv_3d = 'd0;
-  reg     [15:0]  hdmi_data_4d = 'd0;
-  reg             hdmi_hs_de_rcv_4d = 'd0;
-  reg             hdmi_vs_de_rcv_4d = 'd0;
-  reg     [15:0]  hdmi_data_de = 'd0;
-  reg             hdmi_hs_de = 'd0;
-  reg             hdmi_vs_de = 'd0;
-  reg     [ 1:0]  hdmi_preamble_cnt = 'd0;
-  reg             hdmi_hs_de_rcv = 'd0;
-  reg             hdmi_vs_de_rcv = 'd0;
   reg     [15:0]  hdmi_data_neg_p = 'd0;
   reg     [15:0]  hdmi_data_pos_p = 'd0;
   reg     [15:0]  hdmi_data_p = 'd0;
@@ -160,42 +144,52 @@ module axi_hdmi_rx_core (
   wire            hdmi_sof_444_s;
   wire            hdmi_de_444_s;
   wire    [23:0]  hdmi_data_444_s;
+  wire    [15:0]  hdmi_data_de_s;
+  wire            hdmi_hs_de_s;
+  wire            hdmi_vs_de_s;
 
   // dma interface
 
   always @(posedge hdmi_clk) begin
-    if (hdmi_dma_enable == 1'b0) begin
-      hdmi_dma_sof_rcv <= 1'd0;
-      hdmi_dma_de <= 1'd0;
-      hdmi_dma_data <= 32'd0;
-    end else if (hdmi_csc_bypass == 1'b1) begin
-      if (hdmi_packed == 1'b0) begin
-        hdmi_dma_sof_rcv <= hdmi_sof_422;
-        hdmi_dma_de <= hdmi_de_422;
-        hdmi_dma_data <= {16'd0, hdmi_data_422};
-      end else begin
-        hdmi_dma_sof_rcv <= hdmi_sof_422;
-        hdmi_dma_de <= ~hdmi_dma_de & hdmi_de_422;
-        hdmi_dma_data <= {hdmi_data_422, hdmi_dma_data[31:16]};
-      end
-    end else begin
-      if (hdmi_packed == 1'b0) begin
-        hdmi_dma_sof_rcv <= hdmi_sof_444;
-        hdmi_dma_de <= hdmi_de_444;
-        hdmi_dma_data <= {8'd0, hdmi_data_444};
-      end else begin
-        hdmi_dma_sof_rcv <= hdmi_sof_444_p;
-        hdmi_dma_de <= hdmi_de_444_p;
-        hdmi_dma_data <= hdmi_data_444_p;
-      end
-    end
-  end
-
-  always @(posedge hdmi_clk) begin
-    if(hdmi_dma_sof_rcv == 1'b1) begin
+    if(hdmi_dma_sof_int == 1'b1) begin
       hdmi_dma_sof <= 1'b1;
     end else if (hdmi_dma_de == 1'b1) begin
       hdmi_dma_sof <= 1'b0;
+    end
+    hdmi_dma_de <= ~hdmi_dma_de & hdmi_dma_de_int;
+    if (hdmi_dma_de_int == 1'b1) begin
+      hdmi_dma_data[63:32] <= hdmi_dma_data_int;
+      hdmi_dma_data[31: 0] <= hdmi_dma_data[63:32];
+    end
+  end
+
+  // 32 bit interface
+
+  always @(posedge hdmi_clk) begin
+    if (hdmi_dma_enable == 1'b0) begin
+      hdmi_dma_sof_int <= 1'd0;
+      hdmi_dma_de_int <= 1'd0;
+      hdmi_dma_data_int <= 32'd0;
+    end else if (hdmi_csc_bypass == 1'b1) begin
+      if (hdmi_packed == 1'b0) begin
+        hdmi_dma_sof_int <= hdmi_sof_422;
+        hdmi_dma_de_int <= hdmi_de_422;
+        hdmi_dma_data_int <= {16'd0, hdmi_data_422};
+      end else begin
+        hdmi_dma_sof_int <= hdmi_sof_422;
+        hdmi_dma_de_int <= ~hdmi_dma_de_int & hdmi_de_422;
+        hdmi_dma_data_int <= {hdmi_data_422, hdmi_dma_data_int[31:16]};
+      end
+    end else begin
+      if (hdmi_packed == 1'b0) begin
+        hdmi_dma_sof_int <= hdmi_sof_444;
+        hdmi_dma_de_int <= hdmi_de_444;
+        hdmi_dma_data_int <= {8'd0, hdmi_data_444};
+      end else begin
+        hdmi_dma_sof_int <= hdmi_sof_444_p;
+        hdmi_dma_de_int <= hdmi_de_444_p;
+        hdmi_dma_data_int <= hdmi_data_444_p;
+      end
     end
   end
 
@@ -203,8 +197,8 @@ module axi_hdmi_rx_core (
 
   always @(posedge hdmi_clk) begin
     hdmi_sof_422 <= hdmi_sof;
-    hdmi_de_422 <= hdmi_hs_de & hdmi_vs_de;
-    hdmi_data_422 <= hdmi_data_de;
+    hdmi_de_422 <= hdmi_hs_de_s & hdmi_vs_de_s;
+    hdmi_data_422 <= hdmi_data_de_s;
     hdmi_sof_444 <= hdmi_sof_444_s;
     hdmi_de_444 <= hdmi_de_444_s;
     if (hdmi_bgr == 1'b1) begin
@@ -286,13 +280,13 @@ module axi_hdmi_rx_core (
     end
   end
 
-  assign hdmi_sof_s = hdmi_vs_de & ~hdmi_vs_de_d;
+  assign hdmi_sof_s = hdmi_vs_de_s & ~hdmi_vs_de_d;
 
   always @(posedge hdmi_clk) begin
-    hdmi_hs_de_d <= hdmi_hs_de;
-    hdmi_vs_de_d <= hdmi_vs_de;
+    hdmi_hs_de_d <= hdmi_hs_de_s;
+    hdmi_vs_de_d <= hdmi_vs_de_s;
     hdmi_sof <= hdmi_sof_s;
-    if ((hdmi_hs_de == 1'b1) && (hdmi_hs_de_d == 1'b0)) begin
+    if ((hdmi_hs_de_s == 1'b1) && (hdmi_hs_de_d == 1'b0)) begin
       hdmi_hs_rcv <= 'd1;
       hdmi_hs_cur <= hdmi_hs_rcv;
       if (hdmi_hs_cur == hdmi_hs_rcv) begin
@@ -300,12 +294,12 @@ module axi_hdmi_rx_core (
       end else begin
         hdmi_hs_oos_int <= 1'b1;
       end
-    end else if (hdmi_hs_de == 1'b1) begin
+    end else if (hdmi_hs_de_s == 1'b1) begin
       hdmi_hs_rcv <= hdmi_hs_rcv + 1'b1;
       hdmi_hs_cur <= hdmi_hs_cur;
       hdmi_hs_oos_int <= hdmi_hs_oos_int;
     end
-    if ((hdmi_vs_de == 1'b1) && (hdmi_vs_de_d == 1'b0)) begin
+    if ((hdmi_vs_de_s == 1'b1) && (hdmi_vs_de_d == 1'b0)) begin
       hdmi_vs_rcv <= 'd0;
       hdmi_vs_cur <= hdmi_vs_rcv;
       if (hdmi_vs_cur == hdmi_vs_rcv) begin
@@ -313,52 +307,11 @@ module axi_hdmi_rx_core (
       end else begin
         hdmi_vs_oos_int <= 1'b1;
       end
-    end else if ((hdmi_vs_de == 1'b1) && (hdmi_hs_de == 1'b1) && (hdmi_hs_de_d == 1'b0)) begin
+    end else if ((hdmi_vs_de_s == 1'b1) && (hdmi_hs_de_s == 1'b1) &&
+      (hdmi_hs_de_d == 1'b0)) begin
       hdmi_vs_rcv <= hdmi_vs_rcv + 1'b1;
       hdmi_vs_cur <= hdmi_vs_cur;
       hdmi_vs_oos_int <= hdmi_vs_oos_int;
-    end
-  end
-
-  // delay to get rid of eav's 4 bytes
-
-  always @(posedge hdmi_clk) begin
-    hdmi_data_d <= hdmi_data_p;
-    hdmi_hs_de_rcv_d <= hdmi_hs_de_rcv;
-    hdmi_vs_de_rcv_d <= hdmi_vs_de_rcv;
-    hdmi_data_2d <= hdmi_data_d;
-    hdmi_hs_de_rcv_2d <= hdmi_hs_de_rcv_d;
-    hdmi_vs_de_rcv_2d <= hdmi_vs_de_rcv_d;
-    hdmi_data_3d <= hdmi_data_2d;
-    hdmi_hs_de_rcv_3d <= hdmi_hs_de_rcv_2d;
-    hdmi_vs_de_rcv_3d <= hdmi_vs_de_rcv_2d;
-    hdmi_data_4d <= hdmi_data_3d;
-    hdmi_hs_de_rcv_4d <= hdmi_hs_de_rcv_3d;
-    hdmi_vs_de_rcv_4d <= hdmi_vs_de_rcv_3d;
-    hdmi_data_de  <= hdmi_data_4d;
-    hdmi_hs_de <= hdmi_hs_de_rcv & hdmi_hs_de_rcv_4d;
-    hdmi_vs_de <= hdmi_vs_de_rcv & hdmi_vs_de_rcv_4d;
-  end
-
-  // check for sav and eav and generate the corresponding enables
-
-  always @(posedge hdmi_clk) begin
-    if ((hdmi_data_p == 16'hffff) || (hdmi_data_p == 16'h0000)) begin
-      hdmi_preamble_cnt <= hdmi_preamble_cnt + 1'b1;
-    end else begin
-      hdmi_preamble_cnt <= 'd0;
-    end
-    if (hdmi_preamble_cnt == 3'b11) begin
-      if ((hdmi_data_p == 16'hb6b6) || (hdmi_data_p == 16'h9d9d)) begin
-        hdmi_hs_de_rcv <= 1'b0;
-      end else if ((hdmi_data_p == 16'habab) || (hdmi_data_p == 16'h8080)) begin
-        hdmi_hs_de_rcv <= 1'b1;
-      end
-      if (hdmi_data_p == 16'hb6b6) begin
-        hdmi_vs_de_rcv <= 1'b0;
-      end else if (hdmi_data_p == 16'h9d9d) begin
-        hdmi_vs_de_rcv <= 1'b1;
-      end
     end
   end
 
@@ -396,6 +349,15 @@ module axi_hdmi_rx_core (
     .CrYCb_data (hdmi_data_ss_s),
     .RGB_sync ({hdmi_sof_444_s, hdmi_de_444_s}),
     .RGB_data (hdmi_data_444_s));
+
+  // embedded sync
+
+  axi_hdmi_rx_es #(.DATA_WIDTH(16)) i_es (
+    .hdmi_clk (hdmi_clk),
+    .hdmi_data (hdmi_data_p),
+    .hdmi_vs_de (hdmi_vs_de_s),
+    .hdmi_hs_de (hdmi_hs_de_s),
+    .hdmi_data_de (hdmi_data_de_s));
 
 endmodule
 
