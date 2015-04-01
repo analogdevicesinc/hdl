@@ -39,6 +39,7 @@ clean:
 	make -C axi_mc_speed clean
 	make -C axi_spdif_tx clean
 	make -C controllerperipheralhdladi_pcore clean
+	make -C cordic_demod clean
 	make -C util_adc_pack clean
 	make -C util_adcfifo clean
 	make -C util_axis_fifo clean
@@ -90,6 +91,7 @@ lib:
 	-make -C axi_mc_speed
 	-make -C axi_spdif_tx
 	-make -C controllerperipheralhdladi_pcore
+	-make -C cordic_demod
 	-make -C util_adc_pack
 	-make -C util_adcfifo
 	-make -C util_axis_fifo
