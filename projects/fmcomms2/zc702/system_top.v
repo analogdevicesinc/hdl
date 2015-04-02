@@ -167,9 +167,9 @@ module system_top (
 
   // internal signals
 
-  wire    [48:0]  gpio_i;
-  wire    [48:0]  gpio_o;
-  wire    [48:0]  gpio_t;
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
 
   wire            spi_udc_csn_tx;
   wire            spi_udc_csn_rx;
