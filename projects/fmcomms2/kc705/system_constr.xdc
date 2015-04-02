@@ -53,7 +53,7 @@ set_property  -dict {PACKAGE_PIN  AE30  IOSTANDARD LVCMOS25} [get_ports gpio_res
 set_property  -dict {PACKAGE_PIN  AC22  IOSTANDARD LVCMOS25} [get_ports gpio_enable]                      ; ## G18  FMC_LPC_LA16_P
 set_property  -dict {PACKAGE_PIN  AD22  IOSTANDARD LVCMOS25} [get_ports gpio_txnrx]                       ; ## G19  FMC_LPC_LA16_N
 
-set_property  -dict {PACKAGE_PIN  AK29  IOSTANDARD LVCMOS25  PULLTYPE PULLUP} [get_ports spi_csn]         ; ## D26  FMC_LPC_LA26_P          
+set_property  -dict {PACKAGE_PIN  AK29  IOSTANDARD LVCMOS25  PULLTYPE PULLUP} [get_ports spi_csn_0]       ; ## D26  FMC_LPC_LA26_P          
 set_property  -dict {PACKAGE_PIN  AK30  IOSTANDARD LVCMOS25} [get_ports spi_clk]                          ; ## D27  FMC_LPC_LA26_N          
 set_property  -dict {PACKAGE_PIN  AJ28  IOSTANDARD LVCMOS25} [get_ports spi_mosi]                         ; ## C26  FMC_LPC_LA27_P          
 set_property  -dict {PACKAGE_PIN  AJ29  IOSTANDARD LVCMOS25} [get_ports spi_miso]                         ; ## C27  FMC_LPC_LA27_N          

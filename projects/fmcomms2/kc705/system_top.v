@@ -67,7 +67,7 @@ module system_top (
   ddr3_odt,
 
   mdio_mdc,
-  mdio_mdio_io,
+  mdio_mdio,
   mii_rst_n,
   mii_col,
   mii_crs,
@@ -89,8 +89,7 @@ module system_top (
   fan_pwm,
 
   gpio_lcd,
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_rstn,
   iic_scl,
@@ -118,7 +117,7 @@ module system_top (
   gpio_ctl,
   gpio_status,
 
-  spi_csn,
+  spi_csn_0,
   spi_clk,
   spi_mosi,
   spi_miso
@@ -150,7 +149,7 @@ module system_top (
   output  [ 0:0]  ddr3_odt;
 
   output          mdio_mdc;
-  inout           mdio_mdio_io;
+  inout           mdio_mdio;
   output          mii_rst_n;
   input           mii_col;
   input           mii_crs;
@@ -172,8 +171,7 @@ module system_top (
   output          fan_pwm;
 
   inout   [ 6:0]  gpio_lcd;
-  inout   [ 7:0]  gpio_led;
-  inout   [ 8:0]  gpio_sw;
+  inout   [16:0]  gpio_bd;
 
   output          iic_rstn;
   inout           iic_scl;
@@ -201,7 +199,7 @@ module system_top (
   inout   [ 3:0]  gpio_ctl;
   inout   [ 7:0]  gpio_status;
 
-  output          spi_csn;
+  output          spi_csn_0;
   output          spi_clk;
   output          spi_mosi;
   input           spi_miso;
@@ -211,6 +209,10 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
+  wire    [ 7:0]  spi_csn;
+  wire            spi_clk;
+  wire            spi_mosi;
+  wire            spi_miso;
 
   // default logic
 
@@ -218,6 +220,7 @@ module system_top (
   assign ddr3_1_n = 3'b000;
   assign fan_pwm  = 1'b1;
   assign iic_rstn = 1'b1;
+  assign spi_csn_0 = spi_csn[0];
 
   // instantiations
 
@@ -233,12 +236,11 @@ module system_top (
             gpio_ctl,
             gpio_status}));
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_sw_led (
-     .dt (gpio_t[16:0]),
-     .di (gpio_o[16:0]),
-     .do (gpio_i[16:0]),
-     .dio({gpio_led,
-           gpio_sw}));
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
+    .dt (gpio_t[16:0]),
+    .di (gpio_o[16:0]),
+    .do (gpio_i[16:0]),
+    .dio (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -272,7 +274,7 @@ module system_top (
     .mb_intr_14 (1'b0),
     .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
-    .mdio_mdio_io (mdio_mdio_io),
+    .mdio_mdio_io (mdio_mdio),
     .mii_col (mii_col),
     .mii_crs (mii_crs),
     .mii_rst_n (mii_rst_n),
