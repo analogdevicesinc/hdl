@@ -79,8 +79,8 @@ ad_cpu_interconnect 0x44A30000 axi_ad9265_dma
 
 # interconnect (adc)
 
-ad_mem_hp2_interconnect ad9265_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect ad9265_clk axi_ad9265_dma/m_dest_axi
+ad_mem_hp2_interconnect sys_200m_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect sys_200m_clk axi_ad9265_dma/m_dest_axi
 ad_connect  sys_cpu_resetn axi_ad9265_dma/m_dest_axi_aresetn
 
 # interrupts
