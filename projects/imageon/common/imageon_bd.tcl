@@ -38,7 +38,7 @@ set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {14}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {32}] $axi_hdmi_rx_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_hdmi_rx_dma
 
 ad_connect  hdmi_rx_clk axi_hdmi_rx_core/hdmi_rx_clk
@@ -63,23 +63,18 @@ ad_cpu_interrupt ps-12 mb-12 axi_hdmi_rx_dma/irq
 
 set ila_fifo_dma_rx [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_fifo_dma_rx]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_fifo_dma_rx
-set_property -dict [list CONFIG.C_DATA_DEPTH {16384}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_DATA_DEPTH {2048}] $ila_fifo_dma_rx
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_fifo_dma_rx
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_fifo_dma_rx
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_fifo_dma_rx
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {32}] $ila_fifo_dma_rx
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_fifo_dma_rx
-
-set ila_axi_dma_rx [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_axi_dma_rx]
-set_property -dict [list CONFIG.C_DATA_DEPTH {16384}] $ila_axi_dma_rx
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {32}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}] $ila_fifo_dma_rx
 
 ad_connect  hdmi_rx_clk ila_fifo_dma_rx/clk
-ad_connect  hdmi_rx_clk ila_axi_dma_rx/clk
 
 ad_connect  ila_fifo_dma_rx/probe0 axi_hdmi_rx_dma/fifo_wr_sync
 ad_connect  ila_fifo_dma_rx/probe1 axi_hdmi_rx_dma/fifo_wr_en
 ad_connect  ila_fifo_dma_rx/probe2 axi_hdmi_rx_dma/fifo_wr_din
 ad_connect  ila_fifo_dma_rx/probe3 axi_hdmi_rx_dma/fifo_wr_overflow
 
-ad_connect  ila_axi_dma_rx/SLOT_0_AXI axi_hdmi_rx_dma/m_dest_axi
 
