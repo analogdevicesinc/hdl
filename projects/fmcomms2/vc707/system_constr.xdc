@@ -53,7 +53,7 @@ set_property  -dict {PACKAGE_PIN  L29  IOSTANDARD LVCMOS18} [get_ports gpio_rese
 set_property  -dict {PACKAGE_PIN  K37  IOSTANDARD LVCMOS18} [get_ports gpio_enable]                      ; ## G18  FMC_LPC_LA16_P
 set_property  -dict {PACKAGE_PIN  K38  IOSTANDARD LVCMOS18} [get_ports gpio_txnrx]                       ; ## G19  FMC_LPC_LA16_N
 
-set_property  -dict {PACKAGE_PIN  J30  IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_csn]         ; ## D26  FMC_LPC_LA26_P          
+set_property  -dict {PACKAGE_PIN  J30  IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_csn_0]         ; ## D26  FMC_LPC_LA26_P          
 set_property  -dict {PACKAGE_PIN  H30  IOSTANDARD LVCMOS18} [get_ports spi_clk]                          ; ## D27  FMC_LPC_LA26_N          
 set_property  -dict {PACKAGE_PIN  J31  IOSTANDARD LVCMOS18} [get_ports spi_mosi]                         ; ## C26  FMC_LPC_LA27_P          
 set_property  -dict {PACKAGE_PIN  H31  IOSTANDARD LVCMOS18} [get_ports spi_miso]                         ; ## C27  FMC_LPC_LA27_N          

@@ -84,8 +84,7 @@ module system_top (
   fan_pwm,
 
   gpio_lcd,
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_rstn,
   iic_scl,
@@ -113,7 +112,7 @@ module system_top (
   gpio_ctl,
   gpio_status,
 
-  spi_csn,
+  spi_csn_0,
   spi_clk,
   spi_mosi,
   spi_miso
@@ -163,9 +162,8 @@ module system_top (
   output          linear_flash_wen;
   inout   [15:0]  linear_flash_dq_io;
 
-  output  [ 6:0]  gpio_lcd;
-  inout   [ 7:0]  gpio_led;
-  inout   [12:0]  gpio_sw;
+  inout   [ 6:0]  gpio_lcd;
+  inout   [20:0]  gpio_bd;
 
   output          iic_rstn;
   inout           iic_scl;
@@ -193,20 +191,26 @@ module system_top (
   inout   [ 3:0]  gpio_ctl;
   inout   [ 7:0]  gpio_status;
 
-  output          spi_csn;
+  output          spi_csn_0;
   output          spi_clk;
   output          spi_mosi;
   input           spi_miso;
 
   // internal signals
+
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
+  wire    [ 7:0]  spi_csn;
+  wire            spi_clk;
+  wire            spi_mosi;
+  wire            spi_miso;
 
   // default logic
 
   assign fan_pwm = 1'b1;
   assign iic_rstn = 1'b1;
+  assign spi_csn_0 = spi_csn[0];
 
   // instantiations
 
@@ -226,8 +230,7 @@ module system_top (
     .dt (gpio_t[20:0]),
     .di (gpio_o[20:0]),
     .do (gpio_i[20:0]),
-    .dio({gpio_led,
-    gpio_sw}));
+    .dio(gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -251,7 +254,7 @@ module system_top (
     .linear_flash_oen (linear_flash_oen),
     .linear_flash_wen (linear_flash_wen),
     .linear_flash_dq_io(linear_flash_dq_io),
-    .gpio_lcd_tri_o (gpio_lcd),
+    .gpio_lcd_tri_io (gpio_lcd),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
     .gpio0_i (gpio_i[31:0]),
