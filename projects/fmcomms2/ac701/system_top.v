@@ -77,20 +77,11 @@ module system_top (
   fan_pwm,
 
   gpio_lcd,
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_rstn,
   iic_scl,
   iic_sda,
-
-  hdmi_out_clk,
-  hdmi_hsync,
-  hdmi_vsync,
-  hdmi_data_e,
-  hdmi_data,
-
-  spdif,
 
   rx_clk_in_p,
   rx_clk_in_n,
@@ -114,7 +105,7 @@ module system_top (
   gpio_ctl,
   gpio_status,
 
-  spi_csn,
+  spi_csn_0,
   spi_clk,
   spi_mosi,
   spi_miso
@@ -156,20 +147,11 @@ module system_top (
   output          fan_pwm;
 
   inout   [ 6:0]  gpio_lcd;
-  inout   [ 3:0]  gpio_led;
-  inout   [ 8:0]  gpio_sw;
+  inout   [12:0]  gpio_bd;
 
   output          iic_rstn;
   inout           iic_scl;
   inout           iic_sda;
-
-  output          hdmi_out_clk;
-  output          hdmi_hsync;
-  output          hdmi_vsync;
-  output          hdmi_data_e;
-  output  [23:0]  hdmi_data;
-
-  output          spdif;
 
   input           rx_clk_in_p;
   input           rx_clk_in_n;
@@ -193,23 +175,33 @@ module system_top (
   inout   [ 3:0]  gpio_ctl;
   inout   [ 7:0]  gpio_status;
 
-  output          spi_csn;
+  output          spi_csn_0;
   output          spi_clk;
   output          spi_mosi;
   input           spi_miso;
 
   // internal signals
-  wire    [16:0]  gpio_i;
-  wire    [16:0]  gpio_o;
-  wire    [16:0]  gpio_t;
-  wire    [31:0]  mb_intrs;
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 7:0]  spi_csn;
+  wire            spi_clk;
+  wire            spi_mosi;
+  wire            spi_miso;
+
+  // assignments
+
+  assign fan_pwm      = 1'b1;
+  assign iic_rstn     = 1'b1;
+  assign spi_csn_0    = spi_csn[0];
 
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
-    .dt (gpio_t[16:0]),
-    .di (gpio_o[16:0]),
-    .do (gpio_i[16:0]),
+    .dt (gpio_t[48:32]),
+    .di (gpio_o[48:32]),
+    .do (gpio_i[48:32]),
     .dio({  gpio_txnrx,
             gpio_enable,
             gpio_resetb,
@@ -217,6 +209,12 @@ module system_top (
             gpio_en_agc,
             gpio_ctl,
             gpio_status}));
+
+  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf_sw_led (
+    .dt (gpio_t[12:0]),
+    .di (gpio_o[12:0]),
+    .do (gpio_i[12:0]),
+    .dio(gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -234,47 +232,20 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .fan_pwm (fan_pwm),
     .gpio_lcd_tri_io (gpio_lcd),
-    .gpio_led_tri_io (gpio_led),
-    .gpio_sw_tri_io (gpio_sw),
-    .gpio_fmcomms2_i (gpio_i),
-    .gpio_fmcomms2_o (gpio_o),
-    .gpio_fmcomms2_t (gpio_t),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio1_i (gpio_i[63:32]),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
-    .mb_intr_10 (mb_intrs[10]),
-    .mb_intr_11 (mb_intrs[11]),
-    .mb_intr_12 (mb_intrs[12]),
-    .mb_intr_13 (mb_intrs[13]),
-    .mb_intr_14 (mb_intrs[14]),
-    .mb_intr_15 (mb_intrs[15]),
-    .mb_intr_16 (mb_intrs[16]),
-    .mb_intr_17 (mb_intrs[17]),
-    .mb_intr_18 (mb_intrs[18]),
-    .mb_intr_19 (mb_intrs[19]),
-    .mb_intr_20 (mb_intrs[20]),
-    .mb_intr_21 (mb_intrs[21]),
-    .mb_intr_22 (mb_intrs[22]),
-    .mb_intr_23 (mb_intrs[23]),
-    .mb_intr_24 (mb_intrs[24]),
-    .mb_intr_25 (mb_intrs[25]),
-    .mb_intr_26 (mb_intrs[26]),
-    .mb_intr_27 (mb_intrs[27]),
-    .mb_intr_28 (mb_intrs[28]),
-    .mb_intr_29 (mb_intrs[29]),
-    .mb_intr_30 (mb_intrs[30]),
-    .mb_intr_31 (mb_intrs[31]),
-    .fmcomms2_spi_irq(mb_intrs[10]),
-    .fmcomms2_gpio_irq(mb_intrs[11]),
-    .ad9361_adc_dma_irq (mb_intrs[12]),
-    .ad9361_dac_dma_irq (mb_intrs[13]),
+    .mb_intr_06 (1'b0),
+    .mb_intr_07 (1'b0),
+    .mb_intr_08 (1'b0),
+    .mb_intr_14 (1'b0),
+    .mb_intr_15 (1'b0),
     .mdio_io (phy_mdio),
     .mdio_mdc (phy_mdc),
     .phy_rst_n (phy_reset_n),
@@ -284,17 +255,16 @@ module system_top (
     .rgmii_td (phy_tx_data),
     .rgmii_tx_ctl (phy_tx_ctrl),
     .rgmii_txc (phy_tx_clk),
-    .spdif (spdif),
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
-    .spi_csn_i (1'b1),
+    .spi_clk_i (spi_clk),
+    .spi_clk_o (spi_clk),
+    .spi_csn_i (spi_csn),
     .spi_csn_o (spi_csn),
-    .spi_miso_i (spi_miso),
-    .spi_mosi_i (1'b0),
-    .spi_mosi_o (spi_mosi),
-    .spi_sclk_i (1'b0),
-    .spi_sclk_o (spi_clk),
+    .spi_sdi_i (spi_miso),
+    .spi_sdo_i (spi_mosi),
+    .spi_sdo_o (spi_mosi),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
     .rx_data_in_n (rx_data_in_n),
