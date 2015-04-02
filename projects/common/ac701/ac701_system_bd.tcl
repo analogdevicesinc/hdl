@@ -267,9 +267,9 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_SG
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_MM2S
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_S2MM
 
-create_bd_addr_seg -range 0x80000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
+create_bd_addr_seg -range 0x2000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
   [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem] SEG_dlmb_cntlr
-create_bd_addr_seg -range 0x80000 -offset 0x0 [get_bd_addr_spaces sys_mb/Instruction] \
+create_bd_addr_seg -range 0x2000 -offset 0x0 [get_bd_addr_spaces sys_mb/Instruction] \
   [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_ilmb_cntlr
 
 
