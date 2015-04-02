@@ -8,8 +8,6 @@ set_property -dict  {PACKAGE_PIN  U4    IOSTANDARD  LVCMOS15} [get_ports sys_rst
 set_property -dict  {PACKAGE_PIN  R3    IOSTANDARD  DIFF_SSTL15 DIFF_TERM TRUE} [get_ports sys_clk_p]
 set_property -dict  {PACKAGE_PIN  P3    IOSTANDARD  DIFF_SSTL15 DIFF_TERM TRUE} [get_ports sys_clk_n]
 
-create_clock -name sys_clk      -period  5.00 [get_ports sys_clk_p]
-
 # ethernet
 
 set_property -dict  {PACKAGE_PIN V18    IOSTANDARD  LVCMOS18} [get_ports phy_reset_n]
