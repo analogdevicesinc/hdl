@@ -1,6 +1,7 @@
 
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 # adc's SPI frequency in Mhz
 global adc_spi_freq
