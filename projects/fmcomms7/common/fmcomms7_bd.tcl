@@ -138,14 +138,14 @@ if {$sys_zynq == 1} {
   set axi_fmcomms7_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_fmcomms7_gt]
   set_property -dict [list CONFIG.PCORE_NUM_OF_TX_LANES {8}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {4}] $axi_fmcomms7_gt
-  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_0 {0}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_0 {5}] $axi_fmcomms7_gt
   set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_1 {3}] $axi_fmcomms7_gt
-  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_2 {1}] $axi_fmcomms7_gt
-  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_3 {2}] $axi_fmcomms7_gt
-  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_4 {4}] $axi_fmcomms7_gt
-  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_5 {5}] $axi_fmcomms7_gt
-  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_6 {6}] $axi_fmcomms7_gt
-  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_7 {7}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_2 {6}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_3 {7}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_4 {2}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_5 {0}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_6 {1}] $axi_fmcomms7_gt
+  set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_7 {4}] $axi_fmcomms7_gt
 
 if {$sys_zynq == 1} {
 
