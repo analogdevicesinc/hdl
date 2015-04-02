@@ -74,9 +74,6 @@ set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}] $axi_ad9361_adc_dma
 set util_adc_pack_0   [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 util_adc_pack_0]
 set util_dac_unpack_0 [create_bd_cell -type ip -vlnv analog.com:user:util_dac_unpack:1.0 util_dac_unpack_0]
 
-set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
-
-
 # constants for avoiding errors when validating bd
 
 set constant_1bit   [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 constant_1bit]
@@ -188,8 +185,6 @@ ad_connect  util_dac_unpack_0/fifo_valid  axi_ad9361_dac_dma/fifo_rd_valid
 ad_connect  axi_ad9361_0/adc_dovf         axi_ad9361_adc_dma/fifo_wr_overflow
 ad_connect  axi_ad9361_0/dac_dunf         axi_ad9361_dac_dma/fifo_rd_underflow
 
-ad_connect  sys_dma_clk sys_ps7/FCLK_CLK2
-
 ad_connect  constant_32bit/dout axi_ad9361_0/up_dac_gpio_in
 ad_connect  constant_32bit/dout axi_ad9361_0/up_adc_gpio_in
 ad_connect  constant_32bit/dout axi_ad9361_1/up_dac_gpio_in
@@ -200,7 +195,6 @@ ad_connect  constant_1bit/dout  axi_ad9361_1/dac_dovf
 ad_connect  constant_1bit/dout  axi_ad9361_1/dac_dunf
 ad_connect  constant_1bit/dout  axi_ad9361_1/adc_dunf
 ad_connect  constant_1bit/dout  axi_ad9361_1/adc_dovf
-
 
 # address map
 
