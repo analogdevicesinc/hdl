@@ -135,8 +135,8 @@ ad_connect  sys_cpu_clk axi_ad6676_gt/drp_clk
 
 # interconnect (adc)
 
-ad_mem_hp2_interconnect ad6676_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect ad6676_clk axi_ad6676_dma/m_dest_axi
+ad_mem_hp2_interconnect sys_200m_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect sys_200m_clk axi_ad6676_dma/m_dest_axi
 ad_connect  sys_cpu_resetn axi_ad6676_dma/m_dest_axi_aresetn
 
 # interrupts
