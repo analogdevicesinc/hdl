@@ -2,7 +2,7 @@
 ####################################################################################
 ## Copyright 2011(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
-## Wed Apr  1 16:22:09 2015
+## Fri Apr  3 11:55:07 2015
 ####################################################################################
 ####################################################################################
 
@@ -12,8 +12,9 @@ M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_ccat.v
 M_DEPS += util_ccat_constr.xdc
 
+C_VIVADO := vivado -mode batch -source
 
-C_VIVADO := vivado -mode batch -script
+F_LIST := `find . -not -name '.' -not -name '*.tcl' -not -name '*.v' -not -name '*.xdc' -not -name '*.vhd' -not -name '*.prj' -not -name 'Makefile' -not -name '*.h' `
 
 
 .PHONY: all
@@ -21,13 +22,17 @@ all: util_ccat.xpr
 
 
 .PHONY: clean
-clean:
-	$(C_VIVADO) $(CLEAN_SCRIPT)
+clean:clean-all
+
+
+.PHONY: clean-all
+clean-all:
+	rm -rf $(F_LIST)
 
 
 util_ccat.xpr: $(M_DEPS)
-	$(C_VIVADO) $(CLEAN_SCRIPT)
-	$(C_VIVADO) util_ccat_ip.tcl
+	rm -rf $(F_LIST)
+	$(C_VIVADO) util_ccat_ip.tcl  >> util_ccat_ip.log 2>&1
 
 ####################################################################################
 ####################################################################################

@@ -2,27 +2,33 @@
 ####################################################################################
 ## Copyright 2011(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
-## Wed Apr  1 16:22:09 2015
+## Fri Apr  3 11:55:07 2015
 ####################################################################################
 ####################################################################################
 
 M_DEPS := system_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_project.tcl
+M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../common/motcon2_fmc_bd.tcl
-M_DEPS += ../../../library/axi_mc_speed.xpr
-M_DEPS += ../../../library/util_i2c_mixer.xpr
-M_DEPS += ../../../library/axi_dmac.xpr
-M_DEPS += ../../../library/axi_spdif_tx.xpr
-M_DEPS += ../../../library/axi_mc_current_monitor.xpr
-M_DEPS += ../../../library/axi_i2s_adi.xpr
-M_DEPS += ../../../library/axi_clkgen.xpr
-M_DEPS += ../../../library/axi_hdmi_tx.xpr
+M_DEPS += ../../../library/util_cpack/util_cpack.xpr
+M_DEPS += ../../../library/axi_mc_speed/axi_mc_speed.xpr
+M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
+M_DEPS += ../../../library/util_gmii_to_rgmii/util_gmii_to_rgmii.xpr
+M_DEPS += ../../../library/util_adc_pack/util_adc_pack.xpr
+M_DEPS += ../../../library/axi_mc_controller/axi_mc_controller.xpr
+M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
+M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
+M_DEPS += ../../../library/axi_mc_current_monitor/axi_mc_current_monitor.xpr
+M_DEPS += ../../../library/axi_i2s_adi/axi_i2s_adi.xpr
+M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
+M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 
+C_VIVADO := vivado -mode batch -source
 
-C_VIVADO := vivado -mode batch -script
+F_LIST := `find . -not -name '.' -not -name '*.tcl' -not -name '*.v' -not -name '*.xdc' -not -name '*.vhd' -not -name '*.prj' -not -name 'Makefile' -not -name '*.h' `
 
 
 .PHONY: all
@@ -30,14 +36,18 @@ all: lib motcon2_fmc_zed.xpr
 
 
 .PHONY: clean
-clean:
-	$(C_VIVADO) $(CLEAN_SCRIPT)
+clean: clean-all
 
 
 .PHONY: clean-all
-clean-all: clean
+clean-all:
+	rm -rf $(F_LIST)
+	make -C ../../../library/util_cpack clean
 	make -C ../../../library/axi_mc_speed clean
 	make -C ../../../library/util_i2c_mixer clean
+	make -C ../../../library/util_gmii_to_rgmii clean
+	make -C ../../../library/util_adc_pack clean
+	make -C ../../../library/axi_mc_controller clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/axi_mc_current_monitor clean
@@ -47,14 +57,18 @@ clean-all: clean
 
 
 motcon2_fmc_zed.xpr: lib $(M_DEPS)
-	$(C_VIVADO) $(CLEAN_SCRIPT)
-	$(C_VIVADO) system_project.tcl
+	rm -rf $(F_LIST)
+	$(C_VIVADO) system_project.tcl >> motcon2_fmc_zed_vivado.log 2>&1
 
 
 .PHONY: lib
 lib:
+	make -C ../../../library/util_cpack
 	make -C ../../../library/axi_mc_speed
 	make -C ../../../library/util_i2c_mixer
+	make -C ../../../library/util_gmii_to_rgmii
+	make -C ../../../library/util_adc_pack
+	make -C ../../../library/axi_mc_controller
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_spdif_tx
 	make -C ../../../library/axi_mc_current_monitor

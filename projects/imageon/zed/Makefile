@@ -11,18 +11,14 @@ M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_bd.tcl
-M_DEPS += ../../common/zc706/zc706_system_bd.tcl
-M_DEPS += ../../common/zc706/zc706_system_plddr3.tcl
-M_DEPS += ../common/daq2_bd.tcl
-M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
-M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
-M_DEPS += ../../../library/axi_fifo2s/axi_fifo2s.xpr
-M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr
+M_DEPS += ../../common/zed/zed_system_bd.tcl
+M_DEPS += ../common/imageon_bd.tcl
+M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
-M_DEPS += ../../../library/util_ccat/util_ccat.xpr
-M_DEPS += ../../../library/axi_ad9144/axi_ad9144.xpr
+M_DEPS += ../../../library/axi_i2s_adi/axi_i2s_adi.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
+M_DEPS += ../../../library/axi_hdmi_rx/axi_hdmi_rx.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 
 C_VIVADO := vivado -mode batch -source
@@ -31,7 +27,7 @@ F_LIST := `find . -not -name '.' -not -name '*.tcl' -not -name '*.v' -not -name 
 
 
 .PHONY: all
-all: lib daq2_zc706.xpr
+all: lib imageon_zed.xpr
 
 
 .PHONY: clean
@@ -41,34 +37,28 @@ clean: clean-all
 .PHONY: clean-all
 clean-all:
 	rm -rf $(F_LIST)
-	make -C ../../../library/axi_jesd_gt clean
-	make -C ../../../library/util_bsplit clean
-	make -C ../../../library/axi_fifo2s clean
-	make -C ../../../library/axi_ad9680 clean
+	make -C ../../../library/util_i2c_mixer clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/util_ccat clean
-	make -C ../../../library/axi_ad9144 clean
+	make -C ../../../library/axi_i2s_adi clean
 	make -C ../../../library/axi_clkgen clean
+	make -C ../../../library/axi_hdmi_rx clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-daq2_zc706.xpr: lib $(M_DEPS)
+imageon_zed.xpr: lib $(M_DEPS)
 	rm -rf $(F_LIST)
-	$(C_VIVADO) system_project.tcl >> daq2_zc706_vivado.log 2>&1
+	$(C_VIVADO) system_project.tcl >> imageon_zed_vivado.log 2>&1
 
 
 .PHONY: lib
 lib:
-	make -C ../../../library/axi_jesd_gt
-	make -C ../../../library/util_bsplit
-	make -C ../../../library/axi_fifo2s
-	make -C ../../../library/axi_ad9680
+	make -C ../../../library/util_i2c_mixer
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/util_ccat
-	make -C ../../../library/axi_ad9144
+	make -C ../../../library/axi_i2s_adi
 	make -C ../../../library/axi_clkgen
+	make -C ../../../library/axi_hdmi_rx
 	make -C ../../../library/axi_hdmi_tx
 
 ####################################################################################

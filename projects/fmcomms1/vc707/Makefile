@@ -2,7 +2,7 @@
 ####################################################################################
 ## Copyright 2011(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
-## Wed Apr  1 16:22:09 2015
+## Fri Apr  3 11:55:07 2015
 ####################################################################################
 ####################################################################################
 
@@ -14,13 +14,14 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../common/fmcomms1_bd.tcl
-M_DEPS += ../../../library/axi_ad9122.xpr
-M_DEPS += ../../../library/util_wfifo.xpr
-M_DEPS += ../../../library/axi_dmac.xpr
-M_DEPS += ../../../library/axi_ad9643.xpr
+M_DEPS += ../../../library/axi_ad9122/axi_ad9122.xpr
+M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
+M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
+M_DEPS += ../../../library/axi_ad9643/axi_ad9643.xpr
 
+C_VIVADO := vivado -mode batch -source
 
-C_VIVADO := vivado -mode batch -script
+F_LIST := `find . -not -name '.' -not -name '*.tcl' -not -name '*.v' -not -name '*.xdc' -not -name '*.vhd' -not -name '*.prj' -not -name 'Makefile' -not -name '*.h' `
 
 
 .PHONY: all
@@ -28,12 +29,12 @@ all: lib fmcomms1_vc707.xpr
 
 
 .PHONY: clean
-clean:
-	$(C_VIVADO) $(CLEAN_SCRIPT)
+clean: clean-all
 
 
 .PHONY: clean-all
-clean-all: clean
+clean-all:
+	rm -rf $(F_LIST)
 	make -C ../../../library/axi_ad9122 clean
 	make -C ../../../library/util_wfifo clean
 	make -C ../../../library/axi_dmac clean
@@ -41,8 +42,8 @@ clean-all: clean
 
 
 fmcomms1_vc707.xpr: lib $(M_DEPS)
-	$(C_VIVADO) $(CLEAN_SCRIPT)
-	$(C_VIVADO) system_project.tcl
+	rm -rf $(F_LIST)
+	$(C_VIVADO) system_project.tcl >> fmcomms1_vc707_vivado.log 2>&1
 
 
 .PHONY: lib

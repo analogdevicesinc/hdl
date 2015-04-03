@@ -2,17 +2,17 @@
 ####################################################################################
 ## Copyright 2011(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
-## Wed Apr  1 16:22:09 2015
+## Fri Apr  3 11:55:07 2015
 ####################################################################################
 ####################################################################################
 
 .PHONY: all
 all:
-	make -C a5gt all
-	make -C a5soc all
-	make -C kc705 all
-	make -C vc707 all
-	make -C zc706 all
+	-make -C a5gt all
+	-make -C a5soc all
+	-make -C kc705 all
+	-make -C vc707 all
+	-make -C zc706 all
 
 
 .PHONY: clean

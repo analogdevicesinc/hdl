@@ -2,7 +2,7 @@
 ####################################################################################
 ## Copyright 2011(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
-## Wed Apr  1 16:22:09 2015
+## Fri Apr  3 11:55:07 2015
 ####################################################################################
 ####################################################################################
 
@@ -39,8 +39,9 @@ M_DEPS += axi_ad9361_tx_channel.v
 M_DEPS += axi_ad9361_tx.v
 M_DEPS += axi_ad9361.v
 
+C_VIVADO := vivado -mode batch -source
 
-C_VIVADO := vivado -mode batch -script
+F_LIST := `find . -not -name '.' -not -name '*.tcl' -not -name '*.v' -not -name '*.xdc' -not -name '*.vhd' -not -name '*.prj' -not -name 'Makefile' -not -name '*.h' `
 
 
 .PHONY: all
@@ -48,13 +49,17 @@ all: axi_ad9361.xpr
 
 
 .PHONY: clean
-clean:
-	$(C_VIVADO) $(CLEAN_SCRIPT)
+clean:clean-all
+
+
+.PHONY: clean-all
+clean-all:
+	rm -rf $(F_LIST)
 
 
 axi_ad9361.xpr: $(M_DEPS)
-	$(C_VIVADO) $(CLEAN_SCRIPT)
-	$(C_VIVADO) axi_ad9361_ip.tcl
+	rm -rf $(F_LIST)
+	$(C_VIVADO) axi_ad9361_ip.tcl  >> axi_ad9361_ip.log 2>&1
 
 ####################################################################################
 ####################################################################################

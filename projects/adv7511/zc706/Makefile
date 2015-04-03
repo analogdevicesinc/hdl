@@ -2,7 +2,7 @@
 ####################################################################################
 ## Copyright 2011(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
-## Wed Apr  1 16:22:09 2015
+## Fri Apr  3 11:55:07 2015
 ####################################################################################
 ####################################################################################
 
@@ -12,12 +12,13 @@ M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
-M_DEPS += ../../../library/axi_spdif_tx.xpr
-M_DEPS += ../../../library/axi_clkgen.xpr
-M_DEPS += ../../../library/axi_hdmi_tx.xpr
+M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
+M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
+M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 
+C_VIVADO := vivado -mode batch -source
 
-C_VIVADO := vivado -mode batch -script
+F_LIST := `find . -not -name '.' -not -name '*.tcl' -not -name '*.v' -not -name '*.xdc' -not -name '*.vhd' -not -name '*.prj' -not -name 'Makefile' -not -name '*.h' `
 
 
 .PHONY: all
@@ -25,20 +26,20 @@ all: lib adv7511_zc706.xpr
 
 
 .PHONY: clean
-clean:
-	$(C_VIVADO) $(CLEAN_SCRIPT)
+clean: clean-all
 
 
 .PHONY: clean-all
-clean-all: clean
+clean-all:
+	rm -rf $(F_LIST)
 	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
 adv7511_zc706.xpr: lib $(M_DEPS)
-	$(C_VIVADO) $(CLEAN_SCRIPT)
-	$(C_VIVADO) system_project.tcl
+	rm -rf $(F_LIST)
+	$(C_VIVADO) system_project.tcl >> adv7511_zc706_vivado.log 2>&1
 
 
 .PHONY: lib
