@@ -202,7 +202,7 @@ module system_top (
   assign ddr3_1_n = 3'b000;
   assign fan_pwm = 1'b1;
   assign iic_rstn = 1'b1;
-  assign spi_csn_0 = spi_csn;
+  assign spi_csn_0 = spi_csn[0];
 
   // pack & unpack here
 
