@@ -177,7 +177,7 @@ module system_top (
   output            linear_flash_wen;
   inout   [15:0]    linear_flash_dq_io;
 
-  output  [  6:0]   gpio_lcd;
+  inout   [  6:0]   gpio_lcd;
   inout   [ 20:0]   gpio_bd;
 
   output            iic_rstn;
@@ -408,7 +408,7 @@ module system_top (
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
-    .gpio_lcd_tri_o (gpio_lcd),
+    .gpio_lcd_tri_io (gpio_lcd),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .linear_flash_addr (linear_flash_addr),
