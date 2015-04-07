@@ -2,7 +2,6 @@
 ####################################################################################
 ## Copyright 2011(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
-## Fri Apr  3 11:55:07 2015
 ####################################################################################
 ####################################################################################
 
@@ -12,9 +11,16 @@ M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_bsplit.v
 M_DEPS += util_bsplit_constr.xdc
 
-C_VIVADO := vivado -mode batch -source
+M_VIVADO := vivado -mode batch -source
 
-F_LIST := `find . -not -name '.' -not -name '*.tcl' -not -name '*.v' -not -name '*.xdc' -not -name '*.vhd' -not -name '*.prj' -not -name 'Makefile' -not -name '*.h' `
+M_FLIST := `find . -not -name '.'
+M_FLIST += -not -name '*.tcl'
+M_FLIST += -not -name '*.v'
+M_FLIST += -not -name '*.xdc'
+M_FLIST += -not -name '*.vhd'
+M_FLIST += -not -name '*.prj'
+M_FLIST += -not -name 'Makefile'
+M_FLIST += -not -name '*.h' `
 
 
 .PHONY: all
@@ -27,12 +33,12 @@ clean:clean-all
 
 .PHONY: clean-all
 clean-all:
-	rm -rf $(F_LIST)
+	rm -rf $(M_FLIST)
 
 
 util_bsplit.xpr: $(M_DEPS)
-	rm -rf $(F_LIST)
-	$(C_VIVADO) util_bsplit_ip.tcl  >> util_bsplit_ip.log 2>&1
+	rm -rf $(M_FLIST)
+	$(M_VIVADO) util_bsplit_ip.tcl  >> util_bsplit_ip.log 2>&1
 
 ####################################################################################
 ####################################################################################

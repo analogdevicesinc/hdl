@@ -2,7 +2,6 @@
 ####################################################################################
 ## Copyright 2011(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
-## Fri Apr  3 11:55:07 2015
 ####################################################################################
 ####################################################################################
 
@@ -15,13 +14,20 @@ M_DEPS += ../../common/ac701/ac701_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../common/fmcomms1_bd.tcl
 M_DEPS += ../../../library/axi_ad9122/axi_ad9122.xpr
-M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
-M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_ad9643/axi_ad9643.xpr
+M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
+M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
 
-C_VIVADO := vivado -mode batch -source
+M_VIVADO := vivado -mode batch -source
 
-F_LIST := `find . -not -name '.' -not -name '*.tcl' -not -name '*.v' -not -name '*.xdc' -not -name '*.vhd' -not -name '*.prj' -not -name 'Makefile' -not -name '*.h' `
+M_FLIST := `find . -not -name '.'
+M_FLIST += -not -name '*.tcl'
+M_FLIST += -not -name '*.v'
+M_FLIST += -not -name '*.xdc'
+M_FLIST += -not -name '*.vhd'
+M_FLIST += -not -name '*.prj'
+M_FLIST += -not -name 'Makefile'
+M_FLIST += -not -name '*.h' `
 
 
 .PHONY: all
@@ -34,24 +40,24 @@ clean: clean-all
 
 .PHONY: clean-all
 clean-all:
-	rm -rf $(F_LIST)
+	rm -rf $(M_FLIST)
 	make -C ../../../library/axi_ad9122 clean
-	make -C ../../../library/util_wfifo clean
-	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_ad9643 clean
+	make -C ../../../library/axi_dmac clean
+	make -C ../../../library/util_wfifo clean
 
 
 fmcomms1_ac701.xpr: lib $(M_DEPS)
-	rm -rf $(F_LIST)
-	$(C_VIVADO) system_project.tcl >> fmcomms1_ac701_vivado.log 2>&1
+	rm -rf $(M_FLIST)
+	$(M_VIVADO) system_project.tcl >> fmcomms1_ac701_vivado.log 2>&1
 
 
 .PHONY: lib
 lib:
 	make -C ../../../library/axi_ad9122
-	make -C ../../../library/util_wfifo
-	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_ad9643
+	make -C ../../../library/axi_dmac
+	make -C ../../../library/util_wfifo
 
 ####################################################################################
 ####################################################################################

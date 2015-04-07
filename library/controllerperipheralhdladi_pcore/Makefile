@@ -2,7 +2,6 @@
 ####################################################################################
 ## Copyright 2011(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
-## Fri Apr  3 11:55:07 2015
 ####################################################################################
 ####################################################################################
 
@@ -113,9 +112,16 @@ M_DEPS += controllerperipheralhdladi_pcore_addr_decoder.v
 M_DEPS += controllerperipheralhdladi_pcore_axi_lite.v
 M_DEPS += controllerperipheralhdladi_pcore.v
 
-C_VIVADO := vivado -mode batch -source
+M_VIVADO := vivado -mode batch -source
 
-F_LIST := `find . -not -name '.' -not -name '*.tcl' -not -name '*.v' -not -name '*.xdc' -not -name '*.vhd' -not -name '*.prj' -not -name 'Makefile' -not -name '*.h' `
+M_FLIST := `find . -not -name '.'
+M_FLIST += -not -name '*.tcl'
+M_FLIST += -not -name '*.v'
+M_FLIST += -not -name '*.xdc'
+M_FLIST += -not -name '*.vhd'
+M_FLIST += -not -name '*.prj'
+M_FLIST += -not -name 'Makefile'
+M_FLIST += -not -name '*.h' `
 
 
 .PHONY: all
@@ -128,12 +134,12 @@ clean:clean-all
 
 .PHONY: clean-all
 clean-all:
-	rm -rf $(F_LIST)
+	rm -rf $(M_FLIST)
 
 
 controllerperipheralhdladi_pcore.xpr: $(M_DEPS)
-	rm -rf $(F_LIST)
-	$(C_VIVADO) controllerperipheralhdladi_pcore_ip.tcl  >> controllerperipheralhdladi_pcore_ip.log 2>&1
+	rm -rf $(M_FLIST)
+	$(M_VIVADO) controllerperipheralhdladi_pcore_ip.tcl  >> controllerperipheralhdladi_pcore_ip.log 2>&1
 
 ####################################################################################
 ####################################################################################
