@@ -16,7 +16,7 @@ M_DEPS += ../../common/zc706/zc706_system_plddr3.tcl
 M_DEPS += ../common/daq3_bd.tcl
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
-M_DEPS += ../../../library/axi_fifo2s/axi_fifo2s.xpr
+M_DEPS += ../../../library/axi_adcfifo/axi_adcfifo.xpr
 M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr
 M_DEPS += ../../../library/axi_ad9152/axi_ad9152.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
@@ -43,7 +43,7 @@ clean-all:
 	rm -rf $(F_LIST)
 	make -C ../../../library/axi_jesd_gt clean
 	make -C ../../../library/util_bsplit clean
-	make -C ../../../library/axi_fifo2s clean
+	make -C ../../../library/axi_adcfifo clean
 	make -C ../../../library/axi_ad9680 clean
 	make -C ../../../library/axi_ad9152 clean
 	make -C ../../../library/axi_dmac clean
@@ -62,7 +62,7 @@ daq3_zc706.xpr: lib $(M_DEPS)
 lib:
 	make -C ../../../library/axi_jesd_gt
 	make -C ../../../library/util_bsplit
-	make -C ../../../library/axi_fifo2s
+	make -C ../../../library/axi_adcfifo
 	make -C ../../../library/axi_ad9680
 	make -C ../../../library/axi_ad9152
 	make -C ../../../library/axi_dmac

@@ -15,7 +15,7 @@ ad_connect  sys_clk axi_ad9680_fifo/sys_clk
 ad_connect  ddr3 axi_ad9680_fifo/ddr3
 
 create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
-  [get_bd_addr_spaces axi_ad9680_fifo/axi_fifo2s/axi] \
+  [get_bd_addr_spaces axi_ad9680_fifo/axi_adcfifo/axi] \
   [get_bd_addr_segs axi_ad9680_fifo/axi_ddr_cntrl/memmap/memaddr] \
   SEG_axi_ddr_cntrl_memaddr
 

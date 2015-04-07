@@ -17,7 +17,7 @@ M_DEPS += ../common/fmcadc2_bd.tcl
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/axi_ad9625/axi_ad9625.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
-M_DEPS += ../../../library/axi_fifo2s/axi_fifo2s.xpr
+M_DEPS += ../../../library/axi_adcfifo/axi_adcfifo.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
@@ -42,7 +42,7 @@ clean-all:
 	make -C ../../../library/axi_jesd_gt clean
 	make -C ../../../library/axi_ad9625 clean
 	make -C ../../../library/util_bsplit clean
-	make -C ../../../library/axi_fifo2s clean
+	make -C ../../../library/axi_adcfifo clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/axi_clkgen clean
@@ -59,7 +59,7 @@ lib:
 	make -C ../../../library/axi_jesd_gt
 	make -C ../../../library/axi_ad9625
 	make -C ../../../library/util_bsplit
-	make -C ../../../library/axi_fifo2s
+	make -C ../../../library/axi_adcfifo
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_spdif_tx
 	make -C ../../../library/axi_clkgen
