@@ -17,7 +17,7 @@ M_DEPS += ../common/fmcadc5_bd.tcl
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/axi_ad9625/axi_ad9625.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
-M_DEPS += ../../../library/axi_fifo2f/axi_fifo2f.xpr
+M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 
 C_VIVADO := vivado -mode batch -source
@@ -39,7 +39,7 @@ clean-all:
 	make -C ../../../library/axi_jesd_gt clean
 	make -C ../../../library/axi_ad9625 clean
 	make -C ../../../library/util_bsplit clean
-	make -C ../../../library/axi_fifo2f clean
+	make -C ../../../library/util_adcfifo clean
 	make -C ../../../library/axi_dmac clean
 
 
@@ -53,7 +53,7 @@ lib:
 	make -C ../../../library/axi_jesd_gt
 	make -C ../../../library/axi_ad9625
 	make -C ../../../library/util_bsplit
-	make -C ../../../library/axi_fifo2f
+	make -C ../../../library/util_adcfifo
 	make -C ../../../library/axi_dmac
 
 ####################################################################################

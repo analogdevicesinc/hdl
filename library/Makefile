@@ -31,7 +31,7 @@ clean:
 	make -C library/axi_ad9739a clean
 	make -C library/axi_clkgen clean
 	make -C library/axi_dmac clean
-	make -C library/axi_fifo2f clean
+	make -C library/util_adcfifo clean
 	make -C library/axi_fifo2s clean
 	make -C library/axi_hdmi_rx clean
 	make -C library/axi_hdmi_tx clean
@@ -77,7 +77,7 @@ lib:
 	-make -C axi_ad9739a
 	-make -C axi_clkgen
 	-make -C axi_dmac
-	-make -C axi_fifo2f
+	-make -C util_adcfifo
 	-make -C axi_fifo2s
 	-make -C axi_hdmi_rx
 	-make -C axi_hdmi_tx

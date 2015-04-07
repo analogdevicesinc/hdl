@@ -27,23 +27,23 @@ proc p_sys_dmafifo {p_name m_name adc_data_width dma_addr_width} {
   create_bd_pin -dir I dma_xfer_req
   create_bd_pin -dir O -from 3 -to 0 dma_xfer_status
 
-  set axi_fifo2f [create_bd_cell -type ip -vlnv analog.com:user:axi_fifo2f:1.0 axi_fifo2f]
-  set_property -dict [list CONFIG.ADC_DATA_WIDTH $adc_data_width] $axi_fifo2f
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH {64}] $axi_fifo2f
-  set_property -dict [list CONFIG.DMA_READY_ENABLE {1}] $axi_fifo2f
-  set_property -dict [list CONFIG.DMA_ADDR_WIDTH $dma_addr_width] $axi_fifo2f
+  set util_adcfifo [create_bd_cell -type ip -vlnv analog.com:user:util_adcfifo:1.0 util_adcfifo]
+  set_property -dict [list CONFIG.ADC_DATA_WIDTH $adc_data_width] $util_adcfifo
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH {64}] $util_adcfifo
+  set_property -dict [list CONFIG.DMA_READY_ENABLE {1}] $util_adcfifo
+  set_property -dict [list CONFIG.DMA_ADDR_WIDTH $dma_addr_width] $util_adcfifo
 
-  ad_connect  adc_rst axi_fifo2f/adc_rst
-  ad_connect  adc_clk axi_fifo2f/adc_clk
-  ad_connect  adc_wr axi_fifo2f/adc_wr
-  ad_connect  adc_wdata axi_fifo2f/adc_wdata
-  ad_connect  adc_wovf axi_fifo2f/adc_wovf
-  ad_connect  dma_clk axi_fifo2f/dma_clk
-  ad_connect  dma_wr axi_fifo2f/dma_wr
-  ad_connect  dma_wdata axi_fifo2f/dma_wdata
-  ad_connect  dma_wready axi_fifo2f/dma_wready
-  ad_connect  dma_xfer_req axi_fifo2f/dma_xfer_req
-  ad_connect  dma_xfer_status axi_fifo2f/dma_xfer_status
+  ad_connect  adc_rst util_adcfifo/adc_rst
+  ad_connect  adc_clk util_adcfifo/adc_clk
+  ad_connect  adc_wr util_adcfifo/adc_wr
+  ad_connect  adc_wdata util_adcfifo/adc_wdata
+  ad_connect  adc_wovf util_adcfifo/adc_wovf
+  ad_connect  dma_clk util_adcfifo/dma_clk
+  ad_connect  dma_wr util_adcfifo/dma_wr
+  ad_connect  dma_wdata util_adcfifo/dma_wdata
+  ad_connect  dma_wready util_adcfifo/dma_wready
+  ad_connect  dma_xfer_req util_adcfifo/dma_xfer_req
+  ad_connect  dma_xfer_status util_adcfifo/dma_xfer_status
 
   current_bd_instance $c_instance
 }
