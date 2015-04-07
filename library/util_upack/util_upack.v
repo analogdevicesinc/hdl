@@ -45,27 +45,38 @@ module util_upack (
   dac_enable_0,
   dac_valid_0,
   dac_data_0,
+  upack_valid_0,
   dac_enable_1,
   dac_valid_1,
   dac_data_1,
+  upack_valid_1,
   dac_enable_2,
   dac_valid_2,
   dac_data_2,
+  upack_valid_2,
   dac_enable_3,
   dac_valid_3,
   dac_data_3,
+  upack_valid_3,
   dac_enable_4,
   dac_valid_4,
   dac_data_4,
+  upack_valid_4,
   dac_enable_5,
   dac_valid_5,
   dac_data_5,
+  upack_valid_5,
   dac_enable_6,
   dac_valid_6,
   dac_data_6,
+  upack_valid_6,
   dac_enable_7,
   dac_valid_7,
   dac_data_7,
+  upack_valid_7,
+
+  dma_xfer_in,
+  dac_xfer_out,
 
   // fifo interface
 
@@ -90,27 +101,38 @@ module util_upack (
   input                             dac_enable_0;
   input                             dac_valid_0;
   output  [(CH_DW-1):0]             dac_data_0;
+  output                            upack_valid_0;
   input                             dac_enable_1;
   input                             dac_valid_1;
   output  [(CH_DW-1):0]             dac_data_1;
+  output                            upack_valid_1;
   input                             dac_enable_2;
   input                             dac_valid_2;
   output  [(CH_DW-1):0]             dac_data_2;
+  output                            upack_valid_2;
   input                             dac_enable_3;
   input                             dac_valid_3;
   output  [(CH_DW-1):0]             dac_data_3;
+  output                            upack_valid_3;
   input                             dac_enable_4;
   input                             dac_valid_4;
   output  [(CH_DW-1):0]             dac_data_4;
+  output                            upack_valid_4;
   input                             dac_enable_5;
   input                             dac_valid_5;
   output  [(CH_DW-1):0]             dac_data_5;
+  output                            upack_valid_5;
   input                             dac_enable_6;
   input                             dac_valid_6;
   output  [(CH_DW-1):0]             dac_data_6;
+  output                            upack_valid_6;
   input                             dac_enable_7;
   input                             dac_valid_7;
   output  [(CH_DW-1):0]             dac_data_7;
+  output                            upack_valid_7;
+
+  input                             dma_xfer_in;
+  output                            dac_xfer_out;
 
   // fifo interface
 
@@ -124,6 +146,12 @@ module util_upack (
   reg                               dac_sync = 'd0;
   reg     [(M_WIDTH-1):0]           dac_dsf_data = 'd0;
   reg     [  7:0]                   dac_dmx_enable = 'd0;
+  reg                               xfer_valid_d1;
+  reg                               xfer_valid_d2;
+  reg                               xfer_valid_d3;
+  reg                               xfer_valid_d4;
+  reg                               xfer_valid_d5;
+  reg                               dac_xfer_out;
 
   // internal signals
 
@@ -148,6 +176,28 @@ module util_upack (
 
   assign dac_valid_s =  dac_valid_7 | dac_valid_6 | dac_valid_5 | dac_valid_4 |
                         dac_valid_3 | dac_valid_2 | dac_valid_1 | dac_valid_0;
+
+  assign upack_valid_0  = | dac_dmx_enable & dac_enable_0 & dac_xfer_out;
+  assign upack_valid_1  = | dac_dmx_enable & dac_enable_1 & dac_xfer_out;
+  assign upack_valid_2  = | dac_dmx_enable & dac_enable_2 & dac_xfer_out;
+  assign upack_valid_3  = | dac_dmx_enable & dac_enable_3 & dac_xfer_out;
+  assign upack_valid_4  = | dac_dmx_enable & dac_enable_4 & dac_xfer_out;
+  assign upack_valid_5  = | dac_dmx_enable & dac_enable_5 & dac_xfer_out;
+  assign upack_valid_6  = | dac_dmx_enable & dac_enable_6 & dac_xfer_out;
+  assign upack_valid_7  = | dac_dmx_enable & dac_enable_7 & dac_xfer_out;
+
+  always @(posedge dac_clk) begin
+    xfer_valid_d1   <= dma_xfer_in;
+    xfer_valid_d2   <= xfer_valid_d1;
+    xfer_valid_d3   <= xfer_valid_d2;
+    xfer_valid_d4   <= xfer_valid_d3;
+    xfer_valid_d5   <= xfer_valid_d4;
+    if (dac_dmx_enable[P_CNT-1] == 1'b1) begin
+      dac_xfer_out  <= xfer_valid_d4;
+    end else begin
+      dac_xfer_out  <= xfer_valid_d5;
+    end
+  end
 
   always @(posedge dac_clk) begin
     dac_valid <=    dac_dsf_valid_s[7] | dac_dsf_valid_s[6] |
