@@ -176,3 +176,11 @@ proc adi_add_bus_clock {clock_signal_name bus_inf_name {reset_signal_name ""}} {
 		set_property value "ACTIVE_LOW" $reset_polarity
 	}
 }
+
+proc adi_ip_add_core_dependencies {vlnvs} {
+	foreach file_group [ipx::get_file_groups * -of_objects [ipx::current_core]] {
+		foreach vlnv $vlnvs {
+			ipx::add_subcore $vlnv $file_group
+		}
+	}
+}
