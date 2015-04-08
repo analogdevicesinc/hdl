@@ -165,12 +165,7 @@ ad_connect  fixed_io  sys_ps7/FIXED_IO
 ad_connect  iic_fmc   axi_iic_fmc/iic
 ad_connect  sys_200m_clk axi_hdmi_clkgen/clk
 
-ad_connect  axi_iic_main/scl_i sys_i2c_mixer/upstream_scl_o
-ad_connect  axi_iic_main/scl_o sys_i2c_mixer/upstream_scl_i
-ad_connect  axi_iic_main/scl_t sys_i2c_mixer/upstream_scl_t
-ad_connect  axi_iic_main/sda_i sys_i2c_mixer/upstream_sda_o
-ad_connect  axi_iic_main/sda_o sys_i2c_mixer/upstream_sda_i
-ad_connect  axi_iic_main/sda_t sys_i2c_mixer/upstream_sda_t
+ad_connect  axi_iic_main/IIC sys_i2c_mixer/upstream
 
 ad_connect  iic_mux_scl_i   sys_i2c_mixer/downstream_scl_i
 ad_connect  iic_mux_scl_o   sys_i2c_mixer/downstream_scl_o
