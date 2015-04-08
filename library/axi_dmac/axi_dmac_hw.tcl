@@ -20,6 +20,7 @@ add_fileset_file axi_fifo.v               VERILOG PATH $ad_hdl_dir/library/axi_f
 add_fileset_file address_gray.v           VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_gray.v
 add_fileset_file address_gray_pipelined.v VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_gray_pipelined.v
 add_fileset_file address_sync.v           VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_sync.v
+add_fileset_file axi_repack.v             VERILOG PATH $ad_hdl_dir/library/util_axis_resize/util_axis_resize.v
 add_fileset_file inc_id.h                 VERILOG_INCLUDE PATH inc_id.h
 add_fileset_file resp.h                   VERILOG_INCLUDE PATH resp.h
 add_fileset_file address_generator.v      VERILOG PATH address_generator.v
@@ -38,7 +39,6 @@ add_fileset_file src_fifo_inf.v           VERILOG PATH src_fifo_inf.v
 add_fileset_file splitter.v               VERILOG PATH splitter.v
 add_fileset_file response_generator.v     VERILOG PATH response_generator.v
 add_fileset_file axi_dmac.v               VERILOG PATH axi_dmac.v
-add_fileset_file axi_repack.v             VERILOG PATH axi_repack.v
 
 # parameters
 

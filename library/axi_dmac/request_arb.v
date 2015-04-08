@@ -805,7 +805,7 @@ axi_register_slice #(
 	.m_axi_data(src_fifo_data)
 );
 
-axi_repack #(
+util_axis_resize #(
 	.C_S_DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
 	.C_M_DATA_WIDTH(DMA_DATA_WIDTH)
 ) i_src_repack (
@@ -838,7 +838,7 @@ fifo #(
 	.m_axis_data(dest_fifo_data)
 );
 
-axi_repack #(
+util_axis_resize #(
 	.C_S_DATA_WIDTH(DMA_DATA_WIDTH),
 	.C_M_DATA_WIDTH(C_DMA_DATA_WIDTH_DEST)
 ) i_dest_repack (
