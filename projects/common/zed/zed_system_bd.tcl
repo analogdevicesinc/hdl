@@ -234,7 +234,7 @@ ad_connect  sys_cpu_clk   sys_ps7/DMA0_ACLK
 
 ad_connect  sys_ps7/DMA0_REQ  axi_spdif_tx_core/DMA_REQ
 ad_connect  sys_ps7/DMA0_ACK  axi_spdif_tx_core/DMA_ACK
-ad_connect  sys_100m_resetn   axi_spdif_tx_core/DMA_REQ_RSTN
+ad_connect  sys_cpu_resetn    axi_spdif_tx_core/DMA_REQ_RSTN
 ad_connect  sys_200m_clk      sys_audio_clkgen/clk_in1
 ad_connect  sys_cpu_resetn    sys_audio_clkgen/resetn
 ad_connect  sys_audio_clkgen/clk_out1 axi_spdif_tx_core/spdif_data_clk
@@ -257,8 +257,10 @@ ad_connect  i2s_sdata_in   axi_i2s_adi/SDATA_I
 
 ad_connect  sys_ps7/DMA1_REQ   axi_i2s_adi/DMA_REQ_TX
 ad_connect  sys_ps7/DMA1_ACK   axi_i2s_adi/DMA_ACK_TX
+ad_connect  sys_cpu_resetn     axi_i2s_adi/DMA_REQ_TX_RSTN
 ad_connect  sys_ps7/DMA2_REQ   axi_i2s_adi/DMA_REQ_RX
 ad_connect  sys_ps7/DMA2_ACK   axi_i2s_adi/DMA_ACK_RX
+ad_connect  sys_cpu_resetn     axi_i2s_adi/DMA_REQ_RX_RSTN
 
 # interrupts
 
