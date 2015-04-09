@@ -42,13 +42,15 @@ module fifo_address_gray (
 	input m_axis_ready,
 	output reg m_axis_valid,
 	output [C_ADDRESS_WIDTH-1:0] m_axis_raddr_next,
+	output reg [C_ADDRESS_WIDTH:0] m_axis_level,
 
 	input s_axis_aclk,
 	input s_axis_aresetn,
 	output reg s_axis_ready,
 	input s_axis_valid,
 	output reg s_axis_empty,
-	output [C_ADDRESS_WIDTH-1:0] s_axis_waddr
+	output [C_ADDRESS_WIDTH-1:0] s_axis_waddr,
+	output reg [C_ADDRESS_WIDTH:0] s_axis_room
 );
 
 parameter C_ADDRESS_WIDTH = 4;

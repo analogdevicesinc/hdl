@@ -43,13 +43,15 @@ module fifo_address_gray_pipelined (
 	output reg m_axis_valid,
 	output [C_ADDRESS_WIDTH-1:0] m_axis_raddr_next,
 	output [C_ADDRESS_WIDTH-1:0] m_axis_raddr,
+	output reg [C_ADDRESS_WIDTH:0] m_axis_level,
 
 	input s_axis_aclk,
 	input s_axis_aresetn,
 	output reg s_axis_ready,
 	input s_axis_valid,
 	output reg s_axis_empty,
-	output [C_ADDRESS_WIDTH-1:0] s_axis_waddr
+	output [C_ADDRESS_WIDTH-1:0] s_axis_waddr,
+	output reg [C_ADDRESS_WIDTH:0] s_axis_room
 );
 
 parameter C_ADDRESS_WIDTH = 4;
@@ -127,19 +129,23 @@ begin
 	if (s_axis_aresetn == 1'b0) begin
 		s_axis_ready <= 1'b1;
 		s_axis_empty <= 1'b1;
+		s_axis_room <= 2**C_ADDRESS_WIDTH;
 	end else begin
 		s_axis_ready <= (_s_axis_raddr[C_ADDRESS_WIDTH] == _s_axis_waddr_next[C_ADDRESS_WIDTH] ||
 			_s_axis_raddr[C_ADDRESS_WIDTH-1:0] != _s_axis_waddr_next[C_ADDRESS_WIDTH-1:0]);
 		s_axis_empty <= _s_axis_raddr == _s_axis_waddr_next;
+		s_axis_room <= _s_axis_raddr - _s_axis_waddr_next + 2**C_ADDRESS_WIDTH;
 	end
 end
 
 always @(posedge m_axis_aclk)
 begin
-	if (s_axis_aresetn == 1'b0)
+	if (s_axis_aresetn == 1'b0) begin
 		m_axis_valid <= 1'b0;
-	else begin
+		m_axis_level <= 'h00;
+	end else begin
 		m_axis_valid <= _m_axis_waddr != _m_axis_raddr_next;
+		m_axis_level <= _m_axis_waddr - _m_axis_raddr_next;
 	end
 end
 

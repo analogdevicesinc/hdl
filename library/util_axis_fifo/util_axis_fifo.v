@@ -42,13 +42,15 @@ module util_axis_fifo (
 	input m_axis_ready,
 	output m_axis_valid,
 	output [C_DATA_WIDTH-1:0] m_axis_data,
+	output [C_ADDRESS_WIDTH:0] m_axis_level,
 
 	input s_axis_aclk,
 	input s_axis_aresetn,
 	output s_axis_ready,
 	input s_axis_valid,
 	input [C_DATA_WIDTH-1:0] s_axis_data,
-	output s_axis_empty
+	output s_axis_empty,
+	output [C_ADDRESS_WIDTH:0] s_axis_room
 );
 
 parameter C_DATA_WIDTH = 64;
@@ -86,8 +88,10 @@ sync_bits #(
 );
 
 assign m_axis_valid = m_axis_raddr != m_axis_waddr;
+assign m_axis_level = m_axis_valid;
 assign s_axis_ready = s_axis_raddr == s_axis_waddr;
-assign s_axis_empty = s_axis_raddr == s_axis_waddr;
+assign s_axis_empty = s_axis_ready;
+assign s_axis_room = s_axis_ready;
 
 always @(posedge s_axis_aclk) begin
 	if (s_axis_ready)
@@ -131,17 +135,18 @@ fifo_address_gray_pipelined #(
 ) i_address_gray (
 	.m_axis_aclk(m_axis_aclk),
 	.m_axis_aresetn(m_axis_aresetn),
-
 	.m_axis_ready(_m_axis_ready),
 	.m_axis_valid(_m_axis_valid),
 	.m_axis_raddr(m_axis_raddr),
+	.m_axis_level(m_axis_level),
 
 	.s_axis_aclk(s_axis_aclk),
 	.s_axis_aresetn(s_axis_aresetn),
 	.s_axis_ready(s_axis_ready),
 	.s_axis_valid(s_axis_valid),
 	.s_axis_empty(s_axis_empty),
-	.s_axis_waddr(s_axis_waddr)
+	.s_axis_waddr(s_axis_waddr),
+	.s_axis_room(s_axis_room)
 );
 
 end else begin
@@ -151,15 +156,16 @@ fifo_address_sync #(
 ) i_address_sync (
 	.clk(m_axis_aclk),
 	.resetn(m_axis_aresetn),
-
 	.m_axis_ready(_m_axis_ready),
 	.m_axis_valid(_m_axis_valid),
 	.m_axis_raddr(m_axis_raddr),
+	.m_axis_level(m_axis_level),
 
 	.s_axis_ready(s_axis_ready),
 	.s_axis_valid(s_axis_valid),
 	.s_axis_empty(s_axis_empty),
-	.s_axis_waddr(s_axis_waddr)
+	.s_axis_waddr(s_axis_waddr),
+	.s_axis_room(s_axis_room)
 );
 
 end
