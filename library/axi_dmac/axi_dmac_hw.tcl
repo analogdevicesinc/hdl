@@ -16,11 +16,11 @@ set_fileset_property quartus_synth TOP_LEVEL axi_dmac
 add_fileset_file sync_bits.v              VERILOG PATH $ad_hdl_dir/library/common/sync_bits.v
 add_fileset_file sync_gray.v              VERILOG PATH $ad_hdl_dir/library/common/sync_gray.v
 add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
-add_fileset_file axi_fifo.v               VERILOG PATH $ad_hdl_dir/library/axi_fifo/axi_fifo.v
-add_fileset_file address_gray.v           VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_gray.v
-add_fileset_file address_gray_pipelined.v VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_gray_pipelined.v
-add_fileset_file address_sync.v           VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_sync.v
 add_fileset_file axi_repack.v             VERILOG PATH $ad_hdl_dir/library/util_axis_resize/util_axis_resize.v
+add_fileset_file fifo.v                   VERILOG PATH fifo.v
+add_fileset_file address_gray.v           VERILOG PATH address_gray.v
+add_fileset_file address_gray_pipelined.v VERILOG PATH address_gray_pipelined.v
+add_fileset_file address_sync.v           VERILOG PATH address_sync.v
 add_fileset_file inc_id.h                 VERILOG_INCLUDE PATH inc_id.h
 add_fileset_file resp.h                   VERILOG_INCLUDE PATH resp.h
 add_fileset_file address_generator.v      VERILOG PATH address_generator.v
