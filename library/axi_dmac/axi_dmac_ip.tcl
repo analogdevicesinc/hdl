@@ -6,12 +6,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_dmac
 adi_ip_files axi_dmac [list \
   "$ad_hdl_dir/library/common/sync_bits.v" \
-  "$ad_hdl_dir/library/common/sync_gray.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "fifo.v" \
-  "address_gray.v" \
-  "address_gray_pipelined.v" \
-  "address_sync.v" \
   "address_generator.v" \
   "data_mover.v" \
   "request_arb.v" \
@@ -34,7 +29,10 @@ adi_ip_properties axi_dmac
 adi_ip_constraints axi_dmac [list \
   "axi_dmac_constr.xdc" ]
 
-adi_ip_add_core_dependencies {analog.com:user:util_axis_resize:1.0}
+adi_ip_add_core_dependencies { \
+	analog.com:user:util_axis_resize:1.0 \
+	analog.com:user:util_axis_fifo:1.0 \
+}
 
 set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
   [ipx::get_bus_interface s_axi_signal_clock [ipx::current_core]]]

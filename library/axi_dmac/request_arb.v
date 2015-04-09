@@ -819,7 +819,7 @@ util_axis_resize #(
 	.m_data(src_fifo_repacked_data)
 );
 
-fifo #(
+util_axis_fifo #(
 	.C_DATA_WIDTH(DMA_DATA_WIDTH),
 	.C_ADDRESS_WIDTH($clog2(C_MAX_BYTES_PER_BURST / (DMA_DATA_WIDTH / 8) * C_FIFO_SIZE)),
 	.C_CLKS_ASYNC(C_CLKS_ASYNC_SRC_DEST)
@@ -924,7 +924,7 @@ splitter #(
 	})
 );
 
-fifo #(
+util_axis_fifo #(
 	.C_DATA_WIDTH(DMA_ADDR_WIDTH_DEST + BEATS_PER_BURST_WIDTH_DEST + C_BYTES_PER_BEAT_WIDTH_DEST),
 	.C_ADDRESS_WIDTH(0),
 	.C_CLKS_ASYNC(C_CLKS_ASYNC_DEST_REQ)
@@ -950,7 +950,7 @@ fifo #(
 	})
 );
 
-fifo #(
+util_axis_fifo #(
 	.C_DATA_WIDTH(DMA_ADDR_WIDTH_SRC + BEATS_PER_BURST_WIDTH_SRC + 1),
 	.C_ADDRESS_WIDTH(0),
 	.C_CLKS_ASYNC(C_CLKS_ASYNC_REQ_SRC)
@@ -976,7 +976,7 @@ fifo #(
 	})
 );
 
-fifo #(
+util_axis_fifo #(
 	.C_DATA_WIDTH(3),
 	.C_ADDRESS_WIDTH(0),
 	.C_CLKS_ASYNC(C_CLKS_ASYNC_DEST_REQ)
@@ -994,7 +994,7 @@ fifo #(
 	.m_axis_data(response_dest_resp_eot)
 );
 
-fifo #(
+util_axis_fifo #(
 	.C_DATA_WIDTH(2),
 	.C_ADDRESS_WIDTH(0),
 	.C_CLKS_ASYNC(C_CLKS_ASYNC_REQ_SRC)
