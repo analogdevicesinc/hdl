@@ -12,10 +12,10 @@ M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../common/fmcjesdadc1_bd.tcl
-M_DEPS += ../../../library/axi_ad9250/axi_ad9250.xpr
-M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
+M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -40,10 +40,10 @@ clean: clean-all
 .PHONY: clean-all
 clean-all:
 	rm -rf $(M_FLIST)
-	make -C ../../../library/axi_ad9250 clean
-	make -C ../../../library/util_bsplit clean
 	make -C ../../../library/axi_jesd_gt clean
+	make -C ../../../library/util_bsplit clean
 	make -C ../../../library/axi_dmac clean
+	make -C ../../../library/axi_ad9250 clean
 
 
 fmcjesdadc1_kc705.xpr: lib $(M_DEPS)
@@ -53,10 +53,10 @@ fmcjesdadc1_kc705.xpr: lib $(M_DEPS)
 
 .PHONY: lib
 lib:
-	make -C ../../../library/axi_ad9250
-	make -C ../../../library/util_bsplit
 	make -C ../../../library/axi_jesd_gt
+	make -C ../../../library/util_bsplit
 	make -C ../../../library/axi_dmac
+	make -C ../../../library/axi_ad9250
 
 ####################################################################################
 ####################################################################################

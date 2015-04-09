@@ -5,17 +5,33 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := system_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_board.tcl
-M_DEPS += system_bd.tcl
-M_DEPS += ../../common/kcu105/kcu105_system_bd.tcl
-M_DEPS += ../common/adv7511_bd.tcl
-M_DEPS += ../../common/kcu105/kcu105_system_mig.tcl
-M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
-M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
-M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
+M_DEPS := util_axis_resize_ip.tcl
+M_DEPS += ../scripts/adi_env.tcl
+M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += 
+M_DEPS += adi_ip_properties_liteutil_axis_resize
+M_DEPS += 
+M_DEPS += adi_add_buss_axisslave
+M_DEPS += xilinx.com:interface:axis_rtl:1.0
+M_DEPS += xilinx.com:interface:axis:1.0
+M_DEPS += {
+M_DEPS += {s_validTVALID}
+M_DEPS += {s_readyTREADY}
+M_DEPS += {s_dataTDATA}
+M_DEPS += }
+M_DEPS += 
+M_DEPS += adi_add_busm_axismaster
+M_DEPS += xilinx.com:interface:axis_rtl:1.0
+M_DEPS += xilinx.com:interface:axis:1.0
+M_DEPS += {
+M_DEPS += {m_validTVALID}
+M_DEPS += {m_readyTREADY}
+M_DEPS += {m_dataTDATA}
+M_DEPS += }
+M_DEPS += 
+M_DEPS += adi_add_bus_clockclks_axis:m_axisresetn
+M_DEPS += 
+M_DEPS += ipx::save_core[ipx::current_core
 
 M_VIVADO := vivado -mode batch -source
 
@@ -30,31 +46,21 @@ M_FLIST += -not -name '*.h' `
 
 
 .PHONY: all
-all: lib adv7511_kcu105.xpr
+all: util_axis_resize.xpr
 
 
 .PHONY: clean
-clean: clean-all
+clean:clean-all
 
 
 .PHONY: clean-all
 clean-all:
 	rm -rf $(M_FLIST)
-	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/axi_clkgen clean
-	make -C ../../../library/axi_hdmi_tx clean
 
 
-adv7511_kcu105.xpr: lib $(M_DEPS)
+util_axis_resize.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> adv7511_kcu105_vivado.log 2>&1
-
-
-.PHONY: lib
-lib:
-	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/axi_clkgen
-	make -C ../../../library/axi_hdmi_tx
+	$(M_VIVADO) util_axis_resize_ip.tcl  >> util_axis_resize_ip.log 2>&1
 
 ####################################################################################
 ####################################################################################

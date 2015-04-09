@@ -7,8 +7,8 @@
 
 .PHONY: all
 all:
-	-make -C zc706 all
 	-make -C a5gt all
+	-make -C zc706 all
 
 
 .PHONY: clean
@@ -17,8 +17,8 @@ clean: clean-all
 
 .PHONY: clean-all
 clean-all:
-	make -C zc706 clean-all
 	make -C a5gt clean-all
+	make -C zc706 clean-all
 
 ####################################################################################
 ####################################################################################

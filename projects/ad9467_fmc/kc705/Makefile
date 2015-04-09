@@ -12,8 +12,8 @@ M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../common/ad9467_bd.tcl
-M_DEPS += ../../../library/axi_ad9467/axi_ad9467.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
+M_DEPS += ../../../library/axi_ad9467/axi_ad9467.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -38,8 +38,8 @@ clean: clean-all
 .PHONY: clean-all
 clean-all:
 	rm -rf $(M_FLIST)
-	make -C ../../../library/axi_ad9467 clean
 	make -C ../../../library/axi_dmac clean
+	make -C ../../../library/axi_ad9467 clean
 
 
 ad9467_fmc_kc705.xpr: lib $(M_DEPS)
@@ -49,8 +49,8 @@ ad9467_fmc_kc705.xpr: lib $(M_DEPS)
 
 .PHONY: lib
 lib:
-	make -C ../../../library/axi_ad9467
 	make -C ../../../library/axi_dmac
+	make -C ../../../library/axi_ad9467
 
 ####################################################################################
 ####################################################################################

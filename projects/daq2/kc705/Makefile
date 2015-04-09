@@ -15,11 +15,11 @@ M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
 M_DEPS += ../common/daq2_bd.tcl
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
-M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
 M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr
-M_DEPS += ../../../library/axi_ad9144/axi_ad9144.xpr
-M_DEPS += ../../../library/util_ccat/util_ccat.xpr
+M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
+M_DEPS += ../../../library/util_ccat/util_ccat.xpr
+M_DEPS += ../../../library/axi_ad9144/axi_ad9144.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -46,11 +46,11 @@ clean-all:
 	rm -rf $(M_FLIST)
 	make -C ../../../library/axi_jesd_gt clean
 	make -C ../../../library/util_bsplit clean
-	make -C ../../../library/util_adcfifo clean
 	make -C ../../../library/axi_ad9680 clean
-	make -C ../../../library/axi_ad9144 clean
-	make -C ../../../library/util_ccat clean
+	make -C ../../../library/util_adcfifo clean
 	make -C ../../../library/axi_dmac clean
+	make -C ../../../library/util_ccat clean
+	make -C ../../../library/axi_ad9144 clean
 
 
 daq2_kc705.xpr: lib $(M_DEPS)
@@ -62,11 +62,11 @@ daq2_kc705.xpr: lib $(M_DEPS)
 lib:
 	make -C ../../../library/axi_jesd_gt
 	make -C ../../../library/util_bsplit
-	make -C ../../../library/util_adcfifo
 	make -C ../../../library/axi_ad9680
-	make -C ../../../library/axi_ad9144
-	make -C ../../../library/util_ccat
+	make -C ../../../library/util_adcfifo
 	make -C ../../../library/axi_dmac
+	make -C ../../../library/util_ccat
+	make -C ../../../library/axi_ad9144
 
 ####################################################################################
 ####################################################################################

@@ -12,8 +12,8 @@ M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/zc702/zc702_system_bd.tcl
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
-M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
+M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -39,8 +39,8 @@ clean: clean-all
 clean-all:
 	rm -rf $(M_FLIST)
 	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/axi_hdmi_tx clean
 	make -C ../../../library/axi_clkgen clean
+	make -C ../../../library/axi_hdmi_tx clean
 
 
 adv7511_zc702.xpr: lib $(M_DEPS)
@@ -51,8 +51,8 @@ adv7511_zc702.xpr: lib $(M_DEPS)
 .PHONY: lib
 lib:
 	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/axi_hdmi_tx
 	make -C ../../../library/axi_clkgen
+	make -C ../../../library/axi_hdmi_tx
 
 ####################################################################################
 ####################################################################################
