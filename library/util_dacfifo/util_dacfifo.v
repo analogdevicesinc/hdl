@@ -48,7 +48,7 @@ module util_dacfifo (
 
   // transfer request from DMAC
 
-  xfer_req,
+  dac_xfer_req,
 
   // fifo IN interface/channel
 
@@ -91,105 +91,123 @@ module util_dacfifo (
 
   // parameters
 
-  parameter               CH_DW = 16;
-  parameter               FIFO_AW = 10;
+  parameter               C_CH_DW = 16;
+  parameter               C_FIFO_AW = 10;
+  parameter               C_CH_CNT = 8;
 
-  localparam              FIFO_DW = 8 * CH_DW;
+  localparam              FIFO_DW = C_CH_CNT * C_CH_DW;
 
   // port definitions
 
-  input                   dac_clk;
-  input                   dac_rst;
+  input                     dac_clk;
+  input                     dac_rst;
 
-  input                   xfer_req;
+  input                     dac_xfer_req;
 
-  input   [(CH_DW-1):0]   data_in_0;
-  input                   dvalid_in_0;
-  input   [(CH_DW-1):0]   data_in_1;
-  input                   dvalid_in_1;
-  input   [(CH_DW-1):0]   data_in_2;
-  input                   dvalid_in_2;
-  input   [(CH_DW-1):0]   data_in_3;
-  input                   dvalid_in_3;
-  input   [(CH_DW-1):0]   data_in_4;
-  input                   dvalid_in_4;
-  input   [(CH_DW-1):0]   data_in_5;
-  input                   dvalid_in_5;
-  input   [(CH_DW-1):0]   data_in_6;
-  input                   dvalid_in_6;
-  input   [(CH_DW-1):0]   data_in_7;
-  input                   dvalid_in_7;
+  input   [(C_CH_DW-1):0]   data_in_0;
+  input                     dvalid_in_0;
+  input   [(C_CH_DW-1):0]   data_in_1;
+  input                     dvalid_in_1;
+  input   [(C_CH_DW-1):0]   data_in_2;
+  input                     dvalid_in_2;
+  input   [(C_CH_DW-1):0]   data_in_3;
+  input                     dvalid_in_3;
+  input   [(C_CH_DW-1):0]   data_in_4;
+  input                     dvalid_in_4;
+  input   [(C_CH_DW-1):0]   data_in_5;
+  input                     dvalid_in_5;
+  input   [(C_CH_DW-1):0]   data_in_6;
+  input                     dvalid_in_6;
+  input   [(C_CH_DW-1):0]   data_in_7;
+  input                     dvalid_in_7;
 
-  input                   dvalid_out_0;
-  output  [(CH_DW-1):0]   data_out_0;
-  input                   dvalid_out_1;
-  output  [(CH_DW-1):0]   data_out_1;
-  input                   dvalid_out_2;
-  output  [(CH_DW-1):0]   data_out_2;
-  input                   dvalid_out_3;
-  output  [(CH_DW-1):0]   data_out_3;
-  input                   dvalid_out_4;
-  output  [(CH_DW-1):0]   data_out_4;
-  input                   dvalid_out_5;
-  output  [(CH_DW-1):0]   data_out_5;
-  input                   dvalid_out_6;
-  output  [(CH_DW-1):0]   data_out_6;
-  input                   dvalid_out_7;
-  output  [(CH_DW-1):0]   data_out_7;
+  input                     dvalid_out_0;
+  output  [(C_CH_DW-1):0]   data_out_0;
+  input                     dvalid_out_1;
+  output  [(C_CH_DW-1):0]   data_out_1;
+  input                     dvalid_out_2;
+  output  [(C_CH_DW-1):0]   data_out_2;
+  input                     dvalid_out_3;
+  output  [(C_CH_DW-1):0]   data_out_3;
+  input                     dvalid_out_4;
+  output  [(C_CH_DW-1):0]   data_out_4;
+  input                     dvalid_out_5;
+  output  [(C_CH_DW-1):0]   data_out_5;
+  input                     dvalid_out_6;
+  output  [(C_CH_DW-1):0]   data_out_6;
+  input                     dvalid_out_7;
+  output  [(C_CH_DW-1):0]   data_out_7;
 
   // internal signals
 
-  wire    [(FIFO_DW-1):0] data_in_s;
-  wire    [(FIFO_DW-1):0] data_out_s;
-  wire                    dvalid_in_s;
-  wire                    dvalid_out_s;
-
-  wire                    fifo_wren_s;
+  wire    [(FIFO_DW-1):0]   data_in_s;
+  wire    [(FIFO_DW-1):0]   data_out_s;
+  wire                      dvalid_in_s;
+  wire                      dvalid_out_s;
 
   // internal registers
 
-  reg     [ 2:0]          dac_xfer_req_m = 'b0;
-  reg                     dac_xfer_init = 'b0;
-  reg                     dac_xfer_enable = 'b0;
-  reg                     dac_xfer_enable_d = 'b0;
-  reg                     dac_read_init = 'b0;
-  reg                     dac_read_enable = 'b0;
+  reg                       fifo_wren = 1'b1;
+  reg                       dac_xfer_req_d = 'b0;
 
-  reg     [(FIFO_AW-1):0] dac_waddr = 'b0;
-  reg     [(FIFO_AW-1):0] dac_waddr_d = 'b0;
-  reg     [(FIFO_AW-1):0] dac_raddr = 'b0;
-  reg     [(FIFO_AW-1):0] dac_maxaddr = 'b0;
+  reg     [(C_FIFO_AW-1):0] dac_waddr = 'b0;
+  reg     [(C_FIFO_AW-1):0] dac_waddr_d = 'b0;
+  reg     [(C_FIFO_AW-1):0] dac_raddr = 'b0;
+  reg     [(C_FIFO_AW-1):0] dac_maxaddr = 'b0;
 
-  reg     [(FIFO_DW-1):0] data_in = 'b0;
-  reg     [(FIFO_DW-1):0] data_in_d = 'b0;
-  reg                     dvalid_in = 1'b0;
-  reg                     dvalid_in_d = 1'b0;
+  reg                       dvalid_in = 1'b0;
+  reg     [(FIFO_DW-1):0]   data_in = 'b0;
+  reg     [(FIFO_DW-1):0]   data_in_d = 'b0;
 
   // internal logic
 
-  assign data_in_s = {data_in_7, data_in_6, data_in_5, data_in_4,
-                      data_in_3, data_in_2, data_in_1, data_in_0};
+  assign data_in_s = (C_CH_CNT == 8) ? {data_in_7, data_in_6, data_in_5,
+                                        data_in_4, data_in_3, data_in_2,
+                                        data_in_1, data_in_0} :
+                     (C_CH_CNT == 7) ? {data_in_6, data_in_5, data_in_4,
+                                        data_in_3, data_in_2, data_in_1,
+                                        data_in_0} :
+                     (C_CH_CNT == 6) ? {data_in_5, data_in_4, data_in_3,
+                                        data_in_2, data_in_1, data_in_0} :
+                     (C_CH_CNT == 5) ? {data_in_4, data_in_3, data_in_2,
+                                        data_in_1, data_in_0} :
+                     (C_CH_CNT == 4) ? {data_in_3, data_in_2, data_in_1,
+                                        data_in_0} :
+                     (C_CH_CNT == 3) ? {data_in_2, data_in_1, data_in_0} :
+                     (C_CH_CNT == 2) ? {data_in_1, data_in_0} :
+                     (C_CH_CNT == 1) ?  data_in_0 :
+                                        data_in_0;
 
-  assign dvalid_in_s =  dvalid_in_0 | dvalid_in_1 | dvalid_in_2 | dvalid_in_3 |
-                        dvalid_in_4 | dvalid_in_5 | dvalid_in_6 | dvalid_in_7;
+  assign dvalid_in_s = (C_CH_CNT == 8) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
+                                          dvalid_in_3 & dvalid_in_4 & dvalid_in_5 &
+                                          dvalid_in_6 & dvalid_in_7) :
+                       (C_CH_CNT == 7) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
+                                          dvalid_in_3 & dvalid_in_4 & dvalid_in_5 &
+                                          dvalid_in_6) :
+                       (C_CH_CNT == 6) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
+                                          dvalid_in_3 & dvalid_in_4 & dvalid_in_5) :
+                       (C_CH_CNT == 5) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
+                                          dvalid_in_3 & dvalid_in_4) :
+                       (C_CH_CNT == 4) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
+                                          dvalid_in_3) :
+                       (C_CH_CNT == 3) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2) :
+                       (C_CH_CNT == 2) ? (dvalid_in_0 & dvalid_in_1) :
+                       (C_CH_CNT == 1) ?  dvalid_in_0 :
+                                          dvalid_in_0;
 
-  assign dac_waddr_limit_s = &dac_waddr_d;
-
-  // write interface
+  // free running write address generator
+  // running just when xfer_req is asserted
+  // a new xfer_req resets the write address
 
   always @(posedge dac_clk) begin
     if(dac_rst == 1'b1) begin
-      dac_xfer_req_m <= 3'b0;
-      dac_xfer_init <= 1'b0;
-      dac_xfer_enable <= 1'b0;
+      dac_xfer_req_d <= 1'b0;
+      dac_maxaddr <= {C_FIFO_AW{1'b1}};
     end else begin
-      dac_xfer_req_m <= {dac_xfer_req_m[1:0], xfer_req};
-      dac_xfer_init <= ~dac_xfer_req_m[2] & dac_xfer_req_m[1];
-      if(dac_xfer_init  ==  1'b1) begin
-        dac_xfer_enable <= 1'b1;
-      end else if ((dac_waddr_limit_s == 1'b1) || (dac_xfer_req_m[2] == 1'b0)) begin
-        dac_xfer_enable <= 1'b0;
-      end
+      dac_xfer_req_d <= dac_xfer_req;
+    end
+    if (dac_xfer_req_d && ~dac_xfer_req) begin
+      dac_maxaddr <= dac_waddr_d;
     end
   end
 
@@ -197,13 +215,9 @@ module util_dacfifo (
     if(dac_rst == 1'b1) begin
       dac_waddr <= 'h0;
       dac_waddr_d <= 'h0;
-      dac_maxaddr <= {FIFO_AW{1'b1}};
-    end if(dvalid_in_d == 1'b1) begin
-      dac_waddr <= (dac_xfer_enable == 1'b1) ? (dac_waddr + 1) : 'h0;
+    end if(dvalid_in == 1'b1) begin
+      dac_waddr <= (dac_xfer_req_d == 1'b1) ? (dac_waddr + 1) : 'h0;
       dac_waddr_d <= dac_waddr;
-    end
-    if((dac_xfer_enable == 1'b0) && (dac_xfer_enable_d == 1'b1)) begin
-      dac_maxaddr <= dac_waddr_d;
     end
   end
 
@@ -214,23 +228,42 @@ module util_dacfifo (
       data_in <= 'b0;
       data_in_d <= 'b0;
       dvalid_in <= 1'b0;
-      dvalid_in_d <= 1'b0;
-      dac_xfer_enable_d <= 1'b0;
     end else begin
       data_in <= data_in_s;
       data_in_d <= data_in;
       dvalid_in <= dvalid_in_s;
-      dvalid_in_d <= dvalid_in;
-      dac_xfer_enable_d <= dac_xfer_enable;
     end
   end
 
-  assign fifo_wren_s = dvalid_in_d & dac_xfer_enable;
+  always @(posedge dac_clk) begin
+    if(dac_rst == 1'b1) begin
+      fifo_wren <= 1'b0;
+    end else begin
+      fifo_wren <= dvalid_in & dac_xfer_req_d;
+    end
+  end
 
   // read interface
 
-  assign dvalid_out_s = dvalid_out_0 | dvalid_out_1 | dvalid_out_2 | dvalid_out_3 |
-                        dvalid_out_4 | dvalid_out_5 | dvalid_out_6 | dvalid_out_7;
+  assign dvalid_out_s = (C_CH_CNT == 8) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
+                                           dvalid_out_3 & dvalid_out_4 & dvalid_out_5 &
+                                           dvalid_out_6 & dvalid_out_7) :
+                        (C_CH_CNT == 7) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
+                                           dvalid_out_3 & dvalid_out_4 & dvalid_out_5 &
+                                           dvalid_out_6) :
+                        (C_CH_CNT == 6) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
+                                           dvalid_out_3 & dvalid_out_4 & dvalid_out_5) :
+                        (C_CH_CNT == 5) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
+                                           dvalid_out_3 & dvalid_out_4) :
+                        (C_CH_CNT == 4) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
+                                           dvalid_out_3) :
+                        (C_CH_CNT == 3) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2) :
+                        (C_CH_CNT == 2) ? (dvalid_out_0 & dvalid_out_1) :
+                        (C_CH_CNT == 1) ?  dvalid_out_0 :
+                                           dvalid_out_0;
+
+  // free running read address generator
+  // reads until the max address
 
   always @(posedge dac_clk) begin
     if(dac_rst == 1'b1) begin
@@ -244,24 +277,24 @@ module util_dacfifo (
 
   // output logic
 
-  assign data_out_0 = data_out_s[(1*CH_DW-1):        0];
-  assign data_out_1 = data_out_s[(2*CH_DW-1):(1*CH_DW)];
-  assign data_out_2 = data_out_s[(3*CH_DW-1):(2*CH_DW)];
-  assign data_out_3 = data_out_s[(4*CH_DW-1):(3*CH_DW)];
-  assign data_out_4 = data_out_s[(5*CH_DW-1):(4*CH_DW)];
-  assign data_out_5 = data_out_s[(6*CH_DW-1):(5*CH_DW)];
-  assign data_out_6 = data_out_s[(7*CH_DW-1):(6*CH_DW)];
-  assign data_out_7 = data_out_s[(8*CH_DW-1):(7*CH_DW)];
+  assign data_out_0 = (C_CH_CNT >= 1) ? data_out_s[(1*C_CH_DW-1):          0] : 'b0;
+  assign data_out_1 = (C_CH_CNT >= 2) ? data_out_s[(2*C_CH_DW-1):(1*C_CH_DW)] : 'b0;
+  assign data_out_2 = (C_CH_CNT >= 3) ? data_out_s[(3*C_CH_DW-1):(2*C_CH_DW)] : 'b0;
+  assign data_out_3 = (C_CH_CNT >= 4) ? data_out_s[(4*C_CH_DW-1):(3*C_CH_DW)] : 'b0;
+  assign data_out_4 = (C_CH_CNT >= 5) ? data_out_s[(5*C_CH_DW-1):(4*C_CH_DW)] : 'b0;
+  assign data_out_5 = (C_CH_CNT >= 6) ? data_out_s[(6*C_CH_DW-1):(5*C_CH_DW)] : 'b0;
+  assign data_out_6 = (C_CH_CNT >= 7) ? data_out_s[(7*C_CH_DW-1):(6*C_CH_DW)] : 'b0;
+  assign data_out_7 = (C_CH_CNT == 8) ? data_out_s[(8*C_CH_DW-1):(7*C_CH_DW)] : 'b0;
 
   // memory instantiation
 
   ad_mem #(
-    .ADDR_WIDTH (FIFO_AW),
+    .ADDR_WIDTH (C_FIFO_AW),
     .DATA_WIDTH (FIFO_DW))
   i_mem_fifo (
     .clka (dac_clk),
-    .wea (fifo_wren_s),
-    .addra (dac_waddr),
+    .wea (fifo_wren),
+    .addra (dac_waddr_d),
     .dina (data_in_d),
     .clkb (dac_clk),
     .addrb (dac_raddr),
