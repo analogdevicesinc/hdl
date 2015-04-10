@@ -54,6 +54,7 @@ module util_axis_fifo (
 parameter C_DATA_WIDTH = 64;
 parameter C_CLKS_ASYNC = 1;
 parameter C_ADDRESS_WIDTH = 4;
+parameter C_S_AXIS_REGISTERED = 1;
 
 generate if (C_ADDRESS_WIDTH == 0) begin
 
@@ -168,6 +169,8 @@ always @(posedge s_axis_aclk) begin
 		ram[s_axis_waddr] <= s_axis_data;
 end
 
+if (C_S_AXIS_REGISTERED == 1) begin
+
 reg [C_DATA_WIDTH-1:0] data;
 reg valid;
 
@@ -190,6 +193,14 @@ end
 assign _m_axis_ready = ~valid || m_axis_ready;
 assign m_axis_data = data;
 assign m_axis_valid = valid;
+
+end else begin
+
+assign _m_axis_ready = m_axis_ready;
+assign m_axis_valid = _m_axis_valid;
+assign m_axis_data = ram[m_axis_raddr];
+
+end
 
 end endgenerate
 
