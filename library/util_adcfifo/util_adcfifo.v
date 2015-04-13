@@ -187,12 +187,6 @@ module util_adcfifo (
     end
   end
   
-  always @(posedge dma_clk) begin
-    if (dma_xfer_req == 1'b0) begin
-    end else begin
-    end
-  end
-
   assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
   assign dma_rd_s = (dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_wready_s;
 
