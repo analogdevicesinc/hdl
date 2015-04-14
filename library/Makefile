@@ -30,6 +30,7 @@ clean:
 	make -C axi_adcfifo clean
 	make -C axi_clkgen clean
 	make -C axi_dmac clean
+	make -C axi_generic_adc clean
 	make -C axi_hdmi_rx clean
 	make -C axi_hdmi_tx clean
 	make -C axi_i2s_adi clean
@@ -82,6 +83,7 @@ lib:
 	-make -C axi_adcfifo
 	-make -C axi_clkgen
 	-make -C axi_dmac
+	-make -C axi_generic_adc
 	-make -C axi_hdmi_rx
 	-make -C axi_hdmi_tx
 	-make -C axi_i2s_adi
