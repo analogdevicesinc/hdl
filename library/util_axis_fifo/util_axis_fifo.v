@@ -60,7 +60,7 @@ parameter C_S_AXIS_REGISTERED = 1;
 
 generate if (C_ADDRESS_WIDTH == 0) begin
 
-reg [C_DATA_WIDTH-1:0] ram;
+reg [C_DATA_WIDTH-1:0] cdc_sync_fifo_ram;
 reg s_axis_waddr = 1'b0;
 reg m_axis_raddr = 1'b0;
 
@@ -95,7 +95,7 @@ assign s_axis_room = s_axis_ready;
 
 always @(posedge s_axis_aclk) begin
 	if (s_axis_ready)
-		ram <= s_axis_data;
+		cdc_sync_fifo_ram <= s_axis_data;
 end
 
 always @(posedge s_axis_aclk) begin
@@ -117,7 +117,7 @@ always @(posedge m_axis_aclk) begin
 	end
 end
 
-assign m_axis_data = ram;
+assign m_axis_data = cdc_sync_fifo_ram;
 
 end else begin
 
