@@ -11,7 +11,6 @@ all: lib
 
 clean:
 	make -C axi_ad6676 clean
-	make -C axi_ad7175 clean
 	make -C axi_ad9122 clean
 	make -C axi_ad9144 clean
 	make -C axi_ad9152 clean
@@ -71,7 +70,6 @@ clean-all:clean
 
 lib:
 	-make -C axi_ad6676
-	-make -C axi_ad7175
 	-make -C axi_ad9122
 	-make -C axi_ad9144
 	-make -C axi_ad9152
