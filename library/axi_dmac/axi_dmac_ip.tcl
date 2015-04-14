@@ -26,8 +26,7 @@ adi_ip_files axi_dmac [list \
   "axi_dmac_constr.xdc" ]
 
 adi_ip_properties axi_dmac
-adi_ip_constraints axi_dmac [list \
-  "axi_dmac_constr.xdc" ]
+adi_ip_constraints axi_dmac "axi_dmac_constr.xdc" "late"
 
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_axis_resize:1.0 \
