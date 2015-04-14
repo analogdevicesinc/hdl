@@ -59,6 +59,7 @@ clean:
 	make -C util_pmod_adc clean
 	make -C util_pmod_fmeter clean
 	make -C util_rfifo clean
+	make -C util_sigma_delta_spi clean
 	make -C util_upack clean
 	make -C util_wfifo clean
 
@@ -116,6 +117,7 @@ lib:
 	-make -C util_pmod_adc
 	-make -C util_pmod_fmeter
 	-make -C util_rfifo
+	-make -C util_sigma_delta_spi
 	-make -C util_upack
 	-make -C util_wfifo
 
