@@ -72,7 +72,7 @@ sync_bits #(
 	.CLK_ASYNC(C_CLKS_ASYNC)
 ) i_waddr_sync (
 	.out_clk(m_axis_aclk),
-	.out_resetn(s_axis_aresetn),
+	.out_resetn(m_axis_aresetn),
 	.in(s_axis_waddr),
 	.out(m_axis_waddr)
 );
@@ -82,7 +82,7 @@ sync_bits #(
 	.CLK_ASYNC(C_CLKS_ASYNC)
 ) i_raddr_sync (
 	.out_clk(s_axis_aclk),
-	.out_resetn(m_axis_aresetn),
+	.out_resetn(s_axis_aresetn),
 	.in(m_axis_raddr),
 	.out(s_axis_raddr)
 );

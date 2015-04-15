@@ -140,7 +140,7 @@ end
 
 always @(posedge m_axis_aclk)
 begin
-	if (s_axis_aresetn == 1'b0) begin
+	if (m_axis_aresetn == 1'b0) begin
 		m_axis_valid <= 1'b0;
 		m_axis_level <= 'h00;
 	end else begin
