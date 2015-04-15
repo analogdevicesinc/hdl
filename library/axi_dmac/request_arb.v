@@ -273,9 +273,11 @@ wire response_dest_ready = 1'b1;
 wire [1:0] response_dest_resp;
 wire response_dest_resp_eot;
 
+/* Unused for now
 wire response_src_valid;
 wire response_src_ready = 1'b1;
 wire [1:0] response_src_resp;
+*/
 
 assign dbg_dest_request_id = dest_request_id;
 assign dbg_dest_response_id = dest_response_id;
@@ -994,6 +996,7 @@ util_axis_fifo #(
 	.m_axis_data(response_dest_resp_eot)
 );
 
+/* Unused for now
 util_axis_fifo #(
 	.C_DATA_WIDTH(2),
 	.C_ADDRESS_WIDTH(0),
@@ -1010,7 +1013,7 @@ util_axis_fifo #(
 	.m_axis_valid(response_src_valid),
 	.m_axis_ready(response_src_ready),
 	.m_axis_data(response_src_resp)
-);
+);*/
 
 dmac_request_generator #(
 	.C_ID_WIDTH(C_ID_WIDTH),
