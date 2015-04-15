@@ -45,12 +45,15 @@ proc adi_ip_files {ip_name ip_files} {
   set_property "top" "$ip_name" $proj_fileset
 }
 
-proc adi_ip_constraints {ip_name ip_constr_files} {
+proc adi_ip_constraints {ip_name ip_constr_files {processing_order early}} {
 
   set proj_filegroup [ipx::get_file_groups xilinx_verilogsynthesis -of_objects [ipx::current_core]]
-  ipx::add_file $ip_constr_files $proj_filegroup
-  set_property type {{xdc}} [ipx::get_files $ip_constr_files -of_objects $proj_filegroup]
-  set_property library_name {} [ipx::get_files $ip_constr_files -of_objects $proj_filegroup]
+  set f [ipx::add_file $ip_constr_files $proj_filegroup]
+  set_property -dict [list \
+    type xdc \
+    library_name {} \
+    processing_order $processing_order \
+  ] $f
 }
 
 proc adi_ip_properties {ip_name} {
