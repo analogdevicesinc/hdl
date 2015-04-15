@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -39,27 +39,33 @@
 
 module fmcadc2_spi (
 
-  spi_adc_csn,
-  spi_clk_csn,
   spi_clk,
+
+  spi_adc_csn,
+  spi_ext_csn_0,
+  spi_ext_csn_1,
+
   spi_mosi,
   spi_miso,
 
   spi_adc_sdio,
-  spi_clk_sdio);
+  spi_ext_sdio);
 
   // 4 wire
 
-  input           spi_adc_csn;
-  input           spi_clk_csn;
   input           spi_clk;
+
+  input           spi_adc_csn;
+  input           spi_ext_csn_0;
+  input           spi_ext_csn_1;
+
   input           spi_mosi;
   output          spi_miso;
 
   // 3 wire
 
   inout           spi_adc_sdio;
-  inout           spi_clk_sdio;
+  inout           spi_ext_sdio;
 
   // internal registers
 
@@ -72,11 +78,11 @@ module fmcadc2_spi (
   wire            spi_csn_s;
   wire            spi_enable_s;
   wire            spi_adc_miso_s;
-  wire            spi_clk_miso_s;
+  wire            spi_ext_miso_s;
 
   // check on rising edge and change on falling edge
 
-  assign spi_csn_s = spi_adc_csn & spi_clk_csn;
+  assign spi_csn_s = spi_adc_csn & spi_ext_csn_0 & spi_ext_csn_1;
   assign spi_enable_s = spi_enable & ~spi_csn_s;
 
   always @(posedge spi_clk or posedge spi_csn_s) begin
@@ -101,7 +107,9 @@ module fmcadc2_spi (
     end
   end
 
-  assign spi_miso = ((spi_adc_miso_s & ~spi_adc_csn) | (spi_clk_miso_s & ~spi_clk_csn));
+  assign spi_miso = ((spi_adc_miso_s & ~spi_adc_csn) |
+                     (spi_ext_miso_s & ~spi_ext_csn_0) |
+                     (spi_ext_miso_s & ~spi_ext_csn_1));
 
   // io butter
 
@@ -114,8 +122,8 @@ module fmcadc2_spi (
   IOBUF i_iobuf_clk_sdio (
     .T (spi_enable_s),
     .I (spi_mosi),
-    .O (spi_clk_miso_s),
-    .IO (spi_clk_sdio));
+    .O (spi_ext_miso_s),
+    .IO (spi_ext_sdio));
 
 endmodule
 

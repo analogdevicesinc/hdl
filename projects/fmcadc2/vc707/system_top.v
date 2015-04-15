@@ -100,22 +100,22 @@ module system_top (
 
   adc_irq,
   adc_fd,
-  clk_reset,
 
   spi_adc_csn,
   spi_adc_clk,
   spi_adc_sdio,
-  spi_clk_csn,
-  spi_clk_clk,
-  spi_clk_sdio);
+  spi_ext_csn_0,
+  spi_ext_csn_1,
+  spi_ext_clk,
+  spi_ext_sdio);
 
   input             sys_rst;
   input             sys_clk_p;
   input             sys_clk_n;
-                    
+
   input             uart_sin;
   output            uart_sout;
-                    
+
   output            ddr3_reset_n;
   output  [13:0]    ddr3_addr;
   output  [ 2:0]    ddr3_ba;
@@ -131,12 +131,12 @@ module system_top (
   inout   [ 7:0]    ddr3_dqs_n;
   inout   [ 7:0]    ddr3_dqs_p;
   output  [ 0:0]    ddr3_odt;
-                    
+
   input             sgmii_rxp;
   input             sgmii_rxn;
   output            sgmii_txp;
   output            sgmii_txn;
-                    
+
   output            phy_rstn;
   input             mgt_clk_p;
   input             mgt_clk_n;
@@ -151,14 +151,14 @@ module system_top (
   output            linear_flash_wen;
 
   output            fan_pwm;
-                    
+
   inout   [ 6:0]    gpio_lcd;
   inout   [20:0]    gpio_bd;
-                    
+
   output            iic_rstn;
   inout             iic_scl;
   inout             iic_sda;
-                    
+
   input             rx_ref_clk_p;
   input             rx_ref_clk_n;
   output            rx_sysref_p;
@@ -167,17 +167,17 @@ module system_top (
   output            rx_sync_n;
   input   [ 7:0]    rx_data_p;
   input   [ 7:0]    rx_data_n;
-                    
+
   inout             adc_irq;
   inout             adc_fd;
-  inout             clk_reset;
 
   output            spi_adc_csn;
   output            spi_adc_clk;
   inout             spi_adc_sdio;
-  output            spi_clk_csn;
-  output            spi_clk_clk;
-  inout             spi_clk_sdio;
+  output            spi_ext_csn_0;
+  output            spi_ext_csn_1;
+  output            spi_ext_clk;
+  inout             spi_ext_sdio;
 
   // internal signals
 
@@ -195,8 +195,9 @@ module system_top (
 
   assign spi_adc_csn = spi_csn[0];
   assign spi_adc_clk = spi_clk;
-  assign spi_clk_csn = spi_csn[1];
-  assign spi_clk_clk = spi_clk;
+  assign spi_ext_csn_0 = spi_csn[1];
+  assign spi_ext_csn_1 = spi_csn[2];
+  assign spi_ext_clk = spi_clk;
 
   // default logic
 
@@ -224,19 +225,19 @@ module system_top (
 
   fmcadc2_spi i_fmcadc2_spi (
     .spi_adc_csn (spi_adc_csn),
-    .spi_clk_csn (spi_clk_csn),
+    .spi_ext_csn_0 (spi_ext_csn_0),
+    .spi_ext_csn_1 (spi_ext_csn_1),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_adc_sdio (spi_adc_sdio),
-    .spi_clk_sdio (spi_clk_sdio));
+    .spi_ext_sdio (spi_ext_sdio));
 
   ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
-    .dt (gpio_t[34:32]),
-    .di (gpio_o[34:32]),
-    .do (gpio_i[34:32]),
-    .dio ({ clk_reset,  // 34
-            adc_irq,    // 33
+    .dt (gpio_t[33:32]),
+    .di (gpio_o[33:32]),
+    .do (gpio_i[33:32]),
+    .dio ({ adc_irq,    // 33
             adc_fd}));  // 32
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (

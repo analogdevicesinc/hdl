@@ -108,14 +108,14 @@ module system_top (
 
   adc_irq,
   adc_fd,
-  clk_reset,
 
   spi_adc_csn,
   spi_adc_clk,
   spi_adc_sdio,
-  spi_clk_csn,
-  spi_clk_clk,
-  spi_clk_sdio);
+  spi_ext_csn_0,
+  spi_ext_csn_1,
+  spi_ext_clk,
+  spi_ext_sdio);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -184,14 +184,14 @@ module system_top (
 
   inout           adc_irq;
   inout           adc_fd;
-  inout           clk_reset;
 
   output          spi_adc_csn;
   output          spi_adc_clk;
   inout           spi_adc_sdio;
-  output          spi_clk_csn;
-  output          spi_clk_clk;
-  inout           spi_clk_sdio;
+  output          spi_ext_csn_0;
+  output          spi_ext_csn_1;
+  output          spi_ext_clk;
+  inout           spi_ext_sdio;
 
   // internal signals
 
@@ -214,8 +214,9 @@ module system_top (
 
   assign spi_adc_csn = spi0_csn[0];
   assign spi_adc_clk = spi_clk;
-  assign spi_clk_csn = spi0_csn[1];
-  assign spi_clk_clk = spi_clk;
+  assign spi_ext_csn_0 = spi0_csn[1];
+  assign spi_ext_csn_1 = spi0_csn[2];
+  assign spi_ext_clk = spi_clk;
 
   // instantiations
 
@@ -238,19 +239,19 @@ module system_top (
 
   fmcadc2_spi i_fmcadc2_spi (
     .spi_adc_csn (spi_adc_csn),
-    .spi_clk_csn (spi_clk_csn),
+    .spi_ext_csn_0 (spi_ext_csn_0),
+    .spi_ext_csn_1 (spi_ext_csn_1),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_adc_sdio (spi_adc_sdio),
-    .spi_clk_sdio (spi_clk_sdio));
+    .spi_ext_sdio (spi_ext_sdio));
 
   ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
-    .dt (gpio_t[34:32]),
-    .di (gpio_o[34:32]),
-    .do (gpio_i[34:32]),
-    .dio ({ clk_reset,  // 34
-            adc_irq,    // 33
+    .dt (gpio_t[33:32]),
+    .di (gpio_o[33:32]),
+    .do (gpio_i[33:32]),
+    .dio ({ adc_irq,    // 33
             adc_fd}));  // 32
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
