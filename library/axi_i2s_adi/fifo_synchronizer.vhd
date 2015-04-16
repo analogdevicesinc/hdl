@@ -45,13 +45,14 @@ entity fifo_synchronizer is
 		WIDTH		: integer := 2
 	);
 	port (
-		resetn		: in std_logic;
 
 		in_clk	    : in std_logic;
+		in_resetn   : in std_logic;
 		in_data	    : in std_logic_vector(WIDTH - 1 downto 0);
 		in_tick	    : in std_logic;
 
 		out_clk	    : in std_logic;
+		out_resetn  : in std_logic;
 		out_data    : out std_logic_vector(WIDTH - 1 downto 0);
 		out_tick    : out std_logic
 	);
@@ -65,44 +66,67 @@ architecture impl of fifo_synchronizer is
 	signal rd_addr : natural range 0 to DEPTH - 1;
 	signal wr_addr : natural range 0 to DEPTH - 1;
 
+	signal cdc_sync_stage0_tick : std_logic;
+	signal cdc_sync_stage1_tick : std_logic;
+	signal cdc_sync_stage2_tick : std_logic;
+	signal cdc_sync_stage3_tick : std_logic;
 	signal tick : std_logic;
-	signal tick_d1 : std_logic;
-	signal tick_d2 : std_logic;
 begin
 
 	process (in_clk)
 	begin
-	    if rising_edge(in_clk) then
-			if resetn = '0' then
-				wr_addr <= 0;
-				tick <= '0';
-			else
-				if in_tick = '1' then
-					fifo(wr_addr) <= in_data;
-					wr_addr <= (wr_addr + 1) mod DEPTH;
-					tick <= not tick;
-				end if;
+		if rising_edge(in_clk) then
+			if in_tick = '1' then
+				cdc_sync_stage0_tick <= not cdc_sync_stage0_tick;
+				fifo(wr_addr) <= in_data;
 			end if;
-	    end if;
+		end if;
 	end process;
 
-	process (out_clk)
+	process (in_clk)
 	begin
-	    if rising_edge(out_clk) then
-			if resetn = '0' then
-				rd_addr <= 0;
-				tick_d1 <= '0';
-				tick_d2 <= '0';
+		if rising_edge(in_clk) then
+			if in_resetn = '0' then
+				wr_addr <= 0;
 			else
-				tick_d1 <= tick;
-				tick_d2 <= tick_d1;
-				out_tick <= tick_d1 xor tick_d2;
-				if (tick_d1 xor tick_d2) = '1' then
-					rd_addr <= (rd_addr + 1) mod DEPTH;
-					out_data <= fifo(rd_addr);
+				if in_tick = '1' then
+					wr_addr <= (wr_addr + 1) mod DEPTH;
 				end if;
 			end if;
 		end if;
 	end process;
 
+	process (out_clk)
+	begin
+		if rising_edge(out_clk) then
+			cdc_sync_stage1_tick <= cdc_sync_stage0_tick;
+			cdc_sync_stage2_tick <= cdc_sync_stage1_tick;
+			cdc_sync_stage3_tick <= cdc_sync_stage2_tick;
+		end if;
+	end process;
+
+	tick <= cdc_sync_stage2_tick xor cdc_sync_stage3_tick;
+	out_tick <= tick;
+
+	process (out_clk)
+	begin
+		if rising_edge(out_clk) then
+			if tick = '1' then
+				out_data <= fifo(rd_addr);
+			end if;
+		end if;
+	end process;
+
+	process (out_clk)
+	begin
+		if rising_edge(out_clk) then
+			if out_resetn = '0' then
+				rd_addr <= 0;
+			else
+				if tick = '1' then
+					rd_addr <= (rd_addr + 1) mod DEPTH;
+				end if;
+			end if;
+		end if;
+	end process;
 end;

@@ -86,9 +86,10 @@ constant NUM_RX			: integer := C_HAS_RX * C_NUM_CH;
 
 signal enable			: Boolean;
 
-signal tick			: std_logic;
-signal tick_d1			: std_logic;
-signal tick_d2			: std_logic;
+signal cdc_sync_stage0_tick	: std_logic;
+signal cdc_sync_stage1_tick	: std_logic;
+signal cdc_sync_stage2_tick	: std_logic;
+signal cdc_sync_stage3_tick	: std_logic;
 
 signal BCLK_O_int		: std_logic;
 signal LRCLK_O_int		: std_logic;
@@ -114,37 +115,43 @@ signal tx_sync_fifo_in : std_logic_vector(3 + NUM_TX downto 0);
 signal rx_sync_fifo_out : std_logic_vector(3 + NUM_RX downto 0);
 signal rx_sync_fifo_in : std_logic_vector(3 + NUM_RX downto 0);
 
+signal data_resetn : std_logic;
+signal data_reset_vec : std_logic_vector(2 downto 0);
+
 begin
 	enable <= rx_enable or tx_enable;
 
   const_1 <= '1';
+	process (data_clk, resetn)
+	begin
+		if resetn = '0' then
+			data_reset_vec <= (others => '1');
+		elsif rising_edge(data_clk) then
+			data_reset_vec(2 downto 1) <= data_reset_vec(1 downto 0);
+			data_reset_vec(0) <= '0';
+		end if;
+	end process;
+
+	data_resetn <= not data_reset_vec(2);
 
 	-- Generate tick signal in the DATA_CLK_I domain
 	process (data_clk)
 	begin
 		if rising_edge(data_clk) then
-			if resetn = '0' then
-				tick <= '0';
-			else
-				tick <= not tick;
-			end if;
+			cdc_sync_stage0_tick <= not cdc_sync_stage0_tick;
 		end if;
 	end process;
 
 	process (clk)
 	begin
 		if rising_edge(clk) then
-			if resetn = '0' then
-				tick_d1 <= '0';
-				tick_d2 <= '0';
-			else
-				tick_d1 <= tick;
-				tick_d2 <= tick_d1;
-			end if;
+			cdc_sync_stage1_tick <= cdc_sync_stage0_tick;
+			cdc_sync_stage2_tick <= cdc_sync_stage1_tick;
+			cdc_sync_stage3_tick <= cdc_sync_stage2_tick;
 		end if;
 	end process;
 
-	tx_tick <= tick_d2 xor tick_d1;
+	tx_tick <= cdc_sync_stage2_tick xor cdc_sync_stage3_tick;
 
 	tx_sync_fifo_in(0) <= tx_channel_sync;
 	tx_sync_fifo_in(1) <= tx_frame_sync;
@@ -152,10 +159,11 @@ begin
 	tx_sync_fifo_in(3) <= tx_lrclk;
 	tx_sync_fifo_in(3 + NUM_TX downto 4) <= tx_sdata;
 
+
 	process (data_clk)
 	begin
 		if rising_edge(data_clk) then
-			if resetn = '0' then
+			if data_resetn = '0' then
 				BCLK_O <= (others => '1');
 				LRCLK_O <= (others => '1');
 				SDATA_O <= (others => '0');
@@ -190,11 +198,12 @@ begin
 			WIDTH => NUM_TX + 4
 		)
 		port map (
-			resetn => resetn,
+			in_resetn => resetn,
 			in_clk => clk,
 			in_data => tx_sync_fifo_in,
 			in_tick => tx_tick,
 
+			out_resetn => data_resetn,
 			out_clk => data_clk,
 			out_data => tx_sync_fifo_out
 		);
@@ -271,11 +280,12 @@ begin
 				WIDTH => NUM_RX + 4
 			)
 			port map (
-				resetn => resetn,
+				in_resetn => data_resetn,
 				in_clk => data_clk,
 				in_data => rx_sync_fifo_in,
 				in_tick => const_1,
 
+				out_resetn => resetn,
 				out_clk => clk,
 				out_data => rx_sync_fifo_out
 			);

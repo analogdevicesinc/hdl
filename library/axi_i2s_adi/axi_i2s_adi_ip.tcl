@@ -15,9 +15,12 @@ adi_ip_files axi_i2s_adi [list \
   "i2s_tx.vhd" \
   "i2s_clkgen.vhd" \
   "fifo_synchronizer.vhd" \
-  "axi_i2s_adi.vhd" ]
+  "axi_i2s_adi.vhd" \
+  "axi_i2s_adi_constr.xdc" \
+]
 
 adi_ip_properties_lite axi_i2s_adi
+adi_ip_constraints axi_spdif_tx axi_i2s_adi_constr.xdc late
 
 adi_add_bus "DMA_ACK_RX" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
