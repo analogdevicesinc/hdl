@@ -42,6 +42,7 @@ clean:
 	make -C controllerperipheralhdladi_pcore clean
 	make -C util_adcfifo clean
 	make -C util_adc_pack clean
+	make -C util_axis_fifo clean
 	make -C util_axis_resize clean
 	make -C util_bsplit clean
 	make -C util_ccat clean
@@ -94,6 +95,7 @@ lib:
 	-make -C controllerperipheralhdladi_pcore
 	-make -C util_adcfifo
 	-make -C util_adc_pack
+	-make -C util_axis_fifo
 	-make -C util_axis_resize
 	-make -C util_bsplit
 	-make -C util_ccat

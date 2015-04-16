@@ -46,8 +46,9 @@ M_FLIST += -not -name '*.v'
 M_FLIST += -not -name '*.xdc'
 M_FLIST += -not -name '*.vhd'
 M_FLIST += -not -name '*.prj'
+M_FLIST += -not -name '*.xml'
 M_FLIST += -not -name 'Makefile'
-M_FLIST += -not -name '*.h' `
+M_FLIST += -not -name '*.h' `M_FLIST += component.xml 
 
 
 .PHONY: all

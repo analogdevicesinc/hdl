@@ -5,15 +5,16 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_clkgen_ip.tcl
+M_DEPS := util_axis_fifo_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/ad_mmcm_drp.v
-M_DEPS += ../common/up_axi.v
-M_DEPS += ../common/up_drp_cntrl.v
-M_DEPS += ../common/up_clkgen.v
-M_DEPS += axi_clkgen.v
+M_DEPS += ../common/sync_bits.v
+M_DEPS += ../common/sync_gray.v
+M_DEPS += address_gray.v
+M_DEPS += address_gray_pipelined.v
+M_DEPS += address_sync.v
+M_DEPS += util_axis_fifo.v
+M_DEPS += 
 
 M_VIVADO := vivado -mode batch -source
 
@@ -29,7 +30,7 @@ M_FLIST += -not -name '*.h' `M_FLIST += component.xml
 
 
 .PHONY: all
-all: axi_clkgen.xpr
+all: util_axis_fifo.xpr
 
 
 .PHONY: clean
@@ -41,9 +42,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-axi_clkgen.xpr: $(M_DEPS)
+util_axis_fifo.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_VIVADO) axi_clkgen_ip.tcl  >> axi_clkgen_ip.log 2>&1
+	$(M_VIVADO) util_axis_fifo_ip.tcl  >> util_axis_fifo_ip.log 2>&1
 
 ####################################################################################
 ####################################################################################

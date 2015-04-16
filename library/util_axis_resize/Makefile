@@ -9,6 +9,7 @@ M_DEPS := util_axis_resize_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_axis_resize.v
+M_DEPS += 
 
 M_VIVADO := vivado -mode batch -source
 
@@ -18,8 +19,9 @@ M_FLIST += -not -name '*.v'
 M_FLIST += -not -name '*.xdc'
 M_FLIST += -not -name '*.vhd'
 M_FLIST += -not -name '*.prj'
+M_FLIST += -not -name '*.xml'
 M_FLIST += -not -name 'Makefile'
-M_FLIST += -not -name '*.h' `
+M_FLIST += -not -name '*.h' `M_FLIST += component.xml 
 
 
 .PHONY: all
