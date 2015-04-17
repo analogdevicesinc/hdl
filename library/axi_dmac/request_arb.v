@@ -339,28 +339,28 @@ end
 // Generate reset for reset-less interfaces
 generate if (C_DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI || C_DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
 
-reg [2:0] src_resetn_shift = 3'b0;
-assign src_resetn = src_resetn_shift[2];
+reg [2:0] src_reset_shift = 3'b0;
+assign src_resetn = ~src_reset_shift[2];
 
 always @(negedge req_aresetn or posedge src_clk) begin
 	if (~req_aresetn)
-		src_resetn_shift <= 3'b000;
+		src_reset_shift <= 3'b111;
 	else
-		src_resetn_shift <= {src_resetn_shift[1:0], 1'b1};
+		src_reset_shift <= {src_reset_shift[1:0], 1'b0};
 end
 
 end endgenerate
 
 generate if (C_DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI || C_DMA_TYPE_DEST == DMA_TYPE_FIFO) begin
 
-reg [2:0] dest_resetn_shift = 3'b0;
-assign dest_resetn = dest_resetn_shift[2];
+reg [2:0] dest_reset_shift = 3'b0;
+assign dest_resetn = ~dest_reset_shift[2];
 
 always @(negedge req_aresetn or posedge dest_clk) begin
 	if (~req_aresetn)
-		dest_resetn_shift <= 3'b000;
+		dest_reset_shift <= 3'b111;
 	else
-		dest_resetn_shift <= {dest_resetn_shift[1:0], 1'b1};
+		dest_reset_shift <= {dest_reset_shift[1:0], 1'b0};
 end
 
 end endgenerate

@@ -165,7 +165,7 @@ set_max_delay \
 # Reset signals
 set_false_path \
 	-from $req_clk \
-	-to [get_pins -hier *resetn_shift_reg*/CLR]
+	-to [get_pins -quiet -hier *reset_shift_reg*/PRE]
 
 # Not sure why, but it seems the built-in constraints for the RAM36B are wrong
 set_max_delay \
