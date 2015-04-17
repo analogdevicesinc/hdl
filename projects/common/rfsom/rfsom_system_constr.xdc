@@ -17,28 +17,28 @@ set_property  -dict {PACKAGE_PIN  B9    IOSTANDARD LVCMOS18} [get_ports eth1_rgm
 
 # hdmi
 
-set_property  -dict {PACKAGE_PIN  L3    IOSTANDARD LVCMOS18} [get_ports hdmi_out_clk]                  ; ## IO_L11P_T1_SRCC_33       
-set_property  -dict {PACKAGE_PIN  D4    IOSTANDARD LVCMOS18} [get_ports hdmi_vsync]                    ; ## IO_L2P_T0_33             
-set_property  -dict {PACKAGE_PIN  D3    IOSTANDARD LVCMOS18} [get_ports hdmi_hsync]                    ; ## IO_L2N_T0_33             
-set_property  -dict {PACKAGE_PIN  K3    IOSTANDARD LVCMOS18} [get_ports hdmi_data_e]                   ; ## IO_L11N_T1_SRCC_33       
-set_property  -dict {PACKAGE_PIN  G2    IOSTANDARD LVCMOS18} [get_ports hdmi_data[0]]                  ; ## IO_L3P_T0_DQS_33         
-set_property  -dict {PACKAGE_PIN  F2    IOSTANDARD LVCMOS18} [get_ports hdmi_data[1]]                  ; ## IO_L3N_T0_DQS_33         
-set_property  -dict {PACKAGE_PIN  D1    IOSTANDARD LVCMOS18} [get_ports hdmi_data[2]]                  ; ## IO_L4P_T0_33             
-set_property  -dict {PACKAGE_PIN  C1    IOSTANDARD LVCMOS18} [get_ports hdmi_data[3]]                  ; ## IO_L4N_T0_33             
-set_property  -dict {PACKAGE_PIN  E2    IOSTANDARD LVCMOS18} [get_ports hdmi_data[4]]                  ; ## IO_L5P_T0_33             
-set_property  -dict {PACKAGE_PIN  E1    IOSTANDARD LVCMOS18} [get_ports hdmi_data[5]]                  ; ## IO_L5N_T0_33             
-set_property  -dict {PACKAGE_PIN  F3    IOSTANDARD LVCMOS18} [get_ports hdmi_data[6]]                  ; ## IO_L6P_T0_33             
-set_property  -dict {PACKAGE_PIN  E3    IOSTANDARD LVCMOS18} [get_ports hdmi_data[7]]                  ; ## IO_L6N_T0_VREF_33        
-set_property  -dict {PACKAGE_PIN  J1    IOSTANDARD LVCMOS18} [get_ports hdmi_data[8]]                  ; ## IO_L7P_T1_33             
-set_property  -dict {PACKAGE_PIN  H1    IOSTANDARD LVCMOS18} [get_ports hdmi_data[9]]                  ; ## IO_L7N_T1_33             
-set_property  -dict {PACKAGE_PIN  H4    IOSTANDARD LVCMOS18} [get_ports hdmi_data[10]]                 ; ## IO_L8P_T1_33             
-set_property  -dict {PACKAGE_PIN  H3    IOSTANDARD LVCMOS18} [get_ports hdmi_data[11]]                 ; ## IO_L8N_T1_33             
-set_property  -dict {PACKAGE_PIN  K2    IOSTANDARD LVCMOS18} [get_ports hdmi_data[12]]                 ; ## IO_L9P_T1_DQS_33         
-set_property  -dict {PACKAGE_PIN  K1    IOSTANDARD LVCMOS18} [get_ports hdmi_data[13]]                 ; ## IO_L9N_T1_DQS_33         
-set_property  -dict {PACKAGE_PIN  H2    IOSTANDARD LVCMOS18} [get_ports hdmi_data[14]]                 ; ## IO_L10P_T1_33            
-set_property  -dict {PACKAGE_PIN  G1    IOSTANDARD LVCMOS18} [get_ports hdmi_data[15]]                 ; ## IO_L10N_T1_33 
-set_property  -dict {PACKAGE_PIN  L9    IOSTANDARD LVCMOS18} [get_ports hdmi_pd]                       ; ## IO_0_VRN_33              
-set_property  -dict {PACKAGE_PIN  N8    IOSTANDARD LVCMOS18} [get_ports hdmi_intn]                     ; ## IO_25_VRP_33             
+set_property  -dict {PACKAGE_PIN  L3    IOSTANDARD LVCMOS18}             [get_ports hdmi_out_clk]      ; ## IO_L11P_T1_SRCC_33       
+set_property  -dict {PACKAGE_PIN  D4    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_vsync]        ; ## IO_L2P_T0_33             
+set_property  -dict {PACKAGE_PIN  D3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_hsync]        ; ## IO_L2N_T0_33             
+set_property  -dict {PACKAGE_PIN  K3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data_e]       ; ## IO_L11N_T1_SRCC_33       
+set_property  -dict {PACKAGE_PIN  G2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[0]]      ; ## IO_L3P_T0_DQS_33         
+set_property  -dict {PACKAGE_PIN  F2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[1]]      ; ## IO_L3N_T0_DQS_33         
+set_property  -dict {PACKAGE_PIN  D1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[2]]      ; ## IO_L4P_T0_33             
+set_property  -dict {PACKAGE_PIN  C1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[3]]      ; ## IO_L4N_T0_33             
+set_property  -dict {PACKAGE_PIN  E2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[4]]      ; ## IO_L5P_T0_33             
+set_property  -dict {PACKAGE_PIN  E1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[5]]      ; ## IO_L5N_T0_33             
+set_property  -dict {PACKAGE_PIN  F3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[6]]      ; ## IO_L6P_T0_33             
+set_property  -dict {PACKAGE_PIN  E3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[7]]      ; ## IO_L6N_T0_VREF_33        
+set_property  -dict {PACKAGE_PIN  J1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[8]]      ; ## IO_L7P_T1_33             
+set_property  -dict {PACKAGE_PIN  H1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[9]]      ; ## IO_L7N_T1_33             
+set_property  -dict {PACKAGE_PIN  H4    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[10]]     ; ## IO_L8P_T1_33             
+set_property  -dict {PACKAGE_PIN  H3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[11]]     ; ## IO_L8N_T1_33             
+set_property  -dict {PACKAGE_PIN  K2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[12]]     ; ## IO_L9P_T1_DQS_33         
+set_property  -dict {PACKAGE_PIN  K1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[13]]     ; ## IO_L9N_T1_DQS_33         
+set_property  -dict {PACKAGE_PIN  H2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[14]]     ; ## IO_L10P_T1_33            
+set_property  -dict {PACKAGE_PIN  G1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[15]]     ; ## IO_L10N_T1_33 
+set_property  -dict {PACKAGE_PIN  L9    IOSTANDARD LVCMOS18}             [get_ports hdmi_pd]           ; ## IO_0_VRN_33              
+set_property  -dict {PACKAGE_PIN  N8    IOSTANDARD LVCMOS18}             [get_ports hdmi_intn]         ; ## IO_25_VRP_33             
 
 # hdmi-spdif
 
