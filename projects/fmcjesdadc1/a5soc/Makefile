@@ -20,7 +20,7 @@ M_DEPS += ../../../library/common/sync_bits.v
 M_DEPS += ../../../library/common/sync_gray.v
 M_DEPS += ../../../library/common/up_axi.v
 M_DEPS += ../../../library/util_axis_resize/util_axis_resize.v
-M_DEPS += ../../../library/util_axis_fifo/util_axis_fifofifo.v
+M_DEPS += ../../../library/util_axis_fifo/util_axis_fifo.v
 M_DEPS += ../../../library/util_axis_fifo/address_gray.v
 M_DEPS += ../../../library/util_axis_fifo/address_gray_pipelined.v
 M_DEPS += ../../../library/util_axis_fifo/address_sync.v
@@ -64,31 +64,42 @@ M_DEPS += ../../../library/axi_ad9250/axi_ad9250_alt.v
 M_ALTERA := quartus_sh --64bit -t 
 
 
-M_FLIST := `find . -not -name '.'
-M_FLIST += -not -name '*.tcl'
-M_FLIST += -not -name '*.sdc'
-M_FLIST += -not -name '*.qsys'
-M_FLIST += -not -name '*.v'
-M_FLIST += -not -name '*.xdc'
-M_FLIST += -not -name '*.vhd'
-M_FLIST += -not -name '*.prj'
-M_FLIST += -not -name 'Makefile'
-M_FLIST += -not -name '*.h' `
+M_FLIST += *.log
+M_FLIST += *_INFO.txt
+M_FLIST += *_dump.txt
+M_FLIST += db
+M_FLIST += *.asm.rpt
+M_FLIST += *.done
+M_FLIST += *.eda.rpt
+M_FLIST += *.fit.*
+M_FLIST += *.map.*
+M_FLIST += *.sta.*
+M_FLIST += *.qsf
+M_FLIST += *.qpf
+M_FLIST += *.qws
+M_FLIST += *.sof
+M_FLIST += hc_output
+M_FLIST += hps_isw_handoff
+M_FLIST += hps_sdram_*.csv
+M_FLIST += *ddr3_*.csv
+M_FLIST += incremental_db
+M_FLIST += reconfig_mif
+M_FLIST += *.sopcinfo
+M_FLIST +=  *.jdi
+M_FLIST += *.pin
 
 
-.PHONY: all
+
+.PHONY: all clean clean-all
 all: fmcjesdadc1.qpf
 
 
 
-.PHONY: clean
 clean:clean-all
 
 
-.PHONY: clean-all
 clean-all:
 	rm -rf $(M_FLIST)
-
 
 
 fmcjesdadc1.qpf: $(M_DEPS)

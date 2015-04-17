@@ -5,16 +5,15 @@
 ####################################################################################
 ####################################################################################
 
-.PHONY: all
+.PHONY: all clean clean-all 
 all:
 	-make -C vc707 all
 
 
-.PHONY: clean
-clean: clean-all
+clean: 
+	make -C vc707 clean
 
 
-.PHONY: clean-all
 clean-all:
 	make -C vc707 clean-all
 

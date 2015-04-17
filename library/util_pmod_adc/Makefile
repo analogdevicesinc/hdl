@@ -13,26 +13,24 @@ M_DEPS +=
 
 M_VIVADO := vivado -mode batch -source
 
-M_FLIST := `find . -not -name '.'
-M_FLIST += -not -name '*.tcl'
-M_FLIST += -not -name '*.v'
-M_FLIST += -not -name '*.xdc'
-M_FLIST += -not -name '*.vhd'
-M_FLIST += -not -name '*.prj'
-M_FLIST += -not -name '*.xml'
-M_FLIST += -not -name 'Makefile'
-M_FLIST += -not -name '*.h' `M_FLIST += component.xml 
+M_FLIST := *.cache
+M_FLIST += *.data
+M_FLIST += *.xpr
+M_FLIST += *.log
+M_FLIST += component.xml
+M_FLIST += *.jou
+M_FLIST +=  xgui
+M_FLIST += .Xil
 
 
-.PHONY: all
+
+.PHONY: all clean clean-all
 all: util_pmod_adc.xpr
 
 
-.PHONY: clean
 clean:clean-all
 
 
-.PHONY: clean-all
 clean-all:
 	rm -rf $(M_FLIST)
 

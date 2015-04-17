@@ -5,7 +5,7 @@
 ####################################################################################
 ####################################################################################
 
-.PHONY: all
+.PHONY: all clean clean_all
 all:
 	-make -C fmcomms6 all
 	-make -C fmcjesdadc1 all
@@ -34,11 +34,34 @@ all:
 	-make -C daq2 all
 
 
-.PHONY: clean
-clean: clean-all
+clean:
+	make -C fmcomms6 clean
+	make -C fmcjesdadc1 clean
+	make -C daq1 clean
+	make -C fmcomms7 clean
+	make -C cftl_cip clean
+	make -C adv7511 clean
+	make -C fmcadc5 clean
+	make -C daq3 clean
+	make -C ad9265_fmc clean
+	make -C ad9434_fmc clean
+	make -C cftl_std clean
+	make -C motcon1_fmc clean
+	make -C fmcadc4 clean
+	make -C fmcomms5 clean
+	make -C imageon clean
+	make -C usdrx1 clean
+	make -C ad6676evb clean
+	make -C ad9467_fmc clean
+	make -C fmcomms2_pr clean
+	make -C fmcomms2 clean
+	make -C fmcomms1 clean
+	make -C ad9739a_fmc clean
+	make -C fmcadc2 clean
+	make -C motcon2_fmc clean
+	make -C daq2 clean
 
 
-.PHONY: clean-all
 clean-all:
 	make -C fmcomms6 clean-all
 	make -C fmcjesdadc1 clean-all

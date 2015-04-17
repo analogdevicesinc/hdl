@@ -5,16 +5,15 @@
 ####################################################################################
 ####################################################################################
 
-.PHONY: all
+.PHONY: all clean clean-all 
 all:
 	-make -C zed all
 
 
-.PHONY: clean
-clean: clean-all
+clean: 
+	make -C zed clean
 
 
-.PHONY: clean-all
 clean-all:
 	make -C zed clean-all
 

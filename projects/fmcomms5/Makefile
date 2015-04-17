@@ -5,17 +5,17 @@
 ####################################################################################
 ####################################################################################
 
-.PHONY: all
+.PHONY: all clean clean-all 
 all:
 	-make -C zc702 all
 	-make -C zc706 all
 
 
-.PHONY: clean
-clean: clean-all
+clean: 
+	make -C zc702 clean
+	make -C zc706 clean
 
 
-.PHONY: clean-all
 clean-all:
 	make -C zc702 clean-all
 	make -C zc706 clean-all

@@ -5,11 +5,10 @@
 ####################################################################################
 ####################################################################################
 
-.PHONY: all
+.PHONY: all lib clean clean-all
 all: lib
 
 
-.PHONY: clean
 clean:
 	make -C axi_ad6676 clean
 	make -C axi_ad7175 clean
@@ -58,11 +57,9 @@ clean:
 	make -C util_wfifo clean
 
 
-.PHONY: clean-all
 clean-all:clean
 
 
-.PHONY: lib
 lib:
 	-make -C axi_ad6676
 	-make -C axi_ad7175

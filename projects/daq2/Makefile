@@ -5,7 +5,7 @@
 ####################################################################################
 ####################################################################################
 
-.PHONY: all
+.PHONY: all clean clean-all 
 all:
 	-make -C kc705 all
 	-make -C kcu105 all
@@ -13,11 +13,13 @@ all:
 	-make -C zc706 all
 
 
-.PHONY: clean
-clean: clean-all
+clean: 
+	make -C kc705 clean
+	make -C kcu105 clean
+	make -C vc707 clean
+	make -C zc706 clean
 
 
-.PHONY: clean-all
 clean-all:
 	make -C kc705 clean-all
 	make -C kcu105 clean-all

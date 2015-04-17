@@ -19,27 +19,28 @@ M_DEPS += ../../../library/axi_ad6676/axi_ad6676.xpr
 
 M_VIVADO := vivado -mode batch -source
 
-M_FLIST := `find . -not -name '.'
-M_FLIST += -not -name '*.tcl'
-M_FLIST += -not -name '*.v'
-M_FLIST += -not -name '*.xdc'
-M_FLIST += -not -name '*.vhd'
-M_FLIST += -not -name '*.prj'
-M_FLIST += -not -name 'Makefile'
-M_FLIST += -not -name '*.h' `
+M_FLIST := *.cache
+M_FLIST += *.data
+M_FLIST += *.xpr
+M_FLIST += *.log
+M_FLIST += *.jou
+M_FLIST +=  xgui
+M_FLIST += *.runs
+M_FLIST += *.srcs
+M_FLIST += *.sdk
+M_FLIST += .Xil
 
 
-.PHONY: all
+
+.PHONY: all lib clean clean-all
 all: lib ad6676evb_vc707.xpr
 
 
-.PHONY: clean
-clean: clean-all
-
-
-.PHONY: clean-all
-clean-all:
+clean: 
 	rm -rf $(M_FLIST)
+
+
+clean-all:clean
 	make -C ../../../library/axi_jesd_gt clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/util_bsplit clean
@@ -51,7 +52,6 @@ ad6676evb_vc707.xpr: lib $(M_DEPS)
 	$(M_VIVADO) system_project.tcl >> ad6676evb_vc707_vivado.log 2>&1
 
 
-.PHONY: lib
 lib:
 	make -C ../../../library/axi_jesd_gt
 	make -C ../../../library/axi_dmac
