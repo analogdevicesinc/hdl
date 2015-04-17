@@ -17,7 +17,7 @@ add_fileset_file sync_bits.v              VERILOG PATH $ad_hdl_dir/library/commo
 add_fileset_file sync_gray.v              VERILOG PATH $ad_hdl_dir/library/common/sync_gray.v
 add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
 add_fileset_file axi_repack.v             VERILOG PATH $ad_hdl_dir/library/util_axis_resize/util_axis_resize.v
-add_fileset_file fifo.v                   VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/util_axis_fifofifo.v
+add_fileset_file fifo.v                   VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v
 add_fileset_file address_gray.v           VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_gray.v
 add_fileset_file address_gray_pipelined.v VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_gray_pipelined.v
 add_fileset_file address_sync.v           VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_sync.v
