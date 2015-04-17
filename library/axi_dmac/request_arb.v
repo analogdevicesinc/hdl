@@ -1012,6 +1012,8 @@ util_axis_fifo #(
 	.m_axis_ready(response_src_ready),
 	.m_axis_data(response_src_resp)
 );*/
+assign src_response_empty = 1'b1;
+assign src_response_ready = 1'b1;
 
 dmac_request_generator #(
 	.C_ID_WIDTH(C_ID_WIDTH),
