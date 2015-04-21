@@ -192,3 +192,6 @@ set_false_path -quiet \
 set_false_path -quiet \
 	-from [get_cells -quiet -hier *id_reg* -filter {name =~ *i_request_arb* && primitive_subgroup == flop}] \
 	-to [get_cells -quiet -hier up_rdata_reg* -filter {primitive_subgroup == flop}]
+set_false_path -quiet \
+	-from [get_cells -quiet -hier address_reg* -filter {name =~ *i_addr_gen* && primitive_subgroup == flop}] \
+	-to [get_cells -quiet -hier up_rdata_reg* -filter {primitive_subgroup == flop}]
