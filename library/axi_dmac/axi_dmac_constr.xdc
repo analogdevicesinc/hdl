@@ -177,7 +177,7 @@ set_false_path -quiet \
 # Not sure why, but it seems the built-in constraints for the RAM36B are wrong
 set_max_delay -quiet \
 	-from $async_dest_to_src_clk \
-	-to [get_pins -hier ram_reg/REGCEB -filter {NAME =~ *i_fifo*}] \
+	-to [get_pins -hier ram_reg*/REGCEB -filter {NAME =~ *i_fifo*}] \
 	[get_property PERIOD $dest_clk] -datapath_only
 
 # Ignore timing for debug signals to register map
