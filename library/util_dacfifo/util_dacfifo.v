@@ -43,261 +43,145 @@ module util_dacfifo (
 
   // clock signals
 
-  dac_clk,
-  dac_rst,
+  wr_clk,                   // should connect to the dac clock
+  rd_clk,                   // should connect to a lower system clock
+  rd_rst,
 
-  // transfer request from DMAC
+  // read interface
 
-  dac_xfer_req,
+  rd_en,
+  rd_valid,
+  rd_data,
+  rd_underflow,
+  rd_xfer_req,
 
-  // fifo IN interface/channel
+  // write interface
 
-  data_in_0,
-  dvalid_in_0,
-  data_in_1,
-  dvalid_in_1,
-  data_in_2,
-  dvalid_in_2,
-  data_in_3,
-  dvalid_in_3,
-  data_in_4,
-  dvalid_in_4,
-  data_in_5,
-  dvalid_in_5,
-  data_in_6,
-  dvalid_in_6,
-  data_in_7,
-  dvalid_in_7,
-
-  // fifo OUT interface/channel
-
-  dvalid_out_0,
-  data_out_0,
-  dvalid_out_1,
-  data_out_1,
-  dvalid_out_2,
-  data_out_2,
-  dvalid_out_3,
-  data_out_3,
-  dvalid_out_4,
-  data_out_4,
-  dvalid_out_5,
-  data_out_5,
-  dvalid_out_6,
-  data_out_6,
-  dvalid_out_7,
-  data_out_7
+  wr_valid,
+  wr_sync,
+  wr_data
 );
 
   // parameters
 
-  parameter               C_CH_DW = 16;
-  parameter               C_FIFO_AW = 10;
-  parameter               C_CH_CNT = 8;
+  // depth of the FIFO
+  parameter       FIFO_WADDR_WIDTH = 6;
+  // read/write interface data width
+  parameter       FIFO_RDATA_WIDTH = 64;      // should be less or equal to FIFO_WDATA_WIDTH
+  parameter       FIFO_WDATA_WIDTH = 128;
 
-  localparam              FIFO_DW = C_CH_CNT * C_CH_DW;
+  // local parameters
+
+  // supported ratios with the write interface are 1:1, 1:2, 1:4, 1:8
+  localparam      IF_RATIO = FIFO_WDATA_WIDTH/FIFO_RDATA_WIDTH;
 
   // port definitions
 
-  input                     dac_clk;
-  input                     dac_rst;
+  input                                         wr_clk;
+  input                                         rd_clk;
+  input                                         rd_rst;
 
-  input                     dac_xfer_req;
+  output                                        rd_en;
+  input                                         rd_valid;
+  input   [(FIFO_RDATA_WIDTH-1):0]              rd_data;
+  input                                         rd_underflow;
+  input                                         rd_xfer_req;
 
-  input   [(C_CH_DW-1):0]   data_in_0;
-  input                     dvalid_in_0;
-  input   [(C_CH_DW-1):0]   data_in_1;
-  input                     dvalid_in_1;
-  input   [(C_CH_DW-1):0]   data_in_2;
-  input                     dvalid_in_2;
-  input   [(C_CH_DW-1):0]   data_in_3;
-  input                     dvalid_in_3;
-  input   [(C_CH_DW-1):0]   data_in_4;
-  input                     dvalid_in_4;
-  input   [(C_CH_DW-1):0]   data_in_5;
-  input                     dvalid_in_5;
-  input   [(C_CH_DW-1):0]   data_in_6;
-  input                     dvalid_in_6;
-  input   [(C_CH_DW-1):0]   data_in_7;
-  input                     dvalid_in_7;
+  input                                         wr_valid;
+  input                                         wr_sync;
+  output  [(FIFO_WDATA_WIDTH-1):0]              wr_data;
 
-  input                     dvalid_out_0;
-  output  [(C_CH_DW-1):0]   data_out_0;
-  input                     dvalid_out_1;
-  output  [(C_CH_DW-1):0]   data_out_1;
-  input                     dvalid_out_2;
-  output  [(C_CH_DW-1):0]   data_out_2;
-  input                     dvalid_out_3;
-  output  [(C_CH_DW-1):0]   data_out_3;
-  input                     dvalid_out_4;
-  output  [(C_CH_DW-1):0]   data_out_4;
-  input                     dvalid_out_5;
-  output  [(C_CH_DW-1):0]   data_out_5;
-  input                     dvalid_out_6;
-  output  [(C_CH_DW-1):0]   data_out_6;
-  input                     dvalid_out_7;
-  output  [(C_CH_DW-1):0]   data_out_7;
-
-  // internal signals
-
-  wire    [(FIFO_DW-1):0]   data_in_s;
-  wire    [(FIFO_DW-1):0]   data_out_s;
-  wire                      dvalid_in_s;
-  wire                      dvalid_out_s;
 
   // internal registers
 
-  reg                       fifo_wren = 1'b1;
-  reg                       dac_xfer_req_d = 'b0;
+  reg     [FIFO_WADDR_WIDTH-1:0]                fifo_waddr = 'h0;
+  reg     [(FIFO_RDATA_WIDTH*IF_RATIO)-1:0]     fifo_rdata = 'h0;
 
-  reg     [(C_FIFO_AW-1):0] dac_waddr = 'b0;
-  reg     [(C_FIFO_AW-1):0] dac_waddr_d = 'b0;
-  reg     [(C_FIFO_AW-1):0] dac_raddr = 'b0;
-  reg     [(C_FIFO_AW-1):0] dac_maxaddr = 'b0;
+  reg     [FIFO_WDATA_WIDTH-1:0]                wr_data = 'h0;
+  reg                                           rd_en = 1'b0;
 
-  reg                       dvalid_in = 1'b0;
-  reg     [(FIFO_DW-1):0]   data_in = 'b0;
-  reg     [(FIFO_DW-1):0]   data_in_d = 'b0;
+  reg                                           fifo_ren = 1'b0;
+  reg     [FIFO_WADDR_WIDTH-1:0]                fifo_maxraddr = 'h0;
+  reg     [FIFO_WADDR_WIDTH-1:0]                fifo_raddr = 'h0;
+  reg     [FIFO_WADDR_WIDTH-1:0]                fifo_raddr_ff = 'h0;
 
-  // internal logic
+  reg     [ 2:0]                                fifo_rdata_count = 'h0;
 
-  assign data_in_s = (C_CH_CNT == 8) ? {data_in_7, data_in_6, data_in_5,
-                                        data_in_4, data_in_3, data_in_2,
-                                        data_in_1, data_in_0} :
-                     (C_CH_CNT == 7) ? {data_in_6, data_in_5, data_in_4,
-                                        data_in_3, data_in_2, data_in_1,
-                                        data_in_0} :
-                     (C_CH_CNT == 6) ? {data_in_5, data_in_4, data_in_3,
-                                        data_in_2, data_in_1, data_in_0} :
-                     (C_CH_CNT == 5) ? {data_in_4, data_in_3, data_in_2,
-                                        data_in_1, data_in_0} :
-                     (C_CH_CNT == 4) ? {data_in_3, data_in_2, data_in_1,
-                                        data_in_0} :
-                     (C_CH_CNT == 3) ? {data_in_2, data_in_1, data_in_0} :
-                     (C_CH_CNT == 2) ? {data_in_1, data_in_0} :
-                     (C_CH_CNT == 1) ?  data_in_0 :
-                                        data_in_0;
+  // internal wires
 
-  assign dvalid_in_s = (C_CH_CNT == 8) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
-                                          dvalid_in_3 & dvalid_in_4 & dvalid_in_5 &
-                                          dvalid_in_6 & dvalid_in_7) :
-                       (C_CH_CNT == 7) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
-                                          dvalid_in_3 & dvalid_in_4 & dvalid_in_5 &
-                                          dvalid_in_6) :
-                       (C_CH_CNT == 6) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
-                                          dvalid_in_3 & dvalid_in_4 & dvalid_in_5) :
-                       (C_CH_CNT == 5) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
-                                          dvalid_in_3 & dvalid_in_4) :
-                       (C_CH_CNT == 4) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2 &
-                                          dvalid_in_3) :
-                       (C_CH_CNT == 3) ? (dvalid_in_0 & dvalid_in_1 & dvalid_in_2) :
-                       (C_CH_CNT == 2) ? (dvalid_in_0 & dvalid_in_1) :
-                       (C_CH_CNT == 1) ?  dvalid_in_0 :
-                                          dvalid_in_0;
-
-  // free running write address generator
-  // running just when xfer_req is asserted
-  // a new xfer_req resets the write address
-
-  always @(posedge dac_clk) begin
-    if(dac_rst == 1'b1) begin
-      dac_xfer_req_d <= 1'b0;
-      dac_maxaddr <= {C_FIFO_AW{1'b1}};
-    end else begin
-      dac_xfer_req_d <= dac_xfer_req;
-    end
-    if (dac_xfer_req_d && ~dac_xfer_req) begin
-      dac_maxaddr <= dac_waddr_d;
-    end
-  end
-
-  always @(posedge dac_clk) begin
-    if(dac_rst == 1'b1) begin
-      dac_waddr <= 'h0;
-      dac_waddr_d <= 'h0;
-    end if(dvalid_in == 1'b1) begin
-      dac_waddr <= (dac_xfer_req_d == 1'b1) ? (dac_waddr + 1) : 'h0;
-      dac_waddr_d <= dac_waddr;
-    end
-  end
-
-  // pipelines
-
-  always @(posedge dac_clk) begin
-    if(dac_rst == 1'b1) begin
-      data_in <= 'b0;
-      data_in_d <= 'b0;
-      dvalid_in <= 1'b0;
-    end else begin
-      data_in <= data_in_s;
-      data_in_d <= data_in;
-      dvalid_in <= dvalid_in_s;
-    end
-  end
-
-  always @(posedge dac_clk) begin
-    if(dac_rst == 1'b1) begin
-      fifo_wren <= 1'b0;
-    end else begin
-      fifo_wren <= dvalid_in & dac_xfer_req_d;
-    end
-  end
+  wire    [FIFO_WDATA_WIDTH-1:0]                fifo_wdata_s;
 
   // read interface
 
-  assign dvalid_out_s = (C_CH_CNT == 8) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
-                                           dvalid_out_3 & dvalid_out_4 & dvalid_out_5 &
-                                           dvalid_out_6 & dvalid_out_7) :
-                        (C_CH_CNT == 7) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
-                                           dvalid_out_3 & dvalid_out_4 & dvalid_out_5 &
-                                           dvalid_out_6) :
-                        (C_CH_CNT == 6) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
-                                           dvalid_out_3 & dvalid_out_4 & dvalid_out_5) :
-                        (C_CH_CNT == 5) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
-                                           dvalid_out_3 & dvalid_out_4) :
-                        (C_CH_CNT == 4) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2 &
-                                           dvalid_out_3) :
-                        (C_CH_CNT == 3) ? (dvalid_out_0 & dvalid_out_1 & dvalid_out_2) :
-                        (C_CH_CNT == 2) ? (dvalid_out_0 & dvalid_out_1) :
-                        (C_CH_CNT == 1) ?  dvalid_out_0 :
-                                           dvalid_out_0;
-
-  // free running read address generator
-  // reads until the max address
-
-  always @(posedge dac_clk) begin
-    if(dac_rst == 1'b1) begin
-      dac_raddr <= 'b0;
+  always @(posedge rd_clk) begin
+    if(rd_rst == 1'b1) begin
+      rd_en <= 1'b0;
     end else begin
-      if(dvalid_out_s == 1'b1) begin
-        dac_raddr <= (dac_raddr < dac_maxaddr) ? (dac_raddr + 'b1) : 'b0;
-      end
+      // try to drive the interface with maximum throughput
+      rd_en <= (rd_underflow == 0) ? 1'b1 : 1'b0;
     end
   end
 
-  // output logic
+  // read counter
 
-  assign data_out_0 = (C_CH_CNT >= 1) ? data_out_s[(1*C_CH_DW-1):          0] : 'b0;
-  assign data_out_1 = (C_CH_CNT >= 2) ? data_out_s[(2*C_CH_DW-1):(1*C_CH_DW)] : 'b0;
-  assign data_out_2 = (C_CH_CNT >= 3) ? data_out_s[(3*C_CH_DW-1):(2*C_CH_DW)] : 'b0;
-  assign data_out_3 = (C_CH_CNT >= 4) ? data_out_s[(4*C_CH_DW-1):(3*C_CH_DW)] : 'b0;
-  assign data_out_4 = (C_CH_CNT >= 5) ? data_out_s[(5*C_CH_DW-1):(4*C_CH_DW)] : 'b0;
-  assign data_out_5 = (C_CH_CNT >= 6) ? data_out_s[(6*C_CH_DW-1):(5*C_CH_DW)] : 'b0;
-  assign data_out_6 = (C_CH_CNT >= 7) ? data_out_s[(7*C_CH_DW-1):(6*C_CH_DW)] : 'b0;
-  assign data_out_7 = (C_CH_CNT == 8) ? data_out_s[(8*C_CH_DW-1):(7*C_CH_DW)] : 'b0;
+  always @(posedge rd_clk) begin
+    if (rd_rst == 1'b1) begin
+      fifo_rdata_count = 'h0;
+    end else if((rd_valid == 1'b1) && (rd_en == 1'b1) && (rd_xfer_req == 1'b1)) begin
+      if(IF_RATIO > 1) begin
+        fifo_rdata[((IF_RATIO * FIFO_RDATA_WIDTH)-1):((IF_RATIO-1)*FIFO_RDATA_WIDTH)] <= rd_data;
+        fifo_rdata[((IF_RATIO-1)*FIFO_RDATA_WIDTH-1): 0] <= fifo_rdata[((IF_RATIO * FIFO_RDATA_WIDTH)-1):FIFO_RDATA_WIDTH];
+      end else begin
+        fifo_rdata <= rd_data;
+      end
+      fifo_rdata_count <= (fifo_rdata_count  < (IF_RATIO - 1)) ? (fifo_rdata_count + 1) : 3'h0;
+    end
+  end
 
-  // memory instantiation
+  always @(posedge rd_clk) begin
+    if(rd_rst == 1'b1) begin
+      fifo_raddr <= 'b0;
+      fifo_ren <= 'b0;
+      fifo_maxraddr <= {FIFO_WADDR_WIDTH{1'b1}};
+      fifo_raddr_ff <= 'b0;
+    end else begin
+
+      fifo_ren <= (fifo_rdata_count == (IF_RATIO - 1)) ? (rd_valid & rd_xfer_req) : 1'b0;
+
+      if(rd_xfer_req == 1'b1) begin
+        fifo_raddr <= (fifo_ren && rd_xfer_req) ? (fifo_raddr + 1) : fifo_raddr;
+      end else begin
+        fifo_raddr <= 'h0;
+      end
+      fifo_raddr_ff <= fifo_raddr;
+
+      fifo_maxraddr <= ((rd_xfer_req == 1'b0) && (fifo_raddr > 'b0)) ?
+                      fifo_raddr_ff :
+                      fifo_maxraddr;
+    end
+  end
+
+  // write interface
+
+  always @(posedge wr_clk) begin
+    if(wr_valid == 1'b1) begin
+      fifo_waddr <= (fifo_waddr < fifo_maxraddr) ? (fifo_waddr + 'b1) : 'b0;
+    end
+    wr_data <= fifo_wdata_s;
+  end
+
+  // instantiations
 
   ad_mem #(
-    .ADDR_WIDTH (C_FIFO_AW),
-    .DATA_WIDTH (FIFO_DW))
+    .ADDR_WIDTH (FIFO_WADDR_WIDTH),
+    .DATA_WIDTH (FIFO_WDATA_WIDTH))
   i_mem_fifo (
-    .clka (dac_clk),
-    .wea (fifo_wren),
-    .addra (dac_waddr_d),
-    .dina (data_in_d),
-    .clkb (dac_clk),
-    .addrb (dac_raddr),
-    .doutb (data_out_s));
+    .clka (rd_clk),
+    .wea (fifo_ren),
+    .addra (fifo_raddr_ff),
+    .dina (fifo_rdata),
+    .clkb (wr_clk),
+    .addrb (fifo_waddr),
+    .doutb (fifo_wdata_s));
 
 endmodule

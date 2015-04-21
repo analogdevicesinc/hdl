@@ -48,3 +48,45 @@ proc p_sys_dmafifo {p_name m_name adc_data_width dma_addr_width} {
   current_bd_instance $c_instance
 }
 
+proc p_sys_dacfifo {p_name m_name dma_data_width dac_data_width dac_addr_width} {
+
+  global ad_hdl_dir
+
+  set p_instance [get_bd_cells $p_name]
+  set c_instance [current_bd_instance .]
+
+  current_bd_instance $p_instance
+
+  set m_instance [create_bd_cell -type hier $m_name]
+  current_bd_instance $m_instance
+
+  create_bd_pin -dir I  dma_clk
+  create_bd_pin -dir I  dma_rst
+  create_bd_pin -dir O  dma_en
+  create_bd_pin -dir I  dma_valid
+  create_bd_pin -dir I  -from [expr ($dma_data_width-1)] -to 0 dma_data
+  create_bd_pin -dir I  dma_unf
+  create_bd_pin -dir I  dma_xfer_req
+
+  create_bd_pin -dir I  dac_clk
+  create_bd_pin -dir I  dac_valid
+  create_bd_pin -dir O  -from [expr ($dac_data_width - 1)] -to 0 dac_data
+
+  set util_dacfifo [create_bd_cell -type ip -vlnv analog.com:user:util_dacfifo:1.0 util_dacfifo]
+  set_property -dict [list CONFIG.FIFO_WDATA_WIDTH $dac_data_width] $util_dacfifo
+  set_property -dict [list CONFIG.FIFO_WADDR_WIDTH $dac_addr_width] $util_dacfifo
+  set_property -dict [list CONFIG.FIFO_RDATA_WIDTH $dma_data_width] $util_dacfifo
+
+  ad_connect  dma_clk util_dacfifo/rd_clk
+  ad_connect  dac_clk util_dacfifo/wr_clk
+  ad_connect  dma_rst util_dacfifo/rd_rst
+  ad_connect  dma_en util_dacfifo/rd_en
+  ad_connect  dma_valid util_dacfifo/rd_valid
+  ad_connect  dma_data util_dacfifo/rd_data
+  ad_connect  dma_unf util_dacfifo/rd_underflow
+  ad_connect  dma_xfer_req util_dacfifo/rd_xfer_req
+  ad_connect  dac_valid util_dacfifo/wr_valid
+  ad_connect  dac_data util_dacfifo/wr_data
+
+  current_bd_instance $c_instance
+}
