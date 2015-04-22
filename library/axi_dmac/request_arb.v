@@ -336,40 +336,56 @@ begin
 	end
 end
 
-// Generate reset for reset-less interfaces
-generate if (C_DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI || C_DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
+generate if (C_CLKS_ASYNC_REQ_SRC) begin
 
-reg [2:0] src_reset_shift = 3'b0;
+wire src_async_resetn_source;
+
+if (C_DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
+assign src_async_resetn_source = m_src_axi_aresetn;
+end else begin
+assign src_async_resetn_source = req_aresetn;
+end
+
+reg [2:0] src_reset_shift = 3'b111;
 assign src_resetn = ~src_reset_shift[2];
 
-always @(negedge req_aresetn or posedge src_clk) begin
-	if (~req_aresetn)
+always @(negedge src_async_resetn_source or posedge src_clk) begin
+	if (src_async_resetn_source == 1'b0)
 		src_reset_shift <= 3'b111;
 	else
 		src_reset_shift <= {src_reset_shift[1:0], 1'b0};
 end
 
+end else begin
+assign src_resetn = req_aresetn;
 end endgenerate
 
-generate if (C_DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI || C_DMA_TYPE_DEST == DMA_TYPE_FIFO) begin
+generate if (C_CLKS_ASYNC_DEST_REQ) begin
+wire dest_async_resetn_source;
 
-reg [2:0] dest_reset_shift = 3'b0;
+if (C_DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
+assign dest_async_resetn_source = m_dest_axi_aresetn;
+end else begin
+assign dest_async_resetn_source = req_aresetn;
+end
+
+reg [2:0] dest_reset_shift = 3'b111;
 assign dest_resetn = ~dest_reset_shift[2];
 
-always @(negedge req_aresetn or posedge dest_clk) begin
-	if (~req_aresetn)
+always @(negedge dest_async_resetn_source or posedge dest_clk) begin
+	if (dest_async_resetn_source == 1'b0)
 		dest_reset_shift <= 3'b111;
 	else
 		dest_reset_shift <= {dest_reset_shift[1:0], 1'b0};
 end
 
+end else begin
+assign dest_resetn = req_aresetn;
 end endgenerate
-
 
 generate if (C_DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
 
 assign dest_clk = m_dest_axi_aclk;
-assign dest_resetn = m_dest_axi_aresetn;
 
 wire [C_ID_WIDTH-1:0] dest_data_id;
 wire [C_ID_WIDTH-1:0] dest_address_id;
@@ -387,7 +403,7 @@ dmac_dest_mm_axi #(
 	.C_BYTES_PER_BEAT_WIDTH(C_BYTES_PER_BEAT_WIDTH_DEST)
 ) i_dest_dma_mm (
 	.m_axi_aclk(m_dest_axi_aclk),
-	.m_axi_aresetn(m_dest_axi_aresetn),
+	.m_axi_aresetn(dest_resetn),
 
 	.enable(dest_enable),
 	.enabled(dest_enabled),
@@ -579,7 +595,6 @@ end endgenerate
 generate if (C_DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
 
 assign src_clk = m_src_axi_aclk;
-assign src_resetn = m_src_axi_aresetn;
 
 wire [C_ID_WIDTH-1:0] src_data_id;
 wire [C_ID_WIDTH-1:0] src_address_id;
@@ -596,7 +611,7 @@ dmac_src_mm_axi #(
 	.C_BYTES_PER_BEAT_WIDTH(C_BYTES_PER_BEAT_WIDTH_SRC)
 ) i_src_dma_mm (
 	.m_axi_aclk(m_src_axi_aclk),
-	.m_axi_aresetn(m_src_axi_aresetn),
+	.m_axi_aresetn(src_resetn),
 
 	.pause(pause),
 	.enable(src_enable),
