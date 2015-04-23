@@ -19,9 +19,13 @@ adi_ip_files axi_mc_controller [list \
   "motor_driver.v" \
   "delay.v" \
   "control_registers.v" \
+  "axi_mc_controller_constr.xdc" \
   "axi_mc_controller.v" ]
 
 adi_ip_properties axi_mc_controller
+
+adi_ip_constraints axi_mc_controller [list \
+  "axi_mc_controller_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 
