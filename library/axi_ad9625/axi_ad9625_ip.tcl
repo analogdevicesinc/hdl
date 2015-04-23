@@ -24,6 +24,7 @@ adi_ip_files axi_ad9625 [list \
   "axi_ad9625_constr.xdc" ]
 
 adi_ip_properties axi_ad9625
+
 adi_ip_constraints axi_ad9625 [list \
   "axi_ad9625_constr.xdc" ]
 
