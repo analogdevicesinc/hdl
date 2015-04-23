@@ -22,8 +22,12 @@ adi_ip_files axi_ad9265 [list \
   "axi_ad9265_pnmon.v" \
   "axi_ad9265_if.v" \
   "axi_ad9265_channel.v" \
+  "axi_ad9265_constr.xdc" \
   "axi_ad9265.v"]
 
 adi_ip_properties axi_ad9265
+
+adi_ip_constraints axi_ad9265 [list \
+  "axi_ad9265_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
