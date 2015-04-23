@@ -45,7 +45,7 @@ proc adi_ip_files {ip_name ip_files} {
   set_property "top" "$ip_name" $proj_fileset
 }
 
-proc adi_ip_constraints {ip_name ip_constr_files {processing_order early}} {
+proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
 
   set proj_filegroup [ipx::get_file_groups xilinx_v*synthesis -of_objects [ipx::current_core]]
   set f [ipx::add_file $ip_constr_files $proj_filegroup]
