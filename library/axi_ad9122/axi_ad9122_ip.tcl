@@ -27,6 +27,7 @@ adi_ip_files axi_ad9122 [list \
   "axi_ad9122.v" ]
 
 adi_ip_properties axi_ad9122
+
 adi_ip_constraints axi_ad9122 [list \
   "axi_ad9122_constr.xdc" ]
 
