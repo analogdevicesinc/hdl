@@ -23,6 +23,7 @@ adi_ip_files axi_ad9680 [list \
   "axi_ad9680_constr.xdc" ]
 
 adi_ip_properties axi_ad9680
+
 adi_ip_constraints axi_ad9680 [list \
   "axi_ad9680_constr.xdc" ]
 
