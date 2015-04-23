@@ -17,9 +17,13 @@ adi_ip_files axi_mc_speed [list \
   "debouncer.v" \
   "speed_detector.v" \
   "delay_30_degrees.v" \
+  "axi_mc_speed_constr.xdc" \
   "axi_mc_speed.v" ]
 
 adi_ip_properties axi_mc_speed
+
+adi_ip_constraints axi_mc_speed [list \
+  "axi_mc_speed_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 
