@@ -19,9 +19,13 @@ adi_ip_files axi_ad9250 [list \
   "axi_ad9250_pnmon.v" \
   "axi_ad9250_channel.v" \
   "axi_ad9250_if.v" \
+  "axi_ad9250_constr.xdc" \
   "axi_ad9250.v" ]
 
 adi_ip_properties axi_ad9250
+
+adi_ip_constraints axi_ad9250 [list \
+  "axi_ad9250_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 
