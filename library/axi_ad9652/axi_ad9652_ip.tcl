@@ -23,9 +23,13 @@ adi_ip_files axi_ad9652 [list \
   "axi_ad9652_pnmon.v" \
   "axi_ad9652_channel.v" \
   "axi_ad9652_if.v" \
+  "axi_ad9652_constr.xdc" \
   "axi_ad9652.v" ]
 
 adi_ip_properties axi_ad9652
+
+adi_ip_constraints axi_ad9652 [list \
+  "axi_ad9652_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 
