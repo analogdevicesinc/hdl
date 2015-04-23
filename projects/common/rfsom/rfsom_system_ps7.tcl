@@ -17,6 +17,7 @@ set_property CONFIG.PCW_ENET1_RESET_IO                            {MIO 51}      
 set_property CONFIG.PCW_SD0_PERIPHERAL_ENABLE                     {1}                     [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_SD0_GRP_CD_ENABLE                         {1}                     [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_SD0_GRP_CD_IO                             {MIO 50}                [get_bd_cells sys_ps7]
+set_property CONFIG.PCW_SDIO_PERIPHERAL_FREQMHZ                   {50}                    [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_UART1_PERIPHERAL_ENABLE                   {1}                     [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_USB0_PERIPHERAL_ENABLE                    {1}                     [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_USB0_RESET_ENABLE                         {1}                     [get_bd_cells sys_ps7]
