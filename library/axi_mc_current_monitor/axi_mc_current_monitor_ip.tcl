@@ -16,9 +16,13 @@ adi_ip_files axi_mc_current_monitor [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "dec256sinc24b.v" \
   "ad7401.v" \
+  "axi_mc_current_monitor_constr.xdc" \
   "axi_mc_current_monitor.v" ]
 
 adi_ip_properties axi_mc_current_monitor
+
+adi_ip_constraints axi_mc_current_monitor [list \
+  "axi_mc_current_monitor_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 
