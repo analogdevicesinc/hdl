@@ -25,6 +25,7 @@ adi_ip_files axi_ad9739a [list \
   "axi_ad9739a.v" ]
 
 adi_ip_properties axi_ad9739a
+
 adi_ip_constraints axi_ad9739a [list \
   "axi_ad9739a_constr.xdc" ]
 
