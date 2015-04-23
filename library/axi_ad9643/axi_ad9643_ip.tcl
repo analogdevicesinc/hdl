@@ -28,6 +28,7 @@ adi_ip_files axi_ad9643 [list \
   "axi_ad9643.v" ]
 
 adi_ip_properties axi_ad9643
+
 adi_ip_constraints axi_ad9643 [list \
   "axi_ad9643_constr.xdc" ]
 
