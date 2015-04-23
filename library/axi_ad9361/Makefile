@@ -37,6 +37,7 @@ M_DEPS += axi_ad9361_rx.v
 M_DEPS += axi_ad9361_tx_channel.v
 M_DEPS += axi_ad9361_tx.v
 M_DEPS += axi_ad9361.v
+M_DEPS += axi_ad9361_constr.xdc
 
 M_VIVADO := vivado -mode batch -source
 

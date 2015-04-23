@@ -19,6 +19,7 @@ M_DEPS += ../common/up_adc_common.v
 M_DEPS += ../common/up_adc_channel.v
 M_DEPS += dec256sinc24b.v
 M_DEPS += ad7401.v
+M_DEPS += axi_mc_current_monitor_constr.xdc
 M_DEPS += axi_mc_current_monitor.v
 
 M_VIVADO := vivado -mode batch -source

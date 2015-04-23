@@ -20,6 +20,7 @@ M_DEPS += ../common/up_adc_channel.v
 M_DEPS += debouncer.v
 M_DEPS += speed_detector.v
 M_DEPS += delay_30_degrees.v
+M_DEPS += axi_mc_speed_constr.xdc
 M_DEPS += axi_mc_speed.v
 
 M_VIVADO := vivado -mode batch -source

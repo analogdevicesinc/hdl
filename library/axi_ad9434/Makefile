@@ -25,6 +25,7 @@ M_DEPS += ../common/up_axi.v
 M_DEPS += axi_ad9434_if.v
 M_DEPS += axi_ad9434_pnmon.v
 M_DEPS += axi_ad9434_core.v
+M_DEPS += axi_ad9434_constr.xdc
 M_DEPS += axi_ad9434.v
 
 M_VIVADO := vivado -mode batch -source

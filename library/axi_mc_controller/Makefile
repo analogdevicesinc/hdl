@@ -22,6 +22,7 @@ M_DEPS += ../common/up_adc_channel.v
 M_DEPS += motor_driver.v
 M_DEPS += delay.v
 M_DEPS += control_registers.v
+M_DEPS += axi_mc_controller_constr.xdc
 M_DEPS += axi_mc_controller.v
 
 M_VIVADO := vivado -mode batch -source

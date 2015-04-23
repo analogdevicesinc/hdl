@@ -13,6 +13,7 @@ M_DEPS += ../common/ad_mmcm_drp.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_drp_cntrl.v
 M_DEPS += ../common/up_clkgen.v
+M_DEPS += axi_clkgen_constr.xdc
 M_DEPS += axi_clkgen.v
 
 M_VIVADO := vivado -mode batch -source
