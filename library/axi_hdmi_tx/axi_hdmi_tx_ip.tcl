@@ -24,6 +24,7 @@ adi_ip_files axi_hdmi_tx [list \
   "axi_hdmi_tx_constr.xdc" ]
 
 adi_ip_properties axi_hdmi_tx
+
 adi_ip_constraints axi_hdmi_tx [list \
   "axi_hdmi_tx_constr.xdc" ]
 
