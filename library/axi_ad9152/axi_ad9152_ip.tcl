@@ -20,7 +20,7 @@ adi_ip_files axi_ad9152 [list \
   "axi_ad9152_channel.v" \
   "axi_ad9152_core.v" \
   "axi_ad9152_if.v" \
-  "axi_ad9152_constr.v" \
+  "axi_ad9152_constr.xdc" \
   "axi_ad9152.v" ]
 
 adi_ip_properties axi_ad9152
