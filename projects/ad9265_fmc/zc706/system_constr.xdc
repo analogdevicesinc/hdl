@@ -30,6 +30,5 @@ set_property -dict {PACKAGE_PIN Y27     IOSTANDARD LVCMOS25} [get_ports spi_clk]
 set_property -dict {PACKAGE_PIN Y26     IOSTANDARD LVCMOS25} [get_ports spi_sdio]                           ;
 
 # clocks
-create_clock -name adc_clk      -period 3.33 [get_ports adc_clk_in_p]
 
-set_false_path -through [get_pins i_system_wrapper/system_i/ila_wfifo/wfifo_ctl/inst/fifo_rst_reg/C] 
+create_clock -name adc_clk      -period 3.33 [get_ports adc_clk_in_p]
