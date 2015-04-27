@@ -67,7 +67,7 @@ module system_top (
   ddr3_odt,
 
   mdio_mdc,
-  mdio_mdio_io,
+  mdio_mdio,
   mii_rst_n,
   mii_col,
   mii_crs,
@@ -129,7 +129,7 @@ module system_top (
   output          ddr3_odt;
 
   output          mdio_mdc;
-  inout           mdio_mdio_io;
+  inout           mdio_mdio;
   output          mii_rst_n;
   input           mii_col;
   input           mii_crs;
@@ -224,7 +224,7 @@ module system_top (
     .mb_intr_14 (1'b0),
     .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
-    .mdio_mdio_io (mdio_mdio_io),
+    .mdio_mdio_io (mdio_mdio),
     .mii_col (mii_col),
     .mii_crs (mii_crs),
     .mii_rst_n (mii_rst_n),
