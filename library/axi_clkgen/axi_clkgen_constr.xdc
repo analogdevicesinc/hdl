@@ -3,7 +3,6 @@ set delay_clk [get_clocks -of_objects [get_ports drp_clk]]
 
 set_property ASYNC_REG TRUE \
   [get_cells -hier *up_drp_locked_m1_reg*] \
-  [get_cells -hier *up_drp_locked_m2_reg*] \
   [get_cells -hier *up_drp_ack_t_m1_reg*] \
   [get_cells -hier *up_drp_ack_t_m2_reg*] \
   [get_cells -hier *drp_sel_t_m1_reg*] \
