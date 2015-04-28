@@ -56,7 +56,7 @@ module up_gt (
   // receive interface
 
   rx_clk,
-  rx_rst,
+  jesd_rx_rst,
   rx_ext_sysref,
   rx_sysref,
   rx_ip_sync,
@@ -64,6 +64,7 @@ module up_gt (
   rx_rst_done,
   rx_pll_locked,
   rx_error,
+  rx_rst_done_up,
 
   // transmit interface
 
@@ -76,6 +77,7 @@ module up_gt (
   tx_rst_done,
   tx_pll_locked,
   tx_error,
+  tx_rst_done_up,
 
   // drp interface
 
@@ -158,7 +160,7 @@ module up_gt (
   // receive interface
 
   input           rx_clk;
-  output          rx_rst;
+  output          jesd_rx_rst;
   input           rx_ext_sysref;
   output          rx_sysref;
   input           rx_ip_sync;
@@ -166,6 +168,7 @@ module up_gt (
   input   [ 7:0]  rx_rst_done;
   input   [ 7:0]  rx_pll_locked;
   input           rx_error;
+  output          rx_rst_done_up;
 
   // transmit interface
 
@@ -178,6 +181,7 @@ module up_gt (
   input   [ 7:0]  tx_rst_done;
   input   [ 7:0]  tx_pll_locked;
   input           tx_error;
+  output          tx_rst_done_up;
 
   // drp interface
 
@@ -381,6 +385,11 @@ module up_gt (
   assign up_gt_tx_preset_s = ~(up_gt_pll_resetn & up_gt_tx_resetn & up_tx_pll_locked_s);
   assign up_rx_preset_s = ~(up_gt_pll_resetn & up_gt_rx_resetn & up_rx_resetn & up_rx_pll_locked_s & up_rx_rst_done_s);
   assign up_tx_preset_s = ~(up_gt_pll_resetn & up_gt_tx_resetn & up_tx_resetn & up_tx_pll_locked_s & up_tx_rst_done_s);
+
+  // up clock domain reset done
+
+  assign rx_rst_done_up  = up_rx_rst_done_s;
+  assign tx_rst_done_up  = up_tx_rst_done_s;
 
   // processor write interface
 
@@ -604,6 +613,7 @@ module up_gt (
   ad_rst i_gt_rx_rst_reg  (.preset(up_gt_rx_preset_s),  .clk(drp_clk),  .rst(gt_rx_rst));
   ad_rst i_gt_tx_rst_reg  (.preset(up_gt_tx_preset_s),  .clk(drp_clk),  .rst(gt_tx_rst));
   ad_rst i_rx_rst_reg     (.preset(up_rx_preset_s),     .clk(rx_clk),   .rst(rx_rst));
+  ad_rst i_j_rx_rst_reg   (.preset(up_rx_preset_s),     .clk(up_clk),   .rst(jesd_rx_rst));
   ad_rst i_tx_rst_reg     (.preset(up_tx_preset_s),     .clk(tx_clk),   .rst(tx_rst));
 
   // reset done & pll locked

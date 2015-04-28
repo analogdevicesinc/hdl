@@ -418,9 +418,6 @@ module axi_jesd_gt (
   assign tx_rst_done_extn_s = {up_status_extn_s[8:PCORE_NUM_OF_LANES], tx_rst_done_s};
   assign tx_pll_locked_extn_s = {up_status_extn_s[8:PCORE_NUM_OF_LANES], tx_pll_locked_s};
 
-  assign rx_rst_done = | rx_rst_done_s;
-  assign tx_rst_done = | tx_rst_done_s;
-
   assign drp_rdata_s =    drp_rdata_gt_s[15] | drp_rdata_gt_s[14] |
                           drp_rdata_gt_s[13] | drp_rdata_gt_s[12] |
                           drp_rdata_gt_s[11] | drp_rdata_gt_s[10] |
@@ -746,7 +743,7 @@ module axi_jesd_gt (
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_s),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_s),
     .rx_clk (rx_clk),
-    .rx_rst (rx_rst),
+    .jesd_rx_rst (rx_rst),
     .rx_ext_sysref (rx_ext_sysref),
     .rx_sysref (rx_sysref),
     .rx_ip_sync (rx_ip_sync),
@@ -754,6 +751,7 @@ module axi_jesd_gt (
     .rx_rst_done (rx_rst_done_extn_s[7:0]),
     .rx_pll_locked (rx_pll_locked_extn_s[7:0]),
     .rx_error (1'd0),
+    .rx_rst_done_up (rx_rst_done),
     .tx_clk (tx_clk),
     .tx_rst (tx_rst),
     .tx_ext_sysref (tx_ext_sysref),
@@ -763,6 +761,7 @@ module axi_jesd_gt (
     .tx_rst_done (tx_rst_done_extn_s[7:0]),
     .tx_pll_locked (tx_pll_locked_extn_s[7:0]),
     .tx_error (1'd0),
+    .tx_rst_done_up (tx_rst_done),
     .drp_clk (drp_clk),
     .drp_rst (drp_rst),
     .drp_sel (drp_sel_s),
