@@ -123,6 +123,7 @@ module util_wfifo (
   reg                             adc_wovf = 'd0;
   reg                             dma_wr_int = 'd0;
   reg                             fifo_rst = 'd0;
+  reg                             fifo_rst_p = 'd0;
   reg                             fifo_rstn = 'd0;
 
   // internal signals
@@ -172,9 +173,16 @@ module util_wfifo (
 
   // reset & resetn
 
-  always @(posedge adc_clk) begin
-    fifo_rst <= adc_rst;
-    fifo_rstn <= ~adc_rst;
+  always @(posedge dma_clk or posedge adc_rst) begin
+    if (adc_rst == 1'b1) begin
+      fifo_rst_p <= 1'd1;
+      fifo_rst <= 1'd1;
+      fifo_rstn <= 1'd0;
+    end else begin
+      fifo_rst_p <= 1'b0;
+      fifo_rst <= fifo_rst_p;
+      fifo_rstn <= ~fifo_rst_p;
+    end
   end
 
   // axis
