@@ -150,7 +150,7 @@ proc adi_add_bus {bus_name mode abs_type bus_type port_maps} {
 	}
 }
 
-proc adi_add_bus_clock {clock_signal_name bus_inf_name {reset_signal_name ""}} {
+proc adi_add_bus_clock {clock_signal_name bus_inf_name {reset_signal_name ""} {reset_signal_mode "slave"}} {
 	set bus_inf_name_clean [string map {":" "_"} $bus_inf_name]
 	set clock_inf_name [format "%s%s" $bus_inf_name_clean "_signal_clock"]
 	set clock_inf [ipx::add_bus_interface $clock_inf_name [ipx::current_core]]
@@ -172,6 +172,7 @@ proc adi_add_bus_clock {clock_signal_name bus_inf_name {reset_signal_name ""}} {
 		set_property abstraction_type_vlnv "xilinx.com:signal:reset_rtl:1.0" $reset_inf
 		set_property bus_type_vlnv "xilinx.com:signal:reset:1.0" $reset_inf
 		set_property display_name $reset_inf_name $reset_inf
+		set_property interface_mode $reset_signal_mode $reset_inf
 		set reset_map [ipx::add_port_map "RST" $reset_inf]
 		set_property physical_name $reset_signal_name $reset_map
 
