@@ -23,7 +23,7 @@ M_DEPS += ../common/up_dac_channel.v
 M_DEPS += axi_ad9152_channel.v
 M_DEPS += axi_ad9152_core.v
 M_DEPS += axi_ad9152_if.v
-M_DEPS += axi_ad9152_constr.v
+M_DEPS += axi_ad9152_constr.xdc
 M_DEPS += axi_ad9152.v
 
 M_VIVADO := vivado -mode batch -source

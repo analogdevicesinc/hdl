@@ -10,6 +10,7 @@ all:
 	-make -C fmcomms6 all
 	-make -C fmcjesdadc1 all
 	-make -C daq1 all
+	-make -C imageon_loopback all
 	-make -C fmcomms7 all
 	-make -C cftl_cip all
 	-make -C adv7511 all
@@ -38,6 +39,7 @@ clean:
 	make -C fmcomms6 clean
 	make -C fmcjesdadc1 clean
 	make -C daq1 clean
+	make -C imageon_loopback clean
 	make -C fmcomms7 clean
 	make -C cftl_cip clean
 	make -C adv7511 clean
@@ -66,6 +68,7 @@ clean-all:
 	make -C fmcomms6 clean-all
 	make -C fmcjesdadc1 clean-all
 	make -C daq1 clean-all
+	make -C imageon_loopback clean-all
 	make -C fmcomms7 clean-all
 	make -C cftl_cip clean-all
 	make -C adv7511 clean-all
