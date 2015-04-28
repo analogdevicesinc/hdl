@@ -42,7 +42,7 @@
         <BankAddress>3</BankAddress>
         <MemoryVoltage>1.5V</MemoryVoltage>
         <C0_MEM_SIZE>1073741824</C0_MEM_SIZE>
-        <UserMemoryAddressMap>ROW_BANK_COLUMN</UserMemoryAddressMap>
+        <UserMemoryAddressMap>BANK_ROW_COLUMN</UserMemoryAddressMap>
         <PinSelection>
             <Pin VCCAUX_IO="HIGH" IOSTANDARD="SSTL15" PADName="A20" SLEW="" name="ddr3_addr[0]" IN_TERM="" />
             <Pin VCCAUX_IO="HIGH" IOSTANDARD="SSTL15" PADName="B21" SLEW="" name="ddr3_addr[10]" IN_TERM="" />
