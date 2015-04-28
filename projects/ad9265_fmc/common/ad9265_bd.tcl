@@ -55,9 +55,9 @@ ad_connect axi_ad9265/adc_dovf   axi_ad9265_dma/fifo_wr_overflow
 
 p_sys_wfifo [current_bd_instance .] ila_wfifo 16 32
 
-ad_connect ad9265_clk     ila_wfifo/adc_clk
-ad_connect sys_200m_clk   ila_wfifo/dma_clk
-ad_connect sys_cpu_reset  ila_wfifo/adc_rst
+ad_connect ad9265_clk         ila_wfifo/adc_clk
+ad_connect sys_200m_clk       ila_wfifo/dma_clk
+ad_connect axi_ad9265/adc_rst ila_wfifo/adc_rst
 
 set ila_ad9265_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_ad9265_mon]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9265_mon
