@@ -52,7 +52,7 @@
   set axi_ad9122_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9122_dma]
   set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {2}] $axi_ad9122_dma
-  set_property -dict [list CONFIG.C_FIFO_SIZE {64}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.C_FIFO_SIZE {16}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9122_dma
   set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9122_dma
@@ -66,7 +66,7 @@
   set axi_ad9643_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9643_dma]
   set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_FIFO_SIZE {64}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.C_FIFO_SIZE {16}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9643_dma
   set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9643_dma
@@ -76,11 +76,16 @@
   # reference clock
 
   set refclk_clkgen [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 refclk_clkgen]
-  set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {30} ] [get_bd_cells refclk_clkgen]
-  set_property -dict [list CONFIG.USE_PHASE_ALIGNMENT {false} ] [get_bd_cells refclk_clkgen]
-  set_property -dict [list CONFIG.JITTER_SEL {Min_O_Jitter} ] [get_bd_cells refclk_clkgen]
-  set_property -dict [list CONFIG.USE_LOCKED {false} ] [get_bd_cells refclk_clkgen]
-  set_property -dict [list CONFIG.USE_RESET {false} ] [get_bd_cells refclk_clkgen]
+  set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {30} ] $refclk_clkgen
+  set_property -dict [list CONFIG.USE_PHASE_ALIGNMENT {false} ] $refclk_clkgen
+  set_property -dict [list CONFIG.JITTER_SEL {Min_O_Jitter} ] $refclk_clkgen
+  set_property -dict [list CONFIG.USE_LOCKED {false} ] $refclk_clkgen
+  set_property -dict [list CONFIG.USE_RESET {false} ] $refclk_clkgen
+
+  # reference clock connections
+
+  ad_connect sys_200m_clk refclk_clkgen/clk_in1
+  ad_connect ref_clk      refclk_clkgen/clk_out1
 
   # connections (dac)
 
@@ -111,12 +116,12 @@
 
   p_sys_wfifo [current_bd_instance .] sys_wfifo 32 64
 
-  ad_connect  adc_clk       axi_ad9643/adc_clk
-  ad_connect  adc_clk       sys_wfifo/adc_clk
-  ad_connect  sys_200m_clk  sys_wfifo/dma_clk
-  ad_connect  sys_200m_clk  axi_ad9643_dma/fifo_wr_clk
-  ad_connect  sys_200m_clk  axi_ad9643/delay_clk
-  ad_connect  sys_cpu_reset sys_wfifo/adc_rst
+  ad_connect  adc_clk             axi_ad9643/adc_clk
+  ad_connect  adc_clk             sys_wfifo/adc_clk
+  ad_connect  sys_200m_clk        axi_ad9643/delay_clk
+  ad_connect  sys_200m_clk        axi_ad9643_dma/fifo_wr_clk
+  ad_connect  sys_200m_clk        sys_wfifo/dma_clk
+  ad_connect  axi_ad9643/adc_rst  sys_wfifo/adc_rst
 
   ad_connect  adc_clk_in_p  axi_ad9643/adc_clk_in_p
   ad_connect  adc_clk_in_n  axi_ad9643/adc_clk_in_n
@@ -143,11 +148,6 @@
   ad_connect  sys_cpu_resetn axi_ad9122_dma/m_src_axi_aresetn
   ad_connect  sys_cpu_resetn axi_ad9643_dma/m_dest_axi_aresetn
 
-  # reference clock
-
-  ad_connect sys_200m_clk refclk_clkgen/clk_in1
-  ad_connect ref_clk      refclk_clkgen/clk_out1
-
   # address map
 
   ad_cpu_interconnect 0x74200000  axi_ad9122
@@ -164,7 +164,7 @@
   ad_cpu_interrupt ps-12 mb-12 axi_ad9122_dma/irq
   ad_cpu_interrupt ps-13 mb-13 axi_ad9643_dma/irq
 
-   # ila (adc)
+  # ila (adc)
 
   set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_adc]
   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
