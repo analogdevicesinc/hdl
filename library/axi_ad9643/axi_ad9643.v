@@ -67,6 +67,7 @@ module axi_ad9643 (
   adc_dunf,
   up_adc_gpio_in,
   up_adc_gpio_out,
+  adc_rst,
 
   // axi interface
 
@@ -124,6 +125,7 @@ module axi_ad9643 (
   input           adc_dunf;
   input   [31:0]  up_adc_gpio_in;
   output  [31:0]  up_adc_gpio_out;
+  output          adc_rst;
 
   // axi interface
 
