@@ -71,5 +71,3 @@ set_property  -dict {PACKAGE_PIN AA30   IOSTANDARD LVCMOS25} [get_ports spi_miso
 # clocks
 
 create_clock -name dac_clk_in   -period  1.66 [get_ports dac_clk_in_p]
-create_clock -name dac_div_clk  -period  6.66 [get_pins i_system_wrapper/system_i/axi_ad9739a/dac_div_clk]
-
