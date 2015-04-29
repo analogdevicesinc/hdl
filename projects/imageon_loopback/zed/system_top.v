@@ -95,6 +95,8 @@ module system_top (
   hdmi_rx_data,
   hdmi_tx_data,
   
+  hdmiio_int,
+  
   otg_vbusoc);
 
   inout   [14:0]  ddr_addr;
@@ -145,6 +147,8 @@ module system_top (
   inout           hdmi_iic_scl;
   inout           hdmi_iic_sda;
 
+  inout           hdmiio_int;
+
   input           otg_vbusoc;
 
   // imageon ports
@@ -191,6 +195,12 @@ module system_top (
     .D2 (1'b0),
     .C (hdmi_rx_clk),
     .Q (hdmi_tx_clk));
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi (
+    .dt (gpio_t[32]),
+    .di (gpio_o[32]),
+    .do (gpio_i[32]),
+    .dio (hdmiio_int));
 
   ad_iobuf #(
     .DATA_WIDTH(32)

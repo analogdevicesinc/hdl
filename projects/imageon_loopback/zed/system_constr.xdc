@@ -46,4 +46,8 @@ set_property -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS25} [get_ports hdmi_iic_scl
 set_property -dict {PACKAGE_PIN K21 IOSTANDARD LVCMOS25} [get_ports hdmi_iic_sda] ;	 	## G19 FMC_LPC_LA16_N
 set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25} [get_ports hdmi_iic_rstn] ; 	## D9 FMC_LPC_LA01_CC_N
 
+# hdmiio_int
+
+set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports hdmiio_int] ; ## D08 FMC_LPC_LA01_CC_P
+
 set_property  -dict {IOB TRUE} [get_ports {hdmi_rx_data[*] hdmi_tx_data[*]}];
