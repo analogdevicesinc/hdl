@@ -21,7 +21,8 @@ set_property ASYNC_REG TRUE \
   [get_cells -hier *tx_ip_sync_m2_reg*] \
   [get_cells -hier *up_rx_status_m1_reg*] \
   [get_cells -hier *up_tx_status_m1_reg*] \
-  [get_cells -hier *up_rx_rst_done_m1_reg*]
+  [get_cells -hier *up_rx_rst_done_m1_reg*] \
+  [get_cells -hier *up_tx_rst_done_m1_reg*]
 
 set_false_path \
   -from [get_cells -hier es_dma_req_toggle_reg* -filter {primitive_subgroup == flop}] \
@@ -79,6 +80,10 @@ set_max_delay -datapath_only \
 set_false_path \
   -from [get_pins -hier *RXUSRCLK2* ] \
   -to [get_pins -hier up_rx_rst_done_m1_reg*/D ]
+
+set_false_path \
+  -from [get_pins -hier *TXUSRCLK2* ] \
+  -to [get_pins -hier up_tx_rst_done_m1_reg*/D ]
 
 set_false_path \
   -to [get_pins -hier */PRE -filter {NAME =~ *i_*rst_reg*}]

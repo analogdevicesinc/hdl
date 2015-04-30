@@ -56,7 +56,8 @@ module up_gt (
   // receive interface
 
   rx_clk,
-  jesd_rx_rst,
+  rx_rst,
+  rx_jesd_rst,
   rx_ext_sysref,
   rx_sysref,
   rx_ip_sync,
@@ -70,6 +71,7 @@ module up_gt (
 
   tx_clk,
   tx_rst,
+  tx_jesd_rst,
   tx_ext_sysref,
   tx_sysref,
   tx_sync,
@@ -160,7 +162,8 @@ module up_gt (
   // receive interface
 
   input           rx_clk;
-  output          jesd_rx_rst;
+  output          rx_rst;
+  output          rx_jesd_rst;
   input           rx_ext_sysref;
   output          rx_sysref;
   input           rx_ip_sync;
@@ -174,6 +177,7 @@ module up_gt (
 
   input           tx_clk;
   output          tx_rst;
+  output          tx_jesd_rst;
   input           tx_ext_sysref;
   output          tx_sysref;
   input           tx_sync;
@@ -613,8 +617,9 @@ module up_gt (
   ad_rst i_gt_rx_rst_reg  (.preset(up_gt_rx_preset_s),  .clk(drp_clk),  .rst(gt_rx_rst));
   ad_rst i_gt_tx_rst_reg  (.preset(up_gt_tx_preset_s),  .clk(drp_clk),  .rst(gt_tx_rst));
   ad_rst i_rx_rst_reg     (.preset(up_rx_preset_s),     .clk(rx_clk),   .rst(rx_rst));
-  ad_rst i_j_rx_rst_reg   (.preset(up_rx_preset_s),     .clk(up_clk),   .rst(jesd_rx_rst));
+  ad_rst i_j_rx_rst_reg   (.preset(up_rx_preset_s),     .clk(up_clk),   .rst(rx_jesd_rst));
   ad_rst i_tx_rst_reg     (.preset(up_tx_preset_s),     .clk(tx_clk),   .rst(tx_rst));
+  ad_rst i_j_tx_rst_reg   (.preset(up_tx_preset_s),     .clk(up_clk),   .rst(tx_jesd_rst));
 
   // reset done & pll locked
   

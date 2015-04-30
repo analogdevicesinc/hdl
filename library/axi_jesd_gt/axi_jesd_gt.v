@@ -59,6 +59,7 @@ module axi_jesd_gt (
   // core interface
 
   rx_rst,
+  rx_jesd_rst,
   rx_clk_g,
   rx_clk,
   rx_data,
@@ -74,6 +75,7 @@ module axi_jesd_gt (
   rx_ip_data,
 
   tx_rst,
+  tx_jesd_rst,
   tx_clk_g,
   tx_clk,
   tx_data,
@@ -196,6 +198,7 @@ module axi_jesd_gt (
   // core interface
 
   output                                        rx_rst;
+  output                                        rx_jesd_rst;
   output                                        rx_clk_g;
   input                                         rx_clk;
   output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_data;
@@ -211,6 +214,7 @@ module axi_jesd_gt (
   input   [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_ip_data;
 
   output                                        tx_rst;
+  output                                        tx_jesd_rst;
   output                                        tx_clk_g;
   input                                         tx_clk;
   input   [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_data;
@@ -743,7 +747,8 @@ module axi_jesd_gt (
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_s),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_s),
     .rx_clk (rx_clk),
-    .jesd_rx_rst (rx_rst),
+    .rx_rst (rx_rst),
+    .rx_jesd_rst (rx_jesd_rst),
     .rx_ext_sysref (rx_ext_sysref),
     .rx_sysref (rx_sysref),
     .rx_ip_sync (rx_ip_sync),
@@ -754,6 +759,7 @@ module axi_jesd_gt (
     .rx_rst_done_up (rx_rst_done),
     .tx_clk (tx_clk),
     .tx_rst (tx_rst),
+    .tx_jesd_rst (tx_jesd_rst),
     .tx_ext_sysref (tx_ext_sysref),
     .tx_sysref (tx_sysref),
     .tx_sync (tx_sync),
