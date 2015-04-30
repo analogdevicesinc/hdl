@@ -47,7 +47,6 @@ set_property -dict [list CONFIG.C_DMA_TYPE_DEST {2}] [get_bd_cells axi_ad9122_dm
 set_property -dict [list CONFIG.PCORE_ID {1}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] [get_bd_cells axi_ad9122_dma]
-set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {0}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_CYCLIC {1}] [get_bd_cells axi_ad9122_dma]
@@ -68,7 +67,6 @@ set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9250_dma
 set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9250_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {0}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9250_dma
@@ -144,7 +142,7 @@ ad_connect  util_bsplit_rx_gt_data/data axi_daq1_gt/rx_gt_data
 ad_connect  util_bsplit_rx_gt_data/split_data_0 axi_ad9250_jesd/gt0_rxdata
 ad_connect  util_bsplit_rx_gt_data/split_data_1 axi_ad9250_jesd/gt1_rxdata
 
-ad_connect  axi_daq1_gt/rx_rst  axi_ad9250_jesd/rx_reset
+ad_connect  axi_daq1_gt/rx_jesd_rst  axi_ad9250_jesd/rx_reset
 ad_connect  axi_daq1_gt/rx_sysref  axi_ad9250_jesd/rx_sysref
 ad_connect  axi_daq1_gt/rx_rst_done  axi_ad9250_jesd/rx_reset_done
 ad_connect  axi_daq1_gt/rx_ip_comma_align  axi_ad9250_jesd/rxencommaalign_out
@@ -186,6 +184,10 @@ ad_connect  dac_ddata_1  axi_ad9122_core/dac_ddata_1
 ad_connect  dac_drd  axi_ad9122_dma/fifo_rd_en
 ad_connect  dac_ddata  axi_ad9122_dma/fifo_rd_dout
 ad_connect  axi_ad9122_core/dac_dunf  axi_ad9122_dma/fifo_rd_underflow
+
+ad_connect  sys_cpu_resetn axi_ad9122_dma/m_src_axi_aresetn
+ad_connect  sys_cpu_resetn axi_ad9250_dma/m_dest_axi_aresetn
+
 
 # interconnect (cpu)
 
