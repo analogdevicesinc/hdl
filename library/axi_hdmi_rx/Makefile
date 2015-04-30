@@ -21,6 +21,7 @@ M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_hdmi_rx.v
 M_DEPS += axi_hdmi_rx.v
 M_DEPS += axi_hdmi_rx_es.v
+M_DEPS += axi_hdmi_rx_constr.xdc
 M_DEPS += axi_hdmi_rx_core.v
 
 M_VIVADO := vivado -mode batch -source
