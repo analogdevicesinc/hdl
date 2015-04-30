@@ -112,7 +112,7 @@ ad_connect  axi_ad9250_gt_rx_clk  axi_ad9250_0_core/rx_clk
 ad_connect  axi_ad9250_gt_rx_clk  axi_ad9250_1_core/rx_clk
 ad_connect  axi_ad9250_gt_rx_clk  axi_ad9250_jesd/rx_core_clk
 ad_connect  axi_ad9250_gt_rx_clk  adc_clk
-ad_connect  axi_ad9250_gt_rx_rst  axi_ad9250_gt/rx_rst
+ad_connect  axi_ad9250_gt_rx_rst  axi_ad9250_gt/rx_jesd_rst
 ad_connect  axi_ad9250_gt_rx_rst  axi_ad9250_jesd/rx_reset
 
 ad_connect  axi_ad9250_gt_rx_sysref         axi_ad9250_jesd/rx_sysref

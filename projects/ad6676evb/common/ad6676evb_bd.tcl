@@ -66,7 +66,7 @@ ad_connect  ad6676_clk axi_ad6676_gt/rx_clk
 ad_connect  ad6676_clk axi_ad6676_core/rx_clk
 ad_connect  ad6676_clk axi_ad6676_jesd/rx_core_clk
 ad_connect  ad6676_clk axi_ad6676_dma/fifo_wr_clk
-ad_connect  axi_ad6676_gt/rx_rst axi_ad6676_jesd/rx_reset
+ad_connect  axi_ad6676_gt/rx_jesd_rst axi_ad6676_jesd/rx_reset
 ad_connect  axi_ad6676_gt/rx_sysref axi_ad6676_jesd/rx_sysref
 ad_connect  axi_ad6676_gt/tx_clk_g axi_ad6676_gt/tx_clk
 

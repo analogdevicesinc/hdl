@@ -125,7 +125,7 @@ ad_connect axi_usdrx1_gt_rx_clk             axi_ad9671_core_1/rx_clk
 ad_connect axi_usdrx1_gt_rx_clk             axi_ad9671_core_2/rx_clk
 ad_connect axi_usdrx1_gt_rx_clk             axi_ad9671_core_3/rx_clk
 ad_connect axi_usdrx1_gt_rx_clk             axi_usdrx1_jesd/rx_core_clk
-ad_connect axi_usdrx1_gt/rx_rst             axi_usdrx1_jesd/rx_reset
+ad_connect axi_usdrx1_gt/rx_jesd_rst        axi_usdrx1_jesd/rx_reset
 ad_connect axi_usdrx1_gt/rx_sysref          axi_usdrx1_jesd/rx_sysref
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_charisk

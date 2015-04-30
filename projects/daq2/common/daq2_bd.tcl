@@ -165,7 +165,7 @@ ad_connect  axi_daq2_gt/rx_clk_g adc_clk
 ad_connect  axi_daq2_gt/rx_clk_g axi_daq2_gt/rx_clk
 ad_connect  axi_daq2_gt/rx_clk_g axi_ad9680_core/rx_clk
 ad_connect  axi_daq2_gt/rx_clk_g axi_ad9680_jesd/rx_core_clk
-ad_connect  axi_daq2_gt/rx_rst axi_ad9680_jesd/rx_reset
+ad_connect  axi_daq2_gt/rx_jesd_rst axi_ad9680_jesd/rx_reset
 ad_connect  axi_daq2_gt/rx_sysref axi_ad9680_jesd/rx_sysref
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_charisk
