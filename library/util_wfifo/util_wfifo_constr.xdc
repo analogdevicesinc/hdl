@@ -7,3 +7,6 @@ set_false_path \
 
 set_false_path \
   -to [get_pins -hier */PRE -filter {NAME =~ *i_*fifo_rst*}]
+
+set_false_path \
+  -to [get_pins -hier */CLR -filter {NAME =~ *i_*fifo_rstn_reg*}]
