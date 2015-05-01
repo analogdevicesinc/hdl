@@ -1,14 +1,10 @@
 
 # create board design
-# interface ports
+# default ports
 
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main
-
-create_bd_port -dir I -from 63 -to 0 gpio_i
-create_bd_port -dir O -from 63 -to 0 gpio_o
-create_bd_port -dir O -from 63 -to 0 gpio_t
-
-# spi interface
+create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
 
 create_bd_port -dir O spi0_csn_2_o
 create_bd_port -dir O spi0_csn_1_o
@@ -30,6 +26,10 @@ create_bd_port -dir I spi1_sdo_i
 create_bd_port -dir O spi1_sdo_o
 create_bd_port -dir I spi1_sdi_i
 
+create_bd_port -dir I -from 63 -to 0 gpio_i
+create_bd_port -dir O -from 63 -to 0 gpio_o
+create_bd_port -dir O -from 63 -to 0 gpio_t
+
 # hdmi interface
 
 create_bd_port -dir O hdmi_out_clk
@@ -38,14 +38,14 @@ create_bd_port -dir O hdmi_vsync
 create_bd_port -dir O hdmi_data_e
 create_bd_port -dir O -from 15 -to 0 hdmi_data
 
-# spdif audio
-
-create_bd_port -dir O spdif
-
 # i2s
 
 create_bd_port -dir O -type clk i2s_mclk
 create_bd_intf_port -mode Master -vlnv analog.com:interface:i2s_rtl:1.0 i2s
+
+# spdif audio
+
+create_bd_port -dir O spdif
 
 # interrupts
 
@@ -67,15 +67,16 @@ create_bd_port -dir I -type intr ps_intr_13
 # instance: sys_ps7
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 sys_ps7]
-apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {make_external "fixed_io, ddr" apply_board_preset "1" Master "Disable" Slave "Disable" } $sys_ps7
+source $ad_hdl_dir/projects/common/mitx045/mitx045_system_ps7.tcl
 set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {1} ] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
+set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP0 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_INTR {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {64}] $sys_ps7
@@ -135,13 +136,15 @@ ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
 
 # interface connections
 
+ad_connect  ddr sys_ps7/DDR
 ad_connect  gpio_i sys_ps7/GPIO_I
 ad_connect  gpio_o sys_ps7/GPIO_O
 ad_connect  gpio_t sys_ps7/GPIO_T
+ad_connect  fixed_io sys_ps7/FIXED_IO
 ad_connect  iic_main axi_iic_main/iic
 ad_connect  sys_200m_clk axi_hdmi_clkgen/clk
 
-# spi connection
+# spi connections
 
 ad_connect  spi0_csn_2_o sys_ps7/SPI0_SS2_O
 ad_connect  spi0_csn_1_o sys_ps7/SPI0_SS1_O
@@ -194,20 +197,17 @@ ad_connect  spdif axi_spdif_tx_core/spdif_tx_o
 
 ad_connect  sys_cpu_clk axi_i2s_adi/DMA_REQ_RX_ACLK
 ad_connect  sys_cpu_clk axi_i2s_adi/DMA_REQ_TX_ACLK
+ad_connect  sys_cpu_clk sys_ps7/DMA1_ACLK
+ad_connect  sys_cpu_clk sys_ps7/DMA2_ACLK
 ad_connect  sys_cpu_resetn axi_i2s_adi/DMA_REQ_RX_RSTN
 ad_connect  sys_cpu_resetn axi_i2s_adi/DMA_REQ_TX_RSTN
-
-ad_connect  i2s_mclk sys_audio_clkgen/clk_out1
-ad_connect  axi_i2s_adi/DATA_CLK_I sys_audio_clkgen/clk_out1
-
-ad_connect  i2s axi_i2s_adi/I2S
-
 ad_connect  sys_ps7/DMA1_REQ  axi_i2s_adi/DMA_REQ_TX
 ad_connect  sys_ps7/DMA1_ACK  axi_i2s_adi/DMA_ACK_TX
 ad_connect  sys_ps7/DMA2_REQ  axi_i2s_adi/DMA_REQ_RX
 ad_connect  sys_ps7/DMA2_ACK  axi_i2s_adi/DMA_ACK_RX
-ad_connect  sys_cpu_clk sys_ps7/DMA1_ACLK
-ad_connect  sys_cpu_clk sys_ps7/DMA2_ACLK
+ad_connect  sys_audio_clkgen/clk_out1 i2s_mclk 
+ad_connect  sys_audio_clkgen/clk_out1 axi_i2s_adi/DATA_CLK_I
+ad_connect  i2s axi_i2s_adi/I2S
 
 # interrupts
 
