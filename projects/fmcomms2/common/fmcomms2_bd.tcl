@@ -33,10 +33,6 @@ set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9361_dac_dma
 
-if {$sys_zynq == 1} {
-  set_property -dict [list CONFIG.C_DMA_AXI_PROTOCOL_SRC {1}] $axi_ad9361_dac_dma
-}
-
 set util_dac_unpack [create_bd_cell -type ip -vlnv analog.com:user:util_dac_unpack:1.0 util_dac_unpack]
 set_property -dict [list CONFIG.CHANNELS {4}] $util_dac_unpack
 
@@ -52,10 +48,6 @@ set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}]  $axi_ad9361_adc_dma
-
-if {$sys_zynq == 1} {
-  set_property -dict [list CONFIG.C_DMA_AXI_PROTOCOL_DEST {1}] $axi_ad9361_adc_dma
-}
 
 set util_adc_pack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 util_adc_pack]
 set_property -dict [list CONFIG.CHANNELS {4}] $util_adc_pack
