@@ -180,6 +180,27 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
+  wire            clk;
+  wire            dma_dac_dunf;
+  wire            core_dac_dunf;
+  wire    [63:0]  dma_dac_ddata;
+  wire    [63:0]  core_dac_ddata;
+  wire            dma_dac_en;
+  wire            core_dac_en;
+  wire            dma_dac_dvalid;
+  wire            core_dac_dvalid;
+  wire            dma_adc_ovf;
+  wire            core_adc_ovf;
+  wire    [63:0]  dma_adc_ddata;
+  wire    [63:0]  core_adc_ddata;
+  wire            dma_adc_dwr;
+  wire            core_adc_dwr;
+  wire            dma_adc_dsync;
+  wire            core_adc_dsync;
+  wire    [31:0]  adc_gpio_input;
+  wire    [31:0]  adc_gpio_output;
+  wire    [31:0]  dac_gpio_input;
+  wire    [31:0]  dac_gpio_output;
 
   // instantiations
 
@@ -200,6 +221,29 @@ module system_top (
     .di (gpio_o[14:0]),
     .do (gpio_i[14:0]),
     .dio (gpio_bd));
+
+  prcfg i_prcfg (
+    .clk (clk),
+    .adc_gpio_input (adc_gpio_input),
+    .adc_gpio_output (adc_gpio_output),
+    .dac_gpio_input (dac_gpio_input),
+    .dac_gpio_output (dac_gpio_output),
+    .dma_dac_en (dma_dac_en),
+    .dma_dac_dunf (dma_dac_dunf),
+    .dma_dac_ddata (dma_dac_ddata),
+    .dma_dac_dvalid (dma_dac_dvalid),
+    .core_dac_en (core_dac_en),
+    .core_dac_dunf (core_dac_dunf),
+    .core_dac_ddata (core_dac_ddata),
+    .core_dac_dvalid (core_dac_dvalid),
+    .core_adc_dwr (core_adc_dwr),
+    .core_adc_dsync (core_adc_dsync),
+    .core_adc_ddata (core_adc_ddata),
+    .core_adc_ovf (core_adc_ovf),
+    .dma_adc_dwr (dma_adc_dwr),
+    .dma_adc_dsync (dma_adc_dsync),
+    .dma_adc_ddata (dma_adc_ddata),
+    .dma_adc_ovf (dma_adc_ovf));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -275,7 +319,54 @@ module system_top (
     .tx_data_out_n (tx_data_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
-    .tx_frame_out_p (tx_frame_out_p));
+    .tx_frame_out_p (tx_frame_out_p),
+    .clk (clk),
+    .dma_dac_en (dma_dac_en),
+    .dma_dac_dunf (dma_dac_dunf),
+    .dma_dac_ddata (dma_dac_ddata),
+    .dma_dac_dvalid (dma_dac_dvalid),
+    .core_dac_en (core_dac_en),
+    .core_dac_dunf (core_dac_dunf),
+    .core_dac_ddata (core_dac_ddata),
+    .core_dac_dvalid (core_dac_dvalid),
+    .core_adc_dwr (core_adc_dwr),
+    .core_adc_dsync (core_adc_dsync),
+    .core_adc_ddata (core_adc_ddata),
+    .core_adc_ovf (core_adc_ovf),
+    .dma_adc_dwr (dma_adc_dwr),
+    .dma_adc_dsync (dma_adc_dsync),
+    .dma_adc_ddata (dma_adc_ddata),
+    .dma_adc_ovf (dma_adc_ovf),
+    .up_dac_gpio_in (dac_gpio_output),
+    .up_adc_gpio_in (adc_gpio_output),
+    .up_dac_gpio_out (dac_gpio_input),
+    .up_adc_gpio_out (adc_gpio_input));
+endmodule
+
+// black box definition for pr module
+(* black_box *) module prcfg (
+
+  input                 clk,
+  input       [31:0]    adc_gpio_input,
+  output      [31:0]    adc_gpio_output,
+  input       [31:0]    dac_gpio_input,
+  output      [31:0]    dac_gpio_output,
+  output                dma_dac_en,
+  input                 dma_dac_dunf,
+  input       [63:0]    dma_dac_ddata,
+  input                 dma_dac_dvalid,
+  input                 core_dac_en,
+  output                core_dac_dunf,
+  output      [63:0]    core_dac_ddata,
+  output                core_dac_dvalid,
+  input                 core_adc_dwr,
+  input                 core_adc_dsync,
+  input       [63:0]    core_adc_ddata,
+  output                core_adc_ovf,
+  output                dma_adc_dwr,
+  output                dma_adc_dsync,
+  output      [63:0]    dma_adc_ddata,
+  input                 dma_adc_ovf);
 
 endmodule
 
