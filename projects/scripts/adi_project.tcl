@@ -88,6 +88,10 @@ proc adi_project_create {project_name {mode 0}} {
     create_project -in_memory -part $p_device
   }
 
+  if {$mode == 1} {
+    file mkdir $project_name.data
+  }
+
   if {$p_board ne "not-applicable"} {
     set_property board $p_board [current_project]
   }
@@ -119,7 +123,7 @@ proc adi_project_create {project_name {mode 0}} {
   if {$mode == 0} {
     import_files -force -norecurse -fileset sources_1 $project_system_dir/hdl/system_wrapper.v
   } else {
-    write_hwdef -file "$project_name.hwdef"
+    write_hwdef -file "$project_name.data/$project_name.hwdef"
   }
 }
 
@@ -168,22 +172,24 @@ proc adi_project_synth {project_name prcfg_name hdl_files {xdc_files ""}} {
 
   global p_device
 
+  set p_prefix "$project_name.data/$project_name"
+
   if {$prcfg_name eq ""} {
 
     read_verilog .srcs/sources_1/bd/system/hdl/system_wrapper.v
     read_verilog $hdl_files
     read_xdc $xdc_files
 
-    synth_design -mode default -top system_top -part $p_device > $project_name.synth.rds
-    write_checkpoint -force $project_name.synth.dcp
+    synth_design -mode default -top system_top -part $p_device > $p_prefix.synth.rds
+    write_checkpoint -force $p_prefix.synth.dcp
     close_project
 
   } else {
 
     create_project -in_memory -part $p_device
     read_verilog $hdl_files
-    synth_design -mode out_of_context -top "prcfg" -part $p_device > $project_name.${prcfg_name}_synth.rds
-    write_checkpoint -force $project_name.${prcfg_name}_synth.dcp
+    synth_design -mode out_of_context -top "prcfg" -part $p_device > $p_prefix.${prcfg_name}_synth.rds
+    write_checkpoint -force $p_prefix.${prcfg_name}_synth.dcp
     close_project
   }
 }
@@ -195,55 +201,58 @@ proc adi_project_impl {project_name prcfg_name {xdc_files ""}} {
   global p_prcfg_list
   global p_prcfg_status
 
+  set p_prefix "$project_name.data/$project_name"
+
   if {$prcfg_name eq "default"} {
     set p_prcfg_status 0
-    set p_prcfg_init "$project_name.${prcfg_name}_impl.dcp"
+    set p_prcfg_init "$p_prefix.${prcfg_name}_impl.dcp"
     file mkdir $project_name.sdk
   }
 
   if {$prcfg_name eq "default"} {
 
-    open_checkpoint $project_name.synth.dcp -part $p_device
+    open_checkpoint $p_prefix.synth.dcp -part $p_device
     read_xdc $xdc_files
-    read_checkpoint -cell i_prcfg $project_name.${prcfg_name}_synth.dcp
+    read_checkpoint -cell i_prcfg $p_prefix.${prcfg_name}_synth.dcp
     set_property HD.RECONFIGURABLE 1 [get_cells i_prcfg]
-    opt_design > $project_name.${prcfg_name}_opt.rds
-    write_debug_probes -force $project_name.${prcfg_name}_debug_nets.ltx
-    place_design > $project_name.${prcfg_name}_place.rds
-    route_design > $project_name.${prcfg_name}_route.rds
+    opt_design > $p_prefix.${prcfg_name}_opt.rds
+    write_debug_probes -force $p_prefix.${prcfg_name}_debug_nets.ltx
+    place_design > $p_prefix.${prcfg_name}_place.rds
+    route_design > $p_prefix.${prcfg_name}_route.rds
 
   } else {
 
-    open_checkpoint $project_name.default_impl_bb.dcp -part $p_device
+    open_checkpoint $p_prefix.default_impl_bb.dcp -part $p_device
     lock_design -level routing
-    read_checkpoint -cell i_prcfg $project_name.${prcfg_name}_synth.dcp
-    opt_design > $project_name.${prcfg_name}_opt.rds
-    place_design > $project_name.${prcfg_name}_place.rds
-    route_design > $project_name.${prcfg_name}_route.rds
+    read_checkpoint -cell i_prcfg $p_prefix.${prcfg_name}_synth.dcp
+    opt_design > $p_prefix.${prcfg_name}_opt.rds
+    place_design > $p_prefix.${prcfg_name}_place.rds
+    route_design > $p_prefix.${prcfg_name}_route.rds
   }
 
-  write_checkpoint -force $project_name.${prcfg_name}_impl.dcp
-  report_utilization -pblocks pb_prcfg -file $project_name.${prcfg_name}_utilization.rpt
-  report_timing_summary -file $project_name.${prcfg_name}_timing_summary.rpt
+  write_checkpoint -force $p_prefix.${prcfg_name}_impl.dcp
+  report_utilization -pblocks pb_prcfg -file $p_prefix.${prcfg_name}_utilization.rpt
+  report_timing_summary -file $p_prefix.${prcfg_name}_timing_summary.rpt
 
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
     set p_prcfg_status 1
+    puts "CRITICAL WARNING: Timing Constraints NOT met ($prcfg_name)!"
   }
 
-  write_checkpoint -force -cell i_prcfg $project_name.${prcfg_name}_prcfg_impl.dcp
+  write_checkpoint -force -cell i_prcfg $p_prefix.${prcfg_name}_prcfg_impl.dcp
   update_design -cell i_prcfg -black_box
-  write_checkpoint -force $project_name.${prcfg_name}_impl_bb.dcp
-  open_checkpoint $project_name.${prcfg_name}_impl.dcp -part $p_device
-  write_bitstream -force -bin_file -file $project_name.${prcfg_name}.bit
-  write_sysdef -hwdef $project_name.hwdef -bitfile $project_name.${prcfg_name}.bit -file $project_name.${prcfg_name}.hdf
-  file copy -force $project_name.${prcfg_name}.hdf $project_name.sdk/system_top.${prcfg_name}.hdf
+  write_checkpoint -force $p_prefix.${prcfg_name}_impl_bb.dcp
+  open_checkpoint $p_prefix.${prcfg_name}_impl.dcp -part $p_device
+  write_bitstream -force -bin_file -file $p_prefix.${prcfg_name}.bit
+  write_sysdef -hwdef $p_prefix.hwdef -bitfile $p_prefix.${prcfg_name}.bit -file $p_prefix.${prcfg_name}.hdf
+  file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.${prcfg_name}.hdf
 
   if {$prcfg_name ne "default"} {
-    lappend p_prcfg_list "$project_name.${prcfg_name}_impl.dcp"
+    lappend p_prcfg_list "$p_prefix.${prcfg_name}_impl.dcp"
   }
 
   if {$prcfg_name eq "default"} {
-    file copy -force $project_name.${prcfg_name}.hdf $project_name.sdk/system_top.hdf
+    file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.hdf
   }
 }
 
@@ -253,9 +262,11 @@ proc adi_project_verify {project_name} {
   global p_prcfg_list
   global p_prcfg_status
 
+  set p_prefix "$project_name.data/$project_name"
+
   pr_verify -full_check -initial $p_prcfg_init \
     -additional $p_prcfg_list \
-    -file $project_name.prcfg_verify.log
+    -file $p_prefix.prcfg_verify.log
 
   if {$p_prcfg_status == 1} {
     return -code error [format "ERROR: Timing Constraints NOT met!"]
