@@ -67,7 +67,7 @@ proc adi_project_create {project_name {mode 0}} {
   }
   if [regexp "_mitx045$" $project_name] {
     set p_device "xc7z045ffg900-2"
-    set p_board "em.avnet.com:mini_itx_7z045:part0:1.0"
+    set p_board "not-applicable"
     set sys_zynq 1
   }
   if [regexp "_rfsom$" $project_name] {
