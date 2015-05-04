@@ -5,6 +5,7 @@ variable sys_zynq
 variable p_prcfg_init
 variable p_prcfg_list
 variable p_prcfg_status
+variable p_prlicense_exist
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
   set REQUIRED_VIVADO_VERSION "2014.4.1"
@@ -200,11 +201,13 @@ proc adi_project_impl {project_name prcfg_name {xdc_files ""}} {
   global p_prcfg_init
   global p_prcfg_list
   global p_prcfg_status
+  global p_prlicense_exist
 
   set p_prefix "$project_name.data/$project_name"
 
   if {$prcfg_name eq "default"} {
     set p_prcfg_status 0
+    set p_prlicense_exist 0
     set p_prcfg_init "$p_prefix.${prcfg_name}_impl.dcp"
     file mkdir $project_name.sdk
   }
@@ -214,13 +217,14 @@ proc adi_project_impl {project_name prcfg_name {xdc_files ""}} {
     open_checkpoint $p_prefix.synth.dcp -part $p_device
     read_xdc $xdc_files
     read_checkpoint -cell i_prcfg $p_prefix.${prcfg_name}_synth.dcp
-    set_property HD.RECONFIGURABLE 1 [get_cells i_prcfg]
+    set_property -quiet HD.RECONFIGURABLE 1 [get_cells i_prcfg]
+    set p_prlicense_exist [get_property HD.RECONFIGURABLE [get_cells i_prcfg]]
     opt_design > $p_prefix.${prcfg_name}_opt.rds
     write_debug_probes -force $p_prefix.${prcfg_name}_debug_nets.ltx
     place_design > $p_prefix.${prcfg_name}_place.rds
     route_design > $p_prefix.${prcfg_name}_route.rds
 
-  } else {
+  } elseif {$p_prlicense_exist == 1} {
 
     open_checkpoint $p_prefix.default_impl_bb.dcp -part $p_device
     lock_design -level routing
@@ -230,29 +234,32 @@ proc adi_project_impl {project_name prcfg_name {xdc_files ""}} {
     route_design > $p_prefix.${prcfg_name}_route.rds
   }
 
-  write_checkpoint -force $p_prefix.${prcfg_name}_impl.dcp
-  report_utilization -pblocks pb_prcfg -file $p_prefix.${prcfg_name}_utilization.rpt
-  report_timing_summary -file $p_prefix.${prcfg_name}_timing_summary.rpt
+  if {$prcfg_name eq "default"
+      || $p_prlicense_exist == 1} {
+    write_checkpoint -force $p_prefix.${prcfg_name}_impl.dcp
+    report_utilization -pblocks pb_prcfg -file $p_prefix.${prcfg_name}_utilization.rpt
+    report_timing_summary -file $p_prefix.${prcfg_name}_timing_summary.rpt
 
-  if [expr [get_property SLACK [get_timing_paths]] < 0] {
-    set p_prcfg_status 1
-    puts "CRITICAL WARNING: Timing Constraints NOT met ($prcfg_name)!"
-  }
+    if [expr [get_property SLACK [get_timing_paths]] < 0] {
+      set p_prcfg_status 1
+      puts "CRITICAL WARNING: Timing Constraints NOT met ($prcfg_name)!"
+    }
 
-  write_checkpoint -force -cell i_prcfg $p_prefix.${prcfg_name}_prcfg_impl.dcp
-  update_design -cell i_prcfg -black_box
-  write_checkpoint -force $p_prefix.${prcfg_name}_impl_bb.dcp
-  open_checkpoint $p_prefix.${prcfg_name}_impl.dcp -part $p_device
-  write_bitstream -force -bin_file -file $p_prefix.${prcfg_name}.bit
-  write_sysdef -hwdef $p_prefix.hwdef -bitfile $p_prefix.${prcfg_name}.bit -file $p_prefix.${prcfg_name}.hdf
-  file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.${prcfg_name}.hdf
+    write_checkpoint -force -cell i_prcfg $p_prefix.${prcfg_name}_prcfg_impl.dcp
+    update_design -cell i_prcfg -black_box
+    write_checkpoint -force $p_prefix.${prcfg_name}_impl_bb.dcp
+    open_checkpoint $p_prefix.${prcfg_name}_impl.dcp -part $p_device
+    write_bitstream -force -bin_file -file $p_prefix.${prcfg_name}.bit
+    write_sysdef -hwdef $p_prefix.hwdef -bitfile $p_prefix.${prcfg_name}.bit -file $p_prefix.${prcfg_name}.hdf
+    file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.${prcfg_name}.hdf
 
-  if {$prcfg_name ne "default"} {
-    lappend p_prcfg_list "$p_prefix.${prcfg_name}_impl.dcp"
-  }
+    if {$prcfg_name ne "default"} {
+      lappend p_prcfg_list "$p_prefix.${prcfg_name}_impl.dcp"
+    }
 
-  if {$prcfg_name eq "default"} {
-    file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.hdf
+    if {$prcfg_name eq "default"} {
+      file copy -force $p_prefix.${prcfg_name}.hdf $project_name.sdk/system_top.hdf
+    }
   }
 }
 
@@ -264,7 +271,7 @@ proc adi_project_verify {project_name} {
 
   set p_prefix "$project_name.data/$project_name"
 
-  pr_verify -full_check -initial $p_prcfg_init \
+  pr_verify -quiet -full_check -initial $p_prcfg_init \
     -additional $p_prcfg_list \
     -file $p_prefix.prcfg_verify.log
 
