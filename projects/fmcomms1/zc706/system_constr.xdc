@@ -84,4 +84,3 @@ set_property  -dict {PACKAGE_PIN AG15   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_
 
 create_clock -name dac_clk_in   -period  2.00 [get_ports dac_clk_in_p]
 create_clock -name adc_clk_in   -period  4.00 [get_ports adc_clk_in_p]
-create_clock -name dac_div_clk  -period  8.00 [get_pins i_system_wrapper/system_i/axi_ad9122/dac_div_clk]
