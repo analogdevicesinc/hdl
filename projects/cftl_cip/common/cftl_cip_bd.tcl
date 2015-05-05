@@ -33,11 +33,6 @@ set pmod_gpio_core [create_bd_cell -type ip -vlnv analog.com:user:util_pmod_fmet
 
 # additional configurations
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ $adc_spi_freq] $sys_ps7
-
-ad_connect sys_ps7/FCLK_CLK2 pmod_spi_core/adc_spi_clk
 
 ad_connect sys_cpu_clk pmod_spi_dma/fifo_wr_clk
 ad_connect sys_cpu_clk pmod_spi_core/clk
