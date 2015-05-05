@@ -63,7 +63,6 @@ module util_pmod_adc (
   // clock and reset signals
 
   clk,
-  adc_spi_clk,
   reset,
 
   // dma interface
@@ -87,6 +86,7 @@ module util_pmod_adc (
   parameter         ADC_TQUIET_NS       = 60;   // quite time between the last SPI read and next conversion start
   parameter         SPI_WORD_LENGTH     = 12;
   parameter         ADC_RESET_LENGTH    = 3;
+  parameter         ADC_CLK_DIVIDE      = 16;
 
   // ADC states
   localparam        ADC_POWERUP         = 0;
@@ -108,7 +108,6 @@ module util_pmod_adc (
   // clock and reset signals
 
   input           clk;                          // system clock (100 MHz)
-  input           adc_spi_clk;                  // spi rate (max 50 Mhz)
   input           reset;                        // active high reset signal
 
   // dma interface
@@ -139,17 +138,28 @@ module util_pmod_adc (
   reg [15:0]      adc_tquiet_cnt    = 16'b0;
   reg [15:0]      sclk_clk_cnt      = 16'b0;
   reg [15:0]      sclk_clk_cnt_m1   = 16'b0;
+  reg [7:0]       adc_clk_cnt       = 8'h0;
 
   reg             adc_convst_n      = 1'b1;
   reg             adc_clk_en        = 1'b0;
   reg             adc_cs_n          = 1'b1;
   reg             adc_sw_reset      = 1'b0;
   reg             data_rd_ready     = 1'b0;
+  reg             adc_spi_clk       = 1'b0;
 
   // Assign/Always Blocks
 
   assign adc_sclk   = adc_spi_clk & adc_clk_en;
   assign adc_enable = 1'b1;
+
+  // spi clock generation
+  always @(posedge clk) begin
+    adc_clk_cnt <= adc_clk_cnt + 1;
+    if (adc_clk_cnt == ((ADC_CLK_DIVIDE/2)-1)) begin 
+      adc_clk_cnt <= 0;
+      adc_spi_clk <= ~adc_spi_clk;
+    end
+  end
 
   // update the ADC timing counters
 
@@ -197,7 +207,7 @@ module util_pmod_adc (
           end
       end
       else if(adc_state != ADC_READ_CNV_RESULT) begin
-          adc_data     <= 16'h0;
+          adc_data   <= 16'h0;
           sclk_clk_cnt <= SPI_WORD_LENGTH - 1;
       end
   end
