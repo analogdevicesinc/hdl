@@ -41,262 +41,111 @@
 
 module util_dacfifo (
 
+  // DMA interface
 
-  // FIFO read interface
-  rd_fifo_clk,             // should be connected to a lower system clock
-  rd_fifo_rst,
-  rd_fifo_en,
-  rd_fifo_valid,
-  rd_fifo_data,
-  rd_fifo_underflow,
-  rd_fifo_xfer_req,
+  dma_clk,
+  dma_rst,
+  dma_valid,
+  dma_data,
+  dma_ready,
+  dma_xfer_req,
+  dma_xfer_last,
 
-  // AXIS Slave interface (connection with DMAC)
+  // DAC interface
 
-  s_axis_aclk,
-  s_axis_aresetn,
-  s_axis_ready,
-  s_axis_valid,
-  s_axis_data,
-  s_axis_last,
-
-  // FIFO write interface (connection with upack/DAC)
-
-  wr_fifo_clk,             // should be connected to the dac clock
-  wr_fifo_valid,
-  wr_fifo_sync,
-  wr_fifo_data
+  dac_clk,
+  dac_valid,
+  dac_data
 );
 
-  // parameters
-  parameter       RD_INTERFACE_MODE = 0;
-
   // depth of the FIFO
-  parameter       FIFO_WADDR_WIDTH = 6;
-
-  // read/write interface data width
-  parameter       FIFO_RDATA_WIDTH = 64;      // should be less or equal to FIFO_WDATA_WIDTH
-  parameter       FIFO_WDATA_WIDTH = 128;
+  parameter       ADDR_WIDTH = 6;
+  parameter       DATA_WIDTH = 128;
 
   // local parameters
 
-  // supported ratios with the write interface are 1:1, 1:2, 1:4, 1:8
-  localparam      IF_RATIO = FIFO_WDATA_WIDTH/FIFO_RDATA_WIDTH;
-
-  // FSM state definitions
-  localparam      IDLE = 0;
-  localparam      READ = 1;
-
-  // interface type definitions
-  localparam      RD_FIFO_IF = 0;
-  localparam      S_AXIS_IF = 1;
-
   // port definitions
 
-  // RD FIFO interface
-  input                                         rd_fifo_clk;
-  input                                         rd_fifo_rst;
-  output                                        rd_fifo_en;
-  input                                         rd_fifo_valid;
-  input   [(FIFO_RDATA_WIDTH-1):0]              rd_fifo_data;
-  input                                         rd_fifo_underflow;
-  input                                         rd_fifo_xfer_req;
+  // DMA interface
 
-  // Slave AXI Stream interface
-  input                                         s_axis_aclk;
-  input                                         s_axis_aresetn;
-  input                                         s_axis_valid;
-  input   [(FIFO_RDATA_WIDTH-1):0]              s_axis_data;
-  input                                         s_axis_last;
-  output                                        s_axis_ready;
+  input                                         dma_clk;
+  input                                         dma_rst;
+  input                                         dma_valid;
+  input   [(DATA_WIDTH-1):0]                    dma_data;
+  output                                        dma_ready;
+  input                                         dma_xfer_req;
+  input                                         dma_xfer_last;
 
-  // WR FIFO interface
-  input                                         wr_fifo_clk;
-  input                                         wr_fifo_valid;
-  input                                         wr_fifo_sync;
-  output  [(FIFO_WDATA_WIDTH-1):0]              wr_fifo_data;
+  // DAC interface
+
+  input                                         dac_clk;
+  input                                         dac_valid;
+  output  [(DATA_WIDTH-1):0]                    dac_data;
 
   // internal registers
 
-  reg     [FIFO_WADDR_WIDTH-1:0]                fifo_waddr = 'h0;
-  reg     [(FIFO_RDATA_WIDTH*IF_RATIO)-1:0]     fifo_rdata = 'h0;
+  reg     [(ADDR_WIDTH-1):0]                    dma_waddr = 'b0;
+  reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr = 'b0;
+  reg                                           dma_xfer_req_ff = 1'b0;
+  reg                                           dma_ready = 1'b0;
 
-  reg     [FIFO_WDATA_WIDTH-1:0]                wr_fifo_data = 'h0;
-  reg                                           rd_en = 1'b0;
-
-  reg                                           fifo_ren = 1'b0;
-  reg     [FIFO_WADDR_WIDTH-1:0]                fifo_maxraddr = {FIFO_WADDR_WIDTH{1'b1}};
-  reg     [FIFO_WADDR_WIDTH-1:0]                fifo_raddr = 'h0;
-  reg     [FIFO_WADDR_WIDTH-1:0]                fifo_raddr_ff = 'h0;
-
-  reg     [ 2:0]                                fifo_rdata_count = 3'h0;
-
-  reg                                           fifo_state = IDLE;
-  reg                                           fifo_next_state = IDLE;
-
+  reg     [(ADDR_WIDTH-1):0]                    dac_raddr = 'b0;
+  reg     [(DATA_WIDTH-1):0]                    dac_data = 'b0;
+  
   // internal wires
+  wire                                          dma_wren;
+  wire    [(DATA_WIDTH-1):0]                    dac_data_s;
 
-  // common read interface
-  wire                                          rd_clk;
-  wire                                          rd_rst;
-  wire                                          rd_ready;   // or could be rd_en
-  wire     [FIFO_RDATA_WIDTH-1:0]               rd_data;
-  wire                                          rd_valid;
-
-  wire    [FIFO_WDATA_WIDTH-1:0]                fifo_wdata_s;
-
-  // define the common read interface
-  generate if (RD_INTERFACE_MODE == RD_FIFO_IF) begin
-
-    assign  rd_clk        = rd_fifo_clk;
-    assign  rd_rst        = rd_fifo_rst;
-    assign  rd_data       = rd_fifo_data;
-    assign  rd_valid      = rd_fifo_valid;
-
-    assign  rd_fifo_en    = rd_ready;
-
-  end else begin // if (RD_INTERFACE_MODE == S_AXIS_IF)
-
-    assign  rd_clk        = s_axis_aclk;
-    assign  rd_rst        = ~s_axis_aresetn;
-    assign  rd_data       = s_axis_data;
-    assign  rd_valid      = s_axis_valid;
-
-    assign  s_axis_ready  = rd_ready;
-
-  end
-  endgenerate
-
-  // **** Define FIFO state machine ****
-
-  // in <IDLE> the FIFO writes data into DAC
-  // in <READ> the FIFO is loaded with data through the S_AXIS interface,
-  // the FIFO write interface sending NULLs to the DAC during the read process
-
-  always @(posedge rd_clk) begin
-    if(rd_rst == 1) begin
-      fifo_state <= IDLE;
+  // write interface
+  always @(posedge dma_clk) begin
+    if(dma_rst == 1'b1) begin
+      dma_ready <= 1'b0;
+      dma_xfer_req_ff <= 1'b0;
     end else begin
-      fifo_state <= fifo_next_state;
+      dma_ready <= 1'b1;                                // Fifo is always ready
+      dma_xfer_req_ff <= dma_xfer_req;
     end
   end
 
-  // next state logic
-  generate if (RD_INTERFACE_MODE == RD_FIFO_IF) begin
-
-    always @(rd_valid or rd_fifo_xfer_req) begin
-      case (fifo_state)
-        IDLE: begin
-          if((rd_valid == 1) && (rd_fifo_xfer_req == 1))
-            fifo_next_state <= READ;
-        end
-        READ: begin
-          if(rd_fifo_xfer_req == 0)
-            fifo_next_state <= IDLE;
-        end
-      endcase
-    end
-
-  end else begin // if (RD_INTERFACE_MODE == S_AXIS_IF)
-
-    always @(rd_valid or s_axis_last) begin
-      case (fifo_state)
-        IDLE: begin
-          if(rd_valid == 1)
-            fifo_next_state <= READ;
-        end
-        READ: begin
-          if((rd_valid == 1) && (s_axis_last == 1))
-            fifo_next_state <= IDLE;
-        end
-      endcase
-    end
-
-  end
-  endgenerate
-
-  // FIFO is always ready to accept data from memory
-  assign rd_ready = 1;
-
-  // adjust the RD data width to the WR data width
-  generate if (IF_RATIO > 1) begin
-
-    always @(posedge rd_clk) begin
-      if(s_axis_valid == 1) begin
-        fifo_rdata <= {s_axis_data, fifo_rdata[((IF_RATIO * FIFO_RDATA_WIDTH)-1):FIFO_RDATA_WIDTH]};
-        fifo_rdata_count <= (fifo_rdata_count  < (IF_RATIO - 1)) ? (fifo_rdata_count + 1) : 3'h0;
-      end
-    end
-
-  end else begin
-
-    always @(posedge rd_clk) begin
-      if(s_axis_valid == 1) begin
-        fifo_rdata <= s_axis_data;
-      end
-      fifo_rdata_count <= 3'b0;
-    end
-
-  end
-  endgenerate
-
-  // generate address for the incoming data
-  always @(posedge rd_clk) begin
-    if(fifo_state == IDLE) begin
-      fifo_raddr <= 'b0;
+  always @(posedge dma_clk) begin
+    if(dma_rst == 1'b1) begin
+      dma_waddr <= 'b0;
+      dma_lastaddr <= {ADDR_WIDTH{1'b1}};
     end else begin
-      fifo_raddr <= (fifo_ren == 1) ? (fifo_raddr + 1) : fifo_raddr;
-    end
-    fifo_raddr_ff <= fifo_raddr;
-  end
-
-  // save the last valid address
-
-  generate if (RD_INTERFACE_MODE == RD_FIFO_IF) begin
-
-    always @(posedge rd_clk) begin
-      if(rd_fifo_xfer_req == 0) begin
-        fifo_maxraddr <= fifo_raddr;
+      if (dma_valid && dma_xfer_req) begin
+        dma_waddr <= dma_waddr + 1;
+      end
+      if (dma_xfer_last) begin
+        dma_lastaddr <= dma_waddr;
+        dma_waddr <= 'b0;
       end
     end
+  end
 
-  end else begin // if (RD_INTERFACE_MODE == S_AXIS_IF)
+  assign dma_wren = dma_valid & dma_xfer_req;
 
-    always @(posedge rd_clk) begin
-      if((rd_valid == 1) && (s_axis_last == 1)) begin
-        fifo_maxraddr <= fifo_raddr;
-      end
+  // read interface
+  always @(posedge dac_clk) begin
+    if(dac_valid == 1'b1) begin
+      dac_raddr <= (dac_raddr < dma_lastaddr) ? (dac_raddr + 1) : 'b0;
     end
-
-  end
-  endgenerate
-
-  // generate wren for the incoming data
-  always @(posedge rd_clk) begin
-    fifo_ren <= (fifo_rdata_count == (IF_RATIO - 1)) ? rd_valid : 1'b0;
+    dac_data <= dac_data_s;
   end
 
-  // write interface, FIFO writes data to DAC when its state is IDLE
-  always @(posedge wr_fifo_clk) begin
-    if(fifo_state == IDLE) begin
-      fifo_waddr <= (fifo_waddr < fifo_maxraddr) ? (fifo_waddr + 1) : 'b0;
-    end else begin
-      fifo_waddr <= 'b0;
-    end
-    wr_fifo_data <= fifo_wdata_s;
-  end
 
   // memory instantiation
+
   ad_mem #(
-    .ADDR_WIDTH (FIFO_WADDR_WIDTH),
-    .DATA_WIDTH (FIFO_WDATA_WIDTH))
+    .ADDR_WIDTH (ADDR_WIDTH),
+    .DATA_WIDTH (DATA_WIDTH))
   i_mem_fifo (
-    .clka (rd_clk),
-    .wea (fifo_ren),
-    .addra (fifo_raddr_ff),
-    .dina (fifo_rdata),
-    .clkb (wr_fifo_clk),
-    .addrb (fifo_waddr),
-    .doutb (fifo_wdata_s));
+    .clka (dma_clk),
+    .wea (dma_wren),
+    .addra (dma_waddr),
+    .dina (dma_data),
+    .clkb (dac_clk),
+    .addrb (dac_raddr),
+    .doutb (dac_data_s));
 
 endmodule
+
