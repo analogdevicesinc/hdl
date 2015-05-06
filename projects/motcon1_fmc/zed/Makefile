@@ -60,7 +60,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-motcon1_fmc_zed.xpr: lib $(M_DEPS)
+motcon1_fmc_zed.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> motcon1_fmc_zed_vivado.log 2>&1
 

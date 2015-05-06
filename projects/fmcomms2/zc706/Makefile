@@ -13,6 +13,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../common/fmcomms2_bd.tcl
+M_DEPS += ../common/prcfg_bd.tcl
 M_DEPS += ../../../library/util_dac_unpack/util_dac_unpack.xpr
 M_DEPS += ../../../library/util_adc_pack/util_adc_pack.xpr
 M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
@@ -56,7 +57,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-fmcomms2_zc706.xpr: lib $(M_DEPS)
+fmcomms2_zc706.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcomms2_zc706_vivado.log 2>&1
 

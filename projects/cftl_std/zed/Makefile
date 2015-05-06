@@ -49,7 +49,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-cftl_std_zed.xpr: lib $(M_DEPS)
+cftl_std_zed.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> cftl_std_zed_vivado.log 2>&1
 

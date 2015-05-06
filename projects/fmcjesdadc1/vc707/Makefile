@@ -47,7 +47,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9250 clean
 
 
-fmcjesdadc1_vc707.xpr: lib $(M_DEPS)
+fmcjesdadc1_vc707.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcjesdadc1_vc707_vivado.log 2>&1
 

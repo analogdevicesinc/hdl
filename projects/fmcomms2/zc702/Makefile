@@ -56,7 +56,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-fmcomms2_zc702.xpr: lib $(M_DEPS)
+fmcomms2_zc702.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcomms2_zc702_vivado.log 2>&1
 

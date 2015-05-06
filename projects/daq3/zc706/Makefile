@@ -60,7 +60,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-daq3_zc706.xpr: lib $(M_DEPS)
+daq3_zc706.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> daq3_zc706_vivado.log 2>&1
 

@@ -52,7 +52,7 @@ clean-all:clean
 	make -C ../../../library/util_dacfifo clean
 
 
-fmcadc5_vc707.xpr: lib $(M_DEPS)
+fmcadc5_vc707.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcadc5_vc707_vivado.log 2>&1
 

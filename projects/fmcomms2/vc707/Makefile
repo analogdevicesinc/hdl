@@ -50,7 +50,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9361 clean
 
 
-fmcomms2_vc707.xpr: lib $(M_DEPS)
+fmcomms2_vc707.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcomms2_vc707_vivado.log 2>&1
 

@@ -47,7 +47,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad6676 clean
 
 
-ad6676evb_vc707.xpr: lib $(M_DEPS)
+ad6676evb_vc707.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> ad6676evb_vc707_vivado.log 2>&1
 

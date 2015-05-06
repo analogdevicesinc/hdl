@@ -13,6 +13,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/mitx045/mitx045_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../common/fmcomms2_bd.tcl
+M_DEPS += ../../common/mitx045/mitx045_system_ps7.tcl
 M_DEPS += ../../../library/util_dac_unpack/util_dac_unpack.xpr
 M_DEPS += ../../../library/util_adc_pack/util_adc_pack.xpr
 M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
@@ -58,7 +59,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-fmcomms2_mitx045.xpr: lib $(M_DEPS)
+fmcomms2_mitx045.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcomms2_mitx045_vivado.log 2>&1
 

@@ -45,7 +45,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-adv7511_vc707.xpr: lib $(M_DEPS)
+adv7511_vc707.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> adv7511_vc707_vivado.log 2>&1
 

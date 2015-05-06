@@ -43,7 +43,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9467 clean
 
 
-ad9467_fmc_kc705.xpr: lib $(M_DEPS)
+ad9467_fmc_kc705.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> ad9467_fmc_kc705_vivado.log 2>&1
 

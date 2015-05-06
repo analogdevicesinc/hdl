@@ -27,6 +27,8 @@ M_DEPS += splitter.v
 M_DEPS += response_generator.v
 M_DEPS += axi_dmac.v
 M_DEPS += axi_dmac_constr.xdc
+M_DEPS += ../util_axis_resize/util_axis_resize.xpr
+M_DEPS += ../util_axis_fifo/util_axis_fifo.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -41,8 +43,8 @@ M_FLIST += .Xil
 
 
 
-.PHONY: all clean clean-all
-all: axi_dmac.xpr
+.PHONY: all dep clean clean-all
+all: dep axi_dmac.xpr
 
 
 clean:clean-all
@@ -56,5 +58,8 @@ axi_dmac.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_dmac_ip.tcl  >> axi_dmac_ip.log 2>&1
 
+dep:
+	make -C ../util_axis_resize
+	make -C ../util_axis_fifo
 ####################################################################################
 ####################################################################################

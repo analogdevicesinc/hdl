@@ -59,7 +59,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-fmcomms2_rfsom.xpr: lib $(M_DEPS)
+fmcomms2_rfsom.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcomms2_rfsom_vivado.log 2>&1
 

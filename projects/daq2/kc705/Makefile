@@ -56,7 +56,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9144 clean
 
 
-daq2_kc705.xpr: lib $(M_DEPS)
+daq2_kc705.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> daq2_kc705_vivado.log 2>&1
 
