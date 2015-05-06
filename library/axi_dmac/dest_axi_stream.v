@@ -64,6 +64,7 @@ module dmac_dest_axi_stream (
 	input req_valid,
 	output req_ready,
 	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+        input req_xlast,
 
 	output response_valid,
 	input response_ready,
@@ -75,14 +76,25 @@ parameter C_ID_WIDTH = 3;
 parameter C_S_AXIS_DATA_WIDTH = 64;
 parameter C_BEATS_PER_BURST_WIDTH = 4;
 
+reg req_xlast_d = 1'b0;
+
 assign sync_id_ret = sync_id;
 wire data_enabled;
 wire _fifo_ready;
+wire m_axis_last_s;
 
 // We are not allowed to just de-assert valid, but if the streaming target does
 // not accept any samples anymore we'd lock up the DMA core. So retain the last
 // beat when disabled until it is accepted. But if in the meantime the DMA core
 // is re-enabled and new data becomes available overwrite the old.
+
+always @(posedge s_axis_aclk) begin
+  if(req_ready == 1'b1) begin
+    req_xlast_d <= req_xlast;
+  end
+end
+
+assign m_axis_last = (req_xlast_d == 1'b1) ? m_axis_last_s : 1'b0;
 
 dmac_data_mover # (
 	.C_ID_WIDTH(C_ID_WIDTH),
@@ -101,7 +113,7 @@ dmac_data_mover # (
 	.request_id(request_id),
 	.response_id(data_id),
 	.eot(data_eot),
-	
+
 	.req_valid(req_valid),
 	.req_ready(req_ready),
 	.req_last_burst_length(req_last_burst_length),
@@ -109,7 +121,7 @@ dmac_data_mover # (
 	.m_axi_ready(m_axis_ready),
 	.m_axi_valid(m_axis_valid),
 	.m_axi_data(m_axis_data),
-        .m_axi_last(m_axis_last),
+        .m_axi_last(m_axis_last_s),
 	.s_axi_ready(_fifo_ready),
 	.s_axi_valid(fifo_valid),
 	.s_axi_data(fifo_data)

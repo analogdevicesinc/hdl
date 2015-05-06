@@ -45,6 +45,7 @@ module dmac_request_arb (
 	input [31:C_BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
 	input [31:C_BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
 	input [C_DMA_LENGTH_WIDTH-1:0] req_length,
+        input req_xlast,
 	input req_sync_transfer_start,
 
 	output reg eot,
@@ -219,6 +220,7 @@ wire dest_req_ready;
 wire [DMA_ADDR_WIDTH_DEST-1:0] dest_req_address;
 wire [BEATS_PER_BURST_WIDTH_DEST-1:0] dest_req_last_burst_length;
 wire [C_BYTES_PER_BEAT_WIDTH_DEST-1:0] dest_req_last_beat_bytes;
+wire dest_req_xlast;
 
 wire dest_response_valid;
 wire dest_response_ready;
@@ -501,6 +503,7 @@ dmac_dest_axi_stream #(
 	.req_valid(dest_req_valid),
 	.req_ready(dest_req_ready),
 	.req_last_burst_length(dest_req_last_burst_length),
+        .req_xlast(dest_req_xlast),
 
 	.response_valid(dest_response_valid),
 	.response_ready(dest_response_ready),
@@ -942,7 +945,7 @@ splitter #(
 );
 
 util_axis_fifo #(
-	.C_DATA_WIDTH(DMA_ADDR_WIDTH_DEST + BEATS_PER_BURST_WIDTH_DEST + C_BYTES_PER_BEAT_WIDTH_DEST),
+	.C_DATA_WIDTH(DMA_ADDR_WIDTH_DEST + BEATS_PER_BURST_WIDTH_DEST + C_BYTES_PER_BEAT_WIDTH_DEST + 1),
 	.C_ADDRESS_WIDTH(0),
 	.C_CLKS_ASYNC(C_CLKS_ASYNC_DEST_REQ)
 ) i_dest_req_fifo (
@@ -954,7 +957,8 @@ util_axis_fifo #(
 	.s_axis_data({
 		req_dest_address,
 		req_length[BYTES_PER_BURST_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_DEST],
-		req_length[C_BYTES_PER_BEAT_WIDTH_DEST-1:0]
+		req_length[C_BYTES_PER_BEAT_WIDTH_DEST-1:0],
+                req_xlast
 	}),
 	.m_axis_aclk(dest_clk),
 	.m_axis_aresetn(dest_resetn),
@@ -963,7 +967,8 @@ util_axis_fifo #(
 	.m_axis_data({
 		dest_req_address,
 		dest_req_last_burst_length,
-		dest_req_last_beat_bytes
+		dest_req_last_beat_bytes,
+                dest_req_xlast
 	})
 );
 

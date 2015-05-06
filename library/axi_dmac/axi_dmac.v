@@ -259,10 +259,7 @@ wire up_dma_req_ready;
 reg [1:0] up_transfer_id = 2'b0;
 reg [1:0] up_transfer_id_eot = 2'b0;
 reg [3:0] up_transfer_done_bitmap = 4'b0;
-reg [3:0] up_axis_xlast_bitmap = 4'b0;
-reg       up_axis_xlast = 1'b0;
-reg       up_axis_xlast_en = 1'b0;
-wire      m_axis_last_s;
+reg       up_axis_xlast = 1'b1;
 
 reg [31:BYTES_PER_BEAT_WIDTH_DEST]   up_dma_dest_address = 'h00;
 reg [31:BYTES_PER_BEAT_WIDTH_SRC]   up_dma_src_address = 'h00;
@@ -390,8 +387,7 @@ begin
 			12'h100: {up_pause, up_enable} <= up_wdata[1:0];
                         12'h103: begin
                           if (C_CYCLIC) up_dma_cyclic <= up_wdata[0];
-                          up_axis_xlast_en <= up_wdata[1];
-                          up_axis_xlast <= up_wdata[2];
+                          up_axis_xlast <= up_wdata[1];
                         end
 			12'h104: up_dma_dest_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_DEST];
 			12'h105: up_dma_src_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_SRC];
@@ -421,7 +417,7 @@ begin
 		12'h100: up_rdata <= {up_pause, up_enable};
 		12'h101: up_rdata <= up_transfer_id;
 		12'h102: up_rdata <= up_dma_req_valid;
-		12'h103: up_rdata <= {31'h00, up_axis_xlast, up_axis_xlast_en, up_dma_cyclic}; // Flags
+		12'h103: up_rdata <= {30'h00, up_axis_xlast, up_dma_cyclic}; // Flags
 		12'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
 		12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
 		12'h106: up_rdata <= up_dma_x_length;
@@ -452,17 +448,13 @@ begin
 		if (up_dma_req_valid == 1'b1 && up_dma_req_ready == 1'b1) begin
 			up_transfer_id <= up_transfer_id + 1'b1;
 			up_transfer_done_bitmap[up_transfer_id] <= 1'b0;
-                        up_axis_xlast_bitmap[up_transfer_id] <= up_axis_xlast;
 		end
 		if (up_eot == 1'b1) begin
 			up_transfer_done_bitmap[up_transfer_id_eot] <= 1'b1;
 			up_transfer_id_eot <= up_transfer_id_eot + 1'b1;
-                        up_axis_xlast_bitmap[up_transfer_id_eot] <= 1'b0;
 		end
 	end
 end
-
-assign m_axis_last = (up_axis_xlast_en == 1'b1) ? (up_axis_xlast_bitmap[dest_data_id] & m_axis_last_s) : m_axis_last_s;
 
 wire dma_req_valid;
 wire dma_req_ready;
@@ -547,6 +539,7 @@ dmac_request_arb #(
 	.req_dest_address(dma_req_dest_address),
 	.req_src_address(dma_req_src_address),
 	.req_length(dma_req_length),
+        .req_xlast(up_axis_xlast),
 	.req_sync_transfer_start(dma_req_sync_transfer_start),
 
 	.eot(dma_req_eot),
@@ -608,7 +601,7 @@ dmac_request_arb #(
 	.m_axis_ready(m_axis_ready),
 	.m_axis_valid(m_axis_valid),
 	.m_axis_data(m_axis_data),
-        .m_axis_last(m_axis_last_s),
+        .m_axis_last(m_axis_last),
         .m_axis_xfer_req(m_axis_xfer_req),
 
 
