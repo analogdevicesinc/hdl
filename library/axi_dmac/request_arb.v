@@ -109,6 +109,7 @@ module dmac_request_arb (
 	input                               m_axis_ready,
 	output                              m_axis_valid,
 	output [C_DMA_DATA_WIDTH_DEST-1:0]  m_axis_data,
+        output                              m_axis_last,
         output                              m_axis_xfer_req,
 
 	// Input FIFO interface
@@ -522,7 +523,8 @@ dmac_dest_axi_stream #(
 
 	.m_axis_valid(m_axis_valid),
 	.m_axis_ready(m_axis_ready),
-	.m_axis_data(m_axis_data)
+	.m_axis_data(m_axis_data),
+        .m_axis_last(m_axis_last)
 );
 
 end else begin
