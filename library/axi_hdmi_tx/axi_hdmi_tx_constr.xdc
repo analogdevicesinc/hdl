@@ -9,67 +9,67 @@ set_property ASYNC_REG TRUE \
   [get_cells -hier *state_m2_reg*]
 
 set_false_path \
-  -from [get_cells -hier up_xfer_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier d_xfer_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
+  -from [get_cells -hier *up_xfer_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *d_xfer_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
 set_false_path \
-  -from [get_cells -hier d_xfer_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier up_xfer_state_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
+  -from [get_cells -hier *d_xfer_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *up_xfer_state_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
 set_max_delay  -datapath_only \
-  -from [get_cells -hier up_xfer_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier d_data_cntrl_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -from [get_cells -hier *up_xfer_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *d_data_cntrl_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
   [get_property PERIOD $hdmi_clk]
 
 set_false_path \
-  -from [get_cells -hier d_xfer_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier up_xfer_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
+  -from [get_cells -hier *d_xfer_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *up_xfer_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
 set_false_path \
-  -from [get_cells -hier up_xfer_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier d_xfer_state_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
+  -from [get_cells -hier *up_xfer_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *d_xfer_state_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
 set_max_delay -datapath_only \
-  -from [get_cells -hier d_xfer_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier up_data_status_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -from [get_cells -hier *d_xfer_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *up_data_status_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
   [get_property PERIOD $up_clk]
 
 set_false_path \
-  -from [get_cells -hier hdmi_fs_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier vdma_fs_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
+  -from [get_cells -hier *hdmi_fs_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *vdma_fs_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
 set_false_path \
-  -from [get_cells -hier vdma_fs_ret_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier hdmi_fs_ret_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
+  -from [get_cells -hier *vdma_fs_ret_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *hdmi_fs_ret_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
 set_max_delay -datapath_only \
-  -from [get_cells -hier vdma_fs_waddr* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier hdmi_fs_waddr* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -from [get_cells -hier *vdma_fs_waddr* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *hdmi_fs_waddr* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
   [get_property PERIOD $hdmi_clk]
 
 set_false_path \
-  -from [get_cells -hier up_count_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier d_count_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
+  -from [get_cells -hier *up_count_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *d_count_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
 set_false_path \
-  -from [get_cells -hier d_count_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier up_count_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
+  -from [get_cells -hier *d_count_toggle_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *up_count_toggle_m1_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}]
 set_max_delay  -datapath_only \
-  -from [get_cells -hier d_count_hold_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier up_d_count_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -from [get_cells -hier *d_count_hold_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *up_d_count_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
   [get_property PERIOD $up_clk]
 
 set_max_delay -datapath_only \
-  -from [get_cells -hier hdmi_raddr_g* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier vdma_raddr_g_m1* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -from [get_cells -hier *hdmi_raddr_g* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *vdma_raddr_g_m1* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
  [get_property PERIOD $vdma_clk]
 
 set_max_delay -datapath_only \
-  -from [get_cells -hier vdma_tpm_oos_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier d_acc_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -from [get_cells -hier *vdma_tpm_oos_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *d_acc_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
   [get_property PERIOD $up_clk]
 
 set_max_delay -datapath_only \
-  -from [get_cells -hier vdma_ovf_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier d_acc_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -from [get_cells -hier *vdma_ovf_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *d_acc_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
   [get_property PERIOD $up_clk]
 
 set_max_delay -datapath_only \
-  -from [get_cells -hier vdma_unf_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
-  -to [get_cells -hier d_acc_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -from [get_cells -hier *vdma_unf_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
+  -to [get_cells -hier *d_acc_data_reg* -filter {primitive_subgroup == flop || primitive_subgroup == SDR}] \
   [get_property PERIOD $up_clk]
 
 set_false_path \
