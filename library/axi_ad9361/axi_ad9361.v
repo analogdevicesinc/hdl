@@ -269,6 +269,7 @@ module axi_ad9361 (
 
   // internal signals
 
+  wire            adc_ddr_edgesel;
   wire            adc_valid_s;
   wire    [47:0]  adc_data_s;
   wire            adc_status_s;
@@ -337,6 +338,7 @@ module axi_ad9361 (
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode),
+    .adc_ddr_edgesel (adc_ddr_edgesel),
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
     .dac_r1_mode (dac_r1_mode),
@@ -364,6 +366,7 @@ module axi_ad9361 (
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode),
+    .adc_ddr_edgesel (adc_ddr_edgesel),
     .dac_data (dac_data_s),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
