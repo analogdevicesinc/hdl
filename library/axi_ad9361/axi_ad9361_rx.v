@@ -50,6 +50,7 @@ module axi_ad9361_rx (
   adc_data,
   adc_status,
   adc_r1_mode,
+  adc_ddr_edgesel,
   dac_data,
 
   // delay interface
@@ -112,6 +113,7 @@ module axi_ad9361_rx (
   input   [47:0]  adc_data;
   input           adc_status;
   output          adc_r1_mode;
+  output          adc_ddr_edgesel;
   input   [47:0]  dac_data;
 
   // delay interface
@@ -342,7 +344,7 @@ module axi_ad9361_rx (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_r1_mode (adc_r1_mode),
-    .adc_ddr_edgesel (),
+    .adc_ddr_edgesel (adc_ddr_edgesel),
     .adc_pin_mode (),
     .adc_status (adc_status),
     .adc_sync_status(),
