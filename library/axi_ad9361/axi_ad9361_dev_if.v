@@ -73,6 +73,7 @@ module axi_ad9361_dev_if (
   adc_data,
   adc_status,
   adc_r1_mode,
+  adc_ddr_edgesel,
 
   // transmit data path interface
 
@@ -134,6 +135,7 @@ module axi_ad9361_dev_if (
   output  [47:0]  adc_data;
   output          adc_status;
   input           adc_r1_mode;
+  input           adc_ddr_edgesel;
 
   // transmit data path interface
 
@@ -160,6 +162,12 @@ module axi_ad9361_dev_if (
 
   // internal registers
 
+  reg     [ 5:0]  rx_data_p = 0;
+  reg             rx_frame_p = 0;
+  reg     [ 5:0]  rx_data_p_d = 0;
+  reg             rx_frame_p_d = 0;
+  reg     [ 5:0]  rx_data_n = 0;
+  reg             rx_frame_n = 0;
   reg     [11:0]  rx_data = 'd0;
   reg     [ 1:0]  rx_frame = 'd0;
   reg     [11:0]  rx_data_d = 'd0;
@@ -240,8 +248,22 @@ module axi_ad9361_dev_if (
   assign rx_frame_s = {rx_frame_d, rx_frame};
 
   always @(posedge l_clk) begin
-    rx_data <= {rx_data_n_s, rx_data_p_s};
-    rx_frame <= {rx_frame_n_s, rx_frame_p_s};
+    rx_data_p <= rx_data_p_s;
+    rx_frame_p <= rx_frame_p_s;
+    rx_data_p_d <= rx_data_p;
+    rx_frame_p_d <= rx_frame_p;
+    rx_data_n <= rx_data_n_s;
+    rx_frame_n <= rx_frame_n_s;
+  end
+
+  always @(posedge l_clk) begin
+    if (adc_ddr_edgesel == 1'b1) begin
+      rx_data <= {rx_data_p_d, rx_data_n};
+      rx_frame <= {rx_frame_p_d, rx_frame_n};
+    end else begin
+      rx_data <= {rx_data_n, rx_data_p};
+      rx_frame <= {rx_frame_n, rx_frame_p};
+    end
     rx_data_d <= rx_data;
     rx_frame_d <= rx_frame;
   end
