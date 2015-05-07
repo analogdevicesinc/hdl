@@ -143,7 +143,7 @@ module system_top (
   inout   [ 1:0]  iic_mux_scl;
   inout   [ 1:0]  iic_mux_sda;
 
-  output          hdmi_iic_rstn;
+  inout           hdmi_iic_rstn;
   inout           hdmi_iic_scl;
   inout           hdmi_iic_sda;
 
@@ -183,8 +183,6 @@ module system_top (
     hdmi_tx_data <= hdmi_rx_data_in;
   end
 
-  assign hdmi_iic_rstn = 1'b1;
-
   // instantiations
 
   ODDR #(.INIT(1'b0)) i_clk_oddr (
@@ -201,6 +199,12 @@ module system_top (
     .di (gpio_o[32]),
     .do (gpio_i[32]),
     .dio (hdmiio_int));
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi_iic_rstn (
+    .dt (gpio_t[33]),
+    .di (gpio_o[33]),
+    .do (gpio_i[33]),
+    .dio (hdmi_iic_rstn));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
