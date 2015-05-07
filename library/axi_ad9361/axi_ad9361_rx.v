@@ -347,7 +347,7 @@ module axi_ad9361_rx (
     .adc_ddr_edgesel (adc_ddr_edgesel),
     .adc_pin_mode (),
     .adc_status (adc_status),
-    .adc_sync_status(),
+    .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
