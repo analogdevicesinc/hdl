@@ -164,10 +164,8 @@ module axi_ad9361_dev_if (
 
   reg     [ 5:0]  rx_data_p = 0;
   reg             rx_frame_p = 0;
-  reg     [ 5:0]  rx_data_p_d = 0;
-  reg             rx_frame_p_d = 0;
-  reg     [ 5:0]  rx_data_n = 0;
-  reg             rx_frame_n = 0;
+  reg     [ 1:0]  rx_ccnt = 0;
+  reg             rx_align = 0;
   reg     [11:0]  rx_data = 'd0;
   reg     [ 1:0]  rx_frame = 'd0;
   reg     [11:0]  rx_data_d = 'd0;
@@ -207,6 +205,7 @@ module axi_ad9361_dev_if (
 
   // internal signals
 
+  wire            rx_align_s;
   wire    [ 3:0]  rx_frame_s;
   wire    [ 3:0]  tx_data_sel_s;
   wire    [ 4:0]  delay_rdata_s[6:0];
@@ -245,24 +244,28 @@ module axi_ad9361_dev_if (
 
   // receive data path interface
 
-  assign rx_frame_s = {rx_frame_d, rx_frame};
+  assign rx_align_s = rx_frame_n_s ^ rx_frame_p_s;
 
   always @(posedge l_clk) begin
     rx_data_p <= rx_data_p_s;
     rx_frame_p <= rx_frame_p_s;
-    rx_data_p_d <= rx_data_p;
-    rx_frame_p_d <= rx_frame_p;
-    rx_data_n <= rx_data_n_s;
-    rx_frame_n <= rx_frame_n_s;
+    rx_ccnt <= rx_ccnt + 1'b1;
+    if (rx_ccnt == 2'd0) begin
+      rx_align <= rx_align_s;
+    end else begin
+      rx_align <= rx_align | rx_align_s;
+    end
   end
 
+  assign rx_frame_s = {rx_frame_d, rx_frame};
+
   always @(posedge l_clk) begin
-    if (adc_ddr_edgesel == 1'b1) begin
-      rx_data <= {rx_data_p_d, rx_data_n};
-      rx_frame <= {rx_frame_p_d, rx_frame_n};
+    if (rx_align == 1'b1) begin
+      rx_data <= {rx_data_p, rx_data_n_s};
+      rx_frame <= {rx_frame_p, rx_frame_n_s};
     end else begin
-      rx_data <= {rx_data_n, rx_data_p};
-      rx_frame <= {rx_frame_n, rx_frame_p};
+      rx_data <= {rx_data_n_s, rx_data_p_s};
+      rx_frame <= {rx_frame_n_s, rx_frame_p_s};
     end
     rx_data_d <= rx_data;
     rx_frame_d <= rx_frame;
