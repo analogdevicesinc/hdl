@@ -75,7 +75,7 @@ module system_top (
   eth_mdio_i,
   eth_mdio_o,
   eth_mdio_t,
-
+  eth_phy_resetn,
   // board gpio
 
   led_grn,
@@ -161,6 +161,7 @@ module system_top (
   input             eth_mdio_i;
   output            eth_mdio_o;
   output            eth_mdio_t;
+  output            eth_phy_resetn;
 
   // board gpio
 
@@ -225,6 +226,8 @@ module system_top (
   reg               rx_sof_1_s = 'd0;
   reg               rx_sof_2_s = 'd0;
   reg               rx_sof_3_s = 'd0;
+  reg     [  3:0]   phy_rst_cnt = 0;
+  reg               phy_rst_reg = 0;
 
   // internal clocks and resets
 
@@ -287,6 +290,15 @@ module system_top (
 
   assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
     (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+    end
+  end
 
   altddio_out #(.width(1)) i_eth_tx_clk_out (
     .aset (1'b0),
@@ -465,8 +477,8 @@ module system_top (
     .sys_jesd204b_s1_rx_xcvr_data_rx_serial_data (rx_data),
     .sys_jesd204b_s1_rx_analogreset_rx_analogreset (rx_analog_reset_s),
     .sys_jesd204b_s1_rx_digitalreset_rx_digitalreset (rx_digital_reset_s),
-    .sys_jesd204b_s1_locked_export (rx_cdr_locked_s),
-    .sys_jesd204b_s1_rx_cal_busy_export (rx_cal_busy_s),
+    .sys_jesd204b_s1_locked_rx_is_lockedtodata (rx_cdr_locked_s),
+    .sys_jesd204b_s1_rx_cal_busy_rx_cal_busy (rx_cal_busy_s),
     .sys_jesd204b_s1_ref_clk_clk (ref_clk),
     .sys_jesd204b_s1_rx_clk_clk (rx_clk),
     .sys_jesd204b_s1_pll_locked_export (rx_pll_locked_s),
