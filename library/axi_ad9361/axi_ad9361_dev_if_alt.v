@@ -73,6 +73,7 @@ module axi_ad9361_dev_if (
   adc_data,
   adc_status,
   adc_r1_mode,
+  adc_ddr_edgesel,
 
   // transmit data path interface
 
@@ -134,6 +135,7 @@ module axi_ad9361_dev_if (
   output  [47:0]  adc_data;
   output          adc_status;
   input           adc_r1_mode;
+  input           adc_ddr_edgesel;
 
   // transmit data path interface
 
