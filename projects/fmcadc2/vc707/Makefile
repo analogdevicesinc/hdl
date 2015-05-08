@@ -13,6 +13,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
 M_DEPS += ../common/fmcadc2_bd.tcl
+M_DEPS += ../../common/vc707/vc707_system_mig.prj 
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/axi_ad9625/axi_ad9625.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr

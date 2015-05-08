@@ -12,6 +12,7 @@ M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../../adv7511/common/adv7511_bd.tcl
+M_DEPS += ../../common/vc707/vc707_system_mig.prj 
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr

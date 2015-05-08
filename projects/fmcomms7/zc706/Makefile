@@ -13,6 +13,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_system_plddr3.tcl
 M_DEPS += ../common/fmcomms7_bd.tcl
+M_DEPS +=   $ad_hdl_dir/projects/common/zc706/zc706_system_mig.prj 
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
 M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr

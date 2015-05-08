@@ -13,6 +13,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../common/fmcomms2_bd.tcl
+M_DEPS += ../../common/vc707/vc707_system_mig.prj 
 M_DEPS += ../../../library/util_dac_unpack/util_dac_unpack.xpr
 M_DEPS += ../../../library/util_adc_pack/util_adc_pack.xpr
 M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr

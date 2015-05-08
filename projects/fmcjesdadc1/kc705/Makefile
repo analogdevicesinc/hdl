@@ -12,6 +12,7 @@ M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../common/fmcjesdadc1_bd.tcl
+M_DEPS += ../../common/kc705/kc705_system_mig.prj 
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
