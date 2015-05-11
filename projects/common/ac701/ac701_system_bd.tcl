@@ -236,6 +236,7 @@ ad_connect  sys_cpu_clk axi_ethernet/axis_clk
 ad_connect  sys_200m_clk axi_ethernet/ref_clk
 ad_connect  sys_200m_clk sys_ethernet_clkgen/clk_in1
 ad_connect  sys_ethernet_clkgen/clk_out1 axi_ethernet/gtx_clk
+ad_connect  axi_ethernet/phy_rst_n phy_rst_n
 
 ad_connect  axi_ethernet/axi_txd_arstn axi_ethernet_dma/mm2s_prmry_reset_out_n
 ad_connect  axi_ethernet/axi_txc_arstn axi_ethernet_dma/mm2s_cntrl_reset_out_n
