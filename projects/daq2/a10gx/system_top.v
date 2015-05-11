@@ -321,7 +321,7 @@ module system_top (
     .rx_ready (rx_ready_s),
     .rx_rst_state (rx_rst_state_s));
 
-  fmcjesdadc1_spi i_fmcjesdadc1_spi (
+  daq2_spi i_daq2_spi (
     .spi_csn (spi_csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
