@@ -165,6 +165,7 @@ module axi_ad9361_dev_if (
   reg     [ 5:0]  rx_data_p = 0;
   reg             rx_frame_p = 0;
   reg     [ 1:0]  rx_ccnt = 0;
+  reg             rx_calign = 0;
   reg             rx_align = 0;
   reg     [11:0]  rx_data = 'd0;
   reg     [ 1:0]  rx_frame = 'd0;
@@ -251,8 +252,10 @@ module axi_ad9361_dev_if (
     rx_frame_p <= rx_frame_p_s;
     rx_ccnt <= rx_ccnt + 1'b1;
     if (rx_ccnt == 2'd0) begin
+      rx_calign <= rx_align;
       rx_align <= rx_align_s;
     end else begin
+      rx_calign <= rx_calign;
       rx_align <= rx_align | rx_align_s;
     end
   end
@@ -260,7 +263,7 @@ module axi_ad9361_dev_if (
   assign rx_frame_s = {rx_frame_d, rx_frame};
 
   always @(posedge l_clk) begin
-    if (rx_align == 1'b1) begin
+    if (rx_calign == 1'b1) begin
       rx_data <= {rx_data_p, rx_data_n_s};
       rx_frame <= {rx_frame_p, rx_frame_n_s};
     end else begin
