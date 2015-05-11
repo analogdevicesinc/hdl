@@ -20,7 +20,7 @@ M_DEPS += ../../../library/axi_adcfifo/axi_adcfifo.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
-M_DEPS += ../../../library/axi_ad9234/axi_ad9234.xpr
+M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 
 M_VIVADO := vivado -mode batch -source
@@ -53,7 +53,7 @@ clean-all:clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/axi_clkgen clean
-	make -C ../../../library/axi_ad9234 clean
+	make -C ../../../library/axi_ad9680 clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
@@ -69,7 +69,7 @@ lib:
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_spdif_tx
 	make -C ../../../library/axi_clkgen
-	make -C ../../../library/axi_ad9234
+	make -C ../../../library/axi_ad9680
 	make -C ../../../library/axi_hdmi_tx
 
 ####################################################################################
