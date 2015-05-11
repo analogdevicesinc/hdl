@@ -86,12 +86,14 @@ module util_dacfifo (
 
   reg     [(ADDR_WIDTH-1):0]                    dma_waddr = 'b0;
   reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr = 'b0;
+  reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr_d = 'b0;
+  reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr_2d = 'b0;
   reg                                           dma_xfer_req_ff = 1'b0;
   reg                                           dma_ready = 1'b0;
 
   reg     [(ADDR_WIDTH-1):0]                    dac_raddr = 'b0;
   reg     [(DATA_WIDTH-1):0]                    dac_data = 'b0;
-  
+
   // internal wires
   wire                                          dma_wren;
   wire    [(DATA_WIDTH-1):0]                    dac_data_s;
@@ -125,9 +127,17 @@ module util_dacfifo (
   assign dma_wren = dma_valid & dma_xfer_req;
 
   // read interface
+
+  // sync lastaddr to dac clock domain
+  always @(posedge dac_clk) begin
+    dma_lastaddr_d <= dma_lastaddr;
+    dma_lastaddr_2d <= dma_lastaddr_d;
+  end
+
+  // generate dac read address
   always @(posedge dac_clk) begin
     if(dac_valid == 1'b1) begin
-      dac_raddr <= (dac_raddr < dma_lastaddr) ? (dac_raddr + 1) : 'b0;
+      dac_raddr <= (dac_raddr < dma_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
     end
     dac_data <= dac_data_s;
   end
