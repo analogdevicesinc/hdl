@@ -2,13 +2,13 @@
 load_package flow
 
 source ../../scripts/adi_env.tcl
-project_new fmcjesdadc1_a5gt -overwrite
+project_new daq2_a10gx -overwrite
 
-source $ad_hdl_dir/projects/common/a5gt/a5gt_system_assign.tcl
+source $ad_hdl_dir/projects/common/a10gx/a10gx_system_assign.tcl
 
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_jesd_align.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_xcvr_rx_rst.v
-set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
+set_global_assignment -name VERILOG_FILE ../common/daq2_spi.v
 
 # reference clock
 
