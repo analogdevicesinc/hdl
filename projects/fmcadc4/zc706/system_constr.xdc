@@ -29,19 +29,19 @@ set_property  -dict {PACKAGE_PIN  AH21  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_
 set_property  -dict {PACKAGE_PIN  AG19  IOSTANDARD LVCMOS25} [get_ports ad9528_csn]                   ; ## G13  FMC_HPC_LA08_N             
 set_property  -dict {PACKAGE_PIN  AH19  IOSTANDARD LVCMOS25} [get_ports ada4961_1a_csn]               ; ## G09  FMC_HPC_LA03_P             
 set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVCMOS25} [get_ports ada4961_1b_csn]               ; ## G10  FMC_HPC_LA03_N             
-set_property  -dict {PACKAGE_PIN  AJ23  IOSTANDARD LVCMOS25} [get_ports ad9234_1_csn]                 ; ## H13  FMC_HPC_LA07_P             
+set_property  -dict {PACKAGE_PIN  AJ23  IOSTANDARD LVCMOS25} [get_ports ad9680_1_csn]                 ; ## H13  FMC_HPC_LA07_P             
 set_property  -dict {PACKAGE_PIN  AG22  IOSTANDARD LVCMOS25} [get_ports ada4961_2a_csn]               ; ## C10  FMC_HPC_LA06_P             
 set_property  -dict {PACKAGE_PIN  AH22  IOSTANDARD LVCMOS25} [get_ports ada4961_2b_csn]               ; ## C11  FMC_HPC_LA06_N             
-set_property  -dict {PACKAGE_PIN  AJ24  IOSTANDARD LVCMOS25} [get_ports ad9234_2_csn]                 ; ## H14  FMC_HPC_LA07_N             
+set_property  -dict {PACKAGE_PIN  AJ24  IOSTANDARD LVCMOS25} [get_ports ad9680_2_csn]                 ; ## H14  FMC_HPC_LA07_N             
 set_property  -dict {PACKAGE_PIN  AA23  IOSTANDARD LVCMOS25} [get_ports spi_clk]                      ; ## D18  FMC_HPC_LA13_N             
 set_property  -dict {PACKAGE_PIN  AA22  IOSTANDARD LVCMOS25} [get_ports spi_sdio]                     ; ## D17  FMC_HPC_LA13_P             
 
 set_property  -dict {PACKAGE_PIN  AE21  IOSTANDARD LVCMOS25} [get_ports ad9528_rstn]                  ; ## D15  FMC_HPC_LA09_N             
 set_property  -dict {PACKAGE_PIN  AD21  IOSTANDARD LVCMOS25} [get_ports ad9528_status]                ; ## D14  FMC_HPC_LA09_P             
-set_property  -dict {PACKAGE_PIN  AG24  IOSTANDARD LVCMOS25} [get_ports ad9234_1_fda]                 ; ## C14  FMC_HPC_LA10_P             
-set_property  -dict {PACKAGE_PIN  AG25  IOSTANDARD LVCMOS25} [get_ports ad9234_1_fdb]                 ; ## C15  FMC_HPC_LA10_N             
-set_property  -dict {PACKAGE_PIN  AD23  IOSTANDARD LVCMOS25} [get_ports ad9234_2_fda]                 ; ## H16  FMC_HPC_LA11_P             
-set_property  -dict {PACKAGE_PIN  AE23  IOSTANDARD LVCMOS25} [get_ports ad9234_2_fdb]                 ; ## H17  FMC_HPC_LA11_N             
+set_property  -dict {PACKAGE_PIN  AG24  IOSTANDARD LVCMOS25} [get_ports ad9680_1_fda]                 ; ## C14  FMC_HPC_LA10_P             
+set_property  -dict {PACKAGE_PIN  AG25  IOSTANDARD LVCMOS25} [get_ports ad9680_1_fdb]                 ; ## C15  FMC_HPC_LA10_N             
+set_property  -dict {PACKAGE_PIN  AD23  IOSTANDARD LVCMOS25} [get_ports ad9680_2_fda]                 ; ## H16  FMC_HPC_LA11_P             
+set_property  -dict {PACKAGE_PIN  AE23  IOSTANDARD LVCMOS25} [get_ports ad9680_2_fdb]                 ; ## H17  FMC_HPC_LA11_N             
 
 # clocks
 
