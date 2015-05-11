@@ -107,6 +107,9 @@ module axi_ad9361 (
   dac_dunf,
   dac_r1_mode,
 
+  tdd_enable,
+  tdd_txnrx,
+
   // axi interface
 
   s_axi_aclk,
@@ -141,7 +144,9 @@ module axi_ad9361 (
   // chipscope signals
 
   dev_dbg_data,
-  dev_l_dbg_data);
+  dev_l_dbg_data,
+
+  tdd_dbg);
 
   // parameters
 
@@ -218,6 +223,9 @@ module axi_ad9361 (
   input           dac_dunf;
   output          dac_r1_mode;
 
+  output          tdd_enable;
+  output          tdd_txnrx;
+
   // axi interface
 
   input           s_axi_aclk;
@@ -253,6 +261,8 @@ module axi_ad9361 (
 
   output [111:0]  dev_dbg_data;
   output [ 61:0]  dev_l_dbg_data;
+
+  output [34:0]   tdd_dbg;
 
   // internal registers
 
@@ -293,6 +303,25 @@ module axi_ad9361 (
   wire            up_rack_rx_s;
   wire    [31:0]  up_rdata_tx_s;
   wire            up_rack_tx_s;
+  wire            up_wack_tdd_s;
+  wire            up_rack_tdd_s;
+  wire    [31:0]  up_rdata_tdd_s;
+
+  wire            tdd_tx_dp_en_s;
+  wire            tdd_rx_vco_en_s;
+  wire            tdd_tx_vco_en_s;
+  wire            tdd_rx_rf_en_s;
+  wire            tdd_tx_rf_en_s;
+  wire    [ 7:0]  ad9361_tdd_status_s;
+  wire            tdd_enable;
+  wire            tdd_txnrx;
+
+  wire            dac_valid_i0_s;
+  wire            dac_valid_q0_s;
+  wire            dac_valid_i1_s;
+  wire            dac_valid_q1_s;
+
+  wire            tdd_mode_enable_s;
 
   // signal name changes
 
@@ -307,9 +336,9 @@ module axi_ad9361 (
       up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_wack <= up_wack_rx_s | up_wack_tx_s;
-      up_rack <= up_rack_rx_s | up_rack_tx_s;
-      up_rdata <= up_rdata_rx_s | up_rdata_tx_s;
+      up_wack <= up_wack_rx_s | up_wack_tx_s | up_wack_tdd_s;
+      up_rack <= up_rack_rx_s | up_rack_tx_s | up_rack_tdd_s;
+      up_rdata <= up_rdata_rx_s | up_rdata_tx_s | up_rdata_tdd_s;
     end
   end
 
@@ -353,6 +382,45 @@ module axi_ad9361 (
     .delay_locked (delay_locked_s),
     .dev_dbg_data (dev_dbg_data),
     .dev_l_dbg_data (dev_l_dbg_data));
+
+  // TDD interface
+
+  axi_ad9361_tdd_if #(.MODE_OF_ENABLE(1)) i_tdd_if(
+    .clk(clk),
+    .rst(tdd_rst),
+    .tdd_rx_vco_en(tdd_rx_vco_en_s),
+    .tdd_tx_vco_en(tdd_tx_vco_en_s),
+    .tdd_rx_rf_en(tdd_rx_rf_en_s),
+    .tdd_tx_rf_en(tdd_tx_rf_en_s),
+    .ad9361_txnrx(tdd_txnrx),
+    .ad9361_enable(tdd_enable),
+    .ad9361_tdd_status(ad9361_tdd_status_s)
+  );
+
+  // TDD control
+
+  axi_ad9361_tdd i_tdd(
+    .clk(clk),
+    .rst(tdd_rst),
+    .tdd_enable(tdd_mode_enable_s),
+    .tdd_tx_dp_en(tdd_tx_dp_en_s),
+    .tdd_rx_vco_en(tdd_rx_vco_en_s),
+    .tdd_tx_vco_en(tdd_tx_vco_en_s),
+    .tdd_rx_rf_en(tdd_rx_rf_en_s),
+    .tdd_tx_rf_en(tdd_tx_rf_en_s),
+    .tdd_status(ad9361_tdd_status_s),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_wreq(up_wreq_s),
+    .up_waddr(up_waddr_s),
+    .up_wdata(up_wdata_s),
+    .up_wack(up_wack_tdd_s),
+    .up_rreq(up_rreq_s),
+    .up_raddr(up_raddr_s),
+    .up_rdata(up_rdata_tdd_s),
+    .up_rack(up_rack_tdd_s),
+    .tdd_dbg(tdd_dbg)
+  );
 
   // receive
 
@@ -418,16 +486,16 @@ module axi_ad9361 (
     .dac_sync_in (dac_sync_in),
     .dac_sync_out (dac_sync_out),
     .dac_enable_i0 (dac_enable_i0),
-    .dac_valid_i0 (dac_valid_i0),
+    .dac_valid_i0 (dac_valid_i0_s),
     .dac_data_i0 (dac_data_i0),
     .dac_enable_q0 (dac_enable_q0),
-    .dac_valid_q0 (dac_valid_q0),
+    .dac_valid_q0 (dac_valid_q0_s),
     .dac_data_q0 (dac_data_q0),
     .dac_enable_i1 (dac_enable_i1),
-    .dac_valid_i1 (dac_valid_i1),
+    .dac_valid_i1 (dac_valid_i1_s),
     .dac_data_i1 (dac_data_i1),
     .dac_enable_q1 (dac_enable_q1),
-    .dac_valid_q1 (dac_valid_q1),
+    .dac_valid_q1 (dac_valid_q1_s),
     .dac_data_q1 (dac_data_q1),
     .dac_dovf(dac_dovf),
     .dac_dunf(dac_dunf),
@@ -443,6 +511,11 @@ module axi_ad9361 (
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_tx_s),
     .up_rack (up_rack_tx_s));
+
+  assign  dac_valid_i0 = (tdd_mode_enable_s == 1) ? (dac_valid_i0_s & tdd_tx_dp_en_s) : dac_valid_i0_s;
+  assign  dac_valid_q0 = (tdd_mode_enable_s == 1) ? (dac_valid_q0_s & tdd_tx_dp_en_s) : dac_valid_q0_s;
+  assign  dac_valid_i1 = (tdd_mode_enable_s == 1) ? (dac_valid_i1_s & tdd_tx_dp_en_s) : dac_valid_i1_s;
+  assign  dac_valid_q1 = (tdd_mode_enable_s == 1) ? (dac_valid_q1_s & tdd_tx_dp_en_s) : dac_valid_q1_s;
 
   // axi interface
 
