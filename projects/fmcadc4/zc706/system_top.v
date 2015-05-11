@@ -110,18 +110,18 @@ module system_top (
   
   ad9528_rstn,
   ad9528_status,
-  ad9234_1_fda,
-  ad9234_1_fdb,
-  ad9234_2_fda,
-  ad9234_2_fdb,
+  ad9680_1_fda,
+  ad9680_1_fdb,
+  ad9680_2_fda,
+  ad9680_2_fdb,
  
   ad9528_csn,
   ada4961_1a_csn,
   ada4961_1b_csn,
-  ad9234_1_csn,
+  ad9680_1_csn,
   ada4961_2a_csn,
   ada4961_2b_csn,
-  ad9234_2_csn,
+  ad9680_2_csn,
   spi_clk,
   spi_sdio);
 
@@ -194,18 +194,18 @@ module system_top (
   
   inout           ad9528_rstn;
   inout           ad9528_status;
-  inout           ad9234_1_fda;
-  inout           ad9234_1_fdb;
-  inout           ad9234_2_fda;
-  inout           ad9234_2_fdb;
+  inout           ad9680_1_fda;
+  inout           ad9680_1_fdb;
+  inout           ad9680_2_fda;
+  inout           ad9680_2_fdb;
   
   output          ad9528_csn;
   output          ada4961_1a_csn;
   output          ada4961_1b_csn;
-  output          ad9234_1_csn;
+  output          ad9680_1_csn;
   output          ada4961_2a_csn;
   output          ada4961_2b_csn;
-  output          ad9234_2_csn;
+  output          ad9680_2_csn;
   output          spi_clk;
   inout           spi_sdio;
 
@@ -403,8 +403,8 @@ module system_top (
 
   assign spi_clk = spi0_clk;
   assign ad9528_csn = (spi0_csn == 3'b110) ? 1'b0 : 1'b1;
-  assign ad9234_1_csn = (spi0_csn == 3'b101) ? 1'b0 : 1'b1;
-  assign ad9234_2_csn = (spi0_csn == 3'b011) ? 1'b0 : 1'b1;
+  assign ad9680_1_csn = (spi0_csn == 3'b101) ? 1'b0 : 1'b1;
+  assign ad9680_2_csn = (spi0_csn == 3'b011) ? 1'b0 : 1'b1;
   assign ada4961_1a_csn = (spi0_csn == 3'b000) ? 1'b0 : 1'b1;
   assign ada4961_1b_csn = (spi0_csn == 3'b001) ? 1'b0 : 1'b1;
   assign ada4961_1c_csn = (spi0_csn == 3'b010) ? 1'b0 : 1'b1;
@@ -445,10 +445,10 @@ module system_top (
     .dt (gpio_t[37:32]),
     .di (gpio_o[37:32]),
     .do (gpio_i[37:32]),
-    .dio ({ ad9234_2_fdb,     // 37
-            ad9234_2_fda,     // 36
-            ad9234_1_fdb,     // 35
-            ad9234_1_fda,     // 34
+    .dio ({ ad9680_2_fdb,     // 37
+            ad9680_2_fda,     // 36
+            ad9680_1_fdb,     // 35
+            ad9680_1_fda,     // 34
             ad9528_status,    // 33
             ad9528_rstn}));   // 32
 
