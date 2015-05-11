@@ -90,13 +90,14 @@ module system_top (
   tx_data_out_p,
   tx_data_out_n,
 
-  gpio_txnrx,
-  gpio_enable,
   gpio_resetb,
   gpio_sync,
   gpio_en_agc,
   gpio_ctl,
   gpio_status,
+
+  ad9361_enable,
+  ad9361_txnrx,
 
   spi_csn,
   spi_clk,
@@ -157,8 +158,6 @@ module system_top (
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
 
-  inout           gpio_txnrx;
-  inout           gpio_enable;
   inout           gpio_resetb;
   inout           gpio_sync;
   inout           gpio_en_agc;
@@ -174,6 +173,9 @@ module system_top (
   output          spi_udc_csn_rx;
   output          spi_udc_sclk;
   output          spi_udc_data;
+
+  output          ad9361_enable;
+  output          ad9361_txnrx;
 
   // internal signals
 
@@ -202,15 +204,16 @@ module system_top (
   wire    [31:0]  dac_gpio_input;
   wire    [31:0]  dac_gpio_output;
 
+  wire            ad9361_enable_s;
+  wire            ad9361_txnrx_s;
+
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
-    .dt (gpio_t[48:32]),
-    .di (gpio_o[48:32]),
-    .do (gpio_i[48:32]),
-    .dio({  gpio_txnrx,
-            gpio_enable,
-            gpio_resetb,
+  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf (
+    .dt (gpio_t[46:32]),
+    .di (gpio_o[46:32]),
+    .do (gpio_i[46:32]),
+    .dio({  gpio_resetb,
             gpio_sync,
             gpio_en_agc,
             gpio_ctl,
@@ -221,29 +224,6 @@ module system_top (
     .di (gpio_o[14:0]),
     .do (gpio_i[14:0]),
     .dio (gpio_bd));
-
-  prcfg i_prcfg (
-    .clk (clk),
-    .adc_gpio_input (adc_gpio_input),
-    .adc_gpio_output (adc_gpio_output),
-    .dac_gpio_input (dac_gpio_input),
-    .dac_gpio_output (dac_gpio_output),
-    .dma_dac_en (dma_dac_en),
-    .dma_dac_dunf (dma_dac_dunf),
-    .dma_dac_ddata (dma_dac_ddata),
-    .dma_dac_dvalid (dma_dac_dvalid),
-    .core_dac_en (core_dac_en),
-    .core_dac_dunf (core_dac_dunf),
-    .core_dac_ddata (core_dac_ddata),
-    .core_dac_dvalid (core_dac_dvalid),
-    .core_adc_dwr (core_adc_dwr),
-    .core_adc_dsync (core_adc_dsync),
-    .core_adc_ddata (core_adc_ddata),
-    .core_adc_ovf (core_adc_ovf),
-    .dma_adc_dwr (dma_adc_dwr),
-    .dma_adc_dsync (dma_adc_dsync),
-    .dma_adc_ddata (dma_adc_ddata),
-    .dma_adc_ovf (dma_adc_ovf));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -320,27 +300,9 @@ module system_top (
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
-    .clk (clk),
-    .dma_dac_en (dma_dac_en),
-    .dma_dac_dunf (dma_dac_dunf),
-    .dma_dac_ddata (dma_dac_ddata),
-    .dma_dac_dvalid (dma_dac_dvalid),
-    .core_dac_en (core_dac_en),
-    .core_dac_dunf (core_dac_dunf),
-    .core_dac_ddata (core_dac_ddata),
-    .core_dac_dvalid (core_dac_dvalid),
-    .core_adc_dwr (core_adc_dwr),
-    .core_adc_dsync (core_adc_dsync),
-    .core_adc_ddata (core_adc_ddata),
-    .core_adc_ovf (core_adc_ovf),
-    .dma_adc_dwr (dma_adc_dwr),
-    .dma_adc_dsync (dma_adc_dsync),
-    .dma_adc_ddata (dma_adc_ddata),
-    .dma_adc_ovf (dma_adc_ovf),
-    .up_dac_gpio_in (dac_gpio_output),
-    .up_adc_gpio_in (adc_gpio_output),
-    .up_dac_gpio_out (dac_gpio_input),
-    .up_adc_gpio_out (adc_gpio_input));
+    .axi_ad9361_enable(ad9361_enable),
+    .axi_ad9361_txnrx(ad9361_txnrx));
+
 endmodule
 
 // ***************************************************************************

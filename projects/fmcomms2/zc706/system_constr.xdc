@@ -50,8 +50,10 @@ set_property  -dict {PACKAGE_PIN  AG29  IOSTANDARD LVCMOS25} [get_ports gpio_ctl
 set_property  -dict {PACKAGE_PIN  AH26  IOSTANDARD LVCMOS25} [get_ports gpio_en_agc]                      ; ## H22  FMC_LPC_LA19_P
 set_property  -dict {PACKAGE_PIN  AH27  IOSTANDARD LVCMOS25} [get_ports gpio_sync]                        ; ## H23  FMC_LPC_LA19_N
 set_property  -dict {PACKAGE_PIN  AD25  IOSTANDARD LVCMOS25} [get_ports gpio_resetb]                      ; ## H31  FMC_LPC_LA28_P
-set_property  -dict {PACKAGE_PIN  AE18  IOSTANDARD LVCMOS25} [get_ports gpio_enable]                      ; ## G18  FMC_LPC_LA16_P
-set_property  -dict {PACKAGE_PIN  AE17  IOSTANDARD LVCMOS25} [get_ports gpio_txnrx]                       ; ## G19  FMC_LPC_LA16_N
+set_property  -dict {PACKAGE_PIN  AE18  IOSTANDARD LVCMOS25} [get_ports ad9361_enable]                    ; ## G18  FMC_LPC_LA16_P
+set_property  -dict {PACKAGE_PIN  AE17  IOSTANDARD LVCMOS25} [get_ports ad9361_txnrx]                     ; ## G19  FMC_LPC_LA16_N
+
+set_property  -dict {IOB TRUE} [get_ports {ad9361_enable ad9361_txnrx}]
 
 set_property  -dict {PACKAGE_PIN  AJ30  IOSTANDARD LVCMOS25  PULLTYPE PULLUP} [get_ports spi_csn]         ; ## D26  FMC_LPC_LA26_P
 set_property  -dict {PACKAGE_PIN  AK30  IOSTANDARD LVCMOS25} [get_ports spi_clk]                          ; ## D27  FMC_LPC_LA26_N
