@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -88,7 +88,7 @@ module system_top (
   rx_sync_n,
   rx_data_p,
   rx_data_n,
-  
+
   tx_ref_clk_p,
   tx_ref_clk_n,
   tx_sysref_p,
@@ -97,7 +97,7 @@ module system_top (
   tx_sync_n,
   tx_data_p,
   tx_data_n,
-  
+
   trig_p,
   trig_n,
 
@@ -105,12 +105,12 @@ module system_top (
   adc_fda,
   dac_irq,
   clkd_status,
-  
+
   adc_pd,
   dac_txen,
   dac_reset,
   clkd_sync,
- 
+
   spi_csn_clk,
   spi_csn_dac,
   spi_csn_adc,
@@ -165,7 +165,7 @@ module system_top (
   output          rx_sync_n;
   input   [ 3:0]  rx_data_p;
   input   [ 3:0]  rx_data_n;
-  
+
   input           tx_ref_clk_p;
   input           tx_ref_clk_n;
   input           tx_sysref_p;
@@ -174,37 +174,26 @@ module system_top (
   input           tx_sync_n;
   output  [ 3:0]  tx_data_p;
   output  [ 3:0]  tx_data_n;
-  
+
   input           trig_p;
   input           trig_n;
- 
+
   inout           adc_fdb;
   inout           adc_fda;
   inout           dac_irq;
   inout   [ 1:0]  clkd_status;
-  
+
   inout           adc_pd;
   inout           dac_txen;
   inout           dac_reset;
   inout           clkd_sync;
-  
+
   output          spi_csn_clk;
   output          spi_csn_dac;
   output          spi_csn_adc;
   output          spi_clk;
   inout           spi_sdio;
   output          spi_dir;
-  
-  // internal registers
-
-  reg             dac_drd = 'd0;
-  reg     [63:0]  dac_ddata_0 = 'd0;
-  reg     [63:0]  dac_ddata_1 = 'd0;
-  reg     [63:0]  dac_ddata_2 = 'd0;
-  reg     [63:0]  dac_ddata_3 = 'd0;
-  reg             adc_dsync = 'd0;
-  reg             adc_dwr = 'd0;
-  reg    [127:0]  adc_ddata = 'd0;
 
   // internal signals
 
@@ -221,130 +210,6 @@ module system_top (
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire            tx_sync;
-  wire            dac_clk;
-  wire   [127:0]  dac_ddata;
-  wire            dac_enable_0;
-  wire            dac_enable_1;
-  wire            dac_enable_2;
-  wire            dac_enable_3;
-  wire            dac_valid_0;
-  wire            dac_valid_1;
-  wire            dac_valid_2;
-  wire            dac_valid_3;
-  wire            adc_clk;
-  wire    [63:0]  adc_data_0;
-  wire    [63:0]  adc_data_1;
-  wire            adc_enable_0;
-  wire            adc_enable_1;
-  wire            adc_valid_0;
-  wire            adc_valid_1;
-
-  // adc-dac data
-
-  always @(posedge dac_clk) begin
-    case ({dac_enable_1, dac_enable_0})
-      2'b11: begin
-        dac_drd <= dac_valid_0 & dac_valid_1;
-        dac_ddata_0[63:48] <= dac_ddata[111: 96];
-        dac_ddata_0[47:32] <= dac_ddata[ 79: 64];
-        dac_ddata_0[31:16] <= dac_ddata[ 47: 32];
-        dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
-        dac_ddata_1[63:48] <= dac_ddata[127:112];
-        dac_ddata_1[47:32] <= dac_ddata[ 95: 80];
-        dac_ddata_1[31:16] <= dac_ddata[ 63: 48];
-        dac_ddata_1[15: 0] <= dac_ddata[ 31: 16];
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
-      end
-      2'b10: begin
-        dac_drd <= dac_valid_1 & ~dac_drd;
-        dac_ddata_0 <= 64'd0;
-        if (dac_drd == 1'b1) begin
-          dac_ddata_1[63:48] <= dac_ddata[127:112];
-          dac_ddata_1[47:32] <= dac_ddata[111: 96];
-          dac_ddata_1[31:16] <= dac_ddata[ 95: 80];
-          dac_ddata_1[15: 0] <= dac_ddata[ 79: 64];
-        end else begin
-          dac_ddata_1[63:48] <= dac_ddata[ 63: 48];
-          dac_ddata_1[47:32] <= dac_ddata[ 47: 32];
-          dac_ddata_1[31:16] <= dac_ddata[ 31: 16];
-          dac_ddata_1[15: 0] <= dac_ddata[ 15:  0];
-        end
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
-      end
-      2'b01: begin
-        dac_drd <= dac_valid_0 & ~dac_drd;
-        if (dac_drd == 1'b1) begin
-          dac_ddata_0[63:48] <= dac_ddata[127:112];
-          dac_ddata_0[47:32] <= dac_ddata[111: 96];
-          dac_ddata_0[31:16] <= dac_ddata[ 95: 80];
-          dac_ddata_0[15: 0] <= dac_ddata[ 79: 64];
-        end else begin
-          dac_ddata_0[63:48] <= dac_ddata[ 63: 48];
-          dac_ddata_0[47:32] <= dac_ddata[ 47: 32];
-          dac_ddata_0[31:16] <= dac_ddata[ 31: 16];
-          dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
-        end
-        dac_ddata_1 <= 64'd0;
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
-      end
-      default: begin
-        dac_drd <= 1'b0;
-        dac_ddata_0 <= 64'd0;
-        dac_ddata_1 <= 64'd0;
-        dac_ddata_2 <= 64'd0;
-        dac_ddata_3 <= 64'd0;
-      end
-    endcase
-  end
-
-  always @(posedge adc_clk) begin
-    case ({adc_enable_1, adc_enable_0})
-      2'b11: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_1 & adc_valid_0;
-        adc_ddata[127:112] <= adc_data_1[63:48];
-        adc_ddata[111: 96] <= adc_data_0[63:48];
-        adc_ddata[ 95: 80] <= adc_data_1[47:32];
-        adc_ddata[ 79: 64] <= adc_data_0[47:32];
-        adc_ddata[ 63: 48] <= adc_data_1[31:16];
-        adc_ddata[ 47: 32] <= adc_data_0[31:16];
-        adc_ddata[ 31: 16] <= adc_data_1[15: 0];
-        adc_ddata[ 15:  0] <= adc_data_0[15: 0];
-      end
-      2'b10: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_1 & ~adc_dwr;
-        adc_ddata[127:112] <= adc_data_1[63:48];
-        adc_ddata[111: 96] <= adc_data_1[47:32];
-        adc_ddata[ 95: 80] <= adc_data_1[31:16];
-        adc_ddata[ 79: 64] <= adc_data_1[15: 0];
-        adc_ddata[ 63: 48] <= adc_ddata[127:112];
-        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
-        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
-        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
-      end
-      2'b01: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_0 & ~adc_dwr;
-        adc_ddata[127:112] <= adc_data_0[63:48];
-        adc_ddata[111: 96] <= adc_data_0[47:32];
-        adc_ddata[ 95: 80] <= adc_data_0[31:16];
-        adc_ddata[ 79: 64] <= adc_data_0[15: 0];
-        adc_ddata[ 63: 48] <= adc_ddata[127:112];
-        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
-        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
-        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
-      end
-      default: begin
-        adc_dsync <= 1'b0;
-        adc_dwr <= 1'b0;
-        adc_ddata <= 128'd0;
-      end
-    endcase
-  end
 
   // spi
 
@@ -427,16 +292,6 @@ module system_top (
     .dio (gpio_bd));
 
   system_wrapper i_system_wrapper (
-    .adc_clk (adc_clk),
-    .adc_data_0 (adc_data_0),
-    .adc_data_1 (adc_data_1),
-    .adc_ddata (adc_ddata),
-    .adc_dsync (adc_dsync),
-    .adc_dwr (adc_dwr),
-    .adc_enable_0 (adc_enable_0),
-    .adc_enable_1 (adc_enable_1),
-    .adc_valid_0 (adc_valid_0),
-    .adc_valid_1 (adc_valid_1),
     .c0_ddr4_act_n (ddr4_act_n),
     .c0_ddr4_adr (ddr4_addr),
     .c0_ddr4_ba (ddr4_ba),
@@ -451,21 +306,6 @@ module system_top (
     .c0_ddr4_dqs_t (ddr4_dqs_p),
     .c0_ddr4_odt (ddr4_odt),
     .c0_ddr4_reset_n (ddr4_reset_n),
-    .dac_clk (dac_clk),
-    .dac_ddata (dac_ddata),
-    .dac_ddata_0 (dac_ddata_0),
-    .dac_ddata_1 (dac_ddata_1),
-    .dac_ddata_2 (dac_ddata_2),
-    .dac_ddata_3 (dac_ddata_3),
-    .dac_drd (dac_drd),
-    .dac_enable_0 (dac_enable_0),
-    .dac_enable_1 (dac_enable_1),
-    .dac_enable_2 (dac_enable_2),
-    .dac_enable_3 (dac_enable_3),
-    .dac_valid_0 (dac_valid_0),
-    .dac_valid_1 (dac_valid_1),
-    .dac_valid_2 (dac_valid_2),
-    .dac_valid_3 (dac_valid_3),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),

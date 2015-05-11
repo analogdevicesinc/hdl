@@ -15,8 +15,10 @@ M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
 M_DEPS += ../common/daq2_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_mig.prj 
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
+M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
 M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr
+M_DEPS += ../../../library/util_upack/util_upack.xpr
 M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/util_dacfifo/util_dacfifo.xpr
@@ -48,8 +50,10 @@ clean:
 
 clean-all:clean
 	make -C ../../../library/axi_jesd_gt clean
+	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_bsplit clean
 	make -C ../../../library/axi_ad9680 clean
+	make -C ../../../library/util_upack clean
 	make -C ../../../library/util_adcfifo clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/util_dacfifo clean
@@ -64,8 +68,10 @@ daq2_kc705.xpr: $(M_DEPS)
 
 lib:
 	make -C ../../../library/axi_jesd_gt
+	make -C ../../../library/util_cpack
 	make -C ../../../library/util_bsplit
 	make -C ../../../library/axi_ad9680
+	make -C ../../../library/util_upack
 	make -C ../../../library/util_adcfifo
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/util_dacfifo
