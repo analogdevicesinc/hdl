@@ -48,11 +48,9 @@ module up_tdd_cntrl (
   tdd_start,
   tdd_rst,
   tdd_counter_reset,
-  tdd_update_regs,
   tdd_secondary,
   tdd_burst_en,
   tdd_burst_count,
-  tdd_infinite_burst,
   tdd_counter_init,
   tdd_frame_length,
   tdd_tx_dp_delay,
@@ -102,7 +100,6 @@ module up_tdd_cntrl (
   output          tdd_enable;
   output          tdd_start;
   output          tdd_rst;
-  output          tdd_update_regs;
   output          tdd_counter_reset;
   output          tdd_secondary;
   output  [21:0]  tdd_counter_init;
@@ -110,7 +107,6 @@ module up_tdd_cntrl (
 
   output          tdd_burst_en;
   output  [ 5:0]  tdd_burst_count;
-  output          tdd_infinite_burst;
 
   output  [ 7:0]  tdd_tx_dp_delay;
   output  [21:0]  tdd_vco_rx_on_1;
@@ -159,7 +155,6 @@ module up_tdd_cntrl (
 
   reg             up_tdd_enable = 1'h0;
   reg             up_tdd_start = 1'h0;
-  reg             up_tdd_update_regs = 1'h0;
   reg             up_tdd_counter_reset = 1'h0;
   reg             up_tdd_secondary = 1'h0;
   reg     [21:0]  up_tdd_counter_init = 22'h0;
@@ -167,7 +162,6 @@ module up_tdd_cntrl (
 
   reg             up_tdd_burst_en = 1'h0;
   reg     [ 5:0]  up_tdd_burst_count = 6'h0;
-  reg             up_tdd_infinite_burst = 1'h0;
   reg     [ 7:0]  up_tdd_tx_dp_delay = 8'h0;
 
   reg     [21:0]  up_tdd_vco_rx2tx_1 = 22'h0;
@@ -217,7 +211,6 @@ module up_tdd_cntrl (
       up_scratch <= 32'h0;
       up_resetn <= 1'h0;
       up_tdd_start <= 1'h0;
-      up_tdd_update_regs <= 1'h0;
       up_tdd_counter_reset <= 1'h0;
       up_tdd_enable <= 1'h0;
       up_tdd_secondary <= 1'h0;
@@ -225,7 +218,6 @@ module up_tdd_cntrl (
       up_tdd_frame_length <= 22'h0;
       up_tdd_burst_en <= 1'h0;
       up_tdd_burst_count <= 6'h0;
-      up_tdd_infinite_burst <= 1'h0;
       up_tdd_vco_rx_on_1 <= 22'h0;
       up_tdd_vco_rx_off_1 <= 22'h0;
       up_tdd_vco_tx_on_1 <= 22'h0;
@@ -252,25 +244,20 @@ module up_tdd_cntrl (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
         up_resetn <= up_wdata[0];
       end
-      if (up_tdd_update_regs == 1'b1) begin
-        if (up_cntrl_xfer_done == 1) begin
-          up_tdd_update_regs <= 1'h0;
-        end
-      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
-          up_tdd_update_regs <= up_wdata[3];
-          up_tdd_counter_reset <= up_wdata[2];
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
           up_tdd_enable <= up_wdata[0];
       end
       if (up_tdd_start == 1) begin
         if (up_cntrl_xfer_done == 1) begin
           up_tdd_start <= 1'h0;
+          up_tdd_counter_reset <= 1'h0;
         end
       end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+        up_tdd_counter_reset <= up_wdata[2];
         up_tdd_start <= up_wdata[1];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
         up_tdd_burst_count <= up_wdata[21:16];
-        up_tdd_infinite_burst <= up_wdata[2];
         up_tdd_burst_en <= up_wdata[1];
         up_tdd_secondary <= up_wdata[0];
       end
@@ -360,8 +347,8 @@ module up_tdd_cntrl (
           8'h01: up_rdata <= PCORE_ID;
           8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {31'h0, up_resetn};
-          8'h11: up_rdata <= {28'h0, up_tdd_update_regs, up_tdd_counter_reset, up_tdd_start, up_tdd_enable};
-          8'h12: up_rdata <= {10'h0, up_tdd_burst_count, 13'h0, up_tdd_infinite_burst, up_tdd_burst_en, up_tdd_secondary};
+          8'h11: up_rdata <= {29'h0, up_tdd_counter_reset, up_tdd_start, up_tdd_enable};
+          8'h12: up_rdata <= {10'h0, up_tdd_burst_count, 14'h0, up_tdd_burst_en, up_tdd_secondary};
           8'h13: up_rdata <= {10'h0, up_tdd_counter_init};
           8'h14: up_rdata <= {10'h0, up_tdd_frame_length};
           8'h15: up_rdata <= {24'h0, up_tdd_tx_dp_delay};
@@ -402,29 +389,25 @@ module up_tdd_cntrl (
 
   // rf tdd control signal CDC
 
-  up_xfer_cntrl #(.DATA_WIDTH(13)) i_tdd_control (
+  up_xfer_cntrl #(.DATA_WIDTH(11)) i_tdd_control (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({up_tdd_enable,
                     up_tdd_counter_reset,
-                    up_tdd_update_regs,
                     up_tdd_secondary,
                     up_tdd_start,
                     up_tdd_burst_en,
-                    up_tdd_burst_count,
-                    up_tdd_infinite_burst
+                    up_tdd_burst_count
     }),
     .up_xfer_done(up_cntrl_xfer_done),
     .d_rst(tdd_rst),
     .d_clk(clk),
     .d_data_cntrl({tdd_enable,
                    tdd_counter_reset,
-                   tdd_update_regs,
                    tdd_secondary,
                    tdd_start,
                    tdd_burst_en,
-                   tdd_burst_count,
-                   tdd_infinite_burst
+                   tdd_burst_count
     }));
 
   up_xfer_cntrl #(.DATA_WIDTH(492)) i_tdd_counter_values (
