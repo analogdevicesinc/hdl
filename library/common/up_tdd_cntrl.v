@@ -51,9 +51,10 @@ module up_tdd_cntrl (
   tdd_secondary,
   tdd_burst_en,
   tdd_burst_count,
+  tdd_continuous_tx,
+  tdd_continuous_rx,
   tdd_counter_init,
   tdd_frame_length,
-  tdd_tx_dp_delay,
   tdd_vco_rx_on_1,
   tdd_vco_rx_off_1,
   tdd_vco_tx_on_1,
@@ -107,8 +108,10 @@ module up_tdd_cntrl (
 
   output          tdd_burst_en;
   output  [ 5:0]  tdd_burst_count;
+  output          tdd_continuous_tx;
+  output          tdd_continuous_rx;
 
-  output  [ 7:0]  tdd_tx_dp_delay;
+
   output  [21:0]  tdd_vco_rx_on_1;
   output  [21:0]  tdd_vco_rx_off_1;
   output  [21:0]  tdd_vco_tx_on_1;
@@ -162,7 +165,8 @@ module up_tdd_cntrl (
 
   reg             up_tdd_burst_en = 1'h0;
   reg     [ 5:0]  up_tdd_burst_count = 6'h0;
-  reg     [ 7:0]  up_tdd_tx_dp_delay = 8'h0;
+  reg             up_tdd_continuous_tx = 1'h0;
+  reg             up_tdd_continuous_rx = 1'h0;
 
   reg     [21:0]  up_tdd_vco_rx2tx_1 = 22'h0;
   reg     [21:0]  up_tdd_vco_tx2rx_1 = 22'h0;
@@ -217,6 +221,8 @@ module up_tdd_cntrl (
       up_tdd_counter_init <= 22'h0;
       up_tdd_frame_length <= 22'h0;
       up_tdd_burst_en <= 1'h0;
+      up_tdd_continuous_rx <= 1'h0;
+      up_tdd_continuous_tx <= 1'h0;
       up_tdd_burst_count <= 6'h0;
       up_tdd_vco_rx_on_1 <= 22'h0;
       up_tdd_vco_rx_off_1 <= 22'h0;
@@ -258,6 +264,8 @@ module up_tdd_cntrl (
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
         up_tdd_burst_count <= up_wdata[21:16];
+        up_tdd_continuous_rx <= up_wdata[3];
+        up_tdd_continuous_tx <= up_wdata[2];
         up_tdd_burst_en <= up_wdata[1];
         up_tdd_secondary <= up_wdata[0];
       end
@@ -266,9 +274,6 @@ module up_tdd_cntrl (
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
         up_tdd_frame_length <= up_wdata[21:0];
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h15)) begin
-        up_tdd_tx_dp_delay <= up_wdata[ 7:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
         up_tdd_vco_rx_on_1 <= up_wdata[21:0];
@@ -348,10 +353,9 @@ module up_tdd_cntrl (
           8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {31'h0, up_resetn};
           8'h11: up_rdata <= {29'h0, up_tdd_counter_reset, up_tdd_start, up_tdd_enable};
-          8'h12: up_rdata <= {10'h0, up_tdd_burst_count, 14'h0, up_tdd_burst_en, up_tdd_secondary};
+          8'h12: up_rdata <= {10'h0, up_tdd_burst_count, 12'h0, up_tdd_continuous_rx, up_tdd_continuous_tx, up_tdd_burst_en, up_tdd_secondary};
           8'h13: up_rdata <= {10'h0, up_tdd_counter_init};
           8'h14: up_rdata <= {10'h0, up_tdd_frame_length};
-          8'h15: up_rdata <= {24'h0, up_tdd_tx_dp_delay};
           8'h1A: up_rdata <= {24'h0, up_tdd_status_s};
           8'h20: up_rdata <= {10'h0, up_tdd_vco_rx_on_1};
           8'h21: up_rdata <= {10'h0, up_tdd_vco_rx_off_1};
@@ -389,7 +393,7 @@ module up_tdd_cntrl (
 
   // rf tdd control signal CDC
 
-  up_xfer_cntrl #(.DATA_WIDTH(11)) i_tdd_control (
+  up_xfer_cntrl #(.DATA_WIDTH(13)) i_tdd_control (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({up_tdd_enable,
@@ -397,6 +401,8 @@ module up_tdd_cntrl (
                     up_tdd_secondary,
                     up_tdd_start,
                     up_tdd_burst_en,
+                    up_tdd_continuous_tx,
+                    up_tdd_continuous_rx,
                     up_tdd_burst_count
     }),
     .up_xfer_done(up_cntrl_xfer_done),
@@ -407,15 +413,16 @@ module up_tdd_cntrl (
                    tdd_secondary,
                    tdd_start,
                    tdd_burst_en,
+                   tdd_continuous_tx,
+                   tdd_continuous_rx,
                    tdd_burst_count
     }));
 
-  up_xfer_cntrl #(.DATA_WIDTH(492)) i_tdd_counter_values (
+  up_xfer_cntrl #(.DATA_WIDTH(484)) i_tdd_counter_values (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({up_tdd_counter_init,
                     up_tdd_frame_length,
-                    up_tdd_tx_dp_delay,
                     up_tdd_vco_rx_on_1,
                     up_tdd_vco_rx_off_1,
                     up_tdd_vco_tx_on_1,
@@ -442,7 +449,6 @@ module up_tdd_cntrl (
     .d_clk(clk),
     .d_data_cntrl({tdd_counter_init,
                    tdd_frame_length,
-                   tdd_tx_dp_delay,
                    tdd_vco_rx_on_1,
                    tdd_vco_rx_off_1,
                    tdd_vco_tx_on_1,

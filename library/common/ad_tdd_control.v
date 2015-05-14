@@ -55,7 +55,8 @@ module ad_tdd_control(
   tdd_frame_length,
   tdd_burst_en,
   tdd_burst_count,
-  tdd_tx_dp_delay,
+  tdd_continuous_tx,
+  tdd_continuous_rx,
 
   tdd_vco_rx_on_1,
   tdd_vco_rx_off_1,
@@ -110,7 +111,8 @@ module ad_tdd_control(
   input [21:0]    tdd_frame_length;
   input           tdd_burst_en;
   input [ 5:0]    tdd_burst_count;
-  input [ 7:0]    tdd_tx_dp_delay;
+  input           tdd_continuous_tx;
+  input           tdd_continuous_rx;
 
   input [21:0]    tdd_vco_rx_on_1;
   input [21:0]    tdd_vco_rx_off_1;
@@ -486,7 +488,7 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_vco_rx_on_1 || counter_at_tdd_vco_rx_on_2) begin
+      if (counter_at_tdd_vco_rx_on_1 || counter_at_tdd_vco_rx_on_2 || tdd_continuous_rx) begin
         tdd_rx_vco_en <= 1'b1;
       end
       else if (counter_at_tdd_vco_rx_off_1 || counter_at_tdd_vco_rx_off_2) begin
@@ -499,7 +501,7 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_vco_tx_on_1 || counter_at_tdd_vco_tx_on_2) begin
+      if (counter_at_tdd_vco_tx_on_1 || counter_at_tdd_vco_tx_on_2 || tdd_continuous_tx) begin
         tdd_tx_vco_en <= 1'b1;
       end
       else if (counter_at_tdd_vco_tx_off_1 || counter_at_tdd_vco_tx_off_2) begin
@@ -512,7 +514,7 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_rx_on_1 || counter_at_tdd_rx_on_2) begin
+      if (counter_at_tdd_rx_on_1 || counter_at_tdd_rx_on_2 || tdd_continuous_rx) begin
         tdd_rx_rf_en <= 1'b1;
       end
       else if (counter_at_tdd_rx_off_1 || counter_at_tdd_rx_off_2) begin
@@ -525,7 +527,7 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_tx_on_1 || counter_at_tdd_tx_on_2) begin
+      if (counter_at_tdd_tx_on_1 || counter_at_tdd_tx_on_2 || tdd_continuous_tx) begin
         tdd_tx_rf_en <= 1'b1;
       end
       else if (counter_at_tdd_tx_off_1 || counter_at_tdd_tx_off_2) begin
@@ -538,7 +540,7 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_tx_dp_on_1 || counter_at_tdd_tx_dp_on_2) begin
+      if (counter_at_tdd_tx_dp_on_1 || counter_at_tdd_tx_dp_on_2 || tdd_continuous_tx) begin
         tdd_tx_dp_en <= 1'b1;
       end
       else if (counter_at_tdd_tx_dp_off_1 || counter_at_tdd_tx_dp_off_2) begin

@@ -112,9 +112,10 @@ module axi_ad9361_tdd (
   wire              tdd_secondary_s;
   wire              tdd_burst_en_s;
   wire   [ 5:0]     tdd_burst_count_s;
+  wire              tdd_continuous_tx_s;
+  wire              tdd_continuous_rx_s;
   wire   [21:0]     tdd_counter_init_s;
   wire   [21:0]     tdd_frame_length_s;
-  wire   [ 7:0]     tdd_tx_dp_delay_s;
   wire   [21:0]     tdd_vco_rx_on_1_s;
   wire   [21:0]     tdd_vco_rx_off_1_s;
   wire   [21:0]     tdd_vco_tx_on_1_s;
@@ -152,9 +153,10 @@ module axi_ad9361_tdd (
     .tdd_secondary(tdd_secondary_s),
     .tdd_burst_en(tdd_burst_en_s),
     .tdd_burst_count(tdd_burst_count_s),
+    .tdd_continuous_tx(tdd_continuous_tx_s),
+    .tdd_continuous_rx(tdd_continuous_rx_s),
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),
-    .tdd_tx_dp_delay(tdd_tx_dp_delay_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),
@@ -197,7 +199,8 @@ module axi_ad9361_tdd (
     .tdd_frame_length(tdd_frame_length_s),
     .tdd_burst_en(tdd_burst_en_s),
     .tdd_burst_count(tdd_burst_count_s),
-    .tdd_tx_dp_delay(tdd_tx_dp_delay_s),
+    .tdd_continuous_tx(tdd_continuous_tx_s),
+    .tdd_continuous_rx(tdd_continuous_rx_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),
