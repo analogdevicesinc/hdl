@@ -89,15 +89,14 @@ module system_top (
   tx_frame_out_n,
   tx_data_out_p,
   tx_data_out_n,
+  enable,
+  txnrx,
 
   gpio_resetb,
   gpio_sync,
   gpio_en_agc,
   gpio_ctl,
   gpio_status,
-
-  ad9361_enable,
-  ad9361_txnrx,
 
   spi_csn,
   spi_clk,
@@ -157,6 +156,8 @@ module system_top (
   output          tx_frame_out_n;
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
+  output          enable;
+  output          txnrx;
 
   inout           gpio_resetb;
   inout           gpio_sync;
@@ -173,9 +174,6 @@ module system_top (
   output          spi_udc_csn_rx;
   output          spi_udc_sclk;
   output          spi_udc_data;
-
-  output          ad9361_enable;
-  output          ad9361_txnrx;
 
   // internal signals
 
@@ -203,9 +201,6 @@ module system_top (
   wire    [31:0]  adc_gpio_output;
   wire    [31:0]  dac_gpio_input;
   wire    [31:0]  dac_gpio_output;
-
-  wire            ad9361_enable_s;
-  wire            ad9361_txnrx_s;
 
   // instantiations
 
@@ -241,6 +236,7 @@ module system_top (
     .ddr_ras_n (ddr_ras_n),
     .ddr_reset_n (ddr_reset_n),
     .ddr_we_n (ddr_we_n),
+    .enable (enable),
     .fixed_io_ddr_vrn (fixed_io_ddr_vrn),
     .fixed_io_ddr_vrp (fixed_io_ddr_vrp),
     .fixed_io_mio (fixed_io_mio),
@@ -300,8 +296,7 @@ module system_top (
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
-    .axi_ad9361_enable(ad9361_enable),
-    .axi_ad9361_txnrx(ad9361_txnrx));
+    .txnrx (txnrx));
 
 endmodule
 
