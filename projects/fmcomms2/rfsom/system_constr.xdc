@@ -34,6 +34,8 @@ set_property  -dict {PACKAGE_PIN  B16  IOSTANDARD LVDS}     [get_ports tx_data_o
 set_property  -dict {PACKAGE_PIN  B15  IOSTANDARD LVDS}     [get_ports tx_data_out_n[4]]                  ; ## IO_L17N_T2_AD5N_35       
 set_property  -dict {PACKAGE_PIN  B17  IOSTANDARD LVDS}     [get_ports tx_data_out_p[5]]                  ; ## IO_L18P_T2_AD13P_35      
 set_property  -dict {PACKAGE_PIN  A17  IOSTANDARD LVDS}     [get_ports tx_data_out_n[5]]                  ; ## IO_L18N_T2_AD13N_35      
+set_property  -dict {PACKAGE_PIN  G14  IOSTANDARD LVCMOS18} [get_ports enable]                            ; ## IO_L11P_T1_SRCC_35       
+set_property  -dict {PACKAGE_PIN  F14  IOSTANDARD LVCMOS18} [get_ports txnrx]                             ; ## IO_L11N_T1_SRCC_35       
 
 set_property  -dict {PACKAGE_PIN  D13  IOSTANDARD LVCMOS18} [get_ports gpio_status[0]]                    ; ## IO_L19P_T3_35            
 set_property  -dict {PACKAGE_PIN  C13  IOSTANDARD LVCMOS18} [get_ports gpio_status[1]]                    ; ## IO_L19N_T3_VREF_35       
@@ -49,8 +51,6 @@ set_property  -dict {PACKAGE_PIN  B2   IOSTANDARD LVCMOS18} [get_ports gpio_ctl[
 set_property  -dict {PACKAGE_PIN  A2   IOSTANDARD LVCMOS18} [get_ports gpio_ctl[3]]                       ; ## IO_L24N_T3_34            
 set_property  -dict {PACKAGE_PIN  G16  IOSTANDARD LVCMOS18} [get_ports gpio_en_agc]                       ; ## IO_L10P_T1_AD11P_35      
 set_property  -dict {PACKAGE_PIN  G15  IOSTANDARD LVCMOS18} [get_ports gpio_sync]                         ; ## IO_L10N_T1_AD11N_35      
-set_property  -dict {PACKAGE_PIN  G14  IOSTANDARD LVCMOS18} [get_ports gpio_enable]                       ; ## IO_L11P_T1_SRCC_35       
-set_property  -dict {PACKAGE_PIN  F14  IOSTANDARD LVCMOS18} [get_ports gpio_txnrx]                        ; ## IO_L11N_T1_SRCC_35       
 set_property  -dict {PACKAGE_PIN  H16  IOSTANDARD LVCMOS18} [get_ports gpio_resetb]                       ; ## IO_0_VRN_35              
 set_property  -dict {PACKAGE_PIN  K11  IOSTANDARD LVCMOS18} [get_ports gpio_clksel]                       ; ## IO_0_VRN_34              
 set_property  -dict {PACKAGE_PIN  K10  IOSTANDARD LVCMOS18} [get_ports gpio_rfpwr_enable]                 ; ## IO_25_VRP_34

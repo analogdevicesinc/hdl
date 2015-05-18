@@ -15,8 +15,8 @@ create_bd_port -dir O tx_frame_out_n
 create_bd_port -dir O -from 5 -to 0 tx_data_out_p
 create_bd_port -dir O -from 5 -to 0 tx_data_out_n
 
-create_bd_port -dir O axi_ad9361_enable
-create_bd_port -dir O axi_ad9361_txnrx
+create_bd_port -dir O enable
+create_bd_port -dir O txnrx
 
 # ad9361 core
 
@@ -74,8 +74,8 @@ ad_connect  tx_frame_out_p axi_ad9361/tx_frame_out_p
 ad_connect  tx_frame_out_n axi_ad9361/tx_frame_out_n
 ad_connect  tx_data_out_p axi_ad9361/tx_data_out_p
 ad_connect  tx_data_out_n axi_ad9361/tx_data_out_n
-ad_connect  axi_ad9361/tdd_enable axi_ad9361_enable
-ad_connect  axi_ad9361/tdd_txnrx axi_ad9361_txnrx
+ad_connect  axi_ad9361/enable enable
+ad_connect  axi_ad9361/txnrx txnrx
 ad_connect  axi_ad9361_clk util_adc_pack/clk
 ad_connect  axi_ad9361/adc_valid_i0 util_adc_pack/chan_valid_0
 ad_connect  axi_ad9361/adc_valid_q0 util_adc_pack/chan_valid_1
@@ -143,8 +143,8 @@ set_property -dict [list CONFIG.C_PROBE5_WIDTH {1}] $ila_tdd
 set_property -dict [list CONFIG.C_PROBE6_WIDTH {64}] $ila_tdd
 
 ad_connect  axi_ad9361_clk ila_tdd/clk
-ad_connect  axi_ad9361/tdd_enable ila_tdd/probe0
-ad_connect  axi_ad9361/tdd_txnrx  ila_tdd/probe1
+ad_connect  axi_ad9361/enable ila_tdd/probe0
+ad_connect  axi_ad9361/txnrx  ila_tdd/probe1
 ad_connect  axi_ad9361/tdd_dbg  ila_tdd/probe2
 ad_connect  util_dac_unpack/fifo_valid ila_tdd/probe3
 ad_connect  util_dac_unpack/dma_rd ila_tdd/probe4

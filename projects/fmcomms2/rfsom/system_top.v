@@ -107,11 +107,11 @@ module system_top (
   tx_frame_out_n,
   tx_data_out_p,
   tx_data_out_n,
+  enable,
+  txnrx,
 
   gpio_rfpwr_enable,
   gpio_clksel,
-  gpio_txnrx,
-  gpio_enable,
   gpio_resetb,
   gpio_sync,
   gpio_en_agc,
@@ -190,11 +190,11 @@ module system_top (
   output          tx_frame_out_n;
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
+  output          enable;
+  output          txnrx;
 
   inout           gpio_rfpwr_enable;
   inout           gpio_clksel;
-  inout           gpio_txnrx;
-  inout           gpio_enable;
   inout           gpio_resetb;
   inout           gpio_sync;
   inout           gpio_en_agc;
@@ -219,14 +219,12 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
-    .dt (gpio_t[50:32]),
-    .di (gpio_o[50:32]),
-    .do (gpio_i[50:32]),
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+    .dt ({gpio_t[50:49], gpio_t[46:32]}),
+    .di ({gpio_o[50:49], gpio_o[46:32]}),
+    .do ({gpio_i[50:49], gpio_i[46:32]}),
     .dio({  gpio_rfpwr_enable,
             gpio_clksel,
-            gpio_txnrx,
-            gpio_enable,
             gpio_resetb,
             gpio_sync,
             gpio_en_agc,
@@ -255,6 +253,7 @@ module system_top (
     .ddr_ras_n (ddr_ras_n),
     .ddr_reset_n (ddr_reset_n),
     .ddr_we_n (ddr_we_n),
+    .enable (enable),
     .eth1_125mclk (),
     .eth1_25mclk (),
     .eth1_2m5clk (),
@@ -336,7 +335,8 @@ module system_top (
     .tx_data_out_n (tx_data_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
-    .tx_frame_out_p (tx_frame_out_p));
+    .tx_frame_out_p (tx_frame_out_p),
+    .txnrx (txnrx));
 
 endmodule
 
