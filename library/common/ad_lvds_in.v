@@ -49,13 +49,17 @@ module ad_lvds_in (
   rx_data_p,
   rx_data_n,
 
-  // delay interface
+  // delay-data interface
+
+  up_clk,
+  up_dld,
+  up_dwdata,
+  up_drdata,
+
+  // delay-cntrl interface
 
   delay_clk,
   delay_rst,
-  delay_ld,
-  delay_wdata,
-  delay_rdata,
   delay_locked);
 
   // parameters
@@ -74,13 +78,17 @@ module ad_lvds_in (
   output              rx_data_p;
   output              rx_data_n;
 
-  // delay interface
+  // delay-data interface
+
+  input               up_clk;
+  input               up_dld;
+  input       [ 4:0]  up_dwdata;
+  output      [ 4:0]  up_drdata;
+
+  // delay-cntrl interface
 
   input               delay_clk;
   input               delay_rst;
-  input               delay_ld;
-  input       [ 4:0]  delay_wdata;
-  output      [ 4:0]  delay_rdata;
   output              delay_locked;
 
   // internal registers
@@ -134,12 +142,12 @@ module ad_lvds_in (
     .DATAIN (1'b0),
     .ODATAIN (1'b0),
     .CINVCTRL (1'b0),
-    .C (delay_clk),
+    .C (up_clk),
     .IDATAIN (rx_data_ibuf_s),
     .DATAOUT (rx_data_idelay_s),
-    .RST (delay_ld),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata));
+    .RST (up_dld),
+    .CNTVALUEIN (up_dwdata),
+    .CNTVALUEOUT (up_drdata));
   end else begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYE2 #(
@@ -158,12 +166,12 @@ module ad_lvds_in (
     .LDPIPEEN (1'b0),
     .CINVCTRL (1'b0),
     .REGRST (1'b0),
-    .C (delay_clk),
+    .C (up_clk),
     .IDATAIN (rx_data_ibuf_s),
     .DATAOUT (rx_data_idelay_s),
-    .LD (delay_ld),
-    .CNTVALUEIN (delay_wdata),
-    .CNTVALUEOUT (delay_rdata));
+    .LD (up_dld),
+    .CNTVALUEIN (up_dwdata),
+    .CNTVALUEOUT (up_drdata));
   end
 
   IDDR #(
