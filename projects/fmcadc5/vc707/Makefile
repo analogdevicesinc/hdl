@@ -13,7 +13,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
 M_DEPS += ../common/fmcadc5_bd.tcl
-M_DEPS += ../../common/vc707/vc707_system_mig.prj 
+M_DEPS += ../../common/vc707/vc707_system_mig.prj
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/axi_ad9625/axi_ad9625.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
@@ -37,7 +37,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib fmcadc5_vc707.xpr
+all: lib fmcadc5_vc707.sdk/system_top.hdf
 
 
 clean: 
@@ -53,7 +53,7 @@ clean-all:clean
 	make -C ../../../library/util_dacfifo clean
 
 
-fmcadc5_vc707.xpr: $(M_DEPS)
+fmcadc5_vc707.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcadc5_vc707_vivado.log 2>&1
 

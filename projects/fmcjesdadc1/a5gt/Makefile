@@ -15,10 +15,26 @@ M_DEPS += ../common/fmcjesdadc1_spi.v
 M_DEPS += system_constr.sdc
 M_DEPS += system_top.v
 M_DEPS += system_bd.qsys
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250_hw.tcl
+M_DEPS += ../../../library/common/altera/ad_rst.v
+M_DEPS += ../../../library/common/ad_pnmon.v
+M_DEPS += ../../../library/common/ad_datafmt.v
+M_DEPS += ../../../library/common/up_axi.v
+M_DEPS += ../../../library/common/up_xfer_cntrl.v
+M_DEPS += ../../../library/common/up_xfer_status.v
+M_DEPS += ../../../library/common/up_clock_mon.v
+M_DEPS += ../../../library/common/up_drp_cntrl.v
+M_DEPS += ../../../library/common/up_delay_cntrl.v
+M_DEPS += ../../../library/common/up_adc_common.v
+M_DEPS += ../../../library/common/up_adc_channel.v
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250_pnmon.v
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250_if.v
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250_channel.v
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250.v
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250_alt.v
 M_DEPS += ../../../library/axi_dmac/axi_dmac_hw.tcl
 M_DEPS += ../../../library/common/sync_bits.v
 M_DEPS += ../../../library/common/sync_gray.v
-M_DEPS += ../../../library/common/up_axi.v
 M_DEPS += ../../../library/util_axis_resize/util_axis_resize.v
 M_DEPS += ../../../library/util_axis_fifo/util_axis_fifo.v
 M_DEPS += ../../../library/util_axis_fifo/address_gray.v
@@ -42,23 +58,6 @@ M_DEPS += ../../../library/axi_dmac/src_fifo_inf.v
 M_DEPS += ../../../library/axi_dmac/splitter.v
 M_DEPS += ../../../library/axi_dmac/response_generator.v
 M_DEPS += ../../../library/axi_dmac/axi_dmac.v
-M_DEPS += ../../../library/axi_ad9250/axi_ad9250_hw.tcl
-M_DEPS += ../../../library/common/altera/ad_rst.v
-M_DEPS += ../../../library/common/ad_pnmon.v
-M_DEPS += ../../../library/common/ad_datafmt.v
-M_DEPS += ../../../library/common/up_axi.v
-M_DEPS += ../../../library/common/up_xfer_cntrl.v
-M_DEPS += ../../../library/common/up_xfer_status.v
-M_DEPS += ../../../library/common/up_clock_mon.v
-M_DEPS += ../../../library/common/up_drp_cntrl.v
-M_DEPS += ../../../library/common/up_delay_cntrl.v
-M_DEPS += ../../../library/common/up_adc_common.v
-M_DEPS += ../../../library/common/up_adc_channel.v
-M_DEPS += ../../../library/axi_ad9250/axi_ad9250_pnmon.v
-M_DEPS += ../../../library/axi_ad9250/axi_ad9250_if.v
-M_DEPS += ../../../library/axi_ad9250/axi_ad9250_channel.v
-M_DEPS += ../../../library/axi_ad9250/axi_ad9250.v
-M_DEPS += ../../../library/axi_ad9250/axi_ad9250_alt.v
 
 
 M_ALTERA := quartus_sh --64bit -t 
@@ -91,7 +90,7 @@ M_FLIST += *.pin
 
 
 .PHONY: all clean clean-all
-all: fmcjesdadc1.qpf
+all: fmcjesdadc1_a5gt.sof
 
 
 
@@ -102,9 +101,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-fmcjesdadc1.qpf: $(M_DEPS)
+fmcjesdadc1_a5gt.sof: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_ALTERA) system_project.tcl  >> fmcjesdadc1_quartus.log 2>&1
+	$(M_ALTERA) system_project.tcl  >> fmcjesdadc1_a5gt_quartus.log 2>&1
 
 ####################################################################################
 ####################################################################################

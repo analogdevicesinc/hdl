@@ -20,6 +20,7 @@ M_DEPS += ../common/ad_dds.v
 M_DEPS += ../common/ad_datafmt.v
 M_DEPS += ../common/ad_dcfilter.v
 M_DEPS += ../common/ad_iqcor.v
+M_DEPS += ../common/ad_addsub.v
 M_DEPS += ../common/ad_tdd_control.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_xfer_cntrl.v

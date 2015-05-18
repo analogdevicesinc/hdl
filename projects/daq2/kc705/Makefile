@@ -13,7 +13,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
 M_DEPS += ../common/daq2_bd.tcl
-M_DEPS += ../../common/kc705/kc705_system_mig.prj 
+M_DEPS += ../../common/kc705/kc705_system_mig.prj
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
@@ -41,7 +41,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib daq2_kc705.xpr
+all: lib daq2_kc705.sdk/system_top.hdf
 
 
 clean: 
@@ -61,7 +61,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9144 clean
 
 
-daq2_kc705.xpr: $(M_DEPS)
+daq2_kc705.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> daq2_kc705_vivado.log 2>&1
 

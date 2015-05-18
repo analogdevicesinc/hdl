@@ -12,7 +12,7 @@ M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../common/ad9467_bd.tcl
-M_DEPS += ../../common/kc705/kc705_system_mig.prj 
+M_DEPS += ../../common/kc705/kc705_system_mig.prj
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_ad9467/axi_ad9467.xpr
 
@@ -32,7 +32,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib ad9467_fmc_kc705.xpr
+all: lib ad9467_fmc_kc705.sdk/system_top.hdf
 
 
 clean: 
@@ -44,7 +44,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9467 clean
 
 
-ad9467_fmc_kc705.xpr: $(M_DEPS)
+ad9467_fmc_kc705.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> ad9467_fmc_kc705_vivado.log 2>&1
 

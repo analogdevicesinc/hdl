@@ -33,7 +33,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib adv7511_mitx045.xpr
+all: lib adv7511_mitx045.sdk/system_top.hdf
 
 
 clean: 
@@ -47,7 +47,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-adv7511_mitx045.xpr: $(M_DEPS)
+adv7511_mitx045.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> adv7511_mitx045_vivado.log 2>&1
 

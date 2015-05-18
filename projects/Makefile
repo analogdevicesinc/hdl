@@ -19,7 +19,6 @@ all:
 	-make -C ad9265_fmc all
 	-make -C ad9434_fmc all
 	-make -C cftl_std all
-	-make -C motcon1_fmc all
 	-make -C fmcadc4 all
 	-make -C fmcomms5 all
 	-make -C imageon all
@@ -48,7 +47,6 @@ clean:
 	make -C ad9265_fmc clean
 	make -C ad9434_fmc clean
 	make -C cftl_std clean
-	make -C motcon1_fmc clean
 	make -C fmcadc4 clean
 	make -C fmcomms5 clean
 	make -C imageon clean
@@ -77,7 +75,6 @@ clean-all:
 	make -C ad9265_fmc clean-all
 	make -C ad9434_fmc clean-all
 	make -C cftl_std clean-all
-	make -C motcon1_fmc clean-all
 	make -C fmcadc4 clean-all
 	make -C fmcomms5 clean-all
 	make -C imageon clean-all

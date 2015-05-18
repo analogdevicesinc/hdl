@@ -34,7 +34,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib imageon_loopback_zed.xpr
+all: lib imageon_loopback_zed.sdk/system_top.hdf
 
 
 clean: 
@@ -49,7 +49,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-imageon_loopback_zed.xpr: $(M_DEPS)
+imageon_loopback_zed.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> imageon_loopback_zed_vivado.log 2>&1
 

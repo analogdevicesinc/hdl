@@ -41,7 +41,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib daq2_kcu105.xpr
+all: lib daq2_kcu105.sdk/system_top.hdf
 
 
 clean: 
@@ -61,7 +61,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9144 clean
 
 
-daq2_kcu105.xpr: $(M_DEPS)
+daq2_kcu105.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> daq2_kcu105_vivado.log 2>&1
 

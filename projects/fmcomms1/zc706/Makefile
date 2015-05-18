@@ -37,7 +37,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib fmcomms1_zc706.xpr
+all: lib fmcomms1_zc706.sdk/system_top.hdf
 
 
 clean: 
@@ -54,7 +54,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 
 
-fmcomms1_zc706.xpr: $(M_DEPS)
+fmcomms1_zc706.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcomms1_zc706_vivado.log 2>&1
 

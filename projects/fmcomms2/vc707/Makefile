@@ -13,7 +13,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../common/fmcomms2_bd.tcl
-M_DEPS += ../../common/vc707/vc707_system_mig.prj 
+M_DEPS += ../../common/vc707/vc707_system_mig.prj
 M_DEPS += ../../../library/util_dac_unpack/util_dac_unpack.xpr
 M_DEPS += ../../../library/util_adc_pack/util_adc_pack.xpr
 M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
@@ -36,7 +36,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib fmcomms2_vc707.xpr
+all: lib fmcomms2_vc707.sdk/system_top.hdf
 
 
 clean: 
@@ -51,7 +51,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9361 clean
 
 
-fmcomms2_vc707.xpr: $(M_DEPS)
+fmcomms2_vc707.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcomms2_vc707_vivado.log 2>&1
 

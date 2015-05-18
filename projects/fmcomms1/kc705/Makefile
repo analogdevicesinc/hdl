@@ -13,7 +13,7 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../common/fmcomms1_bd.tcl
-M_DEPS += ../../common/kc705/kc705_system_mig.prj 
+M_DEPS += ../../common/kc705/kc705_system_mig.prj
 M_DEPS += ../../../library/axi_ad9122/axi_ad9122.xpr
 M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
@@ -35,7 +35,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib fmcomms1_kc705.xpr
+all: lib fmcomms1_kc705.sdk/system_top.hdf
 
 
 clean: 
@@ -49,7 +49,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9643 clean
 
 
-fmcomms1_kc705.xpr: $(M_DEPS)
+fmcomms1_kc705.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcomms1_kc705_vivado.log 2>&1
 
