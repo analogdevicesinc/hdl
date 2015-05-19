@@ -89,7 +89,6 @@ module axi_ad9671 (
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_4L_2L_N = 1;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // jesd interface
   // rx_clk is the jesd clock (ref_clk/2)
@@ -277,25 +276,16 @@ module axi_ad9671 (
     .adc_r1_mode (),
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
-    .adc_start_code (adc_start_code),
-    .adc_sync (adc_sync),
-    .adc_sync_status (adc_sync_status_s),
     .adc_status (adc_status_s),
+    .adc_sync_status (adc_sync_status_s),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
+    .adc_start_code (adc_start_code),
+    .adc_sync (adc_sync),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),
-    .delay_clk (1'b0),
-    .delay_rst (),
-    .delay_sel (),
-    .delay_rwn (),
-    .delay_addr (),
-    .delay_wdata (),
-    .delay_rdata (5'd0),
-    .delay_ack_t (1'b0),
-    .delay_locked (1'b1),
     .drp_clk (1'd0),
     .drp_rst (),
     .drp_sel (),
