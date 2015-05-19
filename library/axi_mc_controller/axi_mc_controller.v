@@ -38,9 +38,6 @@
 `timescale 1ns/100ps
 
 module axi_mc_controller
-#(
-    parameter C_S_AXI_MIN_SIZE = 32'hffff
-)
 (
   input           ref_clk,       // 100 MHz
   input           ctrl_data_clk,

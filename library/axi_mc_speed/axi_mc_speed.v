@@ -38,9 +38,6 @@
 `timescale 1ns/100ps
 
 module axi_mc_speed
-#(
-    parameter C_S_AXI_MIN_SIZE = 32'hffff
-)
 //----------- Ports Declarations -----------------------------------------------
 (
 // physical interface

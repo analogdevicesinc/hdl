@@ -89,7 +89,6 @@ module axi_ad9434 (
   parameter PCORE_ID = 0;
   parameter PCORE_DEVTYPE = SERIES7;
   parameter PCORE_IODELAY_GROUP = "dev_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // physical interface
   input           adc_clk_in_p;

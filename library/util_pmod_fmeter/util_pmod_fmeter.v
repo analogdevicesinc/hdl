@@ -67,7 +67,6 @@ module util_pmod_fmeter (
   // parameters
 
   parameter       PCORE_ID = 0;
-  parameter       C_S_AXI_MIN_SIZE = 32'hffff;
 
   // physical interface
 

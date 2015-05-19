@@ -92,7 +92,6 @@ module axi_ad9265 (
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_ADC_DP_DISABLE = 0;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // adc interface (clk, data, over-range)
 

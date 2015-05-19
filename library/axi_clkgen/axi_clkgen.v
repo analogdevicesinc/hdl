@@ -78,7 +78,6 @@ module axi_clkgen (
   parameter   PCORE_VCO_MUL = 49;
   parameter   PCORE_CLK0_DIV = 6;
   parameter   PCORE_CLK1_DIV = 6;
-  parameter   C_S_AXI_MIN_SIZE = 32'hffff;
 
   // clocks
 

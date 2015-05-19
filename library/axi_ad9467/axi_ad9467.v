@@ -90,7 +90,6 @@ module axi_ad9467(
   parameter PCORE_ID = 0;
   parameter PCORE_BUFTYPE = 0;
   parameter PCORE_IODELAY_GROUP = "dev_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // physical interface
 

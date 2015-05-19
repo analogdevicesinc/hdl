@@ -37,10 +37,7 @@
 
 `timescale 1ns/100ps
 
-module axi_mc_current_monitor #(
-    parameter C_S_AXI_MIN_SIZE = 32'hffff
-)
-(
+module axi_mc_current_monitor (
 
 // physical interface
 

@@ -84,7 +84,6 @@ module axi_ad6676 (
   parameter PCORE_ID = 0;
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // jesd interface 
   // rx_clk is (line-rate/40)

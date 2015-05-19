@@ -173,7 +173,6 @@ module axi_jesd_gt (
   parameter   PCORE_TX_LANE_SEL_6 = 6;
   parameter   PCORE_TX_LANE_SEL_7 = 7;
   parameter   PCORE_TX_LANE_SEL_8 = 8;
-  parameter   C_S_AXI_MIN_SIZE = 32'hffff;
 
   localparam  PCORE_NUM_OF_LANES = (PCORE_NUM_OF_TX_LANES > PCORE_NUM_OF_RX_LANES) ?
                                     PCORE_NUM_OF_TX_LANES : PCORE_NUM_OF_RX_LANES;
