@@ -147,28 +147,25 @@ module axi_ad9467(
   wire            adc_rst;
   wire            up_clk;
   wire            up_rstn;
+  wire            delay_rst;
 
   // internal signals
 
   wire    [15:0]  adc_data_s;
   wire            adc_or_s;
   wire            adc_ddr_edgesel_s;
-  wire            delay_rst_s;
-  wire            delay_sel_s;
-  wire            delay_rwn_s;
-  wire    [ 7:0]  delay_addr_s;
-  wire    [ 4:0]  delay_wdata_s;
-  wire    [ 4:0]  delay_rdata_s;
-  wire            delay_ack_t_s;
+  wire    [ 8:0]  up_dld_s;
+  wire    [44:0]  up_dwdata_s;
+  wire    [44:0]  up_drdata_s;
   wire            delay_locked_s;
   wire            up_status_pn_err_s;
   wire            up_status_pn_oos_s;
   wire            up_status_or_s;
   wire            up_rreq_s;
   wire    [13:0]  up_raddr_s;
-  wire    [31:0]  up_rdata_s[0:1];
-  wire            up_rack_s[0:1];
-  wire            up_wack_s[0:1];
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_rack_s[0:2];
+  wire            up_wack_s[0:2];
   wire            up_wreq_s;
   wire    [13:0]  up_waddr_s;
   wire    [31:0]  up_wdata_s;
@@ -187,9 +184,9 @@ module axi_ad9467(
       up_rack <= 1'd0;
       up_wack <= 1'd0;
     end else begin
-      up_rdata <= up_rdata_s[0] | up_rdata_s[1];
-      up_rack <= up_rack_s[0] | up_rack_s[1];
-      up_wack <= up_wack_s[0] | up_wack_s[1];
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
     end
   end
 
@@ -209,14 +206,12 @@ module axi_ad9467(
     .adc_data (adc_data_s),
     .adc_or (adc_or_s),
     .adc_ddr_edgesel (adc_ddr_edgesel_s),
+    .up_clk (up_clk),
+    .up_dld (up_dld_s),
+    .up_dwdata (up_dwdata_s),
+    .up_drdata (up_drdata_s),
     .delay_clk (delay_clk),
-    .delay_rst (delay_rst_s),
-    .delay_sel (delay_sel_s),
-    .delay_rwn (delay_rwn_s),
-    .delay_addr (delay_addr_s),
-    .delay_wdata (delay_wdata_s),
-    .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t_s),
+    .delay_rst (delay_rst),
     .delay_locked (delay_locked_s));
 
   // channel
@@ -242,6 +237,26 @@ module axi_ad9467(
     .up_rdata (up_rdata_s[0]),
     .up_rack (up_rack_s[0]));
 
+  // adc delay control
+
+  up_delay_cntrl #(.IO_WIDTH(9), .IO_BASEADDR(6'h02)) i_delay_cntrl (
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked_s),
+    .up_dld (up_dld_s),
+    .up_dwdata (up_dwdata_s),
+    .up_drdata (up_drdata_s),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[2]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_s[2]),
+    .up_rack (up_rack_s[2]));
+
   // common processor control
 
   up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
@@ -252,21 +267,15 @@ module axi_ad9467(
     .adc_ddr_edgesel (adc_ddr_edgesel_s),
     .adc_pin_mode (),
     .adc_status (1'b1),
+    .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'b1),
+    .adc_start_code (),
+    .adc_sync (),
     .up_status_pn_err (up_status_pn_err_s),
     .up_status_pn_oos (up_status_pn_oos_s),
     .up_status_or (up_status_or_s),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst_s),
-    .delay_sel (delay_sel_s),
-    .delay_rwn (delay_rwn_s),
-    .delay_addr (delay_addr_s),
-    .delay_wdata (delay_wdata_s),
-    .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t_s),
-    .delay_locked (delay_locked_s),
     .drp_clk (1'b0),
     .drp_rst (),
     .drp_sel (),

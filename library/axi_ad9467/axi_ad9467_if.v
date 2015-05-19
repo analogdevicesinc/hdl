@@ -64,14 +64,12 @@ module axi_ad9467_if (
 
   // delay control signals
 
+  up_clk,
+  up_dld,
+  up_dwdata,
+  up_drdata,
   delay_clk,
   delay_rst,
-  delay_sel,
-  delay_rwn,
-  delay_addr,
-  delay_wdata,
-  delay_rdata,
-  delay_ack_t,
   delay_locked);
 
   // buffer type based on the target device.
@@ -100,14 +98,12 @@ module axi_ad9467_if (
 
   // delay control signals
 
+  input           up_clk;
+  input   [ 8:0]  up_dld;
+  input   [44:0]  up_dwdata;
+  output  [44:0]  up_drdata;
   input           delay_clk;
   input           delay_rst;
-  input           delay_sel;
-  input           delay_rwn;
-  input   [ 7:0]  delay_addr;
-  input   [ 4:0]  delay_wdata;
-  output  [ 4:0]  delay_rdata;
-  output          delay_ack_t;
   output          delay_locked;
 
   // internal registers
@@ -121,13 +117,9 @@ module axi_ad9467_if (
   reg             adc_or_p = 'd0;
   reg             adc_or_n = 'd0;
   reg             adc_or = 'd0;
-  reg     [ 8:0]  delay_ld = 'd0;
-  reg             delay_ack_t = 'd0;
-  reg     [ 4:0]  delay_rdata = 'd0;
 
   // internal signals
 
-  wire    [ 4:0]  delay_rdata_s[8:0];
   wire    [ 7:0]  adc_data_p_s;
   wire    [ 7:0]  adc_data_n_s;
   wire            adc_or_p_s;
@@ -168,49 +160,6 @@ module axi_ad9467_if (
     end
   end
 
-  // delay write interface, each delay element can be individually
-  // addressed, and a delay value can be directly loaded (no inc/dec stuff)
-
-  always @(posedge delay_clk) begin
-    if ((delay_sel == 1'b1) && (delay_rwn == 1'b0)) begin
-      case (delay_addr)
-        8'd8 : delay_ld <= 9'h100;
-        8'd7 : delay_ld <= 9'h080;
-        8'd6 : delay_ld <= 9'h040;
-        8'd5 : delay_ld <= 9'h020;
-        8'd4 : delay_ld <= 9'h010;
-        8'd3 : delay_ld <= 9'h008;
-        8'd2 : delay_ld <= 9'h004;
-        8'd1 : delay_ld <= 9'h002;
-        8'd0 : delay_ld <= 9'h001;
-        default: delay_ld <= 9'h000;
-      endcase
-    end else begin
-      delay_ld <= 9'h000;
-    end
-  end
-
-  // delay read interface, a delay ack toggle is used to transfer data to the
-  // processor side- delay locked is independently transferred
-
-  always @(posedge delay_clk) begin
-    case (delay_addr)
-      8'd8 : delay_rdata <= delay_rdata_s[8];
-      8'd7 : delay_rdata <= delay_rdata_s[7];
-      8'd6 : delay_rdata <= delay_rdata_s[6];
-      8'd5 : delay_rdata <= delay_rdata_s[5];
-      8'd4 : delay_rdata <= delay_rdata_s[4];
-      8'd3 : delay_rdata <= delay_rdata_s[3];
-      8'd2 : delay_rdata <= delay_rdata_s[2];
-      8'd1 : delay_rdata <= delay_rdata_s[1];
-      8'd0 : delay_rdata <= delay_rdata_s[0];
-      default: delay_rdata <= 5'd0;
-    endcase
-    if (delay_sel == 1'b1) begin
-      delay_ack_t <= ~delay_ack_t;
-    end
-  end
-
   // data interface
 
   generate
@@ -225,11 +174,12 @@ module axi_ad9467_if (
     .rx_data_in_n (adc_data_in_n[l_inst]),
     .rx_data_p (adc_data_p_s[l_inst]),
     .rx_data_n (adc_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_dld[l_inst]),
+    .up_dwdata (up_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_drdata[((l_inst*5)+4):(l_inst*5)]),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
-    .delay_ld (delay_ld[l_inst]),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata_s[l_inst]),
     .delay_locked ());
   end
   endgenerate
@@ -246,11 +196,12 @@ module axi_ad9467_if (
     .rx_data_in_n (adc_or_in_n),
     .rx_data_p (adc_or_p_s),
     .rx_data_n (adc_or_n_s),
+    .up_clk (up_clk),
+    .up_dld (up_dld[8]),
+    .up_dwdata (up_dwdata[44:40]),
+    .up_drdata (up_drdata[44:40]),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
-    .delay_ld (delay_ld[8]),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata_s[8]),
     .delay_locked (delay_locked));
 
   // clock
