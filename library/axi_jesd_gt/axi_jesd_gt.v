@@ -63,7 +63,7 @@ module axi_jesd_gt (
   rx_clk_g,
   rx_clk,
   rx_data,
-  rx_data_sof,
+  rx_sof,
   rx_gt_charisk,
   rx_gt_disperr,
   rx_gt_notintable,
@@ -201,7 +201,7 @@ module axi_jesd_gt (
   output                                        rx_clk_g;
   input                                         rx_clk;
   output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_data;
-  output  [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_data_sof;
+  output  [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_sof;
   output  [((PCORE_NUM_OF_RX_LANES* 4)-1):0]    rx_gt_charisk;
   output  [((PCORE_NUM_OF_RX_LANES* 4)-1):0]    rx_gt_disperr;
   output  [((PCORE_NUM_OF_RX_LANES* 4)-1):0]    rx_gt_notintable;
@@ -321,7 +321,7 @@ module axi_jesd_gt (
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_data_p_s;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_data_n_s;
   wire    [((PCORE_NUM_OF_LANES*32)-1):0]       rx_data_s;
-  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_data_sof_s;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_sof_s;
   wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_charisk_s;
   wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_disperr_s;
   wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_notintable_s;
@@ -452,7 +452,7 @@ module axi_jesd_gt (
   // asymmetric widths -- receive
 
   assign rx_data = rx_data_s[((PCORE_NUM_OF_RX_LANES*32)-1):0];
-  assign rx_data_sof = rx_data_sof_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0];
+  assign rx_sof = rx_sof_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0];
   assign rx_gt_charisk = rx_gt_charisk_s[((PCORE_NUM_OF_RX_LANES* 4)-1):0];
   assign rx_gt_disperr = rx_gt_disperr_s[((PCORE_NUM_OF_RX_LANES* 4)-1):0];
   assign rx_gt_notintable = rx_gt_notintable_s[((PCORE_NUM_OF_RX_LANES* 4)-1):0];
@@ -611,9 +611,9 @@ module axi_jesd_gt (
 
   ad_jesd_align i_jesd_align (
     .rx_clk (rx_clk),
-    .rx_sof (rx_ip_sof),
+    .rx_ip_sof (rx_ip_sof),
     .rx_ip_data (rx_ip_data_s[n*32+31:n*32]),
-    .rx_data_sof(rx_data_sof_s[n]),
+    .rx_sof (rx_sof_s[n]),
     .rx_data (rx_data_s[n*32+31:n*32]));
 
   ad_gt_channel_1 #(
