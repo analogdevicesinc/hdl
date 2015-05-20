@@ -95,7 +95,7 @@ module util_upack (
   localparam  M_WIDTH   = CH_DW*M_CNT;
   localparam  P_WIDTH   = CH_DW*P_CNT;
 
-  // adc interface
+  // dac interface
 
   input                             dac_clk;
   input                             dac_enable_0;

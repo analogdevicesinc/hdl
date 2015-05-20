@@ -2,6 +2,7 @@
 
 package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
+source ../scripts/adi_ip_alt.tcl
 
 set_module_property NAME axi_dmac
 set_module_property DESCRIPTION "AXI DMA Controller"
@@ -303,30 +304,21 @@ proc axi_dmac_elaborate {} {
   # fifo destination/source
 
   if {[get_parameter_value C_DMA_TYPE_DEST] == 2} {
-
-    add_interface fifo_rd_clock clock end
-    add_interface_port fifo_rd_clock fifo_rd_clk clk Input 1
-
-    add_interface fifo_rd_if conduit end
-    set_interface_property fifo_rd_if associatedClock fifo_rd_clock
-    add_interface_port fifo_rd_if fifo_rd_en rden Input 1
-    add_interface_port fifo_rd_if fifo_rd_valid valid Output 1
-    add_interface_port fifo_rd_if fifo_rd_dout data Output C_DMA_DATA_WIDTH_DEST
-    add_interface_port fifo_rd_if fifo_rd_underflow unf Output 1
+    ad_alt_intf clock   fifo_rd_clk       input   1                       dac_clk
+    ad_alt_intf signal  fifo_rd_en        input   1                       dac_valid
+    ad_alt_intf signal  fifo_rd_valid     output  1                       dma_valid
+    ad_alt_intf signal  fifo_rd_dout      output  C_DMA_DATA_WIDTH_DEST   dac_data
+    ad_alt_intf signal  fifo_rd_underflow output  1                       dac_dunf
+    ad_alt_intf signal  fifo_rd_xfer_req  output  1                       dma_xfer_req
   }
 
   if {[get_parameter_value C_DMA_TYPE_SRC] == 2} {
-
-    add_interface fifo_wr_clock clock end
-    add_interface_port fifo_wr_clock fifo_wr_clk clk Input 1
-
-    add_interface fifo_wr_if conduit end
-    set_interface_property fifo_wr_if associatedClock fifo_wr_clock
-    add_interface_port fifo_wr_if fifo_wr_overflow ovf Output 1
-    add_interface_port fifo_wr_if fifo_wr_en wren Input 1
-    add_interface_port fifo_wr_if fifo_wr_din data Input C_DMA_DATA_WIDTH_SRC
-    add_interface_port fifo_wr_if fifo_wr_sync sync Input 1
+    ad_alt_intf clock   fifo_wr_clock     input   1                       adc_clk
+    ad_alt_intf signal  fifo_wr_en        input   1                       adc_valid
+    ad_alt_intf signal  fifo_wr_din       input   C_DMA_DATA_WIDTH_SRC    adc_data
+    ad_alt_intf signal  fifo_wr_overflow  output  1                       adc_dovf
+    ad_alt_intf signal  fifo_wr_sync      input   1                       adc_sync
+    ad_alt_intf signal  fifo_wr_xfer_req  output  1                       dma_xfer_req
   }
-
 }
 
