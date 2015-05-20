@@ -87,8 +87,6 @@ add_interface if_tx_clk clock end
 add_interface_port if_tx_clk tx_clk clk Input 1
 
 add_interface if_tx_data avalon_streaming start
-set_interface_property if_tx_data associatedClock if_tx_clk
-set_interface_property if_tx_data dataBitsPerSymbol 128*(PCORE_QUAD_DUAL_N+1)
 add_interface_port if_tx_data tx_data data Output 128*(PCORE_QUAD_DUAL_N+1)
 
 # dma interface
@@ -104,6 +102,10 @@ ad_alt_intf signal  dac_dovf      input   1
 ad_alt_intf signal  dac_dunf      input   1
 
 proc p_axi_ad9144 {} {
+
+  set p_pcore_quad_dual_n [get_parameter_value "PCORE_QUAD_DUAL_N"]
+  set_interface_property if_tx_data associatedClock if_tx_clk
+  set_interface_property if_tx_data dataBitsPerSymbol [expr (128*($p_pcore_quad_dual_n+1))]
 
   if {[get_parameter_value PCORE_QUAD_DUAL_N] == 1} {
     ad_alt_intf signal  dac_valid_2   output  1
