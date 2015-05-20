@@ -7,8 +7,8 @@ Analog Devices HDL libraries and projects
 >Beware! This branch is just a realease candidate. Final release expected at end of June.
 
 ###Tools version:
-- [Vivado 2014.4.1]
-- [Quartus 14.1]
+- **Xilinx** : [Vivado 2014.4.1]
+- **Altera** : [Quartus 14.1]
 
 ###Documentation and support
 
