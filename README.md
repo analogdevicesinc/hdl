@@ -10,6 +10,8 @@ Analog Devices HDL libraries and projects
 - [Vivado 2014.4.1]
 - [Quartus 14.1]
 
+###Documentation and support
+
 For first time users, it is **highly recommended** to go through our [HDL user guide].
 
 For support please visit our [FPGA Reference Designs Support Community] on EngineerZone.
