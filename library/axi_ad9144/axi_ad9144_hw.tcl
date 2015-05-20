@@ -2,6 +2,7 @@
 
 package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
+source ../scripts/adi_ip_alt.tcl
 
 set_module_property NAME axi_ad9144
 set_module_property DESCRIPTION "AXI AD9144 Interface"
@@ -81,32 +82,29 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # transceiver interface
 
-add_interface xcvr_clk clock end
-add_interface_port xcvr_clk tx_clk clk Input 1
+add_interface if_tx_clk clock end
+add_interface_port if_tx_clk tx_clk clk Input 1
 
-add_interface xcvr_data conduit end
-set_interface_property xcvr_data associatedClock xcvr_clk
-add_interface_port xcvr_data tx_data data Output 128*(PCORE_QUAD_DUAL_N+1)
+add_interface if_tx_data avalon_streaming start
+set_interface_property if_tx_data associatedClock if_tx_clk
+set_interface_property if_tx_data dataBitsPerSymbol 128*(PCORE_QUAD_DUAL_N+1)
+add_interface_port if_tx_data tx_data data Output 128*(PCORE_QUAD_DUAL_N+1)
 
 # dma interface
 
-add_interface dac_clock clock start
-add_interface_port dac_clock dac_clk clk Output 1
-
-add_interface dac_dma_if conduit start
-set_interface_property dac_dma_if associatedClock dac_clock
-add_interface_port dac_dma_if dac_valid_0 dac_valid_0 Output 1
-add_interface_port dac_dma_if dac_enable_0 dac_enable_0 Output 1
-add_interface_port dac_dma_if dac_data_0 dac_data_0 Input 64
-add_interface_port dac_dma_if dac_valid_1 dac_valid_1 Output 1
-add_interface_port dac_dma_if dac_enable_1 dac_enable_1 Output 1
-add_interface_port dac_dma_if dac_data_1 dac_data_1 Input 64
-add_interface_port dac_dma_if dac_valid_2 dac_valid_2 Output 1
-add_interface_port dac_dma_if dac_enable_2 dac_enable_2 Output 1
-add_interface_port dac_dma_if dac_data_2 dac_data_2 Input 64
-add_interface_port dac_dma_if dac_valid_3 dac_valid_3 Output 1
-add_interface_port dac_dma_if dac_enable_3 dac_enable_3 Output 1
-add_interface_port dac_dma_if dac_data_3 dac_data_3 Input 64
-add_interface_port dac_dma_if dac_dovf dac_dovf Input 1
-add_interface_port dac_dma_if dac_dunf dac_dunf Input 1
+ad_alt_intf clock   dac_clk       output  1
+ad_alt_intf signal  dac_valid_0   output  1
+ad_alt_intf signal  dac_enable_0  output  1
+ad_alt_intf signal  dac_data_0    input   64
+ad_alt_intf signal  dac_valid_1   output  1
+ad_alt_intf signal  dac_enable_1  output  1
+ad_alt_intf signal  dac_data_1    input   64
+ad_alt_intf signal  dac_valid_2   output  1
+ad_alt_intf signal  dac_enable_2  output  1
+ad_alt_intf signal  dac_data_2    input   64
+ad_alt_intf signal  dac_valid_3   output  1
+ad_alt_intf signal  dac_enable_3  output  1
+ad_alt_intf signal  dac_data_3    input   64
+ad_alt_intf signal  dac_dovf      input   1
+ad_alt_intf signal  dac_dunf      input   1
 

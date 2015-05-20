@@ -9,6 +9,7 @@ set_module_property NAME util_cpack
 set_module_property DESCRIPTION "Channel Pack Utility"
 set_module_property VERSION 1.0
 set_module_property DISPLAY_NAME util_cpack
+set_module_property ELABORATION_CALLBACK p_util_cpack
 
 # files
 
@@ -38,32 +39,49 @@ set_parameter_property CH_CNT HDL_PARAMETER true
 
 ad_alt_intf clock   adc_clk         input   1
 ad_alt_intf signal  adc_rst         input   1
-ad_alt_intf signal  adc_valid_0     input   1
-ad_alt_intf signal  adc_enable_0    input   1
-ad_alt_intf signal  adc_data_0      input   CH_DW
-ad_alt_intf signal  adc_valid_1     input   1
-ad_alt_intf signal  adc_enable_1    input   1
-ad_alt_intf signal  adc_data_1      input   CH_DW
-ad_alt_intf signal  adc_valid_2     input   1
-ad_alt_intf signal  adc_enable_2    input   1
-ad_alt_intf signal  adc_data_2      input   CH_DW
-ad_alt_intf signal  adc_valid_3     input   1
-ad_alt_intf signal  adc_enable_3    input   1
-ad_alt_intf signal  adc_data_3      input   CH_DW
-ad_alt_intf signal  adc_valid_4     input   1
-ad_alt_intf signal  adc_enable_4    input   1
-ad_alt_intf signal  adc_data_4      input   CH_DW
-ad_alt_intf signal  adc_valid_5     input   1
-ad_alt_intf signal  adc_enable_5    input   1
-ad_alt_intf signal  adc_data_5      input   CH_DW
-ad_alt_intf signal  adc_valid_6     input   1
-ad_alt_intf signal  adc_enable_6    input   1
-ad_alt_intf signal  adc_data_6      input   CH_DW
-ad_alt_intf signal  adc_valid_7     input   1
-ad_alt_intf signal  adc_enable_7    input   1
-ad_alt_intf signal  adc_data_7      input   CH_DW
 ad_alt_intf signal  adc_valid       output  1
 ad_alt_intf signal  adc_sync        output  1
 ad_alt_intf signal  adc_data        output  CH_CNT*CH_DW
+ad_alt_intf signal  adc_valid_0     input   1
+ad_alt_intf signal  adc_enable_0    input   1
+ad_alt_intf signal  adc_data_0      input   CH_DW
 
+proc p_util_cpack {} {
+
+  if {[get_parameter_value CH_CNT] > 1} {
+    ad_alt_intf signal  adc_valid_1     input   1
+    ad_alt_intf signal  adc_enable_1    input   1
+    ad_alt_intf signal  adc_data_1      input   CH_DW
+  }
+  if {[get_parameter_value CH_CNT] > 2} {
+    ad_alt_intf signal  adc_valid_2     input   1
+    ad_alt_intf signal  adc_enable_2    input   1
+    ad_alt_intf signal  adc_data_2      input   CH_DW
+  }
+  if {[get_parameter_value CH_CNT] > 3} {
+    ad_alt_intf signal  adc_valid_3     input   1
+    ad_alt_intf signal  adc_enable_3    input   1
+    ad_alt_intf signal  adc_data_3      input   CH_DW
+  }
+  if {[get_parameter_value CH_CNT] > 4} {
+    ad_alt_intf signal  adc_valid_4     input   1
+    ad_alt_intf signal  adc_enable_4    input   1
+    ad_alt_intf signal  adc_data_4      input   CH_DW
+  }
+  if {[get_parameter_value CH_CNT] > 5} {
+    ad_alt_intf signal  adc_valid_5     input   1
+    ad_alt_intf signal  adc_enable_5    input   1
+    ad_alt_intf signal  adc_data_5      input   CH_DW
+  }
+  if {[get_parameter_value CH_CNT] > 6} {
+    ad_alt_intf signal  adc_valid_6     input   1
+    ad_alt_intf signal  adc_enable_6    input   1
+    ad_alt_intf signal  adc_data_6      input   CH_DW
+  }
+  if {[get_parameter_value CH_CNT] > 7} {
+    ad_alt_intf signal  adc_valid_7     input   1
+    ad_alt_intf signal  adc_enable_7    input   1
+    ad_alt_intf signal  adc_data_7      input   CH_DW
+  }
+}
 
