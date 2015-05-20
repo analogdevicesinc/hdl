@@ -282,7 +282,7 @@ module system_top (
   wire    [  7:0]   rx_cal_busy_s;
   wire              rx_pll_locked_s;
   wire    [ 22:0]   rx_xcvr_status_s;
-  wire    [  7:0]   rx_data_sof;
+  wire    [  7:0]   rx_sof;
   wire    [  3:0]   sync_raddr;
   wire              sync_signal;
 
@@ -357,9 +357,9 @@ module system_top (
   for (n = 0; n < 8; n = n + 1) begin: g_align_1
   ad_jesd_align i_jesd_align (
     .rx_clk (rx_clk),
-    .rx_sof (rx_ip_sof_s),
+    .rx_ip_sof (rx_ip_sof_s),
     .rx_ip_data (rx_ip_data_s[n*32+31:n*32]),
-    .rx_data_sof(rx_data_sof[n]),
+    .rx_sof (rx_sof[n]),
     .rx_data (rx_data_s[n*32+31:n*32]));
   end
   endgenerate
@@ -398,10 +398,10 @@ module system_top (
 
   always @(posedge rx_clk)
   begin
-    rx_sof_0_s <= rx_data_sof[0] | rx_data_sof[1];
-    rx_sof_1_s <= rx_data_sof[2] | rx_data_sof[3];
-    rx_sof_2_s <= rx_data_sof[4] | rx_data_sof[5];
-    rx_sof_3_s <= rx_data_sof[6] | rx_data_sof[7];
+    rx_sof_0_s <= rx_sof[0] | rx_sof[1];
+    rx_sof_1_s <= rx_sof[2] | rx_sof[3];
+    rx_sof_2_s <= rx_sof[4] | rx_sof[5];
+    rx_sof_3_s <= rx_sof[6] | rx_sof[7];
   end
 
   usdrx1_spi i_spi (
