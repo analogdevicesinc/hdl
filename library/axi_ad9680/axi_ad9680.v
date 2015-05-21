@@ -63,6 +63,7 @@ module axi_ad9680 (
   s_axi_aresetn,
   s_axi_awvalid,
   s_axi_awaddr,
+  s_axi_awprot,
   s_axi_awready,
   s_axi_wvalid,
   s_axi_wdata,
@@ -73,6 +74,7 @@ module axi_ad9680 (
   s_axi_bready,
   s_axi_arvalid,
   s_axi_araddr,
+  s_axi_arprot,
   s_axi_arready,
   s_axi_rvalid,
   s_axi_rresp,
@@ -107,6 +109,7 @@ module axi_ad9680 (
   input           s_axi_aresetn;
   input           s_axi_awvalid;
   input   [31:0]  s_axi_awaddr;
+  input   [ 2:0]  s_axi_awprot;
   output          s_axi_awready;
   input           s_axi_wvalid;
   input   [31:0]  s_axi_wdata;
@@ -117,6 +120,7 @@ module axi_ad9680 (
   input           s_axi_bready;
   input           s_axi_arvalid;
   input   [31:0]  s_axi_araddr;
+  input   [ 2:0]  s_axi_arprot;
   output          s_axi_arready;
   output          s_axi_rvalid;
   output  [ 1:0]  s_axi_rresp;
