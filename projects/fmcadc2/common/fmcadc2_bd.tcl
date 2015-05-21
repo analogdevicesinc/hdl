@@ -42,10 +42,10 @@ set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
 # connections (gt)
 
 ad_connect  axi_ad9625_gt/ref_clk_c rx_ref_clk
-ad_connect  axi_ad9625_gt/rx_data_p rx_data_p   
-ad_connect  axi_ad9625_gt/rx_data_n rx_data_n   
-ad_connect  axi_ad9625_gt/rx_sync rx_sync   
-ad_connect  axi_ad9625_gt/rx_sysref rx_sysref   
+ad_connect  axi_ad9625_gt/rx_data_p rx_data_p
+ad_connect  axi_ad9625_gt/rx_data_n rx_data_n
+ad_connect  axi_ad9625_gt/rx_sync rx_sync
+ad_connect  axi_ad9625_gt/rx_sysref rx_sysref
 
 # connections (adc)
 
@@ -152,5 +152,5 @@ ad_mem_hp2_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
 
 # interrupts
 
-ad_cpu_interrupt ps-13 mb-10 axi_ad9625_dma/irq
+ad_cpu_interrupt ps-13 mb-12 axi_ad9625_dma/irq
 
