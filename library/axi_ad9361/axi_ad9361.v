@@ -107,8 +107,8 @@ module axi_ad9361 (
   dac_dunf,
   dac_r1_mode,
 
-  tdd_enable,
-  tdd_txnrx,
+  enable,
+  txnrx,
 
   // axi interface
 
@@ -223,8 +223,8 @@ module axi_ad9361 (
   input           dac_dunf;
   output          dac_r1_mode;
 
-  output          tdd_enable;
-  output          tdd_txnrx;
+  output          enable;
+  output          txnrx;
 
   // axi interface
 
@@ -313,8 +313,8 @@ module axi_ad9361 (
   wire            tdd_rx_rf_en_s;
   wire            tdd_tx_rf_en_s;
   wire    [ 7:0]  ad9361_tdd_status_s;
-  wire            tdd_enable;
-  wire            tdd_txnrx;
+  wire            enable;
+  wire            txnrx;
 
   wire            dac_valid_i0_s;
   wire            dac_valid_q0_s;
@@ -387,13 +387,13 @@ module axi_ad9361 (
 
   axi_ad9361_tdd_if #(.MODE_OF_ENABLE(1)) i_tdd_if(
     .clk(clk),
-    .rst(tdd_rst),
+    .rst(rst),
     .tdd_rx_vco_en(tdd_rx_vco_en_s),
     .tdd_tx_vco_en(tdd_tx_vco_en_s),
     .tdd_rx_rf_en(tdd_rx_rf_en_s),
     .tdd_tx_rf_en(tdd_tx_rf_en_s),
-    .ad9361_txnrx(tdd_txnrx),
-    .ad9361_enable(tdd_enable),
+    .ad9361_txnrx(txnrx),
+    .ad9361_enable(enable),
     .ad9361_tdd_status(ad9361_tdd_status_s)
   );
 
@@ -401,7 +401,7 @@ module axi_ad9361 (
 
   axi_ad9361_tdd i_tdd(
     .clk(clk),
-    .rst(tdd_rst),
+    .rst(rst),
     .tdd_enable(tdd_mode_enable_s),
     .tdd_tx_dp_en(tdd_tx_dp_en_s),
     .tdd_rx_vco_en(tdd_rx_vco_en_s),
