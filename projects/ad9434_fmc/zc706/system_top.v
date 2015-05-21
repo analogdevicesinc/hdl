@@ -217,7 +217,7 @@ module system_top (
     .adc_or_p(adc_or_p),
     .adc_or_n(adc_or_n),
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (spi_clk),
+    .spi0_clk_o (spi_sclk),
     .spi0_csn_0_o (spi_csn_adc),
     .spi0_csn_1_o (spi_csn_clk),
     .spi0_csn_2_o (),
