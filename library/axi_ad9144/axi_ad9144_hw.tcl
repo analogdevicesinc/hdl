@@ -94,10 +94,10 @@ add_interface_port if_tx_data tx_data data Output 128*(PCORE_QUAD_DUAL_N+1)
 ad_alt_intf clock   dac_clk       output  1
 ad_alt_intf signal  dac_valid_0   output  1
 ad_alt_intf signal  dac_enable_0  output  1
-ad_alt_intf signal  dac_data_0    input   64
+ad_alt_intf signal  dac_ddata_0   input   64
 ad_alt_intf signal  dac_valid_1   output  1
 ad_alt_intf signal  dac_enable_1  output  1
-ad_alt_intf signal  dac_data_1    input   64
+ad_alt_intf signal  dac_ddata_1   input   64
 ad_alt_intf signal  dac_dovf      input   1
 ad_alt_intf signal  dac_dunf      input   1
 
@@ -110,9 +110,9 @@ proc p_axi_ad9144 {} {
   if {[get_parameter_value PCORE_QUAD_DUAL_N] == 1} {
     ad_alt_intf signal  dac_valid_2   output  1
     ad_alt_intf signal  dac_enable_2  output  1
-    ad_alt_intf signal  dac_data_2    input   64
+    ad_alt_intf signal  dac_ddata_2   input   64
     ad_alt_intf signal  dac_valid_3   output  1
     ad_alt_intf signal  dac_enable_3  output  1
-    ad_alt_intf signal  dac_data_3    input   64
+    ad_alt_intf signal  dac_ddata_3   input   64
   }
 }
