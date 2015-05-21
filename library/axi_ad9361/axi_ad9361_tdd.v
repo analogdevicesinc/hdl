@@ -76,7 +76,7 @@ module axi_ad9361_tdd (
 );
 
   input             clk;
-  output            rst;
+  input             rst;
 
   // control signals from the tdd control
 
@@ -107,54 +107,51 @@ module axi_ad9361_tdd (
   // internal signals
 
   wire              rst;
-  wire              tdd_start_s;
-  wire              tdd_counter_reset_s;
+  wire              tdd_enable_s;
   wire              tdd_secondary_s;
-  wire              tdd_burst_en_s;
-  wire   [ 5:0]     tdd_burst_count_s;
-  wire              tdd_continuous_tx_s;
-  wire              tdd_continuous_rx_s;
-  wire   [21:0]     tdd_counter_init_s;
-  wire   [21:0]     tdd_frame_length_s;
-  wire   [21:0]     tdd_vco_rx_on_1_s;
-  wire   [21:0]     tdd_vco_rx_off_1_s;
-  wire   [21:0]     tdd_vco_tx_on_1_s;
-  wire   [21:0]     tdd_vco_tx_off_1_s;
-  wire   [21:0]     tdd_rx_on_1_s;
-  wire   [21:0]     tdd_rx_off_1_s;
-  wire   [21:0]     tdd_tx_on_1_s;
-  wire   [21:0]     tdd_tx_off_1_s;
-  wire   [21:0]     tdd_tx_dp_on_1_s;
-  wire   [21:0]     tdd_tx_dp_off_1_s;
-  wire   [21:0]     tdd_vco_rx_on_2_s;
-  wire   [21:0]     tdd_vco_rx_off_2_s;
-  wire   [21:0]     tdd_vco_tx_on_2_s;
-  wire   [21:0]     tdd_vco_tx_off_2_s;
-  wire   [21:0]     tdd_rx_on_2_s;
-  wire   [21:0]     tdd_rx_off_2_s;
-  wire   [21:0]     tdd_tx_on_2_s;
-  wire   [21:0]     tdd_tx_off_2_s;
-  wire   [21:0]     tdd_tx_dp_on_2_s;
-  wire   [21:0]     tdd_tx_dp_off_2_s;
+  wire   [ 7:0]     tdd_burst_count_s;
+  wire              tdd_txnrx_only_en_s;
+  wire              tdd_txnrx_only_s;
+  wire   [23:0]     tdd_counter_init_s;
+  wire   [23:0]     tdd_frame_length_s;
+  wire   [23:0]     tdd_vco_rx_on_1_s;
+  wire   [23:0]     tdd_vco_rx_off_1_s;
+  wire   [23:0]     tdd_vco_tx_on_1_s;
+  wire   [23:0]     tdd_vco_tx_off_1_s;
+  wire   [23:0]     tdd_rx_on_1_s;
+  wire   [23:0]     tdd_rx_off_1_s;
+  wire   [23:0]     tdd_tx_on_1_s;
+  wire   [23:0]     tdd_tx_off_1_s;
+  wire   [23:0]     tdd_tx_dp_on_1_s;
+  wire   [23:0]     tdd_tx_dp_off_1_s;
+  wire   [23:0]     tdd_vco_rx_on_2_s;
+  wire   [23:0]     tdd_vco_rx_off_2_s;
+  wire   [23:0]     tdd_vco_tx_on_2_s;
+  wire   [23:0]     tdd_vco_tx_off_2_s;
+  wire   [23:0]     tdd_rx_on_2_s;
+  wire   [23:0]     tdd_rx_off_2_s;
+  wire   [23:0]     tdd_tx_on_2_s;
+  wire   [23:0]     tdd_tx_off_2_s;
+  wire   [23:0]     tdd_tx_dp_on_2_s;
+  wire   [23:0]     tdd_tx_dp_off_2_s;
 
   wire   [23:0]     tdd_counter_status;
 
   assign tdd_dbg = {tdd_counter_status, tdd_enable, tdd_tx_dp_en,
                     tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
 
+  assign tdd_enable = tdd_enable_s;
+
   // instantiations
 
   up_tdd_cntrl i_up_tdd_cntrl(
     .clk(clk),
-    .tdd_enable(tdd_enable),
-    .tdd_start(tdd_start_s),
-    .tdd_rst(rst),
-    .tdd_counter_reset(tdd_counter_reset_s),
+    .rst(rst),
+    .tdd_enable(tdd_enable_s),
     .tdd_secondary(tdd_secondary_s),
-    .tdd_burst_en(tdd_burst_en_s),
     .tdd_burst_count(tdd_burst_count_s),
-    .tdd_continuous_tx(tdd_continuous_tx_s),
-    .tdd_continuous_rx(tdd_continuous_rx_s),
+    .tdd_txnrx_only_en(tdd_txnrx_only_en_s),
+    .tdd_txnrx_only(tdd_txnrx_only_s),
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
@@ -192,15 +189,13 @@ module axi_ad9361_tdd (
   ad_tdd_control i_tdd_control(
     .clk(clk),
     .rst(rst),
-    .tdd_start(tdd_start_s),
-    .tdd_counter_reset(tdd_counter_reset_s),
+    .tdd_enable(tdd_enable_s),
     .tdd_secondary(tdd_secondary_s),
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),
-    .tdd_burst_en(tdd_burst_en_s),
     .tdd_burst_count(tdd_burst_count_s),
-    .tdd_continuous_tx(tdd_continuous_tx_s),
-    .tdd_continuous_rx(tdd_continuous_rx_s),
+    .tdd_txnrx_only_en(tdd_txnrx_only_en_s),
+    .tdd_txnrx_only(tdd_txnrx_only_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),

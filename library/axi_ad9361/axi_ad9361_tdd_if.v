@@ -104,7 +104,7 @@ module axi_ad9361_tdd_if(
   wire            ad9361_enable_s;
 
   // just one VCO can be enabled at a time
-  assign ad9361_txnrx_s = tdd_tx_vco_en;
+  assign ad9361_txnrx_s = tdd_tx_vco_en & ~tdd_rx_vco_en;
 
   always @(posedge clk) begin
     tdd_rx_rf_en_d <= tdd_rx_rf_en;

@@ -379,7 +379,7 @@ module axi_ad9361 (
 
   axi_ad9361_tdd_if #(.MODE_OF_ENABLE(1)) i_tdd_if(
     .clk(clk),
-    .rst(tdd_rst),
+    .rst(rst),
     .tdd_rx_vco_en(tdd_rx_vco_en_s),
     .tdd_tx_vco_en(tdd_tx_vco_en_s),
     .tdd_rx_rf_en(tdd_rx_rf_en_s),
@@ -393,7 +393,7 @@ module axi_ad9361 (
 
   axi_ad9361_tdd i_tdd(
     .clk(clk),
-    .rst(tdd_rst),
+    .rst(rst),
     .tdd_enable(tdd_mode_enable_s),
     .tdd_tx_dp_en(tdd_tx_dp_en_s),
     .tdd_rx_vco_en(tdd_rx_vco_en_s),

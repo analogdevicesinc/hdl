@@ -74,8 +74,8 @@ ad_connect  tx_frame_out_p axi_ad9361/tx_frame_out_p
 ad_connect  tx_frame_out_n axi_ad9361/tx_frame_out_n
 ad_connect  tx_data_out_p axi_ad9361/tx_data_out_p
 ad_connect  tx_data_out_n axi_ad9361/tx_data_out_n
-ad_connect  axi_ad9361/enable enable
-ad_connect  axi_ad9361/txnrx txnrx
+ad_connect  enable axi_ad9361/enable
+ad_connect  txnrx axi_ad9361/txnrx
 ad_connect  axi_ad9361_clk util_adc_pack/clk
 ad_connect  axi_ad9361/adc_valid_i0 util_adc_pack/chan_valid_0
 ad_connect  axi_ad9361/adc_valid_q0 util_adc_pack/chan_valid_1
@@ -123,33 +123,10 @@ ad_mem_hp1_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
 
-
 # interrupts
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
-
-set ila_tdd [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_tdd]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tdd
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {7}] $ila_tdd
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_tdd
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {35}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE4_WIDTH {1}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE5_WIDTH {1}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE6_WIDTH {64}] $ila_tdd
-
-ad_connect  axi_ad9361_clk ila_tdd/clk
-ad_connect  axi_ad9361/enable ila_tdd/probe0
-ad_connect  axi_ad9361/txnrx  ila_tdd/probe1
-ad_connect  axi_ad9361/tdd_dbg  ila_tdd/probe2
-ad_connect  util_dac_unpack/fifo_valid ila_tdd/probe3
-ad_connect  util_dac_unpack/dma_rd ila_tdd/probe4
-ad_connect  axi_ad9361/dac_dunf ila_tdd/probe5
-ad_connect  util_dac_unpack/dma_data ila_tdd/probe6
 
 # ila (adc)
 

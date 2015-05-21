@@ -48,39 +48,31 @@ module ad_tdd_control(
 
   // TDD timming signals
 
-  tdd_start,
-  tdd_counter_reset,
+  tdd_enable,
   tdd_secondary,
+  tdd_txnrx_only_en,
+  tdd_txnrx_only,
+  tdd_burst_count,
   tdd_counter_init,
   tdd_frame_length,
-  tdd_burst_en,
-  tdd_burst_count,
-  tdd_continuous_tx,
-  tdd_continuous_rx,
-
   tdd_vco_rx_on_1,
   tdd_vco_rx_off_1,
   tdd_vco_tx_on_1,
   tdd_vco_tx_off_1,
-
   tdd_rx_on_1,
   tdd_rx_off_1,
   tdd_tx_on_1,
   tdd_tx_off_1,
-
   tdd_tx_dp_on_1,
   tdd_tx_dp_off_1,
-
   tdd_vco_rx_on_2,
   tdd_vco_rx_off_2,
   tdd_vco_tx_on_2,
   tdd_vco_tx_off_2,
-
   tdd_rx_on_2,
   tdd_rx_off_2,
   tdd_tx_on_2,
   tdd_tx_off_2,
-
   tdd_tx_dp_on_2,
   tdd_tx_dp_off_2,
 
@@ -104,41 +96,33 @@ module ad_tdd_control(
   input           clk;
   input           rst;
 
-  input           tdd_start;
+  input           tdd_enable;
   input           tdd_secondary;
-  input           tdd_counter_reset;
-  input [21:0]    tdd_counter_init;
-  input [21:0]    tdd_frame_length;
-  input           tdd_burst_en;
-  input [ 5:0]    tdd_burst_count;
-  input           tdd_continuous_tx;
-  input           tdd_continuous_rx;
-
-  input [21:0]    tdd_vco_rx_on_1;
-  input [21:0]    tdd_vco_rx_off_1;
-  input [21:0]    tdd_vco_tx_on_1;
-  input [21:0]    tdd_vco_tx_off_1;
-
-  input [21:0]    tdd_rx_on_1;
-  input [21:0]    tdd_rx_off_1;
-  input [21:0]    tdd_tx_on_1;
-  input [21:0]    tdd_tx_off_1;
-
-  input [21:0]    tdd_tx_dp_on_1;
-  input [21:0]    tdd_tx_dp_off_1;
-
-  input [21:0]    tdd_vco_rx_on_2;
-  input [21:0]    tdd_vco_rx_off_2;
-  input [21:0]    tdd_vco_tx_on_2;
-  input [21:0]    tdd_vco_tx_off_2;
-
-  input [21:0]    tdd_rx_on_2;
-  input [21:0]    tdd_rx_off_2;
-  input [21:0]    tdd_tx_on_2;
-  input [21:0]    tdd_tx_off_2;
-
-  input [21:0]    tdd_tx_dp_on_2;
-  input [21:0]    tdd_tx_dp_off_2;
+  input           tdd_txnrx_only_en;
+  input           tdd_txnrx_only;
+  input  [ 7:0]   tdd_burst_count;
+  input  [23:0]   tdd_counter_init;
+  input  [23:0]   tdd_frame_length;
+  input  [23:0]   tdd_vco_rx_on_1;
+  input  [23:0]   tdd_vco_rx_off_1;
+  input  [23:0]   tdd_vco_tx_on_1;
+  input  [23:0]   tdd_vco_tx_off_1;
+  input  [23:0]   tdd_rx_on_1;
+  input  [23:0]   tdd_rx_off_1;
+  input  [23:0]   tdd_tx_on_1;
+  input  [23:0]   tdd_tx_off_1;
+  input  [23:0]   tdd_tx_dp_on_1;
+  input  [23:0]   tdd_tx_dp_off_1;
+  input  [23:0]   tdd_vco_rx_on_2;
+  input  [23:0]   tdd_vco_rx_off_2;
+  input  [23:0]   tdd_vco_tx_on_2;
+  input  [23:0]   tdd_vco_tx_off_2;
+  input  [23:0]   tdd_rx_on_2;
+  input  [23:0]   tdd_rx_off_2;
+  input  [23:0]   tdd_tx_on_2;
+  input  [23:0]   tdd_tx_off_2;
+  input  [23:0]   tdd_tx_dp_on_2;
+  input  [23:0]   tdd_tx_dp_off_2;
 
   output          tdd_tx_dp_en;       // initiate vco tx2rx switch
   output          tdd_rx_vco_en;      // initiate vco rx2tx switch
@@ -158,7 +142,7 @@ module ad_tdd_control(
 
   // tdd counter related
 
-  reg   [21:0]    tdd_counter = 22'h0;
+  reg   [23:0]    tdd_counter = 24'h0;
   reg   [ 5:0]    tdd_burst_counter = 6'h0;
 
   reg             tdd_counter_state = OFF;
@@ -184,13 +168,14 @@ module ad_tdd_control(
   reg             counter_at_tdd_tx_dp_on_2 = 1'b0;
   reg             counter_at_tdd_tx_dp_off_2 = 1'b0;
 
+  reg             tdd_enable_d = 1'h0;
+
   // internal signals
 
-  wire   [21:0]   tdd_tx_dp_on_1_s;
-  wire   [21:0]   tdd_tx_dp_on_2_s;
-  wire   [21:0]   tdd_tx_dp_off_1_s;
-  wire   [21:0]   tdd_tx_dp_off_2_s;
-
+  wire   [23:0]   tdd_tx_dp_on_1_s;
+  wire   [23:0]   tdd_tx_dp_on_2_s;
+  wire   [23:0]   tdd_tx_dp_off_1_s;
+  wire   [23:0]   tdd_tx_dp_off_2_s;
 
   assign  tdd_counter_status = tdd_counter;
 
@@ -207,13 +192,13 @@ module ad_tdd_control(
     end else begin
 
       // counter reset
-      if (tdd_counter_reset == 1'b1) begin
+      if (tdd_enable == 1'b0) begin
         tdd_counter_state <= OFF;
+        tdd_enable_d <= tdd_enable;
       end else
 
-      // start counter, the start pulse should have one clock cycle
-      // NOTE: a start pulse during a transaction will reinitialize the counter
-      if (tdd_start == 1'b1) begin
+      // start counter on the positive edge of the tdd_enable
+      if ((tdd_enable == 1'b1) && (tdd_enable_d == 1'b0)) begin
         tdd_counter <= tdd_counter_init;
         tdd_burst_counter <= tdd_burst_count;
         tdd_counter_state <= ON;
@@ -223,15 +208,14 @@ module ad_tdd_control(
       if (tdd_counter_state == ON) begin
         if (tdd_counter == tdd_frame_length) begin
           tdd_counter <= 22'h0;
-          if (tdd_burst_en == 1) begin
-            if ( tdd_burst_counter > 0) begin // inside a burst
-              tdd_burst_counter <= tdd_burst_counter - 1;
-              tdd_counter_state <= ON;
-            end
-            else begin // end of burst
-              tdd_burst_counter <= 6'h0;
-              tdd_counter_state <= OFF;
-            end
+          if ( tdd_burst_counter > 1) begin // inside a burst
+            tdd_burst_counter <= tdd_burst_counter - 1;
+            tdd_counter_state <= ON;
+          end
+          else
+          if ( tdd_burst_counter == 1) begin // end of burst
+            tdd_burst_counter <= 6'h0;
+            tdd_counter_state <= OFF;
           end
           else begin // contiuous mode
             tdd_burst_counter <= 6'h0;
@@ -437,7 +421,7 @@ module ad_tdd_control(
   // internal datapath delay compensation
 
   ad_addsub #(
-    .A_WIDTH(22),
+    .A_WIDTH(24),
     .CONST_VALUE(11),
     .ADD_SUB(1)
   ) i_tx_dp_on_1_comp (
@@ -449,7 +433,7 @@ module ad_tdd_control(
   );
 
   ad_addsub #(
-    .A_WIDTH(22),
+    .A_WIDTH(24),
     .CONST_VALUE(11),
     .ADD_SUB(1)
   ) i_tx_dp_on_2_comp (
@@ -461,7 +445,7 @@ module ad_tdd_control(
   );
 
   ad_addsub #(
-    .A_WIDTH(22),
+    .A_WIDTH(24),
     .CONST_VALUE(11),
     .ADD_SUB(1)
   ) i_tx_dp_off_1_comp (
@@ -473,7 +457,7 @@ module ad_tdd_control(
   );
 
   ad_addsub #(
-    .A_WIDTH(22),
+    .A_WIDTH(24),
     .CONST_VALUE(11),
     .ADD_SUB(1)
   ) i_tx_dp_off_2_comp (
@@ -488,7 +472,10 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_vco_rx_on_1 || counter_at_tdd_vco_rx_on_2 || tdd_continuous_rx) begin
+      if (tdd_txnrx_only_en) begin
+        tdd_rx_vco_en <= ~tdd_txnrx_only;
+      end
+      else if (counter_at_tdd_vco_rx_on_1 || counter_at_tdd_vco_rx_on_2) begin
         tdd_rx_vco_en <= 1'b1;
       end
       else if (counter_at_tdd_vco_rx_off_1 || counter_at_tdd_vco_rx_off_2) begin
@@ -501,7 +488,10 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_vco_tx_on_1 || counter_at_tdd_vco_tx_on_2 || tdd_continuous_tx) begin
+      if (tdd_txnrx_only_en) begin
+        tdd_tx_vco_en <= tdd_txnrx_only;
+      end
+      else if (counter_at_tdd_vco_tx_on_1 || counter_at_tdd_vco_tx_on_2) begin
         tdd_tx_vco_en <= 1'b1;
       end
       else if (counter_at_tdd_vco_tx_off_1 || counter_at_tdd_vco_tx_off_2) begin
@@ -514,7 +504,10 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_rx_on_1 || counter_at_tdd_rx_on_2 || tdd_continuous_rx) begin
+      if (tdd_txnrx_only_en) begin
+        tdd_rx_rf_en <= ~tdd_txnrx_only;
+      end
+      else if (counter_at_tdd_rx_on_1 || counter_at_tdd_rx_on_2) begin
         tdd_rx_rf_en <= 1'b1;
       end
       else if (counter_at_tdd_rx_off_1 || counter_at_tdd_rx_off_2) begin
@@ -527,7 +520,10 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_tx_on_1 || counter_at_tdd_tx_on_2 || tdd_continuous_tx) begin
+      if (tdd_txnrx_only_en) begin
+        tdd_tx_rf_en <= tdd_txnrx_only;
+      end
+      else if (counter_at_tdd_tx_on_1 || counter_at_tdd_tx_on_2) begin
         tdd_tx_rf_en <= 1'b1;
       end
       else if (counter_at_tdd_tx_off_1 || counter_at_tdd_tx_off_2) begin
@@ -540,7 +536,10 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (counter_at_tdd_tx_dp_on_1 || counter_at_tdd_tx_dp_on_2 || tdd_continuous_tx) begin
+      if (tdd_txnrx_only_en) begin
+        tdd_tx_dp_en <= tdd_txnrx_only;
+      end
+      else if (counter_at_tdd_tx_dp_on_1 || counter_at_tdd_tx_dp_on_2) begin
         tdd_tx_dp_en <= 1'b1;
       end
       else if (counter_at_tdd_tx_dp_off_1 || counter_at_tdd_tx_dp_off_2) begin
