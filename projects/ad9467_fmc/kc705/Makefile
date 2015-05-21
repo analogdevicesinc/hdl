@@ -13,8 +13,8 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../common/ad9467_bd.tcl
 M_DEPS += ../../common/kc705/kc705_system_mig.prj
-M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_ad9467/axi_ad9467.xpr
+M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -40,8 +40,8 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_ad9467 clean
+	make -C ../../../library/axi_dmac clean
 
 
 ad9467_fmc_kc705.sdk/system_top.hdf: $(M_DEPS)
@@ -50,8 +50,8 @@ ad9467_fmc_kc705.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_ad9467
+	make -C ../../../library/axi_dmac
 
 ####################################################################################
 ####################################################################################

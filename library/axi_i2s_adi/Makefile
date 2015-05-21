@@ -20,7 +20,6 @@ M_DEPS += i2s_clkgen.vhd
 M_DEPS += fifo_synchronizer.vhd
 M_DEPS += axi_i2s_adi.vhd
 M_DEPS += axi_i2s_adi_constr.xdc
-M_DEPS += 
 
 M_VIVADO := vivado -mode batch -source
 

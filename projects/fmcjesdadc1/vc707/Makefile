@@ -13,10 +13,10 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../common/fmcjesdadc1_bd.tcl
 M_DEPS += ../../common/vc707/vc707_system_mig.prj
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250.xpr
+M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
-M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
-M_DEPS += ../../../library/axi_ad9250/axi_ad9250.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -42,10 +42,10 @@ clean:
 
 
 clean-all:clean
+	make -C ../../../library/axi_ad9250 clean
+	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_jesd_gt clean
 	make -C ../../../library/util_bsplit clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_ad9250 clean
 
 
 fmcjesdadc1_vc707.sdk/system_top.hdf: $(M_DEPS)
@@ -54,10 +54,10 @@ fmcjesdadc1_vc707.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
+	make -C ../../../library/axi_ad9250
+	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_jesd_gt
 	make -C ../../../library/util_bsplit
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_ad9250
 
 ####################################################################################
 ####################################################################################

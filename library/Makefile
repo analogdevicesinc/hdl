@@ -39,15 +39,15 @@ clean:
 	make -C axi_mc_speed clean
 	make -C axi_spdif_tx clean
 	make -C controllerperipheralhdladi_pcore clean
-	make -C util_adcfifo clean
 	make -C util_adc_pack clean
+	make -C util_adcfifo clean
 	make -C util_axis_fifo clean
 	make -C util_axis_resize clean
 	make -C util_bsplit clean
 	make -C util_ccat clean
 	make -C util_cpack clean
-	make -C util_dacfifo clean
 	make -C util_dac_unpack clean
+	make -C util_dacfifo clean
 	make -C util_gmii_to_rgmii clean
 	make -C util_i2c_mixer clean
 	make -C util_pmod_adc clean
@@ -90,15 +90,15 @@ lib:
 	-make -C axi_mc_speed
 	-make -C axi_spdif_tx
 	-make -C controllerperipheralhdladi_pcore
-	-make -C util_adcfifo
 	-make -C util_adc_pack
+	-make -C util_adcfifo
 	-make -C util_axis_fifo
 	-make -C util_axis_resize
 	-make -C util_bsplit
 	-make -C util_ccat
 	-make -C util_cpack
-	-make -C util_dacfifo
 	-make -C util_dac_unpack
+	-make -C util_dacfifo
 	-make -C util_gmii_to_rgmii
 	-make -C util_i2c_mixer
 	-make -C util_pmod_adc
