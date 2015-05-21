@@ -210,29 +210,29 @@ module system_top (
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(49)) i_iobuf_gpio (
-    .dt ({gpio_t[48:0]}),
-    .di ({gpio_o[48:0]}),
-    .do ({gpio_i[48:0]}),
-    .dio({  gpio_txnrx,
-            gpio_enable,
-            gpio_resetb,
-            gpio_sync,
-            gpio_en_agc,
-            gpio_ctl,
-            gpio_status,
-            gpio_bd}));
+    .dio_t ({gpio_t[48:0]}),
+    .dio_i ({gpio_o[48:0]}),
+    .dio_o ({gpio_i[48:0]}),
+    .dio_p ({ gpio_txnrx,
+              gpio_enable,
+              gpio_resetb,
+              gpio_sync,
+              gpio_en_agc,
+              gpio_ctl,
+              gpio_status,
+              gpio_bd}));
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_scl (
-    .dt ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
-    .di (iic_mux_scl_o_s),
-    .do (iic_mux_scl_i_s),
-    .dio(iic_mux_scl));
+    .dio_t ({iic_mux_scl_t_s,iic_mux_scl_t_s}),
+    .dio_i (iic_mux_scl_o_s),
+    .dio_o (iic_mux_scl_i_s),
+    .dio_p (iic_mux_scl));
 
    ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_iic_sda (
-    .dt ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
-    .di (iic_mux_sda_o_s),
-    .do (iic_mux_sda_i_s),
-    .dio(iic_mux_sda));
+    .dio_t ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
+    .dio_i (iic_mux_sda_o_s),
+    .dio_o (iic_mux_sda_i_s),
+    .dio_p (iic_mux_sda));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

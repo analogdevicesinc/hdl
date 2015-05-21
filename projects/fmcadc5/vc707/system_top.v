@@ -354,28 +354,28 @@ module system_top (
     .spi_dirn (spi_dirn));
 
   ad_iobuf #(.DATA_WIDTH(13)) i_iobuf (
-    .dt (gpio_t[44:32]),
-    .di (gpio_o[44:32]),
-    .do (gpio_i[44:32]),
-    .dio ({ pwr_good,       // 44
-            fd_1,           // 43
-            irq_1,          // 42
-            fd_0,           // 41
-            irq_0,          // 40
-            pwdn_1,         // 39
-            rst_1,          // 38
-            drst_1,         // 37
-            arst_1,         // 36
-            pwdn_0,         // 35
-            rst_0,          // 34
-            drst_0,         // 33
-            arst_0}));      // 32
+    .dio_t (gpio_t[44:32]),
+    .dio_i (gpio_o[44:32]),
+    .dio_o (gpio_i[44:32]),
+    .dio_p ({ pwr_good,       // 44
+              fd_1,           // 43
+              irq_1,          // 42
+              fd_0,           // 41
+              irq_0,          // 40
+              pwdn_1,         // 39
+              rst_1,          // 38
+              drst_1,         // 37
+              arst_1,         // 36
+              pwdn_0,         // 35
+              rst_0,          // 34
+              drst_0,         // 33
+              arst_0}));      // 32
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
-    .dt (gpio_t[20:0]),
-    .di (gpio_o[20:0]),
-    .do (gpio_i[20:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .adc_clk (adc_clk),

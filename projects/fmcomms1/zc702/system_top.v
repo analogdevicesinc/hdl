@@ -213,10 +213,10 @@ module system_top (
   ad_iobuf #(
     .DATA_WIDTH(16))
   i_gpio_bd (
-    .dt(gpio_t[15:0]),
-    .di(gpio_o[15:0]),
-    .do(gpio_i[15:0]),
-    .dio(gpio_bd));
+    .dio_t(gpio_t[15:0]),
+    .dio_i(gpio_o[15:0]),
+    .dio_o(gpio_i[15:0]),
+    .dio_p(gpio_bd));
 
   always @(posedge dac_clk) begin
     dac_dma_rd <= dac_valid_0 & dac_enable_0;

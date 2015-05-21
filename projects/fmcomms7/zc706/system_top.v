@@ -535,34 +535,34 @@ module system_top (
   assign spi_clk = spi0_clk;
 
   ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
-    .dt (gpio_t[50:32]),
-    .di (gpio_o[50:32]),
-    .do (gpio_i[50:32]),
-    .dio ({ xo_en,            // 50
-            clk_sync,         // 49
-            adf4355_2_pd,     // 48
-            dac_txen0,        // 47
-            dac_txen1,        // 46
-            hmc271_1_reset,   // 45
-            hmc271_2_reset,   // 44
-            hmc349_sel,       // 43
-            hmc922_a,         // 42
-            hmc922_b,         // 41
-            adf4355_2_ld,     // 40
-            adf4355_1_ld,     // 39
-            dac_irq,          // 38
-            adc_fdb,          // 37
-            adc_fda,          // 36
-            clk_gpio[3],      // 35
-            clk_gpio[2],      // 34
-            clk_gpio[1],      // 33
-            clk_gpio[0]}));   // 32
+    .dio_t (gpio_t[50:32]),
+    .dio_i (gpio_o[50:32]),
+    .dio_o (gpio_i[50:32]),
+    .dio_p ({ xo_en,            // 50
+              clk_sync,         // 49
+              adf4355_2_pd,     // 48
+              dac_txen0,        // 47
+              dac_txen1,        // 46
+              hmc271_1_reset,   // 45
+              hmc271_2_reset,   // 44
+              hmc349_sel,       // 43
+              hmc922_a,         // 42
+              hmc922_b,         // 41
+              adf4355_2_ld,     // 40
+              adf4355_1_ld,     // 39
+              dac_irq,          // 38
+              adc_fdb,          // 37
+              adc_fda,          // 36
+              clk_gpio[3],      // 35
+              clk_gpio[2],      // 34
+              clk_gpio[1],      // 33
+              clk_gpio[0]}));   // 32
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
-    .dt (gpio_t[14:0]),
-    .di (gpio_o[14:0]),
-    .do (gpio_i[14:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[14:0]),
+    .dio_i (gpio_o[14:0]),
+    .dio_o (gpio_i[14:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .adc_clk (adc_clk),

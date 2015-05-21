@@ -225,22 +225,22 @@ module system_top (
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
-    .dt (gpio_t[49:32]),
-    .di (gpio_o[49:32]),
-    .do (gpio_i[49:32]),
-    .dio({  gpio_txnrx,
-            gpio_enable,
-            gpio_resetb,
-            gpio_sync,
-            gpio_en_agc,
-            gpio_ctl,
-            gpio_status}));
+    .dio_t (gpio_t[49:32]),
+    .dio_i (gpio_o[49:32]),
+    .dio_o (gpio_i[49:32]),
+    .dio_p ({ gpio_txnrx,
+              gpio_enable,
+              gpio_resetb,
+              gpio_sync,
+              gpio_en_agc,
+              gpio_ctl,
+              gpio_status}));
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
-    .dt (gpio_t[16:0]),
-    .di (gpio_o[16:0]),
-    .do (gpio_i[16:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[16:0]),
+    .dio_i (gpio_o[16:0]),
+    .dio_o (gpio_i[16:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),

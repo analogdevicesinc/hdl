@@ -179,25 +179,25 @@ module system_top (
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(29)) i_iobuf (
-    .dt ({gpio_t[48:32],gpio_t[15:8], gpio_t[3:0]}),
-    .di ({gpio_o[48:32],gpio_o[15:8], gpio_o[3:0]}),
-    .do ({gpio_i[48:32],gpio_i[15:8], gpio_i[3:0]}),
-    .dio({  gpio_txnrx,
-            gpio_enable,
-            gpio_resetb,
-            gpio_sync,
-            gpio_en_agc,
-            gpio_ctl,
-            gpio_status,
-            gpio_bd[15:8],
-            gpio_bd[3:0]}));
+    .dio_t ({gpio_t[48:32],gpio_t[15:8], gpio_t[3:0]}),
+    .dio_i ({gpio_o[48:32],gpio_o[15:8], gpio_o[3:0]}),
+    .dio_o ({gpio_i[48:32],gpio_i[15:8], gpio_i[3:0]}),
+    .dio_p ({ gpio_txnrx,
+              gpio_enable,
+              gpio_resetb,
+              gpio_sync,
+              gpio_en_agc,
+              gpio_ctl,
+              gpio_status,
+              gpio_bd[15:8],
+              gpio_bd[3:0]}));
 
   // udc spi is just output and connected PMOD2_x_LS
   ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_spi (
-    .dt ({4'd0}),
-    .di ({spi_udc_csn_tx, spi_udc_csn_rx, spi_udc_data, spi_udc_sclk}),
-    .do (),
-    .dio(gpio_bd[7:4]));
+    .dio_t ({4'd0}),
+    .dio_i ({spi_udc_csn_tx, spi_udc_csn_rx, spi_udc_data, spi_udc_sclk}),
+    .dio_o (),
+    .dio_p (gpio_bd[7:4]));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

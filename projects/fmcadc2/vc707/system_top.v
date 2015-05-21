@@ -234,17 +234,17 @@ module system_top (
     .spi_ext_sdio (spi_ext_sdio));
 
   ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
-    .dt (gpio_t[33:32]),
-    .di (gpio_o[33:32]),
-    .do (gpio_i[33:32]),
-    .dio ({ adc_irq,    // 33
-            adc_fd}));  // 32
+    .dio_t (gpio_t[33:32]),
+    .dio_i (gpio_o[33:32]),
+    .dio_o (gpio_i[33:32]),
+    .dio_p ({ adc_irq,    // 33
+              adc_fd}));  // 32
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
-    .dt (gpio_t[20:0]),
-    .di (gpio_o[20:0]),
-    .do (gpio_i[20:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),

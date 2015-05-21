@@ -276,10 +276,10 @@ module system_top (
     .ODIV2 ());
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf (
-    .dt (gpio_t[20:0]),
-    .di (gpio_o[20:0]),
-    .do (gpio_i[20:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
 
   fmcjesdadc1_spi i_fmcjesdadc1_spi (
     .spi_csn (spi_csn_0),

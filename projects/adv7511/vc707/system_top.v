@@ -169,10 +169,10 @@ module system_top (
   assign iic_rstn = 1'b1;
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_sw_led (
-    .dt (gpio_t[20:0]),
-    .di (gpio_o[20:0]),
-    .do (gpio_i[20:0]),
-    .dio(gpio_bd));
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
 
   // instantiations
 

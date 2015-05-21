@@ -198,17 +198,17 @@ module system_top (
 
   // instantiations
   ad_iobuf #(.DATA_WIDTH(32)) i_iobuf_gpio_ps7 (
-    .dt ({gpio_t[48:32],gpio_t[14:0]}),
-    .di ({gpio_o[48:32],gpio_o[14:0]}),
-    .do ({gpio_i[48:32],gpio_i[14:0]}),
-    .dio ({ gpio_txnrx,   // 48
-            gpio_enable,  // 47
-            gpio_resetb,  // 46
-            gpio_sync,    // 45
-            gpio_en_agc,  // 44
-            gpio_ctl,     // 40
-            gpio_status,  // 32
-            gpio_bd}));   // 0
+    .dio_t ({gpio_t[48:32],gpio_t[14:0]}),
+    .dio_i ({gpio_o[48:32],gpio_o[14:0]}),
+    .dio_o ({gpio_i[48:32],gpio_i[14:0]}),
+    .dio_p ({ gpio_txnrx,   // 48
+              gpio_enable,  // 47
+              gpio_resetb,  // 46
+              gpio_sync,    // 45
+              gpio_en_agc,  // 44
+              gpio_ctl,     // 40
+              gpio_status,  // 32
+              gpio_bd}));   // 0
 
   prcfg_system_top i_prcfg_system_top (
     .clk(clk),

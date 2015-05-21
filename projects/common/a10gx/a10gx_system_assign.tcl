@@ -25,17 +25,6 @@ set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to ddr3_ref_clk -d
 
 set_location_assignment PIN_R30   -to ddr3_clk_p      ; ## 1.5 V   V1  MEM_CLK_P          
 set_location_assignment PIN_R31   -to ddr3_clk_n      ; ## 1.5 V   V2  MEM_CLK_N          
-set_location_assignment PIN_U33   -to ddr3_cke_0      ; ## 1.5 V   P5  MEM_ADDR_CMD20     
-set_location_assignment PIN_T33   -to ddr3_cke_1      ; ## 1.5 V   M5  MEM_ADDR_CMD21     
-set_location_assignment PIN_T35   -to ddr3_reset_n    ; ## 1.5 V   K1  MEM_ADDR_CMD27     
-set_location_assignment PIN_R34   -to ddr3_cs_n_0     ; ## 1.5 V   P1  MEM_ADDR_CMD22     
-set_location_assignment PIN_P34   -to ddr3_cs_n_1     ; ## 1.5 V   R4  MEM_ADDR_CMD23     
-set_location_assignment PIN_G33   -to ddr3_cas_n      ; ## 1.5 V   L4  MEM_ADDR_CMD19     
-set_location_assignment PIN_F32   -to ddr3_ras_n      ; ## 1.5 V   L2  MEM_ADDR_CMD26     
-set_location_assignment PIN_T34   -to ddr3_we_n       ; ## 1.5 V   P2  MEM_ADDR_CMD28     
-set_location_assignment PIN_F33   -to ddr3_ba[0]      ; ## 1.5 V   M1  MEM_ADDR_CMD16     
-set_location_assignment PIN_G35   -to ddr3_ba[1]      ; ## 1.5 V   M2  MEM_ADDR_CMD17     
-set_location_assignment PIN_H35   -to ddr3_ba[2]      ; ## 1.5 V   N2  MEM_ADDR_CMD18     
 set_location_assignment PIN_M32   -to ddr3_a[0]       ; ## 1.5 V   F1  MEM_ADDR_CMD0      
 set_location_assignment PIN_L32   -to ddr3_a[1]       ; ## 1.5 V   H1  MEM_ADDR_CMD1      
 set_location_assignment PIN_N34   -to ddr3_a[2]       ; ## 1.5 V   F2  MEM_ADDR_CMD2      
@@ -50,11 +39,16 @@ set_location_assignment PIN_H31   -to ddr3_a[10]      ; ## 1.5 V   E4  MEM_ADDR_
 set_location_assignment PIN_J31   -to ddr3_a[11]      ; ## 1.5 V   F4  MEM_ADDR_CMD11     
 set_location_assignment PIN_H34   -to ddr3_a[12]      ; ## 1.5 V   G4  MEM_ADDR_CMD12     
 set_location_assignment PIN_H33   -to ddr3_a[13]      ; ## 1.5 V   H4  MEM_ADDR_CMD13     
-set_location_assignment PIN_G32   -to ddr3_a[14]      ; ## 1.5 V   J4  MEM_ADDR_CMD14     
-set_location_assignment PIN_E32   -to ddr3_a[15]      ; ## 1.5 V   K4  MEM_ADDR_CMD15     
-set_location_assignment PIN_N33   -to ddr3_odt_0      ; ## 1.5 V   M4  MEM_ADDR_CMD24     
-set_location_assignment PIN_P33   -to ddr3_odt_1      ; ## 1.5 V   R3  MEM_ADDR_CMD25     
-set_location_assignment PIN_J34   -to ddr3_rzq        ; ## RZQ
+set_location_assignment PIN_F33   -to ddr3_ba[0]      ; ## 1.5 V   M1  MEM_ADDR_CMD16     
+set_location_assignment PIN_G35   -to ddr3_ba[1]      ; ## 1.5 V   M2  MEM_ADDR_CMD17     
+set_location_assignment PIN_H35   -to ddr3_ba[2]      ; ## 1.5 V   N2  MEM_ADDR_CMD18     
+set_location_assignment PIN_U33   -to ddr3_cke        ; ## 1.5 V   P5  MEM_ADDR_CMD20     
+set_location_assignment PIN_R34   -to ddr3_cs_n       ; ## 1.5 V   P1  MEM_ADDR_CMD22     
+set_location_assignment PIN_N33   -to ddr3_odt        ; ## 1.5 V   M4  MEM_ADDR_CMD24     
+set_location_assignment PIN_T35   -to ddr3_reset_n    ; ## 1.5 V   K1  MEM_ADDR_CMD27     
+set_location_assignment PIN_T34   -to ddr3_we_n       ; ## 1.5 V   P2  MEM_ADDR_CMD28     
+set_location_assignment PIN_F32   -to ddr3_ras_n      ; ## 1.5 V   L2  MEM_ADDR_CMD26     
+set_location_assignment PIN_G33   -to ddr3_cas_n      ; ## 1.5 V   L4  MEM_ADDR_CMD19     
 set_location_assignment PIN_B26   -to ddr3_dqs_p[0]   ; ## 1.5 V   A6  MEM_DQSA_P0        
 set_location_assignment PIN_C26   -to ddr3_dqs_n[0]   ; ## 1.5 V   A7  MEM_DQSA_N0        
 set_location_assignment PIN_H28   -to ddr3_dqs_p[1]   ; ## 1.5 V   A2  MEM_DQSA_P1        
@@ -71,14 +65,6 @@ set_location_assignment PIN_AA34  -to ddr3_dqs_p[6]   ; ## 1.5 V   V16 MEM_DQSB_
 set_location_assignment PIN_AA33  -to ddr3_dqs_n[6]   ; ## 1.5 V   V17 MEM_DQSB_N2        
 set_location_assignment PIN_AF33  -to ddr3_dqs_p[7]   ; ## 1.5 V   V8  MEM_DQSB_P3        
 set_location_assignment PIN_AF34  -to ddr3_dqs_n[7]   ; ## 1.5 V   V9  MEM_DQSB_N3        
-set_location_assignment PIN_E26   -to ddr3_dm[0]      ; ## 1.5 V   B10 MEM_DMA0           
-set_location_assignment PIN_G27   -to ddr3_dm[1]      ; ## 1.5 V   C4  MEM_DMA1           
-set_location_assignment PIN_A29   -to ddr3_dm[2]      ; ## 1.5 V   B17 MEM_DMA2           
-set_location_assignment PIN_F30   -to ddr3_dm[3]      ; ## 1.5 V   F17 MEM_DMA3           
-set_location_assignment PIN_AB32  -to ddr3_dm[4]      ; ## 1.5 V   M16 MEM_DMB0           
-set_location_assignment PIN_AG31  -to ddr3_dm[5]      ; ## 1.5 V   U16 MEM_DMB1           
-set_location_assignment PIN_Y35   -to ddr3_dm[6]      ; ## 1.5 V   U11 MEM_DMB2           
-set_location_assignment PIN_AC34  -to ddr3_dm[7]      ; ## 1.5 V   U6  MEM_DMB3           
 set_location_assignment PIN_B28   -to ddr3_dq[0]      ; ## 1.5 V   A4  MEM_DQA0           
 set_location_assignment PIN_A28   -to ddr3_dq[1]      ; ## 1.5 V   B4  MEM_DQA1           
 set_location_assignment PIN_A27   -to ddr3_dq[2]      ; ## 1.5 V   B5  MEM_DQA2           
@@ -143,7 +129,22 @@ set_location_assignment PIN_AD35  -to ddr3_dq[60]     ; ## 1.5 V   T8  MEM_DQB28
 set_location_assignment PIN_AE34  -to ddr3_dq[61]     ; ## 1.5 V   U8  MEM_DQB29          
 set_location_assignment PIN_AC33  -to ddr3_dq[62]     ; ## 1.5 V   U7  MEM_DQB30          
 set_location_assignment PIN_AD34  -to ddr3_dq[63]     ; ## 1.5 V   V6  MEM_DQB31          
+set_location_assignment PIN_E26   -to ddr3_dm[0]      ; ## 1.5 V   B10 MEM_DMA0           
+set_location_assignment PIN_G27   -to ddr3_dm[1]      ; ## 1.5 V   C4  MEM_DMA1           
+set_location_assignment PIN_A29   -to ddr3_dm[2]      ; ## 1.5 V   B17 MEM_DMA2           
+set_location_assignment PIN_F30   -to ddr3_dm[3]      ; ## 1.5 V   F17 MEM_DMA3           
+set_location_assignment PIN_AB32  -to ddr3_dm[4]      ; ## 1.5 V   M16 MEM_DMB0           
+set_location_assignment PIN_AG31  -to ddr3_dm[5]      ; ## 1.5 V   U16 MEM_DMB1           
+set_location_assignment PIN_Y35   -to ddr3_dm[6]      ; ## 1.5 V   U11 MEM_DMB2           
+set_location_assignment PIN_AC34  -to ddr3_dm[7]      ; ## 1.5 V   U6  MEM_DMB3           
+set_location_assignment PIN_J34   -to ddr3_rzq        ; ## RZQ
 
+
+## set_location_assignment PIN_G32   -to ddr3_a[14]      ; ## 1.5 V   J4  MEM_ADDR_CMD14     
+## set_location_assignment PIN_E32   -to ddr3_a[15]      ; ## 1.5 V   K4  MEM_ADDR_CMD15     
+## set_location_assignment PIN_T33   -to ddr3_cke_1      ; ## 1.5 V   M5  MEM_ADDR_CMD21     
+## set_location_assignment PIN_P34   -to ddr3_cs_n_1     ; ## 1.5 V   R4  MEM_ADDR_CMD23     
+## set_location_assignment PIN_P33   -to ddr3_odt_1      ; ## 1.5 V   R3  MEM_ADDR_CMD25     
 ## E2  MEM_DQA32          set_location_assignment PIN_J28   1.5 V
 ## G16 MEM_DQA33          set_location_assignment PIN_G31   1.5 V
 ## R16 MEM_DQB32          set_location_assignment PIN_AF32  1.5 V
@@ -228,16 +229,16 @@ set_location_assignment PIN_T12   -to gpio_bd[24] ; ## pb0-s3
 set_location_assignment PIN_U12   -to gpio_bd[25] ; ## pb1-s2
 set_location_assignment PIN_U11   -to gpio_bd[26] ; ## pb2-s1
 
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[0]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[1]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[2]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[3]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[4]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[5]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[6]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[7]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[8]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[9]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[0] 
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[1] 
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[2] 
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[3] 
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[4] 
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[5] 
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[6] 
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[7] 
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[8] 
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[9] 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[10]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[11]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd[12]

@@ -209,17 +209,17 @@ module system_top (
   wire    [31:0]  dac_gpio_output;
 
   ad_iobuf #(.DATA_WIDTH(29)) i_iobuf (
-    .dt ({gpio_t[48:32], gpio_t[11:0]}),
-    .di ({gpio_o[48:32], gpio_o[11:0]}),
-    .do ({gpio_i[48:32], gpio_i[11:0]}),
-    .dio ({ gpio_txnrx,   // 48
-            gpio_enable,  // 47
-            gpio_resetb,  // 46
-            gpio_sync,    // 45
-            gpio_en_agc,  // 44
-            gpio_ctl,     // 40
-            gpio_status,  // 32
-            gpio_bd}));   // 0
+    .dio_t ({gpio_t[48:32], gpio_t[11:0]}),
+    .dio_i ({gpio_o[48:32], gpio_o[11:0]}),
+    .dio_o ({gpio_i[48:32], gpio_i[11:0]}),
+    .dio_p ({ gpio_txnrx,   // 48
+              gpio_enable,  // 47
+              gpio_resetb,  // 46
+              gpio_sync,    // 45
+              gpio_en_agc,  // 44
+              gpio_ctl,     // 40
+              gpio_status,  // 32
+              gpio_bd}));   // 0
 
   prcfg_system_top i_prcfg_system_top (
     .clk(clk),

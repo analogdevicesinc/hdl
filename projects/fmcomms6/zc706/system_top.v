@@ -203,16 +203,16 @@ module system_top (
     .spi_sdio (spi_sdio));
 
   ad_iobuf #(.DATA_WIDTH(1)) i_iobuf (
-    .dt (gpio_t[32]),
-    .di (gpio_o[32]),
-    .do (gpio_i[32]),
-    .dio (adf4351_ld));
+    .dio_t (gpio_t[32]),
+    .dio_i (gpio_o[32]),
+    .dio_o (gpio_i[32]),
+    .dio_p (adf4351_ld));
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
-    .dt (gpio_t[14:0]),
-    .di (gpio_o[14:0]),
-    .do (gpio_i[14:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[14:0]),
+    .dio_i (gpio_o[14:0]),
+    .dio_o (gpio_i[14:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .adc_clk (adc_clk),
