@@ -313,7 +313,7 @@ proc axi_dmac_elaborate {} {
   }
 
   if {[get_parameter_value C_DMA_TYPE_SRC] == 2} {
-    ad_alt_intf clock   fifo_wr_clock     input   1                       adc_clk
+    ad_alt_intf clock   fifo_wr_clk       input   1                       adc_clk
     ad_alt_intf signal  fifo_wr_en        input   1                       adc_valid
     ad_alt_intf signal  fifo_wr_din       input   C_DMA_DATA_WIDTH_SRC    adc_data
     ad_alt_intf signal  fifo_wr_overflow  output  1                       adc_dovf
