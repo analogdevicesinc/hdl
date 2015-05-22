@@ -63,16 +63,17 @@ module ad_jesd_align (
   reg     [31:0]  rx_ip_data_d = 'd0;
   reg     [ 3:0]  rx_ip_sof_hold = 'd0;
   reg             rx_sof = 'd0;
+  reg             rx_ip_sof_d = 'd0;
   reg     [31:0]  rx_data = 'd0;
 
   // dword may contain more than one frame per clock
-
   always @(posedge rx_clk) begin
     rx_ip_data_d <= rx_ip_data;
+    rx_ip_sof_d <= rx_ip_sof;
     if (rx_ip_sof != 4'h0) begin
       rx_ip_sof_hold <= rx_ip_sof;
     end
-    rx_sof <= |rx_ip_sof;
+    rx_sof <= |rx_ip_sof_d;
     if (rx_ip_sof_hold[0] == 1'b1) begin
       rx_data <= rx_ip_data;
     end else if (rx_ip_sof_hold[1] == 1'b1) begin
