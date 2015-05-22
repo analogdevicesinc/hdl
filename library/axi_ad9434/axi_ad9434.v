@@ -152,14 +152,13 @@ module axi_ad9434 (
   wire    [ 1:0]  up_status_or_s;
   wire            adc_status_s;
 
-  wire            delay_rst_s;
-  wire            delay_sel_s;
-  wire            delay_rwn_s;
-  wire    [ 7:0]  delay_addr_s;
-  wire    [ 4:0]  delay_wdata_s;
-  wire    [ 4:0]  delay_rdata_s;
-  wire            delay_ack_t_s;
+  wire    [12:0]  up_dld_s;
+  wire    [64:0]  up_dwdata_s;
+  wire    [64:0]  up_drdata_s;
+  wire            delay_clk_s;
+  wire            delay_rst;
   wire            delay_locked_s;
+
 
   wire            drp_sel_s;
   wire            drp_rst_s;
@@ -196,15 +195,13 @@ module axi_ad9434 (
     .adc_clk(adc_clk),
     .adc_rst(adc_rst),
     .adc_status(adc_status_s),
-    .delay_clk(delay_clk),
-    .delay_rst(delay_rst_s),
-    .delay_sel(delay_sel_s),
-    .delay_rwn(delay_rwn_s),
-    .delay_addr(delay_addr_s),
-    .delay_wdata(delay_wdata_s),
-    .delay_rdata(delay_rdata_s),
-    .delay_ack_t(delay_ack_t_s),
-    .delay_locked(delay_locked_s),
+    .up_clk (up_clk),
+    .up_adc_dld (up_dld_s),
+    .up_adc_dwdata (up_dwdata_s),
+    .up_adc_drdata (up_drdata_s),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked_s),
     .mmcm_rst(mmcm_rst),
     .drp_clk(drp_clk),
     .drp_rst(drp_rst_s),
@@ -228,14 +225,11 @@ module axi_ad9434 (
     .dma_dvalid (adc_valid),
     .dma_data (adc_data),
     .dma_dovf (adc_dovf),
+    .up_dld (up_dld_s),
+    .up_dwdata (up_dwdata_s),
+    .up_drdata (up_drdata_s),
     .delay_clk (delay_clk),
-    .delay_rst (delay_rst_s),
-    .delay_sel (delay_sel_s),
-    .delay_rwn (delay_rwn_s),
-    .delay_addr (delay_addr_s),
-    .delay_wdata (delay_wdata_s),
-    .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t_s),
+    .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),
     .drp_clk (drp_clk),
     .drp_rst (drp_rst_s),
