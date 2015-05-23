@@ -156,16 +156,16 @@ module system_top (
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi (
-    .dt (gpio_t[32]),
-    .di (gpio_o[32]),
-    .do (gpio_i[32]),
-    .dio (hdmi_rx_int));
+    .dio_t (gpio_t[32]),
+    .dio_i (gpio_o[32]),
+    .dio_o (gpio_i[32]),
+    .dio_p (hdmi_rx_int));
 
   ad_iobuf #(.DATA_WIDTH(15)) i_gpio_bd (
-    .dt (gpio_t[14:0]),
-    .di (gpio_o[14:0]),
-    .do (gpio_i[14:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[14:0]),
+    .dio_i (gpio_o[14:0]),
+    .dio_o (gpio_i[14:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

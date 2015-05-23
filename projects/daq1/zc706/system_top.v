@@ -305,17 +305,17 @@ module system_top (
     .spi_sdio (spi_sdio));
 
   ad_iobuf #(.DATA_WIDTH(23)) i_iobuf (
-    .dt({gpio_t[39:32], gpio_t[14:0]}),
-    .di({gpio_o[39:32], gpio_o[14:0]}),
-    .do({gpio_i[39:32], gpio_i[14:0]}),
-    .dio({gpio_adc_fdb,     // 39
-          gpio_adc_fda,     // 38
-          gpio_dac_irqn,    // 37
-          gpio_clkd_status, // 36:35
-          gpio_clkd_pdn,    // 34
-          gpio_clkd_syncn,  // 33
-          gpio_resetn,      // 32
-          gpio_bd}));       // 14:0
+    .dio_t({gpio_t[39:32], gpio_t[14:0]}),
+    .dio_i({gpio_o[39:32], gpio_o[14:0]}),
+    .dio_o({gpio_i[39:32], gpio_i[14:0]}),
+    .dio_p({gpio_adc_fdb,     // 39
+            gpio_adc_fda,     // 38
+            gpio_dac_irqn,    // 37
+            gpio_clkd_status, // 36:35
+            gpio_clkd_pdn,    // 34
+            gpio_clkd_syncn,  // 33
+            gpio_resetn,      // 32
+            gpio_bd}));       // 14:0
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

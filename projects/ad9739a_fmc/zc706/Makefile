@@ -13,10 +13,10 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../common/ad9739a_fmc_bd.tcl
 M_DEPS += ../../../library/axi_ad9739a/axi_ad9739a.xpr
-M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
-M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
+M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
+M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -34,7 +34,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib ad9739a_fmc_zc706.xpr
+all: lib ad9739a_fmc_zc706.sdk/system_top.hdf
 
 
 clean: 
@@ -43,23 +43,23 @@ clean:
 
 clean-all:clean
 	make -C ../../../library/axi_ad9739a clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/axi_clkgen clean
+	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_hdmi_tx clean
+	make -C ../../../library/axi_spdif_tx clean
 
 
-ad9739a_fmc_zc706.xpr: $(M_DEPS)
+ad9739a_fmc_zc706.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> ad9739a_fmc_zc706_vivado.log 2>&1
 
 
 lib:
 	make -C ../../../library/axi_ad9739a
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_spdif_tx
 	make -C ../../../library/axi_clkgen
+	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_hdmi_tx
+	make -C ../../../library/axi_spdif_tx
 
 ####################################################################################
 ####################################################################################

@@ -148,10 +148,10 @@ module system_top (
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
-    .dt (gpio_t[16:0]),
-    .di (gpio_o[16:0]),
-    .do (gpio_i[16:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[16:0]),
+    .dio_i (gpio_o[16:0]),
+    .dio_o (gpio_i[16:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .c0_ddr4_act_n (ddr4_act_n),

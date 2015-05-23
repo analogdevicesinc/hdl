@@ -5,23 +5,10 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_ad7175_ip.tcl
-M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/up_axi.v
-M_DEPS += ../common/up_delay_cntrl.v
-M_DEPS += ../common/up_drp_cntrl.v
-M_DEPS += ../common/up_xfer_cntrl.v
-M_DEPS += ../common/up_xfer_status.v
-M_DEPS += ../common/up_clock_mon.v
-M_DEPS += ../common/up_adc_channel.v
-M_DEPS += up_adc_common.v
-M_DEPS += ad_datafmt.v
-M_DEPS += ad7175_if.v
-M_DEPS += axi_ad7175.v
-M_DEPS += axi_ad7175_channel.v
-M_DEPS += clk_div.v
+M_DEPS := cn0363_dma_sequencer_ip.tcl
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_ip.tcl
+M_DEPS += cn0363_dma_sequencer.v
 
 M_VIVADO := vivado -mode batch -source
 
@@ -37,7 +24,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all clean clean-all
-all: axi_ad7175.xpr
+all: cn0363_dma_sequencer.xpr
 
 
 clean:clean-all
@@ -47,9 +34,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-axi_ad7175.xpr: $(M_DEPS)
+cn0363_dma_sequencer.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_VIVADO) axi_ad7175_ip.tcl  >> axi_ad7175_ip.log 2>&1
+	$(M_VIVADO) cn0363_dma_sequencer_ip.tcl  >> cn0363_dma_sequencer_ip.log 2>&1
 
 ####################################################################################
 ####################################################################################

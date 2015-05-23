@@ -2,6 +2,7 @@
 
 package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
+source ../scripts/adi_ip_alt.tcl
 
 set_module_property NAME axi_ad9680
 set_module_property DESCRIPTION "AXI AD9680 Interface"
@@ -71,26 +72,23 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # transceiver interface
 
-add_interface xcvr_clk clock end
-add_interface_port xcvr_clk rx_clk clk Input 1
+add_interface if_rx_clk clock end
+add_interface_port if_rx_clk rx_clk clk Input 1
 
-add_interface xcvr_data conduit end
-set_interface_property xcvr_data associatedClock xcvr_clk
-add_interface_port xcvr_data rx_data data Input 128
+add_interface if_rx_data avalon_streaming end
+set_interface_property if_rx_data associatedClock if_rx_clk
+set_interface_property if_rx_data dataBitsPerSymbol 128
+add_interface_port if_rx_data rx_data data Input 128
 
 # dma interface
 
-add_interface adc_clock clock start
-add_interface_port adc_clock adc_clk clk Output 1
-
-add_interface adc_dma_if conduit start
-set_interface_property adc_dma_if associatedClock adc_clock
-add_interface_port adc_dma_if adc_valid_0 adc_valid_0 Output 1
-add_interface_port adc_dma_if adc_enable_0 adc_enable_0 Output 1
-add_interface_port adc_dma_if adc_data_0 adc_data_0 Input 64
-add_interface_port adc_dma_if adc_valid_1 adc_valid_1 Output 1
-add_interface_port adc_dma_if adc_enable_1 adc_enable_1 Output 1
-add_interface_port adc_dma_if adc_data_1 adc_data_1 Input 64
-add_interface_port adc_dma_if adc_dovf adc_dovf Input 1
-add_interface_port adc_dma_if adc_dunf adc_dunf Input 1
+ad_alt_intf clock   adc_clock     output  1
+ad_alt_intf signal  adc_valid_0   output  1
+ad_alt_intf signal  adc_enable_0  output  1
+ad_alt_intf signal  adc_data_0    output  64
+ad_alt_intf signal  adc_valid_1   output  1
+ad_alt_intf signal  adc_enable_1  output  1
+ad_alt_intf signal  adc_data_1    output  64
+ad_alt_intf signal  adc_dovf      input   1
+ad_alt_intf signal  adc_dunf      input   1
 

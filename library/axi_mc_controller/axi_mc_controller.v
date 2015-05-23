@@ -38,9 +38,6 @@
 `timescale 1ns/100ps
 
 module axi_mc_controller
-#(
-    parameter C_S_AXI_MIN_SIZE = 32'hffff
-)
 (
   input           ref_clk,       // 100 MHz
   input           ctrl_data_clk,
@@ -308,7 +305,7 @@ control_registers control_reg_inst(
     .gpo_o(gpo_o),
     .reference_speed_o(),
     .oloop_matlab_o(foc_ctrl_s),
-    .err_i(),
+    .err_i(32'h0),
     .calibrate_adcs_o(),
     .pwm_open_o(pwm_open_s));
 
@@ -691,23 +688,14 @@ up_adc_common i_up_adc_common(
     .adc_pin_mode(),
     .adc_status(1'b1),
     .adc_sync_status(1'b1),
-    .adc_status_ovf(),
-    .adc_status_unf(),
+    .adc_status_ovf(1'b0),
+    .adc_status_unf(1'b0),
     .adc_clk_ratio(32'd1),
     .adc_start_code(),
     .adc_sync(),
     .up_status_pn_err(1'b0),
     .up_status_pn_oos(1'b0),
     .up_status_or(1'b0),
-    .delay_clk(1'b0),
-    .delay_rst(),
-    .delay_sel(),
-    .delay_rwn(),
-    .delay_addr(),
-    .delay_wdata(),
-    .delay_rdata(5'd0),
-    .delay_ack_t(1'b0),
-    .delay_locked(1'b0),
     .drp_clk(1'd0),
     .drp_rst(),
     .drp_sel(),

@@ -10,7 +10,6 @@ M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_pmod_adc_constr.xdc
 M_DEPS += util_pmod_adc.v
-M_DEPS += 
 
 M_VIVADO := vivado -mode batch -source
 

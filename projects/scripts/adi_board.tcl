@@ -25,12 +25,12 @@ proc ad_connect_type {p_name} {
 
   set m_name ""
 
-  if {$m_name eq ""} {set m_name [get_bd_pins       -quiet $p_name]}
   if {$m_name eq ""} {set m_name [get_bd_intf_pins  -quiet $p_name]}
-  if {$m_name eq ""} {set m_name [get_bd_ports      -quiet $p_name]}
+  if {$m_name eq ""} {set m_name [get_bd_pins       -quiet $p_name]}
   if {$m_name eq ""} {set m_name [get_bd_intf_ports -quiet $p_name]}
-  if {$m_name eq ""} {set m_name [get_bd_nets       -quiet $p_name]}
+  if {$m_name eq ""} {set m_name [get_bd_ports      -quiet $p_name]}
   if {$m_name eq ""} {set m_name [get_bd_intf_nets  -quiet $p_name]}
+  if {$m_name eq ""} {set m_name [get_bd_nets       -quiet $p_name]}
 
   return $m_name
 }

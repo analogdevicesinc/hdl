@@ -46,56 +46,69 @@ module system_top (
 
   // ddr3
 
-  ddr3_a,
-  ddr3_ba,
   ddr3_clk_p,
   ddr3_clk_n,
+  ddr3_a,
+  ddr3_ba,
   ddr3_cke,
   ddr3_cs_n,
-  ddr3_dm,
+  ddr3_odt,
+  ddr3_reset_n,
+  ddr3_we_n,
   ddr3_ras_n,
   ddr3_cas_n,
-  ddr3_we_n,
-  ddr3_reset_n,
-  ddr3_dq,
   ddr3_dqs_p,
   ddr3_dqs_n,
-  ddr3_odt,
+  ddr3_dq,
+  ddr3_dm,
   ddr3_rzq,
+  ddr3_ref_clk,
 
   // ethernet
 
-  eth_rx_clk,
-  eth_rx_data,
-  eth_rx_cntrl,
-  eth_tx_clk_out,
-  eth_tx_data,
-  eth_tx_cntrl,
+  eth_ref_clk,
+  eth_rxd,
+  eth_txd,
   eth_mdc,
-  eth_mdio_i,
-  eth_mdio_o,
-  eth_mdio_t,
-  eth_phy_resetn,
+  eth_mdio,
+  eth_resetn,
+  eth_intn,
 
   // board gpio
 
-  led_grn,
-  led_red,
-  push_buttons,
-  dip_switches,
+  gpio_bd,
 
   // lane interface
 
-  ref_clk,
-  rx_data,
-  rx_sync,
+  rx_ref_clk,
   rx_sysref,
+  rx_sync,
+  rx_data,
+  tx_ref_clk,
+  tx_sysref,
+  tx_sync,
+  tx_data,
+
+  // gpio
+
+  trig,
+  adc_fdb,
+  adc_fda,
+  dac_irq,
+  clkd_status,
+  adc_pd,
+  dac_txen,
+  dac_reset,
+  clkd_sync,
 
   // spi
 
-  spi_csn,
+  spi_csn_clk,
+  spi_csn_dac,
+  spi_csn_adc,
   spi_clk,
-  spi_sdio);
+  spi_sdio,
+  spi_dir);
 
   // clock and resets
 
@@ -104,322 +117,178 @@ module system_top (
 
   // ddr3
 
-  output  [ 13:0]   ddr3_a;
-  output  [  2:0]   ddr3_ba;
   output            ddr3_clk_p;
   output            ddr3_clk_n;
+  output  [ 13:0]   ddr3_a;
+  output  [  2:0]   ddr3_ba;
   output            ddr3_cke;
   output            ddr3_cs_n;
-  output  [  7:0]   ddr3_dm;
+  output            ddr3_odt;
+  output            ddr3_reset_n;
+  output            ddr3_we_n;
   output            ddr3_ras_n;
   output            ddr3_cas_n;
-  output            ddr3_we_n;
-  output            ddr3_reset_n;
-  inout   [ 63:0]   ddr3_dq;
   inout   [  7:0]   ddr3_dqs_p;
   inout   [  7:0]   ddr3_dqs_n;
-  output            ddr3_odt;
+  inout   [ 63:0]   ddr3_dq;
+  output  [  7:0]   ddr3_dm;
   input             ddr3_rzq;
+  input             ddr3_ref_clk;
 
   // ethernet
 
-  input             eth_rx_clk;
-  input   [  3:0]   eth_rx_data;
-  input             eth_rx_cntrl;
-  output            eth_tx_clk_out;
-  output  [  3:0]   eth_tx_data;
-  output            eth_tx_cntrl;
+  input             eth_ref_clk;
+  input             eth_rxd;
+  output            eth_txd;
   output            eth_mdc;
-  input             eth_mdio_i;
-  output            eth_mdio_o;
-  output            eth_mdio_t;
-  output            eth_phy_resetn;
+  inout             eth_mdio;
+  output            eth_resetn;
+  input             eth_intn;
 
   // board gpio
 
-  output  [  7:0]   led_grn;
-  output  [  7:0]   led_red;
-  input   [  2:0]   push_buttons;
-  input   [  7:0]   dip_switches;
+  inout   [ 26:0]   gpio_bd;
 
   // lane interface
 
-  input             ref_clk;
-  input   [  3:0]   rx_data;
+  input             rx_ref_clk;
+  input             rx_sysref;
   output            rx_sync;
-  output            rx_sysref;
+  input   [  3:0]   rx_data;
+  input             tx_ref_clk;
+  input             tx_sysref;
+  input             tx_sync;
+  output  [  3:0]   tx_data;
+
+  // gpio
+
+  input             trig;
+  inout             adc_fdb;
+  inout             adc_fda;
+  inout             dac_irq;
+  inout   [  1:0]   clkd_status;
+  inout             adc_pd;
+  inout             dac_txen;
+  inout             dac_reset;
+  inout             clkd_sync;
 
   // spi
 
-  output            spi_csn;
+  output            spi_csn_clk;
+  output            spi_csn_dac;
+  output            spi_csn_adc;
   output            spi_clk;
   inout             spi_sdio;
-
-  // internal registers
-
-  reg               rx_sysref_m1 = 'd0;
-  reg               rx_sysref_m2 = 'd0;
-  reg               rx_sysref_m3 = 'd0;
-  reg               rx_sysref = 'd0;
-  reg               dma0_wr = 'd0;
-  reg     [ 63:0]   dma0_wdata = 'd0;
-  reg               dma1_wr = 'd0;
-  reg     [ 63:0]   dma1_wdata = 'd0;
-  reg     [  3:0]   phy_rst_cnt = 0;
-  reg               phy_rst_reg = 0;
-
-
-  // internal clocks and resets
-
-  wire              sys_125m_clk;
-  wire              sys_25m_clk;
-  wire              sys_2m5_clk;
-  wire              eth_tx_clk;
-  wire              rx_clk;
-  wire              adc0_clk;
-  wire              adc1_clk;
+  output            spi_dir;
 
   // internal signals
 
-  wire              sys_pll_locked_s;
-  wire              eth_tx_reset_s;
-  wire              eth_tx_mode_1g_s;
-  wire              eth_tx_mode_10m_100m_n_s;
-  wire              spi_mosi;
-  wire              spi_miso;
-  wire              adc0_enable_a_s;
-  wire    [ 31:0]   adc0_data_a_s;
-  wire              adc0_enable_b_s;
-  wire    [ 31:0]   adc0_data_b_s;
-  wire              adc0_dovf_s;
-  wire              adc1_enable_a_s;
-  wire    [ 31:0]   adc1_data_a_s;
-  wire              adc1_enable_b_s;
-  wire    [ 31:0]   adc1_data_b_s;
-  wire              adc1_dovf_s;
-  wire    [  3:0]   rx_ip_sof_s;
-  wire    [127:0]   rx_ip_data_s;
-  wire    [127:0]   rx_data_s;
-  wire              rx_sw_rstn_s;
-  wire              rx_sysref_s;
-  wire              rx_err_s;
-  wire              rx_ready_s;
-  wire    [  3:0]   rx_rst_state_s;
-  wire              rx_lane_aligned_s;
-  wire    [  3:0]   rx_analog_reset_s;
-  wire    [  3:0]   rx_digital_reset_s;
-  wire    [  3:0]   rx_cdr_locked_s;
-  wire    [  3:0]   rx_cal_busy_s;
-  wire              rx_pll_locked_s;
-  wire    [ 15:0]   rx_xcvr_status_s;
+  wire              ddr3_cal_pass;
+  wire              ddr3_cal_fail;
+  wire              eth_mdio_i;
+  wire              eth_mdio_o;
+  wire              eth_mdio_t;
+  wire    [ 63:0]   gpio_i;
+  wire    [ 63:0]   gpio_o;
+  wire              spi_miso_s;
+  wire              spi_mosi_s;
+  wire    [  7:0]   spi_csn_s;
 
-  // ethernet transmit clock
+  // daq2
 
-  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
-    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
-
-  assign eth_phy_resetn = phy_rst_reg;
-
-  always@ (posedge eth_mdc) begin
-    phy_rst_cnt <= phy_rst_cnt + 4'd1;
-    if (phy_rst_cnt == 4'h0) begin
-      phy_rst_reg <= sys_pll_locked_s;
-    end
-  end
-
-  altddio_out #(.width(1)) i_eth_tx_clk_out (
-    .aset (1'b0),
-    .sset (1'b0),
-    .sclr (1'b0),
-    .oe (1'b1),
-    .oe_out (),
-    .datain_h (1'b1),
-    .datain_l (1'b0),
-    .outclocken (1'b1),
-    .aclr (eth_tx_reset_s),
-    .outclock (eth_tx_clk),
-    .dataout (eth_tx_clk_out));
-
-  assign eth_tx_reset_s = ~sys_pll_locked_s;
-
-  always @(posedge rx_clk) begin
-    rx_sysref_m1 <= rx_sysref_s;
-    rx_sysref_m2 <= rx_sysref_m1;
-    rx_sysref_m3 <= rx_sysref_m2;
-    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
-  end
-
-  always @(posedge rx_clk) begin
-    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
-    dma0_wdata <= { adc0_data_b_s[31:16],
-                    adc0_data_a_s[31:16],
-                    adc0_data_b_s[15: 0],
-                    adc0_data_a_s[15: 0]};
-    dma1_wr <= adc1_enable_a_s & adc1_enable_b_s;
-    dma1_wdata <= { adc1_data_b_s[31:16],
-                    adc1_data_a_s[31:16],
-                    adc1_data_b_s[15: 0],
-                    adc1_data_a_s[15: 0]};
-  end
-
-  sld_signaltap #(
-    .sld_advanced_trigger_entity ("basic,1,"),
-    .sld_data_bits (130),
-    .sld_data_bit_cntr_bits (8),
-    .sld_enable_advanced_trigger (0),
-    .sld_mem_address_bits (10),
-    .sld_node_crc_bits (32),
-    .sld_node_crc_hiword (10311),
-    .sld_node_crc_loword (14297),
-    .sld_node_info (1076736),
-    .sld_ram_block_type ("AUTO"),
-    .sld_sample_depth (1024),
-    .sld_storage_qualifier_gap_record (0),
-    .sld_storage_qualifier_mode ("OFF"),
-    .sld_trigger_bits (2),
-    .sld_trigger_in_enabled (0),
-    .sld_trigger_level (1),
-    .sld_trigger_level_pipeline (1))
-  i_signaltap (
-    .acq_clk (rx_clk),
-    .acq_data_in ({ rx_sysref,
-                    rx_sync,
-                    adc1_data_b_s,
-                    adc1_data_a_s,
-                    adc0_data_b_s,
-                    adc0_data_a_s}),
-    .acq_trigger_in ({rx_sysref, rx_sync}));
-
-  genvar n;
-  generate
-  for (n = 0; n < 4; n = n + 1) begin: g_align_1
-  ad_jesd_align i_jesd_align (
-    .rx_clk (rx_clk),
-    .rx_sof (rx_ip_sof_s),
-    .rx_ip_data (rx_ip_data_s[n*32+31:n*32]),
-    .rx_data (rx_data_s[n*32+31:n*32]));
-  end
-  endgenerate
-
-  assign rx_xcvr_status_s[15:15] = 1'd0;
-  assign rx_xcvr_status_s[14:14] = rx_sync;
-  assign rx_xcvr_status_s[13:13] = rx_ready_s;
-  assign rx_xcvr_status_s[12:12] = rx_pll_locked_s;
-  assign rx_xcvr_status_s[11: 8] = rx_rst_state_s;
-  assign rx_xcvr_status_s[ 7: 4] = rx_cdr_locked_s;
-  assign rx_xcvr_status_s[ 3: 0] = rx_cal_busy_s;
-
-  ad_xcvr_rx_rst #(.NUM_OF_LANES (4)) i_xcvr_rx_rst (
-    .rx_clk (rx_clk),
-    .rx_rstn (sys_resetn),
-    .rx_sw_rstn (rx_sw_rstn_s),
-    .rx_pll_locked (rx_pll_locked_s),
-    .rx_cal_busy (rx_cal_busy_s),
-    .rx_cdr_locked (rx_cdr_locked_s),
-    .rx_analog_reset (rx_analog_reset_s),
-    .rx_digital_reset (rx_digital_reset_s),
-    .rx_ready (rx_ready_s),
-    .rx_rst_state (rx_rst_state_s));
+  assign spi_csn_adc = spi_csn_s[2];
+  assign spi_csn_dac = spi_csn_s[1];
+  assign spi_csn_clk = spi_csn_s[0];
 
   daq2_spi i_daq2_spi (
-    .spi_csn (spi_csn),
+    .spi_csn (spi_csn_s[2:0]),
     .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi),
-    .spi_miso (spi_miso),
-    .spi_sdio (spi_sdio));
+    .spi_mosi (spi_mosi_s),
+    .spi_miso (spi_miso_s),
+    .spi_sdio (spi_sdio),
+    .spi_dir (spi_dir));
+
+  assign gpio_i[63:44] = 19'd0;
+  assign gpio_i[43] = trig;
+  assign gpio_i[39] = 1'd0;
+  assign gpio_i[37] = 1'd0;
+
+  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
+    .dio_t ({3'h0, 1'h0, 5'h1f}),
+    .dio_i ({gpio_o[42:40], gpio_o[38], gpio_o[36:32]}),
+    .dio_o ({gpio_i[42:40], gpio_i[38], gpio_i[36:32]}),
+    .dio_p ({ adc_pd,           // 42
+              dac_txen,         // 41
+              dac_reset,        // 40
+              clkd_sync,        // 38
+              adc_fdb,          // 36
+              adc_fda,          // 35
+              dac_irq,          // 34
+              clkd_status}));   // 32
+
+  // board stuff
+
+  assign eth_resetn = 1'b1;
+  assign eth_mdio_i = eth_mdio;
+  assign eth_mdio = (eth_mdio_t == 1'b1) ? 1'bz : eth_mdio_o;
+
+  assign gpio_i[31] = 1'd0;
+  assign gpio_i[30] = 1'd0;
+  assign gpio_i[29] = 1'd0;
+  assign gpio_i[28] = ddr3_cal_fail;
+  assign gpio_i[27] = ddr3_cal_pass;
+
+  ad_iobuf #(.DATA_WIDTH(27)) i_iobuf_bd (
+    .dio_t ({11'h7ff, 16'h0}),
+    .dio_i (gpio_o[26:0]),
+    .dio_o (gpio_i[26:0]),
+    .dio_p (gpio_bd));
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
-    .sys_reset_reset_n (sys_resetn),
-    .sys_125m_clk_clk (sys_125m_clk),
-    .sys_25m_clk_clk (sys_25m_clk),
-    .sys_2m5_clk_clk (sys_2m5_clk),
-    .sys_ddr3_phy_mem_a (ddr3_a),
-    .sys_ddr3_phy_mem_ba (ddr3_ba),
-    .sys_ddr3_phy_mem_ck (ddr3_clk_p),
-    .sys_ddr3_phy_mem_ck_n (ddr3_clk_n),
-    .sys_ddr3_phy_mem_cke (ddr3_cke),
-    .sys_ddr3_phy_mem_cs_n (ddr3_cs_n),
-    .sys_ddr3_phy_mem_dm (ddr3_dm),
-    .sys_ddr3_phy_mem_ras_n (ddr3_ras_n),
-    .sys_ddr3_phy_mem_cas_n (ddr3_cas_n),
-    .sys_ddr3_phy_mem_we_n (ddr3_we_n),
-    .sys_ddr3_phy_mem_reset_n (ddr3_reset_n),
-    .sys_ddr3_phy_mem_dq (ddr3_dq),
-    .sys_ddr3_phy_mem_dqs (ddr3_dqs_p),
-    .sys_ddr3_phy_mem_dqs_n (ddr3_dqs_n),
-    .sys_ddr3_phy_mem_odt (ddr3_odt),
-    .sys_ddr3_oct_rzqin (ddr3_rzq),
-    .sys_ethernet_tx_clk_clk (eth_tx_clk),
-    .sys_ethernet_rx_clk_clk (eth_rx_clk),
-    .sys_ethernet_status_set_10 (),
-    .sys_ethernet_status_set_1000 (),
-    .sys_ethernet_status_eth_mode (eth_tx_mode_1g_s),
-    .sys_ethernet_status_ena_10 (eth_tx_mode_10m_100m_n_s),
-    .sys_ethernet_rgmii_rgmii_in (eth_rx_data),
-    .sys_ethernet_rgmii_rgmii_out (eth_tx_data),
-    .sys_ethernet_rgmii_rx_control (eth_rx_cntrl),
-    .sys_ethernet_rgmii_tx_control (eth_tx_cntrl),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_ck (ddr3_clk_p),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_ck_n (ddr3_clk_n),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_a (ddr3_a),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_ba (ddr3_ba),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_cke (ddr3_cke),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_cs_n (ddr3_cs_n),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_odt (ddr3_odt),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_reset_n (ddr3_reset_n),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_we_n (ddr3_we_n),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_ras_n (ddr3_ras_n),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_cas_n (ddr3_cas_n),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_dqs (ddr3_dqs_p),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_dqs_n (ddr3_dqs_n),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_dq (ddr3_dq),
+    .sys_ddr3_cntrl_mem_conduit_end_mem_dm (ddr3_dm),
+    .sys_ddr3_cntrl_oct_conduit_end_oct_rzqin (ddr3_rzq),
+    .sys_ddr3_cntrl_ref_clk_clk (ddr3_ref_clk),
+    .sys_ddr3_cntrl_status_conduit_end_local_cal_success (ddr3_cal_pass),
+    .sys_ddr3_cntrl_status_conduit_end_local_cal_fail (ddr3_cal_fail),
     .sys_ethernet_mdio_mdc (eth_mdc),
     .sys_ethernet_mdio_mdio_in (eth_mdio_i),
     .sys_ethernet_mdio_mdio_out (eth_mdio_o),
     .sys_ethernet_mdio_mdio_oen (eth_mdio_t),
-    .sys_gpio_in_port ({rx_xcvr_status_s, 5'd0, push_buttons, dip_switches}),
-    .sys_gpio_out_port ({14'd0, rx_sw_rstn_s, rx_sysref_s, led_grn, led_red}),
-    .sys_spi_MISO (spi_miso),
-    .sys_spi_MOSI (spi_mosi),
+    .sys_ethernet_ref_clk_clk (eth_ref_clk),
+    .sys_ethernet_sgmii_rxp_0 (eth_rxd),
+    .sys_ethernet_sgmii_txp_0 (eth_txd),
+    .sys_gpio_in_port (gpio_i[63:32]),
+    .sys_gpio_out_port (gpio_o[63:32]),
+    .sys_gpio_bd_in_port (gpio_i[31:0]),
+    .sys_gpio_bd_out_port (gpio_o[31:0]),
+    .sys_reset_reset_n (sys_resetn),
+    .sys_spi_MISO (spi_miso_s),
+    .sys_spi_MOSI (spi_mosi_s),
     .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn),
-    .axi_ad9250_0_xcvr_clk_clk (rx_clk),
-    .axi_ad9250_0_xcvr_data_data (rx_data_s[63:0]),
-    .axi_ad9250_0_adc_clock_clk (adc0_clk),
-    .axi_ad9250_0_adc_dma_if_adc_valid_a (),
-    .axi_ad9250_0_adc_dma_if_adc_enable_a (adc0_enable_a_s),
-    .axi_ad9250_0_adc_dma_if_adc_data_a (adc0_data_a_s),
-    .axi_ad9250_0_adc_dma_if_adc_valid_b (),
-    .axi_ad9250_0_adc_dma_if_adc_enable_b (adc0_enable_b_s),
-    .axi_ad9250_0_adc_dma_if_adc_data_b (adc0_data_b_s),
-    .axi_ad9250_0_adc_dma_if_adc_dovf (adc0_dovf_s),
-    .axi_ad9250_0_adc_dma_if_adc_dunf (1'b0),
-    .axi_dmac_0_fifo_wr_clock_clk (adc0_clk),
-    .axi_dmac_0_fifo_wr_if_ovf (adc0_dovf_s),
-    .axi_dmac_0_fifo_wr_if_wren (dma0_wr),
-    .axi_dmac_0_fifo_wr_if_data (dma0_wdata),
-    .axi_dmac_0_fifo_wr_if_sync (1'b1),
-    .axi_ad9250_1_xcvr_clk_clk (rx_clk),
-    .axi_ad9250_1_xcvr_data_data (rx_data_s[127:64]),
-    .axi_ad9250_1_adc_clock_clk (adc1_clk),
-    .axi_ad9250_1_adc_dma_if_adc_valid_a (),
-    .axi_ad9250_1_adc_dma_if_adc_enable_a (adc1_enable_a_s),
-    .axi_ad9250_1_adc_dma_if_adc_data_a (adc1_data_a_s),
-    .axi_ad9250_1_adc_dma_if_adc_valid_b (),
-    .axi_ad9250_1_adc_dma_if_adc_enable_b (adc1_enable_b_s),
-    .axi_ad9250_1_adc_dma_if_adc_data_b (adc1_data_b_s),
-    .axi_ad9250_1_adc_dma_if_adc_dovf (adc1_dovf_s),
-    .axi_ad9250_1_adc_dma_if_adc_dunf (1'b0),
-    .axi_dmac_1_fifo_wr_clock_clk (adc1_clk),
-    .axi_dmac_1_fifo_wr_if_ovf (adc1_dovf_s),
-    .axi_dmac_1_fifo_wr_if_wren (dma1_wr),
-    .axi_dmac_1_fifo_wr_if_data (dma1_wdata),
-    .axi_dmac_1_fifo_wr_if_sync (1'b1),
-    .sys_jesd204b_s1_rx_link_data (rx_ip_data_s),
-    .sys_jesd204b_s1_rx_link_valid (),
-    .sys_jesd204b_s1_rx_link_ready (1'b1),
-    .sys_jesd204b_s1_lane_aligned_all_export (rx_lane_aligned_s),
-    .sys_jesd204b_s1_sysref_export (rx_sysref),
-    .sys_jesd204b_s1_rx_ferr_export (rx_err_s),
-    .sys_jesd204b_s1_lane_aligned_export (rx_lane_aligned_s),
-    .sys_jesd204b_s1_sync_n_export (rx_sync),
-    .sys_jesd204b_s1_rx_sof_export (rx_ip_sof_s),
-    .sys_jesd204b_s1_rx_xcvr_data_rx_serial_data (rx_data),
-    .sys_jesd204b_s1_rx_analogreset_rx_analogreset (rx_analog_reset_s),
-    .sys_jesd204b_s1_rx_digitalreset_rx_digitalreset (rx_digital_reset_s),
-    .sys_jesd204b_s1_locked_rx_is_lockedtodata (rx_cdr_locked_s),
-    .sys_jesd204b_s1_rx_cal_busy_rx_cal_busy (rx_cal_busy_s),
-    .sys_jesd204b_s1_ref_clk_clk (ref_clk),
-    .sys_jesd204b_s1_rx_clk_clk (rx_clk),
-    .sys_jesd204b_s1_pll_locked_export (rx_pll_locked_s),
-    .sys_pll_locked_export (sys_pll_locked_s));
+    .sys_spi_SS_n (spi_csn_s),
+    .sys_xcvr_rx_ref_clk_clk (rx_ref_clk),
+    .sys_xcvr_rx_sync_n_export (rx_sync),
+    .sys_xcvr_rx_sysref_export (rx_sysref),
+    .sys_xcvr_rxd_rx_serial_data (rx_data),
+    .sys_xcvr_tx_ref_clk_clk (tx_ref_clk),
+    .sys_xcvr_tx_sync_n_export (tx_sync),
+    .sys_xcvr_tx_sysref_export (tx_sysref),
+    .sys_xcvr_txd_tx_serial_data (tx_data));
 
 endmodule
 

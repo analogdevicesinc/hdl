@@ -13,9 +13,9 @@ M_DEPS += system_bd.tcl
 M_DEPS += ../../common/kcu105/kcu105_system_bd.tcl
 M_DEPS += ../common/adv7511_bd.tcl
 M_DEPS += ../../common/kcu105/kcu105_system_mig.tcl
-M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
+M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -33,7 +33,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib adv7511_kcu105.xpr
+all: lib adv7511_kcu105.sdk/system_top.hdf
 
 
 clean: 
@@ -41,20 +41,20 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/axi_hdmi_tx clean
+	make -C ../../../library/axi_spdif_tx clean
 
 
-adv7511_kcu105.xpr: $(M_DEPS)
+adv7511_kcu105.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> adv7511_kcu105_vivado.log 2>&1
 
 
 lib:
-	make -C ../../../library/axi_spdif_tx
 	make -C ../../../library/axi_clkgen
 	make -C ../../../library/axi_hdmi_tx
+	make -C ../../../library/axi_spdif_tx
 
 ####################################################################################
 ####################################################################################

@@ -16,15 +16,15 @@ create_bd_port -dir I -from 7 -to 0 rx_data_p
 create_bd_port -dir I -from 7 -to 0 rx_data_n
 
 create_bd_port -dir O -from 255 -to 0 gt_rx_data
-create_bd_port -dir O -from 3 -to 0 gt_rx_data_sof
+create_bd_port -dir O -from 3 -to 0 gt_rx_sof
 create_bd_port -dir I -from 63 -to 0 gt_rx_data_0
-create_bd_port -dir I gt_rx_data_sof_0
+create_bd_port -dir I gt_rx_sof_0
 create_bd_port -dir I -from 63 -to 0 gt_rx_data_1
-create_bd_port -dir I gt_rx_data_sof_1
+create_bd_port -dir I gt_rx_sof_1
 create_bd_port -dir I -from 63 -to 0 gt_rx_data_2
-create_bd_port -dir I gt_rx_data_sof_2
+create_bd_port -dir I gt_rx_sof_2
 create_bd_port -dir I -from 63 -to 0 gt_rx_data_3
-create_bd_port -dir I gt_rx_data_sof_3
+create_bd_port -dir I gt_rx_sof_3
 create_bd_port -dir O -from 127 -to 0 adc_data_0
 create_bd_port -dir O -from 127 -to 0 adc_data_1
 create_bd_port -dir O -from 127 -to 0 adc_data_2
@@ -190,15 +190,15 @@ ad_connect axi_usdrx1_gt/rx_ip_sync         axi_usdrx1_jesd/rx_sync
 ad_connect axi_usdrx1_gt/rx_ip_sof          axi_usdrx1_jesd/rx_start_of_frame
 ad_connect axi_usdrx1_gt/rx_ip_data         axi_usdrx1_jesd/rx_tdata
 ad_connect gt_rx_data                       axi_usdrx1_gt/rx_data
-ad_connect gt_rx_data_sof                   axi_usdrx1_gt/rx_data_sof
+ad_connect gt_rx_sof                        axi_usdrx1_gt/rx_sof
 ad_connect gt_rx_data_0                     axi_ad9671_core_0/rx_data
-ad_connect gt_rx_data_sof_0                 axi_ad9671_core_0/rx_data_sof
+ad_connect gt_rx_sof_0                      axi_ad9671_core_0/rx_sof
 ad_connect gt_rx_data_1                     axi_ad9671_core_1/rx_data
-ad_connect gt_rx_data_sof_1                 axi_ad9671_core_1/rx_data_sof
+ad_connect gt_rx_sof_1                      axi_ad9671_core_1/rx_sof
 ad_connect gt_rx_data_2                     axi_ad9671_core_2/rx_data
-ad_connect gt_rx_data_sof_2                 axi_ad9671_core_2/rx_data_sof
+ad_connect gt_rx_sof_2                      axi_ad9671_core_2/rx_sof
 ad_connect gt_rx_data_3                     axi_ad9671_core_3/rx_data
-ad_connect gt_rx_data_sof_3                 axi_ad9671_core_3/rx_data_sof
+ad_connect gt_rx_sof_3                      axi_ad9671_core_3/rx_sof
 ad_connect axi_ad9671_core_0/adc_clk        axi_usdrx1_dma/fifo_wr_clk
 ad_connect adc_data_0                       axi_ad9671_core_0/adc_data
 ad_connect adc_data_1                       axi_ad9671_core_1/adc_data

@@ -165,26 +165,26 @@ module system_top (
   ad_iobuf #(
     .DATA_WIDTH(32)
   ) i_iobuf (
-    .dt(gpio_t),
-    .di(gpio_o),
-    .do(gpio_i),
-    .dio(gpio_bd));
+    .dio_t(gpio_t),
+    .dio_i(gpio_o),
+    .dio_o(gpio_i),
+    .dio_p(gpio_bd));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iic_mux_scl (
-    .dt({iic_mux_scl_t_s, iic_mux_scl_t_s}),
-    .di(iic_mux_scl_o_s),
-    .do(iic_mux_scl_i_s),
-    .dio(iic_mux_scl));
+    .dio_t({iic_mux_scl_t_s, iic_mux_scl_t_s}),
+    .dio_i(iic_mux_scl_o_s),
+    .dio_o(iic_mux_scl_i_s),
+    .dio_p(iic_mux_scl));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iic_mux_sda (
-    .dt({iic_mux_sda_t_s, iic_mux_sda_t_s}),
-    .di(iic_mux_sda_o_s),
-    .do(iic_mux_sda_i_s),
-    .dio(iic_mux_sda));
+    .dio_t({iic_mux_sda_t_s, iic_mux_sda_t_s}),
+    .dio_i(iic_mux_sda_o_s),
+    .dio_o(iic_mux_sda_i_s),
+    .dio_p(iic_mux_sda));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

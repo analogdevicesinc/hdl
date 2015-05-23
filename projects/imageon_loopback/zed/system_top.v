@@ -195,40 +195,40 @@ module system_top (
     .Q (hdmi_tx_clk));
 
   ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi (
-    .dt (gpio_t[32]),
-    .di (gpio_o[32]),
-    .do (gpio_i[32]),
-    .dio (hdmiio_int));
+    .dio_t (gpio_t[32]),
+    .dio_i (gpio_o[32]),
+    .dio_o (gpio_i[32]),
+    .dio_p (hdmiio_int));
 
   ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi_iic_rstn (
-    .dt (gpio_t[33]),
-    .di (gpio_o[33]),
-    .do (gpio_i[33]),
-    .dio (hdmi_iic_rstn));
+    .dio_t (gpio_t[33]),
+    .dio_i (gpio_o[33]),
+    .dio_o (gpio_i[33]),
+    .dio_p (hdmi_iic_rstn));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
   ) i_iobuf (
-    .dt(gpio_t[31:0]),
-    .di(gpio_o[31:0]),
-    .do(gpio_i[31:0]),
-    .dio(gpio_bd));
+    .dio_t(gpio_t[31:0]),
+    .dio_i(gpio_o[31:0]),
+    .dio_o(gpio_i[31:0]),
+    .dio_p(gpio_bd));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iic_mux_scl (
-    .dt({iic_mux_scl_t_s, iic_mux_scl_t_s}),
-    .di(iic_mux_scl_o_s),
-    .do(iic_mux_scl_i_s),
-    .dio(iic_mux_scl));
+    .dio_t({iic_mux_scl_t_s, iic_mux_scl_t_s}),
+    .dio_i(iic_mux_scl_o_s),
+    .dio_o(iic_mux_scl_i_s),
+    .dio_p(iic_mux_scl));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iic_mux_sda (
-    .dt({iic_mux_sda_t_s, iic_mux_sda_t_s}),
-    .di(iic_mux_sda_o_s),
-    .do(iic_mux_sda_i_s),
-    .dio(iic_mux_sda));
+    .dio_t({iic_mux_sda_t_s, iic_mux_sda_t_s}),
+    .dio_i(iic_mux_sda_o_s),
+    .dio_o(iic_mux_sda_i_s),
+    .dio_p(iic_mux_sda));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

@@ -202,10 +202,10 @@ module system_top (
   // instantiations
 
  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf_sw_led (
-    .dt (gpio_t[12:0]),
-    .di (gpio_o[12:0]),
-    .do (gpio_i[12:0]),
-    .dio(gpio_bd));
+    .dio_t (gpio_t[12:0]),
+    .dio_i (gpio_o[12:0]),
+    .dio_o (gpio_i[12:0]),
+    .dio_p (gpio_bd));
 
   ODDR #(
     .DDR_CLK_EDGE ("SAME_EDGE"),

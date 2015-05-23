@@ -40,29 +40,28 @@
 `timescale 1ns/100ps
 
 module system_top (
+  ddr_addr,
+  ddr_ba,
+  ddr_cas_n,
+  ddr_ck_n,
+  ddr_ck_p,
+  ddr_cke,
+  ddr_cs_n,
+  ddr_dm,
+  ddr_dq,
+  ddr_dqs_n,
+  ddr_dqs_p,
+  ddr_odt,
+  ddr_ras_n,
+  ddr_reset_n,
+  ddr_we_n,
 
-  DDR_addr,
-  DDR_ba,
-  DDR_cas_n,
-  DDR_ck_n,
-  DDR_ck_p,
-  DDR_cke,
-  DDR_cs_n,
-  DDR_dm,
-  DDR_dq,
-  DDR_dqs_n,
-  DDR_dqs_p,
-  DDR_odt,
-  DDR_ras_n,
-  DDR_reset_n,
-  DDR_we_n,
-
-  FIXED_IO_ddr_vrn,
-  FIXED_IO_ddr_vrp,
-  FIXED_IO_mio,
-  FIXED_IO_ps_clk,
-  FIXED_IO_ps_porb,
-  FIXED_IO_ps_srstb,
+  fixed_io_ddr_vrn,
+  fixed_io_ddr_vrp,
+  fixed_io_mio,
+  fixed_io_ps_clk,
+  fixed_io_ps_porb,
+  fixed_io_ps_srstb,
 
   gpio_bd,
 
@@ -85,37 +84,38 @@ module system_top (
   iic_mux_scl,
   iic_mux_sda,
 
-  adc_sdo_i,
-  adc_sdi_o,
-  adc_cs_o,
-  adc_sclk_o,
+  spi_sdo,
+  spi_sdi,
+  spi_cs,
+  spi_sclk,
   led_clk_o,
-  gain_o,
+  gain0_o,
+  gain1_o,
   
   otg_vbusoc);
 
-  inout   [14:0]  DDR_addr;
-  inout   [ 2:0]  DDR_ba;
-  inout           DDR_cas_n;
-  inout           DDR_ck_n;
-  inout           DDR_ck_p;
-  inout           DDR_cke;
-  inout           DDR_cs_n;
-  inout   [ 3:0]  DDR_dm;
-  inout   [31:0]  DDR_dq;
-  inout   [ 3:0]  DDR_dqs_n;
-  inout   [ 3:0]  DDR_dqs_p;
-  inout           DDR_odt;
-  inout           DDR_ras_n;
-  inout           DDR_reset_n;
-  inout           DDR_we_n;
+  inout   [14:0]  ddr_addr;
+  inout   [ 2:0]  ddr_ba;
+  inout           ddr_cas_n;
+  inout           ddr_ck_n;
+  inout           ddr_ck_p;
+  inout           ddr_cke;
+  inout           ddr_cs_n;
+  inout   [ 3:0]  ddr_dm;
+  inout   [31:0]  ddr_dq;
+  inout   [ 3:0]  ddr_dqs_n;
+  inout   [ 3:0]  ddr_dqs_p;
+  inout           ddr_odt;
+  inout           ddr_ras_n;
+  inout           ddr_reset_n;
+  inout           ddr_we_n;
 
-  inout           FIXED_IO_ddr_vrn;
-  inout           FIXED_IO_ddr_vrp;
-  inout   [53:0]  FIXED_IO_mio;
-  inout           FIXED_IO_ps_clk;
-  inout           FIXED_IO_ps_porb;
-  inout           FIXED_IO_ps_srstb;
+  inout           fixed_io_ddr_vrn;
+  inout           fixed_io_ddr_vrp;
+  inout   [53:0]  fixed_io_mio;
+  inout           fixed_io_ps_clk;
+  inout           fixed_io_ps_porb;
+  inout           fixed_io_ps_srstb;
 
   inout   [31:0]  gpio_bd;
 
@@ -139,77 +139,99 @@ module system_top (
   inout   [ 1:0]  iic_mux_scl;
   inout   [ 1:0]  iic_mux_sda;
   
-  input           adc_sdo_i;
-  output          adc_sdi_o;
-  output          adc_cs_o;
-  output          adc_sclk_o;
+  input           spi_sdi;
+  inout           spi_sdo;
+  output          spi_sclk;
+  output  [ 1:0]  spi_cs;
   output          led_clk_o;
-  output          gain_o;
+  output          gain0_o;
+  output          gain1_o;
 
   input           otg_vbusoc;
 
   // internal signals
 
-  wire    [32:0]  gpio_i;
-  wire    [32:0]  gpio_o;
-  wire    [32:0]  gpio_t;
+  wire    [34:0]  gpio_i;
+  wire    [34:0]  gpio_o;
+  wire    [34:0]  gpio_t;
   wire    [ 1:0]  iic_mux_scl_i_s;
   wire    [ 1:0]  iic_mux_scl_o_s;
   wire            iic_mux_scl_t_s;
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
-  wire    [31:0]  adc_data_0;
-  wire    [31:0]  adc_data_1;
-  wire    [31:0]  adc_data_2;
-  wire    [31:0]  adc_data_3;
-  wire    [127:0]  dma_data;
+  wire    [23:0]  offload_sdi_data;
 
-  // instantiations
+  wire spi_sdo_o;
+  wire spi_sdo_t;
+  wire excitation;
 
-  genvar n;
-  generate
-  for (n = 0; n <= 31; n = n + 1) begin: g_iobuf_gpio_bd
-  IOBUF i_iobuf_gpio_bd (
-    .I (gpio_o[n]),
-    .O (gpio_i[n]),
-    .T (gpio_t[n]),
-    .IO (gpio_bd[n]));
-  end
-  endgenerate
+  assign gain0_o = gpio_o[32];
+  assign gain1_o = gpio_o[33];
+  
+  assign gpio_i[34] = spi_sdi; // Interrupt
+  assign led_clk_o = excitation;
 
-  assign gain_o = gpio_o[32];
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_sdo_iobuf (
+    .dt(spi_sdo_t),
+    .di(spi_sdo_o),
+    .dio(spi_sdo)
+  );
 
-  IOBUF i_iic_mux_scl_0 (.I(iic_mux_scl_o_s[0]), .O(iic_mux_scl_i_s[0]), .T(iic_mux_scl_t_s), .IO(iic_mux_scl[0]));
-  IOBUF i_iic_mux_scl_1 (.I(iic_mux_scl_o_s[1]), .O(iic_mux_scl_i_s[1]), .T(iic_mux_scl_t_s), .IO(iic_mux_scl[1]));
-  IOBUF i_iic_mux_sda_0 (.I(iic_mux_sda_o_s[0]), .O(iic_mux_sda_i_s[0]), .T(iic_mux_sda_t_s), .IO(iic_mux_sda[0]));
-  IOBUF i_iic_mux_sda_1 (.I(iic_mux_sda_o_s[1]), .O(iic_mux_sda_i_s[1]), .T(iic_mux_sda_t_s), .IO(iic_mux_sda[1]));
+  ad_iobuf #(
+    .DATA_WIDTH(32)
+  ) i_iobuf (
+    .dt(gpio_t[31:0]),
+    .di(gpio_o[31:0]),
+    .do(gpio_i[31:0]),
+    .dio(gpio_bd)
+  );
+
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iic_mux_scl (
+    .dt({iic_mux_scl_t_s, iic_mux_scl_t_s}),
+    .di(iic_mux_scl_o_s),
+    .do(iic_mux_scl_i_s),
+    .dio(iic_mux_scl)
+  );
+
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iic_mux_sda (
+    .dt({iic_mux_sda_t_s, iic_mux_sda_t_s}),
+    .di(iic_mux_sda_o_s),
+    .do(iic_mux_sda_i_s),
+    .dio(iic_mux_sda)
+  );
 
   system_wrapper i_system_wrapper (
-    .DDR_addr (DDR_addr),
-    .DDR_ba (DDR_ba),
-    .DDR_cas_n (DDR_cas_n),
-    .DDR_ck_n (DDR_ck_n),
-    .DDR_ck_p (DDR_ck_p),
-    .DDR_cke (DDR_cke),
-    .DDR_cs_n (DDR_cs_n),
-    .DDR_dm (DDR_dm),
-    .DDR_dq (DDR_dq),
-    .DDR_dqs_n (DDR_dqs_n),
-    .DDR_dqs_p (DDR_dqs_p),
-    .DDR_odt (DDR_odt),
-    .DDR_ras_n (DDR_ras_n),
-    .DDR_reset_n (DDR_reset_n),
-    .DDR_we_n (DDR_we_n),
-    .FIXED_IO_ddr_vrn (FIXED_IO_ddr_vrn),
-    .FIXED_IO_ddr_vrp (FIXED_IO_ddr_vrp),
-    .FIXED_IO_mio (FIXED_IO_mio),
-    .FIXED_IO_ps_clk (FIXED_IO_ps_clk),
-    .FIXED_IO_ps_porb (FIXED_IO_ps_porb),
-    .FIXED_IO_ps_srstb (FIXED_IO_ps_srstb),
-    .GPIO_I (gpio_i),
-    .GPIO_O (gpio_o),
-    .GPIO_T (gpio_t),
+    .ddr_addr (ddr_addr),
+    .ddr_ba (ddr_ba),
+    .ddr_cas_n (ddr_cas_n),
+    .ddr_ck_n (ddr_ck_n),
+    .ddr_ck_p (ddr_ck_p),
+    .ddr_cke (ddr_cke),
+    .ddr_cs_n (ddr_cs_n),
+    .ddr_dm (ddr_dm),
+    .ddr_dq (ddr_dq),
+    .ddr_dqs_n (ddr_dqs_n),
+    .ddr_dqs_p (ddr_dqs_p),
+    .ddr_odt (ddr_odt),
+    .ddr_ras_n (ddr_ras_n),
+    .ddr_reset_n (ddr_reset_n),
+    .ddr_we_n (ddr_we_n),
+    .fixed_io_ddr_vrn (fixed_io_ddr_vrn),
+    .fixed_io_ddr_vrp (fixed_io_ddr_vrp),
+    .fixed_io_mio (fixed_io_mio),
+    .fixed_io_ps_clk (fixed_io_ps_clk),
+    .fixed_io_ps_porb (fixed_io_ps_porb),
+    .fixed_io_ps_srstb (fixed_io_ps_srstb),
+    .gpio_i (gpio_i),
+    .gpio_o (gpio_o),
+    .gpio_t (gpio_t),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -222,22 +244,29 @@ module system_top (
     .i2s_sdata_out (i2s_sdata_out),
     .iic_fmc_scl_io (iic_scl),
     .iic_fmc_sda_io (iic_sda),
-    .iic_mux_scl_I (iic_mux_scl_i_s),
-    .iic_mux_scl_O (iic_mux_scl_o_s),
-    .iic_mux_scl_T (iic_mux_scl_t_s),
-    .iic_mux_sda_I (iic_mux_sda_i_s),
-    .iic_mux_sda_O (iic_mux_sda_o_s),
-    .iic_mux_sda_T (iic_mux_sda_t_s),
-    .adc_sdo_i (adc_sdo_i),
-    .adc_sdi_o (adc_sdi_o),
-    .adc_cs_o (adc_cs_o),
-    .adc_sclk_o (adc_sclk_o),
-    .led_clk_o (led_clk_o),
-    .dma_data ({adc_data_3, adc_data_2, adc_data_1, adc_data_0}),
-    .adc_data_3(adc_data_3),
-    .adc_data_2(adc_data_2),
-    .adc_data_1(adc_data_1),
-    .adc_data_0(adc_data_0),
+    .iic_mux_scl_i (iic_mux_scl_i_s),
+    .iic_mux_scl_o (iic_mux_scl_o_s),
+    .iic_mux_scl_t (iic_mux_scl_t_s),
+    .iic_mux_sda_i (iic_mux_sda_i_s),
+    .iic_mux_sda_o (iic_mux_sda_o_s),
+    .iic_mux_sda_t (iic_mux_sda_t_s),
+    .ps_intr_00 (1'b0),
+    .ps_intr_01 (1'b0),
+    .ps_intr_02 (1'b0),
+    .ps_intr_03 (1'b0),
+    .ps_intr_04 (1'b0),
+    .ps_intr_05 (1'b0),
+    .ps_intr_06 (1'b0),
+    .ps_intr_07 (1'b0),
+    .ps_intr_08 (1'b0),
+    .ps_intr_09 (1'b0),
+    .ps_intr_10 (1'b0),
+    .spi_sdo (spi_sdo_o),
+    .spi_sdo_t (spi_sdo_t),
+    .spi_sdi (spi_sdi),
+    .spi_cs (spi_cs),
+    .spi_sclk (spi_sclk),
+    .excitation (excitation),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

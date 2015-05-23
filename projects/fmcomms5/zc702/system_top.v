@@ -281,34 +281,34 @@ module system_top (
     .O (ref_clk));
 
   ad_iobuf #(.DATA_WIDTH(60)) i_iobuf (
-    .dt (gpio_t[59:0]),
-    .di (gpio_o[59:0]),
-    .do (gpio_i[59:0]),
-    .dio ({ gpio_resetb_1,    // 59
-            gpio_ad5355_lock, // 58
-            gpio_ad5355_rfen, // 57
-            gpio_calsw_4_1,   // 56
-            gpio_calsw_3_1,   // 55
-            gpio_calsw_2_0,   // 54
-            gpio_calsw_1_0,   // 53
-            gpio_txnrx_1,     // 52
-            gpio_enable_1,    // 51
-            gpio_en_agc_1,    // 50
-            gpio_txnrx_0,     // 49
-            gpio_enable_0,    // 48
-            gpio_en_agc_0,    // 47
-            gpio_resetb_0,    // 46
-            gpio_open_45_45,  // 45
-            gpio_open_44_44,  // 44
-            gpio_debug_4_1,   // 43
-            gpio_debug_3_1,   // 42
-            gpio_debug_2_0,   // 41
-            gpio_debug_1_0,   // 40
-            gpio_ctl_1,       // 36
-            gpio_ctl_0,       // 32
-            gpio_status_1,    // 24
-            gpio_status_0,    // 16
-            gpio_bd}));       //  0
+    .dio_t (gpio_t[59:0]),
+    .dio_i (gpio_o[59:0]),
+    .dio_o (gpio_i[59:0]),
+    .dio_p ({ gpio_resetb_1,    // 59
+              gpio_ad5355_lock, // 58
+              gpio_ad5355_rfen, // 57
+              gpio_calsw_4_1,   // 56
+              gpio_calsw_3_1,   // 55
+              gpio_calsw_2_0,   // 54
+              gpio_calsw_1_0,   // 53
+              gpio_txnrx_1,     // 52
+              gpio_enable_1,    // 51
+              gpio_en_agc_1,    // 50
+              gpio_txnrx_0,     // 49
+              gpio_enable_0,    // 48
+              gpio_en_agc_0,    // 47
+              gpio_resetb_0,    // 46
+              gpio_open_45_45,  // 45
+              gpio_open_44_44,  // 44
+              gpio_debug_4_1,   // 43
+              gpio_debug_3_1,   // 42
+              gpio_debug_2_0,   // 41
+              gpio_debug_1_0,   // 40
+              gpio_ctl_1,       // 36
+              gpio_ctl_0,       // 32
+              gpio_status_1,    // 24
+              gpio_status_0,    // 16
+              gpio_bd}));       //  0
 
   assign spi_ad9361_0 = spi0_csn[0];
   assign spi_ad9361_1 = spi0_csn[1];

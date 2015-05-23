@@ -28,7 +28,6 @@ entity axi_i2s_adi is
 		-- Bus protocol parameters, do not add to or delete
 		C_S_AXI_DATA_WIDTH	: integer			:= 32;
 		C_S_AXI_ADDR_WIDTH	: integer			:= 32;
-		C_S_AXI_MIN_SIZE	: std_logic_vector		:= X"000001FF";
 		C_FAMILY		: string			:= "virtex6";
 		-- DO NOT EDIT ABOVE THIS LINE ---------------------
 		C_DMA_TYPE		: integer			:= 0;

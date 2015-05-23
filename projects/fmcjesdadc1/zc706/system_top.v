@@ -250,10 +250,10 @@ module system_top (
     .ODIV2 ());
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf (
-    .dt (gpio_t[14:0]),
-    .di (gpio_o[14:0]),
-    .do (gpio_i[14:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[14:0]),
+    .dio_i (gpio_o[14:0]),
+    .dio_o (gpio_i[14:0]),
+    .dio_p (gpio_bd));
 
   assign spi_adc_clk = spi_clk;
   assign spi_clk_clk = spi_clk;

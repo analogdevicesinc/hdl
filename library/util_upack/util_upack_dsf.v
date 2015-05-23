@@ -105,7 +105,7 @@ module util_upack_dsf (
   genvar i;
   generate
   if (CH_OCNT == P_CNT) begin
-  for (i = 0; i < CH_SCNT ; i = i +1) begin
+  for (i = 0; i < CH_SCNT ; i = i +1) begin: g_dsf_data
     assign dac_dsf_data_s[(((i +1) * M_CNT * 16)-1):(i*M_CNT*16)] =
       dac_data[(((i+1)*16*P_CNT)-1): (i*16*P_CNT)];
   end

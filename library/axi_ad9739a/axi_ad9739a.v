@@ -91,7 +91,6 @@ module axi_ad9739a (
   parameter   PCORE_MMCM_BUFIO_N = 1;
   parameter   PCORE_DAC_DP_DISABLE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
-  parameter   C_S_AXI_MIN_SIZE = 32'hffff;
 
   // dac interface
 

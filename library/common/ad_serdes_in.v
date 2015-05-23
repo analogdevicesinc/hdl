@@ -60,13 +60,17 @@ module ad_serdes_in (
   data_in_p,
   data_in_n,
 
-  // delay interface
+  // delay-data interface
+
+  up_clk,
+  up_dld,
+  up_dwdata,
+  up_drdata,
+
+  // delay-control interface
 
   delay_clk,
   delay_rst,
-  delay_ld,
-  delay_wdata,
-  delay_rdata,
   delay_locked);
 
   // parameters
@@ -103,13 +107,16 @@ module ad_serdes_in (
   input           data_in_p;
   input           data_in_n;
 
-  // delay interface
+  // delay-data interface
 
+  input           up_clk;
+  input           up_dld;
+  input    [ 4:0] up_dwdata;
+  output   [ 4:0] up_drdata;
+
+  // delay-control interface
   input           delay_clk;
   input           delay_rst;
-  input           delay_ld;
-  input    [ 4:0] delay_wdata;
-  output   [ 4:0] delay_rdata;
   output          delay_locked;
 
   // internal signals
@@ -160,12 +167,12 @@ module ad_serdes_in (
       .LDPIPEEN (1'b0),
       .CINVCTRL (1'b0),
       .REGRST (1'b0),
-      .C (delay_clk),
+      .C (up_clk),
       .IDATAIN (data_in_ibuf_s),
       .DATAOUT (data_in_idelay_s),
-      .LD (delay_ld),
-      .CNTVALUEIN (delay_wdata),
-      .CNTVALUEOUT (delay_rdata));
+      .LD (up_dld),
+      .CNTVALUEIN (up_dwdata),
+      .CNTVALUEOUT (up_drdata));
 
     // Note: The first sample in time will be data_s7, the last data_s0!
     if(IF_TYPE == SDR) begin
@@ -290,12 +297,12 @@ module ad_serdes_in (
         .DATAIN (1'b0),
         .ODATAIN (1'b0),
         .CINVCTRL (1'b0),
-        .C (delay_clk),
+        .C (up_clk),
         .IDATAIN (data_in_ibuf_s),
         .DATAOUT (data_in_idelay_s),
-        .RST (delay_ld),
-        .CNTVALUEIN (delay_wdata),
-        .CNTVALUEOUT (delay_rdata));
+        .RST (up_dld),
+        .CNTVALUEIN (up_dwdata),
+        .CNTVALUEOUT (up_drdata));
 
       ISERDESE1 #(
         .DATA_RATE("DDR"),

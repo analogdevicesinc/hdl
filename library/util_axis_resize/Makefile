@@ -9,7 +9,6 @@ M_DEPS := util_axis_resize_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_axis_resize.v
-M_DEPS += 
 
 M_VIVADO := vivado -mode batch -source
 

@@ -66,18 +66,6 @@ module up_adc_common (
   up_status_pn_oos,
   up_status_or,
 
-  // delay interface
-
-  delay_clk,
-  delay_rst,
-  delay_sel,
-  delay_rwn,
-  delay_addr,
-  delay_wdata,
-  delay_rdata,
-  delay_ack_t,
-  delay_locked,
-
   // drp interface
 
   drp_clk,
@@ -140,18 +128,6 @@ module up_adc_common (
   input           up_status_pn_oos;
   input           up_status_or;
 
-  // delay interface
-
-  input           delay_clk;
-  output          delay_rst;
-  output          delay_sel;
-  output          delay_rwn;
-  output  [ 7:0]  delay_addr;
-  output  [ 4:0]  delay_wdata;
-  input   [ 4:0]  delay_rdata;
-  input           delay_ack_t;
-  input           delay_locked;
-
   // drp interface
 
   input           drp_clk;
@@ -193,10 +169,6 @@ module up_adc_common (
   reg             up_adc_r1_mode = 'd0;
   reg             up_adc_ddr_edgesel = 'd0;
   reg             up_adc_pin_mode = 'd0;
-  reg             up_delay_sel = 'd0;
-  reg             up_delay_rwn = 'd0;
-  reg     [ 7:0]  up_delay_addr = 'd0;
-  reg     [ 4:0]  up_delay_wdata = 'd0;
   reg             up_drp_sel_t = 'd0;
   reg             up_drp_rwn = 'd0;
   reg     [11:0]  up_drp_addr = 'd0;
@@ -222,9 +194,6 @@ module up_adc_common (
   wire            up_status_unf_s;
   wire            up_cntrl_xfer_done;
   wire    [31:0]  up_adc_clk_count_s;
-  wire    [ 4:0]  up_delay_rdata_s;
-  wire            up_delay_status_s;
-  wire            up_delay_locked_s;
   wire    [15:0]  up_drp_rdata_s;
   wire            up_drp_status_s;
   wire            up_drp_locked_s;
@@ -247,10 +216,6 @@ module up_adc_common (
       up_adc_r1_mode <= 'd0;
       up_adc_ddr_edgesel <= 'd0;
       up_adc_pin_mode <= 'd0;
-      up_delay_sel <= 'd0;
-      up_delay_rwn <= 'd0;
-      up_delay_addr <= 'd0;
-      up_delay_wdata <= 'd0;
       up_drp_sel_t <= 'd0;
       up_drp_rwn <= 'd0;
       up_drp_addr <= 'd0;
@@ -280,12 +245,6 @@ module up_adc_common (
         up_adc_r1_mode <= up_wdata[2];
         up_adc_ddr_edgesel <= up_wdata[1];
         up_adc_pin_mode <= up_wdata[0];
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h18)) begin
-        up_delay_sel <= up_wdata[17];
-        up_delay_rwn <= up_wdata[16];
-        up_delay_addr <= up_wdata[15:8];
-        up_delay_wdata <= up_wdata[4:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
         up_drp_sel_t <= ~up_drp_sel_t;
@@ -333,8 +292,6 @@ module up_adc_common (
           8'h15: up_rdata <= up_adc_clk_count_s;
           8'h16: up_rdata <= adc_clk_ratio;
           8'h17: up_rdata <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
-          8'h18: up_rdata <= {14'd0, up_delay_sel, up_delay_rwn, up_delay_addr, 3'd0, up_delay_wdata};
-          8'h19: up_rdata <= {22'd0, up_delay_locked_s, up_delay_status_s, 3'd0, up_delay_rdata_s};
           8'h1a: up_rdata <= {31'd0, up_sync_status_s};
           8'h1c: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr, up_drp_wdata};
           8'h1d: up_rdata <= {14'd0, up_drp_locked_s, up_drp_status_s, up_drp_rdata_s};
@@ -356,7 +313,6 @@ module up_adc_common (
 
   ad_rst i_mmcm_rst_reg   (.preset(up_mmcm_preset_s), .clk(drp_clk),    .rst(mmcm_rst));
   ad_rst i_adc_rst_reg    (.preset(up_preset_s),      .clk(adc_clk),    .rst(adc_rst));
-  ad_rst i_delay_rst_reg  (.preset(up_preset_s),      .clk(delay_clk),  .rst(delay_rst));
   ad_rst i_drp_rst_reg    (.preset(up_preset_s),      .clk(drp_clk),    .rst(drp_rst));
 
   // adc control & status
@@ -407,28 +363,6 @@ module up_adc_common (
     .up_d_count (up_adc_clk_count_s),
     .d_rst (adc_rst),
     .d_clk (adc_clk));
-
-  // delay control & status
-
-  up_delay_cntrl i_delay_cntrl (
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_sel (delay_sel),
-    .delay_rwn (delay_rwn),
-    .delay_addr (delay_addr),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata),
-    .delay_ack_t (delay_ack_t),
-    .delay_locked (delay_locked),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_delay_sel (up_delay_sel),
-    .up_delay_rwn (up_delay_rwn),
-    .up_delay_addr (up_delay_addr),
-    .up_delay_wdata (up_delay_wdata),
-    .up_delay_rdata (up_delay_rdata_s),
-    .up_delay_status (up_delay_status_s),
-    .up_delay_locked (up_delay_locked_s));
 
   // drp control & status
 

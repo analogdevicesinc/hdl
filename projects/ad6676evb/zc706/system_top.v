@@ -250,25 +250,25 @@ module system_top (
   assign spi0_miso = spi_miso;
 
   ad_iobuf #(.DATA_WIDTH(10)) i_iobuf (
-    .dt (gpio_t[41:32]),
-    .di (gpio_o[41:32]),
-    .do (gpio_i[41:32]),
-    .dio ({ adc_oen,
-            adc_sela,
-            adc_selb,
-            adc_s0,
-            adc_s1,
-            adc_resetb,
-            adc_agc1,
-            adc_agc2,
-            adc_agc3,
-            adc_agc4}));
+    .dio_t (gpio_t[41:32]),
+    .dio_i (gpio_o[41:32]),
+    .dio_o (gpio_i[41:32]),
+    .dio_p ({ adc_oen,
+              adc_sela,
+              adc_selb,
+              adc_s0,
+              adc_s1,
+              adc_resetb,
+              adc_agc1,
+              adc_agc2,
+              adc_agc3,
+              adc_agc4}));
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
-    .dt (gpio_t[14:0]),
-    .di (gpio_o[14:0]),
-    .do (gpio_i[14:0]),
-    .dio (gpio_bd));
+    .dio_t (gpio_t[14:0]),
+    .dio_i (gpio_o[14:0]),
+    .dio_o (gpio_i[14:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .adc_clk (adc_clk),

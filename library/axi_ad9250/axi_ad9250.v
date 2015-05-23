@@ -84,7 +84,6 @@ module axi_ad9250 (
   parameter PCORE_ID = 0;
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -259,21 +258,15 @@ module axi_ad9250 (
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (adc_status_s),
+    .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
+    .adc_start_code (),
+    .adc_sync (),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),
-    .delay_clk (1'b0),
-    .delay_rst (),
-    .delay_sel (),
-    .delay_rwn (),
-    .delay_addr (),
-    .delay_wdata (),
-    .delay_rdata (5'd0),
-    .delay_ack_t (1'b0),
-    .delay_locked (1'b1),
     .drp_clk (1'd0),
     .drp_rst (),
     .drp_sel (),

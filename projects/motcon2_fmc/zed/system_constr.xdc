@@ -68,7 +68,7 @@ set_property  -dict {PACKAGE_PIN  D21    IOSTANDARD LVCMOS25 PULLTYPE PULLUP} [g
 
 # Ethernet common
 set_property -dict {PACKAGE_PIN F18 IOSTANDARD LVCMOS25} [get_ports eth_mdio_mdc]
-set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS25 PULLUP true} [get_ports eth_mdio_io]
+set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS25 PULLUP true} [get_ports eth_mdio_p]
 set_property -dict {PACKAGE_PIN G20 IOSTANDARD LVCMOS25} [get_ports eth_phy_rst_n]
 
 # Ethernet 1

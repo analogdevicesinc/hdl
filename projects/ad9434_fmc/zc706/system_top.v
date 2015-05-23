@@ -151,10 +151,10 @@ module system_top (
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_gpio (
-    .di (gpio_o[14:0]),
-    .do (gpio_i[14:0]),
-    .dt (gpio_t[14:0]),
-    .dio (gpio_bd));
+    .dio_i (gpio_o[14:0]),
+    .dio_o (gpio_i[14:0]),
+    .dio_t (gpio_t[14:0]),
+    .dio_p (gpio_bd));
 
   ad9434_spi i_spi (
     .spi_csn({spi_csn_clk, spi_csn_adc}),

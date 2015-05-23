@@ -14,7 +14,6 @@ M_DEPS += address_gray.v
 M_DEPS += address_gray_pipelined.v
 M_DEPS += address_sync.v
 M_DEPS += util_axis_fifo.v
-M_DEPS += 
 
 M_VIVADO := vivado -mode batch -source
 

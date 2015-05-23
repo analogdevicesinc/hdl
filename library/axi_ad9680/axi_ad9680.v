@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -65,6 +63,7 @@ module axi_ad9680 (
   s_axi_aresetn,
   s_axi_awvalid,
   s_axi_awaddr,
+  s_axi_awprot,
   s_axi_awready,
   s_axi_wvalid,
   s_axi_wdata,
@@ -75,6 +74,7 @@ module axi_ad9680 (
   s_axi_bready,
   s_axi_arvalid,
   s_axi_araddr,
+  s_axi_arprot,
   s_axi_arready,
   s_axi_rvalid,
   s_axi_rresp,
@@ -109,6 +109,7 @@ module axi_ad9680 (
   input           s_axi_aresetn;
   input           s_axi_awvalid;
   input   [31:0]  s_axi_awaddr;
+  input   [ 2:0]  s_axi_awprot;
   output          s_axi_awready;
   input           s_axi_wvalid;
   input   [31:0]  s_axi_wdata;
@@ -119,6 +120,7 @@ module axi_ad9680 (
   input           s_axi_bready;
   input           s_axi_arvalid;
   input   [31:0]  s_axi_araddr;
+  input   [ 2:0]  s_axi_arprot;
   output          s_axi_arready;
   output          s_axi_rvalid;
   output  [ 1:0]  s_axi_rresp;
@@ -258,21 +260,15 @@ module axi_ad9680 (
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (adc_status_s),
+    .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd40),
+    .adc_start_code (),
+    .adc_sync (),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),
-    .delay_clk (1'b0),
-    .delay_rst (),
-    .delay_sel (),
-    .delay_rwn (),
-    .delay_addr (),
-    .delay_wdata (),
-    .delay_rdata (5'd0),
-    .delay_ack_t (1'b0),
-    .delay_locked (1'b1),
     .drp_clk (1'd0),
     .drp_rst (),
     .drp_sel (),
