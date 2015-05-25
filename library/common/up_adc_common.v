@@ -100,7 +100,7 @@ module up_adc_common (
 
   // parameters
 
-  localparam  PCORE_VERSION = 32'h00080062;
+  localparam  PCORE_VERSION = 32'h00090062;
   parameter   PCORE_ID = 0;
 
   // clock reset
