@@ -28,6 +28,7 @@ add_fileset_file axi_ad9680_pnmon.v   VERILOG PATH axi_ad9680_pnmon.v
 add_fileset_file axi_ad9680_channel.v VERILOG PATH axi_ad9680_channel.v
 add_fileset_file axi_ad9680_if.v      VERILOG PATH axi_ad9680_if.v
 add_fileset_file axi_ad9680.v         VERILOG PATH axi_ad9680.v TOP_LEVEL_FILE
+add_fileset_file ad_axi_ip_constr.sdc SDC     PATH $ad_hdl_dir/library/common/ad_axi_ip_constr.sdc
 
 # parameters
 

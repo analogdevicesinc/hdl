@@ -32,6 +32,7 @@ add_fileset_file axi_ad9144_channel.v VERILOG PATH axi_ad9144_channel.v
 add_fileset_file axi_ad9144_core.v    VERILOG PATH axi_ad9144_core.v
 add_fileset_file axi_ad9144_if.v      VERILOG PATH axi_ad9144_if.v
 add_fileset_file axi_ad9144.v         VERILOG PATH axi_ad9144.v TOP_LEVEL_FILE
+add_fileset_file ad_axi_ip_constr.sdc SDC     PATH $ad_hdl_dir/library/common/ad_axi_ip_constr.sdc
 
 # parameters
 
