@@ -135,7 +135,6 @@ module axi_ad9434 (
   wire            mmcm_rst;
   wire            up_clk;
   wire            adc_clk;
-  wire            drp_clk;
 
   // internal signals
   wire            up_wreq_s;
@@ -160,14 +159,13 @@ module axi_ad9434 (
   wire            delay_locked_s;
 
 
-  wire            drp_sel_s;
-  wire            drp_rst_s;
-  wire            drp_wr_s;
-  wire    [11:0]  drp_addr_s;
-  wire    [15:0]  drp_wdata_s;
-  wire    [15:0]  drp_rdata_s;
-  wire            drp_ready_s;
-  wire            drp_locked_s;
+  wire            up_drp_sel_s;
+  wire            up_drp_wr_s;
+  wire    [11:0]  up_drp_addr_s;
+  wire    [15:0]  up_drp_wdata_s;
+  wire    [15:0]  up_drp_rdata_s;
+  wire            up_drp_ready_s;
+  wire            up_drp_locked_s;
 
   wire    [47:0]  adc_data_if_s;
   wire            adc_or_if_s;
@@ -175,7 +173,6 @@ module axi_ad9434 (
   // clock/reset assignments
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
-  assign drp_clk = up_clk;
 
   // single channel always enable
   assign adc_enable = 1'b1;
@@ -203,15 +200,14 @@ module axi_ad9434 (
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),
     .mmcm_rst(mmcm_rst),
-    .drp_clk(drp_clk),
-    .drp_rst(drp_rst_s),
-    .drp_sel(drp_sel_s),
-    .drp_wr(drp_wr_s),
-    .drp_addr(drp_addr_s),
-    .drp_wdata(drp_wdata_s),
-    .drp_rdata(drp_rdata_s),
-    .drp_ready(drp_ready_s),
-    .drp_locked(drp_locked_s));
+    .up_rstn(up_rstn),
+    .up_drp_sel(up_drp_sel_s),
+    .up_drp_wr(up_drp_wr_s),
+    .up_drp_addr(up_drp_addr_s),
+    .up_drp_wdata(up_drp_wdata_s),
+    .up_drp_rdata(up_drp_rdata_s),
+    .up_drp_ready(up_drp_ready_s),
+    .up_drp_locked(up_drp_locked_s));
 
   // common processor control
   axi_ad9434_core #(.PCORE_ID(PCORE_ID))
@@ -231,15 +227,13 @@ module axi_ad9434 (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst_s),
-    .drp_sel (drp_sel_s),
-    .drp_wr (drp_wr_s),
-    .drp_addr (drp_addr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_s),
-    .drp_ready (drp_ready_s),
-    .drp_locked (drp_locked_s),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_s),
+    .up_drp_ready (up_drp_ready_s),
+    .up_drp_locked (up_drp_locked_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
