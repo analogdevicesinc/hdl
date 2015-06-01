@@ -39,6 +39,7 @@ set_location_assignment PIN_H31   -to ddr3_a[10]      ; ## 1.5 V   E4  MEM_ADDR_
 set_location_assignment PIN_J31   -to ddr3_a[11]      ; ## 1.5 V   F4  MEM_ADDR_CMD11     
 set_location_assignment PIN_H34   -to ddr3_a[12]      ; ## 1.5 V   G4  MEM_ADDR_CMD12     
 set_location_assignment PIN_H33   -to ddr3_a[13]      ; ## 1.5 V   H4  MEM_ADDR_CMD13     
+set_location_assignment PIN_G32   -to ddr3_a[14]      ; ## 1.5 V   J4  MEM_ADDR_CMD14     
 set_location_assignment PIN_F33   -to ddr3_ba[0]      ; ## 1.5 V   M1  MEM_ADDR_CMD16     
 set_location_assignment PIN_G35   -to ddr3_ba[1]      ; ## 1.5 V   M2  MEM_ADDR_CMD17     
 set_location_assignment PIN_H35   -to ddr3_ba[2]      ; ## 1.5 V   N2  MEM_ADDR_CMD18     
@@ -138,38 +139,6 @@ set_location_assignment PIN_AG31  -to ddr3_dm[5]      ; ## 1.5 V   U16 MEM_DMB1
 set_location_assignment PIN_Y35   -to ddr3_dm[6]      ; ## 1.5 V   U11 MEM_DMB2           
 set_location_assignment PIN_AC34  -to ddr3_dm[7]      ; ## 1.5 V   U6  MEM_DMB3           
 set_location_assignment PIN_J34   -to ddr3_rzq        ; ## RZQ
-
-
-## set_location_assignment PIN_G32   -to ddr3_a[14]      ; ## 1.5 V   J4  MEM_ADDR_CMD14     
-## set_location_assignment PIN_E32   -to ddr3_a[15]      ; ## 1.5 V   K4  MEM_ADDR_CMD15     
-## set_location_assignment PIN_T33   -to ddr3_cke_1      ; ## 1.5 V   M5  MEM_ADDR_CMD21     
-## set_location_assignment PIN_P34   -to ddr3_cs_n_1     ; ## 1.5 V   R4  MEM_ADDR_CMD23     
-## set_location_assignment PIN_P33   -to ddr3_odt_1      ; ## 1.5 V   R3  MEM_ADDR_CMD25     
-## E2  MEM_DQA32          set_location_assignment PIN_J28   1.5 V
-## G16 MEM_DQA33          set_location_assignment PIN_G31   1.5 V
-## R16 MEM_DQB32          set_location_assignment PIN_AF32  1.5 V
-## T6  MEM_DQB33          set_location_assignment PIN_AB33  1.5 V
-## N4  MEM_ADDR_CMD29     set_location_assignment PIN_E35   1.5 V
-## P4  MEM_ADDR_CMD30     set_location_assignment PIN_U32   1.5 V
-## N3  MEM_ADDR_CMD31     set_location_assignment PIN_T32   1.5 V
-## R6  MEM_DQ_ADDR_CMD0   set_location_assignment PIN_A32   1.5 V
-## T1  MEM_DQ_ADDR_CMD1   set_location_assignment PIN_A33   1.5 V
-## R2  MEM_DQ_ADDR_CMD2   set_location_assignment PIN_B32   1.5 V
-## T2  MEM_DQ_ADDR_CMD3   set_location_assignment PIN_D32   1.5 V
-## U2  MEM_DQ_ADDR_CMD4   set_location_assignment PIN_C33   1.5 V
-## U3  MEM_DQ_ADDR_CMD5   set_location_assignment PIN_B33   1.5 V
-## T4  MEM_DQ_ADDR_CMD6   set_location_assignment PIN_D34   1.5 V
-## U4  MEM_DQ_ADDR_CMD7   set_location_assignment PIN_C35   1.5 V
-## T5  MEM_DQ_ADDR_CMD8   set_location_assignment PIN_E34   1.5 V
-## V5  MEM_DQS_ADDR_CMD_N set_location_assignment PIN_C34   1.5 V
-## V4  MEM_DQS_ADDR_CMD_P set_location_assignment PIN_D33   1.5 V
-## A11 MEM_QKA_P0         set_location_assignment PIN_C28   1.5 V
-## B18 MEM_QKA_P1         set_location_assignment PIN_E29   1.5 V
-## M18 MEM_QKB_P0         set_location_assignment PIN_Y30   1.5 V
-## V13 MEM_QKB_P1         set_location_assignment PIN_V33   1.5 V
-## H14 MEM_VREF           set_location_assignment PIN_AB30
-## J13 MEM_VREF           set_location_assignment PIN_K32
-## K14 MEM_VREF           set_location_assignment PIN_R32
 
 # ethernet interface
 
