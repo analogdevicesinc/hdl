@@ -11,6 +11,6 @@ if {$slack > 0} {
   }
 }
 
-if {$slack < 0} {
-  use_this_invalid_command_to_crash
-}
+##if {$slack < 0} {
+##  use_this_invalid_command_to_crash
+##}

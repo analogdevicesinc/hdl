@@ -119,7 +119,7 @@ module system_top (
 
   output            ddr3_clk_p;
   output            ddr3_clk_n;
-  output  [ 13:0]   ddr3_a;
+  output  [ 14:0]   ddr3_a;
   output  [  2:0]   ddr3_ba;
   output            ddr3_cke;
   output            ddr3_cs_n;
@@ -183,8 +183,6 @@ module system_top (
 
   // internal signals
 
-  wire              ddr3_cal_pass;
-  wire              ddr3_cal_fail;
   wire              eth_mdio_i;
   wire              eth_mdio_o;
   wire              eth_mdio_t;
@@ -235,8 +233,8 @@ module system_top (
   assign gpio_i[31] = 1'd0;
   assign gpio_i[30] = 1'd0;
   assign gpio_i[29] = 1'd0;
-  assign gpio_i[28] = ddr3_cal_fail;
-  assign gpio_i[27] = ddr3_cal_pass;
+  assign gpio_i[28] = 1'd0;
+  assign gpio_i[27] = 1'd0;
 
   ad_iobuf #(.DATA_WIDTH(27)) i_iobuf_bd (
     .dio_t ({11'h7ff, 16'h0}),
@@ -246,25 +244,23 @@ module system_top (
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_ck (ddr3_clk_p),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_ck_n (ddr3_clk_n),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_a (ddr3_a),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_ba (ddr3_ba),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_cke (ddr3_cke),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_cs_n (ddr3_cs_n),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_odt (ddr3_odt),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_reset_n (ddr3_reset_n),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_we_n (ddr3_we_n),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_ras_n (ddr3_ras_n),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_cas_n (ddr3_cas_n),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_dqs (ddr3_dqs_p),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_dqs_n (ddr3_dqs_n),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_dq (ddr3_dq),
-    .sys_ddr3_cntrl_mem_conduit_end_mem_dm (ddr3_dm),
-    .sys_ddr3_cntrl_oct_conduit_end_oct_rzqin (ddr3_rzq),
-    .sys_ddr3_cntrl_ref_clk_clk (ddr3_ref_clk),
-    .sys_ddr3_cntrl_status_conduit_end_local_cal_success (ddr3_cal_pass),
-    .sys_ddr3_cntrl_status_conduit_end_local_cal_fail (ddr3_cal_fail),
+    .sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
+    .sys_ddr3_cntrl_mem_mem_ck_n (ddr3_clk_n),
+    .sys_ddr3_cntrl_mem_mem_a (ddr3_a),
+    .sys_ddr3_cntrl_mem_mem_ba (ddr3_ba),
+    .sys_ddr3_cntrl_mem_mem_cke (ddr3_cke),
+    .sys_ddr3_cntrl_mem_mem_cs_n (ddr3_cs_n),
+    .sys_ddr3_cntrl_mem_mem_odt (ddr3_odt),
+    .sys_ddr3_cntrl_mem_mem_reset_n (ddr3_reset_n),
+    .sys_ddr3_cntrl_mem_mem_we_n (ddr3_we_n),
+    .sys_ddr3_cntrl_mem_mem_ras_n (ddr3_ras_n),
+    .sys_ddr3_cntrl_mem_mem_cas_n (ddr3_cas_n),
+    .sys_ddr3_cntrl_mem_mem_dqs (ddr3_dqs_p[7:0]),
+    .sys_ddr3_cntrl_mem_mem_dqs_n (ddr3_dqs_n[7:0]),
+    .sys_ddr3_cntrl_mem_mem_dq (ddr3_dq[63:0]),
+    .sys_ddr3_cntrl_mem_mem_dm (ddr3_dm[7:0]),
+    .sys_ddr3_cntrl_oct_oct_rzqin (ddr3_rzq),
+    .sys_ddr3_cntrl_pll_ref_clk_clk (ddr3_ref_clk),
     .sys_ethernet_mdio_mdc (eth_mdc),
     .sys_ethernet_mdio_mdio_in (eth_mdio_i),
     .sys_ethernet_mdio_mdio_out (eth_mdio_o),
