@@ -262,10 +262,6 @@ ad_cpu_interconnect 0x7c420000 axi_ad9625_dma
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9625_0_gt/m_axi
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9625_1_gt/m_axi
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
-ad_connect  sys_cpu_clk axi_ad9625_0_gt/drp_clk
-ad_connect  sys_cpu_clk axi_ad9625_1_gt/drp_clk
-ad_connect  sys_cpu_resetn axi_ad9625_0_gt/m_axi_aresetn
-ad_connect  sys_cpu_resetn axi_ad9625_1_gt/m_axi_aresetn
 ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
 
 # interrupts

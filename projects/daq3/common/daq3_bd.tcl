@@ -234,8 +234,6 @@ ad_cpu_interconnect 0x7c400000 axi_ad9680_dma
 
 ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
 ad_mem_hp3_interconnect sys_cpu_clk axi_daq3_gt/m_axi
-ad_connect  sys_cpu_resetn axi_daq3_gt/m_axi_aresetn 
-ad_connect  sys_cpu_clk axi_daq3_gt/drp_clk
 
 # interconnect (mem/dac)
 

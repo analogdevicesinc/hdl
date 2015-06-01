@@ -130,8 +130,6 @@ ad_cpu_interconnect 0x7c420000 axi_ad6676_dma
 
 ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
 ad_mem_hp3_interconnect sys_cpu_clk axi_ad6676_gt/m_axi
-ad_connect  sys_cpu_resetn axi_ad6676_gt/m_axi_aresetn
-ad_connect  sys_cpu_clk axi_ad6676_gt/drp_clk
 
 # interconnect (adc)
 

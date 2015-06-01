@@ -46,7 +46,6 @@ set_property -dict [list CONFIG.c_sg_include_stscntrl_strm {0}] $axi_spdif_tx_dm
 # hdmi
 
 ad_connect  sys_200m_clk axi_hdmi_clkgen/clk
-ad_connect  sys_cpu_clk axi_hdmi_clkgen/drp_clk
 ad_connect  sys_cpu_clk axi_hdmi_core/m_axis_mm2s_clk
 ad_connect  sys_cpu_clk axi_hdmi_dma/m_axis_mm2s_aclk
 ad_connect  axi_hdmi_core/hdmi_clk axi_hdmi_clkgen/clk_0

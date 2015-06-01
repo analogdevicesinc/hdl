@@ -284,8 +284,6 @@ ad_cpu_interconnect 0x44A80000 axi_fmcomms7_spi
 
 ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
 ad_mem_hp3_interconnect sys_cpu_clk axi_fmcomms7_gt/m_axi
-ad_connect  sys_cpu_resetn axi_fmcomms7_gt/m_axi_aresetn
-ad_connect  sys_cpu_clk axi_fmcomms7_gt/drp_clk
 
 # interconnect (mem/dac)
 

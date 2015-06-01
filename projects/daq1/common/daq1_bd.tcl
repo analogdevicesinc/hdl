@@ -105,8 +105,6 @@ ad_connect  rx_sync     axi_daq1_gt/rx_sync
 ad_connect  rx_sysref   axi_daq1_gt/rx_ext_sysref
 
 ad_connect  axi_daq1_gt/tx_clk  axi_daq1_gt/tx_clk_g
-ad_connect  sys_200m_clk    axi_daq1_gt/drp_clk
-ad_connect  sys_cpu_resetn  axi_daq1_gt/m_axi_aresetn
 
 # connections (adc)
 

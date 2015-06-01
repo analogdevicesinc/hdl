@@ -198,7 +198,6 @@ ad_connect  spi1_sdi_i sys_ps7/SPI1_MISO_I
 
 # hdmi
 
-ad_connect  sys_cpu_clk   axi_hdmi_clkgen/drp_clk
 ad_connect  sys_cpu_clk   axi_hdmi_core/m_axis_mm2s_clk
 ad_connect  sys_cpu_clk   axi_hdmi_dma/s_axi_lite_aclk
 ad_connect  sys_cpu_clk   axi_hdmi_dma/m_axi_mm2s_aclk
