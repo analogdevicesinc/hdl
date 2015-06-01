@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -47,15 +45,13 @@ module up_clkgen (
 
   // drp interface
 
-  drp_clk,
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked,
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked,
 
   // bus interface
 
@@ -81,15 +77,13 @@ module up_clkgen (
 
   // drp interface
 
-  input           drp_clk;
-  output          drp_rst;
-  output          drp_sel;
-  output          drp_wr;
-  output  [11:0]  drp_addr;
-  output  [15:0]  drp_wdata;
-  input   [15:0]  drp_rdata;
-  input           drp_ready;
-  input           drp_locked;
+  output          up_drp_sel;
+  output          up_drp_wr;
+  output  [11:0]  up_drp_addr;
+  output  [15:0]  up_drp_wdata;
+  input   [15:0]  up_drp_rdata;
+  input           up_drp_ready;
+  input           up_drp_locked;
 
   // bus interface
 
@@ -111,10 +105,13 @@ module up_clkgen (
   reg     [31:0]  up_scratch = 'd0;
   reg             up_mmcm_resetn = 'd0;
   reg             up_resetn = 'd0;
-  reg             up_drp_sel_t = 'd0;
+  reg             up_drp_sel = 'd0;
+  reg             up_drp_wr = 'd0;
+  reg             up_drp_status = 'd0;
   reg             up_drp_rwn = 'd0;
   reg     [11:0]  up_drp_addr = 'd0;
   reg     [15:0]  up_drp_wdata = 'd0;
+  reg     [15:0]  up_drp_rdata_hold = 'd0;
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
 
@@ -122,17 +119,12 @@ module up_clkgen (
 
   wire            up_wreq_s;
   wire            up_rreq_s;
-  wire            up_preset_s;
   wire            up_mmcm_preset_s;
-  wire    [15:0]  up_drp_rdata_s;
-  wire            up_drp_status_s;
-  wire            up_drp_locked_s;
 
   // decode block select
 
   assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
-  assign up_preset_s = ~up_resetn;
   assign up_mmcm_preset_s = ~up_mmcm_resetn;
 
   // processor write interface
@@ -143,10 +135,13 @@ module up_clkgen (
       up_scratch <= 'd0;
       up_mmcm_resetn <= 'd0;
       up_resetn <= 'd0;
-      up_drp_sel_t <= 'd0;
+      up_drp_sel <= 'd0;
+      up_drp_wr <= 'd0;
+      up_drp_status <= 'd0;
       up_drp_rwn <= 'd0;
       up_drp_addr <= 'd0;
       up_drp_wdata <= 'd0;
+      up_drp_rdata_hold <= 'd0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
@@ -157,10 +152,24 @@ module up_clkgen (
         up_resetn <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
-        up_drp_sel_t <= ~up_drp_sel_t;
+        up_drp_sel <= 1'b1;
+        up_drp_wr <= ~up_wdata[28];
+      end else begin
+        up_drp_sel <= 1'b0;
+        up_drp_wr <= 1'b0;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+        up_drp_status <= 1'b1;
+      end else if (up_drp_ready == 1'b1) begin
+        up_drp_status <= 1'b0;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
         up_drp_rwn <= up_wdata[28];
         up_drp_addr <= up_wdata[27:16];
         up_drp_wdata <= up_wdata[15:0];
+      end
+      if (up_drp_ready == 1'b1) begin
+        up_drp_rdata_hold <= up_drp_rdata;
       end
     end
   end
@@ -179,9 +188,9 @@ module up_clkgen (
           8'h01: up_rdata <= PCORE_ID;
           8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {30'd0, up_mmcm_resetn, up_resetn};
-          8'h17: up_rdata <= {31'd0, up_drp_locked_s};
+          8'h17: up_rdata <= {31'd0, up_drp_locked};
           8'h1c: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr, up_drp_wdata};
-          8'h1d: up_rdata <= {14'd0, up_drp_locked_s, up_drp_status_s, up_drp_rdata_s};
+          8'h1d: up_rdata <= {14'd0, up_drp_locked, up_drp_status, up_drp_rdata_hold};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -192,30 +201,7 @@ module up_clkgen (
 
   // resets
 
-  ad_rst i_mmcm_rst_reg   (.preset(up_mmcm_preset_s), .clk(drp_clk),    .rst(mmcm_rst));
-  ad_rst i_drp_rst_reg    (.preset(up_preset_s),      .clk(drp_clk),    .rst(drp_rst));
-
-  // drp control & status
-
-  up_drp_cntrl i_drp_cntrl (
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_drp_sel_t (up_drp_sel_t),
-    .up_drp_rwn (up_drp_rwn),
-    .up_drp_addr (up_drp_addr),
-    .up_drp_wdata (up_drp_wdata),
-    .up_drp_rdata (up_drp_rdata_s),
-    .up_drp_status (up_drp_status_s),
-    .up_drp_locked (up_drp_locked_s));
+  ad_rst i_mmcm_rst_reg (.preset(up_mmcm_preset_s), .clk(up_clk), .rst(mmcm_rst));
 
 endmodule
 

@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -63,15 +61,13 @@ module up_dac_common (
 
   // drp interface
 
-  drp_clk,
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked,
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked,
 
   // user channel control
 
@@ -120,15 +116,13 @@ module up_dac_common (
 
   // drp interface
 
-  input           drp_clk;
-  output          drp_rst;
-  output          drp_sel;
-  output          drp_wr;
-  output  [11:0]  drp_addr;
-  output  [15:0]  drp_wdata;
-  input   [15:0]  drp_rdata;
-  input           drp_ready;
-  input           drp_locked;
+  output          up_drp_sel;
+  output          up_drp_wr;
+  output  [11:0]  up_drp_addr;
+  output  [15:0]  up_drp_wdata;
+  input   [15:0]  up_drp_rdata;
+  input           up_drp_ready;
+  input           up_drp_locked;
 
   // user channel control
 
@@ -163,10 +157,13 @@ module up_dac_common (
   reg             up_dac_datafmt = 'd0;
   reg     [ 7:0]  up_dac_datarate = 'd0;
   reg             up_dac_frame = 'd0;
-  reg             up_drp_sel_t = 'd0;
+  reg             up_drp_sel = 'd0;
+  reg             up_drp_wr = 'd0;
+  reg             up_drp_status = 'd0;
   reg             up_drp_rwn = 'd0;
   reg     [11:0]  up_drp_addr = 'd0;
   reg     [15:0]  up_drp_wdata = 'd0;
+  reg     [15:0]  up_drp_rdata_hold = 'd0;
   reg             up_status_ovf = 'd0;
   reg             up_status_unf = 'd0;
   reg     [ 7:0]  up_usr_chanmax = 'd0;
@@ -194,9 +191,6 @@ module up_dac_common (
   wire            dac_sync_s;
   wire            dac_frame_s;
   wire    [31:0]  up_dac_clk_count_s;
-  wire    [15:0]  up_drp_rdata_s;
-  wire            up_drp_status_s;
-  wire            up_drp_locked_s;
 
   // decode block select
 
@@ -220,10 +214,13 @@ module up_dac_common (
       up_dac_datafmt <= 'd0;
       up_dac_datarate <= 'd0;
       up_dac_frame <= 'd0;
-      up_drp_sel_t <= 'd0;
+      up_drp_sel <= 'd0;
+      up_drp_wr <= 'd0;
+      up_drp_status <= 'd0;
       up_drp_rwn <= 'd0;
       up_drp_addr <= 'd0;
       up_drp_wdata <= 'd0;
+      up_drp_rdata_hold <= 'd0;
       up_status_ovf <= 'd0;
       up_status_ovf <= 'd0;
       up_usr_chanmax <= 'd0;
@@ -261,10 +258,24 @@ module up_dac_common (
         up_dac_frame <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
-        up_drp_sel_t <= ~up_drp_sel_t;
+        up_drp_sel <= 1'b1;
+        up_drp_wr <= ~up_wdata[28];
+      end else begin
+        up_drp_sel <= 1'b0;
+        up_drp_wr <= 1'b0;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+        up_drp_status <= 1'b1;
+      end else if (up_drp_ready == 1'b1) begin
+        up_drp_status <= 1'b0;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
         up_drp_rwn <= up_wdata[28];
         up_drp_addr <= up_wdata[27:16];
         up_drp_wdata <= up_wdata[15:0];
+      end
+      if (up_drp_ready == 1'b1) begin
+        up_drp_rdata_hold <= up_drp_rdata;
       end
       if (up_status_ovf_s == 1'b1) begin
         up_status_ovf <= 1'b1;
@@ -308,7 +319,7 @@ module up_dac_common (
           8'h16: up_rdata <= dac_clk_ratio;
           8'h17: up_rdata <= {31'd0, up_status_s};
           8'h1c: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr, up_drp_wdata};
-          8'h1d: up_rdata <= {14'd0, up_drp_locked_s, up_drp_status_s, up_drp_rdata_s};
+          8'h1d: up_rdata <= {14'd0, up_drp_locked, up_drp_status, up_drp_rdata_hold};
           8'h22: up_rdata <= {30'd0, up_status_ovf, up_status_unf};
           8'h28: up_rdata <= {24'd0, dac_usr_chanmax};
           8'h2e: up_rdata <= up_dac_gpio_in;
@@ -323,9 +334,8 @@ module up_dac_common (
 
   // resets
 
-  ad_rst i_mmcm_rst_reg   (.preset(up_mmcm_preset_s), .clk(drp_clk),    .rst(mmcm_rst));
+  ad_rst i_mmcm_rst_reg   (.preset(up_mmcm_preset_s), .clk(up_clk),     .rst(mmcm_rst));
   ad_rst i_dac_rst_reg    (.preset(up_preset_s),      .clk(dac_clk),    .rst(dac_rst));
-  ad_rst i_drp_rst_reg    (.preset(up_preset_s),      .clk(drp_clk),    .rst(drp_rst));
 
   // dac control & status
 
@@ -386,28 +396,6 @@ module up_dac_common (
     .up_d_count (up_dac_clk_count_s),
     .d_rst (dac_rst),
     .d_clk (dac_clk));
-
-  // drp control & status
-
-  up_drp_cntrl i_drp_cntrl (
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_drp_sel_t (up_drp_sel_t),
-    .up_drp_rwn (up_drp_rwn),
-    .up_drp_addr (up_drp_addr),
-    .up_drp_wdata (up_drp_wdata),
-    .up_drp_rdata (up_drp_rdata_s),
-    .up_drp_status (up_drp_status_s),
-    .up_drp_locked (up_drp_locked_s));
 
 endmodule
 
