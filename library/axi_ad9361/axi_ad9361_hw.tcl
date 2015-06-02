@@ -31,7 +31,6 @@ add_fileset_file up_xfer_cntrl.v          VERILOG PATH $ad_hdl_dir/library/commo
 add_fileset_file up_xfer_status.v         VERILOG PATH $ad_hdl_dir/library/common/up_xfer_status.v
 add_fileset_file up_clock_mon.v           VERILOG PATH $ad_hdl_dir/library/common/up_clock_mon.v
 add_fileset_file up_delay_cntrl.v         VERILOG PATH $ad_hdl_dir/library/common/up_delay_cntrl.v
-add_fileset_file up_drp_cntrl.v           VERILOG PATH $ad_hdl_dir/library/common/up_drp_cntrl.v
 add_fileset_file up_adc_common.v          VERILOG PATH $ad_hdl_dir/library/common/up_adc_common.v
 add_fileset_file up_adc_channel.v         VERILOG PATH $ad_hdl_dir/library/common/up_adc_channel.v
 add_fileset_file up_dac_common.v          VERILOG PATH $ad_hdl_dir/library/common/up_dac_common.v
