@@ -73,3 +73,6 @@ set_property  -dict {PACKAGE_PIN  W16   IOSTANDARD LVCMOS25} [get_ports gpio_bd[
 set_property  -dict {PACKAGE_PIN  W15   IOSTANDARD LVCMOS25} [get_ports gpio_bd[10]]                   ; ## (dip) IO_L24N_T3_12            
 set_property  -dict {PACKAGE_PIN  V19   IOSTANDARD LVCMOS25} [get_ports gpio_bd[11]]                   ; ## (dip) IO_0_13                  
 
+# clocks
+
+create_clock -period 8.000 -name eth1_rgmii_rxclk [get_ports eth1_rgmii_rxclk]
