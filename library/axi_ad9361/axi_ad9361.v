@@ -313,8 +313,6 @@ module axi_ad9361 (
   wire            dac_valid_i1_s;
   wire            dac_valid_q1_s;
 
-  wire            tdd_mode_enable_s;
-
   // signal name changes
 
   assign up_clk = s_axi_aclk;
@@ -394,13 +392,20 @@ module axi_ad9361 (
   axi_ad9361_tdd i_tdd(
     .clk(clk),
     .rst(rst),
-    .tdd_enable(tdd_mode_enable_s),
     .tdd_tx_dp_en(tdd_tx_dp_en_s),
     .tdd_rx_vco_en(tdd_rx_vco_en_s),
     .tdd_tx_vco_en(tdd_tx_vco_en_s),
     .tdd_rx_rf_en(tdd_rx_rf_en_s),
     .tdd_tx_rf_en(tdd_tx_rf_en_s),
     .tdd_status(tdd_status_s),
+    .tx_valid_i0(dac_valid_i0_s),
+    .tx_valid_q0(dac_valid_q0_s),
+    .tx_valid_i1(dac_valid_i1_s),
+    .tx_valid_q1(dac_valid_q1_s),
+    .tdd_tx_valid_i0(dac_valid_i0),
+    .tdd_tx_valid_q0(dac_valid_q0),
+    .tdd_tx_valid_i1(dac_valid_i1),
+    .tdd_tx_valid_q1(dac_valid_q1),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_wreq(up_wreq_s),
@@ -413,6 +418,7 @@ module axi_ad9361 (
     .up_rack(up_rack_tdd_s),
     .tdd_dbg(tdd_dbg)
   );
+
 
   // receive
 
@@ -506,11 +512,6 @@ module axi_ad9361 (
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_tx_s),
     .up_rack (up_rack_tx_s));
-
-  assign  dac_valid_i0 = (tdd_mode_enable_s == 1) ? (dac_valid_i0_s & tdd_tx_dp_en_s) : dac_valid_i0_s;
-  assign  dac_valid_q0 = (tdd_mode_enable_s == 1) ? (dac_valid_q0_s & tdd_tx_dp_en_s) : dac_valid_q0_s;
-  assign  dac_valid_i1 = (tdd_mode_enable_s == 1) ? (dac_valid_i1_s & tdd_tx_dp_en_s) : dac_valid_i1_s;
-  assign  dac_valid_q1 = (tdd_mode_enable_s == 1) ? (dac_valid_q1_s & tdd_tx_dp_en_s) : dac_valid_q1_s;
 
   // axi interface
 
