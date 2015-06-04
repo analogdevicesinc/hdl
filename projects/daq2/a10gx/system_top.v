@@ -191,6 +191,9 @@ module system_top (
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
+  wire              xcvr_pll_locked;
+  wire    [  3:0]   xcvr_rx_ready;
+  wire    [  3:0]   xcvr_tx_ready;
 
   // daq2
 
@@ -206,10 +209,13 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
-  assign gpio_i[63:44] = 19'd0;
-  assign gpio_i[43] = trig;
-  assign gpio_i[39] = 1'd0;
-  assign gpio_i[37] = 1'd0;
+  assign gpio_i[63:60] = xcvr_tx_ready;
+  assign gpio_i[59:56] = xcvr_rx_ready;
+  assign gpio_i[55:55] = xcvr_pll_locked;
+  assign gpio_i[54:44] = 11'd0;
+  assign gpio_i[43:43] = trig;
+  assign gpio_i[39:39] = 1'd0;
+  assign gpio_i[37:37] = 1'd0;
 
   ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
     .dio_t ({3'h0, 1'h0, 5'h1f}),
@@ -277,6 +283,9 @@ module system_top (
     .sys_spi_MOSI (spi_mosi_s),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
+    .sys_xcvr_rstcntrl_pll_locked_pll_locked (xcvr_pll_locked),
+    .sys_xcvr_rstcntrl_rx_ready_rx_ready (xcvr_rx_ready),
+    .sys_xcvr_rstcntrl_tx_ready_tx_ready (xcvr_tx_ready),
     .sys_xcvr_rx_ref_clk_clk (rx_ref_clk),
     .sys_xcvr_rx_sync_n_export (rx_sync),
     .sys_xcvr_rx_sysref_export (rx_sysref),

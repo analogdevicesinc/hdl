@@ -686,6 +686,21 @@
    dir="end" />
  <interface name="sys_spi" internal="sys_spi.external" type="conduit" dir="end" />
  <interface
+   name="sys_xcvr_rstcntrl_pll_locked"
+   internal="sys_xcvr_rstcntrl.pll_locked"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sys_xcvr_rstcntrl_rx_ready"
+   internal="sys_xcvr_rstcntrl.rx_ready"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sys_xcvr_rstcntrl_tx_ready"
+   internal="sys_xcvr_rstcntrl.tx_ready"
+   type="conduit"
+   dir="end" />
+ <interface
    name="sys_xcvr_rx_ref_clk"
    internal="sys_xcvr_rx_ref_clk.clk_in"
    type="clock"
@@ -1485,9 +1500,9 @@
   <parameter name="PHY_DDR3_CONFIG_ENUM">CONFIG_PHY_AND_HARD_CTRL</parameter>
   <parameter name="PHY_DDR3_CORE_CLKS_SHARING_ENUM">CORE_CLKS_SHARING_DISABLED</parameter>
   <parameter name="PHY_DDR3_DEFAULT_IO" value="false" />
-  <parameter name="PHY_DDR3_DEFAULT_REF_CLK_FREQ" value="true" />
+  <parameter name="PHY_DDR3_DEFAULT_REF_CLK_FREQ" value="false" />
   <parameter name="PHY_DDR3_IO_VOLTAGE" value="1.5" />
-  <parameter name="PHY_DDR3_MEM_CLK_FREQ_MHZ" value="933.3333" />
+  <parameter name="PHY_DDR3_MEM_CLK_FREQ_MHZ" value="533.3333" />
   <parameter name="PHY_DDR3_RATE_ENUM" value="RATE_QUARTER" />
   <parameter name="PHY_DDR3_REF_CLK_JITTER_PS" value="10.0" />
   <parameter name="PHY_DDR3_USER_AC_IO_STD_ENUM" value="IO_STD_SSTL_15_C1" />
@@ -1501,7 +1516,7 @@
   <parameter name="PHY_DDR3_USER_DATA_OUT_MODE_ENUM" value="OUT_OCT_34_CAL" />
   <parameter name="PHY_DDR3_USER_PING_PONG_EN" value="false" />
   <parameter name="PHY_DDR3_USER_PLL_REF_CLK_IO_STD_ENUM" value="IO_STD_LVDS" />
-  <parameter name="PHY_DDR3_USER_REF_CLK_FREQ_MHZ" value="100.0" />
+  <parameter name="PHY_DDR3_USER_REF_CLK_FREQ_MHZ" value="133.333" />
   <parameter name="PHY_DDR3_USER_RZQ_IO_STD_ENUM" value="IO_STD_CMOS_15" />
   <parameter name="PHY_DDR4_CONFIG_ENUM">CONFIG_PHY_AND_HARD_CTRL</parameter>
   <parameter name="PHY_DDR4_CORE_CLKS_SHARING_ENUM">CORE_CLKS_SHARING_DISABLED</parameter>
@@ -1708,7 +1723,7 @@
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@1725efb7</parameter>
+  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@4e75700d</parameter>
   <parameter name="BURST_ENABLE" value="1" />
   <parameter name="BURST_WRAPPING_SUPPORT" value="0" />
   <parameter name="CHANNEL_ENABLE" value="0" />
@@ -1738,7 +1753,7 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@10cf986e</parameter>
+  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@7671b727</parameter>
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="" />
   <parameter name="BURST_ENABLE" value="1" />
