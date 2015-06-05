@@ -171,6 +171,7 @@ ad_connect sys_concat_intc/dout   axi_intc/intr
 
 # defaults (peripherals)
 
+ad_connect axi_ddr_cntrl/device_temp_i GND
 ad_connect axi_ddr_cntrl/mmcm_locked   sys_rstgen/dcm_locked
 
 ad_connect sys_cpu_clk    axi_ddr_cntrl/ui_addn_clk_0
