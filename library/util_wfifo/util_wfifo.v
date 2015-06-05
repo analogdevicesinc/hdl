@@ -280,7 +280,7 @@ module util_wfifo (
 
   assign dout_waddr_rel_t_s = dout_waddr_rel_t_m[2] ^ dout_waddr_rel_t_m[1];
 
-  always @(posedge dout_clk) begin
+  always @(posedge dout_clk or negedge dout_rstn) begin
     if (dout_rstn == 1'b0) begin
       dout_waddr_rel_t_m <= 3'd0;
       dout_waddr_rel <= 'd0;
@@ -302,7 +302,7 @@ module util_wfifo (
   assign dout_data_s[(T_DOUT_DATA_WIDTH+1):DATA_WIDTH] = 'd0;
   assign dout_data_s[(DATA_WIDTH-1):0] = dout_rdata_d;
 
-  always @(posedge dout_clk) begin
+  always @(posedge dout_clk or negedge dout_rstn) begin
     if (dout_rstn == 1'b0) begin
       dout_enable_m <= 'd0;
       dout_enable <= 'd0;
