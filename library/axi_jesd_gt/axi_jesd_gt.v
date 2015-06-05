@@ -86,10 +86,13 @@ module axi_jesd_gt (
   tx_ip_sof,
   tx_ip_data,
 
-  // axi interface
+  // axi - clock & reset
 
-  s_axi_aclk,
-  s_axi_aresetn,
+  axi_aclk,
+  axi_aresetn,
+
+  // axi-lite (slave)
+
   s_axi_awvalid,
   s_axi_awaddr,
   s_axi_awready,
@@ -108,10 +111,8 @@ module axi_jesd_gt (
   s_axi_rresp,
   s_axi_rready,
 
-  // master interface
+  // axi (master)
 
-  m_axi_aclk,
-  m_axi_aresetn,
   m_axi_awvalid,
   m_axi_awaddr,
   m_axi_awprot,
@@ -130,24 +131,7 @@ module axi_jesd_gt (
   m_axi_rvalid,
   m_axi_rdata,
   m_axi_rresp,
-  m_axi_rready,
-
-  // drp clock
-
-  drp_clk,
-
-  // es debug interface
-
-  es_dbg_data,
-  es_dbg_trigger,
-
-  // jesd debug interface
-
-  rx_mon_data,
-  rx_mon_trigger,
-
-  tx_mon_data,
-  tx_mon_trigger);
+  m_axi_rready);
 
   parameter   PCORE_ID = 0;
   parameter   PCORE_DEVICE_TYPE = 0;
@@ -224,10 +208,11 @@ module axi_jesd_gt (
   input   [  3:0]                               tx_ip_sof;
   output  [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_ip_data;
 
+  input                                         axi_aclk;
+  input                                         axi_aresetn;
+
   // axi interface
 
-  input                                         s_axi_aclk;
-  input                                         s_axi_aresetn;
   input                                         s_axi_awvalid;
   input   [ 31:0]                               s_axi_awaddr;
   output                                        s_axi_awready;
@@ -248,8 +233,6 @@ module axi_jesd_gt (
 
   // master interface
 
-  input                                         m_axi_aclk;
-  input                                         m_axi_aresetn;
   output                                        m_axi_awvalid;
   output  [ 31:0]                               m_axi_awaddr;
   output  [  2:0]                               m_axi_awprot;
@@ -270,23 +253,6 @@ module axi_jesd_gt (
   input   [  1:0]                               m_axi_rresp;
   output                                        m_axi_rready;
 
-  // drp clock
-
-  input                                         drp_clk;
-
-  // es debug interface
-
-  output  [275:0]                               es_dbg_data;
-  output  [  7:0]                               es_dbg_trigger;
-
-  // jesd debug interface
-
-  output  [((PCORE_NUM_OF_RX_LANES*82)+5):0]    rx_mon_data;
-  output  [((PCORE_NUM_OF_RX_LANES* 1)+1):0]    rx_mon_trigger;
-
-  output  [((PCORE_NUM_OF_TX_LANES*36)+5):0]    tx_mon_data;
-  output  [  5:0]                               tx_mon_trigger;
-
   // reset and clocks
 
   wire                                          gt_pll_rst;
@@ -300,11 +266,9 @@ module axi_jesd_gt (
   wire    [  7:0]                               qpll_ref_clk;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_out_clk;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_out_clk;
-  wire                                          axi_rstn;
-  wire                                          axi_clk;
   wire                                          up_rstn;
   wire                                          up_clk;
-  wire                                          drp_rst;
+  wire                                          up_drp_rst;
 
   // internal signals
 
@@ -315,9 +279,9 @@ module axi_jesd_gt (
   wire    [  8:0]                               tx_pll_locked_extn_s;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_mon_trigger_s;
   wire    [((PCORE_NUM_OF_LANES*50)-1):0]       rx_mon_data_s;
-  wire    [ 15:0]                               drp_rdata_gt_s[15:0];
-  wire                                          drp_ready_gt_s[15:0];
-  wire    [  7:0]                               drp_rx_rate_gt_s[15:0];
+  wire    [ 15:0]                               up_drp_rdata_gt_s[15:0];
+  wire                                          up_drp_ready_gt_s[15:0];
+  wire    [  7:0]                               up_drp_rxrate_gt_s[15:0];
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_data_p_s;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_data_n_s;
   wire    [((PCORE_NUM_OF_LANES*32)-1):0]       rx_data_s;
@@ -326,6 +290,11 @@ module axi_jesd_gt (
   wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_disperr_s;
   wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_notintable_s;
   wire    [((PCORE_NUM_OF_LANES*32)-1):0]       rx_gt_data_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_ilas_f_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_ilas_q_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_ilas_a_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_ilas_r_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_cgs_k_s;
   wire    [((PCORE_NUM_OF_LANES*32)-1):0]       rx_ip_data_s;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_data_p_s;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_data_n_s;
@@ -350,45 +319,45 @@ module axi_jesd_gt (
   wire    [  2:0]                               up_rx_out_clk_sel_s;
   wire    [  1:0]                               up_tx_sys_clk_sel_s;
   wire    [  2:0]                               up_tx_out_clk_sel_s;
-  wire                                          drp_sel_s;
-  wire                                          drp_wr_s;
-  wire    [ 11:0]                               drp_addr_s;
-  wire    [ 15:0]                               drp_wdata_s;
-  wire    [ 15:0]                               drp_rdata_s;
-  wire                                          drp_ready_s;
-  wire    [  7:0]                               drp_lanesel_s;
-  wire    [  7:0]                               drp_rx_rate_s;
-  wire                                          es_sel_s;
-  wire                                          es_wr_s;
-  wire    [ 11:0]                               es_addr_s;
-  wire    [ 15:0]                               es_wdata_s;
-  wire    [ 15:0]                               es_rdata_s;
-  wire                                          es_ready_s;
-  wire                                          es_start_s;
-  wire                                          es_stop_s;
-  wire                                          es_init_s;
-  wire                                          es_lpm_dfe_n_s;
-  wire    [ 15:0]                               es_sdata0_s;
-  wire    [ 15:0]                               es_sdata1_s;
-  wire    [ 15:0]                               es_sdata2_s;
-  wire    [ 15:0]                               es_sdata3_s;
-  wire    [ 15:0]                               es_sdata4_s;
-  wire    [ 15:0]                               es_qdata0_s;
-  wire    [ 15:0]                               es_qdata1_s;
-  wire    [ 15:0]                               es_qdata2_s;
-  wire    [ 15:0]                               es_qdata3_s;
-  wire    [ 15:0]                               es_qdata4_s;
-  wire    [  4:0]                               es_prescale_s;
-  wire    [ 11:0]                               es_hoffset_min_s;
-  wire    [ 11:0]                               es_hoffset_max_s;
-  wire    [ 11:0]                               es_hoffset_step_s;
-  wire    [  7:0]                               es_voffset_min_s;
-  wire    [  7:0]                               es_voffset_max_s;
-  wire    [  7:0]                               es_voffset_step_s;
-  wire    [  1:0]                               es_voffset_range_s;
-  wire    [ 31:0]                               es_start_addr_s;
-  wire                                          es_dmaerr_s;
-  wire                                          es_status_s;
+  wire                                          up_drp_sel_s;
+  wire                                          up_drp_wr_s;
+  wire    [ 11:0]                               up_drp_addr_s;
+  wire    [ 15:0]                               up_drp_wdata_s;
+  wire    [ 15:0]                               up_drp_rdata_s;
+  wire                                          up_drp_ready_s;
+  wire    [  7:0]                               up_drp_lanesel_s;
+  wire    [  7:0]                               up_drp_rxrate_s;
+  wire                                          up_es_drp_sel_s;
+  wire                                          up_es_drp_wr_s;
+  wire    [ 11:0]                               up_es_drp_addr_s;
+  wire    [ 15:0]                               up_es_drp_wdata_s;
+  wire    [ 15:0]                               up_es_drp_rdata_s;
+  wire                                          up_es_drp_ready_s;
+  wire                                          up_es_start_s;
+  wire                                          up_es_stop_s;
+  wire                                          up_es_init_s;
+  wire                                          up_es_lpm_dfe_n_s;
+  wire    [ 15:0]                               up_es_sdata0_s;
+  wire    [ 15:0]                               up_es_sdata1_s;
+  wire    [ 15:0]                               up_es_sdata2_s;
+  wire    [ 15:0]                               up_es_sdata3_s;
+  wire    [ 15:0]                               up_es_sdata4_s;
+  wire    [ 15:0]                               up_es_qdata0_s;
+  wire    [ 15:0]                               up_es_qdata1_s;
+  wire    [ 15:0]                               up_es_qdata2_s;
+  wire    [ 15:0]                               up_es_qdata3_s;
+  wire    [ 15:0]                               up_es_qdata4_s;
+  wire    [  4:0]                               up_es_prescale_s;
+  wire    [ 11:0]                               up_es_hoffset_min_s;
+  wire    [ 11:0]                               up_es_hoffset_max_s;
+  wire    [ 11:0]                               up_es_hoffset_step_s;
+  wire    [  7:0]                               up_es_voffset_min_s;
+  wire    [  7:0]                               up_es_voffset_max_s;
+  wire    [  7:0]                               up_es_voffset_step_s;
+  wire    [  1:0]                               up_es_voffset_range_s;
+  wire    [ 31:0]                               up_es_start_addr_s;
+  wire                                          up_es_dmaerr_s;
+  wire                                          up_es_status_s;
   wire                                          up_wreq_s;
   wire    [ 13:0]                               up_waddr_s;
   wire    [ 31:0]                               up_wdata_s;
@@ -408,10 +377,8 @@ module axi_jesd_gt (
 
   // signal name changes
 
-  assign axi_rstn = m_axi_aresetn;
-  assign axi_clk = m_axi_aclk;
-  assign up_rstn = s_axi_aresetn;
-  assign up_clk = s_axi_aclk;
+  assign up_rstn = axi_aresetn;
+  assign up_clk = axi_aclk;
 
   // drp is simply over-defined to avoid errors with singluar entries
 
@@ -421,32 +388,32 @@ module axi_jesd_gt (
   assign tx_rst_done_extn_s = {up_status_extn_s[8:PCORE_NUM_OF_LANES], tx_rst_done_s};
   assign tx_pll_locked_extn_s = {up_status_extn_s[8:PCORE_NUM_OF_LANES], tx_pll_locked_s};
 
-  assign drp_rdata_s =    drp_rdata_gt_s[15] | drp_rdata_gt_s[14] |
-                          drp_rdata_gt_s[13] | drp_rdata_gt_s[12] |
-                          drp_rdata_gt_s[11] | drp_rdata_gt_s[10] |
-                          drp_rdata_gt_s[ 9] | drp_rdata_gt_s[ 8] |
-                          drp_rdata_gt_s[ 7] | drp_rdata_gt_s[ 6] |
-                          drp_rdata_gt_s[ 5] | drp_rdata_gt_s[ 4] |
-                          drp_rdata_gt_s[ 3] | drp_rdata_gt_s[ 2] |
-                          drp_rdata_gt_s[ 1] | drp_rdata_gt_s[ 0];
+  assign up_drp_rdata_s =   up_drp_rdata_gt_s[15] | up_drp_rdata_gt_s[14] |
+                            up_drp_rdata_gt_s[13] | up_drp_rdata_gt_s[12] |
+                            up_drp_rdata_gt_s[11] | up_drp_rdata_gt_s[10] |
+                            up_drp_rdata_gt_s[ 9] | up_drp_rdata_gt_s[ 8] |
+                            up_drp_rdata_gt_s[ 7] | up_drp_rdata_gt_s[ 6] |
+                            up_drp_rdata_gt_s[ 5] | up_drp_rdata_gt_s[ 4] |
+                            up_drp_rdata_gt_s[ 3] | up_drp_rdata_gt_s[ 2] |
+                            up_drp_rdata_gt_s[ 1] | up_drp_rdata_gt_s[ 0];
 
-  assign drp_ready_s =    drp_ready_gt_s[15] | drp_ready_gt_s[14] |
-                          drp_ready_gt_s[13] | drp_ready_gt_s[12] |
-                          drp_ready_gt_s[11] | drp_ready_gt_s[10] |
-                          drp_ready_gt_s[ 9] | drp_ready_gt_s[ 8] |
-                          drp_ready_gt_s[ 7] | drp_ready_gt_s[ 6] |
-                          drp_ready_gt_s[ 5] | drp_ready_gt_s[ 4] |
-                          drp_ready_gt_s[ 3] | drp_ready_gt_s[ 2] |
-                          drp_ready_gt_s[ 1] | drp_ready_gt_s[ 0];
+  assign up_drp_ready_s =   up_drp_ready_gt_s[15] | up_drp_ready_gt_s[14] |
+                            up_drp_ready_gt_s[13] | up_drp_ready_gt_s[12] |
+                            up_drp_ready_gt_s[11] | up_drp_ready_gt_s[10] |
+                            up_drp_ready_gt_s[ 9] | up_drp_ready_gt_s[ 8] |
+                            up_drp_ready_gt_s[ 7] | up_drp_ready_gt_s[ 6] |
+                            up_drp_ready_gt_s[ 5] | up_drp_ready_gt_s[ 4] |
+                            up_drp_ready_gt_s[ 3] | up_drp_ready_gt_s[ 2] |
+                            up_drp_ready_gt_s[ 1] | up_drp_ready_gt_s[ 0];
 
-  assign drp_rx_rate_s =  drp_rx_rate_gt_s[15] | drp_rx_rate_gt_s[14] |
-                          drp_rx_rate_gt_s[13] | drp_rx_rate_gt_s[12] |
-                          drp_rx_rate_gt_s[11] | drp_rx_rate_gt_s[10] |
-                          drp_rx_rate_gt_s[ 9] | drp_rx_rate_gt_s[ 8] |
-                          drp_rx_rate_gt_s[ 7] | drp_rx_rate_gt_s[ 6] |
-                          drp_rx_rate_gt_s[ 5] | drp_rx_rate_gt_s[ 4] |
-                          drp_rx_rate_gt_s[ 3] | drp_rx_rate_gt_s[ 2] |
-                          drp_rx_rate_gt_s[ 1] | drp_rx_rate_gt_s[ 0];
+  assign up_drp_rxrate_s =  up_drp_rxrate_gt_s[15] | up_drp_rxrate_gt_s[14] |
+                            up_drp_rxrate_gt_s[13] | up_drp_rxrate_gt_s[12] |
+                            up_drp_rxrate_gt_s[11] | up_drp_rxrate_gt_s[10] |
+                            up_drp_rxrate_gt_s[ 9] | up_drp_rxrate_gt_s[ 8] |
+                            up_drp_rxrate_gt_s[ 7] | up_drp_rxrate_gt_s[ 6] |
+                            up_drp_rxrate_gt_s[ 5] | up_drp_rxrate_gt_s[ 4] |
+                            up_drp_rxrate_gt_s[ 3] | up_drp_rxrate_gt_s[ 2] |
+                            up_drp_rxrate_gt_s[ 1] | up_drp_rxrate_gt_s[ 0];
 
 
   // asymmetric widths -- receive
@@ -565,15 +532,15 @@ module axi_jesd_gt (
     .qpll_clk (qpll_clk_0),
     .qpll_ref_clk (qpll_ref_clk_0),
     .qpll_locked (qpll_locked_0_s),
-    .drp_clk (drp_clk),
-    .drp_sel (drp_sel_s),
-    .drp_addr (drp_addr_s),
-    .drp_wr (drp_wr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_gt_s[14]),
-    .drp_ready (drp_ready_gt_s[14]),
-    .drp_lanesel (drp_lanesel_s),
-    .drp_rx_rate (drp_rx_rate_gt_s[14]));
+    .up_clk (up_clk),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_gt_s[14]),
+    .up_drp_ready (up_drp_ready_gt_s[14]),
+    .up_drp_lanesel (up_drp_lanesel_s),
+    .up_drp_rxrate (up_drp_rxrate_gt_s[14]));
 
   ad_gt_common_1 #(
     .DRP_ID (15),
@@ -588,23 +555,23 @@ module axi_jesd_gt (
     .qpll_clk (qpll_clk_1),
     .qpll_ref_clk (qpll_ref_clk_1),
     .qpll_locked (qpll_locked_1_s),
-    .drp_clk (drp_clk),
-    .drp_sel (drp_sel_s),
-    .drp_addr (drp_addr_s),
-    .drp_wr (drp_wr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_gt_s[15]),
-    .drp_ready (drp_ready_gt_s[15]),
-    .drp_lanesel (drp_lanesel_s),
-    .drp_rx_rate (drp_rx_rate_gt_s[15]));
+    .up_clk (up_clk),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_gt_s[15]),
+    .up_drp_ready (up_drp_ready_gt_s[15]),
+    .up_drp_lanesel (up_drp_lanesel_s),
+    .up_drp_rxrate (up_drp_rxrate_gt_s[15]));
 
   genvar n;
   generate
 
   for (n = PCORE_NUM_OF_LANES; n < 14; n = n + 1) begin: g_unused_1
-  assign drp_rdata_gt_s[n] = 'd0;
-  assign drp_ready_gt_s[n] = 'd0;
-  assign drp_rx_rate_gt_s[n] = 'd0;
+  assign up_drp_rdata_gt_s[n] = 'd0;
+  assign up_drp_ready_gt_s[n] = 'd0;
+  assign up_drp_rxrate_gt_s[n] = 'd0;
   end
 
   for (n = 0; n < PCORE_NUM_OF_LANES; n = n + 1) begin: g_lane_1
@@ -648,6 +615,11 @@ module axi_jesd_gt (
     .rx_notintable (rx_gt_notintable_s[n*4+3:n*4]),
     .rx_data (rx_gt_data_s[n*32+31:n*32]),
     .rx_comma_align_enb (rx_ip_comma_align),
+    .rx_ilas_f (rx_ilas_f_s[n*4+3:n*4]),
+    .rx_ilas_q (rx_ilas_q_s[n*4+3:n*4]),
+    .rx_ilas_a (rx_ilas_a_s[n*4+3:n*4]),
+    .rx_ilas_r (rx_ilas_r_s[n*4+3:n*4]),
+    .rx_cgs_k (rx_cgs_k_s[n*4+3:n*4]),
     .tx_rst (gt_tx_rst),
     .tx_p (tx_data_p_s[n]),
     .tx_n (tx_data_n_s[n]),
@@ -659,33 +631,29 @@ module axi_jesd_gt (
     .tx_clk (tx_clk),
     .tx_charisk (tx_gt_charisk_mux_s[n*4+3:n*4]),
     .tx_data (tx_gt_data_mux_s[n*32+31:n*32]),
-    .drp_clk (drp_clk),
-    .drp_sel (drp_sel_s),
-    .drp_addr (drp_addr_s),
-    .drp_wr (drp_wr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_gt_s[n]),
-    .drp_ready (drp_ready_gt_s[n]),
-    .drp_lanesel (drp_lanesel_s),
-    .drp_rx_rate (drp_rx_rate_gt_s[n]),
-    .rx_mon_trigger (rx_mon_trigger_s[n]),
-    .rx_mon_data (rx_mon_data_s[n*50+49:n*50]));
+    .up_clk (up_clk),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_gt_s[n]),
+    .up_drp_ready (up_drp_ready_gt_s[n]),
+    .up_drp_lanesel (up_drp_lanesel_s),
+    .up_drp_rxrate (up_drp_rxrate_gt_s[n]));
   end
   endgenerate
 
   // eye scan
 
   ad_gt_es #(.GTH_GTX_N(PCORE_DEVICE_TYPE)) i_gt_es (
-    .drp_rst (drp_rst),
-    .drp_clk (drp_clk),
-    .es_sel (es_sel_s),
-    .es_wr (es_wr_s),
-    .es_addr (es_addr_s),
-    .es_wdata (es_wdata_s),
-    .es_rdata (es_rdata_s),
-    .es_ready (es_ready_s),
-    .axi_rstn (axi_rstn),
-    .axi_clk (axi_clk),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_es_drp_sel (up_es_drp_sel_s),
+    .up_es_drp_wr (up_es_drp_wr_s),
+    .up_es_drp_addr (up_es_drp_addr_s),
+    .up_es_drp_wdata (up_es_drp_wdata_s),
+    .up_es_drp_rdata (up_es_drp_rdata_s),
+    .up_es_drp_ready (up_es_drp_ready_s),
     .axi_awvalid (m_axi_awvalid),
     .axi_awaddr (m_axi_awaddr),
     .axi_awprot (m_axi_awprot),
@@ -705,33 +673,31 @@ module axi_jesd_gt (
     .axi_rdata (m_axi_rdata),
     .axi_rresp (m_axi_rresp),
     .axi_rready (m_axi_rready),
-    .es_start (es_start_s),
-    .es_stop (es_stop_s),
-    .es_init (es_init_s),
-    .es_lpm_dfe_n (es_lpm_dfe_n_s),
-    .es_sdata0 (es_sdata0_s),
-    .es_sdata1 (es_sdata1_s),
-    .es_sdata2 (es_sdata2_s),
-    .es_sdata3 (es_sdata3_s),
-    .es_sdata4 (es_sdata4_s),
-    .es_qdata0 (es_qdata0_s),
-    .es_qdata1 (es_qdata1_s),
-    .es_qdata2 (es_qdata2_s),
-    .es_qdata3 (es_qdata3_s),
-    .es_qdata4 (es_qdata4_s),
-    .es_prescale (es_prescale_s),
-    .es_hoffset_min (es_hoffset_min_s),
-    .es_hoffset_max (es_hoffset_max_s),
-    .es_hoffset_step (es_hoffset_step_s),
-    .es_voffset_min (es_voffset_min_s),
-    .es_voffset_max (es_voffset_max_s),
-    .es_voffset_step (es_voffset_step_s),
-    .es_voffset_range (es_voffset_range_s),
-    .es_start_addr (es_start_addr_s),
-    .es_dmaerr (es_dmaerr_s),
-    .es_status (es_status_s),
-    .es_dbg_trigger (es_dbg_trigger),
-    .es_dbg_data (es_dbg_data));
+    .up_lpm_dfe_n (up_lpm_dfe_n_s),
+    .up_es_start (up_es_start_s),
+    .up_es_stop (up_es_stop_s),
+    .up_es_init (up_es_init_s),
+    .up_es_sdata0 (up_es_sdata0_s),
+    .up_es_sdata1 (up_es_sdata1_s),
+    .up_es_sdata2 (up_es_sdata2_s),
+    .up_es_sdata3 (up_es_sdata3_s),
+    .up_es_sdata4 (up_es_sdata4_s),
+    .up_es_qdata0 (up_es_qdata0_s),
+    .up_es_qdata1 (up_es_qdata1_s),
+    .up_es_qdata2 (up_es_qdata2_s),
+    .up_es_qdata3 (up_es_qdata3_s),
+    .up_es_qdata4 (up_es_qdata4_s),
+    .up_es_prescale (up_es_prescale_s),
+    .up_es_hoffset_min (up_es_hoffset_min_s),
+    .up_es_hoffset_max (up_es_hoffset_max_s),
+    .up_es_hoffset_step (up_es_hoffset_step_s),
+    .up_es_voffset_min (up_es_voffset_min_s),
+    .up_es_voffset_max (up_es_voffset_max_s),
+    .up_es_voffset_step (up_es_voffset_step_s),
+    .up_es_voffset_range (up_es_voffset_range_s),
+    .up_es_start_addr (up_es_start_addr_s),
+    .up_es_dmaerr (up_es_dmaerr_s),
+    .up_es_status (up_es_status_s));
 
   // processor
     
@@ -767,47 +733,44 @@ module axi_jesd_gt (
     .tx_pll_locked (tx_pll_locked_extn_s[7:0]),
     .tx_error (1'd0),
     .tx_rst_done_up (tx_rst_done),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel_s),
-    .drp_wr (drp_wr_s),
-    .drp_addr (drp_addr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_s),
-    .drp_ready (drp_ready_s),
-    .drp_lanesel (drp_lanesel_s),
-    .drp_rx_rate (drp_rx_rate_s),
-    .es_sel (es_sel_s),
-    .es_wr (es_wr_s),
-    .es_addr (es_addr_s),
-    .es_wdata (es_wdata_s),
-    .es_rdata (es_rdata_s),
-    .es_ready (es_ready_s),
-    .es_start (es_start_s),
-    .es_stop (es_stop_s),
-    .es_init (es_init_s),
-    .es_lpm_dfe_n (es_lpm_dfe_n_s),
-    .es_prescale (es_prescale_s),
-    .es_voffset_range (es_voffset_range_s),
-    .es_voffset_step (es_voffset_step_s),
-    .es_voffset_max (es_voffset_max_s),
-    .es_voffset_min (es_voffset_min_s),
-    .es_hoffset_max (es_hoffset_max_s),
-    .es_hoffset_min (es_hoffset_min_s),
-    .es_hoffset_step (es_hoffset_step_s),
-    .es_start_addr (es_start_addr_s),
-    .es_sdata0 (es_sdata0_s),
-    .es_sdata1 (es_sdata1_s),
-    .es_sdata2 (es_sdata2_s),
-    .es_sdata3 (es_sdata3_s),
-    .es_sdata4 (es_sdata4_s),
-    .es_qdata0 (es_qdata0_s),
-    .es_qdata1 (es_qdata1_s),
-    .es_qdata2 (es_qdata2_s),
-    .es_qdata3 (es_qdata3_s),
-    .es_qdata4 (es_qdata4_s),
-    .es_dmaerr (es_dmaerr_s),
-    .es_status (es_status_s),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_s),
+    .up_drp_ready (up_drp_ready_s),
+    .up_drp_lanesel (up_drp_lanesel_s),
+    .up_drp_rxrate (up_drp_rxrate_s),
+    .up_es_drp_sel (up_es_drp_sel_s),
+    .up_es_drp_wr (up_es_drp_wr_s),
+    .up_es_drp_addr (up_es_drp_addr_s),
+    .up_es_drp_wdata (up_es_drp_wdata_s),
+    .up_es_drp_rdata (up_es_drp_rdata_s),
+    .up_es_drp_ready (up_es_drp_ready_s),
+    .up_es_start (up_es_start_s),
+    .up_es_stop (up_es_stop_s),
+    .up_es_init (up_es_init_s),
+    .up_es_prescale (up_es_prescale_s),
+    .up_es_voffset_range (up_es_voffset_range_s),
+    .up_es_voffset_step (up_es_voffset_step_s),
+    .up_es_voffset_max (up_es_voffset_max_s),
+    .up_es_voffset_min (up_es_voffset_min_s),
+    .up_es_hoffset_max (up_es_hoffset_max_s),
+    .up_es_hoffset_min (up_es_hoffset_min_s),
+    .up_es_hoffset_step (up_es_hoffset_step_s),
+    .up_es_start_addr (up_es_start_addr_s),
+    .up_es_sdata0 (up_es_sdata0_s),
+    .up_es_sdata1 (up_es_sdata1_s),
+    .up_es_sdata2 (up_es_sdata2_s),
+    .up_es_sdata3 (up_es_sdata3_s),
+    .up_es_sdata4 (up_es_sdata4_s),
+    .up_es_qdata0 (up_es_qdata0_s),
+    .up_es_qdata1 (up_es_qdata1_s),
+    .up_es_qdata2 (up_es_qdata2_s),
+    .up_es_qdata3 (up_es_qdata3_s),
+    .up_es_qdata4 (up_es_qdata4_s),
+    .up_es_dmaerr (up_es_dmaerr_s),
+    .up_es_status (up_es_status_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),

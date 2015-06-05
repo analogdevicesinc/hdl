@@ -37,8 +37,8 @@
 // ***************************************************************************
 // ***************************************************************************
 
-// A simple adder/substracter width preconfigured input ports width and overflow value
-// Output = A - B or A + B
+// A simple adder/substracter width preconfigured input ports width and turn-around value
+// Output = A - B_constant or A + B_constant
 // Constraints: Awidth >= Bwidth
 
 `timescale 1ns/1ps
@@ -46,7 +46,7 @@
 module ad_addsub (
   clk,
   A,
-  overflow,
+  Amax,
   out,
   CE
 );
@@ -64,7 +64,7 @@ module ad_addsub (
 
   input                     clk;
   input   [(A_WIDTH-1):0]   A;
-  input   [(A_WIDTH-1):0]   overflow;
+  input   [(A_WIDTH-1):0]   Amax;
   output  [(A_WIDTH-1):0]   out;
   input                     CE;
 
@@ -75,8 +75,8 @@ module ad_addsub (
   reg     [A_WIDTH:0]       out_d2 = 'b0;
   reg     [(A_WIDTH-1):0]   A_d = 'b0;
   reg     [(A_WIDTH-1):0]   A_d2 = 'b0;
-  reg     [(A_WIDTH-1):0]   overflow_d = 'b0;
-  reg     [(A_WIDTH-1):0]   overflow_d2 = 'b0;
+  reg     [(A_WIDTH-1):0]   Amax_d = 'b0;
+  reg     [(A_WIDTH-1):0]   Amax_d2 = 'b0;
 
   // constant regs
 
@@ -87,8 +87,8 @@ module ad_addsub (
   always @(posedge clk) begin
       A_d <= A;
       A_d2 <= A_d;
-      overflow_d <= overflow;
-      overflow_d2 <= overflow_d;
+      Amax_d <= Amax;
+      Amax_d2 <= Amax_d;
   end
 
   // ADDER/SUBSTRACTER
@@ -101,18 +101,18 @@ module ad_addsub (
     end
   end
 
-  // Resolve overflow
+  // Resolve
 
   always @(posedge clk) begin
     if ( ADD_SUB == ADDER ) begin
-      if ( out_d > overflow_d2 ) begin
-        out_d2 <= out_d - overflow_d2;
+      if ( out_d > Amax_d2 ) begin
+        out_d2 <= out_d - Amax_d2;
       end else begin
         out_d2 <= out_d;
       end
     end else begin // SUBSTRACTER
       if ( out_d[A_WIDTH] == 1'b1 ) begin
-        out_d2 <= overflow_d2 + out_d;
+        out_d2 <= Amax_d2 + out_d;
       end else begin
         out_d2 <= out_d;
       end

@@ -65,8 +65,6 @@ set_property  -dict {PACKAGE_PIN  AK21    IOSTANDARD LVCMOS25}     [get_ports sp
 set_property  -dict {PACKAGE_PIN  AB16    IOSTANDARD LVCMOS25}     [get_ports spi_udc_sclk]               ; ## PMOD1_3_LS
 set_property  -dict {PACKAGE_PIN  AB21    IOSTANDARD LVCMOS25}     [get_ports spi_udc_data]               ; ## PMOD1_2_LS
 
-set_property  -dict {IOB TRUE} [get_ports {enable txnrx}]
-
 # clocks
 
 create_clock -name rx_clk       -period  4.00 [get_ports rx_clk_in_p]

@@ -72,15 +72,14 @@ module axi_ad9434_if (
   mmcm_rst,
 
   // drp interface for MMCM
-  drp_clk,
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked);
+  up_rstn,
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked);
 
   // parameters
   parameter PCORE_DEVTYPE = 0;  // 0 - 7Series / 1 - 6Series
@@ -122,15 +121,14 @@ module axi_ad9434_if (
   input           mmcm_rst;
 
   // drp interface
-  input           drp_clk;
-  input           drp_rst;
-  input           drp_sel;
-  input           drp_wr;
-  input   [11:0]  drp_addr;
-  input   [15:0]  drp_wdata;
-  output  [15:0]  drp_rdata;
-  output          drp_ready;
-  output          drp_locked;
+  input           up_rstn;
+  input           up_drp_sel;
+  input           up_drp_wr;
+  input   [11:0]  up_drp_addr;
+  input   [15:0]  up_drp_wdata;
+  output  [15:0]  up_drp_rdata;
+  output          up_drp_ready;
+  output          up_drp_locked;
 
   // internal registers
 
@@ -225,15 +223,15 @@ module axi_ad9434_if (
     .clk_in_n (adc_clk_in_n),
     .clk (adc_clk_in),
     .div_clk (adc_div_clk),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked));
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked));
 
   // adc overange
   assign adc_or = adc_or_s[0] | adc_or_s[1] | adc_or_s[2] | adc_or_s[3];
@@ -244,7 +242,7 @@ module axi_ad9434_if (
       adc_status_m1 <= 1'b0;
       adc_status <= 1'b0;
     end else begin
-      adc_status_m1 <= drp_locked & delay_locked;
+      adc_status_m1 <= up_drp_locked & delay_locked;
     end
   end
 

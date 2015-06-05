@@ -47,8 +47,8 @@ module up_tdd_cntrl (
 
   tdd_enable,
   tdd_secondary,
-  tdd_txnrx_only_en,
-  tdd_txnrx_only,
+  tdd_rx_only,
+  tdd_tx_only,
   tdd_burst_count,
   tdd_counter_init,
   tdd_frame_length,
@@ -98,8 +98,8 @@ module up_tdd_cntrl (
 
   output          tdd_enable;
   output          tdd_secondary;
-  output          tdd_txnrx_only_en;
-  output          tdd_txnrx_only;
+  output          tdd_rx_only;
+  output          tdd_tx_only;
   output  [ 7:0]  tdd_burst_count;
   output  [23:0]  tdd_counter_init;
   output  [23:0]  tdd_frame_length;
@@ -148,8 +148,8 @@ module up_tdd_cntrl (
 
   reg             up_tdd_enable = 1'h0;
   reg             up_tdd_secondary = 1'h0;
-  reg             up_tdd_txnrx_only_en = 1'h0;
-  reg             up_tdd_txnrx_only = 1'h0;
+  reg             up_tdd_rx_only = 1'h0;
+  reg             up_tdd_tx_only = 1'h0;
 
   reg     [ 7:0]  up_tdd_burst_count = 8'h0;
   reg     [23:0]  up_tdd_counter_init = 24'h0;
@@ -197,8 +197,8 @@ module up_tdd_cntrl (
       up_scratch <= 32'h0;
       up_tdd_enable <= 1'h0;
       up_tdd_secondary <= 1'h0;
-      up_tdd_txnrx_only_en <= 1'h0;
-      up_tdd_txnrx_only <= 1'h0;
+      up_tdd_rx_only <= 1'h0;
+      up_tdd_tx_only <= 1'h0;
       up_tdd_counter_init <= 24'h0;
       up_tdd_frame_length <= 24'h0;
       up_tdd_burst_count <= 8'h0;
@@ -225,8 +225,8 @@ module up_tdd_cntrl (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
         up_tdd_enable <= up_wdata[0];
         up_tdd_secondary <= up_wdata[1];
-        up_tdd_txnrx_only_en <= up_wdata[2];
-        up_tdd_txnrx_only <= up_wdata[3];
+        up_tdd_rx_only <= up_wdata[2];
+        up_tdd_tx_only <= up_wdata[3];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
         up_tdd_burst_count <= up_wdata[7:0];
@@ -310,7 +310,7 @@ module up_tdd_cntrl (
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
-          8'h10: up_rdata <= {28'h0, up_tdd_txnrx_only, up_tdd_txnrx_only_en, up_tdd_secondary, up_tdd_enable};
+          8'h10: up_rdata <= {28'h0, up_tdd_tx_only, up_tdd_rx_only, up_tdd_secondary, up_tdd_enable};
           8'h11: up_rdata <= {24'h0, up_tdd_burst_count};
           8'h12: up_rdata <= {8'h0, up_tdd_counter_init};
           8'h13: up_rdata <= {8'h0, up_tdd_frame_length};
@@ -348,8 +348,8 @@ module up_tdd_cntrl (
     .up_clk(up_clk),
     .up_data_cntrl({up_tdd_enable,
                     up_tdd_secondary,
-                    up_tdd_txnrx_only_en,
-                    up_tdd_txnrx_only,
+                    up_tdd_rx_only,
+                    up_tdd_tx_only,
                     up_tdd_burst_count
     }),
     .up_xfer_done(up_cntrl_xfer_done),
@@ -357,8 +357,8 @@ module up_tdd_cntrl (
     .d_clk(clk),
     .d_data_cntrl({tdd_enable,
                    tdd_secondary,
-                   tdd_txnrx_only_en,
-                   tdd_txnrx_only,
+                   tdd_rx_only,
+                   tdd_tx_only,
                    tdd_burst_count
     }));
 

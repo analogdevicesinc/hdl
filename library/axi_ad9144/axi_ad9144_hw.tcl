@@ -14,7 +14,7 @@ set_module_property ELABORATION_CALLBACK p_axi_ad9144
 
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9144
-add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_rst.v
+add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
 add_fileset_file MULT_MACRO.v         VERILOG PATH $ad_hdl_dir/library/common/altera/MULT_MACRO.v
 add_fileset_file ad_mul.v             VERILOG PATH $ad_hdl_dir/library/common/ad_mul.v
 add_fileset_file ad_dds_sine.v        VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine.v
@@ -25,13 +25,13 @@ add_fileset_file up_axi.v             VERILOG PATH $ad_hdl_dir/library/common/up
 add_fileset_file up_xfer_cntrl.v      VERILOG PATH $ad_hdl_dir/library/common/up_xfer_cntrl.v
 add_fileset_file up_xfer_status.v     VERILOG PATH $ad_hdl_dir/library/common/up_xfer_status.v
 add_fileset_file up_clock_mon.v       VERILOG PATH $ad_hdl_dir/library/common/up_clock_mon.v
-add_fileset_file up_drp_cntrl.v       VERILOG PATH $ad_hdl_dir/library/common/up_drp_cntrl.v
 add_fileset_file up_dac_common.v      VERILOG PATH $ad_hdl_dir/library/common/up_dac_common.v
 add_fileset_file up_dac_channel.v     VERILOG PATH $ad_hdl_dir/library/common/up_dac_channel.v
 add_fileset_file axi_ad9144_channel.v VERILOG PATH axi_ad9144_channel.v
 add_fileset_file axi_ad9144_core.v    VERILOG PATH axi_ad9144_core.v
 add_fileset_file axi_ad9144_if.v      VERILOG PATH axi_ad9144_if.v
 add_fileset_file axi_ad9144.v         VERILOG PATH axi_ad9144.v TOP_LEVEL_FILE
+add_fileset_file ad_axi_ip_constr.sdc SDC     PATH $ad_hdl_dir/library/common/ad_axi_ip_constr.sdc
 
 # parameters
 

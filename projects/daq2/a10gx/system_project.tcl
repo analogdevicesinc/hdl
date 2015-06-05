@@ -40,10 +40,21 @@ set_location_assignment PIN_AT22  -to "tx_sync(n)"          ; ## H08  FMCA_LA02_
 set_location_assignment PIN_AN20  -to tx_sysref             ; ## H10  FMCA_LA04_P
 set_location_assignment PIN_AP19  -to "tx_sysref(n)"        ; ## H11  FMCA_LA04_N
 
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[0]
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[1]
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[2]
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[3]
 set_instance_assignment -name IO_STANDARD LVDS -to rx_sync
 set_instance_assignment -name IO_STANDARD LVDS -to rx_sysref
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to rx_sysref
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[0]
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[1]
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[2]
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[3]
 set_instance_assignment -name IO_STANDARD LVDS -to tx_sync
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to tx_sync
 set_instance_assignment -name IO_STANDARD LVDS -to tx_sysref
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to tx_sysref
 
 # gpio
 

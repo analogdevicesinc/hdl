@@ -48,7 +48,6 @@ module axi_ad9361_tdd (
 
   // control signals from the tdd control
 
-  tdd_enable,
   tdd_tx_dp_en,
   tdd_rx_vco_en,
   tdd_tx_vco_en,
@@ -58,6 +57,18 @@ module axi_ad9361_tdd (
   // status signal
 
   tdd_status,
+
+  // tx data flow control
+
+  tx_valid_i0,
+  tx_valid_q0,
+  tx_valid_i1,
+  tx_valid_q1,
+
+  tdd_tx_valid_i0,
+  tdd_tx_valid_q0,
+  tdd_tx_valid_i1,
+  tdd_tx_valid_q1,
 
   // bus interface
 
@@ -80,7 +91,6 @@ module axi_ad9361_tdd (
 
   // control signals from the tdd control
 
-  output            tdd_enable;
   output            tdd_tx_dp_en;
   output            tdd_rx_vco_en;
   output            tdd_tx_vco_en;
@@ -88,6 +98,18 @@ module axi_ad9361_tdd (
   output            tdd_tx_rf_en;
 
   input   [ 7:0]    tdd_status;
+
+  // tx data flow control
+
+  input             tx_valid_i0;
+  input             tx_valid_q0;
+  input             tx_valid_i1;
+  input             tx_valid_q1;
+
+  output            tdd_tx_valid_i0;
+  output            tdd_tx_valid_q0;
+  output            tdd_tx_valid_i1;
+  output            tdd_tx_valid_q1;
 
   // bus interface
 
@@ -110,8 +132,8 @@ module axi_ad9361_tdd (
   wire              tdd_enable_s;
   wire              tdd_secondary_s;
   wire   [ 7:0]     tdd_burst_count_s;
-  wire              tdd_txnrx_only_en_s;
-  wire              tdd_txnrx_only_s;
+  wire              tdd_rx_only_s;
+  wire              tdd_tx_only_s;
   wire   [23:0]     tdd_counter_init_s;
   wire   [23:0]     tdd_frame_length_s;
   wire   [23:0]     tdd_vco_rx_on_1_s;
@@ -137,10 +159,15 @@ module axi_ad9361_tdd (
 
   wire   [23:0]     tdd_counter_status;
 
-  assign tdd_dbg = {tdd_counter_status, tdd_enable, tdd_tx_dp_en,
+  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_tx_dp_en,
                     tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
 
-  assign tdd_enable = tdd_enable_s;
+  // tx data flow control
+
+  assign  tdd_tx_valid_i0 = tx_valid_i0 & tdd_enable_s;
+  assign  tdd_tx_valid_q0 = tx_valid_q0 & tdd_enable_s;
+  assign  tdd_tx_valid_i1 = tx_valid_i1 & tdd_enable_s;
+  assign  tdd_tx_valid_q1 = tx_valid_q1 & tdd_enable_s;
 
   // instantiations
 
@@ -150,8 +177,8 @@ module axi_ad9361_tdd (
     .tdd_enable(tdd_enable_s),
     .tdd_secondary(tdd_secondary_s),
     .tdd_burst_count(tdd_burst_count_s),
-    .tdd_txnrx_only_en(tdd_txnrx_only_en_s),
-    .tdd_txnrx_only(tdd_txnrx_only_s),
+    .tdd_tx_only(tdd_tx_only_s),
+    .tdd_rx_only(tdd_rx_only_s),
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
@@ -194,8 +221,8 @@ module axi_ad9361_tdd (
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),
     .tdd_burst_count(tdd_burst_count_s),
-    .tdd_txnrx_only_en(tdd_txnrx_only_en_s),
-    .tdd_txnrx_only(tdd_txnrx_only_s),
+    .tdd_rx_only(tdd_rx_only_s),
+    .tdd_tx_only(tdd_tx_only_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),

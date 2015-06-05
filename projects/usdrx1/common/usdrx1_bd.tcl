@@ -246,8 +246,6 @@ ad_connect  sys_cpu_resetn axi_usdrx1_dma/m_dest_axi_aresetn
 
 ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
 ad_mem_hp3_interconnect sys_cpu_clk axi_usdrx1_gt/m_axi
-ad_connect  sys_cpu_clk    axi_usdrx1_gt/drp_clk
-ad_connect  sys_cpu_resetn axi_usdrx1_gt/m_axi_aresetn
 
 #interrupts
 

@@ -40,6 +40,7 @@ add_fileset_file src_fifo_inf.v           VERILOG PATH src_fifo_inf.v
 add_fileset_file splitter.v               VERILOG PATH splitter.v
 add_fileset_file response_generator.v     VERILOG PATH response_generator.v
 add_fileset_file axi_dmac.v               VERILOG PATH axi_dmac.v
+add_fileset_file axi_dmac_constr.sdc      SDC     PATH axi_dmac_constr.sdc
 
 # parameters
 

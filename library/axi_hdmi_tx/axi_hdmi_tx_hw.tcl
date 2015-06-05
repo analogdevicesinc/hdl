@@ -13,7 +13,7 @@ set_module_property DISPLAY_NAME axi_hdmi_tx
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_hdmi_tx_alt
 add_fileset_file MULT_MACRO.v         VERILOG PATH $ad_hdl_dir/library/common/altera/MULT_MACRO.v
-add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_rst.v
+add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
 add_fileset_file ad_mem.v             VERILOG PATH $ad_hdl_dir/library/common/ad_mem.v
 add_fileset_file ad_csc_1_mul.v       VERILOG PATH $ad_hdl_dir/library/common/ad_csc_1_mul.v
 add_fileset_file ad_csc_1_add.v       VERILOG PATH $ad_hdl_dir/library/common/ad_csc_1_add.v

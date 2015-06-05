@@ -50,8 +50,8 @@ module ad_tdd_control(
 
   tdd_enable,
   tdd_secondary,
-  tdd_txnrx_only_en,
-  tdd_txnrx_only,
+  tdd_tx_only,
+  tdd_rx_only,
   tdd_burst_count,
   tdd_counter_init,
   tdd_frame_length,
@@ -98,8 +98,8 @@ module ad_tdd_control(
 
   input           tdd_enable;
   input           tdd_secondary;
-  input           tdd_txnrx_only_en;
-  input           tdd_txnrx_only;
+  input           tdd_tx_only;
+  input           tdd_rx_only;
   input  [ 7:0]   tdd_burst_count;
   input  [23:0]   tdd_counter_init;
   input  [23:0]   tdd_frame_length;
@@ -177,6 +177,8 @@ module ad_tdd_control(
   wire   [23:0]   tdd_tx_dp_off_1_s;
   wire   [23:0]   tdd_tx_dp_off_2_s;
 
+  wire            tdd_txrx_only_en_s;
+
   assign  tdd_counter_status = tdd_counter;
 
   // ***************************************************************************
@@ -208,7 +210,7 @@ module ad_tdd_control(
       if (tdd_counter_state == ON) begin
         if (tdd_counter == tdd_frame_length) begin
           tdd_counter <= 22'h0;
-          if ( tdd_burst_counter > 1) begin // inside a burst
+          if (tdd_burst_counter > 1) begin // inside a burst
             tdd_burst_counter <= tdd_burst_counter - 1;
             tdd_counter_state <= ON;
           end
@@ -427,7 +429,7 @@ module ad_tdd_control(
   ) i_tx_dp_on_1_comp (
     .clk(clk),
     .A(tdd_tx_dp_on_1),
-    .overflow(tdd_frame_length),
+    .Amax(tdd_frame_length),
     .out(tdd_tx_dp_on_1_s),
     .CE(1)
   );
@@ -439,7 +441,7 @@ module ad_tdd_control(
   ) i_tx_dp_on_2_comp (
     .clk(clk),
     .A(tdd_tx_dp_on_2),
-    .overflow(tdd_frame_length),
+    .Amax(tdd_frame_length),
     .out(tdd_tx_dp_on_2_s),
     .CE(1)
   );
@@ -451,7 +453,7 @@ module ad_tdd_control(
   ) i_tx_dp_off_1_comp (
     .clk(clk),
     .A(tdd_tx_dp_off_1),
-    .overflow(tdd_frame_length),
+    .Amax(tdd_frame_length),
     .out(tdd_tx_dp_off_1_s),
     .CE(1)
   );
@@ -463,17 +465,19 @@ module ad_tdd_control(
   ) i_tx_dp_off_2_comp (
     .clk(clk),
     .A(tdd_tx_dp_off_2),
-    .overflow(tdd_frame_length),
+    .Amax(tdd_frame_length),
     .out(tdd_tx_dp_off_2_s),
     .CE(1)
   );
 
   // output logic
 
+  assign tdd_txrx_only_en_s = tdd_tx_only ^ tdd_rx_only;
+
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (tdd_txnrx_only_en) begin
-        tdd_rx_vco_en <= ~tdd_txnrx_only;
+      if (tdd_txrx_only_en_s) begin
+        tdd_rx_vco_en <= tdd_rx_only;
       end
       else if (counter_at_tdd_vco_rx_on_1 || counter_at_tdd_vco_rx_on_2) begin
         tdd_rx_vco_en <= 1'b1;
@@ -488,8 +492,8 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (tdd_txnrx_only_en) begin
-        tdd_tx_vco_en <= tdd_txnrx_only;
+      if (tdd_txrx_only_en_s) begin
+        tdd_tx_vco_en <= tdd_tx_only;
       end
       else if (counter_at_tdd_vco_tx_on_1 || counter_at_tdd_vco_tx_on_2) begin
         tdd_tx_vco_en <= 1'b1;
@@ -504,8 +508,8 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (tdd_txnrx_only_en) begin
-        tdd_rx_rf_en <= ~tdd_txnrx_only;
+      if (tdd_txrx_only_en_s) begin
+        tdd_rx_rf_en <= tdd_rx_only;
       end
       else if (counter_at_tdd_rx_on_1 || counter_at_tdd_rx_on_2) begin
         tdd_rx_rf_en <= 1'b1;
@@ -520,8 +524,8 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (tdd_txnrx_only_en) begin
-        tdd_tx_rf_en <= tdd_txnrx_only;
+      if (tdd_txrx_only_en_s) begin
+        tdd_tx_rf_en <= tdd_tx_only;
       end
       else if (counter_at_tdd_tx_on_1 || counter_at_tdd_tx_on_2) begin
         tdd_tx_rf_en <= 1'b1;
@@ -536,8 +540,8 @@ module ad_tdd_control(
 
   always @(posedge clk) begin
     if(tdd_counter_state == ON) begin
-      if (tdd_txnrx_only_en) begin
-        tdd_tx_dp_en <= tdd_txnrx_only;
+      if (tdd_txrx_only_en_s) begin
+        tdd_tx_dp_en <= tdd_tx_only;
       end
       else if (counter_at_tdd_tx_dp_on_1 || counter_at_tdd_tx_dp_on_2) begin
         tdd_tx_dp_en <= 1'b1;

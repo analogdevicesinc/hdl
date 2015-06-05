@@ -12,5 +12,5 @@ if {$slack > 0} {
 }
 
 if {$slack < 0} {
-  use_this_invalid_command_to_crash
+  return -code error [format "ERROR: Timing Constraints NOT met!"]
 }
