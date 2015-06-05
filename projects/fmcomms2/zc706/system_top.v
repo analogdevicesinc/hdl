@@ -92,6 +92,8 @@ module system_top (
   enable,
   txnrx,
 
+  gpio_muxout_tx,
+  gpio_muxout_rx,
   gpio_resetb,
   gpio_sync,
   gpio_en_agc,
@@ -159,6 +161,8 @@ module system_top (
   output          enable;
   output          txnrx;
 
+  inout           gpio_muxout_tx;
+  inout           gpio_muxout_rx;
   inout           gpio_resetb;
   inout           gpio_sync;
   inout           gpio_en_agc;
@@ -204,11 +208,13 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf (
-    .dio_t (gpio_t[46:32]),
-    .dio_i (gpio_o[46:32]),
-    .dio_o (gpio_i[46:32]),
-    .dio_p ({ gpio_resetb,
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+    .dio_t (gpio_t[49:32]),
+    .dio_i (gpio_o[49:32]),
+    .dio_o (gpio_i[49:32]),
+    .dio_p ({ gpio_muxout_tx,
+              gpio_muxout_rx,
+              gpio_resetb,
               gpio_sync,
               gpio_en_agc,
               gpio_ctl,
