@@ -72,6 +72,7 @@ module axi_ad9361 (
 
   l_clk,
   clk,
+  rst,
 
   // dma interface
 
@@ -185,6 +186,7 @@ module axi_ad9361 (
 
   output          l_clk;
   input           clk;
+  output          rst;
 
   // dma interface
 
@@ -266,7 +268,6 @@ module axi_ad9361 (
 
   // internal clocks and resets
 
-  wire            rst;
   wire            up_clk;
   wire            up_rstn;
   wire            delay_rst;
