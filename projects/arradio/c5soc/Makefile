@@ -106,7 +106,7 @@ M_FLIST += *.pin
 
 
 .PHONY: all clean clean-all
-all: fmcomms2_c5soc.sof
+all: arradio_c5soc.sof
 
 
 
@@ -117,9 +117,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-fmcomms2_c5soc.sof: $(M_DEPS)
+arradio_c5soc.sof: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_ALTERA) system_project.tcl  >> fmcomms2_c5soc_quartus.log 2>&1
+	$(M_ALTERA) system_project.tcl  >> arradio_c5soc_quartus.log 2>&1
 
 ####################################################################################
 ####################################################################################

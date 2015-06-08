@@ -2,7 +2,7 @@
 load_package flow
 
 source ../../scripts/adi_env.tcl
-project_new fmcomms2_c5soc -overwrite
+project_new arradio_c5soc -overwrite
 
 source $ad_hdl_dir/projects/common/c5soc/c5soc_system_assign.tcl
 

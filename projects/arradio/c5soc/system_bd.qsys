@@ -240,7 +240,7 @@
  <parameter name="hdlLanguage" value="VERILOG" />
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="maxAdditionalLatency" value="2" />
- <parameter name="projectName" value="fmcomms2_c5soc.qpf" />
+ <parameter name="projectName" value="arradio_c5soc.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
