@@ -51,27 +51,6 @@ ad_connect axi_ad9265/adc_valid  axi_ad9265_dma/fifo_wr_en
 ad_connect axi_ad9265/adc_data   axi_ad9265_dma/fifo_wr_din
 ad_connect axi_ad9265/adc_dovf   axi_ad9265_dma/fifo_wr_overflow
 
-# ila (with fifo to prevent timing failure)
-
-p_sys_wfifo [current_bd_instance .] ila_wfifo 16 32
-
-ad_connect ad9265_clk         ila_wfifo/adc_clk
-ad_connect sys_200m_clk       ila_wfifo/dma_clk
-ad_connect axi_ad9265/adc_rst ila_wfifo/adc_rst
-
-set ila_ad9265_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_ad9265_mon]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9265_mon
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_ad9265_mon
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_ad9265_mon
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {32}] $ila_ad9265_mon
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_ad9265_mon
-
-ad_connect ila_wfifo/adc_wr axi_ad9265/adc_valid
-ad_connect ila_wfifo/adc_wdata axi_ad9265/adc_data
-ad_connect ila_wfifo/dma_wr ila_ad9265_mon/PROBE0
-ad_connect ila_wfifo/dma_wdata ila_ad9265_mon/PROBE1
-ad_connect sys_200m_clk ila_ad9265_mon/clk
-
 # address mapping
 
 ad_cpu_interconnect 0x44A00000 axi_ad9265
