@@ -83,7 +83,6 @@ module axi_ad9122_core (
 
   // drp interface
 
-  up_drp_rst,
   up_drp_sel,
   up_drp_wr,
   up_drp_addr,
@@ -154,7 +153,6 @@ module axi_ad9122_core (
 
   // drp interface
 
-  output          up_drp_rst;
   output          up_drp_sel;
   output          up_drp_wr;
   output  [11:0]  up_drp_addr;
