@@ -31,5 +31,9 @@ adi_ip_properties axi_ad9643
 adi_ip_constraints axi_ad9643 [list \
   "axi_ad9643_constr.xdc" ]
 
+set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *gpio_in* -of_objects [ipx::current_core]]
+
 ipx::save_core [ipx::current_core]
 
