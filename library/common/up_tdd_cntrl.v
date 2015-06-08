@@ -180,7 +180,6 @@ module up_tdd_cntrl (
 
   wire            up_wreq_s;
   wire            up_rreq_s;
-  wire            up_cntrl_xfer_done;
 
   wire    [ 7:0]  up_tdd_status_s;
 
@@ -352,7 +351,7 @@ module up_tdd_cntrl (
                     up_tdd_tx_only,
                     up_tdd_burst_count
     }),
-    .up_xfer_done(up_cntrl_xfer_done),
+    .up_xfer_done(),
     .d_rst(rst),
     .d_clk(clk),
     .d_data_cntrl({tdd_enable,
