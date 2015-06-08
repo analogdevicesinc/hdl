@@ -392,7 +392,6 @@ module axi_ad9361 (
   axi_ad9361_tdd i_tdd(
     .clk(clk),
     .rst(rst),
-    .tdd_tx_dp_en(tdd_tx_dp_en_s),
     .tdd_rx_vco_en(tdd_rx_vco_en_s),
     .tdd_tx_vco_en(tdd_tx_vco_en_s),
     .tdd_rx_rf_en(tdd_rx_rf_en_s),
