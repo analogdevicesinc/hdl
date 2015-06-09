@@ -197,33 +197,27 @@ ad_connect  axi_ad9250_1_core/adc_dovf      axi_ad9250_1_dma/fifo_wr_overflow
 
 set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_jesd_rx_mon]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {11}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {128}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {9}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {128}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {32}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE3_WIDTH {32}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE4_WIDTH {32}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE5_WIDTH {32}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE6_WIDTH {32}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE6_WIDTH {1}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE7_WIDTH {1}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE8_WIDTH {1}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE9_WIDTH {1}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE10_WIDTH {1}] $ila_jesd_rx_mon
 
-ad_connect  axi_ad9250_gt_rx_mon_data       axi_ad9250_gt/rx_mon_data
-ad_connect  axi_ad9250_gt_rx_mon_trigger    axi_ad9250_gt/rx_mon_trigger
 ad_connect  axi_ad9250_gt_rx_clk            ila_jesd_rx_mon/CLK
-ad_connect  axi_ad9250_gt_rx_mon_data       ila_jesd_rx_mon/PROBE0
-ad_connect  axi_ad9250_gt_rx_mon_trigger    ila_jesd_rx_mon/PROBE1
-ad_connect  axi_ad9250_gt_rx_data           ila_jesd_rx_mon/PROBE2
-ad_connect  axi_ad9250_0_core/adc_data_a    ila_jesd_rx_mon/PROBE3
-ad_connect  axi_ad9250_0_core/adc_data_b    ila_jesd_rx_mon/PROBE4
-ad_connect  axi_ad9250_1_core/adc_data_a    ila_jesd_rx_mon/PROBE5
-ad_connect  axi_ad9250_1_core/adc_data_b    ila_jesd_rx_mon/PROBE6
-ad_connect  axi_ad9250_0_core/adc_valid_a   ila_jesd_rx_mon/PROBE7
-ad_connect  axi_ad9250_0_core/adc_valid_b   ila_jesd_rx_mon/PROBE8
-ad_connect  axi_ad9250_1_core/adc_valid_a   ila_jesd_rx_mon/PROBE9
-ad_connect  axi_ad9250_1_core/adc_valid_b   ila_jesd_rx_mon/PROBE10
+ad_connect  axi_ad9250_gt_rx_data           ila_jesd_rx_mon/PROBE0
+ad_connect  axi_ad9250_0_core/adc_data_a    ila_jesd_rx_mon/PROBE1
+ad_connect  axi_ad9250_0_core/adc_data_b    ila_jesd_rx_mon/PROBE2
+ad_connect  axi_ad9250_1_core/adc_data_a    ila_jesd_rx_mon/PROBE3
+ad_connect  axi_ad9250_1_core/adc_data_b    ila_jesd_rx_mon/PROBE4
+ad_connect  axi_ad9250_0_core/adc_valid_a   ila_jesd_rx_mon/PROBE5
+ad_connect  axi_ad9250_0_core/adc_valid_b   ila_jesd_rx_mon/PROBE6
+ad_connect  axi_ad9250_1_core/adc_valid_a   ila_jesd_rx_mon/PROBE7
+ad_connect  axi_ad9250_1_core/adc_valid_b   ila_jesd_rx_mon/PROBE8
 
 ad_connect  constant_1bit/dout    axi_ad9250_0_core/adc_dunf
 ad_connect  constant_1bit/dout    axi_ad9250_1_core/adc_dunf
