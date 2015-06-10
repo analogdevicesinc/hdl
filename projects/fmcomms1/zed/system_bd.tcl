@@ -1,6 +1,5 @@
 
   source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
-  source $ad_hdl_dir/projects/common/xilinx/sys_wfifo.tcl
   source ../common/fmcomms1_bd.tcl
 
   # Add extra register slice between ADC DMA and HP1 to meet timing
