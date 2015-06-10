@@ -156,6 +156,8 @@ module up_adc_common (
 
   // internal registers
   
+  reg             up_preset = 'd0;
+  reg             up_mmcm_preset = 'd0;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_mmcm_resetn = 'd0;
@@ -183,8 +185,6 @@ module up_adc_common (
 
   wire            up_wreq_s;
   wire            up_rreq_s;
-  wire            up_preset_s;
-  wire            up_mmcm_preset_s;
   wire            up_status_s;
   wire            up_sync_status_s;
   wire            up_status_ovf_s;
@@ -196,13 +196,13 @@ module up_adc_common (
 
   assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
-  assign up_preset_s = ~up_resetn;
-  assign up_mmcm_preset_s = ~up_mmcm_resetn;
 
   // processor write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_preset <= 1'd1;
+      up_mmcm_preset <= 1'd1;
       up_wack <= 'd0;
       up_scratch <= 'd0;
       up_mmcm_resetn <= 'd0;
@@ -223,6 +223,8 @@ module up_adc_common (
       up_adc_gpio_out <= 'd0;
       up_adc_start_code <= 'd0;
     end else begin
+      up_preset <= 1'd0;
+      up_mmcm_preset <= ~up_mmcm_resetn;
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
@@ -322,8 +324,8 @@ module up_adc_common (
 
   // resets
 
-  ad_rst i_mmcm_rst_reg   (.preset(up_mmcm_preset_s), .clk(up_clk),     .rst(mmcm_rst));
-  ad_rst i_adc_rst_reg    (.preset(up_preset_s),      .clk(adc_clk),    .rst(adc_rst));
+  ad_rst i_mmcm_rst_reg   (.preset(up_mmcm_preset), .clk(up_clk),     .rst(mmcm_rst));
+  ad_rst i_adc_rst_reg    (.preset(up_preset),      .clk(adc_clk),    .rst(adc_rst));
 
   // adc control & status
 

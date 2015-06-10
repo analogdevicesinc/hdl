@@ -134,6 +134,7 @@ module up_hdmi_tx (
 
   // internal registers
 
+  reg             up_preset = 'd0;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_resetn = 'd0;
@@ -162,7 +163,6 @@ module up_hdmi_tx (
 
   wire            up_wreq_s;
   wire            up_rreq_s;
-  wire            up_preset_s;
   wire            up_hdmi_status_s;
   wire            up_hdmi_tpm_oos_s;
   wire    [31:0]  up_hdmi_clk_count_s;
@@ -174,12 +174,12 @@ module up_hdmi_tx (
 
   assign up_wreq_s = (up_waddr[13:12] == 2'd0) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:12] == 2'd0) ? up_rreq : 1'b0;
-  assign up_preset_s = ~up_resetn;
 
   // processor write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_preset <= 1'd1;
       up_wack <= 'd0;
       up_scratch <= 'd0;
       up_resetn <= 'd0;
@@ -202,6 +202,7 @@ module up_hdmi_tx (
       up_ve_max <= 'd0;
       up_ve_min <= 'd0;
     end else begin
+      up_preset <= 1'd0;
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h002)) begin
         up_scratch <= up_wdata;
@@ -302,8 +303,8 @@ module up_hdmi_tx (
 
   // resets
 
-  ad_rst i_hdmi_rst_reg   (.preset(up_preset_s),      .clk(hdmi_clk),   .rst(hdmi_rst));
-  ad_rst i_vdma_rst_reg   (.preset(up_preset_s),      .clk(vdma_clk),   .rst(vdma_rst));
+  ad_rst i_hdmi_rst_reg   (.preset(up_preset), .clk(hdmi_clk),   .rst(hdmi_rst));
+  ad_rst i_vdma_rst_reg   (.preset(up_preset), .clk(vdma_clk),   .rst(vdma_rst));
 
   // hdmi control & status
 
