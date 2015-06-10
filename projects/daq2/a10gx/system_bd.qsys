@@ -1718,7 +1718,7 @@
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@4471262f</parameter>
+  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@27d20365</parameter>
   <parameter name="BURST_ENABLE" value="1" />
   <parameter name="BURST_WRAPPING_SUPPORT" value="0" />
   <parameter name="CHANNEL_ENABLE" value="0" />
@@ -1748,7 +1748,7 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@677e2f9e</parameter>
+  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@34bd85de</parameter>
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="" />
   <parameter name="BURST_ENABLE" value="1" />
@@ -3387,6 +3387,17 @@
    version="15.0"
    start="sys_xcvr_rstcntrl.tx_cal_busy"
    end="sys_xcvr.tx_cal_busy">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="sys_xcvr.tx_dev_sync_n"
+   end="sys_xcvr.mdev_sync_n">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
