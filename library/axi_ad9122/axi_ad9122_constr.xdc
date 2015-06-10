@@ -43,7 +43,7 @@ set_max_delay -datapath_only \
   [get_property PERIOD $up_clk]
 
 set_false_path \
-  -from [get_cells -hier drp_locked_reg* -filter {primitive_subgroup == flop}] \
+  -from [get_cells -hier up_drp_locked_reg* -filter {primitive_subgroup == flop}] \
   -to [get_cells -hier dac_status_m1_reg* -filter {primitive_subgroup == flop}]
 
 set_false_path \
