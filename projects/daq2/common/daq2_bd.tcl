@@ -244,3 +244,8 @@ ad_mem_hp2_interconnect sys_cpu_clk axi_ad9680_dma/m_dest_axi
 ad_cpu_interrupt ps-12 mb-13 axi_ad9144_dma/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9680_dma/irq
 
+ad_connect  axi_ad9144_fifo/dma_rst GND
+ad_connect  axi_ad9144_core/dac_ddata_2 GND
+ad_connect  axi_ad9144_core/dac_ddata_3 GND
+
+

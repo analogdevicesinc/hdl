@@ -74,6 +74,8 @@ proc p_plddr3_fifo {p_name m_name adc_data_width} {
   ad_connect  axi_resetn axi_adcfifo/axi_resetn
   ad_connect  axi_resetn axi_ddr_cntrl/aresetn
 
+  ad_connect  axi_ddr_cntrl/device_temp_i GND
+
   current_bd_instance $c_instance
 }
 
