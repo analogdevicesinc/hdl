@@ -254,19 +254,6 @@ ad_cpu_interrupt ps-13 mb-13 axi_usdrx1_dma/irq
 
 # ila
 
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_jesd_rx_mon]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {662}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {10}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_jesd_rx_mon
-
-ad_connect axi_usdrx1_gt_rx_mon_data       axi_usdrx1_gt/rx_mon_data
-ad_connect axi_usdrx1_gt_rx_mon_trigger    axi_usdrx1_gt/rx_mon_trigger
-ad_connect axi_usdrx1_gt_rx_clk            ila_jesd_rx_mon/CLK
-ad_connect axi_usdrx1_gt_rx_mon_data       ila_jesd_rx_mon/PROBE0
-ad_connect axi_usdrx1_gt_rx_mon_trigger    ila_jesd_rx_mon/PROBE1
-
 set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_ad9671]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9671
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {8}] $ila_ad9671
