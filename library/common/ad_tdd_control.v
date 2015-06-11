@@ -193,10 +193,11 @@ module ad_tdd_control(
       tdd_counter_state <= OFF;
     end else begin
 
+      tdd_enable_d <= tdd_enable;
+
       // counter reset
       if (tdd_enable == 1'b0) begin
         tdd_counter_state <= OFF;
-        tdd_enable_d <= tdd_enable;
       end else
 
       // start counter on the positive edge of the tdd_enable
@@ -237,6 +238,9 @@ module ad_tdd_control(
 
   // start/stop rx vco
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_vco_rx_on_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_vco_rx_on_1) begin
       counter_at_tdd_vco_rx_on_1 <= 1'b1;
     end
@@ -246,6 +250,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_vco_rx_on_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_rx_on_2)) begin
       counter_at_tdd_vco_rx_on_2 <= 1'b1;
     end
@@ -255,6 +262,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_vco_rx_off_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_vco_rx_off_1) begin
       counter_at_tdd_vco_rx_off_1 <= 1'b1;
     end
@@ -264,6 +274,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_vco_rx_off_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_rx_off_2)) begin
       counter_at_tdd_vco_rx_off_2 <= 1'b1;
     end
@@ -274,6 +287,9 @@ module ad_tdd_control(
 
   // start/stop tx vco
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_vco_tx_on_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_vco_tx_on_1) begin
       counter_at_tdd_vco_tx_on_1 <= 1'b1;
     end
@@ -283,6 +299,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_vco_tx_on_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_tx_on_2)) begin
       counter_at_tdd_vco_tx_on_2 <= 1'b1;
     end
@@ -292,6 +311,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_vco_tx_off_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_vco_tx_off_1) begin
       counter_at_tdd_vco_tx_off_1 <= 1'b1;
     end
@@ -301,6 +323,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_vco_tx_off_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_tx_off_2)) begin
       counter_at_tdd_vco_tx_off_2 <= 1'b1;
     end
@@ -311,6 +336,9 @@ module ad_tdd_control(
 
   // start/stop rx rf path
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_rx_on_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_rx_on_1) begin
       counter_at_tdd_rx_on_1 <= 1'b1;
     end
@@ -320,6 +348,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_rx_on_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_rx_on_2)) begin
       counter_at_tdd_rx_on_2 <= 1'b1;
     end
@@ -329,6 +360,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_rx_off_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_rx_off_1) begin
       counter_at_tdd_rx_off_1 <= 1'b1;
     end
@@ -338,6 +372,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_rx_off_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_rx_off_2)) begin
       counter_at_tdd_rx_off_2 <= 1'b1;
     end
@@ -348,6 +385,9 @@ module ad_tdd_control(
 
   // start/stop tx rf path
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_on_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_tx_on_1) begin
       counter_at_tdd_tx_on_1 <= 1'b1;
     end
@@ -357,6 +397,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_on_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_on_2)) begin
       counter_at_tdd_tx_on_2 <= 1'b1;
     end
@@ -366,6 +409,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_off_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_tx_off_1) begin
       counter_at_tdd_tx_off_1 <= 1'b1;
     end
@@ -375,6 +421,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_off_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_off_2)) begin
       counter_at_tdd_tx_off_2 <= 1'b1;
     end
@@ -385,6 +434,9 @@ module ad_tdd_control(
 
   // start/stop tx data path
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_dp_on_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_tx_dp_on_1_s) begin
       counter_at_tdd_tx_dp_on_1 <= 1'b1;
     end
@@ -394,6 +446,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_dp_on_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_dp_on_2_s)) begin
       counter_at_tdd_tx_dp_on_2 <= 1'b1;
     end
@@ -403,6 +458,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_dp_off_1 <= 1'b0;
+    end else
     if(tdd_counter == tdd_tx_dp_off_1_s) begin
       counter_at_tdd_tx_dp_off_1 <= 1'b1;
     end
@@ -412,6 +470,9 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_dp_off_2 <= 1'b0;
+    end else
     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_dp_off_2_s)) begin
       counter_at_tdd_tx_dp_off_2 <= 1'b1;
     end
@@ -475,82 +536,92 @@ module ad_tdd_control(
   assign tdd_txrx_only_en_s = tdd_tx_only ^ tdd_rx_only;
 
   always @(posedge clk) begin
-    if(tdd_counter_state == ON) begin
-      if (tdd_txrx_only_en_s) begin
-        tdd_rx_vco_en <= tdd_rx_only;
-      end
-      else if (counter_at_tdd_vco_rx_on_1 || counter_at_tdd_vco_rx_on_2) begin
-        tdd_rx_vco_en <= 1'b1;
-      end
-      else if (counter_at_tdd_vco_rx_off_1 || counter_at_tdd_vco_rx_off_2) begin
-        tdd_rx_vco_en <= 1'b0;
-      end
-    end else begin
+    if(rst == 1'b1) begin
       tdd_rx_vco_en <= 1'b0;
     end
+    else if((tdd_counter_state == OFF) || (counter_at_tdd_vco_rx_off_1 == 1'b1) || (counter_at_tdd_vco_rx_off_2 == 1'b1)) begin
+      tdd_rx_vco_en <= 1'b0;
+    end
+    else if((tdd_counter_state == ON) && ((counter_at_tdd_vco_rx_on_1 == 1'b1) || (counter_at_tdd_vco_rx_on_2 == 1'b1))) begin
+      tdd_rx_vco_en <= 1'b1;
+    end
+    else if((tdd_counter_state == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_rx_vco_en <= tdd_rx_only;
+    end
+    else begin
+      tdd_rx_vco_en <= tdd_rx_vco_en;
+    end
   end
 
   always @(posedge clk) begin
-    if(tdd_counter_state == ON) begin
-      if (tdd_txrx_only_en_s) begin
-        tdd_tx_vco_en <= tdd_tx_only;
-      end
-      else if (counter_at_tdd_vco_tx_on_1 || counter_at_tdd_vco_tx_on_2) begin
-        tdd_tx_vco_en <= 1'b1;
-      end
-      else if (counter_at_tdd_vco_tx_off_1 || counter_at_tdd_vco_tx_off_2) begin
-        tdd_tx_vco_en <= 1'b0;
-      end
-    end else begin
+    if(rst == 1'b1) begin
       tdd_tx_vco_en <= 1'b0;
     end
+    else if((tdd_counter_state == OFF) || (counter_at_tdd_vco_tx_off_1 == 1'b1) || (counter_at_tdd_vco_tx_off_2 == 1'b1)) begin
+      tdd_tx_vco_en <= 1'b0;
+    end
+    else if((tdd_counter_state == ON) && ((counter_at_tdd_vco_tx_on_1 == 1'b1) || (counter_at_tdd_vco_tx_on_2 == 1'b1))) begin
+      tdd_tx_vco_en <= 1'b1;
+    end
+    else if((tdd_counter_state == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_tx_vco_en <= tdd_tx_only;
+    end
+    else begin
+      tdd_tx_vco_en <= tdd_tx_vco_en;
+    end
   end
 
   always @(posedge clk) begin
-    if(tdd_counter_state == ON) begin
-      if (tdd_txrx_only_en_s) begin
-        tdd_rx_rf_en <= tdd_rx_only;
-      end
-      else if (counter_at_tdd_rx_on_1 || counter_at_tdd_rx_on_2) begin
-        tdd_rx_rf_en <= 1'b1;
-      end
-      else if (counter_at_tdd_rx_off_1 || counter_at_tdd_rx_off_2) begin
-        tdd_rx_rf_en <= 1'b0;
-      end
-    end else begin
+    if(rst == 1'b1) begin
       tdd_rx_rf_en <= 1'b0;
     end
-  end
-
-  always @(posedge clk) begin
-    if(tdd_counter_state == ON) begin
-      if (tdd_txrx_only_en_s) begin
-        tdd_tx_rf_en <= tdd_tx_only;
-      end
-      else if (counter_at_tdd_tx_on_1 || counter_at_tdd_tx_on_2) begin
-        tdd_tx_rf_en <= 1'b1;
-      end
-      else if (counter_at_tdd_tx_off_1 || counter_at_tdd_tx_off_2) begin
-        tdd_tx_rf_en <= 1'b0;
-      end
-    end else begin
-      tdd_tx_rf_en <= 1'b0;
+    else if((tdd_counter_state == OFF) || (counter_at_tdd_rx_off_1 == 1'b1) || (counter_at_tdd_rx_off_2 == 1'b1)) begin
+      tdd_rx_rf_en <= 1'b0;
+    end
+    else if((tdd_counter_state == ON) && ((counter_at_tdd_rx_on_1 == 1'b1) || (counter_at_tdd_rx_on_2 == 1'b1))) begin
+      tdd_rx_rf_en <= 1'b1;
+    end
+    else if((tdd_counter_state == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_rx_rf_en <= tdd_rx_only;
+    end
+    else begin
+      tdd_rx_rf_en <= tdd_rx_rf_en;
     end
   end
 
   always @(posedge clk) begin
-    if(tdd_counter_state == ON) begin
-      if (tdd_txrx_only_en_s) begin
-        tdd_tx_dp_en <= tdd_tx_only;
-      end
-      else if (counter_at_tdd_tx_dp_on_1 || counter_at_tdd_tx_dp_on_2) begin
-        tdd_tx_dp_en <= 1'b1;
-      end
-      else if (counter_at_tdd_tx_dp_off_1 || counter_at_tdd_tx_dp_off_2) begin
-        tdd_tx_dp_en <= 1'b0;
-      end
-    end else begin
+    if(rst == 1'b1) begin
+      tdd_tx_rf_en <= 1'b0;
+    end
+    else if((tdd_counter_state == OFF) || (counter_at_tdd_tx_off_1 == 1'b1) || (counter_at_tdd_tx_off_2 == 1'b1)) begin
+      tdd_tx_rf_en <= 1'b0;
+    end
+    else if((tdd_counter_state == ON) && ((counter_at_tdd_tx_on_1 == 1'b1) || (counter_at_tdd_tx_on_2 == 1'b1))) begin
+      tdd_tx_rf_en <= 1'b1;
+    end
+    else if((tdd_counter_state == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_tx_rf_en <= tdd_tx_only;
+    end
+    else begin
+      tdd_tx_rf_en <= tdd_tx_rf_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
       tdd_tx_dp_en <= 1'b0;
+    end
+    else if((tdd_counter_state == OFF) || (counter_at_tdd_tx_dp_off_1 == 1'b1) || (counter_at_tdd_tx_dp_off_2 == 1'b1)) begin
+      tdd_tx_dp_en <= 1'b0;
+    end
+    else if((tdd_counter_state == ON) && ((counter_at_tdd_tx_dp_on_1 == 1'b1) || (counter_at_tdd_tx_dp_on_2 == 1'b1))) begin
+      tdd_tx_dp_en <= 1'b1;
+    end
+    else if((tdd_counter_state == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_tx_dp_en <= tdd_tx_only;
+    end
+    else begin
+      tdd_tx_dp_en <= tdd_tx_dp_en;
     end
   end
 
