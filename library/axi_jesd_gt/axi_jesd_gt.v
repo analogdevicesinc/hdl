@@ -64,27 +64,110 @@ module axi_jesd_gt (
   rx_clk,
   rx_data,
   rx_sof,
-  rx_gt_charisk,
-  rx_gt_disperr,
-  rx_gt_notintable,
-  rx_gt_data,
   rx_rst_done,
   rx_ip_comma_align,
   rx_ip_sync,
   rx_ip_sof,
   rx_ip_data,
+  rx_gt_charisk_0,
+  rx_gt_disperr_0,
+  rx_gt_notintable_0,
+  rx_gt_data_0,
+  rx_gt_charisk_1,
+  rx_gt_disperr_1,
+  rx_gt_notintable_1,
+  rx_gt_data_1,
+  rx_gt_charisk_2,
+  rx_gt_disperr_2,
+  rx_gt_notintable_2,
+  rx_gt_data_2,
+  rx_gt_charisk_3,
+  rx_gt_disperr_3,
+  rx_gt_notintable_3,
+  rx_gt_data_3,
+  rx_gt_charisk_4,
+  rx_gt_disperr_4,
+  rx_gt_notintable_4,
+  rx_gt_data_4,
+  rx_gt_charisk_5,
+  rx_gt_disperr_5,
+  rx_gt_notintable_5,
+  rx_gt_data_5,
+  rx_gt_charisk_6,
+  rx_gt_disperr_6,
+  rx_gt_notintable_6,
+  rx_gt_data_6,
+  rx_gt_charisk_7,
+  rx_gt_disperr_7,
+  rx_gt_notintable_7,
+  rx_gt_data_7,
+
+  rx_gt_ilas_f_0,
+  rx_gt_ilas_q_0,
+  rx_gt_ilas_a_0,
+  rx_gt_ilas_r_0,
+  rx_gt_cgs_k_0,
+  rx_gt_ilas_f_1,
+  rx_gt_ilas_q_1,
+  rx_gt_ilas_a_1,
+  rx_gt_ilas_r_1,
+  rx_gt_cgs_k_1,
+  rx_gt_ilas_f_2,
+  rx_gt_ilas_q_2,
+  rx_gt_ilas_a_2,
+  rx_gt_ilas_r_2,
+  rx_gt_cgs_k_2,
+  rx_gt_ilas_f_3,
+  rx_gt_ilas_q_3,
+  rx_gt_ilas_a_3,
+  rx_gt_ilas_r_3,
+  rx_gt_cgs_k_3,
+  rx_gt_ilas_f_4,
+  rx_gt_ilas_q_4,
+  rx_gt_ilas_a_4,
+  rx_gt_ilas_r_4,
+  rx_gt_cgs_k_4,
+  rx_gt_ilas_f_5,
+  rx_gt_ilas_q_5,
+  rx_gt_ilas_a_5,
+  rx_gt_ilas_r_5,
+  rx_gt_cgs_k_5,
+  rx_gt_ilas_f_6,
+  rx_gt_ilas_q_6,
+  rx_gt_ilas_a_6,
+  rx_gt_ilas_r_6,
+  rx_gt_cgs_k_6,
+  rx_gt_ilas_f_7,
+  rx_gt_ilas_q_7,
+  rx_gt_ilas_a_7,
+  rx_gt_ilas_r_7,
+  rx_gt_cgs_k_7,
 
   tx_rst,
   tx_jesd_rst,
   tx_clk_g,
   tx_clk,
   tx_data,
-  tx_gt_charisk,
-  tx_gt_data,
   tx_rst_done,
   tx_ip_sync,
   tx_ip_sof,
   tx_ip_data,
+  tx_gt_charisk_0,
+  tx_gt_data_0,
+  tx_gt_charisk_1,
+  tx_gt_data_1,
+  tx_gt_charisk_2,
+  tx_gt_data_2,
+  tx_gt_charisk_3,
+  tx_gt_data_3,
+  tx_gt_charisk_4,
+  tx_gt_data_4,
+  tx_gt_charisk_5,
+  tx_gt_data_5,
+  tx_gt_charisk_6,
+  tx_gt_data_6,
+  tx_gt_charisk_7,
+  tx_gt_data_7,
 
   // axi - clock & reset
 
@@ -186,27 +269,110 @@ module axi_jesd_gt (
   input                                         rx_clk;
   output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_data;
   output  [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_sof;
-  output  [((PCORE_NUM_OF_RX_LANES* 4)-1):0]    rx_gt_charisk;
-  output  [((PCORE_NUM_OF_RX_LANES* 4)-1):0]    rx_gt_disperr;
-  output  [((PCORE_NUM_OF_RX_LANES* 4)-1):0]    rx_gt_notintable;
-  output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_gt_data;
   output                                        rx_rst_done;
   input                                         rx_ip_comma_align;
   input                                         rx_ip_sync;
   input   [  3:0]                               rx_ip_sof;
   input   [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_ip_data;
+  output  [  3:0]                               rx_gt_charisk_0;
+  output  [  3:0]                               rx_gt_disperr_0;
+  output  [  3:0]                               rx_gt_notintable_0;
+  output  [ 31:0]                               rx_gt_data_0;
+  output  [  3:0]                               rx_gt_charisk_1;
+  output  [  3:0]                               rx_gt_disperr_1;
+  output  [  3:0]                               rx_gt_notintable_1;
+  output  [ 31:0]                               rx_gt_data_1;
+  output  [  3:0]                               rx_gt_charisk_2;
+  output  [  3:0]                               rx_gt_disperr_2;
+  output  [  3:0]                               rx_gt_notintable_2;
+  output  [ 31:0]                               rx_gt_data_2;
+  output  [  3:0]                               rx_gt_charisk_3;
+  output  [  3:0]                               rx_gt_disperr_3;
+  output  [  3:0]                               rx_gt_notintable_3;
+  output  [ 31:0]                               rx_gt_data_3;
+  output  [  3:0]                               rx_gt_charisk_4;
+  output  [  3:0]                               rx_gt_disperr_4;
+  output  [  3:0]                               rx_gt_notintable_4;
+  output  [ 31:0]                               rx_gt_data_4;
+  output  [  3:0]                               rx_gt_charisk_5;
+  output  [  3:0]                               rx_gt_disperr_5;
+  output  [  3:0]                               rx_gt_notintable_5;
+  output  [ 31:0]                               rx_gt_data_5;
+  output  [  3:0]                               rx_gt_charisk_6;
+  output  [  3:0]                               rx_gt_disperr_6;
+  output  [  3:0]                               rx_gt_notintable_6;
+  output  [ 31:0]                               rx_gt_data_6;
+  output  [  3:0]                               rx_gt_charisk_7;
+  output  [  3:0]                               rx_gt_disperr_7;
+  output  [  3:0]                               rx_gt_notintable_7;
+  output  [ 31:0]                               rx_gt_data_7;
+
+  output  [  3:0]                               rx_gt_ilas_f_0;
+  output  [  3:0]                               rx_gt_ilas_q_0;
+  output  [  3:0]                               rx_gt_ilas_a_0;
+  output  [  3:0]                               rx_gt_ilas_r_0;
+  output  [  3:0]                               rx_gt_cgs_k_0;
+  output  [  3:0]                               rx_gt_ilas_f_1;
+  output  [  3:0]                               rx_gt_ilas_q_1;
+  output  [  3:0]                               rx_gt_ilas_a_1;
+  output  [  3:0]                               rx_gt_ilas_r_1;
+  output  [  3:0]                               rx_gt_cgs_k_1;
+  output  [  3:0]                               rx_gt_ilas_f_2;
+  output  [  3:0]                               rx_gt_ilas_q_2;
+  output  [  3:0]                               rx_gt_ilas_a_2;
+  output  [  3:0]                               rx_gt_ilas_r_2;
+  output  [  3:0]                               rx_gt_cgs_k_2;
+  output  [  3:0]                               rx_gt_ilas_f_3;
+  output  [  3:0]                               rx_gt_ilas_q_3;
+  output  [  3:0]                               rx_gt_ilas_a_3;
+  output  [  3:0]                               rx_gt_ilas_r_3;
+  output  [  3:0]                               rx_gt_cgs_k_3;
+  output  [  3:0]                               rx_gt_ilas_f_4;
+  output  [  3:0]                               rx_gt_ilas_q_4;
+  output  [  3:0]                               rx_gt_ilas_a_4;
+  output  [  3:0]                               rx_gt_ilas_r_4;
+  output  [  3:0]                               rx_gt_cgs_k_4;
+  output  [  3:0]                               rx_gt_ilas_f_5;
+  output  [  3:0]                               rx_gt_ilas_q_5;
+  output  [  3:0]                               rx_gt_ilas_a_5;
+  output  [  3:0]                               rx_gt_ilas_r_5;
+  output  [  3:0]                               rx_gt_cgs_k_5;
+  output  [  3:0]                               rx_gt_ilas_f_6;
+  output  [  3:0]                               rx_gt_ilas_q_6;
+  output  [  3:0]                               rx_gt_ilas_a_6;
+  output  [  3:0]                               rx_gt_ilas_r_6;
+  output  [  3:0]                               rx_gt_cgs_k_6;
+  output  [  3:0]                               rx_gt_ilas_f_7;
+  output  [  3:0]                               rx_gt_ilas_q_7;
+  output  [  3:0]                               rx_gt_ilas_a_7;
+  output  [  3:0]                               rx_gt_ilas_r_7;
+  output  [  3:0]                               rx_gt_cgs_k_7;
 
   output                                        tx_rst;
   output                                        tx_jesd_rst;
   output                                        tx_clk_g;
   input                                         tx_clk;
   input   [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_data;
-  input   [((PCORE_NUM_OF_TX_LANES* 4)-1):0]    tx_gt_charisk;
-  input   [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_gt_data;
   output                                        tx_rst_done;
   output                                        tx_ip_sync;
   input   [  3:0]                               tx_ip_sof;
   output  [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_ip_data;
+  input   [  3:0]                               tx_gt_charisk_0;
+  input   [ 31:0]                               tx_gt_data_0;
+  input   [  3:0]                               tx_gt_charisk_1;
+  input   [ 31:0]                               tx_gt_data_1;
+  input   [  3:0]                               tx_gt_charisk_2;
+  input   [ 31:0]                               tx_gt_data_2;
+  input   [  3:0]                               tx_gt_charisk_3;
+  input   [ 31:0]                               tx_gt_data_3;
+  input   [  3:0]                               tx_gt_charisk_4;
+  input   [ 31:0]                               tx_gt_data_4;
+  input   [  3:0]                               tx_gt_charisk_5;
+  input   [ 31:0]                               tx_gt_data_5;
+  input   [  3:0]                               tx_gt_charisk_6;
+  input   [ 31:0]                               tx_gt_data_6;
+  input   [  3:0]                               tx_gt_charisk_7;
+  input   [ 31:0]                               tx_gt_data_7;
 
   input                                         axi_aclk;
   input                                         axi_aresetn;
@@ -270,6 +436,20 @@ module axi_jesd_gt (
   wire                                          up_clk;
   wire                                          up_drp_rst;
 
+  // per gt interface- max -8
+
+  wire    [((8* 4)-1):0]                        rx_gt_charisk;
+  wire    [((8* 4)-1):0]                        rx_gt_disperr;
+  wire    [((8* 4)-1):0]                        rx_gt_notintable;
+  wire    [((8*32)-1):0]                        rx_gt_data;
+  wire    [((8* 4)-1):0]                        rx_gt_ilas_f;
+  wire    [((8* 4)-1):0]                        rx_gt_ilas_q;
+  wire    [((8* 4)-1):0]                        rx_gt_ilas_a;
+  wire    [((8* 4)-1):0]                        rx_gt_ilas_r;
+  wire    [((8* 4)-1):0]                        rx_gt_cgs_k;
+  wire    [((8* 4)-1):0]                        tx_gt_charisk;
+  wire    [((8*32)-1):0]                        tx_gt_data;
+
   // internal signals
 
   wire    [  8:0]                               up_status_extn_s;
@@ -277,8 +457,6 @@ module axi_jesd_gt (
   wire    [  8:0]                               rx_pll_locked_extn_s;
   wire    [  8:0]                               tx_rst_done_extn_s;
   wire    [  8:0]                               tx_pll_locked_extn_s;
-  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_mon_trigger_s;
-  wire    [((PCORE_NUM_OF_LANES*50)-1):0]       rx_mon_data_s;
   wire    [ 15:0]                               up_drp_rdata_gt_s[15:0];
   wire                                          up_drp_ready_gt_s[15:0];
   wire    [  7:0]                               up_drp_rxrate_gt_s[15:0];
@@ -290,11 +468,11 @@ module axi_jesd_gt (
   wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_disperr_s;
   wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_notintable_s;
   wire    [((PCORE_NUM_OF_LANES*32)-1):0]       rx_gt_data_s;
-  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_ilas_f_s;
-  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_ilas_q_s;
-  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_ilas_a_s;
-  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_ilas_r_s;
-  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_cgs_k_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_ilas_f_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_ilas_q_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_ilas_a_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_ilas_r_s;
+  wire    [((PCORE_NUM_OF_LANES* 4)-1):0]       rx_gt_cgs_k_s;
   wire    [((PCORE_NUM_OF_LANES*32)-1):0]       rx_ip_data_s;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_data_p_s;
   wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_data_n_s;
@@ -367,20 +545,105 @@ module axi_jesd_gt (
   wire    [ 31:0]                               up_rdata_s;
   wire                                          up_rack_s;
 
-  // debug interface
+  // bad tools -- bad interfaces
 
-  assign rx_mon_data = {rx_sync, rx_sysref, rx_ip_sof, rx_ip_data, rx_mon_data_s[((PCORE_NUM_OF_RX_LANES*50)-1):0]};
-  assign rx_mon_trigger = {rx_sync, rx_sysref, rx_mon_trigger_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0]};
+  assign rx_gt_charisk_0 = rx_gt_charisk[((1* 4)-1):(0* 4)];
+  assign rx_gt_disperr_0 = rx_gt_disperr[((1* 4)-1):(0* 4)];
+  assign rx_gt_notintable_0 = rx_gt_notintable[((1* 4)-1):(0* 4)];
+  assign rx_gt_data_0 = rx_gt_data[((1*32)-1):(0*32)];
+  assign rx_gt_charisk_1 = rx_gt_charisk[((2* 4)-1):(1* 4)];
+  assign rx_gt_disperr_1 = rx_gt_disperr[((2* 4)-1):(1* 4)];
+  assign rx_gt_notintable_1 = rx_gt_notintable[((2* 4)-1):(1* 4)];
+  assign rx_gt_data_1 = rx_gt_data[((2*32)-1):(1*32)];
+  assign rx_gt_charisk_2 = rx_gt_charisk[((3* 4)-1):(2* 4)];
+  assign rx_gt_disperr_2 = rx_gt_disperr[((3* 4)-1):(2* 4)];
+  assign rx_gt_notintable_2 = rx_gt_notintable[((3* 4)-1):(2* 4)];
+  assign rx_gt_data_2 = rx_gt_data[((3*32)-1):(2*32)];
+  assign rx_gt_charisk_3 = rx_gt_charisk[((4* 4)-1):(3* 4)];
+  assign rx_gt_disperr_3 = rx_gt_disperr[((4* 4)-1):(3* 4)];
+  assign rx_gt_notintable_3 = rx_gt_notintable[((4* 4)-1):(3* 4)];
+  assign rx_gt_data_3 = rx_gt_data[((4*32)-1):(3*32)];
+  assign rx_gt_charisk_4 = rx_gt_charisk[((5* 4)-1):(4* 4)];
+  assign rx_gt_disperr_4 = rx_gt_disperr[((5* 4)-1):(4* 4)];
+  assign rx_gt_notintable_4 = rx_gt_notintable[((5* 4)-1):(4* 4)];
+  assign rx_gt_data_4 = rx_gt_data[((5*32)-1):(4*32)];
+  assign rx_gt_charisk_5 = rx_gt_charisk[((6* 4)-1):(5* 4)];
+  assign rx_gt_disperr_5 = rx_gt_disperr[((6* 4)-1):(5* 4)];
+  assign rx_gt_notintable_5 = rx_gt_notintable[((6* 4)-1):(5* 4)];
+  assign rx_gt_data_5 = rx_gt_data[((6*32)-1):(5*32)];
+  assign rx_gt_charisk_6 = rx_gt_charisk[((7* 4)-1):(6* 4)];
+  assign rx_gt_disperr_6 = rx_gt_disperr[((7* 4)-1):(6* 4)];
+  assign rx_gt_notintable_6 = rx_gt_notintable[((7* 4)-1):(6* 4)];
+  assign rx_gt_data_6 = rx_gt_data[((7*32)-1):(6*32)];
+  assign rx_gt_charisk_7 = rx_gt_charisk[((8* 4)-1):(7* 4)];
+  assign rx_gt_disperr_7 = rx_gt_disperr[((8* 4)-1):(7* 4)];
+  assign rx_gt_notintable_7 = rx_gt_notintable[((8* 4)-1):(7* 4)];
+  assign rx_gt_data_7 = rx_gt_data[((8*32)-1):(7*32)];
 
-  assign tx_mon_data = {tx_sync, tx_sysref, tx_ip_sof, tx_gt_charisk, tx_gt_data};
-  assign tx_mon_trigger = {tx_sync, tx_sysref, tx_ip_sof};
+  assign rx_gt_ilas_f_0 = rx_gt_ilas_f[((1* 4)-1):(0* 4)];
+  assign rx_gt_ilas_q_0 = rx_gt_ilas_q[((1* 4)-1):(0* 4)];
+  assign rx_gt_ilas_a_0 = rx_gt_ilas_a[((1* 4)-1):(0* 4)];
+  assign rx_gt_ilas_r_0 = rx_gt_ilas_r[((1* 4)-1):(0* 4)];
+  assign rx_gt_cgs_k_0 = rx_gt_cgs_k[((1* 4)-1):(0* 4)];
+  assign rx_gt_ilas_f_1 = rx_gt_ilas_f[((2* 4)-1):(1* 4)];
+  assign rx_gt_ilas_q_1 = rx_gt_ilas_q[((2* 4)-1):(1* 4)];
+  assign rx_gt_ilas_a_1 = rx_gt_ilas_a[((2* 4)-1):(1* 4)];
+  assign rx_gt_ilas_r_1 = rx_gt_ilas_r[((2* 4)-1):(1* 4)];
+  assign rx_gt_cgs_k_1 = rx_gt_cgs_k[((2* 4)-1):(1* 4)];
+  assign rx_gt_ilas_f_2 = rx_gt_ilas_f[((3* 4)-1):(2* 4)];
+  assign rx_gt_ilas_q_2 = rx_gt_ilas_q[((3* 4)-1):(2* 4)];
+  assign rx_gt_ilas_a_2 = rx_gt_ilas_a[((3* 4)-1):(2* 4)];
+  assign rx_gt_ilas_r_2 = rx_gt_ilas_r[((3* 4)-1):(2* 4)];
+  assign rx_gt_cgs_k_2 = rx_gt_cgs_k[((3* 4)-1):(2* 4)];
+  assign rx_gt_ilas_f_3 = rx_gt_ilas_f[((4* 4)-1):(3* 4)];
+  assign rx_gt_ilas_q_3 = rx_gt_ilas_q[((4* 4)-1):(3* 4)];
+  assign rx_gt_ilas_a_3 = rx_gt_ilas_a[((4* 4)-1):(3* 4)];
+  assign rx_gt_ilas_r_3 = rx_gt_ilas_r[((4* 4)-1):(3* 4)];
+  assign rx_gt_cgs_k_3 = rx_gt_cgs_k[((4* 4)-1):(3* 4)];
+  assign rx_gt_ilas_f_4 = rx_gt_ilas_f[((5* 4)-1):(4* 4)];
+  assign rx_gt_ilas_q_4 = rx_gt_ilas_q[((5* 4)-1):(4* 4)];
+  assign rx_gt_ilas_a_4 = rx_gt_ilas_a[((5* 4)-1):(4* 4)];
+  assign rx_gt_ilas_r_4 = rx_gt_ilas_r[((5* 4)-1):(4* 4)];
+  assign rx_gt_cgs_k_4 = rx_gt_cgs_k[((5* 4)-1):(4* 4)];
+  assign rx_gt_ilas_f_5 = rx_gt_ilas_f[((6* 4)-1):(5* 4)];
+  assign rx_gt_ilas_q_5 = rx_gt_ilas_q[((6* 4)-1):(5* 4)];
+  assign rx_gt_ilas_a_5 = rx_gt_ilas_a[((6* 4)-1):(5* 4)];
+  assign rx_gt_ilas_r_5 = rx_gt_ilas_r[((6* 4)-1):(5* 4)];
+  assign rx_gt_cgs_k_5 = rx_gt_cgs_k[((6* 4)-1):(5* 4)];
+  assign rx_gt_ilas_f_6 = rx_gt_ilas_f[((7* 4)-1):(6* 4)];
+  assign rx_gt_ilas_q_6 = rx_gt_ilas_q[((7* 4)-1):(6* 4)];
+  assign rx_gt_ilas_a_6 = rx_gt_ilas_a[((7* 4)-1):(6* 4)];
+  assign rx_gt_ilas_r_6 = rx_gt_ilas_r[((7* 4)-1):(6* 4)];
+  assign rx_gt_cgs_k_6 = rx_gt_cgs_k[((7* 4)-1):(6* 4)];
+  assign rx_gt_ilas_f_7 = rx_gt_ilas_f[((8* 4)-1):(7* 4)];
+  assign rx_gt_ilas_q_7 = rx_gt_ilas_q[((8* 4)-1):(7* 4)];
+  assign rx_gt_ilas_a_7 = rx_gt_ilas_a[((8* 4)-1):(7* 4)];
+  assign rx_gt_ilas_r_7 = rx_gt_ilas_r[((8* 4)-1):(7* 4)];
+  assign rx_gt_cgs_k_7 = rx_gt_cgs_k[((8* 4)-1):(7* 4)];
+
+  assign tx_gt_charisk[((1* 4)-1):(0* 4)] = tx_gt_charisk_0;
+  assign tx_gt_data[((1*32)-1):(0*32)] = tx_gt_data_0;
+  assign tx_gt_charisk[((2* 4)-1):(1* 4)] = tx_gt_charisk_1;
+  assign tx_gt_data[((2*32)-1):(1*32)] = tx_gt_data_1;
+  assign tx_gt_charisk[((3* 4)-1):(2* 4)] = tx_gt_charisk_2;
+  assign tx_gt_data[((3*32)-1):(2*32)] = tx_gt_data_2;
+  assign tx_gt_charisk[((4* 4)-1):(3* 4)] = tx_gt_charisk_3;
+  assign tx_gt_data[((4*32)-1):(3*32)] = tx_gt_data_3;
+  assign tx_gt_charisk[((5* 4)-1):(4* 4)] = tx_gt_charisk_4;
+  assign tx_gt_data[((5*32)-1):(4*32)] = tx_gt_data_4;
+  assign tx_gt_charisk[((6* 4)-1):(5* 4)] = tx_gt_charisk_5;
+  assign tx_gt_data[((6*32)-1):(5*32)] = tx_gt_data_5;
+  assign tx_gt_charisk[((7* 4)-1):(6* 4)] = tx_gt_charisk_6;
+  assign tx_gt_data[((7*32)-1):(6*32)] = tx_gt_data_6;
+  assign tx_gt_charisk[((8* 4)-1):(7* 4)] = tx_gt_charisk_7;
+  assign tx_gt_data[((8*32)-1):(7*32)] = tx_gt_data_7;
 
   // signal name changes
 
   assign up_rstn = axi_aresetn;
   assign up_clk = axi_aclk;
 
-  // drp is simply over-defined to avoid errors with singluar entries
+  // drp range-extended
 
   assign up_status_extn_s = 9'hff;
   assign rx_rst_done_extn_s = {up_status_extn_s[8:PCORE_NUM_OF_LANES], rx_rst_done_s};
@@ -415,15 +678,49 @@ module axi_jesd_gt (
                             up_drp_rxrate_gt_s[ 3] | up_drp_rxrate_gt_s[ 2] |
                             up_drp_rxrate_gt_s[ 1] | up_drp_rxrate_gt_s[ 0];
 
-
   // asymmetric widths -- receive
 
   assign rx_data = rx_data_s[((PCORE_NUM_OF_RX_LANES*32)-1):0];
   assign rx_sof = rx_sof_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0];
-  assign rx_gt_charisk = rx_gt_charisk_s[((PCORE_NUM_OF_RX_LANES* 4)-1):0];
-  assign rx_gt_disperr = rx_gt_disperr_s[((PCORE_NUM_OF_RX_LANES* 4)-1):0];
-  assign rx_gt_notintable = rx_gt_notintable_s[((PCORE_NUM_OF_RX_LANES* 4)-1):0];
-  assign rx_gt_data = rx_gt_data_s[((PCORE_NUM_OF_RX_LANES*32)-1):0];
+
+  generate
+  if (PCORE_NUM_OF_LANES < 8) begin
+  assign rx_gt_charisk[((8*4)-1):(PCORE_NUM_OF_LANES*4)] = 'd0;
+  assign rx_gt_disperr[((8*4)-1):(PCORE_NUM_OF_LANES*4)] = 'd0;
+  assign rx_gt_notintable[((8*4)-1):(PCORE_NUM_OF_LANES*4)] = 'd0;
+  assign rx_gt_data[((8*32)-1):(PCORE_NUM_OF_LANES*32)] = 'd0;
+  assign rx_gt_charisk[((PCORE_NUM_OF_LANES*4)-1):0] = rx_gt_charisk_s;
+  assign rx_gt_disperr[((PCORE_NUM_OF_LANES*4)-1):0] = rx_gt_disperr_s;
+  assign rx_gt_notintable[((PCORE_NUM_OF_LANES*4)-1):0] = rx_gt_notintable_s;
+  assign rx_gt_data[((PCORE_NUM_OF_LANES*32)-1):0] = rx_gt_data_s;
+  end else begin
+  assign rx_gt_charisk = rx_gt_charisk_s[((8*4)-1):0];
+  assign rx_gt_disperr = rx_gt_disperr_s[((8*4)-1):0];
+  assign rx_gt_notintable = rx_gt_notintable_s[((8*4)-1):0];
+  assign rx_gt_data = rx_gt_data_s[((8*32)-1):0];
+  end
+  endgenerate
+
+  generate
+  if (PCORE_NUM_OF_LANES < 8) begin
+  assign rx_gt_ilas_f[((8*4)-1):(PCORE_NUM_OF_LANES*4)] = 'd0;
+  assign rx_gt_ilas_q[((8*4)-1):(PCORE_NUM_OF_LANES*4)] = 'd0;
+  assign rx_gt_ilas_a[((8*4)-1):(PCORE_NUM_OF_LANES*4)] = 'd0;
+  assign rx_gt_ilas_r[((8*4)-1):(PCORE_NUM_OF_LANES*4)] = 'd0;
+  assign rx_gt_cgs_k[((8*4)-1):(PCORE_NUM_OF_LANES*4)] = 'd0;
+  assign rx_gt_ilas_f[((PCORE_NUM_OF_LANES*4)-1):0] = rx_gt_ilas_f_s;
+  assign rx_gt_ilas_q[((PCORE_NUM_OF_LANES*4)-1):0] = rx_gt_ilas_q_s;
+  assign rx_gt_ilas_a[((PCORE_NUM_OF_LANES*4)-1):0] = rx_gt_ilas_a_s;
+  assign rx_gt_ilas_r[((PCORE_NUM_OF_LANES*4)-1):0] = rx_gt_ilas_r_s;
+  assign rx_gt_cgs_k[((PCORE_NUM_OF_LANES*4)-1):0] = rx_gt_cgs_k_s;
+  end else begin
+  assign rx_gt_ilas_f = rx_gt_ilas_f_s[((8*4)-1):0];
+  assign rx_gt_ilas_q = rx_gt_ilas_q_s[((8*4)-1):0];
+  assign rx_gt_ilas_a = rx_gt_ilas_a_s[((8*4)-1):0];
+  assign rx_gt_ilas_r = rx_gt_ilas_r_s[((8*4)-1):0];
+  assign rx_gt_cgs_k = rx_gt_cgs_k_s[((8*4)-1):0];
+  end
+  endgenerate
 
   generate
   if (PCORE_NUM_OF_LANES == PCORE_NUM_OF_RX_LANES) begin
@@ -446,14 +743,20 @@ module axi_jesd_gt (
   assign tx_data_n = tx_data_n_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
 
   generate
-  if (PCORE_NUM_OF_LANES == PCORE_NUM_OF_TX_LANES) begin
-  assign tx_gt_charisk_s = tx_gt_charisk;
-  assign tx_gt_data_s = tx_gt_data;
+  if (PCORE_NUM_OF_LANES > 8) begin
   end else begin
-  assign tx_gt_charisk_s[((PCORE_NUM_OF_LANES* 4)-1):(PCORE_NUM_OF_TX_LANES* 4)] = 'd0;
-  assign tx_gt_data_s[((PCORE_NUM_OF_LANES*32)-1):(PCORE_NUM_OF_TX_LANES*32)] = 'd0;
-  assign tx_gt_charisk_s[((PCORE_NUM_OF_TX_LANES* 4)-1):0] = tx_gt_charisk;
-  assign tx_gt_data_s[((PCORE_NUM_OF_TX_LANES*32)-1):0] = tx_gt_data;
+  end
+  endgenerate
+
+  generate
+  if (PCORE_NUM_OF_LANES > 8) begin
+  assign tx_gt_charisk_s[((PCORE_NUM_OF_LANES* 4)-1):(8* 4)] = 'd0;
+  assign tx_gt_data_s[((PCORE_NUM_OF_LANES*32)-1):(8*32)] = 'd0;
+  assign tx_gt_charisk_s[((8* 4)-1):0] = tx_gt_charisk;
+  assign tx_gt_data_s[((8*32)-1):0] = tx_gt_data;
+  end else begin
+  assign tx_gt_charisk_s = tx_gt_charisk[((PCORE_NUM_OF_LANES* 4)-1):0];
+  assign tx_gt_data_s = tx_gt_data[((PCORE_NUM_OF_LANES*32)-1):0];
   end
   endgenerate
 
@@ -615,11 +918,11 @@ module axi_jesd_gt (
     .rx_notintable (rx_gt_notintable_s[n*4+3:n*4]),
     .rx_data (rx_gt_data_s[n*32+31:n*32]),
     .rx_comma_align_enb (rx_ip_comma_align),
-    .rx_ilas_f (rx_ilas_f_s[n*4+3:n*4]),
-    .rx_ilas_q (rx_ilas_q_s[n*4+3:n*4]),
-    .rx_ilas_a (rx_ilas_a_s[n*4+3:n*4]),
-    .rx_ilas_r (rx_ilas_r_s[n*4+3:n*4]),
-    .rx_cgs_k (rx_cgs_k_s[n*4+3:n*4]),
+    .rx_ilas_f (rx_gt_ilas_f_s[n*4+3:n*4]),
+    .rx_ilas_q (rx_gt_ilas_q_s[n*4+3:n*4]),
+    .rx_ilas_a (rx_gt_ilas_a_s[n*4+3:n*4]),
+    .rx_ilas_r (rx_gt_ilas_r_s[n*4+3:n*4]),
+    .rx_cgs_k (rx_gt_cgs_k_s[n*4+3:n*4]),
     .tx_rst (gt_tx_rst),
     .tx_p (tx_data_p_s[n]),
     .tx_n (tx_data_n_s[n]),
