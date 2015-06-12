@@ -133,6 +133,7 @@ ad_connect  sys_cpu_resetn axi_ad9144_dma/m_src_axi_aresetn
 ad_connect  sys_cpu_clk axi_ad9144_dma/m_axis_aclk
 ad_connect  axi_ad9144_dma/m_axis_xfer_req axi_ad9144_fifo/dma_xfer_req
 ad_connect  axi_ad9144_dma/m_axis_aclk axi_ad9144_fifo/dma_clk
+ad_connect  sys_cpu_reset axi_ad9144_fifo/dma_rst
 ad_connect  axi_ad9144_dma/m_axis_ready axi_ad9144_fifo/dma_ready
 ad_connect  axi_ad9144_dma/m_axis_data axi_ad9144_fifo/dma_data
 ad_connect  axi_ad9144_dma/m_axis_valid axi_ad9144_fifo/dma_valid
@@ -244,7 +245,6 @@ ad_mem_hp2_interconnect sys_cpu_clk axi_ad9680_dma/m_dest_axi
 ad_cpu_interrupt ps-12 mb-13 axi_ad9144_dma/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9680_dma/irq
 
-ad_connect  axi_ad9144_fifo/dma_rst GND
 ad_connect  axi_ad9144_core/dac_ddata_2 GND
 ad_connect  axi_ad9144_core/dac_ddata_3 GND
 
