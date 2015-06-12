@@ -96,27 +96,14 @@ ad_connect  axi_daq2_gt/tx_clk_g axi_ad9144_jesd/tx_core_clk
 ad_connect  axi_daq2_gt/tx_clk_g axi_ad9144_upack/dac_clk
 ad_connect  axi_daq2_gt/tx_rst axi_ad9144_jesd/tx_reset
 ad_connect  axi_daq2_gt/tx_sysref axi_ad9144_jesd/tx_sysref
-
-create_bd_cell -type ip -vlnv analog.com:user:util_ccat:1.0 util_ccat_tx_gt_charisk
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_ccat_tx_gt_charisk]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_ccat_tx_gt_charisk]
-
-ad_connect  util_ccat_tx_gt_charisk/ccat_data axi_daq2_gt/tx_gt_charisk
-ad_connect  util_ccat_tx_gt_charisk/data_0 axi_ad9144_jesd/gt0_txcharisk
-ad_connect  util_ccat_tx_gt_charisk/data_1 axi_ad9144_jesd/gt1_txcharisk
-ad_connect  util_ccat_tx_gt_charisk/data_2 axi_ad9144_jesd/gt2_txcharisk
-ad_connect  util_ccat_tx_gt_charisk/data_3 axi_ad9144_jesd/gt3_txcharisk
-
-create_bd_cell -type ip -vlnv analog.com:user:util_ccat:1.0 util_ccat_tx_gt_data
-set_property -dict [list CONFIG.CH_DW {32}] [get_bd_cells util_ccat_tx_gt_data]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_ccat_tx_gt_data]
-
-ad_connect  util_ccat_tx_gt_data/ccat_data axi_daq2_gt/tx_gt_data
-ad_connect  util_ccat_tx_gt_data/data_0 axi_ad9144_jesd/gt0_txdata
-ad_connect  util_ccat_tx_gt_data/data_1 axi_ad9144_jesd/gt1_txdata
-ad_connect  util_ccat_tx_gt_data/data_2 axi_ad9144_jesd/gt2_txdata
-ad_connect  util_ccat_tx_gt_data/data_3 axi_ad9144_jesd/gt3_txdata
-
+ad_connect  axi_daq2_gt/tx_gt_charisk_0 axi_ad9144_jesd/gt0_txcharisk
+ad_connect  axi_daq2_gt/tx_gt_charisk_1 axi_ad9144_jesd/gt1_txcharisk
+ad_connect  axi_daq2_gt/tx_gt_charisk_2 axi_ad9144_jesd/gt2_txcharisk
+ad_connect  axi_daq2_gt/tx_gt_charisk_3 axi_ad9144_jesd/gt3_txcharisk
+ad_connect  axi_daq2_gt/tx_gt_data_0 axi_ad9144_jesd/gt0_txdata
+ad_connect  axi_daq2_gt/tx_gt_data_1 axi_ad9144_jesd/gt1_txdata
+ad_connect  axi_daq2_gt/tx_gt_data_2 axi_ad9144_jesd/gt2_txdata
+ad_connect  axi_daq2_gt/tx_gt_data_3 axi_ad9144_jesd/gt3_txdata
 ad_connect  axi_daq2_gt/tx_rst_done axi_ad9144_jesd/tx_reset_done
 ad_connect  axi_daq2_gt/tx_ip_sync axi_ad9144_jesd/tx_sync
 ad_connect  axi_daq2_gt/tx_ip_sof axi_ad9144_jesd/tx_start_of_frame
@@ -129,7 +116,6 @@ ad_connect  axi_ad9144_core/dac_valid_1 axi_ad9144_upack/dac_valid_1
 ad_connect  axi_ad9144_core/dac_enable_1 axi_ad9144_upack/dac_enable_1
 ad_connect  axi_ad9144_core/dac_ddata_1 axi_ad9144_upack/dac_data_1
 ad_connect  sys_cpu_resetn axi_ad9144_dma/m_src_axi_aresetn
-
 ad_connect  sys_cpu_clk axi_ad9144_dma/m_axis_aclk
 ad_connect  axi_ad9144_dma/m_axis_xfer_req axi_ad9144_fifo/dma_xfer_req
 ad_connect  axi_ad9144_dma/m_axis_aclk axi_ad9144_fifo/dma_clk
@@ -138,7 +124,6 @@ ad_connect  axi_ad9144_dma/m_axis_ready axi_ad9144_fifo/dma_ready
 ad_connect  axi_ad9144_dma/m_axis_data axi_ad9144_fifo/dma_data
 ad_connect  axi_ad9144_dma/m_axis_valid axi_ad9144_fifo/dma_valid
 ad_connect  axi_ad9144_dma/m_axis_last axi_ad9144_fifo/dma_xfer_last
-
 ad_connect  axi_ad9144_fifo/dac_clk axi_daq2_gt/tx_clk
 ad_connect  axi_ad9144_fifo/dac_valid axi_ad9144_upack/dac_valid
 ad_connect  axi_ad9144_fifo/dac_data axi_ad9144_upack/dac_data
@@ -151,47 +136,22 @@ ad_connect  axi_daq2_gt/rx_clk_g axi_ad9680_jesd/rx_core_clk
 ad_connect  axi_daq2_gt/rx_jesd_rst axi_ad9680_jesd/rx_reset
 ad_connect  axi_daq2_gt/rx_clk_g axi_ad9680_cpack/adc_clk
 ad_connect  axi_daq2_gt/rx_sysref axi_ad9680_jesd/rx_sysref
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_charisk
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
-
-ad_connect  util_bsplit_rx_gt_charisk/data axi_daq2_gt/rx_gt_charisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_0 axi_ad9680_jesd/gt0_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_1 axi_ad9680_jesd/gt1_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_2 axi_ad9680_jesd/gt2_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_3 axi_ad9680_jesd/gt3_rxcharisk
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_disperr
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
-
-ad_connect  util_bsplit_rx_gt_disperr/data axi_daq2_gt/rx_gt_disperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_0 axi_ad9680_jesd/gt0_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_1 axi_ad9680_jesd/gt1_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_2 axi_ad9680_jesd/gt2_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_3 axi_ad9680_jesd/gt3_rxdisperr
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_notintable
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
-
-ad_connect  util_bsplit_rx_gt_notintable/data axi_daq2_gt/rx_gt_notintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_0 axi_ad9680_jesd/gt0_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_1 axi_ad9680_jesd/gt1_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_2 axi_ad9680_jesd/gt2_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_3 axi_ad9680_jesd/gt3_rxnotintable
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_data
-set_property -dict [list CONFIG.CH_DW {32}] [get_bd_cells util_bsplit_rx_gt_data]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_data]
-
-ad_connect  util_bsplit_rx_gt_data/data axi_daq2_gt/rx_gt_data
-ad_connect  util_bsplit_rx_gt_data/split_data_0 axi_ad9680_jesd/gt0_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_1 axi_ad9680_jesd/gt1_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_2 axi_ad9680_jesd/gt2_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_3 axi_ad9680_jesd/gt3_rxdata
-
+ad_connect  axi_daq2_gt/rx_gt_charisk_0 axi_ad9680_jesd/gt0_rxcharisk
+ad_connect  axi_daq2_gt/rx_gt_disperr_0 axi_ad9680_jesd/gt0_rxdisperr
+ad_connect  axi_daq2_gt/rx_gt_notintable_0 axi_ad9680_jesd/gt0_rxnotintable
+ad_connect  axi_daq2_gt/rx_gt_data_0 axi_ad9680_jesd/gt0_rxdata
+ad_connect  axi_daq2_gt/rx_gt_charisk_1 axi_ad9680_jesd/gt1_rxcharisk
+ad_connect  axi_daq2_gt/rx_gt_disperr_1 axi_ad9680_jesd/gt1_rxdisperr
+ad_connect  axi_daq2_gt/rx_gt_notintable_1 axi_ad9680_jesd/gt1_rxnotintable
+ad_connect  axi_daq2_gt/rx_gt_data_1 axi_ad9680_jesd/gt1_rxdata
+ad_connect  axi_daq2_gt/rx_gt_charisk_2 axi_ad9680_jesd/gt2_rxcharisk
+ad_connect  axi_daq2_gt/rx_gt_disperr_2 axi_ad9680_jesd/gt2_rxdisperr
+ad_connect  axi_daq2_gt/rx_gt_notintable_2 axi_ad9680_jesd/gt2_rxnotintable
+ad_connect  axi_daq2_gt/rx_gt_data_2 axi_ad9680_jesd/gt2_rxdata
+ad_connect  axi_daq2_gt/rx_gt_charisk_3 axi_ad9680_jesd/gt3_rxcharisk
+ad_connect  axi_daq2_gt/rx_gt_disperr_3 axi_ad9680_jesd/gt3_rxdisperr
+ad_connect  axi_daq2_gt/rx_gt_notintable_3 axi_ad9680_jesd/gt3_rxnotintable
+ad_connect  axi_daq2_gt/rx_gt_data_3 axi_ad9680_jesd/gt3_rxdata
 ad_connect  axi_daq2_gt/rx_rst_done axi_ad9680_jesd/rx_reset_done
 ad_connect  axi_daq2_gt/rx_ip_comma_align axi_ad9680_jesd/rxencommaalign_out
 ad_connect  axi_daq2_gt/rx_ip_sync axi_ad9680_jesd/rx_sync
