@@ -81,5 +81,10 @@ set_location_assignment PIN_AW11  -to spi_clk               ; ## D12  FMCA_LA05_
 set_location_assignment PIN_AW13  -to spi_sdio              ; ## D14  FMCA_LA09_P
 set_location_assignment PIN_AN19  -to spi_dir               ; ## G13  FMCA_LA08_N
 
+# disable auto-pack
+
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_cntrl
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_status
+
 execute_flow -compile
 
