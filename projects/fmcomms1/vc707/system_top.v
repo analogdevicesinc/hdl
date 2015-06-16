@@ -374,6 +374,7 @@ module system_top (
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),
     .sgmii_txp (sgmii_txp),
+    .phy_sd(1'b1),
     .spdif (spdif),
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
