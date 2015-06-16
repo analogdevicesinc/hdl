@@ -139,18 +139,18 @@ set_clock_groups -asynchronous \
 
 # Ethernet common
 
-set_property IODELAY_GROUP eth_idelay_grp [get_cells dlyctrl]
+#set_property IODELAY_GROUP eth_idelay_grp [get_cells dlyctrl]
 
 # Ethernet 1
 #IDELAY
-set_property IDELAY_VALUE 16 [get_cells */*/gmii_to_rgmii_eth1/inst/*delay_rgmii_rx_ctl]
-set_property IDELAY_VALUE 16 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth1*/*delay_rgmii_rd*}]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells */*/gmii_to_rgmii_eth1/inst/*delay_rgmii_rx_ctl]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth1*/*delay_rgmii_rd*}]
+#set_property IDELAY_VALUE 16 [get_cells */*/gmii_to_rgmii_eth1/inst/*delay_rgmii_rx_ctl]
+#set_property IDELAY_VALUE 16 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth1*/*delay_rgmii_rd*}]
+#set_property IODELAY_GROUP eth_idelay_grp [get_cells */*/gmii_to_rgmii_eth1/inst/*delay_rgmii_rx_ctl]
+#set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth1*/*delay_rgmii_rd*}]
 
 # Ethernet 2
 #IDELAY
-set_property IDELAY_VALUE 16 [get_cells */*/gmii_to_rgmii_eth2/inst/*delay_rgmii_rx_ctl]
-set_property IDELAY_VALUE 16 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth2*/*delay_rgmii_rd*}]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells */*/gmii_to_rgmii_eth2/inst/*delay_rgmii_rx_ctl]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth2*/*delay_rgmii_rd*}]
+#set_property IDELAY_VALUE 16 [get_cells */*/gmii_to_rgmii_eth2/inst/*delay_rgmii_rx_ctl]
+#set_property IDELAY_VALUE 16 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth2*/*delay_rgmii_rd*}]
+#set_property IODELAY_GROUP eth_idelay_grp [get_cells */*/gmii_to_rgmii_eth2/inst/*delay_rgmii_rx_ctl]
+#set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth2*/*delay_rgmii_rd*}]

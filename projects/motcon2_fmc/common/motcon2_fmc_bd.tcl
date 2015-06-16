@@ -184,10 +184,12 @@
   #ethernet gmii to rgmii converters
     # phy 1
   set gmii_to_rgmii_eth1 [ create_bd_cell -type ip -vlnv analog.com:user:util_gmii_to_rgmii:1.0 gmii_to_rgmii_eth1 ]
-  set_property -dict [list CONFIG.PHY_AD {"00000"}] [get_bd_cells gmii_to_rgmii_eth1]
+  set_property -dict [list CONFIG.PHY_AD {"00000"}] $gmii_to_rgmii_eth1
+  set_property -dict [list CONFIG.IODELAY_CTRL {1}] $gmii_to_rgmii_eth1
+
     # phy 2
   set gmii_to_rgmii_eth2 [ create_bd_cell -type ip -vlnv analog.com:user:util_gmii_to_rgmii:1.0 gmii_to_rgmii_eth2 ]
-  set_property -dict [list CONFIG.PHY_AD {"00001"}] [get_bd_cells gmii_to_rgmii_eth2]
+  set_property -dict [list CONFIG.PHY_AD {"00001"}] $gmii_to_rgmii_eth2
 
   # iic
   set iic_ee2  [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 iic_ee2 ]
@@ -488,6 +490,7 @@
   ad_connect sys_ps7/ENET0_MDIO_T eth_mdio_t
   ad_connect sys_ps7/ENET0_MDIO_I eth_mdio_i
     # phy 1
+  ad_connect sys_200m_clk gmii_to_rgmii_eth1/idelayctrl_clk
   ad_connect gmii_to_rgmii_eth1/gmii sys_ps7/GMII_ETHERNET_0
   ad_connect eth1_rgmii gmii_to_rgmii_eth1/rgmii
   ad_connect gmii_to_rgmii_eth1/reset sys_rstgen/peripheral_reset
