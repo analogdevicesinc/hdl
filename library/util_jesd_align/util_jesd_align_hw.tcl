@@ -27,6 +27,20 @@ set_parameter_property NUM_OF_LANES TYPE INTEGER
 set_parameter_property NUM_OF_LANES UNITS None
 set_parameter_property NUM_OF_LANES HDL_PARAMETER true
 
+add_parameter ST_VALID_WIDTH INTEGER 0
+set_parameter_property ST_VALID_WIDTH DEFAULT_VALUE 1
+set_parameter_property ST_VALID_WIDTH DISPLAY_NAME ST_VALID_WIDTH
+set_parameter_property ST_VALID_WIDTH TYPE INTEGER
+set_parameter_property ST_VALID_WIDTH UNITS None
+set_parameter_property ST_VALID_WIDTH HDL_PARAMETER true
+
+add_parameter ST_DATA_WIDTH INTEGER 0
+set_parameter_property ST_DATA_WIDTH DEFAULT_VALUE 32
+set_parameter_property ST_DATA_WIDTH DISPLAY_NAME ST_DATA_WIDTH
+set_parameter_property ST_DATA_WIDTH TYPE INTEGER
+set_parameter_property ST_DATA_WIDTH UNITS None
+set_parameter_property ST_DATA_WIDTH HDL_PARAMETER true
+
 # transceiver interface
 
 add_interface if_rx_clk clock end
@@ -40,6 +54,11 @@ add_interface_port if_rx_data rx_data data Output 32*NUM_OF_LANES
 
 ad_alt_intf signal rx_ip_sof input 4 export
 ad_alt_intf signal rx_sof output NUM_OF_LANES export
+
+add_interface if_rx_st conduit end
+set_interface_property if_rx_st associatedClock if_rx_clk
+add_interface_port if_rx_st rx_st_valid acq_trigger_in output ST_VALID_WIDTH
+add_interface_port if_rx_st rx_st_data acq_data_in output ST_DATA_WIDTH
 
 proc p_util_jesd_align {} {
 
