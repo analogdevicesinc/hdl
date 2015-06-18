@@ -181,6 +181,15 @@ module system_top (
   inout             spi_sdio;
   output            spi_dir;
 
+  // internal registers
+
+  reg               up_tx_sync_m1 = 'd0;
+  reg               up_tx_sync_m2 = 'd0;
+  reg               up_tx_sync = 'd0;
+  reg               up_rx_sync_m1 = 'd0;
+  reg               up_rx_sync_m2 = 'd0;
+  reg               up_rx_sync = 'd0;
+
   // internal signals
 
   wire              eth_mdio_i;
@@ -208,9 +217,31 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
+  always @(posedge sys_clk or negedge sys_resetn) begin
+    if (sys_resetn == 1'b0) begin
+      up_tx_sync_m1 <= 1'd0;
+      up_tx_sync_m2 <= 1'd0;
+      up_tx_sync <= 1'd0;
+      up_rx_sync_m1 <= 1'd0;
+      up_rx_sync_m2 <= 1'd0;
+      up_rx_sync <= 1'd0;
+    end else begin
+      up_tx_sync_m1 <= tx_sync;
+      up_tx_sync_m2 <= up_tx_sync_m1;
+      up_tx_sync <= up_tx_sync_m2;
+      up_rx_sync_m1 <= rx_sync;
+      up_rx_sync_m2 <= up_rx_sync_m1;
+      up_rx_sync <= up_rx_sync_m2;
+    end
+  end
+
   assign gpio_i[63:60] = xcvr_tx_ready;
   assign gpio_i[59:56] = xcvr_rx_ready;
-  assign gpio_i[55:44] = 12'd0;
+  assign gpio_i[55:55] = up_tx_sync;
+  assign gpio_i[54:54] = up_rx_sync;
+  assign gpio_i[53:52] = 2'd0;
+  assign gpio_i[51:51] = gpio_o[51];
+  assign gpio_i[50:44] = 7'd0;
   assign gpio_i[43:43] = trig;
   assign gpio_i[39:39] = 1'd0;
   assign gpio_i[37:37] = 1'd0;
@@ -281,6 +312,7 @@ module system_top (
     .sys_spi_MOSI (spi_mosi_s),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
+    .sys_xcvr_reset_reset (gpio_o[51]),
     .sys_xcvr_rstcntrl_rx_ready_rx_ready (xcvr_rx_ready),
     .sys_xcvr_rstcntrl_tx_ready_tx_ready (xcvr_tx_ready),
     .sys_xcvr_rx_ref_clk_clk (rx_ref_clk),
@@ -291,6 +323,7 @@ module system_top (
     .sys_xcvr_tx_sync_n_export (tx_sync),
     .sys_xcvr_tx_sysref_export (tx_sysref),
     .sys_xcvr_txd_tx_serial_data (tx_data));
+
 
 endmodule
 

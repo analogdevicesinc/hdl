@@ -99,6 +99,14 @@
          type = "String";
       }
    }
+   element st_rx
+   {
+      datum _sortIndex
+      {
+         value = "29";
+         type = "int";
+      }
+   }
    element sys_clk
    {
       datum _sortIndex
@@ -393,7 +401,7 @@
    {
       datum _sortIndex
       {
-         value = "21";
+         value = "22";
          type = "int";
       }
    }
@@ -405,15 +413,15 @@
          type = "String";
       }
    }
-   element sys_xcvr_rstcntrl
+   element sys_xcvr_rst
    {
       datum _sortIndex
       {
-         value = "22";
+         value = "21";
          type = "int";
       }
    }
-   element sys_xcvr_rx_clk
+   element sys_xcvr_rstcntrl
    {
       datum _sortIndex
       {
@@ -421,7 +429,7 @@
          type = "int";
       }
    }
-   element sys_xcvr_rx_ref_clk
+   element sys_xcvr_rx_clk
    {
       datum _sortIndex
       {
@@ -429,7 +437,7 @@
          type = "int";
       }
    }
-   element sys_xcvr_tx_clk
+   element sys_xcvr_rx_ref_clk
    {
       datum _sortIndex
       {
@@ -437,7 +445,7 @@
          type = "int";
       }
    }
-   element sys_xcvr_tx_pll
+   element sys_xcvr_tx_clk
    {
       datum _sortIndex
       {
@@ -445,12 +453,36 @@
          type = "int";
       }
    }
-   element sys_xcvr_tx_ref_clk
+   element sys_xcvr_tx_pll
    {
       datum _sortIndex
       {
          value = "27";
          type = "int";
+      }
+   }
+   element sys_xcvr_tx_ref_clk
+   {
+      datum _sortIndex
+      {
+         value = "28";
+         type = "int";
+      }
+   }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
       }
    }
    element system_bd
@@ -686,6 +718,11 @@
    dir="end" />
  <interface name="sys_spi" internal="sys_spi.external" type="conduit" dir="end" />
  <interface
+   name="sys_xcvr_reset"
+   internal="sys_xcvr_rst.in_reset"
+   type="reset"
+   dir="end" />
+ <interface
    name="sys_xcvr_rstcntrl_rx_ready"
    internal="sys_xcvr_rstcntrl.rx_ready"
    type="conduit"
@@ -773,6 +810,28 @@
   <parameter name="C_DMA_TYPE_SRC" value="2" />
   <parameter name="C_SYNC_TRANSFER_START" value="0" />
   <parameter name="PCORE_ID" value="0" />
+ </module>
+ <module
+   name="st_rx"
+   kind="altera_signaltap_ii_logic_analyzer"
+   version="15.0"
+   enabled="1">
+  <parameter name="device_family" value="Arria 10" />
+  <parameter name="gui_num_segments" value="4" />
+  <parameter name="gui_ram_type" value="AUTO" />
+  <parameter name="gui_sq" value="Continuous" />
+  <parameter name="gui_trigger_out_enabled" value="false" />
+  <parameter name="gui_use_segmented" value="false" />
+  <parameter name="sld_data_bits" value="260" />
+  <parameter name="sld_enable_advanced_trigger" value="0" />
+  <parameter name="sld_node_crc_bits" value="32" />
+  <parameter name="sld_node_info" value="806383104" />
+  <parameter name="sld_sample_depth" value="128" />
+  <parameter name="sld_storage_qualifier_gap_record" value="0" />
+  <parameter name="sld_trigger_bits" value="1" />
+  <parameter name="sld_trigger_in_enabled" value="0" />
+  <parameter name="sld_trigger_level" value="1" />
+  <parameter name="sld_trigger_level_pipeline" value="1" />
  </module>
  <module name="sys_clk" kind="clock_source" version="15.0" enabled="1">
   <parameter name="clockFrequency" value="100000000" />
@@ -1718,7 +1777,7 @@
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@27d20365</parameter>
+  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@26c48c90</parameter>
   <parameter name="BURST_ENABLE" value="1" />
   <parameter name="BURST_WRAPPING_SUPPORT" value="0" />
   <parameter name="CHANNEL_ENABLE" value="0" />
@@ -1748,7 +1807,7 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@34bd85de</parameter>
+  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@40ea8d12</parameter>
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="" />
   <parameter name="BURST_ENABLE" value="1" />
@@ -1975,6 +2034,17 @@
   <parameter name="set_prbs_soft_logic_enable" value="false" />
   <parameter name="set_user_identifier" value="0" />
   <parameter name="wrapper_opt" value="base_phy" />
+ </module>
+ <module
+   name="sys_xcvr_rst"
+   kind="altera_reset_bridge"
+   version="15.0"
+   enabled="1">
+  <parameter name="ACTIVE_LOW_RESET" value="0" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
+  <parameter name="NUM_RESET_OUTPUTS" value="1" />
+  <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
+  <parameter name="USE_RESET_REQUEST" value="0" />
  </module>
  <module
    name="sys_xcvr_rstcntrl"
@@ -2662,6 +2732,8 @@
    version="1.0"
    enabled="1">
   <parameter name="NUM_OF_LANES" value="4" />
+  <parameter name="ST_DATA_WIDTH" value="260" />
+  <parameter name="ST_VALID_WIDTH" value="1" />
  </module>
  <module name="util_upack_0" kind="util_upack" version="1.0" enabled="1">
   <parameter name="CH_CNT" value="2" />
@@ -2955,6 +3027,11 @@
    kind="clock"
    version="15.0"
    start="sys_clk.clk"
+   end="sys_xcvr_rst.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
    end="sys_int_mem.clk1" />
  <connection
    kind="clock"
@@ -3051,6 +3128,11 @@
    version="15.0"
    start="sys_ddr3_cntrl.emif_usr_clk"
    end="axi_ad9144_dma.m_src_axi_clock" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_xcvr_rx_clk.outclk0"
+   end="st_rx.acq_clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -3374,6 +3456,17 @@
  <connection
    kind="conduit"
    version="15.0"
+   start="st_rx.tap"
+   end="util_jesd_align_0.if_rx_st">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
    start="sys_xcvr_rstcntrl.tx_analogreset"
    end="sys_xcvr.tx_analogreset">
   <parameter name="endPort" value="" />
@@ -3498,16 +3591,6 @@
    kind="reset"
    version="15.0"
    start="sys_clk.clk_reset"
-   end="sys_xcvr_tx_ref_clk.clk_in_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="sys_xcvr_rx_ref_clk.clk_in_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
    end="sys_ddr3_cntrl.global_reset_n" />
  <connection
    kind="reset"
@@ -3568,21 +3651,6 @@
    kind="reset"
    version="15.0"
    start="sys_clk.clk_reset"
-   end="sys_xcvr_rstcntrl.reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="sys_xcvr_tx_clk.reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="sys_xcvr_rx_clk.reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
    end="sys_int_mem.reset1" />
  <connection
    kind="reset"
@@ -3608,11 +3676,6 @@
    kind="reset"
    version="15.0"
    start="sys_clk.clk_reset"
-   end="sys_xcvr.rxlink_rst_n" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
    end="axi_ad9680_dma.s_axi_reset" />
  <connection
    kind="reset"
@@ -3632,11 +3695,6 @@
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
-   end="sys_xcvr.txlink_rst_n" />
- <connection
-   kind="reset"
-   version="15.0"
    start="sys_cpu.debug_reset_request"
    end="sys_cpu.reset" />
  <connection
@@ -3649,6 +3707,41 @@
    version="15.0"
    start="sys_ddr3_cntrl.emif_usr_reset_n"
    end="axi_ad9144_dma.m_src_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_xcvr_rst.out_reset"
+   end="sys_xcvr_tx_ref_clk.clk_in_reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_xcvr_rst.out_reset"
+   end="sys_xcvr_rx_ref_clk.clk_in_reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_xcvr_rst.out_reset"
+   end="sys_xcvr_tx_clk.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_xcvr_rst.out_reset"
+   end="sys_xcvr_rx_clk.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_xcvr_rst.out_reset"
+   end="sys_xcvr_rstcntrl.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_xcvr_rst.out_reset"
+   end="sys_xcvr.rxlink_rst_n" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_xcvr_rst.out_reset"
+   end="sys_xcvr.txlink_rst_n" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />

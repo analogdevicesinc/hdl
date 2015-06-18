@@ -8,5 +8,6 @@ create_clock -period "2.000 ns"   -name tx_ref_clk_500mhz   [get_ports {tx_ref_c
 derive_pll_clocks
 derive_clock_uncertainty
 
+set_false_path -from [get_registers *dev_sync_n*] -to [get_registers *up_*_sync_m1*]
 
 
