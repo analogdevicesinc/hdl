@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -80,6 +78,7 @@ module util_cpack (
 
   parameter   CH_DW     = 32;
   parameter   CH_CNT    = 8;
+  parameter   ST_DEPTH  = 0;
 
   localparam  CH_SCNT   = CH_DW/16;
   localparam  CH_MCNT   = 8;
@@ -172,6 +171,22 @@ module util_cpack (
                           adc_valid_3, adc_valid_2, adc_valid_1, adc_valid_0};
   assign adc_data_s   = { adc_data_7, adc_data_6, adc_data_5, adc_data_4,
                           adc_data_3, adc_data_2, adc_data_1, adc_data_0};
+
+  generate
+  if (ST_DEPTH > 0) begin
+  sld_signaltap #(
+    .sld_sample_depth (ST_DEPTH),
+    .sld_data_bits (CH_CNT*CH_DW),
+    .sld_trigger_bits (1),
+    .sld_trigger_level (1),
+    .sld_trigger_in_enabled (0),
+    .sld_enable_advanced_trigger (0))
+  i_st (
+    .acq_clk (adc_clk),
+    .acq_trigger_in (adc_valid_d),
+    .acq_data_in (adc_data_d[((CH_CNT*CH_DW)-1):0]));
+  end
+  endgenerate
 
   // adc first channel must be always on (doesn't have to be enabled)
 

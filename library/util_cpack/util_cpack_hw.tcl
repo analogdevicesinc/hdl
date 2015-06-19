@@ -35,6 +35,13 @@ set_parameter_property CH_CNT TYPE INTEGER
 set_parameter_property CH_CNT UNITS None
 set_parameter_property CH_CNT HDL_PARAMETER true
 
+add_parameter ST_DEPTH INTEGER 0
+set_parameter_property ST_DEPTH DEFAULT_VALUE 1024
+set_parameter_property ST_DEPTH DISPLAY_NAME ST_DEPTH
+set_parameter_property ST_DEPTH TYPE INTEGER
+set_parameter_property ST_DEPTH UNITS None
+set_parameter_property ST_DEPTH HDL_PARAMETER true
+
 # defaults
 
 ad_alt_intf clock   adc_clk         input   1
