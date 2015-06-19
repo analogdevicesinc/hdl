@@ -213,10 +213,10 @@ module system_top (
   // spi
 
   assign spi_adc_csn = spi0_csn[0];
-  assign spi_adc_clk = spi_clk;
+  assign spi_adc_clk = spi0_clk;
   assign spi_ext_csn_0 = spi0_csn[1];
   assign spi_ext_csn_1 = spi0_csn[2];
-  assign spi_ext_clk = spi_clk;
+  assign spi_ext_clk = spi0_clk;
 
   // instantiations
 
@@ -241,13 +241,13 @@ module system_top (
     .spi_adc_csn (spi_adc_csn),
     .spi_ext_csn_0 (spi_ext_csn_0),
     .spi_ext_csn_1 (spi_ext_csn_1),
-    .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi),
-    .spi_miso (spi_miso),
+    .spi_clk (spi0_clk),
+    .spi_mosi (spi0_mosi),
+    .spi_miso (spi0_miso),
     .spi_adc_sdio (spi_adc_sdio),
     .spi_ext_sdio (spi_ext_sdio));
 
-  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf (
     .dio_t (gpio_t[33:32]),
     .dio_i (gpio_o[33:32]),
     .dio_o (gpio_i[33:32]),
