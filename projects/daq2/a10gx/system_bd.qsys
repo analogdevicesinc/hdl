@@ -103,7 +103,7 @@
    {
       datum _sortIndex
       {
-         value = "29";
+         value = "30";
          type = "int";
       }
    }
@@ -401,7 +401,7 @@
    {
       datum _sortIndex
       {
-         value = "22";
+         value = "23";
          type = "int";
       }
    }
@@ -417,7 +417,7 @@
    {
       datum _sortIndex
       {
-         value = "21";
+         value = "22";
          type = "int";
       }
    }
@@ -425,7 +425,7 @@
    {
       datum _sortIndex
       {
-         value = "23";
+         value = "24";
          type = "int";
       }
    }
@@ -433,7 +433,7 @@
    {
       datum _sortIndex
       {
-         value = "24";
+         value = "25";
          type = "int";
       }
    }
@@ -441,7 +441,7 @@
    {
       datum _sortIndex
       {
-         value = "25";
+         value = "26";
          type = "int";
       }
    }
@@ -449,7 +449,7 @@
    {
       datum _sortIndex
       {
-         value = "26";
+         value = "27";
          type = "int";
       }
    }
@@ -457,7 +457,7 @@
    {
       datum _sortIndex
       {
-         value = "27";
+         value = "28";
          type = "int";
       }
    }
@@ -465,7 +465,7 @@
    {
       datum _sortIndex
       {
-         value = "28";
+         value = "29";
          type = "int";
       }
    }
@@ -605,7 +605,15 @@
          type = "String";
       }
    }
-   element util_jesd_align_0
+   element util_jesd_align
+   {
+      datum _sortIndex
+      {
+         value = "21";
+         type = "int";
+      }
+   }
+   element util_jesd_xmit
    {
       datum _sortIndex
       {
@@ -1777,7 +1785,7 @@
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@26c48c90</parameter>
+  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@26654ba1</parameter>
   <parameter name="BURST_ENABLE" value="1" />
   <parameter name="BURST_WRAPPING_SUPPORT" value="0" />
   <parameter name="CHANNEL_ENABLE" value="0" />
@@ -1807,7 +1815,7 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@40ea8d12</parameter>
+  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@663dfd57</parameter>
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="" />
   <parameter name="BURST_ENABLE" value="1" />
@@ -2727,13 +2735,16 @@
   <parameter name="CH_DW" value="64" />
  </module>
  <module
-   name="util_jesd_align_0"
+   name="util_jesd_align"
    kind="util_jesd_align"
    version="1.0"
    enabled="1">
   <parameter name="NUM_OF_LANES" value="4" />
   <parameter name="ST_DATA_WIDTH" value="260" />
   <parameter name="ST_VALID_WIDTH" value="1" />
+ </module>
+ <module name="util_jesd_xmit" kind="util_jesd_xmit" version="1.0" enabled="1">
+  <parameter name="NUM_OF_LANES" value="4" />
  </module>
  <module name="util_upack_0" kind="util_upack" version="1.0" enabled="1">
   <parameter name="CH_CNT" value="2" />
@@ -2994,18 +3005,23 @@
  <connection
    kind="avalon_streaming"
    version="15.0"
-   start="util_jesd_align_0.if_rx_data"
+   start="util_jesd_align.if_rx_data"
    end="axi_ad9680_core.if_rx_data" />
  <connection
    kind="avalon_streaming"
    version="15.0"
    start="axi_ad9144_core.if_tx_data"
+   end="util_jesd_xmit.if_tx_data" />
+ <connection
+   kind="avalon_streaming"
+   version="15.0"
+   start="util_jesd_xmit.if_tx_ip_data"
    end="sys_xcvr.jesd204_tx_link" />
  <connection
    kind="avalon_streaming"
    version="15.0"
    start="sys_xcvr.jesd204_rx_link"
-   end="util_jesd_align_0.if_rx_ip_data" />
+   end="util_jesd_align.if_rx_ip_data" />
  <connection
    kind="avalon_streaming"
    version="15.0"
@@ -3162,12 +3178,17 @@
    kind="clock"
    version="15.0"
    start="sys_xcvr_rx_clk.outclk0"
-   end="util_jesd_align_0.if_rx_clk" />
+   end="util_jesd_align.if_rx_clk" />
  <connection
    kind="clock"
    version="15.0"
    start="sys_xcvr_tx_clk.outclk0"
    end="axi_ad9144_core.if_tx_clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_xcvr_tx_clk.outclk0"
+   end="util_jesd_xmit.if_tx_clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -3446,7 +3467,7 @@
    kind="conduit"
    version="15.0"
    start="sys_xcvr.rx_sof"
-   end="util_jesd_align_0.if_rx_ip_sof">
+   end="util_jesd_align.if_rx_ip_sof">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -3457,7 +3478,7 @@
    kind="conduit"
    version="15.0"
    start="st_rx.tap"
-   end="util_jesd_align_0.if_rx_st">
+   end="util_jesd_align.if_rx_st">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
