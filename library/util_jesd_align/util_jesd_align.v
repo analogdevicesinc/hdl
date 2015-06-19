@@ -45,10 +45,7 @@ module util_jesd_align (
   rx_ip_sof,
   rx_ip_data,
   rx_sof,
-  rx_data,
-
-  rx_st_valid,
-  rx_st_data);
+  rx_data);
 
   // parameters
 
@@ -64,18 +61,7 @@ module util_jesd_align (
   output  [((NUM_OF_LANES* 1)-1):0]   rx_sof;
   output  [((NUM_OF_LANES*32)-1):0]   rx_data;
 
-  output  [(ST_VALID_WIDTH-1):0]      rx_st_valid;
-  output  [(ST_DATA_WIDTH-1):0]       rx_st_data;
-
-  // internal signals
-
-  wire    [((NUM_OF_LANES*64)+3):0]   rx_st_data_s;
-
   // only for altera, xcvr+jesd do not frame align
-
-  assign rx_st_data_s = {rx_ip_sof, rx_ip_data, rx_data};
-  assign rx_st_data = rx_st_data_s[(ST_DATA_WIDTH-1):0];
-  assign rx_st_valid = 'd1;
 
   genvar n;
   generate
