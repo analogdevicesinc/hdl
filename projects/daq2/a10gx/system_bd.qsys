@@ -99,14 +99,6 @@
          type = "String";
       }
    }
-   element st_rx
-   {
-      datum _sortIndex
-      {
-         value = "30";
-         type = "int";
-      }
-   }
    element sys_clk
    {
       datum _sortIndex
@@ -818,28 +810,6 @@
   <parameter name="C_DMA_TYPE_SRC" value="2" />
   <parameter name="C_SYNC_TRANSFER_START" value="0" />
   <parameter name="PCORE_ID" value="0" />
- </module>
- <module
-   name="st_rx"
-   kind="altera_signaltap_ii_logic_analyzer"
-   version="15.0"
-   enabled="1">
-  <parameter name="device_family" value="Arria 10" />
-  <parameter name="gui_num_segments" value="4" />
-  <parameter name="gui_ram_type" value="AUTO" />
-  <parameter name="gui_sq" value="Continuous" />
-  <parameter name="gui_trigger_out_enabled" value="false" />
-  <parameter name="gui_use_segmented" value="false" />
-  <parameter name="sld_data_bits" value="260" />
-  <parameter name="sld_enable_advanced_trigger" value="0" />
-  <parameter name="sld_node_crc_bits" value="32" />
-  <parameter name="sld_node_info" value="806383104" />
-  <parameter name="sld_sample_depth" value="128" />
-  <parameter name="sld_storage_qualifier_gap_record" value="0" />
-  <parameter name="sld_trigger_bits" value="1" />
-  <parameter name="sld_trigger_in_enabled" value="0" />
-  <parameter name="sld_trigger_level" value="1" />
-  <parameter name="sld_trigger_level_pipeline" value="1" />
  </module>
  <module name="sys_clk" kind="clock_source" version="15.0" enabled="1">
   <parameter name="clockFrequency" value="100000000" />
@@ -1785,7 +1755,7 @@
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@26654ba1</parameter>
+  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@65c0d72e</parameter>
   <parameter name="BURST_ENABLE" value="1" />
   <parameter name="BURST_WRAPPING_SUPPORT" value="0" />
   <parameter name="CHANNEL_ENABLE" value="0" />
@@ -1815,7 +1785,7 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.ctrl_amm_0' start='0x80000000' end='0x100000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@663dfd57</parameter>
+  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@346e210f</parameter>
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="" />
   <parameter name="BURST_ENABLE" value="1" />
@@ -2733,6 +2703,7 @@
  <module name="util_cpack_0" kind="util_cpack" version="1.0" enabled="1">
   <parameter name="CH_CNT" value="2" />
   <parameter name="CH_DW" value="64" />
+  <parameter name="ST_DEPTH" value="1024" />
  </module>
  <module
    name="util_jesd_align"
@@ -2740,8 +2711,6 @@
    version="1.0"
    enabled="1">
   <parameter name="NUM_OF_LANES" value="4" />
-  <parameter name="ST_DATA_WIDTH" value="260" />
-  <parameter name="ST_VALID_WIDTH" value="1" />
  </module>
  <module name="util_jesd_xmit" kind="util_jesd_xmit" version="1.0" enabled="1">
   <parameter name="NUM_OF_LANES" value="4" />
@@ -3148,11 +3117,6 @@
    kind="clock"
    version="15.0"
    start="sys_xcvr_rx_clk.outclk0"
-   end="st_rx.acq_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_xcvr_rx_clk.outclk0"
    end="util_cpack_0.if_adc_clk" />
  <connection
    kind="clock"
@@ -3468,17 +3432,6 @@
    version="15.0"
    start="sys_xcvr.rx_sof"
    end="util_jesd_align.if_rx_ip_sof">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="st_rx.tap"
-   end="util_jesd_align.if_rx_st">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
