@@ -94,6 +94,7 @@ module axi_hdmi_rx_core (
 
   reg             hdmi_dma_sof = 'd0;
   reg             hdmi_dma_de = 'd0;
+  reg             hdmi_dma_de_cnt = 'd0;
   reg     [63:0]  hdmi_dma_data = 'd0;
   reg             hdmi_dma_sof_int = 'd0;
   reg             hdmi_dma_de_int = 'd0;
@@ -156,8 +157,9 @@ module axi_hdmi_rx_core (
     end else if (hdmi_dma_de == 1'b1) begin
       hdmi_dma_sof <= 1'b0;
     end
-    hdmi_dma_de <= ~hdmi_dma_de & hdmi_dma_de_int;
+    hdmi_dma_de <= hdmi_dma_de_cnt & hdmi_dma_de_int;
     if (hdmi_dma_de_int == 1'b1) begin
+      hdmi_dma_de_cnt <= ~hdmi_dma_de_cnt;
       hdmi_dma_data[63:32] <= hdmi_dma_data_int;
       hdmi_dma_data[31: 0] <= hdmi_dma_data[63:32];
     end
@@ -210,7 +212,9 @@ module axi_hdmi_rx_core (
       hdmi_data_444[15: 8] <= hdmi_data_444_s[15: 8];
       hdmi_data_444[ 7: 0] <= hdmi_data_444_s[ 7: 0];
     end
-    if (hdmi_de_444 == 1'b1) begin
+    if (hdmi_sof_444 == 1'b1) begin
+      hdmi_de_444_cnt <= (hdmi_de_444 == 1'b1) ? 2'b1 : 2'b0;
+    end else if (hdmi_de_444 == 1'b1) begin
       hdmi_de_444_cnt <= hdmi_de_444_cnt + 1'b1;
     end
     hdmi_data_444_hold <= hdmi_data_444[23:8];
@@ -218,7 +222,7 @@ module axi_hdmi_rx_core (
     hdmi_de_444_p <= hdmi_de_444_cnt[0] | hdmi_de_444_cnt[1];
     case (hdmi_de_444_cnt)
       2'b11: hdmi_data_444_p <= {hdmi_data_444[23:0], hdmi_data_444_hold[15: 8]};
-      2'b10: hdmi_data_444_p <= {hdmi_data_444[15:8], hdmi_data_444_hold[15: 0]};
+      2'b10: hdmi_data_444_p <= {hdmi_data_444[15:0], hdmi_data_444_hold[15: 0]};
       2'b01: hdmi_data_444_p <= {hdmi_data_444[ 7:0], hdmi_data_444_p[23: 0]};
       default: hdmi_data_444_p <= {8'd0, hdmi_data_444};
     endcase
