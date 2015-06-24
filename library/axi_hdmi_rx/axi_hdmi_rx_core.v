@@ -88,7 +88,7 @@ module axi_hdmi_rx_core (
 
   output          hdmi_dma_sof;
   output          hdmi_dma_de;
-  output  [31:0]  hdmi_dma_data;
+  output  [63:0]  hdmi_dma_data;
 
   // internal registers
 
@@ -157,9 +157,15 @@ module axi_hdmi_rx_core (
     end else if (hdmi_dma_de == 1'b1) begin
       hdmi_dma_sof <= 1'b0;
     end
+
+    if(hdmi_dma_sof_int == 1'b1) begin
+      hdmi_dma_de_cnt <= 1'b0;
+    end else if (hdmi_dma_de_int == 1'b1) begin
+      hdmi_dma_de_cnt <= ~hdmi_dma_de_cnt;
+    end
+
     hdmi_dma_de <= hdmi_dma_de_cnt & hdmi_dma_de_int;
     if (hdmi_dma_de_int == 1'b1) begin
-      hdmi_dma_de_cnt <= ~hdmi_dma_de_cnt;
       hdmi_dma_data[63:32] <= hdmi_dma_data_int;
       hdmi_dma_data[31: 0] <= hdmi_dma_data[63:32];
     end
