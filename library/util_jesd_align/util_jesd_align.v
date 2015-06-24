@@ -43,6 +43,7 @@ module util_jesd_align (
 
   rx_clk,
   rx_ip_sof,
+  rx_ip_sof_out,
   rx_ip_data,
   rx_sof,
   rx_data);
@@ -57,9 +58,14 @@ module util_jesd_align (
 
   input                               rx_clk;
   input   [ 3:0]                      rx_ip_sof;
+  output  [ 3:0]                      rx_ip_sof_out;
   input   [((NUM_OF_LANES*32)-1):0]   rx_ip_data;
   output  [((NUM_OF_LANES* 1)-1):0]   rx_sof;
   output  [((NUM_OF_LANES*32)-1):0]   rx_data;
+
+  // qsys can not multi-cast.
+
+  assign rx_ip_sof_out = rx_ip_sof;
 
   // only for altera, xcvr+jesd do not frame align
 

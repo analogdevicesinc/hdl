@@ -39,6 +39,7 @@ add_interface if_rx_data avalon_streaming start
 add_interface_port if_rx_data rx_data data Output 32*NUM_OF_LANES
 
 ad_alt_intf signal rx_ip_sof input 4 export
+ad_alt_intf signal rx_ip_sof_out output 4 export
 ad_alt_intf signal rx_sof output NUM_OF_LANES export
 
 proc p_util_jesd_align {} {
