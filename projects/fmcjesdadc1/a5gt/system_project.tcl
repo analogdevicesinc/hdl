@@ -6,8 +6,7 @@ project_new fmcjesdadc1_a5gt -overwrite
 
 source $ad_hdl_dir/projects/common/a5gt/a5gt_system_assign.tcl
 
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_jesd_align.v
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_xcvr_rx_rst.v
+set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
 
 # reference clock
@@ -54,6 +53,11 @@ set_location_assignment PIN_AD24  -to spi_sdio
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_csn
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_sdio
+
+# disable auto-pack
+
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_cntrl
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_status
 
 execute_flow -compile
 
