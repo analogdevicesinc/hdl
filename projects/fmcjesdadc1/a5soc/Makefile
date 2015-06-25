@@ -8,7 +8,7 @@
 M_DEPS := system_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/a5soc/a5soc_system_assign.tcl
-M_DEPS += system_timing.tcl
+M_DEPS += ../../../projects/scripts/adi_tquest.tcl
 M_DEPS += ../../../library/common/altera/ad_jesd_align.v
 M_DEPS += ../../../library/common/altera/ad_xcvr_rx_rst.v
 M_DEPS += ../common/fmcjesdadc1_spi.v

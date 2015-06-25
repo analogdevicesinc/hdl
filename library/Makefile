@@ -57,6 +57,7 @@ clean:
 	make -C util_dacfifo clean
 	make -C util_gmii_to_rgmii clean
 	make -C util_i2c_mixer clean
+	make -C util_jesd_align clean
 	make -C util_pmod_adc clean
 	make -C util_pmod_fmeter clean
 	make -C util_rfifo clean
@@ -116,6 +117,7 @@ lib:
 	-make -C util_dacfifo
 	-make -C util_gmii_to_rgmii
 	-make -C util_i2c_mixer
+	-make -C util_jesd_align
 	-make -C util_pmod_adc
 	-make -C util_pmod_fmeter
 	-make -C util_rfifo
