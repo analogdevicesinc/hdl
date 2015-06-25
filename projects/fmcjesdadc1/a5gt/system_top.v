@@ -291,11 +291,11 @@ module system_top (
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn),
-		.sys_xcvr_reset_reset (gpio_jesd_o[15]),
-		.sys_xcvr_rstcntrl_rx_ready_rx_ready (rx_ready),
-		.sys_xcvr_rx_ref_clk_clk (ref_clk),
-		.sys_xcvr_rx_sync_n_export (rx_sync),
-		.sys_xcvr_rx_sysref_export (rx_sysref),
+    .sys_xcvr_reset_reset (gpio_jesd_o[15]),
+    .sys_xcvr_rstcntrl_rx_ready_rx_ready (rx_ready),
+    .sys_xcvr_rx_ref_clk_clk (ref_clk),
+    .sys_xcvr_rx_sync_n_export (rx_sync),
+    .sys_xcvr_rx_sysref_export (rx_sysref),
 		.sys_xcvr_rxd_rx_serial_data (rx_data));
 
 endmodule
