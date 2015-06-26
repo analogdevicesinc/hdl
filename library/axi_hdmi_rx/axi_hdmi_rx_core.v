@@ -47,7 +47,6 @@ module axi_hdmi_rx_core (
   hdmi_bgr,
   hdmi_packed,
   hdmi_csc_bypass,
-  hdmi_tpg_enable,
   hdmi_vs_count,
   hdmi_hs_count,
   hdmi_tpm_oos,
@@ -73,7 +72,6 @@ module axi_hdmi_rx_core (
   input           hdmi_bgr;
   input           hdmi_packed;
   input           hdmi_csc_bypass;
-  input           hdmi_tpg_enable;
   input   [15:0]  hdmi_vs_count;
   input   [15:0]  hdmi_hs_count;
   output          hdmi_tpm_oos;

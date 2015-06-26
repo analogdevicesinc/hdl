@@ -45,7 +45,6 @@ module up_hdmi_rx (
   hdmi_bgr,
   hdmi_packed,
   hdmi_csc_bypass,
-  hdmi_tpg_enable,
   hdmi_vs_count,
   hdmi_hs_count,
   hdmi_dma_ovf,
@@ -85,7 +84,6 @@ module up_hdmi_rx (
   output          hdmi_bgr;
   output          hdmi_packed;
   output          hdmi_csc_bypass;
-  output          hdmi_tpg_enable;
   output  [15:0]  hdmi_vs_count;
   output  [15:0]  hdmi_hs_count;
   input           hdmi_dma_ovf;
@@ -121,7 +119,6 @@ module up_hdmi_rx (
   reg             up_bgr = 'd0;
   reg             up_packed = 'd0;
   reg             up_csc_bypass = 'd0;
-  reg             up_tpg_enable = 'd0;
   reg             up_dma_ovf = 'd0;
   reg             up_dma_unf = 'd0;
   reg             up_tpm_oos = 'd0;
@@ -164,7 +161,6 @@ module up_hdmi_rx (
       up_bgr <= 'd0;
       up_packed <= 'd0;
       up_csc_bypass <= 'd0;
-      up_tpg_enable <= 'd0;
       up_dma_ovf <= 'd0;
       up_dma_unf <= 'd0;
       up_tpm_oos <= 'd0;
@@ -187,9 +183,6 @@ module up_hdmi_rx (
         up_bgr <= up_wdata[2];
         up_packed <= up_wdata[1];
         up_csc_bypass <= up_wdata[0];
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h012)) begin
-        up_tpg_enable <= up_wdata[0];
       end
       if (up_dma_ovf_s == 1'b1) begin
         up_dma_ovf <= 1'b1;
@@ -248,7 +241,6 @@ module up_hdmi_rx (
           12'h002: up_rdata <= up_scratch;
           12'h010: up_rdata <= {31'h0, ~up_preset};
           12'h011: up_rdata <= {28'h0, up_edge_sel, up_bgr, up_packed, up_csc_bypass};
-          12'h012: up_rdata <= {31'h0, up_tpg_enable};
           12'h015: up_rdata <= up_clk_count_s;
           12'h016: up_rdata <= hdmi_clk_ratio;
           12'h018: up_rdata <= {30'h0, up_dma_ovf, up_dma_unf};
@@ -272,14 +264,13 @@ module up_hdmi_rx (
 
   // hdmi control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(37)) i_hdmi_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(36)) i_hdmi_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_edge_sel,
                       up_bgr,
                       up_packed,
                       up_csc_bypass,
-                      up_tpg_enable,
                       up_vs_count,
                       up_hs_count}),
     .up_xfer_done (),
@@ -289,7 +280,6 @@ module up_hdmi_rx (
                       hdmi_bgr,
                       hdmi_packed,
                       hdmi_csc_bypass,
-                      hdmi_tpg_enable,
                       hdmi_vs_count,
                       hdmi_hs_count}));
 
