@@ -129,7 +129,6 @@ module axi_hdmi_rx  (
   wire            hdmi_bgr_s;
   wire            hdmi_packed_s;
   wire            hdmi_csc_bypass_s;
-  wire            hdmi_tpg_enable_s;
   wire    [15:0]  hdmi_vs_count_s;
   wire    [15:0]  hdmi_hs_count_s;
   wire            hdmi_tpm_oos_s;
@@ -189,7 +188,6 @@ module axi_hdmi_rx  (
     .hdmi_bgr (hdmi_bgr_s),
     .hdmi_packed (hdmi_packed_s),
     .hdmi_csc_bypass (hdmi_csc_bypass_s),
-    .hdmi_tpg_enable (hdmi_tpg_enable_s),
     .hdmi_vs_count (hdmi_vs_count_s),
     .hdmi_hs_count (hdmi_hs_count_s),
     .hdmi_dma_ovf (hdmi_dma_ovf),
@@ -223,7 +221,6 @@ module axi_hdmi_rx  (
     .hdmi_bgr (hdmi_bgr_s),
     .hdmi_packed (hdmi_packed_s),
     .hdmi_csc_bypass (hdmi_csc_bypass_s),
-    .hdmi_tpg_enable (hdmi_tpg_enable_s),
     .hdmi_vs_count (hdmi_vs_count_s),
     .hdmi_hs_count (hdmi_hs_count_s),
     .hdmi_tpm_oos (hdmi_tpm_oos_s),
