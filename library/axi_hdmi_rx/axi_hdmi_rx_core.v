@@ -109,9 +109,6 @@ module axi_hdmi_rx_core (
   reg             hdmi_de_444_p = 'd0;
   reg     [31:0]  hdmi_data_444_p = 'd0;
   reg             hdmi_dma_enable = 'd0;
-  reg     [15:0]  hdmi_tpm_data = 'd0;
-  reg             hdmi_tpm_mismatch = 'd0;
-  reg             hdmi_tpm_oos = 'd0;
   reg     [15:0]  hdmi_vs = 'd0;
   reg     [15:0]  hdmi_hs = 'd0;
   reg             hdmi_vs_oos = 'd0;
@@ -134,8 +131,6 @@ module axi_hdmi_rx_core (
 
   // internal signals
 
-  wire    [15:0]  hdmi_tpm_data_s;
-  wire            hdmi_tpm_mismatch_s;
   wire            hdmi_sof_s;
   wire            hdmi_sof_ss_s;
   wire            hdmi_de_ss_s;
@@ -237,26 +232,6 @@ module axi_hdmi_rx_core (
       hdmi_dma_enable <= 1'b0;
     end else if (hdmi_sof_s == 1'b1) begin
       hdmi_dma_enable <= ~(hdmi_vs_oos | hdmi_hs_oos);
-    end
-  end
-
-  // tpm
-
-  assign hdmi_tpm_data_s[15:8] = (hdmi_tpm_data[15:8] < 8'h10) ? 8'h10 :
-    ((hdmi_tpm_data[15:8] > 8'heb) ? 8'heb : hdmi_tpm_data[15:8]);
-  assign hdmi_tpm_data_s[ 7:0] = (hdmi_tpm_data[ 7:0] < 8'h10) ? 8'h10 :
-    ((hdmi_tpm_data[ 7:0] > 8'heb) ? 8'heb : hdmi_tpm_data[ 7:0]);
-  assign hdmi_tpm_mismatch_s = (hdmi_tpm_data_s == hdmi_data_422) ? 1'b0 : 1'b1;
-
-  always @(posedge hdmi_clk) begin
-    if (hdmi_sof_s == 1'b1) begin
-      hdmi_tpm_data <= 16'd0;
-      hdmi_tpm_mismatch <= 1'd0;
-      hdmi_tpm_oos <= hdmi_tpm_mismatch;
-    end else if (hdmi_de_422 == 1'b1) begin
-      hdmi_tpm_data <= hdmi_tpm_data + 1'b1;
-      hdmi_tpm_mismatch <= hdmi_tpm_mismatch_s;
-      hdmi_tpm_oos <= hdmi_tpm_oos;
     end
   end
 
@@ -366,6 +341,15 @@ module axi_hdmi_rx_core (
     .hdmi_vs_de (hdmi_vs_de_s),
     .hdmi_hs_de (hdmi_hs_de_s),
     .hdmi_data_de (hdmi_data_de_s));
+
+  // test patttern matcher
+
+  axi_hdmi_rx_tpm i_tpm (
+    .hdmi_clk (hdmi_clk),
+    .hdmi_sof (hdmi_sof_422),
+    .hdmi_de (hdmi_de_422),
+    .hdmi_data (hdmi_data_422),
+    .hdmi_tpm_oos(hdmi_tpm_oos));
 
 endmodule
 
