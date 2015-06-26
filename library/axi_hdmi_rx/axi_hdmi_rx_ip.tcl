@@ -18,6 +18,7 @@ adi_ip_files axi_hdmi_rx [list \
   "$ad_hdl_dir/library/common/up_hdmi_rx.v" \
   "axi_hdmi_rx.v" \
   "axi_hdmi_rx_es.v" \
+  "axi_hdmi_rx_tpm.v" \
   "axi_hdmi_rx_constr.xdc" \
   "axi_hdmi_rx_core.v" ]
 
