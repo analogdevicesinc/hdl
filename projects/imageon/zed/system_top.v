@@ -152,7 +152,7 @@ module system_top (
   output  [15:0]  hdmi_tx_data;
   output          hdmi_tx_spdif;
 
-  output          hdmi_iic_rstn;
+  inout           hdmi_iic_rstn;
   inout           hdmi_iic_scl;
   inout           hdmi_iic_sda;
 
@@ -172,7 +172,6 @@ module system_top (
 
   // base hdmi
 
-  assign hdmi_iic_rstn = 1'b1;
   assign hdmi_out_clk = 1'd0;
   assign hdmi_vsync = 1'd0;
   assign hdmi_hsync = 1'd0;
@@ -181,6 +180,12 @@ module system_top (
   assign spdif = 1'd0;
 
   // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi_iic_rstn (
+    .dio_t (gpio_t[33]),
+    .dio_i (gpio_o[33]),
+    .dio_o (gpio_i[33]),
+    .dio_p (hdmi_iic_rstn));
 
   ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi (
     .dio_t (gpio_t[32]),
