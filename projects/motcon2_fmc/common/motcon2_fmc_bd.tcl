@@ -130,9 +130,6 @@
   #
   set current_monitor_m1_apack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 current_monitor_m1_apack]
   set_property -dict [list CONFIG.CHANNELS {4}] $current_monitor_m1_apack
-#  set current_monitor_m1_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m1_pack ]
-#  set_property -dict [ list CONFIG.CH_CNT {4}  ] $current_monitor_m1_pack
-#  set_property -dict [ list CONFIG.CH_DW {16}  ] $current_monitor_m1_pack
 
     # current monitor core motor 2
   set current_monitor_m2 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_current_monitor:1.0 current_monitor_m2 ]
@@ -147,9 +144,6 @@
     # data packer motor 2
   set current_monitor_m2_apack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 current_monitor_m2_apack]
   set_property -dict [list CONFIG.CHANNELS {4}] $current_monitor_m2_apack
-  #set current_monitor_m2_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m2_pack ]
-  #set_property -dict [ list CONFIG.CH_CNT {4}  ] $current_monitor_m2_pack
-  #set_property -dict [ list CONFIG.CH_DW {16}  ] $current_monitor_m2_pack
 
   #controller
     # controller core motor 1
@@ -164,9 +158,6 @@
   set_property -dict [list CONFIG.CHANNELS {8}] $controller_m1_apack
   set_property -dict [list CONFIG.DATA_WIDTH {32}] $controller_m1_apack
 
-  #set controller_m1_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 controller_m1_pack ]
-  #set_property -dict [ list CONFIG.CH_CNT {8}  ] $controller_m1_pack
-  #set_property -dict [ list CONFIG.CH_DW {32}  ] $controller_m1_pack
     # controller core motor 2
   set controller_m2 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_controller:1.0 controller_m2 ]
     # dma motor 2
@@ -175,8 +166,6 @@
   set_property -dict [list CONFIG.C_CYCLIC {0}] $controller_m2_dma
   set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {256}] $controller_m2_dma
     # data packer motor 2
-  #set controller_m2_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 controller_m2_pack ]
-  #set_property -dict [ list CONFIG.CH_CNT {8}  ] $controller_m2_pack
   set controller_m2_apack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 controller_m2_apack]
   set_property -dict [list CONFIG.CHANNELS {8}] $controller_m2_apack
   set_property -dict [list CONFIG.DATA_WIDTH {32}] $controller_m2_apack
@@ -195,8 +184,8 @@
   # xadc
   set xadc_core [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.0 xadc_core ]
   set_property -dict [ list CONFIG.XADC_STARUP_SELECTION {simultaneous_sampling} ] $xadc_core
-  set_property -dict [ list CONFIG.ENABLE_EXTERNAL_MUX {false} ] $xadc_core
-  set_property -dict [ list CONFIG.CHANNEL_ENABLE_VAUXP0_VAUXN0  {true} ] $xadc_core
+  set_property -dict [ list CONFIG.ENABLE_EXTERNAL_MUX {true} ] $xadc_core
+  set_property -dict [ list CONFIG.EXTERNAL_MUX_CHANNEL  {VAUXP0_VAUXN0} ] $xadc_core
   set_property -dict [ list CONFIG.OT_ALARM {false} ] $xadc_core
   set_property -dict [ list CONFIG.USER_TEMP_ALARM {false}  ] $xadc_core
   set_property -dict [ list CONFIG.VCCAUX_ALARM {false} ] $xadc_core
@@ -251,23 +240,6 @@
   ad_connect current_monitor_m1_apack/ddata current_monitor_m1_dma/fifo_wr_din
   ad_connect current_monitor_m1_apack/dvalid current_monitor_m1_dma/fifo_wr_en
 
-#  connect_bd_net -net [get_bd_nets sys_100m_clk] [get_bd_pins current_monitor_m1_pack/adc_clk] [get_bd_pins sys_ps7/FCLK_CLK0]
-#  connect_bd_net -net [get_bd_nets sys_rstgen_peripheral_reset] [get_bd_pins current_monitor_m1_pack/adc_rst] [get_bd_pins sys_rstgen/peripheral_reset]
-#  connect_bd_net -net current_monitor_m1_adc_enable_ia [get_bd_pins current_monitor_m1/adc_enable_ia] [get_bd_pins current_monitor_m1_pack/adc_enable_0]
-#  connect_bd_net -net current_monitor_m1_adc_enable_ib [get_bd_pins current_monitor_m1/adc_enable_ib] [get_bd_pins current_monitor_m1_pack/adc_enable_1]
-#  connect_bd_net -net current_monitor_m1_adc_enable_vbus [get_bd_pins current_monitor_m1/adc_enable_vbus] [get_bd_pins current_monitor_m1_pack/adc_enable_2]
-#  connect_bd_net -net current_monitor_m1_adc_enable_stub [get_bd_pins current_monitor_m1/adc_enable_stub] [get_bd_pins current_monitor_m1_pack/adc_enable_3]
-#  connect_bd_net -net current_monitor_m1_i_ready_o [get_bd_pins current_monitor_m1_pack/adc_valid_0] [get_bd_pins current_monitor_m1/i_ready_o]
-#  connect_bd_net -net current_monitor_m1_i_ready_o [get_bd_pins current_monitor_m1_pack/adc_valid_1] [get_bd_pins current_monitor_m1/i_ready_o]
-#  connect_bd_net -net current_monitor_m1_i_ready_o [get_bd_pins current_monitor_m1_pack/adc_valid_2] [get_bd_pins current_monitor_m1/i_ready_o]
-#  connect_bd_net -net current_monitor_m1_i_ready_o [get_bd_pins current_monitor_m1_pack/adc_valid_3] [get_bd_pins current_monitor_m1/i_ready_o]
-#  connect_bd_net [get_bd_pins current_monitor_m1/ia_o] [get_bd_pins current_monitor_m1_pack/adc_data_0]
-#  connect_bd_net [get_bd_pins current_monitor_m1/ib_o] [get_bd_pins current_monitor_m1_pack/adc_data_1]
-#  connect_bd_net [get_bd_pins current_monitor_m1/vbus_o] [get_bd_pins current_monitor_m1_pack/adc_data_2]
-#  connect_bd_net [get_bd_pins current_monitor_m1/vbus_o] [get_bd_pins current_monitor_m1_pack/adc_data_3]
-#  connect_bd_net [get_bd_pins current_monitor_m1_pack/adc_data] [get_bd_pins current_monitor_m1_dma/fifo_wr_din]
-#  connect_bd_net [get_bd_pins current_monitor_m1_pack/adc_valid] [get_bd_pins current_monitor_m1_dma/fifo_wr_en]
-
     # motor 2
   ad_connect  sys_cpu_clk current_monitor_m2/ref_clk
 
@@ -293,22 +265,6 @@
   ad_connect   current_monitor_m2/vbus_o current_monitor_m2_apack/chan_data_3
   ad_connect   current_monitor_m2_apack/ddata current_monitor_m2_dma/fifo_wr_din
   ad_connect   current_monitor_m2_apack/dvalid current_monitor_m2_dma/fifo_wr_en
-#  connect_bd_net -net [get_bd_nets sys_100m_clk] [get_bd_pins current_monitor_m2_pack/adc_clk] [get_bd_pins sys_ps7/FCLK_CLK0]
-#  connect_bd_net -net [get_bd_nets sys_rstgen_peripheral_reset] [get_bd_pins current_monitor_m2_pack/adc_rst] [get_bd_pins sys_rstgen/peripheral_reset]
-#  connect_bd_net -net current_monitor_m2_adc_enable_ia [get_bd_pins current_monitor_m2/adc_enable_ia] [get_bd_pins current_monitor_m2_pack/adc_enable_0]
-#  connect_bd_net -net current_monitor_m2_adc_enable_ib [get_bd_pins current_monitor_m2/adc_enable_ib] [get_bd_pins current_monitor_m2_pack/adc_enable_1]
-#  connect_bd_net -net current_monitor_m2_adc_enable_vbus [get_bd_pins current_monitor_m2/adc_enable_vbus] [get_bd_pins current_monitor_m2_pack/adc_enable_2]
-#  connect_bd_net -net current_monitor_m2_adc_enable_stub [get_bd_pins current_monitor_m2/adc_enable_stub] [get_bd_pins current_monitor_m2_pack/adc_enable_3]
-#  connect_bd_net -net current_monitor_m2_i_ready_o [get_bd_pins current_monitor_m2_pack/adc_valid_0] [get_bd_pins current_monitor_m2/i_ready_o]
-#  connect_bd_net -net current_monitor_m2_i_ready_o [get_bd_pins current_monitor_m2_pack/adc_valid_1] [get_bd_pins current_monitor_m2/i_ready_o]
-#  connect_bd_net -net current_monitor_m2_i_ready_o [get_bd_pins current_monitor_m2_pack/adc_valid_2] [get_bd_pins current_monitor_m2/i_ready_o]
-#  connect_bd_net -net current_monitor_m2_i_ready_o [get_bd_pins current_monitor_m2_pack/adc_valid_3] [get_bd_pins current_monitor_m2/i_ready_o]
-#  connect_bd_net [get_bd_pins current_monitor_m2/ia_o] [get_bd_pins current_monitor_m2_pack/adc_data_0]
-#  connect_bd_net [get_bd_pins current_monitor_m2/ib_o] [get_bd_pins current_monitor_m2_pack/adc_data_1]
-#  connect_bd_net [get_bd_pins current_monitor_m2/vbus_o] [get_bd_pins current_monitor_m2_pack/adc_data_2]
-#  connect_bd_net [get_bd_pins current_monitor_m2/vbus_o] [get_bd_pins current_monitor_m2_pack/adc_data_3]
-#  connect_bd_net [get_bd_pins current_monitor_m2_pack/adc_valid] [get_bd_pins current_monitor_m2_dma/fifo_wr_en]
-#  connect_bd_net [get_bd_pins current_monitor_m2_pack/adc_data] [get_bd_pins current_monitor_m2_dma/fifo_wr_din]
 
   #controller
     # motor 1
@@ -328,39 +284,6 @@
   ad_connect controller_m1/sensors_o speed_detector_m1/hall_bemf_i
   ad_connect controller_m1/position_i speed_detector_m1/position_o
   ad_connect controller_m1/ctrl_data_valid_i current_monitor_m1/i_ready_o
-
-  #connect_bd_net -net controller_m1_adc_clk_o [get_bd_pins controller_m1_pack/adc_clk] [get_bd_pins controller_m1/adc_clk_o]
-  #connect_bd_net -net [get_bd_nets sys_rstgen_peripheral_reset] [get_bd_pins controller_m1_pack/adc_rst] [get_bd_pins sys_rstgen/peripheral_reset]
-
-  #connect_bd_net -net controller_m1_adc_enable_c0 [get_bd_pins controller_m1/adc_enable_c0] [get_bd_pins controller_m1_pack/adc_enable_0]
-  #connect_bd_net -net controller_m1_adc_enable_c1 [get_bd_pins controller_m1/adc_enable_c1] [get_bd_pins controller_m1_pack/adc_enable_1]
-  #connect_bd_net -net controller_m1_adc_enable_c2 [get_bd_pins controller_m1/adc_enable_c2] [get_bd_pins controller_m1_pack/adc_enable_2]
-  #connect_bd_net -net controller_m1_adc_enable_c3 [get_bd_pins controller_m1/adc_enable_c3] [get_bd_pins controller_m1_pack/adc_enable_3]
-  #connect_bd_net -net controller_m1_adc_enable_c4 [get_bd_pins controller_m1/adc_enable_c4] [get_bd_pins controller_m1_pack/adc_enable_4]
-  #connect_bd_net -net controller_m1_adc_enable_c5 [get_bd_pins controller_m1/adc_enable_c5] [get_bd_pins controller_m1_pack/adc_enable_5]
-  #connect_bd_net -net controller_m1_adc_enable_c6 [get_bd_pins controller_m1/adc_enable_c6] [get_bd_pins controller_m1_pack/adc_enable_6]
-  #connect_bd_net -net controller_m1_adc_enable_c7 [get_bd_pins controller_m1/adc_enable_c7] [get_bd_pins controller_m1_pack/adc_enable_7]
-
-  #connect_bd_net -net controller_m1_adc_valid_c0 [get_bd_pins controller_m1/adc_valid_c0] [get_bd_pins controller_m1_pack/adc_valid_0]
-  #connect_bd_net -net controller_m1_adc_valid_c1 [get_bd_pins controller_m1/adc_valid_c1] [get_bd_pins controller_m1_pack/adc_valid_1]
-  #connect_bd_net -net controller_m1_adc_valid_c2 [get_bd_pins controller_m1/adc_valid_c2] [get_bd_pins controller_m1_pack/adc_valid_2]
-  #connect_bd_net -net controller_m1_adc_valid_c3 [get_bd_pins controller_m1/adc_valid_c3] [get_bd_pins controller_m1_pack/adc_valid_3]
-  #connect_bd_net -net controller_m1_adc_valid_c4 [get_bd_pins controller_m1/adc_valid_c4] [get_bd_pins controller_m1_pack/adc_valid_4]
-  #connect_bd_net -net controller_m1_adc_valid_c5 [get_bd_pins controller_m1/adc_valid_c5] [get_bd_pins controller_m1_pack/adc_valid_5]
-  #connect_bd_net -net controller_m1_adc_valid_c6 [get_bd_pins controller_m1/adc_valid_c6] [get_bd_pins controller_m1_pack/adc_valid_6]
-  #connect_bd_net -net controller_m1_adc_valid_c7 [get_bd_pins controller_m1/adc_valid_c7] [get_bd_pins controller_m1_pack/adc_valid_7]
-
-  #connect_bd_net -net controller_m1_data_c0 [get_bd_pins controller_m1/adc_data_c0] [get_bd_pins controller_m1_pack/adc_data_0]
-  #connect_bd_net -net controller_m1_data_c1 [get_bd_pins controller_m1/adc_data_c1] [get_bd_pins controller_m1_pack/adc_data_1]
-  #connect_bd_net -net controller_m1_data_c2 [get_bd_pins controller_m1/adc_data_c2] [get_bd_pins controller_m1_pack/adc_data_2]
-  #connect_bd_net -net controller_m1_data_c3 [get_bd_pins controller_m1/adc_data_c3] [get_bd_pins controller_m1_pack/adc_data_3]
-  #connect_bd_net -net controller_m1_data_c4 [get_bd_pins controller_m1/adc_data_c4] [get_bd_pins controller_m1_pack/adc_data_4]
-  #connect_bd_net -net controller_m1_data_c5 [get_bd_pins controller_m1/adc_data_c5] [get_bd_pins controller_m1_pack/adc_data_5]
-  #connect_bd_net -net controller_m1_data_c6 [get_bd_pins controller_m1/adc_data_c6] [get_bd_pins controller_m1_pack/adc_data_6]
-  #connect_bd_net -net controller_m1_data_c7 [get_bd_pins controller_m1/adc_data_c7] [get_bd_pins controller_m1_pack/adc_data_7]
-
-  #connect_bd_net [get_bd_pins controller_m1_pack/adc_data] [get_bd_pins controller_m1_dma/fifo_wr_din]
-  #connect_bd_net [get_bd_pins controller_m1_pack/adc_valid] [get_bd_pins controller_m1_dma/fifo_wr_en]
 
   ad_connect  sys_cpu_clk controller_m1_apack/clk
 
@@ -411,39 +334,6 @@
   ad_connect controller_m2/sensors_o speed_detector_m2/hall_bemf_i
   ad_connect controller_m2/position_i speed_detector_m2/position_o
   ad_connect controller_m2/ctrl_data_valid_i current_monitor_m2/i_ready_o
-
-  #connect_bd_net -net controller_m2_adc_clk_o [get_bd_pins controller_m2_pack/adc_clk] [get_bd_pins controller_m2/adc_clk_o]
-  #connect_bd_net -net [get_bd_nets sys_rstgen_peripheral_reset] [get_bd_pins controller_m2_pack/adc_rst] [get_bd_pins sys_rstgen/peripheral_reset]
-
-  #connect_bd_net -net controller_m2_adc_enable_c0 [get_bd_pins controller_m2/adc_enable_c0] [get_bd_pins controller_m2_pack/adc_enable_0]
-  #connect_bd_net -net controller_m2_adc_enable_c1 [get_bd_pins controller_m2/adc_enable_c1] [get_bd_pins controller_m2_pack/adc_enable_1]
-  #connect_bd_net -net controller_m2_adc_enable_c2 [get_bd_pins controller_m2/adc_enable_c2] [get_bd_pins controller_m2_pack/adc_enable_2]
-  #connect_bd_net -net controller_m2_adc_enable_c3 [get_bd_pins controller_m2/adc_enable_c3] [get_bd_pins controller_m2_pack/adc_enable_3]
-  #connect_bd_net -net controller_m2_adc_enable_c4 [get_bd_pins controller_m2/adc_enable_c4] [get_bd_pins controller_m2_pack/adc_enable_4]
-  #connect_bd_net -net controller_m2_adc_enable_c5 [get_bd_pins controller_m2/adc_enable_c5] [get_bd_pins controller_m2_pack/adc_enable_5]
-  #connect_bd_net -net controller_m2_adc_enable_c6 [get_bd_pins controller_m2/adc_enable_c6] [get_bd_pins controller_m2_pack/adc_enable_6]
-  #connect_bd_net -net controller_m2_adc_enable_c7 [get_bd_pins controller_m2/adc_enable_c7] [get_bd_pins controller_m2_pack/adc_enable_7]
-
-  #connect_bd_net -net controller_m2_adc_valid_c0 [get_bd_pins controller_m2/adc_valid_c0] [get_bd_pins controller_m2_pack/adc_valid_0]
-  #connect_bd_net -net controller_m2_adc_valid_c1 [get_bd_pins controller_m2/adc_valid_c1] [get_bd_pins controller_m2_pack/adc_valid_1]
-  #connect_bd_net -net controller_m2_adc_valid_c2 [get_bd_pins controller_m2/adc_valid_c2] [get_bd_pins controller_m2_pack/adc_valid_2]
-  #connect_bd_net -net controller_m2_adc_valid_c3 [get_bd_pins controller_m2/adc_valid_c3] [get_bd_pins controller_m2_pack/adc_valid_3]
-  #connect_bd_net -net controller_m2_adc_valid_c4 [get_bd_pins controller_m2/adc_valid_c4] [get_bd_pins controller_m2_pack/adc_valid_4]
-  #connect_bd_net -net controller_m2_adc_valid_c5 [get_bd_pins controller_m2/adc_valid_c5] [get_bd_pins controller_m2_pack/adc_valid_5]
-  #connect_bd_net -net controller_m2_adc_valid_c6 [get_bd_pins controller_m2/adc_valid_c6] [get_bd_pins controller_m2_pack/adc_valid_6]
-  #connect_bd_net -net controller_m2_adc_valid_c7 [get_bd_pins controller_m2/adc_valid_c7] [get_bd_pins controller_m2_pack/adc_valid_7]
-
-  #connect_bd_net -net controller_m2_data_c0 [get_bd_pins controller_m2/adc_data_c0] [get_bd_pins controller_m2_pack/adc_data_0]
-  #connect_bd_net -net controller_m2_data_c1 [get_bd_pins controller_m2/adc_data_c1] [get_bd_pins controller_m2_pack/adc_data_1]
-  #connect_bd_net -net controller_m2_data_c2 [get_bd_pins controller_m2/adc_data_c2] [get_bd_pins controller_m2_pack/adc_data_2]
-  #connect_bd_net -net controller_m2_data_c3 [get_bd_pins controller_m2/adc_data_c3] [get_bd_pins controller_m2_pack/adc_data_3]
-  #connect_bd_net -net controller_m2_data_c4 [get_bd_pins controller_m2/adc_data_c4] [get_bd_pins controller_m2_pack/adc_data_4]
-  #connect_bd_net -net controller_m2_data_c5 [get_bd_pins controller_m2/adc_data_c5] [get_bd_pins controller_m2_pack/adc_data_5]
-  #connect_bd_net -net controller_m2_data_c6 [get_bd_pins controller_m2/adc_data_c6] [get_bd_pins controller_m2_pack/adc_data_6]
-  #connect_bd_net -net controller_m2_data_c7 [get_bd_pins controller_m2/adc_data_c7] [get_bd_pins controller_m2_pack/adc_data_7]
-
-  #connect_bd_net [get_bd_pins controller_m2_pack/adc_data] [get_bd_pins controller_m2_dma/fifo_wr_din]
-  #connect_bd_net [get_bd_pins controller_m2_pack/adc_valid] [get_bd_pins controller_m2_dma/fifo_wr_en]
 
   ad_connect sys_cpu_clk controller_m2_apack/clk
 
@@ -513,7 +403,7 @@
   # xadc
   ad_connect xadc_core/Vaux0 vaux0
   ad_connect xadc_core/Vaux8 vaux8
-  #connect_bd_net -net xadc_muxout       [get_bd_pins /xadc_core/muxaddr_out] [get_bd_ports muxaddr_out]
+  ad_connect xadc_core/muxaddr_out muxaddr_out
 
   # iic
   ad_connect iic_ee2/IIC iic_ee2
@@ -524,6 +414,7 @@
   ad_connect  sys_cpu_resetn current_monitor_m2_dma/m_dest_axi_aresetn
   ad_connect  sys_cpu_resetn controller_m1_dma/m_dest_axi_aresetn
   ad_connect  sys_cpu_resetn controller_m2_dma/m_dest_axi_aresetn
+  ad_connect  sys_cpu_resetn xadc_core/s_axi_aresetn
 
   # address map
   ad_cpu_interconnect  0x40410000 speed_detector_m1
@@ -549,6 +440,7 @@
   ad_mem_hp1_interconnect sys_cpu_clk controller_m1_dma/m_dest_axi
   ad_mem_hp1_interconnect sys_cpu_clk controller_m2_dma/m_dest_axi
 
+  ad_cpu_interrupt ps-5 mb-5 xadc_core/ip2intc_irpt
   ad_cpu_interrupt ps-6 mb-6 controller_m2_dma/irq
   ad_cpu_interrupt ps-7 mb-7 current_monitor_m2_dma/irq
   ad_cpu_interrupt ps-8 mb-8 speed_detector_m2_dma/irq

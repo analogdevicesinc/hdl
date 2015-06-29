@@ -45,8 +45,13 @@ set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS25 } [get_ports {gpo[2]}]
 set_property -dict {PACKAGE_PIN B15 IOSTANDARD LVCMOS25 } [get_ports {gpo[3]}]
 
 # GPI
-set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS25} [get_ports {gpi[0]}]
-set_property -dict {PACKAGE_PIN A22 IOSTANDARD LVCMOS25} [get_ports {gpi[1]}]
+# Unset gpio_bd pins from XADC-GIO0 and XADC-GIO1  and connect them to GPI0 and GPI1
+# XADC-GIO0 and XADC-GIO1 will be used by the XADC core
+set_property  -dict {PACKAGE_PIN  A21   IOSTANDARD LVCMOS25} [get_ports gpio_bd[27]]      ; ## GPI0
+set_property  -dict {PACKAGE_PIN  A22   IOSTANDARD LVCMOS25} [get_ports gpio_bd[28]]      ; ## GPI1
+
+set_property  -dict {PACKAGE_PIN  H15   IOSTANDARD LVCMOS25} [get_ports muxaddr_out[0]]      ; ## XADC-GIO0
+set_property  -dict {PACKAGE_PIN  R15   IOSTANDARD LVCMOS25} [get_ports muxaddr_out[1]]      ; ## XADC-GIO1
 
 set_property -dict {PACKAGE_PIN E16 IOSTANDARD LVCMOS25} [get_ports vauxn0]
 set_property -dict {PACKAGE_PIN D17 IOSTANDARD LVCMOS25} [get_ports vauxn8]
