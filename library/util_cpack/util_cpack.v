@@ -174,14 +174,7 @@ module util_cpack (
 
   generate
   if (ST_DEPTH > 0) begin
-  sld_signaltap #(
-    .sld_sample_depth (ST_DEPTH),
-    .sld_data_bits (CH_CNT*CH_DW),
-    .sld_trigger_bits (1),
-    .sld_trigger_level (1),
-    .sld_trigger_in_enabled (0),
-    .sld_enable_advanced_trigger (0))
-  i_st (
+  system_stap i_st (
     .acq_clk (adc_clk),
     .acq_trigger_in (adc_valid_d),
     .acq_data_in (adc_data_d[((CH_CNT*CH_DW)-1):0]));

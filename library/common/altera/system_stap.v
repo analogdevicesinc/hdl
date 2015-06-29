@@ -37,26 +37,17 @@
 
 `timescale 1ps/1ps
 
-module sld_signaltap (
+module system_stap (
 
   acq_clk,
   acq_trigger_in,
   acq_data_in);
 
-  // parameters
-
-  parameter   sld_sample_depth  = 1024;
-  parameter   sld_data_bits = 32;
-  parameter   sld_trigger_bits = 1;
-  parameter   sld_trigger_level = 1;
-  parameter   sld_trigger_in_enabled = 0;
-  parameter   sld_enable_advanced_trigger = 0;
-
   // data interface
 
-  input                             acq_clk;
-  input   [(sld_trigger_bits-1):0]  acq_trigger_in;
-  input   [(sld_data_bits-1):0]     acq_data_in;
+  input   acq_clk;
+  input   acq_trigger_in;
+  input   acq_data_in;
 
 endmodule
 
