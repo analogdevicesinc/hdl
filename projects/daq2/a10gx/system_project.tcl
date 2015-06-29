@@ -8,6 +8,7 @@ source $ad_hdl_dir/projects/common/a10gx/a10gx_system_assign.tcl
 
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 set_global_assignment -name VERILOG_FILE ../common/daq2_spi.v
+set_global_assignment -name QSYS_FILE system_stap.qsys
 
 # lane interface
 
