@@ -87,6 +87,7 @@ module axi_hdmi_tx_core (
 
   hdmi_full_range,
   hdmi_csc_bypass,
+  hdmi_ss_bypass,
   hdmi_srcsel,
   hdmi_const_rgb,
   hdmi_hl_active,
@@ -152,6 +153,7 @@ module axi_hdmi_tx_core (
 
   input           hdmi_full_range;
   input           hdmi_csc_bypass;
+  input           hdmi_ss_bypass;
   input   [ 1:0]  hdmi_srcsel;
   input   [23:0]  hdmi_const_rgb;
   input   [15:0]  hdmi_hl_active;
@@ -213,6 +215,8 @@ module axi_hdmi_tx_core (
   reg     [23:0]  hdmi_24_data = 'd0;
   reg             hdmi_16_hsync = 'd0;
   reg             hdmi_16_vsync = 'd0;
+  reg             hdmi_16_hsync_data_e = 'd0;
+  reg             hdmi_16_vsync_data_e = 'd0;
   reg             hdmi_16_data_e = 'd0;
   reg     [15:0]  hdmi_16_data = 'd0;
   reg             hdmi_es_hs_de = 'd0;
@@ -473,18 +477,29 @@ module axi_hdmi_tx_core (
       hdmi_24_data_e <= hdmi_csc_data_e_s;
       hdmi_24_data <= hdmi_csc_data_s;
     end
-    hdmi_16_hsync <= hdmi_ss_hsync_s;
-    hdmi_16_vsync <= hdmi_ss_vsync_s;
-    hdmi_16_data_e <= hdmi_ss_data_e_s;
-    hdmi_16_data <= hdmi_ss_data_s;
+    if (hdmi_ss_bypass == 1'b1) begin
+      hdmi_16_hsync <= hdmi_24_hsync;
+      hdmi_16_vsync <= hdmi_24_vsync;
+      hdmi_16_hsync_data_e <= hdmi_24_hsync_data_e;
+      hdmi_16_vsync_data_e <= hdmi_24_vsync_data_e;
+      hdmi_16_data_e <= hdmi_24_data_e;
+      hdmi_16_data <= hdmi_24_data[15:0]; // Ignore the upper 8 bit
+    end else begin
+      hdmi_16_hsync <= hdmi_ss_hsync_s;
+      hdmi_16_vsync <= hdmi_ss_vsync_s;
+      hdmi_16_hsync_data_e <= hdmi_ss_hsync_data_e_s;
+      hdmi_16_vsync_data_e <= hdmi_ss_vsync_data_e_s;
+      hdmi_16_data_e <= hdmi_ss_data_e_s;
+      hdmi_16_data <= hdmi_ss_data_s;
+    end
   end
 
   // hdmi embedded sync clipping
 
-  assign hdmi_es_hs_de_s = hdmi_ss_hsync_data_e_s;
-  assign hdmi_es_vs_de_s = hdmi_ss_vsync_data_e_s;
-  assign hdmi_es_de_s = hdmi_ss_data_e_s;
-  assign hdmi_es_data_s = hdmi_ss_data_s;
+  assign hdmi_es_hs_de_s = hdmi_16_hsync_data_e;
+  assign hdmi_es_vs_de_s = hdmi_16_vsync_data_e;
+  assign hdmi_es_de_s = hdmi_16_data_e;
+  assign hdmi_es_data_s = hdmi_16_data;
 
   always @(posedge hdmi_clk) begin
     hdmi_es_hs_de <= hdmi_es_hs_de_s;

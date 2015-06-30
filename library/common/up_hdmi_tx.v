@@ -47,6 +47,7 @@ module up_hdmi_tx (
   hdmi_rst,
   hdmi_full_range,
   hdmi_csc_bypass,
+  hdmi_ss_bypass,
   hdmi_srcsel,
   hdmi_const_rgb,
   hdmi_hl_active,
@@ -95,6 +96,7 @@ module up_hdmi_tx (
   output          hdmi_rst;
   output          hdmi_full_range;
   output          hdmi_csc_bypass;
+  output          hdmi_ss_bypass;
   output  [ 1:0]  hdmi_srcsel;
   output  [23:0]  hdmi_const_rgb;
   output  [15:0]  hdmi_hl_active;
@@ -139,6 +141,7 @@ module up_hdmi_tx (
   reg             up_resetn = 'd0;
   reg             up_full_range = 'd0;
   reg             up_csc_bypass = 'd0;
+  reg             up_ss_bypass = 'd0;
   reg     [ 1:0]  up_srcsel = 'd1;
   reg     [23:0]  up_const_rgb = 'd0;
   reg             up_vdma_ovf = 'd0;
@@ -185,6 +188,7 @@ module up_hdmi_tx (
       up_resetn <= 'd0;
       up_full_range <= 'd0;
       up_csc_bypass <= 'd0;
+      up_ss_bypass <= 'd0;
       up_srcsel <= 'd1;
       up_const_rgb <= 'd0;
       up_vdma_ovf <= 'd0;
@@ -210,6 +214,7 @@ module up_hdmi_tx (
         up_resetn <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h011)) begin
+        up_ss_bypass <= up_wdata[2];
         up_full_range <= up_wdata[1];
         up_csc_bypass <= up_wdata[0];
       end
@@ -278,7 +283,7 @@ module up_hdmi_tx (
           12'h001: up_rdata <= PCORE_ID;
           12'h002: up_rdata <= up_scratch;
           12'h010: up_rdata <= {31'd0, up_resetn};
-          12'h011: up_rdata <= {30'd0, up_full_range, up_csc_bypass};
+          12'h011: up_rdata <= {29'd0, up_ss_bypass, up_full_range, up_csc_bypass};
           12'h012: up_rdata <= {30'd0, up_srcsel};
           12'h013: up_rdata <= {8'd0, up_const_rgb};
           12'h015: up_rdata <= up_hdmi_clk_count_s;
@@ -307,10 +312,11 @@ module up_hdmi_tx (
 
   // hdmi control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(188)) i_hdmi_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(189)) i_hdmi_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_cntrl ({ up_full_range,
+    .up_data_cntrl ({ up_ss_bypass,
+                      up_full_range,
                       up_csc_bypass,
                       up_srcsel,
                       up_const_rgb,
@@ -327,7 +333,8 @@ module up_hdmi_tx (
     .up_xfer_done (),
     .d_rst (hdmi_rst),
     .d_clk (hdmi_clk),
-    .d_data_cntrl ({  hdmi_full_range,
+    .d_data_cntrl ({  hdmi_ss_bypass,
+                      hdmi_full_range,
                       hdmi_csc_bypass,
                       hdmi_srcsel,
                       hdmi_const_rgb,
