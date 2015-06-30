@@ -99,6 +99,7 @@ module axi_hdmi_rx_core (
   reg     [31:0]  hdmi_dma_data_int = 'd0;
   reg             hdmi_sof_422 = 'd0;
   reg             hdmi_de_422 = 'd0;
+  reg             hdmi_de_422_cnt = 'd0;
   reg     [15:0]  hdmi_data_422 = 'd0;
   reg             hdmi_sof_444 = 'd0;
   reg             hdmi_de_444 = 'd0;
@@ -171,6 +172,7 @@ module axi_hdmi_rx_core (
       hdmi_dma_sof_int <= 1'd0;
       hdmi_dma_de_int <= 1'd0;
       hdmi_dma_data_int <= 32'd0;
+      hdmi_de_422_cnt <= 1'b0;
     end else if (hdmi_csc_bypass == 1'b1) begin
       if (hdmi_packed == 1'b0) begin
         hdmi_dma_sof_int <= hdmi_sof_422;
@@ -178,8 +180,11 @@ module axi_hdmi_rx_core (
         hdmi_dma_data_int <= {16'd0, hdmi_data_422};
       end else begin
         hdmi_dma_sof_int <= hdmi_sof_422;
-        hdmi_dma_de_int <= ~hdmi_dma_de_int & hdmi_de_422;
-        hdmi_dma_data_int <= {hdmi_data_422, hdmi_dma_data_int[31:16]};
+        hdmi_dma_de_int <= hdmi_de_422_cnt && hdmi_de_422;
+        if (hdmi_de_422) begin
+          hdmi_de_422_cnt <= hdmi_de_422_cnt + 1'b1;
+          hdmi_dma_data_int <= {hdmi_data_422, hdmi_dma_data_int[31:16]};
+        end
       end
     end else begin
       if (hdmi_packed == 1'b0) begin
