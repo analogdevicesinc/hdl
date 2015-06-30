@@ -56,10 +56,10 @@ module axi_hdmi_tx_es (
   // hdmi interface
 
   input                       hdmi_clk;
-  input                       hdmi_hs_de = 'd0;
-  input                       hdmi_vs_de = 'd0;
-  input   [(DATA_WIDTH-1):0]  hdmi_data_de = 'd0;
-  output  [(DATA_WIDTH-1):0]  hdmi_data = 'd0;
+  input                       hdmi_hs_de;
+  input                       hdmi_vs_de;
+  input   [(DATA_WIDTH-1):0]  hdmi_data_de;
+  output  [(DATA_WIDTH-1):0]  hdmi_data;
 
   // internal registers
 
