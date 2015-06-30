@@ -206,7 +206,7 @@ module up_hdmi_rx (
       if (up_tpm_oos_s == 1'b1) begin
         up_tpm_oos <= 1'b1;
       end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
-        up_tpm_oos <= up_tpm_oos & ~up_wdata[0];
+        up_tpm_oos <= up_tpm_oos & ~up_wdata[1];
       end
       if (up_vs_oos_s == 1'b1) begin
         up_vs_oos <= 1'b1;
