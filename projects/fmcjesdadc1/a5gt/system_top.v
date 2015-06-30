@@ -163,7 +163,6 @@ module system_top (
 
   // internal clocks and resets
 
-  wire              sys_pll_clk;
   wire              sys_125m_clk;
   wire              sys_25m_clk;
   wire              sys_2m5_clk;
@@ -185,13 +184,22 @@ module system_top (
 
   // jesd sysref
 
-  always @(posedge sys_pll_clk or negedge sys_resetn) begin
-    rx_sysref_d1 <= gpio_jesd_i[13];
-    rx_sysref_d2 <= rx_sysref_d1;
-    rx_sysref <= rx_sysref_d1 & ~rx_sysref_d2;
-    rx_sync_m1 = rx_sync;
-    rx_sync_m2 = rx_sync_m1;
-    rx_sync_up = rx_sync_m2;
+  always @(posedge sys_clk or negedge sys_resetn) begin
+    if (sys_resetn == 1'b0) begin
+      rx_sysref_d1 <= 'd0;
+      rx_sysref_d2 <= 'd0;
+      rx_sysref <= 'd0;
+      rx_sync_m1 = 'd0;
+      rx_sync_m2 = 'd0;
+      rx_sync_up = 'd0;
+    end else begin
+      rx_sysref_d1 <= gpio_jesd_i[13];
+      rx_sysref_d2 <= rx_sysref_d1;
+      rx_sysref <= rx_sysref_d1 & ~rx_sysref_d2;
+      rx_sync_m1 = rx_sync;
+      rx_sync_m2 = rx_sync_m1;
+      rx_sync_up = rx_sync_m2;
+    end
   end
 
   assign gpio_jesd_i[31:24] = gpio_jesd_o[31:24];
@@ -248,7 +256,6 @@ module system_top (
     .sys_25m_clk_clk (sys_25m_clk),
     .sys_2m5_clk_clk (sys_2m5_clk),
     .sys_clk_clk (sys_clk),
-    .sys_clk_out_clk (sys_pll_clk),
     .sys_ddr3_oct_rzqin (ddr3_rzq),
     .sys_ddr3_phy_mem_a (ddr3_a),
     .sys_ddr3_phy_mem_ba (ddr3_ba),

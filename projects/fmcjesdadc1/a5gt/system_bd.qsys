@@ -21,7 +21,7 @@
    {
       datum _sortIndex
       {
-         value = "25";
+         value = "22";
          type = "int";
       }
       datum sopceditor_expanded
@@ -34,7 +34,7 @@
    {
       datum baseAddress
       {
-         value = "270532608";
+         value = "272629760";
          type = "String";
       }
    }
@@ -42,7 +42,7 @@
    {
       datum _sortIndex
       {
-         value = "21";
+         value = "18";
          type = "int";
       }
       datum sopceditor_expanded
@@ -55,7 +55,7 @@
    {
       datum baseAddress
       {
-         value = "270598144";
+         value = "272695296";
          type = "String";
       }
    }
@@ -63,7 +63,7 @@
    {
       datum _sortIndex
       {
-         value = "23";
+         value = "20";
          type = "int";
       }
       datum sopceditor_expanded
@@ -76,7 +76,7 @@
    {
       datum baseAddress
       {
-         value = "270680064";
+         value = "272777216";
          type = "String";
       }
    }
@@ -84,7 +84,7 @@
    {
       datum _sortIndex
       {
-         value = "19";
+         value = "16";
          type = "int";
       }
       datum sopceditor_expanded
@@ -97,7 +97,7 @@
    {
       datum baseAddress
       {
-         value = "270663680";
+         value = "272760832";
          type = "String";
       }
    }
@@ -109,19 +109,11 @@
          type = "int";
       }
    }
-   element sys_clk_out
-   {
-      datum _sortIndex
-      {
-         value = "2";
-         type = "int";
-      }
-   }
    element sys_cpu
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "2";
          type = "int";
       }
       datum sopceditor_expanded
@@ -134,7 +126,7 @@
    {
       datum baseAddress
       {
-         value = "270702592";
+         value = "272803840";
          type = "String";
       }
    }
@@ -142,7 +134,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "5";
          type = "int";
       }
       datum sopceditor_expanded
@@ -164,40 +156,11 @@
          type = "String";
       }
    }
-   element sys_dma_interconnect
-   {
-      datum _sortIndex
-      {
-         value = "18";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element sys_dma_interconnect.s0
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
-   element sys_dma_rst
-   {
-      datum _sortIndex
-      {
-         value = "17";
-         type = "int";
-      }
-   }
    element sys_ethernet
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "6";
          type = "int";
       }
       datum sopceditor_expanded
@@ -210,7 +173,7 @@
    {
       datum baseAddress
       {
-         value = "270704640";
+         value = "272805888";
          type = "String";
       }
    }
@@ -218,7 +181,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "7";
          type = "int";
       }
    }
@@ -226,7 +189,7 @@
    {
       datum baseAddress
       {
-         value = "270705792";
+         value = "272807040";
          type = "String";
       }
    }
@@ -234,7 +197,7 @@
    {
       datum baseAddress
       {
-         value = "270705760";
+         value = "272807008";
          type = "String";
       }
    }
@@ -242,7 +205,7 @@
    {
       datum baseAddress
       {
-         value = "270705904";
+         value = "272807152";
          type = "String";
       }
    }
@@ -250,7 +213,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "8";
          type = "int";
       }
    }
@@ -258,7 +221,7 @@
    {
       datum baseAddress
       {
-         value = "270705824";
+         value = "272807072";
          type = "String";
       }
    }
@@ -266,7 +229,7 @@
    {
       datum baseAddress
       {
-         value = "270705728";
+         value = "272806976";
          type = "String";
       }
    }
@@ -274,7 +237,7 @@
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "13";
          type = "int";
       }
       datum sopceditor_expanded
@@ -287,7 +250,7 @@
    {
       datum baseAddress
       {
-         value = "270705888";
+         value = "272807136";
          type = "String";
       }
    }
@@ -295,7 +258,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "12";
          type = "int";
       }
    }
@@ -303,7 +266,7 @@
    {
       datum baseAddress
       {
-         value = "270705872";
+         value = "272807120";
          type = "String";
       }
    }
@@ -311,7 +274,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "15";
          type = "int";
       }
    }
@@ -319,7 +282,7 @@
    {
       datum baseAddress
       {
-         value = "270705856";
+         value = "272807104";
          type = "String";
       }
    }
@@ -327,7 +290,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "11";
          type = "int";
       }
       datum sopceditor_expanded
@@ -340,7 +303,7 @@
    {
       datum baseAddress
       {
-         value = "270705912";
+         value = "272807160";
          type = "String";
       }
    }
@@ -348,7 +311,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "3";
          type = "int";
       }
       datum sopceditor_expanded
@@ -366,20 +329,7 @@
       }
       datum baseAddress
       {
-         value = "268435456";
-         type = "String";
-      }
-   }
-   element sys_int_mem.s2
-   {
-      datum _lockedAddress
-      {
-         value = "0";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "268435456";
+         value = "270532608";
          type = "String";
       }
    }
@@ -400,7 +350,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "14";
          type = "int";
       }
       datum sopceditor_expanded
@@ -413,7 +363,7 @@
    {
       datum baseAddress
       {
-         value = "270705664";
+         value = "272806912";
          type = "String";
       }
    }
@@ -421,7 +371,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "4";
          type = "int";
       }
    }
@@ -429,40 +379,11 @@
    {
       datum baseAddress
       {
-         value = "270696448";
-         type = "String";
-      }
-   }
-   element sys_tcm_mem.s2
-   {
-      datum baseAddress
-      {
-         value = "270696448";
+         value = "272797696";
          type = "String";
       }
    }
    element sys_timer
-   {
-      datum _sortIndex
-      {
-         value = "11";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element sys_timer.s1
-   {
-      datum baseAddress
-      {
-         value = "270705696";
-         type = "String";
-      }
-   }
-   element sys_uart
    {
       datum _sortIndex
       {
@@ -475,11 +396,32 @@
          type = "boolean";
       }
    }
+   element sys_timer.s1
+   {
+      datum baseAddress
+      {
+         value = "272806944";
+         type = "String";
+      }
+   }
+   element sys_uart
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
    element sys_uart.avalon_jtag_slave
    {
       datum baseAddress
       {
-         value = "270705920";
+         value = "272807168";
          type = "String";
       }
    }
@@ -487,7 +429,7 @@
    {
       datum _sortIndex
       {
-         value = "28";
+         value = "25";
          type = "int";
       }
       datum sopceditor_expanded
@@ -508,7 +450,7 @@
    {
       datum _sortIndex
       {
-         value = "32";
+         value = "29";
          type = "int";
       }
    }
@@ -516,7 +458,7 @@
    {
       datum _sortIndex
       {
-         value = "29";
+         value = "26";
          type = "int";
       }
    }
@@ -524,7 +466,7 @@
    {
       datum _sortIndex
       {
-         value = "30";
+         value = "27";
          type = "int";
       }
       datum sopceditor_expanded
@@ -537,7 +479,7 @@
    {
       datum _sortIndex
       {
-         value = "31";
+         value = "28";
          type = "int";
       }
    }
@@ -609,7 +551,7 @@
    {
       datum _sortIndex
       {
-         value = "27";
+         value = "24";
          type = "int";
       }
    }
@@ -617,7 +559,7 @@
    {
       datum _sortIndex
       {
-         value = "24";
+         value = "21";
          type = "int";
       }
    }
@@ -625,7 +567,7 @@
    {
       datum _sortIndex
       {
-         value = "20";
+         value = "17";
          type = "int";
       }
    }
@@ -633,7 +575,7 @@
    {
       datum _sortIndex
       {
-         value = "26";
+         value = "23";
          type = "int";
       }
    }
@@ -641,7 +583,7 @@
    {
       datum _sortIndex
       {
-         value = "22";
+         value = "19";
          type = "int";
       }
    }
@@ -682,25 +624,20 @@
  <interface name="axi_dmac_1_fifo_wr_if" internal="axi_dmac_1.fifo_wr_if" />
  <interface
    name="sys_125m_clk"
-   internal="sys_pll.outclk2"
+   internal="sys_pll.outclk0"
    type="clock"
    dir="start" />
  <interface
    name="sys_25m_clk"
-   internal="sys_pll.outclk3"
+   internal="sys_pll.outclk1"
    type="clock"
    dir="start" />
  <interface
    name="sys_2m5_clk"
-   internal="sys_pll.outclk4"
+   internal="sys_pll.outclk2"
    type="clock"
    dir="start" />
  <interface name="sys_clk" internal="sys_clk.clk_in" type="clock" dir="end" />
- <interface
-   name="sys_clk_out"
-   internal="sys_clk_out.out_clk"
-   type="clock"
-   dir="start" />
  <interface
    name="sys_ddr3_oct"
    internal="sys_ddr3_cntrl.oct"
@@ -838,18 +775,9 @@
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
  </module>
- <module
-   name="sys_clk_out"
-   kind="altera_clock_bridge"
-   version="15.0"
-   enabled="1">
-  <parameter name="DERIVED_CLOCK_RATE" value="100000000" />
-  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
-  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
- </module>
  <module name="sys_cpu" kind="altera_nios2_gen2" version="15.0" enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="13" />
-  <parameter name="AUTO_CLK_RESET_DOMAIN" value="13" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="4" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="4" />
   <parameter name="AUTO_DEVICE" value="5AGTFD7K3F40I3" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="3_H3" />
   <parameter name="bht_ramBlockType" value="Automatic" />
@@ -867,7 +795,7 @@
   <parameter name="dataAddrWidth" value="29" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /><slave name='sys_int_mem.s1' start='0x10000000' end='0x10180000' /><slave name='axi_ad9250_0.s_axi' start='0x10200000' end='0x10210000' /><slave name='axi_ad9250_1.s_axi' start='0x10210000' end='0x10220000' /><slave name='axi_dmac_1.s_axi' start='0x10220000' end='0x10224000' /><slave name='axi_dmac_0.s_axi' start='0x10224000' end='0x10228000' /><slave name='sys_cpu.debug_mem_slave' start='0x10229800' end='0x1022A000' /><slave name='sys_ethernet.control_port' start='0x1022A000' end='0x1022A400' /><slave name='sys_spi.spi_control_port' start='0x1022A400' end='0x1022A420' /><slave name='sys_timer.s1' start='0x1022A420' end='0x1022A440' /><slave name='sys_ethernet_dma_tx.descriptor_slave' start='0x1022A440' end='0x1022A460' /><slave name='sys_ethernet_dma_rx.descriptor_slave' start='0x1022A460' end='0x1022A480' /><slave name='sys_ethernet_dma_rx.csr' start='0x1022A480' end='0x1022A4A0' /><slave name='sys_ethernet_dma_tx.csr' start='0x1022A4A0' end='0x1022A4C0' /><slave name='sys_gpio_jesd.s1' start='0x1022A4C0' end='0x1022A4D0' /><slave name='sys_gpio_bd.s1' start='0x1022A4D0' end='0x1022A4E0' /><slave name='sys_gpio.s1' start='0x1022A4E0' end='0x1022A4F0' /><slave name='sys_ethernet_dma_rx.response' start='0x1022A4F0' end='0x1022A4F8' /><slave name='sys_id.control_slave' start='0x1022A4F8' end='0x1022A500' /><slave name='sys_uart.avalon_jtag_slave' start='0x1022A500' end='0x1022A508' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /><slave name='sys_int_mem.s1' start='0x10200000' end='0x10400000' /><slave name='axi_ad9250_0.s_axi' start='0x10400000' end='0x10410000' /><slave name='axi_ad9250_1.s_axi' start='0x10410000' end='0x10420000' /><slave name='axi_dmac_1.s_axi' start='0x10420000' end='0x10424000' /><slave name='axi_dmac_0.s_axi' start='0x10424000' end='0x10428000' /><slave name='sys_cpu.debug_mem_slave' start='0x1042A800' end='0x1042B000' /><slave name='sys_ethernet.control_port' start='0x1042B000' end='0x1042B400' /><slave name='sys_spi.spi_control_port' start='0x1042B400' end='0x1042B420' /><slave name='sys_timer.s1' start='0x1042B420' end='0x1042B440' /><slave name='sys_ethernet_dma_tx.descriptor_slave' start='0x1042B440' end='0x1042B460' /><slave name='sys_ethernet_dma_rx.descriptor_slave' start='0x1042B460' end='0x1042B480' /><slave name='sys_ethernet_dma_rx.csr' start='0x1042B480' end='0x1042B4A0' /><slave name='sys_ethernet_dma_tx.csr' start='0x1042B4A0' end='0x1042B4C0' /><slave name='sys_gpio_jesd.s1' start='0x1042B4C0' end='0x1042B4D0' /><slave name='sys_gpio_bd.s1' start='0x1042B4D0' end='0x1042B4E0' /><slave name='sys_gpio.s1' start='0x1042B4E0' end='0x1042B4F0' /><slave name='sys_ethernet_dma_rx.response' start='0x1042B4F0' end='0x1042B4F8' /><slave name='sys_id.control_slave' start='0x1042B4F8' end='0x1042B500' /><slave name='sys_uart.avalon_jtag_slave' start='0x1042B500' end='0x1042B508' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -892,7 +820,7 @@
   <parameter name="deviceFeaturesSystemInfo">ADDRESS_STALL 1 ADVANCED_INFO 0 ALLOWS_COMPILING_OTHER_FAMILY_IP 1 ANY_QFP 0 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 1 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 0 EMUL 0 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 1 ENABLE_PIN_PLANNER 0 ENGINEERING_SAMPLE 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FAMILY_LEVEL_INSTALLATION_ONLY 0 FASTEST 0 FINAL_TIMING_MODEL 0 FITTER_USE_FALLING_EDGE_DELAY 1 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 1 HARDCOPY 0 HAS_18_BIT_MULTS 1 HAS_ACE_SUPPORT 1 HAS_ACTIVE_PARALLEL_FLASH_SUPPORT 0 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 1 HAS_ADVANCED_IO_INVERTED_CORNER 1 HAS_ADVANCED_IO_POWER_SUPPORT 1 HAS_ADVANCED_IO_TIMING_SUPPORT 1 HAS_ALM_SUPPORT 1 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 1 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 0 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 1 HAS_BSDL_FILE_GENERATION 1 HAS_CDB_RE_NETWORK_PRESERVATION_SUPPORT 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 1 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 0 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DAP_JTAG_FROM_HPS 0 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 1 HAS_DDB_FDI_SUPPORT 1 HAS_DESIGN_ANALYZER_SUPPORT 1 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 0 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 0 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 1 HAS_ERROR_DETECTION_SUPPORT 1 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 0 HAS_FPGA_XCHANGE_SUPPORT 1 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 1 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 0 HAS_FUNCTIONAL_VERILOG_SIMULATION_SUPPORT 1 HAS_FUNCTIONAL_VHDL_SIMULATION_SUPPORT 1 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HARDCOPYII_SUPPORT 0 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 1 HAS_HSSI_POWER_CALCULATOR 1 HAS_IBISO_WRITER_SUPPORT 0 HAS_ICD_DATA_IP 0 HAS_IDB_SUPPORT 1 HAS_INCREMENTAL_DAT_SUPPORT 1 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 1 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_PLACEMENT_USING_GEOMETRY_RULE 0 HAS_IO_PLACEMENT_USING_PHYSIC_RULE 0 HAS_IO_SMART_RECOMPILE_SUPPORT 0 HAS_JITTER_SUPPORT 1 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 1 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 0 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_HARDBLOCK_PARTITION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 0 HAS_PARTIAL_RECONFIG_SUPPORT 1 HAS_PASSIVE_PARALLEL_SUPPORT 0 HAS_PHYSICAL_DESIGN_PLANNER_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 1 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 1 HAS_PLDM_REF_SUPPORT 0 HAS_POWER_BINNING_LIMITS_DATA 1 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 1 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 1 HAS_PVA_SUPPORT 1 HAS_QUARTUS_HIERARCHICAL_DESIGN_SUPPORT 0 HAS_RAPID_RECOMPILE_SUPPORT 1 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 1 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 0 HAS_SPLIT_IO_SUPPORT 1 HAS_SPLIT_LC_SUPPORT 1 HAS_STRICT_PRESERVATION_SUPPORT 0 HAS_SYNTHESIS_ON_ATOMS 1 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 0 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TCL_FITTER_SUPPORT 0 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 1 HAS_TIMING_SIMULATION_SUPPORT 0 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 1 HAS_U2B2_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 0 HAS_VCCPD_POWER_RAIL 1 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 0 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 1 HAS_XIBISO2_WRITER_SUPPORT 0 HAS_XIBISO_WRITER_SUPPORT 1 IFP_USE_LEGACY_IO_CHECKER 1 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 0 INSTALLED 0 INTERNAL_POF_SUPPORT_ENABLED 0 INTERNAL_USE_ONLY 0 ISSUE_MILITARY_TEMPERATURE_WARNING 0 IS_CONFIG_ROM 0 IS_DEFAULT_FAMILY 0 IS_FOR_INTERNAL_TESTING_ONLY 0 IS_HARDCOPY_FAMILY 0 IS_HBGA_PACKAGE 0 IS_HIGH_CURRENT_PART 0 IS_LOW_POWER_PART 0 IS_SDM_ONLY_PACKAGE 0 IS_SMI_PART 0 LOAD_BLK_TYPE_DATA_FROM_ATOM_WYS_INFO 0 LVDS_IO 1 M10K_MEMORY 1 M144K_MEMORY 1 M20K_MEMORY 0 M4K_MEMORY 0 M512_MEMORY 0 M9K_MEMORY 0 MLAB_MEMORY 1 MRAM_MEMORY 0 NOT_LISTED 0 NOT_MIGRATABLE 0 NO_FITTER_DELAY_CACHE_GENERATED 0 NO_PIN_OUT 0 NO_POF 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 1 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 0 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 1 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 1 PROGRAMMER_ONLY 0 PROGRAMMER_SUPPORT 1 PVA_SUPPORTS_ONLY_SUBSET_OF_ATOMS 0 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 1 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 1 REQUIRE_QUARTUS_HIERARCHICAL_DESIGN 0 REQUIRE_SPECIAL_HANDLING_FOR_LOCAL_LABLINE 0 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RISEFALL_SUPPORT_IS_HIDDEN 0 SHOW_HIDDEN_FAMILY_IN_PROGRAMMER 0 STRICT_TIMING_DB_CHECKS 1 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 1 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 1 SUPPORTS_HIPI_RETIMING 0 SUPPORTS_MAC_CHAIN_OUT_ADDER 1 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 SUPPORTS_VID 0 TMV_RUN_CUSTOMIZABLE_VIEWER 1 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 0 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 1 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 1 TRANSCEIVER_6G_BLOCK 1 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 1 USES_ALTERA_LNSIM 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_NETWORK_ROUTING_POWER_CALCULATOR 0 USES_PART_INFO_FOR_DISPLAYING_CORE_VOLTAGE_VALUE 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_PVAFAM2 0 USES_SECOND_GENERATION_PART_INFO 0 USES_SECOND_GENERATION_POWER_ANALYZER 0 USES_THIRD_GENERATION_TIMING_MODELS_TIS 1 USES_U2B2_TIMING_MODELS 0 USES_XML_FORMAT_FOR_EMIF_PIN_MAP_FILE 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 1 USE_ADVANCED_IO_TIMING_BY_DEFAULT 1 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 1 USE_RELAX_IO_ASSIGNMENT_RULES 0 USE_RISEFALL_ONLY 1 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 1 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 1 USING_28NM_OR_OLDER_TIMING_METHODOLOGY 1 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 1</parameter>
   <parameter name="dividerType" value="no_div" />
   <parameter name="exceptionOffset" value="32" />
-  <parameter name="exceptionSlave" value="sys_int_mem.s2" />
+  <parameter name="exceptionSlave" value="sys_int_mem.s1" />
   <parameter name="faAddrWidth" value="1" />
   <parameter name="faSlaveMapParam" value="" />
   <parameter name="fa_cache_line" value="2" />
@@ -906,7 +834,7 @@
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Fast" />
   <parameter name="instAddrWidth" value="29" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /><slave name='sys_int_mem.s2' start='0x10000000' end='0x10180000' /><slave name='sys_cpu.debug_mem_slave' start='0x10229800' end='0x1022A000' /></address-map>]]></parameter>
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /><slave name='sys_int_mem.s1' start='0x10200000' end='0x10400000' /><slave name='sys_cpu.debug_mem_slave' start='0x1042A800' end='0x1042B000' /></address-map>]]></parameter>
   <parameter name="instructionMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="instructionMasterHighPerformanceMapParam" value="" />
   <parameter name="instruction_master_high_performance_paddr_base" value="0" />
@@ -918,7 +846,7 @@
   <parameter name="io_regionsize" value="0" />
   <parameter name="master_addr_map" value="false" />
   <parameter name="mmu_TLBMissExcOffset" value="4096" />
-  <parameter name="mmu_TLBMissExcSlave" value="sys_int_mem.s2" />
+  <parameter name="mmu_TLBMissExcSlave" value="sys_int_mem.s1" />
   <parameter name="mmu_autoAssignTlbPtrSz" value="false" />
   <parameter name="mmu_enabled" value="false" />
   <parameter name="mmu_processIDNumBits" value="8" />
@@ -941,7 +869,7 @@
   <parameter name="ocimem_ramInit" value="false" />
   <parameter name="regfile_ramBlockType" value="Automatic" />
   <parameter name="resetOffset" value="0" />
-  <parameter name="resetSlave" value="sys_int_mem.s2" />
+  <parameter name="resetSlave" value="sys_int_mem.s1" />
   <parameter name="resetrequest_enabled" value="true" />
   <parameter name="setting_HBreakTest" value="false" />
   <parameter name="setting_HDLSimCachesCleared" value="true" />
@@ -988,7 +916,7 @@
   <parameter name="setting_usedesignware" value="false" />
   <parameter name="shift_rot_impl" value="0" />
   <parameter name="tightlyCoupledDataMaster0AddrWidth" value="29" />
-  <parameter name="tightlyCoupledDataMaster0MapParam"><![CDATA[<address-map><slave name='sys_tcm_mem.s1' start='0x10228000' end='0x10229000' /></address-map>]]></parameter>
+  <parameter name="tightlyCoupledDataMaster0MapParam"><![CDATA[<address-map><slave name='sys_tcm_mem.s1' start='0x10429000' end='0x1042A000' /></address-map>]]></parameter>
   <parameter name="tightlyCoupledDataMaster1AddrWidth" value="1" />
   <parameter name="tightlyCoupledDataMaster1MapParam" value="" />
   <parameter name="tightlyCoupledDataMaster2AddrWidth" value="1" />
@@ -996,7 +924,7 @@
   <parameter name="tightlyCoupledDataMaster3AddrWidth" value="1" />
   <parameter name="tightlyCoupledDataMaster3MapParam" value="" />
   <parameter name="tightlyCoupledInstructionMaster0AddrWidth" value="29" />
-  <parameter name="tightlyCoupledInstructionMaster0MapParam"><![CDATA[<address-map><slave name='sys_tcm_mem.s2' start='0x10228000' end='0x10229000' /></address-map>]]></parameter>
+  <parameter name="tightlyCoupledInstructionMaster0MapParam"><![CDATA[<address-map><slave name='sys_tcm_mem.s1' start='0x10429000' end='0x1042A000' /></address-map>]]></parameter>
   <parameter name="tightlyCoupledInstructionMaster1AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster1MapParam" value="" />
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
@@ -1345,37 +1273,6 @@
   <parameter name="WEIGHT_PORT" value="0,0,0,0,0,0" />
   <parameter name="WRBUFFER_ADDR_WIDTH" value="6" />
  </module>
- <module
-   name="sys_dma_interconnect"
-   kind="altera_avalon_mm_clock_crossing_bridge"
-   version="15.0"
-   enabled="1">
-  <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
-  <parameter name="ADDRESS_WIDTH" value="31" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
-  <parameter name="AUTO_M0_CLK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_S0_CLK_CLOCK_RATE" value="125000000" />
-  <parameter name="COMMAND_FIFO_DEPTH" value="4" />
-  <parameter name="DATA_WIDTH" value="512" />
-  <parameter name="MASTER_SYNC_DEPTH" value="2" />
-  <parameter name="MAX_BURST_SIZE" value="1" />
-  <parameter name="RESPONSE_FIFO_DEPTH" value="4" />
-  <parameter name="SLAVE_SYNC_DEPTH" value="2" />
-  <parameter name="SYMBOL_WIDTH" value="8" />
-  <parameter name="SYSINFO_ADDR_WIDTH" value="28" />
-  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="0" />
- </module>
- <module
-   name="sys_dma_rst"
-   kind="altera_reset_bridge"
-   version="15.0"
-   enabled="1">
-  <parameter name="ACTIVE_LOW_RESET" value="0" />
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="125000000" />
-  <parameter name="NUM_RESET_OUTPUTS" value="1" />
-  <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
-  <parameter name="USE_RESET_REQUEST" value="0" />
- </module>
  <module name="sys_ethernet" kind="altera_eth_tse" version="15.0" enabled="1">
   <parameter name="AUTO_DEVICE" value="5AGTFD7K3F40I3" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="3_H3" />
@@ -1428,7 +1325,7 @@
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@6023fe1d</parameter>
+  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@76434858</parameter>
   <parameter name="BURST_ENABLE" value="1" />
   <parameter name="BURST_WRAPPING_SUPPORT" value="0" />
   <parameter name="CHANNEL_ENABLE" value="0" />
@@ -1458,7 +1355,7 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="3_H3" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@550aaf81</parameter>
+  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@8dfa39</parameter>
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="" />
   <parameter name="BURST_ENABLE" value="1" />
@@ -1551,12 +1448,12 @@
   <parameter name="dataWidth" value="32" />
   <parameter name="deviceFamily" value="Arria V" />
   <parameter name="deviceFeatures">ADDRESS_STALL 1 ADVANCED_INFO 0 ALLOWS_COMPILING_OTHER_FAMILY_IP 1 ANY_QFP 0 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 1 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 0 EMUL 0 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 1 ENABLE_PIN_PLANNER 0 ENGINEERING_SAMPLE 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FAMILY_LEVEL_INSTALLATION_ONLY 0 FASTEST 0 FINAL_TIMING_MODEL 0 FITTER_USE_FALLING_EDGE_DELAY 1 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 1 HARDCOPY 0 HAS_18_BIT_MULTS 1 HAS_ACE_SUPPORT 1 HAS_ACTIVE_PARALLEL_FLASH_SUPPORT 0 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 1 HAS_ADVANCED_IO_INVERTED_CORNER 1 HAS_ADVANCED_IO_POWER_SUPPORT 1 HAS_ADVANCED_IO_TIMING_SUPPORT 1 HAS_ALM_SUPPORT 1 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 1 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 0 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 1 HAS_BSDL_FILE_GENERATION 1 HAS_CDB_RE_NETWORK_PRESERVATION_SUPPORT 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 1 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 0 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DAP_JTAG_FROM_HPS 0 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 1 HAS_DDB_FDI_SUPPORT 1 HAS_DESIGN_ANALYZER_SUPPORT 1 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 0 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 0 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 1 HAS_ERROR_DETECTION_SUPPORT 1 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 0 HAS_FPGA_XCHANGE_SUPPORT 1 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 1 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 0 HAS_FUNCTIONAL_VERILOG_SIMULATION_SUPPORT 1 HAS_FUNCTIONAL_VHDL_SIMULATION_SUPPORT 1 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HARDCOPYII_SUPPORT 0 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 1 HAS_HSSI_POWER_CALCULATOR 1 HAS_IBISO_WRITER_SUPPORT 0 HAS_ICD_DATA_IP 0 HAS_IDB_SUPPORT 1 HAS_INCREMENTAL_DAT_SUPPORT 1 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 1 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_PLACEMENT_USING_GEOMETRY_RULE 0 HAS_IO_PLACEMENT_USING_PHYSIC_RULE 0 HAS_IO_SMART_RECOMPILE_SUPPORT 0 HAS_JITTER_SUPPORT 1 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 1 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 0 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_HARDBLOCK_PARTITION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 0 HAS_PARTIAL_RECONFIG_SUPPORT 1 HAS_PASSIVE_PARALLEL_SUPPORT 0 HAS_PHYSICAL_DESIGN_PLANNER_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 1 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 1 HAS_PLDM_REF_SUPPORT 0 HAS_POWER_BINNING_LIMITS_DATA 1 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 1 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 1 HAS_PVA_SUPPORT 1 HAS_QUARTUS_HIERARCHICAL_DESIGN_SUPPORT 0 HAS_RAPID_RECOMPILE_SUPPORT 1 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 1 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 0 HAS_SPLIT_IO_SUPPORT 1 HAS_SPLIT_LC_SUPPORT 1 HAS_STRICT_PRESERVATION_SUPPORT 0 HAS_SYNTHESIS_ON_ATOMS 1 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 0 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TCL_FITTER_SUPPORT 0 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 1 HAS_TIMING_SIMULATION_SUPPORT 0 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 1 HAS_U2B2_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 0 HAS_VCCPD_POWER_RAIL 1 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 0 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 1 HAS_XIBISO2_WRITER_SUPPORT 0 HAS_XIBISO_WRITER_SUPPORT 1 IFP_USE_LEGACY_IO_CHECKER 1 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 0 INSTALLED 0 INTERNAL_POF_SUPPORT_ENABLED 0 INTERNAL_USE_ONLY 0 ISSUE_MILITARY_TEMPERATURE_WARNING 0 IS_CONFIG_ROM 0 IS_DEFAULT_FAMILY 0 IS_FOR_INTERNAL_TESTING_ONLY 0 IS_HARDCOPY_FAMILY 0 IS_HBGA_PACKAGE 0 IS_HIGH_CURRENT_PART 0 IS_LOW_POWER_PART 0 IS_SDM_ONLY_PACKAGE 0 IS_SMI_PART 0 LOAD_BLK_TYPE_DATA_FROM_ATOM_WYS_INFO 0 LVDS_IO 1 M10K_MEMORY 1 M144K_MEMORY 1 M20K_MEMORY 0 M4K_MEMORY 0 M512_MEMORY 0 M9K_MEMORY 0 MLAB_MEMORY 1 MRAM_MEMORY 0 NOT_LISTED 0 NOT_MIGRATABLE 0 NO_FITTER_DELAY_CACHE_GENERATED 0 NO_PIN_OUT 0 NO_POF 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 1 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 0 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 1 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 1 PROGRAMMER_ONLY 0 PROGRAMMER_SUPPORT 1 PVA_SUPPORTS_ONLY_SUBSET_OF_ATOMS 0 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 1 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 1 REQUIRE_QUARTUS_HIERARCHICAL_DESIGN 0 REQUIRE_SPECIAL_HANDLING_FOR_LOCAL_LABLINE 0 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RISEFALL_SUPPORT_IS_HIDDEN 0 SHOW_HIDDEN_FAMILY_IN_PROGRAMMER 0 STRICT_TIMING_DB_CHECKS 1 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 1 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 1 SUPPORTS_HIPI_RETIMING 0 SUPPORTS_MAC_CHAIN_OUT_ADDER 1 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 SUPPORTS_VID 0 TMV_RUN_CUSTOMIZABLE_VIEWER 1 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 0 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 1 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 1 TRANSCEIVER_6G_BLOCK 1 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 1 USES_ALTERA_LNSIM 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_NETWORK_ROUTING_POWER_CALCULATOR 0 USES_PART_INFO_FOR_DISPLAYING_CORE_VOLTAGE_VALUE 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_PVAFAM2 0 USES_SECOND_GENERATION_PART_INFO 0 USES_SECOND_GENERATION_POWER_ANALYZER 0 USES_THIRD_GENERATION_TIMING_MODELS_TIS 1 USES_U2B2_TIMING_MODELS 0 USES_XML_FORMAT_FOR_EMIF_PIN_MAP_FILE 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 1 USE_ADVANCED_IO_TIMING_BY_DEFAULT 1 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 1 USE_RELAX_IO_ASSIGNMENT_RULES 0 USE_RISEFALL_ONLY 1 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 1 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 1 USING_28NM_OR_OLDER_TIMING_METHODOLOGY 1 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 1</parameter>
-  <parameter name="dualPort" value="true" />
+  <parameter name="dualPort" value="false" />
   <parameter name="ecc_enabled" value="false" />
   <parameter name="initMemContent" value="true" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="1572864" />
+  <parameter name="memorySize" value="2097152" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="resetrequest_enabled" value="true" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
@@ -1685,10 +1582,10 @@
   <parameter name="gui_fractional_cout" value="32" />
   <parameter name="gui_mif_generate" value="false" />
   <parameter name="gui_multiply_factor" value="1" />
-  <parameter name="gui_number_of_clocks" value="5" />
+  <parameter name="gui_number_of_clocks" value="3" />
   <parameter name="gui_operation_mode" value="direct" />
-  <parameter name="gui_output_clock_frequency0" value="100.0" />
-  <parameter name="gui_output_clock_frequency1" value="166.666666" />
+  <parameter name="gui_output_clock_frequency0" value="125.0" />
+  <parameter name="gui_output_clock_frequency1" value="25.0" />
   <parameter name="gui_output_clock_frequency10" value="100.0" />
   <parameter name="gui_output_clock_frequency11" value="100.0" />
   <parameter name="gui_output_clock_frequency12" value="100.0" />
@@ -1697,9 +1594,9 @@
   <parameter name="gui_output_clock_frequency15" value="100.0" />
   <parameter name="gui_output_clock_frequency16" value="100.0" />
   <parameter name="gui_output_clock_frequency17" value="100.0" />
-  <parameter name="gui_output_clock_frequency2" value="125.0" />
-  <parameter name="gui_output_clock_frequency3" value="25.0" />
-  <parameter name="gui_output_clock_frequency4" value="2.5" />
+  <parameter name="gui_output_clock_frequency2" value="2.5" />
+  <parameter name="gui_output_clock_frequency3" value="100.0" />
+  <parameter name="gui_output_clock_frequency4" value="100.0" />
   <parameter name="gui_output_clock_frequency5" value="100.0" />
   <parameter name="gui_output_clock_frequency6" value="100.0" />
   <parameter name="gui_output_clock_frequency7" value="100.0" />
@@ -1799,7 +1696,7 @@
   <parameter name="dataWidth" value="32" />
   <parameter name="deviceFamily" value="Arria V" />
   <parameter name="deviceFeatures">ADDRESS_STALL 1 ADVANCED_INFO 0 ALLOWS_COMPILING_OTHER_FAMILY_IP 1 ANY_QFP 0 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 1 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 0 EMUL 0 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 1 ENABLE_PIN_PLANNER 0 ENGINEERING_SAMPLE 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FAMILY_LEVEL_INSTALLATION_ONLY 0 FASTEST 0 FINAL_TIMING_MODEL 0 FITTER_USE_FALLING_EDGE_DELAY 1 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 1 HARDCOPY 0 HAS_18_BIT_MULTS 1 HAS_ACE_SUPPORT 1 HAS_ACTIVE_PARALLEL_FLASH_SUPPORT 0 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 1 HAS_ADVANCED_IO_INVERTED_CORNER 1 HAS_ADVANCED_IO_POWER_SUPPORT 1 HAS_ADVANCED_IO_TIMING_SUPPORT 1 HAS_ALM_SUPPORT 1 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 1 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 0 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 1 HAS_BSDL_FILE_GENERATION 1 HAS_CDB_RE_NETWORK_PRESERVATION_SUPPORT 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 1 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 0 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DAP_JTAG_FROM_HPS 0 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 1 HAS_DDB_FDI_SUPPORT 1 HAS_DESIGN_ANALYZER_SUPPORT 1 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 0 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 0 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 1 HAS_ERROR_DETECTION_SUPPORT 1 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 0 HAS_FPGA_XCHANGE_SUPPORT 1 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 1 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 0 HAS_FUNCTIONAL_VERILOG_SIMULATION_SUPPORT 1 HAS_FUNCTIONAL_VHDL_SIMULATION_SUPPORT 1 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HARDCOPYII_SUPPORT 0 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 1 HAS_HSSI_POWER_CALCULATOR 1 HAS_IBISO_WRITER_SUPPORT 0 HAS_ICD_DATA_IP 0 HAS_IDB_SUPPORT 1 HAS_INCREMENTAL_DAT_SUPPORT 1 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 1 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_PLACEMENT_USING_GEOMETRY_RULE 0 HAS_IO_PLACEMENT_USING_PHYSIC_RULE 0 HAS_IO_SMART_RECOMPILE_SUPPORT 0 HAS_JITTER_SUPPORT 1 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 1 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 0 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_HARDBLOCK_PARTITION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 0 HAS_PARTIAL_RECONFIG_SUPPORT 1 HAS_PASSIVE_PARALLEL_SUPPORT 0 HAS_PHYSICAL_DESIGN_PLANNER_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 1 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 1 HAS_PLDM_REF_SUPPORT 0 HAS_POWER_BINNING_LIMITS_DATA 1 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 1 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 1 HAS_PVA_SUPPORT 1 HAS_QUARTUS_HIERARCHICAL_DESIGN_SUPPORT 0 HAS_RAPID_RECOMPILE_SUPPORT 1 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 1 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 0 HAS_SPLIT_IO_SUPPORT 1 HAS_SPLIT_LC_SUPPORT 1 HAS_STRICT_PRESERVATION_SUPPORT 0 HAS_SYNTHESIS_ON_ATOMS 1 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 0 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TCL_FITTER_SUPPORT 0 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 1 HAS_TIMING_SIMULATION_SUPPORT 0 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 1 HAS_U2B2_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 0 HAS_VCCPD_POWER_RAIL 1 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 0 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 1 HAS_XIBISO2_WRITER_SUPPORT 0 HAS_XIBISO_WRITER_SUPPORT 1 IFP_USE_LEGACY_IO_CHECKER 1 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 0 INSTALLED 0 INTERNAL_POF_SUPPORT_ENABLED 0 INTERNAL_USE_ONLY 0 ISSUE_MILITARY_TEMPERATURE_WARNING 0 IS_CONFIG_ROM 0 IS_DEFAULT_FAMILY 0 IS_FOR_INTERNAL_TESTING_ONLY 0 IS_HARDCOPY_FAMILY 0 IS_HBGA_PACKAGE 0 IS_HIGH_CURRENT_PART 0 IS_LOW_POWER_PART 0 IS_SDM_ONLY_PACKAGE 0 IS_SMI_PART 0 LOAD_BLK_TYPE_DATA_FROM_ATOM_WYS_INFO 0 LVDS_IO 1 M10K_MEMORY 1 M144K_MEMORY 1 M20K_MEMORY 0 M4K_MEMORY 0 M512_MEMORY 0 M9K_MEMORY 0 MLAB_MEMORY 1 MRAM_MEMORY 0 NOT_LISTED 0 NOT_MIGRATABLE 0 NO_FITTER_DELAY_CACHE_GENERATED 0 NO_PIN_OUT 0 NO_POF 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 1 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 0 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 1 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 1 PROGRAMMER_ONLY 0 PROGRAMMER_SUPPORT 1 PVA_SUPPORTS_ONLY_SUBSET_OF_ATOMS 0 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 1 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 1 REQUIRE_QUARTUS_HIERARCHICAL_DESIGN 0 REQUIRE_SPECIAL_HANDLING_FOR_LOCAL_LABLINE 0 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RISEFALL_SUPPORT_IS_HIDDEN 0 SHOW_HIDDEN_FAMILY_IN_PROGRAMMER 0 STRICT_TIMING_DB_CHECKS 1 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 1 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 1 SUPPORTS_HIPI_RETIMING 0 SUPPORTS_MAC_CHAIN_OUT_ADDER 1 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 SUPPORTS_VID 0 TMV_RUN_CUSTOMIZABLE_VIEWER 1 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 0 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 1 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 1 TRANSCEIVER_6G_BLOCK 1 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 1 USES_ALTERA_LNSIM 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_NETWORK_ROUTING_POWER_CALCULATOR 0 USES_PART_INFO_FOR_DISPLAYING_CORE_VOLTAGE_VALUE 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_PVAFAM2 0 USES_SECOND_GENERATION_PART_INFO 0 USES_SECOND_GENERATION_POWER_ANALYZER 0 USES_THIRD_GENERATION_TIMING_MODELS_TIS 1 USES_U2B2_TIMING_MODELS 0 USES_XML_FORMAT_FOR_EMIF_PIN_MAP_FILE 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 1 USE_ADVANCED_IO_TIMING_BY_DEFAULT 1 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 1 USE_RELAX_IO_ASSIGNMENT_RULES 0 USE_RISEFALL_ONLY 1 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 1 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 1 USING_28NM_OR_OLDER_TIMING_METHODOLOGY 1 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 1</parameter>
-  <parameter name="dualPort" value="true" />
+  <parameter name="dualPort" value="false" />
   <parameter name="ecc_enabled" value="false" />
   <parameter name="initMemContent" value="true" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
@@ -2192,7 +2089,7 @@
    start="sys_cpu.data_master"
    end="sys_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a500" />
+  <parameter name="baseAddress" value="0x1042b500" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2210,7 +2107,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet.control_port">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a000" />
+  <parameter name="baseAddress" value="0x1042b000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2219,7 +2116,7 @@
    start="sys_cpu.data_master"
    end="sys_id.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a4f8" />
+  <parameter name="baseAddress" value="0x1042b4f8" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2228,7 +2125,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_tx.csr">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a4a0" />
+  <parameter name="baseAddress" value="0x1042b4a0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2237,7 +2134,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_rx.csr">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a480" />
+  <parameter name="baseAddress" value="0x1042b480" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2246,7 +2143,7 @@
    start="sys_cpu.data_master"
    end="sys_cpu.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10229800" />
+  <parameter name="baseAddress" value="0x1042a800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2255,7 +2152,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_rx.descriptor_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a460" />
+  <parameter name="baseAddress" value="0x1042b460" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2264,7 +2161,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_tx.descriptor_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a440" />
+  <parameter name="baseAddress" value="0x1042b440" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2273,7 +2170,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_rx.response">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a4f0" />
+  <parameter name="baseAddress" value="0x1042b4f0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2282,7 +2179,7 @@
    start="sys_cpu.data_master"
    end="sys_int_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10000000" />
+  <parameter name="baseAddress" value="0x10200000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2291,7 +2188,7 @@
    start="sys_cpu.data_master"
    end="sys_gpio.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a4e0" />
+  <parameter name="baseAddress" value="0x1042b4e0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2300,7 +2197,7 @@
    start="sys_cpu.data_master"
    end="sys_timer.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a420" />
+  <parameter name="baseAddress" value="0x1042b420" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2309,7 +2206,7 @@
    start="sys_cpu.data_master"
    end="sys_gpio_bd.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a4d0" />
+  <parameter name="baseAddress" value="0x1042b4d0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2318,7 +2215,7 @@
    start="sys_cpu.data_master"
    end="sys_gpio_jesd.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a4c0" />
+  <parameter name="baseAddress" value="0x1042b4c0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2327,7 +2224,7 @@
    start="sys_cpu.data_master"
    end="axi_ad9250_1.s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10210000" />
+  <parameter name="baseAddress" value="0x10410000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2336,7 +2233,7 @@
    start="sys_cpu.data_master"
    end="axi_dmac_0.s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10224000" />
+  <parameter name="baseAddress" value="0x10424000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2345,7 +2242,7 @@
    start="sys_cpu.data_master"
    end="axi_ad9250_0.s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10200000" />
+  <parameter name="baseAddress" value="0x10400000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2354,7 +2251,7 @@
    start="sys_cpu.data_master"
    end="axi_dmac_1.s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10220000" />
+  <parameter name="baseAddress" value="0x10420000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2363,7 +2260,7 @@
    start="sys_cpu.data_master"
    end="sys_spi.spi_control_port">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1022a400" />
+  <parameter name="baseAddress" value="0x1042b400" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2381,22 +2278,22 @@
    start="sys_cpu.instruction_master"
    end="sys_cpu.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10229800" />
+  <parameter name="baseAddress" value="0x1042a800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.0"
    start="sys_cpu.instruction_master"
-   end="sys_int_mem.s2">
+   end="sys_int_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10000000" />
+  <parameter name="baseAddress" value="0x10200000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.0"
-   start="sys_dma_interconnect.m0"
+   start="axi_dmac_1.m_dest_axi"
    end="sys_ddr3_cntrl.avl">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -2406,16 +2303,7 @@
    kind="avalon"
    version="15.0"
    start="axi_dmac_0.m_dest_axi"
-   end="sys_dma_interconnect.s0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="axi_dmac_1.m_dest_axi"
-   end="sys_dma_interconnect.s0">
+   end="sys_ddr3_cntrl.avl">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
@@ -2444,16 +2332,16 @@
    start="sys_cpu.tightly_coupled_data_master_0"
    end="sys_tcm_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10228000" />
+  <parameter name="baseAddress" value="0x10429000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.0"
    start="sys_cpu.tightly_coupled_instruction_master_0"
-   end="sys_tcm_mem.s2">
+   end="sys_tcm_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10228000" />
+  <parameter name="baseAddress" value="0x10429000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -2495,7 +2383,64 @@
    kind="clock"
    version="15.0"
    start="sys_ddr3_cntrl.afi_clk"
-   end="sys_dma_interconnect.m0_clk" />
+   end="axi_dmac_1.m_dest_axi_clock" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_ddr3_cntrl.afi_clk"
+   end="axi_dmac_0.m_dest_axi_clock" />
+ <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_cpu.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_uart.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_timer.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_id.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_gpio_bd.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_gpio.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_spi.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_gpio_jesd.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_xcvr_rst.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_int_mem.clk1" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_tcm_mem.clk1" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_ethernet_dma_rx.clock" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_ethernet_dma_tx.clock" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_xcvr_rstcntrl.clock" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_ethernet.control_port_clock_connection" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_xcvr.jesd204_rx_avs_clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -2506,6 +2451,11 @@
    version="15.0"
    start="sys_xcvr_rx_ref_clk.clk"
    end="sys_xcvr.pll_ref_clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.clk"
+   end="sys_ethernet.receive_clock_connection" />
  <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_pll.refclk" />
  <connection
    kind="clock"
@@ -2515,81 +2465,28 @@
  <connection
    kind="clock"
    version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_uart.clk" />
+   start="sys_clk.clk"
+   end="axi_dmac_1.s_axi_clock" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_timer.clk" />
- <connection kind="clock" version="15.0" start="sys_pll.outclk0" end="sys_id.clk" />
+   start="sys_clk.clk"
+   end="axi_ad9250_1.s_axi_clock" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_gpio.clk" />
- <connection kind="clock" version="15.0" start="sys_pll.outclk0" end="sys_spi.clk" />
- <connection kind="clock" version="15.0" start="sys_pll.outclk0" end="sys_cpu.clk" />
+   start="sys_clk.clk"
+   end="axi_dmac_0.s_axi_clock" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_xcvr_rx_clk.outclk0"
-   end="sys_dma_rst.clk" />
+   start="sys_clk.clk"
+   end="axi_ad9250_0.s_axi_clock" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_gpio_bd.clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_gpio_jesd.clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_xcvr_rst.clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_int_mem.clk1" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_tcm_mem.clk1" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_int_mem.clk2" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_tcm_mem.clk2" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet_dma_rx.clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet_dma_tx.clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_xcvr_rstcntrl.clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet.control_port_clock_connection" />
+   start="sys_clk.clk"
+   end="sys_ethernet.transmit_clock_connection" />
  <connection
    kind="clock"
    version="15.0"
@@ -2638,63 +2535,8 @@
  <connection
    kind="clock"
    version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_clk_out.in_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_xcvr.jesd204_rx_avs_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_xcvr_rx_clk.outclk0"
-   end="axi_dmac_1.m_dest_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_xcvr_rx_clk.outclk0"
-   end="axi_dmac_0.m_dest_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet.receive_clock_connection" />
- <connection
-   kind="clock"
-   version="15.0"
    start="sys_xcvr_rx_clk.outclk0"
    end="sys_xcvr.rxlink_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_xcvr_rx_clk.outclk0"
-   end="sys_dma_interconnect.s0_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="axi_ad9250_0.s_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="axi_dmac_0.s_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="axi_ad9250_1.s_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="axi_dmac_1.s_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_pll.outclk0"
-   end="sys_ethernet.transmit_clock_connection" />
  <connection
    kind="conduit"
    version="15.0"
@@ -3062,17 +2904,22 @@
    kind="reset"
    version="15.0"
    start="sys_ddr3_cntrl.afi_reset"
-   end="sys_dma_interconnect.m0_reset" />
+   end="axi_dmac_1.m_dest_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_ddr3_cntrl.afi_reset"
+   end="axi_dmac_0.m_dest_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_clk.clk_reset"
+   end="sys_xcvr_rx_ref_clk.clk_in_reset" />
  <connection
    kind="reset"
    version="15.0"
    start="sys_clk.clk_reset"
    end="sys_ddr3_cntrl.global_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="sys_dma_rst.in_reset" />
  <connection
    kind="reset"
    version="15.0"
@@ -3132,22 +2979,17 @@
    kind="reset"
    version="15.0"
    start="sys_clk.clk_reset"
+   end="sys_xcvr_rstcntrl.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_clk.clk_reset"
    end="sys_int_mem.reset1" />
  <connection
    kind="reset"
    version="15.0"
    start="sys_clk.clk_reset"
    end="sys_tcm_mem.reset1" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="sys_int_mem.reset2" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="sys_tcm_mem.reset2" />
  <connection
    kind="reset"
    version="15.0"
@@ -3191,23 +3033,8 @@
  <connection
    kind="reset"
    version="15.0"
-   start="sys_cpu.debug_reset_request"
-   end="sys_cpu.reset" />
- <connection
-   kind="reset"
-   version="15.0"
    start="sys_xcvr_rst.out_reset"
    end="sys_xcvr_rx_ref_clk.clk_in_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_dma_rst.out_reset"
-   end="axi_dmac_1.m_dest_axi_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_dma_rst.out_reset"
-   end="axi_dmac_0.m_dest_axi_reset" />
  <connection
    kind="reset"
    version="15.0"
@@ -3223,11 +3050,6 @@
    version="15.0"
    start="sys_xcvr_rst.out_reset"
    end="sys_xcvr.rxlink_rst_n" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_dma_rst.out_reset"
-   end="sys_dma_interconnect.s0_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />

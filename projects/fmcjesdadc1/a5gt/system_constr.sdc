@@ -7,7 +7,7 @@ derive_pll_clocks
 derive_clock_uncertainty
 
 set_clock_groups -exclusive \
+  -group [get_clocks {i_system_bd|sys_pll|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}] \
+  -group [get_clocks {i_system_bd|sys_pll|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] \
   -group [get_clocks {i_system_bd|sys_pll|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] \
-  -group [get_clocks {i_system_bd|sys_pll|altera_pll_i|general[3].gpll~PLL_OUTPUT_COUNTER|divclk}] \
-  -group [get_clocks {i_system_bd|sys_pll|altera_pll_i|general[4].gpll~PLL_OUTPUT_COUNTER|divclk}] \
 
