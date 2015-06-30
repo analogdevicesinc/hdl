@@ -512,6 +512,10 @@ module axi_hdmi_tx_core (
     end else if ((hdmi_full_range == 1'b0) &&
       (hdmi_es_data_s[15:8] < 8'h10)) begin
       hdmi_es_data[15:8] <= 8'h10;
+    end else if (hdmi_es_data_s[15:8] > 8'hfe) begin
+      hdmi_es_data[15:8] <= 8'hfe;
+    end else if (hdmi_es_data_s[15:8] < 8'h01) begin
+      hdmi_es_data[15:8] <= 8'h01;
     end else begin
       hdmi_es_data[15:8] <= hdmi_es_data_s[15:8];
     end
@@ -523,6 +527,10 @@ module axi_hdmi_tx_core (
     end else if ((hdmi_full_range == 1'b0) &&
       (hdmi_es_data_s[7:0] < 8'h10)) begin
       hdmi_es_data[7:0] <= 8'h10;
+    end else if (hdmi_es_data_s[7:0] > 8'hfe) begin
+      hdmi_es_data[7:0] <= 8'hfe;
+    end else if (hdmi_es_data_s[7:0] < 8'h01) begin
+      hdmi_es_data[7:0] <= 8'h01;
     end else begin
       hdmi_es_data[7:0] <= hdmi_es_data_s[7:0];
     end
