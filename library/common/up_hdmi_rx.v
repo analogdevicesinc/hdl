@@ -117,7 +117,6 @@ module up_hdmi_rx (
   reg             up_preset = 'd0;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
-  reg             up_resetn = 'd0;
   reg             up_edge_sel = 'd0;
   reg             up_bgr = 'd0;
   reg             up_packed = 'd0;
@@ -161,7 +160,6 @@ module up_hdmi_rx (
       up_preset <= 1'd1;
       up_wack <= 'd0;
       up_scratch <= 'd0;
-      up_resetn <= 'd0;
       up_edge_sel <= 'd0;
       up_bgr <= 'd0;
       up_packed <= 'd0;
@@ -177,13 +175,12 @@ module up_hdmi_rx (
       up_vs_count <= 'd0;
       up_hs_count <= 'd0;
     end else begin
-      up_preset <= 1'd0;
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h002)) begin
         up_scratch <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h010)) begin
-        up_resetn <= up_wdata[0];
+        up_preset <= ~up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h011)) begin
         up_edge_sel <= up_wdata[3];
@@ -249,7 +246,7 @@ module up_hdmi_rx (
           12'h000: up_rdata <= PCORE_VERSION;
           12'h001: up_rdata <= PCORE_ID;
           12'h002: up_rdata <= up_scratch;
-          12'h010: up_rdata <= {31'h0, up_resetn};
+          12'h010: up_rdata <= {31'h0, ~up_preset};
           12'h011: up_rdata <= {28'h0, up_edge_sel, up_bgr, up_packed, up_csc_bypass};
           12'h012: up_rdata <= {31'h0, up_tpg_enable};
           12'h015: up_rdata <= up_clk_count_s;
