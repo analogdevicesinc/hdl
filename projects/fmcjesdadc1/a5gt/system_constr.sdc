@@ -11,3 +11,6 @@ set_clock_groups -exclusive \
   -group [get_clocks {i_system_bd|sys_pll|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] \
   -group [get_clocks {i_system_bd|sys_pll|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] \
 
+set_false_path -from [get_registers *dev_sync_n*] -to [get_registers *rx_sync_m1*]
+set_false_path -from [get_registers *rx_sysref*]  -to [get_registers *sys_xcvr*sysref*]
+
