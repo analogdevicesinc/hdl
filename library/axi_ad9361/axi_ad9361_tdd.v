@@ -55,6 +55,7 @@ module axi_ad9361_tdd (
 
   // status signal
 
+  tdd_enable,
   tdd_status,
 
   // tx data flow control
@@ -95,6 +96,7 @@ module axi_ad9361_tdd (
   output            tdd_rx_rf_en;
   output            tdd_tx_rf_en;
 
+  output            tdd_enable;
   input   [ 7:0]    tdd_status;
 
   // tx data flow control
@@ -168,6 +170,8 @@ module axi_ad9361_tdd (
   assign  tdd_tx_valid_q0 = (tdd_enable_s == 1'b1) ? (tx_valid_q0 & tdd_tx_dp_en_s) : tx_valid_q0;
   assign  tdd_tx_valid_i1 = (tdd_enable_s == 1'b1) ? (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
   assign  tdd_tx_valid_q1 = (tdd_enable_s == 1'b1) ? (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
+
+  assign  tdd_enable = tdd_enable_s;
 
   // instantiations
 

@@ -72,6 +72,7 @@ module axi_ad9361 (
 
   l_clk,
   clk,
+  rst,
 
   // dma interface
 
@@ -106,6 +107,8 @@ module axi_ad9361 (
   dac_dovf,
   dac_dunf,
   dac_r1_mode,
+
+  tdd_enable,
 
   enable,
   txnrx,
@@ -185,6 +188,7 @@ module axi_ad9361 (
 
   output          l_clk;
   input           clk;
+  output          rst;
 
   // dma interface
 
@@ -219,6 +223,8 @@ module axi_ad9361 (
   input           dac_dovf;
   input           dac_dunf;
   output          dac_r1_mode;
+
+  output          tdd_enable;
 
   output          enable;
   output          txnrx;
@@ -266,7 +272,6 @@ module axi_ad9361 (
 
   // internal clocks and resets
 
-  wire            rst;
   wire            up_clk;
   wire            up_rstn;
   wire            delay_rst;
@@ -396,6 +401,7 @@ module axi_ad9361 (
     .tdd_tx_vco_en(tdd_tx_vco_en_s),
     .tdd_rx_rf_en(tdd_rx_rf_en_s),
     .tdd_tx_rf_en(tdd_tx_rf_en_s),
+    .tdd_enable (tdd_enable),
     .tdd_status(tdd_status_s),
     .tx_valid_i0(dac_valid_i0_s),
     .tx_valid_q0(dac_valid_q0_s),
