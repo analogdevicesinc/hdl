@@ -17,6 +17,7 @@ create_bd_port -dir O -from 5 -to 0 tx_data_out_n
 
 create_bd_port -dir O enable
 create_bd_port -dir O txnrx
+create_bd_port -dir O tdd_enable
 
 # ad9361 core
 
@@ -135,6 +136,7 @@ ad_connect  util_ad9361_dac_upack/dac_data_3 axi_ad9361/dac_data_q1
 ad_connect  util_ad9361_dac_upack/dac_valid axi_ad9361_dac_dma/fifo_rd_en
 ad_connect  util_ad9361_dac_upack/dac_data axi_ad9361_dac_dma/fifo_rd_dout
 ad_connect  axi_ad9361_dac_dma/fifo_rd_underflow axi_ad9361/dac_dunf
+ad_connect  tdd_enable axi_ad9361/tdd_enable
 
 # interconnects
 
@@ -172,4 +174,21 @@ ad_connect  util_ad9361_adc_fifo/dout_data_2 ila_adc/probe2
 ad_connect  util_ad9361_adc_fifo/dout_data_3 ila_adc/probe3
 ad_connect  util_ad9361_adc_fifo/dout_valid_0 ila_adc/probe4
 ad_connect  sys_cpu_clk ila_adc/clk
+
+# ila (tdd)
+set ila_tdd [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_tdd]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tdd
+set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_tdd
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tdd
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_tdd
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE3_WIDTH {35}] $ila_adc
+
+ad_connect  axi_ad9361_clk          ila_tdd/clk
+ad_connect  axi_ad9361/enable       ila_tdd/probe0
+ad_connect  axi_ad9361/txnrx        ila_tdd/probe1
+ad_connect  axi_ad9361/tdd_enable   ila_tdd/probe2
+ad_connect  axi_ad9361/tdd_dbg      ila_tdd/probe3
 

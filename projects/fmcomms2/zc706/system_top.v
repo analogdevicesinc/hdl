@@ -89,6 +89,7 @@ module system_top (
   tx_frame_out_n,
   tx_data_out_p,
   tx_data_out_n,
+
   enable,
   txnrx,
 
@@ -158,6 +159,7 @@ module system_top (
   output          tx_frame_out_n;
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
+
   output          enable;
   output          txnrx;
 
@@ -206,6 +208,15 @@ module system_top (
   wire    [31:0]  dac_gpio_input;
   wire    [31:0]  dac_gpio_output;
 
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
@@ -214,6 +225,8 @@ module system_top (
     .dio_o (gpio_i[49:32]),
     .dio_p ({ gpio_muxout_tx,
               gpio_muxout_rx,
+              gpio_txnrx,
+              gpio_enable,
               gpio_resetb,
               gpio_sync,
               gpio_en_agc,
@@ -242,7 +255,7 @@ module system_top (
     .ddr_ras_n (ddr_ras_n),
     .ddr_reset_n (ddr_reset_n),
     .ddr_we_n (ddr_we_n),
-    .enable (enable),
+    .enable (enable_s),
     .fixed_io_ddr_vrn (fixed_io_ddr_vrn),
     .fixed_io_ddr_vrp (fixed_io_ddr_vrp),
     .fixed_io_mio (fixed_io_mio),
@@ -302,7 +315,8 @@ module system_top (
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
-    .txnrx (txnrx));
+    .txnrx (txnrx_s),
+    .tdd_enable (tdd_enable_s));
 
 endmodule
 
