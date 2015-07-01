@@ -90,8 +90,9 @@ module system_top (
   tx_data_out_p,
   tx_data_out_n,
 
-  gpio_txnrx,
-  gpio_enable,
+  txnrx,
+  enable,
+
   gpio_resetb,
   gpio_sync,
   gpio_en_agc,
@@ -152,8 +153,8 @@ module system_top (
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
 
-  inout           gpio_txnrx;
-  inout           gpio_enable;
+  output          txnrx;
+  output          enable;
   inout           gpio_resetb;
   inout           gpio_sync;
   inout           gpio_en_agc;
@@ -175,6 +176,17 @@ module system_top (
   wire            spi_udc_csn_rx;
   wire            spi_udc_sclk;
   wire            spi_udc_data;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
 
   // instantiations
 
@@ -273,7 +285,10 @@ module system_top (
     .spi1_csn_2_o(),
     .spi1_sdo_i (spi_udc_data),
     .spi1_sdo_o (spi_udc_data),
-    .spi1_sdi_i (1'b0));
+    .spi1_sdi_i (1'b0),
+    .enable (enable_s),
+    .txnrx (txnrx_s),
+    .tdd_enable (tdd_enable_s));
 
 endmodule
 

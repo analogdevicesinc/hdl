@@ -213,18 +213,28 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
   // assignments
 
   assign hdmi_pd = 1'b0;
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
-    .dio_t ({gpio_t[50:49], gpio_t[46:32]}),
-    .dio_i ({gpio_o[50:49], gpio_o[46:32]}),
-    .dio_o ({gpio_i[50:49], gpio_i[46:32]}),
+  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
+    .dio_t ({gpio_t[51:50], gpio_t[48:32]}),
+    .dio_i ({gpio_o[51:50], gpio_o[48:32]}),
+    .dio_o ({gpio_i[51:50], gpio_i[48:32]}),
     .dio_p ({ gpio_rfpwr_enable,
               gpio_clksel,
+              gpio_txnrx,
+              gpio_enable,
               gpio_resetb,
               gpio_sync,
               gpio_en_agc,
@@ -253,7 +263,7 @@ module system_top (
     .ddr_ras_n (ddr_ras_n),
     .ddr_reset_n (ddr_reset_n),
     .ddr_we_n (ddr_we_n),
-    .enable (enable),
+    .enable (enable_s),
     .eth1_125mclk (),
     .eth1_25mclk (),
     .eth1_2m5clk (),
@@ -336,7 +346,8 @@ module system_top (
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
-    .txnrx (txnrx));
+    .txnrx (txnrx_s),
+    .tdd_enable (tdd_enable_s));
 
 endmodule
 
