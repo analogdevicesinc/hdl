@@ -1,0 +1,14 @@
+* text=auto
+
+*.c text
+*.h text
+*.prj
+*.tcl text
+*.txt text
+*.ucf text
+*.v text
+*.vhd text
+*.xdc text
+*.xml text
+*.qsys text
+Makefile text
