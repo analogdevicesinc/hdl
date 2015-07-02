@@ -91,10 +91,9 @@ wire [15:0] data_s ;
 //----------- Registers Declarations -------------------------------------------
 //------------------------------------------------------------------------------
 //State machine
-reg [4:0]   present_state;
-reg [4:0]   next_state;
+reg [3:0]   present_state;
+reg [3:0]   next_state;
 
-reg [15:0]  complemented_data_s;
 reg         data_rdy_s_d1;
 reg         data_rdy_s_d2;
 
@@ -103,11 +102,10 @@ reg         data_rdy_s_d2;
 //------------------------------------------------------------------------------
 
 //States
-localparam WAIT_DATA_RDY_HIGH_STATE = 5'b00001;
-localparam ACQUIRE_DATA_STATE       = 5'b00010;
-localparam COMPLEMENT_DATA          = 5'b00100;
-localparam TRANSFER_DATA_STATE      = 5'b01000;
-localparam WAIT_DATA_RDY_LOW_STATE  = 5'b10000;
+localparam WAIT_DATA_RDY_HIGH_STATE = 4'b0001;
+localparam ACQUIRE_DATA_STATE       = 4'b0010;
+localparam TRANSFER_DATA_STATE      = 4'b0100;
+localparam WAIT_DATA_RDY_LOW_STATE  = 4'b1000;
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
@@ -135,14 +133,9 @@ begin
             begin
                 data_rd_ready_o  <= 1'b0;
             end
-            COMPLEMENT_DATA:
-            begin
-                complemented_data_s <= ~data_s + 1;
-                data_rd_ready_o     <= 1'b0;
-            end
             ACQUIRE_DATA_STATE:             // Acquire data from the filter
             begin
-                data_o          <= complemented_data_s;
+                data_o          <= data_s;
                 data_rd_ready_o <= 1'b0;
                 adc_status_o    <= 1'b1;
             end
@@ -166,12 +159,8 @@ begin
         begin
             if(data_rdy_s_d2 == 1'b1)
             begin
-                next_state  <= COMPLEMENT_DATA;
+                next_state  <= ACQUIRE_DATA_STATE;
             end
-        end
-        COMPLEMENT_DATA:
-        begin
-            next_state      <= ACQUIRE_DATA_STATE;
         end
         ACQUIRE_DATA_STATE:
         begin
