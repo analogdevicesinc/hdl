@@ -63,13 +63,12 @@ ad_cpu_interrupt ps-12 mb-12 axi_hdmi_rx_dma/irq
 
 set ila_fifo_dma_rx [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_fifo_dma_rx]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_fifo_dma_rx
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_fifo_dma_rx
 set_property -dict [list CONFIG.C_DATA_DEPTH {4096}] $ila_fifo_dma_rx
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_fifo_dma_rx
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_fifo_dma_rx
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_fifo_dma_rx
 set_property -dict [list CONFIG.C_PROBE2_WIDTH {64}] $ila_fifo_dma_rx
 set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}] $ila_fifo_dma_rx
-set_property -dict [list CONFIG.C_PROBE4_WIDTH {16}] $ila_fifo_dma_rx
 
 ad_connect  hdmi_rx_clk ila_fifo_dma_rx/clk
 
@@ -77,4 +76,5 @@ ad_connect  ila_fifo_dma_rx/probe0 axi_hdmi_rx_dma/fifo_wr_sync
 ad_connect  ila_fifo_dma_rx/probe1 axi_hdmi_rx_dma/fifo_wr_en
 ad_connect  ila_fifo_dma_rx/probe2 axi_hdmi_rx_dma/fifo_wr_din
 ad_connect  ila_fifo_dma_rx/probe3 axi_hdmi_rx_dma/fifo_wr_overflow
-ad_connect  ila_fifo_dma_rx/probe4 hdmi_rx_data
+
+
