@@ -17,14 +17,13 @@ M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ../common/up_clock_mon.v
-M_DEPS += ../common/up_drp_cntrl.v
 M_DEPS += ../common/up_dac_common.v
 M_DEPS += ../common/up_dac_channel.v
 M_DEPS += axi_ad9144_channel.v
 M_DEPS += axi_ad9144_core.v
 M_DEPS += axi_ad9144_if.v
 M_DEPS += axi_ad9144.v
-M_DEPS += axi_ad9144_constr.xdc
+M_DEPS += ../common/ad_axi_ip_constr.xdc
 
 M_VIVADO := vivado -mode batch -source
 

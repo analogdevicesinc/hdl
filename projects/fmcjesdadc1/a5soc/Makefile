@@ -8,13 +8,8 @@
 M_DEPS := system_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/a5soc/a5soc_system_assign.tcl
-M_DEPS += system_timing.tcl
-M_DEPS += ../../../library/common/altera/ad_jesd_align.v
-M_DEPS += ../../../library/common/altera/ad_xcvr_rx_rst.v
-M_DEPS += ../common/fmcjesdadc1_spi.v
-M_DEPS += system_constr.sdc
-M_DEPS += system_top.v
-M_DEPS += system_bd.qsys
+M_DEPS += $ad_hdl_dir/projects/scripts/adi_tquest.tcl
+M_DEPS += 0
 
 
 M_ALTERA := quartus_sh --64bit -t 

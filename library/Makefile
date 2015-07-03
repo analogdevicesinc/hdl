@@ -37,6 +37,7 @@ clean:
 	make -C axi_mc_controller clean
 	make -C axi_mc_current_monitor clean
 	make -C axi_mc_speed clean
+	make -C axi_spdif_rx clean
 	make -C axi_spdif_tx clean
 	make -C cn0363/cn0363_dma_sequencer clean
 	make -C cn0363/cn0363_phase_data_sync clean
@@ -57,6 +58,8 @@ clean:
 	make -C util_dacfifo clean
 	make -C util_gmii_to_rgmii clean
 	make -C util_i2c_mixer clean
+	make -C util_jesd_align clean
+	make -C util_jesd_xmit clean
 	make -C util_pmod_adc clean
 	make -C util_pmod_fmeter clean
 	make -C util_rfifo clean
@@ -96,6 +99,7 @@ lib:
 	-make -C axi_mc_controller
 	-make -C axi_mc_current_monitor
 	-make -C axi_mc_speed
+	-make -C axi_spdif_rx
 	-make -C axi_spdif_tx
 	-make -C cn0363/cn0363_dma_sequencer
 	-make -C cn0363/cn0363_phase_data_sync
@@ -116,6 +120,8 @@ lib:
 	-make -C util_dacfifo
 	-make -C util_gmii_to_rgmii
 	-make -C util_i2c_mixer
+	-make -C util_jesd_align
+	-make -C util_jesd_xmit
 	-make -C util_pmod_adc
 	-make -C util_pmod_fmeter
 	-make -C util_rfifo

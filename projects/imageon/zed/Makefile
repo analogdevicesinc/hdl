@@ -17,6 +17,7 @@ M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_rx/axi_hdmi_rx.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_i2s_adi/axi_i2s_adi.xpr
+M_DEPS += ../../../library/axi_spdif_rx/axi_spdif_rx.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
 
@@ -49,6 +50,7 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_rx clean
 	make -C ../../../library/axi_hdmi_tx clean
 	make -C ../../../library/axi_i2s_adi clean
+	make -C ../../../library/axi_spdif_rx clean
 	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/util_i2c_mixer clean
 
@@ -64,6 +66,7 @@ lib:
 	make -C ../../../library/axi_hdmi_rx
 	make -C ../../../library/axi_hdmi_tx
 	make -C ../../../library/axi_i2s_adi
+	make -C ../../../library/axi_spdif_rx
 	make -C ../../../library/axi_spdif_tx
 	make -C ../../../library/util_i2c_mixer
 

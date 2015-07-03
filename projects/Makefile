@@ -13,6 +13,7 @@ all:
 	-make -C ad9467_fmc all
 	-make -C ad9739a_fmc all
 	-make -C adv7511 all
+	-make -C arradio all
 	-make -C cftl_cip all
 	-make -C cftl_std all
 	-make -C cn0363 all
@@ -42,6 +43,7 @@ clean:
 	make -C ad9467_fmc clean
 	make -C ad9739a_fmc clean
 	make -C adv7511 clean
+	make -C arradio clean
 	make -C cftl_cip clean
 	make -C cftl_std clean
 	make -C cn0363 clean
@@ -71,6 +73,7 @@ clean-all:
 	make -C ad9467_fmc clean-all
 	make -C ad9739a_fmc clean-all
 	make -C adv7511 clean-all
+	make -C arradio clean-all
 	make -C cftl_cip clean-all
 	make -C cftl_std clean-all
 	make -C cn0363 clean-all

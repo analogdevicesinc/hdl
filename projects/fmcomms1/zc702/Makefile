@@ -11,7 +11,6 @@ M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/zc702/zc702_system_bd.tcl
-M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../common/fmcomms1_bd.tcl
 M_DEPS += ../../../library/axi_ad9122/axi_ad9122.xpr
 M_DEPS += ../../../library/axi_ad9643/axi_ad9643.xpr
@@ -19,6 +18,8 @@ M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
+M_DEPS += ../../../library/util_cpack/util_cpack.xpr
+M_DEPS += ../../../library/util_upack/util_upack.xpr
 M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
 
 M_VIVADO := vivado -mode batch -source
@@ -51,6 +52,8 @@ clean-all:clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_hdmi_tx clean
 	make -C ../../../library/axi_spdif_tx clean
+	make -C ../../../library/util_cpack clean
+	make -C ../../../library/util_upack clean
 	make -C ../../../library/util_wfifo clean
 
 
@@ -66,6 +69,8 @@ lib:
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_hdmi_tx
 	make -C ../../../library/axi_spdif_tx
+	make -C ../../../library/util_cpack
+	make -C ../../../library/util_upack
 	make -C ../../../library/util_wfifo
 
 ####################################################################################
