@@ -51,3 +51,5 @@ set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25} [get_ports hdmi_iic_rst
 set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports hdmiio_int] ; ## D08 FMC_LPC_LA01_CC_P
 
 set_property  -dict {IOB TRUE} [get_ports {hdmi_rx_data[*] hdmi_tx_data[*]}];
+
+create_clock -period 6.66667  -name hdmi_rx_clk  [get_ports hdmi_rx_clk]
