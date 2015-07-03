@@ -227,10 +227,10 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf (
-    .dio_t ({gpio_t[51:50], gpio_t[48:32]}),
-    .dio_i ({gpio_o[51:50], gpio_o[48:32]}),
-    .dio_o ({gpio_i[51:50], gpio_i[48:32]}),
+  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
+    .dio_t ({gpio_t[52:51], gpio_t[48:32]}),
+    .dio_i ({gpio_o[52:51], gpio_o[48:32]}),
+    .dio_o ({gpio_i[52:51], gpio_i[48:32]}),
     .dio_p ({ gpio_rfpwr_enable,
               gpio_clksel,
               gpio_txnrx,
