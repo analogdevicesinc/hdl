@@ -80,6 +80,7 @@ module system_top (
   hdmi_rx_clk,
   hdmi_rx_data,
   hdmi_rx_int,
+  hdmi_rx_spdif,
 
   hdmi_tx_clk,
   hdmi_tx_data,
@@ -128,6 +129,7 @@ module system_top (
   input           hdmi_rx_clk;
   input   [15:0]  hdmi_rx_data;
   inout           hdmi_rx_int;
+  input           hdmi_rx_spdif;
 
   output          hdmi_tx_clk;
   output  [15:0]  hdmi_tx_data;
@@ -222,6 +224,7 @@ module system_top (
     .ps_intr_10 (1'b0),
     .ps_intr_13 (1'b0),
     .spdif (hdmi_tx_spdif),
+    .spdif_rx (hdmi_rx_spdif),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (),
     .spi0_csn_0_o (),

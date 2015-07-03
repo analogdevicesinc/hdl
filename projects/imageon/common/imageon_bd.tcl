@@ -1,4 +1,8 @@
 
+# define additional ports
+
+create_bd_port -dir I spdif_rx
+
 # adv7511 (reconfigure base design)
 
 set_property CONFIG.PCORE_EMBEDDED_SYNC {1} [get_bd_cells axi_hdmi_core]
@@ -50,8 +54,22 @@ ad_connect  axi_hdmi_rx_core/hdmi_dma_de axi_hdmi_rx_dma/fifo_wr_en
 ad_connect  axi_hdmi_rx_core/hdmi_dma_data axi_hdmi_rx_dma/fifo_wr_din
 ad_connect  axi_hdmi_rx_core/hdmi_dma_ovf axi_hdmi_rx_dma/fifo_wr_overflow
 
+set axi_spdif_rx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_rx:1.0 axi_spdif_rx_core]
+set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_rx_core
+
+set_property -dict [list CONFIG.PCW_USE_DMA1 {1}] $sys_ps7
+set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_rx_core
+
+ad_connect  sys_cpu_clk axi_spdif_rx_core/DMA_REQ_ACLK
+ad_connect  sys_cpu_clk sys_ps7/DMA1_ACLK
+ad_connect  sys_cpu_resetn axi_spdif_rx_core/DMA_REQ_RSTN
+ad_connect  sys_ps7/DMA1_REQ axi_spdif_rx_core/DMA_REQ
+ad_connect  sys_ps7/DMA1_ACK axi_spdif_rx_core/DMA_ACK
+ad_connect  spdif_rx axi_spdif_rx_core/spdif_rx_i
+
 ad_cpu_interconnect 0x43100000 axi_hdmi_rx_core
 ad_cpu_interconnect 0x43C20000 axi_hdmi_rx_dma
+ad_cpu_interconnect 0x75C20000 axi_spdif_rx_core
 
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_hdmi_rx_dma/m_dest_axi
@@ -76,5 +94,4 @@ ad_connect  ila_fifo_dma_rx/probe0 axi_hdmi_rx_dma/fifo_wr_sync
 ad_connect  ila_fifo_dma_rx/probe1 axi_hdmi_rx_dma/fifo_wr_en
 ad_connect  ila_fifo_dma_rx/probe2 axi_hdmi_rx_dma/fifo_wr_din
 ad_connect  ila_fifo_dma_rx/probe3 axi_hdmi_rx_dma/fifo_wr_overflow
-
 
