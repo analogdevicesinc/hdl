@@ -96,8 +96,8 @@ module system_top (
   tx_data_out_p,
   tx_data_out_n,
 
-  txnrx,
-  enable,
+  gpio_txnrx,
+  gpio_enable,
   gpio_resetb,
   gpio_sync,
   gpio_en_agc,
@@ -164,8 +164,8 @@ module system_top (
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
 
-  output          txnrx;
-  output          enable;
+  inout           gpio_txnrx;
+  inout           gpio_enable;
   inout           gpio_resetb;
   inout           gpio_sync;
   inout           gpio_en_agc;
@@ -182,17 +182,6 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-
-  wire            tdd_enable_s;
-  wire            gpio_enable;
-  wire            gpio_txnrx;
-  wire            enable_s;
-  wire            txnrx_s;
-
-  // assignments
-
-  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
-  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
 
   // instantiations
 
@@ -293,10 +282,7 @@ module system_top (
     .tx_data_out_n (tx_data_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
-    .tx_frame_out_p (tx_frame_out_p),
-    .enable (enable_s),
-    .txnrx (txnrx_s),
-    .tdd_enable (tdd_enable_s));
+    .tx_frame_out_p (tx_frame_out_p));
 
 endmodule
 
