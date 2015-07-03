@@ -173,17 +173,22 @@ module system_top (
 
   wire            hdmi_rx_clk;
   wire            hdmi_tx_clk;
+  wire            hdmi_rx_clk_bufio;
 
   wire    [15:0]  hdmi_rx_data;
   reg     [15:0]  hdmi_rx_data_in;
   reg     [15:0]  hdmi_tx_data;
   
-  always @(posedge hdmi_rx_clk) begin
+  always @(posedge hdmi_rx_clk_bufio) begin
     hdmi_rx_data_in <= hdmi_rx_data;
     hdmi_tx_data <= hdmi_rx_data_in;
   end
 
   // instantiations
+
+  BUFIO (
+    .I (hdmi_rx_clk),
+    .O (hdmi_rx_clk_bufio));
 
   ODDR #(.INIT(1'b0)) i_clk_oddr (
     .R (1'b0),
