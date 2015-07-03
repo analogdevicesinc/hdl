@@ -191,7 +191,7 @@ module system_top (
     .CE (1'b1),
     .D1 (1'b1),
     .D2 (1'b0),
-    .C (hdmi_rx_clk),
+    .C (hdmi_rx_clk_bufio),
     .Q (hdmi_tx_clk));
 
   ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi (
