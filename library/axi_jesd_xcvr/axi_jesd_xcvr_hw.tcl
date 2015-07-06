@@ -4,30 +4,20 @@ package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 
-set_module_property NAME axi_ad9680
-set_module_property DESCRIPTION "AXI AD9680 Interface"
+set_module_property NAME axi_jesd_xcvr
+set_module_property DESCRIPTION "AXI JESD XCVR Interface"
 set_module_property VERSION 1.0
-set_module_property DISPLAY_NAME axi_ad9680
+set_module_property DISPLAY_NAME axi_jesd_xcvr
 
 # files
 
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
-set_fileset_property quartus_synth TOP_LEVEL axi_ad9680
-add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
-add_fileset_file ad_pnmon.v           VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
-add_fileset_file ad_datafmt.v         VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
-add_fileset_file up_axi.v             VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
-add_fileset_file up_xfer_cntrl.v      VERILOG PATH $ad_hdl_dir/library/common/up_xfer_cntrl.v
-add_fileset_file up_xfer_status.v     VERILOG PATH $ad_hdl_dir/library/common/up_xfer_status.v
-add_fileset_file up_clock_mon.v       VERILOG PATH $ad_hdl_dir/library/common/up_clock_mon.v
-add_fileset_file up_delay_cntrl.v     VERILOG PATH $ad_hdl_dir/library/common/up_delay_cntrl.v
-add_fileset_file up_adc_common.v      VERILOG PATH $ad_hdl_dir/library/common/up_adc_common.v
-add_fileset_file up_adc_channel.v     VERILOG PATH $ad_hdl_dir/library/common/up_adc_channel.v
-add_fileset_file axi_ad9680_pnmon.v   VERILOG PATH axi_ad9680_pnmon.v
-add_fileset_file axi_ad9680_channel.v VERILOG PATH axi_ad9680_channel.v
-add_fileset_file axi_ad9680_if.v      VERILOG PATH axi_ad9680_if.v
-add_fileset_file axi_ad9680.v         VERILOG PATH axi_ad9680.v TOP_LEVEL_FILE
-add_fileset_file ad_axi_ip_constr.sdc SDC     PATH $ad_hdl_dir/library/common/ad_axi_ip_constr.sdc
+set_fileset_property quartus_synth TOP_LEVEL axi_jesd_xcvr
+add_fileset_file ad_rst.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
+add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
+add_fileset_file up_xcvr.v                VERILOG PATH $ad_hdl_dir/library/common/up_xcvr.v
+add_fileset_file axi_jesd_xcvr.v          VERILOG PATH axi_jesd_xcvr.v TOP_LEVEL_FILE
+add_fileset_file axi_jesd_xcvr_constr.sdc SDC     PATH axi_jesd_xcvr_constr.sdc
 
 # parameters
 
@@ -37,6 +27,27 @@ set_parameter_property PCORE_ID DISPLAY_NAME PCORE_ID
 set_parameter_property PCORE_ID TYPE INTEGER
 set_parameter_property PCORE_ID UNITS None
 set_parameter_property PCORE_ID HDL_PARAMETER true
+
+add_parameter PCORE_DEVICE_TYPE INTEGER 0
+set_parameter_property PCORE_DEVICE_TYPE DEFAULT_VALUE 0
+set_parameter_property PCORE_DEVICE_TYPE DISPLAY_NAME PCORE_DEVICE_TYPE
+set_parameter_property PCORE_DEVICE_TYPE TYPE INTEGER
+set_parameter_property PCORE_DEVICE_TYPE UNITS None
+set_parameter_property PCORE_DEVICE_TYPE HDL_PARAMETER true
+
+add_parameter PCORE_NUM_OF_TX_LANES INTEGER 0
+set_parameter_property PCORE_NUM_OF_TX_LANES DEFAULT_VALUE 0
+set_parameter_property PCORE_NUM_OF_TX_LANES DISPLAY_NAME PCORE_NUM_OF_TX_LANES
+set_parameter_property PCORE_NUM_OF_TX_LANES TYPE INTEGER
+set_parameter_property PCORE_NUM_OF_TX_LANES UNITS None
+set_parameter_property PCORE_NUM_OF_TX_LANES HDL_PARAMETER true
+
+add_parameter PCORE_NUM_OF_RX_LANES INTEGER 0
+set_parameter_property PCORE_NUM_OF_RX_LANES DEFAULT_VALUE 0
+set_parameter_property PCORE_NUM_OF_RX_LANES DISPLAY_NAME PCORE_NUM_OF_RX_LANES
+set_parameter_property PCORE_NUM_OF_RX_LANES TYPE INTEGER
+set_parameter_property PCORE_NUM_OF_RX_LANES UNITS None
+set_parameter_property PCORE_NUM_OF_RX_LANES HDL_PARAMETER true
 
 # axi4 slave
 
@@ -72,23 +83,35 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # transceiver interface
 
+add_interface if_rst reset source
+set_interface_property if_rst associatedClock s_axi_clock
+add_interface_port if_rst rst reset Output 1
+
 add_interface if_rx_clk clock end
 add_interface_port if_rx_clk rx_clk clk Input 1
 
-add_interface if_rx_data avalon_streaming end
-set_interface_property if_rx_data associatedClock if_rx_clk
-set_interface_property if_rx_data dataBitsPerSymbol 128
-add_interface_port if_rx_data rx_data data Input 128
+add_interface if_rx_rst reset source
+set_interface_property if_rx_rst associatedClock if_rx_clk
+add_interface_port if_rx_rst rx_rst reset Output 1
 
-# dma interface
+ad_alt_intf signal  rx_ext_sysref   input   1
+ad_alt_intf signal  rx_sysref       output  1
+ad_alt_intf signal  rx_ip_sync      input   1
+ad_alt_intf signal  rx_sync         output  1
+ad_alt_intf signal  rx_status       input   PCORE_NUM_OF_RX_LANES
 
-ad_alt_intf clock   adc_clock     output  1
-ad_alt_intf signal  adc_valid_0   output  1
-ad_alt_intf signal  adc_enable_0  output  1
-ad_alt_intf signal  adc_data_0    output  64
-ad_alt_intf signal  adc_valid_1   output  1
-ad_alt_intf signal  adc_enable_1  output  1
-ad_alt_intf signal  adc_data_1    output  64
-ad_alt_intf signal  adc_dovf      input   1
-ad_alt_intf signal  adc_dunf      input   1
+add_interface if_tx_clk clock end
+add_interface_port if_tx_clk tx_clk clk Input 1
+
+add_interface if_tx_rst reset source
+set_interface_property if_tx_rst associatedClock if_tx_clk
+add_interface_port if_tx_rst tx_rst reset Output 1
+
+ad_alt_intf signal  tx_ext_sysref   input   1
+ad_alt_intf signal  tx_sysref       output  1
+ad_alt_intf signal  tx_sync         input   1
+ad_alt_intf signal  tx_ip_sync      output  1
+ad_alt_intf signal  tx_status       input   PCORE_NUM_OF_TX_LANES
+
+
 
