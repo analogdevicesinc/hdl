@@ -133,19 +133,21 @@ module up_xcvr (
   reg             up_tx_sync = 'd0;
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
-  reg             rx_sysref_m1 = 'd0;
-  reg             rx_sysref_m2 = 'd0;
-  reg             rx_sysref_m3 = 'd0;
+  reg             rx_sysref_sel_m1 = 'd0;
+  reg             rx_sysref_sel = 'd0;
+  reg             rx_up_sysref_m1 = 'd0;
+  reg             rx_up_sysref = 'd0;
   reg             rx_sysref = 'd0;
-  reg             rx_sync_m1 = 'd0;
-  reg             rx_sync_m2 = 'd0;
+  reg             rx_up_sync_m1 = 'd0;
+  reg             rx_up_sync = 'd0;
   reg             rx_sync = 'd0;
-  reg             tx_sysref_m1 = 'd0;
-  reg             tx_sysref_m2 = 'd0;
-  reg             tx_sysref_m3 = 'd0;
+  reg             tx_sysref_sel_m1 = 'd0;
+  reg             tx_sysref_sel = 'd0;
+  reg             tx_up_sysref_m1 = 'd0;
+  reg             tx_up_sysref = 'd0;
   reg             tx_sysref = 'd0;
-  reg             tx_ip_sync_m1 = 'd0;
-  reg             tx_ip_sync_m2 = 'd0;
+  reg             tx_up_sync_m1 = 'd0;
+  reg             tx_up_sync = 'd0;
   reg             tx_ip_sync = 'd0;
   reg     [ 8:0]  up_rx_status_m1 = 'd0;
   reg     [ 8:0]  up_rx_status = 'd0;
@@ -156,8 +158,6 @@ module up_xcvr (
 
   wire            up_wreq_s;
   wire            up_rreq_s;
-  wire            rx_sysref_s;
-  wire            tx_sysref_s;
 
   // decode block select
 
@@ -236,54 +236,63 @@ module up_xcvr (
   // resets
 
   assign rst = up_reset;
+
   ad_rst i_rx_rst_reg (.preset(up_reset), .clk(rx_clk), .rst(rx_rst));
   ad_rst i_tx_rst_reg (.preset(up_reset), .clk(tx_clk), .rst(tx_rst));
 
   // rx sysref & sync
 
-  assign rx_sysref_s = (up_rx_sysref_sel == 1'b1) ? rx_ext_sysref : up_rx_sysref;
-
   always @(posedge rx_clk or posedge rx_rst) begin
     if (rx_rst == 1'b1) begin
-      rx_sysref_m1 <= 'd0;
-      rx_sysref_m2 <= 'd0;
-      rx_sysref_m3 <= 'd0;
+      rx_sysref_sel_m1 <= 'd0;
+      rx_sysref_sel <= 'd0;
+      rx_up_sysref_m1 <= 'd0;
+      rx_up_sysref <= 'd0;
       rx_sysref <= 'd0;
-      rx_sync_m1 <= 'd0;
-      rx_sync_m2 <= 'd0;
+      rx_up_sync_m1 <= 'd0;
+      rx_up_sync <= 'd0;
       rx_sync <= 'd0;
     end else begin
-      rx_sysref_m1 <= rx_sysref_s;
-      rx_sysref_m2 <= rx_sysref_m1;
-      rx_sysref_m3 <= rx_sysref_m2;
-      rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
-      rx_sync_m1 <= up_rx_sync & rx_ip_sync;
-      rx_sync_m2 <= rx_sync_m1;
-      rx_sync <= rx_sync_m2;
+      rx_sysref_sel_m1 <= up_rx_sysref_sel;
+      rx_sysref_sel <= rx_sysref_sel_m1;
+      rx_up_sysref_m1 <= up_rx_sysref;
+      rx_up_sysref <= rx_up_sysref_m1;
+      if (rx_sysref_sel == 1'b1) begin
+        rx_sysref <= rx_ext_sysref;
+      end else begin
+        rx_sysref <= rx_up_sysref;
+      end
+      rx_up_sync_m1 <= up_rx_sync;
+      rx_up_sync <= rx_up_sync_m1;
+      rx_sync <= rx_up_sync & rx_ip_sync;
     end
   end
 
   // tx sysref & sync
 
-  assign tx_sysref_s = (up_tx_sysref_sel == 1'b1) ? tx_ext_sysref : up_tx_sysref;
-
   always @(posedge tx_clk or posedge tx_rst) begin
     if (tx_rst == 1'b1) begin
-      tx_sysref_m1 <= 'd0;
-      tx_sysref_m2 <= 'd0;
-      tx_sysref_m3 <= 'd0;
+      tx_sysref_sel_m1 <= 'd0;
+      tx_sysref_sel <= 'd0;
+      tx_up_sysref_m1 <= 'd0;
+      tx_up_sysref <= 'd0;
       tx_sysref <= 'd0;
-      tx_ip_sync_m1 <= 'd0;
-      tx_ip_sync_m2 <= 'd0;
+      tx_up_sync_m1 <= 'd0;
+      tx_up_sync <= 'd0;
       tx_ip_sync <= 'd0;
     end else begin
-      tx_sysref_m1 <= tx_sysref_s;
-      tx_sysref_m2 <= tx_sysref_m1;
-      tx_sysref_m3 <= tx_sysref_m2;
-      tx_sysref <= tx_sysref_m2 & ~tx_sysref_m3;
-      tx_ip_sync_m1 <= up_tx_sync & tx_sync;
-      tx_ip_sync_m2 <= tx_ip_sync_m1;
-      tx_ip_sync <= tx_ip_sync_m2;
+      tx_sysref_sel_m1 <= up_tx_sysref_sel;
+      tx_sysref_sel <= tx_sysref_sel_m1;
+      tx_up_sysref_m1 <= up_tx_sysref;
+      tx_up_sysref <= tx_up_sysref_m1;
+      if (tx_sysref_sel == 1'b1) begin
+        tx_sysref <= tx_ext_sysref;
+      end else begin
+        tx_sysref <= tx_up_sysref;
+      end
+      tx_up_sync_m1 <= up_tx_sync;
+      tx_up_sync <= tx_up_sync_m1;
+      tx_ip_sync <= tx_up_sync & tx_sync;
     end
   end
 
@@ -296,9 +305,9 @@ module up_xcvr (
       up_tx_status_m1 <= 'd0;
       up_tx_status <= 'd0;
     end else begin
-      up_rx_status_m1 <= {rx_ip_sync, rx_status};
+      up_rx_status_m1 <= {rx_sync, rx_status};
       up_rx_status <= up_rx_status_m1;
-      up_tx_status_m1 <= {tx_sync, tx_status};
+      up_tx_status_m1 <= {tx_ip_sync, tx_status};
       up_tx_status <= up_tx_status_m1;
     end
   end
