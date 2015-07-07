@@ -151,15 +151,8 @@ module system_top (
 
   // internal registers
 
-  reg               rx_sysref_d1 = 'd0;
-  reg               rx_sysref_d2 = 'd0;
-  reg               rx_sysref = 'd0;
-  reg               rx_sync_m1 = 'd0;
-  reg               rx_sync_m2 = 'd0;
-  reg               rx_sync_up = 'd0;
   reg     [  3:0]   phy_rst_cnt = 0;
   reg               phy_rst_reg = 0;
-
 
   // internal clocks and resets
 
@@ -178,38 +171,6 @@ module system_top (
   wire              spi_miso;
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
-  wire    [ 31:0]   gpio_jesd_i;
-  wire    [ 31:0]   gpio_jesd_o;
-  wire    [  3:0]   rx_ready;
-
-  // jesd sysref
-
-  always @(posedge sys_clk or negedge sys_resetn) begin
-    if (sys_resetn == 1'b0) begin
-      rx_sysref_d1 <= 'd0;
-      rx_sysref_d2 <= 'd0;
-      rx_sysref <= 'd0;
-      rx_sync_m1 = 'd0;
-      rx_sync_m2 = 'd0;
-      rx_sync_up = 'd0;
-    end else begin
-      rx_sysref_d1 <= gpio_jesd_i[13];
-      rx_sysref_d2 <= rx_sysref_d1;
-      rx_sysref <= rx_sysref_d1 & ~rx_sysref_d2;
-      rx_sync_m1 = rx_sync;
-      rx_sync_m2 = rx_sync_m1;
-      rx_sync_up = rx_sync_m2;
-    end
-  end
-
-  assign gpio_jesd_i[31:24] = gpio_jesd_o[31:24];
-  assign gpio_jesd_i[23:16] = 8'd0;
-  assign gpio_jesd_i[15:15] = gpio_jesd_o[15];
-  assign gpio_jesd_i[14:14] = rx_sync_up;
-  assign gpio_jesd_i[13:13] = gpio_jesd_o[13];
-  assign gpio_jesd_i[12: 8] = 5'd0;
-  assign gpio_jesd_i[ 7: 4] = 4'hf;
-  assign gpio_jesd_i[ 3: 0] = rx_ready;
 
   // ethernet transmit clock
 
@@ -252,6 +213,11 @@ module system_top (
     .dataout (eth_tx_clk_out));
 
   system_bd i_system_bd (
+		.rx_data_rx_serial_data (rx_data),
+    .rx_ip_sysref_export (rx_sysref),
+    .rx_ref_clk_clk (ref_clk),
+    .rx_sync_rx_sync (rx_sync),
+    .rx_sysref_export (rx_sysref),
     .sys_125m_clk_clk (sys_125m_clk),
     .sys_25m_clk_clk (sys_25m_clk),
     .sys_2m5_clk_clk (sys_2m5_clk),
@@ -290,20 +256,12 @@ module system_top (
     .sys_gpio_out_port (gpio_o[63:32]),
     .sys_gpio_bd_in_port (gpio_i[31:0]),
     .sys_gpio_bd_out_port (gpio_o[31:0]),
-    .sys_gpio_jesd_in_port (gpio_jesd_i[31:0]),
-    .sys_gpio_jesd_out_port (gpio_jesd_o[31:0]),
     .sys_pll_locked_export (sys_pll_locked),
     .sys_reset_reset_n (sys_resetn),
     .sys_spi_MISO (spi_miso),
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn),
-    .sys_xcvr_reset_reset (gpio_jesd_o[15]),
-    .sys_xcvr_rstcntrl_rx_ready_rx_ready (rx_ready),
-    .sys_xcvr_rx_ref_clk_clk (ref_clk),
-    .sys_xcvr_rx_sync_n_export (rx_sync),
-    .sys_xcvr_rx_sysref_export (rx_sysref),
-		.sys_xcvr_rxd_rx_serial_data (rx_data));
+    .sys_spi_SS_n (spi_csn));
 
 endmodule
 
