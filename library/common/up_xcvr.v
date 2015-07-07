@@ -296,9 +296,9 @@ module up_xcvr (
       up_tx_status_m1 <= 'd0;
       up_tx_status <= 'd0;
     end else begin
-      up_rx_status_m1 <= {rx_sync, rx_status};
+      up_rx_status_m1 <= {rx_ip_sync, rx_status};
       up_rx_status <= up_rx_status_m1;
-      up_tx_status_m1 <= {tx_ip_sync, tx_status};
+      up_tx_status_m1 <= {tx_sync, tx_status};
       up_tx_status <= up_tx_status_m1;
     end
   end

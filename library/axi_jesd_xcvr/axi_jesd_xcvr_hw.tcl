@@ -36,14 +36,14 @@ set_parameter_property PCORE_DEVICE_TYPE UNITS None
 set_parameter_property PCORE_DEVICE_TYPE HDL_PARAMETER true
 
 add_parameter PCORE_NUM_OF_TX_LANES INTEGER 0
-set_parameter_property PCORE_NUM_OF_TX_LANES DEFAULT_VALUE 0
+set_parameter_property PCORE_NUM_OF_TX_LANES DEFAULT_VALUE 4
 set_parameter_property PCORE_NUM_OF_TX_LANES DISPLAY_NAME PCORE_NUM_OF_TX_LANES
 set_parameter_property PCORE_NUM_OF_TX_LANES TYPE INTEGER
 set_parameter_property PCORE_NUM_OF_TX_LANES UNITS None
 set_parameter_property PCORE_NUM_OF_TX_LANES HDL_PARAMETER true
 
 add_parameter PCORE_NUM_OF_RX_LANES INTEGER 0
-set_parameter_property PCORE_NUM_OF_RX_LANES DEFAULT_VALUE 0
+set_parameter_property PCORE_NUM_OF_RX_LANES DEFAULT_VALUE 4
 set_parameter_property PCORE_NUM_OF_RX_LANES DISPLAY_NAME PCORE_NUM_OF_RX_LANES
 set_parameter_property PCORE_NUM_OF_RX_LANES TYPE INTEGER
 set_parameter_property PCORE_NUM_OF_RX_LANES UNITS None
@@ -95,10 +95,10 @@ set_interface_property if_rx_rst associatedClock if_rx_clk
 add_interface_port if_rx_rst rx_rst reset Output 1
 
 ad_alt_intf signal  rx_ext_sysref   input   1
-ad_alt_intf signal  rx_sysref       output  1
-ad_alt_intf signal  rx_ip_sync      input   1
+ad_alt_intf signal  rx_sysref       output  1 export
+ad_alt_intf signal  rx_ip_sync      input   1 export
 ad_alt_intf signal  rx_sync         output  1
-ad_alt_intf signal  rx_status       input   PCORE_NUM_OF_RX_LANES
+ad_alt_intf signal  rx_status       input   PCORE_NUM_OF_RX_LANES rx_ready
 
 add_interface if_tx_clk clock end
 add_interface_port if_tx_clk tx_clk clk Input 1
@@ -108,10 +108,10 @@ set_interface_property if_tx_rst associatedClock if_tx_clk
 add_interface_port if_tx_rst tx_rst reset Output 1
 
 ad_alt_intf signal  tx_ext_sysref   input   1
-ad_alt_intf signal  tx_sysref       output  1
+ad_alt_intf signal  tx_sysref       output  1 export
 ad_alt_intf signal  tx_sync         input   1
-ad_alt_intf signal  tx_ip_sync      output  1
-ad_alt_intf signal  tx_status       input   PCORE_NUM_OF_TX_LANES
+ad_alt_intf signal  tx_ip_sync      output  1 export
+ad_alt_intf signal  tx_status       input   PCORE_NUM_OF_TX_LANES tx_ready
 
 
 
