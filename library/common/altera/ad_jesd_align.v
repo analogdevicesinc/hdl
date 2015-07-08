@@ -60,44 +60,45 @@ module ad_jesd_align (
 
   // internal registers
 
+  reg     [ 3:0]  rx_ip_sof_p;
+  reg     [31:0]  rx_ip_data_p;
   reg     [31:0]  rx_ip_data_d = 'd0;
   reg     [ 3:0]  rx_ip_sof_hold = 'd0;
   reg             rx_sof = 'd0;
   reg     [31:0]  rx_data = 'd0;
 
+  // internal signals
+
+
   // dword may contain more than one frame per clock
+  
+  always @(posedge rx_clk) begin
+    rx_ip_sof_p[3] <= rx_ip_sof[0];
+    rx_ip_sof_p[2] <= rx_ip_sof[1];
+    rx_ip_sof_p[1] <= rx_ip_sof[2];
+    rx_ip_sof_p[0] <= rx_ip_sof[3];
+    rx_ip_data_p[31:24] <= rx_ip_data[ 7: 0];
+    rx_ip_data_p[23:16] <= rx_ip_data[15: 8];
+    rx_ip_data_p[15: 8] <= rx_ip_data[23:16];
+    rx_ip_data_p[ 7: 0] <= rx_ip_data[31:24];
+  end
 
   always @(posedge rx_clk) begin
-    rx_ip_data_d <= rx_ip_data;
-    if (rx_ip_sof != 4'd0) begin
-      rx_ip_sof_hold <= rx_ip_sof;
+    rx_ip_data_d <= rx_ip_data_p;
+    if (rx_ip_sof_p != 4'd0) begin
+      rx_ip_sof_hold <= rx_ip_sof_p;
     end
-    rx_sof <= |rx_ip_sof;
-    if (rx_ip_sof_hold[3] == 1'b1) begin
-      rx_data[31:24] <= rx_ip_data[ 7: 0];
-      rx_data[23:16] <= rx_ip_data[15: 8];
-      rx_data[15: 8] <= rx_ip_data[23:16];
-      rx_data[ 7: 0] <= rx_ip_data[31:24];
-    end else if (rx_ip_sof_hold[2] == 1'b1) begin
-      rx_data[31:24] <= rx_ip_data[31:24];
-      rx_data[23:16] <= rx_ip_data_d[ 7: 0];
-      rx_data[15: 8] <= rx_ip_data_d[15: 8];
-      rx_data[ 7: 0] <= rx_ip_data_d[23:16];
+    rx_sof <= |rx_ip_sof_p;
+    if (rx_ip_sof_hold[0] == 1'b1) begin
+      rx_data <= rx_ip_data_p;
     end else if (rx_ip_sof_hold[1] == 1'b1) begin
-      rx_data[31:24] <= rx_ip_data[23:16];
-      rx_data[23:16] <= rx_ip_data[31:24];
-      rx_data[15: 8] <= rx_ip_data_d[ 7: 0];
-      rx_data[ 7: 0] <= rx_ip_data_d[15: 8];
-    end else if (rx_ip_sof_hold[0] == 1'b1) begin
-      rx_data[31:24] <= rx_ip_data[15: 8];
-      rx_data[23:16] <= rx_ip_data[23:16];
-      rx_data[15: 8] <= rx_ip_data[31:24];
-      rx_data[ 7: 0] <= rx_ip_data_d[ 7: 0];
+      rx_data <= {rx_ip_data_p[ 7:0], rx_ip_data_d[31: 8]};
+    end else if (rx_ip_sof_hold[2] == 1'b1) begin
+      rx_data <= {rx_ip_data_p[15:0], rx_ip_data_d[31:16]};
+    end else if (rx_ip_sof_hold[3] == 1'b1) begin
+      rx_data <= {rx_ip_data_p[23:0], rx_ip_data_d[31:24]};
     end else begin
-      rx_data[31:24] <= 8'd0;
-      rx_data[23:16] <= 8'd0;
-      rx_data[15: 8] <= 8'd0;
-      rx_data[ 7: 0] <= 8'd0;
+      rx_data <= 8'd0;
     end
   end
 
