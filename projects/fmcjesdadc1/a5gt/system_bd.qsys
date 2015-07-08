@@ -2021,12 +2021,10 @@
  <module name="util_cpack_0" kind="util_cpack" version="1.0" enabled="1">
   <parameter name="CH_CNT" value="2" />
   <parameter name="CH_DW" value="32" />
-  <parameter name="ST_DEPTH" value="1024" />
  </module>
  <module name="util_cpack_1" kind="util_cpack" version="1.0" enabled="1">
   <parameter name="CH_CNT" value="2" />
   <parameter name="CH_DW" value="32" />
-  <parameter name="ST_DEPTH" value="1024" />
  </module>
  <module
    name="util_jesd_align_0"

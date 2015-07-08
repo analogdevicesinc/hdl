@@ -8,7 +8,6 @@ source $ad_hdl_dir/projects/common/a5gt/a5gt_system_assign.tcl
 
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
-set_global_assignment -name QSYS_FILE system_stap.qsys
 
 # reference clock
 
@@ -59,7 +58,7 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_sdio
 
 set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_cntrl
 set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_status
-set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity top_level
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xcvr
 
 execute_flow -compile
 
