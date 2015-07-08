@@ -43,6 +43,7 @@ module util_gmii_to_rgmii (
   clk_20m,
   clk_25m,
   clk_125m,
+  idelayctrl_clk,
 
   reset,
 
@@ -69,10 +70,14 @@ module util_gmii_to_rgmii (
   gmii_rx_clk);
 
   parameter PHY_AD = 5'b10000;
+  parameter IODELAY_CTRL = 1'b0;
+  parameter IDELAY_VALUE = 18;
+  parameter IODELAY_GROUP = "if_delay_group";
 
   input           clk_20m;
   input           clk_25m;
   input           clk_125m;
+  input           idelayctrl_clk;
 
   input           reset;
 
@@ -128,6 +133,9 @@ module util_gmii_to_rgmii (
   reg  [ 7:0]     gmii_rxd;
   reg             gmii_rx_dv;
   reg             gmii_rx_er;
+
+  reg             idelayctrl_reset;
+  reg [ 3:0]      idelay_reset_cnt;
 
   assign gigabit        = speed_selection [1];
   assign gmii_tx_clk    = gmii_tx_clk_s;
@@ -236,11 +244,13 @@ module util_gmii_to_rgmii (
     .I(rgmii_rxc),
     .O(gmii_rx_clk));
 
+  (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYE2 #(
     .IDELAY_TYPE("FIXED"),
     .HIGH_PERFORMANCE_MODE("TRUE"),
     .REFCLK_FREQUENCY(200.0),
     .SIGNAL_PATTERN("DATA"),
+    .IDELAY_VALUE (IDELAY_VALUE),
     .DELAY_SRC("IDATAIN")
   ) delay_rgmii_rx_ctl (
     .IDATAIN(rgmii_rx_ctl),
@@ -258,11 +268,13 @@ module util_gmii_to_rgmii (
 
   generate
   for (i = 0; i < 4; i = i + 1) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
     IDELAYE2 #(
       .IDELAY_TYPE("FIXED"),
       .HIGH_PERFORMANCE_MODE("TRUE"),
       .REFCLK_FREQUENCY(200.0),
       .SIGNAL_PATTERN("DATA"),
+      .IDELAY_VALUE (IDELAY_VALUE),
       .DELAY_SRC("IDATAIN")
     ) delay_rgmii_rd (
       .IDATAIN(rgmii_rd[i]),
@@ -310,5 +322,45 @@ module util_gmii_to_rgmii (
       .mdio_in_r(mdio_in_r),
       .speed_select(speed_selection),
       .duplex_mode(duplex_mode));
+
+  // DELAY CONTROLLER
+  generate
+  if (IODELAY_CTRL == 1'b1) begin
+    always @(posedge idelayctrl_clk) begin
+      if (reset == 1'b1) begin
+        idelay_reset_cnt <= 4'h0;
+        idelayctrl_reset <= 1'b1;
+      end else begin
+        idelayctrl_reset <= 1'b1;
+        case (idelay_reset_cnt)
+          4'h0: idelay_reset_cnt <= 4'h1;
+          4'h1: idelay_reset_cnt <= 4'h2;
+          4'h2: idelay_reset_cnt <= 4'h3;
+          4'h3: idelay_reset_cnt <= 4'h4;
+          4'h4: idelay_reset_cnt <= 4'h5;
+          4'h5: idelay_reset_cnt <= 4'h6;
+          4'h6: idelay_reset_cnt <= 4'h7;
+          4'h7: idelay_reset_cnt <= 4'h8;
+          4'h8: idelay_reset_cnt <= 4'h9;
+          4'h9: idelay_reset_cnt <= 4'ha;
+          4'ha: idelay_reset_cnt <= 4'hb;
+          4'hb: idelay_reset_cnt <= 4'hc;
+          4'hc: idelay_reset_cnt <= 4'hd;
+          4'hd: idelay_reset_cnt <= 4'he;
+          default: begin
+            idelay_reset_cnt <= 4'he;
+            idelayctrl_reset <= 1'b0;
+          end
+        endcase
+      end
+    end
+
+    (* IODELAY_GROUP = IODELAY_GROUP *)
+    IDELAYCTRL dlyctrl (
+      .RDY(),
+      .REFCLK(idelayctrl_clk),
+      .RST(idelayctrl_reset));
+  end
+  endgenerate
 
 endmodule

@@ -271,15 +271,9 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  wire            refclk;
-  wire            refclk_rst;
-
   wire            eth_mdio_o;
   wire            eth_mdio_i;
   wire            eth_mdio_t;
-
-  reg             idelayctrl_reset;
-  reg [ 3:0]      idelay_reset_cnt;
 
   // assignments
 
@@ -322,40 +316,6 @@ module system_top (
       .dio_i(eth_mdio_o),
       .dio_o(eth_mdio_i),
       .dio_p(eth_mdio_p));
-
-    always @(posedge refclk) begin
-      if (refclk_rst == 1'b1) begin
-        idelay_reset_cnt <= 4'h0;
-        idelayctrl_reset <= 1'b1;
-      end else begin
-        idelayctrl_reset <= 1'b1;
-        case (idelay_reset_cnt)
-          4'h0: idelay_reset_cnt <= 4'h1;
-          4'h1: idelay_reset_cnt <= 4'h2;
-          4'h2: idelay_reset_cnt <= 4'h3;
-          4'h3: idelay_reset_cnt <= 4'h4;
-          4'h4: idelay_reset_cnt <= 4'h5;
-          4'h5: idelay_reset_cnt <= 4'h6;
-          4'h6: idelay_reset_cnt <= 4'h7;
-          4'h7: idelay_reset_cnt <= 4'h8;
-          4'h8: idelay_reset_cnt <= 4'h9;
-          4'h9: idelay_reset_cnt <= 4'ha;
-          4'ha: idelay_reset_cnt <= 4'hb;
-          4'hb: idelay_reset_cnt <= 4'hc;
-          4'hc: idelay_reset_cnt <= 4'hd;
-          4'hd: idelay_reset_cnt <= 4'he;
-          default: begin
-            idelay_reset_cnt <= 4'he;
-            idelayctrl_reset <= 1'b0;
-          end
-        endcase
-      end
-    end
-
-    IDELAYCTRL dlyctrl (
-      .RDY(),
-      .REFCLK(refclk),
-      .RST(idelayctrl_reset));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -475,8 +435,6 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .refclk(refclk),
-    .refclk_rst(refclk_rst),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
