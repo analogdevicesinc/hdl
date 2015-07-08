@@ -8,7 +8,6 @@
 M_DEPS := util_cpack_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/altera/system_stap.v
 M_DEPS += util_cpack_mux.v
 M_DEPS += util_cpack_dsf.v
 M_DEPS += util_cpack.v
