@@ -15,6 +15,41 @@ proc ad_alt_intf {type name dir width {remap ""}} {
     return
   }
 
+  if {(($type eq "reset") && ($dir eq "input"))} {
+    add_interface if_${name} reset sink
+    add_interface_port if_${name} ${name} reset ${dir} ${width}
+    set_interface_property if_${name} associatedclock if_${remap}
+    return
+  }
+
+  if {(($type eq "reset") && ($dir eq "output"))} {
+    add_interface if_${name} reset source
+    add_interface_port if_${name} ${name} reset ${dir} ${width}
+    set_interface_property if_${name} associatedclock if_${remap}
+    return
+  }
+
+  if {(($type eq "reset-n") && ($dir eq "input"))} {
+    add_interface if_${name} reset sink
+    add_interface_port if_${name} ${name} reset_n ${dir} ${width}
+    set_interface_property if_${name} associatedclock if_${remap}
+    return
+  }
+
+  if {(($type eq "reset-n") && ($dir eq "output"))} {
+    add_interface if_${name} reset source
+    add_interface_port if_${name} ${name} reset_n ${dir} ${width}
+    set_interface_property if_${name} associatedclock if_${remap}
+    return
+  }
+
+  if {(($type eq "intr") && ($dir eq "output"))} {
+    add_interface if_${name} interrupt source
+    add_interface_port if_${name} ${name} irq ${dir} ${width}
+    set_interface_property if_${name} associatedclock if_${remap}
+    return
+  }
+
   if {$remap eq ""} {
     set remap $name
   }
