@@ -27,7 +27,9 @@ create_bd_port -dir I -from 255 -to 0 adc_ddata
 # adc peripherals
 
 set axi_ad9680_core_0 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core_0]
+set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9680_core_0
 set axi_ad9680_core_1 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core_1]
+set_property -dict [list CONFIG.PCORE_ID {1}] $axi_ad9680_core_1
 
 set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.0 axi_ad9680_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
