@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags="INTERNAL_COMPONENT=true"
+   categories="" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element $${FILENAME}
+   {
+   }
+   element xcvr_atx_pll_a10_0
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="device" value="10AX115S3F45I2SGE2" />
+ <parameter name="deviceFamily" value="Arria 10" />
+ <parameter name="deviceSpeedGrade" value="2" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="true" />
+ <parameter name="lockedInterfaceDefinition" value="" />
+ <parameter name="maxAdditionalLatency" value="1" />
+ <parameter name="projectName" value="" />
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="false" />
+ <instanceScript></instanceScript>
+ <interface
+   name="pll_cal_busy"
+   internal="xcvr_atx_pll_a10_0.pll_cal_busy"
+   type="conduit"
+   dir="end">
+  <port name="pll_cal_busy" internal="pll_cal_busy" />
+ </interface>
+ <interface
+   name="pll_locked"
+   internal="xcvr_atx_pll_a10_0.pll_locked"
+   type="conduit"
+   dir="end">
+  <port name="pll_locked" internal="pll_locked" />
+ </interface>
+ <interface
+   name="pll_powerdown"
+   internal="xcvr_atx_pll_a10_0.pll_powerdown"
+   type="conduit"
+   dir="end">
+  <port name="pll_powerdown" internal="pll_powerdown" />
+ </interface>
+ <interface
+   name="pll_refclk0"
+   internal="xcvr_atx_pll_a10_0.pll_refclk0"
+   type="clock"
+   dir="end">
+  <port name="pll_refclk0" internal="pll_refclk0" />
+ </interface>
+ <interface
+   name="tx_serial_clk"
+   internal="xcvr_atx_pll_a10_0.tx_serial_clk"
+   type="hssi_serial_clock"
+   dir="start">
+  <port name="tx_serial_clk" internal="tx_serial_clk" />
+ </interface>
+ <module
+   name="xcvr_atx_pll_a10_0"
+   kind="altera_xcvr_atx_pll_a10"
+   version="15.0"
+   enabled="1"
+   autoexport="1">
+  <parameter name="base_device" value="NIGHTFURY5ES2" />
+  <parameter name="bw_sel" value="medium" />
+  <parameter name="device" value="10AX115S3F45I2SGE2" />
+  <parameter name="device_family" value="Arria 10" />
+  <parameter name="enable_16G_path" value="0" />
+  <parameter name="enable_8G_path" value="1" />
+  <parameter name="enable_atx_to_fpll_cascade_out" value="0" />
+  <parameter name="enable_bonding_clks" value="0" />
+  <parameter name="enable_cascade_out" value="0" />
+  <parameter name="enable_debug_ports_parameters" value="0" />
+  <parameter name="enable_fb_comp_bonding" value="0" />
+  <parameter name="enable_fractional" value="0" />
+  <parameter name="enable_hfreq_clk" value="0" />
+  <parameter name="enable_hip_cal_done_port" value="0" />
+  <parameter name="enable_manual_configuration" value="1" />
+  <parameter name="enable_mcgb" value="0" />
+  <parameter name="enable_mcgb_pcie_clksw" value="0" />
+  <parameter name="enable_pcie_clk" value="0" />
+  <parameter name="enable_pld_atx_cal_busy_port" value="1" />
+  <parameter name="enable_pld_mcgb_cal_busy_port" value="0" />
+  <parameter name="enable_pll_reconfig" value="0" />
+  <parameter name="generate_add_hdl_instance_example" value="0" />
+  <parameter name="generate_docs" value="1" />
+  <parameter name="mcgb_aux_clkin_cnt" value="0" />
+  <parameter name="mcgb_div" value="1" />
+  <parameter name="message_level" value="error" />
+  <parameter name="pma_width" value="64" />
+  <parameter name="primary_pll_buffer">GX clock output buffer</parameter>
+  <parameter name="prot_mode" value="Basic" />
+  <parameter name="rcfg_debug" value="0" />
+  <parameter name="rcfg_file_prefix">altera_xcvr_atx_pll_a10</parameter>
+  <parameter name="rcfg_h_file_enable" value="0" />
+  <parameter name="rcfg_jtag_enable" value="0" />
+  <parameter name="rcfg_mif_file_enable" value="0" />
+  <parameter name="rcfg_multi_enable" value="0" />
+  <parameter name="rcfg_param_vals1" value="" />
+  <parameter name="rcfg_param_vals2" value="" />
+  <parameter name="rcfg_profile_cnt" value="2" />
+  <parameter name="rcfg_profile_select" value="1" />
+  <parameter name="rcfg_sv_file_enable" value="0" />
+  <parameter name="rcfg_txt_file_enable" value="0" />
+  <parameter name="refclk_cnt" value="1" />
+  <parameter name="refclk_index" value="0" />
+  <parameter name="select_manual_config" value="false" />
+  <parameter name="set_altera_xcvr_atx_pll_a10_calibration_en" value="1" />
+  <parameter name="set_auto_reference_clock_frequency" value="500.0" />
+  <parameter name="set_capability_reg_enable" value="0" />
+  <parameter name="set_csr_soft_logic_enable" value="0" />
+  <parameter name="set_fref_clock_frequency" value="100.0" />
+  <parameter name="set_hip_cal_en" value="0" />
+  <parameter name="set_k_counter" value="1" />
+  <parameter name="set_l_cascade_counter" value="4" />
+  <parameter name="set_l_counter" value="4" />
+  <parameter name="set_m_counter" value="50" />
+  <parameter name="set_manual_reference_clock_frequency" value="100.0" />
+  <parameter name="set_output_clock_frequency" value="5000.0" />
+  <parameter name="set_ref_clk_div" value="1" />
+  <parameter name="set_user_identifier" value="0" />
+  <parameter name="silicon_rev" value="false" />
+  <parameter name="support_mode" value="user_mode" />
+  <parameter name="test_mode" value="0" />
+ </module>
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
+</system>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags="INTERNAL_COMPONENT=true"
+   categories="" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element $${FILENAME}
+   {
+   }
+   element xcvr_reset_control_0
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="device" value="10AX115S3F45I2SGE2" />
+ <parameter name="deviceFamily" value="Arria 10" />
+ <parameter name="deviceSpeedGrade" value="2" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="true" />
+ <parameter name="lockedInterfaceDefinition" value="" />
+ <parameter name="maxAdditionalLatency" value="1" />
+ <parameter name="projectName" value="" />
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="false" />
+ <instanceScript></instanceScript>
+ <interface
+   name="clock"
+   internal="xcvr_reset_control_0.clock"
+   type="clock"
+   dir="end">
+  <port name="clock" internal="clock" />
+ </interface>
+ <interface
+   name="pll_locked"
+   internal="xcvr_reset_control_0.pll_locked"
+   type="conduit"
+   dir="end">
+  <port name="pll_locked" internal="pll_locked" />
+ </interface>
+ <interface
+   name="pll_powerdown"
+   internal="xcvr_reset_control_0.pll_powerdown"
+   type="conduit"
+   dir="end">
+  <port name="pll_powerdown" internal="pll_powerdown" />
+ </interface>
+ <interface
+   name="pll_select"
+   internal="xcvr_reset_control_0.pll_select"
+   type="conduit"
+   dir="end">
+  <port name="pll_select" internal="pll_select" />
+ </interface>
+ <interface
+   name="reset"
+   internal="xcvr_reset_control_0.reset"
+   type="reset"
+   dir="end">
+  <port name="reset" internal="reset" />
+ </interface>
+ <interface
+   name="rx_analogreset"
+   internal="xcvr_reset_control_0.rx_analogreset"
+   type="conduit"
+   dir="end">
+  <port name="rx_analogreset" internal="rx_analogreset" />
+ </interface>
+ <interface
+   name="rx_cal_busy"
+   internal="xcvr_reset_control_0.rx_cal_busy"
+   type="conduit"
+   dir="end">
+  <port name="rx_cal_busy" internal="rx_cal_busy" />
+ </interface>
+ <interface
+   name="rx_digitalreset"
+   internal="xcvr_reset_control_0.rx_digitalreset"
+   type="conduit"
+   dir="end">
+  <port name="rx_digitalreset" internal="rx_digitalreset" />
+ </interface>
+ <interface
+   name="rx_is_lockedtodata"
+   internal="xcvr_reset_control_0.rx_is_lockedtodata"
+   type="conduit"
+   dir="end">
+  <port name="rx_is_lockedtodata" internal="rx_is_lockedtodata" />
+ </interface>
+ <interface
+   name="rx_ready"
+   internal="xcvr_reset_control_0.rx_ready"
+   type="conduit"
+   dir="end">
+  <port name="rx_ready" internal="rx_ready" />
+ </interface>
+ <interface
+   name="tx_analogreset"
+   internal="xcvr_reset_control_0.tx_analogreset"
+   type="conduit"
+   dir="end">
+  <port name="tx_analogreset" internal="tx_analogreset" />
+ </interface>
+ <interface
+   name="tx_cal_busy"
+   internal="xcvr_reset_control_0.tx_cal_busy"
+   type="conduit"
+   dir="end">
+  <port name="tx_cal_busy" internal="tx_cal_busy" />
+ </interface>
+ <interface
+   name="tx_digitalreset"
+   internal="xcvr_reset_control_0.tx_digitalreset"
+   type="conduit"
+   dir="end">
+  <port name="tx_digitalreset" internal="tx_digitalreset" />
+ </interface>
+ <interface
+   name="tx_ready"
+   internal="xcvr_reset_control_0.tx_ready"
+   type="conduit"
+   dir="end">
+  <port name="tx_ready" internal="tx_ready" />
+ </interface>
+ <module
+   name="xcvr_reset_control_0"
+   kind="altera_xcvr_reset_control"
+   version="15.0"
+   enabled="1"
+   autoexport="1">
+  <parameter name="CHANNELS" value="4" />
+  <parameter name="PLLS" value="1" />
+  <parameter name="REDUCED_SIM_TIME" value="1" />
+  <parameter name="RX_ENABLE" value="1" />
+  <parameter name="RX_PER_CHANNEL" value="0" />
+  <parameter name="SYNCHRONIZE_PLL_RESET" value="0" />
+  <parameter name="SYNCHRONIZE_RESET" value="1" />
+  <parameter name="SYS_CLK_IN_MHZ" value="100" />
+  <parameter name="TX_ENABLE" value="1" />
+  <parameter name="TX_PER_CHANNEL" value="0" />
+  <parameter name="TX_PLL_ENABLE" value="1" />
+  <parameter name="T_PLL_LOCK_HYST" value="0" />
+  <parameter name="T_PLL_POWERDOWN" value="1000" />
+  <parameter name="T_RX_ANALOGRESET" value="40" />
+  <parameter name="T_RX_DIGITALRESET" value="4000" />
+  <parameter name="T_TX_DIGITALRESET" value="20" />
+  <parameter name="device_family" value="Arria 10" />
+  <parameter name="gui_pll_cal_busy" value="0" />
+  <parameter name="gui_rx_auto_reset" value="0" />
+  <parameter name="gui_split_interfaces" value="0" />
+  <parameter name="gui_tx_auto_reset" value="0" />
+ </module>
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
+</system>
