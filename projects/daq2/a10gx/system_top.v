@@ -239,10 +239,13 @@ module system_top (
     .dio_p (gpio_bd));
 
   system_bd i_system_bd (
-    .rx_data_rx_serial_data (rx_data),
+    .rx_data_rx_d (rx_data),
     .rx_ref_clk_clk (rx_ref_clk),
     .rx_sync_rx_sync (rx_sync),
     .rx_sysref_rx_ext_sysref (rx_sysref),
+    .stp_clk_clk (),
+    .stp_data_stp_data (),
+    .stp_trigger_stp_trigger (),
     .sys_clk_clk (sys_clk),
     .sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
     .sys_ddr3_cntrl_mem_mem_ck_n (ddr3_clk_n),
@@ -277,7 +280,7 @@ module system_top (
     .sys_spi_MOSI (spi_mosi_s),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
-    .tx_data_tx_serial_data (tx_data),
+    .tx_data_tx_d (tx_data),
     .tx_ref_clk_clk (tx_ref_clk),
     .tx_sync_tx_sync (tx_sync),
     .tx_sysref_tx_ext_sysref (tx_sysref));
