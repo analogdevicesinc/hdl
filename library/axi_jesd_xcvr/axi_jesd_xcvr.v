@@ -39,29 +39,24 @@
 
 module axi_jesd_xcvr (
 
-  // common reset
-
-  rst,
-
   // receive interface
 
+  rx_ref_clk,
+  rx_d,
   rx_clk,
-  rx_rst,
   rx_ext_sysref,
-  rx_sysref,
-  rx_ip_sync,
   rx_sync,
-  rx_status,
+  rx_sof,
+  rx_data,
 
   // transmit interface
 
+  tx_ref_clk,
+  tx_d,
   tx_clk,
-  tx_rst,
   tx_ext_sysref,
-  tx_sysref,
   tx_sync,
-  tx_ip_sync,
-  tx_status,
+  tx_data,
 
   // axi-lite (slave)
 
@@ -85,77 +80,98 @@ module axi_jesd_xcvr (
   s_axi_rvalid,
   s_axi_rdata,
   s_axi_rresp,
-  s_axi_rready);
+  s_axi_rready,
+
+  // signal tap interface
+
+  stp_clk,
+  stp_data,
+  stp_trigger);
 
   parameter   PCORE_ID = 0;
   parameter   PCORE_DEVICE_TYPE = 0;
   parameter   PCORE_NUM_OF_TX_LANES = 4;
   parameter   PCORE_NUM_OF_RX_LANES = 4;
-
-  // common reset
-
-  output                                  rst;
+  parameter   PCORE_ST_DATA_WIDTH = 32;
+  parameter   PCORE_ST_TRIGGER_WIDTH = 4;
 
   // receive interface
 
-  input                                   rx_clk;
-  output                                  rx_rst;
-  input                                   rx_ext_sysref;
-  output                                  rx_sysref;
-  input                                   rx_ip_sync;
-  output                                  rx_sync;
-  input   [(PCORE_NUM_OF_RX_LANES-1):0]   rx_status;
+  input                                         rx_ref_clk;
+  input   [(PCORE_NUM_OF_RX_LANES-1):0]         rx_d;
+  output                                        rx_clk;
+  input                                         rx_ext_sysref;
+  output                                        rx_sync;
+  output  [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_sof;
+  output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_data;
 
   // transmit interface
 
-  input                                   tx_clk;
-  output                                  tx_rst;
-  input                                   tx_ext_sysref;
-  output                                  tx_sysref;
-  input                                   tx_sync;
-  output                                  tx_ip_sync;
-  input   [(PCORE_NUM_OF_RX_LANES-1):0]   tx_status;
+  input                                         tx_ref_clk;
+  output  [(PCORE_NUM_OF_TX_LANES-1):0]         tx_d;
+  output                                        tx_clk;
+  input                                         tx_ext_sysref;
+  input                                         tx_sync;
+  input   [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_data;
 
   // axi interface
 
-  input                                   s_axi_aclk;        
-  input                                   s_axi_aresetn;     
-  input                                   s_axi_awvalid;     
-  input   [ 31:0]                         s_axi_awaddr;      
-  input   [  2:0]                         s_axi_awprot;      
-  output                                  s_axi_awready;     
-  input                                   s_axi_wvalid;      
-  input   [ 31:0]                         s_axi_wdata;       
-  input   [  3:0]                         s_axi_wstrb;       
-  output                                  s_axi_wready;      
-  output                                  s_axi_bvalid;      
-  output  [  1:0]                         s_axi_bresp;       
-  input                                   s_axi_bready;      
-  input                                   s_axi_arvalid;     
-  input   [ 31:0]                         s_axi_araddr;      
-  input   [  2:0]                         s_axi_arprot;      
-  output                                  s_axi_arready;     
-  output                                  s_axi_rvalid;      
-  output  [ 31:0]                         s_axi_rdata;       
-  output  [  1:0]                         s_axi_rresp;       
-  input                                   s_axi_rready;      
+  input                                         s_axi_aclk;        
+  input                                         s_axi_aresetn;     
+  input                                         s_axi_awvalid;     
+  input   [ 31:0]                               s_axi_awaddr;      
+  input   [  2:0]                               s_axi_awprot;      
+  output                                        s_axi_awready;     
+  input                                         s_axi_wvalid;      
+  input   [ 31:0]                               s_axi_wdata;       
+  input   [  3:0]                               s_axi_wstrb;       
+  output                                        s_axi_wready;      
+  output                                        s_axi_bvalid;      
+  output  [  1:0]                               s_axi_bresp;       
+  input                                         s_axi_bready;      
+  input                                         s_axi_arvalid;     
+  input   [ 31:0]                               s_axi_araddr;      
+  input   [  2:0]                               s_axi_arprot;      
+  output                                        s_axi_arready;     
+  output                                        s_axi_rvalid;      
+  output  [ 31:0]                               s_axi_rdata;       
+  output  [  1:0]                               s_axi_rresp;       
+  input                                         s_axi_rready;      
+
+  // signal tap interface
+
+  output                                        stp_clk;
+  output  [(PCORE_ST_DATA_WIDTH-1):0]           stp_data;
+  output  [(PCORE_ST_TRIGGER_WIDTH-1):0]        stp_trigger;
                                                              
   // internal signals                                        
 
-  wire                                    up_rstn;
-  wire                                    up_clk;
-  wire    [  7:0]                         status_s;
-  wire    [  7:0]                         rx_status_s;
-  wire    [  7:0]                         tx_status_s;
-  wire                                    up_wreq_s;
-  wire    [ 13:0]                         up_waddr_s;
-  wire    [ 31:0]                         up_wdata_s;
-  wire                                    up_wack_s;
-  wire                                    up_rreq_s;
-  wire    [ 13:0]                         up_raddr_s;
-  wire    [ 31:0]                         up_rdata_s;
-  wire                                    up_rack_s;
-
+  wire                                          up_rstn;
+  wire                                          up_clk;
+  wire    [  7:0]                               status_s;
+  wire                                          rst;
+  wire                                          rx_rstn;
+  wire                                          rx_sysref_s;
+  wire                                          rx_ip_sync_s;
+  wire    [  3:0]                               rx_ip_sof_s;                     
+  wire    [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_ip_data_s;
+  wire    [(PCORE_NUM_OF_RX_LANES-1):0]         rx_ready_s;
+  wire    [  7:0]                               rx_status_s;
+  wire                                          tx_rstn;
+  wire                                          tx_sysref_s;
+  wire                                          tx_ip_sync_s;
+  wire    [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_ip_data_s;
+  wire    [(PCORE_NUM_OF_TX_LANES-1):0]         tx_ready_s;
+  wire    [  7:0]                               tx_status_s;
+  wire                                          up_wreq_s;
+  wire    [ 13:0]                               up_waddr_s;
+  wire    [ 31:0]                               up_wdata_s;
+  wire                                          up_wack_s;
+  wire                                          up_rreq_s;
+  wire    [ 13:0]                               up_raddr_s;
+  wire    [ 31:0]                               up_rdata_s;
+  wire                                          up_rack_s;
+                                                
   // assignments
 
   assign status_s = 8'hff;
@@ -165,38 +181,94 @@ module axi_jesd_xcvr (
   generate
   if (PCORE_NUM_OF_TX_LANES < 8) begin
   assign tx_status_s[7:PCORE_NUM_OF_TX_LANES] = status_s[7:PCORE_NUM_OF_TX_LANES];
-  assign tx_status_s[(PCORE_NUM_OF_TX_LANES-1):0] = tx_status;
+  assign tx_status_s[(PCORE_NUM_OF_TX_LANES-1):0] = tx_ready_s;
   end else begin
-  assign tx_status_s = tx_status[7:0];
+  assign tx_status_s = tx_ready_s[7:0];
   end
   endgenerate
 
   generate
   if (PCORE_NUM_OF_RX_LANES < 8) begin
   assign rx_status_s[7:PCORE_NUM_OF_RX_LANES] = status_s[7:PCORE_NUM_OF_RX_LANES];
-  assign rx_status_s[(PCORE_NUM_OF_RX_LANES-1):0] = rx_status;
+  assign rx_status_s[(PCORE_NUM_OF_RX_LANES-1):0] = rx_ready_s;
   end else begin
-  assign rx_status_s = rx_status[7:0];
+  assign rx_status_s = rx_ready_s[7:0];
   end
   endgenerate
 
-  // processor
-    
-  up_xcvr #(.PCORE_ID(PCORE_ID), .PCORE_DEVICE_TYPE(PCORE_DEVICE_TYPE)) i_up_xcvr (
+  genvar n;
+  generate
+  for (n = 0; n < PCORE_NUM_OF_RX_LANES; n = n + 1) begin: g_rx_lane
+  ad_jesd_align i_jesd_align (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_ip_sof_s),
+    .rx_ip_data (rx_ip_data_s[n*32+31:n*32]),
+    .rx_sof (rx_sof[n]),
+    .rx_data (rx_data[n*32+31:n*32]));
+  end
+  endgenerate
+
+  generate
+  for (n = 0; n < PCORE_NUM_OF_TX_LANES; n = n + 1) begin: g_tx_lane
+  assign tx_ip_data_s[((n*32) + 31):((n*32) + 24)] = tx_data[((n*32) +  7):((n*32) +  0)];
+  assign tx_ip_data_s[((n*32) + 23):((n*32) + 16)] = tx_data[((n*32) + 15):((n*32) +  8)];
+  assign tx_ip_data_s[((n*32) + 15):((n*32) +  8)] = tx_data[((n*32) + 23):((n*32) + 16)];
+  assign tx_ip_data_s[((n*32) +  7):((n*32) +  0)] = tx_data[((n*32) + 31):((n*32) + 24)];
+  end
+  endgenerate
+
+  sys_xcvr #(
+    .PCORE_NUM_OF_TX_LANES (PCORE_NUM_OF_TX_LANES),
+    .PCORE_NUM_OF_RX_LANES (PCORE_NUM_OF_RX_LANES),
+    .PCORE_ST_DATA_WIDTH (PCORE_ST_DATA_WIDTH),
+    .PCORE_ST_TRIGGER_WIDTH (PCORE_ST_TRIGGER_WIDTH))
+  i_sys_xcvr (
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .rx_ref_clk (rx_ref_clk),
+    .rx_d (rx_d),
+    .tx_ref_clk (tx_ref_clk),
+    .tx_d (tx_d),
     .rst (rst),
     .rx_clk (rx_clk),
-    .rx_rst (rx_rst),
+    .rx_rstn (rx_rstn),
+    .rx_sysref (rx_sysref_s),
+    .rx_ip_sync (rx_ip_sync_s),
+    .rx_ip_sof (rx_ip_sof_s),
+    .rx_ip_data (rx_ip_data_s),
+    .rx_ready (rx_ready_s),
+    .rx_int (),
+    .tx_clk (tx_clk),
+    .tx_rstn (tx_rstn),
+    .tx_sysref (tx_sysref_s),
+    .tx_ip_sync (tx_ip_sync_s),
+    .tx_ip_data (tx_ip_data_s),
+    .tx_ready (tx_ready_s),
+    .tx_int (),
+    .stp_clk (stp_clk),
+    .stp_data (stp_data),
+    .stp_trigger (stp_trigger));
+
+  // processor
+    
+  up_xcvr #(
+    .PCORE_ID(PCORE_ID),
+    .PCORE_DEVICE_TYPE(PCORE_DEVICE_TYPE))
+  i_up_xcvr (
+    .rst (rst),
+    .rx_clk (rx_clk),
+    .rx_rstn (rx_rstn),
     .rx_ext_sysref (rx_ext_sysref),
-    .rx_sysref (rx_sysref),
-    .rx_ip_sync (rx_ip_sync),
+    .rx_sysref (rx_sysref_s),
+    .rx_ip_sync (rx_ip_sync_s),
     .rx_sync (rx_sync),
     .rx_status (rx_status_s),
     .tx_clk (tx_clk),
-    .tx_rst (tx_rst),
+    .tx_rstn (tx_rstn),
     .tx_ext_sysref (tx_ext_sysref),
-    .tx_sysref (tx_sysref),
+    .tx_sysref (tx_sysref_s),
     .tx_sync (tx_sync),
-    .tx_ip_sync (tx_ip_sync),
+    .tx_ip_sync (tx_ip_sync_s),
     .tx_status (tx_status_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),

@@ -46,7 +46,7 @@ module up_xcvr (
   // receive interface
 
   rx_clk,
-  rx_rst,
+  rx_rstn,
   rx_ext_sysref,
   rx_sysref,
   rx_ip_sync,
@@ -56,7 +56,7 @@ module up_xcvr (
   // transmit interface
 
   tx_clk,
-  tx_rst,
+  tx_rstn,
   tx_ext_sysref,
   tx_sysref,
   tx_sync,
@@ -89,7 +89,7 @@ module up_xcvr (
   // receive interface
 
   input           rx_clk;
-  output          rx_rst;
+  output          rx_rstn;
   input           rx_ext_sysref;
   output          rx_sysref;
   input           rx_ip_sync;
@@ -99,7 +99,7 @@ module up_xcvr (
   // transmit interface
 
   input           tx_clk;
-  output          tx_rst;
+  output          tx_rstn;
   input           tx_ext_sysref;
   output          tx_sysref;
   input           tx_sync;
@@ -122,17 +122,22 @@ module up_xcvr (
   // internal registers
 
   reg             up_reset = 'd1;
+  reg             up_rx_reset = 'd1;
+  reg             up_tx_reset = 'd1;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_resetn = 'd0;
   reg             up_rx_sysref_sel = 'd0;
   reg             up_rx_sysref = 'd0;
   reg             up_rx_sync = 'd0;
+  reg             up_rx_resetn = 'd0;
   reg             up_tx_sysref_sel = 'd0;
   reg             up_tx_sysref = 'd0;
   reg             up_tx_sync = 'd0;
+  reg             up_tx_resetn = 'd0;
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
+  reg             rx_rstn = 'd0;
   reg             rx_sysref_sel_m1 = 'd0;
   reg             rx_sysref_sel = 'd0;
   reg             rx_up_sysref_m1 = 'd0;
@@ -141,6 +146,7 @@ module up_xcvr (
   reg             rx_up_sync_m1 = 'd0;
   reg             rx_up_sync = 'd0;
   reg             rx_sync = 'd0;
+  reg             tx_rstn = 'd0;
   reg             tx_sysref_sel_m1 = 'd0;
   reg             tx_sysref_sel = 'd0;
   reg             tx_up_sysref_m1 = 'd0;
@@ -156,6 +162,8 @@ module up_xcvr (
 
   // internal signals
 
+  wire            rx_rst;
+  wire            tx_rst;
   wire            up_wreq_s;
   wire            up_rreq_s;
 
@@ -169,17 +177,23 @@ module up_xcvr (
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_reset <= 1'b1;
+      up_rx_reset <= 1'b1;
+      up_tx_reset <= 1'b1;
       up_wack <= 'd0;
       up_scratch <= 'd0;
       up_resetn <= 'd0;
       up_rx_sysref_sel <= 'd0;
       up_rx_sysref <= 'd0;
       up_rx_sync <= 'd0;
+      up_rx_resetn <= 'd0;
       up_tx_sysref_sel <= 'd0;
       up_tx_sysref <= 'd0;
       up_tx_sync <= 'd0;
+      up_tx_resetn <= 'd0;
     end else begin
       up_reset <= ~up_resetn;
+      up_rx_reset <= ~(up_resetn & up_rx_resetn);
+      up_tx_reset <= ~(up_resetn & up_tx_resetn);
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
@@ -194,12 +208,18 @@ module up_xcvr (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
         up_rx_sync <= up_wdata[0];
       end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h13)) begin
+        up_rx_resetn <= up_wdata[0];
+      end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
         up_tx_sysref_sel <= up_wdata[1];
         up_tx_sysref <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h21)) begin
         up_tx_sync <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+        up_tx_resetn <= up_wdata[0];
       end
     end
   end
@@ -221,9 +241,11 @@ module up_xcvr (
           8'h10: up_rdata <= {30'd0, up_rx_sysref_sel, up_rx_sysref};
           8'h11: up_rdata <= {31'd0, up_rx_sync};
           8'h12: up_rdata <= {23'd0, up_rx_status};
+          8'h13: up_rdata <= {31'd0, up_rx_resetn};
           8'h20: up_rdata <= {30'd0, up_tx_sysref_sel, up_tx_sysref};
           8'h21: up_rdata <= {31'd0, up_tx_sync};
           8'h22: up_rdata <= {23'd0, up_tx_status};
+          8'h23: up_rdata <= {31'd0, up_tx_resetn};
           8'h30: up_rdata <= PCORE_DEVICE_TYPE;
           default: up_rdata <= 0;
         endcase
@@ -237,13 +259,14 @@ module up_xcvr (
 
   assign rst = up_reset;
 
-  ad_rst i_rx_rst_reg (.preset(up_reset), .clk(rx_clk), .rst(rx_rst));
-  ad_rst i_tx_rst_reg (.preset(up_reset), .clk(tx_clk), .rst(tx_rst));
+  ad_rst i_rx_rst_reg (.preset(up_rx_reset), .clk(rx_clk), .rst(rx_rst));
+  ad_rst i_tx_rst_reg (.preset(up_tx_reset), .clk(tx_clk), .rst(tx_rst));
 
   // rx sysref & sync
 
   always @(posedge rx_clk or posedge rx_rst) begin
     if (rx_rst == 1'b1) begin
+      rx_rstn <= 'd0;
       rx_sysref_sel_m1 <= 'd0;
       rx_sysref_sel <= 'd0;
       rx_up_sysref_m1 <= 'd0;
@@ -253,6 +276,7 @@ module up_xcvr (
       rx_up_sync <= 'd0;
       rx_sync <= 'd0;
     end else begin
+      rx_rstn <= 1'd1;
       rx_sysref_sel_m1 <= up_rx_sysref_sel;
       rx_sysref_sel <= rx_sysref_sel_m1;
       rx_up_sysref_m1 <= up_rx_sysref;
@@ -272,6 +296,7 @@ module up_xcvr (
 
   always @(posedge tx_clk or posedge tx_rst) begin
     if (tx_rst == 1'b1) begin
+      tx_rstn <= 'd0;
       tx_sysref_sel_m1 <= 'd0;
       tx_sysref_sel <= 'd0;
       tx_up_sysref_m1 <= 'd0;
@@ -281,6 +306,7 @@ module up_xcvr (
       tx_up_sync <= 'd0;
       tx_ip_sync <= 'd0;
     end else begin
+      tx_rstn <= 1'd1;
       tx_sysref_sel_m1 <= up_tx_sysref_sel;
       tx_sysref_sel <= tx_sysref_sel_m1;
       tx_up_sysref_m1 <= up_tx_sysref;

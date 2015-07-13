@@ -14,6 +14,7 @@ set_module_property DISPLAY_NAME axi_jesd_xcvr
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_jesd_xcvr
 add_fileset_file ad_rst.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
+add_fileset_file ad_jesd_align.v          VERILOG PATH $ad_hdl_dir/library/common/altera/ad_jesd_align.v
 add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
 add_fileset_file up_xcvr.v                VERILOG PATH $ad_hdl_dir/library/common/up_xcvr.v
 add_fileset_file axi_jesd_xcvr.v          VERILOG PATH axi_jesd_xcvr.v TOP_LEVEL_FILE
@@ -49,6 +50,20 @@ set_parameter_property PCORE_NUM_OF_RX_LANES TYPE INTEGER
 set_parameter_property PCORE_NUM_OF_RX_LANES UNITS None
 set_parameter_property PCORE_NUM_OF_RX_LANES HDL_PARAMETER true
 
+add_parameter PCORE_ST_DATA_WIDTH INTEGER 0
+set_parameter_property PCORE_ST_DATA_WIDTH DEFAULT_VALUE 32
+set_parameter_property PCORE_ST_DATA_WIDTH DISPLAY_NAME PCORE_ST_DATA_WIDTH
+set_parameter_property PCORE_ST_DATA_WIDTH TYPE INTEGER
+set_parameter_property PCORE_ST_DATA_WIDTH UNITS None
+set_parameter_property PCORE_ST_DATA_WIDTH HDL_PARAMETER true
+
+add_parameter PCORE_ST_TRIGGER_WIDTH INTEGER 0
+set_parameter_property PCORE_ST_TRIGGER_WIDTH DEFAULT_VALUE 32
+set_parameter_property PCORE_ST_TRIGGER_WIDTH DISPLAY_NAME PCORE_ST_TRIGGER_WIDTH
+set_parameter_property PCORE_ST_TRIGGER_WIDTH TYPE INTEGER
+set_parameter_property PCORE_ST_TRIGGER_WIDTH UNITS None
+set_parameter_property PCORE_ST_TRIGGER_WIDTH HDL_PARAMETER true
+
 # axi4 slave
 
 add_interface s_axi_clock clock end
@@ -83,35 +98,29 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # transceiver interface
 
-add_interface if_rst reset source
-set_interface_property if_rst associatedClock s_axi_clock
-add_interface_port if_rst rst reset Output 1
-
-add_interface if_rx_clk clock end
-add_interface_port if_rx_clk rx_clk clk Input 1
-
-add_interface if_rx_rst reset source
-set_interface_property if_rx_rst associatedClock if_rx_clk
-add_interface_port if_rx_rst rx_rst reset Output 1
-
+ad_alt_intf clock   rx_ref_clk      input   1
+ad_alt_intf signal  rx_d            input   4
+ad_alt_intf clock   rx_clk          output  1
 ad_alt_intf signal  rx_ext_sysref   input   1
-ad_alt_intf signal  rx_sysref       output  1 export
-ad_alt_intf signal  rx_ip_sync      input   1 export
 ad_alt_intf signal  rx_sync         output  1
-ad_alt_intf signal  rx_status       input   PCORE_NUM_OF_RX_LANES rx_ready
+ad_alt_intf signal  rx_sof          output  PCORE_NUM_OF_RX_LANES
+ad_alt_intf signal  rx_data         output  PCORE_NUM_OF_RX_LANES*32
 
-add_interface if_tx_clk clock end
-add_interface_port if_tx_clk tx_clk clk Input 1
-
-add_interface if_tx_rst reset source
-set_interface_property if_tx_rst associatedClock if_tx_clk
-add_interface_port if_tx_rst tx_rst reset Output 1
-
+ad_alt_intf clock   tx_ref_clk      input   1
+ad_alt_intf signal  tx_d            output  4
+ad_alt_intf clock   tx_clk          output  1
 ad_alt_intf signal  tx_ext_sysref   input   1
-ad_alt_intf signal  tx_sysref       output  1 export
 ad_alt_intf signal  tx_sync         input   1
-ad_alt_intf signal  tx_ip_sync      output  1 export
-ad_alt_intf signal  tx_status       input   PCORE_NUM_OF_TX_LANES tx_ready
+ad_alt_intf signal  tx_data         input   PCORE_NUM_OF_TX_LANES*32
+
+# signal tap interface
+
+ad_alt_intf clock   stp_clk         output  1
+
+add_interface if_stp conduit source
+add_interface_port if_stp stp_data     acq_data_in     output  PCORE_ST_DATA_WIDTH
+add_interface_port if_stp stp_trigger  acq_trigger_in  output  PCORE_ST_TRIGGER_WIDTH
+set_interface_property if_stp associatedClock if_stp_clk
 
 
 
