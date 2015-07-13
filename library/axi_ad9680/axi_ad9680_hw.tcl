@@ -72,13 +72,8 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # transceiver interface
 
-add_interface if_rx_clk clock end
-add_interface_port if_rx_clk rx_clk clk Input 1
-
-add_interface if_rx_data avalon_streaming end
-set_interface_property if_rx_data associatedClock if_rx_clk
-set_interface_property if_rx_data dataBitsPerSymbol 128
-add_interface_port if_rx_data rx_data data Input 128
+ad_alt_intf clock   rx_clk        input   1
+ad_alt_intf signal  rx_data       input   128
 
 # dma interface
 
