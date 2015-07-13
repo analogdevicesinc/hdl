@@ -83,36 +83,31 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # transceiver interface
 
-add_interface if_tx_clk clock end
-add_interface_port if_tx_clk tx_clk clk Input 1
-
-add_interface if_tx_data avalon_streaming start
-add_interface_port if_tx_data tx_data data Output 128*(PCORE_QUAD_DUAL_N+1)
+ad_alt_intf clock   tx_clk        input   1
+ad_alt_intf signal  tx_data       output  128*(PCORE_QUAD_DUAL_N+1)
 
 # dma interface
 
 ad_alt_intf clock   dac_clk       output  1
 ad_alt_intf signal  dac_valid_0   output  1
 ad_alt_intf signal  dac_enable_0  output  1
-ad_alt_intf signal  dac_ddata_0   input   64
+ad_alt_intf signal  dac_ddata_0   input   64  dac_data_0
 ad_alt_intf signal  dac_valid_1   output  1
 ad_alt_intf signal  dac_enable_1  output  1
-ad_alt_intf signal  dac_ddata_1   input   64
+ad_alt_intf signal  dac_ddata_1   input   64  dac_data_1
 ad_alt_intf signal  dac_dovf      input   1
 ad_alt_intf signal  dac_dunf      input   1
 
 proc p_axi_ad9144 {} {
 
   set p_pcore_quad_dual_n [get_parameter_value "PCORE_QUAD_DUAL_N"]
-  set_interface_property if_tx_data associatedClock if_tx_clk
-  set_interface_property if_tx_data dataBitsPerSymbol [expr (128*($p_pcore_quad_dual_n+1))]
 
   if {[get_parameter_value PCORE_QUAD_DUAL_N] == 1} {
     ad_alt_intf signal  dac_valid_2   output  1
     ad_alt_intf signal  dac_enable_2  output  1
-    ad_alt_intf signal  dac_ddata_2   input   64
+    ad_alt_intf signal  dac_ddata_2   input   64  dac_data_2
     ad_alt_intf signal  dac_valid_3   output  1
     ad_alt_intf signal  dac_enable_3  output  1
-    ad_alt_intf signal  dac_ddata_3   input   64
+    ad_alt_intf signal  dac_ddata_3   input   64  dac_data_3
   }
 }
