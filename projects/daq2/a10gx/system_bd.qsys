@@ -115,6 +115,14 @@
          type = "String";
       }
    }
+   element signaltap_ii_logic_analyzer_0
+   {
+      datum _sortIndex
+      {
+         value = "21";
+         type = "int";
+      }
+   }
    element sys_clk
    {
       datum _sortIndex
@@ -573,6 +581,30 @@
          type = "String";
       }
    }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
    element util_cpack_0
    {
       datum _sortIndex
@@ -650,21 +682,7 @@
    internal="axi_jesd_xcvr.if_rx_ext_sysref"
    type="conduit"
    dir="end" />
- <interface
-   name="stp_clk"
-   internal="axi_jesd_xcvr.if_stp_clk"
-   type="clock"
-   dir="start" />
- <interface
-   name="stp_data"
-   internal="axi_jesd_xcvr.if_stp_data"
-   type="conduit"
-   dir="end" />
- <interface
-   name="stp_trigger"
-   internal="axi_jesd_xcvr.if_stp_trigger"
-   type="conduit"
-   dir="end" />
+ <interface name="stp_trigger" internal="axi_jesd_xcvr.if_stp_trigger" />
  <interface name="sys_clk" internal="sys_clk.clk_in" type="clock" dir="end" />
  <interface
    name="sys_ddr3_cntrl_mem"
@@ -800,8 +818,30 @@
   <parameter name="PCORE_ID" value="0" />
   <parameter name="PCORE_NUM_OF_RX_LANES" value="4" />
   <parameter name="PCORE_NUM_OF_TX_LANES" value="4" />
-  <parameter name="PCORE_ST_DATA_WIDTH" value="32" />
-  <parameter name="PCORE_ST_TRIGGER_WIDTH" value="32" />
+  <parameter name="PCORE_ST_DATA_WIDTH" value="182" />
+  <parameter name="PCORE_ST_TRIGGER_WIDTH" value="2" />
+ </module>
+ <module
+   name="signaltap_ii_logic_analyzer_0"
+   kind="altera_signaltap_ii_logic_analyzer"
+   version="15.0"
+   enabled="1">
+  <parameter name="device_family" value="Arria 10" />
+  <parameter name="gui_num_segments" value="2" />
+  <parameter name="gui_ram_type" value="AUTO" />
+  <parameter name="gui_sq" value="Continuous" />
+  <parameter name="gui_trigger_out_enabled" value="false" />
+  <parameter name="gui_use_segmented" value="false" />
+  <parameter name="sld_data_bits" value="182" />
+  <parameter name="sld_enable_advanced_trigger" value="0" />
+  <parameter name="sld_node_crc_bits" value="32" />
+  <parameter name="sld_node_info" value="806383104" />
+  <parameter name="sld_sample_depth" value="1024" />
+  <parameter name="sld_storage_qualifier_gap_record" value="0" />
+  <parameter name="sld_trigger_bits" value="2" />
+  <parameter name="sld_trigger_in_enabled" value="0" />
+  <parameter name="sld_trigger_level" value="1" />
+  <parameter name="sld_trigger_level_pipeline" value="1" />
  </module>
  <module name="sys_clk" kind="clock_source" version="15.0" enabled="1">
   <parameter name="clockFrequency" value="100000000" />
@@ -810,8 +850,8 @@
   <parameter name="resetSynchronousEdges" value="NONE" />
  </module>
  <module name="sys_cpu" kind="altera_nios2_gen2" version="15.0" enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="3" />
-  <parameter name="AUTO_CLK_RESET_DOMAIN" value="3" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="2" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="2" />
   <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="bht_ramBlockType" value="Automatic" />
@@ -2323,6 +2363,11 @@
  <connection
    kind="clock"
    version="15.0"
+   start="axi_jesd_xcvr.if_stp_clk"
+   end="signaltap_ii_logic_analyzer_0.acq_clk" />
+ <connection
+   kind="clock"
+   version="15.0"
    start="axi_jesd_xcvr.if_tx_clk"
    end="util_upack_0.if_dac_clk" />
  <connection
@@ -2549,6 +2594,17 @@
    version="15.0"
    start="axi_ad9680_core.if_rx_data"
    end="axi_jesd_xcvr.if_rx_data">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="axi_jesd_xcvr.if_stp"
+   end="signaltap_ii_logic_analyzer_0.tap">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />

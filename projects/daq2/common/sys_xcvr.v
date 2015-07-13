@@ -112,8 +112,8 @@ module sys_xcvr (
   output            tx_int;
 
   output            stp_clk;
-  output  [ 31:0]   stp_data;
-  output  [  3:0]   stp_trigger;
+  output  [181:0]   stp_data;
+  output  [  1:0]   stp_trigger;
                                                              
   // internal signals
 
@@ -150,6 +150,21 @@ module sys_xcvr (
   wire    [  3:0]   tx_pcfifo_full;
   wire    [ 15:0]   tx_pcs_kchar;
   wire    [127:0]   tx_pcs_data;
+
+  // signal tap
+
+  assign stp_clk = rx_clk;
+
+  assign stp_data[181:181] = rx_sysref;
+  assign stp_data[180:180] = rx_ip_sync;
+  assign stp_data[179:176] = rx_pcs_valid;
+  assign stp_data[175:160] = rx_pcs_disperr;
+  assign stp_data[159:144] = rx_pcs_errdetect;
+  assign stp_data[143:128] = rx_pcs_kchar;
+  assign stp_data[127:  0] = rx_pcs_data;
+
+  assign stp_trigger[1] = rx_sysref;
+  assign stp_trigger[0] = rx_ip_sync;
 
   // instantiations
 

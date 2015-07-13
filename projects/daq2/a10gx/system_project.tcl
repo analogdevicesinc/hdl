@@ -9,13 +9,13 @@ source $ad_hdl_dir/projects/common/a10gx/a10gx_system_assign.tcl
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 set_global_assignment -name VERILOG_FILE ../common/daq2_spi.v
 set_global_assignment -name VERILOG_FILE ../common/sys_xcvr.v
-set_global_assignment -name QSYS_FILE ../common/sys_xcvr_tx_lane_pll.qsys
-set_global_assignment -name QSYS_FILE ../common/sys_xcvr_core.qsys
-set_global_assignment -name QSYS_FILE ../common/sys_xcvr_rstcntrl.qsys
-set_global_assignment -name QSYS_FILE ../common/sys_xcvr_rx_pll.qsys
-set_global_assignment -name QSYS_FILE ../common/sys_xcvr_tx_pll.qsys
-set_global_assignment -name QSYS_FILE ../common/sys_xcvr_rx_ip.qsys
-set_global_assignment -name QSYS_FILE ../common/sys_xcvr_tx_ip.qsys
+set_global_assignment -name QSYS_FILE sys_xcvr_tx_lane_pll.qsys
+set_global_assignment -name QSYS_FILE sys_xcvr_core.qsys
+set_global_assignment -name QSYS_FILE sys_xcvr_rstcntrl.qsys
+set_global_assignment -name QSYS_FILE sys_xcvr_rx_pll.qsys
+set_global_assignment -name QSYS_FILE sys_xcvr_tx_pll.qsys
+set_global_assignment -name QSYS_FILE sys_xcvr_rx_ip.qsys
+set_global_assignment -name QSYS_FILE sys_xcvr_tx_ip.qsys
 
 # lane interface
 
