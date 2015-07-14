@@ -110,6 +110,10 @@ module system_top (
   enable,
   txnrx,
 
+  gpio_rf0,
+  gpio_rf1,
+  gpio_rf2,
+  gpio_rf3,
   gpio_rfpwr_enable,
   gpio_clksel,
   gpio_resetb,
@@ -193,6 +197,10 @@ module system_top (
   output          enable;
   output          txnrx;
 
+  inout           gpio_rf0;
+  inout           gpio_rf1;
+  inout           gpio_rf2;
+  inout           gpio_rf3;
   inout           gpio_rfpwr_enable;
   inout           gpio_clksel;
   inout           gpio_resetb;
@@ -227,11 +235,15 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
-    .dio_t ({gpio_t[52:51], gpio_t[48:32]}),
-    .dio_i ({gpio_o[52:51], gpio_o[48:32]}),
-    .dio_o ({gpio_i[52:51], gpio_i[48:32]}),
-    .dio_p ({ gpio_rfpwr_enable,
+  ad_iobuf #(.DATA_WIDTH(23)) i_iobuf (
+    .dio_t ({gpio_t[56:51], gpio_t[48:32]}),
+    .dio_i ({gpio_o[56:51], gpio_o[48:32]}),
+    .dio_o ({gpio_i[56:51], gpio_i[48:32]}),
+    .dio_p ({ gpio_rf0,
+              gpio_rf1,
+              gpio_rf2,
+              gpio_rf3,
+              gpio_rfpwr_enable,
               gpio_clksel,
               gpio_txnrx,
               gpio_enable,
