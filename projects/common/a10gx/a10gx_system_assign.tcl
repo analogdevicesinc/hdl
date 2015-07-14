@@ -23,6 +23,10 @@ set_location_assignment PIN_F35   -to "ddr3_ref_clk(n)"
 set_instance_assignment -name IO_STANDARD LVDS -to ddr3_ref_clk
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to ddr3_ref_clk -disable
 
+set_instance_assignment -name IO_STANDARD "1.5 V" -to ddr3_a[14]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to ddr3_a[13]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to ddr3_a[12]
+
 set_location_assignment PIN_R30   -to ddr3_clk_p      ; ## 1.5 V   V1  MEM_CLK_P          
 set_location_assignment PIN_R31   -to ddr3_clk_n      ; ## 1.5 V   V2  MEM_CLK_N          
 set_location_assignment PIN_M32   -to ddr3_a[0]       ; ## 1.5 V   F1  MEM_ADDR_CMD0      
