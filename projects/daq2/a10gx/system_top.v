@@ -244,7 +244,7 @@ module system_top (
     .rx_data_rx_d (rx_data),
     .rx_ref_clk_clk (rx_ref_clk),
     .rx_sync_rx_sync (rx_sync),
-    .rx_sysref_rx_ext_sysref (rx_sysref),
+    .rx_sysref_rx_ext_sysref_in (rx_sysref),
     .sys_clk_clk (sys_clk),
     .sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
     .sys_ddr3_cntrl_mem_mem_ck_n (ddr3_clk_n),
@@ -282,7 +282,7 @@ module system_top (
     .tx_data_tx_d (tx_data),
     .tx_ref_clk_clk (tx_ref_clk),
     .tx_sync_tx_sync (tx_sync),
-    .tx_sysref_tx_ext_sysref (tx_sysref));
+    .tx_sysref_tx_ext_sysref_in (tx_sysref));
 
 endmodule
 
