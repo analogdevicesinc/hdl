@@ -589,6 +589,14 @@
          type = "String";
       }
    }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
    element util_cpack_0
    {
       datum _sortIndex
@@ -663,7 +671,7 @@
    dir="end" />
  <interface
    name="rx_sysref"
-   internal="axi_jesd_xcvr.if_rx_ext_sysref"
+   internal="axi_jesd_xcvr.if_rx_ext_sysref_in"
    type="conduit"
    dir="end" />
  <interface name="stp_trigger" internal="axi_jesd_xcvr.if_stp_trigger" />
@@ -755,7 +763,7 @@
    dir="end" />
  <interface
    name="tx_sysref"
-   internal="axi_jesd_xcvr.if_tx_ext_sysref"
+   internal="axi_jesd_xcvr.if_tx_ext_sysref_in"
    type="conduit"
    dir="end" />
  <module name="axi_ad9144_core" kind="axi_ad9144" version="1.0" enabled="1">
