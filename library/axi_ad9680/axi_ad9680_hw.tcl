@@ -73,7 +73,7 @@ add_interface_port s_axi s_axi_rready rready Input 1
 # transceiver interface
 
 ad_alt_intf clock   rx_clk        input   1
-ad_alt_intf signal  rx_data       input   128
+ad_alt_intf signal  rx_data       input   128 data
 
 # dma interface
 
