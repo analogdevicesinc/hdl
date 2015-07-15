@@ -44,7 +44,8 @@ module axi_jesd_xcvr (
   rx_ref_clk,
   rx_d,
   rx_clk,
-  rx_ext_sysref,
+  rx_ext_sysref_in,
+  rx_ext_sysref_out,
   rx_sync,
   rx_sof,
   rx_data,
@@ -54,7 +55,8 @@ module axi_jesd_xcvr (
   tx_ref_clk,
   tx_d,
   tx_clk,
-  tx_ext_sysref,
+  tx_ext_sysref_in,
+  tx_ext_sysref_out,
   tx_sync,
   tx_data,
 
@@ -100,7 +102,8 @@ module axi_jesd_xcvr (
   input                                         rx_ref_clk;
   input   [(PCORE_NUM_OF_RX_LANES-1):0]         rx_d;
   output                                        rx_clk;
-  input                                         rx_ext_sysref;
+  input                                         rx_ext_sysref_in;
+  output                                        rx_ext_sysref_out;
   output                                        rx_sync;
   output  [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_sof;
   output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_data;
@@ -110,7 +113,8 @@ module axi_jesd_xcvr (
   input                                         tx_ref_clk;
   output  [(PCORE_NUM_OF_TX_LANES-1):0]         tx_d;
   output                                        tx_clk;
-  input                                         tx_ext_sysref;
+  input                                         tx_ext_sysref_in;
+  output                                        tx_ext_sysref_out;
   input                                         tx_sync;
   input   [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_data;
 
@@ -151,14 +155,12 @@ module axi_jesd_xcvr (
   wire    [  7:0]                               status_s;
   wire                                          rst;
   wire                                          rx_rstn;
-  wire                                          rx_sysref_s;
   wire                                          rx_ip_sync_s;
   wire    [  3:0]                               rx_ip_sof_s;                     
   wire    [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_ip_data_s;
   wire    [(PCORE_NUM_OF_RX_LANES-1):0]         rx_ready_s;
   wire    [  7:0]                               rx_status_s;
   wire                                          tx_rstn;
-  wire                                          tx_sysref_s;
   wire                                          tx_ip_sync_s;
   wire    [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_ip_data_s;
   wire    [(PCORE_NUM_OF_TX_LANES-1):0]         tx_ready_s;
@@ -232,7 +234,7 @@ module axi_jesd_xcvr (
     .rst (rst),
     .rx_clk (rx_clk),
     .rx_rstn (rx_rstn),
-    .rx_sysref (rx_sysref_s),
+    .rx_sysref (rx_ext_sysref_out),
     .rx_ip_sync (rx_ip_sync_s),
     .rx_ip_sof (rx_ip_sof_s),
     .rx_ip_data (rx_ip_data_s),
@@ -240,7 +242,7 @@ module axi_jesd_xcvr (
     .rx_int (),
     .tx_clk (tx_clk),
     .tx_rstn (tx_rstn),
-    .tx_sysref (tx_sysref_s),
+    .tx_sysref (tx_ext_sysref_out),
     .tx_ip_sync (tx_ip_sync_s),
     .tx_ip_data (tx_ip_data_s),
     .tx_ready (tx_ready_s),
@@ -258,15 +260,15 @@ module axi_jesd_xcvr (
     .rst (rst),
     .rx_clk (rx_clk),
     .rx_rstn (rx_rstn),
-    .rx_ext_sysref (rx_ext_sysref),
-    .rx_sysref (rx_sysref_s),
+    .rx_ext_sysref (rx_ext_sysref_in),
+    .rx_sysref (rx_ext_sysref_out),
     .rx_ip_sync (rx_ip_sync_s),
     .rx_sync (rx_sync),
     .rx_status (rx_status_s),
     .tx_clk (tx_clk),
     .tx_rstn (tx_rstn),
-    .tx_ext_sysref (tx_ext_sysref),
-    .tx_sysref (tx_sysref_s),
+    .tx_ext_sysref (tx_ext_sysref_in),
+    .tx_sysref (tx_ext_sysref_out),
     .tx_sync (tx_sync),
     .tx_ip_sync (tx_ip_sync_s),
     .tx_status (tx_status_s),

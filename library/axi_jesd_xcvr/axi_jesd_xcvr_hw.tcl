@@ -98,20 +98,22 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # transceiver interface
 
-ad_alt_intf clock   rx_ref_clk      input   1
-ad_alt_intf signal  rx_d            input   4
-ad_alt_intf clock   rx_clk          output  1
-ad_alt_intf signal  rx_ext_sysref   input   1
-ad_alt_intf signal  rx_sync         output  1
-ad_alt_intf signal  rx_sof          output  PCORE_NUM_OF_RX_LANES
-ad_alt_intf signal  rx_data         output  PCORE_NUM_OF_RX_LANES*32
+ad_alt_intf clock   rx_ref_clk          input   1
+ad_alt_intf signal  rx_d                input   4
+ad_alt_intf clock   rx_clk              output  1
+ad_alt_intf signal  rx_ext_sysref_in    input   1
+ad_alt_intf signal  rx_ext_sysref_out   output  1
+ad_alt_intf signal  rx_sync             output  1
+ad_alt_intf signal  rx_sof              output  PCORE_NUM_OF_RX_LANES
+ad_alt_intf signal  rx_data             output  PCORE_NUM_OF_RX_LANES*32  data
 
-ad_alt_intf clock   tx_ref_clk      input   1
-ad_alt_intf signal  tx_d            output  4
-ad_alt_intf clock   tx_clk          output  1
-ad_alt_intf signal  tx_ext_sysref   input   1
-ad_alt_intf signal  tx_sync         input   1
-ad_alt_intf signal  tx_data         input   PCORE_NUM_OF_TX_LANES*32
+ad_alt_intf clock   tx_ref_clk          input   1
+ad_alt_intf signal  tx_d                output  4
+ad_alt_intf clock   tx_clk              output  1
+ad_alt_intf signal  tx_ext_sysref_in    input   1
+ad_alt_intf signal  tx_ext_sysref_out   output  1
+ad_alt_intf signal  tx_sync             input   1
+ad_alt_intf signal  tx_data             input   PCORE_NUM_OF_TX_LANES*32  data
 
 # signal tap interface
 
