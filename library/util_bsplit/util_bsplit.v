@@ -40,7 +40,6 @@
 
 module util_bsplit (
 
-  clk,
   data,
 
   split_data_0,
@@ -60,7 +59,6 @@ module util_bsplit (
 
   // interface
 
-  input                             clk;
   input   [((CH_CNT*CH_DW)-1):0]    data;
   output  [(CH_DW-1):0]             split_data_0;
   output  [(CH_DW-1):0]             split_data_1;

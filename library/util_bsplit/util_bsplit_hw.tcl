@@ -35,66 +35,34 @@ set_parameter_property CH_CNT HDL_PARAMETER true
 
 # avalon streaming
 
-add_interface if_clk clock end
-add_interface_port if_clk clk clk Input 1
-
-add_interface if_data avalon_streaming end
-set_interface_property if_data associatedClock if_clk
-add_interface_port if_data data data Input CH_CNT*CH_DW
-
-add_interface if_split_data_0 avalon_streaming start
-set_interface_property if_split_data_0 associatedClock if_clk
-add_interface_port if_split_data_0 split_data_0 data Output CH_DW
+ad_alt_intf signal  data          input   CH_CNT*CH_DW
+ad_alt_intf signal  split_data_0  output  CH_DW   data
 
 proc p_util_bsplit {} {
 
   set p_ch_cnt [get_parameter_value "CH_CNT"]
   set p_ch_dw [get_parameter_value "CH_DW"]
 
-  set_interface_property if_data dataBitsPerSymbol [expr $p_ch_cnt*$p_ch_dw]
-  set_interface_property if_split_data_0 dataBitsPerSymbol $p_ch_dw
-
   if {[get_parameter_value CH_CNT] > 1} {
-    add_interface if_split_data_1 avalon_streaming start
-    set_interface_property if_split_data_1 associatedClock if_clk
-    set_interface_property if_split_data_1 dataBitsPerSymbol $p_ch_dw
-    add_interface_port if_split_data_1 split_data_1 data Output CH_DW
+    ad_alt_intf signal  split_data_1  output  CH_DW data
   }
   if {[get_parameter_value CH_CNT] > 2} {
-    add_interface if_split_data_2 avalon_streaming start
-    set_interface_property if_split_data_2 associatedClock if_clk
-    set_interface_property if_split_data_2 dataBitsPerSymbol $p_ch_dw
-    add_interface_port if_split_data_2 split_data_2 data Output CH_DW
+    ad_alt_intf signal  split_data_2  output  CH_DW data
   }
   if {[get_parameter_value CH_CNT] > 3} {
-    add_interface if_split_data_3 avalon_streaming start
-    set_interface_property if_split_data_3 associatedClock if_clk
-    set_interface_property if_split_data_3 dataBitsPerSymbol $p_ch_dw
-    add_interface_port if_split_data_3 split_data_3 data Output CH_DW
+    ad_alt_intf signal  split_data_3  output  CH_DW data
   }
   if {[get_parameter_value CH_CNT] > 4} {
-    add_interface if_split_data_4 avalon_streaming start
-    set_interface_property if_split_data_4 associatedClock if_clk
-    set_interface_property if_split_data_4 dataBitsPerSymbol $p_ch_dw
-    add_interface_port if_split_data_4 split_data_4 data Output CH_DW
+    ad_alt_intf signal  split_data_4  output  CH_DW data
   }
   if {[get_parameter_value CH_CNT] > 5} {
-    add_interface if_split_data_5 avalon_streaming start
-    set_interface_property if_split_data_5 associatedClock if_clk
-    set_interface_property if_split_data_5 dataBitsPerSymbol $p_ch_dw
-    add_interface_port if_split_data_5 split_data_5 data Output CH_DW
+    ad_alt_intf signal  split_data_5  output  CH_DW data
   }
   if {[get_parameter_value CH_CNT] > 6} {
-    add_interface if_split_data_6 avalon_streaming start
-    set_interface_property if_split_data_6 associatedClock if_clk
-    set_interface_property if_split_data_6 dataBitsPerSymbol $p_ch_dw
-    add_interface_port if_split_data_6 split_data_6 data Output CH_DW
+    ad_alt_intf signal  split_data_6  output  CH_DW data
   }
   if {[get_parameter_value CH_CNT] > 7} {
-    add_interface if_split_data_7 avalon_streaming start
-    set_interface_property if_split_data_7 associatedClock if_clk
-    set_interface_property if_split_data_7 dataBitsPerSymbol $p_ch_dw
-    add_interface_port if_split_data_7 split_data_7 data Output CH_DW
+    ad_alt_intf signal  split_data_7  output  CH_DW data
   }
 }
 
