@@ -213,11 +213,10 @@ module system_top (
     .dataout (eth_tx_clk_out));
 
   system_bd i_system_bd (
-		.rx_data_rx_serial_data (rx_data),
-    .rx_ip_sysref_export (rx_sysref),
+		.rx_data_rx_d (rx_data),
     .rx_ref_clk_clk (ref_clk),
     .rx_sync_rx_sync (rx_sync),
-    .rx_sysref_export (rx_sysref),
+    .rx_sysref_rx_ext_sysref_out (rx_sysref),
     .sys_125m_clk_clk (sys_125m_clk),
     .sys_25m_clk_clk (sys_25m_clk),
     .sys_2m5_clk_clk (sys_2m5_clk),
@@ -261,7 +260,8 @@ module system_top (
     .sys_spi_MISO (spi_miso),
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn));
+    .sys_spi_SS_n (spi_csn),
+    .tx_ref_clk_clk (1'd0));
 
 endmodule
 
