@@ -84,7 +84,7 @@ add_interface_port s_axi s_axi_rready rready Input 1
 # transceiver interface
 
 ad_alt_intf clock   tx_clk        input   1
-ad_alt_intf signal  tx_data       output  128*(PCORE_QUAD_DUAL_N+1)
+ad_alt_intf signal  tx_data       output  128*(PCORE_QUAD_DUAL_N+1) data
 
 # dma interface
 
