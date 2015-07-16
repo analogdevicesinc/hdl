@@ -8,7 +8,7 @@
 M_DEPS := system_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/a10gx/a10gx_system_assign.tcl
-M_DEPS += $ad_hdl_dir/projects/scripts/adi_tquest.tcl
+M_DEPS += ../../../projects/scripts/adi_tquest.tcl
 M_DEPS += 0
 
 
