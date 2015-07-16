@@ -49,6 +49,8 @@ module up_tdd_cntrl (
   tdd_secondary,
   tdd_rx_only,
   tdd_tx_only,
+  tdd_gated_rx_dmapath,
+  tdd_gated_tx_dmapath,
   tdd_burst_count,
   tdd_counter_init,
   tdd_frame_length,
@@ -100,6 +102,8 @@ module up_tdd_cntrl (
   output          tdd_secondary;
   output          tdd_rx_only;
   output          tdd_tx_only;
+  output          tdd_gated_rx_dmapath;
+  output          tdd_gated_tx_dmapath;
   output  [ 7:0]  tdd_burst_count;
   output  [23:0]  tdd_counter_init;
   output  [23:0]  tdd_frame_length;
@@ -150,6 +154,8 @@ module up_tdd_cntrl (
   reg             up_tdd_secondary = 1'h0;
   reg             up_tdd_rx_only = 1'h0;
   reg             up_tdd_tx_only = 1'h0;
+  reg             up_tdd_gated_tx_dmapath = 1'h0;
+  reg             up_tdd_gated_rx_dmapath = 1'h0;
 
   reg     [ 7:0]  up_tdd_burst_count = 8'h0;
   reg     [23:0]  up_tdd_counter_init = 24'h0;
@@ -198,6 +204,8 @@ module up_tdd_cntrl (
       up_tdd_secondary <= 1'h0;
       up_tdd_rx_only <= 1'h0;
       up_tdd_tx_only <= 1'h0;
+      up_tdd_gated_tx_dmapath <= 1'h0;
+      up_tdd_gated_rx_dmapath <= 1'h0;
       up_tdd_counter_init <= 24'h0;
       up_tdd_frame_length <= 24'h0;
       up_tdd_burst_count <= 8'h0;
@@ -226,6 +234,8 @@ module up_tdd_cntrl (
         up_tdd_secondary <= up_wdata[1];
         up_tdd_rx_only <= up_wdata[2];
         up_tdd_tx_only <= up_wdata[3];
+        up_tdd_gated_rx_dmapath <= up_wdata[4];
+        up_tdd_gated_tx_dmapath <= up_wdata[5];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
         up_tdd_burst_count <= up_wdata[7:0];
@@ -309,31 +319,36 @@ module up_tdd_cntrl (
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
-          8'h10: up_rdata <= {28'h0, up_tdd_tx_only, up_tdd_rx_only, up_tdd_secondary, up_tdd_enable};
+          8'h10: up_rdata <= {28'h0, up_tdd_gated_tx_dmapath,
+                                     up_tdd_gated_rx_dmapath,
+                                     up_tdd_tx_only,
+                                     up_tdd_rx_only,
+                                     up_tdd_secondary,
+                                     up_tdd_enable};
           8'h11: up_rdata <= {24'h0, up_tdd_burst_count};
-          8'h12: up_rdata <= {8'h0, up_tdd_counter_init};
-          8'h13: up_rdata <= {8'h0, up_tdd_frame_length};
+          8'h12: up_rdata <= { 8'h0, up_tdd_counter_init};
+          8'h13: up_rdata <= { 8'h0, up_tdd_frame_length};
           8'h18: up_rdata <= {24'h0, up_tdd_status_s};
-          8'h20: up_rdata <= {8'h0, up_tdd_vco_rx_on_1};
-          8'h21: up_rdata <= {8'h0, up_tdd_vco_rx_off_1};
-          8'h22: up_rdata <= {8'h0, up_tdd_vco_tx_on_1};
-          8'h23: up_rdata <= {8'h0, up_tdd_vco_tx_off_1};
-          8'h24: up_rdata <= {8'h0, up_tdd_rx_on_1};
-          8'h25: up_rdata <= {8'h0, up_tdd_rx_off_1};
-          8'h26: up_rdata <= {8'h0, up_tdd_tx_on_1};
-          8'h27: up_rdata <= {8'h0, up_tdd_tx_off_1};
-          8'h28: up_rdata <= {8'h0, up_tdd_tx_dp_on_1};
-          8'h29: up_rdata <= {8'h0, up_tdd_tx_dp_off_1};
-          8'h30: up_rdata <= {8'h0, up_tdd_vco_rx_on_2};
-          8'h31: up_rdata <= {8'h0, up_tdd_vco_rx_off_2};
-          8'h32: up_rdata <= {8'h0, up_tdd_vco_tx_on_2};
-          8'h33: up_rdata <= {8'h0, up_tdd_vco_tx_off_2};
-          8'h34: up_rdata <= {8'h0, up_tdd_rx_on_2};
-          8'h35: up_rdata <= {8'h0, up_tdd_rx_off_2};
-          8'h36: up_rdata <= {8'h0, up_tdd_tx_on_2};
-          8'h37: up_rdata <= {8'h0, up_tdd_tx_off_2};
-          8'h38: up_rdata <= {8'h0, up_tdd_tx_dp_on_2};
-          8'h39: up_rdata <= {8'h0, up_tdd_tx_dp_off_2};
+          8'h20: up_rdata <= { 8'h0, up_tdd_vco_rx_on_1};
+          8'h21: up_rdata <= { 8'h0, up_tdd_vco_rx_off_1};
+          8'h22: up_rdata <= { 8'h0, up_tdd_vco_tx_on_1};
+          8'h23: up_rdata <= { 8'h0, up_tdd_vco_tx_off_1};
+          8'h24: up_rdata <= { 8'h0, up_tdd_rx_on_1};
+          8'h25: up_rdata <= { 8'h0, up_tdd_rx_off_1};
+          8'h26: up_rdata <= { 8'h0, up_tdd_tx_on_1};
+          8'h27: up_rdata <= { 8'h0, up_tdd_tx_off_1};
+          8'h28: up_rdata <= { 8'h0, up_tdd_tx_dp_on_1};
+          8'h29: up_rdata <= { 8'h0, up_tdd_tx_dp_off_1};
+          8'h30: up_rdata <= { 8'h0, up_tdd_vco_rx_on_2};
+          8'h31: up_rdata <= { 8'h0, up_tdd_vco_rx_off_2};
+          8'h32: up_rdata <= { 8'h0, up_tdd_vco_tx_on_2};
+          8'h33: up_rdata <= { 8'h0, up_tdd_vco_tx_off_2};
+          8'h34: up_rdata <= { 8'h0, up_tdd_rx_on_2};
+          8'h35: up_rdata <= { 8'h0, up_tdd_rx_off_2};
+          8'h36: up_rdata <= { 8'h0, up_tdd_tx_on_2};
+          8'h37: up_rdata <= { 8'h0, up_tdd_tx_off_2};
+          8'h38: up_rdata <= { 8'h0, up_tdd_tx_dp_on_2};
+          8'h39: up_rdata <= { 8'h0, up_tdd_tx_dp_off_2};
           default: up_rdata <= 32'h0;
         endcase
       end
@@ -342,13 +357,15 @@ module up_tdd_cntrl (
 
   // rf tdd control signal CDC
 
-  up_xfer_cntrl #(.DATA_WIDTH(12)) i_tdd_control (
+  up_xfer_cntrl #(.DATA_WIDTH(14)) i_tdd_control (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({up_tdd_enable,
                     up_tdd_secondary,
                     up_tdd_rx_only,
                     up_tdd_tx_only,
+                    up_tdd_gated_rx_dmapath,
+                    up_tdd_gated_tx_dmapath,
                     up_tdd_burst_count
     }),
     .up_xfer_done(),
@@ -358,6 +375,8 @@ module up_tdd_cntrl (
                    tdd_secondary,
                    tdd_rx_only,
                    tdd_tx_only,
+                   tdd_gated_rx_dmapath,
+                   tdd_gated_tx_dmapath,
                    tdd_burst_count
     }));
 
