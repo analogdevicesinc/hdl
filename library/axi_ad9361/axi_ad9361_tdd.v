@@ -58,7 +58,7 @@ module axi_ad9361_tdd (
   tdd_enable,
   tdd_status,
 
-  // tx data flow control
+  // tx/rx data flow control
 
   tx_valid_i0,
   tx_valid_q0,
@@ -69,6 +69,16 @@ module axi_ad9361_tdd (
   tdd_tx_valid_q0,
   tdd_tx_valid_i1,
   tdd_tx_valid_q1,
+
+  rx_valid_i0,
+  rx_valid_q0,
+  rx_valid_i1,
+  rx_valid_q1,
+
+  tdd_rx_valid_i0,
+  tdd_rx_valid_q0,
+  tdd_rx_valid_i1,
+  tdd_rx_valid_q1,
 
   // bus interface
 
@@ -111,6 +121,18 @@ module axi_ad9361_tdd (
   output            tdd_tx_valid_i1;
   output            tdd_tx_valid_q1;
 
+  // rx data flow control
+
+  input             rx_valid_i0;
+  input             rx_valid_q0;
+  input             rx_valid_i1;
+  input             rx_valid_q1;
+
+  output            tdd_rx_valid_i0;
+  output            tdd_rx_valid_q0;
+  output            tdd_rx_valid_i1;
+  output            tdd_rx_valid_q1;
+
   // bus interface
 
   input             up_rstn;
@@ -134,6 +156,8 @@ module axi_ad9361_tdd (
   wire   [ 7:0]     tdd_burst_count_s;
   wire              tdd_rx_only_s;
   wire              tdd_tx_only_s;
+  wire              tdd_gated_rx_dmapath_s;
+  wire              tdd_gated_tx_dmapath_s;
   wire   [23:0]     tdd_counter_init_s;
   wire   [23:0]     tdd_frame_length_s;
   wire   [23:0]     tdd_vco_rx_on_1_s;
@@ -164,12 +188,25 @@ module axi_ad9361_tdd (
   assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_tx_dp_en_s,
                     tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
 
-  // tx data flow control
+  // tx/rx data flow control
 
-  assign  tdd_tx_valid_i0 = (tdd_enable_s == 1'b1) ? (tx_valid_i0 & tdd_tx_dp_en_s) : tx_valid_i0;
-  assign  tdd_tx_valid_q0 = (tdd_enable_s == 1'b1) ? (tx_valid_q0 & tdd_tx_dp_en_s) : tx_valid_q0;
-  assign  tdd_tx_valid_i1 = (tdd_enable_s == 1'b1) ? (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
-  assign  tdd_tx_valid_q1 = (tdd_enable_s == 1'b1) ? (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
+  assign  tdd_tx_valid_i0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i0 & tdd_tx_dp_en_s) : tx_valid_i0;
+  assign  tdd_tx_valid_q0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q0 & tdd_tx_dp_en_s) : tx_valid_q0;
+  assign  tdd_tx_valid_i1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
+  assign  tdd_tx_valid_q1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
+
+  assign  tdd_rx_valid_i0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i0 & tdd_rx_rf_en) : rx_valid_i0;
+  assign  tdd_rx_valid_q0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q0 & tdd_rx_rf_en) : rx_valid_q0;
+  assign  tdd_rx_valid_i1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
+  assign  tdd_rx_valid_q1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q1 & tdd_rx_rf_en) : rx_valid_q1;
 
   assign  tdd_enable = tdd_enable_s;
 
@@ -183,6 +220,8 @@ module axi_ad9361_tdd (
     .tdd_burst_count(tdd_burst_count_s),
     .tdd_tx_only(tdd_tx_only_s),
     .tdd_rx_only(tdd_rx_only_s),
+    .tdd_gated_rx_dmapath(tdd_gated_rx_dmapath_s),
+    .tdd_gated_tx_dmapath(tdd_gated_tx_dmapath_s),
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
