@@ -82,20 +82,12 @@ module axi_jesd_xcvr (
   s_axi_rvalid,
   s_axi_rdata,
   s_axi_rresp,
-  s_axi_rready,
-
-  // signal tap interface
-
-  stp_clk,
-  stp_data,
-  stp_trigger);
+  s_axi_rready);
 
   parameter   PCORE_ID = 0;
   parameter   PCORE_DEVICE_TYPE = 0;
   parameter   PCORE_NUM_OF_TX_LANES = 4;
   parameter   PCORE_NUM_OF_RX_LANES = 4;
-  parameter   PCORE_ST_DATA_WIDTH = 32;
-  parameter   PCORE_ST_TRIGGER_WIDTH = 4;
 
   // receive interface
 
@@ -142,12 +134,6 @@ module axi_jesd_xcvr (
   output  [  1:0]                               s_axi_rresp;       
   input                                         s_axi_rready;      
 
-  // signal tap interface
-
-  output                                        stp_clk;
-  output  [(PCORE_ST_DATA_WIDTH-1):0]           stp_data;
-  output  [(PCORE_ST_TRIGGER_WIDTH-1):0]        stp_trigger;
-                                                             
   // internal signals                                        
 
   wire                                          up_rstn;
@@ -221,9 +207,7 @@ module axi_jesd_xcvr (
 
   sys_xcvr #(
     .PCORE_NUM_OF_TX_LANES (PCORE_NUM_OF_TX_LANES),
-    .PCORE_NUM_OF_RX_LANES (PCORE_NUM_OF_RX_LANES),
-    .PCORE_ST_DATA_WIDTH (PCORE_ST_DATA_WIDTH),
-    .PCORE_ST_TRIGGER_WIDTH (PCORE_ST_TRIGGER_WIDTH))
+    .PCORE_NUM_OF_RX_LANES (PCORE_NUM_OF_RX_LANES))
   i_sys_xcvr (
     .up_clk (up_clk),
     .up_rstn (up_rstn),
@@ -246,10 +230,7 @@ module axi_jesd_xcvr (
     .tx_ip_sync (tx_ip_sync_s),
     .tx_ip_data (tx_ip_data_s),
     .tx_ready (tx_ready_s),
-    .tx_int (),
-    .stp_clk (stp_clk),
-    .stp_data (stp_data),
-    .stp_trigger (stp_trigger));
+    .tx_int ());
 
   // processor
     

@@ -50,20 +50,6 @@ set_parameter_property PCORE_NUM_OF_RX_LANES TYPE INTEGER
 set_parameter_property PCORE_NUM_OF_RX_LANES UNITS None
 set_parameter_property PCORE_NUM_OF_RX_LANES HDL_PARAMETER true
 
-add_parameter PCORE_ST_DATA_WIDTH INTEGER 0
-set_parameter_property PCORE_ST_DATA_WIDTH DEFAULT_VALUE 32
-set_parameter_property PCORE_ST_DATA_WIDTH DISPLAY_NAME PCORE_ST_DATA_WIDTH
-set_parameter_property PCORE_ST_DATA_WIDTH TYPE INTEGER
-set_parameter_property PCORE_ST_DATA_WIDTH UNITS None
-set_parameter_property PCORE_ST_DATA_WIDTH HDL_PARAMETER true
-
-add_parameter PCORE_ST_TRIGGER_WIDTH INTEGER 0
-set_parameter_property PCORE_ST_TRIGGER_WIDTH DEFAULT_VALUE 32
-set_parameter_property PCORE_ST_TRIGGER_WIDTH DISPLAY_NAME PCORE_ST_TRIGGER_WIDTH
-set_parameter_property PCORE_ST_TRIGGER_WIDTH TYPE INTEGER
-set_parameter_property PCORE_ST_TRIGGER_WIDTH UNITS None
-set_parameter_property PCORE_ST_TRIGGER_WIDTH HDL_PARAMETER true
-
 # axi4 slave
 
 add_interface s_axi_clock clock end
@@ -114,15 +100,4 @@ ad_alt_intf signal  tx_ext_sysref_in    input   1
 ad_alt_intf signal  tx_ext_sysref_out   output  1
 ad_alt_intf signal  tx_sync             input   1
 ad_alt_intf signal  tx_data             input   PCORE_NUM_OF_TX_LANES*32  data
-
-# signal tap interface
-
-ad_alt_intf clock   stp_clk         output  1
-
-add_interface if_stp conduit source
-add_interface_port if_stp stp_data     acq_data_in     output  PCORE_ST_DATA_WIDTH
-add_interface_port if_stp stp_trigger  acq_trigger_in  output  PCORE_ST_TRIGGER_WIDTH
-set_interface_property if_stp associatedClock if_stp_clk
-
-
 

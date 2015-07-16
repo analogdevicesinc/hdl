@@ -69,18 +69,12 @@ module sys_xcvr (
   tx_ip_sync,
   tx_ip_data,
   tx_ready,
-  tx_int,
-
-  stp_clk,
-  stp_data,
-  stp_trigger);
+  tx_int);
 
   // parameters are not used--
 
   parameter   PCORE_NUM_OF_TX_LANES = 4;
   parameter   PCORE_NUM_OF_RX_LANES = 4;
-  parameter   PCORE_ST_DATA_WIDTH = 32;
-  parameter   PCORE_ST_TRIGGER_WIDTH = 4;
 
   // io
 
@@ -111,10 +105,6 @@ module sys_xcvr (
   output  [  3:0]   tx_ready;
   output            tx_int;
 
-  output            stp_clk;
-  output  [181:0]   stp_data;
-  output  [  1:0]   stp_trigger;
-                                                             
   // internal signals
 
   wire    [  3:0]   rx_analogreset;
@@ -134,21 +124,6 @@ module sys_xcvr (
   wire    [ 15:0]   rx_pcs_errdetect;
   wire    [ 15:0]   rx_pcs_kchar;
   wire    [127:0]   rx_pcs_data;
-
-  // signal tap
-
-  assign stp_clk = rx_clk;
-
-  assign stp_data[181:181] = rx_sysref;
-  assign stp_data[180:180] = rx_ip_sync;
-  assign stp_data[179:176] = rx_pcs_valid;
-  assign stp_data[175:160] = rx_pcs_disperr;
-  assign stp_data[159:144] = rx_pcs_errdetect;
-  assign stp_data[143:128] = rx_pcs_kchar;
-  assign stp_data[127:  0] = rx_pcs_data;
-
-  assign stp_trigger[1] = rx_sysref;
-  assign stp_trigger[0] = rx_ip_sync;
 
   // instantiations
 
