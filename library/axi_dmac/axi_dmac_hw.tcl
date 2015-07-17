@@ -7,6 +7,7 @@ source ../scripts/adi_ip_alt.tcl
 set_module_property NAME axi_dmac
 set_module_property DESCRIPTION "AXI DMA Controller"
 set_module_property VERSION 1.0
+set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_dmac
 set_module_property ELABORATION_CALLBACK axi_dmac_elaborate
 

@@ -6,6 +6,7 @@ source ../scripts/adi_env.tcl
 set_module_property NAME axi_hdmi_tx
 set_module_property DESCRIPTION "AXI HDMI Transmit Interface"
 set_module_property VERSION 1.0
+set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_hdmi_tx
 
 # files

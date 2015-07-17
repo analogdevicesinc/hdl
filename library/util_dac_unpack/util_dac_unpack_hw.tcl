@@ -5,6 +5,7 @@ source ../scripts/adi_env.tcl
 set_module_property NAME util_dac_unpack
 set_module_property DESCRIPTION "Util DAC data unpacker"
 set_module_property VERSION 1.0
+set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME util_dac_unpack
 set_module_property ELABORATION_CALLBACK util_dac_unpack_elaborate
 
