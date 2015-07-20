@@ -5,10 +5,11 @@ source ../../scripts/adi_env.tcl
 project_new daq2_a10gx -overwrite
 
 source $ad_hdl_dir/projects/common/a10gx/a10gx_system_assign.tcl
+file copy -force $ad_hdl_dir/projects/common/a10gx/a10gx_system_bd.qsys .
+file copy -force $ad_hdl_dir/projects/daq2/common/daq2_bd.qsys .
 
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
-set_global_assignment -name VERILOG_FILE ../common/daq2_spi.v
-set_global_assignment -name VERILOG_FILE ../common/sys_xcvr.v
+#set_global_assignment -name QSYS_FILE a10gx_system_bd.qsys
+#set_global_assignment -name QSYS_FILE daq2_bd.qsys
 set_global_assignment -name QSYS_FILE sys_xcvr_tx_lane_pll.qsys
 set_global_assignment -name QSYS_FILE sys_xcvr_core.qsys
 set_global_assignment -name QSYS_FILE sys_xcvr_rstcntrl.qsys
@@ -16,6 +17,15 @@ set_global_assignment -name QSYS_FILE sys_xcvr_rx_pll.qsys
 set_global_assignment -name QSYS_FILE sys_xcvr_tx_pll.qsys
 set_global_assignment -name QSYS_FILE sys_xcvr_rx_ip.qsys
 set_global_assignment -name QSYS_FILE sys_xcvr_tx_ip.qsys
+set_global_assignment -name QSYS_FILE system_bd.qsys
+
+set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
+set_global_assignment -name VERILOG_FILE ../common/daq2_spi.v
+set_global_assignment -name VERILOG_FILE ../common/sys_xcvr.v
+set_global_assignment -name VERILOG_FILE system_top.v
+
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # lane interface
 
