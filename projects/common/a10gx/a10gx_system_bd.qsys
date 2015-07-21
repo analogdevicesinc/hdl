@@ -653,13 +653,13 @@
  <interface name="sys_rst" internal="sys_rst.in_reset" type="reset" dir="end" />
  <interface name="sys_spi" internal="sys_spi.external" type="conduit" dir="end" />
  <module name="mem_clk" kind="altera_clock_bridge" version="15.0" enabled="1">
-  <parameter name="DERIVED_CLOCK_RATE" value="233333325" />
+  <parameter name="DERIVED_CLOCK_RATE" value="133333250" />
   <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
  <module name="mem_rst" kind="altera_reset_bridge" version="15.0" enabled="1">
   <parameter name="ACTIVE_LOW_RESET" value="0" />
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="233333325" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="133333250" />
   <parameter name="NUM_RESET_OUTPUTS" value="1" />
   <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
   <parameter name="USE_RESET_REQUEST" value="0" />
@@ -1406,7 +1406,7 @@
   <parameter name="PHY_DDR3_DEFAULT_IO" value="false" />
   <parameter name="PHY_DDR3_DEFAULT_REF_CLK_FREQ" value="false" />
   <parameter name="PHY_DDR3_IO_VOLTAGE" value="1.5" />
-  <parameter name="PHY_DDR3_MEM_CLK_FREQ_MHZ" value="933.3333" />
+  <parameter name="PHY_DDR3_MEM_CLK_FREQ_MHZ" value="533.333" />
   <parameter name="PHY_DDR3_RATE_ENUM" value="RATE_QUARTER" />
   <parameter name="PHY_DDR3_REF_CLK_JITTER_PS" value="10.0" />
   <parameter name="PHY_DDR3_USER_AC_IO_STD_ENUM" value="IO_STD_SSTL_15_C1" />
@@ -1420,7 +1420,7 @@
   <parameter name="PHY_DDR3_USER_DATA_OUT_MODE_ENUM" value="OUT_OCT_34_CAL" />
   <parameter name="PHY_DDR3_USER_PING_PONG_EN" value="false" />
   <parameter name="PHY_DDR3_USER_PLL_REF_CLK_IO_STD_ENUM" value="IO_STD_LVDS" />
-  <parameter name="PHY_DDR3_USER_REF_CLK_FREQ_MHZ" value="233.333" />
+  <parameter name="PHY_DDR3_USER_REF_CLK_FREQ_MHZ" value="133.333" />
   <parameter name="PHY_DDR3_USER_RZQ_IO_STD_ENUM" value="IO_STD_CMOS_15" />
   <parameter name="PHY_DDR4_CONFIG_ENUM">CONFIG_PHY_AND_HARD_CTRL</parameter>
   <parameter name="PHY_DDR4_CORE_CLKS_SHARING_ENUM">CORE_CLKS_SHARING_DISABLED</parameter>
@@ -1763,7 +1763,7 @@
    enabled="1">
   <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
   <parameter name="ADDRESS_WIDTH" value="29" />
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="233333325" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="133333250" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="DATA_WIDTH" value="512" />
   <parameter name="LINEWRAPBURSTS" value="0" />
