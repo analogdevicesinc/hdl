@@ -67,6 +67,7 @@ module ad_jesd_align (
   reg     [31:0]  rx_data = 'd0;
 
   // dword may contain more than one frame per clock
+
   always @(posedge rx_clk) begin
     rx_ip_data_d <= rx_ip_data;
     rx_ip_sof_d <= rx_ip_sof;
