@@ -1,5 +1,4 @@
 
-set_false_path -from [get_registers *preset*]       -to [get_registers *rst*]
 set_false_path -from [get_registers *up_rx_*]       -to [get_registers *rx_*]
 set_false_path -from [get_registers *up_tx_*]       -to [get_registers *tx_*]
 set_false_path -from [get_registers *rx_sync*]      -to [get_registers *up_rx_status_m1*]

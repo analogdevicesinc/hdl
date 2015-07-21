@@ -9,6 +9,7 @@ set_module_property DESCRIPTION "AXI JESD XCVR Interface"
 set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_jesd_xcvr
+set_module_property ELABORATION_CALLBACK p_axi_jesd_xcvr
 
 # files
 
@@ -85,20 +86,51 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # transceiver interface
 
-ad_alt_intf clock   rx_ref_clk          input   1
-ad_alt_intf signal  rx_d                input   4
-ad_alt_intf clock   rx_clk              output  1
+ad_alt_intf reset   rst                 output  1 s_axi_clock s_axi_reset
+
+ad_alt_intf clock   rx_clk              input   1
+ad_alt_intf reset-n rx_rstn             output  1 if_rx_clk s_axi_reset
 ad_alt_intf signal  rx_ext_sysref_in    input   1
 ad_alt_intf signal  rx_ext_sysref_out   output  1
 ad_alt_intf signal  rx_sync             output  1
 ad_alt_intf signal  rx_sof              output  PCORE_NUM_OF_RX_LANES
 ad_alt_intf signal  rx_data             output  PCORE_NUM_OF_RX_LANES*32  data
+ad_alt_intf signal  rx_ready            input   PCORE_NUM_OF_RX_LANES rx_ready
+ad_alt_intf signal  rx_ip_sysref        output  1 export
+ad_alt_intf signal  rx_ip_sync          input   1 export
+ad_alt_intf signal  rx_ip_sof           input   4 export
 
-ad_alt_intf clock   tx_ref_clk          input   1
-ad_alt_intf signal  tx_d                output  4
-ad_alt_intf clock   tx_clk              output  1
+add_interface if_rx_ip_avl avalon_streaming sink
+add_interface_port if_rx_ip_avl rx_ip_data  data  input PCORE_NUM_OF_RX_LANES*32
+add_interface_port if_rx_ip_avl rx_ip_valid valid input 1
+add_interface_port if_rx_ip_avl rx_ip_ready ready output 1
+
+ad_alt_intf clock   tx_clk              input   1
+ad_alt_intf reset-n tx_rstn             output  1 if_tx_clk s_axi_reset
 ad_alt_intf signal  tx_ext_sysref_in    input   1
 ad_alt_intf signal  tx_ext_sysref_out   output  1
 ad_alt_intf signal  tx_sync             input   1
 ad_alt_intf signal  tx_data             input   PCORE_NUM_OF_TX_LANES*32  data
+ad_alt_intf signal  tx_ready            input   PCORE_NUM_OF_TX_LANES tx_ready
+ad_alt_intf signal  tx_ip_sysref        output  1 export
+ad_alt_intf signal  tx_ip_sync          output  1 export
+
+add_interface if_tx_ip_avl avalon_streaming source
+add_interface_port if_tx_ip_avl tx_ip_data  data  output PCORE_NUM_OF_TX_LANES*32
+add_interface_port if_tx_ip_avl tx_ip_valid valid output 1
+add_interface_port if_tx_ip_avl tx_ip_ready ready input 1
+
+proc p_axi_jesd_xcvr {} {
+
+  set p_num_of_rx_lanes [get_parameter_value "PCORE_NUM_OF_RX_LANES"]
+  set p_num_of_tx_lanes [get_parameter_value "PCORE_NUM_OF_TX_LANES"]
+
+  set_interface_property if_rx_ip_avl associatedClock if_rx_clk
+  set_interface_property if_rx_ip_avl associatedReset if_rx_rstn
+  set_interface_property if_rx_ip_avl dataBitsPerSymbol [expr ($p_num_of_rx_lanes*32)]
+  
+  set_interface_property if_tx_ip_avl associatedClock if_tx_clk
+  set_interface_property if_tx_ip_avl associatedReset if_tx_rstn
+  set_interface_property if_tx_ip_avl dataBitsPerSymbol [expr ($p_num_of_tx_lanes*32)]
+}
 

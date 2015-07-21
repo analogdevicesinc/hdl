@@ -39,26 +39,39 @@
 
 module axi_jesd_xcvr (
 
+  rst,
+
   // receive interface
 
-  rx_ref_clk,
-  rx_d,
   rx_clk,
+  rx_rstn,
   rx_ext_sysref_in,
   rx_ext_sysref_out,
   rx_sync,
   rx_sof,
   rx_data,
+  rx_ready,
+  rx_ip_sysref,
+  rx_ip_sync,
+  rx_ip_sof,
+  rx_ip_valid,
+  rx_ip_data,
+  rx_ip_ready,
 
   // transmit interface
 
-  tx_ref_clk,
-  tx_d,
   tx_clk,
+  tx_rstn,
   tx_ext_sysref_in,
   tx_ext_sysref_out,
   tx_sync,
   tx_data,
+  tx_ready,
+  tx_ip_sysref,
+  tx_ip_sync,
+  tx_ip_valid,
+  tx_ip_data,
+  tx_ip_ready,
 
   // axi-lite (slave)
 
@@ -89,26 +102,39 @@ module axi_jesd_xcvr (
   parameter   PCORE_NUM_OF_TX_LANES = 4;
   parameter   PCORE_NUM_OF_RX_LANES = 4;
 
+  output                                        rst;
+
   // receive interface
 
-  input                                         rx_ref_clk;
-  input   [(PCORE_NUM_OF_RX_LANES-1):0]         rx_d;
-  output                                        rx_clk;
+  input                                         rx_clk;
+  output                                        rx_rstn;
   input                                         rx_ext_sysref_in;
   output                                        rx_ext_sysref_out;
   output                                        rx_sync;
   output  [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_sof;
   output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_data;
+  input   [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    rx_ready;
+  output                                        rx_ip_sysref;
+  input                                         rx_ip_sync;
+  input   [  3:0]                               rx_ip_sof;
+  input                                         rx_ip_valid;
+  input   [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_ip_data;
+  output                                        rx_ip_ready;
 
   // transmit interface
 
-  input                                         tx_ref_clk;
-  output  [(PCORE_NUM_OF_TX_LANES-1):0]         tx_d;
-  output                                        tx_clk;
+  input                                         tx_clk;
+  output                                        tx_rstn;
   input                                         tx_ext_sysref_in;
   output                                        tx_ext_sysref_out;
   input                                         tx_sync;
   input   [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_data;
+  input   [((PCORE_NUM_OF_RX_LANES* 1)-1):0]    tx_ready;
+  output                                        tx_ip_sysref;
+  output                                        tx_ip_sync;
+  output                                        tx_ip_valid;
+  output  [((PCORE_NUM_OF_RX_LANES*32)-1):0]    tx_ip_data;
+  input                                         tx_ip_ready;
 
   // axi interface
 
@@ -139,17 +165,9 @@ module axi_jesd_xcvr (
   wire                                          up_rstn;
   wire                                          up_clk;
   wire    [  7:0]                               status_s;
-  wire                                          rst;
-  wire                                          rx_rstn;
-  wire                                          rx_ip_sync_s;
-  wire    [  3:0]                               rx_ip_sof_s;                     
+  wire    [  3:0]                               rx_ip_sof_s;
   wire    [((PCORE_NUM_OF_RX_LANES*32)-1):0]    rx_ip_data_s;
-  wire    [(PCORE_NUM_OF_RX_LANES-1):0]         rx_ready_s;
   wire    [  7:0]                               rx_status_s;
-  wire                                          tx_rstn;
-  wire                                          tx_ip_sync_s;
-  wire    [((PCORE_NUM_OF_TX_LANES*32)-1):0]    tx_ip_data_s;
-  wire    [(PCORE_NUM_OF_TX_LANES-1):0]         tx_ready_s;
   wire    [  7:0]                               tx_status_s;
   wire                                          up_wreq_s;
   wire    [ 13:0]                               up_waddr_s;
@@ -159,34 +177,45 @@ module axi_jesd_xcvr (
   wire    [ 13:0]                               up_raddr_s;
   wire    [ 31:0]                               up_rdata_s;
   wire                                          up_rack_s;
-                                                
+ 
+  // variables
+                                               
+  genvar                                        n;
+
   // assignments
 
   assign status_s = 8'hff;
   assign up_rstn = s_axi_aresetn;
   assign up_clk = s_axi_aclk;
 
+  assign rx_ip_ready = 1'b1;
+  assign rx_ip_sysref = rx_ext_sysref_out;
+
+  assign rx_ip_sof_s[3] = rx_ip_sof[0];
+  assign rx_ip_sof_s[2] = rx_ip_sof[1];
+  assign rx_ip_sof_s[1] = rx_ip_sof[2];
+  assign rx_ip_sof_s[0] = rx_ip_sof[3];
+
   generate
-  if (PCORE_NUM_OF_TX_LANES < 8) begin
-  assign tx_status_s[7:PCORE_NUM_OF_TX_LANES] = status_s[7:PCORE_NUM_OF_TX_LANES];
-  assign tx_status_s[(PCORE_NUM_OF_TX_LANES-1):0] = tx_ready_s;
-  end else begin
-  assign tx_status_s = tx_ready_s[7:0];
+  for (n = 0; n < PCORE_NUM_OF_RX_LANES; n = n + 1) begin: g_rx_swap
+  assign rx_ip_data_s[((n*32) + 31):((n*32) + 24)] = rx_ip_data[((n*32) +  7):((n*32) +  0)];
+  assign rx_ip_data_s[((n*32) + 23):((n*32) + 16)] = rx_ip_data[((n*32) + 15):((n*32) +  8)];
+  assign rx_ip_data_s[((n*32) + 15):((n*32) +  8)] = rx_ip_data[((n*32) + 23):((n*32) + 16)];
+  assign rx_ip_data_s[((n*32) +  7):((n*32) +  0)] = rx_ip_data[((n*32) + 31):((n*32) + 24)];
   end
   endgenerate
 
   generate
   if (PCORE_NUM_OF_RX_LANES < 8) begin
   assign rx_status_s[7:PCORE_NUM_OF_RX_LANES] = status_s[7:PCORE_NUM_OF_RX_LANES];
-  assign rx_status_s[(PCORE_NUM_OF_RX_LANES-1):0] = rx_ready_s;
+  assign rx_status_s[(PCORE_NUM_OF_RX_LANES-1):0] = rx_ready;
   end else begin
-  assign rx_status_s = rx_ready_s[7:0];
+  assign rx_status_s = rx_ready[7:0];
   end
   endgenerate
 
-  genvar n;
   generate
-  for (n = 0; n < PCORE_NUM_OF_RX_LANES; n = n + 1) begin: g_rx_lane
+  for (n = 0; n < PCORE_NUM_OF_RX_LANES; n = n + 1) begin: g_rx_align
   ad_jesd_align i_jesd_align (
     .rx_clk (rx_clk),
     .rx_ip_sof (rx_ip_sof_s),
@@ -196,41 +225,26 @@ module axi_jesd_xcvr (
   end
   endgenerate
 
+  assign tx_ip_valid = 1'b1;
+  assign tx_ip_sysref = tx_ext_sysref_out;
+
   generate
-  for (n = 0; n < PCORE_NUM_OF_TX_LANES; n = n + 1) begin: g_tx_lane
-  assign tx_ip_data_s[((n*32) + 31):((n*32) + 24)] = tx_data[((n*32) +  7):((n*32) +  0)];
-  assign tx_ip_data_s[((n*32) + 23):((n*32) + 16)] = tx_data[((n*32) + 15):((n*32) +  8)];
-  assign tx_ip_data_s[((n*32) + 15):((n*32) +  8)] = tx_data[((n*32) + 23):((n*32) + 16)];
-  assign tx_ip_data_s[((n*32) +  7):((n*32) +  0)] = tx_data[((n*32) + 31):((n*32) + 24)];
+  for (n = 0; n < PCORE_NUM_OF_TX_LANES; n = n + 1) begin: g_tx_swap
+  assign tx_ip_data[((n*32) + 31):((n*32) + 24)] = tx_data[((n*32) +  7):((n*32) +  0)];
+  assign tx_ip_data[((n*32) + 23):((n*32) + 16)] = tx_data[((n*32) + 15):((n*32) +  8)];
+  assign tx_ip_data[((n*32) + 15):((n*32) +  8)] = tx_data[((n*32) + 23):((n*32) + 16)];
+  assign tx_ip_data[((n*32) +  7):((n*32) +  0)] = tx_data[((n*32) + 31):((n*32) + 24)];
   end
   endgenerate
 
-  sys_xcvr #(
-    .PCORE_NUM_OF_TX_LANES (PCORE_NUM_OF_TX_LANES),
-    .PCORE_NUM_OF_RX_LANES (PCORE_NUM_OF_RX_LANES))
-  i_sys_xcvr (
-    .up_clk (up_clk),
-    .up_rstn (up_rstn),
-    .rx_ref_clk (rx_ref_clk),
-    .rx_d (rx_d),
-    .tx_ref_clk (tx_ref_clk),
-    .tx_d (tx_d),
-    .rst (rst),
-    .rx_clk (rx_clk),
-    .rx_rstn (rx_rstn),
-    .rx_sysref (rx_ext_sysref_out),
-    .rx_ip_sync (rx_ip_sync_s),
-    .rx_ip_sof (rx_ip_sof_s),
-    .rx_ip_data (rx_ip_data_s),
-    .rx_ready (rx_ready_s),
-    .rx_int (),
-    .tx_clk (tx_clk),
-    .tx_rstn (tx_rstn),
-    .tx_sysref (tx_ext_sysref_out),
-    .tx_ip_sync (tx_ip_sync_s),
-    .tx_ip_data (tx_ip_data_s),
-    .tx_ready (tx_ready_s),
-    .tx_int ());
+  generate
+  if (PCORE_NUM_OF_TX_LANES < 8) begin
+  assign tx_status_s[7:PCORE_NUM_OF_TX_LANES] = status_s[7:PCORE_NUM_OF_TX_LANES];
+  assign tx_status_s[(PCORE_NUM_OF_TX_LANES-1):0] = tx_ready;
+  end else begin
+  assign tx_status_s = tx_ready[7:0];
+  end
+  endgenerate
 
   // processor
     
@@ -243,7 +257,7 @@ module axi_jesd_xcvr (
     .rx_rstn (rx_rstn),
     .rx_ext_sysref (rx_ext_sysref_in),
     .rx_sysref (rx_ext_sysref_out),
-    .rx_ip_sync (rx_ip_sync_s),
+    .rx_ip_sync (rx_ip_sync),
     .rx_sync (rx_sync),
     .rx_status (rx_status_s),
     .tx_clk (tx_clk),
@@ -251,7 +265,7 @@ module axi_jesd_xcvr (
     .tx_ext_sysref (tx_ext_sysref_in),
     .tx_sysref (tx_ext_sysref_out),
     .tx_sync (tx_sync),
-    .tx_ip_sync (tx_ip_sync_s),
+    .tx_ip_sync (tx_ip_sync),
     .tx_status (tx_status_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
