@@ -289,6 +289,14 @@
          type = "String";
       }
    }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
