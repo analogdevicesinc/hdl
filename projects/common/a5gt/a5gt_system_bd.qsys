@@ -17,104 +17,28 @@
          type = "String";
       }
    }
-   element axi_ad9250_0
+   element a5gt_system_bd
    {
-      datum _sortIndex
+      datum _originalDeviceFamily
       {
-         value = "19";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element axi_ad9250_0.s_axi
-   {
-      datum baseAddress
-      {
-         value = "272695296";
+         value = "Arria V";
          type = "String";
       }
    }
-   element axi_ad9250_1
-   {
-      datum _sortIndex
-      {
-         value = "16";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element axi_ad9250_1.s_axi
-   {
-      datum baseAddress
-      {
-         value = "272760832";
-         type = "String";
-      }
-   }
-   element axi_dmac_0
+   element mem_clk
    {
       datum _sortIndex
       {
          value = "17";
          type = "int";
       }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
    }
-   element axi_dmac_0.s_axi
-   {
-      datum baseAddress
-      {
-         value = "272842752";
-         type = "String";
-      }
-   }
-   element axi_dmac_1
+   element mem_rst
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "18";
          type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element axi_dmac_1.s_axi
-   {
-      datum baseAddress
-      {
-         value = "272826368";
-         type = "String";
-      }
-   }
-   element axi_jesd_xcvr
-   {
-      datum _sortIndex
-      {
-         value = "21";
-         type = "int";
-      }
-   }
-   element axi_jesd_xcvr.s_axi
-   {
-      datum baseAddress
-      {
-         value = "272629760";
-         type = "String";
       }
    }
    element sys_clk
@@ -129,7 +53,7 @@
    {
       datum _sortIndex
       {
-         value = "2";
+         value = "3";
          type = "int";
       }
       datum sopceditor_expanded
@@ -142,7 +66,23 @@
    {
       datum baseAddress
       {
-         value = "272869376";
+         value = "557844480";
+         type = "String";
+      }
+   }
+   element sys_cpu_interconnect
+   {
+      datum _sortIndex
+      {
+         value = "15";
+         type = "int";
+      }
+   }
+   element sys_cpu_interconnect.s0
+   {
+      datum baseAddress
+      {
+         value = "536870912";
          type = "String";
       }
    }
@@ -150,7 +90,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "5";
          type = "int";
       }
       datum sopceditor_expanded
@@ -168,7 +108,7 @@
       }
       datum baseAddress
       {
-         value = "0";
+         value = "268435456";
          type = "String";
       }
    }
@@ -176,7 +116,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "6";
          type = "int";
       }
       datum sopceditor_expanded
@@ -189,7 +129,7 @@
    {
       datum baseAddress
       {
-         value = "272871424";
+         value = "557846528";
          type = "String";
       }
    }
@@ -197,7 +137,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "7";
          type = "int";
       }
    }
@@ -205,7 +145,7 @@
    {
       datum baseAddress
       {
-         value = "272872576";
+         value = "557847680";
          type = "String";
       }
    }
@@ -213,7 +153,7 @@
    {
       datum baseAddress
       {
-         value = "272872544";
+         value = "557847648";
          type = "String";
       }
    }
@@ -221,7 +161,7 @@
    {
       datum baseAddress
       {
-         value = "272872672";
+         value = "557847776";
          type = "String";
       }
    }
@@ -229,7 +169,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "8";
          type = "int";
       }
    }
@@ -237,7 +177,7 @@
    {
       datum baseAddress
       {
-         value = "272872608";
+         value = "557847712";
          type = "String";
       }
    }
@@ -245,7 +185,7 @@
    {
       datum baseAddress
       {
-         value = "272872512";
+         value = "557847616";
          type = "String";
       }
    }
@@ -253,7 +193,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "13";
          type = "int";
       }
       datum sopceditor_expanded
@@ -266,7 +206,7 @@
    {
       datum baseAddress
       {
-         value = "272872656";
+         value = "557847760";
          type = "String";
       }
    }
@@ -274,7 +214,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "12";
          type = "int";
       }
    }
@@ -282,7 +222,7 @@
    {
       datum baseAddress
       {
-         value = "272872640";
+         value = "557847744";
          type = "String";
       }
    }
@@ -290,7 +230,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "11";
          type = "int";
       }
       datum sopceditor_expanded
@@ -303,7 +243,7 @@
    {
       datum baseAddress
       {
-         value = "272872680";
+         value = "557847784";
          type = "String";
       }
    }
@@ -311,7 +251,7 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "4";
          type = "int";
       }
       datum sopceditor_expanded
@@ -329,15 +269,31 @@
       }
       datum baseAddress
       {
-         value = "270532608";
+         value = "555745280";
          type = "String";
+      }
+   }
+   element sys_intr
+   {
+      datum _sortIndex
+      {
+         value = "19";
+         type = "int";
+      }
+   }
+   element sys_mem_interconnect
+   {
+      datum _sortIndex
+      {
+         value = "16";
+         type = "int";
       }
    }
    element sys_pll
    {
       datum _sortIndex
       {
-         value = "1";
+         value = "2";
          type = "int";
       }
       datum sopceditor_expanded
@@ -346,11 +302,19 @@
          type = "boolean";
       }
    }
+   element sys_rst
+   {
+      datum _sortIndex
+      {
+         value = "1";
+         type = "int";
+      }
+   }
    element sys_spi
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "14";
          type = "int";
       }
       datum sopceditor_expanded
@@ -363,7 +327,7 @@
    {
       datum baseAddress
       {
-         value = "272872448";
+         value = "557847552";
          type = "String";
       }
    }
@@ -371,7 +335,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "10";
          type = "int";
       }
       datum sopceditor_expanded
@@ -384,7 +348,7 @@
    {
       datum baseAddress
       {
-         value = "272872480";
+         value = "557847584";
          type = "String";
       }
    }
@@ -392,7 +356,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "9";
          type = "int";
       }
       datum sopceditor_expanded
@@ -405,7 +369,7 @@
    {
       datum baseAddress
       {
-         value = "272872688";
+         value = "557847792";
          type = "String";
       }
    }
@@ -479,30 +443,6 @@
       {
          value = "Arria V";
          type = "String";
-      }
-   }
-   element util_bsplit
-   {
-      datum _sortIndex
-      {
-         value = "20";
-         type = "int";
-      }
-   }
-   element util_cpack_0
-   {
-      datum _sortIndex
-      {
-         value = "18";
-         type = "int";
-      }
-   }
-   element util_cpack_1
-   {
-      datum _sortIndex
-      {
-         value = "15";
-         type = "int";
       }
    }
 }
@@ -519,47 +459,15 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="2" />
- <parameter name="projectName">fmcjesdadc1_a5gt.qpf</parameter>
+ <parameter name="projectName" value="" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
- <interface name="axi_ad9250_0_adc_clock" internal="axi_ad9250_0.adc_clock" />
- <interface name="axi_ad9250_0_adc_dma_if" internal="axi_ad9250_0.adc_dma_if" />
- <interface name="axi_ad9250_0_adc_mon_if" internal="axi_ad9250_0.adc_mon_if" />
- <interface name="axi_ad9250_0_xcvr_clk" internal="axi_ad9250_0.xcvr_clk" />
- <interface name="axi_ad9250_0_xcvr_data" internal="axi_ad9250_0.xcvr_data" />
- <interface name="axi_ad9250_1_adc_clock" internal="axi_ad9250_1.adc_clock" />
- <interface name="axi_ad9250_1_adc_dma_if" internal="axi_ad9250_1.adc_dma_if" />
- <interface name="axi_ad9250_1_adc_mon_if" internal="axi_ad9250_1.adc_mon_if" />
- <interface name="axi_ad9250_1_xcvr_clk" internal="axi_ad9250_1.xcvr_clk" />
- <interface name="axi_ad9250_1_xcvr_data" internal="axi_ad9250_1.xcvr_data" />
- <interface name="axi_dmac_0_fifo_wr_clock" internal="axi_dmac_0.fifo_wr_clock" />
- <interface name="axi_dmac_0_fifo_wr_if" internal="axi_dmac_0.fifo_wr_if" />
- <interface name="axi_dmac_1_fifo_wr_clock" internal="axi_dmac_1.fifo_wr_clock" />
- <interface name="axi_dmac_1_fifo_wr_if" internal="axi_dmac_1.fifo_wr_if" />
- <interface
-   name="rx_data"
-   internal="axi_jesd_xcvr.if_rx_d"
-   type="conduit"
-   dir="end" />
- <interface
-   name="rx_ref_clk"
-   internal="axi_jesd_xcvr.if_rx_ref_clk"
-   type="clock"
-   dir="end" />
- <interface
-   name="rx_sync"
-   internal="axi_jesd_xcvr.if_rx_sync"
-   type="conduit"
-   dir="end" />
- <interface
-   name="rx_sysref"
-   internal="axi_jesd_xcvr.if_rx_ext_sysref_out"
-   type="conduit"
-   dir="end" />
+ <interface name="mem_clk" internal="mem_clk.out_clk" type="clock" dir="start" />
+ <interface name="mem_rst" internal="mem_rst.out_reset" type="reset" dir="start" />
  <interface
    name="sys_125m_clk"
    internal="sys_pll.outclk0"
@@ -575,7 +483,12 @@
    internal="sys_pll.outclk2"
    type="clock"
    dir="start" />
- <interface name="sys_clk" internal="sys_clk.clk_in" type="clock" dir="end" />
+ <interface name="sys_clk" internal="sys_clk.in_clk" type="clock" dir="end" />
+ <interface
+   name="sys_cpu_interconnect_m0"
+   internal="sys_cpu_interconnect.m0"
+   type="avalon"
+   dir="start" />
  <interface
    name="sys_ddr3_oct"
    internal="sys_ddr3_cntrl.oct"
@@ -622,83 +535,49 @@
    type="conduit"
    dir="end" />
  <interface
+   name="sys_intr"
+   internal="sys_intr.receiver_irq"
+   type="interrupt"
+   dir="start" />
+ <interface
+   name="sys_mem_interconnect_s0"
+   internal="sys_mem_interconnect.s0"
+   type="avalon"
+   dir="end" />
+ <interface
    name="sys_pll_locked"
    internal="sys_pll.locked"
    type="conduit"
    dir="end" />
- <interface
-   name="sys_reset"
-   internal="sys_clk.clk_in_reset"
-   type="reset"
-   dir="end" />
+ <interface name="sys_rst" internal="sys_rst.in_reset" type="reset" dir="end" />
  <interface name="sys_spi" internal="sys_spi.external" type="conduit" dir="end" />
- <interface
-   name="tx_ref_clk"
-   internal="axi_jesd_xcvr.if_tx_ref_clk"
-   type="clock"
-   dir="end" />
- <module name="axi_ad9250_0" kind="axi_ad9250" version="1.0" enabled="1">
-  <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_ID" value="0" />
+ <module name="mem_clk" kind="altera_clock_bridge" version="15.0" enabled="1">
+  <parameter name="DERIVED_CLOCK_RATE" value="100000000" />
+  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
+  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
- <module name="axi_ad9250_1" kind="axi_ad9250" version="1.0" enabled="1">
-  <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_ID" value="1" />
+ <module name="mem_rst" kind="altera_reset_bridge" version="15.0" enabled="1">
+  <parameter name="ACTIVE_LOW_RESET" value="0" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
+  <parameter name="NUM_RESET_OUTPUTS" value="1" />
+  <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
+  <parameter name="USE_RESET_REQUEST" value="0" />
  </module>
- <module name="axi_dmac_0" kind="axi_dmac" version="1.0" enabled="1">
-  <parameter name="C_2D_TRANSFER" value="1" />
-  <parameter name="C_AXI_SLICE_DEST" value="0" />
-  <parameter name="C_AXI_SLICE_SRC" value="0" />
-  <parameter name="C_CLKS_ASYNC_DEST_REQ" value="1" />
-  <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
-  <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
-  <parameter name="C_CYCLIC" value="1" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
-  <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
-  <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
-  <parameter name="C_DMA_TYPE_DEST" value="0" />
-  <parameter name="C_DMA_TYPE_SRC" value="2" />
-  <parameter name="C_SYNC_TRANSFER_START" value="0" />
-  <parameter name="PCORE_ID" value="0" />
- </module>
- <module name="axi_dmac_1" kind="axi_dmac" version="1.0" enabled="1">
-  <parameter name="C_2D_TRANSFER" value="1" />
-  <parameter name="C_AXI_SLICE_DEST" value="0" />
-  <parameter name="C_AXI_SLICE_SRC" value="0" />
-  <parameter name="C_CLKS_ASYNC_DEST_REQ" value="1" />
-  <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
-  <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
-  <parameter name="C_CYCLIC" value="1" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
-  <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
-  <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
-  <parameter name="C_DMA_TYPE_DEST" value="0" />
-  <parameter name="C_DMA_TYPE_SRC" value="2" />
-  <parameter name="C_SYNC_TRANSFER_START" value="0" />
-  <parameter name="PCORE_ID" value="1" />
- </module>
- <module name="axi_jesd_xcvr" kind="axi_jesd_xcvr" version="1.0" enabled="1">
-  <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_ID" value="0" />
-  <parameter name="PCORE_NUM_OF_RX_LANES" value="4" />
-  <parameter name="PCORE_NUM_OF_TX_LANES" value="4" />
- </module>
- <module name="sys_clk" kind="clock_source" version="15.0" enabled="1">
-  <parameter name="clockFrequency" value="100000000" />
-  <parameter name="clockFrequencyKnown" value="true" />
-  <parameter name="inputClockFrequency" value="0" />
-  <parameter name="resetSynchronousEdges" value="NONE" />
+ <module name="sys_clk" kind="altera_clock_bridge" version="15.0" enabled="1">
+  <parameter name="DERIVED_CLOCK_RATE" value="0" />
+  <parameter name="EXPLICIT_CLOCK_RATE" value="1000000000" />
+  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
  <module name="sys_cpu" kind="altera_nios2_gen2" version="15.0" enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="5" />
-  <parameter name="AUTO_CLK_RESET_DOMAIN" value="5" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="6" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="6" />
   <parameter name="AUTO_DEVICE" value="5AGTFD7K3F40I3" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="3_H3" />
   <parameter name="bht_ramBlockType" value="Automatic" />
   <parameter name="breakOffset" value="32" />
   <parameter name="breakSlave">sys_cpu.jtag_debug_module</parameter>
   <parameter name="cdx_enabled" value="false" />
-  <parameter name="clockFrequency" value="100000000" />
+  <parameter name="clockFrequency" value="1000000000" />
   <parameter name="cpuArchRev" value="1" />
   <parameter name="cpuID" value="0" />
   <parameter name="cpuReset" value="false" />
@@ -706,10 +585,10 @@
   <parameter name="customInstSlavesSystemInfo_nios_a" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_b" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_c" value="&lt;info/&gt;" />
-  <parameter name="dataAddrWidth" value="29" />
+  <parameter name="dataAddrWidth" value="30" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /><slave name='sys_int_mem.s1' start='0x10200000' end='0x10400000' /><slave name='axi_jesd_xcvr.s_axi' start='0x10400000' end='0x10410000' /><slave name='axi_ad9250_0.s_axi' start='0x10410000' end='0x10420000' /><slave name='axi_ad9250_1.s_axi' start='0x10420000' end='0x10430000' /><slave name='axi_dmac_1.s_axi' start='0x10430000' end='0x10434000' /><slave name='axi_dmac_0.s_axi' start='0x10434000' end='0x10438000' /><slave name='sys_cpu.debug_mem_slave' start='0x1043A800' end='0x1043B000' /><slave name='sys_ethernet.control_port' start='0x1043B000' end='0x1043B400' /><slave name='sys_spi.spi_control_port' start='0x1043B400' end='0x1043B420' /><slave name='sys_timer.s1' start='0x1043B420' end='0x1043B440' /><slave name='sys_ethernet_dma_tx.descriptor_slave' start='0x1043B440' end='0x1043B460' /><slave name='sys_ethernet_dma_rx.descriptor_slave' start='0x1043B460' end='0x1043B480' /><slave name='sys_ethernet_dma_rx.csr' start='0x1043B480' end='0x1043B4A0' /><slave name='sys_ethernet_dma_tx.csr' start='0x1043B4A0' end='0x1043B4C0' /><slave name='sys_gpio_bd.s1' start='0x1043B4C0' end='0x1043B4D0' /><slave name='sys_gpio.s1' start='0x1043B4D0' end='0x1043B4E0' /><slave name='sys_ethernet_dma_rx.response' start='0x1043B4E0' end='0x1043B4E8' /><slave name='sys_id.control_slave' start='0x1043B4E8' end='0x1043B4F0' /><slave name='sys_uart.avalon_jtag_slave' start='0x1043B4F0' end='0x1043B4F8' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x10000000' end='0x20000000' /><slave name='sys_cpu_interconnect.s0' start='0x20000000' end='0x21000000' /><slave name='sys_int_mem.s1' start='0x21200000' end='0x21400000' /><slave name='sys_cpu.debug_mem_slave' start='0x21400800' end='0x21401000' /><slave name='sys_ethernet.control_port' start='0x21401000' end='0x21401400' /><slave name='sys_spi.spi_control_port' start='0x21401400' end='0x21401420' /><slave name='sys_timer.s1' start='0x21401420' end='0x21401440' /><slave name='sys_ethernet_dma_tx.descriptor_slave' start='0x21401440' end='0x21401460' /><slave name='sys_ethernet_dma_rx.descriptor_slave' start='0x21401460' end='0x21401480' /><slave name='sys_ethernet_dma_rx.csr' start='0x21401480' end='0x214014A0' /><slave name='sys_ethernet_dma_tx.csr' start='0x214014A0' end='0x214014C0' /><slave name='sys_gpio_bd.s1' start='0x214014C0' end='0x214014D0' /><slave name='sys_gpio.s1' start='0x214014D0' end='0x214014E0' /><slave name='sys_ethernet_dma_rx.response' start='0x214014E0' end='0x214014E8' /><slave name='sys_id.control_slave' start='0x214014E8' end='0x214014F0' /><slave name='sys_uart.avalon_jtag_slave' start='0x214014F0' end='0x214014F8' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -747,15 +626,15 @@
   <parameter name="icache_size" value="32768" />
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Fast" />
-  <parameter name="instAddrWidth" value="29" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /><slave name='sys_int_mem.s1' start='0x10200000' end='0x10400000' /><slave name='sys_cpu.debug_mem_slave' start='0x1043A800' end='0x1043B000' /></address-map>]]></parameter>
+  <parameter name="instAddrWidth" value="30" />
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x10000000' end='0x20000000' /><slave name='sys_int_mem.s1' start='0x21200000' end='0x21400000' /><slave name='sys_cpu.debug_mem_slave' start='0x21400800' end='0x21401000' /></address-map>]]></parameter>
   <parameter name="instructionMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="instructionMasterHighPerformanceMapParam" value="" />
   <parameter name="instruction_master_high_performance_paddr_base" value="0" />
   <parameter name="instruction_master_high_performance_paddr_size" value="0" />
   <parameter name="instruction_master_paddr_base" value="0" />
   <parameter name="instruction_master_paddr_size" value="0" />
-  <parameter name="internalIrqMaskSystemInfo" value="511" />
+  <parameter name="internalIrqMaskSystemInfo" value="32767" />
   <parameter name="io_regionbase" value="0" />
   <parameter name="io_regionsize" value="0" />
   <parameter name="master_addr_map" value="false" />
@@ -864,6 +743,26 @@
   <parameter name="tmr_enabled" value="false" />
   <parameter name="tracefilename" value="" />
   <parameter name="userDefinedSettings" value="" />
+ </module>
+ <module
+   name="sys_cpu_interconnect"
+   kind="altera_avalon_mm_bridge"
+   version="15.0"
+   enabled="1">
+  <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
+  <parameter name="ADDRESS_WIDTH" value="24" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="1000000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
+  <parameter name="DATA_WIDTH" value="32" />
+  <parameter name="LINEWRAPBURSTS" value="0" />
+  <parameter name="MAX_BURST_SIZE" value="1" />
+  <parameter name="MAX_PENDING_RESPONSES" value="4" />
+  <parameter name="PIPELINE_COMMAND" value="1" />
+  <parameter name="PIPELINE_RESPONSE" value="1" />
+  <parameter name="SYMBOL_WIDTH" value="8" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="10" />
+  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="0" />
+  <parameter name="USE_RESPONSE" value="0" />
  </module>
  <module
    name="sys_ddr3_cntrl"
@@ -1238,8 +1137,8 @@
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="3_H3" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="AddressWidth = -1" />
-  <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="AddressWidth = 28" />
+  <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x10000000' end='0x20000000' /></address-map>]]></parameter>
+  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="AddressWidth = 29" />
   <parameter name="BURST_ENABLE" value="1" />
   <parameter name="BURST_WRAPPING_SUPPORT" value="0" />
   <parameter name="CHANNEL_ENABLE" value="0" />
@@ -1268,8 +1167,8 @@
   <parameter name="AUTO_DEVICE" value="5AGTFD7K3F40I3" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="3_H3" />
-  <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="AddressWidth = 28" />
+  <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x10000000' end='0x20000000' /></address-map>]]></parameter>
+  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="AddressWidth = 29" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="AddressWidth = -1" />
   <parameter name="BURST_ENABLE" value="1" />
@@ -1296,7 +1195,7 @@
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="100000000" />
+  <parameter name="clockRate" value="1000000000" />
   <parameter name="direction" value="InOut" />
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="true" />
@@ -1314,7 +1213,7 @@
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="100000000" />
+  <parameter name="clockRate" value="1000000000" />
   <parameter name="direction" value="InOut" />
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="true" />
@@ -1360,6 +1259,33 @@
   <parameter name="useNonDefaultInitFile" value="false" />
   <parameter name="useShallowMemBlocks" value="false" />
   <parameter name="writable" value="true" />
+ </module>
+ <module name="sys_intr" kind="altera_irq_bridge" version="15.0" enabled="1">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="1000000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
+  <parameter name="AUTO_RECEIVER_IRQ_INTERRUPTS_USED" value="0" />
+  <parameter name="IRQ_N" value="0" />
+  <parameter name="IRQ_WIDTH" value="8" />
+ </module>
+ <module
+   name="sys_mem_interconnect"
+   kind="altera_avalon_mm_bridge"
+   version="15.0"
+   enabled="1">
+  <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
+  <parameter name="ADDRESS_WIDTH" value="29" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
+  <parameter name="DATA_WIDTH" value="512" />
+  <parameter name="LINEWRAPBURSTS" value="0" />
+  <parameter name="MAX_BURST_SIZE" value="1" />
+  <parameter name="MAX_PENDING_RESPONSES" value="4" />
+  <parameter name="PIPELINE_COMMAND" value="1" />
+  <parameter name="PIPELINE_RESPONSE" value="1" />
+  <parameter name="SYMBOL_WIDTH" value="8" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="29" />
+  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="0" />
+  <parameter name="USE_RESPONSE" value="0" />
  </module>
  <module name="sys_pll" kind="altera_pll" version="15.0" enabled="1">
   <parameter name="debug_print_output" value="false" />
@@ -1564,13 +1490,20 @@
   <parameter name="gui_switchover_mode">Automatic Switchover</parameter>
   <parameter name="gui_use_locked" value="true" />
  </module>
+ <module name="sys_rst" kind="altera_reset_bridge" version="15.0" enabled="1">
+  <parameter name="ACTIVE_LOW_RESET" value="0" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="1000000000" />
+  <parameter name="NUM_RESET_OUTPUTS" value="1" />
+  <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
+  <parameter name="USE_RESET_REQUEST" value="0" />
+ </module>
  <module name="sys_spi" kind="altera_avalon_spi" version="15.0" enabled="1">
   <parameter name="avalonSpec" value="2.0" />
   <parameter name="clockPhase" value="0" />
   <parameter name="clockPolarity" value="0" />
   <parameter name="dataWidth" value="8" />
   <parameter name="disableAvalonFlowControl" value="false" />
-  <parameter name="inputClockRate" value="100000000" />
+  <parameter name="inputClockRate" value="1000000000" />
   <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
   <parameter name="insertSync" value="false" />
   <parameter name="lsbOrderedFirst" value="false" />
@@ -1592,7 +1525,7 @@
   <parameter name="periodUnits" value="MSEC" />
   <parameter name="resetOutput" value="false" />
   <parameter name="snapshot" value="true" />
-  <parameter name="systemFrequency" value="100000000" />
+  <parameter name="systemFrequency" value="1000000000" />
   <parameter name="timeoutPulseOutput" value="false" />
   <parameter name="watchdogPulse" value="2" />
  </module>
@@ -1603,7 +1536,7 @@
    enabled="1">
   <parameter name="allowMultipleConnections" value="false" />
   <parameter name="avalonSpec" value="2.0" />
-  <parameter name="clkFreq" value="100000000" />
+  <parameter name="clkFreq" value="1000000000" />
   <parameter name="hubInstanceID" value="0" />
   <parameter name="readBufferDepth" value="64" />
   <parameter name="readIRQThreshold" value="8" />
@@ -1615,25 +1548,13 @@
   <parameter name="writeBufferDepth" value="64" />
   <parameter name="writeIRQThreshold" value="8" />
  </module>
- <module name="util_bsplit" kind="util_bsplit" version="1.0" enabled="1">
-  <parameter name="CH_CNT" value="2" />
-  <parameter name="CH_DW" value="64" />
- </module>
- <module name="util_cpack_0" kind="util_cpack" version="1.0" enabled="1">
-  <parameter name="CH_CNT" value="2" />
-  <parameter name="CH_DW" value="32" />
- </module>
- <module name="util_cpack_1" kind="util_cpack" version="1.0" enabled="1">
-  <parameter name="CH_CNT" value="2" />
-  <parameter name="CH_DW" value="32" />
- </module>
  <connection
    kind="avalon"
    version="15.0"
    start="sys_cpu.data_master"
    end="sys_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b4f0" />
+  <parameter name="baseAddress" value="0x214014f0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1642,7 +1563,7 @@
    start="sys_cpu.data_master"
    end="sys_ddr3_cntrl.avl">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x10000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1651,7 +1572,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet.control_port">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b000" />
+  <parameter name="baseAddress" value="0x21401000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1660,7 +1581,7 @@
    start="sys_cpu.data_master"
    end="sys_id.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b4e8" />
+  <parameter name="baseAddress" value="0x214014e8" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1669,7 +1590,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_tx.csr">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b4a0" />
+  <parameter name="baseAddress" value="0x214014a0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1678,7 +1599,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_rx.csr">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b480" />
+  <parameter name="baseAddress" value="0x21401480" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1687,7 +1608,7 @@
    start="sys_cpu.data_master"
    end="sys_cpu.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043a800" />
+  <parameter name="baseAddress" value="0x21400800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1696,7 +1617,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_rx.descriptor_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b460" />
+  <parameter name="baseAddress" value="0x21401460" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1705,7 +1626,7 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_tx.descriptor_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b440" />
+  <parameter name="baseAddress" value="0x21401440" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1714,7 +1635,16 @@
    start="sys_cpu.data_master"
    end="sys_ethernet_dma_rx.response">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b4e0" />
+  <parameter name="baseAddress" value="0x214014e0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="sys_cpu.data_master"
+   end="sys_cpu_interconnect.s0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x20000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1723,7 +1653,7 @@
    start="sys_cpu.data_master"
    end="sys_int_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10200000" />
+  <parameter name="baseAddress" value="0x21200000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1732,7 +1662,7 @@
    start="sys_cpu.data_master"
    end="sys_gpio.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b4d0" />
+  <parameter name="baseAddress" value="0x214014d0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1741,7 +1671,7 @@
    start="sys_cpu.data_master"
    end="sys_timer.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b420" />
+  <parameter name="baseAddress" value="0x21401420" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1750,52 +1680,7 @@
    start="sys_cpu.data_master"
    end="sys_gpio_bd.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b4c0" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="sys_cpu.data_master"
-   end="axi_ad9250_1.s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10420000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="sys_cpu.data_master"
-   end="axi_dmac_0.s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10434000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="sys_cpu.data_master"
-   end="axi_ad9250_0.s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10410000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="sys_cpu.data_master"
-   end="axi_dmac_1.s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10430000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="sys_cpu.data_master"
-   end="axi_jesd_xcvr.s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10400000" />
+  <parameter name="baseAddress" value="0x214014c0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1804,7 +1689,7 @@
    start="sys_cpu.data_master"
    end="sys_spi.spi_control_port">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043b400" />
+  <parameter name="baseAddress" value="0x21401400" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1813,7 +1698,7 @@
    start="sys_cpu.instruction_master"
    end="sys_ddr3_cntrl.avl">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x10000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1822,7 +1707,7 @@
    start="sys_cpu.instruction_master"
    end="sys_cpu.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1043a800" />
+  <parameter name="baseAddress" value="0x21400800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1831,25 +1716,16 @@
    start="sys_cpu.instruction_master"
    end="sys_int_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10200000" />
+  <parameter name="baseAddress" value="0x21200000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.0"
-   start="axi_dmac_1.m_dest_axi"
+   start="sys_mem_interconnect.m0"
    end="sys_ddr3_cntrl.avl">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="axi_dmac_0.m_dest_axi"
-   end="sys_ddr3_cntrl.avl">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x10000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1858,7 +1734,7 @@
    start="sys_ethernet_dma_tx.mm_read"
    end="sys_ddr3_cntrl.avl">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x10000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1867,7 +1743,7 @@
    start="sys_ethernet_dma_rx.mm_write"
    end="sys_ddr3_cntrl.avl">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x10000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1884,363 +1760,91 @@
    kind="clock"
    version="15.0"
    start="sys_ddr3_cntrl.afi_clk"
-   end="axi_dmac_1.m_dest_axi_clock" />
+   end="sys_mem_interconnect.clk" />
  <connection
    kind="clock"
    version="15.0"
    start="sys_ddr3_cntrl.afi_clk"
-   end="axi_dmac_0.m_dest_axi_clock" />
- <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_cpu.clk" />
- <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_uart.clk" />
- <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_timer.clk" />
- <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_id.clk" />
- <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_gpio_bd.clk" />
- <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_gpio.clk" />
- <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_spi.clk" />
+   end="mem_rst.clk" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_clk.clk"
+   start="sys_ddr3_cntrl.afi_clk"
+   end="mem_clk.in_clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.out_clk" end="sys_rst.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.out_clk" end="sys_cpu.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.out_clk"
+   end="sys_uart.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.out_clk"
+   end="sys_timer.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.out_clk" end="sys_id.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.out_clk"
+   end="sys_gpio_bd.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.out_clk"
+   end="sys_gpio.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.out_clk" end="sys_spi.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.out_clk"
+   end="sys_cpu_interconnect.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.out_clk"
+   end="sys_intr.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.out_clk"
    end="sys_int_mem.clk1" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_clk.clk"
+   start="sys_clk.out_clk"
    end="sys_ethernet_dma_rx.clock" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_clk.clk"
+   start="sys_clk.out_clk"
    end="sys_ethernet_dma_tx.clock" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_clk.clk"
+   start="sys_clk.out_clk"
    end="sys_ethernet.control_port_clock_connection" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_clk.clk"
+   start="sys_clk.out_clk"
    end="sys_ddr3_cntrl.pll_ref_clk" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_clk.clk"
+   start="sys_clk.out_clk"
    end="sys_ethernet.receive_clock_connection" />
- <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_pll.refclk" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_clk.clk"
-   end="axi_dmac_1.s_axi_clock" />
+   start="sys_clk.out_clk"
+   end="sys_pll.refclk" />
  <connection
    kind="clock"
    version="15.0"
-   start="sys_clk.clk"
-   end="axi_ad9250_1.s_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_clk.clk"
-   end="axi_dmac_0.s_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_clk.clk"
-   end="axi_ad9250_0.s_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_clk.clk"
-   end="axi_jesd_xcvr.s_axi_clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="sys_clk.clk"
+   start="sys_clk.out_clk"
    end="sys_ethernet.transmit_clock_connection" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="axi_jesd_xcvr.if_rx_clk"
-   end="util_cpack_0.if_adc_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="axi_jesd_xcvr.if_rx_clk"
-   end="util_cpack_1.if_adc_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="axi_jesd_xcvr.if_rx_clk"
-   end="axi_dmac_0.if_fifo_wr_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="axi_jesd_xcvr.if_rx_clk"
-   end="axi_dmac_1.if_fifo_wr_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="axi_jesd_xcvr.if_rx_clk"
-   end="axi_ad9250_0.if_rx_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="axi_jesd_xcvr.if_rx_clk"
-   end="axi_ad9250_1.if_rx_clk" />
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_0.if_adc_data"
-   end="axi_dmac_0.if_fifo_wr_din">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_1.if_adc_data"
-   end="axi_dmac_1.if_fifo_wr_din">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_adc_data_a"
-   end="util_cpack_0.if_adc_data_0">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_1.if_adc_data_a"
-   end="util_cpack_1.if_adc_data_0">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_adc_data_b"
-   end="util_cpack_0.if_adc_data_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_1.if_adc_data_b"
-   end="util_cpack_1.if_adc_data_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_1.if_adc_enable_0"
-   end="axi_ad9250_1.if_adc_enable_a">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_adc_enable_a"
-   end="util_cpack_0.if_adc_enable_0">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_adc_enable_b"
-   end="util_cpack_0.if_adc_enable_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_1.if_adc_enable_b"
-   end="util_cpack_1.if_adc_enable_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_0.if_adc_sync"
-   end="axi_dmac_0.if_fifo_wr_sync">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_1.if_adc_sync"
-   end="axi_dmac_1.if_fifo_wr_sync">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_0.if_adc_valid_0"
-   end="axi_ad9250_0.if_adc_valid_a">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_1.if_adc_valid_1"
-   end="axi_ad9250_1.if_adc_valid_b">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_1.if_adc_valid_a"
-   end="util_cpack_1.if_adc_valid_0">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_adc_valid_b"
-   end="util_cpack_0.if_adc_valid_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_dmac_0.if_fifo_wr_en"
-   end="util_cpack_0.if_adc_valid">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_dmac_1.if_fifo_wr_en"
-   end="util_cpack_1.if_adc_valid">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_dmac_0.if_fifo_wr_overflow"
-   end="axi_ad9250_0.if_adc_dovf">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_dmac_1.if_fifo_wr_overflow"
-   end="axi_ad9250_1.if_adc_dovf">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_jesd_xcvr.if_rx_data"
-   end="util_bsplit.if_data">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_rx_data"
-   end="util_bsplit.if_split_data_0">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_bsplit.if_split_data_1"
-   end="axi_ad9250_1.if_rx_data">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
  <connection
    kind="interrupt"
    version="15.0"
@@ -2254,20 +1858,6 @@
    start="sys_cpu.irq"
    end="sys_ethernet_dma_tx.csr_irq">
   <parameter name="irqNumber" value="1" />
- </connection>
- <connection
-   kind="interrupt"
-   version="15.0"
-   start="sys_cpu.irq"
-   end="axi_dmac_0.interrupt_sender">
-  <parameter name="irqNumber" value="2" />
- </connection>
- <connection
-   kind="interrupt"
-   version="15.0"
-   start="sys_cpu.irq"
-   end="axi_dmac_1.interrupt_sender">
-  <parameter name="irqNumber" value="3" />
  </connection>
  <connection
    kind="interrupt"
@@ -2301,109 +1891,150 @@
   <parameter name="irqNumber" value="8" />
  </connection>
  <connection
-   kind="reset"
+   kind="interrupt"
    version="15.0"
-   start="sys_ddr3_cntrl.afi_reset"
-   end="axi_dmac_1.m_dest_axi_reset" />
+   start="sys_cpu.irq"
+   end="sys_intr.sender0_irq">
+  <parameter name="irqNumber" value="2" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="sys_cpu.irq"
+   end="sys_intr.sender1_irq">
+  <parameter name="irqNumber" value="3" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="sys_cpu.irq"
+   end="sys_intr.sender2_irq">
+  <parameter name="irqNumber" value="9" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="sys_cpu.irq"
+   end="sys_intr.sender3_irq">
+  <parameter name="irqNumber" value="10" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="sys_cpu.irq"
+   end="sys_intr.sender4_irq">
+  <parameter name="irqNumber" value="11" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="sys_cpu.irq"
+   end="sys_intr.sender5_irq">
+  <parameter name="irqNumber" value="12" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="sys_cpu.irq"
+   end="sys_intr.sender6_irq">
+  <parameter name="irqNumber" value="13" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="sys_cpu.irq"
+   end="sys_intr.sender7_irq">
+  <parameter name="irqNumber" value="14" />
+ </connection>
  <connection
    kind="reset"
    version="15.0"
    start="sys_ddr3_cntrl.afi_reset"
-   end="axi_dmac_0.m_dest_axi_reset" />
+   end="mem_rst.in_reset" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_ddr3_cntrl.afi_reset"
+   end="sys_mem_interconnect.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
+   end="sys_intr.clk_reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
    end="sys_ddr3_cntrl.global_reset" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_pll.reset" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_cpu.reset" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_uart.reset" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_timer.reset" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_id.reset" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
-   end="sys_gpio.reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="sys_spi.reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_gpio_bd.reset" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
+   end="sys_gpio.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
+   end="sys_spi.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
+   end="sys_cpu_interconnect.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
    end="sys_int_mem.reset1" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_ethernet.reset_connection" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_ethernet_dma_rx.reset_n" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_ethernet_dma_tx.reset_n" />
  <connection
    kind="reset"
    version="15.0"
-   start="sys_clk.clk_reset"
-   end="axi_ad9250_0.s_axi_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="axi_dmac_0.s_axi_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="axi_ad9250_1.s_axi_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="axi_dmac_1.s_axi_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
-   end="axi_jesd_xcvr.s_axi_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_clk.clk_reset"
+   start="sys_rst.out_reset"
    end="sys_ddr3_cntrl.soft_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
