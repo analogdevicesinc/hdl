@@ -93,6 +93,8 @@ module system_top (
   txnrx,
   enable,
 
+  gpio_muxout_tx,
+  gpio_muxout_rx,
   gpio_resetb,
   gpio_sync,
   gpio_en_agc,
@@ -102,7 +104,12 @@ module system_top (
   spi_csn,
   spi_clk,
   spi_mosi,
-  spi_miso);
+  spi_miso,
+
+  spi_udc_csn_tx,
+  spi_udc_csn_rx,
+  spi_udc_sclk,
+  spi_udc_data);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -155,6 +162,9 @@ module system_top (
 
   output          txnrx;
   output          enable;
+
+  inout           gpio_muxout_tx;
+  inout           gpio_muxout_rx;
   inout           gpio_resetb;
   inout           gpio_sync;
   inout           gpio_en_agc;
@@ -165,6 +175,11 @@ module system_top (
   output          spi_clk;
   output          spi_mosi;
   input           spi_miso;
+
+  output          spi_udc_csn_tx;
+  output          spi_udc_csn_rx;
+  output          spi_udc_sclk;
+  output          spi_udc_data;
 
   // internal signals
 
@@ -190,26 +205,21 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(29)) i_iobuf (
-    .dio_t ({gpio_t[48:32],gpio_t[15:8], gpio_t[3:0]}),
-    .dio_i ({gpio_o[48:32],gpio_o[15:8], gpio_o[3:0]}),
-    .dio_o ({gpio_i[48:32],gpio_i[15:8], gpio_i[3:0]}),
-    .dio_p ({ gpio_txnrx,
+  ad_iobuf #(.DATA_WIDTH(31)) i_iobuf (
+    .dio_t ({gpio_t[50:32],gpio_t[15:12], gpio_t[3:0]}),
+    .dio_i ({gpio_o[50:32],gpio_o[15:12], gpio_o[3:0]}),
+    .dio_o ({gpio_i[50:32],gpio_i[15:12], gpio_i[3:0]}),
+    .dio_p ({ gpio_muxout_tx,
+              gpio_muxout_rx,
+              gpio_txnrx,
               gpio_enable,
               gpio_resetb,
               gpio_sync,
               gpio_en_agc,
               gpio_ctl,
               gpio_status,
-              gpio_bd[15:8],
+              gpio_bd[15:12],
               gpio_bd[3:0]}));
-
-  // udc spi is just output and connected PMOD2_x_LS
-  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_spi (
-    .dio_t ({4'd0}),
-    .dio_i ({spi_udc_csn_tx, spi_udc_csn_rx, spi_udc_data, spi_udc_sclk}),
-    .dio_o (),
-    .dio_p (gpio_bd[7:4]));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
