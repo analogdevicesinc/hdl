@@ -62,7 +62,7 @@ entity axi_spdif_rx is
     --SPDIF ports
     rx_int_o            : out std_logic;
     spdif_rx_i          : in std_logic;
-    spdif_rx_i_osc      : out std_logic;
+    spdif_rx_i_dbg      : out std_logic;
 
     --AXI Lite inter    face
     S_AXI_ACLK          : in  std_logic;
@@ -131,7 +131,6 @@ architecture IMP of axi_spdif_rx is
 
   signal conf_rxen        : std_logic;
   signal conf_sample      : std_logic;
-  signal evt_en           : std_logic;
   signal conf_chas        : std_logic;
   signal conf_valid       : std_logic;
   signal conf_blken       : std_logic;
@@ -177,7 +176,7 @@ architecture IMP of axi_spdif_rx is
 begin
 
   -------------------------------------------------------------------------------
-  -- Version Register'w
+  -- Version Register
   -------------------------------------------------------------------------------
   version_reg(31 downto 20) <= (others => '0');
   version_reg(19 downto 16) <= "0001";
@@ -198,7 +197,6 @@ begin
   conf_blken                <= control_reg(5);
   conf_valid                <= control_reg(4);
   conf_chas                 <= control_reg(3);
-  evt_en                    <= control_reg(2);
   conf_sample               <= control_reg(1);
   conf_rxen                 <= control_reg(0);
   --------------------------------------------------------------------------------
@@ -256,9 +254,9 @@ begin
         enable      => enable,
 
         in_data     => sample_din,
-        in_stb      => tx_fifo_stb,
+        in_stb      => sample_wr,
 
-        out_ack     => '1',
+        out_ack     => tx_fifo_stb,
         out_data    => sampled_data,
 
         dclk        => DMA_REQ_ACLK,
@@ -328,7 +326,7 @@ begin
         cs_a_en => cs_a_en,
         cs_b_en => cs_b_en
     );
-    spdif_rx_i_osc <= spdif_rx_i;
+    spdif_rx_i_dbg <= spdif_rx_i;
   --------------------------------------------------------------------------------
 
   --------------------------------------------------------------------------------
@@ -415,7 +413,6 @@ begin
       else
         if wr_stb = '1' then
           case wr_addr is
-            when 0 => version_reg <= wr_data;
             when 1 => control_reg <= wr_data;
             when others => null;
           end case;
