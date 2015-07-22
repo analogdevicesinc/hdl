@@ -16,7 +16,7 @@ set_module_property ELABORATION_CALLBACK p_axi_jesd_xcvr
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_jesd_xcvr
 add_fileset_file ad_rst.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
-add_fileset_file ad_jesd_align.v          VERILOG PATH $ad_hdl_dir/library/common/altera/ad_jesd_align.v
+add_fileset_file ad_jesd_align.v          VERILOG PATH $ad_hdl_dir/library/common/ad_jesd_align.v
 add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
 add_fileset_file up_xcvr.v                VERILOG PATH $ad_hdl_dir/library/common/up_xcvr.v
 add_fileset_file axi_jesd_xcvr.v          VERILOG PATH axi_jesd_xcvr.v TOP_LEVEL_FILE
