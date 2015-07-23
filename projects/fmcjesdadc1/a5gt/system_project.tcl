@@ -5,13 +5,16 @@ source ../../scripts/adi_env.tcl
 project_new fmcjesdadc1_a5gt -overwrite
 
 source $ad_hdl_dir/projects/common/a5gt/a5gt_system_assign.tcl
+file copy -force $ad_hdl_dir/projects/common/a5gt/a5gt_system_bd.qsys .
+file copy -force $ad_hdl_dir/projects/fmcjesdadc1/common/fmcjesdadc1_bd.qsys .
+set_global_assignment -name QSYS_FILE system_bd.qsys
 
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
-set_global_assignment -name VERILOG_FILE ../common/sys_xcvr.v
-set_global_assignment -name QSYS_FILE sys_xcvr_rstcntrl_rx_pll.qsys
-set_global_assignment -name QSYS_FILE sys_xcvr_core.qsys
-set_global_assignment -name QSYS_FILE sys_xcvr_rx_ip.qsys
+set_global_assignment -name VERILOG_FILE system_top.v
+
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # reference clock
 
