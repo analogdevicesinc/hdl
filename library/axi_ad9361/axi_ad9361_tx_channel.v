@@ -129,8 +129,6 @@ module axi_ad9361_tx_channel (
 
   // internal signals
 
-  wire    [11:0]  dac_data_i_s;
-  wire    [11:0]  dac_data_q_s;
   wire            dac_iqcor_valid_s;
   wire    [15:0]  dac_iqcor_data_s;
   wire    [15:0]  dac_dds_data_s;
@@ -275,9 +273,6 @@ module axi_ad9361_tx_channel (
 
   // dac iq correction
 
-  assign dac_data_i_s = (IQSEL == 1) ? dac_data_in  : dac_data_out;
-  assign dac_data_q_s = (IQSEL == 1) ? dac_data_out : dac_data_in;
-
   always @(posedge dac_clk) begin
     dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
     if (dac_iqcor_valid_s == 1'b1) begin
@@ -293,8 +288,8 @@ module axi_ad9361_tx_channel (
   ad_iqcor #(.IQSEL (IQSEL)) i_ad_iqcor (
     .clk (dac_clk),
     .valid (dac_valid),
-    .data_i ({dac_data_i_s, 4'd0}),
-    .data_q ({dac_data_q_s, 4'd0}),
+    .data_in ({dac_data_out, 4'd0}),
+    .data_iq ({dac_data_in, 4'd0}),
     .valid_out (dac_iqcor_valid_s),
     .data_out (dac_iqcor_data_s),
     .iqcor_enable (dac_iqcor_enb_s),
