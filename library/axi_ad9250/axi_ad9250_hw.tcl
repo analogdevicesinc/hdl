@@ -2,6 +2,8 @@
 
 package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
+source ../scripts/adi_ip_alt.tcl
+
 
 set_module_property NAME axi_ad9250
 set_module_property DESCRIPTION "AXI AD9250 Interface"
@@ -87,17 +89,13 @@ add_interface_port xcvr_data rx_data data Input 64
 
 # dma interface
 
-add_interface adc_clock clock start
-add_interface_port adc_clock adc_clk clk Output 1
-
-add_interface adc_dma_if conduit end
-set_interface_property adc_dma_if associatedClock adc_clock
-add_interface_port adc_dma_if adc_valid_a adc_valid_a Output 1
-add_interface_port adc_dma_if adc_enable_a adc_enable_a Output 1
-add_interface_port adc_dma_if adc_data_a adc_data_a Output 32
-add_interface_port adc_dma_if adc_valid_b adc_valid_b Output 1
-add_interface_port adc_dma_if adc_enable_b adc_enable_b Output 1
-add_interface_port adc_dma_if adc_data_b adc_data_b Output 32
-add_interface_port adc_dma_if adc_dovf adc_dovf Input 1
-add_interface_port adc_dma_if adc_dunf adc_dunf Input 1
+ad_alt_intf clock   adc_clk       output  1
+ad_alt_intf signal  adc_valid_a   output  1   adc_valid_0
+ad_alt_intf signal  adc_enable_a  output  1   adc_enable_0
+ad_alt_intf signal  adc_data_a    output  32  adc_data_0
+ad_alt_intf signal  adc_valid_b   output  1   adc_valid_1
+ad_alt_intf signal  adc_enable_b  output  1   adc_enable_1
+ad_alt_intf signal  adc_data_b    output  32  adc_data_1
+ad_alt_intf signal  adc_dovf      input   1
+ad_alt_intf signal  adc_dunf      input   1
 
