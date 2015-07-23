@@ -39,13 +39,16 @@ set_parameter_property CH_CNT HDL_PARAMETER true
 # defaults
 
 ad_alt_intf clock   adc_clk         input   1
-ad_alt_intf signal  adc_rst         input   1
 ad_alt_intf signal  adc_valid       output  1
 ad_alt_intf signal  adc_sync        output  1
 ad_alt_intf signal  adc_data        output  CH_CNT*CH_DW
 ad_alt_intf signal  adc_valid_0     input   1
 ad_alt_intf signal  adc_enable_0    input   1
 ad_alt_intf signal  adc_data_0      input   CH_DW
+
+add_interface adc_reset reset end
+set_interface_property adc_reset associatedClock if_adc_clk
+add_interface_port adc_reset adc_rst reset  Input 1
 
 proc p_util_cpack {} {
 
