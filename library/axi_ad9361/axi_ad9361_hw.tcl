@@ -35,6 +35,9 @@ add_fileset_file up_adc_common.v          VERILOG PATH $ad_hdl_dir/library/commo
 add_fileset_file up_adc_channel.v         VERILOG PATH $ad_hdl_dir/library/common/up_adc_channel.v
 add_fileset_file up_dac_common.v          VERILOG PATH $ad_hdl_dir/library/common/up_dac_common.v
 add_fileset_file up_dac_channel.v         VERILOG PATH $ad_hdl_dir/library/common/up_dac_channel.v
+add_fileset_file up_tdd_cntrl.v           VERILOG PATH $ad_hdl_dir/library/common/up_tdd_cntrl.v
+add_fileset_file ad_tdd_control.v         VERILOG PATH $ad_hdl_dir/library/common/ad_tdd_control.v
+add_fileset_file ad_addsub.v              VERILOG PATH $ad_hdl_dir/library/common/ad_addsub.v
 add_fileset_file axi_ad9361_alt_lvds_tx.v VERILOG PATH axi_ad9361_alt_lvds_tx.v
 add_fileset_file axi_ad9361_alt_lvds_rx.v VERILOG PATH axi_ad9361_alt_lvds_rx.v
 add_fileset_file axi_ad9361_dev_if_alt.v  VERILOG PATH axi_ad9361_dev_if_alt.v
@@ -43,6 +46,8 @@ add_fileset_file axi_ad9361_rx_channel.v  VERILOG PATH axi_ad9361_rx_channel.v
 add_fileset_file axi_ad9361_rx.v          VERILOG PATH axi_ad9361_rx.v
 add_fileset_file axi_ad9361_tx_channel.v  VERILOG PATH axi_ad9361_tx_channel.v
 add_fileset_file axi_ad9361_tx.v          VERILOG PATH axi_ad9361_tx.v
+add_fileset_file axi_ad9361_tdd.v         VERILOG PATH axi_ad9361_tdd.v
+add_fileset_file axi_ad9361_tdd_if.v      VERILOG PATH axi_ad9361_tdd_if.v
 add_fileset_file axi_ad9361.v             VERILOG PATH axi_ad9361.v TOP_LEVEL_FILE
 
 # parameters
@@ -150,10 +155,6 @@ add_interface_port dma_if dac_data_q1 dac_data_q1 Input   16
 add_interface_port dma_if dac_dovf dac_dovf Input   1
 add_interface_port dma_if dac_dunf dac_dunf Input   1
 
-add_interface debug_if conduit start
-set_interface_property debug_if associatedClock device_clock
-add_interface_port debug_if dev_dbg_data dev_dbg_data Output 112
-add_interface_port debug_if dev_l_dbg_data dev_l_dbg_data Output 62
 
 add_interface delay_clock clock end
 add_interface_port delay_clock delay_clk clk Input 1
