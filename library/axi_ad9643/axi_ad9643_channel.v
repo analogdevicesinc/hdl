@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // ADC channel-
 
 `timescale 1ns/100ps
@@ -111,8 +109,7 @@ module axi_ad9643_channel (
   // internal signals
 
   wire    [15:0]  adc_dfmt_data_s;
-  wire    [15:0]  adc_dcfilter_data_i_s;
-  wire    [15:0]  adc_dcfilter_data_q_s;
+  wire    [15:0]  adc_dcfilter_data_s;
   wire            adc_iqcor_enb_s;
   wire            adc_dcfilt_enb_s;
   wire            adc_dfmt_se_s;
@@ -127,9 +124,6 @@ module axi_ad9643_channel (
   wire            adc_pn_oos_s;
 
   // iq correction inputs
-
-  assign adc_dcfilter_data_i_s = (IQSEL == 1) ? adc_dcfilter_data_in  : adc_dcfilter_data_out;
-  assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
 
   axi_ad9643_pnmon i_pnmon (
     .adc_clk (adc_clk),
@@ -163,22 +157,24 @@ module axi_ad9643_channel (
     .valid (1'b1),
     .data (adc_dfmt_data_s),
     .valid_out (),
-    .data_out (adc_dcfilter_data_out),
+    .data_out (adc_dcfilter_data_s),
     .dcfilt_enb (adc_dcfilt_enb_s),
     .dcfilt_coeff (adc_dcfilt_coeff_s),
     .dcfilt_offset (adc_dcfilt_offset_s));
   end
   endgenerate
 
+  assign adc_dcfilter_data_out = adc_dcfilter_data_s;
+
   generate
   if (DP_DISABLE == 1) begin
-  assign adc_iqcor_data = (IQSEL == 1) ? adc_dcfilter_data_q_s : adc_dcfilter_data_i_s;
+  assign adc_iqcor_data = adc_dcfilter_data_s;
   end else begin
   ad_iqcor #(.IQSEL(IQSEL)) i_ad_iqcor (
     .clk (adc_clk),
     .valid (1'b1),
-    .data_i (adc_dcfilter_data_i_s),
-    .data_q (adc_dcfilter_data_q_s),
+    .data_in (adc_dcfilter_data_s),
+    .data_iq (adc_dcfilter_data_in),
     .valid_out (),
     .data_out (adc_iqcor_data),
     .iqcor_enable (adc_iqcor_enb_s),
