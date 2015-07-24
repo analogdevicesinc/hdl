@@ -123,7 +123,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -136,7 +136,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -624,6 +624,14 @@
          type = "String";
       }
    }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria V";
+         type = "String";
+      }
+   }
    element timer_1_ms
    {
       datum _sortIndex
@@ -879,11 +887,12 @@
   <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
   <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
   <parameter name="C_CYCLIC" value="0" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="512" />
+  <parameter name="C_DMA_DATA_WIDTH_DEST" value="256" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="23" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
   <parameter name="C_DMA_TYPE_SRC" value="2" />
+  <parameter name="C_FIFO_SIZE" value="32" />
   <parameter name="C_SYNC_TRANSFER_START" value="0" />
   <parameter name="PCORE_ID" value="0" />
  </module>
@@ -895,16 +904,17 @@
   <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
   <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
   <parameter name="C_CYCLIC" value="0" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="512" />
+  <parameter name="C_DMA_DATA_WIDTH_DEST" value="256" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="23" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
   <parameter name="C_DMA_TYPE_SRC" value="2" />
+  <parameter name="C_FIFO_SIZE" value="32" />
   <parameter name="C_SYNC_TRANSFER_START" value="0" />
   <parameter name="PCORE_ID" value="0" />
  </module>
  <module name="sys_clk" kind="clock_source" version="15.0" enabled="1">
-  <parameter name="clockFrequency" value="50000000" />
+  <parameter name="clockFrequency" value="100000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
@@ -1459,7 +1469,7 @@
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_READ_ADDRESS_WIDTH" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@68cd7841</parameter>
+  <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@3ee88d12</parameter>
   <parameter name="BURST_ENABLE" value="1" />
   <parameter name="BURST_WRAPPING_SUPPORT" value="0" />
   <parameter name="CHANNEL_ENABLE" value="0" />
@@ -1489,7 +1499,7 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria V" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="3_H3" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl.avl' start='0x0' end='0x10000000' /></address-map>]]></parameter>
-  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@38d2c6c5</parameter>
+  <parameter name="AUTO_MM_READ_ADDRESS_WIDTH">com.altera.entityinterfaces.moduleext.AddressWidthType@5ff04458</parameter>
   <parameter name="AUTO_MM_WRITE_ADDRESS_MAP" value="" />
   <parameter name="AUTO_MM_WRITE_ADDRESS_WIDTH" value="" />
   <parameter name="BURST_ENABLE" value="1" />
@@ -2427,7 +2437,7 @@
    version="15.0"
    start="axi_dmac_1.m_dest_axi"
    end="sys_ddr3_cntrl.avl">
-  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="arbitrationPriority" value="4" />
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
@@ -2436,7 +2446,7 @@
    version="15.0"
    start="axi_dmac_0.m_dest_axi"
    end="sys_ddr3_cntrl.avl">
-  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="arbitrationPriority" value="4" />
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
