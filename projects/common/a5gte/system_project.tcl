@@ -13,8 +13,8 @@ set_global_assignment -name VERILOG_FILE system_top.v
 
 # fmc fpga interface
 
-set_location_assignment PIN_R11 -to eth_rx_clk
-set_location_assignment PIN_T11 -to "eth_rx_clk(n)"
+set_location_assignment PIN_H18 -to eth_rx_clk
+set_location_assignment PIN_J18 -to "eth_rx_clk(n)"
 set_location_assignment PIN_J11 -to eth_rx_cntrl
 set_location_assignment PIN_K11 -to "eth_rx_cntrl(n)"
 set_location_assignment PIN_F12 -to eth_rx_data[0]
@@ -28,13 +28,10 @@ set_location_assignment PIN_H13 -to "eth_rx_data[3](n)"
 
 set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_clk
 set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_cntrl
-set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[0]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[1]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[2]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[3]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data
 
-set_location_assignment PIN_E10 -to eth_tx_clk_out
-set_location_assignment PIN_F10 -to "eth_tx_clk_out(n)"
+set_location_assignment PIN_A6  -to eth_tx_clk
+set_location_assignment PIN_B6  -to "eth_tx_clk(n)"
 set_location_assignment PIN_P12 -to eth_tx_cntrl
 set_location_assignment PIN_R12 -to "eth_tx_cntrl(n)"
 set_location_assignment PIN_M12 -to eth_tx_data[0]
@@ -46,19 +43,13 @@ set_location_assignment PIN_R13 -to "eth_tx_data[2](n)"
 set_location_assignment PIN_D13 -to eth_tx_data[3]
 set_location_assignment PIN_E13 -to "eth_tx_data[3](n)"
 
-set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_clk_out
+set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_clk
 set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_cntrl
-set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[0]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[1]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[2]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[3]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data
 
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_tx_clk_out
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_tx_clk
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_tx_cntrl
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_tx_data[0]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_tx_data[1]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_tx_data[2]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_tx_data[3]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_tx_data
 
 set_location_assignment PIN_L15 -to eth_mdc
 set_location_assignment PIN_M15 -to eth_mdio_i
