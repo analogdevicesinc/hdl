@@ -5,11 +5,16 @@ source ../../scripts/adi_env.tcl
 project_new fmcjesdadc1_a5soc -overwrite
 
 source $ad_hdl_dir/projects/common/a5soc/a5soc_system_assign.tcl
+file copy -force $ad_hdl_dir/projects/common/a5soc/a5soc_system_bd.qsys .
+file copy -force $ad_hdl_dir/projects/fmcjesdadc1/common/fmcjesdadc1_bd.qsys .
+set_global_assignment -name QSYS_FILE system_bd.qsys
 
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_jesd_align.v
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_xcvr_rx_rst.v
+set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
+set_global_assignment -name VERILOG_FILE system_top.v
 
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # reference clock
 
@@ -55,6 +60,12 @@ set_location_assignment PIN_C32   -to spi_sdio
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_csn
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_sdio
+
+# disable auto-pack
+
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_cntrl
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_status
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xcvr
 
 execute_flow -compile
 
