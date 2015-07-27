@@ -3,56 +3,8 @@
 
 set_global_assignment -name FAMILY "Arria V"
 set_global_assignment -name DEVICE 5ASTFD5K3F40I3ES
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name QSYS_FILE system_bd.qsys
-set_global_assignment -name VERILOG_FILE system_top.v
 
-# clocks
-
-set_location_assignment PIN_AU32 -to sys_clk
-set_instance_assignment -name IO_STANDARD "1.5 V" -to sys_clk
-
-# hdmi
-# data[6] (C23) and data[10] (C22) are not populated
-# replacing with C19 and C18 for now
-
-set_location_assignment PIN_A21 -to hdmi_out_clk
-set_location_assignment PIN_B25 -to hdmi_data[0]
-set_location_assignment PIN_A25 -to hdmi_data[1]
-set_location_assignment PIN_A24 -to hdmi_data[2]
-set_location_assignment PIN_T25 -to hdmi_data[3]
-set_location_assignment PIN_A23 -to hdmi_data[4]
-set_location_assignment PIN_P22 -to hdmi_data[5]
-set_location_assignment PIN_T27 -to hdmi_data[6]
-set_location_assignment PIN_T26 -to hdmi_data[7]
-set_location_assignment PIN_N22 -to hdmi_data[8]
-set_location_assignment PIN_T21 -to hdmi_data[9]
-set_location_assignment PIN_R26 -to hdmi_data[10]
-set_location_assignment PIN_D20 -to hdmi_data[11]
-set_location_assignment PIN_R21 -to hdmi_data[12]
-set_location_assignment PIN_F22 -to hdmi_data[13]
-set_location_assignment PIN_C20 -to hdmi_data[14]
-set_location_assignment PIN_E22 -to hdmi_data[15]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_out_clk
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[0]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[1]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[2]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[3]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[4]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[5]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[6]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[7]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[8]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[9]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[10]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[11]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[12]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[13]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[14]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_data[15]
-
-# i2c (hdmi)
+# i2c (fmc)
 
 set_location_assignment PIN_F26 -to hdmi_scl
 set_location_assignment PIN_G26 -to hdmi_sda
@@ -492,8 +444,5 @@ set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
 set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
-
-
-
 
 
