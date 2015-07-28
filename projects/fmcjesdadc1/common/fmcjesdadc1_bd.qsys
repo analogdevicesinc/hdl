@@ -117,6 +117,14 @@
          type = "String";
       }
    }
+   element fmcjesdadc1_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria V";
+         type = "String";
+      }
+   }
    element mem_clk
    {
       datum _sortIndex
@@ -291,7 +299,7 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="2" />
- <parameter name="projectName" value="" />
+ <parameter name="projectName">fmcjesdadc1_a5gt.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
@@ -387,14 +395,14 @@
   <parameter name="PCORE_ID" value="1" />
  </module>
  <module name="axi_dmac_0" kind="axi_dmac" version="1.0" enabled="1">
-  <parameter name="C_2D_TRANSFER" value="1" />
+  <parameter name="C_2D_TRANSFER" value="0" />
   <parameter name="C_AXI_SLICE_DEST" value="0" />
   <parameter name="C_AXI_SLICE_SRC" value="0" />
   <parameter name="C_CLKS_ASYNC_DEST_REQ" value="1" />
   <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
   <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
-  <parameter name="C_CYCLIC" value="1" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
+  <parameter name="C_CYCLIC" value="0" />
+  <parameter name="C_DMA_DATA_WIDTH_DEST" value="256" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
@@ -403,14 +411,14 @@
   <parameter name="PCORE_ID" value="0" />
  </module>
  <module name="axi_dmac_1" kind="axi_dmac" version="1.0" enabled="1">
-  <parameter name="C_2D_TRANSFER" value="1" />
+  <parameter name="C_2D_TRANSFER" value="0" />
   <parameter name="C_AXI_SLICE_DEST" value="0" />
   <parameter name="C_AXI_SLICE_SRC" value="0" />
   <parameter name="C_CLKS_ASYNC_DEST_REQ" value="1" />
   <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
   <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
-  <parameter name="C_CYCLIC" value="1" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="64" />
+  <parameter name="C_CYCLIC" value="0" />
+  <parameter name="C_DMA_DATA_WIDTH_DEST" value="256" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
   <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
@@ -1229,6 +1237,16 @@
    version="15.0"
    start="axi_jesd_xcvr.if_rx_rstn"
    end="xcvr_core.rxlink_rst_n" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
+   end="util_cpack_0.adc_reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
+   end="util_cpack_1.adc_reset" />
  <connection
    kind="reset"
    version="15.0"
