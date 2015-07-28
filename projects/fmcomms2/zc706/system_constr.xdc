@@ -36,6 +36,7 @@ set_property  -dict {PACKAGE_PIN  AB15  IOSTANDARD LVDS_25} [get_ports tx_data_o
 set_property  -dict {PACKAGE_PIN  AB14  IOSTANDARD LVDS_25} [get_ports tx_data_out_n[5]]                  ; ## H20  FMC_LPC_LA15_N
 set_property  -dict {PACKAGE_PIN  AE18  IOSTANDARD LVCMOS25} [get_ports enable]                           ; ## G18  FMC_LPC_LA16_P
 set_property  -dict {PACKAGE_PIN  AE17  IOSTANDARD LVCMOS25} [get_ports txnrx]                            ; ## G19  FMC_LPC_LA16_N
+set_property  -dict {PACKAGE_PIN  AC19  IOSTANDARD LVCMOS25} [get_ports tdd_sync]                         ; ## PMOD1_7_LS
 
 set_property  -dict {PACKAGE_PIN  AG26  IOSTANDARD LVCMOS25} [get_ports gpio_status[0]]                   ; ## G21  FMC_LPC_LA20_P
 set_property  -dict {PACKAGE_PIN  AG27  IOSTANDARD LVCMOS25} [get_ports gpio_status[1]]                   ; ## G22  FMC_LPC_LA20_N
