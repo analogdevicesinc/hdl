@@ -20,6 +20,10 @@ create_bd_port -dir O txnrx
 
 create_bd_port -dir O tdd_enable
 
+create_bd_port -dir I tdd_sync_i
+create_bd_port -dir O tdd_sync_o
+create_bd_port -dir O tdd_sync_t
+
 # ad9361 core
 
 set axi_ad9361 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361]
@@ -78,6 +82,9 @@ ad_connect  tx_data_out_p axi_ad9361/tx_data_out_p
 ad_connect  tx_data_out_n axi_ad9361/tx_data_out_n
 ad_connect  enable axi_ad9361/enable
 ad_connect  txnrx axi_ad9361/txnrx
+ad_connect  tdd_sync_i axi_ad9361/tdd_sync_i
+ad_connect  tdd_sync_o axi_ad9361/tdd_sync_o
+ad_connect  tdd_sync_t axi_ad9361/tdd_sync_t
 ad_connect  tdd_enable axi_ad9361/tdd_enable
 ad_connect  axi_ad9361_clk util_adc_pack/clk
 ad_connect  axi_ad9361/adc_valid_i0 util_adc_pack/chan_valid_0

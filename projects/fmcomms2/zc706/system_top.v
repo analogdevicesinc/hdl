@@ -92,6 +92,7 @@ module system_top (
 
   enable,
   txnrx,
+  tdd_sync,
 
   gpio_muxout_tx,
   gpio_muxout_rx,
@@ -162,6 +163,7 @@ module system_top (
 
   output          enable;
   output          txnrx;
+  inout           tdd_sync;
 
   inout           gpio_muxout_tx;
   inout           gpio_muxout_rx;
@@ -213,6 +215,9 @@ module system_top (
   wire            gpio_txnrx;
   wire            enable_s;
   wire            txnrx_s;
+  wire            tdd_sync_t_s;
+  wire            tdd_sync_o_s;
+  wire            tdd_sync_i_s;
 
   // internal logic
 
@@ -240,6 +245,12 @@ module system_top (
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_tdd_sync (
+    .dio_t (tdd_sync_t_s),
+    .dio_i (tdd_sync_o_s),
+    .dio_o (tdd_sync_i_s),
+    .dio_p (tdd_sync));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -318,7 +329,10 @@ module system_top (
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
     .txnrx (txnrx_s),
-    .tdd_enable (tdd_enable_s));
+    .tdd_enable (tdd_enable_s),
+    .tdd_sync_i (tdd_sync_i_s),
+    .tdd_sync_o (tdd_sync_o_s),
+    .tdd_sync_t (tdd_sync_t_s));
 
 endmodule
 
