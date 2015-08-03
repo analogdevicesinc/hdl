@@ -613,8 +613,8 @@ module up_gt_channel (
           8'h0b: up_rdata <= {30'd0, up_rx_sysref_sel, up_rx_sysref};
           8'h0c: up_rdata <= {31'd0, up_rx_sync};
           8'h0d: up_rdata <= {15'd0, up_rx_status,
-                              6'hcf, up_rx_rst_done_m, up_rx_rst_done,
-                              6'hcf, up_rx_pll_locked_m, up_rx_pll_locked};
+                              6'h3f, up_rx_rst_done_m, up_rx_rst_done,
+                              6'h3f, up_rx_pll_locked_m, up_rx_pll_locked};
           8'h0e: up_rdata <= {31'd0, up_rx_user_ready};
           8'h18: up_rdata <= {31'd0, up_tx_gt_resetn};
           8'h19: up_rdata <= {31'd0, up_tx_resetn};
@@ -622,8 +622,8 @@ module up_gt_channel (
           8'h1b: up_rdata <= {30'd0, up_tx_sysref_sel, up_tx_sysref};
           8'h1c: up_rdata <= {31'd0, up_tx_sync};
           8'h1d: up_rdata <= {15'd0, up_tx_status,
-                              6'hcf, up_tx_rst_done_m, up_tx_rst_done,
-                              6'hcf, up_tx_pll_locked_m, up_tx_pll_locked};
+                              6'h3f, up_tx_rst_done_m, up_tx_rst_done,
+                              6'h3f, up_tx_pll_locked_m, up_tx_pll_locked};
           8'h1e: up_rdata <= {31'd0, up_tx_user_ready};
           8'h24: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr_int, up_drp_wdata_int};
           8'h25: up_rdata <= {15'd0, up_drp_status, up_drp_rdata_int};

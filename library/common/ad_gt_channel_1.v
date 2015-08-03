@@ -41,12 +41,12 @@ module ad_gt_channel_1 (
 
   // channel interface (pll)
 
+  cpll_rst_m,
   cpll_ref_clk_in,
   qpll_ref_clk,
   qpll_locked,
   qpll_clk,
   pll_rst,
-  pll_rst_m,
 
   // channel interface (rx)
 
@@ -82,17 +82,13 @@ module ad_gt_channel_1 (
   rx_ip_sync,
   rx_ip_rst_done,
 
+  rx_pll_locked,
   rx_user_ready,
-  rx_rst_done_m,
+  rx_rst_done,
+
   rx_pll_locked_m,
   rx_user_ready_m,
-
-  // channel interface (rx-daisy-chain)
-
-  rx_rst_done_in,
-  rx_rst_done_out,
-  rx_pll_locked_in,
-  rx_pll_locked_out,
+  rx_rst_done_m,
 
   // channel interface (tx)
 
@@ -118,17 +114,13 @@ module ad_gt_channel_1 (
   tx_ip_sync,
   tx_ip_rst_done,
 
+  tx_pll_locked,
   tx_user_ready,
-  tx_rst_done_m,
+  tx_rst_done,
+
   tx_pll_locked_m,
   tx_user_ready_m,
-
-  // channel interface (tx-daisy-chain)
-
-  tx_rst_done_in,
-  tx_rst_done_out,
-  tx_pll_locked_in,
-  tx_pll_locked_out,
+  tx_rst_done_m,
 
   // dma interface
 
@@ -160,21 +152,19 @@ module ad_gt_channel_1 (
   parameter   integer RX_OUT_DIV = 1;
   parameter   integer RX_CLK25_DIV = 10;
   parameter   integer RX_CLKBUF_ENABLE = 0;
-  parameter   integer RX_PRIMARY = 0;
   parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020;
   parameter   integer TX_OUT_DIV = 1;
   parameter   integer TX_CLK25_DIV = 10;
   parameter   integer TX_CLKBUF_ENABLE = 0;
-  parameter   integer TX_PRIMARY = 0;
 
   // channel interface (pll)
 
+  input           cpll_rst_m;
   input           cpll_ref_clk_in;
   input           qpll_ref_clk;
   input           qpll_locked;
   input           qpll_clk;
   output          pll_rst;
-  input           pll_rst_m;
 
   // channel interface (rx)
 
@@ -210,17 +200,13 @@ module ad_gt_channel_1 (
   input           rx_ip_sync;
   output          rx_ip_rst_done;
 
+  output          rx_pll_locked;
   output          rx_user_ready;
-  input           rx_rst_done_m;
+  output          rx_rst_done;
+
   input           rx_pll_locked_m;
   input           rx_user_ready_m;
-
-  // channel interface (rx-daisy-chain)
-
-  input           rx_rst_done_in;
-  output          rx_rst_done_out;
-  input           rx_pll_locked_in;
-  output          rx_pll_locked_out;
+  input           rx_rst_done_m;
 
   // channel interface (tx)
 
@@ -246,17 +232,13 @@ module ad_gt_channel_1 (
   output          tx_ip_sync;
   output          tx_ip_rst_done;
 
+  output          tx_pll_locked;
   output          tx_user_ready;
-  input           tx_rst_done_m;
+  output          tx_rst_done;
+
   input           tx_pll_locked_m;
   input           tx_user_ready_m;
-
-  // channel interface (tx-daisy-chain)
-
-  input           tx_rst_done_in;
-  output          tx_rst_done_out;
-  input           tx_pll_locked_in;
-  output          tx_pll_locked_out;
+  input           tx_rst_done_m;
 
   // dma interface
 
@@ -285,12 +267,8 @@ module ad_gt_channel_1 (
   wire            cpll_pd_s;
   wire    [ 1:0]  rx_sys_clk_sel_s;
   wire    [ 2:0]  rx_out_clk_sel_s;
-  wire            rx_rst_done_s;
-  wire            rx_pll_locked_s;
   wire    [ 1:0]  tx_sys_clk_sel_s;
   wire    [ 2:0]  tx_out_clk_sel_s;
-  wire            tx_rst_done_s;
-  wire            tx_pll_locked_s;
   wire            up_drp_sel_s;
   wire            up_drp_wr_s;
   wire    [11:0]  up_drp_addr_s;
@@ -351,30 +329,24 @@ module ad_gt_channel_1 (
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_CLKBUF_ENABLE (RX_CLKBUF_ENABLE),
     .TX_CLKBUF_ENABLE (TX_CLKBUF_ENABLE),
-    .RX_PRIMARY (RX_PRIMARY),
-    .TX_PRIMARY (TX_PRIMARY),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_gt (
     .lpm_dfe_n (lpm_dfe_n_s),
     .cpll_ref_clk_in (cpll_ref_clk_in),
     .cpll_pd (cpll_pd_s),
-    .cpll_rst (pll_rst_m),
+    .cpll_rst (cpll_rst_m),
     .qpll_clk (qpll_clk),
     .qpll_ref_clk (qpll_ref_clk),
     .qpll_locked (qpll_locked),
-    .rx_rst (rx_rst_m),
+    .rx_gt_rst_m (rx_gt_rst_m),
     .rx_p (rx_p),
     .rx_n (rx_n),
     .rx_sys_clk_sel (rx_sys_clk_sel_s),
     .rx_out_clk_sel (rx_out_clk_sel_s),
     .rx_out_clk (rx_out_clk),
-    .rx_rst_done (rx_rst_done_s),
-    .rx_rst_done_in (rx_rst_done_in),
-    .rx_rst_done_out (rx_rst_done_out),
-    .rx_pll_locked (rx_pll_locked_s),
-    .rx_pll_locked_in (rx_pll_locked_in),
-    .rx_pll_locked_out (rx_pll_locked_out),
-    .rx_user_ready (rx_user_ready_m),
+    .rx_rst_done (rx_rst_done),
+    .rx_pll_locked (rx_pll_locked),
+    .rx_user_ready_m (rx_user_ready_m),
     .rx_clk (rx_clk),
     .rx_gt_charisk (rx_gt_charisk),
     .rx_gt_disperr (rx_gt_disperr),
@@ -386,19 +358,15 @@ module ad_gt_channel_1 (
     .rx_gt_ilas_a (rx_gt_ilas_a),
     .rx_gt_ilas_r (rx_gt_ilas_r),
     .rx_gt_cgs_k (rx_gt_cgs_k),
-    .tx_rst (tx_rst_m),
+    .tx_gt_rst_m (tx_gt_rst_m),
     .tx_p (tx_p),
     .tx_n (tx_n),
     .tx_sys_clk_sel (tx_sys_clk_sel_s),
     .tx_out_clk_sel (tx_out_clk_sel_s),
     .tx_out_clk (tx_out_clk),
-    .tx_rst_done (tx_rst_done_s),
-    .tx_rst_done_in (tx_rst_done_in),
-    .tx_rst_done_out (tx_rst_done_out),
-    .tx_pll_locked (tx_pll_locked_s),
-    .tx_pll_locked_in (tx_pll_locked_in),
-    .tx_pll_locked_out (tx_pll_locked_out),
-    .tx_user_ready (tx_user_ready_m),
+    .tx_rst_done (tx_rst_done),
+    .tx_pll_locked (tx_pll_locked),
+    .tx_user_ready_m (tx_user_ready_m),
     .tx_clk (tx_clk),
     .tx_gt_charisk (tx_gt_charisk),
     .tx_gt_data (tx_gt_data),
@@ -469,9 +437,9 @@ module ad_gt_channel_1 (
     .rx_ip_sysref (rx_ip_sysref),
     .rx_ip_sync (rx_ip_sync),
     .rx_sync (rx_sync),
-    .rx_rst_done (rx_rst_done_s),
+    .rx_rst_done (rx_rst_done),
     .rx_rst_done_m (rx_rst_done_m),
-    .rx_pll_locked (rx_pll_locked_s),
+    .rx_pll_locked (rx_pll_locked),
     .rx_pll_locked_m (rx_pll_locked_m),
     .rx_user_ready (rx_user_ready),
     .rx_ip_rst_done (rx_ip_rst_done),
@@ -486,9 +454,9 @@ module ad_gt_channel_1 (
     .tx_ip_sysref (tx_ip_sysref),
     .tx_sync (tx_sync),
     .tx_ip_sync (tx_ip_sync),
-    .tx_rst_done (tx_rst_done_s),
+    .tx_rst_done (tx_rst_done),
     .tx_rst_done_m (tx_rst_done_m),
-    .tx_pll_locked (tx_pll_locked_s),
+    .tx_pll_locked (tx_pll_locked),
     .tx_pll_locked_m (tx_pll_locked_m),
     .tx_user_ready (tx_user_ready),
     .tx_ip_rst_done (tx_ip_rst_done),

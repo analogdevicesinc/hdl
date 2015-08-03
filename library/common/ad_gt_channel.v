@@ -51,7 +51,7 @@ module ad_gt_channel (
 
   // receive
 
-  rx_rst,
+  rx_gt_rst_m,
   rx_p,
   rx_n,
 
@@ -59,12 +59,8 @@ module ad_gt_channel (
   rx_out_clk_sel,
   rx_out_clk,
   rx_rst_done,
-  rx_rst_done_in,
-  rx_rst_done_out,
   rx_pll_locked,
-  rx_pll_locked_in,
-  rx_pll_locked_out,
-  rx_user_ready,
+  rx_user_ready_m,
 
   rx_clk,
   rx_gt_charisk,
@@ -80,7 +76,7 @@ module ad_gt_channel (
 
   // transmit
 
-  tx_rst,
+  tx_gt_rst_m,
   tx_p,
   tx_n,
 
@@ -88,12 +84,8 @@ module ad_gt_channel (
   tx_out_clk_sel,
   tx_out_clk,
   tx_rst_done,
-  tx_rst_done_in,
-  tx_rst_done_out,
   tx_pll_locked,
-  tx_pll_locked_in,
-  tx_pll_locked_out,
-  tx_user_ready,
+  tx_user_ready_m,
 
   tx_clk,
   tx_gt_charisk,
@@ -118,12 +110,10 @@ module ad_gt_channel (
   parameter   integer RX_OUT_DIV = 1;
   parameter   integer RX_CLK25_DIV = 10;
   parameter   integer RX_CLKBUF_ENABLE = 0;
-  parameter   integer RX_PRIMARY = 0;
   parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020;
   parameter   integer TX_OUT_DIV = 1;
   parameter   integer TX_CLK25_DIV = 10;
   parameter   integer TX_CLKBUF_ENABLE = 0;
-  parameter   integer TX_PRIMARY = 0;
 
   // rst and clocks
 
@@ -137,7 +127,7 @@ module ad_gt_channel (
 
   // receive
 
-  input           rx_rst;
+  input           rx_gt_rst_m;
   input           rx_p;
   input           rx_n;
 
@@ -145,12 +135,8 @@ module ad_gt_channel (
   input   [ 2:0]  rx_out_clk_sel;
   output          rx_out_clk;
   output          rx_rst_done;
-  input           rx_rst_done_in;
-  output          rx_rst_done_out;
   output          rx_pll_locked;
-  input           rx_pll_locked_in;
-  output          rx_pll_locked_out;
-  input           rx_user_ready;
+  input           rx_user_ready_m;
 
   input           rx_clk;
   output  [ 3:0]  rx_gt_charisk;
@@ -166,7 +152,7 @@ module ad_gt_channel (
 
   // transmit
 
-  input           tx_rst;
+  input           tx_gt_rst_m;
   output          tx_p;
   output          tx_n;
 
@@ -174,12 +160,8 @@ module ad_gt_channel (
   input   [ 2:0]  tx_out_clk_sel;
   output          tx_out_clk;
   output          tx_rst_done;
-  input           tx_rst_done_in;
-  output          tx_rst_done_out;
   output          tx_pll_locked;
-  input           tx_pll_locked_in;
-  output          tx_pll_locked_out;
-  input           tx_user_ready;
+  input           tx_user_ready_m;
 
   input           tx_clk;
   input   [ 3:0]  tx_gt_charisk;
@@ -252,20 +234,7 @@ module ad_gt_channel (
   // pll locked
 
   assign rx_pll_locked = (rx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
-  assign rx_pll_locked_out = (RX_PRIMARY == 1) ? rx_pll_locked :
-    (rx_pll_locked & rx_pll_locked_in);
-
   assign tx_pll_locked = (tx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
-  assign tx_pll_locked_out = (TX_PRIMARY == 1) ? tx_pll_locked :
-    (tx_pll_locked & tx_pll_locked_in);
-
-  // reset done
-
-  assign rx_rst_done_out = (RX_PRIMARY == 1) ? rx_rst_done :
-    (rx_rst_done & rx_rst_done_in);
-
-  assign tx_rst_done_out = (TX_PRIMARY == 1) ? tx_rst_done :
-    (tx_rst_done & tx_rst_done_in);
 
   // instantiations
 
@@ -544,7 +513,7 @@ module ad_gt_channel (
     .TXPD (2'b00),
     .SETERRSTATUS (1'd0),
     .EYESCANRESET (1'd0),
-    .RXUSERRDY (rx_user_ready),
+    .RXUSERRDY (rx_user_ready_m),
     .EYESCANDATAERROR (),
     .EYESCANMODE (1'd0),
     .EYESCANTRIGGER (1'd0),
@@ -637,7 +606,7 @@ module ad_gt_channel (
     .RXHEADERVALID (),
     .RXSTARTOFSEQ (),
     .RXGEARBOXSLIP (1'd0),
-    .GTRXRESET (rx_rst),
+    .GTRXRESET (rx_gt_rst_m),
     .RXOOBRESET (1'd0),
     .RXPCSRESET (1'd0),
     .RXPMARESET (1'd0),
@@ -665,9 +634,9 @@ module ad_gt_channel (
     .TXQPISTRONGPDOWN (1'd0),
     .TXQPIWEAKPUP (1'd0),
     .CFGRESET (1'd0),
-    .GTTXRESET (tx_rst),
+    .GTTXRESET (tx_gt_rst_m),
     .PCSRSVDOUT (),
-    .TXUSERRDY (tx_user_ready),
+    .TXUSERRDY (tx_user_ready_m),
     .GTRESETSEL (1'd0),
     .RESETOVRD (1'd0),
     .TXCHARDISPMODE (8'd0),
@@ -1172,10 +1141,10 @@ module ad_gt_channel (
     .GTREFCLK1 (1'd0),
     .GTRESETSEL (1'd0),
     .GTRSVD (15'd0),
-    .GTRXRESET (rx_rst),
+    .GTRXRESET (rx_gt_rst_m),
     .GTSOUTHREFCLK0 (1'd0),
     .GTSOUTHREFCLK1 (1'd0),
-    .GTTXRESET (tx_rst),
+    .GTTXRESET (tx_gt_rst_m),
     .LOOPBACK (3'd0),
     .LPBKRXTXSEREN (1'd0),
     .LPBKTXRXSEREN (1'd0),
@@ -1297,7 +1266,7 @@ module ad_gt_channel (
     .RXSYNCIN (1'd0),
     .RXSYNCMODE (1'd0),
     .RXSYSCLKSEL (rx_sys_clk_sel_s),
-    .RXUSERRDY (rx_user_ready),
+    .RXUSERRDY (rx_user_ready_m),
     .RXUSRCLK (rx_clk),
     .RXUSRCLK2 (rx_clk),
     .RX8B10BEN (1'd1),
@@ -1354,7 +1323,7 @@ module ad_gt_channel (
     .TXPRBSSEL (4'd0),
     .TXPRECURSOR (5'd0),
     .TXPRECURSORINV (1'd0),
-    .TXPROGDIVRESET (tx_rst),
+    .TXPROGDIVRESET (tx_gt_rst_m),
     .TXQPIBIASEN (1'd0),
     .TXQPISTRONGPDOWN (1'd0),
     .TXQPIWEAKPUP (1'd0),
@@ -1366,7 +1335,7 @@ module ad_gt_channel (
     .TXSYNCIN (1'd0),
     .TXSYNCMODE (1'd0),
     .TXSYSCLKSEL (tx_sys_clk_sel_s),
-    .TXUSERRDY (tx_user_ready),
+    .TXUSERRDY (tx_user_ready_m),
     .TXUSRCLK (tx_clk),
     .TXUSRCLK2 (tx_clk),
     .TX8B10BBYPASS (8'd0),
