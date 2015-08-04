@@ -194,8 +194,8 @@ module axi_ad9434_core (
       up_wack <= 'd0;
     end else begin
       up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
-      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rdata_s[2];
-      up_wack <= up_wack_s[0] | up_wack_s[1] | up_rdata_s[2];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
     end
   end
 
