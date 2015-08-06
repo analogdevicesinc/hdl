@@ -261,7 +261,7 @@ module up_tdd_cntrl (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
         up_tdd_vco_rx_on_1 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h21)) begin
         up_tdd_vco_rx_off_1 <= up_wdata[23:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
@@ -288,34 +288,34 @@ module up_tdd_cntrl (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h29)) begin
         up_tdd_tx_dp_off_1 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h30)) begin
         up_tdd_vco_rx_on_2 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h21)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h31)) begin
         up_tdd_vco_rx_off_2 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h32)) begin
         up_tdd_vco_tx_on_2 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h33)) begin
         up_tdd_vco_tx_off_2 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h32)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h34)) begin
         up_tdd_rx_on_2 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h33)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h35)) begin
         up_tdd_rx_off_2 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h34)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h36)) begin
         up_tdd_tx_on_2 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h35)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h37)) begin
         up_tdd_tx_off_2 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h36)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h38)) begin
         up_tdd_tx_dp_on_2 <= up_wdata[23:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h37)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h39)) begin
         up_tdd_tx_dp_off_2 <= up_wdata[23:0];
       end
     end
