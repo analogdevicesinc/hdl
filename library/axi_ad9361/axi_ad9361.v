@@ -113,9 +113,8 @@ module axi_ad9361 (
   enable,
   txnrx,
 
-  tdd_sync_i,
-  tdd_sync_o,
-  tdd_sync_t,
+  tdd_sync_req,
+  tdd_sync_ack,
 
   // axi interface
 
@@ -233,9 +232,8 @@ module axi_ad9361 (
   output          enable;
   output          txnrx;
 
-  input           tdd_sync_i;
-  output          tdd_sync_o;
-  output          tdd_sync_t;
+  inout           tdd_sync_req;
+  inout           tdd_sync_ack;
 
   // axi interface
 
@@ -270,7 +268,7 @@ module axi_ad9361 (
 
   // chipscope signals
 
-  output [34:0]   tdd_dbg;
+  output [40:0]   tdd_dbg;
 
   // internal registers
 
@@ -411,9 +409,8 @@ module axi_ad9361 (
     .tdd_tx_rf_en(tdd_tx_rf_en_s),
     .tdd_enable (tdd_enable),
     .tdd_status(tdd_status_s),
-    .tdd_sync_i(tdd_sync_i),
-    .tdd_sync_o(tdd_sync_o),
-    .tdd_sync_t(tdd_sync_t),
+    .tdd_sync_req(tdd_sync_req),
+    .tdd_sync_ack(tdd_sync_ack),
     .tx_valid_i0(dac_valid_i0_s),
     .tx_valid_q0(dac_valid_q0_s),
     .tx_valid_i1(dac_valid_i1_s),
