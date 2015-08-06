@@ -9,6 +9,10 @@ M_DEPS := system_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_board.tcl
+M_DEPS += system_top.v
+M_DEPS += system_constr.xdc
+M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += system_bd.tcl
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../common/motcon2_fmc_bd.tcl
@@ -21,7 +25,6 @@ M_DEPS += ../../../library/axi_mc_current_monitor/axi_mc_current_monitor.xpr
 M_DEPS += ../../../library/axi_mc_speed/axi_mc_speed.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/util_adc_pack/util_adc_pack.xpr
-M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_gmii_to_rgmii/util_gmii_to_rgmii.xpr
 M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
 
@@ -58,7 +61,6 @@ clean-all:clean
 	make -C ../../../library/axi_mc_speed clean
 	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/util_adc_pack clean
-	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_gmii_to_rgmii clean
 	make -C ../../../library/util_i2c_mixer clean
 
@@ -78,7 +80,6 @@ lib:
 	make -C ../../../library/axi_mc_speed
 	make -C ../../../library/axi_spdif_tx
 	make -C ../../../library/util_adc_pack
-	make -C ../../../library/util_cpack
 	make -C ../../../library/util_gmii_to_rgmii
 	make -C ../../../library/util_i2c_mixer
 
