@@ -371,7 +371,7 @@ module up_tdd_cntrl (
 
   // rf tdd control signal CDC
 
-  up_xfer_cntrl #(.DATA_WIDTH(15)) i_tdd_control (
+  up_xfer_cntrl #(.DATA_WIDTH(16)) i_tdd_control (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({up_tdd_enable,
