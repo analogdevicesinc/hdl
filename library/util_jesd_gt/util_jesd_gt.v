@@ -306,21 +306,21 @@ module util_jesd_gt #(
 
   // channel interface (tx)
 
-  output  [((RX_NUM_OF_LANES* 1)-1):0]        tx_p,
-  output  [((RX_NUM_OF_LANES* 1)-1):0]        tx_n,
+  output  [((TX_NUM_OF_LANES* 1)-1):0]        tx_p,
+  output  [((TX_NUM_OF_LANES* 1)-1):0]        tx_n,
   input                                       tx_sysref,
   input                                       tx_sync,
 
   output                                      tx_out_clk,
   input                                       tx_clk,
   output                                      tx_rst,
-  input   [((RX_NUM_OF_LANES*32)-1):0]        tx_data,
+  input   [((TX_NUM_OF_LANES*32)-1):0]        tx_data,
 
   output                                      tx_ip_rst,
   output                                      tx_ip_rst_done,
   output                                      tx_ip_sysref,
   output                                      tx_ip_sync,
-  input   [((RX_NUM_OF_LANES*32)-1):0]        tx_ip_data,
+  output  [((TX_NUM_OF_LANES*32)-1):0]        tx_ip_data,
 
   input                                       tx_0_p,
   input                                       tx_0_n,
