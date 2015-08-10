@@ -39,7 +39,12 @@
 
 module util_jesd_gt #(
 
+  parameter   integer QPLL0_ENABLE = 1,
+  parameter   integer QPLL1_ENABLE = 1,
+  parameter   integer NUM_OF_LANES = 8,
+  parameter   integer RX_ENABLE = 1,
   parameter   integer RX_NUM_OF_LANES = 8,
+  parameter   integer TX_ENABLE = 1,
   parameter   integer TX_NUM_OF_LANES = 8)
 
  (
