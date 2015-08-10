@@ -3,35 +3,14 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
-adi_ip_create axi_jesd_gt
-adi_ip_files axi_jesd_gt [list \
-  "axi_jesd_gt_constr.xdc" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/common/ad_gt_channel.v" \
-  "$ad_hdl_dir/library/common/ad_gt_common.v" \
-  "$ad_hdl_dir/library/common/ad_gt_es.v" \
-  "$ad_hdl_dir/library/common/ad_gt_es_axi.v" \
-  "$ad_hdl_dir/library/common/ad_gt_channel_1.v" \
-  "$ad_hdl_dir/library/common/ad_gt_common_1.v" \
-  "$ad_hdl_dir/library/common/ad_jesd_align.v" \
-  "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/common/up_gt_channel.v" \
-  "$ad_hdl_dir/library/common/up_gt.v" \
-  "axi_jesd_gt.v" ]
+adi_ip_create util_jesd_gt
+adi_ip_files util_jesd_gt [list \
+  "util_jesd_gt.v" ]
 
-adi_ip_properties axi_jesd_gt
+adi_ip_properties_lite util_jesd_gt
 
-adi_ip_constraints axi_jesd_gt [list \
-  "axi_jesd_gt_constr.xdc" ]
-
-set_property value m_axi:s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
-  -of_objects [ipx::get_bus_interfaces axi_signal_clock \
-  -of_objects [ipx::current_core]]]
-
-set_property value axi_aresetn [ipx::get_bus_parameters ASSOCIATED_RESET \
-  -of_objects [ipx::get_bus_interfaces axi_signal_clock \
-  -of_objects [ipx::current_core]]]
-
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 0} \
+  [ipx::get_ports *rx_*_0* -of_objects [ipx::current_core]] 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 1} \
   [ipx::get_ports *rx_*_1* -of_objects [ipx::current_core]] 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 2} \
@@ -47,6 +26,8 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 7} \
   [ipx::get_ports *rx_*_7* -of_objects [ipx::current_core]]
 
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 0} \
+  [ipx::get_ports *tx_*_0* -of_objects [ipx::current_core]] 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 1} \
   [ipx::get_ports *tx_*_1* -of_objects [ipx::current_core]] 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 2} \
