@@ -40,6 +40,7 @@
 module axi_jesd_gt #(
 
   parameter   integer ID = 0,
+  parameter   integer NUM_OF_LANES = 8,
   parameter   integer GTH_GTX_N = 0,
   parameter   integer QPLL0_ENABLE = 1,
   parameter   integer QPLL0_REFCLK_DIV = 1,
@@ -706,8 +707,6 @@ module axi_jesd_gt #(
 
   // post-processing
   
-  localparam  integer NUM_OF_LANES = (TX_NUM_OF_LANES > RX_NUM_OF_LANES) ?
-    TX_NUM_OF_LANES : RX_NUM_OF_LANES;
   localparam  [31:0]  PMA_RSV[7:0] = {PMA_RSV_7, PMA_RSV_6, PMA_RSV_5, PMA_RSV_4,
     PMA_RSV_3, PMA_RSV_2, PMA_RSV_1, PMA_RSV_0};
   localparam  integer CPLL_FBDIV[7:0] = {CPLL_FBDIV_7, CPLL_FBDIV_6, CPLL_FBDIV_5, CPLL_FBDIV_4,
