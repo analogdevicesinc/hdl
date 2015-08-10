@@ -5,6 +5,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_dmac
 adi_ip_files axi_dmac [list \
+  "sg.v" \
   "$ad_hdl_dir/library/common/sync_bits.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "address_generator.v" \

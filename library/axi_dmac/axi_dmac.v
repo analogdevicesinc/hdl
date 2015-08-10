@@ -122,6 +122,22 @@ module axi_dmac (
 	input                                    m_src_axi_rvalid,
 	input  [ 1:0]                            m_src_axi_rresp,
 
+	// Read address
+	input                                    m_sg_axi_arready,
+	output                                   m_sg_axi_arvalid,
+	output [31:0]                            m_sg_axi_araddr,
+	output [7-(4*C_DMA_AXI_PROTOCOL_SRC):0]  m_sg_axi_arlen,
+	output [ 2:0]                            m_sg_axi_arsize,
+	output [ 1:0]                            m_sg_axi_arburst,
+	output [ 2:0]                            m_sg_axi_arprot,
+	output [ 3:0]                            m_sg_axi_arcache,
+
+	// Read data and response
+	input  [C_DMA_DATA_WIDTH_SRC-1:0]        m_sg_axi_rdata,
+	output                                   m_sg_axi_rready,
+	input                                    m_sg_axi_rvalid,
+	input  [ 1:0]                            m_sg_axi_rresp,
+
 	// Unused write interface
 	output                                   m_src_axi_awvalid,
 	output [31:0]                            m_src_axi_awaddr,
@@ -153,8 +169,8 @@ module axi_dmac (
 	input                                    m_axis_ready,
 	output                                   m_axis_valid,
 	output [C_DMA_DATA_WIDTH_DEST-1:0]       m_axis_data,
-        output                                   m_axis_last,
-        output                                   m_axis_xfer_req,
+	output                                   m_axis_last,
+	output                                   m_axis_xfer_req,
 
 	// Input FIFO interface
 	input                                    fifo_wr_clk,
@@ -170,7 +186,7 @@ module axi_dmac (
 	output                                   fifo_rd_valid,
 	output [C_DMA_DATA_WIDTH_DEST-1:0]       fifo_rd_dout,
 	output                                   fifo_rd_underflow,
-        output                                   fifo_rd_xfer_req
+	output                                   fifo_rd_xfer_req
 );
 
 parameter PCORE_ID = 0;
@@ -201,7 +217,7 @@ localparam DMA_TYPE_AXI_MM = 0;
 localparam DMA_TYPE_AXI_STREAM = 1;
 localparam DMA_TYPE_FIFO = 2;
 
-localparam PCORE_VERSION = 'h00040062;
+localparam PCORE_VERSION = 'h00040162;
 
 localparam HAS_DEST_ADDR = C_DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
 localparam HAS_SRC_ADDR = C_DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
@@ -223,6 +239,7 @@ localparam BYTES_PER_BEAT_WIDTH_SRC = C_DMA_DATA_WIDTH_SRC > 1024 ? 8 :
 	C_DMA_DATA_WIDTH_SRC > 32 ? 3 :
 	C_DMA_DATA_WIDTH_SRC > 16 ? 2 :
 	C_DMA_DATA_WIDTH_SRC > 8 ? 1 : 0;
+localparam BYTES_PER_BEAT_WIDTH_SG = BYTES_PER_BEAT_WIDTH_SRC;
 
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
@@ -240,6 +257,7 @@ reg [31:0] up_scratch = 'h00;
 // Control bits
 reg up_enable = 'h00;
 reg up_pause = 'h00;
+reg up_use_hwdesc = 'h00;
 
 // Start and end of transfer
 wire up_eot; // Asserted for one cycle when a transfer has been completed
@@ -263,6 +281,8 @@ reg       up_axis_xlast = 1'b1;
 
 reg [31:BYTES_PER_BEAT_WIDTH_DEST]   up_dma_dest_address = 'h00;
 reg [31:BYTES_PER_BEAT_WIDTH_SRC]   up_dma_src_address = 'h00;
+reg [31:BYTES_PER_BEAT_WIDTH_SG] up_dma_sg_address = 'h00;
+reg [31:0] up_dma_sg_desc_id = 'h00;
 reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_x_length = 'h00;
 reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
 reg [C_DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
@@ -358,8 +378,10 @@ begin
 	if (s_axi_aresetn == 1'b0) begin
 		up_enable <= 'h00;
 		up_pause <= 'h00;
+		up_use_hwdesc <= 'h00;
 		up_dma_src_address <= 'h00;
 		up_dma_dest_address <= 'h00;
+		up_dma_sg_address <= 'h00;
 		up_dma_y_length <= 'h00;
 		up_dma_x_length <= 'h00;
 		up_dma_dest_stride <= 'h00;
@@ -384,7 +406,7 @@ begin
 			case (up_waddr)
 			12'h002: up_scratch <= up_wdata;
 			12'h020: up_irq_mask <= up_wdata;
-			12'h100: {up_pause, up_enable} <= up_wdata[1:0];
+			12'h100: {up_use_hwdesc, up_pause, up_enable} <= up_wdata[2:0];
                         12'h103: begin
                           if (C_CYCLIC) up_dma_cyclic <= up_wdata[0];
                           up_axis_xlast <= up_wdata[1];
@@ -395,6 +417,7 @@ begin
 			12'h107: up_dma_y_length <= up_wdata[C_DMA_LENGTH_WIDTH-1:0];
 			12'h108: up_dma_dest_stride <= up_wdata[C_DMA_LENGTH_WIDTH-1:0];
 			12'h109: up_dma_src_stride <= up_wdata[C_DMA_LENGTH_WIDTH-1:0];
+			12'h10f: up_dma_sg_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_SG];
 			endcase
 		end
 	end
@@ -414,7 +437,7 @@ begin
 		12'h020: up_rdata <= up_irq_mask;
 		12'h021: up_rdata <= up_irq_pending;
 		12'h022: up_rdata <= up_irq_source;
-		12'h100: up_rdata <= {up_pause, up_enable};
+		12'h100: up_rdata <= {up_use_hwdesc, up_pause, up_enable};
 		12'h101: up_rdata <= up_transfer_id;
 		12'h102: up_rdata <= up_dma_req_valid;
 		12'h103: up_rdata <= {30'h00, up_axis_xlast, up_dma_cyclic}; // Flags
@@ -429,9 +452,11 @@ begin
 		12'h10c: up_rdata <= 'h00; // Status
 		12'h10d: up_rdata <= m_dest_axi_awaddr; //HAS_DEST_ADDR ? 'h00 : 'h00; // Current dest address
 		12'h10e: up_rdata <= m_src_axi_araddr; //HAS_SRC_ADDR ? 'h00 : 'h00; // Current src address
-		12'h10f: up_rdata <= {src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0, src_request_id,
+		12'h10f: up_rdata <= {up_dma_sg_address, {BYTES_PER_BEAT_WIDTH_SG{1'b0}}};
+		12'h110: up_rdata <= up_dma_sg_desc_id;
+		12'h111: up_rdata <= {src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0, src_request_id,
 							1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0, dest_address_id, 1'b0, dest_request_id};
-		12'h110: up_rdata <= dbg_status;
+		12'h112: up_rdata <= dbg_status;
 		default: up_rdata <= 'h00;
 		endcase
 	end
@@ -463,13 +488,105 @@ wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
 wire [C_DMA_LENGTH_WIDTH-1:0] dma_req_length;
 wire dma_req_eot;
 wire dma_req_sync_transfer_start;
-wire up_req_eot;
+reg up_req_eot;
 
 assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
-assign up_eot = up_dma_cyclic ? 1'b0 : up_req_eot;
+assign up_eot = (!up_use_hwdesc && up_dma_cyclic) ? 1'b0 : up_req_eot;
 
+wire [31:0] dma_sg_hwdesc_id;
+wire dma_sg_hwdesc_eot;
+wire dma_sg_out_valid;
+
+always @(posedge s_axi_aclk) begin
+	if (up_use_hwdesc == 1'b1) begin
+		if (dma_sg_out_valid == 1'b1) begin
+			up_dma_sg_desc_id <= dma_sg_hwdesc_id;
+			up_req_eot <= dma_sg_hwdesc_eot;
+		end else begin
+			up_req_eot <= 1'b0;
+		end
+	end else begin
+		up_req_eot <= dma_req_eot;
+	end
+end
 
 generate if (C_2D_TRANSFER == 1) begin
+
+wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_2d_dest_address;
+wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_2d_src_address;
+wire [C_DMA_LENGTH_WIDTH-1:0] dma_2d_x_length;
+wire [C_DMA_LENGTH_WIDTH-1:0] dma_2d_y_length;
+wire [C_DMA_LENGTH_WIDTH-1:0] dma_2d_src_stride;
+wire [C_DMA_LENGTH_WIDTH-1:0] dma_2d_dst_stride;
+wire dma_2d_eot;
+
+wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_sg_out_dest_address;
+wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_sg_out_src_address;
+wire [C_DMA_LENGTH_WIDTH-1:0] dma_sg_x_length;
+wire [C_DMA_LENGTH_WIDTH-1:0] dma_sg_y_length;
+wire [C_DMA_LENGTH_WIDTH-1:0] dma_sg_src_stride;
+wire [C_DMA_LENGTH_WIDTH-1:0] dma_sg_dst_stride;
+
+wire dma_2d_req_valid;
+wire dma_2d_req_ready;
+wire dma_sg_in_req_valid;
+wire dma_sg_in_req_ready;
+wire dma_sg_out_req_valid;
+
+assign dma_2d_dest_address = up_use_hwdesc == 1'b1 ? dma_sg_out_dest_address : up_dma_dest_address;
+assign dma_2d_src_address = up_use_hwdesc == 1'b1 ? dma_sg_out_src_address : up_dma_src_address;
+assign dma_2d_x_length = up_use_hwdesc == 1'b1 ? dma_sg_x_length : up_dma_x_length;
+assign dma_2d_y_length = up_use_hwdesc == 1'b1 ? dma_sg_y_length : up_dma_y_length;
+assign dma_2d_src_stride = up_use_hwdesc == 1'b1 ? dma_sg_src_stride : up_dma_src_stride;
+assign dma_2d_dst_stride = up_use_hwdesc == 1'b1 ? dma_sg_dst_stride : up_dma_dest_stride;
+
+assign dma_sg_in_req_valid = up_use_hwdesc == 1'b1 ? up_dma_req_valid : 1'b0;
+assign dma_2d_req_valid = up_use_hwdesc == 1'b1 ? dma_sg_out_req_valid : up_dma_req_valid;
+assign up_dma_req_ready = up_use_hwdesc == 1'b1 ? dma_sg_in_req_ready : dma_2d_req_ready;
+
+dmac_sg #(
+	.C_DMA_LENGTH_WIDTH(C_DMA_LENGTH_WIDTH),
+	.C_BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
+	.C_BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
+	.C_BYTES_PER_BEAT_WIDTH_SG(BYTES_PER_BEAT_WIDTH_SG)
+) i_dmac_sg (
+	.req_aclk(s_axi_aclk),
+	.req_aresetn(s_axi_aresetn),
+
+	.req_in_valid(dma_sg_in_req_valid),
+	.req_in_ready(dma_sg_in_req_ready),
+
+	.req_out_valid(dma_sg_out_req_valid),
+	.req_out_ready(dma_2d_req_ready),
+
+	.req_desc_address(up_dma_sg_address),
+
+	.out_dest_address(dma_sg_out_dest_address),
+	.out_src_address(dma_sg_out_src_address),
+
+	.out_x_length(dma_sg_x_length),
+	.out_y_length(dma_sg_y_length),
+	.out_dest_stride(dma_sg_dst_stride),
+	.out_src_stride(dma_sg_src_stride),
+	.resp_out_id(dma_sg_hwdesc_id),
+	.resp_out_eot(dma_sg_hwdesc_eot),
+	.resp_in_valid(dma_2d_eot),
+	.resp_out_valid(dma_sg_out_valid),
+
+	.m_axi_arready(m_sg_axi_arready),
+	.m_axi_arvalid(m_sg_axi_arvalid),
+	.m_axi_araddr(m_sg_axi_araddr),
+	.m_axi_arlen(m_sg_axi_arlen),
+	.m_axi_arsize(m_sg_axi_arsize),
+	.m_axi_arburst(m_sg_axi_arburst),
+	.m_axi_arprot(m_sg_axi_arprot),
+	.m_axi_arcache(m_sg_axi_arcache),
+
+	.m_axi_rdata(m_sg_axi_rdata),
+	.m_axi_rready(m_sg_axi_rready),
+	.m_axi_rvalid(m_sg_axi_rvalid),
+	.m_axi_rresp(m_sg_axi_rresp)
+);
 
 dmac_2d_transfer #(
 	.C_DMA_LENGTH_WIDTH(C_DMA_LENGTH_WIDTH),
@@ -479,16 +596,16 @@ dmac_2d_transfer #(
 	.req_aclk(s_axi_aclk),
 	.req_aresetn(s_axi_aresetn),
 
-	.req_eot(up_req_eot),
+	.req_eot(dma_2d_eot),
 
-	.req_valid(up_dma_req_valid),
-	.req_ready(up_dma_req_ready),
-	.req_dest_address(up_dma_dest_address),
-	.req_src_address(up_dma_src_address),
-	.req_x_length(up_dma_x_length),
-	.req_y_length(up_dma_y_length),
-	.req_dest_stride(up_dma_dest_stride),
-	.req_src_stride(up_dma_src_stride),
+	.req_valid(dma_2d_req_valid),
+	.req_ready(dma_2d_req_ready),
+	.req_dest_address(dma_2d_dest_address),
+	.req_src_address(dma_2d_src_address),
+	.req_x_length(dma_2d_x_length),
+	.req_y_length(dma_2d_y_length),
+	.req_dest_stride(dma_2d_dst_stride),
+	.req_src_stride(dma_2d_src_stride),
 	.req_sync_transfer_start(up_dma_sync_transfer_start),
 
 	.out_req_valid(dma_req_valid),
@@ -508,7 +625,6 @@ assign dma_req_dest_address = up_dma_dest_address;
 assign dma_req_src_address = up_dma_src_address;
 assign dma_req_length = up_dma_x_length;
 assign dma_req_sync_transfer_start = up_dma_sync_transfer_start;
-assign up_req_eot = dma_req_eot;
 
 end endgenerate
 

@@ -8,6 +8,7 @@
 M_DEPS := axi_dmac_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += sg.v
 M_DEPS += ../common/sync_bits.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += address_generator.v
