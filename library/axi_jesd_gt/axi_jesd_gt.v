@@ -1401,7 +1401,7 @@ module axi_jesd_gt #(
   generate
 
   if (NUM_OF_LANES < 8) begin
-  for (n = (NUM_OF_LANES-1); n < 8; n = n + 1) begin: g_unused_1
+  for (n = NUM_OF_LANES; n < 8; n = n + 1) begin: g_unused_1
   assign pll_rst[n] = 1'd0;
   assign rx_rst[n] = 1'd0;
   assign rx_gt_rst[n] = 1'd0;
@@ -1425,8 +1425,8 @@ module axi_jesd_gt #(
   assign rx_ip_rst[n] = 1'd0;
   assign rx_ip_sysref[n] = 1'd0;
   assign rx_ip_rst_done[n] = 1'd0;
-  assign tx_0_p = 1'd0;
-  assign tx_0_n = 1'd1;
+  assign tx_p[n] = 1'd0;
+  assign tx_n[n] = 1'd1;
   assign tx_rst[n] = 1'd0;
   assign tx_gt_rst[n] = 1'd0;
   assign tx_pll_locked[n] = 1'd0;
