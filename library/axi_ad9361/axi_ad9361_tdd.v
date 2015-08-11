@@ -55,7 +55,7 @@ module axi_ad9361_tdd (
 
   // status signal
 
-  tdd_enable,
+  tdd_enabled,
   tdd_status,
 
   // sync signals
@@ -111,7 +111,7 @@ module axi_ad9361_tdd (
   output            tdd_rx_rf_en;
   output            tdd_tx_rf_en;
 
-  output            tdd_enable;
+  output            tdd_enabled;
   input   [ 7:0]    tdd_status;
 
   inout             tdd_sync_req;
@@ -156,7 +156,6 @@ module axi_ad9361_tdd (
 
   output  [41:0]    tdd_dbg;
 
-  reg               tdd_enable = 1'b0;
   reg               tdd_slave_synced = 1'b0;
   reg               tdd_sync_o = 1'b0;
 
@@ -222,6 +221,8 @@ module axi_ad9361_tdd (
                                     (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
   assign  tdd_rx_valid_q1 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
                                     (rx_valid_q1 & tdd_rx_rf_en) : rx_valid_q1;
+
+  assign  tdd_enabled = tdd_enable_synced_s;
 
   // instantiations
 

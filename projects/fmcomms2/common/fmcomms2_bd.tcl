@@ -17,7 +17,7 @@ create_bd_port -dir O -from 5 -to 0 tx_data_out_n
 
 create_bd_port -dir O enable
 create_bd_port -dir O txnrx
-create_bd_port -dir O tdd_enable
+create_bd_port -dir O tdd_enabled
 
 create_bd_port -dir IO tdd_sync_req
 create_bd_port -dir IO tdd_sync_ack
@@ -142,7 +142,7 @@ ad_connect  axi_ad9361_dac_dma/fifo_rd_underflow axi_ad9361/dac_dunf
 ad_connect  tdd_sync_req axi_ad9361/tdd_sync_req
 ad_connect  tdd_sync_ack axi_ad9361/tdd_sync_ack
 
-ad_connect  tdd_enable axi_ad9361/tdd_enable
+ad_connect  tdd_enabled axi_ad9361/tdd_enabled
 
 # interconnects
 
@@ -195,6 +195,6 @@ set_property -dict [list CONFIG.C_PROBE3_WIDTH {35}] $ila_adc
 ad_connect  axi_ad9361_clk          ila_tdd/clk
 ad_connect  axi_ad9361/enable       ila_tdd/probe0
 ad_connect  axi_ad9361/txnrx        ila_tdd/probe1
-ad_connect  axi_ad9361/tdd_enable   ila_tdd/probe2
+ad_connect  axi_ad9361/tdd_enabled  ila_tdd/probe2
 ad_connect  axi_ad9361/tdd_dbg      ila_tdd/probe3
 

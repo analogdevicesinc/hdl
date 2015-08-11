@@ -225,7 +225,7 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  wire            tdd_enable_s;
+  wire            tdd_enabled_s;
   wire            gpio_enable;
   wire            gpio_txnrx;
   wire            enable_s;
@@ -234,8 +234,8 @@ module system_top (
   // assignments
 
   assign hdmi_pd = 1'b0;
-  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
-  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+  assign enable = (tdd_enabled_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enabled_s == 1'b1) ? txnrx_s  : gpio_txnrx;
 
   // instantiations
 
@@ -363,7 +363,7 @@ module system_top (
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
     .txnrx (txnrx_s),
-    .tdd_enable (tdd_enable_s),
+    .tdd_enabled (tdd_enabled_s),
     .tdd_sync_req (tdd_sync_req),
     .tdd_sync_ack (tdd_sync_ack));
 

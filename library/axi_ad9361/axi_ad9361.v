@@ -108,7 +108,7 @@ module axi_ad9361 (
   dac_dunf,
   dac_r1_mode,
 
-  tdd_enable,
+  tdd_enabled,
 
   enable,
   txnrx,
@@ -227,7 +227,7 @@ module axi_ad9361 (
   input           dac_dunf;
   output          dac_r1_mode;
 
-  output          tdd_enable;
+  output          tdd_enabled;
 
   output          enable;
   output          txnrx;
@@ -407,7 +407,7 @@ module axi_ad9361 (
     .tdd_tx_vco_en(tdd_tx_vco_en_s),
     .tdd_rx_rf_en(tdd_rx_rf_en_s),
     .tdd_tx_rf_en(tdd_tx_rf_en_s),
-    .tdd_enable (tdd_enable),
+    .tdd_enabled (tdd_enabled),
     .tdd_status(tdd_status_s),
     .tdd_sync_req(tdd_sync_req),
     .tdd_sync_ack(tdd_sync_ack),
