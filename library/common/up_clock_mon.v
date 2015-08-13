@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -113,7 +111,7 @@ module up_clock_mon (
 
   assign d_count_toggle_s = d_count_toggle_m3 ^ d_count_toggle_m2;
 
-  always @(posedge d_clk) begin
+  always @(posedge d_clk or posedge d_rst) begin
     if (d_rst == 1'b1) begin
       d_count_toggle_m1 <= 'd0;
       d_count_toggle_m2 <= 'd0;

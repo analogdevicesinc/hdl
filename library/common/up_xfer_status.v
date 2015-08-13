@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -94,7 +92,7 @@ module up_xfer_status (
 
   assign d_xfer_enable_s = d_xfer_state ^ d_xfer_toggle;
 
-  always @(posedge d_clk) begin
+  always @(posedge d_clk or posedge d_rst) begin
     if (d_rst == 1'b1) begin
       d_xfer_state_m1 <= 'd0;
       d_xfer_state_m2 <= 'd0;
