@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -377,8 +375,8 @@ module up_hdmi_tx (
     .up_data_status ({up_vdma_ovf_s,
                       up_vdma_unf_s,
                       up_vdma_tpm_oos_s}),
-    .d_rst (hdmi_rst),
-    .d_clk (hdmi_clk),
+    .d_rst (vdma_rst),
+    .d_clk (vdma_clk),
     .d_data_status ({ vdma_ovf, 
                       vdma_unf,
                       vdma_tpm_oos}));
