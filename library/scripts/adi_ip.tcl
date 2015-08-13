@@ -48,12 +48,11 @@ proc adi_ip_files {ip_name ip_files} {
 proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
 
   set proj_filegroup [ipx::get_file_groups xilinx_v*synthesis -of_objects [ipx::current_core]]
-  set f [ipx::add_file $ip_constr_files $proj_filegroup]
-  set_property -dict [list \
-    type xdc \
-    library_name {} \
-    processing_order $processing_order \
-  ] $f
+  foreach f_name $ip_constr_files {
+    ipx::add_file $f_name $proj_filegroup
+    set_property type xdc [ipx::get_files $f_name -of_objects $proj_filegroup]
+    set_property processing_order $processing_order [ipx::get_files $f_name -of_objects $proj_filegroup]
+  }
 }
 
 proc adi_ip_properties {ip_name} {
