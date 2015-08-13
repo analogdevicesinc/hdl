@@ -73,6 +73,22 @@
          type = "String";
       }
    }
+   element gpio
+   {
+      datum _sortIndex
+      {
+         value = "15";
+         type = "int";
+      }
+   }
+   element gpio.s1
+   {
+      datum baseAddress
+      {
+         value = "65680";
+         type = "String";
+      }
+   }
    element spi_ad9361
    {
       datum _sortIndex
@@ -265,11 +281,7 @@
  <interface name="axi_ad9361_0_rx_if" internal="axi_ad9361.rx_if" />
  <interface name="axi_ad9361_0_tx_clock" internal="axi_ad9361.tx_clock" />
  <interface name="axi_ad9361_0_tx_if" internal="axi_ad9361.tx_if" />
- <interface
-   name="axi_ad9361_debug_if"
-   internal="axi_ad9361.debug_if"
-   type="conduit"
-   dir="end" />
+ <interface name="axi_ad9361_debug_if" internal="axi_ad9361.debug_if" />
  <interface
    name="axi_ad9361_device_clock"
    internal="axi_ad9361.device_clock"
@@ -359,6 +371,11 @@
    type="conduit"
    dir="end" />
  <interface name="clk" internal="sys_clk.clk_in" type="clock" dir="end" />
+ <interface
+   name="gpio_external_connection"
+   internal="gpio.external_connection"
+   type="conduit"
+   dir="end" />
  <interface name="hps_0_f2h_cold_reset_req" internal="sys_hps.f2h_cold_reset_req" />
  <interface
    name="hps_0_f2h_debug_reset_req"
@@ -442,6 +459,7 @@
   <parameter name="C_DMA_LENGTH_WIDTH" value="24" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
   <parameter name="C_DMA_TYPE_SRC" value="2" />
+  <parameter name="C_FIFO_SIZE" value="4" />
   <parameter name="C_SYNC_TRANSFER_START" value="1" />
   <parameter name="PCORE_ID" value="0" />
  </module>
@@ -458,8 +476,23 @@
   <parameter name="C_DMA_LENGTH_WIDTH" value="24" />
   <parameter name="C_DMA_TYPE_DEST" value="2" />
   <parameter name="C_DMA_TYPE_SRC" value="0" />
+  <parameter name="C_FIFO_SIZE" value="4" />
   <parameter name="C_SYNC_TRANSFER_START" value="0" />
   <parameter name="PCORE_ID" value="0" />
+ </module>
+ <module name="gpio" kind="altera_avalon_pio" version="15.0" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="5" />
  </module>
  <module name="spi_ad9361" kind="altera_avalon_spi" version="15.0" enabled="1">
   <parameter name="avalonSpec" value="2.0" />
@@ -1383,6 +1416,15 @@
    kind="avalon"
    version="15.0"
    start="sys_hps.h2f_lw_axi_master"
+   end="gpio.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00010090" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="sys_hps.h2f_lw_axi_master"
    end="axi_ad9361.s_axi">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00020000" />
@@ -1441,6 +1483,7 @@
  <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_id.clk" />
  <connection kind="clock" version="15.0" start="sys_clk.clk" end="sys_gpio.clk" />
  <connection kind="clock" version="15.0" start="sys_clk.clk" end="spi_ad9361.clk" />
+ <connection kind="clock" version="15.0" start="sys_clk.clk" end="gpio.clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -1587,6 +1630,11 @@
    version="15.0"
    start="sys_clk.clk_reset"
    end="axi_dmac_dac.m_src_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_clk.clk_reset"
+   end="gpio.reset" />
  <connection
    kind="reset"
    version="15.0"

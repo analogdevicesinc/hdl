@@ -67,12 +67,21 @@ set_location_assignment PIN_E4  -to tx_data_out[5]
 set_location_assignment PIN_D4  -to "tx_data_out[5](n)"
 
 set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_resetb
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_en_agc
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_sync
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_enable
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_txnrx
+
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_csn
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_mosi
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_miso
 
 set_location_assignment PIN_C4  -to ad9361_resetb
+set_location_assignment PIN_C5  -to ad9361_en_agc
+set_location_assignment PIN_D5  -to ad9361_sync
+set_location_assignment PIN_B11 -to ad9361_enable
+set_location_assignment PIN_C12 -to ad9361_txnrx
 set_location_assignment PIN_A8  -to spi_csn
 set_location_assignment PIN_H12 -to spi_clk
 set_location_assignment PIN_H13 -to spi_mosi

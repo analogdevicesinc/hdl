@@ -135,6 +135,10 @@ module system_top (
   // gpio interface
 
   ad9361_resetb,
+  ad9361_en_agc,
+  ad9361_sync,
+  ad9361_enable,
+  ad9361_txnrx,
 
   // spi
 
@@ -239,6 +243,10 @@ module system_top (
   // gpio interface
 
   output            ad9361_resetb;
+  output            ad9361_en_agc;
+  output            ad9361_sync;
+  output            ad9361_enable;
+  output            ad9361_txnrx;
 
   // spi interface
 
@@ -300,8 +308,6 @@ module system_top (
   assign vga_hs = vid_h_sync;
   assign vga_vs = vid_v_sync;
   assign {vga_b,vga_g,vga_r} =  {vid_b,vid_g,vid_r};
-
-  assign ad9361_resetb = 1'b1;
 
   // instantiations
 
@@ -504,7 +510,8 @@ module system_top (
 		.util_dac_unpack_channels_data_dac_data_03 (dac_data_q1),
 		.util_dac_unpack_channels_data_fifo_valid (dac_fifo_valid),
 		.util_dac_unpack_channels_data_dma_rd (dac_rd_en),
-		.util_dac_unpack_channels_data_dma_data (dac_ddata)
+		.util_dac_unpack_channels_data_dma_data (dac_ddata),
+    .gpio_external_connection_export ({ad9361_resetb, ad9361_en_agc, ad9361_sync, ad9361_enable, ad9361_txnrx})
 	);
 
 endmodule
