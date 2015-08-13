@@ -1,13 +1,20 @@
 
-set_false_path -from [get_cells -hier *up_xfer_toggle*  -filter {primitive_subgroup == flop}] -to [get_cells -hier *d_xfer_state*     -filter {primitive_subgroup == flop}]
-set_false_path -from [get_cells -hier *up_xfer_toggle*  -filter {primitive_subgroup == flop}] -to [get_cells -hier *d_xfer_toggle*    -filter {primitive_subgroup == flop}]
-set_false_path -from [get_cells -hier *up_count_toggle* -filter {primitive_subgroup == flop}] -to [get_cells -hier *d_count_toggle*   -filter {primitive_subgroup == flop}]
-set_false_path -from [get_cells -hier *d_xfer_toggle*   -filter {primitive_subgroup == flop}] -to [get_cells -hier *up_xfer_state*    -filter {primitive_subgroup == flop}]
-set_false_path -from [get_cells -hier *d_xfer_toggle*   -filter {primitive_subgroup == flop}] -to [get_cells -hier *up_xfer_toggle*   -filter {primitive_subgroup == flop}]
-set_false_path -from [get_cells -hier *d_count_toggle*  -filter {primitive_subgroup == flop}] -to [get_cells -hier *up_count_toggle*  -filter {primitive_subgroup == flop}]
-set_false_path -from [get_cells -hier *preset*          -filter {primitive_subgroup == flop}] -to [get_cells -hier *rst*              -filter {primitive_subgroup == flop}]
- 
-set_max_delay -from [get_cells -hier *up_xfer_data* -filter {primitive_subgroup == flop}] -to [get_cells -hier *d_data_cntrl*   -filter {primitive_subgroup == flop}]   8.0
-set_max_delay -from [get_cells -hier *d_xfer_data*  -filter {primitive_subgroup == flop}] -to [get_cells -hier *up_data_status* -filter {primitive_subgroup == flop}]  20.0
-set_max_delay -from [get_cells -hier *d_count_hold* -filter {primitive_subgroup == flop}] -to [get_cells -hier *up_d_count*     -filter {primitive_subgroup == flop}]  20.0
+set_property shreg_extract no [get_cells -hier -filter {name =~ *up_xfer_state*}]
+set_property shreg_extract no [get_cells -hier -filter {name =~ *d_xfer_toggle*}]
+set_property shreg_extract no [get_cells -hier -filter {name =~ *d_xfer_state*}]
+set_property shreg_extract no [get_cells -hier -filter {name =~ *up_xfer_toggle*}]
+set_property shreg_extract no [get_cells -hier -filter {name =~ *up_count_toggle*}]
+set_property shreg_extract no [get_cells -hier -filter {name =~ *d_count_toggle*}]
+set_property shreg_extract no [get_cells -hier -filter {name =~ *ad_rst_sync*}]
+
+set_false_path -from [get_cells -hier -filter {name =~ *d_xfer_toggle_reg   && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *up_xfer_state_m1_reg   && IS_SEQUENTIAL}]
+set_false_path -from [get_cells -hier -filter {name =~ *up_xfer_toggle_reg  && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *d_xfer_toggle_m1_reg   && IS_SEQUENTIAL}]
+set_false_path -from [get_cells -hier -filter {name =~ *up_xfer_data*       && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *d_data_cntrl*          && IS_SEQUENTIAL}]
+set_false_path -from [get_cells -hier -filter {name =~ *up_xfer_toggle_reg  && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *d_xfer_state_m1_reg    && IS_SEQUENTIAL}]
+set_false_path -from [get_cells -hier -filter {name =~ *d_xfer_toggle_reg   && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *up_xfer_toggle_m1_reg  && IS_SEQUENTIAL}]
+set_false_path -from [get_cells -hier -filter {name =~ *d_xfer_data*        && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *up_data_status*        && IS_SEQUENTIAL}]
+set_false_path -from [get_cells -hier -filter {name =~ *d_count_toggle_reg  && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *up_count_toggle_m1_reg && IS_SEQUENTIAL}]
+set_false_path -from [get_cells -hier -filter {name =~ *d_count_hold*       && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *up_d_count*            && IS_SEQUENTIAL}]
+set_false_path -from [get_cells -hier -filter {name =~ *up_count_toggle_reg && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *d_count_toggle_m1_reg  && IS_SEQUENTIAL}]
+set_false_path -from [get_cells -hier -filter {name =~ *up_preset_reg       && IS_SEQUENTIAL}] -to [get_cells -hier -filter {name =~ *ad_rst_sync_m1_reg     && IS_SEQUENTIAL}]
 
