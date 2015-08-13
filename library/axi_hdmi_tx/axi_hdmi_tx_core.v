@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // Transmit HDMI, video dma data in, hdmi separate syncs data out.
 
 module axi_hdmi_tx_core (
@@ -332,7 +330,7 @@ module axi_hdmi_tx_core (
 
   assign hdmi_fs_ret_s = hdmi_fs_ret_toggle_m2 ^ hdmi_fs_ret_toggle_m3;
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge hdmi_clk or posedge hdmi_rst) begin
     if (hdmi_rst == 1'b1) begin
       hdmi_fs_ret_toggle_m1 <= 1'd0;
       hdmi_fs_ret_toggle_m2 <= 1'd0;
@@ -342,6 +340,9 @@ module axi_hdmi_tx_core (
       hdmi_fs_ret_toggle_m2 <= hdmi_fs_ret_toggle_m1;
       hdmi_fs_ret_toggle_m3 <= hdmi_fs_ret_toggle_m2;
     end
+  end
+
+  always @(posedge hdmi_clk) begin
     hdmi_fs_ret <= hdmi_fs_ret_s;
     if (hdmi_fs_ret_s == 1'b1) begin
       hdmi_fs_waddr <= vdma_fs_waddr;
