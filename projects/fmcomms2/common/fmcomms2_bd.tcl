@@ -39,7 +39,7 @@ set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.C_2D_TRANSFER {1}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9361_dac_dma
 
 set util_dac_unpack [create_bd_cell -type ip -vlnv analog.com:user:util_dac_unpack:1.0 util_dac_unpack]
@@ -55,7 +55,7 @@ set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.C_2D_TRANSFER {1}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}]  $axi_ad9361_adc_dma
 
 set util_adc_pack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 util_adc_pack]
@@ -132,6 +132,9 @@ ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
+
+ad_mem_hp2_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_sg_axi
+ad_mem_hp1_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_sg_axi
 
 # interrupts
 
