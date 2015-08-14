@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -75,6 +75,7 @@ module system_top (
   eth_mdio_i,
   eth_mdio_o,
   eth_mdio_t,
+  eth_phy_resetn,
 
   // board gpio
 
@@ -132,6 +133,7 @@ module system_top (
   input             eth_mdio_i;
   output            eth_mdio_o;
   output            eth_mdio_t;
+  output            eth_phy_resetn;
 
   // board gpio
 
@@ -159,10 +161,9 @@ module system_top (
   reg               rx_sysref_m2 = 'd0;
   reg               rx_sysref_m3 = 'd0;
   reg               rx_sysref = 'd0;
-  reg               dma0_wr = 'd0;
-  reg     [ 63:0]   dma0_wdata = 'd0;
-  reg               dma1_wr = 'd0;
-  reg     [ 63:0]   dma1_wdata = 'd0;
+  reg     [  3:0]   phy_rst_cnt = 0;
+  reg               phy_rst_reg = 0;
+
 
   // internal clocks and resets
 
@@ -171,8 +172,6 @@ module system_top (
   wire              sys_2m5_clk;
   wire              eth_tx_clk;
   wire              rx_clk;
-  wire              adc0_clk;
-  wire              adc1_clk;
 
   // internal signals
 
@@ -182,16 +181,6 @@ module system_top (
   wire              eth_tx_mode_10m_100m_n_s;
   wire              spi_mosi;
   wire              spi_miso;
-  wire              adc0_enable_a_s;
-  wire    [ 31:0]   adc0_data_a_s;
-  wire              adc0_enable_b_s;
-  wire    [ 31:0]   adc0_data_b_s;
-  wire              adc0_dovf_s;
-  wire              adc1_enable_a_s;
-  wire    [ 31:0]   adc1_data_a_s;
-  wire              adc1_enable_b_s;
-  wire    [ 31:0]   adc1_data_b_s;
-  wire              adc1_dovf_s;
   wire    [  3:0]   rx_ip_sof_s;
   wire    [127:0]   rx_ip_data_s;
   wire    [127:0]   rx_data_s;
@@ -212,6 +201,15 @@ module system_top (
 
   assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
     (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+    end
+  end
 
   altddio_out #(.width(1)) i_eth_tx_clk_out (
     .aset (1'b0),
@@ -235,18 +233,16 @@ module system_top (
     rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
   end
 
-  always @(posedge rx_clk) begin
-    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
-    dma0_wdata <= { adc0_data_b_s[31:16],
-                    adc0_data_a_s[31:16],
-                    adc0_data_b_s[15: 0],
-                    adc0_data_a_s[15: 0]};
-    dma1_wr <= adc1_enable_a_s & adc1_enable_b_s;
-    dma1_wdata <= { adc1_data_b_s[31:16],
-                    adc1_data_a_s[31:16],
-                    adc1_data_b_s[15: 0],
-                    adc1_data_a_s[15: 0]};
+  genvar n;
+  generate
+  for (n = 0; n < 4; n = n + 1) begin: g_align_1
+  ad_jesd_align i_jesd_align (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_ip_sof_s),
+    .rx_ip_data (rx_ip_data_s[n*32+31:n*32]),
+    .rx_data (rx_data_s[n*32+31:n*32]));
   end
+  endgenerate
 
   sld_signaltap #(
     .sld_advanced_trigger_entity ("basic,1,"),
@@ -266,26 +262,14 @@ module system_top (
     .sld_trigger_in_enabled (0),
     .sld_trigger_level (1),
     .sld_trigger_level_pipeline (1))
-  i_signaltap (
-    .acq_clk (rx_clk),
-    .acq_data_in ({ rx_sysref,
-                    rx_sync,
-                    adc1_data_b_s,
-                    adc1_data_a_s,
-                    adc0_data_b_s,
-                    adc0_data_a_s}),
-    .acq_trigger_in ({rx_sysref, rx_sync}));
+    i_signaltap (
+      .acq_clk (rx_clk),
+      .acq_data_in ({ rx_sysref,
+                      rx_sync,
+                      rx_ip_data_s}),
+      .acq_trigger_in ({rx_sysref, rx_sync}));
 
-  genvar n;
-  generate
-  for (n = 0; n < 4; n = n + 1) begin: g_align_1
-  ad_jesd_align i_jesd_align (
-    .rx_clk (rx_clk),
-    .rx_sof (rx_ip_sof_s),
-    .rx_ip_data (rx_ip_data_s[n*32+31:n*32]),
-    .rx_data (rx_data_s[n*32+31:n*32]));
-  end
-  endgenerate
+
 
   assign rx_xcvr_status_s[15:15] = 1'd0;
   assign rx_xcvr_status_s[14:14] = rx_sync;
@@ -350,44 +334,16 @@ module system_top (
     .sys_ethernet_mdio_mdio_in (eth_mdio_i),
     .sys_ethernet_mdio_mdio_out (eth_mdio_o),
     .sys_ethernet_mdio_mdio_oen (eth_mdio_t),
-    .sys_gpio_in_port ({rx_xcvr_status_s, 5'd0, push_buttons, dip_switches}),
-    .sys_gpio_out_port ({14'd0, rx_sw_rstn_s, rx_sysref_s, led_grn, led_red}),
+    .sys_gpio_in_export ({rx_xcvr_status_s, 5'd0, push_buttons, dip_switches}),
+    .sys_gpio_out_export ({14'd0, rx_sw_rstn_s, rx_sysref_s, led_grn, led_red}),
     .sys_spi_MISO (spi_miso),
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn),
     .axi_ad9250_0_xcvr_clk_clk (rx_clk),
     .axi_ad9250_0_xcvr_data_data (rx_data_s[63:0]),
-    .axi_ad9250_0_adc_clock_clk (adc0_clk),
-    .axi_ad9250_0_adc_dma_if_adc_valid_a (),
-    .axi_ad9250_0_adc_dma_if_adc_enable_a (adc0_enable_a_s),
-    .axi_ad9250_0_adc_dma_if_adc_data_a (adc0_data_a_s),
-    .axi_ad9250_0_adc_dma_if_adc_valid_b (),
-    .axi_ad9250_0_adc_dma_if_adc_enable_b (adc0_enable_b_s),
-    .axi_ad9250_0_adc_dma_if_adc_data_b (adc0_data_b_s),
-    .axi_ad9250_0_adc_dma_if_adc_dovf (adc0_dovf_s),
-    .axi_ad9250_0_adc_dma_if_adc_dunf (1'b0),
-    .axi_dmac_0_fifo_wr_clock_clk (adc0_clk),
-    .axi_dmac_0_fifo_wr_if_ovf (adc0_dovf_s),
-    .axi_dmac_0_fifo_wr_if_wren (dma0_wr),
-    .axi_dmac_0_fifo_wr_if_data (dma0_wdata),
-    .axi_dmac_0_fifo_wr_if_sync (1'b1),
     .axi_ad9250_1_xcvr_clk_clk (rx_clk),
     .axi_ad9250_1_xcvr_data_data (rx_data_s[127:64]),
-    .axi_ad9250_1_adc_clock_clk (adc1_clk),
-    .axi_ad9250_1_adc_dma_if_adc_valid_a (),
-    .axi_ad9250_1_adc_dma_if_adc_enable_a (adc1_enable_a_s),
-    .axi_ad9250_1_adc_dma_if_adc_data_a (adc1_data_a_s),
-    .axi_ad9250_1_adc_dma_if_adc_valid_b (),
-    .axi_ad9250_1_adc_dma_if_adc_enable_b (adc1_enable_b_s),
-    .axi_ad9250_1_adc_dma_if_adc_data_b (adc1_data_b_s),
-    .axi_ad9250_1_adc_dma_if_adc_dovf (adc1_dovf_s),
-    .axi_ad9250_1_adc_dma_if_adc_dunf (1'b0),
-    .axi_dmac_1_fifo_wr_clock_clk (adc1_clk),
-    .axi_dmac_1_fifo_wr_if_ovf (adc1_dovf_s),
-    .axi_dmac_1_fifo_wr_if_wren (dma1_wr),
-    .axi_dmac_1_fifo_wr_if_data (dma1_wdata),
-    .axi_dmac_1_fifo_wr_if_sync (1'b1),
     .sys_jesd204b_s1_rx_link_data (rx_ip_data_s),
     .sys_jesd204b_s1_rx_link_valid (),
     .sys_jesd204b_s1_rx_link_ready (1'b1),
@@ -400,8 +356,8 @@ module system_top (
     .sys_jesd204b_s1_rx_xcvr_data_rx_serial_data (rx_data),
     .sys_jesd204b_s1_rx_analogreset_rx_analogreset (rx_analog_reset_s),
     .sys_jesd204b_s1_rx_digitalreset_rx_digitalreset (rx_digital_reset_s),
-    .sys_jesd204b_s1_locked_export (rx_cdr_locked_s),
-    .sys_jesd204b_s1_rx_cal_busy_export (rx_cal_busy_s),
+    .sys_jesd204b_s1_locked_rx_is_lockedtodata (rx_cdr_locked_s),
+    .sys_jesd204b_s1_rx_cal_busy_rx_cal_busy (rx_cal_busy_s),
     .sys_jesd204b_s1_ref_clk_clk (ref_clk),
     .sys_jesd204b_s1_rx_clk_clk (rx_clk),
     .sys_jesd204b_s1_pll_locked_export (rx_pll_locked_s),

@@ -49,15 +49,15 @@ module ad_gt_common_1 (
 
   // drp interface
 
-  drp_clk,
-  drp_sel,
-  drp_addr,
-  drp_wr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_lanesel,
-  drp_rx_rate);
+  up_clk,
+  up_drp_sel,
+  up_drp_addr,
+  up_drp_wr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_lanesel,
+  up_drp_rxrate);
 
   // parameters
 
@@ -78,50 +78,50 @@ module ad_gt_common_1 (
 
   // drp interface
 
-  input           drp_clk;
-  input           drp_sel;
-  input   [11:0]  drp_addr;
-  input           drp_wr;
-  input   [15:0]  drp_wdata;
-  output  [15:0]  drp_rdata;
-  output          drp_ready;
-  input   [ 7:0]  drp_lanesel;
-  output  [ 7:0]  drp_rx_rate;
+  input           up_clk;
+  input           up_drp_sel;
+  input   [11:0]  up_drp_addr;
+  input           up_drp_wr;
+  input   [15:0]  up_drp_wdata;
+  output  [15:0]  up_drp_rdata;
+  output          up_drp_ready;
+  input   [ 7:0]  up_drp_lanesel;
+  output  [ 7:0]  up_drp_rxrate;
 
   // internal registers
 
-  reg             drp_sel_int;
-  reg     [11:0]  drp_addr_int;
-  reg             drp_wr_int;
-  reg     [15:0]  drp_wdata_int;
-  reg     [15:0]  drp_rdata;
-  reg             drp_ready;
-  reg     [ 7:0]  drp_rx_rate;
+  reg             up_drp_sel_int;
+  reg     [11:0]  up_drp_addr_int;
+  reg             up_drp_wr_int;
+  reg     [15:0]  up_drp_wdata_int;
+  reg     [15:0]  up_drp_rdata;
+  reg             up_drp_ready;
+  reg     [ 7:0]  up_drp_rxrate;
 
   // internal wires
 
-  wire    [15:0]  drp_rdata_s;
-  wire            drp_ready_s;
+  wire    [15:0]  up_drp_rdata_s;
+  wire            up_drp_ready_s;
 
   // drp control
 
-  always @(posedge drp_clk) begin
-    if (drp_lanesel == DRP_ID) begin
-      drp_sel_int <= drp_sel;
-      drp_addr_int <= drp_addr;
-      drp_wr_int <= drp_wr;
-      drp_wdata_int <= drp_wdata;
-      drp_rdata <= drp_rdata_s;
-      drp_ready <= drp_ready_s;
-      drp_rx_rate <= 8'hff;
+  always @(posedge up_clk) begin
+    if (up_drp_lanesel == DRP_ID) begin
+      up_drp_sel_int <= up_drp_sel;
+      up_drp_addr_int <= up_drp_addr;
+      up_drp_wr_int <= up_drp_wr;
+      up_drp_wdata_int <= up_drp_wdata;
+      up_drp_rdata <= up_drp_rdata_s;
+      up_drp_ready <= up_drp_ready_s;
+      up_drp_rxrate <= 8'hff;
     end else begin
-      drp_sel_int <= 1'd0;
-      drp_addr_int <= 12'd0;
-      drp_wr_int <= 1'd0;
-      drp_wdata_int <= 16'd0;
-      drp_rdata <= 16'd0;
-      drp_ready <= 1'd0;
-      drp_rx_rate <= 8'd0;
+      up_drp_sel_int <= 1'd0;
+      up_drp_addr_int <= 12'd0;
+      up_drp_wr_int <= 1'd0;
+      up_drp_wdata_int <= 16'd0;
+      up_drp_rdata <= 16'd0;
+      up_drp_ready <= 1'd0;
+      up_drp_rxrate <= 8'd0;
     end
   end
 
@@ -150,13 +150,13 @@ module ad_gt_common_1 (
     .QPLL_LPF (4'b1111),
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV))
   i_gtxe2_common (
-    .DRPCLK (drp_clk),
-    .DRPEN (drp_sel_int),
-    .DRPADDR (drp_addr_int[7:0]),
-    .DRPWE (drp_wr_int),
-    .DRPDI (drp_wdata_int),
-    .DRPDO (drp_rdata_s),
-    .DRPRDY (drp_ready_s),
+    .DRPCLK (up_clk),
+    .DRPEN (up_drp_sel_int),
+    .DRPADDR (up_drp_addr_int[7:0]),
+    .DRPWE (up_drp_wr_int),
+    .DRPDI (up_drp_wdata_int),
+    .DRPDO (up_drp_rdata_s),
+    .DRPRDY (up_drp_ready_s),
     .GTGREFCLK (1'd0),
     .GTNORTHREFCLK0 (1'd0),
     .GTNORTHREFCLK1 (1'd0),
@@ -170,7 +170,7 @@ module ad_gt_common_1 (
     .REFCLKOUTMONITOR (),
     .QPLLFBCLKLOST (),
     .QPLLLOCK (qpll_locked),
-    .QPLLLOCKDETCLK (drp_clk),
+    .QPLLLOCKDETCLK (up_clk),
     .QPLLLOCKEN (1'd1),
     .QPLLOUTRESET (1'd0),
     .QPLLPD (1'd0),
@@ -190,7 +190,7 @@ module ad_gt_common_1 (
   if (GTH_GTX_N == 1) begin
   GTHE3_COMMON #(
     .SIM_RESET_SPEEDUP ("TRUE"),
-    .SIM_VERSION ("Ver_1"),
+    .SIM_VERSION (2),
     .SARC_EN (1'b1),
     .SARC_SEL (1'b0),
     .SDM0_DATA_PIN_SEL (1'b0),
@@ -268,11 +268,11 @@ module ad_gt_common_1 (
     .BGPDB (1'd1),
     .BGRCALOVRD (5'b11111),
     .BGRCALOVRDENB (1'd1),
-    .DRPADDR (drp_addr_int[8:0]),
-    .DRPCLK (drp_clk),
-    .DRPDI (drp_wdata_int),
-    .DRPEN (drp_sel_int),
-    .DRPWE (drp_wr_int),
+    .DRPADDR (up_drp_addr_int[8:0]),
+    .DRPCLK (up_clk),
+    .DRPDI (up_drp_wdata_int),
+    .DRPEN (up_drp_sel_int),
+    .DRPWE (up_drp_wr_int),
     .GTGREFCLK0 (1'd0),
     .GTGREFCLK1 (1'd0),
     .GTNORTHREFCLK00 (1'd0),
@@ -295,7 +295,7 @@ module ad_gt_common_1 (
     .QPLLRSVD4 (8'd0),
     .QPLL0CLKRSVD0 (1'd0),
     .QPLL0CLKRSVD1 (1'd0),
-    .QPLL0LOCKDETCLK (drp_clk),
+    .QPLL0LOCKDETCLK (up_clk),
     .QPLL0LOCKEN (1'd1),
     .QPLL0PD (1'd0),
     .QPLL0REFCLKSEL (3'b001),
@@ -308,8 +308,8 @@ module ad_gt_common_1 (
     .QPLL1REFCLKSEL (3'b001),
     .QPLL1RESET (1'd1),
     .RCALENB (1'd1),
-    .DRPDO (drp_rdata_s),
-    .DRPRDY (drp_ready_s),
+    .DRPDO (up_drp_rdata_s),
+    .DRPRDY (up_drp_ready_s),
     .PMARSVDOUT0 (),
     .PMARSVDOUT1 (),
     .QPLLDMONITOR0 (),

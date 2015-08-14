@@ -2,6 +2,7 @@
 
 package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
+source ../scripts/adi_ip_alt.tcl
 
 set_module_property NAME axi_dmac
 set_module_property DESCRIPTION "AXI DMA Controller"
@@ -16,10 +17,11 @@ set_fileset_property quartus_synth TOP_LEVEL axi_dmac
 add_fileset_file sync_bits.v              VERILOG PATH $ad_hdl_dir/library/common/sync_bits.v
 add_fileset_file sync_gray.v              VERILOG PATH $ad_hdl_dir/library/common/sync_gray.v
 add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
-add_fileset_file axi_fifo.v               VERILOG PATH $ad_hdl_dir/library/axi_fifo/axi_fifo.v
-add_fileset_file address_gray.v           VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_gray.v
-add_fileset_file address_gray_pipelined.v VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_gray_pipelined.v
-add_fileset_file address_sync.v           VERILOG PATH $ad_hdl_dir/library/axi_fifo/address_sync.v
+add_fileset_file axi_repack.v             VERILOG PATH $ad_hdl_dir/library/util_axis_resize/util_axis_resize.v
+add_fileset_file fifo.v                   VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v
+add_fileset_file address_gray.v           VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_gray.v
+add_fileset_file address_gray_pipelined.v VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_gray_pipelined.v
+add_fileset_file address_sync.v           VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_sync.v
 add_fileset_file inc_id.h                 VERILOG_INCLUDE PATH inc_id.h
 add_fileset_file resp.h                   VERILOG_INCLUDE PATH resp.h
 add_fileset_file address_generator.v      VERILOG PATH address_generator.v
@@ -38,7 +40,7 @@ add_fileset_file src_fifo_inf.v           VERILOG PATH src_fifo_inf.v
 add_fileset_file splitter.v               VERILOG PATH splitter.v
 add_fileset_file response_generator.v     VERILOG PATH response_generator.v
 add_fileset_file axi_dmac.v               VERILOG PATH axi_dmac.v
-add_fileset_file axi_repack.v             VERILOG PATH axi_repack.v
+add_fileset_file axi_dmac_constr.sdc      SDC     PATH axi_dmac_constr.sdc
 
 # parameters
 
@@ -139,6 +141,13 @@ set_parameter_property C_DMA_TYPE_SRC DISPLAY_NAME C_DMA_TYPE_SRC
 set_parameter_property C_DMA_TYPE_SRC TYPE INTEGER
 set_parameter_property C_DMA_TYPE_SRC UNITS None
 set_parameter_property C_DMA_TYPE_SRC HDL_PARAMETER true
+
+add_parameter C_FIFO_SIZE INTEGER 0 "In bursts"
+set_parameter_property C_FIFO_SIZE DEFAULT_VALUE 4
+set_parameter_property C_FIFO_SIZE DISPLAY_NAME C_FIFO_SIZE
+set_parameter_property C_FIFO_SIZE TYPE INTEGER
+set_parameter_property C_FIFO_SIZE UNITS None
+set_parameter_property C_FIFO_SIZE HDL_PARAMETER true
 
 # axi4 slave
 
@@ -303,30 +312,21 @@ proc axi_dmac_elaborate {} {
   # fifo destination/source
 
   if {[get_parameter_value C_DMA_TYPE_DEST] == 2} {
-
-    add_interface fifo_rd_clock clock end
-    add_interface_port fifo_rd_clock fifo_rd_clk clk Input 1
-
-    add_interface fifo_rd_if conduit end
-    set_interface_property fifo_rd_if associatedClock fifo_rd_clock
-    add_interface_port fifo_rd_if fifo_rd_en rden Input 1
-    add_interface_port fifo_rd_if fifo_rd_valid valid Output 1
-    add_interface_port fifo_rd_if fifo_rd_dout data Output C_DMA_DATA_WIDTH_DEST
-    add_interface_port fifo_rd_if fifo_rd_underflow unf Output 1
+    ad_alt_intf clock   fifo_rd_clk       input   1                       dac_clk
+    ad_alt_intf signal  fifo_rd_en        input   1                       dac_valid
+    ad_alt_intf signal  fifo_rd_valid     output  1                       dma_valid
+    ad_alt_intf signal  fifo_rd_dout      output  C_DMA_DATA_WIDTH_DEST   dac_data
+    ad_alt_intf signal  fifo_rd_underflow output  1                       dac_dunf
+    ad_alt_intf signal  fifo_rd_xfer_req  output  1                       dma_xfer_req
   }
 
   if {[get_parameter_value C_DMA_TYPE_SRC] == 2} {
-
-    add_interface fifo_wr_clock clock end
-    add_interface_port fifo_wr_clock fifo_wr_clk clk Input 1
-
-    add_interface fifo_wr_if conduit end
-    set_interface_property fifo_wr_if associatedClock fifo_wr_clock
-    add_interface_port fifo_wr_if fifo_wr_overflow ovf Output 1
-    add_interface_port fifo_wr_if fifo_wr_en wren Input 1
-    add_interface_port fifo_wr_if fifo_wr_din data Input C_DMA_DATA_WIDTH_SRC
-    add_interface_port fifo_wr_if fifo_wr_sync sync Input 1
+    ad_alt_intf clock   fifo_wr_clk       input   1                       adc_clk
+    ad_alt_intf signal  fifo_wr_en        input   1                       adc_valid
+    ad_alt_intf signal  fifo_wr_din       input   C_DMA_DATA_WIDTH_SRC    adc_data
+    ad_alt_intf signal  fifo_wr_overflow  output  1                       adc_dovf
+    ad_alt_intf signal  fifo_wr_sync      input   1                       adc_sync
+    ad_alt_intf signal  fifo_wr_xfer_req  output  1                       dma_xfer_req
   }
-
 }
 

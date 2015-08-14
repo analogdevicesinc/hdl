@@ -156,7 +156,3 @@ set_property DIFF_TERM TRUE [get_ports {adc_data_in_n[13]}]
 
 create_clock -period 2.000 -name dac_clk_in [get_ports dac_clk_in_p]
 create_clock -period 4.000 -name adc_clk_in [get_ports adc_clk_in_p]
-create_clock -period 8.000 -name dac_div_clk [get_pins i_system_wrapper/system_i/axi_ad9122/dac_div_clk]
-
-set_false_path -from [get_pins i_system_wrapper/system_i/axi_ad9643_dma/inst/i_request_arb/i_src_dma_fifo/overflow_reg/C] \
-               -to [get_pins i_system_wrapper/system_i/sys_wfifo/wfifo_ctl/inst/m_wovf_m1_reg/D]

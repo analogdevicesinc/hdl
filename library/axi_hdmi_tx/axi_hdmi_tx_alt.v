@@ -217,8 +217,7 @@ module axi_hdmi_tx_alt (
     .PCORE_ID (PCORE_ID),
     .PCORE_Cr_Cb_N (PCORE_Cr_Cb_N),
     .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .PCORE_EMBEDDED_SYNC (PCORE_EMBEDDED_SYNC),
-    .C_S_AXI_MIN_SIZE (32'hffff))
+    .PCORE_EMBEDDED_SYNC (PCORE_EMBEDDED_SYNC))
   i_hdmi_tx (
     .hdmi_clk (hdmi_clk),
     .hdmi_out_clk (hdmi_out_clk),

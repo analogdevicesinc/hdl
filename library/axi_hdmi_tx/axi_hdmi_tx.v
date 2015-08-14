@@ -105,7 +105,6 @@ module axi_hdmi_tx (
   parameter   PCORE_Cr_Cb_N = 0;
   parameter   PCORE_DEVICE_TYPE = 0;
   parameter   PCORE_EMBEDDED_SYNC = 0;
-  parameter   C_S_AXI_MIN_SIZE = 32'hffff;
 
   localparam  XILINX_7SERIES = 0;
   localparam  XILINX_ULTRASCALE = 1;
@@ -191,6 +190,7 @@ module axi_hdmi_tx (
   wire            up_rack_s;
   wire            hdmi_full_range_s;
   wire            hdmi_csc_bypass_s;
+  wire            hdmi_ss_bypass_s;
   wire    [ 1:0]  hdmi_srcsel_s;
   wire    [23:0]  hdmi_const_rgb_s;
   wire    [15:0]  hdmi_hl_active_s;
@@ -270,6 +270,7 @@ module axi_hdmi_tx (
     .hdmi_rst (hdmi_rst),
     .hdmi_full_range (hdmi_full_range_s),
     .hdmi_csc_bypass (hdmi_csc_bypass_s),
+    .hdmi_ss_bypass (hdmi_ss_bypass_s),
     .hdmi_srcsel (hdmi_srcsel_s),
     .hdmi_const_rgb (hdmi_const_rgb_s),
     .hdmi_hl_active (hdmi_hl_active_s),
@@ -355,6 +356,7 @@ module axi_hdmi_tx (
     .vdma_fs_waddr (vdma_fs_waddr_s),
     .hdmi_full_range (hdmi_full_range_s),
     .hdmi_csc_bypass (hdmi_csc_bypass_s),
+    .hdmi_ss_bypass (hdmi_ss_bypass_s),
     .hdmi_srcsel (hdmi_srcsel_s),
     .hdmi_const_rgb (hdmi_const_rgb_s),
     .hdmi_hl_active (hdmi_hl_active_s),

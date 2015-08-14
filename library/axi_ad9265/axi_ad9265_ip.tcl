@@ -15,15 +15,18 @@ adi_ip_files axi_ad9265 [list \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
-  "$ad_hdl_dir/library/common/up_drp_cntrl.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "axi_ad9265_pnmon.v" \
   "axi_ad9265_if.v" \
   "axi_ad9265_channel.v" \
+  "axi_ad9265_constr.xdc" \
   "axi_ad9265.v"]
 
 adi_ip_properties axi_ad9265
+
+adi_ip_constraints axi_ad9265 [list \
+  "axi_ad9265_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]

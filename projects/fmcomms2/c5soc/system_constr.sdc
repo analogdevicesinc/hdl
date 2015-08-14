@@ -6,7 +6,7 @@ create_clock -period "12.500 ns" -name clk_80m  [get_pins {i_system_bd|sys_hps|f
 derive_pll_clocks
 derive_clock_uncertainty
 
-set clk_125m [get_clocks {i_system_bd|axi_ad9361|i_ad9361|i_dev_if|i_rx|i_altlvds_rx|auto_generated|pll_sclk~PLL_OUTPUT_COUNTER|divclk}]
+set clk_125m [get_clocks {i_system_bd|axi_ad9361|i_dev_if|i_rx|i_altlvds_rx|auto_generated|pll_sclk~PLL_OUTPUT_COUNTER|divclk}]
 
 set clk_vga [get_clocks {i_system_bd|vga_pll|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}]
  

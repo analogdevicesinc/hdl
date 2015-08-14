@@ -153,6 +153,8 @@ module axi_dmac (
 	input                                    m_axis_ready,
 	output                                   m_axis_valid,
 	output [C_DMA_DATA_WIDTH_DEST-1:0]       m_axis_data,
+        output                                   m_axis_last,
+        output                                   m_axis_xfer_req,
 
 	// Input FIFO interface
 	input                                    fifo_wr_clk,
@@ -167,7 +169,8 @@ module axi_dmac (
 	input                                    fifo_rd_en,
 	output                                   fifo_rd_valid,
 	output [C_DMA_DATA_WIDTH_DEST-1:0]       fifo_rd_dout,
-	output                                   fifo_rd_underflow
+	output                                   fifo_rd_underflow,
+        output                                   fifo_rd_xfer_req
 );
 
 parameter PCORE_ID = 0;
@@ -230,7 +233,6 @@ wire         up_rreq;
 wire [31:0]  up_wdata;
 wire [11:0]  up_waddr;
 wire [11:0]  up_raddr;
-wire         up_write;
 
 // Scratch register
 reg [31:0] up_scratch = 'h00;
@@ -254,9 +256,10 @@ wire [1:0] up_irq_source_clear;
 reg  up_dma_req_valid = 1'b0;
 wire up_dma_req_ready;
 
-reg [1:0] up_transfer_id;
-reg [1:0] up_transfer_id_eot;
-reg [3:0] up_transfer_done_bitmap;
+reg [1:0] up_transfer_id = 2'b0;
+reg [1:0] up_transfer_id_eot = 2'b0;
+reg [3:0] up_transfer_done_bitmap = 4'b0;
+reg       up_axis_xlast = 1'b1;
 
 reg [31:BYTES_PER_BEAT_WIDTH_DEST]   up_dma_dest_address = 'h00;
 reg [31:BYTES_PER_BEAT_WIDTH_SRC]   up_dma_src_address = 'h00;
@@ -329,7 +332,7 @@ up_axi #(
 // IRQ handling
 assign up_irq_pending = ~up_irq_mask & up_irq_source;
 assign up_irq_trigger  = {up_eot, up_sot};
-assign up_irq_source_clear = (up_write == 1'b1 && up_waddr == 12'h021) ? up_wdata[1:0] : 0;
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 12'h021) ? up_wdata[1:0] : 0;
 
 always @(posedge s_axi_aclk)
 begin
@@ -349,7 +352,6 @@ begin
 end
 
 // Register Interface
-assign up_write = up_wreq;
 
 always @(posedge s_axi_aclk)
 begin
@@ -369,7 +371,7 @@ begin
 	end else begin
 		up_wack <= up_wreq;
 		if (up_enable == 1'b1) begin
-			if (up_write && up_waddr == 12'h102) begin
+			if (up_wreq && up_waddr == 12'h102) begin
 				up_dma_req_valid <= up_dma_req_valid | up_wdata[0];
 			end else if (up_sot) begin
 				up_dma_req_valid <= 1'b0;
@@ -378,12 +380,15 @@ begin
 			up_dma_req_valid <= 1'b0;
 		end
 
-		if (up_write) begin
+		if (up_wreq) begin
 			case (up_waddr)
 			12'h002: up_scratch <= up_wdata;
 			12'h020: up_irq_mask <= up_wdata;
 			12'h100: {up_pause, up_enable} <= up_wdata[1:0];
-			12'h103: if (C_CYCLIC) up_dma_cyclic <= up_wdata[0];
+                        12'h103: begin
+                          if (C_CYCLIC) up_dma_cyclic <= up_wdata[0];
+                          up_axis_xlast <= up_wdata[1];
+                        end
 			12'h104: up_dma_dest_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_DEST];
 			12'h105: up_dma_src_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_SRC];
 			12'h106: up_dma_x_length <= up_wdata[C_DMA_LENGTH_WIDTH-1:0];
@@ -412,7 +417,7 @@ begin
 		12'h100: up_rdata <= {up_pause, up_enable};
 		12'h101: up_rdata <= up_transfer_id;
 		12'h102: up_rdata <= up_dma_req_valid;
-		12'h103: up_rdata <= {31'h00, up_dma_cyclic}; // Flags
+		12'h103: up_rdata <= {30'h00, up_axis_xlast, up_dma_cyclic}; // Flags
 		12'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
 		12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
 		12'h106: up_rdata <= up_dma_x_length;
@@ -534,6 +539,7 @@ dmac_request_arb #(
 	.req_dest_address(dma_req_dest_address),
 	.req_src_address(dma_req_src_address),
 	.req_length(dma_req_length),
+        .req_xlast(up_axis_xlast),
 	.req_sync_transfer_start(dma_req_sync_transfer_start),
 
 	.eot(dma_req_eot),
@@ -595,8 +601,10 @@ dmac_request_arb #(
 	.m_axis_ready(m_axis_ready),
 	.m_axis_valid(m_axis_valid),
 	.m_axis_data(m_axis_data),
+        .m_axis_last(m_axis_last),
+        .m_axis_xfer_req(m_axis_xfer_req),
 
-	
+
 	.fifo_wr_clk(fifo_wr_clk),
 	.fifo_wr_en(fifo_wr_en),
 	.fifo_wr_din(fifo_wr_din),
@@ -610,6 +618,7 @@ dmac_request_arb #(
 	.fifo_rd_valid(fifo_rd_valid),
 	.fifo_rd_dout(fifo_rd_dout),
 	.fifo_rd_underflow(fifo_rd_underflow),
+        .fifo_rd_xfer_req(fifo_rd_xfer_req),
 
 	// DBG
 	.dbg_dest_request_id(dest_request_id),

@@ -56,26 +56,21 @@ module axi_ad9434_core (
 
   // drp interface
 
-  drp_clk,
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked,
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked,
 
   // delay interface
 
+  up_dld,
+  up_dwdata,
+  up_drdata,
   delay_clk,
   delay_rst,
-  delay_sel,
-  delay_rwn,
-  delay_addr,
-  delay_wdata,
-  delay_rdata,
-  delay_ack_t,
   delay_locked,
 
   // processor interface
@@ -111,25 +106,20 @@ module axi_ad9434_core (
   input           dma_dovf;
 
   // drp interface
-  input           drp_clk;
-  output          drp_rst;
-  output          drp_sel;
-  output          drp_wr;
-  output  [11:0]  drp_addr;
-  output  [15:0]  drp_wdata;
-  input   [15:0]  drp_rdata;
-  input           drp_ready;
-  input           drp_locked;
+  output          up_drp_sel;
+  output          up_drp_wr;
+  output  [11:0]  up_drp_addr;
+  output  [15:0]  up_drp_wdata;
+  input   [15:0]  up_drp_rdata;
+  input           up_drp_ready;
+  input           up_drp_locked;
 
   // delay interface
+  output  [12:0]  up_dld;
+  output  [64:0]  up_dwdata;
+  input   [64:0]  up_drdata;
   input           delay_clk;
   output          delay_rst;
-  output          delay_sel;
-  output          delay_rwn;
-  output  [ 7:0]  delay_addr;
-  output  [ 4:0]  delay_wdata;
-  input   [ 4:0]  delay_rdata;
-  input           delay_ack_t;
   input           delay_locked;
 
   // processor interface
@@ -166,9 +156,9 @@ module axi_ad9434_core (
   wire            adc_pn_err_s;
   wire            adc_pn_oos_s;
 
-  wire            up_wack_s[0:1];
-  wire    [31:0]  up_rdata_s[0:1];
-  wire            up_rack_s[0:1];
+  wire            up_wack_s[0:2];
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_rack_s[0:2];
 
   // instantiations
   axi_ad9434_pnmon i_pnmon (
@@ -203,9 +193,9 @@ module axi_ad9434_core (
       up_rack <= 'd0;
       up_wack <= 'd0;
     end else begin
-      up_rdata <= up_rdata_s[0] | up_rdata_s[1];
-      up_rack <= up_rack_s[0] | up_rack_s[1];
-      up_wack <= up_wack_s[0] | up_wack_s[1];
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
     end
   end
 
@@ -213,40 +203,37 @@ module axi_ad9434_core (
     .PCORE_ID(PCORE_ID))
   i_adc_common(
     .mmcm_rst (mmcm_rst),
+
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_r1_mode (),
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (adc_status),
+    .adc_sync_status (1'd0),
     .adc_status_ovf (dma_dovf),
     .adc_status_unf (1'b0),
     .adc_clk_ratio (32'd4),
+    .adc_start_code (),
+    .adc_sync (),
+
     .up_status_pn_err (up_status_pn_err_s),
     .up_status_pn_oos (up_status_pn_oos_s),
     .up_status_or (up_status_or_s),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_sel (delay_sel),
-    .delay_rwn (delay_rwn),
-    .delay_addr (delay_addr),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata),
-    .delay_ack_t (delay_ack_t),
-    .delay_locked (delay_locked),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked),
+
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked),
+
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd0),
     .up_adc_gpio_in (32'd0),
     .up_adc_gpio_out (),
+
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),
@@ -305,5 +292,25 @@ module axi_ad9434_core (
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[1]),
     .up_rack (up_rack_s[1]));
+
+  // adc delay control
+
+  up_delay_cntrl #(.IO_WIDTH(13), .IO_BASEADDR(6'h02)) i_delay_cntrl (
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked),
+    .up_dld (up_dld),
+    .up_dwdata (up_dwdata),
+    .up_drdata (up_drdata),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[2]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[2]),
+    .up_rack (up_rack_s[2]));
 
 endmodule

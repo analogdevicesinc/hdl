@@ -72,6 +72,7 @@ module axi_ad9361 (
 
   l_clk,
   clk,
+  rst,
 
   // dma interface
 
@@ -89,6 +90,7 @@ module axi_ad9361 (
   adc_data_q1,
   adc_dovf,
   adc_dunf,
+  adc_r1_mode,
 
   dac_enable_i0,
   dac_valid_i0,
@@ -104,6 +106,16 @@ module axi_ad9361 (
   dac_data_q1,
   dac_dovf,
   dac_dunf,
+  dac_r1_mode,
+
+  tdd_enable,
+
+  enable,
+  txnrx,
+
+  tdd_sync_i,
+  tdd_sync_o,
+  tdd_sync_t,
 
   // axi interface
 
@@ -138,17 +150,16 @@ module axi_ad9361 (
 
   // chipscope signals
 
-  dev_dbg_data,
-  dev_l_dbg_data);
+  tdd_dbg);
 
   // parameters
 
   parameter   PCORE_ID = 0;
   parameter   PCORE_DEVICE_TYPE = 0;
+  parameter   PCORE_DAC_IODELAY_ENABLE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
   parameter   PCORE_DAC_DP_DISABLE = 0;
   parameter   PCORE_ADC_DP_DISABLE = 0;
-  parameter   C_S_AXI_MIN_SIZE = 32'hffff;
 
   // physical interface (receive)
 
@@ -181,6 +192,7 @@ module axi_ad9361 (
 
   output          l_clk;
   input           clk;
+  output          rst;
 
   // dma interface
 
@@ -198,6 +210,7 @@ module axi_ad9361 (
   output  [15:0]  adc_data_q1;
   input           adc_dovf;
   input           adc_dunf;
+  output          adc_r1_mode;
 
   output          dac_enable_i0;
   output          dac_valid_i0;
@@ -213,6 +226,16 @@ module axi_ad9361 (
   input   [15:0]  dac_data_q1;
   input           dac_dovf;
   input           dac_dunf;
+  output          dac_r1_mode;
+
+  output          tdd_enable;
+
+  output          enable;
+  output          txnrx;
+
+  input           tdd_sync_i;
+  output          tdd_sync_o;
+  output          tdd_sync_t;
 
   // axi interface
 
@@ -247,8 +270,7 @@ module axi_ad9361 (
 
   // chipscope signals
 
-  output [111:0]  dev_dbg_data;
-  output [ 61:0]  dev_l_dbg_data;
+  output [34:0]   tdd_dbg;
 
   // internal registers
 
@@ -258,26 +280,24 @@ module axi_ad9361 (
 
   // internal clocks and resets
 
-  wire            rst;
   wire            up_clk;
   wire            up_rstn;
   wire            delay_rst;
 
   // internal signals
 
+  wire            adc_ddr_edgesel;
   wire            adc_valid_s;
   wire    [47:0]  adc_data_s;
   wire            adc_status_s;
-  wire            adc_r1_mode_s;
   wire            dac_valid_s;
   wire    [47:0]  dac_data_s;
-  wire            dac_r1_mode_s;
-  wire            delay_sel_s;
-  wire            delay_rwn_s;
-  wire    [ 7:0]  delay_addr_s;
-  wire    [ 4:0]  delay_wdata_s;
-  wire    [ 4:0]  delay_rdata_s;
-  wire            delay_ack_t_s;
+  wire    [ 6:0]  up_adc_dld_s;
+  wire    [34:0]  up_adc_dwdata_s;
+  wire    [34:0]  up_adc_drdata_s;
+  wire    [ 7:0]  up_dac_dld_s;
+  wire    [39:0]  up_dac_dwdata_s;
+  wire    [39:0]  up_dac_drdata_s;
   wire            delay_locked_s;
   wire            up_wreq_s;
   wire    [13:0]  up_waddr_s;
@@ -290,6 +310,21 @@ module axi_ad9361 (
   wire            up_rack_rx_s;
   wire    [31:0]  up_rdata_tx_s;
   wire            up_rack_tx_s;
+  wire            up_wack_tdd_s;
+  wire            up_rack_tdd_s;
+  wire    [31:0]  up_rdata_tdd_s;
+
+  wire            tdd_tx_dp_en_s;
+  wire            tdd_rx_vco_en_s;
+  wire            tdd_tx_vco_en_s;
+  wire            tdd_rx_rf_en_s;
+  wire            tdd_tx_rf_en_s;
+  wire    [ 7:0]  tdd_status_s;
+
+  wire            dac_valid_i0_s;
+  wire            dac_valid_q0_s;
+  wire            dac_valid_i1_s;
+  wire            dac_valid_q1_s;
 
   // signal name changes
 
@@ -304,9 +339,9 @@ module axi_ad9361 (
       up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_wack <= up_wack_rx_s | up_wack_tx_s;
-      up_rack <= up_rack_rx_s | up_rack_tx_s;
-      up_rdata <= up_rdata_rx_s | up_rdata_tx_s;
+      up_wack <= up_wack_rx_s | up_wack_tx_s | up_wack_tdd_s;
+      up_rack <= up_rack_rx_s | up_rack_tx_s | up_rack_tdd_s;
+      up_rdata <= up_rdata_rx_s | up_rdata_tx_s | up_rdata_tdd_s;
     end
   end
 
@@ -314,6 +349,7 @@ module axi_ad9361 (
 
   axi_ad9361_dev_if #(
     .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
+    .PCORE_DAC_IODELAY_ENABLE (PCORE_DAC_IODELAY_ENABLE),
     .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP))
   i_dev_if (
     .rx_clk_in_p (rx_clk_in_p),
@@ -334,21 +370,79 @@ module axi_ad9361 (
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
-    .adc_r1_mode (adc_r1_mode_s),
+    .adc_r1_mode (adc_r1_mode),
+    .adc_ddr_edgesel (adc_ddr_edgesel),
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
-    .dac_r1_mode (dac_r1_mode_s),
+    .dac_r1_mode (dac_r1_mode),
+    .up_clk (up_clk),
+    .up_adc_dld (up_adc_dld_s),
+    .up_adc_dwdata (up_adc_dwdata_s),
+    .up_adc_drdata (up_adc_drdata_s),
+    .up_dac_dld (up_dac_dld_s),
+    .up_dac_dwdata (up_dac_dwdata_s),
+    .up_dac_drdata (up_dac_drdata_s),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
-    .delay_sel (delay_sel_s),
-    .delay_rwn (delay_rwn_s),
-    .delay_addr (delay_addr_s),
-    .delay_wdata (delay_wdata_s),
-    .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t_s),
-    .delay_locked (delay_locked_s),
-    .dev_dbg_data (dev_dbg_data),
-    .dev_l_dbg_data (dev_l_dbg_data));
+    .delay_locked (delay_locked_s));
+
+  // TDD interface
+
+  axi_ad9361_tdd_if #(.MODE_OF_ENABLE(1)) i_tdd_if(
+    .clk(clk),
+    .rst(rst),
+    .tdd_rx_vco_en(tdd_rx_vco_en_s),
+    .tdd_tx_vco_en(tdd_tx_vco_en_s),
+    .tdd_rx_rf_en(tdd_rx_rf_en_s),
+    .tdd_tx_rf_en(tdd_tx_rf_en_s),
+    .ad9361_txnrx(txnrx),
+    .ad9361_enable(enable),
+    .ad9361_tdd_status(tdd_status_s)
+  );
+
+  // TDD control
+
+  axi_ad9361_tdd i_tdd(
+    .clk(clk),
+    .rst(rst),
+    .tdd_rx_vco_en(tdd_rx_vco_en_s),
+    .tdd_tx_vco_en(tdd_tx_vco_en_s),
+    .tdd_rx_rf_en(tdd_rx_rf_en_s),
+    .tdd_tx_rf_en(tdd_tx_rf_en_s),
+    .tdd_enable (tdd_enable),
+    .tdd_status(tdd_status_s),
+    .tdd_sync_i(tdd_sync_i),
+    .tdd_sync_o(tdd_sync_o),
+    .tdd_sync_t(tdd_sync_t),
+    .tx_valid_i0(dac_valid_i0_s),
+    .tx_valid_q0(dac_valid_q0_s),
+    .tx_valid_i1(dac_valid_i1_s),
+    .tx_valid_q1(dac_valid_q1_s),
+    .tdd_tx_valid_i0(dac_valid_i0),
+    .tdd_tx_valid_q0(dac_valid_q0),
+    .tdd_tx_valid_i1(dac_valid_i1),
+    .tdd_tx_valid_q1(dac_valid_q1),
+    .rx_valid_i0(adc_valid_i0_s),
+    .rx_valid_q0(adc_valid_q0_s),
+    .rx_valid_i1(adc_valid_i1_s),
+    .rx_valid_q1(adc_valid_q1_s),
+    .tdd_rx_valid_i0(adc_valid_i0),
+    .tdd_rx_valid_q0(adc_valid_q0),
+    .tdd_rx_valid_i1(adc_valid_i1),
+    .tdd_rx_valid_q1(adc_valid_q1),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_wreq(up_wreq_s),
+    .up_waddr(up_waddr_s),
+    .up_wdata(up_wdata_s),
+    .up_wack(up_wack_tdd_s),
+    .up_rreq(up_rreq_s),
+    .up_raddr(up_raddr_s),
+    .up_rdata(up_rdata_tdd_s),
+    .up_rack(up_rack_tdd_s),
+    .tdd_dbg(tdd_dbg)
+  );
+
 
   // receive
 
@@ -361,28 +455,26 @@ module axi_ad9361 (
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
-    .adc_r1_mode (adc_r1_mode_s),
+    .adc_r1_mode (adc_r1_mode),
+    .adc_ddr_edgesel (adc_ddr_edgesel),
     .dac_data (dac_data_s),
+    .up_dld (up_adc_dld_s),
+    .up_dwdata (up_adc_dwdata_s),
+    .up_drdata (up_adc_drdata_s),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
-    .delay_sel (delay_sel_s),
-    .delay_rwn (delay_rwn_s),
-    .delay_addr (delay_addr_s),
-    .delay_wdata (delay_wdata_s),
-    .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t_s),
     .delay_locked (delay_locked_s),
     .adc_enable_i0 (adc_enable_i0),
-    .adc_valid_i0 (adc_valid_i0),
+    .adc_valid_i0 (adc_valid_i0_s),
     .adc_data_i0 (adc_data_i0),
     .adc_enable_q0 (adc_enable_q0),
-    .adc_valid_q0 (adc_valid_q0),
+    .adc_valid_q0 (adc_valid_q0_s),
     .adc_data_q0 (adc_data_q0),
     .adc_enable_i1 (adc_enable_i1),
-    .adc_valid_i1 (adc_valid_i1),
+    .adc_valid_i1 (adc_valid_i1_s),
     .adc_data_i1 (adc_data_i1),
     .adc_enable_q1 (adc_enable_q1),
-    .adc_valid_q1 (adc_valid_q1),
+    .adc_valid_q1 (adc_valid_q1_s),
     .adc_data_q1 (adc_data_q1),
     .adc_dovf (adc_dovf),
     .adc_dunf (adc_dunf),
@@ -408,21 +500,27 @@ module axi_ad9361 (
     .dac_clk (clk),
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
-    .dac_r1_mode (dac_r1_mode_s),
+    .dac_r1_mode (dac_r1_mode),
     .adc_data (adc_data_s),
+    .up_dld (up_dac_dld_s),
+    .up_dwdata (up_dac_dwdata_s),
+    .up_drdata (up_dac_drdata_s),
+    .delay_clk (delay_clk),
+    .delay_rst (),
+    .delay_locked (delay_locked_s),
     .dac_sync_in (dac_sync_in),
     .dac_sync_out (dac_sync_out),
     .dac_enable_i0 (dac_enable_i0),
-    .dac_valid_i0 (dac_valid_i0),
+    .dac_valid_i0 (dac_valid_i0_s),
     .dac_data_i0 (dac_data_i0),
     .dac_enable_q0 (dac_enable_q0),
-    .dac_valid_q0 (dac_valid_q0),
+    .dac_valid_q0 (dac_valid_q0_s),
     .dac_data_q0 (dac_data_q0),
     .dac_enable_i1 (dac_enable_i1),
-    .dac_valid_i1 (dac_valid_i1),
+    .dac_valid_i1 (dac_valid_i1_s),
     .dac_data_i1 (dac_data_i1),
     .dac_enable_q1 (dac_enable_q1),
-    .dac_valid_q1 (dac_valid_q1),
+    .dac_valid_q1 (dac_valid_q1_s),
     .dac_data_q1 (dac_data_q1),
     .dac_dovf(dac_dovf),
     .dac_dunf(dac_dunf),

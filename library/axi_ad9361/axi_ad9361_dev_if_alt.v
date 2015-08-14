@@ -73,6 +73,7 @@ module axi_ad9361_dev_if (
   adc_data,
   adc_status,
   adc_r1_mode,
+  adc_ddr_edgesel,
 
   // transmit data path interface
 
@@ -80,26 +81,23 @@ module axi_ad9361_dev_if (
   dac_data,
   dac_r1_mode,
 
-  // delay control signals
+  // delay interface
 
+  up_clk,
+  up_adc_dld,
+  up_adc_dwdata,
+  up_adc_drdata,
+  up_dac_dld,
+  up_dac_dwdata,
+  up_dac_drdata,
   delay_clk,
   delay_rst,
-  delay_sel,
-  delay_rwn,
-  delay_addr,
-  delay_wdata,
-  delay_rdata,
-  delay_ack_t,
-  delay_locked,
-
-  // chipscope signals
-
-  dev_dbg_data,
-  dev_l_dbg_data);
+  delay_locked);
 
   // this parameter controls the buffer type based on the target device.
 
   parameter   PCORE_DEVICE_TYPE = 0;
+  parameter   PCORE_DAC_IODELAY_ENABLE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
   localparam  PCORE_7SERIES = 0;
   localparam  PCORE_VIRTEX6 = 1;
@@ -134,6 +132,7 @@ module axi_ad9361_dev_if (
   output  [47:0]  adc_data;
   output          adc_status;
   input           adc_r1_mode;
+  input           adc_ddr_edgesel;
 
   // transmit data path interface
 
@@ -141,22 +140,18 @@ module axi_ad9361_dev_if (
   input   [47:0]  dac_data;
   input           dac_r1_mode;
 
-  // delay control signals
+  // delay interface
 
+  input           up_clk;
+  input   [ 6:0]  up_adc_dld;
+  input   [34:0]  up_adc_dwdata;
+  output  [34:0]  up_adc_drdata;
+  input   [ 7:0]  up_dac_dld;
+  input   [39:0]  up_dac_dwdata;
+  output  [39:0]  up_dac_drdata;
   input           delay_clk;
   input           delay_rst;
-  input           delay_sel;
-  input           delay_rwn;
-  input   [ 7:0]  delay_addr;
-  input   [ 4:0]  delay_wdata;
-  output  [ 4:0]  delay_rdata;
-  output          delay_ack_t;
   output          delay_locked;
-
-  // chipscope signals
-
-  output [111:0]  dev_dbg_data;
-  output [ 61:0]  dev_l_dbg_data;
 
   // internal registers
 
@@ -192,11 +187,7 @@ module axi_ad9361_dev_if (
 
   // defaults
 
-  assign delay_rdata = 5'd0;
-  assign delay_ack_t = 1'd0;
   assign delay_locked = 1'd1;
-  assign dev_dbg_data = 112'd0;
-  assign dev_l_dbg_data = 62'd0;
 
   // receive data path interface
 

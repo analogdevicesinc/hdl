@@ -17,7 +17,6 @@ adi_ip_files axi_ad9643 [list \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
-  "$ad_hdl_dir/library/common/up_drp_cntrl.v" \
   "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
@@ -28,6 +27,7 @@ adi_ip_files axi_ad9643 [list \
   "axi_ad9643.v" ]
 
 adi_ip_properties axi_ad9643
+
 adi_ip_constraints axi_ad9643 [list \
   "axi_ad9643_constr.xdc" ]
 

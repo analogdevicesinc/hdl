@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // software programmable clock generator (still needs a reference input!)
 
 module axi_clkgen (
@@ -45,7 +43,6 @@ module axi_clkgen (
   clk,
   clk_0,
   clk_1,
-  drp_clk,
 
   // axi interface
 
@@ -78,14 +75,12 @@ module axi_clkgen (
   parameter   PCORE_VCO_MUL = 49;
   parameter   PCORE_CLK0_DIV = 6;
   parameter   PCORE_CLK1_DIV = 6;
-  parameter   C_S_AXI_MIN_SIZE = 32'hffff;
 
   // clocks
 
   input           clk;
   output          clk_0;
   output          clk_1;
-  input           drp_clk;
 
   // axi interface
 
@@ -112,19 +107,18 @@ module axi_clkgen (
   // reset and clocks
 
   wire            mmcm_rst;
-  wire            drp_rst;
   wire            up_rstn;
   wire            up_clk;
 
   // internal signals
 
-  wire            drp_sel_s;
-  wire            drp_wr_s;
-  wire    [11:0]  drp_addr_s;
-  wire    [15:0]  drp_wdata_s;
-  wire    [15:0]  drp_rdata_s;
-  wire            drp_ready_s;
-  wire            drp_locked_s;
+  wire            up_drp_sel_s;
+  wire            up_drp_wr_s;
+  wire    [11:0]  up_drp_addr_s;
+  wire    [15:0]  up_drp_wdata_s;
+  wire    [15:0]  up_drp_rdata_s;
+  wire            up_drp_ready_s;
+  wire            up_drp_locked_s;
   wire            up_wreq_s;
   wire    [13:0]  up_waddr_s;
   wire    [31:0]  up_wdata_s;
@@ -174,15 +168,13 @@ module axi_clkgen (
 
   up_clkgen i_up_clkgen (
     .mmcm_rst (mmcm_rst),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel_s),
-    .drp_wr (drp_wr_s),
-    .drp_addr (drp_addr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_s),
-    .drp_ready (drp_ready_s),
-    .drp_locked (drp_locked_s),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_s),
+    .up_drp_ready (up_drp_ready_s),
+    .up_drp_locked (up_drp_locked_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
@@ -208,15 +200,15 @@ module axi_clkgen (
     .mmcm_rst (mmcm_rst),
     .mmcm_clk_0 (clk_0),
     .mmcm_clk_1 (clk_1),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel_s),
-    .drp_wr (drp_wr_s),
-    .drp_addr (drp_addr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_s),
-    .drp_ready (drp_ready_s),
-    .drp_locked (drp_locked_s));
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_s),
+    .up_drp_ready (up_drp_ready_s),
+    .up_drp_locked (up_drp_locked_s));
 
 endmodule
 

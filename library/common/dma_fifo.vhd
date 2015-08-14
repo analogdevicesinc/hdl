@@ -31,15 +31,24 @@ architecture imp of dma_fifo is
 	signal data_fifo		: MEM;
 	signal wr_addr			: natural range 0 to FIFO_MAX;
 	signal rd_addr			: natural range 0 to FIFO_MAX;
-	signal full, empty		: Boolean;
+	signal not_full, not_empty	: Boolean;
 
 begin
-	in_ack <= '0' when full else '1';
+	in_ack <= '1' when not_full else '0';
 
-	out_stb <= '0' when empty else '1';
+	out_stb <= '1' when not_empty else '0';
 	out_data <= data_fifo(rd_addr);
 
-	fifo: process (clk) is
+	fifo_data: process (clk) is
+	begin
+		if rising_edge(clk) then
+			if not_full then
+				data_fifo(wr_addr) <= in_data;
+			end if;
+		end if;
+	end process;
+
+	fifo_ctrl: process (clk) is
 		variable free_cnt : integer range 0 to FIFO_MAX + 1;
 	begin
 		if rising_edge(clk) then
@@ -47,22 +56,21 @@ begin
 				wr_addr <= 0;
 				rd_addr <= 0;
 				free_cnt := FIFO_MAX + 1;
-				empty <= True;
-				full <= False;
+				not_empty <= False;
+				not_full <= True;
 			else
-				if in_stb = '1' and not full then
-					data_fifo(wr_addr) <= in_data;
+				if in_stb = '1' and not_full then
 					wr_addr <= (wr_addr + 1) mod (FIFO_MAX + 1);
 					free_cnt := free_cnt - 1;
 				end if;
 
-				if out_ack = '1' and not empty then
+				if out_ack = '1' and not_empty then
 					rd_addr <= (rd_addr + 1) mod (FIFO_MAX + 1);
 					free_cnt := free_cnt + 1;
 				end if;
 
-				full <= free_cnt = 0;
-				empty <= free_cnt = FIFO_MAX + 1;
+				not_full <= not (free_cnt = 0);
+				not_empty <= not (free_cnt = FIFO_MAX + 1);
 			end if;
 		end if;
 	end process;

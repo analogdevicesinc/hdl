@@ -85,7 +85,6 @@ module axi_ad9152 (
 
   parameter   PCORE_ID = 0;
   parameter   PCORE_DAC_DP_DISABLE = 0;
-  parameter   C_S_AXI_MIN_SIZE = 32'hffff;
 
   // jesd interface
   // tx_clk is (line-rate/40)

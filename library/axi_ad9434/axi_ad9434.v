@@ -89,7 +89,6 @@ module axi_ad9434 (
   parameter PCORE_ID = 0;
   parameter PCORE_DEVTYPE = SERIES7;
   parameter PCORE_IODELAY_GROUP = "dev_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // physical interface
   input           adc_clk_in_p;
@@ -136,7 +135,6 @@ module axi_ad9434 (
   wire            mmcm_rst;
   wire            up_clk;
   wire            adc_clk;
-  wire            drp_clk;
 
   // internal signals
   wire            up_wreq_s;
@@ -153,23 +151,21 @@ module axi_ad9434 (
   wire    [ 1:0]  up_status_or_s;
   wire            adc_status_s;
 
-  wire            delay_rst_s;
-  wire            delay_sel_s;
-  wire            delay_rwn_s;
-  wire    [ 7:0]  delay_addr_s;
-  wire    [ 4:0]  delay_wdata_s;
-  wire    [ 4:0]  delay_rdata_s;
-  wire            delay_ack_t_s;
+  wire    [12:0]  up_dld_s;
+  wire    [64:0]  up_dwdata_s;
+  wire    [64:0]  up_drdata_s;
+  wire            delay_clk_s;
+  wire            delay_rst;
   wire            delay_locked_s;
 
-  wire            drp_sel_s;
-  wire            drp_rst_s;
-  wire            drp_wr_s;
-  wire    [11:0]  drp_addr_s;
-  wire    [15:0]  drp_wdata_s;
-  wire    [15:0]  drp_rdata_s;
-  wire            drp_ready_s;
-  wire            drp_locked_s;
+
+  wire            up_drp_sel_s;
+  wire            up_drp_wr_s;
+  wire    [11:0]  up_drp_addr_s;
+  wire    [15:0]  up_drp_wdata_s;
+  wire    [15:0]  up_drp_rdata_s;
+  wire            up_drp_ready_s;
+  wire            up_drp_locked_s;
 
   wire    [47:0]  adc_data_if_s;
   wire            adc_or_if_s;
@@ -177,7 +173,6 @@ module axi_ad9434 (
   // clock/reset assignments
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
-  assign drp_clk = up_clk;
 
   // single channel always enable
   assign adc_enable = 1'b1;
@@ -197,25 +192,22 @@ module axi_ad9434 (
     .adc_clk(adc_clk),
     .adc_rst(adc_rst),
     .adc_status(adc_status_s),
-    .delay_clk(delay_clk),
-    .delay_rst(delay_rst_s),
-    .delay_sel(delay_sel_s),
-    .delay_rwn(delay_rwn_s),
-    .delay_addr(delay_addr_s),
-    .delay_wdata(delay_wdata_s),
-    .delay_rdata(delay_rdata_s),
-    .delay_ack_t(delay_ack_t_s),
-    .delay_locked(delay_locked_s),
+    .up_clk (up_clk),
+    .up_adc_dld (up_dld_s),
+    .up_adc_dwdata (up_dwdata_s),
+    .up_adc_drdata (up_drdata_s),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked_s),
     .mmcm_rst(mmcm_rst),
-    .drp_clk(drp_clk),
-    .drp_rst(drp_rst_s),
-    .drp_sel(drp_sel_s),
-    .drp_wr(drp_wr_s),
-    .drp_addr(drp_addr_s),
-    .drp_wdata(drp_wdata_s),
-    .drp_rdata(drp_rdata_s),
-    .drp_ready(drp_ready_s),
-    .drp_locked(drp_locked_s));
+    .up_rstn(up_rstn),
+    .up_drp_sel(up_drp_sel_s),
+    .up_drp_wr(up_drp_wr_s),
+    .up_drp_addr(up_drp_addr_s),
+    .up_drp_wdata(up_drp_wdata_s),
+    .up_drp_rdata(up_drp_rdata_s),
+    .up_drp_ready(up_drp_ready_s),
+    .up_drp_locked(up_drp_locked_s));
 
   // common processor control
   axi_ad9434_core #(.PCORE_ID(PCORE_ID))
@@ -229,24 +221,19 @@ module axi_ad9434 (
     .dma_dvalid (adc_valid),
     .dma_data (adc_data),
     .dma_dovf (adc_dovf),
+    .up_dld (up_dld_s),
+    .up_dwdata (up_dwdata_s),
+    .up_drdata (up_drdata_s),
     .delay_clk (delay_clk),
-    .delay_rst (delay_rst_s),
-    .delay_sel (delay_sel_s),
-    .delay_rwn (delay_rwn_s),
-    .delay_addr (delay_addr_s),
-    .delay_wdata (delay_wdata_s),
-    .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t_s),
+    .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst_s),
-    .drp_sel (drp_sel_s),
-    .drp_wr (drp_wr_s),
-    .drp_addr (drp_addr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_s),
-    .drp_ready (drp_ready_s),
-    .drp_locked (drp_locked_s),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_s),
+    .up_drp_ready (up_drp_ready_s),
+    .up_drp_locked (up_drp_locked_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),

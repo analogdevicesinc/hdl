@@ -36,7 +36,6 @@
 // ***************************************************************************
 // ***************************************************************************
 // ***************************************************************************
-// This is the LVDS/DDR interface
 
 `timescale 1ns/100ps
 
@@ -46,7 +45,7 @@ module axi_ad9671_if (
   // rx_clk is (line-rate/40)
 
   rx_clk,
-  rx_data_sof,
+  rx_sof,
   rx_data,
 
   // adc data output
@@ -88,7 +87,7 @@ module axi_ad9671_if (
   // rx_clk is (line-rate/40)
 
   input                                 rx_clk;
-  input                                 rx_data_sof;
+  input                                 rx_sof;
   input   [(64*PCORE_4L_2L_N)+63:0]     rx_data;
 
   // adc data output
@@ -142,6 +141,7 @@ module axi_ad9671_if (
   reg     [127:0]                       int_data = 'd0;
   reg                                   adc_status = 'd0;
   reg                                   adc_sync_status = 'd0;
+  reg                                   rx_sof_d = 'd0;
 
   reg     [  3:0]                       adc_waddr = 'd0;
   reg     [  3:0]                       adc_raddr_out = 'd0;
@@ -219,9 +219,10 @@ module axi_ad9671_if (
   always @(posedge rx_clk) begin
     if (PCORE_4L_2L_N == 1'b1) begin
       int_valid <= 1'b1;
-      int_data <= rx_data;
+      int_data  <= rx_data;
     end else begin
-      int_valid         <= !rx_data_sof;
+      rx_sof_d          <= rx_sof;
+      int_valid         <= rx_sof_d;
       int_data[63:0]    <= {rx_data[31:0], int_data[63:32]};
       int_data[127:64]  <= {rx_data[63:32], int_data[127:96]};
     end

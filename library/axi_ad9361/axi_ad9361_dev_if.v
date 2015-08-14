@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // This interface includes both the transmit and receive components -
 // They both uses the same clock (sourced from the receiving side).
 
@@ -73,6 +71,7 @@ module axi_ad9361_dev_if (
   adc_data,
   adc_status,
   adc_r1_mode,
+  adc_ddr_edgesel,
 
   // transmit data path interface
 
@@ -80,26 +79,23 @@ module axi_ad9361_dev_if (
   dac_data,
   dac_r1_mode,
 
-  // delay control signals
+  // delay interface
 
+  up_clk,
+  up_adc_dld,
+  up_adc_dwdata,
+  up_adc_drdata,
+  up_dac_dld,
+  up_dac_dwdata,
+  up_dac_drdata,
   delay_clk,
   delay_rst,
-  delay_sel,
-  delay_rwn,
-  delay_addr,
-  delay_wdata,
-  delay_rdata,
-  delay_ack_t,
-  delay_locked,
-
-  // chipscope signals
-
-  dev_dbg_data,
-  dev_l_dbg_data);
+  delay_locked);
 
   // this parameter controls the buffer type based on the target device.
 
   parameter   PCORE_DEVICE_TYPE = 0;
+  parameter   PCORE_DAC_IODELAY_ENABLE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
   localparam  PCORE_7SERIES = 0;
   localparam  PCORE_VIRTEX6 = 1;
@@ -134,6 +130,7 @@ module axi_ad9361_dev_if (
   output  [47:0]  adc_data;
   output          adc_status;
   input           adc_r1_mode;
+  input           adc_ddr_edgesel;
 
   // transmit data path interface
 
@@ -141,25 +138,26 @@ module axi_ad9361_dev_if (
   input   [47:0]  dac_data;
   input           dac_r1_mode;
 
-  // delay control signals
+  // delay interface
 
+  input           up_clk;
+  input   [ 6:0]  up_adc_dld;
+  input   [34:0]  up_adc_dwdata;
+  output  [34:0]  up_adc_drdata;
+  input   [ 7:0]  up_dac_dld;
+  input   [39:0]  up_dac_dwdata;
+  output  [39:0]  up_dac_drdata;
   input           delay_clk;
   input           delay_rst;
-  input           delay_sel;
-  input           delay_rwn;
-  input   [ 7:0]  delay_addr;
-  input   [ 4:0]  delay_wdata;
-  output  [ 4:0]  delay_rdata;
-  output          delay_ack_t;
   output          delay_locked;
-
-  // chipscope signals
-
-  output [111:0]  dev_dbg_data;
-  output [ 61:0]  dev_l_dbg_data;
 
   // internal registers
 
+  reg     [ 5:0]  rx_data_p = 0;
+  reg             rx_frame_p = 0;
+  reg     [ 1:0]  rx_ccnt = 0;
+  reg             rx_calign = 0;
+  reg             rx_align = 0;
   reg     [11:0]  rx_data = 'd0;
   reg     [ 1:0]  rx_frame = 'd0;
   reg     [11:0]  rx_data_d = 'd0;
@@ -193,15 +191,12 @@ module axi_ad9361_dev_if (
   reg             tx_p_frame = 'd0;
   reg     [ 5:0]  tx_p_data_p = 'd0;
   reg     [ 5:0]  tx_p_data_n = 'd0;
-  reg     [ 6:0]  delay_ld = 'd0;
-  reg     [ 4:0]  delay_rdata = 'd0;
-  reg             delay_ack_t = 'd0;
 
   // internal signals
 
+  wire            rx_align_s;
   wire    [ 3:0]  rx_frame_s;
   wire    [ 3:0]  tx_data_sel_s;
-  wire    [ 4:0]  delay_rdata_s[6:0];
   wire    [ 5:0]  rx_data_p_s;
   wire    [ 5:0]  rx_data_n_s;
   wire            rx_frame_p_s;
@@ -209,39 +204,33 @@ module axi_ad9361_dev_if (
 
   genvar          l_inst;
 
-  // device debug signals
-
-  assign dev_dbg_data[  5:  0] = tx_data_n;
-  assign dev_dbg_data[ 11:  6] = tx_data_p;
-  assign dev_dbg_data[ 23: 12] = dac_data[11: 0];
-  assign dev_dbg_data[ 35: 24] = dac_data[23:12];
-  assign dev_dbg_data[ 47: 36] = dac_data[35:24];
-  assign dev_dbg_data[ 59: 48] = dac_data[47:36];
-  assign dev_dbg_data[ 71: 60] = adc_data[11: 0];
-  assign dev_dbg_data[ 83: 72] = adc_data[23:12];
-  assign dev_dbg_data[ 95: 84] = adc_data[35:24];
-  assign dev_dbg_data[107: 96] = adc_data[47:36];
-  assign dev_dbg_data[108:108] = tx_frame;
-  assign dev_dbg_data[109:109] = dac_valid;
-  assign dev_dbg_data[110:110] = adc_status;
-  assign dev_dbg_data[111:111] = adc_valid;
-
-  assign dev_l_dbg_data[  5:  0] = tx_p_data_n;
-  assign dev_l_dbg_data[ 11:  6] = tx_p_data_p;
-  assign dev_l_dbg_data[ 23: 12] = adc_p_data[11: 0];
-  assign dev_l_dbg_data[ 35: 24] = adc_p_data[23:12];
-  assign dev_l_dbg_data[ 47: 36] = adc_p_data[35:24];
-  assign dev_l_dbg_data[ 59: 48] = adc_p_data[47:36];
-  assign dev_l_dbg_data[ 60: 60] = tx_p_frame;
-  assign dev_l_dbg_data[ 61: 61] = adc_p_valid;
-
   // receive data path interface
+
+  assign rx_align_s = rx_frame_n_s ^ rx_frame_p_s;
+
+  always @(posedge l_clk) begin
+    rx_data_p <= rx_data_p_s;
+    rx_frame_p <= rx_frame_p_s;
+    rx_ccnt <= rx_ccnt + 1'b1;
+    if (rx_ccnt == 2'd0) begin
+      rx_calign <= rx_align;
+      rx_align <= rx_align_s;
+    end else begin
+      rx_calign <= rx_calign;
+      rx_align <= rx_align | rx_align_s;
+    end
+  end
 
   assign rx_frame_s = {rx_frame_d, rx_frame};
 
   always @(posedge l_clk) begin
-    rx_data <= {rx_data_n_s, rx_data_p_s};
-    rx_frame <= {rx_frame_n_s, rx_frame_p_s};
+    if (rx_calign == 1'b1) begin
+      rx_data <= {rx_data_p, rx_data_n_s};
+      rx_frame <= {rx_frame_p, rx_frame_n_s};
+    end else begin
+      rx_data <= {rx_data_n_s, rx_data_p_s};
+      rx_frame <= {rx_frame_n_s, rx_frame_p_s};
+    end
     rx_data_d <= rx_data;
     rx_frame_d <= rx_frame;
   end
@@ -383,45 +372,6 @@ module axi_ad9361_dev_if (
     tx_p_data_n <= tx_n_data_n;
   end
 
-  // delay write interface, each delay element can be individually
-  // addressed, and a delay value can be directly loaded (no inc/dec stuff)
-
-  always @(posedge delay_clk) begin
-    if ((delay_sel == 1'b1) && (delay_rwn == 1'b0)) begin
-      case (delay_addr)
-        8'h06: delay_ld <= 7'h40;
-        8'h05: delay_ld <= 7'h20;
-        8'h04: delay_ld <= 7'h10;
-        8'h03: delay_ld <= 7'h08;
-        8'h02: delay_ld <= 7'h04;
-        8'h01: delay_ld <= 7'h02;
-        8'h00: delay_ld <= 7'h01;
-        default: delay_ld <= 7'h00;
-      endcase
-    end else begin
-      delay_ld <= 7'h00;
-    end
-  end
-
-  // delay read interface, a delay ack toggle is used to transfer data to the
-  // processor side- delay locked is independently transferred
-
-  always @(posedge delay_clk) begin
-    case (delay_addr)
-      8'h06: delay_rdata <= delay_rdata_s[6];
-      8'h05: delay_rdata <= delay_rdata_s[5];
-      8'h04: delay_rdata <= delay_rdata_s[4];
-      8'h03: delay_rdata <= delay_rdata_s[3];
-      8'h02: delay_rdata <= delay_rdata_s[2];
-      8'h01: delay_rdata <= delay_rdata_s[1];
-      8'h00: delay_rdata <= delay_rdata_s[0];
-      default: delay_rdata <= 5'd0;
-    endcase
-    if (delay_sel == 1'b1) begin
-      delay_ack_t <= ~delay_ack_t;
-    end
-  end
-
   // receive data interface, ibuf -> idelay -> iddr
 
   generate
@@ -436,11 +386,12 @@ module axi_ad9361_dev_if (
     .rx_data_in_n (rx_data_in_n[l_inst]),
     .rx_data_p (rx_data_p_s[l_inst]),
     .rx_data_n (rx_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_adc_dld[l_inst]),
+    .up_dwdata (up_adc_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_adc_drdata[((l_inst*5)+4):(l_inst*5)]),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
-    .delay_ld (delay_ld[l_inst]),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata_s[l_inst]),
     .delay_locked ());
   end
   endgenerate
@@ -457,11 +408,12 @@ module axi_ad9361_dev_if (
     .rx_data_in_n (rx_frame_in_n),
     .rx_data_p (rx_frame_p_s),
     .rx_data_n (rx_frame_n_s),
+    .up_clk (up_clk),
+    .up_dld (up_adc_dld[6]),
+    .up_dwdata (up_adc_dwdata[34:30]),
+    .up_drdata (up_adc_drdata[34:30]),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
-    .delay_ld (delay_ld[6]),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata_s[6]),
     .delay_locked (delay_locked));
 
   // transmit data interface, oddr -> obuf
@@ -469,37 +421,67 @@ module axi_ad9361_dev_if (
   generate
   for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_tx_data
   ad_lvds_out #(
-    .BUFTYPE (PCORE_DEVICE_TYPE))
+    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .IODELAY_ENABLE (PCORE_DAC_IODELAY_ENABLE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
   i_tx_data (
     .tx_clk (l_clk),
     .tx_data_p (tx_p_data_p[l_inst]),
     .tx_data_n (tx_p_data_n[l_inst]),
     .tx_data_out_p (tx_data_out_p[l_inst]),
-    .tx_data_out_n (tx_data_out_n[l_inst]));
+    .tx_data_out_n (tx_data_out_n[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_dac_dld[l_inst]),
+    .up_dwdata (up_dac_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_dac_drdata[((l_inst*5)+4):(l_inst*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
   end
   endgenerate
 
   // transmit frame interface, oddr -> obuf
 
   ad_lvds_out #(
-    .BUFTYPE (PCORE_DEVICE_TYPE))
+    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .IODELAY_ENABLE (PCORE_DAC_IODELAY_ENABLE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
   i_tx_frame (
     .tx_clk (l_clk),
     .tx_data_p (tx_p_frame),
     .tx_data_n (tx_p_frame),
     .tx_data_out_p (tx_frame_out_p),
-    .tx_data_out_n (tx_frame_out_n));
+    .tx_data_out_n (tx_frame_out_n),
+    .up_clk (up_clk),
+    .up_dld (up_dac_dld[6]),
+    .up_dwdata (up_dac_dwdata[34:30]),
+    .up_drdata (up_dac_drdata[34:30]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
 
   // transmit clock interface, oddr -> obuf
 
   ad_lvds_out #(
-    .BUFTYPE (PCORE_DEVICE_TYPE))
+    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .IODELAY_ENABLE (PCORE_DAC_IODELAY_ENABLE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
   i_tx_clk (
     .tx_clk (l_clk),
     .tx_data_p (1'b0),
     .tx_data_n (1'b1),
     .tx_data_out_p (tx_clk_out_p),
-    .tx_data_out_n (tx_clk_out_n));
+    .tx_data_out_n (tx_clk_out_n),
+    .up_clk (up_clk),
+    .up_dld (up_dac_dld[7]),
+    .up_dwdata (up_dac_dwdata[39:35]),
+    .up_drdata (up_dac_drdata[39:35]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
 
   // device clock interface (receive clock)
 

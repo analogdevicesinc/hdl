@@ -84,7 +84,6 @@ module axi_ad9625 (
   parameter PCORE_ID = 0;
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -223,30 +222,22 @@ module axi_ad9625 (
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (adc_status_s),
+    .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
+    .adc_start_code (),
+    .adc_sync (),
     .up_status_pn_err (up_adc_pn_err_s),
     .up_status_pn_oos (up_adc_pn_oos_s),
     .up_status_or (up_adc_or_s),
-    .delay_clk (1'b0),
-    .delay_rst (),
-    .delay_sel (),
-    .delay_rwn (),
-    .delay_addr (),
-    .delay_wdata (),
-    .delay_rdata (5'd0),
-    .delay_ack_t (1'b0),
-    .delay_locked (1'b1),
-    .drp_clk (1'd0),
-    .drp_rst (),
-    .drp_sel (),
-    .drp_wr (),
-    .drp_addr (),
-    .drp_wdata (),
-    .drp_rdata (16'd0),
-    .drp_ready (1'd0),
-    .drp_locked (1'd1),
+    .up_drp_sel (),
+    .up_drp_wr (),
+    .up_drp_addr (),
+    .up_drp_wdata (),
+    .up_drp_rdata (16'd0),
+    .up_drp_ready (1'd0),
+    .up_drp_locked (1'd1),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd1),
     .up_adc_gpio_in (32'd0),

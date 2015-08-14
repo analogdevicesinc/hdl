@@ -102,6 +102,6 @@ set_property  -dict {PACKAGE_PIN  P26   IOSTANDARD LVCMOS25} [get_ports hmc922_b
 
 create_clock -name tx_ref_clk   -period  2.00 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  2.00 [get_ports rx_ref_clk_p]
-create_clock -name tx_div_clk   -period  4.00 [get_nets i_system_wrapper/system_i/axi_fmcomms7_gt_tx_clk]
-create_clock -name rx_div_clk   -period  4.00 [get_nets i_system_wrapper/system_i/axi_fmcomms7_gt_rx_clk]
+create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_fmcomms7_gt/inst/g_lane_1[0].i_gt_channel_1/i_gtxe2_channel/TXOUTCLK]
+create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_fmcomms7_gt/inst/g_lane_1[0].i_gt_channel_1/i_gtxe2_channel/RXOUTCLK]
 

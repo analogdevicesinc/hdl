@@ -37,10 +37,7 @@
 
 `timescale 1ns/100ps
 
-module axi_mc_current_monitor #(
-    parameter C_S_AXI_MIN_SIZE = 32'hffff
-)
-(
+module axi_mc_current_monitor (
 
 // physical interface
 
@@ -259,6 +256,8 @@ up_adc_channel #(.PCORE_ADC_CHID(1)) i_up_adc_channel_ib(
     .adc_dcfilt_coeff(),
     .adc_iqcor_coeff_1(),
     .adc_iqcor_coeff_2(),
+    .adc_pnseq_sel(),
+    .adc_data_sel(),
     .adc_pn_err(1'b0),
     .adc_pn_oos(1'b0),
     .adc_or(1'b0),
@@ -303,6 +302,8 @@ up_adc_channel #(.PCORE_ADC_CHID(2)) i_up_adc_channel_vbus(
     .adc_dcfilt_coeff(),
     .adc_iqcor_coeff_1(),
     .adc_iqcor_coeff_2(),
+    .adc_pnseq_sel(),
+    .adc_data_sel(),
     .adc_pn_err(1'b0),
     .adc_pn_oos(1'b0),
     .adc_or(1'b0),
@@ -347,6 +348,8 @@ up_adc_channel #(.PCORE_ADC_CHID(3)) i_up_adc_channel_stub(
     .adc_dcfilt_coeff(),
     .adc_iqcor_coeff_1(),
     .adc_iqcor_coeff_2(),
+    .adc_pnseq_sel(),
+    .adc_data_sel(),
     .adc_pn_err(1'b0),
     .adc_pn_oos(1'b0),
     .adc_or(1'b0),
@@ -389,8 +392,8 @@ up_adc_common i_up_adc_common(
     .adc_pin_mode(),
     .adc_status(1'b1),
     .adc_sync_status(1'b1),
-    .adc_status_ovf(),
-    .adc_status_unf(),
+    .adc_status_ovf(1'b0),
+    .adc_status_unf(1'b0),
     .adc_clk_ratio(32'd1),
     .adc_start_code(),
     .adc_sync(),
@@ -399,25 +402,13 @@ up_adc_common i_up_adc_common(
     .up_status_pn_oos(1'b0),
     .up_status_or(1'b0),
 
-    .delay_clk(1'b0),
-    .delay_rst(),
-    .delay_sel(),
-    .delay_rwn(),
-    .delay_addr(),
-    .delay_wdata(),
-    .delay_rdata(5'd0),
-    .delay_ack_t(1'b0),
-    .delay_locked(1'b0),
-
-    .drp_clk(1'd0),
-    .drp_rst(),
-    .drp_sel(),
-    .drp_wr(),
-    .drp_addr(),
-    .drp_wdata(),
-    .drp_rdata(16'd0),
-    .drp_ready(1'b0),
-    .drp_locked(1'b0),
+    .up_drp_sel(),
+    .up_drp_wr(),
+    .up_drp_addr(),
+    .up_drp_wdata(),
+    .up_drp_rdata(16'd0),
+    .up_drp_ready(1'b0),
+    .up_drp_locked(1'b0),
 
     .up_usr_chanmax(),
     .adc_usr_chanmax(8'd3),

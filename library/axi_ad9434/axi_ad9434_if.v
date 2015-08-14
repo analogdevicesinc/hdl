@@ -60,29 +60,26 @@ module axi_ad9434_if (
   adc_status,
 
   // delay interface (for IDELAY macros)
+  up_clk,
+  up_adc_dld,
+  up_adc_dwdata,
+  up_adc_drdata,
   delay_clk,
   delay_rst,
-  delay_sel,
-  delay_rwn,
-  delay_addr,
-  delay_wdata,
-  delay_rdata,
-  delay_ack_t,
   delay_locked,
 
   // mmcm reset
   mmcm_rst,
 
   // drp interface for MMCM
-  drp_clk,
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked);
+  up_rstn,
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked);
 
   // parameters
   parameter PCORE_DEVTYPE = 0;  // 0 - 7Series / 1 - 6Series
@@ -110,42 +107,35 @@ module axi_ad9434_if (
   input           adc_rst;
   output          adc_status;
 
-  // delay control signals
+  // delay interface
+
+  input           up_clk;
+  input   [12:0]  up_adc_dld;
+  input   [64:0]  up_adc_dwdata;
+  output  [64:0]  up_adc_drdata;
   input           delay_clk;
   input           delay_rst;
-  input           delay_sel;
-  input           delay_rwn;
-  input   [ 7:0]  delay_addr;
-  input   [ 4:0]  delay_wdata;
-  output  [ 4:0]  delay_rdata;
-  output          delay_ack_t;
   output          delay_locked;
 
   // mmcm reset
   input           mmcm_rst;
 
   // drp interface
-  input           drp_clk;
-  input           drp_rst;
-  input           drp_sel;
-  input           drp_wr;
-  input   [11:0]  drp_addr;
-  input   [15:0]  drp_wdata;
-  output  [15:0]  drp_rdata;
-  output          drp_ready;
-  output          drp_locked;
-
-  // output registers
-  reg     [ 4:0]  delay_rdata   = 'b0;
-  reg             delay_ack_t   = 'b0;
+  input           up_rstn;
+  input           up_drp_sel;
+  input           up_drp_wr;
+  input   [11:0]  up_drp_addr;
+  input   [15:0]  up_drp_wdata;
+  output  [15:0]  up_drp_rdata;
+  output          up_drp_ready;
+  output          up_drp_locked;
 
   // internal registers
-  reg     [12:0]  delay_ld      = 'd0;
+
   reg             adc_status    = 'd0;
   reg             adc_status_m1 = 'd0;
 
   // internal signals
-  wire    [ 4:0]  delay_rdata_s[12:0];
 
   wire    [3:0]   adc_or_s;
 
@@ -156,55 +146,6 @@ module axi_ad9434_if (
 
   // output assignment for adc clock (1:4 of the sampling clock)
   assign  adc_clk = adc_div_clk;
-
-  // delay write interface, each delay element can be individually
-  // addressed, and a delay value can be directly loaded (no inc/dec stuff)
-  always @(posedge delay_clk) begin
-    if ((delay_sel == 1'b1) && (delay_rwn == 1'b0)) begin
-      case (delay_addr)
-        8'd12  : delay_ld <= 13'h1000;
-        8'd11  : delay_ld <= 13'h0800;
-        8'd10  : delay_ld <= 13'h0400;
-        8'd9   : delay_ld <= 13'h0200;
-        8'd8   : delay_ld <= 13'h0100;
-        8'd7   : delay_ld <= 13'h0080;
-        8'd6   : delay_ld <= 13'h0040;
-        8'd5   : delay_ld <= 13'h0020;
-        8'd4   : delay_ld <= 13'h0010;
-        8'd3   : delay_ld <= 13'h0008;
-        8'd2   : delay_ld <= 13'h0004;
-        8'd1   : delay_ld <= 13'h0002;
-        8'd0   : delay_ld <= 13'h0001;
-        default : delay_ld <= 13'h0000;
-      endcase
-    end else begin
-      delay_ld <= 13'h000;
-    end
-  end
-
-  // delay read interface, a delay ack toggle is used to transfer data to the
-  // processor side- delay locked is independently transferred
-  always @(posedge delay_clk) begin
-    case (delay_addr)
-      8'd12 : delay_rdata <= delay_rdata_s[12];
-      8'd11 : delay_rdata <= delay_rdata_s[11];
-      8'd10 : delay_rdata <= delay_rdata_s[10];
-      8'd9  : delay_rdata <= delay_rdata_s[9];
-      8'd8  : delay_rdata <= delay_rdata_s[8];
-      8'd7  : delay_rdata <= delay_rdata_s[7];
-      8'd6  : delay_rdata <= delay_rdata_s[6];
-      8'd5  : delay_rdata <= delay_rdata_s[5];
-      8'd4  : delay_rdata <= delay_rdata_s[4];
-      8'd3  : delay_rdata <= delay_rdata_s[3];
-      8'd2  : delay_rdata <= delay_rdata_s[2];
-      8'd1  : delay_rdata <= delay_rdata_s[1];
-      8'd0  : delay_rdata <= delay_rdata_s[0];
-      default: delay_rdata <= 5'd0;
-    endcase
-    if (delay_sel == 1'b1) begin
-      delay_ack_t <= ~delay_ack_t;
-    end
-  end
 
   // data interface
   generate
@@ -229,11 +170,12 @@ module axi_ad9434_if (
       .data_s7(),
       .data_in_p(adc_data_in_p[l_inst]),
       .data_in_n(adc_data_in_n[l_inst]),
+      .up_clk (up_clk),
+      .up_dld (up_adc_dld[l_inst]),
+      .up_dwdata (up_adc_dwdata[((l_inst*5)+4):(l_inst*5)]),
+      .up_drdata (up_adc_drdata[((l_inst*5)+4):(l_inst*5)]),
       .delay_clk(delay_clk),
       .delay_rst(delay_rst),
-      .delay_ld(delay_ld[l_inst]),
-      .delay_wdata(delay_wdata),
-      .delay_rdata(delay_rdata_s[l_inst]),
       .delay_locked());
     end
   endgenerate
@@ -259,11 +201,12 @@ module axi_ad9434_if (
     .data_s7(),
     .data_in_p(adc_or_in_p),
     .data_in_n(adc_or_in_n),
+    .up_clk (up_clk),
+    .up_dld (up_adc_dld[12]),
+    .up_dwdata (up_adc_dwdata[64:60]),
+    .up_drdata (up_adc_drdata[64:60]),
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
-    .delay_ld(delay_ld[12]),
-    .delay_wdata(delay_wdata),
-    .delay_rdata(delay_rdata_s[12]),
     .delay_locked(delay_locked));
 
   // clock input buffers and MMCM
@@ -280,15 +223,15 @@ module axi_ad9434_if (
     .clk_in_n (adc_clk_in_n),
     .clk (adc_clk_in),
     .div_clk (adc_div_clk),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked));
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked));
 
   // adc overange
   assign adc_or = adc_or_s[0] | adc_or_s[1] | adc_or_s[2] | adc_or_s[3];
@@ -299,7 +242,7 @@ module axi_ad9434_if (
       adc_status_m1 <= 1'b0;
       adc_status <= 1'b0;
     end else begin
-      adc_status_m1 <= drp_locked & delay_locked;
+      adc_status_m1 <= up_drp_locked & delay_locked;
     end
   end
 

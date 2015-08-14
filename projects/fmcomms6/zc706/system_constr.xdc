@@ -54,6 +54,4 @@ set_property  -dict {PACKAGE_PIN  AK26  IOSTANDARD LVCMOS25} [get_ports adf4351_
 # clocks
 
 create_clock -name adc_clk_in   -period  3.22 [get_ports adc_clk_in_p]
-create_clock -name adc_clk      -period  3.22 [get_pins i_system_wrapper/system_i/axi_ad9652/adc_clk]
 
-set_clock_groups -asynchronous -group {adc_clk}

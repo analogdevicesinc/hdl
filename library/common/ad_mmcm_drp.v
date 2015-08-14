@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // MMCM with DRP and device specific
 
 `timescale 1ns/100ps
@@ -51,15 +49,15 @@ module ad_mmcm_drp (
 
   // drp interface
 
-  drp_clk,
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked);
+  up_clk,
+  up_rstn,
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked);
 
   // parameters
 
@@ -82,22 +80,22 @@ module ad_mmcm_drp (
 
   // drp interface
 
-  input           drp_clk;
-  input           drp_rst;
-  input           drp_sel;
-  input           drp_wr;
-  input   [11:0]  drp_addr;
-  input   [15:0]  drp_wdata;
-  output  [15:0]  drp_rdata;
-  output          drp_ready;
-  output          drp_locked;
+  input           up_clk;
+  input           up_rstn;
+  input           up_drp_sel;
+  input           up_drp_wr;
+  input   [11:0]  up_drp_addr;
+  input   [15:0]  up_drp_wdata;
+  output  [15:0]  up_drp_rdata;
+  output          up_drp_ready;
+  output          up_drp_locked;
 
   // internal registers
 
-  reg     [15:0]  drp_rdata = 'd0;
-  reg             drp_ready = 'd0;
-  reg             drp_locked_m1 = 'd0;
-  reg             drp_locked = 'd0;
+  reg     [15:0]  up_drp_rdata = 'd0;
+  reg             up_drp_ready = 'd0;
+  reg             up_drp_locked_m1 = 'd0;
+  reg             up_drp_locked = 'd0;
 
   // internal signals
 
@@ -106,20 +104,22 @@ module ad_mmcm_drp (
   wire            mmcm_clk_0_s;
   wire            mmcm_clk_1_s;
   wire            mmcm_locked_s;
-  wire    [15:0]  drp_rdata_s;
-  wire            drp_ready_s;
+  wire    [15:0]  up_drp_rdata_s;
+  wire            up_drp_ready_s;
 
   // drp read and locked
 
-  always @(posedge drp_clk) begin
-    drp_rdata <= drp_rdata_s;
-    drp_ready <= drp_ready_s;
-    if (drp_rst == 1'b1) begin
-      drp_locked_m1 <= 1'd0;
-      drp_locked <= 1'd0;
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_drp_rdata <= 'd0;
+      up_drp_ready <= 'd0;
+      up_drp_locked_m1 <= 1'd0;
+      up_drp_locked <= 1'd0;
     end else begin
-      drp_locked_m1 <= mmcm_locked_s;
-      drp_locked <= drp_locked_m1;
+      up_drp_rdata <= up_drp_rdata_s;
+      up_drp_ready <= up_drp_ready_s;
+      up_drp_locked_m1 <= mmcm_locked_s;
+      up_drp_locked <= up_drp_locked_m1;
     end
   end
 
@@ -154,13 +154,13 @@ module ad_mmcm_drp (
     .CLKOUT0 (mmcm_clk_0_s),
     .CLKOUT1 (mmcm_clk_1_s),
     .LOCKED (mmcm_locked_s),
-    .DCLK (drp_clk),
-    .DEN (drp_sel),
-    .DADDR (drp_addr[6:0]),
-    .DWE (drp_wr),
-    .DI (drp_wdata),
-    .DO (drp_rdata_s),
-    .DRDY (drp_ready_s),
+    .DCLK (up_clk),
+    .DEN (up_drp_sel),
+    .DADDR (up_drp_addr[6:0]),
+    .DWE (up_drp_wr),
+    .DI (up_drp_wdata),
+    .DO (up_drp_rdata_s),
+    .DRDY (up_drp_ready_s),
     .CLKFBOUTB (),
     .CLKOUT0B (),
     .CLKOUT1B (),
@@ -210,13 +210,13 @@ module ad_mmcm_drp (
     .CLKOUT0 (mmcm_clk_0_s),
     .CLKOUT1 (mmcm_clk_1_s),
     .LOCKED (mmcm_locked_s),
-    .DCLK (drp_clk),
-    .DEN (drp_sel),
-    .DADDR (drp_addr[6:0]),
-    .DWE (drp_wr),
-    .DI (drp_wdata),
-    .DO (drp_rdata_s),
-    .DRDY (drp_ready_s),
+    .DCLK (up_clk),
+    .DEN (up_drp_sel),
+    .DADDR (up_drp_addr[6:0]),
+    .DWE (up_drp_wr),
+    .DI (up_drp_wdata),
+    .DO (up_drp_rdata_s),
+    .DRDY (up_drp_ready_s),
     .CLKFBOUTB (),
     .CLKOUT0B (),
     .CLKOUT1B (),

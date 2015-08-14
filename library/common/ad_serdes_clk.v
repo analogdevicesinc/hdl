@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // serial data output interface: serdes(x8) or oddr(x2) output module
 
 `timescale 1ps/1ps
@@ -53,15 +51,15 @@ module ad_serdes_clk (
 
   // drp interface
 
-  drp_clk,
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked);
+  up_clk,
+  up_rstn,
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked);
 
   // parameters
 
@@ -85,15 +83,15 @@ module ad_serdes_clk (
 
   // drp interface
 
-  input           drp_clk;
-  input           drp_rst;
-  input           drp_sel;
-  input           drp_wr;
-  input   [11:0]  drp_addr;
-  input   [15:0]  drp_wdata;
-  output  [15:0]  drp_rdata;
-  output          drp_ready;
-  output          drp_locked;
+  input           up_clk;
+  input           up_rstn;
+  input           up_drp_sel;
+  input           up_drp_wr;
+  input   [11:0]  up_drp_addr;
+  input   [15:0]  up_drp_wdata;
+  output  [15:0]  up_drp_rdata;
+  output          up_drp_ready;
+  output          up_drp_locked;
 
   // internal signals
 
@@ -120,15 +118,15 @@ module ad_serdes_clk (
     .mmcm_rst (mmcm_rst),
     .mmcm_clk_0 (clk),
     .mmcm_clk_1 (div_clk),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked));
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked));
   end
 
   if ((MMCM == 0) && (SERDES == 0)) begin

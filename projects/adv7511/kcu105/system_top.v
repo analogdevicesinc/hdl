@@ -61,7 +61,6 @@ module system_top (
   ddr4_dqs_p,
   ddr4_dqs_n,
   ddr4_odt,
-  ddr4_par,
   ddr4_reset_n,
 
   mdio_mdc,
@@ -76,8 +75,7 @@ module system_top (
 
   fan_pwm,
 
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_scl,
   iic_sda,
@@ -110,7 +108,6 @@ module system_top (
   inout   [ 7:0]  ddr4_dqs_p;
   inout   [ 7:0]  ddr4_dqs_n;
   output  [ 0:0]  ddr4_odt;
-  output          ddr4_par;
   output          ddr4_reset_n;
 
   output          mdio_mdc;
@@ -125,8 +122,7 @@ module system_top (
 
   output          fan_pwm;
 
-  inout   [ 7:0]  gpio_led;
-  inout   [ 8:0]  gpio_sw;
+  inout   [16:0]  gpio_bd;
 
   inout           iic_scl;
   inout           iic_sda;
@@ -141,12 +137,21 @@ module system_top (
 
   // internal signals
 
-  wire    [31:0]  mb_intrs;
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+
   // default logic
 
   assign fan_pwm = 1'b1;
 
   // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
+    .dio_t (gpio_t[16:0]),
+    .dio_i (gpio_o[16:0]),
+    .dio_o (gpio_i[16:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .c0_ddr4_act_n (ddr4_act_n),
@@ -162,40 +167,34 @@ module system_top (
     .c0_ddr4_dqs_c (ddr4_dqs_n),
     .c0_ddr4_dqs_t (ddr4_dqs_p),
     .c0_ddr4_odt (ddr4_odt),
-    .c0_ddr4_par (ddr4_par),
     .c0_ddr4_reset_n (ddr4_reset_n),
-    .gpio_lcd_tri_io (),
-    .gpio_led_tri_io (gpio_led),
-    .gpio_sw_tri_io (gpio_sw),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio1_i (gpio_i[63:32]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .hdmi_16_data (hdmi_data),
+    .hdmi_16_data_e (hdmi_data_e),
+    .hdmi_16_hsync (hdmi_hsync),
+    .hdmi_16_vsync (hdmi_vsync),
+    .hdmi_24_data (),
+    .hdmi_24_data_e (),
+    .hdmi_24_hsync (),
+    .hdmi_24_vsync (),
+    .hdmi_36_data (),
+    .hdmi_36_data_e (),
+    .hdmi_36_hsync (),
+    .hdmi_36_vsync (),
     .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .mb_intr_10 (mb_intrs[10]),
-    .mb_intr_11 (mb_intrs[11]),
-    .mb_intr_12 (mb_intrs[12]),
-    .mb_intr_13 (mb_intrs[13]),
-    .mb_intr_14 (mb_intrs[14]),
-    .mb_intr_15 (mb_intrs[15]),
-    .mb_intr_16 (mb_intrs[16]),
-    .mb_intr_17 (mb_intrs[17]),
-    .mb_intr_18 (mb_intrs[18]),
-    .mb_intr_19 (mb_intrs[19]),
-    .mb_intr_20 (mb_intrs[20]),
-    .mb_intr_21 (mb_intrs[21]),
-    .mb_intr_22 (mb_intrs[22]),
-    .mb_intr_23 (mb_intrs[23]),
-    .mb_intr_24 (mb_intrs[24]),
-    .mb_intr_25 (mb_intrs[25]),
-    .mb_intr_26 (mb_intrs[26]),
-    .mb_intr_27 (mb_intrs[27]),
-    .mb_intr_28 (mb_intrs[28]),
-    .mb_intr_29 (mb_intrs[29]),
-    .mb_intr_30 (mb_intrs[30]),
-    .mb_intr_31 (mb_intrs[31]),
+    .mb_intr_05 (1'b0),
+    .mb_intr_06 (1'b0),
+    .mb_intr_12 (1'b0),
+    .mb_intr_13 (1'b0),
+    .mb_intr_14 (1'b0),
+    .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .phy_clk_clk_n (phy_clk_n),

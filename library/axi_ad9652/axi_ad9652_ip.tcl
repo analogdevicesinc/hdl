@@ -16,16 +16,19 @@ adi_ip_files axi_ad9652 [list \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
-  "$ad_hdl_dir/library/common/up_drp_cntrl.v" \
   "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "axi_ad9652_pnmon.v" \
   "axi_ad9652_channel.v" \
   "axi_ad9652_if.v" \
+  "axi_ad9652_constr.xdc" \
   "axi_ad9652.v" ]
 
 adi_ip_properties axi_ad9652
+
+adi_ip_constraints axi_ad9652 [list \
+  "axi_ad9652_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 

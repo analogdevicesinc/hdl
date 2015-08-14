@@ -75,7 +75,7 @@ module system_top (
   eth_mdio_i,
   eth_mdio_o,
   eth_mdio_t,
-
+  eth_phy_resetn,
   // board gpio
 
   led_grn,
@@ -161,6 +161,7 @@ module system_top (
   input             eth_mdio_i;
   output            eth_mdio_o;
   output            eth_mdio_t;
+  output            eth_phy_resetn;
 
   // board gpio
 
@@ -225,6 +226,8 @@ module system_top (
   reg               rx_sof_1_s = 'd0;
   reg               rx_sof_2_s = 'd0;
   reg               rx_sof_3_s = 'd0;
+  reg     [  3:0]   phy_rst_cnt = 0;
+  reg               phy_rst_reg = 0;
 
   // internal clocks and resets
 
@@ -279,7 +282,7 @@ module system_top (
   wire    [  7:0]   rx_cal_busy_s;
   wire              rx_pll_locked_s;
   wire    [ 22:0]   rx_xcvr_status_s;
-  wire    [  7:0]   rx_data_sof;
+  wire    [  7:0]   rx_sof;
   wire    [  3:0]   sync_raddr;
   wire              sync_signal;
 
@@ -287,6 +290,15 @@ module system_top (
 
   assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
     (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+    end
+  end
 
   altddio_out #(.width(1)) i_eth_tx_clk_out (
     .aset (1'b0),
@@ -345,9 +357,9 @@ module system_top (
   for (n = 0; n < 8; n = n + 1) begin: g_align_1
   ad_jesd_align i_jesd_align (
     .rx_clk (rx_clk),
-    .rx_sof (rx_ip_sof_s),
+    .rx_ip_sof (rx_ip_sof_s),
     .rx_ip_data (rx_ip_data_s[n*32+31:n*32]),
-    .rx_data_sof(rx_data_sof[n]),
+    .rx_sof (rx_sof[n]),
     .rx_data (rx_data_s[n*32+31:n*32]));
   end
   endgenerate
@@ -386,10 +398,10 @@ module system_top (
 
   always @(posedge rx_clk)
   begin
-    rx_sof_0_s <= rx_data_sof[0] | rx_data_sof[1];
-    rx_sof_1_s <= rx_data_sof[2] | rx_data_sof[3];
-    rx_sof_2_s <= rx_data_sof[4] | rx_data_sof[5];
-    rx_sof_3_s <= rx_data_sof[6] | rx_data_sof[7];
+    rx_sof_0_s <= rx_sof[0] | rx_sof[1];
+    rx_sof_1_s <= rx_sof[2] | rx_sof[3];
+    rx_sof_2_s <= rx_sof[4] | rx_sof[5];
+    rx_sof_3_s <= rx_sof[6] | rx_sof[7];
   end
 
   usdrx1_spi i_spi (
@@ -448,11 +460,11 @@ module system_top (
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn),
-    .axi_dmac_0_fifo_wr_clock_clk (adc_clk),
-    .axi_dmac_0_fifo_wr_if_ovf (adc_dovf),
-    .axi_dmac_0_fifo_wr_if_wren (dma_wr),
-    .axi_dmac_0_fifo_wr_if_data (dma_data),
-    .axi_dmac_0_fifo_wr_if_sync (dma_sync),
+    .axi_dmac_if_fifo_wr_clk_clk (adc_clk),
+    .axi_dmac_if_fifo_wr_overflow_adc_dovf (adc_dovf),
+    .axi_dmac_if_fifo_wr_en_adc_valid (dma_wr),
+    .axi_dmac_if_fifo_wr_din_adc_data (dma_data),
+    .axi_dmac_if_fifo_wr_sync_adc_sync (dma_sync),
     .sys_jesd204b_s1_rx_link_data (rx_ip_data_s),
     .sys_jesd204b_s1_rx_link_valid (),
     .sys_jesd204b_s1_rx_link_ready (1'b1),
@@ -465,8 +477,8 @@ module system_top (
     .sys_jesd204b_s1_rx_xcvr_data_rx_serial_data (rx_data),
     .sys_jesd204b_s1_rx_analogreset_rx_analogreset (rx_analog_reset_s),
     .sys_jesd204b_s1_rx_digitalreset_rx_digitalreset (rx_digital_reset_s),
-    .sys_jesd204b_s1_locked_export (rx_cdr_locked_s),
-    .sys_jesd204b_s1_rx_cal_busy_export (rx_cal_busy_s),
+    .sys_jesd204b_s1_locked_rx_is_lockedtodata (rx_cdr_locked_s),
+    .sys_jesd204b_s1_rx_cal_busy_rx_cal_busy (rx_cal_busy_s),
     .sys_jesd204b_s1_ref_clk_clk (ref_clk),
     .sys_jesd204b_s1_rx_clk_clk (rx_clk),
     .sys_jesd204b_s1_pll_locked_export (rx_pll_locked_s),

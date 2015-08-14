@@ -14,7 +14,6 @@ proc p_sys_dmafifo {p_name m_name adc_data_width dma_addr_width} {
   set m_instance [create_bd_cell -type hier $m_name]
   current_bd_instance $m_instance
 
-
   create_bd_pin -dir I adc_rst
   create_bd_pin -dir I -type clk adc_clk
   create_bd_pin -dir I adc_wr
@@ -28,24 +27,65 @@ proc p_sys_dmafifo {p_name m_name adc_data_width dma_addr_width} {
   create_bd_pin -dir I dma_xfer_req
   create_bd_pin -dir O -from 3 -to 0 dma_xfer_status
 
-  set axi_fifo2f [create_bd_cell -type ip -vlnv analog.com:user:axi_fifo2f:1.0 axi_fifo2f]
-  set_property -dict [list CONFIG.ADC_DATA_WIDTH $adc_data_width] $axi_fifo2f
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH {64}] $axi_fifo2f
-  set_property -dict [list CONFIG.DMA_READY_ENABLE {1}] $axi_fifo2f
-  set_property -dict [list CONFIG.DMA_ADDR_WIDTH $dma_addr_width] $axi_fifo2f
+  set util_adcfifo [create_bd_cell -type ip -vlnv analog.com:user:util_adcfifo:1.0 util_adcfifo]
+  set_property -dict [list CONFIG.ADC_DATA_WIDTH $adc_data_width] $util_adcfifo
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH {64}] $util_adcfifo
+  set_property -dict [list CONFIG.DMA_READY_ENABLE {1}] $util_adcfifo
+  set_property -dict [list CONFIG.DMA_ADDR_WIDTH $dma_addr_width] $util_adcfifo
 
-  connect_bd_net -net adc_rst         [get_bd_pins adc_rst]                 [get_bd_pins axi_fifo2f/adc_rst]
-  connect_bd_net -net adc_clk         [get_bd_pins adc_clk]                 [get_bd_pins axi_fifo2f/adc_clk]  
-  connect_bd_net -net adc_wr          [get_bd_pins adc_wr]                  [get_bd_pins axi_fifo2f/adc_wr]
-  connect_bd_net -net adc_wdata       [get_bd_pins adc_wdata]               [get_bd_pins axi_fifo2f/adc_wdata]
-  connect_bd_net -net adc_wovf        [get_bd_pins adc_wovf]                [get_bd_pins axi_fifo2f/adc_wovf]
-  connect_bd_net -net dma_clk         [get_bd_pins dma_clk]                 [get_bd_pins axi_fifo2f/dma_clk]  
-  connect_bd_net -net dma_wr          [get_bd_pins dma_wr]                  [get_bd_pins axi_fifo2f/dma_wr]
-  connect_bd_net -net dma_wdata       [get_bd_pins dma_wdata]               [get_bd_pins axi_fifo2f/dma_wdata]
-  connect_bd_net -net dma_wready      [get_bd_pins dma_wready]              [get_bd_pins axi_fifo2f/dma_wready]
-  connect_bd_net -net dma_xfer_req    [get_bd_pins dma_xfer_req]            [get_bd_pins axi_fifo2f/dma_xfer_req]
-  connect_bd_net -net dma_xfer_status [get_bd_pins dma_xfer_status]         [get_bd_pins axi_fifo2f/dma_xfer_status]
+  ad_connect  adc_rst util_adcfifo/adc_rst
+  ad_connect  adc_clk util_adcfifo/adc_clk
+  ad_connect  adc_wr util_adcfifo/adc_wr
+  ad_connect  adc_wdata util_adcfifo/adc_wdata
+  ad_connect  adc_wovf util_adcfifo/adc_wovf
+  ad_connect  dma_clk util_adcfifo/dma_clk
+  ad_connect  dma_wr util_adcfifo/dma_wr
+  ad_connect  dma_wdata util_adcfifo/dma_wdata
+  ad_connect  dma_wready util_adcfifo/dma_wready
+  ad_connect  dma_xfer_req util_adcfifo/dma_xfer_req
+  ad_connect  dma_xfer_status util_adcfifo/dma_xfer_status
 
   current_bd_instance $c_instance
 }
 
+proc p_sys_dacfifo {p_name m_name data_width addr_width} {
+
+  global ad_hdl_dir
+
+  set p_instance [get_bd_cells $p_name]
+  set c_instance [current_bd_instance .]
+
+  current_bd_instance $p_instance
+
+  set m_instance [create_bd_cell -type hier $m_name]
+  current_bd_instance $m_instance
+
+  create_bd_pin -dir I  dma_clk
+  create_bd_pin -dir I  dma_rst
+  create_bd_pin -dir O  dma_ready
+  create_bd_pin -dir I  dma_valid
+  create_bd_pin -dir I  -from [expr ($data_width-1)] -to 0 dma_data
+  create_bd_pin -dir I  dma_xfer_req
+  create_bd_pin -dir I  dma_xfer_last
+
+  create_bd_pin -dir I  dac_clk
+  create_bd_pin -dir I  dac_valid
+  create_bd_pin -dir O  -from [expr ($data_width - 1)] -to 0 dac_data
+
+  set util_dacfifo [create_bd_cell -type ip -vlnv analog.com:user:util_dacfifo:1.0 util_dacfifo]
+  set_property -dict [list CONFIG.DATA_WIDTH $data_width] $util_dacfifo
+  set_property -dict [list CONFIG.ADDR_WIDTH $addr_width] $util_dacfifo
+
+  ad_connect  dma_clk util_dacfifo/dma_clk
+  ad_connect  dac_clk util_dacfifo/dac_clk
+  ad_connect  dma_rst util_dacfifo/dma_rst
+  ad_connect  dma_ready util_dacfifo/dma_ready
+  ad_connect  dma_valid util_dacfifo/dma_valid
+  ad_connect  dma_data util_dacfifo/dma_data
+  ad_connect  dma_xfer_req util_dacfifo/dma_xfer_req
+  ad_connect  dma_xfer_last util_dacfifo/dma_xfer_last
+  ad_connect  dac_valid util_dacfifo/dac_valid
+  ad_connect  dac_data util_dacfifo/dac_data
+
+  current_bd_instance $c_instance
+}

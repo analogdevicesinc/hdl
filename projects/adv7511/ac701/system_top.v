@@ -77,8 +77,7 @@ module system_top (
   fan_pwm,
 
   gpio_lcd,
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_rstn,
   iic_scl,
@@ -128,8 +127,7 @@ module system_top (
   output          fan_pwm;
 
   inout   [ 6:0]  gpio_lcd;
-  inout   [ 3:0]  gpio_led;
-  inout   [ 8:0]  gpio_sw;
+  inout   [12:0]  gpio_bd;
 
   output          iic_rstn;
   inout           iic_scl;
@@ -143,13 +141,25 @@ module system_top (
 
   output          spdif;
 
-  // assignments
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+
+  // default logic
 
   assign mgt_clk_sel = 2'd0;
-
-  wire   [31:0]   mb_intrs;
+  assign fan_pwm = 1'b1;
+  assign iic_rstn = 1'b1;
 
   // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_sw_led (
+    .dio_t (gpio_t[12:0]),
+    .dio_i (gpio_o[12:0]),
+    .dio_o (gpio_i[12:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -167,40 +177,25 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .fan_pwm (fan_pwm),
     .gpio_lcd_tri_io (gpio_lcd),
-    .gpio_led_tri_io (gpio_led),
-    .gpio_sw_tri_io (gpio_sw),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio1_i (gpio_i[63:32]),
+    .hdmi_24_data (hdmi_data),
+    .hdmi_24_data_e (hdmi_data_e),
+    .hdmi_24_hsync (hdmi_hsync),
     .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
+    .hdmi_24_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
-    .mb_intr_10 (mb_intrs[10]),
-    .mb_intr_11 (mb_intrs[11]),
-    .mb_intr_12 (mb_intrs[12]),
-    .mb_intr_13 (mb_intrs[13]),
-    .mb_intr_14 (mb_intrs[14]),
-    .mb_intr_15 (mb_intrs[15]),
-    .mb_intr_16 (mb_intrs[16]),
-    .mb_intr_17 (mb_intrs[17]),
-    .mb_intr_18 (mb_intrs[18]),
-    .mb_intr_19 (mb_intrs[19]),
-    .mb_intr_20 (mb_intrs[20]),
-    .mb_intr_21 (mb_intrs[21]),
-    .mb_intr_22 (mb_intrs[22]),
-    .mb_intr_23 (mb_intrs[23]),
-    .mb_intr_24 (mb_intrs[24]),
-    .mb_intr_25 (mb_intrs[25]),
-    .mb_intr_26 (mb_intrs[26]),
-    .mb_intr_27 (mb_intrs[27]),
-    .mb_intr_28 (mb_intrs[28]),
-    .mb_intr_29 (mb_intrs[29]),
-    .mb_intr_30 (mb_intrs[30]),
-    .mb_intr_31 (mb_intrs[31]),
+    .mb_intr_06 (1'b0),
+    .mb_intr_12 (1'b0),
+    .mb_intr_13 (1'b0),
+    .mb_intr_14 (1'b0),
+    .mb_intr_15 (1'b0),
     .mdio_io (phy_mdio),
     .mdio_mdc (phy_mdc),
     .phy_rst_n (phy_reset_n),

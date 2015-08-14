@@ -11,9 +11,12 @@ set runBit      1
 set part "xc7z045ffg900-2"
 set board "em.avnet.com:mini_itx_7z045:part0:1.0"
 
+set sys_zynq 1
+
 # Load scripts for env. variables and RP design flow
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_prcfg_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 ###############################################################################
 #### INIT WORKSPACE ####

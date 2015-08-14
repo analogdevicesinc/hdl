@@ -39,7 +39,7 @@
 
 module fmcadc4_spi (
 
-  csn,
+  spi_csn,
   spi_clk,
   spi_mosi,
   spi_miso,
@@ -48,7 +48,7 @@ module fmcadc4_spi (
 
   // 4 wire
 
-  input   [ 6:0]  csn;
+  input   [ 2:0]  spi_csn;
   input           spi_clk;
   input           spi_mosi;
   output          spi_miso;
@@ -70,7 +70,7 @@ module fmcadc4_spi (
 
   // check on rising edge and change on falling edge
 
-  assign spi_csn_s = &csn;
+  assign spi_csn_s = & spi_csn;
   assign spi_enable_s = spi_enable & ~spi_csn_s;
 
   always @(posedge spi_clk or posedge spi_csn_s) begin

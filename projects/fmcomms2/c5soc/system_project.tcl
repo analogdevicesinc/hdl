@@ -71,6 +71,7 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_en_agc
 set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_sync
 set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_enable
 set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_txnrx
+
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_csn
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_mosi

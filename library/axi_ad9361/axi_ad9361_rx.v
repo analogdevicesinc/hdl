@@ -50,18 +50,16 @@ module axi_ad9361_rx (
   adc_data,
   adc_status,
   adc_r1_mode,
+  adc_ddr_edgesel,
   dac_data,
 
   // delay interface
 
+  up_dld,
+  up_dwdata,
+  up_drdata,
   delay_clk,
   delay_rst,
-  delay_sel,
-  delay_rwn,
-  delay_addr,
-  delay_wdata,
-  delay_rdata,
-  delay_ack_t,
   delay_locked,
 
   // dma interface
@@ -112,18 +110,16 @@ module axi_ad9361_rx (
   input   [47:0]  adc_data;
   input           adc_status;
   output          adc_r1_mode;
+  output          adc_ddr_edgesel;
   input   [47:0]  dac_data;
 
   // delay interface
 
+  output  [ 6:0]  up_dld;
+  output  [34:0]  up_dwdata;
+  input   [34:0]  up_drdata;
   input           delay_clk;
   output          delay_rst;
-  output          delay_sel;
-  output          delay_rwn;
-  output  [ 7:0]  delay_addr;
-  output  [ 4:0]  delay_wdata;
-  input   [ 4:0]  delay_rdata;
-  input           delay_ack_t;
   input           delay_locked;
 
   // dma interface
@@ -179,9 +175,9 @@ module axi_ad9361_rx (
   wire    [ 3:0]  up_adc_pn_err_s;
   wire    [ 3:0]  up_adc_pn_oos_s;
   wire    [ 3:0]  up_adc_or_s;
-  wire    [31:0]  up_rdata_s[0:4];
-  wire            up_rack_s[0:4];
-  wire            up_wack_s[0:4];
+  wire    [31:0]  up_rdata_s[0:5];
+  wire            up_rack_s[0:5];
+  wire            up_wack_s[0:5];
 
   // processor read interface
 
@@ -197,9 +193,12 @@ module axi_ad9361_rx (
       up_status_pn_err <= | up_adc_pn_err_s;
       up_status_pn_oos <= | up_adc_pn_oos_s;
       up_status_or <= | up_adc_or_s;
-      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3] | up_rdata_s[4];
-      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3] | up_rack_s[4];
-      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3] | up_wack_s[4];
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
+                  up_rdata_s[3] | up_rdata_s[4] | up_rdata_s[5];
+      up_rack <=  up_rack_s[0]  | up_rack_s[1]  | up_rack_s[2]  |
+                  up_rack_s[3]  | up_rack_s[4]  | up_rack_s[5];
+      up_wack <=  up_wack_s[0]  | up_wack_s[1]  | up_wack_s[2]  |
+                  up_wack_s[3]  | up_wack_s[4]  | up_wack_s[5];
     end
   end
 
@@ -342,36 +341,25 @@ module axi_ad9361_rx (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_r1_mode (adc_r1_mode),
-    .adc_ddr_edgesel (),
+    .adc_ddr_edgesel (adc_ddr_edgesel),
     .adc_pin_mode (),
     .adc_status (adc_status),
-    .adc_sync_status(),
+    .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
-    .adc_start_code(),
-    .adc_sync(),
+    .adc_start_code (),
+    .adc_sync (),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_sel (delay_sel),
-    .delay_rwn (delay_rwn),
-    .delay_addr (delay_addr),
-    .delay_wdata (delay_wdata),
-    .delay_rdata (delay_rdata),
-    .delay_ack_t (delay_ack_t),
-    .delay_locked (delay_locked),
-    .drp_clk (1'd0),
-    .drp_rst (),
-    .drp_sel (),
-    .drp_wr (),
-    .drp_addr (),
-    .drp_wdata (),
-    .drp_rdata (16'd0),
-    .drp_ready (1'd0),
-    .drp_locked (1'd1),
+    .up_drp_sel (),
+    .up_drp_wr (),
+    .up_drp_addr (),
+    .up_drp_wdata (),
+    .up_drp_rdata (16'd0),
+    .up_drp_ready (1'd0),
+    .up_drp_locked (1'd1),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd3),
     .up_adc_gpio_in (up_adc_gpio_in),
@@ -386,6 +374,26 @@ module axi_ad9361_rx (
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[4]),
     .up_rack (up_rack_s[4]));
+
+  // adc delay control
+
+  up_delay_cntrl #(.IO_WIDTH(7), .IO_BASEADDR(6'h02)) i_delay_cntrl (
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked),
+    .up_dld (up_dld),
+    .up_dwdata (up_dwdata),
+    .up_drdata (up_drdata),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[5]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[5]),
+    .up_rack (up_rack_s[5]));
 
 endmodule
 

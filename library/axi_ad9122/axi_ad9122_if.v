@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // This is the dac physical interface (drives samples from the low speed clock to the
 // dac clock domain.
 
@@ -87,15 +85,15 @@ module axi_ad9122_if (
 
   // drp interface
 
-  drp_clk,
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked);
+  up_clk,
+  up_rstn,
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked);
 
   // parameters
 
@@ -148,15 +146,15 @@ module axi_ad9122_if (
 
   // drp interface
 
-  input           drp_clk;
-  input           drp_rst;
-  input           drp_sel;
-  input           drp_wr;
-  input   [11:0]  drp_addr;
-  input   [15:0]  drp_wdata;
-  output  [15:0]  drp_rdata;
-  output          drp_ready;
-  output          drp_locked;
+  input           up_clk;
+  input           up_rstn;
+  input           up_drp_sel;
+  input           up_drp_wr;
+  input   [11:0]  up_drp_addr;
+  input   [15:0]  up_drp_wdata;
+  output  [15:0]  up_drp_rdata;
+  output          up_drp_ready;
+  output          up_drp_locked;
 
   // internal registers
 
@@ -170,7 +168,7 @@ module axi_ad9122_if (
       dac_status_m1 <= 1'd0;
       dac_status <= 1'd0;
     end else begin
-      dac_status_m1 <= drp_locked;
+      dac_status_m1 <= up_drp_locked;
       dac_status <= dac_status_m1;
     end
   end
@@ -255,15 +253,15 @@ module axi_ad9122_if (
     .clk_in_n (dac_clk_in_n),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
-    .drp_clk (drp_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked));
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked));
 
 endmodule
 

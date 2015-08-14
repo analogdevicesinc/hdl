@@ -30,5 +30,7 @@ reconfig_mif
 *.sopcinfo
 *.jdi
 *.pin
+*.os
+*webtalk*
 
 

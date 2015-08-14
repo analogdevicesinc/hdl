@@ -46,7 +46,7 @@ module axi_ad9671 (
 
   rx_clk,
   rx_data,
-  rx_data_sof,
+  rx_sof,
 
   // dma interface
 
@@ -89,14 +89,13 @@ module axi_ad9671 (
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_4L_2L_N = 1;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // jesd interface
   // rx_clk is the jesd clock (ref_clk/2)
 
   input                                 rx_clk;
   input   [(64*PCORE_4L_2L_N)+63:0]     rx_data;
-  input                                 rx_data_sof;
+  input                                 rx_sof;
 
   // dma interface
 
@@ -207,7 +206,7 @@ module axi_ad9671 (
   ) i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
-    .rx_data_sof (rx_data_sof),
+    .rx_sof (rx_sof),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_valid (adc_valid_s),
@@ -277,34 +276,23 @@ module axi_ad9671 (
     .adc_r1_mode (),
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
-    .adc_start_code (adc_start_code),
-    .adc_sync (adc_sync),
-    .adc_sync_status (adc_sync_status_s),
     .adc_status (adc_status_s),
+    .adc_sync_status (adc_sync_status_s),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
+    .adc_start_code (adc_start_code),
+    .adc_sync (adc_sync),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),
-    .delay_clk (1'b0),
-    .delay_rst (),
-    .delay_sel (),
-    .delay_rwn (),
-    .delay_addr (),
-    .delay_wdata (),
-    .delay_rdata (5'd0),
-    .delay_ack_t (1'b0),
-    .delay_locked (1'b1),
-    .drp_clk (1'd0),
-    .drp_rst (),
-    .drp_sel (),
-    .drp_wr (),
-    .drp_addr (),
-    .drp_wdata (),
-    .drp_rdata (16'd0),
-    .drp_ready (1'd0),
-    .drp_locked (1'd1),
+    .up_drp_sel (),
+    .up_drp_wr (),
+    .up_drp_addr (),
+    .up_drp_wdata (),
+    .up_drp_rdata (16'd0),
+    .up_drp_ready (1'd0),
+    .up_drp_locked (1'd1),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd7),
     .up_adc_gpio_in (32'd0),

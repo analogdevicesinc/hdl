@@ -74,9 +74,4 @@ create_clock -name tx_ref_clk   -period  2.00 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  4.00 [get_ports rx_ref_clk_p]
 create_clock -name tx_div_clk   -period  8.00 [get_nets i_system_wrapper/system_i/axi_ad9122_dac_div_clk]
 create_clock -name rx_div_clk   -period  8.00 [get_nets i_system_wrapper/system_i/axi_daq1_gt_rx_clk]
-create_clock -name fmc_dma_clk  -period  5.00 [get_pins i_system_wrapper/system_i/sys_ps7/FCLK_CLK2]
-
-set_clock_groups -asynchronous -group {tx_div_clk}
-set_clock_groups -asynchronous -group {rx_div_clk}
-set_clock_groups -asynchronous -group {fmc_dma_clk}
 

@@ -87,6 +87,7 @@ module axi_hdmi_tx_core (
 
   hdmi_full_range,
   hdmi_csc_bypass,
+  hdmi_ss_bypass,
   hdmi_srcsel,
   hdmi_const_rgb,
   hdmi_hl_active,
@@ -152,6 +153,7 @@ module axi_hdmi_tx_core (
 
   input           hdmi_full_range;
   input           hdmi_csc_bypass;
+  input           hdmi_ss_bypass;
   input   [ 1:0]  hdmi_srcsel;
   input   [23:0]  hdmi_const_rgb;
   input   [15:0]  hdmi_hl_active;
@@ -213,22 +215,13 @@ module axi_hdmi_tx_core (
   reg     [23:0]  hdmi_24_data = 'd0;
   reg             hdmi_16_hsync = 'd0;
   reg             hdmi_16_vsync = 'd0;
+  reg             hdmi_16_hsync_data_e = 'd0;
+  reg             hdmi_16_vsync_data_e = 'd0;
   reg             hdmi_16_data_e = 'd0;
   reg     [15:0]  hdmi_16_data = 'd0;
   reg             hdmi_es_hs_de = 'd0;
   reg             hdmi_es_vs_de = 'd0;
   reg     [15:0]  hdmi_es_data = 'd0;
-  reg             hdmi_es_hs_de_d = 'd0;
-  reg     [15:0]  hdmi_es_data_d = 'd0;
-  reg             hdmi_es_hs_de_2d = 'd0;
-  reg     [15:0]  hdmi_es_data_2d = 'd0;
-  reg             hdmi_es_hs_de_3d = 'd0;
-  reg     [15:0]  hdmi_es_data_3d = 'd0;
-  reg             hdmi_es_hs_de_4d = 'd0;
-  reg     [15:0]  hdmi_es_data_4d = 'd0;
-  reg             hdmi_es_hs_de_5d = 'd0;
-  reg     [15:0]  hdmi_es_data_5d = 'd0;
-  reg     [15:0]  hdmi_es_data_6d = 'd0;
 
   // internal wires
 
@@ -258,8 +251,6 @@ module axi_hdmi_tx_core (
   wire            hdmi_es_vs_de_s;
   wire            hdmi_es_de_s;
   wire    [15:0]  hdmi_es_data_s;
-  wire    [15:0]  hdmi_es_sav_s;
-  wire    [15:0]  hdmi_es_eav_s;
 
   // binary to grey conversion
 
@@ -486,18 +477,29 @@ module axi_hdmi_tx_core (
       hdmi_24_data_e <= hdmi_csc_data_e_s;
       hdmi_24_data <= hdmi_csc_data_s;
     end
-    hdmi_16_hsync <= hdmi_ss_hsync_s;
-    hdmi_16_vsync <= hdmi_ss_vsync_s;
-    hdmi_16_data_e <= hdmi_ss_data_e_s;
-    hdmi_16_data <= hdmi_ss_data_s;
+    if (hdmi_ss_bypass == 1'b1) begin
+      hdmi_16_hsync <= hdmi_24_hsync;
+      hdmi_16_vsync <= hdmi_24_vsync;
+      hdmi_16_hsync_data_e <= hdmi_24_hsync_data_e;
+      hdmi_16_vsync_data_e <= hdmi_24_vsync_data_e;
+      hdmi_16_data_e <= hdmi_24_data_e;
+      hdmi_16_data <= hdmi_24_data[15:0]; // Ignore the upper 8 bit
+    end else begin
+      hdmi_16_hsync <= hdmi_ss_hsync_s;
+      hdmi_16_vsync <= hdmi_ss_vsync_s;
+      hdmi_16_hsync_data_e <= hdmi_ss_hsync_data_e_s;
+      hdmi_16_vsync_data_e <= hdmi_ss_vsync_data_e_s;
+      hdmi_16_data_e <= hdmi_ss_data_e_s;
+      hdmi_16_data <= hdmi_ss_data_s;
+    end
   end
 
   // hdmi embedded sync clipping
 
-  assign hdmi_es_hs_de_s = hdmi_ss_hsync_data_e_s;
-  assign hdmi_es_vs_de_s = hdmi_ss_vsync_data_e_s;
-  assign hdmi_es_de_s = hdmi_ss_data_e_s;
-  assign hdmi_es_data_s = hdmi_ss_data_s;
+  assign hdmi_es_hs_de_s = hdmi_16_hsync_data_e;
+  assign hdmi_es_vs_de_s = hdmi_16_vsync_data_e;
+  assign hdmi_es_de_s = hdmi_16_data_e;
+  assign hdmi_es_data_s = hdmi_16_data;
 
   always @(posedge hdmi_clk) begin
     hdmi_es_hs_de <= hdmi_es_hs_de_s;
@@ -510,6 +512,10 @@ module axi_hdmi_tx_core (
     end else if ((hdmi_full_range == 1'b0) &&
       (hdmi_es_data_s[15:8] < 8'h10)) begin
       hdmi_es_data[15:8] <= 8'h10;
+    end else if (hdmi_es_data_s[15:8] > 8'hfe) begin
+      hdmi_es_data[15:8] <= 8'hfe;
+    end else if (hdmi_es_data_s[15:8] < 8'h01) begin
+      hdmi_es_data[15:8] <= 8'h01;
     end else begin
       hdmi_es_data[15:8] <= hdmi_es_data_s[15:8];
     end
@@ -521,48 +527,15 @@ module axi_hdmi_tx_core (
     end else if ((hdmi_full_range == 1'b0) &&
       (hdmi_es_data_s[7:0] < 8'h10)) begin
       hdmi_es_data[7:0] <= 8'h10;
+    end else if (hdmi_es_data_s[7:0] > 8'hfe) begin
+      hdmi_es_data[7:0] <= 8'hfe;
+    end else if (hdmi_es_data_s[7:0] < 8'h01) begin
+      hdmi_es_data[7:0] <= 8'h01;
     end else begin
       hdmi_es_data[7:0] <= hdmi_es_data_s[7:0];
     end
   end
 
-  // hdmi embedded sync insertion
-
-  assign hdmi_es_sav_s = (hdmi_es_vs_de == 1) ? 16'h8080 : 16'habab;
-  assign hdmi_es_eav_s = (hdmi_es_vs_de == 1) ? 16'h9d9d : 16'hb6b6;
-
-  always @(posedge hdmi_clk) begin
-    hdmi_es_hs_de_d <= hdmi_es_hs_de;
-    case ({hdmi_es_hs_de_4d, hdmi_es_hs_de_3d, hdmi_es_hs_de_2d,
-      hdmi_es_hs_de_d, hdmi_es_hs_de})
-      5'b10000: hdmi_es_data_d <= hdmi_es_eav_s;
-      5'b11000: hdmi_es_data_d <= 16'h0000;
-      5'b11100: hdmi_es_data_d <= 16'h0000;
-      5'b11110: hdmi_es_data_d <= 16'hffff;
-      default: hdmi_es_data_d <= hdmi_es_data;
-    endcase
-    hdmi_es_hs_de_2d <= hdmi_es_hs_de_d;
-    hdmi_es_data_2d <= hdmi_es_data_d;
-    hdmi_es_hs_de_3d <= hdmi_es_hs_de_2d;
-    hdmi_es_data_3d <= hdmi_es_data_2d;
-    hdmi_es_hs_de_4d <= hdmi_es_hs_de_3d;
-    hdmi_es_data_4d <= hdmi_es_data_3d;
-    hdmi_es_hs_de_5d <= hdmi_es_hs_de_4d;
-    hdmi_es_data_5d <= hdmi_es_data_4d;
-    case ({hdmi_es_hs_de_5d, hdmi_es_hs_de_4d, hdmi_es_hs_de_3d,
-      hdmi_es_hs_de_2d, hdmi_es_hs_de_d})
-      5'b01111: hdmi_es_data_6d <= hdmi_es_sav_s;
-      5'b00111: hdmi_es_data_6d <= 16'h0000;
-      5'b00011: hdmi_es_data_6d <= 16'h0000;
-      5'b00001: hdmi_es_data_6d <= 16'hffff;
-      default:  hdmi_es_data_6d <= hdmi_es_data_5d;
-    endcase
-  end
-
-  // es outputs
-
-  assign hdmi_16_es_data = hdmi_es_data_6d;
-  
   // data memory
 
   ad_mem #(.DATA_WIDTH(48), .ADDR_WIDTH(9)) i_mem (
@@ -608,6 +581,15 @@ module axi_hdmi_tx_core (
       hdmi_ss_vsync_data_e_s,
       hdmi_ss_data_e_s}),
     .s422_data (hdmi_ss_data_s));
+
+  // embedded sync
+
+  axi_hdmi_tx_es #(.DATA_WIDTH(16)) i_es (
+    .hdmi_clk (hdmi_clk),
+    .hdmi_hs_de (hdmi_es_hs_de),
+    .hdmi_vs_de (hdmi_es_vs_de),
+    .hdmi_data_de (hdmi_es_data),
+    .hdmi_data (hdmi_16_es_data));
 
 endmodule
 

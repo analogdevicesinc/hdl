@@ -57,9 +57,9 @@ parameter DATA_WIDTH = 1;
 // synchronizer will be bypassed and out_count will be in_count.
 parameter CLK_ASYNC = 1;
 
-reg [DATA_WIDTH-1:0] in_count_gray = 'h0;
-reg [DATA_WIDTH-1:0] out_count_gray_m1 = 'h0;
-reg [DATA_WIDTH-1:0] out_count_gray_m2 = 'h0;
+reg [DATA_WIDTH-1:0] cdc_sync_stage0 = 'h0;
+reg [DATA_WIDTH-1:0] cdc_sync_stage1 = 'h0;
+reg [DATA_WIDTH-1:0] cdc_sync_stage2 = 'h0;
 reg [DATA_WIDTH-1:0] out_count_m = 'h0;
 
 function [DATA_WIDTH-1:0] g2b;
@@ -88,21 +88,21 @@ endfunction
 
 always @(posedge in_clk) begin
 	if (in_resetn == 1'b0) begin
-		in_count_gray <= 'h00;
+		cdc_sync_stage0 <= 'h00;
 	end else begin
-		in_count_gray <= b2g(in_count);
+		cdc_sync_stage0 <= b2g(in_count);
 	end
 end
 
 always @(posedge out_clk) begin
 	if (out_resetn == 1'b0) begin
-		out_count_gray_m1 <= 'h00;
-		out_count_gray_m2 <= 'h00;
+		cdc_sync_stage1 <= 'h00;
+		cdc_sync_stage2 <= 'h00;
 		out_count_m <= 'h00;
 	end else begin
-		out_count_gray_m1 <= in_count_gray;
-		out_count_gray_m2 <= out_count_gray_m1;
-		out_count_m <= g2b(out_count_gray_m2);
+		cdc_sync_stage1 <= cdc_sync_stage0;
+		cdc_sync_stage2 <= cdc_sync_stage1;
+		out_count_m <= g2b(cdc_sync_stage2);
 	end
 end
 

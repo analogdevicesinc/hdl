@@ -42,6 +42,7 @@ module ad_gt_channel_1 (
   // rst and clocks
 
   ref_clk,
+  lpm_dfe_n,
   cpll_pd,
   cpll_rst,
   qpll_clk,
@@ -66,6 +67,11 @@ module ad_gt_channel_1 (
   rx_notintable,
   rx_data,
   rx_comma_align_enb,
+  rx_ilas_f,
+  rx_ilas_q,
+  rx_ilas_a,
+  rx_ilas_r,
+  rx_cgs_k,
 
   // transmit
 
@@ -85,20 +91,15 @@ module ad_gt_channel_1 (
 
   // drp interface
 
-  drp_clk,
-  drp_sel,
-  drp_addr,
-  drp_wr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_lanesel,
-  drp_rx_rate,
-
-  // monitor signals
-
-  rx_mon_trigger,
-  rx_mon_data);
+  up_clk,
+  up_drp_sel,
+  up_drp_addr,
+  up_drp_wr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_lanesel,
+  up_drp_rxrate);
 
   // parameters
 
@@ -115,6 +116,7 @@ module ad_gt_channel_1 (
   // rst and clocks
 
   input           ref_clk;
+  input           lpm_dfe_n;
   input           cpll_pd;
   input           cpll_rst;
   input           qpll_clk;
@@ -139,6 +141,11 @@ module ad_gt_channel_1 (
   output  [ 3:0]  rx_notintable;
   output  [31:0]  rx_data;
   input           rx_comma_align_enb;
+  output  [ 3:0]  rx_ilas_f;
+  output  [ 3:0]  rx_ilas_q;
+  output  [ 3:0]  rx_ilas_a;
+  output  [ 3:0]  rx_ilas_r;
+  output  [ 3:0]  rx_cgs_k;
 
   // transmit
 
@@ -158,103 +165,75 @@ module ad_gt_channel_1 (
 
   // drp interface
 
-  input           drp_clk;
-  input           drp_sel;
-  input   [11:0]  drp_addr;
-  input           drp_wr;
-  input   [15:0]  drp_wdata;
-  output  [15:0]  drp_rdata;
-  output          drp_ready;
-  input   [ 7:0]  drp_lanesel;
-  output  [ 7:0]  drp_rx_rate;
-
-  // monitor signals
-
-  output          rx_mon_trigger;
-  output  [49:0]  rx_mon_data;
+  input           up_clk;
+  input           up_drp_sel;
+  input   [11:0]  up_drp_addr;
+  input           up_drp_wr;
+  input   [15:0]  up_drp_wdata;
+  output  [15:0]  up_drp_rdata;
+  output          up_drp_ready;
+  input   [ 7:0]  up_drp_lanesel;
+  output  [ 7:0]  up_drp_rxrate;
 
   // internal registers
 
   reg     [ 3:0]  rx_user_ready = 'd0;
   reg     [ 3:0]  tx_user_ready = 'd0;
-  reg             drp_sel_int = 'd0;
-  reg     [11:0]  drp_addr_int = 'd0;
-  reg             drp_wr_int = 'd0;
-  reg     [15:0]  drp_wdata_int = 'd0;
-  reg     [15:0]  drp_rdata = 'd0;
-  reg             drp_ready = 'd0;
-  reg     [ 7:0]  drp_rx_rate = 'd0;
+  reg             rx_rst_done = 'd0;
+  reg             tx_rst_done = 'd0;
+  reg             up_drp_sel_int = 'd0;
+  reg     [11:0]  up_drp_addr_int = 'd0;
+  reg             up_drp_wr_int = 'd0;
+  reg     [15:0]  up_drp_wdata_int = 'd0;
+  reg     [15:0]  up_drp_rdata = 'd0;
+  reg             up_drp_ready = 'd0;
+  reg     [ 7:0]  up_drp_rxrate = 'd0;
 
   // internal signals
 
-  wire            rx_ilas_f_s;
-  wire            rx_ilas_q_s;
-  wire            rx_ilas_a_s;
-  wire            rx_ilas_r_s;
-  wire            rx_cgs_k_s;
   wire    [ 3:0]  rx_valid_k_s;
-  wire            rx_valid_k_1_s;
   wire    [ 2:0]  rx_rate_p_s;
   wire    [ 7:0]  rx_rate_s;
   wire    [ 3:0]  rx_charisk_open_s;
   wire    [ 3:0]  rx_disperr_open_s;
   wire    [ 3:0]  rx_notintable_open_s;
   wire    [31:0]  rx_data_open_s;
+  wire    [ 1:0]  rx_sys_clk_sel_s;
+  wire    [ 1:0]  tx_sys_clk_sel_s;
+  wire    [ 1:0]  rx_pll_clk_sel_s;
+  wire    [ 1:0]  tx_pll_clk_sel_s;
+  wire            rx_rst_done_s;
+  wire            tx_rst_done_s;
   wire            cpll_locked_s;
-  wire    [15:0]  drp_rdata_s;
-  wire            drp_ready_s;
+  wire    [15:0]  up_drp_rdata_s;
+  wire            up_drp_ready_s;
 
-  // monitor interface
+  // cgs & ilas frame characters
 
-  assign rx_mon_data[31: 0] = rx_data;
-  assign rx_mon_data[35:32] = rx_notintable;
-  assign rx_mon_data[39:36] = rx_disperr;
-  assign rx_mon_data[43:40] = rx_charisk;
-  assign rx_mon_data[44:44] = rx_valid_k_1_s;
-  assign rx_mon_data[45:45] = rx_cgs_k_s;
-  assign rx_mon_data[46:46] = rx_ilas_r_s;
-  assign rx_mon_data[47:47] = rx_ilas_a_s;
-  assign rx_mon_data[48:48] = rx_ilas_q_s;
-  assign rx_mon_data[49:49] = rx_ilas_f_s;
-
-  assign rx_mon_trigger = rx_valid_k_1_s;
-
-  // ilas frame characters
-
-  assign rx_ilas_f_s = 
-    (((rx_data[31:24] == 8'hfc) && (rx_valid_k_s[ 3] == 1'b1)) ||
-     ((rx_data[23:16] == 8'hfc) && (rx_valid_k_s[ 2] == 1'b1)) ||
-     ((rx_data[15: 8] == 8'hfc) && (rx_valid_k_s[ 1] == 1'b1)) ||
-     ((rx_data[ 7: 0] == 8'hfc) && (rx_valid_k_s[ 0] == 1'b1))) ? 1'b1 : 1'b0;
-
-  assign rx_ilas_q_s = 
-    (((rx_data[31:24] == 8'h9c) && (rx_valid_k_s[ 3] == 1'b1)) ||
-     ((rx_data[23:16] == 8'h9c) && (rx_valid_k_s[ 2] == 1'b1)) ||
-     ((rx_data[15: 8] == 8'h9c) && (rx_valid_k_s[ 1] == 1'b1)) ||
-     ((rx_data[ 7: 0] == 8'h9c) && (rx_valid_k_s[ 0] == 1'b1))) ? 1'b1 : 1'b0;
-
-  assign rx_ilas_a_s = 
-    (((rx_data[31:24] == 8'h7c) && (rx_valid_k_s[ 3] == 1'b1)) ||
-     ((rx_data[23:16] == 8'h7c) && (rx_valid_k_s[ 2] == 1'b1)) ||
-     ((rx_data[15: 8] == 8'h7c) && (rx_valid_k_s[ 1] == 1'b1)) ||
-     ((rx_data[ 7: 0] == 8'h7c) && (rx_valid_k_s[ 0] == 1'b1))) ? 1'b1 : 1'b0;
-
-  assign rx_ilas_r_s = 
-    (((rx_data[31:24] == 8'h1c) && (rx_valid_k_s[ 3] == 1'b1)) ||
-     ((rx_data[23:16] == 8'h1c) && (rx_valid_k_s[ 2] == 1'b1)) ||
-     ((rx_data[15: 8] == 8'h1c) && (rx_valid_k_s[ 1] == 1'b1)) ||
-     ((rx_data[ 7: 0] == 8'h1c) && (rx_valid_k_s[ 0] == 1'b1))) ? 1'b1 : 1'b0;
-
-  assign rx_cgs_k_s = 
-    (((rx_data[31:24] == 8'hbc) && (rx_valid_k_s[ 3] == 1'b1)) &&
-     ((rx_data[23:16] == 8'hbc) && (rx_valid_k_s[ 2] == 1'b1)) &&
-     ((rx_data[15: 8] == 8'hbc) && (rx_valid_k_s[ 1] == 1'b1)) &&
-     ((rx_data[ 7: 0] == 8'hbc) && (rx_valid_k_s[ 0] == 1'b1))) ? 1'b1 : 1'b0;
+  assign rx_ilas_f[3] = (rx_data[31:24] == 8'hfc) ? rx_valid_k_s[3] : 1'b0;
+  assign rx_ilas_f[2] = (rx_data[23:16] == 8'hfc) ? rx_valid_k_s[2] : 1'b0;
+  assign rx_ilas_f[1] = (rx_data[15: 8] == 8'hfc) ? rx_valid_k_s[1] : 1'b0;
+  assign rx_ilas_f[0] = (rx_data[ 7: 0] == 8'hfc) ? rx_valid_k_s[0] : 1'b0;
+  assign rx_ilas_q[3] = (rx_data[31:24] == 8'h9c) ? rx_valid_k_s[3] : 1'b0;
+  assign rx_ilas_q[2] = (rx_data[23:16] == 8'h9c) ? rx_valid_k_s[2] : 1'b0;
+  assign rx_ilas_q[1] = (rx_data[15: 8] == 8'h9c) ? rx_valid_k_s[1] : 1'b0;
+  assign rx_ilas_q[0] = (rx_data[ 7: 0] == 8'h9c) ? rx_valid_k_s[0] : 1'b0;
+  assign rx_ilas_a[3] = (rx_data[31:24] == 8'h7c) ? rx_valid_k_s[3] : 1'b0;
+  assign rx_ilas_a[2] = (rx_data[23:16] == 8'h7c) ? rx_valid_k_s[2] : 1'b0;
+  assign rx_ilas_a[1] = (rx_data[15: 8] == 8'h7c) ? rx_valid_k_s[1] : 1'b0;
+  assign rx_ilas_a[0] = (rx_data[ 7: 0] == 8'h7c) ? rx_valid_k_s[0] : 1'b0;
+  assign rx_ilas_r[3] = (rx_data[31:24] == 8'h1c) ? rx_valid_k_s[3] : 1'b0;
+  assign rx_ilas_r[2] = (rx_data[23:16] == 8'h1c) ? rx_valid_k_s[2] : 1'b0;
+  assign rx_ilas_r[1] = (rx_data[15: 8] == 8'h1c) ? rx_valid_k_s[1] : 1'b0;
+  assign rx_ilas_r[0] = (rx_data[ 7: 0] == 8'h1c) ? rx_valid_k_s[0] : 1'b0;
+  assign rx_cgs_k[3]  = (rx_data[31:24] == 8'hbc) ? rx_valid_k_s[3] : 1'b0;
+  assign rx_cgs_k[2]  = (rx_data[23:16] == 8'hbc) ? rx_valid_k_s[2] : 1'b0;
+  assign rx_cgs_k[1]  = (rx_data[15: 8] == 8'hbc) ? rx_valid_k_s[1] : 1'b0;
+  assign rx_cgs_k[0]  = (rx_data[ 7: 0] == 8'hbc) ? rx_valid_k_s[0] : 1'b0;
 
   // validate all characters
 
   assign rx_valid_k_s = rx_charisk & (~rx_disperr) & (~rx_notintable);
-  assign rx_valid_k_1_s = (rx_valid_k_s == 4'd0) ? 1'b0 : 1'b1;
 
   // rate 
 
@@ -268,20 +247,27 @@ module ad_gt_channel_1 (
 
   // pll locked
 
+  assign rx_pll_locked = (rx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
+  assign tx_pll_locked = (tx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
+
   generate
   if (GTH_GTX_N == 0) begin
-  assign rx_pll_locked = (rx_sys_clk_sel[0] == 1'b1) ? qpll_locked : cpll_locked_s;
-  assign tx_pll_locked = (tx_sys_clk_sel[0] == 1'b1) ? qpll_locked : cpll_locked_s;
+  assign rx_sys_clk_sel_s = rx_sys_clk_sel;
+  assign tx_sys_clk_sel_s = tx_sys_clk_sel;
+  assign rx_pll_clk_sel_s = 2'd0;
+  assign tx_pll_clk_sel_s = 2'd0;
   end
   if (GTH_GTX_N == 1) begin
-  assign rx_pll_locked = (rx_sys_clk_sel[1] == 1'b1) ? qpll_locked : cpll_locked_s;
-  assign tx_pll_locked = (tx_sys_clk_sel[1] == 1'b1) ? qpll_locked : cpll_locked_s;
+  assign rx_sys_clk_sel_s = (rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign tx_sys_clk_sel_s = (tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign rx_pll_clk_sel_s = rx_sys_clk_sel;
+  assign tx_pll_clk_sel_s = tx_sys_clk_sel;
   end
   endgenerate
 
   // user ready
 
-  always @(posedge drp_clk) begin
+  always @(posedge up_clk) begin
     if ((rx_rst == 1'b1) || (rx_pll_locked == 1'b0)) begin
       rx_user_ready <= 4'd0;
     end else begin
@@ -289,7 +275,7 @@ module ad_gt_channel_1 (
     end
   end
 
-  always @(posedge drp_clk) begin
+  always @(posedge up_clk) begin
     if ((tx_rst == 1'b1) || (tx_pll_locked == 1'b0)) begin
       tx_user_ready <= 4'd0;
     end else begin
@@ -297,25 +283,35 @@ module ad_gt_channel_1 (
     end
   end
 
+  // reset done
+
+  always @(posedge rx_clk) begin
+    rx_rst_done <= rx_rst_done_s;
+  end
+
+  always @(posedge tx_clk) begin
+    tx_rst_done <= tx_rst_done_s;
+  end
+
   // drp control
 
-  always @(posedge drp_clk) begin
-    if (drp_lanesel == DRP_ID) begin
-      drp_sel_int <= drp_sel;
-      drp_addr_int <= drp_addr;
-      drp_wr_int <= drp_wr;
-      drp_wdata_int <= drp_wdata;
-      drp_rdata <= drp_rdata_s;
-      drp_ready <= drp_ready_s;
-      drp_rx_rate <= rx_rate_s;
+  always @(posedge up_clk) begin
+    if (up_drp_lanesel == DRP_ID) begin
+      up_drp_sel_int <= up_drp_sel;
+      up_drp_addr_int <= up_drp_addr;
+      up_drp_wr_int <= up_drp_wr;
+      up_drp_wdata_int <= up_drp_wdata;
+      up_drp_rdata <= up_drp_rdata_s;
+      up_drp_ready <= up_drp_ready_s;
+      up_drp_rxrate <= rx_rate_s;
     end else begin
-      drp_sel_int <= 1'd0;
-      drp_addr_int <= 12'd0;
-      drp_wr_int <= 1'd0;
-      drp_wdata_int <= 16'd0;
-      drp_rdata <= 16'd0;
-      drp_ready <= 1'd0;
-      drp_rx_rate <= 8'd0;
+      up_drp_sel_int <= 1'd0;
+      up_drp_addr_int <= 12'd0;
+      up_drp_wr_int <= 1'd0;
+      up_drp_wdata_int <= 16'd0;
+      up_drp_rdata <= 16'd0;
+      up_drp_ready <= 1'd0;
+      up_drp_rxrate <= 8'd0;
     end
   end
 
@@ -526,7 +522,7 @@ module ad_gt_channel_1 (
   i_gtxe2_channel (
     .CPLLFBCLKLOST (),
     .CPLLLOCK (cpll_locked_s),
-    .CPLLLOCKDETCLK (drp_clk),
+    .CPLLLOCKDETCLK (up_clk),
     .CPLLLOCKEN (1'd1),
     .CPLLPD (cpll_pd),
     .CPLLREFCLKLOST (),
@@ -547,18 +543,18 @@ module ad_gt_channel_1 (
     .GTREFCLK1 (1'd0),
     .GTSOUTHREFCLK0 (1'd0),
     .GTSOUTHREFCLK1 (1'd0),
-    .DRPADDR (drp_addr_int[8:0]),
-    .DRPCLK (drp_clk),
-    .DRPDI (drp_wdata_int),
-    .DRPDO (drp_rdata_s),
-    .DRPEN (drp_sel_int),
-    .DRPRDY (drp_ready_s),
-    .DRPWE (drp_wr_int),
+    .DRPADDR (up_drp_addr_int[8:0]),
+    .DRPCLK (up_clk),
+    .DRPDI (up_drp_wdata_int),
+    .DRPDO (up_drp_rdata_s),
+    .DRPEN (up_drp_sel_int),
+    .DRPRDY (up_drp_ready_s),
+    .DRPWE (up_drp_wr_int),
     .GTREFCLKMONITOR (),
     .QPLLCLK (qpll_clk),
     .QPLLREFCLK (qpll_ref_clk),
-    .RXSYSCLKSEL (rx_sys_clk_sel),
-    .TXSYSCLKSEL (tx_sys_clk_sel),
+    .RXSYSCLKSEL (rx_sys_clk_sel_s),
+    .TXSYSCLKSEL (tx_sys_clk_sel_s),
     .DMONITOROUT (),
     .TX8B10BEN (1'd1),
     .LOOPBACK (3'd0),
@@ -666,7 +662,7 @@ module ad_gt_channel_1 (
     .RXOOBRESET (1'd0),
     .RXPCSRESET (1'd0),
     .RXPMARESET (1'd0),
-    .RXLPMEN (1'd0),
+    .RXLPMEN (lpm_dfe_n),
     .RXCOMSASDET (),
     .RXCOMWAKEDET (),
     .RXCOMINITDET (),
@@ -677,7 +673,7 @@ module ad_gt_channel_1 (
     .RXCHARISCOMMA (),
     .RXCHARISK ({rx_charisk_open_s, rx_charisk}),
     .RXCHBONDI (5'd0),
-    .RXRESETDONE (rx_rst_done),
+    .RXRESETDONE (rx_rst_done_s),
     .RXQPIEN (1'd0),
     .RXQPISENN (),
     .RXQPISENP (),
@@ -742,7 +738,7 @@ module ad_gt_channel_1 (
     .TXSTARTSEQ (1'd0),
     .TXPCSRESET (1'd0),
     .TXPMARESET (1'd0),
-    .TXRESETDONE (tx_rst_done),
+    .TXRESETDONE (tx_rst_done_s),
     .TXCOMFINISH (),
     .TXCOMINIT (1'd0),
     .TXCOMSAS (1'd0),
@@ -1065,7 +1061,7 @@ module ad_gt_channel_1 (
     .SIM_RECEIVER_DETECT_PASS ("TRUE"),
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_TX_EIDLE_DRIVE_LEVEL (1'b0),
-    .SIM_VERSION ("Ver_1"),
+    .SIM_VERSION (2),
     .TAPDLY_SET_TX (2'b00),
     .TEMPERATUR_PAR (4'b0010),
     .TERM_RCAL_CFG (15'b100001000010000),
@@ -1149,18 +1145,18 @@ module ad_gt_channel_1 (
     .CFGRESET (1'd0),
     .CLKRSVD0 (1'd0),
     .CLKRSVD1 (1'd0),
-    .CPLLLOCKDETCLK (drp_clk),
+    .CPLLLOCKDETCLK (up_clk),
     .CPLLLOCKEN (1'd1),
     .CPLLPD (cpll_pd),
     .CPLLREFCLKSEL (3'b001),
     .CPLLRESET (cpll_rst),
     .DMONFIFORESET (1'd0),
     .DMONITORCLK (1'd0),
-    .DRPADDR (drp_addr_int[8:0]),
-    .DRPCLK (drp_clk),
-    .DRPDI (drp_wdata_int),
-    .DRPEN (drp_sel_int),
-    .DRPWE (drp_wr_int),
+    .DRPADDR (up_drp_addr_int[8:0]),
+    .DRPCLK (up_clk),
+    .DRPDI (up_drp_wdata_int),
+    .DRPEN (up_drp_sel_int),
+    .DRPWE (up_drp_wr_int),
     .EVODDPHICALDONE (1'd0),
     .EVODDPHICALSTART (1'd0),
     .EVODDPHIDRDEN (1'd0),
@@ -1258,7 +1254,7 @@ module ad_gt_channel_1 (
     .RXELECIDLEMODE (2'b11),
     .RXGEARBOXSLIP (1'd0),
     .RXLATCLK (1'd0),
-    .RXLPMEN (1'd0),
+    .RXLPMEN (lpm_dfe_n),
     .RXLPMGCHOLD (1'd0),
     .RXLPMGCOVRDEN (1'd0),
     .RXLPMHFHOLD (1'd0),
@@ -1288,7 +1284,7 @@ module ad_gt_channel_1 (
     .RXPHDLYPD (1'd1),
     .RXPHDLYRESET (1'd0),
     .RXPHOVRDEN (1'd0),
-    .RXPLLCLKSEL (2'b11),
+    .RXPLLCLKSEL (rx_pll_clk_sel_s),
     .RXPMARESET (1'd0),
     .RXPOLARITY (1'd0),
     .RXPRBSCNTRESET (1'd0),
@@ -1303,7 +1299,7 @@ module ad_gt_channel_1 (
     .RXSYNCALLIN (1'd0),
     .RXSYNCIN (1'd0),
     .RXSYNCMODE (1'd0),
-    .RXSYSCLKSEL (rx_sys_clk_sel),
+    .RXSYSCLKSEL (rx_sys_clk_sel_s),
     .RXUSERRDY (rx_user_ready[3]),
     .RXUSRCLK (rx_clk),
     .RXUSRCLK2 (rx_clk),
@@ -1352,7 +1348,7 @@ module ad_gt_channel_1 (
     .TXPIPPMSEL (1'd0),
     .TXPIPPMSTEPSIZE (5'd0),
     .TXPISOPD (1'd0),
-    .TXPLLCLKSEL (2'd3),
+    .TXPLLCLKSEL (tx_pll_clk_sel_s),
     .TXPMARESET (1'd0),
     .TXPOLARITY (1'd0),
     .TXPOSTCURSOR (5'd0),
@@ -1372,7 +1368,7 @@ module ad_gt_channel_1 (
     .TXSYNCALLIN (1'd0),
     .TXSYNCIN (1'd0),
     .TXSYNCMODE (1'd0),
-    .TXSYSCLKSEL (tx_sys_clk_sel),
+    .TXSYSCLKSEL (tx_sys_clk_sel_s),
     .TXUSERRDY (tx_user_ready[3]),
     .TXUSRCLK (tx_clk),
     .TXUSRCLK2 (tx_clk),
@@ -1387,8 +1383,8 @@ module ad_gt_channel_1 (
     .CPLLLOCK (cpll_locked_s),
     .CPLLREFCLKLOST (),
     .DMONITOROUT (),
-    .DRPDO (drp_rdata_s),
-    .DRPRDY (drp_ready_s),
+    .DRPDO (up_drp_rdata_s),
+    .DRPRDY (up_drp_ready_s),
     .EYESCANDATAERROR (),
     .GTHTXN (tx_n),
     .GTHTXP (tx_p),
@@ -1449,7 +1445,7 @@ module ad_gt_channel_1 (
     .RXQPISENP (),
     .RXRATEDONE (),
     .RXRECCLKOUT (),
-    .RXRESETDONE (rx_rst_done),
+    .RXRESETDONE (rx_rst_done_s),
     .RXSLIDERDY (),
     .RXSLIPDONE (),
     .RXSLIPOUTCLKRDY (),
@@ -1472,7 +1468,7 @@ module ad_gt_channel_1 (
     .TXQPISENN (),
     .TXQPISENP (),
     .TXRATEDONE (),
-    .TXRESETDONE (tx_rst_done),
+    .TXRESETDONE (tx_rst_done_s),
     .TXSYNCDONE (),
     .TXSYNCOUT ());
   end

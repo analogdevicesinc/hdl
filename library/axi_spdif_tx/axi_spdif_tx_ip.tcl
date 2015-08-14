@@ -15,18 +15,17 @@ adi_ip_files axi_spdif_tx [list \
   "axi_spdif_tx_constr.xdc" ]
 
 adi_ip_properties_lite axi_spdif_tx
+adi_ip_constraints axi_spdif_tx axi_spdif_tx_constr.xdc
 
-set ip_constr_files "axi_spdif_tx_constr.xdc"
-set proj_filegroup [ipx::get_file_group xilinx_vhdlsynthesis [ipx::current_core]]
-ipx::add_file $ip_constr_files $proj_filegroup
-set_property type {{xdc}} [ipx::get_file $ip_constr_files $proj_filegroup]
-set_property library_name {} [ipx::get_file $ip_constr_files $proj_filegroup]
-
-adi_add_bus "DMA_ACK" "axis" "slave" \
+adi_add_bus "DMA_ACK" "slave" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
 	[list {"DMA_REQ_DAVALID" "TVALID"} \
 		{"DMA_REQ_DAREADY" "TREADY"} \
 		{"DMA_REQ_DATYPE" "TUSER"} ]
-adi_add_bus "DMA_REQ" "axis" "master" \
+adi_add_bus "DMA_REQ" "master" \
+	"xilinx.com:interface:axis_rtl:1.0" \
+	"xilinx.com:interface:axis:1.0" \
 	[list {"DMA_REQ_DRVALID" "TVALID"} \
 		{"DMA_REQ_DRREADY" "TREADY"} \
 		{"DMA_REQ_DRTYPE" "TUSER"} \

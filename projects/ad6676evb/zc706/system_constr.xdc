@@ -31,5 +31,5 @@ set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVCMOS25} [get_ports adc_agc4
 # clocks
 
 create_clock -name rx_ref_clk   -period  3.30 [get_ports rx_ref_clk_p]
-create_clock -name rx_div_clk   -period  6.60 [get_nets i_system_wrapper/system_i/axi_ad6676_gt_rx_clk]
+create_clock -name rx_div_clk   -period  6.60 [get_pins i_system_wrapper/system_i/axi_ad6676_gt/inst/g_lane_1[0].i_gt_channel_1/i_gtxe2_channel/RXOUTCLK]
 

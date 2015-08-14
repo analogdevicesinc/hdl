@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -48,9 +46,12 @@ module system_top (
   uart_sin,
   uart_sout,
 
+  ddr3_reset_n,
   ddr3_addr,
   ddr3_ba,
   ddr3_cas_n,
+  ddr3_ras_n,
+  ddr3_we_n,
   ddr3_ck_n,
   ddr3_ck_p,
   ddr3_cke,
@@ -60,9 +61,6 @@ module system_top (
   ddr3_dqs_n,
   ddr3_dqs_p,
   ddr3_odt,
-  ddr3_ras_n,
-  ddr3_reset_n,
-  ddr3_we_n,
 
   sgmii_rxp,
   sgmii_rxn,
@@ -75,30 +73,21 @@ module system_top (
   mdio_mdc,
   mdio_mdio,
 
-  fan_pwm,
-
   linear_flash_addr,
   linear_flash_adv_ldn,
   linear_flash_ce_n,
+  linear_flash_dq_io,
   linear_flash_oen,
   linear_flash_wen,
-  linear_flash_dq_io,
+
+  fan_pwm,
 
   gpio_lcd,
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_rstn,
   iic_scl,
   iic_sda,
-
-  hdmi_out_clk,
-  hdmi_hsync,
-  hdmi_vsync,
-  hdmi_data_e,
-  hdmi_data,
-
-  spdif,
 
   rx_ref_clk_p,
   rx_ref_clk_n,
@@ -111,106 +100,109 @@ module system_top (
 
   adc_irq,
   adc_fd,
-  clk_reset,
 
   spi_adc_csn,
   spi_adc_clk,
   spi_adc_sdio,
-  spi_clk_csn,
-  spi_clk_clk,
-  spi_clk_sdio);
+  spi_ext_csn_0,
+  spi_ext_csn_1,
+  spi_ext_clk,
+  spi_ext_sdio);
 
-  input           sys_rst;
-  input           sys_clk_p;
-  input           sys_clk_n;
+  input             sys_rst;
+  input             sys_clk_p;
+  input             sys_clk_n;
 
-  input           uart_sin;
-  output          uart_sout;
+  input             uart_sin;
+  output            uart_sout;
 
-  output  [13:0]  ddr3_addr;
-  output  [ 2:0]  ddr3_ba;
-  output          ddr3_cas_n;
-  output  [ 0:0]  ddr3_ck_n;
-  output  [ 0:0]  ddr3_ck_p;
-  output  [ 0:0]  ddr3_cke;
-  output  [ 0:0]  ddr3_cs_n;
-  output  [ 7:0]  ddr3_dm;
-  inout   [63:0]  ddr3_dq;
-  inout   [ 7:0]  ddr3_dqs_n;
-  inout   [ 7:0]  ddr3_dqs_p;
-  output  [ 0:0]  ddr3_odt;
-  output          ddr3_ras_n;
-  output          ddr3_reset_n;
-  output          ddr3_we_n;
+  output            ddr3_reset_n;
+  output  [13:0]    ddr3_addr;
+  output  [ 2:0]    ddr3_ba;
+  output            ddr3_cas_n;
+  output            ddr3_ras_n;
+  output            ddr3_we_n;
+  output  [ 0:0]    ddr3_ck_n;
+  output  [ 0:0]    ddr3_ck_p;
+  output  [ 0:0]    ddr3_cke;
+  output  [ 0:0]    ddr3_cs_n;
+  output  [ 7:0]    ddr3_dm;
+  inout   [63:0]    ddr3_dq;
+  inout   [ 7:0]    ddr3_dqs_n;
+  inout   [ 7:0]    ddr3_dqs_p;
+  output  [ 0:0]    ddr3_odt;
 
-  input           sgmii_rxp;
-  input           sgmii_rxn;
-  output          sgmii_txp;
-  output          sgmii_txn;
+  input             sgmii_rxp;
+  input             sgmii_rxn;
+  output            sgmii_txp;
+  output            sgmii_txn;
 
-  output          phy_rstn;
-  input           mgt_clk_p;
-  input           mgt_clk_n;
-  output          mdio_mdc;
-  inout           mdio_mdio;
-
-  output          fan_pwm;
+  output            phy_rstn;
+  input             mgt_clk_p;
+  input             mgt_clk_n;
+  output            mdio_mdc;
+  inout             mdio_mdio;
 
   output  [26:1]    linear_flash_addr;
   output            linear_flash_adv_ldn;
   output            linear_flash_ce_n;
+  inout   [15:0]    linear_flash_dq_io;
   output            linear_flash_oen;
   output            linear_flash_wen;
-  inout   [15:0]    linear_flash_dq_io;
 
-  output  [ 6:0]  gpio_lcd;
-  output  [ 7:0]  gpio_led;
-  input   [12:0]  gpio_sw;
+  output            fan_pwm;
 
-  output          iic_rstn;
-  inout           iic_scl;
-  inout           iic_sda;
+  inout   [ 6:0]    gpio_lcd;
+  inout   [20:0]    gpio_bd;
 
-  output          hdmi_out_clk;
-  output          hdmi_hsync;
-  output          hdmi_vsync;
-  output          hdmi_data_e;
-  output  [35:0]  hdmi_data;
+  output            iic_rstn;
+  inout             iic_scl;
+  inout             iic_sda;
 
-  output          spdif;
+  input             rx_ref_clk_p;
+  input             rx_ref_clk_n;
+  output            rx_sysref_p;
+  output            rx_sysref_n;
+  output            rx_sync_p;
+  output            rx_sync_n;
+  input   [ 7:0]    rx_data_p;
+  input   [ 7:0]    rx_data_n;
 
-  input           rx_ref_clk_p;
-  input           rx_ref_clk_n;
-  output          rx_sysref_p;
-  output          rx_sysref_n;
-  output          rx_sync_p;
-  output          rx_sync_n;
-  input   [ 7:0]  rx_data_p;
-  input   [ 7:0]  rx_data_n;
+  inout             adc_irq;
+  inout             adc_fd;
 
-  inout           adc_irq;
-  inout           adc_fd;
-  inout           clk_reset;
-
-  output          spi_adc_csn;
-  output          spi_adc_clk;
-  inout           spi_adc_sdio;
-  output          spi_clk_csn;
-  output          spi_clk_clk;
-  inout           spi_clk_sdio;
+  output            spi_adc_csn;
+  output            spi_adc_clk;
+  inout             spi_adc_sdio;
+  output            spi_ext_csn_0;
+  output            spi_ext_csn_1;
+  output            spi_ext_clk;
+  inout             spi_ext_sdio;
 
   // internal signals
 
-  wire    [ 2:0]  gpio_i;
-  wire    [ 2:0]  gpio_o;
-  wire    [ 2:0]  gpio_t;
-  wire            rx_ref_clk;
-  wire            rx_sysref;
-  wire            rx_sync;
-  wire            spi_clk;
-  wire            spi_miso;
-  wire            spi_mosi;
-  wire    [31:0]  mb_intrs;
+  wire    [63:0]    gpio_i;
+  wire    [63:0]    gpio_o;
+  wire    [63:0]    gpio_t;
+  wire    [ 7:0]    spi_csn;
+  wire              spi_mosi;
+  wire              spi_miso;
+  wire              rx_ref_clk;
+  wire              rx_sysref;
+  wire              rx_sync;
+
+  // spi
+
+  assign spi_adc_csn = spi_csn[0];
+  assign spi_adc_clk = spi_clk;
+  assign spi_ext_csn_0 = spi_csn[1];
+  assign spi_ext_csn_1 = spi_csn[2];
+  assign spi_ext_clk = spi_clk;
+
+  // default logic
+
+  assign fan_pwm = 1'b1;
+  assign iic_rstn = 1'b1;
 
   // instantiations
 
@@ -231,27 +223,28 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
-  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
-    .dt (gpio_t),
-    .di (gpio_o),
-    .do (gpio_i),
-    .dio ({ clk_reset,  //  2
-            adc_irq,    //  1
-            adc_fd}));  //  0
-
-  assign spi_adc_clk = spi_clk;
-  assign spi_clk_clk = spi_clk;
-
   fmcadc2_spi i_fmcadc2_spi (
     .spi_adc_csn (spi_adc_csn),
-    .spi_clk_csn (spi_clk_csn),
+    .spi_ext_csn_0 (spi_ext_csn_0),
+    .spi_ext_csn_1 (spi_ext_csn_1),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_adc_sdio (spi_adc_sdio),
-    .spi_clk_sdio (spi_clk_sdio));
+    .spi_ext_sdio (spi_ext_sdio));
 
-  assign fan_pwm = 1'b1;
+  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
+    .dio_t (gpio_t[33:32]),
+    .dio_i (gpio_o[33:32]),
+    .dio_o (gpio_i[33:32]),
+    .dio_p ({ adc_irq,    // 33
+              adc_fd}));  // 32
+
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -269,73 +262,53 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio1_i (gpio_i[63:32]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio_lcd_tri_io (gpio_lcd),
+    .iic_main_scl_io (iic_scl),
+    .iic_main_sda_io (iic_sda),
     .linear_flash_addr (linear_flash_addr),
     .linear_flash_adv_ldn (linear_flash_adv_ldn),
     .linear_flash_ce_n (linear_flash_ce_n),
+    .linear_flash_dq_io (linear_flash_dq_io),
     .linear_flash_oen (linear_flash_oen),
     .linear_flash_wen (linear_flash_wen),
-    .linear_flash_dq_io(linear_flash_dq_io),
-    .gpio_lcd_tri_o (gpio_lcd),
-    .gpio_led_tri_o (gpio_led),
-    .gpio_sw_tri_i (gpio_sw),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
-    .iic_main_scl_io (iic_scl),
-    .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
-    .mb_intr_11 (mb_intrs[11]),
-    .mb_intr_12 (mb_intrs[12]),
-    .mb_intr_15 (mb_intrs[15]),
-    .mb_intr_16 (mb_intrs[16]),
-    .mb_intr_17 (mb_intrs[17]),
-    .mb_intr_18 (mb_intrs[18]),
-    .mb_intr_19 (mb_intrs[19]),
-    .mb_intr_20 (mb_intrs[20]),
-    .mb_intr_21 (mb_intrs[21]),
-    .mb_intr_22 (mb_intrs[22]),
-    .mb_intr_23 (mb_intrs[23]),
-    .mb_intr_24 (mb_intrs[24]),
-    .mb_intr_25 (mb_intrs[25]),
-    .mb_intr_26 (mb_intrs[26]),
-    .mb_intr_27 (mb_intrs[27]),
-    .mb_intr_28 (mb_intrs[28]),
-    .mb_intr_29 (mb_intrs[29]),
-    .mb_intr_30 (mb_intrs[30]),
-    .mb_intr_31 (mb_intrs[31]),
+    .mb_intr_06 (1'd0),
+    .mb_intr_07 (1'd0),
+    .mb_intr_08 (1'd0),
+    .mb_intr_14 (1'd0),
+    .mb_intr_15 (1'd0),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .mgt_clk_clk_n (mgt_clk_n),
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
     .phy_sd (1'b1),
-    .sgmii_rxn (sgmii_rxn),
-    .sgmii_rxp (sgmii_rxp),
-    .sgmii_txn (sgmii_txn),
-    .sgmii_txp (sgmii_txp),
-    .spdif (spdif),
-    .sys_clk_n (sys_clk_n),
-    .sys_clk_p (sys_clk_p),
-    .sys_rst (sys_rst),
-    .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
-    .gpio_ad9625_i (gpio_i),
-    .gpio_ad9625_o (gpio_o),
-    .gpio_ad9625_t (gpio_t),
-    .spi_clk_i (1'b0),
+    .sgmii_rxn (sgmii_rxn),
+    .sgmii_rxp (sgmii_rxp),
+    .sgmii_txn (sgmii_txn),
+    .sgmii_txp (sgmii_txp),
+    .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
-    .spi_csn_i (1'b1),
-    .spi_csn_o ({spi_clk_csn, spi_adc_csn}),
+    .spi_csn_i (spi_csn),
+    .spi_csn_o (spi_csn),
     .spi_sdi_i (spi_miso),
-    .spi_sdo_i (1'b0),
-    .spi_sdo_o (spi_mosi));
+    .spi_sdo_i (spi_mosi),
+    .spi_sdo_o (spi_mosi),
+    .sys_clk_n (sys_clk_n),
+    .sys_clk_p (sys_clk_p),
+    .sys_rst (sys_rst),
+    .uart_sin (uart_sin),
+    .uart_sout (uart_sout));
 
 endmodule
 

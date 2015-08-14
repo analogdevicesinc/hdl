@@ -752,11 +752,13 @@ set_location_assignment PIN_E15 -to eth_mdc
 set_location_assignment PIN_F15 -to eth_mdio_i
 set_location_assignment PIN_G16 -to eth_mdio_o
 set_location_assignment PIN_H16 -to eth_mdio_t
+set_location_assignment PIN_K18 -to eth_phy_resetn
 
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdc
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdio_i
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdio_o
 set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_mdio_t
+set_instance_assignment -name IO_STANDARD "2.5 V" -to eth_phy_resetn
 
 set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to eth_rx_clk
 
@@ -825,7 +827,7 @@ set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
 set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
 set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
 set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
-set_global_assignment -name TIMEQUEST_REPORT_SCRIPT system_timing.tcl
+set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
 

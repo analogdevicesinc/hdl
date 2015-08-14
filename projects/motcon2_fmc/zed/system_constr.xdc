@@ -45,8 +45,13 @@ set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS25 } [get_ports {gpo[2]}]
 set_property -dict {PACKAGE_PIN B15 IOSTANDARD LVCMOS25 } [get_ports {gpo[3]}]
 
 # GPI
-set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS25} [get_ports {gpi[0]}]
-set_property -dict {PACKAGE_PIN A22 IOSTANDARD LVCMOS25} [get_ports {gpi[1]}]
+# Unset gpio_bd pins from XADC-GIO0 and XADC-GIO1  and connect them to GPI0 and GPI1
+# XADC-GIO0 and XADC-GIO1 will be used by the XADC core
+set_property  -dict {PACKAGE_PIN  A21   IOSTANDARD LVCMOS25} [get_ports gpio_bd[27]]      ; ## GPI0
+set_property  -dict {PACKAGE_PIN  A22   IOSTANDARD LVCMOS25} [get_ports gpio_bd[28]]      ; ## GPI1
+
+set_property  -dict {PACKAGE_PIN  H15   IOSTANDARD LVCMOS25} [get_ports muxaddr_out[0]]      ; ## XADC-GIO0
+set_property  -dict {PACKAGE_PIN  R15   IOSTANDARD LVCMOS25} [get_ports muxaddr_out[1]]      ; ## XADC-GIO1
 
 set_property -dict {PACKAGE_PIN E16 IOSTANDARD LVCMOS25} [get_ports vauxn0]
 set_property -dict {PACKAGE_PIN D17 IOSTANDARD LVCMOS25} [get_ports vauxn8]
@@ -68,7 +73,7 @@ set_property  -dict {PACKAGE_PIN  D21    IOSTANDARD LVCMOS25 PULLTYPE PULLUP} [g
 
 # Ethernet common
 set_property -dict {PACKAGE_PIN F18 IOSTANDARD LVCMOS25} [get_ports eth_mdio_mdc]
-set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS25 PULLUP true} [get_ports eth_mdio_io]
+set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS25 PULLUP true} [get_ports eth_mdio_p]
 set_property -dict {PACKAGE_PIN G20 IOSTANDARD LVCMOS25} [get_ports eth_phy_rst_n]
 
 # Ethernet 1
@@ -136,21 +141,3 @@ set_clock_groups -asynchronous \
 set_clock_groups -asynchronous \
         -group [get_clocks {pwm_ctrl_1 }] \
         -group [get_clocks {pwm_ctrl_2 }]
-
-# Ethernet common
-
-set_property IODELAY_GROUP eth_idelay_grp [get_cells dlyctrl]
-
-# Ethernet 1
-#IDELAY
-set_property IDELAY_VALUE 16 [get_cells */*/gmii_to_rgmii_eth1/inst/*delay_rgmii_rx_ctl]
-set_property IDELAY_VALUE 16 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth1*/*delay_rgmii_rd*}]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells */*/gmii_to_rgmii_eth1/inst/*delay_rgmii_rx_ctl]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth1*/*delay_rgmii_rd*}]
-
-# Ethernet 2
-#IDELAY
-set_property IDELAY_VALUE 16 [get_cells */*/gmii_to_rgmii_eth2/inst/*delay_rgmii_rx_ctl]
-set_property IDELAY_VALUE 16 [get_cells -hier -filter {name =~ *gmii_to_rgmii_eth2*/*delay_rgmii_rd*}]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells */*/gmii_to_rgmii_eth2/inst/*delay_rgmii_rx_ctl]
-set_property IODELAY_GROUP eth_idelay_grp [get_cells -hier -filter {name =~*gmii_to_rgmii_eth2*/*delay_rgmii_rd*}]

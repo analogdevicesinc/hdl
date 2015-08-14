@@ -12,14 +12,13 @@ set_module_property DISPLAY_NAME axi_ad9671
 
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9671
-add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_rst.v
+add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
 add_fileset_file ad_pnmon.v           VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
 add_fileset_file ad_datafmt.v         VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
 add_fileset_file up_axi.v             VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
 add_fileset_file up_xfer_cntrl.v      VERILOG PATH $ad_hdl_dir/library/common/up_xfer_cntrl.v
 add_fileset_file up_xfer_status.v     VERILOG PATH $ad_hdl_dir/library/common/up_xfer_status.v
 add_fileset_file up_clock_mon.v       VERILOG PATH $ad_hdl_dir/library/common/up_clock_mon.v
-add_fileset_file up_drp_cntrl.v       VERILOG PATH $ad_hdl_dir/library/common/up_drp_cntrl.v
 add_fileset_file up_delay_cntrl.v     VERILOG PATH $ad_hdl_dir/library/common/up_delay_cntrl.v
 add_fileset_file up_adc_common.v      VERILOG PATH $ad_hdl_dir/library/common/up_adc_common.v
 add_fileset_file up_adc_channel.v     VERILOG PATH $ad_hdl_dir/library/common/up_adc_channel.v
@@ -92,7 +91,7 @@ add_interface_port xcvr_clk rx_clk clk Input 1
 add_interface xcvr_data conduit end
 set_interface_property xcvr_data associatedClock xcvr_clk
 add_interface_port xcvr_data rx_data data Input 64*PCORE_4L_2L_N+64
-add_interface_port xcvr_data rx_data_sof data_sof Input 1
+add_interface_port xcvr_data rx_sof data_sof Input 1
 
 add_interface xcvr_sync conduit end
 set_interface_property xcvr_sync associatedClock xcvr_clk

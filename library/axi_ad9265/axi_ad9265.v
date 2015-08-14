@@ -57,6 +57,7 @@ module axi_ad9265 (
   // dma interface
 
   adc_clk,
+  adc_rst,
   adc_valid,
   adc_enable,
   adc_data,
@@ -91,7 +92,6 @@ module axi_ad9265 (
   parameter PCORE_DEVICE_TYPE = 0;
   parameter PCORE_ADC_DP_DISABLE = 0;
   parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
-  parameter C_S_AXI_MIN_SIZE = 32'hffff;
 
   // adc interface (clk, data, over-range)
 
@@ -109,6 +109,7 @@ module axi_ad9265 (
   // dma interface
 
   output          adc_clk;
+  output          adc_rst;
   output          adc_valid;
   output          adc_enable;
   output  [15:0]  adc_data;
@@ -151,6 +152,7 @@ module axi_ad9265 (
   wire            adc_rst;
   wire            up_rstn;
   wire            up_clk;
+  wire            delay_rst;
 
   // internal signals
 
@@ -160,18 +162,14 @@ module axi_ad9265 (
   wire            up_status_pn_oos_s;
   wire            up_status_or_s;
   wire            adc_status_s;
-  wire            delay_rst_s;
-  wire            delay_sel_s;
-  wire            delay_rwn_s;
-  wire    [ 7:0]  delay_addr_s;
-  wire    [ 4:0]  delay_wdata_s;
-  wire    [ 4:0]  delay_rdata_s;
-  wire            delay_ack_t_s;
+  wire    [ 8:0]  up_dld_s;
+  wire    [44:0]  up_dwdata_s;
+  wire    [44:0]  up_drdata_s;
   wire            delay_locked_s;
   wire    [13:0]  up_raddr_s;
-  wire    [31:0]  up_rdata_s[0:1];
-  wire            up_rack_s[0:1];
-  wire            up_wack_s[0:1];
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_rack_s[0:2];
+  wire            up_wack_s[0:2];
   wire            up_wreq_s;
   wire    [13:0]  up_waddr_s;
   wire    [31:0]  up_wdata_s;
@@ -196,9 +194,9 @@ module axi_ad9265 (
       up_status_pn_err <= up_status_pn_err_s;
       up_status_pn_oos <= up_status_pn_oos_s;
       up_status_or <= up_status_or_s;
-      up_rdata <= up_rdata_s[0] | up_rdata_s[1];
-      up_rack <= up_rack_s[0] | up_rack_s[1];
-      up_wack <= up_wack_s[0] | up_wack_s[1];
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
     end
   end
 
@@ -245,15 +243,33 @@ module axi_ad9265 (
     .adc_data (adc_data_s),
     .adc_or (adc_or_s),
     .adc_status (adc_status_s),
+    .up_clk (up_clk),
+    .up_dld (up_dld_s),
+    .up_dwdata (up_dwdata_s),
+    .up_drdata (up_drdata_s),
     .delay_clk (delay_clk),
-    .delay_rst (delay_rst_s),
-    .delay_sel (delay_sel_s),
-    .delay_rwn (delay_rwn_s),
-    .delay_addr (delay_addr_s),
-    .delay_wdata (delay_wdata_s),
-    .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t_s),
+    .delay_rst (delay_rst),
     .delay_locked (delay_locked_s));
+
+  // adc delay control
+
+  up_delay_cntrl #(.IO_WIDTH(9), .IO_BASEADDR(6'h02)) i_delay_cntrl (
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked_s),
+    .up_dld (up_dld_s),
+    .up_dwdata (up_dwdata_s),
+    .up_drdata (up_drdata_s),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[2]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_s[2]),
+    .up_rack (up_rack_s[2]));
 
   // common processor control
 
@@ -265,33 +281,25 @@ module axi_ad9265 (
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
     .adc_status (adc_status_s),
+    .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
+    .adc_start_code (),
+    .adc_sync (),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst_s),
-    .delay_sel (delay_sel_s),
-    .delay_rwn (delay_rwn_s),
-    .delay_addr (delay_addr_s),
-    .delay_wdata (delay_wdata_s),
-    .delay_rdata (delay_rdata_s),
-    .delay_ack_t (delay_ack_t_s),
-    .delay_locked (delay_locked_s),
-    .drp_clk (1'd0),
-    .drp_rst (),
-    .drp_sel (),
-    .drp_wr (),
-    .drp_addr (),
-    .drp_wdata (),
-    .drp_rdata (16'd0),
-    .drp_ready (1'd0),
-    .drp_locked (1'd1),
+    .up_drp_sel (),
+    .up_drp_wr (),
+    .up_drp_addr (),
+    .up_drp_wdata (),
+    .up_drp_rdata (16'd0),
+    .up_drp_ready (1'd0),
+    .up_drp_locked (1'd1),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd0),
-    .up_adc_gpio_in (),
+    .up_adc_gpio_in (32'd0),
     .up_adc_gpio_out (),
     .up_rstn (up_rstn),
     .up_clk (up_clk),

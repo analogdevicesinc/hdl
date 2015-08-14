@@ -51,6 +51,7 @@ module system_top (
   eth_mdio_i,
   eth_mdio_o,
   eth_mdio_t,
+  eth_phy_resetn,
 
   // phy interface
 
@@ -76,6 +77,7 @@ module system_top (
   output            eth_mdio_i;
   input             eth_mdio_o;
   input             eth_mdio_t;
+  input             eth_phy_resetn;
 
   // phy interface
 
@@ -103,7 +105,7 @@ module system_top (
   assign phy_mdio = (eth_mdio_t == 1'b0) ? eth_mdio_o : 1'bz;
   assign eth_mdio_i = phy_mdio;
 
-  assign phy_resetn = 1'b1;
+  assign phy_resetn = eth_phy_resetn;
 
 endmodule
 

@@ -77,8 +77,7 @@ module system_top (
   fan_pwm,
 
   gpio_lcd,
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_rstn,
   iic_scl,
@@ -101,15 +100,7 @@ module system_top (
   adc_data_in_n,
 
   ref_clk_out_p,
-  ref_clk_out_n,
-
-  hdmi_out_clk,
-  hdmi_hsync,
-  hdmi_vsync,
-  hdmi_data_e,
-  hdmi_data,
-
-  spdif);
+  ref_clk_out_n);
 
   input           sys_rst;
   input           sys_clk_p;
@@ -147,8 +138,7 @@ module system_top (
   output          fan_pwm;
 
   inout   [ 6:0]  gpio_lcd;
-  inout   [ 3:0]  gpio_led;
-  inout   [ 8:0]  gpio_sw;
+  inout   [12:0]  gpio_bd;
 
   output          iic_rstn;
   inout           iic_scl;
@@ -173,14 +163,6 @@ module system_top (
   output          ref_clk_out_p;
   output          ref_clk_out_n;
 
-  output          hdmi_out_clk;
-  output          hdmi_hsync;
-  output          hdmi_vsync;
-  output          hdmi_data_e;
-  output  [23:0]  hdmi_data;
-
-  output          spdif;
-
   // internal registers
 
   reg     [63:0]  dac_ddata_0 = 'd0;
@@ -192,6 +174,9 @@ module system_top (
 
   // internal signals
 
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
   wire            dac_clk;
   wire            dac_valid_0;
   wire            dac_enable_0;
@@ -207,13 +192,20 @@ module system_top (
   wire    [15:0]  adc_data_1;
   wire            ref_clk;
   wire            oddr_ref_clk;
-  wire    [31:0]  mb_intrs;
 
   // assignments
 
-  assign mgt_clk_sel = 2'd0;
+  assign mgt_clk_sel  = 2'd0;
+  assign fan_pwm      = 1'b1;
+  assign iic_rstn     = 1'b1;
 
   // instantiations
+
+ ad_iobuf #(.DATA_WIDTH(13)) i_iobuf_sw_led (
+    .dio_t (gpio_t[12:0]),
+    .dio_i (gpio_o[12:0]),
+    .dio_o (gpio_i[12:0]),
+    .dio_p (gpio_bd));
 
   ODDR #(
     .DDR_CLK_EDGE ("SAME_EDGE"),
@@ -279,38 +271,20 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .fan_pwm (fan_pwm),
     .gpio_lcd_tri_io (gpio_lcd),
-    .gpio_led_tri_io (gpio_led),
-    .gpio_sw_tri_io (gpio_sw),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio1_i (gpio_i[63:32]),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
-    .mb_intr_10 (mb_intrs[10]),
-    .mb_intr_11 (mb_intrs[11]),
-    .mb_intr_14 (mb_intrs[14]),
-    .mb_intr_15 (mb_intrs[15]),
-    .mb_intr_16 (mb_intrs[16]),
-    .mb_intr_17 (mb_intrs[17]),
-    .mb_intr_18 (mb_intrs[18]),
-    .mb_intr_19 (mb_intrs[19]),
-    .mb_intr_20 (mb_intrs[20]),
-    .mb_intr_21 (mb_intrs[21]),
-    .mb_intr_22 (mb_intrs[22]),
-    .mb_intr_23 (mb_intrs[23]),
-    .mb_intr_24 (mb_intrs[24]),
-    .mb_intr_25 (mb_intrs[25]),
-    .mb_intr_26 (mb_intrs[26]),
-    .mb_intr_27 (mb_intrs[27]),
-    .mb_intr_28 (mb_intrs[28]),
-    .mb_intr_29 (mb_intrs[29]),
-    .mb_intr_30 (mb_intrs[30]),
-    .mb_intr_31 (mb_intrs[31]),
+    .mb_intr_06 (1'b0),
+    .mb_intr_07 (1'b0),
+    .mb_intr_08 (1'b0),
+    .mb_intr_14 (1'b0),
+    .mb_intr_15 (1'b0),
     .adc_clk (adc_clk),
     .adc_clk_in_n (adc_clk_in_n),
     .adc_clk_in_p (adc_clk_in_p),
@@ -318,7 +292,6 @@ module system_top (
     .adc_data_1 (adc_data_1),
     .adc_data_in_n (adc_data_in_n),
     .adc_data_in_p (adc_data_in_p),
-    .adc_dma_sync (1'b1),
     .adc_dma_wdata (adc_dma_wdata),
     .adc_dma_wr (adc_dma_wr),
     .adc_enable_0 (adc_enable_0),
@@ -354,7 +327,6 @@ module system_top (
     .rgmii_td (phy_tx_data),
     .rgmii_tx_ctl (phy_tx_ctrl),
     .rgmii_txc (phy_tx_clk),
-    .spdif (spdif),
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),

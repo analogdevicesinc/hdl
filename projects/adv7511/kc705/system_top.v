@@ -67,7 +67,7 @@ module system_top (
   ddr3_odt,
 
   mdio_mdc,
-  mdio_mdio_io,
+  mdio_mdio,
   mii_rst_n,
   mii_col,
   mii_crs,
@@ -89,8 +89,7 @@ module system_top (
   fan_pwm,
 
   gpio_lcd,
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_rstn,
   iic_scl,
@@ -119,18 +118,18 @@ module system_top (
   output          ddr3_cas_n;
   output          ddr3_ras_n;
   output          ddr3_we_n;
-  output  [ 0:0]  ddr3_ck_n;
-  output  [ 0:0]  ddr3_ck_p;
-  output  [ 0:0]  ddr3_cke;
-  output  [ 0:0]  ddr3_cs_n;
+  output          ddr3_ck_n;
+  output          ddr3_ck_p;
+  output          ddr3_cke;
+  output          ddr3_cs_n;
   output  [ 7:0]  ddr3_dm;
   inout   [63:0]  ddr3_dq;
   inout   [ 7:0]  ddr3_dqs_n;
   inout   [ 7:0]  ddr3_dqs_p;
-  output  [ 0:0]  ddr3_odt;
+  output          ddr3_odt;
 
   output          mdio_mdc;
-  inout           mdio_mdio_io;
+  inout           mdio_mdio;
   output          mii_rst_n;
   input           mii_col;
   input           mii_crs;
@@ -142,18 +141,17 @@ module system_top (
   output          mii_tx_en;
   output  [ 3:0]  mii_txd;
 
-  output [26:1]  linear_flash_addr;
-  output         linear_flash_adv_ldn;
-  output         linear_flash_ce_n;
-  inout   [15:0] linear_flash_dq_io;
-  output         linear_flash_oen;
-  output         linear_flash_wen;
+  output  [26:1]  linear_flash_addr;
+  output          linear_flash_adv_ldn;
+  output          linear_flash_ce_n;
+  inout   [15:0]  linear_flash_dq_io;
+  output          linear_flash_oen;
+  output          linear_flash_wen;
 
   output          fan_pwm;
 
   inout   [ 6:0]  gpio_lcd;
-  inout   [ 7:0]  gpio_led;
-  inout   [ 8:0]  gpio_sw;
+  inout   [16:0]  gpio_bd;
 
   output          iic_rstn;
   inout           iic_scl;
@@ -167,13 +165,28 @@ module system_top (
 
   output          spdif;
 
-  wire   [31:0]   mb_intrs;
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+
+  // default logic
+
+  assign ddr3_1_p = 2'b11;
+  assign ddr3_1_n = 3'b000;
+  assign fan_pwm  = 1'b1;
+  assign iic_rstn = 1'b1;
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_sw_led (
+     .dio_t (gpio_t[16:0]),
+     .dio_i (gpio_o[16:0]),
+     .dio_o (gpio_i[16:0]),
+     .dio_p (gpio_bd));
 
   // instantiations
 
   system_wrapper i_system_wrapper (
-    .ddr3_1_n (ddr3_1_n),
-    .ddr3_1_p (ddr3_1_p),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -189,42 +202,29 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .fan_pwm (fan_pwm),
     .gpio_lcd_tri_io (gpio_lcd),
-    .gpio_led_tri_io (gpio_led),
-    .gpio_sw_tri_io (gpio_sw),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
+    .hdmi_16_data (hdmi_data),
+    .hdmi_16_data_e (hdmi_data_e),
+    .hdmi_16_hsync (hdmi_hsync),
     .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
+    .hdmi_16_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
-    .mb_intr_10 (mb_intrs[10]),
-    .mb_intr_11 (mb_intrs[11]),
-    .mb_intr_12 (mb_intrs[12]),
-    .mb_intr_13 (mb_intrs[13]),
-    .mb_intr_14 (mb_intrs[14]),
-    .mb_intr_15 (mb_intrs[15]),
-    .mb_intr_16 (mb_intrs[16]),
-    .mb_intr_17 (mb_intrs[17]),
-    .mb_intr_18 (mb_intrs[18]),
-    .mb_intr_19 (mb_intrs[19]),
-    .mb_intr_20 (mb_intrs[20]),
-    .mb_intr_21 (mb_intrs[21]),
-    .mb_intr_22 (mb_intrs[22]),
-    .mb_intr_23 (mb_intrs[23]),
-    .mb_intr_24 (mb_intrs[24]),
-    .mb_intr_25 (mb_intrs[25]),
-    .mb_intr_26 (mb_intrs[26]),
-    .mb_intr_27 (mb_intrs[27]),
-    .mb_intr_28 (mb_intrs[28]),
-    .mb_intr_29 (mb_intrs[29]),
-    .mb_intr_30 (mb_intrs[30]),
-    .mb_intr_31 (mb_intrs[31]),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio1_i (gpio_i[63:32]),
+    .mb_intr_02 (1'b0),
+    .mb_intr_03 (1'b0),
+    .mb_intr_06 (1'b0),
+    .mb_intr_12 (1'b0),
+    .mb_intr_13 (1'b0),
+    .mb_intr_14 (1'b0),
+    .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
-    .mdio_mdio_io (mdio_mdio_io),
+    .mdio_mdio_io (mdio_mdio),
     .mii_col (mii_col),
     .mii_crs (mii_crs),
     .mii_rst_n (mii_rst_n),

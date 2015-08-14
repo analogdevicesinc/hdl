@@ -85,8 +85,7 @@ module system_top (
   linear_flash_dq_io,
 
   gpio_lcd,
-  gpio_led,
-  gpio_sw,
+  gpio_bd,
 
   iic_rstn,
   iic_scl,
@@ -136,16 +135,15 @@ module system_top (
 
   output          fan_pwm;
 
-  output  [26:1]    linear_flash_addr;
-  output            linear_flash_adv_ldn;
-  output            linear_flash_ce_n;
-  output            linear_flash_oen;
-  output            linear_flash_wen;
-  inout   [15:0]    linear_flash_dq_io;
+  output  [26:1]  linear_flash_addr;
+  output          linear_flash_adv_ldn;
+  output          linear_flash_ce_n;
+  output          linear_flash_oen;
+  output          linear_flash_wen;
+  inout   [15:0]  linear_flash_dq_io;
 
-  output  [ 6:0]  gpio_lcd;
-  output  [ 7:0]  gpio_led;
-  input   [12:0]  gpio_sw;
+  inout   [ 6:0]  gpio_lcd;
+  inout   [20:0]  gpio_bd;
 
   output          iic_rstn;
   inout           iic_scl;
@@ -159,9 +157,22 @@ module system_top (
 
   output          spdif;
 
-  wire    [31:0]  mb_intrs;
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+
+  // default logic
 
   assign fan_pwm = 1'b1;
+  assign iic_rstn = 1'b1;
+
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_sw_led (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
 
   // instantiations
 
@@ -187,44 +198,31 @@ module system_top (
     .linear_flash_oen (linear_flash_oen),
     .linear_flash_wen (linear_flash_wen),
     .linear_flash_dq_io(linear_flash_dq_io),
-    .gpio_lcd_tri_o (gpio_lcd),
-    .gpio_led_tri_o (gpio_led),
-    .gpio_sw_tri_i (gpio_sw),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
+    .gpio_lcd_tri_io (gpio_lcd),
+    .gpio0_o (gpio_o[31:0]),
+    .gpio0_t (gpio_t[31:0]),
+    .gpio0_i (gpio_i[31:0]),
+    .gpio1_o (gpio_o[63:32]),
+    .gpio1_t (gpio_t[63:32]),
+    .gpio1_i (gpio_i[63:32]),
+    .hdmi_36_data (hdmi_data),
+    .hdmi_36_data_e (hdmi_data_e),
+    .hdmi_36_hsync (hdmi_hsync),
     .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
+    .hdmi_36_vsync (hdmi_vsync),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .iic_rstn (iic_rstn),
-    .mb_intr_10 (mb_intrs[10]),
-    .mb_intr_11 (mb_intrs[11]),
-    .mb_intr_12 (mb_intrs[12]),
-    .mb_intr_13 (mb_intrs[13]),
-    .mb_intr_14 (mb_intrs[14]),
-    .mb_intr_15 (mb_intrs[15]),
-    .mb_intr_16 (mb_intrs[16]),
-    .mb_intr_17 (mb_intrs[17]),
-    .mb_intr_18 (mb_intrs[18]),
-    .mb_intr_19 (mb_intrs[19]),
-    .mb_intr_20 (mb_intrs[20]),
-    .mb_intr_21 (mb_intrs[21]),
-    .mb_intr_22 (mb_intrs[22]),
-    .mb_intr_23 (mb_intrs[23]),
-    .mb_intr_24 (mb_intrs[24]),
-    .mb_intr_25 (mb_intrs[25]),
-    .mb_intr_26 (mb_intrs[26]),
-    .mb_intr_27 (mb_intrs[27]),
-    .mb_intr_28 (mb_intrs[28]),
-    .mb_intr_29 (mb_intrs[29]),
-    .mb_intr_30 (mb_intrs[30]),
-    .mb_intr_31 (mb_intrs[31]),
+    .mb_intr_06 (1'b0),
+    .mb_intr_12 (1'b0),
+    .mb_intr_13 (1'b0),
+    .mb_intr_14 (1'b0),
+    .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .mgt_clk_clk_n (mgt_clk_n),
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
+    .phy_sd (1'b1),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),

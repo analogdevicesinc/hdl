@@ -92,9 +92,11 @@ architecture rtl of tx_encoder is
   signal par_vector : std_logic_vector(26 downto 0);
   signal send_audio : std_logic;
   
+  signal cdc_sync_stage0_tick_counter : std_logic := '0';
+  signal cdc_sync_stage1_tick_counter : std_logic := '0';
+  signal cdc_sync_stage2_tick_counter : std_logic := '0';
+  signal cdc_sync_stage3_tick_counter : std_logic := '0';
   signal tick_counter : std_logic;
-  signal tick_counter_d1 : std_logic;
-  signal tick_counter_d2 : std_logic;
 
   constant X_PREAMBLE : std_logic_vector(0 to 7) := "11100010";
   constant Y_PREAMBLE : std_logic_vector(0 to 7) := "11100100";
@@ -149,24 +151,30 @@ begin
   DCLK : process (data_clk)
   begin
     if rising_edge(data_clk) then
-      tick_counter <= not tick_counter;
+      cdc_sync_stage0_tick_counter <= not cdc_sync_stage0_tick_counter;
     end if;
   end process DCLK;
+
+  process (up_clk) begin
+    if rising_edge(up_clk) then
+      cdc_sync_stage1_tick_counter <= cdc_sync_stage0_tick_counter;
+      cdc_sync_stage2_tick_counter <= cdc_sync_stage1_tick_counter;
+      cdc_sync_stage3_tick_counter <= cdc_sync_stage2_tick_counter;
+    end if;
+  end process;
+
+  tick_counter <= cdc_sync_stage3_tick_counter xor cdc_sync_stage2_tick_counter;
 
   CGEN: process (up_clk)
   begin 
     if rising_edge(up_clk) then
       if resetn = '0' or conf_txen = '0' then
          clk_cnt <= 0;
-         tick_counter_d1 <= '0';
-         tick_counter_d2 <= '0';
          spdif_clk_en <= '0';
       else
-        tick_counter_d1 <= tick_counter;
-        tick_counter_d2 <= tick_counter_d1;
         spdif_clk_en <= '0';
 
-        if (tick_counter_d1 xor tick_counter_d2) = '1' then
+        if tick_counter = '1' then
           if clk_cnt < to_integer(unsigned(conf_ratio)) then
             clk_cnt <= clk_cnt + 1;
           else
@@ -221,11 +229,7 @@ begin
   TXSYNC: process (data_clk)
   begin
     if (rising_edge(data_clk)) then
-      if resetn = '0' then
-        spdif_tx_o <= '0';
-      else
         spdif_tx_o <= spdif_out;
-      end if;
     end if;
   end process TXSYNC;
  

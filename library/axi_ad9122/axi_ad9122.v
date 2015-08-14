@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -99,7 +97,6 @@ module axi_ad9122 (
   parameter   PCORE_MMCM_BUFIO_N = 1;
   parameter   PCORE_DAC_DP_DISABLE = 0;
   parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
-  parameter   C_S_AXI_MIN_SIZE = 32'hffff;
 
   // dac interface
 
@@ -155,7 +152,6 @@ module axi_ad9122 (
 
   wire            dac_rst;
   wire            mmcm_rst;
-  wire            drp_rst;
   wire            up_clk;
   wire            up_rstn;
 
@@ -178,13 +174,13 @@ module axi_ad9122 (
   wire            dac_frame_q3_s;
   wire    [15:0]  dac_data_q3_s;
   wire            dac_status_s;
-  wire            drp_sel_s;
-  wire            drp_wr_s;
-  wire    [11:0]  drp_addr_s;
-  wire    [15:0]  drp_wdata_s;
-  wire    [15:0]  drp_rdata_s;
-  wire            drp_ready_s;
-  wire            drp_locked_s;
+  wire            up_drp_sel_s;
+  wire            up_drp_wr_s;
+  wire    [11:0]  up_drp_addr_s;
+  wire    [15:0]  up_drp_wdata_s;
+  wire    [15:0]  up_drp_rdata_s;
+  wire            up_drp_ready_s;
+  wire            up_drp_locked_s;
   wire            up_wreq_s;
   wire    [13:0]  up_waddr_s;
   wire    [31:0]  up_wdata_s;
@@ -235,15 +231,15 @@ module axi_ad9122 (
     .dac_frame_q3 (dac_frame_q3_s),
     .dac_data_q3 (dac_data_q3_s),
     .mmcm_rst (mmcm_rst),
-    .drp_clk (up_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel_s),
-    .drp_wr (drp_wr_s),
-    .drp_addr (drp_addr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_s),
-    .drp_ready (drp_ready_s),
-    .drp_locked (drp_locked_s));
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_s),
+    .up_drp_ready (up_drp_ready_s),
+    .up_drp_locked (up_drp_locked_s));
 
   // core
 
@@ -278,14 +274,13 @@ module axi_ad9122 (
     .dac_dovf (dac_dovf),
     .dac_dunf (dac_dunf),
     .mmcm_rst (mmcm_rst),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel_s),
-    .drp_wr (drp_wr_s),
-    .drp_addr (drp_addr_s),
-    .drp_wdata (drp_wdata_s),
-    .drp_rdata (drp_rdata_s),
-    .drp_ready (drp_ready_s),
-    .drp_locked (drp_locked_s),
+    .up_drp_sel (up_drp_sel_s),
+    .up_drp_wr (up_drp_wr_s),
+    .up_drp_addr (up_drp_addr_s),
+    .up_drp_wdata (up_drp_wdata_s),
+    .up_drp_rdata (up_drp_rdata_s),
+    .up_drp_ready (up_drp_ready_s),
+    .up_drp_locked (up_drp_locked_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),

@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -85,14 +83,14 @@ module axi_ad9122_core (
 
   // drp interface
 
-  drp_rst,
-  drp_sel,
-  drp_wr,
-  drp_addr,
-  drp_wdata,
-  drp_rdata,
-  drp_ready,
-  drp_locked,
+  up_drp_rst,
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked,
 
   // processor interface
 
@@ -156,14 +154,14 @@ module axi_ad9122_core (
 
   // drp interface
 
-  output          drp_rst;
-  output          drp_sel;
-  output          drp_wr;
-  output  [11:0]  drp_addr;
-  output  [15:0]  drp_wdata;
-  input   [15:0]  drp_rdata;
-  input           drp_ready;
-  input           drp_locked;
+  output          up_drp_rst;
+  output          up_drp_sel;
+  output          up_drp_wr;
+  output  [11:0]  up_drp_addr;
+  output  [15:0]  up_drp_wdata;
+  input   [15:0]  up_drp_rdata;
+  input           up_drp_ready;
+  input           up_drp_locked;
 
   // processor interface
 
@@ -291,15 +289,13 @@ module axi_ad9122_core (
     .dac_status_ovf (dac_dovf),
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd4),
-    .drp_clk (up_clk),
-    .drp_rst (drp_rst),
-    .drp_sel (drp_sel),
-    .drp_wr (drp_wr),
-    .drp_addr (drp_addr),
-    .drp_wdata (drp_wdata),
-    .drp_rdata (drp_rdata),
-    .drp_ready (drp_ready),
-    .drp_locked (drp_locked),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked),
     .up_usr_chanmax (),
     .dac_usr_chanmax (8'd3),
     .up_dac_gpio_in (32'd0),

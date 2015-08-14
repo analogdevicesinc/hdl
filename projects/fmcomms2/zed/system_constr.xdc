@@ -50,8 +50,8 @@ set_property  -dict {PACKAGE_PIN  C22  IOSTANDARD LVCMOS25} [get_ports gpio_ctl[
 set_property  -dict {PACKAGE_PIN  G15  IOSTANDARD LVCMOS25} [get_ports gpio_en_agc]                      ; ## H22  FMC_LPC_LA19_P
 set_property  -dict {PACKAGE_PIN  G16  IOSTANDARD LVCMOS25} [get_ports gpio_sync]                        ; ## H23  FMC_LPC_LA19_N
 set_property  -dict {PACKAGE_PIN  A16  IOSTANDARD LVCMOS25} [get_ports gpio_resetb]                      ; ## H31  FMC_LPC_LA28_P
-set_property  -dict {PACKAGE_PIN  J20  IOSTANDARD LVCMOS25} [get_ports gpio_enable]                      ; ## G18  FMC_LPC_LA16_P
-set_property  -dict {PACKAGE_PIN  K21  IOSTANDARD LVCMOS25} [get_ports gpio_txnrx]                       ; ## G19  FMC_LPC_LA16_N
+set_property  -dict {PACKAGE_PIN  J20  IOSTANDARD LVCMOS25} [get_ports enable]                           ; ## G18  FMC_LPC_LA16_P
+set_property  -dict {PACKAGE_PIN  K21  IOSTANDARD LVCMOS25} [get_ports txnrx]                            ; ## G19  FMC_LPC_LA16_N
 
 set_property  -dict {PACKAGE_PIN  F18  IOSTANDARD LVCMOS25  PULLTYPE PULLUP} [get_ports spi_csn]         ; ## D26  FMC_LPC_LA26_P
 set_property  -dict {PACKAGE_PIN  E18  IOSTANDARD LVCMOS25} [get_ports spi_clk]                          ; ## D27  FMC_LPC_LA26_N
@@ -61,9 +61,12 @@ set_property  -dict {PACKAGE_PIN  D21  IOSTANDARD LVCMOS25} [get_ports spi_miso]
 # spi pmod JA1
 
 set_property  -dict {PACKAGE_PIN  Y11    IOSTANDARD LVCMOS33}     [get_ports spi_udc_csn_tx]       ; ## JA1
-set_property  -dict {PACKAGE_PIN  AA11   IOSTANDARD LVCMOS33}     [get_ports spi_udc_csn_rx]       ; ## JA2
+set_property  -dict {PACKAGE_PIN  AB11   IOSTANDARD LVCMOS33}     [get_ports spi_udc_csn_rx]       ; ## JA7
 set_property  -dict {PACKAGE_PIN  AA9    IOSTANDARD LVCMOS33}     [get_ports spi_udc_sclk]         ; ## JA4
-set_property  -dict {PACKAGE_PIN  Y10    IOSTANDARD LVCMOS33}     [get_ports spi_udc_data]         ; ## JA3
+set_property  -dict {PACKAGE_PIN  AA11   IOSTANDARD LVCMOS33}     [get_ports spi_udc_data]         ; ## JA2
+
+set_property  -dict {PACKAGE_PIN  Y10    IOSTANDARD LVCMOS33}     [get_ports gpio_muxout_tx]       ; ## JA3
+set_property  -dict {PACKAGE_PIN  AB9    IOSTANDARD LVCMOS33}     [get_ports gpio_muxout_rx]       ; ## JA9
 
 # clocks
 
