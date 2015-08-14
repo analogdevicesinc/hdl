@@ -187,3 +187,60 @@ proc adi_ip_add_core_dependencies {vlnvs} {
 		}
 	}
 }
+
+proc adi_if_define {name} {
+
+  ipx::create_abstraction_definition ADI user ${name}_rtl 1.0
+  ipx::create_bus_definition ADI user $name 1.0
+
+  set_property xml_file_name ${name}_rtl.xml [ipx::current_busabs]
+  set_property xml_file_name ${name}.xml [ipx::current_busdef]
+  set_property bus_type_vlnv ADI:user:${name}:1.0 [ipx::current_busabs]
+
+  ipx::save_abstraction_definition [ipx::current_busabs]
+  ipx::save_bus_definition [ipx::current_busdef]
+}
+
+proc adi_if_ports {dir width name {type none}} {
+
+  ipx::add_bus_abstraction_port $name [ipx::current_busabs]
+  set m_intf [ipx::get_bus_abstraction_ports $name -of_objects [ipx::current_busabs]]
+  set_property master_presence required $m_intf
+  set_property slave_presence  required $m_intf
+  set_property master_width $width $m_intf
+  set_property slave_width  $width $m_intf
+
+  set m_dir "in"
+  set s_dir "out"
+  if {$dir eq "output"} {
+    set m_dir "out"
+    set s_dir "in"
+  }
+
+  set_property master_direction $m_dir $m_intf
+  set_property slave_direction  $s_dir $m_intf
+
+  if {$type ne "none"} {
+    set_property is_${type} true $m_intf
+  }
+
+  ipx::save_bus_definition [ipx::current_busdef]
+  ipx::save_abstraction_definition [ipx::current_busabs]
+}
+
+proc adi_if_infer_bus {if_name mode name maps} {
+
+  ipx::add_bus_interface $name [ipx::current_core]
+  set m_bus_if [ipx::get_bus_interfaces $name -of_objects [ipx::current_core]]
+  set_property abstraction_type_vlnv ${if_name}_rtl:1.0 $m_bus_if
+  set_property bus_type_vlnv ${if_name}:1.0 $m_bus_if
+  set_property interface_mode $mode $m_bus_if
+
+  foreach map $maps  {
+    set m_maps [regexp -all -inline {\S+} $map]
+    lassign $m_maps p_name p_map
+    ipx::add_port_map $p_name $m_bus_if
+    set_property physical_name $p_map [ipx::get_port_maps $p_name -of_objects $m_bus_if]
+  }
+}
+
