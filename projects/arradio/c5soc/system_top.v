@@ -135,6 +135,10 @@ module system_top (
   // gpio interface
 
   ad9361_resetb,
+  ad9361_en_agc,
+  ad9361_sync,
+  ad9361_enable,
+  ad9361_txnrx,
 
   // spi
 
@@ -239,6 +243,10 @@ module system_top (
   // gpio interface
 
   output            ad9361_resetb;
+  output            ad9361_en_agc;
+  output            ad9361_sync;
+  output            ad9361_enable;
+  output            ad9361_txnrx;
 
   // spi interface
 
@@ -287,8 +295,6 @@ module system_top (
   wire              dac_dunf;
   wire              dac_rd_en;
   wire              dac_fifo_valid;  
-  wire    [111:0]   dev_dbg_data;
-  wire    [ 61:0]   dev_l_dbg_data;
   wire              vga_pixel_clock;
   wire              vid_v_sync;
   wire              vid_h_sync;
@@ -302,8 +308,6 @@ module system_top (
   assign vga_hs = vid_h_sync;
   assign vga_vs = vid_v_sync;
   assign {vga_b,vga_g,vga_r} =  {vid_b,vid_g,vid_r};
-
-  assign ad9361_resetb = 1'b1;
 
   // instantiations
 
@@ -449,18 +453,18 @@ module system_top (
 		.axi_ad9361_dma_if_dac_data_q1 (dac_data_q1),
 		.axi_ad9361_dma_if_dac_dovf (),
 		.axi_ad9361_dma_if_dac_dunf (dac_dunf),
-		.axi_ad9361_debug_if_dev_dbg_data (dev_dbg_data),
-		.axi_ad9361_debug_if_dev_l_dbg_data (dev_l_dbg_data),
-		.axi_dmac_dac_fifo_rd_clock_clk (clk),
-		.axi_dmac_dac_fifo_rd_if_rden (dac_rd_en),
-		.axi_dmac_dac_fifo_rd_if_valid (dac_fifo_valid),
-		.axi_dmac_dac_fifo_rd_if_data (dac_ddata),
-		.axi_dmac_dac_fifo_rd_if_unf (dac_dunf),
-		.axi_dmac_adc_fifo_wr_clock_clk (clk),
-		.axi_dmac_adc_fifo_wr_if_ovf (adc_dovf),
-		.axi_dmac_adc_fifo_wr_if_wren (adc_dwr),
-		.axi_dmac_adc_fifo_wr_if_data (adc_ddata),
-		.axi_dmac_adc_fifo_wr_if_sync (adc_dsync),
+		.axi_dmac_dac_if_fifo_rd_clk_clk (clk),
+		.axi_dmac_dac_if_fifo_rd_en_dac_valid (dac_rd_en),
+		.axi_dmac_dac_if_fifo_rd_valid_dma_valid (dac_fifo_valid),
+		.axi_dmac_dac_if_fifo_rd_dout_dac_data (dac_ddata),
+		.axi_dmac_dac_if_fifo_rd_underflow_dac_dunf (dac_dunf),
+		.axi_dmac_dac_if_fifo_rd_xfer_req_dma_xfer_req (),
+		.axi_dmac_adc_if_fifo_wr_clk_clk (clk),
+		.axi_dmac_adc_if_fifo_wr_overflow_adc_dovf (adc_dovf),
+		.axi_dmac_adc_if_fifo_wr_en_adc_valid (adc_dwr),
+		.axi_dmac_adc_if_fifo_wr_din_adc_data (adc_ddata),
+		.axi_dmac_adc_if_fifo_wr_sync_adc_sync (adc_dsync),
+		.axi_dmac_adc_if_fifo_wr_xfer_req_dma_xfer_req (),
 		.spi_ad9361_external_MISO (spi_miso),
 		.spi_ad9361_external_MOSI (spi_mosi),
 		.spi_ad9361_external_SCLK (spi_clk),
@@ -506,7 +510,8 @@ module system_top (
 		.util_dac_unpack_channels_data_dac_data_03 (dac_data_q1),
 		.util_dac_unpack_channels_data_fifo_valid (dac_fifo_valid),
 		.util_dac_unpack_channels_data_dma_rd (dac_rd_en),
-		.util_dac_unpack_channels_data_dma_data (dac_ddata)
+		.util_dac_unpack_channels_data_dma_data (dac_ddata),
+    .gpio_external_connection_export ({ad9361_resetb, ad9361_en_agc, ad9361_sync, ad9361_enable, ad9361_txnrx})
 	);
 
 endmodule

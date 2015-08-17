@@ -143,6 +143,13 @@ set_parameter_property C_DMA_TYPE_SRC TYPE INTEGER
 set_parameter_property C_DMA_TYPE_SRC UNITS None
 set_parameter_property C_DMA_TYPE_SRC HDL_PARAMETER true
 
+add_parameter C_FIFO_SIZE INTEGER 0 "In bursts"
+set_parameter_property C_FIFO_SIZE DEFAULT_VALUE 4
+set_parameter_property C_FIFO_SIZE DISPLAY_NAME C_FIFO_SIZE
+set_parameter_property C_FIFO_SIZE TYPE INTEGER
+set_parameter_property C_FIFO_SIZE UNITS None
+set_parameter_property C_FIFO_SIZE HDL_PARAMETER true
+
 # axi4 slave
 
 add_interface s_axi_clock clock end
