@@ -39,16 +39,13 @@ set_parameter_property NUM_OF_CHANNELS HDL_PARAMETER true
 # defaults
 
 ad_alt_intf clock   adc_clk         input   1
+ad_alt_intf reset   adc_rst         input   1  if_adc_clk
 ad_alt_intf signal  adc_valid       output  1
 ad_alt_intf signal  adc_sync        output  1
 ad_alt_intf signal  adc_data        output  NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH
 ad_alt_intf signal  adc_valid_0     input   1
 ad_alt_intf signal  adc_enable_0    input   1
 ad_alt_intf signal  adc_data_0      input   CHANNEL_DATA_WIDTH
-
-add_interface adc_reset reset end
-set_interface_property adc_reset associatedClock if_adc_clk
-add_interface_port adc_reset adc_rst reset  Input 1
 
 proc p_util_cpack {} {
 
