@@ -654,6 +654,7 @@
   <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
   <parameter name="C_DMA_TYPE_DEST" value="2" />
   <parameter name="C_DMA_TYPE_SRC" value="0" />
+  <parameter name="C_FIFO_SIZE" value="4" />
   <parameter name="C_SYNC_TRANSFER_START" value="0" />
   <parameter name="PCORE_ID" value="1" />
  </module>
@@ -673,6 +674,7 @@
   <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
   <parameter name="C_DMA_TYPE_DEST" value="0" />
   <parameter name="C_DMA_TYPE_SRC" value="2" />
+  <parameter name="C_FIFO_SIZE" value="4" />
   <parameter name="C_SYNC_TRANSFER_START" value="0" />
   <parameter name="PCORE_ID" value="0" />
  </module>
@@ -2061,6 +2063,16 @@
    version="15.0"
    start="axi_jesd_xcvr.if_tx_rstn"
    end="xcvr_core.txlink_rst_n" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
+   end="util_cpack_0.if_adc_rst" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="mem_rst.out_reset"
+   end="util_cpack_0.if_adc_rst" />
  <connection
    kind="reset"
    version="15.0"
