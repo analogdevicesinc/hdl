@@ -273,6 +273,7 @@ wire [1:0] up_irq_source_clear;
 // DMA transfer signals
 reg  up_dma_req_valid = 1'b0;
 wire up_dma_req_ready;
+wire up_req_arb_enable;
 
 reg [1:0] up_transfer_id = 2'b0;
 reg [1:0] up_transfer_id_eot = 2'b0;
@@ -440,7 +441,7 @@ begin
 		12'h100: up_rdata <= {up_use_hwdesc, up_pause, up_enable};
 		12'h101: up_rdata <= up_transfer_id;
 		12'h102: up_rdata <= up_dma_req_valid;
-		12'h103: up_rdata <= {30'h00, up_axis_xlast, up_dma_cyclic}; // Flags
+		12'h103: up_rdata <= {up_req_arb_enable, up_axis_xlast, up_dma_cyclic}; // Flags
 		12'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
 		12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
 		12'h106: up_rdata <= up_dma_x_length;
@@ -544,6 +545,8 @@ assign dma_sg_in_req_valid = up_use_hwdesc == 1'b1 ? up_dma_req_valid : 1'b0;
 assign dma_2d_req_valid = up_use_hwdesc == 1'b1 ? dma_sg_out_req_valid : up_dma_req_valid;
 assign up_dma_req_ready = up_use_hwdesc == 1'b1 ? dma_sg_in_req_ready : dma_2d_req_ready;
 
+assign up_req_arb_enable = up_enable || !dma_sg_in_req_ready;
+
 dmac_sg #(
 	.C_DMA_LENGTH_WIDTH(C_DMA_LENGTH_WIDTH),
 	.C_BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
@@ -552,6 +555,8 @@ dmac_sg #(
 ) i_dmac_sg (
 	.req_aclk(s_axi_aclk),
 	.req_aresetn(s_axi_aresetn),
+
+	.req_enable(up_enable),
 
 	.req_in_valid(dma_sg_in_req_valid),
 	.req_in_ready(dma_sg_in_req_ready),
@@ -625,6 +630,7 @@ assign dma_req_dest_address = up_dma_dest_address;
 assign dma_req_src_address = up_dma_src_address;
 assign dma_req_length = up_dma_x_length;
 assign dma_req_sync_transfer_start = up_dma_sync_transfer_start;
+assign up_req_arb_enable = up_enable;
 
 end endgenerate
 
@@ -647,7 +653,7 @@ dmac_request_arb #(
 	.req_aclk(s_axi_aclk),
 	.req_aresetn(s_axi_aresetn),
 
-	.enable(up_enable),
+	.enable(up_req_arb_enable),
 	.pause(up_pause),
 
 	.req_valid(dma_req_valid),
