@@ -103,7 +103,7 @@ end
 always @(posedge clk) begin
   if (addr_valid == 1'b0) begin
     if (eot == 1'b1)
-      length <= req_last_burst_length;
+      length <= last_burst_len;
     else
       length <= MAX_BEATS_PER_BURST - 1;
   end
@@ -130,6 +130,7 @@ always @(posedge clk) begin
 			if (req_valid && enable) begin
 				address <= req_address;
 				req_ready <= 1'b0;
+				last_burst_len <= req_last_burst_length;
 			end
 		end else begin
 			if (addr_valid && addr_ready) begin
