@@ -146,7 +146,7 @@ module up_dac_common (
 
   // internal registers
 
-  reg             up_preset = 'd0;
+  reg             up_core_preset = 'd0;
   reg             up_mmcm_preset = 'd0;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
@@ -201,7 +201,7 @@ module up_dac_common (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_preset <= 1'd1;
+      up_core_preset <= 1'd1;
       up_mmcm_preset <= 1'd1;
       up_wack <= 'd0;
       up_scratch <= 'd0;
@@ -226,7 +226,7 @@ module up_dac_common (
       up_usr_chanmax <= 'd0;
       up_dac_gpio_out <= 'd0;
     end else begin
-      up_preset <= 1'd0;
+      up_core_preset <= 1'd0;
       up_mmcm_preset <= ~up_mmcm_resetn;
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
@@ -336,8 +336,8 @@ module up_dac_common (
 
   // resets
 
-  ad_rst i_mmcm_rst_reg   (.preset(up_mmcm_preset), .clk(up_clk),     .rst(mmcm_rst));
-  ad_rst i_dac_rst_reg    (.preset(up_preset),      .clk(dac_clk),    .rst(dac_rst));
+  ad_rst i_mmcm_rst_reg (.preset(up_mmcm_preset), .clk(up_clk),  .rst(mmcm_rst));
+  ad_rst i_core_rst_reg (.preset(up_core_preset), .clk(dac_clk), .rst(dac_rst));
 
   // dac control & status
 
