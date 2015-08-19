@@ -38,19 +38,19 @@ set_parameter_property DEVICE_TYPE TYPE INTEGER
 set_parameter_property DEVICE_TYPE UNITS None
 set_parameter_property DEVICE_TYPE HDL_PARAMETER true
 
-add_parameter PCORE_NUM_OF_TX_LANES INTEGER 0
-set_parameter_property PCORE_NUM_OF_TX_LANES DEFAULT_VALUE 4
-set_parameter_property PCORE_NUM_OF_TX_LANES DISPLAY_NAME PCORE_NUM_OF_TX_LANES
-set_parameter_property PCORE_NUM_OF_TX_LANES TYPE INTEGER
-set_parameter_property PCORE_NUM_OF_TX_LANES UNITS None
-set_parameter_property PCORE_NUM_OF_TX_LANES HDL_PARAMETER true
+add_parameter TX_NUM_OF_LANES INTEGER 0
+set_parameter_property TX_NUM_OF_LANES DEFAULT_VALUE 4
+set_parameter_property TX_NUM_OF_LANES DISPLAY_NAME TX_NUM_OF_LANES
+set_parameter_property TX_NUM_OF_LANES TYPE INTEGER
+set_parameter_property TX_NUM_OF_LANES UNITS None
+set_parameter_property TX_NUM_OF_LANES HDL_PARAMETER true
 
-add_parameter PCORE_NUM_OF_RX_LANES INTEGER 0
-set_parameter_property PCORE_NUM_OF_RX_LANES DEFAULT_VALUE 4
-set_parameter_property PCORE_NUM_OF_RX_LANES DISPLAY_NAME PCORE_NUM_OF_RX_LANES
-set_parameter_property PCORE_NUM_OF_RX_LANES TYPE INTEGER
-set_parameter_property PCORE_NUM_OF_RX_LANES UNITS None
-set_parameter_property PCORE_NUM_OF_RX_LANES HDL_PARAMETER true
+add_parameter RX_NUM_OF_LANES INTEGER 0
+set_parameter_property RX_NUM_OF_LANES DEFAULT_VALUE 4
+set_parameter_property RX_NUM_OF_LANES DISPLAY_NAME RX_NUM_OF_LANES
+set_parameter_property RX_NUM_OF_LANES TYPE INTEGER
+set_parameter_property RX_NUM_OF_LANES UNITS None
+set_parameter_property RX_NUM_OF_LANES HDL_PARAMETER true
 
 # axi4 slave
 
@@ -93,15 +93,15 @@ ad_alt_intf reset-n rx_rstn             output  1 if_rx_clk s_axi_reset
 ad_alt_intf signal  rx_ext_sysref_in    input   1
 ad_alt_intf signal  rx_ext_sysref_out   output  1
 ad_alt_intf signal  rx_sync             output  1
-ad_alt_intf signal  rx_sof              output  PCORE_NUM_OF_RX_LANES
-ad_alt_intf signal  rx_data             output  PCORE_NUM_OF_RX_LANES*32  data
-ad_alt_intf signal  rx_ready            input   PCORE_NUM_OF_RX_LANES rx_ready
+ad_alt_intf signal  rx_sof              output  RX_NUM_OF_LANES
+ad_alt_intf signal  rx_data             output  RX_NUM_OF_LANES*32  data
+ad_alt_intf signal  rx_ready            input   RX_NUM_OF_LANES rx_ready
 ad_alt_intf signal  rx_ip_sysref        output  1 export
 ad_alt_intf signal  rx_ip_sync          input   1 export
 ad_alt_intf signal  rx_ip_sof           input   4 export
 
 add_interface if_rx_ip_avl avalon_streaming sink
-add_interface_port if_rx_ip_avl rx_ip_data  data  input PCORE_NUM_OF_RX_LANES*32
+add_interface_port if_rx_ip_avl rx_ip_data  data  input RX_NUM_OF_LANES*32
 add_interface_port if_rx_ip_avl rx_ip_valid valid input 1
 add_interface_port if_rx_ip_avl rx_ip_ready ready output 1
 
@@ -110,20 +110,20 @@ ad_alt_intf reset-n tx_rstn             output  1 if_tx_clk s_axi_reset
 ad_alt_intf signal  tx_ext_sysref_in    input   1
 ad_alt_intf signal  tx_ext_sysref_out   output  1
 ad_alt_intf signal  tx_sync             input   1
-ad_alt_intf signal  tx_data             input   PCORE_NUM_OF_TX_LANES*32  data
-ad_alt_intf signal  tx_ready            input   PCORE_NUM_OF_TX_LANES tx_ready
+ad_alt_intf signal  tx_data             input   TX_NUM_OF_LANES*32  data
+ad_alt_intf signal  tx_ready            input   TX_NUM_OF_LANES tx_ready
 ad_alt_intf signal  tx_ip_sysref        output  1 export
 ad_alt_intf signal  tx_ip_sync          output  1 export
 
 add_interface if_tx_ip_avl avalon_streaming source
-add_interface_port if_tx_ip_avl tx_ip_data  data  output PCORE_NUM_OF_TX_LANES*32
+add_interface_port if_tx_ip_avl tx_ip_data  data  output TX_NUM_OF_LANES*32
 add_interface_port if_tx_ip_avl tx_ip_valid valid output 1
 add_interface_port if_tx_ip_avl tx_ip_ready ready input 1
 
 proc p_axi_jesd_xcvr {} {
 
-  set p_num_of_rx_lanes [get_parameter_value "PCORE_NUM_OF_RX_LANES"]
-  set p_num_of_tx_lanes [get_parameter_value "PCORE_NUM_OF_TX_LANES"]
+  set p_num_of_rx_lanes [get_parameter_value "RX_NUM_OF_LANES"]
+  set p_num_of_tx_lanes [get_parameter_value "TX_NUM_OF_LANES"]
 
   set_interface_property if_rx_ip_avl associatedClock if_rx_clk
   set_interface_property if_rx_ip_avl associatedReset if_rx_rstn
