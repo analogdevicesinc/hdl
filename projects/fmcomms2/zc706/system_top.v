@@ -92,8 +92,8 @@ module system_top (
 
   enable,
   txnrx,
-  tdd_sync_req,
-  tdd_sync_ack,
+  tdd_sync_out,
+  tdd_sync_in,
 
   gpio_muxout_tx,
   gpio_muxout_rx,
@@ -164,8 +164,8 @@ module system_top (
 
   output          enable;
   output          txnrx;
-  inout           tdd_sync_req;
-  inout           tdd_sync_ack;
+  output          tdd_sync_out;
+  input           tdd_sync_in;
 
   inout           gpio_muxout_tx;
   inout           gpio_muxout_rx;
@@ -242,6 +242,11 @@ module system_top (
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
+
+  //========================================================
+  // debug syncronization pulses
+
+  //========================================================
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -321,8 +326,8 @@ module system_top (
     .tx_frame_out_p (tx_frame_out_p),
     .txnrx (txnrx_s),
     .tdd_enabled (tdd_enabled_s),
-    .tdd_sync_req(tdd_sync_req),
-    .tdd_sync_ack(tdd_sync_ack));
+    .tdd_sync_out(tdd_sync_out),
+    .tdd_sync_in(tdd_sync_in));
 
 endmodule
 

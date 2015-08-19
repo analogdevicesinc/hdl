@@ -60,8 +60,8 @@ module axi_ad9361_tdd (
 
   // sync signals
 
-  tdd_sync_req,
-  tdd_sync_ack,
+  tdd_sync_out,
+  tdd_sync_in,
 
   // tx/rx data flow control
 
@@ -114,8 +114,8 @@ module axi_ad9361_tdd (
   output            tdd_enabled;
   input   [ 7:0]    tdd_status;
 
-  inout             tdd_sync_req;
-  inout             tdd_sync_ack;
+  output            tdd_sync_out;
+  input             tdd_sync_in;
 
   // tx data flow control
 
@@ -157,7 +157,6 @@ module axi_ad9361_tdd (
   output  [41:0]    tdd_dbg;
 
   reg               tdd_slave_synced = 1'b0;
-  reg               tdd_sync_o = 1'b0;
 
   // internal signals
 
@@ -174,6 +173,7 @@ module axi_ad9361_tdd (
   wire    [23:0]    tdd_frame_length_s;
   wire              tdd_terminal_type_s;
   wire              tdd_sync_enable_s;
+  wire    [31:0]    tdd_sync_period_s;
   wire    [23:0]    tdd_vco_rx_on_1_s;
   wire    [23:0]    tdd_vco_rx_off_1_s;
   wire    [23:0]    tdd_vco_tx_on_1_s;
@@ -194,12 +194,13 @@ module axi_ad9361_tdd (
   wire    [23:0]    tdd_tx_off_2_s;
   wire    [23:0]    tdd_tx_dp_on_2_s;
   wire    [23:0]    tdd_tx_dp_off_2_s;
+  wire              tdd_resync_s;
 
   wire    [23:0]    tdd_counter_status;
 
   wire              tdd_tx_dp_en_s;
 
-  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_tx_dp_en_s,
+  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_enable_synced_s, tdd_tx_dp_en_s,
                     tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
 
   // tx/rx data flow control
@@ -240,6 +241,7 @@ module axi_ad9361_tdd (
     .tdd_frame_length(tdd_frame_length_s),
     .tdd_terminal_type(tdd_terminal_type_s),
     .tdd_sync_enable(tdd_sync_enable_s),
+    .tdd_sync_period(tdd_sync_period_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),
@@ -282,6 +284,7 @@ module axi_ad9361_tdd (
     .tdd_burst_count(tdd_burst_count_s),
     .tdd_rx_only(tdd_rx_only_s),
     .tdd_tx_only(tdd_tx_only_s),
+    .tdd_resync (tdd_resync_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),
@@ -312,13 +315,14 @@ module axi_ad9361_tdd (
   ad_tdd_sync i_tdd_sync (
     .clk(clk),
     .rst(rst),
-    .tdd_sync_en(tdd_sync_enable_s),
-    .tdd_term_type(tdd_terminal_type_s),
-    .tdd_enable_in(tdd_enable_s),
-    .tdd_enable_out(tdd_enable_synced_s),
-    .sync_req(tdd_sync_req),
-    .sync_ack(tdd_sync_ack),
-    .sync_dbg(tdd_sync_dbg)
+    .sync_en(tdd_sync_enable_s),
+    .device_type(tdd_terminal_type_s),
+    .sync_period(tdd_sync_period_s),
+    .enable_in(tdd_enable_s),
+    .enable_out(tdd_enable_synced_s),
+    .sync_out(tdd_sync_out),
+    .sync_in(tdd_sync_in),
+    .resync(tdd_resync_s)
   );
 
 endmodule

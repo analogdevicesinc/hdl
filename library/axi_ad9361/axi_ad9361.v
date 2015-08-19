@@ -113,8 +113,8 @@ module axi_ad9361 (
   enable,
   txnrx,
 
-  tdd_sync_req,
-  tdd_sync_ack,
+  tdd_sync_out,
+  tdd_sync_in,
 
   // axi interface
 
@@ -232,8 +232,8 @@ module axi_ad9361 (
   output          enable;
   output          txnrx;
 
-  inout           tdd_sync_req;
-  inout           tdd_sync_ack;
+  output          tdd_sync_out;
+  input           tdd_sync_in;
 
   // axi interface
 
@@ -409,8 +409,8 @@ module axi_ad9361 (
     .tdd_tx_rf_en(tdd_tx_rf_en_s),
     .tdd_enabled (tdd_enabled),
     .tdd_status(tdd_status_s),
-    .tdd_sync_req(tdd_sync_req),
-    .tdd_sync_ack(tdd_sync_ack),
+    .tdd_sync_out(tdd_sync_out),
+    .tdd_sync_in(tdd_sync_in),
     .tx_valid_i0(dac_valid_i0_s),
     .tx_valid_q0(dac_valid_q0_s),
     .tx_valid_i1(dac_valid_i1_s),

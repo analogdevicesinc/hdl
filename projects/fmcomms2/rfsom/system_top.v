@@ -109,8 +109,8 @@ module system_top (
   tx_data_out_n,
   enable,
   txnrx,
-  tdd_sync_req,
-  tdd_sync_ack,
+  tdd_sync_out,
+  tdd_sync_in,
 
   gpio_rf0,
   gpio_rf1,
@@ -198,8 +198,8 @@ module system_top (
   output  [ 5:0]  tx_data_out_n;
   output          enable;
   output          txnrx;
-  inout           tdd_sync_req;
-  inout           tdd_sync_ack;
+  output          tdd_sync_out;
+  input           tdd_sync_in;
 
   inout           gpio_rf0;
   inout           gpio_rf1;
@@ -364,8 +364,8 @@ module system_top (
     .tx_frame_out_p (tx_frame_out_p),
     .txnrx (txnrx_s),
     .tdd_enabled (tdd_enabled_s),
-    .tdd_sync_req (tdd_sync_req),
-    .tdd_sync_ack (tdd_sync_ack));
+    .tdd_sync_out (tdd_sync_out),
+    .tdd_sync_in (tdd_sync_in));
 
 endmodule
 

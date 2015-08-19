@@ -19,8 +19,8 @@ create_bd_port -dir O enable
 create_bd_port -dir O txnrx
 create_bd_port -dir O tdd_enabled
 
-create_bd_port -dir IO tdd_sync_req
-create_bd_port -dir IO tdd_sync_ack
+create_bd_port -dir O tdd_sync_out
+create_bd_port -dir I tdd_sync_in
 
 # ad9361 core
 
@@ -139,8 +139,8 @@ ad_connect  util_ad9361_dac_upack/dac_data_3 axi_ad9361/dac_data_q1
 ad_connect  util_ad9361_dac_upack/dac_valid axi_ad9361_dac_dma/fifo_rd_en
 ad_connect  util_ad9361_dac_upack/dac_data axi_ad9361_dac_dma/fifo_rd_dout
 ad_connect  axi_ad9361_dac_dma/fifo_rd_underflow axi_ad9361/dac_dunf
-ad_connect  tdd_sync_req axi_ad9361/tdd_sync_req
-ad_connect  tdd_sync_ack axi_ad9361/tdd_sync_ack
+ad_connect  tdd_sync_out axi_ad9361/tdd_sync_out
+ad_connect  tdd_sync_in axi_ad9361/tdd_sync_in
 
 ad_connect  tdd_enabled axi_ad9361/tdd_enabled
 

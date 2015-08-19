@@ -75,6 +75,7 @@ module ad_tdd_control(
   tdd_tx_off_2,
   tdd_tx_dp_on_2,
   tdd_tx_dp_off_2,
+  tdd_resync,
 
   // TDD control signals
 
@@ -123,6 +124,7 @@ module ad_tdd_control(
   input  [23:0]   tdd_tx_off_2;
   input  [23:0]   tdd_tx_dp_on_2;
   input  [23:0]   tdd_tx_dp_off_2;
+  input           tdd_resync;
 
   output          tdd_tx_dp_en;       // initiate vco tx2rx switch
   output          tdd_rx_vco_en;      // initiate vco rx2tx switch
@@ -206,6 +208,11 @@ module ad_tdd_control(
         tdd_burst_counter <= tdd_burst_count;
         tdd_counter_state <= ON;
       end else
+
+      // resync slave to master
+      if (tdd_resync == 1'b1) begin
+        tdd_counter <= 24'b0;
+      end
 
       // free running counter
       if (tdd_counter_state == ON) begin
