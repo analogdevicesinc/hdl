@@ -90,9 +90,10 @@ set_location_assignment PIN_AN19  -to spi_dir               ; ## G13  FMCA_LA08_
 
 # disable auto-pack
 
-set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_cntrl
-set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_status
-set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xcvr
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -entity up_xfer_cntrl
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -entity up_xfer_status
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -entity up_xcvr
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -entity ad_rst
 
 execute_flow -compile
 
