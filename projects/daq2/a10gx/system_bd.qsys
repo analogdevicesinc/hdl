@@ -27,6 +27,11 @@
    }
    element a10gx_base.sys_mem_s_avl
    {
+      datum _lockedAddress
+      {
+         value = "1";
+         type = "boolean";
+      }
       datum baseAddress
       {
          value = "0";
@@ -87,6 +92,14 @@
       {
          value = "0";
          type = "int";
+      }
+   }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
       }
    }
    element system_bd
@@ -434,7 +447,7 @@
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
   <parameter name="AUTO_MEM_CLK_CLOCK_DOMAIN" value="1" />
-  <parameter name="AUTO_MEM_CLK_CLOCK_RATE" value="166666650" />
+  <parameter name="AUTO_MEM_CLK_CLOCK_RATE" value="133332500" />
   <parameter name="AUTO_MEM_CLK_RESET_DOMAIN" value="1" />
   <parameter name="AUTO_RX_REF_CLK_CLOCK_DOMAIN" value="6" />
   <parameter name="AUTO_RX_REF_CLK_CLOCK_RATE" value="0" />
