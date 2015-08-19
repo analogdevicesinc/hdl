@@ -638,16 +638,16 @@
    type="conduit"
    dir="end" />
  <module name="axi_ad9144_core" kind="axi_ad9144" version="1.0" enabled="1">
-  <parameter name="PCORE_ID" value="0" />
-  <parameter name="PCORE_QUAD_DUAL_N" value="0" />
+  <parameter name="ID" value="0" />
+  <parameter name="QUAD_OR_DUAL_N" value="0" />
  </module>
  <module name="axi_ad9144_dma" kind="axi_dmac" version="1.0" enabled="1">
+  <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
+  <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
+  <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
   <parameter name="C_2D_TRANSFER" value="1" />
   <parameter name="C_AXI_SLICE_DEST" value="0" />
   <parameter name="C_AXI_SLICE_SRC" value="0" />
-  <parameter name="C_CLKS_ASYNC_DEST_REQ" value="1" />
-  <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
-  <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
   <parameter name="C_CYCLIC" value="1" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="128" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="128" />
@@ -656,18 +656,18 @@
   <parameter name="C_DMA_TYPE_SRC" value="0" />
   <parameter name="C_FIFO_SIZE" value="4" />
   <parameter name="C_SYNC_TRANSFER_START" value="0" />
-  <parameter name="PCORE_ID" value="1" />
+  <parameter name="ID" value="0" />
  </module>
  <module name="axi_ad9680_core" kind="axi_ad9680" version="1.0" enabled="1">
-  <parameter name="PCORE_ID" value="0" />
+  <parameter name="ID" value="0" />
  </module>
  <module name="axi_ad9680_dma" kind="axi_dmac" version="1.0" enabled="1">
+  <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
+  <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
+  <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
   <parameter name="C_2D_TRANSFER" value="1" />
   <parameter name="C_AXI_SLICE_DEST" value="0" />
   <parameter name="C_AXI_SLICE_SRC" value="0" />
-  <parameter name="C_CLKS_ASYNC_DEST_REQ" value="1" />
-  <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
-  <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
   <parameter name="C_CYCLIC" value="1" />
   <parameter name="C_DMA_DATA_WIDTH_DEST" value="128" />
   <parameter name="C_DMA_DATA_WIDTH_SRC" value="128" />
@@ -676,13 +676,13 @@
   <parameter name="C_DMA_TYPE_SRC" value="2" />
   <parameter name="C_FIFO_SIZE" value="4" />
   <parameter name="C_SYNC_TRANSFER_START" value="0" />
-  <parameter name="PCORE_ID" value="0" />
+  <parameter name="ID" value="0" />
  </module>
  <module name="axi_jesd_xcvr" kind="axi_jesd_xcvr" version="1.0" enabled="1">
-  <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_ID" value="0" />
-  <parameter name="PCORE_NUM_OF_RX_LANES" value="4" />
-  <parameter name="PCORE_NUM_OF_TX_LANES" value="4" />
+  <parameter name="DEVICE_TYPE" value="0" />
+  <parameter name="ID" value="0" />
+  <parameter name="RX_NUM_OF_LANES" value="4" />
+  <parameter name="TX_NUM_OF_LANES" value="4" />
  </module>
  <module name="mem_clk" kind="altera_clock_bridge" version="15.0" enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
@@ -709,12 +709,12 @@
   <parameter name="USE_RESET_REQUEST" value="0" />
  </module>
  <module name="util_cpack_0" kind="util_cpack" version="1.0" enabled="1">
-  <parameter name="CH_CNT" value="2" />
-  <parameter name="CH_DW" value="64" />
+  <parameter name="CHANNEL_DATA_WIDTH" value="64" />
+  <parameter name="NUM_OF_CHANNELS" value="2" />
  </module>
  <module name="util_upack_0" kind="util_upack" version="1.0" enabled="1">
-  <parameter name="CH_CNT" value="2" />
-  <parameter name="CH_DW" value="64" />
+  <parameter name="CHANNEL_DATA_WIDTH" value="64" />
+  <parameter name="NUM_OF_CHANNELS" value="2" />
  </module>
  <module name="xcvr_core" kind="altera_jesd204" version="15.0" enabled="1">
   <parameter name="ADJCNT" value="0" />
