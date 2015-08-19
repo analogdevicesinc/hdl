@@ -201,12 +201,12 @@ module axi_ad9671_if (
       adc_raddr_out   <= 4'h8;
       adc_sync_status <= 1'b0;
     end else begin
-      if (adc_data_a_s == adc_start_code[15:0] && adc_sync_status == 1'b1) begin
+      if (adc_data_d_s == adc_start_code[15:0] && adc_sync_status == 1'b1) begin
         adc_sync_status <= 1'b0;
       end else if(adc_sync_s == 1'b1) begin
         adc_sync_status <= 1'b1;
       end
-      if (adc_data_a_s == adc_start_code[15:0] && adc_sync_status == 1'b1) begin
+      if (adc_data_d_s == adc_start_code[15:0] && adc_sync_status == 1'b1) begin
         adc_waddr       <= 4'h0;
         adc_raddr_out   <= 4'h8;
       end else if (int_valid == 1'b1) begin
