@@ -22,7 +22,7 @@ for {set i 0} {$i < 8} {incr i} {
 	foreach port {"dac_enable" "dac_valid" "dac_data"} {
 		set name [format "%s_%.2d" $port $i]
 		set_property ENABLEMENT_DEPENDENCY \
-		"(spirit:decode(id('MODELPARAM_VALUE.CHANNELS')) > $i)" \
+		"(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > $i)" \
 		[ipx::get_ports $name]
 	}
 	foreach port {"dac_enable" "dac_valid"} {

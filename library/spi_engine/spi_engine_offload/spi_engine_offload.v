@@ -38,21 +38,21 @@ module spi_engine_offload (
 	output [7:0] offload_sdi_data
 );
 
-parameter SPI_CLK_ASYNC = 0;
-parameter CMD_MEM_ADDR_WIDTH = 4;
-parameter SDO_MEM_ADDR_WIDTH = 4;
+parameter ASYNC_SPI_CLK = 0;
+parameter CMD_MEM_ADDRESS_WIDTH = 4;
+parameter SDO_MEM_ADDRESS_WIDTH = 4;
 
 reg spi_active = 1'b0;
 
-reg [CMD_MEM_ADDR_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
-reg [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
-reg [SDO_MEM_ADDR_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
-reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
 
-reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
-reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
 
-wire [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
 wire spi_enable;
 
 assign cmd_valid = spi_active;
@@ -66,7 +66,7 @@ assign offload_sdi_data = sdi_data;
 assign cmd = cmd_mem[spi_cmd_rd_addr];
 assign sdo_data = sdo_mem[spi_sdo_rd_addr];
 
-generate if (SPI_CLK_ASYNC) begin
+generate if (ASYNC_SPI_CLK) begin
 
 /*
  * The synchronization circuit takes care that there are no glitches on the
@@ -96,8 +96,8 @@ always @(posedge spi_clk) begin
 end
 
 sync_bits # (
-    .NUM_BITS(1),
-    .CLK_ASYNC(1)
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1)
 ) i_sync_enable (
     .in(ctrl_do_enable),
     .out_clk(spi_clk),
@@ -106,8 +106,8 @@ sync_bits # (
 );
 
 sync_bits # (
-    .NUM_BITS(1),
-    .CLK_ASYNC(1)
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1)
 ) i_sync_enabled (
     .in(spi_enabled),
     .out_clk(ctrl_clk),

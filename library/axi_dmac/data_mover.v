@@ -40,8 +40,8 @@ module dmac_data_mover (
 	input clk,
 	input resetn,
 
-	input [C_ID_WIDTH-1:0] request_id,
-	output [C_ID_WIDTH-1:0] response_id,
+	input [ID_WIDTH-1:0] request_id,
+	output [ID_WIDTH-1:0] response_id,
 	input sync_id,
 	input eot,
 
@@ -52,30 +52,30 @@ module dmac_data_mover (
 
 	output s_axi_ready,
 	input s_axi_valid,
-	input [C_DATA_WIDTH-1:0] s_axi_data,
+	input [DATA_WIDTH-1:0] s_axi_data,
 
 	input m_axi_ready,
 	output m_axi_valid,
-	output [C_DATA_WIDTH-1:0] m_axi_data,
+	output [DATA_WIDTH-1:0] m_axi_data,
 	output m_axi_last,
 
 	input req_valid,
 	output req_ready,
-	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length
+	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length
 );
 
-parameter C_ID_WIDTH = 3;
-parameter C_DATA_WIDTH = 64;
-parameter C_DISABLE_WAIT_FOR_ID = 1;
-parameter C_BEATS_PER_BURST_WIDTH = 4;
-localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
+parameter ID_WIDTH = 3;
+parameter DATA_WIDTH = 64;
+parameter DISABLE_WAIT_FOR_ID = 1;
+parameter BEATS_PER_BURST_WIDTH = 4;
+localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
 
 `include "inc_id.h"
 
-reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_length = 'h00;
-reg [C_BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
-reg [C_ID_WIDTH-1:0] id = 'h00;
-reg [C_ID_WIDTH-1:0] id_next = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_length = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
+reg [ID_WIDTH-1:0] id = 'h00;
+reg [ID_WIDTH-1:0] id_next = 'h00;
 
 reg pending_burst = 1'b0;
 reg active = 1'b0;
@@ -108,7 +108,7 @@ always @(posedge clk) begin
 		if (enable) begin
 			enabled <= 1'b1;
 		end else begin
-			if (C_DISABLE_WAIT_FOR_ID == 0) begin
+			if (DISABLE_WAIT_FOR_ID == 0) begin
 				// We are not allowed to just deassert valid, so wait until the
 				// current beat has been accepted
 				if (~s_axi_valid || m_axi_ready)

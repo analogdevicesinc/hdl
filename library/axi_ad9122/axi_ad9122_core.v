@@ -106,8 +106,8 @@ module axi_ad9122_core (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   DP_DISABLE = 0;
+  parameter   ID = 0;
+  parameter   DATAPATH_DISABLE = 0;
 
   // dac interface
 
@@ -202,7 +202,7 @@ module axi_ad9122_core (
 
   // master/slave (clocks must be synchronous)
 
-  assign dac_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
+  assign dac_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
 
   // processor read interface
 
@@ -221,8 +221,8 @@ module axi_ad9122_core (
   // dac channel
 
   axi_ad9122_channel #(
-    .CHID(0),
-    .DP_DISABLE(DP_DISABLE))
+    .CHANNEL_ID(0),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
   i_channel_0 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
@@ -247,8 +247,8 @@ module axi_ad9122_core (
   // dac channel
 
   axi_ad9122_channel #(
-    .CHID(1),
-    .DP_DISABLE(DP_DISABLE))
+    .CHANNEL_ID(1),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
   i_channel_1 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
@@ -272,7 +272,7 @@ module axi_ad9122_core (
 
   // dac common processor interface
 
-  up_dac_common #(.PCORE_ID(PCORE_ID)) i_up_dac_common (
+  up_dac_common #(.ID(ID)) i_up_dac_common (
     .mmcm_rst (mmcm_rst),
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),

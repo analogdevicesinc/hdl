@@ -68,13 +68,13 @@ module axi_clkgen (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_CLKIN_PERIOD  = 5.0;
-  parameter   PCORE_VCO_DIV = 11;
-  parameter   PCORE_VCO_MUL = 49;
-  parameter   PCORE_CLK0_DIV = 6;
-  parameter   PCORE_CLK1_DIV = 6;
+  parameter   ID = 0;
+  parameter   DEVICE_TYPE = 0;
+  parameter   CLKIN_PERIOD  = 5.0;
+  parameter   VCO_DIV = 11;
+  parameter   VCO_MUL = 49;
+  parameter   CLK0_DIV = 6;
+  parameter   CLK1_DIV = 6;
 
   // clocks
 
@@ -189,12 +189,12 @@ module axi_clkgen (
   // mmcm instantiations
 
   ad_mmcm_drp #(
-    .MMCM_DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .MMCM_CLKIN_PERIOD (PCORE_CLKIN_PERIOD),
-    .MMCM_VCO_DIV (PCORE_VCO_DIV),
-    .MMCM_VCO_MUL (PCORE_VCO_MUL),
-    .MMCM_CLK0_DIV (PCORE_CLK0_DIV),
-    .MMCM_CLK1_DIV (PCORE_CLK1_DIV))
+    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
+    .MMCM_CLKIN_PERIOD (CLKIN_PERIOD),
+    .MMCM_VCO_DIV (VCO_DIV),
+    .MMCM_VCO_MUL (VCO_MUL),
+    .MMCM_CLK0_DIV (CLK0_DIV),
+    .MMCM_CLK1_DIV (CLK1_DIV))
   i_mmcm_drp (
     .clk (clk),
     .mmcm_rst (mmcm_rst),

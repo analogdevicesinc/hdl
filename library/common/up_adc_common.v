@@ -97,7 +97,7 @@ module up_adc_common (
   // parameters
 
   localparam  PCORE_VERSION = 32'h00090062;
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   // clock reset
 
@@ -298,7 +298,7 @@ module up_adc_common (
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
           8'h00: up_rdata <= PCORE_VERSION;
-          8'h01: up_rdata <= PCORE_ID;
+          8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {30'd0, up_mmcm_resetn, up_resetn};
           8'h11: up_rdata <= {28'd0, up_adc_sync, up_adc_r1_mode, up_adc_ddr_edgesel, up_adc_pin_mode};

@@ -34,7 +34,7 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// MMCM with DRP and device specific
+// MMCM_OR_BUFR_N with DRP and device specific
 
 `timescale 1ns/100ps
 

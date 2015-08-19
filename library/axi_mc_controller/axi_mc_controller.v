@@ -309,7 +309,7 @@ control_registers control_reg_inst(
     .calibrate_adcs_o(),
     .pwm_open_o(pwm_open_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(0)) adc_channel0(
+up_adc_channel #(.ADC_CHANNEL_ID(0)) adc_channel0(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_c0),
@@ -355,7 +355,7 @@ up_adc_channel #(.PCORE_ADC_CHID(0)) adc_channel0(
     .up_rdata (rdata_c0_s),
     .up_rack (rack_c0_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(1)) adc_channel1(
+up_adc_channel #(.ADC_CHANNEL_ID(1)) adc_channel1(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_c1),
@@ -401,7 +401,7 @@ up_adc_channel #(.PCORE_ADC_CHID(1)) adc_channel1(
     .up_rdata (rdata_c1_s),
     .up_rack (rack_c1_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(2)) adc_channel2(
+up_adc_channel #(.ADC_CHANNEL_ID(2)) adc_channel2(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_c2),
@@ -447,7 +447,7 @@ up_adc_channel #(.PCORE_ADC_CHID(2)) adc_channel2(
     .up_rdata (rdata_c2_s),
     .up_rack (rack_c2_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(3)) adc_channel3(
+up_adc_channel #(.ADC_CHANNEL_ID(3)) adc_channel3(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_c3),
@@ -493,7 +493,7 @@ up_adc_channel #(.PCORE_ADC_CHID(3)) adc_channel3(
     .up_rdata (rdata_c3_s),
     .up_rack (rack_c3_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(4)) adc_channel4(
+up_adc_channel #(.ADC_CHANNEL_ID(4)) adc_channel4(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_c4),
@@ -539,7 +539,7 @@ up_adc_channel #(.PCORE_ADC_CHID(4)) adc_channel4(
     .up_rdata (rdata_c4_s),
     .up_rack (rack_c4_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(5)) adc_channel5(
+up_adc_channel #(.ADC_CHANNEL_ID(5)) adc_channel5(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_c5),
@@ -585,7 +585,7 @@ up_adc_channel #(.PCORE_ADC_CHID(5)) adc_channel5(
     .up_rdata (rdata_c5_s),
     .up_rack (rack_c5_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(6)) adc_channel6(
+up_adc_channel #(.ADC_CHANNEL_ID(6)) adc_channel6(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_c6),
@@ -631,7 +631,7 @@ up_adc_channel #(.PCORE_ADC_CHID(6)) adc_channel6(
     .up_rdata (rdata_c6_s),
     .up_rack (rack_c6_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(7)) adc_channel7(
+up_adc_channel #(.ADC_CHANNEL_ID(7)) adc_channel7(
     .adc_clk(ref_clk),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_c7),

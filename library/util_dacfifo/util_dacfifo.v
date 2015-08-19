@@ -59,7 +59,7 @@ module util_dacfifo (
 );
 
   // depth of the FIFO
-  parameter       ADDR_WIDTH = 6;
+  parameter       ADDRESS_WIDTH = 6;
   parameter       DATA_WIDTH = 128;
 
   // local parameters
@@ -84,14 +84,14 @@ module util_dacfifo (
 
   // internal registers
 
-  reg     [(ADDR_WIDTH-1):0]                    dma_waddr = 'b0;
-  reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr = 'b0;
-  reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr_d = 'b0;
-  reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr_2d = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]                    dma_waddr = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]                    dma_lastaddr = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]                    dma_lastaddr_d = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]                    dma_lastaddr_2d = 'b0;
   reg                                           dma_xfer_req_ff = 1'b0;
   reg                                           dma_ready = 1'b0;
 
-  reg     [(ADDR_WIDTH-1):0]                    dac_raddr = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]                    dac_raddr = 'b0;
   reg     [(DATA_WIDTH-1):0]                    dac_data = 'b0;
 
   // internal wires
@@ -112,7 +112,7 @@ module util_dacfifo (
   always @(posedge dma_clk) begin
     if(dma_rst == 1'b1) begin
       dma_waddr <= 'b0;
-      dma_lastaddr <= {ADDR_WIDTH{1'b1}};
+      dma_lastaddr <= {ADDRESS_WIDTH{1'b1}};
     end else begin
       if (dma_valid && dma_xfer_req) begin
         dma_waddr <= dma_waddr + 1;
@@ -146,7 +146,7 @@ module util_dacfifo (
   // memory instantiation
 
   ad_mem #(
-    .ADDR_WIDTH (ADDR_WIDTH),
+    .ADDRESS_WIDTH (ADDRESS_WIDTH),
     .DATA_WIDTH (DATA_WIDTH))
   i_mem_fifo (
     .clka (dma_clk),

@@ -22,21 +22,21 @@ set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9152_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9152_jesd
 
 set axi_ad9152_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9152_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9152_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {1}] $axi_ad9152_dma
-set_property -dict [list CONFIG.PCORE_ID {1}] $axi_ad9152_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9152_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9152_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9152_dma
-set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9152_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9152_dma
-set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9152_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}] $axi_ad9152_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9152_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9152_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9152_dma
+set_property -dict [list CONFIG.ID {1}] $axi_ad9152_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9152_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9152_dma
+set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9152_dma
+set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9152_dma
+set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9152_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9152_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9152_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9152_dma
 
 set axi_ad9152_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 axi_ad9152_upack]
-set_property -dict [list CONFIG.CH_DW {64}] $axi_ad9152_upack
-set_property -dict [list CONFIG.CH_CNT {2}] $axi_ad9152_upack
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9152_upack
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9152_upack
 
 # adc peripherals
 
@@ -47,22 +47,22 @@ set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
 
 set axi_ad9680_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9680_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.ID {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9680_dma
+set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9680_dma
+set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9680_dma
 
 set axi_ad9680_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 axi_ad9680_cpack]
-set_property -dict [list CONFIG.CH_DW {64}] $axi_ad9680_cpack
-set_property -dict [list CONFIG.CH_CNT {2}] $axi_ad9680_cpack
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9680_cpack
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9680_cpack
 
 # dac/adc common gt
 
@@ -76,16 +76,16 @@ set_property -dict [list CONFIG.PCORE_TX_LANE_SEL_3 {2}] $axi_daq3_gt
 
 # connections (gt)
 
-ad_connect  axi_daq3_gt/ref_clk_q rx_ref_clk   
-ad_connect  axi_daq3_gt/ref_clk_c tx_ref_clk   
-ad_connect  axi_daq3_gt/rx_data_p rx_data_p 
-ad_connect  axi_daq3_gt/rx_data_n rx_data_n   
-ad_connect  axi_daq3_gt/rx_sync rx_sync   
-ad_connect  axi_daq3_gt/rx_ext_sysref rx_sysref   
-ad_connect  axi_daq3_gt/tx_data_p tx_data_p   
-ad_connect  axi_daq3_gt/tx_data_n tx_data_n   
-ad_connect  axi_daq3_gt/tx_sync tx_sync   
-ad_connect  axi_daq3_gt/tx_ext_sysref tx_sysref   
+ad_connect  axi_daq3_gt/ref_clk_q rx_ref_clk
+ad_connect  axi_daq3_gt/ref_clk_c tx_ref_clk
+ad_connect  axi_daq3_gt/rx_data_p rx_data_p
+ad_connect  axi_daq3_gt/rx_data_n rx_data_n
+ad_connect  axi_daq3_gt/rx_sync rx_sync
+ad_connect  axi_daq3_gt/rx_ext_sysref rx_sysref
+ad_connect  axi_daq3_gt/tx_data_p tx_data_p
+ad_connect  axi_daq3_gt/tx_data_n tx_data_n
+ad_connect  axi_daq3_gt/tx_sync tx_sync
+ad_connect  axi_daq3_gt/tx_ext_sysref tx_sysref
 
 # connections (dac)
 
@@ -163,7 +163,7 @@ ad_connect  axi_ad9680_core/adc_data_0 axi_ad9680_cpack/adc_data_0
 ad_connect  axi_ad9680_core/adc_enable_1 axi_ad9680_cpack/adc_enable_1
 ad_connect  axi_ad9680_core/adc_valid_1 axi_ad9680_cpack/adc_valid_1
 ad_connect  axi_ad9680_core/adc_data_1 axi_ad9680_cpack/adc_data_1
-ad_connect  axi_daq3_gt/rx_rst axi_ad9680_fifo/adc_rst 
+ad_connect  axi_daq3_gt/rx_rst axi_ad9680_fifo/adc_rst
 ad_connect  axi_daq3_gt/rx_rst axi_ad9680_cpack/adc_rst
 ad_connect  axi_ad9680_core/adc_clk axi_ad9680_fifo/adc_clk
 ad_connect  axi_ad9680_core/adc_dovf axi_ad9680_fifo/adc_wovf
@@ -201,6 +201,6 @@ ad_mem_hp2_interconnect sys_cpu_clk axi_ad9680_dma/m_dest_axi
 
 # interrupts
 
-ad_cpu_interrupt ps-12 mb-13 axi_ad9152_dma/irq 
-ad_cpu_interrupt ps-13 mb-12 axi_ad9680_dma/irq 
+ad_cpu_interrupt ps-12 mb-13 axi_ad9152_dma/irq
+ad_cpu_interrupt ps-13 mb-12 axi_ad9680_dma/irq
 

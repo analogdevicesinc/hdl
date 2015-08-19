@@ -57,7 +57,7 @@ module axi_ad9361_rx_pnmon (
 
   // parameters
 
-  parameter   IQSEL     = 0;
+  parameter   Q_OR_I_N     = 0;
   parameter   PRBS_SEL  = 0;
   localparam  PRBS_P09  = 0;
   localparam  PRBS_P11  = 1;
@@ -255,8 +255,8 @@ module axi_ad9361_rx_pnmon (
 
   // device specific, assuming lower nibble is lost-
 
-  assign adc_pn0_data_i_s = (IQSEL == 1) ? adc_data_q : adc_data_i;
-  assign adc_pn0_data_q_s = (IQSEL == 1) ? adc_data_i : adc_data_q;
+  assign adc_pn0_data_i_s = (Q_OR_I_N == 1) ? adc_data_q : adc_data_i;
+  assign adc_pn0_data_q_s = (Q_OR_I_N == 1) ? adc_data_i : adc_data_q;
   assign adc_pn0_data_q_rev_s = brfn(adc_pn0_data_q_s);
   assign adc_pn0_data_s = {adc_pn0_data_i_s, adc_pn0_data_q_rev_s[3:0]};
   assign adc_pn0_iq_match_s = (adc_pn0_data_i_s[7:0] == adc_pn0_data_q_rev_s[11:4]) ? 1'b1 : 1'b0;

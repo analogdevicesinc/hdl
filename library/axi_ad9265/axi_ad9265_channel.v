@@ -73,8 +73,8 @@ module axi_ad9265_channel (
 
   // parameters
 
-  parameter CHID = 0;
-  parameter DP_DISABLE = 0;
+  parameter CHANNEL_ID = 0;
+  parameter DATAPATH_DISABLE = 0;
 
   // adc interface
 
@@ -128,7 +128,7 @@ module axi_ad9265_channel (
     .adc_pnseq_sel (adc_pnseq_sel_s));
 
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign adc_dfmt_data_s = adc_data;
   end else begin
   ad_datafmt #(.DATA_WIDTH(16)) i_ad_datafmt (
@@ -144,7 +144,7 @@ module axi_ad9265_channel (
   endgenerate
 
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign adc_dcfilter_data_out = adc_dfmt_data_s;
   end else begin
   ad_dcfilter i_ad_dcfilter (
@@ -159,7 +159,7 @@ module axi_ad9265_channel (
   end
   endgenerate
 
-  up_adc_channel #(.PCORE_ADC_CHID(CHID)) i_up_adc_channel (
+  up_adc_channel #(.ADC_CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),

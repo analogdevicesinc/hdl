@@ -146,7 +146,7 @@ module ad_gt_channel_1 (
   // parameters
 
   parameter   integer ID = 0;
-  parameter   integer GTH_GTX_N = 0;
+  parameter   integer GTH_OR_GTX_N = 0;
   parameter   [31:0]  PMA_RSV = 32'h00018480;
   parameter   integer CPLL_FBDIV = 2;
   parameter   integer RX_OUT_DIV = 1;
@@ -320,7 +320,7 @@ module ad_gt_channel_1 (
     .rx_data (rx_data));
 
   ad_gt_channel #(
-    .GTH_GTX_N (GTH_GTX_N),
+    .GTH_OR_GTX_N (GTH_OR_GTX_N),
     .PMA_RSV (PMA_RSV),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -380,7 +380,7 @@ module ad_gt_channel_1 (
     .up_drp_rxrate (up_drp_rxrate_s));
 
   ad_gt_es #(
-    .GTH_GTX_N (GTH_GTX_N))
+    .GTH_OR_GTX_N (GTH_OR_GTX_N))
   i_es (
     .lpm_dfe_n (lpm_dfe_n_s),
     .up_rstn (up_rstn),
@@ -421,7 +421,7 @@ module ad_gt_channel_1 (
 
   up_gt_channel #(
     .ID (ID),
-    .GTH_GTX_N (GTH_GTX_N))
+    .GTH_OR_GTX_N (GTH_OR_GTX_N))
   i_up (
     .pll_rst (pll_rst),
     .lpm_dfe_n (lpm_dfe_n_s),

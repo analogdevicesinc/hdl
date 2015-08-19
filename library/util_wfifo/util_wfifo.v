@@ -108,10 +108,10 @@ module util_wfifo (
   parameter   NUM_OF_CHANNELS = 4;
   parameter   DIN_DATA_WIDTH = 32;
   parameter   DOUT_DATA_WIDTH = 64;
-  parameter   DIN_ADDR_WIDTH = 8;
+  parameter   DIN_ADDRESS_WIDTH = 8;
 
   localparam  M_MEM_RATIO = DOUT_DATA_WIDTH/DIN_DATA_WIDTH;
-  localparam  ADDR_WIDTH = (DIN_ADDR_WIDTH > 4) ? DIN_ADDR_WIDTH : 4;
+  localparam  ADDRESS_WIDTH = (DIN_ADDRESS_WIDTH > 4) ? DIN_ADDRESS_WIDTH : 4;
   localparam  DATA_WIDTH = DOUT_DATA_WIDTH * NUM_OF_CHANNELS;
   localparam  T_DIN_DATA_WIDTH = DIN_DATA_WIDTH * 8;
   localparam  T_DOUT_DATA_WIDTH = DOUT_DATA_WIDTH * 8;
@@ -182,20 +182,20 @@ module util_wfifo (
   reg     [ 7:0]                      din_enable = 'd0;
   reg     [ 2:0]                      din_dcnt = 'd0;
   reg                                 din_wr = 'd0;
-  reg     [(ADDR_WIDTH-1):0]          din_waddr = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]          din_waddr = 'd0;
   reg                                 din_waddr_rel_t = 'd0;
-  reg     [(ADDR_WIDTH-1):0]          din_waddr_rel = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]          din_waddr_rel = 'd0;
   reg     [ 2:0]                      din_ovf_m = 'd0;
   reg                                 din_ovf = 'd0;
   reg     [ 2:0]                      dout_waddr_rel_t_m = 'd0;
-  reg     [(ADDR_WIDTH-1):0]          dout_waddr_rel = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]          dout_waddr_rel = 'd0;
   reg                                 dout_ovf_int = 'd0;
   reg     [ 7:0]                      dout_enable_m = 'd0;
   reg     [ 7:0]                      dout_enable = 'd0;
   reg                                 dout_rd = 'd0;
   reg                                 dout_rd_d = 'd0;
   reg     [(DATA_WIDTH-1):0]          dout_rdata_d = 'd0;
-  reg     [(ADDR_WIDTH-1):0]          dout_raddr = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]          dout_raddr = 'd0;
 
   // internal signals
 
@@ -356,7 +356,7 @@ module util_wfifo (
 
   // instantiations
 
-  ad_mem #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) i_mem (
+  ad_mem #(.ADDRESS_WIDTH(ADDRESS_WIDTH), .DATA_WIDTH(DATA_WIDTH)) i_mem (
     .clka (din_clk),
     .wea (din_wr),
     .addra (din_waddr),

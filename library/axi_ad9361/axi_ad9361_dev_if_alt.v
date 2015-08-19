@@ -96,9 +96,9 @@ module axi_ad9361_dev_if (
 
   // this parameter controls the buffer type based on the target device.
 
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_DAC_IODELAY_ENABLE = 0;
-  parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
+  parameter   DEVICE_TYPE = 0;
+  parameter   DAC_IODELAY_ENABLE = 0;
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group";
   localparam  PCORE_7SERIES = 0;
   localparam  PCORE_VIRTEX6 = 1;
 

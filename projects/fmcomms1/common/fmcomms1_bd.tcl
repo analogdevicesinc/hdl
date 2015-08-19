@@ -28,39 +28,39 @@
   set axi_ad9122 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9122:1.0 axi_ad9122]
 
   set axi_ad9122_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9122_dma]
-  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9122_dma
-  set_property -dict [list CONFIG.C_DMA_TYPE_DEST {2}] $axi_ad9122_dma
-  set_property -dict [list CONFIG.C_FIFO_SIZE {16}] $axi_ad9122_dma
-  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9122_dma
-  set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9122_dma
-  set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9122_dma
-  set_property -dict [list CONFIG.C_AXI_SLICE_SRC {1}]  $axi_ad9122_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.FIFO_SIZE {16}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.AXI_SLICE_SRC {1}]  $axi_ad9122_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9122_dma
 
   set util_upack_ad9122 [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_upack_ad9122]
-  set_property -dict [list CONFIG.CH_DW {64} CONFIG.CH_CNT {2}] $util_upack_ad9122
+  set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64} CONFIG.NUM_OF_CHANNELS {2}] $util_upack_ad9122
 
   # adc peripherals
 
   set axi_ad9643 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9643:1.0 axi_ad9643]
 
   set axi_ad9643_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9643_dma]
-  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_FIFO_SIZE {16}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_AXI_SLICE_SRC {1}]  $axi_ad9643_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.FIFO_SIZE {16}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.AXI_SLICE_SRC {1}]  $axi_ad9643_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9643_dma
 
   set util_cpack_ad9643 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_ad9643]
-  set_property -dict [list CONFIG.CH_DW {32} CONFIG.CH_CNT {2}] $util_cpack_ad9643
+  set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32} CONFIG.NUM_OF_CHANNELS {2}] $util_cpack_ad9643
 
   set util_ad9643_adc_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_wfifo:1.0 util_ad9643_adc_fifo]
   set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_ad9643_adc_fifo
-  set_property -dict [list CONFIG.DIN_ADDR_WIDTH {4}] $util_ad9643_adc_fifo
+  set_property -dict [list CONFIG.DIN_ADDRESS_WIDTH {4}] $util_ad9643_adc_fifo
   set_property -dict [list CONFIG.DIN_DATA_WIDTH {16}] $util_ad9643_adc_fifo
   set_property -dict [list CONFIG.DOUT_DATA_WIDTH {32}] $util_ad9643_adc_fifo
 

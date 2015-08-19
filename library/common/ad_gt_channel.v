@@ -104,7 +104,7 @@ module ad_gt_channel (
 
   // parameters
 
-  parameter   integer GTH_GTX_N = 0;
+  parameter   integer GTH_OR_GTX_N = 0;
   parameter   [31:0]  PMA_RSV = 32'h00018480;
   parameter   integer CPLL_FBDIV = 2;
   parameter   integer RX_OUT_DIV = 1;
@@ -248,7 +248,7 @@ module ad_gt_channel (
   assign tx_out_clk = tx_out_clk_s;
   end
 
-  if (GTH_GTX_N == 0) begin
+  if (GTH_OR_GTX_N == 0) begin
 
   assign rx_sys_clk_sel_s = rx_sys_clk_sel;
   assign tx_sys_clk_sel_s = tx_sys_clk_sel;
@@ -700,7 +700,7 @@ module ad_gt_channel (
     .TXQPISENN ());
   end
 
-  if (GTH_GTX_N == 1) begin
+  if (GTH_OR_GTX_N == 1) begin
 
   assign rx_sys_clk_sel_s = (rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
   assign tx_sys_clk_sel_s = (tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;

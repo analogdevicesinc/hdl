@@ -18,10 +18,10 @@ set_property -dict [list CONFIG.FPGA_CLOCK_MHZ {100}] $pmod_spi_core
 set pmod_spi_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 pmod_spi_dma]
 set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.PCORE_ID {0}] $pmod_spi_dma
+set_property -dict [list CONFIG.ID {0}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $pmod_spi_dma
+set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {0}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $pmod_spi_dma

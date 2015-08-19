@@ -53,38 +53,38 @@ module util_ccat (
 
   // parameters
 
-  parameter   CH_DW     = 1;
-  parameter   CH_CNT    = 8;
-  localparam  CH_MCNT   = 8;
+  parameter   CHANNEL_DATA_WIDTH     = 1;
+  parameter   NUM_OF_CHANNELS    = 8;
+  localparam  NUM_OF_CHANNELS_M   = 8;
 
   // interface
 
-  input   [(CH_DW-1):0]             data_0;
-  input   [(CH_DW-1):0]             data_1;
-  input   [(CH_DW-1):0]             data_2;
-  input   [(CH_DW-1):0]             data_3;
-  input   [(CH_DW-1):0]             data_4;
-  input   [(CH_DW-1):0]             data_5;
-  input   [(CH_DW-1):0]             data_6;
-  input   [(CH_DW-1):0]             data_7;
-  output  [((CH_CNT*CH_DW)-1):0]    ccat_data;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             data_0;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             data_1;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             data_2;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             data_3;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             data_4;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             data_5;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             data_6;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             data_7;
+  output  [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    ccat_data;
 
   // internal signals
 
-  wire    [((CH_MCNT*CH_DW)-1):0]   data_s;
+  wire    [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]   data_s;
 
   // concatenate
 
-  assign data_s[((CH_DW*1)-1):(CH_DW*0)] = data_0;
-  assign data_s[((CH_DW*2)-1):(CH_DW*1)] = data_1;
-  assign data_s[((CH_DW*3)-1):(CH_DW*2)] = data_2;
-  assign data_s[((CH_DW*4)-1):(CH_DW*3)] = data_3;
-  assign data_s[((CH_DW*5)-1):(CH_DW*4)] = data_4;
-  assign data_s[((CH_DW*6)-1):(CH_DW*5)] = data_5;
-  assign data_s[((CH_DW*7)-1):(CH_DW*6)] = data_6;
-  assign data_s[((CH_DW*8)-1):(CH_DW*7)] = data_7;
+  assign data_s[((CHANNEL_DATA_WIDTH*1)-1):(CHANNEL_DATA_WIDTH*0)] = data_0;
+  assign data_s[((CHANNEL_DATA_WIDTH*2)-1):(CHANNEL_DATA_WIDTH*1)] = data_1;
+  assign data_s[((CHANNEL_DATA_WIDTH*3)-1):(CHANNEL_DATA_WIDTH*2)] = data_2;
+  assign data_s[((CHANNEL_DATA_WIDTH*4)-1):(CHANNEL_DATA_WIDTH*3)] = data_3;
+  assign data_s[((CHANNEL_DATA_WIDTH*5)-1):(CHANNEL_DATA_WIDTH*4)] = data_4;
+  assign data_s[((CHANNEL_DATA_WIDTH*6)-1):(CHANNEL_DATA_WIDTH*5)] = data_5;
+  assign data_s[((CHANNEL_DATA_WIDTH*7)-1):(CHANNEL_DATA_WIDTH*6)] = data_6;
+  assign data_s[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*7)] = data_7;
 
-  assign ccat_data = data_s[((CH_CNT*CH_DW)-1):0];
+  assign ccat_data = data_s[((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0];
 
 endmodule
 

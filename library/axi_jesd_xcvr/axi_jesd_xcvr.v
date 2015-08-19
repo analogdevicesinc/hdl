@@ -97,8 +97,8 @@ module axi_jesd_xcvr (
   s_axi_rresp,
   s_axi_rready);
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_DEVICE_TYPE = 0;
+  parameter   ID = 0;
+  parameter   DEVICE_TYPE = 0;
   parameter   PCORE_NUM_OF_TX_LANES = 4;
   parameter   PCORE_NUM_OF_RX_LANES = 4;
 
@@ -249,8 +249,8 @@ module axi_jesd_xcvr (
   // processor
     
   up_xcvr #(
-    .PCORE_ID(PCORE_ID),
-    .PCORE_DEVICE_TYPE(PCORE_DEVICE_TYPE))
+    .ID(ID),
+    .DEVICE_TYPE(DEVICE_TYPE))
   i_up_xcvr (
     .rst (rst),
     .rx_clk (rx_clk),

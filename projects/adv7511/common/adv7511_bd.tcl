@@ -37,7 +37,7 @@ set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
 set_property -dict [list CONFIG.C_DMA_TYPE {0}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_tx_core
+set_property -dict [list CONFIG.C_S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_tx_core
 
 set axi_spdif_tx_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_spdif_tx_dma]
 set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_spdif_tx_dma

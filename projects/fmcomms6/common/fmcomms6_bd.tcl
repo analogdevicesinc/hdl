@@ -25,12 +25,12 @@ create_bd_port -dir I -from 31 -to 0 adc_ddata
 set axi_ad9652 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9652:1.0 axi_ad9652]
 
 set axi_ad9652_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9652_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9652_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9652_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9652_dma
-set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9652_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9652_dma
-set_property -dict [list CONFIG.C_FIFO_SIZE {8}] $axi_ad9652_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9652_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9652_dma
+set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9652_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9652_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9652_dma
+set_property -dict [list CONFIG.FIFO_SIZE {8}] $axi_ad9652_dma
 
 # connections (adc)
 
@@ -42,7 +42,7 @@ ad_connect  adc_or_in_p axi_ad9652/adc_or_in_p
 ad_connect  adc_or_in_n axi_ad9652/adc_or_in_n
 ad_connect  adc_data_in_p axi_ad9652/adc_data_in_p
 ad_connect  adc_data_in_n axi_ad9652/adc_data_in_n
-ad_connect  axi_ad9652/adc_clk adc_clk 
+ad_connect  axi_ad9652/adc_clk adc_clk
 ad_connect  axi_ad9652/adc_clk sys_wfifo/adc_clk
 ad_connect  axi_ad9652/adc_dovf sys_wfifo/adc_wovf
 ad_connect  sys_200m_clk sys_wfifo/dma_clk

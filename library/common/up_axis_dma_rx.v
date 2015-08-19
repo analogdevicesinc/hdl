@@ -74,7 +74,7 @@ module up_axis_dma_rx (
   // parameters
 
   localparam  PCORE_VERSION = 32'h00050063;
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   // adc interface
 
@@ -189,7 +189,7 @@ module up_axis_dma_rx (
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
           8'h00: up_rdata <= PCORE_VERSION;
-          8'h01: up_rdata <= PCORE_ID;
+          8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {31'd0, up_resetn};
           8'h20: up_rdata <= {30'd0, up_dma_stream, up_dma_start};

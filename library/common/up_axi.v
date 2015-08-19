@@ -79,8 +79,8 @@ module up_axi (
 
   // parameters
 
-  parameter   PCORE_ADDR_WIDTH = 14;
-  localparam  AW = PCORE_ADDR_WIDTH - 1;
+  parameter   ADDRESS_WIDTH = 14;
+  localparam  AW = ADDRESS_WIDTH - 1;
 
   // reset and clocks
 

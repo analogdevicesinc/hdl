@@ -84,8 +84,8 @@ module axi_ad9739a_channel (
 
   // parameters
 
-  parameter CHID = 32'h0;
-  parameter DP_DISABLE = 0;
+  parameter CHANNEL_ID = 32'h0;
+  parameter DATAPATH_DISABLE = 0;
 
   // dac interface
 
@@ -397,7 +397,7 @@ module axi_ad9739a_channel (
   end
 
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_00_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -412,7 +412,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_01_s = 16'd0;
   end else begin
   ad_dds i_dds_1 (
@@ -427,7 +427,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_02_s = 16'd0;
   end else begin
   ad_dds i_dds_2 (
@@ -442,7 +442,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_03_s = 16'd0;
   end else begin
   ad_dds i_dds_3 (
@@ -457,7 +457,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_04_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -472,7 +472,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_05_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -487,7 +487,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_06_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -502,7 +502,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_07_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -517,7 +517,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_08_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -532,7 +532,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_09_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -547,7 +547,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_10_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -562,7 +562,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_11_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -577,7 +577,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_12_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -592,7 +592,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_13_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -607,7 +607,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_14_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -622,7 +622,7 @@ module axi_ad9739a_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_15_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -638,7 +638,7 @@ module axi_ad9739a_channel (
   
   // single channel processor
 
-  up_dac_channel #(.PCORE_DAC_CHID(CHID)) i_up_dac_channel (
+  up_dac_channel #(.DAC_CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),

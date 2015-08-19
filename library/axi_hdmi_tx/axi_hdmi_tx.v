@@ -101,10 +101,10 @@ module axi_hdmi_tx (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_Cr_Cb_N = 0;
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_EMBEDDED_SYNC = 0;
+  parameter   ID = 0;
+  parameter   CR_CB_N = 0;
+  parameter   DEVICE_TYPE = 0;
+  parameter   EMBEDDED_SYNC = 0;
 
   localparam  XILINX_7SERIES = 0;
   localparam  XILINX_ULTRASCALE = 1;
@@ -326,8 +326,8 @@ module axi_hdmi_tx (
   // hdmi interface
 
   axi_hdmi_tx_core #(
-    .Cr_Cb_N(PCORE_Cr_Cb_N),
-    .EMBEDDED_SYNC(PCORE_EMBEDDED_SYNC))
+    .CR_CB_N(CR_CB_N),
+    .EMBEDDED_SYNC(EMBEDDED_SYNC))
   i_tx_core (
     .hdmi_clk (hdmi_clk),
     .hdmi_rst (hdmi_rst),
@@ -373,7 +373,7 @@ module axi_hdmi_tx (
   // hdmi output clock
 
   generate
-  if (PCORE_DEVICE_TYPE == XILINX_ULTRASCALE) begin
+  if (DEVICE_TYPE == XILINX_ULTRASCALE) begin
   ODDRE1 #(.SRVAL(1'b0)) i_clk_oddr (
     .SR (1'b0),
     .D1 (1'b1),
@@ -381,7 +381,7 @@ module axi_hdmi_tx (
     .C (hdmi_clk),
     .Q (hdmi_out_clk));
   end
-  if (PCORE_DEVICE_TYPE == ALTERA_5SERIES) begin
+  if (DEVICE_TYPE == ALTERA_5SERIES) begin
   altddio_out #(.WIDTH(1)) i_clk_oddr (
     .aclr (1'b0),
     .aset (1'b0),
@@ -395,7 +395,7 @@ module axi_hdmi_tx (
     .oe_out (),
     .dataout (hdmi_out_clk));
   end
-  if (PCORE_DEVICE_TYPE == XILINX_7SERIES) begin
+  if (DEVICE_TYPE == XILINX_7SERIES) begin
   ODDR #(.INIT(1'b0)) i_clk_oddr (
     .R (1'b0),
     .S (1'b0),

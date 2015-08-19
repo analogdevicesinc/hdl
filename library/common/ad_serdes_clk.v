@@ -63,8 +63,8 @@ module ad_serdes_clk (
 
   // parameters
 
-  parameter   SERDES = 1;
-  parameter   MMCM = 1;
+  parameter   SERDES_OR_DDR_N = 1;
+  parameter   MMCM_OR_BUFR_N = 1;
   parameter   MMCM_DEVICE_TYPE = 0;
   parameter   MMCM_CLKIN_PERIOD  = 1.667;
   parameter   MMCM_VCO_DIV  = 6;
@@ -105,7 +105,7 @@ module ad_serdes_clk (
     .O (clk_in_s));
 
   generate
-  if (MMCM == 1) begin
+  if (MMCM_OR_BUFR_N == 1) begin
   ad_mmcm_drp #(
     .MMCM_DEVICE_TYPE (MMCM_DEVICE_TYPE),
     .MMCM_CLKIN_PERIOD  (MMCM_CLKIN_PERIOD),
@@ -129,7 +129,7 @@ module ad_serdes_clk (
     .up_drp_locked (up_drp_locked));
   end
 
-  if ((MMCM == 0) && (SERDES == 0)) begin
+  if ((MMCM_OR_BUFR_N == 0) && (SERDES_OR_DDR_N == 0)) begin
   BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_buf (
     .CLR (1'b0),
     .CE (1'b1),
@@ -139,7 +139,7 @@ module ad_serdes_clk (
   assign div_clk = clk;
   end
 
-  if ((MMCM == 0) && (SERDES == 1)) begin
+  if ((MMCM_OR_BUFR_N == 0) && (SERDES_OR_DDR_N == 1)) begin
   BUFIO i_clk_buf (
     .I (clk_in_s),
     .O (clk));

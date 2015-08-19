@@ -153,12 +153,12 @@ module axi_ad9361 (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_DAC_IODELAY_ENABLE = 0;
-  parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
-  parameter   PCORE_DAC_DP_DISABLE = 0;
-  parameter   PCORE_ADC_DP_DISABLE = 0;
+  parameter   ID = 0;
+  parameter   DEVICE_TYPE = 0;
+  parameter   DAC_IODELAY_ENABLE = 0;
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group";
+  parameter   DAC_DATAPATH_DISABLE = 0;
+  parameter   ADC_DATAPATH_DISABLE = 0;
 
   // physical interface (receive)
 
@@ -346,9 +346,9 @@ module axi_ad9361 (
   // device interface
 
   axi_ad9361_dev_if #(
-    .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .PCORE_DAC_IODELAY_ENABLE (PCORE_DAC_IODELAY_ENABLE),
-    .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
+    .IO_DELAY_GROUP (IO_DELAY_GROUP))
   i_dev_if (
     .rx_clk_in_p (rx_clk_in_p),
     .rx_clk_in_n (rx_clk_in_n),
@@ -386,7 +386,7 @@ module axi_ad9361 (
 
   // TDD interface
 
-  axi_ad9361_tdd_if #(.MODE_OF_ENABLE(1)) i_tdd_if(
+  axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if(
     .clk(clk),
     .rst(rst),
     .tdd_rx_vco_en(tdd_rx_vco_en_s),
@@ -444,8 +444,8 @@ module axi_ad9361 (
   // receive
 
   axi_ad9361_rx #(
-    .PCORE_ID (PCORE_ID),
-    .DP_DISABLE (PCORE_ADC_DP_DISABLE))
+    .ID (ID),
+    .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
   i_rx (
     .adc_rst (rst),
     .adc_clk (clk),
@@ -491,8 +491,8 @@ module axi_ad9361 (
   // transmit
 
   axi_ad9361_tx #(
-    .PCORE_ID (PCORE_ID),
-    .DP_DISABLE (PCORE_DAC_DP_DISABLE))
+    .ID (ID),
+    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
   i_tx (
     .dac_clk (clk),
     .dac_valid (dac_valid_s),

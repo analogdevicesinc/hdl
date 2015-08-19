@@ -33,40 +33,40 @@ add_fileset_file axi_hdmi_tx_alt.v    VERILOG PATH axi_hdmi_tx_alt.v TOP_LEVEL_F
 
 # parameters
 
-add_parameter PCORE_ID INTEGER 0
-set_parameter_property PCORE_ID DEFAULT_VALUE 0
-set_parameter_property PCORE_ID DISPLAY_NAME PCORE_ID
-set_parameter_property PCORE_ID TYPE INTEGER
-set_parameter_property PCORE_ID UNITS None
-set_parameter_property PCORE_ID HDL_PARAMETER true
+add_parameter ID INTEGER 0
+set_parameter_property ID DEFAULT_VALUE 0
+set_parameter_property ID DISPLAY_NAME ID
+set_parameter_property ID TYPE INTEGER
+set_parameter_property ID UNITS None
+set_parameter_property ID HDL_PARAMETER true
 
-add_parameter PCORE_DEVICE_TYPE INTEGER 0
-set_parameter_property PCORE_DEVICE_TYPE DEFAULT_VALUE 16
-set_parameter_property PCORE_DEVICE_TYPE DISPLAY_NAME PCORE_DEVICE_TYPE
-set_parameter_property PCORE_DEVICE_TYPE TYPE INTEGER
-set_parameter_property PCORE_DEVICE_TYPE UNITS None
-set_parameter_property PCORE_DEVICE_TYPE HDL_PARAMETER true
+add_parameter DEVICE_TYPE INTEGER 0
+set_parameter_property DEVICE_TYPE DEFAULT_VALUE 16
+set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
+set_parameter_property DEVICE_TYPE TYPE INTEGER
+set_parameter_property DEVICE_TYPE UNITS None
+set_parameter_property DEVICE_TYPE HDL_PARAMETER true
 
-add_parameter PCORE_AXI_ID_WIDTH INTEGER 0
-set_parameter_property PCORE_AXI_ID_WIDTH DEFAULT_VALUE 3
-set_parameter_property PCORE_AXI_ID_WIDTH DISPLAY_NAME PCORE_AXI_ID_WIDTH
-set_parameter_property PCORE_AXI_ID_WIDTH TYPE INTEGER
-set_parameter_property PCORE_AXI_ID_WIDTH UNITS None
-set_parameter_property PCORE_AXI_ID_WIDTH HDL_PARAMETER true
+add_parameter AXI_ID_WIDTH INTEGER 0
+set_parameter_property AXI_ID_WIDTH DEFAULT_VALUE 3
+set_parameter_property AXI_ID_WIDTH DISPLAY_NAME AXI_ID_WIDTH
+set_parameter_property AXI_ID_WIDTH TYPE INTEGER
+set_parameter_property AXI_ID_WIDTH UNITS None
+set_parameter_property AXI_ID_WIDTH HDL_PARAMETER true
 
-add_parameter PCORE_Cr_Cb_N INTEGER 0
-set_parameter_property PCORE_Cr_Cb_N DEFAULT_VALUE 0
-set_parameter_property PCORE_Cr_Cb_N DISPLAY_NAME PCORE_Cr_Cb_N
-set_parameter_property PCORE_Cr_Cb_N TYPE INTEGER
-set_parameter_property PCORE_Cr_Cb_N UNITS None
-set_parameter_property PCORE_Cr_Cb_N HDL_PARAMETER true
+add_parameter CR_CB_N INTEGER 0
+set_parameter_property CR_CB_N DEFAULT_VALUE 0
+set_parameter_property CR_CB_N DISPLAY_NAME CR_CB_N
+set_parameter_property CR_CB_N TYPE INTEGER
+set_parameter_property CR_CB_N UNITS None
+set_parameter_property CR_CB_N HDL_PARAMETER true
 
-add_parameter PCORE_EMBEDDED_SYNC INTEGER 0
-set_parameter_property PCORE_EMBEDDED_SYNC DEFAULT_VALUE 0
-set_parameter_property PCORE_EMBEDDED_SYNC DISPLAY_NAME PCORE_EMBEDDED_SYNC
-set_parameter_property PCORE_EMBEDDED_SYNC TYPE INTEGER
-set_parameter_property PCORE_EMBEDDED_SYNC UNITS None
-set_parameter_property PCORE_EMBEDDED_SYNC HDL_PARAMETER true
+add_parameter EMBEDDED_SYNC INTEGER 0
+set_parameter_property EMBEDDED_SYNC DEFAULT_VALUE 0
+set_parameter_property EMBEDDED_SYNC DISPLAY_NAME EMBEDDED_SYNC
+set_parameter_property EMBEDDED_SYNC TYPE INTEGER
+set_parameter_property EMBEDDED_SYNC UNITS None
+set_parameter_property EMBEDDED_SYNC HDL_PARAMETER true
 
 # axi4 slave
 
@@ -97,7 +97,7 @@ add_interface_port s_axi s_axi_rvalid rvalid Output 1
 add_interface_port s_axi s_axi_rresp rresp Output 2
 add_interface_port s_axi s_axi_rdata rdata Output 32
 add_interface_port s_axi s_axi_rready rready Input 1
-add_interface_port s_axi s_axi_awid awid Input PCORE_AXI_ID_WIDTH
+add_interface_port s_axi s_axi_awid awid Input AXI_ID_WIDTH
 add_interface_port s_axi s_axi_awlen awlen Input 8
 add_interface_port s_axi s_axi_awsize awsize Input 3
 add_interface_port s_axi s_axi_awburst awburst Input 2
@@ -105,15 +105,15 @@ add_interface_port s_axi s_axi_awlock awlock Input 1
 add_interface_port s_axi s_axi_awcache awcache Input 4
 add_interface_port s_axi s_axi_awprot awprot Input 3
 add_interface_port s_axi s_axi_wlast wlast Input 1
-add_interface_port s_axi s_axi_bid bid Output PCORE_AXI_ID_WIDTH
-add_interface_port s_axi s_axi_arid arid Input PCORE_AXI_ID_WIDTH
+add_interface_port s_axi s_axi_bid bid Output AXI_ID_WIDTH
+add_interface_port s_axi s_axi_arid arid Input AXI_ID_WIDTH
 add_interface_port s_axi s_axi_arlen arlen Input 8
 add_interface_port s_axi s_axi_arsize arsize Input 3
 add_interface_port s_axi s_axi_arburst arburst Input 2
 add_interface_port s_axi s_axi_arlock arlock Input 1
 add_interface_port s_axi s_axi_arcache arcache Input 4
 add_interface_port s_axi s_axi_arprot arprot Input 3
-add_interface_port s_axi s_axi_rid rid Output PCORE_AXI_ID_WIDTH
+add_interface_port s_axi s_axi_rid rid Output AXI_ID_WIDTH
 add_interface_port s_axi s_axi_rlast rlast Output 1
 
 # hdmi interface

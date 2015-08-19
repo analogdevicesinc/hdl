@@ -68,10 +68,10 @@ parameter ASYNC_SPI_CLK = 0;
 
 parameter NUM_OFFLOAD = 0;
 
-parameter OFFLOAD0_CMD_MEM_ADDR_WIDTH = 4;
-parameter OFFLOAD0_SDO_MEM_ADDR_WIDTH = 4;
+parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH = 4;
+parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH = 4;
 
-parameter PCORE_ID = 'h00;
+parameter ID = 'h00;
 localparam PCORE_VERSION = 'h010061;
 
 wire [CMD_FIFO_ADDRESS_WIDTH:0] cmd_fifo_room;
@@ -114,7 +114,7 @@ reg  [7:0] sync_id = 'h00;
 reg	   sync_id_pending = 1'b0;
 
 up_axi #(
-	.PCORE_ADDR_WIDTH (8)
+	.ADDRESS_WIDTH (8)
 ) i_up_axi (
 	.up_rstn(s_axi_aresetn),
 	.up_clk(s_axi_aclk),
@@ -200,7 +200,7 @@ end
 always @(posedge s_axi_aclk) begin
 	case (up_raddr)
 	8'h00: up_rdata <= PCORE_VERSION;
-	8'h01: up_rdata <= PCORE_ID;
+	8'h01: up_rdata <= ID;
 	8'h02: up_rdata <= up_scratch;
 	8'h10: up_rdata <= up_reset;
 	8'h20: up_rdata <= up_irq_mask;
@@ -258,10 +258,10 @@ assign cmd_fifo_almost_empty =
 	`axi_spi_engine_check_watermark(cmd_fifo_room, CMD_FIFO_ADDRESS_WIDTH);
 
 util_axis_fifo #(
-	.C_DATA_WIDTH(16),
-	.C_CLKS_ASYNC(ASYNC_SPI_CLK),
-	.C_ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
-	.C_S_AXIS_REGISTERED(0)
+	.DATA_WIDTH(16),
+	.ASYNC_CLK(ASYNC_SPI_CLK),
+	.ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
+	.S_AXIS_REGISTERED(0)
 ) i_cmd_fifo (
 	.s_axis_aclk(s_axi_aclk),
 	.s_axis_aresetn(up_resetn),
@@ -283,10 +283,10 @@ assign sdo_fifo_almost_empty =
 	`axi_spi_engine_check_watermark(sdo_fifo_room, SDO_FIFO_ADDRESS_WIDTH);
 
 util_axis_fifo #(
-	.C_DATA_WIDTH(8),
-	.C_CLKS_ASYNC(ASYNC_SPI_CLK),
-	.C_ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
-	.C_S_AXIS_REGISTERED(0)
+	.DATA_WIDTH(8),
+	.ASYNC_CLK(ASYNC_SPI_CLK),
+	.ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
+	.S_AXIS_REGISTERED(0)
 ) i_sdo_fifo (
 	.s_axis_aclk(s_axi_aclk),
 	.s_axis_aresetn(up_resetn),
@@ -307,10 +307,10 @@ assign sdi_fifo_almost_full =
 	`axi_spi_engine_check_watermark(sdi_fifo_level, SDI_FIFO_ADDRESS_WIDTH);
 
 util_axis_fifo #(
-	.C_DATA_WIDTH(8),
-	.C_CLKS_ASYNC(ASYNC_SPI_CLK),
-	.C_ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
-	.C_S_AXIS_REGISTERED(0)
+	.DATA_WIDTH(8),
+	.ASYNC_CLK(ASYNC_SPI_CLK),
+	.ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
+	.S_AXIS_REGISTERED(0)
 ) i_sdi_fifo (
 	.s_axis_aclk(spi_clk),
 	.s_axis_aresetn(spi_resetn),

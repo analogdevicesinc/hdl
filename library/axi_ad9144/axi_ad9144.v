@@ -91,15 +91,15 @@ module axi_ad9144 (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_QUAD_DUAL_N = 1;
-  parameter   PCORE_DAC_DP_DISABLE = 0;
+  parameter   ID = 0;
+  parameter   QUAD_OR_DUAL_N = 1;
+  parameter   DAC_DATAPATH_DISABLE = 0;
 
   // jesd interface
   // tx_clk is (line-rate/40)
 
   input                                     tx_clk;
-  output  [(128*PCORE_QUAD_DUAL_N)+127:0]   tx_data;
+  output  [(128*QUAD_OR_DUAL_N)+127:0]   tx_data;
 
   // dma interface
 
@@ -184,7 +184,7 @@ module axi_ad9144 (
 
   // dual/quad cores
 
-  assign tx_data = (PCORE_QUAD_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
+  assign tx_data = (QUAD_OR_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
 
   // device interface
 
@@ -212,7 +212,7 @@ module axi_ad9144 (
 
   // core
 
-  axi_ad9144_core #(.PCORE_ID(PCORE_ID), .DP_DISABLE(PCORE_DAC_DP_DISABLE)) i_core (
+  axi_ad9144_core #(.ID(ID), .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)) i_core (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_data_0_0 (dac_data_0_0_s),

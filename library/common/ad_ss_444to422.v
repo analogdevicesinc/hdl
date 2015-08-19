@@ -54,7 +54,7 @@ module ad_ss_444to422 (
 
   // parameters
 
-  parameter   Cr_Cb_N = 0;
+  parameter   CR_CB_N = 0;
   parameter   DELAY_DATA_WIDTH = 16;
   localparam  DW = DELAY_DATA_WIDTH - 1;
 
@@ -128,7 +128,7 @@ module ad_ss_444to422 (
     if (s444_de_3d == 1'b1) begin
       cr_cb_sel <= ~cr_cb_sel;
     end else begin
-      cr_cb_sel <= Cr_Cb_N;
+      cr_cb_sel <= CR_CB_N;
     end
   end
 

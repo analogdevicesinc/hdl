@@ -35,9 +35,9 @@ set_property -dict [list \
 		CONFIG.C_SYNC_TRANSFER_START 1 \
 		CONFIG.C_AXI_SLICE_SRC 0 \
 		CONFIG.C_AXI_SLICE_DEST 0 \
-		CONFIG.C_CLKS_ASYNC_DEST_REQ 0 \
-		CONFIG.C_CLKS_ASYNC_SRC_DEST 0 \
-		CONFIG.C_CLKS_ASYNC_REQ_SRC 0 \
+		CONFIG.ASYNC_CLK_DEST_REQ 0 \
+		CONFIG.ASYNC_CLK_SRC_DEST 0 \
+		CONFIG.ASYNC_CLK_REQ_SRC 0 \
 		CONFIG.C_2D_TRANSFER 0 \
 		CONFIG.C_DMA_DATA_WIDTH_SRC 32 \
 		CONFIG.C_DMA_DATA_WIDTH_DEST 64 \
@@ -61,9 +61,9 @@ current_bd_instance /spi
 	set spi_engine_interconnect [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_interconnect:1.0 interconnect]
 	set util_sigma_delta_spi [create_bd_cell -type ip -vlnv analog.com:user:util_sigma_delta_spi:1.0 util_sigma_delta_spi]
 
-	set_property -dict [list CONFIG.NUM_CS 2] $spi_engine
+	set_property -dict [list CONFIG.NUM_OF_CS 2] $spi_engine
 
-	set_property -dict [list CONFIG.NUM_CS 2] $util_sigma_delta_spi
+	set_property -dict [list CONFIG.NUM_OF_CS 2] $util_sigma_delta_spi
 
 	ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
 	ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
@@ -147,8 +147,8 @@ current_bd_instance /processing
 	set i_q_resize [create_bd_cell -type ip -vlnv analog.com:user:util_axis_resize:1.0 i_q_resize]
 
 	set_property -dict [list \
-		CONFIG.C_M_DATA_WIDTH 32 \
-		CONFIG.C_S_DATA_WIDTH 64 \
+		CONFIG.MASTER_DATA_WIDTH 32 \
+		CONFIG.SLAVE_DATA_WIDTH 64 \
 	] $i_q_resize
 
 	set hpf [create_bd_cell -type ip -vlnv xilinx.com:ip:fir_compiler:7.2 hpf]
@@ -268,7 +268,7 @@ ad_connect /phase_gen/Q /processing/phase
 
 set axi_adc [create_bd_cell -type ip -vlnv analog.com:user:axi_generic_adc:1.0 axi_adc]
 set_property -dict [list \
-		CONFIG.NUM_CHANNELS 14 \
+		CONFIG.NUM_OF_CHANNELS 14 \
 	] $axi_adc
 
 ad_connect processing/overflow axi_adc/adc_dovf

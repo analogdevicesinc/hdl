@@ -118,11 +118,11 @@ module axi_hdmi_tx_alt (
   s_axi_rlast,
   s_axi_rready);
 
-  parameter PCORE_ID = 0;
-  parameter PCORE_AXI_ID_WIDTH = 3;
-  parameter PCORE_DEVICE_TYPE = 0;
-  parameter PCORE_Cr_Cb_N = 0;
-  parameter PCORE_EMBEDDED_SYNC = 0;
+  parameter ID = 0;
+  parameter AXI_ID_WIDTH = 3;
+  parameter DEVICE_TYPE = 0;
+  parameter CR_CB_N = 0;
+  parameter EMBEDDED_SYNC = 0;
 
   // hdmi interface
 
@@ -167,7 +167,7 @@ module axi_hdmi_tx_alt (
   input                               s_axi_aresetn;
   input                               s_axi_awvalid;
   input   [13:0]                      s_axi_awaddr;
-  input   [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_awid;
+  input   [(AXI_ID_WIDTH-1):0]  s_axi_awid;
   input   [ 7:0]                      s_axi_awlen;
   input   [ 2:0]                      s_axi_awsize;
   input   [ 1:0]                      s_axi_awburst;
@@ -182,11 +182,11 @@ module axi_hdmi_tx_alt (
   output                              s_axi_wready;
   output                              s_axi_bvalid;
   output  [ 1:0]                      s_axi_bresp;
-  output  [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_bid;
+  output  [(AXI_ID_WIDTH-1):0]  s_axi_bid;
   input                               s_axi_bready;
   input                               s_axi_arvalid;
   input   [13:0]                      s_axi_araddr;
-  input   [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_arid;
+  input   [(AXI_ID_WIDTH-1):0]  s_axi_arid;
   input   [ 7:0]                      s_axi_arlen;
   input   [ 2:0]                      s_axi_arsize;
   input   [ 1:0]                      s_axi_arburst;
@@ -197,7 +197,7 @@ module axi_hdmi_tx_alt (
   output                              s_axi_rvalid;
   output  [ 1:0]                      s_axi_rresp;
   output  [31:0]                      s_axi_rdata;
-  output  [(PCORE_AXI_ID_WIDTH-1):0]  s_axi_rid;
+  output  [(AXI_ID_WIDTH-1):0]  s_axi_rid;
   output                              s_axi_rlast;
   input                               s_axi_rready;
 
@@ -214,10 +214,10 @@ module axi_hdmi_tx_alt (
   // hdmi tx lite version
 
   axi_hdmi_tx #(
-    .PCORE_ID (PCORE_ID),
-    .PCORE_Cr_Cb_N (PCORE_Cr_Cb_N),
-    .PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .PCORE_EMBEDDED_SYNC (PCORE_EMBEDDED_SYNC))
+    .ID (ID),
+    .CR_CB_N (CR_CB_N),
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .EMBEDDED_SYNC (EMBEDDED_SYNC))
   i_hdmi_tx (
     .hdmi_clk (hdmi_clk),
     .hdmi_out_clk (hdmi_out_clk),

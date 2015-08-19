@@ -64,7 +64,7 @@ module ad_lvds_out (
 
   // parameters
 
-  parameter   BUFTYPE = 0;
+  parameter   DEVICE_TYPE = 0;
   parameter   IODELAY_ENABLE = 0;
   parameter   IODELAY_CTRL = 0;
   parameter   IODELAY_GROUP = "dev_if_delay_group";
@@ -100,7 +100,7 @@ module ad_lvds_out (
   // delay controller
 
   generate
-  if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7) && (IODELAY_CTRL == 1)) begin
+  if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == SERIES7) && (IODELAY_CTRL == 1)) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYCTRL i_delay_ctrl (
     .RST (delay_rst),
@@ -127,7 +127,7 @@ module ad_lvds_out (
     .Q (tx_data_oddr_s));
 
   generate
-  if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7)) begin
+  if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == SERIES7)) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   ODELAYE2 #(
     .CINVCTRL_SEL ("FALSE"),

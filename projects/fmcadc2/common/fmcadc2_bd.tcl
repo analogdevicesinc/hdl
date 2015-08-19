@@ -26,18 +26,18 @@ set_property -dict [list CONFIG.PCORE_PMA_RSV {0x00018480}] $axi_ad9625_gt
 set_property -dict [list CONFIG.PCORE_RX_CDR_CFG {0x03000023ff20400020}] $axi_ad9625_gt
 
 set axi_ad9625_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9625_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9625_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad9625_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9625_dma
+set_property -dict [list CONFIG.ID {0}] $axi_ad9625_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9625_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9625_dma
+set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9625_dma
+set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad9625_dma
+set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9625_dma
+set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9625_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9625_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9625_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
 
 # connections (gt)
 
@@ -57,8 +57,8 @@ ad_connect  axi_ad9625_gt/rx_jesd_rst axi_ad9625_jesd/rx_reset
 ad_connect  axi_ad9625_gt/rx_sysref axi_ad9625_jesd/rx_sysref
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_charisk
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
-set_property -dict [list CONFIG.CH_CNT {8}] [get_bd_cells util_bsplit_rx_gt_charisk]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_bsplit_rx_gt_charisk]
 
 ad_connect  util_bsplit_rx_gt_charisk/data axi_ad9625_gt/rx_gt_charisk
 ad_connect  util_bsplit_rx_gt_charisk/split_data_0 axi_ad9625_jesd/gt0_rxcharisk
@@ -71,8 +71,8 @@ ad_connect  util_bsplit_rx_gt_charisk/split_data_6 axi_ad9625_jesd/gt6_rxcharisk
 ad_connect  util_bsplit_rx_gt_charisk/split_data_7 axi_ad9625_jesd/gt7_rxcharisk
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_disperr
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
-set_property -dict [list CONFIG.CH_CNT {8}] [get_bd_cells util_bsplit_rx_gt_disperr]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_bsplit_rx_gt_disperr]
 
 ad_connect  util_bsplit_rx_gt_disperr/data axi_ad9625_gt/rx_gt_disperr
 ad_connect  util_bsplit_rx_gt_disperr/split_data_0 axi_ad9625_jesd/gt0_rxdisperr
@@ -85,8 +85,8 @@ ad_connect  util_bsplit_rx_gt_disperr/split_data_6 axi_ad9625_jesd/gt6_rxdisperr
 ad_connect  util_bsplit_rx_gt_disperr/split_data_7 axi_ad9625_jesd/gt7_rxdisperr
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_notintable
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
-set_property -dict [list CONFIG.CH_CNT {8}] [get_bd_cells util_bsplit_rx_gt_notintable]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_bsplit_rx_gt_notintable]
 
 ad_connect  util_bsplit_rx_gt_notintable/data axi_ad9625_gt/rx_gt_notintable
 ad_connect  util_bsplit_rx_gt_notintable/split_data_0 axi_ad9625_jesd/gt0_rxnotintable
@@ -99,8 +99,8 @@ ad_connect  util_bsplit_rx_gt_notintable/split_data_6 axi_ad9625_jesd/gt6_rxnoti
 ad_connect  util_bsplit_rx_gt_notintable/split_data_7 axi_ad9625_jesd/gt7_rxnotintable
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_data
-set_property -dict [list CONFIG.CH_DW {32}] [get_bd_cells util_bsplit_rx_gt_data]
-set_property -dict [list CONFIG.CH_CNT {8}] [get_bd_cells util_bsplit_rx_gt_data]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] [get_bd_cells util_bsplit_rx_gt_data]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_bsplit_rx_gt_data]
 
 ad_connect  util_bsplit_rx_gt_data/data axi_ad9625_gt/rx_gt_data
 ad_connect  util_bsplit_rx_gt_data/split_data_0 axi_ad9625_jesd/gt0_rxdata

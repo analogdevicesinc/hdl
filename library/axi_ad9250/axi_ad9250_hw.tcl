@@ -32,19 +32,19 @@ add_fileset_file ad_axi_ip_constr.sdc SDC     PATH $ad_hdl_dir/library/common/ad
 
 # parameters
 
-add_parameter PCORE_ID INTEGER 0
-set_parameter_property PCORE_ID DEFAULT_VALUE 0
-set_parameter_property PCORE_ID DISPLAY_NAME PCORE_ID
-set_parameter_property PCORE_ID TYPE INTEGER
-set_parameter_property PCORE_ID UNITS None
-set_parameter_property PCORE_ID HDL_PARAMETER true
+add_parameter ID INTEGER 0
+set_parameter_property ID DEFAULT_VALUE 0
+set_parameter_property ID DISPLAY_NAME ID
+set_parameter_property ID TYPE INTEGER
+set_parameter_property ID UNITS None
+set_parameter_property ID HDL_PARAMETER true
 
-add_parameter PCORE_DEVICE_TYPE INTEGER 0
-set_parameter_property PCORE_DEVICE_TYPE DEFAULT_VALUE 0
-set_parameter_property PCORE_DEVICE_TYPE DISPLAY_NAME PCORE_DEVICE_TYPE
-set_parameter_property PCORE_DEVICE_TYPE TYPE INTEGER
-set_parameter_property PCORE_DEVICE_TYPE UNITS None
-set_parameter_property PCORE_DEVICE_TYPE HDL_PARAMETER true
+add_parameter DEVICE_TYPE INTEGER 0
+set_parameter_property DEVICE_TYPE DEFAULT_VALUE 0
+set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
+set_parameter_property DEVICE_TYPE TYPE INTEGER
+set_parameter_property DEVICE_TYPE UNITS None
+set_parameter_property DEVICE_TYPE HDL_PARAMETER true
 
 # axi4 slave
 

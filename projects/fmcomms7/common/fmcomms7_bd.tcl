@@ -51,24 +51,24 @@ create_bd_port -dir I spi2_sdi_i
 # dac peripherals
 
 set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
-set_property -dict [list CONFIG.PCORE_QUAD_DUAL_N {1}] $axi_ad9144_core
+set_property -dict [list CONFIG.QUAD_OR_DUAL_N {1}] $axi_ad9144_core
 
 set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.0 axi_ad9144_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9144_jesd
 
 set axi_ad9144_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9144_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {2}] $axi_ad9144_dma
-set_property -dict [list CONFIG.PCORE_ID {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {256}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {256}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9144_dma
+set_property -dict [list CONFIG.ID {1}] $axi_ad9144_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9144_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9144_dma
+set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9144_dma
+set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9144_dma
+set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {256}] $axi_ad9144_dma
 
 # adc peripherals
 
@@ -81,10 +81,10 @@ set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
 set axi_ad9680_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9680_dma]
 set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_ad9680_dma
 set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.ID {0}] $axi_ad9680_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9680_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9680_dma
+set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9680_dma
 set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9680_dma
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9680_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9680_dma
@@ -120,7 +120,7 @@ ad_connect  spi2_clk_o axi_fmcomms7_spi/sck_o
 ad_connect  spi2_sdo_i axi_fmcomms7_spi/io0_i
 ad_connect  spi2_sdo_o axi_fmcomms7_spi/io0_o
 ad_connect  spi2_sdi_i axi_fmcomms7_spi/io1_i
-ad_connect  sys_cpu_clk axi_fmcomms7_spi/ext_spi_clk 
+ad_connect  sys_cpu_clk axi_fmcomms7_spi/ext_spi_clk
 
 # connections (gt)
 
@@ -145,32 +145,32 @@ ad_connect  axi_fmcomms7_gt/tx_rst axi_ad9144_jesd/tx_reset
 ad_connect  axi_fmcomms7_gt/tx_sysref axi_ad9144_jesd/tx_sysref
 
 create_bd_cell -type ip -vlnv analog.com:user:util_ccat:1.0 util_ccat_tx_gt_charisk
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_ccat_tx_gt_charisk]
-set_property -dict [list CONFIG.CH_CNT {8}] [get_bd_cells util_ccat_tx_gt_charisk]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_ccat_tx_gt_charisk]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_ccat_tx_gt_charisk]
 
-ad_connect  util_ccat_tx_gt_charisk/ccat_data axi_fmcomms7_gt/tx_gt_charisk     
-ad_connect  util_ccat_tx_gt_charisk/data_0 axi_ad9144_jesd/gt0_txcharisk 
-ad_connect  util_ccat_tx_gt_charisk/data_1 axi_ad9144_jesd/gt1_txcharisk 
-ad_connect  util_ccat_tx_gt_charisk/data_2 axi_ad9144_jesd/gt2_txcharisk 
-ad_connect  util_ccat_tx_gt_charisk/data_3 axi_ad9144_jesd/gt3_txcharisk 
-ad_connect  util_ccat_tx_gt_charisk/data_4 axi_ad9144_jesd/gt4_txcharisk 
-ad_connect  util_ccat_tx_gt_charisk/data_5 axi_ad9144_jesd/gt5_txcharisk 
-ad_connect  util_ccat_tx_gt_charisk/data_6 axi_ad9144_jesd/gt6_txcharisk 
-ad_connect  util_ccat_tx_gt_charisk/data_7 axi_ad9144_jesd/gt7_txcharisk 
+ad_connect  util_ccat_tx_gt_charisk/ccat_data axi_fmcomms7_gt/tx_gt_charisk
+ad_connect  util_ccat_tx_gt_charisk/data_0 axi_ad9144_jesd/gt0_txcharisk
+ad_connect  util_ccat_tx_gt_charisk/data_1 axi_ad9144_jesd/gt1_txcharisk
+ad_connect  util_ccat_tx_gt_charisk/data_2 axi_ad9144_jesd/gt2_txcharisk
+ad_connect  util_ccat_tx_gt_charisk/data_3 axi_ad9144_jesd/gt3_txcharisk
+ad_connect  util_ccat_tx_gt_charisk/data_4 axi_ad9144_jesd/gt4_txcharisk
+ad_connect  util_ccat_tx_gt_charisk/data_5 axi_ad9144_jesd/gt5_txcharisk
+ad_connect  util_ccat_tx_gt_charisk/data_6 axi_ad9144_jesd/gt6_txcharisk
+ad_connect  util_ccat_tx_gt_charisk/data_7 axi_ad9144_jesd/gt7_txcharisk
 
 create_bd_cell -type ip -vlnv analog.com:user:util_ccat:1.0 util_ccat_tx_gt_data
-set_property -dict [list CONFIG.CH_DW {32}] [get_bd_cells util_ccat_tx_gt_data]
-set_property -dict [list CONFIG.CH_CNT {8}] [get_bd_cells util_ccat_tx_gt_data]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] [get_bd_cells util_ccat_tx_gt_data]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_ccat_tx_gt_data]
 
-ad_connect  util_ccat_tx_gt_data/ccat_data axi_fmcomms7_gt/tx_gt_data     
-ad_connect  util_ccat_tx_gt_data/data_0 axi_ad9144_jesd/gt0_txdata 
-ad_connect  util_ccat_tx_gt_data/data_1 axi_ad9144_jesd/gt1_txdata 
-ad_connect  util_ccat_tx_gt_data/data_2 axi_ad9144_jesd/gt2_txdata 
-ad_connect  util_ccat_tx_gt_data/data_3 axi_ad9144_jesd/gt3_txdata 
-ad_connect  util_ccat_tx_gt_data/data_4 axi_ad9144_jesd/gt4_txdata 
-ad_connect  util_ccat_tx_gt_data/data_5 axi_ad9144_jesd/gt5_txdata 
-ad_connect  util_ccat_tx_gt_data/data_6 axi_ad9144_jesd/gt6_txdata 
-ad_connect  util_ccat_tx_gt_data/data_7 axi_ad9144_jesd/gt7_txdata 
+ad_connect  util_ccat_tx_gt_data/ccat_data axi_fmcomms7_gt/tx_gt_data
+ad_connect  util_ccat_tx_gt_data/data_0 axi_ad9144_jesd/gt0_txdata
+ad_connect  util_ccat_tx_gt_data/data_1 axi_ad9144_jesd/gt1_txdata
+ad_connect  util_ccat_tx_gt_data/data_2 axi_ad9144_jesd/gt2_txdata
+ad_connect  util_ccat_tx_gt_data/data_3 axi_ad9144_jesd/gt3_txdata
+ad_connect  util_ccat_tx_gt_data/data_4 axi_ad9144_jesd/gt4_txdata
+ad_connect  util_ccat_tx_gt_data/data_5 axi_ad9144_jesd/gt5_txdata
+ad_connect  util_ccat_tx_gt_data/data_6 axi_ad9144_jesd/gt6_txdata
+ad_connect  util_ccat_tx_gt_data/data_7 axi_ad9144_jesd/gt7_txdata
 
 ad_connect  axi_fmcomms7_gt/tx_rst_done axi_ad9144_jesd/tx_reset_done
 ad_connect  axi_fmcomms7_gt/tx_ip_sync axi_ad9144_jesd/tx_sync
@@ -205,8 +205,8 @@ ad_connect  axi_fmcomms7_gt/rx_rst axi_ad9680_jesd/rx_reset
 ad_connect  axi_fmcomms7_gt/rx_sysref axi_ad9680_jesd/rx_sysref
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_charisk
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
 
 ad_connect  util_bsplit_rx_gt_charisk/data axi_fmcomms7_gt/rx_gt_charisk
 ad_connect  util_bsplit_rx_gt_charisk/split_data_0 axi_ad9680_jesd/gt0_rxcharisk
@@ -215,8 +215,8 @@ ad_connect  util_bsplit_rx_gt_charisk/split_data_2 axi_ad9680_jesd/gt2_rxcharisk
 ad_connect  util_bsplit_rx_gt_charisk/split_data_3 axi_ad9680_jesd/gt3_rxcharisk
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_disperr
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
 
 ad_connect  util_bsplit_rx_gt_disperr/data axi_fmcomms7_gt/rx_gt_disperr
 ad_connect  util_bsplit_rx_gt_disperr/split_data_0 axi_ad9680_jesd/gt0_rxdisperr
@@ -225,8 +225,8 @@ ad_connect  util_bsplit_rx_gt_disperr/split_data_2 axi_ad9680_jesd/gt2_rxdisperr
 ad_connect  util_bsplit_rx_gt_disperr/split_data_3 axi_ad9680_jesd/gt3_rxdisperr
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_notintable
-set_property -dict [list CONFIG.CH_DW {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
 
 ad_connect  util_bsplit_rx_gt_notintable/data axi_fmcomms7_gt/rx_gt_notintable
 ad_connect  util_bsplit_rx_gt_notintable/split_data_0 axi_ad9680_jesd/gt0_rxnotintable
@@ -235,8 +235,8 @@ ad_connect  util_bsplit_rx_gt_notintable/split_data_2 axi_ad9680_jesd/gt2_rxnoti
 ad_connect  util_bsplit_rx_gt_notintable/split_data_3 axi_ad9680_jesd/gt3_rxnotintable
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_data
-set_property -dict [list CONFIG.CH_DW {32}] [get_bd_cells util_bsplit_rx_gt_data]
-set_property -dict [list CONFIG.CH_CNT {4}] [get_bd_cells util_bsplit_rx_gt_data]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] [get_bd_cells util_bsplit_rx_gt_data]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] [get_bd_cells util_bsplit_rx_gt_data]
 
 ad_connect  util_bsplit_rx_gt_data/data axi_fmcomms7_gt/rx_gt_data
 ad_connect  util_bsplit_rx_gt_data/split_data_0 axi_ad9680_jesd/gt0_rxdata
@@ -256,12 +256,12 @@ ad_connect  axi_ad9680_core/adc_data_0 adc_data_0
 ad_connect  axi_ad9680_core/adc_enable_1 adc_enable_1
 ad_connect  axi_ad9680_core/adc_valid_1 adc_valid_1
 ad_connect  axi_ad9680_core/adc_data_1 adc_data_1
-ad_connect  axi_fmcomms7_gt/rx_rst axi_ad9680_fifo/adc_rst 
+ad_connect  axi_fmcomms7_gt/rx_rst axi_ad9680_fifo/adc_rst
 ad_connect  axi_ad9680_core/adc_clk axi_ad9680_fifo/adc_clk
 ad_connect  axi_ad9680_core/adc_dovf axi_ad9680_fifo/adc_wovf
 ad_connect  adc_dwr axi_ad9680_fifo/adc_wr
 ad_connect  adc_ddata axi_ad9680_fifo/adc_wdata
-ad_connect  sys_cpu_clk axi_ad9680_fifo/dma_clk 
+ad_connect  sys_cpu_clk axi_ad9680_fifo/dma_clk
 ad_connect  sys_cpu_clk axi_ad9680_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9680_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9680_fifo/dma_wr axi_ad9680_dma/s_axis_valid

@@ -31,7 +31,7 @@ proc p_sys_dmafifo {p_name m_name adc_data_width dma_addr_width} {
   set_property -dict [list CONFIG.ADC_DATA_WIDTH $adc_data_width] $util_adcfifo
   set_property -dict [list CONFIG.DMA_DATA_WIDTH {64}] $util_adcfifo
   set_property -dict [list CONFIG.DMA_READY_ENABLE {1}] $util_adcfifo
-  set_property -dict [list CONFIG.DMA_ADDR_WIDTH $dma_addr_width] $util_adcfifo
+  set_property -dict [list CONFIG.DMA_ADDRESS_WIDTH $dma_addr_width] $util_adcfifo
 
   ad_connect  adc_rst util_adcfifo/adc_rst
   ad_connect  adc_clk util_adcfifo/adc_clk
@@ -74,7 +74,7 @@ proc p_sys_dacfifo {p_name m_name data_width addr_width} {
 
   set util_dacfifo [create_bd_cell -type ip -vlnv analog.com:user:util_dacfifo:1.0 util_dacfifo]
   set_property -dict [list CONFIG.DATA_WIDTH $data_width] $util_dacfifo
-  set_property -dict [list CONFIG.ADDR_WIDTH $addr_width] $util_dacfifo
+  set_property -dict [list CONFIG.ADDRESS_WIDTH $addr_width] $util_dacfifo
 
   ad_connect  dma_clk util_dacfifo/dma_clk
   ad_connect  dac_clk util_dacfifo/dac_clk

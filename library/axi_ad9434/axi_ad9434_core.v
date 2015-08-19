@@ -93,7 +93,7 @@ module axi_ad9434_core (
   adc_status);
 
   // parameters
-  parameter PCORE_ID = 0;
+  parameter ID = 0;
 
   // device interface
   input           adc_clk;
@@ -200,7 +200,7 @@ module axi_ad9434_core (
   end
 
   up_adc_common #(
-    .PCORE_ID(PCORE_ID))
+    .ID(ID))
   i_adc_common(
     .mmcm_rst (mmcm_rst),
 
@@ -246,7 +246,7 @@ module axi_ad9434_core (
     .up_rack (up_rack_s[0]));
 
   up_adc_channel #(
-    .PCORE_ADC_CHID(0))
+    .ADC_CHANNEL_ID(0))
   i_adc_channel(
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -295,7 +295,7 @@ module axi_ad9434_core (
 
   // adc delay control
 
-  up_delay_cntrl #(.IO_WIDTH(13), .IO_BASEADDR(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(.DATA_WIDTH(13), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),

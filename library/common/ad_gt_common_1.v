@@ -66,7 +66,7 @@ module ad_gt_common_1 (
   // parameters
 
   parameter   integer ID = 0;
-  parameter   integer GTH_GTX_N = 0;
+  parameter   integer GTH_OR_GTX_N = 0;
   parameter   integer QPLL0_ENABLE = 1;
   parameter   integer QPLL0_REFCLK_DIV = 2;
   parameter   [26:0]  QPLL0_CFG = 27'h06801C1;
@@ -146,7 +146,7 @@ module ad_gt_common_1 (
   // instantiations
 
   ad_gt_common #(
-    .GTH_GTX_N (GTH_GTX_N),
+    .GTH_OR_GTX_N (GTH_OR_GTX_N),
     .QPLL_ENABLE (QPLL0_ENABLE),
     .QPLL_REFCLK_DIV (QPLL0_REFCLK_DIV),
     .QPLL_CFG (QPLL0_CFG),
@@ -167,7 +167,7 @@ module ad_gt_common_1 (
     .up_drp_ready (up_drp_qpll0_ready_s));
 
   ad_gt_common #(
-    .GTH_GTX_N (GTH_GTX_N),
+    .GTH_OR_GTX_N (GTH_OR_GTX_N),
     .QPLL_ENABLE (QPLL1_ENABLE),
     .QPLL_REFCLK_DIV (QPLL1_REFCLK_DIV),
     .QPLL_CFG (QPLL1_CFG),
@@ -188,7 +188,7 @@ module ad_gt_common_1 (
     .up_drp_ready (up_drp_qpll1_ready_s));
 
   up_gt #(
-    .GTH_GTX_N (GTH_GTX_N),
+    .GTH_OR_GTX_N (GTH_OR_GTX_N),
     .ID (ID))
   i_up (
     .up_drp_qpll0_sel (up_drp_qpll0_sel_s),

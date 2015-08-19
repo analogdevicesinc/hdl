@@ -102,7 +102,7 @@ set_property -dict [list CONFIG.C_BAUDRATE {115200}] $axi_uart
 set axi_timer [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_timer:2.0 axi_timer]
 
 set axi_gpio_lcd [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_lcd]
-set_property -dict [list CONFIG.C_GPIO_WIDTH {7}] $axi_gpio_lcd
+set_property -dict [list CONFIG.C_GPDATA_WIDTH {7}] $axi_gpio_lcd
 set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_lcd
 
 set axi_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_spi]
@@ -112,7 +112,7 @@ set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_spi
 
 set axi_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio]
 set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio
-set_property -dict [list CONFIG.C_GPIO_WIDTH {32}] $axi_gpio
+set_property -dict [list CONFIG.C_GPDATA_WIDTH {32}] $axi_gpio
 set_property -dict [list CONFIG.C_GPIO2_WIDTH {32}] $axi_gpio
 set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio
 

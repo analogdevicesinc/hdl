@@ -70,7 +70,7 @@ module up_gt (
   // parameters
 
   localparam  [31:0]  VERSION = 32'h00070161;
-  parameter   integer GTH_GTX_N = 0;
+  parameter   integer GTH_OR_GTX_N = 0;
   parameter   integer ID = 0;
 
   // drp interface
@@ -219,7 +219,7 @@ module up_gt (
           8'h24: up_rdata <= {3'd0, up_drp_qpll1_rwn,
                               up_drp_qpll1_addr, up_drp_qpll1_wdata};
           8'h25: up_rdata <= {15'd0, up_drp_qpll1_status, up_drp_qpll1_rdata};
-          8'h3a: up_rdata <= GTH_GTX_N;
+          8'h3a: up_rdata <= GTH_OR_GTX_N;
           default: up_rdata <= 0;
         endcase
       end else begin

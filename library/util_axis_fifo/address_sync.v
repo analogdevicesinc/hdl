@@ -42,22 +42,22 @@ module fifo_address_sync (
 
 	input m_axis_ready,
 	output reg m_axis_valid,
-	output reg  [C_ADDRESS_WIDTH-1:0] m_axis_raddr,
-	output reg [C_ADDRESS_WIDTH-1:0] m_axis_raddr_next,
-	output [C_ADDRESS_WIDTH:0] m_axis_level,
+	output reg  [ADDRESS_WIDTH-1:0] m_axis_raddr,
+	output reg [ADDRESS_WIDTH-1:0] m_axis_raddr_next,
+	output [ADDRESS_WIDTH:0] m_axis_level,
 
 	output reg s_axis_ready,
 	input s_axis_valid,
 	output reg s_axis_empty,
-	output reg [C_ADDRESS_WIDTH-1:0] s_axis_waddr,
-	output [C_ADDRESS_WIDTH:0] s_axis_room
+	output reg [ADDRESS_WIDTH-1:0] s_axis_waddr,
+	output [ADDRESS_WIDTH:0] s_axis_room
 );
 
-parameter C_ADDRESS_WIDTH = 4;
+parameter ADDRESS_WIDTH = 4;
 
-reg [C_ADDRESS_WIDTH:0] room = 2**C_ADDRESS_WIDTH;
-reg [C_ADDRESS_WIDTH:0] level = 'h00;
-reg [C_ADDRESS_WIDTH:0] level_next;
+reg [ADDRESS_WIDTH:0] room = 2**ADDRESS_WIDTH;
+reg [ADDRESS_WIDTH:0] level = 'h00;
+reg [ADDRESS_WIDTH:0] level_next;
 
 assign s_axis_room = room;
 assign m_axis_level = level;
@@ -101,13 +101,13 @@ begin
 		m_axis_valid <= 1'b0;
 		s_axis_ready <= 1'b0;
 		level <= 'h00;
-		room <= 2**C_ADDRESS_WIDTH;
+		room <= 2**ADDRESS_WIDTH;
 		s_axis_empty <= 'h00;
 	end else begin
 		level <= level_next;
-		room <= 2**C_ADDRESS_WIDTH - level_next;
+		room <= 2**ADDRESS_WIDTH - level_next;
 		m_axis_valid <= level_next != 0;
-		s_axis_ready <= level_next != 2**C_ADDRESS_WIDTH;
+		s_axis_ready <= level_next != 2**ADDRESS_WIDTH;
 		s_axis_empty <= level_next == 0;
 	end
 end

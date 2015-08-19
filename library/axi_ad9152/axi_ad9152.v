@@ -83,8 +83,8 @@ module axi_ad9152 (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_DAC_DP_DISABLE = 0;
+  parameter   ID = 0;
+  parameter   DAC_DATAPATH_DISABLE = 0;
 
   // jesd interface
   // tx_clk is (line-rate/40)
@@ -174,7 +174,7 @@ module axi_ad9152 (
 
   // core
 
-  axi_ad9152_core #(.PCORE_ID(PCORE_ID), .DP_DISABLE(PCORE_DAC_DP_DISABLE)) i_core (
+  axi_ad9152_core #(.ID(ID), .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)) i_core (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_data_0_0 (dac_data_0_0_s),

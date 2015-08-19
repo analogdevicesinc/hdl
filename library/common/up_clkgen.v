@@ -69,7 +69,7 @@ module up_clkgen (
   // parameters
 
   localparam  PCORE_VERSION = 32'h00040063;
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   // mmcm reset
 
@@ -186,7 +186,7 @@ module up_clkgen (
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
           8'h00: up_rdata <= PCORE_VERSION;
-          8'h01: up_rdata <= PCORE_ID;
+          8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {30'd0, up_mmcm_resetn, up_resetn};
           8'h17: up_rdata <= {31'd0, up_drp_locked};

@@ -36,19 +36,19 @@ add_fileset_file ad_axi_ip_constr.sdc SDC     PATH $ad_hdl_dir/library/common/ad
 
 # parameters
 
-add_parameter PCORE_ID INTEGER 0
-set_parameter_property PCORE_ID DEFAULT_VALUE 0
-set_parameter_property PCORE_ID DISPLAY_NAME PCORE_ID
-set_parameter_property PCORE_ID TYPE INTEGER
-set_parameter_property PCORE_ID UNITS None
-set_parameter_property PCORE_ID HDL_PARAMETER true
+add_parameter ID INTEGER 0
+set_parameter_property ID DEFAULT_VALUE 0
+set_parameter_property ID DISPLAY_NAME ID
+set_parameter_property ID TYPE INTEGER
+set_parameter_property ID UNITS None
+set_parameter_property ID HDL_PARAMETER true
 
-add_parameter PCORE_QUAD_DUAL_N INTEGER 0
-set_parameter_property PCORE_QUAD_DUAL_N DEFAULT_VALUE 0
-set_parameter_property PCORE_QUAD_DUAL_N DISPLAY_NAME PCORE_QUAD_DUAL_N
-set_parameter_property PCORE_QUAD_DUAL_N TYPE INTEGER
-set_parameter_property PCORE_QUAD_DUAL_N UNITS None
-set_parameter_property PCORE_QUAD_DUAL_N HDL_PARAMETER true
+add_parameter QUAD_OR_DUAL_N INTEGER 0
+set_parameter_property QUAD_OR_DUAL_N DEFAULT_VALUE 0
+set_parameter_property QUAD_OR_DUAL_N DISPLAY_NAME QUAD_OR_DUAL_N
+set_parameter_property QUAD_OR_DUAL_N TYPE INTEGER
+set_parameter_property QUAD_OR_DUAL_N UNITS None
+set_parameter_property QUAD_OR_DUAL_N HDL_PARAMETER true
 
 # axi4 slave
 
@@ -85,7 +85,7 @@ add_interface_port s_axi s_axi_rready rready Input 1
 # transceiver interface
 
 ad_alt_intf clock   tx_clk        input   1
-ad_alt_intf signal  tx_data       output  128*(PCORE_QUAD_DUAL_N+1) data
+ad_alt_intf signal  tx_data       output  128*(QUAD_OR_DUAL_N+1) data
 
 # dma interface
 
@@ -101,9 +101,9 @@ ad_alt_intf signal  dac_dunf      input   1
 
 proc p_axi_ad9144 {} {
 
-  set p_pcore_quad_dual_n [get_parameter_value "PCORE_QUAD_DUAL_N"]
+  set p_pcore_quad_dual_n [get_parameter_value "QUAD_OR_DUAL_N"]
 
-  if {[get_parameter_value PCORE_QUAD_DUAL_N] == 1} {
+  if {[get_parameter_value QUAD_OR_DUAL_N] == 1} {
     ad_alt_intf signal  dac_valid_2   output  1
     ad_alt_intf signal  dac_enable_2  output  1
     ad_alt_intf signal  dac_ddata_2   input   64  dac_data_2

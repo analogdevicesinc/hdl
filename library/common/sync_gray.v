@@ -55,7 +55,7 @@ module sync_gray (
 parameter DATA_WIDTH = 1;
 // Whether the input and output clock are asynchronous, if set to 0 the
 // synchronizer will be bypassed and out_count will be in_count.
-parameter CLK_ASYNC = 1;
+parameter ASYNC_CLK = 1;
 
 reg [DATA_WIDTH-1:0] cdc_sync_stage0 = 'h0;
 reg [DATA_WIDTH-1:0] cdc_sync_stage1 = 'h0;
@@ -106,6 +106,6 @@ always @(posedge out_clk) begin
 	end
 end
 
-assign out_count = CLK_ASYNC ? out_count_m : in_count;
+assign out_count = ASYNC_CLK ? out_count_m : in_count;
 
 endmodule

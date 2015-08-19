@@ -92,93 +92,93 @@
   set speed_detector_m1 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_speed:1.0 speed_detector_m1 ]
     # dma motor 1
   set speed_detector_m1_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 speed_detector_m1_dma]
-  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.C_CYCLIC {0}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {32}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {0}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {0}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {0}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.2D_TRANSFER {0}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.CYCLIC {0}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {0}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {0}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {0}] $speed_detector_m1_dma
     # speed detector core motor 2
   set speed_detector_m2 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_speed:1.0 speed_detector_m2 ]
     # dma motor 2
   set speed_detector_m2_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 speed_detector_m2_dma]
-  set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.C_CYCLIC {0}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {32}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {0}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {0}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {0}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.2D_TRANSFER {0}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.CYCLIC {0}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {0}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {0}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {0}] $speed_detector_m2_dma
 
   # current monitor peripherals
     # current monitor core motor 1
   set current_monitor_m1 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_current_monitor:1.0 current_monitor_m1 ]
     # dma motor 1
   set current_monitor_m1_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 current_monitor_m1_dma ]
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $current_monitor_m1_dma
-  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $current_monitor_m1_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {0}] $current_monitor_m1_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {0}] $current_monitor_m1_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {0}] $current_monitor_m1_dma
-  set_property -dict [list CONFIG.C_CYCLIC {0}] $current_monitor_m1_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $current_monitor_m1_dma
+  set_property -dict [list CONFIG.2D_TRANSFER {0}] $current_monitor_m1_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {0}] $current_monitor_m1_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {0}] $current_monitor_m1_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {0}] $current_monitor_m1_dma
+  set_property -dict [list CONFIG.CYCLIC {0}] $current_monitor_m1_dma
     # data packer motor 1
   #
   set current_monitor_m1_apack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 current_monitor_m1_apack]
-  set_property -dict [list CONFIG.CHANNELS {4}] $current_monitor_m1_apack
+  set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $current_monitor_m1_apack
 #  set current_monitor_m1_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m1_pack ]
-#  set_property -dict [ list CONFIG.CH_CNT {4}  ] $current_monitor_m1_pack
-#  set_property -dict [ list CONFIG.CH_DW {16}  ] $current_monitor_m1_pack
+#  set_property -dict [ list CONFIG.NUM_OF_CHANNELS {4}  ] $current_monitor_m1_pack
+#  set_property -dict [ list CONFIG.CHANNEL_DATA_WIDTH {16}  ] $current_monitor_m1_pack
 
     # current monitor core motor 2
   set current_monitor_m2 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_current_monitor:1.0 current_monitor_m2 ]
     # dma motor 2
   set current_monitor_m2_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 current_monitor_m2_dma ]
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $current_monitor_m2_dma
-  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $current_monitor_m2_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {0}] $current_monitor_m2_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {0}] $current_monitor_m2_dma
-  set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {0}] $current_monitor_m2_dma
-  set_property -dict [list CONFIG.C_CYCLIC {0}] $current_monitor_m2_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $current_monitor_m2_dma
+  set_property -dict [list CONFIG.2D_TRANSFER {0}] $current_monitor_m2_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {0}] $current_monitor_m2_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {0}] $current_monitor_m2_dma
+  set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {0}] $current_monitor_m2_dma
+  set_property -dict [list CONFIG.CYCLIC {0}] $current_monitor_m2_dma
     # data packer motor 2
   set current_monitor_m2_apack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 current_monitor_m2_apack]
-  set_property -dict [list CONFIG.CHANNELS {4}] $current_monitor_m2_apack
+  set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $current_monitor_m2_apack
   #set current_monitor_m2_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m2_pack ]
-  #set_property -dict [ list CONFIG.CH_CNT {4}  ] $current_monitor_m2_pack
-  #set_property -dict [ list CONFIG.CH_DW {16}  ] $current_monitor_m2_pack
+  #set_property -dict [ list CONFIG.NUM_OF_CHANNELS {4}  ] $current_monitor_m2_pack
+  #set_property -dict [ list CONFIG.CHANNEL_DATA_WIDTH {16}  ] $current_monitor_m2_pack
 
   #controller
     # controller core motor 1
   set controller_m1 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_controller:1.0 controller_m1 ]
     # dma motor 1
   set controller_m1_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 controller_m1_dma ]
-  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $controller_m1_dma
-  set_property -dict [list CONFIG.C_CYCLIC {0}] $controller_m1_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {256}] $controller_m1_dma
+  set_property -dict [list CONFIG.2D_TRANSFER {0}] $controller_m1_dma
+  set_property -dict [list CONFIG.CYCLIC {0}] $controller_m1_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $controller_m1_dma
     # data packer motor 1
   set controller_m1_apack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 controller_m1_apack]
-  set_property -dict [list CONFIG.CHANNELS {8}] $controller_m1_apack
+  set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] $controller_m1_apack
   set_property -dict [list CONFIG.DATA_WIDTH {32}] $controller_m1_apack
 
   #set controller_m1_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 controller_m1_pack ]
-  #set_property -dict [ list CONFIG.CH_CNT {8}  ] $controller_m1_pack
-  #set_property -dict [ list CONFIG.CH_DW {32}  ] $controller_m1_pack
+  #set_property -dict [ list CONFIG.NUM_OF_CHANNELS {8}  ] $controller_m1_pack
+  #set_property -dict [ list CONFIG.CHANNEL_DATA_WIDTH {32}  ] $controller_m1_pack
     # controller core motor 2
   set controller_m2 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_controller:1.0 controller_m2 ]
     # dma motor 2
   set controller_m2_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 controller_m2_dma ]
-  set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $controller_m2_dma
-  set_property -dict [list CONFIG.C_CYCLIC {0}] $controller_m2_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {256}] $controller_m2_dma
+  set_property -dict [list CONFIG.2D_TRANSFER {0}] $controller_m2_dma
+  set_property -dict [list CONFIG.CYCLIC {0}] $controller_m2_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $controller_m2_dma
     # data packer motor 2
   #set controller_m2_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 controller_m2_pack ]
-  #set_property -dict [ list CONFIG.CH_CNT {8}  ] $controller_m2_pack
+  #set_property -dict [ list CONFIG.NUM_OF_CHANNELS {8}  ] $controller_m2_pack
   set controller_m2_apack [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 controller_m2_apack]
-  set_property -dict [list CONFIG.CHANNELS {8}] $controller_m2_apack
+  set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] $controller_m2_apack
   set_property -dict [list CONFIG.DATA_WIDTH {32}] $controller_m2_apack
 
   #ethernet gmii to rgmii converters

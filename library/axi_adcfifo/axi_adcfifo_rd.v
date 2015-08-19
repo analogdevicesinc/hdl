@@ -91,7 +91,7 @@ module axi_adcfifo_rd (
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 16;
   parameter   AXI_ADDRESS = 32'h00000000;
-  parameter   AXI_ADDRLIMIT = 32'h00000000;
+  parameter   AXI_ADDRESS_LIMIT = 32'h00000000;
   localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
   localparam  AXI_AWINCR = AXI_LENGTH * AXI_BYTE_WIDTH;
   localparam  BUF_THRESHOLD_LO = 6'd3;

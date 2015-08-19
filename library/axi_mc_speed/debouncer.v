@@ -60,7 +60,7 @@
 module debouncer
 //----------- Paramters Declarations -------------------------------------------
 #(
-    parameter DEBOUNCER_LEN = 4
+    parameter DEBOUNCER_LENGTH = 4
 )
 //----------- Ports Declarations -----------------------------------------------
 (
@@ -72,7 +72,7 @@ module debouncer
 //------------------------------------------------------------------------------
 //----------- Registers Declarations -------------------------------------------
 //------------------------------------------------------------------------------
-reg [DEBOUNCER_LEN-1:0] shift_reg;
+reg [DEBOUNCER_LENGTH-1:0] shift_reg;
 
 //------------------------------------------------------------------------------
 //----------- Assign/Always Blocks ---------------------------------------------
@@ -87,12 +87,12 @@ begin
     end
     else
     begin
-        shift_reg <= {shift_reg[DEBOUNCER_LEN-2:0], sig_i};
-        if(shift_reg == {DEBOUNCER_LEN{1'b1}})
+        shift_reg <= {shift_reg[DEBOUNCER_LENGTH-2:0], sig_i};
+        if(shift_reg == {DEBOUNCER_LENGTH{1'b1}})
         begin
             sig_o <= 1'b1;
         end
-        else if(shift_reg == {DEBOUNCER_LEN{1'b0}})
+        else if(shift_reg == {DEBOUNCER_LENGTH{1'b0}})
         begin
             sig_o <= 1'b0;
         end

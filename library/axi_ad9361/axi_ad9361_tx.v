@@ -100,8 +100,8 @@ module axi_ad9361_tx (
 
   // parameters
 
-  parameter   DP_DISABLE = 0;
-  parameter   PCORE_ID = 0;
+  parameter   DATAPATH_DISABLE = 0;
+  parameter   ID = 0;
 
   // dac interface
 
@@ -189,7 +189,7 @@ module axi_ad9361_tx (
 
   // master/slave
 
-  assign dac_data_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
+  assign dac_data_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
 
   always @(posedge dac_clk) begin
     dac_data_sync <= dac_data_sync_s;
@@ -235,9 +235,9 @@ module axi_ad9361_tx (
   // dac channel
   
   axi_ad9361_tx_channel #(
-    .CHID (0),
-    .IQSEL (0),
-    .DP_DISABLE (DP_DISABLE))
+    .CHANNEL_ID (0),
+    .Q_OR_I_N (0),
+    .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_tx_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -264,9 +264,9 @@ module axi_ad9361_tx (
   // dac channel
   
   axi_ad9361_tx_channel #(
-    .CHID (1),
-    .IQSEL (1),
-    .DP_DISABLE (DP_DISABLE))
+    .CHANNEL_ID (1),
+    .Q_OR_I_N (1),
+    .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_tx_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -293,9 +293,9 @@ module axi_ad9361_tx (
   // dac channel
   
   axi_ad9361_tx_channel #(
-    .CHID (2),
-    .IQSEL (0),
-    .DP_DISABLE (DP_DISABLE))
+    .CHANNEL_ID (2),
+    .Q_OR_I_N (0),
+    .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_tx_channel_2 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -322,9 +322,9 @@ module axi_ad9361_tx (
   // dac channel
   
   axi_ad9361_tx_channel #(
-    .CHID (3),
-    .IQSEL (1),
-    .DP_DISABLE (DP_DISABLE))
+    .CHANNEL_ID (3),
+    .Q_OR_I_N (1),
+    .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_tx_channel_3 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -350,7 +350,7 @@ module axi_ad9361_tx (
 
   // dac common processor interface
 
-  up_dac_common #(.PCORE_ID (PCORE_ID)) i_up_dac_common (
+  up_dac_common #(.ID (ID)) i_up_dac_common (
     .mmcm_rst (),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -389,7 +389,7 @@ module axi_ad9361_tx (
   
   // dac delay control
 
-  up_delay_cntrl #(.IO_WIDTH(8), .IO_BASEADDR(6'h12)) i_delay_cntrl (
+  up_delay_cntrl #(.DATA_WIDTH(8), .BASE_ADDRESS(6'h12)) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),

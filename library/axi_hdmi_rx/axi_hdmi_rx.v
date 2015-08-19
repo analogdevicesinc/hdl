@@ -77,7 +77,7 @@ module axi_hdmi_rx  (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   // hdmi interface
 

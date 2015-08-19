@@ -96,7 +96,7 @@ module up_tdd_cntrl (
   // parameters
 
   localparam  PCORE_VERSION = 32'h00010001;
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   input           clk;
   input           rst;

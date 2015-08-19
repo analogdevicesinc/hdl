@@ -50,23 +50,23 @@ module MULT_MACRO (
   P);
 
   parameter   LATENCY = 3;
-  parameter   WIDTH_A = 16;
-  parameter   WIDTH_B = 16;
+  parameter   A_DATA_WIDTH = 16;
+  parameter   B_DATA_WIDTH = 16;
 
-  localparam  WIDTH_P = WIDTH_A + WIDTH_B;
+  localparam  WIDTH_P = A_DATA_WIDTH + B_DATA_WIDTH;
 
   input                   CE;
   input                   RST;
   input                   CLK;
 
-  input   [WIDTH_A-1:0]   A;
-  input   [WIDTH_B-1:0]   B;
+  input   [A_DATA_WIDTH-1:0]   A;
+  input   [B_DATA_WIDTH-1:0]   B;
   output  [WIDTH_P-1:0]   P;
 
   lpm_mult #(
     .lpm_type ("lpm_mult"),
-    .lpm_widtha (WIDTH_A),
-    .lpm_widthb (WIDTH_B),
+    .lpm_widtha (A_DATA_WIDTH),
+    .lpm_widthb (B_DATA_WIDTH),
     .lpm_widthp (WIDTH_P),
     .lpm_representation ("SIGNED"),
     .lpm_pipeline (3))

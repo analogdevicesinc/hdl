@@ -13,18 +13,18 @@ create_bd_port -dir I -from 7 -to 0 adc_data_in_p
 set axi_ad9265  [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9265:1.0 axi_ad9265]
 
 set axi_ad9265_dma  [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9265_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {16}] $axi_ad9265_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9265_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9265_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9265_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9265_dma
+set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad9265_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9265_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9265_dma
+set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9265_dma
+set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_ad9265_dma
+set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9265_dma
+set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9265_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16}] $axi_ad9265_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9265_dma
 
 # clock for ila
 

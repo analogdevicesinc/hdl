@@ -69,8 +69,8 @@ module axi_ad9144_channel (
 
   // parameters
 
-  parameter CHID = 32'h0;
-  parameter DP_DISABLE = 0;
+  parameter CHANNEL_ID = 32'h0;
+  parameter DATAPATH_DISABLE = 0;
 
   // dac interface
 
@@ -495,7 +495,7 @@ module axi_ad9144_channel (
   end
 
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_0_s = 16'd0;
   end else begin
   ad_dds i_dds_0 (
@@ -510,7 +510,7 @@ module axi_ad9144_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_1_s = 16'd0;
   end else begin
   ad_dds i_dds_1 (
@@ -525,7 +525,7 @@ module axi_ad9144_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_2_s = 16'd0;
   end else begin
   ad_dds i_dds_2 (
@@ -540,7 +540,7 @@ module axi_ad9144_channel (
   endgenerate
   
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_3_s = 16'd0;
   end else begin
   ad_dds i_dds_3 (
@@ -556,7 +556,7 @@ module axi_ad9144_channel (
   
   // single channel processor
 
-  up_dac_channel #(.PCORE_DAC_CHID(CHID)) i_up_dac_channel (
+  up_dac_channel #(.DAC_CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),

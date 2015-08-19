@@ -86,9 +86,9 @@ module axi_ad9434 (
   localparam SERIES7 = 0;
   localparam SERIES6 = 1;
 
-  parameter PCORE_ID = 0;
-  parameter PCORE_DEVTYPE = SERIES7;
-  parameter PCORE_IODELAY_GROUP = "dev_if_delay_group";
+  parameter ID = 0;
+  parameter DEVICE_TYPE = SERIES7;
+  parameter IO_DELAY_GROUP = "dev_if_delay_group";
 
   // physical interface
   input           adc_clk_in_p;
@@ -178,8 +178,8 @@ module axi_ad9434 (
   assign adc_enable = 1'b1;
 
   axi_ad9434_if #(
-    .PCORE_DEVTYPE(PCORE_DEVTYPE),
-    .PCORE_IODELAY_GROUP(PCORE_IODELAY_GROUP))
+    .DEVICE_TYPE(DEVICE_TYPE),
+    .IO_DELAY_GROUP(IO_DELAY_GROUP))
   i_if(
     .adc_clk_in_p(adc_clk_in_p),
     .adc_clk_in_n(adc_clk_in_n),
@@ -210,7 +210,7 @@ module axi_ad9434 (
     .up_drp_locked(up_drp_locked_s));
 
   // common processor control
-  axi_ad9434_core #(.PCORE_ID(PCORE_ID))
+  axi_ad9434_core #(.ID(ID))
   i_core (
     .adc_clk(adc_clk),
     .adc_data(adc_data_if_s),

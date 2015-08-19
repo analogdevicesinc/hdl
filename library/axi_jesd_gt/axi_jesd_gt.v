@@ -41,7 +41,7 @@ module axi_jesd_gt #(
 
   parameter   integer ID = 0,
   parameter   integer NUM_OF_LANES = 8,
-  parameter   integer GTH_GTX_N = 0,
+  parameter   integer GTH_OR_GTX_N = 0,
   parameter   integer QPLL0_ENABLE = 1,
   parameter   integer QPLL0_REFCLK_DIV = 1,
   parameter   [26:0]  QPLL0_CFG = 27'h0680181,
@@ -1445,7 +1445,7 @@ module axi_jesd_gt #(
   for (n = 0; n < NUM_OF_LANES; n = n + 1) begin: g_lane_1
   ad_gt_channel_1 #(
     .ID (n),
-    .GTH_GTX_N (GTH_GTX_N),
+    .GTH_OR_GTX_N (GTH_OR_GTX_N),
     .PMA_RSV (PMA_RSV[n]),
     .CPLL_FBDIV (CPLL_FBDIV[n]),
     .RX_OUT_DIV (RX_OUT_DIV[n]),
@@ -1540,7 +1540,7 @@ module axi_jesd_gt #(
 
   ad_gt_common_1 #(
     .ID (0),
-    .GTH_GTX_N (GTH_GTX_N),
+    .GTH_OR_GTX_N (GTH_OR_GTX_N),
     .QPLL0_ENABLE (QPLL0_ENABLE),
     .QPLL0_REFCLK_DIV (QPLL0_REFCLK_DIV),
     .QPLL0_CFG (QPLL0_CFG),

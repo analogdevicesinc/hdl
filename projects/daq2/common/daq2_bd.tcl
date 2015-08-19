@@ -16,28 +16,28 @@ create_bd_port -dir O -from 3 -to 0 tx_data_n
 # dac peripherals
 
 set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
-set_property -dict [list CONFIG.PCORE_QUAD_DUAL_N {0}] $axi_ad9144_core
+set_property -dict [list CONFIG.QUAD_OR_DUAL_N {0}] $axi_ad9144_core
 
 set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.0 axi_ad9144_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9144_jesd
 
 set axi_ad9144_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9144_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.PCORE_ID {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}] $axi_ad9144_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9144_dma
+set_property -dict [list CONFIG.ID {1}] $axi_ad9144_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9144_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9144_dma
+set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9144_dma
+set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9144_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9144_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9144_dma
 
 set axi_ad9144_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 axi_ad9144_upack]
-set_property -dict [list CONFIG.CH_DW {64}] $axi_ad9144_upack
-set_property -dict [list CONFIG.CH_CNT {2}] $axi_ad9144_upack
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9144_upack
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9144_upack
 
 # adc peripherals
 
@@ -48,22 +48,22 @@ set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
 
 set axi_ad9680_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9680_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9680_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.ID {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9680_dma
+set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9680_dma
+set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9680_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9680_dma
 
 set axi_ad9680_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 axi_ad9680_cpack]
-set_property -dict [list CONFIG.CH_DW {64}] $axi_ad9680_cpack
-set_property -dict [list CONFIG.CH_CNT {2}] $axi_ad9680_cpack
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9680_cpack
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9680_cpack
 
 # dac/adc common gt
 
@@ -141,7 +141,7 @@ ad_connect  axi_ad9144_core/dac_valid_0 axi_ad9144_upack/dac_valid_0
 ad_connect  axi_ad9144_core/dac_enable_1 axi_ad9144_upack/dac_enable_1
 ad_connect  axi_ad9144_core/dac_ddata_1 axi_ad9144_upack/dac_data_1
 ad_connect  axi_ad9144_core/dac_valid_1 axi_ad9144_upack/dac_valid_1
-ad_connect  util_daq2_gt/tx_out_clk axi_ad9144_fifo/dac_clk 
+ad_connect  util_daq2_gt/tx_out_clk axi_ad9144_fifo/dac_clk
 ad_connect  axi_ad9144_upack/dac_valid axi_ad9144_fifo/dac_valid
 ad_connect  axi_ad9144_upack/dac_data axi_ad9144_fifo/dac_data
 ad_connect  sys_cpu_clk axi_ad9144_fifo/dma_clk

@@ -59,7 +59,7 @@ module ad_gt_common (
 
   // parameters
 
-  parameter   integer GTH_GTX_N = 0;
+  parameter   integer GTH_OR_GTX_N = 0;
   parameter   integer QPLL_ENABLE = 1;
   parameter   integer QPLL_REFCLK_DIV = 2;
   parameter   [26:0]  QPLL_CFG = 27'h06801C1;
@@ -96,7 +96,7 @@ module ad_gt_common (
   assign up_drp_ready = 1'd0;
   end
 
-  if ((QPLL_ENABLE == 1) && (GTH_GTX_N == 0)) begin
+  if ((QPLL_ENABLE == 1) && (GTH_OR_GTX_N == 0)) begin
   GTXE2_COMMON #(
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_QPLLREFCLK_SEL (3'b001),
@@ -155,7 +155,7 @@ module ad_gt_common (
     .RCALENB (1'd1));
   end
 
-  if ((QPLL_ENABLE == 1) && (GTH_GTX_N == 1)) begin
+  if ((QPLL_ENABLE == 1) && (GTH_OR_GTX_N == 1)) begin
   GTHE3_COMMON #(
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_VERSION (2),

@@ -59,7 +59,7 @@ module axi_ad9625_if (
   adc_raddr_in,
   adc_raddr_out);
 
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   // jesd interface 
   // rx_clk is ref_clk/4
@@ -127,7 +127,7 @@ module axi_ad9625_if (
 
   // synchronization mode, multiple instances
 
-  assign adc_raddr_s = (PCORE_ID == 0) ? adc_raddr_out : adc_raddr_in;
+  assign adc_raddr_s = (ID == 0) ? adc_raddr_out : adc_raddr_in;
 
   always @(posedge rx_clk) begin
     adc_data <= adc_rdata_s;
@@ -219,7 +219,7 @@ module axi_ad9625_if (
 
   // alignment fifo
 
-  ad_mem #(.ADDR_WIDTH(4), .DATA_WIDTH(192)) i_mem (
+  ad_mem #(.ADDRESS_WIDTH(4), .DATA_WIDTH(192)) i_mem (
     .clka (rx_clk),
     .wea (1'b1),
     .addra (adc_waddr),

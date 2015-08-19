@@ -25,7 +25,7 @@ create_bd_port -dir I tdd_sync_in
 # ad9361 core
 
 set axi_ad9361 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361]
-set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9361
+set_property -dict [list CONFIG.ID {0}] $axi_ad9361
 
 set axi_ad9361_dac_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9361_dac_dma]
 set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9361_dac_dma
@@ -34,15 +34,15 @@ set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {0}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9361_dac_dma
 
 set util_ad9361_dac_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_ad9361_dac_upack]
-set_property -dict [list CONFIG.CH_CNT {4}] $util_ad9361_dac_upack
-set_property -dict [list CONFIG.CH_DW {16}] $util_ad9361_dac_upack
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9361_dac_upack
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_ad9361_dac_upack
 
 set axi_ad9361_adc_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9361_adc_dma]
 set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9361_adc_dma
@@ -51,19 +51,19 @@ set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {0}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}]  $axi_ad9361_adc_dma
 
 set util_ad9361_adc_pack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_ad9361_adc_pack]
-set_property -dict [list CONFIG.CH_CNT {4}] $util_ad9361_adc_pack
-set_property -dict [list CONFIG.CH_DW {16}] $util_ad9361_adc_pack
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9361_adc_pack
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_ad9361_adc_pack
 
 set util_ad9361_adc_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_wfifo:1.0 util_ad9361_adc_fifo]
 set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9361_adc_fifo
-set_property -dict [list CONFIG.DIN_ADDR_WIDTH {4}] $util_ad9361_adc_fifo
+set_property -dict [list CONFIG.DIN_ADDRESS_WIDTH {4}] $util_ad9361_adc_fifo
 set_property -dict [list CONFIG.DIN_DATA_WIDTH {16}] $util_ad9361_adc_fifo
 set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16}] $util_ad9361_adc_fifo
 

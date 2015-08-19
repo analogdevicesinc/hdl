@@ -87,9 +87,9 @@ module axi_ad9467(
 
   // parameters
 
-  parameter PCORE_ID = 0;
-  parameter PCORE_BUFTYPE = 0;
-  parameter PCORE_IODELAY_GROUP = "dev_if_delay_group";
+  parameter ID = 0;
+  parameter DEVICE_TYPE = 0;
+  parameter IO_DELAY_GROUP = "dev_if_delay_group";
 
   // physical interface
 
@@ -192,8 +192,8 @@ module axi_ad9467(
   // main (device interface)
 
   axi_ad9467_if #(
-    .PCORE_BUFTYPE (PCORE_BUFTYPE),
-    .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .IO_DELAY_GROUP (IO_DELAY_GROUP))
   i_if (
     .adc_clk_in_p (adc_clk_in_p),
     .adc_clk_in_n (adc_clk_in_n),
@@ -215,7 +215,7 @@ module axi_ad9467(
 
   // channel
 
-  axi_ad9467_channel #(.CHID(0)) i_channel (
+  axi_ad9467_channel #(.CHANNEL_ID(0)) i_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_data (adc_data_s),
@@ -238,7 +238,7 @@ module axi_ad9467(
 
   // adc delay control
 
-  up_delay_cntrl #(.IO_WIDTH(9), .IO_BASEADDR(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(.DATA_WIDTH(9), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),
@@ -258,7 +258,7 @@ module axi_ad9467(
 
   // common processor control
 
-  up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
+  up_adc_common #(.ID(ID)) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

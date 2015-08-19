@@ -94,9 +94,9 @@ module axi_ad9361_dev_if (
 
   // this parameter controls the buffer type based on the target device.
 
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_DAC_IODELAY_ENABLE = 0;
-  parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
+  parameter   DEVICE_TYPE = 0;
+  parameter   DAC_IODELAY_ENABLE = 0;
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group";
   localparam  PCORE_7SERIES = 0;
   localparam  PCORE_VIRTEX6 = 1;
 
@@ -377,9 +377,9 @@ module axi_ad9361_dev_if (
   generate
   for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_rx_data
   ad_lvds_in #(
-    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_CTRL (0),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .IODELAY_GROUP (IO_DELAY_GROUP))
   i_rx_data (
     .rx_clk (l_clk),
     .rx_data_in_p (rx_data_in_p[l_inst]),
@@ -399,9 +399,9 @@ module axi_ad9361_dev_if (
   // receive frame interface, ibuf -> idelay -> iddr
 
   ad_lvds_in #(
-    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_CTRL (1),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .IODELAY_GROUP (IO_DELAY_GROUP))
   i_rx_frame (
     .rx_clk (l_clk),
     .rx_data_in_p (rx_frame_in_p),
@@ -421,10 +421,10 @@ module axi_ad9361_dev_if (
   generate
   for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_tx_data
   ad_lvds_out #(
-    .BUFTYPE (PCORE_DEVICE_TYPE),
-    .IODELAY_ENABLE (PCORE_DAC_IODELAY_ENABLE),
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .IODELAY_GROUP (IO_DELAY_GROUP))
   i_tx_data (
     .tx_clk (l_clk),
     .tx_data_p (tx_p_data_p[l_inst]),
@@ -444,10 +444,10 @@ module axi_ad9361_dev_if (
   // transmit frame interface, oddr -> obuf
 
   ad_lvds_out #(
-    .BUFTYPE (PCORE_DEVICE_TYPE),
-    .IODELAY_ENABLE (PCORE_DAC_IODELAY_ENABLE),
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .IODELAY_GROUP (IO_DELAY_GROUP))
   i_tx_frame (
     .tx_clk (l_clk),
     .tx_data_p (tx_p_frame),
@@ -465,10 +465,10 @@ module axi_ad9361_dev_if (
   // transmit clock interface, oddr -> obuf
 
   ad_lvds_out #(
-    .BUFTYPE (PCORE_DEVICE_TYPE),
-    .IODELAY_ENABLE (PCORE_DAC_IODELAY_ENABLE),
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .IODELAY_GROUP (IO_DELAY_GROUP))
   i_tx_clk (
     .tx_clk (l_clk),
     .tx_data_p (1'b0),
@@ -486,7 +486,7 @@ module axi_ad9361_dev_if (
   // device clock interface (receive clock)
 
   ad_lvds_clk #(
-    .BUFTYPE (PCORE_DEVICE_TYPE))
+    .DEVICE_TYPE (DEVICE_TYPE))
   i_clk (
     .clk_in_p (rx_clk_in_p),
     .clk_in_n (rx_clk_in_n),

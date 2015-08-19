@@ -491,9 +491,9 @@ module ad_tdd_control(
   // internal datapath delay compensation
 
   ad_addsub #(
-    .A_WIDTH(24),
-    .CONST_VALUE(11),
-    .ADD_SUB(1)
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(11),
+    .ADD_OR_SUB_N(0)
   ) i_tx_dp_on_1_comp (
     .clk(clk),
     .A(tdd_tx_dp_on_1),
@@ -503,9 +503,9 @@ module ad_tdd_control(
   );
 
   ad_addsub #(
-    .A_WIDTH(24),
-    .CONST_VALUE(11),
-    .ADD_SUB(1)
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(11),
+    .ADD_OR_SUB_N(0)
   ) i_tx_dp_on_2_comp (
     .clk(clk),
     .A(tdd_tx_dp_on_2),
@@ -515,9 +515,9 @@ module ad_tdd_control(
   );
 
   ad_addsub #(
-    .A_WIDTH(24),
-    .CONST_VALUE(11),
-    .ADD_SUB(1)
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(11),
+    .ADD_OR_SUB_N(0)
   ) i_tx_dp_off_1_comp (
     .clk(clk),
     .A(tdd_tx_dp_off_1),
@@ -527,9 +527,9 @@ module ad_tdd_control(
   );
 
   ad_addsub #(
-    .A_WIDTH(24),
-    .CONST_VALUE(11),
-    .ADD_SUB(1)
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(11),
+    .ADD_OR_SUB_N(0)
   ) i_tx_dp_off_2_comp (
     .clk(clk),
     .A(tdd_tx_dp_off_2),

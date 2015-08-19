@@ -76,13 +76,13 @@ module util_cpack (
 
   // parameters
 
-  parameter   CH_DW     = 32;
-  parameter   CH_CNT    = 8;
+  parameter   CHANNEL_DATA_WIDTH     = 32;
+  parameter   NUM_OF_CHANNELS    = 8;
 
-  localparam  CH_SCNT   = CH_DW/16;
-  localparam  CH_MCNT   = 8;
-  localparam  P_DW      = CH_CNT*CH_DW;
-  localparam  P_CNT     = CH_CNT;
+  localparam  CH_SCNT   = CHANNEL_DATA_WIDTH/16;
+  localparam  NUM_OF_CHANNELS_M   = 8;
+  localparam  P_DW      = NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH;
+  localparam  NUM_OF_CHANNELS_P     = NUM_OF_CHANNELS;
   localparam  P_SCNT    = P_DW/16;
 
   // adc interface
@@ -91,52 +91,52 @@ module util_cpack (
   input                             adc_clk;
   input                             adc_enable_0;
   input                             adc_valid_0;
-  input   [(CH_DW-1):0]             adc_data_0;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             adc_data_0;
   input                             adc_enable_1;
   input                             adc_valid_1;
-  input   [(CH_DW-1):0]             adc_data_1;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             adc_data_1;
   input                             adc_enable_2;
   input                             adc_valid_2;
-  input   [(CH_DW-1):0]             adc_data_2;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             adc_data_2;
   input                             adc_enable_3;
   input                             adc_valid_3;
-  input   [(CH_DW-1):0]             adc_data_3;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             adc_data_3;
   input                             adc_enable_4;
   input                             adc_valid_4;
-  input   [(CH_DW-1):0]             adc_data_4;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             adc_data_4;
   input                             adc_enable_5;
   input                             adc_valid_5;
-  input   [(CH_DW-1):0]             adc_data_5;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             adc_data_5;
   input                             adc_enable_6;
   input                             adc_valid_6;
-  input   [(CH_DW-1):0]             adc_data_6;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             adc_data_6;
   input                             adc_enable_7;
   input                             adc_valid_7;
-  input   [(CH_DW-1):0]             adc_data_7;
+  input   [(CHANNEL_DATA_WIDTH-1):0]             adc_data_7;
 
   // fifo interface
 
   output                            adc_valid;
   output                            adc_sync;
-  output  [((CH_CNT*CH_DW)-1):0]    adc_data;
+  output  [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    adc_data;
 
   // internal registers
 
   reg                               adc_valid_d = 'd0;
-  reg     [((CH_MCNT*CH_DW)-1):0]   adc_data_d = 'd0;
+  reg     [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]   adc_data_d = 'd0;
   reg                               adc_mux_valid = 'd0;
-  reg     [(CH_MCNT-1):0]           adc_mux_enable = 'd0;
+  reg     [(NUM_OF_CHANNELS_M-1):0]           adc_mux_enable = 'd0;
   reg     [((CH_SCNT*16*79)-1):0]   adc_mux_data = 'd0;
   reg                               adc_valid = 'd0;
   reg                               adc_sync = 'd0;
-  reg     [((CH_CNT*CH_DW)-1):0]    adc_data = 'd0;
+  reg     [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    adc_data = 'd0;
 
   // internal signals
 
-  wire    [(CH_MCNT-1):0]           adc_enable_s;
-  wire    [(CH_MCNT-1):0]           adc_valid_s;
-  wire    [((CH_MCNT*CH_DW)-1):0]   adc_data_s;
-  wire    [((CH_MCNT*CH_DW)-1):0]   adc_data_intlv_s;
+  wire    [(NUM_OF_CHANNELS_M-1):0]           adc_enable_s;
+  wire    [(NUM_OF_CHANNELS_M-1):0]           adc_valid_s;
+  wire    [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]   adc_data_s;
+  wire    [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]   adc_data_intlv_s;
   wire    [(CH_SCNT-1):0]           adc_mux_valid_s;
   wire    [(CH_SCNT-1):0]           adc_mux_enable_0_s;
   wire    [(CH_SCNT-1):0]           adc_mux_enable_1_s;
@@ -154,9 +154,9 @@ module util_cpack (
   wire    [((CH_SCNT*16*6)-1):0]    adc_mux_data_5_s;
   wire    [((CH_SCNT*16*7)-1):0]    adc_mux_data_6_s;
   wire    [((CH_SCNT*16*8)-1):0]    adc_mux_data_7_s;
-  wire    [(CH_MCNT-1):0]           adc_dsf_valid_s;
-  wire    [(CH_MCNT-1):0]           adc_dsf_sync_s;
-  wire    [(P_DW-1):0]              adc_dsf_data_s[(CH_MCNT-1):0];
+  wire    [(NUM_OF_CHANNELS_M-1):0]           adc_dsf_valid_s;
+  wire    [(NUM_OF_CHANNELS_M-1):0]           adc_dsf_sync_s;
+  wire    [(P_DW-1):0]              adc_dsf_data_s[(NUM_OF_CHANNELS_M-1):0];
 
   // loop variables
 
@@ -184,13 +184,13 @@ module util_cpack (
   // mw requires unused to be zero
 
   generate
-  for (n = 0; n < CH_MCNT; n = n + 1) begin: g_in
+  for (n = 0; n < NUM_OF_CHANNELS_M; n = n + 1) begin: g_in
   always @(posedge adc_clk) begin
     if ((adc_rst == 1'b1) && (adc_enable_s[n] == 1'b0)) begin
-      adc_data_d[((CH_DW*(n+1))-1):(CH_DW*n)] <= 'd0;
+      adc_data_d[((CHANNEL_DATA_WIDTH*(n+1))-1):(CHANNEL_DATA_WIDTH*n)] <= 'd0;
     end else if (adc_valid_s[n] == 1'b1) begin
-      adc_data_d[((CH_DW*(n+1))-1):(CH_DW*n)] <=
-        adc_data_s[((CH_DW*(n+1))-1):(CH_DW*n)];
+      adc_data_d[((CHANNEL_DATA_WIDTH*(n+1))-1):(CHANNEL_DATA_WIDTH*n)] <=
+        adc_data_s[((CHANNEL_DATA_WIDTH*(n+1))-1):(CHANNEL_DATA_WIDTH*n)];
     end
   end
   end
@@ -200,15 +200,15 @@ module util_cpack (
 
   generate
   for (n = 0; n < CH_SCNT; n = n + 1) begin: g_intlv
-  assign adc_data_intlv_s[((16*CH_MCNT*(n+1))-1):(16*CH_MCNT*n)] =
-          { adc_data_d[(((CH_DW*7)+(16*(n+1)))-1):((CH_DW*7)+(16*n))],
-            adc_data_d[(((CH_DW*6)+(16*(n+1)))-1):((CH_DW*6)+(16*n))],
-            adc_data_d[(((CH_DW*5)+(16*(n+1)))-1):((CH_DW*5)+(16*n))],
-            adc_data_d[(((CH_DW*4)+(16*(n+1)))-1):((CH_DW*4)+(16*n))],
-            adc_data_d[(((CH_DW*3)+(16*(n+1)))-1):((CH_DW*3)+(16*n))],
-            adc_data_d[(((CH_DW*2)+(16*(n+1)))-1):((CH_DW*2)+(16*n))],
-            adc_data_d[(((CH_DW*1)+(16*(n+1)))-1):((CH_DW*1)+(16*n))],
-            adc_data_d[(((CH_DW*0)+(16*(n+1)))-1):((CH_DW*0)+(16*n))]};
+  assign adc_data_intlv_s[((16*NUM_OF_CHANNELS_M*(n+1))-1):(16*NUM_OF_CHANNELS_M*n)] =
+          { adc_data_d[(((CHANNEL_DATA_WIDTH*7)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*7)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*6)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*6)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*5)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*5)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*4)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*4)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*3)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*3)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*2)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*2)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*1)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*1)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*0)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*0)+(16*n))]};
   end
   endgenerate
 
@@ -220,7 +220,7 @@ module util_cpack (
     .adc_clk (adc_clk),
     .adc_valid (adc_valid_d),
     .adc_enable (adc_enable_s),
-    .adc_data (adc_data_intlv_s[((16*CH_MCNT*(n+1))-1):(16*CH_MCNT*n)]),
+    .adc_data (adc_data_intlv_s[((16*NUM_OF_CHANNELS_M*(n+1))-1):(16*NUM_OF_CHANNELS_M*n)]),
     .adc_mux_valid (adc_mux_valid_s[n]),
     .adc_mux_enable_0 (adc_mux_enable_0_s[n]),
     .adc_mux_data_0 (adc_mux_data_0_s[(((n+1)*16*1)-1):(n*16*1)]),
@@ -274,12 +274,12 @@ module util_cpack (
   // store & fwd
 
   generate
-  for (n = 0; n < P_CNT; n = n + 1) begin: g_dsf
+  for (n = 0; n < NUM_OF_CHANNELS_P; n = n + 1) begin: g_dsf
   util_cpack_dsf #(
-    .CH_MCNT (CH_MCNT),
-    .P_CNT (P_CNT),
-    .CH_DW (CH_DW),
-    .CH_ICNT ((n+1)))
+    .NUM_OF_CHANNELS_M (NUM_OF_CHANNELS_M),
+    .NUM_OF_CHANNELS_P (NUM_OF_CHANNELS_P),
+    .CHANNEL_DATA_WIDTH (CHANNEL_DATA_WIDTH),
+    .NUM_OF_CHANNELS_I ((n+1)))
   i_dsf (
     .adc_clk (adc_clk),
     .adc_valid (adc_mux_valid),
@@ -292,8 +292,8 @@ module util_cpack (
   endgenerate
 
   generate
-  if (CH_MCNT > P_CNT) begin
-  for (n = P_CNT; n < CH_MCNT; n = n + 1) begin: g_def
+  if (NUM_OF_CHANNELS_M > NUM_OF_CHANNELS_P) begin
+  for (n = NUM_OF_CHANNELS_P; n < NUM_OF_CHANNELS_M; n = n + 1) begin: g_def
   assign adc_dsf_valid_s[n] = 'd0;
   assign adc_dsf_sync_s[n] = 'd0;
   assign adc_dsf_data_s[n] = 'd0;

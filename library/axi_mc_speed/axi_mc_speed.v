@@ -134,7 +134,7 @@ end
 
 // HALL sensors debouncers
 debouncer
-#( .DEBOUNCER_LEN(400))
+#( .DEBOUNCER_LENGTH(400))
 position_0(
     .clk_i(ref_clk),
     .rst_i(adc_rst),
@@ -142,7 +142,7 @@ position_0(
     .sig_o(position_s[0]));
 
 debouncer
-#( .DEBOUNCER_LEN(400))
+#( .DEBOUNCER_LENGTH(400))
 position_1(
     .clk_i(ref_clk),
     .rst_i(adc_rst),
@@ -150,7 +150,7 @@ position_1(
     .sig_o(position_s[1]));
 
 debouncer
-#( .DEBOUNCER_LEN(400))
+#( .DEBOUNCER_LENGTH(400))
 position_2(
     .clk_i(ref_clk),
     .rst_i(adc_rst),

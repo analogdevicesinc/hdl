@@ -57,7 +57,7 @@ module ad_iqcor (
 
   // select i/q if disabled
 
-  parameter IQSEL = 0;
+  parameter Q_OR_I_N = 0;
 
   // data interface
 
@@ -95,8 +95,8 @@ module ad_iqcor (
 
   // swap i & q
 
-  assign data_i_s = (IQSEL == 1) ? data_iq : data_in;
-  assign data_q_s = (IQSEL == 1) ? data_in : data_iq;
+  assign data_i_s = (Q_OR_I_N == 1) ? data_iq : data_in;
+  assign data_q_s = (Q_OR_I_N == 1) ? data_in : data_iq;
 
   // scaling functions - i
 
@@ -133,7 +133,7 @@ module ad_iqcor (
     valid_out <= p1_valid;
     if (iqcor_enable == 1'b1) begin
       data_out <= p1_data_p[29:14];
-    end else if (IQSEL == 1) begin
+    end else if (Q_OR_I_N == 1) begin
       data_out <= p1_data_q;
     end else begin
       data_out <= p1_data_i;

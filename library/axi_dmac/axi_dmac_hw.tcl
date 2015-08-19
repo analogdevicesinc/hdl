@@ -45,12 +45,12 @@ add_fileset_file axi_dmac_constr.sdc      SDC     PATH axi_dmac_constr.sdc
 
 # parameters
 
-add_parameter PCORE_ID INTEGER 0
-set_parameter_property PCORE_ID DEFAULT_VALUE 0
-set_parameter_property PCORE_ID DISPLAY_NAME PCORE_ID
-set_parameter_property PCORE_ID TYPE INTEGER
-set_parameter_property PCORE_ID UNITS None
-set_parameter_property PCORE_ID HDL_PARAMETER true
+add_parameter ID INTEGER 0
+set_parameter_property ID DEFAULT_VALUE 0
+set_parameter_property ID DISPLAY_NAME ID
+set_parameter_property ID TYPE INTEGER
+set_parameter_property ID UNITS None
+set_parameter_property ID HDL_PARAMETER true
 
 add_parameter C_DMA_DATA_WIDTH_SRC INTEGER 0
 set_parameter_property C_DMA_DATA_WIDTH_SRC DEFAULT_VALUE 64
@@ -80,26 +80,26 @@ set_parameter_property C_2D_TRANSFER TYPE INTEGER
 set_parameter_property C_2D_TRANSFER UNITS None
 set_parameter_property C_2D_TRANSFER HDL_PARAMETER true
 
-add_parameter C_CLKS_ASYNC_REQ_SRC INTEGER 0
-set_parameter_property C_CLKS_ASYNC_REQ_SRC DEFAULT_VALUE 1
-set_parameter_property C_CLKS_ASYNC_REQ_SRC DISPLAY_NAME C_CLKS_ASYNC_REQ_SRC
-set_parameter_property C_CLKS_ASYNC_REQ_SRC TYPE INTEGER
-set_parameter_property C_CLKS_ASYNC_REQ_SRC UNITS None
-set_parameter_property C_CLKS_ASYNC_REQ_SRC HDL_PARAMETER true
+add_parameter ASYNC_CLK_REQ_SRC INTEGER 0
+set_parameter_property ASYNC_CLK_REQ_SRC DEFAULT_VALUE 1
+set_parameter_property ASYNC_CLK_REQ_SRC DISPLAY_NAME ASYNC_CLK_REQ_SRC
+set_parameter_property ASYNC_CLK_REQ_SRC TYPE INTEGER
+set_parameter_property ASYNC_CLK_REQ_SRC UNITS None
+set_parameter_property ASYNC_CLK_REQ_SRC HDL_PARAMETER true
 
-add_parameter C_CLKS_ASYNC_SRC_DEST INTEGER 0
-set_parameter_property C_CLKS_ASYNC_SRC_DEST DEFAULT_VALUE 1
-set_parameter_property C_CLKS_ASYNC_SRC_DEST DISPLAY_NAME C_CLKS_ASYNC_SRC_DEST
-set_parameter_property C_CLKS_ASYNC_SRC_DEST TYPE INTEGER
-set_parameter_property C_CLKS_ASYNC_SRC_DEST UNITS None
-set_parameter_property C_CLKS_ASYNC_SRC_DEST HDL_PARAMETER true
+add_parameter ASYNC_CLK_SRC_DEST INTEGER 0
+set_parameter_property ASYNC_CLK_SRC_DEST DEFAULT_VALUE 1
+set_parameter_property ASYNC_CLK_SRC_DEST DISPLAY_NAME ASYNC_CLK_SRC_DEST
+set_parameter_property ASYNC_CLK_SRC_DEST TYPE INTEGER
+set_parameter_property ASYNC_CLK_SRC_DEST UNITS None
+set_parameter_property ASYNC_CLK_SRC_DEST HDL_PARAMETER true
 
-add_parameter C_CLKS_ASYNC_DEST_REQ INTEGER 0
-set_parameter_property C_CLKS_ASYNC_DEST_REQ DEFAULT_VALUE 1
-set_parameter_property C_CLKS_ASYNC_DEST_REQ DISPLAY_NAME C_CLKS_ASYNC_DEST_REQ
-set_parameter_property C_CLKS_ASYNC_DEST_REQ TYPE INTEGER
-set_parameter_property C_CLKS_ASYNC_DEST_REQ UNITS None
-set_parameter_property C_CLKS_ASYNC_DEST_REQ HDL_PARAMETER true
+add_parameter ASYNC_CLK_DEST_REQ INTEGER 0
+set_parameter_property ASYNC_CLK_DEST_REQ DEFAULT_VALUE 1
+set_parameter_property ASYNC_CLK_DEST_REQ DISPLAY_NAME ASYNC_CLK_DEST_REQ
+set_parameter_property ASYNC_CLK_DEST_REQ TYPE INTEGER
+set_parameter_property ASYNC_CLK_DEST_REQ UNITS None
+set_parameter_property ASYNC_CLK_DEST_REQ HDL_PARAMETER true
 
 add_parameter C_AXI_SLICE_DEST INTEGER 0
 set_parameter_property C_AXI_SLICE_DEST DEFAULT_VALUE 0

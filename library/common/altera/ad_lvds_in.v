@@ -60,7 +60,7 @@ module ad_lvds_in (
 
   // parameters
 
-  parameter   BUFTYPE = 0;
+  parameter   DEVICE_TYPE = 0;
   parameter   IODELAY_CTRL = 0;
   parameter   IODELAY_GROUP = "dev_if_delay_group";
   localparam  SERIES7 = 0;

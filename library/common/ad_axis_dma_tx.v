@@ -266,7 +266,7 @@ module ad_axis_dma_tx (
 
   // memory
 
-  ad_mem #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(6)) i_mem (
+  ad_mem #(.DATA_WIDTH(DATA_WIDTH), .ADDRESS_WIDTH(6)) i_mem (
     .clka (dma_clk),
     .wea (dma_wr),
     .addra (dma_waddr),

@@ -45,20 +45,20 @@
  */
 module sync_bits
 (
-	input [NUM_BITS-1:0] in,
+	input [NUM_OF_BITS-1:0] in,
 	input out_resetn,
 	input out_clk,
-	output [NUM_BITS-1:0] out
+	output [NUM_OF_BITS-1:0] out
 );
 
 // Number of bits to synchronize
-parameter NUM_BITS = 1;
+parameter NUM_OF_BITS = 1;
 // Whether input and output clocks are asynchronous, if 0 the synchronizer will
 // be bypassed and the output signal equals the input signal.
-parameter CLK_ASYNC = 1;
+parameter ASYNC_CLK = 1;
 
-reg [NUM_BITS-1:0] cdc_sync_stage1 = 'h0;
-reg [NUM_BITS-1:0] cdc_sync_stage2 = 'h0;
+reg [NUM_OF_BITS-1:0] cdc_sync_stage1 = 'h0;
+reg [NUM_OF_BITS-1:0] cdc_sync_stage2 = 'h0;
 
 always @(posedge out_clk)
 begin
@@ -71,6 +71,6 @@ begin
 	end
 end
 
-assign out = CLK_ASYNC ? cdc_sync_stage2 : in;
+assign out = ASYNC_CLK ? cdc_sync_stage2 : in;
 
 endmodule

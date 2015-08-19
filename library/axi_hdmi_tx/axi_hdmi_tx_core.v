@@ -101,7 +101,7 @@ module axi_hdmi_tx_core (
 
   // parameters
 
-  parameter   Cr_Cb_N = 0;
+  parameter   CR_CB_N = 0;
   parameter   EMBEDDED_SYNC = 0;
 
   // hdmi interface
@@ -539,7 +539,7 @@ module axi_hdmi_tx_core (
 
   // data memory
 
-  ad_mem #(.DATA_WIDTH(48), .ADDR_WIDTH(9)) i_mem (
+  ad_mem #(.DATA_WIDTH(48), .ADDRESS_WIDTH(9)) i_mem (
     .clka (vdma_clk),
     .wea (vdma_wr),
     .addra (vdma_waddr),
@@ -567,7 +567,7 @@ module axi_hdmi_tx_core (
 
   // sub sampling, 444 to 422
 
-  ad_ss_444to422 #(.DELAY_DATA_WIDTH(5), .Cr_Cb_N(Cr_Cb_N)) i_ss_444to422 (
+  ad_ss_444to422 #(.DELAY_DATA_WIDTH(5), .CR_CB_N(CR_CB_N)) i_ss_444to422 (
     .clk (hdmi_clk),
     .s444_de (hdmi_24_data_e),
     .s444_sync ({hdmi_24_hsync,

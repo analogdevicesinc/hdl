@@ -86,7 +86,7 @@ module up_hdmi_tx (
   // parameters
 
   localparam  PCORE_VERSION = 32'h00040063;
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   // hdmi interface
 
@@ -279,7 +279,7 @@ module up_hdmi_tx (
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[11:0])
           12'h000: up_rdata <= PCORE_VERSION;
-          12'h001: up_rdata <= PCORE_ID;
+          12'h001: up_rdata <= ID;
           12'h002: up_rdata <= up_scratch;
           12'h010: up_rdata <= {31'd0, up_resetn};
           12'h011: up_rdata <= {29'd0, up_ss_bypass, up_full_range, up_csc_bypass};

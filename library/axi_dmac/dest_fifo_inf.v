@@ -45,14 +45,14 @@ module dmac_dest_fifo_inf (
 	input sync_id,
 	output sync_id_ret,
 
-	input [C_ID_WIDTH-1:0] request_id,
-	output [C_ID_WIDTH-1:0] response_id,
-	output [C_ID_WIDTH-1:0] data_id,
+	input [ID_WIDTH-1:0] request_id,
+	output [ID_WIDTH-1:0] response_id,
+	output [ID_WIDTH-1:0] data_id,
 	input data_eot,
 	input response_eot,
 
 	input en,
-	output [C_DATA_WIDTH-1:0] dout,
+	output [DATA_WIDTH-1:0] dout,
 	output valid,
 	output underflow,
 
@@ -60,11 +60,11 @@ module dmac_dest_fifo_inf (
 
 	output fifo_ready,
 	input fifo_valid,
-	input [C_DATA_WIDTH-1:0] fifo_data,
+	input [DATA_WIDTH-1:0] fifo_data,
 
 	input req_valid,
 	output req_ready,
-	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
 	output response_valid,
 	input response_ready,
@@ -72,9 +72,9 @@ module dmac_dest_fifo_inf (
 	output [1:0] response_resp
 );
 
-parameter C_ID_WIDTH = 3;
-parameter C_DATA_WIDTH = 64;
-parameter C_BEATS_PER_BURST_WIDTH = 4;
+parameter ID_WIDTH = 3;
+parameter DATA_WIDTH = 64;
+parameter BEATS_PER_BURST_WIDTH = 4;
 
 assign sync_id_ret = sync_id;
 wire data_enabled;
@@ -100,10 +100,10 @@ assign data_ready = en_d1 & (data_valid | ~enable);
 assign valid = en_d1 & data_valid & enable;
 
 dmac_data_mover # (
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_DATA_WIDTH),
-	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH),
-	.C_DISABLE_WAIT_FOR_ID(0)
+	.ID_WIDTH(ID_WIDTH),
+	.DATA_WIDTH(DATA_WIDTH),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+	.DISABLE_WAIT_FOR_ID(0)
 ) i_data_mover (
 	.clk(clk),
 	.resetn(resetn),
@@ -131,7 +131,7 @@ dmac_data_mover # (
 );
 
 dmac_response_generator # (
-	.C_ID_WIDTH(C_ID_WIDTH)
+	.ID_WIDTH(ID_WIDTH)
 ) i_response_generator (
 	.clk(clk),
 	.resetn(resetn),

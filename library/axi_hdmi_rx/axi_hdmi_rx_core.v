@@ -321,7 +321,7 @@ module axi_hdmi_rx_core (
 
   // super sampling, 422 to 444
 
-  ad_ss_422to444 #(.Cr_Cb_N(0), .DELAY_DATA_WIDTH(2)) i_ss (
+  ad_ss_422to444 #(.CR_CB_N(0), .DELAY_DATA_WIDTH(2)) i_ss (
     .clk (hdmi_clk),
     .s422_de (hdmi_de_422),
     .s422_sync ({hdmi_sof_422, hdmi_de_422}),
