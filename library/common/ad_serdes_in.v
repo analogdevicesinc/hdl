@@ -176,7 +176,7 @@ module ad_serdes_in (
 
     // Note: The first sample in time will be data_s7, the last data_s0!
     if(DDR_OR_SDR_N == SDR) begin
-      ISERDES_OR_DDR_NE2 #(
+      ISERDESE2  #(
         .DATA_RATE("SDR"),
         .DATA_WIDTH(DATA_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
@@ -189,12 +189,12 @@ module ad_serdes_in (
         .IOBDELAY("IFD"),
         .NUM_CE(2),
         .OFB_USED("FALSE"),
-        .SERDES_OR_DDR_N_MODE("MASTER"),
+        .SERDES_MODE("MASTER"),
         .SRVAL_Q1(1'b0),
         .SRVAL_Q2(1'b0),
         .SRVAL_Q3(1'b0),
         .SRVAL_Q4(1'b0))
-      ISERDES_OR_DDR_NE2_inst (
+      ISERDESE2_inst (
         .O(),
         .Q1(data_s0),
         .Q2(data_s1),
@@ -226,7 +226,7 @@ module ad_serdes_in (
       );
     end else begin
 
-      ISERDES_OR_DDR_NE2 #(
+      ISERDESE2 #(
         .DATA_RATE("DDR"),
         .DATA_WIDTH(DATA_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
@@ -239,12 +239,12 @@ module ad_serdes_in (
         .IOBDELAY("IFD"),
         .NUM_CE(2),
         .OFB_USED("FALSE"),
-        .SERDES_OR_DDR_N_MODE("MASTER"),
+        .SERDES_MODE("MASTER"),
         .SRVAL_Q1(1'b0),
         .SRVAL_Q2(1'b0),
         .SRVAL_Q3(1'b0),
         .SRVAL_Q4(1'b0))
-      ISERDES_OR_DDR_NE2_inst (
+      ISERDESE2_inst (
         .O(),
         .Q1(data_s0),
         .Q2(data_s1),
@@ -304,7 +304,7 @@ module ad_serdes_in (
         .CNTVALUEIN (up_dwdata),
         .CNTVALUEOUT (up_drdata));
 
-      ISERDES_OR_DDR_NE1 #(
+      ISERDESE1 #(
         .DATA_RATE("DDR"),
         .DATA_WIDTH(DATA_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
@@ -317,7 +317,7 @@ module ad_serdes_in (
         .IOBDELAY("NONE"),
         .NUM_CE(1),
         .OFB_USED("FALSE"),
-        .SERDES_OR_DDR_N_MODE("MASTER"),
+        .SERDES_MODE("MASTER"),
         .SRVAL_Q1(1'b0),
         .SRVAL_Q2(1'b0),
         .SRVAL_Q3(1'b0),
@@ -349,7 +349,7 @@ module ad_serdes_in (
         .SHIFTIN2(1'b0)
       );
 
-      ISERDES_OR_DDR_NE1 #(
+      ISERDESE1 #(
         .DATA_RATE("DDR"),
         .DATA_WIDTH(DATA_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
@@ -362,7 +362,7 @@ module ad_serdes_in (
         .IOBDELAY("NONE"),
         .NUM_CE(1),
         .OFB_USED("FALSE"),
-        .SERDES_OR_DDR_N_MODE("SLAVE"),
+        .SERDES_MODE("SLAVE"),
         .SRVAL_Q1(1'b0),
         .SRVAL_Q2(1'b0),
         .SRVAL_Q3(1'b0),

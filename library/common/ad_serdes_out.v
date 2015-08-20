@@ -119,12 +119,12 @@ module ad_serdes_out (
   end
 
   if ((SERDES_OR_DDR_N == 1) && (DEVICE_TYPE == DEVICE_7SERIES)) begin
-  OSERDES_OR_DDR_NE2 #(
+  OSERDESE2  #(
     .DATA_RATE_OQ ("DDR"),
     .DATA_RATE_TQ ("SDR"),
     .DATA_WIDTH (8),
     .TRISTATE_WIDTH (1),
-    .SERDES_OR_DDR_N_MODE ("MASTER"))
+    .SERDES_MODE ("MASTER"))
   i_serdes (
     .D1 (data_s0[l_inst]),
     .D2 (data_s1[l_inst]),
@@ -156,13 +156,13 @@ module ad_serdes_out (
   end
 
   if ((SERDES_OR_DDR_N == 1) && (DEVICE_TYPE == DEVICE_6SERIES)) begin
-  OSERDES_OR_DDR_NE1 #(
+  OSERDESE1  #(
     .DATA_RATE_OQ ("DDR"),
     .DATA_RATE_TQ ("SDR"),
     .DATA_WIDTH (8),
     .INTERFACE_TYPE ("DEFAULT"),
     .TRISTATE_WIDTH (1),
-    .SERDES_OR_DDR_N_MODE ("MASTER"))
+    .SERDES_MODE ("MASTER"))
   i_serdes_m (
     .D1 (data_s0[l_inst]),
     .D2 (data_s1[l_inst]),
@@ -193,13 +193,13 @@ module ad_serdes_out (
     .TCE (1'b0),
     .RST (rst));
 
-  OSERDES_OR_DDR_NE1 #(
+  OSERDESE1  #(
     .DATA_RATE_OQ ("DDR"),
     .DATA_RATE_TQ ("SDR"),
     .DATA_WIDTH (8),
     .INTERFACE_TYPE ("DEFAULT"),
     .TRISTATE_WIDTH (1),
-    .SERDES_OR_DDR_N_MODE ("SLAVE"))
+    .SERDES_MODE ("SLAVE"))
   i_serdes_s (
     .D1 (1'b0), 
     .D2 (1'b0), 
