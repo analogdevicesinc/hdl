@@ -52,17 +52,17 @@ adi_add_bus "m_axis" "master" \
 	  {"m_axis_valid" "TVALID"} \
 	  {"m_axis_data" "TDATA"} ]
 adi_add_bus_clock "m_axis_aclk" "m_axis"
-   
+
 adi_set_bus_dependency "m_src_axi" "m_src_axi" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_SRC')) = 0)"
 adi_set_bus_dependency "m_dest_axi" "m_dest_axi" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_DEST')) = 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 0)"
 adi_set_bus_dependency "s_axis" "s_axis" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_SRC')) = 1)"
 adi_set_bus_dependency "m_axis" "m_axis" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_DEST')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 1)"
 adi_set_ports_dependency "fifo_rd" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_DEST')) = 2)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 2)"
 
 adi_add_bus "fifo_wr" "slave" \
 	"analog.com:interface:fifo_wr_rtl:1.0" \
@@ -78,7 +78,7 @@ adi_add_bus "fifo_wr" "slave" \
 adi_add_bus_clock "fifo_wr_clk" "fifo_wr"
 
 adi_set_bus_dependency "fifo_wr" "fifo_wr" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_SRC')) = 2)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_SRC')) = 2)"
 
 adi_add_bus "fifo_rd" "slave" \
 	"analog.com:interface:fifo_rd_rtl:1.0" \
@@ -93,7 +93,7 @@ adi_add_bus "fifo_rd" "slave" \
 adi_add_bus_clock "fifo_rd_clk" "fifo_rd"
 
 adi_set_bus_dependency "fifo_rd" "fifo_rd" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE_DEST')) = 2)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 2)"
 
 foreach port {"m_dest_axi_aresetn" "m_src_axi_aresetn" "s_axis_valid" \
 	"s_axis_data" "m_axis_ready" "fifo_wr_en" "fifo_wr_din" "fifo_rd_en"} {
