@@ -86,7 +86,6 @@ module axi_ad9434_if (
   parameter IO_DELAY_GROUP = "dev_if_delay_group";
 
   // buffer type based on the target device.
-  localparam DEVICE_TYPE = DEVICE_TYPE;
   localparam SDR = 0;
 
   // adc interface (clk, data, over-range)
