@@ -645,18 +645,18 @@
   <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
   <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
   <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
-  <parameter name="C_2D_TRANSFER" value="1" />
-  <parameter name="C_AXI_SLICE_DEST" value="0" />
-  <parameter name="C_AXI_SLICE_SRC" value="0" />
-  <parameter name="C_CYCLIC" value="1" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="128" />
-  <parameter name="C_DMA_DATA_WIDTH_SRC" value="128" />
-  <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
-  <parameter name="C_DMA_TYPE_DEST" value="2" />
-  <parameter name="C_DMA_TYPE_SRC" value="0" />
-  <parameter name="C_FIFO_SIZE" value="4" />
-  <parameter name="C_SYNC_TRANSFER_START" value="0" />
+  <parameter name="AXI_SLICE_DEST" value="0" />
+  <parameter name="AXI_SLICE_SRC" value="0" />
+  <parameter name="CYCLIC" value="1" />
+  <parameter name="DMA_2D_TRANSFER" value="0" />
+  <parameter name="DMA_DATA_WIDTH_DEST" value="128" />
+  <parameter name="DMA_DATA_WIDTH_SRC" value="128" />
+  <parameter name="DMA_LENGTH_WIDTH" value="14" />
+  <parameter name="DMA_TYPE_DEST" value="2" />
+  <parameter name="DMA_TYPE_SRC" value="0" />
+  <parameter name="FIFO_SIZE" value="4" />
   <parameter name="ID" value="0" />
+  <parameter name="SYNC_TRANSFER_START" value="0" />
  </module>
  <module name="axi_ad9680_core" kind="axi_ad9680" version="1.0" enabled="1">
   <parameter name="ID" value="0" />
@@ -665,18 +665,18 @@
   <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
   <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
   <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
-  <parameter name="C_2D_TRANSFER" value="1" />
-  <parameter name="C_AXI_SLICE_DEST" value="0" />
-  <parameter name="C_AXI_SLICE_SRC" value="0" />
-  <parameter name="C_CYCLIC" value="1" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="128" />
-  <parameter name="C_DMA_DATA_WIDTH_SRC" value="128" />
-  <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
-  <parameter name="C_DMA_TYPE_DEST" value="0" />
-  <parameter name="C_DMA_TYPE_SRC" value="2" />
-  <parameter name="C_FIFO_SIZE" value="4" />
-  <parameter name="C_SYNC_TRANSFER_START" value="0" />
+  <parameter name="AXI_SLICE_DEST" value="0" />
+  <parameter name="AXI_SLICE_SRC" value="0" />
+  <parameter name="CYCLIC" value="0" />
+  <parameter name="DMA_2D_TRANSFER" value="1" />
+  <parameter name="DMA_DATA_WIDTH_DEST" value="128" />
+  <parameter name="DMA_DATA_WIDTH_SRC" value="128" />
+  <parameter name="DMA_LENGTH_WIDTH" value="14" />
+  <parameter name="DMA_TYPE_DEST" value="0" />
+  <parameter name="DMA_TYPE_SRC" value="2" />
+  <parameter name="FIFO_SIZE" value="4" />
   <parameter name="ID" value="0" />
+  <parameter name="SYNC_TRANSFER_START" value="0" />
  </module>
  <module name="axi_jesd_xcvr" kind="axi_jesd_xcvr" version="1.0" enabled="1">
   <parameter name="DEVICE_TYPE" value="0" />
