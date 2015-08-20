@@ -24,7 +24,7 @@ set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $pmod_spi_dma
 set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {0}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $pmod_spi_dma
+set_property -dict [list CONFIG.C_DMA_2D_TRANSFER {0}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {16}] $pmod_spi_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $pmod_spi_dma

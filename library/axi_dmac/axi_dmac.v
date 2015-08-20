@@ -2,9 +2,9 @@
 // ***************************************************************************
 // Copyright 2013(c) Analog Devices, Inc.
 //  Author: Lars-Peter Clausen <lars@metafoo.de>
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -22,16 +22,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -178,7 +178,7 @@ parameter ID = 0;
 parameter DMA_DATA_WIDTH_SRC = 64;
 parameter DMA_DATA_WIDTH_DEST = 64;
 parameter DMA_LENGTH_WIDTH = 24;
-parameter 2D_TRANSFER = 1;
+parameter DMA_DMA_2D_TRANSFER = 1;
 
 parameter ASYNC_CLK_REQ_SRC = 1;
 parameter ASYNC_CLK_SRC_DEST = 1;
@@ -421,9 +421,9 @@ begin
 		12'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
 		12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
 		12'h106: up_rdata <= up_dma_x_length;
-		12'h107: up_rdata <= 2D_TRANSFER ? up_dma_y_length : 'h00;
-		12'h108: up_rdata <= 2D_TRANSFER ? up_dma_dest_stride : 'h00;
-		12'h109: up_rdata <= 2D_TRANSFER ? up_dma_src_stride : 'h00;
+		12'h107: up_rdata <= DMA_2D_TRANSFER ? up_dma_y_length : 'h00;
+		12'h108: up_rdata <= DMA_2D_TRANSFER ? up_dma_dest_stride : 'h00;
+		12'h109: up_rdata <= DMA_2D_TRANSFER ? up_dma_src_stride : 'h00;
 		12'h10a: up_rdata <= up_transfer_done_bitmap;
 		12'h10b: up_rdata <= up_transfer_id_eot;
 		12'h10c: up_rdata <= 'h00; // Status
@@ -469,7 +469,7 @@ assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
 assign up_eot = up_dma_cyclic ? 1'b0 : up_req_eot;
 
 
-generate if (2D_TRANSFER == 1) begin
+generate if (DMA_2D_TRANSFER == 1) begin
 
 dmac_2d_transfer #(
 	.DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
@@ -544,13 +544,13 @@ dmac_request_arb #(
 
 	.eot(dma_req_eot),
 
-	
+
 	.m_dest_axi_aclk(m_dest_axi_aclk),
 	.m_dest_axi_aresetn(m_dest_axi_aresetn),
 	.m_src_axi_aclk(m_src_axi_aclk),
 	.m_src_axi_aresetn(m_src_axi_aresetn),
 
-	
+
 	.m_axi_awaddr(m_dest_axi_awaddr),
 	.m_axi_awlen(m_dest_axi_awlen),
 	.m_axi_awsize(m_dest_axi_awsize),
@@ -560,19 +560,19 @@ dmac_request_arb #(
 	.m_axi_awvalid(m_dest_axi_awvalid),
 	.m_axi_awready(m_dest_axi_awready),
 
-	
+
 	.m_axi_wdata(m_dest_axi_wdata),
 	.m_axi_wstrb(m_dest_axi_wstrb),
 	.m_axi_wready(m_dest_axi_wready),
 	.m_axi_wvalid(m_dest_axi_wvalid),
 	.m_axi_wlast(m_dest_axi_wlast),
 
-	
+
 	.m_axi_bvalid(m_dest_axi_bvalid),
 	.m_axi_bresp(m_dest_axi_bresp),
 	.m_axi_bready(m_dest_axi_bready),
 
-	
+
 	.m_axi_arready(m_src_axi_arready),
 	.m_axi_arvalid(m_src_axi_arvalid),
 	.m_axi_araddr(m_src_axi_araddr),
@@ -582,13 +582,13 @@ dmac_request_arb #(
 	.m_axi_arprot(m_src_axi_arprot),
 	.m_axi_arcache(m_src_axi_arcache),
 
-	
+
 	.m_axi_rdata(m_src_axi_rdata),
 	.m_axi_rready(m_src_axi_rready),
 	.m_axi_rvalid(m_src_axi_rvalid),
 	.m_axi_rresp(m_src_axi_rresp),
 
-	
+
 	.s_axis_aclk(s_axis_aclk),
 	.s_axis_ready(s_axis_ready),
 	.s_axis_valid(s_axis_valid),
@@ -596,7 +596,7 @@ dmac_request_arb #(
 	.s_axis_user(s_axis_user),
 	.s_axis_xfer_req(s_axis_xfer_req),
 
-	
+
 	.m_axis_aclk(m_axis_aclk),
 	.m_axis_ready(m_axis_ready),
 	.m_axis_valid(m_axis_valid),
@@ -612,7 +612,7 @@ dmac_request_arb #(
 	.fifo_wr_sync(fifo_wr_sync),
 	.fifo_wr_xfer_req(fifo_wr_xfer_req),
 
-	
+
 	.fifo_rd_clk(fifo_rd_clk),
 	.fifo_rd_en(fifo_rd_en),
 	.fifo_rd_valid(fifo_rd_valid),

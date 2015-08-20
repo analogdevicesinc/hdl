@@ -48,7 +48,7 @@ set_property -dict [list CONFIG.ID {1}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] [get_bd_cells axi_ad9122_dma]
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] [get_bd_cells axi_ad9122_dma]
+set_property -dict [list CONFIG.C_DMA_2D_TRANSFER {0}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_CYCLIC {1}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}] [get_bd_cells axi_ad9122_dma]
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] [get_bd_cells axi_ad9122_dma]
@@ -69,7 +69,7 @@ set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_ad9250_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9250_dma
+set_property -dict [list CONFIG.C_DMA_2D_TRANSFER {0}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9250_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9250_dma

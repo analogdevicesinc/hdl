@@ -31,7 +31,7 @@
   set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9122_dma
   set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9122_dma
   set_property -dict [list CONFIG.FIFO_SIZE {16}] $axi_ad9122_dma
-  set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9122_dma
+  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9122_dma
   set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9122_dma
   set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9122_dma
   set_property -dict [list CONFIG.AXI_SLICE_SRC {1}]  $axi_ad9122_dma
@@ -48,7 +48,7 @@
   set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9643_dma
   set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9643_dma
   set_property -dict [list CONFIG.FIFO_SIZE {16}] $axi_ad9643_dma
-  set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9643_dma
+  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9643_dma
   set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9643_dma
   set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9643_dma
   set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9643_dma

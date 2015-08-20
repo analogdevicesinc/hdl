@@ -53,7 +53,7 @@ set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9361_dac_dma
 
@@ -72,7 +72,7 @@ set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9361_adc_dma
 

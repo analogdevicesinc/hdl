@@ -94,7 +94,7 @@
   set speed_detector_m1_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 speed_detector_m1_dma]
   set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $speed_detector_m1_dma
   set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.2D_TRANSFER {0}] $speed_detector_m1_dma
+  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $speed_detector_m1_dma
   set_property -dict [list CONFIG.CYCLIC {0}] $speed_detector_m1_dma
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $speed_detector_m1_dma
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $speed_detector_m1_dma
@@ -107,7 +107,7 @@
   set speed_detector_m2_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 speed_detector_m2_dma]
   set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $speed_detector_m2_dma
   set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.2D_TRANSFER {0}] $speed_detector_m2_dma
+  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $speed_detector_m2_dma
   set_property -dict [list CONFIG.CYCLIC {0}] $speed_detector_m2_dma
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $speed_detector_m2_dma
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $speed_detector_m2_dma
@@ -121,7 +121,7 @@
     # dma motor 1
   set current_monitor_m1_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 current_monitor_m1_dma ]
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $current_monitor_m1_dma
-  set_property -dict [list CONFIG.2D_TRANSFER {0}] $current_monitor_m1_dma
+  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $current_monitor_m1_dma
   set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {0}] $current_monitor_m1_dma
   set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {0}] $current_monitor_m1_dma
   set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {0}] $current_monitor_m1_dma
@@ -139,7 +139,7 @@
     # dma motor 2
   set current_monitor_m2_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 current_monitor_m2_dma ]
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $current_monitor_m2_dma
-  set_property -dict [list CONFIG.2D_TRANSFER {0}] $current_monitor_m2_dma
+  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $current_monitor_m2_dma
   set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {0}] $current_monitor_m2_dma
   set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {0}] $current_monitor_m2_dma
   set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {0}] $current_monitor_m2_dma
@@ -156,7 +156,7 @@
   set controller_m1 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_controller:1.0 controller_m1 ]
     # dma motor 1
   set controller_m1_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 controller_m1_dma ]
-  set_property -dict [list CONFIG.2D_TRANSFER {0}] $controller_m1_dma
+  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $controller_m1_dma
   set_property -dict [list CONFIG.CYCLIC {0}] $controller_m1_dma
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $controller_m1_dma
     # data packer motor 1
@@ -171,7 +171,7 @@
   set controller_m2 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_controller:1.0 controller_m2 ]
     # dma motor 2
   set controller_m2_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 controller_m2_dma ]
-  set_property -dict [list CONFIG.2D_TRANSFER {0}] $controller_m2_dma
+  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $controller_m2_dma
   set_property -dict [list CONFIG.CYCLIC {0}] $controller_m2_dma
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $controller_m2_dma
     # data packer motor 2

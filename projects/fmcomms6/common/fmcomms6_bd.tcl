@@ -27,7 +27,7 @@ set axi_ad9652 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9652:1.0 axi
 set axi_ad9652_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9652_dma]
 set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9652_dma
 set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9652_dma
-set_property -dict [list CONFIG.2D_TRANSFER {0}] $axi_ad9652_dma
+set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9652_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9652_dma
 set_property -dict [list CONFIG.FIFO_SIZE {8}] $axi_ad9652_dma
