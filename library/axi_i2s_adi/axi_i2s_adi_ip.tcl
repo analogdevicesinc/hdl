@@ -10,6 +10,7 @@ adi_ip_files axi_i2s_adi [list \
   "$ad_hdl_dir/library/common/axi_streaming_dma_rx_fifo.vhd" \
   "$ad_hdl_dir/library/common/pl330_dma_fifo.vhd" \
   "$ad_hdl_dir/library/common/dma_fifo.vhd" \
+  "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
   "i2s_controller.vhd" \
   "i2s_rx.vhd" \
   "i2s_tx.vhd" \
@@ -20,7 +21,6 @@ adi_ip_files axi_i2s_adi [list \
 ]
 
 adi_ip_properties_lite axi_i2s_adi
-adi_ip_constraints axi_spdif_tx axi_i2s_adi_constr.xdc late
 
 adi_add_bus "DMA_ACK_RX" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
