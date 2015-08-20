@@ -47,7 +47,7 @@ proc adi_ip_files {ip_name ip_files} {
 
 proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
 
-  set proj_filegroup [ipx::get_file_groups xilinx_v*synthesis -of_objects [ipx::current_core]]
+  set proj_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
   foreach f_name $ip_constr_files {
     ipx::add_file $f_name $proj_filegroup
     set_property type xdc [ipx::get_files $f_name -of_objects $proj_filegroup]
