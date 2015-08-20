@@ -54,28 +54,28 @@ set_parameter_property ID HDL_PARAMETER true
 
 add_parameter DMA_DATA_WIDTH_SRC INTEGER 0
 set_parameter_property DMA_DATA_WIDTH_SRC DEFAULT_VALUE 64
-set_parameter_property DMA_DATA_WIDTH_SRC DISPLAY_NAME C_DMA_DATA_WIDTH_SRC
+set_parameter_property DMA_DATA_WIDTH_SRC DISPLAY_NAME DMA_DATA_WIDTH_SRC
 set_parameter_property DMA_DATA_WIDTH_SRC TYPE INTEGER
 set_parameter_property DMA_DATA_WIDTH_SRC UNITS None
 set_parameter_property DMA_DATA_WIDTH_SRC HDL_PARAMETER true
 
 add_parameter DMA_DATA_WIDTH_DEST INTEGER 0
 set_parameter_property DMA_DATA_WIDTH_DEST DEFAULT_VALUE 64
-set_parameter_property DMA_DATA_WIDTH_DEST DISPLAY_NAME C_DMA_DATA_WIDTH_DEST
+set_parameter_property DMA_DATA_WIDTH_DEST DISPLAY_NAME DMA_DATA_WIDTH_DEST
 set_parameter_property DMA_DATA_WIDTH_DEST TYPE INTEGER
 set_parameter_property DMA_DATA_WIDTH_DEST UNITS None
 set_parameter_property DMA_DATA_WIDTH_DEST HDL_PARAMETER true
 
 add_parameter DMA_LENGTH_WIDTH INTEGER 0
 set_parameter_property DMA_LENGTH_WIDTH DEFAULT_VALUE 14
-set_parameter_property DMA_LENGTH_WIDTH DISPLAY_NAME C_DMA_LENGTH_WIDTH
+set_parameter_property DMA_LENGTH_WIDTH DISPLAY_NAME DMA_LENGTH_WIDTH
 set_parameter_property DMA_LENGTH_WIDTH TYPE INTEGER
 set_parameter_property DMA_LENGTH_WIDTH UNITS None
 set_parameter_property DMA_LENGTH_WIDTH HDL_PARAMETER true
 
 add_parameter DMA_2D_TRANSFER INTEGER 0
 set_parameter_property DMA_2D_TRANSFER DEFAULT_VALUE 1
-set_parameter_property DMA_2D_TRANSFER DISPLAY_NAME C_DMA_2D_TRANSFER
+set_parameter_property DMA_2D_TRANSFER DISPLAY_NAME DMA_2D_TRANSFER
 set_parameter_property DMA_2D_TRANSFER TYPE INTEGER
 set_parameter_property DMA_2D_TRANSFER UNITS None
 set_parameter_property DMA_2D_TRANSFER HDL_PARAMETER true
@@ -103,49 +103,49 @@ set_parameter_property ASYNC_CLK_DEST_REQ HDL_PARAMETER true
 
 add_parameter AXI_SLICE_DEST INTEGER 0
 set_parameter_property AXI_SLICE_DEST DEFAULT_VALUE 0
-set_parameter_property AXI_SLICE_DEST DISPLAY_NAME C_AXI_SLICE_DEST
+set_parameter_property AXI_SLICE_DEST DISPLAY_NAME AXI_SLICE_DEST
 set_parameter_property AXI_SLICE_DEST TYPE INTEGER
 set_parameter_property AXI_SLICE_DEST UNITS None
 set_parameter_property AXI_SLICE_DEST HDL_PARAMETER true
 
 add_parameter AXI_SLICE_SRC INTEGER 0
 set_parameter_property AXI_SLICE_SRC DEFAULT_VALUE 0
-set_parameter_property AXI_SLICE_SRC DISPLAY_NAME C_AXI_SLICE_SRC
+set_parameter_property AXI_SLICE_SRC DISPLAY_NAME AXI_SLICE_SRC
 set_parameter_property AXI_SLICE_SRC TYPE INTEGER
 set_parameter_property AXI_SLICE_SRC UNITS None
 set_parameter_property AXI_SLICE_SRC HDL_PARAMETER true
 
 add_parameter SYNC_TRANSFER_START INTEGER 0
 set_parameter_property SYNC_TRANSFER_START DEFAULT_VALUE 0
-set_parameter_property SYNC_TRANSFER_START DISPLAY_NAME C_SYNC_TRANSFER_START
+set_parameter_property SYNC_TRANSFER_START DISPLAY_NAME SYNC_TRANSFER_START
 set_parameter_property SYNC_TRANSFER_START TYPE INTEGER
 set_parameter_property SYNC_TRANSFER_START UNITS None
 set_parameter_property SYNC_TRANSFER_START HDL_PARAMETER true
 
 add_parameter CYCLIC INTEGER 0
 set_parameter_property CYCLIC DEFAULT_VALUE 1
-set_parameter_property CYCLIC DISPLAY_NAME C_CYCLIC
+set_parameter_property CYCLIC DISPLAY_NAME CYCLIC
 set_parameter_property CYCLIC TYPE INTEGER
 set_parameter_property CYCLIC UNITS None
 set_parameter_property CYCLIC HDL_PARAMETER true
 
 add_parameter DMA_TYPE_DEST INTEGER 0
 set_parameter_property DMA_TYPE_DEST DEFAULT_VALUE 0
-set_parameter_property DMA_TYPE_DEST DISPLAY_NAME C_DMA_TYPE_DEST
+set_parameter_property DMA_TYPE_DEST DISPLAY_NAME DMA_TYPE_DEST
 set_parameter_property DMA_TYPE_DEST TYPE INTEGER
 set_parameter_property DMA_TYPE_DEST UNITS None
 set_parameter_property DMA_TYPE_DEST HDL_PARAMETER true
 
 add_parameter DMA_TYPE_SRC INTEGER 0
 set_parameter_property DMA_TYPE_SRC DEFAULT_VALUE 2
-set_parameter_property DMA_TYPE_SRC DISPLAY_NAME C_DMA_TYPE_SRC
+set_parameter_property DMA_TYPE_SRC DISPLAY_NAME DMA_TYPE_SRC
 set_parameter_property DMA_TYPE_SRC TYPE INTEGER
 set_parameter_property DMA_TYPE_SRC UNITS None
 set_parameter_property DMA_TYPE_SRC HDL_PARAMETER true
 
 add_parameter FIFO_SIZE INTEGER 0 "In bursts"
 set_parameter_property FIFO_SIZE DEFAULT_VALUE 4
-set_parameter_property FIFO_SIZE DISPLAY_NAME C_FIFO_SIZE
+set_parameter_property FIFO_SIZE DISPLAY_NAME FIFO_SIZE
 set_parameter_property FIFO_SIZE TYPE INTEGER
 set_parameter_property FIFO_SIZE UNITS None
 set_parameter_property FIFO_SIZE HDL_PARAMETER true
@@ -215,8 +215,8 @@ proc axi_dmac_elaborate {} {
     add_interface_port m_dest_axi m_dest_axi_awaddr awaddr Output 32
     add_interface_port m_dest_axi m_dest_axi_awready awready Input 1
     add_interface_port m_dest_axi m_dest_axi_wvalid wvalid Output 1
-    add_interface_port m_dest_axi m_dest_axi_wdata wdata Output C_DMA_DATA_WIDTH_DEST
-    add_interface_port m_dest_axi m_dest_axi_wstrb wstrb Output C_DMA_DATA_WIDTH_DEST/8
+    add_interface_port m_dest_axi m_dest_axi_wdata wdata Output DMA_DATA_WIDTH_DEST
+    add_interface_port m_dest_axi m_dest_axi_wstrb wstrb Output DMA_DATA_WIDTH_DEST/8
     add_interface_port m_dest_axi m_dest_axi_wready wready Input 1
     add_interface_port m_dest_axi m_dest_axi_bvalid bvalid Input 1
     add_interface_port m_dest_axi m_dest_axi_bresp bresp Input 2
@@ -226,7 +226,7 @@ proc axi_dmac_elaborate {} {
     add_interface_port m_dest_axi m_dest_axi_arready arready Input 1
     add_interface_port m_dest_axi m_dest_axi_rvalid rvalid Input 1
     add_interface_port m_dest_axi m_dest_axi_rresp rresp Input 2
-    add_interface_port m_dest_axi m_dest_axi_rdata rdata Input C_DMA_DATA_WIDTH_DEST
+    add_interface_port m_dest_axi m_dest_axi_rdata rdata Input DMA_DATA_WIDTH_DEST
     add_interface_port m_dest_axi m_dest_axi_rready rready Output 1
     add_interface_port m_dest_axi m_dest_axi_awlen awlen Output 8
     add_interface_port m_dest_axi m_dest_axi_awsize awsize Output 3
