@@ -1,13 +1,13 @@
 
-variable p_board 
-variable p_device 
+variable p_board
+variable p_device
 variable sys_zynq
 variable p_prcfg_init
 variable p_prcfg_list
 variable p_prcfg_status
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2014.4.1"
+  set REQUIRED_VIVADO_VERSION "2015.2.1"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
