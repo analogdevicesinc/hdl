@@ -226,7 +226,7 @@ module up_dac_common (
       up_usr_chanmax <= 'd0;
       up_dac_gpio_out <= 'd0;
     end else begin
-      up_core_preset <= 1'd0;
+      up_core_preset <= ~up_resetn;
       up_mmcm_preset <= ~up_mmcm_resetn;
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
@@ -341,7 +341,7 @@ module up_dac_common (
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(14)) i_dac_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(14)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_sync,
@@ -362,7 +362,7 @@ module up_dac_common (
                       dac_datafmt,
                       dac_datarate}));
 
-  up_xfer_status #(.DATA_WIDTH(3)) i_dac_xfer_status (
+  up_xfer_status #(.DATA_WIDTH(3)) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_status_s,
@@ -392,7 +392,7 @@ module up_dac_common (
 
   // dac clock monitor
 
-  up_clock_mon i_dac_clock_mon (
+  up_clock_mon i_clock_mon (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_d_count (up_dac_clk_count_s),
