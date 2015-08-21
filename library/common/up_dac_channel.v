@@ -330,7 +330,7 @@ module up_dac_channel (
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(165)) i_dac_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(165)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_iqcor_enb,
