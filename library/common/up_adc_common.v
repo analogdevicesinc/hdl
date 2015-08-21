@@ -223,7 +223,7 @@ module up_adc_common (
       up_adc_gpio_out <= 'd0;
       up_adc_start_code <= 'd0;
     end else begin
-      up_core_preset <= 1'd0;
+      up_core_preset <= ~up_resetn;
       up_mmcm_preset <= ~up_mmcm_resetn;
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
@@ -329,7 +329,7 @@ module up_adc_common (
 
   // adc control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(36)) i_adc_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(36)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_adc_sync,
@@ -346,7 +346,7 @@ module up_adc_common (
                       adc_ddr_edgesel,
                       adc_pin_mode}));
 
-  up_xfer_status #(.DATA_WIDTH(4)) i_adc_xfer_status (
+  up_xfer_status #(.DATA_WIDTH(4)) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_sync_status_s,
@@ -362,7 +362,7 @@ module up_adc_common (
 
   // adc clock monitor
 
-  up_clock_mon i_adc_clock_mon (
+  up_clock_mon i_clock_mon (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_d_count (up_adc_clk_count_s),
