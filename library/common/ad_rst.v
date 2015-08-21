@@ -53,8 +53,8 @@ module ad_rst (
 
   // internal registers
 
-  reg             ad_rst_sync_m1 = 'd1;
-  reg             ad_rst_sync = 'd1;
+  reg             ad_rst_sync_m1 = 'd0;
+  reg             ad_rst_sync = 'd0;
   reg             rst = 'd0;
 
   // simple reset gen
