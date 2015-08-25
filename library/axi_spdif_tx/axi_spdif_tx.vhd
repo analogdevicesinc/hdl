@@ -1,9 +1,9 @@
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
 -- Copyright 2011-2013(c) Analog Devices, Inc.
--- 
+--
 -- All rights reserved.
--- 
+--
 -- Redistribution and use in source and binary forms, with or without modification,
 -- are permitted provided that the following conditions are met:
 --	 - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 --	   patent holders to use this software.
 --	 - Use of the software either in source or binary form, must be run
 --	   on or directly connected to an Analog Devices Inc. component.
---	
+--
 -- THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 -- INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 -- PARTICULAR PURPOSE ARE DISCLAIMED.
 --
 -- IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 -- EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
--- RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+-- RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 -- BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
--- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 -- THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
@@ -49,10 +49,10 @@ use work.pl330_dma_fifo;
 
 entity axi_spdif_tx is
 	generic (
-		C_S_AXI_DATA_WIDTH	: integer		:= 32;
-		C_S_AXI_ADDR_WIDTH	: integer		:= 32;
-		C_FAMILY		: string		:= "virtex6";
-		C_DMA_TYPE		: integer		:= 0
+		S_AXI_DATA_WIDTH	: integer		:= 32;
+		S_AXI_ADDRESS_WIDTH	: integer		:= 32;
+		DEVICE_FAMILY		: string		:= "virtex6";
+		DMA_TYPE		: integer		:= 0
 	);
 	port (
 		--SPDIF ports
@@ -62,24 +62,24 @@ entity axi_spdif_tx is
 		--AXI Lite interface
 		S_AXI_ACLK	: in  std_logic;
 		S_AXI_ARESETN	: in  std_logic;
-		S_AXI_AWADDR	: in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
+		S_AXI_AWADDR	: in  std_logic_vector(S_AXI_ADDRESS_WIDTH-1 downto 0);
 		S_AXI_AWVALID	: in  std_logic;
-		S_AXI_WDATA	: in  std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-		S_AXI_WSTRB	: in  std_logic_vector((C_S_AXI_DATA_WIDTH/8)-1 downto 0);
+		S_AXI_WDATA	: in  std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
+		S_AXI_WSTRB	: in  std_logic_vector((S_AXI_DATA_WIDTH/8)-1 downto 0);
 		S_AXI_WVALID	: in  std_logic;
 		S_AXI_BREADY	: in  std_logic;
-		S_AXI_ARADDR	: in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
+		S_AXI_ARADDR	: in  std_logic_vector(S_AXI_ADDRESS_WIDTH-1 downto 0);
 		S_AXI_ARVALID	: in  std_logic;
 		S_AXI_RREADY	: in  std_logic;
 		S_AXI_ARREADY	: out std_logic;
-		S_AXI_RDATA	: out std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+		S_AXI_RDATA	: out std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
 		S_AXI_RRESP	: out std_logic_vector(1 downto 0);
 		S_AXI_RVALID	: out std_logic;
 		S_AXI_WREADY	: out std_logic;
 		S_AXI_BRESP	: out std_logic_vector(1 downto 0);
 		S_AXI_BVALID	: out std_logic;
 		S_AXI_AWREADY	: out std_logic;
-		
+
 		--AXI streaming interface
 		S_AXIS_ACLK	: in  std_logic;
 		S_AXIS_ARESETN	: in  std_logic;
@@ -109,8 +109,8 @@ architecture IMP of axi_spdif_tx is
 	------------------------------------------
 	-- SPDIF signals
 	------------------------------------------
-	signal config_reg : std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-	signal chstatus_reg : std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+	signal config_reg : std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
+	signal chstatus_reg : std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
 
 	signal chstat_freq : std_logic_vector(1 downto 0);
 	signal chstat_gstat, chstat_preem, chstat_copy, chstat_audio : std_logic;
@@ -140,7 +140,7 @@ begin
 	enable <= conf_txdata = '1';
 	fifo_data_ack <= channel and sample_data_ack;
 
-	streaming_dma_gen: if C_DMA_TYPE = 0 generate
+	streaming_dma_gen: if DMA_TYPE = 0 generate
 		fifo: entity axi_streaming_dma_tx_fifo
 			generic map (
 				RAM_ADDR_WIDTH	=> 3,
@@ -162,11 +162,11 @@ begin
 			);
 	end generate;
 
-	no_streaming_dma_gen: if C_DMA_TYPE /= 0 generate
+	no_streaming_dma_gen: if DMA_TYPE /= 0 generate
 		S_AXIS_TREADY <= '0';
 	end generate;
 
-	pl330_dma_gen: if C_DMA_TYPE = 1 generate
+	pl330_dma_gen: if DMA_TYPE = 1 generate
 		tx_fifo_stb <= '1' when wr_addr = 3 and wr_stb = '1' else '0';
 
 		fifo: entity pl330_dma_fifo
@@ -199,7 +199,7 @@ begin
 			);
 	end generate;
 
-	no_pl330_dma_gen: if C_DMA_TYPE /= 1 generate
+	no_pl330_dma_gen: if DMA_TYPE /= 1 generate
 		DMA_REQ_DAREADY <= '0';
 		DMA_REQ_DRVALID <= '0';
 		DMA_REQ_DRTYPE <= (others => '0');
@@ -228,12 +228,12 @@ begin
 	chstat_preem <= chstatus_reg(2);
 	chstat_copy <= chstatus_reg(1);
 	chstat_audio <= chstatus_reg(0);
-	
+
 	-- Transmit encoder
-	TENC: tx_encoder 	 
+	TENC: tx_encoder
 		generic map (
 			DATA_WIDTH => 16
-		) 
+		)
 		port map (
 			up_clk		=> S_AXI_ACLK,
 			data_clk	=> spdif_data_clk,  -- data clock
@@ -255,8 +255,8 @@ begin
 
 	ctrlif: entity axi_ctrlif
 		generic map (
-			C_S_AXI_ADDR_WIDTH => C_S_AXI_ADDR_WIDTH,
-			C_S_AXI_DATA_WIDTH => C_S_AXI_DATA_WIDTH,
+			C_S_AXI_ADDR_WIDTH => S_AXI_ADDRESS_WIDTH,
+			C_S_AXI_DATA_WIDTH => S_AXI_DATA_WIDTH,
 			C_NUM_REG => 4
 		)
 		port map(

@@ -74,26 +74,26 @@ adi_add_bus "I2S" "master" \
 adi_add_bus_clock "DATA_CLK_I" "i2s"
 
 adi_set_bus_dependency "S_AXIS" "S_AXIS" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 0)"
 adi_set_bus_dependency "M_AXIS" "M_AXIS" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 0)"
 
 adi_set_bus_dependency "DMA_ACK_TX" "DMA_REQ_TX_DA" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_bus_dependency "DMA_REQ_TX" "DMA_REQ_TX_DR" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_ports_dependency "DMA_REQ_TX_ACLK" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_ports_dependency "DMA_REQ_TX_RSTN" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_bus_dependency "DMA_ACK_RX" "DMA_REQ_RX_DA" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_bus_dependency "DMA_REQ_RX" "DMA_REQ_RX_DR" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_ports_dependency "DMA_REQ_RX_ACLK" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_ports_dependency "DMA_REQ_RX_RSTN" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 
 ipx::save_core [ipx::current_core]
 
