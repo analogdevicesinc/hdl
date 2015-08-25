@@ -33,9 +33,6 @@ adi_ip_add_core_dependencies { \
 	analog.com:user:util_axis_fifo:1.0 \
 }
 
-set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
-  [ipx::get_bus_interface s_axi_signal_clock [ipx::current_core]]]
-
 adi_add_bus "s_axis" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \

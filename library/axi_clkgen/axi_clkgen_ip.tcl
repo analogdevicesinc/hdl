@@ -15,7 +15,7 @@ adi_ip_files axi_clkgen [list \
 
 adi_ip_properties axi_clkgen
 
-ipx::remove_bus_interface {signal_clock} [ipx::current_core]
+ipx::remove_bus_interface {clk} [ipx::current_core]
 ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]
 
 #set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
