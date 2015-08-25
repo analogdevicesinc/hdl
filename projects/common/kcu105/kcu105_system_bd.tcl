@@ -51,7 +51,7 @@ set_property -dict [list CONFIG.FREQ_HZ {625000000}] [get_bd_intf_ports phy_clk]
 
 # instance: microblaze - processor
 
-set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.4 sys_mb]
+set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.5 sys_mb]
 set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
 set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
 
@@ -80,7 +80,7 @@ set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 s
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig:6.1 axi_ddr_cntrl]
+set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig:7.1 axi_ddr_cntrl]
 source $ad_hdl_dir/projects/common/kcu105/kcu105_system_mig.tcl
 
 set axi_ddr_cntrl_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_ddr_cntrl_rstgen]
@@ -101,7 +101,7 @@ set_property -dict [list CONFIG.USE_RESET {false}] $axi_ethernet_clkgen
 
 set axi_ethernet_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_ethernet_rstgen]
 
-set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.2 axi_ethernet]
+set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:7.0 axi_ethernet]
 set_property -dict [list CONFIG.PHY_TYPE {SGMII}] $axi_ethernet
 set_property -dict [list CONFIG.ENABLE_LVDS {true}] $axi_ethernet
 set_property -dict [list CONFIG.SupportLevel {0}] $axi_ethernet
