@@ -119,9 +119,9 @@ set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.
 set axi_hdmi_core [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_tx:1.0 axi_hdmi_core]
 
 set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_hdmi_dma]
-set_property -dict [list CONFIG.c_m_axis_mm2s_tdata_width {64}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_use_mm2s_fsync {1}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
+set_property -dict [list CONFIG.C_M_AXIS_MM2S_TDATA_WIDTH {64}] $axi_hdmi_dma
+set_property -dict [list CONFIG.C_USE_MM2S_FSYNC {1}] $axi_hdmi_dma
+set_property -dict [list CONFIG.C_INCLUDE_S2MM {0}] $axi_hdmi_dma
 
 # audio peripherals
 
@@ -154,13 +154,13 @@ ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
 
 # interface connections
 
-ad_connect  ddr       sys_ps7/DDR
-ad_connect  gpio_i    sys_ps7/GPIO_I
-ad_connect  gpio_o    sys_ps7/GPIO_O
-ad_connect  gpio_t    sys_ps7/GPIO_T
-ad_connect  fixed_io  sys_ps7/FIXED_IO
-ad_connect  iic_fmc   axi_iic_fmc/iic
-ad_connect  sys_200m_clk axi_hdmi_clkgen/clk
+ad_connect  ddr           sys_ps7/DDR
+ad_connect  gpio_i        sys_ps7/GPIO_I
+ad_connect  gpio_o        sys_ps7/GPIO_O
+ad_connect  gpio_t        sys_ps7/GPIO_T
+ad_connect  fixed_io      sys_ps7/FIXED_IO
+ad_connect  iic_fmc       axi_iic_fmc/iic
+ad_connect  sys_200m_clk  axi_hdmi_clkgen/clk
 
 ad_connect  axi_iic_main/IIC sys_i2c_mixer/upstream
 

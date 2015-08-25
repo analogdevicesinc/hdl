@@ -163,7 +163,7 @@ ad_connect  sys_ilmb_cntlr/BRAM_PORT sys_lmb_bram/BRAM_PORTB
 
 ad_connect  sys_mb_debug/MBDEBUG_0 sys_mb/DEBUG
 ad_connect  axi_intc/interrupt sys_mb/INTERRUPT
-ad_connect  axi_intc/intr sys_concat_intc/dout    
+ad_connect  axi_intc/intr sys_concat_intc/dout
 
 # defaults (peripherals)
 
@@ -181,7 +181,7 @@ ad_connect  sys_cpu_clk sys_dlmb/LMB_Clk
 ad_connect  sys_cpu_clk sys_ilmb/LMB_Clk
 ad_connect  sys_cpu_clk sys_dlmb_cntlr/LMB_Clk
 ad_connect  sys_cpu_clk sys_ilmb_cntlr/LMB_Clk
-ad_connect  sys_cpu_clk axi_ethernet/axis_clk 
+ad_connect  sys_cpu_clk axi_ethernet/axis_clk
 
 # defaults (interrupts)
 
@@ -223,7 +223,7 @@ ad_connect  axi_ethernet/s_axis_txc axi_ethernet_dma/M_AXIS_CNTRL
 ad_connect  axi_ethernet/m_axis_rxd axi_ethernet_dma/S_AXIS_S2MM
 ad_connect  axi_ethernet/m_axis_rxs axi_ethernet_dma/S_AXIS_STS
 ad_connect  phy_sd axi_ethernet/signal_detect
-ad_connect  sys_cpu_resetn phy_rst_n                            
+ad_connect  sys_cpu_resetn phy_rst_n
 ad_connect  axi_ethernet_clkgen/clk_out1 axi_ethernet/clk125m
 ad_connect  axi_ethernet_clkgen/clk_out1 axi_ethernet_rstgen/slowest_sync_clk
 ad_connect  axi_ethernet_clkgen/clk_out2 axi_ethernet/clk312
@@ -247,13 +247,13 @@ ad_connect  spi_clk_o axi_spi/sck_o
 ad_connect  spi_sdo_i axi_spi/io0_i
 ad_connect  spi_sdo_o axi_spi/io0_o
 ad_connect  spi_sdi_i axi_spi/io1_i
-ad_connect  gpio0_i axi_gpio/gpio_io_i   
-ad_connect  gpio0_o axi_gpio/gpio_io_o   
-ad_connect  gpio0_t axi_gpio/gpio_io_t   
-ad_connect  gpio1_i axi_gpio/gpio2_io_i  
-ad_connect  gpio1_o axi_gpio/gpio2_io_o  
-ad_connect  gpio1_t axi_gpio/gpio2_io_t  
-ad_connect  sys_cpu_clk axi_spi/ext_spi_clk 
+ad_connect  gpio0_i axi_gpio/gpio_io_i
+ad_connect  gpio0_o axi_gpio/gpio_io_o
+ad_connect  gpio0_t axi_gpio/gpio_io_t
+ad_connect  gpio1_i axi_gpio/gpio2_io_i
+ad_connect  gpio1_o axi_gpio/gpio2_io_o
+ad_connect  gpio1_t axi_gpio/gpio2_io_t
+ad_connect  sys_cpu_clk axi_spi/ext_spi_clk
 
 # defaults (interconnect - processor)
 

@@ -97,9 +97,9 @@ set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.
 set axi_hdmi_core [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_tx:1.0 axi_hdmi_core]
 
 set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_hdmi_dma]
-set_property -dict [list CONFIG.c_m_axis_mm2s_tdata_width {64}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_use_mm2s_fsync {1}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
+set_property -dict [list CONFIG.C_M_AXIS_MM2S_TDATA_WIDTH {64}] $axi_hdmi_dma
+set_property -dict [list CONFIG.C_USE_MM2S_FSYNC {1}] $axi_hdmi_dma
+set_property -dict [list CONFIG.C_INCLUDE_S2MM {0}] $axi_hdmi_dma
 
 # audio peripherals
 
@@ -176,7 +176,7 @@ ad_connect  sys_cpu_resetn axi_spdif_tx_core/DMA_REQ_RSTN
 ad_connect  sys_ps7/DMA0_REQ axi_spdif_tx_core/DMA_REQ
 ad_connect  sys_ps7/DMA0_ACK axi_spdif_tx_core/DMA_ACK
 ad_connect  sys_200m_clk sys_audio_clkgen/clk_in1
-ad_connect  sys_cpu_resetn sys_audio_clkgen/resetn 
+ad_connect  sys_cpu_resetn sys_audio_clkgen/resetn
 ad_connect  sys_audio_clkgen/clk_out1 axi_spdif_tx_core/spdif_data_clk
 ad_connect  spdif axi_spdif_tx_core/spdif_tx_o
 

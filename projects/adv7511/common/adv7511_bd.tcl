@@ -40,8 +40,8 @@ set_property -dict [list CONFIG.DMA_TYPE {0}] $axi_spdif_tx_core
 set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_tx_core
 
 set axi_spdif_tx_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_spdif_tx_dma]
-set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_spdif_tx_dma
-set_property -dict [list CONFIG.c_sg_include_stscntrl_strm {0}] $axi_spdif_tx_dma
+set_property -dict [list CONFIG.C_INCLUDE_S2MM {0}] $axi_spdif_tx_dma
+set_property -dict [list CONFIG.C_SG_INCLUDE_STSCNTRL_STRM {0}] $axi_spdif_tx_dma
 
 # hdmi
 

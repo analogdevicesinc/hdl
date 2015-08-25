@@ -107,9 +107,9 @@ set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.2 a
 set_property -dict [list CONFIG.PHY_TYPE {RGMII}] $axi_ethernet
 
 set axi_ethernet_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_ethernet_dma]
-set_property -dict [list CONFIG.c_include_mm2s_dre {1}] $axi_ethernet_dma
-set_property -dict [list CONFIG.c_sg_use_stsapp_length {1}] $axi_ethernet_dma
-set_property -dict [list CONFIG.c_include_s2mm_dre {1}] $axi_ethernet_dma
+set_property -dict [list CONFIG.C_INCLUDE_MM2S_DRE {1}] $axi_ethernet_dma
+set_property -dict [list CONFIG.C_SG_USE_STSAPP_LENGTH {1}] $axi_ethernet_dma
+set_property -dict [list CONFIG.C_INCLUDE_S2MM_DRE {1}] $axi_ethernet_dma
 
 set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
 

@@ -173,7 +173,7 @@ ad_connect  sys_cpu_resetn axi_spdif_tx_core/DMA_REQ_RSTN
 ad_connect  sys_ps7/DMA0_REQ axi_spdif_tx_core/DMA_REQ
 ad_connect  sys_ps7/DMA0_ACK axi_spdif_tx_core/DMA_ACK
 ad_connect  sys_200m_clk sys_audio_clkgen/clk_in1
-ad_connect  sys_cpu_resetn sys_audio_clkgen/resetn 
+ad_connect  sys_cpu_resetn sys_audio_clkgen/resetn
 ad_connect  sys_audio_clkgen/clk_out1 axi_spdif_tx_core/spdif_data_clk
 ad_connect  spdif axi_spdif_tx_core/spdif_tx_o
 
