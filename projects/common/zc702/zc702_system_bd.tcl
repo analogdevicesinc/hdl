@@ -107,8 +107,8 @@ set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
 set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
-set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_tx_core
+set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_spdif_tx_core
+set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_tx_core
 
 # system reset/clock definitions
 
