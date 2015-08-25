@@ -32,37 +32,37 @@ proc adi_project_create {project_name {mode 0}} {
 
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
-    set p_board "xilinx.com:artix7:ac701:1.0"
+    set p_board "xilinx.com:ac701:part0:1.0"
     set sys_zynq 0
   }
   if [regexp "_kc705$" $project_name] {
     set p_device "xc7k325tffg900-2"
-    set p_board "xilinx.com:kintex7:kc705:1.1"
+    set p_board "xilinx.com:kc705:part0:1.1"
     set sys_zynq 0
   }
   if [regexp "_vc707$" $project_name] {
     set p_device "xc7vx485tffg1761-2"
-    set p_board "xilinx.com:virtex7:vc707:1.1"
+    set p_board "xilinx.com:vc707:part0:1.1"
     set sys_zynq 0
   }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
-    set p_board "not-applicable"
+    set p_board "xilinx.com:kcu105:part0:1.0"
     set sys_zynq 0
   }
   if [regexp "_zed$" $project_name] {
     set p_device "xc7z020clg484-1"
-    set p_board "em.avnet.com:zynq:zed:d"
+    set p_board "em.avnet.com:zed:part0:1.3"
     set sys_zynq 1
   }
   if [regexp "_zc702$" $project_name] {
     set p_device "xc7z020clg484-1"
-    set p_board "xilinx.com:zynq:zc702:1.0"
+    set p_board "xilinx.com:zc702:part0:1.2"
     set sys_zynq 1
   }
   if [regexp "_zc706$" $project_name] {
     set p_device "xc7z045ffg900-2"
-    set p_board "xilinx.com:zc706:part0:1.0"
+    set p_board "xilinx.com:zc706:part0:1.2"
     set sys_zynq 1
   }
   if [regexp "_mitx045$" $project_name] {
@@ -93,7 +93,7 @@ proc adi_project_create {project_name {mode 0}} {
   }
 
   if {$p_board ne "not-applicable"} {
-    set_property board $p_board [current_project]
+    set_property board_part $p_board [current_project]
   }
 
   set lib_dirs $ad_hdl_dir/library
