@@ -16,7 +16,6 @@ adi_ip_files axi_hdmi_rx [list \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_hdmi_rx.v" \
-  "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
   "axi_hdmi_rx.v" \
   "axi_hdmi_rx_es.v" \
   "axi_hdmi_rx_tpm.v" \
@@ -24,6 +23,8 @@ adi_ip_files axi_hdmi_rx [list \
   "axi_hdmi_rx_core.v" ]
 
 adi_ip_properties axi_hdmi_rx
+adi_ip_constraints axi_hdmi_rx [list \
+  "axi_hdmi_rx_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 

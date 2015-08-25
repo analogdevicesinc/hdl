@@ -9,7 +9,6 @@ adi_ip_files axi_spdif_rx [list \
   "$ad_hdl_dir/library/common/axi_streaming_dma_rx_fifo.vhd" \
   "$ad_hdl_dir/library/common/pl330_dma_fifo.vhd" \
   "$ad_hdl_dir/library/common/dma_fifo.vhd" \
-  "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
   "rx_phase_det.vhd" \
   "rx_package.vhd" \
   "rx_decode.vhd" \
@@ -18,6 +17,7 @@ adi_ip_files axi_spdif_rx [list \
   "axi_spdif_rx_constr.xdc"]
 
 adi_ip_properties_lite axi_spdif_rx
+adi_ip_constraints axi_spdif_tx axi_spdif_rx_constr.xdc
 
 adi_add_bus "DMA_ACK" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
