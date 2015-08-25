@@ -95,5 +95,8 @@ adi_set_ports_dependency "DMA_REQ_RX_ACLK" \
 adi_set_ports_dependency "DMA_REQ_RX_RSTN" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 
+set_property value S_AXI_ARESETN [ipx::get_bus_parameters ASSOCIATED_RESET \
+    -of_objects [ipx::get_bus_interfaces S_AXI_ACLK -of_objects [ipx::current_core]]]
+
 ipx::save_core [ipx::current_core]
 
