@@ -196,7 +196,7 @@ module system_top (
     .mb_intr_13 (1'b0),
     .mb_intr_14 (1'b0),
     .mb_intr_15 (1'b0),
-    .mdio_io (phy_mdio),
+    .mdio_mdio_io (phy_mdio),
     .mdio_mdc (phy_mdc),
     .phy_rst_n (phy_reset_n),
     .rgmii_rd (phy_rx_data),

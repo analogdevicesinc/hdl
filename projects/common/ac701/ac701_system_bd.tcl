@@ -209,7 +209,7 @@ ad_connect  sys_rst axi_ddr_cntrl/sys_rst
 ad_connect  sys_clk_p axi_ddr_cntrl/sys_clk_p
 ad_connect  sys_clk_n axi_ddr_cntrl/sys_clk_n
 ad_connect  ddr3 axi_ddr_cntrl/DDR3
-ad_connect  mdio axi_ethernet/mdio_io
+ad_connect  mdio axi_ethernet/mdio
 ad_connect  rgmii axi_ethernet/rgmii
 ad_connect  uart_sin axi_uart/rx
 ad_connect  uart_sout axi_uart/tx
