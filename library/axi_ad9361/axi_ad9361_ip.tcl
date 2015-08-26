@@ -20,7 +20,6 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/ad_addsub.v" \
   "$ad_hdl_dir/library/common/ad_tdd_control.v" \
   "$ad_hdl_dir/library/common/ad_tdd_sync.v" \
-  "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
@@ -31,6 +30,7 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
+  "axi_ad9361_constr.xdc" \
   "axi_ad9361_dev_if.v" \
   "axi_ad9361_rx_pnmon.v" \
   "axi_ad9361_rx_channel.v" \
@@ -39,17 +39,11 @@ adi_ip_files axi_ad9361 [list \
   "axi_ad9361_tx.v" \
   "axi_ad9361_tdd.v" \
   "axi_ad9361_tdd_if.v" \
-  "axi_ad9361_constr.xdc" \
   "axi_ad9361.v" ]
 
 adi_ip_properties axi_ad9361
-adi_ip_constraints axi_ad9361 "axi_ad9361_constr.xdc" "late"
-
-set_property physical_name {s_axi_aclk} [ipx::get_port_maps CLK \
-  -of_objects [ipx::get_bus_interfaces s_axi_signal_clock -of_objects [ipx::current_core]]]
-
-
-ipx::remove_bus_interface {signal_clock} [ipx::current_core]
+adi_ip_constraints axi_ad9361 [list \
+  "axi_ad9361_constr.xdc" ]
 
 set_property driver_value 0 [ipx::get_ports *dac_sync_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
