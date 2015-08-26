@@ -14,9 +14,9 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
 # ip related stuff
 
 proc adi_ip_create {ip_name} {
+
   global ad_hdl_dir
   global ad_phdl_dir
-
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
 
