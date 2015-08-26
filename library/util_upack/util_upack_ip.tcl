@@ -33,6 +33,7 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CH
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 7} \
   [ipx::get_ports *_7* -of_objects [ipx::current_core]]
 
+ipx::remove_all_bus_interface [ipx::current_core]
 ipx::save_core [ipx::current_core]
 
 
