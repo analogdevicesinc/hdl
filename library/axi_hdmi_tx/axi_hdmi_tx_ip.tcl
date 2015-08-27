@@ -30,5 +30,8 @@ adi_ip_constraints axi_hdmi_tx [list \
   "axi_hdmi_tx_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" ]
 
+ipx::remove_bus_interface hdmi_clk [ipx::current_core]
+ipx::remove_bus_interface hdmi_out_clk [ipx::current_core]
+ipx::remove_bus_interface vdma_clk [ipx::current_core]
 ipx::save_core [ipx::current_core]
 
