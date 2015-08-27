@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -65,6 +63,7 @@ module ad_lvds_out (
   // parameters
 
   parameter   DEVICE_TYPE = 0;
+  parameter   SINGLE_ENDED = 0;
   parameter   IODELAY_ENABLE = 0;
   parameter   IODELAY_CTRL = 0;
   parameter   IODELAY_GROUP = "dev_if_delay_group";
@@ -157,10 +156,19 @@ module ad_lvds_out (
   end
   endgenerate
 
+  generate
+  if (SINGLE_ENDED == 1) begin
+  assign tx_data_out_n = 1'b0;
+  OBUF i_tx_data_obuf (
+    .I (tx_data_odelay_s),
+    .O (tx_data_out_p));
+  end else begin
   OBUFDS i_tx_data_obuf (
     .I (tx_data_odelay_s),
     .O (tx_data_out_p),
     .OB (tx_data_out_n));
+  end
+  endgenerate
 
 endmodule
 
