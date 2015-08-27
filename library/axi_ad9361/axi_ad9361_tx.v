@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -113,9 +111,9 @@ module axi_ad9361_tx (
   
   // delay interface
 
-  output  [ 7:0]  up_dld;
-  output  [39:0]  up_dwdata;
-  input   [39:0]  up_drdata;
+  output  [ 9:0]  up_dld;
+  output  [49:0]  up_dwdata;
+  input   [49:0]  up_drdata;
   input           delay_clk;
   output          delay_rst;
   input           delay_locked;
@@ -389,7 +387,7 @@ module axi_ad9361_tx (
   
   // dac delay control
 
-  up_delay_cntrl #(.DATA_WIDTH(8), .BASE_ADDRESS(6'h12)) i_delay_cntrl (
+  up_delay_cntrl #(.DATA_WIDTH(10), .BASE_ADDRESS(6'h12)) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),
