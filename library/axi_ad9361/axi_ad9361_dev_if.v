@@ -59,6 +59,11 @@ module axi_ad9361_dev_if (
   tx_data_out_p,
   tx_data_out_n,
 
+  // ensm control
+
+  enable,
+  txnrx,
+
   // clock (common to both receive and transmit)
 
   rst,
@@ -79,9 +84,17 @@ module axi_ad9361_dev_if (
   dac_data,
   dac_r1_mode,
 
+  // tdd interface
+
+  tdd_enable,
+  tdd_txnrx,
+  tdd_mode,
+
   // delay interface
 
   up_clk,
+  up_enable,
+  up_txnrx,
   up_adc_dld,
   up_adc_dwdata,
   up_adc_drdata,
@@ -97,8 +110,6 @@ module axi_ad9361_dev_if (
   parameter   DEVICE_TYPE = 0;
   parameter   DAC_IODELAY_ENABLE = 0;
   parameter   IO_DELAY_GROUP = "dev_if_delay_group";
-  localparam  PCORE_7SERIES = 0;
-  localparam  PCORE_VIRTEX6 = 1;
 
   // physical interface (receive)
 
@@ -117,6 +128,11 @@ module axi_ad9361_dev_if (
   output          tx_frame_out_n;
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
+
+  // ensm control
+
+  output          enable;
+  output          txnrx;
 
   // clock (common to both receive and transmit)
 
@@ -138,15 +154,23 @@ module axi_ad9361_dev_if (
   input   [47:0]  dac_data;
   input           dac_r1_mode;
 
+  // tdd interface
+
+  input           tdd_enable;
+  input           tdd_txnrx;
+  input           tdd_mode;
+
   // delay interface
 
   input           up_clk;
+  input           up_enable;
+  input           up_txnrx;
   input   [ 6:0]  up_adc_dld;
   input   [34:0]  up_adc_dwdata;
   output  [34:0]  up_adc_drdata;
-  input   [ 7:0]  up_dac_dld;
-  input   [39:0]  up_dac_dwdata;
-  output  [39:0]  up_dac_drdata;
+  input   [ 9:0]  up_dac_dld;
+  input   [49:0]  up_dac_dwdata;
+  output  [49:0]  up_dac_drdata;
   input           delay_clk;
   input           delay_rst;
   output          delay_locked;
@@ -191,6 +215,18 @@ module axi_ad9361_dev_if (
   reg             tx_p_frame = 'd0;
   reg     [ 5:0]  tx_p_data_p = 'd0;
   reg     [ 5:0]  tx_p_data_n = 'd0;
+  reg             up_enable_int = 'd0;
+  reg             up_txnrx_int = 'd0;
+  reg             enable_up_m1 = 'd0;
+  reg             txnrx_up_m1 = 'd0;
+  reg             enable_up = 'd0;
+  reg             txnrx_up = 'd0;
+  reg             enable_int = 'd0;
+  reg             txnrx_int = 'd0;
+  reg             enable_n_int = 'd0;
+  reg             txnrx_n_int = 'd0;
+  reg             enable_p_int = 'd0;
+  reg             txnrx_p_int = 'd0;
 
   // internal signals
 
@@ -372,6 +408,47 @@ module axi_ad9361_dev_if (
     tx_p_data_n <= tx_n_data_n;
   end
 
+  // tdd/ensm control
+
+  always @(posedge up_clk) begin
+    up_enable_int <= up_enable;
+    up_txnrx_int <= up_txnrx;
+  end
+
+  always @(posedge clk or posedge rst) begin
+    if (rst == 1'b1) begin
+      enable_up_m1 <= 1'b0;
+      txnrx_up_m1 <= 1'b0;
+      enable_up <= 1'b0;
+      txnrx_up <= 1'b0;
+    end else begin
+      enable_up_m1 <= up_enable_int;
+      txnrx_up_m1 <= up_txnrx_int;
+      enable_up <= enable_up_m1;
+      txnrx_up <= txnrx_up_m1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (tdd_mode == 1'b1) begin
+      enable_int <= tdd_enable;
+      txnrx_int <= tdd_txnrx;
+    end else begin
+      enable_int <= enable_up;
+      txnrx_int <= txnrx_up;
+    end
+  end
+
+  always @(negedge clk) begin
+    enable_n_int <= enable_int;
+    txnrx_n_int <= txnrx_int;
+  end
+
+  always @(posedge l_clk) begin
+    enable_p_int <= enable_n_int;
+    txnrx_p_int <= txnrx_n_int;
+  end
+
   // receive data interface, ibuf -> idelay -> iddr
 
   generate
@@ -422,6 +499,7 @@ module axi_ad9361_dev_if (
   for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_tx_data
   ad_lvds_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
+    .SINGLE_ENDED (0),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -445,6 +523,7 @@ module axi_ad9361_dev_if (
 
   ad_lvds_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
+    .SINGLE_ENDED (0),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -466,6 +545,7 @@ module axi_ad9361_dev_if (
 
   ad_lvds_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
+    .SINGLE_ENDED (0),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -479,6 +559,50 @@ module axi_ad9361_dev_if (
     .up_dld (up_dac_dld[7]),
     .up_dwdata (up_dac_dwdata[39:35]),
     .up_drdata (up_dac_drdata[39:35]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+
+  // enable, oddr -> obuf
+
+  ad_lvds_out #(
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .SINGLE_ENDED (1),
+    .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (IO_DELAY_GROUP))
+  i_enable (
+    .tx_clk (l_clk),
+    .tx_data_p (enable_p_int),
+    .tx_data_n (enable_p_int),
+    .tx_data_out_p (enable),
+    .tx_data_out_n (),
+    .up_clk (up_clk),
+    .up_dld (up_dac_dld[8]),
+    .up_dwdata (up_dac_dwdata[44:40]),
+    .up_drdata (up_dac_drdata[44:40]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+
+  // txnrx, oddr -> obuf
+
+  ad_lvds_out #(
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .SINGLE_ENDED (1),
+    .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (IO_DELAY_GROUP))
+  i_txnrx (
+    .tx_clk (l_clk),
+    .tx_data_p (txnrx_p_int),
+    .tx_data_n (txnrx_p_int),
+    .tx_data_out_p (txnrx),
+    .tx_data_out_n (),
+    .up_clk (up_clk),
+    .up_dld (up_dac_dld[9]),
+    .up_dwdata (up_dac_dwdata[49:45]),
+    .up_drdata (up_dac_drdata[49:45]),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked ());
