@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -107,8 +105,10 @@ module system_top (
   tx_frame_out_n,
   tx_data_out_p,
   tx_data_out_n,
+
   enable,
   txnrx,
+
   tdd_sync_out,
   tdd_sync_in,
 
@@ -196,8 +196,10 @@ module system_top (
   output          tx_frame_out_n;
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
+
   output          enable;
   output          txnrx;
+
   output          tdd_sync_out;
   input           tdd_sync_in;
 
@@ -225,37 +227,27 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  wire            tdd_enabled_s;
-  wire            gpio_enable;
-  wire            gpio_txnrx;
-  wire            enable_s;
-  wire            txnrx_s;
-
   // assignments
 
   assign hdmi_pd = 1'b0;
-  assign enable = (tdd_enabled_s == 1'b1) ? enable_s : gpio_enable;
-  assign txnrx  = (tdd_enabled_s == 1'b1) ? txnrx_s  : gpio_txnrx;
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(23)) i_iobuf (
-    .dio_t ({gpio_t[56:51], gpio_t[48:32]}),
-    .dio_i ({gpio_o[56:51], gpio_o[48:32]}),
-    .dio_o ({gpio_i[56:51], gpio_i[48:32]}),
-    .dio_p ({ gpio_rf0,
-              gpio_rf1,
-              gpio_rf2,
-              gpio_rf3,
-              gpio_rfpwr_enable,
-              gpio_clksel,
-              gpio_txnrx,
-              gpio_enable,
-              gpio_resetb,
-              gpio_sync,
-              gpio_en_agc,
-              gpio_ctl,
-              gpio_status}));
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf (
+    .dio_t ({gpio_t[56:51], gpio_t[46:32]}),
+    .dio_i ({gpio_o[56:51], gpio_o[46:32]}),
+    .dio_o ({gpio_i[56:51], gpio_i[46:32]}),
+    .dio_p ({ gpio_rf0,           // 56:56
+              gpio_rf1,           // 55:55
+              gpio_rf2,           // 54:54
+              gpio_rf3,           // 53:53
+              gpio_rfpwr_enable,  // 52:52
+              gpio_clksel,        // 51:51
+              gpio_resetb,        // 46:46
+              gpio_sync,          // 45:45
+              gpio_en_agc,        // 44:44
+              gpio_ctl,           // 43:40
+              gpio_status}));     // 39:32
 
   ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_bd (
     .dio_t (gpio_t[11:0]),
@@ -279,7 +271,7 @@ module system_top (
     .ddr_ras_n (ddr_ras_n),
     .ddr_reset_n (ddr_reset_n),
     .ddr_we_n (ddr_we_n),
-    .enable (enable_s),
+    .enable (enable),
     .eth1_125mclk (),
     .eth1_25mclk (),
     .eth1_2m5clk (),
@@ -356,16 +348,17 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
+    .tdd_sync_in (tdd_sync_in),
+    .tdd_sync_out (tdd_sync_out),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_data_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
-    .txnrx (txnrx_s),
-    .tdd_enabled (tdd_enabled_s),
-    .tdd_sync_out (tdd_sync_out),
-    .tdd_sync_in (tdd_sync_in));
+    .txnrx (txnrx),
+    .up_enable (gpio_o[47]),
+    .up_txnrx (gpio_o[48]));
 
 endmodule
 
