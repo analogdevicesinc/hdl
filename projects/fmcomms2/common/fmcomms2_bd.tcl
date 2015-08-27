@@ -189,7 +189,7 @@ set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tdd
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_tdd
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tdd
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {41}] $ila_tdd
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {42}] $ila_tdd
 
 ad_connect  axi_ad9361_clk          ila_tdd/clk
 ad_connect  axi_ad9361/tdd_dbg      ila_tdd/probe0
