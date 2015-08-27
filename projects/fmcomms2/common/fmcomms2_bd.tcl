@@ -17,7 +17,8 @@ create_bd_port -dir O -from 5 -to 0 tx_data_out_n
 
 create_bd_port -dir O enable
 create_bd_port -dir O txnrx
-create_bd_port -dir O tdd_enabled
+create_bd_port -dir I up_enable
+create_bd_port -dir I up_txnrx
 
 create_bd_port -dir O tdd_sync_out
 create_bd_port -dir I tdd_sync_in
@@ -86,6 +87,8 @@ ad_connect  tx_data_out_p axi_ad9361/tx_data_out_p
 ad_connect  tx_data_out_n axi_ad9361/tx_data_out_n
 ad_connect  enable axi_ad9361/enable
 ad_connect  txnrx axi_ad9361/txnrx
+ad_connect  up_enable axi_ad9361/up_enable
+ad_connect  up_txnrx axi_ad9361/up_txnrx
 ad_connect  axi_ad9361_clk util_ad9361_adc_fifo/din_clk
 ad_connect  axi_ad9361/rst util_ad9361_adc_fifo/din_rst
 ad_connect  sys_cpu_clk util_ad9361_adc_fifo/dout_clk
@@ -141,7 +144,6 @@ ad_connect  util_ad9361_dac_upack/dac_data axi_ad9361_dac_dma/fifo_rd_dout
 ad_connect  axi_ad9361_dac_dma/fifo_rd_underflow axi_ad9361/dac_dunf
 ad_connect  tdd_sync_out axi_ad9361/tdd_sync_out
 ad_connect  tdd_sync_in axi_ad9361/tdd_sync_in
-ad_connect  tdd_enabled axi_ad9361/tdd_enabled
 
 # interconnects
 
@@ -181,19 +183,18 @@ ad_connect  util_ad9361_adc_fifo/dout_valid_0 ila_adc/probe4
 ad_connect  sys_cpu_clk ila_adc/clk
 
 # ila (tdd)
+
 set ila_tdd [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tdd]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tdd
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_tdd
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tdd
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {35}] $ila_adc
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {3}] $ila_tdd
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_tdd
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_tdd
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {41}] $ila_tdd
 
 ad_connect  axi_ad9361_clk          ila_tdd/clk
 ad_connect  axi_ad9361/enable       ila_tdd/probe0
 ad_connect  axi_ad9361/txnrx        ila_tdd/probe1
-ad_connect  axi_ad9361/tdd_enabled  ila_tdd/probe2
-ad_connect  axi_ad9361/tdd_dbg      ila_tdd/probe3
+ad_connect  axi_ad9361/tdd_dbg      ila_tdd/probe2
 
