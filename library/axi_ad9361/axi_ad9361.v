@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -59,10 +57,20 @@ module axi_ad9361 (
   tx_data_out_p,
   tx_data_out_n,
 
+  // ensm control
+
+  enable,
+  txnrx,
+
   // transmit master/slave
 
   dac_sync_in,
   dac_sync_out,
+
+  // tdd sync (1s pulse)
+
+  tdd_sync_out,
+  tdd_sync_in,
 
   // delay clock
 
@@ -108,14 +116,6 @@ module axi_ad9361 (
   dac_dunf,
   dac_r1_mode,
 
-  tdd_enabled,
-
-  enable,
-  txnrx,
-
-  tdd_sync_out,
-  tdd_sync_in,
-
   // axi interface
 
   s_axi_aclk,
@@ -142,6 +142,8 @@ module axi_ad9361 (
 
   // gpio
 
+  up_enable,
+  up_txnrx,
   up_dac_gpio_in,
   up_dac_gpio_out,
   up_adc_gpio_in,
@@ -178,10 +180,20 @@ module axi_ad9361 (
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
 
-  // master/slave
+  // ensm control
+
+  output          enable;
+  output          txnrx;
+
+  // transmit master/slave
 
   input           dac_sync_in;
   output          dac_sync_out;
+
+  // tdd sync (1s pulse)
+
+  output          tdd_sync_out;
+  input           tdd_sync_in;
 
   // delay clock
 
@@ -227,14 +239,6 @@ module axi_ad9361 (
   input           dac_dunf;
   output          dac_r1_mode;
 
-  output          tdd_enabled;
-
-  output          enable;
-  output          txnrx;
-
-  output          tdd_sync_out;
-  input           tdd_sync_in;
-
   // axi interface
 
   input           s_axi_aclk;
@@ -261,6 +265,8 @@ module axi_ad9361 (
 
   // gpio
 
+  input           up_enable;
+  input           up_txnrx;
   input   [31:0]  up_dac_gpio_in;
   output  [31:0]  up_dac_gpio_out;
   input   [31:0]  up_adc_gpio_in;
@@ -268,7 +274,7 @@ module axi_ad9361 (
 
   // chipscope signals
 
-  output [40:0]   tdd_dbg;
+  output  [41:0]  tdd_dbg;
 
   // internal registers
 
@@ -290,12 +296,16 @@ module axi_ad9361 (
   wire            adc_status_s;
   wire            dac_valid_s;
   wire    [47:0]  dac_data_s;
+  wire            dac_valid_i0_s;
+  wire            dac_valid_q0_s;
+  wire            dac_valid_i1_s;
+  wire            dac_valid_q1_s;
   wire    [ 6:0]  up_adc_dld_s;
   wire    [34:0]  up_adc_dwdata_s;
   wire    [34:0]  up_adc_drdata_s;
-  wire    [ 7:0]  up_dac_dld_s;
-  wire    [39:0]  up_dac_dwdata_s;
-  wire    [39:0]  up_dac_drdata_s;
+  wire    [ 9:0]  up_dac_dld_s;
+  wire    [49:0]  up_dac_dwdata_s;
+  wire    [49:0]  up_dac_drdata_s;
   wire            delay_locked_s;
   wire            up_wreq_s;
   wire    [13:0]  up_waddr_s;
@@ -311,18 +321,16 @@ module axi_ad9361 (
   wire            up_wack_tdd_s;
   wire            up_rack_tdd_s;
   wire    [31:0]  up_rdata_tdd_s;
-
   wire            tdd_tx_dp_en_s;
   wire            tdd_rx_vco_en_s;
   wire            tdd_tx_vco_en_s;
   wire            tdd_rx_rf_en_s;
   wire            tdd_tx_rf_en_s;
   wire    [ 7:0]  tdd_status_s;
+  wire            tdd_enable_s;
+  wire            tdd_txnrx_s;
+  wire            tdd_mode_s;
 
-  wire            dac_valid_i0_s;
-  wire            dac_valid_q0_s;
-  wire            dac_valid_i1_s;
-  wire            dac_valid_q1_s;
 
   // signal name changes
 
@@ -362,9 +370,11 @@ module axi_ad9361 (
     .tx_frame_out_n (tx_frame_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_data_out_n (tx_data_out_n),
+    .enable (enable),
+    .txnrx (txnrx),
     .rst (rst),
-    .l_clk (l_clk),
     .clk (clk),
+    .l_clk (l_clk),
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
@@ -373,7 +383,12 @@ module axi_ad9361 (
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
     .dac_r1_mode (dac_r1_mode),
+    .tdd_enable (tdd_enable_s),
+    .tdd_txnrx (tdd_txnrx_s),
+    .tdd_mode (tdd_mode_s),
     .up_clk (up_clk),
+    .up_enable (up_enable),
+    .up_txnrx (up_txnrx),
     .up_adc_dld (up_adc_dld_s),
     .up_adc_dwdata (up_adc_dwdata_s),
     .up_adc_drdata (up_adc_drdata_s),
@@ -386,60 +401,57 @@ module axi_ad9361 (
 
   // TDD interface
 
-  axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if(
-    .clk(clk),
-    .rst(rst),
-    .tdd_rx_vco_en(tdd_rx_vco_en_s),
-    .tdd_tx_vco_en(tdd_tx_vco_en_s),
-    .tdd_rx_rf_en(tdd_rx_rf_en_s),
-    .tdd_tx_rf_en(tdd_tx_rf_en_s),
-    .ad9361_txnrx(txnrx),
-    .ad9361_enable(enable),
-    .ad9361_tdd_status(tdd_status_s)
-  );
+  axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if (
+    .clk (clk),
+    .rst (rst),
+    .tdd_rx_vco_en (tdd_rx_vco_en_s),
+    .tdd_tx_vco_en (tdd_tx_vco_en_s),
+    .tdd_rx_rf_en (tdd_rx_rf_en_s),
+    .tdd_tx_rf_en (tdd_tx_rf_en_s),
+    .ad9361_txnrx (tdd_txnrx_s),
+    .ad9361_enable (tdd_enable_s),
+    .ad9361_tdd_status (tdd_status_s));
 
   // TDD control
 
-  axi_ad9361_tdd i_tdd(
-    .clk(clk),
-    .rst(rst),
-    .tdd_rx_vco_en(tdd_rx_vco_en_s),
-    .tdd_tx_vco_en(tdd_tx_vco_en_s),
-    .tdd_rx_rf_en(tdd_rx_rf_en_s),
-    .tdd_tx_rf_en(tdd_tx_rf_en_s),
-    .tdd_enabled (tdd_enabled),
-    .tdd_status(tdd_status_s),
-    .tdd_sync_out(tdd_sync_out),
-    .tdd_sync_in(tdd_sync_in),
-    .tx_valid_i0(dac_valid_i0_s),
-    .tx_valid_q0(dac_valid_q0_s),
-    .tx_valid_i1(dac_valid_i1_s),
-    .tx_valid_q1(dac_valid_q1_s),
-    .tdd_tx_valid_i0(dac_valid_i0),
-    .tdd_tx_valid_q0(dac_valid_q0),
-    .tdd_tx_valid_i1(dac_valid_i1),
-    .tdd_tx_valid_q1(dac_valid_q1),
-    .rx_valid_i0(adc_valid_i0_s),
-    .rx_valid_q0(adc_valid_q0_s),
-    .rx_valid_i1(adc_valid_i1_s),
-    .rx_valid_q1(adc_valid_q1_s),
-    .tdd_rx_valid_i0(adc_valid_i0),
-    .tdd_rx_valid_q0(adc_valid_q0),
-    .tdd_rx_valid_i1(adc_valid_i1),
-    .tdd_rx_valid_q1(adc_valid_q1),
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_wreq(up_wreq_s),
-    .up_waddr(up_waddr_s),
-    .up_wdata(up_wdata_s),
-    .up_wack(up_wack_tdd_s),
-    .up_rreq(up_rreq_s),
-    .up_raddr(up_raddr_s),
-    .up_rdata(up_rdata_tdd_s),
-    .up_rack(up_rack_tdd_s),
-    .tdd_dbg(tdd_dbg)
-  );
-
+  axi_ad9361_tdd i_tdd (
+    .clk (clk),
+    .rst (rst),
+    .tdd_rx_vco_en (tdd_rx_vco_en_s),
+    .tdd_tx_vco_en (tdd_tx_vco_en_s),
+    .tdd_rx_rf_en (tdd_rx_rf_en_s),
+    .tdd_tx_rf_en (tdd_tx_rf_en_s),
+    .tdd_enabled (tdd_mode_s),
+    .tdd_status (tdd_status_s),
+    .tdd_sync_out (tdd_sync_out),
+    .tdd_sync_in (tdd_sync_in),
+    .tx_valid_i0 (dac_valid_i0_s),
+    .tx_valid_q0 (dac_valid_q0_s),
+    .tx_valid_i1 (dac_valid_i1_s),
+    .tx_valid_q1 (dac_valid_q1_s),
+    .tdd_tx_valid_i0 (dac_valid_i0),
+    .tdd_tx_valid_q0 (dac_valid_q0),
+    .tdd_tx_valid_i1 (dac_valid_i1),
+    .tdd_tx_valid_q1 (dac_valid_q1),
+    .rx_valid_i0 (adc_valid_i0_s),
+    .rx_valid_q0 (adc_valid_q0_s),
+    .rx_valid_i1 (adc_valid_i1_s),
+    .rx_valid_q1 (adc_valid_q1_s),
+    .tdd_rx_valid_i0 (adc_valid_i0),
+    .tdd_rx_valid_q0 (adc_valid_q0),
+    .tdd_rx_valid_i1 (adc_valid_i1),
+    .tdd_rx_valid_q1 (adc_valid_q1),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_tdd_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_tdd_s),
+    .up_rack (up_rack_tdd_s),
+    .tdd_dbg (tdd_dbg));
 
   // receive
 
