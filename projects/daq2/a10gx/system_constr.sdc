@@ -6,3 +6,11 @@ create_clock -period "2.000 ns"   -name tx_ref_clk_500mhz   [get_ports {tx_ref_c
 derive_pll_clocks
 derive_clock_uncertainty
 
+set_false_path -from [get_clocks {sys_clk_100mhz}] -to [get_clocks {\
+  i_system_bd|a10gx_base|sys_ddr3_cntrl_phy_clk_0 \
+  i_system_bd|a10gx_base|sys_ddr3_cntrl_phy_clk_1 \
+  i_system_bd|a10gx_base|sys_ddr3_cntrl_phy_clk_2 \
+  i_system_bd|a10gx_base|sys_ddr3_cntrl_phy_clk_l_0 \
+  i_system_bd|a10gx_base|sys_ddr3_cntrl_phy_clk_l_1 \
+  i_system_bd|a10gx_base|sys_ddr3_cntrl_phy_clk_l_2}]
+ 
