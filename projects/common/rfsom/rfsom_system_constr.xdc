@@ -76,3 +76,16 @@ set_property  -dict {PACKAGE_PIN  V19   IOSTANDARD LVCMOS25} [get_ports gpio_bd[
 # clocks
 
 create_clock -period 8.000 -name eth1_rgmii_rxclk [get_ports eth1_rgmii_rxclk]
+
+# bad ip- we have to do this
+
+set_property IDELAY_VALUE 16 \
+  [get_cells -hier -filter {name =~ *delay_rgmii_rxd*}] \
+  [get_cells -hier -filter {name =~ *delay_rgmii_rx_ctl}]
+
+set_property IODELAY_GROUP gmii2rgmii_iodelay_group\
+  [get_cells -hier -filter {name =~ *idelayctrl}] \
+  [get_cells -hier -filter {name =~ *delay_rgmii_rxd*}] \
+  [get_cells -hier -filter {name =~ *delay_rgmii_rx_ctl}]
+
+
