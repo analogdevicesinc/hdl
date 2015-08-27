@@ -62,8 +62,8 @@ create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_
 ##  set_property  -dict {PACKAGE_PIN  D6} [get_ports tx_data_p[3]] ; ## A22  FMC_HPC_DP1_C2M_P (tx_data_p[2])
 ##  set_property  -dict {PACKAGE_PIN  D5} [get_ports tx_data_n[3]] ; ## A23  FMC_HPC_DP1_C2M_N (tx_data_n[2])
 
-set_property LOC GTHE3_CHANNEL_X0Y19 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[0].i_channel_1/i_gt/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y16 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[1].i_channel_1/i_gt/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y18 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[2].i_channel_1/i_gt/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y17 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[3].i_channel_1/i_gt/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y19 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[0].i_channel/i_gt/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y16 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[1].i_channel/i_gt/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y18 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[2].i_channel/i_gt/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y17 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[3].i_channel/i_gt/i_gthe3_channel}]
 
