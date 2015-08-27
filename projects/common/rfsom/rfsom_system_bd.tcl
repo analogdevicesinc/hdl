@@ -115,7 +115,7 @@ set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
 set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
 
-set sys_rgmii [create_bd_cell -type ip -vlnv xilinx.com:ip:gmii_to_rgmii:3.0 sys_rgmii]
+set sys_rgmii [create_bd_cell -type ip -vlnv xilinx.com:ip:gmii_to_rgmii:4.0 sys_rgmii]
 set_property -dict [list CONFIG.SupportLevel {Include_Shared_Logic_in_Core}] $sys_rgmii
 
 set sys_rgmii_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rgmii_rstgen]
