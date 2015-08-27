@@ -134,7 +134,7 @@ module up_hdmi_tx (
 
   // internal registers
 
-  reg             up_preset = 'd0;
+  reg             up_core_preset = 'd0;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_resetn = 'd0;
@@ -180,7 +180,7 @@ module up_hdmi_tx (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_preset <= 1'd1;
+      up_core_preset <= 1'd1;
       up_wack <= 'd0;
       up_scratch <= 'd0;
       up_resetn <= 'd0;
@@ -204,7 +204,7 @@ module up_hdmi_tx (
       up_ve_max <= 'd0;
       up_ve_min <= 'd0;
     end else begin
-      up_preset <= 1'd0;
+      up_core_preset <= ~up_resetn;
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h002)) begin
         up_scratch <= up_wdata;
@@ -306,12 +306,12 @@ module up_hdmi_tx (
 
   // resets
 
-  ad_rst i_hdmi_rst_reg   (.preset(up_preset), .clk(hdmi_clk),   .rst(hdmi_rst));
-  ad_rst i_vdma_rst_reg   (.preset(up_preset), .clk(vdma_clk),   .rst(vdma_rst));
+  ad_rst i_core_rst_reg (.preset(up_core_preset), .clk(hdmi_clk),   .rst(hdmi_rst));
+  ad_rst i_vdma_rst_reg (.preset(up_core_preset), .clk(vdma_clk),   .rst(vdma_rst));
 
   // hdmi control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(189)) i_hdmi_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(189)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_ss_bypass,
@@ -348,7 +348,7 @@ module up_hdmi_tx (
                       hdmi_ve_max,
                       hdmi_ve_min}));
 
-  up_xfer_status #(.DATA_WIDTH(2)) i_hdmi_xfer_status (
+  up_xfer_status #(.DATA_WIDTH(2)) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_hdmi_status_s,
@@ -360,7 +360,7 @@ module up_hdmi_tx (
 
   // hdmi clock monitor
 
-  up_clock_mon i_hdmi_clock_mon (
+  up_clock_mon i_clock_mon (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_d_count (up_hdmi_clk_count_s),
