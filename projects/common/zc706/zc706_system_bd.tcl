@@ -156,7 +156,7 @@ ad_connect  spi1_sdi_i sys_ps7/SPI1_MISO_I
 
 # hdmi
 
-ad_connect  sys_cpu_clk axi_hdmi_core/m_axis_mm2s_clk
+ad_connect  sys_cpu_clk axi_hdmi_core/vdma_clk
 ad_connect  sys_cpu_clk axi_hdmi_dma/m_axis_mm2s_aclk
 ad_connect  axi_hdmi_core/hdmi_clk axi_hdmi_clkgen/clk_0
 ad_connect  axi_hdmi_core/hdmi_out_clk hdmi_out_clk
@@ -164,9 +164,11 @@ ad_connect  axi_hdmi_core/hdmi_24_hsync hdmi_hsync
 ad_connect  axi_hdmi_core/hdmi_24_vsync hdmi_vsync
 ad_connect  axi_hdmi_core/hdmi_24_data_e hdmi_data_e
 ad_connect  axi_hdmi_core/hdmi_24_data hdmi_data
-ad_connect  axi_hdmi_core/M_AXIS_MM2S axi_hdmi_dma/m_axis_mm2s
-ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_dma/mm2s_fsync
-ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_core/m_axis_mm2s_fsync_ret
+ad_connect  axi_hdmi_core/vdma_valid axi_hdmi_dma/m_axis_mm2s_tvalid
+ad_connect  axi_hdmi_core/vdma_data axi_hdmi_dma/m_axis_mm2s_tdata
+ad_connect  axi_hdmi_core/vdma_ready axi_hdmi_dma/m_axis_mm2s_tready
+ad_connect  axi_hdmi_core/vdma_fs axi_hdmi_dma/mm2s_fsync
+ad_connect  axi_hdmi_core/vdma_fs axi_hdmi_core/vdma_fs_ret
 
 # spdif audio
 
