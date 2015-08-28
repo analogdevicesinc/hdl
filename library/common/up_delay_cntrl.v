@@ -71,9 +71,9 @@ module up_delay_cntrl (
 
   // delay interface
 
-  input                         delay_clk;
-  output                        delay_rst;
-  input                         delay_locked;
+  input                           delay_clk;
+  output                          delay_rst;
+  input                           delay_locked;
 
   // io interface
 
@@ -83,33 +83,33 @@ module up_delay_cntrl (
 
   // processor interface
 
-  input                         up_rstn;
-  input                         up_clk;
-  input                         up_wreq;
-  input   [13:0]                up_waddr;
-  input   [31:0]                up_wdata;
-  output                        up_wack;
-  input                         up_rreq;
-  input   [13:0]                up_raddr;
-  output  [31:0]                up_rdata;
-  output                        up_rack;
+  input                           up_rstn;
+  input                           up_clk;
+  input                           up_wreq;
+  input   [13:0]                  up_waddr;
+  input   [31:0]                  up_wdata;
+  output                          up_wack;
+  input                           up_rreq;
+  input   [13:0]                  up_raddr;
+  output  [31:0]                  up_rdata;
+  output                          up_rack;
 
   // internal registers
   
-  reg                           up_preset = 'd0;
-  reg                           up_wack = 'd0;
-  reg                           up_rack = 'd0;
-  reg     [31:0]                up_rdata = 'd0;
-  reg                           up_dlocked_m1 = 'd0;
-  reg                           up_dlocked = 'd0;
+  reg                             up_preset = 'd0;
+  reg                             up_wack = 'd0;
+  reg                             up_rack = 'd0;
+  reg     [31:0]                  up_rdata = 'd0;
+  reg                             up_dlocked_m1 = 'd0;
+  reg                             up_dlocked = 'd0;
   reg     [(DATA_WIDTH-1):0]      up_dld = 'd0;
   reg     [((DATA_WIDTH*5)-1):0]  up_dwdata = 'd0;
 
   // internal signals
 
-  wire                          up_wreq_s;
-  wire                          up_rreq_s;
-  wire    [ 4:0]                up_rdata_s;
+  wire                            up_wreq_s;
+  wire                            up_rreq_s;
+  wire    [ 4:0]                  up_rdata_s;
   wire    [(DATA_WIDTH-1):0]      up_drdata4_s;
   wire    [(DATA_WIDTH-1):0]      up_drdata3_s;
   wire    [(DATA_WIDTH-1):0]      up_drdata2_s;
@@ -118,7 +118,7 @@ module up_delay_cntrl (
 
   // variables
 
-  genvar                        n;
+  genvar                          n;
 
   // decode block select
 
