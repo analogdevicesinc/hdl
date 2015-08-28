@@ -46,7 +46,7 @@ set_property -dict [list CONFIG.C_SG_INCLUDE_STSCNTRL_STRM {0}] $axi_spdif_tx_dm
 # hdmi
 
 ad_connect  sys_200m_clk axi_hdmi_clkgen/clk
-ad_connect  sys_cpu_clk axi_hdmi_core/m_axis_mm2s_clk
+ad_connect  sys_cpu_clk axi_hdmi_core/vdma_clk
 ad_connect  sys_cpu_clk axi_hdmi_dma/m_axis_mm2s_aclk
 ad_connect  axi_hdmi_core/hdmi_clk axi_hdmi_clkgen/clk_0
 ad_connect  axi_hdmi_core/hdmi_out_clk hdmi_out_clk
@@ -62,13 +62,11 @@ ad_connect  axi_hdmi_core/hdmi_36_hsync hdmi_36_hsync
 ad_connect  axi_hdmi_core/hdmi_36_vsync hdmi_36_vsync
 ad_connect  axi_hdmi_core/hdmi_36_data_e hdmi_36_data_e
 ad_connect  axi_hdmi_core/hdmi_36_data hdmi_36_data
-ad_connect  axi_hdmi_core/m_axis_mm2s_tvalid axi_hdmi_dma/m_axis_mm2s_tvalid
-ad_connect  axi_hdmi_core/m_axis_mm2s_tdata axi_hdmi_dma/m_axis_mm2s_tdata
-ad_connect  axi_hdmi_core/m_axis_mm2s_tkeep axi_hdmi_dma/m_axis_mm2s_tkeep
-ad_connect  axi_hdmi_core/m_axis_mm2s_tlast axi_hdmi_dma/m_axis_mm2s_tlast
-ad_connect  axi_hdmi_core/m_axis_mm2s_tready axi_hdmi_dma/m_axis_mm2s_tready
-ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_dma/mm2s_fsync
-ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_core/m_axis_mm2s_fsync_ret
+ad_connect  axi_hdmi_core/vdma_valid axi_hdmi_dma/m_axis_mm2s_tvalid
+ad_connect  axi_hdmi_core/vdma_data axi_hdmi_dma/m_axis_mm2s_tdata
+ad_connect  axi_hdmi_core/vdma_ready axi_hdmi_dma/m_axis_mm2s_tready
+ad_connect  axi_hdmi_core/vdma_fs axi_hdmi_dma/mm2s_fsync
+ad_connect  axi_hdmi_core/vdma_fs axi_hdmi_core/vdma_fs_ret
 
 # spdif audio
 
