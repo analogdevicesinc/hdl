@@ -64,6 +64,134 @@ module util_gtlb (
   up_rx_pn_err,
   up_rx_pn_oos);
 
+  // pll clocks & resets
+
+  input                                       qpll_ref_clk,
+  input                                       cpll_ref_clk,
+
+  output                                      qpll0_rst,
+  output                                      qpll0_ref_clk_in,
+
+  input                                       pll_rst_0,
+  output                                      cpll_rst_m_0,
+  output                                      cpll_ref_clk_in_0,
+
+  // channel interface (rx)
+  
+  input                                       rx_p,
+  input                                       rx_n,
+
+  input   [ 3:0]                              rx_gt_charisk;
+  input   [ 3:0]                              rx_gt_disperr;
+  input   [ 3:0]                              rx_gt_notintable;
+  input   [31:0]                              rx_gt_data;
+
+  output                                      rx_out_clk,
+  input                                       rx_clk,
+  output                                      rx_rst,
+  output                                      rx_sof,
+  output  [((RX_NUM_OF_LANES*32)-1):0]        rx_data,
+
+  output                                      rx_ip_rst,
+  output                                      rx_ip_rst_done,
+  output                                      rx_ip_sysref,
+  input                                       rx_ip_sync,
+  input   [  3:0]                             rx_ip_sof,
+  input   [((RX_NUM_OF_LANES*32)-1):0]        rx_ip_data,
+
+  output                                      rx_0_p,
+  output                                      rx_0_n,
+  input                                       rx_rst_0,
+  output                                      rx_rst_m_0,
+  input                                       rx_gt_rst_0,
+  output                                      rx_gt_rst_m_0,
+  input                                       rx_pll_locked_0,
+  output                                      rx_pll_locked_m_0,
+  input                                       rx_user_ready_0,
+  output                                      rx_user_ready_m_0,
+  input                                       rx_rst_done_0,
+  output                                      rx_rst_done_m_0,
+  input                                       rx_out_clk_0,
+  output                                      rx_clk_0,
+  output                                      rx_sysref_0,
+  input                                       rx_sync_0,
+  input                                       rx_sof_0,
+  input   [31:0]                              rx_data_0,
+  input                                       rx_ip_rst_0,
+  output  [ 3:0]                              rx_ip_sof_0,
+  output  [31:0]                              rx_ip_data_0,
+  input                                       rx_ip_sysref_0,
+  output                                      rx_ip_sync_0,
+  input                                       rx_ip_rst_done_0,
+
+  // channel interface (tx)
+
+  output                                      tx_p,
+  output                                      tx_n,
+
+  output  [ 3:0]                              tx_gt_charisk,
+  output  [31:0]                              tx_gt_data,
+
+  input                                       tx_0_p,
+  input                                       tx_0_n,
+  input                                       tx_rst_0,
+  output                                      tx_rst_m_0,
+  input                                       tx_gt_rst_0,
+  output                                      tx_gt_rst_m_0,
+  input                                       tx_pll_locked_0,
+  output                                      tx_pll_locked_m_0,
+  input                                       tx_user_ready_0,
+  output                                      tx_user_ready_m_0,
+  input                                       tx_rst_done_0,
+  output                                      tx_rst_done_m_0,
+  input                                       tx_out_clk_0,
+  output                                      tx_clk_0,
+  output                                      tx_sysref_0,
+  output                                      tx_sync_0,
+  output  [31:0]                              tx_data_0,
+  input                                       tx_ip_rst_0,
+  input   [31:0]                              tx_ip_data_0,
+  input                                       tx_ip_sysref_0,
+  input                                       tx_ip_sync_0,
+  input                                       tx_ip_rst_done_0);
+
+
+  assign qpll0_rst = pll_rst_0;
+  assign qpll0_ref_clk_in = qpll_ref_clk;
+  assign cpll_rst_m_0 = pll_rst_0;
+  assign cpll_ref_clk_in_0 = cpll_ref_clk;
+
+
+  assign rx_0_p = rx_p;
+  assign rx_0_n = rx_n;
+  assign rx_rst_m_0 = rx_rst_0;
+  assign rx_gt_rst_m_0 = rx_gt_rst_0;
+  assign rx_pll_locked_m_0 = rx_pll_locked_0;
+  assign rx_user_ready_m_0 = rx_user_ready_0;
+  assign rx_rst_done_m_0 = & rx_rst_done_0;
+  assign rx_clk_0 = rx_clk;
+  assign rx_sysref_0 = 1'd0;
+  assign rx_ip_sof_0 = 4'hf;
+  assign rx_ip_data_0 = rx_gt_data_0;
+  assign rx_ip_sync_0 = ?;
+
+  assign tx_p = tx_0_p;
+  assign tx_n = tx_0_n;
+
+  assign tx_gt_charisk = ?;
+  assign tx_gt_data = tx_ip_data_0;
+
+  assign tx_rst_m_0 = tx_rst_0;
+  assign tx_gt_rst_m_0 = tx_gt_rst_0;
+  assign tx_pll_locked_m_0 = tx_pll_locked_0;
+  assign tx_user_ready_m_0 = tx_user_ready_0;
+  assign tx_rst_done_m_0 = tx_rst_done_0;
+  assign tx_clk_0 = tx_clk;
+  assign tx_sysref_0 = 1'd0;
+  assign tx_sync_0 = ?;
+  assign tx_data_0 = ?;
+
+
   // receive interface
 
   input           rx_clk;
