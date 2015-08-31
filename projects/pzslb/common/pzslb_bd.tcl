@@ -19,6 +19,39 @@ set_property -dict [list CONFIG.RX_CLKBUF_ENABLE_0 {1}] $axi_pzslb_gt
 set_property -dict [list CONFIG.TX_CLKBUF_ENABLE_0 {1}] $axi_pzslb_gt
 set_property -dict [list CONFIG.TX_DATA_SEL_0 {0}] $axi_pzslb_gt
 
+ad_connect  util_daq2_gt/qpll_ref_clk rx_ref_clk
+ad_connect  util_daq2_gt/cpll_ref_clk tx_ref_clk
+ad_connect  util_daq2_gt/tx_sysref tx_sysref
+ad_connect  util_daq2_gt/tx_p tx_data_p
+ad_connect  util_daq2_gt/tx_n tx_data_n
+ad_connect  util_daq2_gt/tx_sync tx_sync
+ad_connect  util_daq2_gt/tx_out_clk util_daq2_gt/tx_clk
+ad_connect  util_daq2_gt/tx_out_clk axi_ad9144_jesd/tx_core_clk
+ad_connect  util_daq2_gt/tx_ip_rst axi_ad9144_jesd/tx_reset
+ad_connect  util_daq2_gt/tx_ip_rst_done axi_ad9144_jesd/tx_reset_done
+ad_connect  util_daq2_gt/tx_ip_sysref axi_ad9144_jesd/tx_sysref
+ad_connect  util_daq2_gt/tx_ip_sync axi_ad9144_jesd/tx_sync
+ad_connect  util_daq2_gt/tx_ip_data axi_ad9144_jesd/tx_tdata
+ad_connect  util_daq2_gt/tx_out_clk axi_ad9144_core/tx_clk
+ad_connect  util_daq2_gt/tx_data axi_ad9144_core/tx_data
+ad_connect  util_daq2_gt/tx_out_clk axi_ad9144_upack/dac_clk
+ad_connect  util_daq2_gt/rx_sysref rx_sysref
+ad_connect  util_daq2_gt/rx_p rx_data_p
+ad_connect  util_daq2_gt/rx_n rx_data_n
+ad_connect  util_daq2_gt/rx_sync rx_sync
+ad_connect  util_daq2_gt/rx_out_clk util_daq2_gt/rx_clk
+ad_connect  util_daq2_gt/rx_out_clk axi_ad9680_jesd/rx_core_clk
+ad_connect  util_daq2_gt/rx_ip_rst axi_ad9680_jesd/rx_reset
+ad_connect  util_daq2_gt/rx_ip_rst_done axi_ad9680_jesd/rx_reset_done
+ad_connect  util_daq2_gt/rx_ip_sysref axi_ad9680_jesd/rx_sysref
+ad_connect  util_daq2_gt/rx_ip_sync axi_ad9680_jesd/rx_sync
+ad_connect  util_daq2_gt/rx_ip_sof axi_ad9680_jesd/rx_start_of_frame
+ad_connect  util_daq2_gt/rx_ip_data axi_ad9680_jesd/rx_tdata
+ad_connect  util_daq2_gt/rx_out_clk axi_ad9680_core/rx_clk
+ad_connect  util_daq2_gt/rx_data axi_ad9680_core/rx_data
+ad_connect  util_daq2_gt/rx_out_clk axi_ad9680_cpack/adc_clk
+ad_connect  util_daq2_gt/rx_rst axi_ad9680_cpack/adc_rst
+
 
 ad_connect  axi_daq2_gt/gt_qpll_0 util_daq2_gt/gt_qpll_0
 ad_connect  axi_daq2_gt/gt_pll_0 util_daq2_gt/gt_pll_0
