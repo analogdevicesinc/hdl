@@ -269,7 +269,7 @@ ad_connect axi_usdrx1_gt_rx_mon_trigger    ila_jesd_rx_mon/PROBE1
 
 set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_ad9671]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9671
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {8}] $ila_ad9671
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {9}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {8}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE2_WIDTH {128}] $ila_ad9671
@@ -278,6 +278,7 @@ set_property -dict [list CONFIG.C_PROBE4_WIDTH {128}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE5_WIDTH {8}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE6_WIDTH {128}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE7_WIDTH {8}] $ila_ad9671
+set_property -dict [list CONFIG.C_PROBE8_WIDTH {1}] $ila_ad9671
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_ad9671
 
 ad_connect axi_ad9671_core_0/adc_clk  ila_ad9671/CLK
@@ -289,3 +290,4 @@ ad_connect adc_data_2                 ila_ad9671/PROBE4
 ad_connect adc_valid_2                ila_ad9671/PROBE5
 ad_connect adc_data_3                 ila_ad9671/PROBE6
 ad_connect adc_valid_3                ila_ad9671/PROBE7
+ad_connect adc_dovf_0                 ila_ad9671/PROBE8
