@@ -74,6 +74,26 @@ module system_top (
 
   spdif,
 
+  sys_rst,
+  sys_clk_p,
+  sys_clk_n,
+
+  ddr3_addr,
+  ddr3_ba,
+  ddr3_cas_n,
+  ddr3_ck_n,
+  ddr3_ck_p,
+  ddr3_cke,
+  ddr3_cs_n,
+  ddr3_dm,
+  ddr3_dq,
+  ddr3_dqs_n,
+  ddr3_dqs_p,
+  ddr3_odt,
+  ddr3_ras_n,
+  ddr3_reset_n,
+  ddr3_we_n,
+
   iic_scl,
   iic_sda,
 
@@ -151,6 +171,26 @@ module system_top (
   output  [23:0]  hdmi_data;
 
   output          spdif;
+
+  input           sys_rst;
+  input           sys_clk_p;
+  input           sys_clk_n;
+
+  output  [13:0]  ddr3_addr;
+  output  [ 2:0]  ddr3_ba;
+  output          ddr3_cas_n;
+  output  [ 0:0]  ddr3_ck_n;
+  output  [ 0:0]  ddr3_ck_p;
+  output  [ 0:0]  ddr3_cke;
+  output  [ 0:0]  ddr3_cs_n;
+  output  [ 7:0]  ddr3_dm;
+  inout   [63:0]  ddr3_dq;
+  inout   [ 7:0]  ddr3_dqs_n;
+  inout   [ 7:0]  ddr3_dqs_p;
+  output  [ 0:0]  ddr3_odt;
+  output          ddr3_ras_n;
+  output          ddr3_reset_n;
+  output          ddr3_we_n;
 
   inout           iic_scl;
   inout           iic_sda;
@@ -360,6 +400,24 @@ module system_top (
   endgenerate
 
   system_wrapper i_system_wrapper (
+    .sys_clk_clk_n (sys_clk_n),
+    .sys_clk_clk_p (sys_clk_p),
+    .sys_rst (sys_rst),
+    .ddr3_addr (ddr3_addr),
+    .ddr3_ba (ddr3_ba),
+    .ddr3_cas_n (ddr3_cas_n),
+    .ddr3_ck_n (ddr3_ck_n),
+    .ddr3_ck_p (ddr3_ck_p),
+    .ddr3_cke (ddr3_cke),
+    .ddr3_cs_n (ddr3_cs_n),
+    .ddr3_dm (ddr3_dm),
+    .ddr3_dq (ddr3_dq),
+    .ddr3_dqs_n (ddr3_dqs_n),
+    .ddr3_dqs_p (ddr3_dqs_p),
+    .ddr3_odt (ddr3_odt),
+    .ddr3_ras_n (ddr3_ras_n),
+    .ddr3_reset_n (ddr3_reset_n),
+    .ddr3_we_n (ddr3_we_n),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),

@@ -80,18 +80,21 @@ set_property -dict [list CONFIG.PCORE_PMA_RSV {0x00018480}] $axi_usdrx1_gt
 set_property -dict [list CONFIG.PCORE_RX_CDR_CFG {0x03000023ff20400020}] $axi_usdrx1_gt
 
 set axi_usdrx1_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_usdrx1_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_usdrx1_dma
+set_property -dict [list CONFIG.C_DMA_TYPE_SRC {1}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.PCORE_ID {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_usdrx1_dma
+set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_usdrx1_dma
+set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_usdrx1_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {512}] $axi_usdrx1_dma
+set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_usdrx1_dma
+set_property -dict [list CONFIG.C_FIFO_SIZE {8}] $axi_usdrx1_dma
 
 set axi_usdrx1_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_usdrx1_spi]
 set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_usdrx1_spi
@@ -201,7 +204,7 @@ ad_connect gt_rx_data_2                     axi_ad9671_core_2/rx_data
 ad_connect gt_rx_sof_2                      axi_ad9671_core_2/rx_sof
 ad_connect gt_rx_data_3                     axi_ad9671_core_3/rx_data
 ad_connect gt_rx_sof_3                      axi_ad9671_core_3/rx_sof
-ad_connect axi_ad9671_core_0/adc_clk        axi_usdrx1_dma/fifo_wr_clk
+ad_connect axi_ad9671_core_0/adc_clk        usdrx1_fifo/adc_clk
 ad_connect adc_data_0                       axi_ad9671_core_0/adc_data
 ad_connect adc_data_1                       axi_ad9671_core_1/adc_data
 ad_connect adc_data_2                       axi_ad9671_core_2/adc_data
@@ -218,9 +221,8 @@ ad_connect adc_dovf_0                       axi_ad9671_core_0/adc_dovf
 ad_connect adc_dovf_1                       axi_ad9671_core_1/adc_dovf
 ad_connect adc_dovf_2                       axi_ad9671_core_2/adc_dovf
 ad_connect adc_dovf_3                       axi_ad9671_core_3/adc_dovf
-ad_connect adc_wr_en                        axi_usdrx1_dma/fifo_wr_en
-ad_connect adc_data                         axi_usdrx1_dma/fifo_wr_din
-ad_connect adc_dovf                         axi_usdrx1_dma/fifo_wr_overflow
+ad_connect adc_wr_en                        usdrx1_fifo/adc_wr
+ad_connect adc_data                         usdrx1_fifo/adc_wdata
 ad_connect axi_ad9671_adc_raddr             axi_ad9671_core_0/adc_raddr_out
 ad_connect axi_ad9671_adc_raddr             axi_ad9671_core_1/adc_raddr_in
 ad_connect axi_ad9671_adc_raddr             axi_ad9671_core_2/adc_raddr_in
@@ -229,6 +231,16 @@ ad_connect axi_ad9671_adc_sync              axi_ad9671_core_0/adc_sync_out
 ad_connect axi_ad9671_adc_sync              axi_ad9671_core_1/adc_sync_in
 ad_connect axi_ad9671_adc_sync              axi_ad9671_core_2/adc_sync_in
 ad_connect axi_ad9671_adc_sync              axi_ad9671_core_3/adc_sync_in
+
+ad_connect axi_usdrx1_gt/rx_rst             usdrx1_fifo/adc_rst
+ad_connect adc_dovf                         usdrx1_fifo/adc_wovf
+
+ad_connect usdrx1_fifo/dma_wdata            axi_usdrx1_dma/s_axis_data
+ad_connect usdrx1_fifo/dma_wr               axi_usdrx1_dma/s_axis_valid
+ad_connect usdrx1_fifo/dma_wready           axi_usdrx1_dma/s_axis_ready
+ad_connect usdrx1_fifo/dma_xfer_req         axi_usdrx1_dma/s_axis_xfer_req
+ad_connect sys_200m_clk                     axi_usdrx1_dma/s_axis_aclk
+ad_connect sys_200m_clk                     usdrx1_fifo/dma_clk
 
 # address map
 
@@ -242,9 +254,9 @@ ad_cpu_interconnect  0x44A91000 axi_usdrx1_jesd
 ad_cpu_interconnect  0x7c400000 axi_usdrx1_dma
 ad_cpu_interconnect  0x7c420000 axi_usdrx1_spi
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_usdrx1_dma/m_dest_axi
-ad_connect  sys_cpu_resetn axi_usdrx1_dma/m_dest_axi_aresetn
+ad_mem_hp2_interconnect sys_200m_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect sys_200m_clk axi_usdrx1_dma/m_dest_axi
+ad_connect sys_cpu_resetn axi_usdrx1_dma/m_dest_axi_aresetn
 
 ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
 ad_mem_hp3_interconnect sys_cpu_clk axi_usdrx1_gt/m_axi
