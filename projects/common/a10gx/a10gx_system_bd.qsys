@@ -66,7 +66,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "17";
          type = "int";
       }
    }
@@ -103,7 +103,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "8";
          type = "int";
       }
       datum sopceditor_expanded
@@ -124,7 +124,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "9";
          type = "int";
       }
    }
@@ -156,7 +156,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "10";
          type = "int";
       }
    }
@@ -176,11 +176,19 @@
          type = "String";
       }
    }
+   element sys_ethernet_reset
+   {
+      datum _sortIndex
+      {
+         value = "7";
+         type = "int";
+      }
+   }
    element sys_gpio
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "15";
          type = "int";
       }
    }
@@ -196,7 +204,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "14";
          type = "int";
       }
       datum sopceditor_expanded
@@ -217,7 +225,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "13";
          type = "int";
       }
       datum sopceditor_expanded
@@ -264,7 +272,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "19";
          type = "int";
       }
    }
@@ -272,7 +280,7 @@
    {
       datum _sortIndex
       {
-         value = "17";
+         value = "18";
          type = "int";
       }
    }
@@ -288,7 +296,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "16";
          type = "int";
       }
       datum sopceditor_expanded
@@ -309,7 +317,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "12";
          type = "int";
       }
       datum sopceditor_expanded
@@ -330,7 +338,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "11";
          type = "int";
       }
       datum sopceditor_expanded
@@ -613,6 +621,11 @@
    internal="sys_ethernet.pcs_ref_clk_clock_connection"
    type="clock"
    dir="end" />
+ <interface
+   name="sys_ethernet_reset"
+   internal="sys_ethernet_reset.out_reset"
+   type="reset"
+   dir="start" />
  <interface
    name="sys_ethernet_rgmii"
    internal="sys_ethernet.mac_rgmii_connection" />
@@ -1580,18 +1593,18 @@
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="core_variation" value="MAC_PCS" />
   <parameter name="deviceFamilyName" value="Arria 10" />
-  <parameter name="eg_addr" value="11" />
+  <parameter name="eg_addr" value="12" />
   <parameter name="ena_hash" value="false" />
   <parameter name="enable_alt_reconfig" value="false" />
   <parameter name="enable_ecc" value="false" />
   <parameter name="enable_ena" value="32" />
   <parameter name="enable_gmii_loopback" value="false" />
   <parameter name="enable_hd_logic" value="false" />
-  <parameter name="enable_mac_flow_ctrl" value="true" />
+  <parameter name="enable_mac_flow_ctrl" value="false" />
   <parameter name="enable_mac_vlan" value="false" />
   <parameter name="enable_magic_detect" value="true" />
   <parameter name="enable_ptp_1step" value="false" />
-  <parameter name="enable_sgmii" value="false" />
+  <parameter name="enable_sgmii" value="true" />
   <parameter name="enable_shift16" value="true" />
   <parameter name="enable_sup_addr" value="false" />
   <parameter name="enable_timestamping" value="false" />
@@ -1599,9 +1612,9 @@
   <parameter name="export_pwrdn" value="false" />
   <parameter name="ext_stat_cnt_ena" value="false" />
   <parameter name="ifGMII" value="MII_GMII" />
-  <parameter name="ing_addr" value="11" />
+  <parameter name="ing_addr" value="12" />
   <parameter name="max_channels" value="1" />
-  <parameter name="mdio_clk_div" value="30" />
+  <parameter name="mdio_clk_div" value="40" />
   <parameter name="nf_phyip_rcfg_enable" value="false" />
   <parameter name="phy_identifier" value="0" />
   <parameter name="phyip_en_synce_support" value="false" />
@@ -1679,6 +1692,17 @@
   <parameter name="RESPONSE_PORT" value="2" />
   <parameter name="STRIDE_ENABLE" value="0" />
   <parameter name="TRANSFER_TYPE" value="Unaligned Accesses" />
+ </module>
+ <module
+   name="sys_ethernet_reset"
+   kind="altera_reset_bridge"
+   version="15.0"
+   enabled="1">
+  <parameter name="ACTIVE_LOW_RESET" value="0" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
+  <parameter name="NUM_RESET_OUTPUTS" value="1" />
+  <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
+  <parameter name="USE_RESET_REQUEST" value="0" />
  </module>
  <module name="sys_gpio" kind="altera_avalon_pio" version="15.0" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="false" />
@@ -2091,6 +2115,11 @@
    kind="clock"
    version="15.0"
    start="sys_clk.out_clk"
+   end="sys_ethernet_reset.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="sys_clk.out_clk"
    end="sys_int_mem.clk1" />
  <connection
    kind="clock"
@@ -2243,6 +2272,11 @@
    version="15.0"
    start="sys_rst.out_reset"
    end="sys_ddr3_cntrl.global_reset_n" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
+   end="sys_ethernet_reset.in_reset" />
  <connection
    kind="reset"
    version="15.0"
