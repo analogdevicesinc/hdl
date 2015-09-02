@@ -183,6 +183,7 @@ module system_top (
 
   // internal signals
 
+  wire              eth_reset;
   wire              eth_mdio_i;
   wire              eth_mdio_o;
   wire              eth_mdio_t;
@@ -226,7 +227,7 @@ module system_top (
 
   // board stuff
 
-  assign eth_resetn = 1'b1;
+  assign eth_resetn = ~eth_reset;
   assign eth_mdio_i = eth_mdio;
   assign eth_mdio = (eth_mdio_t == 1'b1) ? 1'bz : eth_mdio_o;
 
@@ -263,6 +264,7 @@ module system_top (
     .a10gx_base_sys_ethernet_mdio_mdio_out (eth_mdio_o),
     .a10gx_base_sys_ethernet_mdio_mdio_oen (eth_mdio_t),
     .a10gx_base_sys_ethernet_ref_clk_clk (eth_ref_clk),
+		.a10gx_base_sys_ethernet_reset_reset (eth_reset),
     .a10gx_base_sys_ethernet_sgmii_rxp_0 (eth_rxd),
     .a10gx_base_sys_ethernet_sgmii_txp_0 (eth_txd),
     .a10gx_base_sys_gpio_in_port (gpio_i[63:32]),
