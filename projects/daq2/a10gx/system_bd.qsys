@@ -365,6 +365,11 @@
    type="clock"
    dir="end" />
  <interface
+   name="a10gx_base_sys_ethernet_reset"
+   internal="a10gx_base.sys_ethernet_reset"
+   type="reset"
+   dir="start" />
+ <interface
    name="a10gx_base_sys_ethernet_sgmii"
    internal="a10gx_base.sys_ethernet_sgmii"
    type="conduit"
@@ -419,26 +424,26 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="3" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="6" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="3" />
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="6" />
   <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='daq2_axi_jesd_xcvr.s_axi' start='0x0' end='0x10000' /><slave name='daq2_axi_ad9680_core.s_axi' start='0x10000' end='0x20000' /><slave name='daq2_axi_ad9144_core.s_axi' start='0x20000' end='0x30000' /><slave name='daq2_axi_ad9680_dma.s_axi' start='0x30000' end='0x34000' /><slave name='daq2_axi_ad9144_dma.s_axi' start='0x34000' end='0x38000' /></address-map>]]></parameter>
   <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_WIDTH" value="AddressWidth = 18" />
-  <parameter name="AUTO_SYS_DDR3_CNTRL_PLL_REF_CLK_CLOCK_DOMAIN" value="4" />
+  <parameter name="AUTO_SYS_DDR3_CNTRL_PLL_REF_CLK_CLOCK_DOMAIN" value="1" />
   <parameter name="AUTO_SYS_DDR3_CNTRL_PLL_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_SYS_DDR3_CNTRL_PLL_REF_CLK_RESET_DOMAIN" value="4" />
-  <parameter name="AUTO_SYS_ETHERNET_REF_CLK_CLOCK_DOMAIN" value="5" />
+  <parameter name="AUTO_SYS_DDR3_CNTRL_PLL_REF_CLK_RESET_DOMAIN" value="1" />
+  <parameter name="AUTO_SYS_ETHERNET_REF_CLK_CLOCK_DOMAIN" value="2" />
   <parameter name="AUTO_SYS_ETHERNET_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_SYS_ETHERNET_REF_CLK_RESET_DOMAIN" value="5" />
+  <parameter name="AUTO_SYS_ETHERNET_REF_CLK_RESET_DOMAIN" value="2" />
   <parameter name="AUTO_SYS_INTR_INTERRUPTS_USED" value="3" />
-  <parameter name="AUTO_UNIQUE_ID">system_bd_a10gx_base</parameter>
+  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_a10gx_base</parameter>
  </module>
  <module name="daq2" kind="daq2_bd" version="1.0" enabled="1">
-  <parameter name="AUTO_AXI_AD9144_DMA_M_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10gx_base_sys_ddr3_cntrl.ctrl_amm_0' start='0x10000000' end='0x20000000' /></address-map>]]></parameter>
+  <parameter name="AUTO_AXI_AD9144_DMA_M_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10gx_base_sys_ddr3_cntrl.ctrl_amm_0' start='0x0' end='0x10000000' /></address-map>]]></parameter>
   <parameter
      name="AUTO_AXI_AD9144_DMA_M_AXI_ADDRESS_WIDTH"
      value="AddressWidth = 29" />
-  <parameter name="AUTO_AXI_AD9680_DMA_M_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10gx_base_sys_ddr3_cntrl.ctrl_amm_0' start='0x10000000' end='0x20000000' /></address-map>]]></parameter>
+  <parameter name="AUTO_AXI_AD9680_DMA_M_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10gx_base_sys_ddr3_cntrl.ctrl_amm_0' start='0x0' end='0x10000000' /></address-map>]]></parameter>
   <parameter
      name="AUTO_AXI_AD9680_DMA_M_AXI_ADDRESS_WIDTH"
      value="AddressWidth = 29" />
@@ -446,19 +451,19 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_MEM_CLK_CLOCK_DOMAIN" value="1" />
+  <parameter name="AUTO_MEM_CLK_CLOCK_DOMAIN" value="8" />
   <parameter name="AUTO_MEM_CLK_CLOCK_RATE" value="133332500" />
-  <parameter name="AUTO_MEM_CLK_RESET_DOMAIN" value="1" />
-  <parameter name="AUTO_RX_REF_CLK_CLOCK_DOMAIN" value="6" />
+  <parameter name="AUTO_MEM_CLK_RESET_DOMAIN" value="8" />
+  <parameter name="AUTO_RX_REF_CLK_CLOCK_DOMAIN" value="4" />
   <parameter name="AUTO_RX_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_RX_REF_CLK_RESET_DOMAIN" value="6" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="3" />
+  <parameter name="AUTO_RX_REF_CLK_RESET_DOMAIN" value="4" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="6" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="3" />
-  <parameter name="AUTO_TX_REF_CLK_CLOCK_DOMAIN" value="7" />
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="6" />
+  <parameter name="AUTO_TX_REF_CLK_CLOCK_DOMAIN" value="5" />
   <parameter name="AUTO_TX_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_TX_REF_CLK_RESET_DOMAIN" value="7" />
-  <parameter name="AUTO_UNIQUE_ID" value="system_bd_daq2" />
+  <parameter name="AUTO_TX_REF_CLK_RESET_DOMAIN" value="5" />
+  <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_daq2" />
  </module>
  <module name="sys_clk" kind="clock_source" version="15.0" enabled="1">
   <parameter name="clockFrequency" value="100000000" />
