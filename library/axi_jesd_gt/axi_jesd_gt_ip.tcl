@@ -77,10 +77,10 @@ for {set n 0} {$n < 8} {incr n} {
     "rx_ip_rst_done      rx_ip_rst_done_${n}    "]
 
   adi_if_infer_bus xilinx.com:display_jesd204:jesd204_rx_bus master gt_rx_ip_${n} [list \
-    "rxcharisk           rx_gt_charisk_${n}      "\
-    "rxdisperr           rx_gt_disperr_${n}      "\
-    "rxnotintable        rx_gt_notintable_${n}   "\
-    "rxdata              rx_gt_data_${n}         "]
+    "rxcharisk           rx_gt_charisk_${n}     "\
+    "rxdisperr           rx_gt_disperr_${n}     "\
+    "rxnotintable        rx_gt_notintable_${n}  "\
+    "rxdata              rx_gt_data_${n}        "]
 
   adi_if_infer_bus ADI:user:if_gt_rx_ksig master gt_rx_ksig_${n} [list \
     "rx_gt_ilas_f        rx_gt_ilas_f_${n}      "\
@@ -114,8 +114,8 @@ for {set n 0} {$n < 8} {incr n} {
     "tx_ip_rst_done      tx_ip_rst_done_${n}    "]
 
   adi_if_infer_bus xilinx.com:display_jesd204:jesd204_tx_bus slave gt_tx_ip_${n} [list \
-    "txcharisk           tx_gt_charisk_${n}      "\
-    "txdata              tx_gt_data_${n}         "]
+    "txcharisk           tx_gt_charisk_${n}     "\
+    "txdata              tx_gt_data_${n}        "]
 }
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.QPLL0_ENABLE')) == 1} \
