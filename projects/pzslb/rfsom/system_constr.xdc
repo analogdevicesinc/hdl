@@ -92,3 +92,16 @@ set_property  -dict {PACKAGE_PIN  A5    IOSTANDARD LVCMOS18} [get_ports pmod1[5]
 set_property  -dict {PACKAGE_PIN  A4    IOSTANDARD LVCMOS18} [get_ports pmod1[6]]                         ; ## IO_L22P_T3_34            
 set_property  -dict {PACKAGE_PIN  A3    IOSTANDARD LVCMOS18} [get_ports pmod1[7]]                         ; ## IO_L22N_T3_34            
 
+set_property  -dict {PACKAGE_PIN  W6}   [get_ports fmc_gt_ref_clk_p]                                      ; ## MGTREFCLK0P_111          
+set_property  -dict {PACKAGE_PIN  W5}   [get_ports fmc_gt_ref_clk_n]                                      ; ## MGTREFCLK0N_111          
+set_property  -dict {PACKAGE_PIN  AF8}  [get_ports fmc_gt_tx_p]                                           ; ## MGTXTXP0_111             
+set_property  -dict {PACKAGE_PIN  AF7}  [get_ports fmc_gt_tx_n]                                           ; ## MGTXTXN0_111             
+set_property  -dict {PACKAGE_PIN  AD8}  [get_ports fmc_gt_rx_p]                                           ; ## MGTXRXP0_111             
+set_property  -dict {PACKAGE_PIN  AD7}  [get_ports fmc_gt_rx_n]                                           ; ## MGTXRXN0_111             
+
+# clocks
+
+create_clock -name ref_clk      -period  4.00 [get_ports fmc_gt_ref_clk_p]
+create_clock -name tx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/TXOUTCLK]
+create_clock -name rx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
+
