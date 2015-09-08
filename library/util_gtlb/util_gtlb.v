@@ -132,7 +132,6 @@ module util_gtlb (
   reg                   tx_sync_m1 = 'd0;
   reg                   tx_sync_m2 = 'd0;
   reg                   tx_sync = 'd0;
-  reg         [ 7:0]    tx_clk_count = 'd0;
   reg         [31:0]    tx_pn_data = 'd0;
   reg                   tx_charisk_1 = 'd0;
   reg         [ 3:0]    rx_kcount = 'd0;
@@ -241,7 +240,6 @@ module util_gtlb (
       tx_sync_m1 <= 1'd0;
       tx_sync_m2 <= 1'd0;
       tx_sync <= 1'd0;
-      tx_clk_count <= 8'd0;
       tx_pn_data <= 32'hffffffff;
       tx_charisk_1 <= 1'd0;
       tx_gt_data_0 <= 32'd0;
@@ -249,12 +247,7 @@ module util_gtlb (
       tx_sync_m1 <= rx_sync;
       tx_sync_m2 <= tx_sync_m1;
       tx_sync <= tx_sync_m2;
-      tx_clk_count <= tx_clk_count + 1'b1;
-      if (tx_clk_count == 0) begin
-        tx_pn_data <= 32'hffffffff;
-      end else begin
-        tx_pn_data <= pn31(tx_pn_data);
-      end
+      tx_pn_data <= pn31(tx_pn_data);
       if (tx_sync == 1'b1) begin
         tx_charisk_1 <= 1'd0;
         tx_gt_data_0[31:24] <= tx_pn_data[ 7: 0];
