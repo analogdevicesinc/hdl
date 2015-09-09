@@ -274,7 +274,13 @@ module axi_ad9361_tdd (
     .up_rdata(up_rdata),
     .up_rack(up_rack));
 
-  ad_tdd_control i_tdd_control(
+  // the TX_DATA_PATH_DELAY and CONTROL_PATH_DELAY are specificly defined
+  // for the axi_ad9361 core
+
+  ad_tdd_control #(
+    .TX_DATA_PATH_DELAY(14),
+    .CONTROL_PATH_DELAY(3))
+  i_tdd_control(
     .clk(clk),
     .rst(rst),
     .tdd_enable(tdd_enable_synced_s),

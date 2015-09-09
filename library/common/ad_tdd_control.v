@@ -89,8 +89,11 @@ module ad_tdd_control(
 
   // parameters
 
-  localparam      ON = 1;
-  localparam      OFF = 0;
+  parameter   integer TX_DATA_PATH_DELAY = 0;     // internally eliminate the delay introduced by the TX data path
+  parameter   integer CONTROL_PATH_DELAY = 0;     // internally eliminate the delay introduced by the control path
+
+  localparam          ON = 1;
+  localparam          OFF = 0;
 
   // input/output signals
 
@@ -174,9 +177,26 @@ module ad_tdd_control(
 
   // internal signals
 
+  wire   [23:0]   tdd_vco_rx_on_1_s;
+  wire   [23:0]   tdd_vco_rx_off_1_s;
+  wire   [23:0]   tdd_vco_tx_on_1_s;
+  wire   [23:0]   tdd_vco_tx_off_1_s;
+  wire   [23:0]   tdd_rx_on_1_s;
+  wire   [23:0]   tdd_rx_off_1_s;
+  wire   [23:0]   tdd_tx_on_1_s;
+  wire   [23:0]   tdd_tx_off_1_s;
   wire   [23:0]   tdd_tx_dp_on_1_s;
-  wire   [23:0]   tdd_tx_dp_on_2_s;
   wire   [23:0]   tdd_tx_dp_off_1_s;
+
+  wire   [23:0]   tdd_vco_rx_on_2_s;
+  wire   [23:0]   tdd_vco_rx_off_2_s;
+  wire   [23:0]   tdd_vco_tx_on_2_s;
+  wire   [23:0]   tdd_vco_tx_off_2_s;
+  wire   [23:0]   tdd_rx_on_2_s;
+  wire   [23:0]   tdd_rx_off_2_s;
+  wire   [23:0]   tdd_tx_on_2_s;
+  wire   [23:0]   tdd_tx_off_2_s;
+  wire   [23:0]   tdd_tx_dp_on_2_s;
   wire   [23:0]   tdd_tx_dp_off_2_s;
 
   wire            tdd_txrx_only_en_s;
@@ -248,7 +268,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_vco_rx_on_1 <= 1'b0;
     end else
-    if(tdd_counter == tdd_vco_rx_on_1) begin
+    if(tdd_counter == tdd_vco_rx_on_1_s) begin
       counter_at_tdd_vco_rx_on_1 <= 1'b1;
     end
     else begin
@@ -260,7 +280,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_vco_rx_on_2 <= 1'b0;
     end else
-    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_rx_on_2)) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_rx_on_2_s)) begin
       counter_at_tdd_vco_rx_on_2 <= 1'b1;
     end
     else begin
@@ -272,7 +292,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_vco_rx_off_1 <= 1'b0;
     end else
-    if(tdd_counter == tdd_vco_rx_off_1) begin
+    if(tdd_counter == tdd_vco_rx_off_1_s) begin
       counter_at_tdd_vco_rx_off_1 <= 1'b1;
     end
     else begin
@@ -284,7 +304,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_vco_rx_off_2 <= 1'b0;
     end else
-    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_rx_off_2)) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_rx_off_2_s)) begin
       counter_at_tdd_vco_rx_off_2 <= 1'b1;
     end
     else begin
@@ -297,7 +317,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_vco_tx_on_1 <= 1'b0;
     end else
-    if(tdd_counter == tdd_vco_tx_on_1) begin
+    if(tdd_counter == tdd_vco_tx_on_1_s) begin
       counter_at_tdd_vco_tx_on_1 <= 1'b1;
     end
     else begin
@@ -309,7 +329,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_vco_tx_on_2 <= 1'b0;
     end else
-    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_tx_on_2)) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_tx_on_2_s)) begin
       counter_at_tdd_vco_tx_on_2 <= 1'b1;
     end
     else begin
@@ -321,7 +341,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_vco_tx_off_1 <= 1'b0;
     end else
-    if(tdd_counter == tdd_vco_tx_off_1) begin
+    if(tdd_counter == tdd_vco_tx_off_1_s) begin
       counter_at_tdd_vco_tx_off_1 <= 1'b1;
     end
     else begin
@@ -333,7 +353,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_vco_tx_off_2 <= 1'b0;
     end else
-    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_tx_off_2)) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_vco_tx_off_2_s)) begin
       counter_at_tdd_vco_tx_off_2 <= 1'b1;
     end
     else begin
@@ -346,7 +366,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_rx_on_1 <= 1'b0;
     end else
-    if(tdd_counter == tdd_rx_on_1) begin
+    if(tdd_counter == tdd_rx_on_1_s) begin
       counter_at_tdd_rx_on_1 <= 1'b1;
     end
     else begin
@@ -358,7 +378,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_rx_on_2 <= 1'b0;
     end else
-    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_rx_on_2)) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_rx_on_2_s)) begin
       counter_at_tdd_rx_on_2 <= 1'b1;
     end
     else begin
@@ -370,7 +390,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_rx_off_1 <= 1'b0;
     end else
-    if(tdd_counter == tdd_rx_off_1) begin
+    if(tdd_counter == tdd_rx_off_1_s) begin
       counter_at_tdd_rx_off_1 <= 1'b1;
     end
     else begin
@@ -382,7 +402,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_rx_off_2 <= 1'b0;
     end else
-    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_rx_off_2)) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_rx_off_2_s)) begin
       counter_at_tdd_rx_off_2 <= 1'b1;
     end
     else begin
@@ -395,7 +415,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_tx_on_1 <= 1'b0;
     end else
-    if(tdd_counter == tdd_tx_on_1) begin
+    if(tdd_counter == tdd_tx_on_1_s) begin
       counter_at_tdd_tx_on_1 <= 1'b1;
     end
     else begin
@@ -407,7 +427,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_tx_on_2 <= 1'b0;
     end else
-    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_on_2)) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_on_2_s)) begin
       counter_at_tdd_tx_on_2 <= 1'b1;
     end
     else begin
@@ -419,7 +439,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_tx_off_1 <= 1'b0;
     end else
-    if(tdd_counter == tdd_tx_off_1) begin
+    if(tdd_counter == tdd_tx_off_1_s) begin
       counter_at_tdd_tx_off_1 <= 1'b1;
     end
     else begin
@@ -431,7 +451,7 @@ module ad_tdd_control(
     if(rst == 1'b1) begin
       counter_at_tdd_tx_off_2 <= 1'b0;
     end else
-    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_off_2)) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_off_2_s)) begin
       counter_at_tdd_tx_off_2 <= 1'b1;
     end
     else begin
@@ -488,54 +508,248 @@ module ad_tdd_control(
     end
   end
 
-  // internal datapath delay compensation
+  // control-path delay compensation
 
   ad_addsub #(
     .A_DATA_WIDTH(24),
-    .B_DATA_VALUE(11),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_vco_rx_on_1_comp (
+    .clk(clk),
+    .A(tdd_vco_rx_on_1),
+    .Amax(tdd_frame_length),
+    .out(tdd_vco_rx_on_1_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_vco_rx_off_1_comp (
+    .clk(clk),
+    .A(tdd_vco_rx_off_1),
+    .Amax(tdd_frame_length),
+    .out(tdd_vco_rx_off_1_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_vco_tx_on_1_comp (
+    .clk(clk),
+    .A(tdd_vco_tx_on_1),
+    .Amax(tdd_frame_length),
+    .out(tdd_vco_tx_on_1_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_vco_tx_off_1_comp (
+    .clk(clk),
+    .A(tdd_vco_tx_off_1),
+    .Amax(tdd_frame_length),
+    .out(tdd_vco_tx_off_1_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_rx_on_1_comp (
+    .clk(clk),
+    .A(tdd_rx_on_1),
+    .Amax(tdd_frame_length),
+    .out(tdd_rx_on_1_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_rx_off_1_comp (
+    .clk(clk),
+    .A(tdd_rx_off_1),
+    .Amax(tdd_frame_length),
+    .out(tdd_rx_off_1_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_tx_on_1_comp (
+    .clk(clk),
+    .A(tdd_tx_on_1),
+    .Amax(tdd_frame_length),
+    .out(tdd_tx_on_1_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_tx_off_1_comp (
+    .clk(clk),
+    .A(tdd_tx_off_1),
+    .Amax(tdd_frame_length),
+    .out(tdd_tx_off_1_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_vco_rx_on_2_comp (
+    .clk(clk),
+    .A(tdd_vco_rx_on_2),
+    .Amax(tdd_frame_length),
+    .out(tdd_vco_rx_on_2_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_vco_rx_off_2_comp (
+    .clk(clk),
+    .A(tdd_vco_rx_off_2),
+    .Amax(tdd_frame_length),
+    .out(tdd_vco_rx_off_2_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_vco_tx_on_2_comp (
+    .clk(clk),
+    .A(tdd_vco_tx_on_2),
+    .Amax(tdd_frame_length),
+    .out(tdd_vco_tx_on_2_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_vco_tx_off_2_comp (
+    .clk(clk),
+    .A(tdd_vco_tx_off_2),
+    .Amax(tdd_frame_length),
+    .out(tdd_vco_tx_off_2_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_rx_on_2_comp (
+    .clk(clk),
+    .A(tdd_rx_on_2),
+    .Amax(tdd_frame_length),
+    .out(tdd_rx_on_2_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_rx_off_2_comp (
+    .clk(clk),
+    .A(tdd_rx_off_2),
+    .Amax(tdd_frame_length),
+    .out(tdd_rx_off_2_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_tx_on_2_comp (
+    .clk(clk),
+    .A(tdd_tx_on_2),
+    .Amax(tdd_frame_length),
+    .out(tdd_tx_on_2_s),
+    .CE(1'b1)
+  );
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(CONTROL_PATH_DELAY),
+    .ADD_OR_SUB_N(0)
+  ) i_tx_off_2_comp (
+    .clk(clk),
+    .A(tdd_tx_off_2),
+    .Amax(tdd_frame_length),
+    .out(tdd_tx_off_2_s),
+    .CE(1'b1)
+  );
+
+  // internal data-path delay compensation
+
+  ad_addsub #(
+    .A_DATA_WIDTH(24),
+    .B_DATA_VALUE(TX_DATA_PATH_DELAY),
     .ADD_OR_SUB_N(0)
   ) i_tx_dp_on_1_comp (
     .clk(clk),
     .A(tdd_tx_dp_on_1),
     .Amax(tdd_frame_length),
     .out(tdd_tx_dp_on_1_s),
-    .CE(1)
+    .CE(1'b1)
   );
 
   ad_addsub #(
     .A_DATA_WIDTH(24),
-    .B_DATA_VALUE(11),
+    .B_DATA_VALUE(TX_DATA_PATH_DELAY),
     .ADD_OR_SUB_N(0)
   ) i_tx_dp_on_2_comp (
     .clk(clk),
     .A(tdd_tx_dp_on_2),
     .Amax(tdd_frame_length),
     .out(tdd_tx_dp_on_2_s),
-    .CE(1)
+    .CE(1'b1)
   );
 
   ad_addsub #(
     .A_DATA_WIDTH(24),
-    .B_DATA_VALUE(11),
+    .B_DATA_VALUE(TX_DATA_PATH_DELAY),
     .ADD_OR_SUB_N(0)
   ) i_tx_dp_off_1_comp (
     .clk(clk),
     .A(tdd_tx_dp_off_1),
     .Amax(tdd_frame_length),
     .out(tdd_tx_dp_off_1_s),
-    .CE(1)
+    .CE(1'b1)
   );
 
   ad_addsub #(
     .A_DATA_WIDTH(24),
-    .B_DATA_VALUE(11),
+    .B_DATA_VALUE(TX_DATA_PATH_DELAY),
     .ADD_OR_SUB_N(0)
   ) i_tx_dp_off_2_comp (
     .clk(clk),
     .A(tdd_tx_dp_off_2),
     .Amax(tdd_frame_length),
     .out(tdd_tx_dp_off_2_s),
-    .CE(1)
+    .CE(1'b1)
   );
 
   // output logic
