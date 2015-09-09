@@ -36,8 +36,7 @@ set_property  -dict {PACKAGE_PIN  B17  IOSTANDARD LVDS}     [get_ports tx_data_o
 set_property  -dict {PACKAGE_PIN  A17  IOSTANDARD LVDS}     [get_ports tx_data_out_n[5]]                  ; ## IO_L18N_T2_AD13N_35
 set_property  -dict {PACKAGE_PIN  G14  IOSTANDARD LVCMOS18} [get_ports enable]                            ; ## IO_L11P_T1_SRCC_35
 set_property  -dict {PACKAGE_PIN  F14  IOSTANDARD LVCMOS18} [get_ports txnrx]                             ; ## IO_L11N_T1_SRCC_35
-set_property  -dict {PACKAGE_PIN  AA18 IOSTANDARD LVCMOS25} [get_ports tdd_sync_out]                      ; ## IO_L24_13_JX2_N
-set_property  -dict {PACKAGE_PIN  W19  IOSTANDARD LVCMOS25} [get_ports tdd_sync_in]                       ; ## IO_L23_13_JX2_N
+set_property  -dict {PACKAGE_PIN  W19  IOSTANDARD LVCMOS25} [get_ports tdd_sync]                          ; ## IO_L23_13_JX2_N
 
 set_property  -dict {PACKAGE_PIN  D13  IOSTANDARD LVCMOS18} [get_ports gpio_status[0]]                    ; ## IO_L19P_T3_35
 set_property  -dict {PACKAGE_PIN  C13  IOSTANDARD LVCMOS18} [get_ports gpio_status[1]]                    ; ## IO_L19N_T3_VREF_35

@@ -109,8 +109,7 @@ module system_top (
   enable,
   txnrx,
 
-  tdd_sync_out,
-  tdd_sync_in,
+  tdd_sync,
 
   gpio_rf0,
   gpio_rf1,
@@ -200,8 +199,7 @@ module system_top (
   output          enable;
   output          txnrx;
 
-  output          tdd_sync_out;
-  input           tdd_sync_in;
+  inout           tdd_sync;
 
   inout           gpio_rf0;
   inout           gpio_rf1;
@@ -226,6 +224,10 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
+
+  wire            tdd_sync_i;
+  wire            tdd_sync_o;
+  wire            tdd_sync_t;
 
   // assignments
 
@@ -254,6 +256,12 @@ module system_top (
     .dio_i (gpio_o[11:0]),
     .dio_o (gpio_i[11:0]),
     .dio_p (gpio_bd));
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_tdd_sync (
+    .dio_t (tdd_sync_t),
+    .dio_i (tdd_sync_o),
+    .dio_o (tdd_sync_i),
+    .dio_p (tdd_sync));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -348,8 +356,9 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .tdd_sync_in (tdd_sync_in),
-    .tdd_sync_out (tdd_sync_out),
+    .tdd_sync_i (tdd_sync_i),
+    .tdd_sync_o (tdd_sync_o),
+    .tdd_sync_t (tdd_sync_t),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_data_out_n),
