@@ -50,14 +50,16 @@ module ad_tdd_sync (
   sync_en,              // synchronization enabled
   device_type,          // master or slave
   sync_period,          // periodicity of the sync pulse,
+  endof_frame,
 
   enable_in,            // tdd enable signal asserted by software
   enable_out,           // synchronized tdd_enable
 
   // sync interface
 
-  sync_out,             // sync output for slave
-  sync_in,              // sync input
+  sync_o,               // sync output
+  sync_i,               // sync input
+  sync_t,               // sync 3-state
 
   resync                // resync pulse for slave device
 
@@ -68,28 +70,29 @@ module ad_tdd_sync (
 
   input           sync_en;
   input           device_type;
-  input   [31:0]  sync_period;
+  input   [ 7:0]  sync_period;
+  input           endof_frame;
 
   input           enable_in;
   output          enable_out;
 
-  output          sync_out;
-  input           sync_in;
+  output          sync_o;
+  input           sync_i;
+  output          sync_t;
 
   output          resync;
 
   // internal registers
 
+  reg             enable_in_d = 1'b0;
   reg             enable_out = 1'b0;
   reg             enable_synced = 1'b0;
-  reg             sync_in_d = 1'b0;
-
-  reg             sync_out = 1'b0;
+  reg             sync_i_d = 1'b0;
+  reg             sync_o = 1'b0;
   reg             resync = 1'b0;
-
-  reg     [ 2:0]  pulse_width = 3'h7;
-
-  reg     [31:0]  pulse_counter = 32'h0;
+  reg     [ 7:0]  frame_counter = 32'h0;
+  reg     [ 2:0]  pulse_counter = 3'h7;
+  reg             pulse_en = 1'h0;
 
   // the sync module can be bypassed
 
@@ -101,36 +104,55 @@ module ad_tdd_sync (
     end
   end
 
-  // generate sync pulse
+  // sync pulse is generated at every posedge of enable_in
+  // OR after [sync_period] number of endof_frame
 
   always @(posedge clk) begin
-    if(rst == 1) begin
-      pulse_counter <= 0;
-      pulse_width <= 3'h7;
-      sync_out <= 1'h0;
+    if (rst == 1) begin
+      enable_in_d <= 1'b0;
+      frame_counter <= 0;
+      pulse_en <= 0;
     end else begin
-      if (device_type == 1) begin
-        pulse_counter <= (pulse_counter < sync_period) ? pulse_counter + 1 : 32'h0;
-        if(pulse_counter == sync_period) begin
-          sync_out <= enable_in;
-          pulse_width <= 3'h0;
-        end else begin
-          pulse_width <= (pulse_width < 3'h7) ? pulse_width + 1 : pulse_width;
-          sync_out <= (pulse_width == 3'h7) ? 0 : enable_in;
-        end
+      enable_in_d <= enable_in;
+      if(endof_frame == 1) begin
+        frame_counter <= frame_counter + 1;
+      end
+      if((frame_counter == sync_period) || (~enable_in_d & enable_in == 1)) begin
+        frame_counter <= 1'b0;
+        pulse_en <= 1'b1;
+      end else begin
+        pulse_en <= 1'b0;
       end
     end
   end
 
+  // generate pulse with a specified width
+
+  always @(posedge clk) begin
+    if (rst == 1) begin
+      pulse_counter <= 0;
+      sync_o <= 0;
+    end else begin
+      if(pulse_en == 1'b1) begin
+        sync_o <= 1'b1;
+      end else if(pulse_counter == 3'h7) begin
+        sync_o <= 1'b0;
+      end
+      pulse_counter <= (sync_o == 1'b1) ? pulse_counter + 1 : 3'h0;
+    end
+  end
+
+  assign sync_t = ~device_type;
+
   // syncronize enalbe_in and generate resync for slave
 
   always @(posedge clk) begin
-    sync_in_d <= sync_in;
+    sync_i_d <= sync_i;
     if(device_type == 1'b1) begin
       enable_synced <= enable_in;
       resync <= 1'b0;
     end else begin
-      if (~sync_in_d & sync_in) begin
+      if (~sync_i_d & sync_i) begin
         enable_synced <= enable_in;
         resync <= 1'b1;
       end else begin

@@ -76,6 +76,7 @@ module ad_tdd_control(
   tdd_tx_dp_on_2,
   tdd_tx_dp_off_2,
   tdd_resync,
+  tdd_endof_frame,
 
   // TDD control signals
 
@@ -128,6 +129,7 @@ module ad_tdd_control(
   input  [23:0]   tdd_tx_dp_on_2;
   input  [23:0]   tdd_tx_dp_off_2;
   input           tdd_resync;
+  output          tdd_endof_frame;
 
   output          tdd_tx_dp_en;       // initiate vco tx2rx switch
   output          tdd_rx_vco_en;      // initiate vco rx2tx switch
@@ -172,6 +174,7 @@ module ad_tdd_control(
   reg             counter_at_tdd_tx_off_2 = 1'b0;
   reg             counter_at_tdd_tx_dp_on_2 = 1'b0;
   reg             counter_at_tdd_tx_dp_off_2 = 1'b0;
+  reg             tdd_endof_frame = 1'h0;
 
   reg             tdd_enable_d = 1'h0;
 
@@ -229,15 +232,11 @@ module ad_tdd_control(
         tdd_counter_state <= ON;
       end else
 
-      // resync slave to master
-      if (tdd_resync == 1'b1) begin
-        tdd_counter <= 24'b0;
-      end
-
       // free running counter
       if (tdd_counter_state == ON) begin
         if (tdd_counter == tdd_frame_length) begin
-          tdd_counter <= 22'h0;
+          tdd_endof_frame <= 1'b1;
+          tdd_counter <= 24'h0;
           if (tdd_burst_counter > 1) begin // inside a burst
             tdd_burst_counter <= tdd_burst_counter - 1;
             tdd_counter_state <= ON;
@@ -253,7 +252,8 @@ module ad_tdd_control(
           end
         end
         else begin
-          tdd_counter <= tdd_counter + 1;
+          tdd_endof_frame <= 1'b0;
+          tdd_counter <= (tdd_resync == 1'b1) ? 24'h0 : tdd_counter + 1;
         end
       end
     end

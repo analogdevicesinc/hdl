@@ -69,8 +69,9 @@ module axi_ad9361 (
 
   // tdd sync (1s pulse)
 
-  tdd_sync_out,
-  tdd_sync_in,
+  tdd_sync_o,
+  tdd_sync_i,
+  tdd_sync_t,
 
   // delay clock
 
@@ -192,8 +193,9 @@ module axi_ad9361 (
 
   // tdd sync (1s pulse)
 
-  output          tdd_sync_out;
-  input           tdd_sync_in;
+  output          tdd_sync_o;
+  input           tdd_sync_i;
+  output          tdd_sync_t;
 
   // delay clock
 
@@ -423,8 +425,9 @@ module axi_ad9361 (
     .tdd_tx_rf_en (tdd_tx_rf_en_s),
     .tdd_enabled (tdd_mode_s),
     .tdd_status (tdd_status_s),
-    .tdd_sync_out (tdd_sync_out),
-    .tdd_sync_in (tdd_sync_in),
+    .tdd_sync_o (tdd_sync_o),
+    .tdd_sync_i (tdd_sync_i),
+    .tdd_sync_t (tdd_sync_t),
     .tx_valid_i0 (dac_valid_i0_s),
     .tx_valid_q0 (dac_valid_q0_s),
     .tx_valid_i1 (dac_valid_i1_s),

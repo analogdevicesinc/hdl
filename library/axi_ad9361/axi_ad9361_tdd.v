@@ -60,8 +60,9 @@ module axi_ad9361_tdd (
 
   // sync signals
 
-  tdd_sync_out,
-  tdd_sync_in,
+  tdd_sync_o,
+  tdd_sync_i,
+  tdd_sync_t,
 
   // tx/rx data flow control
 
@@ -114,8 +115,9 @@ module axi_ad9361_tdd (
   output            tdd_enabled;
   input   [ 7:0]    tdd_status;
 
-  output            tdd_sync_out;
-  input             tdd_sync_in;
+  output            tdd_sync_o;
+  input             tdd_sync_i;
+  output            tdd_sync_t;
 
   // tx data flow control
 
@@ -173,7 +175,7 @@ module axi_ad9361_tdd (
   wire    [23:0]    tdd_frame_length_s;
   wire              tdd_terminal_type_s;
   wire              tdd_sync_enable_s;
-  wire    [31:0]    tdd_sync_period_s;
+  wire    [ 7:0]    tdd_sync_period_s;
   wire    [23:0]    tdd_vco_rx_on_1_s;
   wire    [23:0]    tdd_vco_rx_off_1_s;
   wire    [23:0]    tdd_vco_tx_on_1_s;
@@ -195,12 +197,13 @@ module axi_ad9361_tdd (
   wire    [23:0]    tdd_tx_dp_on_2_s;
   wire    [23:0]    tdd_tx_dp_off_2_s;
   wire              tdd_resync_s;
+  wire              tdd_endof_frame_s;
 
   wire    [23:0]    tdd_counter_status;
 
   wire              tdd_tx_dp_en_s;
 
-  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_enable_synced_s, tdd_tx_dp_en_s,
+  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_sync_i, tdd_tx_dp_en_s,
                     tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
 
   // tx/rx data flow control
@@ -291,6 +294,7 @@ module axi_ad9361_tdd (
     .tdd_rx_only(tdd_rx_only_s),
     .tdd_tx_only(tdd_tx_only_s),
     .tdd_resync (tdd_resync_s),
+    .tdd_endof_frame (tdd_endof_frame_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),
@@ -326,9 +330,11 @@ module axi_ad9361_tdd (
     .sync_period(tdd_sync_period_s),
     .enable_in(tdd_enable_s),
     .enable_out(tdd_enable_synced_s),
-    .sync_out(tdd_sync_out),
-    .sync_in(tdd_sync_in),
-    .resync(tdd_resync_s)
+    .sync_o(tdd_sync_o),
+    .sync_i(tdd_sync_i),
+    .sync_t(tdd_sync_t),
+    .resync(tdd_resync_s),
+    .endof_frame (tdd_endof_frame_s)
   );
 
 endmodule
