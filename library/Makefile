@@ -41,8 +41,8 @@ clean:
 	make -C axi_spdif_tx clean
 	make -C cn0363/cn0363_dma_sequencer clean
 	make -C cn0363/cn0363_phase_data_sync clean
-	make -C controllerperipheralhdladi_pcore clean
 	make -C cordic_demod clean
+	make -C interfaces clean
 	make -C spi_engine/axi_spi_engine clean
 	make -C spi_engine/spi_engine_execution clean
 	make -C spi_engine/spi_engine_interconnect clean
@@ -57,9 +57,9 @@ clean:
 	make -C util_dac_unpack clean
 	make -C util_dacfifo clean
 	make -C util_gmii_to_rgmii clean
+	make -C util_gtlb clean
 	make -C util_i2c_mixer clean
-	make -C util_jesd_align clean
-	make -C util_jesd_xmit clean
+	make -C util_jesd_gt clean
 	make -C util_pmod_adc clean
 	make -C util_pmod_fmeter clean
 	make -C util_rfifo clean
@@ -103,8 +103,8 @@ lib:
 	-make -C axi_spdif_tx
 	-make -C cn0363/cn0363_dma_sequencer
 	-make -C cn0363/cn0363_phase_data_sync
-	-make -C controllerperipheralhdladi_pcore
 	-make -C cordic_demod
+	-make -C interfaces
 	-make -C spi_engine/axi_spi_engine
 	-make -C spi_engine/spi_engine_execution
 	-make -C spi_engine/spi_engine_interconnect
@@ -119,9 +119,9 @@ lib:
 	-make -C util_dac_unpack
 	-make -C util_dacfifo
 	-make -C util_gmii_to_rgmii
+	-make -C util_gtlb
 	-make -C util_i2c_mixer
-	-make -C util_jesd_align
-	-make -C util_jesd_xmit
+	-make -C util_jesd_gt
 	-make -C util_pmod_adc
 	-make -C util_pmod_fmeter
 	-make -C util_rfifo

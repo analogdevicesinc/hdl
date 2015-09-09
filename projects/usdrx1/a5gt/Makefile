@@ -9,9 +9,6 @@ M_DEPS := system_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/a5gt/a5gt_system_assign.tcl
 M_DEPS += ../../../projects/scripts/adi_tquest.tcl
-M_DEPS += ../../../library/common/altera/ad_jesd_align.v
-M_DEPS += ../../../library/common/altera/ad_xcvr_rx_rst.v
-M_DEPS += ../common/usdrx1_spi.v
 M_DEPS += 0
 
 
@@ -32,7 +29,11 @@ M_FLIST += *.qsf
 M_FLIST += *.qpf
 M_FLIST += *.qws
 M_FLIST += *.sof
+M_FLIST += *.cdf
+M_FLIST += *.sld
+M_FLIST += *.qdf
 M_FLIST += hc_output
+M_FLIST += system_bd
 M_FLIST += hps_isw_handoff
 M_FLIST += hps_sdram_*.csv
 M_FLIST += *ddr3_*.csv

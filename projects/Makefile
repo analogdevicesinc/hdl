@@ -33,6 +33,8 @@ all:
 	-make -C imageon all
 	-make -C imageon_loopback all
 	-make -C motcon2_fmc all
+	-make -C pzsdr all
+	-make -C pzslb all
 	-make -C usdrx1 all
 
 
@@ -63,6 +65,8 @@ clean:
 	make -C imageon clean
 	make -C imageon_loopback clean
 	make -C motcon2_fmc clean
+	make -C pzsdr clean
+	make -C pzslb clean
 	make -C usdrx1 clean
 
 
@@ -93,6 +97,8 @@ clean-all:
 	make -C imageon clean-all
 	make -C imageon_loopback clean-all
 	make -C motcon2_fmc clean-all
+	make -C pzsdr clean-all
+	make -C pzslb clean-all
 	make -C usdrx1 clean-all
 
 ####################################################################################
