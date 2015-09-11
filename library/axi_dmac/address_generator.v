@@ -109,6 +109,7 @@ end
 
 always @(posedge clk) begin
   if (addr_valid == 1'b0) begin
+    last <= eot;
     if (eot == 1'b1)
       length <= last_burst_len;
     else
@@ -117,17 +118,16 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    last <= 1'b0;
-  end else if (addr_valid == 1'b0) begin
-    last <= eot;
+  if (req_ready == 1'b1) begin
+    address <= req_address;
+    last_burst_len <= req_last_burst_length;
+  end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
+    address <= address + MAX_BEATS_PER_BURST;
   end
 end
 
 always @(posedge clk) begin
   if (resetn == 1'b0) begin
-    address <= 'h00;
-    last_burst_len <= 'h00;
     req_ready <= 1'b1;
     addr_valid <= 1'b0;
   end else begin
@@ -135,13 +135,10 @@ always @(posedge clk) begin
       req_ready <= 1'b1;
     end else if (req_ready) begin
       if (req_valid && enable) begin
-        address <= req_address;
         req_ready <= 1'b0;
-        last_burst_len <= req_last_burst_length;
       end
     end else begin
       if (addr_valid && addr_ready) begin
-        address <= address + MAX_BEATS_PER_BURST;
         addr_valid <= 1'b0;
         if (last)
           req_ready <= 1'b1;
