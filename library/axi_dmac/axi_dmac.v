@@ -67,8 +67,6 @@ module axi_dmac (
 	// Master AXI interface
 	input                                    m_dest_axi_aclk,
 	input                                    m_dest_axi_aresetn,
-	input                                    m_src_axi_aclk,
-	input                                    m_src_axi_aresetn,
 
 	// Write address
 	output [31:0]                            m_dest_axi_awaddr,
@@ -105,6 +103,10 @@ module axi_dmac (
 	input  [ 1:0]                            m_dest_axi_rresp,
 	input  [DMA_DATA_WIDTH_DEST-1:0]       m_dest_axi_rdata,
 	output                                   m_dest_axi_rready,
+
+	// Master AXI interface
+	input                                    m_src_axi_aclk,
+	input                                    m_src_axi_aresetn,
 
 	// Read address
 	input                                    m_src_axi_arready,
