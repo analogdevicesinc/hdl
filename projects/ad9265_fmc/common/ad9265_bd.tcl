@@ -26,13 +26,6 @@ set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9265_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16}] $axi_ad9265_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9265_dma
 
-# clock for ila
-
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {125.0}] $sys_ps7
-
 # connections (ad9265)
 
 ad_connect    adc_clk_in_p     axi_ad9265/adc_clk_in_p
