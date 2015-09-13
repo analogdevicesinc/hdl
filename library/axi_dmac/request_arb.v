@@ -618,7 +618,7 @@ dmac_src_mm_axi #(
 	.m_axi_aclk(m_src_axi_aclk),
 	.m_axi_aresetn(src_resetn),
 
-	.pause(pause),
+	.pause(src_pause),
 	.enable(src_enable),
 	.enabled(src_enabled),
 	.sync_id(src_sync_id),
