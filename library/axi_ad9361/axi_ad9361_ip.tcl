@@ -41,7 +41,7 @@ adi_ip_files axi_ad9361 [list \
   "axi_ad9361.v" ]
 
 adi_ip_properties axi_ad9361
-adi_ip_constraints axi_dmac "axi_ad9361_constr.xdc" "late"
+adi_ip_constraints axi_ad9361 "axi_ad9361_constr.xdc" "late"
 
 set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
   [ipx::get_bus_interface s_axi_signal_clock [ipx::current_core]]]
