@@ -55,6 +55,15 @@ proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
   }
 }
 
+proc adi_ip_ttcl {ip_name ip_constr_files} {
+
+  set proj_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
+  set f [ipx::add_file $ip_constr_files $proj_filegroup]
+  set_property -dict [list \
+    type ttcl \
+  ] $f
+}
+
 proc adi_ip_properties {ip_name} {
 
   ipx::package_project -root_dir .
