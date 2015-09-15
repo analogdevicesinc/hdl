@@ -26,7 +26,7 @@ M_DEPS += src_fifo_inf.v
 M_DEPS += splitter.v
 M_DEPS += response_generator.v
 M_DEPS += axi_dmac.v
-M_DEPS += axi_dmac_constr.xdc
+M_DEPS += axi_dmac_constr.ttcl
 M_DEPS += ../util_axis_resize/util_axis_resize.xpr
 M_DEPS += ../util_axis_fifo/util_axis_fifo.xpr
 
