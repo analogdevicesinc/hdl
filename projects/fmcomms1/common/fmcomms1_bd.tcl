@@ -38,7 +38,8 @@
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9122_dma
 
   set util_upack_ad9122 [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_upack_ad9122]
-  set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64} CONFIG.NUM_OF_CHANNELS {2}] $util_upack_ad9122
+  set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $util_upack_ad9122
+  set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_upack_ad9122
 
   # adc peripherals
 
@@ -56,7 +57,8 @@
   set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9643_dma
 
   set util_cpack_ad9643 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_ad9643]
-  set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32} CONFIG.NUM_OF_CHANNELS {2}] $util_cpack_ad9643
+  set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] $util_cpack_ad9643
+  set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_cpack_ad9643
 
   set util_ad9643_adc_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_wfifo:1.0 util_ad9643_adc_fifo]
   set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_ad9643_adc_fifo
@@ -104,8 +106,6 @@
   ad_connect util_upack_ad9122/dac_valid  axi_ad9122_dma/fifo_rd_en
   ad_connect util_upack_ad9122/dac_data   axi_ad9122_dma/fifo_rd_dout
   ad_connect util_upack_ad9122/dac_sync   axi_ad9122/dac_sync_in
-
-#  ad_connect axi_ad9122_dma/fifo_rd_xfer_req util_upack_ad9122/dma_xfer_in
 
   # connections (adc)
 
@@ -166,18 +166,4 @@
 
   ad_cpu_interrupt ps-12 mb-12 axi_ad9122_dma/irq
   ad_cpu_interrupt ps-13 mb-13 axi_ad9643_dma/irq
-
-  # ila (adc)
-
-  set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_adc]
-  set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
-  set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc
-  set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
-  set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_adc
-  set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]  $ila_adc
-  set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
-
-  ad_connect sys_200m_clk                 ila_adc/clk
-  ad_connect util_cpack_ad9643/adc_valid  ila_adc/PROBE0
-  ad_connect util_cpack_ad9643/adc_data   ila_adc/PROBE1
 
