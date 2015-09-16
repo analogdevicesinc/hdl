@@ -306,13 +306,19 @@ module util_wfifo (
     if (dout_rstn == 1'b0) begin
       dout_enable_m <= 'd0;
       dout_enable <= 'd0;
+    end else begin
+      dout_enable_m <= din_enable;
+      dout_enable <= dout_enable_m;
+    end
+  end
+
+  always @(posedge dout_clk) begin
+    if (dout_rstn == 1'b0) begin
       dout_rd <= 'd0;
       dout_rd_d <= 'd0;
       dout_rdata_d <= 'd0;
       dout_raddr <= 'd0;
     end else begin
-      dout_enable_m <= din_enable;
-      dout_enable <= dout_enable_m;
       dout_rd <= dout_rd_s;
       dout_rd_d <= dout_rd;
       dout_rdata_d <= dout_rdata_s;
