@@ -82,6 +82,8 @@ module ad_iqcor (
   reg     [33:0]  p1_data_p = 'd0;
   reg             valid_out = 'd0;
   reg     [15:0]  data_out = 'd0;
+  reg     [15:0]  iqcor_coeff_1_r = 'd0;
+  reg     [15:0]  iqcor_coeff_2_r = 'd0;
 
   // internal signals
 
@@ -98,12 +100,19 @@ module ad_iqcor (
   assign data_i_s = (Q_OR_I_N == 1) ? data_iq : data_in;
   assign data_q_s = (Q_OR_I_N == 1) ? data_in : data_iq;
 
+  // coefficients are flopped to remove warnings from vivado
+
+  always @(posedge clk) begin
+    iqcor_coeff_1_r <= iqcor_coeff_1;
+    iqcor_coeff_2_r <= iqcor_coeff_2;
+  end
+
   // scaling functions - i
 
   ad_mul #(.DELAY_DATA_WIDTH(17)) i_mul_i (
     .clk (clk),
     .data_a ({data_i_s[15], data_i_s}),
-    .data_b ({iqcor_coeff_1[15], iqcor_coeff_1}),
+    .data_b ({iqcor_coeff_1_r[15], iqcor_coeff_1_r}),
     .data_p (p1_data_p_i_s),
     .ddata_in ({valid, data_i_s}),
     .ddata_out ({p1_valid_s, p1_data_i_s}));
@@ -113,7 +122,7 @@ module ad_iqcor (
   ad_mul #(.DELAY_DATA_WIDTH(16)) i_mul_q (
     .clk (clk),
     .data_a ({data_q_s[15], data_q_s}),
-    .data_b ({iqcor_coeff_2[15], iqcor_coeff_2}),
+    .data_b ({iqcor_coeff_2_r[15], iqcor_coeff_2_r}),
     .data_p (p1_data_p_q_s),
     .ddata_in (data_q_s),
     .ddata_out (p1_data_q_s));
