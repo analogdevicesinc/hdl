@@ -64,6 +64,17 @@ proc adi_ip_ttcl {ip_name ip_constr_files} {
   ] $f
 }
 
+proc adi_ip_bd {ip_name ip_bd_files} {
+  set proj_filegroup [ipx::get_file_groups xilinx_blockdiagram -of_objects [ipx::current_core]]
+  if {$proj_filegroup == {}} {
+    set proj_filegroup [ipx::add_file_group -type xilinx_blockdiagram "" [ipx::current_core]]
+  }
+  set f [ipx::add_file $ip_bd_files $proj_filegroup]
+  set_property -dict [list \
+    type tclSource \
+  ] $f
+}
+
 proc adi_ip_properties {ip_name} {
 
   ipx::package_project -root_dir .
