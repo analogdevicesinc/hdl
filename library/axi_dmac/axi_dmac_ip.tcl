@@ -23,10 +23,12 @@ adi_ip_files axi_dmac [list \
   "splitter.v" \
   "response_generator.v" \
   "axi_dmac.v" \
-  "axi_dmac_constr.ttcl" ]
+  "axi_dmac_constr.ttcl" \
+  "bd/bd.tcl" ]
 
 adi_ip_properties axi_dmac
 adi_ip_ttcl axi_dmac "axi_dmac_constr.ttcl"
+adi_ip_bd axi_dmac "bd/bd.tcl"
 
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_axis_resize:1.0 \
