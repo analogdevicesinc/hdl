@@ -55,38 +55,12 @@ module system_top (
   ddr_reset_n,
   ddr_we_n,
 
-  eth1_mdc,
-  eth1_mdio,
-  eth1_rgmii_rxclk,
-  eth1_rgmii_rxctl,
-  eth1_rgmii_rxdata,
-  eth1_rgmii_txclk,
-  eth1_rgmii_txctl,
-  eth1_rgmii_txdata,
-
   fixed_io_ddr_vrn,
   fixed_io_ddr_vrp,
   fixed_io_mio,
   fixed_io_ps_clk,
   fixed_io_ps_porb,
   fixed_io_ps_srstb,
-
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
-  hdmi_pd,
-  hdmi_intn,
-
-  spdif,
-  spdif_in,
-
-  i2s_mclk,
-  i2s_bclk,
-  i2s_lrclk,
-  i2s_sdata_out,
-  i2s_sdata_in,
 
   iic_scl,
   iic_sda,
@@ -159,38 +133,12 @@ module system_top (
   inout           ddr_reset_n;
   inout           ddr_we_n;
 
-  output          eth1_mdc;
-  inout           eth1_mdio;
-  input           eth1_rgmii_rxclk;
-  input           eth1_rgmii_rxctl;
-  input   [ 3:0]  eth1_rgmii_rxdata;
-  output          eth1_rgmii_txclk;
-  output          eth1_rgmii_txctl;
-  output  [ 3:0]  eth1_rgmii_txdata;
-
   inout           fixed_io_ddr_vrn;
   inout           fixed_io_ddr_vrp;
   inout   [53:0]  fixed_io_mio;
   inout           fixed_io_ps_clk;
   inout           fixed_io_ps_porb;
   inout           fixed_io_ps_srstb;
-
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output  [15:0]  hdmi_data;
-  output          hdmi_pd;
-  input           hdmi_intn;
-
-  output          spdif;
-  input           spdif_in;
-
-  output          i2s_mclk;
-  output          i2s_bclk;
-  output          i2s_lrclk;
-  output          i2s_sdata_out;
-  input           i2s_sdata_in;
 
   inout           iic_scl;
   inout           iic_sda;
@@ -279,10 +227,6 @@ module system_top (
   wire            up_pn_oos_clr;
   wire            up_pn_err;
   wire            up_pn_oos;
-
-  // assignments
-
-  assign hdmi_pd = 1'b0;
 
   // instantiations
 
@@ -399,23 +343,6 @@ module system_top (
     .ddr_reset_n (ddr_reset_n),
     .ddr_we_n (ddr_we_n),
     .enable (enable),
-    .eth1_125mclk (),
-    .eth1_25mclk (),
-    .eth1_2m5clk (),
-    .eth1_clock_speed (),
-    .eth1_duplex_status (),
-    .eth1_intn (1'b1),
-    .eth1_link_status (),
-    .eth1_mdio_mdc (eth1_mdc),
-    .eth1_mdio_mdio_io (eth1_mdio),
-    .eth1_refclk (),
-    .eth1_rgmii_rd (eth1_rgmii_rxdata),
-    .eth1_rgmii_rx_ctl (eth1_rgmii_rxctl),
-    .eth1_rgmii_rxc (eth1_rgmii_rxclk),
-    .eth1_rgmii_td (eth1_rgmii_txdata),
-    .eth1_rgmii_tx_ctl (eth1_rgmii_txctl),
-    .eth1_rgmii_txc (eth1_rgmii_txclk),
-    .eth1_speed_mode (),
     .fixed_io_ddr_vrn (fixed_io_ddr_vrn),
     .fixed_io_ddr_vrp (fixed_io_ddr_vrp),
     .fixed_io_mio (fixed_io_mio),
@@ -455,16 +382,6 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
-    .i2s_bclk (i2s_bclk),
-    .i2s_lrclk (i2s_lrclk),
-    .i2s_mclk (i2s_mclk),
-    .i2s_sdata_in (i2s_sdata_in),
-    .i2s_sdata_out (i2s_sdata_out),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
@@ -480,13 +397,13 @@ module system_top (
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
     .ps_intr_11 (1'b0),
+    .ps_intr_15 (1'b0),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
     .rx_data_in_n (rx_data_in_n),
     .rx_data_in_p (rx_data_in_p),
     .rx_frame_in_n (rx_frame_in_n),
     .rx_frame_in_p (rx_frame_in_p),
-    .spdif (spdif),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (spi_clk),
     .spi0_csn_0_o (spi_csn),
@@ -505,8 +422,9 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .tdd_sync_in (),
-    .tdd_sync_out (),
+    .tdd_sync_i (1'b0),
+    .tdd_sync_o (),
+    .tdd_sync_t (),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_data_out_n),
