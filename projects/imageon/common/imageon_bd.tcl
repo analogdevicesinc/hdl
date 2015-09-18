@@ -36,9 +36,6 @@ set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.CYCLIC {0}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.AXI_SLICE_SRC {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {14}] $axi_hdmi_rx_dma
