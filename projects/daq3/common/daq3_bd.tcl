@@ -27,7 +27,6 @@ set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9152_dma
 set_property -dict [list CONFIG.ID {1}] $axi_ad9152_dma
 set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9152_dma
 set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9152_dma
-set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9152_dma
 set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9152_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9152_dma
 set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9152_dma
@@ -52,7 +51,6 @@ set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9680_dma
 set_property -dict [list CONFIG.ID {0}] $axi_ad9680_dma
 set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9680_dma
 set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9680_dma
 set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9680_dma
 set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9680_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9680_dma
