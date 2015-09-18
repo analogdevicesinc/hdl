@@ -183,4 +183,10 @@ foreach port {"s_axis_user" "fifo_wr_sync"} {
 	set_property DRIVER_VALUE "1" [ipx::get_ports $port]
 }
 
+# The core does not issue narrow bursts
+foreach intf [ipx::get_bus_interfaces m_*_axi -of_objects [ipx::current_core]] {
+	set para [ipx::add_bus_parameter SUPPORTS_NARROW_BURST $intf]
+	set_property "VALUE" "0" $para
+}
+
 ipx::save_core [ipx::current_core]
