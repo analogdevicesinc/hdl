@@ -70,7 +70,7 @@ proc adi_project_create {project_name {mode 0}} {
     set p_board "not-applicable"
     set sys_zynq 1
   }
-  if [regexp "_rfsom$" $project_name] {
+  if [regexp "_pzsdr$" $project_name] {
     set p_device "xc7z035ifbg676-2L"
     set p_board "not-applicable"
     set sys_zynq 1
