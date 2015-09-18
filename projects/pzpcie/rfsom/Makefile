@@ -44,7 +44,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib pzsdr_rfsom.sdk/system_top.hdf
+all: lib pzpcie_rfsom.sdk/system_top.hdf
 
 
 clean: 
@@ -63,9 +63,9 @@ clean-all:clean
 	make -C ../../../library/util_wfifo clean
 
 
-pzsdr_rfsom.sdk/system_top.hdf: $(M_DEPS)
+pzpcie_rfsom.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> pzsdr_rfsom_vivado.log 2>&1
+	$(M_VIVADO) system_project.tcl >> pzpcie_rfsom_vivado.log 2>&1
 
 
 lib:
