@@ -149,5 +149,6 @@ ad_cpu_interconnect 0x43000000 axi_hdmi_dma
 ad_cpu_interconnect 0x70e00000 axi_hdmi_core
 ad_cpu_interconnect 0x75c00000 axi_spdif_tx_core
 ad_cpu_interconnect 0x77600000 axi_i2s_adi
+ad_mem_hp0_interconnect sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect sys_cpu_clk axi_hdmi_dma/M_AXI_MM2S
 
