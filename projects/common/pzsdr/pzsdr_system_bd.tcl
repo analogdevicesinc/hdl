@@ -153,7 +153,6 @@ ad_connect  sys_concat_intc/In0 ps_intr_00
 # interconnects
 
 ad_cpu_interconnect 0x41600000 axi_iic_main
-ad_mem_hp0_interconnect sys_cpu_clk sys_ps7/S_AXI_HP0
 
 # module ad9361
 
