@@ -1,71 +1,87 @@
 
-# constraints
-# ad9361
+# ethernet-1
 
-set_property  -dict {PACKAGE_PIN  J14  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_clk_in_p]       ; ## IO_L12P_T1_MRCC_35
-set_property  -dict {PACKAGE_PIN  H14  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_clk_in_n]       ; ## IO_L12N_T1_MRCC_35
-set_property  -dict {PACKAGE_PIN  H13  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_frame_in_p]     ; ## IO_L7P_T1_AD2P_35
-set_property  -dict {PACKAGE_PIN  H12  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_frame_in_n]     ; ## IO_L7N_T1_AD2N_35
-set_property  -dict {PACKAGE_PIN  F12  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_p[0]]   ; ## IO_L1P_T0_AD0P_35
-set_property  -dict {PACKAGE_PIN  E12  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_n[0]]   ; ## IO_L1N_T0_AD0N_35
-set_property  -dict {PACKAGE_PIN  E10  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_p[1]]   ; ## IO_L2P_T0_AD8P_35
-set_property  -dict {PACKAGE_PIN  D10  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_n[1]]   ; ## IO_L2N_T0_AD8N_35
-set_property  -dict {PACKAGE_PIN  G10  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_p[2]]   ; ## IO_L3P_T0_DQS_AD1P_35
-set_property  -dict {PACKAGE_PIN  F10  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_n[2]]   ; ## IO_L3N_T0_DQS_AD1N_35
-set_property  -dict {PACKAGE_PIN  E11  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_p[3]]   ; ## IO_L4P_T0_35
-set_property  -dict {PACKAGE_PIN  D11  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_n[3]]   ; ## IO_L4N_T0_35
-set_property  -dict {PACKAGE_PIN  G12  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_p[4]]   ; ## IO_L5P_T0_AD9P_35
-set_property  -dict {PACKAGE_PIN  G11  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_n[4]]   ; ## IO_L5N_T0_AD9N_35
-set_property  -dict {PACKAGE_PIN  F13  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_p[5]]   ; ## IO_L6P_T0_35
-set_property  -dict {PACKAGE_PIN  E13  IOSTANDARD LVDS      DIFF_TERM TRUE} [get_ports rx_data_in_n[5]]   ; ## IO_L6N_T0_VREF_35
-set_property  -dict {PACKAGE_PIN  K13  IOSTANDARD LVDS}     [get_ports tx_clk_out_p]                      ; ## IO_L8P_T1_AD10P_35
-set_property  -dict {PACKAGE_PIN  J13  IOSTANDARD LVDS}     [get_ports tx_clk_out_n]                      ; ## IO_L8N_T1_AD10N_35
-set_property  -dict {PACKAGE_PIN  K15  IOSTANDARD LVDS}     [get_ports tx_frame_out_p]                    ; ## IO_L9P_T1_DQS_AD3P_35
-set_property  -dict {PACKAGE_PIN  J15  IOSTANDARD LVDS}     [get_ports tx_frame_out_n]                    ; ## IO_L9N_T1_DQS_AD3N_35
-set_property  -dict {PACKAGE_PIN  D15  IOSTANDARD LVDS}     [get_ports tx_data_out_p[0]]                  ; ## IO_L13P_T2_MRCC_35
-set_property  -dict {PACKAGE_PIN  D14  IOSTANDARD LVDS}     [get_ports tx_data_out_n[0]]                  ; ## IO_L13N_T2_MRCC_35
-set_property  -dict {PACKAGE_PIN  F15  IOSTANDARD LVDS}     [get_ports tx_data_out_p[1]]                  ; ## IO_L14P_T2_AD4P_SRCC_35
-set_property  -dict {PACKAGE_PIN  E15  IOSTANDARD LVDS}     [get_ports tx_data_out_n[1]]                  ; ## IO_L14N_T2_AD4N_SRCC_35
-set_property  -dict {PACKAGE_PIN  C17  IOSTANDARD LVDS}     [get_ports tx_data_out_p[2]]                  ; ## IO_L15P_T2_DQS_AD12P_35
-set_property  -dict {PACKAGE_PIN  C16  IOSTANDARD LVDS}     [get_ports tx_data_out_n[2]]                  ; ## IO_L15N_T2_DQS_AD12N_35
-set_property  -dict {PACKAGE_PIN  E16  IOSTANDARD LVDS}     [get_ports tx_data_out_p[3]]                  ; ## IO_L16P_T2_35
-set_property  -dict {PACKAGE_PIN  D16  IOSTANDARD LVDS}     [get_ports tx_data_out_n[3]]                  ; ## IO_L16N_T2_35
-set_property  -dict {PACKAGE_PIN  B16  IOSTANDARD LVDS}     [get_ports tx_data_out_p[4]]                  ; ## IO_L17P_T2_AD5P_35
-set_property  -dict {PACKAGE_PIN  B15  IOSTANDARD LVDS}     [get_ports tx_data_out_n[4]]                  ; ## IO_L17N_T2_AD5N_35
-set_property  -dict {PACKAGE_PIN  B17  IOSTANDARD LVDS}     [get_ports tx_data_out_p[5]]                  ; ## IO_L18P_T2_AD13P_35
-set_property  -dict {PACKAGE_PIN  A17  IOSTANDARD LVDS}     [get_ports tx_data_out_n[5]]                  ; ## IO_L18N_T2_AD13N_35
-set_property  -dict {PACKAGE_PIN  G14  IOSTANDARD LVCMOS18} [get_ports enable]                            ; ## IO_L11P_T1_SRCC_35
-set_property  -dict {PACKAGE_PIN  F14  IOSTANDARD LVCMOS18} [get_ports txnrx]                             ; ## IO_L11N_T1_SRCC_35
-set_property  -dict {PACKAGE_PIN  W19  IOSTANDARD LVCMOS25} [get_ports tdd_sync]                          ; ## IO_L23_13_JX2_N
+set_property  -dict {PACKAGE_PIN  B10   IOSTANDARD LVCMOS18} [get_ports eth1_mdc]                      ; ## IO_L16P_T2_34      
+set_property  -dict {PACKAGE_PIN  A10   IOSTANDARD LVCMOS18} [get_ports eth1_mdio]                     ; ## IO_L16N_T2_34      
+set_property  -dict {PACKAGE_PIN  G7    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_rxclk]              ; ## IO_L12P_T1_MRCC_34 
+set_property  -dict {PACKAGE_PIN  F7    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_rxctl]              ; ## IO_L12N_T1_MRCC_34 
+set_property  -dict {PACKAGE_PIN  E6    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_rxdata[0]]          ; ## IO_L10P_T1_34      
+set_property  -dict {PACKAGE_PIN  D5    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_rxdata[1]]          ; ## IO_L10N_T1_34      
+set_property  -dict {PACKAGE_PIN  F8    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_rxdata[2]]          ; ## IO_L11P_T1_SRCC_34 
+set_property  -dict {PACKAGE_PIN  E7    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_rxdata[3]]          ; ## IO_L11N_T1_SRCC_34 
+set_property  -dict {PACKAGE_PIN  C8    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_txclk]              ; ## IO_L13P_T2_MRCC_34 
+set_property  -dict {PACKAGE_PIN  C7    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_txctl]              ; ## IO_L13N_T2_MRCC_34 
+set_property  -dict {PACKAGE_PIN  D6    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_txdata[0]]          ; ## IO_L14P_T2_SRCC_34 
+set_property  -dict {PACKAGE_PIN  C6    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_txdata[1]]          ; ## IO_L14N_T2_SRCC_34 
+set_property  -dict {PACKAGE_PIN  C9    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_txdata[2]]          ; ## IO_L15P_T2_DQS_34  
+set_property  -dict {PACKAGE_PIN  B9    IOSTANDARD LVCMOS18} [get_ports eth1_rgmii_txdata[3]]          ; ## IO_L15N_T2_DQS_34  
 
-set_property  -dict {PACKAGE_PIN  D13  IOSTANDARD LVCMOS18} [get_ports gpio_status[0]]                    ; ## IO_L19P_T3_35
-set_property  -dict {PACKAGE_PIN  C13  IOSTANDARD LVCMOS18} [get_ports gpio_status[1]]                    ; ## IO_L19N_T3_VREF_35
-set_property  -dict {PACKAGE_PIN  C14  IOSTANDARD LVCMOS18} [get_ports gpio_status[2]]                    ; ## IO_L20P_T3_AD6P_35
-set_property  -dict {PACKAGE_PIN  B14  IOSTANDARD LVCMOS18} [get_ports gpio_status[3]]                    ; ## IO_L20N_T3_AD6N_35
-set_property  -dict {PACKAGE_PIN  A15  IOSTANDARD LVCMOS18} [get_ports gpio_status[4]]                    ; ## IO_L21P_T3_DQS_AD14P_35
-set_property  -dict {PACKAGE_PIN  A14  IOSTANDARD LVCMOS18} [get_ports gpio_status[5]]                    ; ## IO_L21N_T3_DQS_AD14N_35
-set_property  -dict {PACKAGE_PIN  C12  IOSTANDARD LVCMOS18} [get_ports gpio_status[6]]                    ; ## IO_L22P_T3_AD7P_35
-set_property  -dict {PACKAGE_PIN  B12  IOSTANDARD LVCMOS18} [get_ports gpio_status[7]]                    ; ## IO_L22N_T3_AD7N_35
-set_property  -dict {PACKAGE_PIN  C2   IOSTANDARD LVCMOS18} [get_ports gpio_ctl[0]]                       ; ## IO_L23P_T3_34
-set_property  -dict {PACKAGE_PIN  B1   IOSTANDARD LVCMOS18} [get_ports gpio_ctl[1]]                       ; ## IO_L23N_T3_34
-set_property  -dict {PACKAGE_PIN  B2   IOSTANDARD LVCMOS18} [get_ports gpio_ctl[2]]                       ; ## IO_L24P_T3_34
-set_property  -dict {PACKAGE_PIN  A2   IOSTANDARD LVCMOS18} [get_ports gpio_ctl[3]]                       ; ## IO_L24N_T3_34
-set_property  -dict {PACKAGE_PIN  G16  IOSTANDARD LVCMOS18} [get_ports gpio_en_agc]                       ; ## IO_L10P_T1_AD11P_35
-set_property  -dict {PACKAGE_PIN  G15  IOSTANDARD LVCMOS18} [get_ports gpio_sync]                         ; ## IO_L10N_T1_AD11N_35
-set_property  -dict {PACKAGE_PIN  H16  IOSTANDARD LVCMOS18} [get_ports gpio_resetb]                       ; ## IO_0_VRN_35
-set_property  -dict {PACKAGE_PIN  K11  IOSTANDARD LVCMOS18} [get_ports gpio_clksel]                       ; ## IO_0_VRN_34
-set_property  -dict {PACKAGE_PIN  K10  IOSTANDARD LVCMOS18} [get_ports gpio_rfpwr_enable]                 ; ## IO_25_VRP_34
-set_property  -dict {PACKAGE_PIN  AA20 IOSTANDARD LVCMOS25} [get_ports gpio_rf0]                          ; ## IO_L20_13_JX2_P
-set_property  -dict {PACKAGE_PIN  AB20 IOSTANDARD LVCMOS25} [get_ports gpio_rf1]                          ; ## IO_L20_13_JX2_N
-set_property  -dict {PACKAGE_PIN  AA14 IOSTANDARD LVCMOS25} [get_ports gpio_rf2]                          ; ## IO_L22_12_JX2_N
-set_property  -dict {PACKAGE_PIN  J9   IOSTANDARD LVCMOS18} [get_ports gpio_rf3]                          ; ## IO_L05_34_JX4_N
+# hdmi
 
-set_property  -dict {PACKAGE_PIN  C11  IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_csn]          ; ## IO_L23P_T3_35
-set_property  -dict {PACKAGE_PIN  B11  IOSTANDARD LVCMOS18} [get_ports spi_clk]                           ; ## IO_L23N_T3_35
-set_property  -dict {PACKAGE_PIN  A13  IOSTANDARD LVCMOS18} [get_ports spi_mosi]                          ; ## IO_L24P_T3_AD15P_35
-set_property  -dict {PACKAGE_PIN  A12  IOSTANDARD LVCMOS18} [get_ports spi_miso]                          ; ## IO_L24N_T3_AD15N_35
+set_property  -dict {PACKAGE_PIN  L3    IOSTANDARD LVCMOS18}             [get_ports hdmi_out_clk]      ; ## IO_L11P_T1_SRCC_33       
+set_property  -dict {PACKAGE_PIN  D4    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_vsync]        ; ## IO_L2P_T0_33             
+set_property  -dict {PACKAGE_PIN  D3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_hsync]        ; ## IO_L2N_T0_33             
+set_property  -dict {PACKAGE_PIN  K3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data_e]       ; ## IO_L11N_T1_SRCC_33       
+set_property  -dict {PACKAGE_PIN  G2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[0]]      ; ## IO_L3P_T0_DQS_33         
+set_property  -dict {PACKAGE_PIN  F2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[1]]      ; ## IO_L3N_T0_DQS_33         
+set_property  -dict {PACKAGE_PIN  D1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[2]]      ; ## IO_L4P_T0_33             
+set_property  -dict {PACKAGE_PIN  C1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[3]]      ; ## IO_L4N_T0_33             
+set_property  -dict {PACKAGE_PIN  E2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[4]]      ; ## IO_L5P_T0_33             
+set_property  -dict {PACKAGE_PIN  E1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[5]]      ; ## IO_L5N_T0_33             
+set_property  -dict {PACKAGE_PIN  F3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[6]]      ; ## IO_L6P_T0_33             
+set_property  -dict {PACKAGE_PIN  E3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[7]]      ; ## IO_L6N_T0_VREF_33        
+set_property  -dict {PACKAGE_PIN  J1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[8]]      ; ## IO_L7P_T1_33             
+set_property  -dict {PACKAGE_PIN  H1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[9]]      ; ## IO_L7N_T1_33             
+set_property  -dict {PACKAGE_PIN  H4    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[10]]     ; ## IO_L8P_T1_33             
+set_property  -dict {PACKAGE_PIN  H3    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[11]]     ; ## IO_L8N_T1_33             
+set_property  -dict {PACKAGE_PIN  K2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[12]]     ; ## IO_L9P_T1_DQS_33         
+set_property  -dict {PACKAGE_PIN  K1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[13]]     ; ## IO_L9N_T1_DQS_33         
+set_property  -dict {PACKAGE_PIN  H2    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[14]]     ; ## IO_L10P_T1_33            
+set_property  -dict {PACKAGE_PIN  G1    IOSTANDARD LVCMOS18    IOB TRUE} [get_ports hdmi_data[15]]     ; ## IO_L10N_T1_33 
+set_property  -dict {PACKAGE_PIN  L9    IOSTANDARD LVCMOS18}             [get_ports hdmi_pd]           ; ## IO_0_VRN_33              
+set_property  -dict {PACKAGE_PIN  N8    IOSTANDARD LVCMOS18}             [get_ports hdmi_intn]         ; ## IO_25_VRP_33             
+
+# hdmi-spdif
+
+set_property  -dict {PACKAGE_PIN  G4    IOSTANDARD LVCMOS18} [get_ports spdif]                         ; ## IO_L1P_T0_33             
+set_property  -dict {PACKAGE_PIN  F4    IOSTANDARD LVCMOS18} [get_ports spdif_in]                      ; ## IO_L1N_T0_33             
+
+# audio
+
+set_property  -dict {PACKAGE_PIN  J8    IOSTANDARD LVCMOS18} [get_ports i2s_mclk]                      ; ## IO_L6P_T0_34             
+set_property  -dict {PACKAGE_PIN  H8    IOSTANDARD LVCMOS18} [get_ports i2s_bclk]                      ; ## IO_L6N_T0_VREF_34        
+set_property  -dict {PACKAGE_PIN  F5    IOSTANDARD LVCMOS18} [get_ports i2s_lrclk]                     ; ## IO_L7P_T1_34             
+set_property  -dict {PACKAGE_PIN  E5    IOSTANDARD LVCMOS18} [get_ports i2s_sdata_out]                 ; ## IO_L7N_T1_34             
+set_property  -dict {PACKAGE_PIN  D9    IOSTANDARD LVCMOS18} [get_ports i2s_sdata_in]                  ; ## IO_L8P_T1_34             
+
+# gpio
+
+set_property  -dict {PACKAGE_PIN  J3    IOSTANDARD LVCMOS18} [get_ports gpio_bd[0]]                    ; ## (pb)  IO_L12N_T1_MRCC_33       
+set_property  -dict {PACKAGE_PIN  D8    IOSTANDARD LVCMOS18} [get_ports gpio_bd[1]]                    ; ## (pb)  IO_L8N_T1_34             
+set_property  -dict {PACKAGE_PIN  F9    IOSTANDARD LVCMOS18} [get_ports gpio_bd[2]]                    ; ## (pb)  IO_L9P_T1_DQS_34         
+set_property  -dict {PACKAGE_PIN  E8    IOSTANDARD LVCMOS18} [get_ports gpio_bd[3]]                    ; ## (pb)  IO_L9N_T1_DQS_34         
+set_property  -dict {PACKAGE_PIN  A8    IOSTANDARD LVCMOS18} [get_ports gpio_bd[4]]                    ; ## (led) IO_L17N_T2_34            
+set_property  -dict {PACKAGE_PIN  W14   IOSTANDARD LVCMOS25} [get_ports gpio_bd[5]]                    ; ## (led) IO_0_12                  
+set_property  -dict {PACKAGE_PIN  W17   IOSTANDARD LVCMOS25} [get_ports gpio_bd[6]]                    ; ## (led) IO_25_12                 
+set_property  -dict {PACKAGE_PIN  Y16   IOSTANDARD LVCMOS25} [get_ports gpio_bd[7]]                    ; ## (led) IO_L23P_T3_12            
+set_property  -dict {PACKAGE_PIN  Y15   IOSTANDARD LVCMOS25} [get_ports gpio_bd[8]]                    ; ## (dip) IO_L23N_T3_12            
+set_property  -dict {PACKAGE_PIN  W16   IOSTANDARD LVCMOS25} [get_ports gpio_bd[9]]                    ; ## (dip) IO_L24P_T3_12            
+set_property  -dict {PACKAGE_PIN  W15   IOSTANDARD LVCMOS25} [get_ports gpio_bd[10]]                   ; ## (dip) IO_L24N_T3_12            
+set_property  -dict {PACKAGE_PIN  V19   IOSTANDARD LVCMOS25} [get_ports gpio_bd[11]]                   ; ## (dip) IO_0_13                  
 
 # clocks
 
-create_clock -name rx_clk       -period  4 [get_ports rx_clk_in_p]
-create_clock -name ad9361_clk   -period  4 [get_pins i_system_wrapper/system_i/axi_ad9361/clk]
+create_clock -period 8.000 -name eth1_rgmii_rxclk [get_ports eth1_rgmii_rxclk]
+
+# bad ip- we have to do this
+
+set_property IDELAY_VALUE 16 \
+  [get_cells -hier -filter {name =~ *delay_rgmii_rxd*}] \
+  [get_cells -hier -filter {name =~ *delay_rgmii_rx_ctl}]
+
+set_property IODELAY_GROUP gmii2rgmii_iodelay_group\
+  [get_cells -hier -filter {name =~ *idelayctrl}] \
+  [get_cells -hier -filter {name =~ *delay_rgmii_rxd*}] \
+  [get_cells -hier -filter {name =~ *delay_rgmii_rx_ctl}]
+
+

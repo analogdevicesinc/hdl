@@ -155,3 +155,10 @@ ad_connect  sys_concat_intc/In0 ps_intr_00
 ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_mem_hp0_interconnect sys_cpu_clk sys_ps7/S_AXI_HP0
 
+# module ad9361
+
+source $ad_hdl_dir/projects/common/xilinx/sys_wfifo.tcl
+source $ad_hdl_dir/projects/fmcomms2/common/fmcomms2_bd.tcl
+
+set_property -dict [list CONFIG.DAC_IODELAY_ENABLE {1}] $axi_ad9361
+
