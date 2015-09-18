@@ -1,8 +1,21 @@
 
 proc init {cellpath otherInfo} {
-	bd::mark_propagate_override \
-		[get_bd_cells $cellpath] \
+	set ip [get_bd_cells $cellpath]
+
+	bd::mark_propagate_override $ip \
 		"ASYNC_CLK_REQ_SRC ASYNC_CLK_SRC_DEST ASYNC_CLK_DEST_REQ"
+
+	# On ZYNQ the core is most likely connected to the AXI3 HP ports so use AXI3
+	# as the default.
+	set family [string tolower [get_property FAMILY [get_property PART [current_project]]]]
+	if {$family == "zynq"} {
+		set axi_protocol 1
+	} else {
+		set axi_protocol 0
+	}
+
+	set_property "CONFIG.DMA_AXI_PROTOCOL_SRC" $axi_protocol $ip
+	set_property "CONFIG.DMA_AXI_PROTOCOL_DEST" $axi_protocol $ip
 }
 
 proc axi_dmac_detect_async_clk { cellpath ip param_name clk_a clk_b } {
