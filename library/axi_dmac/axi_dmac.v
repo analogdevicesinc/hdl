@@ -42,7 +42,7 @@ module axi_dmac (
 	input s_axi_aresetn,
 
 	input         s_axi_awvalid,
-	input  [31:0] s_axi_awaddr,
+	input  [13:0] s_axi_awaddr,
 	output        s_axi_awready,
 	input   [2:0] s_axi_awprot,
 	input         s_axi_wvalid,
@@ -53,7 +53,7 @@ module axi_dmac (
 	output [ 1:0] s_axi_bresp,
 	input         s_axi_bready,
 	input         s_axi_arvalid,
-	input  [31:0] s_axi_araddr,
+	input  [13:0] s_axi_araddr,
 	output        s_axi_arready,
 	input   [2:0] s_axi_arprot,
 	output        s_axi_rvalid,
