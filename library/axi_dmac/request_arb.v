@@ -1011,7 +1011,7 @@ util_axis_fifo #(
 );
 
 util_axis_fifo #(
-	.DATA_WIDTH(3),
+	.DATA_WIDTH(1),
 	.ADDRESS_WIDTH(0),
 	.ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_dest_response_fifo (
