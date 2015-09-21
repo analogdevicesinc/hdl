@@ -1,6 +1,9 @@
 
 # lbfmc
 
+ad_connect  sys_ps7/ENET1_GMII_RX_CLK GND
+ad_connect  sys_ps7/ENET1_GMII_TX_CLK GND
+
 set axi_gpio_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0]
 set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio_0
 
