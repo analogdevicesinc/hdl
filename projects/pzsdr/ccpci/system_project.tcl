@@ -1,9 +1,9 @@
 
 
 
-source ../../scripts/adi_env.tcl -notrace
-source $ad_hdl_dir/projects/scripts/adi_project.tcl -notrace
-source $ad_hdl_dir/projects/scripts/adi_board.tcl -notrace
+source ../../scripts/adi_env.tcl 
+source $ad_hdl_dir/projects/scripts/adi_project.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project_create ccpci_pzsdr
 adi_project_files ccpci_pzsdr [list \
