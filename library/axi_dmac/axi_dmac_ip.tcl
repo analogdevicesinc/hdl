@@ -250,4 +250,111 @@ foreach dir {"SRC" "DEST"} {
 	[ipx::get_user_parameters DMA_TYPE_${dir} -of_objects $cc]
 }
 
+set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+set g [ipgui::add_group -name {DMA Endpoint Configuration} -component $cc \
+		-parent $page0 -display_name {DMA Endpoint Configuration} \
+		-layout "horizontal"]
+set src_group [ipgui::add_group -name {Source} -component $cc -parent $g \
+		-display_name {Source}]
+set dest_group [ipgui::add_group -name {Destination} -component $cc -parent $g \
+		-display_name {Destination}]
+
+foreach {dir group} [list "SRC" $src_group "DEST" $dest_group] {
+	set p [ipgui::get_guiparamspec -name "DMA_TYPE_${dir}" -component $cc]
+	ipgui::move_param -component $cc -order 0 $p -parent $group
+	set_property -dict [list \
+			"widget" "comboBox" \
+			"display_name" "Type" \
+		] $p
+
+	set p [ipgui::get_guiparamspec -name "DMA_AXI_PROTOCOL_${dir}" -component $cc]
+	ipgui::move_param -component $cc -order 1 $p -parent $group
+	set_property -dict [list \
+		"widget" "comboBox" \
+		"display_name" "AXI Protocol" \
+	] $p
+
+	set p [ipgui::get_guiparamspec -name "DMA_DATA_WIDTH_${dir}" -component $cc]
+	ipgui::move_param -component $cc -order 2 $p -parent $group
+	set_property -dict [list \
+		"display_name" "Bus Width" \
+	] $p
+
+	set p [ipgui::get_guiparamspec -name "AXI_SLICE_${dir}" -component $cc]
+	ipgui::move_param -component $cc -order 3 $p -parent $group
+	set_property -dict [list \
+		"display_name" "Insert Register Slice" \
+	] $p
+}
+
+set p [ipgui::get_guiparamspec -name "SYNC_TRANSFER_START" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $src_group
+set_property -dict [list \
+	"display_name" "Transfer Start Synchronization Support" \
+] $p
+
+set general_group [ipgui::add_group -name "General Configuration" -component $cc \
+		-parent $page0 -display_name "General Configuration"]
+
+set p [ipgui::get_guiparamspec -name "ID" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $general_group
+set_property -dict [list \
+	"display_name" "Core ID" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "DMA_LENGTH_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $general_group
+set_property -dict [list \
+	"display_name" "DMA Transfer Length Register Width" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "FIFO_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $general_group
+set_property -dict [list \
+	"display_name" "FIFO Size (In Bursts)" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "MAX_BYTES_PER_BURST" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $general_group
+set_property -dict [list \
+	"display_name" "Maximum Bytes per Burst" \
+] $p
+
+set feature_group [ipgui::add_group -name "Features" -component $cc \
+		-parent $page0 -display_name "Features"]
+
+set p [ipgui::get_guiparamspec -name "CYCLIC" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $feature_group
+set_property -dict [list \
+	"display_name" "Cyclic Transfer Support" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "DMA_2D_TRANSFER" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $feature_group
+set_property -dict [list \
+	"display_name" "2D Transfer Support" \
+] $p
+
+set clk_group [ipgui::add_group -name {Clock Domain Configuration} -component $cc \
+		-parent $page0 -display_name {Clock Domain Configuration}]
+
+set p [ipgui::get_guiparamspec -name "ASYNC_CLK_REQ_SRC" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $clk_group
+set_property -dict [list \
+	"display_name" "Request and Source Clock Asynchronous" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "ASYNC_CLK_SRC_DEST" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $clk_group
+set_property -dict [list \
+	"display_name" "Source and Destination Clock Asynchronous" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "ASYNC_CLK_DEST_REQ" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $clk_group
+set_property -dict [list \
+	"display_name" "Destination and Request Clock Asynchronous" \
+] $p
+
+ipx::create_xgui_files [ipx::current_core]
 ipx::save_core $cc
