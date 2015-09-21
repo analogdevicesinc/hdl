@@ -533,6 +533,8 @@ dmac_dest_axi_stream #(
 end else begin
 
 assign m_axis_valid = 1'b0;
+assign m_axis_last = 1'b0;
+assign m_axis_xfer_req = 1'b0;
 assign m_axis_data = 'h00;
 
 end
@@ -594,6 +596,7 @@ end else begin
 assign fifo_rd_valid = 1'b0;
 assign fifo_rd_dout = 'h0;
 assign fifo_rd_underflow = 1'b0;
+assign fifo_rd_xfer_req = 1'b0;
 
 end endgenerate
 
@@ -723,6 +726,7 @@ dmac_src_axi_stream #(
 end else begin
 
 assign s_axis_ready = 1'b0;
+assign s_axis_xfer_req = 1'b0;
 
 end
 
