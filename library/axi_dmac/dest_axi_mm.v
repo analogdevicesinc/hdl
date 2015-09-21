@@ -174,6 +174,8 @@ dmac_data_mover # (
 	.enable(address_enabled),
 	.enabled(data_enabled),
 
+	.xfer_req(),
+
 	.request_id(address_id),
 	.response_id(data_id),
 	.sync_id(sync_id),

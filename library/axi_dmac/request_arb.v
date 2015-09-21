@@ -850,12 +850,14 @@ util_axis_fifo #(
 	.s_axis_ready(src_fifo_repacked_ready),
 	.s_axis_data(src_fifo_repacked_data),
 	.s_axis_empty(src_fifo_empty),
+	.s_axis_room(),
 
 	.m_axis_aclk(dest_clk),
 	.m_axis_aresetn(dest_resetn),
 	.m_axis_valid(dest_fifo_valid),
 	.m_axis_ready(dest_fifo_ready),
-	.m_axis_data(dest_fifo_data)
+	.m_axis_data(dest_fifo_data),
+	.m_axis_level()
 );
 
 util_axis_resize #(
@@ -960,6 +962,8 @@ util_axis_fifo #(
 		req_length[BYTES_PER_BEAT_WIDTH_DEST-1:0],
                 req_xlast
 	}),
+	.s_axis_room(),
+
 	.m_axis_aclk(dest_clk),
 	.m_axis_aresetn(dest_resetn),
 	.m_axis_valid(dest_req_valid),
@@ -969,7 +973,8 @@ util_axis_fifo #(
 		dest_req_last_burst_length,
 		dest_req_last_beat_bytes,
                 dest_req_xlast
-	})
+	}),
+	.m_axis_level()
 );
 
 util_axis_fifo #(
@@ -987,6 +992,8 @@ util_axis_fifo #(
 		req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC],
 		req_sync_transfer_start
 	}),
+	.s_axis_room(),
+
 	.m_axis_aclk(src_clk),
 	.m_axis_aresetn(src_resetn),
 	.m_axis_valid(src_req_valid),
@@ -995,7 +1002,8 @@ util_axis_fifo #(
 		src_req_address,
 		src_req_last_burst_length,
 		src_req_sync_transfer_start
-	})
+	}),
+	.m_axis_level()
 );
 
 util_axis_fifo #(
@@ -1009,11 +1017,14 @@ util_axis_fifo #(
 	.s_axis_ready(dest_response_ready),
 	.s_axis_empty(dest_response_empty),
 	.s_axis_data(dest_response_resp_eot),
+	.s_axis_room(),
+
 	.m_axis_aclk(req_aclk),
 	.m_axis_aresetn(req_aresetn),
 	.m_axis_valid(response_dest_valid),
 	.m_axis_ready(response_dest_ready),
-	.m_axis_data(response_dest_resp_eot)
+	.m_axis_data(response_dest_resp_eot),
+	.m_axis_level()
 );
 
 /* Unused for now
