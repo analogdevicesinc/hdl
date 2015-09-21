@@ -14,8 +14,14 @@ proc init {cellpath otherInfo} {
 		set axi_protocol 0
 	}
 
-	set_property "CONFIG.DMA_AXI_PROTOCOL_SRC" $axi_protocol $ip
-	set_property "CONFIG.DMA_AXI_PROTOCOL_DEST" $axi_protocol $ip
+	foreach dir {SRC DEST} {
+		# This is a bit of a hack, but we can't change the protocol if the type
+		# is not AXI MM
+		set old [get_property "CONFIG.DMA_TYPE_${dir}" $ip]
+		set_property "CONFIG.DMA_TYPE_${dir}" "0" $ip
+		set_property "CONFIG.DMA_AXI_PROTOCOL_${dir}" $axi_protocol $ip
+		set_property "CONFIG.DMA_TYPE_${dir}" $old $ip
+	}
 }
 
 proc post_config_ip {cellpath otherinfo} {

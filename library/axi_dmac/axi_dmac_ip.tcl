@@ -183,10 +183,71 @@ foreach port {"s_axis_user" "fifo_wr_sync"} {
 	set_property DRIVER_VALUE "1" [ipx::get_ports $port]
 }
 
+set cc [ipx::current_core]
+
 # The core does not issue narrow bursts
-foreach intf [ipx::get_bus_interfaces m_*_axi -of_objects [ipx::current_core]] {
+foreach intf [ipx::get_bus_interfaces m_*_axi -of_objects $cc] {
 	set para [ipx::add_bus_parameter SUPPORTS_NARROW_BURST $intf]
 	set_property "VALUE" "0" $para
 }
 
-ipx::save_core [ipx::current_core]
+set_property -dict [list \
+	"value_validation_type" "range_long" \
+	"value_validation_range_minimum" "8" \
+	"value_validation_range_maximum" "32" \
+	] \
+	[ipx::get_user_parameters DMA_LENGTH_WIDTH -of_objects $cc]
+
+foreach {k v} { \
+		"ASYNC_CLK_REQ_SRC" "true" \
+		"ASYNC_CLK_SRC_DEST" "true" \
+		"ASYNC_CLK_DEST_REQ" "true" \
+		"CYCLIC" "false" \
+		"DMA_2D_TRANSFER" "false" \
+		"SYNC_TRANSFER_START" "false" \
+		"AXI_SLICE_SRC" "false" \
+		"AXI_SLICE_DEST" "false" \
+	} { \
+	set_property -dict [list \
+			"value_format" "bool" \
+			"value" $v \
+		] \
+		[ipx::get_user_parameters $k -of_objects $cc]
+	set_property -dict [list \
+			"value_format" "bool" \
+			"value" $v \
+		] \
+		[ipx::get_hdl_parameters $k -of_objects $cc]
+}
+
+set_property -dict [list \
+	"enablement_tcl_expr" "\$DMA_TYPE_SRC != 0" \
+] \
+[ipx::get_user_parameters SYNC_TRANSFER_START -of_objects $cc]
+
+foreach dir {"SRC" "DEST"} {
+	set_property -dict [list \
+		"value_validation_type" "list" \
+		"value_validation_list" "16 32 64 128 256 512 1024" \
+	] \
+	[ipx::get_user_parameters DMA_DATA_WIDTH_${dir} -of_objects $cc]
+
+	set_property -dict [list \
+		"value_validation_type" "pairs" \
+		"value_validation_pairs" {"AXI3" "1" "AXI4" "0"} \
+		"enablement_tcl_expr" "\$DMA_TYPE_${dir} == 0" \
+	] \
+	[ipx::get_user_parameters DMA_AXI_PROTOCOL_${dir} -of_objects $cc]
+
+	set_property -dict [list \
+		"value_validation_type" "pairs" \
+		"value_validation_pairs" { \
+			"Memory-Mapped AXI" "0" \
+			"Streaming AXI" "1" \
+			"FIFO Interface" "2" \
+		} \
+	] \
+	[ipx::get_user_parameters DMA_TYPE_${dir} -of_objects $cc]
+}
+
+ipx::save_core $cc
