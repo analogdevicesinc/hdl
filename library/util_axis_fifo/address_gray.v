@@ -41,7 +41,6 @@ module fifo_address_gray (
 	input m_axis_aresetn,
 	input m_axis_ready,
 	output reg m_axis_valid,
-	output [ADDRESS_WIDTH-1:0] m_axis_raddr_next,
 	output reg [ADDRESS_WIDTH:0] m_axis_level,
 
 	input s_axis_aclk,
@@ -70,7 +69,6 @@ wire [ADDRESS_WIDTH:0] m_axis_raddr_gray_next;
 wire [ADDRESS_WIDTH:0] m_axis_waddr_gray;
 
 assign s_axis_waddr = _s_axis_waddr[ADDRESS_WIDTH-1:0];
-assign m_axis_raddr_next = _m_axis_raddr_next[ADDRESS_WIDTH-1:0];
 
 always @(*)
 begin

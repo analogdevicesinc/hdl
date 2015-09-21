@@ -41,7 +41,6 @@ module fifo_address_gray_pipelined (
 	input m_axis_aresetn,
 	input m_axis_ready,
 	output reg m_axis_valid,
-	output [ADDRESS_WIDTH-1:0] m_axis_raddr_next,
 	output [ADDRESS_WIDTH-1:0] m_axis_raddr,
 	output reg [ADDRESS_WIDTH:0] m_axis_level,
 
@@ -65,7 +64,6 @@ reg [ADDRESS_WIDTH:0] _m_axis_raddr_next;
 wire [ADDRESS_WIDTH:0] _m_axis_waddr;
 
 assign s_axis_waddr = _s_axis_waddr[ADDRESS_WIDTH-1:0];
-assign m_axis_raddr_next = _m_axis_raddr_next[ADDRESS_WIDTH-1:0];
 assign m_axis_raddr = _m_axis_raddr[ADDRESS_WIDTH-1:0];
 
 always @(*)

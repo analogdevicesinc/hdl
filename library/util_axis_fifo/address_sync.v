@@ -43,7 +43,6 @@ module fifo_address_sync (
 	input m_axis_ready,
 	output reg m_axis_valid,
 	output reg  [ADDRESS_WIDTH-1:0] m_axis_raddr,
-	output reg [ADDRESS_WIDTH-1:0] m_axis_raddr_next,
 	output [ADDRESS_WIDTH:0] m_axis_level,
 
 	output reg s_axis_ready,
@@ -65,14 +64,6 @@ assign m_axis_level = level;
 wire read = m_axis_ready & m_axis_valid;
 wire write = s_axis_ready & s_axis_valid;
 
-always @(*)
-begin
-	if (read)
-		m_axis_raddr_next <= m_axis_raddr + 1'b1;
-	else
-		m_axis_raddr_next <= m_axis_raddr;
-end
-
 always @(posedge clk)
 begin
 	if (resetn == 1'b0) begin
@@ -81,7 +72,8 @@ begin
 	end else begin
 		if (write)
 			s_axis_waddr <= s_axis_waddr + 1'b1;
-		m_axis_raddr <= m_axis_raddr_next;
+		if (read)
+			m_axis_raddr <= m_axis_raddr + 1'b1;
 	end
 end
 
