@@ -36,7 +36,6 @@ set_property  -dict {PACKAGE_PIN  B17  IOSTANDARD LVDS}     [get_ports tx_data_o
 set_property  -dict {PACKAGE_PIN  A17  IOSTANDARD LVDS}     [get_ports tx_data_out_n[5]]                  ; ## IO_L18N_T2_AD13N_35
 set_property  -dict {PACKAGE_PIN  G14  IOSTANDARD LVCMOS18} [get_ports enable]                            ; ## IO_L11P_T1_SRCC_35
 set_property  -dict {PACKAGE_PIN  F14  IOSTANDARD LVCMOS18} [get_ports txnrx]                             ; ## IO_L11N_T1_SRCC_35
-set_property  -dict {PACKAGE_PIN  W19  IOSTANDARD LVCMOS25} [get_ports tdd_sync]                          ; ## IO_L23_13_JX2_N
 
 set_property  -dict {PACKAGE_PIN  D13  IOSTANDARD LVCMOS18} [get_ports gpio_status[0]]                    ; ## IO_L19P_T3_35
 set_property  -dict {PACKAGE_PIN  C13  IOSTANDARD LVCMOS18} [get_ports gpio_status[1]]                    ; ## IO_L19N_T3_VREF_35
@@ -54,11 +53,6 @@ set_property  -dict {PACKAGE_PIN  G16  IOSTANDARD LVCMOS18} [get_ports gpio_en_a
 set_property  -dict {PACKAGE_PIN  G15  IOSTANDARD LVCMOS18} [get_ports gpio_sync]                         ; ## IO_L10N_T1_AD11N_35
 set_property  -dict {PACKAGE_PIN  H16  IOSTANDARD LVCMOS18} [get_ports gpio_resetb]                       ; ## IO_0_VRN_35
 set_property  -dict {PACKAGE_PIN  K11  IOSTANDARD LVCMOS18} [get_ports gpio_clksel]                       ; ## IO_0_VRN_34
-set_property  -dict {PACKAGE_PIN  K10  IOSTANDARD LVCMOS18} [get_ports gpio_rfpwr_enable]                 ; ## IO_25_VRP_34
-set_property  -dict {PACKAGE_PIN  AA20 IOSTANDARD LVCMOS25} [get_ports gpio_rf0]                          ; ## IO_L20_13_JX2_P
-set_property  -dict {PACKAGE_PIN  AB20 IOSTANDARD LVCMOS25} [get_ports gpio_rf1]                          ; ## IO_L20_13_JX2_N
-set_property  -dict {PACKAGE_PIN  AA14 IOSTANDARD LVCMOS25} [get_ports gpio_rf2]                          ; ## IO_L22_12_JX2_N
-set_property  -dict {PACKAGE_PIN  J9   IOSTANDARD LVCMOS18} [get_ports gpio_rf3]                          ; ## IO_L05_34_JX4_N
 
 set_property  -dict {PACKAGE_PIN  C11  IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_csn]          ; ## IO_L23P_T3_35
 set_property  -dict {PACKAGE_PIN  B11  IOSTANDARD LVCMOS18} [get_ports spi_clk]                           ; ## IO_L23N_T3_35

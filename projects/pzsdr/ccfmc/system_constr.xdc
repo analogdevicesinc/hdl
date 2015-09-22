@@ -1,4 +1,16 @@
 
+# rf-board
+
+set_property  -dict {PACKAGE_PIN  K10  IOSTANDARD LVCMOS18} [get_ports gpio_rfpwr_enable]              ; ## IO_25_VRP_34
+set_property  -dict {PACKAGE_PIN  AA20 IOSTANDARD LVCMOS25} [get_ports gpio_rf0]                       ; ## IO_L20_13_JX2_P
+set_property  -dict {PACKAGE_PIN  AB20 IOSTANDARD LVCMOS25} [get_ports gpio_rf1]                       ; ## IO_L20_13_JX2_N
+set_property  -dict {PACKAGE_PIN  AA14 IOSTANDARD LVCMOS25} [get_ports gpio_rf2]                       ; ## IO_L22_12_JX2_N
+set_property  -dict {PACKAGE_PIN  J9   IOSTANDARD LVCMOS18} [get_ports gpio_rf3]                       ; ## IO_L05_34_JX4_N
+
+# tdd-sync
+
+set_property  -dict {PACKAGE_PIN  W19  IOSTANDARD LVCMOS25} [get_ports tdd_sync]                       ; ## IO_L23_13_JX2_N
+
 # ethernet-1
 
 set_property  -dict {PACKAGE_PIN  B10   IOSTANDARD LVCMOS18} [get_ports eth1_mdc]                      ; ## IO_L16P_T2_34      
