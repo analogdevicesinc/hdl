@@ -34,5 +34,6 @@ reconfig_mif
 *webtalk*
 *.xml
 *.hw
+gui
 
 
