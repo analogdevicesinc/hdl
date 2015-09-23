@@ -313,15 +313,14 @@ module util_wfifo (
   end
 
   always @(posedge dout_clk) begin
+    dout_rdata_d <= dout_rdata_s;
     if (dout_rstn == 1'b0) begin
       dout_rd <= 'd0;
       dout_rd_d <= 'd0;
-      dout_rdata_d <= 'd0;
       dout_raddr <= 'd0;
     end else begin
       dout_rd <= dout_rd_s;
       dout_rd_d <= dout_rd;
-      dout_rdata_d <= dout_rdata_s;
       if (dout_rd_s == 1'b1) begin
         dout_raddr <= dout_raddr + 1'b1;
       end
