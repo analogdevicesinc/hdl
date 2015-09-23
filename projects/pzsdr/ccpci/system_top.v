@@ -198,9 +198,9 @@ module system_top (
     .ODIV2 ());
 
   ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
-    .dio_t ({gpio_t[56:51], gpio_t[46:32]}),
-    .dio_i ({gpio_o[56:51], gpio_o[46:32]}),
-    .dio_o ({gpio_i[56:51], gpio_i[46:32]}),
+    .dio_t ({gpio_t[51], gpio_t[46:32]}),
+    .dio_i ({gpio_o[51], gpio_o[46:32]}),
+    .dio_o ({gpio_i[51], gpio_i[46:32]}),
     .dio_p ({ gpio_clksel,        // 51:51
               gpio_resetb,        // 46:46
               gpio_sync,          // 45:45
