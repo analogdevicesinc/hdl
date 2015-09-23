@@ -103,7 +103,7 @@ proc propagate {cellpath otherinfo} {
 
 	if {$dest_type == 2} {
 		set dest_clk [get_bd_pins "$ip/fifo_rd_clk"]
-	} elseif {$src_type == 1} {
+	} elseif {$dest_type == 1} {
 		set dest_clk [get_bd_pins "$ip/m_axis_aclk"]
 	} else {
 		set dest_clk [get_bd_pins "$ip/m_dest_axi_aclk"]
