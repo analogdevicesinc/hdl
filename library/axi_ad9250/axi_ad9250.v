@@ -50,6 +50,7 @@ module axi_ad9250 (
   // dma interface
 
   adc_clk,
+  adc_rst,
   adc_valid_a,
   adc_enable_a,
   adc_data_a,
@@ -96,6 +97,7 @@ module axi_ad9250 (
   // dma interface
 
   output          adc_clk;
+  output          adc_rst;
   output          adc_valid_a;
   output          adc_enable_a;
   output  [31:0]  adc_data_a;
