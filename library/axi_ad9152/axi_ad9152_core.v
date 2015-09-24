@@ -219,7 +219,7 @@ module axi_ad9152_core (
     .dac_status (1'b1),
     .dac_status_ovf (dac_dovf),
     .dac_status_unf (dac_dunf),
-    .dac_clk_ratio (32'd40),
+    .dac_clk_ratio (32'd4),
     .up_drp_sel (),
     .up_drp_wr (),
     .up_drp_addr (),
