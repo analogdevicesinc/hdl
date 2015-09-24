@@ -163,13 +163,6 @@ module system_top (
   output          spi_clk;
   inout           spi_sdio;
 
-  // internal registers
-
-  reg             dma_0_wr = 'd0;
-  reg    [63:0]   dma_0_data = 'd0;
-  reg             dma_1_wr = 'd0;
-  reg    [63:0]   dma_1_data = 'd0;
-
   // internal signals
 
   wire    [63:0]  gpio_i;
@@ -180,16 +173,6 @@ module system_top (
   wire            spi_mosi;
   wire            spi_miso;
   wire            rx_ref_clk;
-  wire            adc_clk;
-  wire   [127:0]  rx_gt_data;
-  wire            adc_0_enable_a;
-  wire    [31:0]  adc_0_data_a;
-  wire            adc_0_enable_b;
-  wire    [31:0]  adc_0_data_b;
-  wire            adc_1_enable_a;
-  wire    [31:0]  adc_1_data_a;
-  wire            adc_1_enable_b;
-  wire    [31:0]  adc_1_data_b;
   wire    [31:0]  mb_intrs;
 
   assign ddr3_1_p = 2'b11;
@@ -197,74 +180,6 @@ module system_top (
   assign iic_rstn = 1'b1;
   assign fan_pwm = 1'b1;
   assign spi_csn_0 = spi_csn[0];
-
-  // pack & unpack here
-
-  always @(posedge adc_clk) begin
-    case ({adc_0_enable_b, adc_0_enable_a})
-      2'b11: begin
-        dma_0_wr <= 1'b1;
-        dma_0_data[63:48] <= adc_0_data_b[31:16];
-        dma_0_data[47:32] <= adc_0_data_a[31:16];
-        dma_0_data[31:16] <= adc_0_data_b[15: 0];
-        dma_0_data[15: 0] <= adc_0_data_a[15: 0];
-      end
-      2'b10: begin
-        dma_0_wr <= ~dma_0_wr;
-        dma_0_data[63:48] <= adc_0_data_b[31:16];
-        dma_0_data[47:32] <= adc_0_data_b[15: 0];
-        dma_0_data[31:16] <= dma_0_data[63:48];
-        dma_0_data[15: 0] <= dma_0_data[47:32];
-      end
-      2'b01: begin
-        dma_0_wr <= ~dma_0_wr;
-        dma_0_data[63:48] <= adc_0_data_a[31:16];
-        dma_0_data[47:32] <= adc_0_data_a[15: 0];
-        dma_0_data[31:16] <= dma_0_data[63:48];
-        dma_0_data[15: 0] <= dma_0_data[47:32];
-      end
-      default: begin
-        dma_0_wr <= 1'b0;
-        dma_0_data[63:48] <= 16'd0;
-        dma_0_data[47:32] <= 16'd0;
-        dma_0_data[31:16] <= 16'd0;
-        dma_0_data[15: 0] <= 16'd0;
-      end
-    endcase
-  end
-
-  always @(posedge adc_clk) begin
-    case ({adc_1_enable_b, adc_1_enable_a})
-      2'b11: begin
-        dma_1_wr <= 1'b1;
-        dma_1_data[63:48] <= adc_1_data_b[31:16];
-        dma_1_data[47:32] <= adc_1_data_a[31:16];
-        dma_1_data[31:16] <= adc_1_data_b[15: 0];
-        dma_1_data[15: 0] <= adc_1_data_a[15: 0];
-      end
-      2'b10: begin
-        dma_1_wr <= ~dma_1_wr;
-        dma_1_data[63:48] <= adc_1_data_b[31:16];
-        dma_1_data[47:32] <= adc_1_data_b[15: 0];
-        dma_1_data[31:16] <= dma_1_data[63:48];
-        dma_1_data[15: 0] <= dma_1_data[47:32];
-      end
-      2'b01: begin
-        dma_1_wr <= ~dma_1_wr;
-        dma_1_data[63:48] <= adc_1_data_a[31:16];
-        dma_1_data[47:32] <= adc_1_data_a[15: 0];
-        dma_1_data[31:16] <= dma_1_data[63:48];
-        dma_1_data[15: 0] <= dma_1_data[47:32];
-      end
-      default: begin
-        dma_1_wr <= 1'b0;
-        dma_1_data[63:48] <= 16'd0;
-        dma_1_data[47:32] <= 16'd0;
-        dma_1_data[31:16] <= 16'd0;
-        dma_1_data[15: 0] <= 16'd0;
-      end
-    endcase
-  end
 
   // instantiations
 
@@ -319,25 +234,6 @@ module system_top (
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
     .gpio_lcd_tri_io (gpio_lcd),
-    .adc_0_data_a (adc_0_data_a),
-    .adc_0_data_b (adc_0_data_b),
-    .adc_0_enable_a (adc_0_enable_a),
-    .adc_0_enable_b (adc_0_enable_b),
-    .adc_0_valid_a (),
-    .adc_0_valid_b (),
-    .adc_1_data_a (adc_1_data_a),
-    .adc_1_data_b (adc_1_data_b),
-    .adc_1_enable_a (adc_1_enable_a),
-    .adc_1_enable_b (adc_1_enable_b),
-    .adc_1_valid_a (),
-    .adc_1_valid_b (),
-    .adc_clk (adc_clk),
-    .dma_0_data (dma_0_data),
-    .dma_0_sync (1'b1),
-    .dma_0_wr (dma_0_wr),
-    .dma_1_data (dma_1_data),
-    .dma_1_sync (1'b1),
-    .dma_1_wr (dma_1_wr),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .mb_intr_06 (1'b0),
@@ -362,9 +258,6 @@ module system_top (
     .uart_sout (uart_sout),
     .rx_data_n (rx_data_n),
     .rx_data_p (rx_data_p),
-    .rx_gt_data (rx_gt_data),
-    .rx_gt_data_0 (rx_gt_data[63:0]),
-    .rx_gt_data_1 (rx_gt_data[127:64]),
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
