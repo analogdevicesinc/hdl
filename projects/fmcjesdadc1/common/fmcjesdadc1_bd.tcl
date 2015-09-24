@@ -7,48 +7,57 @@ create_bd_port -dir O rx_sysref
 create_bd_port -dir I -from 3 -to 0 rx_data_p
 create_bd_port -dir I -from 3 -to 0 rx_data_n
 
-create_bd_port -dir O -from 127 -to 0 rx_gt_data
-create_bd_port -dir I -from 63 -to 0 rx_gt_data_0
-create_bd_port -dir I -from 63 -to 0 rx_gt_data_1
-
-create_bd_port -dir O adc_clk
-create_bd_port -dir O adc_0_enable_a
-create_bd_port -dir O adc_0_valid_a
-create_bd_port -dir O -from 31 -to 0 adc_0_data_a
-create_bd_port -dir O adc_0_enable_b
-create_bd_port -dir O adc_0_valid_b
-create_bd_port -dir O -from 31 -to 0 adc_0_data_b
-create_bd_port -dir O adc_1_enable_a
-create_bd_port -dir O adc_1_valid_a
-create_bd_port -dir O -from 31 -to 0 adc_1_data_a
-create_bd_port -dir O adc_1_enable_b
-create_bd_port -dir O adc_1_valid_b
-create_bd_port -dir O -from 31 -to 0 adc_1_data_b
-create_bd_port -dir I dma_0_wr
-create_bd_port -dir I dma_0_sync
-create_bd_port -dir I -from 63 -to 0 dma_0_data
-create_bd_port -dir I dma_1_wr
-create_bd_port -dir I dma_1_sync
-create_bd_port -dir I -from 63 -to 0 dma_1_data
-
 # adc peripherals
 
 set axi_ad9250_0_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_0_core]
 set axi_ad9250_1_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_1_core]
 
-set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.0 axi_ad9250_jesd]
+set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.1 axi_ad9250_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9250_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9250_jesd
 
 set axi_ad9250_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_ad9250_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {4}] $axi_ad9250_gt
-set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {2}] $axi_ad9250_gt
-set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_ad9250_gt
-set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_ad9250_gt
-set_property -dict [list CONFIG.PCORE_RX_CLK25_DIV {10}] $axi_ad9250_gt
-set_property -dict [list CONFIG.PCORE_TX_CLK25_DIV {10}] $axi_ad9250_gt
-set_property -dict [list CONFIG.PCORE_PMA_RSV {0x00018480}] $axi_ad9250_gt
-set_property -dict [list CONFIG.PCORE_RX_CDR_CFG {0x03000023ff20400020}] $axi_ad9250_gt
+set_property -dict [list CONFIG.NUM_OF_LANES {4}] $axi_ad9250_gt
+set_property -dict [list CONFIG.QPLL0_ENABLE {0}] $axi_ad9250_gt
+set_property -dict [list CONFIG.QPLL1_ENABLE {0}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_NUM_OF_LANES {4}] $axi_ad9250_gt
+set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $axi_ad9250_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_0 {2}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_0 {1}] $axi_ad9250_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_0 {1}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_0 {10}] $axi_ad9250_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_0 {10}] $axi_ad9250_gt
+set_property -dict [list CONFIG.PMA_RSV_0 {0x00018480}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_0 {0x03000023ff20400020}] $axi_ad9250_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_1 {2}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_1 {1}] $axi_ad9250_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_1 {1}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_1 {10}] $axi_ad9250_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_1 {10}] $axi_ad9250_gt
+set_property -dict [list CONFIG.PMA_RSV_1 {0x00018480}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_1 {0x03000023ff20400020}] $axi_ad9250_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_2 {2}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_2 {1}] $axi_ad9250_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_2 {1}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_2 {10}] $axi_ad9250_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_2 {10}] $axi_ad9250_gt
+set_property -dict [list CONFIG.PMA_RSV_2 {0x00018480}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_2 {0x03000023ff20400020}] $axi_ad9250_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_3 {2}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_3 {1}] $axi_ad9250_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_3 {1}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_3 {10}] $axi_ad9250_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_3 {10}] $axi_ad9250_gt
+set_property -dict [list CONFIG.PMA_RSV_3 {0x00018480}] $axi_ad9250_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_3 {0x03000023ff20400020}] $axi_ad9250_gt
+
+set util_fmcjesdadc1_gt [create_bd_cell -type ip -vlnv analog.com:user:util_jesd_gt:1.0 util_fmcjesdadc1_gt]
+set_property -dict [list CONFIG.QPLL0_ENABLE {0}] $util_fmcjesdadc1_gt
+set_property -dict [list CONFIG.QPLL1_ENABLE {0}] $util_fmcjesdadc1_gt
+set_property -dict [list CONFIG.NUM_OF_LANES {4}] $util_fmcjesdadc1_gt
+set_property -dict [list CONFIG.RX_ENABLE {1}] $util_fmcjesdadc1_gt
+set_property -dict [list CONFIG.RX_NUM_OF_LANES {4}] $util_fmcjesdadc1_gt
+set_property -dict [list CONFIG.TX_ENABLE {0}] $util_fmcjesdadc1_gt
 
 set axi_ad9250_0_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9250_0_dma]
 set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9250_0_dma
@@ -76,163 +85,92 @@ set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9250_1_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9250_1_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9250_1_dma
 
-# constants for avoiding errors when validating bd
+set data_bsplit [create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 data_bsplit]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64} ] $data_bsplit
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $data_bsplit
 
-set constant_1bit   [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 constant_1bit]
-set_property -dict [list CONFIG.CONST_VAL {0}] $constant_1bit
+set data_pack_0 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 data_pack_0]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $data_pack_0
 
-set constant_4bit  [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 constant_4bit]
-set_property -dict [list CONFIG.CONST_WIDTH {4}] $constant_4bit
-set_property -dict [list CONFIG.CONST_VAL {0}] $constant_4bit
-
-set constant_16bit  [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 constant_16bit]
-set_property -dict [list CONFIG.CONST_WIDTH {16}] $constant_16bit
-set_property -dict [list CONFIG.CONST_VAL {0}] $constant_16bit
-
-set constant_128bit  [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 constant_128bit]
-set_property -dict [list CONFIG.CONST_WIDTH {128}] $constant_128bit
-set_property -dict [list CONFIG.CONST_VAL {0}] $constant_128bit
+set data_pack_1 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 data_pack_1]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $data_pack_1
 
 # connections (gt)
 
-ad_connect  axi_ad9250_gt/ref_clk_c  rx_ref_clk
-ad_connect  axi_ad9250_gt/rx_data_p  rx_data_p
-ad_connect  axi_ad9250_gt/rx_data_n  rx_data_n
-ad_connect  axi_ad9250_gt/rx_sync    rx_sync
-ad_connect  axi_ad9250_gt/rx_sysref  rx_sysref
+ad_connect util_fmcjesdadc1_gt/qpll_ref_clk rx_ref_clk
+ad_connect util_fmcjesdadc1_gt/cpll_ref_clk rx_ref_clk
+
+ad_connect  axi_ad9250_gt/gt_pll_0 util_fmcjesdadc1_gt/gt_pll_0
+ad_connect  axi_ad9250_gt/gt_pll_1 util_fmcjesdadc1_gt/gt_pll_1
+ad_connect  axi_ad9250_gt/gt_pll_2 util_fmcjesdadc1_gt/gt_pll_2
+ad_connect  axi_ad9250_gt/gt_pll_3 util_fmcjesdadc1_gt/gt_pll_3
+
+ad_connect  axi_ad9250_gt/gt_rx_0 util_fmcjesdadc1_gt/gt_rx_0
+ad_connect  axi_ad9250_gt/gt_rx_1 util_fmcjesdadc1_gt/gt_rx_1
+ad_connect  axi_ad9250_gt/gt_rx_2 util_fmcjesdadc1_gt/gt_rx_2
+ad_connect  axi_ad9250_gt/gt_rx_3 util_fmcjesdadc1_gt/gt_rx_3
+
+ad_connect  axi_ad9250_gt/gt_rx_ip_0 axi_ad9250_jesd/gt0_rx
+ad_connect  axi_ad9250_gt/gt_rx_ip_1 axi_ad9250_jesd/gt1_rx
+ad_connect  axi_ad9250_gt/gt_rx_ip_2 axi_ad9250_jesd/gt2_rx
+ad_connect  axi_ad9250_gt/gt_rx_ip_3 axi_ad9250_jesd/gt3_rx
+
+ad_connect  axi_ad9250_gt/rx_gt_comma_align_enb_0 axi_ad9250_jesd/rxencommaalign_out
+ad_connect  axi_ad9250_gt/rx_gt_comma_align_enb_1 axi_ad9250_jesd/rxencommaalign_out
+ad_connect  axi_ad9250_gt/rx_gt_comma_align_enb_2 axi_ad9250_jesd/rxencommaalign_out
+ad_connect  axi_ad9250_gt/rx_gt_comma_align_enb_3 axi_ad9250_jesd/rxencommaalign_out
 
 # connections (adc)
 
-ad_connect  axi_ad9250_gt_rx_clk  axi_ad9250_gt/rx_clk_g
-ad_connect  axi_ad9250_gt_rx_clk  axi_ad9250_gt/rx_clk
-ad_connect  axi_ad9250_gt_rx_clk  axi_ad9250_gt/tx_clk
-ad_connect  axi_ad9250_gt_rx_clk  axi_ad9250_0_core/rx_clk
-ad_connect  axi_ad9250_gt_rx_clk  axi_ad9250_1_core/rx_clk
-ad_connect  axi_ad9250_gt_rx_clk  axi_ad9250_jesd/rx_core_clk
-ad_connect  axi_ad9250_gt_rx_clk  adc_clk
-ad_connect  axi_ad9250_gt_rx_rst  axi_ad9250_gt/rx_jesd_rst
-ad_connect  axi_ad9250_gt_rx_rst  axi_ad9250_jesd/rx_reset
+ad_connect  util_fmcjesdadc1_gt/rx_ip_sysref rx_sysref
+ad_connect  util_fmcjesdadc1_gt/rx_p rx_data_p
+ad_connect  util_fmcjesdadc1_gt/rx_n rx_data_n
+ad_connect  util_fmcjesdadc1_gt/rx_sync rx_sync
 
-ad_connect  axi_ad9250_gt_rx_sysref         axi_ad9250_jesd/rx_sysref
+ad_connect  util_fmcjesdadc1_gt/rx_out_clk      util_fmcjesdadc1_gt/rx_clk
+ad_connect  util_fmcjesdadc1_gt/rx_out_clk      axi_ad9250_jesd/rx_core_clk
+ad_connect  util_fmcjesdadc1_gt/rx_ip_rst       axi_ad9250_jesd/rx_reset
+ad_connect  util_fmcjesdadc1_gt/rx_ip_rst_done  axi_ad9250_jesd/rx_reset_done
+ad_connect  util_fmcjesdadc1_gt/rx_ip_sysref    axi_ad9250_jesd/rx_sysref
+ad_connect  util_fmcjesdadc1_gt/rx_ip_sync      axi_ad9250_jesd/rx_sync
+ad_connect  util_fmcjesdadc1_gt/rx_ip_sof       axi_ad9250_jesd/rx_start_of_frame
+ad_connect  util_fmcjesdadc1_gt/rx_ip_data      axi_ad9250_jesd/rx_tdata
 
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_charisk
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
+ad_connect  data_bsplit/data util_fmcjesdadc1_gt/rx_data
 
-ad_connect  util_bsplit_rx_gt_charisk/data axi_ad9250_gt/rx_gt_charisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_0 axi_ad9250_jesd/gt0_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_1 axi_ad9250_jesd/gt1_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_2 axi_ad9250_jesd/gt2_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_3 axi_ad9250_jesd/gt3_rxcharisk
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_disperr
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
-
-ad_connect  util_bsplit_rx_gt_disperr/data axi_ad9250_gt/rx_gt_disperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_0 axi_ad9250_jesd/gt0_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_1 axi_ad9250_jesd/gt1_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_2 axi_ad9250_jesd/gt2_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_3 axi_ad9250_jesd/gt3_rxdisperr
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_notintable
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
-
-ad_connect  util_bsplit_rx_gt_notintable/data axi_ad9250_gt/rx_gt_notintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_0 axi_ad9250_jesd/gt0_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_1 axi_ad9250_jesd/gt1_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_2 axi_ad9250_jesd/gt2_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_3 axi_ad9250_jesd/gt3_rxnotintable
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_data
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] [get_bd_cells util_bsplit_rx_gt_data]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] [get_bd_cells util_bsplit_rx_gt_data]
-
-ad_connect  util_bsplit_rx_gt_data/data axi_ad9250_gt/rx_gt_data
-ad_connect  util_bsplit_rx_gt_data/split_data_0 axi_ad9250_jesd/gt0_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_1 axi_ad9250_jesd/gt1_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_2 axi_ad9250_jesd/gt2_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_3 axi_ad9250_jesd/gt3_rxdata
-
-ad_connect  axi_ad9250_gt/rx_rst_done       axi_ad9250_jesd/rx_reset_done
-ad_connect  axi_ad9250_gt/rx_ip_comma_align axi_ad9250_jesd/rxencommaalign_out
-ad_connect  axi_ad9250_gt/rx_ip_sync        axi_ad9250_jesd/rx_sync
-ad_connect  axi_ad9250_gt/rx_ip_sof         axi_ad9250_jesd/rx_start_of_frame
-ad_connect  axi_ad9250_gt/rx_ip_data        axi_ad9250_jesd/rx_tdata
-
-ad_connect  axi_ad9250_gt/rx_data           rx_gt_data
-ad_connect  axi_ad9250_0_core/rx_data       rx_gt_data_0
-ad_connect  axi_ad9250_1_core/rx_data       rx_gt_data_1
-
+ad_connect  axi_ad9250_0_core/adc_clk       data_pack_0/adc_clk
+ad_connect  axi_ad9250_0_core/adc_rst       data_pack_0/adc_rst
+ad_connect  util_fmcjesdadc1_gt/rx_out_clk  axi_ad9250_0_core/rx_clk
+ad_connect  data_bsplit/split_data_0        axi_ad9250_0_core/rx_data
+ad_connect  axi_ad9250_0_core/adc_enable_a  data_pack_0/adc_enable_0
+ad_connect  axi_ad9250_0_core/adc_valid_a   data_pack_0/adc_valid_0
+ad_connect  axi_ad9250_0_core/adc_data_a    data_pack_0/adc_data_0
+ad_connect  axi_ad9250_0_core/adc_enable_b  data_pack_0/adc_enable_1
+ad_connect  axi_ad9250_0_core/adc_valid_b   data_pack_0/adc_valid_1
+ad_connect  axi_ad9250_0_core/adc_data_b    data_pack_0/adc_data_1
 ad_connect  axi_ad9250_0_core/adc_clk       axi_ad9250_0_dma/fifo_wr_clk
+ad_connect  axi_ad9250_0_dma/fifo_wr_en     data_pack_0/adc_valid
+ad_connect  axi_ad9250_0_dma/fifo_wr_sync   data_pack_0/adc_sync
+ad_connect  axi_ad9250_0_dma/fifo_wr_din    data_pack_0/adc_data
+ad_connect  axi_ad9250_0_core/adc_dovf      axi_ad9250_0_dma/fifo_wr_overflow
+
+ad_connect  axi_ad9250_1_core/adc_clk       data_pack_1/adc_clk
+ad_connect  axi_ad9250_1_core/adc_rst       data_pack_1/adc_rst
+ad_connect  util_fmcjesdadc1_gt/rx_out_clk  axi_ad9250_1_core/rx_clk
+ad_connect  data_bsplit/split_data_1        axi_ad9250_1_core/rx_data
+ad_connect  axi_ad9250_1_core/adc_enable_a  data_pack_1/adc_enable_0
+ad_connect  axi_ad9250_1_core/adc_valid_a   data_pack_1/adc_valid_0
+ad_connect  axi_ad9250_1_core/adc_data_a    data_pack_1/adc_data_0
+ad_connect  axi_ad9250_1_core/adc_enable_b  data_pack_1/adc_enable_1
+ad_connect  axi_ad9250_1_core/adc_valid_b   data_pack_1/adc_valid_1
+ad_connect  axi_ad9250_1_core/adc_data_b    data_pack_1/adc_data_1
+
 ad_connect  axi_ad9250_1_core/adc_clk       axi_ad9250_1_dma/fifo_wr_clk
 
-ad_connect  adc_0_enable_a axi_ad9250_0_core/adc_enable_a
-ad_connect  adc_0_valid_a  axi_ad9250_0_core/adc_valid_a
-ad_connect  adc_0_data_a   axi_ad9250_0_core/adc_data_a
-ad_connect  adc_0_enable_b axi_ad9250_0_core/adc_enable_b
-ad_connect  adc_0_valid_b  axi_ad9250_0_core/adc_valid_b
-ad_connect  adc_0_data_b   axi_ad9250_0_core/adc_data_b
-ad_connect  adc_1_enable_a axi_ad9250_1_core/adc_enable_a
-ad_connect  adc_1_valid_a  axi_ad9250_1_core/adc_valid_a
-ad_connect  adc_1_data_a   axi_ad9250_1_core/adc_data_a
-ad_connect  adc_1_enable_b axi_ad9250_1_core/adc_enable_b
-ad_connect  adc_1_valid_b  axi_ad9250_1_core/adc_valid_b
-ad_connect  adc_1_data_b   axi_ad9250_1_core/adc_data_b
-
-ad_connect  axi_ad9250_0_dma/fifo_wr_en     dma_0_wr
-ad_connect  axi_ad9250_0_dma/fifo_wr_sync   dma_0_sync
-ad_connect  axi_ad9250_0_dma/fifo_wr_din    dma_0_data
-ad_connect  axi_ad9250_1_dma/fifo_wr_en     dma_1_wr
-ad_connect  axi_ad9250_1_dma/fifo_wr_sync   dma_1_sync
-ad_connect  axi_ad9250_1_dma/fifo_wr_din    dma_1_data
-
-ad_connect  axi_ad9250_0_core/adc_dovf      axi_ad9250_0_dma/fifo_wr_overflow
+ad_connect  axi_ad9250_1_dma/fifo_wr_en     data_pack_1/adc_valid
+ad_connect  axi_ad9250_1_dma/fifo_wr_sync   data_pack_1/adc_sync
+ad_connect  axi_ad9250_1_dma/fifo_wr_din    data_pack_1/adc_data
 ad_connect  axi_ad9250_1_core/adc_dovf      axi_ad9250_1_dma/fifo_wr_overflow
-
-# ila
-
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_jesd_rx_mon]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {11}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {334}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {6}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {128}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {32}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE4_WIDTH {32}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE5_WIDTH {32}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE6_WIDTH {32}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE7_WIDTH {1}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE8_WIDTH {1}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE9_WIDTH {1}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE10_WIDTH {1}] $ila_jesd_rx_mon
-
-ad_connect  axi_ad9250_gt_rx_mon_data       axi_ad9250_gt/rx_mon_data
-ad_connect  axi_ad9250_gt_rx_mon_trigger    axi_ad9250_gt/rx_mon_trigger
-ad_connect  axi_ad9250_gt_rx_clk            ila_jesd_rx_mon/CLK
-ad_connect  axi_ad9250_gt_rx_mon_data       ila_jesd_rx_mon/PROBE0
-ad_connect  axi_ad9250_gt_rx_mon_trigger    ila_jesd_rx_mon/PROBE1
-ad_connect  axi_ad9250_gt_rx_data           ila_jesd_rx_mon/PROBE2
-ad_connect  axi_ad9250_0_core/adc_data_a    ila_jesd_rx_mon/PROBE3
-ad_connect  axi_ad9250_0_core/adc_data_b    ila_jesd_rx_mon/PROBE4
-ad_connect  axi_ad9250_1_core/adc_data_a    ila_jesd_rx_mon/PROBE5
-ad_connect  axi_ad9250_1_core/adc_data_b    ila_jesd_rx_mon/PROBE6
-ad_connect  axi_ad9250_0_core/adc_valid_a   ila_jesd_rx_mon/PROBE7
-ad_connect  axi_ad9250_0_core/adc_valid_b   ila_jesd_rx_mon/PROBE8
-ad_connect  axi_ad9250_1_core/adc_valid_a   ila_jesd_rx_mon/PROBE9
-ad_connect  axi_ad9250_1_core/adc_valid_b   ila_jesd_rx_mon/PROBE10
-
-ad_connect  constant_1bit/dout    axi_ad9250_0_core/adc_dunf
-ad_connect  constant_1bit/dout    axi_ad9250_1_core/adc_dunf
-ad_connect  constant_1bit/dout    axi_ad9250_gt/ref_clk_q
-ad_connect  constant_1bit/dout    axi_ad9250_gt/rx_ext_sysref
-ad_connect  constant_1bit/dout    axi_ad9250_gt/tx_sync
-ad_connect  constant_1bit/dout    axi_ad9250_gt/tx_ext_sysref
-ad_connect  constant_4bit/dout    axi_ad9250_gt/tx_ip_sof
-ad_connect  constant_16bit/dout   axi_ad9250_gt/tx_gt_charisk
-ad_connect  constant_128bit/dout  axi_ad9250_gt/tx_data
-ad_connect  constant_128bit/dout  axi_ad9250_gt/tx_gt_data
 
 # interconnects
 
