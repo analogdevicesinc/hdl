@@ -248,7 +248,7 @@ module system_top (
     .dac_frame_out_n (dac_frame_out_n),
     .dac_frame_out_p (dac_frame_out_p),
     .ref_clk (ref_clk),
-    .mdio_io (phy_mdio),
+    .mdio_mdio_io (phy_mdio),
     .mdio_mdc (phy_mdc),
     .phy_rst_n (phy_reset_n),
     .rgmii_rd (phy_rx_data),
