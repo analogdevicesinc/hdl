@@ -55,28 +55,3 @@ ad_connect sys_cpu_resetn axi_ad9467_dma/m_dest_axi_aresetn
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad9467_dma/irq
 
-# ila (with fifo to prevent timing failure)
-
-set ila_fifo  [create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator:12.0 ila_fifo]
-set_property -dict [list CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}] $ila_fifo
-set_property -dict [list CONFIG.Input_Data_Width {16}] $ila_fifo
-set_property -dict [list CONFIG.Input_Depth {128}] $ila_fifo
-set_property -dict [list CONFIG.Output_Data_Width {32}] $ila_fifo
-set_property -dict [list CONFIG.Overflow_Flag {true}] $ila_fifo
-set_property -dict [list CONFIG.Reset_Pin {false}] $ila_fifo
-
-set ila_ad9467_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_ad9467_mon]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9467_mon
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_ad9467_mon
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {32}] $ila_ad9467_mon
-
-
-ad_connect  sys_200m_clk ila_ad9467_mon/clk
-ad_connect  axi_ad9467/adc_clk ila_fifo/wr_clk
-ad_connect  sys_200m_clk ila_fifo/rd_clk
-
-ad_connect  ila_fifo/din axi_ad9467/adc_data
-ad_connect  ila_fifo/rd_en  "VCC"
-ad_connect  ila_fifo/wr_en  "VCC"
-ad_connect  ila_fifo/dout ila_ad9467_mon/probe0
-
