@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -71,7 +71,7 @@ module system_top (
   hdmi_hsync,
   hdmi_data_e,
   hdmi_data,
-  
+
   spdif,
 
   sys_rst,
@@ -107,14 +107,14 @@ module system_top (
   rx_sync_1_n,
   rx_data_p,
   rx_data_n,
-  
+
   ad9528_rstn,
   ad9528_status,
   ad9680_1_fda,
   ad9680_1_fdb,
   ad9680_2_fda,
   ad9680_2_fdb,
- 
+
   ad9528_csn,
   ada4961_1a_csn,
   ada4961_1b_csn,
@@ -155,7 +155,7 @@ module system_top (
   output          hdmi_hsync;
   output          hdmi_data_e;
   output  [23:0]  hdmi_data;
-  
+
   output          spdif;
 
   input           sys_rst;
@@ -191,14 +191,14 @@ module system_top (
   output          rx_sync_1_n;
   input   [ 7:0]  rx_data_p;
   input   [ 7:0]  rx_data_n;
-  
+
   inout           ad9528_rstn;
   inout           ad9528_status;
   inout           ad9680_1_fda;
   inout           ad9680_1_fdb;
   inout           ad9680_2_fda;
   inout           ad9680_2_fdb;
-  
+
   output          ad9528_csn;
   output          ada4961_1a_csn;
   output          ada4961_1b_csn;
@@ -209,13 +209,6 @@ module system_top (
   output          spi_clk;
   inout           spi_sdio;
 
-  // internal registers
-
-  reg     [ 1:0]  adc_dcnt = 'd0;
-  reg             adc_dsync = 'd0;
-  reg             adc_dwr = 'd0;
-  reg    [255:0]  adc_ddata = 'd0;
-  
   // internal signals
 
   wire    [63:0]  gpio_i;
@@ -232,172 +225,6 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
-  wire            adc_clk;
-  wire    [63:0]  adc_data_0;
-  wire    [63:0]  adc_data_1;
-  wire    [63:0]  adc_data_2;
-  wire    [63:0]  adc_data_3;
-  wire            adc_enable_0;
-  wire            adc_enable_1;
-  wire            adc_enable_2;
-  wire            adc_enable_3;
-  wire            adc_valid_0;
-  wire            adc_valid_1;
-  wire            adc_valid_2;
-  wire            adc_valid_3;
-
-  // adc-pack place holder
-
-  always @(posedge adc_clk) begin
-    adc_dcnt <= adc_dcnt + 1'b1;
-    case ({adc_enable_3, adc_enable_2, adc_enable_1, adc_enable_0})
-      4'b1111: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_3 & adc_valid_2 & adc_valid_1 & adc_valid_0;
-        adc_ddata[255:240] <= $signed(adc_data_3[63:52]);
-        adc_ddata[239:224] <= $signed(adc_data_2[63:52]);
-        adc_ddata[223:208] <= $signed(adc_data_1[63:52]);
-        adc_ddata[207:192] <= $signed(adc_data_0[63:52]);
-        adc_ddata[191:176] <= $signed(adc_data_3[47:36]);
-        adc_ddata[175:160] <= $signed(adc_data_2[47:36]);
-        adc_ddata[159:144] <= $signed(adc_data_1[47:36]);
-        adc_ddata[143:128] <= $signed(adc_data_0[47:36]);
-        adc_ddata[127:112] <= $signed(adc_data_3[31:20]);
-        adc_ddata[111: 96] <= $signed(adc_data_2[31:20]);
-        adc_ddata[ 95: 80] <= $signed(adc_data_1[31:20]);
-        adc_ddata[ 79: 64] <= $signed(adc_data_0[31:20]);
-        adc_ddata[ 63: 48] <= $signed(adc_data_3[15: 4]);
-        adc_ddata[ 47: 32] <= $signed(adc_data_2[15: 4]);
-        adc_ddata[ 31: 16] <= $signed(adc_data_1[15: 4]);
-        adc_ddata[ 15:  0] <= $signed(adc_data_0[15: 4]);
-      end
-      4'b0001: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_0 & adc_dcnt[0] & adc_dcnt[1];
-        adc_ddata[255:240] <= $signed(adc_data_0[63:52]);
-        adc_ddata[239:224] <= $signed(adc_data_0[47:36]);
-        adc_ddata[223:208] <= $signed(adc_data_0[31:20]);
-        adc_ddata[207:192] <= $signed(adc_data_0[15: 4]);
-        adc_ddata[191:176] <= adc_ddata[255:240];
-        adc_ddata[175:160] <= adc_ddata[239:224];
-        adc_ddata[159:144] <= adc_ddata[223:208];
-        adc_ddata[143:128] <= adc_ddata[207:192];
-        adc_ddata[127:112] <= adc_ddata[191:176];
-        adc_ddata[111: 96] <= adc_ddata[175:160];
-        adc_ddata[ 95: 80] <= adc_ddata[159:144];
-        adc_ddata[ 79: 64] <= adc_ddata[143:128];
-        adc_ddata[ 63: 48] <= adc_ddata[127:112];
-        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
-        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
-        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
-      end
-      4'b0010: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_1 & adc_dcnt[0] & adc_dcnt[1];
-        adc_ddata[255:240] <= $signed(adc_data_1[63:52]);
-        adc_ddata[239:224] <= $signed(adc_data_1[47:36]);
-        adc_ddata[223:208] <= $signed(adc_data_1[31:20]);
-        adc_ddata[207:192] <= $signed(adc_data_1[15: 4]);
-        adc_ddata[191:176] <= adc_ddata[255:240];
-        adc_ddata[175:160] <= adc_ddata[239:224];
-        adc_ddata[159:144] <= adc_ddata[223:208];
-        adc_ddata[143:128] <= adc_ddata[207:192];
-        adc_ddata[127:112] <= adc_ddata[191:176];
-        adc_ddata[111: 96] <= adc_ddata[175:160];
-        adc_ddata[ 95: 80] <= adc_ddata[159:144];
-        adc_ddata[ 79: 64] <= adc_ddata[143:128];
-        adc_ddata[ 63: 48] <= adc_ddata[127:112];
-        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
-        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
-        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
-      end
-      4'b0011: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_1 & adc_valid_0 & adc_dcnt[0];
-        adc_ddata[255:240] <= $signed(adc_data_1[63:52]);
-        adc_ddata[239:224] <= $signed(adc_data_0[63:52]);
-        adc_ddata[223:208] <= $signed(adc_data_1[47:36]);
-        adc_ddata[207:192] <= $signed(adc_data_0[47:36]);
-        adc_ddata[191:176] <= $signed(adc_data_1[31:20]);
-        adc_ddata[175:160] <= $signed(adc_data_0[31:20]);
-        adc_ddata[159:144] <= $signed(adc_data_1[15: 4]);
-        adc_ddata[143:128] <= $signed(adc_data_0[15: 4]);
-        adc_ddata[127:112] <= adc_ddata[255:240];
-        adc_ddata[111: 96] <= adc_ddata[239:224];
-        adc_ddata[ 95: 80] <= adc_ddata[223:208];
-        adc_ddata[ 79: 64] <= adc_ddata[207:192];
-        adc_ddata[ 63: 48] <= adc_ddata[191:176];
-        adc_ddata[ 47: 32] <= adc_ddata[175:160];
-        adc_ddata[ 31: 16] <= adc_ddata[159:144];
-        adc_ddata[ 15:  0] <= adc_ddata[143:128];
-      end
-      4'b0100: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_2 & adc_dcnt[0] & adc_dcnt[1];
-        adc_ddata[255:240] <= $signed(adc_data_2[63:52]);
-        adc_ddata[239:224] <= $signed(adc_data_2[47:36]);
-        adc_ddata[223:208] <= $signed(adc_data_2[31:20]);
-        adc_ddata[207:192] <= $signed(adc_data_2[15: 4]);
-        adc_ddata[191:176] <= adc_ddata[255:240];
-        adc_ddata[175:160] <= adc_ddata[239:224];
-        adc_ddata[159:144] <= adc_ddata[223:208];
-        adc_ddata[143:128] <= adc_ddata[207:192];
-        adc_ddata[127:112] <= adc_ddata[191:176];
-        adc_ddata[111: 96] <= adc_ddata[175:160];
-        adc_ddata[ 95: 80] <= adc_ddata[159:144];
-        adc_ddata[ 79: 64] <= adc_ddata[143:128];
-        adc_ddata[ 63: 48] <= adc_ddata[127:112];
-        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
-        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
-        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
-      end
-      4'b1000: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_3 & adc_dcnt[0] & adc_dcnt[1];
-        adc_ddata[255:240] <= $signed(adc_data_3[63:52]);
-        adc_ddata[239:224] <= $signed(adc_data_3[47:36]);
-        adc_ddata[223:208] <= $signed(adc_data_3[31:20]);
-        adc_ddata[207:192] <= $signed(adc_data_3[15: 4]);
-        adc_ddata[191:176] <= adc_ddata[255:240];
-        adc_ddata[175:160] <= adc_ddata[239:224];
-        adc_ddata[159:144] <= adc_ddata[223:208];
-        adc_ddata[143:128] <= adc_ddata[207:192];
-        adc_ddata[127:112] <= adc_ddata[191:176];
-        adc_ddata[111: 96] <= adc_ddata[175:160];
-        adc_ddata[ 95: 80] <= adc_ddata[159:144];
-        adc_ddata[ 79: 64] <= adc_ddata[143:128];
-        adc_ddata[ 63: 48] <= adc_ddata[127:112];
-        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
-        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
-        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
-      end
-      4'b1100: begin
-        adc_dsync <= 1'b1;
-        adc_dwr <= adc_valid_3 & adc_valid_2 & adc_dcnt[0];
-        adc_ddata[255:240] <= $signed(adc_data_3[63:52]);
-        adc_ddata[239:224] <= $signed(adc_data_2[63:52]);
-        adc_ddata[223:208] <= $signed(adc_data_3[47:36]);
-        adc_ddata[207:192] <= $signed(adc_data_2[47:36]);
-        adc_ddata[191:176] <= $signed(adc_data_3[31:20]);
-        adc_ddata[175:160] <= $signed(adc_data_2[31:20]);
-        adc_ddata[159:144] <= $signed(adc_data_3[15: 4]);
-        adc_ddata[143:128] <= $signed(adc_data_2[15: 4]);
-        adc_ddata[127:112] <= adc_ddata[255:240];
-        adc_ddata[111: 96] <= adc_ddata[239:224];
-        adc_ddata[ 95: 80] <= adc_ddata[223:208];
-        adc_ddata[ 79: 64] <= adc_ddata[207:192];
-        adc_ddata[ 63: 48] <= adc_ddata[191:176];
-        adc_ddata[ 47: 32] <= adc_ddata[175:160];
-        adc_ddata[ 31: 16] <= adc_ddata[159:144];
-        adc_ddata[ 15:  0] <= adc_ddata[143:128];
-      end
-      default: begin
-        adc_dsync <= 1'b0;
-        adc_dwr <= 1'b0;
-        adc_ddata <= 256'd0;
-      end
-    endcase
-  end
 
   // spi
 
@@ -459,22 +286,6 @@ module system_top (
     .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
-    .adc_clk (adc_clk),
-    .adc_data_0 (adc_data_0),
-    .adc_data_1 (adc_data_1),
-    .adc_data_2 (adc_data_2),
-    .adc_data_3 (adc_data_3),
-    .adc_ddata (adc_ddata),
-    .adc_dsync (adc_dsync),
-    .adc_dwr (adc_dwr),
-    .adc_enable_0 (adc_enable_0),
-    .adc_enable_1 (adc_enable_1),
-    .adc_enable_2 (adc_enable_2),
-    .adc_enable_3 (adc_enable_3),
-    .adc_valid_0 (adc_valid_0),
-    .adc_valid_1 (adc_valid_1),
-    .adc_valid_2 (adc_valid_2),
-    .adc_valid_3 (adc_valid_3),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
