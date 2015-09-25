@@ -50,6 +50,7 @@ module axi_ad9625 (
   // dma interface
 
   adc_clk,
+  adc_rst,
   adc_valid,
   adc_enable,
   adc_data,
@@ -94,6 +95,7 @@ module axi_ad9625 (
   // dma interface
 
   output          adc_clk;
+  output          adc_rst;
   output          adc_valid;
   output          adc_enable;
   output  [255:0] adc_data;
