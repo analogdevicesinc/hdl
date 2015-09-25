@@ -246,51 +246,6 @@ module system_top (
   wire              rx_sysref;
   wire              rx_sync_0;
   wire              rx_sync_1;
-  wire              adc_clk;
-  wire              adc_valid_0;
-  wire              adc_enable_0;
-  wire    [255:0]   adc_data_0;
-  wire              adc_valid_1;
-  wire              adc_enable_1;
-  wire    [255:0]   adc_data_1;
-
-  // interleaving
-
-  always @(posedge adc_clk) begin
-    adc_wr <= adc_enable_0 & adc_enable_1;
-    adc_wdata[((16*31)+15):(16*31)] <= adc_data_1[((16*15)+15):(16*15)];
-    adc_wdata[((16*30)+15):(16*30)] <= adc_data_0[((16*15)+15):(16*15)];
-    adc_wdata[((16*29)+15):(16*29)] <= adc_data_1[((16*14)+15):(16*14)];
-    adc_wdata[((16*28)+15):(16*28)] <= adc_data_0[((16*14)+15):(16*14)];
-    adc_wdata[((16*27)+15):(16*27)] <= adc_data_1[((16*13)+15):(16*13)];
-    adc_wdata[((16*26)+15):(16*26)] <= adc_data_0[((16*13)+15):(16*13)];
-    adc_wdata[((16*25)+15):(16*25)] <= adc_data_1[((16*12)+15):(16*12)];
-    adc_wdata[((16*24)+15):(16*24)] <= adc_data_0[((16*12)+15):(16*12)];
-    adc_wdata[((16*23)+15):(16*23)] <= adc_data_1[((16*11)+15):(16*11)];
-    adc_wdata[((16*22)+15):(16*22)] <= adc_data_0[((16*11)+15):(16*11)];
-    adc_wdata[((16*21)+15):(16*21)] <= adc_data_1[((16*10)+15):(16*10)];
-    adc_wdata[((16*20)+15):(16*20)] <= adc_data_0[((16*10)+15):(16*10)];
-    adc_wdata[((16*19)+15):(16*19)] <= adc_data_1[((16* 9)+15):(16* 9)];
-    adc_wdata[((16*18)+15):(16*18)] <= adc_data_0[((16* 9)+15):(16* 9)];
-    adc_wdata[((16*17)+15):(16*17)] <= adc_data_1[((16* 8)+15):(16* 8)];
-    adc_wdata[((16*16)+15):(16*16)] <= adc_data_0[((16* 8)+15):(16* 8)];
-    adc_wdata[((16*15)+15):(16*15)] <= adc_data_1[((16* 7)+15):(16* 7)];
-    adc_wdata[((16*14)+15):(16*14)] <= adc_data_0[((16* 7)+15):(16* 7)];
-    adc_wdata[((16*13)+15):(16*13)] <= adc_data_1[((16* 6)+15):(16* 6)];
-    adc_wdata[((16*12)+15):(16*12)] <= adc_data_0[((16* 6)+15):(16* 6)];
-    adc_wdata[((16*11)+15):(16*11)] <= adc_data_1[((16* 5)+15):(16* 5)];
-    adc_wdata[((16*10)+15):(16*10)] <= adc_data_0[((16* 5)+15):(16* 5)];
-    adc_wdata[((16* 9)+15):(16* 9)] <= adc_data_1[((16* 4)+15):(16* 4)];
-    adc_wdata[((16* 8)+15):(16* 8)] <= adc_data_0[((16* 4)+15):(16* 4)];
-    adc_wdata[((16* 7)+15):(16* 7)] <= adc_data_1[((16* 3)+15):(16* 3)];
-    adc_wdata[((16* 6)+15):(16* 6)] <= adc_data_0[((16* 3)+15):(16* 3)];
-    adc_wdata[((16* 5)+15):(16* 5)] <= adc_data_1[((16* 2)+15):(16* 2)];
-    adc_wdata[((16* 4)+15):(16* 4)] <= adc_data_0[((16* 2)+15):(16* 2)];
-    adc_wdata[((16* 3)+15):(16* 3)] <= adc_data_1[((16* 1)+15):(16* 1)];
-    adc_wdata[((16* 2)+15):(16* 2)] <= adc_data_0[((16* 1)+15):(16* 1)];
-    adc_wdata[((16* 1)+15):(16* 1)] <= adc_data_1[((16* 0)+15):(16* 0)];
-    adc_wdata[((16* 0)+15):(16* 0)] <= adc_data_0[((16* 0)+15):(16* 0)];
-  end
 
   // spi
 
@@ -378,15 +333,6 @@ module system_top (
     .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
-    .adc_clk (adc_clk),
-    .adc_data_0 (adc_data_0),
-    .adc_data_1 (adc_data_1),
-    .adc_enable_0 (adc_enable_0),
-    .adc_enable_1 (adc_enable_1),
-    .adc_valid_0 (adc_valid_0),
-    .adc_valid_1 (adc_valid_1),
-    .adc_wdata (adc_wdata),
-    .adc_wr (adc_wr),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -420,7 +366,7 @@ module system_top (
     .mb_intr_06 (1'b0),
     .mb_intr_07 (1'b0),
     .mb_intr_08 (1'b0),
-    .mb_intr_12 (1'b0),
+    .mb_intr_13 (1'b0),
     .mb_intr_14 (1'b0),
     .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
