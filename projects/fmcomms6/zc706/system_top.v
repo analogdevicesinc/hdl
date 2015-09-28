@@ -141,11 +141,6 @@ module system_top (
   inout           spi_sdio;
   inout           adf4351_ld;
 
-  // internal registers
-
-  reg             adc_dwr = 'd0;
-  reg     [31:0]  adc_ddata = 'd0;
-
   // internal signals
 
   wire    [63:0]  gpio_i;
@@ -159,32 +154,6 @@ module system_top (
   wire            spi1_clk;
   wire            spi1_mosi;
   wire            spi1_miso;
-  wire            adc_clk;
-  wire            adc_valid_0;
-  wire            adc_enable_0;
-  wire    [15:0]  adc_data_0;
-  wire            adc_valid_1;
-  wire            adc_enable_1;
-  wire    [15:0]  adc_data_1;
-
-  // pack-unpack place holder
-
-  always @(posedge adc_clk) begin
-    case ({adc_enable_1, adc_enable_0})
-      2'b10: begin
-        adc_dwr <= ~adc_dwr;
-        adc_ddata <= {adc_data_1, adc_ddata[31:16]};
-      end
-      2'b01: begin
-        adc_dwr <= ~adc_dwr;
-        adc_ddata <= {adc_data_0, adc_ddata[31:16]};
-      end
-      default: begin
-        adc_dwr <= 1'b1;
-        adc_ddata <= {adc_data_1, adc_data_0};
-      end
-    endcase
-  end
 
   // spi
 
@@ -215,21 +184,12 @@ module system_top (
     .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
-    .adc_clk (adc_clk),
     .adc_clk_in_n (adc_clk_in_n),
     .adc_clk_in_p (adc_clk_in_p),
-    .adc_data_0 (adc_data_0),
-    .adc_data_1 (adc_data_1),
     .adc_data_in_n (adc_data_in_n),
     .adc_data_in_p (adc_data_in_p),
-    .adc_ddata (adc_ddata),
-    .adc_dwr (adc_dwr),
-    .adc_enable_0 (adc_enable_0),
-    .adc_enable_1 (adc_enable_1),
     .adc_or_in_n (adc_or_in_n),
     .adc_or_in_p (adc_or_in_p),
-    .adc_valid_0 (adc_valid_0),
-    .adc_valid_1 (adc_valid_1),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),

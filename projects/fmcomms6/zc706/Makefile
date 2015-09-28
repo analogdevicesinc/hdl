@@ -23,6 +23,7 @@ M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
+M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
 
 M_VIVADO := vivado -mode batch -source
@@ -54,6 +55,7 @@ clean-all:clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_hdmi_tx clean
 	make -C ../../../library/axi_spdif_tx clean
+	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_wfifo clean
 
 
@@ -68,6 +70,7 @@ lib:
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_hdmi_tx
 	make -C ../../../library/axi_spdif_tx
+	make -C ../../../library/util_cpack
 	make -C ../../../library/util_wfifo
 
 ####################################################################################
