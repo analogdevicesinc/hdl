@@ -17,7 +17,7 @@ set axi_ad9739a [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9739a:1.0 a
 set axi_ad9739a_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9739a_dma]
 set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9739a_dma
 set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.FIFO_SIZE {64}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.FIFO_SIZE {32}] $axi_ad9739a_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9739a_dma
 set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9739a_dma
 set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9739a_dma
