@@ -52,10 +52,10 @@ ad_connect  axi_hdmi_rx_core/hdmi_dma_data axi_hdmi_rx_dma/fifo_wr_din
 ad_connect  axi_hdmi_rx_core/hdmi_dma_ovf axi_hdmi_rx_dma/fifo_wr_overflow
 
 set axi_spdif_rx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_rx:1.0 axi_spdif_rx_core]
-set_property -dict [list CONFIG.C_S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_rx_core
+set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_rx_core
+set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_rx_core
 
 set_property -dict [list CONFIG.PCW_USE_DMA3 {1}] $sys_ps7
-set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_rx_core
 
 ad_connect  sys_cpu_clk axi_spdif_rx_core/DMA_REQ_ACLK
 ad_connect  sys_cpu_clk sys_ps7/DMA3_ACLK
