@@ -5,6 +5,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_hdmi_rx
 adi_ip_files axi_hdmi_rx [list \
+  "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_csc_1.v" \
   "$ad_hdl_dir/library/common/ad_csc_1_mul.v" \
@@ -24,7 +25,8 @@ adi_ip_files axi_hdmi_rx [list \
 
 adi_ip_properties axi_hdmi_rx
 adi_ip_constraints axi_hdmi_rx [list \
-  "axi_hdmi_rx_constr.xdc" ]
+  "axi_hdmi_rx_constr.xdc" \
+  "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 

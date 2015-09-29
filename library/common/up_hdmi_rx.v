@@ -112,7 +112,8 @@ module up_hdmi_rx (
 
   // internal registers
 
-  reg             up_preset = 'd0;
+  reg             up_core_preset = 'd0;
+  reg             up_resetn = 'd0;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_edge_sel = 'd0;
@@ -154,7 +155,8 @@ module up_hdmi_rx (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_preset <= 1'd1;
+      up_core_preset <= 1'd1;
+      up_resetn <= 'd0;
       up_wack <= 'd0;
       up_scratch <= 'd0;
       up_edge_sel <= 'd0;
@@ -172,11 +174,12 @@ module up_hdmi_rx (
       up_hs_count <= 'd0;
     end else begin
       up_wack <= up_wreq_s;
+      up_core_preset <= ~up_resetn;
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h002)) begin
         up_scratch <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h010)) begin
-        up_preset <= ~up_wdata[0];
+        up_resetn <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h011)) begin
         up_edge_sel <= up_wdata[3];
@@ -239,7 +242,7 @@ module up_hdmi_rx (
           12'h000: up_rdata <= PCORE_VERSION;
           12'h001: up_rdata <= ID;
           12'h002: up_rdata <= up_scratch;
-          12'h010: up_rdata <= {31'h0, ~up_preset};
+          12'h010: up_rdata <= {31'h0, up_resetn};
           12'h011: up_rdata <= {28'h0, up_edge_sel, up_bgr, up_packed, up_csc_bypass};
           12'h015: up_rdata <= up_clk_count_s;
           12'h016: up_rdata <= hdmi_clk_ratio;
@@ -258,7 +261,7 @@ module up_hdmi_rx (
   // resets
 
   ad_rst i_hdmi_rst_reg (
-    .preset (up_preset),
+    .preset (up_core_preset),
     .clk (hdmi_clk),
     .rst (hdmi_rst));
 
