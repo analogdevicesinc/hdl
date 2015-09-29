@@ -69,9 +69,7 @@ module up_gt (
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00070161;
   parameter   integer GTH_OR_GTX_N = 0;
-  parameter   integer ID = 0;
 
   // drp interface
 
@@ -104,7 +102,6 @@ module up_gt (
   // internal registers
 
   reg             up_wack = 'd0;
-  reg     [31:0]  up_scratch = 'd0;
   reg             up_drp_qpll0_sel = 'd0;
   reg             up_drp_qpll0_wr = 'd0;
   reg             up_drp_qpll0_status = 'd0;
@@ -137,7 +134,6 @@ module up_gt (
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
-      up_scratch <= 'd0;
       up_drp_qpll0_sel <= 'd0;
       up_drp_qpll0_wr <= 'd0;
       up_drp_qpll0_status <= 'd0;
@@ -154,9 +150,6 @@ module up_gt (
       up_drp_qpll1_rdata_hold <= 'd0;
     end else begin
       up_wack <= up_wreq_s;
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
-        up_scratch <= up_wdata;
-      end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
         up_drp_qpll0_sel <= 1'b1;
         up_drp_qpll0_wr <= ~up_wdata[28];
@@ -210,9 +203,6 @@ module up_gt (
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
-          8'h00: up_rdata <= VERSION;
-          8'h01: up_rdata <= ID;
-          8'h02: up_rdata <= up_scratch;
           8'h14: up_rdata <= {3'd0, up_drp_qpll0_rwn,
                               up_drp_qpll0_addr, up_drp_qpll0_wdata};
           8'h15: up_rdata <= {15'd0, up_drp_qpll0_status, up_drp_qpll0_rdata};

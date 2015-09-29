@@ -188,8 +188,7 @@ module ad_gt_common_1 (
     .up_drp_ready (up_drp_qpll1_ready_s));
 
   up_gt #(
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
-    .ID (ID))
+    .GTH_OR_GTX_N (GTH_OR_GTX_N))
   i_up (
     .up_drp_qpll0_sel (up_drp_qpll0_sel_s),
     .up_drp_qpll0_wr (up_drp_qpll0_wr_s),

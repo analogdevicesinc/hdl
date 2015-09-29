@@ -143,6 +143,7 @@ module up_gt_channel (
 
   // parameters
 
+  localparam  [31:0]  VERSION = 32'h00070161;
   parameter   integer ID = 0;
   parameter   integer GTH_OR_GTX_N = 0;
 
@@ -354,6 +355,7 @@ module up_gt_channel (
   reg             tx_up_sync_m1 = 'd0;
   reg             tx_up_sync = 'd0;
   reg             tx_ip_sync = 'd0;
+  reg     [31:0]  up_scratch = 'd0;
 
   // internal signals
 
@@ -407,6 +409,7 @@ module up_gt_channel (
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
+      up_scratch <= 'd0;
       up_lpm_dfe_n <= 'd0;
       up_cpll_pd <= 'd1;
       up_drp_resetn <= 'd0;
@@ -461,6 +464,9 @@ module up_gt_channel (
       up_es_dma_err_hold <= 'd0;
     end else begin
       up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+        up_scratch <= up_wdata;
+      end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h04)) begin
         up_lpm_dfe_n <= up_wdata[1];
         up_cpll_pd <= up_wdata[0];
@@ -605,6 +611,9 @@ module up_gt_channel (
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
+          8'h00: up_rdata <= VERSION;
+          8'h01: up_rdata <= ID;
+          8'h02: up_rdata <= up_scratch;
           8'h04: up_rdata <= {30'd0, up_lpm_dfe_n, up_cpll_pd};
           8'h05: up_rdata <= {30'd0, up_drp_resetn, up_pll_resetn};
           8'h08: up_rdata <= {31'd0, up_rx_gt_resetn};
