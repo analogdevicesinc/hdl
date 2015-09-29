@@ -145,7 +145,6 @@ module up_gt_channel (
 
   localparam  [31:0]  VERSION = 32'h00070161;
   parameter   integer ID = 0;
-  parameter   integer GTH_OR_GTX_N = 0;
 
   // gt interface
 
@@ -651,7 +650,6 @@ module up_gt_channel (
           8'h33: up_rdata <= up_es_qdata4;
           8'h38: up_rdata <= {30'd0, up_es_dma_err_hold, up_es_status};
           8'h39: up_rdata <= {24'd0, up_drp_rxrate};
-          8'h3a: up_rdata <= GTH_OR_GTX_N;
           default: up_rdata <= 0;
         endcase
       end else begin

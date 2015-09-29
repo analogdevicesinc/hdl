@@ -420,8 +420,7 @@ module ad_gt_channel_1 (
     .up_es_status (up_es_status_s));
 
   up_gt_channel #(
-    .ID (ID),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N))
+    .ID (ID))
   i_up (
     .pll_rst (pll_rst),
     .lpm_dfe_n (lpm_dfe_n_s),
