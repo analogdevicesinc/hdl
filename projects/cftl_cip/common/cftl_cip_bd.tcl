@@ -37,7 +37,7 @@ ad_connect sys_cpu_clk pmod_spi_dma/fifo_wr_clk
 ad_connect sys_cpu_clk pmod_spi_core/clk
 ad_connect sys_cpu_clk pmod_gpio_core/ref_clk
 
-ad_connect pmod_spi_core/reset sys_rstgen/peripheral_reset
+ad_connect pmod_spi_core/resetn sys_rstgen/peripheral_aresetn
 
 ad_connect  pmod_spi_core/adc_data pmod_spi_dma/fifo_wr_din
 ad_connect  pmod_spi_core/adc_valid pmod_spi_dma/fifo_wr_en
