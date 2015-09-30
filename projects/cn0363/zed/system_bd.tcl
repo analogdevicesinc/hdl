@@ -28,17 +28,17 @@ set_property LEFT 34 [get_bd_ports GPIO_T]
 
 set axi_dma  [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_dma]
 set_property -dict [list \
-		CONFIG.C_FIFO_SIZE 2 \
-		CONFIG.C_DMA_TYPE_SRC 2 \
-		CONFIG.C_DMA_TYPE_DEST 0 \
-		CONFIG.C_CYCLIC 0 \
-		CONFIG.C_SYNC_TRANSFER_START 1 \
-		CONFIG.C_AXI_SLICE_SRC 0 \
-		CONFIG.C_AXI_SLICE_DEST 0 \
-		CONFIG.C_DMA_2D_TRANSFER 0 \
-		CONFIG.C_DMA_DATA_WIDTH_SRC 32 \
-		CONFIG.C_DMA_DATA_WIDTH_DEST 64 \
-		CONFIG.C_DMA_AXI_PROTOCOL_DEST 1 \
+		CONFIG.FIFO_SIZE 2 \
+		CONFIG.DMA_TYPE_SRC 2 \
+		CONFIG.DMA_TYPE_DEST 0 \
+		CONFIG.CYCLIC 0 \
+		CONFIG.SYNC_TRANSFER_START 1 \
+		CONFIG.AXI_SLICE_SRC 0 \
+		CONFIG.AXI_SLICE_DEST 0 \
+		CONFIG.DMA_2D_TRANSFER 0 \
+		CONFIG.DMA_DATA_WIDTH_SRC 32 \
+		CONFIG.DMA_DATA_WIDTH_DEST 64 \
+		CONFIG.DMA_AXI_PROTOCOL_DEST 1 \
 	] $axi_dma
 
 # Create SPI engine controller with offload
@@ -130,7 +130,7 @@ current_bd_instance /processing
 	create_bd_pin -dir O overflow
 	create_bd_pin -dir I -from 13 -to 0 channel_enable
 	create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_SAMPLE
-	create_bd_intf_pin -mode Master -vlnv analog.com:interface:fifo_wr_rtl:1.0 DMA_WR 
+	create_bd_intf_pin -mode Master -vlnv analog.com:interface:fifo_wr_rtl:1.0 DMA_WR
 
 	create_bd_cell -type ip -vlnv analog.com:user:cn0363_phase_data_sync:1.0 phase_data_sync
 	create_bd_cell -type ip -vlnv analog.com:user:cn0363_dma_sequencer:1.0 sequencer
@@ -256,7 +256,7 @@ current_bd_instance /processing
 	ad_connect overflow_or/Res overflow
 
 	ad_connect phase_data_sync/sample_has_stat GND
-	
+
 current_bd_instance /
 
 ad_connect /spi/M_AXIS_SAMPLE /processing/S_AXIS_SAMPLE
@@ -290,8 +290,8 @@ ad_cpu_interconnect 0x43c00000 /axi_adc
 ad_cpu_interconnect 0x44a00000 /spi/axi
 ad_cpu_interconnect 0x44a30000 /axi_dma
 
-ad_cpu_interrupt "ps-13" "mb-13" /axi_dma/irq 
-ad_cpu_interrupt "ps-12" "mb-12" /spi/irq 
+ad_cpu_interrupt "ps-13" "mb-13" /axi_dma/irq
+ad_cpu_interrupt "ps-12" "mb-12" /spi/irq
 
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_dma/m_dest_axi
