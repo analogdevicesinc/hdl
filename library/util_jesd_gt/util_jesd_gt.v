@@ -41,6 +41,8 @@ module util_jesd_gt #(
 
   parameter   integer QPLL0_ENABLE = 1,
   parameter   integer QPLL1_ENABLE = 1,
+  parameter   integer QPLL_TX_OR_RX_N = 1,
+  parameter   integer CPLL_TX_OR_RX_N = 0,
   parameter   integer NUM_OF_LANES = 8,
   parameter   integer RX_ENABLE = 1,
   parameter   integer RX_NUM_OF_LANES = 8,
@@ -59,28 +61,20 @@ module util_jesd_gt #(
   output                                      qpll1_rst,
   output                                      qpll1_ref_clk_in,
 
-  input                                       pll_rst_0,
   output                                      cpll_rst_m_0,
   output                                      cpll_ref_clk_in_0,
-  input                                       pll_rst_1,
   output                                      cpll_rst_m_1,
   output                                      cpll_ref_clk_in_1,
-  input                                       pll_rst_2,
   output                                      cpll_rst_m_2,
   output                                      cpll_ref_clk_in_2,
-  input                                       pll_rst_3,
   output                                      cpll_rst_m_3,
   output                                      cpll_ref_clk_in_3,
-  input                                       pll_rst_4,
   output                                      cpll_rst_m_4,
   output                                      cpll_ref_clk_in_4,
-  input                                       pll_rst_5,
   output                                      cpll_rst_m_5,
   output                                      cpll_ref_clk_in_5,
-  input                                       pll_rst_6,
   output                                      cpll_rst_m_6,
   output                                      cpll_ref_clk_in_6,
-  input                                       pll_rst_7,
   output                                      cpll_rst_m_7,
   output                                      cpll_ref_clk_in_7,
 
@@ -108,6 +102,7 @@ module util_jesd_gt #(
   output                                      rx_0_n,
   input                                       rx_rst_0,
   output                                      rx_rst_m_0,
+  input                                       rx_pll_rst_0,
   input                                       rx_gt_rst_0,
   output                                      rx_gt_rst_m_0,
   input                                       rx_pll_locked_0,
@@ -133,6 +128,7 @@ module util_jesd_gt #(
   output                                      rx_1_n,
   input                                       rx_rst_1,
   output                                      rx_rst_m_1,
+  input                                       rx_pll_rst_1,
   input                                       rx_gt_rst_1,
   output                                      rx_gt_rst_m_1,
   input                                       rx_pll_locked_1,
@@ -158,6 +154,7 @@ module util_jesd_gt #(
   output                                      rx_2_n,
   input                                       rx_rst_2,
   output                                      rx_rst_m_2,
+  input                                       rx_pll_rst_2,
   input                                       rx_gt_rst_2,
   output                                      rx_gt_rst_m_2,
   input                                       rx_pll_locked_2,
@@ -183,6 +180,7 @@ module util_jesd_gt #(
   output                                      rx_3_n,
   input                                       rx_rst_3,
   output                                      rx_rst_m_3,
+  input                                       rx_pll_rst_3,
   input                                       rx_gt_rst_3,
   output                                      rx_gt_rst_m_3,
   input                                       rx_pll_locked_3,
@@ -208,6 +206,7 @@ module util_jesd_gt #(
   output                                      rx_4_n,
   input                                       rx_rst_4,
   output                                      rx_rst_m_4,
+  input                                       rx_pll_rst_4,
   input                                       rx_gt_rst_4,
   output                                      rx_gt_rst_m_4,
   input                                       rx_pll_locked_4,
@@ -233,6 +232,7 @@ module util_jesd_gt #(
   output                                      rx_5_n,
   input                                       rx_rst_5,
   output                                      rx_rst_m_5,
+  input                                       rx_pll_rst_5,
   input                                       rx_gt_rst_5,
   output                                      rx_gt_rst_m_5,
   input                                       rx_pll_locked_5,
@@ -258,6 +258,7 @@ module util_jesd_gt #(
   output                                      rx_6_n,
   input                                       rx_rst_6,
   output                                      rx_rst_m_6,
+  input                                       rx_pll_rst_6,
   input                                       rx_gt_rst_6,
   output                                      rx_gt_rst_m_6,
   input                                       rx_pll_locked_6,
@@ -283,6 +284,7 @@ module util_jesd_gt #(
   output                                      rx_7_n,
   input                                       rx_rst_7,
   output                                      rx_rst_m_7,
+  input                                       rx_pll_rst_7,
   input                                       rx_gt_rst_7,
   output                                      rx_gt_rst_m_7,
   input                                       rx_pll_locked_7,
@@ -326,6 +328,7 @@ module util_jesd_gt #(
   input                                       tx_0_n,
   input                                       tx_rst_0,
   output                                      tx_rst_m_0,
+  input                                       tx_pll_rst_0,
   input                                       tx_gt_rst_0,
   output                                      tx_gt_rst_m_0,
   input                                       tx_pll_locked_0,
@@ -349,6 +352,7 @@ module util_jesd_gt #(
   input                                       tx_1_n,
   input                                       tx_rst_1,
   output                                      tx_rst_m_1,
+  input                                       tx_pll_rst_1,
   input                                       tx_gt_rst_1,
   output                                      tx_gt_rst_m_1,
   input                                       tx_pll_locked_1,
@@ -372,6 +376,7 @@ module util_jesd_gt #(
   input                                       tx_2_n,
   input                                       tx_rst_2,
   output                                      tx_rst_m_2,
+  input                                       tx_pll_rst_2,
   input                                       tx_gt_rst_2,
   output                                      tx_gt_rst_m_2,
   input                                       tx_pll_locked_2,
@@ -395,6 +400,7 @@ module util_jesd_gt #(
   input                                       tx_3_n,
   input                                       tx_rst_3,
   output                                      tx_rst_m_3,
+  input                                       tx_pll_rst_3,
   input                                       tx_gt_rst_3,
   output                                      tx_gt_rst_m_3,
   input                                       tx_pll_locked_3,
@@ -418,6 +424,7 @@ module util_jesd_gt #(
   input                                       tx_4_n,
   input                                       tx_rst_4,
   output                                      tx_rst_m_4,
+  input                                       tx_pll_rst_4,
   input                                       tx_gt_rst_4,
   output                                      tx_gt_rst_m_4,
   input                                       tx_pll_locked_4,
@@ -441,6 +448,7 @@ module util_jesd_gt #(
   input                                       tx_5_n,
   input                                       tx_rst_5,
   output                                      tx_rst_m_5,
+  input                                       tx_pll_rst_5,
   input                                       tx_gt_rst_5,
   output                                      tx_gt_rst_m_5,
   input                                       tx_pll_locked_5,
@@ -464,6 +472,7 @@ module util_jesd_gt #(
   input                                       tx_6_n,
   input                                       tx_rst_6,
   output                                      tx_rst_m_6,
+  input                                       tx_pll_rst_6,
   input                                       tx_gt_rst_6,
   output                                      tx_gt_rst_m_6,
   input                                       tx_pll_locked_6,
@@ -487,6 +496,7 @@ module util_jesd_gt #(
   input                                       tx_7_n,
   input                                       tx_rst_7,
   output                                      tx_rst_m_7,
+  input                                       tx_pll_rst_7,
   input                                       tx_gt_rst_7,
   output                                      tx_gt_rst_m_7,
   input                                       tx_pll_locked_7,
@@ -527,25 +537,25 @@ module util_jesd_gt #(
 
   // pll clocks & resets
 
-  assign qpll0_rst = pll_rst_0;
+  assign qpll0_rst = (QPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign qpll0_ref_clk_in = qpll_ref_clk;
-  assign qpll1_rst = pll_rst_0;
+  assign qpll1_rst = (QPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign qpll1_ref_clk_in = qpll_ref_clk;
-  assign cpll_rst_m_0 = pll_rst_0;
+  assign cpll_rst_m_0 = (CPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign cpll_ref_clk_in_0 = cpll_ref_clk;
-  assign cpll_rst_m_1 = pll_rst_0;
+  assign cpll_rst_m_1 = (CPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign cpll_ref_clk_in_1 = cpll_ref_clk;
-  assign cpll_rst_m_2 = pll_rst_0;
+  assign cpll_rst_m_2 = (CPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign cpll_ref_clk_in_2 = cpll_ref_clk;
-  assign cpll_rst_m_3 = pll_rst_0;
+  assign cpll_rst_m_3 = (CPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign cpll_ref_clk_in_3 = cpll_ref_clk;
-  assign cpll_rst_m_4 = pll_rst_0;
+  assign cpll_rst_m_4 = (CPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign cpll_ref_clk_in_4 = cpll_ref_clk;
-  assign cpll_rst_m_5 = pll_rst_0;
+  assign cpll_rst_m_5 = (CPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign cpll_ref_clk_in_5 = cpll_ref_clk;
-  assign cpll_rst_m_6 = pll_rst_0;
+  assign cpll_rst_m_6 = (CPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign cpll_ref_clk_in_6 = cpll_ref_clk;
-  assign cpll_rst_m_7 = pll_rst_0;
+  assign cpll_rst_m_7 = (CPLL_TX_OR_RX_N == 1) ? tx_pll_rst_0 : rx_pll_rst_0;
   assign cpll_ref_clk_in_7 = cpll_ref_clk;
 
   // channel interface (rx)
