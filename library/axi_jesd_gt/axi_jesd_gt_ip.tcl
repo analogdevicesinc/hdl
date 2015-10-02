@@ -46,7 +46,6 @@ adi_if_infer_bus ADI:user:if_gt_qpll slave gt_qpll_1 [list \
 for {set n 0} {$n < 8} {incr n} {
 
   adi_if_infer_bus ADI:user:if_gt_pll slave gt_pll_${n} [list \
-    "pll_rst             pll_rst_${n}           "\
     "cpll_rst_m          cpll_rst_m_${n}        "\
     "cpll_ref_clk_in     cpll_ref_clk_in_${n}   "]
 
@@ -55,6 +54,7 @@ for {set n 0} {$n < 8} {incr n} {
     "rx_n                rx_${n}_n              "\
     "rx_rst              rx_rst_${n}            "\
     "rx_rst_m            rx_rst_m_${n}          "\
+    "rx_pll_rst          rx_pll_rst_${n}        "\
     "rx_gt_rst           rx_gt_rst_${n}         "\
     "rx_gt_rst_m         rx_gt_rst_m_${n}       "\
     "rx_pll_locked       rx_pll_locked_${n}     "\
@@ -94,6 +94,7 @@ for {set n 0} {$n < 8} {incr n} {
     "tx_n                tx_${n}_n              "\
     "tx_rst              tx_rst_${n}            "\
     "tx_rst_m            tx_rst_m_${n}          "\
+    "tx_pll_rst          tx_pll_rst_${n}        "\
     "tx_gt_rst           tx_gt_rst_${n}         "\
     "tx_gt_rst_m         tx_gt_rst_m_${n}       "\
     "tx_pll_locked       tx_pll_locked_${n}     "\
