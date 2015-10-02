@@ -46,7 +46,6 @@ module ad_gt_channel_1 (
   qpll_ref_clk,
   qpll_locked,
   qpll_clk,
-  pll_rst,
 
   // channel interface (rx)
 
@@ -62,6 +61,7 @@ module ad_gt_channel_1 (
   rx_sysref,
   rx_sync,
 
+  rx_pll_rst,
   rx_gt_rst,
   rx_gt_rst_m,
   rx_gt_charisk,
@@ -103,6 +103,7 @@ module ad_gt_channel_1 (
   tx_sysref,
   tx_sync,
 
+  tx_pll_rst,
   tx_gt_rst,
   tx_gt_rst_m,
   tx_gt_charisk,
@@ -164,7 +165,6 @@ module ad_gt_channel_1 (
   input           qpll_ref_clk;
   input           qpll_locked;
   input           qpll_clk;
-  output          pll_rst;
 
   // channel interface (rx)
 
@@ -180,6 +180,7 @@ module ad_gt_channel_1 (
   input           rx_sysref;
   output          rx_sync;
 
+  output          rx_pll_rst;
   output          rx_gt_rst;
   input           rx_gt_rst_m;
   output  [ 3:0]  rx_gt_charisk;
@@ -221,6 +222,7 @@ module ad_gt_channel_1 (
   input           tx_sysref;
   input           tx_sync;
 
+  output          tx_pll_rst;
   output          tx_gt_rst;
   input           tx_gt_rst_m;
   input   [ 3:0]  tx_gt_charisk;
@@ -422,9 +424,9 @@ module ad_gt_channel_1 (
   up_gt_channel #(
     .ID (ID))
   i_up (
-    .pll_rst (pll_rst),
     .lpm_dfe_n (lpm_dfe_n_s),
     .cpll_pd (cpll_pd_s),
+    .rx_pll_rst (rx_pll_rst),
     .rx_sys_clk_sel (rx_sys_clk_sel_s),
     .rx_out_clk_sel (rx_out_clk_sel_s),
     .rx_clk (rx_clk),
@@ -442,6 +444,7 @@ module ad_gt_channel_1 (
     .rx_pll_locked_m (rx_pll_locked_m),
     .rx_user_ready (rx_user_ready),
     .rx_ip_rst_done (rx_ip_rst_done),
+    .tx_pll_rst (tx_pll_rst),
     .tx_sys_clk_sel (tx_sys_clk_sel_s),
     .tx_out_clk_sel (tx_out_clk_sel_s),
     .tx_clk (tx_clk),

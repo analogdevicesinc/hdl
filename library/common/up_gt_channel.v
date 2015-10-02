@@ -41,12 +41,12 @@ module up_gt_channel (
 
   // gt interface
 
-  pll_rst,
   lpm_dfe_n,
   cpll_pd,
 
   // receive interface
 
+  rx_pll_rst,
   rx_sys_clk_sel,
   rx_out_clk_sel,
   rx_clk,
@@ -67,6 +67,7 @@ module up_gt_channel (
 
   // transmit interface
 
+  tx_pll_rst,
   tx_sys_clk_sel,
   tx_out_clk_sel,
   tx_clk,
@@ -148,12 +149,12 @@ module up_gt_channel (
 
   // gt interface
 
-  output          pll_rst;
   output          lpm_dfe_n;
   output          cpll_pd;
 
   // receive interface
 
+  output          rx_pll_rst;
   output  [ 1:0]  rx_sys_clk_sel;
   output  [ 2:0]  rx_out_clk_sel;
   input           rx_clk;
@@ -174,6 +175,7 @@ module up_gt_channel (
 
   // transmit interface
 
+  output          tx_pll_rst;
   output  [ 1:0]  tx_sys_clk_sel;
   output  [ 2:0]  tx_out_clk_sel;
   input           tx_clk;
@@ -250,16 +252,16 @@ module up_gt_channel (
 
   // internal registers
 
-  reg             up_pll_preset = 'd1;
+  reg             up_rx_pll_preset = 'd1;
   reg             up_rx_gt_preset = 'd1;
   reg             up_rx_preset = 'd1;
+  reg             up_tx_pll_preset = 'd1;
   reg             up_tx_gt_preset = 'd1;
   reg             up_tx_preset = 'd1;
   reg             up_wack = 'd0;
   reg             up_lpm_dfe_n = 'd0;
   reg             up_cpll_pd = 'd0;
   reg             up_drp_resetn = 'd0;
-  reg             up_pll_resetn = 'd0;
   reg             up_rx_gt_resetn = 'd0;
   reg             up_rx_resetn = 'd0;
   reg     [ 1:0]  up_rx_sys_clk_sel = 'd0;
@@ -268,6 +270,7 @@ module up_gt_channel (
   reg             up_rx_sysref = 'd0;
   reg             up_rx_sync = 'd0;
   reg             up_rx_user_ready = 'd0;
+  reg             up_rx_pll_resetn = 'd0;
   reg             up_tx_gt_resetn = 'd0;
   reg             up_tx_resetn = 'd0;
   reg     [ 1:0]  up_tx_sys_clk_sel = 'd0;
@@ -276,6 +279,7 @@ module up_gt_channel (
   reg             up_tx_sysref = 'd0;
   reg             up_tx_sync = 'd0;
   reg             up_tx_user_ready = 'd0;
+  reg             up_tx_pll_resetn = 'd0;
   reg             up_drp_sel_int = 'd0;
   reg             up_drp_wr_int = 'd0;
   reg             up_drp_status = 'd0;
@@ -385,20 +389,22 @@ module up_gt_channel (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_pll_preset <= 1'b1;
+      up_rx_pll_preset <= 1'b1;
       up_rx_gt_preset <= 1'b1;
-      up_tx_gt_preset <= 1'b1;
       up_rx_preset <= 1'b1;
+      up_tx_pll_preset <= 1'b1;
+      up_tx_gt_preset <= 1'b1;
       up_tx_preset <= 1'b1;
     end else begin
-      up_pll_preset <= ~up_pll_resetn;
-      up_rx_gt_preset <= ~(up_pll_resetn &
+      up_rx_pll_preset <= ~up_rx_pll_resetn;
+      up_rx_gt_preset <= ~(up_rx_pll_resetn &
         up_rx_pll_locked_m & up_rx_gt_resetn);
-      up_rx_preset <= ~(up_pll_resetn & up_rx_pll_locked_m &
+      up_rx_preset <= ~(up_rx_pll_resetn & up_rx_pll_locked_m &
         up_rx_rst_done_m & up_rx_gt_resetn & up_rx_resetn);
-      up_tx_gt_preset <= ~(up_pll_resetn &
+      up_tx_pll_preset <= ~up_tx_pll_resetn;
+      up_tx_gt_preset <= ~(up_tx_pll_resetn &
         up_tx_pll_locked_m & up_tx_gt_resetn);
-      up_tx_preset <= ~(up_pll_resetn & up_tx_pll_locked_m &
+      up_tx_preset <= ~(up_tx_pll_resetn & up_tx_pll_locked_m &
         up_tx_rst_done_m & up_tx_gt_resetn & up_tx_resetn);
     end
   end
@@ -412,7 +418,6 @@ module up_gt_channel (
       up_lpm_dfe_n <= 'd0;
       up_cpll_pd <= 'd1;
       up_drp_resetn <= 'd0;
-      up_pll_resetn <= 'd0;
       up_rx_gt_resetn <= 'd0;
       up_rx_resetn <= 'd0;
       up_rx_sys_clk_sel <= 2'b11;
@@ -421,6 +426,7 @@ module up_gt_channel (
       up_rx_sysref <= 'd0;
       up_rx_sync <= 'd0;
       up_rx_user_ready <= 'd0;
+      up_rx_pll_resetn <= 'd0;
       up_tx_gt_resetn <= 'd0;
       up_tx_resetn <= 'd0;
       up_tx_sys_clk_sel <= 2'b11;
@@ -429,6 +435,7 @@ module up_gt_channel (
       up_tx_sysref <= 'd0;
       up_tx_sync <= 'd0;
       up_tx_user_ready <= 'd0;
+      up_tx_pll_resetn <= 'd0;
       up_drp_sel_int <= 'd0;
       up_drp_wr_int <= 'd0;
       up_drp_status <= 'd0;
@@ -472,7 +479,6 @@ module up_gt_channel (
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h05)) begin
         up_drp_resetn <= up_wdata[1];
-        up_pll_resetn <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h08)) begin
         up_rx_gt_resetn <= up_wdata[0];
@@ -494,6 +500,9 @@ module up_gt_channel (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0e)) begin
         up_rx_user_ready <= up_wdata[0];
       end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0f)) begin
+        up_rx_pll_resetn <= up_wdata[0];
+      end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h18)) begin
         up_tx_gt_resetn <= up_wdata[0];
       end
@@ -513,6 +522,9 @@ module up_gt_channel (
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1e)) begin
         up_tx_user_ready <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1f)) begin
+        up_tx_pll_resetn <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h24)) begin
         up_drp_sel_int <= 1'b1;
@@ -614,7 +626,7 @@ module up_gt_channel (
           8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
           8'h04: up_rdata <= {30'd0, up_lpm_dfe_n, up_cpll_pd};
-          8'h05: up_rdata <= {30'd0, up_drp_resetn, up_pll_resetn};
+          8'h05: up_rdata <= {30'd0, up_drp_resetn, 1'd0};
           8'h08: up_rdata <= {31'd0, up_rx_gt_resetn};
           8'h09: up_rdata <= {31'd0, up_rx_resetn};
           8'h0a: up_rdata <= {24'd0, 2'd0, up_rx_sys_clk_sel, 1'd0, up_rx_out_clk_sel};
@@ -624,6 +636,7 @@ module up_gt_channel (
                               6'h3f, up_rx_rst_done_m, up_rx_rst_done,
                               6'h3f, up_rx_pll_locked_m, up_rx_pll_locked};
           8'h0e: up_rdata <= {31'd0, up_rx_user_ready};
+          8'h0f: up_rdata <= {31'd0, up_rx_pll_resetn};
           8'h18: up_rdata <= {31'd0, up_tx_gt_resetn};
           8'h19: up_rdata <= {31'd0, up_tx_resetn};
           8'h1a: up_rdata <= {24'd0, 2'd0, up_tx_sys_clk_sel, 1'd0, up_tx_out_clk_sel};
@@ -633,6 +646,7 @@ module up_gt_channel (
                               6'h3f, up_tx_rst_done_m, up_tx_rst_done,
                               6'h3f, up_tx_pll_locked_m, up_tx_pll_locked};
           8'h1e: up_rdata <= {31'd0, up_tx_user_ready};
+          8'h1f: up_rdata <= {31'd0, up_tx_pll_resetn};
           8'h24: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr_int, up_drp_wdata_int};
           8'h25: up_rdata <= {15'd0, up_drp_status, up_drp_rdata_int};
           8'h28: up_rdata <= {29'd0, up_es_init, up_es_stop_hold, up_es_start_hold};
@@ -660,13 +674,14 @@ module up_gt_channel (
 
   // resets
 
-  ad_rst i_pll_rst_reg    (.preset(up_pll_preset),   .clk(up_clk), .rst(pll_rst));
-  ad_rst i_rx_gt_rst_reg  (.preset(up_rx_gt_preset), .clk(up_clk), .rst(rx_gt_rst));
-  ad_rst i_rx_ip_rst_reg  (.preset(up_rx_preset),    .clk(up_clk), .rst(rx_ip_rst));
-  ad_rst i_rx_rst_reg     (.preset(up_rx_preset),    .clk(rx_clk), .rst(rx_rst));
-  ad_rst i_tx_gt_rst_reg  (.preset(up_tx_gt_preset), .clk(up_clk), .rst(tx_gt_rst));
-  ad_rst i_tx_ip_rst_reg  (.preset(up_tx_preset),    .clk(up_clk), .rst(tx_ip_rst));
-  ad_rst i_tx_rst_reg     (.preset(up_tx_preset),    .clk(tx_clk), .rst(tx_rst));
+  ad_rst i_rx_pll_rst_reg (.preset(up_rx_pll_preset), .clk(up_clk), .rst(rx_pll_rst));
+  ad_rst i_rx_gt_rst_reg  (.preset(up_rx_gt_preset),  .clk(up_clk), .rst(rx_gt_rst));
+  ad_rst i_rx_ip_rst_reg  (.preset(up_rx_preset),     .clk(up_clk), .rst(rx_ip_rst));
+  ad_rst i_rx_rst_reg     (.preset(up_rx_preset),     .clk(rx_clk), .rst(rx_rst));
+  ad_rst i_tx_pll_rst_reg (.preset(up_tx_pll_preset), .clk(up_clk), .rst(tx_pll_rst));
+  ad_rst i_tx_gt_rst_reg  (.preset(up_tx_gt_preset),  .clk(up_clk), .rst(tx_gt_rst));
+  ad_rst i_tx_ip_rst_reg  (.preset(up_tx_preset),     .clk(up_clk), .rst(tx_ip_rst));
+  ad_rst i_tx_rst_reg     (.preset(up_tx_preset),     .clk(tx_clk), .rst(tx_rst));
 
   // reset done & pll locked
 
