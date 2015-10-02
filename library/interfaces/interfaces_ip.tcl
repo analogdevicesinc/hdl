@@ -8,7 +8,6 @@ adi_if_ports output    1  qpll_rst            reset
 adi_if_ports output    1  qpll_ref_clk        clock
 
 adi_if_define if_gt_pll
-adi_if_ports input     1  pll_rst             reset
 adi_if_ports output    1  cpll_rst_m          reset
 adi_if_ports output    1  cpll_ref_clk_in     clock
 
@@ -17,6 +16,7 @@ adi_if_ports  output   1  rx_p
 adi_if_ports  output   1  rx_n            
 adi_if_ports  input    1  rx_rst              reset
 adi_if_ports  output   1  rx_rst_m            reset
+adi_if_ports  input    1  rx_pll_rst          reset
 adi_if_ports  input    1  rx_gt_rst           reset
 adi_if_ports  output   1  rx_gt_rst_m         reset
 adi_if_ports  input    1  rx_pll_locked     
@@ -43,6 +43,7 @@ adi_if_ports  input    1  tx_p
 adi_if_ports  input    1  tx_n
 adi_if_ports  input    1  tx_rst              reset
 adi_if_ports  output   1  tx_rst_m            reset
+adi_if_ports  input    1  tx_pll_rst          reset
 adi_if_ports  input    1  tx_gt_rst           reset
 adi_if_ports  output   1  tx_gt_rst_m         reset
 adi_if_ports  input    1  tx_pll_locked  
