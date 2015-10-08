@@ -110,7 +110,7 @@ module util_dacfifo (
   always @(posedge dma_clk) begin
     if(dma_rst == 1'b1) begin
       dma_waddr <= 'b0;
-      dma_lastaddr <= {ADDRESS_WIDTH{1'b1}};
+      dma_lastaddr <= 'b0;
     end else begin
       if (dma_valid && dma_xfer_req) begin
         dma_waddr <= dma_waddr + 1;
@@ -135,7 +135,11 @@ module util_dacfifo (
   // generate dac read address
   always @(posedge dac_clk) begin
     if(dac_valid == 1'b1) begin
-      dac_raddr <= (dac_raddr < dma_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
+      if (dma_lastaddr_2d == 'h0) begin
+        dac_raddr <= dac_raddr + 1;
+      end else begin
+        dac_raddr <= (dac_raddr < dma_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
+      end
     end
     dac_data <= dac_data_s;
   end
