@@ -131,6 +131,7 @@ ad_connect  axi_ad9144_core/dac_ddata_1 axi_ad9144_upack/dac_data_1
 ad_connect  sys_cpu_resetn axi_ad9144_dma/m_src_axi_aresetn
 
 ad_connect  sys_cpu_clk axi_ad9144_dma/m_axis_aclk
+ad_connect  sys_cpu_reset axi_ad9144_fifo/dma_rst
 ad_connect  axi_ad9144_dma/m_axis_xfer_req axi_ad9144_fifo/dma_xfer_req
 ad_connect  axi_ad9144_dma/m_axis_aclk axi_ad9144_fifo/dma_clk
 ad_connect  axi_ad9144_dma/m_axis_ready axi_ad9144_fifo/dma_ready
