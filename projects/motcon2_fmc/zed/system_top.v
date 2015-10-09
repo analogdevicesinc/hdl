@@ -419,6 +419,8 @@ module system_top (
     .ps_intr_02 (1'b0),
     .ps_intr_03 (1'b0),
     .ps_intr_04 (1'b0),
+    .ps_intr_05 (1'b0),
+    .ps_intr_06 (1'b0),
     .iic_ee2_scl_io(iic_ee2_scl_io),
     .iic_ee2_sda_io(iic_ee2_sda_io),
     .spi0_clk_i (1'b0),
