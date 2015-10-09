@@ -1,6 +1,6 @@
 
-variable p_board 
-variable p_device 
+variable p_board
+variable p_device
 variable sys_zynq
 variable p_prcfg_init
 variable p_prcfg_list
@@ -226,6 +226,7 @@ proc adi_project_impl {project_name prcfg_name {xdc_files ""}} {
     open_checkpoint $p_prefix.default_impl_bb.dcp -part $p_device
     lock_design -level routing
     read_checkpoint -cell i_prcfg $p_prefix.${prcfg_name}_synth.dcp
+    read_xdc $xdc_files
     opt_design > $p_prefix.${prcfg_name}_opt.rds
     place_design > $p_prefix.${prcfg_name}_place.rds
     route_design > $p_prefix.${prcfg_name}_route.rds
