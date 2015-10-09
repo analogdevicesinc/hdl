@@ -16,15 +16,10 @@ create_bd_port -dir I -from 7 -to 0 rx_data_p
 create_bd_port -dir I -from 7 -to 0 rx_data_n
 
 create_bd_port -dir O -from 255 -to 0 gt_rx_data
-create_bd_port -dir O -from 3 -to 0 gt_rx_sof
 create_bd_port -dir I -from 63 -to 0 gt_rx_data_0
-create_bd_port -dir I gt_rx_sof_0
 create_bd_port -dir I -from 63 -to 0 gt_rx_data_1
-create_bd_port -dir I gt_rx_sof_1
 create_bd_port -dir I -from 63 -to 0 gt_rx_data_2
-create_bd_port -dir I gt_rx_sof_2
 create_bd_port -dir I -from 63 -to 0 gt_rx_data_3
-create_bd_port -dir I gt_rx_sof_3
 create_bd_port -dir O -from 127 -to 0 adc_data_0
 create_bd_port -dir O -from 127 -to 0 adc_data_1
 create_bd_port -dir O -from 127 -to 0 adc_data_2
@@ -63,22 +58,82 @@ set axi_ad9671_core_3 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:
 set_property -dict [list CONFIG.QUAD_OR_DUAL_N {0}] $axi_ad9671_core_3
 set_property -dict [list CONFIG.ID {3}] $axi_ad9671_core_3
 
-set axi_usdrx1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.0 axi_usdrx1_jesd]
+set axi_usdrx1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.1 axi_usdrx1_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_usdrx1_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_usdrx1_jesd
 
 set axi_usdrx1_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_usdrx1_gt]
-set_property -dict [list CONFIG.PCORE_NUM_OF_RX_LANES {8}] [get_bd_cells axi_usdrx1_gt]
-set_property -dict [list CONFIG.PCORE_CPLL_FBDIV {4}] $axi_usdrx1_gt
-set_property -dict [list CONFIG.PCORE_RX_OUT_DIV {1}] $axi_usdrx1_gt
-set_property -dict [list CONFIG.PCORE_TX_OUT_DIV {1}] $axi_usdrx1_gt
-set_property -dict [list CONFIG.PCORE_RX_CLK25_DIV {4}] $axi_usdrx1_gt
-set_property -dict [list CONFIG.PCORE_TX_CLK25_DIV {4}] $axi_usdrx1_gt
-set_property -dict [list CONFIG.PCORE_PMA_RSV {0x00018480}] $axi_usdrx1_gt
-set_property -dict [list CONFIG.PCORE_RX_CDR_CFG {0x03000023ff20400020}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.QPLL0_ENABLE {0}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.QPLL1_ENABLE {0}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_0 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_0 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_0 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_0 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_0 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.PMA_RSV_0 {0x00018480}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_0 {0x03000023ff20400020}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_1 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_1 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_1 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_1 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_1 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.PMA_RSV_1 {0x00018480}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_1 {0x03000023ff20400020}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_2 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_2 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_2 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_2 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_2 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.PMA_RSV_2 {0x00018480}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_2 {0x03000023ff20400020}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_3 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_3 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_3 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_3 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_3 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.PMA_RSV_3 {0x00018480}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_3 {0x03000023ff20400020}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_4 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_4 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_4 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_4 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_4 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.PMA_RSV_4 {0x00018480}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_4 {0x03000023ff20400020}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_5 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_5 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_5 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_5 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_5 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.PMA_RSV_5 {0x00018480}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_5 {0x03000023ff20400020}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_6 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_6 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_6 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_6 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_6 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.PMA_RSV_6 {0x00018480}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_6 {0x03000023ff20400020}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_7 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_7 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_7 {1}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_7 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_7 {4}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.PMA_RSV_7 {0x00018480}] $axi_usdrx1_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_7 {0x03000023ff20400020}] $axi_usdrx1_gt
+
+set util_usdrx1_gt [create_bd_cell -type ip -vlnv analog.com:user:util_jesd_gt:1.0 util_usdrx1_gt]
+set_property -dict [list CONFIG.QPLL0_ENABLE {0}] $util_usdrx1_gt
+set_property -dict [list CONFIG.QPLL1_ENABLE {0}] $util_usdrx1_gt
+set_property -dict [list CONFIG.NUM_OF_LANES {8}] $util_usdrx1_gt
+set_property -dict [list CONFIG.RX_ENABLE {1}] $util_usdrx1_gt
+set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $util_usdrx1_gt
+set_property -dict [list CONFIG.TX_ENABLE {0}] $util_usdrx1_gt
 
 set axi_usdrx1_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_usdrx1_dma]
-
 set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_usdrx1_dma
 set_property -dict [list CONFIG.ID {0}] $axi_usdrx1_dma
@@ -110,96 +165,75 @@ ad_connect  sys_cpu_clk axi_usdrx1_spi/ext_spi_clk
 
 # connections (gt)
 
-ad_connect  rx_ref_clk  axi_usdrx1_gt/ref_clk_c
-ad_connect  rx_data_p   axi_usdrx1_gt/rx_data_p
-ad_connect  rx_data_n   axi_usdrx1_gt/rx_data_n
-ad_connect  rx_sync     axi_usdrx1_gt/rx_sync
-ad_connect  rx_sysref   axi_usdrx1_gt/rx_sysref
+ad_connect util_usdrx1_gt/qpll_ref_clk rx_ref_clk
+ad_connect util_usdrx1_gt/cpll_ref_clk rx_ref_clk
+
+ad_connect  axi_usdrx1_gt/gt_pll_0 util_usdrx1_gt/gt_pll_0
+ad_connect  axi_usdrx1_gt/gt_pll_1 util_usdrx1_gt/gt_pll_1
+ad_connect  axi_usdrx1_gt/gt_pll_2 util_usdrx1_gt/gt_pll_2
+ad_connect  axi_usdrx1_gt/gt_pll_3 util_usdrx1_gt/gt_pll_3
+ad_connect  axi_usdrx1_gt/gt_pll_4 util_usdrx1_gt/gt_pll_4
+ad_connect  axi_usdrx1_gt/gt_pll_5 util_usdrx1_gt/gt_pll_5
+ad_connect  axi_usdrx1_gt/gt_pll_6 util_usdrx1_gt/gt_pll_6
+ad_connect  axi_usdrx1_gt/gt_pll_7 util_usdrx1_gt/gt_pll_7
+
+ad_connect  axi_usdrx1_gt/gt_rx_0 util_usdrx1_gt/gt_rx_0
+ad_connect  axi_usdrx1_gt/gt_rx_1 util_usdrx1_gt/gt_rx_1
+ad_connect  axi_usdrx1_gt/gt_rx_2 util_usdrx1_gt/gt_rx_2
+ad_connect  axi_usdrx1_gt/gt_rx_3 util_usdrx1_gt/gt_rx_3
+ad_connect  axi_usdrx1_gt/gt_rx_4 util_usdrx1_gt/gt_rx_4
+ad_connect  axi_usdrx1_gt/gt_rx_5 util_usdrx1_gt/gt_rx_5
+ad_connect  axi_usdrx1_gt/gt_rx_6 util_usdrx1_gt/gt_rx_6
+ad_connect  axi_usdrx1_gt/gt_rx_7 util_usdrx1_gt/gt_rx_7
+
+ad_connect  axi_usdrx1_gt/gt_rx_ip_0 axi_usdrx1_jesd/gt0_rx
+ad_connect  axi_usdrx1_gt/gt_rx_ip_1 axi_usdrx1_jesd/gt1_rx
+ad_connect  axi_usdrx1_gt/gt_rx_ip_2 axi_usdrx1_jesd/gt2_rx
+ad_connect  axi_usdrx1_gt/gt_rx_ip_3 axi_usdrx1_jesd/gt3_rx
+ad_connect  axi_usdrx1_gt/gt_rx_ip_4 axi_usdrx1_jesd/gt4_rx
+ad_connect  axi_usdrx1_gt/gt_rx_ip_5 axi_usdrx1_jesd/gt5_rx
+ad_connect  axi_usdrx1_gt/gt_rx_ip_6 axi_usdrx1_jesd/gt6_rx
+ad_connect  axi_usdrx1_gt/gt_rx_ip_7 axi_usdrx1_jesd/gt7_rx
+
+ad_connect  axi_usdrx1_gt/rx_gt_comma_align_enb_0 axi_usdrx1_jesd/rxencommaalign_out
+ad_connect  axi_usdrx1_gt/rx_gt_comma_align_enb_1 axi_usdrx1_jesd/rxencommaalign_out
+ad_connect  axi_usdrx1_gt/rx_gt_comma_align_enb_2 axi_usdrx1_jesd/rxencommaalign_out
+ad_connect  axi_usdrx1_gt/rx_gt_comma_align_enb_3 axi_usdrx1_jesd/rxencommaalign_out
+ad_connect  axi_usdrx1_gt/rx_gt_comma_align_enb_4 axi_usdrx1_jesd/rxencommaalign_out
+ad_connect  axi_usdrx1_gt/rx_gt_comma_align_enb_5 axi_usdrx1_jesd/rxencommaalign_out
+ad_connect  axi_usdrx1_gt/rx_gt_comma_align_enb_6 axi_usdrx1_jesd/rxencommaalign_out
+ad_connect  axi_usdrx1_gt/rx_gt_comma_align_enb_7 axi_usdrx1_jesd/rxencommaalign_out
 
 # connections (adc)
 
-ad_connect axi_usdrx1_gt_rx_clk             axi_usdrx1_gt/rx_clk_g
-ad_connect axi_usdrx1_gt_rx_clk             axi_usdrx1_gt/rx_clk
-ad_connect axi_usdrx1_gt_rx_clk             axi_usdrx1_gt/tx_clk
-ad_connect axi_usdrx1_gt_rx_clk             axi_ad9671_core_0/rx_clk
-ad_connect axi_usdrx1_gt_rx_clk             axi_ad9671_core_1/rx_clk
-ad_connect axi_usdrx1_gt_rx_clk             axi_ad9671_core_2/rx_clk
-ad_connect axi_usdrx1_gt_rx_clk             axi_ad9671_core_3/rx_clk
-ad_connect axi_usdrx1_gt_rx_clk             axi_usdrx1_jesd/rx_core_clk
-ad_connect axi_usdrx1_gt/rx_jesd_rst        axi_usdrx1_jesd/rx_reset
-ad_connect axi_usdrx1_gt/rx_sysref          axi_usdrx1_jesd/rx_sysref
+ad_connect  rx_data_p   util_usdrx1_gt/rx_p
+ad_connect  rx_data_n   util_usdrx1_gt/rx_n
+ad_connect  rx_sync     util_usdrx1_gt/rx_sync
+ad_connect  rx_sysref   util_usdrx1_gt/rx_ip_sysref
 
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_charisk
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_charisk]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_bsplit_rx_gt_charisk]
+ad_connect  util_usdrx1_gt/rx_out_clk     util_usdrx1_gt/rx_clk
+ad_connect  util_usdrx1_gt/rx_out_clk     axi_usdrx1_jesd/rx_core_clk
 
-ad_connect  util_bsplit_rx_gt_charisk/data axi_usdrx1_gt/rx_gt_charisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_0 axi_usdrx1_jesd/gt0_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_1 axi_usdrx1_jesd/gt1_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_2 axi_usdrx1_jesd/gt2_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_3 axi_usdrx1_jesd/gt3_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_4 axi_usdrx1_jesd/gt4_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_5 axi_usdrx1_jesd/gt5_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_6 axi_usdrx1_jesd/gt6_rxcharisk
-ad_connect  util_bsplit_rx_gt_charisk/split_data_7 axi_usdrx1_jesd/gt7_rxcharisk
+ad_connect  util_usdrx1_gt/rx_ip_rst      axi_usdrx1_jesd/rx_reset
+ad_connect  util_usdrx1_gt/rx_ip_rst_done axi_usdrx1_jesd/rx_reset_done
+ad_connect  util_usdrx1_gt/rx_ip_sysref   axi_usdrx1_jesd/rx_sysref
+ad_connect  util_usdrx1_gt/rx_ip_sync     axi_usdrx1_jesd/rx_sync
+ad_connect  util_usdrx1_gt/rx_ip_sof      axi_usdrx1_jesd/rx_start_of_frame
+ad_connect  util_usdrx1_gt/rx_ip_data     axi_usdrx1_jesd/rx_tdata
 
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_disperr
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_disperr]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_bsplit_rx_gt_disperr]
-
-ad_connect  util_bsplit_rx_gt_disperr/data axi_usdrx1_gt/rx_gt_disperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_0 axi_usdrx1_jesd/gt0_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_1 axi_usdrx1_jesd/gt1_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_2 axi_usdrx1_jesd/gt2_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_3 axi_usdrx1_jesd/gt3_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_4 axi_usdrx1_jesd/gt4_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_5 axi_usdrx1_jesd/gt5_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_6 axi_usdrx1_jesd/gt6_rxdisperr
-ad_connect  util_bsplit_rx_gt_disperr/split_data_7 axi_usdrx1_jesd/gt7_rxdisperr
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_notintable
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {4}] [get_bd_cells util_bsplit_rx_gt_notintable]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_bsplit_rx_gt_notintable]
-
-ad_connect  util_bsplit_rx_gt_notintable/data axi_usdrx1_gt/rx_gt_notintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_0 axi_usdrx1_jesd/gt0_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_1 axi_usdrx1_jesd/gt1_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_2 axi_usdrx1_jesd/gt2_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_3 axi_usdrx1_jesd/gt3_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_4 axi_usdrx1_jesd/gt4_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_5 axi_usdrx1_jesd/gt5_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_6 axi_usdrx1_jesd/gt6_rxnotintable
-ad_connect  util_bsplit_rx_gt_notintable/split_data_7 axi_usdrx1_jesd/gt7_rxnotintable
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_gt_data
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] [get_bd_cells util_bsplit_rx_gt_data]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] [get_bd_cells util_bsplit_rx_gt_data]
-
-ad_connect  util_bsplit_rx_gt_data/data axi_usdrx1_gt/rx_gt_data
-ad_connect  util_bsplit_rx_gt_data/split_data_0 axi_usdrx1_jesd/gt0_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_1 axi_usdrx1_jesd/gt1_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_2 axi_usdrx1_jesd/gt2_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_3 axi_usdrx1_jesd/gt3_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_4 axi_usdrx1_jesd/gt4_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_5 axi_usdrx1_jesd/gt5_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_6 axi_usdrx1_jesd/gt6_rxdata
-ad_connect  util_bsplit_rx_gt_data/split_data_7 axi_usdrx1_jesd/gt7_rxdata
-
-ad_connect axi_usdrx1_gt/rx_rst_done        axi_usdrx1_jesd/rx_reset_done
-ad_connect axi_usdrx1_gt/rx_ip_comma_align  axi_usdrx1_jesd/rxencommaalign_out
-ad_connect axi_usdrx1_gt/rx_ip_sync         axi_usdrx1_jesd/rx_sync
-ad_connect axi_usdrx1_gt/rx_ip_sof          axi_usdrx1_jesd/rx_start_of_frame
-ad_connect axi_usdrx1_gt/rx_ip_data         axi_usdrx1_jesd/rx_tdata
-ad_connect gt_rx_data                       axi_usdrx1_gt/rx_data
-ad_connect gt_rx_sof                        axi_usdrx1_gt/rx_sof
+ad_connect gt_rx_data                       util_usdrx1_gt/rx_data
+ad_connect util_usdrx1_gt/rx_out_clk        axi_ad9671_core_0/rx_clk
 ad_connect gt_rx_data_0                     axi_ad9671_core_0/rx_data
-ad_connect gt_rx_sof_0                      axi_ad9671_core_0/rx_sof
+ad_connect util_usdrx1_gt/rx_sof            axi_ad9671_core_0/rx_sof
+ad_connect util_usdrx1_gt/rx_out_clk        axi_ad9671_core_1/rx_clk
 ad_connect gt_rx_data_1                     axi_ad9671_core_1/rx_data
-ad_connect gt_rx_sof_1                      axi_ad9671_core_1/rx_sof
+ad_connect util_usdrx1_gt/rx_sof            axi_ad9671_core_1/rx_sof
+ad_connect util_usdrx1_gt/rx_out_clk        axi_ad9671_core_2/rx_clk
 ad_connect gt_rx_data_2                     axi_ad9671_core_2/rx_data
-ad_connect gt_rx_sof_2                      axi_ad9671_core_2/rx_sof
+ad_connect util_usdrx1_gt/rx_sof            axi_ad9671_core_2/rx_sof
+ad_connect util_usdrx1_gt/rx_out_clk        axi_ad9671_core_3/rx_clk
 ad_connect gt_rx_data_3                     axi_ad9671_core_3/rx_data
-ad_connect gt_rx_sof_3                      axi_ad9671_core_3/rx_sof
+ad_connect util_usdrx1_gt/rx_sof            axi_ad9671_core_3/rx_sof
 ad_connect axi_ad9671_core_0/adc_clk        usdrx1_fifo/adc_clk
 ad_connect adc_data_0                       axi_ad9671_core_0/adc_data
 ad_connect adc_data_1                       axi_ad9671_core_1/adc_data
@@ -228,7 +262,7 @@ ad_connect axi_ad9671_adc_sync              axi_ad9671_core_1/adc_sync_in
 ad_connect axi_ad9671_adc_sync              axi_ad9671_core_2/adc_sync_in
 ad_connect axi_ad9671_adc_sync              axi_ad9671_core_3/adc_sync_in
 
-ad_connect axi_usdrx1_gt/rx_rst             usdrx1_fifo/adc_rst
+ad_connect util_usdrx1_gt/rx_rst            usdrx1_fifo/adc_rst
 ad_connect adc_dovf                         usdrx1_fifo/adc_wovf
 
 ad_connect usdrx1_fifo/dma_wdata            axi_usdrx1_dma/s_axis_data
@@ -264,20 +298,7 @@ ad_cpu_interrupt ps-13 mb-13 axi_usdrx1_dma/irq
 
 # ila
 
-set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_jesd_rx_mon]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {662}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {10}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_jesd_rx_mon
-
-ad_connect axi_usdrx1_gt_rx_mon_data       axi_usdrx1_gt/rx_mon_data
-ad_connect axi_usdrx1_gt_rx_mon_trigger    axi_usdrx1_gt/rx_mon_trigger
-ad_connect axi_usdrx1_gt_rx_clk            ila_jesd_rx_mon/CLK
-ad_connect axi_usdrx1_gt_rx_mon_data       ila_jesd_rx_mon/PROBE0
-ad_connect axi_usdrx1_gt_rx_mon_trigger    ila_jesd_rx_mon/PROBE1
-
-set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_ad9671]
+set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_ad9671]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9671
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {9}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_ad9671
