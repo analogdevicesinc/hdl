@@ -198,15 +198,15 @@ ad_connect  axi_ad9250_1_core/adc_dovf      axi_ad9250_1_dma/fifo_wr_overflow
 set ila_jesd_rx_mon [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_jesd_rx_mon]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {9}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {128}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {32}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE2_WIDTH {32}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE3_WIDTH {32}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE4_WIDTH {32}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE5_WIDTH {32}] $ila_jesd_rx_mon
+set_property -dict [list CONFIG.C_PROBE5_WIDTH {1}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE6_WIDTH {1}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE7_WIDTH {1}] $ila_jesd_rx_mon
 set_property -dict [list CONFIG.C_PROBE8_WIDTH {1}] $ila_jesd_rx_mon
-set_property -dict [list CONFIG.C_PROBE9_WIDTH {1}] $ila_jesd_rx_mon
 
 ad_connect  axi_ad9250_gt_rx_clk            ila_jesd_rx_mon/CLK
 ad_connect  axi_ad9250_gt_rx_data           ila_jesd_rx_mon/PROBE0
