@@ -2,22 +2,56 @@
 # prcfg io
 
 create_bd_port -dir O clk
-create_bd_port -dir I dma_dac_en
-create_bd_port -dir O dma_dac_dvalid
-create_bd_port -dir O -from 63 -to 0 dma_dac_ddata
-create_bd_port -dir O dma_dac_dunf
-create_bd_port -dir O core_dac_en
-create_bd_port -dir I core_dac_dvalid
-create_bd_port -dir I -from 63 -to 0 core_dac_ddata
-create_bd_port -dir I core_dac_dunf
-create_bd_port -dir O core_adc_dwr
-create_bd_port -dir O core_adc_dsync
-create_bd_port -dir O -from 63 -to 0 core_adc_ddata
-create_bd_port -dir I core_adc_ovf
-create_bd_port -dir I dma_adc_dwr
-create_bd_port -dir I dma_adc_dsync
-create_bd_port -dir I -from 63 -to 0 dma_adc_ddata
-create_bd_port -dir O dma_adc_ovf
+
+create_bd_port -dir I  dma_dac_i0_enable
+create_bd_port -dir O  dma_dac_i0_data
+create_bd_port -dir I  dma_dac_i0_valid
+create_bd_port -dir I  dma_dac_q0_enable
+create_bd_port -dir O  dma_dac_q0_data
+create_bd_port -dir I  dma_dac_q0_valid
+create_bd_port -dir I  dma_dac_i1_enable
+create_bd_port -dir O  dma_dac_i1_data
+create_bd_port -dir I  dma_dac_i1_valid
+create_bd_port -dir I  dma_dac_q1_enable
+create_bd_port -dir O  dma_dac_q1_data
+create_bd_port -dir I  dma_dac_q1_valid
+create_bd_port -dir O  core_dac_i0_enable
+create_bd_port -dir I  core_dac_i0_data
+create_bd_port -dir O  core_dac_i0_valid
+create_bd_port -dir O  core_dac_q0_enable
+create_bd_port -dir I  core_dac_q0_data
+create_bd_port -dir O  core_dac_q0_valid
+create_bd_port -dir O  core_dac_i1_enable
+create_bd_port -dir I  core_dac_i1_data
+create_bd_port -dir O  core_dac_i1_valid
+create_bd_port -dir O  core_dac_q1_enable
+create_bd_port -dir I  core_dac_q1_data
+create_bd_port -dir O  core_dac_q1_valid
+create_bd_port -dir I  dma_adc_i0_enable
+create_bd_port -dir I  dma_adc_i0_data
+create_bd_port -dir I  dma_adc_i0_valid
+create_bd_port -dir I  dma_adc_q0_enable
+create_bd_port -dir I  dma_adc_q0_data
+create_bd_port -dir I  dma_adc_q0_valid
+create_bd_port -dir I  dma_adc_i1_enable
+create_bd_port -dir I  dma_adc_i1_data
+create_bd_port -dir I  dma_adc_i1_valid
+create_bd_port -dir I  dma_adc_q1_enable
+create_bd_port -dir I  dma_adc_q1_data
+create_bd_port -dir I  dma_adc_q1_valid
+create_bd_port -dir O  core_adc_i0_enable
+create_bd_port -dir O  core_adc_i0_data
+create_bd_port -dir O  core_adc_i0_valid
+create_bd_port -dir O  core_adc_q0_enable
+create_bd_port -dir O  core_adc_q0_data
+create_bd_port -dir O  core_adc_q0_valid
+create_bd_port -dir O  core_adc_i1_enable
+create_bd_port -dir O  core_adc_i1_data
+create_bd_port -dir O  core_adc_i1_valid
+create_bd_port -dir O  core_adc_q1_enable
+create_bd_port -dir O  core_adc_q1_data
+create_bd_port -dir O  core_adc_q1_valid
+
 create_bd_port -dir I -from 31 -to 0 up_dac_gpio_in
 create_bd_port -dir I -from 31 -to 0 up_adc_gpio_in
 create_bd_port -dir O -from 31 -to 0 up_dac_gpio_out
@@ -25,82 +59,182 @@ create_bd_port -dir O -from 31 -to 0 up_adc_gpio_out
 
 # re-wiring
 
-delete_bd_objs [get_bd_nets -of_objects [get_bd_pins axi_ad9361_dac_dma/fifo_rd_en]]
-delete_bd_objs [get_bd_nets -of_objects [get_bd_pins axi_ad9361_dac_dma/fifo_rd_valid]]
-delete_bd_objs [get_bd_nets -of_objects [get_bd_pins axi_ad9361_dac_dma/fifo_rd_dout]]
-delete_bd_objs [get_bd_nets -of_objects [get_bd_pins axi_ad9361_dac_dma/fifo_rd_underflow]]
-delete_bd_objs [get_bd_nets -of_objects [get_bd_pins axi_ad9361_adc_dma/fifo_wr_en]]
-delete_bd_objs [get_bd_nets -of_objects [get_bd_pins axi_ad9361_adc_dma/fifo_wr_sync]]
-delete_bd_objs [get_bd_nets -of_objects [get_bd_pins axi_ad9361_adc_dma/fifo_wr_din]]
-delete_bd_objs [get_bd_nets -of_objects [get_bd_pins axi_ad9361_adc_dma/fifo_wr_overflow]]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_enable_0]] [get_bd_pins util_ad9361_dac_upack/dac_enable_0]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_valid_0]] [get_bd_pins util_ad9361_dac_upack/dac_valid_0]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_data_0]] [get_bd_pins util_ad9361_dac_upack/dac_data_0]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_enable_1]] [get_bd_pins util_ad9361_dac_upack/dac_enable_1]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_valid_1]] [get_bd_pins util_ad9361_dac_upack/dac_valid_1]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_data_1]] [get_bd_pins util_ad9361_dac_upack/dac_data_1]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_enable_2]] [get_bd_pins util_ad9361_dac_upack/dac_enable_2]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_valid_2]] [get_bd_pins util_ad9361_dac_upack/dac_valid_2]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_data_2]] [get_bd_pins util_ad9361_dac_upack/dac_data_2]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_enable_3]] [get_bd_pins util_ad9361_dac_upack/dac_enable_3]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_valid_3]] [get_bd_pins util_ad9361_dac_upack/dac_valid_3]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_dac_upack/dac_data_3]] [get_bd_pins util_ad9361_dac_upack/dac_data_3]
+
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_enable_0]] [get_bd_pins util_ad9361_adc_pack/adc_enable_0]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_valid_0]] [get_bd_pins util_ad9361_adc_pack/adc_valid_0]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_data_0]] [get_bd_pins util_ad9361_adc_pack/adc_data_0]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_enable_1]] [get_bd_pins util_ad9361_adc_pack/adc_enable_1]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_valid_1]] [get_bd_pins util_ad9361_adc_pack/adc_valid_1]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_data_1]] [get_bd_pins util_ad9361_adc_pack/adc_data_1]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_enable_2]] [get_bd_pins util_ad9361_adc_pack/adc_enable_2]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_valid_2]] [get_bd_pins util_ad9361_adc_pack/adc_valid_2]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_data_2]] [get_bd_pins util_ad9361_adc_pack/adc_data_2]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_enable_3]] [get_bd_pins util_ad9361_adc_pack/adc_enable_3]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_valid_3]] [get_bd_pins util_ad9361_adc_pack/adc_valid_3]
+disconnect_bd_net [get_bd_nets -of_objects [get_bd_pins util_ad9361_adc_pack/adc_data_3]] [get_bd_pins util_ad9361_adc_pack/adc_data_3]
 
 ad_connect  clk axi_ad9361/clk
 
-ad_connect  dma_dac_en axi_ad9361_dac_dma/fifo_rd_en
-ad_connect  dma_dac_dvalid axi_ad9361_dac_dma/fifo_rd_valid
-ad_connect  dma_dac_ddata axi_ad9361_dac_dma/fifo_rd_dout
-ad_connect  dma_dac_dunf axi_ad9361_dac_dma/fifo_rd_underflow
-ad_connect  core_dac_en util_dac_unpack/dma_rd
-ad_connect  core_dac_dvalid util_dac_unpack/fifo_valid
-ad_connect  core_dac_ddata util_dac_unpack/dma_data
-ad_connect  core_dac_dunf axi_ad9361/dac_dunf
-ad_connect  up_dac_gpio_in axi_ad9361/up_dac_gpio_in
-ad_connect  up_dac_gpio_out axi_ad9361/up_dac_gpio_out
+# tx data path
+ad_connect  dma_dac_i0_enable util_ad9361_dac_upack/dac_enable_0
+ad_connect  dma_dac_i0_data util_ad9361_dac_upack/dac_data_0
+ad_connect  dma_dac_i0_valid util_ad9361_dac_upack/dac_valid_0
+ad_connect  dma_dac_q0_enable util_ad9361_dac_upack/dac_enable_1
+ad_connect  dma_dac_q0_data util_ad9361_dac_upack/dac_data_1
+ad_connect  dma_dac_q0_valid util_ad9361_dac_upack/dac_valid_1
+ad_connect  dma_dac_i1_enable util_ad9361_dac_upack/dac_enable_2
+ad_connect  dma_dac_i1_data util_ad9361_dac_upack/dac_data_2
+ad_connect  dma_dac_i1_valid util_ad9361_dac_upack/dac_valid_2
+ad_connect  dma_dac_q1_enable util_ad9361_dac_upack/dac_enable_3
+ad_connect  dma_dac_q1_data util_ad9361_dac_upack/dac_data_3
+ad_connect  dma_dac_q1_valid util_ad9361_dac_upack/dac_valid_3
 
-ad_connect  dma_adc_dwr axi_ad9361_adc_dma/fifo_wr_en
-ad_connect  dma_adc_dsync axi_ad9361_adc_dma/fifo_wr_sync
-ad_connect  dma_adc_ddata axi_ad9361_adc_dma/fifo_wr_din
-ad_connect  dma_adc_ovf axi_ad9361_adc_dma/fifo_wr_overflow
-ad_connect  core_adc_dwr util_adc_pack/dvalid
-ad_connect  core_adc_dsync util_adc_pack/dsync
-ad_connect  core_adc_ddata util_adc_pack/ddata
-ad_connect  core_adc_ovf axi_ad9361/adc_dovf
+ad_connect  core_dac_i0_enable axi_ad9361/dac_enable_i0
+ad_connect  core_dac_i0_data axi_ad9361/dac_data_i0
+ad_connect  core_dac_i0_valid axi_ad9361/dac_valid_i0
+ad_connect  core_dac_q0_enable axi_ad9361/dac_enable_q0
+ad_connect  core_dac_q0_data axi_ad9361/dac_data_q0
+ad_connect  core_dac_q0_valid axi_ad9361/dac_valid_q0
+ad_connect  core_dac_i1_enable axi_ad9361/dac_enable_i1
+ad_connect  core_dac_i1_data axi_ad9361/dac_data_i1
+ad_connect  core_dac_i1_valid axi_ad9361/dac_valid_i1
+ad_connect  core_dac_q1_enable axi_ad9361/dac_enable_q1
+ad_connect  core_dac_q1_data axi_ad9361/dac_data_q1
+ad_connect  core_dac_q1_valid axi_ad9361/dac_valid_q1
+
+# rx data path
+ad_connect  dma_adc_i0_enable util_ad9361_adc_pack/adc_enable_0
+ad_connect  dma_adc_i0_data util_ad9361_adc_pack/adc_data_0
+ad_connect  dma_adc_i0_valid util_ad9361_adc_pack/adc_valid_0
+ad_connect  dma_adc_q0_enable util_ad9361_adc_pack/adc_enable_1
+ad_connect  dma_adc_q0_data util_ad9361_adc_pack/adc_data_1
+ad_connect  dma_adc_q0_valid util_ad9361_adc_pack/adc_valid_1
+ad_connect  dma_adc_i1_enable util_ad9361_adc_pack/adc_enable_2
+ad_connect  dma_adc_i1_data util_ad9361_adc_pack/adc_data_2
+ad_connect  dma_adc_i1_valid util_ad9361_adc_pack/adc_valid_2
+ad_connect  dma_adc_q1_enable util_ad9361_adc_pack/adc_enable_3
+ad_connect  dma_adc_q1_data util_ad9361_adc_pack/adc_data_3
+ad_connect  dma_adc_q1_valid util_ad9361_adc_pack/adc_valid_3
+
+ad_connect  core_adc_i0_enable util_ad9361_adc_fifo/dout_enable_0
+ad_connect  core_adc_i0_data util_ad9361_adc_fifo/dout_data_0
+ad_connect  core_adc_i0_valid util_ad9361_adc_fifo/dout_valid_0
+ad_connect  core_adc_q0_enable util_ad9361_adc_fifo/dout_enable_1
+ad_connect  core_adc_q0_data util_ad9361_adc_fifo/dout_data_1
+ad_connect  core_adc_q0_valid util_ad9361_adc_fifo/dout_valid_1
+ad_connect  core_adc_i1_enable util_ad9361_adc_fifo/dout_enable_2
+ad_connect  core_adc_i1_data util_ad9361_adc_fifo/dout_data_2
+ad_connect  core_adc_i1_valid util_ad9361_adc_fifo/dout_valid_2
+ad_connect  core_adc_q1_enable util_ad9361_adc_fifo/dout_enable_3
+ad_connect  core_adc_q1_data util_ad9361_adc_fifo/dout_data_3
+ad_connect  core_adc_q1_valid util_ad9361_adc_fifo/dout_valid_3
+
+ad_connect  up_dac_gpio_in axi_ad9361/up_dac_gpio_in
 ad_connect  up_adc_gpio_in axi_ad9361/up_adc_gpio_in
+ad_connect  up_dac_gpio_out axi_ad9361/up_dac_gpio_out
 ad_connect  up_adc_gpio_out axi_ad9361/up_adc_gpio_out
 
-# monitoring
+# rx side monitoring
 
-set ila_adc_core [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_adc_core]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc_core
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc_core
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc_core
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_adc_core
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc_core
+set ila_rx_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_rx_0]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_rx_0
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_rx_0
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_rx_0
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_rx_0
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_rx_0
 
-ad_connect  clk ila_adc_core/clk
-ad_connect  util_adc_pack/dvalid ila_adc_core/probe0
-ad_connect  util_adc_pack/ddata ila_adc_core/probe1
+ad_connect  sys_cpu_clk ila_rx_0/clk
+ad_connect  util_ad9361_adc_pack/adc_valid_0 ila_rx_0/probe0
+ad_connect  util_ad9361_adc_pack/adc_data_0 ila_rx_0/probe1
 
-set ila_dac_core [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_dac_core]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_dac_core
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_dac_core
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_dac_core
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_dac_core
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_dac_core
+set ila_rx_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_rx_1]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_rx_1
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_rx_1
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_rx_1
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_rx_1
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_rx_1
 
-ad_connect  clk ila_dac_core/clk
-ad_connect  util_dac_unpack/fifo_valid ila_dac_core/probe0
-ad_connect  util_dac_unpack/dma_data ila_dac_core/probe1
+ad_connect  sys_cpu_clk ila_rx_1/clk
+ad_connect  util_ad9361_adc_pack/adc_valid_0 ila_rx_1/probe0
+ad_connect  util_ad9361_adc_pack/adc_data_0 ila_rx_1/probe1
 
-set ila_adc_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_adc_dma]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc_dma
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc_dma
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc_dma
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_adc_dma
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc_dma
+set ila_rx_2 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_rx_2]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_rx_2
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_rx_2
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_rx_2
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_rx_2
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_rx_2
 
-ad_connect  clk ila_adc_dma/clk
-ad_connect  axi_ad9361_adc_dma/fifo_wr_en ila_adc_dma/probe0
-ad_connect  axi_ad9361_adc_dma/fifo_wr_din ila_adc_dma/probe1
+ad_connect  sys_cpu_clk ila_rx_2/clk
+ad_connect  util_ad9361_adc_pack/adc_valid_0 ila_rx_2/probe0
+ad_connect  util_ad9361_adc_pack/adc_data_0 ila_rx_2/probe1
 
-set ila_dac_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.0 ila_dac_dma]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_dac_dma
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_dac_dma
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_dac_dma
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_dac_dma
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_dac_dma
+set ila_rx_3 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_rx_3]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_rx_3
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_rx_3
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_rx_3
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_rx_3
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_rx_3
 
-ad_connect  clk ila_dac_dma/clk
-ad_connect  axi_ad9361_dac_dma/fifo_rd_en ila_dac_dma/probe0
-ad_connect  axi_ad9361_dac_dma/fifo_rd_dout ila_dac_dma/probe1
+ad_connect  sys_cpu_clk ila_rx_3/clk
+ad_connect  util_ad9361_adc_pack/adc_valid_0 ila_rx_3/probe0
+ad_connect  util_ad9361_adc_pack/adc_data_0 ila_rx_3/probe1
+
+# rx side monitoring
+
+set ila_tx_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tx_0]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tx_0
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_tx_0
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_tx_0
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_tx_0
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tx_0
+
+ad_connect  axi_ad9361/l_clk ila_tx_0/clk
+ad_connect  util_ad9361_adc_fifo/dout_valid_0 ila_tx_0/probe0
+ad_connect  util_ad9361_adc_fifo/dout_data_0 ila_tx_0/probe1
+
+set ila_tx_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tx_1]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tx_1
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_tx_1
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_tx_1
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_tx_1
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tx_1
+
+ad_connect  axi_ad9361/l_clk ila_tx_1/clk
+ad_connect  util_ad9361_adc_fifo/dout_valid_1 ila_tx_1/probe0
+ad_connect  util_ad9361_adc_fifo/dout_data_1 ila_tx_1/probe1
+
+set ila_tx_2 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tx_2]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tx_2
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_tx_2
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_tx_2
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_tx_2
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tx_2
+
+ad_connect  axi_ad9361/l_clk ila_tx_2/clk
+ad_connect  util_ad9361_adc_fifo/dout_valid_2 ila_tx_2/probe0
+ad_connect  util_ad9361_adc_fifo/dout_data_2 ila_tx_2/probe1
+
+set ila_tx_3 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tx_3]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tx_3
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_tx_3
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_tx_3
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_tx_3
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tx_3
+
+ad_connect  axi_ad9361/l_clk ila_tx_3/clk
+ad_connect  util_ad9361_adc_fifo/dout_valid_3 ila_tx_3/probe0
+ad_connect  util_ad9361_adc_fifo/dout_data_3 ila_tx_3/probe1
 
