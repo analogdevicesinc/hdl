@@ -49,15 +49,13 @@ module prcfg_dac(
   status,
 
   // FIFO interface
-  src_dac_en,
-  src_dac_ddata,
-  src_dac_dunf,
-  src_dac_dvalid,
+  src_dac_enable,
+  src_dac_data,
+  src_dac_valid,
 
-  dst_dac_en,
-  dst_dac_ddata,
-  dst_dac_dunf,
-  dst_dac_dvalid
+  dst_dac_enable,
+  dst_dac_data,
+  dst_dac_valid
 );
 
   localparam  RP_ID      = 8'hA1;
@@ -68,22 +66,19 @@ module prcfg_dac(
   input   [31:0]    control;
   output  [31:0]    status;
 
-  output            src_dac_en;
-  input   [31:0]    src_dac_ddata;
-  input             src_dac_dunf;
-  input             src_dac_dvalid;
+  output            src_dac_enable;
+  input   [15:0]    src_dac_data;
+  output            src_dac_valid;
 
-  input             dst_dac_en;
-  output  [31:0]    dst_dac_ddata;
-  output            dst_dac_dunf;
-  output            dst_dac_dvalid;
+  input             dst_dac_enable;
+  output  [15:0]    dst_dac_data;
+  input             dst_dac_valid;
 
-  reg               dst_dac_dunf   = 0;
-  reg     [31:0]    dst_dac_ddata  = 0;
-  reg               dst_dac_dvalid = 0;
-  reg               src_dac_en     = 0;
+  reg     [15:0]    dst_dac_data   = 0;
+  reg               src_dac_valid  = 0;
+  reg               src_dac_enable = 0;
 
-  reg     [31:0]    dac_prbs       = 32'hA2F19C;
+  reg     [15:0]    dac_prbs       = 32'hA2F19C;
   reg     [31:0]    status         = 0;
 
   reg     [ 2:0]    counter        = 0;
@@ -93,45 +88,29 @@ module prcfg_dac(
 
   reg     [ 3:0]    mode;
 
-  wire    [31:0]    dac_pattern_s;
+  wire    [15:0]    dac_pattern_s;
 
   // prbs function
-  function [31:0] pn;
-    input [31:0] din;
-    reg   [31:0] dout;
+  function [15:0] pn;
+    input [15:0] din;
+    reg   [15:0] dout;
     begin
-      dout[31]  = din[14] ^ din[13];
-      dout[30]  = din[13] ^ din[12];
-      dout[29]  = din[12] ^ din[11];
-      dout[28]  = din[11] ^ din[10];
-      dout[27]  = din[10] ^ din[9];
-      dout[26]  = din[9]  ^ din[8];
-      dout[25]  = din[8]  ^ din[7];
-      dout[24]  = din[7]  ^ din[6];
-      dout[23]  = din[6]  ^ din[5];
-      dout[22]  = din[5]  ^ din[4];
-      dout[21]  = din[4]  ^ din[3];
-      dout[20]  = din[3]  ^ din[2];
-      dout[19]  = din[2]  ^ din[1];
-      dout[18]  = din[1]  ^ din[0];
-      dout[17]  = din[0]  ^ din[14] ^ din[13];
-      dout[16]  = din[14] ^ din[12];
-      dout[15]  = din[13] ^ din[11];
-      dout[14]  = din[12] ^ din[10];
-      dout[13]  = din[11] ^ din[9];
-      dout[12]  = din[10] ^ din[8];
-      dout[11]  = din[9]  ^ din[7];
-      dout[10]  = din[8]  ^ din[6];
-      dout[9]   = din[7]  ^ din[5];
-      dout[8]   = din[6]  ^ din[4];
-      dout[7]   = din[5]  ^ din[3];
-      dout[6]   = din[4]  ^ din[2];
-      dout[5]   = din[3]  ^ din[1];
-      dout[4]   = din[2]  ^ din[0];
-      dout[3]   = din[1]  ^ din[14] ^ din[13];
-      dout[2]   = din[0]  ^ din[13] ^ din[12];
-      dout[1]   = din[14] ^ din[12] ^ din[13] ^ din[11];
-      dout[0]   = din[13] ^ din[11] ^ din[12] ^ din[10];
+      dout[15] = din[14] ^ din[15];
+      dout[14] = din[13] ^ din[14];
+      dout[13] = din[12] ^ din[13];
+      dout[12] = din[11] ^ din[12];
+      dout[11] = din[10] ^ din[11];
+      dout[10] = din[ 9] ^ din[10];
+      dout[ 9] = din[ 8] ^ din[ 9];
+      dout[ 8] = din[ 7] ^ din[ 8];
+      dout[ 7] = din[ 6] ^ din[ 7];
+      dout[ 6] = din[ 5] ^ din[ 6];
+      dout[ 5] = din[ 4] ^ din[ 5];
+      dout[ 4] = din[ 3] ^ din[ 4];
+      dout[ 3] = din[ 2] ^ din[ 3];
+      dout[ 2] = din[ 1] ^ din[ 2];
+      dout[ 1] = din[ 0] ^ din[ 1];
+      dout[ 0] = din[14] ^ din[15] ^ din[ 0];
       pn = dout;
     end
   endfunction
@@ -143,7 +122,7 @@ module prcfg_dac(
 
   // sine tone generation
   always @(posedge clk) begin
-    if (dst_dac_en == 1'h1) begin
+    if ((dst_dac_enable == 1'h1) && (dst_dac_valid == 1'h1)) begin
       counter <= counter + 1;
     end
   end
@@ -187,45 +166,42 @@ module prcfg_dac(
 
   // prbs generation
   always @(posedge clk) begin
-    if(dst_dac_en == 1'h1) begin
+    if((dst_dac_enable == 1'h1) && (dst_dac_valid == 1'h1)) begin
       dac_prbs <= pn(dac_prbs);
     end
   end
 
   // constant pattern generator
   always @(posedge clk) begin
-    if(dst_dac_en == 1'h1) begin
+    if((dst_dac_enable == 1'h1) && (dst_dac_valid == 1'h1)) begin
       pattern <= ~pattern;
     end
   end
 
-  assign dac_pattern_s = (pattern == 1'h1) ?
-                          {16'h5555, 16'hAAAA, 16'h5555, 16'hAAAA} :
-                          {16'hAAAA, 16'h5555, 16'hAAAA, 16'h5555};
+  assign dac_pattern_s = (pattern == 1'h1) ? 16'h5555 : 16'hAAAA;
 
   // output mux for tx side
   always @(posedge clk) begin
-    src_dac_en     <= (mode == 0) ? dst_dac_en  : 1'b0;
-    dst_dac_dvalid <= (mode == 0) ? src_dac_dvalid  : dst_dac_en;
-    dst_dac_dunf   <= (mode == 0) ? src_dac_dunf : 1'b0;
+    src_dac_enable <= dst_dac_enable;
+    src_dac_valid  <= (mode == 0) ? dst_dac_valid  : 1'b0;
   end
 
   always @(posedge clk) begin
     case(mode)
       4'h0    : begin
-                  dst_dac_ddata <= src_dac_ddata;
+                  dst_dac_data <= src_dac_data;
                 end
       4'h1    : begin
-                  dst_dac_ddata <= {cos_tone, sin_tone};
+                  dst_dac_data <= {cos_tone, sin_tone};
                 end
       4'h2    : begin
-                  dst_dac_ddata <= dac_prbs;
+                  dst_dac_data <= dac_prbs;
                 end
       4'h3    : begin
-                  dst_dac_ddata <= dac_pattern_s;
+                  dst_dac_data <= dac_pattern_s;
                 end
       default : begin
-                  dst_dac_ddata <= src_dac_ddata;
+                  dst_dac_data <= src_dac_data;
                 end
     endcase
   end

@@ -49,19 +49,17 @@ module prcfg_dac(
   status,
 
   // FIFO interface
-  src_dac_en,
-  src_dac_ddata,
-  src_dac_dunf,
-  src_dac_dvalid,
+  src_dac_enable,
+  src_dac_data,
+  src_dac_valid,
 
-  dst_dac_en,
-  dst_dac_ddata,
-  dst_dac_dunf,
-  dst_dac_dvalid
+  dst_dac_enable,
+  dst_dac_data,
+  dst_dac_valid
 );
 
   parameter   CHANNEL_ID    = 0;
-  parameter   DATA_WIDTH    = 32;
+  parameter   DATA_WIDTH    = 16;
 
   localparam  SYMBOL_WIDTH  = 2;
   localparam  RP_ID         = 8'hA2;
@@ -71,21 +69,18 @@ module prcfg_dac(
   input   [31:0]                      control;
   output  [31:0]                      status;
 
-  output                              src_dac_en;
-  input   [(DATA_WIDTH-1):0]          src_dac_ddata;
-  input                               src_dac_dunf;
-  input                               src_dac_dvalid;
+  output                              src_dac_enable;
+  input   [(DATA_WIDTH-1):0]          src_dac_data;
+  output                              src_dac_valid;
 
-  input                               dst_dac_en;
-  output  [(DATA_WIDTH-1):0]          dst_dac_ddata;
-  output                              dst_dac_dunf;
-  output                              dst_dac_dvalid;
+  input                               dst_dac_enable;
+  output  [(DATA_WIDTH-1):0]          dst_dac_data;
+  input                               dst_dac_valid;
 
   // output register to improve timing
-  reg                                 dst_dac_dunf   = 'h0;
-  reg     [(DATA_WIDTH-1):0]          dst_dac_ddata  = 'h0;
-  reg                                 dst_dac_dvalid = 'h0;
-  reg                                 src_dac_en     = 'h0;
+  reg     [(DATA_WIDTH-1):0]          dst_dac_data   = 'h0;
+  reg                                 src_dac_valid  = 'h0;
+  reg                                 src_dac_enable = 'h0;
 
   // internal registers
   reg     [ 7:0]                      pn_data        = 'hF2;
@@ -122,13 +117,13 @@ module prcfg_dac(
 
   // prbs generation
   always @(posedge clk) begin
-    if(dst_dac_en == 1) begin
+    if((dst_dac_en == 1) && (dst_dac_enable == 1)) begin
       pn_data <= pn(pn_data);
     end
   end
 
   // data for the modulator (prbs or dma)
-  assign mod_data = (mode == 1) ? pn_data[ 1:0] : src_dac_ddata[ 1:0];
+  assign mod_data = (mode == 1) ? pn_data[ 1:0] : src_dac_data[ 1:0];
 
   // qpsk modulator
   qpsk_mod i_qpsk_mod (
@@ -142,21 +137,18 @@ module prcfg_dac(
   // output logic
   always @(posedge clk) begin
 
-    src_dac_en     <= dst_dac_en;
-    dst_dac_dvalid <= src_dac_dvalid;
+    src_dac_enable <= dst_dac_en;
+    src_dac_valid  <= dst_dac_valid;
 
     case(mode)
       4'h0 : begin
-        dst_dac_ddata <= src_dac_ddata;
-        dst_dac_dunf  <= src_dac_dunf;
+        dst_dac_data <= src_dac_data;
       end
       4'h1 : begin
-        dst_dac_ddata <= { dac_data_fltr_q, dac_data_fltr_i };
-        dst_dac_dunf  <= 1'h0;
+        dst_dac_data <= { dac_data_fltr_q, dac_data_fltr_i };
       end
       4'h2 : begin
-        dst_dac_ddata <= { dac_data_fltr_q, dac_data_fltr_i };
-        dst_dac_dunf  <= src_dac_dunf;
+        dst_dac_data <= { dac_data_fltr_q, dac_data_fltr_i };
       end
       default : begin
       end
