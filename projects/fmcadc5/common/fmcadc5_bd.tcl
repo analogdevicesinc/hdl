@@ -280,3 +280,12 @@ ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad9625_dma/irq
 
+# sync
+
+create_bd_port -dir O up_clk
+create_bd_port -dir O up_rstn
+
+ad_connect  sys_cpu_clk up_clk
+ad_connect  sys_cpu_resetn up_rstn
+
+
