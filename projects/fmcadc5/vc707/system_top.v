@@ -311,8 +311,8 @@ module system_top (
     .psync_1 (psync_1));
 
   fmcadc5_spi i_fmcadc5_spi (
-    .spi_csn_0 (spi_csn_0),
-    .spi_csn_1 (spi_csn_1),
+    .spi_csn_0 (spi_csn[0]),
+    .spi_csn_1 (spi_csn[1]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),

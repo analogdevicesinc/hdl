@@ -9,7 +9,7 @@ create_bd_port -dir I rx_ref_clk_1
 create_bd_port -dir I -from 7 -to 0 rx_data_1_p
 create_bd_port -dir I -from 7 -to 0 rx_data_1_n
 create_bd_port -dir O rx_sync_1
-create_bd_port -dir I rx_sysref
+create_bd_port -dir O rx_sysref
 
 # adc peripherals
 
@@ -81,7 +81,7 @@ set_property -dict [list CONFIG.RX_CLK25_DIV_7 {25}] $axi_fmcadc5_0_gt
 set_property -dict [list CONFIG.RX_CDR_CFG_7 {0x03000023ff20400020}] $axi_fmcadc5_0_gt
 
 set axi_fmcadc5_1_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_fmcadc5_1_gt]
-set_property -dict [list CONFIG.ID {0}] $axi_fmcadc5_1_gt
+set_property -dict [list CONFIG.ID {1}] $axi_fmcadc5_1_gt
 set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_fmcadc5_1_gt
 set_property -dict [list CONFIG.PMA_RSV_0 {0x00018480}] $axi_fmcadc5_1_gt
 set_property -dict [list CONFIG.CPLL_FBDIV_0 {1}] $axi_fmcadc5_1_gt
@@ -136,8 +136,8 @@ set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_fmcadc5_cpack
 
 # connections (gt)
 
-ad_connect  util_fmcadc5_0_gt/qpll_ref_clk rx_ref_clk_0
-ad_connect  util_fmcadc5_1_gt/qpll_ref_clk rx_ref_clk_1
+ad_connect  util_fmcadc5_0_gt/cpll_ref_clk rx_ref_clk_0
+ad_connect  util_fmcadc5_1_gt/cpll_ref_clk rx_ref_clk_1
 
 ad_connect  axi_fmcadc5_0_gt/gt_qpll_0 util_fmcadc5_0_gt/gt_qpll_0
 ad_connect  axi_fmcadc5_0_gt/gt_qpll_1 util_fmcadc5_0_gt/gt_qpll_1
@@ -210,10 +210,14 @@ ad_connect  axi_fmcadc5_1_gt/rx_gt_comma_align_enb_7 axi_ad9625_1_jesd/rxencomma
 
 # connections (adc)
 
-ad_connect  util_fmcadc5_0_gt/rx_sysref rx_sysref
 ad_connect  util_fmcadc5_0_gt/rx_p rx_data_0_p
 ad_connect  util_fmcadc5_0_gt/rx_n rx_data_0_n
+ad_connect  util_fmcadc5_0_gt/rx_sysref GND
 ad_connect  util_fmcadc5_0_gt/rx_sync rx_sync_0
+ad_connect  util_fmcadc5_1_gt/rx_p rx_data_1_p
+ad_connect  util_fmcadc5_1_gt/rx_n rx_data_1_n
+ad_connect  util_fmcadc5_1_gt/rx_sysref GND
+ad_connect  util_fmcadc5_1_gt/rx_sync rx_sync_1
 ad_connect  util_fmcadc5_0_gt/rx_out_clk util_fmcadc5_0_gt/rx_clk
 ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_0_jesd/rx_core_clk
 ad_connect  util_fmcadc5_0_gt/rx_ip_rst axi_ad9625_0_jesd/rx_reset
@@ -222,24 +226,19 @@ ad_connect  util_fmcadc5_0_gt/rx_ip_sysref axi_ad9625_0_jesd/rx_sysref
 ad_connect  util_fmcadc5_0_gt/rx_ip_sync axi_ad9625_0_jesd/rx_sync
 ad_connect  util_fmcadc5_0_gt/rx_ip_sof axi_ad9625_0_jesd/rx_start_of_frame
 ad_connect  util_fmcadc5_0_gt/rx_ip_data axi_ad9625_0_jesd/rx_tdata
-ad_connect  util_fmcadc5_1_gt/rx_sysref rx_sysref
-ad_connect  util_fmcadc5_1_gt/rx_p rx_data_1_p
-ad_connect  util_fmcadc5_1_gt/rx_n rx_data_1_n
-ad_connect  util_fmcadc5_1_gt/rx_sync rx_sync_1
-ad_connect  util_fmcadc5_1_gt/rx_out_clk util_fmcadc5_1_gt/rx_clk
-ad_connect  util_fmcadc5_1_gt/rx_out_clk axi_ad9625_1_jesd/rx_core_clk
+ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_0_core/rx_clk
+ad_connect  util_fmcadc5_0_gt/rx_data axi_ad9625_0_core/rx_data
+ad_connect  util_fmcadc5_0_gt/rx_out_clk util_fmcadc5_1_gt/rx_clk
+ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_1_jesd/rx_core_clk
 ad_connect  util_fmcadc5_1_gt/rx_ip_rst axi_ad9625_1_jesd/rx_reset
 ad_connect  util_fmcadc5_1_gt/rx_ip_rst_done axi_ad9625_1_jesd/rx_reset_done
 ad_connect  util_fmcadc5_1_gt/rx_ip_sysref axi_ad9625_1_jesd/rx_sysref
 ad_connect  util_fmcadc5_1_gt/rx_ip_sync axi_ad9625_1_jesd/rx_sync
 ad_connect  util_fmcadc5_1_gt/rx_ip_sof axi_ad9625_1_jesd/rx_start_of_frame
 ad_connect  util_fmcadc5_1_gt/rx_ip_data axi_ad9625_1_jesd/rx_tdata
-
-ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_0_core/rx_clk
-ad_connect  util_fmcadc5_1_gt/rx_out_clk axi_ad9625_1_core/rx_clk
-ad_connect  util_fmcadc5_0_gt/rx_data axi_ad9625_0_core/rx_data
+ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_1_core/rx_clk
 ad_connect  util_fmcadc5_1_gt/rx_data axi_ad9625_1_core/rx_data
-ad_connect  axi_ad9625_0_core/adc_clk axi_fmcadc5_cpack/adc_clk
+ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_fmcadc5_cpack/adc_clk
 ad_connect  util_fmcadc5_0_gt/rx_rst axi_fmcadc5_cpack/adc_rst
 ad_connect  axi_ad9625_0_core/adc_enable axi_fmcadc5_cpack/adc_enable_0
 ad_connect  axi_ad9625_0_core/adc_valid axi_fmcadc5_cpack/adc_valid_0
@@ -247,16 +246,17 @@ ad_connect  axi_ad9625_0_core/adc_data axi_fmcadc5_cpack/adc_data_0
 ad_connect  axi_ad9625_1_core/adc_enable axi_fmcadc5_cpack/adc_enable_1
 ad_connect  axi_ad9625_1_core/adc_valid axi_fmcadc5_cpack/adc_valid_1
 ad_connect  axi_ad9625_1_core/adc_data axi_fmcadc5_cpack/adc_data_1
-ad_connect  axi_ad9625_0_core/adc_clk axi_ad9625_fifo/adc_clk
+ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_fifo/adc_clk
 ad_connect  util_fmcadc5_0_gt/rx_rst axi_ad9625_fifo/adc_rst
 ad_connect  axi_fmcadc5_cpack/adc_valid axi_ad9625_fifo/adc_wr
 ad_connect  axi_fmcadc5_cpack/adc_data axi_ad9625_fifo/adc_wdata
 ad_connect  axi_ad9625_0_core/adc_dovf axi_ad9625_fifo/adc_wovf
-ad_connect  sys_cpu_clk axi_ad9625_dma/s_axis_aclk
 ad_connect  sys_cpu_clk axi_ad9625_fifo/dma_clk
+ad_connect  sys_cpu_clk axi_ad9625_dma/s_axis_aclk
+ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9625_fifo/dma_wr axi_ad9625_dma/s_axis_valid
-ad_connect  axi_ad9625_fifo/dma_wready axi_ad9625_dma/s_axis_ready
 ad_connect  axi_ad9625_fifo/dma_wdata axi_ad9625_dma/s_axis_data
+ad_connect  axi_ad9625_fifo/dma_wready axi_ad9625_dma/s_axis_ready
 ad_connect  axi_ad9625_fifo/dma_xfer_req axi_ad9625_dma/s_axis_xfer_req
 
 # interconnect (cpu)
@@ -274,7 +274,6 @@ ad_cpu_interconnect 0x7c420000 axi_ad9625_dma
 ad_mem_hp0_interconnect sys_cpu_clk axi_fmcadc5_0_gt/m_axi
 ad_mem_hp0_interconnect sys_cpu_clk axi_fmcadc5_1_gt/m_axi
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
-ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
 
 # interrupts
 
