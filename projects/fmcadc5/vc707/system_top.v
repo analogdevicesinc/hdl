@@ -112,6 +112,8 @@ module system_top (
   spi_sdio,
   spi_dirn,
 
+  psync_0,
+  psync_1,
   trig_p,
   trig_n,
   vdither_p,
@@ -209,6 +211,8 @@ module system_top (
   output            dac_sync_0;
   output            dac_sync_1;
 
+  output            psync_0;
+  output            psync_1;
   input             trig_p;
   input             trig_n;
   output            vdither_p;
@@ -220,17 +224,12 @@ module system_top (
   inout             irq_0;
   inout             pwdn_1;
   inout             rst_1;
-  inout             drst_1;
-  inout             arst_1;
+  output            drst_1;
+  output            arst_1;
   inout             pwdn_0;
   inout             rst_0;
-  inout             drst_0;
-  inout             arst_0;
-
-  // internal registers
-
-  reg               adc_wr = 'd0;
-  reg     [511:0]   adc_wdata = 'd0;
+  output            drst_0;
+  output            arst_0;
 
   // internal signals
 
@@ -246,6 +245,8 @@ module system_top (
   wire              rx_sysref;
   wire              rx_sync_0;
   wire              rx_sync_1;
+  wire              up_rstn;
+  wire              up_clk;
 
   // spi
 
@@ -257,6 +258,10 @@ module system_top (
   assign dac_sync_0 = spi_csn[2];
   assign spi_csn_1 = spi_csn[1];
   assign spi_csn_0 = spi_csn[0];
+  assign drst_1 = 1'b0;
+  assign arst_1 = 1'b0;
+  assign drst_0 = 1'b0;
+  assign arst_0 = 1'b0;
 
   // instantiations
 
@@ -299,6 +304,12 @@ module system_top (
     .O (vdither_p),
     .OB (vdither_n));
 
+  fmcadc5_psync i_fmcadc5_psync (
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .psync_0 (psync_0),
+    .psync_1 (psync_1));
+
   fmcadc5_spi i_fmcadc5_spi (
     .spi_csn_0 (spi_csn_0),
     .spi_csn_1 (spi_csn_1),
@@ -308,10 +319,10 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dirn (spi_dirn));
 
-  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf (
-    .dio_t (gpio_t[44:32]),
-    .dio_i (gpio_o[44:32]),
-    .dio_o (gpio_i[44:32]),
+  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
+    .dio_t ({gpio_t[44:40], gpio_t[39:38], gpio_t[35:34]}),
+    .dio_i ({gpio_o[44:40], gpio_o[39:38], gpio_o[35:34]}),
+    .dio_o ({gpio_i[44:40], gpio_i[39:38], gpio_i[35:34]}),
     .dio_p ({ pwr_good,       // 44
               fd_1,           // 43
               irq_1,          // 42
@@ -319,12 +330,8 @@ module system_top (
               irq_0,          // 40
               pwdn_1,         // 39
               rst_1,          // 38
-              drst_1,         // 37
-              arst_1,         // 36
               pwdn_0,         // 35
-              rst_0,          // 34
-              drst_0,         // 33
-              arst_0}));      // 32
+              rst_0}));       // 34
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
@@ -399,7 +406,9 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout));
+    .uart_sout (uart_sout),
+    .up_clk (up_clk),
+    .up_rstn (up_rstn));
 
 endmodule
 
