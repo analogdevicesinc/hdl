@@ -226,7 +226,7 @@ module ad_tdd_control(
   // edge detection circuit
   always @(posedge clk) begin
     if (rst == 1'b1) begin
-      tdd_sync_d3 <= 1'b1;
+      tdd_sync_d3 <= 1'b0;
       tdd_sync_pulse <= 1'b0;
     end else begin
       tdd_sync_d3 <= tdd_sync_d2;

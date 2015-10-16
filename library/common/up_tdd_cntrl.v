@@ -241,6 +241,9 @@ module up_tdd_cntrl (
       up_tdd_tx_dp_on_2 <= 24'h0;
     end else begin
       up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+        up_scratch <= up_wdata;
+      end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
         up_tdd_enable <= up_wdata[0];
         up_tdd_secondary <= up_wdata[1];
@@ -338,6 +341,9 @@ module up_tdd_cntrl (
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
+          8'h00: up_rdata <= PCORE_VERSION;
+          8'h01: up_rdata <= ID;
+          8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {28'h0, up_tdd_gated_tx_dmapath,
                                      up_tdd_gated_rx_dmapath,
                                      up_tdd_tx_only,
