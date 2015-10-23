@@ -768,7 +768,7 @@ module up_gt_channel (
 
   // rx sysref & sync
 
-  always @(posedge rx_clk) begin
+  always @(posedge rx_clk or posedge rx_rst_m) begin
     if (rx_rst_m == 1'b1) begin
       rx_sysref_sel_m1 <= 'd0;
       rx_sysref_sel <= 'd0;
@@ -796,7 +796,7 @@ module up_gt_channel (
 
   // tx sysref & sync
 
-  always @(posedge tx_clk) begin
+  always @(posedge tx_clk or posedge tx_rst_m) begin
     if (tx_rst_m == 1'b1) begin
       tx_sysref_sel_m1 <= 'd0;
       tx_sysref_sel <= 'd0;
