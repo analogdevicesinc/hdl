@@ -5,17 +5,17 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := system_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_top.v
+M_DEPS += system_project.tcl
 M_DEPS += system_constr.xdc
-M_DEPS += ../../../library/common/ad_iobuf.v
-M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += system_bd.tcl
-M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../common/ad9739a_fmc_bd.tcl
+M_DEPS += ../../scripts/adi_project.tcl
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_board.tcl
+M_DEPS += ../../common/zc706/zc706_system_constr.xdc
+M_DEPS += ../../common/zc706/zc706_system_bd.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9739a/axi_ad9739a.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr

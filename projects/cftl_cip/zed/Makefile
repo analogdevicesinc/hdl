@@ -5,17 +5,17 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := system_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_top.v
+M_DEPS += system_project.tcl
 M_DEPS += system_constr.xdc
-M_DEPS += ../../common/zed/zed_system_constr.xdc
-M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += system_bd.tcl
-M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../common/cftl_cip_bd.tcl
+M_DEPS += ../../scripts/adi_project.tcl
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_board.tcl
+M_DEPS += ../../common/zed/zed_system_constr.xdc
+M_DEPS += ../../common/zed/zed_system_bd.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
@@ -41,7 +41,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib cftl_cip_zed.sdk/system_top.hdf
+all: lib cftl_custom_zed.sdk/system_top.hdf
 
 
 clean: 
@@ -59,9 +59,9 @@ clean-all:clean
 	make -C ../../../library/util_pmod_fmeter clean
 
 
-cftl_cip_zed.sdk/system_top.hdf: $(M_DEPS)
+cftl_custom_zed.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> cftl_cip_zed_vivado.log 2>&1
+	$(M_VIVADO) system_project.tcl >> cftl_custom_zed_vivado.log 2>&1
 
 
 lib:

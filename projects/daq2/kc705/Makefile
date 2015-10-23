@@ -5,20 +5,20 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := system_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_board.tcl
-M_DEPS += ../common/daq2_spi.v
 M_DEPS += system_top.v
+M_DEPS += system_project.tcl
 M_DEPS += system_constr.xdc
-M_DEPS += ../../../library/common/ad_iobuf.v
-M_DEPS += ../../common/kc705/kc705_system_constr.xdc
 M_DEPS += system_bd.tcl
-M_DEPS += ../../common/kc705/kc705_system_bd.tcl
-M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
+M_DEPS += ../common/daq2_spi.v
 M_DEPS += ../common/daq2_bd.tcl
+M_DEPS += ../../scripts/adi_project.tcl
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_board.tcl
+M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
 M_DEPS += ../../common/kc705/kc705_system_mig.prj
+M_DEPS += ../../common/kc705/kc705_system_constr.xdc
+M_DEPS += ../../common/kc705/kc705_system_bd.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9144/axi_ad9144.xpr
 M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr

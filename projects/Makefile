@@ -17,6 +17,7 @@ all:
 	-make -C cftl_cip all
 	-make -C cftl_std all
 	-make -C cn0363 all
+	-make -C common all
 	-make -C daq1 all
 	-make -C daq2 all
 	-make -C daq3 all
@@ -26,15 +27,13 @@ all:
 	-make -C fmcjesdadc1 all
 	-make -C fmcomms1 all
 	-make -C fmcomms2 all
-	-make -C fmcomms2_pr all
 	-make -C fmcomms5 all
 	-make -C fmcomms6 all
 	-make -C fmcomms7 all
 	-make -C imageon all
-	-make -C imageon_loopback all
 	-make -C motcon2_fmc all
 	-make -C pzsdr all
-	-make -C pzslb all
+	-make -C usb_fx3 all
 	-make -C usdrx1 all
 
 
@@ -49,6 +48,7 @@ clean:
 	make -C cftl_cip clean
 	make -C cftl_std clean
 	make -C cn0363 clean
+	make -C common clean
 	make -C daq1 clean
 	make -C daq2 clean
 	make -C daq3 clean
@@ -58,15 +58,13 @@ clean:
 	make -C fmcjesdadc1 clean
 	make -C fmcomms1 clean
 	make -C fmcomms2 clean
-	make -C fmcomms2_pr clean
 	make -C fmcomms5 clean
 	make -C fmcomms6 clean
 	make -C fmcomms7 clean
 	make -C imageon clean
-	make -C imageon_loopback clean
 	make -C motcon2_fmc clean
 	make -C pzsdr clean
-	make -C pzslb clean
+	make -C usb_fx3 clean
 	make -C usdrx1 clean
 
 
@@ -81,6 +79,7 @@ clean-all:
 	make -C cftl_cip clean-all
 	make -C cftl_std clean-all
 	make -C cn0363 clean-all
+	make -C common clean-all
 	make -C daq1 clean-all
 	make -C daq2 clean-all
 	make -C daq3 clean-all
@@ -90,15 +89,13 @@ clean-all:
 	make -C fmcjesdadc1 clean-all
 	make -C fmcomms1 clean-all
 	make -C fmcomms2 clean-all
-	make -C fmcomms2_pr clean-all
 	make -C fmcomms5 clean-all
 	make -C fmcomms6 clean-all
 	make -C fmcomms7 clean-all
 	make -C imageon clean-all
-	make -C imageon_loopback clean-all
 	make -C motcon2_fmc clean-all
 	make -C pzsdr clean-all
-	make -C pzslb clean-all
+	make -C usb_fx3 clean-all
 	make -C usdrx1 clean-all
 
 ####################################################################################

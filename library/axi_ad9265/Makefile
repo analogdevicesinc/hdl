@@ -21,6 +21,7 @@ M_DEPS += ../common/up_delay_cntrl.v
 M_DEPS += ../common/up_adc_common.v
 M_DEPS += ../common/up_adc_channel.v
 M_DEPS += ../common/up_axi.v
+M_DEPS += ../common/ad_axi_ip_constr.xdc
 M_DEPS += axi_ad9265_pnmon.v
 M_DEPS += axi_ad9265_if.v
 M_DEPS += axi_ad9265_channel.v

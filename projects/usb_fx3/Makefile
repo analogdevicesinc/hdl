@@ -7,15 +7,15 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C rfsom all
+	-make -C zc706 all
 
 
 clean: 
-	make -C rfsom clean
+	make -C zc706 clean
 
 
 clean-all:
-	make -C rfsom clean-all
+	make -C zc706 clean-all
 
 ####################################################################################
 ####################################################################################
