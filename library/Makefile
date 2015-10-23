@@ -39,6 +39,7 @@ clean:
 	make -C axi_mc_speed clean
 	make -C axi_spdif_rx clean
 	make -C axi_spdif_tx clean
+	make -C axi_usb_fx3 clean
 	make -C cn0363/cn0363_dma_sequencer clean
 	make -C cn0363/cn0363_phase_data_sync clean
 	make -C cordic_demod clean
@@ -101,6 +102,7 @@ lib:
 	-make -C axi_mc_speed
 	-make -C axi_spdif_rx
 	-make -C axi_spdif_tx
+	-make -C axi_usb_fx3
 	-make -C cn0363/cn0363_dma_sequencer
 	-make -C cn0363/cn0363_phase_data_sync
 	-make -C cordic_demod
