@@ -21,3 +21,22 @@ create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
 
 source ../common/fmcadc4_bd.tcl
 
+# ila 
+
+set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_adc]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
+set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {64}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {64}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {64}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE3_WIDTH {64}] $ila_adc
+
+ad_connect  util_fmcadc4_gt/rx_out_clk ila_adc/clk
+ad_connect  axi_ad9680_core_0/adc_data_0 ila_adc/probe0
+ad_connect  axi_ad9680_core_0/adc_data_1 ila_adc/probe1
+ad_connect  axi_ad9680_core_1/adc_data_0 ila_adc/probe2
+ad_connect  axi_ad9680_core_1/adc_data_1 ila_adc/probe3
+
+
