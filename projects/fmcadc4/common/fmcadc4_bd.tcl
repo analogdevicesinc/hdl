@@ -39,14 +39,23 @@ set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $axi_ad9680_cpack
 
 set axi_fmcadc4_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_fmcadc4_gt]
 set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_fmcadc4_gt
+set_property -dict [list CONFIG.QPLL0_ENABLE {1}] $axi_fmcadc4_gt
+set_property -dict [list CONFIG.QPLL1_ENABLE {1}] $axi_fmcadc4_gt
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $axi_fmcadc4_gt
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $axi_fmcadc4_gt
+set_property -dict [list CONFIG.RX_CLKBUF_ENABLE_0 {1}] $axi_fmcadc4_gt
 
 set util_fmcadc4_gt [create_bd_cell -type ip -vlnv analog.com:user:util_jesd_gt:1.0 util_fmcadc4_gt]
+set_property -dict [list CONFIG.QPLL0_ENABLE {1}] $util_fmcadc4_gt
+set_property -dict [list CONFIG.QPLL1_ENABLE {1}] $util_fmcadc4_gt
 set_property -dict [list CONFIG.NUM_OF_LANES {8}] $util_fmcadc4_gt
 set_property -dict [list CONFIG.RX_ENABLE {1}] $util_fmcadc4_gt
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $util_fmcadc4_gt
 set_property -dict [list CONFIG.TX_ENABLE {0}] $util_fmcadc4_gt
+
+create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_data
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {128}] [get_bd_cells util_bsplit_rx_data]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] [get_bd_cells util_bsplit_rx_data]
 
 # connections (gt)
 
@@ -89,9 +98,9 @@ ad_connect  axi_fmcadc4_gt/rx_gt_comma_align_enb_7 axi_ad9680_jesd/rxencommaalig
 
 # connections (adc)
 
-ad_connect  util_fmcadc4_gt/rx_sysref rx_sysref
 ad_connect  util_fmcadc4_gt/rx_p rx_data_p
 ad_connect  util_fmcadc4_gt/rx_n rx_data_n
+ad_connect  util_fmcadc4_gt/rx_sysref rx_sysref
 ad_connect  util_fmcadc4_gt/rx_sync rx_sync
 ad_connect  util_fmcadc4_gt/rx_out_clk util_fmcadc4_gt/rx_clk
 ad_connect  util_fmcadc4_gt/rx_out_clk axi_ad9680_jesd/rx_core_clk
@@ -101,17 +110,12 @@ ad_connect  util_fmcadc4_gt/rx_ip_sysref axi_ad9680_jesd/rx_sysref
 ad_connect  util_fmcadc4_gt/rx_ip_sync axi_ad9680_jesd/rx_sync
 ad_connect  util_fmcadc4_gt/rx_ip_sof axi_ad9680_jesd/rx_start_of_frame
 ad_connect  util_fmcadc4_gt/rx_ip_data axi_ad9680_jesd/rx_tdata
-
-create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_data
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {128}] [get_bd_cells util_bsplit_rx_data]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] [get_bd_cells util_bsplit_rx_data]
-
+ad_connect  util_fmcadc4_gt/rx_data util_bsplit_rx_data/data
 ad_connect  util_fmcadc4_gt/rx_out_clk axi_ad9680_core_0/rx_clk
 ad_connect  util_fmcadc4_gt/rx_out_clk axi_ad9680_core_1/rx_clk
-ad_connect  util_fmcadc4_gt/rx_data util_bsplit_rx_data/data
 ad_connect  util_bsplit_rx_data/split_data_0 axi_ad9680_core_0/rx_data
 ad_connect  util_bsplit_rx_data/split_data_1 axi_ad9680_core_1/rx_data
-ad_connect  axi_ad9680_core_0/adc_clk axi_ad9680_cpack/adc_clk
+ad_connect  util_fmcadc4_gt/rx_out_clk axi_ad9680_cpack/adc_clk
 ad_connect  util_fmcadc4_gt/rx_rst axi_ad9680_cpack/adc_rst
 ad_connect  axi_ad9680_core_0/adc_enable_0 axi_ad9680_cpack/adc_enable_0
 ad_connect  axi_ad9680_core_0/adc_valid_0 axi_ad9680_cpack/adc_valid_0
@@ -125,7 +129,7 @@ ad_connect  axi_ad9680_core_1/adc_data_0 axi_ad9680_cpack/adc_data_2
 ad_connect  axi_ad9680_core_1/adc_enable_1 axi_ad9680_cpack/adc_enable_3
 ad_connect  axi_ad9680_core_1/adc_valid_1 axi_ad9680_cpack/adc_valid_3
 ad_connect  axi_ad9680_core_1/adc_data_1 axi_ad9680_cpack/adc_data_3
-ad_connect  axi_ad9680_core_0/adc_clk axi_ad9680_fifo/adc_clk
+ad_connect  util_fmcadc4_gt/rx_out_clk axi_ad9680_fifo/adc_clk
 ad_connect  util_fmcadc4_gt/rx_rst axi_ad9680_fifo/adc_rst
 ad_connect  axi_ad9680_cpack/adc_valid axi_ad9680_fifo/adc_wr
 ad_connect  axi_ad9680_cpack/adc_data axi_ad9680_fifo/adc_wdata
