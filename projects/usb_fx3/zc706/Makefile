@@ -19,6 +19,7 @@ M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
+M_DEPS += ../../../library/axi_usb_fx3/axi_usb_fx3.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -47,6 +48,7 @@ clean-all:clean
 	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/axi_hdmi_tx clean
 	make -C ../../../library/axi_spdif_tx clean
+	make -C ../../../library/axi_usb_fx3 clean
 
 
 usb_fx3_zc706.sdk/system_top.hdf: $(M_DEPS)
@@ -58,6 +60,7 @@ lib:
 	make -C ../../../library/axi_clkgen
 	make -C ../../../library/axi_hdmi_tx
 	make -C ../../../library/axi_spdif_tx
+	make -C ../../../library/axi_usb_fx3
 
 ####################################################################################
 ####################################################################################
