@@ -218,6 +218,7 @@ ad_connect  util_fmcadc5_1_gt/rx_p rx_data_1_p
 ad_connect  util_fmcadc5_1_gt/rx_n rx_data_1_n
 ad_connect  util_fmcadc5_1_gt/rx_sysref GND
 ad_connect  util_fmcadc5_1_gt/rx_sync rx_sync_1
+ad_connect  util_fmcadc5_0_gt/rx_ip_sysref rx_sysref
 ad_connect  util_fmcadc5_0_gt/rx_out_clk util_fmcadc5_0_gt/rx_clk
 ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_0_jesd/rx_core_clk
 ad_connect  util_fmcadc5_0_gt/rx_ip_rst axi_ad9625_0_jesd/rx_reset
@@ -232,7 +233,7 @@ ad_connect  util_fmcadc5_0_gt/rx_out_clk util_fmcadc5_1_gt/rx_clk
 ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_1_jesd/rx_core_clk
 ad_connect  util_fmcadc5_1_gt/rx_ip_rst axi_ad9625_1_jesd/rx_reset
 ad_connect  util_fmcadc5_1_gt/rx_ip_rst_done axi_ad9625_1_jesd/rx_reset_done
-ad_connect  util_fmcadc5_1_gt/rx_ip_sysref axi_ad9625_1_jesd/rx_sysref
+ad_connect  util_fmcadc5_0_gt/rx_ip_sysref axi_ad9625_1_jesd/rx_sysref
 ad_connect  util_fmcadc5_1_gt/rx_ip_sync axi_ad9625_1_jesd/rx_sync
 ad_connect  util_fmcadc5_1_gt/rx_ip_sof axi_ad9625_1_jesd/rx_start_of_frame
 ad_connect  util_fmcadc5_1_gt/rx_ip_data axi_ad9625_1_jesd/rx_tdata
@@ -240,6 +241,8 @@ ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_1_core/rx_clk
 ad_connect  util_fmcadc5_1_gt/rx_data axi_ad9625_1_core/rx_data
 ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_fmcadc5_cpack/adc_clk
 ad_connect  util_fmcadc5_0_gt/rx_rst axi_fmcadc5_cpack/adc_rst
+ad_connect  axi_ad9625_0_core/adc_raddr_out axi_ad9625_0_core/adc_raddr_in
+ad_connect  axi_ad9625_0_core/adc_raddr_out axi_ad9625_1_core/adc_raddr_in
 ad_connect  axi_ad9625_0_core/adc_enable axi_fmcadc5_cpack/adc_enable_0
 ad_connect  axi_ad9625_0_core/adc_valid axi_fmcadc5_cpack/adc_valid_0
 ad_connect  axi_ad9625_0_core/adc_data axi_fmcadc5_cpack/adc_data_0
