@@ -93,6 +93,15 @@ module system_top (
 
   gpio_bd,
 
+  ad9517_csn,
+  ad9517_clk,
+  ad9517_mosi,
+  ad9517_miso,
+  ad9517_pdn,
+  ad9517_ref_sel,
+  ad9517_ld,
+  ad9517_status,
+
   rx_clk_in_p,
   rx_clk_in_n,
   rx_frame_in_p,
@@ -183,6 +192,15 @@ module system_top (
 
   inout   [11:0]  gpio_bd;
 
+  output          ad9517_csn;
+  output          ad9517_clk;
+  output          ad9517_mosi;
+  input           ad9517_miso;
+  inout           ad9517_pdn;
+  inout           ad9517_ref_sel;
+  inout           ad9517_ld;
+  inout           ad9517_status;
+
   input           rx_clk_in_p;
   input           rx_clk_in_n;
   input           rx_frame_in_p;
@@ -221,6 +239,10 @@ module system_top (
 
   // internal signals
 
+  wire    [ 1:0]  spi_csn_s;
+  wire            spi_clk_s;
+  wire            spi_mosi_s;
+  wire            spi_miso_s;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -232,14 +254,25 @@ module system_top (
   // assignments
 
   assign hdmi_pd = 1'b0;
+  assign spi_csn = spi_csn_s[0];
+  assign spi_clk = spi_clk_s;
+  assign spi_mosi = spi_mosi_s;
+  assign ad9517_csn = spi_csn_s[1];
+  assign ad9517_clk = spi_clk_s;
+  assign ad9517_mosi = spi_mosi_s;
+  assign spi_miso_s = (~spi_csn_s[0] & spi_miso) | (~spi_csn_s[1] & ad9517_miso); 
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf (
-    .dio_t ({gpio_t[56:51], gpio_t[46:32]}),
-    .dio_i ({gpio_o[56:51], gpio_o[46:32]}),
-    .dio_o ({gpio_i[56:51], gpio_i[46:32]}),
-    .dio_p ({ gpio_rf0,           // 56:56
+  ad_iobuf #(.DATA_WIDTH(25)) i_iobuf (
+    .dio_t ({gpio_t[60:51], gpio_t[46:32]}),
+    .dio_i ({gpio_o[60:51], gpio_o[46:32]}),
+    .dio_o ({gpio_i[60:51], gpio_i[46:32]}),
+    .dio_p ({ ad9517_pdn,         // 60:60
+              ad9517_ref_sel,     // 59:59
+              ad9517_ld,          // 58:58
+              ad9517_status,      // 57:57
+              gpio_rf0,           // 56:56
               gpio_rf1,           // 55:55
               gpio_rf2,           // 54:54
               gpio_rf3,           // 53:53
@@ -339,14 +372,14 @@ module system_top (
     .rx_frame_in_p (rx_frame_in_p),
     .spdif (spdif),
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (spi_clk),
-    .spi0_csn_0_o (spi_csn),
-    .spi0_csn_1_o (),
+    .spi0_clk_o (spi_clk_s),
+    .spi0_csn_0_o (spi_csn_s[0]),
+    .spi0_csn_1_o (spi_csn_s[1]),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (spi_miso),
+    .spi0_sdi_i (spi_miso_s),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_mosi),
+    .spi0_sdo_o (spi_mosi_s),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
