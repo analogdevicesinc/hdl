@@ -47,7 +47,6 @@ module util_gtlb (
   output                qpll0_rst,
   output                qpll0_ref_clk_in,
 
-  input                 pll_rst_0,
   output                cpll_rst_m_0,
   output                cpll_ref_clk_in_0,
 
@@ -66,6 +65,7 @@ module util_gtlb (
   output                rx_0_n,
   input                 rx_rst_0,
   output                rx_rst_m_0,
+  input                 rx_pll_rst_0,
   input                 rx_gt_rst_0,
   output                rx_gt_rst_m_0,
   input                 rx_pll_locked_0,
@@ -99,6 +99,7 @@ module util_gtlb (
   input                 tx_0_n,
   input                 tx_rst_0,
   output                tx_rst_m_0,
+  input                 tx_pll_rst_0,
   input                 tx_gt_rst_0,
   output                tx_gt_rst_m_0,
   input                 tx_pll_locked_0,
@@ -201,9 +202,9 @@ module util_gtlb (
 
   // defaults
 
-  assign qpll0_rst = pll_rst_0;
+  assign qpll0_rst = tx_pll_rst_0 | rx_pll_rst_0;
   assign qpll0_ref_clk_in = qpll_ref_clk;
-  assign cpll_rst_m_0 = pll_rst_0;
+  assign cpll_rst_m_0 = tx_pll_rst_0 | rx_pll_rst_0;
   assign cpll_ref_clk_in_0 = cpll_ref_clk;
 
   assign rx_0_p = rx_p;
