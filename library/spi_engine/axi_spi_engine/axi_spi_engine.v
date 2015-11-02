@@ -42,7 +42,7 @@ module axi_spi_engine (
 
 	output sdi_data_ready,
 	input sdi_data_valid,
-	input [7:0] sdi_data,
+	input [(SDI_DATA_WIDTH-1):0] sdi_data,
 
 	output sync_ready,
 	input sync_valid,
@@ -72,7 +72,9 @@ parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH = 4;
 parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH = 4;
 
 parameter ID = 'h00;
-localparam PCORE_VERSION = 'h010061;
+parameter SDI_DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
+
+localparam PCORE_VERSION = 'h010071;
 
 wire [CMD_FIFO_ADDRESS_WIDTH:0] cmd_fifo_room;
 wire cmd_fifo_almost_empty;
@@ -307,7 +309,7 @@ assign sdi_fifo_almost_full =
 	`axi_spi_engine_check_watermark(sdi_fifo_level, SDI_FIFO_ADDRESS_WIDTH);
 
 util_axis_fifo #(
-	.DATA_WIDTH(8),
+	.DATA_WIDTH(SDI_DATA_WIDTH),
 	.ASYNC_CLK(ASYNC_SPI_CLK),
 	.ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
 	.S_AXIS_REGISTERED(0)

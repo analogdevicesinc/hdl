@@ -27,7 +27,7 @@ module spi_engine_offload (
 
 	input sdi_data_valid,
 	output sdi_data_ready,
-	input [7:0] sdi_data,
+	input [(SDI_DATA_WIDTH-1):0] sdi_data,
 
 	input sync_valid,
 	output sync_ready,
@@ -35,12 +35,13 @@ module spi_engine_offload (
 
 	output offload_sdi_valid,
 	input offload_sdi_ready,
-	output [7:0] offload_sdi_data
+	output [(SDI_DATA_WIDTH-1):0] offload_sdi_data
 );
 
 parameter ASYNC_SPI_CLK = 0;
 parameter CMD_MEM_ADDRESS_WIDTH = 4;
 parameter SDO_MEM_ADDRESS_WIDTH = 4;
+parameter SDI_DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
 
 reg spi_active = 1'b0;
 
@@ -92,7 +93,7 @@ end
 assign ctrl_enabled = ctrl_is_enabled | ctrl_do_enable;
 
 always @(posedge spi_clk) begin
-	spi_enabled <= spi_enable | spi_active;	
+	spi_enabled <= spi_enable | spi_active;
 end
 
 sync_bits # (

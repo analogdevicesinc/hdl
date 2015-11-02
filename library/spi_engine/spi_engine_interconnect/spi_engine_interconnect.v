@@ -14,7 +14,7 @@ module spi_engine_interconnect (
 
 	input m_sdi_valid,
 	output m_sdi_ready,
-	input [7:0] m_sdi_data,
+	input [(SDI_DATA_WIDTH-1):0] m_sdi_data,
 
 	input m_sync_valid,
 	output m_sync_ready,
@@ -31,7 +31,7 @@ module spi_engine_interconnect (
 
 	output s0_sdi_valid,
 	input s0_sdi_ready,
-	output [7:0] s0_sdi_data,
+	output [(SDI_DATA_WIDTH-1):0] s0_sdi_data,
 
 	output s0_sync_valid,
 	input s0_sync_ready,
@@ -48,12 +48,14 @@ module spi_engine_interconnect (
 
 	output s1_sdi_valid,
 	input s1_sdi_ready,
-	output [7:0] s1_sdi_data,
+	output [(SDI_DATA_WIDTH-1):0] s1_sdi_data,
 
 	output s1_sync_valid,
 	input s1_sync_ready,
 	output [7:0] s1_sync
 );
+
+parameter SDI_DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
 
 reg s_active = 1'b0;
 
