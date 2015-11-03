@@ -123,8 +123,8 @@ module util_gtlb (
 
   input                 up_clk,
   input                 up_rstn,
-  input       [31;0]    up_gp_in;
-  output      [31;0]    up_gp_out);
+  input       [31:0]    up_gp_in,
+  output      [31:0]    up_gp_out);
 
   // internal registers
 
