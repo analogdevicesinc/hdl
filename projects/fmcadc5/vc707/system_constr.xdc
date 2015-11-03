@@ -86,3 +86,4 @@ create_clock -name rx_ref_clk_0   -period  1.60 [get_ports rx_ref_clk_0_p]
 create_clock -name rx_ref_clk_1   -period  1.60 [get_ports rx_ref_clk_1_p]
 create_clock -name rx_div_clk     -period  6.40 [get_pins i_system_wrapper/system_i/axi_fmcadc5_0_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
 
+

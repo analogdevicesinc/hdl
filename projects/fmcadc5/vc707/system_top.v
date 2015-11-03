@@ -231,8 +231,15 @@ module system_top (
   output            drst_0;
   output            arst_0;
 
+  // internal registers
+
+  reg     [  4:0]   gpio_o_60_56_d = 'd0;
+  reg               gpio_dld = 'd0;
+
   // internal signals
 
+  wire              delay_clk;
+  wire              delay_rst;
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [ 63:0]   gpio_t;
@@ -240,9 +247,10 @@ module system_top (
   wire              spi_clk;
   wire              spi_mosi;
   wire              spi_miso;
+  wire              rx_clk;
   wire              rx_ref_clk_0;
   wire              rx_ref_clk_1;
-  wire              rx_sysref;
+  wire              rx_sysref_s;
   wire              rx_sync_0;
   wire              rx_sync_1;
   wire              up_rstn;
@@ -263,7 +271,43 @@ module system_top (
   assign drst_0 = 1'b0;
   assign arst_0 = 1'b0;
 
+  // sysref iob
+
+  always @(posedge up_clk or negedge up_rstn) begin
+    if (up_rstn == 1'b0) begin
+      gpio_o_60_56_d <= 5'd0;
+      gpio_dld <= 1'b0;
+    end else begin
+      gpio_o_60_56_d <= gpio_o[60:56];
+      if (gpio_o[60:56] == gpio_o_60_56_d) begin
+        gpio_dld <= 1'b0;
+      end else begin
+        gpio_dld <= 1'b1;
+      end
+    end
+  end
+
   // instantiations
+
+  ad_lvds_out #(
+    .DEVICE_TYPE (0),
+    .SINGLE_ENDED (0),
+    .IODELAY_ENABLE (1),
+    .IODELAY_CTRL (1),
+    .IODELAY_GROUP ("FMCADC5_SYSREF_IODELAY_GROUP"))
+  i_rx_sysref (
+    .tx_clk (rx_clk),
+    .tx_data_p (rx_sysref_s),
+    .tx_data_n (rx_sysref_s),
+    .tx_data_out_p (rx_sysref_p),
+    .tx_data_out_n (rx_sysref_n),
+    .up_clk (up_clk),
+    .up_dld (gpio_dld),
+    .up_dwdata (gpio_o[60:56]),
+    .up_drdata (gpio_i[60:56]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (gpio_i[61]));
 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk_0 (
     .CEB (1'd0),
@@ -278,11 +322,6 @@ module system_top (
     .IB (rx_ref_clk_1_n),
     .O (rx_ref_clk_1),
     .ODIV2 ());
-
-  OBUFDS i_obufds_rx_sysref (
-    .I (rx_sysref),
-    .O (rx_sysref_p),
-    .OB (rx_sysref_n));
 
   OBUFDS i_obufds_rx_sync_0 (
     .I (rx_sync_0),
@@ -355,6 +394,8 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
@@ -382,6 +423,7 @@ module system_top (
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
     .phy_sd (1'b1),
+    .rx_clk (rx_clk),
     .rx_data_0_n (rx_data_0_n),
     .rx_data_0_p (rx_data_0_p),
     .rx_data_1_n (rx_data_1_n),
@@ -390,7 +432,7 @@ module system_top (
     .rx_ref_clk_1 (rx_ref_clk_1),
     .rx_sync_0 (rx_sync_0),
     .rx_sync_1 (rx_sync_1),
-    .rx_sysref (rx_sysref),
+    .rx_sysref (rx_sysref_s),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),

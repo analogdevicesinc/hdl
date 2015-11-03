@@ -314,6 +314,13 @@ module system_top (
   wire            tdd_sync_i;
   wire            tdd_sync_o;
   wire            tdd_sync_t;
+  wire            up_clk;
+  wire            up_rst;
+  wire            up_rstn;
+  wire            up_pn_err_clr;
+  wire            up_pn_oos_clr;
+  wire            up_pn_err;
+  wire            up_pn_oos;
 
   // assignments
 
@@ -569,7 +576,14 @@ module system_top (
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
     .txnrx (txnrx),
+    .up_clk (up_clk),
     .up_enable (gpio_o[47]),
+    .up_pn_err (up_pn_err),
+    .up_pn_err_clr (up_pn_err_clr),
+    .up_pn_oos (up_pn_oos),
+    .up_pn_oos_clr (up_pn_oos_clr),
+    .up_rst (up_rst),
+    .up_rstn (up_rstn),
     .up_txnrx (gpio_o[48]));
 
 endmodule

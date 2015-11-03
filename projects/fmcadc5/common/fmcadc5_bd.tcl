@@ -10,6 +10,7 @@ create_bd_port -dir I -from 7 -to 0 rx_data_1_p
 create_bd_port -dir I -from 7 -to 0 rx_data_1_n
 create_bd_port -dir O rx_sync_1
 create_bd_port -dir O rx_sysref
+create_bd_port -dir O rx_clk
 
 # adc peripherals
 
@@ -219,6 +220,7 @@ ad_connect  util_fmcadc5_1_gt/rx_n rx_data_1_n
 ad_connect  util_fmcadc5_1_gt/rx_sysref GND
 ad_connect  util_fmcadc5_1_gt/rx_sync rx_sync_1
 ad_connect  util_fmcadc5_0_gt/rx_ip_sysref rx_sysref
+ad_connect  util_fmcadc5_0_gt/rx_out_clk rx_clk
 ad_connect  util_fmcadc5_0_gt/rx_out_clk util_fmcadc5_0_gt/rx_clk
 ad_connect  util_fmcadc5_0_gt/rx_out_clk axi_ad9625_0_jesd/rx_core_clk
 ad_connect  util_fmcadc5_0_gt/rx_ip_rst axi_ad9625_0_jesd/rx_reset
@@ -286,8 +288,12 @@ ad_cpu_interrupt ps-13 mb-12 axi_ad9625_dma/irq
 
 create_bd_port -dir O up_clk
 create_bd_port -dir O up_rstn
+create_bd_port -dir O delay_clk
+create_bd_port -dir O delay_rst
 
 ad_connect  sys_cpu_clk up_clk
 ad_connect  sys_cpu_resetn up_rstn
+ad_connect  sys_200m_clk delay_clk
+ad_connect  sys_cpu_reset delay_rst
 
 
