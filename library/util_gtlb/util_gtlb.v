@@ -123,10 +123,8 @@ module util_gtlb (
 
   input                 up_clk,
   input                 up_rstn,
-  input                 up_pn_err_clr,
-  input                 up_pn_oos_clr,
-  output  reg           up_pn_err,
-  output  reg           up_pn_oos);
+  input       [31;0]    up_gp_in;
+  output      [31;0]    up_gp_out);
 
   // internal registers
 
@@ -145,6 +143,8 @@ module util_gtlb (
   reg         [ 3:0]    rx_pn_oos_count = 'd0;
   reg                   up_pn_err_clr_d = 'd0;
   reg                   up_pn_oos_clr_d = 'd0;
+  reg                   up_pn_err = 'd0;
+  reg                   up_pn_oos = 'd0;
     
   // internal signals
 
@@ -155,6 +155,8 @@ module util_gtlb (
   wire                  rx_pn_match_s;
   wire                  rx_pn_update_s;
   wire                  rx_pn_err_s;
+  wire                  up_pn_err_clr_s;
+  wire                  up_pn_oos_clr_s;
   wire                  up_pn_err_s;
   wire                  up_pn_oos_s;
 
@@ -333,6 +335,13 @@ module util_gtlb (
 
   // up clock
 
+  assign up_pn_err_clr_s = up_gp_in[1];
+  assign up_pn_oos_clr_s = up_gp_in[0];
+
+  assign up_gp_out[31:2] = 30'd0;
+  assign up_gp_out[1] = up_pn_err;
+  assign up_gp_out[0] = up_pn_oos;
+
   up_xfer_status #(.DATA_WIDTH(2)) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -348,17 +357,17 @@ module util_gtlb (
       up_pn_err <= 'd0;
       up_pn_oos <= 'd0;
     end else begin
-      up_pn_err_clr_d <= up_pn_err_clr;
-      up_pn_oos_clr_d <= up_pn_oos_clr;
+      up_pn_err_clr_d <= up_pn_err_clr_s;
+      up_pn_oos_clr_d <= up_pn_oos_clr_s;
       if (up_pn_err_s == 1'b1) begin
         up_pn_err <= 1'b1;
-      end else if ((up_pn_err_clr == 1'b1) &&
+      end else if ((up_pn_err_clr_s == 1'b1) &&
         (up_pn_err_clr_d == 1'b0)) begin
         up_pn_err <= 1'b0;
       end
       if (up_pn_oos_s == 1'b1) begin
         up_pn_oos <= 1'b1;
-      end else if ((up_pn_oos_clr == 1'b1) &&
+      end else if ((up_pn_oos_clr_s == 1'b1) &&
         (up_pn_oos_clr_d == 1'b0)) begin
         up_pn_oos <= 1'b0;
       end
