@@ -105,6 +105,10 @@ module axi_gpreg #(
   output  [  1:0]   s_axi_rresp,
   input             s_axi_rready);
 
+  // version
+
+  localparam  PCORE_VERSION = 32'h00040063;
+
   // internal registers
 
   reg               up_wack_d = 'd0;
@@ -117,6 +121,13 @@ module axi_gpreg #(
 
   // internal signals
 
+  wire              up_rstn;
+  wire              up_clk;
+  wire              up_wreq;
+  wire    [ 13:0]   up_waddr;
+  wire    [ 31:0]   up_wdata;
+  wire              up_rreq;
+  wire    [ 13:0]   up_raddr;
   wire              up_wreq_s;
   wire              up_rreq_s;
   wire    [ 31:0]   up_gp_ioenb_s[7:0];
