@@ -103,6 +103,8 @@ module axi_hdmi_tx (
   parameter   CR_CB_N = 0;
   parameter   DEVICE_TYPE = 0;
   parameter   EMBEDDED_SYNC = 0;
+  /* 0 = Launch on rising edge, 1 = Launch on falling edge */
+  parameter   OUT_CLK_POLARITY = 0;
 
   localparam  XILINX_7SERIES = 0;
   localparam  XILINX_ULTRASCALE = 1;
@@ -362,8 +364,8 @@ module axi_hdmi_tx (
   if (DEVICE_TYPE == XILINX_ULTRASCALE) begin
   ODDRE1 #(.SRVAL(1'b0)) i_clk_oddr (
     .SR (1'b0),
-    .D1 (1'b1),
-    .D2 (1'b0),
+    .D1 (~OUT_CLK_POLARITY),
+    .D2 (OUT_CLK_POLARITY),
     .C (hdmi_clk),
     .Q (hdmi_out_clk));
   end
@@ -375,8 +377,8 @@ module axi_hdmi_tx (
     .sset (1'b0),
     .oe (1'b1),
     .outclocken (1'b1),
-    .datain_h (1'b1),
-    .datain_l (1'b0),
+    .datain_h (~OUT_CLK_POLARITY),
+    .datain_l (OUT_CLK_POLARITY),
     .outclock (hdmi_clk),
     .oe_out (),
     .dataout (hdmi_out_clk));
@@ -386,8 +388,8 @@ module axi_hdmi_tx (
     .R (1'b0),
     .S (1'b0),
     .CE (1'b1),
-    .D1 (1'b1),
-    .D2 (1'b0),
+    .D1 (~OUT_CLK_POLARITY),
+    .D2 (OUT_CLK_POLARITY),
     .C (hdmi_clk),
     .Q (hdmi_out_clk));
   end
