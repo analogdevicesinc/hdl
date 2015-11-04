@@ -81,6 +81,14 @@ module ad_mem_asym (
   // write interface
 
   generate
+  if (MEM_RATIO == 1) begin
+  always @(posedge clka) begin
+    if (wea == 1'b1) begin
+      m_ram[addra] <= dina;
+    end
+  end
+  end
+
   if (MEM_RATIO == 2) begin
   always @(posedge clka) begin
     if (wea == 1'b1) begin
