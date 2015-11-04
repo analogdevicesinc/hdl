@@ -17,11 +17,19 @@
          type = "String";
       }
    }
+   element ad9680_adcfifo
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+   }
    element axi_ad9144_core
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "14";
          type = "int";
       }
    }
@@ -37,7 +45,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "12";
          type = "int";
       }
    }
@@ -53,7 +61,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "11";
          type = "int";
       }
    }
@@ -90,7 +98,7 @@
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "15";
          type = "int";
       }
    }
@@ -99,6 +107,126 @@
       datum baseAddress
       {
          value = "268959744";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element daq2_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
          type = "String";
       }
    }
@@ -458,7 +586,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "10";
          type = "int";
       }
    }
@@ -466,7 +594,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "13";
          type = "int";
       }
    }
@@ -474,7 +602,7 @@
    {
       datum _sortIndex
       {
-         value = "17";
+         value = "18";
          type = "int";
       }
    }
@@ -482,7 +610,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "16";
          type = "int";
       }
    }
@@ -506,7 +634,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "17";
          type = "int";
       }
    }
@@ -540,7 +668,7 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="2" />
- <parameter name="projectName" value="" />
+ <parameter name="projectName" value="daq2_a10gx.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
@@ -637,6 +765,12 @@
    internal="axi_jesd_xcvr.if_tx_ext_sysref_in"
    type="conduit"
    dir="end" />
+ <module name="ad9680_adcfifo" kind="util_adcfifo" version="1.0" enabled="1">
+  <parameter name="ADC_DATA_WIDTH" value="128" />
+  <parameter name="DMA_ADDRESS_WIDTH" value="16" />
+  <parameter name="DMA_DATA_WIDTH" value="128" />
+  <parameter name="DMA_READY_ENABLE" value="1" />
+ </module>
  <module name="axi_ad9144_core" kind="axi_ad9144" version="1.0" enabled="1">
   <parameter name="ID" value="0" />
   <parameter name="QUAD_OR_DUAL_N" value="0" />
@@ -668,15 +802,15 @@
   <parameter name="AXI_SLICE_DEST" value="0" />
   <parameter name="AXI_SLICE_SRC" value="0" />
   <parameter name="CYCLIC" value="0" />
-  <parameter name="DMA_2D_TRANSFER" value="1" />
+  <parameter name="DMA_2D_TRANSFER" value="0" />
   <parameter name="DMA_DATA_WIDTH_DEST" value="128" />
   <parameter name="DMA_DATA_WIDTH_SRC" value="128" />
-  <parameter name="DMA_LENGTH_WIDTH" value="14" />
+  <parameter name="DMA_LENGTH_WIDTH" value="24" />
   <parameter name="DMA_TYPE_DEST" value="0" />
-  <parameter name="DMA_TYPE_SRC" value="2" />
+  <parameter name="DMA_TYPE_SRC" value="1" />
   <parameter name="FIFO_SIZE" value="4" />
   <parameter name="ID" value="0" />
-  <parameter name="SYNC_TRANSFER_START" value="0" />
+  <parameter name="SYNC_TRANSFER_START" value="1" />
  </module>
  <module name="axi_jesd_xcvr" kind="axi_jesd_xcvr" version="1.0" enabled="1">
   <parameter name="DEVICE_TYPE" value="0" />
@@ -1466,6 +1600,16 @@
  <connection
    kind="clock"
    version="15.0"
+   start="mem_clk.out_clk"
+   end="ad9680_adcfifo.if_dma_clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="mem_clk.out_clk"
+   end="axi_ad9680_dma.if_s_axis_aclk" />
+ <connection
+   kind="clock"
+   version="15.0"
    start="sys_clk.out_clk"
    end="xcvr_core.jesd204_rx_avs_clk" />
  <connection
@@ -1536,6 +1680,11 @@
  <connection
    kind="clock"
    version="15.0"
+   start="xcvr_rx_pll.outclk0"
+   end="ad9680_adcfifo.if_adc_clk" />
+ <connection
+   kind="clock"
+   version="15.0"
    start="xcvr_tx_pll.outclk0"
    end="util_upack_0.if_dac_clk" />
  <connection
@@ -1543,11 +1692,6 @@
    version="15.0"
    start="xcvr_tx_pll.outclk0"
    end="axi_ad9144_dma.if_fifo_rd_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="xcvr_rx_pll.outclk0"
-   end="axi_ad9680_dma.if_fifo_wr_clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -1592,6 +1736,17 @@
  <connection
    kind="conduit"
    version="15.0"
+   start="util_cpack_0.if_adc_data"
+   end="ad9680_adcfifo.if_adc_wdata">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
    start="axi_ad9680_core.if_adc_data_0"
    end="util_cpack_0.if_adc_data_0">
   <parameter name="endPort" value="" />
@@ -1605,17 +1760,6 @@
    version="15.0"
    start="axi_ad9680_core.if_adc_data_1"
    end="util_cpack_0.if_adc_data_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9680_core.if_adc_dovf"
-   end="axi_ad9680_dma.if_fifo_wr_overflow">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1647,19 +1791,8 @@
  <connection
    kind="conduit"
    version="15.0"
-   start="util_cpack_0.if_adc_sync"
-   end="axi_ad9680_dma.if_fifo_wr_sync">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
    start="util_cpack_0.if_adc_valid"
-   end="axi_ad9680_dma.if_fifo_wr_en">
+   end="ad9680_adcfifo.if_adc_wr">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1768,6 +1901,50 @@
  <connection
    kind="conduit"
    version="15.0"
+   start="ad9680_adcfifo.if_dma_wdata"
+   end="axi_ad9680_dma.if_s_axis_data">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="ad9680_adcfifo.if_dma_wr"
+   end="axi_ad9680_dma.if_s_axis_valid">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="ad9680_adcfifo.if_dma_wready"
+   end="axi_ad9680_dma.if_s_axis_ready">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="ad9680_adcfifo.if_dma_xfer_req"
+   end="axi_ad9680_dma.if_s_axis_xfer_req">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
    start="axi_ad9144_dma.if_fifo_rd_dout"
    end="util_upack_0.if_dac_data">
   <parameter name="endPort" value="" />
@@ -1781,17 +1958,6 @@
    version="15.0"
    start="axi_ad9144_dma.if_fifo_rd_underflow"
    end="axi_ad9144_core.if_dac_dunf">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9680_dma.if_fifo_wr_din"
-   end="util_cpack_0.if_adc_data">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -2073,6 +2239,16 @@
    version="15.0"
    start="mem_rst.out_reset"
    end="util_cpack_0.if_adc_rst" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="sys_rst.out_reset"
+   end="ad9680_adcfifo.if_adc_rst" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="mem_rst.out_reset"
+   end="ad9680_adcfifo.if_adc_rst" />
  <connection
    kind="reset"
    version="15.0"

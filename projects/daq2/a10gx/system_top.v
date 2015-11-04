@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -163,14 +163,14 @@ module system_top (
   // gpio
 
   input             trig;
-  inout             adc_fdb;
-  inout             adc_fda;
-  inout             dac_irq;
-  inout   [  1:0]   clkd_status;
-  inout             adc_pd;
-  inout             dac_txen;
-  inout             dac_reset;
-  inout             clkd_sync;
+  input             adc_fdb;
+  input             adc_fda;
+  input             dac_irq;
+  input   [  1:0]   clkd_status;
+  output            adc_pd;
+  output            dac_txen;
+  output            dac_reset;
+  output            clkd_sync;
 
   // spi
 
@@ -187,8 +187,8 @@ module system_top (
   wire              eth_mdio_i;
   wire              eth_mdio_o;
   wire              eth_mdio_t;
-  wire    [ 63:0]   gpio_i;
-  wire    [ 63:0]   gpio_o;
+  wire    [ 31:0]   gpio_i;
+  wire    [ 31:0]   gpio_o;
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
@@ -206,24 +206,6 @@ module system_top (
     .spi_miso (spi_miso_s),
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
-
-  assign gpio_i[63:44] = gpio_o[63:44];
-  assign gpio_i[43:43] = trig;
-  assign gpio_i[39:39] = gpio_o[39:39];
-  assign gpio_i[37:37] = gpio_o[37:37];
-
-  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
-    .dio_t ({3'h0, 1'h0, 5'h1f}),
-    .dio_i ({gpio_o[42:40], gpio_o[38], gpio_o[36:32]}),
-    .dio_o ({gpio_i[42:40], gpio_i[38], gpio_i[36:32]}),
-    .dio_p ({ adc_pd,           // 42
-              dac_txen,         // 41
-              dac_reset,        // 40
-              clkd_sync,        // 38
-              adc_fdb,          // 36
-              adc_fda,          // 35
-              dac_irq,          // 34
-              clkd_status}));   // 32
 
   // board stuff
 
@@ -264,11 +246,11 @@ module system_top (
     .a10gx_base_sys_ethernet_mdio_mdio_out (eth_mdio_o),
     .a10gx_base_sys_ethernet_mdio_mdio_oen (eth_mdio_t),
     .a10gx_base_sys_ethernet_ref_clk_clk (eth_ref_clk),
-		.a10gx_base_sys_ethernet_reset_reset (eth_reset),
+    .a10gx_base_sys_ethernet_reset_reset (eth_reset),
     .a10gx_base_sys_ethernet_sgmii_rxp_0 (eth_rxd),
     .a10gx_base_sys_ethernet_sgmii_txp_0 (eth_txd),
-    .a10gx_base_sys_gpio_in_port (gpio_i[63:32]),
-    .a10gx_base_sys_gpio_out_port (gpio_o[63:32]),
+    .a10gx_base_sys_gpio_in_export ({trig, adc_fdb, adc_fda, dac_irq, clkd_status[1], clkd_status[0]}),
+    .a10gx_base_sys_gpio_out_export ({adc_pd, dac_txen, dac_reset, clkd_sync}),
     .a10gx_base_sys_gpio_bd_in_port (gpio_i[31:0]),
     .a10gx_base_sys_gpio_bd_out_port (gpio_o[31:0]),
     .a10gx_base_sys_spi_MISO (spi_miso_s),

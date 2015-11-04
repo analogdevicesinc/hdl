@@ -374,14 +374,20 @@
    internal="a10gx_base.sys_ethernet_sgmii"
    type="conduit"
    dir="end" />
- <interface
-   name="a10gx_base_sys_gpio"
-   internal="a10gx_base.sys_gpio"
-   type="conduit"
-   dir="end" />
+ <interface name="a10gx_base_sys_gpio" internal="a10gx_base.sys_gpio" />
  <interface
    name="a10gx_base_sys_gpio_bd"
    internal="a10gx_base.sys_gpio_bd"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="a10gx_base_sys_gpio_in"
+   internal="a10gx_base.sys_gpio_in"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="a10gx_base_sys_gpio_out"
+   internal="a10gx_base.sys_gpio_out"
    type="conduit"
    dir="end" />
  <interface
@@ -452,7 +458,7 @@
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
   <parameter name="AUTO_MEM_CLK_CLOCK_DOMAIN" value="8" />
-  <parameter name="AUTO_MEM_CLK_CLOCK_RATE" value="133332500" />
+  <parameter name="AUTO_MEM_CLK_CLOCK_RATE" value="133333250" />
   <parameter name="AUTO_MEM_CLK_RESET_DOMAIN" value="8" />
   <parameter name="AUTO_RX_REF_CLK_CLOCK_DOMAIN" value="4" />
   <parameter name="AUTO_RX_REF_CLK_CLOCK_RATE" value="0" />
