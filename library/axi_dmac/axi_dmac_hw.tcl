@@ -287,27 +287,28 @@ proc axi_dmac_elaborate {} {
 
   if {[get_parameter_value DMA_TYPE_DEST] == 1} {
 
-    add_interface m_axis_clk clock end
-    add_interface_port m_axis_clk m_axis_aclk clk Input 1
 
-    add_interface m_axis_if conduit end
-    set_interface_property m_axis_if associatedClock m_axis_clk
-    add_interface_port m_axis_if m_axis_ready ready Input 1
-    add_interface_port m_axis_if m_axis_valid valid Output 1
-    add_interface_port m_axis_if m_axis_data data Output DMA_DATA_WIDTH_DEST
+    ad_alt_intf clock   m_axis_aclk       input   1                       clk
+    ad_alt_intf signal  m_axis_valid      output  1                       valid
+    ad_alt_intf signal  m_axis_data       output  DMA_DATA_WIDTH_DEST     data
+    ad_alt_intf signal  m_axis_ready      input   1                       ready
+    ad_alt_intf signal  m_axis_last       output  1                       last
+    ad_alt_intf signal  m_axis_xfer_req   output  1                       xfer_req
+
   }
 
   if {[get_parameter_value DMA_TYPE_SRC] == 1} {
 
-    add_interface s_axis_clk clock end
-    add_interface_port s_axis_clk s_axis_aclk clk Input 1
+    ad_alt_intf clock   s_axis_aclk       input   1                       clk
+    ad_alt_intf signal  s_axis_valid      input   1                       valid
+    ad_alt_intf signal  s_axis_data       input   DMA_DATA_WIDTH_SRC      data
+    ad_alt_intf signal  s_axis_ready      output  1                       ready
+    ad_alt_intf signal  s_axis_xfer_req   output  1                       xfer_req
+    ad_alt_intf signal  s_axis_user       input   1                       user
 
-    add_interface s_axis_if conduit end
-    set_interface_property s_axis_if associatedClock s_axis_clk
-    add_interface_port s_axis_if s_axis_ready ready Output 1
-    add_interface_port s_axis_if s_axis_valid valid Input 1
-    add_interface_port s_axis_if s_axis_data data Input DMA_DATA_WIDTH_SRC
-    add_interface_port s_axis_if s_axis_user user Input 1
+    set_port_property s_axis_user termination true
+    set_port_property s_axis_user termination_value 1
+
   }
 
   # fifo destination/source
