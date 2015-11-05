@@ -161,7 +161,12 @@ proc adi_project_run {project_name} {
   report_timing_summary -file timing_impl.log
 
   file mkdir $project_name.sdk
-  file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
+  if [expr [get_property SLACK [get_timing_paths]] < 0] {
+    file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top_timing.hdf
+  } else {
+    file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
+  }
+
 
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
     return -code error [format "ERROR: Timing Constraints NOT met!"]
