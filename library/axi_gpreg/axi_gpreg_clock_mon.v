@@ -59,6 +59,7 @@ module axi_gpreg_clock_mon (
   // parameters
 
   parameter   ID = 0;
+  parameter   BUF_ENABLE = 0;
 
   // clock
 
@@ -91,6 +92,7 @@ module axi_gpreg_clock_mon (
   wire            up_rreq_s;
   wire    [31:0]  up_d_count_s;
   wire            d_rst;
+  wire            d_clk_g;
 
   // decode block select
 
@@ -140,12 +142,22 @@ module axi_gpreg_clock_mon (
     .up_clk (up_clk),
     .up_d_count (up_d_count_s),
     .d_rst (d_rst),
-    .d_clk (d_clk));
+    .d_clk (d_clk_g));
 
   ad_rst i_d_rst_reg (
     .preset (up_d_preset),
-    .clk (d_clk),
+    .clk (d_clk_g),
     .rst (d_rst));
+
+  generate
+  if (BUF_ENABLE == 1) begin
+  BUFG i_bufg (
+    .I (d_clk),
+    .O (d_clk_g));
+  end else begin
+  assign d_clk_g = d_clk;
+  end
+  endgenerate
 
 endmodule
 

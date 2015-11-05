@@ -41,7 +41,15 @@ module axi_gpreg #(
 
   parameter   integer ID = 0,
   parameter   integer NUM_OF_IO = 8,
-  parameter   integer NUM_OF_CLK_MONS = 8)
+  parameter   integer NUM_OF_CLK_MONS = 8,
+  parameter   integer BUF_ENABLE_0 = 1,
+  parameter   integer BUF_ENABLE_1 = 1,
+  parameter   integer BUF_ENABLE_2 = 1,
+  parameter   integer BUF_ENABLE_3 = 1,
+  parameter   integer BUF_ENABLE_4 = 1,
+  parameter   integer BUF_ENABLE_5 = 1,
+  parameter   integer BUF_ENABLE_6 = 1,
+  parameter   integer BUF_ENABLE_7 = 1)
 
  (
 
@@ -107,7 +115,9 @@ module axi_gpreg #(
 
   // version
 
-  localparam  PCORE_VERSION = 32'h00040063;
+  localparam  [31:0]  PCORE_VERSION = 32'h00040063;
+  localparam  integer BUF_ENABLE[7:0] = {BUF_ENABLE_7, BUF_ENABLE_6, BUF_ENABLE_5, BUF_ENABLE_4,
+    BUF_ENABLE_3, BUF_ENABLE_2, BUF_ENABLE_1, BUF_ENABLE_0};
 
   // internal registers
 
@@ -288,7 +298,10 @@ module axi_gpreg #(
   end
 
   for (n = 0; n < NUM_OF_CLK_MONS; n = n + 1) begin: g_clock_mon
-  axi_gpreg_clock_mon #(.ID (32+n)) i_gpreg_clock_mon (
+  axi_gpreg_clock_mon #(
+    .ID (32+n),
+    .BUF_ENABLE (BUF_ENABLE[n]))
+  i_gpreg_clock_mon (
     .d_clk (d_clk_s[n]),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
