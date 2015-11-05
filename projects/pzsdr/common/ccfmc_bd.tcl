@@ -153,81 +153,13 @@ ad_cpu_interconnect 0x77600000 axi_i2s_adi
 ad_mem_hp0_interconnect sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect sys_cpu_clk axi_hdmi_dma/M_AXI_MM2S
 
-# usued io (gpio & gt)
-
-set axi_gpio_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0]
-set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio_0
-
-create_bd_port -dir I -from 31 -to 0 gpio_0_0_i
-create_bd_port -dir O -from 31 -to 0 gpio_0_0_o
-create_bd_port -dir O -from 31 -to 0 gpio_0_0_t
-create_bd_port -dir I -from 31 -to 0 gpio_0_1_i
-create_bd_port -dir O -from 31 -to 0 gpio_0_1_o
-create_bd_port -dir O -from 31 -to 0 gpio_0_1_t
-
-ad_connect  gpio_0_0_i axi_gpio_0/gpio_io_i
-ad_connect  gpio_0_0_o axi_gpio_0/gpio_io_o
-ad_connect  gpio_0_0_t axi_gpio_0/gpio_io_t
-ad_connect  gpio_0_1_i axi_gpio_0/gpio2_io_i
-ad_connect  gpio_0_1_o axi_gpio_0/gpio2_io_o
-ad_connect  gpio_0_1_t axi_gpio_0/gpio2_io_t
-
-set axi_gpio_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_1]
-set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio_1
-
-create_bd_port -dir I -from 31 -to 0 gpio_1_0_i
-create_bd_port -dir O -from 31 -to 0 gpio_1_0_o
-create_bd_port -dir O -from 31 -to 0 gpio_1_0_t
-create_bd_port -dir I -from 31 -to 0 gpio_1_1_i
-create_bd_port -dir O -from 31 -to 0 gpio_1_1_o
-create_bd_port -dir O -from 31 -to 0 gpio_1_1_t
-
-ad_connect  gpio_1_0_i axi_gpio_1/gpio_io_i
-ad_connect  gpio_1_0_o axi_gpio_1/gpio_io_o
-ad_connect  gpio_1_0_t axi_gpio_1/gpio_io_t
-ad_connect  gpio_1_1_i axi_gpio_1/gpio2_io_i
-ad_connect  gpio_1_1_o axi_gpio_1/gpio2_io_o
-ad_connect  gpio_1_1_t axi_gpio_1/gpio2_io_t
-
-set axi_gpio_2 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_2]
-set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio_2
-
-create_bd_port -dir I -from 31 -to 0 gpio_2_0_i
-create_bd_port -dir O -from 31 -to 0 gpio_2_0_o
-create_bd_port -dir O -from 31 -to 0 gpio_2_0_t
-create_bd_port -dir I -from 31 -to 0 gpio_2_1_i
-create_bd_port -dir O -from 31 -to 0 gpio_2_1_o
-create_bd_port -dir O -from 31 -to 0 gpio_2_1_t
-
-ad_connect  gpio_2_0_i axi_gpio_2/gpio_io_i
-ad_connect  gpio_2_0_o axi_gpio_2/gpio_io_o
-ad_connect  gpio_2_0_t axi_gpio_2/gpio_io_t
-ad_connect  gpio_2_1_i axi_gpio_2/gpio2_io_i
-ad_connect  gpio_2_1_o axi_gpio_2/gpio2_io_o
-ad_connect  gpio_2_1_t axi_gpio_2/gpio2_io_t
-
-set axi_gpio_3 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_3]
-set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio_3
-
-create_bd_port -dir I -from 31 -to 0 gpio_3_0_i
-create_bd_port -dir O -from 31 -to 0 gpio_3_0_o
-create_bd_port -dir O -from 31 -to 0 gpio_3_0_t
-create_bd_port -dir I -from 31 -to 0 gpio_3_1_i
-create_bd_port -dir O -from 31 -to 0 gpio_3_1_o
-create_bd_port -dir O -from 31 -to 0 gpio_3_1_t
-
-ad_connect  gpio_3_0_i axi_gpio_3/gpio_io_i
-ad_connect  gpio_3_0_o axi_gpio_3/gpio_io_o
-ad_connect  gpio_3_0_t axi_gpio_3/gpio_io_t
-ad_connect  gpio_3_1_i axi_gpio_3/gpio2_io_i
-ad_connect  gpio_3_1_o axi_gpio_3/gpio2_io_o
-ad_connect  gpio_3_1_t axi_gpio_3/gpio2_io_t
+# usued io (gt)
 
 set axi_pzslb_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_pzslb_gt]
-set_property -dict [list CONFIG.NUM_OF_LANES {1}] $axi_pzslb_gt
+set_property -dict [list CONFIG.NUM_OF_LANES {2}] $axi_pzslb_gt
 set_property -dict [list CONFIG.QPLL1_ENABLE {0}] $axi_pzslb_gt
-set_property -dict [list CONFIG.RX_NUM_OF_LANES {1}] $axi_pzslb_gt
-set_property -dict [list CONFIG.TX_NUM_OF_LANES {1}] $axi_pzslb_gt
+set_property -dict [list CONFIG.RX_NUM_OF_LANES {2}] $axi_pzslb_gt
+set_property -dict [list CONFIG.TX_NUM_OF_LANES {2}] $axi_pzslb_gt
 set_property -dict [list CONFIG.RX_CLKBUF_ENABLE_0 {1}] $axi_pzslb_gt
 set_property -dict [list CONFIG.TX_CLKBUF_ENABLE_0 {1}] $axi_pzslb_gt
 set_property -dict [list CONFIG.TX_DATA_SEL_0 {0}] $axi_pzslb_gt
@@ -238,56 +170,107 @@ set_property -dict [list CONFIG.RX_CLK25_DIV_0 {10}] $axi_pzslb_gt
 set_property -dict [list CONFIG.TX_CLK25_DIV_0 {10}] $axi_pzslb_gt
 set_property -dict [list CONFIG.PMA_RSV_0 {0x00018480}] $axi_pzslb_gt
 set_property -dict [list CONFIG.RX_CDR_CFG_0 {0x03000023ff20400020}] $axi_pzslb_gt
+set_property -dict [list CONFIG.RX_CLKBUF_ENABLE_1 {1}] $axi_pzslb_gt
+set_property -dict [list CONFIG.TX_CLKBUF_ENABLE_1 {1}] $axi_pzslb_gt
+set_property -dict [list CONFIG.TX_DATA_SEL_1 {1}] $axi_pzslb_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_1 {2}] $axi_pzslb_gt
+set_property -dict [list CONFIG.RX_OUT_DIV_1 {1}] $axi_pzslb_gt
+set_property -dict [list CONFIG.TX_OUT_DIV_1 {1}] $axi_pzslb_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_1 {10}] $axi_pzslb_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_1 {10}] $axi_pzslb_gt
+set_property -dict [list CONFIG.PMA_RSV_1 {0x00018480}] $axi_pzslb_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_1 {0x03000023ff20400020}] $axi_pzslb_gt
 
-set util_pzslb_gtlb [create_bd_cell -type ip -vlnv analog.com:user:util_gtlb:1.0 util_pzslb_gtlb]
-
-create_bd_port -dir I fmc_gt_ref_clk0
-create_bd_port -dir I fmc_gt_ref_clk1
-create_bd_port -dir I fmc_gt_rx_p
-create_bd_port -dir I fmc_gt_rx_n
-create_bd_port -dir O fmc_gt_tx_p
-create_bd_port -dir O fmc_gt_tx_n
-
-ad_connect  sys_cpu_clk util_pzslb_gtlb/up_clk
-ad_connect  sys_cpu_resetn util_pzslb_gtlb/up_rstn
-ad_connect  util_pzslb_gtlb/qpll_ref_clk fmc_gt_ref_clk0
-ad_connect  util_pzslb_gtlb/cpll_ref_clk fmc_gt_ref_clk1
-ad_connect  axi_pzslb_gt/gt_qpll_0 util_pzslb_gtlb/gt_qpll_0
-ad_connect  axi_pzslb_gt/gt_pll_0 util_pzslb_gtlb/gt_pll_0
-ad_connect  util_pzslb_gtlb/rx_p fmc_gt_rx_p
-ad_connect  util_pzslb_gtlb/rx_n fmc_gt_rx_n
-ad_connect  axi_pzslb_gt/gt_rx_0 util_pzslb_gtlb/gt_rx_0
-ad_connect  util_pzslb_gtlb/tx_p fmc_gt_tx_p
-ad_connect  util_pzslb_gtlb/tx_n fmc_gt_tx_n
-ad_connect  axi_pzslb_gt/gt_tx_0 util_pzslb_gtlb/gt_tx_0
-ad_connect  axi_pzslb_gt/rx_gt_comma_align_enb_0 util_pzslb_gtlb/rx_gt_comma_align_enb_0 
-ad_connect  axi_pzslb_gt/gt_rx_ip_0 util_pzslb_gtlb/gt_rx_ip_0
-ad_connect  axi_pzslb_gt/gt_tx_ip_0 util_pzslb_gtlb/gt_tx_ip_0
+set util_pzslb_gtlb_0 [create_bd_cell -type ip -vlnv analog.com:user:util_gtlb:1.0 util_pzslb_gtlb_0]
+set util_pzslb_gtlb_1 [create_bd_cell -type ip -vlnv analog.com:user:util_gtlb:1.0 util_pzslb_gtlb_1]
 
 ad_cpu_interconnect 0x44A60000 axi_pzslb_gt
 ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
 ad_mem_hp3_interconnect sys_cpu_clk axi_pzslb_gt/m_axi
 
-ad_cpu_interconnect 0x41200000 axi_gpio_0
-ad_cpu_interconnect 0x41210000 axi_gpio_1
-ad_cpu_interconnect 0x41220000 axi_gpio_2
-ad_cpu_interconnect 0x41230000 axi_gpio_3
+create_bd_port -dir I gt_ref_clk_0
+create_bd_port -dir I gt_ref_clk_1
+create_bd_port -dir I gt_rx_0_p
+create_bd_port -dir I gt_rx_0_n
+create_bd_port -dir O gt_tx_0_p
+create_bd_port -dir O gt_tx_0_n
+create_bd_port -dir I gt_rx_1_p
+create_bd_port -dir I gt_rx_1_n
+create_bd_port -dir O gt_tx_1_p
+create_bd_port -dir O gt_tx_1_n
 
-create_bd_port -dir O up_clk
-create_bd_port -dir O up_rst
-create_bd_port -dir O up_rstn
-create_bd_port -dir I up_pn_err_clr
-create_bd_port -dir I up_pn_oos_clr
-create_bd_port -dir O up_pn_err
-create_bd_port -dir O up_pn_oos
+ad_connect  sys_cpu_clk util_pzslb_gtlb_0/up_clk
+ad_connect  sys_cpu_resetn util_pzslb_gtlb_0/up_rstn
+ad_connect  util_pzslb_gtlb_0/qpll_ref_clk gt_ref_clk_0
+ad_connect  util_pzslb_gtlb_0/cpll_ref_clk gt_ref_clk_0
+ad_connect  util_pzslb_gtlb_0/rx_p gt_rx_0_p
+ad_connect  util_pzslb_gtlb_0/rx_n gt_rx_0_n
+ad_connect  util_pzslb_gtlb_0/tx_p gt_tx_0_p
+ad_connect  util_pzslb_gtlb_0/tx_n gt_tx_0_n
+ad_connect  sys_cpu_clk util_pzslb_gtlb_1/up_clk
+ad_connect  sys_cpu_resetn util_pzslb_gtlb_1/up_rstn
+ad_connect  util_pzslb_gtlb_1/qpll_ref_clk gt_ref_clk_0
+ad_connect  util_pzslb_gtlb_1/cpll_ref_clk gt_ref_clk_0
+ad_connect  util_pzslb_gtlb_1/rx_p gt_rx_1_p
+ad_connect  util_pzslb_gtlb_1/rx_n gt_rx_1_n
+ad_connect  util_pzslb_gtlb_1/tx_p gt_tx_1_p
+ad_connect  util_pzslb_gtlb_1/tx_n gt_tx_1_n
+ad_connect  axi_pzslb_gt/gt_qpll_0 util_pzslb_gtlb_0/gt_qpll_0
+ad_connect  axi_pzslb_gt/gt_pll_0 util_pzslb_gtlb_0/gt_pll_0
+ad_connect  axi_pzslb_gt/gt_rx_0 util_pzslb_gtlb_0/gt_rx_0
+ad_connect  axi_pzslb_gt/gt_tx_0 util_pzslb_gtlb_0/gt_tx_0
+ad_connect  axi_pzslb_gt/gt_rx_ip_0 util_pzslb_gtlb_0/gt_rx_ip_0
+ad_connect  axi_pzslb_gt/gt_tx_ip_0 util_pzslb_gtlb_0/gt_tx_ip_0
+ad_connect  axi_pzslb_gt/rx_gt_comma_align_enb_0 util_pzslb_gtlb_0/rx_gt_comma_align_enb_0 
+ad_connect  axi_pzslb_gt/gt_pll_1 util_pzslb_gtlb_1/gt_pll_0
+ad_connect  axi_pzslb_gt/gt_rx_1 util_pzslb_gtlb_1/gt_rx_0
+ad_connect  axi_pzslb_gt/gt_tx_1 util_pzslb_gtlb_1/gt_tx_0
+ad_connect  axi_pzslb_gt/gt_rx_ip_1 util_pzslb_gtlb_1/gt_rx_ip_0
+ad_connect  axi_pzslb_gt/gt_tx_ip_1 util_pzslb_gtlb_1/gt_tx_ip_0
+ad_connect  axi_pzslb_gt/rx_gt_comma_align_enb_1 util_pzslb_gtlb_1/rx_gt_comma_align_enb_0 
 
-ad_connect  sys_cpu_clk up_clk
-ad_connect  sys_cpu_reset up_rst
-ad_connect  sys_cpu_resetn up_rstn
-ad_connect  up_pn_err_clr util_pzslb_gtlb/up_pn_err_clr
-ad_connect  up_pn_oos_clr util_pzslb_gtlb/up_pn_oos_clr
-ad_connect  up_pn_err util_pzslb_gtlb/up_pn_err
-ad_connect  up_pn_oos util_pzslb_gtlb/up_pn_oos
+# usued io (regular)
+
+set axi_gpreg [create_bd_cell -type ip -vlnv analog.com:user:axi_gpreg:1.0 axi_gpreg]
+set_property -dict [list CONFIG.NUM_OF_CLK_MONS {8}] $axi_gpreg
+set_property -dict [list CONFIG.BUF_ENABLE_0 {1}] $axi_gpreg
+set_property -dict [list CONFIG.BUF_ENABLE_1 {1}] $axi_gpreg
+set_property -dict [list CONFIG.BUF_ENABLE_2 {1}] $axi_gpreg
+set_property -dict [list CONFIG.BUF_ENABLE_3 {0}] $axi_gpreg
+set_property -dict [list CONFIG.BUF_ENABLE_4 {0}] $axi_gpreg
+set_property -dict [list CONFIG.BUF_ENABLE_5 {1}] $axi_gpreg
+set_property -dict [list CONFIG.BUF_ENABLE_6 {0}] $axi_gpreg
+set_property -dict [list CONFIG.BUF_ENABLE_7 {0}] $axi_gpreg
+set_property -dict [list CONFIG.NUM_OF_IO {4}] $axi_gpreg
+
+ad_cpu_interconnect 0x41200000 axi_gpreg
+
+create_bd_port -dir I clk_0
+create_bd_port -dir I clk_1
+ad_connect  clk_0 axi_gpreg/d_clk_0
+ad_connect  clk_1 axi_gpreg/d_clk_1
+ad_connect  gt_ref_clk_0 axi_gpreg/d_clk_2
+ad_connect  util_pzslb_gtlb_0/rx_clk axi_gpreg/d_clk_3
+ad_connect  util_pzslb_gtlb_0/tx_clk axi_gpreg/d_clk_4
+ad_connect  gt_ref_clk_1 axi_gpreg/d_clk_5
+ad_connect  util_pzslb_gtlb_1/rx_clk axi_gpreg/d_clk_6
+ad_connect  util_pzslb_gtlb_1/tx_clk axi_gpreg/d_clk_7
+
+create_bd_port -dir I -from 31 -to 0 gp_in_0
+create_bd_port -dir I -from 31 -to 0 gp_in_1
+create_bd_port -dir O -from 31 -to 0 gp_out_0
+create_bd_port -dir O -from 31 -to 0 gp_out_1
+
+ad_connect  gp_in_0 axi_gpreg/up_gp_in_0
+ad_connect  gp_in_1 axi_gpreg/up_gp_in_1
+ad_connect  gp_out_0 axi_gpreg/up_gp_out_0
+ad_connect  gp_out_1 axi_gpreg/up_gp_out_1
+ad_connect  axi_gpreg/up_gp_in_2 util_pzslb_gtlb_0/up_gp_out
+ad_connect  axi_gpreg/up_gp_out_2 util_pzslb_gtlb_0/up_gp_in
+ad_connect  axi_gpreg/up_gp_in_3 util_pzslb_gtlb_1/up_gp_out
+ad_connect  axi_gpreg/up_gp_out_3 util_pzslb_gtlb_1/up_gp_in
+
+## temporary (remove ila indirectly)
 
 delete_bd_objs [get_bd_cells ila_adc]
 delete_bd_objs [get_bd_nets axi_ad9361_tdd_dbg] [get_bd_cells ila_tdd]
