@@ -55,6 +55,8 @@ module util_gtlb (
   input                 rx_p,
   input                 rx_n,
 
+  output                rx_clk,
+
   input       [ 3:0]    rx_gt_charisk_0,
   input       [ 3:0]    rx_gt_disperr_0,
   input       [ 3:0]    rx_gt_notintable_0,
@@ -91,6 +93,8 @@ module util_gtlb (
 
   output                tx_p,
   output                tx_n,
+
+  output                tx_clk,
 
   output      [ 3:0]    tx_gt_charisk_0,
   output  reg [31:0]    tx_gt_data_0,
@@ -221,6 +225,7 @@ module util_gtlb (
   assign rx_ip_sof_0 = 4'hf;
   assign rx_ip_data_0 = 32'd0;
   assign rx_ip_sync_0 = rx_sync;
+  assign rx_clk = rx_out_clk_0;
 
   assign tx_p = tx_0_p;
   assign tx_n = tx_0_n;
@@ -233,6 +238,7 @@ module util_gtlb (
   assign tx_sysref_0 = 1'd0;
   assign tx_sync_0 = tx_sync;
   assign tx_data_0 = 32'd0;
+  assign tx_clk = tx_out_clk_0;
 
   // gt loop back
 
