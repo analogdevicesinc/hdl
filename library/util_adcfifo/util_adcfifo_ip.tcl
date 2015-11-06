@@ -16,4 +16,4 @@ adi_ip_constraints util_adcfifo [list \
 
 ipx::save_core [ipx::current_core]
 
-
+close_project;

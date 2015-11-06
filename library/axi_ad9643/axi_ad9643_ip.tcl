@@ -39,3 +39,4 @@ set_property driver_value 0 [ipx::get_ports *gpio_in* -of_objects [ipx::current_
 
 ipx::save_core [ipx::current_core]
 
+close_project;

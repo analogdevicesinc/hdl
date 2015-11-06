@@ -29,3 +29,5 @@ adi_add_bus "m_axis" "master" \
 adi_add_bus_clock "clk" "s_axis:m_axis" "resetn"
 
 ipx::save_core [ipx::current_core]
+
+close_project;

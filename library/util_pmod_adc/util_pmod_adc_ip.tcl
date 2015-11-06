@@ -16,3 +16,4 @@ adi_ip_constraints util_pmod_adc [list \
 
 ipx::save_core [ipx::current_core]
 
+close_project;

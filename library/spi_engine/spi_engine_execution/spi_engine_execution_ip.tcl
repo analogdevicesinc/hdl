@@ -44,3 +44,5 @@ adi_add_bus "spi" "master" \
 adi_add_bus_clock "clk" "spi" "resetn"
 
 ipx::save_core [ipx::current_core]
+
+close_project;

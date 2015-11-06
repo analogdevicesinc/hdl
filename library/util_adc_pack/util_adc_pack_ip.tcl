@@ -40,3 +40,5 @@ adi_add_bus "fifo_wr" "master" \
 adi_add_bus_clock "clk" "fifo_wr"
 
 ipx::save_core [ipx::current_core]
+
+close_project;

@@ -36,3 +36,5 @@ adi_add_bus_clock "m_axis_aclk" "M_AXIS" "m_axis_aresetn"
 adi_add_bus_clock "s_axis_aclk" "S_AXIS" "m_axis_aresetn"
 
 ipx::save_core [ipx::current_core]
+
+close_project;

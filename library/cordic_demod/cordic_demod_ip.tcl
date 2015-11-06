@@ -30,3 +30,5 @@ adi_add_bus "M_AXIS" "master" \
 adi_add_bus_clock "clk" "S_AXIS:M_AXIS" "resetn"
 
 ipx::save_core [ipx::current_core]
+
+close_project;

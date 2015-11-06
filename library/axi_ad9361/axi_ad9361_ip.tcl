@@ -65,3 +65,7 @@ set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
 
 ipx::save_core [ipx::current_core]
 
+#set ad_hdl_dir [file normalize [file join [file dirname [info script]] "../../hdl"]];
+
+cd $ad_hdl_dir/library;
+close_project;

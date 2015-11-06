@@ -52,3 +52,5 @@ foreach prefix [list "s0" "s1"] {
 }
 
 ipx::save_core [ipx::current_core]
+
+close_project;

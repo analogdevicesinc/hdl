@@ -33,3 +33,5 @@ adi_add_bus "s_spi" "slave" \
 adi_add_bus_clock "clk" "m_spi:s_spi" "resetn"
 
 ipx::save_core [ipx::current_core]
+
+close_project;

@@ -34,3 +34,4 @@ set_property driver_value 0 [ipx::get_ports *raddr_in* -of_objects [ipx::current
 
 ipx::save_core [ipx::current_core]
 
+close_project;

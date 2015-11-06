@@ -35,4 +35,4 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CH
 
 ipx::save_core [ipx::current_core]
 
-
+close_project;

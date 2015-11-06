@@ -7,7 +7,8 @@ variable p_prcfg_list
 variable p_prcfg_status
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2015.2.1"
+  #set REQUIRED_VIVADO_VERSION "2014.4.1"
+  set REQUIRED_VIVADO_VERSION "2015.2"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -32,37 +33,37 @@ proc adi_project_create {project_name {mode 0}} {
 
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
-    set p_board "xilinx.com:ac701:part0:1.0"
+    set p_board "xilinx.com:artix7:ac701:1.0"
     set sys_zynq 0
   }
   if [regexp "_kc705$" $project_name] {
     set p_device "xc7k325tffg900-2"
-    set p_board "xilinx.com:kc705:part0:1.1"
+    set p_board "xilinx.com:kintex7:kc705:1.1"
     set sys_zynq 0
   }
   if [regexp "_vc707$" $project_name] {
     set p_device "xc7vx485tffg1761-2"
-    set p_board "xilinx.com:vc707:part0:1.1"
+    set p_board "xilinx.com:virtex7:vc707:1.1"
     set sys_zynq 0
   }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
-    set p_board "xilinx.com:kcu105:part0:1.0"
+    set p_board "not-applicable"
     set sys_zynq 0
   }
   if [regexp "_zed$" $project_name] {
     set p_device "xc7z020clg484-1"
-    set p_board "em.avnet.com:zed:part0:1.3"
+    set p_board "em.avnet.com:zynq:zed:d"
     set sys_zynq 1
   }
   if [regexp "_zc702$" $project_name] {
     set p_device "xc7z020clg484-1"
-    set p_board "xilinx.com:zc702:part0:1.2"
+    set p_board "xilinx.com:zynq:zc702:1.0"
     set sys_zynq 1
   }
   if [regexp "_zc706$" $project_name] {
     set p_device "xc7z045ffg900-2"
-    set p_board "xilinx.com:zc706:part0:1.2"
+    set p_board "xilinx.com:zc706:part0:1.0"
     set sys_zynq 1
   }
   if [regexp "_mitx045$" $project_name] {
@@ -70,7 +71,7 @@ proc adi_project_create {project_name {mode 0}} {
     set p_board "not-applicable"
     set sys_zynq 1
   }
-  if [regexp "_pzsdr$" $project_name] {
+  if [regexp "_rfsom$" $project_name] {
     set p_device "xc7z035ifbg676-2L"
     set p_board "not-applicable"
     set sys_zynq 1
@@ -93,7 +94,7 @@ proc adi_project_create {project_name {mode 0}} {
   }
 
   if {$p_board ne "not-applicable"} {
-    set_property board_part $p_board [current_project]
+    set_property board $p_board [current_project]
   }
 
   set lib_dirs $ad_hdl_dir/library
@@ -161,12 +162,7 @@ proc adi_project_run {project_name} {
   report_timing_summary -file timing_impl.log
 
   file mkdir $project_name.sdk
-  if [expr [get_property SLACK [get_timing_paths]] < 0] {
-    file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top_bad_timing.hdf
-  } else {
-    file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
-  }
-
+  file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
 
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
     return -code error [format "ERROR: Timing Constraints NOT met!"]

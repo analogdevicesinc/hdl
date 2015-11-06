@@ -16,3 +16,4 @@ adi_ip_properties util_pmod_fmeter
 
 ipx::save_core [ipx::current_core]
 
+close_project;

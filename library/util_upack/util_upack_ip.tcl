@@ -36,4 +36,4 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CH
 ipx::remove_all_bus_interface [ipx::current_core]
 ipx::save_core [ipx::current_core]
 
-
+close_project;

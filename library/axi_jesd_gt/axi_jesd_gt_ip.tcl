@@ -196,3 +196,4 @@ set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects 
 
 ipx::save_core [ipx::current_core]
 
+close_project;

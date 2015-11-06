@@ -50,3 +50,4 @@ adi_set_ports_dependency "DMA_REQ_RSTN" \
 
 ipx::save_core [ipx::current_core]
 
+close_project;

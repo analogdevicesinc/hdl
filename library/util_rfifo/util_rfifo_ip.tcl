@@ -12,4 +12,4 @@ adi_ip_properties_lite util_rfifo
 ipx::remove_all_bus_interface [ipx::current_core]
 ipx::save_core [ipx::current_core]
 
-
+close_project;
