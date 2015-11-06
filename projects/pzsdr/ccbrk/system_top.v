@@ -95,22 +95,17 @@ module system_top (
   spi_mosi,
   spi_miso,
 
-  fmc_prstn,
-  fmc_clk0_p,
-  fmc_clk0_n,
-  fmc_clk1_p,
-  fmc_clk1_n,
-  fmc_la_p,
-  fmc_la_n,
-  pmod0,
-  pmod1,
+  gp_out,
+  gp_in,
+  gp_in_mio,
+  gp_in_1,
 
-  fmc_gt_ref_clk_p,
-  fmc_gt_ref_clk_n,
-  fmc_gt_tx_p,
-  fmc_gt_tx_n,
-  fmc_gt_rx_p,
-  fmc_gt_rx_n);
+  gt_ref_clk_p,
+  gt_ref_clk_n,
+  gt_tx_p,
+  gt_tx_n,
+  gt_rx_p,
+  gt_rx_n);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -168,131 +163,44 @@ module system_top (
   output          spi_mosi;
   input           spi_miso;
 
-  input           fmc_prstn;
-  input           fmc_clk0_p;
-  input           fmc_clk0_n;
-  input           fmc_clk1_p;
-  input           fmc_clk1_n;
-  inout   [33:0]  fmc_la_p;
-  inout   [33:0]  fmc_la_n;
-  inout   [ 7:0]  pmod0;
-  inout   [ 7:0]  pmod1;
+  output  [87:0]  gp_out;
+  input   [87:0]  gp_in;
+  input   [ 3:0]  gp_in_mio;
+  input           gp_in_1;
 
-  input           fmc_gt_ref_clk_p;
-  input           fmc_gt_ref_clk_n;
-  output          fmc_gt_tx_p;
-  output          fmc_gt_tx_n;
-  input           fmc_gt_rx_p;
-  input           fmc_gt_rx_n;
+  input           gt_ref_clk_p;
+  input           gt_ref_clk_n;
+  output  [ 3:0]  gt_tx_p;
+  output  [ 3:0]  gt_tx_n;
+  input   [ 3:0]  gt_rx_p;
+  input   [ 3:0]  gt_rx_n;
 
   // internal signals
 
-  wire            fmc_clk0_s;
-  wire            fmc_clk0;
-  wire    [31:0]  up_clk0_count;
-  wire            fmc_clk1_s;
-  wire            fmc_clk1;
-  wire    [31:0]  up_clk1_count;
-  wire            fmc_gt_ref_clk;
-  wire    [31:0]  gpio_0_0_i;
-  wire    [31:0]  gpio_0_0_o;
-  wire    [31:0]  gpio_0_0_t;
-  wire    [31:0]  gpio_0_1_i;
-  wire    [31:0]  gpio_0_1_o;
-  wire    [31:0]  gpio_0_1_t;
-  wire    [31:0]  gpio_1_0_i;
-  wire    [31:0]  gpio_1_0_o;
-  wire    [31:0]  gpio_1_0_t;
-  wire    [31:0]  gpio_1_1_i;
-  wire    [31:0]  gpio_1_1_o;
-  wire    [31:0]  gpio_1_1_t;
-  wire    [31:0]  gpio_3_1_o;
+  wire            gt_ref_clk;
+  wire    [95:0]  gp_out_s;
+  wire    [95:0]  gp_in_s;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  wire            up_clk;
-  wire            up_rst;
-  wire            up_rstn;
-  wire            up_pn_err_clr;
-  wire            up_pn_oos_clr;
-  wire            up_pn_err;
-  wire            up_pn_oos;
+
+  // assignments
+
+  assign gp_out = gp_out_s[87:0];
+
+  assign gp_in_s[95:93] = 3'd0;
+  assign gp_in_s[92:92] = gp_in_1;
+  assign gp_in_s[91:88] = gp_in_mio;
+  assign gp_in_s[87: 0] = gp_in;
 
   // instantiations
 
-  IBUFDS i_ibufds_clk0 (
-    .I (fmc_clk0_p),
-    .IB (fmc_clk0_n),
-    .O (fmc_clk0_s));
-
-  BUFG i_bufg_clk0 (
-    .I (fmc_clk0_s),
-    .O (fmc_clk0));
-
-  up_clock_mon i_clk0_mon (
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_d_count (up_clk0_count),
-    .d_rst (up_rst),
-    .d_clk (fmc_clk0));
-
-  IBUFDS i_ibufds_clk1 (
-    .I (fmc_clk1_p),
-    .IB (fmc_clk1_n),
-    .O (fmc_clk1_s));
-
-  BUFG i_bufg_clk1 (
-    .I (fmc_clk1_s),
-    .O (fmc_clk1));
-
-  up_clock_mon i_clk1_mon (
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_d_count (up_clk1_count),
-    .d_rst (up_rst),
-    .d_clk (fmc_clk1));
-
-  IBUFDS_GTE2 i_ibufds_ref_clk (
+  IBUFDS_GTE2 i_ibufds_gt_ref_clk (
     .CEB (1'd0),
-    .I (fmc_gt_ref_clk_p),
-    .IB (fmc_gt_ref_clk_n),
-    .O (fmc_gt_ref_clk),
+    .I (gt_ref_clk_p),
+    .IB (gt_ref_clk_n),
+    .O (gt_ref_clk),
     .ODIV2 ());
-
-  assign gpio_0_1_i[31:10] = 'd0;
-  assign gpio_1_1_i[31:10] = 'd0;
-  assign up_pn_err_clr = gpio_3_1_o[1];
-  assign up_pn_oos_clr = gpio_3_1_o[0];
-
-  ad_iobuf #(.DATA_WIDTH(42)) i_iobuf_pmod0_fmc_p (
-    .dio_t ({gpio_0_1_t[9:0], gpio_0_0_t[31:0]}),
-    .dio_i ({gpio_0_1_o[9:0], gpio_0_0_o[31:0]}),
-    .dio_o ({gpio_0_1_i[9:0], gpio_0_0_i[31:0]}),
-    .dio_p ({ pmod1[3],
-              pmod1[2],
-              pmod1[1],
-              pmod1[0],
-              pmod0[3],
-              pmod0[2],
-              pmod0[1],
-              pmod0[0],
-              fmc_la_n[16:0],
-              fmc_la_p[16:0]}));
-
-  ad_iobuf #(.DATA_WIDTH(42)) i_iobuf_pmod1_fmc_n (
-    .dio_t ({gpio_1_1_t[9:0], gpio_1_0_t[31:0]}),
-    .dio_i ({gpio_1_1_o[9:0], gpio_1_0_o[31:0]}),
-    .dio_o ({gpio_1_1_i[9:0], gpio_1_0_i[31:0]}),
-    .dio_p ({ pmod1[7],
-              pmod1[6],
-              pmod1[5],
-              pmod1[4],
-              pmod0[7],
-              pmod0[6],
-              pmod0[5],
-              pmod0[4],
-              fmc_la_n[33:17],
-              fmc_la_p[33:17]}));
 
   ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
     .dio_t ({gpio_t[51], gpio_t[46:32]}),
@@ -334,39 +242,32 @@ module system_top (
     .fixed_io_ps_clk (fixed_io_ps_clk),
     .fixed_io_ps_porb (fixed_io_ps_porb),
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
-    .fmc_gt_ref_clk0 (fmc_gt_ref_clk),
-    .fmc_gt_ref_clk1 (fmc_gt_ref_clk),
-    .fmc_gt_rx_n (fmc_gt_rx_n),
-    .fmc_gt_rx_p (fmc_gt_rx_p),
-    .fmc_gt_tx_n (fmc_gt_tx_n),
-    .fmc_gt_tx_p (fmc_gt_tx_p),
-    .gpio_0_0_i (gpio_0_0_i),
-    .gpio_0_0_o (gpio_0_0_o),
-    .gpio_0_0_t (gpio_0_0_t),
-    .gpio_0_1_i (gpio_0_1_i),
-    .gpio_0_1_o (gpio_0_1_o),
-    .gpio_0_1_t (gpio_0_1_t),
-    .gpio_1_0_i (gpio_1_0_i),
-    .gpio_1_0_o (gpio_1_0_o),
-    .gpio_1_0_t (gpio_1_0_t),
-    .gpio_1_1_i (gpio_1_1_i),
-    .gpio_1_1_o (gpio_1_1_o),
-    .gpio_1_1_t (gpio_1_1_t),
-    .gpio_2_0_i (up_clk0_count),
-    .gpio_2_0_o (),
-    .gpio_2_0_t (),
-    .gpio_2_1_i (up_clk1_count),
-    .gpio_2_1_o (),
-    .gpio_2_1_t (),
-    .gpio_3_0_i ({31'd0, fmc_prstn}),
-    .gpio_3_0_o (),
-    .gpio_3_0_t (),
-    .gpio_3_1_i ({30'd0, up_pn_err, up_pn_oos}),
-    .gpio_3_1_o (gpio_3_1_o),
-    .gpio_3_1_t (),
+    .gp_in_0 (gp_in_s[31:0]),
+    .gp_in_1 (gp_in_s[63:32]),
+    .gp_in_2 (gp_in_s[95:64]),
+    .gp_out_0 (gp_out_s[31:0]),
+    .gp_out_1 (gp_out_s[63:32]),
+    .gp_out_2 (gp_out_s[95:64]),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
+    .gt_ref_clk (gt_ref_clk),
+    .gt_rx_0_n (gt_rx_n[0]),
+    .gt_rx_0_p (gt_rx_p[0]),
+    .gt_rx_1_n (gt_rx_n[1]),
+    .gt_rx_1_p (gt_rx_p[1]),
+    .gt_rx_2_n (gt_rx_n[2]),
+    .gt_rx_2_p (gt_rx_p[2]),
+    .gt_rx_3_n (gt_rx_n[3]),
+    .gt_rx_3_p (gt_rx_p[3]),
+    .gt_tx_0_n (gt_tx_n[0]),
+    .gt_tx_0_p (gt_tx_p[0]),
+    .gt_tx_1_n (gt_tx_n[1]),
+    .gt_tx_1_p (gt_tx_p[1]),
+    .gt_tx_2_n (gt_tx_n[2]),
+    .gt_tx_2_p (gt_tx_p[2]),
+    .gt_tx_3_n (gt_tx_n[3]),
+    .gt_tx_3_p (gt_tx_p[3]),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
@@ -417,14 +318,7 @@ module system_top (
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
     .txnrx (txnrx),
-    .up_clk (up_clk),
     .up_enable (gpio_o[47]),
-    .up_pn_err (up_pn_err),
-    .up_pn_err_clr (up_pn_err_clr),
-    .up_pn_oos (up_pn_oos),
-    .up_pn_oos_clr (up_pn_oos_clr),
-    .up_rst (up_rst),
-    .up_rstn (up_rstn),
     .up_txnrx (gpio_o[48]));
 
 endmodule

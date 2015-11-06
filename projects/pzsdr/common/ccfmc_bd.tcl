@@ -153,7 +153,7 @@ ad_cpu_interconnect 0x77600000 axi_i2s_adi
 ad_mem_hp0_interconnect sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect sys_cpu_clk axi_hdmi_dma/M_AXI_MM2S
 
-# usued io (gt)
+# un-used io (gt)
 
 set axi_pzslb_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:1.0 axi_pzslb_gt]
 set_property -dict [list CONFIG.NUM_OF_LANES {2}] $axi_pzslb_gt
@@ -229,7 +229,7 @@ ad_connect  axi_pzslb_gt/gt_rx_ip_1 util_pzslb_gtlb_1/gt_rx_ip_0
 ad_connect  axi_pzslb_gt/gt_tx_ip_1 util_pzslb_gtlb_1/gt_tx_ip_0
 ad_connect  axi_pzslb_gt/rx_gt_comma_align_enb_1 util_pzslb_gtlb_1/rx_gt_comma_align_enb_0 
 
-# usued io (regular)
+# un-used io (regular)
 
 set axi_gpreg [create_bd_cell -type ip -vlnv analog.com:user:axi_gpreg:1.0 axi_gpreg]
 set_property -dict [list CONFIG.NUM_OF_CLK_MONS {8}] $axi_gpreg
