@@ -162,7 +162,7 @@ proc adi_project_run {project_name} {
 
   file mkdir $project_name.sdk
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
-    file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top_timing.hdf
+    file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top_bad_timing.hdf
   } else {
     file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
   }
