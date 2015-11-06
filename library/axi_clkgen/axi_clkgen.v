@@ -41,6 +41,7 @@ module axi_clkgen (
   // clocks
 
   clk,
+  clk2,
   clk_0,
   clk_1,
 
@@ -71,6 +72,7 @@ module axi_clkgen (
   parameter   ID = 0;
   parameter   DEVICE_TYPE = 0;
   parameter   CLKIN_PERIOD  = 5.0;
+  parameter   CLKIN2_PERIOD  = 5.0;
   parameter   VCO_DIV = 11;
   parameter   VCO_MUL = 49;
   parameter   CLK0_DIV = 6;
@@ -79,6 +81,7 @@ module axi_clkgen (
   // clocks
 
   input           clk;
+  input           clk2;
   output          clk_0;
   output          clk_1;
 
@@ -191,12 +194,14 @@ module axi_clkgen (
   ad_mmcm_drp #(
     .MMCM_DEVICE_TYPE (DEVICE_TYPE),
     .MMCM_CLKIN_PERIOD (CLKIN_PERIOD),
+    .MMCM_CLKIN2_PERIOD (CLKIN2_PERIOD),
     .MMCM_VCO_DIV (VCO_DIV),
     .MMCM_VCO_MUL (VCO_MUL),
     .MMCM_CLK0_DIV (CLK0_DIV),
     .MMCM_CLK1_DIV (CLK1_DIV))
   i_mmcm_drp (
     .clk (clk),
+    .clk2 (clk2),
     .mmcm_rst (mmcm_rst),
     .mmcm_clk_0 (clk_0),
     .mmcm_clk_1 (clk_1),

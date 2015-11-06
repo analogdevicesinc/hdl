@@ -43,6 +43,7 @@ module ad_mmcm_drp (
   // clocks
 
   clk,
+  clk2,
   mmcm_rst,
   mmcm_clk_0,
   mmcm_clk_1,
@@ -66,6 +67,7 @@ module ad_mmcm_drp (
   localparam  MMCM_DEVICE_VIRTEX6 = 1;
 
   parameter   MMCM_CLKIN_PERIOD  = 1.667;
+  parameter   MMCM_CLKIN2_PERIOD  = 1.667;
   parameter   MMCM_VCO_DIV  = 6;
   parameter   MMCM_VCO_MUL = 12.000;
   parameter   MMCM_CLK0_DIV = 2.000;
@@ -74,6 +76,7 @@ module ad_mmcm_drp (
   // clocks
 
   input           clk;
+  input           clk2;
   input           mmcm_rst;
   output          mmcm_clk_0;
   output          mmcm_clk_1;
@@ -146,6 +149,7 @@ module ad_mmcm_drp (
     .CLKOUT1_DUTY_CYCLE (0.500),
     .CLKOUT1_USE_FINE_PS ("FALSE"),
     .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
+    .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
     .REF_JITTER1 (0.010))
   i_mmcm (
     .CLKIN1 (clk),
@@ -171,7 +175,7 @@ module ad_mmcm_drp (
     .CLKOUT4 (),
     .CLKOUT5 (),
     .CLKOUT6 (),
-    .CLKIN2 (1'b0),
+    .CLKIN2 (clk2),
     .CLKINSEL (1'b1),
     .PSCLK (1'b0),
     .PSEN (1'b0),
@@ -202,6 +206,7 @@ module ad_mmcm_drp (
     .CLKOUT1_DUTY_CYCLE (0.500),
     .CLKOUT1_USE_FINE_PS ("FALSE"),
     .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
+    .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
     .REF_JITTER1 (0.010))
   i_mmcm (
     .CLKIN1 (clk),
@@ -227,7 +232,7 @@ module ad_mmcm_drp (
     .CLKOUT4 (),
     .CLKOUT5 (),
     .CLKOUT6 (),
-    .CLKIN2 (1'b0),
+    .CLKIN2 (clk2),
     .CLKINSEL (1'b1),
     .PSCLK (1'b0),
     .PSEN (1'b0),
