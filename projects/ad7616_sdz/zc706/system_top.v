@@ -75,7 +75,23 @@ module system_top (
   spdif,
 
   iic_scl,
-  iic_sda);
+  iic_sda,
+
+  spi_sdo,
+  spi_sdi_0,
+  spi_sdi_1,
+  spi_cs_n,
+
+  adc_db_o,
+  adc_db_i,
+  adc_rd_n,
+  adc_wr_n,
+  adc_reset_n,
+  adc_cnvst,
+  adc_busy,
+  adc_seq_en,
+  adc_hw_rngsel,
+  adc_chsel);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -112,6 +128,22 @@ module system_top (
 
   inout           iic_scl;
   inout           iic_sda;
+
+  output          spi_sdo;
+  input           spi_sdi_0;
+  input           spi_sdi_1;
+  output          spi_cs_n;
+
+  output  [15:0]  adc_db_o;
+  input   [15:0]  adc_db_i;
+  output          adc_rd_n;
+  output          adc_wr_n;
+  output          adc_reset_n;
+  output          adc_cnvst;
+  output          adc_busy;
+  output          adc_seq_en;
+  output  [ 1:0]  adc_hw_rngsel;
+  output  [ 2:0]  adc_chsel;
 
   // internal signals
 
@@ -175,7 +207,22 @@ module system_top (
     .ps_intr_11 (1'b0),
     .ps_intr_12 (1'b0),
     .ps_intr_13 (1'b0),
-    .spdif (spdif));
+    .spdif (spdif),
+    .sclk (spi_sclk),
+    .sdo (spi_sdo),
+    .sdi_0 (spi_sdi_0),
+    .sdi_1 (spi_sdi_1),
+    .db_o (adc_db_o),
+    .db_i (adc_db_i),
+    .rd_n (adc_rd_n),
+    .wr_n (adc_wr_n),
+    .reset_n (adc_reset_n),
+    .cnvst (adc_cnvst),
+    .cs_n (spi_cs_n),
+    .busy (adc_busy),
+    .seq_en (adc_seq_en),
+    .hw_rngsel (adc_hw_rngsel),
+    .chsel (adc_chsel));
 
 endmodule
 
