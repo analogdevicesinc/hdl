@@ -114,6 +114,7 @@ proc adi_project_create {project_name {mode 0}} {
   create_bd_design "system"
   source system_bd.tcl
 
+  regenerate_bd_layout
   save_bd_design
   validate_bd_design
 
