@@ -30,6 +30,7 @@ clean:
 	make -C axi_clkgen clean
 	make -C axi_dmac clean
 	make -C axi_generic_adc clean
+	make -C axi_gpreg clean
 	make -C axi_hdmi_rx clean
 	make -C axi_hdmi_tx clean
 	make -C axi_i2s_adi clean
@@ -61,6 +62,7 @@ clean:
 	make -C util_gtlb clean
 	make -C util_i2c_mixer clean
 	make -C util_jesd_gt clean
+	make -C util_mfifo clean
 	make -C util_pmod_adc clean
 	make -C util_pmod_fmeter clean
 	make -C util_rfifo clean
@@ -93,6 +95,7 @@ lib:
 	-make -C axi_clkgen
 	-make -C axi_dmac
 	-make -C axi_generic_adc
+	-make -C axi_gpreg
 	-make -C axi_hdmi_rx
 	-make -C axi_hdmi_tx
 	-make -C axi_i2s_adi
@@ -124,6 +127,7 @@ lib:
 	-make -C util_gtlb
 	-make -C util_i2c_mixer
 	-make -C util_jesd_gt
+	-make -C util_mfifo
 	-make -C util_pmod_adc
 	-make -C util_pmod_fmeter
 	-make -C util_rfifo

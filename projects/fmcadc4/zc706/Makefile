@@ -30,6 +30,7 @@ M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_jesd_gt/util_jesd_gt.xpr
+M_DEPS += ../../../library/util_mfifo/util_mfifo.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -65,6 +66,7 @@ clean-all:clean
 	make -C ../../../library/util_bsplit clean
 	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_jesd_gt clean
+	make -C ../../../library/util_mfifo clean
 
 
 fmcadc4_zc706.sdk/system_top.hdf: $(M_DEPS)
@@ -83,6 +85,7 @@ lib:
 	make -C ../../../library/util_bsplit
 	make -C ../../../library/util_cpack
 	make -C ../../../library/util_jesd_gt
+	make -C ../../../library/util_mfifo
 
 ####################################################################################
 ####################################################################################
