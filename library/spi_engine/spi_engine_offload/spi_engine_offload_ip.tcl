@@ -3,6 +3,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create spi_engine_offload
 adi_ip_files spi_engine_offload [list \
+        "$ad_hdl_dir/library/common/sync_bits.v" \
 	"spi_engine_offload.v" \
 ]
 
