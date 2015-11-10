@@ -93,7 +93,7 @@ wire sdo_fifo_in_valid;
 wire [SDI_FIFO_ADDRESS_WIDTH:0] sdi_fifo_level;
 wire sdi_fifo_almost_full;
 
-wire [7:0] sdi_fifo_out_data;
+wire [31:0] sdi_fifo_out_data;
 wire sdi_fifo_out_ready;
 wire sdi_fifo_out_valid;
 
