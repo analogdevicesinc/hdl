@@ -23,3 +23,5 @@ adi_add_bus "upstream" "slave" \
 	 ]
 
 ipx::save_core [ipx::current_core]
+
+close_project;

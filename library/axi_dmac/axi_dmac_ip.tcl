@@ -358,3 +358,5 @@ set_property -dict [list \
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core $cc
+
+close_project;

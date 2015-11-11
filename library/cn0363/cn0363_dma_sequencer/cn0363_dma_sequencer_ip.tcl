@@ -70,3 +70,5 @@ adi_add_bus "dma_wr" "master" \
 adi_add_bus_clock "clk" "phase:data:data_filtered:i_q:i_q_filtered:dma_wr" "resetn:processing_resetn"
 
 ipx::save_core [ipx::current_core]
+
+close_project;

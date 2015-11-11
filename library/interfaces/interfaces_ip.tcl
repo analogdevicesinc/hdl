@@ -70,3 +70,4 @@ adi_if_ports  output   4  rx_gt_ilas_a
 adi_if_ports  output   4  rx_gt_ilas_r
 adi_if_ports  output   4  rx_gt_cgs_k
 
+close_project;

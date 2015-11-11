@@ -34,3 +34,5 @@ set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_cor
 set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
 
 ipx::save_core [ipx::current_core]
+
+close_project;

@@ -23,3 +23,5 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.IODELAY_C
   [ipx::get_ports idelayctrl_clk -of_objects [ipx::current_core]]
 
 ipx::save_core [ipx::current_core]
+
+close_project;

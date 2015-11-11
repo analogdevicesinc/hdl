@@ -43,3 +43,4 @@ set_property -dict {driver_value {0} enablement_dependency {spirit:decode(id('MO
 ipx::save_core [ipx::current_core]
 
 
+close_project;

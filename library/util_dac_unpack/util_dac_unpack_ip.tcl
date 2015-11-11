@@ -43,4 +43,4 @@ adi_add_bus_clock "clk" "fifo_rd"
 
 ipx::save_core [ipx::current_core]
 
-
+close_project;

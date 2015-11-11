@@ -26,4 +26,4 @@ adi_ip_constraints axi_mc_speed [list \
 
 ipx::save_core [ipx::current_core]
 
-
+close_project;

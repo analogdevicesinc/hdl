@@ -54,3 +54,5 @@ adi_add_bus_clock "spi_clk" "spi_engine_ctrl:offload_sdi" "spi_resetn"
 adi_add_bus_clock "ctrl_clk" "spi_engine_offload_ctrl"
 
 ipx::save_core [ipx::current_core]
+
+close_project;

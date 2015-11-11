@@ -20,4 +20,4 @@ adi_ip_properties axi_generic_adc
 
 ipx::save_core [ipx::current_core]
 
-
+close_project;

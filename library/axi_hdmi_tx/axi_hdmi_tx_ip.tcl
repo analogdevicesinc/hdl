@@ -35,3 +35,4 @@ ipx::remove_bus_interface hdmi_out_clk [ipx::current_core]
 ipx::remove_bus_interface vdma_clk [ipx::current_core]
 ipx::save_core [ipx::current_core]
 
+close_project;

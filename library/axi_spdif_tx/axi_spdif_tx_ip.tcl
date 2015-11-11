@@ -51,3 +51,4 @@ set_property value S_AXI_ARESETN [ipx::get_bus_parameters ASSOCIATED_RESET \
 
 ipx::save_core [ipx::current_core]
 
+close_project;

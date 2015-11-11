@@ -57,3 +57,5 @@ adi_add_bus "spi_engine_offload_ctrl0" "master" \
 adi_add_bus_clock "s_axi_aclk" "spi_engine_offload_ctrl0:s_axi" "s_axi_aresetn"
 
 ipx::save_core [ipx::current_core]
+
+close_project;

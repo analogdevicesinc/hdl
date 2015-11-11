@@ -28,3 +28,4 @@ adi_ip_constraints axi_mc_controller [list \
 ipx::save_core [ipx::current_core]
 
 
+close_project;

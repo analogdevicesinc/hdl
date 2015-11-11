@@ -24,3 +24,4 @@ ipx::infer_bus_interfaces {{xilinx.com:interface:aximm:1.0}} [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 
+close_project;
