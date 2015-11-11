@@ -273,7 +273,7 @@ module ad_tdd_control(
       end
 
       OFF : begin
-        if((tdd_enable == 1'b1) && (tdd_enable_d == 1'b0)) begin
+        if((tdd_enable_d1 == 1'b1) && (tdd_enable_d2 == 1'b0)) begin
           tdd_cstate_next <= ON;
         end
       end
@@ -772,7 +772,7 @@ module ad_tdd_control(
   assign tdd_txrx_only_en_s = tdd_tx_only ^ tdd_rx_only;
 
   always @(posedge clk) begin
-    if((rst == 1'b1) || (tdd_sync_pulse == 1'b1)) begin
+    if(rst == 1'b1) begin
       tdd_rx_vco_en <= 1'b0;
     end else if((tdd_cstate == OFF) || (counter_at_tdd_vco_rx_off_1 == 1'b1) || (counter_at_tdd_vco_rx_off_2 == 1'b1)) begin
       tdd_rx_vco_en <= 1'b0;
@@ -786,7 +786,7 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
-    if((rst == 1'b1) || (tdd_sync_pulse == 1'b1)) begin
+    if(rst == 1'b1) begin
       tdd_tx_vco_en <= 1'b0;
     end else if((tdd_cstate == OFF) || (counter_at_tdd_vco_tx_off_1 == 1'b1) || (counter_at_tdd_vco_tx_off_2 == 1'b1)) begin
       tdd_tx_vco_en <= 1'b0;
@@ -800,7 +800,7 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
-    if((rst == 1'b1) || (tdd_sync_pulse == 1'b1)) begin
+    if(rst == 1'b1) begin
       tdd_rx_rf_en <= 1'b0;
     end else if((tdd_cstate == OFF) || (counter_at_tdd_rx_off_1 == 1'b1) || (counter_at_tdd_rx_off_2 == 1'b1)) begin
       tdd_rx_rf_en <= 1'b0;
@@ -814,7 +814,7 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
-    if((rst == 1'b1) || (tdd_sync_pulse == 1'b1)) begin
+    if(rst == 1'b1) begin
       tdd_tx_rf_en <= 1'b0;
     end else if((tdd_cstate == OFF) || (counter_at_tdd_tx_off_1 == 1'b1) || (counter_at_tdd_tx_off_2 == 1'b1)) begin
       tdd_tx_rf_en <= 1'b0;
@@ -828,7 +828,7 @@ module ad_tdd_control(
   end
 
   always @(posedge clk) begin
-    if((rst == 1'b1) || (tdd_sync_pulse == 1'b1)) begin
+    if(rst == 1'b1) begin
       tdd_tx_dp_en <= 1'b0;
     end else if((tdd_cstate == OFF) || (counter_at_tdd_tx_dp_off_1 == 1'b1) || (counter_at_tdd_tx_dp_off_2 == 1'b1)) begin
       tdd_tx_dp_en <= 1'b0;
