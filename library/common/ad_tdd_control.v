@@ -49,6 +49,7 @@ module ad_tdd_control(
   // TDD timming signals
 
   tdd_enable,
+  tdd_enable_synced,
   tdd_secondary,
   tdd_tx_only,
   tdd_rx_only,
@@ -76,6 +77,7 @@ module ad_tdd_control(
   tdd_tx_dp_on_2,
   tdd_tx_dp_off_2,
   tdd_sync,
+  tdd_sync_en,
 
   // TDD control signals
 
@@ -101,6 +103,7 @@ module ad_tdd_control(
   input           rst;
 
   input           tdd_enable;
+  output          tdd_enable_synced;
   input           tdd_secondary;
   input           tdd_tx_only;
   input           tdd_rx_only;
@@ -127,7 +130,9 @@ module ad_tdd_control(
   input  [23:0]   tdd_tx_off_2;
   input  [23:0]   tdd_tx_dp_on_2;
   input  [23:0]   tdd_tx_dp_off_2;
+
   input           tdd_sync;
+  output          tdd_sync_en;
 
   output          tdd_tx_dp_en;       // initiate vco tx2rx switch
   output          tdd_rx_vco_en;      // initiate vco rx2tx switch
@@ -174,14 +179,16 @@ module ad_tdd_control(
   reg             counter_at_tdd_tx_dp_on_2 = 1'b0;
   reg             counter_at_tdd_tx_dp_off_2 = 1'b0;
 
-  reg             tdd_enable_d = 1'h0;
+  reg             tdd_enable_d1 = 1'h0;
+  reg             tdd_enable_d2 = 1'h0;
   reg             tdd_last_burst = 1'b0;
 
   reg             tdd_sync_d1 = 1'b0;
   reg             tdd_sync_d2 = 1'b0;
   reg             tdd_sync_d3 = 1'b0;
 
-  reg             tdd_sync_pulse = 1'b00;
+  reg             tdd_sync_pulse = 1'b0;
+  reg             tdd_sync_en = 1'b0;
 
   // internal signals
 
@@ -215,22 +222,30 @@ module ad_tdd_control(
   // synchronization of tdd_sync
   always @(posedge clk) begin
     if (rst == 1'b1) begin
-      tdd_sync_d1 = 1'b0;
-      tdd_sync_d2 = 1'b0;
+      tdd_sync_en <= 1'b0;
+      tdd_sync_d1 <= 1'b0;
+      tdd_sync_d2 <= 1'b0;
     end else begin
+      tdd_sync_en <= tdd_enable;
       tdd_sync_d1 <= tdd_sync;
       tdd_sync_d2 <= tdd_sync_d1;
     end
   end
+
+  assign tdd_enable_synced = tdd_enable_d1;
 
   // edge detection circuit
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       tdd_sync_d3 <= 1'b0;
       tdd_sync_pulse <= 1'b0;
+      tdd_enable_d1 <= 0;
+      tdd_enable_d2 <= 0;
     end else begin
       tdd_sync_d3 <= tdd_sync_d2;
       tdd_sync_pulse <= (~tdd_sync_d3 & tdd_sync_d2) ? 1'b1 : 1'b0;
+      tdd_enable_d1 <= (~tdd_sync_d3 & tdd_sync_d2) ? tdd_enable : tdd_enable_d1;
+      tdd_enable_d2 <= tdd_enable_d1;
     end
   end
 
@@ -242,10 +257,8 @@ module ad_tdd_control(
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       tdd_cstate <= OFF;
-      tdd_enable_d <= 0;
     end else begin
       tdd_cstate <= tdd_cstate_next;
-      tdd_enable_d <= tdd_enable;
     end
   end
 

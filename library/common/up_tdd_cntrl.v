@@ -56,7 +56,6 @@ module up_tdd_cntrl (
   tdd_frame_length,
   tdd_terminal_type,
   tdd_sync_enable,
-  tdd_sync_period,
   tdd_vco_rx_on_1,
   tdd_vco_rx_off_1,
   tdd_vco_tx_on_1,
@@ -112,7 +111,6 @@ module up_tdd_cntrl (
   output  [23:0]  tdd_frame_length;
   output          tdd_terminal_type;
   output          tdd_sync_enable;
-  output  [ 7:0]  tdd_sync_period;
   output  [23:0]  tdd_vco_rx_on_1;
   output  [23:0]  tdd_vco_rx_off_1;
   output  [23:0]  tdd_vco_tx_on_1;
@@ -164,7 +162,6 @@ module up_tdd_cntrl (
   reg             up_tdd_gated_rx_dmapath = 1'h0;
   reg             up_tdd_terminal_type = 1'h0;
   reg             up_tdd_sync_enable = 1'h0;
-  reg     [ 7:0]  up_tdd_sync_period = 8'h0;
 
   reg     [ 7:0]  up_tdd_burst_count = 8'h0;
   reg     [23:0]  up_tdd_counter_init = 24'h0;
@@ -217,7 +214,6 @@ module up_tdd_cntrl (
       up_tdd_gated_rx_dmapath <= 1'h0;
       up_tdd_terminal_type <= 1'h0;
       up_tdd_sync_enable <= 1'h0;
-      up_tdd_sync_period <= 8'h0;
       up_tdd_counter_init <= 24'h0;
       up_tdd_frame_length <= 24'h0;
       up_tdd_burst_count <= 8'h0;
@@ -264,9 +260,6 @@ module up_tdd_cntrl (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
         up_tdd_terminal_type <= up_wdata[1];
         up_tdd_sync_enable <= up_wdata[0];
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h15)) begin
-        up_tdd_sync_period <= up_wdata[7:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
         up_tdd_vco_rx_on_1 <= up_wdata[23:0];
@@ -355,7 +348,6 @@ module up_tdd_cntrl (
           8'h13: up_rdata <= { 8'h0, up_tdd_frame_length};
           8'h14: up_rdata <= {30'h0, up_tdd_terminal_type,
                                      up_tdd_sync_enable};
-          8'h15: up_rdata <= {24'h0, up_tdd_sync_period};
           8'h18: up_rdata <= {24'h0, up_tdd_status_s};
           8'h20: up_rdata <= { 8'h0, up_tdd_vco_rx_on_1};
           8'h21: up_rdata <= { 8'h0, up_tdd_vco_rx_off_1};
@@ -385,7 +377,7 @@ module up_tdd_cntrl (
 
   // rf tdd control signal CDC
 
-  up_xfer_cntrl #(.DATA_WIDTH(24)) i_tdd_control (
+  up_xfer_cntrl #(.DATA_WIDTH(16)) i_xfer_tdd_control (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({up_tdd_enable,
@@ -396,8 +388,7 @@ module up_tdd_cntrl (
                     up_tdd_gated_tx_dmapath,
                     up_tdd_burst_count,
                     up_tdd_terminal_type,
-                    up_tdd_sync_enable,
-                    up_tdd_sync_period
+                    up_tdd_sync_enable
     }),
     .up_xfer_done(),
     .d_rst(rst),
@@ -410,11 +401,10 @@ module up_tdd_cntrl (
                    tdd_gated_tx_dmapath,
                    tdd_burst_count,
                    tdd_terminal_type,
-                   tdd_sync_enable,
-                   tdd_sync_period
+                   tdd_sync_enable
     }));
 
-  up_xfer_cntrl #(.DATA_WIDTH(528)) i_tdd_counter_values (
+  up_xfer_cntrl #(.DATA_WIDTH(528)) i_xfer_tdd_counter_values (
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_data_cntrl({up_tdd_counter_init,
@@ -468,7 +458,7 @@ module up_tdd_cntrl (
     }));
 
 
-  up_xfer_status #(.DATA_WIDTH(8)) i_tdd_status (
+  up_xfer_status #(.DATA_WIDTH(8)) i_xfer_tdd_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status (up_tdd_status_s),
