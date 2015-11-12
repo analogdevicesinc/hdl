@@ -160,6 +160,7 @@ module axi_ad7616 (
 
   // internal registers
 
+
   // internal signals
 
   wire            up_rreq_s;
@@ -175,6 +176,157 @@ module axi_ad7616 (
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+
+  generate if (IF_TYPE == 0) begin
+
+    wire spi_resetn_s;
+
+    axi_spi_engine #(
+      .SDI_DATA_WIDTH(),
+      .NUM_OFFLOAD()
+    ) i_axi_spi_engine(
+      .s_axi_aclk (up_clk),
+      .s_axi_aresetn (up_rstn),
+      .s_axi_awvalid (s_axi_awvalid),
+      .s_axi_awaddr (s_axi_awaddr),
+      .s_axi_awready (s_axi_awready),
+      .s_axi_wvalid (s_axi_wvalid),
+      .s_axi_wdata (s_axi_wdata),
+      .s_axi_wstrb (s_axi_wstrb),
+      .s_axi_wready (s_axi_wready),
+      .s_axi_bvalid (s_axi_bvalid),
+      .s_axi_bresp (s_axi_bresp),
+      .s_axi_bready (s_axi_bready),
+      .s_axi_arvalid (s_axi_arvalid),
+      .s_axi_araddr (s_axi_araddr),
+      .s_axi_arready (s_axi_arready),
+      .s_axi_rvalid (s_axi_rvalid),
+      .s_axi_rready (s_axi_rready),
+      .s_axi_rresp (s_axi_rresp),
+      .s_axi_rdata (s_axi_rdata),
+      .irq (),
+      .spi_clk (up_clk),
+      .spi_resetn (spi_resetn_s),
+      .cmd_ready (),
+      .cmd_valid (),
+      .cmd_data (),
+      .sdo_data_ready (),
+      .sdo_data_valid (),
+      .sdo_data (),
+      .sdi_data_ready (),
+      .sdi_data_valid (),
+      .sdi_data (),
+      .sync_ready (),
+      .sync_valid (),
+      .sync_data (),
+      .offload0_cmd_wr_en (),
+      .offload0_cmd_wr_data (),
+      .offload0_sdo_wr_en (),
+      .offload0_sdo_wr_data (),
+      .offload0_mem_reset (),
+      .offload0_enable (),
+      .offload0_enabled());
+
+    spi_engine_offload #(
+      .SDI_DATA_WIDTH()
+    ) i_spi_engine_offload(
+      .ctrl_clk (),
+      .ctrl_cmd_wr_en (),
+      .ctrl_cmd_wr_data (),
+      .ctrl_sdo_wr_en (),
+      .ctrl_sdo_wr_data (),
+      .ctrl_enable (),
+      .ctrl_enabled (),
+      .ctrl_mem_reset (),
+      .spi_clk (up_clk),
+      .spi_resetn (spi_resetn_s),
+      .trigger (),
+      .cmd_valid (),
+      .cmd_ready (),
+      .cmd (),
+      .sdo_data_valid (),
+      .sdo_data_ready (),
+      .sdo_data (),
+      .sdi_data_ready (),
+      .sdi_data (),
+      .sync_valid (),
+      .sync_ready (),
+      .sync_data (),
+      .offload_sdi_valid (),
+      .offload_sdi_ready (),
+      .offload_sdi_data ());
+
+    spi_engine_interconnect #(
+      .SDI_DATA_WIDTH ()
+    ) i_spi_engine_interconnect (
+      .clk (up_clk),
+      .resetn (spi_resetn_s),
+      .m_cmd_valid (),
+      .m_cmd_ready (),
+      .m_cmd_data (),
+      .m_sdo_valid (),
+      .m_sdo_ready (),
+      .m_sdo_data (),
+      .m_sdi_valid (),
+      .m_sdi_ready (),
+      .m_sdi_data (),
+      .m_sync_valid (),
+      .m_sync_ready (),
+      .m_sync (),
+      .s0_cmd_valid (),
+      .s0_cmd_ready (),
+      .s0_cmd_data (),
+      .s0_sdo_valid (),
+      .s0_sdo_ready (),
+      .s0_sdo_data (),
+      .s0_sdi_valid (),
+      .s0_sdi_ready (),
+      .s0_sdi_data (),
+      .s0_sync_valid (),
+      .s0_sync_ready (),
+      .s0_sync (),
+      .s1_cmd_valid (),
+      .s1_cmd_ready (),
+      .s1_cmd_data (),
+      .s1_sdo_valid (),
+      .s1_sdo_ready (),
+      .s1_sdo_data (),
+      .s1_sdi_valid (),
+      .s1_sdi_ready (),
+      .s1_sdi_data (),
+      .s1_sync_valid (),
+      .s1_sync_ready (),
+      .s1_sync ());
+
+    spi_engine_execution #(
+      .SDI_DATA_WIDTH()
+    ) i_spi_engine_execution (
+      .clk (up_clk),
+      .resetn (spi_resetn_s),
+      .active (),
+      .cmd_ready (),
+      .cmd_valid (),
+      .cmd (),
+      .sdo_data_valid (),
+      .sdo_data_ready (),
+      .sdo_data (),
+      .sdi_data_ready (),
+      .sdi_data_valid (),
+      .sdi_data (),
+      .sync_ready (),
+      .sync_valid (),
+      .sync (),
+      .sclk (),
+      .sdo (),
+      .sdo_t (),
+      .sdi (),
+      .sdi_1 (),
+      .sdi_2 (),
+      .sdi_3 (),
+      .cs (),
+      .three_wire ());
+
+  end
 
   // up bus interface
 
