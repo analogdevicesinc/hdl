@@ -93,8 +93,9 @@ module axi_ad7616 (
 
   m_axis_tdata,
   m_axis_tvalid,
-  m_axis_tready
+  m_axis_tready,
 
+  irq
 );
 
   // parameters
@@ -103,11 +104,12 @@ module axi_ad7616 (
   parameter       OP_MODE = 0;
   parameter       IF_TYPE = 0;
 
-  localparam      PCORE_VERSION = 'h0001001;
-  localparam      SW = 0;
-  localparam      HW = 1;
+  // local parameters
+
+  localparam      SDI_DATA_WIDTH = 16;
   localparam      SERIAL = 0;
   localparam      PARALLEL = 1;
+  localparam      NEG_EDGE = 1;
 
   // IO definitions
 
@@ -124,7 +126,7 @@ module axi_ad7616 (
 
   output          reset_n;
   output          cnvst;
-  output          busy;
+  input           busy;
   output          seq_en;
   output  [ 1:0]  hw_rngsel;
   output  [ 2:0]  chsel;
@@ -132,7 +134,6 @@ module axi_ad7616 (
   output          ser1w_n;
   output          burst;
   output  [ 2:0]  os;
-
 
   input           s_axi_aclk;
   input           s_axi_aresetn;
@@ -158,11 +159,16 @@ module axi_ad7616 (
   input           m_axis_tready;
   output          m_axis_tvalid;
 
+  output          irq;
+
   // internal registers
 
 
   // internal signals
 
+  wire            up_clk;
+  wire            up_rstn;
+  wire            up_rst;
   wire            up_rreq_s;
   wire    [13:0]  up_raddr_s;
   wire    [31:0]  up_rdata_s[0:2];
@@ -176,14 +182,67 @@ module axi_ad7616 (
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+  assign up_rst = ~s_axi_aresetn;
 
-  generate if (IF_TYPE == 0) begin
+  generate if (IF_TYPE == SERIAL) begin
 
-    wire spi_resetn_s;
+    // ground all parallel interface signals
+
+    assign db_o = 16'b0;
+    assign rd_n = 1'b0;
+    assign wr_n = 1'b0;
+
+    // all the SPI Framework instances and logic
+
+    wire                          spi_resetn_s;
+    wire                          s0_cmd_ready_s;
+    wire                          s0_cmd_valid_s;
+    wire  [15:0]                  s0_cmd_data_s;
+    wire                          s0_sdo_data_ready_s;
+    wire                          s0_sdo_data_valid_s;
+    wire  [ 7:0]                  s0_sdo_data_s;
+    wire                          s0_sdi_data_ready_s;
+    wire                          s0_sdi_data_valid_s;
+    wire  [(SDI_DATA_WIDTH-1):0]  s0_sdi_data_s;
+    wire                          s0_sync_ready_s;
+    wire                          s0_sync_valid_s;
+    wire  [ 7:0]                  s0_sync_data_s;
+    wire                          s1_cmd_ready_s;
+    wire                          s1_cmd_valid_s;
+    wire  [15:0]                  s1_cmd_data_s;
+    wire                          s1_sdo_data_ready_s;
+    wire                          s1_sdo_data_valid_s;
+    wire  [ 7:0]                  s1_sdo_data_s;
+    wire                          s1_sdi_data_ready_s;
+    wire                          s1_sdi_data_valid_s;
+    wire  [(SDI_DATA_WIDTH-1):0]  s1_sdi_data_s;
+    wire                          s1_sync_ready_s;
+    wire                          s1_sync_valid_s;
+    wire  [ 7:0]                  s1_sync_data_s;
+    wire                          m_cmd_ready_s;
+    wire                          m_cmd_valid_s;
+    wire  [15:0]                  m_cmd_data_s;
+    wire                          m_sdo_data_ready_s;
+    wire                          m_sdo_data_valid_s;
+    wire  [ 7:0]                  m_sdo_data_s;
+    wire                          m_sdi_data_ready_s;
+    wire                          m_sdi_data_valid_s;
+    wire  [(SDI_DATA_WIDTH-1):0]  m_sdi_data_s;
+    wire                          m_sync_ready_s;
+    wire                          m_sync_valid_s;
+    wire  [ 7:0]                  m_sync_data_s;
+    wire                          offload0_cmd_wr_en_s;
+    wire                          offload0_cmd_wr_data_s;
+    wire                          offload0_sdo_wr_en_s;
+    wire                          offload0_sdo_wr_data_s;
+    wire                          offload0_mem_reset_s;
+    wire                          offload0_enable_s;
+    wire                          offload0_enabled_s;
+    wire                          trigger_s;
 
     axi_spi_engine #(
-      .SDI_DATA_WIDTH(),
-      .NUM_OFFLOAD()
+      .SDI_DATA_WIDTH (SDI_DATA_WIDTH),
+      .NUM_OFFLOAD(1)
     ) i_axi_spi_engine(
       .s_axi_aclk (up_clk),
       .s_axi_aresetn (up_rstn),
@@ -204,129 +263,161 @@ module axi_ad7616 (
       .s_axi_rready (s_axi_rready),
       .s_axi_rresp (s_axi_rresp),
       .s_axi_rdata (s_axi_rdata),
-      .irq (),
+      .irq (irq),
       .spi_clk (up_clk),
       .spi_resetn (spi_resetn_s),
-      .cmd_ready (),
-      .cmd_valid (),
-      .cmd_data (),
-      .sdo_data_ready (),
-      .sdo_data_valid (),
-      .sdo_data (),
-      .sdi_data_ready (),
-      .sdi_data_valid (),
-      .sdi_data (),
-      .sync_ready (),
-      .sync_valid (),
-      .sync_data (),
-      .offload0_cmd_wr_en (),
-      .offload0_cmd_wr_data (),
-      .offload0_sdo_wr_en (),
-      .offload0_sdo_wr_data (),
-      .offload0_mem_reset (),
-      .offload0_enable (),
-      .offload0_enabled());
+      .cmd_ready (s0_cmd_ready_s),
+      .cmd_valid (s0_cmd_valid_s),
+      .cmd_data (s0_cmd_data_s),
+      .sdo_data_ready (s0_sdo_data_ready_s),
+      .sdo_data_valid (s0_sdo_data_valid_s),
+      .sdo_data (s0_sdo_data_s),
+      .sdi_data_ready (s0_sdi_data_ready_s),
+      .sdi_data_valid (s0_sdi_data_valid_s),
+      .sdi_data (s0_sdi_data_s),
+      .sync_ready (s0_sync_ready_s),
+      .sync_valid (s0_sync_valid_s),
+      .sync_data (s0_sync_data_s),
+      .offload0_cmd_wr_en (offload0_cmd_wr_en_s),
+      .offload0_cmd_wr_data (offload0_cmd_wr_data_s),
+      .offload0_sdo_wr_en (offload0_sdo_wr_en_s),
+      .offload0_sdo_wr_data (offload0_sdo_wr_data_s),
+      .offload0_mem_reset (offload0_mem_reset_s),
+      .offload0_enable (offload0_enable_s),
+      .offload0_enabled(offload0_enabled_s));
 
     spi_engine_offload #(
-      .SDI_DATA_WIDTH()
+      .SDI_DATA_WIDTH (SDI_DATA_WIDTH)
     ) i_spi_engine_offload(
-      .ctrl_clk (),
-      .ctrl_cmd_wr_en (),
-      .ctrl_cmd_wr_data (),
-      .ctrl_sdo_wr_en (),
-      .ctrl_sdo_wr_data (),
-      .ctrl_enable (),
-      .ctrl_enabled (),
-      .ctrl_mem_reset (),
+      .ctrl_clk (up_clk),
+      .ctrl_cmd_wr_en (offload0_cmd_wr_en_s),
+      .ctrl_cmd_wr_data (offload0_cmd_wr_data_s),
+      .ctrl_sdo_wr_en (offload0_sdo_wr_en_s),
+      .ctrl_sdo_wr_data (offload0_sdo_wr_data_s),
+      .ctrl_enable (offload0_enable_s),
+      .ctrl_enabled (offload0_enabled_s),
+      .ctrl_mem_reset (offload0_mem_reset_s),
       .spi_clk (up_clk),
       .spi_resetn (spi_resetn_s),
-      .trigger (),
-      .cmd_valid (),
-      .cmd_ready (),
-      .cmd (),
-      .sdo_data_valid (),
-      .sdo_data_ready (),
-      .sdo_data (),
-      .sdi_data_ready (),
-      .sdi_data (),
-      .sync_valid (),
-      .sync_ready (),
-      .sync_data (),
-      .offload_sdi_valid (),
-      .offload_sdi_ready (),
-      .offload_sdi_data ());
+      .trigger (trigger_s),
+      .cmd_valid (s1_cmd_valid_s),
+      .cmd_ready (s1_cmd_ready_s),
+      .cmd (s1_cmd_data_s),
+      .sdo_data_valid (s1_sdo_data_valid_s),
+      .sdo_data_ready (s1_sdo_data_ready_s),
+      .sdo_data (s1_sdo_data_s),
+      .sdi_data_valid (s1_sdi_data_valid_s),
+      .sdi_data_ready (s1_sdi_data_ready_s),
+      .sdi_data (s1_sdi_data_s),
+      .sync_valid (s1_sync_valid_s),
+      .sync_ready (s1_sync_ready_s),
+      .sync_data (s1_sync_data_s),
+      .offload_sdi_valid (m_axis_tvalid),
+      .offload_sdi_ready (m_axis_tready),
+      .offload_sdi_data (m_axis_tdata));
 
     spi_engine_interconnect #(
-      .SDI_DATA_WIDTH ()
+      .SDI_DATA_WIDTH (SDI_DATA_WIDTH)
     ) i_spi_engine_interconnect (
       .clk (up_clk),
       .resetn (spi_resetn_s),
-      .m_cmd_valid (),
-      .m_cmd_ready (),
-      .m_cmd_data (),
-      .m_sdo_valid (),
-      .m_sdo_ready (),
-      .m_sdo_data (),
-      .m_sdi_valid (),
-      .m_sdi_ready (),
-      .m_sdi_data (),
-      .m_sync_valid (),
-      .m_sync_ready (),
-      .m_sync (),
-      .s0_cmd_valid (),
-      .s0_cmd_ready (),
-      .s0_cmd_data (),
-      .s0_sdo_valid (),
-      .s0_sdo_ready (),
-      .s0_sdo_data (),
-      .s0_sdi_valid (),
-      .s0_sdi_ready (),
-      .s0_sdi_data (),
-      .s0_sync_valid (),
-      .s0_sync_ready (),
-      .s0_sync (),
-      .s1_cmd_valid (),
-      .s1_cmd_ready (),
-      .s1_cmd_data (),
-      .s1_sdo_valid (),
-      .s1_sdo_ready (),
-      .s1_sdo_data (),
-      .s1_sdi_valid (),
-      .s1_sdi_ready (),
-      .s1_sdi_data (),
-      .s1_sync_valid (),
-      .s1_sync_ready (),
-      .s1_sync ());
+      .m_cmd_valid (m_cmd_valid_s),
+      .m_cmd_ready (m_cmd_ready_s),
+      .m_cmd_data (m_cmd_data_s),
+      .m_sdo_valid (m_sdo_valid_s),
+      .m_sdo_ready (m_sdo_ready_s),
+      .m_sdo_data (m_sdo_data_s),
+      .m_sdi_valid (m_sdi_valid_s),
+      .m_sdi_ready (m_sdi_ready_s),
+      .m_sdi_data (m_sdi_data_s),
+      .m_sync_valid (m_sync_valid_s),
+      .m_sync_ready (m_sync_ready_s),
+      .m_sync (m_sync_s),
+      .s0_cmd_valid (s0_cmd_valid_s),
+      .s0_cmd_ready (s0_cmd_ready_s),
+      .s0_cmd_data (s0_cmd_data_s),
+      .s0_sdo_valid (s0_sdo_data_valid_s),
+      .s0_sdo_ready (s0_sdi_data_ready_s),
+      .s0_sdo_data (s0_sdo_data_s),
+      .s0_sdi_valid (s0_sdi_data_valid_s),
+      .s0_sdi_ready (s0_sdi_data_ready_s),
+      .s0_sdi_data (s0_sdi_data_s),
+      .s0_sync_valid (s0_sync_valid_s),
+      .s0_sync_ready (s0_sync_ready_s),
+      .s0_sync (s0_sync_data_s),
+      .s1_cmd_valid (s1_cmd_valid_s),
+      .s1_cmd_ready (s1_cmd_ready_s),
+      .s1_cmd_data (s1_cmd_data_s),
+      .s1_sdo_valid (s1_sdo_valid_s),
+      .s1_sdo_ready (s1_sdo_ready_s),
+      .s1_sdo_data (s1_sdo_data_s),
+      .s1_sdi_valid (s1_sdi_valid_s),
+      .s1_sdi_ready (s1_sdi_ready_s),
+      .s1_sdi_data (s1_sdi_data_s),
+      .s1_sync_valid (s1_sync_valid_s),
+      .s1_sync_ready (s1_sync_ready_s),
+      .s1_sync (s1_sync_s));
 
     spi_engine_execution #(
-      .SDI_DATA_WIDTH()
+      .SDI_DATA_WIDTH (SDI_DATA_WIDTH)
     ) i_spi_engine_execution (
       .clk (up_clk),
       .resetn (spi_resetn_s),
       .active (),
-      .cmd_ready (),
-      .cmd_valid (),
-      .cmd (),
-      .sdo_data_valid (),
-      .sdo_data_ready (),
-      .sdo_data (),
-      .sdi_data_ready (),
-      .sdi_data_valid (),
-      .sdi_data (),
-      .sync_ready (),
-      .sync_valid (),
-      .sync (),
-      .sclk (),
-      .sdo (),
+      .cmd_ready (m_cmd_ready_s),
+      .cmd_valid (m_cmd_valid_s),
+      .cmd (m_cmd_data_s),
+      .sdo_data_valid (m_sdo_data_valid_s),
+      .sdo_data_ready (m_sdo_data_ready_s),
+      .sdo_data (m_sdo_data_s),
+      .sdi_data_ready (m_sdi_data_ready_s),
+      .sdi_data_valid (m_sdi_data_valid_s),
+      .sdi_data (m_sdi_data_s),
+      .sync_ready (m_sync_ready_s),
+      .sync_valid (m_sync_valid_s),
+      .sync (m_sync_data_s),
+      .sclk (sclk),
+      .sdo (sdo),
       .sdo_t (),
-      .sdi (),
-      .sdi_1 (),
-      .sdi_2 (),
-      .sdi_3 (),
-      .cs (),
+      .sdi (sdi_0),
+      .sdi_1 (sdi_1),
+      .sdi_2 (1'b0),
+      .sdi_3 (1'b0),
+      .cs (cs_n),
       .three_wire ());
 
   end
+
+  generate if (IF_TYPE == PARALLEL) begin
+
+  end
+  endgenerate
+
+  axi_ad7616_control #(
+    .ID(ID),
+    .OP_MODE (OP_MODE)
+  ) i_ad7616_control (
+    .reset_n (reset_n),
+    .cnvst (cnvst),
+    .busy (busy),
+    .seq_en (seq_en),
+    .hw_rngsel (hw_rngsel),
+    .chsel (chsel),
+    .crcen (crcen),
+    .ser1w_n (ser1w_n),
+    .burst (burst),
+    .os (os),
+    .end_of_conv (trigger_s),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_s),
+    .up_rack (up_rack_s));
 
   // up bus interface
 
