@@ -81,7 +81,7 @@ module ad_tdd_sync (
       pulse_counter <= 0;
       sync_pulse <= 0;
     end else begin
-      pulse_counter <= (sync_pulse == 1'b1) ? pulse_counter + 1 : 3'h0;
+      pulse_counter <= (sync_pulse == 1'b1) ? pulse_counter + 1 : {PULSE_CNTR_WIDTH{1'h0}};
       if(sync_period_eof == 1'b1) begin
         sync_pulse <= 1'b1;
       end else if(pulse_counter == {PULSE_CNTR_WIDTH{1'b1}}) begin
