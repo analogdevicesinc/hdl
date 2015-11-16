@@ -141,6 +141,7 @@ module system_top (
 
   enable,
   txnrx,
+  clk_out,
 
   gpio_rf0,
   gpio_rf1,
@@ -262,6 +263,7 @@ module system_top (
 
   output          enable;
   output          txnrx;
+  input           clk_out;
 
   inout           gpio_rf0;
   inout           gpio_rf1;

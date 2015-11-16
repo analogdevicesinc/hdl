@@ -82,6 +82,7 @@ module system_top (
 
   enable,
   txnrx,
+  clk_out,
 
   gpio_clksel,
   gpio_resetb,
@@ -150,6 +151,7 @@ module system_top (
 
   output          enable;
   output          txnrx;
+  input           clk_out;
 
   inout           gpio_clksel;
   inout           gpio_resetb;

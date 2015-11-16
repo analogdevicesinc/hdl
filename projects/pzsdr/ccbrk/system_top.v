@@ -82,6 +82,7 @@ module system_top (
 
   enable,
   txnrx,
+  clk_out,
 
   gpio_clksel,
   gpio_resetb,
@@ -150,6 +151,7 @@ module system_top (
 
   output          enable;
   output          txnrx;
+  input           clk_out;
 
   inout           gpio_clksel;
   inout           gpio_resetb;
@@ -186,7 +188,9 @@ module system_top (
 
   // assignments
 
-  assign gp_out = gp_out_s[87:0];
+  assign gp_out[87:43] = gp_out_s[87:43];
+  assign gp_out[42:42] = (gpio_o[61] == 1'b1) ? clk_out : gp_out_s[42:42];
+  assign gp_out[41: 0] = gp_out_s[41: 0];
 
   assign gp_in_s[95:93] = 3'd0;
   assign gp_in_s[92:92] = gp_in_1;
