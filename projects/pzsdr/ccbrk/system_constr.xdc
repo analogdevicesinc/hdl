@@ -1,7 +1,6 @@
 
-# constraints
-# loopback
-
+## constraints
+## loopback
 ## p4
 
 set_property  -dict {PACKAGE_PIN  D4    IOSTANDARD  LVCMOS18} [get_ports  gp_out[0]]        ; ## IO_L2P_T0_33              
@@ -97,8 +96,8 @@ set_property  -dict {PACKAGE_PIN  A3    IOSTANDARD  LVCMOS18} [get_ports  gp_out
 set_property  -dict {PACKAGE_PIN  A5    IOSTANDARD  LVCMOS18} [get_ports  gp_in[40]]        ; ## IO_L21N_T3_DQS_34         
 set_property  -dict {PACKAGE_PIN  L9    IOSTANDARD  LVCMOS18} [get_ports  gp_out[41]]       ; ## IO_0_VRN_33               
 set_property  -dict {PACKAGE_PIN  B7    IOSTANDARD  LVCMOS18} [get_ports  gp_in[41]]        ; ## IO_L18P_T2_34             
-set_property  -dict {PACKAGE_PIN  N8    IOSTANDARD  LVCMOS18} [get_ports  gp_out[42]]       ; ## IO_25_VRP_33              
-set_property  -dict {PACKAGE_PIN  A7    IOSTANDARD  LVCMOS18} [get_ports  gp_in[42]]        ; ## IO_L18N_T2_34             
+set_property  -dict {PACKAGE_PIN  A7    IOSTANDARD  LVCMOS18} [get_ports  gp_out[42]]       ; ## IO_L18N_T2_34             
+set_property  -dict {PACKAGE_PIN  N8    IOSTANDARD  LVCMOS18} [get_ports  gp_in[42]]        ; ## IO_25_VRP_33              
 
 ## p13
 
