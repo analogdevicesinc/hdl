@@ -58,9 +58,13 @@ set_property -dict [list CONFIG.SUBSYSTEM_VENDOR_ID {0x11D4}] $axi_pcie_x4
 set_property -dict [list CONFIG.SUBSYSTEM_ID {0x0405}] $axi_pcie_x4
 set_property -dict [list CONFIG.ENABLE_CLASS_CODE {true}] $axi_pcie_x4
 set_property -dict [list CONFIG.CLASS_CODE {0x0D1000}] $axi_pcie_x4
+set_property -dict [list CONFIG.BAR0_ENABLED {true}] $axi_pcie_x4
+set_property -dict [list CONFIG.BAR0_TYPE {Memory}] $axi_pcie_x4
 set_property -dict [list CONFIG.BAR0_SCALE {Gigabytes}] $axi_pcie_x4
-set_property -dict [list CONFIG.BAR0_SIZE {2}] $axi_pcie_x4
+set_property -dict [list CONFIG.BAR0_SIZE {1}] $axi_pcie_x4
 set_property -dict [list CONFIG.NUM_MSI_REQ {1}] $axi_pcie_x4
+set_property -dict [list CONFIG.PCIEBAR2AXIBAR_0 {0x40000000}] $axi_pcie_x4
+set_property -dict [list CONFIG.AXIBAR2PCIEBAR_0 {0x00000000}] $axi_pcie_x4
 
 set axi_pcie_x4_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_pcie_x4_rstgen]
 
@@ -94,24 +98,6 @@ ad_connect  pcie_concat_intc/In2 axi_ad9361_dac_dma/irq
 ad_connect  pcie_concat_intc/In3 axi_gpio/ip2intc_irpt
 ad_connect  pcie_concat_intc/In4 axi_spi/ip2intc_irpt
 
-# master split
-
-set axi_pcie_m_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_pcie_m_interconnect]
-set_property -dict [list CONFIG.NUM_SI {1}] $axi_pcie_m_interconnect
-set_property -dict [list CONFIG.NUM_MI {3}] $axi_pcie_m_interconnect
-
-ad_connect  pcie_axi_clk axi_pcie_m_interconnect/ACLK
-ad_connect  pcie_axi_clk axi_pcie_m_interconnect/S00_ACLK
-ad_connect  pcie_axi_clk axi_pcie_m_interconnect/M00_ACLK
-ad_connect  pcie_axi_clk axi_pcie_m_interconnect/M01_ACLK
-ad_connect  pcie_axi_clk axi_pcie_m_interconnect/M02_ACLK
-ad_connect  pcie_axi_resetn axi_pcie_m_interconnect/ARESETN
-ad_connect  pcie_axi_resetn axi_pcie_m_interconnect/S00_ARESETN
-ad_connect  pcie_axi_resetn axi_pcie_m_interconnect/M00_ARESETN
-ad_connect  pcie_axi_resetn axi_pcie_m_interconnect/M01_ARESETN
-ad_connect  pcie_axi_resetn axi_pcie_m_interconnect/M02_ARESETN
-ad_connect  axi_pcie_x4/M_AXI axi_pcie_m_interconnect/S00_AXI
-
 # cpu interconnect
 
 delete_bd_objs [get_bd_addr_segs sys_ps7/Data/SEG_axi_iic_main_Reg]
@@ -131,7 +117,7 @@ ad_connect  axi_pcie_x4/axi_ctl_aclk_out axi_cpu_interconnect/M04_ACLK
 ad_connect  pcie_axi_resetn axi_cpu_interconnect/M04_ARESETN
 ad_connect  pcie_axi_clk axi_cpu_interconnect/S01_ACLK
 ad_connect  pcie_axi_resetn axi_cpu_interconnect/S01_ARESETN
-ad_connect  axi_pcie_m_interconnect/M02_AXI axi_cpu_interconnect/S01_AXI
+ad_connect  axi_pcie_x4/M_AXI axi_cpu_interconnect/S01_AXI
 ad_connect  pcie_axi_clk axi_pcie_intc/s_axi_aclk
 ad_connect  pcie_axi_resetn axi_pcie_intc/s_axi_aresetn
 ad_connect  pcie_axi_clk axi_cpu_interconnect/M05_ACLK
@@ -164,84 +150,31 @@ delete_bd_objs [get_bd_addr_segs axi_ad9361_adc_dma/m_dest_axi/SEG_sys_ps7_HP1_D
 delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_to [get_bd_intf_pins axi_hp2_interconnect/S00_AXI]]]
 delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_to [get_bd_intf_pins axi_hp2_interconnect/M00_AXI]]]
 
-# adc-dma split
-
-set axi_adma_m_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_adma_m_interconnect]
-set_property -dict [list CONFIG.NUM_SI {1}] $axi_adma_m_interconnect
-set_property -dict [list CONFIG.NUM_MI {2}] $axi_adma_m_interconnect
-
-ad_connect  sys_cpu_clk axi_adma_m_interconnect/ACLK
-ad_connect  sys_cpu_clk axi_adma_m_interconnect/S00_ACLK
-ad_connect  sys_cpu_clk axi_adma_m_interconnect/M00_ACLK
-ad_connect  sys_cpu_clk axi_adma_m_interconnect/M01_ACLK
-ad_connect  sys_cpu_resetn axi_adma_m_interconnect/ARESETN
-ad_connect  sys_cpu_resetn axi_adma_m_interconnect/S00_ARESETN
-ad_connect  sys_cpu_resetn axi_adma_m_interconnect/M00_ARESETN
-ad_connect  sys_cpu_resetn axi_adma_m_interconnect/M01_ARESETN
-ad_connect  axi_ad9361_adc_dma/m_dest_axi axi_adma_m_interconnect/S00_AXI
-
-# dac-dma split
-
-set axi_ddma_m_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ddma_m_interconnect]
-set_property -dict [list CONFIG.NUM_SI {1}] $axi_ddma_m_interconnect
-set_property -dict [list CONFIG.NUM_MI {2}] $axi_ddma_m_interconnect
-
-ad_connect  sys_cpu_clk axi_ddma_m_interconnect/ACLK
-ad_connect  sys_cpu_clk axi_ddma_m_interconnect/S00_ACLK
-ad_connect  sys_cpu_clk axi_ddma_m_interconnect/M00_ACLK
-ad_connect  sys_cpu_clk axi_ddma_m_interconnect/M01_ACLK
-ad_connect  sys_cpu_resetn axi_ddma_m_interconnect/ARESETN
-ad_connect  sys_cpu_resetn axi_ddma_m_interconnect/S00_ARESETN
-ad_connect  sys_cpu_resetn axi_ddma_m_interconnect/M00_ARESETN
-ad_connect  sys_cpu_resetn axi_ddma_m_interconnect/M01_ARESETN
-ad_connect  axi_ad9361_dac_dma/m_src_axi axi_ddma_m_interconnect/S00_AXI
-
 # pci-e slave
 
 set axi_pcie_s_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_pcie_s_interconnect]
-set_property -dict [list CONFIG.NUM_SI {3}] $axi_pcie_s_interconnect
+set_property -dict [list CONFIG.NUM_SI {2}] $axi_pcie_s_interconnect
 set_property -dict [list CONFIG.NUM_MI {1}] $axi_pcie_s_interconnect
 
 ad_connect  pcie_axi_clk axi_pcie_s_interconnect/ACLK
 ad_connect  pcie_axi_clk axi_pcie_s_interconnect/M00_ACLK
-ad_connect  pcie_axi_clk axi_pcie_s_interconnect/S00_ACLK
+ad_connect  sys_cpu_clk axi_pcie_s_interconnect/S00_ACLK
 ad_connect  sys_cpu_clk axi_pcie_s_interconnect/S01_ACLK
-ad_connect  sys_cpu_clk axi_pcie_s_interconnect/S02_ACLK
 ad_connect  pcie_axi_resetn axi_pcie_s_interconnect/ARESETN
 ad_connect  pcie_axi_resetn axi_pcie_s_interconnect/M00_ARESETN
-ad_connect  pcie_axi_resetn axi_pcie_s_interconnect/S00_ARESETN
+ad_connect  sys_cpu_resetn axi_pcie_s_interconnect/S00_ARESETN
 ad_connect  sys_cpu_resetn axi_pcie_s_interconnect/S01_ARESETN
-ad_connect  sys_cpu_resetn axi_pcie_s_interconnect/S02_ARESETN
-ad_connect  axi_pcie_m_interconnect/M00_AXI axi_pcie_s_interconnect/S00_AXI
-ad_connect  axi_adma_m_interconnect/M00_AXI axi_pcie_s_interconnect/S01_AXI
-ad_connect  axi_ddma_m_interconnect/M00_AXI axi_pcie_s_interconnect/S02_AXI
+ad_connect  axi_ad9361_adc_dma/m_dest_axi axi_pcie_s_interconnect/S00_AXI
+ad_connect  axi_ad9361_dac_dma/m_src_axi axi_pcie_s_interconnect/S01_AXI
 ad_connect  axi_pcie_s_interconnect/M00_AXI axi_pcie_x4/S_AXI
 
 # hps7  slave
 
-set_property CONFIG.PCW_USE_S_AXI_HP0 {1} [get_bd_cells sys_ps7]
+set_property CONFIG.PCW_USE_S_AXI_HP0 {0} [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_USE_S_AXI_HP1 {0} [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_USE_S_AXI_HP2 {0} [get_bd_cells sys_ps7]
 
-set axi_hps7_s_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hps7_s_interconnect]
-set_property -dict [list CONFIG.NUM_SI {3}] $axi_hps7_s_interconnect
-set_property -dict [list CONFIG.NUM_MI {1}] $axi_hps7_s_interconnect
-
-ad_connect  sys_cpu_clk sys_ps7/S_AXI_HP0_ACLK
-ad_connect  sys_cpu_clk axi_hps7_s_interconnect/ACLK
-ad_connect  sys_cpu_clk axi_hps7_s_interconnect/M00_ACLK
-ad_connect  pcie_axi_clk axi_hps7_s_interconnect/S00_ACLK
-ad_connect  sys_cpu_clk axi_hps7_s_interconnect/S01_ACLK
-ad_connect  sys_cpu_clk axi_hps7_s_interconnect/S02_ACLK
-ad_connect  sys_cpu_resetn axi_hps7_s_interconnect/ARESETN
-ad_connect  sys_cpu_resetn axi_hps7_s_interconnect/M00_ARESETN
-ad_connect  pcie_axi_resetn axi_hps7_s_interconnect/S00_ARESETN
-ad_connect  sys_cpu_resetn axi_hps7_s_interconnect/S01_ARESETN
-ad_connect  sys_cpu_resetn axi_hps7_s_interconnect/S02_ARESETN
-ad_connect  axi_pcie_m_interconnect/M01_AXI axi_hps7_s_interconnect/S00_AXI
-ad_connect  axi_adma_m_interconnect/M01_AXI axi_hps7_s_interconnect/S01_AXI
-ad_connect  axi_ddma_m_interconnect/M01_AXI axi_hps7_s_interconnect/S02_AXI
-ad_connect  axi_hps7_s_interconnect/M00_AXI sys_ps7/S_AXI_HP0
+# reassign addresses
 
 assign_bd_address [get_bd_addr_segs {axi_iic_main/S_AXI/Reg}]
 assign_bd_address [get_bd_addr_segs {axi_ad9361/s_axi/axi_lite}]
@@ -252,26 +185,25 @@ assign_bd_address [get_bd_addr_segs {axi_pcie_intc/s_axi/Reg}]
 assign_bd_address [get_bd_addr_segs {axi_gpio/S_AXI/Reg}]
 assign_bd_address [get_bd_addr_segs {axi_spi/AXI_LITE/Reg}]
 
+set_property offset 0x40000000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_gpio_Reg}]
+set_property offset 0x44A00000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_spi_Reg}]
 set_property offset 0x41600000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_iic_main_Reg}]
 set_property offset 0x79020000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_ad9361_axi_lite}]
 set_property offset 0x7C400000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_ad9361_dac_dma_axi_lite}]
 set_property offset 0x7C420000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_ad9361_adc_dma_axi_lite}]
 set_property offset 0x50000000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_pcie_x4_CTL0}]
 set_property offset 0x41200000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_pcie_intc_Reg}]
-set_property offset 0x40000000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_gpio_Reg}]
-set_property offset 0x44A00000 [get_bd_addr_segs {axi_pcie_x4/M_AXI/SEG_axi_spi_Reg}]
 
+set_property offset 0x40000000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_gpio_Reg}]
+set_property offset 0x44A00000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_spi_Reg}]
 set_property offset 0x41600000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_iic_main_Reg}]
 set_property offset 0x79020000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_ad9361_axi_lite}]
 set_property offset 0x7C400000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_ad9361_dac_dma_axi_lite}]
 set_property offset 0x7C420000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_ad9361_adc_dma_axi_lite}]
 set_property offset 0x50000000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_pcie_x4_CTL0}]
 set_property offset 0x41200000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_pcie_intc_Reg}]
-set_property offset 0x40000000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_gpio_Reg}]
-set_property offset 0x44A00000 [get_bd_addr_segs {sys_ps7/Data/SEG_axi_spi_Reg}]
 
 assign_bd_address [get_bd_addr_segs {axi_pcie_x4/S_AXI/BAR0}]
-assign_bd_address [get_bd_addr_segs {sys_ps7/S_AXI_HP0/HP0_DDR_LOWOCM}]
 
 
 
