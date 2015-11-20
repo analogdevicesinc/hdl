@@ -61,7 +61,6 @@ set_property  -dict {PACKAGE_PIN  C18  IOSTANDARD LVCMOS25} [get_ports spi_miso]
 # clocks
 
 create_clock -name rx_clk       -period  4 [get_ports rx_clk_in_p]
-create_clock -name ad9361_clk   -period  4 [get_pins i_system_wrapper/system_i/axi_ad9361/clk]
 
 # spi pmod J63
 

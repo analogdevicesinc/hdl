@@ -71,4 +71,4 @@ set_property  -dict {PACKAGE_PIN  AB9    IOSTANDARD LVCMOS33}     [get_ports gpi
 # clocks
 
 create_clock -name rx_clk       -period  4 [get_ports rx_clk_in_p]
-create_clock -name ad9361_clk   -period  4 [get_pins i_system_wrapper/system_i/axi_ad9361/clk]
+
