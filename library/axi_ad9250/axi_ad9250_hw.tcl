@@ -85,13 +85,21 @@ ad_alt_intf signal  rx_data       input   64    data
 
 # dma interface
 
-ad_alt_intf clock   adc_clock     output  1     
-ad_alt_intf signal  adc_valid_a   output  1     adc_valid_0   
-ad_alt_intf signal  adc_enable_a  output  1     adc_enable_0  
-ad_alt_intf signal  adc_data_a    output  32    adc_data_0    
-ad_alt_intf signal  adc_valid_b   output  1     adc_valid_1   
-ad_alt_intf signal  adc_enable_b  output  1     adc_enable_1  
-ad_alt_intf signal  adc_data_b    output  32    adc_data_1    
-ad_alt_intf signal  adc_dovf      input   1     
-ad_alt_intf signal  adc_dunf      input   1     
+ad_alt_intf clock   adc_clk     output  1
+ad_alt_intf reset   adc_rst     output  1 if_adc_clk
+
+add_interface fifo_ch_0_in conduit end
+#set_interface_property fifo_ch_0_in associatedClock if_adc_clk
+add_interface_port fifo_ch_0_in  adc_enable_a enable   Output  1
+add_interface_port fifo_ch_0_in  adc_valid_a  valid    Output  1
+add_interface_port fifo_ch_0_in  adc_data_a   data     Output  32
+
+add_interface fifo_ch_1_in conduit end
+#set_interface_property fifo_ch_1_in associatedClock if_adc_clk
+add_interface_port fifo_ch_1_in  adc_enable_b enable   Output  1
+add_interface_port fifo_ch_1_in  adc_valid_b  valid    Output  1
+add_interface_port fifo_ch_1_in  adc_data_b   data     Output  32
+
+ad_alt_intf signal  adc_dovf      input   1     ovf
+ad_alt_intf signal  adc_dunf      input   1     unf
 
