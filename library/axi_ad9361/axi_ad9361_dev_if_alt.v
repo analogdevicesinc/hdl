@@ -214,8 +214,6 @@ module axi_ad9361_dev_if (
 
   // defaults
 
-  assign up_drdata = 5'd0;
-  assign up_dack = up_dsel;
   assign delay_locked = 1'd1;
 
   // receive data path interface
