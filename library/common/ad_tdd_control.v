@@ -310,8 +310,11 @@ module ad_tdd_control(
       end else begin
         tdd_burst_counter <= tdd_burst_count;
       end
-      tdd_last_burst <= (tdd_burst_counter == 6'b1) ? 1'b1 : 1'b0;
     end
+  end
+
+  always @(posedge clk) begin
+    tdd_last_burst <= (tdd_burst_counter == 6'b1) ? 1'b1 : 1'b0;
   end
 
   // ***************************************************************************
