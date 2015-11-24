@@ -79,12 +79,17 @@ ad_alt_intf signal  rx_data       input   128 data
 # dma interface
 
 ad_alt_intf clock   adc_clock     output  1
-ad_alt_intf signal  adc_valid_0   output  1
-ad_alt_intf signal  adc_enable_0  output  1
-ad_alt_intf signal  adc_data_0    output  64
-ad_alt_intf signal  adc_valid_1   output  1
-ad_alt_intf signal  adc_enable_1  output  1
-ad_alt_intf signal  adc_data_1    output  64
+
+add_interface fifo_ch_0 conduit end
+add_interface_port fifo_ch_0  adc_enable_0  enable   Output  1
+add_interface_port fifo_ch_0  adc_valid_0   valid    Output  1
+add_interface_port fifo_ch_0  adc_data_0    data     Output  64
+
+add_interface fifo_ch_1 conduit end
+add_interface_port fifo_ch_1  adc_enable_1  enable   Output  1
+add_interface_port fifo_ch_1  adc_valid_1   valid    Output  1
+add_interface_port fifo_ch_1  adc_data_1    data     Output  64
+
 ad_alt_intf signal  adc_dovf      input   1
 ad_alt_intf signal  adc_dunf      input   1
 
