@@ -255,7 +255,7 @@ module system_top (
     .a5gt_base_sys_spi_MOSI (spi_mosi),
     .a5gt_base_sys_spi_SCLK (spi_clk),
     .a5gt_base_sys_spi_SS_n (spi_csn),
-		.rx_data_rx_serial_data (rx_data),
+    .rx_data_rx_serial_data (rx_data),
     .rx_ref_clk_clk (ref_clk),
     .rx_sync_rx_sync (rx_sync),
     .rx_sysref_rx_ext_sysref_out (rx_sysref),
