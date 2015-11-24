@@ -4,12 +4,12 @@ load_package flow
 source ../../scripts/adi_env.tcl
 project_new fmcjesdadc1_a5soc -overwrite
 
-source $ad_hdl_dir/projects/common/a5soc/a5soc_system_assign.tcl
-file copy -force $ad_hdl_dir/projects/common/a5soc/a5soc_system_bd.qsys .
-file copy -force $ad_hdl_dir/projects/fmcjesdadc1/common/fmcjesdadc1_bd.qsys .
+source "../../common/a5soc/a5soc_system_assign.tcl"
+set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/a5soc;../../../library/**/*"
+set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/a5soc/;../../../library/**/*"
 set_global_assignment -name QSYS_FILE system_bd.qsys
 
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
+set_global_assignment -name VERILOG_FILE "../../../library/common/ad_iobuf.v"
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
 set_global_assignment -name VERILOG_FILE system_top.v
 
