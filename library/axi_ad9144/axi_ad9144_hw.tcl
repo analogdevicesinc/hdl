@@ -90,12 +90,17 @@ ad_alt_intf signal  tx_data       output  128*(QUAD_OR_DUAL_N+1) data
 # dma interface
 
 ad_alt_intf clock   dac_clk       output  1
-ad_alt_intf signal  dac_valid_0   output  1
-ad_alt_intf signal  dac_enable_0  output  1
-ad_alt_intf signal  dac_ddata_0   input   64  dac_data_0
-ad_alt_intf signal  dac_valid_1   output  1
-ad_alt_intf signal  dac_enable_1  output  1
-ad_alt_intf signal  dac_ddata_1   input   64  dac_data_1
+
+add_interface fifo_ch_0_out conduit end
+add_interface_port fifo_ch_0_out  dac_enable_0  enable   Output  1
+add_interface_port fifo_ch_0_out  dac_valid_0   valid    Output  1
+add_interface_port fifo_ch_0_out  dac_data_0    data     Input   64
+
+add_interface fifo_ch_1_out conduit end
+add_interface_port fifo_ch_1_out  dac_enable_1  enable   Output  1
+add_interface_port fifo_ch_1_out  dac_valid_1   valid    Output  1
+add_interface_port fifo_ch_1_out  dac_data_1    data     Input   64
+
 ad_alt_intf signal  dac_dovf      input   1
 ad_alt_intf signal  dac_dunf      input   1
 
@@ -104,11 +109,16 @@ proc p_axi_ad9144 {} {
   set p_pcore_quad_dual_n [get_parameter_value "QUAD_OR_DUAL_N"]
 
   if {[get_parameter_value QUAD_OR_DUAL_N] == 1} {
-    ad_alt_intf signal  dac_valid_2   output  1
-    ad_alt_intf signal  dac_enable_2  output  1
-    ad_alt_intf signal  dac_ddata_2   input   64  dac_data_2
-    ad_alt_intf signal  dac_valid_3   output  1
-    ad_alt_intf signal  dac_enable_3  output  1
-    ad_alt_intf signal  dac_ddata_3   input   64  dac_data_3
+
+    add_interface fifo_ch_2_out conduit end
+    add_interface_port fifo_ch_2_out  dac_enable_2  enable   Output  1
+    add_interface_port fifo_ch_2_out  dac_valid_2   valid    Output  1
+    add_interface_port fifo_ch_2_out  dac_data_2    data     Input   64
+
+    add_interface fifo_ch_3_out conduit end
+    add_interface_port fifo_ch_3_out  dac_enable_3  enable   Output  1
+    add_interface_port fifo_ch_3_out  dac_valid_3   valid    Output  1
+    add_interface_port fifo_ch_3_out  dac_data_3    data     Input   64
+
   }
 }
