@@ -4,7 +4,16 @@ load_package flow
 source ../../scripts/adi_env.tcl
 project_new arradio_c5soc -overwrite
 
-source $ad_hdl_dir/projects/common/c5soc/c5soc_system_assign.tcl
+source "../../common/c5soc/c5soc_system_assign.tcl"
+set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/c5soc;../../../library/**/*"
+set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/**/*;../../../library/**/*"
+set_global_assignment -name QSYS_FILE system_bd.qsys
+
+set_global_assignment -name VERILOG_FILE "../../../library/common/ad_iobuf.v"
+set_global_assignment -name VERILOG_FILE system_top.v
+
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 set_instance_assignment -name IO_STANDARD LVDS -to rx_clk_in
 set_instance_assignment -name IO_STANDARD LVDS -to rx_frame_in

@@ -1,15 +1,15 @@
 
 create_clock -period "20.000 ns" -name clk_50m  [get_ports {sys_clk}]
 create_clock -period  "4.000 ns" -name clk_250m [get_ports {rx_clk_in}]
-create_clock -period "12.500 ns" -name clk_80m  [get_pins {i_system_bd|sys_hps|fpga_interfaces|clocks_resets|h2f_user0_clk}]
+create_clock -period "12.500 ns" -name clk_80m  [get_pins {i_system_bd|c5soc|sys_hps|fpga_interfaces|clocks_resets|h2f_user0_clk}]
 
 derive_pll_clocks
 derive_clock_uncertainty
 
-set clk_125m [get_clocks {i_system_bd|axi_ad9361|i_dev_if|i_rx|i_altlvds_rx|auto_generated|pll_sclk~PLL_OUTPUT_COUNTER|divclk}]
+set clk_125m [get_clocks {i_system_bd|arradio|axi_ad9361|i_dev_if|i_rx|i_altlvds_rx|auto_generated|pll_sclk~PLL_OUTPUT_COUNTER|divclk}]
 
-set clk_vga [get_clocks {i_system_bd|vga_pll|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}]
- 
+set clk_vga [get_clocks {i_system_bd|c5soc|vga_pll|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}]
+
 set_false_path -from clk_50m     -to clk_80m
 set_false_path -from clk_50m     -to $clk_125m
 set_false_path -from clk_80m     -to clk_50m 
