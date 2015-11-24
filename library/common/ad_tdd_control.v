@@ -179,15 +179,13 @@ module ad_tdd_control(
   reg             counter_at_tdd_tx_dp_on_2 = 1'b0;
   reg             counter_at_tdd_tx_dp_off_2 = 1'b0;
 
-  reg             tdd_enable_d1 = 1'h0;
-  reg             tdd_enable_d2 = 1'h0;
+  reg             tdd_enable_synced = 1'h0;
   reg             tdd_last_burst = 1'b0;
 
   reg             tdd_sync_d1 = 1'b0;
   reg             tdd_sync_d2 = 1'b0;
   reg             tdd_sync_d3 = 1'b0;
 
-  reg             tdd_sync_pulse = 1'b0;
   reg             tdd_sync_en = 1'b0;
 
   // internal signals
@@ -225,30 +223,22 @@ module ad_tdd_control(
       tdd_sync_en <= 1'b0;
       tdd_sync_d1 <= 1'b0;
       tdd_sync_d2 <= 1'b0;
+      tdd_sync_d3 <= 1'b0;
     end else begin
       tdd_sync_en <= tdd_enable;
       tdd_sync_d1 <= tdd_sync;
       tdd_sync_d2 <= tdd_sync_d1;
+      tdd_sync_d3 <= tdd_sync_d2;
     end
   end
 
-  assign tdd_enable_synced = tdd_enable_d1;
-
-  // edge detection circuit
   always @(posedge clk) begin
     if (rst == 1'b1) begin
-      tdd_sync_d3 <= 1'b0;
-      tdd_sync_pulse <= 1'b0;
-      tdd_enable_d1 <= 0;
-      tdd_enable_d2 <= 0;
+      tdd_enable_synced <= 1'b0;
     end else begin
-      tdd_sync_d3 <= tdd_sync_d2;
-      tdd_sync_pulse <= (~tdd_sync_d3 & tdd_sync_d2) ? 1'b1 : 1'b0;
-      tdd_enable_d1 <= (~tdd_sync_d3 & tdd_sync_d2) ? tdd_enable : tdd_enable_d1;
-      tdd_enable_d2 <= tdd_enable_d1;
+      tdd_enable_synced <= ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) ? tdd_enable : tdd_enable_synced;
     end
   end
-
 
   // ***************************************************************************
   // tdd counter (state machine)
@@ -273,8 +263,8 @@ module ad_tdd_control(
       end
 
       OFF : begin
-        if((tdd_enable_d1 == 1'b1) && (tdd_enable_d2 == 1'b0)) begin
-          tdd_cstate_next <= ON;
+        if(tdd_enable == 1'b1) begin
+          tdd_cstate_next <= ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) ? ON : OFF;
         end
       end
     endcase
@@ -289,7 +279,7 @@ module ad_tdd_control(
       tdd_counter <= tdd_counter_init;
     end else begin
       if (tdd_cstate == ON) begin
-        if (tdd_sync_pulse == 1'b1) begin
+        if ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) begin
           tdd_counter <= 24'b0;
         end else begin
           tdd_counter <= (tdd_counter < tdd_frame_length) ? tdd_counter + 1 : 24'b0;
