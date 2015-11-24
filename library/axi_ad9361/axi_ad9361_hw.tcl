@@ -2,6 +2,7 @@
 
 package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
+source ../scripts/adi_ip_alt.tcl
 
 set_module_property NAME axi_ad9361
 set_module_property DESCRIPTION "AXI AD9361 Interface"
@@ -119,43 +120,65 @@ add_interface_port device_if tx_frame_out_n tx_frame_out_n Output 1
 add_interface_port device_if tx_data_out_p tx_data_out_p Output 6
 add_interface_port device_if tx_data_out_n tx_data_out_n Output 6
 
-add_interface master_if conduit end
-set_interface_property master_if associatedClock device_clock
-add_interface_port master_if l_clk l_clk Output 1
-add_interface_port master_if dac_sync_in dac_sync_in Input 1
-add_interface_port master_if dac_sync_out dac_sync_out Output 1
+ad_alt_intf signal  dac_sync_in     input   1   sync
+ad_alt_intf signal  dac_sync_out    output  1   sync
 
-add_interface dma_if conduit start
-set_interface_property dma_if associatedClock device_clock
-add_interface_port dma_if adc_enable_i0 adc_enable_i0 Output  1
-add_interface_port dma_if adc_valid_i0 adc_valid_i0 Output  1
-add_interface_port dma_if adc_data_i0 adc_data_i0 Output  16
-add_interface_port dma_if adc_enable_q0 adc_enable_q0 Output  1
-add_interface_port dma_if adc_valid_q0 adc_valid_q0 Output  1
-add_interface_port dma_if adc_data_q0 adc_data_q0 Output  16
-add_interface_port dma_if adc_enable_i1 adc_enable_i1 Output  1
-add_interface_port dma_if adc_valid_i1 adc_valid_i1 Output  1
-add_interface_port dma_if adc_data_i1 adc_data_i1 Output  16
-add_interface_port dma_if adc_enable_q1 adc_enable_q1 Output  1
-add_interface_port dma_if adc_valid_q1 adc_valid_q1 Output  1
-add_interface_port dma_if adc_data_q1 adc_data_q1 Output  16
-add_interface_port dma_if adc_dovf adc_dovf Input   1
-add_interface_port dma_if adc_dunf adc_dunf Input   1
-add_interface_port dma_if dac_enable_i0 dac_enable_i0 Output  1
-add_interface_port dma_if dac_valid_i0 dac_valid_i0 Output  1
-add_interface_port dma_if dac_data_i0 dac_data_i0 Input   16
-add_interface_port dma_if dac_enable_q0 dac_enable_q0 Output  1
-add_interface_port dma_if dac_valid_q0 dac_valid_q0 Output  1
-add_interface_port dma_if dac_data_q0 dac_data_q0 Input   16
-add_interface_port dma_if dac_enable_i1 dac_enable_i1 Output  1
-add_interface_port dma_if dac_valid_i1 dac_valid_i1 Output  1
-add_interface_port dma_if dac_data_i1 dac_data_i1 Input   16
-add_interface_port dma_if dac_enable_q1 dac_enable_q1 Output  1
-add_interface_port dma_if dac_valid_q1 dac_valid_q1 Output  1
-add_interface_port dma_if dac_data_q1 dac_data_q1 Input   16
-add_interface_port dma_if dac_dovf dac_dovf Input   1
-add_interface_port dma_if dac_dunf dac_dunf Input   1
+ad_alt_intf clock   l_clk           output  1
+ad_alt_intf reset   rst             output  1   if_l_clk
 
+add_interface fifo_ch_0_in conduit end
+#set_interface_property fifo_ch_0_in associatedClock if_l_clk
+add_interface_port fifo_ch_0_in  adc_enable_i0 enable   Output  1
+add_interface_port fifo_ch_0_in  adc_valid_i0  valid    Output  1
+add_interface_port fifo_ch_0_in  adc_data_i0   data     Output  16
+
+add_interface fifo_ch_1_in conduit end
+#set_interface_property fifo_ch_1_in associatedClock if_l_clk
+add_interface_port fifo_ch_1_in  adc_enable_q0 enable   Output  1
+add_interface_port fifo_ch_1_in  adc_valid_q0  valid    Output  1
+add_interface_port fifo_ch_1_in  adc_data_q0   data     Output  16
+
+add_interface fifo_ch_2_in conduit end
+#set_interface_property fifo_ch_2_in associatedClock if_l_clk
+add_interface_port fifo_ch_2_in  adc_enable_i1 enable   Output  1
+add_interface_port fifo_ch_2_in  adc_valid_i1  valid    Output  1
+add_interface_port fifo_ch_2_in  adc_data_i1   data     Output  16
+
+add_interface fifo_ch_3_in conduit end
+#set_interface_property fifo_ch_3_in associatedClock if_l_clk
+add_interface_port fifo_ch_3_in  adc_enable_q1 enable   Output  1
+add_interface_port fifo_ch_3_in  adc_valid_q1  valid    Output  1
+add_interface_port fifo_ch_3_in  adc_data_q1   data     Output  16
+
+ad_alt_intf signal  adc_dovf        input  1   ovf
+ad_alt_intf signal  adc_dunf        input  1   unf
+
+add_interface fifo_ch_0_out conduit end
+#set_interface_property fifo_ch_0_out associatedClock if_l_clk
+add_interface_port fifo_ch_0_out  dac_enable_i0 enable   Output  1
+add_interface_port fifo_ch_0_out  dac_valid_i0  valid    Output  1
+add_interface_port fifo_ch_0_out  dac_data_i0   data     Input   16
+
+add_interface fifo_ch_1_out conduit end
+#set_interface_property fifo_ch_1_out associatedClock if_l_clk
+add_interface_port fifo_ch_1_out  dac_enable_q0 enable   Output  1
+add_interface_port fifo_ch_1_out  dac_valid_q0  valid    Output  1
+add_interface_port fifo_ch_1_out  dac_data_q0   data     Input   16
+
+add_interface fifo_ch_2_out conduit end
+#set_interface_property fifo_ch_2_out associatedClock if_l_clk
+add_interface_port fifo_ch_2_out  dac_enable_i1 enable   Output  1
+add_interface_port fifo_ch_2_out  dac_valid_i1  valid    Output  1
+add_interface_port fifo_ch_2_out  dac_data_i1   data     Input   16
+
+add_interface fifo_ch_3_out conduit end
+#set_interface_property fifo_ch_3_out associatedClock if_l_clk
+add_interface_port fifo_ch_3_out  dac_enable_q1 enable   Output  1
+add_interface_port fifo_ch_3_out  dac_valid_q1  valid    Output  1
+add_interface_port fifo_ch_3_out  dac_data_q1   data     Input   16
+
+ad_alt_intf signal  dac_dovf       input   1 ovf
+ad_alt_intf signal  dac_dunf       input   1 unf
 
 add_interface delay_clock clock end
 add_interface_port delay_clock delay_clk clk Input 1
