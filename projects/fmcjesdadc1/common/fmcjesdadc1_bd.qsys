@@ -108,12 +108,41 @@
          value = "13";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element axi_jesd_xcvr.s_axi
    {
       datum baseAddress
       {
          value = "272629760";
+         type = "String";
+      }
+   }
+   element fmcjesdadc1_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria V";
+         type = "String";
+      }
+   }
+   element fmcjesdadc1_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria V";
+         type = "String";
+      }
+   }
+   element fmcjesdadc1_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria V";
          type = "String";
       }
    }
@@ -132,6 +161,11 @@
          value = "2";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element mem_rst
    {
@@ -139,6 +173,11 @@
       {
          value = "3";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element rx_ref_clk
@@ -148,6 +187,11 @@
          value = "4";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element sys_clk
    {
@@ -156,6 +200,11 @@
          value = "0";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element sys_rst
    {
@@ -163,6 +212,11 @@
       {
          value = "1";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element system_bd
@@ -244,6 +298,11 @@
          value = "12";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element util_cpack_0
    {
@@ -252,6 +311,11 @@
          value = "10";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element util_cpack_1
    {
@@ -259,6 +323,11 @@
       {
          value = "7";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element xcvr_core
@@ -284,6 +353,11 @@
          value = "5";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
 }
 ]]></parameter>
@@ -299,7 +373,7 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="2" />
- <parameter name="projectName">fmcjesdadc1_a5gt.qpf</parameter>
+ <parameter name="projectName" value="" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
@@ -387,50 +461,52 @@
  <interface name="sys_rst" internal="sys_rst.in_reset" type="reset" dir="end" />
  <interface name="tx_ref_clk" internal="axi_jesd_xcvr.if_tx_ref_clk" />
  <module name="axi_ad9250_0" kind="axi_ad9250" version="1.0" enabled="1">
-  <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_ID" value="0" />
+  <parameter name="DEVICE_TYPE" value="0" />
+  <parameter name="ID" value="0" />
  </module>
  <module name="axi_ad9250_1" kind="axi_ad9250" version="1.0" enabled="1">
-  <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_ID" value="1" />
+  <parameter name="DEVICE_TYPE" value="0" />
+  <parameter name="ID" value="0" />
  </module>
  <module name="axi_dmac_0" kind="axi_dmac" version="1.0" enabled="1">
-  <parameter name="C_2D_TRANSFER" value="0" />
-  <parameter name="C_AXI_SLICE_DEST" value="0" />
-  <parameter name="C_AXI_SLICE_SRC" value="0" />
-  <parameter name="C_CLKS_ASYNC_DEST_REQ" value="1" />
-  <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
-  <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
-  <parameter name="C_CYCLIC" value="0" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="256" />
-  <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
-  <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
-  <parameter name="C_DMA_TYPE_DEST" value="0" />
-  <parameter name="C_DMA_TYPE_SRC" value="2" />
-  <parameter name="C_SYNC_TRANSFER_START" value="0" />
-  <parameter name="PCORE_ID" value="0" />
+  <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
+  <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
+  <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
+  <parameter name="AXI_SLICE_DEST" value="0" />
+  <parameter name="AXI_SLICE_SRC" value="0" />
+  <parameter name="CYCLIC" value="1" />
+  <parameter name="DMA_2D_TRANSFER" value="1" />
+  <parameter name="DMA_DATA_WIDTH_DEST" value="64" />
+  <parameter name="DMA_DATA_WIDTH_SRC" value="64" />
+  <parameter name="DMA_LENGTH_WIDTH" value="14" />
+  <parameter name="DMA_TYPE_DEST" value="0" />
+  <parameter name="DMA_TYPE_SRC" value="2" />
+  <parameter name="FIFO_SIZE" value="4" />
+  <parameter name="ID" value="0" />
+  <parameter name="SYNC_TRANSFER_START" value="0" />
  </module>
  <module name="axi_dmac_1" kind="axi_dmac" version="1.0" enabled="1">
-  <parameter name="C_2D_TRANSFER" value="0" />
-  <parameter name="C_AXI_SLICE_DEST" value="0" />
-  <parameter name="C_AXI_SLICE_SRC" value="0" />
-  <parameter name="C_CLKS_ASYNC_DEST_REQ" value="1" />
-  <parameter name="C_CLKS_ASYNC_REQ_SRC" value="1" />
-  <parameter name="C_CLKS_ASYNC_SRC_DEST" value="1" />
-  <parameter name="C_CYCLIC" value="0" />
-  <parameter name="C_DMA_DATA_WIDTH_DEST" value="256" />
-  <parameter name="C_DMA_DATA_WIDTH_SRC" value="64" />
-  <parameter name="C_DMA_LENGTH_WIDTH" value="14" />
-  <parameter name="C_DMA_TYPE_DEST" value="0" />
-  <parameter name="C_DMA_TYPE_SRC" value="2" />
-  <parameter name="C_SYNC_TRANSFER_START" value="0" />
-  <parameter name="PCORE_ID" value="1" />
+  <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
+  <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
+  <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
+  <parameter name="AXI_SLICE_DEST" value="0" />
+  <parameter name="AXI_SLICE_SRC" value="0" />
+  <parameter name="CYCLIC" value="1" />
+  <parameter name="DMA_2D_TRANSFER" value="1" />
+  <parameter name="DMA_DATA_WIDTH_DEST" value="64" />
+  <parameter name="DMA_DATA_WIDTH_SRC" value="64" />
+  <parameter name="DMA_LENGTH_WIDTH" value="14" />
+  <parameter name="DMA_TYPE_DEST" value="0" />
+  <parameter name="DMA_TYPE_SRC" value="2" />
+  <parameter name="FIFO_SIZE" value="4" />
+  <parameter name="ID" value="0" />
+  <parameter name="SYNC_TRANSFER_START" value="0" />
  </module>
  <module name="axi_jesd_xcvr" kind="axi_jesd_xcvr" version="1.0" enabled="1">
-  <parameter name="PCORE_DEVICE_TYPE" value="0" />
-  <parameter name="PCORE_ID" value="0" />
-  <parameter name="PCORE_NUM_OF_RX_LANES" value="4" />
-  <parameter name="PCORE_NUM_OF_TX_LANES" value="4" />
+  <parameter name="DEVICE_TYPE" value="0" />
+  <parameter name="ID" value="0" />
+  <parameter name="RX_NUM_OF_LANES" value="4" />
+  <parameter name="TX_NUM_OF_LANES" value="4" />
  </module>
  <module name="mem_clk" kind="altera_clock_bridge" version="15.0" enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
@@ -466,16 +542,16 @@
   <parameter name="USE_RESET_REQUEST" value="0" />
  </module>
  <module name="util_bsplit" kind="util_bsplit" version="1.0" enabled="1">
-  <parameter name="CH_CNT" value="2" />
-  <parameter name="CH_DW" value="64" />
+  <parameter name="CHANNEL_DATA_WIDTH" value="64" />
+  <parameter name="NUM_OF_CHANNELS" value="2" />
  </module>
  <module name="util_cpack_0" kind="util_cpack" version="1.0" enabled="1">
-  <parameter name="CH_CNT" value="2" />
-  <parameter name="CH_DW" value="32" />
+  <parameter name="CHANNEL_DATA_WIDTH" value="32" />
+  <parameter name="NUM_OF_CHANNELS" value="2" />
  </module>
  <module name="util_cpack_1" kind="util_cpack" version="1.0" enabled="1">
-  <parameter name="CH_CNT" value="2" />
-  <parameter name="CH_DW" value="32" />
+  <parameter name="CHANNEL_DATA_WIDTH" value="32" />
+  <parameter name="NUM_OF_CHANNELS" value="2" />
  </module>
  <module name="xcvr_core" kind="altera_jesd204" version="15.0" enabled="1">
   <parameter name="ADJCNT" value="0" />
@@ -768,6 +844,16 @@
    version="15.0"
    start="xcvr_core.jesd204_rx_link"
    end="axi_jesd_xcvr.if_rx_ip_avl" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="axi_ad9250_0.if_adc_clk"
+   end="util_cpack_0.if_adc_clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="axi_ad9250_1.if_adc_clk"
+   end="util_cpack_1.if_adc_clk" />
  <connection kind="clock" version="15.0" start="sys_clk.out_clk" end="sys_rst.clk" />
  <connection kind="clock" version="15.0" start="mem_clk.out_clk" end="mem_rst.clk" />
  <connection
@@ -829,16 +915,6 @@
    kind="clock"
    version="15.0"
    start="xcvr_rx_pll.outclk0"
-   end="util_cpack_1.if_adc_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="xcvr_rx_pll.outclk0"
-   end="util_cpack_0.if_adc_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="xcvr_rx_pll.outclk0"
    end="axi_dmac_1.if_fifo_wr_clk" />
  <connection
    kind="clock"
@@ -884,6 +960,50 @@
  <connection
    kind="conduit"
    version="15.0"
+   start="axi_ad9250_0.fifo_ch_0_in"
+   end="util_cpack_0.fifo_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="axi_ad9250_1.fifo_ch_0_in"
+   end="util_cpack_1.fifo_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="axi_ad9250_0.fifo_ch_1_in"
+   end="util_cpack_0.fifo_ch_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="axi_ad9250_1.fifo_ch_1_in"
+   end="util_cpack_1.fifo_ch_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
    start="util_cpack_0.if_adc_data"
    end="axi_dmac_0.if_fifo_wr_din">
   <parameter name="endPort" value="" />
@@ -906,94 +1026,6 @@
  <connection
    kind="conduit"
    version="15.0"
-   start="axi_ad9250_0.if_adc_data_a"
-   end="util_cpack_0.if_adc_data_0">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_1.if_adc_data_a"
-   end="util_cpack_1.if_adc_data_0">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_adc_data_b"
-   end="util_cpack_0.if_adc_data_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_1.if_adc_data_b"
-   end="util_cpack_1.if_adc_data_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_1.if_adc_enable_0"
-   end="axi_ad9250_1.if_adc_enable_a">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_adc_enable_a"
-   end="util_cpack_0.if_adc_enable_0">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_adc_enable_b"
-   end="util_cpack_0.if_adc_enable_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_1.if_adc_enable_b"
-   end="util_cpack_1.if_adc_enable_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
    start="util_cpack_0.if_adc_sync"
    end="axi_dmac_0.if_fifo_wr_sync">
   <parameter name="endPort" value="" />
@@ -1007,50 +1039,6 @@
    version="15.0"
    start="util_cpack_1.if_adc_sync"
    end="axi_dmac_1.if_fifo_wr_sync">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_0.if_adc_valid_0"
-   end="axi_ad9250_0.if_adc_valid_a">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="util_cpack_1.if_adc_valid_1"
-   end="axi_ad9250_1.if_adc_valid_b">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_1.if_adc_valid_a"
-   end="util_cpack_1.if_adc_valid_0">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9250_0.if_adc_valid_b"
-   end="util_cpack_0.if_adc_valid_1">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1225,6 +1213,16 @@
  <connection
    kind="reset"
    version="15.0"
+   start="axi_ad9250_1.if_adc_rst"
+   end="util_cpack_1.if_adc_rst" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="axi_ad9250_0.if_adc_rst"
+   end="util_cpack_0.if_adc_rst" />
+ <connection
+   kind="reset"
+   version="15.0"
    start="axi_jesd_xcvr.if_rst"
    end="xcvr_rst_cntrl.reset" />
  <connection
@@ -1237,16 +1235,6 @@
    version="15.0"
    start="axi_jesd_xcvr.if_rx_rstn"
    end="xcvr_core.rxlink_rst_n" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_rst.out_reset"
-   end="util_cpack_0.adc_reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="sys_rst.out_reset"
-   end="util_cpack_1.adc_reset" />
  <connection
    kind="reset"
    version="15.0"
