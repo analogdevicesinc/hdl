@@ -314,21 +314,21 @@ proc axi_dmac_elaborate {} {
   # fifo destination/source
 
   if {[get_parameter_value DMA_TYPE_DEST] == 2} {
-    ad_alt_intf clock   fifo_rd_clk       input   1                       dac_clk
-    ad_alt_intf signal  fifo_rd_en        input   1                       dac_valid
-    ad_alt_intf signal  fifo_rd_valid     output  1                       dma_valid
-    ad_alt_intf signal  fifo_rd_dout      output  DMA_DATA_WIDTH_DEST     dac_data
-    ad_alt_intf signal  fifo_rd_underflow output  1                       dac_dunf
-    ad_alt_intf signal  fifo_rd_xfer_req  output  1                       dma_xfer_req
+    ad_alt_intf clock   fifo_rd_clk       input   1                       clk
+    ad_alt_intf signal  fifo_rd_en        input   1                       valid
+    ad_alt_intf signal  fifo_rd_valid     output  1                       valid
+    ad_alt_intf signal  fifo_rd_dout      output  DMA_DATA_WIDTH_DEST     data
+    ad_alt_intf signal  fifo_rd_underflow output  1                       unf
+    ad_alt_intf signal  fifo_rd_xfer_req  output  1                       xfer_req
   }
 
   if {[get_parameter_value DMA_TYPE_SRC] == 2} {
-    ad_alt_intf clock   fifo_wr_clk       input   1                       adc_clk
-    ad_alt_intf signal  fifo_wr_en        input   1                       adc_valid
-    ad_alt_intf signal  fifo_wr_din       input   DMA_DATA_WIDTH_SRC      adc_data
-    ad_alt_intf signal  fifo_wr_overflow  output  1                       adc_dovf
-    ad_alt_intf signal  fifo_wr_sync      input   1                       adc_sync
-    ad_alt_intf signal  fifo_wr_xfer_req  output  1                       dma_xfer_req
+    ad_alt_intf clock   fifo_wr_clk       input   1                       clk
+    ad_alt_intf signal  fifo_wr_en        input   1                       valid
+    ad_alt_intf signal  fifo_wr_din       input   DMA_DATA_WIDTH_SRC      data
+    ad_alt_intf signal  fifo_wr_overflow  output  1                       ovf
+    ad_alt_intf signal  fifo_wr_sync      input   1                       sync
+    ad_alt_intf signal  fifo_wr_xfer_req  output  1                       xfer_req
   }
 }
 
