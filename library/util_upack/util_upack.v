@@ -86,8 +86,8 @@ module util_upack (
 
   // parameters
 
-  parameter   CHANNEL_DATA_WIDTH     = 32;
-  parameter   NUM_OF_CHANNELS    = 8;
+  parameter   CHANNEL_DATA_WIDTH    = 32;
+  parameter   NUM_OF_CHANNELS       = 8;
 
   localparam  NUM_OF_CHANNELS_M     = 8;
   localparam  NUM_OF_CHANNELS_P     = NUM_OF_CHANNELS;
@@ -97,47 +97,47 @@ module util_upack (
 
   // dac interface
 
-  input                             dac_clk;
-  input                             dac_enable_0;
-  input                             dac_valid_0;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             dac_data_0;
-  output                            upack_valid_0;
-  input                             dac_enable_1;
-  input                             dac_valid_1;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             dac_data_1;
-  output                            upack_valid_1;
-  input                             dac_enable_2;
-  input                             dac_valid_2;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             dac_data_2;
-  output                            upack_valid_2;
-  input                             dac_enable_3;
-  input                             dac_valid_3;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             dac_data_3;
-  output                            upack_valid_3;
-  input                             dac_enable_4;
-  input                             dac_valid_4;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             dac_data_4;
-  output                            upack_valid_4;
-  input                             dac_enable_5;
-  input                             dac_valid_5;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             dac_data_5;
-  output                            upack_valid_5;
-  input                             dac_enable_6;
-  input                             dac_valid_6;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             dac_data_6;
-  output                            upack_valid_6;
-  input                             dac_enable_7;
-  input                             dac_valid_7;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             dac_data_7;
-  output                            upack_valid_7;
+  input                               dac_clk;
+  input                               dac_enable_0;
+  input                               dac_valid_0;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_0;
+  output                              upack_valid_0;
+  input                               dac_enable_1;
+  input                               dac_valid_1;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_1;
+  output                              upack_valid_1;
+  input                               dac_enable_2;
+  input                               dac_valid_2;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_2;
+  output                              upack_valid_2;
+  input                               dac_enable_3;
+  input                               dac_valid_3;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_3;
+  output                              upack_valid_3;
+  input                               dac_enable_4;
+  input                               dac_valid_4;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_4;
+  output                              upack_valid_4;
+  input                               dac_enable_5;
+  input                               dac_valid_5;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_5;
+  output                              upack_valid_5;
+  input                               dac_enable_6;
+  input                               dac_valid_6;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_6;
+  output                              upack_valid_6;
+  input                               dac_enable_7;
+  input                               dac_valid_7;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_7;
+  output                              upack_valid_7;
 
-  input                             dma_xfer_in;
-  output                            dac_xfer_out;
+  input                               dma_xfer_in;
+  output                              dac_xfer_out;
 
   // fifo interface
 
-  output                            dac_valid;
-  output                            dac_sync;
+  output                              dac_valid;
+  output                              dac_sync;
   input   [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    dac_data;
 
   // internal registers

@@ -56,8 +56,8 @@ module util_upack_dsf (
 
   parameter   NUM_OF_CHANNELS_P   =  4;
   parameter   NUM_OF_CHANNELS_M   =  8;
-  parameter   CHANNEL_DATA_WIDTH   = 32;
-  parameter   NUM_OF_CHANNELS_O =  4;
+  parameter   CHANNEL_DATA_WIDTH  = 32;
+  parameter   NUM_OF_CHANNELS_O   =  4;
 
   localparam  CH_SCNT = CHANNEL_DATA_WIDTH/16;
   localparam  P_WIDTH = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_P;
