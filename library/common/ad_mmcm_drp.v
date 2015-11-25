@@ -45,6 +45,7 @@ module ad_mmcm_drp (
   clk,
   clk2,
   mmcm_rst,
+  clk_sel,
   mmcm_clk_0,
   mmcm_clk_1,
 
@@ -78,6 +79,7 @@ module ad_mmcm_drp (
   input           clk;
   input           clk2;
   input           mmcm_rst;
+  input           clk_sel;
   output          mmcm_clk_0;
   output          mmcm_clk_1;
 
@@ -176,7 +178,7 @@ module ad_mmcm_drp (
     .CLKOUT5 (),
     .CLKOUT6 (),
     .CLKIN2 (clk2),
-    .CLKINSEL (1'b1),
+    .CLKINSEL (clk_sel),
     .PSCLK (1'b0),
     .PSEN (1'b0),
     .PSINCDEC (1'b0),
@@ -233,7 +235,7 @@ module ad_mmcm_drp (
     .CLKOUT5 (),
     .CLKOUT6 (),
     .CLKIN2 (clk2),
-    .CLKINSEL (1'b1),
+    .CLKINSEL (clk_sel),
     .PSCLK (1'b0),
     .PSEN (1'b0),
     .PSINCDEC (1'b0),

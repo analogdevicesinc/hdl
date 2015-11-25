@@ -110,6 +110,7 @@ module axi_clkgen (
   // reset and clocks
 
   wire            mmcm_rst;
+  wire            clk_sel;
   wire            up_rstn;
   wire            up_clk;
 
@@ -171,6 +172,7 @@ module axi_clkgen (
 
   up_clkgen i_up_clkgen (
     .mmcm_rst (mmcm_rst),
+    .clk_sel (clk_sel),
     .up_drp_sel (up_drp_sel_s),
     .up_drp_wr (up_drp_wr_s),
     .up_drp_addr (up_drp_addr_s),
@@ -203,6 +205,7 @@ module axi_clkgen (
     .clk (clk),
     .clk2 (clk2),
     .mmcm_rst (mmcm_rst),
+    .clk_sel(clk_sel),
     .mmcm_clk_0 (clk_0),
     .mmcm_clk_1 (clk_1),
     .up_clk (up_clk),
