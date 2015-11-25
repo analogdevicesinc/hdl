@@ -6,6 +6,7 @@ project_new daq2_a10gx -overwrite
 
 source "../../common/a10gx/a10gx_system_assign.tcl"
 set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/a10gx/;../../../library/**/*"
+set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/a10gx;../../../library/**/*"
 set_global_assignment -name QSYS_FILE system_bd.qsys
 
 set_global_assignment -name VERILOG_FILE "../../../library/common/ad_iobuf.v"
