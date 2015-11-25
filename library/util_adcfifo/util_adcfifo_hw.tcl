@@ -55,8 +55,8 @@ set_parameter_property DMA_ADDRESS_WIDTH HDL_PARAMETER true
 
 ad_alt_intf clock   adc_clk         input   1               adc_clk
 ad_alt_intf reset   adc_rst         input   1               if_adc_clk
-ad_alt_intf signal  adc_wr          input   1               adc_valid
-ad_alt_intf signal  adc_wdata       input   ADC_DATA_WIDTH  adc_data
+ad_alt_intf signal  adc_wr          input   1               valid
+ad_alt_intf signal  adc_wdata       input   ADC_DATA_WIDTH  data
 ad_alt_intf signal  adc_wovf        output  1               adc_dovf
 
 ad_alt_intf clock   dma_clk           input   1                 clk
