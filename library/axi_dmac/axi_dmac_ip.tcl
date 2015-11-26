@@ -103,46 +103,6 @@ foreach p $dummy_axi_ports {
 	adi_set_ports_dependency $p "0"
 }
 
-# These are in the design to keep the Altera tools happy which can't handle
-# uni-directional AXI interfaces. The Xilinx tools can and do a better job when
-# they know that the interface is uni-directional, so disable the ports.
-set dummy_axi_ports [list \
-	"m_dest_axi_arvalid" \
-	"m_dest_axi_arready" \
-	"m_dest_axi_araddr" \
-	"m_dest_axi_arlen" \
-	"m_dest_axi_arsize" \
-	"m_dest_axi_arburst" \
-	"m_dest_axi_arcache" \
-	"m_dest_axi_arprot" \
-	"m_dest_axi_rready" \
-	"m_dest_axi_rvalid" \
-	"m_dest_axi_rresp" \
-	"m_dest_axi_rdata" \
-	"m_src_axi_awvalid" \
-	"m_src_axi_awready" \
-	"m_src_axi_awvalid" \
-	"m_src_axi_awaddr" \
-	"m_src_axi_awlen" \
-	"m_src_axi_awsize" \
-	"m_src_axi_awburst" \
-	"m_src_axi_awcache" \
-	"m_src_axi_awprot" \
-	"m_src_axi_wvalid" \
-	"m_src_axi_wready" \
-	"m_src_axi_wvalid" \
-	"m_src_axi_wdata" \
-	"m_src_axi_wstrb" \
-	"m_src_axi_wlast" \
-	"m_src_axi_bready" \
-	"m_src_axi_bvalid" \
-	"m_src_axi_bresp" \
-]
-
-foreach p $dummy_axi_ports {
-	adi_set_ports_dependency $p "0"
-}
-
 adi_add_bus "fifo_wr" "slave" \
 	"analog.com:interface:fifo_wr_rtl:1.0" \
 	"analog.com:interface:fifo_wr:1.0" \
