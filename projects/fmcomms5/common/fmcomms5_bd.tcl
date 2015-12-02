@@ -95,6 +95,8 @@ ad_connect sys_200m_clk     axi_ad9361_0/delay_clk
 ad_connect sys_200m_clk     axi_ad9361_1/delay_clk
 ad_connect axi_ad9361_0_clk axi_ad9361_0/l_clk
 ad_connect axi_ad9361_1_clk axi_ad9361_1/l_clk
+ad_connect axi_ad9361_0_clk axi_ad9361_0/clk
+ad_connect axi_ad9361_0_clk axi_ad9361_1/clk
 ad_connect axi_ad9361_0/rst adc_wfifo/din_rst
 ad_connect axi_ad9361_0_clk adc_wfifo/din_clk
 ad_connect sys_cpu_clk      adc_wfifo/dout_clk
