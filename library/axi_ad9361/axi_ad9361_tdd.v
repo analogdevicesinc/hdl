@@ -160,11 +160,19 @@ module axi_ad9361_tdd (
 
   reg               tdd_slave_synced = 1'b0;
 
+  reg               tdd_tx_valid_i0 = 1'b0;
+  reg               tdd_tx_valid_q0 = 1'b0;
+  reg               tdd_tx_valid_i1 = 1'b0;
+  reg               tdd_tx_valid_q1 = 1'b0;
+  reg               tdd_rx_valid_i0 = 1'b0;
+  reg               tdd_rx_valid_q0 = 1'b0;
+  reg               tdd_rx_valid_i1 = 1'b0;
+  reg               tdd_rx_valid_q1 = 1'b0;
+
   // internal signals
 
   wire              rst;
   wire              tdd_enable_s;
-  wire              tdd_enable_synced_s;
   wire              tdd_secondary_s;
   wire    [ 7:0]    tdd_burst_count_s;
   wire              tdd_rx_only_s;
@@ -205,25 +213,35 @@ module axi_ad9361_tdd (
 
   // tx/rx data flow control
 
-  assign  tdd_tx_valid_i0 = ((tdd_enable_synced_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
-                                    (tx_valid_i0 & tdd_tx_dp_en_s) : tx_valid_i0;
-  assign  tdd_tx_valid_q0 = ((tdd_enable_synced_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
-                                    (tx_valid_q0 & tdd_tx_dp_en_s) : tx_valid_q0;
-  assign  tdd_tx_valid_i1 = ((tdd_enable_synced_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
-                                    (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
-  assign  tdd_tx_valid_q1 = ((tdd_enable_synced_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
-                                    (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
+  always @(posedge clk) begin
+    if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
+      tdd_tx_valid_i0 <= tx_valid_i0 & tdd_tx_dp_en_s;
+      tdd_tx_valid_q0 <= tx_valid_q0 & tdd_tx_dp_en_s;
+      tdd_tx_valid_i1 <= tx_valid_i1 & tdd_tx_dp_en_s;
+      tdd_tx_valid_q1 <= tx_valid_q1 & tdd_tx_dp_en_s;
+    end else begin
+      tdd_tx_valid_i0 <= tx_valid_i0;
+      tdd_tx_valid_q0 <= tx_valid_q0;
+      tdd_tx_valid_i1 <= tx_valid_i1;
+      tdd_tx_valid_q1 <= tx_valid_q1;
+    end
+  end
 
-  assign  tdd_rx_valid_i0 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
-                                    (rx_valid_i0 & tdd_rx_rf_en) : rx_valid_i0;
-  assign  tdd_rx_valid_q0 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
-                                    (rx_valid_q0 & tdd_rx_rf_en) : rx_valid_q0;
-  assign  tdd_rx_valid_i1 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
-                                    (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
-  assign  tdd_rx_valid_q1 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
-                                    (rx_valid_q1 & tdd_rx_rf_en) : rx_valid_q1;
+  always @(posedge clk) begin
+    if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
+      tdd_rx_valid_i0 <= rx_valid_i0 & tdd_rx_rf_en;
+      tdd_rx_valid_q0 <= rx_valid_q0 & tdd_rx_rf_en;
+      tdd_rx_valid_i1 <= rx_valid_i1 & tdd_rx_rf_en;
+      tdd_rx_valid_q1 <= rx_valid_q1 & tdd_rx_rf_en;
+    end else begin
+      tdd_rx_valid_i0 <= rx_valid_i0;
+      tdd_rx_valid_q0 <= rx_valid_q0;
+      tdd_rx_valid_i1 <= rx_valid_i1;
+      tdd_rx_valid_q1 <= rx_valid_q1;
+    end
+  end
 
-  assign  tdd_enabled = tdd_enable_synced_s;
+  assign  tdd_enabled = tdd_enable_s;
   assign  tdd_terminal_type = ~tdd_terminal_type_s;
 
   // instantiations
@@ -284,7 +302,6 @@ module axi_ad9361_tdd (
     .clk(clk),
     .rst(rst),
     .tdd_enable(tdd_enable_s),
-    .tdd_enable_synced (tdd_enable_synced_s),
     .tdd_secondary(tdd_secondary_s),
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),

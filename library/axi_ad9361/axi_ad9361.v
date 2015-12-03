@@ -284,6 +284,12 @@ module axi_ad9361 (
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
 
+  reg     [15:0]  adc_data_i0 = 16'b0;
+  reg     [15:0]  adc_data_q0 = 16'b0;
+  reg     [15:0]  adc_data_i1 = 16'b0;
+  reg     [15:0]  adc_data_q1 = 16'b0;
+
+
   // internal clocks and resets
 
   wire            up_clk;
@@ -333,6 +339,10 @@ module axi_ad9361 (
   wire            tdd_txnrx_s;
   wire            tdd_mode_s;
 
+  wire    [15:0]  adc_data_i0_s;
+  wire    [15:0]  adc_data_q0_s;
+  wire    [15:0]  adc_data_i1_s;
+  wire    [15:0]  adc_data_q1_s;
 
   // signal name changes
 
@@ -402,6 +412,21 @@ module axi_ad9361 (
     .delay_locked (delay_locked_s));
 
   // TDD interface
+
+  // additional flop to keep control and data synced
+  always @(posedge clk) begin
+    if(rst == 1) begin
+      adc_data_i0 <= 16'b0;
+      adc_data_q0 <= 16'b0;
+      adc_data_i1 <= 16'b0;
+      adc_data_q1 <= 16'b0;
+    end else begin
+      adc_data_i0 <= adc_data_i0_s;
+      adc_data_q0 <= adc_data_q0_s;
+      adc_data_i1 <= adc_data_i1_s;
+      adc_data_q1 <= adc_data_q1_s;
+    end
+  end
 
   axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if (
     .clk (clk),
@@ -478,16 +503,16 @@ module axi_ad9361 (
     .delay_locked (delay_locked_s),
     .adc_enable_i0 (adc_enable_i0),
     .adc_valid_i0 (adc_valid_i0_s),
-    .adc_data_i0 (adc_data_i0),
+    .adc_data_i0 (adc_data_i0_s),
     .adc_enable_q0 (adc_enable_q0),
     .adc_valid_q0 (adc_valid_q0_s),
-    .adc_data_q0 (adc_data_q0),
+    .adc_data_q0 (adc_data_q0_s),
     .adc_enable_i1 (adc_enable_i1),
     .adc_valid_i1 (adc_valid_i1_s),
-    .adc_data_i1 (adc_data_i1),
+    .adc_data_i1 (adc_data_i1_s),
     .adc_enable_q1 (adc_enable_q1),
     .adc_valid_q1 (adc_valid_q1_s),
-    .adc_data_q1 (adc_data_q1),
+    .adc_data_q1 (adc_data_q1_s),
     .adc_dovf (adc_dovf),
     .adc_dunf (adc_dunf),
     .up_adc_gpio_in (up_adc_gpio_in),

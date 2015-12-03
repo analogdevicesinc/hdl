@@ -49,7 +49,6 @@ module ad_tdd_control(
   // TDD timming signals
 
   tdd_enable,
-  tdd_enable_synced,
   tdd_secondary,
   tdd_tx_only,
   tdd_rx_only,
@@ -103,7 +102,6 @@ module ad_tdd_control(
   input           rst;
 
   input           tdd_enable;
-  output          tdd_enable_synced;
   input           tdd_secondary;
   input           tdd_tx_only;
   input           tdd_rx_only;
@@ -179,7 +177,6 @@ module ad_tdd_control(
   reg             counter_at_tdd_tx_dp_on_2 = 1'b0;
   reg             counter_at_tdd_tx_dp_off_2 = 1'b0;
 
-  reg             tdd_enable_synced = 1'h0;
   reg             tdd_last_burst = 1'b0;
 
   reg             tdd_sync_d1 = 1'b0;
@@ -229,14 +226,6 @@ module ad_tdd_control(
       tdd_sync_d1 <= tdd_sync;
       tdd_sync_d2 <= tdd_sync_d1;
       tdd_sync_d3 <= tdd_sync_d2;
-    end
-  end
-
-  always @(posedge clk) begin
-    if (rst == 1'b1) begin
-      tdd_enable_synced <= 1'b0;
-    end else begin
-      tdd_enable_synced <= ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) ? tdd_enable : tdd_enable_synced;
     end
   end
 
