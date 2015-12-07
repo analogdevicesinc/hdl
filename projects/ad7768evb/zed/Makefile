@@ -9,7 +9,8 @@ M_DEPS += system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.xdc
 M_DEPS += system_bd.tcl
-M_DEPS += ../common/cftl_cip_bd.tcl
+M_DEPS += ../common/ad7768evb_bd.tcl
+M_DEPS += ../common/ad7768_if.v
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
@@ -22,8 +23,6 @@ M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_i2s_adi/axi_i2s_adi.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
-M_DEPS += ../../../library/util_pmod_adc/util_pmod_adc.xpr
-M_DEPS += ../../../library/util_pmod_fmeter/util_pmod_fmeter.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -41,7 +40,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all lib clean clean-all
-all: lib cftl_custom_zed.sdk/system_top.hdf
+all: lib ad7768evb_zed.sdk/system_top.hdf
 
 
 clean: 
@@ -55,13 +54,11 @@ clean-all:clean
 	make -C ../../../library/axi_i2s_adi clean
 	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/util_i2c_mixer clean
-	make -C ../../../library/util_pmod_adc clean
-	make -C ../../../library/util_pmod_fmeter clean
 
 
-cftl_custom_zed.sdk/system_top.hdf: $(M_DEPS)
+ad7768evb_zed.sdk/system_top.hdf: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> cftl_custom_zed_vivado.log 2>&1
+	$(M_VIVADO) system_project.tcl >> ad7768evb_zed_vivado.log 2>&1
 
 
 lib:
@@ -71,8 +68,6 @@ lib:
 	make -C ../../../library/axi_i2s_adi
 	make -C ../../../library/axi_spdif_tx
 	make -C ../../../library/util_i2c_mixer
-	make -C ../../../library/util_pmod_adc
-	make -C ../../../library/util_pmod_fmeter
 
 ####################################################################################
 ####################################################################################
