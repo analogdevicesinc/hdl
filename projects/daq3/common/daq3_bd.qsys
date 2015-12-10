@@ -25,7 +25,7 @@
          type = "int";
       }
    }
-   element axi_ad9144_core
+   element axi_ad9152_core
    {
       datum _sortIndex
       {
@@ -33,7 +33,7 @@
          type = "int";
       }
    }
-   element axi_ad9144_core.s_axi
+   element axi_ad9152_core.s_axi
    {
       datum baseAddress
       {
@@ -41,7 +41,7 @@
          type = "String";
       }
    }
-   element axi_ad9144_dma
+   element axi_ad9152_dma
    {
       datum _sortIndex
       {
@@ -49,7 +49,7 @@
          type = "int";
       }
    }
-   element axi_ad9144_dma.s_axi
+   element axi_ad9152_dma.s_axi
    {
       datum baseAddress
       {
@@ -110,7 +110,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -118,7 +118,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -126,7 +126,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -134,7 +134,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -142,7 +142,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -150,7 +150,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -158,7 +158,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -166,7 +166,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -174,7 +174,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -182,7 +182,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -190,7 +190,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -198,7 +198,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -206,7 +206,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -214,7 +214,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -222,7 +222,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -230,7 +230,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -238,7 +238,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -246,7 +246,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -254,7 +254,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -262,7 +262,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -270,7 +270,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -278,7 +278,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -286,7 +286,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -294,7 +294,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -302,7 +302,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -310,7 +310,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -318,7 +318,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -326,7 +326,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -334,7 +334,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -342,7 +342,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -350,7 +350,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -358,7 +358,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -366,7 +366,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -374,7 +374,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -382,7 +382,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -390,7 +390,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -398,7 +398,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -406,7 +406,7 @@
          type = "String";
       }
    }
-   element daq2_bd
+   element daq3_bd
    {
       datum _originalDeviceFamily
       {
@@ -740,23 +740,23 @@
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
-   name="axi_ad9144_core_s_axi"
-   internal="axi_ad9144_core.s_axi"
+   name="axi_ad9152_core_s_axi"
+   internal="axi_ad9152_core.s_axi"
    type="axi4lite"
    dir="end" />
  <interface
-   name="axi_ad9144_dma_intr"
-   internal="axi_ad9144_dma.interrupt_sender"
+   name="axi_ad9152_dma_intr"
+   internal="axi_ad9152_dma.interrupt_sender"
    type="interrupt"
    dir="end" />
  <interface
-   name="axi_ad9144_dma_m_axi"
-   internal="axi_ad9144_dma.m_src_axi"
+   name="axi_ad9152_dma_m_axi"
+   internal="axi_ad9152_dma.m_src_axi"
    type="axi4"
    dir="start" />
  <interface
-   name="axi_ad9144_dma_s_axi"
-   internal="axi_ad9144_dma.s_axi"
+   name="axi_ad9152_dma_s_axi"
+   internal="axi_ad9152_dma.s_axi"
    type="axi4lite"
    dir="end" />
  <interface
@@ -835,11 +835,10 @@
   <parameter name="DMA_DATA_WIDTH" value="128" />
   <parameter name="DMA_READY_ENABLE" value="1" />
  </module>
- <module name="axi_ad9144_core" kind="axi_ad9144" version="1.0" enabled="1">
+ <module name="axi_ad9152_core" kind="axi_ad9152" version="1.0" enabled="1">
   <parameter name="ID" value="0" />
-  <parameter name="QUAD_OR_DUAL_N" value="0" />
  </module>
- <module name="axi_ad9144_dma" kind="axi_dmac" version="1.0" enabled="1">
+ <module name="axi_ad9152_dma" kind="axi_dmac" version="1.0" enabled="1">
   <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
   <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
   <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
@@ -1690,7 +1689,7 @@
    kind="clock"
    version="15.0"
    start="mem_clk.out_clk"
-   end="axi_ad9144_dma.m_src_axi_clock" />
+   end="axi_ad9152_dma.m_src_axi_clock" />
  <connection
    kind="clock"
    version="15.0"
@@ -1725,7 +1724,7 @@
    kind="clock"
    version="15.0"
    start="sys_clk.out_clk"
-   end="axi_ad9144_core.s_axi_clock" />
+   end="axi_ad9152_core.s_axi_clock" />
  <connection
    kind="clock"
    version="15.0"
@@ -1735,7 +1734,7 @@
    kind="clock"
    version="15.0"
    start="sys_clk.out_clk"
-   end="axi_ad9144_dma.s_axi_clock" />
+   end="axi_ad9152_dma.s_axi_clock" />
  <connection
    kind="clock"
    version="15.0"
@@ -1755,7 +1754,7 @@
    kind="clock"
    version="15.0"
    start="xcvr_tx_pll.outclk0"
-   end="axi_ad9144_dma.if_fifo_rd_clk" />
+   end="axi_ad9152_dma.if_fifo_rd_clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -1770,7 +1769,7 @@
    kind="clock"
    version="15.0"
    start="xcvr_tx_pll.outclk0"
-   end="axi_ad9144_core.if_tx_clk" />
+   end="axi_ad9152_core.if_tx_clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -1845,7 +1844,7 @@
    kind="conduit"
    version="15.0"
    start="util_upack_0.if_dac_valid"
-   end="axi_ad9144_dma.if_fifo_rd_en">
+   end="axi_ad9152_dma.if_fifo_rd_en">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1899,7 +1898,7 @@
  <connection
    kind="conduit"
    version="15.0"
-   start="axi_ad9144_dma.if_fifo_rd_dout"
+   start="axi_ad9152_dma.if_fifo_rd_dout"
    end="util_upack_0.if_dac_data">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
@@ -1966,7 +1965,7 @@
    kind="conduit"
    version="15.0"
    start="axi_jesd_xcvr.if_tx_data"
-   end="axi_ad9144_core.if_tx_data">
+   end="axi_ad9152_core.if_tx_data">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -2211,7 +2210,7 @@
    kind="reset"
    version="15.0"
    start="mem_rst.out_reset"
-   end="axi_ad9144_dma.m_src_axi_reset" />
+   end="axi_ad9152_dma.m_src_axi_reset" />
  <connection
    kind="reset"
    version="15.0"
@@ -2236,7 +2235,7 @@
    kind="reset"
    version="15.0"
    start="sys_rst.out_reset"
-   end="axi_ad9144_core.s_axi_reset" />
+   end="axi_ad9152_core.s_axi_reset" />
  <connection
    kind="reset"
    version="15.0"
@@ -2251,7 +2250,7 @@
    kind="reset"
    version="15.0"
    start="sys_rst.out_reset"
-   end="axi_ad9144_dma.s_axi_reset" />
+   end="axi_ad9152_dma.s_axi_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />
