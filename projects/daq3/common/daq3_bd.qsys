@@ -414,6 +414,14 @@
          type = "String";
       }
    }
+   element daq3_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
    element mem_clk
    {
       datum _sortIndex
@@ -1810,8 +1818,30 @@
  <connection
    kind="conduit"
    version="15.0"
+   start="axi_ad9152_core.fifo_ch_0_out"
+   end="util_upack_0.fifo_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
    start="util_cpack_0.fifo_ch_1"
    end="axi_ad9680_core.fifo_ch_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="axi_ad9152_core.fifo_ch_1_out"
+   end="util_upack_0.fifo_ch_1">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1834,6 +1864,28 @@
    version="15.0"
    start="util_cpack_0.if_adc_valid"
    end="ad9680_adcfifo.if_adc_wr">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="ad9680_adcfifo.if_adc_wovf"
+   end="axi_ad9680_core.if_adc_dovf">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.0"
+   start="axi_ad9152_core.if_dac_dunf"
+   end="axi_ad9152_dma.if_fifo_rd_underflow">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />

@@ -9,8 +9,8 @@ M_DEPS += system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.sdc
 M_DEPS += system_bd.qsys
-M_DEPS += ../common/daq2_spi.v
-M_DEPS += ../common/daq2_bd.qsys
+M_DEPS += ../common/daq3_spi.v
+M_DEPS += ../common/daq3_bd.qsys
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/a10gx/a10gx_system_bd.qsys
 M_DEPS += ../../common/a10gx/a10gx_system_assign.tcl
@@ -120,7 +120,7 @@ M_FLIST += *.pin
 
 
 .PHONY: all clean clean-all
-all: daq2_a10gx.sof
+all: daq3_a10gx.sof
 
 
 
@@ -131,9 +131,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-daq2_a10gx.sof: $(M_DEPS)
+daq3_a10gx.sof: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_ALTERA) system_project.tcl  >> daq2_a10gx_quartus.log 2>&1
+	$(M_ALTERA) system_project.tcl  >> daq3_a10gx_quartus.log 2>&1
 
 ####################################################################################
 ####################################################################################

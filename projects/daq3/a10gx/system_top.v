@@ -76,7 +76,8 @@ module system_top (
 
   // board gpio
 
-  gpio_bd,
+  gpio_bd_i,
+  gpio_bd_o,
 
   // lane interface
 
@@ -98,8 +99,7 @@ module system_top (
   clkd_status,
   adc_pd,
   dac_txen,
-  dac_reset,
-  clkd_sync,
+  sysref,
 
   // spi
 
@@ -147,7 +147,8 @@ module system_top (
 
   // board gpio
 
-  inout   [ 26:0]   gpio_bd;
+  inout   [ 10:0]   gpio_bd_i;
+  inout   [ 15:0]   gpio_bd_o;
 
   // lane interface
 
@@ -169,8 +170,7 @@ module system_top (
   input   [  1:0]   clkd_status;
   output            adc_pd;
   output            dac_txen;
-  output            dac_reset;
-  output            clkd_sync;
+  output            sysref;
 
   // spi
 
@@ -187,19 +187,29 @@ module system_top (
   wire              eth_mdio_i;
   wire              eth_mdio_o;
   wire              eth_mdio_t;
-  wire    [ 31:0]   gpio_i;
-  wire    [ 31:0]   gpio_o;
+  wire    [ 63:0]   gpio_i;
+  wire    [ 63:0]   gpio_o;
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
 
-  // daq2
+  // daq3
+
+  assign sysref = gpio_o[40];
+  assign adc_pd = gpio_o[38:38];
+  assign dac_txen = gpio_o[37:37];
+
+  assign gpio_i[39:39] = trig;
+  assign gpio_i[36:36] = adc_fdb;
+  assign gpio_i[35:35] = adc_fda;
+  assign gpio_i[34:34] = dac_irq;
+  assign gpio_i[33:32] = clkd_status;
 
   assign spi_csn_adc = spi_csn_s[2];
   assign spi_csn_dac = spi_csn_s[1];
   assign spi_csn_clk = spi_csn_s[0];
 
-  daq2_spi i_daq2_spi (
+  daq3_spi i_daq3_spi (
     .spi_csn (spi_csn_s[2:0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi_s),
@@ -216,12 +226,10 @@ module system_top (
   assign ddr3_a[14:12] = 3'd0;
 
   assign gpio_i[31:27] = gpio_o[31:27];
+  assign gpio_i[26:16] = gpio_bd_i;
+  assign gpio_i[15: 0] = gpio_o[15: 0];
 
-  ad_iobuf #(.DATA_WIDTH(27)) i_iobuf_bd (
-    .dio_t ({11'h7ff, 16'h0}),
-    .dio_i (gpio_o[26:0]),
-    .dio_o (gpio_i[26:0]),
-    .dio_p (gpio_bd));
+  assign gpio_bd_o = gpio_o[15:0];
 
   system_bd i_system_bd (
     .a10gx_base_sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
@@ -249,22 +257,22 @@ module system_top (
     .a10gx_base_sys_ethernet_reset_reset (eth_reset),
     .a10gx_base_sys_ethernet_sgmii_rxp_0 (eth_rxd),
     .a10gx_base_sys_ethernet_sgmii_txp_0 (eth_txd),
-    .a10gx_base_sys_gpio_in_export ({trig, adc_fdb, adc_fda, dac_irq, clkd_status[1], clkd_status[0]}),
-    .a10gx_base_sys_gpio_out_export ({adc_pd, dac_txen, dac_reset, clkd_sync}),
+    .a10gx_base_sys_gpio_in_export (gpio_i[63:32]),
+    .a10gx_base_sys_gpio_out_export (gpio_o[63:32]),
     .a10gx_base_sys_gpio_bd_in_port (gpio_i[31:0]),
     .a10gx_base_sys_gpio_bd_out_port (gpio_o[31:0]),
     .a10gx_base_sys_spi_MISO (spi_miso_s),
     .a10gx_base_sys_spi_MOSI (spi_mosi_s),
     .a10gx_base_sys_spi_SCLK (spi_clk),
     .a10gx_base_sys_spi_SS_n (spi_csn_s),
-    .daq2_rx_data_rx_serial_data (rx_data),
-    .daq2_rx_ref_clk_clk (rx_ref_clk),
-    .daq2_rx_sync_rx_sync (rx_sync),
-    .daq2_rx_sysref_rx_ext_sysref_in (rx_sysref),
-    .daq2_tx_data_tx_serial_data (tx_data),
-    .daq2_tx_ref_clk_clk (tx_ref_clk),
-    .daq2_tx_sync_tx_sync (tx_sync),
-    .daq2_tx_sysref_tx_ext_sysref_in (tx_sysref),
+    .daq3_rx_data_rx_serial_data (rx_data),
+    .daq3_rx_ref_clk_clk (rx_ref_clk),
+    .daq3_rx_sync_rx_sync (rx_sync),
+    .daq3_rx_sysref_rx_ext_sysref_in (rx_sysref),
+    .daq3_tx_data_tx_serial_data (tx_data),
+    .daq3_tx_ref_clk_clk (tx_ref_clk),
+    .daq3_tx_sync_tx_sync (tx_sync),
+    .daq3_tx_sysref_tx_ext_sysref_in (tx_sysref),
     .sys_clk_clk (sys_clk),
     .sys_reset_reset_n (sys_resetn));
 

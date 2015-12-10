@@ -2,15 +2,14 @@
 load_package flow
 
 source ../../scripts/adi_env.tcl
-project_new daq2_a10gx -overwrite
+project_new daq3_a10gx -overwrite
 
 source "../../common/a10gx/a10gx_system_assign.tcl"
 set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/a10gx/;../../../library/**/*"
 set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/a10gx;../../../library/**/*"
 set_global_assignment -name QSYS_FILE system_bd.qsys
 
-set_global_assignment -name VERILOG_FILE "../../../library/common/ad_iobuf.v"
-set_global_assignment -name VERILOG_FILE ../common/daq2_spi.v
+set_global_assignment -name VERILOG_FILE ../common/daq3_spi.v
 set_global_assignment -name VERILOG_FILE system_top.v
 
 set_global_assignment -name SDC_FILE system_constr.sdc
@@ -70,12 +69,12 @@ set_location_assignment PIN_AU17  -to "trig(n)"             ; ## H14  FMCA_LA07_
 set_location_assignment PIN_AR14  -to adc_fdb               ; ## H17  FMCA_LA11_N
 set_location_assignment PIN_AT14  -to adc_fda               ; ## H16  FMCA_LA11_P
 set_location_assignment PIN_AR16  -to dac_irq               ; ## G15  FMCA_LA12_P
-set_location_assignment PIN_AP17  -to clkd_status[1]        ; ## D18  FMCA_LA13_N
-set_location_assignment PIN_AR17  -to clkd_status[0]        ; ## D17  FMCA_LA13_P
+set_location_assignment PIN_AN19  -to clkd_status[1]        ; ## G13  FMCA_LA08_N
+set_location_assignment PIN_AP18  -to clkd_status[0]        ; ## G12  FMCA_LA08_P
 set_location_assignment PIN_AV14  -to adc_pd                ; ## C10  FMCA_LA06_P
 set_location_assignment PIN_AP16  -to dac_txen              ; ## G16  FMCA_LA12_N
-set_location_assignment PIN_AT15  -to dac_reset             ; ## C15  FMCA_LA10_N
-set_location_assignment PIN_AP18  -to clkd_sync             ; ## G12  FMCA_LA08_P
+set_location_assignment PIN_AR17  -to sysref                ; ## D17  FMCA_LA13_P
+set_location_assignment PIN_AP17  -to "sysref(n)"           ; ## D18  FMCA_LA13_N
 
 set_instance_assignment -name IO_STANDARD LVDS -to trig
 
@@ -86,7 +85,7 @@ set_location_assignment PIN_AR15  -to spi_csn_dac           ; ## C14  FMCA_LA10_
 set_location_assignment PIN_AV13  -to spi_csn_adc           ; ## D15  FMCA_LA09_N
 set_location_assignment PIN_AW11  -to spi_clk               ; ## D12  FMCA_LA05_N
 set_location_assignment PIN_AW13  -to spi_sdio              ; ## D14  FMCA_LA09_P
-set_location_assignment PIN_AN19  -to spi_dir               ; ## G13  FMCA_LA08_N
+set_location_assignment PIN_AW14  -to spi_dir               ; ## C11  FMCA_LA06_N
 
 execute_flow -compile
 
