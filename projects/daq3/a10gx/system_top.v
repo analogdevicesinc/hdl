@@ -195,16 +195,6 @@ module system_top (
 
   // daq3
 
-  assign sysref = gpio_o[40];
-  assign adc_pd = gpio_o[38:38];
-  assign dac_txen = gpio_o[37:37];
-
-  assign gpio_i[39:39] = trig;
-  assign gpio_i[36:36] = adc_fdb;
-  assign gpio_i[35:35] = adc_fda;
-  assign gpio_i[34:34] = dac_irq;
-  assign gpio_i[33:32] = clkd_status;
-
   assign spi_csn_adc = spi_csn_s[2];
   assign spi_csn_dac = spi_csn_s[1];
   assign spi_csn_clk = spi_csn_s[0];
@@ -217,6 +207,19 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
+  // gpio in & out are separate cores
+
+  assign sysref = gpio_o[36];
+  assign adc_pd = gpio_o[35];
+  assign dac_txen = gpio_o[34];
+
+  assign gpio_i[63:38] = 26'd0;
+  assign gpio_i[37:37] = trig;
+  assign gpio_i[36:36] = adc_fdb;
+  assign gpio_i[35:35] = adc_fda;
+  assign gpio_i[34:34] = dac_irq;
+  assign gpio_i[33:32] = clkd_status;
+
   // board stuff
 
   assign eth_resetn = ~eth_reset;
@@ -227,7 +230,7 @@ module system_top (
 
   assign gpio_i[31:27] = gpio_o[31:27];
   assign gpio_i[26:16] = gpio_bd_i;
-  assign gpio_i[15: 0] = gpio_o[15: 0];
+  assign gpio_i[15: 0] = gpio_o[15:0];
 
   assign gpio_bd_o = gpio_o[15:0];
 
