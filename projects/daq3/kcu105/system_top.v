@@ -108,8 +108,8 @@ module system_top (
 
   adc_pd,
   dac_txen,
-  dac_reset,
-  clkd_sync,
+  sysref_p,
+  sysref_n,
 
   spi_csn_clk,
   spi_csn_dac,
@@ -185,8 +185,8 @@ module system_top (
 
   inout           adc_pd;
   inout           dac_txen;
-  inout           dac_reset;
-  inout           clkd_sync;
+  output          sysref_p;
+  output          sysref_n;
 
   output          spi_csn_clk;
   output          spi_csn_dac;
@@ -257,7 +257,7 @@ module system_top (
     .IB (tx_sync_n),
     .O (tx_sync));
 
-  daq2_spi i_spi (
+  daq3_spi i_spi (
     .spi_csn (spi_csn[2:0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
@@ -265,21 +265,24 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
+  OBUFDS i_obufds_sysref (
+    .I (gpio_o[40]),
+    .O (sysref_p),
+    .OB (sysref_n));
+
   IBUFDS i_ibufds_trig (
     .I (trig_p),
     .IB (trig_n),
     .O (trig));
 
-  assign gpio_i[43] = trig;
+  assign gpio_i[39] = trig;
 
-  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
-    .dio_t ({gpio_t[42:40], gpio_t[38], gpio_t[36:32]}),
-    .dio_i ({gpio_o[42:40], gpio_o[38], gpio_o[36:32]}),
-    .dio_o ({gpio_i[42:40], gpio_i[38], gpio_i[36:32]}),
-    .dio_p ({ adc_pd,           // 42
-              dac_txen,         // 41
-              dac_reset,        // 40
-              clkd_sync,        // 38
+  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf (
+    .dio_t (gpio_t[38:32]),
+    .dio_i (gpio_o[38:32]),
+    .dio_o (gpio_i[38:32]),
+    .dio_p ({ adc_pd,           // 38
+              dac_txen,         // 37
               adc_fdb,          // 36
               adc_fda,          // 35
               dac_irq,          // 34
