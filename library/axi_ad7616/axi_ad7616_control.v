@@ -50,7 +50,6 @@ module axi_ad7616_control (
   hw_rngsel,
   chsel,
   crcen,
-  ser1w_n,
   burst,
   os,
 
@@ -77,9 +76,8 @@ module axi_ad7616_control (
   localparam  PCORE_VERSION = 'h0001001;
   localparam  SW = 0;
   localparam  HW = 1;
-
-  input           clk;
-  input           rst;
+  localparam  POS_EDGE = 0;
+  localparam  NEG_EDGE = 1;
 
   output          reset_n;
   output          cnvst;
@@ -88,7 +86,6 @@ module axi_ad7616_control (
   output  [ 1:0]  hw_rngsel;
   output  [ 2:0]  chsel;
   output          crcen;
-  output          ser1w_n;
   output          burst;
   output  [ 2:0]  os;
 
@@ -109,18 +106,39 @@ module axi_ad7616_control (
 
   // internal signals
 
-  reg     [31:0]  up_scratch = 'b0;
-  reg             up_resetn = 'b0;
-  reg             up_cnvst_en = 'b0;
-  reg             up_ser1w = 'b0;
-  reg     [ 7:0]  up_cnvst_high = 'b0;
-  reg     [31:0]  up_conv_rate = 'b0;
+  reg     [31:0]  up_scratch = 32'b0;
+  reg             up_resetn = 1'b0;
+  reg             up_cnvst_en = 1'b0;
+  reg             up_wack = 1'b0;
+  reg             up_rack = 1'b0;
+  reg     [31:0]  up_rdata = 32'b0;
+  reg     [31:0]  up_conv_rate = 32'b0;
+
   reg     [31:0]  cnvst_counter = 32'b0;
-  reg     [ 7:0]  pulse_counter = 8'b0;
+  reg     [ 3:0]  pulse_counter = 8'b0;
   reg             cnvst_buf = 1'b0;
+  reg             cnvst_pulse = 1'b0;
+  reg     [ 2:0]  chsel_ff = 3'b0;
+
+  reg     [ 1:0]  up_hw_rngsel = 2'b0;
+  reg     [ 2:0]  up_chsel = 3'b0;
+  reg             up_crcen = 1'b0;
+  reg             up_burst = 1'b0;
+  reg     [ 2:0]  up_os = 3'b0;
+  reg             up_seq_en = 1'b0;
+
+
+  wire            up_rst;
+  wire            up_rreq_s;
+  wire            up_wreq_s;
+  wire            end_of_conv_s;
 
   // decode block select
 
+  assign up_wreq_s = (up_waddr[13:8] == 6'h01) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h01) ? up_rreq : 1'b0;
+
+  assign end_of_conv = end_of_conv_s;
 
   // processor write interface
 
@@ -130,9 +148,13 @@ module axi_ad7616_control (
       up_scratch <= 32'b0;
       up_resetn <= 1'b0;
       up_cnvst_en <= 1'b0;
-      up_ser1w <= 1'b0;
-      up_cnvst_high <= 8'b0;
       up_conv_rate <= 32'b0;
+      up_hw_rngsel <= 2'b0;
+      up_chsel <= 3'b0;
+      up_crcen <= 1'b0;
+      up_burst <= 1'b0;
+      up_os <= 3'b0;
+      up_seq_en <= 1'b0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
@@ -141,13 +163,21 @@ module axi_ad7616_control (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
         up_resetn <= up_wdata[0];
         up_cnvst_en <= up_wdata[1];
-        up_ser1w <= up_wdata[2];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
-        up_cnvst_high <= up_wdata[7:0];
+        up_conv_rate <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
-        up_conv_rate <= up_wdata;
+        up_hw_rngsel <= up_wdata[1:0];
+        up_os <= up_wdata[4:2];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h13)) begin
+        up_seq_en <= up_wdata[0];
+        up_burst <= up_wdata[1];
+        up_chsel <= up_wdata[4:2];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
+        up_crcen <= up_wdata[0];
       end
     end
   end
@@ -165,9 +195,11 @@ module axi_ad7616_control (
             8'h00 : up_rdata = PCORE_VERSION;
             8'h01 : up_rdata = ID;
             8'h02 : up_rdata = up_scratch;
-            8'h10 : up_rdata = {28'b0, up_ser1w, up_cnvst_en, up_resetn};
-            8'h11 : up_rdata = {24'b0, up_cnvst_high};
-            8'h12 : up_rdata = up_conv_rate;
+            8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
+            8'h11 : up_rdata = up_conv_rate;
+            8'h12 : up_rdata = {27'b0, up_os, up_hw_rngsel};
+            8'h13 : up_rdata = {27'b0, up_chsel, up_burst, up_seq_en};
+            8'h14 : up_rdata = {30'b0, up_crcen};
         endcase
       end
     end
@@ -175,52 +207,54 @@ module axi_ad7616_control (
 
   // instantiations
 
+  assign up_rst = ~up_rstn;
+
   ad_edge_detect #(
     .EDGE(NEG_EDGE)
   ) i_ad_edge_detect (
     .clk (up_clk),
-    .rstn (up_rstn),
+    .rst (up_rst),
     .in (busy),
-    .out (end_of_conv)
+    .out (end_of_conv_s)
   );
 
   // convertion start generator
-  // NOTE: The minimum convertion cycle is 1 us and the
-  //       minimum CNVST high pulse width is 20 ns.
-  //       See the AD7616 datasheet for more information.
+  // NOTE: + The minimum convertion cycle is 1 us
+  //       + The rate of the cnvst must be defined in a way,
+  //          to not lose any data. cnvst_rate >= t_conversion + t_aquisition
+  //  See the AD7616 datasheet for more information.
 
-  always @(posedge clk) begin
-    if(up_resetn == 0) begin
+  always @(posedge up_clk) begin
+    if(up_resetn == 1'b0) begin
       cnvst_counter <= 32'b0;
     end else begin
       cnvst_counter <= (cnvst_counter < up_conv_rate) ? cnvst_counter + 1 : 32'b0;
     end
   end
 
-  always @(cnvst_counter) begin
+  always @(cnvst_counter, up_conv_rate) begin
     cnvst_pulse <= (cnvst_counter == up_conv_rate) ? 1'b1 : 1'b0;
   end
 
-  always @(posedge clk) begin
+  always @(posedge up_clk) begin
     if(up_resetn == 1'b0) begin
-      pulse_counter <= 8'b0;
+      pulse_counter <= 3'b0;
       cnvst_buf <= 1'b0;
     end else begin
-      pulse_counter <= (cnvst == 1'b1) ? pulse_counter + 1 : 8'b0;
+      pulse_counter <= (cnvst == 1'b1) ? pulse_counter + 1 : 3'b0;
       if(cnvst_pulse == 1'b1) begin
         cnvst_buf <= 1'b1;
-      end else if (pulse_counter == up_cnvst_high) begin
+      end else if (pulse_counter[2] == 1'b1) begin
         cnvst_buf <= 1'b0;
       end
     end
   end
 
-  assign cnvst <= (up_cnvst_en == 1'b1) ? cnvst_buf : 1'b0;
+  assign cnvst = (up_cnvst_en == 1'b1) ? cnvst_buf : 1'b0;
 
   // output logic
 
   assign reset_n = up_resetn;       // device's reset
-  assign ser1w_n = ~up_ser1w;       // serial output operates over SDOA and SDOB OR just SDOA
 
   generate if (OP_MODE == SW) begin
 
@@ -232,6 +266,28 @@ module axi_ad7616_control (
     assign crcen = 1'b0;
     assign burst = 1'b0;
     assign os = 3'b0;
+
+  end
+  endgenerate
+
+  generate if (OP_MODE == HW) begin
+
+    assign hw_rngsel = up_hw_rngsel;
+    assign crcen = up_crcen;
+    assign burst = up_burst;
+    assign os = up_os;
+    assign seq_en = up_seq_en;
+    assign chsel = chsel_ff;
+
+    // CHSEL is updated after BUSY deasserts
+
+    always @(posedge up_clk) begin
+      if (up_rstn == 1'b0) begin
+        chsel_ff <= 3'b0;
+      end else begin
+        chsel_ff <= (end_of_conv_s == 1'b1) ? up_chsel : chsel_ff;
+      end
+    end
 
   end
   endgenerate

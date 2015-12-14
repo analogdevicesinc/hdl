@@ -63,7 +63,6 @@ module axi_ad7616 (
   hw_rngsel,
   chsel,
   crcen,
-  ser1w_n,
   burst,
   os,
 
@@ -106,10 +105,12 @@ module axi_ad7616 (
 
   // local parameters
 
-  localparam      SDI_DATA_WIDTH = 16;
+  localparam      DATA_WIDTH = 16;
+  localparam      NUM_OF_SDI = 2;
   localparam      SERIAL = 0;
   localparam      PARALLEL = 1;
   localparam      NEG_EDGE = 1;
+  localparam      UP_ADDRESS_WIDTH = 14;
 
   // IO definitions
 
@@ -131,7 +132,6 @@ module axi_ad7616 (
   output  [ 1:0]  hw_rngsel;
   output  [ 2:0]  chsel;
   output          crcen;
-  output          ser1w_n;
   output          burst;
   output  [ 2:0]  os;
 
@@ -163,26 +163,51 @@ module axi_ad7616 (
 
   // internal registers
 
-
   // internal signals
 
-  wire            up_clk;
-  wire            up_rstn;
-  wire            up_rst;
-  wire            up_rreq_s;
-  wire    [13:0]  up_raddr_s;
-  wire    [31:0]  up_rdata_s[0:2];
-  wire            up_rack_s[0:2];
-  wire            up_wack_s[0:2];
-  wire            up_wreq_s;
-  wire    [13:0]  up_waddr_s;
-  wire    [31:0]  up_wdata_s;
+  wire                              up_clk;
+  wire                              up_rstn;
+  wire                              up_rst;
+  wire                              up_rreq_s;
+  wire    [(UP_ADDRESS_WIDTH-1):0]  up_raddr_s;
+  wire                              up_wreq_s;
+  wire    [(UP_ADDRESS_WIDTH-1):0]  up_waddr_s;
+  wire    [31:0]                    up_wdata_s;
+
+  wire                              up_wack_if_s;
+  wire                              up_rack_if_s;
+  wire    [31:0]                    up_rdata_if_s;
+  wire                              up_wack_cntrl_s;
+  wire                              up_rack_cntrl_s;
+  wire    [31:0]                    up_rdata_cntrl_s;
+
+  wire                              trigger_s;
+
+  // internal registers
+
+  reg                               up_wack = 1'b0;
+  reg                               up_rack = 1'b0;
+  reg     [31:0]                    up_rdata = 32'b0;
 
   // defaults
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign up_rst = ~s_axi_aresetn;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+    end else begin
+      up_wack <= up_wack_if_s | up_wack_cntrl_s;
+      up_rack <= up_rack_if_s | up_rack_cntrl_s;
+      up_rdata <= up_rdata_if_s | up_rdata_cntrl_s;
+    end
+  end
 
   generate if (IF_TYPE == SERIAL) begin
 
@@ -192,77 +217,70 @@ module axi_ad7616 (
     assign rd_n = 1'b0;
     assign wr_n = 1'b0;
 
-    // all the SPI Framework instances and logic
+    // SPI Framework instances and logic
 
-    wire                          spi_resetn_s;
-    wire                          s0_cmd_ready_s;
-    wire                          s0_cmd_valid_s;
-    wire  [15:0]                  s0_cmd_data_s;
-    wire                          s0_sdo_data_ready_s;
-    wire                          s0_sdo_data_valid_s;
-    wire  [ 7:0]                  s0_sdo_data_s;
-    wire                          s0_sdi_data_ready_s;
-    wire                          s0_sdi_data_valid_s;
-    wire  [(SDI_DATA_WIDTH-1):0]  s0_sdi_data_s;
-    wire                          s0_sync_ready_s;
-    wire                          s0_sync_valid_s;
-    wire  [ 7:0]                  s0_sync_data_s;
-    wire                          s1_cmd_ready_s;
-    wire                          s1_cmd_valid_s;
-    wire  [15:0]                  s1_cmd_data_s;
-    wire                          s1_sdo_data_ready_s;
-    wire                          s1_sdo_data_valid_s;
-    wire  [ 7:0]                  s1_sdo_data_s;
-    wire                          s1_sdi_data_ready_s;
-    wire                          s1_sdi_data_valid_s;
-    wire  [(SDI_DATA_WIDTH-1):0]  s1_sdi_data_s;
-    wire                          s1_sync_ready_s;
-    wire                          s1_sync_valid_s;
-    wire  [ 7:0]                  s1_sync_data_s;
-    wire                          m_cmd_ready_s;
-    wire                          m_cmd_valid_s;
-    wire  [15:0]                  m_cmd_data_s;
-    wire                          m_sdo_data_ready_s;
-    wire                          m_sdo_data_valid_s;
-    wire  [ 7:0]                  m_sdo_data_s;
-    wire                          m_sdi_data_ready_s;
-    wire                          m_sdi_data_valid_s;
-    wire  [(SDI_DATA_WIDTH-1):0]  m_sdi_data_s;
-    wire                          m_sync_ready_s;
-    wire                          m_sync_valid_s;
-    wire  [ 7:0]                  m_sync_data_s;
-    wire                          offload0_cmd_wr_en_s;
-    wire                          offload0_cmd_wr_data_s;
-    wire                          offload0_sdo_wr_en_s;
-    wire                          offload0_sdo_wr_data_s;
-    wire                          offload0_mem_reset_s;
-    wire                          offload0_enable_s;
-    wire                          offload0_enabled_s;
-    wire                          trigger_s;
+    wire                                    spi_resetn_s;
+    wire                                    s0_cmd_ready_s;
+    wire                                    s0_cmd_valid_s;
+    wire  [15:0]                            s0_cmd_data_s;
+    wire                                    s0_sdo_data_ready_s;
+    wire                                    s0_sdo_data_valid_s;
+    wire  [(DATA_WIDTH-1):0]                s0_sdo_data_s;
+    wire                                    s0_sdi_data_ready_s;
+    wire                                    s0_sdi_data_valid_s;
+    wire  [(NUM_OF_SDI * DATA_WIDTH-1):0]   s0_sdi_data_s;
+    wire                                    s0_sync_ready_s;
+    wire                                    s0_sync_valid_s;
+    wire  [ 7:0]                            s0_sync_s;
+    wire                                    s1_cmd_ready_s;
+    wire                                    s1_cmd_valid_s;
+    wire  [15:0]                            s1_cmd_data_s;
+    wire                                    s1_sdo_data_ready_s;
+    wire                                    s1_sdo_data_valid_s;
+    wire  [(DATA_WIDTH-1):0]                s1_sdo_data_s;
+    wire                                    s1_sdi_data_ready_s;
+    wire                                    s1_sdi_data_valid_s;
+    wire  [(NUM_OF_SDI * DATA_WIDTH-1):0]   s1_sdi_data_s;
+    wire                                    s1_sync_ready_s;
+    wire                                    s1_sync_valid_s;
+    wire  [ 7:0]                            s1_sync_s;
+    wire                                    m_cmd_ready_s;
+    wire                                    m_cmd_valid_s;
+    wire  [15:0]                            m_cmd_data_s;
+    wire                                    m_sdo_data_ready_s;
+    wire                                    m_sdo_data_valid_s;
+    wire  [(DATA_WIDTH-1):0]                m_sdo_data_s;
+    wire                                    m_sdi_data_ready_s;
+    wire                                    m_sdi_data_valid_s;
+    wire  [(NUM_OF_SDI * DATA_WIDTH-1):0]   m_sdi_data_s;
+    wire                                    m_sync_ready_s;
+    wire                                    m_sync_valid_s;
+    wire  [ 7:0]                            m_sync_s;
+    wire                                    offload0_cmd_wr_en_s;
+    wire  [15:0]                            offload0_cmd_wr_data_s;
+    wire                                    offload0_sdo_wr_en_s;
+    wire  [(DATA_WIDTH-1):0]                offload0_sdo_wr_data_s;
+    wire                                    offload0_mem_reset_s;
+    wire                                    offload0_enable_s;
+    wire                                    offload0_enabled_s;
 
     axi_spi_engine #(
-      .SDI_DATA_WIDTH (SDI_DATA_WIDTH),
-      .NUM_OFFLOAD(1)
+      .DATA_WIDTH (DATA_WIDTH),
+      .NUM_OF_SDI (NUM_OF_SDI),
+      .NUM_OFFLOAD(1),
+      .MM_IF_TYPE(1),
+      .UP_ADDRESS_WIDTH (UP_ADDRESS_WIDTH)
     ) i_axi_spi_engine(
-      .s_axi_aclk (up_clk),
-      .s_axi_aresetn (up_rstn),
-      .s_axi_awvalid (s_axi_awvalid),
-      .s_axi_awaddr (s_axi_awaddr),
-      .s_axi_awready (s_axi_awready),
-      .s_axi_wvalid (s_axi_wvalid),
-      .s_axi_wdata (s_axi_wdata),
-      .s_axi_wstrb (s_axi_wstrb),
-      .s_axi_wready (s_axi_wready),
-      .s_axi_bvalid (s_axi_bvalid),
-      .s_axi_bresp (s_axi_bresp),
-      .s_axi_bready (s_axi_bready),
-      .s_axi_arvalid (s_axi_arvalid),
-      .s_axi_araddr (s_axi_araddr),
-      .s_axi_arready (s_axi_arready),
-      .s_axi_rvalid (s_axi_rvalid),
-      .s_axi_rready (s_axi_rready),
-      .s_axi_rresp (s_axi_rresp),
-      .s_axi_rdata (s_axi_rdata),
+      .up_clk (up_clk),
+      .up_rstn (up_rstn),
+      .up_wreq (up_wreq_s),
+      .up_waddr (up_waddr_s),
+      .up_wdata (up_wdata_s),
+      .up_wack (up_wack_if_s),
+      .up_rreq (up_rreq_s),
+      .up_raddr (up_raddr_s),
+      .up_rdata (up_rdata_if_s),
+      .up_rack (up_rack_if_s),
       .irq (irq),
       .spi_clk (up_clk),
       .spi_resetn (spi_resetn_s),
@@ -277,7 +295,7 @@ module axi_ad7616 (
       .sdi_data (s0_sdi_data_s),
       .sync_ready (s0_sync_ready_s),
       .sync_valid (s0_sync_valid_s),
-      .sync_data (s0_sync_data_s),
+      .sync_data (s0_sync_s),
       .offload0_cmd_wr_en (offload0_cmd_wr_en_s),
       .offload0_cmd_wr_data (offload0_cmd_wr_data_s),
       .offload0_sdo_wr_en (offload0_sdo_wr_en_s),
@@ -287,7 +305,8 @@ module axi_ad7616 (
       .offload0_enabled(offload0_enabled_s));
 
     spi_engine_offload #(
-      .SDI_DATA_WIDTH (SDI_DATA_WIDTH)
+      .DATA_WIDTH (DATA_WIDTH),
+      .NUM_OF_SDI (NUM_OF_SDI)
     ) i_spi_engine_offload(
       .ctrl_clk (up_clk),
       .ctrl_cmd_wr_en (offload0_cmd_wr_en_s),
@@ -311,24 +330,25 @@ module axi_ad7616 (
       .sdi_data (s1_sdi_data_s),
       .sync_valid (s1_sync_valid_s),
       .sync_ready (s1_sync_ready_s),
-      .sync_data (s1_sync_data_s),
+      .sync_data (s1_sync_s),
       .offload_sdi_valid (m_axis_tvalid),
       .offload_sdi_ready (m_axis_tready),
       .offload_sdi_data (m_axis_tdata));
 
     spi_engine_interconnect #(
-      .SDI_DATA_WIDTH (SDI_DATA_WIDTH)
+      .DATA_WIDTH (DATA_WIDTH),
+      .NUM_OF_SDI (NUM_OF_SDI)
     ) i_spi_engine_interconnect (
       .clk (up_clk),
       .resetn (spi_resetn_s),
       .m_cmd_valid (m_cmd_valid_s),
       .m_cmd_ready (m_cmd_ready_s),
       .m_cmd_data (m_cmd_data_s),
-      .m_sdo_valid (m_sdo_valid_s),
-      .m_sdo_ready (m_sdo_ready_s),
+      .m_sdo_valid (m_sdo_data_valid_s),
+      .m_sdo_ready (m_sdo_data_ready_s),
       .m_sdo_data (m_sdo_data_s),
-      .m_sdi_valid (m_sdi_valid_s),
-      .m_sdi_ready (m_sdi_ready_s),
+      .m_sdi_valid (m_sdi_data_valid_s),
+      .m_sdi_ready (m_sdi_data_ready_s),
       .m_sdi_data (m_sdi_data_s),
       .m_sync_valid (m_sync_valid_s),
       .m_sync_ready (m_sync_ready_s),
@@ -337,29 +357,30 @@ module axi_ad7616 (
       .s0_cmd_ready (s0_cmd_ready_s),
       .s0_cmd_data (s0_cmd_data_s),
       .s0_sdo_valid (s0_sdo_data_valid_s),
-      .s0_sdo_ready (s0_sdi_data_ready_s),
+      .s0_sdo_ready (s0_sdo_data_ready_s),
       .s0_sdo_data (s0_sdo_data_s),
       .s0_sdi_valid (s0_sdi_data_valid_s),
       .s0_sdi_ready (s0_sdi_data_ready_s),
       .s0_sdi_data (s0_sdi_data_s),
       .s0_sync_valid (s0_sync_valid_s),
       .s0_sync_ready (s0_sync_ready_s),
-      .s0_sync (s0_sync_data_s),
+      .s0_sync (s0_sync_s),
       .s1_cmd_valid (s1_cmd_valid_s),
       .s1_cmd_ready (s1_cmd_ready_s),
       .s1_cmd_data (s1_cmd_data_s),
-      .s1_sdo_valid (s1_sdo_valid_s),
-      .s1_sdo_ready (s1_sdo_ready_s),
+      .s1_sdo_valid (s1_sdo_data_valid_s),
+      .s1_sdo_ready (s1_sdo_data_ready_s),
       .s1_sdo_data (s1_sdo_data_s),
-      .s1_sdi_valid (s1_sdi_valid_s),
-      .s1_sdi_ready (s1_sdi_ready_s),
+      .s1_sdi_valid (s1_sdi_data_valid_s),
+      .s1_sdi_ready (s1_sdi_data_ready_s),
       .s1_sdi_data (s1_sdi_data_s),
       .s1_sync_valid (s1_sync_valid_s),
       .s1_sync_ready (s1_sync_ready_s),
       .s1_sync (s1_sync_s));
 
     spi_engine_execution #(
-      .SDI_DATA_WIDTH (SDI_DATA_WIDTH)
+      .DATA_WIDTH (DATA_WIDTH),
+      .NUM_OF_SDI (NUM_OF_SDI)
     ) i_spi_engine_execution (
       .clk (up_clk),
       .resetn (spi_resetn_s),
@@ -375,7 +396,7 @@ module axi_ad7616 (
       .sdi_data (m_sdi_data_s),
       .sync_ready (m_sync_ready_s),
       .sync_valid (m_sync_valid_s),
-      .sync (m_sync_data_s),
+      .sync (m_sync_s),
       .sclk (sclk),
       .sdo (sdo),
       .sdo_t (),
@@ -387,9 +408,10 @@ module axi_ad7616 (
       .three_wire ());
 
   end
+  endgenerate
 
   generate if (IF_TYPE == PARALLEL) begin
-
+    //assign trigger_s = 1'b0;
   end
   endgenerate
 
@@ -404,7 +426,6 @@ module axi_ad7616 (
     .hw_rngsel (hw_rngsel),
     .chsel (chsel),
     .crcen (crcen),
-    .ser1w_n (ser1w_n),
     .burst (burst),
     .os (os),
     .end_of_conv (trigger_s),
@@ -412,16 +433,18 @@ module axi_ad7616 (
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
     .up_waddr (up_waddr_s),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_cntrl_s),
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s),
-    .up_rack (up_rack_s));
+    .up_rdata (up_rdata_cntrl_s),
+    .up_rack (up_rack_cntrl_s));
 
   // up bus interface
 
-  up_axi i_up_axi (
+  up_axi #(
+    .ADDRESS_WIDTH (UP_ADDRESS_WIDTH)
+  ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),
