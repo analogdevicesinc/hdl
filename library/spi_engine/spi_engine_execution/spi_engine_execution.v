@@ -11,11 +11,12 @@ module spi_engine_execution (
 
   input sdo_data_valid,
   output reg sdo_data_ready,
-  input [7:0] sdo_data,
+  input [(DATA_WIDTH-1):0] sdo_data,
+
 
   input sdi_data_ready,
   output reg sdi_data_valid,
-  output [(SDI_DATA_WIDTH-1):0] sdi_data,
+  output [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
 
   input sync_ready,
   output reg sync_valid,
@@ -35,10 +36,9 @@ module spi_engine_execution (
 parameter NUM_OF_CS = 1;
 parameter DEFAULT_SPI_CFG = 0;
 parameter DEFAULT_CLK_DIV = 0;
-parameter SDI_DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
+parameter DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
+parameter NUM_OF_SDI = 1;
 
-
-localparam NUM_OF_SDI = SDI_DATA_WIDTH >> 3;
 localparam CMD_TRANSFER = 2'b00;
 localparam CMD_CHIPSELECT = 2'b01;
 localparam CMD_WRITE = 2'b10;
@@ -88,10 +88,10 @@ reg [7:0] clk_div = DEFAULT_CLK_DIV;
 wire sdo_enabled = cmd_d1[8];
 wire sdi_enabled = cmd_d1[9];
 
-reg [8:0] data_shift = 'h0;
-reg [8:0] data_shift_1 = 'h0;
-reg [8:0] data_shift_2 = 'h0;
-reg [8:0] data_shift_3 = 'h0;
+reg [(DATA_WIDTH):0] data_shift = 'h0;
+reg [(DATA_WIDTH):0] data_shift_1 = 'h0;
+reg [(DATA_WIDTH):0] data_shift_2 = 'h0;
+reg [(DATA_WIDTH):0] data_shift_3 = 'h0;
 
 wire [1:0] inst = cmd[13:12];
 wire [1:0] inst_d1 = cmd_d1[13:12];
@@ -287,45 +287,45 @@ end
 always @(posedge clk) begin
         if (transfer_active == 1'b1 || wait_for_io == 1'b1)
         begin
-                sdo_t <= ~sdo_enabled;
+          sdo_t <= ~sdo_enabled;
         end else begin
-                sdo_t <= 1'b1;
+          sdo_t <= 1'b1;
         end
 end
 
 always @(posedge clk) begin
         if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
                 if (first_bit == 1'b1)
-                        data_shift[8:1] <= sdo_data;
+                  data_shift[DATA_WIDTH:1] <= sdo_data;
                 else
-                        data_shift[8:1] <= data_shift[7:0];
-            data_shift_1[8:1] <= data_shift_1[7:0];
-            data_shift_2[8:1] <= data_shift_2[7:0];
-            data_shift_3[8:1] <= data_shift_3[7:0];
+                  data_shift[DATA_WIDTH:1] <= data_shift[(DATA_WIDTH-1):0];
+                  data_shift_1[DATA_WIDTH:1] <= data_shift_1[(DATA_WIDTH-1):0];
+                  data_shift_2[DATA_WIDTH:1] <= data_shift_2[(DATA_WIDTH-1):0];
+                  data_shift_3[DATA_WIDTH:1] <= data_shift_3[(DATA_WIDTH-1):0];
         end
 end
 
-assign sdo = data_shift[8];
-assign sdi_data = (NUM_OF_SDI == 1) ? data_shift[7:0] :
-                  (NUM_OF_SDI == 2) ? {data_shift_1[7:0], data_shift[7:0]} :
-                  (NUM_OF_SDI == 3) ? {data_shift_2[7:0], data_shift_1[7:0], data_shift[7:0]} :
-                  (NUM_OF_SDI == 4) ? {data_shift_3[7:0], data_shift_2[7:0], data_shift_1[7:0], data_shift[7:0]} :
+assign sdo = data_shift[DATA_WIDTH];
+assign sdi_data = (NUM_OF_SDI == 1) ? data_shift[(DATA_WIDTH-1):0] :
+                  (NUM_OF_SDI == 2) ? {data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
+                  (NUM_OF_SDI == 3) ? {data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
+                  (NUM_OF_SDI == 4) ? {data_shift_3[(DATA_WIDTH-1):0], data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
                   data_shift[7:0];
 
 always @(posedge clk) begin
         if (trigger_rx == 1'b1) begin
-                data_shift[0] <= sdi;
-        data_shift_1[0] <= sdi_1;
-        data_shift_2[0] <= sdi_2;
-        data_shift_3[0] <= sdi_3;
+          data_shift[0] <= sdi;
+          data_shift_1[0] <= sdi_1;
+          data_shift_2[0] <= sdi_2;
+          data_shift_3[0] <= sdi_3;
         end
 end
 
 always @(posedge clk) begin
         if (transfer_active == 1'b1) begin
-                sclk <= cpol ^ cpha ^ ntx_rx;
+          sclk <= cpol ^ cpha ^ ntx_rx;
         end else begin
-                sclk <= cpol;
+          sclk <= cpol;
         end
 end
 
