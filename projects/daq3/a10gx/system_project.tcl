@@ -77,6 +77,7 @@ set_location_assignment PIN_AR17  -to sysref                ; ## D17  FMCA_LA13_
 set_location_assignment PIN_AP17  -to "sysref(n)"           ; ## D18  FMCA_LA13_N
 
 set_instance_assignment -name IO_STANDARD LVDS -to trig
+set_instance_assignment -name IO_STANDARD LVDS -to sysref
 
 # spi
 
