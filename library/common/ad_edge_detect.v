@@ -57,7 +57,7 @@ module ad_edge_detect (
   localparam  ANY_EDGE = 2;
 
   input       clk;
-  input       rstn;
+  input       rst;
 
   input       in;
   output      out;
@@ -65,8 +65,10 @@ module ad_edge_detect (
   reg         ff_m1 = 0;
   reg         ff_m2 = 0;
 
+  reg         out = 0;
+
   always @(posedge clk) begin
-    if (rstn == 1) begin
+    if (rst == 1) begin
       ff_m1 <= 0;
       ff_m2 <= 0;
     end else begin
@@ -75,15 +77,19 @@ module ad_edge_detect (
     end
   end
 
-  generate
-    if (EDGE == POS_EDGE) begin
-      assign out = ff_m1 & ~ff_m2;
-    end else if (EDGE == NEG_EDGE) begin
-      assign out = ~ff_m1 & ff_m2;
+  always @(posedge clk) begin
+    if (rst == 1) begin
+      out <= 1'b0;
     end else begin
-      assign out = ff_m1 ^ ff_m2;
+      if (EDGE == POS_EDGE) begin
+        out <= ff_m1 & ~ff_m2;
+      end else if (EDGE == NEG_EDGE) begin
+        out <= ~ff_m1 & ff_m2;
+      end else begin
+        out <= ff_m1 ^ ff_m2;
+      end
     end
-  endgenerate
+  end
 
 endmodule
 
