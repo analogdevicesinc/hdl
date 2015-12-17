@@ -338,19 +338,17 @@ module system_top (
     .O (gt_ref_clk_1),
     .ODIV2 ());
 
-  assign gp_out_0 = gp_out_s[58:58];
-  assign gp_out[56:35] = gp_out_s[57:36];
-  assign gp_out[34: 0] = gp_out_s[34: 0];
+  assign gp_out_0 = 1'd0;
+  assign gp_out[56:0] = gp_out_s[56:0];
 
   assign gp_in_s[63:63] = gp_in_0;
-  assign gp_in_s[58:58] = 1'd0;
-  assign gp_in_s[57:36] = gp_in[56:35];
-  assign gp_in_s[35:35] = gp_out_s[62] & gpio_tdd_sync_i;
-  assign gp_in_s[34: 0] = gp_in[34: 0];
+  assign gp_in_s[62:58] = gp_out_s[62:58];
+  assign gp_in_s[57:57] = gp_out_s[62] & gpio_tdd_sync_i;
+  assign gp_in_s[56: 0] = gp_in[56:0];
 
   ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_35_0 (
     .dio_t (1'b0),
-    .dio_i (gp_out_s[35]),
+    .dio_i (gp_out_s[57]),
     .dio_o (),
     .dio_p (gp_inout_0));
 
