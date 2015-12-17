@@ -98,9 +98,9 @@ module system_top (
   clk_1_p,
   clk_1_n,
   gp_in_0,
-  gp_out_0,
   gp_inout_0,
   gp_inout_1,
+  gp_inout,
   gp_out,
   gp_in,
 
@@ -220,11 +220,11 @@ module system_top (
   input           clk_1_p;
   input           clk_1_n;
   input           gp_in_0;
-  output          gp_out_0;
   inout           gp_inout_0;
   inout           gp_inout_1;
-  output  [56:0]  gp_out;
-  input   [56:0]  gp_in;
+  inout   [ 6:0]  gp_inout;
+  output  [53:0]  gp_out;
+  input   [53:0]  gp_in;
 
   input           gt_ref_clk_0_p;
   input           gt_ref_clk_0_n;
@@ -292,6 +292,7 @@ module system_top (
   wire            clk_1;
   wire            gt_ref_clk_0;
   wire            gt_ref_clk_1;
+  wire    [63:0]  gp_ioenb_s;
   wire    [63:0]  gp_out_s;
   wire    [63:0]  gp_in_s;
   wire    [63:0]  gpio_i;
@@ -338,21 +339,26 @@ module system_top (
     .O (gt_ref_clk_1),
     .ODIV2 ());
 
-  assign gp_out_0 = 1'd0;
-  assign gp_out[56:0] = gp_out_s[56:0];
+  assign gp_out[53:0] = gp_out_s[53:0];
+  assign gp_in_s[53:0] = gp_in[53:0];
 
   assign gp_in_s[63:63] = gp_in_0;
-  assign gp_in_s[62:58] = gp_out_s[62:58];
-  assign gp_in_s[57:57] = gp_out_s[62] & gpio_tdd_sync_i;
-  assign gp_in_s[56: 0] = gp_in[56:0];
+  assign gp_in_s[62:62] = gp_out_s[62];
+  assign gp_in_s[54:54] = gp_out_s[62] & gpio_tdd_sync_i;
 
-  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_35_0 (
+  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf_61_55 (
+    .dio_t (gp_ioenb_s[61:55]),
+    .dio_i (gp_out_s[61:55]),
+    .dio_o (gp_in_s[61:55]),
+    .dio_p (gp_inout));
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_54_0 (
     .dio_t (1'b0),
-    .dio_i (gp_out_s[57]),
+    .dio_i (gp_out_s[54]),
     .dio_o (),
     .dio_p (gp_inout_0));
 
-  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_35_1 (
+  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_54_1 (
     .dio_t (gpio_tdd_sync_t),
     .dio_i (gpio_tdd_sync_o),
     .dio_o (gpio_tdd_sync_i),
@@ -432,6 +438,8 @@ module system_top (
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
     .gp_in_0 (gp_in_s[31:0]),
     .gp_in_1 (gp_in_s[63:32]),
+    .gp_ioenb_0 (gp_ioenb_s[31:0]),
+    .gp_ioenb_1 (gp_ioenb_s[63:32]),
     .gp_out_0 (gp_out_s[31:0]),
     .gp_out_1 (gp_out_s[63:32]),
     .gpio_i (gpio_i),
