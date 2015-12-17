@@ -260,11 +260,15 @@ create_bd_port -dir I -from 31 -to 0 gp_in_0
 create_bd_port -dir I -from 31 -to 0 gp_in_1
 create_bd_port -dir O -from 31 -to 0 gp_out_0
 create_bd_port -dir O -from 31 -to 0 gp_out_1
+create_bd_port -dir O -from 31 -to 0 gp_ioenb_0
+create_bd_port -dir O -from 31 -to 0 gp_ioenb_1
 
 ad_connect  gp_in_0 axi_gpreg/up_gp_in_0
 ad_connect  gp_in_1 axi_gpreg/up_gp_in_1
 ad_connect  gp_out_0 axi_gpreg/up_gp_out_0
 ad_connect  gp_out_1 axi_gpreg/up_gp_out_1
+ad_connect  gp_ioenb_0 axi_gpreg/up_gp_ioenb_0
+ad_connect  gp_ioenb_1 axi_gpreg/up_gp_ioenb_1
 ad_connect  axi_gpreg/up_gp_in_2 util_pzslb_gtlb_0/up_gp_out
 ad_connect  axi_gpreg/up_gp_out_2 util_pzslb_gtlb_0/up_gp_in
 ad_connect  axi_gpreg/up_gp_in_3 util_pzslb_gtlb_1/up_gp_out
