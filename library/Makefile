@@ -11,6 +11,7 @@ all: lib
 
 clean:
 	make -C axi_ad6676 clean
+	make -C axi_ad7616 clean
 	make -C axi_ad9122 clean
 	make -C axi_ad9144 clean
 	make -C axi_ad9152 clean
@@ -61,6 +62,7 @@ clean:
 	make -C util_gtlb clean
 	make -C util_i2c_mixer clean
 	make -C util_jesd_gt clean
+	make -C util_mfifo clean
 	make -C util_pmod_adc clean
 	make -C util_pmod_fmeter clean
 	make -C util_rfifo clean
@@ -74,6 +76,7 @@ clean-all:clean
 
 lib:
 	-make -C axi_ad6676
+	-make -C axi_ad7616
 	-make -C axi_ad9122
 	-make -C axi_ad9144
 	-make -C axi_ad9152
@@ -124,6 +127,7 @@ lib:
 	-make -C util_gtlb
 	-make -C util_i2c_mixer
 	-make -C util_jesd_gt
+	-make -C util_mfifo
 	-make -C util_pmod_adc
 	-make -C util_pmod_fmeter
 	-make -C util_rfifo
