@@ -55,6 +55,11 @@ proc adi_project_create {project_name {mode 0}} {
     set p_board "em.avnet.com:zed:part0:1.3"
     set sys_zynq 1
   }
+  if [regexp "_microzed$" $project_name] {
+    set p_device "xc7z010clg400-1"
+    set p_board "not-applicable"
+    set sys_zynq 1
+  }
   if [regexp "_zc702$" $project_name] {
     set p_device "xc7z020clg484-1"
     set p_board "xilinx.com:zc702:part0:1.2"
