@@ -32,7 +32,7 @@ create_bd_port -dir O -from 63 -to 0 gpio_t
 # instance: sys_ps7
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 sys_ps7]
-source $ad_hdl_dir/projects/common/uzed/uzed_system_ps7.tcl
+source $ad_hdl_dir/projects/common/microzed/microzed_system_ps7.tcl
 set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {64}] $sys_ps7
