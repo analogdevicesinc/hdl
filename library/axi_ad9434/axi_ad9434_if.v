@@ -242,6 +242,7 @@ module axi_ad9434_if (
       adc_status <= 1'b0;
     end else begin
       adc_status_m1 <= up_drp_locked & delay_locked;
+      adc_status <= adc_status_m1;
     end
   end
 
