@@ -72,7 +72,6 @@ module axi_ad9680_channel (
 
   // parameters
 
-  parameter Q_OR_I_N = 0;
   parameter CHANNEL_ID = 0;
 
   // adc interface
