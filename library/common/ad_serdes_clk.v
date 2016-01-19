@@ -115,6 +115,7 @@ module ad_serdes_clk (
     .MMCM_CLK1_DIV (MMCM_CLK1_DIV))
   i_mmcm_drp (
     .clk (clk_in_s),
+    .clk_sel (1'b1),
     .mmcm_rst (mmcm_rst),
     .mmcm_clk_0 (clk),
     .mmcm_clk_1 (div_clk),
