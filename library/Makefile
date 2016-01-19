@@ -25,6 +25,7 @@ clean:
 	make -C axi_ad9652 clean
 	make -C axi_ad9671 clean
 	make -C axi_ad9680 clean
+	make -C axi_ad9684 clean
 	make -C axi_ad9739a clean
 	make -C axi_adcfifo clean
 	make -C axi_clkgen clean
@@ -91,6 +92,7 @@ lib:
 	-make -C axi_ad9652
 	-make -C axi_ad9671
 	-make -C axi_ad9680
+	-make -C axi_ad9684
 	-make -C axi_ad9739a
 	-make -C axi_adcfifo
 	-make -C axi_clkgen
