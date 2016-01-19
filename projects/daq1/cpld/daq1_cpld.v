@@ -113,6 +113,7 @@ module daq1_cpld (
   localparam  [ 6:0]  ADC_CONTROL_ADDR    = 7'h00;
   localparam  [ 6:0]  DAC_CONTROL_ADDR    = 7'h01;
   localparam  [ 6:0]  CLK_CONTROL_ADDR    = 7'h02;
+  localparam  [ 6:0]  IRQ_MASK_ADDR       = 7'h03;
   localparam  [ 6:0]  ADC_STATUS_ADDR     = 7'h10;
   localparam  [ 6:0]  DAC_STATUS_ADDR     = 7'h11;
   localparam  [ 6:0]  CLK_STATUS_ADDR     = 7'h12;
@@ -137,6 +138,8 @@ module daq1_cpld (
   reg           cpld_rdata_bit = 1'b0;
   reg    [ 2:0] cpld_rdata_index = 3'h0;
   reg    [ 7:0] cpld_wdata = 8'b0;
+  reg    [ 7:0] cpld_irq_mask = 8'b0;
+  reg    [ 7:0] cpld_irq = 8'b0;
 
   wire          rdnwr;
   wire          cpld_rdata_s;
@@ -199,6 +202,8 @@ module daq1_cpld (
         cpld_rdata <= dac_resetn;
       CLK_CONTROL_ADDR :
         cpld_rdata <= {clk_syncn, clk_resetn, clk_pwdnn};
+      IRQ_MASK_ADDR:
+        cpld_rdata <= cpld_irq_mask;
       ADC_STATUS_ADDR  :
         cpld_rdata <= {adc_status_p, adc_fdb, adc_fda};
       DAC_STATUS_ADDR  :
@@ -235,6 +240,8 @@ module daq1_cpld (
           dac_control <= cpld_wdata;
         CLK_CONTROL_ADDR :
           clk_control <= cpld_wdata;
+        IRQ_MASK_ADDR:
+          cpld_irq_mask <= cpld_wdata;
       endcase
     end
   end
@@ -265,7 +272,13 @@ module daq1_cpld (
   assign clk_resetn = clk_control[1];
   assign clk_syncn = clk_control[2];
 
-  assign fmc_irq = dac_irqn;
+  // interrupt logic
+
+  always @(*) begin
+    cpld_irq <= {2'b00, dac_irqn, clk_status2, clk_status1, adc_status_p, adc_fdb, adc_fda};
+  end
+  
+  assign fmc_irq = |(~cpld_irq_mask & cpld_irq);
 
 endmodule
 
