@@ -1,23 +1,6 @@
 
-##--------------------------------------------------------------
-# IMPORTANT: Set AD7616 operation and interface mode
-#
-#    ad7616_opm - Defines the operation mode (software OR hardware)
-#    ad7616_if  - Defines the interface type (serial OR parallel)
-#
-# LEGEND: Software  - 0
-#         Hardware  - 1
-#         Serial    - 0
-#         Parallel  - 1
-#
-# NOTE : These switches are 'hardware' switches. User needs to
-# reimplement the design each and every time, after these variables
-# were changed.
-
-set ad7616_opm  0
-set ad7616_if   0
-
-##--------------------------------------------------------------
+global ad7616_if
+global ad7616_opm
 
 # data interfaces
 
@@ -76,10 +59,6 @@ if {$ad7616_if == 0} {
   ad_connect  crcen axi_ad7616/crcen
   ad_connect  burst axi_ad7616/burst
   ad_connect  os axi_ad7616/os
-
-  ad_connect  db_o GND
-  ad_connect  wr_n GND
-  ad_connect  rd_n GND
 
 } else {
 
