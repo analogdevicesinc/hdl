@@ -50,19 +50,22 @@ localparam MISC_SLEEP = 1'b1;
 localparam REG_CLK_DIV = 1'b0;
 localparam REG_CONFIG = 1'b1;
 
+localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
+                               DATA_WIDTH > 8  ? 4 : 3;
+
 reg idle;
 
 reg [7:0] clk_div_counter = 'h00;
 reg [7:0] clk_div_counter_next = 'h00;
 reg clk_div_last;
 
-reg [11:0] counter = 'h00;
+reg [(BIT_COUNTER_WIDTH+8):0] counter = 'h00;
 
-wire [7:0] sleep_counter = counter[11:4];
-wire [1:0] cs_sleep_counter = counter[5:4];
-wire [2:0] cs_sleep_counter2 = counter[6:4];
-wire [2:0] bit_counter = counter[3:1];
-wire [7:0] transfer_counter = counter[11:4];
+wire [7:0] sleep_counter = counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)];
+wire [1:0] cs_sleep_counter = counter[(BIT_COUNTER_WIDTH+2):(BIT_COUNTER_WIDTH+1)];
+wire [2:0] cs_sleep_counter2 = counter[(BIT_COUNTER_WIDTH+3):(BIT_COUNTER_WIDTH+1)];
+wire [(BIT_COUNTER_WIDTH-1):0] bit_counter = counter[BIT_COUNTER_WIDTH:1];
+wire [7:0] transfer_counter = counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)];
 wire ntx_rx = counter[0];
 
 reg trigger = 1'b0;
@@ -76,7 +79,7 @@ reg last_transfer;
 wire end_of_word;
 
 assign first_bit = bit_counter == 'h0;
-assign last_bit = bit_counter == 'h7;
+assign last_bit = bit_counter == DATA_WIDTH - 1;
 assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
 
 reg [15:0] cmd_d1;
