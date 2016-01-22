@@ -38,3 +38,4 @@ set_property  -dict {PACKAGE_PIN  L42  IOSTANDARD LVCMOS18} [get_ports adc_fd]  
 # clocks
 
 create_clock -name rx_ref_clk   -period  1.60 [get_ports rx_ref_clk_p]
+create_clock -name rx_div_clk   -period  6.40 [get_pins i_system_wrapper/system_i/axi_ad9625_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
