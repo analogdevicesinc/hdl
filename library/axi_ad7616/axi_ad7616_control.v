@@ -43,15 +43,8 @@ module axi_ad7616_control (
 
   // control signals
 
-  reset_n,
   cnvst,
   busy,
-  seq_en,
-  hw_rngsel,
-  chsel,
-  crcen,
-  burst,
-  os,
 
   end_of_conv,
 
@@ -79,15 +72,8 @@ module axi_ad7616_control (
   localparam  POS_EDGE = 0;
   localparam  NEG_EDGE = 1;
 
-  output          reset_n;
   output          cnvst;
   input           busy;
-  output          seq_en;
-  output  [ 1:0]  hw_rngsel;
-  output  [ 2:0]  chsel;
-  output          crcen;
-  output          burst;
-  output  [ 2:0]  os;
 
   output          end_of_conv;
 
@@ -120,14 +106,6 @@ module axi_ad7616_control (
   reg             cnvst_pulse = 1'b0;
   reg     [ 2:0]  chsel_ff = 3'b0;
 
-  reg     [ 1:0]  up_hw_rngsel = 2'b0;
-  reg     [ 2:0]  up_chsel = 3'b0;
-  reg             up_crcen = 1'b0;
-  reg             up_burst = 1'b0;
-  reg     [ 2:0]  up_os = 3'b0;
-  reg             up_seq_en = 1'b0;
-
-
   wire            up_rst;
   wire            up_rreq_s;
   wire            up_wreq_s;
@@ -149,12 +127,6 @@ module axi_ad7616_control (
       up_resetn <= 1'b0;
       up_cnvst_en <= 1'b0;
       up_conv_rate <= 32'b0;
-      up_hw_rngsel <= 2'b0;
-      up_chsel <= 3'b0;
-      up_crcen <= 1'b0;
-      up_burst <= 1'b0;
-      up_os <= 3'b0;
-      up_seq_en <= 1'b0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
@@ -166,18 +138,6 @@ module axi_ad7616_control (
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
         up_conv_rate <= up_wdata;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
-        up_hw_rngsel <= up_wdata[1:0];
-        up_os <= up_wdata[4:2];
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h13)) begin
-        up_seq_en <= up_wdata[0];
-        up_burst <= up_wdata[1];
-        up_chsel <= up_wdata[4:2];
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
-        up_crcen <= up_wdata[0];
       end
     end
   end
@@ -197,9 +157,6 @@ module axi_ad7616_control (
             8'h02 : up_rdata = up_scratch;
             8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
             8'h11 : up_rdata = up_conv_rate;
-            8'h12 : up_rdata = {27'b0, up_os, up_hw_rngsel};
-            8'h13 : up_rdata = {27'b0, up_chsel, up_burst, up_seq_en};
-            8'h14 : up_rdata = {30'b0, up_crcen};
         endcase
       end
     end
@@ -251,46 +208,6 @@ module axi_ad7616_control (
   end
 
   assign cnvst = (up_cnvst_en == 1'b1) ? cnvst_buf : 1'b0;
-
-  // output logic
-
-  assign reset_n = up_resetn;       // device's reset
-
-  generate if (OP_MODE == SW) begin
-
-    // ground all the unused control signals
-
-    assign seq_en = 1'b0;
-    assign hw_rngsel = 2'b0;
-    assign chsel = 3'b0;
-    assign crcen = 1'b0;
-    assign burst = 1'b0;
-    assign os = 3'b0;
-
-  end
-  endgenerate
-
-  generate if (OP_MODE == HW) begin
-
-    assign hw_rngsel = up_hw_rngsel;
-    assign crcen = up_crcen;
-    assign burst = up_burst;
-    assign os = up_os;
-    assign seq_en = up_seq_en;
-    assign chsel = chsel_ff;
-
-    // CHSEL is updated after BUSY deasserts
-
-    always @(posedge up_clk) begin
-      if (up_rstn == 1'b0) begin
-        chsel_ff <= 3'b0;
-      end else begin
-        chsel_ff <= (end_of_conv_s == 1'b1) ? up_chsel : chsel_ff;
-      end
-    end
-
-  end
-  endgenerate
 
 endmodule
 

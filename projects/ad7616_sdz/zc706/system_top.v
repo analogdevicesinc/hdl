@@ -153,6 +153,18 @@ module system_top (
 
   // instantiations
 
+  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf (
+    .dio_t (gpio_t[43:32]),
+    .dio_i (gpio_o[43:32]),
+    .dio_o (gpio_i[43:32]),
+    .dio_p ({adc_reset_n,        // 43
+             adc_hw_rngsel,      // 42:41
+             adc_os,             // 40:38
+             adc_seq_en,         // 37
+             adc_burst,          // 36
+             adc_chsel,          // 35:33
+             adc_crcen}));       // 32
+
   ad_iobuf #(
     .DATA_WIDTH(15)
   ) i_gpio_bd (
@@ -210,16 +222,9 @@ module system_top (
     .sdo (spi_sdo),
     .sdi_0 (spi_sdi_0),
     .sdi_1 (spi_sdi_1),
-    .reset_n (adc_reset_n),
     .cnvst (adc_convst),
     .cs_n (spi_cs_n),
-    .busy (adc_busy),
-    .seq_en (adc_seq_en),
-    .hw_rngsel (adc_hw_rngsel),
-    .chsel (adc_chsel),
-    .crcen (adc_crcen),
-    .burst (adc_burst),
-    .os (adc_os));
+    .busy (adc_busy));
 
 endmodule
 

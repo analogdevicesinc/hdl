@@ -51,20 +51,14 @@ module axi_ad7616 (
 
   db_o,
   db_i,
+  db_t,
   rd_n,
   wr_n,
 
   // physical control interface
 
-  reset_n,
   cnvst,
   busy,
-  seq_en,
-  hw_rngsel,
-  chsel,
-  crcen,
-  burst,
-  os,
 
   // AXI Slave Memory Map
 
@@ -122,18 +116,12 @@ module axi_ad7616 (
 
   output  [15:0]  db_o;
   input   [15:0]  db_i;
+  output          db_t;
   output          rd_n;
   output          wr_n;
 
-  output          reset_n;
   output          cnvst;
   input           busy;
-  output          seq_en;
-  output  [ 1:0]  hw_rngsel;
-  output  [ 2:0]  chsel;
-  output          crcen;
-  output          burst;
-  output  [ 2:0]  os;
 
   input           s_axi_aclk;
   input           s_axi_aresetn;
@@ -419,15 +407,8 @@ module axi_ad7616 (
     .ID(ID),
     .OP_MODE (OP_MODE)
   ) i_ad7616_control (
-    .reset_n (reset_n),
     .cnvst (cnvst),
     .busy (busy),
-    .seq_en (seq_en),
-    .hw_rngsel (hw_rngsel),
-    .chsel (chsel),
-    .crcen (crcen),
-    .burst (burst),
-    .os (os),
     .end_of_conv (trigger_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),

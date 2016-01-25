@@ -16,16 +16,9 @@ create_bd_port -dir O wr_n
 
 # control lines
 
-create_bd_port -dir O reset_n
 create_bd_port -dir O cnvst
 create_bd_port -dir O cs_n
 create_bd_port -dir I busy
-create_bd_port -dir O seq_en
-create_bd_port -dir O -from 1 -to 0 hw_rngsel
-create_bd_port -dir O -from 2 -to 0 chsel
-create_bd_port -dir O crcen
-create_bd_port -dir O burst
-create_bd_port -dir O -from 2 -to 0 os
 
 # instantiation
 
@@ -50,15 +43,8 @@ if {$ad7616_if == 0} {
   ad_connect  sdi_1 axi_ad7616/sdi_1
   ad_connect  cs_n axi_ad7616/cs_n
 
-  ad_connect  reset_n axi_ad7616/reset_n
   ad_connect  cnvst axi_ad7616/cnvst
   ad_connect  busy axi_ad7616/busy
-  ad_connect  seq_en axi_ad7616/seq_en
-  ad_connect  hw_rngsel axi_ad7616/hw_rngsel
-  ad_connect  chsel axi_ad7616/chsel
-  ad_connect  crcen axi_ad7616/crcen
-  ad_connect  burst axi_ad7616/burst
-  ad_connect  os axi_ad7616/os
 
 } else {
 
