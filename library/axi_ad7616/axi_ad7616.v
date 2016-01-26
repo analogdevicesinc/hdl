@@ -94,7 +94,6 @@ module axi_ad7616 (
   // parameters
 
   parameter       ID = 0;
-  parameter       OP_MODE = 0;
   parameter       IF_TYPE = 0;
 
   // local parameters
@@ -404,8 +403,7 @@ module axi_ad7616 (
   endgenerate
 
   axi_ad7616_control #(
-    .ID(ID),
-    .OP_MODE (OP_MODE)
+    .ID(ID)
   ) i_ad7616_control (
     .cnvst (cnvst),
     .busy (busy),

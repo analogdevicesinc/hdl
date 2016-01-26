@@ -64,7 +64,6 @@ module axi_ad7616_control (
 );
 
   parameter   ID = 0;
-  parameter   OP_MODE = 0;
 
   localparam  PCORE_VERSION = 'h0001001;
   localparam  SW = 0;

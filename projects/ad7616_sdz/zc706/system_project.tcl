@@ -21,7 +21,6 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##--------------------------------------------------------------
 
 set ad7616_if   0
-set ad7616_opm  0
 
 adi_project_create ad7616_sdz_zc706
 

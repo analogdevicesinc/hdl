@@ -1,6 +1,5 @@
 
 global ad7616_if
-global ad7616_opm
 
 # data interfaces
 
@@ -23,7 +22,6 @@ create_bd_port -dir I busy
 # instantiation
 
 set axi_ad7616 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad7616:1.0 axi_ad7616]
-set_property -dict [list CONFIG.OP_MODE $ad7616_opm] $axi_ad7616
 set_property -dict [list CONFIG.IF_TYPE $ad7616_if] $axi_ad7616
 
 set axi_ad7616_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad7616_dma]
