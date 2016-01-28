@@ -5,8 +5,8 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS += system_top.v
-M_DEPS += system_top.v
+M_DEPS += system_top_si.v
+M_DEPS += system_top_pi.v
 M_DEPS += system_project.tcl
 M_DEPS += system_bd.tcl
 M_DEPS += serial_if_constr.xdc
@@ -38,8 +38,6 @@ M_FLIST += *.runs
 M_FLIST += *.srcs
 M_FLIST += *.sdk
 M_FLIST += .Xil
-M_FLIST += *.hw
-M_FLIST += *.sim
 
 
 
