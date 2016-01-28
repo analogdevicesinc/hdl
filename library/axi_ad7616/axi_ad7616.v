@@ -99,7 +99,7 @@ module axi_ad7616 (
 
   // local parameters
 
-  localparam      DATA_WIDTH = 16;
+  localparam      DATA_WIDTH = 8;
   localparam      NUM_OF_SDI = 2;
   localparam      SERIAL = 0;
   localparam      PARALLEL = 1;
