@@ -6,12 +6,9 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##--------------------------------------------------------------
 # IMPORTANT: Set AD7616 operation and interface mode
 #
-#    ad7616_opm - Defines the operation mode (software OR hardware)
 #    ad7616_if  - Defines the interface type (serial OR parallel)
 #
-# LEGEND: Software  - 0
-#         Hardware  - 1
-#         Serial    - 0
+# LEGEND: Serial    - 0
 #         Parallel  - 1
 #
 # NOTE : These switches are 'hardware' switches. User needs to
@@ -28,7 +25,7 @@ if { $ad7616_if == 0 } {
 
   adi_project_files ad7616_sdz_zc706 [list \
     "$ad_hdl_dir/library/common/ad_iobuf.v" \
-    "system_top.v" \
+    "system_top_si.v" \
     "serial_if_constr.xdc" \
     "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc"]
 
@@ -36,7 +33,7 @@ if { $ad7616_if == 0 } {
 
   adi_project_files ad7616_sdz_zc706 [list \
     "$ad_hdl_dir/library/common/ad_iobuf.v" \
-    "system_top.v" \
+    "system_top_pi.v" \
     "parallel_if_constr.xdc" \
     "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc"]
 

@@ -10,6 +10,7 @@ create_bd_port -dir I sdi_1
 
 create_bd_port -dir O -from 15 -to 0 db_o
 create_bd_port -dir I -from 15 -to 0 db_i
+create_bd_port -dir O db_t
 create_bd_port -dir O rd_n
 create_bd_port -dir O wr_n
 
@@ -46,10 +47,22 @@ if {$ad7616_if == 0} {
 
 } else {
 
+  ad_connect  db_o axi_ad7616/db_o
+  ad_connect  db_i axi_ad7616/db_i
+  ad_connect  db_t axi_ad7616/db_t
+  ad_connect  rd_n axi_ad7616/rd_n
+  ad_connect  wr_n axi_ad7616/wr_n
+
+  ad_connect  cs_n axi_ad7616/cs_n
+  ad_connect  cnvst axi_ad7616/cnvst
+  ad_connect  busy axi_ad7616/busy
+
+
 }
 
-ad_connect  axi_ad7616/m_axis axi_ad7616_dma/s_axis
 ad_connect  sys_cpu_clk axi_ad7616_dma/s_axis_aclk
+ad_connect  axi_ad7616/m_axis axi_ad7616_dma/s_axis
+ad_connect  axi_ad7616/m_axis_xfer_req axi_ad7616_dma/s_axis_xfer_req
 
 # interconnect
 
