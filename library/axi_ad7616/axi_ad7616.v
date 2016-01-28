@@ -87,6 +87,7 @@ module axi_ad7616 (
   m_axis_tdata,
   m_axis_tvalid,
   m_axis_tready,
+  m_axis_xfer_req,
 
   irq
 );
@@ -94,7 +95,7 @@ module axi_ad7616 (
   // parameters
 
   parameter       ID = 0;
-  parameter       IF_TYPE = 0;
+  parameter       IF_TYPE = 1;
 
   // local parameters
 
@@ -145,6 +146,7 @@ module axi_ad7616 (
   output  [31:0]  m_axis_tdata;
   input           m_axis_tready;
   output          m_axis_tvalid;
+  input           m_axis_xfer_req;
 
   output          irq;
 
@@ -169,6 +171,13 @@ module axi_ad7616 (
   wire    [31:0]                    up_rdata_cntrl_s;
 
   wire                              trigger_s;
+
+  wire                              rd_req_s;
+  wire                              wr_req_s;
+  wire    [15:0]                    wr_data_s;
+  wire    [15:0]                    rd_data_s;
+  wire                              rd_dvalid_s;
+  wire    [ 4:0]                    burst_length_s;
 
   // internal registers
 
@@ -395,18 +404,56 @@ module axi_ad7616 (
       .three_wire ());
 
   end
+
   endgenerate
 
   generate if (IF_TYPE == PARALLEL) begin
-    //assign trigger_s = 1'b0;
+
+    assign sclk = 1'h0;
+    assign sdo = 1'h0;
+    assign irq = 1'h0;
+
+    assign up_wack_if_s = 1'h0;
+    assign up_rack_if_s = 1'h0;
+    assign up_rdata_if_s = 1'h0;
+
+    axi_ad7616_pif i_ad7616_parallel_interface (
+      .cs_n(cs_n),
+      .db_o(db_o),
+      .db_i(db_i),
+      .db_t(db_t),
+      .rd_n(rd_n),
+      .wr_n(wr_n),
+      .m_axis_tdata(m_axis_tdata),
+      .m_axis_tvalid(m_axis_tvalid),
+      .m_axis_tready(m_axis_tready),
+      .m_axis_xfer_req(m_axis_xfer_req),
+      .end_of_conv(trigger_s),
+      .burst_length(burst_length_s),
+      .clk(up_clk),
+      .rstn(up_rstn),
+      .rd_req(rd_req_s),
+      .wr_req(wr_req_s),
+      .wr_data(wr_data_s),
+      .rd_data(rd_data_s),
+      .rd_dvalid(rd_dvalid_s)
+    );
+
   end
   endgenerate
 
   axi_ad7616_control #(
-    .ID(ID)
+    .ID(ID),
+    .IF_TYPE(IF_TYPE)
   ) i_ad7616_control (
     .cnvst (cnvst),
     .busy (busy),
+    .up_burst_length (burst_length_s),
+    .up_read_data (rd_data_s),
+    .up_read_valid (rd_dvalid_s),
+    .up_write_data (wr_data_s),
+    .up_read_req (rd_req_s),
+    .up_write_req (wr_req_s),
     .end_of_conv (trigger_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),

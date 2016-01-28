@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2013(c) Analog Devices, Inc.
+// Copyright 2015(c) Analog Devices, Inc.
 //
 // All rights reserved.
 //
@@ -46,6 +46,13 @@ module axi_ad7616_control (
   cnvst,
   busy,
 
+  up_read_data,
+  up_read_valid,
+  up_write_data,
+  up_read_req,
+  up_write_req,
+
+  up_burst_length,
   end_of_conv,
 
   // bus interface
@@ -64,17 +71,25 @@ module axi_ad7616_control (
 );
 
   parameter   ID = 0;
+  parameter   IF_TYPE = 0;
 
   localparam  PCORE_VERSION = 'h0001001;
-  localparam  SW = 0;
-  localparam  HW = 1;
   localparam  POS_EDGE = 0;
   localparam  NEG_EDGE = 1;
+  localparam  SERIAL = 0;
+  localparam  PARALLEL = 1;
 
   output          cnvst;
   input           busy;
 
   output          end_of_conv;
+  output  [ 4:0]  up_burst_length;
+
+  input   [15:0]  up_read_data;
+  input           up_read_valid;
+  output  [15:0]  up_write_data;
+  output          up_read_req;
+  output          up_write_req;
 
   // bus interface
 
@@ -98,6 +113,8 @@ module axi_ad7616_control (
   reg             up_rack = 1'b0;
   reg     [31:0]  up_rdata = 32'b0;
   reg     [31:0]  up_conv_rate = 32'b0;
+  reg     [ 4:0]  up_burst_length = 5'h0;
+  reg     [15:0]  up_write_data = 16'h0;
 
   reg     [31:0]  cnvst_counter = 32'b0;
   reg     [ 3:0]  pulse_counter = 8'b0;
@@ -110,12 +127,18 @@ module axi_ad7616_control (
   wire            up_wreq_s;
   wire            end_of_conv_s;
 
+  wire    [31:0]  up_read_data_s;
+  wire            up_read_valid_s;
+
   // decode block select
 
   assign up_wreq_s = (up_waddr[13:8] == 6'h01) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:8] == 6'h01) ? up_rreq : 1'b0;
 
-  assign end_of_conv = end_of_conv_s;
+  // the up_[read/write]_data interfaces are valid just in parallel mode
+
+  assign up_read_valid_s = (IF_TYPE == PARALLEL) ? up_read_valid : 1'b1;
+  assign up_read_data_s = (IF_TYPE == PARALLEL) ? {16'h0, up_read_data} : 32'hDEAD;
 
   // processor write interface
 
@@ -126,6 +149,7 @@ module axi_ad7616_control (
       up_resetn <= 1'b0;
       up_cnvst_en <= 1'b0;
       up_conv_rate <= 32'b0;
+      up_burst_length <= 5'h0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
@@ -138,8 +162,16 @@ module axi_ad7616_control (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
         up_conv_rate <= up_wdata;
       end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
+        up_burst_length <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
+        up_write_data <= up_wdata;
+      end
     end
   end
+
+  assign up_write_req = (up_waddr[7:0] == 8'h14) ? up_wreq_s : 1'h0;
 
   // processor read interface
 
@@ -148,7 +180,7 @@ module axi_ad7616_control (
       up_rack <= 1'b0;
       up_rdata <= 32'b0;
     end else begin
-      up_rack <= up_rreq_s;
+      up_rack <= (up_raddr[7:0] == 8'h13) ? up_read_valid_s : up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
             8'h00 : up_rdata = PCORE_VERSION;
@@ -156,10 +188,14 @@ module axi_ad7616_control (
             8'h02 : up_rdata = up_scratch;
             8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
             8'h11 : up_rdata = up_conv_rate;
+            8'h12 : up_rdata = up_burst_length;
+            8'h13 : up_rdata = up_read_data_s;
         endcase
       end
     end
   end
+
+  assign up_read_req = (up_raddr[7:0] == 8'h13) ? up_rreq_s : 1'b0;
 
   // instantiations
 
@@ -207,6 +243,7 @@ module axi_ad7616_control (
   end
 
   assign cnvst = (up_cnvst_en == 1'b1) ? cnvst_buf : 1'b0;
+  assign end_of_conv = end_of_conv_s;
 
 endmodule
 

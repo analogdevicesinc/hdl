@@ -7,6 +7,7 @@ adi_ip_create axi_ad7616
 adi_ip_files axi_ad7616 [list \
     "axi_ad7616.v" \
     "axi_ad7616_control.v" \
+    "axi_ad7616_pif.v" \
     "$ad_hdl_dir/library/common/ad_edge_detect.v" \
     "$ad_hdl_dir/library/common/up_axi.v"]
 
