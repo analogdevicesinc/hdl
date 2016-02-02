@@ -81,7 +81,7 @@ proc adi_project_create {project_name {mode 0}} {
     set sys_zynq 1
   }
   if [regexp "_pzsdr1$" $project_name] {
-    set p_device "xc7z020ifbg676-1L"
+    set p_device "xc7z020clg400-1"
     set p_board "not-applicable"
     set sys_zynq 1
   }
