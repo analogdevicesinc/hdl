@@ -99,14 +99,8 @@ module system_top (
   gp_out,
   gp_in,
   gp_in_mio,
-  gp_in_1,
+  gp_in_open);
 
-  gt_ref_clk_p,
-  gt_ref_clk_n,
-  gt_tx_p,
-  gt_tx_n,
-  gt_rx_p,
-  gt_rx_n);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -134,7 +128,7 @@ module system_top (
   inout           iic_scl;
   inout           iic_sda;
 
-  inout   [11:0]  gpio_bd;
+  inout   [ 3:0]  gpio_bd;
 
   input           rx_clk_in_p;
   input           rx_clk_in_n;
@@ -165,46 +159,27 @@ module system_top (
   output          spi_mosi;
   input           spi_miso;
 
-  output  [87:0]  gp_out;
-  input   [87:0]  gp_in;
-  input   [ 3:0]  gp_in_mio;
-  input           gp_in_1;
-
-  input           gt_ref_clk_p;
-  input           gt_ref_clk_n;
-  output  [ 3:0]  gt_tx_p;
-  output  [ 3:0]  gt_tx_n;
-  input   [ 3:0]  gt_rx_p;
-  input   [ 3:0]  gt_rx_n;
+  output  [26:0]  gp_out;
+  input   [26:0]  gp_in;
+  input   [ 2:0]  gp_in_mio;
+  input   [ 4:0]  gp_in_open;
 
   // internal signals
 
-  wire            gt_ref_clk;
-  wire    [95:0]  gp_out_s;
-  wire    [95:0]  gp_in_s;
+  wire    [63:0]  gp_out_s;
+  wire    [63:0]  gp_in_s;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
   // assignments
 
-  assign gp_out[87:43] = gp_out_s[87:43];
-  assign gp_out[42:42] = (gpio_o[61] == 1'b1) ? clk_out : gp_out_s[42:42];
-  assign gp_out[41: 0] = gp_out_s[41: 0];
-
-  assign gp_in_s[95:93] = 3'd0;
-  assign gp_in_s[92:92] = gp_in_1;
-  assign gp_in_s[91:88] = gp_in_mio;
-  assign gp_in_s[87: 0] = gp_in;
+  assign gp_out[26:0] = gp_out_s[26:0];
+  assign gp_in_s[34:30] = gp_in_open;
+  assign gp_in_s[29:27] = gp_in_mio;
+  assign gp_in_s[26: 0] = gp_in;
 
   // instantiations
-
-  IBUFDS_GTE2 i_ibufds_gt_ref_clk (
-    .CEB (1'd0),
-    .I (gt_ref_clk_p),
-    .IB (gt_ref_clk_n),
-    .O (gt_ref_clk),
-    .ODIV2 ());
 
   ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
     .dio_t ({gpio_t[51], gpio_t[46:32]}),
@@ -217,10 +192,10 @@ module system_top (
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
 
-  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_bd (
-    .dio_t (gpio_t[11:0]),
-    .dio_i (gpio_o[11:0]),
-    .dio_o (gpio_i[11:0]),
+  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_bd (
+    .dio_t (gpio_t[3:0]),
+    .dio_i (gpio_o[3:0]),
+    .dio_o (gpio_i[3:0]),
     .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
@@ -248,30 +223,11 @@ module system_top (
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
     .gp_in_0 (gp_in_s[31:0]),
     .gp_in_1 (gp_in_s[63:32]),
-    .gp_in_2 (gp_in_s[95:64]),
     .gp_out_0 (gp_out_s[31:0]),
     .gp_out_1 (gp_out_s[63:32]),
-    .gp_out_2 (gp_out_s[95:64]),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .gt_ref_clk (gt_ref_clk),
-    .gt_rx_0_n (gt_rx_n[0]),
-    .gt_rx_0_p (gt_rx_p[0]),
-    .gt_rx_1_n (gt_rx_n[1]),
-    .gt_rx_1_p (gt_rx_p[1]),
-    .gt_rx_2_n (gt_rx_n[2]),
-    .gt_rx_2_p (gt_rx_p[2]),
-    .gt_rx_3_n (gt_rx_n[3]),
-    .gt_rx_3_p (gt_rx_p[3]),
-    .gt_tx_0_n (gt_tx_n[0]),
-    .gt_tx_0_p (gt_tx_p[0]),
-    .gt_tx_1_n (gt_tx_n[1]),
-    .gt_tx_1_p (gt_tx_p[1]),
-    .gt_tx_2_n (gt_tx_n[2]),
-    .gt_tx_2_p (gt_tx_p[2]),
-    .gt_tx_3_n (gt_tx_n[3]),
-    .gt_tx_3_p (gt_tx_p[3]),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
