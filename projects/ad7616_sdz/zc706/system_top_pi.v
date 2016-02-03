@@ -135,7 +135,7 @@ module system_top (
   output          adc_cs_n;
   output          adc_reset_n;
   output          adc_convst;
-  output          adc_busy;
+  input           adc_busy;
   output          adc_seq_en;
   output  [ 1:0]  adc_hw_rngsel;
   output  [ 2:0]  adc_chsel;
