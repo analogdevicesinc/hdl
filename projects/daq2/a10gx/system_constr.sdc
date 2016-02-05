@@ -14,3 +14,5 @@ set_false_path -from [get_clocks {sys_clk_100mhz}] -to [get_clocks {\
   i_system_bd|a10gx_base|sys_ddr3_cntrl_phy_clk_l_1 \
   i_system_bd|a10gx_base|sys_ddr3_cntrl_phy_clk_l_2}]
  
+set_false_path -from [get_clocks {sys_clk_100mhz}] -to [get_clocks {\
+  i_system_bd|a10gx_base|sys_ddr3_cntrl_core_nios_clk}]
