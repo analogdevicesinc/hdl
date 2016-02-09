@@ -52,6 +52,9 @@ set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_adc_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}]  $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {0}]  $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {0}]  $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {0}]  $axi_ad9361_adc_dma
 
 set util_ad9361_adc_pack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_ad9361_adc_pack]
 set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9361_adc_pack
