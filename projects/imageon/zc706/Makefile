@@ -5,20 +5,22 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := system_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_board.tcl
-M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += system_top.v
+M_DEPS += system_project.tcl
 M_DEPS += system_constr.xdc
-M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += system_bd.tcl
-M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../common/imageon_bd.tcl
+M_DEPS += ../../scripts/adi_project.tcl
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_board.tcl
+M_DEPS += ../../common/zc706/zc706_system_constr.xdc
+M_DEPS += ../../common/zc706/zc706_system_bd.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_rx/axi_hdmi_rx.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
+M_DEPS += ../../../library/axi_spdif_rx/axi_spdif_rx.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 
 M_VIVADO := vivado -mode batch -source
@@ -49,6 +51,7 @@ clean-all:clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_hdmi_rx clean
 	make -C ../../../library/axi_hdmi_tx clean
+	make -C ../../../library/axi_spdif_rx clean
 	make -C ../../../library/axi_spdif_tx clean
 
 
@@ -62,6 +65,7 @@ lib:
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_hdmi_rx
 	make -C ../../../library/axi_hdmi_tx
+	make -C ../../../library/axi_spdif_rx
 	make -C ../../../library/axi_spdif_tx
 
 ####################################################################################

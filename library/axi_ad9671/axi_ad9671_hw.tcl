@@ -6,6 +6,7 @@ source ../scripts/adi_env.tcl
 set_module_property NAME axi_ad9671
 set_module_property DESCRIPTION "AXI AD9671 Interface"
 set_module_property VERSION 1.0
+set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_ad9671
 
 # files
@@ -30,26 +31,26 @@ add_fileset_file axi_ad9671.v         VERILOG PATH axi_ad9671.v TOP_LEVEL_FILE
 
 # parameters
 
-add_parameter PCORE_ID INTEGER 0
-set_parameter_property PCORE_ID DEFAULT_VALUE 0
-set_parameter_property PCORE_ID DISPLAY_NAME PCORE_ID
-set_parameter_property PCORE_ID TYPE INTEGER
-set_parameter_property PCORE_ID UNITS None
-set_parameter_property PCORE_ID HDL_PARAMETER true
+add_parameter ID INTEGER 0
+set_parameter_property ID DEFAULT_VALUE 0
+set_parameter_property ID DISPLAY_NAME ID
+set_parameter_property ID TYPE INTEGER
+set_parameter_property ID UNITS None
+set_parameter_property ID HDL_PARAMETER true
 
-add_parameter PCORE_DEVICE_TYPE INTEGER 0
-set_parameter_property PCORE_DEVICE_TYPE DEFAULT_VALUE 0
-set_parameter_property PCORE_DEVICE_TYPE DISPLAY_NAME PCORE_DEVICE_TYPE
-set_parameter_property PCORE_DEVICE_TYPE TYPE INTEGER
-set_parameter_property PCORE_DEVICE_TYPE UNITS None
-set_parameter_property PCORE_DEVICE_TYPE HDL_PARAMETER true
+add_parameter DEVICE_TYPE INTEGER 0
+set_parameter_property DEVICE_TYPE DEFAULT_VALUE 0
+set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
+set_parameter_property DEVICE_TYPE TYPE INTEGER
+set_parameter_property DEVICE_TYPE UNITS None
+set_parameter_property DEVICE_TYPE HDL_PARAMETER true
 
-add_parameter PCORE_4L_2L_N INTEGER 0
-set_parameter_property PCORE_4L_2L_N DEFAULT_VALUE 1
-set_parameter_property PCORE_4L_2L_N DISPLAY_NAME PCORE_4L_2L_N
-set_parameter_property PCORE_4L_2L_N TYPE INTEGER
-set_parameter_property PCORE_4L_2L_N UNITS None
-set_parameter_property PCORE_4L_2L_N HDL_PARAMETER true
+add_parameter QUAD_OR_DUAL_N INTEGER 0
+set_parameter_property QUAD_OR_DUAL_N DEFAULT_VALUE 1
+set_parameter_property QUAD_OR_DUAL_N DISPLAY_NAME QUAD_OR_DUAL_N
+set_parameter_property QUAD_OR_DUAL_N TYPE INTEGER
+set_parameter_property QUAD_OR_DUAL_N UNITS None
+set_parameter_property QUAD_OR_DUAL_N HDL_PARAMETER true
 
 # axi4 slave
 
@@ -90,7 +91,7 @@ add_interface_port xcvr_clk rx_clk clk Input 1
 
 add_interface xcvr_data conduit end
 set_interface_property xcvr_data associatedClock xcvr_clk
-add_interface_port xcvr_data rx_data data Input 64*PCORE_4L_2L_N+64
+add_interface_port xcvr_data rx_data data Input 64*QUAD_OR_DUAL_N+64
 add_interface_port xcvr_data rx_sof data_sof Input 1
 
 add_interface xcvr_sync conduit end

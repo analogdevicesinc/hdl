@@ -66,64 +66,64 @@ module up_delay_cntrl (
 
   // parameters
 
-  parameter   IO_WIDTH = 8;
-  parameter   IO_BASEADDR = 6'h02;
+  parameter   DATA_WIDTH = 8;
+  parameter   BASE_ADDRESS = 6'h02;
 
   // delay interface
 
-  input                         delay_clk;
-  output                        delay_rst;
-  input                         delay_locked;
+  input                           delay_clk;
+  output                          delay_rst;
+  input                           delay_locked;
 
   // io interface
 
-  output  [(IO_WIDTH-1):0]      up_dld;
-  output  [((IO_WIDTH*5)-1):0]  up_dwdata;
-  input   [((IO_WIDTH*5)-1):0]  up_drdata;
+  output  [(DATA_WIDTH-1):0]      up_dld;
+  output  [((DATA_WIDTH*5)-1):0]  up_dwdata;
+  input   [((DATA_WIDTH*5)-1):0]  up_drdata;
 
   // processor interface
 
-  input                         up_rstn;
-  input                         up_clk;
-  input                         up_wreq;
-  input   [13:0]                up_waddr;
-  input   [31:0]                up_wdata;
-  output                        up_wack;
-  input                         up_rreq;
-  input   [13:0]                up_raddr;
-  output  [31:0]                up_rdata;
-  output                        up_rack;
+  input                           up_rstn;
+  input                           up_clk;
+  input                           up_wreq;
+  input   [13:0]                  up_waddr;
+  input   [31:0]                  up_wdata;
+  output                          up_wack;
+  input                           up_rreq;
+  input   [13:0]                  up_raddr;
+  output  [31:0]                  up_rdata;
+  output                          up_rack;
 
   // internal registers
   
-  reg                           up_preset = 'd0;
-  reg                           up_wack = 'd0;
-  reg                           up_rack = 'd0;
-  reg     [31:0]                up_rdata = 'd0;
-  reg                           up_dlocked_m1 = 'd0;
-  reg                           up_dlocked = 'd0;
-  reg     [(IO_WIDTH-1):0]      up_dld = 'd0;
-  reg     [((IO_WIDTH*5)-1):0]  up_dwdata = 'd0;
+  reg                             up_preset = 'd0;
+  reg                             up_wack = 'd0;
+  reg                             up_rack = 'd0;
+  reg     [31:0]                  up_rdata = 'd0;
+  reg                             up_dlocked_m1 = 'd0;
+  reg                             up_dlocked = 'd0;
+  reg     [(DATA_WIDTH-1):0]      up_dld = 'd0;
+  reg     [((DATA_WIDTH*5)-1):0]  up_dwdata = 'd0;
 
   // internal signals
 
-  wire                          up_wreq_s;
-  wire                          up_rreq_s;
-  wire    [ 4:0]                up_rdata_s;
-  wire    [(IO_WIDTH-1):0]      up_drdata4_s;
-  wire    [(IO_WIDTH-1):0]      up_drdata3_s;
-  wire    [(IO_WIDTH-1):0]      up_drdata2_s;
-  wire    [(IO_WIDTH-1):0]      up_drdata1_s;
-  wire    [(IO_WIDTH-1):0]      up_drdata0_s;
+  wire                            up_wreq_s;
+  wire                            up_rreq_s;
+  wire    [ 4:0]                  up_rdata_s;
+  wire    [(DATA_WIDTH-1):0]      up_drdata4_s;
+  wire    [(DATA_WIDTH-1):0]      up_drdata3_s;
+  wire    [(DATA_WIDTH-1):0]      up_drdata2_s;
+  wire    [(DATA_WIDTH-1):0]      up_drdata1_s;
+  wire    [(DATA_WIDTH-1):0]      up_drdata0_s;
 
   // variables
 
-  genvar                        n;
+  genvar                          n;
 
   // decode block select
 
-  assign up_wreq_s = (up_waddr[13:8] == IO_BASEADDR) ? up_wreq : 1'b0;
-  assign up_rreq_s = (up_raddr[13:8] == IO_BASEADDR) ? up_rreq : 1'b0;
+  assign up_wreq_s = (up_waddr[13:8] == BASE_ADDRESS) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == BASE_ADDRESS) ? up_rreq : 1'b0;
   assign up_rdata_s[4] = | up_drdata4_s;
   assign up_rdata_s[3] = | up_drdata3_s;
   assign up_rdata_s[2] = | up_drdata2_s;
@@ -131,7 +131,7 @@ module up_delay_cntrl (
   assign up_rdata_s[0] = | up_drdata0_s;
 
   generate
-  for (n = 0; n < IO_WIDTH; n = n + 1) begin: g_drd
+  for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_drd
   assign up_drdata4_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+4)] : 1'd0;
   assign up_drdata3_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+3)] : 1'd0;
   assign up_drdata2_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+2)] : 1'd0;
@@ -171,7 +171,7 @@ module up_delay_cntrl (
   // write does not hold- read back what goes into effect. 
 
   generate
-  for (n = 0; n < IO_WIDTH; n = n + 1) begin: g_dwr
+  for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_dwr
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dld[n] <= 'd0;

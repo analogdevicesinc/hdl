@@ -39,6 +39,8 @@
 
 module ad_gt_es (
 
+  lpm_dfe_n,
+
   // drp interface
 
   up_rstn,
@@ -50,31 +52,15 @@ module ad_gt_es (
   up_es_drp_rdata,
   up_es_drp_ready,
 
-  // axi4 interface
+  // dma interface
 
-  axi_awvalid,
-  axi_awaddr,
-  axi_awprot,
-  axi_awready,
-  axi_wvalid,
-  axi_wdata,
-  axi_wstrb,
-  axi_wready,
-  axi_bvalid,
-  axi_bresp,
-  axi_bready,
-  axi_arvalid,
-  axi_araddr,
-  axi_arprot,
-  axi_arready,
-  axi_rvalid,
-  axi_rresp,
-  axi_rdata,
-  axi_rready,
+  up_es_dma_req,
+  up_es_dma_addr,
+  up_es_dma_data,
+  up_es_dma_ack,
 
   // processor interface
 
-  up_lpm_dfe_n,
   up_es_start,
   up_es_stop,
   up_es_init,
@@ -97,86 +83,87 @@ module ad_gt_es (
   up_es_voffset_step,
   up_es_voffset_range,
   up_es_start_addr,
-  up_es_dmaerr,
   up_es_status);
 
   // parameters
 
-  parameter   GTH_GTX_N = 0;
+  parameter   integer GTH_OR_GTX_N = 0;
 
   // gt address
 
-  localparam  ES_DRP_CTRL_ADDR    = (GTH_GTX_N == 1) ? 12'h03c : 12'h03d; // GTH-7 12'h03d 
-  localparam  ES_DRP_SDATA0_ADDR  = (GTH_GTX_N == 1) ? 12'h049 : 12'h036; // GTH-7 12'h036 
-  localparam  ES_DRP_SDATA1_ADDR  = (GTH_GTX_N == 1) ? 12'h04a : 12'h037; // GTH-7 12'h037 
-  localparam  ES_DRP_SDATA2_ADDR  = (GTH_GTX_N == 1) ? 12'h04b : 12'h038; // GTH-7 12'h038 
-  localparam  ES_DRP_SDATA3_ADDR  = (GTH_GTX_N == 1) ? 12'h04c : 12'h039; // GTH-7 12'h039 
-  localparam  ES_DRP_SDATA4_ADDR  = (GTH_GTX_N == 1) ? 12'h04d : 12'h03a; // GTH-7 12'h03a 
-  localparam  ES_DRP_QDATA0_ADDR  = (GTH_GTX_N == 1) ? 12'h044 : 12'h031; // GTH-7 12'h031 
-  localparam  ES_DRP_QDATA1_ADDR  = (GTH_GTX_N == 1) ? 12'h045 : 12'h032; // GTH-7 12'h032 
-  localparam  ES_DRP_QDATA2_ADDR  = (GTH_GTX_N == 1) ? 12'h046 : 12'h033; // GTH-7 12'h033 
-  localparam  ES_DRP_QDATA3_ADDR  = (GTH_GTX_N == 1) ? 12'h047 : 12'h034; // GTH-7 12'h034 
-  localparam  ES_DRP_QDATA4_ADDR  = (GTH_GTX_N == 1) ? 12'h048 : 12'h035; // GTH-7 12'h035 
-  localparam  ES_DRP_HOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h04f : 12'h03c; // GTH-7 12'h03c 
-  localparam  ES_DRP_VOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h097 : 12'h03b; // GTH-7 12'h03b 
-  localparam  ES_DRP_STATUS_ADDR  = (GTH_GTX_N == 1) ? 12'h153 : 12'h151; // GTH-7 12'h153 
-  localparam  ES_DRP_SCNT_ADDR    = (GTH_GTX_N == 1) ? 12'h152 : 12'h150; // GTH-7 12'h152 
-  localparam  ES_DRP_ECNT_ADDR    = (GTH_GTX_N == 1) ? 12'h151 : 12'h14f; // GTH-7 12'h151 
+  localparam  [11:0]  ES_DRP_CTRL_ADDR    = (GTH_OR_GTX_N == 1) ? 12'h03c : 12'h03d; // GTH-7 12'h03d 
+  localparam  [11:0]  ES_DRP_SDATA0_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h049 : 12'h036; // GTH-7 12'h036 
+  localparam  [11:0]  ES_DRP_SDATA1_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h04a : 12'h037; // GTH-7 12'h037 
+  localparam  [11:0]  ES_DRP_SDATA2_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h04b : 12'h038; // GTH-7 12'h038 
+  localparam  [11:0]  ES_DRP_SDATA3_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h04c : 12'h039; // GTH-7 12'h039 
+  localparam  [11:0]  ES_DRP_SDATA4_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h04d : 12'h03a; // GTH-7 12'h03a 
+  localparam  [11:0]  ES_DRP_QDATA0_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h044 : 12'h031; // GTH-7 12'h031 
+  localparam  [11:0]  ES_DRP_QDATA1_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h045 : 12'h032; // GTH-7 12'h032 
+  localparam  [11:0]  ES_DRP_QDATA2_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h046 : 12'h033; // GTH-7 12'h033 
+  localparam  [11:0]  ES_DRP_QDATA3_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h047 : 12'h034; // GTH-7 12'h034 
+  localparam  [11:0]  ES_DRP_QDATA4_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h048 : 12'h035; // GTH-7 12'h035 
+  localparam  [11:0]  ES_DRP_HOFFSET_ADDR = (GTH_OR_GTX_N == 1) ? 12'h04f : 12'h03c; // GTH-7 12'h03c 
+  localparam  [11:0]  ES_DRP_VOFFSET_ADDR = (GTH_OR_GTX_N == 1) ? 12'h097 : 12'h03b; // GTH-7 12'h03b 
+  localparam  [11:0]  ES_DRP_STATUS_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h153 : 12'h151; // GTH-7 12'h153 
+  localparam  [11:0]  ES_DRP_SCNT_ADDR    = (GTH_OR_GTX_N == 1) ? 12'h152 : 12'h150; // GTH-7 12'h152 
+  localparam  [11:0]  ES_DRP_ECNT_ADDR    = (GTH_OR_GTX_N == 1) ? 12'h151 : 12'h14f; // GTH-7 12'h151 
 
   // state machine
 
-  localparam  ES_FSM_IDLE             = 6'h00;
-  localparam  ES_FSM_STATUS           = 6'h01;
-  localparam  ES_FSM_INIT             = 6'h02;
-  localparam  ES_FSM_CTRLINIT_READ    = 6'h03;
-  localparam  ES_FSM_CTRLINIT_RRDY    = 6'h04;
-  localparam  ES_FSM_CTRLINIT_WRITE   = 6'h05;
-  localparam  ES_FSM_CTRLINIT_WRDY    = 6'h06;
-  localparam  ES_FSM_SDATA0_WRITE     = 6'h07;
-  localparam  ES_FSM_SDATA0_WRDY      = 6'h08;
-  localparam  ES_FSM_SDATA1_WRITE     = 6'h09;
-  localparam  ES_FSM_SDATA1_WRDY      = 6'h0a;
-  localparam  ES_FSM_SDATA2_WRITE     = 6'h0b;
-  localparam  ES_FSM_SDATA2_WRDY      = 6'h0c;
-  localparam  ES_FSM_SDATA3_WRITE     = 6'h0d;
-  localparam  ES_FSM_SDATA3_WRDY      = 6'h0e;
-  localparam  ES_FSM_SDATA4_WRITE     = 6'h0f;
-  localparam  ES_FSM_SDATA4_WRDY      = 6'h10;
-  localparam  ES_FSM_QDATA0_WRITE     = 6'h11;
-  localparam  ES_FSM_QDATA0_WRDY      = 6'h12;
-  localparam  ES_FSM_QDATA1_WRITE     = 6'h13;
-  localparam  ES_FSM_QDATA1_WRDY      = 6'h14;
-  localparam  ES_FSM_QDATA2_WRITE     = 6'h15;
-  localparam  ES_FSM_QDATA2_WRDY      = 6'h16;
-  localparam  ES_FSM_QDATA3_WRITE     = 6'h17;
-  localparam  ES_FSM_QDATA3_WRDY      = 6'h18;
-  localparam  ES_FSM_QDATA4_WRITE     = 6'h19;
-  localparam  ES_FSM_QDATA4_WRDY      = 6'h1a;
-  localparam  ES_FSM_HOFFSET_READ     = 6'h1b;
-  localparam  ES_FSM_HOFFSET_RRDY     = 6'h1c;
-  localparam  ES_FSM_HOFFSET_WRITE    = 6'h1d;
-  localparam  ES_FSM_HOFFSET_WRDY     = 6'h1e;
-  localparam  ES_FSM_VOFFSET_READ     = 6'h1f;
-  localparam  ES_FSM_VOFFSET_RRDY     = 6'h20;
-  localparam  ES_FSM_VOFFSET_WRITE    = 6'h21;
-  localparam  ES_FSM_VOFFSET_WRDY     = 6'h22;
-  localparam  ES_FSM_CTRLSTART_READ   = 6'h23;
-  localparam  ES_FSM_CTRLSTART_RRDY   = 6'h24;
-  localparam  ES_FSM_CTRLSTART_WRITE  = 6'h25;
-  localparam  ES_FSM_CTRLSTART_WRDY   = 6'h26;
-  localparam  ES_FSM_STATUS_READ      = 6'h27;
-  localparam  ES_FSM_STATUS_RRDY      = 6'h28;
-  localparam  ES_FSM_CTRLSTOP_READ    = 6'h29;
-  localparam  ES_FSM_CTRLSTOP_RRDY    = 6'h2a;
-  localparam  ES_FSM_CTRLSTOP_WRITE   = 6'h2b;
-  localparam  ES_FSM_CTRLSTOP_WRDY    = 6'h2c;
-  localparam  ES_FSM_SCNT_READ        = 6'h2d;
-  localparam  ES_FSM_SCNT_RRDY        = 6'h2e;
-  localparam  ES_FSM_ECNT_READ        = 6'h2f;
-  localparam  ES_FSM_ECNT_RRDY        = 6'h30;
-  localparam  ES_FSM_DMA_WRITE        = 6'h31;
-  localparam  ES_FSM_DMA_READY        = 6'h32;
-  localparam  ES_FSM_UPDATE           = 6'h33;
+  localparam  [ 5:0]  ES_FSM_IDLE             = 6'h00;
+  localparam  [ 5:0]  ES_FSM_STATUS           = 6'h01;
+  localparam  [ 5:0]  ES_FSM_INIT             = 6'h02;
+  localparam  [ 5:0]  ES_FSM_CTRLINIT_READ    = 6'h03;
+  localparam  [ 5:0]  ES_FSM_CTRLINIT_RRDY    = 6'h04;
+  localparam  [ 5:0]  ES_FSM_CTRLINIT_WRITE   = 6'h05;
+  localparam  [ 5:0]  ES_FSM_CTRLINIT_WRDY    = 6'h06;
+  localparam  [ 5:0]  ES_FSM_SDATA0_WRITE     = 6'h07;
+  localparam  [ 5:0]  ES_FSM_SDATA0_WRDY      = 6'h08;
+  localparam  [ 5:0]  ES_FSM_SDATA1_WRITE     = 6'h09;
+  localparam  [ 5:0]  ES_FSM_SDATA1_WRDY      = 6'h0a;
+  localparam  [ 5:0]  ES_FSM_SDATA2_WRITE     = 6'h0b;
+  localparam  [ 5:0]  ES_FSM_SDATA2_WRDY      = 6'h0c;
+  localparam  [ 5:0]  ES_FSM_SDATA3_WRITE     = 6'h0d;
+  localparam  [ 5:0]  ES_FSM_SDATA3_WRDY      = 6'h0e;
+  localparam  [ 5:0]  ES_FSM_SDATA4_WRITE     = 6'h0f;
+  localparam  [ 5:0]  ES_FSM_SDATA4_WRDY      = 6'h10;
+  localparam  [ 5:0]  ES_FSM_QDATA0_WRITE     = 6'h11;
+  localparam  [ 5:0]  ES_FSM_QDATA0_WRDY      = 6'h12;
+  localparam  [ 5:0]  ES_FSM_QDATA1_WRITE     = 6'h13;
+  localparam  [ 5:0]  ES_FSM_QDATA1_WRDY      = 6'h14;
+  localparam  [ 5:0]  ES_FSM_QDATA2_WRITE     = 6'h15;
+  localparam  [ 5:0]  ES_FSM_QDATA2_WRDY      = 6'h16;
+  localparam  [ 5:0]  ES_FSM_QDATA3_WRITE     = 6'h17;
+  localparam  [ 5:0]  ES_FSM_QDATA3_WRDY      = 6'h18;
+  localparam  [ 5:0]  ES_FSM_QDATA4_WRITE     = 6'h19;
+  localparam  [ 5:0]  ES_FSM_QDATA4_WRDY      = 6'h1a;
+  localparam  [ 5:0]  ES_FSM_HOFFSET_READ     = 6'h1b;
+  localparam  [ 5:0]  ES_FSM_HOFFSET_RRDY     = 6'h1c;
+  localparam  [ 5:0]  ES_FSM_HOFFSET_WRITE    = 6'h1d;
+  localparam  [ 5:0]  ES_FSM_HOFFSET_WRDY     = 6'h1e;
+  localparam  [ 5:0]  ES_FSM_VOFFSET_READ     = 6'h1f;
+  localparam  [ 5:0]  ES_FSM_VOFFSET_RRDY     = 6'h20;
+  localparam  [ 5:0]  ES_FSM_VOFFSET_WRITE    = 6'h21;
+  localparam  [ 5:0]  ES_FSM_VOFFSET_WRDY     = 6'h22;
+  localparam  [ 5:0]  ES_FSM_CTRLSTART_READ   = 6'h23;
+  localparam  [ 5:0]  ES_FSM_CTRLSTART_RRDY   = 6'h24;
+  localparam  [ 5:0]  ES_FSM_CTRLSTART_WRITE  = 6'h25;
+  localparam  [ 5:0]  ES_FSM_CTRLSTART_WRDY   = 6'h26;
+  localparam  [ 5:0]  ES_FSM_STATUS_READ      = 6'h27;
+  localparam  [ 5:0]  ES_FSM_STATUS_RRDY      = 6'h28;
+  localparam  [ 5:0]  ES_FSM_CTRLSTOP_READ    = 6'h29;
+  localparam  [ 5:0]  ES_FSM_CTRLSTOP_RRDY    = 6'h2a;
+  localparam  [ 5:0]  ES_FSM_CTRLSTOP_WRITE   = 6'h2b;
+  localparam  [ 5:0]  ES_FSM_CTRLSTOP_WRDY    = 6'h2c;
+  localparam  [ 5:0]  ES_FSM_SCNT_READ        = 6'h2d;
+  localparam  [ 5:0]  ES_FSM_SCNT_RRDY        = 6'h2e;
+  localparam  [ 5:0]  ES_FSM_ECNT_READ        = 6'h2f;
+  localparam  [ 5:0]  ES_FSM_ECNT_RRDY        = 6'h30;
+  localparam  [ 5:0]  ES_FSM_DMA_WRITE        = 6'h31;
+  localparam  [ 5:0]  ES_FSM_DMA_READY        = 6'h32;
+  localparam  [ 5:0]  ES_FSM_UPDATE           = 6'h33;
+
+  input           lpm_dfe_n;
 
   // drp interface
 
@@ -189,31 +176,15 @@ module ad_gt_es (
   input   [15:0]  up_es_drp_rdata;
   input           up_es_drp_ready;
 
-  // axi4 interface
+  // dma interface
 
-  output          axi_awvalid;
-  output  [31:0]  axi_awaddr;
-  output  [ 2:0]  axi_awprot;
-  input           axi_awready;
-  output          axi_wvalid;
-  output  [31:0]  axi_wdata;
-  output  [ 3:0]  axi_wstrb;
-  input           axi_wready;
-  input           axi_bvalid;
-  input   [ 1:0]  axi_bresp;
-  output          axi_bready;
-  output          axi_arvalid;
-  output  [31:0]  axi_araddr;
-  output  [ 2:0]  axi_arprot;
-  input           axi_arready;
-  input           axi_rvalid;
-  input   [31:0]  axi_rdata;
-  input   [ 1:0]  axi_rresp;
-  output          axi_rready;
+  output          up_es_dma_req;
+  output  [31:0]  up_es_dma_addr;
+  output  [31:0]  up_es_dma_data;
+  input           up_es_dma_ack;
 
   // processor interface
 
-  input           up_lpm_dfe_n;
   input           up_es_start;
   input           up_es_stop;
   input           up_es_init;
@@ -236,19 +207,16 @@ module ad_gt_es (
   input   [ 7:0]  up_es_voffset_step;
   input   [ 1:0]  up_es_voffset_range;
   input   [31:0]  up_es_start_addr;
-  output          up_es_dmaerr;
   output          up_es_status;
 
   // internal registers
 
-  reg             axi_awvalid = 'd0;
-  reg     [31:0]  axi_awaddr = 'd0;
-  reg             axi_wvalid = 'd0;
-  reg     [31:0]  axi_wdata = 'd0;
-  reg             up_es_dmaerr = 'd0;
+  reg             up_es_dma_req = 'd0;
+  reg     [31:0]  up_es_dma_addr = 'd0;
+  reg     [31:0]  up_es_dma_data = 'd0;
   reg             up_es_status = 'd0;
   reg             up_es_ut = 'd0;
-  reg     [31:0]  up_es_dma_addr = 'd0;
+  reg     [31:0]  up_es_addr = 'd0;
   reg     [11:0]  up_es_hoffset = 'd0;
   reg     [ 7:0]  up_es_voffset = 'd0;
   reg     [15:0]  up_es_hoffset_rdata = 'd0;
@@ -271,46 +239,22 @@ module ad_gt_es (
   wire    [ 7:0]  up_es_voffset_n_s;
   wire    [ 7:0]  up_es_voffset_s;
 
-  // axi write interface
-
-  assign axi_awprot = 3'd0;
-  assign axi_wstrb = 4'hf;
-  assign axi_bready = 1'd1;
-  assign axi_arvalid = 1'd0;
-  assign axi_araddr = 32'd0;
-  assign axi_arprot = 3'd0;
-  assign axi_rready = 1'd1;
+  // dma interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      axi_awvalid <= 'b0;
-      axi_awaddr <= 'd0;
-      axi_wvalid <= 'b0;
-      axi_wdata <= 'd0;
+      up_es_dma_req <= 'b0;
+      up_es_dma_addr <= 'd0;
+      up_es_dma_data <= 'd0;
     end else begin
-      if ((axi_awvalid == 1'b1) && (axi_awready == 1'b1)) begin
-        axi_awvalid <= 1'b0;
-        axi_awaddr <= 32'd0;
+      if ((up_es_dma_req == 1'b1) && (up_es_dma_ack == 1'b1)) begin
+        up_es_dma_req <= 1'b0;
+        up_es_dma_addr <= 32'd0;
+        up_es_dma_data <= 32'd0;
       end else if (up_es_fsm == ES_FSM_DMA_WRITE) begin
-        axi_awvalid <= 1'b1;
-        axi_awaddr <= up_es_dma_addr;
-      end
-      if ((axi_wvalid == 1'b1) && (axi_wready == 1'b1)) begin
-        axi_wvalid <= 1'b0;
-        axi_wdata <= 32'd0;
-      end else if (up_es_fsm == ES_FSM_DMA_WRITE) begin
-        axi_wvalid <= 1'b1;
-        axi_wdata <= {up_es_scnt_rdata, up_es_ecnt_rdata};
-      end
-    end
-  end
-
-  always @(negedge up_rstn or posedge up_clk) begin
-    if (up_rstn == 1'b0) begin
-      up_es_dmaerr <= 'd0;
-    end else begin
-      if (axi_bvalid == 1'b1) begin
-        up_es_dmaerr <= axi_bresp[1] | axi_bresp[0];
+        up_es_dma_req <= 1'b1;
+        up_es_dma_addr <= up_es_addr;
+        up_es_dma_data <= {up_es_scnt_rdata, up_es_ecnt_rdata};
       end
     end
   end
@@ -320,7 +264,7 @@ module ad_gt_es (
   assign up_es_heos_s = (up_es_hoffset == up_es_hoffset_max) ? up_es_ut : 1'b0;
   assign up_es_eos_s = (up_es_voffset == up_es_voffset_max) ? up_es_heos_s : 1'b0;
 
-  assign up_es_ut_s = up_es_ut & ~up_lpm_dfe_n;
+  assign up_es_ut_s = up_es_ut & ~lpm_dfe_n;
   assign up_es_voffset_2_s = ~up_es_voffset + 1'b1;
   assign up_es_voffset_n_s = {1'b1, up_es_voffset_2_s[6:0]};
   assign up_es_voffset_s = (up_es_voffset[7] == 1'b1) ? up_es_voffset_n_s : up_es_voffset;
@@ -329,7 +273,7 @@ module ad_gt_es (
     if (up_rstn == 1'b0) begin
       up_es_status <= 1'b0;
       up_es_ut <= 'd0;
-      up_es_dma_addr <= 'd0;
+      up_es_addr <= 'd0;
       up_es_hoffset <= 'd0;
       up_es_voffset <= 'd0;
     end else begin
@@ -339,13 +283,13 @@ module ad_gt_es (
         up_es_status <= 1'b1;
       end
       if (up_es_fsm == ES_FSM_IDLE) begin
-        up_es_ut <= up_lpm_dfe_n;
-        up_es_dma_addr <= up_es_start_addr;
+        up_es_ut <= lpm_dfe_n;
+        up_es_addr <= up_es_start_addr;
         up_es_hoffset <= up_es_hoffset_min;
         up_es_voffset <= up_es_voffset_min;
       end else if (up_es_fsm == ES_FSM_UPDATE) begin
-        up_es_ut <= ~up_es_ut | up_lpm_dfe_n;
-        up_es_dma_addr <= up_es_dma_addr + 3'd4;
+        up_es_ut <= ~up_es_ut | lpm_dfe_n;
+        up_es_addr <= up_es_addr + 3'd4;
         if (up_es_heos_s == 1'b1) begin
           up_es_hoffset <= up_es_hoffset_min;
         end else if (up_es_ut == 1'b1) begin
@@ -664,7 +608,7 @@ module ad_gt_es (
             up_es_fsm <= ES_FSM_DMA_READY;
           end
           ES_FSM_DMA_READY: begin // dma ack
-            if (axi_bvalid == 1'b1) begin
+            if (up_es_dma_ack == 1'b1) begin
               up_es_fsm <= ES_FSM_UPDATE;
             end else begin
               up_es_fsm <= ES_FSM_DMA_READY;
@@ -709,8 +653,9 @@ module ad_gt_es (
           up_es_drp_sel <= 1'b1;
           up_es_drp_wr <= 1'b1;
           up_es_drp_addr <= ES_DRP_CTRL_ADDR;
-          if (GTH_GTX_N == 1) begin
-          up_es_drp_wdata <= {up_es_ctrl_rdata[15:10], 2'b11, up_es_ctrl_rdata[7:5], up_es_prescale};
+          if (GTH_OR_GTX_N == 1) begin
+          up_es_drp_wdata <= {up_es_ctrl_rdata[15:10], 2'b11,
+            up_es_ctrl_rdata[7:5], up_es_prescale};
           end else begin
           up_es_drp_wdata <= {up_es_ctrl_rdata[15:10], 2'b11, up_es_ctrl_rdata[7:0]};
           end
@@ -785,7 +730,7 @@ module ad_gt_es (
           up_es_drp_sel <= 1'b1;
           up_es_drp_wr <= 1'b1;
           up_es_drp_addr <= ES_DRP_HOFFSET_ADDR;
-          if (GTH_GTX_N == 1) begin
+          if (GTH_OR_GTX_N == 1) begin
           up_es_drp_wdata <= {up_es_hoffset, up_es_hoffset_rdata[3:0]};
           end else begin
           up_es_drp_wdata <= {up_es_hoffset_rdata[15:12], up_es_hoffset};
@@ -801,10 +746,12 @@ module ad_gt_es (
           up_es_drp_sel <= 1'b1;
           up_es_drp_wr <= 1'b1;
           up_es_drp_addr <= ES_DRP_VOFFSET_ADDR;
-          if (GTH_GTX_N == 1) begin
-          up_es_drp_wdata <= {up_es_voffset_rdata[15:11], up_es_voffset_s[7], up_es_ut_s, up_es_voffset_s[6:0], up_es_voffset_range};
+          if (GTH_OR_GTX_N == 1) begin
+          up_es_drp_wdata <= {up_es_voffset_rdata[15:11], up_es_voffset_s[7],
+            up_es_ut_s, up_es_voffset_s[6:0], up_es_voffset_range};
           end else begin
-          up_es_drp_wdata <= {up_es_prescale, up_es_voffset_rdata[10:9], up_es_ut_s, up_es_voffset_s};
+          up_es_drp_wdata <= {up_es_prescale, up_es_voffset_rdata[10:9],
+            up_es_ut_s, up_es_voffset_s};
           end
         end
         ES_FSM_CTRLSTART_READ: begin
@@ -817,7 +764,7 @@ module ad_gt_es (
           up_es_drp_sel <= 1'b1;
           up_es_drp_wr <= 1'b1;
           up_es_drp_addr <= ES_DRP_CTRL_ADDR;
-          if (GTH_GTX_N == 1) begin
+          if (GTH_OR_GTX_N == 1) begin
           up_es_drp_wdata <= {6'd1, up_es_ctrl_rdata[9:0]};
           end else begin
           up_es_drp_wdata <= {up_es_ctrl_rdata[15:6], 6'd1};
@@ -839,7 +786,7 @@ module ad_gt_es (
           up_es_drp_sel <= 1'b1;
           up_es_drp_wr <= 1'b1;
           up_es_drp_addr <= ES_DRP_CTRL_ADDR;
-          if (GTH_GTX_N == 1) begin
+          if (GTH_OR_GTX_N == 1) begin
           up_es_drp_wdata <= {6'd0, up_es_ctrl_rdata[9:0]};
           end else begin
           up_es_drp_wdata <= {up_es_ctrl_rdata[15:6], 6'd0};

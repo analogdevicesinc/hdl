@@ -35,16 +35,19 @@ adi_add_bus "DMA_REQ" "master" \
 adi_add_bus_clock "DMA_REQ_ACLK" "DMA_REQ:DMA_ACK" "DMA_REQ_RSTN"
 
 adi_set_bus_dependency "S_AXIS" "S_AXIS" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 0)"
 
 adi_set_bus_dependency "DMA_ACK" "DMA_REQ_DA" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_bus_dependency "DMA_REQ" "DMA_REQ_DR" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_ports_dependency "DMA_REQ_ACLK" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 adi_set_ports_dependency "DMA_REQ_RSTN" \
-	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
+	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
+
+set_property value S_AXI_ARESETN [ipx::get_bus_parameters ASSOCIATED_RESET \
+    -of_objects [ipx::get_bus_interfaces S_AXI_ACLK -of_objects [ipx::current_core]]]
 
 ipx::save_core [ipx::current_core]
 

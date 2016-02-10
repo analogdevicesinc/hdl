@@ -41,11 +41,11 @@ module dmac_address_generator (
 
 	input                        req_valid,
 	output reg                   req_ready,
-	input [31:C_BYTES_PER_BEAT_WIDTH] req_address,
-	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+	input [31:BYTES_PER_BEAT_WIDTH] req_address,
+	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
-	output reg [C_ID_WIDTH-1:0]  id,
-	input [C_ID_WIDTH-1:0]       request_id,
+	output reg [ID_WIDTH-1:0]  id,
+	input [ID_WIDTH-1:0]       request_id,
 	input                        sync_id,
 
 	input                        eot,
@@ -65,11 +65,11 @@ module dmac_address_generator (
 );
 
 
-parameter C_ID_WIDTH = 3;
-parameter C_DMA_DATA_WIDTH = 64;
-parameter C_BEATS_PER_BURST_WIDTH = 4;
-parameter C_BYTES_PER_BEAT_WIDTH = $clog2(C_DMA_DATA_WIDTH/8);
-localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
+parameter ID_WIDTH = 3;
+parameter DMA_DATA_WIDTH = 64;
+parameter BEATS_PER_BURST_WIDTH = 4;
+parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8);
+localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
 
 `include "inc_id.h"
 
@@ -77,12 +77,12 @@ assign burst = 2'b01;
 assign prot = 3'b000;
 assign cache = 4'b0011;
 assign len = length;
-assign size = $clog2(C_DMA_DATA_WIDTH/8);
+assign size = $clog2(DMA_DATA_WIDTH/8);
 
 reg [7:0] length = 'h0;
-reg [31-C_BYTES_PER_BEAT_WIDTH:0] address = 'h00;
-reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
-assign addr = {address, {C_BYTES_PER_BEAT_WIDTH{1'b0}}};
+reg [31-BYTES_PER_BEAT_WIDTH:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
 
 reg addr_valid_d1;
 reg last = 1'b0;

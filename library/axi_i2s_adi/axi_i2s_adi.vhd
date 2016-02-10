@@ -19,30 +19,30 @@ entity axi_i2s_adi is
 	generic
 	(
 		-- ADD USER GENERICS BELOW THIS LINE ---------------
-		C_SLOT_WIDTH		: integer := 24;
-		C_LRCLK_POL		: integer := 0;		-- LRCLK Polarity (0 - Falling edge, 1 - Rising edge)
-		C_BCLK_POL		: integer := 0; 	-- BCLK Polarity (0 - Falling edge, 1 - Rising edge)
+		SLOT_WIDTH		: integer := 24;
+		LRCLK_POL		: integer := 0;		-- LRCLK Polarity (0 - Falling edge, 1 - Rising edge)
+		BCLK_POL		: integer := 0; 	-- BCLK Polarity (0 - Falling edge, 1 - Rising edge)
 		-- ADD USER GENERICS ABOVE THIS LINE ---------------
 
 		-- DO NOT EDIT BELOW THIS LINE ---------------------
 		-- Bus protocol parameters, do not add to or delete
-		C_S_AXI_DATA_WIDTH	: integer			:= 32;
-		C_S_AXI_ADDR_WIDTH	: integer			:= 32;
-		C_FAMILY		: string			:= "virtex6";
+		S_AXI_DATA_WIDTH	: integer			:= 32;
+		S_AXI_ADDRESS_WIDTH	: integer			:= 32;
+		DEVICE_FAMILY		: string			:= "virtex6";
 		-- DO NOT EDIT ABOVE THIS LINE ---------------------
-		C_DMA_TYPE		: integer			:= 0;
-		C_NUM_CH		: integer			:= 1;
-		C_HAS_TX		: integer			:= 1;
-		C_HAS_RX		: integer			:= 1
+		DMA_TYPE		: integer			:= 0;
+		NUM_OF_CHANNEL		: integer			:= 1;
+		HAS_TX		: integer			:= 1;
+		HAS_RX		: integer			:= 1
 	);
 	port
 	(
 		-- Serial Data interface
 		DATA_CLK_I		: in  std_logic;
-		BCLK_O			: out std_logic_vector(C_NUM_CH - 1 downto 0);
-		LRCLK_O			: out std_logic_vector(C_NUM_CH - 1 downto 0);
-		SDATA_O			: out std_logic_vector(C_NUM_CH - 1 downto 0);
-		SDATA_I			: in  std_logic_vector(C_NUM_CH - 1 downto 0);
+		BCLK_O			: out std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
+		LRCLK_O			: out std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
+		SDATA_O			: out std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
+		SDATA_I			: in  std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
 
 		-- AXI Streaming DMA TX interface
 		S_AXIS_ACLK		: in  std_logic;
@@ -85,17 +85,17 @@ entity axi_i2s_adi is
 		-- AXI bus interface
 		S_AXI_ACLK		: in  std_logic;
 		S_AXI_ARESETN		: in  std_logic;
-		S_AXI_AWADDR		: in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
+		S_AXI_AWADDR		: in  std_logic_vector(S_AXI_ADDRESS_WIDTH-1 downto 0);
 		S_AXI_AWVALID		: in  std_logic;
-		S_AXI_WDATA		: in  std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-		S_AXI_WSTRB		: in  std_logic_vector((C_S_AXI_DATA_WIDTH/8)-1 downto 0);
+		S_AXI_WDATA		: in  std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
+		S_AXI_WSTRB		: in  std_logic_vector((S_AXI_DATA_WIDTH/8)-1 downto 0);
 		S_AXI_WVALID		: in  std_logic;
 		S_AXI_BREADY		: in  std_logic;
-		S_AXI_ARADDR		: in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
+		S_AXI_ARADDR		: in  std_logic_vector(S_AXI_ADDRESS_WIDTH-1 downto 0);
 		S_AXI_ARVALID		: in  std_logic;
 		S_AXI_RREADY		: in  std_logic;
 		S_AXI_ARREADY		: out std_logic;
-		S_AXI_RDATA		: out std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+		S_AXI_RDATA		: out std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
 		S_AXI_RRESP		: out std_logic_vector(1 downto 0);
 		S_AXI_RVALID		: out std_logic;
 		S_AXI_WREADY		: out std_logic;
@@ -113,13 +113,13 @@ architecture Behavioral of axi_i2s_adi is
 signal i2s_reset			: std_logic;
 signal tx_fifo_reset			: std_logic;
 signal tx_enable			: Boolean;
-signal tx_data				: std_logic_vector(C_SLOT_WIDTH - 1 downto 0);
+signal tx_data				: std_logic_vector(SLOT_WIDTH - 1 downto 0);
 signal tx_ack				: std_logic;
 signal tx_stb				: std_logic;
 
 signal rx_enable			: Boolean;
 signal rx_fifo_reset			: std_logic;
-signal rx_data				: std_logic_vector(C_SLOT_WIDTH - 1 downto 0);
+signal rx_data				: std_logic_vector(SLOT_WIDTH - 1 downto 0);
 signal rx_ack				: std_logic;
 signal rx_stb				: std_logic;
 
@@ -135,7 +135,7 @@ signal I2S_CONTROL_REG			: std_logic_vector(31 downto 0);
 signal I2S_CLK_CONTROL_REG		: std_logic_vector(31 downto 0);
 signal PERIOD_LEN_REG			: std_logic_vector(31 downto 0);
 
-constant FIFO_AWIDTH			: integer := integer(ceil(log2(real(C_NUM_CH * 8))));
+constant FIFO_AWIDTH			: integer := integer(ceil(log2(real(NUM_OF_CHANNEL * 8))));
 
 -- Audio samples FIFO
 constant RAM_ADDR_WIDTH			: integer := 7;
@@ -175,8 +175,8 @@ begin
 		end if;
 	end process;
 
-	streaming_dma_tx_gen: if C_DMA_TYPE = 0 and C_HAS_TX = 1 generate
-		tx_fifo : entity axi_streaming_dma_tx_fifo	
+	streaming_dma_tx_gen: if DMA_TYPE = 0 and HAS_TX = 1 generate
+		tx_fifo : entity axi_streaming_dma_tx_fifo
 			generic map(
 				RAM_ADDR_WIDTH => FIFO_AWIDTH,
 				FIFO_DWIDTH => 24
@@ -199,12 +199,12 @@ begin
 			);
 	end generate;
 
-	no_streaming_dma_tx_gen: if C_DMA_TYPE /= 0 or C_HAS_TX /= 1 generate
+	no_streaming_dma_tx_gen: if DMA_TYPE /= 0 or HAS_TX /= 1 generate
 		S_AXIS_TREADY <= '0';
 	end generate;
 
-	streaming_dma_rx_gen: if C_DMA_TYPE = 0 and C_HAS_RX = 1 generate
-		rx_fifo : entity axi_streaming_dma_rx_fifo	
+	streaming_dma_rx_gen: if DMA_TYPE = 0 and HAS_RX = 1 generate
+		rx_fifo : entity axi_streaming_dma_rx_fifo
 			generic map(
 				RAM_ADDR_WIDTH => FIFO_AWIDTH,
 				FIFO_DWIDTH => 24
@@ -232,7 +232,7 @@ begin
 			M_AXIS_TDATA(7 downto 0) <= (others => '0');
 	end generate;
 
-	no_streaming_dma_rx_gen: if C_DMA_TYPE /= 0 or C_HAS_RX /= 1 generate
+	no_streaming_dma_rx_gen: if DMA_TYPE /= 0 or HAS_RX /= 1 generate
 		M_AXIS_TDATA <= (others => '0');
 		M_AXIS_TLAST <= '0';
 		M_AXIS_TVALID <= '0';
@@ -241,7 +241,7 @@ begin
 
 
 
-	pl330_dma_tx_gen: if C_DMA_TYPE = 1 and C_HAS_TX = 1 generate
+	pl330_dma_tx_gen: if DMA_TYPE = 1 and HAS_TX = 1 generate
 		tx_fifo_stb <= '1' when wr_addr = 11 and wr_stb = '1' else '0';
 
 		tx_fifo: entity pl330_dma_fifo
@@ -275,14 +275,14 @@ begin
 			);
 	end generate;
 
-	no_pl330_dma_tx_gen: if C_DMA_TYPE /= 1 or C_HAS_TX /= 1 generate
+	no_pl330_dma_tx_gen: if DMA_TYPE /= 1 or HAS_TX /= 1 generate
 		DMA_REQ_TX_DAREADY <= '0';
 		DMA_REQ_TX_DRVALID <= '0';
 		DMA_REQ_TX_DRTYPE <= (others => '0');
 		DMA_REQ_TX_DRLAST <= '0';
 	end generate;
 
-	pl330_dma_rx_gen: if C_DMA_TYPE = 1 and C_HAS_RX = 1 generate
+	pl330_dma_rx_gen: if DMA_TYPE = 1 and HAS_RX = 1 generate
 		rx_fifo_ack <= '1' when rd_addr = 10 and rd_ack = '1' else '0';
 
 		rx_fifo: entity pl330_dma_fifo
@@ -317,7 +317,7 @@ begin
 
 	end generate;
 
-	no_pl330_dma_rx_gen: if C_DMA_TYPE /= 1 or C_HAS_RX /= 1 generate
+	no_pl330_dma_rx_gen: if DMA_TYPE /= 1 or HAS_RX /= 1 generate
 		DMA_REQ_RX_DAREADY <= '0';
 		DMA_REQ_RX_DRVALID <= '0';
 		DMA_REQ_RX_DRTYPE <= (others => '0');
@@ -326,12 +326,12 @@ begin
 
 	ctrl : entity i2s_controller
 		generic map (
-			C_SLOT_WIDTH => C_SLOT_WIDTH,
-			C_BCLK_POL => C_BCLK_POL,
-			C_LRCLK_POL => C_LRCLK_POL,
-			C_NUM_CH => C_NUM_CH,
-			C_HAS_TX => C_HAS_TX,
-			C_HAS_RX => C_HAS_RX
+			C_SLOT_WIDTH => SLOT_WIDTH,
+			C_BCLK_POL => BCLK_POL,
+			C_LRCLK_POL => LRCLK_POL,
+			C_NUM_CH => NUM_OF_CHANNEL,
+			C_HAS_TX => HAS_TX,
+			C_HAS_RX => HAS_RX
 		)
 		port map (
 			clk => S_AXI_ACLK,
@@ -368,8 +368,8 @@ begin
 
 	ctrlif: entity axi_ctrlif
 		generic map (
-			C_S_AXI_ADDR_WIDTH => C_S_AXI_ADDR_WIDTH,
-			C_S_AXI_DATA_WIDTH => C_S_AXI_DATA_WIDTH,
+			C_S_AXI_ADDR_WIDTH => S_AXI_ADDRESS_WIDTH,
+			C_S_AXI_DATA_WIDTH => S_AXI_DATA_WIDTH,
 			C_NUM_REG => 12
 		)
 		port map(
@@ -407,8 +407,8 @@ begin
 	process(rd_addr, I2S_CONTROL_REG, I2S_CLK_CONTROL_REG, PERIOD_LEN_REG, rx_sample, cnt)
 	begin
 		case rd_addr is
-			when 1 => rd_data <=  I2S_CONTROL_REG and x"00000003"; 
-			when 2 => rd_data <=  I2S_CLK_CONTROL_REG and x"00ff00ff"; 
+			when 1 => rd_data <=  I2S_CONTROL_REG and x"00000003";
+			when 2 => rd_data <=  I2S_CLK_CONTROL_REG and x"00ff00ff";
 			when 6 => rd_data <= PERIOD_LEN_REG and x"0000ffff";
 			when 10 => rd_data <= rx_sample & std_logic_vector(to_unsigned(cnt, 8));
 			when others => rd_data <= (others => '0');

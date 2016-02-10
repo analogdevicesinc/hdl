@@ -97,7 +97,7 @@ module axi_adcfifo_wr (
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 16;
   parameter   AXI_ADDRESS = 32'h00000000;
-  parameter   AXI_ADDRLIMIT = 32'h00000000;
+  parameter   AXI_ADDRESS_LIMIT = 32'h00000000;
   localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
   localparam  AXI_AWINCR = AXI_LENGTH * AXI_BYTE_WIDTH;
   localparam  BUF_THRESHOLD_LO = 8'd6;
@@ -259,7 +259,7 @@ module axi_adcfifo_wr (
       adc_xfer_init <= adc_xfer_req_m[1] & ~adc_xfer_req_m[2];
       if (adc_xfer_init == 1'b1) begin
         adc_xfer_limit <= 1'd1;
-      end else if ((adc_xfer_addr >= AXI_ADDRLIMIT) || (adc_xfer_enable == 1'b0)) begin
+      end else if ((adc_xfer_addr >= AXI_ADDRESS_LIMIT) || (adc_xfer_enable == 1'b0)) begin
         adc_xfer_limit <= 1'd0;
       end
       if (adc_xfer_init == 1'b1) begin
@@ -464,7 +464,7 @@ module axi_adcfifo_wr (
 
   // buffer
 
-  ad_mem #(.DATA_WIDTH(AXI_DATA_WIDTH), .ADDR_WIDTH(8)) i_mem (
+  ad_mem #(.DATA_WIDTH(AXI_DATA_WIDTH), .ADDRESS_WIDTH(8)) i_mem (
     .clka (adc_clk),
     .wea (adc_wr),
     .addra (adc_waddr),

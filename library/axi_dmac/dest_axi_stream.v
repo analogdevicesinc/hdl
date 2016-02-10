@@ -46,24 +46,24 @@ module dmac_dest_axi_stream (
 	output sync_id_ret,
         output xfer_req,
 
-	input [C_ID_WIDTH-1:0] request_id,
-	output [C_ID_WIDTH-1:0] response_id,
-	output [C_ID_WIDTH-1:0] data_id,
+	input [ID_WIDTH-1:0] request_id,
+	output [ID_WIDTH-1:0] response_id,
+	output [ID_WIDTH-1:0] data_id,
 	input data_eot,
 	input response_eot,
 
 	input m_axis_ready,
 	output m_axis_valid,
-	output [C_S_AXIS_DATA_WIDTH-1:0] m_axis_data,
+	output [S_AXIS_DATA_WIDTH-1:0] m_axis_data,
         output m_axis_last,
 
 	output fifo_ready,
 	input fifo_valid,
-	input [C_S_AXIS_DATA_WIDTH-1:0] fifo_data,
+	input [S_AXIS_DATA_WIDTH-1:0] fifo_data,
 
 	input req_valid,
 	output req_ready,
-	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
         input req_xlast,
 
 	output response_valid,
@@ -72,9 +72,9 @@ module dmac_dest_axi_stream (
 	output [1:0] response_resp
 );
 
-parameter C_ID_WIDTH = 3;
-parameter C_S_AXIS_DATA_WIDTH = 64;
-parameter C_BEATS_PER_BURST_WIDTH = 4;
+parameter ID_WIDTH = 3;
+parameter S_AXIS_DATA_WIDTH = 64;
+parameter BEATS_PER_BURST_WIDTH = 4;
 
 reg req_xlast_d = 1'b0;
 
@@ -97,10 +97,10 @@ end
 assign m_axis_last = (req_xlast_d == 1'b1) ? m_axis_last_s : 1'b0;
 
 dmac_data_mover # (
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_S_AXIS_DATA_WIDTH),
-	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH),
-	.C_DISABLE_WAIT_FOR_ID(0)
+	.ID_WIDTH(ID_WIDTH),
+	.DATA_WIDTH(S_AXIS_DATA_WIDTH),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+	.DISABLE_WAIT_FOR_ID(0)
 ) i_data_mover (
 	.clk(s_axis_aclk),
 	.resetn(s_axis_aresetn),
@@ -128,7 +128,7 @@ dmac_data_mover # (
 );
 
 dmac_response_generator # (
-	.C_ID_WIDTH(C_ID_WIDTH)
+	.ID_WIDTH(ID_WIDTH)
 ) i_response_generator (
 	.clk(s_axis_aclk),
 	.resetn(s_axis_aresetn),

@@ -18,18 +18,18 @@ adi_add_bus "S_AXIS" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{
-		{"s_valid" "TVALID"} \
-		{"s_ready" "TREADY"} \
-		{"s_data" "TDATA"} \
+		{"s_axis_valid" "TVALID"} \
+		{"s_axis_ready" "TREADY"} \
+		{"s_axis_data" "TDATA"} \
 	}
 
 adi_add_bus "M_AXIS" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{
-		{"m_valid" "TVALID"} \
-		{"m_ready" "TREADY"} \
-		{"m_data" "TDATA"} \
+		{"m_axis_valid" "TVALID"} \
+		{"m_axis_ready" "TREADY"} \
+		{"m_axis_data" "TDATA"} \
 	}
 
 adi_add_bus_clock "m_axis_aclk" "M_AXIS" "m_axis_aresetn"

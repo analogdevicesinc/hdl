@@ -51,7 +51,7 @@ module ad_lvds_out (
 
   // parameters
 
-  parameter   BUFTYPE = 0;
+  parameter   DEVICE_TYPE = 0;
   localparam  SERIES7 = 0;
   localparam  VIRTEX6 = 1;
 

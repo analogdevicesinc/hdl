@@ -21,7 +21,7 @@ M_DEPS += axi_ad9680_pnmon.v
 M_DEPS += axi_ad9680_channel.v
 M_DEPS += axi_ad9680_if.v
 M_DEPS += axi_ad9680.v
-M_DEPS += axi_ad9680_constr.xdc
+M_DEPS += ../common/ad_axi_ip_constr.xdc
 
 M_VIVADO := vivado -mode batch -source
 

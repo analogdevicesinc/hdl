@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -83,7 +83,6 @@ module axi_ad9122_core (
 
   // drp interface
 
-  up_drp_rst,
   up_drp_sel,
   up_drp_wr,
   up_drp_addr,
@@ -107,8 +106,8 @@ module axi_ad9122_core (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   DP_DISABLE = 0;
+  parameter   ID = 0;
+  parameter   DATAPATH_DISABLE = 0;
 
   // dac interface
 
@@ -154,7 +153,6 @@ module axi_ad9122_core (
 
   // drp interface
 
-  output          up_drp_rst;
   output          up_drp_sel;
   output          up_drp_wr;
   output  [11:0]  up_drp_addr;
@@ -204,7 +202,7 @@ module axi_ad9122_core (
 
   // master/slave (clocks must be synchronous)
 
-  assign dac_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
+  assign dac_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
 
   // processor read interface
 
@@ -221,10 +219,10 @@ module axi_ad9122_core (
   end
 
   // dac channel
-  
+
   axi_ad9122_channel #(
-    .CHID(0),
-    .DP_DISABLE(DP_DISABLE))
+    .CHANNEL_ID(0),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
   i_channel_0 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
@@ -247,10 +245,10 @@ module axi_ad9122_core (
     .up_rack (up_rack_0_s));
 
   // dac channel
-  
+
   axi_ad9122_channel #(
-    .CHID(1),
-    .DP_DISABLE(DP_DISABLE))
+    .CHANNEL_ID(1),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
   i_channel_1 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
@@ -274,7 +272,7 @@ module axi_ad9122_core (
 
   // dac common processor interface
 
-  up_dac_common #(.PCORE_ID(PCORE_ID)) i_up_dac_common (
+  up_dac_common #(.ID(ID)) i_up_dac_common (
     .mmcm_rst (mmcm_rst),
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),
@@ -310,7 +308,7 @@ module axi_ad9122_core (
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
-  
+
 endmodule
 
 // ***************************************************************************

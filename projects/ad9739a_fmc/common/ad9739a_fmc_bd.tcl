@@ -15,16 +15,16 @@ create_bd_port -dir O -from 13 -to 0 dac_data_out_b_n
 set axi_ad9739a [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9739a:1.0 axi_ad9739a]
 
 set axi_ad9739a_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9739a_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {2}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.C_FIFO_SIZE {64}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {1}]  $axi_ad9739a_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {256}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {256}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.C_DMA_AXI_PROTOCOL_SRC {1}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.FIFO_SIZE {32}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {1}]  $axi_ad9739a_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {256}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $axi_ad9739a_dma
+set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $axi_ad9739a_dma
 
 # connections (dac)
 
@@ -38,7 +38,7 @@ ad_connect  dac_data_out_b_p axi_ad9739a/dac_data_out_b_p
 ad_connect  dac_data_out_b_n axi_ad9739a/dac_data_out_b_n
 ad_connect  dac_div_clk axi_ad9739a/dac_div_clk
 ad_connect  dac_div_clk axi_ad9739a_dma/fifo_rd_clk
-ad_connect  axi_ad9739a/dac_valid axi_ad9739a_dma/fifo_rd_en  
+ad_connect  axi_ad9739a/dac_valid axi_ad9739a_dma/fifo_rd_en
 ad_connect  axi_ad9739a/dac_ddata axi_ad9739a_dma/fifo_rd_dout
 ad_connect  axi_ad9739a/dac_dunf axi_ad9739a_dma/fifo_rd_underflow
 

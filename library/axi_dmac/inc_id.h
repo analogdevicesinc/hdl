@@ -35,32 +35,32 @@
 // ***************************************************************************
 // ***************************************************************************
 
-function [C_ID_WIDTH-1:0] g2b;
-	input [C_ID_WIDTH-1:0] g;
-	reg   [C_ID_WIDTH-1:0] b;
+function [ID_WIDTH-1:0] g2b;
+	input [ID_WIDTH-1:0] g;
+	reg   [ID_WIDTH-1:0] b;
 	integer i;
 	begin
-		b[C_ID_WIDTH-1] = g[C_ID_WIDTH-1];
-		for (i = C_ID_WIDTH - 2; i >= 0; i =  i - 1)
+		b[ID_WIDTH-1] = g[ID_WIDTH-1];
+		for (i = ID_WIDTH - 2; i >= 0; i =  i - 1)
 			b[i] = b[i + 1] ^ g[i];
 		g2b = b;
 	end
 endfunction
 
-function [C_ID_WIDTH-1:0] b2g;
-	input [C_ID_WIDTH-1:0] b;
-	reg [C_ID_WIDTH-1:0] g;
+function [ID_WIDTH-1:0] b2g;
+	input [ID_WIDTH-1:0] b;
+	reg [ID_WIDTH-1:0] g;
 	integer i;
 	begin
-		g[C_ID_WIDTH-1] = b[C_ID_WIDTH-1];
-		for (i = C_ID_WIDTH - 2; i >= 0; i = i -1)
+		g[ID_WIDTH-1] = b[ID_WIDTH-1];
+		for (i = ID_WIDTH - 2; i >= 0; i = i -1)
 				g[i] = b[i + 1] ^ b[i];
 		b2g = g;
 	end
 endfunction
 
-function [C_ID_WIDTH:0] inc_id;
-input [C_ID_WIDTH:0] id;
+function [ID_WIDTH:0] inc_id;
+input [ID_WIDTH:0] id;
 begin
 	inc_id = b2g(g2b(id) + 1);
 end

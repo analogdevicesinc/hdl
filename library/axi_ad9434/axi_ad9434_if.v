@@ -71,7 +71,7 @@ module axi_ad9434_if (
   // mmcm reset
   mmcm_rst,
 
-  // drp interface for MMCM
+  // drp interface for MMCM_OR_BUFR_N
   up_rstn,
   up_drp_sel,
   up_drp_wr,
@@ -82,11 +82,10 @@ module axi_ad9434_if (
   up_drp_locked);
 
   // parameters
-  parameter PCORE_DEVTYPE = 0;  // 0 - 7Series / 1 - 6Series
-  parameter PCORE_IODELAY_GROUP = "dev_if_delay_group";
+  parameter DEVICE_TYPE = 0;  // 0 - 7Series / 1 - 6Series
+  parameter IO_DELAY_GROUP = "dev_if_delay_group";
 
   // buffer type based on the target device.
-  localparam PCORE_BUFTYPE = PCORE_DEVTYPE;
   localparam SDR = 0;
 
   // adc interface (clk, data, over-range)
@@ -151,11 +150,11 @@ module axi_ad9434_if (
   generate
   for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin : g_adc_if
     ad_serdes_in #(
-      .DEVICE_TYPE(PCORE_DEVTYPE),
+      .DEVICE_TYPE(DEVICE_TYPE),
       .IODELAY_CTRL(0),
-      .IODELAY_GROUP(PCORE_IODELAY_GROUP),
-      .IF_TYPE(SDR),
-      .PARALLEL_WIDTH(4))
+      .IODELAY_GROUP(IO_DELAY_GROUP),
+      .DDR_OR_SDR_N(SDR),
+      .DATA_WIDTH(4))
     i_adc_data (
       .rst(adc_rst),
       .clk(adc_clk_in),
@@ -182,11 +181,11 @@ module axi_ad9434_if (
 
   // over-range interface
   ad_serdes_in #(
-    .DEVICE_TYPE(PCORE_DEVTYPE),
+    .DEVICE_TYPE(DEVICE_TYPE),
     .IODELAY_CTRL(1),
-    .IODELAY_GROUP(PCORE_IODELAY_GROUP),
-    .IF_TYPE(SDR),
-    .PARALLEL_WIDTH(4))
+    .IODELAY_GROUP(IO_DELAY_GROUP),
+    .DDR_OR_SDR_N(SDR),
+    .DATA_WIDTH(4))
   i_adc_data (
     .rst(adc_rst),
     .clk(adc_clk_in),
@@ -209,9 +208,9 @@ module axi_ad9434_if (
     .delay_rst(delay_rst),
     .delay_locked(delay_locked));
 
-  // clock input buffers and MMCM
+  // clock input buffers and MMCM_OR_BUFR_N
   ad_serdes_clk #(
-    .MMCM_DEVICE_TYPE (PCORE_DEVTYPE),
+    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
     .MMCM_CLKIN_PERIOD (2),
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),
@@ -236,13 +235,14 @@ module axi_ad9434_if (
   // adc overange
   assign adc_or = adc_or_s[0] | adc_or_s[1] | adc_or_s[2] | adc_or_s[3];
 
-  // adc status: adc is up, if both the MMCM and DELAY blocks are up
+  // adc status: adc is up, if both the MMCM_OR_BUFR_N and DELAY blocks are up
   always @(posedge adc_div_clk) begin
     if(adc_rst == 1'b1) begin
       adc_status_m1 <= 1'b0;
       adc_status <= 1'b0;
     end else begin
       adc_status_m1 <= up_drp_locked & delay_locked;
+      adc_status <= adc_status_m1;
     end
   end
 

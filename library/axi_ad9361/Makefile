@@ -8,6 +8,7 @@
 M_DEPS := axi_ad9361_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += ../common/ad_axi_ip_constr.xdc
 M_DEPS += ../common/ad_rst.v
 M_DEPS += ../common/ad_lvds_clk.v
 M_DEPS += ../common/ad_lvds_in.v
@@ -32,6 +33,7 @@ M_DEPS += ../common/up_adc_channel.v
 M_DEPS += ../common/up_dac_common.v
 M_DEPS += ../common/up_dac_channel.v
 M_DEPS += ../common/up_tdd_cntrl.v
+M_DEPS += axi_ad9361_constr.xdc
 M_DEPS += axi_ad9361_dev_if.v
 M_DEPS += axi_ad9361_rx_pnmon.v
 M_DEPS += axi_ad9361_rx_channel.v
@@ -40,7 +42,6 @@ M_DEPS += axi_ad9361_tx_channel.v
 M_DEPS += axi_ad9361_tx.v
 M_DEPS += axi_ad9361_tdd.v
 M_DEPS += axi_ad9361_tdd_if.v
-M_DEPS += axi_ad9361_constr.xdc
 M_DEPS += axi_ad9361.v
 
 M_VIVADO := vivado -mode batch -source

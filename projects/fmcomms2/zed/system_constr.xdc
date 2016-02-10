@@ -60,15 +60,15 @@ set_property  -dict {PACKAGE_PIN  D21  IOSTANDARD LVCMOS25} [get_ports spi_miso]
 
 # spi pmod JA1
 
-set_property  -dict {PACKAGE_PIN  Y11    IOSTANDARD LVCMOS33}     [get_ports spi_udc_csn_tx]       ; ## JA1
-set_property  -dict {PACKAGE_PIN  AB11   IOSTANDARD LVCMOS33}     [get_ports spi_udc_csn_rx]       ; ## JA7
-set_property  -dict {PACKAGE_PIN  AA9    IOSTANDARD LVCMOS33}     [get_ports spi_udc_sclk]         ; ## JA4
-set_property  -dict {PACKAGE_PIN  AA11   IOSTANDARD LVCMOS33}     [get_ports spi_udc_data]         ; ## JA2
+set_property  -dict {PACKAGE_PIN  Y11    IOSTANDARD LVCMOS33}     [get_ports spi_udc_csn_tx]             ; ## JA1
+set_property  -dict {PACKAGE_PIN  AB11   IOSTANDARD LVCMOS33}     [get_ports spi_udc_csn_rx]             ; ## JA7
+set_property  -dict {PACKAGE_PIN  AA9    IOSTANDARD LVCMOS33}     [get_ports spi_udc_sclk]               ; ## JA4
+set_property  -dict {PACKAGE_PIN  AA11   IOSTANDARD LVCMOS33}     [get_ports spi_udc_data]               ; ## JA2
 
-set_property  -dict {PACKAGE_PIN  Y10    IOSTANDARD LVCMOS33}     [get_ports gpio_muxout_tx]       ; ## JA3
-set_property  -dict {PACKAGE_PIN  AB9    IOSTANDARD LVCMOS33}     [get_ports gpio_muxout_rx]       ; ## JA9
+set_property  -dict {PACKAGE_PIN  Y10    IOSTANDARD LVCMOS33}     [get_ports gpio_muxout_tx]             ; ## JA3
+set_property  -dict {PACKAGE_PIN  AB9    IOSTANDARD LVCMOS33}     [get_ports gpio_muxout_rx]             ; ## JA9
 
 # clocks
 
 create_clock -name rx_clk       -period  4 [get_ports rx_clk_in_p]
-create_clock -name ad9361_clk   -period  4 [get_pins i_system_wrapper/system_i/axi_ad9361/clk]
+

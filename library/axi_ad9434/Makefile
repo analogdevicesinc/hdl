@@ -21,6 +21,7 @@ M_DEPS += ../common/up_adc_common.v
 M_DEPS += ../common/up_adc_channel.v
 M_DEPS += ../common/ad_pnmon.v
 M_DEPS += ../common/up_axi.v
+M_DEPS += ../common/ad_axi_ip_constr.xdc
 M_DEPS += axi_ad9434_if.v
 M_DEPS += axi_ad9434_pnmon.v
 M_DEPS += axi_ad9434_core.v

@@ -53,39 +53,39 @@ module util_bsplit (
 
   // parameters
 
-  parameter   CH_DW     = 1;
-  parameter   CH_CNT    = 8;
-  localparam  CH_MCNT   = 9;
+  parameter   CHANNEL_DATA_WIDTH     = 1;
+  parameter   NUM_OF_CHANNELS    = 8;
+  localparam  NUM_OF_CHANNELS_M   = 9;
 
   // interface
 
-  input   [((CH_CNT*CH_DW)-1):0]    data;
-  output  [(CH_DW-1):0]             split_data_0;
-  output  [(CH_DW-1):0]             split_data_1;
-  output  [(CH_DW-1):0]             split_data_2;
-  output  [(CH_DW-1):0]             split_data_3;
-  output  [(CH_DW-1):0]             split_data_4;
-  output  [(CH_DW-1):0]             split_data_5;
-  output  [(CH_DW-1):0]             split_data_6;
-  output  [(CH_DW-1):0]             split_data_7;
+  input   [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    data;
+  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_0;
+  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_1;
+  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_2;
+  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_3;
+  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_4;
+  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_5;
+  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_6;
+  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_7;
 
   // internal signals
 
-  wire    [((CH_MCNT*CH_DW)-1):0]   data_s;
+  wire    [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]   data_s;
 
   // extend and split
   
-  assign data_s[((CH_MCNT*CH_DW)-1):(CH_CNT*CH_DW)] = 'd0;
-  assign data_s[((CH_CNT*CH_DW)-1):0] = data;
+  assign data_s[((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):(NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)] = 'd0;
+  assign data_s[((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0] = data;
 
-  assign split_data_0 = data_s[((CH_DW*1)-1):(CH_DW*0)];
-  assign split_data_1 = data_s[((CH_DW*2)-1):(CH_DW*1)];
-  assign split_data_2 = data_s[((CH_DW*3)-1):(CH_DW*2)];
-  assign split_data_3 = data_s[((CH_DW*4)-1):(CH_DW*3)];
-  assign split_data_4 = data_s[((CH_DW*5)-1):(CH_DW*4)];
-  assign split_data_5 = data_s[((CH_DW*6)-1):(CH_DW*5)];
-  assign split_data_6 = data_s[((CH_DW*7)-1):(CH_DW*6)];
-  assign split_data_7 = data_s[((CH_DW*8)-1):(CH_DW*7)];
+  assign split_data_0 = data_s[((CHANNEL_DATA_WIDTH*1)-1):(CHANNEL_DATA_WIDTH*0)];
+  assign split_data_1 = data_s[((CHANNEL_DATA_WIDTH*2)-1):(CHANNEL_DATA_WIDTH*1)];
+  assign split_data_2 = data_s[((CHANNEL_DATA_WIDTH*3)-1):(CHANNEL_DATA_WIDTH*2)];
+  assign split_data_3 = data_s[((CHANNEL_DATA_WIDTH*4)-1):(CHANNEL_DATA_WIDTH*3)];
+  assign split_data_4 = data_s[((CHANNEL_DATA_WIDTH*5)-1):(CHANNEL_DATA_WIDTH*4)];
+  assign split_data_5 = data_s[((CHANNEL_DATA_WIDTH*6)-1):(CHANNEL_DATA_WIDTH*5)];
+  assign split_data_6 = data_s[((CHANNEL_DATA_WIDTH*7)-1):(CHANNEL_DATA_WIDTH*6)];
+  assign split_data_7 = data_s[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*7)];
 
 endmodule
 

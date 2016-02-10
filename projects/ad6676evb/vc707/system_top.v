@@ -189,11 +189,6 @@ module system_top (
   output          spi_mosi;
   input           spi_miso;
 
-  // internal registers
-
-  reg             adc_dwr = 'd0;
-  reg     [63:0]  adc_ddata = 'd0;
-
   // internal signals
 
   wire    [63:0]  gpio_i;
@@ -205,46 +200,6 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
-  wire            adc_clk;
-  wire            adc_enable_a;
-  wire    [31:0]  adc_data_a;
-  wire            adc_enable_b;
-  wire    [31:0]  adc_data_b;
-
-  // pack & unpack here
-
-  always @(posedge adc_clk) begin
-    case ({adc_enable_b, adc_enable_a})
-      2'b11: begin
-        adc_dwr <= 1'b1;
-        adc_ddata[63:48] <= adc_data_b[31:16];
-        adc_ddata[47:32] <= adc_data_a[31:16];
-        adc_ddata[31:16] <= adc_data_b[15: 0];
-        adc_ddata[15: 0] <= adc_data_a[15: 0];
-      end
-      2'b10: begin
-        adc_dwr <= ~adc_dwr;
-        adc_ddata[63:48] <= adc_data_b[31:16];
-        adc_ddata[47:32] <= adc_data_b[15: 0];
-        adc_ddata[31:16] <= adc_ddata[63:48];
-        adc_ddata[15: 0] <= adc_ddata[47:32];
-      end
-      2'b01: begin
-        adc_dwr <= ~adc_dwr;
-        adc_ddata[63:48] <= adc_data_a[31:16];
-        adc_ddata[47:32] <= adc_data_a[15: 0];
-        adc_ddata[31:16] <= adc_ddata[63:48];
-        adc_ddata[15: 0] <= adc_ddata[47:32];
-      end
-      default: begin
-        adc_dwr <= 1'b0;
-        adc_ddata[63:48] <= 16'd0;
-        adc_ddata[47:32] <= 16'd0;
-        adc_ddata[31:16] <= 16'd0;
-        adc_ddata[15: 0] <= 16'd0;
-      end
-    endcase
-  end
 
   // default logic
 
@@ -292,16 +247,6 @@ module system_top (
     .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
-    .adc_clk (adc_clk),
-    .adc_data_a (adc_data_a),
-    .adc_data_b (adc_data_b),
-    .adc_ddata (adc_ddata),
-    .adc_dsync (1'b1),
-    .adc_dwr (adc_dwr),
-    .adc_enable_a (adc_enable_a),
-    .adc_enable_b (adc_enable_b),
-    .adc_valid_a (),
-    .adc_valid_b (),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),

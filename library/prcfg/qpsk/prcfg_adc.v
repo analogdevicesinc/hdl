@@ -48,21 +48,19 @@ module prcfg_adc (
   status,
 
   // FIFO interface
-  src_adc_dwr,
-  src_adc_dsync,
-  src_adc_ddata,
-  src_adc_dovf,
+  src_adc_valid,
+  src_adc_data,
+  src_adc_enable,
 
-  dst_adc_dwr,
-  dst_adc_dsync,
-  dst_adc_ddata,
-  dst_adc_dovf
+  dst_adc_valid,
+  dst_adc_data,
+  dst_adc_enable
 );
 
   parameter   CHANNEL_ID    = 0;
   parameter   DATA_WIDTH    = 32;
 
-  localparam  SYMBOL_WIDTH = 2;
+  localparam  SYMBOL_WIDTH  = 2;
   localparam  RP_ID         = 8'hA2;
 
   input                               clk;
@@ -70,28 +68,25 @@ module prcfg_adc (
   input   [31:0]                      control;
   output  [31:0]                      status;
 
-  input                               src_adc_dwr;
-  input                               src_adc_dsync;
-  input   [(DATA_WIDTH-1):0]          src_adc_ddata;
-  output                              src_adc_dovf;
+  input                               src_adc_valid;
+  input   [(DATA_WIDTH-1):0]          src_adc_data;
+  input                               src_adc_enable;
 
-  output                              dst_adc_dwr;
-  output                              dst_adc_dsync;
-  output  [(DATA_WIDTH-1):0]          dst_adc_ddata;
-  input                               dst_adc_dovf;
+  output                              dst_adc_valid;
+  output  [(DATA_WIDTH-1):0]          dst_adc_data;
+  output                              dst_adc_enable;
 
-  reg                                 src_adc_dovf    = 'h0;
-  reg                                 dst_adc_dwr     = 'h0;
-  reg                                 dst_adc_dsync   = 'h0;
-  reg     [(DATA_WIDTH-1):0]          dst_adc_ddata   = 'h0;
+  reg                                 dst_adc_valid   = 'h0;
+  reg     [(DATA_WIDTH-1):0]          dst_adc_data    = 'h0;
+  reg                                 dst_adc_enable  = 'h0;
 
   reg     [ 7:0]                      adc_pn_data     = 'hF1;
   reg     [31:0]                      status          = 'h0;
   reg     [ 3:0]                      mode            = 'h0;
   reg     [ 3:0]                      channel_sel     = 'h0;
 
-  wire                                adc_dvalid;
-  wire    [(SYMBOL_WIDTH-1):0]        adc_ddata_s;
+  wire                                adc_valid;
+  wire    [(SYMBOL_WIDTH-1):0]        adc_data_s;
   wire    [ 7:0]                      adc_pn_data_s;
   wire                                adc_pn_err_s;
   wire                                adc_pn_oos_s;
@@ -119,23 +114,23 @@ module prcfg_adc (
     mode        <= control[ 7:4];
   end
 
-  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+  assign adc_valid  = src_adc_valid & src_adc_enable;
 
-  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_ddata_s} : adc_pn_data;
+  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_data_s} : adc_pn_data;
 
   ad_pnmon #(
     .DATA_WIDTH(8)
   ) i_pn_mon (
     .adc_clk(clk),
-    .adc_valid_in(adc_dvalid),
-    .adc_data_in({adc_pn_data[7:2], adc_ddata_s}),
+    .adc_valid_in(adc_valid),
+    .adc_data_in({adc_pn_data[7:2], adc_data_s}),
     .adc_data_pn(adc_pn_data_s),
     .adc_pn_oos(adc_pn_oos_s),
     .adc_pn_err(adc_pn_err_s));
 
   // prbs generation
   always @(posedge clk) begin
-    if(adc_dvalid == 1'b1) begin
+    if(adc_valid == 1'b1) begin
       adc_pn_data <= pn(adc_pn_data);
     end
   end
@@ -143,35 +138,31 @@ module prcfg_adc (
   // qpsk demodulator
   qpsk_demod i_qpsk_demod1 (
     .clk(clk),
-    .data_qpsk_i(src_adc_ddata[15: 0]),
-    .data_qpsk_q(src_adc_ddata[31:16]),
-    .data_valid(adc_dvalid),
-    .data_output(adc_ddata_s)
+    .data_qpsk_i(src_adc_data[15: 0]),
+    .data_qpsk_q(src_adc_data[31:16]),
+    .data_valid(adc_valid),
+    .data_output(adc_data_s)
   );
 
   // output logic for data ans status
   always @(posedge clk) begin
 
-    dst_adc_dsync  <= src_adc_dsync;
-    dst_adc_dwr    <= src_adc_dwr;
+    dst_adc_valid <= src_adc_valid;
+    dst_adc_enable <= src_adc_enable;
 
     case(mode)
 
       4'h0 : begin
-        dst_adc_ddata <= src_adc_ddata;
-        src_adc_dovf   <= dst_adc_dovf;
+        dst_adc_data <= src_adc_data;
       end
       4'h1 : begin
-        dst_adc_ddata <= 32'h0;
-        src_adc_dovf  <= 1'b0;
+        dst_adc_data <= 32'h0;
       end
       4'h2 : begin
-        dst_adc_ddata <= {30'h0, adc_ddata_s};
-        src_adc_dovf   <= dst_adc_dovf;
+        dst_adc_data <= {30'h0, adc_data_s};
       end
       default : begin
-        dst_adc_ddata <= src_adc_ddata;
-        src_adc_dovf   <= dst_adc_dovf;
+        dst_adc_data <= src_adc_data;
       end
     endcase
 

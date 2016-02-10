@@ -5,23 +5,24 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := system_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_top.v
+M_DEPS += system_project.tcl
 M_DEPS += system_constr.xdc
-M_DEPS += ../../../library/common/ad_iobuf.v
-M_DEPS += ../../common/ac701/ac701_system_constr.xdc
 M_DEPS += system_bd.tcl
-M_DEPS += ../../common/ac701/ac701_system_bd.tcl
-M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../common/fmcomms2_bd.tcl
+M_DEPS += ../../scripts/adi_project.tcl
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_board.tcl
+M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../../common/ac701/ac701_system_mig.prj
+M_DEPS += ../../common/ac701/ac701_system_constr.xdc
+M_DEPS += ../../common/ac701/ac701_system_bd.tcl
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
-M_DEPS += ../../../library/util_adc_pack/util_adc_pack.xpr
-M_DEPS += ../../../library/util_dac_unpack/util_dac_unpack.xpr
+M_DEPS += ../../../library/util_cpack/util_cpack.xpr
+M_DEPS += ../../../library/util_tdd_sync/util_tdd_sync.xpr
+M_DEPS += ../../../library/util_upack/util_upack.xpr
 M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
 
 M_VIVADO := vivado -mode batch -source
@@ -50,8 +51,9 @@ clean:
 clean-all:clean
 	make -C ../../../library/axi_ad9361 clean
 	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/util_adc_pack clean
-	make -C ../../../library/util_dac_unpack clean
+	make -C ../../../library/util_cpack clean
+	make -C ../../../library/util_tdd_sync clean
+	make -C ../../../library/util_upack clean
 	make -C ../../../library/util_wfifo clean
 
 
@@ -63,8 +65,9 @@ fmcomms2_ac701.sdk/system_top.hdf: $(M_DEPS)
 lib:
 	make -C ../../../library/axi_ad9361
 	make -C ../../../library/axi_dmac
-	make -C ../../../library/util_adc_pack
-	make -C ../../../library/util_dac_unpack
+	make -C ../../../library/util_cpack
+	make -C ../../../library/util_tdd_sync
+	make -C ../../../library/util_upack
 	make -C ../../../library/util_wfifo
 
 ####################################################################################

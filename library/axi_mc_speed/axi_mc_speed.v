@@ -134,7 +134,7 @@ end
 
 // HALL sensors debouncers
 debouncer
-#( .DEBOUNCER_LEN(400))
+#( .DEBOUNCER_LENGTH(400))
 position_0(
     .clk_i(ref_clk),
     .rst_i(adc_rst),
@@ -142,7 +142,7 @@ position_0(
     .sig_o(position_s[0]));
 
 debouncer
-#( .DEBOUNCER_LEN(400))
+#( .DEBOUNCER_LENGTH(400))
 position_1(
     .clk_i(ref_clk),
     .rst_i(adc_rst),
@@ -150,7 +150,7 @@ position_1(
     .sig_o(position_s[1]));
 
 debouncer
-#( .DEBOUNCER_LEN(400))
+#( .DEBOUNCER_LENGTH(400))
 position_2(
     .clk_i(ref_clk),
     .rst_i(adc_rst),
@@ -202,7 +202,7 @@ up_adc_common i_up_adc_common(
   .up_drp_ready(1'b0),
   .up_drp_locked(1'b0),
   .up_usr_chanmax(),
-  .adc_usr_chanmax(8'd2),
+  .adc_usr_chanmax(8'd1),
   .up_adc_gpio_in(32'h0),
   .up_adc_gpio_out(),
   .up_rstn(up_rstn),

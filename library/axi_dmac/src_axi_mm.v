@@ -42,8 +42,8 @@ module dmac_src_mm_axi (
 
 	input                           req_valid,
 	output                          req_ready,
-	input [31:C_BYTES_PER_BEAT_WIDTH]    req_address,
-	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+	input [31:BYTES_PER_BEAT_WIDTH]    req_address,
+	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
 	input                           enable,
 	output                          enabled,
@@ -55,17 +55,17 @@ module dmac_src_mm_axi (
 	input                           response_ready,
 	output [1:0]                    response_resp,
 
-	input  [C_ID_WIDTH-1:0]         request_id,
-	output [C_ID_WIDTH-1:0]         response_id,
+	input  [ID_WIDTH-1:0]         request_id,
+	output [ID_WIDTH-1:0]         response_id,
 
-	output [C_ID_WIDTH-1:0]         data_id,
-	output [C_ID_WIDTH-1:0]         address_id,
+	output [ID_WIDTH-1:0]         data_id,
+	output [ID_WIDTH-1:0]         address_id,
 	input                           data_eot,
 	input                           address_eot,
 
 	output                          fifo_valid,
 	input                           fifo_ready,
-	output [C_DMA_DATA_WIDTH-1:0]   fifo_data,
+	output [DMA_DATA_WIDTH-1:0]   fifo_data,
 
 	// Read address
 	input                            m_axi_arready,
@@ -78,16 +78,16 @@ module dmac_src_mm_axi (
 	output [ 3:0]                    m_axi_arcache,
 
 	// Read data and response
-	input  [C_DMA_DATA_WIDTH-1:0]    m_axi_rdata,
+	input  [DMA_DATA_WIDTH-1:0]    m_axi_rdata,
 	output                           m_axi_rready,
 	input                            m_axi_rvalid,
 	input  [ 1:0]                    m_axi_rresp
 );
 
-parameter C_ID_WIDTH = 3;
-parameter C_DMA_DATA_WIDTH = 64;
-parameter C_BYTES_PER_BEAT_WIDTH = 3;
-parameter C_BEATS_PER_BURST_WIDTH = 4;
+parameter ID_WIDTH = 3;
+parameter DMA_DATA_WIDTH = 64;
+parameter BYTES_PER_BEAT_WIDTH = 3;
+parameter BEATS_PER_BURST_WIDTH = 4;
 
 `include "resp.h"
 
@@ -105,7 +105,7 @@ assign response_valid = 1'b0;
 assign response_resp = RESP_OKAY;
 
 splitter #(
-	.C_NUM_M(2)
+	.NUM_M(2)
 ) i_req_splitter (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),
@@ -122,10 +122,10 @@ splitter #(
 );
 
 dmac_address_generator #(
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH),
-	.C_BYTES_PER_BEAT_WIDTH(C_BYTES_PER_BEAT_WIDTH),
-	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH)
+	.ID_WIDTH(ID_WIDTH),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+	.BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),
+	.DMA_DATA_WIDTH(DMA_DATA_WIDTH)
 ) i_addr_gen (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),
@@ -156,9 +156,9 @@ dmac_address_generator #(
 );
 
 dmac_data_mover # (
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_DMA_DATA_WIDTH),
-	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH)
+	.ID_WIDTH(ID_WIDTH),
+	.DATA_WIDTH(DMA_DATA_WIDTH),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
 ) i_data_mover (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),
@@ -166,6 +166,8 @@ dmac_data_mover # (
 	.enable(address_enabled),
 	.enabled(enabled),
 	.sync_id(sync_id),
+
+	.xfer_req(),
 
 	.request_id(address_id),
 	.response_id(data_id),

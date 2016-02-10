@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -64,7 +62,8 @@ module ad_lvds_out (
 
   // parameters
 
-  parameter   BUFTYPE = 0;
+  parameter   DEVICE_TYPE = 0;
+  parameter   SINGLE_ENDED = 0;
   parameter   IODELAY_ENABLE = 0;
   parameter   IODELAY_CTRL = 0;
   parameter   IODELAY_GROUP = "dev_if_delay_group";
@@ -100,7 +99,7 @@ module ad_lvds_out (
   // delay controller
 
   generate
-  if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7) && (IODELAY_CTRL == 1)) begin
+  if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == SERIES7) && (IODELAY_CTRL == 1)) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYCTRL i_delay_ctrl (
     .RST (delay_rst),
@@ -127,7 +126,7 @@ module ad_lvds_out (
     .Q (tx_data_oddr_s));
 
   generate
-  if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7)) begin
+  if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == SERIES7)) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   ODELAYE2 #(
     .CINVCTRL_SEL ("FALSE"),
@@ -157,10 +156,19 @@ module ad_lvds_out (
   end
   endgenerate
 
+  generate
+  if (SINGLE_ENDED == 1) begin
+  assign tx_data_out_n = 1'b0;
+  OBUF i_tx_data_obuf (
+    .I (tx_data_odelay_s),
+    .O (tx_data_out_p));
+  end else begin
   OBUFDS i_tx_data_obuf (
     .I (tx_data_odelay_s),
     .O (tx_data_out_p),
     .OB (tx_data_out_n));
+  end
+  endgenerate
 
 endmodule
 

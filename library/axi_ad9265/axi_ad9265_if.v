@@ -70,8 +70,8 @@ module axi_ad9265_if (
 
   // This parameter controls the buffer type based on the target device.
 
-  parameter   PCORE_BUFTYPE = 0;
-  parameter   PCORE_IODELAY_GROUP = "adc_if_delay_group";
+  parameter   DEVICE_TYPE = 0;
+  parameter   IO_DELAY_GROUP = "adc_if_delay_group";
 
   // adc interface (clk, data, over-range)
   // nominal clock 125 MHz, up to 300 MHz
@@ -131,9 +131,9 @@ module axi_ad9265_if (
   generate
   for (l_inst = 0; l_inst <= 7; l_inst = l_inst + 1) begin : g_adc_if
   ad_lvds_in #(
-    .BUFTYPE (PCORE_BUFTYPE),
+    .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_CTRL (0),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .IODELAY_GROUP (IO_DELAY_GROUP))
   i_adc_data (
     .rx_clk (adc_clk),
     .rx_data_in_p (adc_data_in_p[l_inst]),
@@ -153,9 +153,9 @@ module axi_ad9265_if (
   // over-range interface
 
   ad_lvds_in #(
-    .BUFTYPE (PCORE_BUFTYPE),
+    .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_CTRL (1),
-    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .IODELAY_GROUP (IO_DELAY_GROUP))
   i_adc_or (
     .rx_clk (adc_clk),
     .rx_data_in_p (adc_or_in_p),
@@ -173,7 +173,7 @@ module axi_ad9265_if (
   // clock
 
   ad_lvds_clk #(
-    .BUFTYPE (PCORE_BUFTYPE))
+    .DEVICE_TYPE (DEVICE_TYPE))
   i_adc_clk (
     .clk_in_p (adc_clk_in_p),
     .clk_in_n (adc_clk_in_n),

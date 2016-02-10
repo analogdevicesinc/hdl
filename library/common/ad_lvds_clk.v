@@ -45,7 +45,7 @@ module ad_lvds_clk (
   clk_in_n,
   clk);
 
-  parameter   BUFTYPE       = 0;
+  parameter   DEVICE_TYPE       = 0;
   localparam  SERIES7       = 0;
   localparam  VIRTEX6       = 1;
 
@@ -65,7 +65,7 @@ module ad_lvds_clk (
     .O (clk_ibuf_s));
 
   generate
-  if (BUFTYPE == VIRTEX6) begin
+  if (DEVICE_TYPE == VIRTEX6) begin
   BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_rbuf (
     .CLR (1'b0),
     .CE (1'b1),

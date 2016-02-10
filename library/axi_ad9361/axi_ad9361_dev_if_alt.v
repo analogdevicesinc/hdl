@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // This interface includes both the transmit and receive components -
 // They both uses the same clock (sourced from the receiving side).
 
@@ -61,6 +59,11 @@ module axi_ad9361_dev_if (
   tx_data_out_p,
   tx_data_out_n,
 
+  // ensm control
+
+  enable,
+  txnrx,
+
   // clock (common to both receive and transmit)
 
   rst,
@@ -81,9 +84,17 @@ module axi_ad9361_dev_if (
   dac_data,
   dac_r1_mode,
 
+  // tdd interface
+
+  tdd_enable,
+  tdd_txnrx,
+  tdd_mode,
+
   // delay interface
 
   up_clk,
+  up_enable,
+  up_txnrx,
   up_adc_dld,
   up_adc_dwdata,
   up_adc_drdata,
@@ -96,11 +107,9 @@ module axi_ad9361_dev_if (
 
   // this parameter controls the buffer type based on the target device.
 
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_DAC_IODELAY_ENABLE = 0;
-  parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
-  localparam  PCORE_7SERIES = 0;
-  localparam  PCORE_VIRTEX6 = 1;
+  parameter   DEVICE_TYPE = 0;
+  parameter   DAC_IODELAY_ENABLE = 0;
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group";
 
   // physical interface (receive)
 
@@ -119,6 +128,11 @@ module axi_ad9361_dev_if (
   output          tx_frame_out_n;
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
+
+  // ensm control
+
+  output          enable;
+  output          txnrx;
 
   // clock (common to both receive and transmit)
 
@@ -140,15 +154,23 @@ module axi_ad9361_dev_if (
   input   [47:0]  dac_data;
   input           dac_r1_mode;
 
+  // tdd interface
+
+  input           tdd_enable;
+  input           tdd_txnrx;
+  input           tdd_mode;
+
   // delay interface
 
   input           up_clk;
+  input           up_enable;
+  input           up_txnrx;
   input   [ 6:0]  up_adc_dld;
   input   [34:0]  up_adc_dwdata;
   output  [34:0]  up_adc_drdata;
-  input   [ 7:0]  up_dac_dld;
-  input   [39:0]  up_dac_dwdata;
-  output  [39:0]  up_dac_drdata;
+  input   [ 9:0]  up_dac_dld;
+  input   [49:0]  up_dac_dwdata;
+  output  [49:0]  up_dac_drdata;
   input           delay_clk;
   input           delay_rst;
   output          delay_locked;
@@ -184,6 +206,11 @@ module axi_ad9361_dev_if (
   wire    [ 5:0]  rx_data_2_s;
   wire    [ 5:0]  rx_data_3_s;
   wire            rx_locked_s;
+
+  // tdd support-
+
+  assign enable = up_enable;
+  assign txnrx = up_txnrx;
 
   // defaults
 

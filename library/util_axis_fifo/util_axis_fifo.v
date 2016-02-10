@@ -41,26 +41,26 @@ module util_axis_fifo (
 	input m_axis_aresetn,
 	input m_axis_ready,
 	output m_axis_valid,
-	output [C_DATA_WIDTH-1:0] m_axis_data,
-	output [C_ADDRESS_WIDTH:0] m_axis_level,
+	output [DATA_WIDTH-1:0] m_axis_data,
+	output [ADDRESS_WIDTH:0] m_axis_level,
 
 	input s_axis_aclk,
 	input s_axis_aresetn,
 	output s_axis_ready,
 	input s_axis_valid,
-	input [C_DATA_WIDTH-1:0] s_axis_data,
+	input [DATA_WIDTH-1:0] s_axis_data,
 	output s_axis_empty,
-	output [C_ADDRESS_WIDTH:0] s_axis_room
+	output [ADDRESS_WIDTH:0] s_axis_room
 );
 
-parameter C_DATA_WIDTH = 64;
-parameter C_CLKS_ASYNC = 1;
-parameter C_ADDRESS_WIDTH = 4;
-parameter C_S_AXIS_REGISTERED = 1;
+parameter DATA_WIDTH = 64;
+parameter ASYNC_CLK = 1;
+parameter ADDRESS_WIDTH = 4;
+parameter S_AXIS_REGISTERED = 1;
 
-generate if (C_ADDRESS_WIDTH == 0) begin
+generate if (ADDRESS_WIDTH == 0) begin
 
-reg [C_DATA_WIDTH-1:0] cdc_sync_fifo_ram;
+reg [DATA_WIDTH-1:0] cdc_sync_fifo_ram;
 reg s_axis_waddr = 1'b0;
 reg m_axis_raddr = 1'b0;
 
@@ -68,8 +68,8 @@ wire m_axis_waddr;
 wire s_axis_raddr;
 
 sync_bits #(
-	.NUM_BITS(1),
-	.CLK_ASYNC(C_CLKS_ASYNC)
+	.NUM_OF_BITS(1),
+	.ASYNC_CLK(ASYNC_CLK)
 ) i_waddr_sync (
 	.out_clk(m_axis_aclk),
 	.out_resetn(m_axis_aresetn),
@@ -78,8 +78,8 @@ sync_bits #(
 );
 
 sync_bits #(
-	.NUM_BITS(1),
-	.CLK_ASYNC(C_CLKS_ASYNC)
+	.NUM_OF_BITS(1),
+	.ASYNC_CLK(ASYNC_CLK)
 ) i_raddr_sync (
 	.out_clk(s_axis_aclk),
 	.out_resetn(s_axis_aresetn),
@@ -121,17 +121,17 @@ assign m_axis_data = cdc_sync_fifo_ram;
 
 end else begin
 
-reg [C_DATA_WIDTH-1:0] ram[0:2**C_ADDRESS_WIDTH-1];
+reg [DATA_WIDTH-1:0] ram[0:2**ADDRESS_WIDTH-1];
 
-wire [C_ADDRESS_WIDTH-1:0] s_axis_waddr;
-wire [C_ADDRESS_WIDTH-1:0] m_axis_raddr;
+wire [ADDRESS_WIDTH-1:0] s_axis_waddr;
+wire [ADDRESS_WIDTH-1:0] m_axis_raddr;
 wire _m_axis_ready;
 wire _m_axis_valid;
 
-if (C_CLKS_ASYNC == 1) begin
+if (ASYNC_CLK == 1) begin
 
 fifo_address_gray_pipelined #(
-	.C_ADDRESS_WIDTH(C_ADDRESS_WIDTH)
+	.ADDRESS_WIDTH(ADDRESS_WIDTH)
 ) i_address_gray (
 	.m_axis_aclk(m_axis_aclk),
 	.m_axis_aresetn(m_axis_aresetn),
@@ -152,7 +152,7 @@ fifo_address_gray_pipelined #(
 end else begin
 
 fifo_address_sync #(
-	.C_ADDRESS_WIDTH(C_ADDRESS_WIDTH)
+	.ADDRESS_WIDTH(ADDRESS_WIDTH)
 ) i_address_sync (
 	.clk(m_axis_aclk),
 	.resetn(m_axis_aresetn),
@@ -175,9 +175,9 @@ always @(posedge s_axis_aclk) begin
 		ram[s_axis_waddr] <= s_axis_data;
 end
 
-if (C_S_AXIS_REGISTERED == 1) begin
+if (S_AXIS_REGISTERED == 1) begin
 
-reg [C_DATA_WIDTH-1:0] data;
+reg [DATA_WIDTH-1:0] data;
 reg valid;
 
 always @(posedge m_axis_aclk) begin

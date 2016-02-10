@@ -65,7 +65,7 @@ module axi_ad9361_tdd_if(
 
   // parameters
 
-  parameter       MODE_OF_ENABLE = 0;
+  parameter       LEVEL_OR_PULSE_N = 0;   // the control signals are edge (pulse) or level sensitive
 
   localparam      PULSE_MODE = 0;
   localparam      LEVEL_MODE = 1;
@@ -111,7 +111,7 @@ module axi_ad9361_tdd_if(
     tdd_tx_rf_en_d <= tdd_tx_rf_en;
   end
 
-  assign ad9361_enable_s = (MODE_OF_ENABLE == PULSE_MODE) ?
+  assign ad9361_enable_s = (LEVEL_OR_PULSE_N == PULSE_MODE) ?
                           ((~tdd_rx_rf_en_d & tdd_rx_rf_en) | (tdd_rx_rf_en_d & ~tdd_rx_rf_en) |
                            (~tdd_tx_rf_en_d & tdd_tx_rf_en) | (tdd_tx_rf_en_d & ~tdd_tx_rf_en)) :
                            (tdd_rx_rf_en | tdd_tx_rf_en);

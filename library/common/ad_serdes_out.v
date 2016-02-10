@@ -64,7 +64,7 @@ module ad_serdes_out (
   // parameters
 
   parameter   DEVICE_TYPE = 0;
-  parameter   SERDES = 1;
+  parameter   SERDES_OR_DDR_N = 1;
   parameter   DATA_WIDTH = 16;
 
 
@@ -103,7 +103,7 @@ module ad_serdes_out (
   generate
   for (l_inst = 0; l_inst <= DW; l_inst = l_inst + 1) begin: g_data
 
-  if (SERDES == 0) begin
+  if (SERDES_OR_DDR_N == 0) begin
   ODDR #(
     .DDR_CLK_EDGE ("SAME_EDGE"),
     .INIT (1'b0),
@@ -118,8 +118,8 @@ module ad_serdes_out (
     .Q (data_out_s[l_inst]));
   end
 
-  if ((SERDES == 1) && (DEVICE_TYPE == DEVICE_7SERIES)) begin
-  OSERDESE2 #(
+  if ((SERDES_OR_DDR_N == 1) && (DEVICE_TYPE == DEVICE_7SERIES)) begin
+  OSERDESE2  #(
     .DATA_RATE_OQ ("DDR"),
     .DATA_RATE_TQ ("SDR"),
     .DATA_WIDTH (8),
@@ -155,8 +155,8 @@ module ad_serdes_out (
     .RST (rst));
   end
 
-  if ((SERDES == 1) && (DEVICE_TYPE == DEVICE_6SERIES)) begin
-  OSERDESE1 #(
+  if ((SERDES_OR_DDR_N == 1) && (DEVICE_TYPE == DEVICE_6SERIES)) begin
+  OSERDESE1  #(
     .DATA_RATE_OQ ("DDR"),
     .DATA_RATE_TQ ("SDR"),
     .DATA_WIDTH (8),
@@ -193,7 +193,7 @@ module ad_serdes_out (
     .TCE (1'b0),
     .RST (rst));
 
-  OSERDESE1 #(
+  OSERDESE1  #(
     .DATA_RATE_OQ ("DDR"),
     .DATA_RATE_TQ ("SDR"),
     .DATA_WIDTH (8),

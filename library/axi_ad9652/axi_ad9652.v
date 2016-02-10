@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -55,6 +55,7 @@ module axi_ad9652 (
   // dma interface
 
   adc_clk,
+  adc_rst,
   adc_valid_0,
   adc_enable_0,
   adc_data_0,
@@ -90,10 +91,10 @@ module axi_ad9652 (
 
   // parameters
 
-  parameter PCORE_ID = 0;
-  parameter PCORE_DEVICE_TYPE = 0;
-  parameter PCORE_ADC_DP_DISABLE = 0;
-  parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
+  parameter ID = 0;
+  parameter DEVICE_TYPE = 0;
+  parameter ADC_DATAPATH_DISABLE = 0;
+  parameter IO_DELAY_GROUP = "adc_if_delay_group";
 
   // adc interface (clk, data, over-range)
 
@@ -111,6 +112,7 @@ module axi_ad9652 (
   // dma interface
 
   output          adc_clk;
+  output          adc_rst;
   output          adc_valid_0;
   output          adc_enable_0;
   output  [15:0]  adc_data_0;
@@ -221,9 +223,9 @@ module axi_ad9652 (
   // channel
 
   axi_ad9652_channel #(
-    .IQSEL(0),
-    .CHID(0),
-    .DP_DISABLE (PCORE_ADC_DP_DISABLE))
+    .Q_OR_I_N(0),
+    .CHANNEL_ID(0),
+    .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
   i_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -250,9 +252,9 @@ module axi_ad9652 (
   // channel
 
   axi_ad9652_channel #(
-    .IQSEL(1),
-    .CHID(1),
-    .DP_DISABLE (PCORE_ADC_DP_DISABLE))
+    .Q_OR_I_N(1),
+    .CHANNEL_ID(1),
+    .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
   i_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -279,8 +281,8 @@ module axi_ad9652 (
   // main (device interface)
 
   axi_ad9652_if #(
-    .PCORE_BUFTYPE (PCORE_DEVICE_TYPE),
-    .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .IO_DELAY_GROUP (IO_DELAY_GROUP))
   i_if (
     .adc_clk_in_p (adc_clk_in_p),
     .adc_clk_in_n (adc_clk_in_n),
@@ -305,7 +307,7 @@ module axi_ad9652 (
 
   // common processor control
 
-  up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
+  up_adc_common #(.ID(ID)) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -346,7 +348,7 @@ module axi_ad9652 (
 
   // adc delay control
 
-  up_delay_cntrl #(.IO_WIDTH(17), .IO_BASEADDR(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(.DATA_WIDTH(17), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),

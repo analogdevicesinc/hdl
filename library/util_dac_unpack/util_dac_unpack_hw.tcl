@@ -5,6 +5,7 @@ source ../scripts/adi_env.tcl
 set_module_property NAME util_dac_unpack
 set_module_property DESCRIPTION "Util DAC data unpacker"
 set_module_property VERSION 1.0
+set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME util_dac_unpack
 set_module_property ELABORATION_CALLBACK util_dac_unpack_elaborate
 
@@ -14,14 +15,14 @@ add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL util_dac_unpack
 add_fileset_file util_dac_unpack.v   VERILOG PATH util_dac_unpack.v
 
-add_parameter CHANNELS INTEGER 0
-set_parameter_property CHANNELS DEFAULT_VALUE 8
-set_parameter_property CHANNELS ALLOWED_RANGES {4 8}
-set_parameter_property CHANNELS DESCRIPTION "Valid values are 4 and 8"
-set_parameter_property CHANNELS DISPLAY_NAME CHANNELS
-set_parameter_property CHANNELS TYPE INTEGER
-set_parameter_property CHANNELS UNITS None
-set_parameter_property CHANNELS HDL_PARAMETER true
+add_parameter NUM_OF_CHANNELS INTEGER 0
+set_parameter_property NUM_OF_CHANNELS DEFAULT_VALUE 8
+set_parameter_property NUM_OF_CHANNELS ALLOWED_RANGES {4 8}
+set_parameter_property NUM_OF_CHANNELS DESCRIPTION "Valid values are 4 and 8"
+set_parameter_property NUM_OF_CHANNELS DISPLAY_NAME NUM_OF_CHANNELS
+set_parameter_property NUM_OF_CHANNELS TYPE INTEGER
+set_parameter_property NUM_OF_CHANNELS UNITS None
+set_parameter_property NUM_OF_CHANNELS HDL_PARAMETER true
 
 add_parameter DATA_WIDTH INTEGER 0
 set_parameter_property DATA_WIDTH DEFAULT_VALUE 16
@@ -35,7 +36,7 @@ add_interface_port data_clock clk clk Input 1
 
 proc util_dac_unpack_elaborate {} {
   set DW [ get_parameter_value DATA_WIDTH ]
-  set CHAN [ get_parameter_value CHANNELS ]
+  set CHAN [ get_parameter_value NUM_OF_CHANNELS ]
 
   add_interface channels_data conduit end
   set_interface_property channels_data associatedClock data_clock

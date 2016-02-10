@@ -85,12 +85,12 @@ module axi_ad9739a (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_SERDES_DDR_N = 1;
-  parameter   PCORE_MMCM_BUFIO_N = 1;
-  parameter   PCORE_DAC_DP_DISABLE = 0;
-  parameter   PCORE_IODELAY_GROUP = "dev_if_delay_group";
+  parameter   ID = 0;
+  parameter   DEVICE_TYPE = 0;
+  parameter   SERDES_OR_DDR_N = 1;
+  parameter   MMCM_OR_BUFIO_N = 1;
+  parameter   DAC_DATAPATH_DISABLE = 0;
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group";
 
   // dac interface
 
@@ -175,7 +175,7 @@ module axi_ad9739a (
 
   // device interface
 
-  axi_ad9739a_if #(.PCORE_DEVICE_TYPE (PCORE_DEVICE_TYPE)) i_if (
+  axi_ad9739a_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
     .dac_clk_in_p (dac_clk_in_p),
     .dac_clk_in_n (dac_clk_in_n),
     .dac_clk_out_p (dac_clk_out_p),
@@ -207,7 +207,7 @@ module axi_ad9739a (
 
   // core
 
-  axi_ad9739a_core #(.PCORE_ID(PCORE_ID), .DP_DISABLE(PCORE_DAC_DP_DISABLE)) i_core (
+  axi_ad9739a_core #(.ID(ID), .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)) i_core (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
     .dac_data_00 (dac_data_00_s),

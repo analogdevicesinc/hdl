@@ -122,7 +122,7 @@ module system_top (
   vauxn8,
   vauxp0,
   vauxp8,
-  muxaddr_out,
+/*  muxaddr_out,*/
 
   i2s_mclk,
   i2s_bclk,
@@ -146,6 +146,7 @@ module system_top (
   fmc_spi1_sck,
   fmc_sample_n,
   gpo,
+  gpi,
 
   otg_vbusoc);
 
@@ -232,7 +233,7 @@ module system_top (
   input           vauxn8;
   input           vauxp0;
   input           vauxp8;
-  output  [ 1:0]  muxaddr_out;
+/*  output  [ 3:0]  muxaddr_out;*/
 
   output          spdif;
 
@@ -256,6 +257,7 @@ module system_top (
   output          fmc_spi1_sck;
   output          fmc_sample_n;
   output  [ 3:0]  gpo;
+  input   [ 1:0]  gpi;
 
   input           otg_vbusoc;
 
@@ -275,9 +277,11 @@ module system_top (
   wire            eth_mdio_i;
   wire            eth_mdio_t;
 
+
   // assignments
 
   assign fmc_sample_n   = gpio_o[32];
+  assign gpio_i[34:33]  = gpi[1:0];
   assign vt_enable      = 1'b1;
   assign pwm_m1_dh_o    = 1'b0;
   assign pwm_m1_dl_o    = 1'b0;
@@ -317,7 +321,7 @@ module system_top (
       .dio_o(eth_mdio_i),
       .dio_p(eth_mdio_p));
 
-  system_wrapper i_system_wrapper (
+   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
@@ -396,7 +400,7 @@ module system_top (
     .vaux0_v_p(vauxp0),
     .vaux8_v_n(vauxn8),
     .vaux8_v_p(vauxp8),
-    .muxaddr_out(muxaddr_out),
+    /*.muxaddr_out(muxaddr_out),*/
     .i2s_bclk (i2s_bclk),
     .i2s_lrclk (i2s_lrclk),
     .i2s_mclk (i2s_mclk),
@@ -415,6 +419,8 @@ module system_top (
     .ps_intr_02 (1'b0),
     .ps_intr_03 (1'b0),
     .ps_intr_04 (1'b0),
+    .ps_intr_05 (1'b0),
+    .ps_intr_06 (1'b0),
     .iic_ee2_scl_io(iic_ee2_scl_io),
     .iic_ee2_sda_io(iic_ee2_sda_io),
     .spi0_clk_i (1'b0),

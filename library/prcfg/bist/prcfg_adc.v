@@ -48,15 +48,13 @@ module prcfg_adc (
   status,
 
   // FIFO interface
-  src_adc_dwr,
-  src_adc_dsync,
-  src_adc_ddata,
-  src_adc_dovf,
+  src_adc_enable,
+  src_adc_valid,
+  src_adc_data,
 
-  dst_adc_dwr,
-  dst_adc_dsync,
-  dst_adc_ddata,
-  dst_adc_dovf
+  dst_adc_enable,
+  dst_adc_valid,
+  dst_adc_data
 );
 
   localparam  RP_ID       = 8'hA1;
@@ -67,76 +65,57 @@ module prcfg_adc (
   input   [31:0]    control;
   output  [31:0]    status;
 
-  input             src_adc_dwr;
-  input             src_adc_dsync;
-  input   [31:0]    src_adc_ddata;
-  output            src_adc_dovf;
+  input             src_adc_enable;
+  input             src_adc_valid;
+  input   [15:0]    src_adc_data;
 
-  output            dst_adc_dwr;
-  output            dst_adc_dsync;
-  output  [31:0]    dst_adc_ddata;
-  input             dst_adc_dovf;
+  output            dst_adc_enable;
+  output            dst_adc_valid;
+  output  [15:0]    dst_adc_data;
 
-  reg               dst_adc_dwr;
-  reg               dst_adc_dsync;
-  reg     [31:0]    dst_adc_ddata;
-  reg               src_adc_dovf;
+  reg               dst_adc_enable;
+  reg               dst_adc_valid;
+  reg     [15:0]    dst_adc_data;
 
   reg     [31:0]    status            = 0;
-  reg     [31:0]    adc_pn_data       = 0;
+  reg     [15:0]    adc_pn_data       = 0;
 
   reg     [ 3:0]    mode;
   reg     [ 3:0]    channel_sel;
 
   wire              adc_dvalid;
-  wire    [31:0]    adc_pn_data_s;
+  wire    [15:0]    adc_pn_data_s;
   wire              adc_pn_oos_s;
   wire              adc_pn_err_s;
 
 
   // prbs function
 
-  function [31:0] pn;
-    input [31:0] din;
-    reg   [31:0] dout;
+  function [15:0] pn;
+    input [15:0] din;
+    reg   [15:0] dout;
     begin
-      dout[31]  = din[14] ^ din[13];
-      dout[30]  = din[13] ^ din[12];
-      dout[29]  = din[12] ^ din[11];
-      dout[28]  = din[11] ^ din[10];
-      dout[27]  = din[10] ^ din[9];
-      dout[26]  = din[9]  ^ din[8];
-      dout[25]  = din[8]  ^ din[7];
-      dout[24]  = din[7]  ^ din[6];
-      dout[23]  = din[6]  ^ din[5];
-      dout[22]  = din[5]  ^ din[4];
-      dout[21]  = din[4]  ^ din[3];
-      dout[20]  = din[3]  ^ din[2];
-      dout[19]  = din[2]  ^ din[1];
-      dout[18]  = din[1]  ^ din[0];
-      dout[17]  = din[0]  ^ din[14] ^ din[13];
-      dout[16]  = din[14] ^ din[12];
-      dout[15]  = din[13] ^ din[11];
-      dout[14]  = din[12] ^ din[10];
-      dout[13]  = din[11] ^ din[9];
-      dout[12]  = din[10] ^ din[8];
-      dout[11]  = din[9]  ^ din[7];
-      dout[10]  = din[8]  ^ din[6];
-      dout[9]   = din[7]  ^ din[5];
-      dout[8]   = din[6]  ^ din[4];
-      dout[7]   = din[5]  ^ din[3];
-      dout[6]   = din[4]  ^ din[2];
-      dout[5]   = din[3]  ^ din[1];
-      dout[4]   = din[2]  ^ din[0];
-      dout[3]   = din[1]  ^ din[14] ^ din[13];
-      dout[2]   = din[0]  ^ din[13] ^ din[12];
-      dout[1]   = din[14] ^ din[12] ^ din[13] ^ din[11];
-      dout[0]   = din[13] ^ din[11] ^ din[12] ^ din[10];
+      dout[15] = din[14] ^ din[15];
+      dout[14] = din[13] ^ din[14];
+      dout[13] = din[12] ^ din[13];
+      dout[12] = din[11] ^ din[12];
+      dout[11] = din[10] ^ din[11];
+      dout[10] = din[ 9] ^ din[10];
+      dout[ 9] = din[ 8] ^ din[ 9];
+      dout[ 8] = din[ 7] ^ din[ 8];
+      dout[ 7] = din[ 6] ^ din[ 7];
+      dout[ 6] = din[ 5] ^ din[ 6];
+      dout[ 5] = din[ 4] ^ din[ 5];
+      dout[ 4] = din[ 3] ^ din[ 4];
+      dout[ 3] = din[ 2] ^ din[ 3];
+      dout[ 2] = din[ 1] ^ din[ 2];
+      dout[ 1] = din[ 0] ^ din[ 1];
+      dout[ 0] = din[14] ^ din[15] ^ din[ 0];
       pn = dout;
     end
   endfunction
 
-  assign adc_dvalid = src_adc_dwr & src_adc_dsync;
+  assign adc_dvalid = src_adc_enable & src_adc_valid;
 
   always @(posedge clk) begin
     channel_sel  <= control[3:0];
@@ -164,10 +143,9 @@ module prcfg_adc (
 
   // rx path are passed through on test mode
   always @(posedge clk) begin
-    dst_adc_dwr    <= src_adc_dwr;
-    dst_adc_dsync  <= src_adc_dsync;
-    dst_adc_ddata  <= src_adc_ddata;
-    src_adc_dovf   <= dst_adc_dovf;
+    dst_adc_enable <= src_adc_enable;
+    dst_adc_data   <= src_adc_data;
+    dst_adc_valid  <= src_adc_valid;
   end
 
   // setup status bits for gpio_out

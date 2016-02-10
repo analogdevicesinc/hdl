@@ -53,34 +53,34 @@ module ad_addsub (
 
   // parameters
 
-  parameter   A_WIDTH = 32;
-  parameter   CONST_VALUE = 32'h1;
-  parameter   ADD_SUB = 0;
+  parameter   A_DATA_WIDTH = 32;
+  parameter   B_DATA_VALUE = 32'h1;
+  parameter   ADD_OR_SUB_N = 0;
 
-  localparam  ADDER = 0;
-  localparam  SUBSTRACTER = 1;
+  localparam  ADDER = 1;
+  localparam  SUBSTRACTER = 0;
 
   // I/O definitions
 
   input                     clk;
-  input   [(A_WIDTH-1):0]   A;
-  input   [(A_WIDTH-1):0]   Amax;
-  output  [(A_WIDTH-1):0]   out;
+  input   [(A_DATA_WIDTH-1):0]   A;
+  input   [(A_DATA_WIDTH-1):0]   Amax;
+  output  [(A_DATA_WIDTH-1):0]   out;
   input                     CE;
 
   // registers
 
-  reg     [(A_WIDTH-1):0]   out = 'b0;
-  reg     [A_WIDTH:0]       out_d = 'b0;
-  reg     [A_WIDTH:0]       out_d2 = 'b0;
-  reg     [(A_WIDTH-1):0]   A_d = 'b0;
-  reg     [(A_WIDTH-1):0]   A_d2 = 'b0;
-  reg     [(A_WIDTH-1):0]   Amax_d = 'b0;
-  reg     [(A_WIDTH-1):0]   Amax_d2 = 'b0;
+  reg     [(A_DATA_WIDTH-1):0]   out = 'b0;
+  reg     [A_DATA_WIDTH:0]       out_d = 'b0;
+  reg     [A_DATA_WIDTH:0]       out_d2 = 'b0;
+  reg     [(A_DATA_WIDTH-1):0]   A_d = 'b0;
+  reg     [(A_DATA_WIDTH-1):0]   A_d2 = 'b0;
+  reg     [(A_DATA_WIDTH-1):0]   Amax_d = 'b0;
+  reg     [(A_DATA_WIDTH-1):0]   Amax_d2 = 'b0;
 
   // constant regs
 
-  reg     [(A_WIDTH-1):0]   B_reg = CONST_VALUE;
+  reg     [(A_DATA_WIDTH-1):0]   B_reg = B_DATA_VALUE;
 
   // latch the inputs
 
@@ -94,7 +94,7 @@ module ad_addsub (
   // ADDER/SUBSTRACTER
 
   always @(posedge clk) begin
-    if ( ADD_SUB == ADDER ) begin
+    if ( ADD_OR_SUB_N == ADDER ) begin
       out_d <= A_d + B_reg;
     end else begin
       out_d <= A_d - B_reg;
@@ -104,14 +104,14 @@ module ad_addsub (
   // Resolve
 
   always @(posedge clk) begin
-    if ( ADD_SUB == ADDER ) begin
+    if ( ADD_OR_SUB_N == ADDER ) begin
       if ( out_d > Amax_d2 ) begin
         out_d2 <= out_d - Amax_d2;
       end else begin
         out_d2 <= out_d;
       end
     end else begin // SUBSTRACTER
-      if ( out_d[A_WIDTH] == 1'b1 ) begin
+      if ( out_d[A_DATA_WIDTH] == 1'b1 ) begin
         out_d2 <= Amax_d2 + out_d;
       end else begin
         out_d2 <= out_d;

@@ -50,6 +50,7 @@ module axi_ad9625 (
   // dma interface
 
   adc_clk,
+  adc_rst,
   adc_valid,
   adc_enable,
   adc_data,
@@ -81,9 +82,9 @@ module axi_ad9625 (
   s_axi_rdata,
   s_axi_rready);
 
-  parameter PCORE_ID = 0;
-  parameter PCORE_DEVICE_TYPE = 0;
-  parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
+  parameter ID = 0;
+  parameter DEVICE_TYPE = 0;
+  parameter IO_DELAY_GROUP = "adc_if_delay_group";
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -94,6 +95,7 @@ module axi_ad9625 (
   // dma interface
 
   output          adc_clk;
+  output          adc_rst;
   output          adc_valid;
   output          adc_enable;
   output  [255:0] adc_data;
@@ -177,7 +179,7 @@ module axi_ad9625 (
 
   assign adc_valid = 1'b1;
 
-  axi_ad9625_if #(.PCORE_ID(PCORE_ID)) i_if (
+  axi_ad9625_if #(.ID(ID)) i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
     .adc_clk (adc_clk),
@@ -214,7 +216,7 @@ module axi_ad9625 (
 
   // common processor control
 
-  up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
+  up_adc_common #(.ID(ID)) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

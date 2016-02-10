@@ -51,7 +51,7 @@ set_property -dict [list CONFIG.FREQ_HZ {625000000}] [get_bd_intf_ports phy_clk]
 
 # instance: microblaze - processor
 
-set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.4 sys_mb]
+set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.5 sys_mb]
 set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
 set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
 
@@ -80,7 +80,7 @@ set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 s
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig:6.1 axi_ddr_cntrl]
+set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig:7.1 axi_ddr_cntrl]
 source $ad_hdl_dir/projects/common/kcu105/kcu105_system_mig.tcl
 
 set axi_ddr_cntrl_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_ddr_cntrl_rstgen]
@@ -101,7 +101,7 @@ set_property -dict [list CONFIG.USE_RESET {false}] $axi_ethernet_clkgen
 
 set axi_ethernet_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_ethernet_rstgen]
 
-set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.2 axi_ethernet]
+set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:7.0 axi_ethernet]
 set_property -dict [list CONFIG.PHY_TYPE {SGMII}] $axi_ethernet
 set_property -dict [list CONFIG.ENABLE_LVDS {true}] $axi_ethernet
 set_property -dict [list CONFIG.SupportLevel {0}] $axi_ethernet
@@ -163,7 +163,7 @@ ad_connect  sys_ilmb_cntlr/BRAM_PORT sys_lmb_bram/BRAM_PORTB
 
 ad_connect  sys_mb_debug/MBDEBUG_0 sys_mb/DEBUG
 ad_connect  axi_intc/interrupt sys_mb/INTERRUPT
-ad_connect  axi_intc/intr sys_concat_intc/dout    
+ad_connect  axi_intc/intr sys_concat_intc/dout
 
 # defaults (peripherals)
 
@@ -181,7 +181,7 @@ ad_connect  sys_cpu_clk sys_dlmb/LMB_Clk
 ad_connect  sys_cpu_clk sys_ilmb/LMB_Clk
 ad_connect  sys_cpu_clk sys_dlmb_cntlr/LMB_Clk
 ad_connect  sys_cpu_clk sys_ilmb_cntlr/LMB_Clk
-ad_connect  sys_cpu_clk axi_ethernet/axis_clk 
+ad_connect  sys_cpu_clk axi_ethernet/axis_clk
 
 # defaults (interrupts)
 
@@ -223,7 +223,7 @@ ad_connect  axi_ethernet/s_axis_txc axi_ethernet_dma/M_AXIS_CNTRL
 ad_connect  axi_ethernet/m_axis_rxd axi_ethernet_dma/S_AXIS_S2MM
 ad_connect  axi_ethernet/m_axis_rxs axi_ethernet_dma/S_AXIS_STS
 ad_connect  phy_sd axi_ethernet/signal_detect
-ad_connect  sys_cpu_resetn phy_rst_n                            
+ad_connect  sys_cpu_resetn phy_rst_n
 ad_connect  axi_ethernet_clkgen/clk_out1 axi_ethernet/clk125m
 ad_connect  axi_ethernet_clkgen/clk_out1 axi_ethernet_rstgen/slowest_sync_clk
 ad_connect  axi_ethernet_clkgen/clk_out2 axi_ethernet/clk312
@@ -247,13 +247,13 @@ ad_connect  spi_clk_o axi_spi/sck_o
 ad_connect  spi_sdo_i axi_spi/io0_i
 ad_connect  spi_sdo_o axi_spi/io0_o
 ad_connect  spi_sdi_i axi_spi/io1_i
-ad_connect  gpio0_i axi_gpio/gpio_io_i   
-ad_connect  gpio0_o axi_gpio/gpio_io_o   
-ad_connect  gpio0_t axi_gpio/gpio_io_t   
-ad_connect  gpio1_i axi_gpio/gpio2_io_i  
-ad_connect  gpio1_o axi_gpio/gpio2_io_o  
-ad_connect  gpio1_t axi_gpio/gpio2_io_t  
-ad_connect  sys_cpu_clk axi_spi/ext_spi_clk 
+ad_connect  gpio0_i axi_gpio/gpio_io_i
+ad_connect  gpio0_o axi_gpio/gpio_io_o
+ad_connect  gpio0_t axi_gpio/gpio_io_t
+ad_connect  gpio1_i axi_gpio/gpio2_io_i
+ad_connect  gpio1_o axi_gpio/gpio2_io_o
+ad_connect  gpio1_t axi_gpio/gpio2_io_t
+ad_connect  sys_cpu_clk axi_spi/ext_spi_clk
 
 # defaults (interconnect - processor)
 

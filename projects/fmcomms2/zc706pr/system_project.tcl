@@ -8,7 +8,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 adi_project_create fmcomms2_zc706 1
 adi_project_synth fmcomms2_zc706 "" \
   [list "system_top.v" \
-  "$ad_hdl_dir/library/prcfg/common/prcfg_bb.v" \
+  "../common/prcfg_bb.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v"] \
   [list "../zc706/system_constr.xdc" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc"]

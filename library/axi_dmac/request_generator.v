@@ -40,12 +40,12 @@ module dmac_request_generator (
 	input req_aclk,
 	input req_aresetn,
 
-	output [C_ID_WIDTH-1:0] request_id,
-	input [C_ID_WIDTH-1:0] response_id,
+	output [ID_WIDTH-1:0] request_id,
+	input [ID_WIDTH-1:0] response_id,
 
 	input req_valid,
 	output reg req_ready,
-	input [C_BURSTS_PER_TRANSFER_WIDTH-1:0] req_burst_count,
+	input [BURSTS_PER_TRANSFER_WIDTH-1:0] req_burst_count,
 
 	input enable,
 	input pause,
@@ -53,8 +53,8 @@ module dmac_request_generator (
 	output eot
 );
 
-parameter C_ID_WIDTH = 3;
-parameter C_BURSTS_PER_TRANSFER_WIDTH = 17;
+parameter ID_WIDTH = 3;
+parameter BURSTS_PER_TRANSFER_WIDTH = 17;
 
 `include "inc_id.h"
 
@@ -65,9 +65,9 @@ parameter C_BURSTS_PER_TRANSFER_WIDTH = 17;
  * care that only the requested ammount of bytes is transfered.
  */
 
-reg [C_BURSTS_PER_TRANSFER_WIDTH-1:0] burst_count = 'h00;
-reg [C_ID_WIDTH-1:0] id;
-wire [C_ID_WIDTH-1:0] id_next = inc_id(id);
+reg [BURSTS_PER_TRANSFER_WIDTH-1:0] burst_count = 'h00;
+reg [ID_WIDTH-1:0] id;
+wire [ID_WIDTH-1:0] id_next = inc_id(id);
 
 assign eot = burst_count == 'h00;
 assign request_id = id;

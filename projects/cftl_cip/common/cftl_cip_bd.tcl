@@ -16,18 +16,17 @@ set pmod_spi_core [create_bd_cell -type ip -vlnv analog.com:user:util_pmod_adc:1
 set_property -dict [list CONFIG.FPGA_CLOCK_MHZ {100}] $pmod_spi_core
 
 set pmod_spi_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 pmod_spi_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.PCORE_ID {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_DMA_LENGTH_WIDTH {24}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_CYCLIC {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {16}] $pmod_spi_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $pmod_spi_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $pmod_spi_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $pmod_spi_dma
+set_property -dict [list CONFIG.ID {0}] $pmod_spi_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $pmod_spi_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $pmod_spi_dma
+set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $pmod_spi_dma
+set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $pmod_spi_dma
+set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $pmod_spi_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $pmod_spi_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16}] $pmod_spi_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $pmod_spi_dma
 
 set pmod_gpio_core [create_bd_cell -type ip -vlnv analog.com:user:util_pmod_fmeter:1.0 pmod_gpio_core]
 
@@ -38,7 +37,7 @@ ad_connect sys_cpu_clk pmod_spi_dma/fifo_wr_clk
 ad_connect sys_cpu_clk pmod_spi_core/clk
 ad_connect sys_cpu_clk pmod_gpio_core/ref_clk
 
-ad_connect pmod_spi_core/reset sys_rstgen/peripheral_reset
+ad_connect pmod_spi_core/resetn sys_rstgen/peripheral_aresetn
 
 ad_connect  pmod_spi_core/adc_data pmod_spi_dma/fifo_wr_din
 ad_connect  pmod_spi_core/adc_valid pmod_spi_dma/fifo_wr_en

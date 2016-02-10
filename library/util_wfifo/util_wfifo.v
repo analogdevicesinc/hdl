@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,35 +21,21 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// allows conversions between the adc (or similar) interface to the dma (or similar).
-//    * asymmetric bus widths in the range allowed by the fifo
-//    * frequency -- dma can run slower at reduced channels
-//    * drop or add channels -- post processing samples
-//    * interface axis -- allows axi-stream interface
-//
+// allows conversions of clock/buswidth for adc/dac channels
 // in all cases bandwidth requirements must be met (read >= write).
-//
-// axis-interface support
-//    * set DMA_READY_ENABLE parameter to 1.
-//    * connect dma_wr as axis_valid, dma_wready as axis_ready
-//    * make sure read bandwidth >= write bandwidth (or drop samples)
-//    * some axis interface requires last (use a counter or such externally).
-//
-// the fifo is external- connect all the fifo_* signals to a fifo generator IP.
-// configure the IP to match the buswidths & clocks.
 // ***************************************************************************
 // ***************************************************************************
 
@@ -57,146 +43,332 @@
 
 module util_wfifo (
 
-  // adc interface
+  // d-in interface
 
-  adc_rst,
-  adc_clk,
-  adc_wr,
-  adc_wdata,
-  adc_wovf,
+  din_rst,
+  din_clk,
+  din_enable_0,
+  din_valid_0,
+  din_data_0,
+  din_enable_1,
+  din_valid_1,
+  din_data_1,
+  din_enable_2,
+  din_valid_2,
+  din_data_2,
+  din_enable_3,
+  din_valid_3,
+  din_data_3,
+  din_enable_4,
+  din_valid_4,
+  din_data_4,
+  din_enable_5,
+  din_valid_5,
+  din_data_5,
+  din_enable_6,
+  din_valid_6,
+  din_data_6,
+  din_enable_7,
+  din_valid_7,
+  din_data_7,
+  din_ovf,
 
-  // dma interface
+  // d-out interface
 
-  dma_clk,
-  dma_wr,
-  dma_wdata,
-  dma_wready,
-  dma_wovf,
-
-  // fifo interface
-
-  fifo_rst,
-  fifo_rstn,
-  fifo_wr,
-  fifo_wdata,
-  fifo_wovf,
-  fifo_rd,
-  fifo_rdata,
-  fifo_rempty);
+  dout_rstn,
+  dout_clk,
+  dout_enable_0,
+  dout_valid_0,
+  dout_data_0,
+  dout_enable_1,
+  dout_valid_1,
+  dout_data_1,
+  dout_enable_2,
+  dout_valid_2,
+  dout_data_2,
+  dout_enable_3,
+  dout_valid_3,
+  dout_data_3,
+  dout_enable_4,
+  dout_valid_4,
+  dout_data_4,
+  dout_enable_5,
+  dout_valid_5,
+  dout_data_5,
+  dout_enable_6,
+  dout_valid_6,
+  dout_data_6,
+  dout_enable_7,
+  dout_valid_7,
+  dout_data_7,
+  dout_ovf);
 
   // parameters
 
-  parameter ADC_DATA_WIDTH = 32;
-  parameter DMA_DATA_WIDTH = 64;
-  parameter DMA_READY_ENABLE = 0;
- 
-  // adc interface
+  parameter   NUM_OF_CHANNELS = 4;
+  parameter   DIN_DATA_WIDTH = 32;
+  parameter   DOUT_DATA_WIDTH = 64;
+  parameter   DIN_ADDRESS_WIDTH = 8;
 
-  input                           adc_rst;
-  input                           adc_clk;
-  input                           adc_wr;
-  input   [ADC_DATA_WIDTH-1:0]    adc_wdata;
-  output                          adc_wovf;
+  localparam  M_MEM_RATIO = DOUT_DATA_WIDTH/DIN_DATA_WIDTH;
+  localparam  ADDRESS_WIDTH = (DIN_ADDRESS_WIDTH > 4) ? DIN_ADDRESS_WIDTH : 4;
+  localparam  DATA_WIDTH = DOUT_DATA_WIDTH * NUM_OF_CHANNELS;
+  localparam  T_DIN_DATA_WIDTH = DIN_DATA_WIDTH * 8;
+  localparam  T_DOUT_DATA_WIDTH = DOUT_DATA_WIDTH * 8;
 
-  // dma interface
+  // d-in interface
 
-  input                           dma_clk;
-  output                          dma_wr;
-  output  [DMA_DATA_WIDTH-1:0]    dma_wdata;
-  input                           dma_wready;
-  input                           dma_wovf;
+  input                               din_rst;
+  input                               din_clk;
+  input                               din_enable_0;
+  input                               din_valid_0;
+  input   [DIN_DATA_WIDTH-1:0]        din_data_0;
+  input                               din_enable_1;
+  input                               din_valid_1;
+  input   [DIN_DATA_WIDTH-1:0]        din_data_1;
+  input                               din_enable_2;
+  input                               din_valid_2;
+  input   [DIN_DATA_WIDTH-1:0]        din_data_2;
+  input                               din_enable_3;
+  input                               din_valid_3;
+  input   [DIN_DATA_WIDTH-1:0]        din_data_3;
+  input                               din_enable_4;
+  input                               din_valid_4;
+  input   [DIN_DATA_WIDTH-1:0]        din_data_4;
+  input                               din_enable_5;
+  input                               din_valid_5;
+  input   [DIN_DATA_WIDTH-1:0]        din_data_5;
+  input                               din_enable_6;
+  input                               din_valid_6;
+  input   [DIN_DATA_WIDTH-1:0]        din_data_6;
+  input                               din_enable_7;
+  input                               din_valid_7;
+  input   [DIN_DATA_WIDTH-1:0]        din_data_7;
+  output                              din_ovf;
 
-  // fifo interface
+  // dout interface
 
-  output                          fifo_rst;
-  output                          fifo_rstn;
-  output                          fifo_wr;
-  output  [ADC_DATA_WIDTH-1:0]    fifo_wdata;
-  input                           fifo_wovf;
-  output                          fifo_rd;
-  input   [DMA_DATA_WIDTH-1:0]    fifo_rdata;
-  input                           fifo_rempty;
+  input                               dout_rstn;
+  input                               dout_clk;
+  output                              dout_enable_0;
+  output                              dout_valid_0;
+  output  [DOUT_DATA_WIDTH-1:0]       dout_data_0;
+  output                              dout_enable_1;
+  output                              dout_valid_1;
+  output  [DOUT_DATA_WIDTH-1:0]       dout_data_1;
+  output                              dout_enable_2;
+  output                              dout_valid_2;
+  output  [DOUT_DATA_WIDTH-1:0]       dout_data_2;
+  output                              dout_enable_3;
+  output                              dout_valid_3;
+  output  [DOUT_DATA_WIDTH-1:0]       dout_data_3;
+  output                              dout_enable_4;
+  output                              dout_valid_4;
+  output  [DOUT_DATA_WIDTH-1:0]       dout_data_4;
+  output                              dout_enable_5;
+  output                              dout_valid_5;
+  output  [DOUT_DATA_WIDTH-1:0]       dout_data_5;
+  output                              dout_enable_6;
+  output                              dout_valid_6;
+  output  [DOUT_DATA_WIDTH-1:0]       dout_data_6;
+  output                              dout_enable_7;
+  output                              dout_valid_7;
+  output  [DOUT_DATA_WIDTH-1:0]       dout_data_7;
+  input                               dout_ovf;
 
   // internal registers
 
-  reg     [ 1:0]                  adc_wovf_m = 'd0;
-  reg                             adc_wovf = 'd0;
-  reg                             dma_wr_int = 'd0;
-  reg                             fifo_rst = 'd0;
-  reg                             fifo_rst_p = 'd0;
-  reg                             fifo_rstn = 'd0;
+  reg     [(DATA_WIDTH-1):0]          din_wdata = 'd0;
+  reg     [ 7:0]                      din_enable = 'd0;
+  reg     [ 2:0]                      din_dcnt = 'd0;
+  reg                                 din_wr = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]       din_waddr = 'd0;
+  reg                                 din_waddr_rel_t = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]       din_waddr_rel = 'd0;
+  reg     [ 2:0]                      din_ovf_m = 'd0;
+  reg                                 din_ovf = 'd0;
+  reg     [ 2:0]                      dout_waddr_rel_t_m = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]       dout_waddr_rel = 'd0;
+  reg                                 dout_ovf_int = 'd0;
+  reg     [ 7:0]                      dout_enable_m = 'd0;
+  reg     [ 7:0]                      dout_enable = 'd0;
+  reg                                 dout_rd = 'd0;
+  reg                                 dout_rd_d = 'd0;
+  reg     [(DATA_WIDTH-1):0]          dout_rdata_d = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd0;
 
   // internal signals
 
-  wire                            dma_wready_s;
-  wire    [DMA_DATA_WIDTH-1:0]    dma_wdata_s;
+  wire    [ 7:0]                      din_enable_s;
+  wire    [ 7:0]                      din_valid_s;
+  wire    [(T_DIN_DATA_WIDTH-1):0]    din_data_s;
+  wire                                dout_waddr_rel_t_s;
+  wire                                dout_rd_s;
+  wire    [(DATA_WIDTH-1):0]          dout_rdata_s;
+  wire    [(T_DOUT_DATA_WIDTH+1):0]   dout_data_s;
 
-  // adc overflow
+  // variables
 
-  always @(posedge adc_clk) begin
-    if (adc_rst == 1'b1) begin
-      adc_wovf_m <= 2'd0;
-      adc_wovf <= 1'b0;
-    end else begin
-      adc_wovf_m[0] <= dma_wovf | fifo_wovf;
-      adc_wovf_m[1] <= adc_wovf_m[0];
-      adc_wovf <= adc_wovf_m[1];
+  genvar                              n;
+
+  // concat signals, valid_0 must always be active
+
+  assign din_enable_s = { din_enable_7, din_enable_6, din_enable_5, din_enable_4,
+                          din_enable_3, din_enable_2, din_enable_1, din_enable_0};
+  assign din_valid_s  = { din_valid_7,  din_valid_6,  din_valid_5,  din_valid_4,
+                          din_valid_3,  din_valid_2,  din_valid_1,  din_valid_0};
+  assign din_data_s   = { din_data_7,   din_data_6,   din_data_5,   din_data_4,
+                          din_data_3,   din_data_2,   din_data_1,   din_data_0};
+
+  // dout_width >= din_width only
+
+  generate
+  for (n = 0; n < NUM_OF_CHANNELS; n = n + 1) begin: g_in
+  if (M_MEM_RATIO == 1) begin
+  always @(posedge din_clk) begin
+    if (din_valid_s[n] == 1'b1) begin
+      din_wdata[((DOUT_DATA_WIDTH*(n+1))-1):(DOUT_DATA_WIDTH*n)] <=
+        din_data_s[((DIN_DATA_WIDTH*(n+1))-1):(DIN_DATA_WIDTH*n)];
     end
   end
-
-  // write
-
-  assign fifo_wr = adc_wr;
-
-  genvar m;
-  generate
-  for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
-  assign fifo_wdata[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
+  end else begin
+  always @(posedge din_clk) begin
+    if (din_valid_s[n] == 1'b1) begin
+      din_wdata[((DOUT_DATA_WIDTH*(n+1))-1):(DOUT_DATA_WIDTH*n)] <=
+        {din_data_s[((DIN_DATA_WIDTH*(n+1))-1):(DIN_DATA_WIDTH*n)],
+        din_wdata[((DOUT_DATA_WIDTH*(n+1))-1):(DIN_DATA_WIDTH+(DOUT_DATA_WIDTH*n))]};
+    end
+  end
+  end
   end
   endgenerate
 
-  // read
-
-  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
-  assign fifo_rd = ~fifo_rempty & dma_wready_s;
-
-  always @(posedge dma_clk) begin
-    dma_wr_int <= fifo_rd;
-  end
-  
-  genvar s;
-  generate
-  for (s = 0; s < DMA_DATA_WIDTH; s = s + 1) begin: g_rdata
-  assign dma_wdata_s[s] = fifo_rdata[(DMA_DATA_WIDTH-1)-s];
-  end
-  endgenerate
-
-  // reset & resetn
-
-  always @(posedge dma_clk or posedge adc_rst) begin
-    if (adc_rst == 1'b1) begin
-      fifo_rst_p <= 1'd1;
-      fifo_rst <= 1'd1;
-      fifo_rstn <= 1'd0;
+  always @(posedge din_clk) begin
+    if (din_rst == 1'b1) begin
+      din_enable <= 8'd0;
+      din_dcnt <= 3'd0;
+      din_wr <= 1'd0;
+      din_waddr <= 5'd0;
+      din_waddr_rel_t <= 1'd0;
+      din_waddr_rel <= 5'd0;
+      din_ovf_m <= 'd0;
+      din_ovf <= 'd0;
     end else begin
-      fifo_rst_p <= 1'b0;
-      fifo_rst <= fifo_rst_p;
-      fifo_rstn <= ~fifo_rst_p;
+      din_enable <= din_enable_s;
+      if (din_valid_s[0] == 1'b1) begin
+        din_dcnt <= din_dcnt + 1'b1;
+      end
+      case (M_MEM_RATIO)
+        8: din_wr <= din_valid_s[0] & din_dcnt[0] & din_dcnt[1] & din_dcnt[2];
+        4: din_wr <= din_valid_s[0] & din_dcnt[0] & din_dcnt[1];
+        2: din_wr <= din_valid_s[0] & din_dcnt[0];
+        default: din_wr <= din_valid_s[0];
+      endcase
+      if (din_wr == 1'b1) begin
+        din_waddr <= din_waddr + 1'b1;
+      end
+      if ((din_wr == 1'b1) && (din_waddr[2:0] == 3'd0)) begin
+        din_waddr_rel_t <= ~din_waddr_rel_t;
+        din_waddr_rel <= din_waddr;
+      end
+      din_ovf_m <= {din_ovf_m[1:0], dout_ovf_int};
+      din_ovf <= din_ovf_m[2];
     end
   end
 
-  // axis
+  // read interface (bus expansion and/or clock conversion)
 
-  ad_axis_inf_rx #(.DATA_WIDTH(DMA_DATA_WIDTH)) i_axis_inf (
-    .clk (dma_clk),
-    .rst (fifo_rst),
-    .valid (dma_wr_int),
-    .last (1'd0),
-    .data (dma_wdata_s),
-    .inf_valid (dma_wr),
-    .inf_last (),
-    .inf_data (dma_wdata),
-    .inf_ready (dma_wready_s));
+  assign dout_waddr_rel_t_s = dout_waddr_rel_t_m[2] ^ dout_waddr_rel_t_m[1];
+
+  always @(posedge dout_clk or negedge dout_rstn) begin
+    if (dout_rstn == 1'b0) begin
+      dout_waddr_rel_t_m <= 3'd0;
+      dout_waddr_rel <= 'd0;
+      dout_ovf_int <= 1'b1;
+    end else begin
+      dout_waddr_rel_t_m <= {dout_waddr_rel_t_m[1:0], din_waddr_rel_t};
+      if (dout_waddr_rel_t_s == 1'b1) begin
+        dout_waddr_rel <= din_waddr_rel;
+        if (dout_raddr == dout_waddr_rel) begin
+          dout_ovf_int <= dout_ovf;
+        end else begin
+          dout_ovf_int <= 1'b1;
+        end
+      end
+    end
+  end
+
+  assign dout_rd_s = (dout_raddr == dout_waddr_rel) ? 1'b0 : 1'b1;
+  assign dout_data_s[(T_DOUT_DATA_WIDTH+1):DATA_WIDTH] = 'd0;
+  assign dout_data_s[(DATA_WIDTH-1):0] = dout_rdata_d;
+
+  always @(posedge dout_clk or negedge dout_rstn) begin
+    if (dout_rstn == 1'b0) begin
+      dout_enable_m <= 'd0;
+      dout_enable <= 'd0;
+    end else begin
+      dout_enable_m <= din_enable;
+      dout_enable <= dout_enable_m;
+    end
+  end
+
+  always @(posedge dout_clk) begin
+    dout_rdata_d <= dout_rdata_s;
+    if (dout_rstn == 1'b0) begin
+      dout_rd <= 'd0;
+      dout_rd_d <= 'd0;
+      dout_raddr <= 'd0;
+    end else begin
+      dout_rd <= dout_rd_s;
+      dout_rd_d <= dout_rd;
+      if (dout_rd_s == 1'b1) begin
+        dout_raddr <= dout_raddr + 1'b1;
+      end
+    end
+  end
+
+  assign dout_enable_7 = dout_enable[7];
+  assign dout_valid_7 = dout_rd_d;
+  assign dout_data_7 = dout_data_s[((DOUT_DATA_WIDTH*8)-1):(DOUT_DATA_WIDTH*7)];
+
+  assign dout_enable_6 = dout_enable[6];
+  assign dout_valid_6 = dout_rd_d;
+  assign dout_data_6 = dout_data_s[((DOUT_DATA_WIDTH*7)-1):(DOUT_DATA_WIDTH*6)];
+
+  assign dout_enable_5 = dout_enable[5];
+  assign dout_valid_5 = dout_rd_d;
+  assign dout_data_5 = dout_data_s[((DOUT_DATA_WIDTH*6)-1):(DOUT_DATA_WIDTH*5)];
+
+  assign dout_enable_4 = dout_enable[4];
+  assign dout_valid_4 = dout_rd_d;
+  assign dout_data_4 = dout_data_s[((DOUT_DATA_WIDTH*5)-1):(DOUT_DATA_WIDTH*4)];
+
+  assign dout_enable_3 = dout_enable[3];
+  assign dout_valid_3 = dout_rd_d;
+  assign dout_data_3 = dout_data_s[((DOUT_DATA_WIDTH*4)-1):(DOUT_DATA_WIDTH*3)];
+
+  assign dout_enable_2 = dout_enable[2];
+  assign dout_valid_2 = dout_rd_d;
+  assign dout_data_2 = dout_data_s[((DOUT_DATA_WIDTH*3)-1):(DOUT_DATA_WIDTH*2)];
+
+  assign dout_enable_1 = dout_enable[1];
+  assign dout_valid_1 = dout_rd_d;
+  assign dout_data_1 = dout_data_s[((DOUT_DATA_WIDTH*2)-1):(DOUT_DATA_WIDTH*1)];
+
+  assign dout_enable_0 = dout_enable[0];
+  assign dout_valid_0 = dout_rd_d;
+  assign dout_data_0 = dout_data_s[((DOUT_DATA_WIDTH*1)-1):(DOUT_DATA_WIDTH*0)];
+
+  // instantiations
+
+  ad_mem #(.ADDRESS_WIDTH(ADDRESS_WIDTH), .DATA_WIDTH(DATA_WIDTH)) i_mem (
+    .clka (din_clk),
+    .wea (din_wr),
+    .addra (din_waddr),
+    .dina (din_wdata),
+    .clkb (dout_clk),
+    .addrb (dout_raddr),
+    .doutb (dout_rdata_s));
 
 endmodule
 

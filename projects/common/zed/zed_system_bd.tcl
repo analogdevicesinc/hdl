@@ -119,9 +119,9 @@ set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.
 set axi_hdmi_core [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_tx:1.0 axi_hdmi_core]
 
 set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_hdmi_dma]
-set_property -dict [list CONFIG.c_m_axis_mm2s_tdata_width {64}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_use_mm2s_fsync {1}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
+set_property -dict [list CONFIG.C_M_AXIS_MM2S_TDATA_WIDTH {64}] $axi_hdmi_dma
+set_property -dict [list CONFIG.C_USE_MM2S_FSYNC {1}] $axi_hdmi_dma
+set_property -dict [list CONFIG.C_INCLUDE_S2MM {0}] $axi_hdmi_dma
 
 # audio peripherals
 
@@ -132,12 +132,12 @@ set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
 set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
-set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_tx_core
+set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_spdif_tx_core
+set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_tx_core
 
 set axi_i2s_adi [create_bd_cell -type ip -vlnv analog.com:user:axi_i2s_adi:1.0 axi_i2s_adi]
-set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_i2s_adi
-set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_i2s_adi
+set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_i2s_adi
+set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_i2s_adi
 
 # iic (fmc)
 
@@ -154,13 +154,13 @@ ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
 
 # interface connections
 
-ad_connect  ddr       sys_ps7/DDR
-ad_connect  gpio_i    sys_ps7/GPIO_I
-ad_connect  gpio_o    sys_ps7/GPIO_O
-ad_connect  gpio_t    sys_ps7/GPIO_T
-ad_connect  fixed_io  sys_ps7/FIXED_IO
-ad_connect  iic_fmc   axi_iic_fmc/iic
-ad_connect  sys_200m_clk axi_hdmi_clkgen/clk
+ad_connect  ddr           sys_ps7/DDR
+ad_connect  gpio_i        sys_ps7/GPIO_I
+ad_connect  gpio_o        sys_ps7/GPIO_O
+ad_connect  gpio_t        sys_ps7/GPIO_T
+ad_connect  fixed_io      sys_ps7/FIXED_IO
+ad_connect  iic_fmc       axi_iic_fmc/iic
+ad_connect  sys_200m_clk  axi_hdmi_clkgen/clk
 
 ad_connect  axi_iic_main/IIC sys_i2c_mixer/upstream
 
@@ -198,20 +198,19 @@ ad_connect  spi1_sdi_i sys_ps7/SPI1_MISO_I
 
 # hdmi
 
-ad_connect  sys_cpu_clk   axi_hdmi_core/m_axis_mm2s_clk
-ad_connect  sys_cpu_clk   axi_hdmi_dma/s_axi_lite_aclk
-ad_connect  sys_cpu_clk   axi_hdmi_dma/m_axi_mm2s_aclk
-ad_connect  sys_cpu_clk   axi_hdmi_dma/m_axis_mm2s_aclk
-
-ad_connect  axi_hdmi_core/hdmi_clk             axi_hdmi_clkgen/clk_0
-ad_connect  axi_hdmi_core/hdmi_out_clk         hdmi_out_clk
-ad_connect  axi_hdmi_core/hdmi_16_hsync        hdmi_hsync
-ad_connect  axi_hdmi_core/hdmi_16_vsync        hdmi_vsync
-ad_connect  axi_hdmi_core/hdmi_16_data_e       hdmi_data_e
-ad_connect  axi_hdmi_core/hdmi_16_data         hdmi_data
-ad_connect  axi_hdmi_core/M_AXIS_MM2S          axi_hdmi_dma/m_axis_mm2s
-ad_connect  axi_hdmi_core/m_axis_mm2s_fsync    axi_hdmi_dma/mm2s_fsync
-ad_connect  axi_hdmi_core/m_axis_mm2s_fsync    axi_hdmi_core/m_axis_mm2s_fsync_ret
+ad_connect  sys_cpu_clk axi_hdmi_core/vdma_clk
+ad_connect  sys_cpu_clk axi_hdmi_dma/m_axis_mm2s_aclk
+ad_connect  axi_hdmi_core/hdmi_clk axi_hdmi_clkgen/clk_0
+ad_connect  axi_hdmi_core/hdmi_out_clk hdmi_out_clk
+ad_connect  axi_hdmi_core/hdmi_16_hsync hdmi_hsync
+ad_connect  axi_hdmi_core/hdmi_16_vsync hdmi_vsync
+ad_connect  axi_hdmi_core/hdmi_16_data_e hdmi_data_e
+ad_connect  axi_hdmi_core/hdmi_16_data hdmi_data
+ad_connect  axi_hdmi_core/vdma_valid axi_hdmi_dma/m_axis_mm2s_tvalid
+ad_connect  axi_hdmi_core/vdma_data axi_hdmi_dma/m_axis_mm2s_tdata
+ad_connect  axi_hdmi_core/vdma_ready axi_hdmi_dma/m_axis_mm2s_tready
+ad_connect  axi_hdmi_core/vdma_fs axi_hdmi_dma/mm2s_fsync
+ad_connect  axi_hdmi_core/vdma_fs axi_hdmi_core/vdma_fs_ret
 
 # spdif audio
 

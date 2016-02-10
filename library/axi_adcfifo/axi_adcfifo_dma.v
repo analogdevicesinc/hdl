@@ -62,9 +62,9 @@ module axi_adcfifo_dma (
   parameter   DMA_READY_ENABLE = 1;
 
   localparam  DMA_MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;
-  localparam  DMA_ADDR_WIDTH = 8;
-  localparam  AXI_ADDR_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDR_WIDTH - 1) :
-    ((DMA_MEM_RATIO == 4) ? (DMA_ADDR_WIDTH - 2) : (DMA_ADDR_WIDTH - 3));
+  localparam  DMA_ADDRESS_WIDTH = 8;
+  localparam  AXI_ADDRESS_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
+    ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) : (DMA_ADDRESS_WIDTH - 3));
  
   // adc write
 
@@ -86,32 +86,32 @@ module axi_adcfifo_dma (
 
   // internal registers
 
-  reg     [AXI_ADDR_WIDTH-1:0]    axi_waddr = 'd0;
+  reg     [AXI_ADDRESS_WIDTH-1:0]    axi_waddr = 'd0;
   reg     [  2:0]                 axi_waddr_rel_count = 'd0;
   reg                             axi_waddr_rel_t = 'd0;
-  reg     [AXI_ADDR_WIDTH-1:0]    axi_waddr_rel = 'd0;
+  reg     [AXI_ADDRESS_WIDTH-1:0]    axi_waddr_rel = 'd0;
   reg     [  2:0]                 axi_raddr_rel_t_m = 'd0;
-  reg     [DMA_ADDR_WIDTH-1:0]    axi_raddr_rel = 'd0;
-  reg     [DMA_ADDR_WIDTH-1:0]    axi_addr_diff = 'd0;
+  reg     [DMA_ADDRESS_WIDTH-1:0]    axi_raddr_rel = 'd0;
+  reg     [DMA_ADDRESS_WIDTH-1:0]    axi_addr_diff = 'd0;
   reg                             axi_dready = 'd0;
   reg                             dma_rst = 'd0;
   reg     [  2:0]                 dma_waddr_rel_t_m = 'd0;
-  reg     [AXI_ADDR_WIDTH-1:0]    dma_waddr_rel = 'd0;
+  reg     [AXI_ADDRESS_WIDTH-1:0]    dma_waddr_rel = 'd0;
   reg                             dma_rd = 'd0;
   reg                             dma_rd_d = 'd0;
   reg     [DMA_DATA_WIDTH-1:0]    dma_rdata_d = 'd0;
-  reg     [DMA_ADDR_WIDTH-1:0]    dma_raddr = 'd0;
+  reg     [DMA_ADDRESS_WIDTH-1:0]    dma_raddr = 'd0;
   reg     [  2:0]                 dma_raddr_rel_count = 'd0;
   reg                             dma_raddr_rel_t = 'd0;
-  reg     [DMA_ADDR_WIDTH-1:0]    dma_raddr_rel = 'd0;
+  reg     [DMA_ADDRESS_WIDTH-1:0]    dma_raddr_rel = 'd0;
 
   // internal signals
 
-  wire    [DMA_ADDR_WIDTH:0]      axi_addr_diff_s;
+  wire    [DMA_ADDRESS_WIDTH:0]      axi_addr_diff_s;
   wire                            axi_raddr_rel_t_s;
-  wire    [DMA_ADDR_WIDTH-1:0]    axi_waddr_s;
+  wire    [DMA_ADDRESS_WIDTH-1:0]    axi_waddr_s;
   wire                            dma_waddr_rel_t_s;
-  wire    [DMA_ADDR_WIDTH-1:0]    dma_waddr_rel_s;
+  wire    [DMA_ADDRESS_WIDTH-1:0]    dma_waddr_rel_s;
   wire                            dma_wready_s;
   wire                            dma_rd_s;
   wire    [DMA_DATA_WIDTH-1:0]    dma_rdata_s;
@@ -152,7 +152,7 @@ module axi_adcfifo_dma (
       if (axi_raddr_rel_t_s == 1'b1) begin
         axi_raddr_rel <= dma_raddr_rel;
       end
-      axi_addr_diff <= axi_addr_diff_s[DMA_ADDR_WIDTH-1:0];
+      axi_addr_diff <= axi_addr_diff_s[DMA_ADDRESS_WIDTH-1:0];
       if (axi_addr_diff >= 180) begin
         axi_dready <= 1'b0;
       end else if (axi_addr_diff <= 8) begin
@@ -211,10 +211,10 @@ module axi_adcfifo_dma (
   // instantiations
 
   ad_mem_asym #(
-    .ADDR_WIDTH_A (AXI_ADDR_WIDTH),
-    .DATA_WIDTH_A (AXI_DATA_WIDTH),
-    .ADDR_WIDTH_B (DMA_ADDR_WIDTH),
-    .DATA_WIDTH_B (DMA_DATA_WIDTH))
+    .A_ADDRESS_WIDTH (AXI_ADDRESS_WIDTH),
+    .A_DATA_WIDTH (AXI_DATA_WIDTH),
+    .B_ADDRESS_WIDTH (DMA_ADDRESS_WIDTH),
+    .B_DATA_WIDTH (DMA_DATA_WIDTH))
   i_mem_asym (
     .clka (axi_clk),
     .wea (axi_dvalid),

@@ -42,28 +42,28 @@ module util_axis_resize (
 
 	input                       s_valid,
 	output                      s_ready,
-	input [C_S_DATA_WIDTH-1:0]  s_data,
+	input [SLAVE_DATA_WIDTH-1:0]  s_data,
 
 	output                      m_valid,
 	input                       m_ready,
-	output [C_M_DATA_WIDTH-1:0] m_data
+	output [MASTER_DATA_WIDTH-1:0] m_data
 );
 
-parameter C_M_DATA_WIDTH = 64;
-parameter C_S_DATA_WIDTH = 64;
-parameter C_BIG_ENDIAN = 0;
+parameter MASTER_DATA_WIDTH = 64;
+parameter SLAVE_DATA_WIDTH = 64;
+parameter BIG_ENDIAN = 0;
 
-generate if (C_S_DATA_WIDTH == C_M_DATA_WIDTH) begin
+generate if (SLAVE_DATA_WIDTH == MASTER_DATA_WIDTH) begin
 
 assign m_valid = s_valid;
 assign s_ready = m_ready;
 assign m_data = s_data;
 
-end else if (C_S_DATA_WIDTH < C_M_DATA_WIDTH) begin
+end else if (SLAVE_DATA_WIDTH < MASTER_DATA_WIDTH) begin
 
-localparam RATIO = C_M_DATA_WIDTH / C_S_DATA_WIDTH;
+localparam RATIO = MASTER_DATA_WIDTH / SLAVE_DATA_WIDTH;
 
-reg [C_M_DATA_WIDTH-1:0] data;
+reg [MASTER_DATA_WIDTH-1:0] data;
 reg [$clog2(RATIO)-1:0] count;
 reg valid;
 
@@ -90,10 +90,10 @@ end
 always @(posedge clk)
 begin
 	if (s_ready == 1'b1 && s_valid == 1'b1)
-		if (C_BIG_ENDIAN == 1) begin
-			data <= {data[C_M_DATA_WIDTH-C_S_DATA_WIDTH-1:0], s_data};
+		if (BIG_ENDIAN == 1) begin
+			data <= {data[MASTER_DATA_WIDTH-SLAVE_DATA_WIDTH-1:0], s_data};
 		end else begin
-			data <= {s_data, data[C_M_DATA_WIDTH-1:C_S_DATA_WIDTH]};
+			data <= {s_data, data[MASTER_DATA_WIDTH-1:SLAVE_DATA_WIDTH]};
 		end
 end
 
@@ -103,9 +103,9 @@ assign m_data = data;
 
 end else begin
 
-localparam RATIO = C_S_DATA_WIDTH / C_M_DATA_WIDTH;
+localparam RATIO = SLAVE_DATA_WIDTH / MASTER_DATA_WIDTH;
 
-reg [C_S_DATA_WIDTH-1:0] data;
+reg [SLAVE_DATA_WIDTH-1:0] data;
 reg [$clog2(RATIO)-1:0] count;
 reg valid;
 
@@ -134,19 +134,19 @@ begin
 	if (s_ready == 1'b1 && s_valid == 1'b1) begin
 		data <= s_data;
 	end else if (m_ready == 1'b1 && m_valid == 1'b1) begin
-		if (C_BIG_ENDIAN == 1) begin
-			data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH] <= data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0];
+		if (BIG_ENDIAN == 1) begin
+			data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH] <= data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0];
 		end else begin
-			data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0] <= data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH];
+			data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0] <= data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH];
 		end
 	end
 end
 
 assign s_ready = ~valid || (m_ready && count == 'h0);
 assign m_valid = valid;
-assign m_data = C_BIG_ENDIAN == 1 ?
-	data[C_S_DATA_WIDTH-1:C_S_DATA_WIDTH-C_M_DATA_WIDTH] :
-	data[C_M_DATA_WIDTH-1:0];
+assign m_data = BIG_ENDIAN == 1 ?
+	data[SLAVE_DATA_WIDTH-1:SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH] :
+	data[MASTER_DATA_WIDTH-1:0];
 
 end
 endgenerate

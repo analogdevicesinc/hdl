@@ -47,25 +47,9 @@ set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] [get_bd_ports sys_rst]
 
 # instance: microblaze - processor
 
-set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.4 sys_mb]
-set_property -dict [list CONFIG.C_FAULT_TOLERANT {0}] $sys_mb
-set_property -dict [list CONFIG.C_D_AXI {1}] $sys_mb
-set_property -dict [list CONFIG.C_D_LMB {1}] $sys_mb
-set_property -dict [list CONFIG.C_I_LMB {1}] $sys_mb
-set_property -dict [list CONFIG.C_DEBUG_ENABLED {1}] $sys_mb
-set_property -dict [list CONFIG.C_USE_ICACHE {1}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_LINE_LEN {8}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_ALWAYS_USED {1}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
-set_property -dict [list CONFIG.C_USE_DCACHE {1}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_LINE_LEN {4}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_ALWAYS_USED {1}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_HIGHADDR {0xBFFFFFFF}] $sys_mb
-set_property -dict [list CONFIG.C_ICACHE_BASEADDR {0x80000000}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_HIGHADDR {0xBFFFFFFF}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_BASEADDR {0x80000000}] $sys_mb
+set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.5 sys_mb]
 set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
+set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
 
 # instance: microblaze - local memory & bus
 
@@ -103,13 +87,13 @@ set sys_ethernet_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1
 set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_ethernet_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {125.000}] $sys_ethernet_clkgen
 
-set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:6.2 axi_ethernet]
+set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:7.0 axi_ethernet]
 set_property -dict [list CONFIG.PHY_TYPE {RGMII}] $axi_ethernet
 
 set axi_ethernet_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_ethernet_dma]
-set_property -dict [list CONFIG.c_include_mm2s_dre {1}] $axi_ethernet_dma
-set_property -dict [list CONFIG.c_sg_use_stsapp_length {1}] $axi_ethernet_dma
-set_property -dict [list CONFIG.c_include_s2mm_dre {1}] $axi_ethernet_dma
+set_property -dict [list CONFIG.C_INCLUDE_MM2S_DRE {1}] $axi_ethernet_dma
+set_property -dict [list CONFIG.C_SG_USE_STSAPP_LENGTH {1}] $axi_ethernet_dma
+set_property -dict [list CONFIG.C_INCLUDE_S2MM_DRE {1}] $axi_ethernet_dma
 
 set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
 
@@ -209,7 +193,7 @@ ad_connect  sys_rst axi_ddr_cntrl/sys_rst
 ad_connect  sys_clk_p axi_ddr_cntrl/sys_clk_p
 ad_connect  sys_clk_n axi_ddr_cntrl/sys_clk_n
 ad_connect  ddr3 axi_ddr_cntrl/DDR3
-ad_connect  mdio axi_ethernet/mdio_io
+ad_connect  mdio axi_ethernet/mdio
 ad_connect  rgmii axi_ethernet/rgmii
 ad_connect  uart_sin axi_uart/rx
 ad_connect  uart_sout axi_uart/tx

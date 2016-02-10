@@ -82,7 +82,7 @@ module axi_ad9739a_if (
 
   // parameters
 
-  parameter   PCORE_DEVICE_TYPE = 0;
+  parameter   DEVICE_TYPE = 0;
 
   // dac interface
 
@@ -143,9 +143,9 @@ module axi_ad9739a_if (
   // dac data output serdes(s) & buffers
 
   ad_serdes_out #(
-    .SERDES(1),
+    .SERDES_OR_DDR_N(1),
     .DATA_WIDTH(14),
-    .DEVICE_TYPE (PCORE_DEVICE_TYPE))
+    .DEVICE_TYPE (DEVICE_TYPE))
   i_serdes_out_data_a (
     .rst (dac_rst),
     .clk (dac_clk),
@@ -164,9 +164,9 @@ module axi_ad9739a_if (
   // dac data output serdes(s) & buffers
   
   ad_serdes_out #(
-    .SERDES(1),
+    .SERDES_OR_DDR_N(1),
     .DATA_WIDTH(14),
-    .DEVICE_TYPE (PCORE_DEVICE_TYPE))
+    .DEVICE_TYPE (DEVICE_TYPE))
   i_serdes_out_data_b (
     .rst (dac_rst),
     .clk (dac_clk),
@@ -185,9 +185,9 @@ module axi_ad9739a_if (
   // dac clock output serdes & buffer
   
   ad_serdes_out #(
-    .SERDES(1),
+    .SERDES_OR_DDR_N(1),
     .DATA_WIDTH(1),
-    .DEVICE_TYPE (PCORE_DEVICE_TYPE))
+    .DEVICE_TYPE (DEVICE_TYPE))
   i_serdes_out_clk (
     .rst (dac_rst),
     .clk (dac_clk),

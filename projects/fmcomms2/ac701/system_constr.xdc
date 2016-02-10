@@ -50,6 +50,7 @@ set_property  -dict {PACKAGE_PIN  F22  IOSTANDARD LVCMOS25} [get_ports gpio_ctl[
 set_property  -dict {PACKAGE_PIN  M14  IOSTANDARD LVCMOS25} [get_ports gpio_en_agc]                      ; ## H22  FMC_LPC_LA19_P
 set_property  -dict {PACKAGE_PIN  L14  IOSTANDARD LVCMOS25} [get_ports gpio_sync]                        ; ## H23  FMC_LPC_LA19_N
 set_property  -dict {PACKAGE_PIN  K22  IOSTANDARD LVCMOS25} [get_ports gpio_resetb]                      ; ## H31  FMC_LPC_LA28_P
+
 set_property  -dict {PACKAGE_PIN  E21  IOSTANDARD LVCMOS25} [get_ports enable]                           ; ## G18  FMC_LPC_LA16_P
 set_property  -dict {PACKAGE_PIN  D21  IOSTANDARD LVCMOS25} [get_ports txnrx]                            ; ## G19  FMC_LPC_LA16_N
 
@@ -61,4 +62,4 @@ set_property  -dict {PACKAGE_PIN  E23  IOSTANDARD LVCMOS25} [get_ports spi_miso]
 # clocks
 
 create_clock -name rx_clk       -period  4 [get_ports rx_clk_in_p]
-create_clock -name ad9361_clk   -period  4 [get_pins i_system_wrapper/system_i/axi_ad9361/clk]
+

@@ -36,78 +36,79 @@ create_bd_port -dir O sys_100m_resetn
 # instances
 
 set axi_ad9361_0 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361_0]
-set_property -dict [list CONFIG.PCORE_ID {0}] $axi_ad9361_0
-set_property -dict [list CONFIG.PCORE_IODELAY_GROUP {dev_0_if_delay_group}] $axi_ad9361_0
+set_property -dict [list CONFIG.ID {0}] $axi_ad9361_0
+set_property -dict [list CONFIG.IO_DELAY_GROUP {dev_0_if_delay_group}] $axi_ad9361_0
 
 set axi_ad9361_1 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361_1]
-set_property -dict [list CONFIG.PCORE_ID {1}] $axi_ad9361_1
-set_property -dict [list CONFIG.PCORE_IODELAY_GROUP {dev_1_if_delay_group}] $axi_ad9361_1
+set_property -dict [list CONFIG.ID {1}] $axi_ad9361_1
+set_property -dict [list CONFIG.IO_DELAY_GROUP {dev_1_if_delay_group}] $axi_ad9361_1
 
 set axi_ad9361_dac_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9361_dac_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {2}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_CYCLIC {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9361_dac_dma
 
 if {$sys_zynq == 1} {
-  set_property -dict [list CONFIG.C_DMA_AXI_PROTOCOL_SRC {1}] $axi_ad9361_dac_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {64}] $axi_ad9361_dac_dma
+  set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $axi_ad9361_dac_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9361_dac_dma
 }
 
 set axi_ad9361_adc_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9361_adc_dma]
-set_property -dict [list CONFIG.C_DMA_TYPE_SRC {2}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_DMA_TYPE_DEST {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_CYCLIC {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_SYNC_TRANSFER_START {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_SRC {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_AXI_SLICE_DEST {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_DEST_REQ {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_SRC_DEST {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_CLKS_ASYNC_REQ_SRC {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_2D_TRANSFER {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {128}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_SRC {128}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {1}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9361_adc_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9361_adc_dma
 
 if {$sys_zynq == 1} {
-  set_property -dict [list CONFIG.C_DMA_AXI_PROTOCOL_DEST {1}] $axi_ad9361_adc_dma
-  set_property -dict [list CONFIG.C_DMA_DATA_WIDTH_DEST {64}] $axi_ad9361_adc_dma
+  set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {1}] $axi_ad9361_adc_dma
+  set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9361_adc_dma
 }
 
-set util_adc_pack_0   [create_bd_cell -type ip -vlnv analog.com:user:util_adc_pack:1.0 util_adc_pack_0]
-set util_dac_unpack_0 [create_bd_cell -type ip -vlnv analog.com:user:util_dac_unpack:1.0 util_dac_unpack_0]
+set util_upack_dac [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_upack_dac]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_upack_dac
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] $util_upack_dac
 
-# constants for avoiding errors when validating bd
+set util_cpack_adc [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_adc]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_cpack_adc
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] $util_cpack_adc
 
-set constant_1bit   [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 constant_1bit]
-set_property -dict [list CONFIG.CONST_VAL {0}] $constant_1bit
-
-set constant_32bit  [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 constant_32bit]
-set_property -dict [list CONFIG.CONST_WIDTH {32}] $constant_32bit
-set_property -dict [list CONFIG.CONST_VAL {0}] $constant_32bit
+set adc_wfifo [create_bd_cell -type ip -vlnv analog.com:user:util_wfifo:1.0 adc_wfifo]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {8} ] $adc_wfifo
+set_property -dict [list CONFIG.DIN_DATA_WIDTH {16} ] $adc_wfifo
+set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16} ] $adc_wfifo
+set_property -dict [list CONFIG.DIN_ADDRESS_WIDTH {4}] $adc_wfifo
 
 # connections (ad9361)
 
-ad_connect sys_200m_clk axi_ad9361_0/delay_clk
-ad_connect sys_200m_clk axi_ad9361_1/delay_clk
+ad_connect sys_200m_clk     axi_ad9361_0/delay_clk
+ad_connect sys_200m_clk     axi_ad9361_1/delay_clk
 ad_connect axi_ad9361_0_clk axi_ad9361_0/l_clk
 ad_connect axi_ad9361_1_clk axi_ad9361_1/l_clk
 ad_connect axi_ad9361_0_clk axi_ad9361_0/clk
 ad_connect axi_ad9361_0_clk axi_ad9361_1/clk
-ad_connect axi_ad9361_0_clk util_adc_pack_0/clk
-ad_connect axi_ad9361_0_clk util_dac_unpack_0/clk
-ad_connect axi_ad9361_0_clk axi_ad9361_adc_dma/fifo_wr_clk
+ad_connect axi_ad9361_0/rst adc_wfifo/din_rst
+ad_connect axi_ad9361_0_clk adc_wfifo/din_clk
+ad_connect sys_cpu_clk      adc_wfifo/dout_clk
+ad_connect sys_cpu_resetn   adc_wfifo/dout_rstn
+ad_connect sys_cpu_clk      util_cpack_adc/adc_clk
+ad_connect sys_cpu_clk      axi_ad9361_adc_dma/fifo_wr_clk
+ad_connect axi_ad9361_0_clk util_upack_dac/dac_clk
 ad_connect axi_ad9361_0_clk axi_ad9361_dac_dma/fifo_rd_clk
 ad_connect sys_cpu_resetn   sys_100m_resetn
 ad_connect sys_cpu_resetn   axi_ad9361_adc_dma/m_dest_axi_aresetn
 ad_connect sys_cpu_resetn   axi_ad9361_dac_dma/m_src_axi_aresetn
+ad_connect sys_cpu_resetn   util_cpack_adc/adc_rst
 
 ad_connect  axi_ad9361_0_dac_sync   axi_ad9361_0/dac_sync_out
 ad_connect  axi_ad9361_0_dac_sync   axi_ad9361_0/dac_sync_in
@@ -137,74 +138,90 @@ ad_connect  tx_frame_out_1_p            axi_ad9361_1/tx_frame_out_p
 ad_connect  tx_frame_out_1_n            axi_ad9361_1/tx_frame_out_n
 ad_connect  tx_data_out_1_p             axi_ad9361_1/tx_data_out_p
 ad_connect  tx_data_out_1_n             axi_ad9361_1/tx_data_out_n
-ad_connect  axi_ad9361_0/adc_enable_i0  util_adc_pack_0/chan_enable_0
-ad_connect  axi_ad9361_0/adc_valid_i0   util_adc_pack_0/chan_valid_0
-ad_connect  axi_ad9361_0/adc_data_i0    util_adc_pack_0/chan_data_0
-ad_connect  axi_ad9361_0/adc_enable_q0  util_adc_pack_0/chan_enable_1
-ad_connect  axi_ad9361_0/adc_valid_q0   util_adc_pack_0/chan_valid_1
-ad_connect  axi_ad9361_0/adc_data_q0    util_adc_pack_0/chan_data_1
-ad_connect  axi_ad9361_0/adc_enable_i1  util_adc_pack_0/chan_enable_2
-ad_connect  axi_ad9361_0/adc_valid_i1   util_adc_pack_0/chan_valid_2
-ad_connect  axi_ad9361_0/adc_data_i1    util_adc_pack_0/chan_data_2
-ad_connect  axi_ad9361_0/adc_enable_q1  util_adc_pack_0/chan_enable_3
-ad_connect  axi_ad9361_0/adc_valid_q1   util_adc_pack_0/chan_valid_3
-ad_connect  axi_ad9361_0/adc_data_q1    util_adc_pack_0/chan_data_3
-ad_connect  axi_ad9361_1/adc_enable_i0  util_adc_pack_0/chan_enable_4
-ad_connect  axi_ad9361_1/adc_valid_i0   util_adc_pack_0/chan_valid_4
-ad_connect  axi_ad9361_1/adc_data_i0    util_adc_pack_0/chan_data_4
-ad_connect  axi_ad9361_1/adc_enable_q0  util_adc_pack_0/chan_enable_5
-ad_connect  axi_ad9361_1/adc_valid_q0   util_adc_pack_0/chan_valid_5
-ad_connect  axi_ad9361_1/adc_data_q0    util_adc_pack_0/chan_data_5
-ad_connect  axi_ad9361_1/adc_enable_i1  util_adc_pack_0/chan_enable_6
-ad_connect  axi_ad9361_1/adc_valid_i1   util_adc_pack_0/chan_valid_6
-ad_connect  axi_ad9361_1/adc_data_i1    util_adc_pack_0/chan_data_6
-ad_connect  axi_ad9361_1/adc_enable_q1  util_adc_pack_0/chan_enable_7
-ad_connect  axi_ad9361_1/adc_valid_q1   util_adc_pack_0/chan_valid_7
-ad_connect  axi_ad9361_1/adc_data_q1    util_adc_pack_0/chan_data_7
-ad_connect  util_adc_pack_0/dvalid      axi_ad9361_adc_dma/fifo_wr_en
-ad_connect  util_adc_pack_0/dsync       axi_ad9361_adc_dma/fifo_wr_sync
-ad_connect  util_adc_pack_0/ddata       axi_ad9361_adc_dma/fifo_wr_din
-ad_connect  axi_ad9361_0/dac_enable_i0  util_dac_unpack_0/dac_enable_00
-ad_connect  axi_ad9361_0/dac_valid_i0   util_dac_unpack_0/dac_valid_00
-ad_connect  axi_ad9361_0/dac_data_i0    util_dac_unpack_0/dac_data_00
-ad_connect  axi_ad9361_0/dac_enable_q0  util_dac_unpack_0/dac_enable_01
-ad_connect  axi_ad9361_0/dac_valid_q0   util_dac_unpack_0/dac_valid_01
-ad_connect  axi_ad9361_0/dac_data_q0    util_dac_unpack_0/dac_data_01
-ad_connect  axi_ad9361_0/dac_enable_i1  util_dac_unpack_0/dac_enable_02
-ad_connect  axi_ad9361_0/dac_valid_i1   util_dac_unpack_0/dac_valid_02
 
-ad_connect  axi_ad9361_0/dac_data_i1      util_dac_unpack_0/dac_data_02
-ad_connect  axi_ad9361_0/dac_enable_q1    util_dac_unpack_0/dac_enable_03
-ad_connect  axi_ad9361_0/dac_valid_q1     util_dac_unpack_0/dac_valid_03
-ad_connect  axi_ad9361_0/dac_data_q1      util_dac_unpack_0/dac_data_03
-ad_connect  axi_ad9361_1/dac_enable_i0    util_dac_unpack_0/dac_enable_04
-ad_connect  axi_ad9361_1/dac_valid_i0     util_dac_unpack_0/dac_valid_04
-ad_connect  axi_ad9361_1/dac_data_i0      util_dac_unpack_0/dac_data_04
-ad_connect  axi_ad9361_1/dac_enable_q0    util_dac_unpack_0/dac_enable_05
-ad_connect  axi_ad9361_1/dac_valid_q0     util_dac_unpack_0/dac_valid_05
-ad_connect  axi_ad9361_1/dac_data_q0      util_dac_unpack_0/dac_data_05
-ad_connect  axi_ad9361_1/dac_enable_i1    util_dac_unpack_0/dac_enable_06
-ad_connect  axi_ad9361_1/dac_valid_i1     util_dac_unpack_0/dac_valid_06
-ad_connect  axi_ad9361_1/dac_data_i1      util_dac_unpack_0/dac_data_06
-ad_connect  axi_ad9361_1/dac_enable_q1    util_dac_unpack_0/dac_enable_07
-ad_connect  axi_ad9361_1/dac_valid_q1     util_dac_unpack_0/dac_valid_07
-ad_connect  axi_ad9361_1/dac_data_q1      util_dac_unpack_0/dac_data_07
-ad_connect  util_dac_unpack_0/dma_rd      axi_ad9361_dac_dma/fifo_rd_en
-ad_connect  util_dac_unpack_0/dma_data    axi_ad9361_dac_dma/fifo_rd_dout
-ad_connect  util_dac_unpack_0/fifo_valid  axi_ad9361_dac_dma/fifo_rd_valid
-ad_connect  axi_ad9361_0/adc_dovf         axi_ad9361_adc_dma/fifo_wr_overflow
-ad_connect  axi_ad9361_0/dac_dunf         axi_ad9361_dac_dma/fifo_rd_underflow
 
-ad_connect  constant_32bit/dout axi_ad9361_0/up_dac_gpio_in
-ad_connect  constant_32bit/dout axi_ad9361_0/up_adc_gpio_in
-ad_connect  constant_32bit/dout axi_ad9361_1/up_dac_gpio_in
-ad_connect  constant_32bit/dout axi_ad9361_1/up_adc_gpio_in
-ad_connect  constant_1bit/dout  axi_ad9361_0/dac_dovf
-ad_connect  constant_1bit/dout  axi_ad9361_0/adc_dunf
-ad_connect  constant_1bit/dout  axi_ad9361_1/dac_dovf
-ad_connect  constant_1bit/dout  axi_ad9361_1/dac_dunf
-ad_connect  constant_1bit/dout  axi_ad9361_1/adc_dunf
-ad_connect  constant_1bit/dout  axi_ad9361_1/adc_dovf
+
+ad_connect  axi_ad9361_0/adc_enable_i0  adc_wfifo/din_enable_0 
+ad_connect  axi_ad9361_0/adc_valid_i0   adc_wfifo/din_valid_0
+ad_connect  axi_ad9361_0/adc_data_i0    adc_wfifo/din_data_0
+ad_connect  axi_ad9361_0/adc_enable_q0  adc_wfifo/din_enable_1
+ad_connect  axi_ad9361_0/adc_valid_q0   adc_wfifo/din_valid_1
+ad_connect  axi_ad9361_0/adc_data_q0    adc_wfifo/din_data_1
+ad_connect  axi_ad9361_0/adc_enable_i1  adc_wfifo/din_enable_2
+ad_connect  axi_ad9361_0/adc_valid_i1   adc_wfifo/din_valid_2
+ad_connect  axi_ad9361_0/adc_data_i1    adc_wfifo/din_data_2
+ad_connect  axi_ad9361_0/adc_enable_q1  adc_wfifo/din_enable_3
+ad_connect  axi_ad9361_0/adc_valid_q1   adc_wfifo/din_valid_3
+ad_connect  axi_ad9361_0/adc_data_q1    adc_wfifo/din_data_3
+ad_connect  axi_ad9361_1/adc_enable_i0  adc_wfifo/din_enable_4
+ad_connect  axi_ad9361_1/adc_valid_i0   adc_wfifo/din_valid_4
+ad_connect  axi_ad9361_1/adc_data_i0    adc_wfifo/din_data_4
+ad_connect  axi_ad9361_1/adc_enable_q0  adc_wfifo/din_enable_5
+ad_connect  axi_ad9361_1/adc_valid_q0   adc_wfifo/din_valid_5
+ad_connect  axi_ad9361_1/adc_data_q0    adc_wfifo/din_data_5
+ad_connect  axi_ad9361_1/adc_enable_i1  adc_wfifo/din_enable_6
+ad_connect  axi_ad9361_1/adc_valid_i1   adc_wfifo/din_valid_6
+ad_connect  axi_ad9361_1/adc_data_i1    adc_wfifo/din_data_6
+ad_connect  axi_ad9361_1/adc_enable_q1  adc_wfifo/din_enable_7
+ad_connect  axi_ad9361_1/adc_valid_q1   adc_wfifo/din_valid_7
+ad_connect  axi_ad9361_1/adc_data_q1    adc_wfifo/din_data_7    
+
+ad_connect  util_cpack_adc/adc_enable_0  adc_wfifo/dout_enable_0 
+ad_connect  util_cpack_adc/adc_valid_0   adc_wfifo/dout_valid_0
+ad_connect  util_cpack_adc/adc_data_0    adc_wfifo/dout_data_0
+ad_connect  util_cpack_adc/adc_enable_1  adc_wfifo/dout_enable_1
+ad_connect  util_cpack_adc/adc_valid_1   adc_wfifo/dout_valid_1
+ad_connect  util_cpack_adc/adc_data_1    adc_wfifo/dout_data_1
+ad_connect  util_cpack_adc/adc_enable_2  adc_wfifo/dout_enable_2
+ad_connect  util_cpack_adc/adc_valid_2   adc_wfifo/dout_valid_2
+ad_connect  util_cpack_adc/adc_data_2    adc_wfifo/dout_data_2
+ad_connect  util_cpack_adc/adc_enable_3  adc_wfifo/dout_enable_3
+ad_connect  util_cpack_adc/adc_valid_3   adc_wfifo/dout_valid_3
+ad_connect  util_cpack_adc/adc_data_3    adc_wfifo/dout_data_3
+ad_connect  util_cpack_adc/adc_enable_4  adc_wfifo/dout_enable_4
+ad_connect  util_cpack_adc/adc_valid_4   adc_wfifo/dout_valid_4
+ad_connect  util_cpack_adc/adc_data_4    adc_wfifo/dout_data_4
+ad_connect  util_cpack_adc/adc_enable_5  adc_wfifo/dout_enable_5
+ad_connect  util_cpack_adc/adc_valid_5   adc_wfifo/dout_valid_5
+ad_connect  util_cpack_adc/adc_data_5    adc_wfifo/dout_data_5
+ad_connect  util_cpack_adc/adc_enable_6  adc_wfifo/dout_enable_6
+ad_connect  util_cpack_adc/adc_valid_6   adc_wfifo/dout_valid_6
+ad_connect  util_cpack_adc/adc_data_6    adc_wfifo/dout_data_6
+ad_connect  util_cpack_adc/adc_enable_7  adc_wfifo/dout_enable_7
+ad_connect  util_cpack_adc/adc_valid_7   adc_wfifo/dout_valid_7
+ad_connect  util_cpack_adc/adc_data_7    adc_wfifo/dout_data_7
+
+ad_connect  util_cpack_adc/adc_valid    axi_ad9361_adc_dma/fifo_wr_en
+ad_connect  util_cpack_adc/adc_sync     axi_ad9361_adc_dma/fifo_wr_sync
+ad_connect  util_cpack_adc/adc_data     axi_ad9361_adc_dma/fifo_wr_din
+ad_connect  axi_ad9361_0/dac_enable_i0  util_upack_dac/dac_enable_0
+ad_connect  axi_ad9361_0/dac_valid_i0   util_upack_dac/dac_valid_0
+ad_connect  axi_ad9361_0/dac_data_i0    util_upack_dac/dac_data_0
+ad_connect  axi_ad9361_0/dac_enable_q0  util_upack_dac/dac_enable_1
+ad_connect  axi_ad9361_0/dac_valid_q0   util_upack_dac/dac_valid_1
+ad_connect  axi_ad9361_0/dac_data_q0    util_upack_dac/dac_data_1
+ad_connect  axi_ad9361_0/dac_enable_i1  util_upack_dac/dac_enable_2
+ad_connect  axi_ad9361_0/dac_valid_i1   util_upack_dac/dac_valid_2
+ad_connect  axi_ad9361_0/dac_data_i1    util_upack_dac/dac_data_2
+ad_connect  axi_ad9361_0/dac_enable_q1  util_upack_dac/dac_enable_3
+ad_connect  axi_ad9361_0/dac_valid_q1   util_upack_dac/dac_valid_3
+ad_connect  axi_ad9361_0/dac_data_q1    util_upack_dac/dac_data_3
+ad_connect  axi_ad9361_1/dac_enable_i0  util_upack_dac/dac_enable_4
+ad_connect  axi_ad9361_1/dac_valid_i0   util_upack_dac/dac_valid_4
+ad_connect  axi_ad9361_1/dac_data_i0    util_upack_dac/dac_data_4
+ad_connect  axi_ad9361_1/dac_enable_q0  util_upack_dac/dac_enable_5
+ad_connect  axi_ad9361_1/dac_valid_q0   util_upack_dac/dac_valid_5
+ad_connect  axi_ad9361_1/dac_data_q0    util_upack_dac/dac_data_5
+ad_connect  axi_ad9361_1/dac_enable_i1  util_upack_dac/dac_enable_6
+ad_connect  axi_ad9361_1/dac_valid_i1   util_upack_dac/dac_valid_6
+ad_connect  axi_ad9361_1/dac_data_i1    util_upack_dac/dac_data_6
+ad_connect  axi_ad9361_1/dac_enable_q1  util_upack_dac/dac_enable_7
+ad_connect  axi_ad9361_1/dac_valid_q1   util_upack_dac/dac_valid_7
+ad_connect  axi_ad9361_1/dac_data_q1    util_upack_dac/dac_data_7
+ad_connect  util_upack_dac/dac_valid    axi_ad9361_dac_dma/fifo_rd_en
+ad_connect  util_upack_dac/dac_data     axi_ad9361_dac_dma/fifo_rd_dout
+ad_connect  axi_ad9361_0/adc_dovf       axi_ad9361_adc_dma/fifo_wr_overflow
+ad_connect  axi_ad9361_0/dac_dunf       axi_ad9361_dac_dma/fifo_rd_underflow
 
 # address map
 

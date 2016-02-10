@@ -3,10 +3,6 @@
 
 set_global_assignment -name FAMILY "Arria V"
 set_global_assignment -name DEVICE 5AGTFD7K3F40I3
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name QSYS_FILE system_bd.qsys
-set_global_assignment -name VERILOG_FILE system_top.v
 
 # clocks and resets
 
@@ -701,8 +697,8 @@ set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|s
 
 # ethernet interface
 
-set_location_assignment PIN_P12 -to eth_rx_clk
-set_location_assignment PIN_R12 -to "eth_rx_clk(n)"
+set_location_assignment PIN_A6 -to eth_rx_clk
+set_location_assignment PIN_B6 -to "eth_rx_clk(n)"
 set_location_assignment PIN_D13 -to eth_rx_cntrl
 set_location_assignment PIN_E13 -to "eth_rx_cntrl(n)"
 set_location_assignment PIN_A13 -to eth_rx_data[0]
@@ -716,20 +712,14 @@ set_location_assignment PIN_C10 -to "eth_rx_data[3](n)"
 
 set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_clk
 set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_cntrl
-set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[0]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[1]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[2]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data[3]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_rx_data
 
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_clk
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_cntrl
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_data[0]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_data[1]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_data[2]
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_data[3]
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to eth_rx_data
 
-set_location_assignment PIN_M13 -to eth_tx_clk_out
-set_location_assignment PIN_N13 -to "eth_tx_clk_out(n)"
+set_location_assignment PIN_H18 -to eth_tx_clk_out
+set_location_assignment PIN_J18 -to "eth_tx_clk_out(n)"
 set_location_assignment PIN_J11 -to eth_tx_cntrl
 set_location_assignment PIN_K11 -to "eth_tx_cntrl(n)"
 set_location_assignment PIN_K12 -to eth_tx_data[0]
@@ -743,10 +733,7 @@ set_location_assignment PIN_B13 -to "eth_tx_data[3](n)"
 
 set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_clk_out
 set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_cntrl
-set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[0]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[1]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[2]
-set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data[3]
+set_instance_assignment -name IO_STANDARD LVDS -to eth_tx_data
 
 set_location_assignment PIN_E15 -to eth_mdc
 set_location_assignment PIN_F15 -to eth_mdio_i
@@ -764,61 +751,61 @@ set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to eth_rx_clk
 
 # leds
 
-set_location_assignment PIN_M19   -to led_grn[0]
-set_location_assignment PIN_L19   -to led_grn[1]
-set_location_assignment PIN_K19   -to led_grn[2]
-set_location_assignment PIN_J19   -to led_grn[3]
-set_location_assignment PIN_K20   -to led_grn[4]
-set_location_assignment PIN_J20   -to led_grn[5]
-set_location_assignment PIN_T20   -to led_grn[6]
-set_location_assignment PIN_R20   -to led_grn[7]
-set_location_assignment PIN_N20   -to led_red[0]
-set_location_assignment PIN_C15   -to led_red[1]
-set_location_assignment PIN_AL28  -to led_red[2]
-set_location_assignment PIN_F11   -to led_red[3]
-set_location_assignment PIN_AJ31  -to led_red[4]
-set_location_assignment PIN_AN34  -to led_red[5]
-set_location_assignment PIN_AJ34  -to led_red[6]
-set_location_assignment PIN_AK33  -to led_red[7]
-set_location_assignment PIN_D6    -to push_buttons[0]
-set_location_assignment PIN_C6    -to push_buttons[1]
-set_location_assignment PIN_K7    -to push_buttons[2]
-set_location_assignment PIN_C8    -to dip_switches[0]
-set_location_assignment PIN_D8    -to dip_switches[1]
-set_location_assignment PIN_E7    -to dip_switches[2]
-set_location_assignment PIN_E6    -to dip_switches[3]
-set_location_assignment PIN_G8    -to dip_switches[4]
-set_location_assignment PIN_F8    -to dip_switches[5]
-set_location_assignment PIN_D15   -to dip_switches[6]
-set_location_assignment PIN_G11   -to dip_switches[7]
+set_location_assignment PIN_M19   -to gpio_bd[0]    ; ## led_grn[0]
+set_location_assignment PIN_L19   -to gpio_bd[1]    ; ## led_grn[1]
+set_location_assignment PIN_K19   -to gpio_bd[2]    ; ## led_grn[2]
+set_location_assignment PIN_J19   -to gpio_bd[3]    ; ## led_grn[3]
+set_location_assignment PIN_K20   -to gpio_bd[4]    ; ## led_grn[4]
+set_location_assignment PIN_J20   -to gpio_bd[5]    ; ## led_grn[5]
+set_location_assignment PIN_T20   -to gpio_bd[6]    ; ## led_grn[6]
+set_location_assignment PIN_R20   -to gpio_bd[7]    ; ## led_grn[7]
+set_location_assignment PIN_N20   -to gpio_bd[8]    ; ## led_red[0]
+set_location_assignment PIN_C15   -to gpio_bd[9]    ; ## led_red[1]
+set_location_assignment PIN_AL28  -to gpio_bd[10]   ; ## led_red[2]
+set_location_assignment PIN_F11   -to gpio_bd[11]   ; ## led_red[3]
+set_location_assignment PIN_AJ31  -to gpio_bd[12]   ; ## led_red[4]
+set_location_assignment PIN_AN34  -to gpio_bd[13]   ; ## led_red[5]
+set_location_assignment PIN_AJ34  -to gpio_bd[14]   ; ## led_red[6]
+set_location_assignment PIN_AK33  -to gpio_bd[15]   ; ## led_red[7]
+set_location_assignment PIN_C8    -to gpio_bd[16]   ; ## dip_switches[0]
+set_location_assignment PIN_D8    -to gpio_bd[17]   ; ## dip_switches[1]
+set_location_assignment PIN_E7    -to gpio_bd[18]   ; ## dip_switches[2]
+set_location_assignment PIN_E6    -to gpio_bd[19]   ; ## dip_switches[3]
+set_location_assignment PIN_G8    -to gpio_bd[20]   ; ## dip_switches[4]
+set_location_assignment PIN_F8    -to gpio_bd[21]   ; ## dip_switches[5]
+set_location_assignment PIN_D15   -to gpio_bd[22]   ; ## dip_switches[6]
+set_location_assignment PIN_G11   -to gpio_bd[23]   ; ## dip_switches[7]
+set_location_assignment PIN_D6    -to gpio_bd[24]   ; ## push_buttons[0]
+set_location_assignment PIN_C6    -to gpio_bd[25]   ; ## push_buttons[1]
+set_location_assignment PIN_K7    -to gpio_bd[26]   ; ## push_buttons[2]
 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_grn[0]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_grn[1]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_grn[2]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_grn[3]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_grn[4]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_grn[5]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_grn[6]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_grn[7]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_red[0]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_red[1]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_red[2]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_red[3]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_red[4]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_red[5]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_red[6]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to led_red[7]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to push_buttons[0]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to push_buttons[1]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to push_buttons[2]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[0]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[1]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[2]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[3]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[4]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[5]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[6]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to dip_switches[7]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[0] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[1] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[2] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[3] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[4] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[5] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[6] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[7] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[8] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[9] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[10]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[11]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[12]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[13]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[14]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[15]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[16]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[17]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[18]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[19]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[20]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[21]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[22]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[23]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[24]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[25]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[26]
 
 # globals
 

@@ -25,11 +25,11 @@ module spi_engine_execution (
 	output sdo,
 	output reg sdo_t,
 	input sdi,
-	output reg [NUM_CS-1:0] cs,
+	output reg [NUM_OF_CS-1:0] cs,
 	output reg three_wire
 );
 
-parameter NUM_CS = 1;
+parameter NUM_OF_CS = 1;
 parameter DEFAULT_SPI_CFG = 0;
 parameter DEFAULT_CLK_DIV = 0;
 
@@ -198,7 +198,7 @@ always @(posedge clk) begin
 	if (resetn == 1'b0) begin
 		cs <= 'hff;
 	end else if (inst_d1 == CMD_CHIPSELECT && cs_sleep_counter_compare == 1'b1) begin
-		cs <= cmd_d1[NUM_CS-1:0];
+		cs <= cmd_d1[NUM_OF_CS-1:0];
 	end
 end
 

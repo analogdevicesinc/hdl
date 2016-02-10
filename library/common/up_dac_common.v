@@ -92,7 +92,7 @@ module up_dac_common (
   // parameters
 
   localparam  PCORE_VERSION = 32'h00080062;
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   // mmcm reset
 
@@ -146,6 +146,8 @@ module up_dac_common (
 
   // internal registers
 
+  reg             up_core_preset = 'd0;
+  reg             up_mmcm_preset = 'd0;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_mmcm_resetn = 'd0;
@@ -182,8 +184,6 @@ module up_dac_common (
 
   wire            up_wreq_s;
   wire            up_rreq_s;
-  wire            up_preset_s;
-  wire            up_mmcm_preset_s;
   wire            up_xfer_done_s;
   wire            up_status_s;
   wire            up_status_ovf_s;
@@ -196,13 +196,13 @@ module up_dac_common (
 
   assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
-  assign up_preset_s = ~up_resetn;
-  assign up_mmcm_preset_s = ~up_mmcm_resetn;
 
   // processor write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_core_preset <= 1'd1;
+      up_mmcm_preset <= 1'd1;
       up_wack <= 'd0;
       up_scratch <= 'd0;
       up_mmcm_resetn <= 'd0;
@@ -226,6 +226,8 @@ module up_dac_common (
       up_usr_chanmax <= 'd0;
       up_dac_gpio_out <= 'd0;
     end else begin
+      up_core_preset <= ~up_resetn;
+      up_mmcm_preset <= ~up_mmcm_resetn;
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
@@ -307,7 +309,7 @@ module up_dac_common (
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
           8'h00: up_rdata <= PCORE_VERSION;
-          8'h01: up_rdata <= PCORE_ID;
+          8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {30'd0, up_mmcm_resetn, up_resetn};
           8'h11: up_rdata <= {31'd0, up_dac_sync};
@@ -334,12 +336,12 @@ module up_dac_common (
 
   // resets
 
-  ad_rst i_mmcm_rst_reg   (.preset(up_mmcm_preset_s), .clk(up_clk),     .rst(mmcm_rst));
-  ad_rst i_dac_rst_reg    (.preset(up_preset_s),      .clk(dac_clk),    .rst(dac_rst));
+  ad_rst i_mmcm_rst_reg (.preset(up_mmcm_preset), .clk(up_clk),  .rst(mmcm_rst));
+  ad_rst i_core_rst_reg (.preset(up_core_preset), .clk(dac_clk), .rst(dac_rst));
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(14)) i_dac_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(14)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_sync,
@@ -360,7 +362,7 @@ module up_dac_common (
                       dac_datafmt,
                       dac_datarate}));
 
-  up_xfer_status #(.DATA_WIDTH(3)) i_dac_xfer_status (
+  up_xfer_status #(.DATA_WIDTH(3)) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_status_s,
@@ -390,7 +392,7 @@ module up_dac_common (
 
   // dac clock monitor
 
-  up_clock_mon i_dac_clock_mon (
+  up_clock_mon i_clock_mon (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_d_count (up_dac_clk_count_s),

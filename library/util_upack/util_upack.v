@@ -86,59 +86,59 @@ module util_upack (
 
   // parameters
 
-  parameter   CH_DW     = 32;
-  parameter   CH_CNT    = 8;
+  parameter   CHANNEL_DATA_WIDTH    = 32;
+  parameter   NUM_OF_CHANNELS       = 8;
 
-  localparam  M_CNT     = 8;
-  localparam  P_CNT     = CH_CNT;
-  localparam  CH_SCNT   = CH_DW/16;
-  localparam  M_WIDTH   = CH_DW*M_CNT;
-  localparam  P_WIDTH   = CH_DW*P_CNT;
+  localparam  NUM_OF_CHANNELS_M     = 8;
+  localparam  NUM_OF_CHANNELS_P     = NUM_OF_CHANNELS;
+  localparam  CH_SCNT   = CHANNEL_DATA_WIDTH/16;
+  localparam  M_WIDTH   = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_M;
+  localparam  P_WIDTH   = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_P;
 
   // dac interface
 
-  input                             dac_clk;
-  input                             dac_enable_0;
-  input                             dac_valid_0;
-  output  [(CH_DW-1):0]             dac_data_0;
-  output                            upack_valid_0;
-  input                             dac_enable_1;
-  input                             dac_valid_1;
-  output  [(CH_DW-1):0]             dac_data_1;
-  output                            upack_valid_1;
-  input                             dac_enable_2;
-  input                             dac_valid_2;
-  output  [(CH_DW-1):0]             dac_data_2;
-  output                            upack_valid_2;
-  input                             dac_enable_3;
-  input                             dac_valid_3;
-  output  [(CH_DW-1):0]             dac_data_3;
-  output                            upack_valid_3;
-  input                             dac_enable_4;
-  input                             dac_valid_4;
-  output  [(CH_DW-1):0]             dac_data_4;
-  output                            upack_valid_4;
-  input                             dac_enable_5;
-  input                             dac_valid_5;
-  output  [(CH_DW-1):0]             dac_data_5;
-  output                            upack_valid_5;
-  input                             dac_enable_6;
-  input                             dac_valid_6;
-  output  [(CH_DW-1):0]             dac_data_6;
-  output                            upack_valid_6;
-  input                             dac_enable_7;
-  input                             dac_valid_7;
-  output  [(CH_DW-1):0]             dac_data_7;
-  output                            upack_valid_7;
+  input                               dac_clk;
+  input                               dac_enable_0;
+  input                               dac_valid_0;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_0;
+  output                              upack_valid_0;
+  input                               dac_enable_1;
+  input                               dac_valid_1;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_1;
+  output                              upack_valid_1;
+  input                               dac_enable_2;
+  input                               dac_valid_2;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_2;
+  output                              upack_valid_2;
+  input                               dac_enable_3;
+  input                               dac_valid_3;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_3;
+  output                              upack_valid_3;
+  input                               dac_enable_4;
+  input                               dac_valid_4;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_4;
+  output                              upack_valid_4;
+  input                               dac_enable_5;
+  input                               dac_valid_5;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_5;
+  output                              upack_valid_5;
+  input                               dac_enable_6;
+  input                               dac_valid_6;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_6;
+  output                              upack_valid_6;
+  input                               dac_enable_7;
+  input                               dac_valid_7;
+  output  [(CHANNEL_DATA_WIDTH-1):0]  dac_data_7;
+  output                              upack_valid_7;
 
-  input                             dma_xfer_in;
-  output                            dac_xfer_out;
+  input                               dma_xfer_in;
+  output                              dac_xfer_out;
 
   // fifo interface
 
-  output                            dac_valid;
-  output                            dac_sync;
-  input   [((CH_CNT*CH_DW)-1):0]    dac_data;
+  output                              dac_valid;
+  output                              dac_sync;
+  input   [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    dac_data;
 
   // internal registers
 
@@ -156,9 +156,9 @@ module util_upack (
   // internal signals
 
   wire                              dac_valid_s;
-  wire                              dac_dsf_valid_s[(M_CNT-1):0];
-  wire                              dac_dsf_sync_s[(M_CNT-1):0];
-  wire    [(M_WIDTH-1):0]           dac_dsf_data_s[(M_CNT-1):0];
+  wire                              dac_dsf_valid_s[(NUM_OF_CHANNELS_M-1):0];
+  wire                              dac_dsf_sync_s[(NUM_OF_CHANNELS_M-1):0];
+  wire    [(M_WIDTH-1):0]           dac_dsf_data_s[(NUM_OF_CHANNELS_M-1):0];
   wire    [(CH_SCNT-1):0]           dac_dmx_enable_7_s;
   wire    [(CH_SCNT-1):0]           dac_dmx_enable_6_s;
   wire    [(CH_SCNT-1):0]           dac_dmx_enable_5_s;
@@ -192,7 +192,7 @@ module util_upack (
     xfer_valid_d3   <= xfer_valid_d2;
     xfer_valid_d4   <= xfer_valid_d3;
     xfer_valid_d5   <= xfer_valid_d4;
-    if (dac_dmx_enable[P_CNT-1] == 1'b1) begin
+    if (dac_dmx_enable[NUM_OF_CHANNELS_P-1] == 1'b1) begin
       dac_xfer_out  <= xfer_valid_d4;
     end else begin
       dac_xfer_out  <= xfer_valid_d5;
@@ -225,20 +225,20 @@ module util_upack (
   // store & fwd
 
   generate
-  if (P_CNT < M_CNT) begin
-    for (n = P_CNT; n < M_CNT; n = n + 1) begin: g_def
+  if (NUM_OF_CHANNELS_P < NUM_OF_CHANNELS_M) begin
+    for (n = NUM_OF_CHANNELS_P; n < NUM_OF_CHANNELS_M; n = n + 1) begin: g_def
       assign dac_dsf_valid_s[n] = 'd0;
       assign dac_dsf_sync_s[n] = 'd0;
       assign dac_dsf_data_s[n] = 'd0;
     end
   end
 
-  for (n = 0; n < P_CNT; n = n + 1) begin: g_dsf
+  for (n = 0; n < NUM_OF_CHANNELS_P; n = n + 1) begin: g_dsf
   util_upack_dsf #(
-    .P_CNT (P_CNT),
-    .M_CNT (M_CNT),
-    .CH_DW (CH_DW),
-    .CH_OCNT ((n+1)))
+    .NUM_OF_CHANNELS_P (NUM_OF_CHANNELS_P),
+    .NUM_OF_CHANNELS_M (NUM_OF_CHANNELS_M),
+    .CHANNEL_DATA_WIDTH (CHANNEL_DATA_WIDTH),
+    .NUM_OF_CHANNELS_O ((n+1)))
   i_dsf (
     .dac_clk (dac_clk),
     .dac_valid (dac_valid_s),
@@ -270,7 +270,7 @@ module util_upack (
                       dac_dmx_enable_5_s[n], dac_dmx_enable_4_s[n],
                       dac_dmx_enable_3_s[n], dac_dmx_enable_2_s[n],
                       dac_dmx_enable_1_s[n], dac_dmx_enable_0_s[n]}),
-    .dac_dsf_data (dac_dsf_data[((M_CNT*16*(n+1))-1):(M_CNT*16*n)]));
+    .dac_dsf_data (dac_dsf_data[((NUM_OF_CHANNELS_M*16*(n+1))-1):(NUM_OF_CHANNELS_M*16*n)]));
   end
   endgenerate
 

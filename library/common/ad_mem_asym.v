@@ -50,42 +50,50 @@ module ad_mem_asym (
   addrb,
   doutb);
 
-  parameter   ADDR_WIDTH_A =  10;
-  parameter   DATA_WIDTH_A = 256;
-  parameter   ADDR_WIDTH_B =   8; 
-  parameter   DATA_WIDTH_B =  64;
+  parameter   A_ADDRESS_WIDTH =  10;
+  parameter   A_DATA_WIDTH = 256;
+  parameter   B_ADDRESS_WIDTH =   8; 
+  parameter   B_DATA_WIDTH =  64;
 
-  localparam  MEM_SIZE_A = 2**ADDR_WIDTH_A;
-  localparam  MEM_SIZE_B = 2**ADDR_WIDTH_B;
+  localparam  MEM_SIZE_A = 2**A_ADDRESS_WIDTH;
+  localparam  MEM_SIZE_B = 2**B_ADDRESS_WIDTH;
   localparam  MEM_SIZE = (MEM_SIZE_A > MEM_SIZE_B) ? MEM_SIZE_A : MEM_SIZE_B;
-  localparam  MEM_RATIO = DATA_WIDTH_A/DATA_WIDTH_B;
+  localparam  MEM_RATIO = A_DATA_WIDTH/B_DATA_WIDTH;
 
   // write interface
 
   input                       clka;
   input                       wea;
-  input   [ADDR_WIDTH_A-1:0]  addra;
-  input   [DATA_WIDTH_A-1:0]  dina;
+  input   [A_ADDRESS_WIDTH-1:0]  addra;
+  input   [A_DATA_WIDTH-1:0]  dina;
 
   // read interface
 
   input                       clkb;
-  input   [ADDR_WIDTH_B-1:0]  addrb;
-  output  [DATA_WIDTH_B-1:0]  doutb;
+  input   [B_ADDRESS_WIDTH-1:0]  addrb;
+  output  [B_DATA_WIDTH-1:0]  doutb;
 
   // internal registers
 
-  reg     [DATA_WIDTH_B-1:0]  m_ram[0:MEM_SIZE-1];
-  reg     [DATA_WIDTH_B-1:0]  doutb;
+  reg     [B_DATA_WIDTH-1:0]  m_ram[0:MEM_SIZE-1];
+  reg     [B_DATA_WIDTH-1:0]  doutb;
 
   // write interface
 
   generate
+  if (MEM_RATIO == 1) begin
+  always @(posedge clka) begin
+    if (wea == 1'b1) begin
+      m_ram[addra] <= dina;
+    end
+  end
+  end
+
   if (MEM_RATIO == 2) begin
   always @(posedge clka) begin
     if (wea == 1'b1) begin
-      m_ram[{addra, 1'd0}] <= dina[((1*DATA_WIDTH_B)-1):(DATA_WIDTH_B*0)];
-      m_ram[{addra, 1'd1}] <= dina[((2*DATA_WIDTH_B)-1):(DATA_WIDTH_B*1)];
+      m_ram[{addra, 1'd0}] <= dina[((1*B_DATA_WIDTH)-1):(B_DATA_WIDTH*0)];
+      m_ram[{addra, 1'd1}] <= dina[((2*B_DATA_WIDTH)-1):(B_DATA_WIDTH*1)];
     end
   end
   end
@@ -93,10 +101,10 @@ module ad_mem_asym (
   if (MEM_RATIO == 4) begin
   always @(posedge clka) begin
     if (wea == 1'b1) begin
-      m_ram[{addra, 2'd0}] <= dina[((1*DATA_WIDTH_B)-1):(DATA_WIDTH_B*0)];
-      m_ram[{addra, 2'd1}] <= dina[((2*DATA_WIDTH_B)-1):(DATA_WIDTH_B*1)];
-      m_ram[{addra, 2'd2}] <= dina[((3*DATA_WIDTH_B)-1):(DATA_WIDTH_B*2)];
-      m_ram[{addra, 2'd3}] <= dina[((4*DATA_WIDTH_B)-1):(DATA_WIDTH_B*3)];
+      m_ram[{addra, 2'd0}] <= dina[((1*B_DATA_WIDTH)-1):(B_DATA_WIDTH*0)];
+      m_ram[{addra, 2'd1}] <= dina[((2*B_DATA_WIDTH)-1):(B_DATA_WIDTH*1)];
+      m_ram[{addra, 2'd2}] <= dina[((3*B_DATA_WIDTH)-1):(B_DATA_WIDTH*2)];
+      m_ram[{addra, 2'd3}] <= dina[((4*B_DATA_WIDTH)-1):(B_DATA_WIDTH*3)];
     end
   end
   end
@@ -104,14 +112,14 @@ module ad_mem_asym (
   if (MEM_RATIO == 8) begin
   always @(posedge clka) begin
     if (wea == 1'b1) begin
-      m_ram[{addra, 3'd0}] <= dina[((1*DATA_WIDTH_B)-1):(DATA_WIDTH_B*0)];
-      m_ram[{addra, 3'd1}] <= dina[((2*DATA_WIDTH_B)-1):(DATA_WIDTH_B*1)];
-      m_ram[{addra, 3'd2}] <= dina[((3*DATA_WIDTH_B)-1):(DATA_WIDTH_B*2)];
-      m_ram[{addra, 3'd3}] <= dina[((4*DATA_WIDTH_B)-1):(DATA_WIDTH_B*3)];
-      m_ram[{addra, 3'd4}] <= dina[((5*DATA_WIDTH_B)-1):(DATA_WIDTH_B*4)];
-      m_ram[{addra, 3'd5}] <= dina[((6*DATA_WIDTH_B)-1):(DATA_WIDTH_B*5)];
-      m_ram[{addra, 3'd6}] <= dina[((7*DATA_WIDTH_B)-1):(DATA_WIDTH_B*6)];
-      m_ram[{addra, 3'd7}] <= dina[((8*DATA_WIDTH_B)-1):(DATA_WIDTH_B*7)];
+      m_ram[{addra, 3'd0}] <= dina[((1*B_DATA_WIDTH)-1):(B_DATA_WIDTH*0)];
+      m_ram[{addra, 3'd1}] <= dina[((2*B_DATA_WIDTH)-1):(B_DATA_WIDTH*1)];
+      m_ram[{addra, 3'd2}] <= dina[((3*B_DATA_WIDTH)-1):(B_DATA_WIDTH*2)];
+      m_ram[{addra, 3'd3}] <= dina[((4*B_DATA_WIDTH)-1):(B_DATA_WIDTH*3)];
+      m_ram[{addra, 3'd4}] <= dina[((5*B_DATA_WIDTH)-1):(B_DATA_WIDTH*4)];
+      m_ram[{addra, 3'd5}] <= dina[((6*B_DATA_WIDTH)-1):(B_DATA_WIDTH*5)];
+      m_ram[{addra, 3'd6}] <= dina[((7*B_DATA_WIDTH)-1):(B_DATA_WIDTH*6)];
+      m_ram[{addra, 3'd7}] <= dina[((8*B_DATA_WIDTH)-1):(B_DATA_WIDTH*7)];
     end
   end
   end

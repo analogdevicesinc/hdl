@@ -47,7 +47,6 @@ module axi_mc_current_monitor (
     output          adc_enable_ib,
     input           adc_vbus_dat_i,
     output          adc_enable_vbus,
-    output          adc_enable_stub,
     output          adc_clk_o,
 
     input           ref_clk,
@@ -111,15 +110,12 @@ wire            up_adc_common_ack_s;
 wire    [31:0]  up_rdata_0_s;
 wire    [31:0]  up_rdata_1_s;
 wire    [31:0]  up_rdata_2_s;
-wire    [31:0]  up_rdata_3_s;
 wire            up_rack_0_s;
 wire            up_rack_1_s;
 wire            up_rack_2_s;
-wire            up_rack_3_s;
 wire            up_wack_0_s;
 wire            up_wack_1_s;
 wire            up_wack_2_s;
-wire            up_wack_3_s;
 
 wire            adc_status_a_s;
 wire    [15:0]  adc_data_ia_s ;
@@ -162,9 +158,9 @@ begin
     end
     else
     begin
-        up_rdata  <= up_adc_common_rdata_s | up_rdata_0_s | up_rdata_1_s | up_rdata_2_s |up_rdata_3_s  ;
-        up_rack   <= up_adc_common_rack_s | up_rack_0_s | up_rack_1_s | up_rack_2_s | up_rack_3_s ;
-        up_wack   <= up_adc_common_wack_s | up_wack_0_s | up_wack_1_s | up_wack_2_s | up_wack_3_s;
+        up_rdata  <= up_adc_common_rdata_s | up_rdata_0_s | up_rdata_1_s | up_rdata_2_s ;
+        up_rack   <= up_adc_common_rack_s | up_rack_0_s | up_rack_1_s | up_rack_2_s ;
+        up_wack   <= up_adc_common_wack_s | up_wack_0_s | up_wack_1_s | up_wack_2_s ;
     end
 end
 
@@ -197,7 +193,7 @@ ad7401 vbus_if(
     .data_rd_ready_o(),
     .adc_mdata_i(adc_vbus_dat_i));
 
-up_adc_channel #(.PCORE_ADC_CHID(0)) i_up_adc_channel_ia(
+up_adc_channel #(.ADC_CHANNEL_ID(0)) i_up_adc_channel_ia(
     .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_ia),
@@ -243,7 +239,7 @@ up_adc_channel #(.PCORE_ADC_CHID(0)) i_up_adc_channel_ia(
     .up_rdata (up_rdata_0_s),
     .up_rack (up_rack_0_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(1)) i_up_adc_channel_ib(
+up_adc_channel #(.ADC_CHANNEL_ID(1)) i_up_adc_channel_ib(
     .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_ib),
@@ -289,7 +285,7 @@ up_adc_channel #(.PCORE_ADC_CHID(1)) i_up_adc_channel_ib(
     .up_rdata (up_rdata_1_s),
     .up_rack (up_rack_1_s));
 
-up_adc_channel #(.PCORE_ADC_CHID(2)) i_up_adc_channel_vbus(
+up_adc_channel #(.ADC_CHANNEL_ID(2)) i_up_adc_channel_vbus(
     .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_vbus),
@@ -334,52 +330,6 @@ up_adc_channel #(.PCORE_ADC_CHID(2)) i_up_adc_channel_vbus(
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_2_s),
     .up_rack (up_rack_2_s));
-
-up_adc_channel #(.PCORE_ADC_CHID(3)) i_up_adc_channel_stub(
-    .adc_clk(adc_clk_o),
-    .adc_rst(adc_rst),
-    .adc_enable(adc_enable_stub),
-    .adc_iqcor_enb(),
-    .adc_dcfilt_enb(),
-    .adc_dfmt_se(),
-    .adc_dfmt_type(),
-    .adc_dfmt_enable(),
-    .adc_dcfilt_offset(),
-    .adc_dcfilt_coeff(),
-    .adc_iqcor_coeff_1(),
-    .adc_iqcor_coeff_2(),
-    .adc_pnseq_sel(),
-    .adc_data_sel(),
-    .adc_pn_err(1'b0),
-    .adc_pn_oos(1'b0),
-    .adc_or(1'b0),
-    .up_adc_pn_err(),
-    .up_adc_pn_oos(),
-    .up_adc_or(),
-    .up_usr_datatype_be(),
-    .up_usr_datatype_signed(),
-    .up_usr_datatype_shift(),
-    .up_usr_datatype_total_bits(),
-    .up_usr_datatype_bits(),
-    .up_usr_decimation_m(),
-    .up_usr_decimation_n(),
-    .adc_usr_datatype_be(1'b0),
-    .adc_usr_datatype_signed(1'b1),
-    .adc_usr_datatype_shift(8'd0),
-    .adc_usr_datatype_total_bits(8'd16),
-    .adc_usr_datatype_bits(8'd16),
-    .adc_usr_decimation_m(16'd1),
-    .adc_usr_decimation_n(16'd1),
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_wreq (up_wreq_s),
-    .up_waddr (up_waddr_s),
-    .up_wdata (up_wdata_s),
-    .up_wack (up_wack_3_s),
-    .up_rreq (up_rreq_s),
-    .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_3_s),
-    .up_rack (up_rack_3_s));
 
 // common processor control
 
@@ -451,7 +401,6 @@ up_axi i_up_axi(
         .up_wreq (up_wreq_s),
         .up_waddr (up_waddr_s),
         .up_wdata (up_wdata_s),
-        .up_wack (up_wack),
         .up_rreq (up_rreq_s),
         .up_raddr (up_raddr_s),
         .up_rdata (up_rdata),

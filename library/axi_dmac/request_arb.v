@@ -2,9 +2,9 @@
 // ***************************************************************************
 // Copyright 2013(c) Analog Devices, Inc.
 //  Author: Lars-Peter Clausen <lars@metafoo.de>
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -22,16 +22,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -42,9 +42,9 @@ module dmac_request_arb (
 
 	input req_valid,
 	output req_ready,
-	input [31:C_BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
-	input [31:C_BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
-	input [C_DMA_LENGTH_WIDTH-1:0] req_length,
+	input [31:BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
+	input [31:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
+	input [DMA_LENGTH_WIDTH-1:0] req_length,
         input req_xlast,
 	input req_sync_transfer_start,
 
@@ -70,8 +70,8 @@ module dmac_request_arb (
 	input                               m_axi_awready,
 
 	// Write data
-	output [C_DMA_DATA_WIDTH_DEST-1:0]     m_axi_wdata,
-	output [(C_DMA_DATA_WIDTH_DEST/8)-1:0] m_axi_wstrb,
+	output [DMA_DATA_WIDTH_DEST-1:0]     m_axi_wdata,
+	output [(DMA_DATA_WIDTH_DEST/8)-1:0] m_axi_wstrb,
 	input                               m_axi_wready,
 	output                              m_axi_wvalid,
 	output                              m_axi_wlast,
@@ -92,7 +92,7 @@ module dmac_request_arb (
 	output [ 3:0]                       m_axi_arcache,
 
 	// Read data and response
-	input  [C_DMA_DATA_WIDTH_SRC-1:0]   m_axi_rdata,
+	input  [DMA_DATA_WIDTH_SRC-1:0]   m_axi_rdata,
 	output                              m_axi_rready,
 	input                               m_axi_rvalid,
 	input  [ 1:0]                       m_axi_rresp,
@@ -101,7 +101,7 @@ module dmac_request_arb (
 	input                               s_axis_aclk,
 	output                              s_axis_ready,
 	input                               s_axis_valid,
-	input  [C_DMA_DATA_WIDTH_SRC-1:0]   s_axis_data,
+	input  [DMA_DATA_WIDTH_SRC-1:0]   s_axis_data,
 	input  [0:0]                        s_axis_user,
 	output                              s_axis_xfer_req,
 
@@ -109,14 +109,14 @@ module dmac_request_arb (
 	input                               m_axis_aclk,
 	input                               m_axis_ready,
 	output                              m_axis_valid,
-	output [C_DMA_DATA_WIDTH_DEST-1:0]  m_axis_data,
+	output [DMA_DATA_WIDTH_DEST-1:0]  m_axis_data,
         output                              m_axis_last,
         output                              m_axis_xfer_req,
 
 	// Input FIFO interface
 	input                               fifo_wr_clk,
 	input                               fifo_wr_en,
-	input  [C_DMA_DATA_WIDTH_SRC-1:0]   fifo_wr_din,
+	input  [DMA_DATA_WIDTH_SRC-1:0]   fifo_wr_din,
 	output                              fifo_wr_overflow,
 	input                               fifo_wr_sync,
 	output                              fifo_wr_xfer_req,
@@ -125,69 +125,69 @@ module dmac_request_arb (
 	input                               fifo_rd_clk,
 	input                               fifo_rd_en,
 	output                              fifo_rd_valid,
-	output [C_DMA_DATA_WIDTH_DEST-1:0]  fifo_rd_dout,
+	output [DMA_DATA_WIDTH_DEST-1:0]  fifo_rd_dout,
 	output                              fifo_rd_underflow,
         output                              fifo_rd_xfer_req,
 
-	output [C_ID_WIDTH-1:0]				dbg_dest_request_id,
-	output [C_ID_WIDTH-1:0]				dbg_dest_address_id,
-	output [C_ID_WIDTH-1:0]				dbg_dest_data_id,
-	output [C_ID_WIDTH-1:0]				dbg_dest_response_id,
-	output [C_ID_WIDTH-1:0]				dbg_src_request_id,
-	output [C_ID_WIDTH-1:0]				dbg_src_address_id,
-	output [C_ID_WIDTH-1:0]				dbg_src_data_id,
-	output [C_ID_WIDTH-1:0]				dbg_src_response_id,
+	output [ID_WIDTH-1:0]				dbg_dest_request_id,
+	output [ID_WIDTH-1:0]				dbg_dest_address_id,
+	output [ID_WIDTH-1:0]				dbg_dest_data_id,
+	output [ID_WIDTH-1:0]				dbg_dest_response_id,
+	output [ID_WIDTH-1:0]				dbg_src_request_id,
+	output [ID_WIDTH-1:0]				dbg_src_address_id,
+	output [ID_WIDTH-1:0]				dbg_src_data_id,
+	output [ID_WIDTH-1:0]				dbg_src_response_id,
 	output [7:0]                        dbg_status
 );
 
-parameter C_DMA_DATA_WIDTH_SRC = 64;
-parameter C_DMA_DATA_WIDTH_DEST = 64;
-parameter C_DMA_LENGTH_WIDTH = 24;
+parameter DMA_DATA_WIDTH_SRC = 64;
+parameter DMA_DATA_WIDTH_DEST = 64;
+parameter DMA_LENGTH_WIDTH = 24;
 
-parameter C_BYTES_PER_BEAT_WIDTH_DEST = $clog2(C_DMA_DATA_WIDTH_DEST/8);
-parameter C_BYTES_PER_BEAT_WIDTH_SRC = $clog2(C_DMA_DATA_WIDTH_SRC/8);
+parameter BYTES_PER_BEAT_WIDTH_DEST = $clog2(DMA_DATA_WIDTH_DEST/8);
+parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(DMA_DATA_WIDTH_SRC/8);
 
-parameter C_DMA_TYPE_DEST = DMA_TYPE_MM_AXI;
-parameter C_DMA_TYPE_SRC = DMA_TYPE_FIFO;
+parameter DMA_TYPE_DEST = DMA_TYPE_MM_AXI;
+parameter DMA_TYPE_SRC = DMA_TYPE_FIFO;
 
-parameter C_CLKS_ASYNC_REQ_SRC = 1;
-parameter C_CLKS_ASYNC_SRC_DEST = 1;
-parameter C_CLKS_ASYNC_DEST_REQ = 1;
+parameter ASYNC_CLK_REQ_SRC = 1;
+parameter ASYNC_CLK_SRC_DEST = 1;
+parameter ASYNC_CLK_DEST_REQ = 1;
 
-parameter C_AXI_SLICE_DEST = 0;
-parameter C_AXI_SLICE_SRC = 0;
+parameter AXI_SLICE_DEST = 0;
+parameter AXI_SLICE_SRC = 0;
 
-parameter C_MAX_BYTES_PER_BURST = 128;
-parameter C_FIFO_SIZE = 4;
+parameter MAX_BYTES_PER_BURST = 128;
+parameter FIFO_SIZE = 4;
 
-parameter C_ID_WIDTH = $clog2(C_FIFO_SIZE * 2);
+parameter ID_WIDTH = $clog2(FIFO_SIZE*2);
 
 localparam DMA_TYPE_MM_AXI = 0;
 localparam DMA_TYPE_STREAM_AXI = 1;
 localparam DMA_TYPE_FIFO = 2;
 
-localparam DMA_ADDR_WIDTH_DEST = 32 - C_BYTES_PER_BEAT_WIDTH_DEST;
-localparam DMA_ADDR_WIDTH_SRC = 32 - C_BYTES_PER_BEAT_WIDTH_SRC;
+localparam DMA_ADDRESS_WIDTH_DEST = 32 - BYTES_PER_BEAT_WIDTH_DEST;
+localparam DMA_ADDRESS_WIDTH_SRC = 32 - BYTES_PER_BEAT_WIDTH_SRC;
 
-localparam DMA_DATA_WIDTH = C_DMA_DATA_WIDTH_SRC < C_DMA_DATA_WIDTH_DEST ?
-	C_DMA_DATA_WIDTH_DEST : C_DMA_DATA_WIDTH_SRC;
+localparam DMA_DATA_WIDTH = DMA_DATA_WIDTH_SRC < DMA_DATA_WIDTH_DEST ?
+	DMA_DATA_WIDTH_DEST : DMA_DATA_WIDTH_SRC;
 
 
 
 // Bytes per burst is the same for both dest and src, but bytes per beat may
 // differ, so beats per burst may also differ
 
-parameter BYTES_PER_BURST_WIDTH = $clog2(C_MAX_BYTES_PER_BURST);
-localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_SRC;
-localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_DEST;
+parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST);
+localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
+localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
 
-localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+localparam BURSTS_PER_TRANSFER_WIDTH = DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
 
-reg [0:2**C_ID_WIDTH-1] eot_mem;
+reg [0:2**ID_WIDTH-1] eot_mem;
 wire request_eot;
 
-wire [C_ID_WIDTH-1:0] request_id;
-wire [C_ID_WIDTH-1:0] response_id;
+wire [ID_WIDTH-1:0] request_id;
+wire [ID_WIDTH-1:0] response_id;
 
 wire enabled_src;
 wire enabled_dest;
@@ -217,9 +217,9 @@ wire dest_clk;
 wire dest_resetn;
 wire dest_req_valid;
 wire dest_req_ready;
-wire [DMA_ADDR_WIDTH_DEST-1:0] dest_req_address;
+wire [DMA_ADDRESS_WIDTH_DEST-1:0] dest_req_address;
 wire [BEATS_PER_BURST_WIDTH_DEST-1:0] dest_req_last_burst_length;
-wire [C_BYTES_PER_BEAT_WIDTH_DEST-1:0] dest_req_last_beat_bytes;
+wire [BYTES_PER_BEAT_WIDTH_DEST-1:0] dest_req_last_beat_bytes;
 wire dest_req_xlast;
 
 wire dest_response_valid;
@@ -228,15 +228,15 @@ wire dest_response_empty;
 wire [1:0] dest_response_resp;
 wire dest_response_resp_eot;
 
-wire [C_ID_WIDTH-1:0] dest_request_id;
-wire [C_ID_WIDTH-1:0] dest_response_id;
+wire [ID_WIDTH-1:0] dest_request_id;
+wire [ID_WIDTH-1:0] dest_response_id;
 
 wire dest_valid;
 wire dest_ready;
-wire [C_DMA_DATA_WIDTH_DEST-1:0] dest_data;
+wire [DMA_DATA_WIDTH_DEST-1:0] dest_data;
 wire dest_fifo_repacked_valid;
 wire dest_fifo_repacked_ready;
-wire [C_DMA_DATA_WIDTH_DEST-1:0] dest_fifo_repacked_data;
+wire [DMA_DATA_WIDTH_DEST-1:0] dest_fifo_repacked_data;
 wire dest_fifo_valid;
 wire dest_fifo_ready;
 wire [DMA_DATA_WIDTH-1:0] dest_fifo_data;
@@ -245,7 +245,7 @@ wire src_clk;
 wire src_resetn;
 wire src_req_valid;
 wire src_req_ready;
-wire [DMA_ADDR_WIDTH_SRC-1:0] src_req_address;
+wire [DMA_ADDRESS_WIDTH_SRC-1:0] src_req_address;
 wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_req_last_burst_length;
 wire src_req_sync_transfer_start;
 
@@ -254,15 +254,15 @@ wire src_response_ready;
 wire src_response_empty;
 wire [1:0] src_response_resp;
 
-wire [C_ID_WIDTH-1:0] src_request_id;
-wire [C_ID_WIDTH-1:0] src_response_id;
+wire [ID_WIDTH-1:0] src_request_id;
+wire [ID_WIDTH-1:0] src_response_id;
 
 wire src_valid;
 wire src_ready;
-wire [C_DMA_DATA_WIDTH_SRC-1:0] src_data;
+wire [DMA_DATA_WIDTH_SRC-1:0] src_data;
 wire src_fifo_valid;
 wire src_fifo_ready;
-wire [C_DMA_DATA_WIDTH_SRC-1:0] src_fifo_data;
+wire [DMA_DATA_WIDTH_SRC-1:0] src_fifo_data;
 wire src_fifo_repacked_valid;
 wire src_fifo_repacked_ready;
 wire [DMA_DATA_WIDTH-1:0] src_fifo_repacked_data;
@@ -339,11 +339,11 @@ begin
 	end
 end
 
-generate if (C_CLKS_ASYNC_REQ_SRC) begin
+generate if (ASYNC_CLK_REQ_SRC) begin
 
 wire src_async_resetn_source;
 
-if (C_DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
+if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
 assign src_async_resetn_source = m_src_axi_aresetn;
 end else begin
 assign src_async_resetn_source = req_aresetn;
@@ -363,10 +363,10 @@ end else begin
 assign src_resetn = req_aresetn;
 end endgenerate
 
-generate if (C_CLKS_ASYNC_DEST_REQ) begin
+generate if (ASYNC_CLK_DEST_REQ) begin
 wire dest_async_resetn_source;
 
-if (C_DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
+if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
 assign dest_async_resetn_source = m_dest_axi_aresetn;
 end else begin
 assign dest_async_resetn_source = req_aresetn;
@@ -386,12 +386,12 @@ end else begin
 assign dest_resetn = req_aresetn;
 end endgenerate
 
-generate if (C_DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
+generate if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
 
 assign dest_clk = m_dest_axi_aclk;
 
-wire [C_ID_WIDTH-1:0] dest_data_id;
-wire [C_ID_WIDTH-1:0] dest_address_id;
+wire [ID_WIDTH-1:0] dest_data_id;
+wire [ID_WIDTH-1:0] dest_address_id;
 wire dest_address_eot = eot_mem[dest_address_id];
 wire dest_data_eot = eot_mem[dest_data_id];
 wire dest_response_eot = eot_mem[dest_response_id];
@@ -400,10 +400,10 @@ assign dbg_dest_address_id = dest_address_id;
 assign dbg_dest_data_id = dest_data_id;
 
 dmac_dest_mm_axi #(
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH_DEST),
-	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST),
-	.C_BYTES_PER_BEAT_WIDTH(C_BYTES_PER_BEAT_WIDTH_DEST)
+	.ID_WIDTH(ID_WIDTH),
+	.DMA_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST),
+	.BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_DEST)
 ) i_dest_dma_mm (
 	.m_axi_aclk(m_dest_axi_aclk),
 	.m_axi_aresetn(dest_resetn),
@@ -477,11 +477,11 @@ assign m_axi_bready = 1'b0;
 
 end
 
-if (C_DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
+if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
 
 assign dest_clk = m_axis_aclk;
 
-wire [C_ID_WIDTH-1:0] data_id;
+wire [ID_WIDTH-1:0] data_id;
 
 wire data_eot = eot_mem[data_id];
 wire response_eot = eot_mem[dest_response_id];
@@ -490,9 +490,9 @@ assign dbg_dest_address_id = 'h00;
 assign dbg_dest_data_id = data_id;
 
 dmac_dest_axi_stream #(
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_S_AXIS_DATA_WIDTH(C_DMA_DATA_WIDTH_DEST),
-	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
+	.ID_WIDTH(ID_WIDTH),
+	.S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
 ) i_dest_dma_stream (
 	.s_axis_aclk(m_axis_aclk),
 	.s_axis_aresetn(dest_resetn),
@@ -533,15 +533,17 @@ dmac_dest_axi_stream #(
 end else begin
 
 assign m_axis_valid = 1'b0;
+assign m_axis_last = 1'b0;
+assign m_axis_xfer_req = 1'b0;
 assign m_axis_data = 'h00;
 
-end 
+end
 
-if (C_DMA_TYPE_DEST == DMA_TYPE_FIFO) begin
+if (DMA_TYPE_DEST == DMA_TYPE_FIFO) begin
 
 assign dest_clk = fifo_rd_clk;
 
-wire [C_ID_WIDTH-1:0] data_id;
+wire [ID_WIDTH-1:0] data_id;
 
 wire data_eot = eot_mem[data_id];
 wire response_eot = eot_mem[dest_response_id];
@@ -550,9 +552,9 @@ assign dbg_dest_address_id = 'h00;
 assign dbg_dest_data_id = data_id;
 
 dmac_dest_fifo_inf #(
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_DMA_DATA_WIDTH_DEST),
-	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
+	.ID_WIDTH(ID_WIDTH),
+	.DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
 ) i_dest_dma_fifo (
 	.clk(fifo_rd_clk),
 	.resetn(dest_resetn),
@@ -594,15 +596,16 @@ end else begin
 assign fifo_rd_valid = 1'b0;
 assign fifo_rd_dout = 'h0;
 assign fifo_rd_underflow = 1'b0;
+assign fifo_rd_xfer_req = 1'b0;
 
 end endgenerate
 
-generate if (C_DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
+generate if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
 
 assign src_clk = m_src_axi_aclk;
 
-wire [C_ID_WIDTH-1:0] src_data_id;
-wire [C_ID_WIDTH-1:0] src_address_id;
+wire [ID_WIDTH-1:0] src_data_id;
+wire [ID_WIDTH-1:0] src_address_id;
 wire src_address_eot = eot_mem[src_address_id];
 wire src_data_eot = eot_mem[src_data_id];
 
@@ -610,10 +613,10 @@ assign dbg_src_address_id = src_address_id;
 assign dbg_src_data_id = src_data_id;
 
 dmac_src_mm_axi #(
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
-	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
-	.C_BYTES_PER_BEAT_WIDTH(C_BYTES_PER_BEAT_WIDTH_SRC)
+	.ID_WIDTH(ID_WIDTH),
+	.DMA_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
+	.BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_SRC)
 ) i_src_dma_mm (
 	.m_axi_aclk(m_src_axi_aclk),
 	.m_axi_aresetn(src_resetn),
@@ -671,9 +674,9 @@ assign m_axi_arcache = 'h00;
 assign m_axi_arprot = 'h00;
 assign m_axi_rready = 1'b0;
 
-end 
+end
 
-if (C_DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
+if (DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
 
 assign src_clk = s_axis_aclk;
 
@@ -687,9 +690,9 @@ assign src_response_valid = 1'b0;
 assign src_response_resp = 2'b0;
 
 dmac_src_axi_stream #(
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_S_AXIS_DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
-	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+	.ID_WIDTH(ID_WIDTH),
+	.S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
 ) i_src_dma_stream (
 	.s_axis_aclk(s_axis_aclk),
 	.s_axis_aresetn(src_resetn),
@@ -723,10 +726,11 @@ dmac_src_axi_stream #(
 end else begin
 
 assign s_axis_ready = 1'b0;
+assign s_axis_xfer_req = 1'b0;
 
 end
 
-if (C_DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
+if (DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
 
 assign src_clk = fifo_wr_clk;
 
@@ -740,9 +744,9 @@ assign src_response_valid = 1'b0;
 assign src_response_resp = 2'b0;
 
 dmac_src_fifo_inf #(
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
-	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+	.ID_WIDTH(ID_WIDTH),
+	.DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
 ) i_src_dma_fifo (
 	.clk(fifo_wr_clk),
 	.resetn(src_resetn),
@@ -781,8 +785,8 @@ assign fifo_wr_xfer_req = 1'b0;
 end endgenerate
 
 sync_bits #(
-	.NUM_BITS(C_ID_WIDTH),
-	.CLK_ASYNC(C_CLKS_ASYNC_REQ_SRC)
+	.NUM_OF_BITS(ID_WIDTH),
+	.ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_sync_src_request_id (
 	.out_clk(src_clk),
 	.out_resetn(src_resetn),
@@ -791,8 +795,8 @@ sync_bits #(
 );
 
 sync_bits #(
-	.NUM_BITS(C_ID_WIDTH),
-	.CLK_ASYNC(C_CLKS_ASYNC_SRC_DEST)
+	.NUM_OF_BITS(ID_WIDTH),
+	.ASYNC_CLK(ASYNC_CLK_SRC_DEST)
 ) i_sync_dest_request_id (
 	.out_clk(dest_clk),
 	.out_resetn(dest_resetn),
@@ -801,8 +805,8 @@ sync_bits #(
 );
 
 sync_bits #(
-	.NUM_BITS(C_ID_WIDTH),
-	.CLK_ASYNC(C_CLKS_ASYNC_DEST_REQ)
+	.NUM_OF_BITS(ID_WIDTH),
+	.ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_sync_req_response_id (
 	.out_clk(req_aclk),
 	.out_resetn(req_aresetn),
@@ -811,9 +815,9 @@ sync_bits #(
 );
 
 axi_register_slice #(
-	.DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
-	.FORWARD_REGISTERED(C_AXI_SLICE_SRC),
-	.BACKWARD_REGISTERED(C_AXI_SLICE_SRC)
+	.DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+	.FORWARD_REGISTERED(AXI_SLICE_SRC),
+	.BACKWARD_REGISTERED(AXI_SLICE_SRC)
 ) i_src_slice (
 	.clk(src_clk),
 	.resetn(src_resetn),
@@ -826,8 +830,8 @@ axi_register_slice #(
 );
 
 util_axis_resize #(
-	.C_S_DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
-	.C_M_DATA_WIDTH(DMA_DATA_WIDTH)
+	.SLAVE_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+	.MASTER_DATA_WIDTH(DMA_DATA_WIDTH)
 ) i_src_repack (
 	.clk(src_clk),
 	.resetn(src_resetn & src_enable),
@@ -840,9 +844,9 @@ util_axis_resize #(
 );
 
 util_axis_fifo #(
-	.C_DATA_WIDTH(DMA_DATA_WIDTH),
-	.C_ADDRESS_WIDTH($clog2(C_MAX_BYTES_PER_BURST / (DMA_DATA_WIDTH / 8) * C_FIFO_SIZE)),
-	.C_CLKS_ASYNC(C_CLKS_ASYNC_SRC_DEST)
+	.DATA_WIDTH(DMA_DATA_WIDTH),
+	.ADDRESS_WIDTH($clog2(MAX_BYTES_PER_BURST / (DMA_DATA_WIDTH / 8) * FIFO_SIZE)),
+	.ASYNC_CLK(ASYNC_CLK_SRC_DEST)
 ) i_fifo (
 	.s_axis_aclk(src_clk),
 	.s_axis_aresetn(src_resetn),
@@ -850,17 +854,19 @@ util_axis_fifo #(
 	.s_axis_ready(src_fifo_repacked_ready),
 	.s_axis_data(src_fifo_repacked_data),
 	.s_axis_empty(src_fifo_empty),
+	.s_axis_room(),
 
 	.m_axis_aclk(dest_clk),
 	.m_axis_aresetn(dest_resetn),
 	.m_axis_valid(dest_fifo_valid),
 	.m_axis_ready(dest_fifo_ready),
-	.m_axis_data(dest_fifo_data)
+	.m_axis_data(dest_fifo_data),
+	.m_axis_level()
 );
 
 util_axis_resize #(
-	.C_S_DATA_WIDTH(DMA_DATA_WIDTH),
-	.C_M_DATA_WIDTH(C_DMA_DATA_WIDTH_DEST)
+	.SLAVE_DATA_WIDTH(DMA_DATA_WIDTH),
+	.MASTER_DATA_WIDTH(DMA_DATA_WIDTH_DEST)
 ) i_dest_repack (
 	.clk(dest_clk),
 	.resetn(dest_resetn & dest_enable),
@@ -874,11 +880,11 @@ util_axis_resize #(
 
 wire _dest_valid;
 wire _dest_ready;
-wire [C_DMA_DATA_WIDTH_DEST-1:0] _dest_data;
+wire [DMA_DATA_WIDTH_DEST-1:0] _dest_data;
 
 axi_register_slice #(
-	.DATA_WIDTH(C_DMA_DATA_WIDTH_DEST),
-	.FORWARD_REGISTERED(C_AXI_SLICE_DEST)
+	.DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+	.FORWARD_REGISTERED(AXI_SLICE_DEST)
 ) i_dest_slice2 (
 	.clk(dest_clk),
 	.resetn(dest_resetn),
@@ -891,9 +897,9 @@ axi_register_slice #(
 );
 
 axi_register_slice #(
-	.DATA_WIDTH(C_DMA_DATA_WIDTH_DEST),
-	.FORWARD_REGISTERED(C_AXI_SLICE_DEST),
-	.BACKWARD_REGISTERED(C_AXI_SLICE_DEST)
+	.DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+	.FORWARD_REGISTERED(AXI_SLICE_DEST),
+	.BACKWARD_REGISTERED(AXI_SLICE_DEST)
 ) i_dest_slice (
 	.clk(dest_clk),
 	.resetn(dest_resetn),
@@ -926,7 +932,7 @@ end
 assign req_ready = _req_ready & _req_valid & enable;
 
 splitter #(
-	.C_NUM_M(3)
+	.NUM_M(3)
 ) i_req_splitter (
 	.clk(req_aclk),
 	.resetn(req_aresetn),
@@ -945,9 +951,9 @@ splitter #(
 );
 
 util_axis_fifo #(
-	.C_DATA_WIDTH(DMA_ADDR_WIDTH_DEST + BEATS_PER_BURST_WIDTH_DEST + C_BYTES_PER_BEAT_WIDTH_DEST + 1),
-	.C_ADDRESS_WIDTH(0),
-	.C_CLKS_ASYNC(C_CLKS_ASYNC_DEST_REQ)
+	.DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + BEATS_PER_BURST_WIDTH_DEST + BYTES_PER_BEAT_WIDTH_DEST + 1),
+	.ADDRESS_WIDTH(0),
+	.ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_dest_req_fifo (
 	.s_axis_aclk(req_aclk),
 	.s_axis_aresetn(req_aresetn),
@@ -956,10 +962,12 @@ util_axis_fifo #(
 	.s_axis_empty(req_dest_empty),
 	.s_axis_data({
 		req_dest_address,
-		req_length[BYTES_PER_BURST_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_DEST],
-		req_length[C_BYTES_PER_BEAT_WIDTH_DEST-1:0],
+		req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST],
+		req_length[BYTES_PER_BEAT_WIDTH_DEST-1:0],
                 req_xlast
 	}),
+	.s_axis_room(),
+
 	.m_axis_aclk(dest_clk),
 	.m_axis_aresetn(dest_resetn),
 	.m_axis_valid(dest_req_valid),
@@ -969,13 +977,14 @@ util_axis_fifo #(
 		dest_req_last_burst_length,
 		dest_req_last_beat_bytes,
                 dest_req_xlast
-	})
+	}),
+	.m_axis_level()
 );
 
 util_axis_fifo #(
-	.C_DATA_WIDTH(DMA_ADDR_WIDTH_SRC + BEATS_PER_BURST_WIDTH_SRC + 1),
-	.C_ADDRESS_WIDTH(0),
-	.C_CLKS_ASYNC(C_CLKS_ASYNC_REQ_SRC)
+	.DATA_WIDTH(DMA_ADDRESS_WIDTH_SRC + BEATS_PER_BURST_WIDTH_SRC + 1),
+	.ADDRESS_WIDTH(0),
+	.ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_src_req_fifo (
 	.s_axis_aclk(req_aclk),
 	.s_axis_aresetn(req_aresetn),
@@ -984,9 +993,11 @@ util_axis_fifo #(
 	.s_axis_empty(req_src_empty),
 	.s_axis_data({
 		req_src_address,
-		req_length[BYTES_PER_BURST_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_SRC],
+		req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC],
 		req_sync_transfer_start
 	}),
+	.s_axis_room(),
+
 	.m_axis_aclk(src_clk),
 	.m_axis_aresetn(src_resetn),
 	.m_axis_valid(src_req_valid),
@@ -995,13 +1006,14 @@ util_axis_fifo #(
 		src_req_address,
 		src_req_last_burst_length,
 		src_req_sync_transfer_start
-	})
+	}),
+	.m_axis_level()
 );
 
 util_axis_fifo #(
-	.C_DATA_WIDTH(3),
-	.C_ADDRESS_WIDTH(0),
-	.C_CLKS_ASYNC(C_CLKS_ASYNC_DEST_REQ)
+	.DATA_WIDTH(1),
+	.ADDRESS_WIDTH(0),
+	.ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_dest_response_fifo (
 	.s_axis_aclk(dest_clk),
 	.s_axis_aresetn(dest_resetn),
@@ -1009,18 +1021,21 @@ util_axis_fifo #(
 	.s_axis_ready(dest_response_ready),
 	.s_axis_empty(dest_response_empty),
 	.s_axis_data(dest_response_resp_eot),
+	.s_axis_room(),
+
 	.m_axis_aclk(req_aclk),
 	.m_axis_aresetn(req_aresetn),
 	.m_axis_valid(response_dest_valid),
 	.m_axis_ready(response_dest_ready),
-	.m_axis_data(response_dest_resp_eot)
+	.m_axis_data(response_dest_resp_eot),
+	.m_axis_level()
 );
 
 /* Unused for now
 util_axis_fifo #(
-	.C_DATA_WIDTH(2),
-	.C_ADDRESS_WIDTH(0),
-	.C_CLKS_ASYNC(C_CLKS_ASYNC_REQ_SRC)
+	.DATA_WIDTH(2),
+	.ADDRESS_WIDTH(0),
+	.ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_src_response_fifo (
 	.s_axis_aclk(src_clk),
 	.s_axis_aresetn(src_resetn),
@@ -1038,8 +1053,8 @@ assign src_response_empty = 1'b1;
 assign src_response_ready = 1'b1;
 
 dmac_request_generator #(
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_BURSTS_PER_TRANSFER_WIDTH(BURSTS_PER_TRANSFER_WIDTH)
+	.ID_WIDTH(ID_WIDTH),
+	.BURSTS_PER_TRANSFER_WIDTH(BURSTS_PER_TRANSFER_WIDTH)
 ) i_req_gen (
 	.req_aclk(req_aclk),
 	.req_aresetn(req_aresetn),
@@ -1049,7 +1064,7 @@ dmac_request_generator #(
 
 	.req_valid(req_gen_valid),
 	.req_ready(req_gen_ready),
-	.req_burst_count(req_length[C_DMA_LENGTH_WIDTH-1:BYTES_PER_BURST_WIDTH]),
+	.req_burst_count(req_length[DMA_LENGTH_WIDTH-1:BYTES_PER_BURST_WIDTH]),
 
 	.enable(do_enable),
 	.pause(pause),
@@ -1058,8 +1073,8 @@ dmac_request_generator #(
 );
 
 sync_bits #(
-	.NUM_BITS(3),
-	.CLK_ASYNC(C_CLKS_ASYNC_DEST_REQ)
+	.NUM_OF_BITS(3),
+	.ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_sync_control_dest (
 	.out_clk(dest_clk),
 	.out_resetn(dest_resetn),
@@ -1068,8 +1083,8 @@ sync_bits #(
 );
 
 sync_bits #(
-	.NUM_BITS(2),
-	.CLK_ASYNC(C_CLKS_ASYNC_DEST_REQ)
+	.NUM_OF_BITS(2),
+	.ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_sync_status_dest (
 	.out_clk(req_aclk),
 	.out_resetn(req_aresetn),
@@ -1078,8 +1093,8 @@ sync_bits #(
 );
 
 sync_bits #(
-	.NUM_BITS(3),
-	.CLK_ASYNC(C_CLKS_ASYNC_REQ_SRC)
+	.NUM_OF_BITS(3),
+	.ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_sync_control_src (
 	.out_clk(src_clk),
 	.out_resetn(src_resetn),
@@ -1088,8 +1103,8 @@ sync_bits #(
 );
 
 sync_bits #(
-	.NUM_BITS(3),
-	.CLK_ASYNC(C_CLKS_ASYNC_REQ_SRC)
+	.NUM_OF_BITS(3),
+	.ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_sync_status_src (
 	.out_clk(req_aclk),
 	.out_resetn(req_aresetn),

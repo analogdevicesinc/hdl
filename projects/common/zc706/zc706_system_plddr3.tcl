@@ -48,7 +48,7 @@ proc p_plddr3_fifo {p_name m_name adc_data_width} {
   set_property -dict [list CONFIG.AXI_SIZE {6}] $axi_adcfifo
   set_property -dict [list CONFIG.AXI_LENGTH {4}] $axi_adcfifo
   set_property -dict [list CONFIG.AXI_ADDRESS {0x80000000}] $axi_adcfifo
-  set_property -dict [list CONFIG.AXI_ADDRLIMIT {0xa0000000}] $axi_adcfifo
+  set_property -dict [list CONFIG.AXI_ADDRESS_LIMIT {0xa0000000}] $axi_adcfifo
   set_property -dict [list CONFIG.AXI_BYTE_WIDTH {64}] $axi_adcfifo
 
   ad_connect  sys_rst axi_ddr_cntrl/sys_rst
@@ -73,6 +73,8 @@ proc p_plddr3_fifo {p_name m_name adc_data_width} {
   ad_connect  axi_resetn axi_rstgen/peripheral_aresetn
   ad_connect  axi_resetn axi_adcfifo/axi_resetn
   ad_connect  axi_resetn axi_ddr_cntrl/aresetn
+
+  ad_connect  axi_ddr_cntrl/device_temp_i GND
 
   current_bd_instance $c_instance
 }

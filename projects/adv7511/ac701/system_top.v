@@ -155,7 +155,7 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_sw_led (
+  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf_sw_led (
     .dio_t (gpio_t[12:0]),
     .dio_i (gpio_o[12:0]),
     .dio_o (gpio_i[12:0]),
@@ -196,7 +196,7 @@ module system_top (
     .mb_intr_13 (1'b0),
     .mb_intr_14 (1'b0),
     .mb_intr_15 (1'b0),
-    .mdio_io (phy_mdio),
+    .mdio_mdio_io (phy_mdio),
     .mdio_mdc (phy_mdc),
     .phy_rst_n (phy_reset_n),
     .rgmii_rd (phy_rx_data),

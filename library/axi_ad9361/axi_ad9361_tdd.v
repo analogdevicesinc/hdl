@@ -55,14 +55,14 @@ module axi_ad9361_tdd (
 
   // status signal
 
-  tdd_enable,
+  tdd_enabled,
   tdd_status,
 
-  // sync signals
+  // sync signal
 
-  tdd_sync_i,
-  tdd_sync_o,
-  tdd_sync_t,
+  tdd_sync,
+  tdd_sync_en,
+  tdd_terminal_type,
 
   // tx/rx data flow control
 
@@ -112,12 +112,12 @@ module axi_ad9361_tdd (
   output            tdd_rx_rf_en;
   output            tdd_tx_rf_en;
 
-  output            tdd_enable;
+  output            tdd_enabled;
   input   [ 7:0]    tdd_status;
 
-  input             tdd_sync_i;
-  output            tdd_sync_o;
-  output            tdd_sync_t;
+  input             tdd_sync;
+  output            tdd_sync_en;
+  output            tdd_terminal_type;
 
   // tx data flow control
 
@@ -156,11 +156,18 @@ module axi_ad9361_tdd (
   output  [31:0]    up_rdata;
   output            up_rack;
 
-  output  [34:0]    tdd_dbg;
+  output  [41:0]    tdd_dbg;
 
-  reg               tdd_enable = 1'b0;
   reg               tdd_slave_synced = 1'b0;
-  reg               tdd_sync_o = 1'b0;
+
+  reg               tdd_tx_valid_i0 = 1'b0;
+  reg               tdd_tx_valid_q0 = 1'b0;
+  reg               tdd_tx_valid_i1 = 1'b0;
+  reg               tdd_tx_valid_q1 = 1'b0;
+  reg               tdd_rx_valid_i0 = 1'b0;
+  reg               tdd_rx_valid_q0 = 1'b0;
+  reg               tdd_rx_valid_i1 = 1'b0;
+  reg               tdd_rx_valid_q1 = 1'b0;
 
   // internal signals
 
@@ -175,6 +182,7 @@ module axi_ad9361_tdd (
   wire    [23:0]    tdd_counter_init_s;
   wire    [23:0]    tdd_frame_length_s;
   wire              tdd_terminal_type_s;
+  wire              tdd_sync_enable_s;
   wire    [23:0]    tdd_vco_rx_on_1_s;
   wire    [23:0]    tdd_vco_rx_off_1_s;
   wire    [23:0]    tdd_vco_tx_on_1_s;
@@ -200,68 +208,41 @@ module axi_ad9361_tdd (
 
   wire              tdd_tx_dp_en_s;
 
-  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_tx_dp_en_s,
+  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_sync, tdd_tx_dp_en_s,
                     tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
 
   // tx/rx data flow control
 
-  assign  tdd_tx_valid_i0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
-                                    (tx_valid_i0 & tdd_tx_dp_en_s) : tx_valid_i0;
-  assign  tdd_tx_valid_q0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
-                                    (tx_valid_q0 & tdd_tx_dp_en_s) : tx_valid_q0;
-  assign  tdd_tx_valid_i1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
-                                    (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
-  assign  tdd_tx_valid_q1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
-                                    (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
-
-  assign  tdd_rx_valid_i0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
-                                    (rx_valid_i0 & tdd_rx_rf_en) : rx_valid_i0;
-  assign  tdd_rx_valid_q0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
-                                    (rx_valid_q0 & tdd_rx_rf_en) : rx_valid_q0;
-  assign  tdd_rx_valid_i1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
-                                    (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
-  assign  tdd_rx_valid_q1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
-                                    (rx_valid_q1 & tdd_rx_rf_en) : rx_valid_q1;
-
-  // assign  tdd_enable = tdd_enable_s;
-
-  assign tdd_sync_t = tdd_terminal_type_s;
-
-  // catch generated sync signal
   always @(posedge clk) begin
-    if (rst == 1'b1) begin
-      tdd_slave_synced <= 1'b0;
+    if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
+      tdd_tx_valid_i0 <= tx_valid_i0 & tdd_tx_dp_en_s;
+      tdd_tx_valid_q0 <= tx_valid_q0 & tdd_tx_dp_en_s;
+      tdd_tx_valid_i1 <= tx_valid_i1 & tdd_tx_dp_en_s;
+      tdd_tx_valid_q1 <= tx_valid_q1 & tdd_tx_dp_en_s;
     end else begin
-      if(tdd_sync_i == 1) begin
-        tdd_slave_synced <= 1'b1;
-      end else begin
-        tdd_slave_synced <= tdd_slave_synced & tdd_enable_s;
-      end
+      tdd_tx_valid_i0 <= tx_valid_i0;
+      tdd_tx_valid_q0 <= tx_valid_q0;
+      tdd_tx_valid_i1 <= tx_valid_i1;
+      tdd_tx_valid_q1 <= tx_valid_q1;
     end
   end
 
-  // generate sync signal
   always @(posedge clk) begin
-    if (rst == 1'b1) begin
-      tdd_sync_o <= 1'b0;
+    if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
+      tdd_rx_valid_i0 <= rx_valid_i0 & tdd_rx_rf_en;
+      tdd_rx_valid_q0 <= rx_valid_q0 & tdd_rx_rf_en;
+      tdd_rx_valid_i1 <= rx_valid_i1 & tdd_rx_rf_en;
+      tdd_rx_valid_q1 <= rx_valid_q1 & tdd_rx_rf_en;
     end else begin
-      if(~tdd_enable & tdd_enable_s == 1'b1) begin
-        tdd_sync_o <= 1'b1;
-      end else begin
-        tdd_sync_o <= 1'b0;
-      end
+      tdd_rx_valid_i0 <= rx_valid_i0;
+      tdd_rx_valid_q0 <= rx_valid_q0;
+      tdd_rx_valid_i1 <= rx_valid_i1;
+      tdd_rx_valid_q1 <= rx_valid_q1;
     end
   end
 
-  // generate tdd enable in function of the terminal type
-  always @(posedge clk) begin
-    if (rst == 1'b1) begin
-      tdd_enable <= 1'b0;
-    end else begin
-      tdd_enable <= (tdd_terminal_type_s == 1'b1) ? tdd_enable_s :
-                                                    (tdd_enable_s & tdd_slave_synced);
-    end
-  end
+  assign  tdd_enabled = tdd_enable_s;
+  assign  tdd_terminal_type = ~tdd_terminal_type_s;
 
   // instantiations
 
@@ -278,6 +259,7 @@ module axi_ad9361_tdd (
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),
     .tdd_terminal_type(tdd_terminal_type_s),
+    .tdd_sync_enable(tdd_sync_enable_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),
@@ -310,7 +292,13 @@ module axi_ad9361_tdd (
     .up_rdata(up_rdata),
     .up_rack(up_rack));
 
-  ad_tdd_control i_tdd_control(
+  // the TX_DATA_PATH_DELAY and CONTROL_PATH_DELAY are specificly defined
+  // for the axi_ad9361 core
+
+  ad_tdd_control #(
+    .TX_DATA_PATH_DELAY(14),
+    .CONTROL_PATH_DELAY(3))
+  i_tdd_control(
     .clk(clk),
     .rst(rst),
     .tdd_enable(tdd_enable_s),
@@ -320,6 +308,8 @@ module axi_ad9361_tdd (
     .tdd_burst_count(tdd_burst_count_s),
     .tdd_rx_only(tdd_rx_only_s),
     .tdd_tx_only(tdd_tx_only_s),
+    .tdd_sync (tdd_sync),
+    .tdd_sync_en (tdd_sync_en),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),

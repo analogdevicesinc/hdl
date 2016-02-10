@@ -44,8 +44,8 @@ module dmac_response_handler (
 	output bready,
 	input [1:0] bresp,
 
-	output reg [C_ID_WIDTH-1:0] id,
-	input [C_ID_WIDTH-1:0] request_id,
+	output reg [ID_WIDTH-1:0] id,
+	input [ID_WIDTH-1:0] request_id,
 	input sync_id,
 
 	input enable,
@@ -59,7 +59,7 @@ module dmac_response_handler (
 	output [1:0] resp_resp
 );
 
-parameter C_ID_WIDTH = 3;
+parameter ID_WIDTH = 3;
 
 `include "resp.h"
 `include "inc_id.h"

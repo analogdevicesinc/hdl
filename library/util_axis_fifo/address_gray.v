@@ -41,36 +41,34 @@ module fifo_address_gray (
 	input m_axis_aresetn,
 	input m_axis_ready,
 	output reg m_axis_valid,
-	output [C_ADDRESS_WIDTH-1:0] m_axis_raddr_next,
-	output reg [C_ADDRESS_WIDTH:0] m_axis_level,
+	output reg [ADDRESS_WIDTH:0] m_axis_level,
 
 	input s_axis_aclk,
 	input s_axis_aresetn,
 	output reg s_axis_ready,
 	input s_axis_valid,
 	output reg s_axis_empty,
-	output [C_ADDRESS_WIDTH-1:0] s_axis_waddr,
-	output reg [C_ADDRESS_WIDTH:0] s_axis_room
+	output [ADDRESS_WIDTH-1:0] s_axis_waddr,
+	output reg [ADDRESS_WIDTH:0] s_axis_room
 );
 
-parameter C_ADDRESS_WIDTH = 4;
+parameter ADDRESS_WIDTH = 4;
 
-reg [C_ADDRESS_WIDTH:0] _s_axis_waddr = 'h00;
-reg [C_ADDRESS_WIDTH:0] _s_axis_waddr_next;
+reg [ADDRESS_WIDTH:0] _s_axis_waddr = 'h00;
+reg [ADDRESS_WIDTH:0] _s_axis_waddr_next;
 
-reg [C_ADDRESS_WIDTH:0] _m_axis_raddr = 'h00;
-reg [C_ADDRESS_WIDTH:0] _m_axis_raddr_next;
+reg [ADDRESS_WIDTH:0] _m_axis_raddr = 'h00;
+reg [ADDRESS_WIDTH:0] _m_axis_raddr_next;
 
-reg [C_ADDRESS_WIDTH:0] s_axis_waddr_gray = 'h00;
-wire [C_ADDRESS_WIDTH:0] s_axis_waddr_gray_next;
-wire [C_ADDRESS_WIDTH:0] s_axis_raddr_gray;
+reg [ADDRESS_WIDTH:0] s_axis_waddr_gray = 'h00;
+wire [ADDRESS_WIDTH:0] s_axis_waddr_gray_next;
+wire [ADDRESS_WIDTH:0] s_axis_raddr_gray;
 
-reg [C_ADDRESS_WIDTH:0] m_axis_raddr_gray = 'h00;
-wire [C_ADDRESS_WIDTH:0] m_axis_raddr_gray_next;
-wire [C_ADDRESS_WIDTH:0] m_axis_waddr_gray;
+reg [ADDRESS_WIDTH:0] m_axis_raddr_gray = 'h00;
+wire [ADDRESS_WIDTH:0] m_axis_raddr_gray_next;
+wire [ADDRESS_WIDTH:0] m_axis_waddr_gray;
 
-assign s_axis_waddr = _s_axis_waddr[C_ADDRESS_WIDTH-1:0];
-assign m_axis_raddr_next = _m_axis_raddr_next[C_ADDRESS_WIDTH-1:0];
+assign s_axis_waddr = _s_axis_waddr[ADDRESS_WIDTH-1:0];
 
 always @(*)
 begin
@@ -80,7 +78,7 @@ begin
 		_s_axis_waddr_next <= _s_axis_waddr;
 end
 
-assign s_axis_waddr_gray_next = _s_axis_waddr_next ^ _s_axis_waddr_next[C_ADDRESS_WIDTH:1];
+assign s_axis_waddr_gray_next = _s_axis_waddr_next ^ _s_axis_waddr_next[ADDRESS_WIDTH:1];
 
 always @(posedge s_axis_aclk)
 begin
@@ -101,7 +99,7 @@ begin
 		_m_axis_raddr_next <= _m_axis_raddr;
 end
 
-assign m_axis_raddr_gray_next = _m_axis_raddr_next ^ _m_axis_raddr_next[C_ADDRESS_WIDTH:1];
+assign m_axis_raddr_gray_next = _m_axis_raddr_next ^ _m_axis_raddr_next[ADDRESS_WIDTH:1];
 
 always @(posedge m_axis_aclk)
 begin
@@ -115,7 +113,7 @@ begin
 end
 
 sync_bits #(
-	.NUM_BITS(C_ADDRESS_WIDTH + 1)
+	.NUM_OF_BITS(ADDRESS_WIDTH + 1)
 ) i_waddr_sync (
 	.out_clk(m_axis_aclk),
 	.out_resetn(m_axis_aresetn),
@@ -124,7 +122,7 @@ sync_bits #(
 );
 
 sync_bits #(
-	.NUM_BITS(C_ADDRESS_WIDTH + 1)
+	.NUM_OF_BITS(ADDRESS_WIDTH + 1)
 ) i_raddr_sync (
 	.out_clk(s_axis_aclk),
 	.out_resetn(s_axis_aresetn),
@@ -138,9 +136,9 @@ begin
 		s_axis_ready <= 1'b1;
 		s_axis_empty <= 1'b1;
 	end else begin
-		s_axis_ready <= (s_axis_raddr_gray[C_ADDRESS_WIDTH] == s_axis_waddr_gray_next[C_ADDRESS_WIDTH] ||
-			s_axis_raddr_gray[C_ADDRESS_WIDTH-1] == s_axis_waddr_gray_next[C_ADDRESS_WIDTH-1] ||
-			s_axis_raddr_gray[C_ADDRESS_WIDTH-2:0] != s_axis_waddr_gray_next[C_ADDRESS_WIDTH-2:0]);
+		s_axis_ready <= (s_axis_raddr_gray[ADDRESS_WIDTH] == s_axis_waddr_gray_next[ADDRESS_WIDTH] ||
+			s_axis_raddr_gray[ADDRESS_WIDTH-1] == s_axis_waddr_gray_next[ADDRESS_WIDTH-1] ||
+			s_axis_raddr_gray[ADDRESS_WIDTH-2:0] != s_axis_waddr_gray_next[ADDRESS_WIDTH-2:0]);
 		s_axis_empty <= s_axis_raddr_gray == s_axis_waddr_gray_next;
 	end
 end

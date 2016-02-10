@@ -8,6 +8,7 @@
 M_DEPS := axi_ad9144_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += ../common/ad_axi_ip_constr.xdc
 M_DEPS += ../common/ad_mul.v
 M_DEPS += ../common/ad_dds_sine.v
 M_DEPS += ../common/ad_dds_1.v
@@ -23,7 +24,6 @@ M_DEPS += axi_ad9144_channel.v
 M_DEPS += axi_ad9144_core.v
 M_DEPS += axi_ad9144_if.v
 M_DEPS += axi_ad9144.v
-M_DEPS += axi_ad9144_constr.xdc
 
 M_VIVADO := vivado -mode batch -source
 

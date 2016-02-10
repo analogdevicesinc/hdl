@@ -41,32 +41,30 @@ module fifo_address_gray_pipelined (
 	input m_axis_aresetn,
 	input m_axis_ready,
 	output reg m_axis_valid,
-	output [C_ADDRESS_WIDTH-1:0] m_axis_raddr_next,
-	output [C_ADDRESS_WIDTH-1:0] m_axis_raddr,
-	output reg [C_ADDRESS_WIDTH:0] m_axis_level,
+	output [ADDRESS_WIDTH-1:0] m_axis_raddr,
+	output reg [ADDRESS_WIDTH:0] m_axis_level,
 
 	input s_axis_aclk,
 	input s_axis_aresetn,
 	output reg s_axis_ready,
 	input s_axis_valid,
 	output reg s_axis_empty,
-	output [C_ADDRESS_WIDTH-1:0] s_axis_waddr,
-	output reg [C_ADDRESS_WIDTH:0] s_axis_room
+	output [ADDRESS_WIDTH-1:0] s_axis_waddr,
+	output reg [ADDRESS_WIDTH:0] s_axis_room
 );
 
-parameter C_ADDRESS_WIDTH = 4;
+parameter ADDRESS_WIDTH = 4;
 
-reg [C_ADDRESS_WIDTH:0] _s_axis_waddr = 'h00;
-reg [C_ADDRESS_WIDTH:0] _s_axis_waddr_next;
-wire [C_ADDRESS_WIDTH:0] _s_axis_raddr;
+reg [ADDRESS_WIDTH:0] _s_axis_waddr = 'h00;
+reg [ADDRESS_WIDTH:0] _s_axis_waddr_next;
+wire [ADDRESS_WIDTH:0] _s_axis_raddr;
 
-reg [C_ADDRESS_WIDTH:0] _m_axis_raddr = 'h00;
-reg [C_ADDRESS_WIDTH:0] _m_axis_raddr_next;
-wire [C_ADDRESS_WIDTH:0] _m_axis_waddr;
+reg [ADDRESS_WIDTH:0] _m_axis_raddr = 'h00;
+reg [ADDRESS_WIDTH:0] _m_axis_raddr_next;
+wire [ADDRESS_WIDTH:0] _m_axis_waddr;
 
-assign s_axis_waddr = _s_axis_waddr[C_ADDRESS_WIDTH-1:0];
-assign m_axis_raddr_next = _m_axis_raddr_next[C_ADDRESS_WIDTH-1:0];
-assign m_axis_raddr = _m_axis_raddr[C_ADDRESS_WIDTH-1:0];
+assign s_axis_waddr = _s_axis_waddr[ADDRESS_WIDTH-1:0];
+assign m_axis_raddr = _m_axis_raddr[ADDRESS_WIDTH-1:0];
 
 always @(*)
 begin
@@ -103,7 +101,7 @@ begin
 end
 
 sync_gray #(
-	.DATA_WIDTH(C_ADDRESS_WIDTH + 1)
+	.DATA_WIDTH(ADDRESS_WIDTH + 1)
 ) i_waddr_sync (
 	.in_clk(s_axis_aclk),
 	.in_resetn(s_axis_aresetn),
@@ -114,7 +112,7 @@ sync_gray #(
 );
 
 sync_gray #(
-	.DATA_WIDTH(C_ADDRESS_WIDTH + 1)
+	.DATA_WIDTH(ADDRESS_WIDTH + 1)
 ) i_raddr_sync (
 	.in_clk(m_axis_aclk),
 	.in_resetn(m_axis_aresetn),
@@ -129,12 +127,12 @@ begin
 	if (s_axis_aresetn == 1'b0) begin
 		s_axis_ready <= 1'b1;
 		s_axis_empty <= 1'b1;
-		s_axis_room <= 2**C_ADDRESS_WIDTH;
+		s_axis_room <= 2**ADDRESS_WIDTH;
 	end else begin
-		s_axis_ready <= (_s_axis_raddr[C_ADDRESS_WIDTH] == _s_axis_waddr_next[C_ADDRESS_WIDTH] ||
-			_s_axis_raddr[C_ADDRESS_WIDTH-1:0] != _s_axis_waddr_next[C_ADDRESS_WIDTH-1:0]);
+		s_axis_ready <= (_s_axis_raddr[ADDRESS_WIDTH] == _s_axis_waddr_next[ADDRESS_WIDTH] ||
+			_s_axis_raddr[ADDRESS_WIDTH-1:0] != _s_axis_waddr_next[ADDRESS_WIDTH-1:0]);
 		s_axis_empty <= _s_axis_raddr == _s_axis_waddr_next;
-		s_axis_room <= _s_axis_raddr - _s_axis_waddr_next + 2**C_ADDRESS_WIDTH;
+		s_axis_room <= _s_axis_raddr - _s_axis_waddr_next + 2**ADDRESS_WIDTH;
 	end
 end
 

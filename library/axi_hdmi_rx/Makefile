@@ -8,6 +8,7 @@
 M_DEPS := axi_hdmi_rx_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += ../common/ad_axi_ip_constr.xdc
 M_DEPS += ../common/ad_rst.v
 M_DEPS += ../common/ad_csc_1.v
 M_DEPS += ../common/ad_csc_1_mul.v

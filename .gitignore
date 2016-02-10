@@ -32,5 +32,8 @@ reconfig_mif
 *.pin
 *.os
 *webtalk*
+*.xml
+*.hw
+gui
 
 

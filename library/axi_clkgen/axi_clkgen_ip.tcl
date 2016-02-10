@@ -14,13 +14,13 @@ adi_ip_files axi_clkgen [list \
 
 adi_ip_properties axi_clkgen
 
+ipx::remove_bus_interface {clk} [ipx::current_core]
+ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]
+
+set_property driver_value 0 [ipx::get_ports *clk2* -of_objects [ipx::current_core]]
+
 adi_ip_constraints axi_clkgen [list \
   "axi_clkgen_constr.xdc" ]
-
-set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
-  [ipx::get_bus_interface s_axi_signal_clock [ipx::current_core]]]
-
-ipx::remove_bus_interface {signal_clock} [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

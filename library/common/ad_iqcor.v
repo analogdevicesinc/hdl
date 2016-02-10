@@ -44,8 +44,8 @@ module ad_iqcor (
 
   clk,
   valid,
-  data_i,
-  data_q,
+  data_in,
+  data_iq,
   valid_out,
   data_out,
 
@@ -57,14 +57,14 @@ module ad_iqcor (
 
   // select i/q if disabled
 
-  parameter IQSEL = 0;
+  parameter Q_OR_I_N = 0;
 
   // data interface
 
   input           clk;
   input           valid;
-  input   [15:0]  data_i;
-  input   [15:0]  data_q;
+  input   [15:0]  data_in;
+  input   [15:0]  data_iq;
   output          valid_out;
   output  [15:0]  data_out;
 
@@ -82,33 +82,49 @@ module ad_iqcor (
   reg     [33:0]  p1_data_p = 'd0;
   reg             valid_out = 'd0;
   reg     [15:0]  data_out = 'd0;
+  reg     [15:0]  iqcor_coeff_1_r = 'd0;
+  reg     [15:0]  iqcor_coeff_2_r = 'd0;
 
   // internal signals
 
+  wire    [15:0]  data_i_s;
+  wire    [15:0]  data_q_s;
   wire    [33:0]  p1_data_p_i_s;
   wire            p1_valid_s;
   wire    [15:0]  p1_data_i_s;
   wire    [33:0]  p1_data_p_q_s;
   wire    [15:0]  p1_data_q_s;
 
+  // swap i & q
+
+  assign data_i_s = (Q_OR_I_N == 1) ? data_iq : data_in;
+  assign data_q_s = (Q_OR_I_N == 1) ? data_in : data_iq;
+
+  // coefficients are flopped to remove warnings from vivado
+
+  always @(posedge clk) begin
+    iqcor_coeff_1_r <= iqcor_coeff_1;
+    iqcor_coeff_2_r <= iqcor_coeff_2;
+  end
+
   // scaling functions - i
 
   ad_mul #(.DELAY_DATA_WIDTH(17)) i_mul_i (
     .clk (clk),
-    .data_a ({data_i[15], data_i}),
-    .data_b ({iqcor_coeff_1[15], iqcor_coeff_1}),
+    .data_a ({data_i_s[15], data_i_s}),
+    .data_b ({iqcor_coeff_1_r[15], iqcor_coeff_1_r}),
     .data_p (p1_data_p_i_s),
-    .ddata_in ({valid, data_i}),
+    .ddata_in ({valid, data_i_s}),
     .ddata_out ({p1_valid_s, p1_data_i_s}));
 
   // scaling functions - q
 
   ad_mul #(.DELAY_DATA_WIDTH(16)) i_mul_q (
     .clk (clk),
-    .data_a ({data_q[15], data_q}),
-    .data_b ({iqcor_coeff_2[15], iqcor_coeff_2}),
+    .data_a ({data_q_s[15], data_q_s}),
+    .data_b ({iqcor_coeff_2_r[15], iqcor_coeff_2_r}),
     .data_p (p1_data_p_q_s),
-    .ddata_in (data_q),
+    .ddata_in (data_q_s),
     .ddata_out (p1_data_q_s));
 
   // sum
@@ -126,7 +142,7 @@ module ad_iqcor (
     valid_out <= p1_valid;
     if (iqcor_enable == 1'b1) begin
       data_out <= p1_data_p[29:14];
-    end else if (IQSEL == 1) begin
+    end else if (Q_OR_I_N == 1) begin
       data_out <= p1_data_q;
     end else begin
       data_out <= p1_data_i;

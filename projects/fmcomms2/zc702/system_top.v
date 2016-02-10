@@ -191,28 +191,18 @@ module system_top (
   wire            spi_udc_csn_rx;
   wire            spi_udc_sclk;
   wire            spi_udc_data;
-
-  wire            tdd_enable_s;
-  wire            gpio_enable;
-  wire            gpio_txnrx;
-  wire            enable_s;
-  wire            txnrx_s;
-
-  // internal logic
-
-  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
-  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+  wire            tdd_sync_t;
+  wire            tdd_sync_o;
+  wire            tdd_sync_i;
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(31)) i_iobuf (
-    .dio_t ({gpio_t[50:32],gpio_t[15:12], gpio_t[3:0]}),
-    .dio_i ({gpio_o[50:32],gpio_o[15:12], gpio_o[3:0]}),
-    .dio_o ({gpio_i[50:32],gpio_i[15:12], gpio_i[3:0]}),
+  ad_iobuf #(.DATA_WIDTH(25)) i_iobuf (
+    .dio_t ({gpio_t[50:49],gpio_t[46:32],gpio_t[15:12], gpio_t[3:0]}),
+    .dio_i ({gpio_o[50:49],gpio_o[46:32],gpio_o[15:12], gpio_o[3:0]}),
+    .dio_o ({gpio_i[50:49],gpio_i[46:32],gpio_i[15:12], gpio_i[3:0]}),
     .dio_p ({ gpio_muxout_tx,
               gpio_muxout_rx,
-              gpio_txnrx,
-              gpio_enable,
               gpio_resetb,
               gpio_sync,
               gpio_en_agc,
@@ -296,9 +286,10 @@ module system_top (
     .spi1_sdo_i (spi_udc_data),
     .spi1_sdo_o (spi_udc_data),
     .spi1_sdi_i (1'b0),
-    .enable (enable_s),
-    .txnrx (txnrx_s),
-    .tdd_enable (tdd_enable_s));
+    .enable (enable),
+    .txnrx (txnrx),
+    .up_enable (gpio_o[47]),
+    .up_txnrx (gpio_o[48]));
 
 endmodule
 

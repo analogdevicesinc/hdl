@@ -2,6 +2,7 @@
 # fmc hdmi rx (adv7611)
 
 set_property  -dict {PACKAGE_PIN  AC28    IOSTANDARD LVCMOS25}                [get_ports  hdmi_rx_clk]          ; ## G2   FMC_LPC_CLK1_M2C_P
+set_property  -dict {PACKAGE_PIN  AG30    IOSTANDARD LVCMOS25}                [get_ports  hdmi_rx_spdif]        ; ## H29  FMC_LPC_LA24_N
 set_property  -dict {PACKAGE_PIN  AE26    IOSTANDARD LVCMOS25    IOB TRUE}    [get_ports  hdmi_rx_data[0]]      ; ## H32  FMC_LPC_LA28_N
 set_property  -dict {PACKAGE_PIN  AD25    IOSTANDARD LVCMOS25    IOB TRUE}    [get_ports  hdmi_rx_data[1]]      ; ## H31  FMC_LPC_LA28_P
 set_property  -dict {PACKAGE_PIN  AF25    IOSTANDARD LVCMOS25    IOB TRUE}    [get_ports  hdmi_rx_data[2]]      ; ## G31  FMC_LPC_LA29_N

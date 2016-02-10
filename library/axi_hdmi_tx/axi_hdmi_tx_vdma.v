@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // Transmit HDMI, video dma data in, hdmi separate syncs data out.
 
 module axi_hdmi_tx_vdma (
@@ -145,7 +143,7 @@ module axi_hdmi_tx_vdma (
 
   // get fs from hdmi side, return fs and sof write address back
 
-  always @(posedge vdma_clk) begin
+  always @(posedge vdma_clk or posedge vdma_rst) begin
     if (vdma_rst == 1'b1) begin
       vdma_fs_toggle_m1 <= 'd0;
       vdma_fs_toggle_m2 <= 'd0;
@@ -155,6 +153,9 @@ module axi_hdmi_tx_vdma (
       vdma_fs_toggle_m2 <= vdma_fs_toggle_m1;
       vdma_fs_toggle_m3 <= vdma_fs_toggle_m2;
     end
+  end
+
+  always @(posedge vdma_clk) begin
     vdma_fs <= vdma_fs_toggle_m2 ^ vdma_fs_toggle_m3;
     if (vdma_fs_ret == 1'b1) begin
       vdma_fs_waddr <= vdma_waddr;
@@ -195,7 +196,7 @@ module axi_hdmi_tx_vdma (
   assign vdma_ovf_s = (vdma_addr_diff < BUF_THRESHOLD_LO) ? vdma_almost_full : 1'b0;
   assign vdma_unf_s = (vdma_addr_diff > BUF_THRESHOLD_HI) ? vdma_almost_empty : 1'b0;
 
-  always @(posedge vdma_clk) begin
+  always @(posedge vdma_clk or posedge vdma_rst) begin
     if (vdma_rst == 1'b1) begin
       vdma_raddr_g_m1 <= 9'd0;
       vdma_raddr_g_m2 <= 9'd0;
@@ -203,6 +204,9 @@ module axi_hdmi_tx_vdma (
       vdma_raddr_g_m1 <= hdmi_raddr_g;
       vdma_raddr_g_m2 <= vdma_raddr_g_m1;
     end
+  end
+
+  always @(posedge vdma_clk) begin
     vdma_raddr <= g2b(vdma_raddr_g_m2);
     vdma_addr_diff <= vdma_addr_diff_s[8:0];
     if (vdma_addr_diff >= RDY_THRESHOLD_HI) begin

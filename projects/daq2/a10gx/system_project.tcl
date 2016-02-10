@@ -4,10 +4,17 @@ load_package flow
 source ../../scripts/adi_env.tcl
 project_new daq2_a10gx -overwrite
 
-source $ad_hdl_dir/projects/common/a10gx/a10gx_system_assign.tcl
+source "../../common/a10gx/a10gx_system_assign.tcl"
+set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/a10gx/;../../../library/**/*"
+set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/a10gx;../../../library/**/*"
+set_global_assignment -name QSYS_FILE system_bd.qsys
 
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
+set_global_assignment -name VERILOG_FILE "../../../library/common/ad_iobuf.v"
 set_global_assignment -name VERILOG_FILE ../common/daq2_spi.v
+set_global_assignment -name VERILOG_FILE system_top.v
+
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # lane interface
 

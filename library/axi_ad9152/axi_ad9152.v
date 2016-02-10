@@ -65,6 +65,7 @@ module axi_ad9152 (
   s_axi_aresetn,
   s_axi_awvalid,
   s_axi_awaddr,
+  s_axi_awprot,
   s_axi_awready,
   s_axi_wvalid,
   s_axi_wdata,
@@ -75,6 +76,7 @@ module axi_ad9152 (
   s_axi_bready,
   s_axi_arvalid,
   s_axi_araddr,
+  s_axi_arprot,
   s_axi_arready,
   s_axi_rvalid,
   s_axi_rdata,
@@ -83,8 +85,8 @@ module axi_ad9152 (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_DAC_DP_DISABLE = 0;
+  parameter   ID = 0;
+  parameter   DAC_DATAPATH_DISABLE = 0;
 
   // jesd interface
   // tx_clk is (line-rate/40)
@@ -110,6 +112,7 @@ module axi_ad9152 (
   input             s_axi_aresetn;
   input             s_axi_awvalid;
   input   [ 31:0]   s_axi_awaddr;
+  input   [  2:0]                           s_axi_awprot;
   output            s_axi_awready;
   input             s_axi_wvalid;
   input   [ 31:0]   s_axi_wdata;
@@ -120,6 +123,7 @@ module axi_ad9152 (
   input             s_axi_bready;
   input             s_axi_arvalid;
   input   [ 31:0]   s_axi_araddr;
+  input   [  2:0]                           s_axi_arprot;
   output            s_axi_arready;
   output            s_axi_rvalid;
   output  [ 31:0]   s_axi_rdata;
@@ -174,7 +178,7 @@ module axi_ad9152 (
 
   // core
 
-  axi_ad9152_core #(.PCORE_ID(PCORE_ID), .DP_DISABLE(PCORE_DAC_DP_DISABLE)) i_core (
+  axi_ad9152_core #(.ID(ID), .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)) i_core (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_data_0_0 (dac_data_0_0_s),

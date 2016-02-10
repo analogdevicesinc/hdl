@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -55,19 +53,16 @@ module ad_rst (
 
   // internal registers
 
-  reg             rst_p = 'd0;
+  reg             ad_rst_sync_m1 = 'd0 /* synthesis preserve */;
+  reg             ad_rst_sync = 'd0 /* synthesis preserve */;
   reg             rst = 'd0;
 
   // simple reset gen
 
-  always @(posedge clk or posedge preset) begin
-    if (preset == 1'b1) begin
-      rst_p <= 1'd1;
-      rst <= 1'd1;
-    end else begin
-      rst_p <= 1'b0;
-      rst <= rst_p;
-    end
+  always @(posedge clk) begin
+    ad_rst_sync_m1 <= preset;
+    ad_rst_sync <= ad_rst_sync_m1;
+    rst <= ad_rst_sync;
   end
 
 endmodule

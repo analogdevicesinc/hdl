@@ -22,9 +22,6 @@ adi_ip_add_core_dependencies { \
 	analog.com:user:util_axis_fifo:1.0 \
 }
 
-set_property physical_name {s_axi_aclk} [ipx::get_port_map CLK \
-  [ipx::get_bus_interface s_axi_signal_clock [ipx::current_core]]]
-
 adi_add_bus "spi_engine_ctrl" "master" \
 	"analog.com:interface:spi_engine_ctrl_rtl:1.0" \
 	"analog.com:interface:spi_engine_ctrl:1.0" \

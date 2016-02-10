@@ -20,6 +20,7 @@ M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ../common/up_clock_mon.v
 M_DEPS += ../common/up_dac_common.v
 M_DEPS += ../common/up_dac_channel.v
+M_DEPS += ../common/ad_axi_ip_constr.xdc
 M_DEPS += axi_ad9739a_channel.v
 M_DEPS += axi_ad9739a_core.v
 M_DEPS += axi_ad9739a_if.v

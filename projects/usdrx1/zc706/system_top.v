@@ -266,15 +266,10 @@ module system_top (
   wire            adc_dovf_2;
   wire            adc_dovf_3;
   wire   [255:0]  gt_rx_data;
-  wire     [7:0]  gt_rx_sof;
   wire    [63:0]  gt_rx_data_0;
-  wire            gt_rx_sof_0;
   wire    [63:0]  gt_rx_data_1;
-  wire            gt_rx_sof_1;
   wire    [63:0]  gt_rx_data_2;
-  wire            gt_rx_sof_2;
   wire    [63:0]  gt_rx_data_3;
-  wire            gt_rx_sof_3;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -310,10 +305,6 @@ module system_top (
   assign gt_rx_data_2 = gt_rx_data[191:128];
   assign gt_rx_data_1 = gt_rx_data[127: 64];
   assign gt_rx_data_0 = gt_rx_data[ 63:  0];
-  assign gt_rx_sof_0 = gt_rx_sof [0] | gt_rx_sof [1];
-  assign gt_rx_sof_1 = gt_rx_sof [2] | gt_rx_sof [3];
-  assign gt_rx_sof_2 = gt_rx_sof [4] | gt_rx_sof [5];
-  assign gt_rx_sof_3 = gt_rx_sof [6] | gt_rx_sof [7];
 
   assign adc_data   = {adc_data_3, adc_data_2, adc_data_1, adc_data_0};
   assign adc_valid  = (|adc_valid_0) | (|adc_valid_1) | (|adc_valid_2) | (|adc_valid_3) ;
@@ -462,15 +453,10 @@ module system_top (
     .adc_dovf_2 (adc_dovf_2),
     .adc_dovf_3 (adc_dovf_3),
     .gt_rx_data (gt_rx_data),
-    .gt_rx_sof (gt_rx_sof),
     .gt_rx_data_0 (gt_rx_data_0),
-    .gt_rx_sof_0(gt_rx_sof_0),
     .gt_rx_data_1 (gt_rx_data_1),
-    .gt_rx_sof_1(gt_rx_sof_1),
     .gt_rx_data_2 (gt_rx_data_2),
-    .gt_rx_sof_2(gt_rx_sof_2),
     .gt_rx_data_3 (gt_rx_data_3),
-    .gt_rx_sof_3(gt_rx_sof_3),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),

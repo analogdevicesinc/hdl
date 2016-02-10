@@ -8,8 +8,7 @@
 M_DEPS := util_wfifo_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/ad_axis_inf_rx.v
-M_DEPS += util_wfifo_constr.xdc
+M_DEPS += ../common/ad_mem.v
 M_DEPS += util_wfifo.v
 
 M_VIVADO := vivado -mode batch -source

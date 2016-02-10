@@ -112,6 +112,8 @@ module system_top (
   spi_sdio,
   spi_dirn,
 
+  psync_0,
+  psync_1,
   trig_p,
   trig_n,
   vdither_p,
@@ -209,6 +211,8 @@ module system_top (
   output            dac_sync_0;
   output            dac_sync_1;
 
+  output            psync_0;
+  output            psync_1;
   input             trig_p;
   input             trig_n;
   output            vdither_p;
@@ -220,20 +224,22 @@ module system_top (
   inout             irq_0;
   inout             pwdn_1;
   inout             rst_1;
-  inout             drst_1;
-  inout             arst_1;
+  output            drst_1;
+  output            arst_1;
   inout             pwdn_0;
   inout             rst_0;
-  inout             drst_0;
-  inout             arst_0;
+  output            drst_0;
+  output            arst_0;
 
   // internal registers
 
-  reg               adc_wr = 'd0;
-  reg     [511:0]   adc_wdata = 'd0;
+  reg     [  4:0]   gpio_o_60_56_d = 'd0;
+  reg               gpio_dld = 'd0;
 
   // internal signals
 
+  wire              delay_clk;
+  wire              delay_rst;
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [ 63:0]   gpio_t;
@@ -241,56 +247,14 @@ module system_top (
   wire              spi_clk;
   wire              spi_mosi;
   wire              spi_miso;
+  wire              rx_clk;
   wire              rx_ref_clk_0;
   wire              rx_ref_clk_1;
-  wire              rx_sysref;
+  wire              rx_sysref_s;
   wire              rx_sync_0;
   wire              rx_sync_1;
-  wire              adc_clk;
-  wire              adc_valid_0;
-  wire              adc_enable_0;
-  wire    [255:0]   adc_data_0;
-  wire              adc_valid_1;
-  wire              adc_enable_1;
-  wire    [255:0]   adc_data_1;
-
-  // interleaving
-
-  always @(posedge adc_clk) begin
-    adc_wr <= adc_enable_0 & adc_enable_1;
-    adc_wdata[((16*31)+15):(16*31)] <= adc_data_1[((16*15)+15):(16*15)];
-    adc_wdata[((16*30)+15):(16*30)] <= adc_data_0[((16*15)+15):(16*15)];
-    adc_wdata[((16*29)+15):(16*29)] <= adc_data_1[((16*14)+15):(16*14)];
-    adc_wdata[((16*28)+15):(16*28)] <= adc_data_0[((16*14)+15):(16*14)];
-    adc_wdata[((16*27)+15):(16*27)] <= adc_data_1[((16*13)+15):(16*13)];
-    adc_wdata[((16*26)+15):(16*26)] <= adc_data_0[((16*13)+15):(16*13)];
-    adc_wdata[((16*25)+15):(16*25)] <= adc_data_1[((16*12)+15):(16*12)];
-    adc_wdata[((16*24)+15):(16*24)] <= adc_data_0[((16*12)+15):(16*12)];
-    adc_wdata[((16*23)+15):(16*23)] <= adc_data_1[((16*11)+15):(16*11)];
-    adc_wdata[((16*22)+15):(16*22)] <= adc_data_0[((16*11)+15):(16*11)];
-    adc_wdata[((16*21)+15):(16*21)] <= adc_data_1[((16*10)+15):(16*10)];
-    adc_wdata[((16*20)+15):(16*20)] <= adc_data_0[((16*10)+15):(16*10)];
-    adc_wdata[((16*19)+15):(16*19)] <= adc_data_1[((16* 9)+15):(16* 9)];
-    adc_wdata[((16*18)+15):(16*18)] <= adc_data_0[((16* 9)+15):(16* 9)];
-    adc_wdata[((16*17)+15):(16*17)] <= adc_data_1[((16* 8)+15):(16* 8)];
-    adc_wdata[((16*16)+15):(16*16)] <= adc_data_0[((16* 8)+15):(16* 8)];
-    adc_wdata[((16*15)+15):(16*15)] <= adc_data_1[((16* 7)+15):(16* 7)];
-    adc_wdata[((16*14)+15):(16*14)] <= adc_data_0[((16* 7)+15):(16* 7)];
-    adc_wdata[((16*13)+15):(16*13)] <= adc_data_1[((16* 6)+15):(16* 6)];
-    adc_wdata[((16*12)+15):(16*12)] <= adc_data_0[((16* 6)+15):(16* 6)];
-    adc_wdata[((16*11)+15):(16*11)] <= adc_data_1[((16* 5)+15):(16* 5)];
-    adc_wdata[((16*10)+15):(16*10)] <= adc_data_0[((16* 5)+15):(16* 5)];
-    adc_wdata[((16* 9)+15):(16* 9)] <= adc_data_1[((16* 4)+15):(16* 4)];
-    adc_wdata[((16* 8)+15):(16* 8)] <= adc_data_0[((16* 4)+15):(16* 4)];
-    adc_wdata[((16* 7)+15):(16* 7)] <= adc_data_1[((16* 3)+15):(16* 3)];
-    adc_wdata[((16* 6)+15):(16* 6)] <= adc_data_0[((16* 3)+15):(16* 3)];
-    adc_wdata[((16* 5)+15):(16* 5)] <= adc_data_1[((16* 2)+15):(16* 2)];
-    adc_wdata[((16* 4)+15):(16* 4)] <= adc_data_0[((16* 2)+15):(16* 2)];
-    adc_wdata[((16* 3)+15):(16* 3)] <= adc_data_1[((16* 1)+15):(16* 1)];
-    adc_wdata[((16* 2)+15):(16* 2)] <= adc_data_0[((16* 1)+15):(16* 1)];
-    adc_wdata[((16* 1)+15):(16* 1)] <= adc_data_1[((16* 0)+15):(16* 0)];
-    adc_wdata[((16* 0)+15):(16* 0)] <= adc_data_0[((16* 0)+15):(16* 0)];
-  end
+  wire              up_rstn;
+  wire              up_clk;
 
   // spi
 
@@ -302,8 +266,48 @@ module system_top (
   assign dac_sync_0 = spi_csn[2];
   assign spi_csn_1 = spi_csn[1];
   assign spi_csn_0 = spi_csn[0];
+  assign drst_1 = 1'b0;
+  assign arst_1 = 1'b0;
+  assign drst_0 = 1'b0;
+  assign arst_0 = 1'b0;
+
+  // sysref iob
+
+  always @(posedge up_clk or negedge up_rstn) begin
+    if (up_rstn == 1'b0) begin
+      gpio_o_60_56_d <= 5'd0;
+      gpio_dld <= 1'b0;
+    end else begin
+      gpio_o_60_56_d <= gpio_o[60:56];
+      if (gpio_o[60:56] == gpio_o_60_56_d) begin
+        gpio_dld <= 1'b0;
+      end else begin
+        gpio_dld <= 1'b1;
+      end
+    end
+  end
 
   // instantiations
+
+  ad_lvds_out #(
+    .DEVICE_TYPE (0),
+    .SINGLE_ENDED (0),
+    .IODELAY_ENABLE (1),
+    .IODELAY_CTRL (1),
+    .IODELAY_GROUP ("FMCADC5_SYSREF_IODELAY_GROUP"))
+  i_rx_sysref (
+    .tx_clk (rx_clk),
+    .tx_data_p (rx_sysref_s),
+    .tx_data_n (rx_sysref_s),
+    .tx_data_out_p (rx_sysref_p),
+    .tx_data_out_n (rx_sysref_n),
+    .up_clk (up_clk),
+    .up_dld (gpio_dld),
+    .up_dwdata (gpio_o[60:56]),
+    .up_drdata (gpio_i[60:56]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (gpio_i[61]));
 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk_0 (
     .CEB (1'd0),
@@ -318,11 +322,6 @@ module system_top (
     .IB (rx_ref_clk_1_n),
     .O (rx_ref_clk_1),
     .ODIV2 ());
-
-  OBUFDS i_obufds_rx_sysref (
-    .I (rx_sysref),
-    .O (rx_sysref_p),
-    .OB (rx_sysref_n));
 
   OBUFDS i_obufds_rx_sync_0 (
     .I (rx_sync_0),
@@ -344,19 +343,25 @@ module system_top (
     .O (vdither_p),
     .OB (vdither_n));
 
+  fmcadc5_psync i_fmcadc5_psync (
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .psync_0 (psync_0),
+    .psync_1 (psync_1));
+
   fmcadc5_spi i_fmcadc5_spi (
-    .spi_csn_0 (spi_csn_0),
-    .spi_csn_1 (spi_csn_1),
+    .spi_csn_0 (spi_csn[0]),
+    .spi_csn_1 (spi_csn[1]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio),
     .spi_dirn (spi_dirn));
 
-  ad_iobuf #(.DATA_WIDTH(13)) i_iobuf (
-    .dio_t (gpio_t[44:32]),
-    .dio_i (gpio_o[44:32]),
-    .dio_o (gpio_i[44:32]),
+  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
+    .dio_t ({gpio_t[44:40], gpio_t[39:38], gpio_t[35:34]}),
+    .dio_i ({gpio_o[44:40], gpio_o[39:38], gpio_o[35:34]}),
+    .dio_o ({gpio_i[44:40], gpio_i[39:38], gpio_i[35:34]}),
     .dio_p ({ pwr_good,       // 44
               fd_1,           // 43
               irq_1,          // 42
@@ -364,12 +369,8 @@ module system_top (
               irq_0,          // 40
               pwdn_1,         // 39
               rst_1,          // 38
-              drst_1,         // 37
-              arst_1,         // 36
               pwdn_0,         // 35
-              rst_0,          // 34
-              drst_0,         // 33
-              arst_0}));      // 32
+              rst_0}));       // 34
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
@@ -378,15 +379,6 @@ module system_top (
     .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
-    .adc_clk (adc_clk),
-    .adc_data_0 (adc_data_0),
-    .adc_data_1 (adc_data_1),
-    .adc_enable_0 (adc_enable_0),
-    .adc_enable_1 (adc_enable_1),
-    .adc_valid_0 (adc_valid_0),
-    .adc_valid_1 (adc_valid_1),
-    .adc_wdata (adc_wdata),
-    .adc_wr (adc_wr),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -402,6 +394,8 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
@@ -420,7 +414,7 @@ module system_top (
     .mb_intr_06 (1'b0),
     .mb_intr_07 (1'b0),
     .mb_intr_08 (1'b0),
-    .mb_intr_12 (1'b0),
+    .mb_intr_13 (1'b0),
     .mb_intr_14 (1'b0),
     .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
@@ -429,6 +423,7 @@ module system_top (
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
     .phy_sd (1'b1),
+    .rx_clk (rx_clk),
     .rx_data_0_n (rx_data_0_n),
     .rx_data_0_p (rx_data_0_p),
     .rx_data_1_n (rx_data_1_n),
@@ -437,7 +432,7 @@ module system_top (
     .rx_ref_clk_1 (rx_ref_clk_1),
     .rx_sync_0 (rx_sync_0),
     .rx_sync_1 (rx_sync_1),
-    .rx_sysref (rx_sysref),
+    .rx_sysref (rx_sysref_s),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),
@@ -453,7 +448,9 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout));
+    .uart_sout (uart_sout),
+    .up_clk (up_clk),
+    .up_rstn (up_rstn));
 
 endmodule
 

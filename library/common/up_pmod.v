@@ -61,7 +61,7 @@ module up_pmod (
   // parameters
 
   localparam      PCORE_VERSION = 32'h00010001;
-  parameter       PCORE_ID = 0;
+  parameter       ID = 0;
 
   input           pmod_clk;
   output          pmod_rst;
@@ -129,7 +129,7 @@ module up_pmod (
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
           8'h00:  up_rdata <= PCORE_VERSION;
-          8'h01:  up_rdata <= PCORE_ID;
+          8'h01:  up_rdata <= ID;
           8'h02:  up_rdata <= up_scratch;
           8'h03:  up_rdata <= up_pmod_signal_freq_s;
           8'h10:  up_rdata <= up_resetn;

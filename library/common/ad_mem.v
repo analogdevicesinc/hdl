@@ -51,9 +51,9 @@ module ad_mem (
   doutb);
 
   parameter       DATA_WIDTH = 16;
-  parameter       ADDR_WIDTH =  5;
+  parameter       ADDRESS_WIDTH =  5;
   localparam      DW = DATA_WIDTH - 1;
-  localparam      AW = ADDR_WIDTH - 1;
+  localparam      AW = ADDRESS_WIDTH - 1;
 
   input           clka;
   input           wea;
@@ -64,7 +64,7 @@ module ad_mem (
   input   [AW:0]  addrb;
   output  [DW:0]  doutb;
 
-  reg     [DW:0]  m_ram[0:((2**ADDR_WIDTH)-1)];
+  reg     [DW:0]  m_ram[0:((2**ADDRESS_WIDTH)-1)];
   reg     [DW:0]  doutb;
 
   always @(posedge clka) begin

@@ -90,7 +90,7 @@ module up_dac_channel (
 
   // parameters
 
-  parameter PCORE_DAC_CHID = 4'h0;
+  parameter DAC_CHANNEL_ID = 4'h0;
 
   // dac interface
 
@@ -193,8 +193,8 @@ module up_dac_channel (
 
   // decode block select
 
-  assign up_wreq_s = ((up_waddr[13:8] == 6'h11) && (up_waddr[7:4] == PCORE_DAC_CHID)) ? up_wreq : 1'b0;
-  assign up_rreq_s = ((up_raddr[13:8] == 6'h11) && (up_raddr[7:4] == PCORE_DAC_CHID)) ? up_rreq : 1'b0;
+  assign up_wreq_s = ((up_waddr[13:8] == 6'h11) && (up_waddr[7:4] == DAC_CHANNEL_ID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == 6'h11) && (up_raddr[7:4] == DAC_CHANNEL_ID)) ? up_rreq : 1'b0;
 
   // processor write interface
 
@@ -330,7 +330,7 @@ module up_dac_channel (
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(165)) i_dac_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(165)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_iqcor_enb,

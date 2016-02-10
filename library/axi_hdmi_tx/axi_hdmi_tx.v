@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 module axi_hdmi_tx (
 
@@ -68,14 +66,12 @@ module axi_hdmi_tx (
 
   // vdma interface
 
-  m_axis_mm2s_clk,
-  m_axis_mm2s_fsync,
-  m_axis_mm2s_fsync_ret,
-  m_axis_mm2s_tvalid,
-  m_axis_mm2s_tdata,
-  m_axis_mm2s_tkeep,
-  m_axis_mm2s_tlast,
-  m_axis_mm2s_tready,
+  vdma_clk,
+  vdma_fs,
+  vdma_fs_ret,
+  vdma_valid,
+  vdma_data,
+  vdma_ready,
 
   // axi interface
 
@@ -83,6 +79,7 @@ module axi_hdmi_tx (
   s_axi_aresetn,
   s_axi_awvalid,
   s_axi_awaddr,
+  s_axi_awprot,
   s_axi_awready,
   s_axi_wvalid,
   s_axi_wdata,
@@ -93,18 +90,21 @@ module axi_hdmi_tx (
   s_axi_bready,
   s_axi_arvalid,
   s_axi_araddr,
+  s_axi_arprot,
   s_axi_arready,
   s_axi_rvalid,
-  s_axi_rdata,
   s_axi_rresp,
+  s_axi_rdata,
   s_axi_rready);
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_Cr_Cb_N = 0;
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_EMBEDDED_SYNC = 0;
+  parameter   ID = 0;
+  parameter   CR_CB_N = 0;
+  parameter   DEVICE_TYPE = 0;
+  parameter   EMBEDDED_SYNC = 0;
+  /* 0 = Launch on rising edge, 1 = Launch on falling edge */
+  parameter   OUT_CLK_POLARITY = 0;
 
   localparam  XILINX_7SERIES = 0;
   localparam  XILINX_ULTRASCALE = 1;
@@ -139,14 +139,12 @@ module axi_hdmi_tx (
 
   // vdma interface
 
-  input           m_axis_mm2s_clk;
-  output          m_axis_mm2s_fsync;
-  input           m_axis_mm2s_fsync_ret;
-  input           m_axis_mm2s_tvalid;
-  input   [63:0]  m_axis_mm2s_tdata;
-  input   [ 7:0]  m_axis_mm2s_tkeep;
-  input           m_axis_mm2s_tlast;
-  output          m_axis_mm2s_tready;
+  input           vdma_clk;
+  output          vdma_fs;
+  input           vdma_fs_ret;
+  input           vdma_valid;
+  input   [63:0]  vdma_data;
+  output          vdma_ready;
 
   // axi interface
 
@@ -154,6 +152,7 @@ module axi_hdmi_tx (
   input           s_axi_aresetn;
   input           s_axi_awvalid;
   input   [31:0]  s_axi_awaddr;
+  input   [ 2:0]  s_axi_awprot;
   output          s_axi_awready;
   input           s_axi_wvalid;
   input   [31:0]  s_axi_wdata;
@@ -164,10 +163,11 @@ module axi_hdmi_tx (
   input           s_axi_bready;
   input           s_axi_arvalid;
   input   [31:0]  s_axi_araddr;
+  input   [ 2:0]  s_axi_arprot;
   output          s_axi_arready;
   output          s_axi_rvalid;
-  output  [31:0]  s_axi_rdata;
   output  [ 1:0]  s_axi_rresp;
+  output  [31:0]  s_axi_rdata;
   input           s_axi_rready;
 
   // reset and clocks
@@ -175,7 +175,6 @@ module axi_hdmi_tx (
   wire            up_rstn;
   wire            up_clk;
   wire            hdmi_rst;
-  wire            vdma_clk;
   wire            vdma_rst;
 
   // internal signals
@@ -207,11 +206,6 @@ module axi_hdmi_tx (
   wire    [ 8:0]  hdmi_raddr_g_s;
   wire            hdmi_tpm_oos_s;
   wire            hdmi_status_s;
-  wire            vdma_fs_s;
-  wire            vdma_fs_ret_s;
-  wire            vdma_valid_s;
-  wire    [63:0]  vdma_data_s;
-  wire            vdma_ready_s;
   wire            vdma_wr_s;
   wire    [ 8:0]  vdma_waddr_s;
   wire    [47:0]  vdma_wdata_s;
@@ -225,12 +219,6 @@ module axi_hdmi_tx (
 
   assign up_rstn = s_axi_aresetn;
   assign up_clk = s_axi_aclk;
-  assign vdma_clk = m_axis_mm2s_clk;
-  assign vdma_valid_s = m_axis_mm2s_tvalid;
-  assign vdma_data_s = m_axis_mm2s_tdata;
-  assign vdma_fs_ret_s = m_axis_mm2s_fsync_ret;
-  assign m_axis_mm2s_fsync = vdma_fs_s;
-  assign m_axis_mm2s_tready = vdma_ready_s;
 
   // axi interface
 
@@ -309,11 +297,11 @@ module axi_hdmi_tx (
     .hdmi_raddr_g (hdmi_raddr_g_s),
     .vdma_clk (vdma_clk),
     .vdma_rst (vdma_rst),
-    .vdma_fs (vdma_fs_s),
-    .vdma_fs_ret (vdma_fs_ret_s),
-    .vdma_valid (vdma_valid_s),
-    .vdma_data (vdma_data_s),
-    .vdma_ready (vdma_ready_s),
+    .vdma_fs (vdma_fs),
+    .vdma_fs_ret (vdma_fs_ret),
+    .vdma_valid (vdma_valid),
+    .vdma_data (vdma_data),
+    .vdma_ready (vdma_ready),
     .vdma_wr (vdma_wr_s),
     .vdma_waddr (vdma_waddr_s),
     .vdma_wdata (vdma_wdata_s),
@@ -326,8 +314,8 @@ module axi_hdmi_tx (
   // hdmi interface
 
   axi_hdmi_tx_core #(
-    .Cr_Cb_N(PCORE_Cr_Cb_N),
-    .EMBEDDED_SYNC(PCORE_EMBEDDED_SYNC))
+    .CR_CB_N(CR_CB_N),
+    .EMBEDDED_SYNC(EMBEDDED_SYNC))
   i_tx_core (
     .hdmi_clk (hdmi_clk),
     .hdmi_rst (hdmi_rst),
@@ -373,15 +361,15 @@ module axi_hdmi_tx (
   // hdmi output clock
 
   generate
-  if (PCORE_DEVICE_TYPE == XILINX_ULTRASCALE) begin
+  if (DEVICE_TYPE == XILINX_ULTRASCALE) begin
   ODDRE1 #(.SRVAL(1'b0)) i_clk_oddr (
     .SR (1'b0),
-    .D1 (1'b1),
-    .D2 (1'b0),
+    .D1 (~OUT_CLK_POLARITY),
+    .D2 (OUT_CLK_POLARITY),
     .C (hdmi_clk),
     .Q (hdmi_out_clk));
   end
-  if (PCORE_DEVICE_TYPE == ALTERA_5SERIES) begin
+  if (DEVICE_TYPE == ALTERA_5SERIES) begin
   altddio_out #(.WIDTH(1)) i_clk_oddr (
     .aclr (1'b0),
     .aset (1'b0),
@@ -389,19 +377,19 @@ module axi_hdmi_tx (
     .sset (1'b0),
     .oe (1'b1),
     .outclocken (1'b1),
-    .datain_h (1'b1),
-    .datain_l (1'b0),
+    .datain_h (~OUT_CLK_POLARITY),
+    .datain_l (OUT_CLK_POLARITY),
     .outclock (hdmi_clk),
     .oe_out (),
     .dataout (hdmi_out_clk));
   end
-  if (PCORE_DEVICE_TYPE == XILINX_7SERIES) begin
+  if (DEVICE_TYPE == XILINX_7SERIES) begin
   ODDR #(.INIT(1'b0)) i_clk_oddr (
     .R (1'b0),
     .S (1'b0),
     .CE (1'b1),
-    .D1 (1'b1),
-    .D2 (1'b0),
+    .D1 (~OUT_CLK_POLARITY),
+    .D2 (OUT_CLK_POLARITY),
     .C (hdmi_clk),
     .Q (hdmi_out_clk));
   end

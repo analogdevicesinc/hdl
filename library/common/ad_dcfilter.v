@@ -81,12 +81,18 @@ module ad_dcfilter (
   reg     [15:0]  data_dcfilt = 'd0;
   reg             valid_out = 'd0;
   reg     [15:0]  data_out = 'd0;
+  reg     [15:0]  dcfilt_coeff_r;
 
   // internal signals
 
   wire    [47:0]  dc_offset_s;
 
   // cancelling the dc offset
+
+  // dcfilt_coeff is flopped so to remove warnings from vivado
+  always @(posedge clk) begin
+    dcfilt_coeff_r <= dcfilt_coeff;
+  end
 
   always @(posedge clk) begin
     dc_offset   <= dc_offset_s;
@@ -138,7 +144,7 @@ module ad_dcfilter (
   i_dsp48e1 (
     .CLK (clk),
     .A ({{14{dc_offset_s[32]}}, dc_offset_s[32:17]}),
-    .B ({{2{dcfilt_coeff[15]}}, dcfilt_coeff}),
+    .B ({{2{dcfilt_coeff_r[15]}}, dcfilt_coeff_r}),
     .C (dc_offset_d),
     .D ({{9{data_d[15]}}, data_d}),
     .MULTSIGNIN (1'd0),

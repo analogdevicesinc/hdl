@@ -41,6 +41,7 @@ module axi_clkgen (
   // clocks
 
   clk,
+  clk2,
   clk_0,
   clk_1,
 
@@ -68,17 +69,21 @@ module axi_clkgen (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_CLKIN_PERIOD  = 5.0;
-  parameter   PCORE_VCO_DIV = 11;
-  parameter   PCORE_VCO_MUL = 49;
-  parameter   PCORE_CLK0_DIV = 6;
-  parameter   PCORE_CLK1_DIV = 6;
+  parameter   ID = 0;
+  parameter   DEVICE_TYPE = 0;
+  parameter   CLKIN_PERIOD  = 5.0;
+  parameter   CLKIN2_PERIOD  = 5.0;
+  parameter   VCO_DIV = 11;
+  parameter   VCO_MUL = 49;
+  parameter   CLK0_DIV = 6;
+  parameter   CLK0_PHASE = 0.000;
+  parameter   CLK1_DIV = 6;
+  parameter   CLK1_PHASE = 0.000;
 
   // clocks
 
   input           clk;
+  input           clk2;
   output          clk_0;
   output          clk_1;
 
@@ -107,6 +112,7 @@ module axi_clkgen (
   // reset and clocks
 
   wire            mmcm_rst;
+  wire            clk_sel;
   wire            up_rstn;
   wire            up_clk;
 
@@ -168,6 +174,7 @@ module axi_clkgen (
 
   up_clkgen i_up_clkgen (
     .mmcm_rst (mmcm_rst),
+    .clk_sel (clk_sel),
     .up_drp_sel (up_drp_sel_s),
     .up_drp_wr (up_drp_wr_s),
     .up_drp_addr (up_drp_addr_s),
@@ -189,15 +196,20 @@ module axi_clkgen (
   // mmcm instantiations
 
   ad_mmcm_drp #(
-    .MMCM_DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .MMCM_CLKIN_PERIOD (PCORE_CLKIN_PERIOD),
-    .MMCM_VCO_DIV (PCORE_VCO_DIV),
-    .MMCM_VCO_MUL (PCORE_VCO_MUL),
-    .MMCM_CLK0_DIV (PCORE_CLK0_DIV),
-    .MMCM_CLK1_DIV (PCORE_CLK1_DIV))
+    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
+    .MMCM_CLKIN_PERIOD (CLKIN_PERIOD),
+    .MMCM_CLKIN2_PERIOD (CLKIN2_PERIOD),
+    .MMCM_VCO_DIV (VCO_DIV),
+    .MMCM_VCO_MUL (VCO_MUL),
+    .MMCM_CLK0_DIV (CLK0_DIV),
+    .MMCM_CLK0_PHASE (CLK0_PHASE),
+    .MMCM_CLK1_DIV (CLK1_DIV),
+    .MMCM_CLK1_PHASE (CLK1_PHASE))
   i_mmcm_drp (
     .clk (clk),
+    .clk2 (clk2),
     .mmcm_rst (mmcm_rst),
+    .clk_sel(clk_sel),
     .mmcm_clk_0 (clk_0),
     .mmcm_clk_1 (clk_1),
     .up_clk (up_clk),

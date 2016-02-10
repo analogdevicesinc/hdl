@@ -79,9 +79,9 @@ module ad_serdes_in (
   parameter   IODELAY_CTRL    = 0;
   parameter   IODELAY_GROUP   = "dev_if_delay_group";
   // SDR = 0 / DDR = 1
-  parameter   IF_TYPE         = 0;
+  parameter   DDR_OR_SDR_N         = 0;
   // serialization factor
-  parameter   PARALLEL_WIDTH  = 8;
+  parameter   DATA_WIDTH  = 8;
 
   localparam  DEVICE_6SERIES  = 1;
   localparam  DEVICE_7SERIES  = 0;
@@ -175,10 +175,10 @@ module ad_serdes_in (
       .CNTVALUEOUT (up_drdata));
 
     // Note: The first sample in time will be data_s7, the last data_s0!
-    if(IF_TYPE == SDR) begin
-      ISERDESE2 #(
+    if(DDR_OR_SDR_N == SDR) begin
+      ISERDESE2  #(
         .DATA_RATE("SDR"),
-        .DATA_WIDTH(PARALLEL_WIDTH),
+        .DATA_WIDTH(DATA_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
         .DYN_CLK_INV_EN("FALSE"),
         .INIT_Q1(1'b0),
@@ -228,7 +228,7 @@ module ad_serdes_in (
 
       ISERDESE2 #(
         .DATA_RATE("DDR"),
-        .DATA_WIDTH(PARALLEL_WIDTH),
+        .DATA_WIDTH(DATA_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
         .DYN_CLK_INV_EN("FALSE"),
         .INIT_Q1(1'b0),
@@ -306,7 +306,7 @@ module ad_serdes_in (
 
       ISERDESE1 #(
         .DATA_RATE("DDR"),
-        .DATA_WIDTH(PARALLEL_WIDTH),
+        .DATA_WIDTH(DATA_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
         .DYN_CLK_INV_EN("FALSE"),
         .INIT_Q1(1'b0),
@@ -351,7 +351,7 @@ module ad_serdes_in (
 
       ISERDESE1 #(
         .DATA_RATE("DDR"),
-        .DATA_WIDTH(PARALLEL_WIDTH),
+        .DATA_WIDTH(DATA_WIDTH),
         .DYN_CLKDIV_INV_EN("FALSE"),
         .DYN_CLK_INV_EN("FALSE"),
         .INIT_Q1(1'b0),

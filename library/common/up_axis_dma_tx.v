@@ -70,7 +70,7 @@ module up_axis_dma_tx (
   // parameters
 
   localparam  PCORE_VERSION = 32'h00050062;
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   // dac interface
 
@@ -100,6 +100,7 @@ module up_axis_dma_tx (
 
   // internal registers
 
+  reg             up_preset = 'd0;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_resetn = 'd0;
@@ -113,7 +114,6 @@ module up_axis_dma_tx (
 
   wire            up_wreq_s;
   wire            up_rreq_s;
-  wire            up_preset_s;
   wire            up_dma_ovf_s;
   wire            up_dma_unf_s;
 
@@ -121,12 +121,12 @@ module up_axis_dma_tx (
 
   assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
-  assign up_preset_s = ~up_resetn;
 
   // processor write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_preset <= 1'd1;
       up_wack <= 'd0;
       up_scratch <= 'd0;
       up_resetn <= 'd0;
@@ -134,6 +134,7 @@ module up_axis_dma_tx (
       up_dma_ovf <= 'd0;
       up_dma_unf <= 'd0;
     end else begin
+      up_preset <= 1'd0;
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
@@ -168,7 +169,7 @@ module up_axis_dma_tx (
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
           8'h00: up_rdata <= PCORE_VERSION;
-          8'h01: up_rdata <= PCORE_ID;
+          8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
           8'h10: up_rdata <= {31'd0, up_resetn};
           8'h21: up_rdata <= up_dma_frmcnt;
@@ -183,8 +184,8 @@ module up_axis_dma_tx (
 
   // resets
 
-  ad_rst i_dac_rst_reg    (.preset(up_preset_s),      .clk(dac_clk),    .rst(dac_rst));
-  ad_rst i_dma_rst_reg    (.preset(up_preset_s),      .clk(dma_clk),    .rst(dma_rst));
+  ad_rst i_dac_rst_reg (.preset(up_preset), .clk(dac_clk), .rst(dac_rst));
+  ad_rst i_dma_rst_reg (.preset(up_preset), .clk(dma_clk), .rst(dma_rst));
 
   // dma control & status
 

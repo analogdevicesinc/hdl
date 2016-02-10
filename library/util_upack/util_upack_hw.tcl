@@ -8,6 +8,7 @@ source ../scripts/adi_ip_alt.tcl
 set_module_property NAME util_upack
 set_module_property DESCRIPTION "Channel Pack Utility"
 set_module_property VERSION 1.0
+set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME util_upack
 set_module_property ELABORATION_CALLBACK p_util_upack
 
@@ -21,76 +22,93 @@ add_fileset_file util_upack.v       VERILOG PATH util_upack.v TOP_LEVEL_FILE
 
 # parameters
 
-add_parameter CH_DW INTEGER 0
-set_parameter_property CH_DW DEFAULT_VALUE 32
-set_parameter_property CH_DW DISPLAY_NAME CH_DW
-set_parameter_property CH_DW TYPE INTEGER
-set_parameter_property CH_DW UNITS None
-set_parameter_property CH_DW HDL_PARAMETER true
+add_parameter CHANNEL_DATA_WIDTH INTEGER 0
+set_parameter_property CHANNEL_DATA_WIDTH DEFAULT_VALUE 32
+set_parameter_property CHANNEL_DATA_WIDTH DISPLAY_NAME CHANNEL_DATA_WIDTH
+set_parameter_property CHANNEL_DATA_WIDTH TYPE INTEGER
+set_parameter_property CHANNEL_DATA_WIDTH UNITS None
+set_parameter_property CHANNEL_DATA_WIDTH HDL_PARAMETER true
 
-add_parameter CH_CNT INTEGER 0
-set_parameter_property CH_CNT DEFAULT_VALUE 8
-set_parameter_property CH_CNT DISPLAY_NAME CH_CNT
-set_parameter_property CH_CNT TYPE INTEGER
-set_parameter_property CH_CNT UNITS None
-set_parameter_property CH_CNT HDL_PARAMETER true
+add_parameter NUM_OF_CHANNELS INTEGER 0
+set_parameter_property NUM_OF_CHANNELS DEFAULT_VALUE 8
+set_parameter_property NUM_OF_CHANNELS DISPLAY_NAME NUM_OF_CHANNELS
+set_parameter_property NUM_OF_CHANNELS TYPE INTEGER
+set_parameter_property NUM_OF_CHANNELS UNITS None
+set_parameter_property NUM_OF_CHANNELS HDL_PARAMETER true
 
 # defaults
 
 ad_alt_intf clock   dac_clk         input   1
-ad_alt_intf signal  dma_xfer_in     input   1
-ad_alt_intf signal  dac_xfer_out    output  1
-ad_alt_intf signal  dac_valid       output  1
-ad_alt_intf signal  dac_sync        output  1
-ad_alt_intf signal  dac_data        input   CH_CNT*CH_DW
-ad_alt_intf signal  dac_enable_0    input   1
-ad_alt_intf signal  dac_valid_0     input   1
-ad_alt_intf signal  dac_data_0      output  CH_DW
-ad_alt_intf signal  upack_valid_0   output  1
+ad_alt_intf signal  dma_xfer_in     input   1                                   xfer_req
+ad_alt_intf signal  dac_xfer_out    output  1                                   xfer_req
+ad_alt_intf signal  dac_valid       output  1                                   valid
+ad_alt_intf signal  dac_sync        output  1                                   sync
+ad_alt_intf signal  dac_data        input   NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH  data
+
+add_interface fifo_ch_0 conduit end
+#set_interface_property fifo_ch_0  associatedClock if_dac_clk
+add_interface_port fifo_ch_0  dac_enable_0  enable   Input  1
+add_interface_port fifo_ch_0  dac_valid_0   valid    Input  1
+#add_interface_port fifo_ch_0  upack_valid_0 valid_o  Output  1
+add_interface_port fifo_ch_0  dac_data_0    data     Output  CHANNEL_DATA_WIDTH
 
 proc p_util_upack {} {
 
-  if {[get_parameter_value CH_CNT] > 1} {
-    ad_alt_intf signal  dac_enable_1    input   1
-    ad_alt_intf signal  dac_valid_1     input   1
-    ad_alt_intf signal  dac_data_1      output  CH_DW
-    ad_alt_intf signal  upack_valid_1   output  1
+  if {[get_parameter_value NUM_OF_CHANNELS] > 1} {
+    add_interface fifo_ch_1 conduit end
+    #set_interface_property fifo_ch_1  associatedClock if_dac_clk
+    add_interface_port fifo_ch_1  dac_enable_1  enable   Input  1
+    add_interface_port fifo_ch_1  dac_valid_1   valid    Input  1
+#    add_interface_port fifo_ch_1  upack_valid_1 valid_o  Output  1
+    add_interface_port fifo_ch_1  dac_data_1    data     Output  CHANNEL_DATA_WIDTH
   }
-  if {[get_parameter_value CH_CNT] > 2} {
-    ad_alt_intf signal  dac_enable_2    input   1
-    ad_alt_intf signal  dac_valid_2     input   1
-    ad_alt_intf signal  dac_data_2      output  CH_DW
-    ad_alt_intf signal  upack_valid_2   output  1
+  if {[get_parameter_value NUM_OF_CHANNELS] > 2} {
+    add_interface fifo_ch_2 conduit end
+    #set_interface_property fifo_ch_2  associatedClock if_dac_clk
+    add_interface_port fifo_ch_2  dac_enable_2  enable   Input  1
+    add_interface_port fifo_ch_2  dac_valid_2   valid    Input  1
+#    add_interface_port fifo_ch_2  upack_valid_2 valid_o  Output  1
+    add_interface_port fifo_ch_2  dac_data_2    data     Output  CHANNEL_DATA_WIDTH
   }
-  if {[get_parameter_value CH_CNT] > 3} {
-    ad_alt_intf signal  dac_enable_3    input   1
-    ad_alt_intf signal  dac_valid_3     input   1
-    ad_alt_intf signal  dac_data_3      output  CH_DW
-    ad_alt_intf signal  upack_valid_3   output  1
+  if {[get_parameter_value NUM_OF_CHANNELS] > 3} {
+    add_interface fifo_ch_3 conduit end
+    #set_interface_property fifo_ch_3  associatedClock if_dac_clk
+    add_interface_port fifo_ch_3  dac_enable_3  enable   Input  1
+    add_interface_port fifo_ch_3  dac_valid_3   valid    Input  1
+#    add_interface_port fifo_ch_3  upack_valid_3 valid_o  Output  1
+    add_interface_port fifo_ch_3  dac_data_3    data     Output  CHANNEL_DATA_WIDTH
   }
-  if {[get_parameter_value CH_CNT] > 4} {
-    ad_alt_intf signal  dac_enable_4    input   1
-    ad_alt_intf signal  dac_valid_4     input   1
-    ad_alt_intf signal  dac_data_4      output  CH_DW
-    ad_alt_intf signal  upack_valid_4   output  1
+  if {[get_parameter_value NUM_OF_CHANNELS] > 4} {
+    add_interface fifo_ch_4 conduit end
+    #set_interface_property fifo_ch_4  associatedClock if_dac_clk
+    add_interface_port fifo_ch_4  dac_enable_4  enable   Input  1
+    add_interface_port fifo_ch_4  dac_valid_4   valid    Input  1
+#    add_interface_port fifo_ch_4  upack_valid_4 valid_o  Output  1
+    add_interface_port fifo_ch_4  dac_data_4    data     Output  CHANNEL_DATA_WIDTH
   }
-  if {[get_parameter_value CH_CNT] > 5} {
-    ad_alt_intf signal  dac_enable_5    input   1
-    ad_alt_intf signal  dac_valid_5     input   1
-    ad_alt_intf signal  dac_data_5      output  CH_DW
-    ad_alt_intf signal  upack_valid_5   output  1
+  if {[get_parameter_value NUM_OF_CHANNELS] > 5} {
+    add_interface fifo_ch_5 conduit end
+    #set_interface_property fifo_ch_5  associatedClock if_dac_clk
+    add_interface_port fifo_ch_5  dac_enable_5  enable   Input  1
+    add_interface_port fifo_ch_5  dac_valid_5   valid    Input  1
+#    add_interface_port fifo_ch_5  upack_valid_5 valid_o  Output  1
+    add_interface_port fifo_ch_5  dac_data_5    data     Output  CHANNEL_DATA_WIDTH
   }
-  if {[get_parameter_value CH_CNT] > 6} {
-    ad_alt_intf signal  dac_enable_6    input   1
-    ad_alt_intf signal  dac_valid_6     input   1
-    ad_alt_intf signal  dac_data_6      output  CH_DW
-    ad_alt_intf signal  upack_valid_6   output  1
+  if {[get_parameter_value NUM_OF_CHANNELS] > 6} {
+    add_interface fifo_ch_6 conduit end
+    #set_interface_property fifo_ch_6  associatedClock if_dac_clk
+    add_interface_port fifo_ch_6  dac_enable_6  enable   Input  1
+    add_interface_port fifo_ch_6  dac_valid_6   valid    Input  1
+#    add_interface_port fifo_ch_6  upack_valid_6 valid_o  Output  1
+    add_interface_port fifo_ch_6  dac_data_6    data     Output  CHANNEL_DATA_WIDTH
   }
-  if {[get_parameter_value CH_CNT] > 7} {
-    ad_alt_intf signal  dac_enable_7    input   1
-    ad_alt_intf signal  dac_valid_7     input   1
-    ad_alt_intf signal  dac_data_7      output  CH_DW
-    ad_alt_intf signal  upack_valid_7   output  1
+  if {[get_parameter_value NUM_OF_CHANNELS] > 7} {
+    add_interface fifo_ch_7 conduit end
+    #set_interface_property fifo_ch_7  associatedClock if_dac_clk
+    add_interface_port fifo_ch_7  dac_enable_7  enable   Input  1
+    add_interface_port fifo_ch_7  dac_valid_7   valid    Input  1
+#    add_interface_port fifo_ch_7  upack_valid_7 valid_o  Output  1
+    add_interface_port fifo_ch_7  dac_data_7    data     Output  CHANNEL_DATA_WIDTH
   }
 }
 

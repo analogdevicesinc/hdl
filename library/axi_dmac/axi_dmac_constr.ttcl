@@ -3,9 +3,9 @@
 <: setFileName [ttcl_add $ComponentName "_constr"] :>
 <: setFileExtension ".xdc" :>
 <: setFileProcessingOrder late :>
-<: set async_dest_req [getBooleanValue "C_CLKS_ASYNC_DEST_REQ"] :>
-<: set async_req_src [getBooleanValue "C_CLKS_ASYNC_REQ_SRC"] :>
-<: set async_src_dest [getBooleanValue "C_CLKS_ASYNC_SRC_DEST"] :>
+<: set async_dest_req [getBooleanValue "ASYNC_CLK_DEST_REQ"] :>
+<: set async_req_src [getBooleanValue "ASYNC_CLK_REQ_SRC"] :>
+<: set async_src_dest [getBooleanValue "ASYNC_CLK_SRC_DEST"] :>
 
 set req_clk [get_clocks -of_objects [get_ports s_axi_aclk]]
 set src_clk [get_clocks -of_objects [get_ports -quiet {fifo_wr_clk s_axis_aclk m_src_axi_aclk}]]
@@ -135,11 +135,12 @@ set_max_delay -quiet -datapath_only \
 		-filter {NAME =~ *i_fifo/i_address_gray/i_raddr_sync* && PRIMITIVE_SUBGROUP == flop}] \
 	[get_property -min PERIOD $dest_clk]
 
-# Not sure why, but it seems the built-in constraints for the RAM36B are wrong
-set_max_delay -quiet -datapath_only \
-	-from $dest_clk \
-	-to [get_pins -hier *ram_reg*/REGCEB -filter {NAME =~ *i_fifo*}] \
-	[get_property -min PERIOD $dest_clk]
+# In SDP mode REGCEB should not be connected. When inferring the BRAM the tools
+# do it anyway. The signal is not used by the BRAM though. But since the clock
+# associated with REGCEB is the write clock and not the read clock we get a
+# timing problem. Mark the path as a false path so it is not timed.
+set_false_path -quiet \
+	-to [get_pins -hier *ram_reg*/REGCEB -filter {NAME =~ *i_fifo*}]
 
 <: } :>
 # Reset signals

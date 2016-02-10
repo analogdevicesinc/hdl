@@ -66,7 +66,7 @@ module util_pmod_fmeter (
 
   // parameters
 
-  parameter       PCORE_ID = 0;
+  parameter       ID = 0;
 
   // physical interface
 

@@ -5,18 +5,18 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := system_project.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_project.tcl
-M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += system_top.v
-M_DEPS += ../../../library/common/ad_iobuf.v
-M_DEPS += ../../common/ac701/ac701_system_constr.xdc
-M_DEPS += ../../adv7511/ac701/system_constr.xdc
+M_DEPS += system_project.tcl
 M_DEPS += system_bd.tcl
+M_DEPS += ../../scripts/adi_project.tcl
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_board.tcl
+M_DEPS += ../../common/ac701/ac701_system_mig.prj
+M_DEPS += ../../common/ac701/ac701_system_constr.xdc
 M_DEPS += ../../common/ac701/ac701_system_bd.tcl
 M_DEPS += ../../adv7511/common/adv7511_bd.tcl
-M_DEPS += ../../common/ac701/ac701_system_mig.prj
+M_DEPS += ../../adv7511/ac701/system_constr.xdc
+M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr

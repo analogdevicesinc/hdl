@@ -73,10 +73,10 @@ module axi_ad9361_tx_channel (
 
   // parameters
 
-  parameter   CHID = 32'h0;
-  parameter   IQSEL = 0;
-  parameter   DP_DISABLE = 0;
-  localparam  PRBS_SEL = CHID;
+  parameter   CHANNEL_ID = 32'h0;
+  parameter   Q_OR_I_N = 0;
+  parameter   DATAPATH_DISABLE = 0;
+  localparam  PRBS_SEL = CHANNEL_ID;
   localparam  PRBS_P09  = 0;
   localparam  PRBS_P11  = 1;
   localparam  PRBS_P15  = 2;
@@ -129,8 +129,6 @@ module axi_ad9361_tx_channel (
 
   // internal signals
 
-  wire    [11:0]  dac_data_i_s;
-  wire    [11:0]  dac_data_q_s;
   wire            dac_iqcor_valid_s;
   wire    [15:0]  dac_iqcor_data_s;
   wire    [15:0]  dac_dds_data_s;
@@ -275,9 +273,6 @@ module axi_ad9361_tx_channel (
 
   // dac iq correction
 
-  assign dac_data_i_s = (IQSEL == 1) ? dac_data_in  : dac_data_out;
-  assign dac_data_q_s = (IQSEL == 1) ? dac_data_out : dac_data_in;
-
   always @(posedge dac_clk) begin
     dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
     if (dac_iqcor_valid_s == 1'b1) begin
@@ -286,15 +281,15 @@ module axi_ad9361_tx_channel (
   end
 
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_iqcor_valid_s = dac_valid;
   assign dac_iqcor_data_s = {dac_data_out, 4'd0};
   end else begin
-  ad_iqcor #(.IQSEL (IQSEL)) i_ad_iqcor (
+  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
     .clk (dac_clk),
     .valid (dac_valid),
-    .data_i ({dac_data_i_s, 4'd0}),
-    .data_q ({dac_data_q_s, 4'd0}),
+    .data_in ({dac_data_out, 4'd0}),
+    .data_iq ({dac_data_in, 4'd0}),
     .valid_out (dac_iqcor_valid_s),
     .data_out (dac_iqcor_data_s),
     .iqcor_enable (dac_iqcor_enb_s),
@@ -366,7 +361,7 @@ module axi_ad9361_tx_channel (
   // dds
 
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_s = 16'd0;
   end else begin
   ad_dds i_dds (
@@ -382,7 +377,7 @@ module axi_ad9361_tx_channel (
 
   // single channel processor
 
-  up_dac_channel #(.PCORE_DAC_CHID(CHID)) i_up_dac_channel (
+  up_dac_channel #(.DAC_CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),

@@ -10,5 +10,6 @@ adi_ip_files util_dacfifo [list \
 
 adi_ip_properties_lite util_dacfifo
 
+ipx::remove_all_bus_interface [ipx::current_core]
 ipx::save_core [ipx::current_core]
 

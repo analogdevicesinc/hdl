@@ -315,7 +315,7 @@ module ad_axis_dma_rx (
 
   // buffer (mainly for clock domain transfer)
 
-  ad_mem #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(6)) i_mem (
+  ad_mem #(.DATA_WIDTH(DATA_WIDTH), .ADDRESS_WIDTH(6)) i_mem (
     .clka (adc_clk),
     .wea (adc_wr),
     .addra (adc_waddr),

@@ -80,15 +80,15 @@ module axi_ad9671_if (
 
   // parameters
 
-  parameter PCORE_4L_2L_N = 1;
-  parameter PCORE_ID = 0;
+  parameter QUAD_OR_DUAL_N = 1;
+  parameter ID = 0;
 
   // jesd interface 
   // rx_clk is (line-rate/40)
 
   input                                 rx_clk;
   input                                 rx_sof;
-  input   [(64*PCORE_4L_2L_N)+63:0]     rx_data;
+  input   [(64*QUAD_OR_DUAL_N)+63:0]     rx_data;
 
   // adc data output
 
@@ -181,8 +181,8 @@ module axi_ad9671_if (
   assign adc_wdata = {adc_data_h_s, adc_data_g_s, adc_data_f_s, adc_data_e_s,
                       adc_data_d_s, adc_data_c_s, adc_data_b_s, adc_data_a_s};
 
-  assign adc_raddr_s = (PCORE_ID == 0) ? adc_raddr_out : adc_raddr_in;
-  assign adc_sync_s  = (PCORE_ID == 0) ? adc_sync_out : adc_sync_in;
+  assign adc_raddr_s = (ID == 0) ? adc_raddr_out : adc_raddr_in;
+  assign adc_sync_s  = (ID == 0) ? adc_sync_out : adc_sync_in;
 
   always @(posedge rx_clk) begin
     adc_data_a <= adc_rdata[ 15:  0];
@@ -217,7 +217,7 @@ module axi_ad9671_if (
   end
 
   always @(posedge rx_clk) begin
-    if (PCORE_4L_2L_N == 1'b1) begin
+    if (QUAD_OR_DUAL_N == 1'b1) begin
       int_valid <= 1'b1;
       int_data  <= rx_data;
     end else begin
@@ -236,7 +236,7 @@ module axi_ad9671_if (
     end
   end
 
-  ad_mem #(.ADDR_WIDTH(4), .DATA_WIDTH(128)) i_mem (
+  ad_mem #(.ADDRESS_WIDTH(4), .DATA_WIDTH(128)) i_mem (
     .clka(rx_clk),
     .wea(int_valid),
     .addra(adc_waddr),

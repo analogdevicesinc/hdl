@@ -96,7 +96,7 @@ module up_adc_channel (
 
   // parameters
 
-  parameter PCORE_ADC_CHID = 4'h0;
+  parameter ADC_CHANNEL_ID = 4'h0;
 
   // adc interface
 
@@ -211,8 +211,8 @@ module up_adc_channel (
 
   // decode block select
 
-  assign up_wreq_s = ((up_waddr[13:8] == 6'h01) && (up_waddr[7:4] == PCORE_ADC_CHID)) ? up_wreq : 1'b0;
-  assign up_rreq_s = ((up_raddr[13:8] == 6'h01) && (up_raddr[7:4] == PCORE_ADC_CHID)) ? up_rreq : 1'b0;
+  assign up_wreq_s = ((up_waddr[13:8] == 6'h01) && (up_waddr[7:4] == ADC_CHANNEL_ID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == 6'h01) && (up_raddr[7:4] == ADC_CHANNEL_ID)) ? up_rreq : 1'b0;
 
   // processor write interface
 
@@ -362,7 +362,7 @@ module up_adc_channel (
 
   // adc control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(78)) i_adc_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(78)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_adc_iqcor_enb,
@@ -393,7 +393,7 @@ module up_adc_channel (
                       adc_pnseq_sel,
                       adc_data_sel}));
 
-  up_xfer_status #(.DATA_WIDTH(3)) i_adc_xfer_status (
+  up_xfer_status #(.DATA_WIDTH(3)) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_adc_pn_err_s,

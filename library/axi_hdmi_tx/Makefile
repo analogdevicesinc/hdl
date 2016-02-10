@@ -8,6 +8,7 @@
 M_DEPS := axi_hdmi_tx_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += ../common/ad_axi_ip_constr.xdc
 M_DEPS += ../common/ad_mem.v
 M_DEPS += ../common/ad_rst.v
 M_DEPS += ../common/ad_csc_1_mul.v
@@ -20,11 +21,11 @@ M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ../common/up_clock_mon.v
 M_DEPS += ../common/up_hdmi_tx.v
+M_DEPS += axi_hdmi_tx_constr.xdc
 M_DEPS += axi_hdmi_tx_vdma.v
 M_DEPS += axi_hdmi_tx_es.v
 M_DEPS += axi_hdmi_tx_core.v
 M_DEPS += axi_hdmi_tx.v
-M_DEPS += axi_hdmi_tx_constr.xdc
 
 M_VIVADO := vivado -mode batch -source
 

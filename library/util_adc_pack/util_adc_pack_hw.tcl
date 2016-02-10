@@ -5,6 +5,7 @@ source ../scripts/adi_env.tcl
 set_module_property NAME util_adc_pack
 set_module_property DESCRIPTION "Util ADC data packager"
 set_module_property VERSION 1.0
+set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME util_adc_pack
 set_module_property ELABORATION_CALLBACK util_adc_pack_elaborate
 
@@ -16,14 +17,14 @@ add_fileset_file util_adc_pack.v   VERILOG PATH util_adc_pack.v
 
 # parameters
 
-add_parameter CHANNELS INTEGER 0
-set_parameter_property CHANNELS DEFAULT_VALUE 8
-set_parameter_property CHANNELS ALLOWED_RANGES {4 8}
-set_parameter_property CHANNELS DESCRIPTION "Valid values are 4 and 8"
-set_parameter_property CHANNELS DISPLAY_NAME CHANNELS
-set_parameter_property CHANNELS TYPE INTEGER
-set_parameter_property CHANNELS UNITS None
-set_parameter_property CHANNELS HDL_PARAMETER true
+add_parameter NUM_OF_CHANNELS INTEGER 0
+set_parameter_property NUM_OF_CHANNELS DEFAULT_VALUE 8
+set_parameter_property NUM_OF_CHANNELS ALLOWED_RANGES {4 8}
+set_parameter_property NUM_OF_CHANNELS DESCRIPTION "Valid values are 4 and 8"
+set_parameter_property NUM_OF_CHANNELS DISPLAY_NAME NUM_OF_CHANNELS
+set_parameter_property NUM_OF_CHANNELS TYPE INTEGER
+set_parameter_property NUM_OF_CHANNELS UNITS None
+set_parameter_property NUM_OF_CHANNELS HDL_PARAMETER true
 
 add_parameter DATA_WIDTH INTEGER 0
 set_parameter_property DATA_WIDTH DEFAULT_VALUE 16
@@ -58,12 +59,12 @@ add_interface_port channels_data chan_data_3 chan_data_3 Input DATA_WIDTH
 proc util_adc_pack_elaborate {} {
 
   set DW [ get_parameter_value DATA_WIDTH ]
-  set CHAN [ get_parameter_value CHANNELS ]
+  set CHAN [ get_parameter_value NUM_OF_CHANNELS ]
   add_interface_port channels_data dvalid dvalid Output 1
   add_interface_port channels_data dsync dsync Output 1
   add_interface_port channels_data ddata ddata Output [expr {$DW * $CHAN}]
 
-  if {[get_parameter_value CHANNELS] == 8} {
+  if {[get_parameter_value NUM_OF_CHANNELS] == 8} {
 
     add_interface_port channels_data chan_enable_4 chan_enable_4 Input 1
     add_interface_port channels_data chan_valid_4 chan_valid_4 Input 1

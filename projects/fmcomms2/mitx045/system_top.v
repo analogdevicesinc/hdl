@@ -167,6 +167,7 @@ module system_top (
 
   output          txnrx;
   output          enable;
+
   inout           gpio_resetb;
   inout           gpio_sync;
   inout           gpio_en_agc;
@@ -184,26 +185,13 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  wire            tdd_enable_s;
-  wire            gpio_enable;
-  wire            gpio_txnrx;
-  wire            enable_s;
-  wire            txnrx_s;
-
-  // internal logic
-
-  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
-  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
-
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
-    .dio_t (gpio_t[48:32]),
-    .dio_i (gpio_o[48:32]),
-    .dio_o (gpio_i[48:32]),
-    .dio_p ({ gpio_txnrx,
-              gpio_enable,
-              gpio_resetb,
+  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf (
+    .dio_t (gpio_t[46:32]),
+    .dio_i (gpio_o[46:32]),
+    .dio_o (gpio_i[46:32]),
+    .dio_p ({ gpio_resetb,
               gpio_sync,
               gpio_en_agc,
               gpio_ctl,
@@ -295,9 +283,10 @@ module system_top (
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
-    .enable (enable_s),
-    .txnrx (txnrx_s),
-    .tdd_enable (tdd_enable_s));
+    .enable (enable),
+    .txnrx (txnrx),
+    .up_enable (gpio_o[47]),
+    .up_txnrx (gpio_o[48]));
 
 endmodule
 

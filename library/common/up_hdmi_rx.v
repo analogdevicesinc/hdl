@@ -74,7 +74,7 @@ module up_hdmi_rx (
   // parameters
 
   localparam  PCORE_VERSION = 32'h00040063;
-  parameter   PCORE_ID = 0;
+  parameter   ID = 0;
 
   // hdmi interface
 
@@ -112,9 +112,10 @@ module up_hdmi_rx (
 
   // internal registers
 
+  reg             up_core_preset = 'd0;
+  reg             up_resetn = 'd0;
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
-  reg             up_resetn = 'd0;
   reg             up_edge_sel = 'd0;
   reg             up_bgr = 'd0;
   reg             up_packed = 'd0;
@@ -135,7 +136,6 @@ module up_hdmi_rx (
 
   wire            up_wreq_s;
   wire            up_rreq_s;
-  wire            up_preset_s;
   wire            up_dma_ovf_s;
   wire            up_dma_unf_s;
   wire            up_vs_oos_s;
@@ -150,15 +150,15 @@ module up_hdmi_rx (
 
   assign up_wreq_s = (up_waddr[13:12] == 2'd0) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:12] == 2'd0) ? up_rreq : 1'b0;
-  assign up_preset_s  = ~up_resetn;
 
   // processor write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_core_preset <= 1'd1;
+      up_resetn <= 'd0;
       up_wack <= 'd0;
       up_scratch <= 'd0;
-      up_resetn <= 'd0;
       up_edge_sel <= 'd0;
       up_bgr <= 'd0;
       up_packed <= 'd0;
@@ -174,6 +174,7 @@ module up_hdmi_rx (
       up_hs_count <= 'd0;
     end else begin
       up_wack <= up_wreq_s;
+      up_core_preset <= ~up_resetn;
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h002)) begin
         up_scratch <= up_wdata;
       end
@@ -239,7 +240,7 @@ module up_hdmi_rx (
       if(up_rreq_s == 1'b1) begin
         case (up_raddr[11:0])
           12'h000: up_rdata <= PCORE_VERSION;
-          12'h001: up_rdata <= PCORE_ID;
+          12'h001: up_rdata <= ID;
           12'h002: up_rdata <= up_scratch;
           12'h010: up_rdata <= {31'h0, up_resetn};
           12'h011: up_rdata <= {28'h0, up_edge_sel, up_bgr, up_packed, up_csc_bypass};
@@ -260,7 +261,7 @@ module up_hdmi_rx (
   // resets
 
   ad_rst i_hdmi_rst_reg (
-    .preset (up_preset_s),
+    .preset (up_core_preset),
     .clk (hdmi_clk),
     .rst (hdmi_rst));
 

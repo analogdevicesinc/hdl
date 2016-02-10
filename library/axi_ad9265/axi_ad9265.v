@@ -88,10 +88,10 @@ module axi_ad9265 (
 
   // parameters
 
-  parameter PCORE_ID = 0;
-  parameter PCORE_DEVICE_TYPE = 0;
-  parameter PCORE_ADC_DP_DISABLE = 0;
-  parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
+  parameter ID = 0;
+  parameter DEVICE_TYPE = 0;
+  parameter ADC_DATAPATH_DISABLE = 0;
+  parameter IO_DELAY_GROUP = "adc_if_delay_group";
 
   // adc interface (clk, data, over-range)
 
@@ -203,8 +203,8 @@ module axi_ad9265 (
   // channel
 
   axi_ad9265_channel #(
-    .CHID(0),
-    .DP_DISABLE (PCORE_ADC_DP_DISABLE))
+    .CHANNEL_ID(0),
+    .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
   i_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -230,8 +230,8 @@ module axi_ad9265 (
   // main (device interface)
 
   axi_ad9265_if #(
-    .PCORE_BUFTYPE (PCORE_DEVICE_TYPE),
-    .PCORE_IODELAY_GROUP (PCORE_IODELAY_GROUP))
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .IO_DELAY_GROUP (IO_DELAY_GROUP))
   i_if (
     .adc_clk_in_p (adc_clk_in_p),
     .adc_clk_in_n (adc_clk_in_n),
@@ -253,7 +253,7 @@ module axi_ad9265 (
 
   // adc delay control
 
-  up_delay_cntrl #(.IO_WIDTH(9), .IO_BASEADDR(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(.DATA_WIDTH(9), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),
@@ -273,7 +273,7 @@ module axi_ad9265 (
 
   // common processor control
 
-  up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
+  up_adc_common #(.ID(ID)) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

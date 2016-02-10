@@ -99,8 +99,8 @@ module axi_ad9361_rx (
 
   // parameters
 
-  parameter   DP_DISABLE = 0;
-  parameter   PCORE_ID = 0;
+  parameter   DATAPATH_DISABLE = 0;
+  parameter   ID = 0;
 
   // adc interface
 
@@ -205,9 +205,9 @@ module axi_ad9361_rx (
   // channel 0 (i)
 
   axi_ad9361_rx_channel #(
-    .IQSEL(0),
-    .CHID(0),
-    .DP_DISABLE (DP_DISABLE))
+    .Q_OR_I_N(0),
+    .CHANNEL_ID(0),
+    .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_rx_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -238,9 +238,9 @@ module axi_ad9361_rx (
   // channel 1 (q)
 
   axi_ad9361_rx_channel #(
-    .IQSEL(1),
-    .CHID(1),
-    .DP_DISABLE (DP_DISABLE))
+    .Q_OR_I_N(1),
+    .CHANNEL_ID(1),
+    .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_rx_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -271,9 +271,9 @@ module axi_ad9361_rx (
   // channel 2 (i)
 
   axi_ad9361_rx_channel #(
-    .IQSEL(0),
-    .CHID(2),
-    .DP_DISABLE (DP_DISABLE))
+    .Q_OR_I_N(0),
+    .CHANNEL_ID(2),
+    .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_rx_channel_2 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -304,9 +304,9 @@ module axi_ad9361_rx (
   // channel 3 (q)
 
   axi_ad9361_rx_channel #(
-    .IQSEL(1),
-    .CHID(3),
-    .DP_DISABLE (DP_DISABLE))
+    .Q_OR_I_N(1),
+    .CHANNEL_ID(3),
+    .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_rx_channel_3 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -336,7 +336,7 @@ module axi_ad9361_rx (
 
   // common processor control
 
-  up_adc_common #(.PCORE_ID (PCORE_ID)) i_up_adc_common (
+  up_adc_common #(.ID (ID)) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -377,7 +377,7 @@ module axi_ad9361_rx (
 
   // adc delay control
 
-  up_delay_cntrl #(.IO_WIDTH(7), .IO_BASEADDR(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(.DATA_WIDTH(7), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),

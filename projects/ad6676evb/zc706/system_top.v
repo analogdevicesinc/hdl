@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -71,7 +71,7 @@ module system_top (
   hdmi_hsync,
   hdmi_data_e,
   hdmi_data,
-  
+
   spdif,
 
   iic_scl,
@@ -85,7 +85,7 @@ module system_top (
   rx_sync_n,
   rx_data_p,
   rx_data_n,
-  
+
   adc_oen,
   adc_sela,
   adc_selb,
@@ -96,7 +96,7 @@ module system_top (
   adc_agc2,
   adc_agc3,
   adc_agc4,
- 
+
   spi_csn,
   spi_clk,
   spi_mosi,
@@ -132,7 +132,7 @@ module system_top (
   output          hdmi_hsync;
   output          hdmi_data_e;
   output  [23:0]  hdmi_data;
-  
+
   output          spdif;
 
   inout           iic_scl;
@@ -146,7 +146,7 @@ module system_top (
   output          rx_sync_n;
   input   [ 1:0]  rx_data_p;
   input   [ 1:0]  rx_data_n;
-  
+
   inout           adc_oen;
   inout           adc_sela;
   inout           adc_selb;
@@ -157,16 +157,11 @@ module system_top (
   inout           adc_agc2;
   inout           adc_agc3;
   inout           adc_agc4;
-  
+
   output          spi_csn;
   output          spi_clk;
   output          spi_mosi;
   input           spi_miso;
-  
-  // internal registers
-
-  reg             adc_dwr = 'd0;
-  reg    [63:0]   adc_ddata = 'd0;
 
   // internal signals
 
@@ -184,46 +179,6 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
-  wire            adc_clk;
-  wire            adc_enable_a;
-  wire    [31:0]  adc_data_a;
-  wire            adc_enable_b;
-  wire    [31:0]  adc_data_b;
-
-  // pack & unpack here
-
-  always @(posedge adc_clk) begin
-    case ({adc_enable_b, adc_enable_a})
-      2'b11: begin
-        adc_dwr <= 1'b1;
-        adc_ddata[63:48] <= adc_data_b[31:16];
-        adc_ddata[47:32] <= adc_data_a[31:16];
-        adc_ddata[31:16] <= adc_data_b[15: 0];
-        adc_ddata[15: 0] <= adc_data_a[15: 0];
-      end
-      2'b10: begin
-        adc_dwr <= ~adc_dwr;
-        adc_ddata[63:48] <= adc_data_b[31:16];
-        adc_ddata[47:32] <= adc_data_b[15: 0];
-        adc_ddata[31:16] <= adc_ddata[63:48];
-        adc_ddata[15: 0] <= adc_ddata[47:32];
-      end
-      2'b01: begin
-        adc_dwr <= ~adc_dwr;
-        adc_ddata[63:48] <= adc_data_a[31:16];
-        adc_ddata[47:32] <= adc_data_a[15: 0];
-        adc_ddata[31:16] <= adc_ddata[63:48];
-        adc_ddata[15: 0] <= adc_ddata[47:32];
-      end
-      default: begin
-        adc_dwr <= 1'b0;
-        adc_ddata[63:48] <= 16'd0;
-        adc_ddata[47:32] <= 16'd0;
-        adc_ddata[31:16] <= 16'd0;
-        adc_ddata[15: 0] <= 16'd0;
-      end
-    endcase
-  end
 
   // instantiations
 
@@ -271,16 +226,6 @@ module system_top (
     .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
-    .adc_clk (adc_clk),
-    .adc_data_a (adc_data_a),
-    .adc_data_b (adc_data_b),
-    .adc_ddata (adc_ddata),
-    .adc_dsync (1'b1),
-    .adc_dwr (adc_dwr),
-    .adc_enable_a (adc_enable_a),
-    .adc_enable_b (adc_enable_b),
-    .adc_valid_a (),
-    .adc_valid_b (),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),

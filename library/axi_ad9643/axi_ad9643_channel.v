@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // ADC channel-
 
 `timescale 1ns/100ps
@@ -74,9 +72,9 @@ module axi_ad9643_channel (
 
   // parameters
 
-  parameter IQSEL = 0;
-  parameter CHID = 0;
-  parameter DP_DISABLE = 0;
+  parameter Q_OR_I_N = 0;
+  parameter CHANNEL_ID = 0;
+  parameter DATAPATH_DISABLE = 0;
 
   // adc interface
 
@@ -111,8 +109,7 @@ module axi_ad9643_channel (
   // internal signals
 
   wire    [15:0]  adc_dfmt_data_s;
-  wire    [15:0]  adc_dcfilter_data_i_s;
-  wire    [15:0]  adc_dcfilter_data_q_s;
+  wire    [15:0]  adc_dcfilter_data_s;
   wire            adc_iqcor_enb_s;
   wire            adc_dcfilt_enb_s;
   wire            adc_dfmt_se_s;
@@ -128,9 +125,6 @@ module axi_ad9643_channel (
 
   // iq correction inputs
 
-  assign adc_dcfilter_data_i_s = (IQSEL == 1) ? adc_dcfilter_data_in  : adc_dcfilter_data_out;
-  assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
-
   axi_ad9643_pnmon i_pnmon (
     .adc_clk (adc_clk),
     .adc_data (adc_data),
@@ -139,7 +133,7 @@ module axi_ad9643_channel (
     .adc_pnseq_sel (adc_pnseq_sel_s));
 
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign adc_dfmt_data_s = {2'd0, adc_data};
   end else begin
   ad_datafmt #(.DATA_WIDTH(14)) i_ad_datafmt (
@@ -155,7 +149,7 @@ module axi_ad9643_channel (
   endgenerate
 
   generate
-  if (DP_DISABLE == 1) begin
+  if (DATAPATH_DISABLE == 1) begin
   assign adc_dcfilter_data_out = adc_dfmt_data_s;
   end else begin
   ad_dcfilter i_ad_dcfilter (
@@ -163,22 +157,24 @@ module axi_ad9643_channel (
     .valid (1'b1),
     .data (adc_dfmt_data_s),
     .valid_out (),
-    .data_out (adc_dcfilter_data_out),
+    .data_out (adc_dcfilter_data_s),
     .dcfilt_enb (adc_dcfilt_enb_s),
     .dcfilt_coeff (adc_dcfilt_coeff_s),
     .dcfilt_offset (adc_dcfilt_offset_s));
   end
   endgenerate
 
+  assign adc_dcfilter_data_out = adc_dcfilter_data_s;
+
   generate
-  if (DP_DISABLE == 1) begin
-  assign adc_iqcor_data = (IQSEL == 1) ? adc_dcfilter_data_q_s : adc_dcfilter_data_i_s;
+  if (DATAPATH_DISABLE == 1) begin
+  assign adc_iqcor_data = adc_dcfilter_data_s;
   end else begin
-  ad_iqcor #(.IQSEL(IQSEL)) i_ad_iqcor (
+  ad_iqcor #(.Q_OR_I_N(Q_OR_I_N)) i_ad_iqcor (
     .clk (adc_clk),
     .valid (1'b1),
-    .data_i (adc_dcfilter_data_i_s),
-    .data_q (adc_dcfilter_data_q_s),
+    .data_in (adc_dcfilter_data_s),
+    .data_iq (adc_dcfilter_data_in),
     .valid_out (),
     .data_out (adc_iqcor_data),
     .iqcor_enable (adc_iqcor_enb_s),
@@ -187,7 +183,7 @@ module axi_ad9643_channel (
   end
   endgenerate
 
-  up_adc_channel #(.PCORE_ADC_CHID(CHID)) i_up_adc_channel (
+  up_adc_channel #(.ADC_CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),

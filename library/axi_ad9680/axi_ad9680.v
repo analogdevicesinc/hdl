@@ -81,9 +81,9 @@ module axi_ad9680 (
   s_axi_rdata,
   s_axi_rready);
 
-  parameter PCORE_ID = 0;
-  parameter PCORE_DEVICE_TYPE = 0;
-  parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
+  parameter ID = 0;
+  parameter DEVICE_TYPE = 0;
+  parameter IO_DELAY_GROUP = "adc_if_delay_group";
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -206,7 +206,7 @@ module axi_ad9680 (
 
   // channel
 
-  axi_ad9680_channel #(.IQSEL(0), .CHID(0)) i_channel_0 (
+  axi_ad9680_channel #(.CHANNEL_ID(0)) i_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_data (adc_data_a_s),
@@ -229,7 +229,7 @@ module axi_ad9680 (
 
   // channel
 
-  axi_ad9680_channel #(.IQSEL(1), .CHID(1)) i_channel_1 (
+  axi_ad9680_channel #(.CHANNEL_ID(1)) i_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_data (adc_data_b_s),
@@ -252,7 +252,7 @@ module axi_ad9680 (
 
   // common processor control
 
-  up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
+  up_adc_common #(.ID(ID)) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

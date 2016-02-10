@@ -9,18 +9,18 @@ module util_sigma_delta_spi (
 	input s_sdo,
 	input s_sdo_t,
 	output s_sdi,
-	input [NUM_CS-1:0] s_cs,
+	input [NUM_OF_CS-1:0] s_cs,
 
 	output m_sclk,
 	output m_sdo,
 	output m_sdo_t,
 	input m_sdi,
-	output [NUM_CS-1:0] m_cs,
+	output [NUM_OF_CS-1:0] m_cs,
 
 	output reg data_ready
 );
 
-parameter NUM_CS = 1;
+parameter NUM_OF_CS = 1;
 parameter CS_PIN = 0;
 parameter IDLE_TIMEOUT = 63;
 

@@ -63,12 +63,11 @@ module util_pmod_adc (
   // clock and reset signals
 
   clk,
-  reset,
+  resetn,
 
   // dma interface
   adc_data,
   adc_valid,
-  adc_enable,
   adc_dbg,
 
   // adc interface (clk, data, cs and conversion start)
@@ -108,13 +107,12 @@ module util_pmod_adc (
   // clock and reset signals
 
   input           clk;                          // system clock (100 MHz)
-  input           reset;                        // active high reset signal
+  input           resetn;                       // active low reset signal
 
   // dma interface
 
   output  [15:0]  adc_data;
   output          adc_valid;
-  output          adc_enable;
   output  [24:0]  adc_dbg;
 
   // adc interface
@@ -150,12 +148,11 @@ module util_pmod_adc (
   // Assign/Always Blocks
 
   assign adc_sclk   = adc_spi_clk & adc_clk_en;
-  assign adc_enable = 1'b1;
 
   // spi clock generation
   always @(posedge clk) begin
     adc_clk_cnt <= adc_clk_cnt + 1;
-    if (adc_clk_cnt == ((ADC_CLK_DIVIDE/2)-1)) begin 
+    if (adc_clk_cnt == ((ADC_CLK_DIVIDE/2)-1)) begin
       adc_clk_cnt <= 0;
       adc_spi_clk <= ~adc_spi_clk;
     end
@@ -165,7 +162,7 @@ module util_pmod_adc (
 
   always @(posedge clk)
   begin
-    if(reset == 1'b1) begin
+    if(resetn == 1'b0) begin
       adc_tconvst_cnt  <= ADC_CONVST_CNT;
       adc_tconvert_cnt <= ADC_CONVERT_CNT;
       adc_tquiet_cnt   <= ADC_TQUITE_CNT;
@@ -215,7 +212,7 @@ module util_pmod_adc (
   // update the ADC current state and the control signals
 
   always @(posedge clk) begin
-    if(reset == 1'b1) begin
+    if(resetn == 1'b0) begin
       adc_state <= ADC_SW_RESET;
       adc_dbg <= 1'b0;
     end

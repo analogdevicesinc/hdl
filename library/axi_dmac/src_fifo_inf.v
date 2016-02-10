@@ -45,29 +45,29 @@ module dmac_src_fifo_inf (
 	input sync_id,
 	output sync_id_ret,
 
-	input [C_ID_WIDTH-1:0] request_id,
-	output [C_ID_WIDTH-1:0] response_id,
+	input [ID_WIDTH-1:0] request_id,
+	output [ID_WIDTH-1:0] response_id,
 	input eot,
 
 	input en,
-	input [C_DATA_WIDTH-1:0] din,
+	input [DATA_WIDTH-1:0] din,
 	output reg overflow,
 	input sync,
 	output xfer_req,
 
 	input fifo_ready,
 	output fifo_valid,
-	output [C_DATA_WIDTH-1:0] fifo_data,
+	output [DATA_WIDTH-1:0] fifo_data,
 
 	input req_valid,
 	output req_ready,
-	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 	input req_sync_transfer_start
 );
 
-parameter C_ID_WIDTH = 3;
-parameter C_DATA_WIDTH = 64;
-parameter C_BEATS_PER_BURST_WIDTH = 4;
+parameter ID_WIDTH = 3;
+parameter DATA_WIDTH = 64;
+parameter BEATS_PER_BURST_WIDTH = 4;
 
 wire ready;
 
@@ -104,10 +104,10 @@ end
 assign sync_id_ret = sync_id;
 
 dmac_data_mover # (
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_DATA_WIDTH),
-	.C_DISABLE_WAIT_FOR_ID(0),
-	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH)
+	.ID_WIDTH(ID_WIDTH),
+	.DATA_WIDTH(DATA_WIDTH),
+	.DISABLE_WAIT_FOR_ID(0),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
 ) i_data_mover (
 	.clk(clk),
 	.resetn(resetn),

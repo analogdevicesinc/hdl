@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // Transmit HDMI, video dma data in, hdmi separate syncs data out.
 
 module axi_hdmi_tx_core (
@@ -103,7 +101,7 @@ module axi_hdmi_tx_core (
 
   // parameters
 
-  parameter   Cr_Cb_N = 0;
+  parameter   CR_CB_N = 0;
   parameter   EMBEDDED_SYNC = 0;
 
   // hdmi interface
@@ -332,7 +330,7 @@ module axi_hdmi_tx_core (
 
   assign hdmi_fs_ret_s = hdmi_fs_ret_toggle_m2 ^ hdmi_fs_ret_toggle_m3;
 
-  always @(posedge hdmi_clk) begin
+  always @(posedge hdmi_clk or posedge hdmi_rst) begin
     if (hdmi_rst == 1'b1) begin
       hdmi_fs_ret_toggle_m1 <= 1'd0;
       hdmi_fs_ret_toggle_m2 <= 1'd0;
@@ -342,6 +340,9 @@ module axi_hdmi_tx_core (
       hdmi_fs_ret_toggle_m2 <= hdmi_fs_ret_toggle_m1;
       hdmi_fs_ret_toggle_m3 <= hdmi_fs_ret_toggle_m2;
     end
+  end
+
+  always @(posedge hdmi_clk) begin
     hdmi_fs_ret <= hdmi_fs_ret_s;
     if (hdmi_fs_ret_s == 1'b1) begin
       hdmi_fs_waddr <= vdma_fs_waddr;
@@ -538,7 +539,7 @@ module axi_hdmi_tx_core (
 
   // data memory
 
-  ad_mem #(.DATA_WIDTH(48), .ADDR_WIDTH(9)) i_mem (
+  ad_mem #(.DATA_WIDTH(48), .ADDRESS_WIDTH(9)) i_mem (
     .clka (vdma_clk),
     .wea (vdma_wr),
     .addra (vdma_waddr),
@@ -566,7 +567,7 @@ module axi_hdmi_tx_core (
 
   // sub sampling, 444 to 422
 
-  ad_ss_444to422 #(.DELAY_DATA_WIDTH(5), .Cr_Cb_N(Cr_Cb_N)) i_ss_444to422 (
+  ad_ss_444to422 #(.DELAY_DATA_WIDTH(5), .CR_CB_N(CR_CB_N)) i_ss_444to422 (
     .clk (hdmi_clk),
     .s444_de (hdmi_24_data_e),
     .s444_sync ({hdmi_24_hsync,

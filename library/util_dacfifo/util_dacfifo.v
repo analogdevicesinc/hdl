@@ -59,44 +59,42 @@ module util_dacfifo (
 );
 
   // depth of the FIFO
-  parameter       ADDR_WIDTH = 6;
+  parameter       ADDRESS_WIDTH = 6;
   parameter       DATA_WIDTH = 128;
-
-  // local parameters
 
   // port definitions
 
   // DMA interface
 
-  input                                         dma_clk;
-  input                                         dma_rst;
-  input                                         dma_valid;
-  input   [(DATA_WIDTH-1):0]                    dma_data;
-  output                                        dma_ready;
-  input                                         dma_xfer_req;
-  input                                         dma_xfer_last;
+  input                               dma_clk;
+  input                               dma_rst;
+  input                               dma_valid;
+  input   [(DATA_WIDTH-1):0]          dma_data;
+  output                              dma_ready;
+  input                               dma_xfer_req;
+  input                               dma_xfer_last;
 
   // DAC interface
 
-  input                                         dac_clk;
-  input                                         dac_valid;
-  output  [(DATA_WIDTH-1):0]                    dac_data;
+  input                               dac_clk;
+  input                               dac_valid;
+  output  [(DATA_WIDTH-1):0]          dac_data;
 
   // internal registers
 
-  reg     [(ADDR_WIDTH-1):0]                    dma_waddr = 'b0;
-  reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr = 'b0;
-  reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr_d = 'b0;
-  reg     [(ADDR_WIDTH-1):0]                    dma_lastaddr_2d = 'b0;
-  reg                                           dma_xfer_req_ff = 1'b0;
-  reg                                           dma_ready = 1'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_waddr = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr_d = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr_2d = 'b0;
+  reg                                 dma_xfer_req_ff = 1'b0;
+  reg                                 dma_ready = 1'b0;
 
-  reg     [(ADDR_WIDTH-1):0]                    dac_raddr = 'b0;
-  reg     [(DATA_WIDTH-1):0]                    dac_data = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_raddr = 'b0;
+  reg     [(DATA_WIDTH-1):0]          dac_data = 'b0;
 
   // internal wires
-  wire                                          dma_wren;
-  wire    [(DATA_WIDTH-1):0]                    dac_data_s;
+  wire                                dma_wren;
+  wire    [(DATA_WIDTH-1):0]          dac_data_s;
 
   // write interface
   always @(posedge dma_clk) begin
@@ -150,7 +148,7 @@ module util_dacfifo (
   // memory instantiation
 
   ad_mem #(
-    .ADDR_WIDTH (ADDR_WIDTH),
+    .ADDRESS_WIDTH (ADDRESS_WIDTH),
     .DATA_WIDTH (DATA_WIDTH))
   i_mem_fifo (
     .clka (dma_clk),

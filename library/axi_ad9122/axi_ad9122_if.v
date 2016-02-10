@@ -97,10 +97,10 @@ module axi_ad9122_if (
 
   // parameters
 
-  parameter   PCORE_DEVICE_TYPE = 0;
-  parameter   PCORE_SERDES_DDR_N = 1;
-  parameter   PCORE_MMCM_BUFIO_N = 1;
-  parameter   PCORE_IODELAY_GROUP = "dac_if_delay_group";
+  parameter   DEVICE_TYPE = 0;
+  parameter   SERDES_OR_DDR_N = 1;
+  parameter   MMCM_OR_BUFIO_N = 1;
+  parameter   IO_DELAY_GROUP = "dac_if_delay_group";
 
   // dac interface
 
@@ -176,8 +176,8 @@ module axi_ad9122_if (
   // dac data output serdes(s) & buffers
 
   ad_serdes_out #(
-    .DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .SERDES(PCORE_SERDES_DDR_N),
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .SERDES_OR_DDR_N(SERDES_OR_DDR_N),
     .DATA_WIDTH(16))
   i_serdes_out_data (
     .rst (dac_rst),
@@ -197,8 +197,8 @@ module axi_ad9122_if (
   // dac frame output serdes & buffer
   
   ad_serdes_out #(
-    .DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .SERDES(PCORE_SERDES_DDR_N),
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .SERDES_OR_DDR_N(SERDES_OR_DDR_N),
     .DATA_WIDTH(1))
   i_serdes_out_frame (
     .rst (dac_rst),
@@ -218,8 +218,8 @@ module axi_ad9122_if (
   // dac clock output serdes & buffer
   
   ad_serdes_out #(
-    .DEVICE_TYPE (PCORE_DEVICE_TYPE),
-    .SERDES(PCORE_SERDES_DDR_N),
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .SERDES_OR_DDR_N(SERDES_OR_DDR_N),
     .DATA_WIDTH(1))
   i_serdes_out_clk (
     .rst (dac_rst),
@@ -239,9 +239,9 @@ module axi_ad9122_if (
   // dac clock input buffers
 
   ad_serdes_clk #(
-    .SERDES (PCORE_SERDES_DDR_N),
-    .MMCM (PCORE_MMCM_BUFIO_N),
-    .MMCM_DEVICE_TYPE (PCORE_DEVICE_TYPE),
+    .SERDES_OR_DDR_N (SERDES_OR_DDR_N),
+    .MMCM_OR_BUFR_N (MMCM_OR_BUFIO_N),
+    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
     .MMCM_CLKIN_PERIOD (1.667),
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),

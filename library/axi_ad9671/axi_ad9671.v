@@ -85,16 +85,16 @@ module axi_ad9671 (
   s_axi_rdata,
   s_axi_rready);
 
-  parameter PCORE_ID = 0;
-  parameter PCORE_DEVICE_TYPE = 0;
-  parameter PCORE_4L_2L_N = 1;
-  parameter PCORE_IODELAY_GROUP = "adc_if_delay_group";
+  parameter ID = 0;
+  parameter DEVICE_TYPE = 0;
+  parameter QUAD_OR_DUAL_N = 1;
+  parameter IO_DELAY_GROUP = "adc_if_delay_group";
 
   // jesd interface
   // rx_clk is the jesd clock (ref_clk/2)
 
   input                                 rx_clk;
-  input   [(64*PCORE_4L_2L_N)+63:0]     rx_data;
+  input   [(64*QUAD_OR_DUAL_N)+63:0]     rx_data;
   input                                 rx_sof;
 
   // dma interface
@@ -201,8 +201,8 @@ module axi_ad9671 (
   // main (device interface)
 
   axi_ad9671_if #(
-    .PCORE_4L_2L_N(PCORE_4L_2L_N),
-    .PCORE_ID(PCORE_ID)
+    .QUAD_OR_DUAL_N(QUAD_OR_DUAL_N),
+    .ID(ID)
   ) i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
@@ -240,7 +240,7 @@ module axi_ad9671 (
   genvar n;
   generate
   for (n = 0; n < 8; n = n + 1) begin: g_channel
-  axi_ad9671_channel #(.CHID(n)) i_channel (
+  axi_ad9671_channel #(.CHANNEL_ID(n)) i_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_valid (adc_valid_s),
@@ -268,7 +268,7 @@ module axi_ad9671 (
   // common processor control
 
   up_adc_common #(
-    .PCORE_ID(PCORE_ID)
+    .ID(ID)
   ) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
@@ -311,7 +311,7 @@ module axi_ad9671 (
   // up bus interface
 
   up_axi #(
-    .PCORE_ADDR_WIDTH (14)
+    .ADDRESS_WIDTH (14)
   ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),

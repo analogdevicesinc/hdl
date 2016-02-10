@@ -94,8 +94,8 @@ module axi_ad9144_core (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   DP_DISABLE = 0;
+  parameter   ID = 0;
+  parameter   DATAPATH_DISABLE = 0;
 
   // dac interface
 
@@ -197,7 +197,7 @@ module axi_ad9144_core (
 
   // dac channel
   
-  axi_ad9144_channel #(.CHID(0), .DP_DISABLE(DP_DISABLE)) i_channel_0 (
+  axi_ad9144_channel #(.CHANNEL_ID(0), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_0),
@@ -218,7 +218,7 @@ module axi_ad9144_core (
 
   // dac channel
   
-  axi_ad9144_channel #(.CHID(1), .DP_DISABLE(DP_DISABLE)) i_channel_1 (
+  axi_ad9144_channel #(.CHANNEL_ID(1), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_1),
@@ -239,7 +239,7 @@ module axi_ad9144_core (
 
   // dac channel
   
-  axi_ad9144_channel #(.CHID(2), .DP_DISABLE(DP_DISABLE)) i_channel_2 (
+  axi_ad9144_channel #(.CHANNEL_ID(2), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_2 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_2),
@@ -260,7 +260,7 @@ module axi_ad9144_core (
 
   // dac channel
   
-  axi_ad9144_channel #(.CHID(3), .DP_DISABLE(DP_DISABLE)) i_channel_3 (
+  axi_ad9144_channel #(.CHANNEL_ID(3), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_3 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_3),
@@ -281,7 +281,7 @@ module axi_ad9144_core (
 
   // dac common processor interface
 
-  up_dac_common #(.PCORE_ID(PCORE_ID)) i_up_dac_common (
+  up_dac_common #(.ID(ID)) i_up_dac_common (
     .mmcm_rst (),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),

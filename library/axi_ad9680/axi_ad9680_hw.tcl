@@ -7,6 +7,7 @@ source ../scripts/adi_ip_alt.tcl
 set_module_property NAME axi_ad9680
 set_module_property DESCRIPTION "AXI AD9680 Interface"
 set_module_property VERSION 1.0
+set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_ad9680
 
 # files
@@ -31,12 +32,12 @@ add_fileset_file ad_axi_ip_constr.sdc SDC     PATH $ad_hdl_dir/library/common/ad
 
 # parameters
 
-add_parameter PCORE_ID INTEGER 0
-set_parameter_property PCORE_ID DEFAULT_VALUE 0
-set_parameter_property PCORE_ID DISPLAY_NAME PCORE_ID
-set_parameter_property PCORE_ID TYPE INTEGER
-set_parameter_property PCORE_ID UNITS None
-set_parameter_property PCORE_ID HDL_PARAMETER true
+add_parameter ID INTEGER 0
+set_parameter_property ID DEFAULT_VALUE 0
+set_parameter_property ID DISPLAY_NAME ID
+set_parameter_property ID TYPE INTEGER
+set_parameter_property ID UNITS None
+set_parameter_property ID HDL_PARAMETER true
 
 # axi4 slave
 
@@ -72,23 +73,23 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # transceiver interface
 
-add_interface if_rx_clk clock end
-add_interface_port if_rx_clk rx_clk clk Input 1
-
-add_interface if_rx_data avalon_streaming end
-set_interface_property if_rx_data associatedClock if_rx_clk
-set_interface_property if_rx_data dataBitsPerSymbol 128
-add_interface_port if_rx_data rx_data data Input 128
+ad_alt_intf clock   rx_clk        input   1
+ad_alt_intf signal  rx_data       input   128 data
 
 # dma interface
 
 ad_alt_intf clock   adc_clock     output  1
-ad_alt_intf signal  adc_valid_0   output  1
-ad_alt_intf signal  adc_enable_0  output  1
-ad_alt_intf signal  adc_data_0    output  64
-ad_alt_intf signal  adc_valid_1   output  1
-ad_alt_intf signal  adc_enable_1  output  1
-ad_alt_intf signal  adc_data_1    output  64
+
+add_interface fifo_ch_0 conduit end
+add_interface_port fifo_ch_0  adc_enable_0  enable   Output  1
+add_interface_port fifo_ch_0  adc_valid_0   valid    Output  1
+add_interface_port fifo_ch_0  adc_data_0    data     Output  64
+
+add_interface fifo_ch_1 conduit end
+add_interface_port fifo_ch_1  adc_enable_1  enable   Output  1
+add_interface_port fifo_ch_1  adc_valid_1   valid    Output  1
+add_interface_port fifo_ch_1  adc_data_1    data     Output  64
+
 ad_alt_intf signal  adc_dovf      input   1
 ad_alt_intf signal  adc_dunf      input   1
 

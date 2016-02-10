@@ -42,9 +42,9 @@ module dmac_dest_mm_axi (
 
 	input                               req_valid,
 	output                              req_ready,
-	input [31:C_BYTES_PER_BEAT_WIDTH]   req_address,
-	input [C_BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
-	input [C_BYTES_PER_BEAT_WIDTH-1:0]  req_last_beat_bytes,
+	input [31:BYTES_PER_BEAT_WIDTH]   req_address,
+	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+	input [BYTES_PER_BEAT_WIDTH-1:0]  req_last_beat_bytes,
 
 	input                               enable,
 	output                              enabled,
@@ -57,18 +57,18 @@ module dmac_dest_mm_axi (
 	output [1:0]                        response_resp,
 	output                              response_resp_eot,
 
-	input  [C_ID_WIDTH-1:0]             request_id,
-	output [C_ID_WIDTH-1:0]             response_id,
+	input  [ID_WIDTH-1:0]             request_id,
+	output [ID_WIDTH-1:0]             response_id,
 
-	output [C_ID_WIDTH-1:0]             data_id,
-	output [C_ID_WIDTH-1:0]             address_id,
+	output [ID_WIDTH-1:0]             data_id,
+	output [ID_WIDTH-1:0]             address_id,
 	input                               data_eot,
 	input                               address_eot,
 	input                               response_eot,
 
 	input                               fifo_valid,
 	output                              fifo_ready,
-	input [C_DMA_DATA_WIDTH-1:0]        fifo_data,
+	input [DMA_DATA_WIDTH-1:0]        fifo_data,
 
 	// Write address
 	input                               m_axi_awready,
@@ -81,8 +81,8 @@ module dmac_dest_mm_axi (
 	output [ 3:0]                       m_axi_awcache,
 
 	// Write data
-	output [C_DMA_DATA_WIDTH-1:0]     m_axi_wdata,
-	output [(C_DMA_DATA_WIDTH/8)-1:0] m_axi_wstrb,
+	output [DMA_DATA_WIDTH-1:0]     m_axi_wdata,
+	output [(DMA_DATA_WIDTH/8)-1:0] m_axi_wstrb,
 	input                               m_axi_wready,
 	output                              m_axi_wvalid,
 	output                              m_axi_wlast,
@@ -93,12 +93,12 @@ module dmac_dest_mm_axi (
 	output                              m_axi_bready
 );
 
-parameter C_ID_WIDTH = 3;
-parameter C_DMA_DATA_WIDTH = 64;
-parameter C_BYTES_PER_BEAT_WIDTH = $clog2(C_DMA_DATA_WIDTH/8);
-parameter C_BEATS_PER_BURST_WIDTH = 4;
+parameter ID_WIDTH = 3;
+parameter DMA_DATA_WIDTH = 64;
+parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8);
+parameter BEATS_PER_BURST_WIDTH = 4;
 
-reg [(C_DMA_DATA_WIDTH/8)-1:0] wstrb;
+reg [(DMA_DATA_WIDTH/8)-1:0] wstrb;
 
 wire address_req_valid;
 wire address_req_ready;
@@ -113,7 +113,7 @@ wire _fifo_ready;
 assign fifo_ready = _fifo_ready | ~enabled;
 
 splitter #(
-	.C_NUM_M(2)
+	.NUM_M(2)
 ) i_req_splitter (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),
@@ -130,10 +130,10 @@ splitter #(
 );
 
 dmac_address_generator #(
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH),
-	.C_BYTES_PER_BEAT_WIDTH(C_BYTES_PER_BEAT_WIDTH),
-	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH)
+	.ID_WIDTH(ID_WIDTH),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+	.BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),
+	.DMA_DATA_WIDTH(DMA_DATA_WIDTH)
 ) i_addr_gen (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),
@@ -164,15 +164,17 @@ dmac_address_generator #(
 );
 
 dmac_data_mover # (
-	.C_ID_WIDTH(C_ID_WIDTH),
-	.C_DATA_WIDTH(C_DMA_DATA_WIDTH),
-	.C_BEATS_PER_BURST_WIDTH(C_BEATS_PER_BURST_WIDTH)
+	.ID_WIDTH(ID_WIDTH),
+	.DATA_WIDTH(DMA_DATA_WIDTH),
+	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
 ) i_data_mover (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),
 
 	.enable(address_enabled),
 	.enabled(data_enabled),
+
+	.xfer_req(),
 
 	.request_id(address_id),
 	.response_id(data_id),
@@ -197,14 +199,14 @@ begin
 	if (data_eot & m_axi_wlast) begin
 		wstrb <= (1 << (req_last_beat_bytes + 1)) - 1;
 	end else begin
-		wstrb <= {(C_DMA_DATA_WIDTH/8){1'b1}};
+		wstrb <= {(DMA_DATA_WIDTH/8){1'b1}};
 	end
 end
 
 assign m_axi_wstrb = wstrb;
  
 dmac_response_handler #(
-	.C_ID_WIDTH(C_ID_WIDTH)
+	.ID_WIDTH(ID_WIDTH)
 ) i_response_handler (
 	.clk(m_axi_aclk),
 	.resetn(m_axi_aresetn),

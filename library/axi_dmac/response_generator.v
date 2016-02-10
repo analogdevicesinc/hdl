@@ -43,8 +43,8 @@ module dmac_response_generator (
 	input enable,
 	output reg enabled,
 
-	input [C_ID_WIDTH-1:0] request_id,
-	output reg [C_ID_WIDTH-1:0] response_id,
+	input [ID_WIDTH-1:0] request_id,
+	output reg [ID_WIDTH-1:0] response_id,
 	input sync_id,
 
 	input eot,
@@ -55,7 +55,7 @@ module dmac_response_generator (
 	output [1:0] resp_resp
 );
 
-parameter C_ID_WIDTH = 3;
+parameter ID_WIDTH = 3;
 
 `include "inc_id.h"
 `include "resp.h"

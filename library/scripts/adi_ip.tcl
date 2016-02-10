@@ -2,7 +2,7 @@
 # check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2014.4.1"
+  set REQUIRED_VIVADO_VERSION "2015.2.1"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -14,9 +14,9 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
 # ip related stuff
 
 proc adi_ip_create {ip_name} {
+
   global ad_hdl_dir
   global ad_phdl_dir
-
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
 
@@ -47,21 +47,31 @@ proc adi_ip_files {ip_name ip_files} {
 
 proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
 
-  set proj_filegroup [ipx::get_file_groups xilinx_v*synthesis -of_objects [ipx::current_core]]
-  set f [ipx::add_file $ip_constr_files $proj_filegroup]
-  set_property -dict [list \
-    type xdc \
-    library_name {} \
-    processing_order $processing_order \
-  ] $f
+  set proj_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
+  foreach f_name $ip_constr_files {
+    ipx::add_file $f_name $proj_filegroup
+    set_property type xdc [ipx::get_files $f_name -of_objects $proj_filegroup]
+    set_property processing_order $processing_order [ipx::get_files $f_name -of_objects $proj_filegroup]
+  }
 }
 
 proc adi_ip_ttcl {ip_name ip_constr_files} {
 
-  set proj_filegroup [ipx::get_file_groups xilinx_v*synthesis -of_objects [ipx::current_core]]
+  set proj_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
   set f [ipx::add_file $ip_constr_files $proj_filegroup]
   set_property -dict [list \
     type ttcl \
+  ] $f
+}
+
+proc adi_ip_bd {ip_name ip_bd_files} {
+  set proj_filegroup [ipx::get_file_groups xilinx_blockdiagram -of_objects [ipx::current_core]]
+  if {$proj_filegroup == {}} {
+    set proj_filegroup [ipx::add_file_group -type xilinx_blockdiagram "" [ipx::current_core]]
+  }
+  set f [ipx::add_file $ip_bd_files $proj_filegroup]
+  set_property -dict [list \
+    type tclSource \
   ] $f
 }
 
@@ -197,3 +207,60 @@ proc adi_ip_add_core_dependencies {vlnvs} {
 		}
 	}
 }
+
+proc adi_if_define {name} {
+
+  ipx::create_abstraction_definition ADI user ${name}_rtl 1.0
+  ipx::create_bus_definition ADI user $name 1.0
+
+  set_property xml_file_name ${name}_rtl.xml [ipx::current_busabs]
+  set_property xml_file_name ${name}.xml [ipx::current_busdef]
+  set_property bus_type_vlnv ADI:user:${name}:1.0 [ipx::current_busabs]
+
+  ipx::save_abstraction_definition [ipx::current_busabs]
+  ipx::save_bus_definition [ipx::current_busdef]
+}
+
+proc adi_if_ports {dir width name {type none}} {
+
+  ipx::add_bus_abstraction_port $name [ipx::current_busabs]
+  set m_intf [ipx::get_bus_abstraction_ports $name -of_objects [ipx::current_busabs]]
+  set_property master_presence required $m_intf
+  set_property slave_presence  required $m_intf
+  set_property master_width $width $m_intf
+  set_property slave_width  $width $m_intf
+
+  set m_dir "in"
+  set s_dir "out"
+  if {$dir eq "output"} {
+    set m_dir "out"
+    set s_dir "in"
+  }
+
+  set_property master_direction $m_dir $m_intf
+  set_property slave_direction  $s_dir $m_intf
+
+  if {$type ne "none"} {
+    set_property is_${type} true $m_intf
+  }
+
+  ipx::save_bus_definition [ipx::current_busdef]
+  ipx::save_abstraction_definition [ipx::current_busabs]
+}
+
+proc adi_if_infer_bus {if_name mode name maps} {
+
+  ipx::add_bus_interface $name [ipx::current_core]
+  set m_bus_if [ipx::get_bus_interfaces $name -of_objects [ipx::current_core]]
+  set_property abstraction_type_vlnv ${if_name}_rtl:1.0 $m_bus_if
+  set_property bus_type_vlnv ${if_name}:1.0 $m_bus_if
+  set_property interface_mode $mode $m_bus_if
+
+  foreach map $maps  {
+    set m_maps [regexp -all -inline {\S+} $map]
+    lassign $m_maps p_name p_map
+    ipx::add_port_map $p_name $m_bus_if
+    set_property physical_name $p_map [ipx::get_port_maps $p_name -of_objects $m_bus_if]
+  }
+}
+

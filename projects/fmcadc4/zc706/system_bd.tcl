@@ -21,3 +21,38 @@ create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
 
 source ../common/fmcadc4_bd.tcl
 
+# ila 
+
+set mfifo_adc [create_bd_cell -type ip -vlnv analog.com:user:util_mfifo:1.0 mfifo_adc]
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $mfifo_adc
+set_property -dict [list CONFIG.DIN_DATA_WIDTH {64}] $mfifo_adc
+set_property -dict [list CONFIG.ADDRESS_WIDTH {8}] $mfifo_adc
+
+set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_adc]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
+set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {16}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE3_WIDTH {16}] $ila_adc
+set_property -dict [list CONFIG.C_PROBE4_WIDTH {16}] $ila_adc
+
+ad_connect  util_fmcadc4_gt/rx_rst mfifo_adc/din_rst
+ad_connect  util_fmcadc4_gt/rx_out_clk mfifo_adc/din_clk
+ad_connect  axi_ad9680_core_0/adc_valid_0 mfifo_adc/din_valid
+ad_connect  axi_ad9680_core_0/adc_data_0 mfifo_adc/din_data_0
+ad_connect  axi_ad9680_core_0/adc_data_1 mfifo_adc/din_data_1
+ad_connect  axi_ad9680_core_1/adc_data_0 mfifo_adc/din_data_2
+ad_connect  axi_ad9680_core_1/adc_data_1 mfifo_adc/din_data_3
+ad_connect  util_fmcadc4_gt/rx_rst mfifo_adc/dout_rst
+ad_connect  util_fmcadc4_gt/rx_out_clk mfifo_adc/dout_clk
+ad_connect  util_fmcadc4_gt/rx_out_clk ila_adc/clk
+ad_connect  mfifo_adc/dout_valid ila_adc/probe0
+ad_connect  mfifo_adc/dout_data_0 ila_adc/probe1
+ad_connect  mfifo_adc/dout_data_1 ila_adc/probe2
+ad_connect  mfifo_adc/dout_data_2 ila_adc/probe3
+ad_connect  mfifo_adc/dout_data_3 ila_adc/probe4
+
+

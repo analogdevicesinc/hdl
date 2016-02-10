@@ -1,6 +1,6 @@
 module axi_generic_adc (
 	input adc_clk,
-	output [NUM_CHANNELS-1:0] adc_enable,
+	output [NUM_OF_CHANNELS-1:0] adc_enable,
 	input adc_dovf,
 
 	input		s_axi_aclk,
@@ -24,8 +24,8 @@ module axi_generic_adc (
 	input		s_axi_rready
 );
 
-parameter NUM_CHANNELS = 2;
-parameter PCORE_ID = 0;
+parameter NUM_OF_CHANNELS = 2;
+parameter ID = 0;
 
 reg	[31:0] up_rdata = 'd0;
 reg        up_rack = 'd0;
@@ -43,9 +43,9 @@ wire        up_sel_s;
 wire        up_wr_s;
 wire [13:0] up_addr_s;
 wire [31:0] up_wdata_s;
-wire [31:0] up_rdata_s[0:NUM_CHANNELS];
-wire        up_rack_s[0:NUM_CHANNELS];
-wire        up_wack_s[0:NUM_CHANNELS];
+wire [31:0] up_rdata_s[0:NUM_OF_CHANNELS];
+wire        up_rack_s[0:NUM_OF_CHANNELS];
+wire        up_wack_s[0:NUM_OF_CHANNELS];
 
 reg [31:0]  up_rdata_r;
 reg         up_rack_r;
@@ -60,7 +60,7 @@ begin
 	up_rdata_r = 'h00;
 	up_rack_r = 'h00;
 	up_wack_r = 'h00;
-	for (j = 0; j <= NUM_CHANNELS; j=j+1) begin
+	for (j = 0; j <= NUM_OF_CHANNELS; j=j+1) begin
 		up_rack_r = up_rack_r | up_rack_s[j];
 		up_wack_r = up_wack_r | up_wack_s[j];
 		up_rdata_r = up_rdata_r | up_rdata_s[j];
@@ -79,7 +79,7 @@ always @(negedge up_rstn or posedge up_clk) begin
 	end
 end
  
-up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
+up_adc_common #(.ID(ID)) i_up_adc_common (
 	.mmcm_rst (),
 	.adc_clk (adc_clk),
 	.adc_rst (adc_rst),
@@ -110,11 +110,11 @@ up_adc_common #(.PCORE_ID(PCORE_ID)) i_up_adc_common (
 	.up_wreq (up_wreq_s),
 	.up_waddr (up_waddr_s),
 	.up_wdata (up_wdata_s),
-	.up_wack (up_wack_s[NUM_CHANNELS]),
+	.up_wack (up_wack_s[NUM_OF_CHANNELS]),
 	.up_rreq (up_rreq_s),
 	.up_raddr (up_raddr_s),
-	.up_rdata (up_rdata_s[NUM_CHANNELS]),
-	.up_rack (up_rack_s[NUM_CHANNELS]));
+	.up_rdata (up_rdata_s[NUM_OF_CHANNELS]),
+	.up_rack (up_rack_s[NUM_OF_CHANNELS]));
 
 // up bus interface
 
@@ -150,8 +150,8 @@ up_axi i_up_axi (
 generate
 genvar i;
 
-for (i = 0; i < NUM_CHANNELS; i=i+1) begin
-	up_adc_channel #(.PCORE_ADC_CHID(i)) i_up_adc_channel (
+for (i = 0; i < NUM_OF_CHANNELS; i=i+1) begin
+	up_adc_channel #(.ADC_CHANNEL_ID(i)) i_up_adc_channel (
 		.adc_clk (adc_clk),
 		.adc_rst (adc_rst),
 		.adc_enable (adc_enable[i]),

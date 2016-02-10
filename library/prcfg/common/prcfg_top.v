@@ -51,32 +51,64 @@ module prcfg_top(
   adc_gpio_output,
 
   // TX side
-  dma_dac_en,
-  dma_dac_dunf,
-  dma_dac_ddata,
-  dma_dac_dvalid,
+  dma_dac_0_enable,
+  dma_dac_0_data,
+  dma_dac_0_valid,
+  dma_dac_1_enable,
+  dma_dac_1_data,
+  dma_dac_1_valid,
+  dma_dac_2_enable,
+  dma_dac_2_data,
+  dma_dac_2_valid,
+  dma_dac_3_enable,
+  dma_dac_3_data,
+  dma_dac_3_valid,
 
-  core_dac_en,
-  core_dac_dunf,
-  core_dac_ddata,
-  core_dac_dvalid,
+  core_dac_0_enable,
+  core_dac_0_data,
+  core_dac_0_valid,
+  core_dac_1_enable,
+  core_dac_1_data,
+  core_dac_1_valid,
+  core_dac_2_enable,
+  core_dac_2_data,
+  core_dac_2_valid,
+  core_dac_3_enable,
+  core_dac_3_data,
+  core_dac_3_valid,
 
   // RX side
-  core_adc_dwr,
-  core_adc_dsync,
-  core_adc_ddata,
-  core_adc_ovf,
+  dma_adc_0_enable,
+  dma_adc_0_data,
+  dma_adc_0_valid,
+  dma_adc_1_enable,
+  dma_adc_1_data,
+  dma_adc_1_valid,
+  dma_adc_2_enable,
+  dma_adc_2_data,
+  dma_adc_2_valid,
+  dma_adc_3_enable,
+  dma_adc_3_data,
+  dma_adc_3_valid,
 
-  dma_adc_dwr,
-  dma_adc_dsync,
-  dma_adc_ddata,
-  dma_adc_ovf
+  core_adc_0_enable,
+  core_adc_0_data,
+  core_adc_0_valid,
+  core_adc_1_enable,
+  core_adc_1_data,
+  core_adc_1_valid,
+  core_adc_2_enable,
+  core_adc_2_data,
+  core_adc_2_valid,
+  core_adc_3_enable,
+  core_adc_3_data,
+  core_adc_3_valid
 );
 
   localparam  ENABELED    = 1;
-  localparam  DATA_WIDTH  = 32;
+  localparam  DATA_WIDTH  = 16;
 
-  parameter   NUM_CHANNEL = 2;
+  parameter   NUM_CHANNEL = 4;
   parameter   ADC_EN      = 1;
   parameter   DAC_EN      = 1;
 
@@ -89,25 +121,58 @@ module prcfg_top(
   input   [31:0]                    adc_gpio_input;
   output  [31:0]                    adc_gpio_output;
 
-  output                            dma_dac_en;
-  input                             dma_dac_dunf;
-  input   [(DBUS_WIDTH - 1):0]      dma_dac_ddata;
-  input                             dma_dac_dvalid;
+  input                             dma_dac_0_enable;
+  output  [(DBUS_WIDTH-1):0]        dma_dac_0_data;
+  input                             dma_dac_0_valid;
+  input                             dma_dac_1_enable;
+  output  [(DBUS_WIDTH-1):0]        dma_dac_1_data;
+  input                             dma_dac_1_valid;
+  input                             dma_dac_2_enable;
+  output  [(DBUS_WIDTH-1):0]        dma_dac_2_data;
+  input                             dma_dac_2_valid;
+  input                             dma_dac_3_enable;
+  output  [(DBUS_WIDTH-1):0]        dma_dac_3_data;
+  input                             dma_dac_3_valid;
 
-  input                             core_dac_en;
-  output                            core_dac_dunf;
-  output  [(DBUS_WIDTH - 1):0]      core_dac_ddata;
-  output                            core_dac_dvalid;
+  output                            core_dac_0_enable;
+  input   [(DBUS_WIDTH-1):0]        core_dac_0_data;
+  output                            core_dac_0_valid;
+  output                            core_dac_1_enable;
+  input   [(DBUS_WIDTH-1):0]        core_dac_1_data;
+  output                            core_dac_1_valid;
+  output                            core_dac_2_enable;
+  input   [(DBUS_WIDTH-1):0]        core_dac_2_data;
+  output                            core_dac_2_valid;
+  output                            core_dac_3_enable;
+  input   [(DBUS_WIDTH-1):0]        core_dac_3_data;
+  output                            core_dac_3_valid;
 
-  input                             core_adc_dwr;
-  input                             core_adc_dsync;
-  input   [(DBUS_WIDTH - 1):0]      core_adc_ddata;
-  output                            core_adc_ovf;
+  // RX side
+  input                             dma_adc_0_enable;
+  input   [(DBUS_WIDTH-1):0]        dma_adc_0_data;
+  input                             dma_adc_0_valid;
+  input                             dma_adc_1_enable;
+  input   [(DBUS_WIDTH-1):0]        dma_adc_1_data;
+  input                             dma_adc_1_valid;
+  input                             dma_adc_2_enable;
+  input   [(DBUS_WIDTH-1):0]        dma_adc_2_data;
+  input                             dma_adc_2_valid;
+  input                             dma_adc_3_enable;
+  input   [(DBUS_WIDTH-1):0]        dma_adc_3_data;
+  input                             dma_adc_3_valid;
 
-  output                            dma_adc_dwr;
-  output                            dma_adc_dsync;
-  output  [(DBUS_WIDTH - 1):0]      dma_adc_ddata;
-  input                             dma_adc_ovf;
+  output                            core_adc_0_enable;
+  output  [(DBUS_WIDTH-1):0]        core_adc_0_data;
+  output                            core_adc_0_valid;
+  output                            core_adc_1_enable;
+  output  [(DBUS_WIDTH-1):0]        core_adc_1_data;
+  output                            core_adc_1_valid;
+  output                            core_adc_2_enable;
+  output  [(DBUS_WIDTH-1):0]        core_adc_2_data;
+  output                            core_adc_2_valid;
+  output                            core_adc_3_enable;
+  output  [(DBUS_WIDTH-1):0]        core_adc_3_data;
+  output                            core_adc_3_valid;
 
   wire    [31:0]                    adc_gpio_out_s[(NUM_CHANNEL - 1):0];
   wire    [(NUM_CHANNEL - 1):0]     adc_gpio_out_s_inv[31:0];
@@ -115,81 +180,53 @@ module prcfg_top(
   wire    [31:0]                    dac_gpio_out_s[(NUM_CHANNEL - 1):0];
   wire    [(NUM_CHANNEL - 1):0]     dac_gpio_out_s_inv[31:0];
 
+  wire    [(NUM_CHANNEL - 1):0]     core_adc_enable_s;
+  wire    [(NUM_CHANNEL - 1):0]     core_adc_valid_s;
+  wire    [(NUM_CHANNEL - 1):0]     core_adc_data_s[15:0];
+  wire    [(NUM_CHANNEL - 1):0]     dma_adc_enable_s;
+  wire    [(NUM_CHANNEL - 1):0]     dma_adc_valid_s;
+  wire    [(NUM_CHANNEL - 1):0]     dma_adc_data_s[15:0];
+  wire    [(NUM_CHANNEL - 1):0]     core_dac_enable_s;
+  wire    [(NUM_CHANNEL - 1):0]     core_dac_valid_s;
+  wire    [(NUM_CHANNEL - 1):0]     core_dac_data_s[15:0];
+  wire    [(NUM_CHANNEL - 1):0]     dma_dac_enable_s;
+  wire    [(NUM_CHANNEL - 1):0]     dma_dac_valid_s;
+  wire    [(NUM_CHANNEL - 1):0]     dma_dac_data_s[15:0];
+
   genvar l_inst;
 
   generate
     for(l_inst = 0; l_inst < NUM_CHANNEL; l_inst = l_inst + 1) begin: tx_rx_data_path
       if(ADC_EN == ENABELED) begin
-        if(l_inst == 0) begin
           prcfg_adc #(
-            .CHANNEL_ID(l_inst)
-          ) i_prcfg_adc_1 (
-            .clk(clk),
-            .control(adc_gpio_input),
-            .status(adc_gpio_out_s[l_inst]),
-            .src_adc_dwr(core_adc_dwr),
-            .src_adc_dsync(core_adc_dsync),
-            .src_adc_ddata(core_adc_ddata[(DATA_WIDTH - 1):0]),
-            .src_adc_dovf(core_adc_ovf),
-            .dst_adc_dwr(dma_adc_dwr),
-            .dst_adc_dsync(dma_adc_dsync),
-            .dst_adc_ddata(dma_adc_ddata[(DATA_WIDTH - 1):0]),
-            .dst_adc_dovf(dma_adc_ovf)
-          );
-        end else begin
-           prcfg_adc #(
             .CHANNEL_ID(l_inst)
           ) i_prcfg_adc_i (
             .clk(clk),
             .control(adc_gpio_input),
             .status(adc_gpio_out_s[l_inst]),
-            .src_adc_dwr(core_adc_dwr),
-            .src_adc_dsync(core_adc_dsync),
-            .src_adc_ddata(core_adc_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
-            .src_adc_dovf(),
-            .dst_adc_dwr(),
-            .dst_adc_dsync(),
-            .dst_adc_ddata(dma_adc_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
-            .dst_adc_dovf(dma_adc_ovf)
+            .src_adc_enable(core_adc_enable_s[l_inst]),
+            .src_adc_valid(core_adc_valid_s[l_inst]),
+            .src_adc_data(core_adc_data_s[l_inst]),
+            .dst_adc_enable(dma_adc_enable_s[l_inst]),
+            .dst_adc_valid(dma_adc_valid_s[l_inst]),
+            .dst_adc_data(dma_adc_data_s[l_inst])
           );
-        end
       end
       if(DAC_EN == ENABELED) begin
-        if(l_inst == 0) begin
-          prcfg_dac #(
-            .CHANNEL_ID(l_inst)
-          ) i_prcfg_dac_1 (
-            .clk(clk),
-            .control(dac_gpio_input),
-            .status(dac_gpio_out_s[l_inst]),
-            .src_dac_en(dma_dac_en),
-            .src_dac_ddata(dma_dac_ddata[(DATA_WIDTH - 1):0]),
-            .src_dac_dunf(dma_dac_dunf),
-            .src_dac_dvalid(dma_dac_dvalid),
-            .dst_dac_en(core_dac_en),
-            .dst_dac_ddata(core_dac_ddata[(DATA_WIDTH - 1):0]),
-            .dst_dac_dunf(core_dac_dunf),
-            .dst_dac_dvalid(core_dac_dvalid)
-          );
-        end else begin
-          prcfg_dac #(
-            .CHANNEL_ID(l_inst)
-          ) i_prcfg_dac_i (
-            .clk(clk),
-            .control(dac_gpio_input),
-            .status(dac_gpio_out_s[l_inst]),
-            .src_dac_en(),
-            .src_dac_ddata(dma_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
-            .src_dac_dunf(dma_dac_dunf),
-            .src_dac_dvalid(dma_dac_dvalid),
-            .dst_dac_en(core_dac_en),
-            .dst_dac_ddata(core_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
-            .dst_dac_dunf(),
-            .dst_dac_dvalid()
-          );
-        end
+        prcfg_dac #(
+          .CHANNEL_ID(l_inst)
+        ) i_prcfg_dac_i (
+          .clk(clk),
+          .control(dac_gpio_input),
+          .status(dac_gpio_out_s[l_inst]),
+          .src_dac_enable(dma_dac_enable_s[l_inst]),
+          .src_dac_data(dma_dac_data_s[l_inst]),
+          .src_dac_valid(dma_dac_valid_s[l_inst]),
+          .dst_dac_enable(core_dac_enable_s[l_inst]),
+          .dst_dac_data(core_dac_data_s[l_inst]),
+          .dst_dac_valid(core_dac_valid_s[l_inst])
+        );
       end
-
     end
   endgenerate
 
@@ -213,4 +250,59 @@ module prcfg_top(
   end
   endgenerate
 
+  // port connections
+
+  assign core_dac_0_enable = core_dac_enable_s[0];
+  assign core_dac_0_valid = core_dac_valid_s[0];
+  assign core_dac_data_s[0] = core_dac_0_data;
+  assign core_dac_1_enable = core_dac_enable_s[1];
+  assign core_dac_1_valid = core_dac_valid_s[1];
+  assign core_dac_data_s[1] = core_dac_1_data;
+  assign core_dac_2_enable = core_dac_enable_s[2];
+  assign core_dac_2_valid = core_dac_valid_s[2];
+  assign core_dac_data_s[2] = core_dac_2_data;
+  assign core_dac_3_enable = core_dac_enable_s[3];
+  assign core_dac_3_valid = core_dac_valid_s[3];
+  assign core_dac_data_s[3] = core_dac_3_data;
+
+  assign dma_dac_enable_s[0] = dma_dac_0_enable;
+  assign dma_dac_valid_s[0] = dma_dac_0_valid;
+  assign dma_dac_0_data = dma_dac_data_s[0];
+  assign dma_dac_enable_s[1] = dma_dac_1_enable;
+  assign dma_dac_valid_s[1] = dma_dac_1_valid;
+  assign dma_dac_1_data = dma_dac_data_s[1];
+  assign dma_dac_enable_s[2] = dma_dac_2_enable;
+  assign dma_dac_valid_s[2] = dma_dac_2_valid;
+  assign dma_dac_2_data = dma_dac_data_s[2];
+  assign dma_dac_enable_s[3] = dma_dac_3_enable;
+  assign dma_dac_valid_s[3] = dma_dac_3_valid;
+  assign dma_dac_3_data = dma_dac_data_s[3];
+
+  assign core_adc_0_enable = core_adc_enable_s[0];
+  assign core_adc_0_valid = core_adc_valid_s[0];
+  assign core_adc_0_data = core_adc_data_s[0];
+  assign core_adc_1_enable = core_adc_enable_s[1];
+  assign core_adc_1_valid = core_adc_valid_s[1];
+  assign core_adc_1_data = core_adc_data_s[1];
+  assign core_adc_2_enable = core_adc_enable_s[2];
+  assign core_adc_2_valid = core_adc_valid_s[2];
+  assign core_adc_2_data = core_adc_data_s[2];
+  assign core_adc_3_enable = core_adc_enable_s[3];
+  assign core_adc_3_valid = core_adc_valid_s[3];
+  assign core_adc_3_data = core_adc_data_s[3];
+
+  assign dma_adc_enable_s[0] = dma_adc_0_enable;
+  assign dma_adc_valid_s[0] = dma_adc_0_valid;
+  assign dma_adc_data_s[0] = dma_adc_0_data;
+  assign dma_adc_enable_s[1] = dma_adc_1_enable;
+  assign dma_adc_valid_s[1] = dma_adc_1_valid;
+  assign dma_adc_data_s[1] = dma_adc_1_data;
+  assign dma_adc_enable_s[2] = dma_adc_2_enable;
+  assign dma_adc_valid_s[2] = dma_adc_2_valid;
+  assign dma_adc_data_s[2] = dma_adc_2_data;
+  assign dma_adc_enable_s[3] = dma_adc_3_enable;
+  assign dma_adc_valid_s[3] = dma_adc_3_valid;
+  assign dma_adc_data_s[3] = dma_adc_3_data;
+
 endmodule
+

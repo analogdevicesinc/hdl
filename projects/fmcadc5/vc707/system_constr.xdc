@@ -77,9 +77,13 @@ set_property  -dict {PACKAGE_PIN  G39   IOSTANDARD LVCMOS18} [get_ports dac_data
 set_property  -dict {PACKAGE_PIN  N39   IOSTANDARD LVCMOS18} [get_ports dac_sync_0]               ; ## C18  FMC1_HPC_LA14_P
 set_property  -dict {PACKAGE_PIN  N40   IOSTANDARD LVCMOS18} [get_ports dac_sync_1]               ; ## C19  FMC1_HPC_LA14_N
 
+set_property  -dict {PACKAGE_PIN  R40   IOSTANDARD LVCMOS18} [get_ports psync_0]                  ; ## G15  FMC1_HPC_LA12_P
+set_property  -dict {PACKAGE_PIN  P40   IOSTANDARD LVCMOS18} [get_ports psync_1]                  ; ## G16  FMC1_HPC_LA12_N
+
 # clocks
 
 create_clock -name rx_ref_clk_0   -period  1.60 [get_ports rx_ref_clk_0_p]
 create_clock -name rx_ref_clk_1   -period  1.60 [get_ports rx_ref_clk_1_p]
-create_clock -name rx_div_clk     -period  6.40 [get_pins i_system_wrapper/system_i/axi_ad9625_0_gt/inst/g_lane_1[0].i_gt_channel_1/i_gtxe2_channel/RXOUTCLK]
+create_clock -name rx_div_clk     -period  6.40 [get_pins i_system_wrapper/system_i/axi_fmcadc5_0_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
+
 

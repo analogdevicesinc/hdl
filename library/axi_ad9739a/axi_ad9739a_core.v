@@ -86,8 +86,8 @@ module axi_ad9739a_core (
 
   // parameters
 
-  parameter   PCORE_ID = 0;
-  parameter   DP_DISABLE = 0;
+  parameter   ID = 0;
+  parameter   DATAPATH_DISABLE = 0;
 
   // dac interface
 
@@ -170,8 +170,8 @@ module axi_ad9739a_core (
   // dac channel
   
   axi_ad9739a_channel #(
-    .CHID(0),
-    .DP_DISABLE(DP_DISABLE))
+    .CHANNEL_ID(0),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
   i_channel_0 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
@@ -208,7 +208,7 @@ module axi_ad9739a_core (
 
   // dac common processor interface
 
-  up_dac_common #(.PCORE_ID(PCORE_ID)) i_up_dac_common (
+  up_dac_common #(.ID(ID)) i_up_dac_common (
     .mmcm_rst (),
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),

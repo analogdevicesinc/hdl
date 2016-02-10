@@ -8,15 +8,19 @@
 M_DEPS := axi_jesd_gt_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/ad_gt_common_1.v
-M_DEPS += ../common/ad_gt_channel_1.v
-M_DEPS += ../common/ad_gt_es.v
-M_DEPS += ../common/ad_jesd_align.v
 M_DEPS += ../common/ad_rst.v
+M_DEPS += ../common/ad_gt_channel.v
+M_DEPS += ../common/ad_gt_common.v
+M_DEPS += ../common/ad_gt_es.v
+M_DEPS += ../common/ad_gt_es_axi.v
+M_DEPS += ../common/ad_gt_channel_1.v
+M_DEPS += ../common/ad_gt_common_1.v
+M_DEPS += ../common/ad_jesd_align.v
 M_DEPS += ../common/up_axi.v
+M_DEPS += ../common/up_gt_channel.v
 M_DEPS += ../common/up_gt.v
-M_DEPS += axi_jesd_gt.v
 M_DEPS += axi_jesd_gt_constr.xdc
+M_DEPS += axi_jesd_gt.v
 
 M_VIVADO := vivado -mode batch -source
 

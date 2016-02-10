@@ -14,55 +14,26 @@ adi_ip_properties_lite util_upack
 adi_ip_constraints util_upack [list \
   "util_upack_constr.xdc" ]
 
-set_property -dict {driver_value {0} enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CH_CNT')) > 1}} \
-  [ipx::get_port dac_enable_1 [ipx::current_core]] \
-  [ipx::get_port dac_valid_1 [ipx::current_core]] \
-  [ipx::get_port dac_data_1 [ipx::current_core]] \
-  [ipx::get_port upack_valid_1 [ipx::current_core]] \
+set_property driver_value 0 [ipx::get_ports *dac_enable* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *dac_valid* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *dac_data* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *dma_xfer_in* -of_objects [ipx::current_core]]
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 1} \
+  [ipx::get_ports *_1* -of_objects [ipx::current_core]]
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 2} \
+  [ipx::get_ports *_2* -of_objects [ipx::current_core]]
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 3} \
+  [ipx::get_ports *_3* -of_objects [ipx::current_core]]
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 4} \
+  [ipx::get_ports *_4* -of_objects [ipx::current_core]]
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 5} \
+  [ipx::get_ports *_5* -of_objects [ipx::current_core]]
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 6} \
+  [ipx::get_ports *_6* -of_objects [ipx::current_core]]
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 7} \
+  [ipx::get_ports *_7* -of_objects [ipx::current_core]]
 
-
-set_property -dict {driver_value {0} enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CH_CNT')) > 2}} \
-  [ipx::get_port dac_enable_2 [ipx::current_core]] \
-  [ipx::get_port dac_valid_2 [ipx::current_core]] \
-  [ipx::get_port dac_data_2 [ipx::current_core]] \
-  [ipx::get_port upack_valid_2 [ipx::current_core]] \
-
-
-set_property -dict {driver_value {0} enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CH_CNT')) > 3}} \
-  [ipx::get_port dac_enable_3 [ipx::current_core]] \
-  [ipx::get_port dac_valid_3 [ipx::current_core]] \
-  [ipx::get_port dac_data_3 [ipx::current_core]] \
-  [ipx::get_port upack_valid_3 [ipx::current_core]] \
-
-
-set_property -dict {driver_value {0} enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CH_CNT')) > 4}} \
-  [ipx::get_port dac_enable_4 [ipx::current_core]] \
-  [ipx::get_port dac_valid_4 [ipx::current_core]] \
-  [ipx::get_port dac_data_4 [ipx::current_core]] \
-  [ipx::get_port upack_valid_4 [ipx::current_core]] \
-
-
-set_property -dict {driver_value {0} enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CH_CNT')) > 5}} \
-  [ipx::get_port dac_enable_5 [ipx::current_core]] \
-  [ipx::get_port dac_valid_5 [ipx::current_core]] \
-  [ipx::get_port dac_data_5 [ipx::current_core]] \
-  [ipx::get_port upack_valid_5 [ipx::current_core]] \
-
-
-set_property -dict {driver_value {0} enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CH_CNT')) > 6}} \
-  [ipx::get_port dac_enable_6 [ipx::current_core]] \
-  [ipx::get_port dac_valid_6 [ipx::current_core]] \
-  [ipx::get_port dac_data_6 [ipx::current_core]] \
-  [ipx::get_port upack_valid_6 [ipx::current_core]] \
-
-
-set_property -dict {driver_value {0} enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CH_CNT')) > 7}} \
-  [ipx::get_port dac_enable_7 [ipx::current_core]] \
-  [ipx::get_port dac_valid_7 [ipx::current_core]] \
-  [ipx::get_port dac_data_7 [ipx::current_core]] \
-  [ipx::get_port upack_valid_7 [ipx::current_core]] \
-
-
+ipx::remove_all_bus_interface [ipx::current_core]
 ipx::save_core [ipx::current_core]
 
 

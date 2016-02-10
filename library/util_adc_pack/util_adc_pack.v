@@ -81,8 +81,8 @@ module util_adc_pack (
 
   );
 
-  parameter CHANNELS    = 8 ; // valid values are 4 and 8
-  parameter DATA_WIDTH  = 16; // valid values are 16 and 32
+  parameter NUM_OF_CHANNELS = 8; // valid values are 4 and 8
+  parameter DATA_WIDTH = 16; // valid values are 16 and 32
   // common clock
 
   input           clk;
@@ -119,13 +119,13 @@ module util_adc_pack (
   input                       chan_enable_7;
   input   [(DATA_WIDTH-1):0]  chan_data_7;
 
-  output  [(DATA_WIDTH*CHANNELS-1):0] ddata;
+  output  [(DATA_WIDTH*NUM_OF_CHANNELS-1):0] ddata;
   output                              dvalid;
   output                              dsync;
 
-  reg  [(DATA_WIDTH*CHANNELS-1):0]    packed_data = 0;
-  reg  [(DATA_WIDTH*CHANNELS-1):0]    temp_data_0 = 0;
-  reg  [(DATA_WIDTH*CHANNELS-1):0]    temp_data_1 = 0;
+  reg  [(DATA_WIDTH*NUM_OF_CHANNELS-1):0]    packed_data = 0;
+  reg  [(DATA_WIDTH*NUM_OF_CHANNELS-1):0]    temp_data_0 = 0;
+  reg  [(DATA_WIDTH*NUM_OF_CHANNELS-1):0]    temp_data_1 = 0;
 
   reg  [3:0]      enable_cnt;
   reg  [2:0]      enable_cnt_0;
@@ -140,7 +140,7 @@ module util_adc_pack (
   reg  [7:0]      en4 = 0;
   reg             dvalid = 0;
 
-  reg  [(DATA_WIDTH*CHANNELS-1):0]  ddata = 0;
+  reg  [(DATA_WIDTH*NUM_OF_CHANNELS-1):0]  ddata = 0;
   reg  [(DATA_WIDTH-1):0]           chan_data_0_r;
   reg  [(DATA_WIDTH-1):0]           chan_data_1_r;
   reg  [(DATA_WIDTH-1):0]           chan_data_2_r;
@@ -159,7 +159,7 @@ module util_adc_pack (
   begin
     enable_cnt   = enable_cnt_0 + enable_cnt_1;
     enable_cnt_0 = chan_enable_0 + chan_enable_1 + chan_enable_2 + chan_enable_3;
-    if (CHANNELS == 8)
+    if (NUM_OF_CHANNELS == 8)
     begin
       enable_cnt_1 = chan_enable_4 + chan_enable_5 + chan_enable_6 + chan_enable_7;
     end
@@ -297,7 +297,7 @@ module util_adc_pack (
       end
       4:
       begin
-        if (CHANNELS == 8)
+        if (NUM_OF_CHANNELS == 8)
         begin
           en1 = path_enabled[0]       << 4;
           en2 = {2{path_enabled[1]}}  << 4;
@@ -354,15 +354,15 @@ module util_adc_pack (
     begin
       if( chan_valid == 1'b1)
       begin
-        if (counter_0 > (CHANNELS - 1) )
+        if (counter_0 > (NUM_OF_CHANNELS - 1) )
         begin
-          counter_0 <= counter_0 - CHANNELS + enable_cnt;
+          counter_0 <= counter_0 - NUM_OF_CHANNELS + enable_cnt;
         end
         else
         begin
           counter_0 <= counter_0 + enable_cnt;
         end
-        if ((counter_0 == (CHANNELS - enable_cnt)) || (path_enabled == (8'h1 << (CHANNELS - 1)) ))
+        if ((counter_0 == (NUM_OF_CHANNELS - enable_cnt)) || (path_enabled == (8'h1 << (NUM_OF_CHANNELS - 1)) ))
         begin
           dvalid  <= 1'b1;
         end
@@ -379,14 +379,14 @@ module util_adc_pack (
   end
 
   generate
-  // 8 CHANNELS
-  if ( CHANNELS == 8 )
+  // 8 NUM_OF_CHANNELS
+  if ( NUM_OF_CHANNELS == 8 )
   begin
-    // FIRST FOUR CHANNELS
+    // FIRST FOUR NUM_OF_CHANNELS
     always @(posedge clk)
     begin
       // ddata 0
-      if ((en1[0] | en2[0] | en4[0] | path_enabled[CHANNELS-1]) == 1'b1)
+      if ((en1[0] | en2[0] | en4[0] | path_enabled[NUM_OF_CHANNELS-1]) == 1'b1)
       begin
         ddata[(DATA_WIDTH-1):0]     <=  packed_data[(DATA_WIDTH-1):0];
       end
@@ -396,7 +396,7 @@ module util_adc_pack (
       begin
         ddata[2*DATA_WIDTH-1:DATA_WIDTH]    <= packed_data[(DATA_WIDTH-1):0];
       end
-      if ( (en2[1] | en4[1] | path_enabled[CHANNELS-1]) == 1'b1)
+      if ( (en2[1] | en4[1] | path_enabled[NUM_OF_CHANNELS-1]) == 1'b1)
       begin
         ddata[2*DATA_WIDTH-1:DATA_WIDTH]    <= packed_data[2*DATA_WIDTH-1:DATA_WIDTH];
       end
@@ -406,7 +406,7 @@ module util_adc_pack (
       begin
         ddata[3*DATA_WIDTH-1:2*DATA_WIDTH]    <= packed_data[(DATA_WIDTH-1):0];
       end
-      if ((en4[2] | path_enabled[CHANNELS-1]) == 1'b1)
+      if ((en4[2] | path_enabled[NUM_OF_CHANNELS-1]) == 1'b1)
       begin
         ddata[3*DATA_WIDTH-1:2*DATA_WIDTH]    <= packed_data[3*DATA_WIDTH-1:2*DATA_WIDTH];
       end
@@ -420,7 +420,7 @@ module util_adc_pack (
       begin
         ddata[4*DATA_WIDTH-1:3*DATA_WIDTH] <= packed_data[2*DATA_WIDTH-1:DATA_WIDTH];
       end
-      if ((en4[3] | path_enabled[CHANNELS-1]) == 1'b1)
+      if ((en4[3] | path_enabled[NUM_OF_CHANNELS-1]) == 1'b1)
       begin
         ddata[4*DATA_WIDTH-1:3*DATA_WIDTH] <= packed_data[4*DATA_WIDTH-1:3*DATA_WIDTH];
       end
@@ -430,7 +430,7 @@ module util_adc_pack (
       begin
         ddata[5*DATA_WIDTH-1:4*DATA_WIDTH] <= packed_data[(DATA_WIDTH-1):0];
       end
-      if (path_enabled[CHANNELS-1] == 1'b1)
+      if (path_enabled[NUM_OF_CHANNELS-1] == 1'b1)
       begin
         ddata[5*DATA_WIDTH-1:4*DATA_WIDTH] <= packed_data[5*DATA_WIDTH-1:4*DATA_WIDTH];
       end
@@ -444,7 +444,7 @@ module util_adc_pack (
       begin
         ddata[6*DATA_WIDTH-1:5*DATA_WIDTH] <= packed_data[2*DATA_WIDTH-1:DATA_WIDTH];
       end
-      if (path_enabled[CHANNELS-1] == 1'b1)
+      if (path_enabled[NUM_OF_CHANNELS-1] == 1'b1)
       begin
         ddata[6*DATA_WIDTH-1:5*DATA_WIDTH] <= packed_data[6*DATA_WIDTH-1:5*DATA_WIDTH];
       end
@@ -458,7 +458,7 @@ module util_adc_pack (
       begin
         ddata[7*DATA_WIDTH-1:6*DATA_WIDTH] <= packed_data[3*DATA_WIDTH-1:2*DATA_WIDTH];
       end
-      if (path_enabled[CHANNELS-1] == 1'b1)
+      if (path_enabled[NUM_OF_CHANNELS-1] == 1'b1)
       begin
         ddata[7*DATA_WIDTH-1:6*DATA_WIDTH] <= packed_data[7*DATA_WIDTH-1:6*DATA_WIDTH];
       end
@@ -476,7 +476,7 @@ module util_adc_pack (
       begin
         ddata[8*DATA_WIDTH-1:7*DATA_WIDTH]  <= packed_data[4*DATA_WIDTH-1:3*DATA_WIDTH];
       end
-      if (path_enabled[CHANNELS-1] == 1'b1)
+      if (path_enabled[NUM_OF_CHANNELS-1] == 1'b1)
       begin
         ddata[8*DATA_WIDTH-1:7*DATA_WIDTH]  <= packed_data[8*DATA_WIDTH-1:7*DATA_WIDTH];
       end

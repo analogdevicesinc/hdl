@@ -54,17 +54,17 @@ module util_upack_dsf (
 
   // parameters
 
-  parameter   P_CNT   =  4;
-  parameter   M_CNT   =  8;
-  parameter   CH_DW   = 32;
-  parameter   CH_OCNT =  4;
+  parameter   NUM_OF_CHANNELS_P   =  4;
+  parameter   NUM_OF_CHANNELS_M   =  8;
+  parameter   CHANNEL_DATA_WIDTH  = 32;
+  parameter   NUM_OF_CHANNELS_O   =  4;
 
-  localparam  CH_SCNT = CH_DW/16;
-  localparam  P_WIDTH = CH_DW*P_CNT;
-  localparam  M_WIDTH = CH_DW*M_CNT;
-  localparam  O_WIDTH = CH_DW*CH_OCNT;
-  localparam  E_WIDTH = CH_DW*(M_CNT+1);
-  localparam  CH_DCNT = P_CNT - CH_OCNT;
+  localparam  CH_SCNT = CHANNEL_DATA_WIDTH/16;
+  localparam  P_WIDTH = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_P;
+  localparam  M_WIDTH = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_M;
+  localparam  O_WIDTH = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_O;
+  localparam  E_WIDTH = CHANNEL_DATA_WIDTH*(NUM_OF_CHANNELS_M+1);
+  localparam  CH_DCNT = NUM_OF_CHANNELS_P - NUM_OF_CHANNELS_O;
 
   // dac interface
 
@@ -104,16 +104,16 @@ module util_upack_dsf (
 
   genvar i;
   generate
-  if (CH_OCNT == P_CNT) begin
+  if (NUM_OF_CHANNELS_O == NUM_OF_CHANNELS_P) begin
   for (i = 0; i < CH_SCNT ; i = i +1) begin: g_dsf_data
-    assign dac_dsf_data_s[(((i +1) * M_CNT * 16)-1):(i*M_CNT*16)] =
-      dac_data[(((i+1)*16*P_CNT)-1): (i*16*P_CNT)];
+    assign dac_dsf_data_s[(((i +1) * NUM_OF_CHANNELS_M * 16)-1):(i*NUM_OF_CHANNELS_M*16)] =
+      dac_data[(((i+1)*16*NUM_OF_CHANNELS_P)-1): (i*16*NUM_OF_CHANNELS_P)];
   end
   end
   endgenerate
 
   generate
-  if (CH_OCNT == P_CNT) begin
+  if (NUM_OF_CHANNELS_O == NUM_OF_CHANNELS_P) begin
 
   assign dac_samples_int_s = 'd0;
   assign dac_data_s = 'd0;
@@ -142,15 +142,15 @@ module util_upack_dsf (
   // data store & forward
 
   generate
-  if (P_CNT > CH_OCNT) begin
+  if (NUM_OF_CHANNELS_P > NUM_OF_CHANNELS_O) begin
 
   assign dac_samples_int_s =  (dac_dsf_valid == 1'b1) ? (dac_samples_int + CH_DCNT) :
-            ((dac_samples_int >= CH_OCNT) ? (dac_samples_int - CH_OCNT) : dac_samples_int);
+            ((dac_samples_int >= NUM_OF_CHANNELS_O) ? (dac_samples_int - NUM_OF_CHANNELS_O) : dac_samples_int);
 
 
   always @(posedge dac_clk) begin
     dac_dmx_valid <= dac_valid & dac_dmx_enable;
-    if (dac_samples_int_s < CH_OCNT) begin
+    if (dac_samples_int_s < NUM_OF_CHANNELS_O) begin
       dac_dsf_valid <= dac_valid & dac_dmx_enable;
     end else begin
       dac_dsf_valid <= 1'b0;
@@ -190,20 +190,20 @@ module util_upack_dsf (
   always @(posedge dac_clk) begin
     if (dac_dmx_valid_d == 1'b1) begin
       case (dac_samples_int_d)
-        3'b111: dac_dsf_data_int <= { dac_data_s[((CH_DW*1)-1):0],
-                                      dac_data_int[((CH_DW*8)-1):(CH_DW*1)]};
-        3'b110: dac_dsf_data_int <= { dac_data_s[((CH_DW*2)-1):0],
-                                      dac_data_int[((CH_DW*8)-1):(CH_DW*2)]};
-        3'b101: dac_dsf_data_int <= { dac_data_s[((CH_DW*3)-1):0],
-                                      dac_data_int[((CH_DW*8)-1):(CH_DW*3)]};
-        3'b100: dac_dsf_data_int <= { dac_data_s[((CH_DW*4)-1):0],
-                                      dac_data_int[((CH_DW*8)-1):(CH_DW*4)]};
-        3'b011: dac_dsf_data_int <= { dac_data_s[((CH_DW*5)-1):0],
-                                      dac_data_int[((CH_DW*8)-1):(CH_DW*5)]};
-        3'b010: dac_dsf_data_int <= { dac_data_s[((CH_DW*6)-1):0],
-                                      dac_data_int[((CH_DW*8)-1):(CH_DW*6)]};
-        3'b001: dac_dsf_data_int <= { dac_data_s[((CH_DW*7)-1):0],
-                                      dac_data_int[((CH_DW*8)-1):(CH_DW*7)]};
+        3'b111: dac_dsf_data_int <= { dac_data_s[((CHANNEL_DATA_WIDTH*1)-1):0],
+                                      dac_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*1)]};
+        3'b110: dac_dsf_data_int <= { dac_data_s[((CHANNEL_DATA_WIDTH*2)-1):0],
+                                      dac_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*2)]};
+        3'b101: dac_dsf_data_int <= { dac_data_s[((CHANNEL_DATA_WIDTH*3)-1):0],
+                                      dac_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*3)]};
+        3'b100: dac_dsf_data_int <= { dac_data_s[((CHANNEL_DATA_WIDTH*4)-1):0],
+                                      dac_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*4)]};
+        3'b011: dac_dsf_data_int <= { dac_data_s[((CHANNEL_DATA_WIDTH*5)-1):0],
+                                      dac_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*5)]};
+        3'b010: dac_dsf_data_int <= { dac_data_s[((CHANNEL_DATA_WIDTH*6)-1):0],
+                                      dac_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*6)]};
+        3'b001: dac_dsf_data_int <= { dac_data_s[((CHANNEL_DATA_WIDTH*7)-1):0],
+                                      dac_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*7)]};
         3'b000: dac_dsf_data_int <= dac_data_s;
         default: dac_dsf_data_int <= 'd0;
       endcase
@@ -214,18 +214,18 @@ module util_upack_dsf (
 
   genvar n;
   generate
-  if (P_CNT > CH_OCNT) begin
+  if (NUM_OF_CHANNELS_P > NUM_OF_CHANNELS_O) begin
   assign dac_dsf_data_s[M_WIDTH] = 'd0;
   for (n = 0; n < CH_SCNT; n = n + 1) begin: g_out
-  assign dac_dsf_data_s[(((n+1)*M_CNT*16)-1):(((n*M_CNT)+CH_OCNT)*16)] = 'd0;
-  assign dac_dsf_data_s[((((n*M_CNT)+CH_OCNT)*16)-1):(n*M_CNT*16)] =
-    dac_dsf_data_int[(((n+1)*CH_OCNT*16)-1):(n*CH_OCNT*16)];
+  assign dac_dsf_data_s[(((n+1)*NUM_OF_CHANNELS_M*16)-1):(((n*NUM_OF_CHANNELS_M)+NUM_OF_CHANNELS_O)*16)] = 'd0;
+  assign dac_dsf_data_s[((((n*NUM_OF_CHANNELS_M)+NUM_OF_CHANNELS_O)*16)-1):(n*NUM_OF_CHANNELS_M*16)] =
+    dac_dsf_data_int[(((n+1)*NUM_OF_CHANNELS_O*16)-1):(n*NUM_OF_CHANNELS_O*16)];
   end
   end
   endgenerate
 
   generate
-  if (P_CNT > CH_OCNT) begin
+  if (NUM_OF_CHANNELS_P > NUM_OF_CHANNELS_O) begin
   always @(posedge dac_clk) begin
     if (dac_dmx_enable == 1'b1) begin
       dac_dsf_data <= dac_dsf_data_s[(M_WIDTH-1):0];

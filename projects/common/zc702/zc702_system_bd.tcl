@@ -107,8 +107,8 @@ set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
 set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
 
 set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
-set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_tx_core
+set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_spdif_tx_core
+set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_tx_core
 
 # system reset/clock definitions
 
@@ -153,7 +153,7 @@ ad_connect  spi1_sdi_i sys_ps7/SPI1_MISO_I
 
 # hdmi
 
-ad_connect  sys_cpu_clk axi_hdmi_core/m_axis_mm2s_clk
+ad_connect  sys_cpu_clk axi_hdmi_core/vdma_clk
 ad_connect  sys_cpu_clk axi_hdmi_dma/m_axis_mm2s_aclk
 ad_connect  axi_hdmi_core/hdmi_clk axi_hdmi_clkgen/clk_0
 ad_connect  axi_hdmi_core/hdmi_out_clk hdmi_out_clk
@@ -161,9 +161,11 @@ ad_connect  axi_hdmi_core/hdmi_16_hsync hdmi_hsync
 ad_connect  axi_hdmi_core/hdmi_16_vsync hdmi_vsync
 ad_connect  axi_hdmi_core/hdmi_16_data_e hdmi_data_e
 ad_connect  axi_hdmi_core/hdmi_16_data hdmi_data
-ad_connect  axi_hdmi_core/M_AXIS_MM2S axi_hdmi_dma/m_axis_mm2s
-ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_dma/mm2s_fsync
-ad_connect  axi_hdmi_core/m_axis_mm2s_fsync axi_hdmi_core/m_axis_mm2s_fsync_ret
+ad_connect  axi_hdmi_core/vdma_valid axi_hdmi_dma/m_axis_mm2s_tvalid
+ad_connect  axi_hdmi_core/vdma_data axi_hdmi_dma/m_axis_mm2s_tdata
+ad_connect  axi_hdmi_core/vdma_ready axi_hdmi_dma/m_axis_mm2s_tready
+ad_connect  axi_hdmi_core/vdma_fs axi_hdmi_dma/mm2s_fsync
+ad_connect  axi_hdmi_core/vdma_fs axi_hdmi_core/vdma_fs_ret
 
 # spdif audio
 
@@ -173,7 +175,7 @@ ad_connect  sys_cpu_resetn axi_spdif_tx_core/DMA_REQ_RSTN
 ad_connect  sys_ps7/DMA0_REQ axi_spdif_tx_core/DMA_REQ
 ad_connect  sys_ps7/DMA0_ACK axi_spdif_tx_core/DMA_ACK
 ad_connect  sys_200m_clk sys_audio_clkgen/clk_in1
-ad_connect  sys_cpu_resetn sys_audio_clkgen/resetn 
+ad_connect  sys_cpu_resetn sys_audio_clkgen/resetn
 ad_connect  sys_audio_clkgen/clk_out1 axi_spdif_tx_core/spdif_data_clk
 ad_connect  spdif axi_spdif_tx_core/spdif_tx_o
 

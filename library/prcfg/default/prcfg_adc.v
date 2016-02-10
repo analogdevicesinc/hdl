@@ -48,15 +48,13 @@ module prcfg_adc (
   status,
 
   // FIFO interface
-  src_adc_dwr,
-  src_adc_dsync,
-  src_adc_ddata,
-  src_adc_dovf,
+  src_adc_enable,
+  src_adc_valid,
+  src_adc_data,
 
-  dst_adc_dwr,
-  dst_adc_dsync,
-  dst_adc_ddata,
-  dst_adc_dovf
+  dst_adc_enable,
+  dst_adc_valid,
+  dst_adc_data
 );
 
   localparam  RP_ID       = 8'hA0;
@@ -67,27 +65,23 @@ module prcfg_adc (
   input   [31:0]    control;
   output  [31:0]    status;
 
-  input             src_adc_dwr;
-  input             src_adc_dsync;
-  input   [31:0]    src_adc_ddata;
-  output            src_adc_dovf;
+  input             src_adc_enable;
+  input             src_adc_valid;
+  input   [15:0]    src_adc_data;
 
-  output            dst_adc_dwr;
-  output            dst_adc_dsync;
-  output  [31:0]    dst_adc_ddata;
-  input             dst_adc_dovf;
+  output            dst_adc_enable;
+  output            dst_adc_valid;
+  output  [15:0]    dst_adc_data;
 
-  reg               dst_adc_dwr;
-  reg               dst_adc_dsync;
-  reg     [31:0]    dst_adc_ddata;
-  reg               src_adc_dovf;
+  reg               dst_adc_enable;
+  reg               dst_adc_valid;
+  reg     [15:0]    dst_adc_data;
 
   assign status = {24'h0, RP_ID};
 
   always @(posedge clk) begin
-    dst_adc_dwr    <= src_adc_dwr;
-    dst_adc_dsync  <= src_adc_dsync;
-    dst_adc_ddata  <= src_adc_ddata;
-    src_adc_dovf   <= dst_adc_dovf;
+    dst_adc_enable <= src_adc_enable;
+    dst_adc_valid <= src_adc_valid;
+    dst_adc_data <= src_adc_data;
   end
 endmodule

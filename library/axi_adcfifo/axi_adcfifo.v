@@ -114,7 +114,7 @@ module axi_adcfifo (
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 16;
   parameter   AXI_ADDRESS = 32'h00000000;
-  parameter   AXI_ADDRLIMIT = 32'hffffffff;
+  parameter   AXI_ADDRESS_LIMIT = 32'hffffffff;
   parameter   AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
 
   // adc interface
@@ -215,7 +215,7 @@ module axi_adcfifo (
     .AXI_SIZE (AXI_SIZE),
     .AXI_LENGTH (AXI_LENGTH),
     .AXI_ADDRESS (AXI_ADDRESS),
-    .AXI_ADDRLIMIT (AXI_ADDRLIMIT))
+    .AXI_ADDRESS_LIMIT (AXI_ADDRESS_LIMIT))
   i_wr (
     .dma_xfer_req (dma_xfer_req),
     .axi_rd_req (axi_rd_req_s),
@@ -258,7 +258,7 @@ module axi_adcfifo (
     .AXI_SIZE (AXI_SIZE),
     .AXI_LENGTH (AXI_LENGTH),
     .AXI_ADDRESS (AXI_ADDRESS),
-    .AXI_ADDRLIMIT (AXI_ADDRLIMIT))
+    .AXI_ADDRESS_LIMIT (AXI_ADDRESS_LIMIT))
   i_rd (
     .dma_xfer_req (dma_xfer_req),
     .axi_rd_req (axi_rd_req_s),
