@@ -70,8 +70,7 @@ module axi_ad9361 (
   // tdd sync (1s pulse)
 
   tdd_sync,
-  tdd_sync_en,
-  tdd_terminal_type,
+  tdd_sync_cntr,
 
   // delay clock
 
@@ -194,8 +193,7 @@ module axi_ad9361 (
   // tdd sync
 
   input           tdd_sync;
-  output          tdd_sync_en;
-  output          tdd_terminal_type;
+  output          tdd_sync_cntr;
 
   // delay clock
 
@@ -415,17 +413,10 @@ module axi_ad9361 (
 
   // additional flop to keep control and data synced
   always @(posedge clk) begin
-    if(rst == 1) begin
-      adc_data_i0 <= 16'b0;
-      adc_data_q0 <= 16'b0;
-      adc_data_i1 <= 16'b0;
-      adc_data_q1 <= 16'b0;
-    end else begin
-      adc_data_i0 <= adc_data_i0_s;
-      adc_data_q0 <= adc_data_q0_s;
-      adc_data_i1 <= adc_data_i1_s;
-      adc_data_q1 <= adc_data_q1_s;
-    end
+    adc_data_i0 <= adc_data_i0_s;
+    adc_data_q0 <= adc_data_q0_s;
+    adc_data_i1 <= adc_data_i1_s;
+    adc_data_q1 <= adc_data_q1_s;
   end
 
   axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if (
@@ -451,8 +442,7 @@ module axi_ad9361 (
     .tdd_enabled (tdd_mode_s),
     .tdd_status (tdd_status_s),
     .tdd_sync (tdd_sync),
-    .tdd_sync_en (tdd_sync_en),
-    .tdd_terminal_type (tdd_terminal_type),
+    .tdd_sync_cntr (tdd_sync_cntr),
     .tx_valid_i0 (dac_valid_i0_s),
     .tx_valid_q0 (dac_valid_q0_s),
     .tx_valid_i1 (dac_valid_i1_s),

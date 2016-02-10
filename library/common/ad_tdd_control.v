@@ -76,7 +76,6 @@ module ad_tdd_control(
   tdd_tx_dp_on_2,
   tdd_tx_dp_off_2,
   tdd_sync,
-  tdd_sync_en,
 
   // TDD control signals
 
@@ -130,7 +129,6 @@ module ad_tdd_control(
   input  [23:0]   tdd_tx_dp_off_2;
 
   input           tdd_sync;
-  output          tdd_sync_en;
 
   output          tdd_tx_dp_en;       // initiate vco tx2rx switch
   output          tdd_rx_vco_en;      // initiate vco rx2tx switch
@@ -183,8 +181,6 @@ module ad_tdd_control(
   reg             tdd_sync_d2 = 1'b0;
   reg             tdd_sync_d3 = 1'b0;
 
-  reg             tdd_sync_en = 1'b0;
-
   // internal signals
 
   wire   [23:0]   tdd_vco_rx_on_1_s;
@@ -217,12 +213,10 @@ module ad_tdd_control(
   // synchronization of tdd_sync
   always @(posedge clk) begin
     if (rst == 1'b1) begin
-      tdd_sync_en <= 1'b0;
       tdd_sync_d1 <= 1'b0;
       tdd_sync_d2 <= 1'b0;
       tdd_sync_d3 <= 1'b0;
     end else begin
-      tdd_sync_en <= tdd_enable;
       tdd_sync_d1 <= tdd_sync;
       tdd_sync_d2 <= tdd_sync_d1;
       tdd_sync_d3 <= tdd_sync_d2;

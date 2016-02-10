@@ -61,8 +61,7 @@ module axi_ad9361_tdd (
   // sync signal
 
   tdd_sync,
-  tdd_sync_en,
-  tdd_terminal_type,
+  tdd_sync_cntr,
 
   // tx/rx data flow control
 
@@ -116,8 +115,7 @@ module axi_ad9361_tdd (
   input   [ 7:0]    tdd_status;
 
   input             tdd_sync;
-  output            tdd_sync_en;
-  output            tdd_terminal_type;
+  output            tdd_sync_cntr;
 
   // tx data flow control
 
@@ -211,6 +209,9 @@ module axi_ad9361_tdd (
   assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_sync, tdd_tx_dp_en_s,
                     tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
 
+  assign  tdd_enabled = tdd_enable_s;
+  assign  tdd_sync_cntr = ~(tdd_enable_s & tdd_terminal_type_s);
+
   // tx/rx data flow control
 
   always @(posedge clk) begin
@@ -241,8 +242,6 @@ module axi_ad9361_tdd (
     end
   end
 
-  assign  tdd_enabled = tdd_enable_s;
-  assign  tdd_terminal_type = ~tdd_terminal_type_s;
 
   // instantiations
 
@@ -259,7 +258,6 @@ module axi_ad9361_tdd (
     .tdd_counter_init(tdd_counter_init_s),
     .tdd_frame_length(tdd_frame_length_s),
     .tdd_terminal_type(tdd_terminal_type_s),
-    .tdd_sync_enable(tdd_sync_enable_s),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),
@@ -309,7 +307,6 @@ module axi_ad9361_tdd (
     .tdd_rx_only(tdd_rx_only_s),
     .tdd_tx_only(tdd_tx_only_s),
     .tdd_sync (tdd_sync),
-    .tdd_sync_en (tdd_sync_en),
     .tdd_vco_rx_on_1(tdd_vco_rx_on_1_s),
     .tdd_vco_rx_off_1(tdd_vco_rx_off_1_s),
     .tdd_vco_tx_on_1(tdd_vco_tx_on_1_s),
