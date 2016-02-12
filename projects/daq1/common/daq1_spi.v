@@ -73,13 +73,11 @@ module daq1_spi (
 
   // internal signals
 
-  wire            spi_csn_s;
   wire            spi_enable_s;
 
   // check on rising edge and change on falling edge
 
-  assign spi_csn_s = & spi_csn;
-  assign spi_enable_s = spi_enable & ~spi_csn_s;
+  assign spi_enable_s = spi_enable & ~spi_csn;
 
   always @(posedge spi_clk or posedge spi_csn_s) begin
     if (spi_csn_s == 1'b1) begin
