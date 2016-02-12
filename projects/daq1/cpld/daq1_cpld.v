@@ -110,13 +110,16 @@ module daq1_cpld (
 
   // CPLD Register Map Addresses
 
-  localparam  [ 6:0]  ADC_CONTROL_ADDR    = 7'h00;
-  localparam  [ 6:0]  DAC_CONTROL_ADDR    = 7'h01;
-  localparam  [ 6:0]  CLK_CONTROL_ADDR    = 7'h02;
-  localparam  [ 6:0]  IRQ_MASK_ADDR       = 7'h03;
-  localparam  [ 6:0]  ADC_STATUS_ADDR     = 7'h10;
-  localparam  [ 6:0]  DAC_STATUS_ADDR     = 7'h11;
-  localparam  [ 6:0]  CLK_STATUS_ADDR     = 7'h12;
+  localparam  [ 6:0]  CPLD_VERSION_ADDR   = 7'h00;
+  localparam  [ 6:0]  ADC_CONTROL_ADDR    = 7'h10;
+  localparam  [ 6:0]  DAC_CONTROL_ADDR    = 7'h11;
+  localparam  [ 6:0]  CLK_CONTROL_ADDR    = 7'h12;
+  localparam  [ 6:0]  IRQ_MASK_ADDR       = 7'h13;
+  localparam  [ 6:0]  ADC_STATUS_ADDR     = 7'h20;
+  localparam  [ 6:0]  DAC_STATUS_ADDR     = 7'h21;
+  localparam  [ 6:0]  CLK_STATUS_ADDR     = 7'h22;
+
+  localparam  [ 7:0]  CPLD_VERSION        = 8'hDAC10101;
 
   // Internal Registers/Signals
 
@@ -148,11 +151,9 @@ module daq1_cpld (
 
   always @(posedge fmc_spi_sclk or posedge fmc_spi_csn) begin
     if (fmc_spi_csn == 1'b1) begin
-      fmc_spi_counter <= 6'h0;
       fmc_spi_dev_sel <= 8'h0;
       fmc_cpld_addr <= 8'h0;
     end else begin
-      fmc_spi_counter <= fmc_spi_counter + 1;
       if (fmc_spi_counter <= 7) begin
         fmc_spi_dev_sel <= {fmc_spi_dev_sel[6:0], fmc_spi_sdio};
       end
@@ -180,14 +181,16 @@ module daq1_cpld (
 
   always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
     if (fmc_spi_csn == 1'b1) begin
+      fmc_spi_counter <= 6'h0;
       fpga_to_cpld <= 1'b1;
       fmc_spi_csn_enb <= 1'b1;
     end else begin
+      fmc_spi_counter <= fmc_spi_counter + 1;
       fmc_spi_csn_enb <= (fmc_spi_counter <= 7) ? 1'b1 : 1'b0;
       if (adc_spicsn & clk_spicsn) begin
-        fpga_to_cpld <= (fmc_spi_counter >= 16) ? rdnwr : 1'b1;
+        fpga_to_cpld <= (fmc_spi_counter >= 15) ? rdnwr : 1'b1;
       end else begin
-        fpga_to_cpld <= (fmc_spi_counter >= 24) ? rdnwr : 1'b1;
+        fpga_to_cpld <= (fmc_spi_counter >= 23) ? rdnwr : 1'b1;
       end
     end
   end
@@ -196,6 +199,8 @@ module daq1_cpld (
 
   always @(fmc_cpld_addr) begin
     case (fmc_cpld_addr[6:0])
+      CPLD_VERSION_ADDR :
+        cpld_rdata <= CPLD_VERSION;
       ADC_CONTROL_ADDR :
         cpld_rdata <= adc_pwdn_stby;
       DAC_CONTROL_ADDR :
@@ -218,18 +223,18 @@ module daq1_cpld (
   always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
     if (fmc_spi_csn == 1'b1) begin
       cpld_rdata_bit <= 1'b0;
-      cpld_rdata_index <= 3'h0;
+      cpld_rdata_index <= 3'h7;
     end else begin
       if (fpga_to_cpld == 1'b0) begin
         cpld_rdata_bit <= cpld_rdata[cpld_rdata_index];
-        cpld_rdata_index <= cpld_rdata_index + 1;
+        cpld_rdata_index <= cpld_rdata_index - 1;
       end
     end
   end
 
   // Internal register write access
 
-  always @(negedge fmc_spi_sclk) begin
+  always @(fpga_to_cpld, cpld_spicsn, fmc_spi_counter) begin
     if ((fpga_to_cpld == 1'b1) &&
         (cpld_spicsn == 1'b0) &&
         (fmc_spi_counter == 8'h18)) begin
@@ -277,7 +282,7 @@ module daq1_cpld (
   always @(*) begin
     cpld_irq <= {2'b00, dac_irqn, clk_status2, clk_status1, adc_status_p, adc_fdb, adc_fda};
   end
-  
+
   assign fmc_irq = |(~cpld_irq_mask & cpld_irq);
 
 endmodule
