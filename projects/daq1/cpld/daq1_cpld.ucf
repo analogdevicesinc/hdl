@@ -16,10 +16,10 @@ NET "clk_syncn"  LOC = "P24" | IOSTANDARD = LVCMOS33 ;
 NET "dac_irqn"  LOC = "P26" | IOSTANDARD = LVCMOS33 ; 
 NET "dac_resetn"  LOC = "P27" | IOSTANDARD = LVCMOS33 ; 
 NET "dac_spicsn"  LOC = "P14" | IOSTANDARD = LVCMOS33 ; 
-NET "fmc_irq"  LOC = "P5" | IOSTANDARD = LVCMOS25 ; 
-NET "fmc_spi_csn"  LOC = "P2" | IOSTANDARD = LVCMOS25 ; 
-NET "fmc_spi_sclk"  LOC = "P1" | IOSTANDARD = LVCMOS25; 
-NET "fmc_spi_sdio"  LOC = "P4" | IOSTANDARD = LVCMOS25 ; 
+NET "fmc_irq"  LOC = "P2" | IOSTANDARD = LVCMOS25; 
+NET "fmc_spi_csn"  LOC = "P5" | IOSTANDARD = LVCMOS25 ; 
+NET "fmc_spi_sclk"  LOC = "P4" | IOSTANDARD = LVCMOS25 ; 
+NET "fmc_spi_sdio"  LOC = "P1" | IOSTANDARD = LVCMOS25 ; 
 NET "sclk"  LOC = "P30" | IOSTANDARD = LVCMOS33 ; 
 NET "sdio"  LOC = "P28" | IOSTANDARD = LVCMOS33 ; 
 
