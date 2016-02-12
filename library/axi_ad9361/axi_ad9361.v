@@ -301,6 +301,7 @@ module axi_ad9361 (
   wire    [47:0]  adc_data_s;
   wire            adc_status_s;
   wire            dac_valid_s;
+  wire            g_dac_valid_s;
   wire    [47:0]  dac_data_s;
   wire            dac_valid_i0_s;
   wire            dac_valid_q0_s;
@@ -390,7 +391,7 @@ module axi_ad9361 (
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode),
     .adc_ddr_edgesel (adc_ddr_edgesel),
-    .dac_valid (dac_valid_s),
+    .dac_valid (g_dac_valid_s),
     .dac_data (dac_data_s),
     .dac_r1_mode (dac_r1_mode),
     .tdd_enable (tdd_enable_s),
@@ -443,10 +444,12 @@ module axi_ad9361 (
     .tdd_status (tdd_status_s),
     .tdd_sync (tdd_sync),
     .tdd_sync_cntr (tdd_sync_cntr),
+    .tx_valid (dac_valid_s),
     .tx_valid_i0 (dac_valid_i0_s),
     .tx_valid_q0 (dac_valid_q0_s),
     .tx_valid_i1 (dac_valid_i1_s),
     .tx_valid_q1 (dac_valid_q1_s),
+    .tdd_tx_valid (g_dac_valid_s),
     .tdd_tx_valid_i0 (dac_valid_i0),
     .tdd_tx_valid_q0 (dac_valid_q0),
     .tdd_tx_valid_i1 (dac_valid_i1),

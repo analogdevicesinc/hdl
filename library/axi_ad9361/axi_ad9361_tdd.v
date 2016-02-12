@@ -65,11 +65,13 @@ module axi_ad9361_tdd (
 
   // tx/rx data flow control
 
+  tx_valid,
   tx_valid_i0,
   tx_valid_q0,
   tx_valid_i1,
   tx_valid_q1,
 
+  tdd_tx_valid,
   tdd_tx_valid_i0,
   tdd_tx_valid_q0,
   tdd_tx_valid_i1,
@@ -119,11 +121,13 @@ module axi_ad9361_tdd (
 
   // tx data flow control
 
+  input             tx_valid;
   input             tx_valid_i0;
   input             tx_valid_q0;
   input             tx_valid_i1;
   input             tx_valid_q1;
 
+  output            tdd_tx_valid;
   output            tdd_tx_valid_i0;
   output            tdd_tx_valid_q0;
   output            tdd_tx_valid_i1;
@@ -158,6 +162,7 @@ module axi_ad9361_tdd (
 
   reg               tdd_slave_synced = 1'b0;
 
+  reg               tdd_tx_valid    = 1'b0;
   reg               tdd_tx_valid_i0 = 1'b0;
   reg               tdd_tx_valid_q0 = 1'b0;
   reg               tdd_tx_valid_i1 = 1'b0;
@@ -216,11 +221,13 @@ module axi_ad9361_tdd (
 
   always @(posedge clk) begin
     if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
+      tdd_tx_valid    <= tx_valid & tdd_tx_dp_en_s;
       tdd_tx_valid_i0 <= tx_valid_i0 & tdd_tx_dp_en_s;
       tdd_tx_valid_q0 <= tx_valid_q0 & tdd_tx_dp_en_s;
       tdd_tx_valid_i1 <= tx_valid_i1 & tdd_tx_dp_en_s;
       tdd_tx_valid_q1 <= tx_valid_q1 & tdd_tx_dp_en_s;
     end else begin
+      tdd_tx_valid    <= tx_valid;
       tdd_tx_valid_i0 <= tx_valid_i0;
       tdd_tx_valid_q0 <= tx_valid_q0;
       tdd_tx_valid_i1 <= tx_valid_i1;
