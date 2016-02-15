@@ -119,7 +119,7 @@ module daq1_cpld (
   localparam  [ 6:0]  DAC_STATUS_ADDR     = 7'h21;
   localparam  [ 6:0]  CLK_STATUS_ADDR     = 7'h22;
 
-  localparam  [ 7:0]  CPLD_VERSION        = 8'hDAC10101;
+  localparam  [ 7:0]  CPLD_VERSION        = 8'h0101;
 
   // Internal Registers/Signals
 
@@ -172,12 +172,12 @@ module daq1_cpld (
 
   // SPI control and data
 
-  assign sclk = fmc_spi_sclk;
   assign sdio = fpga_to_cpld ? fmc_spi_sdio : 1'bZ;
   assign fmc_spi_sdio = fpga_to_cpld ? 1'bZ : cpld_rdata_s;
   assign cpld_rdata_s = cpld_spicsn ? sdio : cpld_rdata_bit;
-
   assign rdnwr = ~fmc_cpld_addr[7];
+
+  assign    sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
 
   always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
     if (fmc_spi_csn == 1'b1) begin
