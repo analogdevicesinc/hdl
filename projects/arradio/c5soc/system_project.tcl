@@ -5,7 +5,7 @@ source ../../scripts/adi_env.tcl
 project_new arradio_c5soc -overwrite
 
 source "../../common/c5soc/c5soc_system_assign.tcl"
-set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/c5soc;../../../library/**/*"
+set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/**/*;../../../library/**/*"
 set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/**/*;../../../library/**/*"
 set_global_assignment -name QSYS_FILE system_bd.qsys
 
