@@ -354,7 +354,7 @@
   <parameter name="DMA_2D_TRANSFER" value="0" />
   <parameter name="DMA_DATA_WIDTH_DEST" value="64" />
   <parameter name="DMA_DATA_WIDTH_SRC" value="64" />
-  <parameter name="DMA_LENGTH_WIDTH" value="14" />
+  <parameter name="DMA_LENGTH_WIDTH" value="24" />
   <parameter name="DMA_TYPE_DEST" value="0" />
   <parameter name="DMA_TYPE_SRC" value="2" />
   <parameter name="FIFO_SIZE" value="4" />
@@ -371,7 +371,7 @@
   <parameter name="DMA_2D_TRANSFER" value="0" />
   <parameter name="DMA_DATA_WIDTH_DEST" value="64" />
   <parameter name="DMA_DATA_WIDTH_SRC" value="64" />
-  <parameter name="DMA_LENGTH_WIDTH" value="14" />
+  <parameter name="DMA_LENGTH_WIDTH" value="24" />
   <parameter name="DMA_TYPE_DEST" value="2" />
   <parameter name="DMA_TYPE_SRC" value="0" />
   <parameter name="FIFO_SIZE" value="4" />
