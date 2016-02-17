@@ -98,6 +98,7 @@ module up_adc_common (
 
   localparam  PCORE_VERSION = 32'h00090062;
   parameter   ID = 0;
+  parameter   ADC_COMMON_ID = 6'h00;
 
   // clock reset
 
@@ -194,8 +195,8 @@ module up_adc_common (
 
   // decode block select
 
-  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
-  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+  assign up_wreq_s = (up_waddr[13:8] == ADC_COMMON_ID) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == ADC_COMMON_ID) ? up_rreq : 1'b0;
 
   // processor write interface
 

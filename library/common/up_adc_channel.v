@@ -96,6 +96,7 @@ module up_adc_channel (
 
   // parameters
 
+  parameter ADC_COMMON_ID = 6'h01;
   parameter ADC_CHANNEL_ID = 4'h0;
 
   // adc interface
@@ -211,8 +212,8 @@ module up_adc_channel (
 
   // decode block select
 
-  assign up_wreq_s = ((up_waddr[13:8] == 6'h01) && (up_waddr[7:4] == ADC_CHANNEL_ID)) ? up_wreq : 1'b0;
-  assign up_rreq_s = ((up_raddr[13:8] == 6'h01) && (up_raddr[7:4] == ADC_CHANNEL_ID)) ? up_rreq : 1'b0;
+  assign up_wreq_s = ((up_waddr[13:8] == ADC_COMMON_ID) && (up_waddr[7:4] == ADC_CHANNEL_ID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == ADC_COMMON_ID) && (up_raddr[7:4] == ADC_CHANNEL_ID)) ? up_rreq : 1'b0;
 
   // processor write interface
 
