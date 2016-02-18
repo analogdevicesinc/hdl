@@ -39,33 +39,47 @@
 
 module fmcadc2_spi (
 
+  spi_adf4355,
+  spi_adf4355_ce,
+
   spi_clk,
-
-  spi_adc_csn,
-  spi_ext_csn_0,
-  spi_ext_csn_1,
-
+  spi_csn,
   spi_mosi,
   spi_miso,
 
+  spi_adc_csn,
+  spi_adc_clk,
   spi_adc_sdio,
-  spi_ext_sdio);
+
+  spi_adf4355_data_or_csn_0,
+  spi_adf4355_clk_or_csn_1,
+  spi_adf4355_le_or_clk,
+  spi_adf4355_ce_or_sdio);
+
+  // select (adf4355 = 0x1), (normal = 0x0)
+
+  input           spi_adf4355;
+  input           spi_adf4355_ce;
 
   // 4 wire
 
   input           spi_clk;
-
-  input           spi_adc_csn;
-  input           spi_ext_csn_0;
-  input           spi_ext_csn_1;
-
+  input   [ 2:0]  spi_csn;
   input           spi_mosi;
   output          spi_miso;
 
-  // 3 wire
+  // adc interface (3 wire)
 
+  output          spi_adc_csn;
+  output          spi_adc_clk;
   inout           spi_adc_sdio;
-  inout           spi_ext_sdio;
+
+  // adf4355 or normal (AMP/EXT)
+
+  output          spi_adf4355_data_or_csn_0;
+  output          spi_adf4355_clk_or_csn_1;
+  output          spi_adf4355_le_or_clk;
+  inout           spi_adf4355_ce_or_sdio;
 
   // internal registers
 
@@ -77,12 +91,10 @@ module fmcadc2_spi (
 
   wire            spi_csn_s;
   wire            spi_enable_s;
-  wire            spi_adc_miso_s;
-  wire            spi_ext_miso_s;
 
   // check on rising edge and change on falling edge
 
-  assign spi_csn_s = spi_adc_csn & spi_ext_csn_0 & spi_ext_csn_1;
+  assign spi_csn_s = & spi_csn;
   assign spi_enable_s = spi_enable & ~spi_csn_s;
 
   always @(posedge spi_clk or posedge spi_csn_s) begin
@@ -107,23 +119,22 @@ module fmcadc2_spi (
     end
   end
 
-  assign spi_miso = ((spi_adc_miso_s & ~spi_adc_csn) |
-                     (spi_ext_miso_s & ~spi_ext_csn_0) |
-                     (spi_ext_miso_s & ~spi_ext_csn_1));
+  assign spi_miso = ((spi_adc_sdio & ~spi_csn[0]) | (~spi_adf4355 &
+    spi_adf4355_ce_or_sdio & ~(spi_csn[1] & spi_csn[2])));
 
-  // io butter
+  // adc interface (3 wire)
 
-  IOBUF i_iobuf_adc_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_adc_miso_s),
-    .IO (spi_adc_sdio));
+  assign spi_adc_csn = spi_csn[0];
+  assign spi_adc_clk = spi_clk;
+  assign spi_adc_sdio = (spi_enable_s == 1'b0) ? spi_mosi : 1'bz;
 
-  IOBUF i_iobuf_clk_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_ext_miso_s),
-    .IO (spi_ext_sdio));
+  // adf4355 or normal (AMP/EXT)
+
+  assign spi_adf4355_data_or_csn_0 = (spi_adf4355 == 1'b1) ? spi_mosi : spi_csn[1];
+  assign spi_adf4355_clk_or_csn_1 = (spi_adf4355 == 1'b1) ? spi_clk : spi_csn[2];
+  assign spi_adf4355_le_or_clk = (spi_adf4355 == 1'b1) ? spi_csn[1] : spi_clk;
+  assign spi_adf4355_ce_or_sdio = (spi_adf4355 == 1'b1) ? spi_adf4355_ce :
+    ((spi_enable_s == 1'b0) ? spi_mosi : 1'bz);
 
 endmodule
 
