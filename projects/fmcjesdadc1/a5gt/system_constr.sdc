@@ -9,6 +9,9 @@ derive_clock_uncertainty
 set_clock_groups -exclusive \
   -group [get_clocks {i_system_bd|a5gt_base|sys_pll|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}] \
   -group [get_clocks {i_system_bd|a5gt_base|sys_pll|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] \
-  -group [get_clocks {i_system_bd|a5gt_base|sys_pll|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] \
+  -group [get_clocks {i_system_bd|a5gt_base|sys_pll|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]
 
-
+set_clock_groups -asynchronous \
+  -group {ref_clk_250mhz} \
+  -group [get_clocks {i_system_bd|fmcjesdadc1|xcvr_rx_pll|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}] \
+  -group [get_clocks {i_system_bd|a5gt_base|sys_pll|altera_pll_i|general[3].gpll~PLL_OUTPUT_COUNTER|divclk}]
