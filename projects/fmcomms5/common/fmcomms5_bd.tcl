@@ -108,7 +108,8 @@ ad_connect axi_ad9361_0_clk axi_ad9361_dac_dma/fifo_rd_clk
 ad_connect sys_cpu_resetn   sys_100m_resetn
 ad_connect sys_cpu_resetn   axi_ad9361_adc_dma/m_dest_axi_aresetn
 ad_connect sys_cpu_resetn   axi_ad9361_dac_dma/m_src_axi_aresetn
-ad_connect sys_cpu_resetn   util_cpack_adc/adc_rst
+ad_connect sys_cpu_reset    util_cpack_adc/adc_rst
+
 
 ad_connect  axi_ad9361_0_dac_sync   axi_ad9361_0/dac_sync_out
 ad_connect  axi_ad9361_0_dac_sync   axi_ad9361_0/dac_sync_in

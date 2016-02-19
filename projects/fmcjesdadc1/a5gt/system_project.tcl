@@ -5,8 +5,8 @@ source ../../scripts/adi_env.tcl
 project_new fmcjesdadc1_a5gt -overwrite
 
 source "../../common/a5gt/a5gt_system_assign.tcl"
-set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/a5gt;../../../library/**/*"
-set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/a5gt/;../../../library/**/*"
+set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/**/*;../../../library/**/*"
+set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/**/*;../../../library/**/*"
 set_global_assignment -name QSYS_FILE system_bd.qsys
 
 set_global_assignment -name VERILOG_FILE "../../../library/common/ad_iobuf.v"

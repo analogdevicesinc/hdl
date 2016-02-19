@@ -206,7 +206,7 @@
 
 
   ad_connect sys_cpu_clk   current_monitor_m1_pack/adc_clk
-  ad_connect sys_cpu_resetn current_monitor_m1_pack/adc_rst
+  ad_connect sys_cpu_reset current_monitor_m1_pack/adc_rst
 
   ad_connect current_monitor_m1/adc_enable_ia     current_monitor_m1_pack/adc_enable_0
   ad_connect current_monitor_m1/adc_enable_ib     current_monitor_m1_pack/adc_enable_1
@@ -231,7 +231,7 @@
   ad_connect  adc_m2_vbus_dat_i current_monitor_m2/adc_vbus_dat_i
 
   ad_connect sys_cpu_clk current_monitor_m2_pack/adc_clk
-  ad_connect sys_cpu_resetn current_monitor_m2_pack/adc_rst
+  ad_connect sys_cpu_reset current_monitor_m2_pack/adc_rst
 
   ad_connect current_monitor_m2/adc_enable_ia     current_monitor_m2_pack/adc_enable_0
   ad_connect current_monitor_m2/adc_enable_ib     current_monitor_m2_pack/adc_enable_1

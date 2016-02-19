@@ -21,3 +21,4 @@ set_property  -dict {PACKAGE_PIN  P21   IOSTANDARD LVCMOS25} [get_ports spi_sdio
 # clocks
 
 create_clock -name rx_ref_clk   -period  4.00 [get_ports rx_ref_clk_p]
+create_clock -name rx_div_clk   -period  6.40 [get_pins i_system_wrapper/system_i/axi_ad9250_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]

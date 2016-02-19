@@ -44,8 +44,8 @@ ad_connect  axi_ad9652/adc_rst axi_ad9652_adc_fifo/din_rst
 ad_connect  sys_200m_clk axi_ad9652/delay_clk
 ad_connect  sys_200m_clk axi_ad9652_dma/fifo_wr_clk
 
-ad_connect  sys_200m_clk   data_pack/adc_clk
-ad_connect  sys_cpu_resetn data_pack/adc_rst
+ad_connect  sys_200m_clk  data_pack/adc_clk
+ad_connect  sys_cpu_reset data_pack/adc_rst
 
 ad_connect  axi_ad9652/adc_enable_0 axi_ad9652_adc_fifo/din_enable_0
 ad_connect  axi_ad9652/adc_valid_0  axi_ad9652_adc_fifo/din_valid_0
