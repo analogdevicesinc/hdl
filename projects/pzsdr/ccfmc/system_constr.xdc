@@ -88,6 +88,10 @@ set_property IODELAY_GROUP gmii2rgmii_iodelay_group\
   [get_cells -hier -filter {name =~ *delay_rgmii_rxd*}] \
   [get_cells -hier -filter {name =~ *delay_rgmii_rx_ctl}]
 
+# fan control/sense
+
+set_property  -dict {PACKAGE_PIN  B7    IOSTANDARD LVCMOS18} [get_ports fan_pwm]    ; ## IO_L18P_T2_34
+set_property  -dict {PACKAGE_PIN  A7    IOSTANDARD LVCMOS18} [get_ports fan_tach]   ; ## IO_L18N_T2_34
 
 # unused io (gpio/gt)
 

@@ -93,6 +93,9 @@ module system_top (
 
   gpio_bd,
 
+  fan_pwm,
+  fan_tach,
+
   clk_0_p,
   clk_0_n,
   clk_1_p,
@@ -215,6 +218,9 @@ module system_top (
 
   inout   [11:0]  gpio_bd;
 
+  output          fan_pwm;
+  input           fan_tach;
+
   input           clk_0_p;
   input           clk_0_n;
   input           clk_1_p;
@@ -304,6 +310,7 @@ module system_top (
 
   // assignments
 
+  assign fan_pwm = 1'b1;
   assign hdmi_pd = 1'b0;
   assign spi_csn = spi_csn_s[0];
   assign spi_clk = spi_clk_s;
