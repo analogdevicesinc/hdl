@@ -631,8 +631,8 @@
   <parameter name="TX_PLL_ENABLE" value="0" />
   <parameter name="T_PLL_LOCK_HYST" value="0" />
   <parameter name="T_PLL_POWERDOWN" value="1000" />
-  <parameter name="T_RX_ANALOGRESET" value="80" />
-  <parameter name="T_RX_DIGITALRESET" value="8000" />
+  <parameter name="T_RX_ANALOGRESET" value="40" />
+  <parameter name="T_RX_DIGITALRESET" value="4000" />
   <parameter name="T_TX_ANALOGRESET" value="0" />
   <parameter name="T_TX_DIGITALRESET" value="20" />
   <parameter name="device_family" value="Arria V" />
@@ -1231,6 +1231,11 @@
  <connection
    kind="reset"
    version="15.1"
+   start="axi_jesd_xcvr.if_rst"
+   end="xcvr_rst_cntrl.reset" />
+ <connection
+   kind="reset"
+   version="15.1"
    start="axi_jesd_xcvr.if_rx_rstn"
    end="xcvr_core.rxlink_rst_n" />
  <connection
@@ -1248,11 +1253,6 @@
    version="15.1"
    start="mem_rst.out_reset"
    end="axi_dmac_0.m_dest_axi_reset" />
- <connection
-   kind="reset"
-   version="15.1"
-   start="sys_rst.out_reset"
-   end="xcvr_rst_cntrl.reset" />
  <connection
    kind="reset"
    version="15.1"
