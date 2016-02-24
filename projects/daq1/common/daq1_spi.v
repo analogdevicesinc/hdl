@@ -79,8 +79,8 @@ module daq1_spi (
 
   assign spi_enable_s = spi_enable & ~spi_csn;
 
-  always @(posedge spi_clk or posedge spi_csn_s) begin
-    if (spi_csn_s == 1'b1) begin
+  always @(posedge spi_clk or posedge spi_csn) begin
+    if (spi_csn == 1'b1) begin
       spi_count <= 6'b0000000;
       spi_rd_wr_n <= 1'b0;
       spi_device_addr <= 8'b00000000;
@@ -95,8 +95,8 @@ module daq1_spi (
     end
   end
 
-  always @(negedge spi_clk or posedge spi_csn_s) begin
-    if (spi_csn_s == 1'b1) begin
+  always @(negedge spi_clk or posedge spi_csn) begin
+    if (spi_csn == 1'b1) begin
       spi_enable <= 1'b0;
     end else begin
       if (((spi_device_addr == SPI_SEL_AD9684) && (spi_count == 6'd24)) ||
