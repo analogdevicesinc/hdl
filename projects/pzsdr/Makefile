@@ -10,18 +10,21 @@ all:
 	-make -C ccbrk all
 	-make -C ccfmc all
 	-make -C ccpci all
+	-make -C ccbrk all
 
 
 clean: 
 	make -C ccbrk clean
 	make -C ccfmc clean
 	make -C ccpci clean
+	make -C ccbrk clean
 
 
 clean-all:
 	make -C ccbrk clean-all
 	make -C ccfmc clean-all
 	make -C ccpci clean-all
+	make -C ccbrk clean-all
 
 ####################################################################################
 ####################################################################################

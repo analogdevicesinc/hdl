@@ -34,6 +34,7 @@ all:
 	-make -C imageon all
 	-make -C motcon2_fmc all
 	-make -C pzsdr all
+	-make -C pzsdr1 all
 	-make -C usb_fx3 all
 	-make -C usdrx1 all
 
@@ -66,6 +67,7 @@ clean:
 	make -C imageon clean
 	make -C motcon2_fmc clean
 	make -C pzsdr clean
+	make -C pzsdr1 clean
 	make -C usb_fx3 clean
 	make -C usdrx1 clean
 
@@ -98,6 +100,7 @@ clean-all:
 	make -C imageon clean-all
 	make -C motcon2_fmc clean-all
 	make -C pzsdr clean-all
+	make -C pzsdr1 clean-all
 	make -C usb_fx3 clean-all
 	make -C usdrx1 clean-all
 
