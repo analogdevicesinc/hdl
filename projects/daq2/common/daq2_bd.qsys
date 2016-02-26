@@ -978,19 +978,19 @@
   <parameter name="PLLS" value="1" />
   <parameter name="REDUCED_SIM_TIME" value="1" />
   <parameter name="RX_ENABLE" value="1" />
-  <parameter name="RX_PER_CHANNEL" value="0" />
+  <parameter name="RX_PER_CHANNEL" value="1" />
   <parameter name="SYNCHRONIZE_PLL_RESET" value="0" />
   <parameter name="SYNCHRONIZE_RESET" value="1" />
   <parameter name="SYS_CLK_IN_MHZ" value="100" />
   <parameter name="TX_ENABLE" value="1" />
-  <parameter name="TX_PER_CHANNEL" value="0" />
+  <parameter name="TX_PER_CHANNEL" value="1" />
   <parameter name="TX_PLL_ENABLE" value="1" />
   <parameter name="T_PLL_LOCK_HYST" value="0" />
   <parameter name="T_PLL_POWERDOWN" value="1000" />
   <parameter name="T_RX_ANALOGRESET" value="40" />
   <parameter name="T_RX_DIGITALRESET" value="4000" />
-  <parameter name="T_TX_ANALOGRESET" value="0" />
-  <parameter name="T_TX_DIGITALRESET" value="20" />
+  <parameter name="T_TX_ANALOGRESET" value="40" />
+  <parameter name="T_TX_DIGITALRESET" value="4000" />
   <parameter name="device_family" value="Arria 10" />
   <parameter name="gui_pll_cal_busy" value="1" />
   <parameter name="gui_rx_auto_reset" value="0" />
@@ -2220,11 +2220,6 @@
    version="15.1"
    start="mem_rst.out_reset"
    end="axi_ad9144_dma.m_src_axi_reset" />
- <connection
-   kind="reset"
-   version="15.1"
-   start="sys_rst.out_reset"
-   end="xcvr_rst_cntrl.reset" />
  <connection
    kind="reset"
    version="15.1"
