@@ -100,6 +100,7 @@ set_property -dict [list CONFIG.USE_LOCKED {true}] $axi_ethernet_clkgen
 set_property -dict [list CONFIG.USE_RESET {false}] $axi_ethernet_clkgen
 
 set axi_ethernet_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_ethernet_rstgen]
+set axi_ethernet_idelayctrl [create_bd_cell -type ip -vlnv xilinx.com:ip:util_idelay_ctrl:1.0 axi_ethernet_idelayctrl]
 
 set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:7.0 axi_ethernet]
 set_property -dict [list CONFIG.PHY_TYPE {SGMII}] $axi_ethernet
@@ -234,6 +235,9 @@ ad_connect  axi_ethernet/axi_txd_arstn axi_ethernet_dma/mm2s_prmry_reset_out_n
 ad_connect  axi_ethernet/axi_txc_arstn axi_ethernet_dma/mm2s_cntrl_reset_out_n
 ad_connect  axi_ethernet/axi_rxd_arstn axi_ethernet_dma/s2mm_prmry_reset_out_n
 ad_connect  axi_ethernet/axi_rxs_arstn axi_ethernet_dma/s2mm_sts_reset_out_n
+ad_connect  axi_ethernet_idelayctrl/rdy axi_ethernet/idelay_rdy_in
+ad_connect  axi_ethernet_idelayctrl/rst axi_ethernet_rstgen/peripheral_reset
+ad_connect  axi_ethernet_idelayctrl/ref_clk axi_ethernet_clkgen/clk_out3
 
 # defaults (misc)
 
