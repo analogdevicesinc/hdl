@@ -85,7 +85,7 @@ module daq1_spi (
       spi_rd_wr_n <= 1'b0;
       spi_device_addr <= 8'b00000000;
     end else begin
-      spi_count <= spi_count + 1'b1;
+      spi_count <= (spi_count < 6'h3f) ? spi_count + 1'b1 : spi_count;
       if (spi_count <= 6'd7) begin
         spi_device_addr <= {spi_device_addr[6:0], spi_mosi};
       end
