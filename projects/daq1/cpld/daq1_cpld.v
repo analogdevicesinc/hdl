@@ -119,7 +119,7 @@ module daq1_cpld (
   localparam  [ 6:0]  DAC_STATUS_ADDR     = 7'h21;
   localparam  [ 6:0]  CLK_STATUS_ADDR     = 7'h22;
 
-  localparam  [ 7:0]  CPLD_VERSION        = 8'h0101;
+  localparam  [ 7:0]  CPLD_VERSION        = 8'h11;
 
   // Internal Registers/Signals
 
