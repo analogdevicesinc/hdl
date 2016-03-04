@@ -120,12 +120,11 @@ module ad_lvds_in (
 
   generate
   if (SINGLE_ENDED == 1) begin
-    assign tx_data_out_n = 1'b0;
-    IBUF i_rx_data_ibuf (
-      .I (rx_data_in_p),
-      .O (rx_data_ibuf_s));
+  IBUF i_rx_data_ibuf (
+    .I (rx_data_in_p),
+    .O (rx_data_ibuf_s));
   end else begin
-     IBUFDS i_rx_data_ibuf (
+  IBUFDS i_rx_data_ibuf (
     .I (rx_data_in_p),
     .IB (rx_data_in_n),
     .O (rx_data_ibuf_s));
