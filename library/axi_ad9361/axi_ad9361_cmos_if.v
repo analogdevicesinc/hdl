@@ -247,8 +247,8 @@ module axi_ad9361_cmos_if (
   // receive data path for dual rf, frame is expected to qualify iq for rf-1 only
 
   always @(posedge l_clk) begin
-    rx_error_r2 <= ((rx_frame_4_s == 4'b0011) ||
-      (rx_frame_4_s == 4'b1001)) ? 1'b0 : 1'b1;
+    rx_error_r2 <= ((rx_frame_4_s == 4'b0011) || (rx_frame_4_s == 4'b1100) ||
+      (rx_frame_4_s == 4'b1001) || (rx_frame_4_s == 4'b0110)) ? 1'b0 : 1'b1;
     rx_valid_r2 <= ((rx_frame_4_s == 4'b0011) ||
       (rx_frame_4_s == 4'b1001)) ? 1'b1 : 1'b0;
     case (rx_frame_s)
@@ -311,13 +311,13 @@ module axi_ad9361_cmos_if (
       tx_data <= dac_data;
     end
     case (tx_data_sel_s)
-      3'b100: begin
+      3'b101: begin
         tx_frame_p <= 1'b0;
         tx_frame_n <= 1'b0;
         tx_data_p <= tx_data[35:24];
         tx_data_n <= tx_data[47:36];
       end
-      3'b101: begin
+      3'b100: begin
         tx_frame_p <= 1'b1;
         tx_frame_n <= 1'b1;
         tx_data_p <= tx_data[11: 0];
@@ -428,7 +428,7 @@ module axi_ad9361_cmos_if (
     .IODELAY_GROUP (IO_DELAY_GROUP))
   i_rx_frame (
     .rx_clk (l_clk),
-    .rx_data_in_p (rx_frame_in),
+    .rx_data_in (rx_frame_in),
     .rx_data_p (rx_frame_p_s),
     .rx_data_n (rx_frame_n_s),
     .up_clk (up_clk),
@@ -495,8 +495,8 @@ module axi_ad9361_cmos_if (
     .IODELAY_GROUP (IO_DELAY_GROUP))
   i_tx_clk (
     .tx_clk (l_clk),
-    .tx_data_p (1'b0),
-    .tx_data_n (1'b1),
+    .tx_data_p (1'b1),
+    .tx_data_n (1'b0),
     .tx_data_out (tx_clk_out),
     .up_clk (up_clk),
     .up_dld (up_dac_dld[13]),

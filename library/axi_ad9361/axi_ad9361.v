@@ -39,7 +39,7 @@
 
 module axi_ad9361 (
 
-  // physical interface (receive)
+  // physical interface (receive-lvds)
 
   rx_clk_in_p,
   rx_clk_in_n,
@@ -48,7 +48,13 @@ module axi_ad9361 (
   rx_data_in_p,
   rx_data_in_n,
 
-  // physical interface (transmit)
+  // physical interface (receive-cmos)
+
+  rx_clk_in,
+  rx_frame_in,
+  rx_data_in,
+
+  // physical interface (transmit-lvds)
 
   tx_clk_out_p,
   tx_clk_out_n,
@@ -56,6 +62,12 @@ module axi_ad9361 (
   tx_frame_out_n,
   tx_data_out_p,
   tx_data_out_n,
+
+  // physical interface (transmit-cmos)
+
+  tx_clk_out,
+  tx_frame_out,
+  tx_data_out,
 
   // ensm control
 
@@ -157,12 +169,13 @@ module axi_ad9361 (
 
   parameter   ID = 0;
   parameter   DEVICE_TYPE = 0;
+  parameter   CMOS_OR_LVDS_N = 0;
   parameter   DAC_IODELAY_ENABLE = 0;
   parameter   IO_DELAY_GROUP = "dev_if_delay_group";
   parameter   DAC_DATAPATH_DISABLE = 0;
   parameter   ADC_DATAPATH_DISABLE = 0;
 
-  // physical interface (receive)
+  // physical interface (receive-lvds)
 
   input           rx_clk_in_p;
   input           rx_clk_in_n;
@@ -171,7 +184,13 @@ module axi_ad9361 (
   input   [ 5:0]  rx_data_in_p;
   input   [ 5:0]  rx_data_in_n;
 
-  // physical interface (transmit)
+  // physical interface (receive-cmos)
+
+  input           rx_clk_in;
+  input           rx_frame_in;
+  input   [11:0]  rx_data_in;
+
+  // physical interface (transmit-lvds)
 
   output          tx_clk_out_p;
   output          tx_clk_out_n;
@@ -179,6 +198,12 @@ module axi_ad9361 (
   output          tx_frame_out_n;
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
+
+  // physical interface (transmit-cmos)
+
+  output          tx_clk_out;
+  output          tx_frame_out;
+  output  [11:0]  tx_data_out;
 
   // ensm control
 
@@ -281,12 +306,10 @@ module axi_ad9361 (
   reg             up_wack = 'd0;
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
-
   reg     [15:0]  adc_data_i0 = 16'b0;
   reg     [15:0]  adc_data_q0 = 16'b0;
   reg     [15:0]  adc_data_i1 = 16'b0;
   reg     [15:0]  adc_data_q1 = 16'b0;
-
 
   // internal clocks and resets
 
@@ -307,12 +330,12 @@ module axi_ad9361 (
   wire            dac_valid_q0_s;
   wire            dac_valid_i1_s;
   wire            dac_valid_q1_s;
-  wire    [ 6:0]  up_adc_dld_s;
-  wire    [34:0]  up_adc_dwdata_s;
-  wire    [34:0]  up_adc_drdata_s;
-  wire    [ 9:0]  up_dac_dld_s;
-  wire    [49:0]  up_dac_dwdata_s;
-  wire    [49:0]  up_dac_drdata_s;
+  wire    [12:0]  up_adc_dld_s;
+  wire    [64:0]  up_adc_dwdata_s;
+  wire    [64:0]  up_adc_drdata_s;
+  wire    [15:0]  up_dac_dld_s;
+  wire    [79:0]  up_dac_dwdata_s;
+  wire    [79:0]  up_dac_drdata_s;
   wire            delay_locked_s;
   wire            up_wreq_s;
   wire    [13:0]  up_waddr_s;
@@ -337,7 +360,6 @@ module axi_ad9361 (
   wire            tdd_enable_s;
   wire            tdd_txnrx_s;
   wire            tdd_mode_s;
-
   wire    [15:0]  adc_data_i0_s;
   wire    [15:0]  adc_data_q0_s;
   wire    [15:0]  adc_data_i1_s;
@@ -363,6 +385,67 @@ module axi_ad9361 (
   end
 
   // device interface
+
+  generate
+  if (CMOS_OR_LVDS_N == 1) begin
+
+  assign tx_clk_out_p = 1'd0;
+  assign tx_clk_out_n = 1'd1;
+  assign tx_frame_out_p = 1'd0;
+  assign tx_frame_out_n = 1'd0;
+  assign tx_data_out_p = 6'h00;
+  assign tx_data_out_n = 6'h3f;
+
+  axi_ad9361_cmos_if #(
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
+    .IO_DELAY_GROUP (IO_DELAY_GROUP))
+  i_dev_if (
+    .rx_clk_in (rx_clk_in),
+    .rx_frame_in (rx_frame_in),
+    .rx_data_in (rx_data_in),
+    .tx_clk_out (tx_clk_out),
+    .tx_frame_out (tx_frame_out),
+    .tx_data_out (tx_data_out),
+    .enable (enable),
+    .txnrx (txnrx),
+    .rst (rst),
+    .clk (clk),
+    .l_clk (l_clk),
+    .adc_valid (adc_valid_s),
+    .adc_data (adc_data_s),
+    .adc_status (adc_status_s),
+    .adc_r1_mode (adc_r1_mode),
+    .adc_ddr_edgesel (adc_ddr_edgesel),
+    .dac_valid (g_dac_valid_s),
+    .dac_data (dac_data_s),
+    .dac_r1_mode (dac_r1_mode),
+    .tdd_enable (tdd_enable_s),
+    .tdd_txnrx (tdd_txnrx_s),
+    .tdd_mode (tdd_mode_s),
+    .up_clk (up_clk),
+    .up_enable (up_enable),
+    .up_txnrx (up_txnrx),
+    .up_adc_dld (up_adc_dld_s),
+    .up_adc_dwdata (up_adc_dwdata_s),
+    .up_adc_drdata (up_adc_drdata_s),
+    .up_dac_dld (up_dac_dld_s),
+    .up_dac_dwdata (up_dac_dwdata_s),
+    .up_dac_drdata (up_dac_drdata_s),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked_s));
+  end
+  endgenerate
+
+  generate
+  if (CMOS_OR_LVDS_N == 0) begin
+
+  assign tx_clk_out = 1'd0;
+  assign tx_frame_out = 1'd0;
+  assign tx_data_out = 12'd0;
+  assign up_adc_drdata_s[64:35] = 30'd0;
+  assign up_dac_drdata_s[79:50] = 30'd0;
 
   axi_ad9361_dev_if #(
     .DEVICE_TYPE (DEVICE_TYPE),
@@ -400,19 +483,22 @@ module axi_ad9361 (
     .up_clk (up_clk),
     .up_enable (up_enable),
     .up_txnrx (up_txnrx),
-    .up_adc_dld (up_adc_dld_s),
-    .up_adc_dwdata (up_adc_dwdata_s),
-    .up_adc_drdata (up_adc_drdata_s),
-    .up_dac_dld (up_dac_dld_s),
-    .up_dac_dwdata (up_dac_dwdata_s),
-    .up_dac_drdata (up_dac_drdata_s),
+    .up_adc_dld (up_adc_dld_s[6:0]),
+    .up_adc_dwdata (up_adc_dwdata_s[34:0]),
+    .up_adc_drdata (up_adc_drdata_s[34:0]),
+    .up_dac_dld (up_dac_dld_s[9:0]),
+    .up_dac_dwdata (up_dac_dwdata_s[49:0]),
+    .up_dac_drdata (up_dac_drdata_s[49:0]),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s));
+  end
+  endgenerate
 
   // TDD interface
 
   // additional flop to keep control and data synced
+
   always @(posedge clk) begin
     adc_data_i0 <= adc_data_i0_s;
     adc_data_q0 <= adc_data_q0_s;

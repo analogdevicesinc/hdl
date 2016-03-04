@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // ADC channel-need to work on dual mode for pn sequence
 
 `timescale 1ns/100ps
@@ -115,9 +113,9 @@ module axi_ad9361_rx (
 
   // delay interface
 
-  output  [ 6:0]  up_dld;
-  output  [34:0]  up_dwdata;
-  input   [34:0]  up_drdata;
+  output  [12:0]  up_dld;
+  output  [64:0]  up_dwdata;
+  input   [64:0]  up_drdata;
   input           delay_clk;
   output          delay_rst;
   input           delay_locked;
@@ -377,7 +375,7 @@ module axi_ad9361_rx (
 
   // adc delay control
 
-  up_delay_cntrl #(.DATA_WIDTH(7), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(.DATA_WIDTH(13), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),
