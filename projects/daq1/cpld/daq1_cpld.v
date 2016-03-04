@@ -177,7 +177,7 @@ module daq1_cpld (
   assign cpld_rdata_s = cpld_spicsn ? sdio : cpld_rdata_bit;
   assign rdnwr = fmc_cpld_addr[7];
 
-  assign    sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
+  assign sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
 
   always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
     if (fmc_spi_csn == 1'b1) begin
@@ -222,8 +222,8 @@ module daq1_cpld (
 
   always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
     if (fmc_spi_csn == 1'b1) begin
-      cpld_rdata_bit <= 1'b0;
-      cpld_rdata_index <= 3'h7;
+      cpld_rdata_bit <= cpld_rdata[7];
+      cpld_rdata_index <= 3'h6;
     end else begin
       if (cpld_to_fpga == 1'b1) begin
         cpld_rdata_bit <= cpld_rdata[cpld_rdata_index];
