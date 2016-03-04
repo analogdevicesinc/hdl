@@ -185,7 +185,7 @@ module daq1_cpld (
       cpld_to_fpga <= 1'b0;
       fmc_spi_csn_enb <= 1'b1;
     end else begin
-      fmc_spi_counter <= fmc_spi_counter + 1;
+      fmc_spi_counter <= (fmc_spi_counter <= 6'h3F) ? fmc_spi_counter + 1 : fmc_spi_counter;
       fmc_spi_csn_enb <= (fmc_spi_counter < 7) ? 1'b1 : 1'b0;
       if (adc_spicsn & clk_spicsn) begin
         cpld_to_fpga <= (fmc_spi_counter >= 15) ? rdnwr : 1'b0;
