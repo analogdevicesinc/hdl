@@ -136,7 +136,7 @@ module daq1_cpld (
   reg   [ 7:0]  dac_status = 8'b0;
   reg   [ 7:0]  clk_status = 8'b0;
 
-  reg           fpga_to_cpld = 1'b1;
+  reg           cpld_to_fpga = 1'b0;
   reg    [ 7:0] cpld_rdata = 8'b0;
   reg           cpld_rdata_bit = 1'b0;
   reg    [ 2:0] cpld_rdata_index = 3'h0;
@@ -172,25 +172,25 @@ module daq1_cpld (
 
   // SPI control and data
 
-  assign sdio = fpga_to_cpld ? fmc_spi_sdio : 1'bZ;
-  assign fmc_spi_sdio = fpga_to_cpld ? 1'bZ : cpld_rdata_s;
+  assign sdio = cpld_to_fpga ? 1'bZ : fmc_spi_sdio;
+  assign fmc_spi_sdio = cpld_to_fpga ? cpld_rdata_s : 1'bZ ;
   assign cpld_rdata_s = cpld_spicsn ? sdio : cpld_rdata_bit;
-  assign rdnwr = ~fmc_cpld_addr[7];
+  assign rdnwr = fmc_cpld_addr[7];
 
   assign    sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
 
   always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
     if (fmc_spi_csn == 1'b1) begin
       fmc_spi_counter <= 6'h0;
-      fpga_to_cpld <= 1'b1;
+      cpld_to_fpga <= 1'b0;
       fmc_spi_csn_enb <= 1'b1;
     end else begin
       fmc_spi_counter <= fmc_spi_counter + 1;
       fmc_spi_csn_enb <= (fmc_spi_counter < 7) ? 1'b1 : 1'b0;
       if (adc_spicsn & clk_spicsn) begin
-        fpga_to_cpld <= (fmc_spi_counter >= 15) ? rdnwr : 1'b1;
+        cpld_to_fpga <= (fmc_spi_counter >= 15) ? rdnwr : 1'b0;
       end else begin
-        fpga_to_cpld <= (fmc_spi_counter >= 23) ? rdnwr : 1'b1;
+        cpld_to_fpga <= (fmc_spi_counter >= 23) ? rdnwr : 1'b0;
       end
     end
   end
@@ -225,7 +225,7 @@ module daq1_cpld (
       cpld_rdata_bit <= 1'b0;
       cpld_rdata_index <= 3'h7;
     end else begin
-      if (fpga_to_cpld == 1'b0) begin
+      if (cpld_to_fpga == 1'b1) begin
         cpld_rdata_bit <= cpld_rdata[cpld_rdata_index];
         cpld_rdata_index <= cpld_rdata_index - 1;
       end
@@ -234,8 +234,8 @@ module daq1_cpld (
 
   // Internal register write access
 
-  always @(fpga_to_cpld, cpld_spicsn, fmc_spi_counter) begin
-    if ((fpga_to_cpld == 1'b1) &&
+  always @(cpld_to_fpga, cpld_spicsn, fmc_spi_counter) begin
+    if ((cpld_to_fpga == 1'b0) &&
         (cpld_spicsn == 1'b0) &&
         (fmc_spi_counter == 8'h18)) begin
       case (fmc_cpld_addr[6:0])
