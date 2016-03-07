@@ -21,6 +21,16 @@ M_DEPS += ../common/up_gt_channel.v
 M_DEPS += ../common/up_gt.v
 M_DEPS += axi_jesd_gt_constr.xdc
 M_DEPS += axi_jesd_gt.v
+M_DEPS += ../interfaces/if_gt_qpll.xml
+M_DEPS += ../interfaces/if_gt_qpll_rtl.xml
+M_DEPS += ../interfaces/if_gt_pll.xml
+M_DEPS += ../interfaces/if_gt_pll_rtl.xml
+M_DEPS += ../interfaces/if_gt_rx.xml
+M_DEPS += ../interfaces/if_gt_rx_rtl.xml
+M_DEPS += ../interfaces/if_gt_rx_ksig.xml
+M_DEPS += ../interfaces/if_gt_rx_ksig_rtl.xml
+M_DEPS += ../interfaces/if_gt_tx.xml
+M_DEPS += ../interfaces/if_gt_tx_rtl.xml
 
 M_VIVADO := vivado -mode batch -source
 
@@ -35,8 +45,8 @@ M_FLIST += .Xil
 
 
 
-.PHONY: all clean clean-all
-all: axi_jesd_gt.xpr
+.PHONY: all dep clean clean-all
+all: dep axi_jesd_gt.xpr
 
 
 clean:clean-all
@@ -50,5 +60,7 @@ axi_jesd_gt.xpr: $(M_DEPS)
 	rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_jesd_gt_ip.tcl  >> axi_jesd_gt_ip.log 2>&1
 
+dep:
+	make -C ../interfaces
 ####################################################################################
 ####################################################################################
