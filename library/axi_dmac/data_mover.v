@@ -68,6 +68,8 @@ parameter ID_WIDTH = 3;
 parameter DATA_WIDTH = 64;
 parameter DISABLE_WAIT_FOR_ID = 1;
 parameter BEATS_PER_BURST_WIDTH = 4;
+parameter LAST = 0; /* 0 = last asserted at the end of each burst, 1 = last only asserted at the end of the transfer */
+
 localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
 
 `include "inc_id.h"
@@ -94,7 +96,7 @@ assign last = eot ? last_eot : last_non_eot;
 assign s_axi_ready = m_axi_ready & pending_burst & active;
 assign m_axi_valid = s_axi_valid & pending_burst & active;
 assign m_axi_data = s_axi_data;
-assign m_axi_last = last;
+assign m_axi_last = LAST ? (last_eot & eot) : last;
 
 // If we want to support zero delay between transfers we have to assert
 // req_ready on the same cycle on which the last load happens.
