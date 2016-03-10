@@ -30,7 +30,7 @@ set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad7616_dma
 set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad7616_dma
 set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad7616_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad7616_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $axi_ad7616_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16}] $axi_ad7616_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad7616_dma
 
 # interface connections
@@ -56,7 +56,6 @@ if {$ad7616_if == 0} {
   ad_connect  cs_n axi_ad7616/cs_n
   ad_connect  cnvst axi_ad7616/cnvst
   ad_connect  busy axi_ad7616/busy
-
 
 }
 

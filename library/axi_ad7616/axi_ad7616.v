@@ -143,7 +143,7 @@ module axi_ad7616 (
   output  [31:0]  s_axi_rdata;
   input           s_axi_rready;
 
-  output  [31:0]  m_axis_tdata;
+  output  [(NUM_OF_SDI * DATA_WIDTH-1):0]  m_axis_tdata;
   input           m_axis_tready;
   output          m_axis_tvalid;
   input           m_axis_xfer_req;
