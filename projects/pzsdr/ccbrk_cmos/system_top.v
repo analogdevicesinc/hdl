@@ -67,18 +67,13 @@ module system_top (
 
   gpio_bd,
 
-  rx_clk_in_p,
-  rx_clk_in_n,
-  rx_frame_in_p,
-  rx_frame_in_n,
-  rx_data_in_p,
-  rx_data_in_n,
-  tx_clk_out_p,
-  tx_clk_out_n,
-  tx_frame_out_p,
-  tx_frame_out_n,
-  tx_data_out_p,
-  tx_data_out_n,
+  rx_clk_in,
+  rx_frame_in,
+  rx_data_in,
+  tx_clk_out,
+  tx_frame_out,
+  tx_data_out,
+  tx_gnd,
 
   enable,
   txnrx,
@@ -136,18 +131,13 @@ module system_top (
 
   inout   [11:0]  gpio_bd;
 
-  input           rx_clk_in_p;
-  input           rx_clk_in_n;
-  input           rx_frame_in_p;
-  input           rx_frame_in_n;
-  input   [ 5:0]  rx_data_in_p;
-  input   [ 5:0]  rx_data_in_n;
-  output          tx_clk_out_p;
-  output          tx_clk_out_n;
-  output          tx_frame_out_p;
-  output          tx_frame_out_n;
-  output  [ 5:0]  tx_data_out_p;
-  output  [ 5:0]  tx_data_out_n;
+  input           rx_clk_in;
+  input           rx_frame_in;
+  input   [11:0]  rx_data_in;
+  output          tx_clk_out;
+  output          tx_frame_out;
+  output  [11:0]  tx_data_out;
+  output  [ 1:0]  tx_gnd;
 
   output          enable;
   output          txnrx;
@@ -187,6 +177,8 @@ module system_top (
   wire    [63:0]  gpio_t;
 
   // assignments
+
+  assign tx_gnd = 2'd0;
 
   assign gp_out[87:43] = gp_out_s[87:43];
   assign gp_out[42:42] = (gpio_o[61] == 1'b1) ? clk_out : gp_out_s[42:42];
@@ -288,12 +280,9 @@ module system_top (
     .ps_intr_10 (1'b0),
     .ps_intr_11 (1'b0),
     .ps_intr_15 (1'b0),
-    .rx_clk_in_n (rx_clk_in_n),
-    .rx_clk_in_p (rx_clk_in_p),
-    .rx_data_in_n (rx_data_in_n),
-    .rx_data_in_p (rx_data_in_p),
-    .rx_frame_in_n (rx_frame_in_n),
-    .rx_frame_in_p (rx_frame_in_p),
+    .rx_clk_in (rx_clk_in),
+    .rx_data_in (rx_data_in),
+    .rx_frame_in (rx_frame_in),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (spi_clk),
     .spi0_csn_0_o (spi_csn),
@@ -315,12 +304,9 @@ module system_top (
     .tdd_sync_i (1'b0),
     .tdd_sync_o (),
     .tdd_sync_t (),
-    .tx_clk_out_n (tx_clk_out_n),
-    .tx_clk_out_p (tx_clk_out_p),
-    .tx_data_out_n (tx_data_out_n),
-    .tx_data_out_p (tx_data_out_p),
-    .tx_frame_out_n (tx_frame_out_n),
-    .tx_frame_out_p (tx_frame_out_p),
+    .tx_clk_out (tx_clk_out),
+    .tx_data_out (tx_data_out),
+    .tx_frame_out (tx_frame_out),
     .txnrx (txnrx),
     .up_enable (gpio_o[47]),
     .up_txnrx (gpio_o[48]));
