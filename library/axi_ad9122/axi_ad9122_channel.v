@@ -141,8 +141,8 @@ module axi_ad9122_channel (
     dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
     case (dac_data_sel_s)
       4'h2: dac_data <= dma_data;
-      4'h1: dac_data <= { dac_pat_data_2_s, dac_pat_data_1_s,
-                          dac_pat_data_2_s, dac_pat_data_1_s};
+      4'ha, 4'h1: dac_data <= {dac_pat_data_2_s, dac_pat_data_1_s,
+        dac_pat_data_2_s, dac_pat_data_1_s};
       default: dac_data <= dac_dds_data;
     endcase
     if (dac_data_sel_s == 4'h1) begin
