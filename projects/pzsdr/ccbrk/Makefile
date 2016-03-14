@@ -18,6 +18,7 @@ M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../../common/pzsdr/pzsdr_system_ps7.tcl
 M_DEPS += ../../common/pzsdr/pzsdr_system_constr.xdc
 M_DEPS += ../../common/pzsdr/pzsdr_system_bd.tcl
+M_DEPS += ../../common/pzsdr/pzsdr_lvds_system_constr.xdc
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
