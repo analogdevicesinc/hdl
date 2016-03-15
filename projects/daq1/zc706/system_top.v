@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -91,12 +89,10 @@ module system_top (
   adc_data_in_p,
   adc_data_in_n,
 
-  daq1_irq,
-
-  cpld_sclk,
-  cpld_csn,
-  cpld_sdio
-);
+  spi_clk,
+  spi_csn,
+  spi_sdio,
+  spi_int);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -148,37 +144,47 @@ module system_top (
   input  [13:0]   adc_data_in_p;
   input  [13:0]   adc_data_in_n;
 
-  input           daq1_irq;
-
-  output          cpld_sclk;
-  output          cpld_csn;
-  inout           cpld_sdio;
+  output          spi_clk;
+  output          spi_csn;
+  inout           spi_sdio;
+  input           spi_int;
 
   // internal signals
 
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
+  wire            spi_mosi;
+  wire            spi_miso;
 
   // instantiations
 
-  ad_iobuf #(
-    .DATA_WIDTH(15)
-  ) i_gpio_bd (
-    .dio_t(gpio_t[14:0]),
-    .dio_i(gpio_o[14:0]),
-    .dio_o(gpio_i[14:0]),
-    .dio_p(gpio_bd));
+  ad_iobuf #(.DATA_WIDTH(15)) i_gpio_bd (
+    .dio_t (gpio_t[14:0]),
+    .dio_i (gpio_o[14:0]),
+    .dio_o (gpio_i[14:0]),
+    .dio_p (gpio_bd));
 
   daq1_spi i_spi (
-    .spi_csn(cpld_csn),
-    .spi_clk(cpld_sclk),
-    .spi_mosi(cpld_mosi),
-    .spi_miso(cpld_miso),
-    .spi_sdio(cpld_sdio)
-  );
+    .spi_csn (spi_csn),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_sdio (spi_sdio));
 
   system_wrapper i_system_wrapper (
+    .adc_clk_in_n (adc_clk_in_n),
+    .adc_clk_in_p (adc_clk_in_p),
+    .adc_data_in_n (adc_data_in_n),
+    .adc_data_in_p (adc_data_in_p),
+    .dac_clk_in_n (dac_clk_in_n),
+    .dac_clk_in_p (dac_clk_in_p),
+    .dac_clk_out_n (dac_clk_out_n),
+    .dac_clk_out_p (dac_clk_out_p),
+    .dac_data_out_n (dac_data_out_n),
+    .dac_data_out_p (dac_data_out_p),
+    .dac_frame_out_n (dac_frame_out_n),
+    .dac_frame_out_p (dac_frame_out_p),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
@@ -223,25 +229,24 @@ module system_top (
     .ps_intr_10 (1'b0),
     .spdif (spdif),
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (cpld_sclk),
-    .spi0_csn_0_o (cpld_csn),
+    .spi0_clk_o (spi_clk),
+    .spi0_csn_0_o (spi_csn),
+    .spi0_csn_1_o (),
+    .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (cpld_miso),
+    .spi0_sdi_i (spi_miso),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (cpld_mosi),
-    .dac_clk_in_p (dac_clk_in_p),
-    .dac_clk_in_n (dac_clk_in_n),
-    .dac_clk_out_p (dac_clk_out_p),
-    .dac_clk_out_n (dac_clk_out_n),
-    .dac_frame_out_p (dac_frame_out_p),
-    .dac_frame_out_n (dac_frame_out_n),
-    .dac_data_out_p (dac_data_out_p),
-    .dac_data_out_n (dac_data_out_n),
-    .adc_clk_in_p (adc_clk_in_p),
-    .adc_clk_in_n (adc_clk_in_n),
-    .adc_data_in_p (adc_data_in_p),
-    .adc_data_in_n (adc_data_in_n),
-    .daq1_irq (daq1_irq));
+    .spi0_sdo_o (spi_mosi),
+    .spi1_clk_i (1'b0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'b1),
+    .spi1_sdi_i (1'b0),
+    .spi1_sdo_i (1'b0),
+    .spi1_sdo_o (),
+    .spi_int (spi_int));
 
 endmodule
 

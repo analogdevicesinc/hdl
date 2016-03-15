@@ -19,7 +19,7 @@ create_bd_port -dir I -from 13 -to 0 adc_data_in_n
 
 # daq1 irq
 
-create_bd_port -dir I daq1_irq
+create_bd_port -dir I spi_int
 
 # dac peripherals
 
@@ -132,7 +132,7 @@ ad_connect  sys_cpu_resetn axi_ad9122_dma/m_src_axi_aresetn
 
 # interrupts
 
-ad_cpu_interrupt ps-13 mb-12 axi_ad9122_dma/irq
-ad_cpu_interrupt ps-12 mb-13 axi_ad9684_dma/irq
-ad_cpu_interrupt ps-11 mb-14 daq1_irq
+ad_cpu_interrupt ps-11 mb-11 spi_int
+ad_cpu_interrupt ps-12 mb-12 axi_ad9122_dma/irq
+ad_cpu_interrupt ps-13 mb-13 axi_ad9684_dma/irq
 

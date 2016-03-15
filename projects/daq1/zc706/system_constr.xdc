@@ -5,10 +5,8 @@ set_property  -dict {PACKAGE_PIN  AC28  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get
 set_property  -dict {PACKAGE_PIN  AD28  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports dac_clk_in_n]            ; ##  G03  FMC_LPC_CLK1_M2C_N
 set_property  -dict {PACKAGE_PIN  AF29  IOSTANDARD LVDS_25 } [get_ports dac_clk_out_p]                          ; ##  G27  FMC_LPC_LA25_P
 set_property  -dict {PACKAGE_PIN  AG29  IOSTANDARD LVDS_25 } [get_ports dac_clk_out_n]                          ; ##  G28  FMC_LPC_LA25_N
-
 set_property  -dict {PACKAGE_PIN  Y26   IOSTANDARD LVDS_25 } [get_ports dac_frame_out_p]                        ; ##  H37  FMC_LPC_LA32_P
 set_property  -dict {PACKAGE_PIN  Y27   IOSTANDARD LVDS_25 } [get_ports dac_frame_out_n]                        ; ##  H38  FMC_LPC_LA32_N
-
 set_property  -dict {PACKAGE_PIN  AB15  IOSTANDARD LVDS_25 } [get_ports dac_data_out_p[0]]                      ; ##  H19  FMC_LPC_LA15_P
 set_property  -dict {PACKAGE_PIN  AB14  IOSTANDARD LVDS_25 } [get_ports dac_data_out_n[0]]                      ; ##  H20  FMC_LPC_LA15_N
 set_property  -dict {PACKAGE_PIN  AG26  IOSTANDARD LVDS_25 } [get_ports dac_data_out_p[1]]                      ; ##  G21  FMC_LPC_LA20_P
@@ -44,7 +42,6 @@ set_property  -dict {PACKAGE_PIN  AA30  IOSTANDARD LVDS_25 } [get_ports dac_data
 
 set_property  -dict {PACKAGE_PIN  AE13  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports adc_clk_in_p]            ; ##  G06  FMC_LPC_LA00_CC_P
 set_property  -dict {PACKAGE_PIN  AF13  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports adc_clk_in_n]            ; ##  G07  FMC_LPC_LA00_CC_N
-
 set_property  -dict {PACKAGE_PIN  AC14  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports adc_data_in_p[0]]        ; ##  C14  FMC_LPC_LA10_P
 set_property  -dict {PACKAGE_PIN  AC13  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports adc_data_in_n[0]]        ; ##  C15  FMC_LPC_LA10_N
 set_property  -dict {PACKAGE_PIN  AF18  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports adc_data_in_p[1]]        ; ##  C18  FMC_LPC_LA14_P
@@ -74,10 +71,10 @@ set_property  -dict {PACKAGE_PIN  AF12  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get
 set_property  -dict {PACKAGE_PIN  AF15  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports adc_data_in_p[13]]       ; ##  D08  FMC_LPC_LA01_CC_P
 set_property  -dict {PACKAGE_PIN  AG15  IOSTANDARD LVDS_25  DIFF_TERM TRUE} [get_ports adc_data_in_n[13]]       ; ##  D09  FMC_LPC_LA01_CC_N
 
-set_property  -dict {PACKAGE_PIN  AG17  IOSTANDARD LVCMOS25} [get_ports cpld_sclk]                              ; ##  H04  FMC_LPC_CLK0_M2C_P
-set_property  -dict {PACKAGE_PIN  AG16  IOSTANDARD LVCMOS25} [get_ports cpld_csn]                               ; ##  H05  FMC_LPC_CLK0_M2C_N
-set_property  -dict {PACKAGE_PIN  AE18  IOSTANDARD LVCMOS25} [get_ports cpld_sdio]                              ; ##  G18  FMC_LPC_LA16_P
-set_property  -dict {PACKAGE_PIN  AE17  IOSTANDARD LVCMOS25} [get_ports daq1_irq]                               ; ##  G19  FMC_LPC_LA16_N
+set_property  -dict {PACKAGE_PIN  AG16  IOSTANDARD LVCMOS25} [get_ports spi_csn]                                ; ##  H05  FMC_LPC_CLK0_M2C_N
+set_property  -dict {PACKAGE_PIN  AG17  IOSTANDARD LVCMOS25} [get_ports spi_clk]                                ; ##  H04  FMC_LPC_CLK0_M2C_P
+set_property  -dict {PACKAGE_PIN  AE18  IOSTANDARD LVCMOS25} [get_ports spi_sdio]                               ; ##  G18  FMC_LPC_LA16_P
+set_property  -dict {PACKAGE_PIN  AE17  IOSTANDARD LVCMOS25} [get_ports spi_int]                                ; ##  G19  FMC_LPC_LA16_N
 
 # clocks
 
