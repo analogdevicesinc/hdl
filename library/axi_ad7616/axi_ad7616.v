@@ -96,6 +96,7 @@ module axi_ad7616 (
 
   parameter       ID = 0;
   parameter       IF_TYPE = 1;
+  parameter       M_AXIS_READY_ENABLE = 0;
 
   // local parameters
 
@@ -179,6 +180,8 @@ module axi_ad7616 (
   wire                              rd_dvalid_s;
   wire    [ 4:0]                    burst_length_s;
 
+  wire                              m_axis_ready_s;
+
   // internal registers
 
   reg                               up_wack = 1'b0;
@@ -204,6 +207,8 @@ module axi_ad7616 (
       up_rdata <= up_rdata_if_s | up_rdata_cntrl_s;
     end
   end
+
+  assign m_axis_ready_s = (M_AXIS_READY_ENABLE) ? m_axis_tready : 1'b1;
 
   generate if (IF_TYPE == SERIAL) begin
 
@@ -328,7 +333,7 @@ module axi_ad7616 (
       .sync_ready (s1_sync_ready_s),
       .sync_data (s1_sync_s),
       .offload_sdi_valid (m_axis_tvalid),
-      .offload_sdi_ready (m_axis_tready),
+      .offload_sdi_ready (m_axis_ready_s),
       .offload_sdi_data (m_axis_tdata));
 
     spi_engine_interconnect #(
@@ -426,7 +431,7 @@ module axi_ad7616 (
       .wr_n(wr_n),
       .m_axis_tdata(m_axis_tdata),
       .m_axis_tvalid(m_axis_tvalid),
-      .m_axis_tready(m_axis_tready),
+      .m_axis_tready(m_axis_ready_s),
       .m_axis_xfer_req(m_axis_xfer_req),
       .end_of_conv(trigger_s),
       .burst_length(burst_length_s),
