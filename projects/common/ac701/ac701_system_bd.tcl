@@ -62,7 +62,7 @@ set_property -dict [list CONFIG.C_ECC {0}] $sys_dlmb_cntlr
 set sys_ilmb_cntlr [create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 sys_ilmb_cntlr]
 set_property -dict [list CONFIG.C_ECC {0}] $sys_ilmb_cntlr
 
-set sys_lmb_bram [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.2 sys_lmb_bram]
+set sys_lmb_bram [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 sys_lmb_bram]
 set_property -dict [list CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.use_bram_block {BRAM_Controller}] $sys_lmb_bram
 
 # instance: microblaze- mdm
@@ -76,14 +76,14 @@ set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 s
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.3 axi_ddr_cntrl]
+set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.4 axi_ddr_cntrl]
 set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
 file copy -force $ad_hdl_dir/projects/common/ac701/ac701_system_mig.prj "$axi_ddr_cntrl_dir/"
 set_property -dict [list CONFIG.XML_INPUT_FILE {ac701_system_mig.prj}] $axi_ddr_cntrl
 
 # instance: default peripherals
 
-set sys_ethernet_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 sys_ethernet_clkgen]
+set sys_ethernet_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.2 sys_ethernet_clkgen]
 set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_ethernet_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {125.000}] $sys_ethernet_clkgen
 
