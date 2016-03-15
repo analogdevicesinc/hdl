@@ -16,7 +16,7 @@ adi_ip_files axi_spdif_rx [list \
   "axi_spdif_rx.vhd" \
   "axi_spdif_rx_constr.xdc"]
 
-adi_ip_properties_lite axi_spdif_rx
+adi_ip_properties axi_spdif_rx
 adi_ip_constraints axi_spdif_tx axi_spdif_rx_constr.xdc
 
 adi_add_bus "DMA_ACK" "slave" \
