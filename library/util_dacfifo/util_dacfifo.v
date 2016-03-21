@@ -55,7 +55,9 @@ module util_dacfifo (
 
   dac_clk,
   dac_valid,
-  dac_data
+  dac_data,
+
+  dac_fifo_bypass
 );
 
   // depth of the FIFO
@@ -80,6 +82,8 @@ module util_dacfifo (
   input                               dac_valid;
   output  [(DATA_WIDTH-1):0]          dac_data;
 
+  input                               dac_fifo_bypass;
+
   // internal registers
 
   reg     [(ADDRESS_WIDTH-1):0]       dma_waddr = 'b0;
@@ -87,10 +91,9 @@ module util_dacfifo (
   reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr_d = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr_2d = 'b0;
   reg                                 dma_xfer_req_ff = 1'b0;
-  reg                                 dma_ready = 1'b0;
+  reg                                 dma_ready_d = 1'b0;
 
   reg     [(ADDRESS_WIDTH-1):0]       dac_raddr = 'b0;
-  reg     [(DATA_WIDTH-1):0]          dac_data = 'b0;
 
   // internal wires
   wire                                dma_wren;
@@ -99,10 +102,10 @@ module util_dacfifo (
   // write interface
   always @(posedge dma_clk) begin
     if(dma_rst == 1'b1) begin
-      dma_ready <= 1'b0;
+      dma_ready_d <= 1'b0;
       dma_xfer_req_ff <= 1'b0;
     end else begin
-      dma_ready <= 1'b1;                                // Fifo is always ready
+      dma_ready_d <= 1'b1;                                // Fifo is always ready
       dma_xfer_req_ff <= dma_xfer_req;
     end
   end
@@ -141,9 +144,7 @@ module util_dacfifo (
         dac_raddr <= (dac_raddr < dma_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
       end
     end
-    dac_data <= dac_data_s;
   end
-
 
   // memory instantiation
 
@@ -158,6 +159,11 @@ module util_dacfifo (
     .clkb (dac_clk),
     .addrb (dac_raddr),
     .doutb (dac_data_s));
+
+  // output logic
+
+  assign dac_data = (dac_fifo_bypass) ? dma_data : dac_data_s;
+  assign dma_ready = (dac_fifo_bypass) ? dac_valid : dma_ready_d;
 
 endmodule
 

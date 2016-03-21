@@ -67,6 +67,7 @@ proc p_sys_dacfifo {p_name m_name data_width addr_width} {
   create_bd_pin -dir I  -from [expr ($data_width-1)] -to 0 dma_data
   create_bd_pin -dir I  dma_xfer_req
   create_bd_pin -dir I  dma_xfer_last
+  create_bd_pin -dir I  dac_fifo_bypass
 
   create_bd_pin -dir I  dac_clk
   create_bd_pin -dir I  dac_valid
@@ -86,6 +87,7 @@ proc p_sys_dacfifo {p_name m_name data_width addr_width} {
   ad_connect  dma_xfer_last util_dacfifo/dma_xfer_last
   ad_connect  dac_valid util_dacfifo/dac_valid
   ad_connect  dac_data util_dacfifo/dac_data
+  ad_connect  dac_fifo_bypass util_dacfifo/dac_fifo_bypass
 
   current_bd_instance $c_instance
 }
