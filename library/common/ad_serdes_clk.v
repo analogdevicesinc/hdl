@@ -48,6 +48,7 @@ module ad_serdes_clk (
 
   clk,
   div_clk,
+  out_clk,
 
   // drp interface
 
@@ -80,6 +81,7 @@ module ad_serdes_clk (
 
   output          clk;
   output          div_clk;
+  output          out_clk;
 
   // drp interface
 
@@ -108,17 +110,24 @@ module ad_serdes_clk (
   if (MMCM_OR_BUFR_N == 1) begin
   ad_mmcm_drp #(
     .MMCM_DEVICE_TYPE (MMCM_DEVICE_TYPE),
-    .MMCM_CLKIN_PERIOD  (MMCM_CLKIN_PERIOD),
-    .MMCM_VCO_DIV  (MMCM_VCO_DIV),
+    .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
+    .MMCM_CLKIN2_PERIOD (MMCM_CLKIN_PERIOD),
+    .MMCM_VCO_DIV (MMCM_VCO_DIV),
     .MMCM_VCO_MUL (MMCM_VCO_MUL),
     .MMCM_CLK0_DIV (MMCM_CLK0_DIV),
-    .MMCM_CLK1_DIV (MMCM_CLK1_DIV))
+    .MMCM_CLK0_PHASE (0.0),
+    .MMCM_CLK1_DIV (MMCM_CLK1_DIV),
+    .MMCM_CLK1_PHASE (0.0),
+    .MMCM_CLK2_DIV (MMCM_CLK0_DIV),
+    .MMCM_CLK2_PHASE (90.0))
   i_mmcm_drp (
     .clk (clk_in_s),
+    .clk2 (1'b0),
     .clk_sel (1'b1),
     .mmcm_rst (mmcm_rst),
     .mmcm_clk_0 (clk),
     .mmcm_clk_1 (div_clk),
+    .mmcm_clk_2 (out_clk),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel),
@@ -138,6 +147,7 @@ module ad_serdes_clk (
     .O (clk));
 
   assign div_clk = clk;
+  assign out_clk = clk;
   end
 
   if ((MMCM_OR_BUFR_N == 0) && (SERDES_OR_DDR_N == 1)) begin
@@ -150,6 +160,8 @@ module ad_serdes_clk (
     .CE (1'b1),
     .I (clk_in_s),
     .O (div_clk));
+
+  assign out_clk = clk;
   end
   endgenerate
 

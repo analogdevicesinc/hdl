@@ -44,10 +44,11 @@ module ad_mmcm_drp (
 
   clk,
   clk2,
-  mmcm_rst,
   clk_sel,
+  mmcm_rst,
   mmcm_clk_0,
   mmcm_clk_1,
+  mmcm_clk_2,
 
   // drp interface
 
@@ -72,18 +73,21 @@ module ad_mmcm_drp (
   parameter   MMCM_VCO_DIV  = 6;
   parameter   MMCM_VCO_MUL = 12.000;
   parameter   MMCM_CLK0_DIV = 2.000;
-  parameter   MMCM_CLK0_PHASE = 0.000 ;
+  parameter   MMCM_CLK0_PHASE = 0.000;
   parameter   MMCM_CLK1_DIV = 6;
   parameter   MMCM_CLK1_PHASE = 0.000;
+  parameter   MMCM_CLK2_DIV = 2.000;
+  parameter   MMCM_CLK2_PHASE = 0.000;
 
   // clocks
 
   input           clk;
   input           clk2;
-  input           mmcm_rst;
   input           clk_sel;
+  input           mmcm_rst;
   output          mmcm_clk_0;
   output          mmcm_clk_1;
+  output          mmcm_clk_2;
 
   // drp interface
 
@@ -110,6 +114,7 @@ module ad_mmcm_drp (
   wire            mmcm_fb_clk_s;
   wire            mmcm_clk_0_s;
   wire            mmcm_clk_1_s;
+  wire            mmcm_clk_2_s;
   wire            mmcm_locked_s;
   wire    [15:0]  up_drp_rdata_s;
   wire            up_drp_ready_s;
@@ -152,6 +157,10 @@ module ad_mmcm_drp (
     .CLKOUT1_PHASE (MMCM_CLK1_PHASE),
     .CLKOUT1_DUTY_CYCLE (0.500),
     .CLKOUT1_USE_FINE_PS ("FALSE"),
+    .CLKOUT2_DIVIDE (MMCM_CLK2_DIV),
+    .CLKOUT2_PHASE (MMCM_CLK2_PHASE),
+    .CLKOUT2_DUTY_CYCLE (0.500),
+    .CLKOUT2_USE_FINE_PS ("FALSE"),
     .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
     .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
     .REF_JITTER1 (0.010))
@@ -161,6 +170,7 @@ module ad_mmcm_drp (
     .CLKFBOUT (mmcm_fb_clk_s),
     .CLKOUT0 (mmcm_clk_0_s),
     .CLKOUT1 (mmcm_clk_1_s),
+    .CLKOUT2 (mmcm_clk_2_s),
     .LOCKED (mmcm_locked_s),
     .DCLK (up_clk),
     .DEN (up_drp_sel),
@@ -172,7 +182,6 @@ module ad_mmcm_drp (
     .CLKFBOUTB (),
     .CLKOUT0B (),
     .CLKOUT1B (),
-    .CLKOUT2 (),
     .CLKOUT2B (),
     .CLKOUT3 (),
     .CLKOUT3B (),
@@ -209,6 +218,10 @@ module ad_mmcm_drp (
     .CLKOUT1_PHASE (MMCM_CLK1_PHASE),
     .CLKOUT1_DUTY_CYCLE (0.500),
     .CLKOUT1_USE_FINE_PS ("FALSE"),
+    .CLKOUT2_DIVIDE (MMCM_CLK2_DIV),
+    .CLKOUT2_PHASE (MMCM_CLK2_PHASE),
+    .CLKOUT2_DUTY_CYCLE (0.500),
+    .CLKOUT2_USE_FINE_PS ("FALSE"),
     .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
     .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
     .REF_JITTER1 (0.010))
@@ -218,6 +231,7 @@ module ad_mmcm_drp (
     .CLKFBOUT (mmcm_fb_clk_s),
     .CLKOUT0 (mmcm_clk_0_s),
     .CLKOUT1 (mmcm_clk_1_s),
+    .CLKOUT2 (mmcm_clk_2_s),
     .LOCKED (mmcm_locked_s),
     .DCLK (up_clk),
     .DEN (up_drp_sel),
@@ -229,7 +243,6 @@ module ad_mmcm_drp (
     .CLKFBOUTB (),
     .CLKOUT0B (),
     .CLKOUT1B (),
-    .CLKOUT2 (),
     .CLKOUT2B (),
     .CLKOUT3 (),
     .CLKOUT3B (),
@@ -252,6 +265,7 @@ module ad_mmcm_drp (
   BUFG i_fb_clk_bufg  (.I (mmcm_fb_clk_s),  .O (bufg_fb_clk_s));
   BUFG i_clk_0_bufg   (.I (mmcm_clk_0_s),   .O (mmcm_clk_0)); 
   BUFG i_clk_1_bufg   (.I (mmcm_clk_1_s),   .O (mmcm_clk_1));
+  BUFG i_clk_2_bufg   (.I (mmcm_clk_2_s),   .O (mmcm_clk_2));
 
 endmodule
 
