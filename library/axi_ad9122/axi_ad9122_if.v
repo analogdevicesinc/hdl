@@ -100,6 +100,11 @@ module axi_ad9122_if (
   parameter   DEVICE_TYPE = 0;
   parameter   SERDES_OR_DDR_N = 1;
   parameter   MMCM_OR_BUFIO_N = 1;
+  parameter   MMCM_CLKIN_PERIOD = 1.667;
+  parameter   MMCM_VCO_DIV = 6;
+  parameter   MMCM_VCO_MUL = 12;
+  parameter   MMCM_CLK0_DIV = 2;
+  parameter   MMCM_CLK1_DIV = 8;
   parameter   IO_DELAY_GROUP = "dac_if_delay_group";
 
   // dac interface
@@ -161,6 +166,10 @@ module axi_ad9122_if (
   reg             dac_status_m1 = 'd0;
   reg             dac_status = 'd0;
 
+  // internal signals
+
+  wire            dac_out_clk;
+
   // dac status
 
   always @(posedge dac_div_clk) begin
@@ -177,8 +186,8 @@ module axi_ad9122_if (
 
   ad_serdes_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SERDES_OR_DDR_N(SERDES_OR_DDR_N),
-    .DATA_WIDTH(16))
+    .SERDES_OR_DDR_N (SERDES_OR_DDR_N),
+    .DATA_WIDTH (16))
   i_serdes_out_data (
     .rst (dac_rst),
     .clk (dac_clk),
@@ -198,8 +207,8 @@ module axi_ad9122_if (
   
   ad_serdes_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SERDES_OR_DDR_N(SERDES_OR_DDR_N),
-    .DATA_WIDTH(1))
+    .SERDES_OR_DDR_N (SERDES_OR_DDR_N),
+    .DATA_WIDTH (1))
   i_serdes_out_frame (
     .rst (dac_rst),
     .clk (dac_clk),
@@ -219,11 +228,11 @@ module axi_ad9122_if (
   
   ad_serdes_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SERDES_OR_DDR_N(SERDES_OR_DDR_N),
-    .DATA_WIDTH(1))
+    .SERDES_OR_DDR_N (SERDES_OR_DDR_N),
+    .DATA_WIDTH (1))
   i_serdes_out_clk (
     .rst (dac_rst),
-    .clk (dac_clk),
+    .clk (dac_out_clk),
     .div_clk (dac_div_clk),
     .data_s0 (1'b1),
     .data_s1 (1'b0),
@@ -242,17 +251,18 @@ module axi_ad9122_if (
     .SERDES_OR_DDR_N (SERDES_OR_DDR_N),
     .MMCM_OR_BUFR_N (MMCM_OR_BUFIO_N),
     .MMCM_DEVICE_TYPE (DEVICE_TYPE),
-    .MMCM_CLKIN_PERIOD (1.667),
-    .MMCM_VCO_DIV (6),
-    .MMCM_VCO_MUL (12),
-    .MMCM_CLK0_DIV (2),
-    .MMCM_CLK1_DIV (8))
+    .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
+    .MMCM_VCO_DIV (MMCM_VCO_DIV),
+    .MMCM_VCO_MUL (MMCM_VCO_MUL),
+    .MMCM_CLK0_DIV (MMCM_CLK0_DIV),
+    .MMCM_CLK1_DIV (MMCM_CLK1_DIV))
   i_serdes_clk (
     .mmcm_rst (mmcm_rst),
     .clk_in_p (dac_clk_in_p),
     .clk_in_n (dac_clk_in_n),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
+    .out_clk (dac_out_clk),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel),

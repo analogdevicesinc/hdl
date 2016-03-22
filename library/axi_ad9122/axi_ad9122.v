@@ -95,6 +95,11 @@ module axi_ad9122 (
   parameter   DEVICE_TYPE = 0;
   parameter   SERDES_OR_DDR_N = 1;
   parameter   MMCM_OR_BUFIO_N = 1;
+  parameter   MMCM_CLKIN_PERIOD = 1.667;
+  parameter   MMCM_VCO_DIV = 2;
+  parameter   MMCM_VCO_MUL = 4;
+  parameter   MMCM_CLK0_DIV = 2;
+  parameter   MMCM_CLK1_DIV = 8;
   parameter   DAC_DATAPATH_DISABLE = 0;
   parameter   IO_DELAY_GROUP = "dev_if_delay_group";
 
@@ -200,7 +205,12 @@ module axi_ad9122 (
   axi_ad9122_if #(
     .DEVICE_TYPE (DEVICE_TYPE),
     .SERDES_OR_DDR_N (SERDES_OR_DDR_N),
-    .MMCM_OR_BUFIO_N (MMCM_OR_BUFIO_N))
+    .MMCM_OR_BUFIO_N (MMCM_OR_BUFIO_N),
+    .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
+    .MMCM_VCO_DIV (MMCM_VCO_DIV),
+    .MMCM_VCO_MUL (MMCM_VCO_MUL),
+    .MMCM_CLK0_DIV (MMCM_CLK0_DIV),
+    .MMCM_CLK1_DIV (MMCM_CLK1_DIV))
   i_if (
     .dac_clk_in_p (dac_clk_in_p),
     .dac_clk_in_n (dac_clk_in_n),
