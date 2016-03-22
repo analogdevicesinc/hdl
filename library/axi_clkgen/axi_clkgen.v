@@ -79,6 +79,8 @@ module axi_clkgen (
   parameter   CLK0_PHASE = 0.000;
   parameter   CLK1_DIV = 6;
   parameter   CLK1_PHASE = 0.000;
+  parameter   CLK2_DIV = 6;
+  parameter   CLK2_PHASE = 0.000;
 
   // clocks
 
@@ -208,10 +210,11 @@ module axi_clkgen (
   i_mmcm_drp (
     .clk (clk),
     .clk2 (clk2),
-    .mmcm_rst (mmcm_rst),
     .clk_sel(clk_sel),
+    .mmcm_rst (mmcm_rst),
     .mmcm_clk_0 (clk_0),
     .mmcm_clk_1 (clk_1),
+    .mmcm_clk_2 (),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel_s),
