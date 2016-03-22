@@ -263,6 +263,7 @@ module axi_ad9684_if (
     .clk_in_n (adc_clk_in_n),
     .clk (adc_clk_in),
     .div_clk (adc_div_clk),
+    .out_clk (),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel),
