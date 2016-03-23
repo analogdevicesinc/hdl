@@ -12,6 +12,7 @@
   # current monitor interface
     # clock
   create_bd_port -dir O adc_clk_o
+
     # data motor 1
   create_bd_port -dir I adc_m1_ia_dat_i
   create_bd_port -dir I adc_m1_ib_dat_i
@@ -159,7 +160,7 @@
   set iic_ee2  [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 iic_ee2 ]
 
   # xadc
-  set xadc_core [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.1 xadc_core ]
+  set xadc_core [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.2 xadc_core ]
   set_property -dict [ list CONFIG.XADC_STARUP_SELECTION {simultaneous_sampling} ] $xadc_core
   set_property -dict [ list CONFIG.ENABLE_EXTERNAL_MUX {true} ] $xadc_core
   set_property -dict [ list CONFIG.EXTERNAL_MUX_CHANNEL  {VAUXP0_VAUXN0} ] $xadc_core
