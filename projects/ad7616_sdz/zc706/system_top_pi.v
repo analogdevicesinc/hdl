@@ -157,7 +157,7 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf (
+  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_adc_cntrl (
     .dio_t (gpio_t[43:32]),
     .dio_i (gpio_o[43:32]),
     .dio_o (gpio_i[43:32]),
@@ -171,7 +171,7 @@ module system_top (
 
   generate
     for (i = 0; i < 16; i = i + 1) begin: adc_db_io
-      ad_iobuf i_adc_db (
+      ad_iobuf i_iobuf_adc_db (
         .dio_t(adc_db_t),
         .dio_i(adc_db_o[i]),
         .dio_o(adc_db_i[i]),
@@ -181,7 +181,7 @@ module system_top (
 
   ad_iobuf #(
     .DATA_WIDTH(15)
-  ) i_gpio_bd (
+  ) i_iobuf_gpio (
     .dio_t(gpio_t[14:0]),
     .dio_i(gpio_o[14:0]),
     .dio_o(gpio_i[14:0]),

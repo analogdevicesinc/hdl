@@ -184,7 +184,7 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf (
+  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_adc_cntrl (
     .dio_t (gpio_t[43:32]),
     .dio_i (gpio_o[43:32]),
     .dio_o (gpio_i[43:32]),
@@ -198,7 +198,7 @@ module system_top (
 
   generate
     for (i = 0; i < 16; i = i + 1) begin: adc_db_io
-      ad_iobuf i_adc_db (
+      ad_iobuf i_iobuf_adc_db (
         .dio_t(adc_db_t),
         .dio_i(adc_db_o[i]),
         .dio_o(adc_db_i[i]),
@@ -208,7 +208,7 @@ module system_top (
 
   ad_iobuf #(
     .DATA_WIDTH(32)
-  ) i_iobuf (
+  ) i_iobuf_gpio (
     .dio_t(gpio_t[31:0]),
     .dio_i(gpio_o[31:0]),
     .dio_o(gpio_i[31:0]),
@@ -216,7 +216,7 @@ module system_top (
 
   ad_iobuf #(
     .DATA_WIDTH(2)
-  ) i_iic_mux_scl (
+  ) i_iobuf_iic_mux_scl (
     .dio_t({iic_mux_scl_t_s, iic_mux_scl_t_s}),
     .dio_i(iic_mux_scl_o_s),
     .dio_o(iic_mux_scl_i_s),
@@ -224,7 +224,7 @@ module system_top (
 
   ad_iobuf #(
     .DATA_WIDTH(2)
-  ) i_iic_mux_sda (
+  ) i_iobuf_iic_mux_sda (
     .dio_t({iic_mux_sda_t_s, iic_mux_sda_t_s}),
     .dio_i(iic_mux_sda_o_s),
     .dio_o(iic_mux_sda_i_s),
