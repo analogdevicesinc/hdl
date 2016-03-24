@@ -87,10 +87,7 @@ module system_top (
   adc_busy,
   adc_seq_en,
   adc_hw_rngsel,
-  adc_chsel,
-  adc_crcen,
-  adc_burst,
-  adc_os);
+  adc_chsel);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -139,9 +136,6 @@ module system_top (
   output          adc_seq_en;
   output  [ 1:0]  adc_hw_rngsel;
   output  [ 2:0]  adc_chsel;
-  output          adc_crcen;
-  output          adc_burst;
-  output  [ 2:0]  adc_os;
 
   // internal signals
 
@@ -158,16 +152,13 @@ module system_top (
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_adc_cntrl (
-    .dio_t (gpio_t[43:32]),
-    .dio_i (gpio_o[43:32]),
-    .dio_o (gpio_i[43:32]),
+    .dio_t (gpio_t[43:41], gpio_t[37], gpio_t[35:33]}),
+    .dio_i (gpio_o[43:41], gpio_o[37], gpio_o[35:33]}),
+    .dio_o (gpio_i[43:41], gpio_i[37], gpio_i[35:33]}),
     .dio_p ({adc_reset_n,        // 43
              adc_hw_rngsel,      // 42:41
-             adc_os,             // 40:38
              adc_seq_en,         // 37
-             adc_burst,          // 36
-             adc_chsel,          // 35:33
-             adc_crcen}));       // 32
+             adc_chsel}));       // 35:33
 
   generate
     for (i = 0; i < 16; i = i + 1) begin: adc_db_io
