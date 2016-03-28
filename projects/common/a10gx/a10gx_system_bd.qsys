@@ -601,7 +601,7 @@
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="10AX115S3F45I2SGE2" />
+ <parameter name="device" value="10AX115S2F45I2SG" />
  <parameter name="deviceFamily" value="Arria 10" />
  <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
@@ -733,7 +733,7 @@
  <module name="sys_cpu" kind="altera_nios2_gen2" version="15.1" enabled="1">
   <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="3" />
   <parameter name="AUTO_CLK_RESET_DOMAIN" value="3" />
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AX115S2F45I2SG" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="bht_ramBlockType" value="Automatic" />
   <parameter name="breakOffset" value="32" />
@@ -1862,14 +1862,14 @@
   <parameter name="PLL_USER_NUM_OF_EXTRA_CLKS" value="0" />
   <parameter name="PROTOCOL_ENUM" value="PROTOCOL_DDR3" />
   <parameter name="SHORT_QSYS_INTERFACE_NAMES" value="true" />
-  <parameter name="SYS_INFO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="SYS_INFO_DEVICE" value="10AX115S2F45I2SG" />
   <parameter name="SYS_INFO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="SYS_INFO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="SYS_INFO_UNIQUE_ID">$${FILENAME}_sys_ddr3_cntrl</parameter>
   <parameter name="TRAIT_SUPPORTS_VID" value="0" />
  </module>
  <module name="sys_ethernet" kind="altera_eth_tse" version="15.1" enabled="1">
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AX115S2F45I2SG" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="core_variation" value="MAC_PCS" />
   <parameter name="deviceFamilyName" value="Arria 10" />
@@ -1922,7 +1922,7 @@
   <parameter
      name="AUTO_DESCRIPTOR_WRITE_MASTER_ADDRESS_WIDTH"
      value="AddressWidth = -1" />
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AX115S2F45I2SG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP" value="" />
@@ -1968,7 +1968,7 @@
   <parameter
      name="AUTO_DESCRIPTOR_WRITE_MASTER_ADDRESS_WIDTH"
      value="AddressWidth = -1" />
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AX115S2F45I2SG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_MM_READ_ADDRESS_MAP"><![CDATA[<address-map><slave name='sys_ddr3_cntrl_arch.ctrl_amm_0' start='0x0' end='0x10000000' /></address-map>]]></parameter>

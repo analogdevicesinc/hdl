@@ -313,7 +313,7 @@
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="10AX115S3F45I2SGE2" />
+ <parameter name="device" value="10AX115S2F45I2SG" />
  <parameter name="deviceFamily" value="Arria 10" />
  <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
@@ -418,7 +418,7 @@
    type="reset"
    dir="end" />
  <module name="a10gx_base" kind="a10gx_system_bd" version="1.0" enabled="1">
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AX115S2F45I2SG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
@@ -445,7 +445,7 @@
   <parameter
      name="AUTO_AXI_AD9680_DMA_M_AXI_ADDRESS_WIDTH"
      value="AddressWidth = 29" />
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AX115S2F45I2SG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
