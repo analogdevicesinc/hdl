@@ -1,18 +1,19 @@
-#HDL Reference Designs
+# HDL Reference Designs
 
-Analog Devices HDL libraries and projects
+[Analog Devices Inc.] HDL libraries and projects
 
-###Tools version:
-- **Xilinx** : [Vivado 2015.2.1]
-- **Altera** : [Quartus 15.1]
+### Branches
 
-###Documentation and support
+Each release has its own branch and master always synced with the latest release. 
+To find out more information about the latest release please check the release notes.
+Every branch, which has **dev** in its name, is a development branch and should handle it accordingly. 
 
-For first time users, it is **highly recommended** to go through our [HDL user guide].
+### [Latest Release Notes]
+### [HDL User Guide]
+### [HDL Help & Support]
 
-For support please visit our [FPGA Reference Designs Support Community] on EngineerZone.
+[HDL User Guide]:http://wiki.analog.com/resources/fpga/docs/hdl
+[HDL Help & Support]:http://ez.analog.com/community/fpga
+[Latest Release Notes]:https://github.com/analogdevicesinc/hdl/releases
+[Analog Devices Inc.]:http://www.analog.com/en/index.html
 
-[Vivado 2015.2.1]:http://www.xilinx.com/content/xilinx/en/downloadNav/vivado-design-tools/2015-2.html
-[Quartus 15.1]:http://dl.altera.com/15.1/?edition=subscription
-[HDL user guide]:http://wiki.analog.com/resources/fpga/docs/hdl
-[FPGA Reference Designs Support Community]:http://ez.analog.com/community/fpga
