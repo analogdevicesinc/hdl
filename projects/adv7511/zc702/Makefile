@@ -29,6 +29,8 @@ M_FLIST +=  xgui
 M_FLIST += *.runs
 M_FLIST += *.srcs
 M_FLIST += *.sdk
+M_FLIST += *.hw
+M_FLIST += *.sim
 M_FLIST += .Xil
 
 
