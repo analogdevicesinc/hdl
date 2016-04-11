@@ -8,14 +8,17 @@
 .PHONY: all clean clean-all 
 all:
 	-make -C ccbrk all
+	-make -C ccbrk_cmos all
 
 
 clean: 
 	make -C ccbrk clean
+	make -C ccbrk_cmos clean
 
 
 clean-all:
 	make -C ccbrk clean-all
+	make -C ccbrk_cmos clean-all
 
 ####################################################################################
 ####################################################################################
