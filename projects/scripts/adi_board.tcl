@@ -94,6 +94,18 @@ proc ad_connect {p_name_1 p_name_2} {
   }
 }
 
+proc ad_disconnect {p_name_1 p_name_2} {
+
+  set m_name_1 [ad_connect_type $p_name_1]
+  set m_name_2 [ad_connect_type $p_name_2]
+
+  if {[get_property CLASS $m_name_1] eq "bd_net"} {
+    puts "disconnect_bd_net $m_name_1 $m_name_2"
+    disconnect_bd_net $m_name_1 $m_name_2
+    return
+  }
+}
+
 ###################################################################################################
 ###################################################################################################
 
