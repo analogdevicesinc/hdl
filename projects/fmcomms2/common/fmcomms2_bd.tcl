@@ -168,7 +168,7 @@ ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
 
 # ila (adc)
 
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_adc]
+set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_adc]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc
@@ -188,7 +188,7 @@ ad_connect  sys_cpu_clk ila_adc/clk
 
 # ila (tdd)
 
-set ila_tdd [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tdd]
+set ila_tdd [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_tdd]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tdd
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_tdd
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tdd

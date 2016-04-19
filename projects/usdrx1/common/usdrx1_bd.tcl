@@ -58,7 +58,7 @@ set axi_ad9671_core_3 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9671:
 set_property -dict [list CONFIG.QUAD_OR_DUAL_N {0}] $axi_ad9671_core_3
 set_property -dict [list CONFIG.ID {3}] $axi_ad9671_core_3
 
-set axi_usdrx1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.1 axi_usdrx1_jesd]
+set axi_usdrx1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_usdrx1_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_usdrx1_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_usdrx1_jesd
 set_property -dict [list CONFIG.GT_Line_Rate {3.2}  ] $axi_usdrx1_jesd
@@ -300,7 +300,7 @@ ad_cpu_interrupt ps-13 mb-13 axi_usdrx1_dma/irq
 
 # ila
 
-set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_ad9671]
+set ila_ad9671 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_ad9671]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_ad9671
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {9}] $ila_ad9671
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {128}] $ila_ad9671

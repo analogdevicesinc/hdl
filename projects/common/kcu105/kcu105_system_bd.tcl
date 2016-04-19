@@ -66,7 +66,7 @@ set_property -dict [list CONFIG.C_ECC {0}] $sys_dlmb_cntlr
 set sys_ilmb_cntlr [create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 sys_ilmb_cntlr]
 set_property -dict [list CONFIG.C_ECC {0}] $sys_ilmb_cntlr
 
-set sys_lmb_bram [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.2 sys_lmb_bram]
+set sys_lmb_bram [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 sys_lmb_bram]
 set_property -dict [list CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.use_bram_block {BRAM_Controller}] $sys_lmb_bram
 
 # instance: microblaze- mdm
