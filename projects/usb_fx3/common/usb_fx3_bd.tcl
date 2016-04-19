@@ -4,10 +4,10 @@ create_bd_port -dir O usb_fx3_uart_rx
 
 create_bd_port -dir I dma_rdy
 create_bd_port -dir I dma_wmk
-create_bd_port -dir I -from 10 -to 0 fifo_rdy
+create_bd_port -dir I -from 3 -to 0 fifo_rdy
 create_bd_port -dir O pclk
-create_bd_port -dir O -from 31 -to 0 data
-create_bd_port -dir O -from 4 -to 0 addr
+create_bd_port -dir IO -from 31 -to 0 data
+create_bd_port -dir O -from 1 -to 0 addr
 create_bd_port -dir O slcs_n
 create_bd_port -dir O slrd_n
 create_bd_port -dir O sloe_n
@@ -21,6 +21,9 @@ set axi_usb_fx3 [create_bd_cell -type ip -vlnv analog.com:user:axi_usb_fx3:1.0 a
 
 set axi_usb_fx3_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_usb_fx3_dma]
 set_property -dict [list CONFIG.c_sg_include_stscntrl_strm {0}] $axi_usb_fx3_dma
+set_property -dict [list CONFIG.c_mm2s_burst_size {256}] $axi_usb_fx3_dma
+set_property -dict [list CONFIG.c_s2mm_burst_size {256}] $axi_usb_fx3_dma
+set_property -dict [list CONFIG.c_sg_length_width {16}] $axi_usb_fx3_dma
 
 ad_connect axi_usb_fx3_dma/S_AXIS_S2MM axi_usb_fx3/m_axis
 ad_connect axi_usb_fx3/s_axis axi_usb_fx3_dma/M_AXIS_MM2S
@@ -57,12 +60,11 @@ ad_mem_hp1_interconnect sys_cpu_clk axi_usb_fx3_dma/M_AXI_S2MM
 
 # test
 
-set vcc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 vcc]
-#ad_connect vcc/dout axi_usb_fx3/m_axis_tready
-
 set ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {3}] $ila
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {11}] $ila
+set_property -dict [list CONFIG.C_PROBE10_WIDTH {4}] $ila
+set_property -dict [list CONFIG.C_PROBE3_WIDTH {2}] $ila
 set_property -dict [list CONFIG.C_PROBE2_WIDTH {15}] $ila
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {74}] $ila
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {75}] $ila
@@ -78,3 +80,11 @@ ad_connect ila/clk axi_usb_fx3/pclk
 ad_connect ila/probe0 axi_usb_fx3/debug_fx32dma
 ad_connect ila/probe1 axi_usb_fx3/debug_dma2fx3
 ad_connect ila/probe2 axi_usb_fx3/debug_status
+ad_connect ila/probe3 axi_usb_fx3/addr
+ad_connect ila/probe4 axi_usb_fx3/epswitch_n
+ad_connect ila/probe5 axi_usb_fx3/slcs_n
+ad_connect ila/probe6 axi_usb_fx3/slrd_n
+ad_connect ila/probe7 axi_usb_fx3/sloe_n
+ad_connect ila/probe8 axi_usb_fx3/slwr_n
+ad_connect ila/probe9 axi_usb_fx3/pktend_n
+ad_connect ila/probe10 fifo_rdy

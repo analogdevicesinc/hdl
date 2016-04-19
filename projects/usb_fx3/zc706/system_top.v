@@ -69,6 +69,22 @@ module system_top (
   usb_fx3_uart_tx,
   usb_fx3_uart_rx,
 
+//  dma_rdy,
+//  dma_wmk,
+  fifo_rdy,
+
+  data,
+  addr,
+  pclk,
+  slcs_n,
+  slrd_n,
+  sloe_n,
+  slwr_n,
+  //epswitch_n,
+  pktend_n,
+
+  pmode,
+
   hdmi_out_clk,
   hdmi_vsync,
   hdmi_hsync,
@@ -108,6 +124,22 @@ module system_top (
   input           usb_fx3_uart_tx;
   output          usb_fx3_uart_rx;
 
+//  input           dma_rdy;
+//  input           dma_wmk;
+  input   [ 3:0]  fifo_rdy;
+
+  inout   [31:0]  data;
+  output  [1:0]   addr;
+  output          pclk;
+  output          slcs_n;
+  output          slrd_n;
+  output          sloe_n;
+  output          slwr_n;
+  //output          epswitch_n;
+  output          pktend_n;
+
+  output  [ 1:0]  pmode;
+
   output          hdmi_out_clk;
   output          hdmi_vsync;
   output          hdmi_hsync;
@@ -125,20 +157,8 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  wire            usb_fx3_uart_tx;
-  wire            usb_fx3_uart_rx;
-  wire            dma_rdy;
-  wire            dma_wmk;
-  wire    [10:0]  fifo_rdy;
-  wire            pclk;
-  wire    [31:0]  data;
-  wire    [4:0]   addr;
-  wire            slcs_n;
-  wire            slrd_n;
-  wire            sloe_n;
-  wire            slwr_n;
-  wire            epswitch_n;
-  wire            pktend_n;
+
+  assign pmode = 2'b11;
 
   // instantiations
 
@@ -194,7 +214,7 @@ module system_top (
     .slrd_n(slrd_n),
     .sloe_n(sloe_n),
     .slwr_n(slwr_n),
-    .epswitch_n(epswitch_n),
+  // .epswitch_n(epswitch_n),
     .pktend_n(pktend_n),
     .ps_intr_00 (1'b0),
     .ps_intr_01 (1'b0),
