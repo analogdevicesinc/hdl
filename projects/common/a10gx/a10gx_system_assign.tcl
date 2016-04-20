@@ -2,13 +2,14 @@
 # device settings
 
 set_global_assignment -name FAMILY "Arria 10"
-set_global_assignment -name DEVICE 10AX115S2F45I2SG
+set_global_assignment -name DEVICE 10AX115S3F45E2SGE3
 
 # clocks and resets
 
-set_location_assignment PIN_BD32  -to sys_clk
+set_location_assignment PIN_AR36  -to sys_clk
+set_location_assignment PIN_AR37  -to "sys_clk(n)"
 set_location_assignment PIN_BD27  -to sys_resetn
-set_instance_assignment -name IO_STANDARD "1.8 V" -to sys_clk
+set_instance_assignment -name IO_STANDARD LVDS -to sys_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to sys_resetn
 
 # ddr3
