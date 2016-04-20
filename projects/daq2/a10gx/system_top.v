@@ -148,8 +148,8 @@ module system_top (
 
   // board gpio
 
-  inout   [ 10:0]   gpio_bd_i;
-  inout   [ 15:0]   gpio_bd_o;
+  input   [ 10:0]   gpio_bd_i;
+  output  [ 15:0]   gpio_bd_o;
 
   // lane interface
 
@@ -211,12 +211,12 @@ module system_top (
 
   // gpio in & out are separate cores
 
-  assign adc_pd = gpio_o[35];
-  assign dac_txen = gpio_o[34];
-  assign dac_reset = gpio_o[33];
-  assign clkd_sync = gpio_o[32];
+  assign adc_pd = gpio_o[42];
+  assign dac_txen = gpio_o[41];
+  assign dac_reset = gpio_o[40];
+  assign clkd_sync = gpio_o[38];
 
-  assign gpio_i[63:38] = 26'd0;
+  assign gpio_i[63:38] = gpio_o[63:38];
   assign gpio_i[37:37] = trig;
   assign gpio_i[36:36] = adc_fdb;
   assign gpio_i[35:35] = adc_fda;
