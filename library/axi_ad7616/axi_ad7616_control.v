@@ -124,8 +124,8 @@ module axi_ad7616_control (
 
   wire            up_rst;
   wire            up_rreq_s;
+  wire            up_rack_s;
   wire            up_wreq_s;
-  wire            end_of_conv_s;
 
   wire    [31:0]  up_read_data_s;
   wire            up_read_valid_s;
@@ -138,7 +138,7 @@ module axi_ad7616_control (
   // the up_[read/write]_data interfaces are valid just in parallel mode
 
   assign up_read_valid_s = (IF_TYPE == PARALLEL) ? up_read_valid : 1'b1;
-  assign up_read_data_s = (IF_TYPE == PARALLEL) ? {16'h0, up_read_data} : 32'hDEAD;
+  assign up_read_data_s = (IF_TYPE == PARALLEL) ? {16'h0, up_read_data} : {2{16'hDEAD}};
 
   // processor write interface
 
@@ -175,21 +175,23 @@ module axi_ad7616_control (
 
   // processor read interface
 
+  assign up_rack_s = (up_raddr[7:0] == 8'h13) ? up_read_valid_s : up_rreq_s;
+
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack <= 1'b0;
       up_rdata <= 32'b0;
     end else begin
-      up_rack <= (up_raddr[7:0] == 8'h13) ? up_read_valid_s : up_rreq_s;
-      if (up_rreq_s == 1'b1) begin
+      up_rack <= up_rack_s;
+      if (up_rack_s == 1'b1) begin
         case (up_raddr[7:0])
-            8'h00 : up_rdata = PCORE_VERSION;
-            8'h01 : up_rdata = ID;
-            8'h02 : up_rdata = up_scratch;
-            8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
-            8'h11 : up_rdata = up_conv_rate;
-            8'h12 : up_rdata = up_burst_length;
-            8'h13 : up_rdata = up_read_data_s;
+          8'h00 : up_rdata = PCORE_VERSION;
+          8'h01 : up_rdata = ID;
+          8'h02 : up_rdata = up_scratch;
+          8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
+          8'h11 : up_rdata = up_conv_rate;
+          8'h12 : up_rdata = {27'b0, up_burst_length};
+          8'h13 : up_rdata = up_read_data_s;
         endcase
       end
     end
@@ -207,7 +209,7 @@ module axi_ad7616_control (
     .clk (up_clk),
     .rst (up_rst),
     .in (busy),
-    .out (end_of_conv_s)
+    .out (end_of_conv)
   );
 
   // convertion start generator
@@ -243,7 +245,6 @@ module axi_ad7616_control (
   end
 
   assign cnvst = (up_cnvst_en == 1'b1) ? cnvst_buf : 1'b0;
-  assign end_of_conv = end_of_conv_s;
 
 endmodule
 
