@@ -177,7 +177,7 @@ module axi_ad7616 (
   wire                              wr_req_s;
   wire    [15:0]                    wr_data_s;
   wire    [15:0]                    rd_data_s;
-  wire                              rd_dvalid_s;
+  wire                              rd_valid_s;
   wire    [ 4:0]                    burst_length_s;
 
   wire                              m_axis_ready_s;
@@ -441,7 +441,7 @@ module axi_ad7616 (
       .wr_req(wr_req_s),
       .wr_data(wr_data_s),
       .rd_data(rd_data_s),
-      .rd_dvalid(rd_dvalid_s)
+      .rd_valid(rd_valid_s)
     );
 
   end
@@ -455,7 +455,7 @@ module axi_ad7616 (
     .busy (busy),
     .up_burst_length (burst_length_s),
     .up_read_data (rd_data_s),
-    .up_read_valid (rd_dvalid_s),
+    .up_read_valid (rd_valid_s),
     .up_write_data (wr_data_s),
     .up_read_req (rd_req_s),
     .up_write_req (wr_req_s),

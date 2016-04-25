@@ -70,7 +70,7 @@ module axi_ad7616_pif (
   wr_req,
   wr_data,
   rd_data,
-  rd_dvalid
+  rd_valid
 );
 
   parameter UP_ADDRESS_WIDTH = 14;
@@ -93,7 +93,7 @@ module axi_ad7616_pif (
   input                           wr_req;
   input   [15:0]                  wr_data;
   output  [15:0]                  rd_data;
-  output                          rd_dvalid;
+  output                          rd_valid;
 
   output  [31:0]                  m_axis_tdata;
   input                           m_axis_tready;
@@ -114,7 +114,7 @@ module axi_ad7616_pif (
 
   reg     [ 2:0]                  transfer_state = 3'h0;
   reg     [ 2:0]                  transfer_state_next = 3'h0;
-  reg     [ 1:0]                  counter = 2'h0;
+  reg     [ 1:0]                  width_counter = 2'h0;
   reg     [ 4:0]                  burst_counter = 5'h0;
 
   reg                             wr_req_d = 1'h0;
@@ -126,6 +126,7 @@ module axi_ad7616_pif (
   reg     [15:0]                  data_out_a = 16'h0;
   reg     [15:0]                  data_out_b = 16'h0;
   reg                             rd_db_valid_div2 = 1'h0;
+  reg                             rd_valid = 1'h0;
 
   // internal wires
 
@@ -148,13 +149,13 @@ module axi_ad7616_pif (
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
-      counter <= 2'h0;
+      width_counter <= 2'h0;
     end else begin
       if((transfer_state == CNTRL0_LOW) || (transfer_state == CNTRL0_HIGH) ||
          (transfer_state == CNTRL1_LOW) || (transfer_state == CNTRL1_HIGH))
-        counter <= counter + 1;
+        width_counter <= width_counter + 1;
       else
-        counter <= 2'h0;
+        width_counter <= 2'h0;
     end
   end
 
@@ -188,17 +189,17 @@ module axi_ad7616_pif (
         transfer_state_next <= CNTRL0_LOW;
       end
       CNTRL0_LOW : begin
-        transfer_state_next <= (counter != 2'b11) ? CNTRL0_LOW : CNTRL0_HIGH;
+        transfer_state_next <= (width_counter != 2'b11) ? CNTRL0_LOW : CNTRL0_HIGH;
       end
       CNTRL0_HIGH : begin
-        transfer_state_next <= (counter != 2'b11) ? CNTRL0_HIGH :
+        transfer_state_next <= (width_counter != 2'b11) ? CNTRL0_HIGH :
                                ((wr_req_d == 1'b1) || (rd_req_d == 1'b1)) ? CS_HIGH : CNTRL1_LOW;
       end
       CNTRL1_LOW : begin
-        transfer_state_next <= (counter != 2'b11) ? CNTRL1_LOW : CNTRL1_HIGH;
+        transfer_state_next <= (width_counter != 2'b11) ? CNTRL1_LOW : CNTRL1_HIGH;
       end
       CNTRL1_HIGH : begin
-        transfer_state_next <= (counter != 2'b11) ? CNTRL1_HIGH : CS_HIGH;
+        transfer_state_next <= (width_counter != 2'b11) ? CNTRL1_HIGH : CS_HIGH;
       end
       CS_HIGH : begin
         transfer_state_next <= (burst_length == burst_counter) ? IDLE : CNTRL0_LOW;
@@ -211,7 +212,8 @@ module axi_ad7616_pif (
 
   // data valid for the register access and m_axis interface
 
-  assign rd_db_valid = ((counter == 2'b0) && ((transfer_state == CNTRL0_HIGH) || (transfer_state == CNTRL1_HIGH))) ? 1'b1 : 1'b0;
+  assign rd_db_valid = ((transfer_state == CS_HIGH) &&
+                       ((rd_req_d == 1'b1) || (rd_conv_d == 1'b1))) ? 1'b1 : 1'b0;
 
   always @(posedge clk) begin
     if (cs_n) begin
@@ -228,10 +230,10 @@ module axi_ad7616_pif (
   always @(posedge clk) begin
     data_out_a <= (rd_db_valid) ? db_i : data_out_a;
     data_out_b <= (rd_db_valid) ? data_out_a : data_out_b;
+    rd_valid <= rd_db_valid;
   end
 
   assign rd_data = data_out_a;
-  assign rd_dvalid = rd_db_valid;
 
   assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
   assign db_t = ~wr_req_d;
