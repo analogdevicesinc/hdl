@@ -9,19 +9,6 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
-   element a10gx_base.sys_mem_s_avl
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
    element a10soc
    {
       datum _sortIndex
@@ -43,94 +30,6 @@
       datum baseAddress
       {
          value = "0";
-         type = "String";
-      }
-   }
-   element daq2.axi_ad9144_core_s_axi
-   {
-      datum baseAddress
-      {
-         value = "131072";
-         type = "String";
-      }
-   }
-   element daq2.axi_ad9144_dma_s_axi
-   {
-      datum baseAddress
-      {
-         value = "229376";
-         type = "String";
-      }
-   }
-   element daq2.axi_ad9680_core_s_axi
-   {
-      datum baseAddress
-      {
-         value = "65536";
-         type = "String";
-      }
-   }
-   element daq2.axi_ad9680_dma_s_axi
-   {
-      datum baseAddress
-      {
-         value = "212992";
-         type = "String";
-      }
-   }
-   element daq2.axi_jesd_xcvr_s_axi
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
-   element daq2.xcvr_core_jesd204_rx_s_avl
-   {
-      datum baseAddress
-      {
-         value = "254976";
-         type = "String";
-      }
-   }
-   element daq2.xcvr_core_jesd204_tx_s_avl
-   {
-      datum baseAddress
-      {
-         value = "253952";
-         type = "String";
-      }
-   }
-   element daq2.xcvr_core_reconfig_s_avl
-   {
-      datum baseAddress
-      {
-         value = "196608";
-         type = "String";
-      }
-   }
-   element daq2.xcvr_rx_pll_reconfig_s_avl
-   {
-      datum baseAddress
-      {
-         value = "251904";
-         type = "String";
-      }
-   }
-   element daq2.xcvr_tx_lane_pll_s_avl
-   {
-      datum baseAddress
-      {
-         value = "245760";
-         type = "String";
-      }
-   }
-   element daq2.xcvr_tx_pll_reconfig_s_avl
-   {
-      datum baseAddress
-      {
-         value = "249856";
          type = "String";
       }
    }
