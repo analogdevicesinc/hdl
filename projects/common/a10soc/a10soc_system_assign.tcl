@@ -2,7 +2,7 @@
 # device settings
 
 set_global_assignment -name FAMILY "Arria 10"
-set_global_assignment -name DEVICE 10AS066N3F40I2LG
+set_global_assignment -name DEVICE 10AS066N3F40E2SGE2
 
 # clocks and resets
 

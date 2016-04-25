@@ -276,7 +276,7 @@
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="10AS066N3F40I2LG" />
+ <parameter name="device" value="10AS066N3F40I2SGES" />
  <parameter name="deviceFamily" value="Arria 10" />
  <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
@@ -329,21 +329,13 @@
    internal="arria10_hps_0.f2h_irq1"
    type="interrupt"
    dir="start" />
- <interface
-   name="hps_s0_axi"
-   internal="arria10_hps_0.f2sdram0_data"
-   type="axi"
-   dir="end" />
+ <interface name="hps_s0_axi" internal="arria10_hps_0.f2sdram0_data" />
  <interface
    name="hps_s1_axi"
    internal="arria10_hps_0.f2sdram1_data"
    type="axi"
    dir="end" />
- <interface
-   name="hps_s2_axi"
-   internal="arria10_hps_0.f2sdram2_data"
-   type="axi"
-   dir="end" />
+ <interface name="hps_s2_axi" internal="arria10_hps_0.f2sdram2_data" />
  <interface
    name="hps_spi0"
    internal="arria10_hps_0.spim0"
@@ -435,9 +427,9 @@
   <parameter name="F2H_SDRAM4_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM5_CLOCK_FREQ" value="100" />
   <parameter name="F2H_WARM_RST_Enable" value="false" />
-  <parameter name="F2SDRAM0_ENABLED" value="true" />
+  <parameter name="F2SDRAM0_ENABLED" value="false" />
   <parameter name="F2SDRAM1_ENABLED" value="true" />
-  <parameter name="F2SDRAM2_ENABLED" value="true" />
+  <parameter name="F2SDRAM2_ENABLED" value="false" />
   <parameter name="F2SDRAM_ADDRESS_WIDTH" value="32" />
   <parameter name="F2SDRAM_PORT_CONFIG" value="5" />
   <parameter name="F2SDRAM_READY_LATENCY" value="false" />
@@ -586,7 +578,7 @@
   <parameter name="USB1_Mode" value="N/A" />
   <parameter name="USB1_PinMuxing" value="Unused" />
   <parameter name="USE_DEFAULT_MPU_CLK" value="false" />
-  <parameter name="device_name" value="10AS066N3F40I2LG" />
+  <parameter name="device_name" value="10AS066N3F40I2SGES" />
   <parameter name="eosc1_clk_mhz" value="25.0" />
   <parameter name="quartus_ini_hps_ip_boot_from_fpga_ready" value="false" />
   <parameter name="quartus_ini_hps_ip_enable_a10_advanced_options" value="false" />
@@ -1536,7 +1528,7 @@
   <parameter name="PLL_USER_NUM_OF_EXTRA_CLKS" value="0" />
   <parameter name="PROTOCOL_ENUM" value="PROTOCOL_DDR4" />
   <parameter name="SHORT_QSYS_INTERFACE_NAMES" value="false" />
-  <parameter name="SYS_INFO_DEVICE" value="10AS066N3F40I2LG" />
+  <parameter name="SYS_INFO_DEVICE" value="10AS066N3F40I2SGES" />
   <parameter name="SYS_INFO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="SYS_INFO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="SYS_INFO_UNIQUE_ID">$${FILENAME}_emif_a10_hps_0</parameter>
@@ -1609,17 +1601,7 @@
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="arria10_hps_0.f2sdram0_clock" />
- <connection
-   kind="clock"
-   version="15.1"
-   start="sys_clk.out_clk"
    end="arria10_hps_0.f2sdram1_clock" />
- <connection
-   kind="clock"
-   version="15.1"
-   start="sys_clk.out_clk"
-   end="arria10_hps_0.f2sdram2_clock" />
  <connection
    kind="clock"
    version="15.1"
