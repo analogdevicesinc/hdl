@@ -9,14 +9,6 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
-   element a10gx_base
-   {
-      datum _sortIndex
-      {
-         value = "1";
-         type = "int";
-      }
-   }
    element a10gx_base.sys_mem_s_avl
    {
       datum _lockedAddress
@@ -30,12 +22,28 @@
          type = "String";
       }
    }
-   element daq2
+   element a10soc
    {
       datum _sortIndex
       {
-         value = "2";
+         value = "1";
          type = "int";
+      }
+   }
+   element a10soc.hps_s0_axi
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
+   element a10soc.hps_s1_axi
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
       }
    }
    element daq2.axi_ad9144_core_s_axi
@@ -123,6 +131,38 @@
       datum baseAddress
       {
          value = "249856";
+         type = "String";
+      }
+   }
+   element fmcomms2
+   {
+      datum _sortIndex
+      {
+         value = "2";
+         type = "int";
+      }
+   }
+   element fmcomms2.axi_ad9361_s_axi
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
+   element fmcomms2.axi_dmac_adc_s_axi
+   {
+      datum baseAddress
+      {
+         value = "81920";
+         type = "String";
+      }
+   }
+   element fmcomms2.axi_dmac_dac_s_axi
+   {
+      datum baseAddress
+      {
+         value = "65536";
          type = "String";
       }
    }
@@ -361,7 +401,7 @@
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="10AX115S3F45E2SGE3" />
+ <parameter name="device" value="10AS066N3F40I2LG" />
  <parameter name="deviceFamily" value="Arria 10" />
  <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
@@ -372,7 +412,7 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="2" />
- <parameter name="projectName" value="daq2_a10gx.qpf" />
+ <parameter name="projectName" value="fmcomms2_a10soc.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
@@ -380,136 +420,78 @@
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
-   name="a10gx_base_sys_ddr3_cntrl_mem"
-   internal="a10gx_base.sys_ddr3_cntrl_mem"
+   name="ad9361_if"
+   internal="fmcomms2.axi_ad9361_device_if"
+   type="conduit"
+   dir="end" />
+ <interface name="hps_ddr" internal="a10soc.hps_ddr" type="conduit" dir="end" />
+ <interface
+   name="hps_ddr_oct"
+   internal="a10soc.hps_ddr_oct"
    type="conduit"
    dir="end" />
  <interface
-   name="a10gx_base_sys_ddr3_cntrl_oct"
-   internal="a10gx_base.sys_ddr3_cntrl_oct"
-   type="conduit"
-   dir="end" />
- <interface
-   name="a10gx_base_sys_ddr3_cntrl_pll_ref_clk"
-   internal="a10gx_base.sys_ddr3_cntrl_pll_ref_clk"
+   name="hps_ddr_ref_clk"
+   internal="a10soc.hps_ddr_ref_clk"
    type="clock"
    dir="end" />
+ <interface name="hps_gpio" internal="a10soc.hps_gpio" type="conduit" dir="end" />
+ <interface name="hps_io" internal="a10soc.hps_io" type="conduit" dir="end" />
+ <interface name="hps_spi0" internal="a10soc.hps_spi0" type="conduit" dir="end" />
  <interface
-   name="a10gx_base_sys_ethernet_mdio"
-   internal="a10gx_base.sys_ethernet_mdio"
-   type="conduit"
-   dir="end" />
- <interface
-   name="a10gx_base_sys_ethernet_ref_clk"
-   internal="a10gx_base.sys_ethernet_ref_clk"
+   name="hps_spi0_sclk"
+   internal="a10soc.hps_spi0_sclk"
    type="clock"
-   dir="end" />
- <interface
-   name="a10gx_base_sys_ethernet_reset"
-   internal="a10gx_base.sys_ethernet_reset"
-   type="reset"
    dir="start" />
+ <interface name="hps_spi1" internal="a10soc.hps_spi1" type="conduit" dir="end" />
  <interface
-   name="a10gx_base_sys_ethernet_sgmii"
-   internal="a10gx_base.sys_ethernet_sgmii"
-   type="conduit"
-   dir="end" />
- <interface name="a10gx_base_sys_gpio" internal="a10gx_base.sys_gpio" />
- <interface
-   name="a10gx_base_sys_gpio_bd"
-   internal="a10gx_base.sys_gpio_bd"
-   type="conduit"
-   dir="end" />
- <interface
-   name="a10gx_base_sys_gpio_in"
-   internal="a10gx_base.sys_gpio_in"
-   type="conduit"
-   dir="end" />
- <interface
-   name="a10gx_base_sys_gpio_out"
-   internal="a10gx_base.sys_gpio_out"
-   type="conduit"
-   dir="end" />
- <interface
-   name="a10gx_base_sys_spi"
-   internal="a10gx_base.sys_spi"
-   type="conduit"
-   dir="end" />
- <interface name="daq2_rx_data" internal="daq2.rx_data" type="conduit" dir="end" />
- <interface
-   name="daq2_rx_ref_clk"
-   internal="daq2.rx_ref_clk"
+   name="hps_spi1_sclk"
+   internal="a10soc.hps_spi1_sclk"
    type="clock"
-   dir="end" />
- <interface name="daq2_rx_sync" internal="daq2.rx_sync" type="conduit" dir="end" />
- <interface
-   name="daq2_rx_sysref"
-   internal="daq2.rx_sysref"
-   type="conduit"
-   dir="end" />
- <interface name="daq2_tx_data" internal="daq2.tx_data" type="conduit" dir="end" />
- <interface
-   name="daq2_tx_ref_clk"
-   internal="daq2.tx_ref_clk"
-   type="clock"
-   dir="end" />
- <interface name="daq2_tx_sync" internal="daq2.tx_sync" type="conduit" dir="end" />
- <interface
-   name="daq2_tx_sysref"
-   internal="daq2.tx_sysref"
-   type="conduit"
-   dir="end" />
+   dir="start" />
  <interface name="sys_clk" internal="sys_clk.clk_in" type="clock" dir="end" />
  <interface
    name="sys_reset"
    internal="sys_clk.clk_in_reset"
    type="reset"
    dir="end" />
- <module name="a10gx_base" kind="a10gx_system_bd" version="1.0" enabled="1">
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45E2SGE3" />
+ <module name="a10soc" kind="a10soc_system_bd" version="1.0" enabled="1">
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40I2LG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="6" />
+  <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_DOMAIN" value="1" />
+  <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_HPS_DDR_REF_CLK_RESET_DOMAIN" value="1" />
+  <parameter name="AUTO_HPS_IRQ0_INTERRUPTS_USED" value="3" />
+  <parameter name="AUTO_HPS_IRQ1_INTERRUPTS_USED" value="3" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="4" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="6" />
-  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='daq2_axi_jesd_xcvr.s_axi' start='0x0' end='0x10000' /><slave name='daq2_axi_ad9680_core.s_axi' start='0x10000' end='0x20000' /><slave name='daq2_axi_ad9144_core.s_axi' start='0x20000' end='0x30000' /><slave name='daq2_xcvr_core.reconfig_avmm' start='0x30000' end='0x34000' /><slave name='daq2_axi_ad9680_dma.s_axi' start='0x34000' end='0x38000' /><slave name='daq2_axi_ad9144_dma.s_axi' start='0x38000' end='0x3C000' /><slave name='daq2_xcvr_tx_lane_pll.reconfig_avmm0' start='0x3C000' end='0x3D000' /><slave name='daq2_xcvr_tx_pll_reconfig.mgmt_avalon_slave' start='0x3D000' end='0x3D800' /><slave name='daq2_xcvr_rx_pll_reconfig.mgmt_avalon_slave' start='0x3D800' end='0x3E000' /><slave name='daq2_xcvr_core.jesd204_tx_avs' start='0x3E000' end='0x3E400' /><slave name='daq2_xcvr_core.jesd204_rx_avs' start='0x3E400' end='0x3E800' /></address-map>]]></parameter>
-  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_WIDTH" value="AddressWidth = 18" />
-  <parameter name="AUTO_SYS_DDR3_CNTRL_PLL_REF_CLK_CLOCK_DOMAIN" value="1" />
-  <parameter name="AUTO_SYS_DDR3_CNTRL_PLL_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_SYS_DDR3_CNTRL_PLL_REF_CLK_RESET_DOMAIN" value="1" />
-  <parameter name="AUTO_SYS_ETHERNET_REF_CLK_CLOCK_DOMAIN" value="2" />
-  <parameter name="AUTO_SYS_ETHERNET_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_SYS_ETHERNET_REF_CLK_RESET_DOMAIN" value="2" />
-  <parameter name="AUTO_SYS_INTR_INTERRUPTS_USED" value="3" />
-  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_a10gx_base</parameter>
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="4" />
+  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='fmcomms2_axi_ad9361.s_axi' start='0x0' end='0x10000' /><slave name='fmcomms2_axi_dmac_dac.s_axi' start='0x10000' end='0x14000' /><slave name='fmcomms2_axi_dmac_adc.s_axi' start='0x14000' end='0x18000' /></address-map>]]></parameter>
+  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_WIDTH" value="AddressWidth = 17" />
+  <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_a10soc" />
  </module>
- <module name="daq2" kind="daq2_bd" version="1.0" enabled="1">
-  <parameter name="AUTO_AXI_AD9144_DMA_M_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10gx_base_sys_ddr3_cntrl_arch.ctrl_amm_0' start='0x0' end='0x10000000' /></address-map>]]></parameter>
+ <module name="fmcomms2" kind="fmcomms2_bd" version="1.0" enabled="1">
+  <parameter name="AUTO_AXI_AD9361_DEVICE_CLOCK_CLOCK_DOMAIN" value="6" />
+  <parameter name="AUTO_AXI_AD9361_DEVICE_CLOCK_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_AXI_AD9361_DEVICE_CLOCK_RESET_DOMAIN" value="6" />
+  <parameter name="AUTO_AXI_DMAC_ADC_M_DEST_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10soc_arria10_hps_0_bridges.f2sdram0_data' start='0x0' end='0x100000000' /></address-map>]]></parameter>
   <parameter
-     name="AUTO_AXI_AD9144_DMA_M_AXI_ADDRESS_WIDTH"
-     value="AddressWidth = 29" />
-  <parameter name="AUTO_AXI_AD9680_DMA_M_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10gx_base_sys_ddr3_cntrl_arch.ctrl_amm_0' start='0x0' end='0x10000000' /></address-map>]]></parameter>
+     name="AUTO_AXI_DMAC_ADC_M_DEST_AXI_ADDRESS_WIDTH"
+     value="AddressWidth = 32" />
+  <parameter name="AUTO_AXI_DMAC_DAC_M_SRC_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10soc_arria10_hps_0_bridges.f2sdram1_data' start='0x0' end='0x100000000' /></address-map>]]></parameter>
   <parameter
-     name="AUTO_AXI_AD9680_DMA_M_AXI_ADDRESS_WIDTH"
-     value="AddressWidth = 29" />
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45E2SGE3" />
+     name="AUTO_AXI_DMAC_DAC_M_SRC_AXI_ADDRESS_WIDTH"
+     value="AddressWidth = 32" />
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40I2LG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_MEM_CLK_CLOCK_DOMAIN" value="8" />
-  <parameter name="AUTO_MEM_CLK_CLOCK_RATE" value="133333250" />
-  <parameter name="AUTO_MEM_CLK_RESET_DOMAIN" value="8" />
-  <parameter name="AUTO_RX_REF_CLK_CLOCK_DOMAIN" value="4" />
-  <parameter name="AUTO_RX_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_RX_REF_CLK_RESET_DOMAIN" value="4" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="6" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="4" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="6" />
-  <parameter name="AUTO_TX_REF_CLK_CLOCK_DOMAIN" value="5" />
-  <parameter name="AUTO_TX_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_TX_REF_CLK_RESET_DOMAIN" value="5" />
-  <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_daq2" />
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="4" />
+  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_fmcomms2</parameter>
  </module>
  <module name="sys_clk" kind="clock_source" version="15.1" enabled="1">
   <parameter name="clockFrequency" value="100000000" />
@@ -520,8 +502,8 @@
  <connection
    kind="avalon"
    version="15.1"
-   start="daq2.axi_ad9144_dma_m_axi"
-   end="a10gx_base.sys_mem_s_avl">
+   start="fmcomms2.axi_dmac_adc_m_dest_axi"
+   end="a10soc.hps_s0_axi">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
@@ -529,8 +511,8 @@
  <connection
    kind="avalon"
    version="15.1"
-   start="daq2.axi_ad9680_dma_m_axi"
-   end="a10gx_base.sys_mem_s_avl">
+   start="fmcomms2.axi_dmac_dac_m_src_axi"
+   end="a10soc.hps_s1_axi">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
@@ -538,142 +520,79 @@
  <connection
    kind="avalon"
    version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.axi_ad9144_core_s_axi">
+   start="a10soc.sys_cpu_m_avl"
+   end="fmcomms2.axi_ad9361_s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00020000" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.axi_ad9144_dma_s_axi">
+   start="a10soc.sys_cpu_m_avl"
+   end="fmcomms2.axi_dmac_adc_s_axi">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00038000" />
+  <parameter name="baseAddress" value="0x00014000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.axi_ad9680_core_s_axi">
+   start="a10soc.sys_cpu_m_avl"
+   end="fmcomms2.axi_dmac_dac_s_axi">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00010000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="avalon"
+   kind="clock"
    version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.axi_ad9680_dma_s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00034000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.axi_jesd_xcvr_s_axi">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.xcvr_core_jesd204_rx_s_avl">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0003e400" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.xcvr_core_jesd204_tx_s_avl">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0003e000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.xcvr_core_reconfig_s_avl">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00030000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.xcvr_rx_pll_reconfig_s_avl">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0003d800" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.xcvr_tx_lane_pll_s_avl">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0003c000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.1"
-   start="a10gx_base.sys_cpu_m_avl"
-   end="daq2.xcvr_tx_pll_reconfig_s_avl">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0003d000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
+   start="fmcomms2.axi_ad9361_l_clk"
+   end="fmcomms2.axi_ad9361_device_clock" />
+ <connection kind="clock" version="15.1" start="sys_clk.clk" end="a10soc.sys_clk" />
  <connection
    kind="clock"
    version="15.1"
    start="sys_clk.clk"
-   end="a10gx_base.sys_clk" />
- <connection kind="clock" version="15.1" start="sys_clk.clk" end="daq2.sys_clk" />
- <connection
-   kind="clock"
-   version="15.1"
-   start="a10gx_base.mem_clk"
-   end="daq2.mem_clk" />
+   end="fmcomms2.sys_clk" />
  <connection
    kind="interrupt"
    version="15.1"
-   start="a10gx_base.sys_intr"
-   end="daq2.axi_ad9144_dma_intr">
+   start="a10soc.hps_irq0"
+   end="fmcomms2.axi_dmac_adc_intr">
+  <parameter name="irqNumber" value="0" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.1"
+   start="a10soc.hps_irq0"
+   end="fmcomms2.axi_dmac_dac_intr">
   <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="interrupt"
    version="15.1"
-   start="a10gx_base.sys_intr"
-   end="daq2.axi_ad9680_dma_intr">
+   start="a10soc.hps_irq1"
+   end="fmcomms2.axi_dmac_adc_intr">
   <parameter name="irqNumber" value="0" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.1"
+   start="a10soc.hps_irq1"
+   end="fmcomms2.axi_dmac_dac_intr">
+  <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="reset"
    version="15.1"
    start="sys_clk.clk_reset"
-   end="a10gx_base.sys_rst" />
+   end="a10soc.sys_rst_in" />
  <connection
    kind="reset"
    version="15.1"
-   start="sys_clk.clk_reset"
-   end="daq2.sys_rst" />
- <connection
-   kind="reset"
-   version="15.1"
-   start="a10gx_base.mem_rst"
-   end="daq2.mem_rst" />
+   start="a10soc.sys_rst"
+   end="fmcomms2.sys_rst" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />

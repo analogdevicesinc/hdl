@@ -13,7 +13,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "2";
          type = "int";
       }
    }
@@ -21,7 +21,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "4";
          type = "int";
       }
       datum sopceditor_expanded
@@ -90,7 +90,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "3";
          type = "int";
       }
       datum sopceditor_expanded
@@ -111,7 +111,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "5";
          type = "int";
       }
       datum sopceditor_expanded
@@ -132,7 +132,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "7";
          type = "int";
       }
       datum sopceditor_expanded
@@ -153,58 +153,13 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "6";
          type = "int";
       }
       datum sopceditor_expanded
       {
          value = "1";
          type = "boolean";
-      }
-   }
-   element gpio
-   {
-      datum _sortIndex
-      {
-         value = "11";
-         type = "int";
-      }
-   }
-   element mem_clk
-   {
-      datum _sortIndex
-      {
-         value = "2";
-         type = "int";
-      }
-   }
-   element mem_rst
-   {
-      datum _sortIndex
-      {
-         value = "3";
-         type = "int";
-      }
-   }
-   element spi_ad9361
-   {
-      datum _sortIndex
-      {
-         value = "10";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element spi_ad9361.spi_control_port
-   {
-      datum baseAddress
-      {
-         value = "32768";
-         type = "String";
       }
    }
    element sys_clk
@@ -226,9 +181,9 @@
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="5CSXFC6D6F31C8ES" />
- <parameter name="deviceFamily" value="Cyclone V" />
- <parameter name="deviceSpeedGrade" value="8_H6" />
+ <parameter name="device" value="10AS066N3F40I2LG" />
+ <parameter name="deviceFamily" value="Arria 10" />
+ <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
  <parameter name="generateLegacySim" value="false" />
  <parameter name="generationId" value="0" />
@@ -302,29 +257,6 @@
    internal="axi_dmac_dac.s_axi"
    type="axi4lite"
    dir="end" />
- <interface
-   name="gpio_external_connection"
-   internal="gpio.external_connection"
-   type="conduit"
-   dir="end" />
- <interface name="gpio_s1" internal="gpio.s1" type="avalon" dir="end" />
- <interface name="mem_clk" internal="mem_clk.in_clk" type="clock" dir="end" />
- <interface name="mem_rst" internal="mem_rst.in_reset" type="reset" dir="end" />
- <interface
-   name="spi_ad9361_external"
-   internal="spi_ad9361.external"
-   type="conduit"
-   dir="end" />
- <interface
-   name="spi_ad9361_irq"
-   internal="spi_ad9361.irq"
-   type="interrupt"
-   dir="end" />
- <interface
-   name="spi_ad9361_spi_control_port"
-   internal="spi_ad9361.spi_control_port"
-   type="avalon"
-   dir="end" />
  <interface name="sys_clk" internal="sys_clk.in_clk" type="clock" dir="end" />
  <interface name="sys_rst" internal="sys_rst.in_reset" type="reset" dir="end" />
  <module
@@ -382,48 +314,6 @@
   <parameter name="CHANNEL_DATA_WIDTH" value="16" />
   <parameter name="NUM_OF_CHANNELS" value="4" />
  </module>
- <module name="gpio" kind="altera_avalon_pio" version="15.1" enabled="1">
-  <parameter name="bitClearingEdgeCapReg" value="false" />
-  <parameter name="bitModifyingOutReg" value="false" />
-  <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="50000000" />
-  <parameter name="direction" value="Output" />
-  <parameter name="edgeType" value="RISING" />
-  <parameter name="generateIRQ" value="false" />
-  <parameter name="irqType" value="LEVEL" />
-  <parameter name="resetValue" value="0" />
-  <parameter name="simDoTestBenchWiring" value="false" />
-  <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="5" />
- </module>
- <module name="mem_clk" kind="altera_clock_bridge" version="15.1" enabled="1">
-  <parameter name="DERIVED_CLOCK_RATE" value="0" />
-  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
-  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
- </module>
- <module name="mem_rst" kind="altera_reset_bridge" version="15.1" enabled="1">
-  <parameter name="ACTIVE_LOW_RESET" value="0" />
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="-1" />
-  <parameter name="NUM_RESET_OUTPUTS" value="1" />
-  <parameter name="SYNCHRONOUS_EDGES" value="none" />
-  <parameter name="USE_RESET_REQUEST" value="0" />
- </module>
- <module name="spi_ad9361" kind="altera_avalon_spi" version="15.1" enabled="1">
-  <parameter name="avalonSpec" value="2.0" />
-  <parameter name="clockPhase" value="0" />
-  <parameter name="clockPolarity" value="1" />
-  <parameter name="dataWidth" value="8" />
-  <parameter name="disableAvalonFlowControl" value="false" />
-  <parameter name="inputClockRate" value="50000000" />
-  <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
-  <parameter name="insertSync" value="false" />
-  <parameter name="lsbOrderedFirst" value="false" />
-  <parameter name="masterSPI" value="true" />
-  <parameter name="numberOfSlaves" value="1" />
-  <parameter name="syncRegDepth" value="2" />
-  <parameter name="targetClockRate" value="50000000" />
-  <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
- </module>
  <module name="sys_clk" kind="altera_clock_bridge" version="15.1" enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
   <parameter name="EXPLICIT_CLOCK_RATE" value="50000000" />
@@ -465,22 +355,16 @@
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="spi_ad9361.clk" />
- <connection kind="clock" version="15.1" start="sys_clk.out_clk" end="gpio.clk" />
- <connection
-   kind="clock"
-   version="15.1"
-   start="sys_clk.out_clk"
    end="axi_ad9361.delay_clock" />
  <connection
    kind="clock"
    version="15.1"
-   start="mem_clk.out_clk"
+   start="sys_clk.out_clk"
    end="axi_dmac_adc.m_dest_axi_clock" />
  <connection
    kind="clock"
    version="15.1"
-   start="mem_clk.out_clk"
+   start="sys_clk.out_clk"
    end="axi_dmac_dac.m_src_axi_clock" />
  <connection
    kind="clock"
@@ -686,28 +570,13 @@
  <connection
    kind="reset"
    version="15.1"
-   start="mem_rst.out_reset"
-   end="adc_pack.if_adc_rst" />
- <connection
-   kind="reset"
-   version="15.1"
-   start="mem_rst.out_reset"
+   start="sys_rst.out_reset"
    end="axi_dmac_adc.m_dest_axi_reset" />
  <connection
    kind="reset"
    version="15.1"
-   start="mem_rst.out_reset"
+   start="sys_rst.out_reset"
    end="axi_dmac_dac.m_src_axi_reset" />
- <connection
-   kind="reset"
-   version="15.1"
-   start="sys_rst.out_reset"
-   end="spi_ad9361.reset" />
- <connection
-   kind="reset"
-   version="15.1"
-   start="sys_rst.out_reset"
-   end="gpio.reset" />
  <connection
    kind="reset"
    version="15.1"
