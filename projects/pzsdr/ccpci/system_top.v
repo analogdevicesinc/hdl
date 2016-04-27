@@ -97,9 +97,6 @@ module system_top (
   spi_miso,
 
   pcie_rstn,
-  pcie_prsntn,
-  pcie_prsnt1n,
-  pcie_prsnt4n,
   pcie_waken,
   pcie_ref_clk_p,
   pcie_ref_clk_n,
@@ -166,9 +163,6 @@ module system_top (
   input           spi_miso;
 
   input           pcie_rstn;
-  input           pcie_prsntn;
-  output          pcie_prsnt1n;
-  output          pcie_prsnt4n;
   inout           pcie_waken;
   input           pcie_ref_clk_p;
   input           pcie_ref_clk_n;
@@ -187,8 +181,6 @@ module system_top (
   // assignments
 
   assign pcie_waken = 1'bz;
-  assign pcie_prsnt1n = 1'b1;
-  assign pcie_prsnt4n = pcie_prsntn;
 
   // instantiations
 
