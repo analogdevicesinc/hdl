@@ -49,29 +49,13 @@ module ad_cmos_clk (
   input     clk_in;
   output    clk;
 
-  // wires
-
-  wire      clk_ibuf_s;
-
   // instantiations
 
-  IBUFG i_rx_clk_ibuf (
-    .I (clk_in),
-    .O (clk_ibuf_s));
-
-  generate
-  if (DEVICE_TYPE == VIRTEX6) begin
-  BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_rbuf (
-    .CLR (1'b0),
-    .CE (1'b1),
-    .I (clk_ibuf_s),
-    .O (clk));
-  end else begin
-  BUFG i_clk_gbuf (
-    .I (clk_ibuf_s),
-    .O (clk));
-  end
-  endgenerate
+  alt_clk i_clk (
+    .rst (1'b0),
+    .refclk (clk_in),
+    .outclk_0 (clk),
+    .locked ());
 
 endmodule
 

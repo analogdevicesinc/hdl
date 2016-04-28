@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -46,14 +44,18 @@ module ad_lvds_clk (
   clk);
 
   parameter   DEVICE_TYPE       = 0;
-  localparam  SERIES7       = 0;
-  localparam  VIRTEX6       = 1;
 
   input     clk_in_p;
   input     clk_in_n;
   output    clk;
   
-  assign clk = clk_in_p;
+  // instantiations
+
+  alt_clk i_clk (
+    .rst (1'b0),
+    .refclk (clk_in_p),
+    .outclk_0 (clk),
+    .locked ());
 
 endmodule
 
