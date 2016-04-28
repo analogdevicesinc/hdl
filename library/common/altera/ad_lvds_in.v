@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -49,22 +47,25 @@ module ad_lvds_in (
   rx_data_p,
   rx_data_n,
 
-  // delay interface
+  // delay-data interface
+
+  up_clk,
+  up_dld,
+  up_dwdata,
+  up_drdata,
+
+  // delay-cntrl interface
 
   delay_clk,
   delay_rst,
-  delay_ld,
-  delay_wdata,
-  delay_rdata,
   delay_locked);
 
   // parameters
 
+  parameter   SINGLE_ENDED = 0;
   parameter   DEVICE_TYPE = 0;
   parameter   IODELAY_CTRL = 0;
   parameter   IODELAY_GROUP = "dev_if_delay_group";
-  localparam  SERIES7 = 0;
-  localparam  VIRTEX6 = 1;
 
   // data interface
 
@@ -74,38 +75,31 @@ module ad_lvds_in (
   output              rx_data_p;
   output              rx_data_n;
 
-  // delay interface
+  // delay-data interface
+
+  input               up_clk;
+  input               up_dld;
+  input       [ 4:0]  up_dwdata;
+  output      [ 4:0]  up_drdata;
+
+  // delay-cntrl interface
 
   input               delay_clk;
   input               delay_rst;
-  input               delay_ld;
-  input       [ 4:0]  delay_wdata;
-  output      [ 4:0]  delay_rdata;
   output              delay_locked;
 
   // defaults
 
-  assign delay_rdata = 5'd0;
+  assign up_drdata = 5'd0;
   assign delay_locked = 1'b1;
 
   // instantiations
 
-  altddio_in #(
-    .invert_input_clocks("OFF"),
-    .lpm_hint("UNUSED"),
-    .lpm_type("altddio_in"),
-    .power_up_high("OFF"),
-    .width(1))
-  i_rx_data_iddr (
-    .aclr (1'b0),
-    .aset (1'b0),
-    .sclr (1'b0),
-    .sset (1'b0),
-    .inclocken (1'b1),
-    .inclock (rx_clk),
-    .datain (rx_data_in_p),
-    .dataout_h (rx_data_p),
-    .dataout_l (rx_data_n));
+  alt_lvds_in i_rx_data_iddr (
+    .ck (rx_clk),
+    .pad_in (rx_data_in_p),
+    .pad_in_b (rx_data_in_n),
+    .dout ({rx_data_p, rx_data_n}));
 
 endmodule
 

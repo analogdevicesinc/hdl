@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -47,13 +45,28 @@ module ad_lvds_out (
   tx_data_p,
   tx_data_n,
   tx_data_out_p,
-  tx_data_out_n);
+  tx_data_out_n,
+
+  // delay-data interface
+
+  up_clk,
+  up_dld,
+  up_dwdata,
+  up_drdata,
+
+  // delay-cntrl interface
+
+  delay_clk,
+  delay_rst,
+  delay_locked);
 
   // parameters
 
   parameter   DEVICE_TYPE = 0;
-  localparam  SERIES7 = 0;
-  localparam  VIRTEX6 = 1;
+  parameter   SINGLE_ENDED = 0;
+  parameter   IODELAY_ENABLE = 0;
+  parameter   IODELAY_CTRL = 0;
+  parameter   IODELAY_GROUP = "dev_if_delay_group";
 
   // data interface
 
@@ -63,33 +76,31 @@ module ad_lvds_out (
   output              tx_data_out_p;
   output              tx_data_out_n;
 
+  // delay-data interface
+
+  input               up_clk;
+  input               up_dld;
+  input       [ 4:0]  up_dwdata;
+  output      [ 4:0]  up_drdata;
+
+  // delay-cntrl interface
+
+  input               delay_clk;
+  input               delay_rst;
+  output              delay_locked;
+
   // defaults
 
-  assign tx_data_out_n = 1'd0;
+  assign up_drdata = 5'd0;
+  assign delay_locked = 1'b1;
 
   // instantiations
 
-  altddio_out #(
-    .extend_oe_disable("OFF"),
-    .intended_device_family("Cyclone V"),
-    .invert_output("OFF"),
-    .lpm_hint("UNUSED"),
-    .lpm_type("altddio_out"),
-    .oe_reg("UNREGISTERED"),
-    .power_up_high("OFF"),
-    .width(1))
-  i_tx_data_oddr (
-    .aclr (1'b0),
-    .aset (1'b0),
-    .sclr (1'b0),
-    .sset (1'b0),
-    .oe (1'b1),
-    .oe_out (),
-    .outclocken (1'b1),
-    .outclock (tx_clk),
-    .datain_h (tx_data_p),
-    .datain_l (tx_data_n),
-    .dataout (tx_data_out_p));
+  alt_lvds_out i_tx_data_oddr (
+    .ck (tx_clk),
+    .din ({tx_data_p, tx_data_n}),
+    .pad_out (tx_data_out_p),
+    .pad_out_b (tx_data_out_n));
 
 endmodule
 
