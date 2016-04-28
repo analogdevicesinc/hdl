@@ -54,6 +54,8 @@ add_fileset_file axi_ad9361_tx.v          VERILOG PATH axi_ad9361_tx.v
 add_fileset_file axi_ad9361_tdd.v         VERILOG PATH axi_ad9361_tdd.v
 add_fileset_file axi_ad9361_tdd_if.v      VERILOG PATH axi_ad9361_tdd_if.v
 add_fileset_file axi_ad9361.v             VERILOG PATH axi_ad9361.v TOP_LEVEL_FILE
+add_fileset_file ad_axi_ip_constr.sdc     SDC     PATH $ad_hdl_dir/library/common/ad_axi_ip_constr.sdc
+add_fileset_file axi_ad9361_constr.sdc    SDC     PATH axi_ad9361_constr.sdc
 
 # parameters
 

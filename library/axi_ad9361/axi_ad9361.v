@@ -447,7 +447,7 @@ module axi_ad9361 (
   assign up_adc_drdata_s[64:35] = 30'd0;
   assign up_dac_drdata_s[79:50] = 30'd0;
 
-  axi_ad9361_dev_if #(
+  axi_ad9361_lvds_if #(
     .DEVICE_TYPE (DEVICE_TYPE),
     .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IO_DELAY_GROUP (IO_DELAY_GROUP))
