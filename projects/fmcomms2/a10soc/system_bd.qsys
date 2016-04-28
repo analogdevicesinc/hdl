@@ -292,7 +292,7 @@
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="10AS066N3F40I2SGES" />
+ <parameter name="device" value="10AS066N3F40E2SGE2" />
  <parameter name="deviceFamily" value="Arria 10" />
  <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
@@ -347,7 +347,7 @@
    type="reset"
    dir="end" />
  <module name="a10soc" kind="a10soc_system_bd" version="1.0" enabled="1">
-  <parameter name="AUTO_DEVICE" value="10AS066N3F40I2SGES" />
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
@@ -375,7 +375,7 @@
   <parameter
      name="AUTO_AXI_DMAC_DAC_M_SRC_AXI_ADDRESS_WIDTH"
      value="AddressWidth = 32" />
-  <parameter name="AUTO_DEVICE" value="10AS066N3F40I2SGES" />
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
