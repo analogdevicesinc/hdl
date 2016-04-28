@@ -9,17 +9,21 @@ set_module_property DESCRIPTION "AXI AD9361 Interface"
 set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_ad9361
+set_module_property ELABORATION_CALLBACK p_axi_ad9361
 
 # files
 
-add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
+add_fileset quartus_synth QUARTUS_SYNTH "" ""
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9361
+add_fileset_file MULT_MACRO.v             VERILOG PATH $ad_hdl_dir/library/common/altera/MULT_MACRO.v
+add_fileset_file DSP48E1.v                VERILOG PATH $ad_hdl_dir/library/common/altera/DSP48E1.v
 add_fileset_file ad_rst.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
 add_fileset_file ad_lvds_clk.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_lvds_clk.v
 add_fileset_file ad_lvds_in.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_lvds_in.v
 add_fileset_file ad_lvds_out.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_lvds_out.v
-add_fileset_file MULT_MACRO.v             VERILOG PATH $ad_hdl_dir/library/common/altera/MULT_MACRO.v
-add_fileset_file DSP48E1.v                VERILOG PATH $ad_hdl_dir/library/common/altera/DSP48E1.v
+add_fileset_file ad_cmos_clk.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_cmos_clk.v
+add_fileset_file ad_cmos_in.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_cmos_in.v
+add_fileset_file ad_cmos_out.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_cmos_out.v
 add_fileset_file ad_mul.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_mul.v
 add_fileset_file ad_pnmon.v               VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
 add_fileset_file ad_dds_sine.v            VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine.v
@@ -28,6 +32,8 @@ add_fileset_file ad_dds.v                 VERILOG PATH $ad_hdl_dir/library/commo
 add_fileset_file ad_datafmt.v             VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
 add_fileset_file ad_dcfilter.v            VERILOG PATH $ad_hdl_dir/library/common/ad_dcfilter.v
 add_fileset_file ad_iqcor.v               VERILOG PATH $ad_hdl_dir/library/common/ad_iqcor.v
+add_fileset_file ad_addsub.v              VERILOG PATH $ad_hdl_dir/library/common/ad_addsub.v
+add_fileset_file ad_tdd_control.v         VERILOG PATH $ad_hdl_dir/library/common/ad_tdd_control.v
 add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
 add_fileset_file up_xfer_cntrl.v          VERILOG PATH $ad_hdl_dir/library/common/up_xfer_cntrl.v
 add_fileset_file up_xfer_status.v         VERILOG PATH $ad_hdl_dir/library/common/up_xfer_status.v
@@ -38,11 +44,8 @@ add_fileset_file up_adc_channel.v         VERILOG PATH $ad_hdl_dir/library/commo
 add_fileset_file up_dac_common.v          VERILOG PATH $ad_hdl_dir/library/common/up_dac_common.v
 add_fileset_file up_dac_channel.v         VERILOG PATH $ad_hdl_dir/library/common/up_dac_channel.v
 add_fileset_file up_tdd_cntrl.v           VERILOG PATH $ad_hdl_dir/library/common/up_tdd_cntrl.v
-add_fileset_file ad_tdd_control.v         VERILOG PATH $ad_hdl_dir/library/common/ad_tdd_control.v
-add_fileset_file ad_addsub.v              VERILOG PATH $ad_hdl_dir/library/common/ad_addsub.v
-add_fileset_file axi_ad9361_alt_lvds_tx.v VERILOG PATH axi_ad9361_alt_lvds_tx.v
-add_fileset_file axi_ad9361_alt_lvds_rx.v VERILOG PATH axi_ad9361_alt_lvds_rx.v
-add_fileset_file axi_ad9361_dev_if_alt.v  VERILOG PATH axi_ad9361_dev_if_alt.v
+add_fileset_file axi_ad9361_lvds_if.v     VERILOG PATH axi_ad9361_lvds_if.v
+add_fileset_file axi_ad9361_cmos_if.v     VERILOG PATH axi_ad9361_cmos_if.v
 add_fileset_file axi_ad9361_rx_pnmon.v    VERILOG PATH axi_ad9361_rx_pnmon.v
 add_fileset_file axi_ad9361_rx_channel.v  VERILOG PATH axi_ad9361_rx_channel.v
 add_fileset_file axi_ad9361_rx.v          VERILOG PATH axi_ad9361_rx.v
@@ -67,6 +70,12 @@ set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
 set_parameter_property DEVICE_TYPE TYPE INTEGER
 set_parameter_property DEVICE_TYPE UNITS None
 set_parameter_property DEVICE_TYPE HDL_PARAMETER true
+
+add_parameter DEVICE_FAMILY STRING 
+set_parameter_property DEVICE_FAMILY SYSTEM_INFO {DEVICE_FAMILY}
+set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
+set_parameter_property DEVICE_FAMILY HDL_PARAMETER false
+set_parameter_property DEVICE_FAMILY ENABLED false
 
 # axi4 slave
 
@@ -126,26 +135,24 @@ ad_alt_intf signal  dac_sync_out    output  1   sync
 ad_alt_intf clock   l_clk           output  1
 ad_alt_intf reset   rst             output  1   if_l_clk
 
+set_interface_property if_rst associatedResetSinks none
+
 add_interface fifo_ch_0_in conduit end
-#set_interface_property fifo_ch_0_in associatedClock if_l_clk
 add_interface_port fifo_ch_0_in  adc_enable_i0 enable   Output  1
 add_interface_port fifo_ch_0_in  adc_valid_i0  valid    Output  1
 add_interface_port fifo_ch_0_in  adc_data_i0   data     Output  16
 
 add_interface fifo_ch_1_in conduit end
-#set_interface_property fifo_ch_1_in associatedClock if_l_clk
 add_interface_port fifo_ch_1_in  adc_enable_q0 enable   Output  1
 add_interface_port fifo_ch_1_in  adc_valid_q0  valid    Output  1
 add_interface_port fifo_ch_1_in  adc_data_q0   data     Output  16
 
 add_interface fifo_ch_2_in conduit end
-#set_interface_property fifo_ch_2_in associatedClock if_l_clk
 add_interface_port fifo_ch_2_in  adc_enable_i1 enable   Output  1
 add_interface_port fifo_ch_2_in  adc_valid_i1  valid    Output  1
 add_interface_port fifo_ch_2_in  adc_data_i1   data     Output  16
 
 add_interface fifo_ch_3_in conduit end
-#set_interface_property fifo_ch_3_in associatedClock if_l_clk
 add_interface_port fifo_ch_3_in  adc_enable_q1 enable   Output  1
 add_interface_port fifo_ch_3_in  adc_valid_q1  valid    Output  1
 add_interface_port fifo_ch_3_in  adc_data_q1   data     Output  16
@@ -154,25 +161,21 @@ ad_alt_intf signal  adc_dovf        input  1   ovf
 ad_alt_intf signal  adc_dunf        input  1   unf
 
 add_interface fifo_ch_0_out conduit end
-#set_interface_property fifo_ch_0_out associatedClock if_l_clk
 add_interface_port fifo_ch_0_out  dac_enable_i0 enable   Output  1
 add_interface_port fifo_ch_0_out  dac_valid_i0  valid    Output  1
 add_interface_port fifo_ch_0_out  dac_data_i0   data     Input   16
 
 add_interface fifo_ch_1_out conduit end
-#set_interface_property fifo_ch_1_out associatedClock if_l_clk
 add_interface_port fifo_ch_1_out  dac_enable_q0 enable   Output  1
 add_interface_port fifo_ch_1_out  dac_valid_q0  valid    Output  1
 add_interface_port fifo_ch_1_out  dac_data_q0   data     Input   16
 
 add_interface fifo_ch_2_out conduit end
-#set_interface_property fifo_ch_2_out associatedClock if_l_clk
 add_interface_port fifo_ch_2_out  dac_enable_i1 enable   Output  1
 add_interface_port fifo_ch_2_out  dac_valid_i1  valid    Output  1
 add_interface_port fifo_ch_2_out  dac_data_i1   data     Input   16
 
 add_interface fifo_ch_3_out conduit end
-#set_interface_property fifo_ch_3_out associatedClock if_l_clk
 add_interface_port fifo_ch_3_out  dac_enable_q1 enable   Output  1
 add_interface_port fifo_ch_3_out  dac_valid_q1  valid    Output  1
 add_interface_port fifo_ch_3_out  dac_data_q1   data     Input   16
@@ -182,4 +185,54 @@ ad_alt_intf signal  dac_dunf       input   1 unf
 
 add_interface delay_clock clock end
 add_interface_port delay_clock delay_clk clk Input 1
+
+add_hdl_instance alt_lvds_in altera_gpio
+set_instance_parameter_value alt_lvds_in {PIN_TYPE_GUI} {Input}
+set_instance_parameter_value alt_lvds_in {SIZE} {1}
+set_instance_parameter_value alt_lvds_in {gui_diff_buff} {1}
+set_instance_parameter_value alt_lvds_in {gui_pseudo_diff} {0}
+set_instance_parameter_value alt_lvds_in {gui_io_reg_mode} {DDIO}
+
+add_hdl_instance alt_lvds_out altera_gpio
+set_instance_parameter_value alt_lvds_out {PIN_TYPE_GUI} {Output}
+set_instance_parameter_value alt_lvds_out {SIZE} {1}
+set_instance_parameter_value alt_lvds_out {gui_diff_buff} {1}
+set_instance_parameter_value alt_lvds_out {gui_pseudo_diff} {0}
+set_instance_parameter_value alt_lvds_out {gui_io_reg_mode} {DDIO}
+
+add_hdl_instance alt_cmos_in altera_gpio
+set_instance_parameter_value alt_cmos_in {PIN_TYPE_GUI} {Input}
+set_instance_parameter_value alt_cmos_in {SIZE} {1}
+set_instance_parameter_value alt_cmos_in {gui_diff_buff} {0}
+set_instance_parameter_value alt_cmos_in {gui_pseudo_diff} {0}
+set_instance_parameter_value alt_cmos_in {gui_io_reg_mode} {DDIO}
+
+add_hdl_instance alt_cmos_out altera_gpio
+set_instance_parameter_value alt_cmos_out {PIN_TYPE_GUI} {Output}
+set_instance_parameter_value alt_cmos_out {SIZE} {1}
+set_instance_parameter_value alt_cmos_out {gui_diff_buff} {0}
+set_instance_parameter_value alt_cmos_out {gui_pseudo_diff} {0}
+set_instance_parameter_value alt_cmos_out {gui_io_reg_mode} {DDIO}
+
+proc p_axi_ad9361 {} {
+
+  set ALTERA_DEVICE_TYPE [get_parameter_value DEVICE_TYPE]
+  set ALTERA_DEVICE_FAMILY [get_parameter_value DEVICE_FAMILY]
+
+  if {$ALTERA_DEVICE_TYPE == 1} {
+  }
+
+  if {$ALTERA_DEVICE_TYPE == 0} {
+
+    add_hdl_instance alt_clk altera_iopll
+    set_instance_parameter_value alt_clk {gui_reference_clock_frequency} {250.0}
+    set_instance_parameter_value alt_clk {gui_use_locked} {1}
+    set_instance_parameter_value alt_clk {gui_operation_mode} {source synchronous}
+    set_instance_parameter_value alt_clk {gui_number_of_clocks} {1}
+    set_instance_parameter_value alt_clk {gui_output_clock_frequency0} {250.0}
+    set_instance_parameter_value alt_clk {gui_ps_units0} {degrees}
+    set_instance_parameter_value alt_clk {gui_phase_shift_deg0} {90.0}
+    set_instance_parameter_value alt_clk {system_info_device_family} $ALTERA_DEVICE_FAMILY
+  }
+}
 
