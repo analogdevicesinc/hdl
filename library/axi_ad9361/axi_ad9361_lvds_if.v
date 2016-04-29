@@ -37,7 +37,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9361_dev_if (
+module axi_ad9361_lvds_if (
 
   // physical interface (receive)
 
