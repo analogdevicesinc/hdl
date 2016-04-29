@@ -214,8 +214,8 @@ module axi_ad7616_pif (
   assign db_o = wr_data;
 
   always @(posedge clk) begin
-    data_out_a <= (rd_db_valid) ? db_i : data_out_a;
-    data_out_b <= (rd_db_valid) ? data_out_a : data_out_b;
+    data_out_a <= (transfer_state == CNTRL0_HIGH) ? db_i : data_out_a;
+    data_out_b <= (transfer_state == CNTRL1_HIGH) ? db_i : data_out_b;
     rd_valid <= rd_db_valid;
   end
 
@@ -231,12 +231,13 @@ module axi_ad7616_pif (
   // The first valid data is ALWAYS the first sample of a convertion
 
   always @(negedge clk) begin
-    if (end_of_conv == 1'b1)
+    if (end_of_conv == 1'b1) begin
       xfer_req_d <= m_axis_xfer_req;
+    end
   end
 
-  assign m_axis_tdata = rd_data;
-  assign m_axis_tvalid = xfer_req_d & rd_db_valid & rd_db_valid_div2;
+  assign m_axis_tdata = {data_out_b, data_out_a};
+  assign m_axis_tvalid = xfer_req_d & rd_valid & rd_db_valid_div2;
 
 endmodule
 
