@@ -7,6 +7,7 @@
 
 .PHONY: all clean clean-all 
 all:
+	-make -C a10soc all
 	-make -C ac701 all
 	-make -C kc705 all
 	-make -C mitx045 all
@@ -17,6 +18,7 @@ all:
 
 
 clean: 
+	make -C a10soc clean
 	make -C ac701 clean
 	make -C kc705 clean
 	make -C mitx045 clean
@@ -27,6 +29,7 @@ clean:
 
 
 clean-all:
+	make -C a10soc clean-all
 	make -C ac701 clean-all
 	make -C kc705 clean-all
 	make -C mitx045 clean-all
