@@ -54,7 +54,6 @@ module axi_ad7616_pif (
 
   m_axis_tdata,
   m_axis_tvalid,
-  m_axis_tready,
   m_axis_xfer_req,
 
   // end of convertion
@@ -94,7 +93,6 @@ module axi_ad7616_pif (
   output                          rd_valid;
 
   output  [31:0]                  m_axis_tdata;
-  input                           m_axis_tready;
   output                          m_axis_tvalid;
   input                           m_axis_xfer_req;
 

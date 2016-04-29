@@ -430,7 +430,6 @@ module axi_ad7616 (
       .wr_n(wr_n),
       .m_axis_tdata(m_axis_tdata),
       .m_axis_tvalid(m_axis_tvalid),
-      .m_axis_tready(m_axis_ready_s),
       .m_axis_xfer_req(m_axis_xfer_req),
       .end_of_conv(trigger_s),
       .clk(up_clk),
