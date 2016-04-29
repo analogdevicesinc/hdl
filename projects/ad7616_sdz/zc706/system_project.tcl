@@ -11,9 +11,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # LEGEND: Serial    - 0
 #         Parallel  - 1
 #
-# NOTE : These switches are 'hardware' switches. User needs to
-# reimplement the design each and every time, after these variables
-# were changed.
+# NOTE : This switch is a 'hardware' switch. Please reimplenent the
+# design if the variable has been changed.
 #
 ##--------------------------------------------------------------
 
