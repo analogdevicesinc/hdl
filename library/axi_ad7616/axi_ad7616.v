@@ -178,7 +178,6 @@ module axi_ad7616 (
   wire    [15:0]                    wr_data_s;
   wire    [15:0]                    rd_data_s;
   wire                              rd_valid_s;
-  wire    [ 4:0]                    burst_length_s;
 
   wire                              m_axis_ready_s;
 
@@ -434,7 +433,6 @@ module axi_ad7616 (
       .m_axis_tready(m_axis_ready_s),
       .m_axis_xfer_req(m_axis_xfer_req),
       .end_of_conv(trigger_s),
-      .burst_length(burst_length_s),
       .clk(up_clk),
       .rstn(up_rstn),
       .rd_req(rd_req_s),
@@ -453,7 +451,6 @@ module axi_ad7616 (
   ) i_ad7616_control (
     .cnvst (cnvst),
     .busy (busy),
-    .up_burst_length (burst_length_s),
     .up_read_data (rd_data_s),
     .up_read_valid (rd_valid_s),
     .up_write_data (wr_data_s),
