@@ -99,31 +99,31 @@ set_location_assignment PIN_E26   -to hps_ddr_rzq
 
 set_location_assignment PIN_F18   -to hps_eth_rxclk
 set_location_assignment PIN_G17   -to hps_eth_rxctl
-set_location_assignment PIN_G20   -to hps_eth_rxd0
-set_location_assignment PIN_G21   -to hps_eth_rxd1
-set_location_assignment PIN_F22   -to hps_eth_rxd2
-set_location_assignment PIN_G22   -to hps_eth_rxd3
+set_location_assignment PIN_G20   -to hps_eth_rxd[0]
+set_location_assignment PIN_G21   -to hps_eth_rxd[1]
+set_location_assignment PIN_F22   -to hps_eth_rxd[2]
+set_location_assignment PIN_G22   -to hps_eth_rxd[3]
 set_location_assignment PIN_H18   -to hps_eth_txclk
 set_location_assignment PIN_H19   -to hps_eth_txctl
-set_location_assignment PIN_E20   -to hps_eth_txd0
-set_location_assignment PIN_F20   -to hps_eth_txd1
-set_location_assignment PIN_F19   -to hps_eth_txd2
-set_location_assignment PIN_G19   -to hps_eth_txd3
+set_location_assignment PIN_E20   -to hps_eth_txd[0]
+set_location_assignment PIN_F20   -to hps_eth_txd[1]
+set_location_assignment PIN_F19   -to hps_eth_txd[2]
+set_location_assignment PIN_G19   -to hps_eth_txd[3]
 set_location_assignment PIN_K20   -to hps_eth_mdc
 set_location_assignment PIN_K21   -to hps_eth_mdio
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxclk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxctl
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxd0
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxd1
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxd2
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxd3
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxd[0]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxd[1]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxd[2]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_rxd[3]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txclk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txctl
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txd0
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txd1
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txd2
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txd3
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txd[0]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txd[1]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txd[2]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_txd[3]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_mdc
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_mdio
 
@@ -133,42 +133,42 @@ set_instance_assignment -name OUTPUT_DELAY_CHAIN 8 -to hps_eth_txclk
 
 set_location_assignment PIN_K16   -to hps_sdio_clk
 set_location_assignment PIN_H16   -to hps_sdio_cmd
-set_location_assignment PIN_E16   -to hps_sdio_d0
-set_location_assignment PIN_G16   -to hps_sdio_d1
-set_location_assignment PIN_H17   -to hps_sdio_d2
-set_location_assignment PIN_F15   -to hps_sdio_d3
-set_location_assignment PIN_M19   -to hps_sdio_d4
-set_location_assignment PIN_E15   -to hps_sdio_d5
-set_location_assignment PIN_J16   -to hps_sdio_d6
-set_location_assignment PIN_L18   -to hps_sdio_d7
+set_location_assignment PIN_E16   -to hps_sdio_d[0]
+set_location_assignment PIN_G16   -to hps_sdio_d[1]
+set_location_assignment PIN_H17   -to hps_sdio_d[2]
+set_location_assignment PIN_F15   -to hps_sdio_d[3]
+set_location_assignment PIN_M19   -to hps_sdio_d[4]
+set_location_assignment PIN_E15   -to hps_sdio_d[5]
+set_location_assignment PIN_J16   -to hps_sdio_d[6]
+set_location_assignment PIN_L18   -to hps_sdio_d[7]
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_cmd
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d0
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d1
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d2
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d3
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d4
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d5
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d6
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d7
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d[0]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d[1]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d[2]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d[3]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d[4]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d[5]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d[6]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_sdio_d[7]
 
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_clk
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_cmd
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d1
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d2
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d3
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d4
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d5
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d6
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d7
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d[3]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d[4]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d[5]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d[6]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d[7]
 set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_clk
 set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_cmd
-set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d0
-set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d1
-set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d2
-set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d3
+set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d[0]
+set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d[1]
+set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d[2]
+set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d[3]
 
 # hps-usb
 
@@ -176,27 +176,27 @@ set_location_assignment PIN_D18   -to hps_usb_clk
 set_location_assignment PIN_C19   -to hps_usb_dir
 set_location_assignment PIN_F17   -to hps_usb_nxt
 set_location_assignment PIN_E18   -to hps_usb_stp
-set_location_assignment PIN_D19   -to hps_usb_d0
-set_location_assignment PIN_E17   -to hps_usb_d1
-set_location_assignment PIN_C17   -to hps_usb_d2
-set_location_assignment PIN_C18   -to hps_usb_d3
-set_location_assignment PIN_D21   -to hps_usb_d4
-set_location_assignment PIN_D20   -to hps_usb_d5
-set_location_assignment PIN_E21   -to hps_usb_d6
-set_location_assignment PIN_E22   -to hps_usb_d7
+set_location_assignment PIN_D19   -to hps_usb_d[0]
+set_location_assignment PIN_E17   -to hps_usb_d[1]
+set_location_assignment PIN_C17   -to hps_usb_d[2]
+set_location_assignment PIN_C18   -to hps_usb_d[3]
+set_location_assignment PIN_D21   -to hps_usb_d[4]
+set_location_assignment PIN_D20   -to hps_usb_d[5]
+set_location_assignment PIN_E21   -to hps_usb_d[6]
+set_location_assignment PIN_E22   -to hps_usb_d[7]
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_dir
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_nxt
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_stp
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d0
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d1
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d2
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d3
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d4
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d5
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d6
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d7
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[0]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[1]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[2]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[3]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[4]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[5]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[6]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[7]
 
 # hps-uart
 
@@ -213,20 +213,6 @@ set_location_assignment PIN_L20   -to hps_i2c_sda
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_i2c_scl
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_i2c_sda
-
-# hps-spi (max-v-u16)
-
-set_location_assignment PIN_H21   -to hps_spi_cs0_n
-set_location_assignment PIN_J21   -to hps_spi_cs1_n
-set_location_assignment PIN_K18   -to hps_spi_clk
-set_location_assignment PIN_L19   -to hps_spi_mosi
-set_location_assignment PIN_H22   -to hps_spi_miso
-
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_spi_cs0_n
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_spi_cs1_n
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_spi_clk
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_spi_mosi
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_spi_miso
 
 # gpio (max-v-u21)
 
@@ -267,20 +253,6 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[2]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[3]
-
-# hps-trace
-
-set_location_assignment PIN_P20   -to hps_trace_clk
-set_location_assignment PIN_K22   -to hps_trace_d0
-set_location_assignment PIN_L22   -to hps_trace_d1
-set_location_assignment PIN_M22   -to hps_trace_d2
-set_location_assignment PIN_M21   -to hps_trace_d3
-
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_trace_clk
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_trace_d0
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_trace_d1
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_trace_d2
-set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_trace_d3
 
 # globals
 
