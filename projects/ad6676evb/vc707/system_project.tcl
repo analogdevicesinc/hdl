@@ -12,8 +12,6 @@ adi_project_files ad6676evb_vc707 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vc707/vc707_system_constr.xdc" ]
 
-set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/vc707/vc707_system_constr.xdc]
-set_property PROCESSING_ORDER EARLY [get_files system_constr.xdc]
 
 adi_project_run ad6676evb_vc707
 

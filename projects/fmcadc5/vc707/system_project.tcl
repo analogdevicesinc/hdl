@@ -15,8 +15,6 @@ adi_project_files fmcadc5_vc707 [list \
   "$ad_hdl_dir/library/common/ad_lvds_out.v" \
   "$ad_hdl_dir/projects/common/vc707/vc707_system_constr.xdc" ]
 
-set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/vc707/vc707_system_constr.xdc]
-set_property PROCESSING_ORDER EARLY [get_files system_constr.xdc]
 
 adi_project_run fmcadc5_vc707
 
