@@ -94,7 +94,7 @@ module ad_cmos_out (
 
   // instantiations
 
-  alt_cmos_out i_tx_data_oddr (
+  alt_ddio_out i_tx_data_oddr (
     .ck (tx_clk),
     .din ({tx_data_p, tx_data_n}),
     .pad_out (tx_data_out));

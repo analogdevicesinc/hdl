@@ -96,11 +96,10 @@ module ad_lvds_out (
 
   // instantiations
 
-  alt_lvds_out i_tx_data_oddr (
+  alt_ddio_out i_tx_data_oddr (
     .ck (tx_clk),
     .din ({tx_data_p, tx_data_n}),
-    .pad_out (tx_data_out_p),
-    .pad_out_b (tx_data_out_n));
+    .pad_out (tx_data_out_p));
 
 endmodule
 

@@ -93,7 +93,7 @@ module ad_cmos_in (
 
   // instantiations
 
-  alt_cmos_in i_rx_data_iddr (
+  alt_ddio_in i_rx_data_iddr (
     .ck (rx_clk),
     .pad_in (rx_data_in),
     .dout ({rx_data_p, rx_data_n}));

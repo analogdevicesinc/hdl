@@ -39,11 +39,17 @@
 
 module ad_lvds_clk (
 
+  rst,
+  locked,
+
   clk_in_p,
   clk_in_n,
   clk);
 
   parameter   DEVICE_TYPE       = 0;
+
+  input     rst;
+  output    locked;
 
   input     clk_in_p;
   input     clk_in_n;
@@ -52,10 +58,10 @@ module ad_lvds_clk (
   // instantiations
 
   alt_clk i_clk (
-    .rst (1'b0),
+    .rst (rst),
     .refclk (clk_in_p),
     .outclk_0 (clk),
-    .locked ());
+    .locked (locked));
 
 endmodule
 

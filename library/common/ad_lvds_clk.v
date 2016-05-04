@@ -41,6 +41,9 @@
 
 module ad_lvds_clk (
 
+  rst,
+  locked,
+
   clk_in_p,
   clk_in_n,
   clk);
@@ -49,6 +52,9 @@ module ad_lvds_clk (
   localparam  SERIES7       = 0;
   localparam  VIRTEX6       = 1;
 
+  input     rst;
+  output    locked;
+
   input     clk_in_p;
   input     clk_in_n;
   output    clk;
@@ -56,6 +62,10 @@ module ad_lvds_clk (
   // wires
 
   wire      clk_ibuf_s;
+
+  // defaults
+
+  assign locked <= 1'b1;
 
   // instantiations
 

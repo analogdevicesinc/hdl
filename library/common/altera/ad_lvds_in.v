@@ -95,10 +95,9 @@ module ad_lvds_in (
 
   // instantiations
 
-  alt_lvds_in i_rx_data_iddr (
+  alt_ddio_in i_rx_data_iddr (
     .ck (rx_clk),
     .pad_in (rx_data_in_p),
-    .pad_in_b (rx_data_in_n),
     .dout ({rx_data_p, rx_data_n}));
 
 endmodule

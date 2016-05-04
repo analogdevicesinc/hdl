@@ -39,6 +39,9 @@
 
 module ad_cmos_clk (
 
+  rst,
+  locked,
+
   clk_in,
   clk);
 
@@ -46,16 +49,19 @@ module ad_cmos_clk (
   localparam  SERIES7       = 0;
   localparam  VIRTEX6       = 1;
 
+  input     rst;
+  output    locked;
+
   input     clk_in;
   output    clk;
 
   // instantiations
 
   alt_clk i_clk (
-    .rst (1'b0),
+    .rst (rst),
     .refclk (clk_in),
     .outclk_0 (clk),
-    .locked ());
+    .locked (locked));
 
 endmodule
 
