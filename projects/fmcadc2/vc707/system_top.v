@@ -233,7 +233,7 @@ module system_top (
     .spi_adc_sdio (spi_adc_sdio),
     .spi_ext_sdio (spi_ext_sdio));
 
-  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf (
     .dio_t (gpio_t[33:32]),
     .dio_i (gpio_o[33:32]),
     .dio_o (gpio_i[33:32]),
