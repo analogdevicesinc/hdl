@@ -40,6 +40,10 @@
 
 module axi_ad9361_rx (
 
+  // common
+
+  mmcm_rst,
+
   // adc interface
 
   adc_rst,
@@ -99,6 +103,10 @@ module axi_ad9361_rx (
 
   parameter   DATAPATH_DISABLE = 0;
   parameter   ID = 0;
+
+  // common
+
+  output          mmcm_rst;
 
   // adc interface
 
@@ -335,7 +343,7 @@ module axi_ad9361_rx (
   // common processor control
 
   up_adc_common #(.ID (ID)) i_up_adc_common (
-    .mmcm_rst (),
+    .mmcm_rst (mmcm_rst),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_r1_mode (adc_r1_mode),

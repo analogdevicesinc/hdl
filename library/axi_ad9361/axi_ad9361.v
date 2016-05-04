@@ -159,11 +159,7 @@ module axi_ad9361 (
   up_dac_gpio_in,
   up_dac_gpio_out,
   up_adc_gpio_in,
-  up_adc_gpio_out,
-
-  // chipscope signals
-
-  tdd_dbg);
+  up_adc_gpio_out);
 
   // parameters
 
@@ -297,10 +293,6 @@ module axi_ad9361 (
   input   [31:0]  up_adc_gpio_in;
   output  [31:0]  up_adc_gpio_out;
 
-  // chipscope signals
-
-  output  [41:0]  tdd_dbg;
-
   // internal registers
 
   reg             up_wack = 'd0;
@@ -315,6 +307,7 @@ module axi_ad9361 (
 
   wire            up_clk;
   wire            up_rstn;
+  wire            mmcm_rst;
   wire            delay_rst;
 
   // internal signals
@@ -423,6 +416,7 @@ module axi_ad9361 (
     .tdd_enable (tdd_enable_s),
     .tdd_txnrx (tdd_txnrx_s),
     .tdd_mode (tdd_mode_s),
+    .mmcm_rst (mmcm_rst),
     .up_clk (up_clk),
     .up_enable (up_enable),
     .up_txnrx (up_txnrx),
@@ -480,6 +474,7 @@ module axi_ad9361 (
     .tdd_enable (tdd_enable_s),
     .tdd_txnrx (tdd_txnrx_s),
     .tdd_mode (tdd_mode_s),
+    .mmcm_rst (mmcm_rst),
     .up_clk (up_clk),
     .up_enable (up_enable),
     .up_txnrx (up_txnrx),
@@ -558,7 +553,7 @@ module axi_ad9361 (
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_tdd_s),
     .up_rack (up_rack_tdd_s),
-    .tdd_dbg (tdd_dbg));
+    .tdd_dbg ());
 
   // receive
 
@@ -566,6 +561,7 @@ module axi_ad9361 (
     .ID (ID),
     .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
   i_rx (
+    .mmcm_rst (mmcm_rst),
     .adc_rst (rst),
     .adc_clk (clk),
     .adc_valid (adc_valid_s),
