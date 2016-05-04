@@ -84,6 +84,7 @@ module axi_ad9361_cmos_if (
 
   // delay interface
 
+  mmcm_rst,
   up_clk,
   up_enable,
   up_txnrx,
@@ -148,6 +149,7 @@ module axi_ad9361_cmos_if (
 
   // delay interface
 
+  input           mmcm_rst;
   input           up_clk;
   input           up_enable;
   input           up_txnrx;
@@ -209,6 +211,8 @@ module axi_ad9361_cmos_if (
   reg             txnrx_n_int = 'd0;
   reg             enable_p_int = 'd0;
   reg             txnrx_p_int = 'd0;
+  reg             locked_m1 = 'd0;
+  reg             locked = 'd0;
 
   // internal signals
 
@@ -219,6 +223,7 @@ module axi_ad9361_cmos_if (
   wire    [11:0]  rx_data_n_s;
   wire            rx_frame_p_s;
   wire            rx_frame_n_s;
+  wire            locked_s;
 
   genvar          l_inst;
 
@@ -293,7 +298,7 @@ module axi_ad9361_cmos_if (
     if (adc_valid_int == 1'b1) begin
       adc_data <= adc_data_int;
     end
-    adc_status <= adc_status_int;
+    adc_status <= adc_status_int & locked;
   end
 
   // transmit data path mux (reverse of what receive does above)
@@ -550,9 +555,16 @@ module axi_ad9361_cmos_if (
 
   // device clock interface (receive clock)
 
+  always @(posedge clk) begin
+    locked_m1 <= locked_s;
+    locked <= locked_m1;
+  end
+
   ad_cmos_clk #(
     .DEVICE_TYPE (DEVICE_TYPE))
   i_clk (
+    .rst (mmcm_rst),
+    .locked (locked_s),
     .clk_in (rx_clk_in),
     .clk (l_clk));
 
