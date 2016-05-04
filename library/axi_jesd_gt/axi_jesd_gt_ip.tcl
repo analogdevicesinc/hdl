@@ -16,12 +16,16 @@ adi_ip_files axi_jesd_gt [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_gt_channel.v" \
   "$ad_hdl_dir/library/common/up_gt.v" \
+  "axi_jesd_gt_tx_constr.xdc" \
+  "axi_jesd_gt_rx_constr.xdc" \
   "axi_jesd_gt_constr.xdc" \
   "axi_jesd_gt.v" ]
 
 adi_ip_properties axi_jesd_gt
 
 adi_ip_constraints axi_jesd_gt [list \
+  "axi_jesd_gt_tx_constr.xdc" \
+  "axi_jesd_gt_rx_constr.xdc" \
   "axi_jesd_gt_constr.xdc" ]
 
 ipx::associate_bus_interfaces -busif m_axi -clock s_axi_aclk [ipx::current_core]
