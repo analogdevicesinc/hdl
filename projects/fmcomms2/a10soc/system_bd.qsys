@@ -315,6 +315,11 @@
    internal="fmcomms2.axi_ad9361_device_if"
    type="conduit"
    dir="end" />
+ <interface
+   name="delay_clk"
+   internal="fmcomms2.axi_ad9361_delay_clk"
+   type="clock"
+   dir="end" />
  <interface name="hps_ddr" internal="a10soc.hps_ddr" type="conduit" dir="end" />
  <interface
    name="hps_ddr_oct"
@@ -346,27 +351,37 @@
    internal="sys_clk.clk_in_reset"
    type="reset"
    dir="end" />
+ <interface
+   name="up_enable"
+   internal="fmcomms2.axi_ad9361_up_enable"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="up_txnrx"
+   internal="fmcomms2.axi_ad9361_up_txnrx"
+   type="conduit"
+   dir="end" />
  <module name="a10soc" kind="a10soc_system_bd" version="1.0" enabled="1">
   <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_DOMAIN" value="4" />
+  <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_DOMAIN" value="2" />
   <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_HPS_DDR_REF_CLK_RESET_DOMAIN" value="4" />
+  <parameter name="AUTO_HPS_DDR_REF_CLK_RESET_DOMAIN" value="2" />
   <parameter name="AUTO_HPS_IRQ0_INTERRUPTS_USED" value="3" />
   <parameter name="AUTO_HPS_IRQ1_INTERRUPTS_USED" value="3" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="3" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="5" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="3" />
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="5" />
   <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='fmcomms2_axi_ad9361.s_axi' start='0x0' end='0x10000' /><slave name='fmcomms2_axi_dmac_dac.s_axi' start='0x10000' end='0x14000' /><slave name='fmcomms2_axi_dmac_adc.s_axi' start='0x14000' end='0x18000' /></address-map>]]></parameter>
   <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_WIDTH" value="AddressWidth = 17" />
-  <parameter name="AUTO_UNIQUE_ID" value="system_bd_a10soc" />
+  <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_a10soc" />
  </module>
  <module name="fmcomms2" kind="fmcomms2_bd" version="1.0" enabled="1">
-  <parameter name="AUTO_AXI_AD9361_DEVICE_CLOCK_CLOCK_DOMAIN" value="2" />
-  <parameter name="AUTO_AXI_AD9361_DEVICE_CLOCK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_AXI_AD9361_DEVICE_CLOCK_RESET_DOMAIN" value="2" />
+  <parameter name="AUTO_AXI_AD9361_DELAY_CLK_CLOCK_DOMAIN" value="1" />
+  <parameter name="AUTO_AXI_AD9361_DELAY_CLK_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_AXI_AD9361_DELAY_CLK_RESET_DOMAIN" value="1" />
   <parameter name="AUTO_AXI_DMAC_ADC_M_DEST_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10soc_arria10_hps_0_bridges.f2sdram1_data' start='0x0' end='0x100000000' /></address-map>]]></parameter>
   <parameter
      name="AUTO_AXI_DMAC_ADC_M_DEST_AXI_ADDRESS_WIDTH"
@@ -379,10 +394,10 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="3" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="5" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="3" />
-  <parameter name="AUTO_UNIQUE_ID" value="system_bd_fmcomms2" />
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="5" />
+  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_fmcomms2</parameter>
  </module>
  <module name="sys_clk" kind="clock_source" version="15.1" enabled="1">
   <parameter name="clockFrequency" value="100000000" />
@@ -435,11 +450,6 @@
   <parameter name="baseAddress" value="0x00010000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="clock"
-   version="15.1"
-   start="fmcomms2.axi_ad9361_l_clk"
-   end="fmcomms2.axi_ad9361_device_clock" />
  <connection kind="clock" version="15.1" start="sys_clk.clk" end="a10soc.sys_clk" />
  <connection
    kind="clock"

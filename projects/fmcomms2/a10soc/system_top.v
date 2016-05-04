@@ -41,246 +41,222 @@ module system_top (
 
   // clock and resets
 
-  sys_clk,
-  sys_resetn,
+  input             sys_clk,
+  input             sys_resetn,
 
-  // ddr3
+  // hps-ddr4 (32)
 
-  ddr3_clk_p,
-  ddr3_clk_n,
-  ddr3_a,
-  ddr3_ba,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_odt,
-  ddr3_reset_n,
-  ddr3_we_n,
-  ddr3_ras_n,
-  ddr3_cas_n,
-  ddr3_dqs_p,
-  ddr3_dqs_n,
-  ddr3_dq,
-  ddr3_dm,
-  ddr3_rzq,
-  ddr3_ref_clk,
+  input             hps_ddr_ref_clk,
+  output  [  0:0]   hps_ddr_clk_p,
+  output  [  0:0]   hps_ddr_clk_n,
+  output  [ 16:0]   hsp_ddr_a,
+  output  [  1:0]   hps_ddr_ba,
+  output  [  0:0]   hps_ddr_bg,
+  output  [  0:0]   hps_ddr_cke,
+  output  [  0:0]   hps_ddr_cs_n,
+  output  [  0:0]   hps_ddr_odt,
+  output  [  0:0]   hps_ddr_reset_n,
+  output  [  0:0]   hps_ddr_act_n,
+  output  [  0:0]   hps_ddr_par,
+  input   [  0:0]   hps_ddr_alert_n,
+  inout   [  3:0]   hps_ddr_dqs_p,
+  inout   [  3:0]   hps_ddr_dqs_n,
+  inout   [ 31:0]   hps_ddr_dq,
+  inout   [  3:0]   hps_ddr_dbi_n,
+  input             hps_ddr_rzq,
 
-  // ethernet
+  // hps-ethernet
 
-  eth_ref_clk,
-  eth_rxd,
-  eth_txd,
-  eth_mdc,
-  eth_mdio,
-  eth_resetn,
-  eth_intn,
+  input   [  0:0]   hps_eth_rxclk,
+  input   [  0:0]   hps_eth_rxctl,
+  input   [  3:0]   hps_eth_rxd,
+  output  [  0:0]   hps_eth_txclk,
+  output  [  0:0]   hps_eth_txctl,
+  output  [  3:0]   hps_eth_txd,
+  output  [  0:0]   hps_eth_mdc,
+  inout   [  0:0]   hps_eth_mdio,
 
-  // board gpio
+  // hps-sdio
 
-  gpio_bd_i,
-  gpio_bd_o,
+  output  [  0:0]   hps_sdio_clk,
+  inout   [  0:0]   hps_sdio_cmd,
+  inout   [  7:0]   hps_sdio_d,
 
-  // lane interface
+  // hps-usb
 
-  rx_ref_clk,
-  rx_sysref,
-  rx_sync,
-  rx_data,
-  tx_ref_clk,
-  tx_sysref,
-  tx_sync,
-  tx_data,
+  input   [  0:0]   hps_usb_clk,
+  input   [  0:0]   hps_usb_dir,
+  input   [  0:0]   hps_usb_nxt,
+  output  [  0:0]   hps_usb_stp,
+  inout   [  7:0]   hps_usb_d,
 
-  // gpio
+  // hps-uart
 
-  trig,
-  adc_fdb,
-  adc_fda,
-  dac_irq,
-  clkd_status,
-  adc_pd,
-  dac_txen,
-  dac_reset,
-  clkd_sync,
+  input   [  0:0]   hps_uart_rx,
+  output  [  0:0]   hps_uart_tx,
 
-  // spi
+  // hps-i2c (shared w fmc-a, fmc-b)
 
-  spi_csn_clk,
-  spi_csn_dac,
-  spi_csn_adc,
-  spi_clk,
-  spi_sdio,
-  spi_dir);
+  inout   [  0:0]   hps_i2c_sda,
+  inout   [  0:0]   hps_i2c_scl,
 
-  // clock and resets
+  // hps-gpio (max-v-u16)
 
-  input             sys_clk;
-  input             sys_resetn;
+  inout   [  3:0]   hps_gpio,
+          
+  // gpio (max-v-u21)
 
-  // ddr3
+  input   [  7:0]   gpio_bd_i,
+  output  [  3:0]   gpio_bd_o,
 
-  output            ddr3_clk_p;
-  output            ddr3_clk_n;
-  output  [ 14:0]   ddr3_a;
-  output  [  2:0]   ddr3_ba;
-  output            ddr3_cke;
-  output            ddr3_cs_n;
-  output            ddr3_odt;
-  output            ddr3_reset_n;
-  output            ddr3_we_n;
-  output            ddr3_ras_n;
-  output            ddr3_cas_n;
-  inout   [  7:0]   ddr3_dqs_p;
-  inout   [  7:0]   ddr3_dqs_n;
-  inout   [ 63:0]   ddr3_dq;
-  output  [  7:0]   ddr3_dm;
-  input             ddr3_rzq;
-  input             ddr3_ref_clk;
+  // ad9361-interface
 
-  // ethernet
+  input             rx_clk_in,
+  input             rx_frame_in,
+  input   [  5:0]   rx_data_in,
+  output            tx_clk_out,
+  output            tx_frame_out,
+  output  [  5:0]   tx_data_out,
+  output            enable,
+  output            txnrx,
 
-  input             eth_ref_clk;
-  input             eth_rxd;
-  output            eth_txd;
-  output            eth_mdc;
-  inout             eth_mdio;
-  output            eth_resetn;
-  input             eth_intn;
+  output            gpio_resetb,
+  output            gpio_sync,
+  output            gpio_en_agc,
+  output  [  3:0]   gpio_ctl,
+  input   [  7:0]   gpio_status,
 
-  // board gpio
-
-  input   [ 10:0]   gpio_bd_i;
-  output  [ 15:0]   gpio_bd_o;
-
-  // lane interface
-
-  input             rx_ref_clk;
-  input             rx_sysref;
-  output            rx_sync;
-  input   [  3:0]   rx_data;
-  input             tx_ref_clk;
-  input             tx_sysref;
-  input             tx_sync;
-  output  [  3:0]   tx_data;
-
-  // gpio
-
-  input             trig;
-  input             adc_fdb;
-  input             adc_fda;
-  input             dac_irq;
-  input   [  1:0]   clkd_status;
-  output            adc_pd;
-  output            dac_txen;
-  output            dac_reset;
-  output            clkd_sync;
-
-  // spi
-
-  output            spi_csn_clk;
-  output            spi_csn_dac;
-  output            spi_csn_adc;
-  output            spi_clk;
-  inout             spi_sdio;
-  output            spi_dir;
+  output            spi_csn,
+  output            spi_clk,
+  output            spi_mosi,
+  input             spi_miso);
 
   // internal signals
 
-  wire              eth_reset;
-  wire              eth_mdio_i;
-  wire              eth_mdio_o;
-  wire              eth_mdio_t;
-  wire    [ 63:0]   gpio_i;
-  wire    [ 63:0]   gpio_o;
-  wire              spi_miso_s;
-  wire              spi_mosi_s;
-  wire    [  7:0]   spi_csn_s;
+  wire    [ 31:0]   gpio_i;
+  wire    [ 31:0]   gpio_o;
 
-  // daq2
+  // gpio (ad9361)
 
-  assign spi_csn_adc = spi_csn_s[2];
-  assign spi_csn_dac = spi_csn_s[1];
-  assign spi_csn_clk = spi_csn_s[0];
+  assign gpio_i[31:24] = gpio_o[31:24];
+  assign gpio_i[23:16] = gpio_status;
 
-  daq2_spi i_daq2_spi (
-    .spi_csn (spi_csn_s[2:0]),
-    .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi_s),
-    .spi_miso (spi_miso_s),
-    .spi_sdio (spi_sdio),
-    .spi_dir (spi_dir));
+  assign gpio_resetb = gpio_o[22];
+  assign gpio_sync = gpio_o[21];
+  assign gpio_en_agc = gpio_o[20];
+  assign gpio_ctl = gpio_o[19:16];
 
-  // gpio in & out are separate cores
+  // gpio (max-v-u21)
 
-  assign adc_pd = gpio_o[42];
-  assign dac_txen = gpio_o[41];
-  assign dac_reset = gpio_o[40];
-  assign clkd_sync = gpio_o[38];
+  assign gpio_i[15:8] = gpio_o[15:8];
+  assign gpio_i[ 7:0] = gpio_bd_i;
 
-  assign gpio_i[63:38] = gpio_o[63:38];
-  assign gpio_i[37:37] = trig;
-  assign gpio_i[36:36] = adc_fdb;
-  assign gpio_i[35:35] = adc_fda;
-  assign gpio_i[34:34] = dac_irq;
-  assign gpio_i[33:32] = clkd_status;
+  assign gpio_bd_o = gpio_o[3:0];
 
-  // board stuff
-
-  assign eth_resetn = ~eth_reset;
-  assign eth_mdio_i = eth_mdio;
-  assign eth_mdio = (eth_mdio_t == 1'b1) ? 1'bz : eth_mdio_o;
-
-  assign ddr3_a[14:12] = 3'd0;
-
-  assign gpio_i[31:27] = gpio_o[31:27];
-  assign gpio_i[26:16] = gpio_bd_i;
-  assign gpio_i[15: 0] = gpio_o[15:0];
-
-  assign gpio_bd_o = gpio_o[15:0];
+  // instantiations
 
   system_bd i_system_bd (
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_ck_n (ddr3_clk_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_a (ddr3_a[11:0]),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_ba (ddr3_ba),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_cke (ddr3_cke),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_cs_n (ddr3_cs_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_odt (ddr3_odt),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_reset_n (ddr3_reset_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_we_n (ddr3_we_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_ras_n (ddr3_ras_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_cas_n (ddr3_cas_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_dqs (ddr3_dqs_p[7:0]),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_dqs_n (ddr3_dqs_n[7:0]),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_dq (ddr3_dq[63:0]),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_dm (ddr3_dm[7:0]),
-    .a10gx_base_sys_ddr3_cntrl_oct_oct_rzqin (ddr3_rzq),
-    .a10gx_base_sys_ddr3_cntrl_pll_ref_clk_clk (ddr3_ref_clk),
-    .a10gx_base_sys_ethernet_mdio_mdc (eth_mdc),
-    .a10gx_base_sys_ethernet_mdio_mdio_in (eth_mdio_i),
-    .a10gx_base_sys_ethernet_mdio_mdio_out (eth_mdio_o),
-    .a10gx_base_sys_ethernet_mdio_mdio_oen (eth_mdio_t),
-    .a10gx_base_sys_ethernet_ref_clk_clk (eth_ref_clk),
-    .a10gx_base_sys_ethernet_reset_reset (eth_reset),
-    .a10gx_base_sys_ethernet_sgmii_rxp_0 (eth_rxd),
-    .a10gx_base_sys_ethernet_sgmii_txp_0 (eth_txd),
-    .a10gx_base_sys_gpio_in_export (gpio_i[63:32]),
-    .a10gx_base_sys_gpio_out_export (gpio_o[63:32]),
-    .a10gx_base_sys_gpio_bd_in_port (gpio_i[31:0]),
-    .a10gx_base_sys_gpio_bd_out_port (gpio_o[31:0]),
-    .a10gx_base_sys_spi_MISO (spi_miso_s),
-    .a10gx_base_sys_spi_MOSI (spi_mosi_s),
-    .a10gx_base_sys_spi_SCLK (spi_clk),
-    .a10gx_base_sys_spi_SS_n (spi_csn_s),
-    .daq2_rx_data_rx_serial_data (rx_data),
-    .daq2_rx_ref_clk_clk (rx_ref_clk),
-    .daq2_rx_sync_rx_sync (rx_sync),
-    .daq2_rx_sysref_rx_ext_sysref_in (rx_sysref),
-    .daq2_tx_data_tx_serial_data (tx_data),
-    .daq2_tx_ref_clk_clk (tx_ref_clk),
-    .daq2_tx_sync_tx_sync (tx_sync),
-    .daq2_tx_sysref_tx_ext_sysref_in (tx_sysref),
+    .ad9361_if_rx_clk_in_p (rx_clk_in),
+    .ad9361_if_rx_clk_in_n (1'b0),
+    .ad9361_if_rx_frame_in_p (rx_frame_in),
+    .ad9361_if_rx_frame_in_n (1'b0),
+    .ad9361_if_rx_data_in_p (rx_data_in),
+    .ad9361_if_rx_data_in_n (6'd0),
+    .ad9361_if_tx_clk_out_p (tx_clk_out),
+    .ad9361_if_tx_clk_out_n (),
+    .ad9361_if_tx_frame_out_p (tx_frame_out),
+    .ad9361_if_tx_frame_out_n (),
+    .ad9361_if_tx_data_out_p (tx_data_out),
+    .ad9361_if_tx_data_out_n (),
+    .ad9361_if_enable (enable),
+    .ad9361_if_txnrx (txnrx),
+    .delay_clk_clk (1'b0),
+    .hps_ddr_mem_ck (hps_ddr_clk_p),
+    .hps_ddr_mem_ck_n (hps_ddr_clk_n),
+    .hps_ddr_mem_a (hsp_ddr_a),
+    .hps_ddr_mem_act_n (hps_ddr_act_n),
+    .hps_ddr_mem_ba (hps_ddr_ba),
+    .hps_ddr_mem_bg (hps_ddr_bg),
+    .hps_ddr_mem_cke (hps_ddr_cke),
+    .hps_ddr_mem_cs_n (hps_ddr_cs_n),
+    .hps_ddr_mem_odt (hps_ddr_odt),
+    .hps_ddr_mem_reset_n (hps_ddr_reset_n),
+    .hps_ddr_mem_par (hps_ddr_par),
+    .hps_ddr_mem_alert_n (hps_ddr_alert_n),
+    .hps_ddr_mem_dqs (hps_ddr_dqs_p),
+    .hps_ddr_mem_dqs_n (hps_ddr_dqs_n),
+    .hps_ddr_mem_dq (hps_ddr_dq),
+    .hps_ddr_mem_dbi_n (hps_ddr_dbi_n),
+    .hps_ddr_oct_oct_rzqin (hps_ddr_rzq),
+    .hps_ddr_ref_clk_clk (hps_ddr_ref_clk),
+    .hps_gpio_gp_in (gpio_i),
+    .hps_gpio_gp_out (gpio_o),
+    .hps_io_hps_io_phery_emac0_TX_CLK (hps_eth_txclk),
+    .hps_io_hps_io_phery_emac0_TXD0 (hps_eth_txd[0]),
+    .hps_io_hps_io_phery_emac0_TXD1 (hps_eth_txd[1]),
+    .hps_io_hps_io_phery_emac0_TXD2 (hps_eth_txd[2]),
+    .hps_io_hps_io_phery_emac0_TXD3 (hps_eth_txd[3]),
+    .hps_io_hps_io_phery_emac0_RX_CTL (hps_eth_rxctl),
+    .hps_io_hps_io_phery_emac0_TX_CTL (hps_eth_txctl),
+    .hps_io_hps_io_phery_emac0_RX_CLK (hps_eth_rxclk),
+    .hps_io_hps_io_phery_emac0_RXD0 (hps_eth_rxd[0]),
+    .hps_io_hps_io_phery_emac0_RXD1 (hps_eth_rxd[1]),
+    .hps_io_hps_io_phery_emac0_RXD2 (hps_eth_rxd[2]),
+    .hps_io_hps_io_phery_emac0_RXD3 (hps_eth_rxd[3]),
+    .hps_io_hps_io_phery_emac0_MDIO (hps_eth_mdio),
+    .hps_io_hps_io_phery_emac0_MDC (hps_eth_mdc),
+    .hps_io_hps_io_phery_sdmmc_CMD (hps_sdio_cmd),
+    .hps_io_hps_io_phery_sdmmc_D0 (hps_sdio_d[0]),
+    .hps_io_hps_io_phery_sdmmc_D1 (hps_sdio_d[1]),
+    .hps_io_hps_io_phery_sdmmc_D2 (hps_sdio_d[2]),
+    .hps_io_hps_io_phery_sdmmc_D3 (hps_sdio_d[3]),
+    .hps_io_hps_io_phery_sdmmc_D4 (hps_sdio_d[4]),
+    .hps_io_hps_io_phery_sdmmc_D5 (hps_sdio_d[5]),
+    .hps_io_hps_io_phery_sdmmc_D6 (hps_sdio_d[6]),
+    .hps_io_hps_io_phery_sdmmc_D7 (hps_sdio_d[7]),
+    .hps_io_hps_io_phery_sdmmc_CCLK (hps_sdio_clk),
+    .hps_io_hps_io_phery_usb0_DATA0 (hps_usb_d[0]),
+    .hps_io_hps_io_phery_usb0_DATA1 (hps_usb_d[1]),
+    .hps_io_hps_io_phery_usb0_DATA2 (hps_usb_d[2]),
+    .hps_io_hps_io_phery_usb0_DATA3 (hps_usb_d[3]),
+    .hps_io_hps_io_phery_usb0_DATA4 (hps_usb_d[4]),
+    .hps_io_hps_io_phery_usb0_DATA5 (hps_usb_d[5]),
+    .hps_io_hps_io_phery_usb0_DATA6 (hps_usb_d[6]),
+    .hps_io_hps_io_phery_usb0_DATA7 (hps_usb_d[7]),
+    .hps_io_hps_io_phery_usb0_CLK (hps_usb_clk),
+    .hps_io_hps_io_phery_usb0_STP (hps_usb_stp),
+    .hps_io_hps_io_phery_usb0_DIR (hps_usb_dir),
+    .hps_io_hps_io_phery_usb0_NXT (hps_usb_nxt),
+    .hps_io_hps_io_phery_uart1_RX (hps_uart_rx),
+    .hps_io_hps_io_phery_uart1_TX (hps_uart_tx),
+    .hps_io_hps_io_phery_i2c1_SDA (hps_i2c_sda),
+    .hps_io_hps_io_phery_i2c1_SCL (hps_i2c_scl),
+    .hps_io_hps_io_gpio_gpio1_io5 (hps_gpio[0]),
+    .hps_io_hps_io_gpio_gpio1_io14 (hps_gpio[1]),
+    .hps_io_hps_io_gpio_gpio1_io16 (hps_gpio[2]),
+    .hps_io_hps_io_gpio_gpio1_io17 (hps_gpio[3]),
+    .hps_spi0_mosi_o (spi_mosi),
+    .hps_spi0_miso_i (spi_miso),
+    .hps_spi0_ss_in_n (1'b1),
+    .hps_spi0_mosi_oe (),
+    .hps_spi0_ss0_n_o (spi_csn),
+    .hps_spi0_ss1_n_o (),
+    .hps_spi0_ss2_n_o (),
+    .hps_spi0_ss3_n_o (),
+    .hps_spi0_sclk_clk (spi_clk),
+    .hps_spi1_mosi_o (),
+    .hps_spi1_miso_i (1'b0),
+    .hps_spi1_ss_in_n (1'b1),
+    .hps_spi1_mosi_oe (),
+    .hps_spi1_ss0_n_o (),
+    .hps_spi1_ss1_n_o (),
+    .hps_spi1_ss2_n_o (),
+    .hps_spi1_ss3_n_o (),
+    .hps_spi1_sclk_clk (),
     .sys_clk_clk (sys_clk),
-    .sys_reset_reset_n (sys_resetn));
+    .sys_reset_reset_n (sys_resetn),
+    .up_enable_up_enable (gpio_o[23]),
+    .up_txnrx_up_txnrx (gpio_o[24]));
 
 endmodule
 
