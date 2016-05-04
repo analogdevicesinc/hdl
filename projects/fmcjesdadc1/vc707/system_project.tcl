@@ -11,4 +11,6 @@ adi_project_files fmcjesdadc1_vc707 [list \
   "system_constr.xdc" \
   "$ad_hdl_dir/projects/common/vc707/vc707_system_constr.xdc" ]
 
+set_property is_enabled false [get_files  *axi_jesd_gt_tx_constr.xdc]
+  
 adi_project_run fmcjesdadc1_vc707
