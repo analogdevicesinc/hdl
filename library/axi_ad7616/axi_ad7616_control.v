@@ -182,6 +182,7 @@ module axi_ad7616_control (
           8'h00 : up_rdata = PCORE_VERSION;
           8'h01 : up_rdata = ID;
           8'h02 : up_rdata = up_scratch;
+          8'h03 : up_rdata = IF_TYPE;
           8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
           8'h11 : up_rdata = up_conv_rate;
           8'h12 : up_rdata = up_read_data_s;
