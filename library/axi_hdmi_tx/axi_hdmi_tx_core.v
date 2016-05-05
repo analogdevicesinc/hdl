@@ -203,6 +203,10 @@ module axi_hdmi_tx_core (
   reg     [47:0]  hdmi_data_2d = 'd0;
   reg     [23:0]  hdmi_tpm_data = 'd0;
   reg             hdmi_tpm_oos = 'd0;
+  reg             hdmi_36_hsync = 'd0;
+  reg             hdmi_36_vsync = 'd0;
+  reg             hdmi_36_data_e = 'd0;
+  reg     [35:0]  hdmi_36_data = 'd0;
   reg             hdmi_hsync = 'd0;
   reg             hdmi_vsync = 'd0;
   reg             hdmi_hsync_data_e = 'd0;
@@ -543,14 +547,14 @@ module axi_hdmi_tx_core (
 
   // hdmi csc 16, 24 and 36 outputs
 
-  assign hdmi_36_hsync = hdmi_24_hsync;
-  assign hdmi_36_vsync = hdmi_24_vsync;
-  assign hdmi_36_data_e = hdmi_24_data_e;
-  assign hdmi_36_data[35:24] = {hdmi_24_data[23:16], hdmi_24_data[23:20]};
-  assign hdmi_36_data[23:12] = {hdmi_24_data[15: 8], hdmi_24_data[15:12]};
-  assign hdmi_36_data[11: 0] = {hdmi_24_data[ 7: 0], hdmi_24_data[ 7: 4]};
-
   always @(posedge hdmi_clk) begin
+
+    hdmi_36_hsync = hdmi_clip_hs_d;
+    hdmi_36_vsync = hdmi_clip_vs_d;
+    hdmi_36_data_e = hdmi_clip_de_d;
+    hdmi_36_data[35:24] = {hdmi_clip_data[23:16], hdmi_clip_data[23:20]};
+    hdmi_36_data[23:12] = {hdmi_clip_data[15: 8], hdmi_clip_data[15:12]};
+    hdmi_36_data[11: 0] = {hdmi_clip_data[ 7: 0], hdmi_clip_data[ 7: 4]};
 
     hdmi_24_hsync <= hdmi_clip_hs_d;
     hdmi_24_vsync <= hdmi_clip_vs_d;
