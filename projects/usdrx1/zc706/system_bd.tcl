@@ -1,8 +1,9 @@
 
-source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
-source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3.tcl
 
-p_plddr3_fifo [current_bd_instance .] usdrx1_fifo 512
+source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
+source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3_adcfifo.tcl
+
+p_plddr3_adcfifo [current_bd_instance .] usdrx1_fifo 512
 
 create_bd_port -dir I -type rst sys_rst
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr3
