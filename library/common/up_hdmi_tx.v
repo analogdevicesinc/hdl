@@ -251,15 +251,6 @@ module up_hdmi_tx (
       end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
         up_vdma_tpm_oos <= up_vdma_tpm_oos & ~up_wdata[0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h011)) begin
-        if ((up_wdata[1]== 1'b1) || (up_wdata[0] == 1'b1)) begin
-          up_clip_max <= 24'hfefefe;
-          up_clip_min <= 24'h010101;
-        end else begin
-          up_clip_max <= 24'hf0ebf0;
-          up_clip_min <= 24'h101010;
-        end
-      end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h01a)) begin
         up_clip_max <= up_wdata[23:0];
       end
