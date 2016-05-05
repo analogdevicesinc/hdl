@@ -202,8 +202,8 @@ module axi_hdmi_tx (
   wire    [15:0]  hdmi_vs_width_s;
   wire    [15:0]  hdmi_ve_max_s;
   wire    [15:0]  hdmi_ve_min_s;
-  wire    [31:0]  hdmi_clip_max_s;
-  wire    [31:0]  hdmi_clip_min_s;
+  wire    [23:0]  hdmi_clip_max_s;
+  wire    [23:0]  hdmi_clip_min_s;
   wire            hdmi_fs_toggle_s;
   wire    [ 8:0]  hdmi_raddr_g_s;
   wire            hdmi_tpm_oos_s;
