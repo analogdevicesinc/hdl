@@ -93,10 +93,29 @@ module ad_cmos_in (
 
   // instantiations
 
+  generate
+  if (DEVICE_TYPE == 0) begin
   alt_ddio_in i_rx_data_iddr (
     .ck (rx_clk),
     .pad_in (rx_data_in),
     .dout ({rx_data_p, rx_data_n}));
+  end
+  endgenerate
+
+  generate
+  if (DEVICE_TYPE == 1) begin
+  altddio_in #(.width (1), .lpm_hint("UNUSED")) i_rx_data_iddr (
+    .inclock (rx_clk),
+    .datain (rx_data_in),
+    .dataout_h (rx_data_p),
+    .dataout_l (rx_data_n),
+    .inclocken (1'b1),
+    .aclr (1'b0),
+    .aset (1'b0),
+    .sclr (1'b0),
+    .sset (1'b0));
+  end
+  endgenerate
 
 endmodule
 

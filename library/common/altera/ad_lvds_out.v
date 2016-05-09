@@ -96,10 +96,31 @@ module ad_lvds_out (
 
   // instantiations
 
+  generate
+  if (DEVICE_TYPE == 0) begin
   alt_ddio_out i_tx_data_oddr (
     .ck (tx_clk),
     .din ({tx_data_p, tx_data_n}),
     .pad_out (tx_data_out_p));
+  end
+  endgenerate
+
+  generate
+  if (DEVICE_TYPE == 1) begin
+  altddio_out #(.width (1), .lpm_hint ("UNUSED")) i_tx_data_oddr (
+    .outclock (tx_clk),
+    .datain_h (tx_data_p),
+    .datain_l (tx_data_n),
+    .dataout (tx_data_out_p),
+    .outclocken (1'b1),
+    .oe_out (),
+    .oe (1'b1),
+    .aclr (1'b0),
+    .aset (1'b0),
+    .sclr (1'b0),
+    .sset (1'b0));
+  end
+  endgenerate
 
 endmodule
 
