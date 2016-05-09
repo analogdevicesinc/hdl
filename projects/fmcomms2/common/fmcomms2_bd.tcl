@@ -186,15 +186,3 @@ ad_connect  util_ad9361_adc_fifo/dout_data_3 ila_adc/probe3
 ad_connect  util_ad9361_adc_fifo/dout_valid_0 ila_adc/probe4
 ad_connect  sys_cpu_clk ila_adc/clk
 
-# ila (tdd)
-
-set ila_tdd [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_tdd]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tdd
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_tdd
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tdd
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {42}] $ila_tdd
-
-ad_connect  axi_ad9361_clk          ila_tdd/clk
-ad_connect  axi_ad9361/tdd_dbg      ila_tdd/probe0
-
