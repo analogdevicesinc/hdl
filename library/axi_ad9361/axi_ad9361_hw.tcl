@@ -201,20 +201,6 @@ ad_alt_intf signal up_dac_gpio_out output 32
 ad_alt_intf signal up_adc_gpio_in input 32
 ad_alt_intf signal up_adc_gpio_out output 32
 
-# sub-modules
-
-add_hdl_instance alt_ddio_in altera_gpio
-set_instance_parameter_value alt_ddio_in {PIN_TYPE_GUI} {Input}
-set_instance_parameter_value alt_ddio_in {SIZE} {1}
-set_instance_parameter_value alt_ddio_in {gui_diff_buff} {0}
-set_instance_parameter_value alt_ddio_in {gui_io_reg_mode} {DDIO}
-
-add_hdl_instance alt_ddio_out altera_gpio
-set_instance_parameter_value alt_ddio_out {PIN_TYPE_GUI} {Output}
-set_instance_parameter_value alt_ddio_out {SIZE} {1}
-set_instance_parameter_value alt_ddio_out {gui_diff_buff} {0}
-set_instance_parameter_value alt_ddio_out {gui_io_reg_mode} {DDIO}
-
 # updates
 
 proc p_axi_ad9361 {} {
@@ -257,9 +243,30 @@ proc p_axi_ad9361 {} {
   add_interface_port device_if txnrx txnrx Output 1
 
   if {$m_device_type == 1} {
+
+    add_hdl_instance alt_clk altera_pll
+    set_instance_parameter_value alt_clk {gui_reference_clock_frequency} {250.0}
+    set_instance_parameter_value alt_clk {gui_use_locked} {1}
+    set_instance_parameter_value alt_clk {gui_operation_mode} {source synchronous}
+    set_instance_parameter_value alt_clk {gui_number_of_clocks} {1}
+    set_instance_parameter_value alt_clk {gui_output_clock_frequency0} {250.0}
+    set_instance_parameter_value alt_clk {gui_ps_units0} {degrees}
+    set_instance_parameter_value alt_clk {gui_phase_shift_deg0} {90.0}
   }
 
   if {$m_device_type == 0} {
+
+    add_hdl_instance alt_ddio_in altera_gpio
+    set_instance_parameter_value alt_ddio_in {PIN_TYPE_GUI} {Input}
+    set_instance_parameter_value alt_ddio_in {SIZE} {1}
+    set_instance_parameter_value alt_ddio_in {gui_diff_buff} {0}
+    set_instance_parameter_value alt_ddio_in {gui_io_reg_mode} {DDIO}
+
+    add_hdl_instance alt_ddio_out altera_gpio
+    set_instance_parameter_value alt_ddio_out {PIN_TYPE_GUI} {Output}
+    set_instance_parameter_value alt_ddio_out {SIZE} {1}
+    set_instance_parameter_value alt_ddio_out {gui_diff_buff} {0}
+    set_instance_parameter_value alt_ddio_out {gui_io_reg_mode} {DDIO}
 
     add_hdl_instance alt_clk altera_iopll
     set_instance_parameter_value alt_clk {gui_reference_clock_frequency} {250.0}
