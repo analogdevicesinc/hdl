@@ -65,7 +65,7 @@ module ad_lvds_clk (
 
   // defaults
 
-  assign locked <= 1'b1;
+  assign locked = 1'b1;
 
   // instantiations
 
