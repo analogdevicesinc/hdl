@@ -9,19 +9,11 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
-   element ad9361_clk_bridge
-   {
-      datum _sortIndex
-      {
-         value = "4";
-         type = "int";
-      }
-   }
    element adc_pack
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "5";
          type = "int";
       }
       datum sopceditor_expanded
@@ -90,7 +82,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "4";
          type = "int";
       }
       datum sopceditor_expanded
@@ -111,7 +103,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "6";
          type = "int";
       }
       datum sopceditor_expanded
@@ -132,7 +124,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "8";
          type = "int";
       }
       datum sopceditor_expanded
@@ -153,7 +145,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "7";
          type = "int";
       }
       datum sopceditor_expanded
@@ -166,7 +158,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "10";
          type = "int";
       }
    }
@@ -190,7 +182,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "9";
          type = "int";
       }
       datum sopceditor_expanded
@@ -245,24 +237,30 @@
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
-   name="axi_ad9361_device_clock"
-   internal="axi_ad9361.device_clock"
+   name="axi_ad9361_delay_clk"
+   internal="axi_ad9361.if_delay_clk"
    type="clock"
    dir="end" />
+ <interface name="axi_ad9361_device_clock" internal="axi_ad9361.device_clock" />
  <interface
    name="axi_ad9361_device_if"
    internal="axi_ad9361.device_if"
    type="conduit"
    dir="end" />
  <interface
-   name="axi_ad9361_l_clk"
-   internal="ad9361_clk_bridge.out_clk"
-   type="clock"
-   dir="start" />
- <interface
    name="axi_ad9361_s_axi"
    internal="axi_ad9361.s_axi"
    type="axi4lite"
+   dir="end" />
+ <interface
+   name="axi_ad9361_up_enable"
+   internal="axi_ad9361.if_up_enable"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="axi_ad9361_up_txnrx"
+   internal="axi_ad9361.if_up_txnrx"
+   type="conduit"
    dir="end" />
  <interface
    name="axi_dmac_adc_fifo_wr_clock"
@@ -327,21 +325,16 @@
    dir="end" />
  <interface name="sys_clk" internal="sys_clk.in_clk" type="clock" dir="end" />
  <interface name="sys_rst" internal="sys_rst.in_reset" type="reset" dir="end" />
- <module
-   name="ad9361_clk_bridge"
-   kind="altera_clock_bridge"
-   version="15.1"
-   enabled="1">
-  <parameter name="DERIVED_CLOCK_RATE" value="0" />
-  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
-  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
- </module>
  <module name="adc_pack" kind="util_cpack" version="1.0" enabled="1">
   <parameter name="CHANNEL_DATA_WIDTH" value="16" />
   <parameter name="NUM_OF_CHANNELS" value="4" />
  </module>
  <module name="axi_ad9361" kind="axi_ad9361" version="1.0" enabled="1">
-  <parameter name="DEVICE_TYPE" value="0" />
+  <parameter name="ADC_DATAPATH_DISABLE" value="0" />
+  <parameter name="CMOS_OR_LVDS_N" value="0" />
+  <parameter name="DAC_DATAPATH_DISABLE" value="0" />
+  <parameter name="DEVICE_FAMILY" value="Cyclone V" />
+  <parameter name="DEVICE_TYPE" value="1" />
   <parameter name="ID" value="0" />
  </module>
  <module name="axi_dmac_adc" kind="axi_dmac" version="1.0" enabled="1">
@@ -445,6 +438,11 @@
    kind="clock"
    version="15.1"
    start="axi_ad9361.if_l_clk"
+   end="axi_ad9361.if_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="axi_ad9361.if_l_clk"
    end="dac_upack.if_dac_clk" />
  <connection
    kind="clock"
@@ -459,19 +457,9 @@
  <connection
    kind="clock"
    version="15.1"
-   start="axi_ad9361.if_l_clk"
-   end="ad9361_clk_bridge.in_clk" />
- <connection
-   kind="clock"
-   version="15.1"
    start="sys_clk.out_clk"
    end="spi_ad9361.clk" />
  <connection kind="clock" version="15.1" start="sys_clk.out_clk" end="gpio.clk" />
- <connection
-   kind="clock"
-   version="15.1"
-   start="sys_clk.out_clk"
-   end="axi_ad9361.delay_clock" />
  <connection
    kind="clock"
    version="15.1"
