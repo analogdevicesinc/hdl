@@ -115,7 +115,7 @@ proc ad_mem_hp0_interconnect {p_clk p_name} {
 
   if {($sys_zynq == 0) && ($p_name eq "sys_ps7/S_AXI_HP0")} {return}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
-  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
+  if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
 }
 
 proc ad_mem_hp1_interconnect {p_clk p_name} {
@@ -124,7 +124,7 @@ proc ad_mem_hp1_interconnect {p_clk p_name} {
 
   if {($sys_zynq == 0) && ($p_name eq "sys_ps7/S_AXI_HP1")} {return}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
-  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
+  if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
 }
 
 proc ad_mem_hp2_interconnect {p_clk p_name} {
@@ -133,7 +133,7 @@ proc ad_mem_hp2_interconnect {p_clk p_name} {
 
   if {($sys_zynq == 0) && ($p_name eq "sys_ps7/S_AXI_HP2")} {return}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
-  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
+  if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
 }
 
 proc ad_mem_hp3_interconnect {p_clk p_name} {
@@ -142,7 +142,7 @@ proc ad_mem_hp3_interconnect {p_clk p_name} {
 
   if {($sys_zynq == 0) && ($p_name eq "sys_ps7/S_AXI_HP3")} {return}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
-  if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
+  if {$sys_zynq >= 1} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
 }
 
 ###################################################################################################
@@ -158,6 +158,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   global sys_hp3_interconnect_index
   global sys_mem_interconnect_index
 
+  set p_name_int $p_name
   set p_clk_source [get_bd_pins -filter {DIR == O} -of_objects [get_bd_nets $p_clk]]
 
   if {$p_sel eq "MEM"} {
@@ -169,8 +170,9 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     set m_addr_seg [get_bd_addr_segs -of_objects [get_bd_cells axi_ddr_cntrl]]
   }
 
-  if {$p_sel eq "HP0"} {
+  if {($p_sel eq "HP0") && ($sys_zynq == 1)} {
     if {$sys_hp0_interconnect_index < 0} {
+      set p_name_int sys_ps7/S_AXI_HP0
       set_property CONFIG.PCW_USE_S_AXI_HP0 {1} [get_bd_cells sys_ps7]
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp0_interconnect
     }
@@ -179,8 +181,9 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     set m_addr_seg [get_bd_addr_segs sys_ps7/S_AXI_HP0/HP0_DDR_LOWOCM]
   }
 
-  if {$p_sel eq "HP1"} {
+  if {($p_sel eq "HP1") && ($sys_zynq == 1)} {
     if {$sys_hp1_interconnect_index < 0} {
+      set p_name_int sys_ps7/S_AXI_HP1
       set_property CONFIG.PCW_USE_S_AXI_HP1 {1} [get_bd_cells sys_ps7]
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp1_interconnect
     }
@@ -189,8 +192,9 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     set m_addr_seg [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM]
   }
 
-  if {$p_sel eq "HP2"} {
+  if {($p_sel eq "HP2") && ($sys_zynq == 1)} {
     if {$sys_hp2_interconnect_index < 0} {
+      set p_name_int sys_ps7/S_AXI_HP2
       set_property CONFIG.PCW_USE_S_AXI_HP2 {1} [get_bd_cells sys_ps7]
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp2_interconnect
     }
@@ -199,14 +203,59 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     set m_addr_seg [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM]
   }
 
-  if {$p_sel eq "HP3"} {
+  if {($p_sel eq "HP3") && ($sys_zynq == 1)} {
     if {$sys_hp3_interconnect_index < 0} {
+      set p_name_int sys_ps7/S_AXI_HP3
       set_property CONFIG.PCW_USE_S_AXI_HP3 {1} [get_bd_cells sys_ps7]
       create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp3_interconnect
     }
     set m_interconnect_index $sys_hp3_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
     set m_addr_seg [get_bd_addr_segs sys_ps7/S_AXI_HP3/HP3_DDR_LOWOCM]
+  }
+
+  if {($p_sel eq "HP0") && ($sys_zynq == 2)} {
+    if {$sys_hp0_interconnect_index < 0} {
+      set p_name_int sys_ps8/S_AXI_HP0_FPD
+      set_property CONFIG.PSU__USE__S_AXI_GP2 {1} [get_bd_cells sys_ps8]
+      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp0_interconnect
+    }
+    set m_interconnect_index $sys_hp0_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hp0_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/S_AXI_HP0_FPD/PLLPD_DDR_LOW]
+  }
+
+  if {($p_sel eq "HP1") && ($sys_zynq == 2)} {
+    if {$sys_hp1_interconnect_index < 0} {
+      set p_name_int sys_ps8/S_AXI_HP1_FPD
+      set_property CONFIG.PSU__USE__S_AXI_GP3 {1} [get_bd_cells sys_ps8]
+      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp1_interconnect
+    }
+    set m_interconnect_index $sys_hp1_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hp1_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/S_AXI_HP1_FPD/HP0_DDR_LOW]
+  }
+
+  if {($p_sel eq "HP2") && ($sys_zynq == 2)} {
+    if {$sys_hp2_interconnect_index < 0} {
+      set p_name_int sys_ps8/S_AXI_HP2_FPD
+      set_property CONFIG.PSU__USE__S_AXI_GP4 {1} [get_bd_cells sys_ps8]
+      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp2_interconnect
+    }
+    set m_interconnect_index $sys_hp2_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hp2_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/S_AXI_HP2_FPD/HP1_DDR_LOW]
+  }
+
+  if {($p_sel eq "HP3") && ($sys_zynq == 2)} {
+    if {$sys_hp3_interconnect_index < 0} {
+      set p_name_int sys_ps8/S_AXI_HP3_FPD
+      set_property CONFIG.PSU__USE__S_AXI_GP5 {1} [get_bd_cells sys_ps8]
+      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp3_interconnect
+    }
+    set m_interconnect_index $sys_hp3_interconnect_index
+    set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
+    set m_addr_seg [get_bd_addr_segs sys_ps8/S_AXI_HP3_FPD/HP2_DDR_LOW]
   }
 
   set i_str "S$m_interconnect_index"
@@ -216,8 +265,8 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   set m_interconnect_index [expr $m_interconnect_index + 1]
 
-  set p_intf_name [lrange [split $p_name "/"] end end]
-  set p_cell_name [lrange [split $p_name "/"] 0 0]
+  set p_intf_name [lrange [split $p_name_int "/"] end end]
+  set p_cell_name [lrange [split $p_name_int "/"] 0 0]
   set p_intf_clock [get_bd_pins -filter "TYPE == clk && (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
     CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
     CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" -quiet -of_objects [get_bd_cells $p_cell_name]]
@@ -233,7 +282,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     ad_connect $p_clk $m_interconnect_cell/ACLK
     ad_connect sys_cpu_resetn $m_interconnect_cell/M00_ARESETN
     ad_connect $p_clk $m_interconnect_cell/M00_ACLK
-    ad_connect $m_interconnect_cell/M00_AXI $p_name
+    ad_connect $m_interconnect_cell/M00_AXI $p_name_int
     if {$p_intf_clock ne ""} {
       ad_connect $p_clk $p_intf_clock
     }
@@ -241,7 +290,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     set_property CONFIG.NUM_SI $m_interconnect_index $m_interconnect_cell
     ad_connect sys_cpu_resetn $m_interconnect_cell/${i_str}_ARESETN
     ad_connect $p_clk $m_interconnect_cell/${i_str}_ACLK
-    ad_connect $m_interconnect_cell/${i_str}_AXI $p_name
+    ad_connect $m_interconnect_cell/${i_str}_AXI $p_name_int
     if {$p_intf_clock ne ""} {
       ad_connect $p_clk $p_intf_clock
     }
@@ -274,6 +323,14 @@ proc ad_cpu_interconnect {p_address p_name} {
 
   if {$sys_cpu_interconnect_index == 0} {
     create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect
+    if {$sys_zynq == 2} {
+      ad_connect sys_cpu_clk sys_ps8/maxihpm0_lpd_aclk
+      ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
+      ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
+      ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
+      ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
+      ad_connect axi_cpu_interconnect/S00_AXI sys_ps8/M_AXI_HPM0_LPD
+    }
     if {$sys_zynq == 1} {
       ad_connect sys_cpu_clk sys_ps7/M_AXI_GP0_ACLK
       ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
@@ -281,7 +338,8 @@ proc ad_cpu_interconnect {p_address p_name} {
       ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
       ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
       ad_connect axi_cpu_interconnect/S00_AXI sys_ps7/M_AXI_GP0
-    } else {
+    }
+    if {$sys_zynq == 0} {
       ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
       ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
       ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
@@ -290,9 +348,13 @@ proc ad_cpu_interconnect {p_address p_name} {
     }
   }
 
+  if {$sys_zynq == 2} {
+    set sys_addr_cntrl_space [get_bd_addr_spaces sys_ps8/Data]
+  }
   if {$sys_zynq == 1} {
     set sys_addr_cntrl_space [get_bd_addr_spaces sys_ps7/Data]
-  } else {
+  }
+  if {$sys_zynq == 0} {
     set sys_addr_cntrl_space [get_bd_addr_spaces sys_mb/Data]
   }
 
@@ -336,7 +398,7 @@ proc ad_cpu_interconnect {p_address p_name} {
   set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
   set p_index 0
   foreach p_seg_name $p_seg {
-    if {$p_index == 0} {
+    if {($p_index == 0) && ($sys_zynq < 2)} {
       set p_seg_range [get_property range $p_seg_name]
       create_bd_addr_seg -range $p_seg_range \
         -offset $p_address $sys_addr_cntrl_space \
@@ -355,18 +417,39 @@ proc ad_cpu_interrupt {p_ps_index p_mb_index p_name} {
 
   global sys_zynq
 
-  if {$sys_zynq == 1} {
-    set p_index [regsub -all {[^0-9]} $p_ps_index ""]
-  } else {
-    set p_index [regsub -all {[^0-9]} $p_mb_index ""]
+  if {$sys_zynq == 0} {set p_index_int $p_mb_index}
+  if {$sys_zynq >= 1} {set p_index_int $p_ps_index}
+
+  set p_index [regsub -all {[^0-9]} $p_index_int ""]
+  set m_index [expr ($p_index - 8)]
+
+  if {($sys_zynq == 2) && ($p_index <= 7)} {
+    set p_net [get_bd_nets -of_objects [get_bd_pins sys_concat_intc_0/In$p_index]] 
+    set p_pin [find_bd_objs -relation connected_to [get_bd_pins sys_concat_intc_0/In$p_index]]
+
+    puts "delete_bd_objs $p_net $p_pin"
+    delete_bd_objs $p_net $p_pin
+    ad_connect sys_concat_intc_0/In$p_index $p_name
   }
 
-  set p_net [get_bd_nets -of_objects [get_bd_pins sys_concat_intc/In$p_index]] 
-  set p_pin [find_bd_objs -relation connected_to [get_bd_pins sys_concat_intc/In$p_index]]
+  if {($sys_zynq == 2) && ($p_index >= 8)} {
+    set p_net [get_bd_nets -of_objects [get_bd_pins sys_concat_intc_1/In$m_index]] 
+    set p_pin [find_bd_objs -relation connected_to [get_bd_pins sys_concat_intc_1/In$m_index]]
 
-  puts "delete_bd_objs $p_net $p_pin"
-  delete_bd_objs $p_net $p_pin
-  ad_connect sys_concat_intc/In$p_index $p_name
+    puts "delete_bd_objs $p_net $p_pin"
+    delete_bd_objs $p_net $p_pin
+    ad_connect sys_concat_intc_1/In$m_index $p_name
+  }
+
+  if {$sys_zynq <= 1} {
+
+    set p_net [get_bd_nets -of_objects [get_bd_pins sys_concat_intc/In$p_index]] 
+    set p_pin [find_bd_objs -relation connected_to [get_bd_pins sys_concat_intc/In$p_index]]
+
+    puts "delete_bd_objs $p_net $p_pin"
+    delete_bd_objs $p_net $p_pin
+    ad_connect sys_concat_intc/In$p_index $p_name
+  }
 }
 
 ###################################################################################################

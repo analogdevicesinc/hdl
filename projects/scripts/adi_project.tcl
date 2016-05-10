@@ -85,6 +85,11 @@ proc adi_project_create {project_name {mode 0}} {
     set p_board "not-applicable"
     set sys_zynq 1
   }
+  if [regexp "_zcu102$" $project_name] {
+    set p_device "xczu9eg-ffvb1156-1-i-EVAL"
+    set p_board "not-applicable"
+    set sys_zynq 2
+  }
 
   if {!$IGNORE_VERSION_CHECK && [string compare [version -short] $REQUIRED_VIVADO_VERSION] != 0} {
     return -code error [format "ERROR: This project requires Vivado %s." $REQUIRED_VIVADO_VERSION]
