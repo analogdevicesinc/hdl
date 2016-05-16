@@ -227,6 +227,7 @@ module util_rfifo (
   assign din_data_s = { din_data_7, din_data_6, din_data_5, din_data_4,
                         din_data_3, din_data_2, din_data_1, din_data_0};
 
+  // simple data transfer-- no ovf/unf handling- read-bw > write-bw
   // dout_width >= din_width only
 
   generate
