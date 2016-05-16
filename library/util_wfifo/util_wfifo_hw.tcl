@@ -17,7 +17,7 @@ add_fileset quartus_synth QUARTUS_SYNTH "" ""
 set_fileset_property quartus_synth TOP_LEVEL util_wfifo
 add_fileset_file ad_mem.v               VERILOG PATH $ad_hdl_dir/library/common/ad_mem.v
 add_fileset_file util_wfifo.v           VERILOG PATH util_wfifo.v TOP_LEVEL_FILE
-add_fileset_file util_wfifo_constr.sdc  SDC     PATH util_wfifo_constr.xdc
+add_fileset_file util_wfifo_constr.sdc  SDC     PATH util_wfifo_constr.sdc
 
 # parameters
 
