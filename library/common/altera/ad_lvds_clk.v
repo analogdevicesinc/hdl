@@ -57,11 +57,31 @@ module ad_lvds_clk (
   
   // instantiations
 
+  generate
+  if (DEVICE_TYPE == 0) begin
   alt_clk i_clk (
     .rst (rst),
     .refclk (clk_in_p),
     .outclk_0 (clk),
     .locked (locked));
+  end
+  endgenerate
+
+  generate
+  if (DEVICE_TYPE == 1) begin
+  altera_pll #(
+    .reference_clock_frequency("250.0 MHz"),
+    .operation_mode("lvds"),
+    .number_of_clocks(1),
+    .output_clock_frequency0("250.0 MHz"),
+    .phase_shift0("0"))
+  i_clk (
+    .rst (rst),
+    .refclk (clk_in_p),
+    .outclk (clk),
+    .locked (locked));
+  end
+  endgenerate
 
 endmodule
 

@@ -46,8 +46,6 @@ module ad_cmos_clk (
   clk);
 
   parameter   DEVICE_TYPE   = 0;
-  localparam  SERIES7       = 0;
-  localparam  VIRTEX6       = 1;
 
   input     rst;
   output    locked;
@@ -57,11 +55,33 @@ module ad_cmos_clk (
 
   // instantiations
 
+  generate
+  if (DEVICE_TYPE == 0) begin
   alt_clk i_clk (
     .rst (rst),
     .refclk (clk_in),
     .outclk_0 (clk),
     .locked (locked));
+  end
+  endgenerate
+
+  generate
+  if (DEVICE_TYPE == 1) begin
+  altera_pll #(
+    .reference_clock_frequency("250.0 MHz"),
+    .operation_mode("source synchronous"),
+    .number_of_clocks(1),
+    .output_clock_frequency0("0 MHz"),
+    .phase_shift0("0"))
+  i_clk (
+    .rst (rst),
+    .refclk (clk_in),
+    .outclk (clk),
+    .fboutclk (),
+    .fbclk (1'b0),
+    .locked (locked));
+  end
+  endgenerate
 
 endmodule
 
