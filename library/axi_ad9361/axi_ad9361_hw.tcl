@@ -146,49 +146,73 @@ ad_alt_intf clock clk input 1
 ad_alt_intf reset rst output 1 if_clk
 set_interface_property if_rst associatedResetSinks none
 
-add_interface fifo_ch_0_in conduit end
-add_interface_port fifo_ch_0_in adc_enable_i0 enable Output 1
-add_interface_port fifo_ch_0_in adc_valid_i0 valid Output 1
-add_interface_port fifo_ch_0_in adc_data_i0 data Output 16
+add_interface adc_ch_0 conduit end
+add_interface_port adc_ch_0 adc_enable_i0 enable Output 1
+add_interface_port adc_ch_0 adc_valid_i0 valid Output 1
+add_interface_port adc_ch_0 adc_data_i0 data Output 16
 
-add_interface fifo_ch_1_in conduit end
-add_interface_port fifo_ch_1_in adc_enable_q0 enable Output 1
-add_interface_port fifo_ch_1_in adc_valid_q0 valid Output 1
-add_interface_port fifo_ch_1_in adc_data_q0 data Output 16
+set_interface_property adc_ch_0 associatedClock if_clk
+set_interface_property adc_ch_0 associatedReset if_rst
 
-add_interface fifo_ch_2_in conduit end
-add_interface_port fifo_ch_2_in adc_enable_i1 enable Output 1
-add_interface_port fifo_ch_2_in adc_valid_i1 valid Output 1
-add_interface_port fifo_ch_2_in adc_data_i1 data Output 16
+add_interface adc_ch_1 conduit end
+add_interface_port adc_ch_1 adc_enable_q0 enable Output 1
+add_interface_port adc_ch_1 adc_valid_q0 valid Output 1
+add_interface_port adc_ch_1 adc_data_q0 data Output 16
 
-add_interface fifo_ch_3_in conduit end
-add_interface_port fifo_ch_3_in adc_enable_q1 enable Output 1
-add_interface_port fifo_ch_3_in adc_valid_q1 valid Output 1
-add_interface_port fifo_ch_3_in adc_data_q1 data Output 16
+set_interface_property adc_ch_1 associatedClock if_clk
+set_interface_property adc_ch_1 associatedReset if_rst
+
+add_interface adc_ch_2 conduit end
+add_interface_port adc_ch_2 adc_enable_i1 enable Output 1
+add_interface_port adc_ch_2 adc_valid_i1 valid Output 1
+add_interface_port adc_ch_2 adc_data_i1 data Output 16
+
+set_interface_property adc_ch_2 associatedClock if_clk
+set_interface_property adc_ch_2 associatedReset if_rst
+
+add_interface adc_ch_3 conduit end
+add_interface_port adc_ch_3 adc_enable_q1 enable Output 1
+add_interface_port adc_ch_3 adc_valid_q1 valid Output 1
+add_interface_port adc_ch_3 adc_data_q1 data Output 16
+
+set_interface_property adc_ch_3 associatedClock if_clk
+set_interface_property adc_ch_3 associatedReset if_rst
 
 ad_alt_intf signal adc_dovf input 1 ovf
 ad_alt_intf signal adc_dunf input 1 unf
 ad_alt_intf signal adc_r1_mode output 1 r1_mode
 
-add_interface fifo_ch_0_out conduit end
-add_interface_port fifo_ch_0_out dac_enable_i0 enable Output 1
-add_interface_port fifo_ch_0_out dac_valid_i0 valid Output 1
-add_interface_port fifo_ch_0_out dac_data_i0 data Input 16
+add_interface dac_ch_0 conduit end
+add_interface_port dac_ch_0 dac_enable_i0 enable Output 1
+add_interface_port dac_ch_0 dac_valid_i0 valid Output 1
+add_interface_port dac_ch_0 dac_data_i0 data Input 16
 
-add_interface fifo_ch_1_out conduit end
-add_interface_port fifo_ch_1_out dac_enable_q0 enable Output 1
-add_interface_port fifo_ch_1_out dac_valid_q0 valid Output 1
-add_interface_port fifo_ch_1_out dac_data_q0 data Input 16
+set_interface_property dac_ch_0 associatedClock if_clk
+set_interface_property dac_ch_0 associatedReset if_rst
 
-add_interface fifo_ch_2_out conduit end
-add_interface_port fifo_ch_2_out dac_enable_i1 enable Output 1
-add_interface_port fifo_ch_2_out dac_valid_i1 valid Output 1
-add_interface_port fifo_ch_2_out dac_data_i1 data Input 16
+add_interface dac_ch_1 conduit end
+add_interface_port dac_ch_1 dac_enable_q0 enable Output 1
+add_interface_port dac_ch_1 dac_valid_q0 valid Output 1
+add_interface_port dac_ch_1 dac_data_q0 data Input 16
 
-add_interface fifo_ch_3_out conduit end
-add_interface_port fifo_ch_3_out dac_enable_q1 enable Output 1
-add_interface_port fifo_ch_3_out dac_valid_q1 valid Output 1
-add_interface_port fifo_ch_3_out dac_data_q1 data Input 16
+set_interface_property dac_ch_1 associatedClock if_clk
+set_interface_property dac_ch_1 associatedReset if_rst
+
+add_interface dac_ch_2 conduit end
+add_interface_port dac_ch_2 dac_enable_i1 enable Output 1
+add_interface_port dac_ch_2 dac_valid_i1 valid Output 1
+add_interface_port dac_ch_2 dac_data_i1 data Input 16
+
+set_interface_property dac_ch_2 associatedClock if_clk
+set_interface_property dac_ch_2 associatedReset if_rst
+
+add_interface dac_ch_3 conduit end
+add_interface_port dac_ch_3 dac_enable_q1 enable Output 1
+add_interface_port dac_ch_3 dac_valid_q1 valid Output 1
+add_interface_port dac_ch_3 dac_data_q1 data Input 16
+
+set_interface_property dac_ch_3 associatedClock if_clk
+set_interface_property dac_ch_3 associatedReset if_rst
 
 ad_alt_intf signal dac_dovf input 1 ovf
 ad_alt_intf signal dac_dunf input 1 unf
@@ -241,18 +265,6 @@ proc p_axi_ad9361 {} {
 
   add_interface_port device_if enable enable Output 1
   add_interface_port device_if txnrx txnrx Output 1
-
-  if {$m_device_type == 1} {
-
-    add_hdl_instance alt_clk altera_pll
-    set_instance_parameter_value alt_clk {gui_reference_clock_frequency} {250.0}
-    set_instance_parameter_value alt_clk {gui_use_locked} {1}
-    set_instance_parameter_value alt_clk {gui_operation_mode} {source synchronous}
-    set_instance_parameter_value alt_clk {gui_number_of_clocks} {1}
-    set_instance_parameter_value alt_clk {gui_output_clock_frequency0} {250.0}
-    set_instance_parameter_value alt_clk {gui_ps_units0} {degrees}
-    set_instance_parameter_value alt_clk {gui_phase_shift_deg0} {90.0}
-  }
 
   if {$m_device_type == 0} {
 
