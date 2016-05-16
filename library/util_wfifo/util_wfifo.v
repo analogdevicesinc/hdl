@@ -34,10 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// allows conversions of clock/buswidth for adc/dac channels
-// in all cases bandwidth requirements must be met (read >= write).
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -183,27 +179,26 @@ module util_wfifo (
   reg     [ 2:0]                      din_dcnt = 'd0;
   reg                                 din_wr = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       din_waddr = 'd0;
-  reg                                 din_waddr_rel_t = 'd0;
-  reg     [(ADDRESS_WIDTH-1):0]       din_waddr_rel = 'd0;
-  reg     [ 2:0]                      din_ovf_m = 'd0;
+  reg                                 din_req_t = 'd0;
+  reg                                 din_ovf_m1 = 'd0;
   reg                                 din_ovf = 'd0;
-  reg     [ 2:0]                      dout_waddr_rel_t_m = 'd0;
-  reg     [(ADDRESS_WIDTH-1):0]       dout_waddr_rel = 'd0;
-  reg                                 dout_ovf_int = 'd0;
-  reg     [ 7:0]                      dout_enable_m = 'd0;
-  reg     [ 7:0]                      dout_enable = 'd0;
-  reg                                 dout_rd = 'd0;
-  reg                                 dout_rd_d = 'd0;
-  reg     [(DATA_WIDTH-1):0]          dout_rdata_d = 'd0;
+  reg                                 dout_req_t_m1 = 'd0;
+  reg                                 dout_req_t_m2 = 'd0;
+  reg                                 dout_req_t_m3 = 'd0;
+  reg     [ 3:0]                      dout_req_cnt = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd0;
+  reg                                 dout_rd = 'd0;
+  reg                                 dout_valid = 'd0;
+  reg     [ 7:0]                      dout_enable_m1 = 'd0;
+  reg     [ 7:0]                      dout_enable = 'd0;
+  reg     [(DATA_WIDTH-1):0]          dout_rdata = 'd0;
 
   // internal signals
 
   wire    [ 7:0]                      din_enable_s;
   wire    [ 7:0]                      din_valid_s;
   wire    [(T_DIN_DATA_WIDTH-1):0]    din_data_s;
-  wire                                dout_waddr_rel_t_s;
-  wire                                dout_rd_s;
+  wire                                dout_req_t_s;
   wire    [(DATA_WIDTH-1):0]          dout_rdata_s;
   wire    [(T_DOUT_DATA_WIDTH+1):0]   dout_data_s;
 
@@ -220,6 +215,7 @@ module util_wfifo (
   assign din_data_s   = { din_data_7,   din_data_6,   din_data_5,   din_data_4,
                           din_data_3,   din_data_2,   din_data_1,   din_data_0};
 
+  // simple data transfer-- no ovf/unf handling- read-bw > write-bw
   // dout_width >= din_width only
 
   generate
@@ -248,10 +244,9 @@ module util_wfifo (
       din_enable <= 8'd0;
       din_dcnt <= 3'd0;
       din_wr <= 1'd0;
-      din_waddr <= 5'd0;
-      din_waddr_rel_t <= 1'd0;
-      din_waddr_rel <= 5'd0;
-      din_ovf_m <= 'd0;
+      din_waddr <= 'd0;
+      din_req_t <= 1'd0;
+      din_ovf_m1 <= 'd0;
       din_ovf <= 'd0;
     end else begin
       din_enable <= din_enable_s;
@@ -268,95 +263,102 @@ module util_wfifo (
         din_waddr <= din_waddr + 1'b1;
       end
       if ((din_wr == 1'b1) && (din_waddr[2:0] == 3'd0)) begin
-        din_waddr_rel_t <= ~din_waddr_rel_t;
-        din_waddr_rel <= din_waddr;
+        din_req_t <= ~din_req_t;
       end
-      din_ovf_m <= {din_ovf_m[1:0], dout_ovf_int};
-      din_ovf <= din_ovf_m[2];
+      din_ovf_m1 <= dout_ovf;
+      din_ovf <= din_ovf_m1;
     end
   end
 
   // read interface (bus expansion and/or clock conversion)
 
-  assign dout_waddr_rel_t_s = dout_waddr_rel_t_m[2] ^ dout_waddr_rel_t_m[1];
+  assign dout_req_t_s = dout_req_t_m3 ^ dout_req_t_m2;
 
   always @(posedge dout_clk or negedge dout_rstn) begin
     if (dout_rstn == 1'b0) begin
-      dout_waddr_rel_t_m <= 3'd0;
-      dout_waddr_rel <= 'd0;
-      dout_ovf_int <= 1'b1;
+      dout_req_t_m1 <= 'd0;
+      dout_req_t_m2 <= 'd0;
+      dout_req_t_m3 <= 'd0;
     end else begin
-      dout_waddr_rel_t_m <= {dout_waddr_rel_t_m[1:0], din_waddr_rel_t};
-      if (dout_waddr_rel_t_s == 1'b1) begin
-        dout_waddr_rel <= din_waddr_rel;
-        if (dout_raddr == dout_waddr_rel) begin
-          dout_ovf_int <= dout_ovf;
-        end else begin
-          dout_ovf_int <= 1'b1;
-        end
-      end
+      dout_req_t_m1 <= din_req_t;
+      dout_req_t_m2 <= dout_req_t_m1;
+      dout_req_t_m3 <= dout_req_t_m2;
     end
   end
 
-  assign dout_rd_s = (dout_raddr == dout_waddr_rel) ? 1'b0 : 1'b1;
-  assign dout_data_s[(T_DOUT_DATA_WIDTH+1):DATA_WIDTH] = 'd0;
-  assign dout_data_s[(DATA_WIDTH-1):0] = dout_rdata_d;
+  always @(posedge dout_clk or negedge dout_rstn) begin
+    if (dout_rstn == 1'b0) begin
+      dout_req_cnt <= 'd0;
+      dout_raddr <= 'd0;
+      dout_rd <= 'd0;
+      dout_valid <= 'd0;
+    end else begin
+      if (dout_req_t_s == 1'b1) begin
+        dout_req_cnt <= 4'h8;
+      end else if (dout_req_cnt[3] == 1'b1) begin
+        dout_req_cnt <= dout_req_cnt + 1'b1;
+      end
+      if (dout_req_cnt[3] == 1'b1) begin
+        dout_raddr <= dout_raddr + 1'b1;
+      end
+      dout_rd <= dout_req_cnt[3];
+      dout_valid <= dout_rd;
+    end
+  end
 
   always @(posedge dout_clk or negedge dout_rstn) begin
     if (dout_rstn == 1'b0) begin
-      dout_enable_m <= 'd0;
+      dout_enable_m1 <= 'd0;
       dout_enable <= 'd0;
     end else begin
-      dout_enable_m <= din_enable;
-      dout_enable <= dout_enable_m;
+      dout_enable_m1 <= din_enable;
+      dout_enable <= dout_enable_m1;
     end
   end
 
   always @(posedge dout_clk) begin
-    dout_rdata_d <= dout_rdata_s;
-    if (dout_rstn == 1'b0) begin
-      dout_rd <= 'd0;
-      dout_rd_d <= 'd0;
-      dout_raddr <= 'd0;
-    end else begin
-      dout_rd <= dout_rd_s;
-      dout_rd_d <= dout_rd;
-      if (dout_rd_s == 1'b1) begin
-        dout_raddr <= dout_raddr + 1'b1;
-      end
-    end
+    dout_rdata <= dout_rdata_s;
   end
 
+  generate
+  if (NUM_OF_CHANNELS >= 8) begin
+  assign dout_data_s = dout_rdata;
+  end else begin
+  assign dout_data_s[(T_DOUT_DATA_WIDTH+1):DATA_WIDTH] = 'd0;
+  assign dout_data_s[(DATA_WIDTH-1):0] = dout_rdata;
+  end
+  endgenerate
+
   assign dout_enable_7 = dout_enable[7];
-  assign dout_valid_7 = dout_rd_d;
+  assign dout_valid_7 = dout_valid;
   assign dout_data_7 = dout_data_s[((DOUT_DATA_WIDTH*8)-1):(DOUT_DATA_WIDTH*7)];
 
   assign dout_enable_6 = dout_enable[6];
-  assign dout_valid_6 = dout_rd_d;
+  assign dout_valid_6 = dout_valid;
   assign dout_data_6 = dout_data_s[((DOUT_DATA_WIDTH*7)-1):(DOUT_DATA_WIDTH*6)];
 
   assign dout_enable_5 = dout_enable[5];
-  assign dout_valid_5 = dout_rd_d;
+  assign dout_valid_5 = dout_valid;
   assign dout_data_5 = dout_data_s[((DOUT_DATA_WIDTH*6)-1):(DOUT_DATA_WIDTH*5)];
 
   assign dout_enable_4 = dout_enable[4];
-  assign dout_valid_4 = dout_rd_d;
+  assign dout_valid_4 = dout_valid;
   assign dout_data_4 = dout_data_s[((DOUT_DATA_WIDTH*5)-1):(DOUT_DATA_WIDTH*4)];
 
   assign dout_enable_3 = dout_enable[3];
-  assign dout_valid_3 = dout_rd_d;
+  assign dout_valid_3 = dout_valid;
   assign dout_data_3 = dout_data_s[((DOUT_DATA_WIDTH*4)-1):(DOUT_DATA_WIDTH*3)];
 
   assign dout_enable_2 = dout_enable[2];
-  assign dout_valid_2 = dout_rd_d;
+  assign dout_valid_2 = dout_valid;
   assign dout_data_2 = dout_data_s[((DOUT_DATA_WIDTH*3)-1):(DOUT_DATA_WIDTH*2)];
 
   assign dout_enable_1 = dout_enable[1];
-  assign dout_valid_1 = dout_rd_d;
+  assign dout_valid_1 = dout_valid;
   assign dout_data_1 = dout_data_s[((DOUT_DATA_WIDTH*2)-1):(DOUT_DATA_WIDTH*1)];
 
   assign dout_enable_0 = dout_enable[0];
-  assign dout_valid_0 = dout_rd_d;
+  assign dout_valid_0 = dout_valid;
   assign dout_data_0 = dout_data_s[((DOUT_DATA_WIDTH*1)-1):(DOUT_DATA_WIDTH*0)];
 
   // instantiations
