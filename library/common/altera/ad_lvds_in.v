@@ -88,6 +88,16 @@ module ad_lvds_in (
   input               delay_rst;
   output              delay_locked;
 
+  // internal registers
+
+  reg                 rx_data_p = 'd0;
+  reg                 rx_data_n = 'd0;
+
+  // internal signals
+
+  wire                rx_data_p_s;
+  wire                rx_data_n_s;
+
   // defaults
 
   assign up_drdata = 5'd0;
@@ -100,7 +110,7 @@ module ad_lvds_in (
   alt_ddio_in i_rx_data_iddr (
     .ck (rx_clk),
     .pad_in (rx_data_in_p),
-    .dout ({rx_data_p, rx_data_n}));
+    .dout ({rx_data_p_s, rx_data_n_s}));
   end
   endgenerate
 
@@ -109,8 +119,8 @@ module ad_lvds_in (
   altddio_in #(.width (1), .lpm_hint("UNUSED")) i_rx_data_iddr (
     .inclock (rx_clk),
     .datain (rx_data_in_p),
-    .dataout_h (rx_data_p),
-    .dataout_l (rx_data_n),
+    .dataout_h (rx_data_p_s),
+    .dataout_l (rx_data_n_s),
     .inclocken (1'b1),
     .aclr (1'b0),
     .aset (1'b0),
@@ -118,6 +128,11 @@ module ad_lvds_in (
     .sset (1'b0));
   end
   endgenerate
+
+  always @(posedge rx_clk) begin
+    rx_data_p <= rx_data_p_s;
+    rx_data_n <= rx_data_n_s;
+  end
 
 endmodule
 
