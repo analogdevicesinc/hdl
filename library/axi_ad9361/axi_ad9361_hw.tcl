@@ -144,7 +144,7 @@ ad_alt_intf clock l_clk output 1
 ad_alt_intf clock clk input 1
 
 ad_alt_intf reset rst output 1 if_clk
-set_interface_property if_rst associatedResetSinks none
+set_interface_property if_rst associatedResetSinks s_axi_reset
 
 add_interface adc_ch_0 conduit end
 add_interface_port adc_ch_0 adc_enable_i0 enable Output 1
