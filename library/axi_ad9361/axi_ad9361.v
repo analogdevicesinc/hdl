@@ -353,6 +353,10 @@ module axi_ad9361 (
   wire            tdd_enable_s;
   wire            tdd_txnrx_s;
   wire            tdd_mode_s;
+  wire            adc_valid_i0_s;
+  wire            adc_valid_q0_s;
+  wire            adc_valid_i1_s;
+  wire            adc_valid_q1_s;
   wire    [15:0]  adc_data_i0_s;
   wire    [15:0]  adc_data_q0_s;
   wire    [15:0]  adc_data_i1_s;
