@@ -56,6 +56,7 @@ module axi_dacfifo_wr (
   // syncronization for the read side
 
   axi_last_raddr,
+  dma_last_addr,
   axi_xfer_out,
 
   // axi write address, write data and write response channels
@@ -122,6 +123,7 @@ module axi_dacfifo_wr (
   input                                     dma_xfer_last;
 
   output  [31:0]                            axi_last_raddr;
+  output  [31:0]                            dma_last_addr;
   output                                    axi_xfer_out;
 
   // axi interface
@@ -165,6 +167,8 @@ module axi_dacfifo_wr (
   reg                                       dma_ready = 'd0;
   reg                                       dma_rst_m1 = 1'b0;
   reg                                       dma_rst_m2 = 1'b0;
+  reg     [31:0]                            dma_last_addr = 32'b0;
+  reg     [31:0]                            dma_addr_cnt = 32'b0;
 
   reg     [ 2:0]                            axi_xfer_req_m = 3'b0;
   reg     [ 2:0]                            axi_xfer_last_m = 3'b0;
@@ -247,6 +251,18 @@ module axi_dacfifo_wr (
   assign dma_rst_s = dma_rst_m2;
 
   // write address generation for the asymetric memory
+
+  always @(posedge dma_clk) begin
+    if (dma_rst_s == 1'b1) begin
+      dma_addr_cnt <= 32'b0;
+      dma_last_addr <= 32'b0;
+    end else begin
+      if((dma_valid == 1'b1) && (dma_xfer_req == 1'b1)) begin
+        dma_addr_cnt <= (dma_xfer_last == 1'b1) ? 32'b0 : dma_addr_cnt + 1;
+        dma_last_addr <= (dma_xfer_last == 1'b1) ? dma_addr_cnt : dma_last_addr;
+      end
+    end
+  end
 
   always @(posedge dma_clk) begin
     if (dma_rst_s == 1'b1) begin
@@ -371,8 +387,8 @@ module axi_dacfifo_wr (
       end else if ((axi_awvalid == 1'b1) && (axi_awready == 1'b1)) begin
         axi_awaddr <= axi_awaddr + AXI_AWINCR;
       end
-      if(axi_xfer_last_m[2] == 1) begin
-        axi_last_raddr <= axi_awaddr;
+      if ((axi_xfer_req_m[2] == 1) && (axi_xfer_last_m[2] == 1)) begin
+        axi_last_raddr <= axi_awaddr - AXI_AWINCR;
         axi_xfer_out <= 1'b1;
       end
     end

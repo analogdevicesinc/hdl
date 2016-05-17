@@ -196,6 +196,7 @@ module axi_dacfifo (
   wire                                axi_rd_valid_s;
   wire    [31:0]                      axi_rd_lastaddr_s;
   wire                                axi_xfer_req_s;
+  wire    [31:0]                      dma_last_addr_s;
 
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_s;
   wire                                dma_ready_s;
@@ -217,6 +218,7 @@ module axi_dacfifo (
     .dma_xfer_req (dma_xfer_req),
     .dma_xfer_last (dma_xfer_last),
     .axi_last_raddr (axi_rd_lastaddr_s),
+    .dma_last_addr (dma_last_addr_s),
     .axi_xfer_out (axi_xfer_req_s),
     .axi_clk (axi_clk),
     .axi_resetn (axi_resetn),
@@ -289,6 +291,7 @@ module axi_dacfifo (
     .axi_ddata (axi_rd_data_s),
     .axi_dready (axi_rd_ready_s),
     .axi_xfer_req (axi_xfer_req_s),
+    .dma_last_addr (dma_last_addr_s),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_valid (dac_valid),

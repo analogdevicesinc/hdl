@@ -186,6 +186,7 @@ module axi_dacfifo_rd (
     if (axi_resetn == 1'b0) begin
       axi_arvalid <= 'd0;
       axi_araddr <= 'd0;
+      axi_rd_addr_h <= 'd0;
     end else begin
       if (axi_arvalid == 1'b1) begin
         if (axi_arready == 1'b1) begin
@@ -202,7 +203,7 @@ module axi_dacfifo_rd (
       end else if ((axi_xfer_req == 1'b1) &&
                    (axi_arvalid == 1'b1) &&
                    (axi_arready == 1'b1)) begin
-        axi_araddr <= ((axi_araddr + AXI_AWINCR) >= axi_rd_addr_h) ? AXI_ADDRESS : axi_araddr + AXI_AWINCR;
+        axi_araddr <= (axi_araddr >= axi_rd_addr_h) ? AXI_ADDRESS : axi_araddr + AXI_AWINCR;
       end
     end
   end
