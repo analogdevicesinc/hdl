@@ -57,7 +57,6 @@ module axi_dacfifo (
   dac_valid,
   dac_data,
   dac_dunf,
-  dac_dovf,
   dac_xfer_out,
 
   dac_fifo_bypass,
@@ -138,7 +137,6 @@ module axi_dacfifo (
   input                               dac_valid;
   output  [(DAC_DATA_WIDTH-1):0]      dac_data;
   output                              dac_dunf;
-  output                              dac_dovf;
   output                              dac_xfer_out;
 
   input                               dac_fifo_bypass;
@@ -297,8 +295,7 @@ module axi_dacfifo (
     .dac_valid (dac_valid),
     .dac_data (dac_data_s),
     .dac_xfer_out (dac_xfer_out),
-    .dac_dunf (dac_dunf),
-    .dac_dovf (dac_dovf));
+    .dac_dunf (dac_dunf));
 
   // output logic
 

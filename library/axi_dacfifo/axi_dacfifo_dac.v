@@ -52,9 +52,7 @@ module axi_dacfifo_dac (
   dac_valid,
   dac_data,
   dac_xfer_out,
-  dac_dunf,
-  dac_dovf
-
+  dac_dunf
 );
 
   // parameters
@@ -87,7 +85,6 @@ module axi_dacfifo_dac (
   output  [(DAC_DATA_WIDTH-1):0]      dac_data;
   output                              dac_xfer_out;
   output                              dac_dunf;
-  output                              dac_dovf;
 
   // internal registers
 
@@ -100,7 +97,6 @@ module axi_dacfifo_dac (
   reg                                 axi_almost_full = 1'b0;
   reg                                 axi_dwunf = 1'b0;
   reg                                 axi_almost_empty  = 1'b0;
-  reg                                 axi_dwovf = 1'b0;
 
   reg                                 dac_rd = 'd0;
   reg                                 dac_rd_d = 'd0;
@@ -109,7 +105,6 @@ module axi_dacfifo_dac (
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_raddr_g = 'd0;
 
   reg     [ 2:0]                      dac_dunf_m = 3'b0;
-  reg     [ 2:0]                      dac_dovf_m = 3'b0;
   reg     [ 2:0]                      dac_xfer_req_m = 3'b0;
 
   // internal signals
@@ -189,7 +184,6 @@ module axi_dacfifo_dac (
       axi_almost_full <= 1'b0;
       axi_dwunf <= 1'b0;
       axi_almost_empty <= 1'b0;
-      axi_dwovf <= 1'b0;
     end else begin
       axi_raddr_m <= g2b(dac_raddr_g);
       axi_raddr <= axi_raddr_m;
@@ -210,17 +204,14 @@ module axi_dacfifo_dac (
         axi_almost_empty <= 1'b0;
       end
       axi_dwunf <= (axi_addr_diff == 0) ? 1'b1 : 1'b0;
-      axi_dwovf <= (axi_addr_diff == {(DAC_ADDRESS_WIDTH){1'b1}}) ? 1'b1 : 1'b0;
     end
   end
 
   always @(posedge dac_clk) begin
     dac_dunf_m <= {dac_dunf_m[1:0], axi_dwunf};
-    dac_dovf_m <= {dac_dovf_m[1:0], axi_dwovf};
     dac_xfer_req_m <= {dac_xfer_req_m[1:0], axi_xfer_req};
   end
 
-  assign dac_dovf = dac_dovf_m[2];
   assign dac_dunf = dac_dunf_m[2];
   assign dac_xfer_out = dac_xfer_req_m[2];
 

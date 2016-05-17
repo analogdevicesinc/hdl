@@ -23,7 +23,6 @@ proc p_plddr3_dacfifo {p_name m_name dma_data_width dac_data_width} {
   create_bd_pin -dir I dac_valid
   create_bd_pin -dir O -from [expr ($dac_data_width-1)] -to 0 dac_data
   create_bd_pin -dir O dac_dunf
-  create_bd_pin -dir O dac_dovf
   create_bd_pin -dir O dac_xfer_out
   create_bd_pin -dir I dac_fifo_bypass
 
@@ -85,7 +84,6 @@ proc p_plddr3_dacfifo {p_name m_name dma_data_width dac_data_width} {
   ad_connect  dac_valid axi_dacfifo/dac_valid
   ad_connect  dac_data axi_dacfifo/dac_data
   ad_connect  dac_dunf axi_dacfifo/dac_dunf
-  ad_connect  dac_dovf axi_dacfifo/dac_dovf
   ad_connect  dac_xfer_out axi_dacfifo/dac_xfer_out
 
   ad_connect  axi_ddr_cntrl/device_temp_i GND
