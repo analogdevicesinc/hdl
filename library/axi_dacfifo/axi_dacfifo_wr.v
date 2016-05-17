@@ -44,7 +44,6 @@ module axi_dacfifo_wr (
   // dma fifo interface
 
   dma_clk,
-  dma_rst,
   dma_data,
   dma_ready,
   dma_valid,
@@ -115,7 +114,6 @@ module axi_dacfifo_wr (
   // dma fifo interface
 
   input                                     dma_clk;
-  input                                     dma_rst;
   input   [(DMA_DATA_WIDTH-1):0]            dma_data;
   output                                    dma_ready;
   input                                     dma_valid;
@@ -165,6 +163,8 @@ module axi_dacfifo_wr (
   reg     [(AXI_MADDRESS_WIDTH-1):0]        dma_mem_raddr_m2 = 'd0;
   reg     [(AXI_MADDRESS_WIDTH-1):0]        dma_mem_raddr = 'd0;
   reg                                       dma_ready = 'd0;
+  reg                                       dma_rst_m1 = 1'b0;
+  reg                                       dma_rst_m2 = 1'b0;
 
   reg     [ 2:0]                            axi_xfer_req_m = 3'b0;
   reg     [ 2:0]                            axi_xfer_last_m = 3'b0;
@@ -188,10 +188,13 @@ module axi_dacfifo_wr (
   reg                                       axi_mem_last_d = 1'b0;
   reg     [ 3:0]                            axi_wvalid_cntr = 4'b0;
 
+
   // internal signal
 
   wire    [(DMA_MADDRESS_WIDTH-1):0]        dma_mem_addr_diff_s;
   wire    [(DMA_MADDRESS_WIDTH-1):0]        dma_mem_raddr_s;
+  wire                                      dma_rst_s;
+
   wire    [(DMA_MADDRESS_WIDTH-1):0]        axi_mem_waddr_s;
   wire                                      axi_req_s;
   wire    [(AXI_DATA_WIDTH-1):0]            axi_mem_rdata_s;
@@ -234,10 +237,19 @@ module axi_dacfifo_wr (
     end
   endfunction
 
+
+  // syncronize the AXI interface reset
+
+  always @(posedge dma_clk) begin
+    dma_rst_m1 <= ~axi_resetn;
+    dma_rst_m2 <= dma_rst_m1;
+  end
+  assign dma_rst_s = dma_rst_m2;
+
   // write address generation for the asymetric memory
 
   always @(posedge dma_clk) begin
-    if (dma_rst == 1'b1) begin
+    if (dma_rst_s == 1'b1) begin
       dma_mem_waddr <= 8'h0;
       dma_mem_waddr_g <= 8'h0;
     end else begin
@@ -255,7 +267,7 @@ module axi_dacfifo_wr (
                                               {dma_mem_raddr, 3'b0};
 
   always @(posedge dma_clk) begin
-    if (dma_rst == 1'b1) begin
+    if (dma_rst_s == 1'b1) begin
       dma_mem_addr_diff <= 'b0;
       dma_mem_raddr_m1 <= 'b0;
       dma_mem_raddr_m2 <= 'b0;

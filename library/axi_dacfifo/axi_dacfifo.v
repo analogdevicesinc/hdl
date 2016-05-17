@@ -53,7 +53,7 @@ module axi_dacfifo (
   // dac interface
 
   dac_clk,
-  dac_reset,
+  dac_rst,
   dac_valid,
   dac_data,
   dac_dunf,
@@ -134,7 +134,7 @@ module axi_dacfifo (
   // dac interface
 
   input                               dac_clk;
-  input                               dac_reset;
+  input                               dac_rst;
   input                               dac_valid;
   output  [(DAC_DATA_WIDTH-1):0]      dac_data;
   output                              dac_dunf;
@@ -190,10 +190,6 @@ module axi_dacfifo (
   input   [(AXI_DATA_WIDTH-1):0]      axi_rdata;
   output                              axi_rready;
 
-  // internal registers
-  reg                                 dma_dacrst_m1 = 1'b0;
-  reg                                 dma_dacrst_m2 = 1'b0;
-
   // internal signals
 
   wire    [(AXI_DATA_WIDTH-1):0]      axi_wr_data_s;
@@ -204,15 +200,7 @@ module axi_dacfifo (
   wire                                axi_rd_valid_s;
   wire    [31:0]                      axi_rd_lastaddr_s;
   wire                                axi_xfer_req_s;
-  wire                                dma_rst_s;
 
-  // DAC reset the DMA side too
-
-  always @(posedge dma_clk) begin
-    dma_dacrst_m1 <= dac_reset;
-    dma_dacrst_m2 <= dma_dacrst_m1;
-  end
-  assign dma_rst_s = dma_dacrst_m2;
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_s;
   wire                                dma_ready_s;
 
@@ -227,7 +215,6 @@ module axi_dacfifo (
     .AXI_ADDRESS_LIMIT (AXI_ADDRESS_LIMIT)
   ) i_wr (
     .dma_clk (dma_clk),
-    .dma_rst (dma_rst_s),
     .dma_data (dma_data),
     .dma_ready (dma_ready_s),
     .dma_valid (dma_valid),
@@ -306,6 +293,7 @@ module axi_dacfifo (
     .axi_dready (axi_rd_ready_s),
     .axi_xfer_req (axi_xfer_req_s),
     .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
     .dac_valid (dac_valid),
     .dac_data (dac_data_s),
     .dac_xfer_out (dac_xfer_out),

@@ -48,6 +48,7 @@ module axi_dacfifo_dac (
   axi_xfer_req,
 
   dac_clk,
+  dac_rst,
   dac_valid,
   dac_data,
   dac_xfer_out,
@@ -81,6 +82,7 @@ module axi_dacfifo_dac (
   // dac read
 
   input                               dac_clk;
+  input                               dac_rst;
   input                               dac_valid;
   output  [(DAC_DATA_WIDTH-1):0]      dac_data;
   output                              dac_xfer_out;
@@ -100,7 +102,6 @@ module axi_dacfifo_dac (
   reg                                 axi_almost_empty  = 1'b0;
   reg                                 axi_dwovf = 1'b0;
 
-  reg                                 dac_rst = 'd0;
   reg                                 dac_rd = 'd0;
   reg                                 dac_rd_d = 'd0;
   reg     [(DAC_DATA_WIDTH-1):0]      dac_rdata_d = 'd0;

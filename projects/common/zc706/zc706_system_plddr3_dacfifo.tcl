@@ -67,7 +67,7 @@ proc p_plddr3_dacfifo {p_name m_name dma_data_width dac_data_width} {
   ad_connect  axi_resetn axi_rstgen/peripheral_aresetn
   ad_connect  axi_resetn axi_dacfifo/axi_resetn
   ad_connect  axi_resetn axi_ddr_cntrl/aresetn
-  ad_connect  dac_rst axi_dacfifo/dac_reset
+  ad_connect  dac_rst axi_dacfifo/dac_rst
   ad_connect  dac_rst axi_rstgen/ext_reset_in
 
   ## interfaces
