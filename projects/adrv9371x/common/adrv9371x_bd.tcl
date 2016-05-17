@@ -37,7 +37,6 @@ set axi_ad9371_tx_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.
 set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9371_tx_dma
@@ -45,8 +44,6 @@ set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9371_tx_dma
-
-p_sys_dacfifo [current_bd_instance .] axi_ad9371_tx_fifo 128 17
 
 set util_ad9371_tx_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_ad9371_tx_upack]
 set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] $util_ad9371_tx_upack
@@ -253,19 +250,21 @@ ad_connect  axi_ad9371_core/dac_data_i1 util_ad9371_tx_upack/dac_data_2
 ad_connect  axi_ad9371_core/dac_valid_q1 util_ad9371_tx_upack/dac_valid_3
 ad_connect  axi_ad9371_core/dac_enable_q1 util_ad9371_tx_upack/dac_enable_3
 ad_connect  axi_ad9371_core/dac_data_q1 util_ad9371_tx_upack/dac_data_3
-ad_connect  util_ad9371_tx_upack/dma_xfer_in axi_ad9371_tx_fifo/dac_xfer_out
-ad_connect  axi_tx_clkgen/clk_0 axi_ad9371_tx_fifo/dac_clk
-ad_connect  util_ad9371_tx_upack/dac_valid axi_ad9371_tx_fifo/dac_valid
-ad_connect  util_ad9371_tx_upack/dac_data axi_ad9371_tx_fifo/dac_data
-ad_connect  axi_tx_clkgen/clk_0 axi_ad9371_tx_fifo/dma_clk
-ad_connect  util_ad9371_gt/tx_rst axi_ad9371_tx_fifo/dma_rst
+
 ad_connect  axi_tx_clkgen/clk_0 axi_ad9371_tx_dma/m_axis_aclk
 ad_connect  sys_dma_resetn axi_ad9371_tx_dma/m_src_axi_aresetn
-ad_connect  axi_ad9371_tx_fifo/dma_xfer_req axi_ad9371_tx_dma/m_axis_xfer_req
-ad_connect  axi_ad9371_tx_fifo/dma_ready axi_ad9371_tx_dma/m_axis_ready
-ad_connect  axi_ad9371_tx_fifo/dma_data axi_ad9371_tx_dma/m_axis_data
-ad_connect  axi_ad9371_tx_fifo/dma_valid axi_ad9371_tx_dma/m_axis_valid
-ad_connect  axi_ad9371_tx_fifo/dma_xfer_last axi_ad9371_tx_dma/m_axis_last
+ad_connect  util_ad9371_gt/tx_rst axi_ad9371_dacfifo/dac_rst
+ad_connect  util_ad9371_tx_upack/dma_xfer_in axi_ad9371_dacfifo/dac_xfer_out
+ad_connect  axi_tx_clkgen/clk_0 axi_ad9371_dacfifo/dac_clk
+ad_connect  util_ad9371_tx_upack/dac_valid axi_ad9371_dacfifo/dac_valid
+ad_connect  util_ad9371_tx_upack/dac_data axi_ad9371_dacfifo/dac_data
+ad_connect  axi_tx_clkgen/clk_0 axi_ad9371_dacfifo/dma_clk
+
+ad_connect  axi_ad9371_dacfifo/dma_xfer_req axi_ad9371_tx_dma/m_axis_xfer_req
+ad_connect  axi_ad9371_dacfifo/dma_rready axi_ad9371_tx_dma/m_axis_ready
+ad_connect  axi_ad9371_dacfifo/dma_rdata axi_ad9371_tx_dma/m_axis_data
+ad_connect  axi_ad9371_dacfifo/dma_rvalid axi_ad9371_tx_dma/m_axis_valid
+ad_connect  axi_ad9371_dacfifo/dma_xfer_last axi_ad9371_tx_dma/m_axis_last
 
 # connections (adc)
 
@@ -333,7 +332,8 @@ ad_connect  util_ad9371_rx_os_cpack/adc_valid axi_ad9371_rx_os_dma/fifo_wr_en
 ad_connect  util_ad9371_rx_os_cpack/adc_sync axi_ad9371_rx_os_dma/fifo_wr_sync
 ad_connect  util_ad9371_rx_os_cpack/adc_data axi_ad9371_rx_os_dma/fifo_wr_din
 ad_connect  axi_ad9371_rx_os_dma/fifo_wr_overflow axi_ad9371_core/adc_os_dovf
-ad_connect  axi_ad9371_tx_fifo/dac_fifo_bypass dac_fifo_bypass
+
+#ad_connect  axi_ad9371_tx_fifo/dac_fifo_bypass dac_fifo_bypass
 
 # interconnect (cpu)
 

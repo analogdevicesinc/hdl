@@ -10,6 +10,7 @@ adi_project_files adrv9371x_zc706 [list \
   "system_top.v" \
   "system_constr.xdc"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/projects/common/zc706/zc706_system_mig_constr.xdc" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc" ]
 
 set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc]
