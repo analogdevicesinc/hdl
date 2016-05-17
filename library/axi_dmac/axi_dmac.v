@@ -246,13 +246,14 @@ reg up_pause = 'h00;
 // Start and end of transfer
 wire up_eot; // Asserted for one cycle when a transfer has been completed
 wire up_sot; // Asserted for one cycle when a transfer has been queued
+wire up_x_eot;
 
 // Interupt handling
-reg [1:0] up_irq_mask = 'h3;
-reg [1:0] up_irq_source = 'h0;
-wire [1:0] up_irq_pending;
-wire [1:0] up_irq_trigger;
-wire [1:0] up_irq_source_clear;
+reg [2:0] up_irq_mask = 'h7;
+reg [2:0] up_irq_source = 'h0;
+wire [2:0] up_irq_pending;
+wire [2:0] up_irq_trigger;
+wire [2:0] up_irq_source_clear;
 
 // DMA transfer signals
 reg  up_dma_req_valid = 1'b0;
@@ -267,8 +268,8 @@ reg [31:BYTES_PER_BEAT_WIDTH_DEST]   up_dma_dest_address = 'h00;
 reg [31:BYTES_PER_BEAT_WIDTH_SRC]   up_dma_src_address = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
-reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
-reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
+reg [31:BYTES_PER_BEAT_WIDTH_SRC] up_dma_src_stride = 'h00;
+reg [31:BYTES_PER_BEAT_WIDTH_SRC] up_dma_dest_stride = 'h00;
 reg up_dma_cyclic = CYCLIC;
 wire up_dma_sync_transfer_start = SYNC_TRANSFER_START ? 1'b1 : 1'b0;
 
@@ -333,8 +334,8 @@ up_axi #(
 
 // IRQ handling
 assign up_irq_pending = ~up_irq_mask & up_irq_source;
-assign up_irq_trigger  = {up_eot, up_sot};
-assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 12'h021) ? up_wdata[1:0] : 0;
+assign up_irq_trigger  = {up_x_eot, up_eot, up_sot};
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 12'h021) ? up_wdata[2:0] : 0;
 
 always @(posedge s_axi_aclk)
 begin
@@ -347,7 +348,7 @@ end
 always @(posedge s_axi_aclk)
 begin
 	if (s_axi_aresetn == 1'b0) begin
-		up_irq_source <= 2'b00;
+		up_irq_source <= 3'b000;
 	end else begin
 		up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
 	end
@@ -395,8 +396,8 @@ begin
 			12'h105: up_dma_src_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_SRC];
 			12'h106: up_dma_x_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
 			12'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-			12'h108: up_dma_dest_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-			12'h109: up_dma_src_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+			12'h108: up_dma_dest_stride <= up_wdata[31:BYTES_PER_BEAT_WIDTH_SRC];
+			12'h109: up_dma_src_stride <= up_wdata[31:BYTES_PER_BEAT_WIDTH_SRC];
 			endcase
 		end
 	end
@@ -424,8 +425,8 @@ begin
 		12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
 		12'h106: up_rdata <= up_dma_x_length;
 		12'h107: up_rdata <= DMA_2D_TRANSFER ? up_dma_y_length : 'h00;
-		12'h108: up_rdata <= DMA_2D_TRANSFER ? up_dma_dest_stride : 'h00;
-		12'h109: up_rdata <= DMA_2D_TRANSFER ? up_dma_src_stride : 'h00;
+		12'h108: up_rdata <= DMA_2D_TRANSFER ? {up_dma_dest_stride,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
+		12'h109: up_rdata <= DMA_2D_TRANSFER ? {up_dma_src_stride,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
 		12'h10a: up_rdata <= up_transfer_done_bitmap;
 		12'h10b: up_rdata <= up_transfer_id_eot;
 		12'h10c: up_rdata <= 'h00; // Status
@@ -469,7 +470,7 @@ wire up_req_eot;
 
 assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
 assign up_eot = up_dma_cyclic ? 1'b0 : up_req_eot;
-
+//assign up_x_eot = dma_req_eot; 
 
 generate if (DMA_2D_TRANSFER == 1) begin
 
@@ -482,7 +483,7 @@ dmac_2d_transfer #(
 	.req_aresetn(s_axi_aresetn),
 
 	.req_eot(up_req_eot),
-
+	
 	.req_valid(up_dma_req_valid),
 	.req_ready(up_dma_req_ready),
 	.req_dest_address(up_dma_dest_address),
@@ -545,6 +546,7 @@ dmac_request_arb #(
 	.req_sync_transfer_start(dma_req_sync_transfer_start),
 
 	.eot(dma_req_eot),
+	.eot_single(up_x_eot),
 
 
 	.m_dest_axi_aclk(m_dest_axi_aclk),

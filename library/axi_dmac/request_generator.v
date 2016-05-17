@@ -50,6 +50,7 @@ module dmac_request_generator (
 	input enable,
 	input pause,
 
+	output reg eot_single,
 	output eot
 );
 
@@ -78,17 +79,24 @@ begin
 		burst_count <= 'h00;
 		id <= 'h0;
 		req_ready <= 1'b1;
+		eot_single <= 1'b0;
 	end else if (enable == 1'b0) begin
 		req_ready <= 1'b1;
+		eot_single <= 1'b0;
 	end else begin
+	
+		eot_single <= 1'b0;
+	   
 		if (req_ready) begin
 			if (req_valid && enable) begin
 				burst_count <= req_burst_count;
 				req_ready <= 1'b0;
 			end
 		end else if (response_id != id_next && ~pause) begin
-			if (eot)
+			if (eot) begin
 				req_ready <= 1'b1;
+				eot_single <= 1'b1;
+			end
 			burst_count <= burst_count - 1'b1;
 			id <= id_next;
 		end

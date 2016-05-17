@@ -49,6 +49,7 @@ module dmac_request_arb (
 	input req_sync_transfer_start,
 
 	output reg eot,
+	output eot_single,
 
 	input                               enable,
 	input                               pause,
@@ -1068,7 +1069,7 @@ dmac_request_generator #(
 
 	.enable(do_enable),
 	.pause(pause),
-
+	.eot_single(eot_single),
 	.eot(request_eot)
 );
 
