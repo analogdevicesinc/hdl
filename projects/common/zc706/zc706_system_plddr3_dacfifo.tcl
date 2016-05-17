@@ -46,10 +46,8 @@ proc p_plddr3_dacfifo {p_name m_name dma_data_width dac_data_width} {
   set_property -dict [list CONFIG.DAC_DATA_WIDTH $dac_data_width] $axi_dacfifo
   set_property -dict [list CONFIG.DMA_DATA_WIDTH $dma_data_width] $axi_dacfifo
   set_property -dict [list CONFIG.AXI_DATA_WIDTH {512}] $axi_dacfifo
-  set_property -dict [list CONFIG.AXI_WR_SIZE {6}] $axi_dacfifo
-  set_property -dict [list CONFIG.AXI_WR_LENGTH {3}] $axi_dacfifo
-  set_property -dict [list CONFIG.AXI_RD_SIZE {6}] $axi_dacfifo
-  set_property -dict [list CONFIG.AXI_RD_LENGTH {15}] $axi_dacfifo
+  set_property -dict [list CONFIG.AXI_SIZE {6}] $axi_dacfifo
+  set_property -dict [list CONFIG.AXI_LENGTH {15}] $axi_dacfifo
   set_property -dict [list CONFIG.AXI_ADDRESS {0x80000000}] $axi_dacfifo
   set_property -dict [list CONFIG.AXI_ADDRESS_LIMIT {0xa0000000}] $axi_dacfifo
 
