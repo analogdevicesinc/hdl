@@ -64,7 +64,7 @@ module axi_dacfifo_dac (
   parameter   DAC_DATA_WIDTH = 64;
 
   localparam  MEM_RATIO = AXI_DATA_WIDTH/DAC_DATA_WIDTH;
-  localparam  DAC_ADDRESS_WIDTH = 8;
+  localparam  DAC_ADDRESS_WIDTH = 10;
   localparam  AXI_ADDRESS_WIDTH = (MEM_RATIO == 1) ? DAC_ADDRESS_WIDTH :
                                   (MEM_RATIO == 2) ? (DAC_ADDRESS_WIDTH - 1) :
                                   (MEM_RATIO == 4) ? (DAC_ADDRESS_WIDTH - 2) :
@@ -139,11 +139,13 @@ module axi_dacfifo_dac (
 
   // binary to grey conversion
 
-  function [7:0] b2g;
-    input [7:0] b;
-    reg   [7:0] g;
+  function [9:0] b2g;
+    input [9:0] b;
+    reg   [9:0] g;
     begin
-      g[7] = b[7];
+      g[9] = b[9];
+      g[8] = b[9] ^ b[8];
+      g[7] = b[8] ^ b[7];
       g[6] = b[7] ^ b[6];
       g[5] = b[6] ^ b[5];
       g[4] = b[5] ^ b[4];
@@ -157,11 +159,13 @@ module axi_dacfifo_dac (
 
   // grey to binary conversion
 
-  function [7:0] g2b;
-    input [7:0] g;
-    reg   [7:0] b;
+  function [9:0] g2b;
+    input [9:0] g;
+    reg   [9:0] b;
     begin
-      b[7] = g[7];
+      b[9] = g[9];
+      b[8] = b[9] ^ g[8];
+      b[7] = b[8] ^ g[7];
       b[6] = b[7] ^ g[6];
       b[5] = b[6] ^ g[5];
       b[4] = b[5] ^ g[4];
