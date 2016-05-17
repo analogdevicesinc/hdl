@@ -113,10 +113,8 @@ module axi_dacfifo (
   parameter   DAC_DATA_WIDTH = 128;
   parameter   DMA_DATA_WIDTH = 64;
   parameter   AXI_DATA_WIDTH = 512;
-  parameter   AXI_RD_SIZE = 2;
-  parameter   AXI_RD_LENGTH = 32;
-  parameter   AXI_WR_SIZE = 2;
-  parameter   AXI_WR_LENGTH = 32;
+  parameter   AXI_SIZE = 2;
+  parameter   AXI_LENGTH = 15;
   parameter   AXI_ADDRESS = 32'h00000000;
   parameter   AXI_ADDRESS_LIMIT = 32'hffffffff;
   parameter   AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
@@ -207,8 +205,8 @@ module axi_dacfifo (
   axi_dacfifo_wr #(
     .AXI_DATA_WIDTH (AXI_DATA_WIDTH),
     .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
-    .AXI_SIZE (AXI_WR_SIZE),
-    .AXI_LENGTH (AXI_WR_LENGTH),
+    .AXI_SIZE (AXI_SIZE),
+    .AXI_LENGTH (AXI_LENGTH),
     .AXI_ADDRESS (AXI_ADDRESS),
     .AXI_ADDRESS_LIMIT (AXI_ADDRESS_LIMIT)
   ) i_wr (
@@ -249,8 +247,8 @@ module axi_dacfifo (
 
   axi_dacfifo_rd #(
     .AXI_DATA_WIDTH (AXI_DATA_WIDTH),
-    .AXI_SIZE (AXI_RD_SIZE),
-    .AXI_LENGTH (AXI_RD_LENGTH),
+    .AXI_SIZE (AXI_SIZE),
+    .AXI_LENGTH (AXI_LENGTH),
     .AXI_ADDRESS (AXI_ADDRESS)
   ) i_rd (
     .axi_rd_lastaddr (axi_rd_lastaddr_s),
@@ -283,6 +281,7 @@ module axi_dacfifo (
 
   axi_dacfifo_dac #(
     .AXI_DATA_WIDTH (AXI_DATA_WIDTH),
+    .AXI_LENGTH(AXI_LENGTH),
     .DAC_DATA_WIDTH (DAC_DATA_WIDTH)
   ) i_dac (
     .axi_clk (axi_clk),

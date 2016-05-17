@@ -58,7 +58,8 @@ module axi_dacfifo_dac (
   // parameters
 
   parameter   AXI_DATA_WIDTH = 512;
-  parameter   DAC_DATA_WIDTH =  64;
+  parameter   AXI_LENGTH = 15;
+  parameter   DAC_DATA_WIDTH = 64;
 
   localparam  MEM_RATIO = AXI_DATA_WIDTH/DAC_DATA_WIDTH;
   localparam  DAC_ADDRESS_WIDTH = 8;
