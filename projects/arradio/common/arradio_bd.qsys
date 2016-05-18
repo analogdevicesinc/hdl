@@ -81,6 +81,14 @@
          type = "String";
       }
    }
+   element arradio_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
    element axi_ad9361
    {
       datum _sortIndex
@@ -106,7 +114,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "9";
          type = "int";
       }
       datum sopceditor_expanded
@@ -123,11 +131,11 @@
          type = "String";
       }
    }
-   element axi_dmac_dac
+   element axi_dac_dma
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "10";
          type = "int";
       }
       datum sopceditor_expanded
@@ -136,7 +144,7 @@
          type = "boolean";
       }
    }
-   element axi_dmac_dac.s_axi
+   element axi_dac_dma.s_axi
    {
       datum baseAddress
       {
@@ -144,24 +152,11 @@
          type = "String";
       }
    }
-   element dac_upack
-   {
-      datum _sortIndex
-      {
-         value = "8";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
    element gpio
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "12";
          type = "int";
       }
    }
@@ -185,7 +180,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "11";
          type = "int";
       }
       datum sopceditor_expanded
@@ -222,7 +217,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "7";
          type = "int";
       }
       datum sopceditor_expanded
@@ -237,6 +232,27 @@
       {
          value = "5";
          type = "int";
+      }
+   }
+   element util_dac_rfifo
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+   }
+   element util_dac_upack
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
 }
@@ -307,21 +323,21 @@
    dir="end" />
  <interface
    name="axi_dmac_dac_fifo_rd_clock"
-   internal="axi_dmac_dac.fifo_rd_clock" />
- <interface name="axi_dmac_dac_fifo_rd_if" internal="axi_dmac_dac.fifo_rd_if" />
+   internal="axi_dac_dma.fifo_rd_clock" />
+ <interface name="axi_dmac_dac_fifo_rd_if" internal="axi_dac_dma.fifo_rd_if" />
  <interface
    name="axi_dmac_dac_intr"
-   internal="axi_dmac_dac.interrupt_sender"
+   internal="axi_dac_dma.interrupt_sender"
    type="interrupt"
    dir="end" />
  <interface
    name="axi_dmac_dac_m_src_axi"
-   internal="axi_dmac_dac.m_src_axi"
+   internal="axi_dac_dma.m_src_axi"
    type="axi4"
    dir="start" />
  <interface
    name="axi_dmac_dac_s_axi"
-   internal="axi_dmac_dac.s_axi"
+   internal="axi_dac_dma.s_axi"
    type="axi4lite"
    dir="end" />
  <interface
@@ -374,7 +390,7 @@
   <parameter name="ID" value="0" />
   <parameter name="SYNC_TRANSFER_START" value="1" />
  </module>
- <module name="axi_dmac_dac" kind="axi_dmac" version="1.0" enabled="1">
+ <module name="axi_dac_dma" kind="axi_dmac" version="1.0" enabled="1">
   <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
   <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
   <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
@@ -390,10 +406,6 @@
   <parameter name="FIFO_SIZE" value="4" />
   <parameter name="ID" value="0" />
   <parameter name="SYNC_TRANSFER_START" value="0" />
- </module>
- <module name="dac_upack" kind="util_upack" version="1.0" enabled="1">
-  <parameter name="CHANNEL_DATA_WIDTH" value="16" />
-  <parameter name="NUM_OF_CHANNELS" value="4" />
  </module>
  <module name="gpio" kind="altera_avalon_pio" version="15.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="false" />
@@ -454,9 +466,19 @@
   <parameter name="NUM_OF_CHANNELS" value="4" />
  </module>
  <module name="util_adc_wfifo" kind="util_wfifo" version="1.0" enabled="1">
-  <parameter name="DIN_ADDRESS_WIDTH" value="8" />
+  <parameter name="DIN_ADDRESS_WIDTH" value="5" />
   <parameter name="DIN_DATA_WIDTH" value="16" />
   <parameter name="DOUT_DATA_WIDTH" value="16" />
+  <parameter name="NUM_OF_CHANNELS" value="4" />
+ </module>
+ <module name="util_dac_rfifo" kind="util_rfifo" version="1.0" enabled="1">
+  <parameter name="DIN_ADDRESS_WIDTH" value="5" />
+  <parameter name="DIN_DATA_WIDTH" value="16" />
+  <parameter name="DOUT_DATA_WIDTH" value="16" />
+  <parameter name="NUM_OF_CHANNELS" value="4" />
+ </module>
+ <module name="util_dac_upack" kind="util_upack" version="1.0" enabled="1">
+  <parameter name="CHANNEL_DATA_WIDTH" value="16" />
   <parameter name="NUM_OF_CHANNELS" value="4" />
  </module>
  <connection
@@ -468,17 +490,12 @@
    kind="clock"
    version="15.1"
    start="axi_ad9361.if_l_clk"
-   end="dac_upack.if_dac_clk" />
- <connection
-   kind="clock"
-   version="15.1"
-   start="axi_ad9361.if_l_clk"
    end="util_adc_wfifo.if_din_clk" />
  <connection
    kind="clock"
    version="15.1"
    start="axi_ad9361.if_l_clk"
-   end="axi_dmac_dac.if_fifo_rd_clk" />
+   end="util_dac_rfifo.if_dout_clk" />
  <connection
    kind="clock"
    version="15.1"
@@ -494,7 +511,22 @@
    kind="clock"
    version="15.1"
    start="mem_clk.out_clk"
+   end="util_dac_upack.if_dac_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="mem_clk.out_clk"
+   end="util_dac_rfifo.if_din_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="mem_clk.out_clk"
    end="util_adc_wfifo.if_dout_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="mem_clk.out_clk"
+   end="axi_dac_dma.if_fifo_rd_clk" />
  <connection
    kind="clock"
    version="15.1"
@@ -509,7 +541,7 @@
    kind="clock"
    version="15.1"
    start="mem_clk.out_clk"
-   end="axi_dmac_dac.m_src_axi_clock" />
+   end="axi_dac_dma.m_src_axi_clock" />
  <connection
    kind="clock"
    version="15.1"
@@ -524,7 +556,7 @@
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="axi_dmac_dac.s_axi_clock" />
+   end="axi_dac_dma.s_axi_clock" />
  <connection
    kind="conduit"
    version="15.1"
@@ -594,8 +626,96 @@
  <connection
    kind="conduit"
    version="15.1"
+   start="util_dac_upack.dac_ch_0"
+   end="util_dac_rfifo.din_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="util_dac_upack.dac_ch_1"
+   end="util_dac_rfifo.din_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9361.dac_ch_1"
+   end="util_dac_rfifo.dout_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="util_dac_upack.dac_ch_2"
+   end="util_dac_rfifo.din_2">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="util_dac_upack.dac_ch_3"
+   end="util_dac_rfifo.din_3">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9361.dac_ch_3"
+   end="util_dac_rfifo.dout_3">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
    start="util_adc_wfifo.dout_0"
    end="util_adc_pack.adc_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="util_dac_rfifo.dout_0"
+   end="axi_ad9361.dac_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="util_dac_rfifo.dout_2"
+   end="axi_ad9361.dac_ch_2">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -649,8 +769,8 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="dac_upack.if_dac_data"
-   end="axi_dmac_dac.if_fifo_rd_dout">
+   start="util_dac_upack.if_dac_data"
+   end="axi_dac_dma.if_fifo_rd_dout">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -660,8 +780,8 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="dac_upack.if_dma_xfer_in"
-   end="axi_dmac_dac.if_fifo_rd_xfer_req">
+   start="util_adc_wfifo.if_din_ovf"
+   end="axi_ad9361.if_adc_dovf">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -671,8 +791,8 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="axi_dmac_dac.if_fifo_rd_en"
-   end="dac_upack.if_dac_valid">
+   start="util_dac_upack.if_dma_xfer_in"
+   end="axi_dac_dma.if_fifo_rd_xfer_req">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -682,8 +802,41 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="axi_dmac_dac.if_fifo_rd_underflow"
+   start="util_dac_rfifo.if_dout_unf"
    end="axi_ad9361.if_dac_dunf">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_dac_dma.if_fifo_rd_en"
+   end="util_dac_upack.if_dac_valid">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_dac_dma.if_fifo_rd_underflow"
+   end="util_dac_rfifo.if_din_unf">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_adc_dma.if_fifo_wr_overflow"
+   end="util_adc_wfifo.if_dout_ovf">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -698,8 +851,18 @@
  <connection
    kind="reset"
    version="15.1"
+   start="axi_ad9361.if_rst"
+   end="util_dac_rfifo.if_dout_rst" />
+ <connection
+   kind="reset"
+   version="15.1"
    start="mem_rst.out_reset"
    end="util_adc_pack.if_adc_rst" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="mem_rst.out_reset"
+   end="util_dac_rfifo.if_din_rstn" />
  <connection
    kind="reset"
    version="15.1"
@@ -714,7 +877,7 @@
    kind="reset"
    version="15.1"
    start="mem_rst.out_reset"
-   end="axi_dmac_dac.m_src_axi_reset" />
+   end="axi_dac_dma.m_src_axi_reset" />
  <connection
    kind="reset"
    version="15.1"
@@ -739,7 +902,7 @@
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
-   end="axi_dmac_dac.s_axi_reset" />
+   end="axi_dac_dma.s_axi_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />
  <interconnectRequirement
