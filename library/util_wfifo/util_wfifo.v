@@ -185,6 +185,7 @@ module util_wfifo (
   reg                                 dout_req_t_m1 = 'd0;
   reg                                 dout_req_t_m2 = 'd0;
   reg                                 dout_req_t_m3 = 'd0;
+  reg                                 dout_ovf_d = 'd0;
   reg     [ 3:0]                      dout_req_cnt = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd0;
   reg                                 dout_rd = 'd0;
@@ -265,7 +266,7 @@ module util_wfifo (
       if ((din_wr == 1'b1) && (din_waddr[2:0] == 3'd0)) begin
         din_req_t <= ~din_req_t;
       end
-      din_ovf_m1 <= dout_ovf;
+      din_ovf_m1 <= dout_ovf_d;
       din_ovf <= din_ovf_m1;
     end
   end
@@ -279,10 +280,12 @@ module util_wfifo (
       dout_req_t_m1 <= 'd0;
       dout_req_t_m2 <= 'd0;
       dout_req_t_m3 <= 'd0;
+      dout_ovf_d <= 'd0;
     end else begin
       dout_req_t_m1 <= din_req_t;
       dout_req_t_m2 <= dout_req_t_m1;
       dout_req_t_m3 <= dout_req_t_m2;
+      dout_ovf_d <= dout_ovf;
     end
   end
 

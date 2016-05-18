@@ -63,7 +63,7 @@ add_interface_port din_0  din_valid_0   valid    Output 1
 add_interface_port din_0  din_data_0    data     Input  DIN_DATA_WIDTH
 
 set_interface_property din_0 associatedClock if_din_clk
-set_interface_property din_0 associatedReset if_din_rstn
+set_interface_property din_0 associatedReset none
 
 add_interface dout_0 conduit end
 add_interface_port dout_0 dout_enable_0 enable   Input  1
@@ -71,7 +71,10 @@ add_interface_port dout_0 dout_valid_0  valid    Input  1
 add_interface_port dout_0 dout_data_0   data     Output DOUT_DATA_WIDTH
 
 set_interface_property dout_0 associatedClock if_dout_clk
-set_interface_property dout_0 associatedReset if_dout_rst
+set_interface_property dout_0 associatedReset none
+
+ad_alt_intf signal din_unf input 1 unf
+ad_alt_intf signal dout_unf output 1 unf
 
 proc p_util_rfifo {} {
 
@@ -83,7 +86,7 @@ proc p_util_rfifo {} {
     add_interface_port din_1  din_data_1    data     Input  DIN_DATA_WIDTH
 
     set_interface_property din_1 associatedClock if_din_clk
-    set_interface_property din_1 associatedReset if_din_rstn
+    set_interface_property din_1 associatedReset none
 
     add_interface dout_1 conduit end
     add_interface_port dout_1 dout_enable_1 enable   Input  1
@@ -91,7 +94,7 @@ proc p_util_rfifo {} {
     add_interface_port dout_1 dout_data_1   data     Output DOUT_DATA_WIDTH
 
     set_interface_property dout_1 associatedClock if_dout_clk
-    set_interface_property dout_1 associatedReset if_dout_rst
+    set_interface_property dout_1 associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 2} {
@@ -102,7 +105,7 @@ proc p_util_rfifo {} {
     add_interface_port din_2  din_data_2    data     Input  DIN_DATA_WIDTH
 
     set_interface_property din_2 associatedClock if_din_clk
-    set_interface_property din_2 associatedReset if_din_rstn
+    set_interface_property din_2 associatedReset none
 
     add_interface dout_2 conduit end
     add_interface_port dout_2 dout_enable_2 enable   Input  1
@@ -110,7 +113,7 @@ proc p_util_rfifo {} {
     add_interface_port dout_2 dout_data_2   data     Output DOUT_DATA_WIDTH
 
     set_interface_property dout_2 associatedClock if_dout_clk
-    set_interface_property dout_2 associatedReset if_dout_rst
+    set_interface_property dout_2 associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 3} {
@@ -121,7 +124,7 @@ proc p_util_rfifo {} {
     add_interface_port din_3  din_data_3    data     Input  DIN_DATA_WIDTH
 
     set_interface_property din_3 associatedClock if_din_clk
-    set_interface_property din_3 associatedReset if_din_rstn
+    set_interface_property din_3 associatedReset none
 
     add_interface dout_3 conduit end
     add_interface_port dout_3 dout_enable_3 enable   Input  1
@@ -129,7 +132,7 @@ proc p_util_rfifo {} {
     add_interface_port dout_3 dout_data_3   data     Output DOUT_DATA_WIDTH
 
     set_interface_property dout_3 associatedClock if_dout_clk
-    set_interface_property dout_3 associatedReset if_dout_rst
+    set_interface_property dout_3 associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 4} {
@@ -140,7 +143,7 @@ proc p_util_rfifo {} {
     add_interface_port din_4  din_data_4    data     Input  DIN_DATA_WIDTH
 
     set_interface_property din_4 associatedClock if_din_clk
-    set_interface_property din_4 associatedReset if_din_rstn
+    set_interface_property din_4 associatedReset none
 
     add_interface dout_4 conduit end
     add_interface_port dout_4 dout_enable_4 enable   Input  1
@@ -148,7 +151,7 @@ proc p_util_rfifo {} {
     add_interface_port dout_4 dout_data_4   data     Output DOUT_DATA_WIDTH
 
     set_interface_property dout_4 associatedClock if_dout_clk
-    set_interface_property dout_4 associatedReset if_dout_rst
+    set_interface_property dout_4 associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 5} {
@@ -159,7 +162,7 @@ proc p_util_rfifo {} {
     add_interface_port din_5  din_data_5    data     Input  DIN_DATA_WIDTH
 
     set_interface_property din_5 associatedClock if_din_clk
-    set_interface_property din_5 associatedReset if_din_rstn
+    set_interface_property din_5 associatedReset none
 
     add_interface dout_5 conduit end
     add_interface_port dout_5 dout_enable_5 enable   Input  1
@@ -167,7 +170,7 @@ proc p_util_rfifo {} {
     add_interface_port dout_5 dout_data_5   data     Output DOUT_DATA_WIDTH
 
     set_interface_property dout_5 associatedClock if_dout_clk
-    set_interface_property dout_5 associatedReset if_dout_rst
+    set_interface_property dout_5 associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 6} {
@@ -178,7 +181,7 @@ proc p_util_rfifo {} {
     add_interface_port din_6  din_data_6    data     Input  DIN_DATA_WIDTH
 
     set_interface_property din_6 associatedClock if_din_clk
-    set_interface_property din_6 associatedReset if_din_rstn
+    set_interface_property din_6 associatedReset none
 
     add_interface dout_6 conduit end
     add_interface_port dout_6 dout_enable_6 enable   Input  1
@@ -186,7 +189,7 @@ proc p_util_rfifo {} {
     add_interface_port dout_6 dout_data_6   data     Output DOUT_DATA_WIDTH
 
     set_interface_property dout_6 associatedClock if_dout_clk
-    set_interface_property dout_6 associatedReset if_dout_rst
+    set_interface_property dout_6 associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 7} {
@@ -197,7 +200,7 @@ proc p_util_rfifo {} {
     add_interface_port din_7  din_data_7    data     Input  DIN_DATA_WIDTH
 
     set_interface_property din_7 associatedClock if_din_clk
-    set_interface_property din_7 associatedReset if_din_rstn
+    set_interface_property din_7 associatedReset none
 
     add_interface dout_7 conduit end
     add_interface_port dout_7 dout_enable_7 enable   Input  1
@@ -205,7 +208,7 @@ proc p_util_rfifo {} {
     add_interface_port dout_7 dout_data_7   data     Output DOUT_DATA_WIDTH
 
     set_interface_property dout_7 associatedClock if_dout_clk
-    set_interface_property dout_7 associatedReset if_dout_rst
+    set_interface_property dout_7 associatedReset none
   }
 
 }

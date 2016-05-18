@@ -183,6 +183,7 @@ module util_rfifo (
   reg                                 din_req_t_m1 = 'd0;
   reg                                 din_req_t_m2 = 'd0;
   reg                                 din_req_t_m3 = 'd0;
+  reg                                 din_unf_d = 'd0;
   reg     [(T_DOUT_DATA_WIDTH+1):0]   dout_data = 'd0;
   reg     [(DATA_WIDTH-1):0]          dout_rdata = 'd0;
   reg     [ 7:0]                      dout_enable = 'd0;
@@ -294,12 +295,14 @@ module util_rfifo (
       din_req_t_m1 <= 'd0;
       din_req_t_m2 <= 'd0;
       din_req_t_m3 <= 'd0;
+      din_unf_d <= 'd0;
     end else begin
       din_enable_m1 <= dout_enable;
       din_enable <= din_enable_m1;
       din_req_t_m1 <= dout_req_t;
       din_req_t_m2 <= din_req_t_m1;
       din_req_t_m3 <= din_req_t_m2;
+      din_unf_d <= din_unf;
     end
   end
 
@@ -367,7 +370,7 @@ module util_rfifo (
       dout_unf_m1 <= 'd0;
       dout_unf <= 'd0;
     end else begin
-      dout_unf_m1 <= din_unf;
+      dout_unf_m1 <= din_unf_d;
       dout_unf <= dout_unf_m1;
     end
   end
