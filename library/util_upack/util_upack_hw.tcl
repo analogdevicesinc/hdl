@@ -53,6 +53,7 @@ add_interface_port dac_ch_0  dac_valid_0   valid    Input  1
 add_interface_port dac_ch_0  dac_data_0    data     Output CHANNEL_DATA_WIDTH
 
 set_interface_property dac_ch_0  associatedClock if_dac_clk
+set_interface_property dac_ch_0  associatedReset none
 
 proc p_util_upack {} {
 

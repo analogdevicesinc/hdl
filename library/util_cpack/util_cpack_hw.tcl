@@ -51,7 +51,7 @@ add_interface_port adc_ch_0  adc_valid_0   valid    Input  1
 add_interface_port adc_ch_0  adc_data_0    data     Input  CHANNEL_DATA_WIDTH
 
 set_interface_property adc_ch_0  associatedClock if_adc_clk
-set_interface_property adc_ch_0  associatedReset if_adc_rst
+set_interface_property adc_ch_0  associatedReset none
 
 proc p_util_cpack {} {
 
@@ -63,7 +63,7 @@ proc p_util_cpack {} {
     add_interface_port adc_ch_1  adc_data_1   data     Input  CHANNEL_DATA_WIDTH
 
     set_interface_property adc_ch_1  associatedClock if_adc_clk
-    set_interface_property adc_ch_1  associatedReset if_adc_rst
+    set_interface_property adc_ch_1  associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 2} {
@@ -74,7 +74,7 @@ proc p_util_cpack {} {
     add_interface_port adc_ch_2  adc_data_2   data     Input  CHANNEL_DATA_WIDTH
 
     set_interface_property adc_ch_2  associatedClock if_adc_clk
-    set_interface_property adc_ch_2  associatedReset if_adc_rst
+    set_interface_property adc_ch_2  associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 3} {
@@ -85,7 +85,7 @@ proc p_util_cpack {} {
     add_interface_port adc_ch_3  adc_data_3   data     Input  CHANNEL_DATA_WIDTH
 
     set_interface_property adc_ch_3  associatedClock if_adc_clk
-    set_interface_property adc_ch_3  associatedReset if_adc_rst
+    set_interface_property adc_ch_3  associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 4} {
@@ -96,7 +96,7 @@ proc p_util_cpack {} {
     add_interface_port adc_ch_4  adc_data_4   data     Input  CHANNEL_DATA_WIDTH
 
     set_interface_property adc_ch_4  associatedClock if_adc_clk
-    set_interface_property adc_ch_4  associatedReset if_adc_rst
+    set_interface_property adc_ch_4  associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 5} {
@@ -107,7 +107,7 @@ proc p_util_cpack {} {
     add_interface_port adc_ch_5  adc_data_5   data     Input  CHANNEL_DATA_WIDTH
 
     set_interface_property adc_ch_5  associatedClock if_adc_clk
-    set_interface_property adc_ch_5  associatedReset if_adc_rst
+    set_interface_property adc_ch_5  associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 6} {
@@ -118,7 +118,7 @@ proc p_util_cpack {} {
     add_interface_port adc_ch_6  adc_data_6   data     Input  CHANNEL_DATA_WIDTH
 
     set_interface_property adc_ch_6  associatedClock if_adc_clk
-    set_interface_property adc_ch_6  associatedReset if_adc_rst
+    set_interface_property adc_ch_6  associatedReset none
   }
 
   if {[get_parameter_value NUM_OF_CHANNELS] > 7} {
@@ -129,7 +129,7 @@ proc p_util_cpack {} {
     add_interface_port adc_ch_7  adc_data_7   data     Input  CHANNEL_DATA_WIDTH
 
     set_interface_property adc_ch_7  associatedClock if_adc_clk
-    set_interface_property adc_ch_7  associatedReset if_adc_rst
+    set_interface_property adc_ch_7  associatedReset none
   }
 }
 
