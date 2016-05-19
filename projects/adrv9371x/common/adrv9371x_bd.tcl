@@ -350,9 +350,10 @@ ad_cpu_interconnect 0x44A92000 axi_ad9371_rx_os_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9371_rx_dma
 ad_cpu_interconnect 0x7c440000 axi_ad9371_rx_os_dma
 
-# gt uses hp0, and 100MHz clock for both DRP and AXI4
+# gt uses hp3, and 100MHz clock for both DRP and AXI4
 
-ad_mem_hp0_interconnect sys_cpu_clk axi_ad9371_gt/m_axi
+ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
+ad_mem_hp3_interconnect sys_cpu_clk axi_ad9371_gt/m_axi
 
 # interconnect (mem/dac)
 
