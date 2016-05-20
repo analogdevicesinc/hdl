@@ -266,6 +266,9 @@ ad_connect  axi_ad9371_dacfifo/dma_rdata axi_ad9371_tx_dma/m_axis_data
 ad_connect  axi_ad9371_dacfifo/dma_rvalid axi_ad9371_tx_dma/m_axis_valid
 ad_connect  axi_ad9371_dacfifo/dma_xfer_last axi_ad9371_tx_dma/m_axis_last
 
+ad_connect  dac_fifo_bypass axi_ad9371_dacfifo/dac_fifo_bypass
+ad_connect  axi_ad9371_dacfifo/dac_dunf axi_ad9371_core/dac_dunf
+
 # connections (adc)
 
 ad_connect  util_ad9371_gt/rx_sysref rx_sysref
@@ -332,8 +335,6 @@ ad_connect  util_ad9371_rx_os_cpack/adc_valid axi_ad9371_rx_os_dma/fifo_wr_en
 ad_connect  util_ad9371_rx_os_cpack/adc_sync axi_ad9371_rx_os_dma/fifo_wr_sync
 ad_connect  util_ad9371_rx_os_cpack/adc_data axi_ad9371_rx_os_dma/fifo_wr_din
 ad_connect  axi_ad9371_rx_os_dma/fifo_wr_overflow axi_ad9371_core/adc_os_dovf
-
-#ad_connect  axi_ad9371_tx_fifo/dac_fifo_bypass dac_fifo_bypass
 
 # interconnect (cpu)
 
