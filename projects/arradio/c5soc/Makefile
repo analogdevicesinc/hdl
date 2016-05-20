@@ -51,6 +51,7 @@ M_DEPS += ../../../library/common/ad_dds.v
 M_DEPS += ../../../library/common/ad_dds_1.v
 M_DEPS += ../../../library/common/ad_dds_sine.v
 M_DEPS += ../../../library/common/ad_iqcor.v
+M_DEPS += ../../../library/common/ad_mem.v
 M_DEPS += ../../../library/common/ad_mul.v
 M_DEPS += ../../../library/common/ad_pnmon.v
 M_DEPS += ../../../library/common/ad_rst.v
@@ -84,10 +85,14 @@ M_DEPS += ../../../library/util_cpack/util_cpack.v
 M_DEPS += ../../../library/util_cpack/util_cpack_dsf.v
 M_DEPS += ../../../library/util_cpack/util_cpack_hw.tcl
 M_DEPS += ../../../library/util_cpack/util_cpack_mux.v
+M_DEPS += ../../../library/util_rfifo/util_rfifo.v
+M_DEPS += ../../../library/util_rfifo/util_rfifo_hw.tcl
 M_DEPS += ../../../library/util_upack/util_upack.v
 M_DEPS += ../../../library/util_upack/util_upack_dmx.v
 M_DEPS += ../../../library/util_upack/util_upack_dsf.v
 M_DEPS += ../../../library/util_upack/util_upack_hw.tcl
+M_DEPS += ../../../library/util_wfifo/util_wfifo.v
+M_DEPS += ../../../library/util_wfifo/util_wfifo_hw.tcl
 
 
 M_ALTERA := quartus_sh --64bit -t 
