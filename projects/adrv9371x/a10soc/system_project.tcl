@@ -2,7 +2,7 @@
 load_package flow
 
 source ../../scripts/adi_env.tcl
-project_new fmcomms2_a10soc -overwrite
+project_new adrv9371x_a10soc -overwrite
 
 source "../../common/a10soc/a10soc_system_assign.tcl"
 
