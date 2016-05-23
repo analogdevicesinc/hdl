@@ -1883,6 +1883,28 @@
  <connection
    kind="conduit"
    version="15.1"
+   start="axi_ad9680_core.adc_ch_0"
+   end="util_cpack_0.adc_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9680_core.adc_ch_1"
+   end="util_cpack_0.adc_ch_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
    start="xcvr_core.alldev_lane_aligned"
    end="xcvr_core.dev_lane_aligned">
   <parameter name="endPort" value="" />
@@ -1894,8 +1916,8 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="axi_ad9680_core.fifo_ch_0"
-   end="util_cpack_0.fifo_ch_0">
+   start="axi_ad9144_core.dac_ch_0"
+   end="util_upack_0.dac_ch_0">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1905,8 +1927,8 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="util_cpack_0.fifo_ch_1"
-   end="axi_ad9680_core.fifo_ch_1">
+   start="axi_ad9144_core.dac_ch_1"
+   end="util_upack_0.dac_ch_1">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1929,6 +1951,17 @@
    version="15.1"
    start="util_cpack_0.if_adc_valid"
    end="ad9680_adcfifo.if_adc_wr">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="ad9680_adcfifo.if_adc_wovf"
+   end="axi_ad9680_core.if_adc_dovf">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1995,6 +2028,17 @@
    version="15.1"
    start="axi_ad9144_dma.if_fifo_rd_dout"
    end="util_upack_0.if_dac_data">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9144_dma.if_fifo_rd_underflow"
+   end="axi_ad9144_core.if_dac_dunf">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />

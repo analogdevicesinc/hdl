@@ -803,7 +803,7 @@
   <parameter name="mmu_TLBMissExcOffset" value="4096" />
   <parameter name="mmu_TLBMissExcSlave" value="sys_tlb_mem.s2" />
   <parameter name="mmu_autoAssignTlbPtrSz" value="false" />
-  <parameter name="mmu_enabled" value="true" />
+  <parameter name="mmu_enabled" value="false" />
   <parameter name="mmu_processIDNumBits" value="8" />
   <parameter name="mmu_ramBlockType" value="Automatic" />
   <parameter name="mmu_tlbNumWays" value="16" />
