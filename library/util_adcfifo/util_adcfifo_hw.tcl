@@ -57,7 +57,7 @@ ad_alt_intf clock   adc_clk         input   1               adc_clk
 ad_alt_intf reset   adc_rst         input   1               if_adc_clk
 ad_alt_intf signal  adc_wr          input   1               valid
 ad_alt_intf signal  adc_wdata       input   ADC_DATA_WIDTH  data
-ad_alt_intf signal  adc_wovf        output  1               adc_dovf
+ad_alt_intf signal  adc_wovf        output  1               ovf
 
 ad_alt_intf clock   dma_clk           input   1                 clk
 ad_alt_intf signal  dma_wr            output  1                 valid

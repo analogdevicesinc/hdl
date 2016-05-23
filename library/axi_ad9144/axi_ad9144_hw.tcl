@@ -90,18 +90,24 @@ ad_alt_intf signal  tx_data       output  128*(QUAD_OR_DUAL_N+1) data
 
 ad_alt_intf clock   dac_clk       output  1
 
-add_interface fifo_ch_0_out conduit end
-add_interface_port fifo_ch_0_out  dac_enable_0  enable   Output  1
-add_interface_port fifo_ch_0_out  dac_valid_0   valid    Output  1
-add_interface_port fifo_ch_0_out  dac_data_0    data     Input   64
+add_interface dac_ch_0 conduit end
+add_interface_port dac_ch_0  dac_enable_0  enable   Output  1
+add_interface_port dac_ch_0  dac_valid_0   valid    Output  1
+add_interface_port dac_ch_0  dac_ddata_0   data     Input   64
 
-add_interface fifo_ch_1_out conduit end
-add_interface_port fifo_ch_1_out  dac_enable_1  enable   Output  1
-add_interface_port fifo_ch_1_out  dac_valid_1   valid    Output  1
-add_interface_port fifo_ch_1_out  dac_data_1    data     Input   64
+set_interface_property dac_ch_0 associatedClock if_tx_clk
+set_interface_property dac_ch_0 associatedReset none
 
-ad_alt_intf signal  dac_dovf      input   1
-ad_alt_intf signal  dac_dunf      input   1
+add_interface dac_ch_1 conduit end
+add_interface_port dac_ch_1  dac_enable_1  enable   Output  1
+add_interface_port dac_ch_1  dac_valid_1   valid    Output  1
+add_interface_port dac_ch_1  dac_ddata_1   data     Input   64
+
+set_interface_property dac_ch_1 associatedClock if_tx_clk
+set_interface_property dac_ch_1 associatedReset none
+
+ad_alt_intf signal  dac_dovf      input   1 ovf
+ad_alt_intf signal  dac_dunf      input   1 unf
 
 proc p_axi_ad9144 {} {
 
@@ -109,15 +115,20 @@ proc p_axi_ad9144 {} {
 
   if {[get_parameter_value QUAD_OR_DUAL_N] == 1} {
 
-    add_interface fifo_ch_2_out conduit end
-    add_interface_port fifo_ch_2_out  dac_enable_2  enable   Output  1
-    add_interface_port fifo_ch_2_out  dac_valid_2   valid    Output  1
-    add_interface_port fifo_ch_2_out  dac_data_2    data     Input   64
+    add_interface dac_ch_2 conduit end
+    add_interface_port dac_ch_2  dac_enable_2  enable   Output  1
+    add_interface_port dac_ch_2  dac_valid_2   valid    Output  1
+    add_interface_port dac_ch_2  dac_ddata_2   data     Input   64
 
-    add_interface fifo_ch_3_out conduit end
-    add_interface_port fifo_ch_3_out  dac_enable_3  enable   Output  1
-    add_interface_port fifo_ch_3_out  dac_valid_3   valid    Output  1
-    add_interface_port fifo_ch_3_out  dac_data_3    data     Input   64
+    set_interface_property dac_ch_2 associatedClock if_tx_clk
+    set_interface_property dac_ch_2 associatedReset none
 
+    add_interface dac_ch_3 conduit end
+    add_interface_port dac_ch_3  dac_enable_3  enable   Output  1
+    add_interface_port dac_ch_3  dac_valid_3   valid    Output  1
+    add_interface_port dac_ch_3  dac_ddata_3   data     Input   64
+
+    set_interface_property dac_ch_3 associatedClock if_tx_clk
+    set_interface_property dac_ch_3 associatedReset none
   }
 }

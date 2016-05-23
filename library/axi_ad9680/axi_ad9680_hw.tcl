@@ -80,16 +80,22 @@ ad_alt_intf signal  rx_data       input   128 data
 
 ad_alt_intf clock   adc_clock     output  1
 
-add_interface fifo_ch_0 conduit end
-add_interface_port fifo_ch_0  adc_enable_0  enable   Output  1
-add_interface_port fifo_ch_0  adc_valid_0   valid    Output  1
-add_interface_port fifo_ch_0  adc_data_0    data     Output  64
+add_interface adc_ch_0 conduit end
+add_interface_port adc_ch_0  adc_enable_0  enable   Output  1
+add_interface_port adc_ch_0  adc_valid_0   valid    Output  1
+add_interface_port adc_ch_0  adc_data_0    data     Output  64
 
-add_interface fifo_ch_1 conduit end
-add_interface_port fifo_ch_1  adc_enable_1  enable   Output  1
-add_interface_port fifo_ch_1  adc_valid_1   valid    Output  1
-add_interface_port fifo_ch_1  adc_data_1    data     Output  64
+set_interface_property adc_ch_0 associatedClock if_rx_clk
+set_interface_property adc_ch_0 associatedReset none
 
-ad_alt_intf signal  adc_dovf      input   1
-ad_alt_intf signal  adc_dunf      input   1
+add_interface adc_ch_1 conduit end
+add_interface_port adc_ch_1  adc_enable_1  enable   Output  1
+add_interface_port adc_ch_1  adc_valid_1   valid    Output  1
+add_interface_port adc_ch_1  adc_data_1    data     Output  64
+
+set_interface_property adc_ch_1 associatedClock if_rx_clk
+set_interface_property adc_ch_1 associatedReset none
+
+ad_alt_intf signal  adc_dovf      input   1 ovf
+ad_alt_intf signal  adc_dunf      input   1 unf
 
