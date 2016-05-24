@@ -9,14 +9,6 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
-   element $${FILENAME}
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Arria 10";
-         type = "String";
-      }
-   }
    element ad9680_adcfifo
    {
       datum _sortIndex
@@ -729,7 +721,7 @@
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="10AX115S3F45I2SGE2" />
+ <parameter name="device" value="10AX115S3F45E2SGE3" />
  <parameter name="deviceFamily" value="Arria 10" />
  <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
@@ -889,24 +881,24 @@
   <parameter name="RX_NUM_OF_LANES" value="4" />
   <parameter name="TX_NUM_OF_LANES" value="4" />
  </module>
- <module name="mem_clk" kind="altera_clock_bridge" version="15.0" enabled="1">
+ <module name="mem_clk" kind="altera_clock_bridge" version="15.1" enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
   <parameter name="EXPLICIT_CLOCK_RATE" value="125000000" />
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
- <module name="mem_rst" kind="altera_reset_bridge" version="15.0" enabled="1">
+ <module name="mem_rst" kind="altera_reset_bridge" version="15.1" enabled="1">
   <parameter name="ACTIVE_LOW_RESET" value="0" />
   <parameter name="AUTO_CLK_CLOCK_RATE" value="125000000" />
   <parameter name="NUM_RESET_OUTPUTS" value="1" />
   <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
   <parameter name="USE_RESET_REQUEST" value="0" />
  </module>
- <module name="sys_clk" kind="altera_clock_bridge" version="15.0" enabled="1">
+ <module name="sys_clk" kind="altera_clock_bridge" version="15.1" enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
   <parameter name="EXPLICIT_CLOCK_RATE" value="100000000" />
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
- <module name="sys_rst" kind="altera_reset_bridge" version="15.0" enabled="1">
+ <module name="sys_rst" kind="altera_reset_bridge" version="15.1" enabled="1">
   <parameter name="ACTIVE_LOW_RESET" value="0" />
   <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
   <parameter name="NUM_RESET_OUTPUTS" value="1" />
@@ -921,10 +913,10 @@
   <parameter name="CHANNEL_DATA_WIDTH" value="64" />
   <parameter name="NUM_OF_CHANNELS" value="2" />
  </module>
- <module name="xcvr_core" kind="altera_jesd204" version="15.0" enabled="1">
+ <module name="xcvr_core" kind="altera_jesd204" version="15.1" enabled="1">
   <parameter name="ADJCNT" value="0" />
   <parameter name="ADJDIR" value="0" />
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AX115S3F45E2SGE3" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="BID" value="0" />
   <parameter name="CF" value="0" />
@@ -934,6 +926,13 @@
   <parameter name="DID" value="0" />
   <parameter name="DLB_TEST" value="0" />
   <parameter name="ECC_EN" value="0" />
+  <parameter name="ED_DEV_KIT" value="NONE" />
+  <parameter name="ED_FILESET_SIM" value="false" />
+  <parameter name="ED_FILESET_SYNTH" value="false" />
+  <parameter name="ED_GENERIC_5SERIES" value="No" />
+  <parameter name="ED_GENERIC_A10" value="No" />
+  <parameter name="ED_HDL_FORMAT_SIM" value="VERILOG" />
+  <parameter name="ED_HDL_FORMAT_SYNTH" value="VERILOG" />
   <parameter name="GUI_CFG_F" value="1" />
   <parameter name="GUI_EN_CFG_F" value="true" />
   <parameter name="HD" value="1" />
@@ -965,8 +964,8 @@
   <parameter name="bitrev_en" value="false" />
   <parameter name="bonded_mode" value="non_bonded" />
   <parameter name="lane_rate" value="10000.0" />
-  <parameter name="part_trait_bd" value="NIGHTFURY5ES2" />
-  <parameter name="part_trait_dp" value="10AX115S3F45I2SGE2" />
+  <parameter name="part_trait_bd" value="NIGHTFURY5" />
+  <parameter name="part_trait_dp" value="10AX115S3F45E2SGE3" />
   <parameter name="pll_reconfig_enable" value="false" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="rcfg_jtag_enable" value="false" />
@@ -980,7 +979,7 @@
  <module
    name="xcvr_rst_cntrl"
    kind="altera_xcvr_reset_control"
-   version="15.0"
+   version="15.1"
    enabled="1">
   <parameter name="CHANNELS" value="4" />
   <parameter name="PLLS" value="1" />
@@ -997,6 +996,7 @@
   <parameter name="T_PLL_POWERDOWN" value="1000" />
   <parameter name="T_RX_ANALOGRESET" value="40" />
   <parameter name="T_RX_DIGITALRESET" value="4000" />
+  <parameter name="T_TX_ANALOGRESET" value="0" />
   <parameter name="T_TX_DIGITALRESET" value="20" />
   <parameter name="device_family" value="Arria 10" />
   <parameter name="gui_pll_cal_busy" value="1" />
@@ -1004,7 +1004,7 @@
   <parameter name="gui_split_interfaces" value="0" />
   <parameter name="gui_tx_auto_reset" value="0" />
  </module>
- <module name="xcvr_rx_pll" kind="altera_iopll" version="15.0" enabled="1">
+ <module name="xcvr_rx_pll" kind="altera_iopll" version="15.1" enabled="1">
   <parameter name="gui_active_clk" value="false" />
   <parameter name="gui_actual_duty_cycle0" value="50.0" />
   <parameter name="gui_actual_duty_cycle1" value="50.0" />
@@ -1179,7 +1179,7 @@
   <parameter name="gui_en_adv_params" value="false" />
   <parameter name="gui_en_dps_ports" value="false" />
   <parameter name="gui_en_extclkout_ports" value="false" />
-  <parameter name="gui_en_lvds_ports" value="false" />
+  <parameter name="gui_en_lvds_ports" value="Disabled" />
   <parameter name="gui_en_phout_ports" value="false" />
   <parameter name="gui_en_reconf" value="false" />
   <parameter name="gui_enable_cascade_in" value="false" />
@@ -1279,8 +1279,10 @@
   <parameter name="gui_reference_clock_frequency" value="500.0" />
   <parameter name="gui_switchover_delay" value="0" />
   <parameter name="gui_switchover_mode">Automatic Switchover</parameter>
+  <parameter name="gui_use_NDFB_modes" value="false" />
   <parameter name="gui_use_locked" value="false" />
-  <parameter name="system_info_device_component" value="10AX115S3F45I2SGE2" />
+  <parameter name="gui_vco_frequency" value="600.0" />
+  <parameter name="system_info_device_component" value="10AX115S3F45E2SGE3" />
   <parameter name="system_info_device_family" value="Arria 10" />
   <parameter name="system_info_device_speed_grade" value="2" />
   <parameter name="system_part_trait_speed_grade" value="2" />
@@ -1288,7 +1290,7 @@
  <module
    name="xcvr_rx_ref_clk"
    kind="altera_clock_bridge"
-   version="15.0"
+   version="15.1"
    enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
   <parameter name="EXPLICIT_CLOCK_RATE" value="500000000" />
@@ -1297,14 +1299,15 @@
  <module
    name="xcvr_tx_lane_pll"
    kind="altera_xcvr_atx_pll_a10"
-   version="15.0"
+   version="15.1"
    enabled="1">
-  <parameter name="base_device" value="NIGHTFURY5ES2" />
+  <parameter name="base_device" value="NIGHTFURY5" />
   <parameter name="bw_sel" value="medium" />
-  <parameter name="device" value="10AX115S3F45I2SGE2" />
+  <parameter name="device" value="10AX115S3F45E2SGE3" />
   <parameter name="device_family" value="Arria 10" />
   <parameter name="enable_16G_path" value="0" />
   <parameter name="enable_8G_path" value="1" />
+  <parameter name="enable_analog_resets" value="0" />
   <parameter name="enable_atx_to_fpll_cascade_out" value="0" />
   <parameter name="enable_bonding_clks" value="1" />
   <parameter name="enable_cascade_out" value="0" />
@@ -1329,6 +1332,7 @@
   <parameter name="primary_pll_buffer">GX clock output buffer</parameter>
   <parameter name="prot_mode" value="Basic" />
   <parameter name="rcfg_debug" value="0" />
+  <parameter name="rcfg_enable_avmm_busy_port" value="0" />
   <parameter name="rcfg_file_prefix">altera_xcvr_atx_pll_a10</parameter>
   <parameter name="rcfg_h_file_enable" value="0" />
   <parameter name="rcfg_jtag_enable" value="0" />
@@ -1338,6 +1342,7 @@
   <parameter name="rcfg_param_vals2" value="" />
   <parameter name="rcfg_profile_cnt" value="2" />
   <parameter name="rcfg_profile_select" value="1" />
+  <parameter name="rcfg_separate_avmm_busy" value="0" />
   <parameter name="rcfg_sv_file_enable" value="0" />
   <parameter name="rcfg_txt_file_enable" value="0" />
   <parameter name="refclk_cnt" value="1" />
@@ -1351,6 +1356,7 @@
   <parameter name="set_hip_cal_en" value="0" />
   <parameter name="set_k_counter" value="1" />
   <parameter name="set_l_cascade_counter" value="4" />
+  <parameter name="set_l_cascade_predivider" value="1" />
   <parameter name="set_l_counter" value="4" />
   <parameter name="set_m_counter" value="50" />
   <parameter name="set_manual_reference_clock_frequency" value="100.0" />
@@ -1361,7 +1367,7 @@
   <parameter name="support_mode" value="user_mode" />
   <parameter name="test_mode" value="0" />
  </module>
- <module name="xcvr_tx_pll" kind="altera_iopll" version="15.0" enabled="1">
+ <module name="xcvr_tx_pll" kind="altera_iopll" version="15.1" enabled="1">
   <parameter name="gui_active_clk" value="false" />
   <parameter name="gui_actual_duty_cycle0" value="50.0" />
   <parameter name="gui_actual_duty_cycle1" value="50.0" />
@@ -1536,7 +1542,7 @@
   <parameter name="gui_en_adv_params" value="false" />
   <parameter name="gui_en_dps_ports" value="false" />
   <parameter name="gui_en_extclkout_ports" value="false" />
-  <parameter name="gui_en_lvds_ports" value="false" />
+  <parameter name="gui_en_lvds_ports" value="Disabled" />
   <parameter name="gui_en_phout_ports" value="false" />
   <parameter name="gui_en_reconf" value="false" />
   <parameter name="gui_enable_cascade_in" value="false" />
@@ -1636,8 +1642,10 @@
   <parameter name="gui_reference_clock_frequency" value="500.0" />
   <parameter name="gui_switchover_delay" value="0" />
   <parameter name="gui_switchover_mode">Automatic Switchover</parameter>
+  <parameter name="gui_use_NDFB_modes" value="false" />
   <parameter name="gui_use_locked" value="false" />
-  <parameter name="system_info_device_component" value="10AX115S3F45I2SGE2" />
+  <parameter name="gui_vco_frequency" value="600.0" />
+  <parameter name="system_info_device_component" value="10AX115S3F45E2SGE3" />
   <parameter name="system_info_device_family" value="Arria 10" />
   <parameter name="system_info_device_speed_grade" value="2" />
   <parameter name="system_part_trait_speed_grade" value="2" />
@@ -1645,7 +1653,7 @@
  <module
    name="xcvr_tx_ref_clk"
    kind="altera_clock_bridge"
-   version="15.0"
+   version="15.1"
    enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
   <parameter name="EXPLICIT_CLOCK_RATE" value="500000000" />
@@ -1653,149 +1661,171 @@
  </module>
  <connection
    kind="avalon_streaming"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_tx_ip_avl"
    end="xcvr_core.jesd204_tx_link" />
  <connection
    kind="avalon_streaming"
-   version="15.0"
+   version="15.1"
    start="xcvr_core.jesd204_rx_link"
    end="axi_jesd_xcvr.if_rx_ip_avl" />
- <connection kind="clock" version="15.0" start="sys_clk.out_clk" end="sys_rst.clk" />
- <connection kind="clock" version="15.0" start="mem_clk.out_clk" end="mem_rst.clk" />
+ <connection kind="clock" version="15.1" start="sys_clk.out_clk" end="sys_rst.clk" />
+ <connection kind="clock" version="15.1" start="mem_clk.out_clk" end="mem_rst.clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="sys_clk.out_clk"
    end="xcvr_rst_cntrl.clock" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="mem_clk.out_clk"
    end="ad9680_adcfifo.if_dma_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="mem_clk.out_clk"
    end="axi_ad9680_dma.if_s_axis_aclk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="sys_clk.out_clk"
    end="xcvr_core.jesd204_rx_avs_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="sys_clk.out_clk"
    end="xcvr_core.jesd204_tx_avs_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="mem_clk.out_clk"
    end="axi_ad9680_dma.m_dest_axi_clock" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="mem_clk.out_clk"
    end="axi_ad9152_dma.m_src_axi_clock" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_ref_clk.out_clk"
    end="xcvr_tx_lane_pll.pll_refclk0" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_ref_clk.out_clk"
    end="xcvr_tx_pll.refclk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_rx_ref_clk.out_clk"
    end="xcvr_rx_pll.refclk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_rx_ref_clk.out_clk"
    end="xcvr_core.rx_pll_ref_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="sys_clk.out_clk"
    end="axi_ad9680_dma.s_axi_clock" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="sys_clk.out_clk"
    end="axi_ad9680_core.s_axi_clock" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="sys_clk.out_clk"
    end="axi_ad9152_core.s_axi_clock" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="sys_clk.out_clk"
    end="axi_jesd_xcvr.s_axi_clock" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="sys_clk.out_clk"
    end="axi_ad9152_dma.s_axi_clock" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_rx_pll.outclk0"
    end="util_cpack_0.if_adc_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_rx_pll.outclk0"
    end="ad9680_adcfifo.if_adc_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_pll.outclk0"
    end="util_upack_0.if_dac_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_pll.outclk0"
    end="axi_ad9152_dma.if_fifo_rd_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_rx_pll.outclk0"
    end="axi_ad9680_core.if_rx_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_rx_pll.outclk0"
    end="axi_jesd_xcvr.if_rx_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_pll.outclk0"
    end="axi_ad9152_core.if_tx_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_pll.outclk0"
    end="axi_jesd_xcvr.if_tx_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_rx_pll.outclk0"
    end="xcvr_core.rxlink_clk" />
  <connection
    kind="clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_pll.outclk0"
    end="xcvr_core.txlink_clk" />
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
+   start="util_cpack_0.adc_ch_0"
+   end="axi_ad9680_core.adc_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="util_cpack_0.adc_ch_1"
+   end="axi_ad9680_core.adc_ch_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
    start="xcvr_core.alldev_lane_aligned"
    end="xcvr_core.dev_lane_aligned">
   <parameter name="endPort" value="" />
@@ -1806,9 +1836,9 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
-   start="axi_ad9680_core.fifo_ch_0"
-   end="util_cpack_0.fifo_ch_0">
+   version="15.1"
+   start="util_upack_0.dac_ch_0"
+   end="axi_ad9152_core.dac_ch_0">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1817,9 +1847,9 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
-   start="axi_ad9152_core.fifo_ch_0_out"
-   end="util_upack_0.fifo_ch_0">
+   version="15.1"
+   start="axi_ad9152_core.dac_ch_1"
+   end="util_upack_0.dac_ch_1">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1828,29 +1858,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
-   start="util_cpack_0.fifo_ch_1"
-   end="axi_ad9680_core.fifo_ch_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
-   start="axi_ad9152_core.fifo_ch_1_out"
-   end="util_upack_0.fifo_ch_1">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.0"
+   version="15.1"
    start="util_cpack_0.if_adc_data"
    end="ad9680_adcfifo.if_adc_wdata">
   <parameter name="endPort" value="" />
@@ -1861,7 +1869,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="util_cpack_0.if_adc_valid"
    end="ad9680_adcfifo.if_adc_wr">
   <parameter name="endPort" value="" />
@@ -1872,7 +1880,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="ad9680_adcfifo.if_adc_wovf"
    end="axi_ad9680_core.if_adc_dovf">
   <parameter name="endPort" value="" />
@@ -1883,7 +1891,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_ad9152_core.if_dac_dunf"
    end="axi_ad9152_dma.if_fifo_rd_underflow">
   <parameter name="endPort" value="" />
@@ -1894,7 +1902,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="util_upack_0.if_dac_valid"
    end="axi_ad9152_dma.if_fifo_rd_en">
   <parameter name="endPort" value="" />
@@ -1905,7 +1913,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="ad9680_adcfifo.if_dma_wdata"
    end="axi_ad9680_dma.if_s_axis_data">
   <parameter name="endPort" value="" />
@@ -1916,7 +1924,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="ad9680_adcfifo.if_dma_wr"
    end="axi_ad9680_dma.if_s_axis_valid">
   <parameter name="endPort" value="" />
@@ -1927,7 +1935,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="ad9680_adcfifo.if_dma_wready"
    end="axi_ad9680_dma.if_s_axis_ready">
   <parameter name="endPort" value="" />
@@ -1938,7 +1946,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="ad9680_adcfifo.if_dma_xfer_req"
    end="axi_ad9680_dma.if_s_axis_xfer_req">
   <parameter name="endPort" value="" />
@@ -1949,7 +1957,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_ad9152_dma.if_fifo_rd_dout"
    end="util_upack_0.if_dac_data">
   <parameter name="endPort" value="" />
@@ -1960,7 +1968,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_ad9680_core.if_rx_data"
    end="axi_jesd_xcvr.if_rx_data">
   <parameter name="endPort" value="" />
@@ -1971,7 +1979,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_rx_ip_sof"
    end="xcvr_core.rx_sof">
   <parameter name="endPort" value="" />
@@ -1982,7 +1990,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_rx_ip_sync"
    end="xcvr_core.rx_dev_sync_n">
   <parameter name="endPort" value="" />
@@ -1993,7 +2001,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_rx_ip_sysref"
    end="xcvr_core.rx_sysref">
   <parameter name="endPort" value="" />
@@ -2004,7 +2012,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_rx_ready"
    end="xcvr_rst_cntrl.rx_ready">
   <parameter name="endPort" value="" />
@@ -2015,7 +2023,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_tx_data"
    end="axi_ad9152_core.if_tx_data">
   <parameter name="endPort" value="" />
@@ -2026,7 +2034,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_tx_ip_sysref"
    end="xcvr_core.tx_sysref">
   <parameter name="endPort" value="" />
@@ -2037,7 +2045,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_tx_ready"
    end="xcvr_rst_cntrl.tx_ready">
   <parameter name="endPort" value="" />
@@ -2048,7 +2056,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_rst_cntrl.pll_cal_busy"
    end="xcvr_tx_lane_pll.pll_cal_busy">
   <parameter name="endPort" value="" />
@@ -2059,7 +2067,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_lane_pll.pll_locked"
    end="xcvr_rst_cntrl.pll_locked">
   <parameter name="endPort" value="" />
@@ -2070,7 +2078,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_lane_pll.pll_powerdown"
    end="xcvr_rst_cntrl.pll_powerdown">
   <parameter name="endPort" value="" />
@@ -2081,7 +2089,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_rst_cntrl.rx_analogreset"
    end="xcvr_core.rx_analogreset">
   <parameter name="endPort" value="" />
@@ -2092,7 +2100,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_core.rx_cal_busy"
    end="xcvr_rst_cntrl.rx_cal_busy">
   <parameter name="endPort" value="" />
@@ -2103,7 +2111,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_core.rx_digitalreset"
    end="xcvr_rst_cntrl.rx_digitalreset">
   <parameter name="endPort" value="" />
@@ -2114,7 +2122,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_rst_cntrl.rx_is_lockedtodata"
    end="xcvr_core.rx_islockedtodata">
   <parameter name="endPort" value="" />
@@ -2125,7 +2133,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_core.sync_n"
    end="axi_jesd_xcvr.if_tx_ip_sync">
   <parameter name="endPort" value="" />
@@ -2136,7 +2144,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_rst_cntrl.tx_analogreset"
    end="xcvr_core.tx_analogreset">
   <parameter name="endPort" value="" />
@@ -2147,7 +2155,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_rst_cntrl.tx_cal_busy"
    end="xcvr_core.tx_cal_busy">
   <parameter name="endPort" value="" />
@@ -2158,7 +2166,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_core.tx_dev_sync_n"
    end="xcvr_core.mdev_sync_n">
   <parameter name="endPort" value="" />
@@ -2169,7 +2177,7 @@
  </connection>
  <connection
    kind="conduit"
-   version="15.0"
+   version="15.1"
    start="xcvr_rst_cntrl.tx_digitalreset"
    end="xcvr_core.tx_digitalreset">
   <parameter name="endPort" value="" />
@@ -2180,127 +2188,127 @@
  </connection>
  <connection
    kind="hssi_serial_clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_lane_pll.tx_serial_clk"
    end="xcvr_core.tx_serial_clk0_ch0" />
  <connection
    kind="hssi_serial_clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_lane_pll.tx_serial_clk"
    end="xcvr_core.tx_serial_clk0_ch1" />
  <connection
    kind="hssi_serial_clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_lane_pll.tx_serial_clk"
    end="xcvr_core.tx_serial_clk0_ch2" />
  <connection
    kind="hssi_serial_clock"
-   version="15.0"
+   version="15.1"
    start="xcvr_tx_lane_pll.tx_serial_clk"
    end="xcvr_core.tx_serial_clk0_ch3" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_rst"
    end="xcvr_tx_pll.reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_rst"
    end="xcvr_rx_pll.reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_rst"
    end="xcvr_rst_cntrl.reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_rx_rstn"
    end="xcvr_core.rxlink_rst_n" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="axi_jesd_xcvr.if_tx_rstn"
    end="xcvr_core.txlink_rst_n" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="util_cpack_0.if_adc_rst" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="mem_rst.out_reset"
    end="util_cpack_0.if_adc_rst" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="ad9680_adcfifo.if_adc_rst" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="mem_rst.out_reset"
    end="ad9680_adcfifo.if_adc_rst" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="xcvr_core.jesd204_rx_avs_rst_n" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="xcvr_core.jesd204_tx_avs_rst_n" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="mem_rst.out_reset"
    end="axi_ad9680_dma.m_dest_axi_reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="mem_rst.out_reset"
    end="axi_ad9152_dma.m_src_axi_reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="xcvr_rst_cntrl.reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="xcvr_tx_pll.reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="xcvr_rx_pll.reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="axi_jesd_xcvr.s_axi_reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="axi_ad9152_core.s_axi_reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="axi_ad9680_core.s_axi_reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="axi_ad9680_dma.s_axi_reset" />
  <connection
    kind="reset"
-   version="15.0"
+   version="15.1"
    start="sys_rst.out_reset"
    end="axi_ad9152_dma.s_axi_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
