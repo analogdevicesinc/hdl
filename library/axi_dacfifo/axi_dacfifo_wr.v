@@ -343,9 +343,9 @@ module axi_dacfifo_wr (
       dma_mem_raddr_m2 <= 'b0;
       dma_mem_raddr <= 'b0;
     end else begin
-      dma_mem_raddr_m1 <= g2b(axi_mem_raddr_g);
+      dma_mem_raddr_m1 <= axi_mem_raddr_g;
       dma_mem_raddr_m2 <= dma_mem_raddr_m1;
-      dma_mem_raddr <= dma_mem_raddr_m2;
+      dma_mem_raddr <= g2b(dma_mem_raddr_m2);
       dma_mem_addr_diff <= dma_mem_addr_diff_s[DMA_MEM_ADDRESS_WIDTH-1:0];
       if (dma_mem_addr_diff >= DMA_BUF_THRESHOLD_HI) begin
         dma_ready <= 1'b0;
@@ -388,10 +388,10 @@ module axi_dacfifo_wr (
     end else begin
       axi_xfer_req_m <= {axi_xfer_req_m[1:0], dma_xfer_req};
       axi_xfer_last_m <= {axi_xfer_last_m[1:0], dma_xfer_last};
-      axi_mem_waddr_m1 <= g2b(dma_mem_waddr_g);
-      axi_mem_waddr_m2 <= axi_mem_waddr_m1;
-      axi_mem_waddr <= axi_mem_waddr_m2;
       axi_xfer_init = ~axi_xfer_req_m[2] & axi_xfer_req_m[1];
+      axi_mem_waddr_m1 <= dma_mem_waddr_g;
+      axi_mem_waddr_m2 <= axi_mem_waddr_m1;
+      axi_mem_waddr <= g2b(axi_mem_waddr_m2);
     end
   end
 

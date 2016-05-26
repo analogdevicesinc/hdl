@@ -101,7 +101,8 @@ module axi_dacfifo_dac (
   reg     [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_waddr = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_waddr_g = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr_m = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr_m1 = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr_m2 = 'd0;
   reg     [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_addr_diff = 'd0;
   reg                                 axi_dready = 'd0;
 
@@ -109,7 +110,8 @@ module axi_dacfifo_dac (
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_raddr_next = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_raddr_g = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr_m = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr_m1 = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr_m2 = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_addr_diff = 'd0;
   reg                                 dac_mem_init = 1'b0;
   reg                                 dac_mem_init_d = 1'b0;
@@ -210,11 +212,13 @@ module axi_dacfifo_dac (
     if (axi_xfer_req == 1'b0) begin
       axi_mem_addr_diff <= 'd0;
       axi_mem_raddr <= 'd0;
-      axi_mem_raddr_m <= 'd0;
+      axi_mem_raddr_m1 <= 'd0;
+      axi_mem_raddr_m2 <= 'd0;
       axi_dready <= 'd0;
     end else begin
-      axi_mem_raddr_m <= g2b(dac_mem_raddr_g);
-      axi_mem_raddr <= axi_mem_raddr_m;
+      axi_mem_raddr_m1 <= dac_mem_raddr_g;
+      axi_mem_raddr_m2 <= axi_mem_raddr_m1;
+      axi_mem_raddr <= g2b(axi_mem_raddr_m2);
       axi_mem_addr_diff <= axi_mem_addr_diff_s[AXI_ADDRESS_WIDTH-1:0];
       if (axi_mem_addr_diff >= AXI_BUF_THRESHOLD_HI) begin
         axi_dready <= 1'b0;
@@ -261,10 +265,12 @@ module axi_dacfifo_dac (
   always @(posedge dac_clk) begin
     if (dac_xfer_out == 1'b0) begin
       dac_mem_waddr <= 'b0;
-      dac_mem_waddr_m <= 'b0;
+      dac_mem_waddr_m1 <= 'b0;
+      dac_mem_waddr_m2 <= 'b0;
     end else begin
-      dac_mem_waddr_m <= g2b(axi_mem_waddr_g);
-      dac_mem_waddr <= dac_mem_waddr_m;
+      dac_mem_waddr_m1 <= axi_mem_waddr_g;
+      dac_mem_waddr_m2 <= dac_mem_waddr_m1;
+      dac_mem_waddr <= g2b(dac_mem_waddr_m2);
     end
   end
 
