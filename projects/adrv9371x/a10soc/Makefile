@@ -9,9 +9,73 @@ M_DEPS += system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.sdc
 M_DEPS += system_bd.qsys
+M_DEPS += ../common/adrv9371x_bd.qsys
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_bd.qsys
 M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
+M_DEPS += ../../../library/axi_ad9371/axi_ad9371.v
+M_DEPS += ../../../library/axi_ad9371/axi_ad9371_hw.tcl
+M_DEPS += ../../../library/axi_ad9371/axi_ad9371_if.v
+M_DEPS += ../../../library/axi_ad9371/axi_ad9371_rx.v
+M_DEPS += ../../../library/axi_ad9371/axi_ad9371_rx_channel.v
+M_DEPS += ../../../library/axi_ad9371/axi_ad9371_rx_os.v
+M_DEPS += ../../../library/axi_ad9371/axi_ad9371_tx.v
+M_DEPS += ../../../library/axi_ad9371/axi_ad9371_tx_channel.v
+M_DEPS += ../../../library/axi_dmac/2d_transfer.v
+M_DEPS += ../../../library/axi_dmac/address_generator.v
+M_DEPS += ../../../library/axi_dmac/axi_dmac.v
+M_DEPS += ../../../library/axi_dmac/axi_dmac_hw.tcl
+M_DEPS += ../../../library/axi_dmac/axi_register_slice.v
+M_DEPS += ../../../library/axi_dmac/data_mover.v
+M_DEPS += ../../../library/axi_dmac/dest_axi_mm.v
+M_DEPS += ../../../library/axi_dmac/dest_axi_stream.v
+M_DEPS += ../../../library/axi_dmac/dest_fifo_inf.v
+M_DEPS += ../../../library/axi_dmac/inc_id.h
+M_DEPS += ../../../library/axi_dmac/request_arb.v
+M_DEPS += ../../../library/axi_dmac/request_generator.v
+M_DEPS += ../../../library/axi_dmac/resp.h
+M_DEPS += ../../../library/axi_dmac/response_generator.v
+M_DEPS += ../../../library/axi_dmac/response_handler.v
+M_DEPS += ../../../library/axi_dmac/splitter.v
+M_DEPS += ../../../library/axi_dmac/src_axi_mm.v
+M_DEPS += ../../../library/axi_dmac/src_axi_stream.v
+M_DEPS += ../../../library/axi_dmac/src_fifo_inf.v
+M_DEPS += ../../../library/axi_jesd_xcvr/axi_jesd_xcvr.v
+M_DEPS += ../../../library/axi_jesd_xcvr/axi_jesd_xcvr_hw.tcl
+M_DEPS += ../../../library/common/ad_datafmt.v
+M_DEPS += ../../../library/common/ad_dcfilter.v
+M_DEPS += ../../../library/common/ad_dds.v
+M_DEPS += ../../../library/common/ad_dds_1.v
+M_DEPS += ../../../library/common/ad_dds_sine.v
+M_DEPS += ../../../library/common/ad_iqcor.v
+M_DEPS += ../../../library/common/ad_jesd_align.v
+M_DEPS += ../../../library/common/ad_mul.v
+M_DEPS += ../../../library/common/ad_rst.v
+M_DEPS += ../../../library/common/altera/MULT_MACRO.v
+M_DEPS += ../../../library/common/sync_bits.v
+M_DEPS += ../../../library/common/sync_gray.v
+M_DEPS += ../../../library/common/up_adc_channel.v
+M_DEPS += ../../../library/common/up_adc_common.v
+M_DEPS += ../../../library/common/up_axi.v
+M_DEPS += ../../../library/common/up_clock_mon.v
+M_DEPS += ../../../library/common/up_dac_channel.v
+M_DEPS += ../../../library/common/up_dac_common.v
+M_DEPS += ../../../library/common/up_xcvr.v
+M_DEPS += ../../../library/common/up_xfer_cntrl.v
+M_DEPS += ../../../library/common/up_xfer_status.v
+M_DEPS += ../../../library/util_axis_fifo/address_gray.v
+M_DEPS += ../../../library/util_axis_fifo/address_gray_pipelined.v
+M_DEPS += ../../../library/util_axis_fifo/address_sync.v
+M_DEPS += ../../../library/util_axis_fifo/util_axis_fifo.v
+M_DEPS += ../../../library/util_axis_resize/util_axis_resize.v
+M_DEPS += ../../../library/util_cpack/util_cpack.v
+M_DEPS += ../../../library/util_cpack/util_cpack_dsf.v
+M_DEPS += ../../../library/util_cpack/util_cpack_hw.tcl
+M_DEPS += ../../../library/util_cpack/util_cpack_mux.v
+M_DEPS += ../../../library/util_upack/util_upack.v
+M_DEPS += ../../../library/util_upack/util_upack_dmx.v
+M_DEPS += ../../../library/util_upack/util_upack_dsf.v
+M_DEPS += ../../../library/util_upack/util_upack_hw.tcl
 
 
 M_ALTERA := quartus_sh --64bit -t 
@@ -48,7 +112,7 @@ M_FLIST += *.pin
 
 
 .PHONY: all clean clean-all
-all: fmcomms2_a10soc.sof
+all: adrv9371x_a10soc.sof
 
 
 
@@ -59,9 +123,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-fmcomms2_a10soc.sof: $(M_DEPS)
+adrv9371x_a10soc.sof: $(M_DEPS)
 	rm -rf $(M_FLIST)
-	$(M_ALTERA) system_project.tcl  >> fmcomms2_a10soc_quartus.log 2>&1
+	$(M_ALTERA) system_project.tcl  >> adrv9371x_a10soc_quartus.log 2>&1
 
 ####################################################################################
 ####################################################################################

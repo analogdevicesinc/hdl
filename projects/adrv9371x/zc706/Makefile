@@ -13,12 +13,16 @@ M_DEPS += ../common/adrv9371x_bd.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
+M_DEPS += ../../common/zc706/zc706_system_plddr3_dacfifo.tcl
+M_DEPS += ../../common/zc706/zc706_system_mig_constr.xdc
+M_DEPS += ../../common/zc706/zc706_system_mig.prj
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9371/axi_ad9371.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
+M_DEPS += ../../../library/axi_dacfifo/axi_dacfifo.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
@@ -58,6 +62,7 @@ clean:
 clean-all:clean
 	make -C ../../../library/axi_ad9371 clean
 	make -C ../../../library/axi_clkgen clean
+	make -C ../../../library/axi_dacfifo clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_hdmi_tx clean
 	make -C ../../../library/axi_jesd_gt clean
@@ -78,6 +83,7 @@ adrv9371x_zc706.sdk/system_top.hdf: $(M_DEPS)
 lib:
 	make -C ../../../library/axi_ad9371
 	make -C ../../../library/axi_clkgen
+	make -C ../../../library/axi_dacfifo
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_hdmi_tx
 	make -C ../../../library/axi_jesd_gt
