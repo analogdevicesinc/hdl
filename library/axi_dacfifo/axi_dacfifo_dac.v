@@ -85,7 +85,7 @@ module axi_dacfifo_dac (
   output                              axi_dready;
   input                               axi_xfer_req;
 
-  input   [32:0]                      dma_last_addr;
+  input   [31:0]                      dma_last_addr;
 
   // dac read
 
@@ -320,7 +320,7 @@ module axi_dacfifo_dac (
       end else begin
         dac_almost_empty <= 1'b0;
       end
-      dac_dunf <= (dac_mem_addr_diff == 0) ? 1'b1 : 1'b0;
+      dac_dunf <= (dac_mem_addr_diff == 1'b0) ? 1'b1 : 1'b0;
     end
   end
 

@@ -55,7 +55,7 @@ module axi_dacfifo_wr (
 
   // syncronization for the read side
 
-  axi_last_raddr,
+  axi_last_addr,
   dma_last_addr,
   axi_xfer_out,
 
@@ -125,7 +125,7 @@ module axi_dacfifo_wr (
   input                                     dma_xfer_req;
   input                                     dma_xfer_last;
 
-  output  [31:0]                            axi_last_raddr;
+  output  [31:0]                            axi_last_addr;
   output  [31:0]                            dma_last_addr;
   output                                    axi_xfer_out;
 
@@ -195,7 +195,7 @@ module axi_dacfifo_wr (
 
   reg                                       axi_reset = 1'b0;
   reg                                       axi_xfer_out = 1'b0;
-  reg     [31:0]                            axi_last_raddr = 'b0;
+  reg     [31:0]                            axi_last_addr = 'b0;
   reg                                       axi_awvalid = 1'b0;
   reg     [31:0]                            axi_awaddr = 32'b0;
   reg                                       axi_xfer_init = 1'b0;
@@ -511,7 +511,7 @@ module axi_dacfifo_wr (
     if (axi_resetn == 1'b0) begin
       axi_awvalid <= 'd0;
       axi_awaddr <= AXI_ADDRESS;
-      axi_last_raddr <= AXI_ADDRESS;
+      axi_last_addr <= AXI_ADDRESS;
       axi_xfer_out <= 1'b0;
     end else begin
       if (axi_awvalid == 1'b1) begin
@@ -530,7 +530,7 @@ module axi_dacfifo_wr (
         axi_awaddr <= axi_awaddr +  AXI_AWINCR;
       end
       if(axi_xfer_last_m[2] == 1'b1) begin
-        axi_last_raddr <= axi_awaddr;
+        axi_last_addr <= axi_awaddr;
         axi_xfer_out <= 1'b1;
       end
     end

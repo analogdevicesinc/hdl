@@ -44,7 +44,7 @@ module axi_dacfifo_rd (
  // xfer last for read/write synchronization
 
   axi_xfer_req,
-  axi_rd_lastaddr,
+  axi_last_raddr,
 
   // axi read address and read data channels
 
@@ -92,7 +92,7 @@ module axi_dacfifo_rd (
   // xfer last for read/write synchronization
 
   input                           axi_xfer_req;
-  input   [ 31:0]                 axi_rd_lastaddr;
+  input   [ 31:0]                 axi_last_raddr;
 
   // axi interface
 
@@ -199,7 +199,7 @@ module axi_dacfifo_rd (
       end
       if ((axi_xfer_req_init == 1'b1)) begin
         axi_araddr <= AXI_ADDRESS;
-        axi_rd_addr_h <= axi_rd_lastaddr;
+        axi_rd_addr_h <= axi_last_raddr;
       end else if ((axi_xfer_req == 1'b1) &&
                    (axi_arvalid == 1'b1) &&
                    (axi_arready == 1'b1)) begin
@@ -220,7 +220,7 @@ module axi_dacfifo_rd (
     end else begin
       axi_ddata <= axi_rdata;
       axi_dvalid <= axi_dvalid_s;
-      if (axi_xfer_req == 1) begin
+      if (axi_xfer_req == 1'b1) begin
         axi_rready <= axi_rvalid;
       end
     end
