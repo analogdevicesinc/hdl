@@ -227,7 +227,11 @@ module axi_dacfifo_dac (
   // CDC for xfer_req signal
 
   always @(posedge dac_clk) begin
-    dac_xfer_req_m <= {dac_xfer_req_m[1:0], axi_xfer_req};
+    if (dac_rst == 1'b1) begin
+      dac_xfer_req_m <= 3'b0;
+    end else begin
+      dac_xfer_req_m <= {dac_xfer_req_m[1:0], axi_xfer_req};
+    end
   end
 
   assign dac_xfer_out = dac_xfer_req_m[2];

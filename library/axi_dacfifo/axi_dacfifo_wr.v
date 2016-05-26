@@ -93,24 +93,27 @@ module axi_dacfifo_wr (
 
   parameter       AXI_DATA_WIDTH = 512;
   parameter       DMA_DATA_WIDTH = 64;
-  parameter       AXI_SIZE = 2;
-  parameter       AXI_LENGTH = 15;
+  parameter       AXI_SIZE = 6;                     // axi_awsize format
+  parameter       AXI_LENGTH = 15;                  // axi_awlength format
   parameter       AXI_ADDRESS = 32'h00000000;
   parameter       AXI_ADDRESS_LIMIT = 32'h00000000;
+  parameter       DMA_MEM_ADDRESS_WIDTH = 8;
 
   // for the syncronization buffer
 
-  localparam      MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;
-  localparam      DMA_MADDRESS_WIDTH = 8;
-  localparam      AXI_MADDRESS_WIDTH = (MEM_RATIO == 1) ? DMA_MADDRESS_WIDTH :
-                                       (MEM_RATIO == 2) ? (DMA_MADDRESS_WIDTH - 1) :
-                                       (MEM_RATIO == 4) ? (DMA_MADDRESS_WIDTH - 2) :
-                                       (DMA_MADDRESS_WIDTH - 3);
+  localparam      MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;  // Max supported MEM_RATIO is 16
+  localparam      AXI_MEM_ADDRESS_WIDTH = (MEM_RATIO == 1) ? DMA_MEM_ADDRESS_WIDTH :
+                                       (MEM_RATIO == 2) ? (DMA_MEM_ADDRESS_WIDTH - 1) :
+                                       (MEM_RATIO == 4) ? (DMA_MEM_ADDRESS_WIDTH - 2) :
+                                       (MEM_RATIO == 8) ? (DMA_MEM_ADDRESS_WIDTH - 3) :
+                                                          (DMA_MEM_ADDRESS_WIDTH - 4);
 
   // for the AXI interface
 
   localparam      AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
+  localparam      DMA_BYTE_WIDTH = DMA_DATA_WIDTH/8;
   localparam      AXI_AWINCR = (AXI_LENGTH + 1) * AXI_BYTE_WIDTH;
+  localparam      DMA_BUF_THRESHOLD_HI = {(DMA_MEM_ADDRESS_WIDTH){1'b1}} - 4;
 
   // dma fifo interface
 
@@ -156,30 +159,39 @@ module axi_dacfifo_wr (
 
   output                                    axi_werror;
 
-  // internal register
+  // registers
 
-  reg     [(DMA_MADDRESS_WIDTH-1):0]        dma_mem_waddr = 'd0;
-  reg     [(DMA_MADDRESS_WIDTH-1):0]        dma_mem_waddr_g = 'd0;
-  reg     [(DMA_MADDRESS_WIDTH-1):0]        dma_mem_addr_diff = 'd0;
-  reg     [(AXI_MADDRESS_WIDTH-1):0]        dma_mem_raddr_m1 = 'd0;
-  reg     [(AXI_MADDRESS_WIDTH-1):0]        dma_mem_raddr_m2 = 'd0;
-  reg     [(AXI_MADDRESS_WIDTH-1):0]        dma_mem_raddr = 'd0;
+  reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     dma_mem_waddr = 'd0;
+  reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     dma_mem_waddr_g = 'd0;
+  reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     dma_mem_addr_diff = 'd0;
+  reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m1 = 'd0;
+  reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2 = 'd0;
+  reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr = 'd0;
   reg                                       dma_ready = 'd0;
   reg                                       dma_rst_m1 = 1'b0;
   reg                                       dma_rst_m2 = 1'b0;
-  reg     [31:0]                            dma_last_addr = 32'b0;
+  reg     [ 2:0]                            dma_mem_last_read_toggle_m = 3'b0;
   reg     [31:0]                            dma_addr_cnt = 32'b0;
+  reg     [31:0]                            dma_last_addr = 32'b0;
+
 
   reg     [ 2:0]                            axi_xfer_req_m = 3'b0;
   reg     [ 2:0]                            axi_xfer_last_m = 3'b0;
-  reg     [(DMA_MADDRESS_WIDTH-1):0]        axi_mem_waddr_m1 = 'b0;
-  reg     [(DMA_MADDRESS_WIDTH-1):0]        axi_mem_waddr_m2 = 'b0;
-  reg     [(DMA_MADDRESS_WIDTH-1):0]        axi_mem_waddr = 'b0;
-  reg                                       axi_mem_ready = 'b0;
-  reg                                       axi_mem_ready_d = 'b0;
-  reg     [(AXI_DATA_WIDTH-1):0]            axi_mem_rdata_d = 'b0;
-  reg     [(AXI_MADDRESS_WIDTH-1):0]        axi_mem_raddr = 'd0;
-  reg     [(AXI_MADDRESS_WIDTH-1):0]        axi_mem_raddr_g = 'd0;
+
+  reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_m1 = 'b0;
+  reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_m2 = 'b0;
+  reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr = 'b0;
+  reg                                       axi_mem_valid = 'b0;
+  reg                                       axi_mem_valid_d = 'b0;
+  reg                                       axi_mem_last = 1'b0;
+  reg                                       axi_mem_last_d = 1'b0;
+  reg     [(AXI_DATA_WIDTH-1):0]            axi_mem_rdata = 'b0;
+  reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     axi_mem_raddr = 'd0;
+  reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     axi_mem_raddr_g = 'd0;
+  reg                                       axi_mem_read_en = 1'b0;
+  reg                                       axi_mem_read_en_d = 1'b0;
+  reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     axi_mem_addr_diff = 'b0;
+  reg                                       axi_mem_last_read_toggle = 1'b0;
 
   reg                                       axi_reset = 1'b0;
   reg                                       axi_xfer_out = 1'b0;
@@ -188,22 +200,27 @@ module axi_dacfifo_wr (
   reg     [31:0]                            axi_awaddr = 32'b0;
   reg                                       axi_xfer_init = 1'b0;
   reg                                       axi_werror = 1'b0;
-  reg                                       axi_mem_last = 1'b0;
-  reg                                       axi_mem_last_d = 1'b0;
-  reg     [ 3:0]                            axi_wvalid_cntr = 4'b0;
+  reg     [ 3:0]                            axi_wvalid_counter = 4'b0;
+  reg                                       axi_wr_active = 1'b0;
 
+  reg                                       axi_last_transaction = 1'b0;
+  reg                                       axi_last_transaction_d = 1'b0;
 
-  // internal signal
+  // internal signals
 
-  wire    [(DMA_MADDRESS_WIDTH-1):0]        dma_mem_addr_diff_s;
-  wire    [(DMA_MADDRESS_WIDTH-1):0]        dma_mem_raddr_s;
+  wire    [(DMA_MEM_ADDRESS_WIDTH):0]       dma_mem_addr_diff_s;
+  wire    [(DMA_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_s;
+  wire                                      dma_mem_last_read_s;
   wire                                      dma_rst_s;
 
-  wire    [(DMA_MADDRESS_WIDTH-1):0]        axi_mem_waddr_s;
-  wire                                      axi_req_s;
+  wire    [(AXI_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_s;
+  wire    [AXI_MEM_ADDRESS_WIDTH:0]         axi_mem_addr_diff_s;
   wire    [(AXI_DATA_WIDTH-1):0]            axi_mem_rdata_s;
-  wire                                      axi_wready_s;
   wire                                      axi_mem_last_s;
+  wire                                      axi_mem_eot_s;
+
+  wire                                      axi_waddr_ready_s;
+  wire                                      axi_wready_s;
 
   // binary to grey conversion
 
@@ -241,8 +258,45 @@ module axi_dacfifo_wr (
     end
   endfunction
 
+  // Instantiations
 
-  // syncronize the AXI interface reset
+  // An asymmetric memory to transfer data from DMAC interface to AXI Memory Map
+  // interface
+
+  ad_mem_asym #(
+    .A_ADDRESS_WIDTH (DMA_MEM_ADDRESS_WIDTH),
+    .A_DATA_WIDTH (DMA_DATA_WIDTH),
+    .B_ADDRESS_WIDTH (AXI_MEM_ADDRESS_WIDTH),
+    .B_DATA_WIDTH (AXI_DATA_WIDTH))
+  i_mem_asym (
+    .clka (dma_clk),
+    .wea (dma_valid),
+    .addra (dma_mem_waddr),
+    .dina (dma_data),
+    .clkb (axi_clk),
+    .addrb (axi_mem_raddr),
+    .doutb (axi_mem_rdata_s));
+
+  ad_axis_inf_rx #(.DATA_WIDTH(AXI_DATA_WIDTH)) i_axis_inf (
+    .clk (axi_clk),
+    .rst (axi_reset),
+    .valid (axi_mem_valid_d),
+    .last (axi_mem_last_d),
+    .data (axi_mem_rdata),
+    .inf_valid (axi_wvalid),
+    .inf_last (axi_wlast),
+    .inf_data (axi_wdata),
+    .inf_ready (axi_wready));
+
+  // fifo needs a reset
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_reset <= 1'b1;
+    end else begin
+      axi_reset <= 1'b0;
+    end
+  end
 
   always @(posedge dma_clk) begin
     dma_rst_m1 <= ~axi_resetn;
@@ -250,7 +304,59 @@ module axi_dacfifo_wr (
   end
   assign dma_rst_s = dma_rst_m2;
 
-  // write address generation for the asymetric memory
+  // Write address generation for the asymmetric memory
+
+  // There is no underflow or overflow. All the data movements are controlled by
+  // this module.
+
+  assign dma_mem_addr_diff_s = {1'b1, dma_mem_waddr} - dma_mem_raddr_s;
+  assign dma_mem_raddr_s = (MEM_RATIO == 1) ?  dma_mem_raddr :
+                           (MEM_RATIO == 2) ? {dma_mem_raddr, 1'b0} :
+                           (MEM_RATIO == 4) ? {dma_mem_raddr, 2'b0} :
+                           (MEM_RATIO == 8) ? {dma_mem_raddr, 3'b0} :
+                                              {dma_mem_raddr, 4'b0};
+  assign dma_mem_last_read_s = dma_mem_last_read_toggle_m[2] ^ dma_mem_last_read_toggle_m[1];
+
+  always @(posedge dma_clk) begin
+    if (dma_rst_s == 1'b1) begin
+      dma_mem_waddr <= 'h0;
+      dma_mem_waddr_g <= 8'h0;
+      dma_mem_last_read_toggle_m <= 3'b0;
+    end else begin
+      dma_mem_last_read_toggle_m = {dma_mem_last_read_toggle_m[1:0], axi_mem_last_read_toggle};
+      if ((dma_xfer_req == 1'b1) && (dma_valid == 1'b1)) begin
+        dma_mem_waddr <= dma_mem_waddr + 8'b1;
+      end
+      if (dma_mem_last_read_s == 1'b1) begin
+        dma_mem_waddr <= 'h0;
+      end
+      dma_mem_waddr_g <= b2g(dma_mem_waddr);
+    end
+  end
+
+  // The memory module request data until reaches the high threshold.
+
+  always @(posedge dma_clk) begin
+    if (dma_rst_s == 1'b1) begin
+      dma_mem_addr_diff <= 'b0;
+      dma_mem_raddr_m1 <= 'b0;
+      dma_mem_raddr_m2 <= 'b0;
+      dma_mem_raddr <= 'b0;
+    end else begin
+      dma_mem_raddr_m1 <= g2b(axi_mem_raddr_g);
+      dma_mem_raddr_m2 <= dma_mem_raddr_m1;
+      dma_mem_raddr <= dma_mem_raddr_m2;
+      dma_mem_addr_diff <= dma_mem_addr_diff_s[DMA_MEM_ADDRESS_WIDTH-1:0];
+      if (dma_mem_addr_diff >= DMA_BUF_THRESHOLD_HI) begin
+        dma_ready <= 1'b0;
+      end else begin
+        dma_ready <= 1'b1;
+      end
+    end
+  end
+
+  // An absolute address counter with DMA's granularity, this address will be
+  // used on read back
 
   always @(posedge dma_clk) begin
     if (dma_rst_s == 1'b1) begin
@@ -264,53 +370,21 @@ module axi_dacfifo_wr (
     end
   end
 
-  always @(posedge dma_clk) begin
-    if (dma_rst_s == 1'b1) begin
-      dma_mem_waddr <= 8'h0;
-      dma_mem_waddr_g <= 8'h0;
-    end else begin
-      if ((dma_ready == 1'b1) && (dma_valid == 1'b1)) begin
-        dma_mem_waddr <= dma_mem_waddr + 1;
-      end
-      dma_mem_waddr_g <= b2g(dma_mem_waddr);
-    end
-  end
+  // Read address generation for the asymmetric memory
 
-  assign dma_mem_addr_diff_s = {1'b1, dma_mem_waddr} - dma_mem_raddr_s;
-  assign dma_mem_raddr_s = (MEM_RATIO == 1) ?  dma_mem_raddr :
-                           (MEM_RATIO == 2) ? {dma_mem_raddr, 1'b0} :
-                           (MEM_RATIO == 4) ? {dma_mem_raddr, 2'b0} :
-                                              {dma_mem_raddr, 3'b0};
+  // The asymmetric memory have to have enough data for at least one AXI burst,
+  // before the controller start an AXI write transaction.
 
-  always @(posedge dma_clk) begin
-    if (dma_rst_s == 1'b1) begin
-      dma_mem_addr_diff <= 'b0;
-      dma_mem_raddr_m1 <= 'b0;
-      dma_mem_raddr_m2 <= 'b0;
-      dma_mem_raddr <= 'b0;
-    end else begin
-      dma_mem_raddr_m1 <= g2b(axi_mem_raddr_g);
-      dma_mem_raddr_m2 <= dma_mem_raddr_m1;
-      dma_mem_raddr <= dma_mem_raddr_m2;
-      dma_mem_addr_diff <= dma_mem_addr_diff_s[DMA_MADDRESS_WIDTH-1:0];
-      if (dma_mem_addr_diff >= 180) begin
-        dma_ready <= 1'b0;
-      end else begin
-        dma_ready <= 1'b1;
-      end
-    end
-  end
-
-  // read address generation for the asymetric memory
+  // CDC for the memory write address, xfer_req and xfer_last
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_xfer_req_m <= 3'b0;
       axi_xfer_last_m <= 3'b0;
+      axi_xfer_init <= 1'b0;
       axi_mem_waddr_m1 <= 'b0;
       axi_mem_waddr_m2 <= 'b0;
       axi_mem_waddr <= 'b0;
-      axi_xfer_init <= 1'b0;
     end else begin
       axi_xfer_req_m <= {axi_xfer_req_m[1:0], dma_xfer_req};
       axi_xfer_last_m <= {axi_xfer_last_m[1:0], dma_xfer_last};
@@ -321,39 +395,105 @@ module axi_dacfifo_wr (
     end
   end
 
+  // check if the AXI write channel is ready
+
   assign axi_wready_s = ~axi_wvalid | axi_wready;
-  assign axi_mem_ready_s = (axi_mem_raddr == axi_mem_waddr_s) ? 1'b0 : axi_wready_s;
-  assign axi_req_s = (axi_mem_raddr[1:0] == 2'h0) ? axi_mem_ready_s : 1'b0;
-  assign axi_mem_last_s = (axi_wvalid_cntr == AXI_LENGTH) ? axi_mem_ready_s : 1'b0;
+
+  // check if there is enough data in the asymmetric memory
+
   assign axi_mem_waddr_s = (MEM_RATIO == 1) ? axi_mem_waddr :
-                           (MEM_RATIO == 2) ? axi_mem_waddr[(DMA_MADDRESS_WIDTH-1):1] :
-                           (MEM_RATIO == 4) ? axi_mem_waddr[(DMA_MADDRESS_WIDTH-1):2] :
-                                              axi_mem_waddr[(DMA_MADDRESS_WIDTH-1):3];
+                           (MEM_RATIO == 2) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):1] :
+                           (MEM_RATIO == 4) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):2] :
+                           (MEM_RATIO == 8) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):3] :
+                                              axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):4];
+
+  assign axi_mem_addr_diff_s = {1'b1, axi_mem_waddr_s} - axi_mem_raddr;
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
-      axi_mem_ready <= 1'b0;
-      axi_mem_ready_d <= 1'b0;
-      axi_mem_rdata_d <= 'b0;
-      axi_mem_raddr <= 'b0;
-      axi_wvalid_cntr <= 4'b0;
+      axi_mem_read_en <= 1'b0;
+      axi_mem_read_en_d <= 1'b0;
+      axi_mem_addr_diff <= 'b0;
     end else begin
-      axi_mem_ready <= axi_mem_ready_s;
+      axi_mem_addr_diff <= axi_mem_addr_diff_s[(AXI_MEM_ADDRESS_WIDTH-1):0];
+      // If there is a valid request and there is enough data in the memory or it's the end of the dma transaction
+      if ((axi_xfer_req_m[2] == 1'b1) && (axi_mem_read_en == 1'b0) && (axi_wr_active == 1'b0)) begin
+        if (((axi_mem_addr_diff > AXI_LENGTH) && (axi_last_transaction == 1'b0)) ||
+             (axi_last_transaction == 1'b1) && (axi_last_transaction_d == 1'b0)) begin
+          axi_mem_read_en <= 1'b1;
+        end
+      end else if (axi_mem_last_s == 1'b1) begin
+        axi_mem_read_en <= 1'b0;
+      end
+      axi_mem_read_en_d <= axi_mem_read_en;
+    end
+  end
+
+  always @(posedge axi_clk) begin
+    if(axi_resetn == 1'b0) begin
+      axi_wr_active = 1'b0;
+    end else begin
+      if (axi_mem_read_en == 1'b1) begin
+        axi_wr_active = 1'b1;
+      end
+      if ((axi_wlast == 1'b1) && (axi_wvalid == 1'b1)) begin
+        axi_wr_active = 1'b0;
+      end
+    end
+  end
+
+  // If there is enough data and the AXI interface is ready, we can start to read
+  // out data from the memory
+
+  assign axi_mem_valid_s =  axi_mem_read_en & axi_wready_s;
+  assign axi_mem_last_s = (axi_wvalid_counter == axi_awlen) ? axi_mem_valid_s : 1'b0;
+  assign axi_mem_eot_s = axi_last_transaction_d & ~axi_last_transaction;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_mem_valid <= 1'b0;
+      axi_mem_valid_d <= 1'b0;
+      axi_mem_last <= 1'b0;
+      axi_mem_last_d <= 1'b0;
+      axi_mem_rdata <= 'b0;
+      axi_mem_raddr <= 'b0;
+      axi_wvalid_counter <= 4'b0;
+      axi_mem_last_read_toggle <= 1'b1;
+    end else begin
+      axi_mem_valid <= axi_mem_valid_s;
+      axi_mem_valid_d <= axi_mem_valid;
       axi_mem_last <= axi_mem_last_s;
       axi_mem_last_d <= axi_mem_last;
-      axi_mem_ready_d <= axi_mem_ready;
-      axi_mem_rdata_d <= axi_mem_rdata_s;
-      if (axi_mem_ready_s == 1'b1) begin
+      axi_mem_rdata <= axi_mem_rdata_s;
+      if (axi_mem_valid_s == 1'b1) begin
         axi_mem_raddr <= axi_mem_raddr + 1;
-        axi_wvalid_cntr <= (axi_wvalid_cntr == AXI_LENGTH) ? 4'b0 : axi_wvalid_cntr + 1;
+        axi_wvalid_counter <= (axi_wvalid_counter == axi_awlen) ? 4'b0 : axi_wvalid_counter + 1;
+      end
+      if (axi_mem_eot_s == 1'b1) begin
+        axi_mem_raddr <= 'b0;
+        axi_mem_last_read_toggle <= ~axi_mem_last_read_toggle;
       end
       axi_mem_raddr_g <= b2g(axi_mem_raddr);
     end
   end
 
-  // write address generation for AXI MEMORY MAP interface
 
-  // address channel
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_last_transaction <= 1'b0;
+      axi_last_transaction_d <= 1'b0;
+    end else begin
+      if (axi_xfer_last_m[2] == 1'b1) begin
+        axi_last_transaction <= 1'b1;
+      end else if (axi_wlast == 1'b1) begin
+        axi_last_transaction <= 1'b0;
+      end
+      axi_last_transaction_d <= axi_last_transaction;
+    end
+  end
+
+  // AXI Memory Map interface write address channel
 
   assign axi_awid = 4'b0000;
   assign axi_awburst = 2'b01;
@@ -364,6 +504,8 @@ module axi_dacfifo_wr (
   assign axi_awuser = 4'b0001;
   assign axi_awlen = AXI_LENGTH;
   assign axi_awsize = AXI_SIZE;
+
+  assign axi_waddr_ready_s = axi_mem_read_en & ~axi_mem_read_en_d;
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
@@ -377,24 +519,24 @@ module axi_dacfifo_wr (
           axi_awvalid <= 1'b0;
         end
       end else begin
-        if (axi_req_s == 1'b1) begin
+        if (axi_waddr_ready_s == 1'b1) begin
           axi_awvalid <= 1'b1;
         end
       end
       if (axi_xfer_init == 1'b1) begin
-        axi_awaddr <= (axi_xfer_out == 1'b1) ? AXI_ADDRESS : axi_last_raddr;
+        axi_awaddr <= (axi_xfer_out == 1'b1) ? AXI_ADDRESS : axi_last_addr;
         axi_xfer_out <= 1'b0;
       end else if ((axi_awvalid == 1'b1) && (axi_awready == 1'b1)) begin
-        axi_awaddr <= axi_awaddr + AXI_AWINCR;
+        axi_awaddr <= axi_awaddr +  AXI_AWINCR;
       end
-      if ((axi_xfer_req_m[2] == 1) && (axi_xfer_last_m[2] == 1)) begin
-        axi_last_raddr <= axi_awaddr - AXI_AWINCR;
+      if(axi_xfer_last_m[2] == 1'b1) begin
+        axi_last_raddr <= axi_awaddr;
         axi_xfer_out <= 1'b1;
       end
     end
   end
 
-  // write channel
+  // write data channel controls
 
   assign axi_wstrb = {AXI_BYTE_WIDTH{1'b1}};
   assign axi_wuser = 4'b0000;
@@ -411,42 +553,4 @@ module axi_dacfifo_wr (
     end
   end
 
-  // fifo needs a reset
-
-  always @(posedge axi_clk) begin
-    if (axi_resetn == 1'b0) begin
-      axi_reset <= 1'b1;
-    end else begin
-      axi_reset <= 1'b0;
-    end
-  end
-
-  // instantiations
-
-  ad_mem_asym #(
-    .A_ADDRESS_WIDTH (DMA_MADDRESS_WIDTH),
-    .A_DATA_WIDTH (DMA_DATA_WIDTH),
-    .B_ADDRESS_WIDTH (AXI_MADDRESS_WIDTH),
-    .B_DATA_WIDTH (AXI_DATA_WIDTH))
-  i_mem_asym (
-    .clka (dma_clk),
-    .wea (dma_valid),
-    .addra (dma_mem_waddr),
-    .dina (dma_data),
-    .clkb (axi_clk),
-    .addrb (axi_mem_raddr),
-    .doutb (axi_mem_rdata_s));
-
-  ad_axis_inf_rx #(.DATA_WIDTH(AXI_DATA_WIDTH)) i_axis_inf (
-    .clk (axi_clk),
-    .rst (axi_reset),
-    .valid (axi_mem_ready_d),
-    .last (axi_mem_last_d),
-    .data (axi_mem_rdata_d),
-    .inf_valid (axi_wvalid),
-    .inf_last (axi_wlast),
-    .inf_data (axi_wdata),
-    .inf_ready (axi_wready));
-
 endmodule
-
