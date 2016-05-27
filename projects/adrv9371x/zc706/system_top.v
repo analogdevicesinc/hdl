@@ -409,7 +409,7 @@ module system_top (
     .spi0_sdo_i (spi_mosi),
     .spi0_sdo_o (spi_mosi),
     .spi1_clk_i (1'd0),
-    .spi1_clk_o (1'd0),
+    .spi1_clk_o (),
     .spi1_csn_0_o (),
     .spi1_csn_1_o (),
     .spi1_csn_2_o (),
