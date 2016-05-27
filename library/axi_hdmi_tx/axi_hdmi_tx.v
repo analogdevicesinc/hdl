@@ -187,7 +187,6 @@ module axi_hdmi_tx (
   wire    [13:0]  up_raddr_s;
   wire    [31:0]  up_rdata_s;
   wire            up_rack_s;
-  wire            hdmi_full_range_s;
   wire            hdmi_csc_bypass_s;
   wire            hdmi_ss_bypass_s;
   wire    [ 1:0]  hdmi_srcsel_s;
@@ -258,7 +257,6 @@ module axi_hdmi_tx (
   up_hdmi_tx i_up (
     .hdmi_clk (hdmi_clk),
     .hdmi_rst (hdmi_rst),
-    .hdmi_full_range (hdmi_full_range_s),
     .hdmi_csc_bypass (hdmi_csc_bypass_s),
     .hdmi_ss_bypass (hdmi_ss_bypass_s),
     .hdmi_srcsel (hdmi_srcsel_s),
@@ -346,7 +344,6 @@ module axi_hdmi_tx (
     .vdma_wdata (vdma_wdata_s),
     .vdma_fs_ret_toggle (vdma_fs_ret_toggle_s),
     .vdma_fs_waddr (vdma_fs_waddr_s),
-    .hdmi_full_range (hdmi_full_range_s),
     .hdmi_csc_bypass (hdmi_csc_bypass_s),
     .hdmi_ss_bypass (hdmi_ss_bypass_s),
     .hdmi_srcsel (hdmi_srcsel_s),

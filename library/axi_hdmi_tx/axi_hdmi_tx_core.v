@@ -83,7 +83,6 @@ module axi_hdmi_tx_core (
 
   // processor interface
 
-  hdmi_full_range,
   hdmi_csc_bypass,
   hdmi_ss_bypass,
   hdmi_srcsel,
@@ -151,7 +150,6 @@ module axi_hdmi_tx_core (
 
   // processor interface
 
-  input           hdmi_full_range;
   input           hdmi_csc_bypass;
   input           hdmi_ss_bypass;
   input   [ 1:0]  hdmi_srcsel;
