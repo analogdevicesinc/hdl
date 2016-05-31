@@ -9,11 +9,19 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
+   element adc_os_pack
+   {
+      datum _sortIndex
+      {
+         value = "19";
+         type = "int";
+      }
+   }
    element adc_pack
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "15";
          type = "int";
       }
       datum sopceditor_expanded
@@ -76,30 +84,6 @@
       {
          value = "Cyclone V";
          type = "String";
-      }
-   }
-   element avl_xcvr_os_rx
-   {
-      datum _sortIndex
-      {
-         value = "13";
-         type = "int";
-      }
-   }
-   element avl_xcvr_rx
-   {
-      datum _sortIndex
-      {
-         value = "12";
-         type = "int";
-      }
-   }
-   element avl_xcvr_tx
-   {
-      datum _sortIndex
-      {
-         value = "7";
-         type = "int";
       }
    }
    element axi_ad9371
@@ -110,11 +94,11 @@
          type = "int";
       }
    }
-   element axi_dmac_adc
+   element axi_adc_dma
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "17";
          type = "int";
       }
       datum sopceditor_expanded
@@ -123,7 +107,7 @@
          type = "boolean";
       }
    }
-   element axi_dmac_adc.s_axi
+   element axi_adc_dma.s_axi
    {
       datum baseAddress
       {
@@ -131,11 +115,11 @@
          type = "String";
       }
    }
-   element axi_dmac_dac
+   element axi_dac_dma
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "18";
          type = "int";
       }
       datum sopceditor_expanded
@@ -144,7 +128,7 @@
          type = "boolean";
       }
    }
-   element axi_dmac_dac.s_axi
+   element axi_dac_dma.s_axi
    {
       datum baseAddress
       {
@@ -160,25 +144,33 @@
          type = "int";
       }
    }
+   element axi_os_adc_dma
+   {
+      datum _sortIndex
+      {
+         value = "20";
+         type = "int";
+      }
+   }
+   element axi_os_jesd_xcvr
+   {
+      datum _sortIndex
+      {
+         value = "11";
+         type = "int";
+      }
+   }
    element dac_upack
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "16";
          type = "int";
       }
       datum sopceditor_expanded
       {
          value = "1";
          type = "boolean";
-      }
-   }
-   element rstcntrl_xcvr_tx
-   {
-      datum _sortIndex
-      {
-         value = "6";
-         type = "int";
       }
    }
    element sys_clk
@@ -221,6 +213,62 @@
          type = "int";
       }
    }
+   element xcvr_rx_core
+   {
+      datum _sortIndex
+      {
+         value = "10";
+         type = "int";
+      }
+   }
+   element xcvr_rx_os_core
+   {
+      datum _sortIndex
+      {
+         value = "13";
+         type = "int";
+      }
+   }
+   element xcvr_rx_os_rst_cntrl
+   {
+      datum _sortIndex
+      {
+         value = "12";
+         type = "int";
+      }
+   }
+   element xcvr_rx_rst_cntrl
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+   }
+   element xcvr_tx_core
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
+      }
+   }
+   element xcvr_tx_lane_pll
+   {
+      datum _sortIndex
+      {
+         value = "7";
+         type = "int";
+      }
+   }
+   element xcvr_tx_rst_cntrl
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+   }
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
@@ -243,8 +291,38 @@
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
-   name="avl_xcvr_os_rx"
-   internal="avl_xcvr_os_rx.reconfig_avmm"
+   name="avl_rx_jesd"
+   internal="xcvr_rx_core.jesd204_rx_avs"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="avl_rx_os_jesd"
+   internal="xcvr_rx_os_core.jesd204_rx_avs"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="avl_rx_os_xcvr"
+   internal="xcvr_rx_os_core.reconfig_avmm"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="avl_rx_xcvr"
+   internal="xcvr_rx_core.reconfig_avmm"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="avl_tx_jesd"
+   internal="xcvr_tx_core.jesd204_tx_avs"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="avl_tx_lane_pll"
+   internal="xcvr_tx_lane_pll.reconfig_avmm0"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="avl_tx_xcvr"
+   internal="xcvr_tx_core.reconfig_avmm"
    type="avalon"
    dir="end" />
  <interface
@@ -253,65 +331,105 @@
    type="avalon"
    dir="end" />
  <interface
-   name="avl_xcvr_rx"
-   internal="avl_xcvr_rx.reconfig_avmm"
-   type="avalon"
+   name="axi_adc_dma_intr"
+   internal="axi_adc_dma.interrupt_sender"
+   type="interrupt"
    dir="end" />
  <interface
-   name="avl_xcvr_tx"
-   internal="avl_xcvr_tx.jesd204_tx_avs"
-   type="avalon"
+   name="axi_adc_dma_m"
+   internal="axi_adc_dma.m_dest_axi"
+   type="axi4"
+   dir="start" />
+ <interface
+   name="axi_adc_dma_s"
+   internal="axi_adc_dma.s_axi"
+   type="axi4lite"
+   dir="end" />
+ <interface
+   name="axi_adc_os_dma_intr"
+   internal="axi_os_adc_dma.interrupt_sender"
+   type="interrupt"
+   dir="end" />
+ <interface
+   name="axi_adc_os_dma_m"
+   internal="axi_os_adc_dma.m_dest_axi"
+   type="axi4"
+   dir="start" />
+ <interface
+   name="axi_adc_os_dma_s"
+   internal="axi_os_adc_dma.s_axi"
+   type="axi4lite"
+   dir="end" />
+ <interface
+   name="axi_dac_dma_intr"
+   internal="axi_dac_dma.interrupt_sender"
+   type="interrupt"
+   dir="end" />
+ <interface
+   name="axi_dac_dma_m"
+   internal="axi_dac_dma.m_src_axi"
+   type="axi4"
+   dir="start" />
+ <interface
+   name="axi_dac_dma_s"
+   internal="axi_dac_dma.s_axi"
+   type="axi4lite"
    dir="end" />
  <interface
    name="axi_dmac_adc_fifo_wr_clock"
-   internal="axi_dmac_adc.fifo_wr_clock" />
- <interface name="axi_dmac_adc_fifo_wr_if" internal="axi_dmac_adc.fifo_wr_if" />
- <interface
-   name="axi_dmac_adc_intr"
-   internal="axi_dmac_adc.interrupt_sender"
-   type="interrupt"
-   dir="end" />
- <interface
-   name="axi_dmac_adc_m_dest_axi"
-   internal="axi_dmac_adc.m_dest_axi"
-   type="axi4"
-   dir="start" />
- <interface
-   name="axi_dmac_adc_s_axi"
-   internal="axi_dmac_adc.s_axi"
-   type="axi4lite"
-   dir="end" />
+   internal="axi_adc_dma.fifo_wr_clock" />
+ <interface name="axi_dmac_adc_fifo_wr_if" internal="axi_adc_dma.fifo_wr_if" />
  <interface
    name="axi_dmac_dac_fifo_rd_clock"
-   internal="axi_dmac_dac.fifo_rd_clock" />
- <interface name="axi_dmac_dac_fifo_rd_if" internal="axi_dmac_dac.fifo_rd_if" />
- <interface
-   name="axi_dmac_dac_intr"
-   internal="axi_dmac_dac.interrupt_sender"
-   type="interrupt"
-   dir="end" />
- <interface
-   name="axi_dmac_dac_m_src_axi"
-   internal="axi_dmac_dac.m_src_axi"
-   type="axi4"
-   dir="start" />
- <interface
-   name="axi_dmac_dac_s_axi"
-   internal="axi_dmac_dac.s_axi"
-   type="axi4lite"
-   dir="end" />
+   internal="axi_dac_dma.fifo_rd_clock" />
+ <interface name="axi_dmac_dac_fifo_rd_if" internal="axi_dac_dma.fifo_rd_if" />
  <interface
    name="axi_jesd_xcvr"
    internal="axi_jesd_xcvr.s_axi"
    type="axi4lite"
    dir="end" />
  <interface
+   name="axi_os_jesd_xcvr"
+   internal="axi_os_jesd_xcvr.s_axi"
+   type="axi4lite"
+   dir="end" />
+ <interface
+   name="rx_data"
+   internal="xcvr_rx_core.rx_serial_data"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="rx_os_data"
+   internal="xcvr_rx_os_core.rx_serial_data"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="rx_os_sync"
+   internal="axi_os_jesd_xcvr.if_rx_sync"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="rx_os_sysref"
+   internal="axi_os_jesd_xcvr.if_rx_ext_sysref_in"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="rx_sync"
+   internal="axi_jesd_xcvr.if_rx_sync"
+   type="conduit"
+   dir="end" />
+ <interface
    name="rx_sysref"
-   internal="avl_xcvr_rx.sysref"
+   internal="axi_jesd_xcvr.if_rx_ext_sysref_in"
    type="conduit"
    dir="end" />
  <interface name="sys_clk" internal="sys_clk.in_clk" type="clock" dir="end" />
  <interface name="sys_rst" internal="sys_rst.in_reset" type="reset" dir="end" />
+ <interface
+   name="tx_data"
+   internal="xcvr_tx_core.tx_serial_data"
+   type="conduit"
+   dir="end" />
  <interface
    name="tx_sync"
    internal="axi_jesd_xcvr.if_tx_sync"
@@ -327,209 +445,20 @@
    internal="xcvr_ref_clk.in_clk"
    type="clock"
    dir="end" />
+ <module name="adc_os_pack" kind="util_cpack" version="1.0" enabled="1">
+  <parameter name="CHANNEL_DATA_WIDTH" value="32" />
+  <parameter name="NUM_OF_CHANNELS" value="2" />
+ </module>
  <module name="adc_pack" kind="util_cpack" version="1.0" enabled="1">
   <parameter name="CHANNEL_DATA_WIDTH" value="16" />
   <parameter name="NUM_OF_CHANNELS" value="4" />
- </module>
- <module
-   name="avl_xcvr_os_rx"
-   kind="altera_jesd204"
-   version="15.1"
-   enabled="1">
-  <parameter name="ADJCNT" value="0" />
-  <parameter name="ADJDIR" value="0" />
-  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
-  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
-  <parameter name="BID" value="0" />
-  <parameter name="CF" value="0" />
-  <parameter name="CS" value="0" />
-  <parameter name="DATA_PATH" value="RX" />
-  <parameter name="DEVICE_FAMILY" value="Arria 10" />
-  <parameter name="DID" value="0" />
-  <parameter name="DLB_TEST" value="0" />
-  <parameter name="ECC_EN" value="0" />
-  <parameter name="ED_DEV_KIT" value="NONE" />
-  <parameter name="ED_FILESET_SIM" value="false" />
-  <parameter name="ED_FILESET_SYNTH" value="false" />
-  <parameter name="ED_GENERIC_5SERIES" value="No" />
-  <parameter name="ED_GENERIC_A10" value="No" />
-  <parameter name="ED_HDL_FORMAT_SIM" value="VERILOG" />
-  <parameter name="ED_HDL_FORMAT_SYNTH" value="VERILOG" />
-  <parameter name="GUI_CFG_F" value="4" />
-  <parameter name="GUI_EN_CFG_F" value="false" />
-  <parameter name="HD" value="0" />
-  <parameter name="JESDV" value="1" />
-  <parameter name="K" value="16" />
-  <parameter name="L" value="2" />
-  <parameter name="LID0" value="0" />
-  <parameter name="LID1" value="1" />
-  <parameter name="LID2" value="2" />
-  <parameter name="LID3" value="3" />
-  <parameter name="LID4" value="4" />
-  <parameter name="LID5" value="5" />
-  <parameter name="LID6" value="6" />
-  <parameter name="LID7" value="7" />
-  <parameter name="M" value="2" />
-  <parameter name="N" value="16" />
-  <parameter name="N_PRIME" value="16" />
-  <parameter name="OPTIMIZE" value="0" />
-  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG1" />
-  <parameter name="PHADJ" value="0" />
-  <parameter name="REFCLK_FREQ" value="122.88" />
-  <parameter name="RES1" value="0" />
-  <parameter name="RES2" value="0" />
-  <parameter name="S" value="1" />
-  <parameter name="SCR" value="1" />
-  <parameter name="SUBCLASSV" value="1" />
-  <parameter name="TERMINATE_RECONFIG_EN" value="false" />
-  <parameter name="TEST_COMPONENTS_EN" value="false" />
-  <parameter name="bitrev_en" value="false" />
-  <parameter name="bonded_mode" value="bonded" />
-  <parameter name="lane_rate" value="4915.2" />
-  <parameter name="part_trait_bd" value="NIGHTFURY4" />
-  <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
-  <parameter name="pll_reconfig_enable" value="true" />
-  <parameter name="pll_type" value="CMU" />
-  <parameter name="rcfg_jtag_enable" value="false" />
-  <parameter name="sdc_constraint" value="1.0" />
-  <parameter name="set_capability_reg_enable" value="true" />
-  <parameter name="set_csr_soft_logic_enable" value="true" />
-  <parameter name="set_prbs_soft_logic_enable" value="false" />
-  <parameter name="set_user_identifier" value="0" />
-  <parameter name="wrapper_opt" value="base_phy" />
- </module>
- <module name="avl_xcvr_rx" kind="altera_jesd204" version="15.1" enabled="1">
-  <parameter name="ADJCNT" value="0" />
-  <parameter name="ADJDIR" value="0" />
-  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
-  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
-  <parameter name="BID" value="0" />
-  <parameter name="CF" value="0" />
-  <parameter name="CS" value="0" />
-  <parameter name="DATA_PATH" value="RX" />
-  <parameter name="DEVICE_FAMILY" value="Arria 10" />
-  <parameter name="DID" value="0" />
-  <parameter name="DLB_TEST" value="0" />
-  <parameter name="ECC_EN" value="0" />
-  <parameter name="ED_DEV_KIT" value="NONE" />
-  <parameter name="ED_FILESET_SIM" value="false" />
-  <parameter name="ED_FILESET_SYNTH" value="false" />
-  <parameter name="ED_GENERIC_5SERIES" value="No" />
-  <parameter name="ED_GENERIC_A10" value="No" />
-  <parameter name="ED_HDL_FORMAT_SIM" value="VERILOG" />
-  <parameter name="ED_HDL_FORMAT_SYNTH" value="VERILOG" />
-  <parameter name="GUI_CFG_F" value="4" />
-  <parameter name="GUI_EN_CFG_F" value="false" />
-  <parameter name="HD" value="0" />
-  <parameter name="JESDV" value="1" />
-  <parameter name="K" value="16" />
-  <parameter name="L" value="2" />
-  <parameter name="LID0" value="0" />
-  <parameter name="LID1" value="1" />
-  <parameter name="LID2" value="2" />
-  <parameter name="LID3" value="3" />
-  <parameter name="LID4" value="4" />
-  <parameter name="LID5" value="5" />
-  <parameter name="LID6" value="6" />
-  <parameter name="LID7" value="7" />
-  <parameter name="M" value="4" />
-  <parameter name="N" value="16" />
-  <parameter name="N_PRIME" value="16" />
-  <parameter name="OPTIMIZE" value="0" />
-  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG1" />
-  <parameter name="PHADJ" value="0" />
-  <parameter name="REFCLK_FREQ" value="122.88" />
-  <parameter name="RES1" value="0" />
-  <parameter name="RES2" value="0" />
-  <parameter name="S" value="1" />
-  <parameter name="SCR" value="1" />
-  <parameter name="SUBCLASSV" value="1" />
-  <parameter name="TERMINATE_RECONFIG_EN" value="false" />
-  <parameter name="TEST_COMPONENTS_EN" value="false" />
-  <parameter name="bitrev_en" value="false" />
-  <parameter name="bonded_mode" value="bonded" />
-  <parameter name="lane_rate" value="4915.2" />
-  <parameter name="part_trait_bd" value="NIGHTFURY4" />
-  <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
-  <parameter name="pll_reconfig_enable" value="true" />
-  <parameter name="pll_type" value="CMU" />
-  <parameter name="rcfg_jtag_enable" value="false" />
-  <parameter name="sdc_constraint" value="1.0" />
-  <parameter name="set_capability_reg_enable" value="true" />
-  <parameter name="set_csr_soft_logic_enable" value="false" />
-  <parameter name="set_prbs_soft_logic_enable" value="false" />
-  <parameter name="set_user_identifier" value="0" />
-  <parameter name="wrapper_opt" value="base_phy" />
- </module>
- <module name="avl_xcvr_tx" kind="altera_jesd204" version="15.1" enabled="1">
-  <parameter name="ADJCNT" value="0" />
-  <parameter name="ADJDIR" value="0" />
-  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
-  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
-  <parameter name="BID" value="0" />
-  <parameter name="CF" value="0" />
-  <parameter name="CS" value="0" />
-  <parameter name="DATA_PATH" value="TX" />
-  <parameter name="DEVICE_FAMILY" value="Arria 10" />
-  <parameter name="DID" value="0" />
-  <parameter name="DLB_TEST" value="0" />
-  <parameter name="ECC_EN" value="0" />
-  <parameter name="ED_DEV_KIT" value="NONE" />
-  <parameter name="ED_FILESET_SIM" value="false" />
-  <parameter name="ED_FILESET_SYNTH" value="false" />
-  <parameter name="ED_GENERIC_5SERIES" value="No" />
-  <parameter name="ED_GENERIC_A10" value="No" />
-  <parameter name="ED_HDL_FORMAT_SIM" value="VERILOG" />
-  <parameter name="ED_HDL_FORMAT_SYNTH" value="VERILOG" />
-  <parameter name="GUI_CFG_F" value="4" />
-  <parameter name="GUI_EN_CFG_F" value="false" />
-  <parameter name="HD" value="0" />
-  <parameter name="JESDV" value="1" />
-  <parameter name="K" value="32" />
-  <parameter name="L" value="4" />
-  <parameter name="LID0" value="0" />
-  <parameter name="LID1" value="1" />
-  <parameter name="LID2" value="2" />
-  <parameter name="LID3" value="3" />
-  <parameter name="LID4" value="4" />
-  <parameter name="LID5" value="5" />
-  <parameter name="LID6" value="6" />
-  <parameter name="LID7" value="7" />
-  <parameter name="M" value="4" />
-  <parameter name="N" value="16" />
-  <parameter name="N_PRIME" value="16" />
-  <parameter name="OPTIMIZE" value="0" />
-  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG1" />
-  <parameter name="PHADJ" value="0" />
-  <parameter name="REFCLK_FREQ" value="125.0" />
-  <parameter name="RES1" value="0" />
-  <parameter name="RES2" value="0" />
-  <parameter name="S" value="1" />
-  <parameter name="SCR" value="1" />
-  <parameter name="SUBCLASSV" value="1" />
-  <parameter name="TERMINATE_RECONFIG_EN" value="false" />
-  <parameter name="TEST_COMPONENTS_EN" value="false" />
-  <parameter name="bitrev_en" value="false" />
-  <parameter name="bonded_mode" value="bonded" />
-  <parameter name="lane_rate" value="4915.2" />
-  <parameter name="part_trait_bd" value="NIGHTFURY4" />
-  <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
-  <parameter name="pll_reconfig_enable" value="true" />
-  <parameter name="pll_type" value="CMU" />
-  <parameter name="rcfg_jtag_enable" value="false" />
-  <parameter name="sdc_constraint" value="1.0" />
-  <parameter name="set_capability_reg_enable" value="false" />
-  <parameter name="set_csr_soft_logic_enable" value="true" />
-  <parameter name="set_prbs_soft_logic_enable" value="false" />
-  <parameter name="set_user_identifier" value="0" />
-  <parameter name="wrapper_opt" value="base_phy" />
  </module>
  <module name="axi_ad9371" kind="axi_ad9371" version="1.0" enabled="1">
   <parameter name="ADC_DATAPATH_DISABLE" value="0" />
   <parameter name="DAC_DATAPATH_DISABLE" value="0" />
   <parameter name="ID" value="0" />
  </module>
- <module name="axi_dmac_adc" kind="axi_dmac" version="1.0" enabled="1">
+ <module name="axi_adc_dma" kind="axi_dmac" version="1.0" enabled="1">
   <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
   <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
   <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
@@ -546,7 +475,7 @@
   <parameter name="ID" value="0" />
   <parameter name="SYNC_TRANSFER_START" value="1" />
  </module>
- <module name="axi_dmac_dac" kind="axi_dmac" version="1.0" enabled="1">
+ <module name="axi_dac_dma" kind="axi_dmac" version="1.0" enabled="1">
   <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
   <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
   <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
@@ -554,8 +483,8 @@
   <parameter name="AXI_SLICE_SRC" value="0" />
   <parameter name="CYCLIC" value="1" />
   <parameter name="DMA_2D_TRANSFER" value="0" />
-  <parameter name="DMA_DATA_WIDTH_DEST" value="64" />
-  <parameter name="DMA_DATA_WIDTH_SRC" value="64" />
+  <parameter name="DMA_DATA_WIDTH_DEST" value="128" />
+  <parameter name="DMA_DATA_WIDTH_SRC" value="128" />
   <parameter name="DMA_LENGTH_WIDTH" value="24" />
   <parameter name="DMA_TYPE_DEST" value="2" />
   <parameter name="DMA_TYPE_SRC" value="0" />
@@ -569,37 +498,36 @@
   <parameter name="RX_NUM_OF_LANES" value="2" />
   <parameter name="TX_NUM_OF_LANES" value="4" />
  </module>
- <module name="dac_upack" kind="util_upack" version="1.0" enabled="1">
-  <parameter name="CHANNEL_DATA_WIDTH" value="16" />
-  <parameter name="NUM_OF_CHANNELS" value="4" />
+ <module name="axi_os_adc_dma" kind="axi_dmac" version="1.0" enabled="1">
+  <parameter name="ASYNC_CLK_DEST_REQ" value="1" />
+  <parameter name="ASYNC_CLK_REQ_SRC" value="1" />
+  <parameter name="ASYNC_CLK_SRC_DEST" value="1" />
+  <parameter name="AXI_SLICE_DEST" value="0" />
+  <parameter name="AXI_SLICE_SRC" value="0" />
+  <parameter name="CYCLIC" value="0" />
+  <parameter name="DMA_2D_TRANSFER" value="0" />
+  <parameter name="DMA_DATA_WIDTH_DEST" value="64" />
+  <parameter name="DMA_DATA_WIDTH_SRC" value="64" />
+  <parameter name="DMA_LENGTH_WIDTH" value="24" />
+  <parameter name="DMA_TYPE_DEST" value="0" />
+  <parameter name="DMA_TYPE_SRC" value="2" />
+  <parameter name="FIFO_SIZE" value="4" />
+  <parameter name="ID" value="0" />
+  <parameter name="SYNC_TRANSFER_START" value="1" />
  </module>
  <module
-   name="rstcntrl_xcvr_tx"
-   kind="altera_xcvr_reset_control"
-   version="15.1"
+   name="axi_os_jesd_xcvr"
+   kind="axi_jesd_xcvr"
+   version="1.0"
    enabled="1">
-  <parameter name="CHANNELS" value="4" />
-  <parameter name="PLLS" value="1" />
-  <parameter name="REDUCED_SIM_TIME" value="1" />
-  <parameter name="RX_ENABLE" value="0" />
-  <parameter name="RX_PER_CHANNEL" value="0" />
-  <parameter name="SYNCHRONIZE_PLL_RESET" value="0" />
-  <parameter name="SYNCHRONIZE_RESET" value="1" />
-  <parameter name="SYS_CLK_IN_MHZ" value="100" />
-  <parameter name="TX_ENABLE" value="1" />
-  <parameter name="TX_PER_CHANNEL" value="0" />
-  <parameter name="TX_PLL_ENABLE" value="1" />
-  <parameter name="T_PLL_LOCK_HYST" value="0" />
-  <parameter name="T_PLL_POWERDOWN" value="1000" />
-  <parameter name="T_RX_ANALOGRESET" value="40" />
-  <parameter name="T_RX_DIGITALRESET" value="4000" />
-  <parameter name="T_TX_ANALOGRESET" value="0" />
-  <parameter name="T_TX_DIGITALRESET" value="20" />
-  <parameter name="device_family" value="Arria 10" />
-  <parameter name="gui_pll_cal_busy" value="0" />
-  <parameter name="gui_rx_auto_reset" value="0" />
-  <parameter name="gui_split_interfaces" value="0" />
-  <parameter name="gui_tx_auto_reset" value="0" />
+  <parameter name="DEVICE_TYPE" value="0" />
+  <parameter name="ID" value="1" />
+  <parameter name="RX_NUM_OF_LANES" value="2" />
+  <parameter name="TX_NUM_OF_LANES" value="0" />
+ </module>
+ <module name="dac_upack" kind="util_upack" version="1.0" enabled="1">
+  <parameter name="CHANNEL_DATA_WIDTH" value="32" />
+  <parameter name="NUM_OF_CHANNELS" value="4" />
  </module>
  <module name="sys_clk" kind="altera_clock_bridge" version="15.1" enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
@@ -915,31 +843,414 @@
   <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
+ <module name="xcvr_rx_core" kind="altera_jesd204" version="15.1" enabled="1">
+  <parameter name="ADJCNT" value="0" />
+  <parameter name="ADJDIR" value="0" />
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
+  <parameter name="BID" value="0" />
+  <parameter name="CF" value="0" />
+  <parameter name="CS" value="0" />
+  <parameter name="DATA_PATH" value="RX" />
+  <parameter name="DEVICE_FAMILY" value="Arria 10" />
+  <parameter name="DID" value="0" />
+  <parameter name="DLB_TEST" value="0" />
+  <parameter name="ECC_EN" value="0" />
+  <parameter name="ED_DEV_KIT" value="NONE" />
+  <parameter name="ED_FILESET_SIM" value="false" />
+  <parameter name="ED_FILESET_SYNTH" value="false" />
+  <parameter name="ED_GENERIC_5SERIES" value="No" />
+  <parameter name="ED_GENERIC_A10" value="No" />
+  <parameter name="ED_HDL_FORMAT_SIM" value="VERILOG" />
+  <parameter name="ED_HDL_FORMAT_SYNTH" value="VERILOG" />
+  <parameter name="GUI_CFG_F" value="4" />
+  <parameter name="GUI_EN_CFG_F" value="false" />
+  <parameter name="HD" value="0" />
+  <parameter name="JESDV" value="1" />
+  <parameter name="K" value="32" />
+  <parameter name="L" value="2" />
+  <parameter name="LID0" value="0" />
+  <parameter name="LID1" value="1" />
+  <parameter name="LID2" value="2" />
+  <parameter name="LID3" value="3" />
+  <parameter name="LID4" value="4" />
+  <parameter name="LID5" value="5" />
+  <parameter name="LID6" value="6" />
+  <parameter name="LID7" value="7" />
+  <parameter name="M" value="4" />
+  <parameter name="N" value="16" />
+  <parameter name="N_PRIME" value="16" />
+  <parameter name="OPTIMIZE" value="0" />
+  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG2" />
+  <parameter name="PHADJ" value="0" />
+  <parameter name="REFCLK_FREQ" value="122.88" />
+  <parameter name="RES1" value="0" />
+  <parameter name="RES2" value="0" />
+  <parameter name="S" value="1" />
+  <parameter name="SCR" value="1" />
+  <parameter name="SUBCLASSV" value="1" />
+  <parameter name="TERMINATE_RECONFIG_EN" value="false" />
+  <parameter name="TEST_COMPONENTS_EN" value="false" />
+  <parameter name="bitrev_en" value="false" />
+  <parameter name="bonded_mode" value="non_bonded" />
+  <parameter name="lane_rate" value="4915.2" />
+  <parameter name="part_trait_bd" value="NIGHTFURY4" />
+  <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
+  <parameter name="pll_reconfig_enable" value="true" />
+  <parameter name="pll_type" value="CMU" />
+  <parameter name="rcfg_jtag_enable" value="false" />
+  <parameter name="sdc_constraint" value="1.0" />
+  <parameter name="set_capability_reg_enable" value="true" />
+  <parameter name="set_csr_soft_logic_enable" value="true" />
+  <parameter name="set_prbs_soft_logic_enable" value="false" />
+  <parameter name="set_user_identifier" value="0" />
+  <parameter name="wrapper_opt" value="base_phy" />
+ </module>
+ <module
+   name="xcvr_rx_os_core"
+   kind="altera_jesd204"
+   version="15.1"
+   enabled="1">
+  <parameter name="ADJCNT" value="0" />
+  <parameter name="ADJDIR" value="0" />
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
+  <parameter name="BID" value="0" />
+  <parameter name="CF" value="0" />
+  <parameter name="CS" value="0" />
+  <parameter name="DATA_PATH" value="RX" />
+  <parameter name="DEVICE_FAMILY" value="Arria 10" />
+  <parameter name="DID" value="0" />
+  <parameter name="DLB_TEST" value="0" />
+  <parameter name="ECC_EN" value="0" />
+  <parameter name="ED_DEV_KIT" value="NONE" />
+  <parameter name="ED_FILESET_SIM" value="false" />
+  <parameter name="ED_FILESET_SYNTH" value="false" />
+  <parameter name="ED_GENERIC_5SERIES" value="No" />
+  <parameter name="ED_GENERIC_A10" value="No" />
+  <parameter name="ED_HDL_FORMAT_SIM" value="VERILOG" />
+  <parameter name="ED_HDL_FORMAT_SYNTH" value="VERILOG" />
+  <parameter name="GUI_CFG_F" value="4" />
+  <parameter name="GUI_EN_CFG_F" value="false" />
+  <parameter name="HD" value="0" />
+  <parameter name="JESDV" value="1" />
+  <parameter name="K" value="16" />
+  <parameter name="L" value="2" />
+  <parameter name="LID0" value="0" />
+  <parameter name="LID1" value="1" />
+  <parameter name="LID2" value="2" />
+  <parameter name="LID3" value="3" />
+  <parameter name="LID4" value="4" />
+  <parameter name="LID5" value="5" />
+  <parameter name="LID6" value="6" />
+  <parameter name="LID7" value="7" />
+  <parameter name="M" value="2" />
+  <parameter name="N" value="16" />
+  <parameter name="N_PRIME" value="16" />
+  <parameter name="OPTIMIZE" value="0" />
+  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG1" />
+  <parameter name="PHADJ" value="0" />
+  <parameter name="REFCLK_FREQ" value="122.88" />
+  <parameter name="RES1" value="0" />
+  <parameter name="RES2" value="0" />
+  <parameter name="S" value="1" />
+  <parameter name="SCR" value="1" />
+  <parameter name="SUBCLASSV" value="1" />
+  <parameter name="TERMINATE_RECONFIG_EN" value="false" />
+  <parameter name="TEST_COMPONENTS_EN" value="false" />
+  <parameter name="bitrev_en" value="false" />
+  <parameter name="bonded_mode" value="bonded" />
+  <parameter name="lane_rate" value="4915.2" />
+  <parameter name="part_trait_bd" value="NIGHTFURY4" />
+  <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
+  <parameter name="pll_reconfig_enable" value="true" />
+  <parameter name="pll_type" value="CMU" />
+  <parameter name="rcfg_jtag_enable" value="false" />
+  <parameter name="sdc_constraint" value="1.0" />
+  <parameter name="set_capability_reg_enable" value="true" />
+  <parameter name="set_csr_soft_logic_enable" value="true" />
+  <parameter name="set_prbs_soft_logic_enable" value="false" />
+  <parameter name="set_user_identifier" value="0" />
+  <parameter name="wrapper_opt" value="base_phy" />
+ </module>
+ <module
+   name="xcvr_rx_os_rst_cntrl"
+   kind="altera_xcvr_reset_control"
+   version="15.1"
+   enabled="1">
+  <parameter name="CHANNELS" value="2" />
+  <parameter name="PLLS" value="1" />
+  <parameter name="REDUCED_SIM_TIME" value="1" />
+  <parameter name="RX_ENABLE" value="1" />
+  <parameter name="RX_PER_CHANNEL" value="0" />
+  <parameter name="SYNCHRONIZE_PLL_RESET" value="0" />
+  <parameter name="SYNCHRONIZE_RESET" value="1" />
+  <parameter name="SYS_CLK_IN_MHZ" value="100" />
+  <parameter name="TX_ENABLE" value="0" />
+  <parameter name="TX_PER_CHANNEL" value="0" />
+  <parameter name="TX_PLL_ENABLE" value="0" />
+  <parameter name="T_PLL_LOCK_HYST" value="0" />
+  <parameter name="T_PLL_POWERDOWN" value="1000" />
+  <parameter name="T_RX_ANALOGRESET" value="70000" />
+  <parameter name="T_RX_DIGITALRESET" value="4000" />
+  <parameter name="T_TX_ANALOGRESET" value="70000" />
+  <parameter name="T_TX_DIGITALRESET" value="70000" />
+  <parameter name="device_family" value="Arria 10" />
+  <parameter name="gui_pll_cal_busy" value="1" />
+  <parameter name="gui_rx_auto_reset" value="0" />
+  <parameter name="gui_split_interfaces" value="0" />
+  <parameter name="gui_tx_auto_reset" value="0" />
+ </module>
+ <module
+   name="xcvr_rx_rst_cntrl"
+   kind="altera_xcvr_reset_control"
+   version="15.1"
+   enabled="1">
+  <parameter name="CHANNELS" value="2" />
+  <parameter name="PLLS" value="1" />
+  <parameter name="REDUCED_SIM_TIME" value="1" />
+  <parameter name="RX_ENABLE" value="1" />
+  <parameter name="RX_PER_CHANNEL" value="0" />
+  <parameter name="SYNCHRONIZE_PLL_RESET" value="0" />
+  <parameter name="SYNCHRONIZE_RESET" value="1" />
+  <parameter name="SYS_CLK_IN_MHZ" value="100" />
+  <parameter name="TX_ENABLE" value="0" />
+  <parameter name="TX_PER_CHANNEL" value="0" />
+  <parameter name="TX_PLL_ENABLE" value="0" />
+  <parameter name="T_PLL_LOCK_HYST" value="0" />
+  <parameter name="T_PLL_POWERDOWN" value="1000" />
+  <parameter name="T_RX_ANALOGRESET" value="70000" />
+  <parameter name="T_RX_DIGITALRESET" value="4000" />
+  <parameter name="T_TX_ANALOGRESET" value="70000" />
+  <parameter name="T_TX_DIGITALRESET" value="70000" />
+  <parameter name="device_family" value="Arria 10" />
+  <parameter name="gui_pll_cal_busy" value="1" />
+  <parameter name="gui_rx_auto_reset" value="0" />
+  <parameter name="gui_split_interfaces" value="0" />
+  <parameter name="gui_tx_auto_reset" value="0" />
+ </module>
+ <module name="xcvr_tx_core" kind="altera_jesd204" version="15.1" enabled="1">
+  <parameter name="ADJCNT" value="0" />
+  <parameter name="ADJDIR" value="0" />
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
+  <parameter name="BID" value="0" />
+  <parameter name="CF" value="0" />
+  <parameter name="CS" value="0" />
+  <parameter name="DATA_PATH" value="TX" />
+  <parameter name="DEVICE_FAMILY" value="Arria 10" />
+  <parameter name="DID" value="0" />
+  <parameter name="DLB_TEST" value="0" />
+  <parameter name="ECC_EN" value="0" />
+  <parameter name="ED_DEV_KIT" value="NONE" />
+  <parameter name="ED_FILESET_SIM" value="false" />
+  <parameter name="ED_FILESET_SYNTH" value="false" />
+  <parameter name="ED_GENERIC_5SERIES" value="No" />
+  <parameter name="ED_GENERIC_A10" value="No" />
+  <parameter name="ED_HDL_FORMAT_SIM" value="VERILOG" />
+  <parameter name="ED_HDL_FORMAT_SYNTH" value="VERILOG" />
+  <parameter name="GUI_CFG_F" value="4" />
+  <parameter name="GUI_EN_CFG_F" value="false" />
+  <parameter name="HD" value="0" />
+  <parameter name="JESDV" value="1" />
+  <parameter name="K" value="32" />
+  <parameter name="L" value="4" />
+  <parameter name="LID0" value="0" />
+  <parameter name="LID1" value="1" />
+  <parameter name="LID2" value="2" />
+  <parameter name="LID3" value="3" />
+  <parameter name="LID4" value="4" />
+  <parameter name="LID5" value="5" />
+  <parameter name="LID6" value="6" />
+  <parameter name="LID7" value="7" />
+  <parameter name="M" value="4" />
+  <parameter name="N" value="16" />
+  <parameter name="N_PRIME" value="16" />
+  <parameter name="OPTIMIZE" value="0" />
+  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG2" />
+  <parameter name="PHADJ" value="0" />
+  <parameter name="REFCLK_FREQ" value="125.0" />
+  <parameter name="RES1" value="0" />
+  <parameter name="RES2" value="0" />
+  <parameter name="S" value="1" />
+  <parameter name="SCR" value="1" />
+  <parameter name="SUBCLASSV" value="1" />
+  <parameter name="TERMINATE_RECONFIG_EN" value="false" />
+  <parameter name="TEST_COMPONENTS_EN" value="false" />
+  <parameter name="bitrev_en" value="false" />
+  <parameter name="bonded_mode" value="non_bonded" />
+  <parameter name="lane_rate" value="4915.2" />
+  <parameter name="part_trait_bd" value="NIGHTFURY4" />
+  <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
+  <parameter name="pll_reconfig_enable" value="true" />
+  <parameter name="pll_type" value="CMU" />
+  <parameter name="rcfg_jtag_enable" value="false" />
+  <parameter name="sdc_constraint" value="1.0" />
+  <parameter name="set_capability_reg_enable" value="false" />
+  <parameter name="set_csr_soft_logic_enable" value="true" />
+  <parameter name="set_prbs_soft_logic_enable" value="false" />
+  <parameter name="set_user_identifier" value="0" />
+  <parameter name="wrapper_opt" value="base_phy" />
+ </module>
+ <module
+   name="xcvr_tx_lane_pll"
+   kind="altera_xcvr_atx_pll_a10"
+   version="15.1"
+   enabled="1">
+  <parameter name="base_device" value="NIGHTFURY4" />
+  <parameter name="bw_sel" value="medium" />
+  <parameter name="device" value="10AS066N3F40E2SGE2" />
+  <parameter name="device_family" value="Arria 10" />
+  <parameter name="enable_16G_path" value="0" />
+  <parameter name="enable_8G_path" value="1" />
+  <parameter name="enable_analog_resets" value="0" />
+  <parameter name="enable_atx_to_fpll_cascade_out" value="0" />
+  <parameter name="enable_bonding_clks" value="0" />
+  <parameter name="enable_cascade_out" value="0" />
+  <parameter name="enable_debug_ports_parameters" value="0" />
+  <parameter name="enable_fb_comp_bonding" value="0" />
+  <parameter name="enable_fractional" value="0" />
+  <parameter name="enable_hfreq_clk" value="0" />
+  <parameter name="enable_hip_cal_done_port" value="0" />
+  <parameter name="enable_manual_configuration" value="1" />
+  <parameter name="enable_mcgb" value="0" />
+  <parameter name="enable_mcgb_pcie_clksw" value="0" />
+  <parameter name="enable_pcie_clk" value="0" />
+  <parameter name="enable_pld_atx_cal_busy_port" value="1" />
+  <parameter name="enable_pld_mcgb_cal_busy_port" value="0" />
+  <parameter name="enable_pll_reconfig" value="1" />
+  <parameter name="generate_add_hdl_instance_example" value="0" />
+  <parameter name="generate_docs" value="1" />
+  <parameter name="mcgb_aux_clkin_cnt" value="0" />
+  <parameter name="mcgb_div" value="1" />
+  <parameter name="message_level" value="error" />
+  <parameter name="pma_width" value="64" />
+  <parameter name="primary_pll_buffer">GX clock output buffer</parameter>
+  <parameter name="prot_mode" value="Basic" />
+  <parameter name="rcfg_debug" value="0" />
+  <parameter name="rcfg_enable_avmm_busy_port" value="0" />
+  <parameter name="rcfg_file_prefix">altera_xcvr_atx_pll_a10</parameter>
+  <parameter name="rcfg_h_file_enable" value="0" />
+  <parameter name="rcfg_jtag_enable" value="0" />
+  <parameter name="rcfg_mif_file_enable" value="0" />
+  <parameter name="rcfg_multi_enable" value="0" />
+  <parameter name="rcfg_param_vals1" value="" />
+  <parameter name="rcfg_param_vals2" value="" />
+  <parameter name="rcfg_profile_cnt" value="2" />
+  <parameter name="rcfg_profile_select" value="1" />
+  <parameter name="rcfg_separate_avmm_busy" value="1" />
+  <parameter name="rcfg_sv_file_enable" value="0" />
+  <parameter name="rcfg_txt_file_enable" value="0" />
+  <parameter name="refclk_cnt" value="1" />
+  <parameter name="refclk_index" value="0" />
+  <parameter name="select_manual_config" value="false" />
+  <parameter name="set_altera_xcvr_atx_pll_a10_calibration_en" value="1" />
+  <parameter name="set_auto_reference_clock_frequency" value="122.88" />
+  <parameter name="set_capability_reg_enable" value="1" />
+  <parameter name="set_csr_soft_logic_enable" value="1" />
+  <parameter name="set_fref_clock_frequency" value="156.25" />
+  <parameter name="set_hip_cal_en" value="0" />
+  <parameter name="set_k_counter" value="2000000000" />
+  <parameter name="set_l_cascade_counter" value="15" />
+  <parameter name="set_l_cascade_predivider" value="1" />
+  <parameter name="set_l_counter" value="16" />
+  <parameter name="set_m_counter" value="24" />
+  <parameter name="set_manual_reference_clock_frequency" value="200.0" />
+  <parameter name="set_output_clock_frequency" value="2457.6" />
+  <parameter name="set_ref_clk_div" value="1" />
+  <parameter name="set_user_identifier" value="0" />
+  <parameter name="silicon_rev" value="false" />
+  <parameter name="support_mode" value="user_mode" />
+  <parameter name="test_mode" value="0" />
+ </module>
+ <module
+   name="xcvr_tx_rst_cntrl"
+   kind="altera_xcvr_reset_control"
+   version="15.1"
+   enabled="1">
+  <parameter name="CHANNELS" value="4" />
+  <parameter name="PLLS" value="1" />
+  <parameter name="REDUCED_SIM_TIME" value="1" />
+  <parameter name="RX_ENABLE" value="0" />
+  <parameter name="RX_PER_CHANNEL" value="0" />
+  <parameter name="SYNCHRONIZE_PLL_RESET" value="0" />
+  <parameter name="SYNCHRONIZE_RESET" value="1" />
+  <parameter name="SYS_CLK_IN_MHZ" value="100" />
+  <parameter name="TX_ENABLE" value="1" />
+  <parameter name="TX_PER_CHANNEL" value="0" />
+  <parameter name="TX_PLL_ENABLE" value="1" />
+  <parameter name="T_PLL_LOCK_HYST" value="0" />
+  <parameter name="T_PLL_POWERDOWN" value="1000" />
+  <parameter name="T_RX_ANALOGRESET" value="40" />
+  <parameter name="T_RX_DIGITALRESET" value="4000" />
+  <parameter name="T_TX_ANALOGRESET" value="70000" />
+  <parameter name="T_TX_DIGITALRESET" value="70000" />
+  <parameter name="device_family" value="Arria 10" />
+  <parameter name="gui_pll_cal_busy" value="1" />
+  <parameter name="gui_rx_auto_reset" value="0" />
+  <parameter name="gui_split_interfaces" value="0" />
+  <parameter name="gui_tx_auto_reset" value="0" />
+ </module>
  <connection
    kind="avalon_streaming"
    version="15.1"
    start="axi_jesd_xcvr.if_tx_ip_avl"
-   end="avl_xcvr_tx.jesd204_tx_link" />
+   end="xcvr_tx_core.jesd204_tx_link" />
+ <connection
+   kind="avalon_streaming"
+   version="15.1"
+   start="xcvr_rx_core.jesd204_rx_link"
+   end="axi_jesd_xcvr.if_rx_ip_avl" />
+ <connection
+   kind="avalon_streaming"
+   version="15.1"
+   start="xcvr_rx_os_core.jesd204_rx_link"
+   end="axi_os_jesd_xcvr.if_rx_ip_avl" />
  <connection
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="rstcntrl_xcvr_tx.clock" />
+   end="xcvr_tx_rst_cntrl.clock" />
  <connection
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="avl_xcvr_tx.jesd204_tx_avs_clk" />
+   end="xcvr_rx_rst_cntrl.clock" />
  <connection
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="axi_dmac_adc.m_dest_axi_clock" />
+   end="xcvr_rx_os_rst_cntrl.clock" />
  <connection
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="axi_dmac_dac.m_src_axi_clock" />
+   end="xcvr_rx_core.jesd204_rx_avs_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_rx_os_core.jesd204_rx_avs_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_tx_core.jesd204_tx_avs_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="axi_adc_dma.m_dest_axi_clock" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="axi_os_adc_dma.m_dest_axi_clock" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="axi_dac_dma.m_src_axi_clock" />
  <connection
    kind="clock"
    version="15.1"
@@ -948,13 +1259,38 @@
  <connection
    kind="clock"
    version="15.1"
-   start="sys_clk.out_clk"
-   end="avl_xcvr_os_rx.reconfig_clk" />
+   start="xcvr_ref_clk.out_clk"
+   end="xcvr_rx_core.pll_ref_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_ref_clk.out_clk"
+   end="xcvr_rx_os_core.pll_ref_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_ref_clk.out_clk"
+   end="xcvr_tx_lane_pll.pll_refclk0" />
  <connection
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="avl_xcvr_rx.reconfig_clk" />
+   end="xcvr_rx_os_core.reconfig_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_tx_core.reconfig_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_rx_core.reconfig_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_tx_lane_pll.reconfig_clk0" />
  <connection
    kind="clock"
    version="15.1"
@@ -964,17 +1300,47 @@
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="axi_dmac_adc.s_axi_clock" />
+   end="axi_adc_dma.s_axi_clock" />
  <connection
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
-   end="axi_dmac_dac.s_axi_clock" />
+   end="axi_dac_dma.s_axi_clock" />
  <connection
    kind="clock"
    version="15.1"
    start="sys_clk.out_clk"
    end="axi_jesd_xcvr.s_axi_clock" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="axi_os_jesd_xcvr.s_axi_clock" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="axi_ad9371.s_axi_clock" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="axi_os_adc_dma.s_axi_clock" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk0"
+   end="axi_ad9371.if_dac_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk0"
+   end="dac_upack.if_dac_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk0"
+   end="axi_dac_dma.if_fifo_rd_clk" />
  <connection
    kind="clock"
    version="15.1"
@@ -984,7 +1350,7 @@
    kind="clock"
    version="15.1"
    start="xcvr_pll.outclk0"
-   end="avl_xcvr_tx.txlink_clk" />
+   end="xcvr_tx_core.txlink_clk" />
  <connection
    kind="clock"
    version="15.1"
@@ -994,12 +1360,195 @@
    kind="clock"
    version="15.1"
    start="xcvr_pll.outclk1"
+   end="axi_ad9371.if_adc_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk1"
+   end="axi_adc_dma.if_fifo_wr_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk1"
    end="axi_jesd_xcvr.if_rx_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk1"
+   end="xcvr_rx_core.rxlink_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk2"
+   end="adc_os_pack.if_adc_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk2"
+   end="axi_ad9371.if_adc_os_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk2"
+   end="axi_os_adc_dma.if_fifo_wr_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk2"
+   end="axi_os_jesd_xcvr.if_rx_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="xcvr_pll.outclk2"
+   end="xcvr_rx_os_core.rxlink_clk" />
  <connection
    kind="conduit"
    version="15.1"
-   start="avl_xcvr_tx.dev_sync_n"
-   end="avl_xcvr_tx.mdev_sync_n">
+   start="adc_pack.adc_ch_0"
+   end="axi_ad9371.adc_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="adc_os_pack.adc_ch_0"
+   end="axi_ad9371.adc_os_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9371.adc_ch_1"
+   end="adc_pack.adc_ch_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="adc_pack.adc_ch_2"
+   end="axi_ad9371.adc_ch_2">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9371.adc_ch_3"
+   end="adc_pack.adc_ch_3">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9371.adc_os_ch_1"
+   end="adc_os_pack.adc_ch_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_os_core.alldev_lane_aligned"
+   end="xcvr_rx_os_core.dev_lane_aligned">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="dac_upack.dac_ch_0"
+   end="axi_ad9371.dac_ch_0">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9371.dac_ch_1"
+   end="dac_upack.dac_ch_1">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="dac_upack.dac_ch_2"
+   end="axi_ad9371.dac_ch_2">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9371.dac_ch_3"
+   end="dac_upack.dac_ch_3">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_core.dev_lane_aligned"
+   end="xcvr_rx_core.alldev_lane_aligned">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_core.dev_sync_n"
+   end="axi_jesd_xcvr.if_rx_ip_sync">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_core.dev_sync_n"
+   end="xcvr_tx_core.mdev_sync_n">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1010,7 +1559,40 @@
    kind="conduit"
    version="15.1"
    start="adc_pack.if_adc_data"
-   end="axi_dmac_adc.if_fifo_wr_din">
+   end="axi_adc_dma.if_fifo_wr_din">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="adc_os_pack.if_adc_data"
+   end="axi_os_adc_dma.if_fifo_wr_din">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9371.if_adc_rx_data"
+   end="axi_jesd_xcvr.if_rx_data">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_ad9371.if_adc_rx_os_data"
+   end="axi_os_jesd_xcvr.if_rx_data">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1021,7 +1603,18 @@
    kind="conduit"
    version="15.1"
    start="adc_pack.if_adc_sync"
-   end="axi_dmac_adc.if_fifo_wr_sync">
+   end="axi_adc_dma.if_fifo_wr_sync">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="adc_os_pack.if_adc_sync"
+   end="axi_os_adc_dma.if_fifo_wr_sync">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1032,7 +1625,7 @@
    kind="conduit"
    version="15.1"
    start="adc_pack.if_adc_valid"
-   end="axi_dmac_adc.if_fifo_wr_en">
+   end="axi_adc_dma.if_fifo_wr_en">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1043,7 +1636,7 @@
    kind="conduit"
    version="15.1"
    start="dac_upack.if_dac_data"
-   end="axi_dmac_dac.if_fifo_rd_dout">
+   end="axi_dac_dma.if_fifo_rd_dout">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1053,18 +1646,7 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="dac_upack.if_dma_xfer_in"
-   end="axi_dmac_dac.if_fifo_rd_xfer_req">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.1"
-   start="axi_dmac_dac.if_fifo_rd_en"
+   start="axi_dac_dma.if_fifo_rd_en"
    end="dac_upack.if_dac_valid">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
@@ -1075,8 +1657,107 @@
  <connection
    kind="conduit"
    version="15.1"
+   start="axi_dac_dma.if_fifo_rd_underflow"
+   end="axi_ad9371.if_dac_dunf">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_os_adc_dma.if_fifo_wr_en"
+   end="adc_os_pack.if_adc_valid">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_adc_dma.if_fifo_wr_overflow"
+   end="axi_ad9371.if_adc_dovf">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_os_adc_dma.if_fifo_wr_overflow"
+   end="axi_ad9371.if_adc_os_dovf">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_jesd_xcvr.if_rx_ip_sof"
+   end="xcvr_rx_core.sof">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_os_jesd_xcvr.if_rx_ip_sync"
+   end="xcvr_rx_os_core.dev_sync_n">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_jesd_xcvr.if_rx_ip_sysref"
+   end="xcvr_rx_core.sysref">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_jesd_xcvr.if_rx_ready"
+   end="xcvr_rx_rst_cntrl.rx_ready">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="axi_jesd_xcvr.if_tx_data"
+   end="axi_ad9371.if_dac_tx_data">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
    start="axi_jesd_xcvr.if_tx_ip_sync"
-   end="avl_xcvr_tx.sync_n">
+   end="xcvr_tx_core.sync_n">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1087,7 +1768,40 @@
    kind="conduit"
    version="15.1"
    start="axi_jesd_xcvr.if_tx_ip_sysref"
-   end="avl_xcvr_tx.sysref">
+   end="xcvr_tx_core.sysref">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_lane_pll.pll_cal_busy"
+   end="xcvr_tx_rst_cntrl.pll_cal_busy">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_lane_pll.pll_locked"
+   end="xcvr_tx_rst_cntrl.pll_locked">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_lane_pll.pll_powerdown"
+   end="xcvr_tx_rst_cntrl.pll_powerdown">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -1117,35 +1831,255 @@
   <parameter name="width" value="0" />
  </connection>
  <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_core.rx_analogreset"
+   end="xcvr_rx_rst_cntrl.rx_analogreset">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_os_core.rx_analogreset"
+   end="xcvr_rx_os_rst_cntrl.rx_analogreset">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_rst_cntrl.rx_cal_busy"
+   end="xcvr_rx_core.rx_cal_busy">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_os_rst_cntrl.rx_cal_busy"
+   end="xcvr_rx_os_core.rx_cal_busy">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_rst_cntrl.rx_digitalreset"
+   end="xcvr_rx_core.rx_digitalreset">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_os_rst_cntrl.rx_digitalreset"
+   end="xcvr_rx_os_core.rx_digitalreset">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_core.rx_islockedtodata"
+   end="xcvr_rx_rst_cntrl.rx_is_lockedtodata">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_os_core.rx_islockedtodata"
+   end="xcvr_rx_os_rst_cntrl.rx_is_lockedtodata">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_os_rst_cntrl.rx_ready"
+   end="axi_os_jesd_xcvr.if_rx_ready">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_os_core.sof"
+   end="axi_os_jesd_xcvr.if_rx_ip_sof">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_os_core.sysref"
+   end="axi_os_jesd_xcvr.if_rx_ip_sysref">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_core.tx_analogreset"
+   end="xcvr_tx_rst_cntrl.tx_analogreset">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_core.tx_cal_busy"
+   end="xcvr_tx_rst_cntrl.tx_cal_busy">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_rst_cntrl.tx_digitalreset"
+   end="xcvr_tx_core.tx_digitalreset">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_rst_cntrl.tx_ready"
+   end="axi_jesd_xcvr.if_tx_ready">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="hssi_serial_clock"
+   version="15.1"
+   start="xcvr_tx_lane_pll.tx_serial_clk"
+   end="xcvr_tx_core.tx_serial_clk0_ch0" />
+ <connection
+   kind="hssi_serial_clock"
+   version="15.1"
+   start="xcvr_tx_lane_pll.tx_serial_clk"
+   end="xcvr_tx_core.tx_serial_clk0_ch1" />
+ <connection
+   kind="hssi_serial_clock"
+   version="15.1"
+   start="xcvr_tx_lane_pll.tx_serial_clk"
+   end="xcvr_tx_core.tx_serial_clk0_ch2" />
+ <connection
+   kind="hssi_serial_clock"
+   version="15.1"
+   start="xcvr_tx_lane_pll.tx_serial_clk"
+   end="xcvr_tx_core.tx_serial_clk0_ch3" />
+ <connection
    kind="reset"
    version="15.1"
    start="axi_jesd_xcvr.if_rst"
-   end="rstcntrl_xcvr_tx.reset" />
+   end="xcvr_tx_rst_cntrl.reset" />
  <connection
    kind="reset"
    version="15.1"
-   start="axi_jesd_xcvr.if_tx_rstn"
-   end="avl_xcvr_tx.txlink_rst_n" />
+   start="axi_os_jesd_xcvr.if_rst"
+   end="xcvr_rx_os_rst_cntrl.reset" />
  <connection
    kind="reset"
    version="15.1"
-   start="sys_rst.out_reset"
+   start="axi_jesd_xcvr.if_rx_rstn"
    end="adc_pack.if_adc_rst" />
  <connection
    kind="reset"
    version="15.1"
-   start="sys_rst.out_reset"
-   end="avl_xcvr_tx.jesd204_tx_avs_rst_n" />
+   start="axi_os_jesd_xcvr.if_rx_rstn"
+   end="adc_os_pack.if_adc_rst" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="axi_jesd_xcvr.if_rx_rstn"
+   end="xcvr_rx_core.rxlink_rst_n" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="axi_os_jesd_xcvr.if_rx_rstn"
+   end="xcvr_rx_os_core.rxlink_rst_n" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="axi_jesd_xcvr.if_tx_rstn"
+   end="xcvr_tx_core.txlink_rst_n" />
  <connection
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
-   end="axi_dmac_adc.m_dest_axi_reset" />
+   end="xcvr_rx_core.jesd204_rx_avs_rst_n" />
  <connection
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
-   end="axi_dmac_dac.m_src_axi_reset" />
+   end="xcvr_rx_os_core.jesd204_rx_avs_rst_n" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="xcvr_tx_core.jesd204_tx_avs_rst_n" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="axi_adc_dma.m_dest_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="axi_os_adc_dma.m_dest_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="axi_dac_dma.m_src_axi_reset" />
  <connection
    kind="reset"
    version="15.1"
@@ -1155,12 +2089,22 @@
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
-   end="avl_xcvr_os_rx.reconfig_reset" />
+   end="xcvr_rx_os_core.reconfig_reset" />
  <connection
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
-   end="avl_xcvr_rx.reconfig_reset" />
+   end="xcvr_tx_core.reconfig_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="xcvr_rx_core.reconfig_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="xcvr_tx_lane_pll.reconfig_reset0" />
  <connection
    kind="reset"
    version="15.1"
@@ -1170,17 +2114,47 @@
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
-   end="axi_dmac_adc.s_axi_reset" />
+   end="xcvr_rx_rst_cntrl.reset" />
  <connection
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
-   end="axi_dmac_dac.s_axi_reset" />
+   end="xcvr_tx_rst_cntrl.reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="xcvr_rx_os_rst_cntrl.reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="axi_adc_dma.s_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="axi_dac_dma.s_axi_reset" />
  <connection
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
    end="axi_jesd_xcvr.s_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="axi_os_jesd_xcvr.s_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="axi_ad9371.s_axi_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="axi_os_adc_dma.s_axi_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />
  <interconnectRequirement
