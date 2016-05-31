@@ -25,12 +25,116 @@
          type = "String";
       }
    }
-   element fmcomms2
+   element adrv9371x
    {
       datum _sortIndex
       {
          value = "2";
          type = "int";
+      }
+   }
+   element adrv9371x.avl_rx_jesd
+   {
+      datum baseAddress
+      {
+         value = "221184";
+         type = "String";
+      }
+   }
+   element adrv9371x.avl_rx_os_jesd
+   {
+      datum baseAddress
+      {
+         value = "220160";
+         type = "String";
+      }
+   }
+   element adrv9371x.avl_rx_os_xcvr
+   {
+      datum baseAddress
+      {
+         value = "204800";
+         type = "String";
+      }
+   }
+   element adrv9371x.avl_rx_xcvr
+   {
+      datum baseAddress
+      {
+         value = "196608";
+         type = "String";
+      }
+   }
+   element adrv9371x.avl_tx_jesd
+   {
+      datum baseAddress
+      {
+         value = "219136";
+         type = "String";
+      }
+   }
+   element adrv9371x.avl_tx_lane_pll
+   {
+      datum baseAddress
+      {
+         value = "212992";
+         type = "String";
+      }
+   }
+   element adrv9371x.avl_tx_xcvr
+   {
+      datum baseAddress
+      {
+         value = "180224";
+         type = "String";
+      }
+   }
+   element adrv9371x.avl_xcvr_pll
+   {
+      datum baseAddress
+      {
+         value = "217088";
+         type = "String";
+      }
+   }
+   element adrv9371x.axi_adc_dma_s
+   {
+      datum baseAddress
+      {
+         value = "163840";
+         type = "String";
+      }
+   }
+   element adrv9371x.axi_adc_os_dma_s
+   {
+      datum baseAddress
+      {
+         value = "147456";
+         type = "String";
+      }
+   }
+   element adrv9371x.axi_dac_dma_s
+   {
+      datum baseAddress
+      {
+         value = "131072";
+         type = "String";
+      }
+   }
+   element adrv9371x.axi_jesd_xcvr
+   {
+      datum baseAddress
+      {
+         value = "65536";
+         type = "String";
+      }
+   }
+   element adrv9371x.axi_os_jesd_xcvr
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
       }
    }
    element fmcomms2.axi_ad9361_s_axi
@@ -303,23 +407,13 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="2" />
- <parameter name="projectName" value="fmcomms2_a10soc.qpf" />
+ <parameter name="projectName">adrv9371x_a10soc.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
- <interface
-   name="ad9361_if"
-   internal="fmcomms2.axi_ad9361_device_if"
-   type="conduit"
-   dir="end" />
- <interface
-   name="delay_clk"
-   internal="fmcomms2.axi_ad9361_delay_clk"
-   type="clock"
-   dir="end" />
  <interface name="hps_ddr" internal="a10soc.hps_ddr" type="conduit" dir="end" />
  <interface
    name="hps_ddr_oct"
@@ -345,20 +439,44 @@
    internal="a10soc.hps_spi1_sclk"
    type="clock"
    dir="start" />
+ <interface
+   name="ref_clk"
+   internal="adrv9371x.xcvr_ref_clk"
+   type="clock"
+   dir="end" />
+ <interface name="rx_data" internal="adrv9371x.rx_data" type="conduit" dir="end" />
+ <interface
+   name="rx_os_data"
+   internal="adrv9371x.rx_os_data"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="rx_os_sync"
+   internal="adrv9371x.rx_os_sync"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="rx_os_sysref"
+   internal="adrv9371x.rx_os_sysref"
+   type="conduit"
+   dir="end" />
+ <interface name="rx_sync" internal="adrv9371x.rx_sync" type="conduit" dir="end" />
+ <interface
+   name="rx_sysref"
+   internal="adrv9371x.rx_sysref"
+   type="conduit"
+   dir="end" />
  <interface name="sys_clk" internal="sys_clk.clk_in" type="clock" dir="end" />
  <interface
    name="sys_reset"
    internal="sys_clk.clk_in_reset"
    type="reset"
    dir="end" />
+ <interface name="tx_data" internal="adrv9371x.tx_data" type="conduit" dir="end" />
+ <interface name="tx_sync" internal="adrv9371x.tx_sync" type="conduit" dir="end" />
  <interface
-   name="up_enable"
-   internal="fmcomms2.axi_ad9361_up_enable"
-   type="conduit"
-   dir="end" />
- <interface
-   name="up_txnrx"
-   internal="fmcomms2.axi_ad9361_up_txnrx"
+   name="tx_sysref"
+   internal="adrv9371x.tx_sysref"
    type="conduit"
    dir="end" />
  <module name="a10soc" kind="a10soc_system_bd" version="1.0" enabled="1">
@@ -366,30 +484,25 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_DOMAIN" value="2" />
+  <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_DOMAIN" value="1" />
   <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_HPS_DDR_REF_CLK_RESET_DOMAIN" value="2" />
-  <parameter name="AUTO_HPS_IRQ0_INTERRUPTS_USED" value="3" />
-  <parameter name="AUTO_HPS_IRQ1_INTERRUPTS_USED" value="3" />
+  <parameter name="AUTO_HPS_DDR_REF_CLK_RESET_DOMAIN" value="1" />
+  <parameter name="AUTO_HPS_IRQ0_INTERRUPTS_USED" value="7" />
+  <parameter name="AUTO_HPS_IRQ1_INTERRUPTS_USED" value="0" />
   <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="5" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="5" />
-  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='fmcomms2_axi_ad9361.s_axi' start='0x0' end='0x10000' /><slave name='fmcomms2_axi_dmac_dac.s_axi' start='0x10000' end='0x14000' /><slave name='fmcomms2_axi_dmac_adc.s_axi' start='0x14000' end='0x18000' /></address-map>]]></parameter>
-  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_WIDTH" value="AddressWidth = 17" />
+  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='adrv9371x_axi_os_jesd_xcvr.s_axi' start='0x0' end='0x10000' /><slave name='adrv9371x_axi_jesd_xcvr.s_axi' start='0x10000' end='0x20000' /><slave name='adrv9371x_axi_dac_dma.s_axi' start='0x20000' end='0x24000' /><slave name='adrv9371x_axi_os_adc_dma.s_axi' start='0x24000' end='0x28000' /><slave name='adrv9371x_axi_adc_dma.s_axi' start='0x28000' end='0x2C000' /><slave name='adrv9371x_xcvr_tx_core.reconfig_avmm' start='0x2C000' end='0x30000' /><slave name='adrv9371x_xcvr_rx_core.reconfig_avmm' start='0x30000' end='0x32000' /><slave name='adrv9371x_xcvr_rx_os_core.reconfig_avmm' start='0x32000' end='0x34000' /><slave name='adrv9371x_xcvr_tx_lane_pll.reconfig_avmm0' start='0x34000' end='0x35000' /><slave name='adrv9371x_xcvr_pll_reconfig.mgmt_avalon_slave' start='0x35000' end='0x35800' /><slave name='adrv9371x_xcvr_tx_core.jesd204_tx_avs' start='0x35800' end='0x35C00' /><slave name='adrv9371x_xcvr_rx_os_core.jesd204_rx_avs' start='0x35C00' end='0x36000' /><slave name='adrv9371x_xcvr_rx_core.jesd204_rx_avs' start='0x36000' end='0x36400' /></address-map>]]></parameter>
+  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_WIDTH" value="AddressWidth = 18" />
   <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_a10soc" />
  </module>
- <module name="fmcomms2" kind="fmcomms2_bd" version="1.0" enabled="1">
-  <parameter name="AUTO_AXI_AD9361_DELAY_CLK_CLOCK_DOMAIN" value="1" />
-  <parameter name="AUTO_AXI_AD9361_DELAY_CLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_AXI_AD9361_DELAY_CLK_RESET_DOMAIN" value="1" />
-  <parameter name="AUTO_AXI_DMAC_ADC_M_DEST_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10soc_arria10_hps_0_bridges.f2sdram1_data' start='0x0' end='0x100000000' /></address-map>]]></parameter>
-  <parameter
-     name="AUTO_AXI_DMAC_ADC_M_DEST_AXI_ADDRESS_WIDTH"
-     value="AddressWidth = 32" />
-  <parameter name="AUTO_AXI_DMAC_DAC_M_SRC_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10soc_arria10_hps_0_bridges.f2sdram1_data' start='0x0' end='0x100000000' /></address-map>]]></parameter>
-  <parameter
-     name="AUTO_AXI_DMAC_DAC_M_SRC_AXI_ADDRESS_WIDTH"
-     value="AddressWidth = 32" />
+ <module name="adrv9371x" kind="adrv9371x_bd" version="1.0" enabled="1">
+  <parameter name="AUTO_AXI_ADC_DMA_M_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10soc_arria10_hps_0_bridges.f2sdram1_data' start='0x0' end='0x100000000' /></address-map>]]></parameter>
+  <parameter name="AUTO_AXI_ADC_DMA_M_ADDRESS_WIDTH" value="AddressWidth = 32" />
+  <parameter name="AUTO_AXI_ADC_OS_DMA_M_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10soc_arria10_hps_0_bridges.f2sdram1_data' start='0x0' end='0x100000000' /></address-map>]]></parameter>
+  <parameter name="AUTO_AXI_ADC_OS_DMA_M_ADDRESS_WIDTH" value="AddressWidth = 32" />
+  <parameter name="AUTO_AXI_DAC_DMA_M_ADDRESS_MAP"><![CDATA[<address-map><slave name='a10soc_arria10_hps_0_bridges.f2sdram1_data' start='0x0' end='0x100000000' /></address-map>]]></parameter>
+  <parameter name="AUTO_AXI_DAC_DMA_M_ADDRESS_WIDTH" value="AddressWidth = 32" />
   <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
@@ -397,7 +510,10 @@
   <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="5" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="5" />
-  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_fmcomms2</parameter>
+  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_adrv9371x</parameter>
+  <parameter name="AUTO_XCVR_REF_CLK_CLOCK_DOMAIN" value="4" />
+  <parameter name="AUTO_XCVR_REF_CLK_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_XCVR_REF_CLK_RESET_DOMAIN" value="4" />
  </module>
  <module name="sys_clk" kind="clock_source" version="15.1" enabled="1">
   <parameter name="clockFrequency" value="100000000" />
@@ -408,7 +524,7 @@
  <connection
    kind="avalon"
    version="15.1"
-   start="fmcomms2.axi_dmac_adc_m_dest_axi"
+   start="adrv9371x.axi_adc_dma_m"
    end="a10soc.hps_s1_axi">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -417,7 +533,16 @@
  <connection
    kind="avalon"
    version="15.1"
-   start="fmcomms2.axi_dmac_dac_m_src_axi"
+   start="adrv9371x.axi_adc_os_dma_m"
+   end="a10soc.hps_s1_axi">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="adrv9371x.axi_dac_dma_m"
    end="a10soc.hps_s1_axi">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -427,27 +552,117 @@
    kind="avalon"
    version="15.1"
    start="a10soc.sys_cpu_m_avl"
-   end="fmcomms2.axi_ad9361_s_axi">
+   end="adrv9371x.avl_rx_jesd">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x00036000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.1"
    start="a10soc.sys_cpu_m_avl"
-   end="fmcomms2.axi_dmac_adc_s_axi">
+   end="adrv9371x.avl_rx_os_jesd">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00014000" />
+  <parameter name="baseAddress" value="0x00035c00" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.1"
    start="a10soc.sys_cpu_m_avl"
-   end="fmcomms2.axi_dmac_dac_s_axi">
+   end="adrv9371x.avl_rx_os_xcvr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00032000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.avl_rx_xcvr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00030000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.avl_tx_jesd">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00035800" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.avl_tx_lane_pll">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00034000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.avl_tx_xcvr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0002c000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.avl_xcvr_pll">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00035000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.axi_adc_dma_s">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00028000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.axi_adc_os_dma_s">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00024000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.axi_dac_dma_s">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00020000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.axi_jesd_xcvr">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00010000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.axi_os_jesd_xcvr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="clock" version="15.1" start="sys_clk.clk" end="a10soc.sys_clk" />
@@ -455,45 +670,38 @@
    kind="clock"
    version="15.1"
    start="sys_clk.clk"
-   end="fmcomms2.sys_clk" />
+   end="adrv9371x.sys_clk" />
  <connection
    kind="interrupt"
    version="15.1"
    start="a10soc.hps_irq0"
-   end="fmcomms2.axi_dmac_adc_intr">
+   end="adrv9371x.axi_adc_dma_intr">
   <parameter name="irqNumber" value="0" />
  </connection>
  <connection
    kind="interrupt"
    version="15.1"
    start="a10soc.hps_irq0"
-   end="fmcomms2.axi_dmac_dac_intr">
+   end="adrv9371x.axi_adc_os_dma_intr">
   <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="interrupt"
    version="15.1"
-   start="a10soc.hps_irq1"
-   end="fmcomms2.axi_dmac_adc_intr">
-  <parameter name="irqNumber" value="0" />
- </connection>
- <connection
-   kind="interrupt"
-   version="15.1"
-   start="a10soc.hps_irq1"
-   end="fmcomms2.axi_dmac_dac_intr">
-  <parameter name="irqNumber" value="1" />
+   start="a10soc.hps_irq0"
+   end="adrv9371x.axi_dac_dma_intr">
+  <parameter name="irqNumber" value="2" />
  </connection>
  <connection
    kind="reset"
    version="15.1"
    start="sys_clk.clk_reset"
-   end="a10soc.sys_rst_in" />
+   end="adrv9371x.sys_rst" />
  <connection
    kind="reset"
    version="15.1"
-   start="a10soc.sys_rst"
-   end="fmcomms2.sys_rst" />
+   start="sys_clk.clk_reset"
+   end="a10soc.sys_rst_in" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="2" />
