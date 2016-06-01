@@ -45,6 +45,16 @@ set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_d
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[2]
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[3]
 
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_0 -to rx_data[0]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_1 -to rx_data[1]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_2 -to rx_data[2]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_3 -to rx_data[3]
+
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_0 -to tx_data[0]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_1 -to tx_data[1]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_2 -to tx_data[2]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_3 -to tx_data[3]
+
 set_location_assignment PIN_C14   -to rx_sync               ; ## G09  FMC_HPC_LA03_P
 set_location_assignment PIN_D14   -to rx_sync(n)            ; ## G10  FMC_HPC_LA03_N
 set_location_assignment PIN_E3    -to rx_os_sync            ; ## G27  FMC_HPC_LA25_P (Sniffer)
@@ -93,45 +103,47 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_test
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_reset_b        
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpint          
 
-set_location_assignment PIN_D4    -to ad9371_gpio_00        ; ## H19  FMC_HPC_LA15_P          
-set_location_assignment PIN_D5    -to ad9371_gpio_01        ; ## H20  FMC_HPC_LA15_N          
-set_location_assignment PIN_D6    -to ad9371_gpio_02        ; ## G18  FMC_HPC_LA16_P          
-set_location_assignment PIN_E6    -to ad9371_gpio_03        ; ## G19  FMC_HPC_LA16_N          
-set_location_assignment PIN_C2    -to ad9371_gpio_04        ; ## H25  FMC_HPC_LA21_P          
-set_location_assignment PIN_D3    -to ad9371_gpio_05        ; ## H26  FMC_HPC_LA21_N          
-set_location_assignment PIN_G7    -to ad9371_gpio_06        ; ## C22  FMC_HPC_LA18_CC_P       
-set_location_assignment PIN_H7    -to ad9371_gpio_07        ; ## C23  FMC_HPC_LA18_CC_N       
-set_location_assignment PIN_F4    -to ad9371_gpio_15        ; ## G24  FMC_HPC_LA22_P     (LVDS Pairs?)    
-set_location_assignment PIN_G4    -to ad9371_gpio_08        ; ## G25  FMC_HPC_LA22_N     (LVDS Pairs?)    
-set_location_assignment PIN_G5    -to ad9371_gpio_09        ; ## H22  FMC_HPC_LA19_P     (LVDS Pairs?)    
-set_location_assignment PIN_G6    -to ad9371_gpio_10        ; ## H23  FMC_HPC_LA19_N     (LVDS Pairs?)    
-set_location_assignment PIN_C3    -to ad9371_gpio_11        ; ## G21  FMC_HPC_LA20_P     (LVDS Pairs?)    
-set_location_assignment PIN_C4    -to ad9371_gpio_12        ; ## G22  FMC_HPC_LA20_N     (LVDS Pairs?)    
-set_location_assignment PIN_N9    -to ad9371_gpio_14        ; ## G30  FMC_HPC_LA29_P     (LVDS Pairs?)    
-set_location_assignment PIN_P10   -to ad9371_gpio_13        ; ## G31  FMC_HPC_LA29_N     (LVDS Pairs?)    
-set_location_assignment PIN_M12   -to ad9371_gpio_17        ; ## G15  FMC_HPC_LA12_P     (LVDS Pairs?)
-set_location_assignment PIN_N13   -to ad9371_gpio_16        ; ## G16  FMC_HPC_LA12_N     (LVDS Pairs?)
-set_location_assignment PIN_F14   -to ad9371_gpio_18        ; ## D12  FMC_HPC_LA05_N          
+# single ended default
 
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_00
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_01
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_02
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_03
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_04
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_05
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_06
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_07
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_15
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_08
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_09
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_10
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_11
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_12
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_14
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_13
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_17
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_16
-set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio_18
+set_location_assignment PIN_D4    -to ad9371_gpio[0]        ; ## H19  FMC_HPC_LA15_P          
+set_location_assignment PIN_D5    -to ad9371_gpio[1]        ; ## H20  FMC_HPC_LA15_N          
+set_location_assignment PIN_D6    -to ad9371_gpio[2]        ; ## G18  FMC_HPC_LA16_P          
+set_location_assignment PIN_E6    -to ad9371_gpio[3]        ; ## G19  FMC_HPC_LA16_N          
+set_location_assignment PIN_C2    -to ad9371_gpio[4]        ; ## H25  FMC_HPC_LA21_P          
+set_location_assignment PIN_D3    -to ad9371_gpio[5]        ; ## H26  FMC_HPC_LA21_N          
+set_location_assignment PIN_G7    -to ad9371_gpio[6]        ; ## C22  FMC_HPC_LA18_CC_P       
+set_location_assignment PIN_H7    -to ad9371_gpio[7]        ; ## C23  FMC_HPC_LA18_CC_N       
+set_location_assignment PIN_G4    -to ad9371_gpio[8]        ; ## G25  FMC_HPC_LA22_N     (LVDS_1N)    
+set_location_assignment PIN_G5    -to ad9371_gpio[9]        ; ## H22  FMC_HPC_LA19_P     (LVDS_2P)    
+set_location_assignment PIN_G6    -to ad9371_gpio[10]       ; ## H23  FMC_HPC_LA19_N     (LVDS_2N)    
+set_location_assignment PIN_C3    -to ad9371_gpio[11]       ; ## G21  FMC_HPC_LA20_P     (LVDS_3P)    
+set_location_assignment PIN_C4    -to ad9371_gpio[12]       ; ## G22  FMC_HPC_LA20_N     (LVDS_3N)    
+set_location_assignment PIN_P10   -to ad9371_gpio[13]       ; ## G31  FMC_HPC_LA29_N     (LVDS_4N)    
+set_location_assignment PIN_N9    -to ad9371_gpio[14]       ; ## G30  FMC_HPC_LA29_P     (LVDS_4P)    
+set_location_assignment PIN_F4    -to ad9371_gpio[15]       ; ## G24  FMC_HPC_LA22_P     (LVDS_1P)    
+set_location_assignment PIN_N13   -to ad9371_gpio[16]       ; ## G16  FMC_HPC_LA12_N     (LVDS_5N)
+set_location_assignment PIN_M12   -to ad9371_gpio[17]       ; ## G15  FMC_HPC_LA12_P     (LVDS_5P)
+set_location_assignment PIN_F14   -to ad9371_gpio[18]       ; ## D12  FMC_HPC_LA05_N
+
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[0]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[1]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[2]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[3]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[4]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[5]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[6]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[7]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[8]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[9]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[10]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[11]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[12]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[13]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[14]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[15]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[16]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[17]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[18]
 
 execute_flow -compile
 

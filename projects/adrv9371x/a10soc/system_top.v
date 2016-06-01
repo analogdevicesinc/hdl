@@ -109,24 +109,31 @@ module system_top (
   input   [  7:0]   gpio_bd_i,
   output  [  3:0]   gpio_bd_o,
 
-  // ad9361-interface
+  // ad9371-interface
 
-  input             rx_clk_in,
-  input             rx_frame_in,
-  input   [  5:0]   rx_data_in,
-  output            tx_clk_out,
-  output            tx_frame_out,
-  output  [  5:0]   tx_data_out,
-  output            enable,
-  output            txnrx,
+  input             ref_clk0,
+  input             ref_clk1,
+  input   [  3:0]   rx_data,
+  output  [  3:0]   tx_data,
+  output            rx_sync,
+  output            rx_os_sync,
+  input             tx_sync,
+  input             sysref,
 
-  output            gpio_resetb,
-  output            gpio_sync,
-  output            gpio_en_agc,
-  output  [  3:0]   gpio_ctl,
-  input   [  7:0]   gpio_status,
+  output            ad9528_reset_b,
+  output            ad9528_sysref_req,
+  output            ad9371_tx1_enable,
+  output            ad9371_tx2_enable,
+  output            ad9371_rx1_enable,
+  output            ad9371_rx2_enable,
+  output            ad9371_test,
+  output            ad9371_reset_b,
+  input             ad9371_gpint,
+                    
+  inout   [ 18:0]   ad9371_gpio,
 
-  output            spi_csn,
+  output            spi_csn_ad9528,
+  output            spi_csn_ad9371,
   output            spi_clk,
   output            spi_mosi,
   input             spi_miso);
@@ -136,16 +143,21 @@ module system_top (
   wire    [ 31:0]   gpio_i;
   wire    [ 31:0]   gpio_o;
 
-  // gpio (ad9361)
+  // gpio (ad9371)
 
-  assign gpio_i[31:24] = gpio_o[31:24];
-  assign gpio_i[23:16] = gpio_status;
+  assign ad9371_tx1_enable = gpio_o[23];
+  assign ad9371_tx2_enable = gpio_o[22];
+  assign ad9371_rx1_enable = gpio_o[21];
+  assign ad9371_rx2_enable = gpio_o[20];
+  assign ad9371_test = gpio_o[19];
+  assign ad9371_reset_b = gpio_o[18];
+  assign ad9528_sysref_req = gpio_o[17];
+  assign ad9528_reset_b = gpio_o[16];
 
-  assign gpio_resetb = gpio_o[22];
-  assign gpio_sync = gpio_o[21];
-  assign gpio_en_agc = gpio_o[20];
-  assign gpio_ctl = gpio_o[19:16];
-
+  assign gpio_i[31:25] = gpio_o[31:25];
+  assign gpio_i[24:24] = ad9371_gpint;
+  assign gpio_i[23:16] = gpio_o[23:16];
+  
   // gpio (max-v-u21)
 
   assign gpio_i[15:8] = gpio_o[15:8];
@@ -156,21 +168,7 @@ module system_top (
   // instantiations
 
   system_bd i_system_bd (
-    .ad9361_if_rx_clk_in_p (rx_clk_in),
-    .ad9361_if_rx_clk_in_n (1'b0),
-    .ad9361_if_rx_frame_in_p (rx_frame_in),
-    .ad9361_if_rx_frame_in_n (1'b0),
-    .ad9361_if_rx_data_in_p (rx_data_in),
-    .ad9361_if_rx_data_in_n (6'd0),
-    .ad9361_if_tx_clk_out_p (tx_clk_out),
-    .ad9361_if_tx_clk_out_n (),
-    .ad9361_if_tx_frame_out_p (tx_frame_out),
-    .ad9361_if_tx_frame_out_n (),
-    .ad9361_if_tx_data_out_p (tx_data_out),
-    .ad9361_if_tx_data_out_n (),
-    .ad9361_if_enable (enable),
-    .ad9361_if_txnrx (txnrx),
-    .delay_clk_clk (1'b0),
+    .gpio_export (ad9371_gpio),
     .hps_ddr_mem_ck (hps_ddr_clk_p),
     .hps_ddr_mem_ck_n (hps_ddr_clk_n),
     .hps_ddr_mem_a (hsp_ddr_a),
@@ -239,8 +237,8 @@ module system_top (
     .hps_spi0_miso_i (spi_miso),
     .hps_spi0_ss_in_n (1'b1),
     .hps_spi0_mosi_oe (),
-    .hps_spi0_ss0_n_o (spi_csn),
-    .hps_spi0_ss1_n_o (),
+    .hps_spi0_ss0_n_o (spi_csn_ad9528),
+    .hps_spi0_ss1_n_o (spi_csn_ad9371),
     .hps_spi0_ss2_n_o (),
     .hps_spi0_ss3_n_o (),
     .hps_spi0_sclk_clk (spi_clk),
@@ -253,10 +251,18 @@ module system_top (
     .hps_spi1_ss2_n_o (),
     .hps_spi1_ss3_n_o (),
     .hps_spi1_sclk_clk (),
-    .sys_clk_clk (sys_clk),
-    .sys_reset_reset_n (sys_resetn),
-    .up_enable_up_enable (gpio_o[23]),
-    .up_txnrx_up_txnrx (gpio_o[24]));
+    .ref_clk_clk (ref_clk1),
+		.rx_data_rx_serial_data (rx_data[1:0]),
+		.rx_os_data_rx_serial_data (rx_data[3:2]),
+		.rx_os_sync_rx_sync (rx_os_sync),
+		.rx_os_sysref_rx_ext_sysref_in (sysref),
+		.rx_sync_rx_sync (rx_sync),
+		.rx_sysref_rx_ext_sysref_in (sysref),
+		.sys_clk_clk (sys_clk),
+		.sys_reset_reset_n (sys_resetn),
+		.tx_data_tx_serial_data (tx_data),
+		.tx_sync_tx_sync (tx_sync),
+		.tx_sysref_tx_ext_sysref_in (sysref));
 
 endmodule
 
