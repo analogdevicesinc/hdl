@@ -9,6 +9,14 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
+   element ad9371_gpio
+   {
+      datum _sortIndex
+      {
+         value = "21";
+         type = "int";
+      }
+   }
    element adc_os_pack
    {
       datum _sortIndex
@@ -291,6 +299,21 @@
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
+   name="ad9371_gpio"
+   internal="ad9371_gpio.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="ad9371_gpio_irq"
+   internal="ad9371_gpio.irq"
+   type="interrupt"
+   dir="end" />
+ <interface
+   name="avl_ad9371_gpio"
+   internal="ad9371_gpio.s1"
+   type="avalon"
+   dir="end" />
+ <interface
    name="avl_rx_jesd"
    internal="xcvr_rx_core.jesd204_rx_avs"
    type="avalon"
@@ -445,6 +468,24 @@
    internal="xcvr_ref_clk.in_clk"
    type="clock"
    dir="end" />
+ <module
+   name="ad9371_gpio"
+   kind="altera_avalon_pio"
+   version="15.1"
+   enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="true" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Bidir" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="true" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="19" />
+ </module>
  <module name="adc_os_pack" kind="util_cpack" version="1.0" enabled="1">
   <parameter name="CHANNEL_DATA_WIDTH" value="32" />
   <parameter name="NUM_OF_CHANNELS" value="2" />
@@ -1206,6 +1247,11 @@
    version="15.1"
    start="xcvr_rx_os_core.jesd204_rx_link"
    end="axi_os_jesd_xcvr.if_rx_ip_avl" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="ad9371_gpio.clk" />
  <connection
    kind="clock"
    version="15.1"
@@ -2125,6 +2171,11 @@
    version="15.1"
    start="sys_rst.out_reset"
    end="xcvr_rx_os_rst_cntrl.reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="ad9371_gpio.reset" />
  <connection
    kind="reset"
    version="15.1"

@@ -33,6 +33,14 @@
          type = "int";
       }
    }
+   element adrv9371x.avl_ad9371_gpio
+   {
+      datum baseAddress
+      {
+         value = "222208";
+         type = "String";
+      }
+   }
    element adrv9371x.avl_rx_jesd
    {
       datum baseAddress
@@ -134,30 +142,6 @@
       datum baseAddress
       {
          value = "0";
-         type = "String";
-      }
-   }
-   element fmcomms2.axi_ad9361_s_axi
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
-   element fmcomms2.axi_dmac_adc_s_axi
-   {
-      datum baseAddress
-      {
-         value = "81920";
-         type = "String";
-      }
-   }
-   element fmcomms2.axi_dmac_dac_s_axi
-   {
-      datum baseAddress
-      {
-         value = "65536";
          type = "String";
       }
    }
@@ -414,6 +398,7 @@
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
+ <interface name="gpio" internal="adrv9371x.ad9371_gpio" type="conduit" dir="end" />
  <interface name="hps_ddr" internal="a10soc.hps_ddr" type="conduit" dir="end" />
  <interface
    name="hps_ddr_oct"
@@ -487,12 +472,12 @@
   <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_DOMAIN" value="1" />
   <parameter name="AUTO_HPS_DDR_REF_CLK_CLOCK_RATE" value="0" />
   <parameter name="AUTO_HPS_DDR_REF_CLK_RESET_DOMAIN" value="1" />
-  <parameter name="AUTO_HPS_IRQ0_INTERRUPTS_USED" value="7" />
+  <parameter name="AUTO_HPS_IRQ0_INTERRUPTS_USED" value="15" />
   <parameter name="AUTO_HPS_IRQ1_INTERRUPTS_USED" value="0" />
   <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="5" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="5" />
-  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='adrv9371x_axi_os_jesd_xcvr.s_axi' start='0x0' end='0x10000' /><slave name='adrv9371x_axi_jesd_xcvr.s_axi' start='0x10000' end='0x20000' /><slave name='adrv9371x_axi_dac_dma.s_axi' start='0x20000' end='0x24000' /><slave name='adrv9371x_axi_os_adc_dma.s_axi' start='0x24000' end='0x28000' /><slave name='adrv9371x_axi_adc_dma.s_axi' start='0x28000' end='0x2C000' /><slave name='adrv9371x_xcvr_tx_core.reconfig_avmm' start='0x2C000' end='0x30000' /><slave name='adrv9371x_xcvr_rx_core.reconfig_avmm' start='0x30000' end='0x32000' /><slave name='adrv9371x_xcvr_rx_os_core.reconfig_avmm' start='0x32000' end='0x34000' /><slave name='adrv9371x_xcvr_tx_lane_pll.reconfig_avmm0' start='0x34000' end='0x35000' /><slave name='adrv9371x_xcvr_pll_reconfig.mgmt_avalon_slave' start='0x35000' end='0x35800' /><slave name='adrv9371x_xcvr_tx_core.jesd204_tx_avs' start='0x35800' end='0x35C00' /><slave name='adrv9371x_xcvr_rx_os_core.jesd204_rx_avs' start='0x35C00' end='0x36000' /><slave name='adrv9371x_xcvr_rx_core.jesd204_rx_avs' start='0x36000' end='0x36400' /></address-map>]]></parameter>
+  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='adrv9371x_axi_os_jesd_xcvr.s_axi' start='0x0' end='0x10000' /><slave name='adrv9371x_axi_jesd_xcvr.s_axi' start='0x10000' end='0x20000' /><slave name='adrv9371x_axi_dac_dma.s_axi' start='0x20000' end='0x24000' /><slave name='adrv9371x_axi_os_adc_dma.s_axi' start='0x24000' end='0x28000' /><slave name='adrv9371x_axi_adc_dma.s_axi' start='0x28000' end='0x2C000' /><slave name='adrv9371x_xcvr_tx_core.reconfig_avmm' start='0x2C000' end='0x30000' /><slave name='adrv9371x_xcvr_rx_core.reconfig_avmm' start='0x30000' end='0x32000' /><slave name='adrv9371x_xcvr_rx_os_core.reconfig_avmm' start='0x32000' end='0x34000' /><slave name='adrv9371x_xcvr_tx_lane_pll.reconfig_avmm0' start='0x34000' end='0x35000' /><slave name='adrv9371x_xcvr_pll_reconfig.mgmt_avalon_slave' start='0x35000' end='0x35800' /><slave name='adrv9371x_xcvr_tx_core.jesd204_tx_avs' start='0x35800' end='0x35C00' /><slave name='adrv9371x_xcvr_rx_os_core.jesd204_rx_avs' start='0x35C00' end='0x36000' /><slave name='adrv9371x_xcvr_rx_core.jesd204_rx_avs' start='0x36000' end='0x36400' /><slave name='adrv9371x_ad9371_gpio.s1' start='0x36400' end='0x36420' /></address-map>]]></parameter>
   <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_WIDTH" value="AddressWidth = 18" />
   <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_a10soc" />
  </module>
@@ -546,6 +531,15 @@
    end="a10soc.hps_s1_axi">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.avl_ad9371_gpio">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00036400" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -671,6 +665,13 @@
    version="15.1"
    start="sys_clk.clk"
    end="adrv9371x.sys_clk" />
+ <connection
+   kind="interrupt"
+   version="15.1"
+   start="a10soc.hps_irq0"
+   end="adrv9371x.ad9371_gpio_irq">
+  <parameter name="irqNumber" value="3" />
+ </connection>
  <connection
    kind="interrupt"
    version="15.1"
