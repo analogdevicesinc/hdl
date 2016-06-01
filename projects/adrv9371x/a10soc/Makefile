@@ -51,6 +51,7 @@ M_DEPS += ../../../library/common/ad_iqcor.v
 M_DEPS += ../../../library/common/ad_jesd_align.v
 M_DEPS += ../../../library/common/ad_mul.v
 M_DEPS += ../../../library/common/ad_rst.v
+M_DEPS += ../../../library/common/altera/DSP48E1.v
 M_DEPS += ../../../library/common/altera/MULT_MACRO.v
 M_DEPS += ../../../library/common/sync_bits.v
 M_DEPS += ../../../library/common/sync_gray.v
