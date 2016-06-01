@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -65,14 +63,6 @@ module system_top (
   fixed_io_ps_srstb,
 
   gpio_bd,
-
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
-
-  spdif,
 
   iic_scl,
   iic_sda,
@@ -115,14 +105,6 @@ module system_top (
 
   inout   [14:0]  gpio_bd;
 
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output  [23:0]  hdmi_data;
-
-  output          spdif;
-
   inout           iic_scl;
   inout           iic_sda;
 
@@ -145,28 +127,13 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  // base hdmi
-
-  assign hdmi_out_clk = 1'd0;
-  assign hdmi_vsync = 1'd0;
-  assign hdmi_hsync = 1'd0;
-  assign hdmi_data_e = 1'd0;
-  assign hdmi_data = 24'd0;
-  assign spdif = 1'd0;
-
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi_iic_rstn (
-    .dio_t (gpio_t[33]),
-    .dio_i (gpio_o[33]),
-    .dio_o (gpio_i[33]),
-    .dio_p (hdmi_iic_rstn));
-
-  ad_iobuf #(.DATA_WIDTH(1)) i_gpio_hdmi (
-    .dio_t (gpio_t[32]),
-    .dio_i (gpio_o[32]),
-    .dio_o (gpio_i[32]),
-    .dio_p (hdmi_rx_int));
+  ad_iobuf #(.DATA_WIDTH(2)) i_gpio (
+    .dio_t (gpio_t[33:32]),
+    .dio_i (gpio_o[33:32]),
+    .dio_o (gpio_i[33:32]),
+    .dio_p ({hdmi_iic_rstn, hdmi_rx_int}));
 
   ad_iobuf #(.DATA_WIDTH(15)) i_gpio_bd (
     .dio_t (gpio_t[14:0]),
@@ -199,14 +166,10 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .hdmi_data (),
-    .hdmi_data_e (),
-    .hdmi_es_data (hdmi_tx_data),
-    .hdmi_hsync (),
-    .hdmi_out_clk (hdmi_tx_clk),
     .hdmi_rx_clk (hdmi_rx_clk),
     .hdmi_rx_data (hdmi_rx_data),
-    .hdmi_vsync (),
+    .hdmi_tx_clk (hdmi_tx_clk),
+    .hdmi_tx_data (hdmi_tx_data),
     .iic_imageon_scl_io (hdmi_iic_scl),
     .iic_imageon_sda_io (hdmi_iic_sda),
     .iic_main_scl_io (iic_scl),
@@ -223,14 +186,14 @@ module system_top (
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
     .ps_intr_13 (1'b0),
-    .spdif (hdmi_tx_spdif),
     .spdif_rx (hdmi_rx_spdif),
+    .spdif_tx (hdmi_tx_spdif),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (),
     .spi0_csn_0_o (),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
-    .spi0_csn_i (1'b0),
+    .spi0_csn_i (1'b1),
     .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (),
@@ -239,7 +202,7 @@ module system_top (
     .spi1_csn_0_o (),
     .spi1_csn_1_o (),
     .spi1_csn_2_o (),
-    .spi1_csn_i (1'b0),
+    .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o ());
