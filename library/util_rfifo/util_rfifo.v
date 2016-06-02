@@ -175,7 +175,7 @@ module util_rfifo (
   // internal registers
 
   reg     [(DATA_WIDTH-1):0]          din_wdata = 'd0;
-  reg     [(ADDRESS_WIDTH-1):0]       din_waddr = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]       din_waddr = 'hc;
   reg                                 din_wr = 'd0;
   reg     [ 6:0]                      din_req_cnt = 'd0;
   reg     [ 7:0]                      din_enable_m1 = 'd0;
@@ -254,7 +254,7 @@ module util_rfifo (
 
   always @(posedge din_clk or negedge din_rstn) begin
     if (din_rstn == 1'b0) begin
-      din_waddr <= 'd0;
+      din_waddr <= 'hc;
       din_wr <= 1'd0;
     end else begin
       if (din_wr == 1'b1) begin
