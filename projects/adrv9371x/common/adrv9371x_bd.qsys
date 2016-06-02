@@ -323,16 +323,8 @@
    internal="xcvr_rx_os_core.jesd204_rx_avs"
    type="avalon"
    dir="end" />
- <interface
-   name="avl_rx_os_xcvr"
-   internal="xcvr_rx_os_core.reconfig_avmm"
-   type="avalon"
-   dir="end" />
- <interface
-   name="avl_rx_xcvr"
-   internal="xcvr_rx_core.reconfig_avmm"
-   type="avalon"
-   dir="end" />
+ <interface name="avl_rx_os_xcvr" internal="xcvr_rx_os_core.reconfig_avmm" />
+ <interface name="avl_rx_xcvr" internal="xcvr_rx_core.reconfig_avmm" />
  <interface
    name="avl_tx_jesd"
    internal="xcvr_tx_core.jesd204_tx_avs"
@@ -343,11 +335,7 @@
    internal="xcvr_tx_lane_pll.reconfig_avmm0"
    type="avalon"
    dir="end" />
- <interface
-   name="avl_tx_xcvr"
-   internal="xcvr_tx_core.reconfig_avmm"
-   type="avalon"
-   dir="end" />
+ <interface name="avl_tx_xcvr" internal="xcvr_tx_core.reconfig_avmm" />
  <interface
    name="avl_xcvr_pll"
    internal="xcvr_pll_reconfig.mgmt_avalon_slave"
@@ -922,7 +910,7 @@
   <parameter name="N" value="16" />
   <parameter name="N_PRIME" value="16" />
   <parameter name="OPTIMIZE" value="0" />
-  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG2" />
+  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG1" />
   <parameter name="PHADJ" value="0" />
   <parameter name="REFCLK_FREQ" value="122.88" />
   <parameter name="RES1" value="0" />
@@ -937,12 +925,12 @@
   <parameter name="lane_rate" value="4915.2" />
   <parameter name="part_trait_bd" value="NIGHTFURY4" />
   <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
-  <parameter name="pll_reconfig_enable" value="true" />
+  <parameter name="pll_reconfig_enable" value="false" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="rcfg_jtag_enable" value="false" />
   <parameter name="sdc_constraint" value="1.0" />
-  <parameter name="set_capability_reg_enable" value="true" />
-  <parameter name="set_csr_soft_logic_enable" value="true" />
+  <parameter name="set_capability_reg_enable" value="false" />
+  <parameter name="set_csr_soft_logic_enable" value="false" />
   <parameter name="set_prbs_soft_logic_enable" value="false" />
   <parameter name="set_user_identifier" value="0" />
   <parameter name="wrapper_opt" value="base_phy" />
@@ -1000,16 +988,16 @@
   <parameter name="TERMINATE_RECONFIG_EN" value="false" />
   <parameter name="TEST_COMPONENTS_EN" value="false" />
   <parameter name="bitrev_en" value="false" />
-  <parameter name="bonded_mode" value="bonded" />
+  <parameter name="bonded_mode" value="non_bonded" />
   <parameter name="lane_rate" value="4915.2" />
   <parameter name="part_trait_bd" value="NIGHTFURY4" />
   <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
-  <parameter name="pll_reconfig_enable" value="true" />
+  <parameter name="pll_reconfig_enable" value="false" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="rcfg_jtag_enable" value="false" />
   <parameter name="sdc_constraint" value="1.0" />
-  <parameter name="set_capability_reg_enable" value="true" />
-  <parameter name="set_csr_soft_logic_enable" value="true" />
+  <parameter name="set_capability_reg_enable" value="false" />
+  <parameter name="set_csr_soft_logic_enable" value="false" />
   <parameter name="set_prbs_soft_logic_enable" value="false" />
   <parameter name="set_user_identifier" value="0" />
   <parameter name="wrapper_opt" value="base_phy" />
@@ -1108,7 +1096,7 @@
   <parameter name="N" value="16" />
   <parameter name="N_PRIME" value="16" />
   <parameter name="OPTIMIZE" value="0" />
-  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG2" />
+  <parameter name="PCS_CONFIG" value="JESD_PCS_CFG1" />
   <parameter name="PHADJ" value="0" />
   <parameter name="REFCLK_FREQ" value="125.0" />
   <parameter name="RES1" value="0" />
@@ -1123,12 +1111,12 @@
   <parameter name="lane_rate" value="4915.2" />
   <parameter name="part_trait_bd" value="NIGHTFURY4" />
   <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
-  <parameter name="pll_reconfig_enable" value="true" />
+  <parameter name="pll_reconfig_enable" value="false" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="rcfg_jtag_enable" value="false" />
   <parameter name="sdc_constraint" value="1.0" />
   <parameter name="set_capability_reg_enable" value="false" />
-  <parameter name="set_csr_soft_logic_enable" value="true" />
+  <parameter name="set_csr_soft_logic_enable" value="false" />
   <parameter name="set_prbs_soft_logic_enable" value="false" />
   <parameter name="set_user_identifier" value="0" />
   <parameter name="wrapper_opt" value="base_phy" />
@@ -1317,21 +1305,6 @@
    version="15.1"
    start="xcvr_ref_clk.out_clk"
    end="xcvr_tx_lane_pll.pll_refclk0" />
- <connection
-   kind="clock"
-   version="15.1"
-   start="sys_clk.out_clk"
-   end="xcvr_rx_os_core.reconfig_clk" />
- <connection
-   kind="clock"
-   version="15.1"
-   start="sys_clk.out_clk"
-   end="xcvr_tx_core.reconfig_clk" />
- <connection
-   kind="clock"
-   version="15.1"
-   start="sys_clk.out_clk"
-   end="xcvr_rx_core.reconfig_clk" />
  <connection
    kind="clock"
    version="15.1"
@@ -2131,21 +2104,6 @@
    version="15.1"
    start="sys_rst.out_reset"
    end="xcvr_pll_reconfig.mgmt_reset" />
- <connection
-   kind="reset"
-   version="15.1"
-   start="sys_rst.out_reset"
-   end="xcvr_rx_os_core.reconfig_reset" />
- <connection
-   kind="reset"
-   version="15.1"
-   start="sys_rst.out_reset"
-   end="xcvr_tx_core.reconfig_reset" />
- <connection
-   kind="reset"
-   version="15.1"
-   start="sys_rst.out_reset"
-   end="xcvr_rx_core.reconfig_reset" />
  <connection
    kind="reset"
    version="15.1"

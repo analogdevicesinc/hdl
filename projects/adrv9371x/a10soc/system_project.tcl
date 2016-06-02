@@ -17,22 +17,22 @@ set_location_assignment PIN_N29   -to ref_clk0              ; ## D04  FMC_HPC_GB
 set_location_assignment PIN_N28   -to "ref_clk0(n)"         ; ## D05  FMC_HPC_GBTCLK0_M2C_N (NC)
 set_location_assignment PIN_R29   -to ref_clk1              ; ## B20  FMC_HPC_GBTCLK1_M2C_P
 set_location_assignment PIN_R28   -to "ref_clk1(n)"         ; ## B21  FMC_HPC_GBTCLK1_M2C_N
-set_location_assignment PIN_R32   -to rx_data[0]            ; ## A02  FMC_HPC_DP1_M2C_P
-set_location_assignment PIN_R33   -to "rx_data[0](n)"       ; ## A03  FMC_HPC_DP1_M2C_N
-set_location_assignment PIN_P34   -to rx_data[1]            ; ## A06  FMC_HPC_DP2_M2C_P
-set_location_assignment PIN_P35   -to "rx_data[1](n)"       ; ## A07  FMC_HPC_DP2_M2C_N
-set_location_assignment PIN_T30   -to rx_data[2]            ; ## C06  FMC_HPC_DP0_M2C_P
-set_location_assignment PIN_T31   -to "rx_data[2](n)"       ; ## C07  FMC_HPC_DP0_M2C_N
-set_location_assignment PIN_P30   -to rx_data[3]            ; ## A10  FMC_HPC_DP3_M2C_P
-set_location_assignment PIN_P31   -to "rx_data[3](n)"       ; ## A11  FMC_HPC_DP3_M2C_N
-set_location_assignment PIN_M38   -to tx_data[0]            ; ## A22  FMC_HPC_DP1_C2M_P (tx_data_p[3])
-set_location_assignment PIN_M39   -to "tx_data[0](n)"       ; ## A23  FMC_HPC_DP1_C2M_N (tx_data_n[3])
-set_location_assignment PIN_L36   -to tx_data[1]            ; ## A26  FMC_HPC_DP2_C2M_P (tx_data_p[0])
-set_location_assignment PIN_L37   -to "tx_data[1](n)"       ; ## A27  FMC_HPC_DP2_C2M_N (tx_data_n[0])
-set_location_assignment PIN_N36   -to tx_data[2]            ; ## C02  FMC_HPC_DP0_C2M_P (tx_data_p[1])
-set_location_assignment PIN_N37   -to "tx_data[2](n)"       ; ## C03  FMC_HPC_DP0_C2M_N (tx_data_n[1])
-set_location_assignment PIN_K38   -to tx_data[3]            ; ## A30  FMC_HPC_DP3_C2M_P (tx_data_p[2])
-set_location_assignment PIN_K39   -to "tx_data[3](n)"       ; ## A31  FMC_HPC_DP3_C2M_N (tx_data_n[2])
+set_location_assignment PIN_R33   -to rx_data[0]            ; ## A02  FMC_HPC_DP1_M2C_P
+set_location_assignment PIN_R32   -to "rx_data[0](n)"       ; ## A03  FMC_HPC_DP1_M2C_N
+set_location_assignment PIN_P35   -to rx_data[1]            ; ## A06  FMC_HPC_DP2_M2C_P
+set_location_assignment PIN_P34   -to "rx_data[1](n)"       ; ## A07  FMC_HPC_DP2_M2C_N
+set_location_assignment PIN_T31   -to rx_data[2]            ; ## C06  FMC_HPC_DP0_M2C_P
+set_location_assignment PIN_T30   -to "rx_data[2](n)"       ; ## C07  FMC_HPC_DP0_M2C_N
+set_location_assignment PIN_P31   -to rx_data[3]            ; ## A10  FMC_HPC_DP3_M2C_P
+set_location_assignment PIN_P30   -to "rx_data[3](n)"       ; ## A11  FMC_HPC_DP3_M2C_N
+set_location_assignment PIN_M39   -to tx_data[0]            ; ## A22  FMC_HPC_DP1_C2M_P (tx_data_p[3])
+set_location_assignment PIN_M38   -to "tx_data[0](n)"       ; ## A23  FMC_HPC_DP1_C2M_N (tx_data_n[3])
+set_location_assignment PIN_L37   -to tx_data[1]            ; ## A26  FMC_HPC_DP2_C2M_P (tx_data_p[0])
+set_location_assignment PIN_L36   -to "tx_data[1](n)"       ; ## A27  FMC_HPC_DP2_C2M_N (tx_data_n[0])
+set_location_assignment PIN_N37   -to tx_data[2]            ; ## C02  FMC_HPC_DP0_C2M_P (tx_data_p[1])
+set_location_assignment PIN_N36   -to "tx_data[2](n)"       ; ## C03  FMC_HPC_DP0_C2M_N (tx_data_n[1])
+set_location_assignment PIN_K39   -to tx_data[3]            ; ## A30  FMC_HPC_DP3_C2M_P (tx_data_p[2])
+set_location_assignment PIN_K38   -to "tx_data[3](n)"       ; ## A31  FMC_HPC_DP3_C2M_N (tx_data_n[2])
 
 set_instance_assignment -name IO_STANDARD LVDS -to ref_clk0
 set_instance_assignment -name IO_STANDARD LVDS -to ref_clk1
