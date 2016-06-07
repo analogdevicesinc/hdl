@@ -8,11 +8,11 @@
 M_DEPS += system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.sdc
-M_DEPS += system_bd.qsys
+M_DEPS += system_qsys.tcl
 M_DEPS += ../common/daq2_spi.v
-M_DEPS += ../common/daq2_bd.qsys
+M_DEPS += ../common/daq2_qsys.tcl
 M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../common/a10gx/a10gx_system_bd.qsys
+M_DEPS += ../../common/a10gx/a10gx_system_qsys.tcl
 M_DEPS += ../../common/a10gx/a10gx_system_assign.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9144/axi_ad9144.v
