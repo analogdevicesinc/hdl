@@ -237,4 +237,15 @@ set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
+# library paths
+
+set ad_lib_folders "$ad_hdl_dir/library/**/*;$ad_phdl_dir/library/**/*"
+
+set_user_option -name USER_IP_SEARCH_PATHS $ad_lib_folders
+set_global_assignment -name IP_SEARCH_PATHS $ad_lib_folders
+
+# generate qsys
+
+exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script --script=system_qsys.tcl
+ 
 
