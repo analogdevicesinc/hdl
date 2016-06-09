@@ -38,57 +38,55 @@
 // ***************************************************************************
 `timescale 1ns/1ps
 
-module ad_tdd_sync (
+module util_pulse_gen (
 
-  clk,                                           // system clock (100 Mhz)
+  clk,
   rstn,
 
-  sync                                           // re-synchronization signal
+  pulse
 );
 
-  localparam      PULSE_CNTR_WIDTH  = 7;
-  parameter       TDD_SYNC_PERIOD   = 100000000; // t_period * clk_freq - 1
+  parameter       PULSE_WIDTH = 7;
+  parameter       PULSE_PERIOD = 100000000; // t_period * clk_freq
 
   input           clk;
   input           rstn;
-  output          sync;
+  output          pulse;
 
   // internal registers
 
-  reg     [(PULSE_CNTR_WIDTH-1):0]  pulse_counter   =  {PULSE_CNTR_WIDTH{1'b1}};
-  reg     [31:0]                    sync_counter    = 32'h0;
-  reg                               sync_pulse      =  1'b0;
-  reg                               sync_period_eof =  1'b0;
+  reg     [(PULSE_WIDTH-1):0]  pulse_width_cnt = {PULSE_WIDTH{1'b1}};
+  reg     [31:0]               pulse_period_cnt = 32'h0;
+  reg                          pulse =  1'b0;
 
-  assign sync = sync_pulse;
+  wire                         end_of_period_s;
 
-  // a free running sync pulse generator
+  // a free running pulse generator
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
-      sync_counter <= 32'h0;
-      sync_period_eof <= 1'b0;
+      pulse_period_cnt <= 32'h0;
     end else begin
-      sync_counter <= (sync_counter < TDD_SYNC_PERIOD) ? (sync_counter + 1) : 32'b0;
-      sync_period_eof <= (sync_counter == (TDD_SYNC_PERIOD - 1)) ? 1'b1 : 1'b0;
+      pulse_period_cnt <= (pulse_period_cnt < PULSE_PERIOD) ? (pulse_period_cnt + 1) : 32'b0;
     end
   end
+
+  assign  end_of_period_s = (pulse_period_cnt == (PULSE_PERIOD - 1)) ? 1'b1 : 1'b0;
 
   // generate pulse with a specified width
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
-      pulse_counter <= 0;
-      sync_pulse <= 0;
+      pulse_width_cnt <= 0;
+      pulse <= 0;
     end else begin
-      pulse_counter <= (sync_pulse == 1'b1) ? pulse_counter + 1 : {PULSE_CNTR_WIDTH{1'h0}};
-      if(sync_period_eof == 1'b1) begin
-        sync_pulse <= 1'b1;
-      end else if(pulse_counter == {PULSE_CNTR_WIDTH{1'b1}}) begin
-        sync_pulse <= 1'b0;
+      pulse_width_cnt <= (pulse == 1'b1) ? pulse_width_cnt + 1 : {PULSE_WIDTH{1'h0}};
+      if(end_of_period_s == 1'b1) begin
+        pulse <= 1'b1;
+      end else if(pulse_width_cnt == {PULSE_WIDTH{1'b1}}) begin
+        pulse <= 1'b0;
       end
     end
   end
 
 endmodule
-

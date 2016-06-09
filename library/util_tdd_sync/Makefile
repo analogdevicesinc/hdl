@@ -8,7 +8,7 @@
 M_DEPS := util_tdd_sync_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/ad_tdd_sync.v
+M_DEPS += ../common/util_pulse_gen.v
 M_DEPS += util_tdd_sync.v
 
 M_VIVADO := vivado -mode batch -source

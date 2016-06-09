@@ -63,10 +63,10 @@ module util_tdd_sync (
   input         sync_in;
   output        sync_out;
 
-  parameter TDD_SYNC_PERIOD     = 100000000;
+  parameter     TDD_SYNC_PERIOD = 100000000;
 
-  reg           sync_mode_d1  = 1'b0;
-  reg           sync_mode_d2  = 1'b0;
+  reg           sync_mode_d1 = 1'b0;
+  reg           sync_mode_d2 = 1'b0;
   reg           sync_out = 1'b0;
 
   wire          sync_internal;
@@ -74,13 +74,13 @@ module util_tdd_sync (
 
   // pulse generator
 
-  ad_tdd_sync #(
-    .TDD_SYNC_PERIOD(TDD_SYNC_PERIOD)
+  util_pulse_gen #(
+    .PULSE_PERIOD(TDD_SYNC_PERIOD)
   )
     i_tdd_sync (
     .clk (clk),
     .rstn (rstn),
-    .sync (sync_internal)
+    .pulse (sync_internal)
   );
 
   // synchronization logic
