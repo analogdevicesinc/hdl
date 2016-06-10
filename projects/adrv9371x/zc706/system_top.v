@@ -269,7 +269,6 @@ module system_top (
   wire            rx_os_sync;
   wire            tx_sync;
   wire            sysref;
-  wire            ad9371_dac_fifo_bypass_s;
 
   // instantiations
 
@@ -307,12 +306,11 @@ module system_top (
     .IB (sysref_n),
     .O (sysref));
 
-  ad_iobuf #(.DATA_WIDTH(29)) i_iobuf (
-    .dio_t ({gpio_t[60:32]}),
-    .dio_i ({gpio_o[60:32]}),
-    .dio_o ({gpio_i[60:32]}),
-    .dio_p ({ ad9371_dac_fifo_bypass_s, // 60
-              ad9528_reset_b,       // 59
+  ad_iobuf #(.DATA_WIDTH(28)) i_iobuf (
+    .dio_t ({gpio_t[59:32]}),
+    .dio_i ({gpio_o[59:32]}),
+    .dio_o ({gpio_i[59:32]}),
+    .dio_p ({ ad9528_reset_b,       // 59
               ad9528_sysref_req,    // 58
               ad9371_tx1_enable,    // 57
               ad9371_tx2_enable,    // 56
@@ -422,7 +420,7 @@ module system_top (
     .tx_ref_clk (ref_clk1),
     .tx_sync (tx_sync),
     .tx_sysref (sysref),
-    .dac_fifo_bypass(ad9371_dac_fifo_bypass_s),
+    .dac_fifo_bypass(gpio_o[60]),
     .sys_rst(sys_rst),
     .sys_clk_clk_p (sys_clk_p),
     .sys_clk_clk_n (sys_clk_n),
