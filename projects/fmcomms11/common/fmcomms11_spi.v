@@ -39,25 +39,23 @@
 
 module fmcomms11_spi (
 
-  spi_csn,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
-
-  spi_sdio,
-  spi_dir);
-
   // 4 wire
 
-  input   [ 2:0]  spi_csn;
-  input           spi_clk;
-  input           spi_mosi;
-  output          spi_miso;
+  input   [ 2:0]  spi_csn,
+  input           spi_clk,
+  input           spi_mosi,
+  output          spi_miso,
 
   // 3 wire
 
-  inout           spi_sdio;
-  output          spi_dir;
+  output          spi_csn_ad9625,
+  output          spi_csn_ad9162,
+  output          spi_csn_ad9508,
+  output          spi_csn_adl5240,
+  output          spi_csn_adf4355,
+  output          spi_csn_hmc1119,
+  inout           spi_sdio,
+  output          spi_dir);
 
   // internal registers
 
@@ -67,12 +65,27 @@ module fmcomms11_spi (
 
   // internal signals
 
+  wire    [ 5:0]  spi_csn6_s;
   wire            spi_csn_s;
   wire            spi_enable_s;
 
   // check on rising edge and change on falling edge
 
-  assign spi_csn_s = & spi_csn;
+  assign spi_csn_ad9625 = spi_csn6_s[0];
+  assign spi_csn_ad9162 = spi_csn6_s[1];
+  assign spi_csn_ad9508 = spi_csn6_s[2];
+  assign spi_csn_adl5240 = spi_csn6_s[3];
+  assign spi_csn_adf4355 = spi_csn6_s[4];
+  assign spi_csn_hmc1119 = spi_csn6_s[5];
+
+  assign spi_csn6_s[0] = (spi_csn == 3'b001) ? 1'b0 : 1'b1;
+  assign spi_csn6_s[1] = (spi_csn == 3'b010) ? 1'b0 : 1'b1;
+  assign spi_csn6_s[2] = (spi_csn == 3'b011) ? 1'b0 : 1'b1;
+  assign spi_csn6_s[3] = (spi_csn == 3'b100) ? 1'b0 : 1'b1;
+  assign spi_csn6_s[4] = (spi_csn == 3'b101) ? 1'b0 : 1'b1;
+  assign spi_csn6_s[5] = (spi_csn == 3'b110) ? 1'b0 : 1'b1;
+
+  assign spi_csn_s = & spi_csn6_s;
   assign spi_dir = ~spi_enable_s;
   assign spi_enable_s = spi_enable & ~spi_csn_s;
 
@@ -98,7 +111,7 @@ module fmcomms11_spi (
     end
   end
 
-  // io butter
+  // io buffer
 
   assign spi_miso = spi_sdio;
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
