@@ -79,7 +79,6 @@ proc adi_ip_properties {ip_name} {
 
   adi_ip_properties_lite $ip_name
 
-  ipx::remove_all_bus_interface [ipx::current_core]
   ipx::infer_bus_interface {\
     s_axi_awvalid \
     s_axi_awaddr \
@@ -150,6 +149,9 @@ proc adi_ip_properties_lite {ip_name} {
     zynquplus     Production
     kintexu       Production}\
   [ipx::current_core]
+
+  ipx::remove_all_bus_interface [ipx::current_core]
+
 }
 
 proc adi_set_ports_dependency {port_prefix dependency} {
