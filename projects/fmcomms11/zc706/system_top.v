@@ -34,200 +34,100 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
 module system_top (
 
-  ddr_addr,
-  ddr_ba,
-  ddr_cas_n,
-  ddr_ck_n,
-  ddr_ck_p,
-  ddr_cke,
-  ddr_cs_n,
-  ddr_dm,
-  ddr_dq,
-  ddr_dqs_n,
-  ddr_dqs_p,
-  ddr_odt,
-  ddr_ras_n,
-  ddr_reset_n,
-  ddr_we_n,
+  inout   [14:0]  ddr_addr,
+  inout   [ 2:0]  ddr_ba,
+  inout           ddr_cas_n,
+  inout           ddr_ck_n,
+  inout           ddr_ck_p,
+  inout           ddr_cke,
+  inout           ddr_cs_n,
+  inout   [ 3:0]  ddr_dm,
+  inout   [31:0]  ddr_dq,
+  inout   [ 3:0]  ddr_dqs_n,
+  inout   [ 3:0]  ddr_dqs_p,
+  inout           ddr_odt,
+  inout           ddr_ras_n,
+  inout           ddr_reset_n,
+  inout           ddr_we_n,
 
-  fixed_io_ddr_vrn,
-  fixed_io_ddr_vrp,
-  fixed_io_mio,
-  fixed_io_ps_clk,
-  fixed_io_ps_porb,
-  fixed_io_ps_srstb,
+  inout           fixed_io_ddr_vrn,
+  inout           fixed_io_ddr_vrp,
+  inout   [53:0]  fixed_io_mio,
+  inout           fixed_io_ps_clk,
+  inout           fixed_io_ps_porb,
+  inout           fixed_io_ps_srstb,
 
-  gpio_bd,
+  inout   [14:0]  gpio_bd,
 
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
+  output          hdmi_out_clk,
+  output          hdmi_vsync,
+  output          hdmi_hsync,
+  output          hdmi_data_e,
+  output  [23:0]  hdmi_data,
 
-  spdif,
+  output          spdif,
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input           sys_rst,
+  input           sys_clk_p,
+  input           sys_clk_n,
 
-  ddr3_addr,
-  ddr3_ba,
-  ddr3_cas_n,
-  ddr3_ck_n,
-  ddr3_ck_p,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_dm,
-  ddr3_dq,
-  ddr3_dqs_n,
-  ddr3_dqs_p,
-  ddr3_odt,
-  ddr3_ras_n,
-  ddr3_reset_n,
-  ddr3_we_n,
+  output  [13:0]  ddr3_addr,
+  output  [ 2:0]  ddr3_ba,
+  output          ddr3_cas_n,
+  output  [ 0:0]  ddr3_ck_n,
+  output  [ 0:0]  ddr3_ck_p,
+  output  [ 0:0]  ddr3_cke,
+  output  [ 0:0]  ddr3_cs_n,
+  output  [ 7:0]  ddr3_dm,
+  inout   [63:0]  ddr3_dq,
+  inout   [ 7:0]  ddr3_dqs_n,
+  inout   [ 7:0]  ddr3_dqs_p,
+  output  [ 0:0]  ddr3_odt,
+  output          ddr3_ras_n,
+  output          ddr3_reset_n,
+  output          ddr3_we_n,
 
-  iic_scl,
-  iic_sda,
+  inout           iic_scl,
+  inout           iic_sda,
 
-  rx_ref_clk_p,
-  rx_ref_clk_n,
-  rx_sysref_p,
-  rx_sysref_n,
-  rx_sync_p,
-  rx_sync_n,
-  rx_data_p,
-  rx_data_n,
+  input           rx_ref_clk_p,
+  input           rx_ref_clk_n,
+  output          rx_sync_p,
+  output          rx_sync_n,
+  input   [ 7:0]  rx_data_p,
+  input   [ 7:0]  rx_data_n,
 
-  tx_ref_clk_p,
-  tx_ref_clk_n,
-  tx_sysref_p,
-  tx_sysref_n,
-  tx_sync_p,
-  tx_sync_n,
-  tx_data_p,
-  tx_data_n,
+  input           tx_ref_clk_p,
+  input           tx_ref_clk_n,
+  input           tx_sync_p,
+  input           tx_sync_n,
+  output  [ 7:0]  tx_data_p,
+  output  [ 7:0]  tx_data_n,
 
-  trig_p,
-  trig_n,
+  input           sysref_p,
+  input           sysref_n,
+  input           usr_clk_p,
+  input           usr_clk_n,
 
-  adc_fdb,
-  adc_fda,
-  dac_irq,
-  clkd_status,
+  inout           adf4355_muxout,
+  inout           ad9162_txen,
+  inout           ad9625_irq,
+  inout           ad9162_irq,
 
-  adc_pd,
-  dac_txen,
-  dac_reset,
-  clkd_sync,
-
-  spi_csn_clk,
-  spi_csn_dac,
-  spi_csn_adc,
-  spi_clk,
-  spi_sdio,
-  spi_dir);
-
-  inout   [14:0]  ddr_addr;
-  inout   [ 2:0]  ddr_ba;
-  inout           ddr_cas_n;
-  inout           ddr_ck_n;
-  inout           ddr_ck_p;
-  inout           ddr_cke;
-  inout           ddr_cs_n;
-  inout   [ 3:0]  ddr_dm;
-  inout   [31:0]  ddr_dq;
-  inout   [ 3:0]  ddr_dqs_n;
-  inout   [ 3:0]  ddr_dqs_p;
-  inout           ddr_odt;
-  inout           ddr_ras_n;
-  inout           ddr_reset_n;
-  inout           ddr_we_n;
-
-  inout           fixed_io_ddr_vrn;
-  inout           fixed_io_ddr_vrp;
-  inout   [53:0]  fixed_io_mio;
-  inout           fixed_io_ps_clk;
-  inout           fixed_io_ps_porb;
-  inout           fixed_io_ps_srstb;
-
-  inout   [14:0]  gpio_bd;
-
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output  [23:0]  hdmi_data;
-
-  output          spdif;
-
-  input           sys_rst;
-  input           sys_clk_p;
-  input           sys_clk_n;
-
-  output  [13:0]  ddr3_addr;
-  output  [ 2:0]  ddr3_ba;
-  output          ddr3_cas_n;
-  output  [ 0:0]  ddr3_ck_n;
-  output  [ 0:0]  ddr3_ck_p;
-  output  [ 0:0]  ddr3_cke;
-  output  [ 0:0]  ddr3_cs_n;
-  output  [ 7:0]  ddr3_dm;
-  inout   [63:0]  ddr3_dq;
-  inout   [ 7:0]  ddr3_dqs_n;
-  inout   [ 7:0]  ddr3_dqs_p;
-  output  [ 0:0]  ddr3_odt;
-  output          ddr3_ras_n;
-  output          ddr3_reset_n;
-  output          ddr3_we_n;
-
-  inout           iic_scl;
-  inout           iic_sda;
-
-  input           rx_ref_clk_p;
-  input           rx_ref_clk_n;
-  input           rx_sysref_p;
-  input           rx_sysref_n;
-  output          rx_sync_p;
-  output          rx_sync_n;
-  input   [ 3:0]  rx_data_p;
-  input   [ 3:0]  rx_data_n;
-
-  input           tx_ref_clk_p;
-  input           tx_ref_clk_n;
-  input           tx_sysref_p;
-  input           tx_sysref_n;
-  input           tx_sync_p;
-  input           tx_sync_n;
-  output  [ 3:0]  tx_data_p;
-  output  [ 3:0]  tx_data_n;
-
-  input           trig_p;
-  input           trig_n;
-
-  inout           adc_fdb;
-  inout           adc_fda;
-  inout           dac_irq;
-  inout   [ 1:0]  clkd_status;
-
-  inout           adc_pd;
-  inout           dac_txen;
-  inout           dac_reset;
-  inout           clkd_sync;
-
-  output          spi_csn_clk;
-  output          spi_csn_dac;
-  output          spi_csn_adc;
-  output          spi_clk;
-  inout           spi_sdio;
-  output          spi_dir;
+  output          spi_csn_ad9625,
+  output          spi_csn_ad9162,
+  output          spi_csn_ad9508,
+  output          spi_csn_adl5240,
+  output          spi_csn_adf4355,
+  output          spi_csn_hmc1119,
+  output          spi_clk,
+  inout           spi_sdio,
+  output          spi_dir);
 
   // internal signals
 
@@ -242,19 +142,12 @@ module system_top (
   wire            spi1_clk;
   wire            spi1_mosi;
   wire            spi1_miso;
-  wire            trig;
   wire            rx_ref_clk;
-  wire            rx_sysref;
   wire            rx_sync;
   wire            tx_ref_clk;
-  wire            tx_sysref;
   wire            tx_sync;
-
-  // spi
-
-  assign spi_csn_adc = spi0_csn[2];
-  assign spi_csn_dac = spi0_csn[1];
-  assign spi_csn_clk = spi0_csn[0];
+  wire            sysref;
+  wire            usr_clk;
 
   // instantiations
 
@@ -264,11 +157,6 @@ module system_top (
     .IB (rx_ref_clk_n),
     .O (rx_ref_clk),
     .ODIV2 ());
-
-  IBUFDS i_ibufds_rx_sysref (
-    .I (rx_sysref_p),
-    .IB (rx_sysref_n),
-    .O (rx_sysref));
 
   OBUFDS i_obufds_rx_sync (
     .I (rx_sync),
@@ -282,44 +170,49 @@ module system_top (
     .O (tx_ref_clk),
     .ODIV2 ());
 
-  IBUFDS i_ibufds_tx_sysref (
-    .I (tx_sysref_p),
-    .IB (tx_sysref_n),
-    .O (tx_sysref));
-
   IBUFDS i_ibufds_tx_sync (
     .I (tx_sync_p),
     .IB (tx_sync_n),
     .O (tx_sync));
 
-  daq2_spi i_spi (
+  IBUFDS i_ibufds_sysref (
+    .I (sysref_p),
+    .IB (sysref_n),
+    .O (sysref));
+
+  IBUFDS i_ibufds_usr_clk (
+    .I (usr_clk_p),
+    .IB (usr_clk_n),
+    .O (usr_clk));
+
+  fmcomms11_spi i_spi (
     .spi_csn (spi0_csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi0_mosi),
     .spi_miso (spi0_miso),
+    .spi_csn_ad9625 (spi_csn_ad9625),
+    .spi_csn_ad9162 (spi_csn_ad9162),
+    .spi_csn_ad9508 (spi_csn_ad9508),
+    .spi_csn_adl5240 (spi_csn_adl5240),
+    .spi_csn_adf4355 (spi_csn_adf4355),
+    .spi_csn_hmc1119 (spi_csn_hmc1119),
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
-  IBUFDS i_ibufds_trig (
-    .I (trig_p),
-    .IB (trig_n),
-    .O (trig));
-
-  assign gpio_i[43] = trig;
   assign spi_clk = spi0_clk;
 
-  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
-    .dio_t ({gpio_t[42:40], gpio_t[38], gpio_t[36:32]}),
-    .dio_i ({gpio_o[42:40], gpio_o[38], gpio_o[36:32]}),
-    .dio_o ({gpio_i[42:40], gpio_i[38], gpio_i[36:32]}),
-    .dio_p ({ adc_pd,           // 42
-              dac_txen,         // 41
-              dac_reset,        // 40
-              clkd_sync,        // 38
-              adc_fdb,          // 36
-              adc_fda,          // 35
-              dac_irq,          // 34
-              clkd_status}));   // 32
+  assign gpio_i[63:36] = gpio_o[63:36];
+
+  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf (
+    .dio_t ({gpio_t[35:32]}),
+    .dio_i ({gpio_o[35:32]}),
+    .dio_o ({gpio_i[35:32]}),
+    .dio_p ({ adf4355_muxout,   // 35
+              ad9162_txen,      // 34
+              ad9625_irq,       // 33
+              ad9162_irq}));    // 32
+
+  assign gpio_i[31:15] = gpio_o[31:15];
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
@@ -390,7 +283,6 @@ module system_top (
     .rx_data_p (rx_data_p),
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
-    .rx_sysref (rx_sysref),
     .spdif (spdif),
     .spi0_clk_i (spi0_clk),
     .spi0_clk_o (spi0_clk),
@@ -413,11 +305,11 @@ module system_top (
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
+    .sysref (sysref),
     .tx_data_n (tx_data_n),
     .tx_data_p (tx_data_p),
     .tx_ref_clk (tx_ref_clk),
-    .tx_sync (tx_sync),
-    .tx_sysref (tx_sysref));
+    .tx_sync (tx_sync));
 
 endmodule
 
