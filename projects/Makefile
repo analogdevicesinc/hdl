@@ -28,6 +28,7 @@ all:
 	-make -C fmcadc5 all
 	-make -C fmcjesdadc1 all
 	-make -C fmcomms1 all
+	-make -C fmcomms11 all
 	-make -C fmcomms2 all
 	-make -C fmcomms5 all
 	-make -C fmcomms6 all
@@ -62,6 +63,7 @@ clean:
 	make -C fmcadc5 clean
 	make -C fmcjesdadc1 clean
 	make -C fmcomms1 clean
+	make -C fmcomms11 clean
 	make -C fmcomms2 clean
 	make -C fmcomms5 clean
 	make -C fmcomms6 clean
@@ -96,6 +98,7 @@ clean-all:
 	make -C fmcadc5 clean-all
 	make -C fmcjesdadc1 clean-all
 	make -C fmcomms1 clean-all
+	make -C fmcomms11 clean-all
 	make -C fmcomms2 clean-all
 	make -C fmcomms5 clean-all
 	make -C fmcomms6 clean-all

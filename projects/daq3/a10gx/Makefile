@@ -12,7 +12,6 @@ M_DEPS += system_bd.qsys
 M_DEPS += ../common/daq3_spi.v
 M_DEPS += ../common/daq3_bd.qsys
 M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../common/a10gx/a10gx_system_bd.qsys
 M_DEPS += ../../common/a10gx/a10gx_system_assign.tcl
 M_DEPS += ../../../library/axi_ad9152/axi_ad9152.v
 M_DEPS += ../../../library/axi_ad9152/axi_ad9152_channel.v
@@ -115,6 +114,8 @@ M_FLIST += reconfig_mif
 M_FLIST += *.sopcinfo
 M_FLIST +=  *.jdi
 M_FLIST += *.pin
+M_FLIST += *_summary.csv
+M_FLIST += *.dpf
 
 
 

@@ -6,9 +6,9 @@
 ####################################################################################
 
 M_DEPS += system_top.v
+M_DEPS += system_qsys.tcl
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.sdc
-M_DEPS += system_qsys.tcl
 M_DEPS += ../common/daq2_spi.v
 M_DEPS += ../common/daq2_qsys.tcl
 M_DEPS += ../../scripts/adi_env.tcl
@@ -116,6 +116,8 @@ M_FLIST += reconfig_mif
 M_FLIST += *.sopcinfo
 M_FLIST +=  *.jdi
 M_FLIST += *.pin
+M_FLIST += *_summary.csv
+M_FLIST += *.dpf
 
 
 
