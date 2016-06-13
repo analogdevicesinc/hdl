@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -104,8 +102,6 @@ module axi_ad9144_channel (
   reg     [63:0]  dac_data = 'd0;
   reg     [63:0]  dac_pn7_data = 'd0;
   reg     [63:0]  dac_pn15_data = 'd0;
- // reg     [63:0]  dac_pn23_data = 'd0;
- // reg     [63:0]  dac_pn31_data = 'd0;
   reg     [15:0]  dac_dds_phase_0_0 = 'd0;
   reg     [15:0]  dac_dds_phase_0_1 = 'd0;
   reg     [15:0]  dac_dds_phase_1_0 = 'd0;
@@ -133,6 +129,10 @@ module axi_ad9144_channel (
   wire    [15:0]  dac_pat_data_1_s;
   wire    [15:0]  dac_pat_data_2_s;
   wire    [ 3:0]  dac_data_sel_s;
+  wire    [63:0]  dac_pn7_data_i_s;
+  wire    [63:0]  dac_pn15_data_i_s;
+  wire    [63:0]  dac_pn7_data_s;
+  wire    [63:0]  dac_pn15_data_s;
 
    // PN7 function
 
@@ -140,74 +140,73 @@ module axi_ad9144_channel (
     input [7:0] din;
     reg   [63:0] dout;
     begin
-      dout[63] = din[ 6] ^ din[ 5];
-      dout[62] = din[ 5] ^ din[ 4];
-      dout[61] = din[ 4] ^ din[ 3];
-      dout[60] = din[ 3] ^ din[ 2];
-      dout[59] = din[ 2] ^ din[ 1];
-      dout[58] = din[ 1] ^ din[ 0];
-      dout[57] = din[ 0] ^ din[ 6] ^ din[ 5];
-      dout[56] = din[ 6] ^ din[ 4];
-      dout[55] = din[ 5] ^ din[ 3];
-      dout[54] = din[ 4] ^ din[ 2];
-      dout[53] = din[ 3] ^ din[ 1];
-      dout[52] = din[ 2] ^ din[ 0];
-      dout[51] = din[ 1] ^ din[ 6] ^ din[ 5];
-      dout[50] = din[ 0] ^ din[ 5] ^ din[ 4];
-      dout[49] = din[ 6] ^ din[ 4] ^ din[ 5] ^ din[ 3];
-      dout[48] = din[ 5] ^ din[ 3] ^ din[ 4] ^ din[ 2];
-      dout[47] = din[ 4] ^ din[ 2] ^ din[ 3] ^ din[ 1];
-      dout[46] = din[ 3] ^ din[ 1] ^ din[ 2] ^ din[ 0];
-      dout[45] = din[ 2] ^ din[ 0] ^ din[ 1] ^ din[ 6] ^ din[ 5];
-      dout[44] = din[ 1] ^ din[ 6] ^ din[ 0] ^ din[ 4];
-      dout[43] = din[ 0] ^ din[ 6] ^ din[ 3];
-      dout[42] = din[ 6] ^ din[ 2];
-      dout[41] = din[ 5] ^ din[ 1];
-      dout[40] = din[ 4] ^ din[ 0];
-      dout[39] = din[ 3] ^ din[ 6] ^ din[ 5];
-      dout[38] = din[ 2] ^ din[ 5] ^ din[ 4];
-      dout[37] = din[ 1] ^ din[ 4] ^ din[ 3];
-      dout[36] = din[ 0] ^ din[ 3] ^ din[ 2];
-      dout[35] = din[ 6] ^ din[ 2] ^ din[ 5] ^ din[ 1];
-      dout[34] = din[ 5] ^ din[ 1] ^ din[ 4] ^ din[ 0];
-      dout[33] = din[ 4] ^ din[ 0] ^ din[ 3] ^ din[ 6] ^ din[ 5];
-      dout[32] = din[ 3] ^ din[ 6] ^ din[ 2] ^ din[ 4];
-      dout[31] = din[ 2] ^ din[ 5] ^ din[ 1] ^ din[ 3];
-      dout[30] = din[ 1] ^ din[ 4] ^ din[ 0] ^ din[ 2];
-      dout[29] = din[ 0] ^ din[ 3] ^ din[ 6] ^ din[ 5] ^ din[ 1];
-      dout[28] = din[ 6] ^ din[ 2] ^ din[ 4] ^ din[ 0];
-      dout[27] = din[ 1] ^ din[ 3] ^ din[ 6];
-      dout[26] = din[ 0] ^ din[ 5] ^ din[ 2];
-      dout[25] = din[ 6] ^ din[ 4] ^ din[ 5] ^ din[ 1];
-      dout[24] = din[ 5] ^ din[ 3] ^ din[ 4] ^ din[ 0];
-      dout[23] = din[ 4] ^ din[ 2] ^ din[ 3] ^ din[ 6] ^ din[ 5];
-      dout[22] = din[ 3] ^ din[ 5] ^ din[ 1] ^ din[ 2] ^ din[ 4];
-      dout[21] = din[ 2] ^ din[ 4] ^ din[ 0] ^ din[ 1] ^ din[ 3];
-      dout[20] = din[ 1] ^ din[ 3] ^ din[ 6] ^ din[ 0] ^ din[ 5] ^ din[ 2];
-      dout[19] = din[ 0] ^ din[ 2] ^ din[ 6] ^ din[ 4] ^ din[ 1];
-      dout[18] = din[ 6] ^ din[ 1] ^ din[ 3] ^ din[ 0];
-      dout[17] = din[ 0] ^ din[ 2] ^ din[ 6];
-      dout[16] = din[ 6] ^ din[ 1];
-      dout[15] = din[ 5] ^ din[ 0];
-      dout[14] = din[ 4] ^ din[ 6] ^ din[ 5];
-      dout[13] = din[ 3] ^ din[ 5] ^ din[ 4];
-      dout[12] = din[ 2] ^ din[ 4] ^ din[ 3];
-      dout[11] = din[ 1] ^ din[ 3] ^ din[ 2];
-      dout[10] = din[ 0] ^ din[ 2] ^ din[ 1];
-      dout[ 9] = din[ 6] ^ din[ 1] ^ din[ 5] ^ din[ 0];
-      dout[ 8] = din[ 0] ^ din[ 4] ^ din[ 6];
-      dout[ 7] = din[ 6] ^ din[ 3];
-      dout[ 6] = din[ 5] ^ din[ 2];
-      dout[ 5] = din[ 4] ^ din[ 1];
-      dout[ 4] = din[ 3] ^ din[ 0];
-      dout[ 3] = din[ 2] ^ din[ 6] ^ din[ 5];
-      dout[ 2] = din[ 1] ^ din[ 5] ^ din[ 4];
-      dout[ 1] = din[ 0] ^ din[ 4] ^ din[ 3];
-      dout[ 0] = din[ 6] ^ din[ 3] ^ din[ 5] ^ din[ 2];
+      dout[15] = din[ 6] ^ din[ 5];
+      dout[14] = din[ 5] ^ din[ 4];
+      dout[13] = din[ 4] ^ din[ 3];
+      dout[12] = din[ 3] ^ din[ 2];
+      dout[11] = din[ 2] ^ din[ 1];
+      dout[10] = din[ 1] ^ din[ 0];
+      dout[ 9] = din[ 0] ^ din[ 6] ^ din[ 5];
+      dout[ 8] = din[ 6] ^ din[ 4];
+      dout[ 7] = din[ 5] ^ din[ 3];
+      dout[ 6] = din[ 4] ^ din[ 2];
+      dout[ 5] = din[ 3] ^ din[ 1];
+      dout[ 4] = din[ 2] ^ din[ 0];
+      dout[ 3] = din[ 1] ^ din[ 6] ^ din[ 5];
+      dout[ 2] = din[ 0] ^ din[ 5] ^ din[ 4];
+      dout[ 1] = din[ 6] ^ din[ 4] ^ din[ 5] ^ din[ 3];
+      dout[ 0] = din[ 5] ^ din[ 3] ^ din[ 4] ^ din[ 2];
+      dout[31] = din[ 4] ^ din[ 2] ^ din[ 3] ^ din[ 1];
+      dout[30] = din[ 3] ^ din[ 1] ^ din[ 2] ^ din[ 0];
+      dout[29] = din[ 2] ^ din[ 0] ^ din[ 1] ^ din[ 6] ^ din[ 5];
+      dout[28] = din[ 1] ^ din[ 6] ^ din[ 0] ^ din[ 4];
+      dout[27] = din[ 0] ^ din[ 6] ^ din[ 3];
+      dout[26] = din[ 6] ^ din[ 2];
+      dout[25] = din[ 5] ^ din[ 1];
+      dout[24] = din[ 4] ^ din[ 0];
+      dout[23] = din[ 3] ^ din[ 6] ^ din[ 5];
+      dout[22] = din[ 2] ^ din[ 5] ^ din[ 4];
+      dout[21] = din[ 1] ^ din[ 4] ^ din[ 3];
+      dout[20] = din[ 0] ^ din[ 3] ^ din[ 2];
+      dout[19] = din[ 6] ^ din[ 2] ^ din[ 5] ^ din[ 1];
+      dout[18] = din[ 5] ^ din[ 1] ^ din[ 4] ^ din[ 0];
+      dout[17] = din[ 4] ^ din[ 0] ^ din[ 3] ^ din[ 6] ^ din[ 5];
+      dout[16] = din[ 3] ^ din[ 6] ^ din[ 2] ^ din[ 4];
+      dout[47] = din[ 2] ^ din[ 5] ^ din[ 1] ^ din[ 3];
+      dout[46] = din[ 1] ^ din[ 4] ^ din[ 0] ^ din[ 2];
+      dout[45] = din[ 0] ^ din[ 3] ^ din[ 6] ^ din[ 5] ^ din[ 1];
+      dout[44] = din[ 6] ^ din[ 2] ^ din[ 4] ^ din[ 0];
+      dout[43] = din[ 1] ^ din[ 3] ^ din[ 6];
+      dout[42] = din[ 0] ^ din[ 5] ^ din[ 2];
+      dout[41] = din[ 6] ^ din[ 4] ^ din[ 5] ^ din[ 1];
+      dout[40] = din[ 5] ^ din[ 3] ^ din[ 4] ^ din[ 0];
+      dout[39] = din[ 4] ^ din[ 2] ^ din[ 3] ^ din[ 6] ^ din[ 5];
+      dout[38] = din[ 3] ^ din[ 5] ^ din[ 1] ^ din[ 2] ^ din[ 4];
+      dout[37] = din[ 2] ^ din[ 4] ^ din[ 0] ^ din[ 1] ^ din[ 3];
+      dout[36] = din[ 1] ^ din[ 3] ^ din[ 6] ^ din[ 0] ^ din[ 5] ^ din[ 2];
+      dout[35] = din[ 0] ^ din[ 2] ^ din[ 6] ^ din[ 4] ^ din[ 1];
+      dout[34] = din[ 6] ^ din[ 1] ^ din[ 3] ^ din[ 0];
+      dout[33] = din[ 0] ^ din[ 2] ^ din[ 6];
+      dout[32] = din[ 6] ^ din[ 1];
+      dout[63] = din[ 5] ^ din[ 0];
+      dout[62] = din[ 4] ^ din[ 6] ^ din[ 5];
+      dout[61] = din[ 3] ^ din[ 5] ^ din[ 4];
+      dout[60] = din[ 2] ^ din[ 4] ^ din[ 3];
+      dout[59] = din[ 1] ^ din[ 3] ^ din[ 2];
+      dout[58] = din[ 0] ^ din[ 2] ^ din[ 1];
+      dout[57] = din[ 6] ^ din[ 1] ^ din[ 5] ^ din[ 0];
+      dout[56] = din[ 0] ^ din[ 4] ^ din[ 6];
+      dout[55] = din[ 6] ^ din[ 3];
+      dout[54] = din[ 5] ^ din[ 2];
+      dout[53] = din[ 4] ^ din[ 1];
+      dout[52] = din[ 3] ^ din[ 0];
+      dout[51] = din[ 2] ^ din[ 6] ^ din[ 5];
+      dout[50] = din[ 1] ^ din[ 5] ^ din[ 4];
+      dout[49] = din[ 0] ^ din[ 4] ^ din[ 3];
+      dout[48] = din[ 6] ^ din[ 3] ^ din[ 5] ^ din[ 2];
       pn7 = dout;
     end
   endfunction
-
   
   // PN15 function
 
@@ -215,83 +214,89 @@ module axi_ad9144_channel (
     input [15:0] din;
     reg   [63:0] dout;
     begin
-      dout[63] = din[14] ^ din[13];
-      dout[62] = din[13] ^ din[12];
-      dout[61] = din[12] ^ din[11];
-      dout[60] = din[11] ^ din[10];
-      dout[59] = din[10] ^ din[ 9];
-      dout[58] = din[ 9] ^ din[ 8];
-      dout[57] = din[ 8] ^ din[ 7];
-      dout[56] = din[ 7] ^ din[ 6];
-      dout[55] = din[ 6] ^ din[ 5];
-      dout[54] = din[ 5] ^ din[ 4];
-      dout[53] = din[ 4] ^ din[ 3];
-      dout[52] = din[ 3] ^ din[ 2];
-      dout[51] = din[ 2] ^ din[ 1];
-      dout[50] = din[ 1] ^ din[ 0];
-      dout[49] = din[ 0] ^ din[14] ^ din[13];
-      dout[48] = din[14] ^ din[12];
-      dout[47] = din[13] ^ din[11];
-      dout[46] = din[12] ^ din[10];
-      dout[45] = din[11] ^ din[ 9];
-      dout[44] = din[10] ^ din[ 8];
-      dout[43] = din[ 9] ^ din[ 7];
-      dout[42] = din[ 8] ^ din[ 6];
-      dout[41] = din[ 7] ^ din[ 5];
-      dout[40] = din[ 6] ^ din[ 4];
-      dout[39] = din[ 5] ^ din[ 3];
-      dout[38] = din[ 4] ^ din[ 2];
-      dout[37] = din[ 3] ^ din[ 1];
-      dout[36] = din[ 2] ^ din[ 0];
-      dout[35] = din[ 1] ^ din[14] ^ din[13];
-      dout[34] = din[ 0] ^ din[13] ^ din[12];
-      dout[33] = din[14] ^ din[12] ^ din[13] ^ din[11];
-      dout[32] = din[13] ^ din[11] ^ din[12] ^ din[10];
-      dout[31] = din[12] ^ din[10] ^ din[11] ^ din[ 9];
-      dout[30] = din[11] ^ din[ 9] ^ din[10] ^ din[ 8];
-      dout[29] = din[10] ^ din[ 8] ^ din[ 9] ^ din[ 7];
-      dout[28] = din[ 9] ^ din[ 7] ^ din[ 8] ^ din[ 6];
-      dout[27] = din[ 8] ^ din[ 6] ^ din[ 7] ^ din[ 5];
-      dout[26] = din[ 7] ^ din[ 5] ^ din[ 6] ^ din[ 4];
-      dout[25] = din[ 6] ^ din[ 4] ^ din[ 5] ^ din[ 3];
-      dout[24] = din[ 5] ^ din[ 3] ^ din[ 4] ^ din[ 2];
-      dout[23] = din[ 4] ^ din[ 2] ^ din[ 3] ^ din[ 1];
-      dout[22] = din[ 3] ^ din[ 1] ^ din[ 2] ^ din[ 0];
-      dout[21] = din[ 2] ^ din[ 0] ^ din[ 1] ^ din[14] ^ din[13];
-      dout[20] = din[ 1] ^ din[14] ^ din[ 0] ^ din[12];
-      dout[19] = din[ 0] ^ din[14] ^ din[11];
-      dout[18] = din[14] ^ din[10];
-      dout[17] = din[13] ^ din[ 9];
-      dout[16] = din[12] ^ din[ 8];
-      dout[15] = din[11] ^ din[ 7];
-      dout[14] = din[10] ^ din[ 6];
-      dout[13] = din[ 9] ^ din[ 5];
-      dout[12] = din[ 8] ^ din[ 4];
-      dout[11] = din[ 7] ^ din[ 3];
-      dout[10] = din[ 6] ^ din[ 2];
-      dout[ 9] = din[ 5] ^ din[ 1];
-      dout[ 8] = din[ 4] ^ din[ 0];
-      dout[ 7] = din[ 3] ^ din[14] ^ din[13];
-      dout[ 6] = din[ 2] ^ din[13] ^ din[12];
-      dout[ 5] = din[ 1] ^ din[12] ^ din[11];
-      dout[ 4] = din[ 0] ^ din[11] ^ din[10];
-      dout[ 3] = din[14] ^ din[10] ^ din[13] ^ din[ 9];
-      dout[ 2] = din[13] ^ din[ 9] ^ din[12] ^ din[ 8];
-      dout[ 1] = din[12] ^ din[ 8] ^ din[11] ^ din[ 7];
-      dout[ 0] = din[11] ^ din[ 7] ^ din[10] ^ din[ 6];
+      dout[15] = din[14] ^ din[13];
+      dout[14] = din[13] ^ din[12];
+      dout[13] = din[12] ^ din[11];
+      dout[12] = din[11] ^ din[10];
+      dout[11] = din[10] ^ din[ 9];
+      dout[10] = din[ 9] ^ din[ 8];
+      dout[ 9] = din[ 8] ^ din[ 7];
+      dout[ 8] = din[ 7] ^ din[ 6];
+      dout[ 7] = din[ 6] ^ din[ 5];
+      dout[ 6] = din[ 5] ^ din[ 4];
+      dout[ 5] = din[ 4] ^ din[ 3];
+      dout[ 4] = din[ 3] ^ din[ 2];
+      dout[ 3] = din[ 2] ^ din[ 1];
+      dout[ 2] = din[ 1] ^ din[ 0];
+      dout[ 1] = din[ 0] ^ din[14] ^ din[13];
+      dout[ 0] = din[14] ^ din[12];
+      dout[31] = din[13] ^ din[11];
+      dout[30] = din[12] ^ din[10];
+      dout[29] = din[11] ^ din[ 9];
+      dout[28] = din[10] ^ din[ 8];
+      dout[27] = din[ 9] ^ din[ 7];
+      dout[26] = din[ 8] ^ din[ 6];
+      dout[25] = din[ 7] ^ din[ 5];
+      dout[24] = din[ 6] ^ din[ 4];
+      dout[23] = din[ 5] ^ din[ 3];
+      dout[22] = din[ 4] ^ din[ 2];
+      dout[21] = din[ 3] ^ din[ 1];
+      dout[20] = din[ 2] ^ din[ 0];
+      dout[19] = din[ 1] ^ din[14] ^ din[13];
+      dout[18] = din[ 0] ^ din[13] ^ din[12];
+      dout[17] = din[14] ^ din[12] ^ din[13] ^ din[11];
+      dout[16] = din[13] ^ din[11] ^ din[12] ^ din[10];
+      dout[47] = din[12] ^ din[10] ^ din[11] ^ din[ 9];
+      dout[46] = din[11] ^ din[ 9] ^ din[10] ^ din[ 8];
+      dout[45] = din[10] ^ din[ 8] ^ din[ 9] ^ din[ 7];
+      dout[44] = din[ 9] ^ din[ 7] ^ din[ 8] ^ din[ 6];
+      dout[43] = din[ 8] ^ din[ 6] ^ din[ 7] ^ din[ 5];
+      dout[42] = din[ 7] ^ din[ 5] ^ din[ 6] ^ din[ 4];
+      dout[41] = din[ 6] ^ din[ 4] ^ din[ 5] ^ din[ 3];
+      dout[40] = din[ 5] ^ din[ 3] ^ din[ 4] ^ din[ 2];
+      dout[39] = din[ 4] ^ din[ 2] ^ din[ 3] ^ din[ 1];
+      dout[38] = din[ 3] ^ din[ 1] ^ din[ 2] ^ din[ 0];
+      dout[37] = din[ 2] ^ din[ 0] ^ din[ 1] ^ din[14] ^ din[13];
+      dout[36] = din[ 1] ^ din[14] ^ din[ 0] ^ din[12];
+      dout[35] = din[ 0] ^ din[14] ^ din[11];
+      dout[34] = din[14] ^ din[10];
+      dout[33] = din[13] ^ din[ 9];
+      dout[32] = din[12] ^ din[ 8];
+      dout[63] = din[11] ^ din[ 7];
+      dout[62] = din[10] ^ din[ 6];
+      dout[61] = din[ 9] ^ din[ 5];
+      dout[60] = din[ 8] ^ din[ 4];
+      dout[59] = din[ 7] ^ din[ 3];
+      dout[58] = din[ 6] ^ din[ 2];
+      dout[57] = din[ 5] ^ din[ 1];
+      dout[56] = din[ 4] ^ din[ 0];
+      dout[55] = din[ 3] ^ din[14] ^ din[13];
+      dout[54] = din[ 2] ^ din[13] ^ din[12];
+      dout[53] = din[ 1] ^ din[12] ^ din[11];
+      dout[52] = din[ 0] ^ din[11] ^ din[10];
+      dout[51] = din[14] ^ din[10] ^ din[13] ^ din[ 9];
+      dout[50] = din[13] ^ din[ 9] ^ din[12] ^ din[ 8];
+      dout[49] = din[12] ^ din[ 8] ^ din[11] ^ din[ 7];
+      dout[48] = din[11] ^ din[ 7] ^ din[10] ^ din[ 6];
       pn15 = dout;
     end
   endfunction
 
-   // dac data select
+  assign dac_pn7_data_i_s  = ~dac_pn7_data;
+  assign dac_pn15_data_i_s = ~dac_pn15_data;
+
+  assign dac_pn7_data_s    = dac_pn7_data;
+  assign dac_pn15_data_s   = dac_pn15_data;
+
+  // dac data select
 
   always @(posedge dac_clk) begin
     dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
     case (dac_data_sel_s)
-      //4'h7: dac_data <= dac_pn31_data;
-      //4'h6: dac_data <= dac_pn23_data;
-      4'h5: dac_data <= dac_pn15_data;
-      4'h4: dac_data <= dac_pn7_data;
+      4'h7: dac_data <= dac_pn15_data_s;
+      4'h6: dac_data <= dac_pn7_data_s;
+      4'h5: dac_data <= dac_pn15_data_i_s;
+      4'h4: dac_data <= dac_pn7_data_i_s;
       4'h3: dac_data <= 64'd0;
       4'h2: dac_data <= dma_data;
       4'h1: dac_data <= { dac_pat_data_2_s, dac_pat_data_1_s,
@@ -304,15 +309,11 @@ module axi_ad9144_channel (
 
   always @(posedge dac_clk) begin
     if (dac_data_sync == 1'b1) begin
-      dac_pn7_data <= {8{1'd1}};
-      dac_pn15_data <= {8{1'd1}};
-      //dac_pn23_data <= {64{1'd1}};
-      //dac_pn31_data <= {64{1'd1}};
+      dac_pn7_data <= {64{1'd1}};
+      dac_pn15_data <= {64{1'd1}};
     end else begin
-      dac_pn7_data <= pn7(dac_pn7_data);
-      dac_pn15_data <= pn15(dac_pn15_data);
-      //dac_pn23_data <= pn23(dac_pn23_data);
-      //dac_pn31_data <= pn31(dac_pn31_data);
+      dac_pn7_data <= pn7(dac_pn7_data[55:48]);
+      dac_pn15_data <= pn15(dac_pn15_data[63:48]);
     end
   end
 
