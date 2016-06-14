@@ -323,7 +323,7 @@ module up_hdmi_tx (
 
   // hdmi control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(237)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(236)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_ss_bypass,
