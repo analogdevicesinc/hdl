@@ -245,7 +245,7 @@ set_instance_parameter_value alt_clk {gui_number_of_clocks} {1}
 set_instance_parameter_value alt_clk {gui_output_clock_frequency0} {250.0}
 set_instance_parameter_value alt_clk {gui_ps_units0} {degrees}
 set_instance_parameter_value alt_clk {gui_phase_shift_deg0} {90.0}
-set_instance_parameter_value alt_clk {system_info_device_family} $m_device_family
+set_instance_parameter_value alt_clk {system_info_device_family} DEVICE_FAMILY
 
 # updates
 
