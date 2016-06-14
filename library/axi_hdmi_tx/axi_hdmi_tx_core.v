@@ -582,8 +582,8 @@ module axi_hdmi_tx_core (
   // hdmi embedded sync
 
   always @(posedge hdmi_clk) begin
-    hdmi_es_hs_de <= hdmi_16_hsync_d;
-    hdmi_es_vs_de <= hdmi_16_vsync_d;
+    hdmi_es_hs_de <= hdmi_16_hsync_data_e_d;
+    hdmi_es_vs_de <= hdmi_16_vsync_data_e_d;
     if (hdmi_16_data_e_d == 1'b0) begin
       hdmi_es_data[15:8] <= 8'h80;
     end else begin
