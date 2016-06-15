@@ -344,6 +344,7 @@ module axi_dacfifo_wr (
       dma_mem_raddr_m1 <= 'b0;
       dma_mem_raddr_m2 <= 'b0;
       dma_mem_raddr <= 'b0;
+      dma_ready <= 1'b0;
     end else begin
       dma_mem_raddr_m1 <= axi_mem_raddr_g;
       dma_mem_raddr_m2 <= dma_mem_raddr_m1;
@@ -448,6 +449,7 @@ module axi_dacfifo_wr (
       axi_mem_raddr <= 'b0;
       axi_wvalid_counter <= 4'b0;
       axi_mem_last_read_toggle <= 1'b1;
+      axi_mem_raddr_g <= 8'b0;
     end else begin
       axi_mem_rvalid <= axi_mem_rvalid_s;
       axi_mem_rvalid_d <= axi_mem_rvalid;
