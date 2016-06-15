@@ -375,9 +375,6 @@ module axi_dacfifo_wr (
 
   // Read address generation for the asymmetric memory
 
-  // The asymmetric memory have to have enough data for at least one AXI burst,
-  // before the controller start an AXI write transaction.
-
   // CDC for the memory write address, xfer_req and xfer_last
 
   always @(posedge axi_clk) begin
@@ -412,6 +409,9 @@ module axi_dacfifo_wr (
 
   assign axi_mem_addr_diff_s = {1'b1, axi_mem_waddr_s} - axi_mem_raddr;
 
+  // The asymmetric memory have to have enough data for at least one AXI burst,
+  // before the controller start an AXI write transaction.
+
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_mem_read_en <= 1'b0;
@@ -419,9 +419,8 @@ module axi_dacfifo_wr (
       axi_mem_addr_diff <= 'b0;
     end else begin
       axi_mem_addr_diff <= axi_mem_addr_diff_s[(AXI_MEM_ADDRESS_WIDTH-1):0];
-      // If there is a valid request and there is enough data in the memory or it's the end of the dma transaction
-      if ((axi_xfer_req_m[2] == 1'b1) && (axi_mem_read_en == 1'b0) && (axi_wr_active == 1'b0)) begin
-        if (((axi_mem_addr_diff > AXI_LENGTH) && (axi_last_transaction == 1'b0)) ||
+      if (axi_mem_read_en == 1'b0) begin
+        if (((axi_xfer_req_m[2] == 1'b1) && (axi_mem_addr_diff > AXI_LENGTH) && (axi_last_transaction_d == 1'b0)) ||
              (axi_last_transaction == 1'b1) && (axi_last_transaction_d == 1'b0)) begin
           axi_mem_read_en <= 1'b1;
         end
@@ -435,9 +434,9 @@ module axi_dacfifo_wr (
   // If there is enough data and the AXI interface is ready, we can start to read
   // out data from the memory
 
-  assign axi_mem_eot_s = axi_last_transaction_d & ~axi_last_transaction;
   assign axi_mem_rvalid_s =  axi_mem_read_en & axi_wready_s;
   assign axi_mem_last_s = (axi_wvalid_counter == axi_awlen) ? axi_mem_rvalid_s : 1'b0;
+  assign axi_mem_eot_s = axi_wlast & axi_last_transaction;
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
@@ -468,14 +467,12 @@ module axi_dacfifo_wr (
     end
   end
 
-
-
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_last_transaction <= 1'b0;
       axi_last_transaction_d <= 1'b0;
     end else begin
-      if (axi_xfer_last_m[2] == 1'b1) begin
+      if ((axi_xfer_req_m[2] == 1'b1) && (axi_xfer_last_m[2] == 1'b1)) begin
         axi_last_transaction <= 1'b1;
       end else if (axi_wlast == 1'b1) begin
         axi_last_transaction <= 1'b0;
