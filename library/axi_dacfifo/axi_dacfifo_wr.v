@@ -167,7 +167,7 @@ module axi_dacfifo_wr (
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m1 = 'd0;
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2 = 'd0;
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr = 'd0;
-  reg                                       dma_ready = 'd0;
+  reg                                       dma_ready = 1'b0;
   reg                                       dma_rst_m1 = 1'b0;
   reg                                       dma_rst_m2 = 1'b0;
   reg     [ 2:0]                            dma_mem_last_read_toggle_m = 3'b0;
@@ -181,8 +181,8 @@ module axi_dacfifo_wr (
   reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_m1 = 'b0;
   reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_m2 = 'b0;
   reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr = 'b0;
-  reg                                       axi_mem_valid = 'b0;
-  reg                                       axi_mem_valid_d = 'b0;
+  reg                                       axi_mem_rvalid = 1'b0;
+  reg                                       axi_mem_rvalid_d = 1'b0;
   reg                                       axi_mem_last = 1'b0;
   reg                                       axi_mem_last_d = 1'b0;
   reg     [(AXI_DATA_WIDTH-1):0]            axi_mem_rdata = 'b0;
@@ -201,7 +201,6 @@ module axi_dacfifo_wr (
   reg                                       axi_xfer_init = 1'b0;
   reg                                       axi_werror = 1'b0;
   reg     [ 3:0]                            axi_wvalid_counter = 4'b0;
-  reg                                       axi_wr_active = 1'b0;
 
   reg                                       axi_last_transaction = 1'b0;
   reg                                       axi_last_transaction_d = 1'b0;
@@ -211,11 +210,13 @@ module axi_dacfifo_wr (
   wire    [(DMA_MEM_ADDRESS_WIDTH):0]       dma_mem_addr_diff_s;
   wire    [(DMA_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_s;
   wire                                      dma_mem_last_read_s;
+  wire                                      dma_mem_wea_s;
   wire                                      dma_rst_s;
 
   wire    [(AXI_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_s;
   wire    [AXI_MEM_ADDRESS_WIDTH:0]         axi_mem_addr_diff_s;
   wire    [(AXI_DATA_WIDTH-1):0]            axi_mem_rdata_s;
+  wire                                      axi_mem_rvalid_s;
   wire                                      axi_mem_last_s;
   wire                                      axi_mem_eot_s;
 
@@ -270,7 +271,7 @@ module axi_dacfifo_wr (
     .B_DATA_WIDTH (AXI_DATA_WIDTH))
   i_mem_asym (
     .clka (dma_clk),
-    .wea (dma_valid),
+    .wea (dma_mem_wea_s),
     .addra (dma_mem_waddr),
     .dina (dma_data),
     .clkb (axi_clk),
@@ -280,7 +281,7 @@ module axi_dacfifo_wr (
   ad_axis_inf_rx #(.DATA_WIDTH(AXI_DATA_WIDTH)) i_axis_inf (
     .clk (axi_clk),
     .rst (axi_reset),
-    .valid (axi_mem_valid_d),
+    .valid (axi_mem_rvalid_d),
     .last (axi_mem_last_d),
     .data (axi_mem_rdata),
     .inf_valid (axi_wvalid),
@@ -316,15 +317,16 @@ module axi_dacfifo_wr (
                            (MEM_RATIO == 8) ? {dma_mem_raddr, 3'b0} :
                                               {dma_mem_raddr, 4'b0};
   assign dma_mem_last_read_s = dma_mem_last_read_toggle_m[2] ^ dma_mem_last_read_toggle_m[1];
+  assign dma_mem_wea_s = dma_xfer_req & dma_valid;
 
   always @(posedge dma_clk) begin
     if (dma_rst_s == 1'b1) begin
       dma_mem_waddr <= 'h0;
-      dma_mem_waddr_g <= 8'h0;
+      dma_mem_waddr_g <= 'h0;
       dma_mem_last_read_toggle_m <= 3'b0;
     end else begin
       dma_mem_last_read_toggle_m = {dma_mem_last_read_toggle_m[1:0], axi_mem_last_read_toggle};
-      if ((dma_xfer_req == 1'b1) && (dma_valid == 1'b1)) begin
+      if (dma_mem_wea_s == 1'b1) begin
         dma_mem_waddr <= dma_mem_waddr + 8'b1;
       end
       if (dma_mem_last_read_s == 1'b1) begin
@@ -429,30 +431,17 @@ module axi_dacfifo_wr (
     end
   end
 
-  always @(posedge axi_clk) begin
-    if(axi_resetn == 1'b0) begin
-      axi_wr_active = 1'b0;
-    end else begin
-      if (axi_mem_read_en == 1'b1) begin
-        axi_wr_active = 1'b1;
-      end
-      if ((axi_wlast == 1'b1) && (axi_wvalid == 1'b1)) begin
-        axi_wr_active = 1'b0;
-      end
-    end
-  end
-
   // If there is enough data and the AXI interface is ready, we can start to read
   // out data from the memory
 
-  assign axi_mem_valid_s =  axi_mem_read_en & axi_wready_s;
-  assign axi_mem_last_s = (axi_wvalid_counter == axi_awlen) ? axi_mem_valid_s : 1'b0;
   assign axi_mem_eot_s = axi_last_transaction_d & ~axi_last_transaction;
+  assign axi_mem_rvalid_s =  axi_mem_read_en & axi_wready_s;
+  assign axi_mem_last_s = (axi_wvalid_counter == axi_awlen) ? axi_mem_rvalid_s : 1'b0;
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
-      axi_mem_valid <= 1'b0;
-      axi_mem_valid_d <= 1'b0;
+      axi_mem_rvalid <= 1'b0;
+      axi_mem_rvalid_d <= 1'b0;
       axi_mem_last <= 1'b0;
       axi_mem_last_d <= 1'b0;
       axi_mem_rdata <= 'b0;
@@ -460,12 +449,12 @@ module axi_dacfifo_wr (
       axi_wvalid_counter <= 4'b0;
       axi_mem_last_read_toggle <= 1'b1;
     end else begin
-      axi_mem_valid <= axi_mem_valid_s;
-      axi_mem_valid_d <= axi_mem_valid;
+      axi_mem_rvalid <= axi_mem_rvalid_s;
+      axi_mem_rvalid_d <= axi_mem_rvalid;
       axi_mem_last <= axi_mem_last_s;
       axi_mem_last_d <= axi_mem_last;
       axi_mem_rdata <= axi_mem_rdata_s;
-      if (axi_mem_valid_s == 1'b1) begin
+      if (axi_mem_rvalid_s == 1'b1) begin
         axi_mem_raddr <= axi_mem_raddr + 1;
         axi_wvalid_counter <= (axi_wvalid_counter == axi_awlen) ? 4'b0 : axi_wvalid_counter + 1;
       end
