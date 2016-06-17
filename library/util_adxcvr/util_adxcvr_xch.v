@@ -39,68 +39,85 @@
 
 module util_adxcvr_xch (
 
-  // rst and clocks
+  // pll interface
 
-  input           ref_clk,
-  input           pll_rst,
-
-  input           qpll_clk,
-  input           qpll_ref_clk,
-  input           qpll_locked,
+  input           qpll2ch_clk,
+  input           qpll2ch_ref_clk,
+  input           qpll2ch_locked,
+  input           cpll_ref_clk,
 
   // receive
 
   input           rx_p,
   input           rx_n,
 
-  input           rx_rst,
-  input           rx_clk,
-  input           rx_lpm_dfe_n,
-  input   [ 2:0]  rx_rate,
-  input   [ 1:0]  rx_sys_clk_sel,
-  input   [ 2:0]  rx_out_clk_sel,
   output          rx_out_clk,
-  output          rx_rst_done,
-  output          rx_pll_locked,
-  input           rx_user_ready,
-  output  [ 3:0]  rx_gt_charisk,
-  output  [ 3:0]  rx_gt_disperr,
-  output  [ 3:0]  rx_gt_notintable,
-  output  [31:0]  rx_gt_data,
-  input           rx_gt_calign,
+  input           rx_clk,
+  output  [ 3:0]  rx_charisk,
+  output  [ 3:0]  rx_disperr,
+  output  [ 3:0]  rx_notintable,
+  output  [31:0]  rx_data,
+  input           rx_calign,
 
   // transmit
 
   output          tx_p,
   output          tx_n,
 
-  input           tx_rst,
-  input           tx_clk,
-  input   [ 2:0]  tx_rate,
-  input   [ 1:0]  tx_sys_clk_sel,
-  input   [ 2:0]  tx_out_clk_sel,
   output          tx_out_clk,
-  output          tx_rst_done,
-  output          tx_pll_locked,
-  input           tx_user_ready,
-  input   [ 3:0]  tx_gt_charisk,
-  input   [31:0]  tx_gt_data,
+  input           tx_clk,
+  input   [ 3:0]  tx_charisk,
+  input   [31:0]  tx_data,
 
-  // drp interface
+  // up interface
 
   input           up_rstn,
   input           up_clk,
-  input   [ 7:0]  up_drp_sel,
-  input           up_drp_enb,
-  input   [11:0]  up_drp_addr,
-  input           up_drp_wr,
-  input   [15:0]  up_drp_wdata,
-  output  [15:0]  up_drp_rdata,
-  output          up_drp_ready);
+  input   [ 7:0]  up_es_sel,
+  input           up_es_enb,
+  input   [11:0]  up_es_addr,
+  input           up_es_wr,
+  input   [15:0]  up_es_wdata,
+  output  [15:0]  up_es_rdata,
+  output          up_es_ready,
+  input           up_rx_pll_rst,
+  output          up_rx_pll_locked,
+  input           up_rx_rst,
+  input           up_rx_user_ready,
+  output          up_rx_rst_done,
+  input           up_rx_lpm_dfe_n,
+  input   [ 2:0]  up_rx_rate,
+  input   [ 1:0]  up_rx_sys_clk_sel,
+  input   [ 2:0]  up_rx_out_clk_sel,
+  input   [ 7:0]  up_rx_sel,
+  input           up_rx_enb,
+  input   [11:0]  up_rx_addr,
+  input           up_rx_wr,
+  input   [15:0]  up_rx_wdata,
+  output  [15:0]  up_rx_rdata,
+  output          up_rx_ready,
+  input           up_tx_pll_rst,
+  output          up_tx_pll_locked,
+  input           up_tx_rst,
+  input           up_tx_user_ready,
+  output          up_tx_rst_done,
+  input           up_tx_lpm_dfe_n,
+  input   [ 2:0]  up_tx_rate,
+  input   [ 1:0]  up_tx_sys_clk_sel,
+  input   [ 2:0]  up_tx_out_clk_sel,
+  input   [ 7:0]  up_tx_sel,
+  input           up_tx_enb,
+  input   [11:0]  up_tx_addr,
+  input           up_tx_wr,
+  input   [15:0]  up_tx_wdata,
+  output  [15:0]  up_tx_rdata,
+  output          up_tx_ready);
 
   // parameters
 
+  parameter   integer XCVR_ID = 0;
   parameter   integer GTH_OR_GTX_N = 0;
+  parameter   integer CPLL_TX_OR_RX_N = 0;
   parameter   integer CPLL_FBDIV = 2;
   parameter   integer RX_OUT_DIV = 1;
   parameter   integer RX_CLK25_DIV = 10;
@@ -113,60 +130,127 @@ module util_adxcvr_xch (
 
   // internal registers
 
-  reg             up_drp_enb_int = 'd0;
-  reg     [11:0]  up_drp_addr_int = 'd0;
-  reg             up_drp_wr_int = 'd0;
-  reg     [15:0]  up_drp_wdata_int = 'd0;
-  reg     [15:0]  up_drp_rdata_int = 'd0;
-  reg             up_drp_ready_int = 'd0;
+  reg     [15:0]  up_es_rdata_int = 'd0;
+  reg             up_es_ready_int = 'd0;
+  reg     [15:0]  up_rx_rdata_int = 'd0;
+  reg             up_rx_ready_int = 'd0;
+  reg     [15:0]  up_tx_rdata_int = 'd0;
+  reg             up_tx_ready_int = 'd0;
+  reg     [ 2:0]  up_sel_int = 'd0;
+  reg             up_enb_int = 'd0;
+  reg     [11:0]  up_addr_int = 'd0;
+  reg             up_wr_int = 'd0;
+  reg     [15:0]  up_wdata_int = 'd0;
 
   // internal signals
 
-  wire    [ 3:0]  rx_charisk_open_s;
-  wire    [ 3:0]  rx_disperr_open_s;
-  wire    [ 3:0]  rx_notintable_open_s;
-  wire    [31:0]  rx_data_open_s;
+  wire            up_cpll_rst;
+  wire            up_es_enb_s;
+  wire            up_rx_enb_s;
+  wire            up_tx_enb_s;
+  wire    [15:0]  up_rdata_s;
+  wire            up_ready_s;
   wire    [ 1:0]  rx_sys_clk_sel_s;
   wire    [ 1:0]  tx_sys_clk_sel_s;
   wire    [ 1:0]  rx_pll_clk_sel_s;
   wire    [ 1:0]  tx_pll_clk_sel_s;
+  wire    [ 3:0]  rx_charisk_open_s;
+  wire    [ 3:0]  rx_disperr_open_s;
+  wire    [ 3:0]  rx_notintable_open_s;
+  wire    [31:0]  rx_data_open_s;
   wire            cpll_locked_s;
-  wire    [15:0]  up_drp_rdata_s;
-  wire            up_drp_ready_s;
 
-  // pll locked
+  // pll
 
-  assign rx_pll_locked = (rx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
-  assign tx_pll_locked = (tx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
+  assign up_cpll_rst = (CPLL_TX_OR_RX_N == 1) ? up_tx_pll_rst : up_rx_pll_rst;
+  assign up_rx_pll_locked = (up_rx_sys_clk_sel == 2'd3) ? qpll2ch_locked : cpll_locked_s;
+  assign up_tx_pll_locked = (up_tx_sys_clk_sel == 2'd3) ? qpll2ch_locked : cpll_locked_s;
 
   // drp access
 
-  assign up_drp_rdata = up_drp_rdata_int;
-  assign up_drp_ready = up_drp_ready_int;
+  assign up_es_rdata = up_es_rdata_int;
+  assign up_es_ready = up_es_ready_int;
+  assign up_rx_rdata = up_rx_rdata_int;
+  assign up_rx_ready = up_rx_ready_int;
+  assign up_tx_rdata = up_tx_rdata_int;
+  assign up_tx_ready = up_tx_ready_int;
 
-  always @(posedge up_clk or negedge up_rstn) begin
+  assign up_es_enb_s = ((up_es_sel == XCVR_ID) ||
+    (up_es_sel == 8'hff)) ? up_es_enb : 1'b0;
+
+  assign up_rx_enb_s = ((up_rx_sel == XCVR_ID) ||
+    (up_rx_sel == 8'hff)) ? up_rx_enb : 1'b0;
+
+  assign up_tx_enb_s = ((up_tx_sel == XCVR_ID) ||
+    (up_tx_sel == 8'hff)) ? up_tx_enb : 1'b0;
+
+  always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
-        up_drp_enb_int <= 1'd0;
-        up_drp_addr_int <= 12'd0;
-        up_drp_wr_int <= 1'd0;
-        up_drp_wdata_int <= 15'd0;
-        up_drp_rdata_int <= 15'd0;
-        up_drp_ready_int <= 1'd0;
+      up_es_rdata_int <= 15'd0;
+      up_es_ready_int <= 1'd0;
+      up_rx_rdata_int <= 15'd0;
+      up_rx_ready_int <= 1'd0;
+      up_tx_rdata_int <= 15'd0;
+      up_tx_ready_int <= 1'd0;
+      up_sel_int <= 3'd0;
+      up_enb_int <= 1'd0;
+      up_addr_int <= 12'd0;
+      up_wr_int <= 1'd0;
+      up_wdata_int <= 15'd0;
     end else begin
-      if ((up_drp_sel == XCVR_ID) || (up_drp_sel == 8'hff)) begin
-        up_drp_enb_int <= up_drp_enb;
-        up_drp_addr_int <= up_drp_addr;
-        up_drp_wr_int <= up_drp_wr;
-        up_drp_wdata_int <= up_drp_wdata;
-        up_drp_rdata_int <= up_drp_rdata_s;
-        up_drp_ready_int <= up_drp_ready_s;
+      if (up_sel_int == 3'b100) begin
+        up_es_rdata_int <= up_rdata_s;
+        up_es_ready_int <= up_ready_s;
       end else begin
-        up_drp_enb_int <= 1'd0;
-        up_drp_addr_int <= 12'd0;
-        up_drp_wr_int <= 1'd0;
-        up_drp_wdata_int <= 15'd0;
-        up_drp_rdata_int <= 15'd0;
-        up_drp_ready_int <= 1'd0;
+        up_es_rdata_int <= 15'd0;
+        up_es_ready_int <= 1'd0;
+      end
+      if (up_sel_int == 3'b101) begin
+        up_rx_rdata_int <= up_rdata_s;
+        up_rx_ready_int <= up_ready_s;
+      end else begin
+        up_rx_rdata_int <= 15'd0;
+        up_rx_ready_int <= 1'd0;
+      end
+      if (up_sel_int == 3'b110) begin
+        up_tx_rdata_int <= up_rdata_s;
+        up_tx_ready_int <= up_ready_s;
+      end else begin
+        up_tx_rdata_int <= 15'd0;
+        up_tx_ready_int <= 1'd0;
+      end
+      if (up_sel_int[2] == 1'b1) begin
+        if (up_ready_s == 1'b1) begin
+          up_sel_int <= 3'b000;
+        end
+        up_enb_int <= 1'b0;
+        up_addr_int <= 12'd0;
+        up_wr_int <= 1'd0;
+        up_wdata_int <= 15'd0;
+      end else if (up_es_enb_s == 1'b1) begin
+        up_sel_int <= 3'b100;
+        up_enb_int <= 1'b1;
+        up_addr_int <= up_es_addr;
+        up_wr_int <= up_es_wr;
+        up_wdata_int <= up_es_wdata;
+      end else if (up_rx_enb_s == 1'b1) begin
+        up_sel_int <= 3'b101;
+        up_enb_int <= 1'b1;
+        up_addr_int <= up_rx_addr;
+        up_wr_int <= up_rx_wr;
+        up_wdata_int <= up_rx_wdata;
+      end else if (up_tx_enb_s == 1'b1) begin
+        up_sel_int <= 3'b110;
+        up_enb_int <= 1'b1;
+        up_addr_int <= up_tx_addr;
+        up_wr_int <= up_tx_wr;
+        up_wdata_int <= up_tx_wdata;
+      end else begin
+        up_sel_int <= 3'b000;
+        up_enb_int <= 1'b0;
+        up_addr_int <= 12'd0;
+        up_wr_int <= 1'd0;
+        up_wdata_int <= 15'd0;
       end
     end
   end
@@ -175,8 +259,8 @@ module util_adxcvr_xch (
 
   generate
   if (GTH_OR_GTX_N == 0) begin
-  assign rx_sys_clk_sel_s = rx_sys_clk_sel;
-  assign tx_sys_clk_sel_s = tx_sys_clk_sel;
+  assign rx_sys_clk_sel_s = up_rx_sys_clk_sel;
+  assign tx_sys_clk_sel_s = up_tx_sys_clk_sel;
   assign rx_pll_clk_sel_s = 2'd0;
   assign tx_pll_clk_sel_s = 2'd0;
   end
@@ -392,7 +476,7 @@ module util_adxcvr_xch (
     .CPLLPD (1'b0),
     .CPLLREFCLKLOST (),
     .CPLLREFCLKSEL (3'b001),
-    .CPLLRESET (pll_rst),
+    .CPLLRESET (up_cpll_rst),
     .GTRSVD (16'b0000000000000000),
     .PCSRSVDIN (16'b0000000000000000),
     .PCSRSVDIN2 (5'b00000),
@@ -404,33 +488,33 @@ module util_adxcvr_xch (
     .GTGREFCLK (1'd0),
     .GTNORTHREFCLK0 (1'd0),
     .GTNORTHREFCLK1 (1'd0),
-    .GTREFCLK0 (ref_clk),
+    .GTREFCLK0 (cpll_ref_clk),
     .GTREFCLK1 (1'd0),
     .GTSOUTHREFCLK0 (1'd0),
     .GTSOUTHREFCLK1 (1'd0),
-    .DRPADDR (up_drp_addr_int[8:0]),
+    .DRPADDR (up_addr_int[8:0]),
     .DRPCLK (up_clk),
-    .DRPDI (up_drp_wdata_int),
-    .DRPDO (up_drp_rdata_s),
-    .DRPEN (up_drp_enb_int),
-    .DRPRDY (up_drp_ready_s),
-    .DRPWE (up_drp_wr_int),
+    .DRPDI (up_wdata_int),
+    .DRPDO (up_rdata_s),
+    .DRPEN (up_enb_int),
+    .DRPRDY (up_ready_s),
+    .DRPWE (up_wr_int),
     .GTREFCLKMONITOR (),
-    .QPLLCLK (qpll_clk),
-    .QPLLREFCLK (qpll_ref_clk),
+    .QPLLCLK (qpll2ch_clk),
+    .QPLLREFCLK (qpll2ch_ref_clk),
     .RXSYSCLKSEL (rx_sys_clk_sel_s),
     .TXSYSCLKSEL (tx_sys_clk_sel_s),
     .DMONITOROUT (),
     .TX8B10BEN (1'd1),
     .LOOPBACK (3'd0),
     .PHYSTATUS (),
-    .RXRATE (rx_rate),
+    .RXRATE (up_rx_rate),
     .RXVALID (),
     .RXPD (2'b00),
     .TXPD (2'b00),
     .SETERRSTATUS (1'd0),
     .EYESCANRESET (1'd0),
-    .RXUSERRDY (rx_user_ready),
+    .RXUSERRDY (up_rx_user_ready),
     .EYESCANDATAERROR (),
     .EYESCANMODE (1'd0),
     .EYESCANTRIGGER (1'd0),
@@ -444,15 +528,15 @@ module util_adxcvr_xch (
     .RX8B10BEN (1'd1),
     .RXUSRCLK (rx_clk),
     .RXUSRCLK2 (rx_clk),
-    .RXDATA ({rx_data_open_s, rx_gt_data}),
+    .RXDATA ({rx_data_open_s, rx_data}),
     .RXPRBSERR (),
     .RXPRBSSEL (3'd0),
     .RXPRBSCNTRESET (1'd0),
     .RXDFEXYDEN (1'd0),
     .RXDFEXYDHOLD (1'd0),
     .RXDFEXYDOVRDEN (1'd0),
-    .RXDISPERR ({rx_disperr_open_s, rx_gt_disperr}),
-    .RXNOTINTABLE ({rx_notintable_open_s, rx_gt_notintable}),
+    .RXDISPERR ({rx_disperr_open_s, rx_disperr}),
+    .RXNOTINTABLE ({rx_notintable_open_s, rx_notintable}),
     .GTXRXP (rx_p),
     .GTXRXN (rx_n),
     .RXBUFRESET (1'd0),
@@ -476,8 +560,8 @@ module util_adxcvr_xch (
     .RXBYTEREALIGN (),
     .RXCOMMADET (),
     .RXCOMMADETEN (1'd1),
-    .RXMCOMMAALIGNEN (rx_gt_calign),
-    .RXPCOMMAALIGNEN (rx_gt_calign),
+    .RXMCOMMAALIGNEN (rx_calign),
+    .RXPCOMMAALIGNEN (rx_calign),
     .RXCHANBONDSEQ (),
     .RXCHBONDEN (1'd0),
     .RXCHBONDLEVEL (3'd0),
@@ -517,17 +601,17 @@ module util_adxcvr_xch (
     .RXOUTCLK (rx_out_clk),
     .RXOUTCLKFABRIC (),
     .RXOUTCLKPCS (),
-    .RXOUTCLKSEL (rx_out_clk_sel),
+    .RXOUTCLKSEL (up_rx_out_clk_sel),
     .RXDATAVALID (),
     .RXHEADER (),
     .RXHEADERVALID (),
     .RXSTARTOFSEQ (),
     .RXGEARBOXSLIP (1'd0),
-    .GTRXRESET (rx_rst),
+    .GTRXRESET (up_rx_rst),
     .RXOOBRESET (1'd0),
     .RXPCSRESET (1'd0),
     .RXPMARESET (1'd0),
-    .RXLPMEN (rx_lpm_dfe_n),
+    .RXLPMEN (up_rx_lpm_dfe_n),
     .RXCOMSASDET (),
     .RXCOMWAKEDET (),
     .RXCOMINITDET (),
@@ -536,9 +620,9 @@ module util_adxcvr_xch (
     .RXPOLARITY (1'd0),
     .RXSLIDE (1'd0),
     .RXCHARISCOMMA (),
-    .RXCHARISK ({rx_charisk_open_s, rx_gt_charisk}),
+    .RXCHARISK ({rx_charisk_open_s, rx_charisk}),
     .RXCHBONDI (5'd0),
-    .RXRESETDONE (rx_rst_done),
+    .RXRESETDONE (up_rx_rst_done),
     .RXQPIEN (1'd0),
     .RXQPISENN (),
     .RXQPISENP (),
@@ -551,9 +635,9 @@ module util_adxcvr_xch (
     .TXQPISTRONGPDOWN (1'd0),
     .TXQPIWEAKPUP (1'd0),
     .CFGRESET (1'd0),
-    .GTTXRESET (tx_rst),
+    .GTTXRESET (up_tx_rst),
     .PCSRSVDOUT (),
-    .TXUSERRDY (tx_user_ready),
+    .TXUSERRDY (up_tx_user_ready),
     .GTRESETSEL (1'd0),
     .RESETOVRD (1'd0),
     .TXCHARDISPMODE (8'd0),
@@ -562,7 +646,7 @@ module util_adxcvr_xch (
     .TXUSRCLK2 (tx_clk),
     .TXELECIDLE (1'd0),
     .TXMARGIN (3'd0),
-    .TXRATE (tx_rate),
+    .TXRATE (up_tx_rate),
     .TXSWING (1'd0),
     .TXPRBSFORCEERR (1'd0),
     .TXDLYBYPASS (1'd1),
@@ -588,22 +672,22 @@ module util_adxcvr_xch (
     .TXINHIBIT (1'd0),
     .TXMAINCURSOR (7'b0000000),
     .TXPISOPD (1'd0),
-    .TXDATA ({32'd0, tx_gt_data}),
+    .TXDATA ({32'd0, tx_data}),
     .GTXTXP (tx_p),
     .GTXTXN (tx_n),
     .TXOUTCLK (tx_out_clk),
     .TXOUTCLKFABRIC (),
     .TXOUTCLKPCS (),
-    .TXOUTCLKSEL (tx_out_clk_sel),
+    .TXOUTCLKSEL (up_tx_out_clk_sel),
     .TXRATEDONE (),
-    .TXCHARISK ({4'd0, tx_gt_charisk}),
+    .TXCHARISK ({4'd0, tx_charisk}),
     .TXGEARBOXREADY (),
     .TXHEADER (3'd0),
     .TXSEQUENCE (7'd0),
     .TXSTARTSEQ (1'd0),
     .TXPCSRESET (1'd0),
     .TXPMARESET (1'd0),
-    .TXRESETDONE (tx_rst_done),
+    .TXRESETDONE (up_tx_rst_done),
     .TXCOMFINISH (),
     .TXCOMINIT (1'd0),
     .TXCOMSAS (1'd0),
@@ -620,10 +704,10 @@ module util_adxcvr_xch (
 
   generate
   if (GTH_OR_GTX_N == 1) begin
-  assign rx_sys_clk_sel_s = (rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
-  assign tx_sys_clk_sel_s = (tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
-  assign rx_pll_clk_sel_s = rx_sys_clk_sel;
-  assign tx_pll_clk_sel_s = tx_sys_clk_sel;
+  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
+  assign tx_pll_clk_sel_s = up_tx_sys_clk_sel;
   end
   endgenerate
 
@@ -1025,14 +1109,14 @@ module util_adxcvr_xch (
     .CPLLLOCKEN (1'd1),
     .CPLLPD (1'b0),
     .CPLLREFCLKSEL (3'b001),
-    .CPLLRESET (pll_rst),
+    .CPLLRESET (up_cpll_rst),
     .DMONFIFORESET (1'd0),
     .DMONITORCLK (1'd0),
-    .DRPADDR (up_drp_addr_int[8:0]),
+    .DRPADDR (up_addr_int[8:0]),
     .DRPCLK (up_clk),
-    .DRPDI (up_drp_wdata_int),
-    .DRPEN (up_drp_enb_int),
-    .DRPWE (up_drp_wr_int),
+    .DRPDI (up_wdata_int),
+    .DRPEN (up_enb_int),
+    .DRPWE (up_wr_int),
     .EVODDPHICALDONE (1'd0),
     .EVODDPHICALSTART (1'd0),
     .EVODDPHIDRDEN (1'd0),
@@ -1047,14 +1131,14 @@ module util_adxcvr_xch (
     .GTHRXP (rx_p),
     .GTNORTHREFCLK0 (1'd0),
     .GTNORTHREFCLK1 (1'd0),
-    .GTREFCLK0 (ref_clk),
+    .GTREFCLK0 (cpll_ref_clk),
     .GTREFCLK1 (1'd0),
     .GTRESETSEL (1'd0),
     .GTRSVD (15'd0),
-    .GTRXRESET (rx_rst),
+    .GTRXRESET (up_rx_rst),
     .GTSOUTHREFCLK0 (1'd0),
     .GTSOUTHREFCLK1 (1'd0),
-    .GTTXRESET (tx_rst),
+    .GTTXRESET (up_tx_rst),
     .LOOPBACK (3'd0),
     .LPBKRXTXSEREN (1'd0),
     .LPBKTXRXSEREN (1'd0),
@@ -1065,8 +1149,8 @@ module util_adxcvr_xch (
     .PCSRSVDIN (16'd0),
     .PCSRSVDIN2 (5'd0),
     .PMARSVDIN (5'd0),
-    .QPLL0CLK (qpll_clk),
-    .QPLL0REFCLK (qpll_ref_clk),
+    .QPLL0CLK (qpll2ch_clk),
+    .QPLL0REFCLK (qpll2ch_ref_clk),
     .QPLL1CLK (1'd0),
     .QPLL1REFCLK (1'd0),
     .RESETOVRD (1'd0),
@@ -1130,7 +1214,7 @@ module util_adxcvr_xch (
     .RXELECIDLEMODE (2'b11),
     .RXGEARBOXSLIP (1'd0),
     .RXLATCLK (1'd0),
-    .RXLPMEN (rx_lpm_dfe_n),
+    .RXLPMEN (up_rx_lpm_dfe_n),
     .RXLPMGCHOLD (1'd0),
     .RXLPMGCOVRDEN (1'd0),
     .RXLPMHFHOLD (1'd0),
@@ -1139,7 +1223,7 @@ module util_adxcvr_xch (
     .RXLPMLFKLOVRDEN (1'd0),
     .RXLPMOSHOLD (1'd0),
     .RXLPMOSOVRDEN (1'd0),
-    .RXMCOMMAALIGNEN (rx_gt_calign),
+    .RXMCOMMAALIGNEN (rx_calign),
     .RXMONITORSEL (2'd0),
     .RXOOBRESET (1'd0),
     .RXOSCALRESET (1'd0),
@@ -1151,8 +1235,8 @@ module util_adxcvr_xch (
     .RXOSINTSTROBE (1'd0),
     .RXOSINTTESTOVRDEN (1'd0),
     .RXOSOVRDEN (1'd0),
-    .RXOUTCLKSEL (rx_out_clk_sel),
-    .RXPCOMMAALIGNEN (rx_gt_calign),
+    .RXOUTCLKSEL (up_rx_out_clk_sel),
+    .RXPCOMMAALIGNEN (rx_calign),
     .RXPCSRESET (1'd0),
     .RXPD (2'd0),
     .RXPHALIGN (1'd0),
@@ -1167,7 +1251,7 @@ module util_adxcvr_xch (
     .RXPRBSSEL (4'd0),
     .RXPROGDIVRESET (1'd0),
     .RXQPIEN (1'd0),
-    .RXRATE (rx_rate),
+    .RXRATE (up_rx_rate),
     .RXRATEMODE (1'd0),
     .RXSLIDE (1'd0),
     .RXSLIPOUTCLK (1'd0),
@@ -1176,7 +1260,7 @@ module util_adxcvr_xch (
     .RXSYNCIN (1'd0),
     .RXSYNCMODE (1'd0),
     .RXSYSCLKSEL (rx_sys_clk_sel_s),
-    .RXUSERRDY (rx_user_ready),
+    .RXUSERRDY (up_rx_user_ready),
     .RXUSRCLK (rx_clk),
     .RXUSRCLK2 (rx_clk),
     .RX8B10BEN (1'd1),
@@ -1188,8 +1272,8 @@ module util_adxcvr_xch (
     .TXCOMWAKE (1'd0),
     .TXCTRL0 (16'd0),
     .TXCTRL1 (16'd0),
-    .TXCTRL2 ({4'd0, tx_gt_charisk}),
-    .TXDATA ({32'd0, tx_gt_data}),
+    .TXCTRL2 ({4'd0, tx_charisk}),
+    .TXDATA ({32'd0, tx_data}),
     .TXDATAEXTENDRSVD (8'd0),
     .TXDEEMPH (1'd0),
     .TXDETECTRX (1'd0),
@@ -1207,7 +1291,7 @@ module util_adxcvr_xch (
     .TXLATCLK (1'd0),
     .TXMAINCURSOR (7'b1000000),
     .TXMARGIN (3'd0),
-    .TXOUTCLKSEL (tx_out_clk_sel),
+    .TXOUTCLKSEL (up_tx_out_clk_sel),
     .TXPCSRESET (1'd0),
     .TXPD (2'd0),
     .TXPDELECIDLEMODE (1'd0),
@@ -1233,11 +1317,11 @@ module util_adxcvr_xch (
     .TXPRBSSEL (4'd0),
     .TXPRECURSOR (5'd0),
     .TXPRECURSORINV (1'd0),
-    .TXPROGDIVRESET (tx_rst),
+    .TXPROGDIVRESET (up_tx_rst),
     .TXQPIBIASEN (1'd0),
     .TXQPISTRONGPDOWN (1'd0),
     .TXQPIWEAKPUP (1'd0),
-    .TXRATE (tx_rate),
+    .TXRATE (up_tx_rate),
     .TXRATEMODE (1'd0),
     .TXSEQUENCE (7'd0),
     .TXSWING (1'd0),
@@ -1245,7 +1329,7 @@ module util_adxcvr_xch (
     .TXSYNCIN (1'd0),
     .TXSYNCMODE (1'd0),
     .TXSYSCLKSEL (tx_sys_clk_sel_s),
-    .TXUSERRDY (tx_user_ready),
+    .TXUSERRDY (up_tx_user_ready),
     .TXUSRCLK (tx_clk),
     .TXUSRCLK2 (tx_clk),
     .TX8B10BBYPASS (8'd0),
@@ -1259,8 +1343,8 @@ module util_adxcvr_xch (
     .CPLLLOCK (cpll_locked_s),
     .CPLLREFCLKLOST (),
     .DMONITOROUT (),
-    .DRPDO (up_drp_rdata_s),
-    .DRPRDY (up_drp_ready_s),
+    .DRPDO (up_rdata_s),
+    .DRPRDY (up_ready_s),
     .EYESCANDATAERROR (),
     .GTHTXN (tx_n),
     .GTHTXP (tx_p),
@@ -1292,11 +1376,11 @@ module util_adxcvr_xch (
     .RXCOMMADET (),
     .RXCOMSASDET (),
     .RXCOMWAKEDET (),
-    .RXCTRL0 ({rx_charisk_open_s, rx_gt_charisk}),
-    .RXCTRL1 ({rx_disperr_open_s, rx_gt_disperr}),
+    .RXCTRL0 ({rx_charisk_open_s, rx_charisk}),
+    .RXCTRL1 ({rx_disperr_open_s, rx_disperr}),
     .RXCTRL2 (),
-    .RXCTRL3 ({rx_notintable_open_s, rx_gt_notintable}),
-    .RXDATA ({rx_data_open_s, rx_gt_data}),
+    .RXCTRL3 ({rx_notintable_open_s, rx_notintable}),
+    .RXDATA ({rx_data_open_s, rx_data}),
     .RXDATAEXTENDRSVD (),
     .RXDATAVALID (),
     .RXDLYSRESETDONE (),
@@ -1321,7 +1405,7 @@ module util_adxcvr_xch (
     .RXQPISENP (),
     .RXRATEDONE (),
     .RXRECCLKOUT (),
-    .RXRESETDONE (rx_rst_done),
+    .RXRESETDONE (up_rx_rst_done),
     .RXSLIDERDY (),
     .RXSLIPDONE (),
     .RXSLIPOUTCLKRDY (),
@@ -1344,7 +1428,7 @@ module util_adxcvr_xch (
     .TXQPISENN (),
     .TXQPISENP (),
     .TXRATEDONE (),
-    .TXRESETDONE (tx_rst_done),
+    .TXRESETDONE (up_tx_rst_done),
     .TXSYNCDONE (),
     .TXSYNCOUT ());
   end

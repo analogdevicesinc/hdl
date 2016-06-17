@@ -41,45 +41,83 @@ module util_adxcvr_xcm (
 
   // reset and clocks
 
-  input           ref_clk,
-  input           pll_rst,
-  output          qpll_clk,
-  output          qpll_ref_clk,
-  output          qpll_locked,
-
+  input           qpll_ref_clk,
+  output          qpll2ch_clk,
+  output          qpll2ch_ref_clk,
+  output          qpll2ch_locked,
+  
   // drp interface
 
+  input           up_rstn,
   input           up_clk,
-  input           up_drp_sel,
-  input   [11:0]  up_drp_addr,
-  input           up_drp_wr,
-  input   [15:0]  up_drp_wdata,
-  output  [15:0]  up_drp_rdata,
-  output          up_drp_ready);
+  input           up_qpll_rst,
+  input   [ 7:0]  up_cm_sel,
+  input           up_cm_enb,
+  input   [11:0]  up_cm_addr,
+  input           up_cm_wr,
+  input   [15:0]  up_cm_wdata,
+  output  [15:0]  up_cm_rdata,
+  output          up_cm_ready);
 
   // parameters
 
+  parameter   integer XCVR_ID = 0;
   parameter   integer GTH_OR_GTX_N = 0;
-  parameter   integer QPLL_ENABLE = 1;
   parameter   integer QPLL_REFCLK_DIV = 2;
   parameter   integer QPLL_FBDIV_RATIO = 1;
   parameter   [26:0]  QPLL_CFG = 27'h06801C1;
   parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000;
 
+  // internal registers
+
+  reg             up_enb_int = 'd0;
+  reg     [11:0]  up_addr_int = 'd0;
+  reg             up_wr_int = 'd0;
+  reg     [15:0]  up_wdata_int = 'd0;
+  reg     [15:0]  up_rdata_int = 'd0;
+  reg             up_ready_int = 'd0;
+
+  // internal signals
+
+  wire    [15:0]  up_rdata_s;
+  wire            up_ready_s;
+
+  // drp access
+
+  assign up_cm_rdata = up_rdata_int;
+  assign up_cm_ready = up_ready_int;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_enb_int <= 1'd0;
+      up_addr_int <= 12'd0;
+      up_wr_int <= 1'd0;
+      up_wdata_int <= 16'd0;
+      up_rdata_int <= 16'd0;
+      up_ready_int <= 1'd0;
+    end else begin
+      if ((up_cm_sel == XCVR_ID) || (up_cm_sel == 8'hff)) begin
+        up_enb_int <= up_cm_enb;
+        up_addr_int <= up_cm_addr;
+        up_wr_int <= up_cm_wr;
+        up_wdata_int <= up_cm_wdata;
+        up_rdata_int <= up_rdata_s;
+        up_ready_int <= up_ready_s;
+      end else begin
+        up_enb_int <= 1'd0;
+        up_addr_int <= 12'd0;
+        up_wr_int <= 1'd0;
+        up_wdata_int <= 16'd0;
+        up_rdata_int <= 16'd0;
+        up_ready_int <= 1'd0;
+      end
+    end
+  end
+
   // instantiations
 
   generate
-  if (QPLL_ENABLE == 0) begin
-  assign qpll_clk = 1'd0;
-  assign qpll_ref_clk = 1'd0;
-  assign qpll_locked = 1'd0;
-  assign up_drp_rdata = 16'd0;
-  assign up_drp_ready = 1'd0;
-  end
-  endgenerate
-
-  generate
-  if ((QPLL_ENABLE == 1) && (GTH_OR_GTX_N == 0)) begin
+  if (GTH_OR_GTX_N == 0) begin
   GTXE2_COMMON #(
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_QPLLREFCLK_SEL (3'b001),
@@ -102,32 +140,32 @@ module util_adxcvr_xcm (
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV))
   i_gtxe2_common (
     .DRPCLK (up_clk),
-    .DRPEN (up_drp_sel),
-    .DRPADDR (up_drp_addr[7:0]),
-    .DRPWE (up_drp_wr),
-    .DRPDI (up_drp_wdata),
-    .DRPDO (up_drp_rdata),
-    .DRPRDY (up_drp_ready),
+    .DRPEN (up_enb_int),
+    .DRPADDR (up_addr_int[7:0]),
+    .DRPWE (up_wr_int),
+    .DRPDI (up_wdata_int),
+    .DRPDO (up_rdata_s),
+    .DRPRDY (up_ready_s),
     .GTGREFCLK (1'd0),
     .GTNORTHREFCLK0 (1'd0),
     .GTNORTHREFCLK1 (1'd0),
-    .GTREFCLK0 (ref_clk),
+    .GTREFCLK0 (qpll_ref_clk),
     .GTREFCLK1 (1'd0),
     .GTSOUTHREFCLK0 (1'd0),
     .GTSOUTHREFCLK1 (1'd0),
     .QPLLDMONITOR (),
-    .QPLLOUTCLK (qpll_clk),
-    .QPLLOUTREFCLK (qpll_ref_clk),
+    .QPLLOUTCLK (qpll2ch_clk),
+    .QPLLOUTREFCLK (qpll2ch_ref_clk),
     .REFCLKOUTMONITOR (),
     .QPLLFBCLKLOST (),
-    .QPLLLOCK (qpll_locked),
+    .QPLLLOCK (qpll2ch_locked),
     .QPLLLOCKDETCLK (up_clk),
     .QPLLLOCKEN (1'd1),
     .QPLLOUTRESET (1'd0),
     .QPLLPD (1'd0),
     .QPLLREFCLKLOST (),
     .QPLLREFCLKSEL (3'b001),
-    .QPLLRESET (pll_rst),
+    .QPLLRESET (up_qpll_rst),
     .QPLLRSVD1 (16'b0000000000000000),
     .QPLLRSVD2 (5'b11111),
     .BGBYPASSB (1'd1),
@@ -140,7 +178,7 @@ module util_adxcvr_xcm (
   endgenerate
 
   generate
-  if ((QPLL_ENABLE == 1) && (GTH_OR_GTX_N == 1)) begin
+  if (GTH_OR_GTX_N == 1) begin
   GTHE3_COMMON #(
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_VERSION (2),
@@ -221,18 +259,18 @@ module util_adxcvr_xcm (
     .BGPDB (1'd1),
     .BGRCALOVRD (5'b11111),
     .BGRCALOVRDENB (1'd1),
-    .DRPADDR (up_drp_addr[8:0]),
+    .DRPADDR (up_addr_int[8:0]),
     .DRPCLK (up_clk),
-    .DRPDI (up_drp_wdata),
-    .DRPEN (up_drp_sel),
-    .DRPWE (up_drp_wr),
+    .DRPDI (up_wdata_int),
+    .DRPEN (up_enb_int),
+    .DRPWE (up_wr_int),
     .GTGREFCLK0 (1'd0),
     .GTGREFCLK1 (1'd0),
     .GTNORTHREFCLK00 (1'd0),
     .GTNORTHREFCLK01 (1'd0),
     .GTNORTHREFCLK10 (1'd0),
     .GTNORTHREFCLK11 (1'd0),
-    .GTREFCLK00 (ref_clk),
+    .GTREFCLK00 (qpll_ref_clk),
     .GTREFCLK01 (1'd0),
     .GTREFCLK10 (1'd0),
     .GTREFCLK11 (1'd0),
@@ -252,7 +290,7 @@ module util_adxcvr_xcm (
     .QPLL0LOCKEN (1'd1),
     .QPLL0PD (1'd0),
     .QPLL0REFCLKSEL (3'b001),
-    .QPLL0RESET (pll_rst),
+    .QPLL0RESET (up_qpll_rst),
     .QPLL1CLKRSVD0 (1'd0),
     .QPLL1CLKRSVD1 (1'd0),
     .QPLL1LOCKDETCLK (1'd0),
@@ -261,16 +299,16 @@ module util_adxcvr_xcm (
     .QPLL1REFCLKSEL (3'b001),
     .QPLL1RESET (1'd1),
     .RCALENB (1'd1),
-    .DRPDO (up_drp_rdata),
-    .DRPRDY (up_drp_ready),
+    .DRPDO (up_rdata_s),
+    .DRPRDY (up_ready_s),
     .PMARSVDOUT0 (),
     .PMARSVDOUT1 (),
     .QPLLDMONITOR0 (),
     .QPLLDMONITOR1 (),
     .QPLL0FBCLKLOST (),
-    .QPLL0LOCK (qpll_locked),
-    .QPLL0OUTCLK (qpll_clk),
-    .QPLL0OUTREFCLK (qpll_ref_clk),
+    .QPLL0LOCK (qpll2ch_locked),
+    .QPLL0OUTCLK (qpll2ch_clk),
+    .QPLL0OUTREFCLK (qpll2ch_ref_clk),
     .QPLL0REFCLKLOST (),
     .QPLL1FBCLKLOST (),
     .QPLL1LOCK (),
