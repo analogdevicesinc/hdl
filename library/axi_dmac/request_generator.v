@@ -84,9 +84,10 @@ begin
 		req_ready <= 1'b1;
 		eot_single <= 1'b0;
 	end else begin
-	
+
+		/* Reset single EOT flag */
 		eot_single <= 1'b0;
-	   
+
 		if (req_ready) begin
 			if (req_valid && enable) begin
 				burst_count <= req_burst_count;
@@ -95,6 +96,8 @@ begin
 		end else if (response_id != id_next && ~pause) begin
 			if (eot) begin
 				req_ready <= 1'b1;
+
+				/* Set single EOT flag */
 				eot_single <= 1'b1;
 			end
 			burst_count <= burst_count - 1'b1;

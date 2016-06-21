@@ -47,8 +47,8 @@ module dmac_2d_transfer (
 	input [31:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
 	input [DMA_LENGTH_WIDTH-1:0] req_x_length,
 	input [DMA_LENGTH_WIDTH-1:0] req_y_length,
-	input [31:C_BYTES_PER_BEAT_WIDTH_DEST] req_dest_stride,
-	input [31:C_BYTES_PER_BEAT_WIDTH_DEST] req_src_stride,
+	input [31:BYTES_PER_BEAT_WIDTH_DEST] req_dest_stride,
+	input [31:BYTES_PER_BEAT_WIDTH_DEST] req_src_stride,
 	input req_sync_transfer_start,
 	output reg req_eot,
 	
@@ -112,7 +112,6 @@ begin
 		out_req_valid <= 1'b0;
 		out_req_sync_transfer_start <= 1'b0;
 	end else begin
-		
 		if (req_ready) begin
 			if (req_valid) begin
 				dest_address <= req_dest_address;

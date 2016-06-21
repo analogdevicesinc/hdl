@@ -470,7 +470,6 @@ wire up_req_eot;
 
 assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
 assign up_eot = up_dma_cyclic ? 1'b0 : up_req_eot;
-//assign up_x_eot = dma_req_eot; 
 
 generate if (DMA_2D_TRANSFER == 1) begin
 
@@ -483,7 +482,7 @@ dmac_2d_transfer #(
 	.req_aresetn(s_axi_aresetn),
 
 	.req_eot(up_req_eot),
-	
+
 	.req_valid(up_dma_req_valid),
 	.req_ready(up_dma_req_ready),
 	.req_dest_address(up_dma_dest_address),
