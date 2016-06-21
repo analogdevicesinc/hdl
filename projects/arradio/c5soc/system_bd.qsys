@@ -113,6 +113,38 @@
          type = "String";
       }
    }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
+   element system_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
@@ -177,6 +209,21 @@
    type="conduit"
    dir="end" />
  <interface
+   name="sys_hps_i2c0"
+   internal="c5soc.sys_hps_i2c0"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sys_hps_i2c0_clk"
+   internal="c5soc.sys_hps_i2c0_clk"
+   type="clock"
+   dir="start" />
+ <interface
+   name="sys_hps_i2c0_scl_in"
+   internal="c5soc.sys_hps_i2c0_scl_in"
+   type="clock"
+   dir="end" />
+ <interface
    name="sys_hps_memory"
    internal="c5soc.sys_hps_memory"
    type="conduit"
@@ -217,9 +264,9 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8_H6" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_MEM_CLK_CLOCK_DOMAIN" value="8" />
+  <parameter name="AUTO_MEM_CLK_CLOCK_DOMAIN" value="10" />
   <parameter name="AUTO_MEM_CLK_CLOCK_RATE" value="80000000" />
-  <parameter name="AUTO_MEM_CLK_RESET_DOMAIN" value="8" />
+  <parameter name="AUTO_MEM_CLK_RESET_DOMAIN" value="10" />
   <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="3" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="3" />
@@ -237,6 +284,9 @@
   <parameter
      name="AUTO_SYS_CPU_INTERCONNECT_M0_ADDRESS_WIDTH"
      value="AddressWidth = 18" />
+  <parameter name="AUTO_SYS_HPS_I2C0_SCL_IN_CLOCK_DOMAIN" value="7" />
+  <parameter name="AUTO_SYS_HPS_I2C0_SCL_IN_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_SYS_HPS_I2C0_SCL_IN_RESET_DOMAIN" value="7" />
   <parameter name="AUTO_SYS_INTR_INTERRUPTS_USED" value="7" />
   <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_c5soc" />
  </module>

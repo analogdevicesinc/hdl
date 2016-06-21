@@ -121,6 +121,7 @@
   set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $current_monitor_m1_dma
   set_property -dict [list CONFIG.CYCLIC {0}] $current_monitor_m1_dma
   set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {0}] $current_monitor_m1_dma
+  set_property -dict [list CONFIG.SYNC_TRANSFER_START {true}] $current_monitor_m1_dma
     # data packer motor 1
   #
   set current_monitor_m1_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m1_pack ]
@@ -135,6 +136,7 @@
   set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $current_monitor_m2_dma
   set_property -dict [list CONFIG.CYCLIC {0}] $current_monitor_m2_dma
   set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {0}] $current_monitor_m2_dma
+  set_property -dict [list CONFIG.SYNC_TRANSFER_START {true}] $current_monitor_m2_dma
     # data packer motor 2
   set current_monitor_m2_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m2_pack ]
   set_property -dict [ list CONFIG.NUM_OF_CHANNELS {4}  ] $current_monitor_m2_pack
@@ -220,6 +222,7 @@
   ad_connect current_monitor_m1/vbus_o current_monitor_m1_pack/adc_data_2
   ad_connect current_monitor_m1_pack/adc_data current_monitor_m1_dma/fifo_wr_din
   ad_connect current_monitor_m1_pack/adc_valid current_monitor_m1_dma/fifo_wr_en
+  ad_connect current_monitor_m1_dma/fifo_wr_sync  current_monitor_m1_pack/adc_sync
 
     # motor 2
   ad_connect  sys_cpu_clk current_monitor_m2/ref_clk
@@ -245,6 +248,7 @@
   ad_connect current_monitor_m2/vbus_o            current_monitor_m2_pack/adc_data_2
   ad_connect current_monitor_m2_pack/adc_valid    current_monitor_m2_dma/fifo_wr_en
   ad_connect current_monitor_m2_pack/adc_data     current_monitor_m2_dma/fifo_wr_din
+  ad_connect current_monitor_m2_dma/fifo_wr_sync  current_monitor_m2_pack/adc_sync
 
   #controller
     # motor 1

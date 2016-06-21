@@ -140,6 +140,13 @@ module system_top (
   ad9361_enable,
   ad9361_txnrx,
 
+  // iic interface
+
+  scl,
+  sda,
+  ga0,
+  ga1,
+
   // spi
 
   spi_csn,
@@ -248,6 +255,14 @@ module system_top (
   output            ad9361_enable;
   output            ad9361_txnrx;
 
+  // iic interface
+
+  inout             scl;
+  inout             sda;
+  output            ga0;
+  output            ga1;
+
+
   // spi interface
 
   output            spi_csn;
@@ -300,14 +315,26 @@ module system_top (
   wire              vid_h_sync;
   wire    [7:0]     vid_r,vid_g,vid_b;
 
+  wire              i2c0_out_data;
+  wire              i2c0_sda;
+  wire              i2c0_out_clk;
+  wire              i2c0_scl_in_clk;
+
   // defaults
-  
+
   assign vga_clk = vga_pixel_clock;
   assign vga_blank_n = 1'b1;
   assign vga_sync_n = 1'b0;
   assign vga_hs = vid_h_sync;
   assign vga_vs = vid_v_sync;
   assign {vga_b,vga_g,vga_r} =  {vid_b,vid_g,vid_r};
+  assign ga0 = 1'b0;
+  assign ga1 = 1'b0;
+
+
+ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl)); //
+ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda)); //
+
 
   // instantiations
 
@@ -437,6 +464,10 @@ module system_top (
     .vga_clock_video_output_clocked_video_vid_f (),
     .vga_clock_video_output_clocked_video_vid_h (),
     .vga_clock_video_output_clocked_video_vid_v (),
+    .sys_hps_i2c0_out_data(i2c0_out_data),
+    .sys_hps_i2c0_sda(i2c0_sda),
+    .sys_hps_i2c0_clk_clk(i2c0_out_clk),
+    .sys_hps_i2c0_scl_in_clk(i2c0_scl_in_clk),
     .gpio_external_connection_export ({ad9361_resetb, ad9361_en_agc, ad9361_sync, ad9361_enable, ad9361_txnrx})
   );
 

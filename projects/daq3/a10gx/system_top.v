@@ -99,8 +99,7 @@ module system_top (
   clkd_status,
   adc_pd,
   dac_txen,
-  dac_reset,
-  clkd_sync,
+  sysref,
 
   // spi
 
@@ -148,8 +147,8 @@ module system_top (
 
   // board gpio
 
-  input   [ 10:0]   gpio_bd_i;
-  output  [ 15:0]   gpio_bd_o;
+  inout   [ 10:0]   gpio_bd_i;
+  inout   [ 15:0]   gpio_bd_o;
 
   // lane interface
 
@@ -171,8 +170,7 @@ module system_top (
   input   [  1:0]   clkd_status;
   output            adc_pd;
   output            dac_txen;
-  output            dac_reset;
-  output            clkd_sync;
+  output            sysref;
 
   // spi
 
@@ -195,13 +193,13 @@ module system_top (
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
 
-  // daq2
+  // daq3
 
   assign spi_csn_adc = spi_csn_s[2];
   assign spi_csn_dac = spi_csn_s[1];
   assign spi_csn_clk = spi_csn_s[0];
 
-  daq2_spi i_daq2_spi (
+  daq3_spi i_daq3_spi (
     .spi_csn (spi_csn_s[2:0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi_s),
@@ -211,12 +209,11 @@ module system_top (
 
   // gpio in & out are separate cores
 
-  assign adc_pd = gpio_o[42];
-  assign dac_txen = gpio_o[41];
-  assign dac_reset = gpio_o[40];
-  assign clkd_sync = gpio_o[38];
+  assign sysref = gpio_o[36];
+  assign adc_pd = gpio_o[35];
+  assign dac_txen = gpio_o[34];
 
-  assign gpio_i[63:38] = gpio_o[63:38];
+  assign gpio_i[63:38] = 26'd0;
   assign gpio_i[37:37] = trig;
   assign gpio_i[36:36] = adc_fdb;
   assign gpio_i[35:35] = adc_fda;
@@ -271,14 +268,14 @@ module system_top (
     .a10gx_base_sys_spi_MOSI (spi_mosi_s),
     .a10gx_base_sys_spi_SCLK (spi_clk),
     .a10gx_base_sys_spi_SS_n (spi_csn_s),
-    .daq2_rx_data_rx_serial_data (rx_data),
-    .daq2_rx_ref_clk_clk (rx_ref_clk),
-    .daq2_rx_sync_rx_sync (rx_sync),
-    .daq2_rx_sysref_rx_ext_sysref_in (rx_sysref),
-    .daq2_tx_data_tx_serial_data (tx_data),
-    .daq2_tx_ref_clk_clk (tx_ref_clk),
-    .daq2_tx_sync_tx_sync (tx_sync),
-    .daq2_tx_sysref_tx_ext_sysref_in (tx_sysref),
+    .daq3_rx_data_rx_serial_data (rx_data),
+    .daq3_rx_ref_clk_clk (rx_ref_clk),
+    .daq3_rx_sync_rx_sync (rx_sync),
+    .daq3_rx_sysref_rx_ext_sysref_in (rx_sysref),
+    .daq3_tx_data_tx_serial_data (tx_data),
+    .daq3_tx_ref_clk_clk (tx_ref_clk),
+    .daq3_tx_sync_tx_sync (tx_sync),
+    .daq3_tx_sysref_tx_ext_sysref_in (tx_sysref),
     .sys_clk_clk (sys_clk),
     .sys_reset_reset_n (sys_resetn));
 
@@ -286,4 +283,3 @@ endmodule
 
 // ***************************************************************************
 // ***************************************************************************
-

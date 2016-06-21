@@ -39,7 +39,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -107,7 +107,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -419,6 +419,17 @@
    internal="sys_hps.hps_io"
    type="conduit"
    dir="end" />
+ <interface name="sys_hps_i2c0" internal="sys_hps.i2c0" type="conduit" dir="end" />
+ <interface
+   name="sys_hps_i2c0_clk"
+   internal="sys_hps.i2c0_clk"
+   type="clock"
+   dir="start" />
+ <interface
+   name="sys_hps_i2c0_scl_in"
+   internal="sys_hps.i2c0_scl_in"
+   type="clock"
+   dir="end" />
  <interface
    name="sys_hps_memory"
    internal="sys_hps.memory"
@@ -686,7 +697,7 @@
   <parameter
      name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_EMAC_PTP_REF_CLOCK"
      value="100" />
-  <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_I2C0_SCL_IN" value="100" />
+  <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_I2C0_SCL_IN" value="0" />
   <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_I2C1_SCL_IN" value="100" />
   <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_I2C2_SCL_IN" value="100" />
   <parameter name="FPGA_PERIPHERAL_INPUT_CLOCK_FREQ_I2C3_SCL_IN" value="100" />
@@ -721,8 +732,8 @@
   <parameter name="HHP_HPS_VERIFICATION" value="false" />
   <parameter name="HLGPI_Enable" value="false" />
   <parameter name="HPS_PROTOCOL" value="DDR3" />
-  <parameter name="I2C0_Mode" value="N/A" />
-  <parameter name="I2C0_PinMuxing" value="Unused" />
+  <parameter name="I2C0_Mode" value="Full" />
+  <parameter name="I2C0_PinMuxing" value="FPGA" />
   <parameter name="I2C1_Mode" value="N/A" />
   <parameter name="I2C1_PinMuxing" value="Unused" />
   <parameter name="I2C2_Mode" value="N/A" />
