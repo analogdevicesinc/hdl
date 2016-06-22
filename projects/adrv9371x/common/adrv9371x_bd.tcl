@@ -36,7 +36,7 @@ ad_connect  sys_dma_rstgen/ext_reset_in sys_ps7/FCLK_RESET2_N
 set axi_ad9371_tx_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9371_tx_dma]
 set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9371_tx_dma
+set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9371_tx_dma
 set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9371_tx_dma
@@ -251,14 +251,15 @@ ad_connect  axi_ad9371_core/dac_valid_q1 util_ad9371_tx_upack/dac_valid_3
 ad_connect  axi_ad9371_core/dac_enable_q1 util_ad9371_tx_upack/dac_enable_3
 ad_connect  axi_ad9371_core/dac_data_q1 util_ad9371_tx_upack/dac_data_3
 
-ad_connect  axi_tx_clkgen/clk_0 axi_ad9371_tx_dma/m_axis_aclk
+ad_connect  pl_ddr_clk axi_ad9371_dacfifo/ddr_clk
+ad_connect  pl_ddr_clk axi_ad9371_tx_dma/m_axis_aclk
+ad_connect  pl_ddr_clk axi_ad9371_dacfifo/dma_clk
 ad_connect  sys_dma_resetn axi_ad9371_tx_dma/m_src_axi_aresetn
 ad_connect  util_ad9371_gt/tx_rst axi_ad9371_dacfifo/dac_rst
 ad_connect  util_ad9371_tx_upack/dma_xfer_in axi_ad9371_dacfifo/dac_xfer_out
 ad_connect  axi_tx_clkgen/clk_0 axi_ad9371_dacfifo/dac_clk
 ad_connect  util_ad9371_tx_upack/dac_valid axi_ad9371_dacfifo/dac_valid
 ad_connect  util_ad9371_tx_upack/dac_data axi_ad9371_dacfifo/dac_data
-ad_connect  axi_tx_clkgen/clk_0 axi_ad9371_dacfifo/dma_clk
 
 ad_connect  axi_ad9371_dacfifo/dma_xfer_req axi_ad9371_tx_dma/m_axis_xfer_req
 ad_connect  axi_ad9371_dacfifo/dma_rready axi_ad9371_tx_dma/m_axis_ready
