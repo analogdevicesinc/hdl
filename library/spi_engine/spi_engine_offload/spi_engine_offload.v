@@ -6,7 +6,7 @@ module spi_engine_offload (
 	input [15:0] ctrl_cmd_wr_data,
 
 	input ctrl_sdo_wr_en,
-	input [7:0] ctrl_sdo_wr_data,
+	input [(DATA_WIDTH-1):0] ctrl_sdo_wr_data,
 
 	input ctrl_enable,
 	output ctrl_enabled,
@@ -23,11 +23,11 @@ module spi_engine_offload (
 
 	output sdo_data_valid,
 	input sdo_data_ready,
-	output [7:0] sdo_data,
+	output [(DATA_WIDTH-1):0] sdo_data,
 
 	input sdi_data_valid,
 	output sdi_data_ready,
-	input [7:0] sdi_data,
+	input [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
 
 	input sync_valid,
 	output sync_ready,
@@ -35,12 +35,14 @@ module spi_engine_offload (
 
 	output offload_sdi_valid,
 	input offload_sdi_ready,
-	output [7:0] offload_sdi_data
+	output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data
 );
 
 parameter ASYNC_SPI_CLK = 0;
 parameter CMD_MEM_ADDRESS_WIDTH = 4;
 parameter SDO_MEM_ADDRESS_WIDTH = 4;
+parameter DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
+parameter NUM_OF_SDI = 1;
 
 reg spi_active = 1'b0;
 
@@ -50,7 +52,7 @@ reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
 reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
 
 reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
-reg [7:0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
 
 wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
 wire spi_enable;
@@ -92,7 +94,7 @@ end
 assign ctrl_enabled = ctrl_is_enabled | ctrl_do_enable;
 
 always @(posedge spi_clk) begin
-	spi_enabled <= spi_enable | spi_active;	
+	spi_enabled <= spi_enable | spi_active;
 end
 
 sync_bits # (

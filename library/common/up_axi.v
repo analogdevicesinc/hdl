@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -135,14 +135,14 @@ module up_axi (
   reg             up_rsel = 'd0;
   reg             up_rreq = 'd0;
   reg     [AW:0]  up_raddr = 'd0;
-  reg     [ 3:0]  up_rcount = 'd0;
+  reg     [ 4:0]  up_rcount = 'd0;
   reg             up_rack_int = 'd0;
   reg     [31:0]  up_rdata_int = 'd0;
   reg             up_rack_int_d = 'd0;
   reg     [31:0]  up_rdata_int_d = 'd0;
 
   // write channel interface
- 
+
   assign up_axi_bresp = 2'd0;
 
   always @(negedge up_rstn or posedge up_clk) begin
@@ -167,7 +167,7 @@ module up_axi (
         up_axi_bvalid <= 1'b1;
       end
     end
-  end       
+  end
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
@@ -230,7 +230,7 @@ module up_axi (
         up_axi_rdata <= up_rdata_int_d;
       end
     end
-  end       
+  end
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
@@ -251,11 +251,11 @@ module up_axi (
         up_raddr <= up_axi_araddr[AW+2:2];
       end
       if (up_rack_int == 1'b1) begin
-        up_rcount <= 4'd0;
-      end else if (up_rcount[3] == 1'b1) begin
+        up_rcount <= 5'd0;
+      end else if (up_rcount[4] == 1'b1) begin
         up_rcount <= up_rcount + 1'b1;
       end else if (up_rreq == 1'b1) begin
-        up_rcount <= 4'd8;
+        up_rcount <= 5'd16;
       end
     end
   end
@@ -267,7 +267,7 @@ module up_axi (
       up_rack_int_d <= 'd0;
       up_rdata_int_d <= 'd0;
     end else begin
-      if ((up_rcount == 4'hf) && (up_rack == 1'b0)) begin
+      if ((up_rcount == 5'h1f) && (up_rack == 1'b0)) begin
         up_rack_int <= 1'b1;
         up_rdata_int <= {2{16'hdead}};
       end else begin
