@@ -50,11 +50,11 @@ module axi_ad7616_pif (
   rd_n,
   wr_n,
 
-  // axi stream master
+  // FIFO interface
 
-  m_axis_tdata,
-  m_axis_tvalid,
-  m_axis_xfer_req,
+  adc_data,
+  adc_valid,
+  adc_sync,
 
   // end of convertion
 
@@ -92,9 +92,9 @@ module axi_ad7616_pif (
   output  [15:0]                  rd_data;
   output                          rd_valid;
 
-  output  [31:0]                  m_axis_tdata;
-  output                          m_axis_tvalid;
-  input                           m_axis_xfer_req;
+  output  [15:0]                  adc_data;
+  output                          adc_valid;
+  output                          adc_sync;
 
   // state registers
 
@@ -118,15 +118,15 @@ module axi_ad7616_pif (
 
   reg                             xfer_req_d = 1'h0;
 
-  reg     [15:0]                  data_out_a = 16'h0;
-  reg     [15:0]                  data_out_b = 16'h0;
-  reg                             rd_db_valid_div2 = 1'h0;
+  reg                             adc_sync = 1'h0;
   reg                             rd_valid = 1'h0;
+  reg                             rd_valid_d = 1'h0;
+  reg     [15:0]                  rd_data = 16'h0;
 
   // internal wires
 
-  wire                            start_transfer;
-  wire                            rd_db_valid;
+  wire                            start_transfer_s;
+  wire                            rd_valid_s;
 
   // FSM state register
 
@@ -140,7 +140,7 @@ module axi_ad7616_pif (
 
   // counters to control the RD_N and WR_N lines
 
-  assign start_transfer = end_of_conv | rd_req | wr_req;
+  assign start_transfer_s = end_of_conv | rd_req | wr_req;
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
@@ -167,7 +167,7 @@ module axi_ad7616_pif (
   always @(*) begin
     case (transfer_state)
       IDLE : begin
-        transfer_state_next <= (start_transfer == 1'b1) ? CS_LOW : IDLE;
+        transfer_state_next <= (start_transfer_s == 1'b1) ? CS_LOW : IDLE;
       end
       CS_LOW : begin
         transfer_state_next <= CNTRL0_LOW;
@@ -196,28 +196,21 @@ module axi_ad7616_pif (
 
   // data valid for the register access and m_axis interface
 
-  assign rd_db_valid = ((transfer_state == CS_HIGH) &&
+  assign rd_valid_s = (((transfer_state == CNTRL0_HIGH) || (transfer_state == CNTRL1_HIGH)) &&
                        ((rd_req_d == 1'b1) || (rd_conv_d == 1'b1))) ? 1'b1 : 1'b0;
-
-  always @(posedge clk) begin
-    if (cs_n) begin
-      rd_db_valid_div2 <= 1'h0;
-    end else begin
-      rd_db_valid_div2 <= (rd_db_valid) ? ~rd_db_valid_div2 : rd_db_valid_div2;
-    end
-  end
 
   // FSM output logic
 
   assign db_o = wr_data;
 
   always @(posedge clk) begin
-    data_out_a <= (transfer_state == CNTRL0_HIGH) ? db_i : data_out_a;
-    data_out_b <= (transfer_state == CNTRL1_HIGH) ? db_i : data_out_b;
-    rd_valid <= rd_db_valid;
+    rd_data <= (rd_valid_s & ~rd_valid_d) ? db_i : rd_data;
+    rd_valid_d <= rd_valid_s;
+    rd_valid <= rd_valid_s & ~rd_valid_d;
   end
 
-  assign rd_data = data_out_a;
+  assign adc_valid = rd_valid;
+  assign adc_data = rd_data;
 
   assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
   assign db_t = ~wr_req_d;
@@ -225,17 +218,15 @@ module axi_ad7616_pif (
                   (transfer_state == CNTRL1_LOW)) ? 1'b0 : 1'b1;
   assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_d == 1'b1)) ? 1'b0 : 1'b1;
 
-  // Master AXI stream output logic with additional xfer_req signal
-  // The first valid data is ALWAYS the first sample of a convertion
+  // sync will be asserted at the first valid data right after the convertion start
 
-  always @(negedge clk) begin
+  always @(posedge clk) begin
     if (end_of_conv == 1'b1) begin
-      xfer_req_d <= m_axis_xfer_req;
+      adc_sync <= 1'b1;
+    end else if (rd_valid == 1'b1) begin
+      adc_sync <= 1'b0;
     end
   end
-
-  assign m_axis_tdata = {data_out_b, data_out_a};
-  assign m_axis_tvalid = xfer_req_d & rd_valid & rd_db_valid_div2;
 
 endmodule
 

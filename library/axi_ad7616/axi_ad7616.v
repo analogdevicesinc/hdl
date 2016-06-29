@@ -82,12 +82,11 @@ module axi_ad7616 (
   s_axi_rdata,
   s_axi_rready,
 
-  // AXI-Stream Master
+  // Write FIFO interface
 
-  m_axis_tdata,
-  m_axis_tvalid,
-  m_axis_tready,
-  m_axis_xfer_req,
+  adc_valid,
+  adc_data,
+  adc_sync,
 
   irq
 );
@@ -96,11 +95,9 @@ module axi_ad7616 (
 
   parameter       ID = 0;
   parameter       IF_TYPE = 1;
-  parameter       M_AXIS_READY_ENABLE = 0;
 
   // local parameters
 
-  localparam      DATA_WIDTH = 8;
   localparam      NUM_OF_SDI = 2;
   localparam      SERIAL = 0;
   localparam      PARALLEL = 1;
@@ -109,49 +106,52 @@ module axi_ad7616 (
 
   // IO definitions
 
-  output          sclk;
-  output          cs_n;
-  output          sdo;
-  input           sdi_0;
-  input           sdi_1;
+  output                            sclk;
+  output                            cs_n;
+  output                            sdo;
+  input                             sdi_0;
+  input                             sdi_1;
 
-  output  [15:0]  db_o;
-  input   [15:0]  db_i;
-  output          db_t;
-  output          rd_n;
-  output          wr_n;
+  output  [15:0]                    db_o;
+  input   [15:0]                    db_i;
+  output                            db_t;
+  output                            rd_n;
+  output                            wr_n;
 
-  output          cnvst;
-  input           busy;
+  output                            cnvst;
+  input                             busy;
 
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [ 1:0]  s_axi_rresp;
-  output  [31:0]  s_axi_rdata;
-  input           s_axi_rready;
+  input                             s_axi_aclk;
+  input                             s_axi_aresetn;
+  input                             s_axi_awvalid;
+  input   [31:0]                    s_axi_awaddr;
+  output                            s_axi_awready;
+  input                             s_axi_wvalid;
+  input   [31:0]                    s_axi_wdata;
+  input   [ 3:0]                    s_axi_wstrb;
+  output                            s_axi_wready;
+  output                            s_axi_bvalid;
+  output  [ 1:0]                    s_axi_bresp;
+  input                             s_axi_bready;
+  input                             s_axi_arvalid;
+  input   [31:0]                    s_axi_araddr;
+  output                            s_axi_arready;
+  output                            s_axi_rvalid;
+  output  [ 1:0]                    s_axi_rresp;
+  output  [31:0]                    s_axi_rdata;
+  input                             s_axi_rready;
 
-  output  [(NUM_OF_SDI * DATA_WIDTH-1):0]  m_axis_tdata;
-  input           m_axis_tready;
-  output          m_axis_tvalid;
-  input           m_axis_xfer_req;
+  output                            adc_valid;
+  output  [15:0]                    adc_data;
+  output                            adc_sync;
 
-  output          irq;
+  output                            irq;
 
   // internal registers
+
+  reg                               up_wack = 1'b0;
+  reg                               up_rack = 1'b0;
+  reg     [31:0]                    up_rdata = 32'b0;
 
   // internal signals
 
@@ -180,12 +180,10 @@ module axi_ad7616 (
   wire                              rd_valid_s;
 
   wire                              m_axis_ready_s;
-
-  // internal registers
-
-  reg                               up_wack = 1'b0;
-  reg                               up_rack = 1'b0;
-  reg     [31:0]                    up_rdata = 32'b0;
+  wire                              m_axis_valid_s;
+  wire    [15:0]                    m_axis_data_s;
+  wire                              m_axis_xfer_req_s;
+  wire    [15:0]                    adc_data_s;
 
   // defaults
 
@@ -207,8 +205,6 @@ module axi_ad7616 (
     end
   end
 
-  assign m_axis_ready_s = (M_AXIS_READY_ENABLE) ? m_axis_tready : 1'b1;
-
   generate if (IF_TYPE == SERIAL) begin
 
     // ground all parallel interface signals
@@ -225,10 +221,10 @@ module axi_ad7616 (
     wire  [15:0]                            s0_cmd_data_s;
     wire                                    s0_sdo_data_ready_s;
     wire                                    s0_sdo_data_valid_s;
-    wire  [(DATA_WIDTH-1):0]                s0_sdo_data_s;
+    wire  [ 7:0]                            s0_sdo_data_s;
     wire                                    s0_sdi_data_ready_s;
     wire                                    s0_sdi_data_valid_s;
-    wire  [(NUM_OF_SDI * DATA_WIDTH-1):0]   s0_sdi_data_s;
+    wire  [15:0]                            s0_sdi_data_s;
     wire                                    s0_sync_ready_s;
     wire                                    s0_sync_valid_s;
     wire  [ 7:0]                            s0_sync_s;
@@ -237,10 +233,10 @@ module axi_ad7616 (
     wire  [15:0]                            s1_cmd_data_s;
     wire                                    s1_sdo_data_ready_s;
     wire                                    s1_sdo_data_valid_s;
-    wire  [(DATA_WIDTH-1):0]                s1_sdo_data_s;
+    wire  [ 7:0]                            s1_sdo_data_s;
     wire                                    s1_sdi_data_ready_s;
     wire                                    s1_sdi_data_valid_s;
-    wire  [(NUM_OF_SDI * DATA_WIDTH-1):0]   s1_sdi_data_s;
+    wire  [15:0]                            s1_sdi_data_s;
     wire                                    s1_sync_ready_s;
     wire                                    s1_sync_valid_s;
     wire  [ 7:0]                            s1_sync_s;
@@ -249,28 +245,28 @@ module axi_ad7616 (
     wire  [15:0]                            m_cmd_data_s;
     wire                                    m_sdo_data_ready_s;
     wire                                    m_sdo_data_valid_s;
-    wire  [(DATA_WIDTH-1):0]                m_sdo_data_s;
+    wire  [7:0]                             m_sdo_data_s;
     wire                                    m_sdi_data_ready_s;
     wire                                    m_sdi_data_valid_s;
-    wire  [(NUM_OF_SDI * DATA_WIDTH-1):0]   m_sdi_data_s;
+    wire  [15:0]                            m_sdi_data_s;
     wire                                    m_sync_ready_s;
     wire                                    m_sync_valid_s;
     wire  [ 7:0]                            m_sync_s;
     wire                                    offload0_cmd_wr_en_s;
     wire  [15:0]                            offload0_cmd_wr_data_s;
     wire                                    offload0_sdo_wr_en_s;
-    wire  [(DATA_WIDTH-1):0]                offload0_sdo_wr_data_s;
+    wire  [ 7:0]                            offload0_sdo_wr_data_s;
     wire                                    offload0_mem_reset_s;
     wire                                    offload0_enable_s;
     wire                                    offload0_enabled_s;
 
     axi_spi_engine #(
-      .DATA_WIDTH (DATA_WIDTH),
+      .DATA_WIDTH (8),
       .NUM_OF_SDI (NUM_OF_SDI),
       .NUM_OFFLOAD(1),
       .MM_IF_TYPE(1),
       .UP_ADDRESS_WIDTH (UP_ADDRESS_WIDTH)
-    ) i_axi_spi_engine(
+    ) i_axi_spi_engine (
       .up_clk (up_clk),
       .up_rstn (up_rstn),
       .up_wreq (up_wreq_s),
@@ -305,9 +301,9 @@ module axi_ad7616 (
       .offload0_enabled(offload0_enabled_s));
 
     spi_engine_offload #(
-      .DATA_WIDTH (DATA_WIDTH),
+      .DATA_WIDTH (8),
       .NUM_OF_SDI (NUM_OF_SDI)
-    ) i_spi_engine_offload(
+    ) i_spi_engine_offload (
       .ctrl_clk (up_clk),
       .ctrl_cmd_wr_en (offload0_cmd_wr_en_s),
       .ctrl_cmd_wr_data (offload0_cmd_wr_data_s),
@@ -331,12 +327,12 @@ module axi_ad7616 (
       .sync_valid (s1_sync_valid_s),
       .sync_ready (s1_sync_ready_s),
       .sync_data (s1_sync_s),
-      .offload_sdi_valid (m_axis_tvalid),
+      .offload_sdi_valid (m_axis_valid_s),
       .offload_sdi_ready (m_axis_ready_s),
-      .offload_sdi_data (m_axis_tdata));
+      .offload_sdi_data (m_axis_data_s));
 
     spi_engine_interconnect #(
-      .DATA_WIDTH (DATA_WIDTH),
+      .DATA_WIDTH (8),
       .NUM_OF_SDI (NUM_OF_SDI)
     ) i_spi_engine_interconnect (
       .clk (up_clk),
@@ -379,7 +375,7 @@ module axi_ad7616 (
       .s1_sync (s1_sync_s));
 
     spi_engine_execution #(
-      .DATA_WIDTH (DATA_WIDTH),
+      .DATA_WIDTH (8),
       .NUM_OF_SDI (NUM_OF_SDI)
     ) i_spi_engine_execution (
       .clk (up_clk),
@@ -407,8 +403,21 @@ module axi_ad7616 (
       .cs (cs_n),
       .three_wire ());
 
-  end
+    axi_ad7616_maxis2wrfifo #(
+      .DATA_WIDTH(16)
+    ) i_maxis2wrfifo (
+      .clk(up_clk),
+      .rstn(up_rstn),
+      .sync_in(trigger_s),
+      .m_axis_data(m_axis_data_s),
+      .m_axis_ready(m_axis_ready_s),
+      .m_axis_valid(m_axis_valid_s),
+      .fifo_wr_en(adc_valid),
+      .fifo_wr_data(adc_data_s),
+      .fifo_wr_sync(adc_sync)
+    );
 
+  end
   endgenerate
 
   generate if (IF_TYPE == PARALLEL) begin
@@ -422,23 +431,23 @@ module axi_ad7616 (
     assign up_rdata_if_s = 1'h0;
 
     axi_ad7616_pif i_ad7616_parallel_interface (
-      .cs_n(cs_n),
-      .db_o(db_o),
-      .db_i(db_i),
-      .db_t(db_t),
-      .rd_n(rd_n),
-      .wr_n(wr_n),
-      .m_axis_tdata(m_axis_tdata),
-      .m_axis_tvalid(m_axis_tvalid),
-      .m_axis_xfer_req(m_axis_xfer_req),
-      .end_of_conv(trigger_s),
-      .clk(up_clk),
-      .rstn(up_rstn),
-      .rd_req(rd_req_s),
-      .wr_req(wr_req_s),
-      .wr_data(wr_data_s),
-      .rd_data(rd_data_s),
-      .rd_valid(rd_valid_s)
+      .cs_n (cs_n),
+      .db_o (db_o),
+      .db_i (db_i),
+      .db_t (db_t),
+      .rd_n (rd_n),
+      .wr_n (wr_n),
+      .adc_data (adc_data_s),
+      .adc_valid (adc_valid),
+      .adc_sync (adc_sync),
+      .end_of_conv (trigger_s),
+      .clk (up_clk),
+      .rstn (up_rstn),
+      .rd_req (rd_req_s),
+      .wr_req (wr_req_s),
+      .wr_data (wr_data_s),
+      .rd_data (rd_data_s),
+      .rd_valid (rd_valid_s)
     );
 
   end
@@ -466,6 +475,8 @@ module axi_ad7616 (
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_cntrl_s),
     .up_rack (up_rack_cntrl_s));
+
+  assign adc_data = adc_data_s;
 
   // up bus interface
 

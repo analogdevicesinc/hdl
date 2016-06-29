@@ -26,7 +26,7 @@ set axi_ad7616 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad7616:1.0 axi
 set_property -dict [list CONFIG.IF_TYPE $ad7616_if] $axi_ad7616
 
 set axi_ad7616_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad7616_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad7616_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad7616_dma
 set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad7616_dma
 set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad7616_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad7616_dma
@@ -59,9 +59,11 @@ if {$ad7616_if == 0} {
 
 }
 
-ad_connect  sys_cpu_clk axi_ad7616_dma/s_axis_aclk
-ad_connect  axi_ad7616/m_axis axi_ad7616_dma/s_axis
-ad_connect  axi_ad7616/m_axis_xfer_req axi_ad7616_dma/s_axis_xfer_req
+ad_connect  sys_cpu_clk axi_ad7616_dma/s_axi_aclk
+ad_connect  sys_cpu_clk axi_ad7616_dma/fifo_wr_clk
+ad_connect  axi_ad7616/adc_valid axi_ad7616_dma/fifo_wr_en
+ad_connect  axi_ad7616/adc_data axi_ad7616_dma/fifo_wr_din
+ad_connect  axi_ad7616/adc_sync axi_ad7616_dma/fifo_wr_sync
 
 # interconnect
 
