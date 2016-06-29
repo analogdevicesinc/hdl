@@ -59,6 +59,7 @@ module axi_ad7616_pif (
   // end of convertion
 
   end_of_conv,
+  burst_length,
 
   // register access
 
@@ -83,6 +84,7 @@ module axi_ad7616_pif (
   output                          wr_n;
 
   input                           end_of_conv;
+  input   [ 4:0]                  burst_length;
 
   input                           clk;
   input                           rstn;
@@ -111,6 +113,7 @@ module axi_ad7616_pif (
   reg     [ 2:0]                  transfer_state = 3'h0;
   reg     [ 2:0]                  transfer_state_next = 3'h0;
   reg     [ 1:0]                  width_counter = 2'h0;
+  reg     [ 4:0]                  burst_counter = 5'h0;
 
   reg                             wr_req_d = 1'h0;
   reg                             rd_req_d = 1'h0;
@@ -154,6 +157,17 @@ module axi_ad7616_pif (
     end
   end
 
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      burst_counter <= 2'h0;
+    end else begin
+      if (transfer_state == CS_HIGH)
+        burst_counter <= burst_counter + 1;
+      else if (transfer_state == IDLE)
+        burst_counter <= 5'h0;
+    end
+  end
+
   always @(negedge clk) begin
     if (transfer_state == IDLE) begin
       wr_req_d <= wr_req;
@@ -186,7 +200,7 @@ module axi_ad7616_pif (
         transfer_state_next <= (width_counter != 2'b11) ? CNTRL1_HIGH : CS_HIGH;
       end
       CS_HIGH : begin
-        transfer_state_next <= IDLE;
+        transfer_state_next <= (burst_length == burst_counter) ? IDLE : CNTRL0_LOW;
       end
       default : begin
         transfer_state_next <= IDLE;

@@ -52,6 +52,7 @@ module axi_ad7616_control (
   up_read_req,
   up_write_req,
 
+  up_burst_length,
   end_of_conv,
 
   // bus interface
@@ -82,6 +83,7 @@ module axi_ad7616_control (
   input           busy;
 
   output          end_of_conv;
+  output  [ 4:0]  up_burst_length;
 
   input   [15:0]  up_read_data;
   input           up_read_valid;
@@ -111,6 +113,7 @@ module axi_ad7616_control (
   reg             up_rack = 1'b0;
   reg     [31:0]  up_rdata = 32'b0;
   reg     [31:0]  up_conv_rate = 32'b0;
+  reg     [ 4:0]  up_burst_length = 5'h0;
   reg     [15:0]  up_write_data = 16'h0;
 
   reg     [31:0]  cnvst_counter = 32'b0;
@@ -146,6 +149,7 @@ module axi_ad7616_control (
       up_resetn <= 1'b0;
       up_cnvst_en <= 1'b0;
       up_conv_rate <= 32'b0;
+      up_burst_length <= 5'h0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
@@ -158,18 +162,21 @@ module axi_ad7616_control (
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
         up_conv_rate <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h13)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
+        up_burst_length <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
         up_write_data <= up_wdata;
       end
     end
   end
 
-  assign up_write_req = (up_waddr[7:0] == 8'h13) ? up_wreq_s : 1'h0;
+  assign up_write_req = (up_waddr[7:0] == 8'h14) ? up_wreq_s : 1'h0;
 
   // processor read interface
 
-  assign up_rack_s = (up_raddr[7:0] == 8'h12) ? up_read_valid_s : up_rreq_s;
-  assign up_read_req = (up_raddr[7:0] == 8'h12) ? up_rreq_s : 1'b0;
+  assign up_rack_s = (up_raddr[7:0] == 8'h13) ? up_read_valid_s : up_rreq_s;
+  assign up_read_req = (up_raddr[7:0] == 8'h13) ? up_rreq_s : 1'b0;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -185,7 +192,8 @@ module axi_ad7616_control (
           8'h03 : up_rdata = IF_TYPE;
           8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
           8'h11 : up_rdata = up_conv_rate;
-          8'h12 : up_rdata = up_read_data_s;
+          8'h12 : up_rdata = {27'b0, up_burst_length};
+          8'h13 : up_rdata = up_read_data_s;
         endcase
       end
     end
