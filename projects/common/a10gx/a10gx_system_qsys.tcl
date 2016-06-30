@@ -12,6 +12,9 @@ add_interface sys_clk clock sink
 add_interface sys_rst reset sink
 set_interface_property sys_clk EXPORT_OF sys_clk.clk_in
 set_interface_property sys_rst EXPORT_OF sys_clk.clk_in_reset
+set_instance_parameter_value sys_clk {clockFrequency} {100000000.0}
+set_instance_parameter_value sys_clk {clockFrequencyKnown} {1}
+set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
 # memory (int)
 
@@ -97,6 +100,7 @@ set_instance_parameter_value sys_cpu {dcache_numTCDM} {1}
 set_instance_parameter_value sys_cpu {setting_dc_ecc_present} {0}
 set_instance_parameter_value sys_cpu {setting_itcm_ecc_present} {0}
 set_instance_parameter_value sys_cpu {setting_dtcm_ecc_present} {0}
+#set_instance_parameter_value sys_cpu {mmu_enabled} {1}
 
 add_connection sys_clk.clk sys_cpu.clk
 add_connection sys_clk.clk_reset sys_cpu.reset
