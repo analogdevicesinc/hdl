@@ -15,23 +15,23 @@ create_bd_port -dir O -from 7 -to 0 tx_data_n
 
 # dac peripherals
 
-set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
+set axi_ad9162_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9162:1.0 axi_ad9162_core]
 
-set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9144_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
-set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9144_jesd
+set axi_ad9162_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9162_jesd]
+set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9162_jesd
+set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9162_jesd
 
-set axi_ad9144_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9144_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.ID {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {256}] $axi_ad9144_dma
+set axi_ad9162_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9162_dma]
+set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9162_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9162_dma
+set_property -dict [list CONFIG.ID {1}] $axi_ad9162_dma
+set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9162_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9162_dma
+set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9162_dma
+set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9162_dma
+set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9162_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $axi_ad9162_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {256}] $axi_ad9162_dma
 
 # adc peripherals
 
@@ -173,14 +173,14 @@ ad_connect  axi_fmcomms11_gt/gt_tx_4 util_fmcomms11_gt/gt_tx_4
 ad_connect  axi_fmcomms11_gt/gt_tx_5 util_fmcomms11_gt/gt_tx_5
 ad_connect  axi_fmcomms11_gt/gt_tx_6 util_fmcomms11_gt/gt_tx_6
 ad_connect  axi_fmcomms11_gt/gt_tx_7 util_fmcomms11_gt/gt_tx_7
-ad_connect  axi_fmcomms11_gt/gt_tx_ip_0 axi_ad9144_jesd/gt0_tx
-ad_connect  axi_fmcomms11_gt/gt_tx_ip_1 axi_ad9144_jesd/gt1_tx
-ad_connect  axi_fmcomms11_gt/gt_tx_ip_2 axi_ad9144_jesd/gt2_tx
-ad_connect  axi_fmcomms11_gt/gt_tx_ip_3 axi_ad9144_jesd/gt3_tx
-ad_connect  axi_fmcomms11_gt/gt_tx_ip_4 axi_ad9144_jesd/gt4_tx
-ad_connect  axi_fmcomms11_gt/gt_tx_ip_5 axi_ad9144_jesd/gt5_tx
-ad_connect  axi_fmcomms11_gt/gt_tx_ip_6 axi_ad9144_jesd/gt6_tx
-ad_connect  axi_fmcomms11_gt/gt_tx_ip_7 axi_ad9144_jesd/gt7_tx
+ad_connect  axi_fmcomms11_gt/gt_tx_ip_0 axi_ad9162_jesd/gt0_tx
+ad_connect  axi_fmcomms11_gt/gt_tx_ip_1 axi_ad9162_jesd/gt1_tx
+ad_connect  axi_fmcomms11_gt/gt_tx_ip_2 axi_ad9162_jesd/gt2_tx
+ad_connect  axi_fmcomms11_gt/gt_tx_ip_3 axi_ad9162_jesd/gt3_tx
+ad_connect  axi_fmcomms11_gt/gt_tx_ip_4 axi_ad9162_jesd/gt4_tx
+ad_connect  axi_fmcomms11_gt/gt_tx_ip_5 axi_ad9162_jesd/gt5_tx
+ad_connect  axi_fmcomms11_gt/gt_tx_ip_6 axi_ad9162_jesd/gt6_tx
+ad_connect  axi_fmcomms11_gt/gt_tx_ip_7 axi_ad9162_jesd/gt7_tx
 
 # connections (dac)
 
@@ -189,26 +189,26 @@ ad_connect  util_fmcomms11_gt/tx_p tx_data_p
 ad_connect  util_fmcomms11_gt/tx_n tx_data_n
 ad_connect  util_fmcomms11_gt/tx_sync tx_sync
 ad_connect  util_fmcomms11_gt/tx_out_clk util_fmcomms11_gt/tx_clk
-ad_connect  util_fmcomms11_gt/tx_out_clk axi_ad9144_jesd/tx_core_clk
-ad_connect  util_fmcomms11_gt/tx_ip_rst axi_ad9144_jesd/tx_reset
-ad_connect  util_fmcomms11_gt/tx_ip_rst_done axi_ad9144_jesd/tx_reset_done
-ad_connect  util_fmcomms11_gt/tx_ip_sysref axi_ad9144_jesd/tx_sysref
-ad_connect  util_fmcomms11_gt/tx_ip_sync axi_ad9144_jesd/tx_sync
-ad_connect  util_fmcomms11_gt/tx_ip_data axi_ad9144_jesd/tx_tdata
-ad_connect  util_fmcomms11_gt/tx_out_clk axi_ad9144_core/tx_clk
-ad_connect  util_fmcomms11_gt/tx_data axi_ad9144_core/tx_data
-ad_connect  util_fmcomms11_gt/tx_out_clk axi_ad9144_fifo/dac_clk
-ad_connect  axi_ad9144_core/dac_valid_0 axi_ad9144_fifo/dac_valid
-ad_connect  axi_ad9144_core/dac_ddata_0 axi_ad9144_fifo/dac_data
-ad_connect  sys_cpu_clk axi_ad9144_fifo/dma_clk
-ad_connect  sys_cpu_reset axi_ad9144_fifo/dma_rst
-ad_connect  sys_cpu_clk axi_ad9144_dma/m_axis_aclk
-ad_connect  sys_cpu_resetn axi_ad9144_dma/m_src_axi_aresetn
-ad_connect  axi_ad9144_fifo/dma_xfer_req axi_ad9144_dma/m_axis_xfer_req
-ad_connect  axi_ad9144_fifo/dma_ready axi_ad9144_dma/m_axis_ready
-ad_connect  axi_ad9144_fifo/dma_data axi_ad9144_dma/m_axis_data
-ad_connect  axi_ad9144_fifo/dma_valid axi_ad9144_dma/m_axis_valid
-ad_connect  axi_ad9144_fifo/dma_xfer_last axi_ad9144_dma/m_axis_last
+ad_connect  util_fmcomms11_gt/tx_out_clk axi_ad9162_jesd/tx_core_clk
+ad_connect  util_fmcomms11_gt/tx_ip_rst axi_ad9162_jesd/tx_reset
+ad_connect  util_fmcomms11_gt/tx_ip_rst_done axi_ad9162_jesd/tx_reset_done
+ad_connect  util_fmcomms11_gt/tx_ip_sysref axi_ad9162_jesd/tx_sysref
+ad_connect  util_fmcomms11_gt/tx_ip_sync axi_ad9162_jesd/tx_sync
+ad_connect  util_fmcomms11_gt/tx_ip_data axi_ad9162_jesd/tx_tdata
+ad_connect  util_fmcomms11_gt/tx_out_clk axi_ad9162_core/tx_clk
+ad_connect  util_fmcomms11_gt/tx_data axi_ad9162_core/tx_data
+ad_connect  util_fmcomms11_gt/tx_out_clk axi_ad9162_fifo/dac_clk
+ad_connect  axi_ad9162_core/dac_valid_0 axi_ad9162_fifo/dac_valid
+ad_connect  axi_ad9162_core/dac_ddata_0 axi_ad9162_fifo/dac_data
+ad_connect  sys_cpu_clk axi_ad9162_fifo/dma_clk
+ad_connect  sys_cpu_reset axi_ad9162_fifo/dma_rst
+ad_connect  sys_cpu_clk axi_ad9162_dma/m_axis_aclk
+ad_connect  sys_cpu_resetn axi_ad9162_dma/m_src_axi_aresetn
+ad_connect  axi_ad9162_fifo/dma_xfer_req axi_ad9162_dma/m_axis_xfer_req
+ad_connect  axi_ad9162_fifo/dma_ready axi_ad9162_dma/m_axis_ready
+ad_connect  axi_ad9162_fifo/dma_data axi_ad9162_dma/m_axis_data
+ad_connect  axi_ad9162_fifo/dma_valid axi_ad9162_dma/m_axis_valid
+ad_connect  axi_ad9162_fifo/dma_xfer_last axi_ad9162_dma/m_axis_last
 
 # connections (adc)
 
@@ -244,9 +244,9 @@ ad_connect  axi_ad9625_core/adc_dovf axi_ad9625_fifo/adc_wovf
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A60000 axi_fmcomms11_gt
-ad_cpu_interconnect 0x44A00000 axi_ad9144_core
-ad_cpu_interconnect 0x44A90000 axi_ad9144_jesd
-ad_cpu_interconnect 0x7c420000 axi_ad9144_dma
+ad_cpu_interconnect 0x44A00000 axi_ad9162_core
+ad_cpu_interconnect 0x44A90000 axi_ad9162_jesd
+ad_cpu_interconnect 0x7c420000 axi_ad9162_dma
 ad_cpu_interconnect 0x44A10000 axi_ad9625_core
 ad_cpu_interconnect 0x44A91000 axi_ad9625_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9625_dma
@@ -259,16 +259,11 @@ ad_mem_hp3_interconnect sys_cpu_clk axi_fmcomms11_gt/m_axi
 # interconnect (mem/dac)
 
 ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_ad9144_dma/m_src_axi
+ad_mem_hp1_interconnect sys_cpu_clk axi_ad9162_dma/m_src_axi
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
 
 # interrupts
 
-ad_cpu_interrupt ps-12 mb-12 axi_ad9144_dma/irq
+ad_cpu_interrupt ps-12 mb-12 axi_ad9162_dma/irq
 ad_cpu_interrupt ps-13 mb-13 axi_ad9625_dma/irq
-
-ad_connect  axi_ad9144_core/dac_ddata_2 GND
-ad_connect  axi_ad9144_core/dac_ddata_3 GND
-
-
