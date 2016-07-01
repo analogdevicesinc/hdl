@@ -223,14 +223,14 @@ module system_top (
     .ps_intr_10 (1'b0),
     .ps_intr_11 (1'b0),
     .spdif (spdif),
-    .cnvst (adc_convst),
-    .cs_n (adc_cs_n),
-    .busy (adc_busy),
-    .db_o (adc_db_o),
-    .db_i (adc_db_i),
-    .db_t (adc_db_t),
-    .rd_n (adc_rd_n),
-    .wr_n (adc_wr_n)
+    .rx_cnvst (adc_convst),
+    .rx_cs_n (adc_cs_n),
+    .rx_busy (adc_busy),
+    .rx_db_o (adc_db_o),
+    .rx_db_i (adc_db_i),
+    .rx_db_t (adc_db_t),
+    .rx_rd_n (adc_rd_n),
+    .rx_wr_n (adc_wr_n)
   );
 
 endmodule

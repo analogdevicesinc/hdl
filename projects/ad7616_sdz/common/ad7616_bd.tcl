@@ -3,22 +3,22 @@ global ad7616_if
 
 # data interfaces
 
-create_bd_port -dir O sclk
-create_bd_port -dir O sdo
-create_bd_port -dir I sdi_0
-create_bd_port -dir I sdi_1
+create_bd_port -dir O rx_sclk
+create_bd_port -dir O rx_sdo
+create_bd_port -dir I rx_sdi_0
+create_bd_port -dir I rx_sdi_1
 
-create_bd_port -dir O -from 15 -to 0 db_o
-create_bd_port -dir I -from 15 -to 0 db_i
-create_bd_port -dir O db_t
-create_bd_port -dir O rd_n
-create_bd_port -dir O wr_n
+create_bd_port -dir O -from 15 -to 0 rx_db_o
+create_bd_port -dir I -from 15 -to 0 rx_db_i
+create_bd_port -dir O rx_db_t
+create_bd_port -dir O rx_rd_n
+create_bd_port -dir O rx_wr_n
 
 # control lines
 
-create_bd_port -dir O cnvst
-create_bd_port -dir O cs_n
-create_bd_port -dir I busy
+create_bd_port -dir O rx_cnvst
+create_bd_port -dir O rx_cs_n
+create_bd_port -dir I rx_busy
 
 # instantiation
 
@@ -36,26 +36,26 @@ set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad7616_dma
 # interface connections
 if {$ad7616_if == 0} {
 
-  ad_connect  sclk axi_ad7616/sclk
-  ad_connect  sdo axi_ad7616/sdo
-  ad_connect  sdi_0 axi_ad7616/sdi_0
-  ad_connect  sdi_1 axi_ad7616/sdi_1
-  ad_connect  cs_n axi_ad7616/cs_n
+  ad_connect  rx_sclk axi_ad7616/rx_sclk
+  ad_connect  rx_sdo axi_ad7616/rx_sdo
+  ad_connect  rx_sdi_0 axi_ad7616/rx_sdi_0
+  ad_connect  rx_sdi_1 axi_ad7616/rx_sdi_1
+  ad_connect  rx_cs_n axi_ad7616/rx_cs_n
 
-  ad_connect  cnvst axi_ad7616/cnvst
-  ad_connect  busy axi_ad7616/busy
+  ad_connect  rx_cnvst axi_ad7616/rx_cnvst
+  ad_connect  rx_busy axi_ad7616/rx_busy
 
 } else {
 
-  ad_connect  db_o axi_ad7616/db_o
-  ad_connect  db_i axi_ad7616/db_i
-  ad_connect  db_t axi_ad7616/db_t
-  ad_connect  rd_n axi_ad7616/rd_n
-  ad_connect  wr_n axi_ad7616/wr_n
+  ad_connect  rx_db_o axi_ad7616/rx_db_o
+  ad_connect  rx_db_i axi_ad7616/rx_db_i
+  ad_connect  rx_db_t axi_ad7616/rx_db_t
+  ad_connect  rx_rd_n axi_ad7616/rx_rd_n
+  ad_connect  rx_wr_n axi_ad7616/rx_wr_n
 
-  ad_connect  cs_n axi_ad7616/cs_n
-  ad_connect  cnvst axi_ad7616/cnvst
-  ad_connect  busy axi_ad7616/busy
+  ad_connect  rx_cs_n axi_ad7616/rx_cs_n
+  ad_connect  rx_cnvst axi_ad7616/rx_cnvst
+  ad_connect  rx_busy axi_ad7616/rx_busy
 
 }
 

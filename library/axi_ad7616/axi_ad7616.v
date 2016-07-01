@@ -43,22 +43,22 @@ module axi_ad7616 (
 
   // physical data interface
 
-  sclk,
-  cs_n,
-  sdo,
-  sdi_0,
-  sdi_1,
+  rx_sclk,
+  rx_cs_n,
+  rx_sdo,
+  rx_sdi_0,
+  rx_sdi_1,
 
-  db_o,
-  db_i,
-  db_t,
-  rd_n,
-  wr_n,
+  rx_db_o,
+  rx_db_i,
+  rx_db_t,
+  rx_rd_n,
+  rx_wr_n,
 
   // physical control interface
 
-  cnvst,
-  busy,
+  rx_cnvst,
+  rx_busy,
 
   // AXI Slave Memory Map
 
@@ -106,20 +106,20 @@ module axi_ad7616 (
 
   // IO definitions
 
-  output                            sclk;
-  output                            cs_n;
-  output                            sdo;
-  input                             sdi_0;
-  input                             sdi_1;
+  output                            rx_sclk;
+  output                            rx_cs_n;
+  output                            rx_sdo;
+  input                             rx_sdi_0;
+  input                             rx_sdi_1;
 
-  output  [15:0]                    db_o;
-  input   [15:0]                    db_i;
-  output                            db_t;
-  output                            rd_n;
-  output                            wr_n;
+  output  [15:0]                    rx_db_o;
+  input   [15:0]                    rx_db_i;
+  output                            rx_db_t;
+  output                            rx_rd_n;
+  output                            rx_wr_n;
 
-  output                            cnvst;
-  input                             busy;
+  output                            rx_cnvst;
+  input                             rx_busy;
 
   input                             s_axi_aclk;
   input                             s_axi_aresetn;
@@ -183,7 +183,6 @@ module axi_ad7616 (
   wire                              m_axis_valid_s;
   wire    [15:0]                    m_axis_data_s;
   wire                              m_axis_xfer_req_s;
-  wire    [15:0]                    adc_data_s;
 
   // defaults
 
@@ -209,9 +208,9 @@ module axi_ad7616 (
 
     // ground all parallel interface signals
 
-    assign db_o = 16'b0;
-    assign rd_n = 1'b0;
-    assign wr_n = 1'b0;
+    assign rx_db_o = 16'b0;
+    assign rx_rd_n = 1'b0;
+    assign rx_wr_n = 1'b0;
 
     // SPI Framework instances and logic
 
@@ -393,14 +392,14 @@ module axi_ad7616 (
       .sync_ready (m_sync_ready_s),
       .sync_valid (m_sync_valid_s),
       .sync (m_sync_s),
-      .sclk (sclk),
-      .sdo (sdo),
+      .sclk (rx_sclk),
+      .sdo (rx_sdo),
       .sdo_t (),
-      .sdi (sdi_0),
-      .sdi_1 (sdi_1),
+      .sdi (rx_sdi_0),
+      .sdi_1 (rx_sdi_1),
       .sdi_2 (1'b0),
       .sdi_3 (1'b0),
-      .cs (cs_n),
+      .cs (rx_cs_n),
       .three_wire ());
 
     axi_ad7616_maxis2wrfifo #(
@@ -413,7 +412,7 @@ module axi_ad7616 (
       .m_axis_ready(m_axis_ready_s),
       .m_axis_valid(m_axis_valid_s),
       .fifo_wr_en(adc_valid),
-      .fifo_wr_data(adc_data_s),
+      .fifo_wr_data(adc_data),
       .fifo_wr_sync(adc_sync)
     );
 
@@ -422,8 +421,8 @@ module axi_ad7616 (
 
   generate if (IF_TYPE == PARALLEL) begin
 
-    assign sclk = 1'h0;
-    assign sdo = 1'h0;
+    assign rx_sclk = 1'h0;
+    assign rx_sdo = 1'h0;
     assign irq = 1'h0;
 
     assign up_wack_if_s = 1'h0;
@@ -431,13 +430,13 @@ module axi_ad7616 (
     assign up_rdata_if_s = 1'h0;
 
     axi_ad7616_pif i_ad7616_parallel_interface (
-      .cs_n (cs_n),
-      .db_o (db_o),
-      .db_i (db_i),
-      .db_t (db_t),
-      .rd_n (rd_n),
-      .wr_n (wr_n),
-      .adc_data (adc_data_s),
+      .cs_n (rx_cs_n),
+      .db_o (rx_db_o),
+      .db_i (rx_db_i),
+      .db_t (rx_db_t),
+      .rd_n (rx_rd_n),
+      .wr_n (rx_wr_n),
+      .adc_data (adc_data),
       .adc_valid (adc_valid),
       .adc_sync (adc_sync),
       .end_of_conv (trigger_s),
@@ -458,8 +457,8 @@ module axi_ad7616 (
     .ID(ID),
     .IF_TYPE(IF_TYPE)
   ) i_ad7616_control (
-    .cnvst (cnvst),
-    .busy (busy),
+    .cnvst (rx_cnvst),
+    .busy (rx_busy),
     .up_burst_length (burst_length_s),
     .up_read_data (rd_data_s),
     .up_read_valid (rd_valid_s),
@@ -477,8 +476,6 @@ module axi_ad7616 (
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_cntrl_s),
     .up_rack (up_rack_cntrl_s));
-
-  assign adc_data = adc_data_s;
 
   // up bus interface
 

@@ -272,13 +272,13 @@ module system_top (
     .ps_intr_10 (1'b0),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
-    .cnvst (adc_convst),
-    .sclk (spi_sclk),
-    .sdo (spi_sdo),
-    .sdi_0 (spi_sdi_0),
-    .sdi_1 (spi_sdi_1),
-    .cs_n (spi_cs_n),
-    .busy (adc_busy)
+    .rx_cnvst (adc_convst),
+    .rx_sclk (spi_sclk),
+    .rx_sdo (spi_sdo),
+    .rx_sdi_0 (spi_sdi_0),
+    .rx_sdi_1 (spi_sdi_1),
+    .rx_cs_n (spi_cs_n),
+    .rx_busy (adc_busy)
   );
 
 endmodule
