@@ -34,7 +34,6 @@ set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9122_dma
 set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9122_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9122_dma
 set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9122_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9122_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9122_dma
 
 set util_upack_ad9122 [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_upack_ad9122]
@@ -55,8 +54,6 @@ set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9684_dma
 set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9684_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9684_dma
 set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9684_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9684_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9684_dma
 
 set util_cpack_ad9684 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_ad9684]
 set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] $util_cpack_ad9684
