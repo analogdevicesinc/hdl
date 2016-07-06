@@ -15,6 +15,7 @@ clean:
 	make -C axi_ad9122 clean
 	make -C axi_ad9144 clean
 	make -C axi_ad9152 clean
+	make -C axi_ad9162 clean
 	make -C axi_ad9234 clean
 	make -C axi_ad9250 clean
 	make -C axi_ad9265 clean
@@ -55,6 +56,7 @@ clean:
 	make -C spi_engine/spi_engine_offload clean
 	make -C util_adc_pack clean
 	make -C util_adcfifo clean
+	make -C util_adxcvr clean
 	make -C util_axis_fifo clean
 	make -C util_axis_resize clean
 	make -C util_bsplit clean
@@ -85,6 +87,7 @@ lib:
 	-make -C axi_ad9122
 	-make -C axi_ad9144
 	-make -C axi_ad9152
+	-make -C axi_ad9162
 	-make -C axi_ad9234
 	-make -C axi_ad9250
 	-make -C axi_ad9265
@@ -125,6 +128,7 @@ lib:
 	-make -C spi_engine/spi_engine_offload
 	-make -C util_adc_pack
 	-make -C util_adcfifo
+	-make -C util_adxcvr
 	-make -C util_axis_fifo
 	-make -C util_axis_resize
 	-make -C util_bsplit
