@@ -46,13 +46,14 @@ set axi_ad9684_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9684:1.
 set_property -dict [list CONFIG.OR_STATUS {0}] $axi_ad9684_core
 
 set axi_ad9684_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9684_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9684_dma
+set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad9684_dma
 set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9684_dma
 set_property -dict [list CONFIG.ID {1}] $axi_ad9684_dma
 set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9684_dma
 set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9684_dma
 set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9684_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9684_dma
+set_property -dict [list CONFIG.FIFO_SIZE {16}] $axi_ad9684_dma
 set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9684_dma
 
 set util_cpack_ad9684 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_ad9684]
@@ -90,7 +91,7 @@ ad_connect  util_upack_ad9122/dac_sync axi_ad9122_core/dac_sync_in
 
 ad_connect  adc_clk axi_ad9684_core/adc_clk
 ad_connect  sys_200m_clk axi_ad9684_core/delay_clk
-ad_connect  adc_clk axi_ad9684_dma/fifo_wr_clk
+ad_connect  sys_cpu_clk axi_ad9684_dma/s_axis_aclk
 ad_connect  adc_clk util_cpack_ad9684/adc_clk
 
 ad_connect  adc_clk_in_p axi_ad9684_core/adc_clk_in_p
@@ -107,11 +108,18 @@ ad_connect  axi_ad9684_core/adc_data_0 util_cpack_ad9684/adc_data_0
 ad_connect  axi_ad9684_core/adc_enable_1 util_cpack_ad9684/adc_enable_1
 ad_connect  axi_ad9684_core/adc_valid_1 util_cpack_ad9684/adc_valid_1
 ad_connect  axi_ad9684_core/adc_data_1 util_cpack_ad9684/adc_data_1
-ad_connect  axi_ad9684_core/adc_dovf axi_ad9684_dma/fifo_wr_overflow
+ad_connect  axi_ad9684_core/adc_dovf axi_ad9684_fifo/adc_wovf
 
-ad_connect  util_cpack_ad9684/adc_valid axi_ad9684_dma/fifo_wr_en
-ad_connect  util_cpack_ad9684/adc_data axi_ad9684_dma/fifo_wr_din
-ad_connect  util_cpack_ad9684/adc_sync axi_ad9684_dma/fifo_wr_sync
+ad_connect  adc_clk axi_ad9684_fifo/adc_clk
+ad_connect  sys_cpu_clk axi_ad9684_fifo/dma_clk
+ad_connect  axi_ad9684_core/adc_rst axi_ad9684_fifo/adc_rst
+ad_connect  util_cpack_ad9684/adc_valid axi_ad9684_fifo/adc_wr
+ad_connect  util_cpack_ad9684/adc_data axi_ad9684_fifo/adc_wdata
+ad_connect  axi_ad9684_fifo/dma_wr axi_ad9684_dma/s_axis_valid
+ad_connect  axi_ad9684_fifo/dma_wdata axi_ad9684_dma/s_axis_data
+ad_connect  axi_ad9684_fifo/dma_wready axi_ad9684_dma/s_axis_ready
+ad_connect  axi_ad9684_fifo/dma_xfer_req axi_ad9684_dma/s_axis_xfer_req
+
 
 # memory interconnect
 

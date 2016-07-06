@@ -92,7 +92,28 @@ module system_top (
   spi_clk,
   spi_csn,
   spi_sdio,
-  spi_int);
+  spi_int,
+
+  sys_rst,
+  sys_clk_p,
+  sys_clk_n,
+
+  ddr3_addr,
+  ddr3_ba,
+  ddr3_cas_n,
+  ddr3_ck_n,
+  ddr3_ck_p,
+  ddr3_cke,
+  ddr3_cs_n,
+  ddr3_dm,
+  ddr3_dq,
+  ddr3_dqs_n,
+  ddr3_dqs_p,
+  ddr3_odt,
+  ddr3_ras_n,
+  ddr3_reset_n,
+  ddr3_we_n
+);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -149,6 +170,26 @@ module system_top (
   inout           spi_sdio;
   input           spi_int;
 
+  input           sys_rst;
+  input           sys_clk_p;
+  input           sys_clk_n;
+
+  output  [13:0]  ddr3_addr;
+  output  [ 2:0]  ddr3_ba;
+  output          ddr3_cas_n;
+  output  [ 0:0]  ddr3_ck_n;
+  output  [ 0:0]  ddr3_ck_p;
+  output  [ 0:0]  ddr3_cke;
+  output  [ 0:0]  ddr3_cs_n;
+  output  [ 7:0]  ddr3_dm;
+  inout   [63:0]  ddr3_dq;
+  inout   [ 7:0]  ddr3_dqs_n;
+  inout   [ 7:0]  ddr3_dqs_p;
+  output  [ 0:0]  ddr3_odt;
+  output          ddr3_ras_n;
+  output          ddr3_reset_n;
+  output          ddr3_we_n;
+
   // internal signals
 
   wire    [63:0]  gpio_i;
@@ -173,6 +214,24 @@ module system_top (
     .spi_sdio (spi_sdio));
 
   system_wrapper i_system_wrapper (
+    .sys_clk_clk_n (sys_clk_n),
+    .sys_clk_clk_p (sys_clk_p),
+    .sys_rst (sys_rst),
+    .ddr3_addr (ddr3_addr),
+    .ddr3_ba (ddr3_ba),
+    .ddr3_cas_n (ddr3_cas_n),
+    .ddr3_ck_n (ddr3_ck_n),
+    .ddr3_ck_p (ddr3_ck_p),
+    .ddr3_cke (ddr3_cke),
+    .ddr3_cs_n (ddr3_cs_n),
+    .ddr3_dm (ddr3_dm),
+    .ddr3_dq (ddr3_dq),
+    .ddr3_dqs_n (ddr3_dqs_n),
+    .ddr3_dqs_p (ddr3_dqs_p),
+    .ddr3_odt (ddr3_odt),
+    .ddr3_ras_n (ddr3_ras_n),
+    .ddr3_reset_n (ddr3_reset_n),
+    .ddr3_we_n (ddr3_we_n),
     .adc_clk_in_n (adc_clk_in_n),
     .adc_clk_in_p (adc_clk_in_p),
     .adc_data_in_n (adc_data_in_n),
