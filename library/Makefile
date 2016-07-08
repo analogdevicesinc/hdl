@@ -31,6 +31,7 @@ clean:
 	make -C axi_ad9684 clean
 	make -C axi_ad9739a clean
 	make -C axi_adcfifo clean
+	make -C axi_adxcvr clean
 	make -C axi_clkgen clean
 	make -C axi_dacfifo clean
 	make -C axi_dmac clean
@@ -103,6 +104,7 @@ lib:
 	-make -C axi_ad9684
 	-make -C axi_ad9739a
 	-make -C axi_adcfifo
+	-make -C axi_adxcvr
 	-make -C axi_clkgen
 	-make -C axi_dacfifo
 	-make -C axi_dmac
