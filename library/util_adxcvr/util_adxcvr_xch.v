@@ -121,10 +121,8 @@ module util_adxcvr_xch (
   parameter   integer CPLL_FBDIV = 2;
   parameter   integer RX_OUT_DIV = 1;
   parameter   integer RX_CLK25_DIV = 10;
-  parameter   integer RX_CLKBUF_ENABLE = 0;
   parameter   integer TX_OUT_DIV = 1;
   parameter   integer TX_CLK25_DIV = 10;
-  parameter   integer TX_CLKBUF_ENABLE = 0;
   parameter   [31:0]  PMA_RSV = 32'h00018480;
   parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020;
 
