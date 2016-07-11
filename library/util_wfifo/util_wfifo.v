@@ -180,15 +180,18 @@ module util_wfifo (
   reg                                 din_wr = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       din_waddr = 'd0;
   reg                                 din_req_t = 'd0;
+  reg     [(ADDRESS_WIDTH-4):0]       din_rinit = 'd0;
   reg                                 din_ovf_m1 = 'd0;
   reg                                 din_ovf = 'd0;
   reg                                 dout_req_t_m1 = 'd0;
   reg                                 dout_req_t_m2 = 'd0;
   reg                                 dout_req_t_m3 = 'd0;
+  reg                                 dout_req_t = 'd0;
+  reg     [(ADDRESS_WIDTH-4):0]       dout_rinit = 'd0;
   reg                                 dout_ovf_d = 'd0;
   reg     [ 3:0]                      dout_req_cnt = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd0;
-  reg                                 dout_rd = 'd0;
+  reg                                 dout_rd_d = 'd0;
   reg                                 dout_valid = 'd0;
   reg     [ 7:0]                      dout_enable_m1 = 'd0;
   reg     [ 7:0]                      dout_enable = 'd0;
@@ -216,8 +219,8 @@ module util_wfifo (
   assign din_data_s   = { din_data_7,   din_data_6,   din_data_5,   din_data_4,
                           din_data_3,   din_data_2,   din_data_1,   din_data_0};
 
-  // simple data transfer-- no ovf/unf handling- read-bw > write-bw
-  // dout_width >= din_width only
+  // simple data transfer-- no ovf/unf handling- read-bw > write-bw (equal will NOT work)
+  // dout_width >= din_width only-
 
   generate
   for (n = 0; n < NUM_OF_CHANNELS; n = n + 1) begin: g_in
@@ -247,6 +250,7 @@ module util_wfifo (
       din_wr <= 1'd0;
       din_waddr <= 'd0;
       din_req_t <= 1'd0;
+      din_rinit <= 'd0;
       din_ovf_m1 <= 'd0;
       din_ovf <= 'd0;
     end else begin
@@ -263,8 +267,9 @@ module util_wfifo (
       if (din_wr == 1'b1) begin
         din_waddr <= din_waddr + 1'b1;
       end
-      if ((din_wr == 1'b1) && (din_waddr[2:0] == 3'd0)) begin
+      if ((din_wr == 1'b1) && (din_waddr[2:0] == 3'd7)) begin
         din_req_t <= ~din_req_t;
+        din_rinit <= din_waddr[(ADDRESS_WIDTH-1):3];
       end
       din_ovf_m1 <= dout_ovf_d;
       din_ovf <= din_ovf_m1;
@@ -280,11 +285,17 @@ module util_wfifo (
       dout_req_t_m1 <= 'd0;
       dout_req_t_m2 <= 'd0;
       dout_req_t_m3 <= 'd0;
+      dout_req_t <= 'd0;
+      dout_rinit <= 'd0;
       dout_ovf_d <= 'd0;
     end else begin
       dout_req_t_m1 <= din_req_t;
       dout_req_t_m2 <= dout_req_t_m1;
       dout_req_t_m3 <= dout_req_t_m2;
+      dout_req_t <= dout_req_t_s;
+      if (dout_req_t_s == 1'b1) begin
+        dout_rinit <= din_rinit;
+      end
       dout_ovf_d <= dout_ovf;
     end
   end
@@ -292,20 +303,19 @@ module util_wfifo (
   always @(posedge dout_clk or negedge dout_rstn) begin
     if (dout_rstn == 1'b0) begin
       dout_req_cnt <= 'd0;
-      dout_raddr <= 'd0;
-      dout_rd <= 'd0;
+      dout_raddr <= 'd8;
+      dout_rd_d <= 'd0;
       dout_valid <= 'd0;
     end else begin
-      if (dout_req_t_s == 1'b1) begin
+      if (dout_req_t == 1'b1) begin
         dout_req_cnt <= 4'h8;
+        dout_raddr <= {dout_rinit, 3'd0};
       end else if (dout_req_cnt[3] == 1'b1) begin
         dout_req_cnt <= dout_req_cnt + 1'b1;
-      end
-      if (dout_req_cnt[3] == 1'b1) begin
         dout_raddr <= dout_raddr + 1'b1;
       end
-      dout_rd <= dout_req_cnt[3];
-      dout_valid <= dout_rd;
+      dout_rd_d <= dout_req_cnt[3];
+      dout_valid <= dout_rd_d;
     end
   end
 
