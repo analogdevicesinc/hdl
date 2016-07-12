@@ -107,7 +107,7 @@ module util_rfifo (
   parameter   DIN_ADDRESS_WIDTH = 8;
 
   localparam  M_MEM_RATIO = DOUT_DATA_WIDTH/DIN_DATA_WIDTH;
-  localparam  ADDRESS_WIDTH = (DIN_ADDRESS_WIDTH > 4) ? DIN_ADDRESS_WIDTH : 4;
+  localparam  ADDRESS_WIDTH = (DIN_ADDRESS_WIDTH > 5) ? DIN_ADDRESS_WIDTH : 5;
   localparam  DATA_WIDTH = DOUT_DATA_WIDTH * NUM_OF_CHANNELS;
   localparam  T_DIN_DATA_WIDTH = DIN_DATA_WIDTH * 8;
   localparam  T_DOUT_DATA_WIDTH = DOUT_DATA_WIDTH * 8;
@@ -177,17 +177,21 @@ module util_rfifo (
   reg     [(DATA_WIDTH-1):0]          din_wdata = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       din_waddr = 'hc;
   reg                                 din_wr = 'd0;
+  reg                                 din_valid = 'd0;
   reg     [ 6:0]                      din_req_cnt = 'd0;
   reg     [ 7:0]                      din_enable_m1 = 'd0;
   reg     [ 7:0]                      din_enable = 'd0;
   reg                                 din_req_t_m1 = 'd0;
   reg                                 din_req_t_m2 = 'd0;
   reg                                 din_req_t_m3 = 'd0;
+  reg                                 din_req = 'd0;
+  reg     [(ADDRESS_WIDTH-4):0]       din_rinit = 'd0;
   reg                                 din_unf_d = 'd0;
   reg     [(T_DOUT_DATA_WIDTH+1):0]   dout_data = 'd0;
   reg     [(DATA_WIDTH-1):0]          dout_rdata = 'd0;
   reg     [ 7:0]                      dout_enable = 'd0;
   reg                                 dout_req_t = 'd0;
+  reg     [(ADDRESS_WIDTH-4):0]       dout_rinit = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd0;
   reg                                 dout_unf_m1 = 'd0;
   reg                                 dout_unf = 'd0;
@@ -216,14 +220,14 @@ module util_rfifo (
   assign din_enable_1 = din_enable[1];
   assign din_enable_0 = din_enable[0];
 
-  assign din_valid_7 = din_req_cnt[6];
-  assign din_valid_6 = din_req_cnt[6];
-  assign din_valid_5 = din_req_cnt[6];
-  assign din_valid_4 = din_req_cnt[6];
-  assign din_valid_3 = din_req_cnt[6];
-  assign din_valid_2 = din_req_cnt[6];
-  assign din_valid_1 = din_req_cnt[6];
-  assign din_valid_0 = din_req_cnt[6];
+  assign din_valid_7 = din_valid;
+  assign din_valid_6 = din_valid;
+  assign din_valid_5 = din_valid;
+  assign din_valid_4 = din_valid;
+  assign din_valid_3 = din_valid;
+  assign din_valid_2 = din_valid;
+  assign din_valid_1 = din_valid;
+  assign din_valid_0 = din_valid;
 
   assign din_data_s = { din_data_7, din_data_6, din_data_5, din_data_4,
                         din_data_3, din_data_2, din_data_1, din_data_0};
@@ -235,14 +239,14 @@ module util_rfifo (
   for (n = 0; n < NUM_OF_CHANNELS; n = n + 1) begin: g_in
   if (M_MEM_RATIO == 1) begin
   always @(posedge din_clk) begin
-    if (din_req_cnt[6] == 1'b1) begin
+    if (din_valid == 1'b1) begin
       din_wdata[((DOUT_DATA_WIDTH*(n+1))-1):(DOUT_DATA_WIDTH*n)] <=
         din_data_s[((DIN_DATA_WIDTH*(n+1))-1):(DIN_DATA_WIDTH*n)];
     end
   end
   end else begin
   always @(posedge din_clk) begin
-    if (din_req_cnt[6] == 1'b1) begin
+    if (din_valid == 1'b1) begin
       din_wdata[((DOUT_DATA_WIDTH*(n+1))-1):(DOUT_DATA_WIDTH*n)] <=
         {din_data_s[((DIN_DATA_WIDTH*(n+1))-1):(DIN_DATA_WIDTH*n)],
         din_wdata[((DOUT_DATA_WIDTH*(n+1))-1):(DIN_DATA_WIDTH+(DOUT_DATA_WIDTH*n))]};
@@ -257,7 +261,9 @@ module util_rfifo (
       din_waddr <= 'hc;
       din_wr <= 1'd0;
     end else begin
-      if (din_wr == 1'b1) begin
+      if (din_req == 1'b1) begin
+        din_waddr <= {din_rinit, 3'd0};
+      end else if (din_wr == 1'b1) begin
         din_waddr <= din_waddr + 1'b1;
       end
       case (M_MEM_RATIO)
@@ -271,8 +277,10 @@ module util_rfifo (
 
   always @(posedge din_clk or negedge din_rstn) begin
     if (din_rstn == 1'b0) begin
+      din_valid <= 'd0;
       din_req_cnt <= 'd0;
     end else begin
+      din_valid <= din_req_cnt[6];
       if (din_req_s == 1'b1) begin
         case (M_MEM_RATIO)
           8: din_req_cnt <= 7'h40;
@@ -295,6 +303,8 @@ module util_rfifo (
       din_req_t_m1 <= 'd0;
       din_req_t_m2 <= 'd0;
       din_req_t_m3 <= 'd0;
+      din_req <= 'd0;
+      din_rinit <= 'd0;
       din_unf_d <= 'd0;
     end else begin
       din_enable_m1 <= dout_enable;
@@ -302,6 +312,10 @@ module util_rfifo (
       din_req_t_m1 <= dout_req_t;
       din_req_t_m2 <= din_req_t_m1;
       din_req_t_m3 <= din_req_t_m2;
+      din_req <= din_req_s;
+      if (din_req_s == 1'b1) begin
+        din_rinit <= dout_rinit;
+      end
       din_unf_d <= din_unf;
     end
   end
@@ -353,12 +367,14 @@ module util_rfifo (
     if (dout_rst == 1'b1) begin
       dout_enable <= 'd0;
       dout_req_t <= 'd0;
+      dout_rinit <= 'd0;
       dout_raddr <= 'd0;
     end else begin
       dout_enable <= dout_enable_s;
       if (dout_valid_s[0] == 1'b1) begin
-        if (dout_raddr[2:0] == 3'd0) begin
+        if (dout_raddr[2:0] == 3'd7) begin
           dout_req_t <= ~dout_req_t;
+          dout_rinit <= dout_raddr[(ADDRESS_WIDTH-1):3] + 2'd2;
         end
         dout_raddr <= dout_raddr + 1'b1;
       end
