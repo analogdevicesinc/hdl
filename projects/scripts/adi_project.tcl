@@ -141,6 +141,12 @@ proc adi_project_create {project_name {mode 0}} {
   } else {
     write_hwdef -file "$project_name.data/$project_name.hwdef"
   }
+
+  if {![info exists ::env(ADI_NO_BITSTREAM_COMPRESSION)] || ![info exists ADI_NO_BITSTREAM_COMPRESSION]} {
+    add_files -norecurse -fileset sources_1 \
+		"$ad_hdl_dir/projects/common/xilinx/compression_system_constr.xdc"
+  }
+
 }
 
 proc adi_project_files {project_name project_files} {
