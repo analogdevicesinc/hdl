@@ -21,6 +21,7 @@ set_property  -dict {PACKAGE_PIN  AF8}  [get_ports pcie_data_tx_p[3]]           
 set_property  -dict {PACKAGE_PIN  AF7}  [get_ports pcie_data_tx_n[3]]                                   ; ## MGTXTXN0_111
 set_property  -dict {PACKAGE_PIN  W20   IOSTANDARD LVCMOS33} [get_ports pcie_rstn]                      ; ## IO_L19P_T3_13
 set_property  -dict {PACKAGE_PIN  AB20  IOSTANDARD LVCMOS33} [get_ports pcie_waken]                     ; ## IO_L20N_T3_13
+set_property  -dict {PACKAGE_PIN  AA14  IOSTANDARD LVCMOS33} [get_ports pcie_rstn_good]                 ; ## IO_L22N_T3_12
 
 # Default constraints have LVCMOS25, overwite it
 set_property  -dict {IOSTANDARD LVCMOS33} [get_ports iic_scl]                                           ; ## IO_L5P_T0_13

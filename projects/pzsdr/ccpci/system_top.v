@@ -101,7 +101,9 @@ module system_top (
   pcie_data_rx_p,
   pcie_data_rx_n,
   pcie_data_tx_p,
-  pcie_data_tx_n);
+  pcie_data_tx_n,
+
+  pcie_rstn_good);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -167,7 +169,13 @@ module system_top (
   output  [ 3:0]  pcie_data_tx_p;
   output  [ 3:0]  pcie_data_tx_n;
 
+  output          pcie_rstn_good;
+
   // internal signals
+
+  reg [3:0]       pcie_rstn_cnt0 = 'h00;
+  reg [3:0]       pcie_rstn_cnt1 = 'h00;
+  reg             pcie_rstn_good = 1'b0;
 
   wire            pcie_ref_clk;
   wire    [63:0]  gpio_i;
@@ -179,7 +187,30 @@ module system_top (
   // assignments
 
   assign pcie_waken = 1'bz;
-  assign gpio_ps_i[63:0] = 'h00;
+  assign gpio_ps_i[0] = pcie_rstn_good;
+  assign gpio_ps_i[63:1] = 'h00;
+
+  // PCIe reset monitor
+
+  always @(posedge pcie_ref_clk) begin
+    // If we see a stable low level followed by a stable high level we assume we
+    // got a good PCIe reset
+    if (pcie_rstn_cnt0 != 'hf) begin
+      if (pcie_rstn == 1'b0) begin
+        pcie_rstn_cnt0 <= pcie_rstn_cnt0 + 1'b1;
+      end else begin
+        pcie_rstn_cnt0 <= 'h00;
+      end
+    end else if (pcie_rstn_cnt1 != 'hf) begin
+      if (pcie_rstn == 1'b1) begin
+        pcie_rstn_cnt1 <= pcie_rstn_cnt1 + 1'b1;
+      end else begin
+        pcie_rstn_cnt1 <= 'h00;
+      end
+    end else begin
+      pcie_rstn_good <= 1'b1;
+    end
+  end
 
   // instantiations
 
