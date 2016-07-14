@@ -19,8 +19,12 @@ set_property  -dict {PACKAGE_PIN  AF4}  [get_ports pcie_data_tx_p[2]]           
 set_property  -dict {PACKAGE_PIN  AF3}  [get_ports pcie_data_tx_n[2]]                                   ; ## MGTXTXN1_111
 set_property  -dict {PACKAGE_PIN  AF8}  [get_ports pcie_data_tx_p[3]]                                   ; ## MGTXTXP0_111
 set_property  -dict {PACKAGE_PIN  AF7}  [get_ports pcie_data_tx_n[3]]                                   ; ## MGTXTXN0_111
-set_property  -dict {PACKAGE_PIN  W20   IOSTANDARD LVCMOS25} [get_ports pcie_rstn]                      ; ## IO_L19P_T3_13      
-set_property  -dict {PACKAGE_PIN  AB20  IOSTANDARD LVCMOS25} [get_ports pcie_waken]                     ; ## IO_L20N_T3_13      
+set_property  -dict {PACKAGE_PIN  W20   IOSTANDARD LVCMOS33} [get_ports pcie_rstn]                      ; ## IO_L19P_T3_13
+set_property  -dict {PACKAGE_PIN  AB20  IOSTANDARD LVCMOS33} [get_ports pcie_waken]                     ; ## IO_L20N_T3_13
+
+# Default constraints have LVCMOS25, overwite it
+set_property  -dict {IOSTANDARD LVCMOS33} [get_ports iic_scl]                                           ; ## IO_L5P_T0_13
+set_property  -dict {IOSTANDARD LVCMOS33} [get_ports iic_sda]                                           ; ## IO_L5N_T0_13
 
 set_property PULLUP true [get_ports pcie_rstn]
 set_property LOC IBUFDS_GTE2_X0Y5 [get_cells i_ibufds_pcie_ref_clk]
