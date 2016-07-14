@@ -178,9 +178,12 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
+  wire    [63:0]  gpio_ps_i;
+
   // assignments
 
   assign pcie_waken = 1'bz;
+  assign gpio_ps_i[63:0] = 'h00;
 
   // instantiations
 
@@ -231,9 +234,9 @@ module system_top (
     .fixed_io_ps_clk (fixed_io_ps_clk),
     .fixed_io_ps_porb (fixed_io_ps_porb),
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
-    .gpio_i (gpio_i),
-    .gpio_o (gpio_o),
-    .gpio_t (gpio_t),
+    .gpio_i (gpio_ps_i),
+    .gpio_o (),
+    .gpio_t (),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
@@ -263,14 +266,14 @@ module system_top (
     .rx_frame_in_n (rx_frame_in_n),
     .rx_frame_in_p (rx_frame_in_p),
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (spi_clk),
-    .spi0_csn_0_o (spi_csn),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (spi_miso),
+    .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_mosi),
+    .spi0_sdo_o (),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -291,7 +294,20 @@ module system_top (
     .tx_frame_out_p (tx_frame_out_p),
     .txnrx (txnrx),
     .up_enable (gpio_o[47]),
-    .up_txnrx (gpio_o[48]));
+    .up_txnrx (gpio_o[48]),
+    .pl_spi_clk_o(spi_clk),
+    .pl_spi_clk_i(spi_clk),
+    .pl_spi_sdo_o(spi_mosi),
+    .pl_spi_sdo_i(spi_mosi),
+    .pl_spi_sdi_i(spi_miso),
+    .pl_spi_csn_o(spi_csn),
+    .pl_spi_csn_i(spi_csn),
+    .pl_gpio0_o(gpio_o[31:0]),
+    .pl_gpio0_t(gpio_t[31:0]),
+    .pl_gpio0_i(gpio_i[31:0]),
+    .pl_gpio1_o(gpio_o[63:32]),
+    .pl_gpio1_t(gpio_t[63:32]),
+    .pl_gpio1_i(gpio_i[63:32]));
 
 endmodule
 
