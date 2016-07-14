@@ -65,8 +65,6 @@ module system_top (
   iic_scl,
   iic_sda,
 
-  gpio_bd,
-
   rx_clk_in_p,
   rx_clk_in_n,
   rx_frame_in_p,
@@ -130,8 +128,6 @@ module system_top (
 
   inout           iic_scl;
   inout           iic_sda;
-
-  inout   [11:0]  gpio_bd;
 
   input           rx_clk_in_p;
   input           rx_clk_in_n;
@@ -204,12 +200,6 @@ module system_top (
               gpio_en_agc,        // 44:44
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
-
-  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_bd (
-    .dio_t (gpio_t[11:0]),
-    .dio_i (gpio_o[11:0]),
-    .dio_o (gpio_i[11:0]),
-    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
