@@ -5,11 +5,13 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create util_adxcvr
 adi_ip_files util_adxcvr [list \
+  "util_adxcvr_constr.xdc" \
   "util_adxcvr_xcm.v" \
   "util_adxcvr_xch.v" \
   "util_adxcvr.v" ]
 
 adi_ip_properties_lite util_adxcvr
+adi_ip_constraints util_adxcvr "util_adxcvr_constr.xdc"
 
 ipx::remove_all_bus_interface [ipx::current_core]
 

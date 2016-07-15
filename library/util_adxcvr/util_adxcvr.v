@@ -1026,15 +1026,15 @@ module util_adxcvr (
   parameter   integer GTH_OR_GTX_N = 0;
   parameter   integer CPLL_TX_OR_RX_N = 0;
   parameter   integer CPLL_FBDIV = 2;
-  parameter   integer QPLL_REFCLK_DIV = 2;
+  parameter   integer QPLL_REFCLK_DIV = 1;
   parameter   integer QPLL_FBDIV_RATIO = 1;
   parameter   integer RX_OUT_DIV = 1;
-  parameter   integer RX_CLK25_DIV = 10;
+  parameter   integer RX_CLK25_DIV = 20;
   parameter   integer TX_OUT_DIV = 1;
-  parameter   integer TX_CLK25_DIV = 10;
-  parameter   [31:0]  PMA_RSV = 32'h00018480;
-  parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020;
-  parameter   [26:0]  QPLL_CFG = 27'h06801C1;
+  parameter   integer TX_CLK25_DIV = 20;
+  parameter   [31:0]  PMA_RSV = 32'h001e7080;
+  parameter   [72:0]  RX_CDR_CFG = 72'h0b000023ff10400020;
+  parameter   [26:0]  QPLL_CFG = 27'h0680181;
   parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000;
 
   localparam  integer NUM_OF_LANES = (TX_NUM_OF_LANES > RX_NUM_OF_LANES) ?
