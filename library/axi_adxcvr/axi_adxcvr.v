@@ -474,6 +474,7 @@ module axi_adxcvr (
 
   input           axi_clk,
   input           axi_aresetn,
+  output          up_status,
 
   input           s_axi_awvalid,
   input   [31:0]  s_axi_awaddr,
@@ -685,7 +686,10 @@ module axi_adxcvr (
   assign up_cm_wr_0 = up_cm_wr;
   assign up_cm_wdata_0 = up_cm_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(0)) i_mdrp_cm_0 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (0),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_cm_0 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_cm_sel),
@@ -703,7 +707,10 @@ module axi_adxcvr (
   assign up_es_wr_0 = up_es_wr;
   assign up_es_wdata_0 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(0)) i_mdrp_es_0 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (0),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_0 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -723,7 +730,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_0 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_0 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_0 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (0),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_0 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (1'd1),
@@ -739,7 +749,10 @@ module axi_adxcvr (
   assign up_ch_wr_0 = up_ch_wr;
   assign up_ch_wdata_0 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(0)) i_mdrp_ch_0 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (0),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_0 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -757,7 +770,10 @@ module axi_adxcvr (
   assign up_es_wr_1 = up_es_wr;
   assign up_es_wdata_1 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(1)) i_mdrp_es_1 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (1),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_1 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -777,7 +793,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_1 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_1 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_1 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (1),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_1 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_0_s),
@@ -793,7 +812,10 @@ module axi_adxcvr (
   assign up_ch_wr_1 = up_ch_wr;
   assign up_ch_wdata_1 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(1)) i_mdrp_ch_1 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (1),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_1 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -811,7 +833,10 @@ module axi_adxcvr (
   assign up_es_wr_2 = up_es_wr;
   assign up_es_wdata_2 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(2)) i_mdrp_es_2 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (2),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_2 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -831,7 +856,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_2 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_2 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_2 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (2),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_2 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_1_s),
@@ -847,7 +875,10 @@ module axi_adxcvr (
   assign up_ch_wr_2 = up_ch_wr;
   assign up_ch_wdata_2 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(2)) i_mdrp_ch_2 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (2),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_2 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -865,7 +896,10 @@ module axi_adxcvr (
   assign up_es_wr_3 = up_es_wr;
   assign up_es_wdata_3 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(3)) i_mdrp_es_3 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (3),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_3 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -885,7 +919,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_3 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_3 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_3 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (3),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_3 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_2_s),
@@ -901,7 +938,10 @@ module axi_adxcvr (
   assign up_ch_wr_3 = up_ch_wr;
   assign up_ch_wdata_3 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(3)) i_mdrp_ch_3 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (3),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_3 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -919,7 +959,10 @@ module axi_adxcvr (
   assign up_cm_wr_4 = up_cm_wr;
   assign up_cm_wdata_4 = up_cm_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(4)) i_mdrp_cm_4 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (4),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_cm_4 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_cm_sel),
@@ -937,7 +980,10 @@ module axi_adxcvr (
   assign up_es_wr_4 = up_es_wr;
   assign up_es_wdata_4 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(4)) i_mdrp_es_4 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (4),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_4 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -957,7 +1003,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_4 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_4 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_4 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (4),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_4 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_3_s),
@@ -973,7 +1022,10 @@ module axi_adxcvr (
   assign up_ch_wr_4 = up_ch_wr;
   assign up_ch_wdata_4 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(4)) i_mdrp_ch_4 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (4),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_4 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -991,7 +1043,10 @@ module axi_adxcvr (
   assign up_es_wr_5 = up_es_wr;
   assign up_es_wdata_5 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(5)) i_mdrp_es_5 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (5),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_5 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1011,7 +1066,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_5 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_5 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_5 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (5),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_5 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_4_s),
@@ -1027,7 +1085,10 @@ module axi_adxcvr (
   assign up_ch_wr_5 = up_ch_wr;
   assign up_ch_wdata_5 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(5)) i_mdrp_ch_5 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (5),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_5 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1045,7 +1106,10 @@ module axi_adxcvr (
   assign up_es_wr_6 = up_es_wr;
   assign up_es_wdata_6 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(6)) i_mdrp_es_6 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (6),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_6 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1065,7 +1129,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_6 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_6 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_6 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (6),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_6 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_5_s),
@@ -1081,7 +1148,10 @@ module axi_adxcvr (
   assign up_ch_wr_6 = up_ch_wr;
   assign up_ch_wdata_6 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(6)) i_mdrp_ch_6 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (6),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_6 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1099,7 +1169,10 @@ module axi_adxcvr (
   assign up_es_wr_7 = up_es_wr;
   assign up_es_wdata_7 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(7)) i_mdrp_es_7 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (7),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_7 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1119,7 +1192,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_7 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_7 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_7 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (7),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_7 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_6_s),
@@ -1135,7 +1211,10 @@ module axi_adxcvr (
   assign up_ch_wr_7 = up_ch_wr;
   assign up_ch_wdata_7 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(7)) i_mdrp_ch_7 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (7),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_7 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1153,7 +1232,10 @@ module axi_adxcvr (
   assign up_cm_wr_8 = up_cm_wr;
   assign up_cm_wdata_8 = up_cm_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(8)) i_mdrp_cm_8 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (8),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_cm_8 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_cm_sel),
@@ -1171,7 +1253,10 @@ module axi_adxcvr (
   assign up_es_wr_8 = up_es_wr;
   assign up_es_wdata_8 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(8)) i_mdrp_es_8 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (8),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_8 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1191,7 +1276,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_8 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_8 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_8 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (8),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_8 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_7_s),
@@ -1207,7 +1295,10 @@ module axi_adxcvr (
   assign up_ch_wr_8 = up_ch_wr;
   assign up_ch_wdata_8 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(8)) i_mdrp_ch_8 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (8),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_8 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1225,7 +1316,10 @@ module axi_adxcvr (
   assign up_es_wr_9 = up_es_wr;
   assign up_es_wdata_9 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(9)) i_mdrp_es_9 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (9),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_9 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1245,7 +1339,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_9 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_9 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_9 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (9),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_9 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_8_s),
@@ -1261,7 +1358,10 @@ module axi_adxcvr (
   assign up_ch_wr_9 = up_ch_wr;
   assign up_ch_wdata_9 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(9)) i_mdrp_ch_9 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (9),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_9 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1279,7 +1379,10 @@ module axi_adxcvr (
   assign up_es_wr_10 = up_es_wr;
   assign up_es_wdata_10 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(10)) i_mdrp_es_10 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (10),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_10 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1299,7 +1402,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_10 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_10 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_10 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (10),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_10 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_9_s),
@@ -1315,7 +1421,10 @@ module axi_adxcvr (
   assign up_ch_wr_10 = up_ch_wr;
   assign up_ch_wdata_10 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(10)) i_mdrp_ch_10 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (10),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_10 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1333,7 +1442,10 @@ module axi_adxcvr (
   assign up_es_wr_11 = up_es_wr;
   assign up_es_wdata_11 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(11)) i_mdrp_es_11 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (11),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_11 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1353,7 +1465,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_11 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_11 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_11 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (11),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_11 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_10_s),
@@ -1369,7 +1484,10 @@ module axi_adxcvr (
   assign up_ch_wr_11 = up_ch_wr;
   assign up_ch_wdata_11 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(11)) i_mdrp_ch_11 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (11),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_11 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1387,7 +1505,10 @@ module axi_adxcvr (
   assign up_cm_wr_12 = up_cm_wr;
   assign up_cm_wdata_12 = up_cm_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(12)) i_mdrp_cm_12 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (12),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_cm_12 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_cm_sel),
@@ -1405,7 +1526,10 @@ module axi_adxcvr (
   assign up_es_wr_12 = up_es_wr;
   assign up_es_wdata_12 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(12)) i_mdrp_es_12 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (12),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_12 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1425,7 +1549,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_12 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_12 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_12 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (12),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_12 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_11_s),
@@ -1441,7 +1568,10 @@ module axi_adxcvr (
   assign up_ch_wr_12 = up_ch_wr;
   assign up_ch_wdata_12 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(12)) i_mdrp_ch_12 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (12),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_12 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1459,7 +1589,10 @@ module axi_adxcvr (
   assign up_es_wr_13 = up_es_wr;
   assign up_es_wdata_13 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(13)) i_mdrp_es_13 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (13),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_13 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1479,7 +1612,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_13 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_13 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_13 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (13),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_13 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_12_s),
@@ -1495,7 +1631,10 @@ module axi_adxcvr (
   assign up_ch_wr_13 = up_ch_wr;
   assign up_ch_wdata_13 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(13)) i_mdrp_ch_13 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (13),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_13 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1513,7 +1652,10 @@ module axi_adxcvr (
   assign up_es_wr_14 = up_es_wr;
   assign up_es_wdata_14 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(14)) i_mdrp_es_14 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (14),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_14 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1533,7 +1675,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_14 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_14 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_14 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (14),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_14 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_13_s),
@@ -1549,7 +1694,10 @@ module axi_adxcvr (
   assign up_ch_wr_14 = up_ch_wr;
   assign up_ch_wdata_14 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(14)) i_mdrp_ch_14 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (14),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_14 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1567,7 +1715,10 @@ module axi_adxcvr (
   assign up_es_wr_15 = up_es_wr;
   assign up_es_wdata_15 = up_es_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(15)) i_mdrp_es_15 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (15),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_es_15 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_es_sel),
@@ -1587,7 +1738,10 @@ module axi_adxcvr (
   assign up_ch_sys_clk_sel_15 = up_ch_sys_clk_sel;
   assign up_ch_out_clk_sel_15 = up_ch_out_clk_sel;
 
-  axi_adxcvr_mstatus i_mstatus_ch_15 (
+  axi_adxcvr_mstatus #(
+    .XCVR_ID (15),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mstatus_ch_15 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_pll_locked_in (up_ch_pll_locked_14_s),
@@ -1603,7 +1757,10 @@ module axi_adxcvr (
   assign up_ch_wr_15 = up_ch_wr;
   assign up_ch_wdata_15 = up_ch_wdata;
 
-  axi_adxcvr_mdrp #(.XCVR_ID(15)) i_mdrp_ch_15 (
+  axi_adxcvr_mdrp #(
+    .XCVR_ID (15),
+    .NUM_OF_LANES (NUM_OF_LANES))
+  i_mdrp_ch_15 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -1701,6 +1858,7 @@ module axi_adxcvr (
     .up_es_hstep (up_es_hstep),
     .up_es_saddr (up_es_saddr),
     .up_es_status (up_es_status),
+    .up_status (up_status),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),

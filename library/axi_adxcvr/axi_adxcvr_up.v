@@ -84,6 +84,10 @@ module axi_adxcvr_up (
   output  [31:0]  up_es_saddr,
   input           up_es_status,
 
+  // status
+
+  output          up_status,
+
   // bus interface
 
   input           up_rstn,
@@ -112,7 +116,7 @@ module axi_adxcvr_up (
   reg     [ 3:0]  up_pll_rst_cnt = 'd0;
   reg     [ 3:0]  up_rst_cnt = 'd0;
   reg     [ 6:0]  up_user_ready_cnt = 'd0;
-  reg             up_status = 'd0;
+  reg             up_status_int = 'd0;
   reg             up_lpm_dfe_n = 'd0;
   reg     [ 2:0]  up_rate = 'd0;
   reg     [ 1:0]  up_sys_clk_sel = 'd0;
@@ -177,13 +181,14 @@ module axi_adxcvr_up (
   assign up_ch_pll_rst = up_pll_rst_cnt[3];
   assign up_ch_rst = up_rst_cnt[3];
   assign up_ch_user_ready = up_user_ready_cnt[6];
+  assign up_status = up_status_int;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_pll_rst_cnt <= 4'h8;
       up_rst_cnt <= 4'h8;
       up_user_ready_cnt <= 7'h00;
-      up_status <= 1'b0;
+      up_status_int <= 1'b0;
     end else begin
       if (up_resetn == 1'b0) begin
         up_pll_rst_cnt <= 4'h8;
@@ -202,9 +207,9 @@ module axi_adxcvr_up (
         up_user_ready_cnt <= up_user_ready_cnt + 1'b1;
       end
       if (up_resetn == 1'b0) begin
-        up_status <= 1'b0;
+        up_status_int <= 1'b0;
       end else if (up_ch_rst_done == 1'b1) begin
-        up_status <= 1'b1;
+        up_status_int <= 1'b1;
       end
     end
   end
@@ -453,7 +458,8 @@ module axi_adxcvr_up (
           10'h001: up_rdata_d <= ID;
           10'h002: up_rdata_d <= up_scratch;
           10'h004: up_rdata_d <= {31'd0, up_resetn};
-          10'h005: up_rdata_d <= {31'd0, up_status};
+          10'h005: up_rdata_d <= {31'd0, up_status_int};
+          10'h006: up_rdata_d <= {17'd0, up_user_ready_cnt, up_rst_cnt, up_pll_rst_cnt};
           10'h008: up_rdata_d <= {19'd0, up_lpm_dfe_n, 1'd0, up_rate, 2'd0, up_sys_clk_sel, 1'd0, up_out_clk_sel};
           10'h010: up_rdata_d <= {24'd0, up_icm_sel};
           10'h011: up_rdata_d <= {3'd0, up_icm_wr, up_icm_addr, up_icm_wdata};
