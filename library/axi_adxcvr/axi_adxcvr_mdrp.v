@@ -54,43 +54,38 @@ module axi_adxcvr_mdrp (
   // parameters
 
   parameter   integer XCVR_ID = 0;
+  parameter   integer NUM_OF_LANES = 8;
 
   // internal registers
 
-  reg             up_ready_d = 'd0;
   reg     [15:0]  up_rdata_int = 'd0;
   reg             up_ready_int = 'd0;
-  reg     [15:0]  up_rdata_m_in = 'd0;
-  reg             up_ready_m_in = 'd0;
+  reg             up_ready_mi = 'd0;
+  reg     [15:0]  up_rdata_i = 'd0;
+  reg             up_ready_i = 'd0;
   reg     [15:0]  up_rdata_m = 'd0;
   reg             up_ready_m = 'd0;
 
   // internal signals
 
   wire            up_ready_s;
-  wire    [15:0]  up_rdata_m_s;
-  wire            up_ready_m_s;
+  wire    [15:0]  up_rdata_mi_s;
+  wire            up_ready_mi_s;
 
   // disable if not selected
 
   assign up_rdata_out = up_rdata_int;
   assign up_ready_out = up_ready_int;
 
-  assign up_ready_s = up_ready_m & up_ready_m_in;
-  assign up_rdata_m_s = up_rdata_m | up_rdata_m_in;
-  assign up_ready_m_s = up_ready_s & ~up_ready_d;
-
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
-      up_ready_d <= 1'd0;
       up_rdata_int <= 16'd0;
       up_ready_int <= 1'b0;
     end else begin
-      up_ready_d <= up_ready_s;
       case (up_sel)
         8'hff: begin
-          up_rdata_int <= up_rdata_m_s;
-          up_ready_int <= up_ready_m_s;
+          up_rdata_int <= up_rdata_mi_s;
+          up_ready_int <= up_ready_mi_s & ~up_ready_mi;
         end
         XCVR_ID: begin
           up_rdata_int <= up_rdata;
@@ -98,7 +93,7 @@ module axi_adxcvr_mdrp (
         end
         default: begin
           up_rdata_int <= up_rdata_in;
-          up_ready_int <= up_ready_int;
+          up_ready_int <= up_ready_in;
         end
       endcase
     end
@@ -106,18 +101,37 @@ module axi_adxcvr_mdrp (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
-      up_rdata_m_in <= 16'd0;
-      up_ready_m_in <= 1'b0;
+      up_ready_mi <= 1'b0;
+    end else begin
+      up_ready_mi <= up_ready_mi_s;
+    end
+  end
+
+  assign up_rdata_mi_s = up_rdata_m | up_rdata_i;
+  assign up_ready_mi_s = up_ready_m & up_ready_i;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_rdata_i <= 16'd0;
+      up_ready_i <= 1'b0;
+    end else begin
+      if (up_ready_in == 1'b1) begin
+        up_rdata_i <= up_rdata_in;
+        up_ready_i <= 1'b1;
+      end else if (up_enb == 1'b1) begin
+        up_rdata_i <= 16'd0;
+        up_ready_i <= 1'b0;
+      end
+    end
+  end
+
+  generate
+  if (XCVR_ID < NUM_OF_LANES) begin
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
       up_rdata_m <= 16'd0;
       up_ready_m <= 1'b0;
     end else begin
-      if (up_ready_in == 1'b1) begin
-        up_rdata_m_in <= up_rdata_in;
-        up_ready_m_in <= 1'b1;
-      end else if (up_enb == 1'b1) begin
-        up_rdata_m_in <= 16'd0;
-        up_ready_m_in <= 1'b0;
-      end
       if (up_ready == 1'b1) begin
         up_rdata_m <= up_rdata;
         up_ready_m <= 1'b1;
@@ -127,6 +141,18 @@ module axi_adxcvr_mdrp (
       end
     end
   end
+  end else begin
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_rdata_m <= 16'd0;
+      up_ready_m <= 1'b0;
+    end else begin
+      up_rdata_m <= 16'd0;
+      up_ready_m <= 1'b1;
+    end
+  end
+  end
+  endgenerate
 
 endmodule     
 

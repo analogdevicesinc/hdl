@@ -49,23 +49,36 @@ module axi_adxcvr_mstatus (
   output          up_pll_locked_out,
   output          up_rst_done_out);
 
+  // parameters
+
+  parameter   integer XCVR_ID = 0;
+  parameter   integer NUM_OF_LANES = 8;
+
   // internal registers
 
   reg             up_pll_locked_int = 'd0;
   reg             up_rst_done_int = 'd0;
+
+  // internal signals
+
+  wire            up_pll_locked_s;
+  wire            up_rst_done_s;
 
   // daisy-chain the signals
 
   assign up_pll_locked_out = up_pll_locked_int;
   assign up_rst_done_out = up_rst_done_int;
 
+  assign up_pll_locked_s = (XCVR_ID < NUM_OF_LANES) ? up_pll_locked : 1'b1;
+  assign up_rst_done_s = (XCVR_ID < NUM_OF_LANES) ? up_rst_done : 1'b1;
+
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_pll_locked_int <= 1'd0;
       up_rst_done_int <= 1'd0;
     end else begin
-      up_pll_locked_int <= up_pll_locked_in & up_pll_locked;
-      up_rst_done_int <= up_rst_done_in & up_rst_done;
+      up_pll_locked_int <= up_pll_locked_in & up_pll_locked_s;
+      up_rst_done_int <= up_rst_done_in & up_rst_done_s;
     end
   end
 
