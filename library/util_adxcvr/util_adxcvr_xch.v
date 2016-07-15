@@ -139,6 +139,14 @@ module util_adxcvr_xch (
   reg     [11:0]  up_addr_int = 'd0;
   reg             up_wr_int = 'd0;
   reg     [15:0]  up_wdata_int = 'd0;
+  reg             up_rx_rst_done_m1 = 'd0;
+  reg             up_rx_rst_done_m2 = 'd0;
+  reg             up_tx_rst_done_m1 = 'd0;
+  reg             up_tx_rst_done_m2 = 'd0;
+  reg     [ 2:0]  rx_rate_m1 = 'd0;
+  reg     [ 2:0]  rx_rate_m2 = 'd0;
+  reg     [ 2:0]  tx_rate_m1 = 'd0;
+  reg     [ 2:0]  tx_rate_m2 = 'd0;
 
   // internal signals
 
@@ -149,7 +157,11 @@ module util_adxcvr_xch (
   wire    [15:0]  up_rdata_s;
   wire            up_ready_s;
   wire    [ 1:0]  rx_sys_clk_sel_s;
+  wire            rx_out_clk_s;
+  wire            rx_rst_done_s;
   wire    [ 1:0]  tx_sys_clk_sel_s;
+  wire            tx_out_clk_s;
+  wire            tx_rst_done_s;
   wire    [ 1:0]  rx_pll_clk_sel_s;
   wire    [ 1:0]  tx_pll_clk_sel_s;
   wire    [ 3:0]  rx_charisk_open_s;
@@ -253,7 +265,37 @@ module util_adxcvr_xch (
     end
   end
 
+  assign up_rx_rst_done = up_rx_rst_done_m2;
+  assign up_tx_rst_done = up_tx_rst_done_m2;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_rx_rst_done_m1 <= 'd0;
+      up_rx_rst_done_m2 <= 'd0;
+      up_tx_rst_done_m1 <= 'd0;
+      up_tx_rst_done_m2 <= 'd0;
+    end else begin
+      up_rx_rst_done_m1 <= rx_rst_done_s;
+      up_rx_rst_done_m2 <= up_rx_rst_done_m1;
+      up_tx_rst_done_m1 <= tx_rst_done_s;
+      up_tx_rst_done_m2 <= up_tx_rst_done_m1;
+    end
+  end
+
+  always @(posedge rx_clk) begin
+    rx_rate_m1 <= up_rx_rate;
+    rx_rate_m2 <= rx_rate_m1;
+  end
+
+  always @(posedge tx_clk) begin
+    tx_rate_m1 <= up_tx_rate;
+    tx_rate_m2 <= tx_rate_m1;
+  end
+
   // instantiations
+
+  BUFG i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
+  BUFG i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
 
   generate
   if (GTH_OR_GTX_N == 0) begin
@@ -506,7 +548,7 @@ module util_adxcvr_xch (
     .TX8B10BEN (1'd1),
     .LOOPBACK (3'd0),
     .PHYSTATUS (),
-    .RXRATE (up_rx_rate),
+    .RXRATE (rx_rate_m2),
     .RXVALID (),
     .RXPD (2'b00),
     .TXPD (2'b00),
@@ -596,7 +638,7 @@ module util_adxcvr_xch (
     .RXLPMHFOVRDEN (1'd0),
     .RXLPMLFHOLD (1'd0),
     .RXRATEDONE (),
-    .RXOUTCLK (rx_out_clk),
+    .RXOUTCLK (rx_out_clk_s),
     .RXOUTCLKFABRIC (),
     .RXOUTCLKPCS (),
     .RXOUTCLKSEL (up_rx_out_clk_sel),
@@ -620,7 +662,7 @@ module util_adxcvr_xch (
     .RXCHARISCOMMA (),
     .RXCHARISK ({rx_charisk_open_s, rx_charisk}),
     .RXCHBONDI (5'd0),
-    .RXRESETDONE (up_rx_rst_done),
+    .RXRESETDONE (rx_rst_done_s),
     .RXQPIEN (1'd0),
     .RXQPISENN (),
     .RXQPISENP (),
@@ -644,7 +686,7 @@ module util_adxcvr_xch (
     .TXUSRCLK2 (tx_clk),
     .TXELECIDLE (1'd0),
     .TXMARGIN (3'd0),
-    .TXRATE (up_tx_rate),
+    .TXRATE (tx_rate_m2),
     .TXSWING (1'd0),
     .TXPRBSFORCEERR (1'd0),
     .TXDLYBYPASS (1'd1),
@@ -673,7 +715,7 @@ module util_adxcvr_xch (
     .TXDATA ({32'd0, tx_data}),
     .GTXTXP (tx_p),
     .GTXTXN (tx_n),
-    .TXOUTCLK (tx_out_clk),
+    .TXOUTCLK (tx_out_clk_s),
     .TXOUTCLKFABRIC (),
     .TXOUTCLKPCS (),
     .TXOUTCLKSEL (up_tx_out_clk_sel),
@@ -685,7 +727,7 @@ module util_adxcvr_xch (
     .TXSTARTSEQ (1'd0),
     .TXPCSRESET (1'd0),
     .TXPMARESET (1'd0),
-    .TXRESETDONE (up_tx_rst_done),
+    .TXRESETDONE (tx_rst_done_s),
     .TXCOMFINISH (),
     .TXCOMINIT (1'd0),
     .TXCOMSAS (1'd0),
@@ -1249,7 +1291,7 @@ module util_adxcvr_xch (
     .RXPRBSSEL (4'd0),
     .RXPROGDIVRESET (1'd0),
     .RXQPIEN (1'd0),
-    .RXRATE (up_rx_rate),
+    .RXRATE (rx_rate_m2),
     .RXRATEMODE (1'd0),
     .RXSLIDE (1'd0),
     .RXSLIPOUTCLK (1'd0),
@@ -1319,7 +1361,7 @@ module util_adxcvr_xch (
     .TXQPIBIASEN (1'd0),
     .TXQPISTRONGPDOWN (1'd0),
     .TXQPIWEAKPUP (1'd0),
-    .TXRATE (up_tx_rate),
+    .TXRATE (tx_rate_m2),
     .TXRATEMODE (1'd0),
     .TXSEQUENCE (7'd0),
     .TXSWING (1'd0),
@@ -1390,7 +1432,7 @@ module util_adxcvr_xch (
     .RXOSINTSTARTED (),
     .RXOSINTSTROBEDONE (),
     .RXOSINTSTROBESTARTED (),
-    .RXOUTCLK (rx_out_clk),
+    .RXOUTCLK (rx_out_clk_s),
     .RXOUTCLKFABRIC (),
     .RXOUTCLKPCS (),
     .RXPHALIGNDONE (),
@@ -1403,7 +1445,7 @@ module util_adxcvr_xch (
     .RXQPISENP (),
     .RXRATEDONE (),
     .RXRECCLKOUT (),
-    .RXRESETDONE (up_rx_rst_done),
+    .RXRESETDONE (rx_rst_done_s),
     .RXSLIDERDY (),
     .RXSLIPDONE (),
     .RXSLIPOUTCLKRDY (),
@@ -1416,7 +1458,7 @@ module util_adxcvr_xch (
     .TXBUFSTATUS (),
     .TXCOMFINISH (),
     .TXDLYSRESETDONE (),
-    .TXOUTCLK (tx_out_clk),
+    .TXOUTCLK (tx_out_clk_s),
     .TXOUTCLKFABRIC (),
     .TXOUTCLKPCS (),
     .TXPHALIGNDONE (),
@@ -1426,7 +1468,7 @@ module util_adxcvr_xch (
     .TXQPISENN (),
     .TXQPISENP (),
     .TXRATEDONE (),
-    .TXRESETDONE (up_tx_rst_done),
+    .TXRESETDONE (tx_rst_done_s),
     .TXSYNCDONE (),
     .TXSYNCOUT ());
   end
