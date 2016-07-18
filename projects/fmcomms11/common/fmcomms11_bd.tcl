@@ -60,66 +60,74 @@ set axi_fmcomms11_gt [create_bd_cell -type ip -vlnv analog.com:user:axi_jesd_gt:
 set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.QPLL0_ENABLE {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.QPLL1_ENABLE {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL0_REFCLK_DIV {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL1_REFCLK_DIV {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL0_CFG {0x06801C1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL1_CFG {0x06801C1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL0_FBDIV_RATIO {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL1_FBDIV_RATIO {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {8}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_CLKBUF_ENABLE_0 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_CLKBUF_ENABLE_0 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.CPLL_FBDIV_0 {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL0_FBDIV {"0010000000"}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL1_FBDIV {"0010000000"}] $axi_fmcomms11_gt   
+set_property -dict [list CONFIG.CPLL_FBDIV_0 {4}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_OUT_DIV_0 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_OUT_DIV_0 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CLK25_DIV_0 {25}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.TX_CLK25_DIV_0 {25}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_0 {7}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_0 {7}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.PMA_RSV_0 {0x00018480}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CDR_CFG_0 {0x03000023ff20400020}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.CPLL_FBDIV_1 {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_0 {0x03000023ff10400020}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_1 {4}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_OUT_DIV_1 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_OUT_DIV_1 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CLK25_DIV_1 {25}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.TX_CLK25_DIV_1 {25}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_1 {7}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_1 {7}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.PMA_RSV_1 {0x00018480}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CDR_CFG_1 {0x03000023ff20400020}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.CPLL_FBDIV_2 {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_1 {0x03000023ff10400020}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_2 {4}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_OUT_DIV_2 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_OUT_DIV_2 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CLK25_DIV_2 {25}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.TX_CLK25_DIV_2 {25}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_2 {7}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_2 {7}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.PMA_RSV_2 {0x00018480}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CDR_CFG_2 {0x03000023ff20400020}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.CPLL_FBDIV_3 {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_2 {0x03000023ff10400020}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_3 {4}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_OUT_DIV_3 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_OUT_DIV_3 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CLK25_DIV_3 {25}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.TX_CLK25_DIV_3 {25}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_3 {7}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_3 {7}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.PMA_RSV_3 {0x00018480}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CDR_CFG_3 {0x03000023ff20400020}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.CPLL_FBDIV_4 {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_3 {0x03000023ff10400020}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_4 {4}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_OUT_DIV_4 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_OUT_DIV_4 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CLK25_DIV_4 {25}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.TX_CLK25_DIV_4 {25}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_4 {7}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_4 {7}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.PMA_RSV_4 {0x00018480}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CDR_CFG_4 {0x03000023ff20400020}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.CPLL_FBDIV_5 {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_4 {0x03000023ff10400020}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_5 {4}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_OUT_DIV_5 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_OUT_DIV_5 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CLK25_DIV_5 {25}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.TX_CLK25_DIV_5 {25}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_5 {7}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_5 {7}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.PMA_RSV_5 {0x00018480}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CDR_CFG_5 {0x03000023ff20400020}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.CPLL_FBDIV_6 {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_5 {0x03000023ff10400020}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_6 {4}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_OUT_DIV_6 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_OUT_DIV_6 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CLK25_DIV_6 {25}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.TX_CLK25_DIV_6 {25}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_6 {7}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_6 {7}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.PMA_RSV_6 {0x00018480}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CDR_CFG_6 {0x03000023ff20400020}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.CPLL_FBDIV_7 {1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_6 {0x03000023ff10400020}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.CPLL_FBDIV_7 {4}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_OUT_DIV_7 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_OUT_DIV_7 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CLK25_DIV_7 {25}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.TX_CLK25_DIV_7 {25}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CLK25_DIV_7 {7}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.TX_CLK25_DIV_7 {7}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.PMA_RSV_7 {0x00018480}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.RX_CDR_CFG_7 {0x03000023ff20400020}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.RX_CDR_CFG_7 {0x03000023ff10400020}] $axi_fmcomms11_gt
 
 set util_fmcomms11_gt [create_bd_cell -type ip -vlnv analog.com:user:util_jesd_gt:1.0 util_fmcomms11_gt]
 set_property -dict [list CONFIG.QPLL0_ENABLE {1}] $util_fmcomms11_gt
@@ -132,7 +140,7 @@ set_property -dict [list CONFIG.TX_NUM_OF_LANES {8}] $util_fmcomms11_gt
 
 # connections (gt)
 
-ad_connect  util_fmcomms11_gt/qpll_ref_clk rx_ref_clk
+ad_connect  util_fmcomms11_gt/qpll_ref_clk tx_ref_clk
 ad_connect  util_fmcomms11_gt/cpll_ref_clk tx_ref_clk
 
 ad_connect  axi_fmcomms11_gt/gt_qpll_0 util_fmcomms11_gt/gt_qpll_0
@@ -267,3 +275,114 @@ ad_mem_hp2_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
 
 ad_cpu_interrupt ps-12 mb-12 axi_ad9162_dma/irq
 ad_cpu_interrupt ps-13 mb-13 axi_ad9625_dma/irq
+
+# unused
+
+ad_connect  axi_ad9162_fifo/dac_fifo_bypass GND
+
+# ila
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ad9625_ila
+set_property CONFIG.C_MONITOR_TYPE {Native} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_NUM_OF_PROBES {33} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE0_WIDTH  {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE1_WIDTH  {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE2_WIDTH  {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE3_WIDTH  {32} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE4_WIDTH  {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE5_WIDTH  {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE6_WIDTH  {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE7_WIDTH  {32} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE8_WIDTH  {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE9_WIDTH  {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE10_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE11_WIDTH {32} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE12_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE13_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE14_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE15_WIDTH {32} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE16_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE17_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE18_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE19_WIDTH {32} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE20_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE21_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE22_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE23_WIDTH {32} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE24_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE25_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE26_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE27_WIDTH {32} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE28_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE29_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE30_WIDTH {4}  [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE31_WIDTH {32} [get_bd_cells ad9625_ila]
+set_property CONFIG.C_PROBE32_WIDTH {1}  [get_bd_cells ad9625_ila]
+
+ad_connect  axi_ad9625_jesd/gt0_rxcharisk    axi_fmcomms11_gt/rx_gt_charisk_0   
+ad_connect  axi_ad9625_jesd/gt0_rxdisperr    axi_fmcomms11_gt/rx_gt_disperr_0   
+ad_connect  axi_ad9625_jesd/gt0_rxnotintable axi_fmcomms11_gt/rx_gt_notintable_0
+ad_connect  axi_ad9625_jesd/gt0_rxdata       axi_fmcomms11_gt/rx_gt_data_0      
+ad_connect  axi_ad9625_jesd/gt1_rxcharisk    axi_fmcomms11_gt/rx_gt_charisk_1   
+ad_connect  axi_ad9625_jesd/gt1_rxdisperr    axi_fmcomms11_gt/rx_gt_disperr_1   
+ad_connect  axi_ad9625_jesd/gt1_rxnotintable axi_fmcomms11_gt/rx_gt_notintable_1
+ad_connect  axi_ad9625_jesd/gt1_rxdata       axi_fmcomms11_gt/rx_gt_data_1      
+ad_connect  axi_ad9625_jesd/gt2_rxcharisk    axi_fmcomms11_gt/rx_gt_charisk_2   
+ad_connect  axi_ad9625_jesd/gt2_rxdisperr    axi_fmcomms11_gt/rx_gt_disperr_2   
+ad_connect  axi_ad9625_jesd/gt2_rxnotintable axi_fmcomms11_gt/rx_gt_notintable_2
+ad_connect  axi_ad9625_jesd/gt2_rxdata       axi_fmcomms11_gt/rx_gt_data_2      
+ad_connect  axi_ad9625_jesd/gt3_rxcharisk    axi_fmcomms11_gt/rx_gt_charisk_3   
+ad_connect  axi_ad9625_jesd/gt3_rxdisperr    axi_fmcomms11_gt/rx_gt_disperr_3   
+ad_connect  axi_ad9625_jesd/gt3_rxnotintable axi_fmcomms11_gt/rx_gt_notintable_3
+ad_connect  axi_ad9625_jesd/gt3_rxdata       axi_fmcomms11_gt/rx_gt_data_3      
+ad_connect  axi_ad9625_jesd/gt4_rxcharisk    axi_fmcomms11_gt/rx_gt_charisk_4   
+ad_connect  axi_ad9625_jesd/gt4_rxdisperr    axi_fmcomms11_gt/rx_gt_disperr_4   
+ad_connect  axi_ad9625_jesd/gt4_rxnotintable axi_fmcomms11_gt/rx_gt_notintable_4
+ad_connect  axi_ad9625_jesd/gt4_rxdata       axi_fmcomms11_gt/rx_gt_data_4      
+ad_connect  axi_ad9625_jesd/gt5_rxcharisk    axi_fmcomms11_gt/rx_gt_charisk_5   
+ad_connect  axi_ad9625_jesd/gt5_rxdisperr    axi_fmcomms11_gt/rx_gt_disperr_5   
+ad_connect  axi_ad9625_jesd/gt5_rxnotintable axi_fmcomms11_gt/rx_gt_notintable_5
+ad_connect  axi_ad9625_jesd/gt5_rxdata       axi_fmcomms11_gt/rx_gt_data_5      
+ad_connect  axi_ad9625_jesd/gt6_rxcharisk    axi_fmcomms11_gt/rx_gt_charisk_6   
+ad_connect  axi_ad9625_jesd/gt6_rxdisperr    axi_fmcomms11_gt/rx_gt_disperr_6   
+ad_connect  axi_ad9625_jesd/gt6_rxnotintable axi_fmcomms11_gt/rx_gt_notintable_6
+ad_connect  axi_ad9625_jesd/gt6_rxdata       axi_fmcomms11_gt/rx_gt_data_6      
+ad_connect  axi_ad9625_jesd/gt7_rxcharisk    axi_fmcomms11_gt/rx_gt_charisk_7   
+ad_connect  axi_ad9625_jesd/gt7_rxdisperr    axi_fmcomms11_gt/rx_gt_disperr_7   
+ad_connect  axi_ad9625_jesd/gt7_rxnotintable axi_fmcomms11_gt/rx_gt_notintable_7
+ad_connect  axi_ad9625_jesd/gt7_rxdata       axi_fmcomms11_gt/rx_gt_data_7      
+
+ad_connect  axi_fmcomms11_gt/rx_gt_charisk_0    ad9625_ila/probe0
+ad_connect  axi_fmcomms11_gt/rx_gt_disperr_0    ad9625_ila/probe1
+ad_connect  axi_fmcomms11_gt/rx_gt_notintable_0 ad9625_ila/probe2
+ad_connect  axi_fmcomms11_gt/rx_gt_data_0       ad9625_ila/probe3
+ad_connect  axi_fmcomms11_gt/rx_gt_charisk_1    ad9625_ila/probe4
+ad_connect  axi_fmcomms11_gt/rx_gt_disperr_1    ad9625_ila/probe5
+ad_connect  axi_fmcomms11_gt/rx_gt_notintable_1 ad9625_ila/probe6
+ad_connect  axi_fmcomms11_gt/rx_gt_data_1       ad9625_ila/probe7
+ad_connect  axi_fmcomms11_gt/rx_gt_charisk_2    ad9625_ila/probe8
+ad_connect  axi_fmcomms11_gt/rx_gt_disperr_2    ad9625_ila/probe9
+ad_connect  axi_fmcomms11_gt/rx_gt_notintable_2 ad9625_ila/probe10
+ad_connect  axi_fmcomms11_gt/rx_gt_data_2       ad9625_ila/probe11
+ad_connect  axi_fmcomms11_gt/rx_gt_charisk_3    ad9625_ila/probe12
+ad_connect  axi_fmcomms11_gt/rx_gt_disperr_3    ad9625_ila/probe13
+ad_connect  axi_fmcomms11_gt/rx_gt_notintable_3 ad9625_ila/probe14
+ad_connect  axi_fmcomms11_gt/rx_gt_data_3       ad9625_ila/probe15
+ad_connect  axi_fmcomms11_gt/rx_gt_charisk_4    ad9625_ila/probe16
+ad_connect  axi_fmcomms11_gt/rx_gt_disperr_4    ad9625_ila/probe17
+ad_connect  axi_fmcomms11_gt/rx_gt_notintable_4 ad9625_ila/probe18
+ad_connect  axi_fmcomms11_gt/rx_gt_data_4       ad9625_ila/probe19
+ad_connect  axi_fmcomms11_gt/rx_gt_charisk_5    ad9625_ila/probe20
+ad_connect  axi_fmcomms11_gt/rx_gt_disperr_5    ad9625_ila/probe21
+ad_connect  axi_fmcomms11_gt/rx_gt_notintable_5 ad9625_ila/probe22
+ad_connect  axi_fmcomms11_gt/rx_gt_data_5       ad9625_ila/probe23
+ad_connect  axi_fmcomms11_gt/rx_gt_charisk_6    ad9625_ila/probe24
+ad_connect  axi_fmcomms11_gt/rx_gt_disperr_6    ad9625_ila/probe25
+ad_connect  axi_fmcomms11_gt/rx_gt_notintable_6 ad9625_ila/probe26
+ad_connect  axi_fmcomms11_gt/rx_gt_data_6       ad9625_ila/probe27
+ad_connect  axi_fmcomms11_gt/rx_gt_charisk_7    ad9625_ila/probe28
+ad_connect  axi_fmcomms11_gt/rx_gt_disperr_7    ad9625_ila/probe29
+ad_connect  axi_fmcomms11_gt/rx_gt_notintable_7 ad9625_ila/probe30
+ad_connect  axi_fmcomms11_gt/rx_gt_data_7       ad9625_ila/probe31
+ad_connect  axi_ad9625_jesd/rx_sync             ad9625_ila/probe32
+ad_connect  util_fmcomms11_gt/rx_out_clk        ad9625_ila/clk

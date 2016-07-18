@@ -65,8 +65,8 @@ set_property  -dict {PACKAGE_PIN  AD23  IOSTANDARD LVCMOS25} [get_ports ad9162_i
 
 # clocks
 
-create_clock -name tx_ref_clk   -period  1.60 [get_ports tx_ref_clk_p]
-create_clock -name rx_ref_clk   -period  1.60 [get_ports rx_ref_clk_p]
+create_clock -name tx_ref_clk   -period  6.40 [get_ports tx_ref_clk_p]
+create_clock -name rx_ref_clk   -period  6.40 [get_ports rx_ref_clk_p]
 create_clock -name tx_div_clk   -period  6.40 [get_pins i_system_wrapper/system_i/axi_fmcomms11_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/TXOUTCLK]
 create_clock -name rx_div_clk   -period  6.40 [get_pins i_system_wrapper/system_i/axi_fmcomms11_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
 
