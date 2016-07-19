@@ -62,16 +62,16 @@ set_property -dict [list CONFIG.QPLL0_ENABLE {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.QPLL1_ENABLE {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.QPLL0_REFCLK_DIV {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.QPLL1_REFCLK_DIV {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.QPLL0_CFG {0x06801C1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.QPLL1_CFG {0x06801C1}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL0_CFG {0x0680181}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL1_CFG {0x0680181}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.QPLL0_FBDIV_RATIO {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.QPLL1_FBDIV_RATIO {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {8}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_CLKBUF_ENABLE_0 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_CLKBUF_ENABLE_0 {1}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.QPLL0_FBDIV {"0010000000"}] $axi_fmcomms11_gt
-set_property -dict [list CONFIG.QPLL1_FBDIV {"0010000000"}] $axi_fmcomms11_gt   
+set_property -dict [list CONFIG.QPLL0_FBDIV {"0100100000"}] $axi_fmcomms11_gt
+set_property -dict [list CONFIG.QPLL1_FBDIV {"0100100000"}] $axi_fmcomms11_gt   
 set_property -dict [list CONFIG.CPLL_FBDIV_0 {4}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.RX_OUT_DIV_0 {1}] $axi_fmcomms11_gt
 set_property -dict [list CONFIG.TX_OUT_DIV_0 {1}] $axi_fmcomms11_gt
@@ -173,6 +173,10 @@ ad_connect  axi_fmcomms11_gt/rx_gt_comma_align_enb_0 axi_ad9625_jesd/rxencommaal
 ad_connect  axi_fmcomms11_gt/rx_gt_comma_align_enb_1 axi_ad9625_jesd/rxencommaalign_out
 ad_connect  axi_fmcomms11_gt/rx_gt_comma_align_enb_2 axi_ad9625_jesd/rxencommaalign_out
 ad_connect  axi_fmcomms11_gt/rx_gt_comma_align_enb_3 axi_ad9625_jesd/rxencommaalign_out
+ad_connect  axi_fmcomms11_gt/rx_gt_comma_align_enb_4 axi_ad9625_jesd/rxencommaalign_out
+ad_connect  axi_fmcomms11_gt/rx_gt_comma_align_enb_5 axi_ad9625_jesd/rxencommaalign_out
+ad_connect  axi_fmcomms11_gt/rx_gt_comma_align_enb_6 axi_ad9625_jesd/rxencommaalign_out
+ad_connect  axi_fmcomms11_gt/rx_gt_comma_align_enb_7 axi_ad9625_jesd/rxencommaalign_out
 ad_connect  axi_fmcomms11_gt/gt_tx_0 util_fmcomms11_gt/gt_tx_0
 ad_connect  axi_fmcomms11_gt/gt_tx_1 util_fmcomms11_gt/gt_tx_1
 ad_connect  axi_fmcomms11_gt/gt_tx_2 util_fmcomms11_gt/gt_tx_2
