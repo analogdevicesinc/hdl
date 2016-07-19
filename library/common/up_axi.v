@@ -129,6 +129,7 @@ module up_axi (
   reg     [31:0]  up_wdata = 'd0;
   reg     [ 2:0]  up_wcount = 'd0;
   reg             up_wack_int = 'd0;
+  reg             up_wack_int_d = 'd0;
   reg             up_axi_arready = 'd0;
   reg             up_axi_rvalid = 'd0;
   reg     [31:0]  up_axi_rdata = 'd0;
@@ -163,7 +164,7 @@ module up_axi (
       end
       if ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) begin
         up_axi_bvalid <= 1'b0;
-      end else if (up_wack_int == 1'b1) begin
+      end else if (up_wack_int_d == 1'b1) begin
         up_axi_bvalid <= 1'b1;
       end
     end
@@ -198,12 +199,14 @@ module up_axi (
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack_int <= 'd0;
+      up_wack_int_d <= 'd0;
     end else begin
       if ((up_wcount == 3'h7) && (up_wack == 1'b0)) begin
         up_wack_int <= 1'b1;
       end else if (up_wsel == 1'b1) begin
         up_wack_int <= up_wack;
       end
+      up_wack_int_d <= up_wack_int;
     end
   end
 
