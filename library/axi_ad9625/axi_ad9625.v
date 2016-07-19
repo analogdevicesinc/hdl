@@ -227,7 +227,7 @@ module axi_ad9625 (
     .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
-    .adc_clk_ratio (32'd1),
+    .adc_clk_ratio (32'd16),
     .adc_start_code (),
     .adc_sync (),
     .up_status_pn_err (up_adc_pn_err_s),
