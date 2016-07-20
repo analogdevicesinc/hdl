@@ -200,7 +200,9 @@ module axi_dacfifo (
   wire                                dac_rd_ready_s;
   wire                                dac_rd_valid_s;
   wire    [31:0]                      axi_last_addr_s;
-  wire    [31:0]                      dma_last_addr_s;
+  wire    [ 3:0]                      axi_last_beats_s;
+  wire                                axi_dlast_s;
+  wire    [ 3:0]                      dma_last_beats_s;
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_s;
   wire                                dma_ready_s;
   wire                                dma_valid_bp_s;
@@ -221,8 +223,9 @@ module axi_dacfifo (
     .dma_valid (dma_valid),
     .dma_xfer_req (dma_xfer_req),
     .dma_xfer_last (dma_xfer_last),
+    .dma_last_beats (dma_last_beats_s),
     .axi_last_addr (axi_last_addr_s),
-    .dma_last_addr (dma_last_addr_s),
+    .axi_last_beats (axi_last_beats_s),
     .axi_xfer_out (axi_xfer_req_s),
     .axi_clk (axi_clk),
     .axi_resetn (axi_resetn),
@@ -257,8 +260,9 @@ module axi_dacfifo (
     .AXI_LENGTH (AXI_LENGTH),
     .AXI_ADDRESS (AXI_ADDRESS)
   ) i_rd (
-    .axi_last_raddr (axi_last_addr_s),
     .axi_xfer_req (axi_xfer_req_s),
+    .axi_last_raddr (axi_last_addr_s),
+    .axi_last_beats (axi_last_beats_s),
     .axi_clk (axi_clk),
     .axi_resetn (axi_resetn),
     .axi_arvalid (axi_arvalid),
@@ -283,7 +287,8 @@ module axi_dacfifo (
     .axi_rerror (axi_rerror),
     .axi_dvalid (axi_rd_valid_s),
     .axi_ddata (axi_rd_data_s),
-    .axi_dready (axi_rd_ready_s));
+    .axi_dready (axi_rd_ready_s),
+    .axi_dlast (axi_dlast_s));
 
   axi_dacfifo_dac #(
     .AXI_DATA_WIDTH (AXI_DATA_WIDTH),
@@ -294,8 +299,9 @@ module axi_dacfifo (
     .axi_dvalid (dac_rd_valid_s),
     .axi_ddata (dac_rd_data_s),
     .axi_dready (axi_rd_ready_s),
+    .axi_dlast (axi_dlast_s),
     .axi_xfer_req (axi_xfer_req_s),
-    .dma_last_addr (dma_last_addr_s),
+    .dma_last_beats (dma_last_beats_s),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_valid (dac_valid),

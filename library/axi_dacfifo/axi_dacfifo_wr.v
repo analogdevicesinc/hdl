@@ -52,11 +52,12 @@ module axi_dacfifo_wr (
 
   dma_xfer_req,
   dma_xfer_last,
+  dma_last_beats,
 
   // syncronization for the read side
 
   axi_last_addr,
-  dma_last_addr,
+  axi_last_beats,
   axi_xfer_out,
 
   // axi write address, write data and write response channels
@@ -124,9 +125,10 @@ module axi_dacfifo_wr (
 
   input                                     dma_xfer_req;
   input                                     dma_xfer_last;
+  output  [ 3:0]                            dma_last_beats;
 
   output  [31:0]                            axi_last_addr;
-  output  [31:0]                            dma_last_addr;
+  output  [ 3:0]                            axi_last_beats;
   output                                    axi_xfer_out;
 
   // axi interface
@@ -171,8 +173,8 @@ module axi_dacfifo_wr (
   reg                                       dma_rst_m1 = 1'b0;
   reg                                       dma_rst_m2 = 1'b0;
   reg     [ 2:0]                            dma_mem_last_read_toggle_m = 3'b0;
-  reg     [31:0]                            dma_addr_cnt = 32'b0;
-  reg     [31:0]                            dma_last_addr = 32'b0;
+  reg                                       dma_xfer_req_d = 1'b0;
+  reg     [ 3:0]                            dma_last_beats = 4'b0;
 
   reg     [ 4:0]                            axi_xfer_req_m = 3'b0;
   reg     [ 4:0]                            axi_xfer_last_m = 3'b0;
@@ -196,6 +198,7 @@ module axi_dacfifo_wr (
   reg                                       axi_reset = 1'b0;
   reg                                       axi_xfer_out = 1'b0;
   reg     [31:0]                            axi_last_addr = 32'b0;
+  reg     [ 3:0]                            axi_last_beats = 15'b0;
   reg                                       axi_awvalid = 1'b0;
   reg     [31:0]                            axi_awaddr = 32'b0;
   reg                                       axi_xfer_init = 1'b0;
@@ -210,6 +213,7 @@ module axi_dacfifo_wr (
   wire    [(DMA_MEM_ADDRESS_WIDTH):0]       dma_mem_addr_diff_s;
   wire    [(DMA_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_s;
   wire                                      dma_mem_last_read_s;
+  wire                                      dma_xfer_init;
   wire                                      dma_mem_wea_s;
   wire                                      dma_rst_s;
 
@@ -304,10 +308,21 @@ module axi_dacfifo_wr (
   end
   assign dma_rst_s = dma_rst_m2;
 
-  // Write address generation for the asymmetric memory
+  // DMA beat counter
 
-  // There is no underflow or overflow. All the data movements are controlled by
-  // this module.
+  assign dma_xfer_init = dma_xfer_req & ~dma_xfer_req_d;
+  always @(posedge dma_clk) begin
+    dma_xfer_req_d <= dma_xfer_req;
+    if ((dma_rst_s == 1'b1) || (dma_xfer_init == 1'b1)) begin
+      dma_last_beats <= 4'b0;
+    end else begin
+      if ((dma_ready == 1'b1) && (dma_valid == 1'b1)) begin
+        dma_last_beats <= (dma_last_beats < MEM_RATIO-1) ? dma_last_beats + 1 : 0;
+      end
+    end
+  end
+
+  // Write address generation for the asymmetric memory
 
   assign dma_mem_addr_diff_s = {1'b1, dma_mem_waddr} - dma_mem_raddr_s;
   assign dma_mem_raddr_s = (MEM_RATIO == 1) ?  dma_mem_raddr :
@@ -327,6 +342,11 @@ module axi_dacfifo_wr (
       dma_mem_last_read_toggle_m = {dma_mem_last_read_toggle_m[1:0], axi_mem_last_read_toggle};
       if (dma_mem_wea_s == 1'b1) begin
         dma_mem_waddr <= dma_mem_waddr + 8'b1;
+        if (dma_xfer_last == 1'b1) begin
+          if (dma_last_beats != (MEM_RATIO - 1)) begin
+            dma_mem_waddr <= dma_mem_waddr + (MEM_RATIO - dma_last_beats);
+          end
+        end
       end
       if (dma_mem_last_read_s == 1'b1) begin
         dma_mem_waddr <= 'h0;
@@ -353,21 +373,6 @@ module axi_dacfifo_wr (
         dma_ready <= 1'b0;
       end else begin
         dma_ready <= 1'b1;
-      end
-    end
-  end
-
-  // An absolute address counter with DMA's granularity, this address will be
-  // used on read back
-
-  always @(posedge dma_clk) begin
-    if (dma_rst_s == 1'b1) begin
-      dma_addr_cnt <= 32'b0;
-      dma_last_addr <= 32'b0;
-    end else begin
-      if((dma_valid == 1'b1) && (dma_xfer_req == 1'b1)) begin
-        dma_addr_cnt <= (dma_xfer_last == 1'b1) ? 32'b0 : dma_addr_cnt + 1;
-        dma_last_addr <= (dma_xfer_last == 1'b1) ? dma_addr_cnt : dma_last_addr;
       end
     end
   end
@@ -543,6 +548,20 @@ module axi_dacfifo_wr (
       axi_werror <= 'd0;
     end else begin
       axi_werror <= axi_bvalid & axi_bresp[1];
+    end
+  end
+
+  // AXI beat counter
+
+  always @(posedge axi_clk) begin
+    if(axi_resetn == 1'b0) begin
+      axi_last_beats <= 4'b0;
+    end else begin
+      if ((axi_endof_transaction == 1'b1) && (axi_awready == 1'b1) && (axi_awvalid == 1'b1)) begin
+        axi_last_beats <= axi_mem_addr_diff;
+      end else begin
+        axi_last_beats <= axi_last_beats;
+      end
     end
   end
 

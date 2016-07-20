@@ -45,9 +45,10 @@ module axi_dacfifo_dac (
   axi_dvalid,
   axi_ddata,
   axi_dready,
+  axi_dlast,
   axi_xfer_req,
 
-  dma_last_addr,
+  dma_last_beats,
 
   dac_clk,
   dac_rst,
@@ -84,9 +85,10 @@ module axi_dacfifo_dac (
   input                               axi_dvalid;
   input   [(AXI_DATA_WIDTH-1):0]      axi_ddata;
   output                              axi_dready;
+  input                               axi_dlast;
   input                               axi_xfer_req;
 
-  input   [31:0]                      dma_last_addr;
+  input   [ 3:0]                      dma_last_beats;
 
   // dac read
 
@@ -100,7 +102,9 @@ module axi_dacfifo_dac (
   // internal registers
 
   reg     [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_waddr = 'd0;
+  reg     [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_laddr = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_waddr_g = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_laddr_g = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr_m1 = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr_m2 = 'd0;
@@ -108,11 +112,13 @@ module axi_dacfifo_dac (
   reg                                 axi_dready = 'd0;
 
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_raddr = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_raddr_next = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_raddr_g = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr_m1 = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr_m2 = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_laddr = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_laddr_m1 = 'd0;
+  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_laddr_m2 = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_addr_diff = 'd0;
   reg                                 dac_mem_init = 1'b0;
   reg                                 dac_mem_init_d = 1'b0;
@@ -121,24 +127,26 @@ module axi_dacfifo_dac (
   reg     [ 2:0]                      dac_xfer_req_m = 3'b0;
   reg                                 dac_xfer_init = 1'b0;
 
-  reg     [31:0]                      dac_raddr_cnt = 32'b0;
-  reg     [31:0]                      dac_last_raddr = 32'b0;
-  reg     [31:0]                      dac_last_raddr_m = 32'b0;
-  reg                                 dac_almost_full = 1'b0;
-  reg                                 dac_almost_empty = 1'b0;
+  reg     [ 3:0]                      dac_last_beats = 4'b0;
+  reg     [ 3:0]                      dac_last_beats_m = 4'b0;
   reg                                 dac_dunf = 1'b0;
+  reg     [ 3:0]                      dac_beat_cnt = 4'b0;
+  reg                                 dac_dlast = 1'b0;
+  reg                                 dac_dlast_m1 = 1'b0;
+  reg                                 dac_dlast_m2 = 1'b0;
+  reg                                 dac_dlast_inmem = 1'b0;
 
   // internal signals
 
   wire    [AXI_ADDRESS_WIDTH:0]       axi_mem_addr_diff_s;
   wire    [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_raddr_s;
   wire    [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_waddr_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_laddr_s;
 
   wire    [DAC_ADDRESS_WIDTH:0]       dac_mem_addr_diff_s;
-  wire    [DAC_ADDRESS_WIDTH:0]       dac_mem_raddr_diff_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr_s;
   wire                                dac_mem_valid_s;
   wire                                dac_xfer_init_s;
+  wire                                dac_last_axi_beats_s;
 
   // binary to grey conversion
 
@@ -186,11 +194,14 @@ module axi_dacfifo_dac (
     if (axi_xfer_req == 1'b0) begin
       axi_mem_waddr <= 'd0;
       axi_mem_waddr_g <= 'd0;
+      axi_mem_laddr <= {AXI_ADDRESS_WIDTH{1'b1}};
     end else begin
       if (axi_dvalid == 1'b1) begin
         axi_mem_waddr <= axi_mem_waddr + 1'b1;
+        axi_mem_laddr <= (axi_dlast == 1'b1) ? axi_mem_waddr : axi_mem_laddr;
       end
       axi_mem_waddr_g <= b2g(axi_mem_waddr_s);
+      axi_mem_laddr_g <= b2g(axi_mem_laddr_s);
     end
   end
 
@@ -204,6 +215,10 @@ module axi_dacfifo_dac (
                            (MEM_RATIO == 2) ? {axi_mem_waddr, 1'b0} :
                            (MEM_RATIO == 4) ? {axi_mem_waddr, 2'b0} :
                                               {axi_mem_waddr, 3'b0};
+   assign axi_mem_laddr_s = (MEM_RATIO == 1) ? axi_mem_laddr :
+                            (MEM_RATIO == 2) ? {axi_mem_laddr, 1'b0} :
+                            (MEM_RATIO == 4) ? {axi_mem_laddr, 2'b0} :
+                                               {axi_mem_laddr, 3'b0};
 
   // incomming data flow control
 
@@ -268,42 +283,63 @@ module axi_dacfifo_dac (
       dac_mem_waddr <= 'b0;
       dac_mem_waddr_m1 <= 'b0;
       dac_mem_waddr_m2 <= 'b0;
+      dac_mem_laddr <= 'b0;
+      dac_mem_laddr_m1 <= 'b0;
+      dac_mem_laddr_m2 <= 'b0;
+      dac_dlast <= 1'b0;
+      dac_dlast_m1 <= 1'b0;
+      dac_dlast_m2 <= 1'b0;
     end else begin
       dac_mem_waddr_m1 <= axi_mem_waddr_g;
       dac_mem_waddr_m2 <= dac_mem_waddr_m1;
       dac_mem_waddr <= g2b(dac_mem_waddr_m2);
+      dac_mem_laddr_m1 <= axi_mem_laddr_g;
+      dac_mem_laddr_m2 <= dac_mem_laddr_m1;
+      dac_mem_laddr <= g2b(dac_mem_laddr_m2);
+      dac_dlast_m1 <= axi_dlast;
+      dac_dlast_m2 <= dac_dlast_m1;
+      dac_dlast <= dac_dlast_m2;
     end
   end
 
   assign dac_mem_addr_diff_s = {1'b1, dac_mem_waddr} - dac_mem_raddr;
-  assign dac_mem_raddr_diff_s = {1'b1, dac_mem_raddr_next} - dac_mem_raddr;
   assign dac_mem_valid_s = (dac_mem_enable) ? dac_valid : 1'b0;
 
-  // CDC for the dma_last_addr
+  // CDC for the dma_last_beats
 
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
-      dac_last_raddr <= 32'b0;
-      dac_last_raddr_m <= 32'b0;
+      dac_last_beats <= 32'b0;
+      dac_last_beats_m <= 32'b0;
     end else begin
-      dac_last_raddr_m <= dma_last_addr;
-      dac_last_raddr <= dac_last_raddr_m;
+      dac_last_beats_m <= dma_last_beats;
+      dac_last_beats <= dac_last_beats_m;
     end
   end
+
+  // If the MEM_RATIO is grater than one, it can happen that not all the DAC beats from
+  // an AXI beat are valid. In this case the invalid data is dropped.
+  // The axi_dlast indicates the last AXI beat. The valid number of DAC beats on the last AXI beat
+  // commes from the AXI write module. (axi_dacfifo_wr.v)
+
+  assign dac_last_axi_beats_s = ((dac_dlast_inmem == 1'b1) && (dac_mem_raddr >= dac_mem_laddr) && (dac_mem_raddr < dac_mem_laddr + MEM_RATIO)) ? 1'b1 : 1'b0;
 
   always @(posedge dac_clk) begin
     if (dac_xfer_out == 1'b0) begin
       dac_mem_raddr <= 'd0;
-      dac_mem_raddr_next <= DAC_ARINCR;
-      dac_mem_raddr_g <= 'd0;
-      dac_mem_addr_diff <= 'd0;
+      dac_beat_cnt <= 'd0;
+      dac_dlast_inmem <= 1'b0;
     end else begin
-      dac_mem_addr_diff <= dac_mem_addr_diff_s[DAC_ADDRESS_WIDTH-1:0];
-      if (dac_mem_valid_s == 1'b1) begin
-        dac_raddr_cnt <= (dac_raddr_cnt == dac_last_raddr) ? 32'b0 : dac_raddr_cnt + 1;
-        dac_mem_raddr <= (dac_raddr_cnt == dac_last_raddr) ? dac_mem_raddr_next : dac_mem_raddr + 1'b1;
+      if (dac_dlast == 1'b1) begin
+        dac_dlast_inmem <= 1'b1;
+      end else if (dac_mem_raddr == dac_mem_laddr + MEM_RATIO) begin
+        dac_dlast_inmem <= 1'b0;
       end
-      dac_mem_raddr_next <= (dac_mem_raddr_diff_s[DAC_ADDRESS_WIDTH-1:0] <= 1) ? dac_mem_raddr_next + DAC_ARINCR : dac_mem_raddr_next;
+      if (dac_mem_valid_s == 1'b1) begin
+        dac_beat_cnt <= ((dac_beat_cnt >= MEM_RATIO-1) ||
+                         ((dac_last_beats > 1'b1) && (dac_last_axi_beats_s > 1'b0) && (dac_beat_cnt == dac_last_beats-1))) ? 0 : dac_beat_cnt + 1;
+        dac_mem_raddr <= ((dac_last_axi_beats_s) && (dac_beat_cnt == dac_last_beats-1)) ? (dac_mem_laddr + MEM_RATIO) : dac_mem_raddr + 1'b1;
+      end
       dac_mem_raddr_g <= b2g(dac_mem_raddr);
     end
   end
@@ -312,15 +348,10 @@ module axi_dacfifo_dac (
 
   always @(posedge dac_clk) begin
     if(dac_xfer_out == 1'b0) begin
-      dac_almost_full <= 1'b0;
-      dac_almost_empty <= 1'b0;
+      dac_mem_addr_diff <= 'b0;
       dac_dunf <= 1'b0;
     end else begin
-      if (dac_mem_addr_diff < DAC_BUF_THRESHOLD_LO) begin
-        dac_almost_empty <= 1'b1;
-      end else begin
-        dac_almost_empty <= 1'b0;
-      end
+      dac_mem_addr_diff <= dac_mem_addr_diff_s[DAC_ADDRESS_WIDTH-1:0];
       dac_dunf <= (dac_mem_addr_diff == 1'b0) ? 1'b1 : 1'b0;
     end
   end

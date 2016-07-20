@@ -45,6 +45,7 @@ module axi_dacfifo_rd (
 
   axi_xfer_req,
   axi_last_raddr,
+  axi_last_beats,
 
   // axi read address and read data channels
 
@@ -78,7 +79,8 @@ module axi_dacfifo_rd (
 
   axi_dvalid,
   axi_ddata,
-  axi_dready);
+  axi_dready,
+  axi_dlast);
 
   // parameters
 
@@ -93,6 +95,7 @@ module axi_dacfifo_rd (
 
   input                           axi_xfer_req;
   input   [31:0]                 axi_last_raddr;
+  input   [ 3:0]                 axi_last_beats;
 
   // axi interface
 
@@ -127,25 +130,30 @@ module axi_dacfifo_rd (
   output                          axi_dvalid;
   output  [(AXI_DATA_WIDTH-1):0]  axi_ddata;
   input                           axi_dready;
+  output                          axi_dlast;
 
   // internal registers
 
-  reg     [ 31:0]                 axi_rd_addr_h = 32'b0;
   reg                             axi_rnext = 1'b0;
   reg                             axi_ractive = 1'b0;
   reg                             axi_arvalid = 1'b0;
   reg     [ 31:0]                 axi_araddr = 32'b0;
+  reg     [ 31:0]                 axi_araddr_prev = 32'b0;
   reg     [(AXI_DATA_WIDTH-1):0]  axi_ddata = 'b0;
   reg                             axi_dvalid = 1'b0;
+  reg                             axi_dlast = 1'b0;
   reg                             axi_rready = 1'b0;
   reg                             axi_rerror = 1'b0;
   reg     [ 1:0]                  axi_xfer_req_m = 2'b0;
+  reg     [ 4:0]                  axi_last_beats_cntr = 16'b0;
 
   // internal signals
 
   wire                            axi_ready_s;
   wire                            axi_xfer_req_init;
   wire                            axi_dvalid_s;
+  wire                            axi_dlast_s;
+  wire    [ 4:0]                  axi_last_beats_s;
 
   assign axi_ready_s = (~axi_arvalid | axi_arready) & axi_dready;
 
@@ -170,6 +178,16 @@ module axi_dacfifo_rd (
 
   assign axi_xfer_req_init = axi_xfer_req_m[0] & ~axi_xfer_req_m[1];
 
+  always @(posedge axi_clk) begin
+    if ((axi_resetn == 1'b0) || (axi_xfer_req == 1'b0)) begin
+      axi_last_beats_cntr <= 0;
+    end else begin
+      if ((axi_rready == 1'b1) && (axi_rvalid == 1'b1)) begin
+        axi_last_beats_cntr <= (axi_rlast == 1'b1) ? 0 : axi_last_beats_cntr +  1;
+      end
+    end
+  end
+
   // address channel
 
   assign axi_arid = 4'b0000;
@@ -185,8 +203,8 @@ module axi_dacfifo_rd (
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_arvalid <= 'd0;
-      axi_araddr <= 'd0;
-      axi_rd_addr_h <= 'd0;
+      axi_araddr <= AXI_ADDRESS;
+      axi_araddr_prev <= AXI_ADDRESS;
     end else begin
       if (axi_arvalid == 1'b1) begin
         if (axi_arready == 1'b1) begin
@@ -197,20 +215,20 @@ module axi_dacfifo_rd (
           axi_arvalid <= 1'b1;
         end
       end
-      if ((axi_xfer_req_init == 1'b1)) begin
-        axi_araddr <= AXI_ADDRESS;
-        axi_rd_addr_h <= axi_last_raddr;
-      end else if ((axi_xfer_req == 1'b1) &&
-                   (axi_arvalid == 1'b1) &&
-                   (axi_arready == 1'b1)) begin
-        axi_araddr <= (axi_araddr >= axi_rd_addr_h) ? AXI_ADDRESS : axi_araddr + AXI_AWINCR;
+      if ((axi_xfer_req == 1'b1) &&
+          (axi_arvalid == 1'b1) &&
+          (axi_arready == 1'b1)) begin
+        axi_araddr <= (axi_araddr >= axi_last_raddr) ? AXI_ADDRESS : axi_araddr + AXI_AWINCR;
+        axi_araddr_prev <= axi_araddr;
       end
     end
   end
 
   // read data channel
 
-  assign axi_dvalid_s = axi_rvalid & axi_rready;
+  assign axi_last_beats_s = {1'b0, axi_last_beats} - 1;
+  assign axi_dvalid_s = ((axi_last_beats_cntr > axi_last_beats_s) && (axi_araddr_prev == axi_last_raddr)) ? 0 : axi_rvalid & axi_rready;
+  assign axi_dlast_s = (axi_araddr_prev == axi_last_raddr) ? 1 : 0;
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
@@ -220,6 +238,7 @@ module axi_dacfifo_rd (
     end else begin
       axi_ddata <= axi_rdata;
       axi_dvalid <= axi_dvalid_s;
+      axi_dlast <= axi_dlast_s;
       if (axi_xfer_req == 1'b1) begin
         axi_rready <= axi_rvalid;
       end
