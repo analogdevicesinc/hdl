@@ -174,9 +174,8 @@ module axi_dacfifo_wr (
   reg     [31:0]                            dma_addr_cnt = 32'b0;
   reg     [31:0]                            dma_last_addr = 32'b0;
 
-
-  reg     [ 2:0]                            axi_xfer_req_m = 3'b0;
-  reg     [ 2:0]                            axi_xfer_last_m = 3'b0;
+  reg     [ 4:0]                            axi_xfer_req_m = 3'b0;
+  reg     [ 4:0]                            axi_xfer_last_m = 3'b0;
 
   reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_m1 = 'b0;
   reg     [(DMA_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_m2 = 'b0;
@@ -190,6 +189,7 @@ module axi_dacfifo_wr (
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     axi_mem_raddr_g = 'd0;
   reg                                       axi_mem_read_en = 1'b0;
   reg                                       axi_mem_read_en_d = 1'b0;
+  reg                                       axi_mem_read_en_delay = 1'b0;
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     axi_mem_addr_diff = 'b0;
   reg                                       axi_mem_last_read_toggle = 1'b0;
 
@@ -202,8 +202,8 @@ module axi_dacfifo_wr (
   reg                                       axi_werror = 1'b0;
   reg     [ 3:0]                            axi_wvalid_counter = 4'b0;
 
-  reg                                       axi_last_transaction = 1'b0;
-  reg                                       axi_last_transaction_d = 1'b0;
+  reg                                       axi_endof_transaction = 1'b0;
+  reg                                       axi_endof_transaction_d = 1'b0;
 
   // internal signals
 
@@ -218,7 +218,6 @@ module axi_dacfifo_wr (
   wire    [(AXI_DATA_WIDTH-1):0]            axi_mem_rdata_s;
   wire                                      axi_mem_rvalid_s;
   wire                                      axi_mem_last_s;
-  wire                                      axi_mem_eot_s;
 
   wire                                      axi_waddr_ready_s;
   wire                                      axi_wready_s;
@@ -379,15 +378,15 @@ module axi_dacfifo_wr (
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
-      axi_xfer_req_m <= 3'b0;
-      axi_xfer_last_m <= 3'b0;
+      axi_xfer_req_m <= 4'b0;
+      axi_xfer_last_m <= 5'b0;
       axi_xfer_init <= 1'b0;
       axi_mem_waddr_m1 <= 'b0;
       axi_mem_waddr_m2 <= 'b0;
       axi_mem_waddr <= 'b0;
     end else begin
-      axi_xfer_req_m <= {axi_xfer_req_m[1:0], dma_xfer_req};
-      axi_xfer_last_m <= {axi_xfer_last_m[1:0], dma_xfer_last};
+      axi_xfer_req_m <= {axi_xfer_req_m[3:0], dma_xfer_req};
+      axi_xfer_last_m <= {axi_xfer_last_m[3:0], dma_xfer_last};
       axi_xfer_init = ~axi_xfer_req_m[2] & axi_xfer_req_m[1];
       axi_mem_waddr_m1 <= dma_mem_waddr_g;
       axi_mem_waddr_m2 <= axi_mem_waddr_m1;
@@ -409,6 +408,22 @@ module axi_dacfifo_wr (
 
   assign axi_mem_addr_diff_s = {1'b1, axi_mem_waddr_s} - axi_mem_raddr;
 
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_endof_transaction <= 1'b0;
+      axi_endof_transaction_d <= 1'b0;
+      axi_mem_addr_diff <= 'b0;
+    end else begin
+     axi_mem_addr_diff <= axi_mem_addr_diff_s[(AXI_MEM_ADDRESS_WIDTH-1):0];
+     axi_endof_transaction_d <= axi_endof_transaction;
+     if ((axi_xfer_req_m[4] == 1'b1) && (axi_xfer_last_m[4] == 1'b1) && (axi_xfer_last_m[3] == 1'b0)) begin
+        axi_endof_transaction <= 1'b1;
+      end else if((axi_endof_transaction == 1'b1) && (axi_wlast == 1'b1) && ((axi_mem_addr_diff == 0) || (axi_mem_addr_diff > AXI_LENGTH))) begin
+        axi_endof_transaction <= 1'b0;
+      end
+    end
+  end
+
   // The asymmetric memory have to have enough data for at least one AXI burst,
   // before the controller start an AXI write transaction.
 
@@ -416,27 +431,29 @@ module axi_dacfifo_wr (
     if (axi_resetn == 1'b0) begin
       axi_mem_read_en <= 1'b0;
       axi_mem_read_en_d <= 1'b0;
+      axi_mem_read_en_delay <= 1'b0;
       axi_mem_addr_diff <= 'b0;
     end else begin
       axi_mem_addr_diff <= axi_mem_addr_diff_s[(AXI_MEM_ADDRESS_WIDTH-1):0];
-      if (axi_mem_read_en == 1'b0) begin
-        if (((axi_xfer_req_m[2] == 1'b1) && (axi_mem_addr_diff > AXI_LENGTH) && (axi_last_transaction_d == 1'b0)) ||
-             (axi_last_transaction == 1'b1) && (axi_last_transaction_d == 1'b0)) begin
+      if ((axi_mem_read_en == 1'b0) && (axi_mem_read_en_delay == 1'b0)) begin
+        if (((axi_xfer_req_m[2] == 1'b1) && (axi_mem_addr_diff > AXI_LENGTH)) ||
+            ((axi_endof_transaction == 1'b1) && (axi_mem_addr_diff > AXI_LENGTH)) ||
+            ((axi_endof_transaction == 1'b1) && (axi_mem_addr_diff > 0))) begin
           axi_mem_read_en <= 1'b1;
         end
       end else if (axi_mem_last_s == 1'b1) begin
         axi_mem_read_en <= 1'b0;
+        axi_mem_read_en_delay <= 1;
+      end
+      if (axi_wlast == 1'b1) begin
+        axi_mem_read_en_delay <= 0;
       end
       axi_mem_read_en_d <= axi_mem_read_en;
     end
   end
 
-  // If there is enough data and the AXI interface is ready, we can start to read
-  // out data from the memory
-
   assign axi_mem_rvalid_s =  axi_mem_read_en & axi_wready_s;
   assign axi_mem_last_s = (axi_wvalid_counter == axi_awlen) ? axi_mem_rvalid_s : 1'b0;
-  assign axi_mem_eot_s = axi_wlast & axi_last_transaction;
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
@@ -457,27 +474,13 @@ module axi_dacfifo_wr (
       axi_mem_rdata <= axi_mem_rdata_s;
       if (axi_mem_rvalid_s == 1'b1) begin
         axi_mem_raddr <= axi_mem_raddr + 1;
-        axi_wvalid_counter <= (axi_wvalid_counter == axi_awlen) ? 4'b0 : axi_wvalid_counter + 1;
+        axi_wvalid_counter <= ((axi_wvalid_counter == axi_awlen) || (axi_xfer_init == 1'b1)) ? 4'b0 : axi_wvalid_counter + 1;
       end
-      if (axi_mem_eot_s == 1'b1) begin
+      if ((axi_endof_transaction == 1'b0) && (axi_endof_transaction_d == 1'b1)) begin
         axi_mem_raddr <= 'b0;
         axi_mem_last_read_toggle <= ~axi_mem_last_read_toggle;
       end
       axi_mem_raddr_g <= b2g(axi_mem_raddr);
-    end
-  end
-
-  always @(posedge axi_clk) begin
-    if (axi_resetn == 1'b0) begin
-      axi_last_transaction <= 1'b0;
-      axi_last_transaction_d <= 1'b0;
-    end else begin
-      if ((axi_xfer_req_m[2] == 1'b1) && (axi_xfer_last_m[2] == 1'b1)) begin
-        axi_last_transaction <= 1'b1;
-      end else if (axi_wlast == 1'b1) begin
-        axi_last_transaction <= 1'b0;
-      end
-      axi_last_transaction_d <= axi_last_transaction;
     end
   end
 
@@ -517,9 +520,11 @@ module axi_dacfifo_wr (
       end else if ((axi_awvalid == 1'b1) && (axi_awready == 1'b1)) begin
         axi_awaddr <= axi_awaddr +  AXI_AWINCR;
       end
-      if(axi_xfer_last_m[2] == 1'b1) begin
-        axi_last_addr <= axi_awaddr;
+      if (axi_xfer_last_m[2] == 1'b1) begin
         axi_xfer_out <= 1'b1;
+      end
+      if ((axi_awvalid == 1'b1) && (axi_endof_transaction == 1'b1)) begin
+        axi_last_addr <= axi_awaddr;
       end
     end
   end
