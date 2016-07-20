@@ -64,7 +64,7 @@ axi_dmac.xpr: $(M_DEPS)
 	$(M_VIVADO) axi_dmac_ip.tcl  >> axi_dmac_ip.log 2>&1
 
 dep:
-	make -C ../util_axis_resize
-	make -C ../util_axis_fifo
+	make -C ../util_axis_resize/
+	make -C ../util_axis_fifo/
 ####################################################################################
 ####################################################################################
