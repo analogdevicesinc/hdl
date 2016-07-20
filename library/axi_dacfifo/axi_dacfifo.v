@@ -201,10 +201,8 @@ module axi_dacfifo (
   wire                                dac_rd_valid_s;
   wire    [31:0]                      axi_last_addr_s;
   wire    [31:0]                      dma_last_addr_s;
-
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_s;
   wire                                dma_ready_s;
-
   wire                                dma_valid_bp_s;
   wire    [(AXI_DATA_WIDTH-1):0]      dma_data_bp_s;
   wire                                dma_ready_bp_s;

@@ -102,11 +102,11 @@ module axi_dacfifo_wr (
   // for the syncronization buffer
 
   localparam      MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;  // Max supported MEM_RATIO is 16
-  localparam      AXI_MEM_ADDRESS_WIDTH = (MEM_RATIO == 1) ? DMA_MEM_ADDRESS_WIDTH :
-                                       (MEM_RATIO == 2) ? (DMA_MEM_ADDRESS_WIDTH - 1) :
-                                       (MEM_RATIO == 4) ? (DMA_MEM_ADDRESS_WIDTH - 2) :
-                                       (MEM_RATIO == 8) ? (DMA_MEM_ADDRESS_WIDTH - 3) :
-                                                          (DMA_MEM_ADDRESS_WIDTH - 4);
+  localparam      AXI_MEM_ADDRESS_WIDTH = (MEM_RATIO == 1) ?  DMA_MEM_ADDRESS_WIDTH :
+                                          (MEM_RATIO == 2) ? (DMA_MEM_ADDRESS_WIDTH - 1) :
+                                          (MEM_RATIO == 4) ? (DMA_MEM_ADDRESS_WIDTH - 2) :
+                                          (MEM_RATIO == 8) ? (DMA_MEM_ADDRESS_WIDTH - 3) :
+                                                             (DMA_MEM_ADDRESS_WIDTH - 4);
 
   // for the AXI interface
 
@@ -195,7 +195,7 @@ module axi_dacfifo_wr (
 
   reg                                       axi_reset = 1'b0;
   reg                                       axi_xfer_out = 1'b0;
-  reg     [31:0]                            axi_last_addr = 'b0;
+  reg     [31:0]                            axi_last_addr = 32'b0;
   reg                                       axi_awvalid = 1'b0;
   reg     [31:0]                            axi_awaddr = 32'b0;
   reg                                       axi_xfer_init = 1'b0;

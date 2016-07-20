@@ -71,6 +71,7 @@ module axi_dacfifo_dac (
                                                      (DAC_ADDRESS_WIDTH - 3);
 
   // BUF_THRESHOLD_LO will make sure that there are always at least two burst in the memmory
+
   localparam  AXI_BUF_THRESHOLD_LO = 3 * (AXI_LENGTH+1);
   localparam  AXI_BUF_THRESHOLD_HI = {(AXI_ADDRESS_WIDTH){1'b1}} - (AXI_LENGTH+1);
   localparam  DAC_BUF_THRESHOLD_LO = 3 * (AXI_LENGTH+1) * MEM_RATIO;

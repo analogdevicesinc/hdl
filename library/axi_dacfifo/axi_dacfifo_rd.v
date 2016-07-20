@@ -92,28 +92,28 @@ module axi_dacfifo_rd (
   // xfer last for read/write synchronization
 
   input                           axi_xfer_req;
-  input   [ 31:0]                 axi_last_raddr;
+  input   [31:0]                 axi_last_raddr;
 
   // axi interface
 
   input                           axi_clk;
   input                           axi_resetn;
   output                          axi_arvalid;
-  output  [  3:0]                 axi_arid;
-  output  [  1:0]                 axi_arburst;
+  output  [ 3:0]                  axi_arid;
+  output  [ 1:0]                  axi_arburst;
   output                          axi_arlock;
-  output  [  3:0]                 axi_arcache;
-  output  [  2:0]                 axi_arprot;
-  output  [  3:0]                 axi_arqos;
-  output  [  3:0]                 axi_aruser;
-  output  [  7:0]                 axi_arlen;
-  output  [  2:0]                 axi_arsize;
-  output  [ 31:0]                 axi_araddr;
+  output  [ 3:0]                  axi_arcache;
+  output  [ 2:0]                  axi_arprot;
+  output  [ 3:0]                  axi_arqos;
+  output  [ 3:0]                  axi_aruser;
+  output  [ 7:0]                  axi_arlen;
+  output  [ 2:0]                  axi_arsize;
+  output  [31:0]                  axi_araddr;
   input                           axi_arready;
   input                           axi_rvalid;
-  input   [  3:0]                 axi_rid;
-  input   [  3:0]                 axi_ruser;
-  input   [  1:0]                 axi_rresp;
+  input   [ 3:0]                  axi_rid;
+  input   [ 3:0]                  axi_ruser;
+  input   [ 1:0]                  axi_rresp;
   input                           axi_rlast;
   input   [(AXI_DATA_WIDTH-1):0]  axi_rdata;
   output                          axi_rready;
@@ -131,8 +131,8 @@ module axi_dacfifo_rd (
   // internal registers
 
   reg     [ 31:0]                 axi_rd_addr_h = 32'b0;
-  reg                             axi_rd = 1'b0;
-  reg                             axi_rd_active = 1'b0;
+  reg                             axi_rnext = 1'b0;
+  reg                             axi_ractive = 1'b0;
   reg                             axi_arvalid = 1'b0;
   reg     [ 31:0]                 axi_araddr = 32'b0;
   reg     [(AXI_DATA_WIDTH-1):0]  axi_ddata = 'b0;
@@ -151,18 +151,18 @@ module axi_dacfifo_rd (
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
-      axi_rd <= 1'b0;
-      axi_rd_active <= 1'b0;
+      axi_rnext <= 1'b0;
+      axi_ractive <= 1'b0;
       axi_xfer_req_m <= 2'b0;
     end else begin
-      if (axi_rd_active == 1'b1) begin
-        axi_rd <= 1'b0;
+      if (axi_ractive == 1'b1) begin
+        axi_rnext <= 1'b0;
         if ((axi_rvalid == 1'b1) && (axi_rlast == 1'b1)) begin
-          axi_rd_active <= 1'b0;
+          axi_ractive <= 1'b0;
         end
       end else if ((axi_ready_s == 1'b1)) begin
-        axi_rd <= axi_xfer_req;
-        axi_rd_active <= axi_xfer_req;
+        axi_rnext <= axi_xfer_req;
+        axi_ractive <= axi_xfer_req;
       end
     axi_xfer_req_m <= {axi_xfer_req_m[0], axi_xfer_req};
     end
@@ -193,7 +193,7 @@ module axi_dacfifo_rd (
           axi_arvalid <= 1'b0;
         end
       end else begin
-        if (axi_rd == 1'b1) begin
+        if (axi_rnext == 1'b1) begin
           axi_arvalid <= 1'b1;
         end
       end
