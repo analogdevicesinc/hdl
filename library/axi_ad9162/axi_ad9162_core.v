@@ -34,39 +34,22 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns / 1ps
 
-module axi_ad9162_core(
+module axi_ad9162_core (
 
     // dac interface
     
     dac_clk,
     dac_rst,
-    dac_data_0_0,
-    dac_data_0_1,
-    dac_data_0_2,
-    dac_data_0_3,
-    dac_data_0_4,
-    dac_data_0_5,
-    dac_data_0_6,
-    dac_data_0_7,
-    dac_data_0_8,
-    dac_data_0_9,
-    dac_data_0_10,
-    dac_data_0_11,
-    dac_data_0_12,
-    dac_data_0_13,
-    dac_data_0_14,
-    dac_data_0_15,
+    dac_data,
     
     // dma interface
     
-    dac_valid_0,
-    dac_enable_0,
-    dac_ddata_0,
+    dac_valid,
+    dac_enable,
+    dac_ddata,
     dac_dovf,
     dac_dunf,
     
@@ -90,67 +73,52 @@ module axi_ad9162_core(
     
     // dac interface
     
-    input            dac_clk;
-    output           dac_rst;
-    output  [ 15:0]  dac_data_0_0;
-    output  [ 15:0]  dac_data_0_1;
-    output  [ 15:0]  dac_data_0_2;
-    output  [ 15:0]  dac_data_0_3;
-    output  [ 15:0]  dac_data_0_4;
-    output  [ 15:0]  dac_data_0_5;
-    output  [ 15:0]  dac_data_0_6;
-    output  [ 15:0]  dac_data_0_7;
-    output  [ 15:0]  dac_data_0_8;
-    output  [ 15:0]  dac_data_0_9;
-    output  [ 15:0]  dac_data_0_10;
-    output  [ 15:0]  dac_data_0_11;
-    output  [ 15:0]  dac_data_0_12;
-    output  [ 15:0]  dac_data_0_13;
-    output  [ 15:0]  dac_data_0_14;
-    output  [ 15:0]  dac_data_0_15;
+    input             dac_clk;
+    output            dac_rst;
+    output  [255:0]   dac_data;
     
     // dma interface
     
-    output           dac_valid_0;
-    output           dac_enable_0;
-    input   [255:0]  dac_ddata_0;
-    input            dac_dovf;
-    input            dac_dunf;
+    output            dac_valid;
+    output            dac_enable;
+    input   [255:0]   dac_ddata;
+    input             dac_dovf;
+    input             dac_dunf;
     
     
     // processor interface
     
-    input            up_rstn;
-    input            up_clk;
-    input            up_wreq;
-    input   [ 13:0]  up_waddr;
-    input   [ 31:0]  up_wdata;
-    output           up_wack;
-    input            up_rreq;
-    input   [ 13:0]  up_raddr;
-    output  [ 31:0]  up_rdata;
-    output           up_rack;
+    input             up_rstn;
+    input             up_clk;
+    input             up_wreq;
+    input   [ 13:0]   up_waddr;
+    input   [ 31:0]   up_wdata;
+    output            up_wack;
+    input             up_rreq;
+    input   [ 13:0]   up_raddr;
+    output  [ 31:0]   up_rdata;
+    output            up_rack;
     
     // internal registers
     
-    reg     [ 31:0]  up_rdata = 'd0;
-    reg              up_rack = 'd0;
-    reg              up_wack = 'd0;
+    reg     [ 31:0]   up_rdata = 'd0;
+    reg               up_rack = 'd0;
+    reg               up_wack = 'd0;
     
     // internal signals
     
-    wire             dac_sync_s;
-    wire             dac_datafmt_s;
-    wire    [ 31:0]  up_rdata_0_s;
-    wire             up_rack_0_s;
-    wire             up_wack_0_s;
-    wire    [ 31:0]  up_rdata_s;
-    wire             up_rack_s;
-    wire             up_wack_s;
+    wire              dac_sync_s;
+    wire              dac_datafmt_s;
+    wire    [ 31:0]   up_rdata_0_s;
+    wire              up_rack_0_s;
+    wire              up_wack_0_s;
+    wire    [ 31:0]   up_rdata_s;
+    wire              up_rack_s;
+    wire              up_wack_s;
     
     // dac valid
     
-    assign dac_valid_0 = 1'b1;
+    assign dac_valid = 1'b1;
     
     // processor read interface
     
@@ -168,15 +136,15 @@ module axi_ad9162_core(
     
     // dac channel
     
-    axi_ad9162_channel #(.CHANNEL_ID(0), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_0 (
+    axi_ad9162_channel #(
+      .CHANNEL_ID (0),
+      .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    i_channel_0 (
       .dac_clk (dac_clk),
       .dac_rst (dac_rst),
-      .dac_enable (dac_enable_0),
-      .dac_data ({dac_data_0_15, dac_data_0_14, dac_data_0_13, dac_data_0_12,
-                  dac_data_0_11, dac_data_0_10, dac_data_0_9, dac_data_0_8,
-                  dac_data_0_7, dac_data_0_6, dac_data_0_5, dac_data_0_4,
-                  dac_data_0_3, dac_data_0_2, dac_data_0_1, dac_data_0_0}),
-      .dma_data (dac_ddata_0),
+      .dac_enable (dac_enable),
+      .dac_data (dac_data),
+      .dma_data (dac_ddata),
       .dac_data_sync (dac_sync_s),
       .dac_dds_format (dac_datafmt_s),
       .up_rstn (up_rstn),
@@ -189,7 +157,6 @@ module axi_ad9162_core(
       .up_raddr (up_raddr),
       .up_rdata (up_rdata_0_s),
       .up_rack (up_rack_0_s));
-    
     
     // dac common processor interface
     
@@ -232,3 +199,5 @@ module axi_ad9162_core(
 
 endmodule
 
+// ***************************************************************************
+// ***************************************************************************

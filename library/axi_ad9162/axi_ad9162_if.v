@@ -34,12 +34,10 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns / 1ps
 
-module axi_ad9162_if(
+module axi_ad9162_if (
 
     // jesd interface
     // tx_clk is (line-rate/40)
@@ -51,95 +49,64 @@ module axi_ad9162_if(
     
     dac_clk,
     dac_rst,
-    dac_data_0_0,
-    dac_data_0_1,
-    dac_data_0_2,
-    dac_data_0_3,
-    dac_data_0_4,
-    dac_data_0_5,
-    dac_data_0_6,
-    dac_data_0_7,
-    dac_data_0_8,
-    dac_data_0_9,
-    dac_data_0_10,
-    dac_data_0_11,
-    dac_data_0_12,
-    dac_data_0_13,
-    dac_data_0_14,
-    dac_data_0_15);
+    dac_data);
     
     // jesd interface
     // tx_clk is (line-rate/40)
     
-    input           tx_clk;
-    output [255:0]  tx_data;
+    input             tx_clk;
+    output  [255:0]   tx_data;
     
     // dac interface
     
-    output          dac_clk;
-    input           dac_rst;
-    input   [15:0]  dac_data_0_0;
-    input   [15:0]  dac_data_0_1;
-    input   [15:0]  dac_data_0_2;
-    input   [15:0]  dac_data_0_3;
-    input   [15:0]  dac_data_0_4;
-    input   [15:0]  dac_data_0_5;
-    input   [15:0]  dac_data_0_6;
-    input   [15:0]  dac_data_0_7;
-    input   [15:0]  dac_data_0_8;
-    input   [15:0]  dac_data_0_9;
-    input   [15:0]  dac_data_0_10;
-    input   [15:0]  dac_data_0_11;
-    input   [15:0]  dac_data_0_12;
-    input   [15:0]  dac_data_0_13;
-    input   [15:0]  dac_data_0_14;
-    input   [15:0]  dac_data_0_15;
-    
+    output            dac_clk;
+    input             dac_rst;
+    input   [255:0]   dac_data;
+
     // internal registers
-    
-    reg    [255:0]  tx_data = 'd0;
+
+    reg     [255:0]   tx_data = 'd0;
     
     // reorder data for the jesd links
     
     assign dac_clk = tx_clk;
-    
-    always @(posedge dac_clk) begin
-      if (dac_rst == 1'b1) begin
-        tx_data <= 256'd0;
-      end else begin
-        tx_data[255:248] <= dac_data_0_15 [ 7: 0];
-        tx_data[247:240] <= dac_data_0_11 [ 7: 0];
-        tx_data[239:232] <= dac_data_0_7  [ 7: 0];
-        tx_data[231:224] <= dac_data_0_3  [ 7: 0];
-        tx_data[223:216] <= dac_data_0_15 [15: 8];
-        tx_data[215:208] <= dac_data_0_11 [15: 8];
-        tx_data[207:200] <= dac_data_0_7  [15: 8];
-        tx_data[199:192] <= dac_data_0_3  [15: 8];
-        tx_data[191:184] <= dac_data_0_14 [ 7: 0];
-        tx_data[183:176] <= dac_data_0_10 [ 7: 0];
-        tx_data[175:168] <= dac_data_0_6  [ 7: 0];
-        tx_data[167:160] <= dac_data_0_2  [ 7: 0];
-        tx_data[159:152] <= dac_data_0_14 [15: 8];
-        tx_data[151:144] <= dac_data_0_10 [15: 8];
-        tx_data[143:136] <= dac_data_0_6  [15: 8];
-        tx_data[135:128] <= dac_data_0_2  [15: 8];
-        tx_data[127:120] <= dac_data_0_13 [ 7: 0];
-        tx_data[119:112] <= dac_data_0_9  [ 7: 0];
-        tx_data[111:104] <= dac_data_0_5  [ 7: 0];
-        tx_data[103: 96] <= dac_data_0_1  [ 7: 0];
-        tx_data[ 95: 88] <= dac_data_0_13 [15: 8];
-        tx_data[ 87: 80] <= dac_data_0_9  [15: 8];
-        tx_data[ 79: 72] <= dac_data_0_5  [15: 8];
-        tx_data[ 71: 64] <= dac_data_0_1  [15: 8];
-        tx_data[ 63: 56] <= dac_data_0_12 [ 7: 0];
-        tx_data[ 55: 48] <= dac_data_0_8  [ 7: 0];
-        tx_data[ 47: 40] <= dac_data_0_4  [ 7: 0];
-        tx_data[ 39: 32] <= dac_data_0_0  [ 7: 0];
-        tx_data[ 31: 24] <= dac_data_0_12 [15: 8];
-        tx_data[ 23: 16] <= dac_data_0_8  [15: 8];
-        tx_data[ 15:  8] <= dac_data_0_4  [15: 8];
-        tx_data[  7:  0] <= dac_data_0_0  [15: 8];
-      end
+
+    always @(posedge tx_clk) begin
+      tx_data[255:248] <= dac_data[247:240];
+      tx_data[247:240] <= dac_data[183:176];
+      tx_data[239:232] <= dac_data[119:112];
+      tx_data[231:224] <= dac_data[ 55: 48];
+      tx_data[223:216] <= dac_data[255:248];
+      tx_data[215:208] <= dac_data[191:184];
+      tx_data[207:200] <= dac_data[127:120];
+      tx_data[199:192] <= dac_data[ 63: 56];
+      tx_data[191:184] <= dac_data[215:208];
+      tx_data[183:176] <= dac_data[151:144];
+      tx_data[175:168] <= dac_data[ 87: 80];
+      tx_data[167:160] <= dac_data[ 23: 16];
+      tx_data[159:152] <= dac_data[223:216];
+      tx_data[151:144] <= dac_data[159:152];
+      tx_data[143:136] <= dac_data[ 95: 88];
+      tx_data[135:128] <= dac_data[ 31: 24];
+      tx_data[127:120] <= dac_data[231:224];
+      tx_data[119:112] <= dac_data[167:160];
+      tx_data[111:104] <= dac_data[103: 96];
+      tx_data[103: 96] <= dac_data[ 39: 32];
+      tx_data[ 95: 88] <= dac_data[239:232];
+      tx_data[ 87: 80] <= dac_data[175:168];
+      tx_data[ 79: 72] <= dac_data[111:104];
+      tx_data[ 71: 64] <= dac_data[ 47: 40];
+      tx_data[ 63: 56] <= dac_data[199:192];
+      tx_data[ 55: 48] <= dac_data[135:128];
+      tx_data[ 47: 40] <= dac_data[ 71: 64];
+      tx_data[ 39: 32] <= dac_data[  7:  0];
+      tx_data[ 31: 24] <= dac_data[207:200];
+      tx_data[ 23: 16] <= dac_data[143:136];
+      tx_data[ 15:  8] <= dac_data[ 79: 72];
+      tx_data[  7:  0] <= dac_data[ 15:  8];
     end
-    
+   
 endmodule
+
+// ***************************************************************************
+// ***************************************************************************

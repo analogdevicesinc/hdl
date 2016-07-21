@@ -34,12 +34,10 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns / 1ps
 
-module axi_ad9162(
+module axi_ad9162 (
 
     // jesd interface
     // tx_clk is (line-rate/40)
@@ -50,9 +48,9 @@ module axi_ad9162(
     // dma interface
     
     dac_clk,
-    dac_valid_0,
-    dac_enable_0,
-    dac_ddata_0,
+    dac_valid,
+    dac_enable,
+    dac_ddata,
     dac_dovf,
     dac_dunf,
     
@@ -88,75 +86,60 @@ module axi_ad9162(
     // jesd interface
     // tx_clk is (line-rate/40)
     
-    input                                     tx_clk;
-    output  [255:0]                           tx_data;
+    input             tx_clk;
+    output  [255:0]   tx_data;
     
     // dma interface
     
-    output                                    dac_clk;
-    output                                    dac_valid_0;
-    output                                    dac_enable_0;
-    input   [255:0]                           dac_ddata_0;
-    input                                     dac_dovf;
-    input                                     dac_dunf;
+    output            dac_clk;
+    output            dac_valid;
+    output            dac_enable;
+    input   [255:0]   dac_ddata;
+    input             dac_dovf;
+    input             dac_dunf;
     
     // axi interface
     
-    input                                     s_axi_aclk;
-    input                                     s_axi_aresetn;
-    input                                     s_axi_awvalid;
-    input   [ 31:0]                           s_axi_awaddr;
-    input   [  2:0]                           s_axi_awprot;
-    output                                    s_axi_awready;
-    input                                     s_axi_wvalid;
-    input   [ 31:0]                           s_axi_wdata;
-    input   [  3:0]                           s_axi_wstrb;
-    output                                    s_axi_wready;
-    output                                    s_axi_bvalid;
-    output  [  1:0]                           s_axi_bresp;
-    input                                     s_axi_bready;
-    input                                     s_axi_arvalid;
-    input   [ 31:0]                           s_axi_araddr;
-    input   [  2:0]                           s_axi_arprot;
-    output                                    s_axi_arready;
-    output                                    s_axi_rvalid;
-    output  [ 31:0]                           s_axi_rdata;
-    output  [  1:0]                           s_axi_rresp;
-    input                                     s_axi_rready;
+    input             s_axi_aclk;
+    input             s_axi_aresetn;
+    input             s_axi_awvalid;
+    input   [ 31:0]   s_axi_awaddr;
+    input   [  2:0]   s_axi_awprot;
+    output            s_axi_awready;
+    input             s_axi_wvalid;
+    input   [ 31:0]   s_axi_wdata;
+    input   [  3:0]   s_axi_wstrb;
+    output            s_axi_wready;
+    output            s_axi_bvalid;
+    output  [  1:0]   s_axi_bresp;
+    input             s_axi_bready;
+    input             s_axi_arvalid;
+    input   [ 31:0]   s_axi_araddr;
+    input   [  2:0]   s_axi_arprot;
+    output            s_axi_arready;
+    output            s_axi_rvalid;
+    output  [ 31:0]   s_axi_rdata;
+    output  [  1:0]   s_axi_rresp;
+    input             s_axi_rready;
     
     // internal clocks and resets
     
-    wire                                      dac_rst;
-    wire                                      up_clk;
-    wire                                      up_rstn;
+    wire              dac_rst;
+    wire              up_clk;
+    wire              up_rstn;
     
     // internal signals
     
-    wire    [255:0]                           tx_data_s;
-    wire    [ 15:0]                           dac_data_0_0_s;
-    wire    [ 15:0]                           dac_data_0_1_s;
-    wire    [ 15:0]                           dac_data_0_2_s;
-    wire    [ 15:0]                           dac_data_0_3_s;
-    wire    [ 15:0]                           dac_data_0_4_s;
-    wire    [ 15:0]                           dac_data_0_5_s;
-    wire    [ 15:0]                           dac_data_0_6_s;
-    wire    [ 15:0]                           dac_data_0_7_s;
-    wire    [ 15:0]                           dac_data_0_8_s;
-    wire    [ 15:0]                           dac_data_0_9_s;
-    wire    [ 15:0]                           dac_data_0_10_s;
-    wire    [ 15:0]                           dac_data_0_11_s;
-    wire    [ 15:0]                           dac_data_0_12_s;
-    wire    [ 15:0]                           dac_data_0_13_s;
-    wire    [ 15:0]                           dac_data_0_14_s;
-    wire    [ 15:0]                           dac_data_0_15_s;
-    wire                                      up_wreq_s;
-    wire    [ 13:0]                           up_waddr_s;
-    wire    [ 31:0]                           up_wdata_s;
-    wire                                      up_wack_s;
-    wire                                      up_rreq_s;
-    wire    [ 13:0]                           up_raddr_s;
-    wire    [ 31:0]                           up_rdata_s;
-    wire                                      up_rack_s;
+    wire    [255:0]   tx_data_s;
+    wire    [255:0]   dac_data_s;
+    wire              up_wreq_s;
+    wire    [ 13:0]   up_waddr_s;
+    wire    [ 31:0]   up_wdata_s;
+    wire              up_wack_s;
+    wire              up_rreq_s;
+    wire    [ 13:0]   up_raddr_s;
+    wire    [ 31:0]   up_rdata_s;
+    wire              up_rack_s;
     
     // signal name changes
     
@@ -171,47 +154,20 @@ module axi_ad9162(
       .tx_data (tx_data_s),
       .dac_clk (dac_clk),
       .dac_rst (dac_rst),
-      .dac_data_0_0 (dac_data_0_0_s),
-      .dac_data_0_1 (dac_data_0_1_s),
-      .dac_data_0_2 (dac_data_0_2_s),
-      .dac_data_0_3 (dac_data_0_3_s),
-      .dac_data_0_4 (dac_data_0_4_s),
-      .dac_data_0_5 (dac_data_0_5_s),
-      .dac_data_0_6 (dac_data_0_6_s),
-      .dac_data_0_7 (dac_data_0_7_s),
-      .dac_data_0_8 (dac_data_0_8_s),
-      .dac_data_0_9 (dac_data_0_9_s),
-      .dac_data_0_10 (dac_data_0_10_s),
-      .dac_data_0_11 (dac_data_0_11_s),
-      .dac_data_0_12 (dac_data_0_12_s),
-      .dac_data_0_13 (dac_data_0_13_s),
-      .dac_data_0_14 (dac_data_0_14_s),
-      .dac_data_0_15 (dac_data_0_15_s));
+      .dac_data (dac_data_s));
     
     // core
     
-    axi_ad9162_core #(.ID(ID), .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)) i_core (
+    axi_ad9162_core #(
+      .ID (ID),
+      .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
+    i_core (
       .dac_clk (dac_clk),
       .dac_rst (dac_rst),
-      .dac_data_0_0 (dac_data_0_0_s),
-      .dac_data_0_1 (dac_data_0_1_s),
-      .dac_data_0_2 (dac_data_0_2_s),
-      .dac_data_0_3 (dac_data_0_3_s),
-      .dac_data_0_4 (dac_data_0_4_s),
-      .dac_data_0_5 (dac_data_0_5_s),
-      .dac_data_0_6 (dac_data_0_6_s),
-      .dac_data_0_7 (dac_data_0_7_s),
-      .dac_data_0_8 (dac_data_0_8_s),
-      .dac_data_0_9 (dac_data_0_9_s),
-      .dac_data_0_10 (dac_data_0_10_s),
-      .dac_data_0_11 (dac_data_0_11_s),
-      .dac_data_0_12 (dac_data_0_12_s),
-      .dac_data_0_13 (dac_data_0_13_s),
-      .dac_data_0_14 (dac_data_0_14_s),
-      .dac_data_0_15 (dac_data_0_15_s),
-      .dac_valid_0 (dac_valid_0),
-      .dac_enable_0 (dac_enable_0),
-      .dac_ddata_0 (dac_ddata_0),
+      .dac_data (dac_data_s),
+      .dac_valid (dac_valid),
+      .dac_enable (dac_enable),
+      .dac_ddata (dac_ddata),
       .dac_dovf (dac_dovf),
       .dac_dunf (dac_dunf),
       .up_rstn (up_rstn),
@@ -258,3 +214,5 @@ module axi_ad9162(
 
 endmodule
 
+// ***************************************************************************
+// ***************************************************************************
