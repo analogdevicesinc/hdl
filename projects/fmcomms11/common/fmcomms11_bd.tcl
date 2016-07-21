@@ -210,8 +210,8 @@ ad_connect  util_fmcomms11_gt/tx_ip_data axi_ad9162_jesd/tx_tdata
 ad_connect  util_fmcomms11_gt/tx_out_clk axi_ad9162_core/tx_clk
 ad_connect  util_fmcomms11_gt/tx_data axi_ad9162_core/tx_data
 ad_connect  util_fmcomms11_gt/tx_out_clk axi_ad9162_fifo/dac_clk
-ad_connect  axi_ad9162_core/dac_valid_0 axi_ad9162_fifo/dac_valid
-ad_connect  axi_ad9162_core/dac_ddata_0 axi_ad9162_fifo/dac_data
+ad_connect  axi_ad9162_core/dac_valid axi_ad9162_fifo/dac_valid
+ad_connect  axi_ad9162_core/dac_ddata axi_ad9162_fifo/dac_data
 ad_connect  sys_cpu_clk axi_ad9162_fifo/dma_clk
 ad_connect  sys_cpu_reset axi_ad9162_fifo/dma_rst
 ad_connect  sys_cpu_clk axi_ad9162_dma/m_axis_aclk
