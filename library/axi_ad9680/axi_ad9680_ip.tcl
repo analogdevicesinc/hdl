@@ -14,6 +14,7 @@ adi_ip_files axi_ad9680 [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
+  "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
   "axi_ad9680_pnmon.v" \
   "axi_ad9680_channel.v" \
   "axi_ad9680_if.v" \

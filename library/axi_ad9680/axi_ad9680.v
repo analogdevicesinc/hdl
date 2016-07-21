@@ -43,6 +43,7 @@ module axi_ad9680 (
   // rx_clk is (line-rate/40)
 
   rx_clk,
+  rx_sof,
   rx_data,
 
   // dma interface
@@ -89,6 +90,7 @@ module axi_ad9680 (
   // rx_clk is (line-rate/40)
 
   input           rx_clk;
+  input  [  3:0]  rx_sof;
   input  [127:0]  rx_data;
 
   // dma interface
@@ -193,8 +195,9 @@ module axi_ad9680 (
 
   // main (device interface)
 
-  axi_ad9680_if i_if (
+  axi_ad9680_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
     .rx_clk (rx_clk),
+    .rx_sof (rx_sof),
     .rx_data (rx_data),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
