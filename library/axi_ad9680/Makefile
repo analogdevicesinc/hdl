@@ -17,6 +17,7 @@ M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ../common/up_clock_mon.v
 M_DEPS += ../common/up_adc_common.v
 M_DEPS += ../common/up_adc_channel.v
+M_DEPS += ../common/ad_xcvr_rx_if.v
 M_DEPS += axi_ad9680_pnmon.v
 M_DEPS += axi_ad9680_channel.v
 M_DEPS += axi_ad9680_if.v

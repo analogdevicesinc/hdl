@@ -8,6 +8,7 @@
 M_DEPS := util_adxcvr_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += util_adxcvr_constr.xdc
 M_DEPS += util_adxcvr_xcm.v
 M_DEPS += util_adxcvr_xch.v
 M_DEPS += util_adxcvr.v

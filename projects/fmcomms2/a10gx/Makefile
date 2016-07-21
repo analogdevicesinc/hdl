@@ -92,7 +92,7 @@ M_DEPS += ../../../library/util_wfifo/util_wfifo.v
 M_DEPS += ../../../library/util_wfifo/util_wfifo_hw.tcl
 
 
-M_ALTERA := quartus_sh --64bit -t
+M_ALTERA := quartus_sh --64bit -t 
 
 
 M_FLIST += *.log

@@ -55,7 +55,6 @@ clean:
 	make -C spi_engine/spi_engine_execution clean
 	make -C spi_engine/spi_engine_interconnect clean
 	make -C spi_engine/spi_engine_offload clean
-	make -C util_adc_pack clean
 	make -C util_adcfifo clean
 	make -C util_adxcvr clean
 	make -C util_axis_fifo clean
@@ -63,7 +62,6 @@ clean:
 	make -C util_bsplit clean
 	make -C util_ccat clean
 	make -C util_cpack clean
-	make -C util_dac_unpack clean
 	make -C util_dacfifo clean
 	make -C util_gmii_to_rgmii clean
 	make -C util_gtlb clean
@@ -128,7 +126,6 @@ lib:
 	-make -C spi_engine/spi_engine_execution
 	-make -C spi_engine/spi_engine_interconnect
 	-make -C spi_engine/spi_engine_offload
-	-make -C util_adc_pack
 	-make -C util_adcfifo
 	-make -C util_adxcvr
 	-make -C util_axis_fifo
@@ -136,7 +133,6 @@ lib:
 	-make -C util_bsplit
 	-make -C util_ccat
 	-make -C util_cpack
-	-make -C util_dac_unpack
 	-make -C util_dacfifo
 	-make -C util_gmii_to_rgmii
 	-make -C util_gtlb
