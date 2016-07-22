@@ -47,7 +47,7 @@ proc adi_project_create {project_name {mode 0}} {
   }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
-    set p_board "xilinx.com:kcu105:part0:1.0"
+    set p_board "xilinx.com:kcu105:part0:1.1"
     set sys_zynq 0
   }
   if [regexp "_zed$" $project_name] {
