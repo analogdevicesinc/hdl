@@ -80,32 +80,24 @@ set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 s
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig:7.1 axi_ddr_cntrl]
-source $ad_hdl_dir/projects/common/kcu105/kcu105_system_mig.tcl
+set axi_ddr_cntrl [ create_bd_cell -type ip -vlnv xilinx.com:ip:ddr4:1.1 axi_ddr_cntrl ]
+set_property -dict [list CONFIG.C0_CLOCK_BOARD_INTERFACE {default_sysclk_300}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.C0_DDR4_BOARD_INTERFACE {ddr4_sdram}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.RESET_BOARD_INTERFACE {reset}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {100}] $axi_ddr_cntrl
+set_property -dict [list CONFIG.ADDN_UI_CLKOUT2_FREQ_HZ {200}] $axi_ddr_cntrl
 
 set axi_ddr_cntrl_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_ddr_cntrl_rstgen]
 
 # instance: default peripherals
 
-set axi_ethernet_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.1 axi_ethernet_clkgen]
-set_property -dict [list CONFIG.PRIM_IN_FREQ {625}] $axi_ethernet_clkgen
-set_property -dict [list CONFIG.PRIM_SOURCE {Differential_clock_capable_pin}] $axi_ethernet_clkgen
-set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {125}] $axi_ethernet_clkgen
-set_property -dict [list CONFIG.CLKOUT2_USED {true}] $axi_ethernet_clkgen
-set_property -dict [list CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {312}] $axi_ethernet_clkgen
-set_property -dict [list CONFIG.CLKOUT3_USED {true}] $axi_ethernet_clkgen
-set_property -dict [list CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {625}] $axi_ethernet_clkgen
-set_property -dict [list CONFIG.CLKOUT4_USED {false}] $axi_ethernet_clkgen
-set_property -dict [list CONFIG.USE_LOCKED {true}] $axi_ethernet_clkgen
-set_property -dict [list CONFIG.USE_RESET {false}] $axi_ethernet_clkgen
-
-set axi_ethernet_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_ethernet_rstgen]
-set axi_ethernet_idelayctrl [create_bd_cell -type ip -vlnv xilinx.com:ip:util_idelay_ctrl:1.0 axi_ethernet_idelayctrl]
-
 set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:7.0 axi_ethernet]
-set_property -dict [list CONFIG.PHY_TYPE {SGMII}] $axi_ethernet
-set_property -dict [list CONFIG.ENABLE_LVDS {true}] $axi_ethernet
-set_property -dict [list CONFIG.SupportLevel {0}] $axi_ethernet
+set_property -dict [list CONFIG.SupportLevel {1}] $axi_ethernet
+set_property -dict [list CONFIG.ETHERNET_BOARD_INTERFACE {sgmii_lvds}] $axi_ethernet
+set_property -dict [list CONFIG.MDIO_BOARD_INTERFACE {mdio_mdc}] $axi_ethernet
+set_property -dict [list CONFIG.PHYRST_BOARD_INTERFACE {phy_reset_out}] $axi_ethernet
+set_property -dict [list CONFIG.DIFFCLK_BOARD_INTERFACE {sgmii_phyclk}] $axi_ethernet
+set_property -dict [list CONFIG.lvdsclkrate {625}] $axi_ethernet
 set_property -dict [list CONFIG.TXCSUM {Full}] $axi_ethernet
 set_property -dict [list CONFIG.RXCSUM {Full}] $axi_ethernet
 set_property -dict [list CONFIG.TXMEM {8k}] $axi_ethernet
@@ -210,13 +202,12 @@ ad_connect  c0_ddr4 axi_ddr_cntrl/C0_DDR4
 ad_connect  sys_clk axi_ddr_cntrl/C0_SYS_CLK
 
 ad_connect  axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_rstgen/ext_reset_in
-ad_connect  axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst axi_ethernet_rstgen/ext_reset_in
 ad_connect  axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst axi_ddr_cntrl_rstgen/ext_reset_in
 ad_connect  sys_mem_clk axi_ddr_cntrl_rstgen/slowest_sync_clk
 
 # defaults (ethernet)
 
-ad_connect  phy_clk axi_ethernet_clkgen/CLK_IN1_D
+ad_connect  phy_clk axi_ethernet/lvds_clk
 ad_connect  mdio axi_ethernet/mdio
 ad_connect  sgmii axi_ethernet/sgmii
 ad_connect  axi_ethernet/s_axis_txd axi_ethernet_dma/M_AXIS_MM2S
@@ -224,20 +215,11 @@ ad_connect  axi_ethernet/s_axis_txc axi_ethernet_dma/M_AXIS_CNTRL
 ad_connect  axi_ethernet/m_axis_rxd axi_ethernet_dma/S_AXIS_S2MM
 ad_connect  axi_ethernet/m_axis_rxs axi_ethernet_dma/S_AXIS_STS
 ad_connect  phy_sd axi_ethernet/signal_detect
-ad_connect  sys_cpu_resetn phy_rst_n
-ad_connect  axi_ethernet_clkgen/clk_out1 axi_ethernet/clk125m
-ad_connect  axi_ethernet_clkgen/clk_out1 axi_ethernet_rstgen/slowest_sync_clk
-ad_connect  axi_ethernet_clkgen/clk_out2 axi_ethernet/clk312
-ad_connect  axi_ethernet_clkgen/clk_out3 axi_ethernet/clk625
-ad_connect  axi_ethernet_clkgen/locked axi_ethernet/mmcm_locked
-ad_connect  axi_ethernet_rstgen/peripheral_reset axi_ethernet/rst_125
+ad_connect  phy_rst_n axi_ethernet/phy_rst_n
 ad_connect  axi_ethernet/axi_txd_arstn axi_ethernet_dma/mm2s_prmry_reset_out_n
 ad_connect  axi_ethernet/axi_txc_arstn axi_ethernet_dma/mm2s_cntrl_reset_out_n
 ad_connect  axi_ethernet/axi_rxd_arstn axi_ethernet_dma/s2mm_prmry_reset_out_n
 ad_connect  axi_ethernet/axi_rxs_arstn axi_ethernet_dma/s2mm_sts_reset_out_n
-ad_connect  axi_ethernet_idelayctrl/rdy axi_ethernet/idelay_rdy_in
-ad_connect  axi_ethernet_idelayctrl/rst axi_ethernet_rstgen/peripheral_reset
-ad_connect  axi_ethernet_idelayctrl/ref_clk axi_ethernet_clkgen/clk_out3
 
 # defaults (misc)
 
