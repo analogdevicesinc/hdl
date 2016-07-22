@@ -101,7 +101,10 @@ entity axi_i2s_adi is
 		S_AXI_WREADY		: out std_logic;
 		S_AXI_BRESP		: out std_logic_vector(1 downto 0);
 		S_AXI_BVALID		: out std_logic;
-		S_AXI_AWREADY		: out std_logic
+		S_AXI_AWREADY		: out std_logic;
+    S_AXI_AWPROT  : in  std_logic_vector(2 downto 0);
+    S_AXI_ARPROT  : in  std_logic_vector(2 downto 0)
+
 	);
 end entity axi_i2s_adi;
 

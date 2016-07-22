@@ -79,7 +79,9 @@ module axi_ad9234 (
   s_axi_rvalid,
   s_axi_rresp,
   s_axi_rdata,
-  s_axi_rready);
+  s_axi_rready,
+  s_axi_awprot,
+  s_axi_arprot);
 
   parameter ID = 0;
   parameter DEVICE_TYPE = 0;
@@ -124,6 +126,9 @@ module axi_ad9234 (
   output  [ 1:0]  s_axi_rresp;
   output  [31:0]  s_axi_rdata;
   input           s_axi_rready;
+  input   [ 2:0]  s_axi_awprot;
+  input   [ 2:0]  s_axi_arprot;
+
 
   // internal registers
 
