@@ -223,7 +223,7 @@ module up_dac_common (
       up_drp_wdata <= 'd0;
       up_drp_rdata_hold <= 'd0;
       up_status_ovf <= 'd0;
-      up_status_ovf <= 'd0;
+      up_status_unf <= 'd0;
       up_usr_chanmax <= 'd0;
       up_dac_gpio_out <= 'd0;
     end else begin
