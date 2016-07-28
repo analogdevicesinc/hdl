@@ -2,7 +2,7 @@
 # check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2015.4.2"
+  set REQUIRED_VIVADO_VERSION "2016.2"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -25,6 +25,11 @@ proc adi_ip_create {ip_name} {
   }
 
   create_project $ip_name . -force
+
+  set_msg_config -id {IP_Flow 19-3656} -new_severity INFO
+  set_msg_config -id {IP_Flow 19-2999} -new_severity INFO 
+  set_msg_config -id {IP_Flow 19-1654} -new_severity INFO 
+  set_msg_config -id {IP_Flow 19-459} -new_severity INFO 
 
   set lib_dirs $ad_hdl_dir/library
   if {$ad_hdl_dir ne $ad_phdl_dir} {
@@ -113,6 +118,9 @@ proc adi_ip_properties {ip_name} {
   set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
     -of_objects [ipx::get_bus_interfaces s_axi_aclk \
     -of_objects [ipx::current_core]]]
+}
+
+proc adi_ip_infer_interfaces {ip_name} {
 
   ipx::infer_bus_interfaces xilinx.com:interface:clock_rtl:1.0 [ipx::current_core]
   ipx::infer_bus_interfaces xilinx.com:interface:reset_rtl:1.0 [ipx::current_core]
@@ -122,11 +130,11 @@ proc adi_ip_properties {ip_name} {
 
 proc adi_ip_properties_lite {ip_name} {
 
-  ipx::package_project -root_dir .
+  ipx::package_project -root_dir . \
+    -vendor {analog.com} \
+    -library {user} \
+    -taxonomy {{/AXI_Infrastructure}} 
 
-  set_property vendor {analog.com} [ipx::current_core]
-  set_property library {user} [ipx::current_core]
-  set_property taxonomy {{/AXI_Infrastructure}} [ipx::current_core]
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
   set_property company_url {www.analog.com} [ipx::current_core]
 
@@ -151,7 +159,6 @@ proc adi_ip_properties_lite {ip_name} {
   [ipx::current_core]
 
   ipx::remove_all_bus_interface [ipx::current_core]
-
 }
 
 proc adi_set_ports_dependency {port_prefix dependency} {
