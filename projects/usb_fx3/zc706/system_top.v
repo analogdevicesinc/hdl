@@ -226,7 +226,6 @@ module system_top (
     .ps_intr_07 (1'b0),
     .ps_intr_08 (1'b0),
     .ps_intr_09 (1'b0),
-    .ps_intr_10 (1'b0),
     .spdif (spdif));
 
 endmodule
