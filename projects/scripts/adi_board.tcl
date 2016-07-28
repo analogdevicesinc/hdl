@@ -400,6 +400,9 @@ proc ad_cpu_interconnect {p_address p_name} {
   foreach p_seg_name $p_seg {
     if {($p_index == 0) && ($sys_zynq < 2)} {
       set p_seg_range [get_property range $p_seg_name]
+      if {$p_seg_range < 0x1000} {
+        set p_seg_range 0x1000
+      }
       create_bd_addr_seg -range $p_seg_range \
         -offset $p_address $sys_addr_cntrl_space \
         $p_seg_name "SEG_data_${p_name}"
