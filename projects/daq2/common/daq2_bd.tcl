@@ -37,7 +37,7 @@ set sys_ad9144_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_rese
 set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
 set_property -dict [list CONFIG.QUAD_OR_DUAL_N {0}] $axi_ad9144_core
 
-set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9144_jesd]
+set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9144_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9144_jesd
 
@@ -68,7 +68,7 @@ set sys_ad9680_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_rese
 
 set axi_ad9680_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core]
 
-set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9680_jesd]
+set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9680_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
 
