@@ -61,6 +61,8 @@ module ad_tdd_control(
   tdd_vco_tx_off_1,
   tdd_rx_on_1,
   tdd_rx_off_1,
+  tdd_rx_dp_on_1,
+  tdd_rx_dp_off_1,
   tdd_tx_on_1,
   tdd_tx_off_1,
   tdd_tx_dp_on_1,
@@ -71,6 +73,8 @@ module ad_tdd_control(
   tdd_vco_tx_off_2,
   tdd_rx_on_2,
   tdd_rx_off_2,
+  tdd_rx_dp_on_2,
+  tdd_rx_dp_off_2,
   tdd_tx_on_2,
   tdd_tx_off_2,
   tdd_tx_dp_on_2,
@@ -80,6 +84,7 @@ module ad_tdd_control(
   // TDD control signals
 
   tdd_tx_dp_en,
+  tdd_rx_dp_en,
   tdd_rx_vco_en,
   tdd_tx_vco_en,
   tdd_rx_rf_en,
@@ -113,6 +118,8 @@ module ad_tdd_control(
   input  [23:0]   tdd_vco_tx_off_1;
   input  [23:0]   tdd_rx_on_1;
   input  [23:0]   tdd_rx_off_1;
+  input  [23:0]   tdd_rx_dp_on_1;
+  input  [23:0]   tdd_rx_dp_off_1;
   input  [23:0]   tdd_tx_on_1;
   input  [23:0]   tdd_tx_off_1;
   input  [23:0]   tdd_tx_dp_on_1;
@@ -123,6 +130,8 @@ module ad_tdd_control(
   input  [23:0]   tdd_vco_tx_off_2;
   input  [23:0]   tdd_rx_on_2;
   input  [23:0]   tdd_rx_off_2;
+  input  [23:0]   tdd_rx_dp_on_2;
+  input  [23:0]   tdd_rx_dp_off_2;
   input  [23:0]   tdd_tx_on_2;
   input  [23:0]   tdd_tx_off_2;
   input  [23:0]   tdd_tx_dp_on_2;
@@ -130,17 +139,19 @@ module ad_tdd_control(
 
   input           tdd_sync;
 
-  output          tdd_tx_dp_en;       // initiate vco tx2rx switch
-  output          tdd_rx_vco_en;      // initiate vco rx2tx switch
-  output          tdd_tx_vco_en;      // power up RF Rx
-  output          tdd_rx_rf_en;       // power up RF Tx
-  output          tdd_tx_rf_en;       // enable Tx datapath
+  output          tdd_rx_vco_en;      // initiate vco tx2rx switch
+  output          tdd_tx_vco_en;      // initiate vco rx2tx switch
+  output          tdd_rx_rf_en;       // power up RF Rx
+  output          tdd_tx_rf_en;       // power up RF Tx
+  output          tdd_tx_dp_en;       // enable Tx datapath
+  output          tdd_rx_dp_en;       // enable Rx datapath
 
   output [23:0]   tdd_counter_status;
 
   // tdd control related
 
   reg             tdd_tx_dp_en = 1'b0;
+  reg             tdd_rx_dp_en = 1'b0;
   reg             tdd_rx_vco_en = 1'b0;
   reg             tdd_tx_vco_en = 1'b0;
   reg             tdd_rx_rf_en = 1'b0;
@@ -160,6 +171,8 @@ module ad_tdd_control(
   reg             counter_at_tdd_vco_tx_off_1 = 1'b0;
   reg             counter_at_tdd_rx_on_1 = 1'b0;
   reg             counter_at_tdd_rx_off_1 = 1'b0;
+  reg             counter_at_tdd_rx_dp_on_1 = 1'b0;
+  reg             counter_at_tdd_rx_dp_off_1 = 1'b0;
   reg             counter_at_tdd_tx_on_1 = 1'b0;
   reg             counter_at_tdd_tx_off_1 = 1'b0;
   reg             counter_at_tdd_tx_dp_on_1 = 1'b0;
@@ -170,6 +183,8 @@ module ad_tdd_control(
   reg             counter_at_tdd_vco_tx_off_2 = 1'b0;
   reg             counter_at_tdd_rx_on_2 = 1'b0;
   reg             counter_at_tdd_rx_off_2 = 1'b0;
+  reg             counter_at_tdd_rx_dp_on_2 = 1'b0;
+  reg             counter_at_tdd_rx_dp_off_2 = 1'b0;
   reg             counter_at_tdd_tx_on_2 = 1'b0;
   reg             counter_at_tdd_tx_off_2 = 1'b0;
   reg             counter_at_tdd_tx_dp_on_2 = 1'b0;
@@ -499,6 +514,48 @@ module ad_tdd_control(
     end
   end
 
+  // start/stop rx data path
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_rx_dp_on_1 <= 1'b0;
+    end else if(tdd_counter == tdd_rx_dp_on_1) begin
+      counter_at_tdd_rx_dp_on_1 <= 1'b1;
+    end else begin
+      counter_at_tdd_rx_dp_on_1 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_rx_dp_on_2 <= 1'b0;
+    end else if((tdd_secondary == 1'b1) && (tdd_counter == tdd_rx_dp_on_2)) begin
+      counter_at_tdd_rx_dp_on_2 <= 1'b1;
+    end else begin
+      counter_at_tdd_rx_dp_on_2 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_rx_dp_off_1 <= 1'b0;
+    end else if(tdd_counter == tdd_rx_dp_off_1) begin
+      counter_at_tdd_rx_dp_off_1 <= 1'b1;
+    end else begin
+      counter_at_tdd_rx_dp_off_1 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_rx_dp_off_2 <= 1'b0;
+    end else if((tdd_secondary == 1'b1) && (tdd_counter == tdd_rx_dp_off_2)) begin
+      counter_at_tdd_rx_dp_off_2 <= 1'b1;
+    end else begin
+      counter_at_tdd_rx_dp_off_2 <= 1'b0;
+    end
+  end
+
+
   // control-path delay compensation
 
   ad_addsub #(
@@ -814,6 +871,20 @@ module ad_tdd_control(
       tdd_tx_dp_en <= tdd_tx_only;
     end else begin
       tdd_tx_dp_en <= tdd_tx_dp_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_rx_dp_en <= 1'b0;
+    end else if((tdd_cstate == OFF) || (counter_at_tdd_rx_dp_off_1 == 1'b1) || (counter_at_tdd_rx_dp_off_2 == 1'b1)) begin
+      tdd_rx_dp_en <= 1'b0;
+    end else if((tdd_cstate == ON) && ((counter_at_tdd_rx_dp_on_1 == 1'b1) || (counter_at_tdd_rx_dp_on_2 == 1'b1))) begin
+      tdd_rx_dp_en <= 1'b1;
+    end else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_rx_dp_en <= tdd_rx_only;
+    end else begin
+      tdd_rx_dp_en <= tdd_rx_dp_en;
     end
   end
 

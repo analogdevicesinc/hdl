@@ -192,6 +192,8 @@ module axi_ad9361_tdd (
   wire    [23:0]    tdd_vco_tx_off_1_s;
   wire    [23:0]    tdd_rx_on_1_s;
   wire    [23:0]    tdd_rx_off_1_s;
+  wire    [23:0]    tdd_rx_dp_on_1_s;
+  wire    [23:0]    tdd_rx_dp_off_1_s;
   wire    [23:0]    tdd_tx_on_1_s;
   wire    [23:0]    tdd_tx_off_1_s;
   wire    [23:0]    tdd_tx_dp_on_1_s;
@@ -202,6 +204,8 @@ module axi_ad9361_tdd (
   wire    [23:0]    tdd_vco_tx_off_2_s;
   wire    [23:0]    tdd_rx_on_2_s;
   wire    [23:0]    tdd_rx_off_2_s;
+  wire    [23:0]    tdd_rx_dp_on_2_s;
+  wire    [23:0]    tdd_rx_dp_off_2_s;
   wire    [23:0]    tdd_tx_on_2_s;
   wire    [23:0]    tdd_tx_off_2_s;
   wire    [23:0]    tdd_tx_dp_on_2_s;
@@ -209,6 +213,7 @@ module axi_ad9361_tdd (
 
   wire    [23:0]    tdd_counter_status;
 
+  wire              tdd_rx_dp_en_s;
   wire              tdd_tx_dp_en_s;
 
   assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_sync, tdd_tx_dp_en_s,
@@ -237,10 +242,10 @@ module axi_ad9361_tdd (
 
   always @(posedge clk) begin
     if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
-      tdd_rx_valid_i0 <= rx_valid_i0 & tdd_rx_rf_en;
-      tdd_rx_valid_q0 <= rx_valid_q0 & tdd_rx_rf_en;
-      tdd_rx_valid_i1 <= rx_valid_i1 & tdd_rx_rf_en;
-      tdd_rx_valid_q1 <= rx_valid_q1 & tdd_rx_rf_en;
+      tdd_rx_valid_i0 <= rx_valid_i0 & tdd_rx_dp_en_s;
+      tdd_rx_valid_q0 <= rx_valid_q0 & tdd_rx_dp_en_s;
+      tdd_rx_valid_i1 <= rx_valid_i1 & tdd_rx_dp_en_s;
+      tdd_rx_valid_q1 <= rx_valid_q1 & tdd_rx_dp_en_s;
     end else begin
       tdd_rx_valid_i0 <= rx_valid_i0;
       tdd_rx_valid_q0 <= rx_valid_q0;
@@ -248,7 +253,6 @@ module axi_ad9361_tdd (
       tdd_rx_valid_q1 <= rx_valid_q1;
     end
   end
-
 
   // instantiations
 
@@ -271,6 +275,8 @@ module axi_ad9361_tdd (
     .tdd_vco_tx_off_1(tdd_vco_tx_off_1_s),
     .tdd_rx_on_1(tdd_rx_on_1_s),
     .tdd_rx_off_1(tdd_rx_off_1_s),
+    .tdd_rx_dp_on_1(tdd_rx_dp_on_1_s),
+    .tdd_rx_dp_off_1(tdd_rx_dp_off_1_s),
     .tdd_tx_on_1(tdd_tx_on_1_s),
     .tdd_tx_off_1(tdd_tx_off_1_s),
     .tdd_tx_dp_on_1(tdd_tx_dp_on_1_s),
@@ -281,6 +287,8 @@ module axi_ad9361_tdd (
     .tdd_vco_tx_off_2(tdd_vco_tx_off_2_s),
     .tdd_rx_on_2(tdd_rx_on_2_s),
     .tdd_rx_off_2(tdd_rx_off_2_s),
+    .tdd_rx_dp_on_2(tdd_rx_dp_on_2_s),
+    .tdd_rx_dp_off_2(tdd_rx_dp_off_2_s),
     .tdd_tx_on_2(tdd_tx_on_2_s),
     .tdd_tx_off_2(tdd_tx_off_2_s),
     .tdd_tx_dp_on_2(tdd_tx_dp_on_2_s),
@@ -301,8 +309,8 @@ module axi_ad9361_tdd (
   // for the axi_ad9361 core
 
   ad_tdd_control #(
-    .TX_DATA_PATH_DELAY(14),
-    .CONTROL_PATH_DELAY(3))
+    .TX_DATA_PATH_DELAY(),
+    .CONTROL_PATH_DELAY())
   i_tdd_control(
     .clk(clk),
     .rst(rst),
@@ -320,6 +328,8 @@ module axi_ad9361_tdd (
     .tdd_vco_tx_off_1(tdd_vco_tx_off_1_s),
     .tdd_rx_on_1(tdd_rx_on_1_s),
     .tdd_rx_off_1(tdd_rx_off_1_s),
+    .tdd_rx_dp_on_1(tdd_rx_dp_on_1_s),
+    .tdd_rx_dp_off_1(tdd_rx_dp_off_1_s),
     .tdd_tx_on_1(tdd_tx_on_1_s),
     .tdd_tx_off_1(tdd_tx_off_1_s),
     .tdd_tx_dp_on_1(tdd_tx_dp_on_1_s),
@@ -330,10 +340,13 @@ module axi_ad9361_tdd (
     .tdd_vco_tx_off_2(tdd_vco_tx_off_2_s),
     .tdd_rx_on_2(tdd_rx_on_2_s),
     .tdd_rx_off_2(tdd_rx_off_2_s),
+    .tdd_rx_dp_on_2(tdd_rx_dp_on_2_s),
+    .tdd_rx_dp_off_2(tdd_rx_dp_off_2_s),
     .tdd_tx_on_2(tdd_tx_on_2_s),
     .tdd_tx_off_2(tdd_tx_off_2_s),
     .tdd_tx_dp_on_2(tdd_tx_dp_on_2_s),
     .tdd_tx_dp_off_2(tdd_tx_dp_off_2_s),
+    .tdd_rx_dp_en(tdd_rx_dp_en_s),
     .tdd_tx_dp_en(tdd_tx_dp_en_s),
     .tdd_rx_vco_en(tdd_rx_vco_en),
     .tdd_tx_vco_en(tdd_tx_vco_en),
