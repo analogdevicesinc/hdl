@@ -74,6 +74,7 @@ set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interfaces s_axi -of_obj
 ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]
 set_property range {4096} [ipx::get_address_blocks axi_lite \
   -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
+
 for {set n 0} {$n < 16} {incr n} {
 
   if {($n%4) == 0} {
