@@ -158,7 +158,8 @@ proc adi_ip_properties_lite {ip_name} {
     kintexu       Production}\
   [ipx::current_core]
 
-  ipx::remove_all_bus_interface [ipx::current_core]
+  ipx::remove_all_bus_interface -quiet [ipx::current_core]
+  ipx::remove_all_address_block -quiet [ipx::get_memory_maps * -of_objects [ipx::current_core]]
 }
 
 proc adi_set_ports_dependency {port_prefix dependency} {
