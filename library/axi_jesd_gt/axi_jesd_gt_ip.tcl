@@ -22,6 +22,7 @@ adi_ip_files axi_jesd_gt [list \
   "axi_jesd_gt.v" ]
 
 adi_ip_properties axi_jesd_gt
+adi_ip_infer_interfaces axi_jesd_gt
 
 adi_ip_constraints axi_jesd_gt [list \
   "axi_jesd_gt_tx_constr.xdc" \
