@@ -1,13 +1,13 @@
 
 # transmit-path (refclk)
 
-add_instance xcvr_tx_ref_clk altera_clock_bridge 15.1
+add_instance xcvr_tx_ref_clk altera_clock_bridge 16.0
 set_instance_parameter_value xcvr_tx_ref_clk {EXPLICIT_CLOCK_RATE} {500000000.0}
 
 # transmit-path (pll-core)
 
-add_instance xcvr_tx_pll altera_iopll 15.1
-add_instance xcvr_tx_pll_reconfig altera_pll_reconfig 15.1
+add_instance xcvr_tx_pll altera_iopll 16.0
+add_instance xcvr_tx_pll_reconfig altera_pll_reconfig 16.0
 set_instance_parameter_value xcvr_tx_pll {gui_en_reconf} {1}
 set_instance_parameter_value xcvr_tx_pll {gui_reference_clock_frequency} {500.0}
 set_instance_parameter_value xcvr_tx_pll {gui_use_locked} {0}
@@ -15,7 +15,7 @@ set_instance_parameter_value xcvr_tx_pll {gui_output_clock_frequency0} {250.0}
 
 # transmit-path (pll-atx)
 
-add_instance xcvr_tx_lane_pll altera_xcvr_atx_pll_a10 15.1
+add_instance xcvr_tx_lane_pll altera_xcvr_atx_pll_a10 16.0
 set_instance_parameter_value xcvr_tx_lane_pll {enable_pll_reconfig} {1}
 set_instance_parameter_value xcvr_tx_lane_pll {rcfg_separate_avmm_busy} {1}
 set_instance_parameter_value xcvr_tx_lane_pll {set_capability_reg_enable} {1}
@@ -25,13 +25,13 @@ set_instance_parameter_value xcvr_tx_lane_pll {set_auto_reference_clock_frequenc
 
 # receive-path (refclk)
 
-add_instance xcvr_rx_ref_clk altera_clock_bridge 15.1
+add_instance xcvr_rx_ref_clk altera_clock_bridge 16.0
 set_instance_parameter_value xcvr_rx_ref_clk {EXPLICIT_CLOCK_RATE} {500000000.0}
 
 # receive-path (pll-core)
 
-add_instance xcvr_rx_pll altera_iopll 15.1
-add_instance xcvr_rx_pll_reconfig altera_pll_reconfig 15.1
+add_instance xcvr_rx_pll altera_iopll 16.0
+add_instance xcvr_rx_pll_reconfig altera_pll_reconfig 16.0
 set_instance_parameter_value xcvr_rx_pll {gui_en_reconf} {1}
 set_instance_parameter_value xcvr_rx_pll {gui_reference_clock_frequency} {500.0}
 set_instance_parameter_value xcvr_rx_pll {gui_use_locked} {0}
@@ -46,7 +46,7 @@ set_instance_parameter_value axi_jesd_xcvr {RX_NUM_OF_LANES} {4}
 
 # transceiver-reset
 
-add_instance xcvr_rst_cntrl altera_xcvr_reset_control 15.1
+add_instance xcvr_rst_cntrl altera_xcvr_reset_control 16.0
 set_instance_parameter_value xcvr_rst_cntrl {CHANNELS} {4}
 set_instance_parameter_value xcvr_rst_cntrl {SYS_CLK_IN_MHZ} {100}
 set_instance_parameter_value xcvr_rst_cntrl {TX_PLL_ENABLE} {1}
@@ -61,7 +61,7 @@ set_instance_parameter_value xcvr_rst_cntrl {T_RX_DIGITALRESET} {4000}
 
 # transceiver-core (+ jesd)
 
-add_instance xcvr_core altera_jesd204 15.1
+add_instance xcvr_core altera_jesd204 16.0
 set_instance_parameter_value xcvr_core {wrapper_opt} {base_phy}
 set_instance_parameter_value xcvr_core {DATA_PATH} {RX_TX}
 set_instance_parameter_value xcvr_core {lane_rate} {10000.0}
@@ -143,8 +143,6 @@ add_connection axi_jesd_xcvr.if_rx_rstn xcvr_core.rxlink_rst_n
 add_connection axi_jesd_xcvr.if_rx_ready xcvr_rst_cntrl.rx_ready
 add_connection axi_jesd_xcvr.if_rx_ip_sysref xcvr_core.rx_sysref
 add_connection axi_jesd_xcvr.if_rx_ip_sync xcvr_core.rx_dev_sync_n
-add_connection axi_jesd_xcvr.if_rx_ip_sof xcvr_core.rx_sof
-add_connection xcvr_core.jesd204_rx_link axi_jesd_xcvr.if_rx_ip_avl
 add_connection sys_clk.clk_reset axi_jesd_xcvr.s_axi_reset
 add_connection sys_clk.clk axi_jesd_xcvr.s_axi_clock
 add_connection sys_cpu.data_master axi_jesd_xcvr.s_axi
@@ -220,10 +218,12 @@ add_connection sys_cpu.irq axi_ad9152_dma.interrupt_sender
 add_instance axi_ad9680_core axi_ad9680 1.0
 
 add_connection xcvr_rx_pll.outclk0 axi_ad9680_core.if_rx_clk
-add_connection axi_jesd_xcvr.if_rx_data axi_ad9680_core.if_rx_data
 add_connection sys_clk.clk_reset axi_ad9680_core.s_axi_reset
 add_connection sys_clk.clk axi_ad9680_core.s_axi_clock
 add_connection sys_cpu.data_master axi_ad9680_core.s_axi
+
+add_connection xcvr_core.jesd204_rx_link axi_ad9680_core.if_rx_ip_avl
+add_connection xcvr_core.rx_sof axi_ad9680_core.if_rx_sof
 
 # ad9680-pack
 
