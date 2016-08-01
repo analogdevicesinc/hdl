@@ -45,6 +45,8 @@ module axi_ad9680 (
   rx_clk,
   rx_sof,
   rx_data,
+  rx_valid,
+  rx_ready,
 
   // dma interface
 
@@ -92,6 +94,9 @@ module axi_ad9680 (
   input           rx_clk;
   input  [  3:0]  rx_sof;
   input  [127:0]  rx_data;
+
+  input           rx_valid;
+  output          rx_ready;
 
   // dma interface
 
@@ -172,6 +177,7 @@ module axi_ad9680 (
 
   assign adc_valid_0 = 1'b1;
   assign adc_valid_1 = 1'b1;
+  assign rx_ready = 1'b1;
 
   // processor read interface
 
