@@ -221,13 +221,13 @@ ad_connect  axi_pzslb_gt/gt_rx_0 util_pzslb_gtlb_0/gt_rx_0
 ad_connect  axi_pzslb_gt/gt_tx_0 util_pzslb_gtlb_0/gt_tx_0
 ad_connect  axi_pzslb_gt/gt_rx_ip_0 util_pzslb_gtlb_0/gt_rx_ip_0
 ad_connect  axi_pzslb_gt/gt_tx_ip_0 util_pzslb_gtlb_0/gt_tx_ip_0
-ad_connect  axi_pzslb_gt/rx_gt_comma_align_enb_0 util_pzslb_gtlb_0/rx_gt_comma_align_enb_0 
+ad_connect  axi_pzslb_gt/rx_gt_comma_align_enb_0 util_pzslb_gtlb_0/rx_gt_comma_align_enb_0
 ad_connect  axi_pzslb_gt/gt_pll_1 util_pzslb_gtlb_1/gt_pll_0
 ad_connect  axi_pzslb_gt/gt_rx_1 util_pzslb_gtlb_1/gt_rx_0
 ad_connect  axi_pzslb_gt/gt_tx_1 util_pzslb_gtlb_1/gt_tx_0
 ad_connect  axi_pzslb_gt/gt_rx_ip_1 util_pzslb_gtlb_1/gt_rx_ip_0
 ad_connect  axi_pzslb_gt/gt_tx_ip_1 util_pzslb_gtlb_1/gt_tx_ip_0
-ad_connect  axi_pzslb_gt/rx_gt_comma_align_enb_1 util_pzslb_gtlb_1/rx_gt_comma_align_enb_0 
+ad_connect  axi_pzslb_gt/rx_gt_comma_align_enb_1 util_pzslb_gtlb_1/rx_gt_comma_align_enb_0
 
 # un-used io (regular)
 

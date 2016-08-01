@@ -115,65 +115,65 @@ for {set n 0} {$n < 8} {incr n} {
 }
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.QPLL0_ENABLE')) == 1} \
-  [ipx::get_bus_interfaces gt_qpll_0 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_qpll_0 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.QPLL1_ENABLE')) == 1} \
-  [ipx::get_bus_interfaces gt_qpll_1 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_qpll_1 -of_objects [ipx::current_core]]
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 0} \
-  [ipx::get_bus_interfaces gt_pll_0 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_pll_0 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 1} \
-  [ipx::get_bus_interfaces gt_pll_1 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_pll_1 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 2} \
-  [ipx::get_bus_interfaces gt_pll_2 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_pll_2 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 3} \
-  [ipx::get_bus_interfaces gt_pll_3 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_pll_3 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 4} \
-  [ipx::get_bus_interfaces gt_pll_4 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_pll_4 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 5} \
-  [ipx::get_bus_interfaces gt_pll_5 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_pll_5 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 6} \
-  [ipx::get_bus_interfaces gt_pll_6 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_pll_6 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES')) > 7} \
-  [ipx::get_bus_interfaces gt_pll_7 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_pll_7 -of_objects [ipx::current_core]]
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 0} \
-  [ipx::get_bus_interfaces gt_rx_*0 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_rx_*0 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 1} \
-  [ipx::get_bus_interfaces gt_rx_*1 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_rx_*1 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 2} \
-  [ipx::get_bus_interfaces gt_rx_*2 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_rx_*2 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 3} \
-  [ipx::get_bus_interfaces gt_rx_*3 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_rx_*3 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 4} \
-  [ipx::get_bus_interfaces gt_rx_*4 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_rx_*4 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 5} \
-  [ipx::get_bus_interfaces gt_rx_*5 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_rx_*5 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 6} \
-  [ipx::get_bus_interfaces gt_rx_*6 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_rx_*6 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 7} \
-  [ipx::get_bus_interfaces gt_rx_*7 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_rx_*7 -of_objects [ipx::current_core]]
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 0} \
-  [ipx::get_bus_interfaces gt_tx_*0 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_tx_*0 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 1} \
-  [ipx::get_bus_interfaces gt_tx_*1 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_tx_*1 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 2} \
-  [ipx::get_bus_interfaces gt_tx_*2 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_tx_*2 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 3} \
-  [ipx::get_bus_interfaces gt_tx_*3 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_tx_*3 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 4} \
-  [ipx::get_bus_interfaces gt_tx_*4 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_tx_*4 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 5} \
-  [ipx::get_bus_interfaces gt_tx_*5 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_tx_*5 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 6} \
-  [ipx::get_bus_interfaces gt_tx_*6 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_tx_*6 -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES')) > 7} \
-  [ipx::get_bus_interfaces gt_tx_*7 -of_objects [ipx::current_core]] 
+  [ipx::get_bus_interfaces gt_tx_*7 -of_objects [ipx::current_core]]
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 0} \
-  [ipx::get_ports *rx_*0* -of_objects [ipx::current_core]] 
+  [ipx::get_ports *rx_*0* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 1} \
-  [ipx::get_ports *rx_*1* -of_objects [ipx::current_core]] 
+  [ipx::get_ports *rx_*1* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 2} \
   [ipx::get_ports *rx_*2* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES')) > 3} \
