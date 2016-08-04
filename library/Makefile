@@ -31,7 +31,6 @@ clean:
 	make -C axi_ad9684 clean
 	make -C axi_ad9739a clean
 	make -C axi_adcfifo clean
-	make -C axi_adxcvr clean
 	make -C axi_clkgen clean
 	make -C axi_dacfifo clean
 	make -C axi_dmac clean
@@ -56,7 +55,6 @@ clean:
 	make -C spi_engine/spi_engine_interconnect clean
 	make -C spi_engine/spi_engine_offload clean
 	make -C util_adcfifo clean
-	make -C util_adxcvr clean
 	make -C util_axis_fifo clean
 	make -C util_axis_resize clean
 	make -C util_bsplit clean
@@ -75,6 +73,8 @@ clean:
 	make -C util_tdd_sync clean
 	make -C util_upack clean
 	make -C util_wfifo clean
+	make -C xilinx/axi_adxcvr clean
+	make -C xilinx/util_adxcvr clean
 
 
 clean-all:clean
@@ -102,7 +102,6 @@ lib:
 	-make -C axi_ad9684
 	-make -C axi_ad9739a
 	-make -C axi_adcfifo
-	-make -C axi_adxcvr
 	-make -C axi_clkgen
 	-make -C axi_dacfifo
 	-make -C axi_dmac
@@ -127,7 +126,6 @@ lib:
 	-make -C spi_engine/spi_engine_interconnect
 	-make -C spi_engine/spi_engine_offload
 	-make -C util_adcfifo
-	-make -C util_adxcvr
 	-make -C util_axis_fifo
 	-make -C util_axis_resize
 	-make -C util_bsplit
@@ -146,6 +144,8 @@ lib:
 	-make -C util_tdd_sync
 	-make -C util_upack
 	-make -C util_wfifo
+	-make -C xilinx/axi_adxcvr
+	-make -C xilinx/util_adxcvr
 
 ####################################################################################
 ####################################################################################

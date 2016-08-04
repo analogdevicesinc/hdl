@@ -6,9 +6,9 @@
 ####################################################################################
 
 M_DEPS := axi_adxcvr_ip.tcl
-M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/up_axi.v
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_ip.tcl
+M_DEPS += ../../common/up_axi.v
 M_DEPS += axi_adxcvr_es.v
 M_DEPS += axi_adxcvr_up.v
 M_DEPS += axi_adxcvr_mdrp.v
