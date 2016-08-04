@@ -223,7 +223,7 @@ ad_cpu_interconnect 0x44A60000 axi_ad9144_xcvr
 ad_cpu_interconnect 0x44A00000 axi_ad9144_core
 ad_cpu_interconnect 0x44A90000 axi_ad9144_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9144_dma
-ad_cpu_interconnect 0x44A70000 axi_ad9680_xcvr
+ad_cpu_interconnect 0x44A50000 axi_ad9680_xcvr
 ad_cpu_interconnect 0x44A10000 axi_ad9680_core
 ad_cpu_interconnect 0x44A91000 axi_ad9680_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9680_dma
