@@ -14,10 +14,10 @@ M_DEPS += axi_adxcvr_up.v
 M_DEPS += axi_adxcvr_mdrp.v
 M_DEPS += axi_adxcvr_mstatus.v
 M_DEPS += axi_adxcvr.v
-M_DEPS += ../interfaces/if_xcvr_cm.xml
-M_DEPS += ../interfaces/if_xcvr_cm_rtl.xml
-M_DEPS += ../interfaces/if_xcvr_ch.xml
-M_DEPS += ../interfaces/if_xcvr_ch_rtl.xml
+M_DEPS += ../../interfaces/if_xcvr_cm.xml
+M_DEPS += ../../interfaces/if_xcvr_cm_rtl.xml
+M_DEPS += ../../interfaces/if_xcvr_ch.xml
+M_DEPS += ../../interfaces/if_xcvr_ch_rtl.xml
 
 M_VIVADO := vivado -mode batch -source
 
@@ -52,6 +52,6 @@ axi_adxcvr.xpr: $(M_DEPS)
 	$(M_VIVADO) axi_adxcvr_ip.tcl  >> axi_adxcvr_ip.log 2>&1
 
 dep:
-	make -C ../interfaces
+	make -C ../../interfaces
 ####################################################################################
 ####################################################################################
