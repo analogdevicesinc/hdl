@@ -9,7 +9,7 @@ adi_project_create ccbrk_pzsdr1
 adi_project_files ccbrk_pzsdr1 [list \
   "system_top.v" \
   "system_constr.xdc"\
-  "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/pzsdr1/pzsdr1_system_constr.xdc" \
   "$ad_hdl_dir/projects/common/pzsdr1/pzsdr1_lvds_system_constr.xdc" ]
 

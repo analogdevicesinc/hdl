@@ -11,8 +11,8 @@ adi_project_files fmcadc5_vc707 [list \
   "../common/fmcadc5_psync.v" \
   "system_top.v" \
   "system_constr.xdc"\
-  "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/library/common/ad_lvds_out.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_lvds_out.v" \
   "$ad_hdl_dir/projects/common/vc707/vc707_system_constr.xdc" ]
 
 set_property is_enabled false [get_files  *axi_jesd_gt_tx_constr.xdc]

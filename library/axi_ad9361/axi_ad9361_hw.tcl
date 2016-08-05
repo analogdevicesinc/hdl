@@ -15,16 +15,14 @@ set_module_property ELABORATION_CALLBACK p_axi_ad9361
 
 add_fileset quartus_synth QUARTUS_SYNTH "" ""
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9361
-add_fileset_file MULT_MACRO.v             VERILOG PATH $ad_hdl_dir/library/common/altera/MULT_MACRO.v
-add_fileset_file DSP48E1.v                VERILOG PATH $ad_hdl_dir/library/common/altera/DSP48E1.v
 add_fileset_file ad_rst.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
-add_fileset_file ad_lvds_clk.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_lvds_clk.v
-add_fileset_file ad_lvds_in.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_lvds_in.v
-add_fileset_file ad_lvds_out.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_lvds_out.v
-add_fileset_file ad_cmos_clk.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_cmos_clk.v
-add_fileset_file ad_cmos_in.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_cmos_in.v
-add_fileset_file ad_cmos_out.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_cmos_out.v
-add_fileset_file ad_mul.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_mul.v
+add_fileset_file ad_lvds_clk.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_lvds_clk.v
+add_fileset_file ad_lvds_in.v             VERILOG PATH $ad_hdl_dir/library/altera/common/ad_lvds_in.v
+add_fileset_file ad_lvds_out.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_lvds_out.v
+add_fileset_file ad_cmos_clk.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_cmos_clk.v
+add_fileset_file ad_cmos_in.v             VERILOG PATH $ad_hdl_dir/library/altera/common/ad_cmos_in.v
+add_fileset_file ad_cmos_out.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_cmos_out.v
+add_fileset_file ad_mul.v                 VERILOG PATH $ad_hdl_dir/library/altera/common/ad_mul.v
 add_fileset_file ad_pnmon.v               VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
 add_fileset_file ad_dds_sine.v            VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine.v
 add_fileset_file ad_dds_1.v               VERILOG PATH $ad_hdl_dir/library/common/ad_dds_1.v
@@ -94,7 +92,7 @@ set_parameter_property ADC_DATAPATH_DISABLE TYPE INTEGER
 set_parameter_property ADC_DATAPATH_DISABLE UNITS None
 set_parameter_property ADC_DATAPATH_DISABLE HDL_PARAMETER true
 
-add_parameter DEVICE_FAMILY STRING 
+add_parameter DEVICE_FAMILY STRING
 set_parameter_property DEVICE_FAMILY SYSTEM_INFO {DEVICE_FAMILY}
 set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
 set_parameter_property DEVICE_FAMILY HDL_PARAMETER false

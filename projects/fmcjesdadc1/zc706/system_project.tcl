@@ -7,7 +7,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project_create fmcjesdadc1_zc706
 adi_project_files fmcjesdadc1_zc706 [list \
-  "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "../common/fmcjesdadc1_spi.v" \
   "system_top.v" \
   "system_constr.xdc" \

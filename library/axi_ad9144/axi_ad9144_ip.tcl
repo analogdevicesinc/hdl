@@ -6,7 +6,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_ad9144
 adi_ip_files axi_ad9144 [list \
   "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
-  "$ad_hdl_dir/library/common/ad_mul.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \

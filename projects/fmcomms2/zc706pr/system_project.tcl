@@ -9,7 +9,7 @@ adi_project_create fmcomms2_zc706 1
 adi_project_synth fmcomms2_zc706 "" \
   [list "system_top.v" \
   "../common/prcfg_bb.v" \
-  "$ad_hdl_dir/library/common/ad_iobuf.v"] \
+  "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v"] \
   [list "../zc706/system_constr.xdc" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc"]
 
