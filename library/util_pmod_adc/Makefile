@@ -40,7 +40,7 @@ clean-all:
 
 
 util_pmod_adc.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_pmod_adc_ip.tcl  >> util_pmod_adc_ip.log 2>&1
 
 ####################################################################################

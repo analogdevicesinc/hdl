@@ -42,7 +42,7 @@ clean-all:
 
 
 util_upack.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_upack_ip.tcl  >> util_upack_ip.log 2>&1
 
 ####################################################################################

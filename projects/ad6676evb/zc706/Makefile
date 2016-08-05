@@ -39,6 +39,7 @@ M_FLIST += *.sdk
 M_FLIST += *.hw
 M_FLIST += *.sim
 M_FLIST += .Xil
+M_FLIST += *.ip_user_files
 
 
 
@@ -62,7 +63,7 @@ clean-all:clean
 
 
 ad6676evb_zc706.sdk/system_top.hdf: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> ad6676evb_zc706_vivado.log 2>&1
 
 

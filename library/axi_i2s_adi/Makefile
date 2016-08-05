@@ -50,7 +50,7 @@ clean-all:
 
 
 axi_i2s_adi.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_i2s_adi_ip.tcl  >> axi_i2s_adi_ip.log 2>&1
 
 ####################################################################################

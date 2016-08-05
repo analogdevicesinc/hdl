@@ -39,7 +39,7 @@ clean-all:
 
 
 util_i2c_mixer.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_i2c_mixer_ip.tcl  >> util_i2c_mixer_ip.log 2>&1
 
 ####################################################################################

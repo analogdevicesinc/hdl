@@ -40,7 +40,7 @@ clean-all:
 
 
 spi_engine_offload.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) spi_engine_offload_ip.tcl  >> spi_engine_offload_ip.log 2>&1
 
 ####################################################################################

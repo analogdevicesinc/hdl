@@ -39,7 +39,7 @@ clean-all:
 
 
 cordic_demod.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) cordic_demod_ip.tcl  >> cordic_demod_ip.log 2>&1
 
 ####################################################################################

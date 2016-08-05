@@ -52,7 +52,7 @@ clean-all:
 
 
 axi_mc_controller.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_mc_controller_ip.tcl  >> axi_mc_controller_ip.log 2>&1
 
 ####################################################################################

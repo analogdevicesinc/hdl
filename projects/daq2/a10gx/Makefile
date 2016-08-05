@@ -135,7 +135,7 @@ clean-all:
 
 
 daq2_a10gx.sof: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_ALTERA) system_project.tcl  >> daq2_a10gx_quartus.log 2>&1
 
 ####################################################################################

@@ -39,7 +39,7 @@ clean-all:
 
 
 cn0363_dma_sequencer.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) cn0363_dma_sequencer_ip.tcl  >> cn0363_dma_sequencer_ip.log 2>&1
 
 ####################################################################################

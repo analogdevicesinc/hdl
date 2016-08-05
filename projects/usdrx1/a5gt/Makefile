@@ -62,7 +62,7 @@ clean-all:
 
 
 usdrx1_a5gt.sof: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_ALTERA) system_project.tcl  >> usdrx1_a5gt_quartus.log 2>&1
 
 ####################################################################################

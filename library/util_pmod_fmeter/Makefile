@@ -44,7 +44,7 @@ clean-all:
 
 
 util_pmod_fmeter.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_pmod_fmeter_ip.tcl  >> util_pmod_fmeter_ip.log 2>&1
 
 ####################################################################################

@@ -41,7 +41,7 @@ clean-all:
 
 
 util_gmii_to_rgmii.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_gmii_to_rgmii_ip.tcl  >> util_gmii_to_rgmii_ip.log 2>&1
 
 ####################################################################################

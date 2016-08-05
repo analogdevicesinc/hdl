@@ -56,7 +56,7 @@ clean-all:
 
 
 axi_ad9739a.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_ad9739a_ip.tcl  >> axi_ad9739a_ip.log 2>&1
 
 ####################################################################################

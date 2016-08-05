@@ -47,7 +47,7 @@ clean-all:
 
 
 axi_generic_adc.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_generic_adc_ip.tcl  >> axi_generic_adc_ip.log 2>&1
 
 ####################################################################################

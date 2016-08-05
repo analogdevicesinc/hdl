@@ -59,7 +59,7 @@ clean-all:
 
 
 a5gte.sof: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_ALTERA) system_project.tcl  >> a5gte_quartus.log 2>&1
 
 ####################################################################################

@@ -55,7 +55,7 @@ clean-all:
 
 
 axi_hdmi_rx.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_hdmi_rx_ip.tcl  >> axi_hdmi_rx_ip.log 2>&1
 
 ####################################################################################

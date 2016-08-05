@@ -48,7 +48,7 @@ clean-all:
 
 
 axi_adcfifo.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_adcfifo_ip.tcl  >> axi_adcfifo_ip.log 2>&1
 
 ####################################################################################

@@ -49,7 +49,7 @@ clean-all:
 
 
 util_gtlb.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_gtlb_ip.tcl  >> util_gtlb_ip.log 2>&1
 
 dep:

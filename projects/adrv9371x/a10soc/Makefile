@@ -127,7 +127,7 @@ clean-all:
 
 
 adrv9371x_a10soc.sof: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_ALTERA) system_project.tcl  >> adrv9371x_a10soc_quartus.log 2>&1
 
 ####################################################################################

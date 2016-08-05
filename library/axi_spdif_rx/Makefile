@@ -48,7 +48,7 @@ clean-all:
 
 
 axi_spdif_rx.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_spdif_rx_ip.tcl  >> axi_spdif_rx_ip.log 2>&1
 
 ####################################################################################

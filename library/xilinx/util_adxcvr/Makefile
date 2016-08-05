@@ -46,7 +46,7 @@ clean-all:
 
 
 util_adxcvr.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_adxcvr_ip.tcl  >> util_adxcvr_ip.log 2>&1
 
 dep:

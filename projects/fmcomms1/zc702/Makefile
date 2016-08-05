@@ -40,6 +40,7 @@ M_FLIST += *.sdk
 M_FLIST += *.hw
 M_FLIST += *.sim
 M_FLIST += .Xil
+M_FLIST += *.ip_user_files
 
 
 
@@ -64,7 +65,7 @@ clean-all:clean
 
 
 fmcomms1_zc702.sdk/system_top.hdf: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> fmcomms1_zc702_vivado.log 2>&1
 
 

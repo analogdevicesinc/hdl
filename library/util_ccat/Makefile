@@ -40,7 +40,7 @@ clean-all:
 
 
 util_ccat.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_ccat_ip.tcl  >> util_ccat_ip.log 2>&1
 
 ####################################################################################

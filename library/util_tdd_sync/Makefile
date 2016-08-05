@@ -40,7 +40,7 @@ clean-all:
 
 
 util_tdd_sync.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_tdd_sync_ip.tcl  >> util_tdd_sync_ip.log 2>&1
 
 ####################################################################################

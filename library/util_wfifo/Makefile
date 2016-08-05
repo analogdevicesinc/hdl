@@ -40,7 +40,7 @@ clean-all:
 
 
 util_wfifo.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_wfifo_ip.tcl  >> util_wfifo_ip.log 2>&1
 
 ####################################################################################

@@ -41,7 +41,7 @@ clean-all:
 
 
 util_dacfifo.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_dacfifo_ip.tcl  >> util_dacfifo_ip.log 2>&1
 
 ####################################################################################

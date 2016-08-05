@@ -43,7 +43,7 @@ clean-all:
 
 
 axi_usb_fx3.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_usb_fx3_ip.tcl  >> axi_usb_fx3_ip.log 2>&1
 
 ####################################################################################

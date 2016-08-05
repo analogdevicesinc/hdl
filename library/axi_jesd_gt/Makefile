@@ -63,7 +63,7 @@ clean-all:
 
 
 axi_jesd_gt.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_jesd_gt_ip.tcl  >> axi_jesd_gt_ip.log 2>&1
 
 dep:

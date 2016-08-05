@@ -39,7 +39,7 @@ clean-all:
 
 
 spi_engine_interconnect.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) spi_engine_interconnect_ip.tcl  >> spi_engine_interconnect_ip.log 2>&1
 
 ####################################################################################

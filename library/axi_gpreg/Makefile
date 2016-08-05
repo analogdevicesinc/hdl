@@ -45,7 +45,7 @@ clean-all:
 
 
 axi_gpreg.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_gpreg_ip.tcl  >> axi_gpreg_ip.log 2>&1
 
 ####################################################################################

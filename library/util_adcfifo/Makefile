@@ -42,7 +42,7 @@ clean-all:
 
 
 util_adcfifo.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_adcfifo_ip.tcl  >> util_adcfifo_ip.log 2>&1
 
 ####################################################################################

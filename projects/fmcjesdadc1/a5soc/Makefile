@@ -116,7 +116,7 @@ clean-all:
 
 
 fmcjesdadc1_a5soc.sof: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_ALTERA) system_project.tcl  >> fmcjesdadc1_a5soc_quartus.log 2>&1
 
 ####################################################################################
