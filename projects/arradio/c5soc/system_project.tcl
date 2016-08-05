@@ -7,7 +7,6 @@ project_new arradio_c5soc -overwrite
 source "../../common/c5soc/c5soc_system_assign.tcl"
 
 set_global_assignment -name QSYS_FILE system_bd.qsys
-set_global_assignment -name VERILOG_FILE "../../../library/common/ad_iobuf.v"
 set_global_assignment -name VERILOG_FILE system_top.v
 set_global_assignment -name SDC_FILE system_constr.sdc
 set_global_assignment -name TOP_LEVEL_ENTITY system_top

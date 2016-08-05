@@ -9,7 +9,6 @@ set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/a5soc;../..
 set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/a5soc/;../../../library/**/*"
 set_global_assignment -name QSYS_FILE system_bd.qsys
 
-set_global_assignment -name VERILOG_FILE "../../../library/common/ad_iobuf.v"
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
 set_global_assignment -name VERILOG_FILE system_top.v
 
