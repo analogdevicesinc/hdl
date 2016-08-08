@@ -95,7 +95,6 @@ set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:7.0 a
 set_property -dict [list CONFIG.SupportLevel {1}] $axi_ethernet
 set_property -dict [list CONFIG.ETHERNET_BOARD_INTERFACE {sgmii_lvds}] $axi_ethernet
 set_property -dict [list CONFIG.MDIO_BOARD_INTERFACE {mdio_mdc}] $axi_ethernet
-set_property -dict [list CONFIG.PHYRST_BOARD_INTERFACE {phy_reset_out}] $axi_ethernet
 set_property -dict [list CONFIG.DIFFCLK_BOARD_INTERFACE {sgmii_phyclk}] $axi_ethernet
 set_property -dict [list CONFIG.lvdsclkrate {625}] $axi_ethernet
 set_property -dict [list CONFIG.TXCSUM {Full}] $axi_ethernet
@@ -215,7 +214,7 @@ ad_connect  axi_ethernet/s_axis_txc axi_ethernet_dma/M_AXIS_CNTRL
 ad_connect  axi_ethernet/m_axis_rxd axi_ethernet_dma/S_AXIS_S2MM
 ad_connect  axi_ethernet/m_axis_rxs axi_ethernet_dma/S_AXIS_STS
 ad_connect  phy_sd axi_ethernet/signal_detect
-ad_connect  phy_rst_n axi_ethernet/phy_rst_n
+ad_connect  sys_cpu_resetn phy_rst_n
 ad_connect  axi_ethernet/axi_txd_arstn axi_ethernet_dma/mm2s_prmry_reset_out_n
 ad_connect  axi_ethernet/axi_txc_arstn axi_ethernet_dma/mm2s_cntrl_reset_out_n
 ad_connect  axi_ethernet/axi_rxd_arstn axi_ethernet_dma/s2mm_prmry_reset_out_n

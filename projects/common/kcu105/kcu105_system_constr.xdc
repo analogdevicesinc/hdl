@@ -8,6 +8,10 @@ set_property -dict  {PACKAGE_PIN  AN8   IOSTANDARD  LVCMOS18} [get_ports sys_rst
 set_property -dict  {PACKAGE_PIN  K26   IOSTANDARD  LVCMOS18} [get_ports uart_sout]
 set_property -dict  {PACKAGE_PIN  G25   IOSTANDARD  LVCMOS18} [get_ports uart_sin] 
 
+# ethernet  (phy_rst_n automation cannot be used with axi_ethernet 7.0) 
+
+set_property -dict  {PACKAGE_PIN  J23   IOSTANDARD  LVCMOS18}  [get_ports phy_rst_n]
+
 # fan 
 
 set_property -dict  {PACKAGE_PIN  AJ9   IOSTANDARD  LVCMOS18} [get_ports fan_pwm] 
@@ -46,3 +50,6 @@ set_property -dict  {INTERNAL_VREF {0.84}}  [get_iobanks 44]
 set_property -dict  {INTERNAL_VREF {0.84}}  [get_iobanks 45]
 set_property -dict  {INTERNAL_VREF {0.84}}  [get_iobanks 46]
 
+create_clock -name phy_clk      -period  1.60 [get_ports phy_clk_p]
+
+set_false_path -to [get_pins -hier -filter {name =~ *ethernet*idelayctrl*/RST}]
