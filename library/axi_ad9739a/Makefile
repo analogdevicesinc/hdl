@@ -8,12 +8,12 @@
 M_DEPS := axi_ad9739a_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/ad_mul.v
+M_DEPS += ../xilinx/common/ad_mul.v
 M_DEPS += ../common/ad_dds_sine.v
 M_DEPS += ../common/ad_dds_1.v
 M_DEPS += ../common/ad_dds.v
 M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/ad_serdes_out.v
+M_DEPS += ../xilinx/common/ad_serdes_out.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_xfer_status.v
