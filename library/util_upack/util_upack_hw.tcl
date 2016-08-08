@@ -6,7 +6,7 @@ source ../scripts/adi_ip_alt.tcl
 
 
 set_module_property NAME util_upack
-set_module_property DESCRIPTION "Channel Pack Utility"
+set_module_property DESCRIPTION "Channel Unpack Utility"
 set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME util_upack
