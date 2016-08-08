@@ -10,9 +10,9 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_lvds_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_lvds_in.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_lvds_out.v" \
-  "$ad_hdl_dir/library/common/ad_cmos_clk.v" \
-  "$ad_hdl_dir/library/common/ad_cmos_in.v" \
-  "$ad_hdl_dir/library/common/ad_cmos_out.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_cmos_clk.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_cmos_in.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_cmos_out.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
