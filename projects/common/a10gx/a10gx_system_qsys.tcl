@@ -1,5 +1,5 @@
 
-package require -exact qsys 14.0
+package require qsys
 
 set_module_property NAME {system_bd}
 set_project_property DEVICE_FAMILY {Arria 10}
@@ -100,7 +100,7 @@ set_instance_parameter_value sys_cpu {dcache_numTCDM} {1}
 set_instance_parameter_value sys_cpu {setting_dc_ecc_present} {0}
 set_instance_parameter_value sys_cpu {setting_itcm_ecc_present} {0}
 set_instance_parameter_value sys_cpu {setting_dtcm_ecc_present} {0}
-set_instance_parameter_value sys_cpu {mmu_enabled} {1}
+set_instance_parameter_value sys_cpu {mmu_enabled} $mmu_enabled
 
 add_connection sys_clk.clk sys_cpu.clk
 add_connection sys_clk.clk_reset sys_cpu.reset
