@@ -64,11 +64,13 @@ xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
 
 ipx::infer_bus_interface axi_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface axi_aresetn xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
 ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces axi_clk \
   -of_objects [ipx::current_core]]
 set_property value s_axi:m_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
   -of_objects [ipx::get_bus_interfaces axi_clk \
   -of_objects [ipx::current_core]]]
+
 ipx::add_memory_map {s_axi} [ipx::current_core]
 set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interfaces s_axi -of_objects [ipx::current_core]]
 ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]
