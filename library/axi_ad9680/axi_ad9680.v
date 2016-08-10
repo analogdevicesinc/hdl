@@ -44,8 +44,8 @@ module axi_ad9680 (
 
   rx_clk,
   rx_sof,
-  rx_data,
   rx_valid,
+  rx_data,
   rx_ready,
 
   // dma interface
@@ -93,9 +93,8 @@ module axi_ad9680 (
 
   input           rx_clk;
   input  [  3:0]  rx_sof;
-  input  [127:0]  rx_data;
-
   input           rx_valid;
+  input  [127:0]  rx_data;
   output          rx_ready;
 
   // dma interface
