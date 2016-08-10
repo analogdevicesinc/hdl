@@ -43,6 +43,7 @@ module util_cpack (
 
   adc_rst,
   adc_clk,
+  adc_sync_in,
   adc_enable_0,
   adc_valid_0,
   adc_data_0,
@@ -78,6 +79,7 @@ module util_cpack (
 
   parameter   CHANNEL_DATA_WIDTH  = 32;
   parameter   NUM_OF_CHANNELS     = 8;
+  parameter   ENABLE_SYNC_IN      = 0;
 
   localparam  SAMPLES_PCHANNEL    = CHANNEL_DATA_WIDTH/16;
   localparam  NUM_OF_CHANNELS_M   = 8;
@@ -88,6 +90,7 @@ module util_cpack (
 
   input                               adc_rst;
   input                               adc_clk;
+  input                               adc_sync_in;
   input                               adc_enable_0;
   input                               adc_valid_0;
   input   [(CHANNEL_DATA_WIDTH-1):0]  adc_data_0;
@@ -122,8 +125,10 @@ module util_cpack (
   // internal registers
 
   reg                                                     adc_valid_d = 'd0;
+  reg                                                     adc_sync_d = 'd0;
   reg     [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]  adc_data_d = 'd0;
   reg                                                     adc_mux_valid = 'd0;
+  reg                                                     adc_mux_sync = 'd0;
   reg     [(NUM_OF_CHANNELS_M-1):0]                       adc_mux_enable = 'd0;
   reg     [((SAMPLES_PCHANNEL*16*79)-1):0]                         adc_mux_data = 'd0;
   reg                                                     adc_valid = 'd0;
@@ -137,6 +142,7 @@ module util_cpack (
   wire    [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]  adc_data_s;
   wire    [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]  adc_data_intlv_s;
   wire    [(SAMPLES_PCHANNEL-1):0]                                 adc_mux_valid_s;
+  wire    [(SAMPLES_PCHANNEL-1):0]                                 adc_mux_sync_s;  
   wire    [(SAMPLES_PCHANNEL-1):0]                                 adc_mux_enable_0_s;
   wire    [(SAMPLES_PCHANNEL-1):0]                                 adc_mux_enable_1_s;
   wire    [(SAMPLES_PCHANNEL-1):0]                                 adc_mux_enable_2_s;
@@ -175,8 +181,10 @@ module util_cpack (
   always @(posedge adc_clk) begin
     if (adc_rst == 1'b1) begin
       adc_valid_d <= 'd0;
+      adc_sync_d <= 'd0;
     end else begin
       adc_valid_d <= adc_valid_0;
+      adc_sync_d <= adc_sync_in;
     end
   end
 
@@ -218,9 +226,11 @@ module util_cpack (
   util_cpack_mux i_mux (
     .adc_clk (adc_clk),
     .adc_valid (adc_valid_d),
+    .adc_sync (adc_sync_d), 
     .adc_enable (adc_enable_s),
     .adc_data (adc_data_intlv_s[((16*NUM_OF_CHANNELS_M*(n+1))-1):(16*NUM_OF_CHANNELS_M*n)]),
     .adc_mux_valid (adc_mux_valid_s[n]),
+    .adc_mux_sync (adc_mux_sync_s[n]),
     .adc_mux_enable_0 (adc_mux_enable_0_s[n]),
     .adc_mux_data_0 (adc_mux_data_0_s[(((n+1)*16*1)-1):(n*16*1)]),
     .adc_mux_enable_1 (adc_mux_enable_1_s[n]),
@@ -244,6 +254,7 @@ module util_cpack (
 
   always @(posedge adc_clk) begin
     adc_mux_valid <= & adc_mux_valid_s;
+    adc_mux_sync <= & adc_mux_sync_s;
     adc_mux_enable[0] <= & adc_mux_enable_0_s;
     adc_mux_enable[1] <= & adc_mux_enable_1_s;
     adc_mux_enable[2] <= & adc_mux_enable_2_s;
@@ -278,10 +289,12 @@ module util_cpack (
     .NUM_OF_CHANNELS_M (NUM_OF_CHANNELS_M),
     .NUM_OF_CHANNELS_P (NUM_OF_CHANNELS_P),
     .CHANNEL_DATA_WIDTH (CHANNEL_DATA_WIDTH),
-    .NUM_OF_CHANNELS_I ((n+1)))
+    .NUM_OF_CHANNELS_I ((n+1)),
+    .ENABLE_SYNC_IN ( ENABLE_SYNC_IN))
   i_dsf (
     .adc_clk (adc_clk),
     .adc_valid (adc_mux_valid),
+    .adc_sync (adc_mux_sync),
     .adc_enable (adc_mux_enable[n]),
     .adc_data (adc_mux_data[((SAMPLES_PCHANNEL*16*((11*n)+1))-1):(SAMPLES_PCHANNEL*16*10*n)]),
     .adc_dsf_valid (adc_dsf_valid_s[n]),

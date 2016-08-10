@@ -43,6 +43,7 @@ module util_cpack_dsf (
 
   adc_clk,
   adc_valid,
+  adc_sync,
   adc_enable,
   adc_data,
 
@@ -58,6 +59,7 @@ module util_cpack_dsf (
   parameter   NUM_OF_CHANNELS_I   =  4;
   parameter   NUM_OF_CHANNELS_M   =  8;
   parameter   NUM_OF_CHANNELS_P   =  4;
+  parameter   ENABLE_SYNC_IN      =  0;
 
   localparam  CH_DCNT = NUM_OF_CHANNELS_P - NUM_OF_CHANNELS_I;
   localparam  I_WIDTH = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_I;
@@ -68,6 +70,7 @@ module util_cpack_dsf (
 
   input                     adc_clk;
   input                     adc_valid;
+  input                     adc_sync;
   input                     adc_enable;
   input   [(I_WIDTH-1):0]   adc_data;
 
@@ -92,9 +95,20 @@ module util_cpack_dsf (
   // internal signals
 
   wire    [(M_WIDTH-1):0]   adc_data_s;
+  
+  wire                      adc_sync_int;
 
+  // Prevent undefined states
+  generate
+  if (ENABLE_SYNC_IN) begin
+    assign adc_sync_int = adc_sync;
+  end else begin
+    assign adc_sync_int = 1'b0;
+  end
+  endgenerate
+  
   // bypass
-
+  
   generate
   if (NUM_OF_CHANNELS_I == NUM_OF_CHANNELS_P) begin
   assign adc_data_s = 'd0;
@@ -108,7 +122,7 @@ module util_cpack_dsf (
     adc_dsf_data_int <= 'd0;
     if (adc_enable == 1'b1) begin
       adc_dsf_valid <= adc_valid;
-      adc_dsf_sync <= 1'b1;
+      adc_dsf_sync <= ENABLE_SYNC_IN ? adc_sync_int : 1'b1;
       adc_dsf_data <= adc_data;
     end else begin
       adc_dsf_valid <= 'b0;
@@ -128,7 +142,10 @@ module util_cpack_dsf (
 
   always @(posedge adc_clk) begin
     if (adc_valid == 1'b1) begin
-      if (adc_samples_int >= CH_DCNT) begin
+      
+      if (adc_sync_int) begin
+        adc_samples_int <= NUM_OF_CHANNELS_I;
+      end else if (adc_samples_int >= CH_DCNT) begin
         adc_samples_int <= adc_samples_int - CH_DCNT;
       end else begin
         adc_samples_int <= adc_samples_int + NUM_OF_CHANNELS_I;
@@ -141,7 +158,7 @@ module util_cpack_dsf (
   always @(posedge adc_clk) begin
     adc_dsf_enable <= adc_enable;
     if (adc_samples_int >= CH_DCNT) begin
-      adc_dsf_valid_int <= adc_valid;
+      adc_dsf_valid_int <= adc_valid & ~adc_sync_int;
     end else begin
       adc_dsf_valid_int <= 1'b0;
     end
@@ -150,7 +167,9 @@ module util_cpack_dsf (
         adc_dsf_sync_int <= 1'b0;
       end
     end else begin
-      if (adc_samples_int == 3'd0) begin
+      if (ENABLE_SYNC_IN == 1'b1) begin
+        adc_dsf_sync_int <= adc_sync_int;
+      end else if (adc_samples_int == 3'd0) begin
         adc_dsf_sync_int <= 1'b1;
       end
     end
@@ -158,24 +177,28 @@ module util_cpack_dsf (
 
   always @(posedge adc_clk) begin
     if (adc_valid == 1'b1) begin
-      case (adc_samples_int)
-        3'b111:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*1)-1):0],
-                    adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*1)]};
-        3'b110:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*2)-1):0],
-                    adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*2)]};
-        3'b101:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*3)-1):0],
-                    adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*3)]};
-        3'b100:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*4)-1):0],
-                    adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*4)]};
-        3'b011:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*5)-1):0],
-                    adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*5)]};
-        3'b010:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*6)-1):0],
-                    adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*6)]};
-        3'b001:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*7)-1):0],
-                    adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*7)]};
-        3'b000:  adc_dsf_data_int <= adc_data_s;
-        default: adc_dsf_data_int <= 'd0;
-      endcase
+      if (adc_sync_int == 1'b1) begin
+        adc_dsf_data_int <= adc_data_s; 
+      end else begin
+        case (adc_samples_int)
+          3'b111:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*1)-1):0],
+                      adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*1)]};
+          3'b110:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*2)-1):0],
+                      adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*2)]};
+          3'b101:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*3)-1):0],
+                      adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*3)]};
+          3'b100:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*4)-1):0],
+                      adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*4)]};
+          3'b011:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*5)-1):0],
+                      adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*5)]};
+          3'b010:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*6)-1):0],
+                      adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*6)]};
+          3'b001:  adc_dsf_data_int <= {adc_data_s[((CHANNEL_DATA_WIDTH*7)-1):0],
+                      adc_data_int[((CHANNEL_DATA_WIDTH*8)-1):(CHANNEL_DATA_WIDTH*7)]};
+          3'b000:  adc_dsf_data_int <= adc_data_s;
+          default: adc_dsf_data_int <= 'd0;
+        endcase
+      end
     end
   end
 

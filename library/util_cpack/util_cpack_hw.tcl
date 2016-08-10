@@ -36,6 +36,16 @@ set_parameter_property NUM_OF_CHANNELS TYPE INTEGER
 set_parameter_property NUM_OF_CHANNELS UNITS None
 set_parameter_property NUM_OF_CHANNELS HDL_PARAMETER true
 
+add_parameter ENABLE_SYNC_IN_BOOL BOOLEAN false
+set_parameter_property ENABLE_SYNC_IN_BOOL DISPLAY_NAME "Enable Sync Input"
+set_parameter_property ENABLE_SYNC_IN_BOOL HDL_PARAMETER false
+
+add_parameter ENABLE_SYNC_IN INTEGER 0
+set_parameter_property ENABLE_SYNC_IN TYPE INTEGER
+set_parameter_property ENABLE_SYNC_IN DERIVED true
+set_parameter_property ENABLE_SYNC_IN HDL_PARAMETER true
+set_parameter_property ENABLE_SYNC_IN VISIBLE false
+
 # defaults
 
 ad_alt_intf clock   adc_clk         input   1
@@ -51,7 +61,12 @@ add_interface_port fifo_ch_0  adc_valid_0   valid    Input  1
 add_interface_port fifo_ch_0  adc_data_0    data     Input  CHANNEL_DATA_WIDTH
 
 proc p_util_cpack {} {
-
+  if { [get_parameter_value ENABLE_SYNC_IN_BOOL] } {
+    set_parameter_value ENABLE_SYNC_IN 1
+    ad_alt_intf signal  adc_sync_in        input  1     sync
+  } else {
+    set_parameter_value ENABLE_SYNC_IN 0
+  }
   if {[get_parameter_value NUM_OF_CHANNELS] > 1} {
     add_interface fifo_ch_1 conduit end
     #set_interface_property fifo_ch_1  associatedClock if_adc_clk

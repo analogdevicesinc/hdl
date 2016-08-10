@@ -43,12 +43,14 @@ module util_cpack_mux (
 
   adc_clk,
   adc_valid,
+  adc_sync,
   adc_enable,
   adc_data,
 
   // fifo interface
 
   adc_mux_valid,
+  adc_mux_sync,
   adc_mux_enable_0,
   adc_mux_data_0,
   adc_mux_enable_1,
@@ -70,12 +72,14 @@ module util_cpack_mux (
 
   input             adc_clk;
   input             adc_valid;
+  input             adc_sync;
   input   [  7:0]   adc_enable;
   input   [127:0]   adc_data;
 
   // fifo interface
 
   output            adc_mux_valid;
+  output            adc_mux_sync;
   output            adc_mux_enable_0;
   output  [ 15:0]   adc_mux_data_0;
   output            adc_mux_enable_1;
@@ -96,7 +100,9 @@ module util_cpack_mux (
   // internal registers
 
   reg               adc_valid_d = 'd0;
+  reg               adc_sync_d = 'd0;
   reg               adc_mux_valid = 'd0;
+  reg               adc_mux_sync = 'd0;
   reg               adc_mux_enable_0 = 'd0;
   reg               adc_mux_enable_1 = 'd0;
   reg               adc_mux_enable_2 = 'd0;
@@ -158,7 +164,9 @@ module util_cpack_mux (
 
   always @(posedge adc_clk) begin
     adc_valid_d <= adc_valid;
+    adc_sync_d <= adc_sync;
     adc_mux_valid <= adc_valid_d;
+    adc_mux_sync <= adc_sync_d;
   end
 
   always @(posedge adc_clk) begin
