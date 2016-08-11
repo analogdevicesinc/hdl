@@ -91,8 +91,8 @@ module util_dacfifo (
 
   reg     [(ADDRESS_WIDTH-1):0]       dma_waddr = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr_d = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr_2d = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_d = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_2d = 'b0;
   reg                                 dma_xfer_req_ff = 1'b0;
   reg                                 dma_ready_d = 1'b0;
 
@@ -140,8 +140,8 @@ module util_dacfifo (
   // sync lastaddr to dac clock domain
 
   always @(posedge dac_clk) begin
-    dma_lastaddr_d <= dma_lastaddr;
-    dma_lastaddr_2d <= dma_lastaddr_d;
+    dac_lastaddr_d <= dma_lastaddr;
+    dac_lastaddr_2d <= dac_lastaddr_d;
     dac_xfer_out_m <= {dac_xfer_out_m[1:0], dma_xfer_out};
   end
 
@@ -151,10 +151,10 @@ module util_dacfifo (
 
   always @(posedge dac_clk) begin
     if(dac_valid == 1'b1) begin
-      if (dma_lastaddr_2d == 'h0) begin
+      if (dac_lastaddr_2d == 'h0) begin
         dac_raddr <= dac_raddr + 1;
       end else begin
-        dac_raddr <= (dac_raddr < dma_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
+        dac_raddr <= (dac_raddr < dac_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
       end
     end
   end
