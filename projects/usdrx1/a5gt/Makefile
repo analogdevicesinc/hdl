@@ -5,6 +5,12 @@
 ####################################################################################
 ####################################################################################
 
+ifeq ($(MMU),)
+  MMU := 1
+endif
+
+export ALT_NIOS_MMU_ENABLED := $(MMU)
+
 M_DEPS += system_project.tcl
 M_DEPS += ../common/usdrx1_spi.v
 M_DEPS += ../../scripts/adi_env.tcl

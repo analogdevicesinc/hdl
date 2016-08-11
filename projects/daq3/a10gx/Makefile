@@ -5,6 +5,12 @@
 ####################################################################################
 ####################################################################################
 
+ifeq ($(MMU),)
+  MMU := 1
+endif
+
+export ALT_NIOS_MMU_ENABLED := $(MMU)
+
 M_DEPS += system_top.v
 M_DEPS += system_qsys.tcl
 M_DEPS += system_project.tcl
