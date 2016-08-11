@@ -294,8 +294,19 @@ module util_adxcvr_xch (
 
   // instantiations
 
+  generate
+  if (GTH_OR_GTX_N == 0) begin
   BUFG i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
   BUFG i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
+  end
+  endgenerate
+
+  generate
+  if (GTH_OR_GTX_N == 1) begin
+  BUFG_GT i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
+  BUFG_GT i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
+  end
+  endgenerate
 
   generate
   if (GTH_OR_GTX_N == 0) begin
