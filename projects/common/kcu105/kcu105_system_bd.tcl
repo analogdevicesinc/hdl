@@ -51,7 +51,7 @@ set_property -dict [list CONFIG.FREQ_HZ {625000000}] [get_bd_intf_ports phy_clk]
 
 # instance: microblaze - processor
 
-set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.5 sys_mb]
+set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.6 sys_mb]
 set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
 set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
 
@@ -80,7 +80,7 @@ set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 s
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [ create_bd_cell -type ip -vlnv xilinx.com:ip:ddr4:1.1 axi_ddr_cntrl ]
+set axi_ddr_cntrl [ create_bd_cell -type ip -vlnv xilinx.com:ip:ddr4:2.0 axi_ddr_cntrl ]
 set_property -dict [list CONFIG.C0_CLOCK_BOARD_INTERFACE {default_sysclk_300}] $axi_ddr_cntrl
 set_property -dict [list CONFIG.C0_DDR4_BOARD_INTERFACE {ddr4_sdram}] $axi_ddr_cntrl
 set_property -dict [list CONFIG.RESET_BOARD_INTERFACE {reset}] $axi_ddr_cntrl
