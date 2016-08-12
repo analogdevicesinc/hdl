@@ -71,8 +71,8 @@ set_instance_assignment -name IO_STANDARD LVDS -to sysref
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to tx_sync
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref
 
-set_location_assignment PIN_A12   -to spi_csn_ad9528        ; ## D15  FMC_HPC_LA09_N
-set_location_assignment PIN_A13   -to spi_csn_ad9371        ; ## D14  FMC_HPC_LA09_P
+set_location_assignment PIN_A13   -to spi_csn_ad9528        ; ## D15  FMC_HPC_LA09_N
+set_location_assignment PIN_A12   -to spi_csn_ad9371        ; ## D14  FMC_HPC_LA09_P
 set_location_assignment PIN_A9    -to spi_clk               ; ## H13  FMC_HPC_LA07_P
 set_location_assignment PIN_B9    -to spi_mosi              ; ## H14  FMC_HPC_LA07_N
 set_location_assignment PIN_B11   -to spi_miso              ; ## G12  FMC_HPC_LA08_P
