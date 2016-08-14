@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -123,24 +121,27 @@ module up_axi (
   reg             up_axi_awready = 'd0;
   reg             up_axi_wready = 'd0;
   reg             up_axi_bvalid = 'd0;
+  reg             up_wack_d = 'd0;
   reg             up_wsel = 'd0;
   reg             up_wreq = 'd0;
   reg     [AW:0]  up_waddr = 'd0;
   reg     [31:0]  up_wdata = 'd0;
-  reg     [ 2:0]  up_wcount = 'd0;
-  reg             up_wack_int = 'd0;
-  reg             up_wack_int_d = 'd0;
+  reg     [ 4:0]  up_wcount = 'd0;
   reg             up_axi_arready = 'd0;
   reg             up_axi_rvalid = 'd0;
   reg     [31:0]  up_axi_rdata = 'd0;
+  reg             up_rack_d = 'd0;
+  reg     [31:0]  up_rdata_d = 'd0;
   reg             up_rsel = 'd0;
   reg             up_rreq = 'd0;
   reg     [AW:0]  up_raddr = 'd0;
   reg     [ 4:0]  up_rcount = 'd0;
-  reg             up_rack_int = 'd0;
-  reg     [31:0]  up_rdata_int = 'd0;
-  reg             up_rack_int_d = 'd0;
-  reg     [31:0]  up_rdata_int_d = 'd0;
+
+  // internal signals
+
+  wire            up_wack_s;
+  wire            up_rack_s;
+  wire    [31:0]  up_rdata_s;
 
   // write channel interface
 
@@ -154,30 +155,34 @@ module up_axi (
     end else begin
       if (up_axi_awready == 1'b1) begin
         up_axi_awready <= 1'b0;
-      end else if (up_wack_int == 1'b1) begin
+      end else if (up_wack_s == 1'b1) begin
         up_axi_awready <= 1'b1;
       end
       if (up_axi_wready == 1'b1) begin
         up_axi_wready <= 1'b0;
-      end else if (up_wack_int == 1'b1) begin
+      end else if (up_wack_s == 1'b1) begin
         up_axi_wready <= 1'b1;
       end
       if ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) begin
         up_axi_bvalid <= 1'b0;
-      end else if (up_wack_int_d == 1'b1) begin
+      end else if (up_wack_d == 1'b1) begin
         up_axi_bvalid <= 1'b1;
       end
     end
   end
 
+  assign up_wack_s = (up_wcount == 5'h1f) ? 1'b1 : (up_wcount[4] & up_wack);
+
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
+      up_wack_d <= 'd0;
       up_wsel <= 'd0;
       up_wreq <= 'd0;
       up_waddr <= 'd0;
       up_wdata <= 'd0;
       up_wcount <= 'd0;
     end else begin
+      up_wack_d <= up_wack_s;
       if (up_wsel == 1'b1) begin
         if ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) begin
           up_wsel <= 1'b0;
@@ -185,28 +190,19 @@ module up_axi (
         up_wreq <= 1'b0;
         up_waddr <= up_waddr;
         up_wdata <= up_wdata;
-        up_wcount <= up_wcount + 1'b1;
       end else begin
         up_wsel <= up_axi_awvalid & up_axi_wvalid;
         up_wreq <= up_axi_awvalid & up_axi_wvalid;
         up_waddr <= up_axi_awaddr[AW+2:2];
         up_wdata <= up_axi_wdata;
-        up_wcount <= 3'd0;
       end
-    end
-  end
-
-  always @(negedge up_rstn or posedge up_clk) begin
-    if (up_rstn == 0) begin
-      up_wack_int <= 'd0;
-      up_wack_int_d <= 'd0;
-    end else begin
-      if ((up_wcount == 3'h7) && (up_wack == 1'b0)) begin
-        up_wack_int <= 1'b1;
-      end else if (up_wsel == 1'b1) begin
-        up_wack_int <= up_wack;
+      if (up_wack_s == 1'b1) begin
+        up_wcount <= 5'h00;
+      end else if (up_wcount[4] == 1'b1) begin
+        up_wcount <= up_wcount + 1'b1;
+      end else if (up_wreq == 1'b1) begin
+        up_wcount <= 5'h10;
       end
-      up_wack_int_d <= up_wack_int;
     end
   end
 
@@ -222,26 +218,33 @@ module up_axi (
     end else begin
       if (up_axi_arready == 1'b1) begin
         up_axi_arready <= 1'b0;
-      end else if (up_rack_int == 1'b1) begin
+      end else if (up_rack_s == 1'b1) begin
         up_axi_arready <= 1'b1;
       end
       if ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1)) begin
         up_axi_rvalid <= 1'b0;
         up_axi_rdata <= 32'd0;
-      end else if (up_rack_int_d == 1'b1) begin
+      end else if (up_rack_d == 1'b1) begin
         up_axi_rvalid <= 1'b1;
-        up_axi_rdata <= up_rdata_int_d;
+        up_axi_rdata <= up_rdata_d;
       end
     end
   end
 
+  assign up_rack_s = (up_rcount == 5'h1f) ? 1'b1 : (up_rcount[4] & up_rack);
+  assign up_rdata_s = (up_rcount == 5'h1f) ? {2{16'hdead}} : up_rdata;
+
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
+      up_rack_d <= 'd0;
+      up_rdata_d <= 'd0;
       up_rsel <= 'd0;
       up_rreq <= 'd0;
       up_raddr <= 'd0;
       up_rcount <= 'd0;
     end else begin
+      up_rack_d <= up_rack_s;
+      up_rdata_d <= up_rdata_s;
       if (up_rsel == 1'b1) begin
         if ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1)) begin
           up_rsel <= 1'b0;
@@ -253,32 +256,13 @@ module up_axi (
         up_rreq <= up_axi_arvalid;
         up_raddr <= up_axi_araddr[AW+2:2];
       end
-      if (up_rack_int == 1'b1) begin
-        up_rcount <= 5'd0;
+      if (up_rack_s == 1'b1) begin
+        up_rcount <= 5'h00;
       end else if (up_rcount[4] == 1'b1) begin
         up_rcount <= up_rcount + 1'b1;
       end else if (up_rreq == 1'b1) begin
-        up_rcount <= 5'd16;
+        up_rcount <= 5'h10;
       end
-    end
-  end
-
-  always @(negedge up_rstn or posedge up_clk) begin
-    if (up_rstn == 0) begin
-      up_rack_int <= 'd0;
-      up_rdata_int <= 'd0;
-      up_rack_int_d <= 'd0;
-      up_rdata_int_d <= 'd0;
-    end else begin
-      if ((up_rcount == 5'h1f) && (up_rack == 1'b0)) begin
-        up_rack_int <= 1'b1;
-        up_rdata_int <= {2{16'hdead}};
-      end else begin
-        up_rack_int <= up_rack;
-        up_rdata_int <= up_rdata;
-      end
-      up_rack_int_d <= up_rack_int;
-      up_rdata_int_d <= up_rdata_int;
     end
   end
 
