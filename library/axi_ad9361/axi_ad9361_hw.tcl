@@ -28,7 +28,7 @@ add_fileset_file ad_dds_sine.v            VERILOG PATH $ad_hdl_dir/library/commo
 add_fileset_file ad_dds_1.v               VERILOG PATH $ad_hdl_dir/library/common/ad_dds_1.v
 add_fileset_file ad_dds.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_dds.v
 add_fileset_file ad_datafmt.v             VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
-add_fileset_file ad_dcfilter.v            VERILOG PATH $ad_hdl_dir/library/common/ad_dcfilter.v
+add_fileset_file ad_dcfilter.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_dcfilter.v
 add_fileset_file ad_iqcor.v               VERILOG PATH $ad_hdl_dir/library/common/ad_iqcor.v
 add_fileset_file ad_addsub.v              VERILOG PATH $ad_hdl_dir/library/common/ad_addsub.v
 add_fileset_file ad_tdd_control.v         VERILOG PATH $ad_hdl_dir/library/common/ad_tdd_control.v
