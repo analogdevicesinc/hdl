@@ -19,7 +19,7 @@ M_DEPS += ../../common/zc706/zc706_system_mig_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_mig.prj
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
-M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
+M_DEPS += ../../common/xilinx/sys_dacfifo.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9162/axi_ad9162.xpr
 M_DEPS += ../../../library/axi_ad9625/axi_ad9625.xpr
@@ -29,7 +29,6 @@ M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
-M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
 M_DEPS += ../../../library/util_dacfifo/util_dacfifo.xpr
 M_DEPS += ../../../library/util_jesd_gt/util_jesd_gt.xpr
 
@@ -68,7 +67,6 @@ clean-all:clean
 	make -C ../../../library/axi_hdmi_tx clean
 	make -C ../../../library/axi_jesd_gt clean
 	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/util_adcfifo clean
 	make -C ../../../library/util_dacfifo clean
 	make -C ../../../library/util_jesd_gt clean
 
@@ -87,7 +85,6 @@ lib:
 	make -C ../../../library/axi_hdmi_tx
 	make -C ../../../library/axi_jesd_gt
 	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/util_adcfifo
 	make -C ../../../library/util_dacfifo
 	make -C ../../../library/util_jesd_gt
 
