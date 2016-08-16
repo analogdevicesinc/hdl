@@ -181,6 +181,30 @@
          type = "boolean";
       }
    }
+   element gpio_i
+   {
+      datum _sortIndex
+      {
+         value = "23";
+         type = "int";
+      }
+   }
+   element gpio_o
+   {
+      datum _sortIndex
+      {
+         value = "22";
+         type = "int";
+      }
+   }
+   element spi
+   {
+      datum _sortIndex
+      {
+         value = "24";
+         type = "int";
+      }
+   }
    element sys_clk
    {
       datum _sortIndex
@@ -313,6 +337,8 @@
    internal="ad9371_gpio.s1"
    type="avalon"
    dir="end" />
+ <interface name="avl_gpio_i" internal="gpio_i.s1" type="avalon" dir="end" />
+ <interface name="avl_gpio_o" internal="gpio_o.s1" type="avalon" dir="end" />
  <interface
    name="avl_rx_jesd"
    internal="xcvr_rx_core.jesd204_rx_avs"
@@ -325,6 +351,11 @@
    dir="end" />
  <interface name="avl_rx_os_xcvr" internal="xcvr_rx_os_core.reconfig_avmm" />
  <interface name="avl_rx_xcvr" internal="xcvr_rx_core.reconfig_avmm" />
+ <interface
+   name="avl_spi"
+   internal="spi.spi_control_port"
+   type="avalon"
+   dir="end" />
  <interface
    name="avl_tx_jesd"
    internal="xcvr_tx_core.jesd204_tx_avs"
@@ -405,6 +436,16 @@
    type="axi4lite"
    dir="end" />
  <interface
+   name="gpio_i"
+   internal="gpio_i.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="gpio_o"
+   internal="gpio_o.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
    name="rx_data"
    internal="xcvr_rx_core.rx_serial_data"
    type="conduit"
@@ -434,6 +475,8 @@
    internal="axi_jesd_xcvr.if_rx_ext_sysref_in"
    type="conduit"
    dir="end" />
+ <interface name="spi" internal="spi.external" type="conduit" dir="end" />
+ <interface name="spi_irq" internal="spi.irq" type="interrupt" dir="end" />
  <interface name="sys_clk" internal="sys_clk.in_clk" type="clock" dir="end" />
  <interface name="sys_rst" internal="sys_rst.in_reset" type="reset" dir="end" />
  <interface
@@ -557,6 +600,50 @@
  <module name="dac_upack" kind="util_upack" version="1.0" enabled="1">
   <parameter name="CHANNEL_DATA_WIDTH" value="32" />
   <parameter name="NUM_OF_CHANNELS" value="4" />
+ </module>
+ <module name="gpio_i" kind="altera_avalon_pio" version="15.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="32" />
+ </module>
+ <module name="gpio_o" kind="altera_avalon_pio" version="15.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="true" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="32" />
+ </module>
+ <module name="spi" kind="altera_avalon_spi" version="15.1" enabled="1">
+  <parameter name="avalonSpec" value="2.0" />
+  <parameter name="clockPhase" value="1" />
+  <parameter name="clockPolarity" value="1" />
+  <parameter name="dataWidth" value="8" />
+  <parameter name="disableAvalonFlowControl" value="false" />
+  <parameter name="inputClockRate" value="50000000" />
+  <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
+  <parameter name="insertSync" value="false" />
+  <parameter name="lsbOrderedFirst" value="false" />
+  <parameter name="masterSPI" value="true" />
+  <parameter name="numberOfSlaves" value="2" />
+  <parameter name="syncRegDepth" value="2" />
+  <parameter name="targetClockRate" value="5000000" />
+  <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
  </module>
  <module name="sys_clk" kind="altera_clock_bridge" version="15.1" enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
@@ -1240,6 +1327,9 @@
    version="15.1"
    start="sys_clk.out_clk"
    end="ad9371_gpio.clk" />
+ <connection kind="clock" version="15.1" start="sys_clk.out_clk" end="gpio_o.clk" />
+ <connection kind="clock" version="15.1" start="sys_clk.out_clk" end="gpio_i.clk" />
+ <connection kind="clock" version="15.1" start="sys_clk.out_clk" end="spi.clk" />
  <connection
    kind="clock"
    version="15.1"
@@ -2134,6 +2224,17 @@
    version="15.1"
    start="sys_rst.out_reset"
    end="ad9371_gpio.reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="gpio_o.reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="gpio_i.reset" />
+ <connection kind="reset" version="15.1" start="sys_rst.out_reset" end="spi.reset" />
  <connection
    kind="reset"
    version="15.1"

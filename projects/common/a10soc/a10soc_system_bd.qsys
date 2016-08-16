@@ -311,9 +311,7 @@
    dir="end" />
  <interface
    name="hps_gpio"
-   internal="arria10_hps_0.h2f_gp"
-   type="conduit"
-   dir="end" />
+   internal="arria10_hps_0.h2f_gp" />
  <interface
    name="hps_io"
    internal="arria10_hps_0.hps_io"
@@ -470,7 +468,7 @@
   <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_SPIM0_SCLK_OUT" value="100" />
   <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_SPIM1_SCLK_OUT" value="100" />
   <parameter name="GPIO_REF_CLK" value="4" />
-  <parameter name="GP_Enable" value="true" />
+  <parameter name="GP_Enable" value="false" />
   <parameter name="H2F_AXI_CLOCK_FREQ" value="100" />
   <parameter name="H2F_COLD_RST_Enable" value="false" />
   <parameter name="H2F_CTI_CLOCK_FREQ" value="100" />
@@ -1556,7 +1554,7 @@
   <parameter name="PIPELINE_RESPONSE" value="1" />
   <parameter name="SYMBOL_WIDTH" value="8" />
   <parameter name="SYSINFO_ADDR_WIDTH" value="10" />
-  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="0" />
+  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="1" />
   <parameter name="USE_RESPONSE" value="0" />
  </module>
  <module name="sys_rst" kind="altera_reset_bridge" version="15.1" enabled="1">
