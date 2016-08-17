@@ -350,7 +350,11 @@
    type="avalon"
    dir="end" />
  <interface name="avl_rx_os_xcvr" internal="xcvr_rx_os_core.reconfig_avmm" />
- <interface name="avl_rx_xcvr" internal="xcvr_rx_core.reconfig_avmm" />
+ <interface
+   name="avl_rx_xcvr_reconfig_avmm"
+   internal="xcvr_rx_core.reconfig_avmm"
+   type="avalon"
+   dir="end" />
  <interface
    name="avl_spi"
    internal="spi.spi_control_port"
@@ -371,6 +375,11 @@
    name="avl_xcvr_pll"
    internal="xcvr_pll_reconfig.mgmt_avalon_slave"
    type="avalon"
+   dir="end" />
+ <interface
+   name="axi_ad9371_s"
+   internal="axi_ad9371.s_axi"
+   type="axi4lite"
    dir="end" />
  <interface
    name="axi_adc_dma_intr"
@@ -1012,11 +1021,11 @@
   <parameter name="lane_rate" value="4915.2" />
   <parameter name="part_trait_bd" value="NIGHTFURY4" />
   <parameter name="part_trait_dp" value="10AS066N3F40E2SGE2" />
-  <parameter name="pll_reconfig_enable" value="false" />
+  <parameter name="pll_reconfig_enable" value="true" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="rcfg_jtag_enable" value="false" />
   <parameter name="sdc_constraint" value="1.0" />
-  <parameter name="set_capability_reg_enable" value="false" />
+  <parameter name="set_capability_reg_enable" value="true" />
   <parameter name="set_csr_soft_logic_enable" value="false" />
   <parameter name="set_prbs_soft_logic_enable" value="false" />
   <parameter name="set_user_identifier" value="0" />
@@ -1395,6 +1404,11 @@
    version="15.1"
    start="xcvr_ref_clk.out_clk"
    end="xcvr_tx_lane_pll.pll_refclk0" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_rx_core.reconfig_clk" />
  <connection
    kind="clock"
    version="15.1"
@@ -2194,6 +2208,11 @@
    version="15.1"
    start="sys_rst.out_reset"
    end="xcvr_pll_reconfig.mgmt_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="xcvr_rx_core.reconfig_reset" />
  <connection
    kind="reset"
    version="15.1"

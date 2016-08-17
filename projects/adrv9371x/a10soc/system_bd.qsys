@@ -73,6 +73,14 @@
          type = "String";
       }
    }
+   element adrv9371x.avl_rx_xcvr_reconfig_avmm
+   {
+      datum baseAddress
+      {
+         value = "229376";
+         type = "String";
+      }
+   }
    element adrv9371x.avl_spi
    {
       datum baseAddress
@@ -102,6 +110,14 @@
       datum baseAddress
       {
          value = "217088";
+         type = "String";
+      }
+   }
+   element adrv9371x.axi_ad9371_s
+   {
+      datum baseAddress
+      {
+         value = "262144";
          type = "String";
       }
    }
@@ -480,8 +496,8 @@
   <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="5" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="5" />
-  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='adrv9371x_axi_os_jesd_xcvr.s_axi' start='0x0' end='0x10000' /><slave name='adrv9371x_axi_jesd_xcvr.s_axi' start='0x10000' end='0x20000' /><slave name='adrv9371x_axi_dac_dma.s_axi' start='0x20000' end='0x24000' /><slave name='adrv9371x_axi_os_adc_dma.s_axi' start='0x24000' end='0x28000' /><slave name='adrv9371x_axi_adc_dma.s_axi' start='0x28000' end='0x2C000' /><slave name='adrv9371x_xcvr_tx_lane_pll.reconfig_avmm0' start='0x34000' end='0x35000' /><slave name='adrv9371x_xcvr_pll_reconfig.mgmt_avalon_slave' start='0x35000' end='0x35800' /><slave name='adrv9371x_xcvr_tx_core.jesd204_tx_avs' start='0x35800' end='0x35C00' /><slave name='adrv9371x_xcvr_rx_os_core.jesd204_rx_avs' start='0x35C00' end='0x36000' /><slave name='adrv9371x_xcvr_rx_core.jesd204_rx_avs' start='0x36000' end='0x36400' /><slave name='adrv9371x_ad9371_gpio.s1' start='0x36400' end='0x36420' /><slave name='adrv9371x_gpio_i.s1' start='0x36500' end='0x36510' /><slave name='adrv9371x_gpio_o.s1' start='0x36600' end='0x36620' /><slave name='adrv9371x_spi.spi_control_port' start='0x36700' end='0x36720' /></address-map>]]></parameter>
-  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_WIDTH" value="AddressWidth = 18" />
+  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_MAP"><![CDATA[<address-map><slave name='adrv9371x_axi_os_jesd_xcvr.s_axi' start='0x0' end='0x10000' /><slave name='adrv9371x_axi_jesd_xcvr.s_axi' start='0x10000' end='0x20000' /><slave name='adrv9371x_axi_dac_dma.s_axi' start='0x20000' end='0x24000' /><slave name='adrv9371x_axi_os_adc_dma.s_axi' start='0x24000' end='0x28000' /><slave name='adrv9371x_axi_adc_dma.s_axi' start='0x28000' end='0x2C000' /><slave name='adrv9371x_xcvr_tx_lane_pll.reconfig_avmm0' start='0x34000' end='0x35000' /><slave name='adrv9371x_xcvr_pll_reconfig.mgmt_avalon_slave' start='0x35000' end='0x35800' /><slave name='adrv9371x_xcvr_tx_core.jesd204_tx_avs' start='0x35800' end='0x35C00' /><slave name='adrv9371x_xcvr_rx_os_core.jesd204_rx_avs' start='0x35C00' end='0x36000' /><slave name='adrv9371x_xcvr_rx_core.jesd204_rx_avs' start='0x36000' end='0x36400' /><slave name='adrv9371x_ad9371_gpio.s1' start='0x36400' end='0x36420' /><slave name='adrv9371x_gpio_i.s1' start='0x36500' end='0x36510' /><slave name='adrv9371x_gpio_o.s1' start='0x36600' end='0x36620' /><slave name='adrv9371x_spi.spi_control_port' start='0x36700' end='0x36720' /><slave name='adrv9371x_xcvr_rx_core.reconfig_avmm' start='0x38000' end='0x3A000' /><slave name='adrv9371x_axi_ad9371.s_axi' start='0x40000' end='0x50000' /></address-map>]]></parameter>
+  <parameter name="AUTO_SYS_CPU_M_AVL_ADDRESS_WIDTH" value="AddressWidth = 19" />
   <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_a10soc" />
  </module>
  <module name="adrv9371x" kind="adrv9371x_bd" version="1.0" enabled="1">
@@ -585,6 +601,15 @@
    kind="avalon"
    version="15.1"
    start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.avl_rx_xcvr_reconfig_avmm">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00038000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
    end="adrv9371x.avl_spi">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00036700" />
@@ -615,6 +640,15 @@
    end="adrv9371x.avl_xcvr_pll">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00035000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="a10soc.sys_cpu_m_avl"
+   end="adrv9371x.axi_ad9371_s">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00040000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
