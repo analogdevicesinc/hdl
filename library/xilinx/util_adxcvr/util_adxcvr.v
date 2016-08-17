@@ -1033,7 +1033,7 @@ module util_adxcvr (
   parameter   integer TX_OUT_DIV = 1;
   parameter   integer TX_CLK25_DIV = 20;
   parameter   [31:0]  PMA_RSV = 32'h001e7080;
-  parameter   [72:0]  RX_CDR_CFG = 72'h0b000023ff10400020;
+  parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff10400020;
   parameter   [26:0]  QPLL_CFG = 27'h0680181;
   parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000;
 

@@ -124,15 +124,13 @@ module axi_adxcvr_up (
   reg     [ 7:0]  up_icm_sel = 'd0;
   reg             up_icm_enb = 'd0;
   reg             up_icm_wr = 'd0;
-  reg     [11:0]  up_icm_addr = 'd0;
-  reg     [15:0]  up_icm_wdata = 'd0;
+  reg     [28:0]  up_icm_data = 'd0;
   reg     [15:0]  up_icm_rdata = 'd0;
   reg             up_icm_busy = 'd0;
   reg     [ 7:0]  up_ich_sel = 'd0;
   reg             up_ich_enb = 'd0;
   reg             up_ich_wr = 'd0;
-  reg     [11:0]  up_ich_addr = 'd0;
-  reg     [15:0]  up_ich_wdata = 'd0;
+  reg     [28:0]  up_ich_data = 'd0;
   reg     [15:0]  up_ich_rdata = 'd0;
   reg             up_ich_busy = 'd0;
   reg     [ 7:0]  up_ies_sel = 'd0;
@@ -242,29 +240,18 @@ module axi_adxcvr_up (
   assign up_cm_sel = up_icm_sel;
   assign up_cm_enb = up_icm_enb;
   assign up_cm_wr = up_icm_wr;
-  assign up_cm_addr = up_icm_addr;
-  assign up_cm_wdata = up_icm_wdata;
+  assign up_cm_addr = up_icm_data[27:16];
+  assign up_cm_wdata = up_icm_data[15:0];
 
   generate
   if (QPLL_ENABLE == 0) begin
-  always @(negedge up_rstn or posedge up_clk) begin
-    if (up_rstn == 0) begin
-      up_icm_sel <= 'd0;
-      up_icm_enb <= 'd0;
-      up_icm_wr <= 'd0;
-      up_icm_addr <= 'd0;
-      up_icm_wdata <= 'd0;
-      up_icm_rdata <= 'd0;
-      up_icm_busy <= 'd0;
-    end else begin
-      up_icm_sel <= 'd0;
-      up_icm_enb <= 'd0;
-      up_icm_wr <= 'd0;
-      up_icm_addr <= 'd0;
-      up_icm_wdata <= 'd0;
-      up_icm_rdata <= 'd0;
-      up_icm_busy <= 'd0;
-    end
+  always @(posedge up_clk) begin
+    up_icm_sel <= 'd0;
+    up_icm_enb <= 'd0;
+    up_icm_wr <= 'd0;
+    up_icm_data <= 'd0;
+    up_icm_rdata <= 'd0;
+    up_icm_busy <= 'd0;
   end
   end else begin
   always @(negedge up_rstn or posedge up_clk) begin
@@ -272,8 +259,7 @@ module axi_adxcvr_up (
       up_icm_sel <= 'd0;
       up_icm_enb <= 'd0;
       up_icm_wr <= 'd0;
-      up_icm_addr <= 'd0;
-      up_icm_wdata <= 'd0;
+      up_icm_data <= 'd0;
       up_icm_rdata <= 'd0;
       up_icm_busy <= 'd0;
     end else begin
@@ -282,13 +268,13 @@ module axi_adxcvr_up (
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h011)) begin
         up_icm_enb <= 1'b1;
+        up_icm_wr <= up_wdata[28];
       end else begin
         up_icm_enb <= 1'b0;
+        up_icm_wr <= 1'b0;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h011)) begin
-        up_icm_wr <= up_wdata[28];
-        up_icm_addr <= up_wdata[27:16];
-        up_icm_wdata <= up_wdata[15:0];
+        up_icm_data <= up_wdata[28:0];
       end
       if (up_cm_ready == 1'b1) begin
         up_icm_rdata <= up_cm_rdata;
@@ -307,16 +293,15 @@ module axi_adxcvr_up (
   assign up_ch_sel = up_ich_sel;
   assign up_ch_enb = up_ich_enb;
   assign up_ch_wr = up_ich_wr;
-  assign up_ch_addr = up_ich_addr;
-  assign up_ch_wdata = up_ich_wdata;
+  assign up_ch_addr = up_ich_data[27:16];
+  assign up_ch_wdata = up_ich_data[15:0];
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_ich_sel <= 'd0;
       up_ich_enb <= 'd0;
       up_ich_wr <= 'd0;
-      up_ich_addr <= 'd0;
-      up_ich_wdata <= 'd0;
+      up_ich_data <= 'd0;
       up_ich_rdata <= 'd0;
       up_ich_busy <= 'd0;
     end else begin
@@ -325,13 +310,13 @@ module axi_adxcvr_up (
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h019)) begin
         up_ich_enb <= 1'b1;
+        up_ich_wr <= up_wdata[28];
       end else begin
         up_ich_enb <= 1'b0;
+        up_ich_wr <= 1'b0;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h019)) begin
-        up_ich_wr <= up_wdata[28];
-        up_ich_addr <= up_wdata[27:16];
-        up_ich_wdata <= up_wdata[15:0];
+        up_ich_data <= up_wdata[28:0];
       end
       if (up_ch_ready == 1'b1) begin
         up_ich_rdata <= up_ch_rdata;
@@ -462,10 +447,10 @@ module axi_adxcvr_up (
           10'h006: up_rdata_d <= {17'd0, up_user_ready_cnt, up_rst_cnt, up_pll_rst_cnt};
           10'h008: up_rdata_d <= {19'd0, up_lpm_dfe_n, 1'd0, up_rate, 2'd0, up_sys_clk_sel, 1'd0, up_out_clk_sel};
           10'h010: up_rdata_d <= {24'd0, up_icm_sel};
-          10'h011: up_rdata_d <= {3'd0, up_icm_wr, up_icm_addr, up_icm_wdata};
+          10'h011: up_rdata_d <= {3'd0, up_icm_data};
           10'h012: up_rdata_d <= {15'd0, up_icm_busy, up_icm_rdata};
           10'h018: up_rdata_d <= {24'd0, up_ich_sel};
-          10'h019: up_rdata_d <= {3'd0, up_ich_wr, up_ich_addr, up_ich_wdata};
+          10'h019: up_rdata_d <= {3'd0, up_ich_data};
           10'h01a: up_rdata_d <= {15'd0, up_ich_busy, up_ich_rdata};
           10'h020: up_rdata_d <= {24'd0, up_ies_sel};
           10'h028: up_rdata_d <= {31'd0, up_ies_req};
