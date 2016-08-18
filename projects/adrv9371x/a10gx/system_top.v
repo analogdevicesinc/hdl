@@ -184,12 +184,10 @@ module system_top (
   wire              eth_mdio_t;
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
-  wire              spi_miso_s;
-  wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
 
-  assign spi_csn_ad9528 = spi_csn_s[0];
-  assign spi_csn_ad9371 = spi_csn_s[1];
+  assign spi_csn_ad9371 = spi_csn_s[0];
+  assign spi_csn_ad9528 = spi_csn_s[1];
 
   // gpio (ad9371)
 
@@ -252,8 +250,8 @@ module system_top (
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
     .sys_rst_reset_n (sys_resetn),
-    .sys_spi_MISO (spi_miso_s),
-    .sys_spi_MOSI (spi_mosi_s),
+    .sys_spi_MISO (spi_miso),
+    .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
     .ad9371_gpio_export(ad9371_gpio),

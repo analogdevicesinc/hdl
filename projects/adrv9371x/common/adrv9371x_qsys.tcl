@@ -1,3 +1,11 @@
+#overwrite default settings
+
+set_instance_parameter_value sys_spi {clockPhase} {1}
+set_instance_parameter_value sys_spi {clockPolarity} {1}
+set_instance_parameter_value sys_spi {targetClockRate} {5000000.0}
+
+
+# Add adrv9371x
 
 add_instance xcvr_ref_clk altera_clock_bridge 16.0
 set_instance_parameter_value xcvr_ref_clk {EXPLICIT_CLOCK_RATE} {0.0}
