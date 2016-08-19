@@ -16,6 +16,10 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
   set IGNORE_VERSION_CHECK 0
 }
 
+set p_board "not-applicable"
+set p_device "none"
+set sys_zynq 1
+
 proc adi_project_create {project_name {mode 0}} {
 
   global ad_hdl_dir
@@ -25,10 +29,6 @@ proc adi_project_create {project_name {mode 0}} {
   global sys_zynq
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
-
-  set p_device "none"
-  set p_board "none"
-  set sys_zynq 0
 
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
