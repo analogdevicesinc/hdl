@@ -49,22 +49,23 @@ set util_ad9371_tx_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upa
 set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] $util_ad9371_tx_upack
 set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9371_tx_upack
 
-set axi_ad9371_tx_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9371_tx_jesd]
+set axi_ad9371_tx_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9371_tx_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9371_tx_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9371_tx_jesd
 
 # adc peripherals
 
-set axi_ad9371_rx_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9371_rx_jesd]
+set axi_ad9371_rx_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9371_rx_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9371_rx_jesd
 set_property -dict [list CONFIG.C_LANES {2}] $axi_ad9371_rx_jesd
 
-set axi_ad9371_rx_os_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9371_rx_os_jesd]
+set axi_ad9371_rx_os_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9371_rx_os_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9371_rx_os_jesd
 set_property -dict [list CONFIG.C_LANES {2}] $axi_ad9371_rx_os_jesd
 
 set axi_ad9371_rx_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9371_rx_dma]
 set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9371_rx_dma
+set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9371_rx_dma
 set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9371_rx_dma
 set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9371_rx_dma
 set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9371_rx_dma
@@ -388,7 +389,7 @@ ad_cpu_interrupt ps-13 mb-13 axi_ad9371_rx_dma/irq
 
 # ila
 
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_adc]
+set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_adc]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_adc
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {16}] $ila_adc
@@ -412,7 +413,7 @@ set bsplit_os_adc_1 [create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1
 set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $bsplit_os_adc_1
 set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $bsplit_os_adc_1
 
-set ila_os_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_os_adc]
+set ila_os_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_os_adc]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_os_adc
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {6}] $ila_os_adc
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_os_adc
