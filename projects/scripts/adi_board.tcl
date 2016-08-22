@@ -297,7 +297,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     assign_bd_address $m_addr_seg
   }
 
-  if {$m_interconnect_index == 3} {
+  if {$m_interconnect_index > 0} {
     set_property CONFIG.STRATEGY {2} $m_interconnect_cell
   }
 
@@ -306,6 +306,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   if {$p_sel eq "HP1"} {set sys_hp1_interconnect_index $m_interconnect_index}
   if {$p_sel eq "HP2"} {set sys_hp2_interconnect_index $m_interconnect_index}
   if {$p_sel eq "HP3"} {set sys_hp3_interconnect_index $m_interconnect_index}
+
 }
 
 ###################################################################################################
