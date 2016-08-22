@@ -82,14 +82,10 @@ set_property -dict [list CONFIG.PCW_UIPARAM_DDR_USE_INTERNAL_VREF {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_WRITE_LEVEL {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_READ_GATE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_DATA_EYE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 {0.066}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 {0.029}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_2 {-0.017}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_3 {-0.038}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 {0.301}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 {0.330}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY2 {0.314}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY3 {0.333}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 {0.048}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 {0.050}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 {0.241}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 {0.240}] $sys_ps7
 
 set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
 set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
