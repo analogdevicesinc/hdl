@@ -201,11 +201,11 @@ set_instance_parameter_value xcvr_tx_core {pll_type} {CMU}
 set_instance_parameter_value xcvr_tx_core {bonded_mode} {non_bonded}
 set_instance_parameter_value xcvr_tx_core {REFCLK_FREQ} {125.0}
 set_instance_parameter_value xcvr_tx_core {bitrev_en} {0}
-set_instance_parameter_value xcvr_tx_core {pll_reconfig_enable} {0}
+set_instance_parameter_value xcvr_tx_core {pll_reconfig_enable} {1}
 set_instance_parameter_value xcvr_tx_core {rcfg_jtag_enable} {0}
-set_instance_parameter_value xcvr_tx_core {set_capability_reg_enable} {0}
+set_instance_parameter_value xcvr_tx_core {set_capability_reg_enable} {1}
 set_instance_parameter_value xcvr_tx_core {set_user_identifier} {0}
-set_instance_parameter_value xcvr_tx_core {set_csr_soft_logic_enable} {0}
+set_instance_parameter_value xcvr_tx_core {set_csr_soft_logic_enable} {1}
 set_instance_parameter_value xcvr_tx_core {set_prbs_soft_logic_enable} {0}
 set_instance_parameter_value xcvr_tx_core {L} {4}
 set_instance_parameter_value xcvr_tx_core {M} {4}
@@ -288,11 +288,11 @@ set_instance_parameter_value xcvr_rx_core {pll_type} {CMU}
 set_instance_parameter_value xcvr_rx_core {bonded_mode} {non_bonded}
 set_instance_parameter_value xcvr_rx_core {REFCLK_FREQ} {122.88}
 set_instance_parameter_value xcvr_rx_core {bitrev_en} {0}
-set_instance_parameter_value xcvr_rx_core {pll_reconfig_enable} {1}
+set_instance_parameter_value xcvr_rx_core {pll_reconfig_enable} {0}
 set_instance_parameter_value xcvr_rx_core {rcfg_jtag_enable} {0}
-set_instance_parameter_value xcvr_rx_core {set_capability_reg_enable} {1}
+set_instance_parameter_value xcvr_rx_core {set_capability_reg_enable} {0}
 set_instance_parameter_value xcvr_rx_core {set_user_identifier} {0}
-set_instance_parameter_value xcvr_rx_core {set_csr_soft_logic_enable} {1}
+set_instance_parameter_value xcvr_rx_core {set_csr_soft_logic_enable} {0}
 set_instance_parameter_value xcvr_rx_core {set_prbs_soft_logic_enable} {0}
 set_instance_parameter_value xcvr_rx_core {L} {2}
 set_instance_parameter_value xcvr_rx_core {M} {4}
@@ -375,11 +375,11 @@ set_instance_parameter_value xcvr_rx_os_core {pll_type} {CMU}
 set_instance_parameter_value xcvr_rx_os_core {bonded_mode} {non_bonded}
 set_instance_parameter_value xcvr_rx_os_core {REFCLK_FREQ} {122.88}
 set_instance_parameter_value xcvr_rx_os_core {bitrev_en} {0}
-set_instance_parameter_value xcvr_rx_os_core {pll_reconfig_enable} {1}
+set_instance_parameter_value xcvr_rx_os_core {pll_reconfig_enable} {0}
 set_instance_parameter_value xcvr_rx_os_core {rcfg_jtag_enable} {0}
-set_instance_parameter_value xcvr_rx_os_core {set_capability_reg_enable} {1}
+set_instance_parameter_value xcvr_rx_os_core {set_capability_reg_enable} {0}
 set_instance_parameter_value xcvr_rx_os_core {set_user_identifier} {0}
-set_instance_parameter_value xcvr_rx_os_core {set_csr_soft_logic_enable} {1}
+set_instance_parameter_value xcvr_rx_os_core {set_csr_soft_logic_enable} {0}
 set_instance_parameter_value xcvr_rx_os_core {set_prbs_soft_logic_enable} {0}
 set_instance_parameter_value xcvr_rx_os_core {L} {2}
 set_instance_parameter_value xcvr_rx_os_core {M} {2}
@@ -442,7 +442,7 @@ set_instance_parameter_value adc_os_pack {NUM_OF_CHANNELS} {2}
 add_instance axi_adc_dma axi_dmac 1.0
 set_instance_parameter_value axi_adc_dma {ID} {0}
 set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {64}
-set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_DEST} {64}
+set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_DEST} {256}
 set_instance_parameter_value axi_adc_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_adc_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_adc_dma {ASYNC_CLK_REQ_SRC} {1}
@@ -454,12 +454,12 @@ set_instance_parameter_value axi_adc_dma {SYNC_TRANSFER_START} {1}
 set_instance_parameter_value axi_adc_dma {CYCLIC} {0}
 set_instance_parameter_value axi_adc_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_adc_dma {DMA_TYPE_SRC} {2}
-set_instance_parameter_value axi_adc_dma {FIFO_SIZE} {4}
+set_instance_parameter_value axi_adc_dma {FIFO_SIZE} {16}
 
 add_instance axi_os_adc_dma axi_dmac 1.0
 set_instance_parameter_value axi_os_adc_dma {ID} {0}
 set_instance_parameter_value axi_os_adc_dma {DMA_DATA_WIDTH_SRC} {64}
-set_instance_parameter_value axi_os_adc_dma {DMA_DATA_WIDTH_DEST} {64}
+set_instance_parameter_value axi_os_adc_dma {DMA_DATA_WIDTH_DEST} {256}
 set_instance_parameter_value axi_os_adc_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_os_adc_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_os_adc_dma {ASYNC_CLK_REQ_SRC} {1}
@@ -471,11 +471,11 @@ set_instance_parameter_value axi_os_adc_dma {SYNC_TRANSFER_START} {1}
 set_instance_parameter_value axi_os_adc_dma {CYCLIC} {0}
 set_instance_parameter_value axi_os_adc_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_os_adc_dma {DMA_TYPE_SRC} {2}
-set_instance_parameter_value axi_os_adc_dma {FIFO_SIZE} {4}
+set_instance_parameter_value axi_os_adc_dma {FIFO_SIZE} {16}
 
 add_instance axi_dac_dma axi_dmac 1.0
 set_instance_parameter_value axi_dac_dma {ID} {0}
-set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_SRC} {128}
+set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_SRC} {256}
 set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_dac_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_dac_dma {DMA_2D_TRANSFER} {0}
@@ -488,7 +488,7 @@ set_instance_parameter_value axi_dac_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_dac_dma {CYCLIC} {1}
 set_instance_parameter_value axi_dac_dma {DMA_TYPE_DEST} {2}
 set_instance_parameter_value axi_dac_dma {DMA_TYPE_SRC} {0}
-set_instance_parameter_value axi_dac_dma {FIFO_SIZE} {4}
+set_instance_parameter_value axi_dac_dma {FIFO_SIZE} {16}
 
 add_instance ad9371_gpio altera_avalon_pio 16.0
 set_instance_parameter_value ad9371_gpio {bitClearingEdgeCapReg} {0}
@@ -517,12 +517,13 @@ add_connection sys_clk.clk xcvr_rx_os_rst_cntrl.clock
 add_connection sys_clk.clk xcvr_rx_core.jesd204_rx_avs_clk
 add_connection sys_clk.clk xcvr_rx_os_core.jesd204_rx_avs_clk
 add_connection sys_clk.clk xcvr_tx_core.jesd204_tx_avs_clk
-add_connection sys_clk.clk axi_adc_dma.m_dest_axi_clock
-add_connection sys_clk.clk axi_os_adc_dma.m_dest_axi_clock
+add_connection sys_ddr3_cntrl.emif_usr_clk axi_adc_dma.m_dest_axi_clock
+add_connection sys_ddr3_cntrl.emif_usr_clk axi_os_adc_dma.m_dest_axi_clock
 add_connection sys_clk.clk axi_dac_dma.m_src_axi_clock
 add_connection sys_clk.clk xcvr_pll_reconfig.mgmt_clk
-add_connection sys_clk.clk xcvr_rx_core.reconfig_clk
-add_connection sys_clk.clk xcvr_rx_os_core.reconfig_clk
+#add_connection sys_clk.clk xcvr_rx_core.reconfig_clk
+#add_connection sys_clk.clk xcvr_rx_os_core.reconfig_clk
+add_connection sys_clk.clk xcvr_tx_core.reconfig_clk
 add_connection sys_clk.clk xcvr_tx_lane_pll.reconfig_clk0
 add_connection sys_clk.clk axi_adc_dma.s_axi_clock
 add_connection sys_clk.clk axi_dac_dma.s_axi_clock
@@ -534,8 +535,8 @@ add_connection sys_clk.clk ad9371_gpio.clk
 
 add_connection sys_clk.clk_reset xcvr_rx_os_core.jesd204_rx_avs_rst_n
 add_connection sys_clk.clk_reset xcvr_tx_core.jesd204_tx_avs_rst_n
-add_connection sys_clk.clk_reset axi_adc_dma.m_dest_axi_reset
-add_connection sys_clk.clk_reset axi_os_adc_dma.m_dest_axi_reset
+add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_adc_dma.m_dest_axi_reset
+add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_os_adc_dma.m_dest_axi_reset
 add_connection sys_clk.clk_reset axi_dac_dma.m_src_axi_reset
 add_connection sys_clk.clk_reset xcvr_pll_reconfig.mgmt_reset
 add_connection sys_clk.clk_reset xcvr_tx_lane_pll.reconfig_reset0
@@ -543,8 +544,9 @@ add_connection sys_clk.clk_reset xcvr_pll.reset
 add_connection sys_clk.clk_reset xcvr_rx_rst_cntrl.reset
 add_connection sys_clk.clk_reset xcvr_tx_rst_cntrl.reset
 add_connection sys_clk.clk_reset xcvr_rx_os_rst_cntrl.reset
-add_connection sys_clk.clk_reset xcvr_rx_core.reconfig_reset
-add_connection sys_clk.clk_reset xcvr_rx_os_core.reconfig_reset
+#add_connection sys_clk.clk_reset xcvr_rx_core.reconfig_reset
+#add_connection sys_clk.clk_reset xcvr_rx_os_core.reconfig_reset
+add_connection sys_clk.clk_reset xcvr_tx_core.reconfig_reset
 add_connection sys_clk.clk_reset axi_adc_dma.s_axi_reset
 add_connection sys_clk.clk_reset axi_dac_dma.s_axi_reset
 add_connection sys_clk.clk_reset axi_jesd_xcvr.s_axi_reset
@@ -682,10 +684,12 @@ add_connection sys_cpu.data_master axi_jesd_xcvr.s_axi
 add_connection sys_cpu.data_master axi_os_jesd_xcvr.s_axi
 add_connection sys_cpu.data_master axi_ad9371.s_axi
 add_connection sys_cpu.data_master axi_os_adc_dma.s_axi
-add_connection sys_cpu.data_master xcvr_rx_core.reconfig_avmm
+#add_connection sys_cpu.data_master xcvr_rx_core.reconfig_avmm
 add_connection sys_cpu.data_master xcvr_rx_core.jesd204_rx_avs
-add_connection sys_cpu.data_master xcvr_rx_os_core.reconfig_avmm
+#add_connection sys_cpu.data_master xcvr_rx_os_core.reconfig_avmm
 add_connection sys_cpu.data_master xcvr_rx_os_core.jesd204_rx_avs
+add_connection sys_cpu.data_master xcvr_tx_core.reconfig_avmm
+add_connection sys_cpu.data_master xcvr_tx_core.jesd204_tx_avs
 add_connection sys_cpu.data_master ad9371_gpio.s1
 
 add_connection axi_adc_dma.m_dest_axi sys_ddr3_cntrl.ctrl_amm_0
@@ -700,10 +704,12 @@ set_connection_parameter_value sys_cpu.data_master/axi_jesd_xcvr.s_axi          
 set_connection_parameter_value sys_cpu.data_master/axi_os_jesd_xcvr.s_axi               baseAddress {0x10020000}
 set_connection_parameter_value sys_cpu.data_master/axi_ad9371.s_axi                     baseAddress {0x10000000}
 set_connection_parameter_value sys_cpu.data_master/axi_os_adc_dma.s_axi                 baseAddress {0x10500000}
-set_connection_parameter_value sys_cpu.data_master/xcvr_rx_core.reconfig_avmm           baseAddress {0x10030000}
+#set_connection_parameter_value sys_cpu.data_master/xcvr_rx_core.reconfig_avmm           baseAddress {0x10030000}
 set_connection_parameter_value sys_cpu.data_master/xcvr_rx_core.jesd204_rx_avs          baseAddress {0x1003e400}
-set_connection_parameter_value sys_cpu.data_master/xcvr_rx_os_core.reconfig_avmm        baseAddress {0x10130000}
+#set_connection_parameter_value sys_cpu.data_master/xcvr_rx_os_core.reconfig_avmm        baseAddress {0x10130000}
 set_connection_parameter_value sys_cpu.data_master/xcvr_rx_os_core.jesd204_rx_avs       baseAddress {0x1013e400}
+set_connection_parameter_value sys_cpu.data_master/xcvr_tx_core.reconfig_avmm           baseAddress {0x10050000}
+set_connection_parameter_value sys_cpu.data_master/xcvr_tx_core.jesd204_tx_avs          baseAddress {0x1005e400}
 set_connection_parameter_value sys_cpu.data_master/ad9371_gpio.s1                       baseAddress {0x10060000}
 
 set_connection_parameter_value axi_adc_dma.m_dest_axi/sys_ddr3_cntrl.ctrl_amm_0         baseAddress {0x00000000}
