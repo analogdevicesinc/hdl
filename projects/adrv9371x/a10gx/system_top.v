@@ -262,7 +262,7 @@ module system_top (
     .rx_os_sysref_rx_ext_sysref_in (sysref),
     .rx_sync_rx_sync (rx_sync),
     .rx_sysref_rx_ext_sysref_in (sysref),
-    .tx_data_tx_serial_data (tx_data),
+    .tx_data_tx_serial_data ({tx_data[0],tx_data[3],tx_data[2],tx_data[1]}),
     .tx_sync_tx_sync (tx_sync),
     .tx_sysref_tx_ext_sysref_in (sysref)
   );
