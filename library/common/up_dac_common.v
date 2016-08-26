@@ -49,6 +49,7 @@ module up_dac_common (
   dac_rst,
   dac_sync,
   dac_frame,
+  dac_clksel,
   dac_par_type,
   dac_par_enb,
   dac_r1_mode,
@@ -105,6 +106,7 @@ module up_dac_common (
   output          dac_rst;
   output          dac_sync;
   output          dac_frame;
+  output          dac_clksel;
   output          dac_par_type;
   output          dac_par_enb;
   output          dac_r1_mode;
@@ -160,6 +162,7 @@ module up_dac_common (
   reg             up_dac_datafmt = 'd0;
   reg     [ 7:0]  up_dac_datarate = 'd0;
   reg             up_dac_frame = 'd0;
+  reg             up_dac_clksel = 'd0;
   reg             up_drp_sel = 'd0;
   reg             up_drp_wr = 'd0;
   reg             up_drp_status = 'd0;
@@ -215,6 +218,7 @@ module up_dac_common (
       up_dac_datafmt <= 'd0;
       up_dac_datarate <= 'd0;
       up_dac_frame <= 'd0;
+      up_dac_clksel <= 'd0;
       up_drp_sel <= 'd0;
       up_drp_wr <= 'd0;
       up_drp_status <= 'd0;
@@ -259,6 +263,9 @@ module up_dac_common (
         end
       end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
         up_dac_frame <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h18)) begin
+        up_dac_clksel <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
         up_drp_sel <= 1'b1;
@@ -321,6 +328,7 @@ module up_dac_common (
           8'h15: up_rdata <= up_dac_clk_count_s;
           8'h16: up_rdata <= dac_clk_ratio;
           8'h17: up_rdata <= {31'd0, up_status_s};
+          8'h18: up_rdata <= {31'd0, up_dac_clksel};
           8'h1c: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr, up_drp_wdata};
           8'h1d: up_rdata <= {14'd0, up_drp_locked, up_drp_status, up_drp_rdata_hold};
           8'h22: up_rdata <= {30'd0, up_status_ovf, up_status_unf};
@@ -342,10 +350,11 @@ module up_dac_common (
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(14)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(15)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_sync,
+                      up_dac_clksel,
                       up_dac_frame,
                       up_dac_par_type,
                       up_dac_par_enb,
@@ -356,6 +365,7 @@ module up_dac_common (
     .d_rst (dac_rst),
     .d_clk (dac_clk),
     .d_data_cntrl ({  dac_sync_s,
+                      dac_clksel,
                       dac_frame_s,
                       dac_par_type,
                       dac_par_enb,
