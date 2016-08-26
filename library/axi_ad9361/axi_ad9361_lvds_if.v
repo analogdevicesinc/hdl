@@ -80,6 +80,7 @@ module axi_ad9361_lvds_if (
 
   dac_valid,
   dac_data,
+  dac_clksel,
   dac_r1_mode,
 
   // tdd interface
@@ -151,6 +152,7 @@ module axi_ad9361_lvds_if (
 
   input           dac_valid;
   input   [47:0]  dac_data;
+  input           dac_clksel;
   input           dac_r1_mode;
 
   // tdd interface
@@ -227,6 +229,8 @@ module axi_ad9361_lvds_if (
   reg             txnrx_n_int = 'd0;
   reg             enable_p_int = 'd0;
   reg             txnrx_p_int = 'd0;
+  reg             dac_clkdata_p = 'd0;
+  reg             dac_clkdata_n = 'd0;
   reg             locked_m1 = 'd0;
   reg             locked = 'd0;
 
@@ -452,6 +456,11 @@ module axi_ad9361_lvds_if (
     txnrx_p_int <= txnrx_n_int;
   end
 
+  always @(posedge l_clk) begin
+    dac_clkdata_p <= dac_clksel;
+    dac_clkdata_n <= ~dac_clksel;
+  end
+
   // receive data interface, ibuf -> idelay -> iddr
 
   generate
@@ -554,8 +563,8 @@ module axi_ad9361_lvds_if (
     .IODELAY_GROUP (IO_DELAY_GROUP))
   i_tx_clk (
     .tx_clk (l_clk),
-    .tx_data_p (1'b0),
-    .tx_data_n (1'b1),
+    .tx_data_p (dac_clkdata_p),
+    .tx_data_n (dac_clkdata_n),
     .tx_data_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_clk_out_n),
     .up_clk (up_clk),

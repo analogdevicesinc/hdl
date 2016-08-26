@@ -312,10 +312,11 @@ module axi_ad9361 (
 
   // internal signals
 
-  wire            adc_ddr_edgesel;
+  wire            adc_ddr_edgesel_s;
   wire            adc_valid_s;
   wire    [47:0]  adc_data_s;
   wire            adc_status_s;
+  wire            dac_clksel_s;
   wire            dac_valid_s;
   wire            g_dac_valid_s;
   wire    [47:0]  dac_data_s;
@@ -413,9 +414,10 @@ module axi_ad9361 (
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode),
-    .adc_ddr_edgesel (adc_ddr_edgesel),
+    .adc_ddr_edgesel (adc_ddr_edgesel_s),
     .dac_valid (g_dac_valid_s),
     .dac_data (dac_data_s),
+    .dac_clksel (dac_clksel_s),
     .dac_r1_mode (dac_r1_mode),
     .tdd_enable (tdd_enable_s),
     .tdd_txnrx (tdd_txnrx_s),
@@ -471,9 +473,10 @@ module axi_ad9361 (
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode),
-    .adc_ddr_edgesel (adc_ddr_edgesel),
+    .adc_ddr_edgesel (adc_ddr_edgesel_s),
     .dac_valid (g_dac_valid_s),
     .dac_data (dac_data_s),
+    .dac_clksel (dac_clksel_s),
     .dac_r1_mode (dac_r1_mode),
     .tdd_enable (tdd_enable_s),
     .tdd_txnrx (tdd_txnrx_s),
@@ -572,7 +575,7 @@ module axi_ad9361 (
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode),
-    .adc_ddr_edgesel (adc_ddr_edgesel),
+    .adc_ddr_edgesel (adc_ddr_edgesel_s),
     .dac_data (dac_data_s),
     .up_dld (up_adc_dld_s),
     .up_dwdata (up_adc_dwdata_s),
@@ -616,6 +619,7 @@ module axi_ad9361 (
     .dac_clk (clk),
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
+    .dac_clksel (dac_clksel_s),
     .dac_r1_mode (dac_r1_mode),
     .adc_data (adc_data_s),
     .up_dld (up_dac_dld_s),

@@ -44,6 +44,7 @@ module axi_ad9361_tx (
   dac_clk,
   dac_valid,
   dac_data,
+  dac_clksel,
   dac_r1_mode,
   adc_data,
   
@@ -106,6 +107,7 @@ module axi_ad9361_tx (
   input           dac_clk;
   output          dac_valid;
   output  [47:0]  dac_data;
+  output          dac_clksel;
   output          dac_r1_mode;
   input   [47:0]  adc_data;
   
@@ -354,6 +356,7 @@ module axi_ad9361_tx (
     .dac_rst (dac_rst),
     .dac_sync (dac_sync_out),
     .dac_frame (),
+    .dac_clksel (dac_clksel),
     .dac_par_type (),
     .dac_par_enb (),
     .dac_r1_mode (dac_r1_mode),
