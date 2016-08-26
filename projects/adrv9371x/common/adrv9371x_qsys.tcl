@@ -1,14 +1,13 @@
-#overwrite default settings
+# overwrite default settings
 
 set_instance_parameter_value sys_spi {clockPhase} {1}
 set_instance_parameter_value sys_spi {clockPolarity} {1}
 set_instance_parameter_value sys_spi {targetClockRate} {5000000.0}
 
-
 # Add adrv9371x
 
 add_instance xcvr_ref_clk altera_clock_bridge 16.0
-set_instance_parameter_value xcvr_ref_clk {EXPLICIT_CLOCK_RATE} {0.0}
+set_instance_parameter_value xcvr_ref_clk {EXPLICIT_CLOCK_RATE} {122880000.0}
 set_instance_parameter_value xcvr_ref_clk {NUM_CLOCK_OUTPUTS} {1}
 
 add_instance xcvr_pll altera_iopll 16.0
@@ -439,6 +438,18 @@ add_instance adc_os_pack util_cpack 1.0
 set_instance_parameter_value adc_os_pack {CHANNEL_DATA_WIDTH} {32}
 set_instance_parameter_value adc_os_pack {NUM_OF_CHANNELS} {2}
 
+add_instance rx_adcfifo util_adcfifo 1.0
+set_instance_parameter_value rx_adcfifo {ADC_DATA_WIDTH} {64}
+set_instance_parameter_value rx_adcfifo {DMA_DATA_WIDTH} {64}
+set_instance_parameter_value rx_adcfifo {DMA_READY_ENABLE} {1}
+set_instance_parameter_value rx_adcfifo {DMA_ADDRESS_WIDTH} {16}
+
+add_instance rx_os_adcfifo util_adcfifo 1.0
+set_instance_parameter_value rx_os_adcfifo {ADC_DATA_WIDTH} {64}
+set_instance_parameter_value rx_os_adcfifo {DMA_DATA_WIDTH} {64}
+set_instance_parameter_value rx_os_adcfifo {DMA_READY_ENABLE} {1}
+set_instance_parameter_value rx_os_adcfifo {DMA_ADDRESS_WIDTH} {16}
+
 add_instance axi_adc_dma axi_dmac 1.0
 set_instance_parameter_value axi_adc_dma {ID} {0}
 set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {64}
@@ -450,10 +461,10 @@ set_instance_parameter_value axi_adc_dma {ASYNC_CLK_SRC_DEST} {1}
 set_instance_parameter_value axi_adc_dma {ASYNC_CLK_DEST_REQ} {1}
 set_instance_parameter_value axi_adc_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_adc_dma {AXI_SLICE_SRC} {0}
-set_instance_parameter_value axi_adc_dma {SYNC_TRANSFER_START} {1}
+set_instance_parameter_value axi_adc_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_adc_dma {CYCLIC} {0}
 set_instance_parameter_value axi_adc_dma {DMA_TYPE_DEST} {0}
-set_instance_parameter_value axi_adc_dma {DMA_TYPE_SRC} {2}
+set_instance_parameter_value axi_adc_dma {DMA_TYPE_SRC} {1}
 set_instance_parameter_value axi_adc_dma {FIFO_SIZE} {16}
 
 add_instance axi_os_adc_dma axi_dmac 1.0
@@ -467,10 +478,10 @@ set_instance_parameter_value axi_os_adc_dma {ASYNC_CLK_SRC_DEST} {1}
 set_instance_parameter_value axi_os_adc_dma {ASYNC_CLK_DEST_REQ} {1}
 set_instance_parameter_value axi_os_adc_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_os_adc_dma {AXI_SLICE_SRC} {0}
-set_instance_parameter_value axi_os_adc_dma {SYNC_TRANSFER_START} {1}
+set_instance_parameter_value axi_os_adc_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_os_adc_dma {CYCLIC} {0}
 set_instance_parameter_value axi_os_adc_dma {DMA_TYPE_DEST} {0}
-set_instance_parameter_value axi_os_adc_dma {DMA_TYPE_SRC} {2}
+set_instance_parameter_value axi_os_adc_dma {DMA_TYPE_SRC} {1}
 set_instance_parameter_value axi_os_adc_dma {FIFO_SIZE} {16}
 
 add_instance axi_dac_dma axi_dmac 1.0
@@ -519,7 +530,7 @@ add_connection sys_clk.clk xcvr_rx_os_core.jesd204_rx_avs_clk
 add_connection sys_clk.clk xcvr_tx_core.jesd204_tx_avs_clk
 add_connection sys_ddr3_cntrl.emif_usr_clk axi_adc_dma.m_dest_axi_clock
 add_connection sys_ddr3_cntrl.emif_usr_clk axi_os_adc_dma.m_dest_axi_clock
-add_connection sys_clk.clk axi_dac_dma.m_src_axi_clock
+add_connection sys_ddr3_cntrl.emif_usr_clk axi_dac_dma.m_src_axi_clock
 add_connection sys_clk.clk xcvr_pll_reconfig.mgmt_clk
 #add_connection sys_clk.clk xcvr_rx_core.reconfig_clk
 #add_connection sys_clk.clk xcvr_rx_os_core.reconfig_clk
@@ -533,11 +544,12 @@ add_connection sys_clk.clk axi_ad9371.s_axi_clock
 add_connection sys_clk.clk axi_os_adc_dma.s_axi_clock
 add_connection sys_clk.clk ad9371_gpio.clk
 
+
 add_connection sys_clk.clk_reset xcvr_rx_os_core.jesd204_rx_avs_rst_n
 add_connection sys_clk.clk_reset xcvr_tx_core.jesd204_tx_avs_rst_n
 add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_adc_dma.m_dest_axi_reset
 add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_os_adc_dma.m_dest_axi_reset
-add_connection sys_clk.clk_reset axi_dac_dma.m_src_axi_reset
+add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_dac_dma.m_src_axi_reset
 add_connection sys_clk.clk_reset xcvr_pll_reconfig.mgmt_reset
 add_connection sys_clk.clk_reset xcvr_tx_lane_pll.reconfig_reset0
 add_connection sys_clk.clk_reset xcvr_pll.reset
@@ -554,6 +566,8 @@ add_connection sys_clk.clk_reset axi_os_jesd_xcvr.s_axi_reset
 add_connection sys_clk.clk_reset axi_ad9371.s_axi_reset
 add_connection sys_clk.clk_reset axi_os_adc_dma.s_axi_reset
 add_connection sys_clk.clk_reset ad9371_gpio.reset
+add_connection sys_clk.clk_reset rx_adcfifo.if_adc_rst
+add_connection sys_clk.clk_reset rx_os_adcfifo.if_adc_rst
 
 add_connection xcvr_pll.outclk0 axi_ad9371.if_dac_clk
 add_connection xcvr_pll.outclk0 dac_upack.if_dac_clk
@@ -562,46 +576,60 @@ add_connection xcvr_pll.outclk0 axi_jesd_xcvr.if_tx_clk
 add_connection xcvr_pll.outclk0 xcvr_tx_core.txlink_clk
 add_connection xcvr_pll.outclk1 adc_pack.if_adc_clk
 add_connection xcvr_pll.outclk1 axi_ad9371.if_adc_clk
-add_connection xcvr_pll.outclk1 axi_adc_dma.if_fifo_wr_clk
 add_connection xcvr_pll.outclk1 axi_jesd_xcvr.if_rx_clk
 add_connection xcvr_pll.outclk1 xcvr_rx_core.rxlink_clk
+add_connection xcvr_pll.outclk1 rx_adcfifo.if_adc_clk
+add_connection xcvr_pll.outclk1 rx_adcfifo.if_dma_clk
+add_connection xcvr_pll.outclk1 axi_adc_dma.if_s_axis_aclk
 add_connection xcvr_pll.outclk2 adc_os_pack.if_adc_clk
 add_connection xcvr_pll.outclk2 axi_ad9371.if_adc_os_clk
-add_connection xcvr_pll.outclk2 axi_os_adc_dma.if_fifo_wr_clk
 add_connection xcvr_pll.outclk2 axi_os_jesd_xcvr.if_rx_clk
 add_connection xcvr_pll.outclk2 xcvr_rx_os_core.rxlink_clk
+add_connection xcvr_pll.outclk2 rx_os_adcfifo.if_adc_clk
+add_connection xcvr_pll.outclk2 rx_os_adcfifo.if_dma_clk
+add_connection xcvr_pll.outclk2 axi_os_adc_dma.if_s_axis_aclk
 
 add_connection adc_pack.adc_ch_0 axi_ad9371.adc_ch_0
-add_connection axi_ad9371.adc_ch_1 adc_pack.adc_ch_1
+add_connection adc_pack.adc_ch_1 axi_ad9371.adc_ch_1
 add_connection adc_pack.adc_ch_2 axi_ad9371.adc_ch_2
-add_connection axi_ad9371.adc_ch_3 adc_pack.adc_ch_3
+add_connection adc_pack.adc_ch_3 axi_ad9371.adc_ch_3
+
+add_connection adc_pack.if_adc_valid rx_adcfifo.if_adc_wr
+add_connection adc_pack.if_adc_data rx_adcfifo.if_adc_wdata
+
+add_connection rx_adcfifo.if_dma_wr axi_adc_dma.if_s_axis_valid
+add_connection rx_adcfifo.if_dma_wdata axi_adc_dma.if_s_axis_data
+add_connection rx_adcfifo.if_dma_wready axi_adc_dma.if_s_axis_ready
+add_connection rx_adcfifo.if_dma_xfer_req axi_adc_dma.if_s_axis_xfer_req
+add_connection rx_adcfifo.if_adc_wovf axi_ad9371.if_adc_dovf
 
 add_connection adc_os_pack.adc_ch_0 axi_ad9371.adc_os_ch_0
-add_connection axi_ad9371.adc_os_ch_1 adc_os_pack.adc_ch_1
+add_connection adc_os_pack.adc_ch_1 axi_ad9371.adc_os_ch_1
 
-add_connection xcvr_rx_os_core.alldev_lane_aligned xcvr_rx_os_core.dev_lane_aligned
+add_connection adc_os_pack.if_adc_valid rx_os_adcfifo.if_adc_wr
+add_connection adc_os_pack.if_adc_data rx_os_adcfifo.if_adc_wdata
+
+add_connection rx_os_adcfifo.if_dma_wr axi_os_adc_dma.if_s_axis_valid
+add_connection rx_os_adcfifo.if_dma_wdata axi_os_adc_dma.if_s_axis_data
+add_connection rx_os_adcfifo.if_dma_wready axi_os_adc_dma.if_s_axis_ready
+add_connection rx_os_adcfifo.if_dma_xfer_req axi_os_adc_dma.if_s_axis_xfer_req
+add_connection rx_os_adcfifo.if_adc_wovf axi_ad9371.if_adc_dovf
 
 add_connection dac_upack.dac_ch_0 axi_ad9371.dac_ch_0
-add_connection axi_ad9371.dac_ch_1 dac_upack.dac_ch_1
+add_connection dac_upack.dac_ch_1 axi_ad9371.dac_ch_1
 add_connection dac_upack.dac_ch_2 axi_ad9371.dac_ch_2
-add_connection axi_ad9371.dac_ch_3 dac_upack.dac_ch_3
+add_connection dac_upack.dac_ch_3 axi_ad9371.dac_ch_3
 
+add_connection xcvr_rx_os_core.alldev_lane_aligned xcvr_rx_os_core.dev_lane_aligned
 add_connection xcvr_rx_core.dev_lane_aligned xcvr_rx_core.alldev_lane_aligned
 add_connection xcvr_rx_core.dev_sync_n axi_jesd_xcvr.if_rx_ip_sync
 add_connection xcvr_tx_core.dev_sync_n xcvr_tx_core.mdev_sync_n
-add_connection adc_pack.if_adc_data axi_adc_dma.if_fifo_wr_din
-add_connection adc_os_pack.if_adc_data axi_os_adc_dma.if_fifo_wr_din
+
 add_connection axi_ad9371.if_adc_rx_data axi_jesd_xcvr.if_rx_data
 add_connection axi_ad9371.if_adc_rx_os_data axi_os_jesd_xcvr.if_rx_data
-add_connection adc_pack.if_adc_sync axi_adc_dma.if_fifo_wr_sync
-add_connection adc_os_pack.if_adc_sync axi_os_adc_dma.if_fifo_wr_sync
-add_connection adc_pack.if_adc_valid axi_adc_dma.if_fifo_wr_en
 add_connection dac_upack.if_dac_data axi_dac_dma.if_fifo_rd_dout
 add_connection axi_dac_dma.if_fifo_rd_en dac_upack.if_dac_valid
 add_connection axi_dac_dma.if_fifo_rd_underflow axi_ad9371.if_dac_dunf
-add_connection axi_os_adc_dma.if_fifo_wr_en adc_os_pack.if_adc_valid
-add_connection axi_adc_dma.if_fifo_wr_overflow axi_ad9371.if_adc_dovf
-add_connection axi_os_adc_dma.if_fifo_wr_overflow axi_ad9371.if_adc_os_dovf
 add_connection axi_jesd_xcvr.if_rx_ip_sof xcvr_rx_core.sof
 add_connection axi_os_jesd_xcvr.if_rx_ip_sync xcvr_rx_os_core.dev_sync_n
 add_connection axi_jesd_xcvr.if_rx_ip_sysref xcvr_rx_core.sysref
