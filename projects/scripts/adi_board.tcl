@@ -297,7 +297,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     assign_bd_address $m_addr_seg
   }
 
-  if {$m_interconnect_index > 0} {
+  if {$m_interconnect_index > 1} {
     set_property CONFIG.STRATEGY {2} $m_interconnect_cell
   }
 
