@@ -111,7 +111,7 @@ set_property -dict [list CONFIG.C_INCLUDE_S2MM {0}] $axi_hdmi_dma
 
 # audio peripherals
 
-set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.2 sys_audio_clkgen]
+set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.3 sys_audio_clkgen]
 set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
 set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
