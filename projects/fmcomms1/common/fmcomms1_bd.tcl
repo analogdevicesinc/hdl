@@ -68,7 +68,7 @@
 
   # reference clock
 
-  set refclk_clkgen [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.2 refclk_clkgen]
+  set refclk_clkgen [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.3 refclk_clkgen]
   set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {30} ] $refclk_clkgen
   set_property -dict [list CONFIG.USE_PHASE_ALIGNMENT {false} ] $refclk_clkgen
   set_property -dict [list CONFIG.JITTER_SEL {Min_O_Jitter} ] $refclk_clkgen
