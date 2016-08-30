@@ -11,7 +11,7 @@ create_bd_port -dir I -from 1 -to 0 rx_data_n
 
 set axi_ad6676_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad6676:1.0 axi_ad6676_core]
 
-set axi_ad6676_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad6676_jesd]
+set axi_ad6676_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad6676_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad6676_jesd
 set_property -dict [list CONFIG.C_LANES {2}] $axi_ad6676_jesd
 
