@@ -19,10 +19,10 @@ set_property -dict [list CONFIG.ID {0}] $axi_ad9625_0_core
 set axi_ad9625_1_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9625:1.0 axi_ad9625_1_core]
 set_property -dict [list CONFIG.ID {1}] $axi_ad9625_1_core
 
-set axi_ad9625_0_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9625_0_jesd]
+set axi_ad9625_0_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9625_0_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9625_0_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9625_0_jesd
-set axi_ad9625_1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9625_1_jesd]
+set axi_ad9625_1_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9625_1_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9625_1_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9625_1_jesd
 
