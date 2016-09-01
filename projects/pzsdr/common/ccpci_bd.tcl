@@ -49,7 +49,7 @@ ad_connect  pl_gpio1_t axi_gpio/gpio2_io_t
 
 # pci-express
 
-set axi_pcie_x4 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_pcie:2.7 axi_pcie_x4]
+set axi_pcie_x4 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_pcie:2.8 axi_pcie_x4]
 set_property -dict [list CONFIG.NO_OF_LANES {X4}] $axi_pcie_x4
 set_property -dict [list CONFIG.MAX_LINK_SPEED {5.0_GT/s}] $axi_pcie_x4
 set_property -dict [list CONFIG.VENDOR_ID {0x11D4}] $axi_pcie_x4
@@ -155,6 +155,7 @@ delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_t
 set axi_pcie_s_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_pcie_s_interconnect]
 set_property -dict [list CONFIG.NUM_SI {2}] $axi_pcie_s_interconnect
 set_property -dict [list CONFIG.NUM_MI {1}] $axi_pcie_s_interconnect
+set_property -dict [list CONFIG.STRATEGY {2} ] $axi_pcie_s_interconnect
 
 ad_connect  pcie_axi_clk axi_pcie_s_interconnect/ACLK
 ad_connect  pcie_axi_clk axi_pcie_s_interconnect/M00_ACLK
