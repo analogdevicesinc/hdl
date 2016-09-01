@@ -2,7 +2,7 @@
 package require -exact qsys 14.0
 
 set_module_property NAME avl_adxcvr
-set_module_property DESCRIPTION "Avalon Transceiver"
+set_module_property DESCRIPTION "Avalon ADXCVR Core"
 set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME avl_adxcvr
@@ -120,7 +120,7 @@ proc p_avl_adxcvr {} {
   set_interface_property sys_resetn EXPORT_OF alt_sys_clk.clk_in_reset
 
   add_instance alt_ref_clk altera_clock_bridge 16.0
-  set_instance_parameter_value alt_ref_clk {EXPLICIT_CLOCK_RATE} $m_refclk_frequency
+  set_instance_parameter_value alt_ref_clk {EXPLICIT_CLOCK_RATE} [expr $m_refclk_frequency*1000000]
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF alt_ref_clk.in_clk
 
@@ -225,8 +225,6 @@ proc p_avl_adxcvr {} {
     set_interface_property sync EXPORT_OF alt_xcvr.sync_n
     add_interface tx_data conduit end
     set_interface_property tx_data EXPORT_OF alt_xcvr.tx_serial_data
-    add_interface pll_locked conduit end
-    set_interface_property pll_locked EXPORT_OF alt_xcvr.pll_locked
     for {set n 0} {$n < $m_num_of_lanes} {incr n} {
       add_connection alt_lane_pll.tx_serial_clk alt_xcvr.tx_serial_clk0_ch${n}
     }
