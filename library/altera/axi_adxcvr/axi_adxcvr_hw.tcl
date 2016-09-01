@@ -5,10 +5,11 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_alt.tcl
 
 set_module_property NAME axi_adxcvr
-set_module_property DESCRIPTION "AXI ADXCVR Interface"
+set_module_property DESCRIPTION "AXI ADXCVR Core"
 set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_adxcvr
+set_module_property ELABORATION_CALLBACK p_axi_adxcvr
 
 # files
 
@@ -27,10 +28,16 @@ set_parameter_property ID UNITS None
 set_parameter_property ID HDL_PARAMETER true
 
 add_parameter TX_OR_RX_N INTEGER 0
-set_parameter_property DEVICE_TYPE DISPLAY_NAME TX_OR_RX_N
-set_parameter_property DEVICE_TYPE TYPE INTEGER
-set_parameter_property DEVICE_TYPE UNITS None
-set_parameter_property DEVICE_TYPE HDL_PARAMETER true
+set_parameter_property TX_OR_RX_N DISPLAY_NAME TX_OR_RX_N
+set_parameter_property TX_OR_RX_N TYPE INTEGER
+set_parameter_property TX_OR_RX_N UNITS None
+set_parameter_property TX_OR_RX_N HDL_PARAMETER true
+
+add_parameter NUM_OF_LANES INTEGER 4
+set_parameter_property NUM_OF_LANES DISPLAY_NAME NUM_OF_LANES
+set_parameter_property NUM_OF_LANES TYPE INTEGER
+set_parameter_property NUM_OF_LANES UNITS None
+set_parameter_property NUM_OF_LANES HDL_PARAMETER true
 
 # axi4 slave interface
 
@@ -66,12 +73,27 @@ add_interface_port s_axi s_axi_rready rready Input 1
 
 # xcvr interface
 
-add_interface if_xcvr conduit end
-add_interface_port if_xcvr up_rst             up_rst            Output   1
-add_interface_port if_xcvr up_ref_pll_locked  up_ref_pll_locked Input    1
-add_interface_port if_xcvr up_pll_locked      up_pll_locked     Input    1
-add_interface_port if_xcvr up_ready           up_ready          Input    1
+ad_alt_intf reset up_rst output 1 s_axi_clock
+set_interface_property if_up_rst associatedResetSinks s_axi_reset
 
-set_interface_property if_xcvr associatedClock s_axi_clock
+add_interface ref_pll_locked conduit end
+add_interface_port ref_pll_locked up_ref_pll_locked export Input 1
 
+# name changes
+
+proc p_axi_adxcvr {} {
+
+  set m_tx_or_rx_n [get_parameter_value TX_OR_RX_N]
+  set m_num_of_lanes [get_parameter_value NUM_OF_LANES]
+
+  if {$m_tx_or_rx_n == 1} {
+    add_interface ready conduit end
+    add_interface_port ready up_ready tx_ready input $m_num_of_lanes
+  }
+
+  if {$m_tx_or_rx_n == 0} {
+    add_interface ready conduit end
+    add_interface_port ready up_ready rx_ready input $m_num_of_lanes
+  }
+}
 

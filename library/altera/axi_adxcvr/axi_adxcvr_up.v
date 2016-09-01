@@ -41,39 +41,44 @@ module axi_adxcvr_up (
 
   // xcvr, lane-pll and ref-pll are shared
 
-  output          up_rst,
-  input           up_ref_pll_locked,
-  input           up_pll_locked,
-  input           up_ready,
+  output                        up_rst,
+  input                         up_ref_pll_locked,
+  input   [(NUM_OF_LANES-1):0]  up_ready,
 
   // bus interface
 
-  input           up_rstn,
-  input           up_clk,
-  input           up_wreq,
-  input   [ 9:0]  up_waddr,
-  input   [31:0]  up_wdata,
-  output          up_wack,
-  input           up_rreq,
-  input   [ 9:0]  up_raddr,
-  output  [31:0]  up_rdata,
-  output          up_rack);
+  input                         up_rstn,
+  input                         up_clk,
+  input                         up_wreq,
+  input   [ 9:0]                up_waddr,
+  input   [31:0]                up_wdata,
+  output                        up_wack,
+  input                         up_rreq,
+  input   [ 9:0]                up_raddr,
+  output  [31:0]                up_rdata,
+  output                        up_rack);
 
   // parameters
 
   localparam  [31:0]  VERSION = 32'h00100161;
   parameter   integer ID = 0;
   parameter   integer TX_OR_RX_N = 0;
+  parameter   integer NUM_OF_LANES = 4;
 
   // internal registers
 
-  reg             up_wreq_d = 'd0;
-  reg     [31:0]  up_scratch = 'd0;
-  reg             up_resetn = 'd0;
-  reg     [ 3:0]  up_rst_cnt = 'd0;
-  reg             up_status_int = 'd0;
-  reg             up_rreq_d = 'd0;
-  reg     [31:0]  up_rdata_d = 'd0;
+  reg                           up_wreq_d = 'd0;
+  reg     [31:0]                up_scratch = 'd0;
+  reg                           up_resetn = 'd0;
+  reg     [ 3:0]                up_rst_cnt = 'd0;
+  reg                           up_status_int = 'd0;
+  reg                           up_rreq_d = 'd0;
+  reg     [31:0]                up_rdata_d = 'd0;
+
+  // internal signals
+
+  wire                          up_ready_s;
+  wire    [31:0]                up_status_32_s;
 
   // defaults
 
@@ -105,6 +110,10 @@ module axi_adxcvr_up (
 
   assign up_rst = up_rst_cnt[3];
   assign up_status = up_status_int;
+  assign up_ready_s = & up_status_32_s[NUM_OF_LANES:1];
+  assign up_status_32_s[31:(NUM_OF_LANES+1)] <= 'd0;
+  assign up_status_32_s[NUM_OF_LANES] <= up_ref_pll_locked;
+  assign up_status_32_s[(NUM_OF_LANES-1):0] <= up_ready;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -118,8 +127,7 @@ module axi_adxcvr_up (
       end
       if (up_resetn == 1'b0) begin
         up_status_int <= 1'b0;
-      end else if ((up_pll_locked == 1'b1) && (up_ready == 1'b1) &&
-        (up_ref_pll_locked == 1'b1)) begin
+      end else if (up_ready_s == 1'b1) begin
         up_status_int <= 1'b1;
       end
     end
@@ -143,7 +151,7 @@ module axi_adxcvr_up (
           10'h002: up_rdata_d <= up_scratch;
           10'h004: up_rdata_d <= {31'd0, up_resetn};
           10'h005: up_rdata_d <= {31'd0, up_status_int};
-          10'h006: up_rdata_d <= {29'd0, up_pll_locked, up_ref_pll_locked, up_ready};
+          10'h006: up_rdata_d <= up_status_32_s;
           default: up_rdata_d <= 32'd0;
         endcase
       end else begin

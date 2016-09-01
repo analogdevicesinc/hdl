@@ -41,50 +41,50 @@ module axi_adxcvr (
 
   // xcvr, lane-pll and ref-pll are shared
 
-  output          up_rst,
-  input           up_ref_pll_locked,
-  input           up_pll_locked,
-  input           up_ready,
+  output                        up_rst,
+  input                         up_ref_pll_locked,
+  input   [(NUM_OF_LANES-1):0]  up_ready,
 
-  input           s_axi_clk,
-  input           s_axi_aresetn,
-  input           s_axi_awvalid,
-  input   [31:0]  s_axi_awaddr,
-  input   [ 2:0]  s_axi_awprot,
-  output          s_axi_awready,
-  input           s_axi_wvalid,
-  input   [31:0]  s_axi_wdata,
-  input   [ 3:0]  s_axi_wstrb,
-  output          s_axi_wready,
-  output          s_axi_bvalid,
-  output  [ 1:0]  s_axi_bresp,
-  input           s_axi_bready,
-  input           s_axi_arvalid,
-  input   [31:0]  s_axi_araddr,
-  input   [ 2:0]  s_axi_arprot,
-  output          s_axi_arready,
-  output          s_axi_rvalid,
-  output  [ 1:0]  s_axi_rresp,
-  output  [31:0]  s_axi_rdata,
-  input           s_axi_rready);
+  input                         s_axi_clk,
+  input                         s_axi_aresetn,
+  input                         s_axi_awvalid,
+  input   [31:0]                s_axi_awaddr,
+  input   [ 2:0]                s_axi_awprot,
+  output                        s_axi_awready,
+  input                         s_axi_wvalid,
+  input   [31:0]                s_axi_wdata,
+  input   [ 3:0]                s_axi_wstrb,
+  output                        s_axi_wready,
+  output                        s_axi_bvalid,
+  output  [ 1:0]                s_axi_bresp,
+  input                         s_axi_bready,
+  input                         s_axi_arvalid,
+  input   [31:0]                s_axi_araddr,
+  input   [ 2:0]                s_axi_arprot,
+  output                        s_axi_arready,
+  output                        s_axi_rvalid,
+  output  [ 1:0]                s_axi_rresp,
+  output  [31:0]                s_axi_rdata,
+  input                         s_axi_rready);
 
   // parameters
 
   parameter   integer ID = 0;
   parameter   integer TX_OR_RX_N = 0;
+  parameter   integer NUM_OF_LANES = 4;
 
   // internal signals
 
-  wire            up_rstn;
-  wire            up_clk;
-  wire            up_wreq;
-  wire    [ 9:0]  up_waddr;
-  wire    [31:0]  up_wdata;
-  wire            up_wack;
-  wire            up_rreq;
-  wire    [ 9:0]  up_raddr;
-  wire    [31:0]  up_rdata;
-  wire            up_rack;
+  wire                          up_rstn;
+  wire                          up_clk;
+  wire                          up_wreq;
+  wire    [ 9:0]                up_waddr;
+  wire    [31:0]                up_wdata;
+  wire                          up_wack;
+  wire                          up_rreq;
+  wire    [ 9:0]                up_raddr;
+  wire    [31:0]                up_rdata;
+  wire                          up_rack;
 
   // clk & rst
 
@@ -95,11 +95,11 @@ module axi_adxcvr (
 
   axi_adxcvr_up #(
     .ID (ID),
-    .TX_OR_RX_N (TX_OR_RX_N))
+    .TX_OR_RX_N (TX_OR_RX_N),
+    .NUM_OF_LANES (NUM_OF_LANES))
   i_up (
     .up_rst (up_rst),
     .up_ref_pll_locked (up_ref_pll_locked),
-    .up_pll_locked (up_pll_locked),
     .up_ready (up_ready),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
