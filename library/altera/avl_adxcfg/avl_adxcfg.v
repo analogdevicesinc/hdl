@@ -48,112 +48,112 @@ module avl_adxcfg (
   input           rcfg_in_write_0,
   input   [11:0]  rcfg_in_address_0,
   input   [31:0]  rcfg_in_writedata_0,
-  output  [31:0]  rcfg_in_readata_0,
+  output  [31:0]  rcfg_in_readdata_0,
   output          rcfg_in_waitrequest_0,
 
   output          rcfg_out_read_0,
   output          rcfg_out_write_0,
   output  [11:0]  rcfg_out_address_0,
   output  [31:0]  rcfg_out_writedata_0,
-  input   [31:0]  rcfg_out_readata_0,
+  input   [31:0]  rcfg_out_readdata_0,
   input           rcfg_out_waitrequest_0,
 
   input           rcfg_in_read_1,
   input           rcfg_in_write_1,
   input   [11:0]  rcfg_in_address_1,
   input   [31:0]  rcfg_in_writedata_1,
-  output  [31:0]  rcfg_in_readata_1,
+  output  [31:0]  rcfg_in_readdata_1,
   output          rcfg_in_waitrequest_1,
 
   output          rcfg_out_read_1,
   output          rcfg_out_write_1,
   output  [11:0]  rcfg_out_address_1,
   output  [31:0]  rcfg_out_writedata_1,
-  input   [31:0]  rcfg_out_readata_1,
+  input   [31:0]  rcfg_out_readdata_1,
   input           rcfg_out_waitrequest_1,
 
   input           rcfg_in_read_2,
   input           rcfg_in_write_2,
   input   [11:0]  rcfg_in_address_2,
   input   [31:0]  rcfg_in_writedata_2,
-  output  [31:0]  rcfg_in_readata_2,
+  output  [31:0]  rcfg_in_readdata_2,
   output          rcfg_in_waitrequest_2,
 
   output          rcfg_out_read_2,
   output          rcfg_out_write_2,
   output  [11:0]  rcfg_out_address_2,
   output  [31:0]  rcfg_out_writedata_2,
-  input   [31:0]  rcfg_out_readata_2,
+  input   [31:0]  rcfg_out_readdata_2,
   input           rcfg_out_waitrequest_2,
 
   input           rcfg_in_read_3,
   input           rcfg_in_write_3,
   input   [11:0]  rcfg_in_address_3,
   input   [31:0]  rcfg_in_writedata_3,
-  output  [31:0]  rcfg_in_readata_3,
+  output  [31:0]  rcfg_in_readdata_3,
   output          rcfg_in_waitrequest_3,
 
   output          rcfg_out_read_3,
   output          rcfg_out_write_3,
   output  [11:0]  rcfg_out_address_3,
   output  [31:0]  rcfg_out_writedata_3,
-  input   [31:0]  rcfg_out_readata_3,
+  input   [31:0]  rcfg_out_readdata_3,
   input           rcfg_out_waitrequest_3,
 
   input           rcfg_in_read_4,
   input           rcfg_in_write_4,
   input   [11:0]  rcfg_in_address_4,
   input   [31:0]  rcfg_in_writedata_4,
-  output  [31:0]  rcfg_in_readata_4,
+  output  [31:0]  rcfg_in_readdata_4,
   output          rcfg_in_waitrequest_4,
 
   output          rcfg_out_read_4,
   output          rcfg_out_write_4,
   output  [11:0]  rcfg_out_address_4,
   output  [31:0]  rcfg_out_writedata_4,
-  input   [31:0]  rcfg_out_readata_4,
+  input   [31:0]  rcfg_out_readdata_4,
   input           rcfg_out_waitrequest_4,
 
   input           rcfg_in_read_5,
   input           rcfg_in_write_5,
   input   [11:0]  rcfg_in_address_5,
   input   [31:0]  rcfg_in_writedata_5,
-  output  [31:0]  rcfg_in_readata_5,
+  output  [31:0]  rcfg_in_readdata_5,
   output          rcfg_in_waitrequest_5,
 
   output          rcfg_out_read_5,
   output          rcfg_out_write_5,
   output  [11:0]  rcfg_out_address_5,
   output  [31:0]  rcfg_out_writedata_5,
-  input   [31:0]  rcfg_out_readata_5,
+  input   [31:0]  rcfg_out_readdata_5,
   input           rcfg_out_waitrequest_5,
 
   input           rcfg_in_read_6,
   input           rcfg_in_write_6,
   input   [11:0]  rcfg_in_address_6,
   input   [31:0]  rcfg_in_writedata_6,
-  output  [31:0]  rcfg_in_readata_6,
+  output  [31:0]  rcfg_in_readdata_6,
   output          rcfg_in_waitrequest_6,
 
   output          rcfg_out_read_6,
   output          rcfg_out_write_6,
   output  [11:0]  rcfg_out_address_6,
   output  [31:0]  rcfg_out_writedata_6,
-  input   [31:0]  rcfg_out_readata_6,
+  input   [31:0]  rcfg_out_readdata_6,
   input           rcfg_out_waitrequest_6,
 
   input           rcfg_in_read_7,
   input           rcfg_in_write_7,
   input   [11:0]  rcfg_in_address_7,
   input   [31:0]  rcfg_in_writedata_7,
-  output  [31:0]  rcfg_in_readata_7,
+  output  [31:0]  rcfg_in_readdata_7,
   output          rcfg_in_waitrequest_7,
 
   output          rcfg_out_read_7,
   output          rcfg_out_write_7,
   output  [11:0]  rcfg_out_address_7,
   output  [31:0]  rcfg_out_writedata_7,
-  input   [31:0]  rcfg_out_readata_7,
+  input   [31:0]  rcfg_out_readdata_7,
   input           rcfg_out_waitrequest_7);
 
   // internal registers
@@ -162,67 +162,67 @@ module avl_adxcfg (
   reg     [31:0]  rcfg_out_writedata = 'd0;
   reg             rcfg_out_iread_0 = 'd0;
   reg             rcfg_out_iwrite_0 = 'd0;
-  reg     [31:0]  rcfg_in_ireadata_0 = 'd0;
+  reg     [31:0]  rcfg_in_ireaddata_0 = 'd0;
   reg             rcfg_in_iwaitrequest_0 = 'd0;
   reg             rcfg_out_iread_1 = 'd0;
   reg             rcfg_out_iwrite_1 = 'd0;
-  reg     [31:0]  rcfg_in_ireadata_1 = 'd0;
+  reg     [31:0]  rcfg_in_ireaddata_1 = 'd0;
   reg             rcfg_in_iwaitrequest_1 = 'd0;
   reg             rcfg_out_iread_2 = 'd0;
   reg             rcfg_out_iwrite_2 = 'd0;
-  reg     [31:0]  rcfg_in_ireadata_2 = 'd0;
+  reg     [31:0]  rcfg_in_ireaddata_2 = 'd0;
   reg             rcfg_in_iwaitrequest_2 = 'd0;
   reg             rcfg_out_iread_3 = 'd0;
   reg             rcfg_out_iwrite_3 = 'd0;
-  reg     [31:0]  rcfg_in_ireadata_3 = 'd0;
+  reg     [31:0]  rcfg_in_ireaddata_3 = 'd0;
   reg             rcfg_in_iwaitrequest_3 = 'd0;
   reg             rcfg_out_iread_4 = 'd0;
   reg             rcfg_out_iwrite_4 = 'd0;
-  reg     [31:0]  rcfg_in_ireadata_4 = 'd0;
+  reg     [31:0]  rcfg_in_ireaddata_4 = 'd0;
   reg             rcfg_in_iwaitrequest_4 = 'd0;
   reg             rcfg_out_iread_5 = 'd0;
   reg             rcfg_out_iwrite_5 = 'd0;
-  reg     [31:0]  rcfg_in_ireadata_5 = 'd0;
+  reg     [31:0]  rcfg_in_ireaddata_5 = 'd0;
   reg             rcfg_in_iwaitrequest_5 = 'd0;
   reg             rcfg_out_iread_6 = 'd0;
   reg             rcfg_out_iwrite_6 = 'd0;
-  reg     [31:0]  rcfg_in_ireadata_6 = 'd0;
+  reg     [31:0]  rcfg_in_ireaddata_6 = 'd0;
   reg             rcfg_in_iwaitrequest_6 = 'd0;
   reg             rcfg_out_iread_7 = 'd0;
   reg             rcfg_out_iwrite_7 = 'd0;
-  reg     [31:0]  rcfg_in_ireadata_7 = 'd0;
+  reg     [31:0]  rcfg_in_ireaddata_7 = 'd0;
   reg             rcfg_in_iwaitrequest_7 = 'd0;
   reg     [ 3:0]  rcfg_select = 'd0;
 
   // internal signals
 
-  wire            recfg_in_req_0_s;
-  wire            recfg_in_req_1_s;
-  wire            recfg_in_req_2_s;
-  wire            recfg_in_req_3_s;
-  wire            recfg_in_req_4_s;
-  wire            recfg_in_req_5_s;
-  wire            recfg_in_req_6_s;
-  wire            recfg_in_req_7_s;
+  wire            rcfg_in_req_0_s;
+  wire            rcfg_in_req_1_s;
+  wire            rcfg_in_req_2_s;
+  wire            rcfg_in_req_3_s;
+  wire            rcfg_in_req_4_s;
+  wire            rcfg_in_req_5_s;
+  wire            rcfg_in_req_6_s;
+  wire            rcfg_in_req_7_s;
 
   // xcvr sharing requires same bus with ONLY different write/read signals
 
-  assign rcfg_out_address_0 <= rcfg_out_address;
-  assign rcfg_out_writedata_0 <= rcfg_out_writedata;
-  assign rcfg_out_address_1 <= rcfg_out_address;
-  assign rcfg_out_writedata_1 <= rcfg_out_writedata;
-  assign rcfg_out_address_2 <= rcfg_out_address;
-  assign rcfg_out_writedata_2 <= rcfg_out_writedata;
-  assign rcfg_out_address_3 <= rcfg_out_address;
-  assign rcfg_out_writedata_3 <= rcfg_out_writedata;
-  assign rcfg_out_address_4 <= rcfg_out_address;
-  assign rcfg_out_writedata_4 <= rcfg_out_writedata;
-  assign rcfg_out_address_5 <= rcfg_out_address;
-  assign rcfg_out_writedata_5 <= rcfg_out_writedata;
-  assign rcfg_out_address_6 <= rcfg_out_address;
-  assign rcfg_out_writedata_6 <= rcfg_out_writedata;
-  assign rcfg_out_address_7 <= rcfg_out_address;
-  assign rcfg_out_writedata_7 <= rcfg_out_writedata;
+  assign rcfg_out_address_0 = rcfg_out_address;
+  assign rcfg_out_writedata_0 = rcfg_out_writedata;
+  assign rcfg_out_address_1 = rcfg_out_address;
+  assign rcfg_out_writedata_1 = rcfg_out_writedata;
+  assign rcfg_out_address_2 = rcfg_out_address;
+  assign rcfg_out_writedata_2 = rcfg_out_writedata;
+  assign rcfg_out_address_3 = rcfg_out_address;
+  assign rcfg_out_writedata_3 = rcfg_out_writedata;
+  assign rcfg_out_address_4 = rcfg_out_address;
+  assign rcfg_out_writedata_4 = rcfg_out_writedata;
+  assign rcfg_out_address_5 = rcfg_out_address;
+  assign rcfg_out_writedata_5 = rcfg_out_writedata;
+  assign rcfg_out_address_6 = rcfg_out_address;
+  assign rcfg_out_writedata_6 = rcfg_out_writedata;
+  assign rcfg_out_address_7 = rcfg_out_address;
+  assign rcfg_out_writedata_7 = rcfg_out_writedata;
 
   always @(negedge rcfg_reset_n or posedge rcfg_clk) begin
     if (rcfg_reset_n == 0) begin
@@ -272,35 +272,35 @@ module avl_adxcfg (
 
   assign rcfg_out_read_0 = rcfg_out_iread_0;
   assign rcfg_out_write_0 = rcfg_out_iwrite_0;
-  assign rcfg_in_readata_0 = rcfg_in_ireadata_0;
+  assign rcfg_in_readdata_0 = rcfg_in_ireaddata_0;
   assign rcfg_in_waitrequest_0 = rcfg_in_iwaitrequest_0;
   assign rcfg_out_read_1 = rcfg_out_iread_1;
   assign rcfg_out_write_1 = rcfg_out_iwrite_1;
-  assign rcfg_in_readata_1 = rcfg_in_ireadata_1;
+  assign rcfg_in_readdata_1 = rcfg_in_ireaddata_1;
   assign rcfg_in_waitrequest_1 = rcfg_in_iwaitrequest_1;
   assign rcfg_out_read_2 = rcfg_out_iread_2;
   assign rcfg_out_write_2 = rcfg_out_iwrite_2;
-  assign rcfg_in_readata_2 = rcfg_in_ireadata_2;
+  assign rcfg_in_readdata_2 = rcfg_in_ireaddata_2;
   assign rcfg_in_waitrequest_2 = rcfg_in_iwaitrequest_2;
   assign rcfg_out_read_3 = rcfg_out_iread_3;
   assign rcfg_out_write_3 = rcfg_out_iwrite_3;
-  assign rcfg_in_readata_3 = rcfg_in_ireadata_3;
+  assign rcfg_in_readdata_3 = rcfg_in_ireaddata_3;
   assign rcfg_in_waitrequest_3 = rcfg_in_iwaitrequest_3;
   assign rcfg_out_read_4 = rcfg_out_iread_4;
   assign rcfg_out_write_4 = rcfg_out_iwrite_4;
-  assign rcfg_in_readata_4 = rcfg_in_ireadata_4;
+  assign rcfg_in_readdata_4 = rcfg_in_ireaddata_4;
   assign rcfg_in_waitrequest_4 = rcfg_in_iwaitrequest_4;
   assign rcfg_out_read_5 = rcfg_out_iread_5;
   assign rcfg_out_write_5 = rcfg_out_iwrite_5;
-  assign rcfg_in_readata_5 = rcfg_in_ireadata_5;
+  assign rcfg_in_readdata_5 = rcfg_in_ireaddata_5;
   assign rcfg_in_waitrequest_5 = rcfg_in_iwaitrequest_5;
   assign rcfg_out_read_6 = rcfg_out_iread_6;
   assign rcfg_out_write_6 = rcfg_out_iwrite_6;
-  assign rcfg_in_readata_6 = rcfg_in_ireadata_6;
+  assign rcfg_in_readdata_6 = rcfg_in_ireaddata_6;
   assign rcfg_in_waitrequest_6 = rcfg_in_iwaitrequest_6;
   assign rcfg_out_read_7 = rcfg_out_iread_7;
   assign rcfg_out_write_7 = rcfg_out_iwrite_7;
-  assign rcfg_in_readata_7 = rcfg_in_ireadata_7;
+  assign rcfg_in_readdata_7 = rcfg_in_ireaddata_7;
   assign rcfg_in_waitrequest_7 = rcfg_in_iwaitrequest_7;
 
   always @(negedge rcfg_reset_n or posedge rcfg_clk) begin
