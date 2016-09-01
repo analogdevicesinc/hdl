@@ -559,8 +559,7 @@ module axi_ad9361 (
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_tdd_s),
-    .up_rack (up_rack_tdd_s),
-    .tdd_dbg ());
+    .up_rack (up_rack_tdd_s));
 
   // receive
 

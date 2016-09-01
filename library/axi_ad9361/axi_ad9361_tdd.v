@@ -98,10 +98,7 @@ module axi_ad9361_tdd (
   up_rreq,
   up_raddr,
   up_rdata,
-  up_rack,
-
-  tdd_dbg
-);
+  up_rack);
 
   input             clk;
   input             rst;
@@ -158,8 +155,6 @@ module axi_ad9361_tdd (
   output  [31:0]    up_rdata;
   output            up_rack;
 
-  output  [41:0]    tdd_dbg;
-
   reg               tdd_slave_synced = 1'b0;
 
   reg               tdd_tx_valid    = 1'b0;
@@ -215,9 +210,6 @@ module axi_ad9361_tdd (
 
   wire              tdd_rx_dp_en_s;
   wire              tdd_tx_dp_en_s;
-
-  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_sync, tdd_tx_dp_en_s,
-                    tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
 
   assign  tdd_enabled = tdd_enable_s;
   assign  tdd_sync_cntr = ~(tdd_enable_s & tdd_terminal_type_s);
