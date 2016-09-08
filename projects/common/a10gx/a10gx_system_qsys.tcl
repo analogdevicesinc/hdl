@@ -5,6 +5,8 @@ set_module_property NAME {system_bd}
 set_project_property DEVICE_FAMILY {Arria 10}
 set_project_property DEVICE {10AX115S3F45E2SGE3}
 
+set system_type nios
+
 # clock-&-reset
 
 add_instance sys_clk clock_source 16.0
