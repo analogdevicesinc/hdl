@@ -45,7 +45,7 @@ module axi_adxcvr (
   input                         up_ref_pll_locked,
   input   [(NUM_OF_LANES-1):0]  up_ready,
 
-  input                         s_axi_clk,
+  input                         s_axi_aclk,
   input                         s_axi_aresetn,
   input                         s_axi_awvalid,
   input   [31:0]                s_axi_awaddr,
@@ -88,8 +88,8 @@ module axi_adxcvr (
 
   // clk & rst
 
-  assign up_rstn = axi_aresetn;
-  assign up_clk = axi_clk;
+  assign up_rstn = s_axi_aresetn;
+  assign up_clk = s_axi_aclk;
 
   // instantiations
 

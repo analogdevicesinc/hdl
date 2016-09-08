@@ -109,11 +109,10 @@ module axi_adxcvr_up (
   end
 
   assign up_rst = up_rst_cnt[3];
-  assign up_status = up_status_int;
   assign up_ready_s = & up_status_32_s[NUM_OF_LANES:1];
-  assign up_status_32_s[31:(NUM_OF_LANES+1)] <= 'd0;
-  assign up_status_32_s[NUM_OF_LANES] <= up_ref_pll_locked;
-  assign up_status_32_s[(NUM_OF_LANES-1):0] <= up_ready;
+  assign up_status_32_s[31:(NUM_OF_LANES+1)] = 'd0;
+  assign up_status_32_s[NUM_OF_LANES] = up_ref_pll_locked;
+  assign up_status_32_s[(NUM_OF_LANES-1):0] = up_ready;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
