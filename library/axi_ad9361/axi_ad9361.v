@@ -170,6 +170,7 @@ module axi_ad9361 (
   parameter   IO_DELAY_GROUP = "dev_if_delay_group";
   parameter   DAC_DATAPATH_DISABLE = 0;
   parameter   ADC_DATAPATH_DISABLE = 0;
+  parameter   TDD_CONTROL_EN = 0;
 
   // physical interface (receive-lvds)
 
@@ -298,10 +299,10 @@ module axi_ad9361 (
   reg             up_wack = 'd0;
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
-  reg     [15:0]  adc_data_i0 = 16'b0;
-  reg     [15:0]  adc_data_q0 = 16'b0;
-  reg     [15:0]  adc_data_i1 = 16'b0;
-  reg     [15:0]  adc_data_q1 = 16'b0;
+  reg     [15:0]  adc_data_i0_b = 16'b0;
+  reg     [15:0]  adc_data_q0_b = 16'b0;
+  reg     [15:0]  adc_data_i1_b = 16'b0;
+  reg     [15:0]  adc_data_q1_b = 16'b0;
 
   // internal clocks and resets
 
@@ -346,11 +347,6 @@ module axi_ad9361 (
   wire            up_rack_tdd_s;
   wire    [31:0]  up_rdata_tdd_s;
   wire            tdd_tx_dp_en_s;
-  wire            tdd_rx_vco_en_s;
-  wire            tdd_tx_vco_en_s;
-  wire            tdd_rx_rf_en_s;
-  wire            tdd_tx_rf_en_s;
-  wire    [ 7:0]  tdd_status_s;
   wire            tdd_enable_s;
   wire            tdd_txnrx_s;
   wire            tdd_mode_s;
@@ -497,69 +493,110 @@ module axi_ad9361 (
   end
   endgenerate
 
-  // TDD interface
+  generate
+  if (TDD_CONTROL_EN) begin
 
-  // additional flop to keep control and data synced
+    wire            tdd_rx_vco_en_s;
+    wire            tdd_tx_vco_en_s;
+    wire            tdd_rx_rf_en_s;
+    wire            tdd_tx_rf_en_s;
+    wire    [ 7:0]  tdd_status_s;
 
-  always @(posedge clk) begin
-    adc_data_i0 <= adc_data_i0_s;
-    adc_data_q0 <= adc_data_q0_s;
-    adc_data_i1 <= adc_data_i1_s;
-    adc_data_q1 <= adc_data_q1_s;
+    // additional flop to keep control and data synced
+
+    assign adc_data_i0 = adc_data_i0_b;
+    assign adc_data_q0 = adc_data_q0_b;
+    assign adc_data_i1 = adc_data_i1_b;
+    assign adc_data_q1 = adc_data_q1_b;
+
+    always @(posedge clk) begin
+      adc_data_i0_b <= adc_data_i0_s;
+      adc_data_q0_b <= adc_data_q0_s;
+      adc_data_i1_b <= adc_data_i1_s;
+      adc_data_q1_b <= adc_data_q1_s;
+    end
+
+    axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if (
+      .clk (clk),
+      .rst (rst),
+      .tdd_rx_vco_en (tdd_rx_vco_en_s),
+      .tdd_tx_vco_en (tdd_tx_vco_en_s),
+      .tdd_rx_rf_en (tdd_rx_rf_en_s),
+      .tdd_tx_rf_en (tdd_tx_rf_en_s),
+      .ad9361_txnrx (tdd_txnrx_s),
+      .ad9361_enable (tdd_enable_s),
+      .ad9361_tdd_status (tdd_status_s));
+
+    // TDD control
+
+    axi_ad9361_tdd i_tdd (
+      .clk (clk),
+      .rst (rst),
+      .tdd_rx_vco_en (tdd_rx_vco_en_s),
+      .tdd_tx_vco_en (tdd_tx_vco_en_s),
+      .tdd_rx_rf_en (tdd_rx_rf_en_s),
+      .tdd_tx_rf_en (tdd_tx_rf_en_s),
+      .tdd_enabled (tdd_mode_s),
+      .tdd_status (tdd_status_s),
+      .tdd_sync (tdd_sync),
+      .tdd_sync_cntr (tdd_sync_cntr),
+      .tx_valid (dac_valid_s),
+      .tx_valid_i0 (dac_valid_i0_s),
+      .tx_valid_q0 (dac_valid_q0_s),
+      .tx_valid_i1 (dac_valid_i1_s),
+      .tx_valid_q1 (dac_valid_q1_s),
+      .tdd_tx_valid (g_dac_valid_s),
+      .tdd_tx_valid_i0 (dac_valid_i0),
+      .tdd_tx_valid_q0 (dac_valid_q0),
+      .tdd_tx_valid_i1 (dac_valid_i1),
+      .tdd_tx_valid_q1 (dac_valid_q1),
+      .rx_valid_i0 (adc_valid_i0_s),
+      .rx_valid_q0 (adc_valid_q0_s),
+      .rx_valid_i1 (adc_valid_i1_s),
+      .rx_valid_q1 (adc_valid_q1_s),
+      .tdd_rx_valid_i0 (adc_valid_i0),
+      .tdd_rx_valid_q0 (adc_valid_q0),
+      .tdd_rx_valid_i1 (adc_valid_i1),
+      .tdd_rx_valid_q1 (adc_valid_q1),
+      .up_rstn (up_rstn),
+      .up_clk (up_clk),
+      .up_wreq (up_wreq_s),
+      .up_waddr (up_waddr_s),
+      .up_wdata (up_wdata_s),
+      .up_wack (up_wack_tdd_s),
+      .up_rreq (up_rreq_s),
+      .up_raddr (up_raddr_s),
+      .up_rdata (up_rdata_tdd_s),
+      .up_rack (up_rack_tdd_s));
+
+  end else begin
+
+    // TDD control bypass
+
+    assign tdd_mode_s     = 1'b0;
+    assign tdd_status_s   = 8'b0;
+    assign tdd_enable_s   = 1'b0;
+    assign tdd_txnrx_s    = 1'b0;
+    assign adc_data_i0    = adc_data_i0_s;
+    assign adc_data_q0    = adc_data_q0_s;
+    assign adc_data_i1    = adc_data_i1_s;
+    assign adc_data_q1    = adc_data_q1_s;
+    assign tdd_sync_cntr  = 1'b0;
+    assign g_dac_valid_s  = dac_valid_s;
+    assign dac_valid_i0   = dac_valid_i0_s;
+    assign dac_valid_q0   = dac_valid_q0_s;
+    assign dac_valid_i1   = dac_valid_i1_s;
+    assign dac_valid_q1   = dac_valid_q1_s;
+    assign adc_valid_i0   = adc_valid_i0_s;
+    assign adc_valid_q0   = adc_valid_q0_s;
+    assign adc_valid_i1   = adc_valid_i1_s;
+    assign adc_valid_q1   = adc_valid_q1_s;
+    assign up_wack_tdd_s  = 1'b0;
+    assign up_rack_tdd_s  = 1'b0;
+    assign up_rdata_tdd_s = 32'b0;
+
   end
-
-  axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if (
-    .clk (clk),
-    .rst (rst),
-    .tdd_rx_vco_en (tdd_rx_vco_en_s),
-    .tdd_tx_vco_en (tdd_tx_vco_en_s),
-    .tdd_rx_rf_en (tdd_rx_rf_en_s),
-    .tdd_tx_rf_en (tdd_tx_rf_en_s),
-    .ad9361_txnrx (tdd_txnrx_s),
-    .ad9361_enable (tdd_enable_s),
-    .ad9361_tdd_status (tdd_status_s));
-
-  // TDD control
-
-  axi_ad9361_tdd i_tdd (
-    .clk (clk),
-    .rst (rst),
-    .tdd_rx_vco_en (tdd_rx_vco_en_s),
-    .tdd_tx_vco_en (tdd_tx_vco_en_s),
-    .tdd_rx_rf_en (tdd_rx_rf_en_s),
-    .tdd_tx_rf_en (tdd_tx_rf_en_s),
-    .tdd_enabled (tdd_mode_s),
-    .tdd_status (tdd_status_s),
-    .tdd_sync (tdd_sync),
-    .tdd_sync_cntr (tdd_sync_cntr),
-    .tx_valid (dac_valid_s),
-    .tx_valid_i0 (dac_valid_i0_s),
-    .tx_valid_q0 (dac_valid_q0_s),
-    .tx_valid_i1 (dac_valid_i1_s),
-    .tx_valid_q1 (dac_valid_q1_s),
-    .tdd_tx_valid (g_dac_valid_s),
-    .tdd_tx_valid_i0 (dac_valid_i0),
-    .tdd_tx_valid_q0 (dac_valid_q0),
-    .tdd_tx_valid_i1 (dac_valid_i1),
-    .tdd_tx_valid_q1 (dac_valid_q1),
-    .rx_valid_i0 (adc_valid_i0_s),
-    .rx_valid_q0 (adc_valid_q0_s),
-    .rx_valid_i1 (adc_valid_i1_s),
-    .rx_valid_q1 (adc_valid_q1_s),
-    .tdd_rx_valid_i0 (adc_valid_i0),
-    .tdd_rx_valid_q0 (adc_valid_q0),
-    .tdd_rx_valid_i1 (adc_valid_i1),
-    .tdd_rx_valid_q1 (adc_valid_q1),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq_s),
-    .up_waddr (up_waddr_s),
-    .up_wdata (up_wdata_s),
-    .up_wack (up_wack_tdd_s),
-    .up_rreq (up_rreq_s),
-    .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_tdd_s),
-    .up_rack (up_rack_tdd_s));
+  endgenerate
 
   // receive
 
