@@ -168,7 +168,7 @@ module system_top (
   // instantiations
 
   system_bd i_system_bd (
-    .gpio_export (ad9371_gpio),
+    .ad9371_gpio_export (ad9371_gpio),
     .hps_ddr_mem_ck (hps_ddr_clk_p),
     .hps_ddr_mem_ck_n (hps_ddr_clk_n),
     .hps_ddr_mem_a (hsp_ddr_a),
@@ -231,25 +231,7 @@ module system_top (
     .hps_io_hps_io_gpio_gpio1_io14 (hps_gpio[1]),
     .hps_io_hps_io_gpio_gpio1_io16 (hps_gpio[2]),
     .hps_io_hps_io_gpio_gpio1_io17 (hps_gpio[3]),
-    .hps_spi0_mosi_o (),
-    .hps_spi0_miso_i (),
-    .hps_spi0_ss_in_n (1'b1),
-    .hps_spi0_mosi_oe (),
-    .hps_spi0_ss0_n_o (),
-    .hps_spi0_ss1_n_o (),
-    .hps_spi0_ss2_n_o (),
-    .hps_spi0_ss3_n_o (),
-    .hps_spi0_sclk_clk (),
-    .hps_spi1_mosi_o (),
-    .hps_spi1_miso_i (1'b0),
-    .hps_spi1_ss_in_n (1'b1),
-    .hps_spi1_mosi_oe (),
-    .hps_spi1_ss0_n_o (),
-    .hps_spi1_ss1_n_o (),
-    .hps_spi1_ss2_n_o (),
-    .hps_spi1_ss3_n_o (),
-    .hps_spi1_sclk_clk (),
-    .ref_clk_clk (ref_clk1),
+    .xcvr_ref_clk_clk (ref_clk1),
     .rx_data_rx_serial_data (rx_data[1:0]),
     .rx_os_data_rx_serial_data (rx_data[3:2]),
     .rx_os_sync_rx_sync (rx_os_sync),
@@ -257,16 +239,16 @@ module system_top (
     .rx_sync_rx_sync (rx_sync),
     .rx_sysref_rx_ext_sysref_in (sysref),
     .sys_clk_clk (sys_clk),
-    .sys_reset_reset_n (sys_resetn),
-    .tx_data_tx_serial_data (tx_data),
+    .sys_rst_reset_n (sys_resetn),
+    .tx_data_tx_serial_data ({tx_data[0],tx_data[3],tx_data[2],tx_data[1]}),
     .tx_sync_tx_sync (tx_sync),
     .tx_sysref_tx_ext_sysref_in (sysref),
     .gpio_i_export (gpio_i),
     .gpio_o_export (gpio_o),
-    .spi_MISO (spi_miso),
-    .spi_MOSI (spi_mosi),
-    .spi_SCLK (spi_clk),
-    .spi_SS_n ({spi_csn_ad9528, spi_csn_ad9371}));
+    .sys_spi_MISO (spi_miso),
+    .sys_spi_MOSI (spi_mosi),
+    .sys_spi_SCLK (spi_clk),
+    .sys_spi_SS_n ({spi_csn_ad9528, spi_csn_ad9371}));
 
 endmodule
 

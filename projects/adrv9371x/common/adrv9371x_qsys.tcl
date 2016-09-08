@@ -528,9 +528,6 @@ add_connection sys_clk.clk xcvr_rx_os_rst_cntrl.clock
 add_connection sys_clk.clk xcvr_rx_core.jesd204_rx_avs_clk
 add_connection sys_clk.clk xcvr_rx_os_core.jesd204_rx_avs_clk
 add_connection sys_clk.clk xcvr_tx_core.jesd204_tx_avs_clk
-add_connection sys_ddr3_cntrl.emif_usr_clk axi_adc_dma.m_dest_axi_clock
-add_connection sys_ddr3_cntrl.emif_usr_clk axi_os_adc_dma.m_dest_axi_clock
-add_connection sys_ddr3_cntrl.emif_usr_clk axi_dac_dma.m_src_axi_clock
 add_connection sys_clk.clk xcvr_pll_reconfig.mgmt_clk
 #add_connection sys_clk.clk xcvr_rx_core.reconfig_clk
 #add_connection sys_clk.clk xcvr_rx_os_core.reconfig_clk
@@ -544,12 +541,8 @@ add_connection sys_clk.clk axi_ad9371.s_axi_clock
 add_connection sys_clk.clk axi_os_adc_dma.s_axi_clock
 add_connection sys_clk.clk ad9371_gpio.clk
 
-
 add_connection sys_clk.clk_reset xcvr_rx_os_core.jesd204_rx_avs_rst_n
 add_connection sys_clk.clk_reset xcvr_tx_core.jesd204_tx_avs_rst_n
-add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_adc_dma.m_dest_axi_reset
-add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_os_adc_dma.m_dest_axi_reset
-add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_dac_dma.m_src_axi_reset
 add_connection sys_clk.clk_reset xcvr_pll_reconfig.mgmt_reset
 add_connection sys_clk.clk_reset xcvr_tx_lane_pll.reconfig_reset0
 add_connection sys_clk.clk_reset xcvr_pll.reset
@@ -588,6 +581,26 @@ add_connection xcvr_pll.outclk2 xcvr_rx_os_core.rxlink_clk
 add_connection xcvr_pll.outclk2 rx_os_adcfifo.if_adc_clk
 add_connection xcvr_pll.outclk2 rx_os_adcfifo.if_dma_clk
 add_connection xcvr_pll.outclk2 axi_os_adc_dma.if_s_axis_aclk
+
+# NIOS
+if { $system_type=="nios" } {
+  add_connection sys_ddr3_cntrl.emif_usr_clk axi_adc_dma.m_dest_axi_clock
+  add_connection sys_ddr3_cntrl.emif_usr_clk axi_os_adc_dma.m_dest_axi_clock
+  add_connection sys_ddr3_cntrl.emif_usr_clk axi_dac_dma.m_src_axi_clock
+  add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_adc_dma.m_dest_axi_reset
+  add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_os_adc_dma.m_dest_axi_reset
+  add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_dac_dma.m_src_axi_reset
+}
+
+# SOC
+if { $system_type=="a10soc" } {
+  add_connection arria10_hps_0.h2f_user0_clock axi_adc_dma.m_dest_axi_clock
+  add_connection arria10_hps_0.h2f_user0_clock axi_os_adc_dma.m_dest_axi_clock
+  add_connection arria10_hps_0.h2f_user0_clock axi_dac_dma.m_src_axi_clock
+  add_connection sys_clk.clk_reset axi_adc_dma.m_dest_axi_reset
+  add_connection sys_clk.clk_reset axi_os_adc_dma.m_dest_axi_reset
+  add_connection sys_clk.clk_reset axi_dac_dma.m_src_axi_reset
+}
 
 add_connection adc_pack.adc_ch_0 axi_ad9371.adc_ch_0
 add_connection adc_pack.adc_ch_1 axi_ad9371.adc_ch_1
@@ -704,52 +717,110 @@ set_interface_property ad9371_gpio EXPORT_OF ad9371_gpio.external_connection
 
 # addresses
 
-add_connection sys_cpu.data_master xcvr_pll_reconfig.mgmt_avalon_slave
-add_connection sys_cpu.data_master xcvr_tx_lane_pll.reconfig_avmm0
-add_connection sys_cpu.data_master axi_adc_dma.s_axi
-add_connection sys_cpu.data_master axi_dac_dma.s_axi
-add_connection sys_cpu.data_master axi_jesd_xcvr.s_axi
-add_connection sys_cpu.data_master axi_os_jesd_xcvr.s_axi
-add_connection sys_cpu.data_master axi_ad9371.s_axi
-add_connection sys_cpu.data_master axi_os_adc_dma.s_axi
-#add_connection sys_cpu.data_master xcvr_rx_core.reconfig_avmm
-add_connection sys_cpu.data_master xcvr_rx_core.jesd204_rx_avs
-#add_connection sys_cpu.data_master xcvr_rx_os_core.reconfig_avmm
-add_connection sys_cpu.data_master xcvr_rx_os_core.jesd204_rx_avs
-add_connection sys_cpu.data_master xcvr_tx_core.reconfig_avmm
-add_connection sys_cpu.data_master xcvr_tx_core.jesd204_tx_avs
-add_connection sys_cpu.data_master ad9371_gpio.s1
+# NIOS
+if { $system_type=="nios" } {
+  add_connection sys_cpu.data_master xcvr_pll_reconfig.mgmt_avalon_slave
+  add_connection sys_cpu.data_master xcvr_tx_lane_pll.reconfig_avmm0
+  add_connection sys_cpu.data_master axi_adc_dma.s_axi
+  add_connection sys_cpu.data_master axi_dac_dma.s_axi
+  add_connection sys_cpu.data_master axi_jesd_xcvr.s_axi
+  add_connection sys_cpu.data_master axi_os_jesd_xcvr.s_axi
+  add_connection sys_cpu.data_master axi_ad9371.s_axi
+  add_connection sys_cpu.data_master axi_os_adc_dma.s_axi
+  #add_connection sys_cpu.data_master xcvr_rx_core.reconfig_avmm
+  add_connection sys_cpu.data_master xcvr_rx_core.jesd204_rx_avs
+  #add_connection sys_cpu.data_master xcvr_rx_os_core.reconfig_avmm
+  add_connection sys_cpu.data_master xcvr_rx_os_core.jesd204_rx_avs
+  add_connection sys_cpu.data_master xcvr_tx_core.reconfig_avmm
+  add_connection sys_cpu.data_master xcvr_tx_core.jesd204_tx_avs
+  add_connection sys_cpu.data_master ad9371_gpio.s1
 
-add_connection axi_adc_dma.m_dest_axi sys_ddr3_cntrl.ctrl_amm_0
-add_connection axi_os_adc_dma.m_dest_axi sys_ddr3_cntrl.ctrl_amm_0
-add_connection axi_dac_dma.m_src_axi sys_ddr3_cntrl.ctrl_amm_0
+  add_connection axi_adc_dma.m_dest_axi sys_ddr3_cntrl.ctrl_amm_0
+  add_connection axi_os_adc_dma.m_dest_axi sys_ddr3_cntrl.ctrl_amm_0
+  add_connection axi_dac_dma.m_src_axi sys_ddr3_cntrl.ctrl_amm_0
 
-set_connection_parameter_value sys_cpu.data_master/xcvr_pll_reconfig.mgmt_avalon_slave  baseAddress {0x1003d800}
-set_connection_parameter_value sys_cpu.data_master/xcvr_tx_lane_pll.reconfig_avmm0      baseAddress {0x1003c000}
-set_connection_parameter_value sys_cpu.data_master/axi_adc_dma.s_axi                    baseAddress {0x10034000}
-set_connection_parameter_value sys_cpu.data_master/axi_dac_dma.s_axi                    baseAddress {0x10010000}
-set_connection_parameter_value sys_cpu.data_master/axi_jesd_xcvr.s_axi                  baseAddress {0x10040000}
-set_connection_parameter_value sys_cpu.data_master/axi_os_jesd_xcvr.s_axi               baseAddress {0x10020000}
-set_connection_parameter_value sys_cpu.data_master/axi_ad9371.s_axi                     baseAddress {0x10000000}
-set_connection_parameter_value sys_cpu.data_master/axi_os_adc_dma.s_axi                 baseAddress {0x10500000}
-#set_connection_parameter_value sys_cpu.data_master/xcvr_rx_core.reconfig_avmm           baseAddress {0x10030000}
-set_connection_parameter_value sys_cpu.data_master/xcvr_rx_core.jesd204_rx_avs          baseAddress {0x1003e400}
-#set_connection_parameter_value sys_cpu.data_master/xcvr_rx_os_core.reconfig_avmm        baseAddress {0x10130000}
-set_connection_parameter_value sys_cpu.data_master/xcvr_rx_os_core.jesd204_rx_avs       baseAddress {0x1013e400}
-set_connection_parameter_value sys_cpu.data_master/xcvr_tx_core.reconfig_avmm           baseAddress {0x10050000}
-set_connection_parameter_value sys_cpu.data_master/xcvr_tx_core.jesd204_tx_avs          baseAddress {0x1005e400}
-set_connection_parameter_value sys_cpu.data_master/ad9371_gpio.s1                       baseAddress {0x10060000}
+  set_connection_parameter_value sys_cpu.data_master/xcvr_pll_reconfig.mgmt_avalon_slave  baseAddress {0x1003d800}
+  set_connection_parameter_value sys_cpu.data_master/xcvr_tx_lane_pll.reconfig_avmm0      baseAddress {0x1003c000}
+  set_connection_parameter_value sys_cpu.data_master/axi_adc_dma.s_axi                    baseAddress {0x10034000}
+  set_connection_parameter_value sys_cpu.data_master/axi_dac_dma.s_axi                    baseAddress {0x10010000}
+  set_connection_parameter_value sys_cpu.data_master/axi_jesd_xcvr.s_axi                  baseAddress {0x10040000}
+  set_connection_parameter_value sys_cpu.data_master/axi_os_jesd_xcvr.s_axi               baseAddress {0x10020000}
+  set_connection_parameter_value sys_cpu.data_master/axi_ad9371.s_axi                     baseAddress {0x10000000}
+  set_connection_parameter_value sys_cpu.data_master/axi_os_adc_dma.s_axi                 baseAddress {0x10500000}
+  #set_connection_parameter_value sys_cpu.data_master/xcvr_rx_core.reconfig_avmm           baseAddress {0x10030000}
+  set_connection_parameter_value sys_cpu.data_master/xcvr_rx_core.jesd204_rx_avs          baseAddress {0x1003e400}
+  #set_connection_parameter_value sys_cpu.data_master/xcvr_rx_os_core.reconfig_avmm        baseAddress {0x10130000}
+  set_connection_parameter_value sys_cpu.data_master/xcvr_rx_os_core.jesd204_rx_avs       baseAddress {0x1013e400}
+  set_connection_parameter_value sys_cpu.data_master/xcvr_tx_core.reconfig_avmm           baseAddress {0x10050000}
+  set_connection_parameter_value sys_cpu.data_master/xcvr_tx_core.jesd204_tx_avs          baseAddress {0x1005e400}
+  set_connection_parameter_value sys_cpu.data_master/ad9371_gpio.s1                       baseAddress {0x10060000}
 
-set_connection_parameter_value axi_adc_dma.m_dest_axi/sys_ddr3_cntrl.ctrl_amm_0         baseAddress {0x00000000}
-set_connection_parameter_value axi_os_adc_dma.m_dest_axi/sys_ddr3_cntrl.ctrl_amm_0      baseAddress {0x00000000}
-set_connection_parameter_value axi_dac_dma.m_src_axi/sys_ddr3_cntrl.ctrl_amm_0          baseAddress {0x00000000}
+  set_connection_parameter_value axi_adc_dma.m_dest_axi/sys_ddr3_cntrl.ctrl_amm_0         baseAddress {0x00000000}
+  set_connection_parameter_value axi_os_adc_dma.m_dest_axi/sys_ddr3_cntrl.ctrl_amm_0      baseAddress {0x00000000}
+  set_connection_parameter_value axi_dac_dma.m_src_axi/sys_ddr3_cntrl.ctrl_amm_0          baseAddress {0x00000000}
+}
+
+# SOC
+if { $system_type=="a10soc" } {
+  add_connection arria10_hps_0.h2f_lw_axi_master xcvr_pll_reconfig.mgmt_avalon_slave
+  add_connection arria10_hps_0.h2f_lw_axi_master xcvr_tx_lane_pll.reconfig_avmm0
+  add_connection arria10_hps_0.h2f_lw_axi_master axi_adc_dma.s_axi
+  add_connection arria10_hps_0.h2f_lw_axi_master axi_dac_dma.s_axi
+  add_connection arria10_hps_0.h2f_lw_axi_master axi_jesd_xcvr.s_axi
+  add_connection arria10_hps_0.h2f_lw_axi_master axi_os_jesd_xcvr.s_axi
+  add_connection arria10_hps_0.h2f_lw_axi_master axi_ad9371.s_axi
+  add_connection arria10_hps_0.h2f_lw_axi_master axi_os_adc_dma.s_axi
+  #add_connection arria10_hps_0.h2f_lw_axi_master xcvr_rx_core.reconfig_avmm
+  add_connection arria10_hps_0.h2f_lw_axi_master xcvr_rx_core.jesd204_rx_avs
+  #add_connection arria10_hps_0.h2f_lw_axi_master xcvr_rx_os_core.reconfig_avmm
+  add_connection arria10_hps_0.h2f_lw_axi_master xcvr_rx_os_core.jesd204_rx_avs
+  add_connection arria10_hps_0.h2f_lw_axi_master xcvr_tx_core.reconfig_avmm
+  add_connection arria10_hps_0.h2f_lw_axi_master xcvr_tx_core.jesd204_tx_avs
+  add_connection arria10_hps_0.h2f_lw_axi_master ad9371_gpio.s1
+
+  add_connection axi_adc_dma.m_dest_axi arria10_hps_0.f2sdram0_data
+  add_connection axi_os_adc_dma.m_dest_axi arria10_hps_0.f2sdram0_data
+  add_connection axi_dac_dma.m_src_axi arria10_hps_0.f2sdram0_data
+
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/ad9371_gpio.s1 baseAddress {0x00001000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/xcvr_pll_reconfig.mgmt_avalon_slave baseAddress {0x00010000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/xcvr_tx_lane_pll.reconfig_avmm0 baseAddress {0x00011000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/axi_jesd_xcvr.s_axi baseAddress {0x00020000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/xcvr_rx_core.jesd204_rx_avs baseAddress {0x00030000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/axi_os_jesd_xcvr.s_axi baseAddress {0x00040000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/xcvr_rx_os_core.jesd204_rx_avs baseAddress {0x00050000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/xcvr_tx_core.jesd204_tx_avs baseAddress {0x00060000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/xcvr_tx_core.reconfig_avmm baseAddress {0x00064000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/axi_ad9371.s_axi baseAddress {0x00070000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/axi_dac_dma.s_axi baseAddress {0x00080000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/axi_os_adc_dma.s_axi baseAddress {0x0090000}
+  set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/axi_adc_dma.s_axi baseAddress {0x000a0000}
+
+  set_connection_parameter_value axi_dac_dma.m_src_axi/arria10_hps_0.f2sdram0_data baseAddress {0x0000}
+  set_connection_parameter_value axi_os_adc_dma.m_dest_axi/arria10_hps_0.f2sdram0_data baseAddress {0x0000}
+  set_connection_parameter_value axi_adc_dma.m_dest_axi/arria10_hps_0.f2sdram0_data baseAddress {0x0000}
+}
 
 # interrupts
 
-add_connection sys_cpu.irq axi_adc_dma.interrupt_sender
-add_connection sys_cpu.irq axi_dac_dma.interrupt_sender
-add_connection sys_cpu.irq axi_os_adc_dma.interrupt_sender
-set_connection_parameter_value sys_cpu.irq/axi_adc_dma.interrupt_sender irqNumber {10}
-set_connection_parameter_value sys_cpu.irq/axi_dac_dma.interrupt_sender irqNumber {11}
-set_connection_parameter_value sys_cpu.irq/axi_os_adc_dma.interrupt_sender irqNumber {12}
+# NIOS
+if { $system_type=="nios" } {
+  add_connection sys_cpu.irq axi_adc_dma.interrupt_sender
+  add_connection sys_cpu.irq axi_dac_dma.interrupt_sender
+  add_connection sys_cpu.irq axi_os_adc_dma.interrupt_sender
 
+  set_connection_parameter_value sys_cpu.irq/axi_adc_dma.interrupt_sender irqNumber {10}
+  set_connection_parameter_value sys_cpu.irq/axi_dac_dma.interrupt_sender irqNumber {11}
+  set_connection_parameter_value sys_cpu.irq/axi_os_adc_dma.interrupt_sender irqNumber {12}
+}
+
+# SOC
+if { $system_type=="a10soc" } {
+  add_connection arria10_hps_0.f2h_irq0 axi_adc_dma.interrupt_sender
+  add_connection arria10_hps_0.f2h_irq0 axi_dac_dma.interrupt_sender
+  add_connection arria10_hps_0.f2h_irq0 axi_os_adc_dma.interrupt_sender
+
+  set_connection_parameter_value arria10_hps_0.f2h_irq0/axi_adc_dma.interrupt_sender irqNumber {10}
+  set_connection_parameter_value arria10_hps_0.f2h_irq0/axi_dac_dma.interrupt_sender irqNumber {11}
+  set_connection_parameter_value arria10_hps_0.f2h_irq0/axi_os_adc_dma.interrupt_sender irqNumber {12}
+}

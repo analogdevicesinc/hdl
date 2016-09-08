@@ -12,12 +12,12 @@ endif
 export ALT_NIOS_MMU_ENABLED := $(MMU)
 
 M_DEPS += system_top.v
+M_DEPS += system_qsys.tcl
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.sdc
-M_DEPS += system_bd.qsys
-M_DEPS += ../common/adrv9371x_bd.qsys
+M_DEPS += ../common/adrv9371x_qsys.tcl
 M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../common/a10soc/a10soc_system_bd.qsys
+M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
 M_DEPS += ../../../library/altera/common/ad_dcfilter.v
 M_DEPS += ../../../library/altera/common/ad_mul.v
@@ -68,6 +68,10 @@ M_DEPS += ../../../library/common/up_dac_common.v
 M_DEPS += ../../../library/common/up_xcvr.v
 M_DEPS += ../../../library/common/up_xfer_cntrl.v
 M_DEPS += ../../../library/common/up_xfer_status.v
+M_DEPS += ../../../library/util_adcfifo/../common/ad_axis_inf_rx.v
+M_DEPS += ../../../library/util_adcfifo/../common/ad_mem_asym.v
+M_DEPS += ../../../library/util_adcfifo/util_adcfifo.v
+M_DEPS += ../../../library/util_adcfifo/util_adcfifo_hw.tcl
 M_DEPS += ../../../library/util_axis_fifo/address_gray.v
 M_DEPS += ../../../library/util_axis_fifo/address_gray_pipelined.v
 M_DEPS += ../../../library/util_axis_fifo/address_sync.v
