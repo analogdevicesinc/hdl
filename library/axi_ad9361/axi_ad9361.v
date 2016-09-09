@@ -171,6 +171,7 @@ module axi_ad9361 (
   parameter   DAC_DATAPATH_DISABLE = 0;
   parameter   ADC_DATAPATH_DISABLE = 0;
   parameter   TDD_CONTROL_EN = 0;
+  parameter   R1_MODE_EN = 0;
 
   // physical interface (receive-lvds)
 
@@ -602,7 +603,8 @@ module axi_ad9361 (
 
   axi_ad9361_rx #(
     .ID (ID),
-    .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
+    .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE),
+    .R1_MODE_EN (R1_MODE_EN))
   i_rx (
     .mmcm_rst (mmcm_rst),
     .adc_rst (rst),
@@ -650,7 +652,8 @@ module axi_ad9361 (
 
   axi_ad9361_tx #(
     .ID (ID),
-    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
+    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE),
+    .R1_MODE_EN (R1_MODE_EN))
   i_tx (
     .dac_clk (clk),
     .dac_valid (dac_valid_s),

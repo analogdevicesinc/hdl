@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -47,7 +47,7 @@ module axi_ad9361_tx (
   dac_clksel,
   dac_r1_mode,
   adc_data,
-  
+
   // delay interface
 
   up_dld,
@@ -101,6 +101,7 @@ module axi_ad9361_tx (
 
   parameter   DATAPATH_DISABLE = 0;
   parameter   ID = 0;
+  parameter   R1_MODE_EN = 0;
 
   // dac interface
 
@@ -110,7 +111,7 @@ module axi_ad9361_tx (
   output          dac_clksel;
   output          dac_r1_mode;
   input   [47:0]  adc_data;
-  
+
   // delay interface
 
   output  [15:0]  up_dld;
@@ -233,7 +234,7 @@ module axi_ad9361_tx (
   end
 
   // dac channel
-  
+
   axi_ad9361_tx_channel #(
     .CHANNEL_ID (0),
     .Q_OR_I_N (0),
@@ -262,7 +263,7 @@ module axi_ad9361_tx (
     .up_rack (up_rack_s[0]));
 
   // dac channel
-  
+
   axi_ad9361_tx_channel #(
     .CHANNEL_ID (1),
     .Q_OR_I_N (1),
@@ -290,8 +291,11 @@ module axi_ad9361_tx (
     .up_rdata (up_rdata_s[1]),
     .up_rack (up_rack_s[1]));
 
+  generate
+  if (R1_MODE_EN == 0) begin
+
   // dac channel
-  
+
   axi_ad9361_tx_channel #(
     .CHANNEL_ID (2),
     .Q_OR_I_N (0),
@@ -320,7 +324,7 @@ module axi_ad9361_tx (
     .up_rack (up_rack_s[2]));
 
   // dac channel
-  
+
   axi_ad9361_tx_channel #(
     .CHANNEL_ID (3),
     .Q_OR_I_N (1),
@@ -347,6 +351,9 @@ module axi_ad9361_tx (
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[3]),
     .up_rack (up_rack_s[3]));
+
+  end
+  endgenerate
 
   // dac common processor interface
 
@@ -387,7 +394,7 @@ module axi_ad9361_tx (
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[4]),
     .up_rack (up_rack_s[4]));
-  
+
   // dac delay control
 
   up_delay_cntrl #(.DATA_WIDTH(16), .BASE_ADDRESS(6'h12)) i_delay_cntrl (

@@ -103,6 +103,7 @@ module axi_ad9361_rx (
 
   parameter   DATAPATH_DISABLE = 0;
   parameter   ID = 0;
+  parameter   R1_MODE_EN = 0;
 
   // common
 
@@ -274,6 +275,9 @@ module axi_ad9361_rx (
     .up_rdata (up_rdata_s[1]),
     .up_rack (up_rack_s[1]));
 
+  generate
+  if (R1_MODE_EN == 0) begin
+
   // channel 2 (i)
 
   axi_ad9361_rx_channel #(
@@ -339,6 +343,9 @@ module axi_ad9361_rx (
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[3]),
     .up_rack (up_rack_s[3]));
+
+  end
+  endgenerate
 
   // common processor control
 
