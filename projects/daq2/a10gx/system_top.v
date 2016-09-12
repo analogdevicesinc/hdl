@@ -238,10 +238,13 @@ module system_top (
   assign gpio_bd_o = gpio_o[15:0];
 
   system_bd i_system_bd (
-    .rx_data_rx_serial_data (rx_data),
+    .rx_data_0_rx_serial_data (rx_data[0]),
+    .rx_data_1_rx_serial_data (rx_data[1]),
+    .rx_data_2_rx_serial_data (rx_data[2]),
+    .rx_data_3_rx_serial_data (rx_data[3]),
     .rx_ref_clk_clk (rx_ref_clk),
-    .rx_sync_rx_sync (rx_sync),
-    .rx_sysref_rx_ext_sysref_in (rx_sysref),
+    .rx_sync_export (rx_sync),
+    .rx_sysref_export (rx_sysref),
     .sys_clk_clk (sys_clk),
     .sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
     .sys_ddr3_cntrl_mem_mem_ck_n (ddr3_clk_n),
@@ -277,10 +280,13 @@ module system_top (
     .sys_spi_MOSI (spi_mosi_s),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
-    .tx_data_tx_serial_data (tx_data),
+    .tx_data_0_tx_serial_data (tx_data[0]),
+    .tx_data_1_tx_serial_data (tx_data[1]),
+    .tx_data_2_tx_serial_data (tx_data[2]),
+    .tx_data_3_tx_serial_data (tx_data[3]),
     .tx_ref_clk_clk (tx_ref_clk),
-    .tx_sync_tx_sync (tx_sync),
-    .tx_sysref_tx_ext_sysref_in (tx_sysref));
+    .tx_sync_export (tx_sync),
+    .tx_sysref_export (tx_sysref));
 
 endmodule
 
