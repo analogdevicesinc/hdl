@@ -124,27 +124,27 @@ proc p_avl_adxcvr {} {
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF alt_ref_clk.in_clk
 
-  add_instance alt_ref_pll altera_iopll 16.0
-  set_instance_parameter_value alt_ref_pll {gui_en_reconf} {1}
-  set_instance_parameter_value alt_ref_pll {gui_reference_clock_frequency} $m_refclk_frequency
-  set_instance_parameter_value alt_ref_pll {gui_use_locked} {1}
-  set_instance_parameter_value alt_ref_pll {gui_output_clock_frequency0} $m_coreclk_frequency
-  add_connection alt_ref_clk.out_clk alt_ref_pll.refclk
-  add_connection alt_sys_clk.clk_reset alt_ref_pll.reset
-  add_interface ref_pll_locked conduit end
-  set_interface_property ref_pll_locked EXPORT_OF alt_ref_pll.locked
+  add_instance alt_core_pll altera_iopll 16.0
+  set_instance_parameter_value alt_core_pll {gui_en_reconf} {1}
+  set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
+  set_instance_parameter_value alt_core_pll {gui_use_locked} {1}
+  set_instance_parameter_value alt_core_pll {gui_output_clock_frequency0} $m_coreclk_frequency
+  add_connection alt_ref_clk.out_clk alt_core_pll.refclk
+  add_connection alt_sys_clk.clk_reset alt_core_pll.reset
+  add_interface core_pll_locked conduit end
+  set_interface_property core_pll_locked EXPORT_OF alt_core_pll.locked
 
-  add_instance alt_ref_pll_reconfig altera_pll_reconfig 16.0
-  add_connection alt_sys_clk.clk_reset alt_ref_pll_reconfig.mgmt_reset
-  add_connection alt_sys_clk.clk alt_ref_pll_reconfig.mgmt_clk
-  add_connection alt_ref_pll_reconfig.reconfig_to_pll alt_ref_pll.reconfig_to_pll
-  add_connection alt_ref_pll.reconfig_from_pll alt_ref_pll_reconfig.reconfig_from_pll
-  add_interface ref_pll_reconfig avalon slave
-  set_interface_property ref_pll_reconfig EXPORT_OF alt_ref_pll_reconfig.mgmt_avalon_slave
+  add_instance alt_core_pll_reconfig altera_pll_reconfig 16.0
+  add_connection alt_sys_clk.clk_reset alt_core_pll_reconfig.mgmt_reset
+  add_connection alt_sys_clk.clk alt_core_pll_reconfig.mgmt_clk
+  add_connection alt_core_pll_reconfig.reconfig_to_pll alt_core_pll.reconfig_to_pll
+  add_connection alt_core_pll.reconfig_from_pll alt_core_pll_reconfig.reconfig_from_pll
+  add_interface core_pll_reconfig avalon slave
+  set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll_reconfig.mgmt_avalon_slave
 
   add_instance alt_core_clk altera_clock_bridge 16.0
   set_instance_parameter_value alt_core_clk {EXPLICIT_CLOCK_RATE} $m_coreclk_frequency
-  add_connection alt_ref_pll.outclk0 alt_core_clk.in_clk
+  add_connection alt_core_pll.outclk0 alt_core_clk.in_clk
   add_interface core_clk clock source
   set_interface_property core_clk EXPORT_OF alt_core_clk.out_clk
 
@@ -183,50 +183,94 @@ proc p_avl_adxcvr {} {
     add_interface lane_pll_reconfig avalon slave
     set_interface_property lane_pll_reconfig EXPORT_OF alt_lane_pll.reconfig_avmm0
 
-    add_instance alt_xcvr altera_jesd204 16.0
-    set_instance_parameter_value alt_xcvr {wrapper_opt} {base_phy}
-    set_instance_parameter_value alt_xcvr {DATA_PATH} {TX}
-    set_instance_parameter_value alt_xcvr {lane_rate} $m_lane_rate
-    set_instance_parameter_value alt_xcvr {PCS_CONFIG} $m_pcs_config
-    set_instance_parameter_value alt_xcvr {bonded_mode} {non_bonded}
-    set_instance_parameter_value alt_xcvr {pll_reconfig_enable} {1}
-    set_instance_parameter_value alt_xcvr {set_capability_reg_enable} {1}
-    set_instance_parameter_value alt_xcvr {set_user_identifier} $m_id
-    set_instance_parameter_value alt_xcvr {set_csr_soft_logic_enable} {1}
-    set_instance_parameter_value alt_xcvr {L} $m_num_of_lanes
-    set_instance_parameter_value alt_xcvr {M} $m_num_of_convs
-    set_instance_parameter_value alt_xcvr {GUI_EN_CFG_F} {1}
-    set_instance_parameter_value alt_xcvr {GUI_CFG_F} $m_frm_bcnt
-    set_instance_parameter_value alt_xcvr {N} {16}
-    set_instance_parameter_value alt_xcvr {N_PRIME} {16}
-    set_instance_parameter_value alt_xcvr {S} $m_frm_scnt
-    set_instance_parameter_value alt_xcvr {K} $m_mf_fcnt
-    set_instance_parameter_value alt_xcvr {SCR} {1}
-    set_instance_parameter_value alt_xcvr {HD} $m_hd
-    add_connection alt_rst_cntrol.tx_digitalreset alt_xcvr.tx_digitalreset
-    add_connection alt_rst_cntrol.tx_analogreset alt_xcvr.tx_analogreset
-    add_connection alt_xcvr.tx_cal_busy alt_rst_cntrol.tx_cal_busy
-    add_connection alt_xcvr.dev_sync_n alt_xcvr.mdev_sync_n
-    add_connection alt_sys_clk.clk alt_xcvr.reconfig_clk
-    add_connection alt_sys_clk.clk_reset alt_xcvr.reconfig_reset
-    add_interface phy_reconfig avalon slave
-    set_interface_property phy_reconfig EXPORT_OF alt_xcvr.reconfig_avmm
-    add_connection alt_sys_clk.clk alt_xcvr.jesd204_tx_avs_clk
-    add_connection alt_sys_clk.clk_reset alt_xcvr.jesd204_tx_avs_rst_n
-    add_interface ip_reconfig avalon slave
-    set_interface_property ip_reconfig EXPORT_OF alt_xcvr.jesd204_tx_avs
-    add_connection alt_ref_pll.outclk0 alt_xcvr.txlink_clk
-    add_connection alt_sys_clk.clk_reset alt_xcvr.txlink_rst_n
+    add_instance alt_ip altera_jesd204 16.0
+    set_instance_parameter_value alt_ip {wrapper_opt} {base}
+    set_instance_parameter_value alt_ip {DATA_PATH} {TX}
+    set_instance_parameter_value alt_ip {lane_rate} $m_lane_rate
+    set_instance_parameter_value alt_ip {L} $m_num_of_lanes
+    set_instance_parameter_value alt_ip {M} $m_num_of_convs
+    set_instance_parameter_value alt_ip {GUI_EN_CFG_F} {1}
+    set_instance_parameter_value alt_ip {GUI_CFG_F} $m_frm_bcnt
+    set_instance_parameter_value alt_ip {N} {16}
+    set_instance_parameter_value alt_ip {N_PRIME} {16}
+    set_instance_parameter_value alt_ip {S} $m_frm_scnt
+    set_instance_parameter_value alt_ip {K} $m_mf_fcnt
+    set_instance_parameter_value alt_ip {SCR} {1}
+    set_instance_parameter_value alt_ip {HD} $m_hd
+    add_connection alt_core_pll.outclk0 alt_ip.txlink_clk
+    add_connection alt_sys_clk.clk_reset alt_ip.txlink_rst_n
     add_interface ip_data avalon_streaming sink
-    set_interface_property ip_data EXPORT_OF alt_xcvr.jesd204_tx_link
+    set_interface_property ip_data EXPORT_OF alt_ip.jesd204_tx_link
+    add_connection alt_sys_clk.clk alt_ip.jesd204_tx_avs_clk
+    add_connection alt_sys_clk.clk_reset alt_ip.jesd204_tx_avs_rst_n
+    add_interface ip_reconfig avalon slave
+    set_interface_property ip_reconfig EXPORT_OF alt_ip.jesd204_tx_avs
     add_interface sysref conduit end
-    set_interface_property sysref EXPORT_OF alt_xcvr.sysref
+    set_interface_property sysref EXPORT_OF alt_ip.sysref
     add_interface sync conduit end
-    set_interface_property sync EXPORT_OF alt_xcvr.sync_n
-    add_interface tx_data conduit end
-    set_interface_property tx_data EXPORT_OF alt_xcvr.tx_serial_data
+    set_interface_property sync EXPORT_OF alt_ip.sync_n
+    add_connection alt_ip.dev_sync_n alt_ip.mdev_sync_n
+
+    add_instance alt_xphy avl_adxphy 1.0
+    set_instance_parameter_value alt_xphy {TX_OR_RX_N} {1}
+    set_instance_parameter_value alt_xphy {NUM_OF_LANES} $m_num_of_lanes
+    add_connection alt_rst_cntrol.tx_analogreset alt_xphy.tx_core_analogreset
+    add_connection alt_rst_cntrol.tx_digitalreset alt_xphy.tx_core_digitalreset
+    add_connection alt_xphy.tx_core_cal_busy alt_rst_cntrol.tx_cal_busy
+    add_connection alt_xphy.tx_ip_cal_busy alt_ip.tx_cal_busy
+    add_connection alt_xphy.tx_ip_pcfifo_full alt_ip.phy_csr_tx_pcfifo_full
+    add_connection alt_xphy.tx_ip_pcfifo_empty alt_ip.phy_csr_tx_pcfifo_empty
+    add_connection alt_ip.jesd204_tx_pcs_data alt_xphy.tx_ip_pcs_data
+    add_connection alt_ip.jesd204_tx_pcs_kchar_data alt_xphy.tx_ip_pcs_kchar_data
+    add_connection alt_ip.phy_tx_elecidle alt_xphy.tx_ip_elecidle
+    add_connection alt_ip.csr_lane_polarity alt_xphy.tx_ip_csr_lane_polarity
+    add_connection alt_ip.csr_lane_powerdown alt_xphy.tx_ip_csr_lane_powerdown
+    add_connection alt_ip.csr_bit_reversal alt_xphy.tx_ip_csr_bit_reversal
+    add_connection alt_ip.csr_byte_reversal alt_xphy.tx_ip_csr_byte_reversal
+
     for {set n 0} {$n < $m_num_of_lanes} {incr n} {
-      add_connection alt_lane_pll.tx_serial_clk alt_xcvr.tx_serial_clk0_ch${n}
+
+      add_interface tx_ip_s_${n} conduit end
+      set_interface_property tx_ip_s_${n} EXPORT_OF alt_xphy.tx_ip_s_${n}
+      add_interface tx_ip_d_${n} conduit end
+      set_interface_property tx_ip_d_${n} EXPORT_OF alt_xphy.tx_ip_d_${n}
+      add_interface tx_phy_s_${n} conduit end
+      set_interface_property tx_phy_s_${n} EXPORT_OF alt_xphy.tx_phy_s_${n}
+      add_interface tx_phy_d_${n} conduit end
+      set_interface_property tx_phy_d_${n} EXPORT_OF alt_xphy.tx_phy_d_${n}
+
+      add_instance alt_phy_${n} altera_jesd204 16.0
+      set_instance_parameter_value alt_phy_${n} {wrapper_opt} {phy}
+      set_instance_parameter_value alt_phy_${n} {DATA_PATH} {TX}
+      set_instance_parameter_value alt_phy_${n} {lane_rate} $m_lane_rate
+      set_instance_parameter_value alt_phy_${n} {PCS_CONFIG} $m_pcs_config
+      set_instance_parameter_value alt_phy_${n} {bonded_mode} {non_bonded}
+      set_instance_parameter_value alt_phy_${n} {pll_reconfig_enable} {1}
+      set_instance_parameter_value alt_phy_${n} {set_capability_reg_enable} {1}
+      set_instance_parameter_value alt_phy_${n} {set_user_identifier} $m_id
+      set_instance_parameter_value alt_phy_${n} {set_csr_soft_logic_enable} {1}
+      set_instance_parameter_value alt_phy_${n} {L} 1
+      add_connection alt_core_pll.outclk0 alt_phy_${n}.txlink_clk
+      add_connection alt_sys_clk.clk_reset alt_phy_${n}.txlink_rst_n
+      add_interface tx_data_${n} conduit end
+      set_interface_property tx_data_${n} EXPORT_OF alt_phy_${n}.tx_serial_data
+      add_connection alt_xphy.tx_phy${n}_analogreset alt_phy_${n}.tx_analogreset
+      add_connection alt_xphy.tx_phy${n}_digitalreset alt_phy_${n}.tx_digitalreset
+      add_connection alt_lane_pll.tx_serial_clk alt_phy_${n}.tx_serial_clk0
+      add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
+      add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
+      add_interface phy_reconfig_${n} avalon slave
+      set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
+      add_connection alt_phy_${n}.tx_cal_busy alt_xphy.tx_phy${n}_cal_busy
+      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_full alt_xphy.tx_phy${n}_pcfifo_full
+      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_empty alt_xphy.tx_phy${n}_pcfifo_empty
+      add_connection alt_xphy.tx_phy${n}_pcs_data alt_phy_${n}.jesd204_tx_pcs_data
+      add_connection alt_xphy.tx_phy${n}_pcs_kchar_data alt_phy_${n}.jesd204_tx_pcs_kchar_data
+      add_connection alt_xphy.tx_phy${n}_elecidle alt_phy_${n}.phy_tx_elecidle
+      add_connection alt_xphy.tx_phy${n}_csr_lane_polarity alt_phy_${n}.csr_lane_polarity
+      add_connection alt_xphy.tx_phy${n}_csr_lane_powerdown alt_phy_${n}.csr_lane_powerdown
+      add_connection alt_xphy.tx_phy${n}_csr_bit_reversal alt_phy_${n}.csr_bit_reversal
+      add_connection alt_xphy.tx_phy${n}_csr_byte_reversal alt_phy_${n}.csr_byte_reversal
     }
   }
 
@@ -246,52 +290,97 @@ proc p_avl_adxcvr {} {
     add_interface ready conduit end
     set_interface_property ready EXPORT_OF alt_rst_cntrol.rx_ready
 
-    add_instance alt_xcvr altera_jesd204 16.0
-    set_instance_parameter_value alt_xcvr {wrapper_opt} {base_phy}
-    set_instance_parameter_value alt_xcvr {DATA_PATH} {RX}
-    set_instance_parameter_value alt_xcvr {lane_rate} $m_lane_rate
-    set_instance_parameter_value alt_xcvr {PCS_CONFIG} $m_pcs_config
-    set_instance_parameter_value alt_xcvr {REFCLK_FREQ} $m_refclk_frequency
-    set_instance_parameter_value alt_xcvr {pll_reconfig_enable} {1}
-    set_instance_parameter_value alt_xcvr {set_capability_reg_enable} {1}
-    set_instance_parameter_value alt_xcvr {set_user_identifier} $m_id
-    set_instance_parameter_value alt_xcvr {set_csr_soft_logic_enable} {1}
-    set_instance_parameter_value alt_xcvr {L} $m_num_of_lanes
-    set_instance_parameter_value alt_xcvr {M} $m_num_of_convs
-    set_instance_parameter_value alt_xcvr {GUI_EN_CFG_F} {1}
-    set_instance_parameter_value alt_xcvr {GUI_CFG_F} $m_frm_bcnt
-    set_instance_parameter_value alt_xcvr {N} {16}
-    set_instance_parameter_value alt_xcvr {N_PRIME} {16}
-    set_instance_parameter_value alt_xcvr {S} $m_frm_scnt
-    set_instance_parameter_value alt_xcvr {K} $m_mf_fcnt
-    set_instance_parameter_value alt_xcvr {SCR} {1}
-    set_instance_parameter_value alt_xcvr {HD} $m_hd
-    add_connection alt_rst_cntrol.rx_digitalreset alt_xcvr.rx_digitalreset
-    add_connection alt_rst_cntrol.rx_analogreset alt_xcvr.rx_analogreset
-    add_connection alt_xcvr.rx_cal_busy alt_rst_cntrol.rx_cal_busy
-    add_connection alt_xcvr.rx_islockedtodata alt_rst_cntrol.rx_is_lockedtodata
-    add_connection alt_xcvr.dev_lane_aligned alt_xcvr.alldev_lane_aligned
-    add_connection alt_sys_clk.clk alt_xcvr.reconfig_clk
-    add_connection alt_sys_clk.clk_reset alt_xcvr.reconfig_reset
-    add_interface phy_reconfig avalon slave
-    set_interface_property phy_reconfig EXPORT_OF alt_xcvr.reconfig_avmm
-    add_connection alt_sys_clk.clk alt_xcvr.jesd204_rx_avs_clk
-    add_connection alt_sys_clk.clk_reset alt_xcvr.jesd204_rx_avs_rst_n
-    add_interface ip_reconfig avalon slave
-    set_interface_property ip_reconfig EXPORT_OF alt_xcvr.jesd204_rx_avs
-    add_connection alt_ref_clk.out_clk alt_xcvr.pll_ref_clk
-    add_connection alt_ref_pll.outclk0 alt_xcvr.rxlink_clk
-    add_connection alt_sys_clk.clk_reset alt_xcvr.rxlink_rst_n
-    add_interface ip_data avalon_streaming source
-    set_interface_property ip_data EXPORT_OF alt_xcvr.jesd204_rx_link
-    add_interface sysref conduit end
-    set_interface_property sysref EXPORT_OF alt_xcvr.sysref
-    add_interface sync conduit end
-    set_interface_property sync EXPORT_OF alt_xcvr.dev_sync_n
+    add_instance alt_ip altera_jesd204 16.0
+    set_instance_parameter_value alt_ip {wrapper_opt} {base}
+    set_instance_parameter_value alt_ip {DATA_PATH} {RX}
+    set_instance_parameter_value alt_ip {lane_rate} $m_lane_rate
+    set_instance_parameter_value alt_ip {L} $m_num_of_lanes
+    set_instance_parameter_value alt_ip {M} $m_num_of_convs
+    set_instance_parameter_value alt_ip {GUI_EN_CFG_F} {1}
+    set_instance_parameter_value alt_ip {GUI_CFG_F} $m_frm_bcnt
+    set_instance_parameter_value alt_ip {N} {16}
+    set_instance_parameter_value alt_ip {N_PRIME} {16}
+    set_instance_parameter_value alt_ip {S} $m_frm_scnt
+    set_instance_parameter_value alt_ip {K} $m_mf_fcnt
+    set_instance_parameter_value alt_ip {SCR} {1}
+    set_instance_parameter_value alt_ip {HD} $m_hd
+    add_connection alt_core_pll.outclk0 alt_ip.rxlink_clk
+    add_connection alt_sys_clk.clk_reset alt_ip.rxlink_rst_n
     add_interface ip_sof conduit end
-    set_interface_property ip_sof EXPORT_OF alt_xcvr.sof
-    add_interface rx_data conduit end
-    set_interface_property rx_data EXPORT_OF alt_xcvr.rx_serial_data
+    set_interface_property ip_sof EXPORT_OF alt_ip.sof
+    add_interface ip_data avalon_streaming source
+    set_interface_property ip_data EXPORT_OF alt_ip.jesd204_rx_link
+    add_connection alt_sys_clk.clk alt_ip.jesd204_rx_avs_clk
+    add_connection alt_sys_clk.clk_reset alt_ip.jesd204_rx_avs_rst_n
+    add_interface ip_reconfig avalon slave
+    set_interface_property ip_reconfig EXPORT_OF alt_ip.jesd204_rx_avs
+    add_interface sysref conduit end
+    set_interface_property sysref EXPORT_OF alt_ip.sysref
+    add_interface sync conduit end
+    set_interface_property sync EXPORT_OF alt_ip.dev_sync_n
+    add_connection alt_ip.dev_lane_aligned alt_ip.alldev_lane_aligned
+
+    add_instance alt_xphy avl_adxphy 1.0
+    set_instance_parameter_value alt_xphy {TX_OR_RX_N} {0}
+    set_instance_parameter_value alt_xphy {NUM_OF_LANES} $m_num_of_lanes
+    add_connection alt_rst_cntrol.rx_analogreset alt_xphy.rx_core_analogreset
+    add_connection alt_rst_cntrol.rx_digitalreset alt_xphy.rx_core_digitalreset
+    add_connection alt_xphy.rx_core_is_lockedtodata alt_rst_cntrol.rx_is_lockedtodata
+    add_connection alt_xphy.rx_core_cal_busy alt_rst_cntrol.rx_cal_busy
+    add_connection alt_xphy.rx_ip_is_lockedtodata alt_ip.rx_islockedtodata
+    add_connection alt_xphy.rx_ip_cal_busy alt_ip.rx_cal_busy
+    add_connection alt_xphy.rx_ip_pcs_data_valid alt_ip.jesd204_rx_pcs_data_valid
+    add_connection alt_xphy.rx_ip_pcs_data alt_ip.jesd204_rx_pcs_data
+    add_connection alt_xphy.rx_ip_pcs_disperr alt_ip.jesd204_rx_pcs_disperr
+    add_connection alt_xphy.rx_ip_pcs_errdetect alt_ip.jesd204_rx_pcs_errdetect
+    add_connection alt_xphy.rx_ip_pcs_kchar_data alt_ip.jesd204_rx_pcs_kchar_data
+    add_connection alt_xphy.rx_ip_pcfifo_full alt_ip.phy_csr_rx_pcfifo_full
+    add_connection alt_xphy.rx_ip_pcfifo_empty alt_ip.phy_csr_rx_pcfifo_empty
+    add_connection alt_xphy.rx_ip_patternalign_en alt_ip.patternalign_en
+    add_connection alt_xphy.rx_ip_csr_lane_polarity alt_ip.csr_lane_polarity
+    add_connection alt_xphy.rx_ip_csr_lane_powerdown alt_ip.csr_lane_powerdown
+    add_connection alt_xphy.rx_ip_csr_bit_reversal alt_ip.csr_bit_reversal
+    add_connection alt_xphy.rx_ip_csr_byte_reversal alt_ip.csr_byte_reversal
+
+    for {set n 0} {$n < $m_num_of_lanes} {incr n} {
+
+      add_instance alt_phy_${n} altera_jesd204 16.0
+      set_instance_parameter_value alt_phy_${n} {wrapper_opt} {phy}
+      set_instance_parameter_value alt_phy_${n} {DATA_PATH} {RX}
+      set_instance_parameter_value alt_phy_${n} {lane_rate} $m_lane_rate
+      set_instance_parameter_value alt_phy_${n} {PCS_CONFIG} $m_pcs_config
+      set_instance_parameter_value alt_phy_${n} {REFCLK_FREQ} $m_refclk_frequency
+      set_instance_parameter_value alt_phy_${n} {pll_reconfig_enable} {1}
+      set_instance_parameter_value alt_phy_${n} {set_capability_reg_enable} {1}
+      set_instance_parameter_value alt_phy_${n} {set_user_identifier} $m_id
+      set_instance_parameter_value alt_phy_${n} {set_csr_soft_logic_enable} {1}
+      set_instance_parameter_value alt_phy_${n} {L} 1
+      add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
+      add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
+      add_interface phy_reconfig_${n} avalon slave
+      set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
+      add_connection alt_ref_clk.out_clk alt_phy_${n}.pll_ref_clk
+      add_connection alt_core_pll.outclk0 alt_phy_${n}.rxlink_clk
+      add_connection alt_sys_clk.clk_reset alt_phy_${n}.rxlink_rst_n
+      add_interface rx_data_${n} conduit end
+      set_interface_property rx_data_${n} EXPORT_OF alt_phy_${n}.rx_serial_data
+      add_connection alt_xphy.rx_phy${n}_analogreset alt_phy_${n}.rx_analogreset
+      add_connection alt_xphy.rx_phy${n}_digitalreset alt_phy_${n}.rx_digitalreset
+      add_connection alt_phy_${n}.rx_islockedtodata alt_xphy.rx_phy${n}_is_lockedtodata
+      add_connection alt_phy_${n}.rx_cal_busy alt_xphy.rx_phy${n}_cal_busy
+      add_connection alt_phy_${n}.jesd204_rx_pcs_data_valid alt_xphy.rx_phy${n}_pcs_data_valid
+      add_connection alt_phy_${n}.jesd204_rx_pcs_data alt_xphy.rx_phy${n}_pcs_data
+      add_connection alt_phy_${n}.jesd204_rx_pcs_disperr alt_xphy.rx_phy${n}_pcs_disperr
+      add_connection alt_phy_${n}.jesd204_rx_pcs_errdetect alt_xphy.rx_phy${n}_pcs_errdetect
+      add_connection alt_phy_${n}.jesd204_rx_pcs_kchar_data alt_xphy.rx_phy${n}_pcs_kchar_data
+      add_connection alt_phy_${n}.phy_csr_rx_pcfifo_full alt_xphy.rx_phy${n}_pcfifo_full
+      add_connection alt_phy_${n}.phy_csr_rx_pcfifo_empty alt_xphy.rx_phy${n}_pcfifo_empty
+      add_connection alt_xphy.rx_phy${n}_patternalign_en alt_phy_${n}.patternalign_en
+      add_connection alt_xphy.rx_phy${n}_csr_lane_polarity alt_phy_${n}.csr_lane_polarity
+      add_connection alt_xphy.rx_phy${n}_csr_lane_powerdown alt_phy_${n}.csr_lane_powerdown
+      add_connection alt_xphy.rx_phy${n}_csr_bit_reversal alt_phy_${n}.csr_bit_reversal
+      add_connection alt_xphy.rx_phy${n}_csr_byte_reversal alt_phy_${n}.csr_byte_reversal
+    }
   }
 }
 
