@@ -64,3 +64,9 @@ proc ad_alt_intf {type name dir width {arg_1 ""} {arg_2 ""}} {
   }
 }
 
+proc ad_conduit {if_name if_port port dir width} {
+
+  add_interface $if_name conduit end
+  add_interface_port $if_name $port $if_port $dir $width
+}
+
