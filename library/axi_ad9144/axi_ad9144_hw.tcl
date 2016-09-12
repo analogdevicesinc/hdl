@@ -48,6 +48,13 @@ set_parameter_property QUAD_OR_DUAL_N TYPE INTEGER
 set_parameter_property QUAD_OR_DUAL_N UNITS None
 set_parameter_property QUAD_OR_DUAL_N HDL_PARAMETER true
 
+add_parameter DEVICE_TYPE INTEGER 0
+set_parameter_property DEVICE_TYPE DEFAULT_VALUE 1
+set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
+set_parameter_property DEVICE_TYPE TYPE INTEGER
+set_parameter_property DEVICE_TYPE UNITS None
+set_parameter_property DEVICE_TYPE HDL_PARAMETER true
+
 # axi4 slave
 
 add_interface s_axi_clock clock end
@@ -83,7 +90,13 @@ add_interface_port s_axi s_axi_rready rready Input 1
 # transceiver interface
 
 ad_alt_intf clock   tx_clk        input   1
-ad_alt_intf signal  tx_data       output  128*(QUAD_OR_DUAL_N+1) data
+
+add_interface if_tx_data avalon_streaming source
+add_interface_port if_tx_data tx_data data output 128*(QUAD_OR_DUAL_N+1)
+add_interface_port if_tx_data tx_valid valid output 1
+add_interface_port if_tx_data tx_ready ready input 1
+set_interface_property if_tx_data associatedClock if_tx_clk
+set_interface_property if_tx_data dataBitsPerSymbol 128
 
 # dma interface
 
