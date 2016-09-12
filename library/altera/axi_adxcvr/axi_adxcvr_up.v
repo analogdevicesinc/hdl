@@ -42,7 +42,7 @@ module axi_adxcvr_up (
   // xcvr, lane-pll and ref-pll are shared
 
   output                        up_rst,
-  input                         up_ref_pll_locked,
+  input                         up_pll_locked,
   input   [(NUM_OF_LANES-1):0]  up_ready,
 
   // bus interface
@@ -111,7 +111,7 @@ module axi_adxcvr_up (
   assign up_rst = up_rst_cnt[3];
   assign up_ready_s = & up_status_32_s[NUM_OF_LANES:1];
   assign up_status_32_s[31:(NUM_OF_LANES+1)] = 'd0;
-  assign up_status_32_s[NUM_OF_LANES] = up_ref_pll_locked;
+  assign up_status_32_s[NUM_OF_LANES] = up_pll_locked;
   assign up_status_32_s[(NUM_OF_LANES-1):0] = up_ready;
 
   always @(negedge up_rstn or posedge up_clk) begin

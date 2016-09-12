@@ -76,8 +76,8 @@ add_interface_port s_axi s_axi_rready rready Input 1
 ad_alt_intf reset up_rst output 1 s_axi_clock
 set_interface_property if_up_rst associatedResetSinks s_axi_reset
 
-add_interface ref_pll_locked conduit end
-add_interface_port ref_pll_locked up_ref_pll_locked export Input 1
+add_interface core_pll_locked conduit end
+add_interface_port core_pll_locked up_pll_locked export Input 1
 
 # name changes
 

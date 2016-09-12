@@ -42,7 +42,7 @@ module axi_adxcvr (
   // xcvr, lane-pll and ref-pll are shared
 
   output                        up_rst,
-  input                         up_ref_pll_locked,
+  input                         up_pll_locked,
   input   [(NUM_OF_LANES-1):0]  up_ready,
 
   input                         s_axi_aclk,
@@ -99,7 +99,7 @@ module axi_adxcvr (
     .NUM_OF_LANES (NUM_OF_LANES))
   i_up (
     .up_rst (up_rst),
-    .up_ref_pll_locked (up_ref_pll_locked),
+    .up_pll_locked (up_pll_locked),
     .up_ready (up_ready),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
