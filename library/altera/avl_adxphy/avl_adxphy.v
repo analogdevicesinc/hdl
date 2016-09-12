@@ -73,6 +73,8 @@ module avl_adxphy (
   output                              rx_phy_lane_powerdown_0,
   output                              rx_phy_bit_reversal_0,
   output                              rx_phy_byte_reversal_0,
+  output                              rx_phy_analogreset_0,
+  output                              rx_phy_digitalreset_0,
 
   input                               rx_phy_locked_1,
   input                               rx_phy_cal_busy_1,
@@ -88,6 +90,8 @@ module avl_adxphy (
   output                              rx_phy_lane_powerdown_1,
   output                              rx_phy_bit_reversal_1,
   output                              rx_phy_byte_reversal_1,
+  output                              rx_phy_analogreset_1,
+  output                              rx_phy_digitalreset_1,
 
   input                               rx_phy_locked_2,
   input                               rx_phy_cal_busy_2,
@@ -103,6 +107,8 @@ module avl_adxphy (
   output                              rx_phy_lane_powerdown_2,
   output                              rx_phy_bit_reversal_2,
   output                              rx_phy_byte_reversal_2,
+  output                              rx_phy_analogreset_2,
+  output                              rx_phy_digitalreset_2,
 
   input                               rx_phy_locked_3,
   input                               rx_phy_cal_busy_3,
@@ -118,6 +124,8 @@ module avl_adxphy (
   output                              rx_phy_lane_powerdown_3,
   output                              rx_phy_bit_reversal_3,
   output                              rx_phy_byte_reversal_3,
+  output                              rx_phy_analogreset_3,
+  output                              rx_phy_digitalreset_3,
 
   input                               rx_phy_locked_4,
   input                               rx_phy_cal_busy_4,
@@ -133,6 +141,8 @@ module avl_adxphy (
   output                              rx_phy_lane_powerdown_4,
   output                              rx_phy_bit_reversal_4,
   output                              rx_phy_byte_reversal_4,
+  output                              rx_phy_analogreset_4,
+  output                              rx_phy_digitalreset_4,
 
   input                               rx_phy_locked_5,
   input                               rx_phy_cal_busy_5,
@@ -148,6 +158,8 @@ module avl_adxphy (
   output                              rx_phy_lane_powerdown_5,
   output                              rx_phy_bit_reversal_5,
   output                              rx_phy_byte_reversal_5,
+  output                              rx_phy_analogreset_5,
+  output                              rx_phy_digitalreset_5,
 
   input                               rx_phy_locked_6,
   input                               rx_phy_cal_busy_6,
@@ -163,6 +175,8 @@ module avl_adxphy (
   output                              rx_phy_lane_powerdown_6,
   output                              rx_phy_bit_reversal_6,
   output                              rx_phy_byte_reversal_6,
+  output                              rx_phy_analogreset_6,
+  output                              rx_phy_digitalreset_6,
 
   input                               rx_phy_locked_7,
   input                               rx_phy_cal_busy_7,
@@ -178,9 +192,13 @@ module avl_adxphy (
   output                              rx_phy_lane_powerdown_7,
   output                              rx_phy_bit_reversal_7,
   output                              rx_phy_byte_reversal_7,
+  output                              rx_phy_analogreset_7,
+  output                              rx_phy_digitalreset_7,
 
   // rx-core interface
 
+  input   [((NUM_OF_LANES* 1)-1):0]   rx_core_analogreset,
+  input   [((NUM_OF_LANES* 1)-1):0]   rx_core_digitalreset,
   output  [((NUM_OF_LANES* 1)-1):0]   rx_core_locked,
   output  [((NUM_OF_LANES* 1)-1):0]   rx_core_cal_busy,
 
@@ -251,6 +269,8 @@ module avl_adxphy (
   output                              tx_phy_lane_powerdown_0,
   output                              tx_phy_bit_reversal_0,
   output                              tx_phy_byte_reversal_0,
+  output                              tx_phy_analogreset_0,
+  output                              tx_phy_digitalreset_0,
 
   input                               tx_phy_cal_busy_1,
   input                               tx_phy_full_1,
@@ -262,6 +282,8 @@ module avl_adxphy (
   output                              tx_phy_lane_powerdown_1,
   output                              tx_phy_bit_reversal_1,
   output                              tx_phy_byte_reversal_1,
+  output                              tx_phy_analogreset_1,
+  output                              tx_phy_digitalreset_1,
 
   input                               tx_phy_cal_busy_2,
   input                               tx_phy_full_2,
@@ -273,6 +295,8 @@ module avl_adxphy (
   output                              tx_phy_lane_powerdown_2,
   output                              tx_phy_bit_reversal_2,
   output                              tx_phy_byte_reversal_2,
+  output                              tx_phy_analogreset_2,
+  output                              tx_phy_digitalreset_2,
 
   input                               tx_phy_cal_busy_3,
   input                               tx_phy_full_3,
@@ -284,6 +308,8 @@ module avl_adxphy (
   output                              tx_phy_lane_powerdown_3,
   output                              tx_phy_bit_reversal_3,
   output                              tx_phy_byte_reversal_3,
+  output                              tx_phy_analogreset_3,
+  output                              tx_phy_digitalreset_3,
 
   input                               tx_phy_cal_busy_4,
   input                               tx_phy_full_4,
@@ -295,6 +321,8 @@ module avl_adxphy (
   output                              tx_phy_lane_powerdown_4,
   output                              tx_phy_bit_reversal_4,
   output                              tx_phy_byte_reversal_4,
+  output                              tx_phy_analogreset_4,
+  output                              tx_phy_digitalreset_4,
 
   input                               tx_phy_cal_busy_5,
   input                               tx_phy_full_5,
@@ -306,6 +334,8 @@ module avl_adxphy (
   output                              tx_phy_lane_powerdown_5,
   output                              tx_phy_bit_reversal_5,
   output                              tx_phy_byte_reversal_5,
+  output                              tx_phy_analogreset_5,
+  output                              tx_phy_digitalreset_5,
 
   input                               tx_phy_cal_busy_6,
   input                               tx_phy_full_6,
@@ -317,6 +347,8 @@ module avl_adxphy (
   output                              tx_phy_lane_powerdown_6,
   output                              tx_phy_bit_reversal_6,
   output                              tx_phy_byte_reversal_6,
+  output                              tx_phy_analogreset_6,
+  output                              tx_phy_digitalreset_6,
 
   input                               tx_phy_cal_busy_7,
   input                               tx_phy_full_7,
@@ -328,9 +360,13 @@ module avl_adxphy (
   output                              tx_phy_lane_powerdown_7,
   output                              tx_phy_bit_reversal_7,
   output                              tx_phy_byte_reversal_7,
+  output                              tx_phy_analogreset_7,
+  output                              tx_phy_digitalreset_7,
 
   // tx-core interface
 
+  input   [((NUM_OF_LANES* 1)-1):0]   tx_core_analogreset,
+  input   [((NUM_OF_LANES* 1)-1):0]   tx_core_digitalreset,
   output  [((NUM_OF_LANES* 1)-1):0]   tx_core_cal_busy);
 
   // parameters
@@ -347,9 +383,9 @@ module avl_adxphy (
   assign rx_ip_cal_busy[0] = rx_phy_cal_busy_0;
   assign rx_ip_valid[0] = rx_phy_valid_0;
   assign rx_ip_data[((32*1)-1):(32*0)] = rx_phy_data_0;
-  assign rx_ip_disperr[((32*1)-1):(32*0)] = rx_phy_disperr_0;
-  assign rx_ip_deterr[((32*1)-1):(32*0)] = rx_phy_deterr_0;
-  assign rx_ip_kchar[((32*1)-1):(32*0)] = rx_phy_kchar_0;
+  assign rx_ip_disperr[((4*1)-1):(4*0)] = rx_phy_disperr_0;
+  assign rx_ip_deterr[((4*1)-1):(4*0)] = rx_phy_deterr_0;
+  assign rx_ip_kchar[((4*1)-1):(4*0)] = rx_phy_kchar_0;
   assign rx_ip_full[0] = rx_phy_full_0;
   assign rx_ip_empty[0] = rx_phy_empty_0;
   end
@@ -360,10 +396,14 @@ module avl_adxphy (
   assign rx_phy_align_en_0 = rx_ip_align_en[0];
   assign rx_phy_lane_polarity_0 = rx_ip_lane_polarity[0];
   assign rx_phy_lane_powerdown_0 = rx_ip_lane_powerdown[0];
+  assign rx_phy_analogreset_0 = rx_core_analogreset[0];
+  assign rx_phy_digitalreset_0 = rx_core_digitalreset[0];
   end else begin
   assign rx_phy_align_en_0 = 1'd0;
   assign rx_phy_lane_polarity_0 = 1'd0;
   assign rx_phy_lane_powerdown_0 = 1'd0;
+  assign rx_phy_analogreset_0 = 1'd1;
+  assign rx_phy_digitalreset_0 = 1'd1;
   end
   endgenerate
 
@@ -378,9 +418,9 @@ module avl_adxphy (
   assign rx_ip_cal_busy[1] = rx_phy_cal_busy_1;
   assign rx_ip_valid[1] = rx_phy_valid_1;
   assign rx_ip_data[((32*2)-1):(32*1)] = rx_phy_data_1;
-  assign rx_ip_disperr[((32*2)-1):(32*1)] = rx_phy_disperr_1;
-  assign rx_ip_deterr[((32*2)-1):(32*1)] = rx_phy_deterr_1;
-  assign rx_ip_kchar[((32*2)-1):(32*1)] = rx_phy_kchar_1;
+  assign rx_ip_disperr[((4*2)-1):(4*1)] = rx_phy_disperr_1;
+  assign rx_ip_deterr[((4*2)-1):(4*1)] = rx_phy_deterr_1;
+  assign rx_ip_kchar[((4*2)-1):(4*1)] = rx_phy_kchar_1;
   assign rx_ip_full[1] = rx_phy_full_1;
   assign rx_ip_empty[1] = rx_phy_empty_1;
   end
@@ -391,10 +431,14 @@ module avl_adxphy (
   assign rx_phy_align_en_1 = rx_ip_align_en[1];
   assign rx_phy_lane_polarity_1 = rx_ip_lane_polarity[1];
   assign rx_phy_lane_powerdown_1 = rx_ip_lane_powerdown[1];
+  assign rx_phy_analogreset_1 = rx_core_analogreset[1];
+  assign rx_phy_digitalreset_1 = rx_core_digitalreset[1];
   end else begin
   assign rx_phy_align_en_1 = 1'd0;
   assign rx_phy_lane_polarity_1 = 1'd0;
   assign rx_phy_lane_powerdown_1 = 1'd0;
+  assign rx_phy_analogreset_1 = 1'd1;
+  assign rx_phy_digitalreset_1 = 1'd1;
   end
   endgenerate
 
@@ -409,9 +453,9 @@ module avl_adxphy (
   assign rx_ip_cal_busy[2] = rx_phy_cal_busy_2;
   assign rx_ip_valid[2] = rx_phy_valid_2;
   assign rx_ip_data[((32*3)-1):(32*2)] = rx_phy_data_2;
-  assign rx_ip_disperr[((32*3)-1):(32*2)] = rx_phy_disperr_2;
-  assign rx_ip_deterr[((32*3)-1):(32*2)] = rx_phy_deterr_2;
-  assign rx_ip_kchar[((32*3)-1):(32*2)] = rx_phy_kchar_2;
+  assign rx_ip_disperr[((4*3)-1):(4*2)] = rx_phy_disperr_2;
+  assign rx_ip_deterr[((4*3)-1):(4*2)] = rx_phy_deterr_2;
+  assign rx_ip_kchar[((4*3)-1):(4*2)] = rx_phy_kchar_2;
   assign rx_ip_full[2] = rx_phy_full_2;
   assign rx_ip_empty[2] = rx_phy_empty_2;
   end
@@ -422,10 +466,14 @@ module avl_adxphy (
   assign rx_phy_align_en_2 = rx_ip_align_en[2];
   assign rx_phy_lane_polarity_2 = rx_ip_lane_polarity[2];
   assign rx_phy_lane_powerdown_2 = rx_ip_lane_powerdown[2];
+  assign rx_phy_analogreset_2 = rx_core_analogreset[2];
+  assign rx_phy_digitalreset_2 = rx_core_digitalreset[2];
   end else begin
   assign rx_phy_align_en_2 = 1'd0;
   assign rx_phy_lane_polarity_2 = 1'd0;
   assign rx_phy_lane_powerdown_2 = 1'd0;
+  assign rx_phy_analogreset_2 = 1'd1;
+  assign rx_phy_digitalreset_2 = 1'd1;
   end
   endgenerate
 
@@ -440,9 +488,9 @@ module avl_adxphy (
   assign rx_ip_cal_busy[3] = rx_phy_cal_busy_3;
   assign rx_ip_valid[3] = rx_phy_valid_3;
   assign rx_ip_data[((32*4)-1):(32*3)] = rx_phy_data_3;
-  assign rx_ip_disperr[((32*4)-1):(32*3)] = rx_phy_disperr_3;
-  assign rx_ip_deterr[((32*4)-1):(32*3)] = rx_phy_deterr_3;
-  assign rx_ip_kchar[((32*4)-1):(32*3)] = rx_phy_kchar_3;
+  assign rx_ip_disperr[((4*4)-1):(4*3)] = rx_phy_disperr_3;
+  assign rx_ip_deterr[((4*4)-1):(4*3)] = rx_phy_deterr_3;
+  assign rx_ip_kchar[((4*4)-1):(4*3)] = rx_phy_kchar_3;
   assign rx_ip_full[3] = rx_phy_full_3;
   assign rx_ip_empty[3] = rx_phy_empty_3;
   end
@@ -453,10 +501,14 @@ module avl_adxphy (
   assign rx_phy_align_en_3 = rx_ip_align_en[3];
   assign rx_phy_lane_polarity_3 = rx_ip_lane_polarity[3];
   assign rx_phy_lane_powerdown_3 = rx_ip_lane_powerdown[3];
+  assign rx_phy_analogreset_3 = rx_core_analogreset[3];
+  assign rx_phy_digitalreset_3 = rx_core_digitalreset[3];
   end else begin
   assign rx_phy_align_en_3 = 1'd0;
   assign rx_phy_lane_polarity_3 = 1'd0;
   assign rx_phy_lane_powerdown_3 = 1'd0;
+  assign rx_phy_analogreset_3 = 1'd1;
+  assign rx_phy_digitalreset_3 = 1'd1;
   end
   endgenerate
 
@@ -471,9 +523,9 @@ module avl_adxphy (
   assign rx_ip_cal_busy[4] = rx_phy_cal_busy_4;
   assign rx_ip_valid[4] = rx_phy_valid_4;
   assign rx_ip_data[((32*5)-1):(32*4)] = rx_phy_data_4;
-  assign rx_ip_disperr[((32*5)-1):(32*4)] = rx_phy_disperr_4;
-  assign rx_ip_deterr[((32*5)-1):(32*4)] = rx_phy_deterr_4;
-  assign rx_ip_kchar[((32*5)-1):(32*4)] = rx_phy_kchar_4;
+  assign rx_ip_disperr[((4*5)-1):(4*4)] = rx_phy_disperr_4;
+  assign rx_ip_deterr[((4*5)-1):(4*4)] = rx_phy_deterr_4;
+  assign rx_ip_kchar[((4*5)-1):(4*4)] = rx_phy_kchar_4;
   assign rx_ip_full[4] = rx_phy_full_4;
   assign rx_ip_empty[4] = rx_phy_empty_4;
   end
@@ -484,10 +536,14 @@ module avl_adxphy (
   assign rx_phy_align_en_4 = rx_ip_align_en[4];
   assign rx_phy_lane_polarity_4 = rx_ip_lane_polarity[4];
   assign rx_phy_lane_powerdown_4 = rx_ip_lane_powerdown[4];
+  assign rx_phy_analogreset_4 = rx_core_analogreset[4];
+  assign rx_phy_digitalreset_4 = rx_core_digitalreset[4];
   end else begin
   assign rx_phy_align_en_4 = 1'd0;
   assign rx_phy_lane_polarity_4 = 1'd0;
   assign rx_phy_lane_powerdown_4 = 1'd0;
+  assign rx_phy_analogreset_4 = 1'd1;
+  assign rx_phy_digitalreset_4 = 1'd1;
   end
   endgenerate
 
@@ -502,9 +558,9 @@ module avl_adxphy (
   assign rx_ip_cal_busy[5] = rx_phy_cal_busy_5;
   assign rx_ip_valid[5] = rx_phy_valid_5;
   assign rx_ip_data[((32*6)-1):(32*5)] = rx_phy_data_5;
-  assign rx_ip_disperr[((32*6)-1):(32*5)] = rx_phy_disperr_5;
-  assign rx_ip_deterr[((32*6)-1):(32*5)] = rx_phy_deterr_5;
-  assign rx_ip_kchar[((32*6)-1):(32*5)] = rx_phy_kchar_5;
+  assign rx_ip_disperr[((4*6)-1):(4*5)] = rx_phy_disperr_5;
+  assign rx_ip_deterr[((4*6)-1):(4*5)] = rx_phy_deterr_5;
+  assign rx_ip_kchar[((4*6)-1):(4*5)] = rx_phy_kchar_5;
   assign rx_ip_full[5] = rx_phy_full_5;
   assign rx_ip_empty[5] = rx_phy_empty_5;
   end
@@ -515,10 +571,14 @@ module avl_adxphy (
   assign rx_phy_align_en_5 = rx_ip_align_en[5];
   assign rx_phy_lane_polarity_5 = rx_ip_lane_polarity[5];
   assign rx_phy_lane_powerdown_5 = rx_ip_lane_powerdown[5];
+  assign rx_phy_analogreset_5 = rx_core_analogreset[5];
+  assign rx_phy_digitalreset_5 = rx_core_digitalreset[5];
   end else begin
   assign rx_phy_align_en_5 = 1'd0;
   assign rx_phy_lane_polarity_5 = 1'd0;
   assign rx_phy_lane_powerdown_5 = 1'd0;
+  assign rx_phy_analogreset_5 = 1'd1;
+  assign rx_phy_digitalreset_5 = 1'd1;
   end
   endgenerate
 
@@ -533,9 +593,9 @@ module avl_adxphy (
   assign rx_ip_cal_busy[6] = rx_phy_cal_busy_6;
   assign rx_ip_valid[6] = rx_phy_valid_6;
   assign rx_ip_data[((32*7)-1):(32*6)] = rx_phy_data_6;
-  assign rx_ip_disperr[((32*7)-1):(32*6)] = rx_phy_disperr_6;
-  assign rx_ip_deterr[((32*7)-1):(32*6)] = rx_phy_deterr_6;
-  assign rx_ip_kchar[((32*7)-1):(32*6)] = rx_phy_kchar_6;
+  assign rx_ip_disperr[((4*7)-1):(4*6)] = rx_phy_disperr_6;
+  assign rx_ip_deterr[((4*7)-1):(4*6)] = rx_phy_deterr_6;
+  assign rx_ip_kchar[((4*7)-1):(4*6)] = rx_phy_kchar_6;
   assign rx_ip_full[6] = rx_phy_full_6;
   assign rx_ip_empty[6] = rx_phy_empty_6;
   end
@@ -546,10 +606,14 @@ module avl_adxphy (
   assign rx_phy_align_en_6 = rx_ip_align_en[6];
   assign rx_phy_lane_polarity_6 = rx_ip_lane_polarity[6];
   assign rx_phy_lane_powerdown_6 = rx_ip_lane_powerdown[6];
+  assign rx_phy_analogreset_6 = rx_core_analogreset[6];
+  assign rx_phy_digitalreset_6 = rx_core_digitalreset[6];
   end else begin
   assign rx_phy_align_en_6 = 1'd0;
   assign rx_phy_lane_polarity_6 = 1'd0;
   assign rx_phy_lane_powerdown_6 = 1'd0;
+  assign rx_phy_analogreset_6 = 1'd1;
+  assign rx_phy_digitalreset_6 = 1'd1;
   end
   endgenerate
 
@@ -564,9 +628,9 @@ module avl_adxphy (
   assign rx_ip_cal_busy[7] = rx_phy_cal_busy_7;
   assign rx_ip_valid[7] = rx_phy_valid_7;
   assign rx_ip_data[((32*8)-1):(32*7)] = rx_phy_data_7;
-  assign rx_ip_disperr[((32*8)-1):(32*7)] = rx_phy_disperr_7;
-  assign rx_ip_deterr[((32*8)-1):(32*7)] = rx_phy_deterr_7;
-  assign rx_ip_kchar[((32*8)-1):(32*7)] = rx_phy_kchar_7;
+  assign rx_ip_disperr[((4*8)-1):(4*7)] = rx_phy_disperr_7;
+  assign rx_ip_deterr[((4*8)-1):(4*7)] = rx_phy_deterr_7;
+  assign rx_ip_kchar[((4*8)-1):(4*7)] = rx_phy_kchar_7;
   assign rx_ip_full[7] = rx_phy_full_7;
   assign rx_ip_empty[7] = rx_phy_empty_7;
   end
@@ -577,10 +641,14 @@ module avl_adxphy (
   assign rx_phy_align_en_7 = rx_ip_align_en[7];
   assign rx_phy_lane_polarity_7 = rx_ip_lane_polarity[7];
   assign rx_phy_lane_powerdown_7 = rx_ip_lane_powerdown[7];
+  assign rx_phy_analogreset_7 = rx_core_analogreset[7];
+  assign rx_phy_digitalreset_7 = rx_core_digitalreset[7];
   end else begin
   assign rx_phy_align_en_7 = 1'd0;
   assign rx_phy_lane_polarity_7 = 1'd0;
   assign rx_phy_lane_powerdown_7 = 1'd0;
+  assign rx_phy_analogreset_7 = 1'd1;
+  assign rx_phy_digitalreset_7 = 1'd1;
   end
   endgenerate
 
@@ -611,6 +679,16 @@ module avl_adxphy (
   assign tx_ip_d_0[36:36] = 1'd0;
   assign tx_ip_d_0[37:37] = 1'd0;
   assign tx_ip_d_0[38:38] = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES > 0) begin
+  assign tx_phy_analogreset_0 = tx_core_analogreset[0];
+  assign tx_phy_digitalreset_0 = tx_core_digitalreset[0];
+  end else begin
+  assign tx_phy_analogreset_0 = 1'd1;
+  assign tx_phy_digitalreset_0 = 1'd1;
   end
   endgenerate
 
@@ -650,6 +728,16 @@ module avl_adxphy (
   end
   endgenerate
 
+  generate
+  if (NUM_OF_LANES > 1) begin
+  assign tx_phy_analogreset_1 = tx_core_analogreset[1];
+  assign tx_phy_digitalreset_1 = tx_core_digitalreset[1];
+  end else begin
+  assign tx_phy_analogreset_1 = 1'd1;
+  assign tx_phy_digitalreset_1 = 1'd1;
+  end
+  endgenerate
+
   assign tx_phy_s_1[0] = tx_phy_cal_busy_1;
   assign tx_phy_s_1[1] = tx_phy_full_1;
   assign tx_phy_s_1[2] = tx_phy_empty_1;
@@ -683,6 +771,16 @@ module avl_adxphy (
   assign tx_ip_d_2[36:36] = 1'd0;
   assign tx_ip_d_2[37:37] = 1'd0;
   assign tx_ip_d_2[38:38] = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES > 2) begin
+  assign tx_phy_analogreset_2 = tx_core_analogreset[2];
+  assign tx_phy_digitalreset_2 = tx_core_digitalreset[2];
+  end else begin
+  assign tx_phy_analogreset_2 = 1'd1;
+  assign tx_phy_digitalreset_2 = 1'd1;
   end
   endgenerate
 
@@ -722,6 +820,16 @@ module avl_adxphy (
   end
   endgenerate
 
+  generate
+  if (NUM_OF_LANES > 3) begin
+  assign tx_phy_analogreset_3 = tx_core_analogreset[3];
+  assign tx_phy_digitalreset_3 = tx_core_digitalreset[3];
+  end else begin
+  assign tx_phy_analogreset_3 = 1'd1;
+  assign tx_phy_digitalreset_3 = 1'd1;
+  end
+  endgenerate
+
   assign tx_phy_s_3[0] = tx_phy_cal_busy_3;
   assign tx_phy_s_3[1] = tx_phy_full_3;
   assign tx_phy_s_3[2] = tx_phy_empty_3;
@@ -755,6 +863,16 @@ module avl_adxphy (
   assign tx_ip_d_4[36:36] = 1'd0;
   assign tx_ip_d_4[37:37] = 1'd0;
   assign tx_ip_d_4[38:38] = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES > 4) begin
+  assign tx_phy_analogreset_4 = tx_core_analogreset[4];
+  assign tx_phy_digitalreset_4 = tx_core_digitalreset[4];
+  end else begin
+  assign tx_phy_analogreset_4 = 1'd1;
+  assign tx_phy_digitalreset_4 = 1'd1;
   end
   endgenerate
 
@@ -794,6 +912,16 @@ module avl_adxphy (
   end
   endgenerate
 
+  generate
+  if (NUM_OF_LANES > 5) begin
+  assign tx_phy_analogreset_5 = tx_core_analogreset[5];
+  assign tx_phy_digitalreset_5 = tx_core_digitalreset[5];
+  end else begin
+  assign tx_phy_analogreset_5 = 1'd1;
+  assign tx_phy_digitalreset_5 = 1'd1;
+  end
+  endgenerate
+
   assign tx_phy_s_5[0] = tx_phy_cal_busy_5;
   assign tx_phy_s_5[1] = tx_phy_full_5;
   assign tx_phy_s_5[2] = tx_phy_empty_5;
@@ -830,6 +958,16 @@ module avl_adxphy (
   end
   endgenerate
 
+  generate
+  if (NUM_OF_LANES > 6) begin
+  assign tx_phy_analogreset_6 = tx_core_analogreset[6];
+  assign tx_phy_digitalreset_6 = tx_core_digitalreset[6];
+  end else begin
+  assign tx_phy_analogreset_6 = 1'd1;
+  assign tx_phy_digitalreset_6 = 1'd1;
+  end
+  endgenerate
+
   assign tx_phy_s_6[0] = tx_phy_cal_busy_6;
   assign tx_phy_s_6[1] = tx_phy_full_6;
   assign tx_phy_s_6[2] = tx_phy_empty_6;
@@ -863,6 +1001,16 @@ module avl_adxphy (
   assign tx_ip_d_7[36:36] = 1'd0;
   assign tx_ip_d_7[37:37] = 1'd0;
   assign tx_ip_d_7[38:38] = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES > 7) begin
+  assign tx_phy_analogreset_7 = tx_core_analogreset[7];
+  assign tx_phy_digitalreset_7 = tx_core_digitalreset[7];
+  end else begin
+  assign tx_phy_analogreset_7 = 1'd1;
+  assign tx_phy_digitalreset_7 = 1'd1;
   end
   endgenerate
 

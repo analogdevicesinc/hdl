@@ -38,6 +38,8 @@ proc p_avl_adxphy {} {
 
   if {$m_tx_or_rx_n == 1} {
 
+    ad_conduit tx_core_analogreset tx_analogreset tx_core_analogreset input $m_num_of_lanes
+    ad_conduit tx_core_digitalreset tx_digitalreset tx_core_digitalreset input $m_num_of_lanes
     ad_conduit tx_core_cal_busy tx_cal_busy tx_core_cal_busy output $m_num_of_lanes
 
     ad_conduit tx_ip_cal_busy tx_cal_busy tx_ip_cal_busy output $m_num_of_lanes
@@ -48,8 +50,8 @@ proc p_avl_adxphy {} {
     ad_conduit tx_ip_elecidle export tx_ip_elecidle input $m_num_of_lanes
     ad_conduit tx_ip_csr_lane_polarity export tx_ip_lane_polarity input $m_num_of_lanes
     ad_conduit tx_ip_csr_lane_powerdown export tx_ip_lane_powerdown input $m_num_of_lanes
-    ad_conduit tx_ip_csr_bit_reversal export rx_tp_bit_reversal input 1
-    ad_conduit tx_ip_csr_byte_reversal export rx_tp_byte_reversal input 1
+    ad_conduit tx_ip_csr_bit_reversal export rx_ip_bit_reversal input 1
+    ad_conduit tx_ip_csr_byte_reversal export rx_ip_byte_reversal input 1
 
     for {set n 0} {$n < $m_num_of_lanes} {incr n} {
 
@@ -68,11 +70,15 @@ proc p_avl_adxphy {} {
       ad_conduit tx_phy${n}_csr_lane_powerdown export tx_phy_lane_powerdown_${n} output 1
       ad_conduit tx_phy${n}_csr_bit_reversal export tx_phy_bit_reversal_${n} output 1
       ad_conduit tx_phy${n}_csr_byte_reversal export tx_phy_byte_reversal_${n} output 1
+      ad_conduit tx_phy${n}_analogreset tx_analogreset tx_phy_analogreset_${n} output 1
+      ad_conduit tx_phy${n}_digitalreset tx_digitalreset tx_phy_digitalreset_${n} output 1
     }
   }
 
   if {$m_tx_or_rx_n == 0} {
 
+    ad_conduit rx_core_analogreset rx_analogreset rx_core_analogreset input $m_num_of_lanes
+    ad_conduit rx_core_digitalreset rx_digitalreset rx_core_digitalreset input $m_num_of_lanes
     ad_conduit rx_core_is_lockedtodata rx_is_lockedtodata rx_core_locked output $m_num_of_lanes
     ad_conduit rx_core_cal_busy rx_cal_busy rx_core_cal_busy output $m_num_of_lanes
 
@@ -107,6 +113,8 @@ proc p_avl_adxphy {} {
       ad_conduit rx_phy${n}_csr_lane_powerdown export rx_phy_lane_powerdown_${n} output 1
       ad_conduit rx_phy${n}_csr_bit_reversal export rx_phy_bit_reversal_${n} output 1
       ad_conduit rx_phy${n}_csr_byte_reversal export rx_phy_byte_reversal_${n} output 1
+      ad_conduit rx_phy${n}_analogreset rx_analogreset rx_phy_analogreset_${n} output 1
+      ad_conduit rx_phy${n}_digitalreset rx_digitalreset rx_phy_digitalreset_${n} output 1
     }
   }
 }
