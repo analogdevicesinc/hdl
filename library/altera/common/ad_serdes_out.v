@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // serial data output interface: serdes(x8)
 
 `timescale 1ps/1ps
@@ -44,82 +42,56 @@ module ad_serdes_out (
 
   // reset and clocks
 
-  rst,
-  clk,
-  div_clk,
-  loaden,
+  input                       rst,
+  input                       clk,
+  input                       div_clk,
+  input                       loaden,
 
   // data interface
 
-  data_s0,
-  data_s1,
-  data_s2,
-  data_s3,
-  data_s4,
-  data_s5,
-  data_s6,
-  data_s7,
-  data_out_p,
-  data_out_n);
+  input   [(DATA_WIDTH-1):0]  data_s0,
+  input   [(DATA_WIDTH-1):0]  data_s1,
+  input   [(DATA_WIDTH-1):0]  data_s2,
+  input   [(DATA_WIDTH-1):0]  data_s3,
+  input   [(DATA_WIDTH-1):0]  data_s4,
+  input   [(DATA_WIDTH-1):0]  data_s5,
+  input   [(DATA_WIDTH-1):0]  data_s6,
+  input   [(DATA_WIDTH-1):0]  data_s7,
+  output  [(DATA_WIDTH-1):0]  data_out_p,
+  output  [(DATA_WIDTH-1):0]  data_out_n);
 
   // parameters
 
   parameter   DEVICE_TYPE = 0;
   parameter   DATA_WIDTH = 16;
 
-  localparam  DW = DATA_WIDTH - 1;
-
-  // reset and clocks
-
-  input           rst;
-  input           clk;
-  input           div_clk;
-  input           loaden;
-
-  // data interface
-
-  input   [DW:0]  data_s0;
-  input   [DW:0]  data_s1;
-  input   [DW:0]  data_s2;
-  input   [DW:0]  data_s3;
-  input   [DW:0]  data_s4;
-  input   [DW:0]  data_s5;
-  input   [DW:0]  data_s6;
-  input   [DW:0]  data_s7;
-  output  [DW:0]  data_out_p;
-  output  [DW:0]  data_out_n;
-
   // internal signals
 
-  wire    [DW:0]  data_out_s;
-  wire    [ 7:0]  data_in_s[DW:0];
+  wire    [(DATA_WIDTH-1):0]  data_out_s;
+  wire    [ 7:0]              data_in_s[(DATA_WIDTH-1):0];
+
+  // defaults
+
+  assign data_out_n = 'd0;
 
   // instantiations
 
-  assign data_out_p = data_out_s;
-  assign data_out_n = 0;   // differential pair will be defined by the Pin Planner
-
   genvar l_inst;
   generate
-  for (l_inst = 0; l_inst <= DW; l_inst = l_inst + 1) begin: g_data
-
-    assign data_in_s[l_inst] = {data_s7[l_inst],
-                                data_s6[l_inst],
-                                data_s5[l_inst],
-                                data_s4[l_inst],
-                                data_s3[l_inst],
-                                data_s2[l_inst],
-                                data_s1[l_inst],
-                                data_s0[l_inst]};
-
-    alt_serdes_out i_alt_serdes_out (
-      .ext_coreclock (div_clk),         // ext_coreclock.export
-      .ext_fclk (clk),                  // ext_fclk.export
-      .ext_loaden (loaden),             // ext_loaden.export
-      .tx_in (data_in_s[l_inst]),       // tx_in.export
-      .tx_out (data_out_s[l_inst])      // tx_out.export
-    );
-
+  for (l_inst = 0; l_inst < DATA_WIDTH; l_inst = l_inst + 1) begin: g_data
+  alt_serdes_out_core i_core (
+    .data_out (data_out_p[l_inst]),
+    .clk (clk),
+    .loaden (loaden),
+    .div_clk (div_clk),
+    .data_s ({data_s7[l_inst],
+      data_s6[l_inst],
+      data_s5[l_inst],
+      data_s4[l_inst],
+      data_s3[l_inst],
+      data_s2[l_inst],
+      data_s1[l_inst],
+      data_s0[l_inst]}));
   end
   endgenerate
 

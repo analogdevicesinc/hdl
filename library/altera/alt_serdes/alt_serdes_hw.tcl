@@ -99,31 +99,52 @@ proc p_alt_serdes {} {
   if {$m_mode == "IN"} {
 
     add_hdl_instance alt_serdes_in altera_lvds
-    set_instance_parameter_value alt_serdes_in {DATA_RATE} {600.0}
     set_instance_parameter_value alt_serdes_in {MODE} {dpa_mode_fifo}
     set_instance_parameter_value alt_serdes_in {NUM_CHANNELS} {1}
-    set_instance_parameter_value alt_serdes_in {J_FACTOR} {8}
-    set_instance_parameter_value alt_serdes_in {INCLOCK_FREQUENCY} {100}
-    set_instance_parameter_value alt_serdes_in {PLL_USE_RESET} {false}
-    set_instance_parameter_value alt_serdes_in {TX_EXPORT_CORECLOCK} {false}
-    set_instance_parameter_value alt_serdes_in {TX_USE_OUTCLOCK} {false}
+    set_instance_parameter_value alt_serdes_in {DATA_RATE} $m_hs_data_rate
+    set_instance_parameter_value alt_serdes_in {J_FACTOR} $m_serdes_factor
     set_instance_parameter_value alt_serdes_in {USE_EXTERNAL_PLL} {true}
-    set_instance_parameter_value alt_serdes_in {SYS_INFO_DEVICE_FAMILY} DEVICE_FAMILY
+    set_instance_parameter_value alt_serdes_in {INCLOCK_FREQUENCY} $m_clkin_frequency
+    set_instance_parameter_value alt_serdes_in {PLL_USE_RESET} {false}
+    add_interface data_in conduit end
+    set_interface_property data_in EXPORT_OF alt_serdes_in.rx_in
+    add_interface clk clock sink
+    set_interface_property clk EXPORT_OF alt_serdes_in.ext_fclk
+    add_interface loaden conduit end
+    set_interface_property loaden EXPORT_OF alt_serdes_in.ext_loaden
+    add_interface div_clk clock sink
+    set_interface_property div_clk EXPORT_OF alt_serdes_in.ext_coreclock
+    add_interface hs_phase conduit end
+    set_interface_property hs_phase EXPORT_OF alt_serdes_in.ext_vcoph
+    add_interface locked conduit end
+    set_interface_property locked EXPORT_OF alt_serdes_in.ext_pll_locked
+    add_interface data_s conduit end
+    set_interface_property data_s EXPORT_OF alt_serdes_in.rx_out
+    add_interface delay_locked conduit end
+    set_interface_property delay_locked EXPORT_OF alt_serdes_in.rx_dpa_locked
   }
 
   if {$m_mode == "OUT"} {
 
     add_hdl_instance alt_serdes_out altera_lvds
-    set_instance_parameter_value alt_serdes_out {DATA_RATE} {600.0}
     set_instance_parameter_value alt_serdes_out {MODE} {TX}
     set_instance_parameter_value alt_serdes_out {NUM_CHANNELS} {1}
-    set_instance_parameter_value alt_serdes_out {J_FACTOR} {8}
-    set_instance_parameter_value alt_serdes_out {INCLOCK_FREQUENCY} {100}
-    set_instance_parameter_value alt_serdes_out {PLL_USE_RESET} {false}
-    set_instance_parameter_value alt_serdes_out {TX_EXPORT_CORECLOCK} {false}
-    set_instance_parameter_value alt_serdes_out {TX_USE_OUTCLOCK} {false}
+    set_instance_parameter_value alt_serdes_out {DATA_RATE} $m_hs_data_rate
+    set_instance_parameter_value alt_serdes_out {J_FACTOR} $m_serdes_factor
     set_instance_parameter_value alt_serdes_out {USE_EXTERNAL_PLL} {true}
-    set_instance_parameter_value alt_serdes_out {SYS_INFO_DEVICE_FAMILY} DEVICE_FAMILY
+    set_instance_parameter_value alt_serdes_out {INCLOCK_FREQUENCY} $m_clkin_frequency
+    set_instance_parameter_value alt_serdes_out {PLL_USE_RESET} {false}
+    set_instance_parameter_value alt_serdes_out {TX_USE_OUTCLOCK} {false}
+    add_interface data_out conduit end
+    set_interface_property data_out EXPORT_OF alt_serdes_out.tx_out
+    add_interface clk clock sink
+    set_interface_property clk EXPORT_OF alt_serdes_out.ext_fclk
+    add_interface loaden conduit end
+    set_interface_property loaden EXPORT_OF alt_serdes_out.ext_loaden
+    add_interface div_clk clock sink
+    set_interface_property div_clk EXPORT_OF alt_serdes_out.ext_coreclock
+    add_interface data_s conduit end
+    set_interface_property data_s EXPORT_OF alt_serdes_out.tx_in
   }
 }
 
