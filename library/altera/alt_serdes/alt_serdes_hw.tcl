@@ -98,8 +98,8 @@ proc p_alt_serdes {} {
 
   if {$m_mode == "IN"} {
 
-    add_hdl_instance alt_serdes_in altera_lvds
-    set_instance_parameter_value alt_serdes_in {MODE} {dpa_mode_fifo}
+    add_instance alt_serdes_in altera_lvds
+    set_instance_parameter_value alt_serdes_in {MODE} {RX_DPA-FIFO}
     set_instance_parameter_value alt_serdes_in {NUM_CHANNELS} {1}
     set_instance_parameter_value alt_serdes_in {DATA_RATE} $m_hs_data_rate
     set_instance_parameter_value alt_serdes_in {J_FACTOR} $m_serdes_factor
@@ -108,11 +108,11 @@ proc p_alt_serdes {} {
     set_instance_parameter_value alt_serdes_in {PLL_USE_RESET} {false}
     add_interface data_in conduit end
     set_interface_property data_in EXPORT_OF alt_serdes_in.rx_in
-    add_interface clk clock sink
+    add_interface clk conduit end
     set_interface_property clk EXPORT_OF alt_serdes_in.ext_fclk
     add_interface loaden conduit end
     set_interface_property loaden EXPORT_OF alt_serdes_in.ext_loaden
-    add_interface div_clk clock sink
+    add_interface div_clk conduit end
     set_interface_property div_clk EXPORT_OF alt_serdes_in.ext_coreclock
     add_interface hs_phase conduit end
     set_interface_property hs_phase EXPORT_OF alt_serdes_in.ext_vcoph
@@ -126,7 +126,7 @@ proc p_alt_serdes {} {
 
   if {$m_mode == "OUT"} {
 
-    add_hdl_instance alt_serdes_out altera_lvds
+    add_instance alt_serdes_out altera_lvds
     set_instance_parameter_value alt_serdes_out {MODE} {TX}
     set_instance_parameter_value alt_serdes_out {NUM_CHANNELS} {1}
     set_instance_parameter_value alt_serdes_out {DATA_RATE} $m_hs_data_rate
@@ -137,11 +137,11 @@ proc p_alt_serdes {} {
     set_instance_parameter_value alt_serdes_out {TX_USE_OUTCLOCK} {false}
     add_interface data_out conduit end
     set_interface_property data_out EXPORT_OF alt_serdes_out.tx_out
-    add_interface clk clock sink
+    add_interface clk conduit end
     set_interface_property clk EXPORT_OF alt_serdes_out.ext_fclk
     add_interface loaden conduit end
     set_interface_property loaden EXPORT_OF alt_serdes_out.ext_loaden
-    add_interface div_clk clock sink
+    add_interface div_clk conduit end
     set_interface_property div_clk EXPORT_OF alt_serdes_out.ext_coreclock
     add_interface data_s conduit end
     set_interface_property data_s EXPORT_OF alt_serdes_out.tx_in
