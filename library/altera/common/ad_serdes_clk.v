@@ -78,7 +78,7 @@ module ad_serdes_clk (
 
   // internal signals
 
-  wire    [31:0]  up_drp_rdata_int_s,
+  wire    [31:0]  up_drp_rdata_int_s;
   wire            up_drp_busy_int_s;
   wire            up_drp_locked_int_s;
 
