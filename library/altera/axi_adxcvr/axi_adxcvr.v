@@ -37,7 +37,13 @@
 
 `timescale 1ns/1ps
 
-module axi_adxcvr (
+module axi_adxcvr #(
+
+  // parameters
+
+  parameter   integer ID = 0,
+  parameter   integer TX_OR_RX_N = 0,
+  parameter   integer NUM_OF_LANES = 4) (
 
   // xcvr, lane-pll and ref-pll are shared
 
@@ -66,12 +72,6 @@ module axi_adxcvr (
   output  [ 1:0]                s_axi_rresp,
   output  [31:0]                s_axi_rdata,
   input                         s_axi_rready);
-
-  // parameters
-
-  parameter   integer ID = 0;
-  parameter   integer TX_OR_RX_N = 0;
-  parameter   integer NUM_OF_LANES = 4;
 
   // internal signals
 

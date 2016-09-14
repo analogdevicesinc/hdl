@@ -38,7 +38,11 @@
 
 `timescale 1ns/1ps
 
-module avl_adxphy (
+module avl_adxphy #(
+
+  // parameters
+
+  parameter   integer NUM_OF_LANES = 4) (
 
   // rx-ip interface
 
@@ -368,10 +372,6 @@ module avl_adxphy (
   input   [((NUM_OF_LANES* 1)-1):0]   tx_core_analogreset,
   input   [((NUM_OF_LANES* 1)-1):0]   tx_core_digitalreset,
   output  [((NUM_OF_LANES* 1)-1):0]   tx_core_cal_busy);
-
-  // parameters
-
-  parameter   integer NUM_OF_LANES = 4;
 
   // rx assignments
 

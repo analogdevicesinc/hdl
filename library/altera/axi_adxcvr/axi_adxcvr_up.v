@@ -37,7 +37,13 @@
 
 `timescale 1ns/100ps
 
-module axi_adxcvr_up (
+module axi_adxcvr_up #(
+
+  // parameters
+
+  parameter   integer ID = 0,
+  parameter   integer TX_OR_RX_N = 0,
+  parameter   integer NUM_OF_LANES = 4) (
 
   // xcvr, lane-pll and ref-pll are shared
 
@@ -61,9 +67,6 @@ module axi_adxcvr_up (
   // parameters
 
   localparam  [31:0]  VERSION = 32'h00100161;
-  parameter   integer ID = 0;
-  parameter   integer TX_OR_RX_N = 0;
-  parameter   integer NUM_OF_LANES = 4;
 
   // internal registers
 
