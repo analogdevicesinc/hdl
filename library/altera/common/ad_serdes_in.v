@@ -47,6 +47,7 @@ module ad_serdes_in (
   input           div_clk,
   input           loaden,
   input           hs_phase,
+  input           locked,
 
   // data interface
 
@@ -81,21 +82,21 @@ module ad_serdes_in (
   // instantiations
 
   alt_serdes_in_core i_core (
-    .data_in (data_in_p),
-    .clk (clk),
-    .loaden (loaden),
-    .div_clk (div_clk),
-    .hs_phase (hs_phase),
-    .locked (locked),
-    .data_s ({data_s7,
-              data_s6,
-              data_s5,
-              data_s4,
-              data_s3,
-              data_s2,
-              data_s1,
-              data_s0}),
-    .delay_locked (delay_locked));
+    .clk_export (clk),
+    .div_clk_export (div_clk),
+    .hs_phase_export (hs_phase),
+    .loaden_export (loaden),
+    .locked_export (locked),
+    .data_in_export (data_in_p),
+    .data_s_export ({ data_s7,
+                      data_s6,
+                      data_s5,
+                      data_s4,
+                      data_s3,
+                      data_s2,
+                      data_s1,
+                      data_s0}),
+    .delay_locked_export (delay_locked));
 
 endmodule
 
