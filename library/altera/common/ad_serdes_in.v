@@ -79,6 +79,10 @@ module ad_serdes_in (
 
   parameter       DEVICE_TYPE  = 0;
 
+  // assignments
+
+  assign up_drdata = 5'd0;
+
   // instantiations
 
   alt_serdes_in_core i_core (

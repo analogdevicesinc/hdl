@@ -85,6 +85,9 @@ module ad_serdes_clk (
   // defaults
 
   assign out_clk = div_clk;
+  assign up_drp_rdata = up_drp_rdata_int;
+  assign up_drp_ready = up_drp_ready_int;
+  assign up_drp_locked = up_drp_locked_int;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin

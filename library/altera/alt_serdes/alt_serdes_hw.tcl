@@ -131,10 +131,11 @@ proc p_alt_serdes {} {
     set_instance_parameter_value alt_serdes_out {NUM_CHANNELS} {1}
     set_instance_parameter_value alt_serdes_out {DATA_RATE} $m_hs_data_rate
     set_instance_parameter_value alt_serdes_out {J_FACTOR} $m_serdes_factor
+    set_instance_parameter_value alt_serdes_out {TX_EXPORT_CORECLOCK} {false}
+    set_instance_parameter_value alt_serdes_out {TX_USE_OUTCLOCK} {false}
     set_instance_parameter_value alt_serdes_out {USE_EXTERNAL_PLL} {true}
     set_instance_parameter_value alt_serdes_out {INCLOCK_FREQUENCY} $m_clkin_frequency
     set_instance_parameter_value alt_serdes_out {PLL_USE_RESET} {false}
-    set_instance_parameter_value alt_serdes_out {TX_USE_OUTCLOCK} {false}
     add_interface data_out conduit end
     set_interface_property data_out EXPORT_OF alt_serdes_out.tx_out
     add_interface clk conduit end
