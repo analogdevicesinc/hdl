@@ -65,7 +65,7 @@ ad_mem_hp1_interconnect sys_cpu_clk axi_usb_fx3_dma/M_AXI_S2MM
 
 # test
 
-set ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila]
+set ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila]
 
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {11}] $ila
