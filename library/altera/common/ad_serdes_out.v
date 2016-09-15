@@ -38,7 +38,12 @@
 
 `timescale 1ps/1ps
 
-module ad_serdes_out (
+module ad_serdes_out #(
+
+  // parameters
+
+  parameter   DEVICE_TYPE = 0,
+  parameter   DATA_WIDTH = 16) (
 
   // reset and clocks
 
@@ -59,11 +64,6 @@ module ad_serdes_out (
   input   [(DATA_WIDTH-1):0]  data_s7,
   output  [(DATA_WIDTH-1):0]  data_out_p,
   output  [(DATA_WIDTH-1):0]  data_out_n);
-
-  // parameters
-
-  parameter   DEVICE_TYPE = 0;
-  parameter   DATA_WIDTH = 16;
 
   // internal signals
 
