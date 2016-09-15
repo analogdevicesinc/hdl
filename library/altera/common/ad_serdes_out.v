@@ -65,11 +65,6 @@ module ad_serdes_out #(
   output  [(DATA_WIDTH-1):0]  data_out_p,
   output  [(DATA_WIDTH-1):0]  data_out_n);
 
-  // internal signals
-
-  wire    [(DATA_WIDTH-1):0]  data_out_s;
-  wire    [ 7:0]              data_in_s[(DATA_WIDTH-1):0];
-
   // defaults
 
   assign data_out_n = 'd0;

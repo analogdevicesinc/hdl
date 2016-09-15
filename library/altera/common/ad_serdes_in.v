@@ -38,69 +38,80 @@
 
 `timescale 1ps/1ps
 
-module ad_serdes_in (
-
-  // reset and clocks
-
-  input           rst,
-  input           clk,
-  input           div_clk,
-  input           loaden,
-  input           hs_phase,
-  input           locked,
-
-  // data interface
-
-  output          data_s0,
-  output          data_s1,
-  output          data_s2,
-  output          data_s3,
-  output          data_s4,
-  output          data_s5,
-  output          data_s6,
-  output          data_s7,
-  input           data_in_p,
-  input           data_in_n,
-
-  // delay-data interface
-
-  input           up_clk,
-  input           up_dld,
-  input    [ 4:0] up_dwdata,
-  output   [ 4:0] up_drdata,
-
-  // delay-control interface
-
-  input           delay_clk,
-  input           delay_rst,
-  output          delay_locked);
+module ad_serdes_in #(
 
   // parameters
 
-  parameter       DEVICE_TYPE  = 0;
+  parameter   DEVICE_TYPE = 0,
+  parameter   DATA_WIDTH = 16) (
+
+  // reset and clocks
+
+  input                       rst,
+  input                       clk,
+  input                       div_clk,
+  input                       loaden,
+  input   [ 7:0]              phase,
+  input                       locked,
+
+  // data interface
+
+  output  [(DATA_WIDTH-1):0]  data_s0,
+  output  [(DATA_WIDTH-1):0]  data_s1,
+  output  [(DATA_WIDTH-1):0]  data_s2,
+  output  [(DATA_WIDTH-1):0]  data_s3,
+  output  [(DATA_WIDTH-1):0]  data_s4,
+  output  [(DATA_WIDTH-1):0]  data_s5,
+  output  [(DATA_WIDTH-1):0]  data_s6,
+  output  [(DATA_WIDTH-1):0]  data_s7,
+  input   [(DATA_WIDTH-1):0]  data_in_p,
+  input   [(DATA_WIDTH-1):0]  data_in_n,
+
+  // delay-data interface
+
+  input                       up_clk,
+  input                       up_dld,
+  input   [ 4:0]              up_dwdata,
+  output  [ 4:0]              up_drdata,
+
+  // delay-control interface
+
+  input                       delay_clk,
+  input                       delay_rst,
+  output                      delay_locked);
+
+  // internal signals
+
+  wire    [(DATA_WIDTH-1):0]  delay_locked_s;
 
   // assignments
 
   assign up_drdata = 5'd0;
+  assign delay_locked = & delay_locked_s;
 
   // instantiations
 
+  genvar l_inst;
+  generate
+  for (l_inst = 0; l_inst < DATA_WIDTH; l_inst = l_inst + 1) begin: g_data
   alt_serdes_in_core i_core (
     .clk_export (clk),
     .div_clk_export (div_clk),
-    .hs_phase_export (hs_phase),
+    .hs_phase_export (phase),
     .loaden_export (loaden),
     .locked_export (locked),
-    .data_in_export (data_in_p),
-    .data_s_export ({ data_s7,
-                      data_s6,
-                      data_s5,
-                      data_s4,
-                      data_s3,
-                      data_s2,
-                      data_s1,
-                      data_s0}),
-    .delay_locked_export (delay_locked));
+    .data_in_export (data_in_p[l_inst]),
+    .data_s_export ({ data_s0[l_inst],
+                      data_s1[l_inst],
+                      data_s2[l_inst],
+                      data_s3[l_inst],
+                      data_s4[l_inst],
+                      data_s5[l_inst],
+                      data_s6[l_inst],
+                      data_s7[l_inst]}),
+    .delay_locked_export (delay_locked_s[l_inst]));
+  end
+  endgenerate
 
 endmodule
 
