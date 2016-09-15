@@ -30,9 +30,7 @@ clean:
 	make -C axi_ad9680 clean
 	make -C axi_ad9684 clean
 	make -C axi_ad9739a clean
-	make -C axi_adcfifo clean
 	make -C axi_clkgen clean
-	make -C axi_dacfifo clean
 	make -C axi_dmac clean
 	make -C axi_generic_adc clean
 	make -C axi_gpreg clean
@@ -73,7 +71,9 @@ clean:
 	make -C util_tdd_sync clean
 	make -C util_upack clean
 	make -C util_wfifo clean
+	make -C xilinx/axi_adcfifo clean
 	make -C xilinx/axi_adxcvr clean
+	make -C xilinx/axi_dacfifo clean
 	make -C xilinx/util_adxcvr clean
 
 
@@ -101,9 +101,7 @@ lib:
 	-make -C axi_ad9680
 	-make -C axi_ad9684
 	-make -C axi_ad9739a
-	-make -C axi_adcfifo
 	-make -C axi_clkgen
-	-make -C axi_dacfifo
 	-make -C axi_dmac
 	-make -C axi_generic_adc
 	-make -C axi_gpreg
@@ -144,7 +142,9 @@ lib:
 	-make -C util_tdd_sync
 	-make -C util_upack
 	-make -C util_wfifo
+	-make -C xilinx/axi_adcfifo
 	-make -C xilinx/axi_adxcvr
+	-make -C xilinx/axi_dacfifo
 	-make -C xilinx/util_adxcvr
 
 ####################################################################################

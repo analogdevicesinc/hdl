@@ -23,7 +23,7 @@ M_DEPS += ../../common/xilinx/sys_dacfifo.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9144/axi_ad9144.xpr
 M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr
-M_DEPS += ../../../library/axi_adcfifo/axi_adcfifo.xpr
+M_DEPS += ../../../library/xilinx/axi_adcfifo/axi_adcfifo.xpr
 M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
@@ -63,7 +63,7 @@ clean:
 clean-all:clean
 	make -C ../../../library/axi_ad9144 clean
 	make -C ../../../library/axi_ad9680 clean
-	make -C ../../../library/axi_adcfifo clean
+	make -C ../../../library/xilinx/axi_adcfifo clean
 	make -C ../../../library/xilinx/axi_adxcvr clean
 	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/axi_dmac clean
@@ -83,7 +83,7 @@ daq2_zc706.sdk/system_top.hdf: $(M_DEPS)
 lib:
 	make -C ../../../library/axi_ad9144
 	make -C ../../../library/axi_ad9680
-	make -C ../../../library/axi_adcfifo
+	make -C ../../../library/xilinx/axi_adcfifo
 	make -C ../../../library/xilinx/axi_adxcvr
 	make -C ../../../library/axi_clkgen
 	make -C ../../../library/axi_dmac
