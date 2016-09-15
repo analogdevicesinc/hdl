@@ -34,54 +34,35 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// serial data output interface: serdes(x8) or oddr(x2) output module
+// serial data output interface: serdes(x8)
 
 `timescale 1ps/1ps
 
-module ad_serdes_clk (
-
-  // clock and divided clock
-
-  mmcm_rst,
-  clk_in_p,
-  clk_in_n,
-
-  clk,
-  div_clk,
-  out_clk,
-
-  // drp interface
-
-  up_clk,
-  up_rstn,
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_locked);
+module ad_serdes_clk #(
 
   // parameters
 
-  parameter   SERDES_OR_DDR_N = 1;
-  parameter   MMCM_OR_BUFR_N = 1;
-  parameter   MMCM_DEVICE_TYPE = 0;
-  parameter   MMCM_CLKIN_PERIOD  = 1.667;
-  parameter   MMCM_VCO_DIV  = 6;
-  parameter   MMCM_VCO_MUL = 12.000;
-  parameter   MMCM_CLK0_DIV = 2.000;
-  parameter   MMCM_CLK1_DIV = 6;
+  parameter   DDR_OR_SDR_N = 1,
+  parameter   SERDES_FACTOR = 8,
+  parameter   MMCM_OR_BUFR_N = 1,
+  parameter   MMCM_DEVICE_TYPE = 0,
+  parameter   MMCM_CLKIN_PERIOD  = 1.667,
+  parameter   MMCM_VCO_DIV  = 6,
+  parameter   MMCM_VCO_MUL = 12.000,
+  parameter   MMCM_CLK0_DIV = 2.000,
+  parameter   MMCM_CLK1_DIV = 6) (
 
   // clock and divided clock
 
-  input           mmcm_rst;
+  input           rst;
   input           clk_in_p;
   input           clk_in_n;
 
   output          clk;
   output          div_clk;
   output          out_clk;
+  output          loaden;
+  output  [ 7:0]  phase,
 
   // drp interface
 
@@ -90,14 +71,20 @@ module ad_serdes_clk (
   input           up_drp_sel;
   input           up_drp_wr;
   input   [11:0]  up_drp_addr;
-  input   [15:0]  up_drp_wdata;
-  output  [15:0]  up_drp_rdata;
+  input   [31:0]  up_drp_wdata;
+  output  [31:0]  up_drp_rdata;
   output          up_drp_ready;
   output          up_drp_locked;
 
   // internal signals
 
   wire            clk_in_s;
+
+  // defaults
+
+  assign loaden = 'd0;
+  assign phase = 'd0;
+  assign up_drp_rdata[31:16] = 'd0;
 
   // instantiations
 
@@ -124,7 +111,7 @@ module ad_serdes_clk (
     .clk (clk_in_s),
     .clk2 (1'b0),
     .clk_sel (1'b1),
-    .mmcm_rst (mmcm_rst),
+    .mmcm_rst (rst),
     .mmcm_clk_0 (clk),
     .mmcm_clk_1 (div_clk),
     .mmcm_clk_2 (out_clk),
@@ -133,24 +120,13 @@ module ad_serdes_clk (
     .up_drp_sel (up_drp_sel),
     .up_drp_wr (up_drp_wr),
     .up_drp_addr (up_drp_addr),
-    .up_drp_wdata (up_drp_wdata),
-    .up_drp_rdata (up_drp_rdata),
+    .up_drp_wdata (up_drp_wdata[15:0]),
+    .up_drp_rdata (up_drp_rdata[15:0]),
     .up_drp_ready (up_drp_ready),
     .up_drp_locked (up_drp_locked));
   end
 
-  if ((MMCM_OR_BUFR_N == 0) && (SERDES_OR_DDR_N == 0)) begin
-  BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_buf (
-    .CLR (1'b0),
-    .CE (1'b1),
-    .I (clk_in_s),
-    .O (clk));
-
-  assign div_clk = clk;
-  assign out_clk = clk;
-  end
-
-  if ((MMCM_OR_BUFR_N == 0) && (SERDES_OR_DDR_N == 1)) begin
+  if (MMCM_OR_BUFR_N == 0) begin
   BUFIO i_clk_buf (
     .I (clk_in_s),
     .O (clk));

@@ -34,91 +34,57 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
-// serial data output interface: serdes(x8) or oddr(x2) output module
+// serial data output interface: serdes(x8)
 
 `timescale 1ps/1ps
 
-module ad_serdes_out (
-
-  // reset and clocks
-
-  rst,
-  clk,
-  div_clk,
-
-  // data interface
-
-  data_s0,
-  data_s1,
-  data_s2,
-  data_s3,
-  data_s4,
-  data_s5,
-  data_s6,
-  data_s7,
-  data_out_p,
-  data_out_n);
+module ad_serdes_out #(
 
   // parameters
 
-  parameter   DEVICE_TYPE = 0;
-  parameter   SERDES_OR_DDR_N = 1;
-  parameter   DATA_WIDTH = 16;
-
-
-  localparam  DEVICE_6SERIES = 1;
-  localparam  DEVICE_7SERIES = 0;
-  localparam  DW = DATA_WIDTH - 1;
+  parameter   DEVICE_TYPE = 0,
+  parameter   DDR_OR_SDR_N = 1,
+  parameter   SERDES_FACTOR = 8,
+  parameter   DATA_WIDTH = 16) (
 
   // reset and clocks
 
-  input           rst;
-  input           clk;
-  input           div_clk;
+  input                       rst;
+  input                       clk;
+  input                       div_clk;
+  input                       loaden;
 
   // data interface
 
-  input   [DW:0]  data_s0;
-  input   [DW:0]  data_s1;
-  input   [DW:0]  data_s2;
-  input   [DW:0]  data_s3;
-  input   [DW:0]  data_s4;
-  input   [DW:0]  data_s5;
-  input   [DW:0]  data_s6;
-  input   [DW:0]  data_s7;
-  output  [DW:0]  data_out_p;
-  output  [DW:0]  data_out_n;
+  input   [(DATA_WIDTH-1):0]  data_s0;
+  input   [(DATA_WIDTH-1):0]  data_s1;
+  input   [(DATA_WIDTH-1):0]  data_s2;
+  input   [(DATA_WIDTH-1):0]  data_s3;
+  input   [(DATA_WIDTH-1):0]  data_s4;
+  input   [(DATA_WIDTH-1):0]  data_s5;
+  input   [(DATA_WIDTH-1):0]  data_s6;
+  input   [(DATA_WIDTH-1):0]  data_s7;
+  output  [(DATA_WIDTH-1):0]  data_out_p;
+  output  [(DATA_WIDTH-1):0]  data_out_n;
 
   // internal signals
 
-  wire    [DW:0]  data_out_s;
-  wire    [DW:0]  serdes_shift1_s;
-  wire    [DW:0]  serdes_shift2_s;
+  wire    [(DATA_WIDTH-1):0]  data_out_s;
+  wire    [(DATA_WIDTH-1):0]  serdes_shift1_s;
+  wire    [(DATA_WIDTH-1):0]  serdes_shift2_s;
+
+  // parameters
+
+  localparam  DEVICE_6SERIES = 1;
+  localparam  DEVICE_7SERIES = 0;
 
   // instantiations
 
   genvar l_inst;
   generate
-  for (l_inst = 0; l_inst <= DW; l_inst = l_inst + 1) begin: g_data
+  for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
 
-  if (SERDES_OR_DDR_N == 0) begin
-  ODDR #(
-    .DDR_CLK_EDGE ("SAME_EDGE"),
-    .INIT (1'b0),
-    .SRTYPE ("ASYNC"))
-  i_oddr (
-    .S (1'b0),
-    .CE (1'b1),
-    .R (rst),
-    .C (clk),
-    .D1 (data_s0[l_inst]),
-    .D2 (data_s1[l_inst]),
-    .Q (data_out_s[l_inst]));
-  end
-
-  if ((SERDES_OR_DDR_N == 1) && (DEVICE_TYPE == DEVICE_7SERIES)) begin
+  if (DEVICE_TYPE == DEVICE_7SERIES) begin
   OSERDESE2  #(
     .DATA_RATE_OQ ("DDR"),
     .DATA_RATE_TQ ("SDR"),
@@ -155,7 +121,7 @@ module ad_serdes_out (
     .RST (rst));
   end
 
-  if ((SERDES_OR_DDR_N == 1) && (DEVICE_TYPE == DEVICE_6SERIES)) begin
+  if (DEVICE_TYPE == DEVICE_6SERIES) begin
   OSERDESE1  #(
     .DATA_RATE_OQ ("DDR"),
     .DATA_RATE_TQ ("SDR"),

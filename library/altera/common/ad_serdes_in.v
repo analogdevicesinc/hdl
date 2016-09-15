@@ -47,42 +47,42 @@ module ad_serdes_in #(
 
   // reset and clocks
 
-  input                       rst,
-  input                       clk,
-  input                       div_clk,
-  input                       loaden,
-  input   [ 7:0]              phase,
-  input                       locked,
+  input                           rst,
+  input                           clk,
+  input                           div_clk,
+  input                           loaden,
+  input   [ 7:0]                  phase,
+  input                           locked,
 
   // data interface
 
-  output  [(DATA_WIDTH-1):0]  data_s0,
-  output  [(DATA_WIDTH-1):0]  data_s1,
-  output  [(DATA_WIDTH-1):0]  data_s2,
-  output  [(DATA_WIDTH-1):0]  data_s3,
-  output  [(DATA_WIDTH-1):0]  data_s4,
-  output  [(DATA_WIDTH-1):0]  data_s5,
-  output  [(DATA_WIDTH-1):0]  data_s6,
-  output  [(DATA_WIDTH-1):0]  data_s7,
-  input   [(DATA_WIDTH-1):0]  data_in_p,
-  input   [(DATA_WIDTH-1):0]  data_in_n,
+  output  [(DATA_WIDTH-1):0]      data_s0,
+  output  [(DATA_WIDTH-1):0]      data_s1,
+  output  [(DATA_WIDTH-1):0]      data_s2,
+  output  [(DATA_WIDTH-1):0]      data_s3,
+  output  [(DATA_WIDTH-1):0]      data_s4,
+  output  [(DATA_WIDTH-1):0]      data_s5,
+  output  [(DATA_WIDTH-1):0]      data_s6,
+  output  [(DATA_WIDTH-1):0]      data_s7,
+  input   [(DATA_WIDTH-1):0]      data_in_p,
+  input   [(DATA_WIDTH-1):0]      data_in_n,
 
   // delay-data interface
 
-  input                       up_clk,
-  input                       up_dld,
-  input   [ 4:0]              up_dwdata,
-  output  [ 4:0]              up_drdata,
+  input                           up_clk;
+  input   [(DATA_WIDTH-1):0]      up_dld;
+  input   [((DATA_WIDTH*5)-1):0]  up_dwdata;
+  output  [((DATA_WIDTH*5)-1):0]  up_drdata;
 
   // delay-control interface
 
-  input                       delay_clk,
-  input                       delay_rst,
-  output                      delay_locked);
+  input                           delay_clk,
+  input                           delay_rst,
+  output                          delay_locked);
 
   // internal signals
 
-  wire    [(DATA_WIDTH-1):0]  delay_locked_s;
+  wire    [(DATA_WIDTH-1):0]      delay_locked_s;
 
   // assignments
 
