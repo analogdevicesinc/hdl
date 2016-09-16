@@ -40,8 +40,6 @@
 
 module ad_serdes_out #(
 
-  // parameters
-
   parameter   DEVICE_TYPE = 0,
   parameter   DATA_WIDTH = 16) (
 
@@ -74,19 +72,20 @@ module ad_serdes_out #(
   genvar l_inst;
   generate
   for (l_inst = 0; l_inst < DATA_WIDTH; l_inst = l_inst + 1) begin: g_data
-  alt_serdes_out_core i_core (
-    .clk_export (clk),
-    .div_clk_export (div_clk),
-    .loaden_export (loaden),
-    .data_out_export (data_out_p[l_inst]),
-    .data_s_export ({ data_s0[l_inst],
-                      data_s1[l_inst],
-                      data_s2[l_inst],
-                      data_s3[l_inst],
-                      data_s4[l_inst],
-                      data_s5[l_inst],
-                      data_s6[l_inst],
-                      data_s7[l_inst]}));
+
+    alt_serdes_out_core i_core (
+      .clk_export (clk),
+      .div_clk_export (div_clk),
+      .loaden_export (loaden),
+      .data_out_export (data_out_p[l_inst]),
+      .data_s_export ({ data_s0[l_inst],
+                        data_s1[l_inst],
+                        data_s2[l_inst],
+                        data_s3[l_inst],
+                        data_s4[l_inst],
+                        data_s5[l_inst],
+                        data_s6[l_inst],
+                        data_s7[l_inst]}));
   end
   endgenerate
 

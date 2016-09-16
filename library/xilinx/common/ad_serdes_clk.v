@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -40,41 +40,38 @@
 
 module ad_serdes_clk #(
 
-  // parameters
-
-  parameter   DDR_OR_SDR_N = 1,
-  parameter   SERDES_FACTOR = 8,
-  parameter   MMCM_OR_BUFR_N = 1,
-  parameter   MMCM_DEVICE_TYPE = 0,
-  parameter   MMCM_CLKIN_PERIOD  = 1.667,
-  parameter   MMCM_VCO_DIV  = 6,
-  parameter   MMCM_VCO_MUL = 12.000,
-  parameter   MMCM_CLK0_DIV = 2.000,
-  parameter   MMCM_CLK1_DIV = 6) (
+  parameter       DDR_OR_SDR_N = 1,
+  parameter       SERDES_FACTOR = 8,
+  parameter       MMCM_OR_BUFR_N = 1,
+  parameter       MMCM_DEVICE_TYPE = 0,
+  parameter       MMCM_CLKIN_PERIOD  = 1.667,
+  parameter       MMCM_VCO_DIV  = 6,
+  parameter       MMCM_VCO_MUL = 12.000,
+  parameter       MMCM_CLK0_DIV = 2.000,
+  parameter       MMCM_CLK1_DIV = 6) (
 
   // clock and divided clock
 
-  input           rst;
-  input           clk_in_p;
-  input           clk_in_n;
-
-  output          clk;
-  output          div_clk;
-  output          out_clk;
-  output          loaden;
+  input           rst,
+  input           clk_in_p,
+  input           clk_in_n,
+  output          clk,
+  output          div_clk,
+  output          out_clk,
+  output          loaden,
   output  [ 7:0]  phase,
 
   // drp interface
 
-  input           up_clk;
-  input           up_rstn;
-  input           up_drp_sel;
-  input           up_drp_wr;
-  input   [11:0]  up_drp_addr;
-  input   [31:0]  up_drp_wdata;
-  output  [31:0]  up_drp_rdata;
-  output          up_drp_ready;
-  output          up_drp_locked;
+  input           up_clk,
+  input           up_rstn,
+  input           up_drp_sel,
+  input           up_drp_wr,
+  input   [11:0]  up_drp_addr,
+  input   [31:0]  up_drp_wdata,
+  output  [31:0]  up_drp_rdata,
+  output          up_drp_ready,
+  output          up_drp_locked);
 
   // internal signals
 

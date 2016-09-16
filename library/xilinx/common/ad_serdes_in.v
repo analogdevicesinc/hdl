@@ -40,8 +40,6 @@
 
 module ad_serdes_in #(
 
-  // parameters
-
   parameter   DEVICE_TYPE = 0,
   parameter   DDR_OR_SDR_N = 0,
   parameter   SERDES_FACTOR = 8,
@@ -51,38 +49,42 @@ module ad_serdes_in #(
 
   // reset and clocks
 
-  input                           rst;
-  input                           clk;
-  input                           div_clk;
+  input                           rst,
+  input                           clk,
+  input                           div_clk,
   input                           loaden,
   input   [ 7:0]                  phase,
   input                           locked,
 
   // data interface
 
-  output  [(DATA_WIDTH-1):0]      data_s0;
-  output  [(DATA_WIDTH-1):0]      data_s1;
-  output  [(DATA_WIDTH-1):0]      data_s2;
-  output  [(DATA_WIDTH-1):0]      data_s3;
-  output  [(DATA_WIDTH-1):0]      data_s4;
-  output  [(DATA_WIDTH-1):0]      data_s5;
-  output  [(DATA_WIDTH-1):0]      data_s6;
-  output  [(DATA_WIDTH-1):0]      data_s7;
-  input   [(DATA_WIDTH-1):0]      data_in_p;
-  input   [(DATA_WIDTH-1):0]      data_in_n;
+  output  [(DATA_WIDTH-1):0]      data_s0,
+  output  [(DATA_WIDTH-1):0]      data_s1,
+  output  [(DATA_WIDTH-1):0]      data_s2,
+  output  [(DATA_WIDTH-1):0]      data_s3,
+  output  [(DATA_WIDTH-1):0]      data_s4,
+  output  [(DATA_WIDTH-1):0]      data_s5,
+  output  [(DATA_WIDTH-1):0]      data_s6,
+  output  [(DATA_WIDTH-1):0]      data_s7,
+  input   [(DATA_WIDTH-1):0]      data_in_p,
+  input   [(DATA_WIDTH-1):0]      data_in_n,
 
   // delay-data interface
 
-  input                           up_clk;
-  input   [(DATA_WIDTH-1):0]      up_dld;
-  input   [((DATA_WIDTH*5)-1):0]  up_dwdata;
-  output  [((DATA_WIDTH*5)-1):0]  up_drdata;
+  input                           up_clk,
+  input   [(DATA_WIDTH-1):0]      up_dld,
+  input   [((DATA_WIDTH*5)-1):0]  up_dwdata,
+  output  [((DATA_WIDTH*5)-1):0]  up_drdata,
 
   // delay-control interface
 
-  input                           delay_clk;
-  input                           delay_rst;
-  output                          delay_locked;
+  input                           delay_clk,
+  input                           delay_rst,
+  output                          delay_locked);
+
+  localparam  DEVICE_6SERIES  = 1;
+  localparam  DEVICE_7SERIES  = 0;
+  localparam  DATA_RATE = (DDR_OR_SDR_N) ? "DDR" : "SDR";
 
   // internal signals
 
@@ -90,12 +92,6 @@ module ad_serdes_in #(
   wire    [(DATA_WIDTH-1):0]      data_in_idelay_s;
   wire    [(DATA_WIDTH-1):0]      data_shift1_s;
   wire    [(DATA_WIDTH-1):0]      data_shift2_s;
-
-  // parameters
-
-  localparam  DEVICE_6SERIES  = 1;
-  localparam  DEVICE_7SERIES  = 0;
-  localparam  DATA_RATE = (DDR_OR_SDR_N == 1) ? "DDR" : "SDR";
 
   // delay controller
 
