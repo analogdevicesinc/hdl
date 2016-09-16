@@ -11,6 +11,7 @@ adi_project_files sdrstk [list \
   "system_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v"]
 
+set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
 adi_project_run sdrstk
 
 
