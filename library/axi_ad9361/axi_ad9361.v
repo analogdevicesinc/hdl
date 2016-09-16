@@ -575,7 +575,6 @@ module axi_ad9361 (
     // TDD control bypass
 
     assign tdd_mode_s     = 1'b0;
-    assign tdd_status_s   = 8'b0;
     assign tdd_enable_s   = 1'b0;
     assign tdd_txnrx_s    = 1'b0;
     assign adc_data_i0    = adc_data_i0_s;
