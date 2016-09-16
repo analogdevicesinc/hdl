@@ -69,10 +69,10 @@ module ad_serdes_in #(
 
   // delay-data interface
 
-  input                           up_clk;
-  input   [(DATA_WIDTH-1):0]      up_dld;
-  input   [((DATA_WIDTH*5)-1):0]  up_dwdata;
-  output  [((DATA_WIDTH*5)-1):0]  up_drdata;
+  input                           up_clk,
+  input   [(DATA_WIDTH-1):0]      up_dld,
+  input   [((DATA_WIDTH*5)-1):0]  up_dwdata,
+  output  [((DATA_WIDTH*5)-1):0]  up_drdata,
 
   // delay-control interface
 
