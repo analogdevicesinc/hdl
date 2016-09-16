@@ -90,8 +90,8 @@ proc p_alt_serdes {} {
     add_connection alt_serdes_pll_reconfig.reconfig_to_pll alt_serdes_pll.reconfig_to_pll
     add_interface drp_clk clock sink
     set_interface_property drp_clk EXPORT_OF alt_serdes_pll_reconfig.mgmt_clk
-    add_interface drp_rstn reset sink
-    set_interface_property drp_rstn EXPORT_OF alt_serdes_pll_reconfig.mgmt_reset
+    add_interface drp_rst reset sink
+    set_interface_property drp_rst EXPORT_OF alt_serdes_pll_reconfig.mgmt_reset
     add_interface pll_reconfig avalon slave
     set_interface_property pll_reconfig EXPORT_OF alt_serdes_pll_reconfig.mgmt_avalon_slave
   }

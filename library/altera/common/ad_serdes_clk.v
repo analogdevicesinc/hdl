@@ -77,13 +77,14 @@ module ad_serdes_clk (
   reg             up_drp_locked_int = 'd0;
 
   // internal signals
-
+  wire            up_drp_reset;
   wire    [31:0]  up_drp_rdata_int_s;
   wire            up_drp_busy_int_s;
   wire            up_drp_locked_int_s;
 
   // defaults
 
+  assign up_drp_reset = ~up_rstn;
   assign out_clk = div_clk;
   assign up_drp_rdata = up_drp_rdata_int;
   assign up_drp_ready = up_drp_ready_int;
@@ -144,7 +145,7 @@ module ad_serdes_clk (
     .loaden_loaden (loaden),
     .ls_clk_clk (div_clk),
     .drp_clk_clk (up_clk),
-    .drp_rstn_reset (up_rstn),
+    .drp_rst_reset (up_drp_reset),
     .pll_reconfig_waitrequest (up_drp_busy_int_s),
     .pll_reconfig_read (up_drp_rd_int),
     .pll_reconfig_write (up_drp_wr_int),
