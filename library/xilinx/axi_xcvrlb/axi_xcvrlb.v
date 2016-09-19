@@ -95,6 +95,10 @@ module axi_xcvrlb #(
   wire    [ 7:0]                up_raddr_s;
   wire    [31:0]                up_status_s;
 
+  // parameters
+
+  localparam  [31:0]  VERSION = 32'h00100161;
+
   // defaults
 
   assign up_rstn = s_axi_aresetn;
@@ -112,13 +116,13 @@ module axi_xcvrlb #(
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
-        up_scratch <= up_wdata;
+        up_scratch <= up_wdata_s;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h04)) begin
-        up_resetn <= up_wdata[0];
+        up_resetn <= up_wdata_s[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h05)) begin
-        up_status <= up_status_s | (up_status & ~up_wdata);
+        up_status <= up_status_s | (up_status & ~up_wdata_s);
       end else begin
         up_status <= up_status_s | up_status;
       end
@@ -134,7 +138,6 @@ module axi_xcvrlb #(
       if (up_rreq_s == 1'b1) begin
         case (up_raddr_s)
           10'h000: up_rdata <= VERSION;
-          10'h001: up_rdata <= ID;
           10'h002: up_rdata <= up_scratch;
           10'h004: up_rdata <= {31'd0, up_resetn};
           10'h005: up_rdata <= up_status;
@@ -187,7 +190,7 @@ module axi_xcvrlb #(
     .up_wreq (up_wreq_s),
     .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
-    .up_wack (up_wack_s),
+    .up_wack (up_wack),
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata),

@@ -5,19 +5,15 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_adxcvr_ip.tcl
+M_DEPS := axi_xcvrlb_ip.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_ip.tcl
+M_DEPS += ../../xilinx/util_adxcvr/util_adxcvr_xch.v
+M_DEPS += ../../common/up_xfer_status.v
+M_DEPS += ../../common/ad_pnmon.v
 M_DEPS += ../../common/up_axi.v
-M_DEPS += axi_adxcvr_es.v
-M_DEPS += axi_adxcvr_up.v
-M_DEPS += axi_adxcvr_mdrp.v
-M_DEPS += axi_adxcvr_mstatus.v
-M_DEPS += axi_adxcvr.v
-M_DEPS += ../../interfaces/if_xcvr_cm.xml
-M_DEPS += ../../interfaces/if_xcvr_cm_rtl.xml
-M_DEPS += ../../interfaces/if_xcvr_ch.xml
-M_DEPS += ../../interfaces/if_xcvr_ch_rtl.xml
+M_DEPS += axi_xcvrlb_1.v
+M_DEPS += axi_xcvrlb.v
 
 M_VIVADO := vivado -mode batch -source
 
@@ -36,8 +32,8 @@ M_FLIST += .Xil
 
 
 
-.PHONY: all dep clean clean-all
-all: dep axi_adxcvr.xpr
+.PHONY: all clean clean-all
+all: axi_xcvrlb.xpr
 
 
 clean:clean-all
@@ -47,11 +43,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-axi_adxcvr.xpr: $(M_DEPS)
+axi_xcvrlb.xpr: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_VIVADO) axi_adxcvr_ip.tcl  >> axi_adxcvr_ip.log 2>&1
+	$(M_VIVADO) axi_xcvrlb_ip.tcl  >> axi_xcvrlb_ip.log 2>&1
 
-dep:
-	make -C ../../interfaces
 ####################################################################################
 ####################################################################################

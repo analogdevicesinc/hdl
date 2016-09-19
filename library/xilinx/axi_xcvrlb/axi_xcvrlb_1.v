@@ -60,7 +60,7 @@ module axi_xcvrlb_1 (
   reg             rx_calign = 'd0;
   reg     [31:0]  rx_data = 'd0;
   reg     [31:0]  rx_pn_data = 'd0;
-  reg     [ 3:0]  tx_charisk = 'd0;
+  reg             tx_charisk = 'd0;
   reg     [31:0]  tx_data = 'd0;
   reg     [31:0]  tx_pn_data = 'd0;
   reg     [ 3:0]  up_pll_rst_cnt = 'd0;
@@ -70,6 +70,7 @@ module axi_xcvrlb_1 (
 
   // internal signals
 
+  wire            clk;
   wire            rx_status_s;
   wire    [31:0]  rx_pn_data_s;
   wire            rx_pn_oos_s;
@@ -243,7 +244,7 @@ module axi_xcvrlb_1 (
 
   util_adxcvr_xch #(
     .XCVR_ID (15),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .GTH_OR_GTX_N (0),
     .CPLL_TX_OR_RX_N (0),
     .CPLL_FBDIV (2),
     .RX_OUT_DIV (1),
@@ -260,7 +261,7 @@ module axi_xcvrlb_1 (
     .rx_p (rx_p),
     .rx_n (rx_n),
     .rx_out_clk (clk),
-    .rx_clk (rx_clk),
+    .rx_clk (clk),
     .rx_charisk (rx_charisk_s),
     .rx_disperr (rx_error_s[3:0]),
     .rx_notintable (rx_error_s[7:4]),
