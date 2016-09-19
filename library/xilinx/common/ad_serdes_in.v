@@ -140,8 +140,8 @@ module ad_serdes_in #(
     .IDATAIN (data_in_ibuf_s[l_inst]),
     .DATAOUT (data_in_idelay_s[l_inst]),
     .LD (up_dld[l_inst]),
-    .CNTVALUEIN (up_dwdata[((5*l_inst)+4):(5*l_inst)),
-    .CNTVALUEOUT (up_drdata[((5*l_inst)+4):(5*l_inst)));
+    .CNTVALUEIN (up_dwdata[((5*l_inst)+4):(5*l_inst)]),
+    .CNTVALUEOUT (up_drdata[((5*l_inst)+4):(5*l_inst)]));
   end
   if(DEVICE_TYPE == DEVICE_6SERIES) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
