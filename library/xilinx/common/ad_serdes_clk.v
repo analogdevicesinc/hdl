@@ -40,10 +40,10 @@
 
 module ad_serdes_clk #(
 
+  parameter       DEVICE_TYPE = 0,
   parameter       DDR_OR_SDR_N = 1,
   parameter       SERDES_FACTOR = 8,
   parameter       MMCM_OR_BUFR_N = 1,
-  parameter       MMCM_DEVICE_TYPE = 0,
   parameter       MMCM_CLKIN_PERIOD  = 1.667,
   parameter       MMCM_VCO_DIV  = 6,
   parameter       MMCM_VCO_MUL = 12.000,
@@ -93,7 +93,7 @@ module ad_serdes_clk #(
   generate
   if (MMCM_OR_BUFR_N == 1) begin
   ad_mmcm_drp #(
-    .MMCM_DEVICE_TYPE (MMCM_DEVICE_TYPE),
+    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
     .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
     .MMCM_CLKIN2_PERIOD (MMCM_CLKIN_PERIOD),
     .MMCM_VCO_DIV (MMCM_VCO_DIV),
