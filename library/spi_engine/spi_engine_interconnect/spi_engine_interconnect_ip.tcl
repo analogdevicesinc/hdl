@@ -51,4 +51,7 @@ foreach prefix [list "s0" "s1"] {
 	adi_add_bus_clock "clk" [format "%s_ctrl" $prefix] "resetn"
 }
 
+adi_set_bus_dependency "s1_ctrl" "s1_ctrl" \
+	"(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 1)"
+
 ipx::save_core [ipx::current_core]
