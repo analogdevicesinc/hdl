@@ -74,6 +74,7 @@ clean:
 	make -C xilinx/axi_adcfifo clean
 	make -C xilinx/axi_adxcvr clean
 	make -C xilinx/axi_dacfifo clean
+	make -C xilinx/axi_xcvrlb clean
 	make -C xilinx/util_adxcvr clean
 
 
@@ -145,6 +146,7 @@ lib:
 	-make -C xilinx/axi_adcfifo
 	-make -C xilinx/axi_adxcvr
 	-make -C xilinx/axi_dacfifo
+	-make -C xilinx/axi_xcvrlb
 	-make -C xilinx/util_adxcvr
 
 ####################################################################################
