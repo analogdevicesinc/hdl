@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -130,8 +130,8 @@ module up_adc_common (
   output          up_drp_sel;
   output          up_drp_wr;
   output  [11:0]  up_drp_addr;
-  output  [15:0]  up_drp_wdata;
-  input   [15:0]  up_drp_rdata;
+  output  [31:0]  up_drp_wdata;
+  input   [31:0]  up_drp_rdata;
   input           up_drp_ready;
   input           up_drp_locked;
 
@@ -156,7 +156,7 @@ module up_adc_common (
   output          up_rack;
 
   // internal registers
-  
+
   reg             up_core_preset = 'd0;
   reg             up_mmcm_preset = 'd0;
   reg             up_wack = 'd0;
@@ -171,8 +171,8 @@ module up_adc_common (
   reg             up_drp_status = 'd0;
   reg             up_drp_rwn = 'd0;
   reg     [11:0]  up_drp_addr = 'd0;
-  reg     [15:0]  up_drp_wdata = 'd0;
-  reg     [15:0]  up_drp_rdata_hold = 'd0;
+  reg     [31:0]  up_drp_wdata = 'd0;
+  reg     [31:0]  up_drp_rdata_hold = 'd0;
   reg             up_status_ovf = 'd0;
   reg             up_status_unf = 'd0;
   reg     [ 7:0]  up_usr_chanmax = 'd0;
@@ -259,9 +259,11 @@ module up_adc_common (
         up_drp_status <= 1'b0;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
-        up_drp_rwn <= up_wdata[28];
-        up_drp_addr <= up_wdata[27:16];
-        up_drp_wdata <= up_wdata[15:0];
+        up_drp_rwn <= up_wdata[12];
+        up_drp_addr <= up_wdata[11:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1e)) begin
+        up_drp_wdata <= up_wdata;
       end
       if (up_drp_ready == 1'b1) begin
         up_drp_rdata_hold <= up_drp_rdata;
@@ -307,8 +309,10 @@ module up_adc_common (
           8'h16: up_rdata <= adc_clk_ratio;
           8'h17: up_rdata <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
           8'h1a: up_rdata <= {31'd0, up_sync_status_s};
-          8'h1c: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr, up_drp_wdata};
-          8'h1d: up_rdata <= {14'd0, up_drp_locked, up_drp_status, up_drp_rdata_hold};
+          8'h1c: up_rdata <= {19'd0, up_drp_rwn, up_drp_addr};
+          8'h1d: up_rdata <= {30'd0, up_drp_locked, up_drp_status};
+          8'h1e: up_rdata <= up_drp_wdata;
+          8'h1f: up_rdata <= up_drp_rdata_hold;
           8'h22: up_rdata <= {29'd0, up_status_ovf, up_status_unf, 1'b0};
           8'h23: up_rdata <= 32'd8;
           8'h28: up_rdata <= {24'd0, adc_usr_chanmax};

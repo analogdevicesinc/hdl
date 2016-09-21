@@ -101,7 +101,7 @@ up_adc_common #(.ID(ID)) i_up_adc_common (
 	.up_drp_wr (),
 	.up_drp_addr (),
 	.up_drp_wdata (),
-	.up_drp_rdata (16'd0),
+	.up_drp_rdata (32'd0),
 	.up_drp_ready (1'd0),
 	.up_drp_locked (1'd1),
 	.up_usr_chanmax (),
