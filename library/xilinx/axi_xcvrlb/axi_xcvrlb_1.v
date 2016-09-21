@@ -135,7 +135,7 @@ module axi_xcvrlb_1 (
   // receive
 
   assign rx_status_s = ~(| rx_error_s);
-  assign rx_pn_data_s = (rx_pn_oos_s == 1'b1) ? rx_data_s : rx_pn_data;
+  assign rx_pn_data_s = (rx_pn_oos_s == 1'b1) ? rx_data : rx_pn_data;
 
   always @(posedge clk) begin
     if (rx_status_s == 1'b0) begin
@@ -243,7 +243,7 @@ module axi_xcvrlb_1 (
     .d_data_status ({rx_pn_err_s, rx_pn_oos_s}));
 
   util_adxcvr_xch #(
-    .XCVR_ID (15),
+    .XCVR_ID (0),
     .GTH_OR_GTX_N (0),
     .CPLL_TX_OR_RX_N (0),
     .CPLL_FBDIV (2),
