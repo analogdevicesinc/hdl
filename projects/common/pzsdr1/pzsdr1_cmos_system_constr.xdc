@@ -1,6 +1,6 @@
 
 # constraints
-# ad9361
+# ad9361 (SWAP == 0x0)
 
 set_property  -dict {PACKAGE_PIN  K17  IOSTANDARD LVCMOS25} [get_ports rx_clk_in]                         ; ## IO_L12P_T1_MRCC_35
 set_property  -dict {PACKAGE_PIN  M19  IOSTANDARD LVCMOS25} [get_ports rx_frame_in]                       ; ## IO_L7P_T1_AD2P_35
@@ -34,6 +34,7 @@ set_property  -dict {PACKAGE_PIN  F16  IOSTANDARD LVCMOS25} [get_ports tx_data_o
 
 set_property  -dict {PACKAGE_PIN  M18  IOSTANDARD LVCMOS25} [get_ports tx_gnd[0]]                         ; ## IO_L8N_T1_AD10N_35
 set_property  -dict {PACKAGE_PIN  L20  IOSTANDARD LVCMOS25} [get_ports tx_gnd[1]]                         ; ## IO_L9N_T1_DQS_AD3N_35
+
 # clocks
 
 create_clock -name rx_clk       -period  8 [get_ports rx_clk_in]

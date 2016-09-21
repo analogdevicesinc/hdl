@@ -1,6 +1,6 @@
 
 # constraints
-# ad9361
+# ad9361 (SWAP == 0x1)
 
 set_property  -dict {PACKAGE_PIN  J14  IOSTANDARD LVCMOS18} [get_ports rx_clk_in]       ; ## IO_L12P_T1_MRCC_35
 set_property  -dict {PACKAGE_PIN  H13  IOSTANDARD LVCMOS18} [get_ports rx_frame_in]     ; ## IO_L7P_T1_AD2P_35
