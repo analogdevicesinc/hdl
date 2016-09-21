@@ -124,8 +124,8 @@ module axi_ad9434_if (
   input           up_drp_sel;
   input           up_drp_wr;
   input   [11:0]  up_drp_addr;
-  input   [15:0]  up_drp_wdata;
-  output  [15:0]  up_drp_rdata;
+  input   [31:0]  up_drp_wdata;
+  output  [31:0]  up_drp_rdata;
   output          up_drp_ready;
   output          up_drp_locked;
 
@@ -147,37 +147,36 @@ module axi_ad9434_if (
   assign  adc_clk = adc_div_clk;
 
   // data interface
-  generate
-  for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin : g_adc_if
-    ad_serdes_in #(
-      .DEVICE_TYPE(DEVICE_TYPE),
-      .IODELAY_CTRL(0),
-      .IODELAY_GROUP(IO_DELAY_GROUP),
-      .DDR_OR_SDR_N(SDR),
-      .DATA_WIDTH(4))
-    i_adc_data (
-      .rst(adc_rst),
-      .clk(adc_clk_in),
-      .div_clk(adc_div_clk),
-      .data_s0(adc_data[(3*12)+l_inst]),
-      .data_s1(adc_data[(2*12)+l_inst]),
-      .data_s2(adc_data[(1*12)+l_inst]),
-      .data_s3(adc_data[(0*12)+l_inst]),
-      .data_s4(),
-      .data_s5(),
-      .data_s6(),
-      .data_s7(),
-      .data_in_p(adc_data_in_p[l_inst]),
-      .data_in_n(adc_data_in_n[l_inst]),
-      .up_clk (up_clk),
-      .up_dld (up_adc_dld[l_inst]),
-      .up_dwdata (up_adc_dwdata[((l_inst*5)+4):(l_inst*5)]),
-      .up_drdata (up_adc_drdata[((l_inst*5)+4):(l_inst*5)]),
-      .delay_clk(delay_clk),
-      .delay_rst(delay_rst),
-      .delay_locked());
-    end
-  endgenerate
+  ad_serdes_in #(
+    .DEVICE_TYPE(DEVICE_TYPE),
+    .IODELAY_CTRL(0),
+    .IODELAY_GROUP(IO_DELAY_GROUP),
+    .DDR_OR_SDR_N(SDR),
+    .DATA_WIDTH(12))
+  i_adc_data (
+    .rst(adc_rst),
+    .clk(adc_clk_in),
+    .div_clk(adc_div_clk),
+    .loaden(1'b0),
+    .phase(8'b0),
+    .locked(1'b0),
+    .data_s0(adc_data[47:36]),
+    .data_s1(adc_data[35:24]),
+    .data_s2(adc_data[23:12]),
+    .data_s3(adc_data[11: 0]),
+    .data_s4(),
+    .data_s5(),
+    .data_s6(),
+    .data_s7(),
+    .data_in_p(adc_data_in_p),
+    .data_in_n(adc_data_in_n),
+    .up_clk (up_clk),
+    .up_dld (up_adc_dld[11:0]),
+    .up_dwdata (up_adc_dwdata[59:0]),
+    .up_drdata (up_adc_drdata[59:0]),
+    .delay_clk(delay_clk),
+    .delay_rst(delay_rst),
+    .delay_locked());
 
   // over-range interface
   ad_serdes_in #(
@@ -185,15 +184,18 @@ module axi_ad9434_if (
     .IODELAY_CTRL(1),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(SDR),
-    .DATA_WIDTH(4))
-  i_adc_data (
+    .DATA_WIDTH(1))
+  i_adc_or (
     .rst(adc_rst),
     .clk(adc_clk_in),
     .div_clk(adc_div_clk),
-    .data_s0(adc_or_s[0]),
-    .data_s1(adc_or_s[1]),
-    .data_s2(adc_or_s[2]),
-    .data_s3(adc_or_s[3]),
+    .loaden(1'b0),
+    .phase(8'b0),
+    .locked(1'b0),
+    .data_s0(adc_or_s[3]),
+    .data_s1(adc_or_s[2]),
+    .data_s2(adc_or_s[1]),
+    .data_s3(adc_or_s[0]),
     .data_s4(),
     .data_s5(),
     .data_s6(),
@@ -210,19 +212,21 @@ module axi_ad9434_if (
 
   // clock input buffers and MMCM_OR_BUFR_N
   ad_serdes_clk #(
-    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
+    .DEVICE_TYPE (DEVICE_TYPE),
     .MMCM_CLKIN_PERIOD (2),
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),
     .MMCM_CLK0_DIV (2),
     .MMCM_CLK1_DIV (8))
   i_serdes_clk (
-    .mmcm_rst (mmcm_rst),
+    .rst (mmcm_rst),
     .clk_in_p (adc_clk_in_p),
     .clk_in_n (adc_clk_in_n),
     .clk (adc_clk_in),
     .div_clk (adc_div_clk),
     .out_clk (),
+    .loaden (),
+    .phase (),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel),
@@ -233,7 +237,7 @@ module axi_ad9434_if (
     .up_drp_ready (up_drp_ready),
     .up_drp_locked (up_drp_locked));
 
-  // adc overange
+  // adc over range
   assign adc_or = adc_or_s[0] | adc_or_s[1] | adc_or_s[2] | adc_or_s[3];
 
   // adc status: adc is up, if both the MMCM_OR_BUFR_N and DELAY blocks are up
