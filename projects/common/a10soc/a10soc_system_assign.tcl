@@ -264,27 +264,6 @@ set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
-# set libraries
+# source defaults
 
-set ad_lib_folders "$ad_hdl_dir/library/**/*;$ad_phdl_dir/library/**/*"
-
-set_user_option -name USER_IP_SEARCH_PATHS $ad_lib_folders
-set_global_assignment -name IP_SEARCH_PATHS $ad_lib_folders
-
-# generate qsys
-# move this to a project script
-
-set mmu_enabled 1
-if [info exists ::env(ALT_NIOS_MMU_ENABLED)] {
-  set mmu_enabled $::env(ALT_NIOS_MMU_ENABLED)
-}
-
-if {$mmu_enabled == 0} {
-  set cmd_str "set mmu_enabled 0"
-  exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
-    --cmd=$cmd_str --script=system_qsys.tcl
-} else {
-  set cmd_str "set mmu_enabled 1"
-  exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
-    --cmd=$cmd_str --script=system_qsys.tcl
-}
+source $ad_hdl_dir/projects/common/altera/sys_gen.tcl
