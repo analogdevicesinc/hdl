@@ -248,7 +248,7 @@ module up_adc_common (
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
         up_drp_sel <= 1'b1;
-        up_drp_wr <= ~up_wdata[28];
+        up_drp_wr <= ~up_wdata[12];
       end else begin
         up_drp_sel <= 1'b0;
         up_drp_wr <= 1'b0;
