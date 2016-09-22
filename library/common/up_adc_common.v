@@ -163,6 +163,7 @@ module up_adc_common (
   reg     [31:0]  up_scratch = 'd0;
   reg             up_mmcm_resetn = 'd0;
   reg             up_resetn = 'd0;
+  reg             up_adc_sync = 'd0;
   reg             up_adc_r1_mode = 'd0;
   reg             up_adc_ddr_edgesel = 'd0;
   reg             up_adc_pin_mode = 'd0;
@@ -176,9 +177,8 @@ module up_adc_common (
   reg             up_status_ovf = 'd0;
   reg             up_status_unf = 'd0;
   reg     [ 7:0]  up_usr_chanmax = 'd0;
-  reg     [31:0]  up_adc_gpio_out = 'd0;
   reg     [31:0]  up_adc_start_code = 'd0;
-  reg             up_adc_sync = 'd0;
+  reg     [31:0]  up_adc_gpio_out = 'd0;
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
 
@@ -190,7 +190,7 @@ module up_adc_common (
   wire            up_sync_status_s;
   wire            up_status_ovf_s;
   wire            up_status_unf_s;
-  wire            up_cntrl_xfer_done;
+  wire            up_cntrl_xfer_done_s;
   wire    [31:0]  up_adc_clk_count_s;
 
   // decode block select
@@ -208,6 +208,7 @@ module up_adc_common (
       up_scratch <= 'd0;
       up_mmcm_resetn <= 'd0;
       up_resetn <= 'd0;
+      up_adc_sync <= 'd0;
       up_adc_r1_mode <= 'd0;
       up_adc_ddr_edgesel <= 'd0;
       up_adc_pin_mode <= 'd0;
@@ -221,8 +222,8 @@ module up_adc_common (
       up_status_ovf <= 'd0;
       up_status_unf <= 'd0;
       up_usr_chanmax <= 'd0;
-      up_adc_gpio_out <= 'd0;
       up_adc_start_code <= 'd0;
+      up_adc_gpio_out <= 'd0;
     end else begin
       up_core_preset <= ~up_resetn;
       up_mmcm_preset <= ~up_mmcm_resetn;
@@ -235,7 +236,7 @@ module up_adc_common (
         up_resetn <= up_wdata[0];
       end
       if (up_adc_sync == 1'b1) begin
-        if (up_cntrl_xfer_done == 1'b1) begin
+        if (up_cntrl_xfer_done_s == 1'b1) begin
           up_adc_sync <= 1'b0;
         end
       end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
@@ -342,7 +343,7 @@ module up_adc_common (
                       up_adc_r1_mode,
                       up_adc_ddr_edgesel,
                       up_adc_pin_mode}),
-    .up_xfer_done (up_cntrl_xfer_done),
+    .up_xfer_done (up_cntrl_xfer_done_s),
     .d_rst (adc_rst),
     .d_clk (adc_clk),
     .d_data_cntrl ({  adc_sync,

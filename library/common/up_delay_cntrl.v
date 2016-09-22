@@ -115,6 +115,8 @@ module up_delay_cntrl (
   wire    [(DATA_WIDTH-1):0]      up_drdata2_s;
   wire    [(DATA_WIDTH-1):0]      up_drdata1_s;
   wire    [(DATA_WIDTH-1):0]      up_drdata0_s;
+  wire    [(DATA_WIDTH-1):0]      up_dld_s;
+  wire    [((DATA_WIDTH*5)-1):0]  up_dwdata_s;
 
   // variables
 
@@ -172,22 +174,23 @@ module up_delay_cntrl (
 
   generate
   for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_dwr
+  assign up_dld_s[n] = (up_waddr[7:0] == n) ? up_wreq_s : 1'b0;
+  assign up_dwdata_s[((n*5)+4):(n*5)] = (up_waddr[7:0] == n) ?
+    up_wdata[4:0] : up_dwdata[((n*5)+4):(n*5)];
+  end
+  endgenerate
+
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_dld[n] <= 'd0;
-      up_dwdata[((n*5)+4):(n*5)] <= 'd0;
+      up_dld <= 'd0;
+      up_dwdata <= 'd0;
     end else begin
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == n)) begin
-        up_dld[n] <= 1'd1;
-        up_dwdata[((n*5)+4):(n*5)] <= up_wdata[4:0];
-      end else begin
-        up_dld[n] <= 1'd0;
-        up_dwdata[((n*5)+4):(n*5)] <= up_dwdata[((n*5)+4):(n*5)];
+      up_dld <= up_dld_s;
+      if (up_wreq_s == 1'b1) begin
+        up_dwdata <= up_dwdata_s;
       end
     end
   end
-  end
-  endgenerate
 
   // resets
 

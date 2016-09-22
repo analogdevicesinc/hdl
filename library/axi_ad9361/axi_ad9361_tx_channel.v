@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -389,6 +387,7 @@ module axi_ad9361_tx_channel (
     .dac_pat_data_1 (dac_pat_data_1_s),
     .dac_pat_data_2 (dac_pat_data_2_s),
     .dac_data_sel (dac_data_sel_s),
+    .dac_iq_mode (),
     .dac_iqcor_enb (dac_iqcor_enb_s),
     .dac_iqcor_coeff_1 (dac_iqcor_coeff_1_s),
     .dac_iqcor_coeff_2 (dac_iqcor_coeff_2_s),
