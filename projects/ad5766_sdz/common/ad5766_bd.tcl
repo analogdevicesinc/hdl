@@ -16,7 +16,7 @@ current_bd_instance /spi
 
 	ad_connect axi/spi_engine_ctrl interconnect/s0_ctrl
 	ad_connect interconnect/m_ctrl execution/ctrl
-        ad_connect execution/spi m_spi
+        ad_connect m_spi execution/spi
 
 	connect_bd_net \
 		[get_bd_pins clk] \
