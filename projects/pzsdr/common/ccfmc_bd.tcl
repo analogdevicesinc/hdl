@@ -5,15 +5,7 @@
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:mdio_rtl:1.0 eth1_mdio
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:rgmii_rtl:1.0 eth1_rgmii
 
-create_bd_port -dir O eth1_link_status
-create_bd_port -dir O eth1_duplex_status
-create_bd_port -dir O -type clk eth1_refclk
-create_bd_port -dir O -type clk eth1_125mclk
-create_bd_port -dir O -type clk eth1_25mclk
-create_bd_port -dir O -type clk eth1_2m5clk
 create_bd_port -dir I -type intr eth1_intn
-create_bd_port -dir O -from 1 -to 0 eth1_clock_speed
-create_bd_port -dir O -from 1 -to 0 eth1_speed_mode
 
 # hdmi interface
 
@@ -80,14 +72,6 @@ ad_connect  sys_ps7/MDIO_ETHERNET_1 sys_rgmii/MDIO_GEM
 ad_connect  sys_ps7/GMII_ETHERNET_1 sys_rgmii/GMII
 ad_connect  sys_rgmii/MDIO_PHY eth1_mdio
 ad_connect  sys_rgmii/RGMII eth1_rgmii
-ad_connect  sys_rgmii/ref_clk_out eth1_refclk
-ad_connect  sys_rgmii/gmii_clk_125m_out eth1_125mclk
-ad_connect  sys_rgmii/gmii_clk_25m_out eth1_25mclk
-ad_connect  sys_rgmii/gmii_clk_2_5m_out eth1_2m5clk
-ad_connect  sys_rgmii/link_status eth1_link_status
-ad_connect  sys_rgmii/duplex_status eth1_duplex_status
-ad_connect  sys_rgmii/clock_speed eth1_clock_speed
-ad_connect  sys_rgmii/speed_mode eth1_speed_mode
 ad_connect  sys_ps7/ENET1_EXT_INTIN eth1_intn
 ad_connect  sys_200m_clk sys_rgmii_rstgen/slowest_sync_clk
 ad_connect  sys_200m_clk sys_rgmii/clkin
