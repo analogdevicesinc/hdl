@@ -296,7 +296,7 @@ module axi_ad9371_rx (
   // common processor control
 
   up_adc_common #(
-    .ADC_COMMON_ID ('h00),
+    .COMMON_ID ('h00),
     .ID (ID))
   i_up_adc_common (
     .mmcm_rst (),

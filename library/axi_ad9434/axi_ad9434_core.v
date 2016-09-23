@@ -246,7 +246,7 @@ module axi_ad9434_core (
     .up_rack (up_rack_s[0]));
 
   up_adc_channel #(
-    .ADC_CHANNEL_ID(0))
+    .CHANNEL_ID(0))
   i_adc_channel(
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

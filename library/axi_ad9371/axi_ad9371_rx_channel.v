@@ -201,8 +201,8 @@ module axi_ad9371_rx_channel (
   endgenerate
 
   up_adc_channel #(
-    .ADC_COMMON_ID (COMMON_ID),
-    .ADC_CHANNEL_ID (CHANNEL_ID))
+    .COMMON_ID (COMMON_ID),
+    .CHANNEL_ID (CHANNEL_ID))
   i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

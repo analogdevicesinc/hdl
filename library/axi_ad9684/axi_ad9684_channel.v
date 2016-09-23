@@ -141,7 +141,7 @@ module axi_ad9684_channel (
 
   assign adc_valid = adc_dfmt_valid_s[0] | adc_dfmt_valid_s[1];
 
-  up_adc_channel #(.ADC_CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
+  up_adc_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),

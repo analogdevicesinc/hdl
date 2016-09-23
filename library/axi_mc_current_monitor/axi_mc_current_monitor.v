@@ -196,7 +196,7 @@ ad7401 vbus_if(
     .data_rd_ready_o(),
     .adc_mdata_i(adc_vbus_dat_i));
 
-up_adc_channel #(.ADC_CHANNEL_ID(0)) i_up_adc_channel_ia(
+up_adc_channel #(.CHANNEL_ID(0)) i_up_adc_channel_ia(
     .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_ia),
@@ -242,7 +242,7 @@ up_adc_channel #(.ADC_CHANNEL_ID(0)) i_up_adc_channel_ia(
     .up_rdata (up_rdata_0_s),
     .up_rack (up_rack_0_s));
 
-up_adc_channel #(.ADC_CHANNEL_ID(1)) i_up_adc_channel_ib(
+up_adc_channel #(.CHANNEL_ID(1)) i_up_adc_channel_ib(
     .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_ib),
@@ -288,7 +288,7 @@ up_adc_channel #(.ADC_CHANNEL_ID(1)) i_up_adc_channel_ib(
     .up_rdata (up_rdata_1_s),
     .up_rack (up_rack_1_s));
 
-up_adc_channel #(.ADC_CHANNEL_ID(2)) i_up_adc_channel_vbus(
+up_adc_channel #(.CHANNEL_ID(2)) i_up_adc_channel_vbus(
     .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_vbus),

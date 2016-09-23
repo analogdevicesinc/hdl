@@ -127,7 +127,7 @@ module axi_ad9467_channel(
     .dfmt_type(adc_dfmt_type_s),
     .dfmt_se(adc_dfmt_se_s));
 
-  up_adc_channel #(.ADC_CHANNEL_ID(0)) i_up_adc_channel (
+  up_adc_channel #(.CHANNEL_ID(0)) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),
