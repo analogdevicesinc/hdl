@@ -67,8 +67,8 @@ module axi_ad9684_if (
   delay_rdata,
   delay_locked,
 
-  // mmcm_rst
-  mmcm_rst,
+  // reset
+  rst,
 
   // drp interface
   up_clk,
@@ -114,7 +114,7 @@ module axi_ad9684_if (
   output  [74:0]  delay_rdata;
   output          delay_locked;
 
-  input           mmcm_rst;
+  input           rst;
 
   input           up_clk;
   input           up_rstn;
@@ -152,60 +152,31 @@ module axi_ad9684_if (
     .IODELAY_CTRL(1),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(DDR_OR_SDR_N),
-    .DATA_WIDTH(4))
+    .DATA_WIDTH(14))
   i_adc_data (
     .rst(adc_rst),
     .clk(adc_clk_in),
     .div_clk(adc_div_clk),
-    .data_s0(adc_data_b[(1*14)]),
-    .data_s1(adc_data_a[(1*14)]),
-    .data_s2(adc_data_b[(0*14)]),
-    .data_s3(adc_data_a[(0*14)]),
+    .loaden(1'b0),
+    .phase(8'b0),
+    .locked(1'b0),
+    .data_s0(adc_data_b[27:14]),
+    .data_s1(adc_data_a[27:14]),
+    .data_s2(adc_data_b[13: 0]),
+    .data_s3(adc_data_a[13: 0]),
     .data_s4(),
     .data_s5(),
     .data_s6(),
     .data_s7(),
-    .data_in_p(adc_data_in_p[0]),
-    .data_in_n(adc_data_in_n[0]),
+    .data_in_p(adc_data_in_p[13:0]),
+    .data_in_n(adc_data_in_n[13:0]),
     .up_clk (up_clk),
-    .up_dld (delay_dload[0]),
-    .up_dwdata (delay_wdata[4:0]),
-    .up_drdata (delay_rdata[4:0]),
+    .up_dld (delay_dload[13:0]),
+    .up_dwdata (delay_wdata[69:0]),
+    .up_drdata (delay_rdata[69:0]),
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked));
-
-  generate
-  for (l_inst = 1; l_inst <= 13; l_inst = l_inst + 1) begin : g_adc_if
-    ad_serdes_in #(
-      .DEVICE_TYPE(DEVICE_TYPE),
-      .IODELAY_CTRL(0),
-      .IODELAY_GROUP(IO_DELAY_GROUP),
-      .DDR_OR_SDR_N(DDR_OR_SDR_N),
-      .DATA_WIDTH(4))
-    i_adc_data (
-      .rst(adc_rst),
-      .clk(adc_clk_in),
-      .div_clk(adc_div_clk),
-      .data_s0(adc_data_b[(1*14)+l_inst]),
-      .data_s1(adc_data_a[(1*14)+l_inst]),
-      .data_s2(adc_data_b[(0*14)+l_inst]),
-      .data_s3(adc_data_a[(0*14)+l_inst]),
-      .data_s4(),
-      .data_s5(),
-      .data_s6(),
-      .data_s7(),
-      .data_in_p(adc_data_in_p[l_inst]),
-      .data_in_n(adc_data_in_n[l_inst]),
-      .up_clk (up_clk),
-      .up_dld (delay_dload[l_inst]),
-      .up_dwdata (delay_wdata[((l_inst*5)+4):(l_inst*5)]),
-      .up_drdata (delay_rdata[((l_inst*5)+4):(l_inst*5)]),
-      .delay_clk(delay_clk),
-      .delay_rst(delay_rst),
-      .delay_locked());
-    end
-  endgenerate
 
   generate if (OR_STATUS == 1) begin
 
@@ -214,11 +185,14 @@ module axi_ad9684_if (
       .IODELAY_CTRL(0),
       .IODELAY_GROUP(IO_DELAY_GROUP),
       .DDR_OR_SDR_N(DDR_OR_SDR_N),
-      .DATA_WIDTH(4))
+      .DATA_WIDTH(1))
     i_adc_or (
       .rst(adc_rst),
       .clk(adc_clk_in),
       .div_clk(adc_div_clk),
+      .loaden(1'b0),
+      .phase(8'b0),
+      .locked(1'b0),
       .data_s0(adc_data_or_b_s[1]),
       .data_s1(adc_data_or_a_s[1]),
       .data_s2(adc_data_or_b_s[0]),
@@ -251,19 +225,21 @@ module axi_ad9684_if (
   // clock input buffers and MMCM_OR_BUFR_N
 
   ad_serdes_clk #(
-    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
+    .DEVICE_TYPE (DEVICE_TYPE),
     .MMCM_CLKIN_PERIOD (2),
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),
     .MMCM_CLK0_DIV (2),
     .MMCM_CLK1_DIV (4))
   i_serdes_clk (
-    .mmcm_rst (mmcm_rst),
+    .rst (rst),
     .clk_in_p (adc_clk_in_p),
     .clk_in_n (adc_clk_in_n),
     .clk (adc_clk_in),
     .div_clk (adc_div_clk),
     .out_clk (),
+    .loaden (),
+    .phase (),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel),

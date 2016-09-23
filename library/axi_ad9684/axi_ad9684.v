@@ -191,7 +191,7 @@ module axi_ad9684 (
   wire    [15:0]  up_drp_rdata_s;
   wire            up_drp_ready_s;
   wire            up_drp_locked_s;
-  wire            mmcm_rst_s;
+  wire            rst_s;
 
   //defaults
 
@@ -239,7 +239,7 @@ module axi_ad9684 (
     .delay_wdata (up_dwdata_s),
     .delay_rdata (up_drdata_s),
     .delay_locked (delay_locked_s),
-    .mmcm_rst (mmcm_rst_s),
+    .rst (rst_s),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel_s),
@@ -259,7 +259,7 @@ module axi_ad9684 (
   up_adc_common #(
     .ID(ID))
   i_up_adc_common (
-    .mmcm_rst (mmcm_rst_s),
+    .mmcm_rst (rst_s),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_r1_mode (),
