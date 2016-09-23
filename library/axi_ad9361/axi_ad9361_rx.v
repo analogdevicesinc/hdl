@@ -38,140 +38,92 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9361_rx (
-
-  // common
-
-  mmcm_rst,
-
-  // adc interface
-
-  adc_rst,
-  adc_clk,
-  adc_valid,
-  adc_data,
-  adc_status,
-  adc_r1_mode,
-  adc_ddr_edgesel,
-  dac_data,
-
-  // delay interface
-
-  up_dld,
-  up_dwdata,
-  up_drdata,
-  delay_clk,
-  delay_rst,
-  delay_locked,
-
-  // dma interface
-
-  adc_enable_i0,
-  adc_valid_i0,
-  adc_data_i0,
-  adc_enable_q0,
-  adc_valid_q0,
-  adc_data_q0,
-  adc_enable_i1,
-  adc_valid_i1,
-  adc_data_i1,
-  adc_enable_q1,
-  adc_valid_q1,
-  adc_data_q1,
-  adc_dovf,
-  adc_dunf,
-
-  // gpio
-
-  up_adc_gpio_in,
-  up_adc_gpio_out,
-
-  // processor interface
-
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+module axi_ad9361_rx #(
 
   // parameters
 
-  parameter   DATAPATH_DISABLE = 0;
-  parameter   ID = 0;
-  parameter   R1_MODE_EN = 0;
+  parameter   ID = 0,
+  parameter   MODE_1R1T = 0,
+  parameter   USERPORTS_DISABLE = 0,
+  parameter   DATAFORMAT_DISABLE = 0,
+  parameter   DCFILTER_DISABLE = 0,
+  parameter   IQCORRECTION_DISABLE = 0) (
 
   // common
 
-  output          mmcm_rst;
+  output          mmcm_rst,
 
   // adc interface
 
-  output          adc_rst;
-  input           adc_clk;
-  input           adc_valid;
-  input   [47:0]  adc_data;
-  input           adc_status;
-  output          adc_r1_mode;
-  output          adc_ddr_edgesel;
-  input   [47:0]  dac_data;
+  output          adc_rst,
+  input           adc_clk,
+  input           adc_valid,
+  input   [47:0]  adc_data,
+  input           adc_status,
+  output          adc_r1_mode,
+  output          adc_ddr_edgesel,
+  input   [47:0]  dac_data,
 
   // delay interface
 
-  output  [12:0]  up_dld;
-  output  [64:0]  up_dwdata;
-  input   [64:0]  up_drdata;
-  input           delay_clk;
-  output          delay_rst;
-  input           delay_locked;
+  output  [12:0]  up_dld,
+  output  [64:0]  up_dwdata,
+  input   [64:0]  up_drdata,
+  input           delay_clk,
+  output          delay_rst,
+  input           delay_locked,
 
   // dma interface
 
-  output          adc_enable_i0;
-  output          adc_valid_i0;
-  output  [15:0]  adc_data_i0;
-  output          adc_enable_q0;
-  output          adc_valid_q0;
-  output  [15:0]  adc_data_q0;
-  output          adc_enable_i1;
-  output          adc_valid_i1;
-  output  [15:0]  adc_data_i1;
-  output          adc_enable_q1;
-  output          adc_valid_q1;
-  output  [15:0]  adc_data_q1;
-  input           adc_dovf;
-  input           adc_dunf;
+  output          adc_enable_i0,
+  output          adc_valid_i0,
+  output  [15:0]  adc_data_i0,
+  output          adc_enable_q0,
+  output          adc_valid_q0,
+  output  [15:0]  adc_data_q0,
+  output          adc_enable_i1,
+  output          adc_valid_i1,
+  output  [15:0]  adc_data_i1,
+  output          adc_enable_q1,
+  output          adc_valid_q1,
+  output  [15:0]  adc_data_q1,
+  input           adc_dovf,
+  input           adc_dunf,
 
   // gpio
 
-  input   [31:0]  up_adc_gpio_in;
-  output  [31:0]  up_adc_gpio_out;
+  input   [31:0]  up_adc_gpio_in,
+  output  [31:0]  up_adc_gpio_out,
 
   // processor interface
 
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
+  input           up_rstn,
+  input           up_clk,
+  input           up_wreq,
+  input   [13:0]  up_waddr,
+  input   [31:0]  up_wdata,
+  output          up_wack,
+  input           up_rreq,
+  input   [13:0]  up_raddr,
+  output  [31:0]  up_rdata,
+  output          up_rack);
+
+  // configuration settings
+
+  localparam  CONFIG =  (MODE_1R1T * 16) +
+                        (USERPORTS_DISABLE * 8) +
+                        (DATAFORMAT_DISABLE * 4) +
+                        (DCFILTER_DISABLE * 2) +
+                        (IQCORRECTION_DISABLE * 1);
 
   // internal registers
 
   reg             up_status_pn_err = 'd0;
   reg             up_status_pn_oos = 'd0;
   reg             up_status_or = 'd0;
-  reg     [31:0]  up_rdata = 'd0;
-  reg             up_rack = 'd0;
-  reg             up_wack = 'd0;
+  reg     [31:0]  up_rdata_int = 'd0;
+  reg             up_rack_int = 'd0;
+  reg             up_wack_int = 'd0;
 
   // internal signals
 
@@ -183,38 +135,44 @@ module axi_ad9361_rx (
   wire    [ 3:0]  up_adc_pn_oos_s;
   wire    [ 3:0]  up_adc_or_s;
   wire    [31:0]  up_rdata_s[0:5];
-  wire            up_rack_s[0:5];
-  wire            up_wack_s[0:5];
+  wire    [ 5:0]  up_rack_s;
+  wire    [ 5:0]  up_wack_s;
 
   // processor read interface
+
+  assign up_wack = up_wack_int;
+  assign up_rack = up_rack_int;
+  assign up_rdata = up_rdata_int;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_status_pn_err <= 'd0;
       up_status_pn_oos <= 'd0;
       up_status_or <= 'd0;
-      up_rdata <= 'd0;
-      up_rack <= 'd0;
-      up_wack <= 'd0;
+      up_rdata_int <= 'd0;
+      up_rack_int <= 'd0;
+      up_wack_int <= 'd0;
     end else begin
       up_status_pn_err <= | up_adc_pn_err_s;
       up_status_pn_oos <= | up_adc_pn_oos_s;
       up_status_or <= | up_adc_or_s;
-      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
-                  up_rdata_s[3] | up_rdata_s[4] | up_rdata_s[5];
-      up_rack <=  up_rack_s[0]  | up_rack_s[1]  | up_rack_s[2]  |
-                  up_rack_s[3]  | up_rack_s[4]  | up_rack_s[5];
-      up_wack <=  up_wack_s[0]  | up_wack_s[1]  | up_wack_s[2]  |
-                  up_wack_s[3]  | up_wack_s[4]  | up_wack_s[5];
+      up_rdata_int <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
+        up_rdata_s[3] | up_rdata_s[4] | up_rdata_s[5];
+      up_rack_int <=  | up_rack_s;
+      up_wack_int <=  | up_wack_s;
     end
   end
 
   // channel 0 (i)
 
   axi_ad9361_rx_channel #(
-    .Q_OR_I_N(0),
-    .CHANNEL_ID(0),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .Q_OR_I_N (0),
+    .CHANNEL_ID (0),
+    .DISABLE (0),
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_rx_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -245,9 +203,13 @@ module axi_ad9361_rx (
   // channel 1 (q)
 
   axi_ad9361_rx_channel #(
-    .Q_OR_I_N(1),
-    .CHANNEL_ID(1),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .Q_OR_I_N (1),
+    .CHANNEL_ID (1),
+    .DISABLE (0),
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_rx_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -275,15 +237,16 @@ module axi_ad9361_rx (
     .up_rdata (up_rdata_s[1]),
     .up_rack (up_rack_s[1]));
 
-  generate
-  if (R1_MODE_EN == 0) begin
-
   // channel 2 (i)
 
   axi_ad9361_rx_channel #(
-    .Q_OR_I_N(0),
-    .CHANNEL_ID(2),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .Q_OR_I_N (0),
+    .CHANNEL_ID (2),
+    .DISABLE (MODE_1R1T),
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_rx_channel_2 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -314,9 +277,13 @@ module axi_ad9361_rx (
   // channel 3 (q)
 
   axi_ad9361_rx_channel #(
-    .Q_OR_I_N(1),
-    .CHANNEL_ID(3),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .Q_OR_I_N (1),
+    .CHANNEL_ID (3),
+    .DISABLE (MODE_1R1T),
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_rx_channel_3 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -344,12 +311,14 @@ module axi_ad9361_rx (
     .up_rdata (up_rdata_s[3]),
     .up_rack (up_rack_s[3]));
 
-  end
-  endgenerate
-
   // common processor control
 
-  up_adc_common #(.ID (ID)) i_up_adc_common (
+  up_adc_common #(
+    .ID (ID),
+    .CONFIG (CONFIG),
+    .DRP_DISABLE (1),
+    .USERPORTS_DISABLE (USERPORTS_DISABLE))
+  i_up_adc_common (
     .mmcm_rst (mmcm_rst),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -390,7 +359,10 @@ module axi_ad9361_rx (
 
   // adc delay control
 
-  up_delay_cntrl #(.DATA_WIDTH(13), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(
+    .DATA_WIDTH (13),
+    .BASE_ADDRESS (6'h02))
+  i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),
