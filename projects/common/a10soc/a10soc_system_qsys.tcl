@@ -14,6 +14,12 @@ set_instance_parameter_value sys_clk {clockFrequency} {100000000.0}
 set_instance_parameter_value sys_clk {clockFrequencyKnown} {1}
 set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
+add_instance sys_rst altera_reset_bridge 16.0
+set_instance_parameter_value sys_rst {ACTIVE_LOW_RESET} {0}
+set_instance_parameter_value sys_rst {SYNCHRONOUS_EDGES} {deassert}
+set_instance_parameter_value sys_rst {NUM_RESET_OUTPUTS} {1}
+set_instance_parameter_value sys_rst {USE_RESET_REQUEST} {0}
+
 # HPS
 add_instance arria10_hps_0 altera_arria10_hps 16.0
 set_instance_parameter_value arria10_hps_0 {MPU_EVENTS_Enable} {0}
@@ -30,9 +36,9 @@ set_instance_parameter_value arria10_hps_0 {F2S_Width} {0}
 set_instance_parameter_value arria10_hps_0 {S2F_Width} {0}
 set_instance_parameter_value arria10_hps_0 {LWH2F_Enable} {1}
 set_instance_parameter_value arria10_hps_0 {RUN_INTERNAL_BUILD_CHECKS} {0}
-set_instance_parameter_value arria10_hps_0 {F2SDRAM_PORT_CONFIG} {6}
-set_instance_parameter_value arria10_hps_0 {F2SDRAM0_ENABLED} {1}
-set_instance_parameter_value arria10_hps_0 {F2SDRAM1_ENABLED} {0}
+set_instance_parameter_value arria10_hps_0 {F2SDRAM_PORT_CONFIG} {5}
+set_instance_parameter_value arria10_hps_0 {F2SDRAM0_ENABLED} {0}
+set_instance_parameter_value arria10_hps_0 {F2SDRAM1_ENABLED} {1}
 set_instance_parameter_value arria10_hps_0 {F2SDRAM2_ENABLED} {0}
 set_instance_parameter_value arria10_hps_0 {F2SDRAM_READY_LATENCY} {0}
 set_instance_parameter_value arria10_hps_0 {F2SDRAM2_DELAY} {4}
@@ -94,8 +100,8 @@ set_instance_parameter_value arria10_hps_0 {FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_I2
 set_instance_parameter_value arria10_hps_0 {MPU_CLK_VCCL} {0}
 set_instance_parameter_value arria10_hps_0 {USE_DEFAULT_MPU_CLK} {0}
 set_instance_parameter_value arria10_hps_0 {CUSTOM_MPU_CLK} {800}
-set_instance_parameter_value arria10_hps_0 {H2F_USER0_CLK_Enable} {1}
-set_instance_parameter_value arria10_hps_0 {H2F_USER0_CLK_FREQ} {150}
+set_instance_parameter_value arria10_hps_0 {H2F_USER0_CLK_Enable} {0}
+set_instance_parameter_value arria10_hps_0 {H2F_USER0_CLK_FREQ} {400}
 set_instance_parameter_value arria10_hps_0 {H2F_USER1_CLK_Enable} {0}
 set_instance_parameter_value arria10_hps_0 {H2F_USER1_CLK_FREQ} {400}
 set_instance_parameter_value arria10_hps_0 {HMC_PLL_REF_CLK} {800}
@@ -1242,16 +1248,24 @@ add_connection sys_clk.clk arria10_hps_0.h2f_lw_axi_clock clock
 add_connection sys_clk.clk sys_spi.clk clock
 add_connection sys_clk.clk gpio_i.clk clock
 add_connection sys_clk.clk gpio_o.clk clock
+add_connection sys_clk.clk sys_rst.clk clock
 
-add_connection arria10_hps_0.h2f_user0_clock arria10_hps_0.f2sdram0_clock clock
+add_connection sys_clk.clk arria10_hps_0.f2sdram1_clock clock
 
 add_connection emif_a10_hps_0.hps_emif_conduit_end arria10_hps_0.emif conduit
+set_connection_parameter_value emif_a10_hps_0.hps_emif_conduit_end/arria10_hps_0.emif endPort {}
+set_connection_parameter_value emif_a10_hps_0.hps_emif_conduit_end/arria10_hps_0.emif endPortLSB {0}
+set_connection_parameter_value emif_a10_hps_0.hps_emif_conduit_end/arria10_hps_0.emif startPort {}
+set_connection_parameter_value emif_a10_hps_0.hps_emif_conduit_end/arria10_hps_0.emif startPortLSB {0}
+set_connection_parameter_value emif_a10_hps_0.hps_emif_conduit_end/arria10_hps_0.emif width {0}
 
 add_connection sys_clk.clk_reset arria10_hps_0.f2h_cold_reset_req reset
 add_connection sys_clk.clk_reset emif_a10_hps_0.global_reset_reset_sink reset
-add_connection sys_clk.clk_reset sys_spi.reset reset
-add_connection sys_clk.clk_reset gpio_i.reset reset
-add_connection sys_clk.clk_reset gpio_o.reset reset
+add_connection sys_clk.clk_reset sys_rst.in_reset reset
+add_connection arria10_hps_0.h2f_reset sys_rst.in_reset reset
+add_connection sys_rst.out_reset sys_spi.reset reset
+add_connection sys_rst.out_reset gpio_i.reset reset
+add_connection sys_rst.out_reset gpio_o.reset reset
 
 # exported interfaces
 add_interface hps_ddr conduit end
