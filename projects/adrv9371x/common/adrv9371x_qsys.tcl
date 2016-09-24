@@ -162,11 +162,9 @@ set_instance_parameter_value xcvr_tx_lane_pll {enable_8G_path} {1}
 set_instance_parameter_value xcvr_tx_lane_pll {enable_16G_path} {0}
 set_instance_parameter_value xcvr_tx_lane_pll {enable_pcie_clk} {0}
 set_instance_parameter_value xcvr_tx_lane_pll {enable_cascade_out} {0}
-set_instance_parameter_value xcvr_tx_lane_pll {enable_atx_to_fpll_cascade_out} {0}
 set_instance_parameter_value xcvr_tx_lane_pll {enable_hip_cal_done_port} {0}
 set_instance_parameter_value xcvr_tx_lane_pll {set_hip_cal_en} {0}
 set_instance_parameter_value xcvr_tx_lane_pll {set_output_clock_frequency} {2457.6}
-set_instance_parameter_value xcvr_tx_lane_pll {enable_fractional} {0}
 set_instance_parameter_value xcvr_tx_lane_pll {set_auto_reference_clock_frequency} {122.88}
 set_instance_parameter_value xcvr_tx_lane_pll {set_manual_reference_clock_frequency} {200.0}
 set_instance_parameter_value xcvr_tx_lane_pll {set_fref_clock_frequency} {156.25}
@@ -453,7 +451,7 @@ set_instance_parameter_value rx_os_adcfifo {DMA_ADDRESS_WIDTH} {16}
 add_instance axi_adc_dma axi_dmac 1.0
 set_instance_parameter_value axi_adc_dma {ID} {0}
 set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {64}
-set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_DEST} {256}
+set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_DEST} {64}
 set_instance_parameter_value axi_adc_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_adc_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_adc_dma {ASYNC_CLK_REQ_SRC} {1}
@@ -470,7 +468,7 @@ set_instance_parameter_value axi_adc_dma {FIFO_SIZE} {16}
 add_instance axi_os_adc_dma axi_dmac 1.0
 set_instance_parameter_value axi_os_adc_dma {ID} {0}
 set_instance_parameter_value axi_os_adc_dma {DMA_DATA_WIDTH_SRC} {64}
-set_instance_parameter_value axi_os_adc_dma {DMA_DATA_WIDTH_DEST} {256}
+set_instance_parameter_value axi_os_adc_dma {DMA_DATA_WIDTH_DEST} {64}
 set_instance_parameter_value axi_os_adc_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_os_adc_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_os_adc_dma {ASYNC_CLK_REQ_SRC} {1}
@@ -486,7 +484,7 @@ set_instance_parameter_value axi_os_adc_dma {FIFO_SIZE} {16}
 
 add_instance axi_dac_dma axi_dmac 1.0
 set_instance_parameter_value axi_dac_dma {ID} {0}
-set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_SRC} {256}
+set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_dac_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_dac_dma {DMA_2D_TRANSFER} {0}
@@ -541,6 +539,7 @@ add_connection sys_clk.clk axi_ad9371.s_axi_clock
 add_connection sys_clk.clk axi_os_adc_dma.s_axi_clock
 add_connection sys_clk.clk ad9371_gpio.clk
 
+add_connection sys_clk.clk_reset xcvr_rx_core.jesd204_rx_avs_rst_n
 add_connection sys_clk.clk_reset xcvr_rx_os_core.jesd204_rx_avs_rst_n
 add_connection sys_clk.clk_reset xcvr_tx_core.jesd204_tx_avs_rst_n
 add_connection sys_clk.clk_reset xcvr_pll_reconfig.mgmt_reset
@@ -561,6 +560,30 @@ add_connection sys_clk.clk_reset axi_os_adc_dma.s_axi_reset
 add_connection sys_clk.clk_reset ad9371_gpio.reset
 add_connection sys_clk.clk_reset rx_adcfifo.if_adc_rst
 add_connection sys_clk.clk_reset rx_os_adcfifo.if_adc_rst
+
+if { $system_type=="a10soc" } {
+  add_connection sys_rst.out_reset xcvr_rx_core.jesd204_rx_avs_rst_n
+  add_connection sys_rst.out_reset xcvr_rx_os_core.jesd204_rx_avs_rst_n
+  add_connection sys_rst.out_reset xcvr_tx_core.jesd204_tx_avs_rst_n
+  add_connection sys_rst.out_reset xcvr_pll_reconfig.mgmt_reset
+  add_connection sys_rst.out_reset xcvr_tx_lane_pll.reconfig_reset0
+  add_connection sys_rst.out_reset xcvr_pll.reset
+  add_connection sys_rst.out_reset xcvr_rx_rst_cntrl.reset
+  add_connection sys_rst.out_reset xcvr_tx_rst_cntrl.reset
+  add_connection sys_rst.out_reset xcvr_rx_os_rst_cntrl.reset
+  #add_connection sys_rst.out_reset xcvr_rx_core.reconfig_reset
+  #add_connection sys_rst.out_reset xcvr_rx_os_core.reconfig_reset
+  add_connection sys_rst.out_reset xcvr_tx_core.reconfig_reset
+  add_connection sys_rst.out_reset axi_adc_dma.s_axi_reset
+  add_connection sys_rst.out_reset axi_dac_dma.s_axi_reset
+  add_connection sys_rst.out_reset axi_jesd_xcvr.s_axi_reset
+  add_connection sys_rst.out_reset axi_os_jesd_xcvr.s_axi_reset
+  add_connection sys_rst.out_reset axi_ad9371.s_axi_reset
+  add_connection sys_rst.out_reset axi_os_adc_dma.s_axi_reset
+  add_connection sys_rst.out_reset ad9371_gpio.reset
+  add_connection sys_rst.out_reset rx_adcfifo.if_adc_rst
+  add_connection sys_rst.out_reset rx_os_adcfifo.if_adc_rst
+}
 
 add_connection xcvr_pll.outclk0 axi_ad9371.if_dac_clk
 add_connection xcvr_pll.outclk0 dac_upack.if_dac_clk
@@ -594,12 +617,12 @@ if { $system_type=="nios" } {
 
 # SOC
 if { $system_type=="a10soc" } {
-  add_connection arria10_hps_0.h2f_user0_clock axi_adc_dma.m_dest_axi_clock
-  add_connection arria10_hps_0.h2f_user0_clock axi_os_adc_dma.m_dest_axi_clock
-  add_connection arria10_hps_0.h2f_user0_clock axi_dac_dma.m_src_axi_clock
-  add_connection sys_clk.clk_reset axi_adc_dma.m_dest_axi_reset
-  add_connection sys_clk.clk_reset axi_os_adc_dma.m_dest_axi_reset
-  add_connection sys_clk.clk_reset axi_dac_dma.m_src_axi_reset
+  add_connection xcvr_pll.outclk1 axi_adc_dma.m_dest_axi_clock
+  add_connection xcvr_pll.outclk2 axi_os_adc_dma.m_dest_axi_clock
+  add_connection xcvr_pll.outclk0 axi_dac_dma.m_src_axi_clock
+  add_connection sys_rst.out_reset axi_adc_dma.m_dest_axi_reset
+  add_connection sys_rst.out_reset axi_os_adc_dma.m_dest_axi_reset
+  add_connection sys_rst.out_reset axi_dac_dma.m_src_axi_reset
 }
 
 add_connection adc_pack.adc_ch_0 axi_ad9371.adc_ch_0
@@ -683,7 +706,6 @@ add_connection axi_jesd_xcvr.if_rx_rstn xcvr_rx_core.rxlink_rst_n
 add_connection axi_os_jesd_xcvr.if_rx_rstn xcvr_rx_os_core.rxlink_rst_n
 add_connection axi_jesd_xcvr.if_tx_rstn xcvr_tx_core.txlink_rst_n
 
-add_connection sys_clk.clk_reset xcvr_rx_core.jesd204_rx_avs_rst_n
 
 add_interface rx_data conduit end
 set_interface_property rx_data EXPORT_OF xcvr_rx_core.rx_serial_data
@@ -778,9 +800,9 @@ if { $system_type=="a10soc" } {
   add_connection arria10_hps_0.h2f_lw_axi_master xcvr_tx_core.jesd204_tx_avs
   add_connection arria10_hps_0.h2f_lw_axi_master ad9371_gpio.s1
 
-  add_connection axi_adc_dma.m_dest_axi arria10_hps_0.f2sdram0_data
-  add_connection axi_os_adc_dma.m_dest_axi arria10_hps_0.f2sdram0_data
-  add_connection axi_dac_dma.m_src_axi arria10_hps_0.f2sdram0_data
+  add_connection axi_adc_dma.m_dest_axi arria10_hps_0.f2sdram1_data
+  add_connection axi_os_adc_dma.m_dest_axi arria10_hps_0.f2sdram1_data
+  add_connection axi_dac_dma.m_src_axi arria10_hps_0.f2sdram1_data
 
   set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/ad9371_gpio.s1 baseAddress {0x00001000}
   set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/xcvr_pll_reconfig.mgmt_avalon_slave baseAddress {0x00010000}
@@ -796,9 +818,9 @@ if { $system_type=="a10soc" } {
   set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/axi_os_adc_dma.s_axi baseAddress {0x0090000}
   set_connection_parameter_value arria10_hps_0.h2f_lw_axi_master/axi_adc_dma.s_axi baseAddress {0x000a0000}
 
-  set_connection_parameter_value axi_dac_dma.m_src_axi/arria10_hps_0.f2sdram0_data baseAddress {0x0000}
-  set_connection_parameter_value axi_os_adc_dma.m_dest_axi/arria10_hps_0.f2sdram0_data baseAddress {0x0000}
-  set_connection_parameter_value axi_adc_dma.m_dest_axi/arria10_hps_0.f2sdram0_data baseAddress {0x0000}
+  set_connection_parameter_value axi_dac_dma.m_src_axi/arria10_hps_0.f2sdram1_data baseAddress {0x0000}
+  set_connection_parameter_value axi_os_adc_dma.m_dest_axi/arria10_hps_0.f2sdram1_data baseAddress {0x0000}
+  set_connection_parameter_value axi_adc_dma.m_dest_axi/arria10_hps_0.f2sdram1_data baseAddress {0x0000}
 }
 
 # interrupts
