@@ -8,6 +8,9 @@ variable sys_hp2_interconnect_index
 variable sys_hp3_interconnect_index
 variable sys_mem_interconnect_index
 
+variable xcvr_tx_index
+variable xcvr_rx_index
+
 ###################################################################################################
 ###################################################################################################
 
@@ -17,6 +20,9 @@ set sys_hp1_interconnect_index -1
 set sys_hp2_interconnect_index -1
 set sys_hp3_interconnect_index -1
 set sys_mem_interconnect_index -1
+
+set xcvr_tx_index 0
+set xcvr_rx_index 0
 
 ###################################################################################################
 ###################################################################################################
@@ -91,6 +97,81 @@ proc ad_connect {p_name_1 p_name_2} {
     puts "connect_bd_net -net $m_name_1 $m_name_2"
     connect_bd_net -net $m_name_1 $m_name_2
     return
+  }
+}
+
+proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
+
+  global xcvr_tx_index
+  global xcvr_rx_index
+
+  set no_of_lanes [get_property CONFIG.NUM_OF_LANES [get_bd_cells $a_xcvr]]
+  set qpll_enable [get_property CONFIG.QPLL_ENABLE [get_bd_cells $a_xcvr]]
+  set tx_or_rx_n [get_property CONFIG.TX_OR_RX_N [get_bd_cells $a_xcvr]]
+
+  set txrx "rx"
+  set data_dir "I"
+  set ctrl_dir "O"
+  set index $xcvr_rx_index
+
+  if {$tx_or_rx_n == 1} {
+
+    set txrx "tx"
+    set data_dir "O"
+    set ctrl_dir "I"
+    set index $xcvr_tx_index
+  }
+
+  create_bd_port -dir I ${txrx}_ref_clk_${index}
+  create_bd_port -dir I ${txrx}_sysref_${index}
+  create_bd_port -dir ${ctrl_dir} ${txrx}_sync_${index}
+  create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 ${a_jesd}_rstgen
+
+  for {set n 0} {$n < $no_of_lanes} {incr n} {
+
+    set m [expr ($n + $index)]
+
+    if {$tx_or_rx_n == 0} {
+      ad_connect  ${a_xcvr}/up_es_${m} ${u_xcvr}/up_es_${m}
+      ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${m}
+    }
+
+    if {(($m%4) == 0) && ($qpll_enable == 1)} {
+      ad_connect  ${a_xcvr}/up_cm_${m} ${u_xcvr}/up_cm_${m}
+    }
+
+    ad_connect  ${a_xcvr}/up_ch_${m} ${u_xcvr}/up_${txrx}_${m}
+    ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/gt${m}_${txrx}
+    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${u_xcvr}/${txrx}_clk_${m}
+
+    if {(($m%4) == 0) && ($qpll_enable == 1)} {
+      ad_connect  ${u_xcvr}/qpll_ref_clk_${m} ${txrx}_ref_clk_${index}
+    }
+
+    if {$qpll_enable == 0} {
+      ad_connect  ${u_xcvr}/cpll_ref_clk_${m} ${txrx}_ref_clk_${index}
+    }
+
+    create_bd_port -dir ${data_dir} ${txrx}_data_${m}_p
+    create_bd_port -dir ${data_dir} ${txrx}_data_${m}_n
+    ad_connect  ${u_xcvr}/${txrx}_${m}_p ${txrx}_data_${m}_p
+    ad_connect  ${u_xcvr}/${txrx}_${m}_n ${txrx}_data_${m}_n
+  }
+
+  ad_connect  ${a_jesd}/${txrx}_sysref ${txrx}_sysref_${index}
+  ad_connect  ${a_jesd}/${txrx}_sync ${txrx}_sync_${index}
+  ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/${txrx}_core_clk
+  ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
+  ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}_rstgen/slowest_sync_clk
+  ad_connect  sys_cpu_resetn ${a_jesd}_rstgen/ext_reset_in
+  ad_connect  ${a_jesd}_rstgen/peripheral_reset ${a_jesd}/${txrx}_reset
+
+  if {$tx_or_rx_n == 0} {
+    set xcvr_rx_index [expr ($xcvr_rx_index + $no_of_lanes)]
+  }
+
+  if {$tx_or_rx_n == 1} {
+    set xcvr_tx_index [expr ($xcvr_tx_index + $no_of_lanes)]
   }
 }
 
