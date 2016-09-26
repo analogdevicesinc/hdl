@@ -16,6 +16,7 @@ adi_ip_files axi_ad9625 [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
+  "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
   "axi_ad9625_pnmon.v" \
   "axi_ad9625_channel.v" \
   "axi_ad9625_if.v" \
@@ -31,6 +32,7 @@ adi_ip_constraints axi_ad9625 [list \
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *raddr_in* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *rx_valid* -of_objects [ipx::current_core]]
 
 ipx::save_core [ipx::current_core]
 

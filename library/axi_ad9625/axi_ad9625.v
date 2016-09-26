@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -45,7 +43,10 @@ module axi_ad9625 (
   // rx_clk is (line-rate/40)
 
   rx_clk,
+  rx_sof,
+  rx_valid,
   rx_data,
+  rx_ready,
 
   // dma interface
 
@@ -92,7 +93,10 @@ module axi_ad9625 (
   // rx_clk is (line-rate/40)
 
   input           rx_clk;
+  input   [  3:0] rx_sof;
+  input           rx_valid;
   input   [255:0] rx_data;
+  output          rx_ready;
 
   // dma interface
 
@@ -166,6 +170,10 @@ module axi_ad9625 (
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
+  // defaults
+
+  assign rx_ready = 1'b1;
+
   // processor read interface
 
   always @(negedge up_rstn or posedge up_clk) begin
@@ -184,8 +192,12 @@ module axi_ad9625 (
 
   assign adc_valid = 1'b1;
 
-  axi_ad9625_if #(.ID(ID)) i_if (
+  axi_ad9625_if #(
+    .ID (ID),
+    .DEVICE_TYPE (DEVICE_TYPE))
+  i_if (
     .rx_clk (rx_clk),
+    .rx_sof (rx_sof),
     .rx_data (rx_data),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
