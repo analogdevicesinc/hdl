@@ -43,7 +43,9 @@ module axi_ad9162 (
     // tx_clk is (line-rate/40)
     
     tx_clk,
+    tx_valid,
     tx_data,
+    tx_ready,
     
     // dma interface
     
@@ -81,13 +83,16 @@ module axi_ad9162 (
     // parameters
     
     parameter   ID = 0;
+    parameter   DEVICE_TYPE = 0;
     parameter   DAC_DATAPATH_DISABLE = 0;
     
     // jesd interface
     // tx_clk is (line-rate/40)
     
     input             tx_clk;
+    output            tx_valid;
     output  [255:0]   tx_data;
+    input             tx_ready;
     
     // dma interface
     
@@ -130,7 +135,6 @@ module axi_ad9162 (
     
     // internal signals
     
-    wire    [255:0]   tx_data_s;
     wire    [255:0]   dac_data_s;
     wire              up_wreq_s;
     wire    [ 13:0]   up_waddr_s;
@@ -145,13 +149,16 @@ module axi_ad9162 (
     
     assign up_clk = s_axi_aclk;
     assign up_rstn = s_axi_aresetn;
-    assign tx_data = tx_data_s;
+
+    // defaults
+
+    assign tx_valid = 1'b1;
     
     // device interface
     
-    axi_ad9162_if i_if (
+    axi_ad9162_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
       .tx_clk (tx_clk),
-      .tx_data (tx_data_s),
+      .tx_data (tx_data),
       .dac_clk (dac_clk),
       .dac_rst (dac_rst),
       .dac_data (dac_data_s));
