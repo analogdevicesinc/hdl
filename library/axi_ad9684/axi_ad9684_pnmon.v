@@ -78,6 +78,7 @@ module axi_ad9684_pnmon (
   // internal signals
 
   wire    [27:0]  adc_pn_data_pn_s;
+  wire    [31:0]  adc_pn_data_pn9_s;
 
   // PN23 function
 
@@ -119,38 +120,42 @@ module axi_ad9684_pnmon (
 
   // PN9 function
 
-  function [27:0] pn9;
+  function [31:0] pn9;
     input [27:0] din;
-    reg   [27:0] dout;
+    reg   [31:0] dout;
     begin
-      dout[27] = din[ 8] ^ din[ 4];
-      dout[26] = din[ 7] ^ din[ 3];
-      dout[25] = din[ 6] ^ din[ 2];
-      dout[24] = din[ 5] ^ din[ 1];
-      dout[23] = din[ 4] ^ din[ 0];
-      dout[22] = din[ 3] ^ din[ 8] ^ din[ 4];
-      dout[21] = din[ 2] ^ din[ 7] ^ din[ 3];
-      dout[20] = din[ 1] ^ din[ 6] ^ din[ 2];
-      dout[19] = din[ 0] ^ din[ 5] ^ din[ 1];
-      dout[18] = din[ 8] ^ din[ 0];
-      dout[17] = din[ 7] ^ din[ 8] ^ din[ 4];
-      dout[16] = din[ 6] ^ din[ 7] ^ din[ 3];
-      dout[15] = din[ 5] ^ din[ 6] ^ din[ 2];
-      dout[14] = din[ 4] ^ din[ 5] ^ din[ 1];
-      dout[13] = din[ 3] ^ din[ 4] ^ din[ 0];
-      dout[12] = din[ 2] ^ din[ 3] ^ din[ 8] ^ din[ 4];
-      dout[11] = din[ 1] ^ din[ 2] ^ din[ 7] ^ din[ 3];
-      dout[10] = din[ 0] ^ din[ 1] ^ din[ 6] ^ din[ 2];
-      dout[ 9] = din[ 8] ^ din[ 0] ^ din[ 4] ^ din[ 5] ^ din[ 1];
-      dout[ 8] = din[ 7] ^ din[ 8] ^ din[ 3] ^ din[ 0];
-      dout[ 7] = din[ 6] ^ din[ 7] ^ din[ 2] ^ din[ 8] ^ din[ 4];
-      dout[ 6] = din[ 5] ^ din[ 6] ^ din[ 1] ^ din[ 7] ^ din[ 3];
-      dout[ 5] = din[ 4] ^ din[ 5] ^ din[ 0] ^ din[ 6] ^ din[ 2];
-      dout[ 4] = din[ 3] ^ din[ 8] ^ din[ 5] ^ din[ 1];
-      dout[ 3] = din[ 2] ^ din[ 4] ^ din[ 7] ^ din[ 0];
-      dout[ 2] = din[ 1] ^ din[ 3] ^ din[ 6] ^ din[ 8] ^ din[ 4];
-      dout[ 1] = din[ 0] ^ din[ 2] ^ din[ 5] ^ din[ 7] ^ din[ 3];
-      dout[ 0] = din[ 8] ^ din[ 1] ^ din[ 6] ^ din[ 2];
+      dout[31] = din[ 8] ^ din[ 4];
+      dout[30] = din[ 7] ^ din[ 3];
+      dout[29] = din[ 6] ^ din[ 2];
+      dout[28] = din[ 5] ^ din[ 1];
+      dout[27] = din[ 4] ^ din[ 0];
+      dout[26] = din[ 3] ^ din[ 8] ^ din[ 4];
+      dout[25] = din[ 2] ^ din[ 7] ^ din[ 3];
+      dout[24] = din[ 1] ^ din[ 6] ^ din[ 2];
+      dout[23] = din[ 0] ^ din[ 5] ^ din[ 1];
+      dout[22] = din[ 8] ^ din[ 0];
+      dout[21] = din[ 7] ^ din[ 8] ^ din[ 4];
+      dout[20] = din[ 6] ^ din[ 7] ^ din[ 3];
+      dout[19] = din[ 5] ^ din[ 6] ^ din[ 2];
+      dout[18] = din[ 4] ^ din[ 5] ^ din[ 1];
+      dout[17] = din[ 3] ^ din[ 4] ^ din[ 0];
+      dout[16] = din[ 2] ^ din[ 3] ^ din[ 8] ^ din[ 4];
+      dout[15] = din[ 1] ^ din[ 2] ^ din[ 7] ^ din[ 3];
+      dout[14] = din[ 0] ^ din[ 1] ^ din[ 6] ^ din[ 2];
+      dout[13] = din[ 8] ^ din[ 0] ^ din[ 5] ^ din[ 1] ^ din[ 4];
+      dout[12] = din[ 7] ^ din[ 8] ^ din[ 3] ^ din[ 0];
+      dout[11] = din[ 6] ^ din[ 7] ^ din[ 2] ^ din[ 8] ^ din[ 4];
+      dout[10] = din[ 5] ^ din[ 6] ^ din[ 1] ^ din[ 7] ^ din[ 3];
+      dout[ 9] = din[ 4] ^ din[ 5] ^ din[ 0] ^ din[ 6] ^ din[ 2];
+      dout[ 8] = din[ 3] ^ din[ 8] ^ din[ 5] ^ din[ 1];
+      dout[ 7] = din[ 2] ^ din[ 4] ^ din[ 7] ^ din[ 0];
+      dout[ 6] = din[ 1] ^ din[ 3] ^ din[ 6] ^ din[ 8] ^ din[ 4];
+      dout[ 5] = din[ 0] ^ din[ 2] ^ din[ 5] ^ din[ 7] ^ din[ 3];
+      dout[ 4] = din[ 8] ^ din[ 1] ^ din[ 6] ^ din[ 2];
+      dout[ 3] = din[ 7] ^ din[ 0] ^ din[ 5] ^ din[ 1];
+      dout[ 2] = din[ 6] ^ din[ 8] ^ din[ 0];
+      dout[ 1] = din[ 5] ^ din[ 7] ^ din[ 8] ^ din[ 4];
+      dout[ 0] = din[ 4] ^ din[ 6] ^ din[ 7] ^ din[ 3];
       pn9 = dout;
     end
   endfunction
@@ -158,12 +163,13 @@ module axi_ad9684_pnmon (
   // pn sequence select
 
   assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+  assign adc_pn_data_pn9_s = pn9(adc_pn_data_pn_s);
 
   always @(posedge adc_clk) begin
     adc_pn_data_in <= { ~adc_data[13], adc_data[12: 0],
                         ~adc_data[27], adc_data[26:14]};
     if (adc_pnseq_sel == 4'd0) begin
-      adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+      adc_pn_data_pn <= {adc_pn_data_pn9_s[29:16], adc_pn_data_pn9_s[13:0]};
     end else begin
       adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
     end
