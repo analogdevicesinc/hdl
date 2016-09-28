@@ -37,263 +37,159 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9361 (
-
-  // physical interface (receive-lvds)
-
-  rx_clk_in_p,
-  rx_clk_in_n,
-  rx_frame_in_p,
-  rx_frame_in_n,
-  rx_data_in_p,
-  rx_data_in_n,
-
-  // physical interface (receive-cmos)
-
-  rx_clk_in,
-  rx_frame_in,
-  rx_data_in,
-
-  // physical interface (transmit-lvds)
-
-  tx_clk_out_p,
-  tx_clk_out_n,
-  tx_frame_out_p,
-  tx_frame_out_n,
-  tx_data_out_p,
-  tx_data_out_n,
-
-  // physical interface (transmit-cmos)
-
-  tx_clk_out,
-  tx_frame_out,
-  tx_data_out,
-
-  // ensm control
-
-  enable,
-  txnrx,
-
-  // transmit master/slave
-
-  dac_sync_in,
-  dac_sync_out,
-
-  // tdd sync (1s pulse)
-
-  tdd_sync,
-  tdd_sync_cntr,
-
-  // delay clock
-
-  delay_clk,
-
-  // master interface
-
-  l_clk,
-  clk,
-  rst,
-
-  // dma interface
-
-  adc_enable_i0,
-  adc_valid_i0,
-  adc_data_i0,
-  adc_enable_q0,
-  adc_valid_q0,
-  adc_data_q0,
-  adc_enable_i1,
-  adc_valid_i1,
-  adc_data_i1,
-  adc_enable_q1,
-  adc_valid_q1,
-  adc_data_q1,
-  adc_dovf,
-  adc_dunf,
-  adc_r1_mode,
-
-  dac_enable_i0,
-  dac_valid_i0,
-  dac_data_i0,
-  dac_enable_q0,
-  dac_valid_q0,
-  dac_data_q0,
-  dac_enable_i1,
-  dac_valid_i1,
-  dac_data_i1,
-  dac_enable_q1,
-  dac_valid_q1,
-  dac_data_q1,
-  dac_dovf,
-  dac_dunf,
-  dac_r1_mode,
-
-  // axi interface
-
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awprot,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arprot,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rdata,
-  s_axi_rresp,
-  s_axi_rready,
-
-  // gpio
-
-  up_enable,
-  up_txnrx,
-  up_dac_gpio_in,
-  up_dac_gpio_out,
-  up_adc_gpio_in,
-  up_adc_gpio_out);
+module axi_ad9361 #(
 
   // parameters
 
-  parameter   ID = 0;
-  parameter   DEVICE_TYPE = 0;
-  parameter   CMOS_OR_LVDS_N = 0;
-  parameter   DAC_IODELAY_ENABLE = 0;
-  parameter   IO_DELAY_GROUP = "dev_if_delay_group";
-  parameter   DAC_DATAPATH_DISABLE = 0;
-  parameter   ADC_DATAPATH_DISABLE = 0;
-  parameter   TDD_CONTROL_EN = 0;
-  parameter   R1_MODE_EN = 0;
+  parameter   ID = 0,
+  parameter   MODE_1R1T = 0,
+  parameter   DEVICE_TYPE = 0,
+  parameter   TDD_DISABLE = 0,
+  parameter   CMOS_OR_LVDS_N = 0,
+  parameter   ADC_DATAPATH_DISABLE = 0,
+  parameter   ADC_USERPORTS_DISABLE = 0,
+  parameter   ADC_DATAFORMAT_DISABLE = 0,
+  parameter   ADC_DCFILTER_DISABLE = 0,
+  parameter   ADC_IQCORRECTION_DISABLE = 0,
+  parameter   DAC_IODELAY_ENABLE = 0,
+  parameter   DAC_DATAPATH_DISABLE = 0,
+  parameter   DAC_DDS_DISABLE = 0,
+  parameter   DAC_USERPORTS_DISABLE = 0,
+  parameter   DAC_IQCORRECTION_DISABLE = 0,
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // physical interface (receive-lvds)
 
-  input           rx_clk_in_p;
-  input           rx_clk_in_n;
-  input           rx_frame_in_p;
-  input           rx_frame_in_n;
-  input   [ 5:0]  rx_data_in_p;
-  input   [ 5:0]  rx_data_in_n;
+  input           rx_clk_in_p,
+  input           rx_clk_in_n,
+  input           rx_frame_in_p,
+  input           rx_frame_in_n,
+  input   [ 5:0]  rx_data_in_p,
+  input   [ 5:0]  rx_data_in_n,
 
   // physical interface (receive-cmos)
 
-  input           rx_clk_in;
-  input           rx_frame_in;
-  input   [11:0]  rx_data_in;
+  input           rx_clk_in,
+  input           rx_frame_in,
+  input   [11:0]  rx_data_in,
 
   // physical interface (transmit-lvds)
 
-  output          tx_clk_out_p;
-  output          tx_clk_out_n;
-  output          tx_frame_out_p;
-  output          tx_frame_out_n;
-  output  [ 5:0]  tx_data_out_p;
-  output  [ 5:0]  tx_data_out_n;
+  output          tx_clk_out_p,
+  output          tx_clk_out_n,
+  output          tx_frame_out_p,
+  output          tx_frame_out_n,
+  output  [ 5:0]  tx_data_out_p,
+  output  [ 5:0]  tx_data_out_n,
 
   // physical interface (transmit-cmos)
 
-  output          tx_clk_out;
-  output          tx_frame_out;
-  output  [11:0]  tx_data_out;
+  output          tx_clk_out,
+  output          tx_frame_out,
+  output  [11:0]  tx_data_out,
 
   // ensm control
 
-  output          enable;
-  output          txnrx;
+  output          enable,
+  output          txnrx,
 
   // transmit master/slave
 
-  input           dac_sync_in;
-  output          dac_sync_out;
+  input           dac_sync_in,
+  output          dac_sync_out,
 
   // tdd sync
 
-  input           tdd_sync;
-  output          tdd_sync_cntr;
+  input           tdd_sync,
+  output          tdd_sync_cntr,
 
   // delay clock
 
-  input           delay_clk;
+  input           delay_clk,
 
   // master interface
 
-  output          l_clk;
-  input           clk;
-  output          rst;
+  output          l_clk,
+  input           clk,
+  output          rst,
 
   // dma interface
 
-  output          adc_enable_i0;
-  output          adc_valid_i0;
-  output  [15:0]  adc_data_i0;
-  output          adc_enable_q0;
-  output          adc_valid_q0;
-  output  [15:0]  adc_data_q0;
-  output          adc_enable_i1;
-  output          adc_valid_i1;
-  output  [15:0]  adc_data_i1;
-  output          adc_enable_q1;
-  output          adc_valid_q1;
-  output  [15:0]  adc_data_q1;
-  input           adc_dovf;
-  input           adc_dunf;
-  output          adc_r1_mode;
+  output          adc_enable_i0,
+  output          adc_valid_i0,
+  output  [15:0]  adc_data_i0,
+  output          adc_enable_q0,
+  output          adc_valid_q0,
+  output  [15:0]  adc_data_q0,
+  output          adc_enable_i1,
+  output          adc_valid_i1,
+  output  [15:0]  adc_data_i1,
+  output          adc_enable_q1,
+  output          adc_valid_q1,
+  output  [15:0]  adc_data_q1,
+  input           adc_dovf,
+  input           adc_dunf,
+  output          adc_r1_mode,
 
-  output          dac_enable_i0;
-  output          dac_valid_i0;
-  input   [15:0]  dac_data_i0;
-  output          dac_enable_q0;
-  output          dac_valid_q0;
-  input   [15:0]  dac_data_q0;
-  output          dac_enable_i1;
-  output          dac_valid_i1;
-  input   [15:0]  dac_data_i1;
-  output          dac_enable_q1;
-  output          dac_valid_q1;
-  input   [15:0]  dac_data_q1;
-  input           dac_dovf;
-  input           dac_dunf;
-  output          dac_r1_mode;
+  output          dac_enable_i0,
+  output          dac_valid_i0,
+  input   [15:0]  dac_data_i0,
+  output          dac_enable_q0,
+  output          dac_valid_q0,
+  input   [15:0]  dac_data_q0,
+  output          dac_enable_i1,
+  output          dac_valid_i1,
+  input   [15:0]  dac_data_i1,
+  output          dac_enable_q1,
+  output          dac_valid_q1,
+  input   [15:0]  dac_data_q1,
+  input           dac_dovf,
+  input           dac_dunf,
+  output          dac_r1_mode,
 
   // axi interface
 
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  input   [ 2:0]  s_axi_awprot;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  input   [ 2:0]  s_axi_arprot;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [31:0]  s_axi_rdata;
-  output  [ 1:0]  s_axi_rresp;
-  input           s_axi_rready;
+  input           s_axi_aclk,
+  input           s_axi_aresetn,
+  input           s_axi_awvalid,
+  input   [31:0]  s_axi_awaddr,
+  input   [ 2:0]  s_axi_awprot,
+  output          s_axi_awready,
+  input           s_axi_wvalid,
+  input   [31:0]  s_axi_wdata,
+  input   [ 3:0]  s_axi_wstrb,
+  output          s_axi_wready,
+  output          s_axi_bvalid,
+  output  [ 1:0]  s_axi_bresp,
+  input           s_axi_bready,
+  input           s_axi_arvalid,
+  input   [31:0]  s_axi_araddr,
+  input   [ 2:0]  s_axi_arprot,
+  output          s_axi_arready,
+  output          s_axi_rvalid,
+  output  [31:0]  s_axi_rdata,
+  output  [ 1:0]  s_axi_rresp,
+  input           s_axi_rready,
 
   // gpio
 
-  input           up_enable;
-  input           up_txnrx;
-  input   [31:0]  up_dac_gpio_in;
-  output  [31:0]  up_dac_gpio_out;
-  input   [31:0]  up_adc_gpio_in;
-  output  [31:0]  up_adc_gpio_out;
+  input           up_enable,
+  input           up_txnrx,
+  input   [31:0]  up_dac_gpio_in,
+  output  [31:0]  up_dac_gpio_out,
+  input   [31:0]  up_adc_gpio_in,
+  output  [31:0]  up_adc_gpio_out);
+
+  // derived parameters
+
+  localparam  ADC_USERPORTS_DISABLE_INT = (ADC_DATAPATH_DISABLE == 1) ? 1 : ADC_USERPORTS_DISABLE;
+  localparam  ADC_DATAFORMAT_DISABLE_INT = (ADC_DATAPATH_DISABLE == 1) ? 1 : ADC_DATAFORMAT_DISABLE;
+  localparam  ADC_DCFILTER_DISABLE_INT = (ADC_DATAPATH_DISABLE == 1) ? 1 : ADC_DCFILTER_DISABLE;
+  localparam  ADC_IQCORRECTION_DISABLE_INT = (ADC_DATAPATH_DISABLE == 1) ? 1 : ADC_IQCORRECTION_DISABLE;
+  localparam  DAC_DDS_DISABLE_INT = (DAC_DATAPATH_DISABLE == 1) ? 1 : DAC_DDS_DISABLE;
+  localparam  DAC_USERPORTS_DISABLE_INT = (DAC_DATAPATH_DISABLE == 1) ? 1 : DAC_USERPORTS_DISABLE;
+  localparam  DAC_DELAYCNTRL_DISABLE_INT = (DAC_IODELAY_ENABLE == 1) ? 0 : 1;
+  localparam  DAC_IQCORRECTION_DISABLE_INT = (DAC_DATAPATH_DISABLE == 1) ? 1 : DAC_IQCORRECTION_DISABLE;
 
   // internal registers
 
@@ -316,7 +212,6 @@ module axi_ad9361 (
   wire            adc_status_s;
   wire            dac_clksel_s;
   wire            dac_valid_s;
-  wire            g_dac_valid_s;
   wire    [47:0]  dac_data_s;
   wire            dac_valid_i0_s;
   wire            dac_valid_q0_s;
@@ -343,18 +238,20 @@ module axi_ad9361 (
   wire            up_wack_tdd_s;
   wire            up_rack_tdd_s;
   wire    [31:0]  up_rdata_tdd_s;
-  wire            tdd_tx_dp_en_s;
   wire            tdd_enable_s;
   wire            tdd_txnrx_s;
   wire            tdd_mode_s;
+  wire            tdd_tx_valid_s;
+  wire            tdd_rx_valid_s;
+  wire            tdd_rx_vco_en_s;
+  wire            tdd_tx_vco_en_s;
+  wire            tdd_rx_rf_en_s;
+  wire            tdd_tx_rf_en_s;
+  wire    [ 7:0]  tdd_status_s;
   wire            adc_valid_i0_s;
   wire            adc_valid_q0_s;
   wire            adc_valid_i1_s;
   wire            adc_valid_q1_s;
-  wire    [15:0]  adc_data_i0_s;
-  wire    [15:0]  adc_data_q0_s;
-  wire    [15:0]  adc_data_i1_s;
-  wire    [15:0]  adc_data_q1_s;
 
   // signal name changes
 
@@ -408,7 +305,7 @@ module axi_ad9361 (
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode),
     .adc_ddr_edgesel (adc_ddr_edgesel_s),
-    .dac_valid (g_dac_valid_s),
+    .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
     .dac_clksel (dac_clksel_s),
     .dac_r1_mode (dac_r1_mode),
@@ -467,7 +364,7 @@ module axi_ad9361 (
     .adc_status (adc_status_s),
     .adc_r1_mode (adc_r1_mode),
     .adc_ddr_edgesel (adc_ddr_edgesel_s),
-    .dac_valid (g_dac_valid_s),
+    .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
     .dac_clksel (dac_clksel_s),
     .dac_r1_mode (dac_r1_mode),
@@ -490,83 +387,73 @@ module axi_ad9361 (
   end
   endgenerate
 
+  assign dac_valid_i0 = tdd_tx_valid_s & dac_valid_i0_s;
+  assign dac_valid_q0 = tdd_tx_valid_s & dac_valid_q0_s;
+  assign dac_valid_i1 = tdd_tx_valid_s & dac_valid_i1_s;
+  assign dac_valid_q1 = tdd_tx_valid_s & dac_valid_q1_s;
+  assign adc_valid_i0 = tdd_rx_valid_s & adc_valid_i0_s;
+  assign adc_valid_q0 = tdd_rx_valid_s & adc_valid_q0_s;
+  assign adc_valid_i1 = tdd_rx_valid_s & adc_valid_i1_s;
+  assign adc_valid_q1 = tdd_rx_valid_s & adc_valid_q1_s;
+
+  // tdd
+
   generate
-  if (TDD_CONTROL_EN) begin
+  if (TDD_DISABLE == 1) begin
+  assign tdd_enable_s = 1'b0;
+  assign tdd_txnrx_s = 1'b0;
+  assign tdd_txnrx_s = 1'b0;
+  assign tdd_mode_s = 1'b0;
+  assign tdd_rx_vco_en_s = 1'b0;
+  assign tdd_tx_vco_en_s = 1'b0;
+  assign tdd_rx_rf_en_s = 1'b0;
+  assign tdd_tx_rf_en_s = 1'b0;
+  assign tdd_status_s = 8'd0;
+  assign tdd_sync_cntr  = 1'b0;
+  assign tdd_tx_valid_s = 1'b1;
+  assign tdd_rx_valid_s = 1'b1;
+  assign up_wack_tdd_s  = 1'b0;
+  assign up_rack_tdd_s  = 1'b0;
+  assign up_rdata_tdd_s = 32'b0;
+  end
+  endgenerate
 
-    wire            tdd_rx_vco_en_s;
-    wire            tdd_tx_vco_en_s;
-    wire            tdd_rx_rf_en_s;
-    wire            tdd_tx_rf_en_s;
-    wire    [ 7:0]  tdd_status_s;
+  generate
+  if (TDD_DISABLE == 0) begin
+  axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if (
+    .clk (clk),
+    .rst (rst),
+    .tdd_rx_vco_en (tdd_rx_vco_en_s),
+    .tdd_tx_vco_en (tdd_tx_vco_en_s),
+    .tdd_rx_rf_en (tdd_rx_rf_en_s),
+    .tdd_tx_rf_en (tdd_tx_rf_en_s),
+    .ad9361_txnrx (tdd_txnrx_s),
+    .ad9361_enable (tdd_enable_s),
+    .ad9361_tdd_status (tdd_status_s));
 
-    axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if (
-      .clk (clk),
-      .rst (rst),
-      .tdd_rx_vco_en (tdd_rx_vco_en_s),
-      .tdd_tx_vco_en (tdd_tx_vco_en_s),
-      .tdd_rx_rf_en (tdd_rx_rf_en_s),
-      .tdd_tx_rf_en (tdd_tx_rf_en_s),
-      .ad9361_txnrx (tdd_txnrx_s),
-      .ad9361_enable (tdd_enable_s),
-      .ad9361_tdd_status (tdd_status_s));
-
-    assign g_dac_valid_s = dac_valid_s;
-    assign dac_valid_i0  = tdd_tx_valid_s & dac_valid_i0_s;
-    assign dac_valid_q0  = tdd_tx_valid_s & dac_valid_q0_s;
-    assign dac_valid_i1  = tdd_tx_valid_s & dac_valid_i1_s;
-    assign dac_valid_q1  = tdd_tx_valid_s & dac_valid_q1_s;
-    assign adc_valid_i0  = tdd_rx_valid_s & adc_valid_i0_s;
-    assign adc_valid_q0  = tdd_rx_valid_s & adc_valid_q0_s;
-    assign adc_valid_i1  = tdd_rx_valid_s & adc_valid_i1_s;
-    assign adc_valid_q1  = tdd_rx_valid_s & adc_valid_q1_s;
-
-    // TDD control
-
-    axi_ad9361_tdd i_tdd (
-      .clk (clk),
-      .rst (rst),
-      .tdd_rx_vco_en (tdd_rx_vco_en_s),
-      .tdd_tx_vco_en (tdd_tx_vco_en_s),
-      .tdd_rx_rf_en (tdd_rx_rf_en_s),
-      .tdd_tx_rf_en (tdd_tx_rf_en_s),
-      .tdd_enabled (tdd_mode_s),
-      .tdd_status (tdd_status_s),
-      .tdd_sync (tdd_sync),
-      .tdd_sync_cntr (tdd_sync_cntr),
-      .tdd_tx_valid (tdd_tx_valid_s),
-      .tdd_rx_valid (tdd_rx_valid_s),
-      .up_rstn (up_rstn),
-      .up_clk (up_clk),
-      .up_wreq (up_wreq_s),
-      .up_waddr (up_waddr_s),
-      .up_wdata (up_wdata_s),
-      .up_wack (up_wack_tdd_s),
-      .up_rreq (up_rreq_s),
-      .up_raddr (up_raddr_s),
-      .up_rdata (up_rdata_tdd_s),
-      .up_rack (up_rack_tdd_s));
-
-  end else begin
-
-    // TDD control bypass
-
-    assign tdd_mode_s     = 1'b0;
-    assign tdd_enable_s   = 1'b0;
-    assign tdd_txnrx_s    = 1'b0;
-    assign tdd_sync_cntr  = 1'b0;
-    assign g_dac_valid_s  = dac_valid_s;
-    assign dac_valid_i0   = dac_valid_i0_s;
-    assign dac_valid_q0   = dac_valid_q0_s;
-    assign dac_valid_i1   = dac_valid_i1_s;
-    assign dac_valid_q1   = dac_valid_q1_s;
-    assign adc_valid_i0   = adc_valid_i0_s;
-    assign adc_valid_q0   = adc_valid_q0_s;
-    assign adc_valid_i1   = adc_valid_i1_s;
-    assign adc_valid_q1   = adc_valid_q1_s;
-    assign up_wack_tdd_s  = 1'b0;
-    assign up_rack_tdd_s  = 1'b0;
-    assign up_rdata_tdd_s = 32'b0;
-
+  axi_ad9361_tdd i_tdd (
+    .clk (clk),
+    .rst (rst),
+    .tdd_rx_vco_en (tdd_rx_vco_en_s),
+    .tdd_tx_vco_en (tdd_tx_vco_en_s),
+    .tdd_rx_rf_en (tdd_rx_rf_en_s),
+    .tdd_tx_rf_en (tdd_tx_rf_en_s),
+    .tdd_enabled (tdd_mode_s),
+    .tdd_status (tdd_status_s),
+    .tdd_sync (tdd_sync),
+    .tdd_sync_cntr (tdd_sync_cntr),
+    .tdd_tx_valid (tdd_tx_valid_s),
+    .tdd_rx_valid (tdd_rx_valid_s),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_tdd_s),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_tdd_s),
+    .up_rack (up_rack_tdd_s));
   end
   endgenerate
 
@@ -574,11 +461,11 @@ module axi_ad9361 (
 
   axi_ad9361_rx #(
     .ID (ID),
-    .MODE_1R1T (R1_MODE_EN),
-    .USERPORTS_DISABLE (ADC_DATAPATH_DISABLE),
-    .DATAFORMAT_DISABLE (ADC_DATAPATH_DISABLE),
-    .DCFILTER_DISABLE (ADC_DATAPATH_DISABLE),
-    .IQCORRECTION_DISABLE (ADC_DATAPATH_DISABLE))
+    .MODE_1R1T (MODE_1R1T),
+    .USERPORTS_DISABLE (ADC_USERPORTS_DISABLE_INT),
+    .DATAFORMAT_DISABLE (ADC_DATAFORMAT_DISABLE_INT),
+    .DCFILTER_DISABLE (ADC_DCFILTER_DISABLE_INT),
+    .IQCORRECTION_DISABLE (ADC_IQCORRECTION_DISABLE_INT))
   i_rx (
     .mmcm_rst (mmcm_rst),
     .adc_rst (rst),
@@ -626,11 +513,11 @@ module axi_ad9361 (
 
   axi_ad9361_tx #(
     .ID (ID),
-    .MODE_1R1T (R1_MODE_EN),
-    .DDS_DISABLE (DAC_DATAPATH_DISABLE),
-    .USERPORTS_DISABLE (DAC_DATAPATH_DISABLE),
-    .DELAYCNTRL_DISABLE (DAC_DATAPATH_DISABLE),
-    .IQCORRECTION_DISABLE (DAC_DATAPATH_DISABLE))
+    .MODE_1R1T (MODE_1R1T),
+    .DDS_DISABLE (DAC_DDS_DISABLE_INT),
+    .USERPORTS_DISABLE (DAC_USERPORTS_DISABLE_INT),
+    .DELAYCNTRL_DISABLE (DAC_DELAYCNTRL_DISABLE_INT),
+    .IQCORRECTION_DISABLE (DAC_IQCORRECTION_DISABLE_INT))
   i_tx (
     .dac_clk (clk),
     .dac_valid (dac_valid_s),
