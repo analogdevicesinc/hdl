@@ -300,10 +300,6 @@ module axi_ad9361 (
   reg             up_wack = 'd0;
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
-  reg     [15:0]  adc_data_i0_b = 16'b0;
-  reg     [15:0]  adc_data_q0_b = 16'b0;
-  reg     [15:0]  adc_data_i1_b = 16'b0;
-  reg     [15:0]  adc_data_q1_b = 16'b0;
 
   // internal clocks and resets
 
@@ -503,20 +499,6 @@ module axi_ad9361 (
     wire            tdd_tx_rf_en_s;
     wire    [ 7:0]  tdd_status_s;
 
-    // additional flop to keep control and data synced
-
-    assign adc_data_i0 = adc_data_i0_b;
-    assign adc_data_q0 = adc_data_q0_b;
-    assign adc_data_i1 = adc_data_i1_b;
-    assign adc_data_q1 = adc_data_q1_b;
-
-    always @(posedge clk) begin
-      adc_data_i0_b <= adc_data_i0_s;
-      adc_data_q0_b <= adc_data_q0_s;
-      adc_data_i1_b <= adc_data_i1_s;
-      adc_data_q1_b <= adc_data_q1_s;
-    end
-
     axi_ad9361_tdd_if #(.LEVEL_OR_PULSE_N(1)) i_tdd_if (
       .clk (clk),
       .rst (rst),
@@ -527,6 +509,16 @@ module axi_ad9361 (
       .ad9361_txnrx (tdd_txnrx_s),
       .ad9361_enable (tdd_enable_s),
       .ad9361_tdd_status (tdd_status_s));
+
+    assign g_dac_valid_s = dac_valid_s;
+    assign dac_valid_i0  = tdd_tx_valid_s & dac_valid_i0_s;
+    assign dac_valid_q0  = tdd_tx_valid_s & dac_valid_q0_s;
+    assign dac_valid_i1  = tdd_tx_valid_s & dac_valid_i1_s;
+    assign dac_valid_q1  = tdd_tx_valid_s & dac_valid_q1_s;
+    assign adc_valid_i0  = tdd_rx_valid_s & adc_valid_i0_s;
+    assign adc_valid_q0  = tdd_rx_valid_s & adc_valid_q0_s;
+    assign adc_valid_i1  = tdd_rx_valid_s & adc_valid_i1_s;
+    assign adc_valid_q1  = tdd_rx_valid_s & adc_valid_q1_s;
 
     // TDD control
 
@@ -541,24 +533,8 @@ module axi_ad9361 (
       .tdd_status (tdd_status_s),
       .tdd_sync (tdd_sync),
       .tdd_sync_cntr (tdd_sync_cntr),
-      .tx_valid (dac_valid_s),
-      .tx_valid_i0 (dac_valid_i0_s),
-      .tx_valid_q0 (dac_valid_q0_s),
-      .tx_valid_i1 (dac_valid_i1_s),
-      .tx_valid_q1 (dac_valid_q1_s),
-      .tdd_tx_valid (g_dac_valid_s),
-      .tdd_tx_valid_i0 (dac_valid_i0),
-      .tdd_tx_valid_q0 (dac_valid_q0),
-      .tdd_tx_valid_i1 (dac_valid_i1),
-      .tdd_tx_valid_q1 (dac_valid_q1),
-      .rx_valid_i0 (adc_valid_i0_s),
-      .rx_valid_q0 (adc_valid_q0_s),
-      .rx_valid_i1 (adc_valid_i1_s),
-      .rx_valid_q1 (adc_valid_q1_s),
-      .tdd_rx_valid_i0 (adc_valid_i0),
-      .tdd_rx_valid_q0 (adc_valid_q0),
-      .tdd_rx_valid_i1 (adc_valid_i1),
-      .tdd_rx_valid_q1 (adc_valid_q1),
+      .tdd_tx_valid (tdd_tx_valid_s),
+      .tdd_rx_valid (tdd_rx_valid_s),
       .up_rstn (up_rstn),
       .up_clk (up_clk),
       .up_wreq (up_wreq_s),
@@ -577,10 +553,6 @@ module axi_ad9361 (
     assign tdd_mode_s     = 1'b0;
     assign tdd_enable_s   = 1'b0;
     assign tdd_txnrx_s    = 1'b0;
-    assign adc_data_i0    = adc_data_i0_s;
-    assign adc_data_q0    = adc_data_q0_s;
-    assign adc_data_i1    = adc_data_i1_s;
-    assign adc_data_q1    = adc_data_q1_s;
     assign tdd_sync_cntr  = 1'b0;
     assign g_dac_valid_s  = dac_valid_s;
     assign dac_valid_i0   = dac_valid_i0_s;
@@ -625,16 +597,16 @@ module axi_ad9361 (
     .delay_locked (delay_locked_s),
     .adc_enable_i0 (adc_enable_i0),
     .adc_valid_i0 (adc_valid_i0_s),
-    .adc_data_i0 (adc_data_i0_s),
+    .adc_data_i0 (adc_data_i0),
     .adc_enable_q0 (adc_enable_q0),
     .adc_valid_q0 (adc_valid_q0_s),
-    .adc_data_q0 (adc_data_q0_s),
+    .adc_data_q0 (adc_data_q0),
     .adc_enable_i1 (adc_enable_i1),
     .adc_valid_i1 (adc_valid_i1_s),
-    .adc_data_i1 (adc_data_i1_s),
+    .adc_data_i1 (adc_data_i1),
     .adc_enable_q1 (adc_enable_q1),
     .adc_valid_q1 (adc_valid_q1_s),
-    .adc_data_q1 (adc_data_q1_s),
+    .adc_data_q1 (adc_data_q1),
     .adc_dovf (adc_dovf),
     .adc_dunf (adc_dunf),
     .up_adc_gpio_in (up_adc_gpio_in),
