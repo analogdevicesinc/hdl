@@ -42,14 +42,22 @@ module axi_ad9371 (
   // receive
 
   adc_clk,
+  adc_rx_valid,
+  adc_rx_sof,
   adc_rx_data,
+  adc_rx_ready,
   adc_os_clk,
+  adc_rx_os_valid,
+  adc_rx_os_sof,
   adc_rx_os_data,
+  adc_rx_os_ready,
 
   // transmit
 
   dac_clk,
+  dac_tx_valid,
   dac_tx_data,
+  dac_tx_ready,
 
   // master/slave
 
@@ -124,20 +132,29 @@ module axi_ad9371 (
   // parameters
 
   parameter   ID = 0;
+  parameter   DEVICE_TYPE = 0;
   parameter   DAC_DATAPATH_DISABLE = 0;
   parameter   ADC_DATAPATH_DISABLE = 0;
 
   // receive
 
   input             adc_clk;
+  input             adc_rx_valid;
+  input   [  3:0]   adc_rx_sof;
   input   [ 63:0]   adc_rx_data;
+  output            adc_rx_ready;
   input             adc_os_clk;
+  input             adc_rx_os_valid;
+  input   [  3:0]   adc_rx_os_sof;
   input   [ 63:0]   adc_rx_os_data;
+  output            adc_rx_os_ready;
 
   // transmit
 
   input             dac_clk;
+  output            dac_tx_valid;
   output  [127:0]   dac_tx_data;
+  input             dac_tx_ready;
 
   // master/slave
 
@@ -237,6 +254,12 @@ module axi_ad9371 (
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
+  // defaults
+
+  assign dac_tx_valid = 1'b1;
+  assign adc_rx_ready = 1'b1;
+  assign adc_rx_os_ready = 1'b1;
+
   // processor read interface
 
   always @(negedge up_rstn or posedge up_clk) begin
@@ -253,10 +276,14 @@ module axi_ad9371 (
 
   // device interface
 
-  axi_ad9371_if i_if (
+  axi_ad9371_if #(
+    .DEVICE_TYPE (DEVICE_TYPE))
+  i_if (
     .adc_clk (adc_clk),
+    .adc_rx_sof (adc_rx_sof),
     .adc_rx_data (adc_rx_data),
     .adc_os_clk (adc_os_clk),
+    .adc_rx_os_sof (adc_rx_os_sof),
     .adc_rx_os_data (adc_rx_os_data),
     .adc_data (adc_data_s),
     .adc_os_valid (adc_os_valid_s),
