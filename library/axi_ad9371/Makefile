@@ -25,6 +25,7 @@ M_DEPS += ../common/up_adc_common.v
 M_DEPS += ../common/up_adc_channel.v
 M_DEPS += ../common/up_dac_common.v
 M_DEPS += ../common/up_dac_channel.v
+M_DEPS += ../common/ad_xcvr_rx_if.v
 M_DEPS += axi_ad9371_if.v
 M_DEPS += axi_ad9371_rx_channel.v
 M_DEPS += axi_ad9371_rx.v
