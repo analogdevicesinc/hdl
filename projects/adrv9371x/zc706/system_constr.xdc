@@ -68,13 +68,10 @@ set_property  -dict {PACKAGE_PIN  AH24  IOSTANDARD LVCMOS25} [get_ports ad9371_g
 
 # clocks
 
-create_clock -name tx_ref_clk   -period  6.25 [get_ports ref_clk0_p]
-create_clock -name rx_ref_clk   -period  6.25 [get_ports ref_clk1_p]
-create_clock -name tx_div_clk   -period  6.25 [get_pins i_system_wrapper/system_i/axi_ad9371_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  6.25 [get_pins i_system_wrapper/system_i/axi_ad9371_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
+create_clock -name tx_ref_clk     -period  8.00 [get_ports ref_clk0_p]
+create_clock -name rx_ref_clk     -period  8.00 [get_ports ref_clk1_p]
+create_clock -name tx_div_clk     -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_0/i_gtxe2_channel/TXOUTCLK]
+create_clock -name rx_div_clk     -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+create_clock -name rx_os_div_clk  -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_2/i_gtxe2_channel/RXOUTCLK]
 
-# sync is also sampled at the cpu clock by the ip.
-
-set_false_path -from [get_cells -hier -filter {name =~ *axi_ad9371_gt*tx_ip_sync*  && IS_SEQUENTIAL}] \
-  -to [get_cells -hier -filter {name =~ *axi_ad9371_tx_jesd*sync_tx_sync*data_sync* && IS_SEQUENTIAL}]
 
