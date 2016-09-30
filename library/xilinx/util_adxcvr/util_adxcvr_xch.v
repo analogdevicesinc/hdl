@@ -164,10 +164,10 @@ module util_adxcvr_xch (
   wire            tx_rst_done_s;
   wire    [ 1:0]  rx_pll_clk_sel_s;
   wire    [ 1:0]  tx_pll_clk_sel_s;
-  wire    [ 3:0]  rx_charisk_open_s;
-  wire    [ 3:0]  rx_disperr_open_s;
+  wire    [11:0]  rx_charisk_open_s;
+  wire    [11:0]  rx_disperr_open_s;
   wire    [ 3:0]  rx_notintable_open_s;
-  wire    [31:0]  rx_data_open_s;
+  wire    [95:0]  rx_data_open_s;
   wire            cpll_locked_s;
 
   // pll
@@ -303,8 +303,23 @@ module util_adxcvr_xch (
 
   generate
   if (GTH_OR_GTX_N == 1) begin
-  BUFG_GT i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
-  BUFG_GT i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
+  BUFG_GT i_rx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (rx_out_clk_s),
+    .O (rx_out_clk));
+
+  BUFG_GT i_tx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (tx_out_clk_s),
+    .O (tx_out_clk));
   end
   endgenerate
 
@@ -579,14 +594,14 @@ module util_adxcvr_xch (
     .RX8B10BEN (1'd1),
     .RXUSRCLK (rx_clk),
     .RXUSRCLK2 (rx_clk),
-    .RXDATA ({rx_data_open_s, rx_data}),
+    .RXDATA ({rx_data_open_s[31:0], rx_data}),
     .RXPRBSERR (),
     .RXPRBSSEL (3'd0),
     .RXPRBSCNTRESET (1'd0),
     .RXDFEXYDEN (1'd0),
     .RXDFEXYDHOLD (1'd0),
     .RXDFEXYDOVRDEN (1'd0),
-    .RXDISPERR ({rx_disperr_open_s, rx_disperr}),
+    .RXDISPERR ({rx_disperr_open_s[3:0], rx_disperr}),
     .RXNOTINTABLE ({rx_notintable_open_s, rx_notintable}),
     .GTXRXP (rx_p),
     .GTXRXN (rx_n),
@@ -671,7 +686,7 @@ module util_adxcvr_xch (
     .RXPOLARITY (1'd0),
     .RXSLIDE (1'd0),
     .RXCHARISCOMMA (),
-    .RXCHARISK ({rx_charisk_open_s, rx_charisk}),
+    .RXCHARISK ({rx_charisk_open_s[3:0], rx_charisk}),
     .RXCHBONDI (5'd0),
     .RXRESETDONE (rx_rst_done_s),
     .RXQPIEN (1'd0),
@@ -1324,7 +1339,7 @@ module util_adxcvr_xch (
     .TXCTRL0 (16'd0),
     .TXCTRL1 (16'd0),
     .TXCTRL2 ({4'd0, tx_charisk}),
-    .TXDATA ({32'd0, tx_data}),
+    .TXDATA ({96'd0, tx_data}),
     .TXDATAEXTENDRSVD (8'd0),
     .TXDEEMPH (1'd0),
     .TXDETECTRX (1'd0),
