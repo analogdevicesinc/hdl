@@ -55,6 +55,7 @@ clean:
 	make -C util_axis_resize clean
 	make -C util_bsplit clean
 	make -C util_ccat clean
+	make -C util_clkdiv clean
 	make -C util_cpack clean
 	make -C util_dac_unpack clean
 	make -C util_dacfifo clean
@@ -121,6 +122,7 @@ lib:
 	-make -C util_axis_resize
 	-make -C util_bsplit
 	-make -C util_ccat
+	-make -C util_clkdiv
 	-make -C util_cpack
 	-make -C util_dac_unpack
 	-make -C util_dacfifo
