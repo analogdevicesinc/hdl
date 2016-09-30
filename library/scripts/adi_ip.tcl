@@ -131,9 +131,9 @@ proc adi_ip_infer_interfaces {ip_name} {
 proc adi_ip_properties_lite {ip_name} {
 
   ipx::package_project -root_dir . \
-    -vendor {analog.com} \
-    -library {user} \
-    -taxonomy {{/AXI_Infrastructure}} 
+    -vendor analog.com \
+    -library user \
+    -taxonomy /Analog_Devices 
 
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
   set_property company_url {www.analog.com} [ipx::current_core]
@@ -155,7 +155,25 @@ proc adi_ip_properties_lite {ip_name} {
     virtexu       Production
     kintexuplus   Production
     zynquplus     Production
-    kintexu       Production}\
+    kintexu       Production
+    virtex7       Beta
+    qvirtex7      Beta
+    kintex7       Beta
+    kintex7l      Beta
+    qkintex7      Beta
+    qkintex7l     Beta
+    artix7        Beta
+    artix7l       Beta
+    aartix7       Beta
+    qartix7       Beta
+    zynq          Beta 
+    qzynq         Beta
+    azynq         Beta
+    virtexu       Beta
+    virtexuplus   Beta
+    kintexuplus   Beta
+    zynquplus     Beta
+    kintexu       Beta}\
   [ipx::current_core]
 
   ipx::remove_all_bus_interface -quiet [ipx::current_core]
