@@ -68,8 +68,9 @@ module ad_lvds_in (
   parameter   DEVICE_TYPE = 0;
   parameter   IODELAY_CTRL = 0;
   parameter   IODELAY_GROUP = "dev_if_delay_group";
-  localparam  SERIES7 = 0;
+  localparam  VIRTEX7 = 0;
   localparam  VIRTEX6 = 1;
+  localparam  ULTRASCALE = 2;
 
   // data interface
 
@@ -101,6 +102,7 @@ module ad_lvds_in (
   wire                rx_data_n_s;
   wire                rx_data_ibuf_s;
   wire                rx_data_idelay_s;
+  wire        [ 8:0]  up_drdata_s;
 
   // delay controller
 
@@ -131,6 +133,7 @@ module ad_lvds_in (
   end
   endgenerate
 
+  generate
   if (DEVICE_TYPE == VIRTEX6) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IODELAYE1 #(
@@ -157,7 +160,11 @@ module ad_lvds_in (
     .RST (up_dld),
     .CNTVALUEIN (up_dwdata),
     .CNTVALUEOUT (up_drdata));
-  end else begin
+  end
+  endgenerate
+
+  generate
+  if (DEVICE_TYPE == VIRTEX7) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYE2 #(
     .CINVCTRL_SEL ("FALSE"),
@@ -182,7 +189,47 @@ module ad_lvds_in (
     .CNTVALUEIN (up_dwdata),
     .CNTVALUEOUT (up_drdata));
   end
+  endgenerate
 
+  generate
+  if (DEVICE_TYPE == ULTRASCALE) begin
+  assign up_drdata = up_drdata_s[8:4];
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYE3 #(
+    .DELAY_SRC ("IDATAIN"),
+    .DELAY_TYPE ("VAR_LOAD"),
+    .REFCLK_FREQUENCY (200.0),
+    .DELAY_FORMAT ("COUNT"))
+  i_rx_data_idelay (
+    .CASC_RETURN (1'b0),
+    .CASC_IN (1'b0),
+    .CASC_OUT (),
+    .CE (1'b0),
+    .CLK (up_clk),
+    .INC (1'b0),
+    .LOAD (up_dld),
+    .CNTVALUEIN ({up_dwdata, 4'd0}),
+    .CNTVALUEOUT (up_drdata_s),
+    .DATAIN (1'b0),
+    .IDATAIN (rx_data_ibuf_s),
+    .DATAOUT (rx_data_idelay_s),
+    .RST (1'b0),
+    .EN_VTC (~up_dld));
+  end
+  endgenerate
+
+  generate
+  if (DEVICE_TYPE == ULTRASCALE) begin
+  IDDRE1 #(
+    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"))
+  i_rx_data_iddr (
+    .R (1'b0),
+    .C (rx_clk),
+    .CB (~rx_clk),
+    .D (rx_data_idelay_s),
+    .Q1 (rx_data_p),
+    .Q2 (rx_data_n_s));
+  end else begin
   IDDR #(
     .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
     .INIT_Q1 (1'b0),
@@ -196,6 +243,8 @@ module ad_lvds_in (
     .D (rx_data_idelay_s),
     .Q1 (rx_data_p),
     .Q2 (rx_data_n_s));
+  end
+  endgenerate
 
   always @(posedge rx_clk) begin
     rx_data_n <= rx_data_n_s;

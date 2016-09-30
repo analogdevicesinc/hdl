@@ -67,8 +67,9 @@ module ad_lvds_out (
   parameter   IODELAY_ENABLE = 0;
   parameter   IODELAY_CTRL = 0;
   parameter   IODELAY_GROUP = "dev_if_delay_group";
-  localparam  SERIES7 = 0;
+  localparam  VIRTEX7 = 0;
   localparam  VIRTEX6 = 1;
+  localparam  ULTRASCALE = 2;
 
   // data interface
 
@@ -99,7 +100,7 @@ module ad_lvds_out (
   // delay controller
 
   generate
-  if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == SERIES7) && (IODELAY_CTRL == 1)) begin
+  if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == VIRTEX7) && (IODELAY_CTRL == 1)) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYCTRL i_delay_ctrl (
     .RST (delay_rst),
@@ -112,6 +113,15 @@ module ad_lvds_out (
 
   // transmit data interface, oddr -> odelay -> obuf
 
+  generate
+  if (DEVICE_TYPE == ULTRASCALE) begin
+  ODDRE1 i_tx_data_oddr (
+    .SR (1'b0),
+    .C (tx_clk),
+    .D1 (tx_data_p),
+    .D2 (tx_data_n),
+    .Q (tx_data_oddr_s));
+  end else begin
   ODDR #(
     .DDR_CLK_EDGE ("SAME_EDGE"),
     .INIT (1'b0),
@@ -124,9 +134,11 @@ module ad_lvds_out (
     .D1 (tx_data_p),
     .D2 (tx_data_n),
     .Q (tx_data_oddr_s));
+  end
+  endgenerate
 
   generate
-  if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == SERIES7)) begin
+  if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == VIRTEX7)) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   ODELAYE2 #(
     .CINVCTRL_SEL ("FALSE"),
