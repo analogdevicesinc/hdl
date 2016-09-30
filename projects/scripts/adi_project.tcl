@@ -86,8 +86,8 @@ proc adi_project_create {project_name {mode 0}} {
     set sys_zynq 1
   }
   if [regexp "_zcu102$" $project_name] {
-    set p_device "xczu9eg-ffvb1156-1-i-EVAL"
-    set p_board "not-applicable"
+    set p_device "xczu9eg-ffvb1156-1-i-es1"
+    set p_board "xilinx.com:zcu102:part0:1.2"
     set sys_zynq 2
   }
 
