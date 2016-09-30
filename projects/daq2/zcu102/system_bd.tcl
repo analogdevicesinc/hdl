@@ -1,5 +1,5 @@
 
-source $ad_hdl_dir/projects/common/kcu105/kcu105_system_bd.tcl
+source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/sys_adcfifo.tcl
 source $ad_hdl_dir/projects/common/xilinx/sys_dacfifo.tcl
 
