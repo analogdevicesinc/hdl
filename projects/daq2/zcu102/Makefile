@@ -14,10 +14,10 @@ M_DEPS += ../common/daq2_bd.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
+M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
+M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../common/xilinx/sys_dacfifo.tcl
 M_DEPS += ../../common/xilinx/sys_adcfifo.tcl
-M_DEPS += ../../common/kcu105/kcu105_system_constr.xdc
-M_DEPS += ../../common/kcu105/kcu105_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9144/axi_ad9144.xpr
 M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr
@@ -48,7 +48,7 @@ M_FLIST += *.ip_user_files
 
 
 .PHONY: all lib clean clean-all
-all: lib daq2_kcu105.sdk/system_top.hdf
+all: lib daq2_zcu102.sdk/system_top.hdf
 
 
 clean: 
@@ -67,9 +67,9 @@ clean-all:clean
 	make -C ../../../library/util_upack clean
 
 
-daq2_kcu105.sdk/system_top.hdf: $(M_DEPS)
+daq2_zcu102.sdk/system_top.hdf: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> daq2_kcu105_vivado.log 2>&1
+	$(M_VIVADO) system_project.tcl >> daq2_zcu102_vivado.log 2>&1
 
 
 lib:

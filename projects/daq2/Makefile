@@ -12,6 +12,7 @@ all:
 	-make -C kcu105 all
 	-make -C vc707 all
 	-make -C zc706 all
+	-make -C zcu102 all
 
 
 clean: 
@@ -20,6 +21,7 @@ clean:
 	make -C kcu105 clean
 	make -C vc707 clean
 	make -C zc706 clean
+	make -C zcu102 clean
 
 
 clean-all:
@@ -28,6 +30,7 @@ clean-all:
 	make -C kcu105 clean-all
 	make -C vc707 clean-all
 	make -C zc706 clean-all
+	make -C zcu102 clean-all
 
 ####################################################################################
 ####################################################################################
