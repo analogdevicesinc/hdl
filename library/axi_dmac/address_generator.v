@@ -36,32 +36,32 @@
 // ***************************************************************************
 
 module dmac_address_generator (
-	input                        clk,
-	input                        resetn,
+  input                        clk,
+  input                        resetn,
 
-	input                        req_valid,
-	output reg                   req_ready,
-	input [31:BYTES_PER_BEAT_WIDTH] req_address,
-	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+  input                        req_valid,
+  output reg                   req_ready,
+  input [31:BYTES_PER_BEAT_WIDTH] req_address,
+  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
-	output reg [ID_WIDTH-1:0]  id,
-	input [ID_WIDTH-1:0]       request_id,
-	input                        sync_id,
+  output reg [ID_WIDTH-1:0]  id,
+  input [ID_WIDTH-1:0]       request_id,
+  input                        sync_id,
 
-	input                        eot,
+  input                        eot,
 
-	input                        enable,
-	input                        pause,
-	output reg                   enabled,
+  input                        enable,
+  input                        pause,
+  output reg                   enabled,
 
-	input                        addr_ready,
-	output reg                   addr_valid,
-	output     [31:0]            addr,
-	output     [ 7:0]            len,
-	output     [ 2:0]            size,
-	output     [ 1:0]            burst,
-	output     [ 2:0]            prot,
-	output     [ 3:0]            cache
+  input                        addr_ready,
+  output reg                   addr_valid,
+  output     [31:0]            addr,
+  output     [ 7:0]            len,
+  output     [ 2:0]            size,
+  output     [ 1:0]            burst,
+  output     [ 2:0]            prot,
+  output     [ 3:0]            cache
 );
 
 
@@ -110,52 +110,52 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-	if (resetn == 1'b0) begin
-		last <= 1'b0;
-	end else if (addr_valid == 1'b0) begin
-		last <= eot;
-	end
+  if (resetn == 1'b0) begin
+    last <= 1'b0;
+  end else if (addr_valid == 1'b0) begin
+    last <= eot;
+  end
 end
 
 always @(posedge clk) begin
-	if (resetn == 1'b0) begin
-		address <= 'h00;
-		last_burst_len <= 'h00;
-		req_ready <= 1'b1;
-		addr_valid <= 1'b0;
-	end else begin
-		if (~enabled) begin
-			req_ready <= 1'b1;
-		end else if (req_ready) begin
-			if (req_valid && enable) begin
-				address <= req_address;
-				req_ready <= 1'b0;
-				last_burst_len <= req_last_burst_length;
-			end
-		end else begin
-			if (addr_valid && addr_ready) begin
-				address <= address + MAX_BEATS_PER_BURST;
-				addr_valid <= 1'b0;
-				if (last)
-					req_ready <= 1'b1;
-			end else if (id != request_id && enable) begin
-				addr_valid <= 1'b1;
-			end
-		end
-	end
+  if (resetn == 1'b0) begin
+    address <= 'h00;
+    last_burst_len <= 'h00;
+    req_ready <= 1'b1;
+    addr_valid <= 1'b0;
+  end else begin
+    if (~enabled) begin
+      req_ready <= 1'b1;
+    end else if (req_ready) begin
+      if (req_valid && enable) begin
+        address <= req_address;
+        req_ready <= 1'b0;
+        last_burst_len <= req_last_burst_length;
+      end
+    end else begin
+      if (addr_valid && addr_ready) begin
+        address <= address + MAX_BEATS_PER_BURST;
+        addr_valid <= 1'b0;
+        if (last)
+          req_ready <= 1'b1;
+      end else if (id != request_id && enable) begin
+        addr_valid <= 1'b1;
+      end
+    end
+  end
 end
 
 always @(posedge clk) begin
-	if (resetn == 1'b0) begin
-		id <='h0;
+  if (resetn == 1'b0) begin
+    id <='h0;
     addr_valid_d1 <= 1'b0;
-	end else begin
+  end else begin
     addr_valid_d1 <= addr_valid;
     if ((addr_valid && ~addr_valid_d1) ||
-			(sync_id && id != request_id))
-			id <= inc_id(id);
+      (sync_id && id != request_id))
+      id <= inc_id(id);
 
-	end
+  end
 end
 
 endmodule

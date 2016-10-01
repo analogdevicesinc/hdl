@@ -37,16 +37,16 @@
 // ***************************************************************************
 
 module util_axis_resize (
-	input                       clk,
-	input                       resetn,
+  input                       clk,
+  input                       resetn,
 
-	input                       s_valid,
-	output                      s_ready,
-	input [SLAVE_DATA_WIDTH-1:0]  s_data,
+  input                       s_valid,
+  output                      s_ready,
+  input [SLAVE_DATA_WIDTH-1:0]  s_data,
 
-	output                      m_valid,
-	input                       m_ready,
-	output [MASTER_DATA_WIDTH-1:0] m_data
+  output                      m_valid,
+  input                       m_ready,
+  output [MASTER_DATA_WIDTH-1:0] m_data
 );
 
 parameter MASTER_DATA_WIDTH = 64;
@@ -69,32 +69,32 @@ reg valid;
 
 always @(posedge clk)
 begin
-	if (resetn == 1'b0) begin
-		count <= RATIO - 1;
-		valid <= 1'b0;
-	end else begin
-		if (count == 'h00 && s_ready == 1'b1 && s_valid == 1'b1)
-			valid <= 1'b1;
-		else if (m_ready == 1'b1)
-			valid <= 1'b0;
+  if (resetn == 1'b0) begin
+    count <= RATIO - 1;
+    valid <= 1'b0;
+  end else begin
+    if (count == 'h00 && s_ready == 1'b1 && s_valid == 1'b1)
+      valid <= 1'b1;
+    else if (m_ready == 1'b1)
+      valid <= 1'b0;
 
-		if (s_ready == 1'b1 && s_valid == 1'b1) begin
-			if (count == 'h00)
-				count <= RATIO - 1;
-			else
-				count <= count - 1'b1;
-		end
-	end
+    if (s_ready == 1'b1 && s_valid == 1'b1) begin
+      if (count == 'h00)
+        count <= RATIO - 1;
+      else
+        count <= count - 1'b1;
+    end
+  end
 end
 
 always @(posedge clk)
 begin
-	if (s_ready == 1'b1 && s_valid == 1'b1)
-		if (BIG_ENDIAN == 1) begin
-			data <= {data[MASTER_DATA_WIDTH-SLAVE_DATA_WIDTH-1:0], s_data};
-		end else begin
-			data <= {s_data, data[MASTER_DATA_WIDTH-1:SLAVE_DATA_WIDTH]};
-		end
+  if (s_ready == 1'b1 && s_valid == 1'b1)
+    if (BIG_ENDIAN == 1) begin
+      data <= {data[MASTER_DATA_WIDTH-SLAVE_DATA_WIDTH-1:0], s_data};
+    end else begin
+      data <= {s_data, data[MASTER_DATA_WIDTH-1:SLAVE_DATA_WIDTH]};
+    end
 end
 
 assign s_ready = ~valid || m_ready;
@@ -111,42 +111,42 @@ reg valid;
 
 always @(posedge clk)
 begin
-	if (resetn == 1'b0) begin
-		count <= RATIO - 1;
-		valid <= 1'b0;
-	end else begin
-		if (s_valid == 1'b1 && s_ready == 1'b1)
-			valid <= 1'b1;
-		else if (count == 'h0 && m_ready == 1'b1 && m_valid == 1'b1)
-			valid <= 1'b0;
+  if (resetn == 1'b0) begin
+    count <= RATIO - 1;
+    valid <= 1'b0;
+  end else begin
+    if (s_valid == 1'b1 && s_ready == 1'b1)
+      valid <= 1'b1;
+    else if (count == 'h0 && m_ready == 1'b1 && m_valid == 1'b1)
+      valid <= 1'b0;
 
-		if (m_ready == 1'b1 && m_valid == 1'b1) begin
-			if (count == 'h00)
-				count <= RATIO - 1;
-			else
-				count <= count - 1'b1;
-		end
-	end
+    if (m_ready == 1'b1 && m_valid == 1'b1) begin
+      if (count == 'h00)
+        count <= RATIO - 1;
+      else
+        count <= count - 1'b1;
+    end
+  end
 end
 
 always @(posedge clk)
 begin
-	if (s_ready == 1'b1 && s_valid == 1'b1) begin
-		data <= s_data;
-	end else if (m_ready == 1'b1 && m_valid == 1'b1) begin
-		if (BIG_ENDIAN == 1) begin
-			data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH] <= data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0];
-		end else begin
-			data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0] <= data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH];
-		end
-	end
+  if (s_ready == 1'b1 && s_valid == 1'b1) begin
+    data <= s_data;
+  end else if (m_ready == 1'b1 && m_valid == 1'b1) begin
+    if (BIG_ENDIAN == 1) begin
+      data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH] <= data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0];
+    end else begin
+      data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0] <= data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH];
+    end
+  end
 end
 
 assign s_ready = ~valid || (m_ready && count == 'h0);
 assign m_valid = valid;
 assign m_data = BIG_ENDIAN == 1 ?
-	data[SLAVE_DATA_WIDTH-1:SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH] :
-	data[MASTER_DATA_WIDTH-1:0];
+  data[SLAVE_DATA_WIDTH-1:SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH] :
+  data[MASTER_DATA_WIDTH-1:0];
 
 end
 endgenerate

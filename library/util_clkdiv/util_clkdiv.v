@@ -40,8 +40,8 @@
 `timescale 1ns/100ps
 
 module util_clkdiv (
-	clk,
-	clk_out
+  clk,
+  clk_out
  );
 
   input   clk;
