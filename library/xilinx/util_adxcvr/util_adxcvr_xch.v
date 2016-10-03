@@ -37,7 +37,20 @@
 
 `timescale 1ns/1ps
 
-module util_adxcvr_xch (
+module util_adxcvr_xch #(
+
+  // parameters
+
+  parameter   integer XCVR_ID = 0,
+  parameter   integer XCVR_TYPE = 0,
+  parameter   integer CPLL_TX_OR_RX_N = 0,
+  parameter   integer CPLL_FBDIV = 2,
+  parameter   integer RX_OUT_DIV = 1,
+  parameter   integer RX_CLK25_DIV = 10,
+  parameter   integer TX_OUT_DIV = 1,
+  parameter   integer TX_CLK25_DIV = 10,
+  parameter   [31:0]  PMA_RSV = 32'h00018480,
+  parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020) (
 
   // pll interface
 
@@ -112,19 +125,6 @@ module util_adxcvr_xch (
   input   [15:0]  up_tx_wdata,
   output  [15:0]  up_tx_rdata,
   output          up_tx_ready);
-
-  // parameters
-
-  parameter   integer XCVR_ID = 0;
-  parameter   integer GTH_OR_GTX_N = 0;
-  parameter   integer CPLL_TX_OR_RX_N = 0;
-  parameter   integer CPLL_FBDIV = 2;
-  parameter   integer RX_OUT_DIV = 1;
-  parameter   integer RX_CLK25_DIV = 10;
-  parameter   integer TX_OUT_DIV = 1;
-  parameter   integer TX_CLK25_DIV = 10;
-  parameter   [31:0]  PMA_RSV = 32'h00018480;
-  parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020;
 
   // internal registers
 
@@ -295,14 +295,14 @@ module util_adxcvr_xch (
   // instantiations
 
   generate
-  if (GTH_OR_GTX_N == 0) begin
+  if (XCVR_TYPE == 0) begin
   BUFG i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
   BUFG i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
   end
   endgenerate
 
   generate
-  if (GTH_OR_GTX_N == 1) begin
+  if (XCVR_TYPE == 1) begin
   BUFG_GT i_rx_bufg (
     .CE (1'b1),
     .CEMASK (1'b0),
@@ -324,7 +324,7 @@ module util_adxcvr_xch (
   endgenerate
 
   generate
-  if (GTH_OR_GTX_N == 0) begin
+  if (XCVR_TYPE == 0) begin
   assign rx_sys_clk_sel_s = up_rx_sys_clk_sel;
   assign tx_sys_clk_sel_s = up_tx_sys_clk_sel;
   assign rx_pll_clk_sel_s = 2'd0;
@@ -333,7 +333,7 @@ module util_adxcvr_xch (
   endgenerate
 
   generate
-  if (GTH_OR_GTX_N == 0) begin
+  if (XCVR_TYPE == 0) begin
   GTXE2_CHANNEL #(
     .SIM_RECEIVER_DETECT_PASS ("TRUE"),
     .SIM_TX_EIDLE_DRIVE_LEVEL ("X"), 
@@ -769,7 +769,7 @@ module util_adxcvr_xch (
   endgenerate
 
   generate
-  if (GTH_OR_GTX_N == 1) begin
+  if (XCVR_TYPE == 1) begin
   assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
   assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
   assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
@@ -778,7 +778,7 @@ module util_adxcvr_xch (
   endgenerate
 
   generate
-  if (GTH_OR_GTX_N == 1) begin
+  if (XCVR_TYPE == 1) begin
   GTHE3_CHANNEL #(
     .ACJTAG_DEBUG_MODE (1'b0),
     .ACJTAG_MODE (1'b0),

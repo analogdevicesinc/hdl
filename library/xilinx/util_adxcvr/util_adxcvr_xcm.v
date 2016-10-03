@@ -37,7 +37,16 @@
 
 `timescale 1ns/1ps
 
-module util_adxcvr_xcm (
+module util_adxcvr_xcm #(
+
+  // parameters
+
+  parameter   integer XCVR_ID = 0,
+  parameter   integer XCVR_TYPE = 0,
+  parameter   integer QPLL_REFCLK_DIV = 2,
+  parameter   integer QPLL_FBDIV_RATIO = 1,
+  parameter   [26:0]  QPLL_CFG = 27'h06801C1,
+  parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000) (
 
   // reset and clocks
 
@@ -58,15 +67,6 @@ module util_adxcvr_xcm (
   input   [15:0]  up_cm_wdata,
   output  [15:0]  up_cm_rdata,
   output          up_cm_ready);
-
-  // parameters
-
-  parameter   integer XCVR_ID = 0;
-  parameter   integer GTH_OR_GTX_N = 0;
-  parameter   integer QPLL_REFCLK_DIV = 2;
-  parameter   integer QPLL_FBDIV_RATIO = 1;
-  parameter   [26:0]  QPLL_CFG = 27'h06801C1;
-  parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000;
 
   // internal registers
 
@@ -117,7 +117,7 @@ module util_adxcvr_xcm (
   // instantiations
 
   generate
-  if (GTH_OR_GTX_N == 0) begin
+  if (XCVR_TYPE == 0) begin
   GTXE2_COMMON #(
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_QPLLREFCLK_SEL (3'b001),
@@ -178,7 +178,7 @@ module util_adxcvr_xcm (
   endgenerate
 
   generate
-  if (GTH_OR_GTX_N == 1) begin
+  if (XCVR_TYPE == 1) begin
   GTHE3_COMMON #(
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_VERSION (2),

@@ -38,7 +38,25 @@
 
 `timescale 1ns/1ps
 
-module util_adxcvr (
+module util_adxcvr #(
+
+  // parameters
+
+  parameter   integer RX_NUM_OF_LANES = 8,
+  parameter   integer TX_NUM_OF_LANES = 8,
+  parameter   integer XCVR_TYPE = 0,
+  parameter   integer CPLL_TX_OR_RX_N = 0,
+  parameter   integer CPLL_FBDIV = 2,
+  parameter   integer QPLL_REFCLK_DIV = 1,
+  parameter   integer QPLL_FBDIV_RATIO = 1,
+  parameter   integer RX_OUT_DIV = 1,
+  parameter   integer RX_CLK25_DIV = 20,
+  parameter   integer TX_OUT_DIV = 1,
+  parameter   integer TX_CLK25_DIV = 20,
+  parameter   [31:0]  PMA_RSV = 32'h001e7080,
+  parameter   [72:0]  RX_CDR_CFG = 72'h0b000023ff10400020,
+  parameter   [26:0]  QPLL_CFG = 27'h0680181,
+  parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000) (
 
   input           up_rstn,
   input           up_clk,
@@ -1021,22 +1039,6 @@ module util_adxcvr (
 
   // parameters
 
-  parameter   integer RX_NUM_OF_LANES = 8;
-  parameter   integer TX_NUM_OF_LANES = 8;
-  parameter   integer GTH_OR_GTX_N = 0;
-  parameter   integer CPLL_TX_OR_RX_N = 0;
-  parameter   integer CPLL_FBDIV = 2;
-  parameter   integer QPLL_REFCLK_DIV = 1;
-  parameter   integer QPLL_FBDIV_RATIO = 1;
-  parameter   integer RX_OUT_DIV = 1;
-  parameter   integer RX_CLK25_DIV = 20;
-  parameter   integer TX_OUT_DIV = 1;
-  parameter   integer TX_CLK25_DIV = 20;
-  parameter   [31:0]  PMA_RSV = 32'h001e7080;
-  parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff10400020;
-  parameter   [26:0]  QPLL_CFG = 27'h0680181;
-  parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000;
-
   localparam  integer NUM_OF_LANES = (TX_NUM_OF_LANES > RX_NUM_OF_LANES) ?
     TX_NUM_OF_LANES : RX_NUM_OF_LANES;
 
@@ -1072,7 +1074,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 1) begin
   util_adxcvr_xcm #(
     .XCVR_ID (0),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
     .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
     .QPLL_CFG (QPLL_CFG),
@@ -1105,7 +1107,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 1) begin
   util_adxcvr_xch #(
     .XCVR_ID (0),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -1202,7 +1204,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 2) begin
   util_adxcvr_xch #(
     .XCVR_ID (1),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -1299,7 +1301,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 3) begin
   util_adxcvr_xch #(
     .XCVR_ID (2),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -1396,7 +1398,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 4) begin
   util_adxcvr_xch #(
     .XCVR_ID (3),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -1492,7 +1494,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 5) begin
   util_adxcvr_xcm #(
     .XCVR_ID (4),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
     .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
     .QPLL_CFG (QPLL_CFG),
@@ -1525,7 +1527,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 5) begin
   util_adxcvr_xch #(
     .XCVR_ID (4),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -1622,7 +1624,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 6) begin
   util_adxcvr_xch #(
     .XCVR_ID (5),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -1719,7 +1721,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 7) begin
   util_adxcvr_xch #(
     .XCVR_ID (6),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -1816,7 +1818,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 8) begin
   util_adxcvr_xch #(
     .XCVR_ID (7),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -1912,7 +1914,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 9) begin
   util_adxcvr_xcm #(
     .XCVR_ID (8),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
     .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
     .QPLL_CFG (QPLL_CFG),
@@ -1945,7 +1947,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 9) begin
   util_adxcvr_xch #(
     .XCVR_ID (8),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -2042,7 +2044,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 10) begin
   util_adxcvr_xch #(
     .XCVR_ID (9),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -2139,7 +2141,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 11) begin
   util_adxcvr_xch #(
     .XCVR_ID (10),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -2236,7 +2238,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 12) begin
   util_adxcvr_xch #(
     .XCVR_ID (11),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -2332,7 +2334,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 13) begin
   util_adxcvr_xcm #(
     .XCVR_ID (12),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
     .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
     .QPLL_CFG (QPLL_CFG),
@@ -2365,7 +2367,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 13) begin
   util_adxcvr_xch #(
     .XCVR_ID (12),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -2462,7 +2464,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 14) begin
   util_adxcvr_xch #(
     .XCVR_ID (13),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -2559,7 +2561,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 15) begin
   util_adxcvr_xch #(
     .XCVR_ID (14),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
@@ -2656,7 +2658,7 @@ module util_adxcvr (
   if (NUM_OF_LANES >= 16) begin
   util_adxcvr_xch #(
     .XCVR_ID (15),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
     .RX_OUT_DIV (RX_OUT_DIV),
