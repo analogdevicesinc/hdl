@@ -139,13 +139,14 @@ module axi_usb_fx3_if (
   reg         fx32dma_sop;
   reg         fx32dma_sop_d1;
   reg         pktend_n;
+  reg         slcs_n_d1;
 
   localparam IDLE         = 4'b0001;
   localparam READ_START   = 4'b0010;
   localparam READ_DATA    = 4'b0100;
   localparam WRITE_DATA   = 4'b1000;
 
-  assign data = (state_gpif_ii == WRITE_DATA && dma2fx3_valid && current_fifo) ? {dma2fx3_data[7:0],dma2fx3_data[15:8],dma2fx3_data[23:16], dma2fx3_data[31:24]}  : 32'hz;
+  assign data = (state_gpif_ii == WRITE_DATA && dma2fx3_valid && current_fifo) ? dma2fx3_data  : 32'hz;
   assign epswitch_n = 1'b1;
 
   always @(fifo_num, fifo_rdy, fifo_direction) begin
@@ -256,7 +257,7 @@ module axi_usb_fx3_if (
       READ_START: begin
         slcs_n        = 1'b0;
         sloe_n        = 1'b0;
-        slrd_n        = 1'b0;
+        slrd_n        = slcs_n_d1;
         fx32dma_valid = 1'b0;
         fx32dma_sop   = 1'b0;
         fx32dma_data  = 32'h0;
@@ -271,8 +272,7 @@ module axi_usb_fx3_if (
         slrd_n        = !current_fifo_d3;
         fx32dma_valid = !sloe_n_d3;
         fx32dma_sop   = fx32dma_sop_d1;
-        fx32dma_data  = {data[7:0],data[15:8],data[23:16], data[31:24]};
-        //fx32dma_data  =  data;
+        fx32dma_data  = data;
         slwr_n        = 1'b1;
         pktend_n      = 1'b1;
         dma2fx3_ready = 1'b0;
@@ -306,6 +306,7 @@ module axi_usb_fx3_if (
   end
 
   always @(posedge pclk) begin
+    slcs_n_d1 <= slcs_n;
     current_fifo_d1 <= current_fifo;
     current_fifo_d2 <= current_fifo_d1;
     current_fifo_d3 <= current_fifo_d2;
