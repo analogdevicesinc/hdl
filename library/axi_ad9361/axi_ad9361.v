@@ -69,116 +69,116 @@ module axi_ad9361 #(
 
   // physical interface (receive-cmos)
 
-  input           rx_clk_in,
-  input           rx_frame_in,
-  input   [11:0]  rx_data_in,
+  input               rx_clk_in,
+  input               rx_frame_in,
+  input   [11:0]      rx_data_in,
 
   // physical interface (transmit-lvds)
 
-  output          tx_clk_out_p,
-  output          tx_clk_out_n,
-  output          tx_frame_out_p,
-  output          tx_frame_out_n,
-  output  [ 5:0]  tx_data_out_p,
-  output  [ 5:0]  tx_data_out_n,
+  output              tx_clk_out_p,
+  output              tx_clk_out_n,
+  output              tx_frame_out_p,
+  output              tx_frame_out_n,
+  output  [ 5:0]      tx_data_out_p,
+  output  [ 5:0]      tx_data_out_n,
 
   // physical interface (transmit-cmos)
 
-  output          tx_clk_out,
-  output          tx_frame_out,
-  output  [11:0]  tx_data_out,
+  output              tx_clk_out,
+  output              tx_frame_out,
+  output  [11:0]      tx_data_out,
 
   // ensm control
 
-  output          enable,
-  output          txnrx,
+  output              enable,
+  output              txnrx,
 
   // transmit master/slave
 
-  input           dac_sync_in,
-  output          dac_sync_out,
+  input               dac_sync_in,
+  output              dac_sync_out,
 
   // tdd sync
 
-  input           tdd_sync,
-  output          tdd_sync_cntr,
+  input               tdd_sync,
+  output              tdd_sync_cntr,
 
   // delay clock
 
-  input           delay_clk,
+  input               delay_clk,
 
   // master interface
 
-  output          l_clk,
-  input           clk,
-  output          rst,
+  output              l_clk,
+  input               clk,
+  output              rst,
 
   // dma interface
 
-  output          adc_enable_i0,
-  output          adc_valid_i0,
-  output  [15:0]  adc_data_i0,
-  output          adc_enable_q0,
-  output          adc_valid_q0,
-  output  [15:0]  adc_data_q0,
-  output          adc_enable_i1,
-  output          adc_valid_i1,
-  output  [15:0]  adc_data_i1,
-  output          adc_enable_q1,
-  output          adc_valid_q1,
-  output  [15:0]  adc_data_q1,
-  input           adc_dovf,
-  input           adc_dunf,
-  output          adc_r1_mode,
+  output              adc_enable_i0,
+  output  reg         adc_valid_i0,
+  output  reg [15:0]  adc_data_i0,
+  output              adc_enable_q0,
+  output  reg         adc_valid_q0,
+  output  reg [15:0]  adc_data_q0,
+  output              adc_enable_i1,
+  output  reg         adc_valid_i1,
+  output  reg [15:0]  adc_data_i1,
+  output              adc_enable_q1,
+  output  reg         adc_valid_q1,
+  output  reg [15:0]  adc_data_q1,
+  input               adc_dovf,
+  input               adc_dunf,
+  output              adc_r1_mode,
 
-  output          dac_enable_i0,
-  output          dac_valid_i0,
-  input   [15:0]  dac_data_i0,
-  output          dac_enable_q0,
-  output          dac_valid_q0,
-  input   [15:0]  dac_data_q0,
-  output          dac_enable_i1,
-  output          dac_valid_i1,
-  input   [15:0]  dac_data_i1,
-  output          dac_enable_q1,
-  output          dac_valid_q1,
-  input   [15:0]  dac_data_q1,
-  input           dac_dovf,
-  input           dac_dunf,
-  output          dac_r1_mode,
+  output              dac_enable_i0,
+  output  reg         dac_valid_i0,
+  input       [15:0]  dac_data_i0,
+  output              dac_enable_q0,
+  output  reg         dac_valid_q0,
+  input       [15:0]  dac_data_q0,
+  output              dac_enable_i1,
+  output  reg         dac_valid_i1,
+  input       [15:0]  dac_data_i1,
+  output              dac_enable_q1,
+  output  reg         dac_valid_q1,
+  input       [15:0]  dac_data_q1,
+  input               dac_dovf,
+  input               dac_dunf,
+  output              dac_r1_mode,
 
   // axi interface
 
-  input           s_axi_aclk,
-  input           s_axi_aresetn,
-  input           s_axi_awvalid,
-  input   [31:0]  s_axi_awaddr,
-  input   [ 2:0]  s_axi_awprot,
-  output          s_axi_awready,
-  input           s_axi_wvalid,
-  input   [31:0]  s_axi_wdata,
-  input   [ 3:0]  s_axi_wstrb,
-  output          s_axi_wready,
-  output          s_axi_bvalid,
-  output  [ 1:0]  s_axi_bresp,
-  input           s_axi_bready,
-  input           s_axi_arvalid,
-  input   [31:0]  s_axi_araddr,
-  input   [ 2:0]  s_axi_arprot,
-  output          s_axi_arready,
-  output          s_axi_rvalid,
-  output  [31:0]  s_axi_rdata,
-  output  [ 1:0]  s_axi_rresp,
-  input           s_axi_rready,
+  input               s_axi_aclk,
+  input               s_axi_aresetn,
+  input               s_axi_awvalid,
+  input   [31:0]      s_axi_awaddr,
+  input   [ 2:0]      s_axi_awprot,
+  output              s_axi_awready,
+  input               s_axi_wvalid,
+  input   [31:0]      s_axi_wdata,
+  input   [ 3:0]      s_axi_wstrb,
+  output              s_axi_wready,
+  output              s_axi_bvalid,
+  output  [ 1:0]      s_axi_bresp,
+  input               s_axi_bready,
+  input               s_axi_arvalid,
+  input   [31:0]      s_axi_araddr,
+  input   [ 2:0]      s_axi_arprot,
+  output              s_axi_arready,
+  output              s_axi_rvalid,
+  output  [31:0]      s_axi_rdata,
+  output  [ 1:0]      s_axi_rresp,
+  input               s_axi_rready,
 
   // gpio
 
-  input           up_enable,
-  input           up_txnrx,
-  input   [31:0]  up_dac_gpio_in,
-  output  [31:0]  up_dac_gpio_out,
-  input   [31:0]  up_adc_gpio_in,
-  output  [31:0]  up_adc_gpio_out);
+  input               up_enable,
+  input               up_txnrx,
+  input   [31:0]      up_dac_gpio_in,
+  output  [31:0]      up_dac_gpio_out,
+  input   [31:0]      up_adc_gpio_in,
+  output  [31:0]      up_adc_gpio_out);
 
   // derived parameters
 
@@ -208,6 +208,14 @@ module axi_ad9361 #(
 
   wire            adc_ddr_edgesel_s;
   wire            adc_valid_s;
+  wire            adc_valid_i0_s;
+  wire            adc_valid_q0_s;
+  wire            adc_valid_i1_s;
+  wire            adc_valid_q1_s;
+  wire    [15:0]  adc_data_i0_s;
+  wire    [15:0]  adc_data_q0_s;
+  wire    [15:0]  adc_data_i1_s;
+  wire    [15:0]  adc_data_q1_s;
   wire    [47:0]  adc_data_s;
   wire            adc_status_s;
   wire            dac_clksel_s;
@@ -217,6 +225,10 @@ module axi_ad9361 #(
   wire            dac_valid_q0_s;
   wire            dac_valid_i1_s;
   wire            dac_valid_q1_s;
+  wire            dac_data_i0_s;
+  wire            dac_data_q0_s;
+  wire            dac_data_i1_s;
+  wire            dac_data_q1_s;
   wire    [12:0]  up_adc_dld_s;
   wire    [64:0]  up_adc_dwdata_s;
   wire    [64:0]  up_adc_drdata_s;
@@ -248,10 +260,6 @@ module axi_ad9361 #(
   wire            tdd_rx_rf_en_s;
   wire            tdd_tx_rf_en_s;
   wire    [ 7:0]  tdd_status_s;
-  wire            adc_valid_i0_s;
-  wire            adc_valid_q0_s;
-  wire            adc_valid_i1_s;
-  wire            adc_valid_q1_s;
 
   // signal name changes
 
@@ -387,14 +395,23 @@ module axi_ad9361 #(
   end
   endgenerate
 
-  assign dac_valid_i0 = tdd_tx_valid_s & dac_valid_i0_s;
-  assign dac_valid_q0 = tdd_tx_valid_s & dac_valid_q0_s;
-  assign dac_valid_i1 = tdd_tx_valid_s & dac_valid_i1_s;
-  assign dac_valid_q1 = tdd_tx_valid_s & dac_valid_q1_s;
-  assign adc_valid_i0 = tdd_rx_valid_s & adc_valid_i0_s;
-  assign adc_valid_q0 = tdd_rx_valid_s & adc_valid_q0_s;
-  assign adc_valid_i1 = tdd_rx_valid_s & adc_valid_i1_s;
-  assign adc_valid_q1 = tdd_rx_valid_s & adc_valid_q1_s;
+  always @(posedge clk) begin
+
+    dac_valid_i0 <= tdd_tx_valid_s & dac_valid_i0_s;
+    dac_valid_q0 <= tdd_tx_valid_s & dac_valid_q0_s;
+    dac_valid_i1 <= tdd_tx_valid_s & dac_valid_i1_s;
+    dac_valid_q1 <= tdd_tx_valid_s & dac_valid_q1_s;
+
+    adc_valid_i0 <= tdd_rx_valid_s & adc_valid_i0_s;
+    adc_valid_q0 <= tdd_rx_valid_s & adc_valid_q0_s;
+    adc_valid_i1 <= tdd_rx_valid_s & adc_valid_i1_s;
+    adc_valid_q1 <= tdd_rx_valid_s & adc_valid_q1_s;
+    adc_data_i0 <= adc_data_i0_s;
+    adc_data_q0 <= adc_data_q0_s;
+    adc_data_i1 <= adc_data_i1_s;
+    adc_data_q1 <= adc_data_q1_s;
+
+  end
 
   // tdd
 
@@ -484,16 +501,16 @@ module axi_ad9361 #(
     .delay_locked (delay_locked_s),
     .adc_enable_i0 (adc_enable_i0),
     .adc_valid_i0 (adc_valid_i0_s),
-    .adc_data_i0 (adc_data_i0),
+    .adc_data_i0 (adc_data_i0_s),
     .adc_enable_q0 (adc_enable_q0),
     .adc_valid_q0 (adc_valid_q0_s),
-    .adc_data_q0 (adc_data_q0),
+    .adc_data_q0 (adc_data_q0_s),
     .adc_enable_i1 (adc_enable_i1),
     .adc_valid_i1 (adc_valid_i1_s),
-    .adc_data_i1 (adc_data_i1),
+    .adc_data_i1 (adc_data_i1_s),
     .adc_enable_q1 (adc_enable_q1),
     .adc_valid_q1 (adc_valid_q1_s),
-    .adc_data_q1 (adc_data_q1),
+    .adc_data_q1 (adc_data_q1_s),
     .adc_dovf (adc_dovf),
     .adc_dunf (adc_dunf),
     .up_adc_gpio_in (up_adc_gpio_in),
