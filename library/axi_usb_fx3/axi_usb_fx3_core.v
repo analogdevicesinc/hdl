@@ -496,7 +496,7 @@ module axi_usb_fx3_core (
     if (state_fx32dma == IDLE) begin
       if (fx32dma_sop == 1'b1) begin
         header_pointer <= 8'h4;
-        if (fx32dma_data != 32'hf00ff00f) begin
+        if (fx32dma_data != 32'h0ff00ff0) begin
           error_fx32dma <= 1'b1;
         end else begin
           error_fx32dma <= 1'b0;
@@ -650,7 +650,7 @@ module axi_usb_fx3_core (
         if (dma2fx3_ready == 1'b1) begin
           dma2fx3_counter <= dma2fx3_counter + 4;
           if (dma2fx3_counter >= buffer_size_current - 4) begin
-            dma2fx3_data_reg <= 32'hf00ff00f;
+            dma2fx3_data_reg <= 32'h0ff00ff0;
           end else begin
             case (test_mode_tpg)
               4'h1: dma2fx3_data_reg <= ~dma2fx3_data_reg;
@@ -663,7 +663,7 @@ module axi_usb_fx3_core (
           end
         end
       end else begin
-          dma2fx3_data_reg <= 32'hf00ff00f;
+          dma2fx3_data_reg <= 32'h0ff00ff0;
         if (s_axis_tvalid== 1'b1 && s_axis_tready == 1'b1) begin
           case (s_axis_tkeep)
             1: dma2fx3_counter <= dma2fx3_counter + 1;
