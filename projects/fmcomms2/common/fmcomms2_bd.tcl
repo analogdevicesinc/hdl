@@ -64,6 +64,7 @@ set_property -dict [list CONFIG.DIN_DATA_WIDTH {16}] $util_ad9361_adc_fifo
 set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16}] $util_ad9361_adc_fifo
 
 set util_ad9361_tdd_sync [create_bd_cell -type ip -vlnv analog.com:user:util_tdd_sync:1.0 util_ad9361_tdd_sync]
+set_property -dict [list CONFIG.TDD_SYNC_PERIOD {10000000}] $util_ad9361_tdd_sync
 
 # connections
 
@@ -143,9 +144,8 @@ ad_connect  axi_ad9361_dac_dma/fifo_rd_underflow axi_ad9361/dac_dunf
 ad_connect  sys_cpu_clk util_ad9361_tdd_sync/clk
 ad_connect  sys_cpu_resetn util_ad9361_tdd_sync/rstn
 ad_connect  util_ad9361_tdd_sync/sync_out axi_ad9361/tdd_sync
-ad_connect  util_ad9361_tdd_sync/sync_en axi_ad9361/tdd_sync_en
-ad_connect  util_ad9361_tdd_sync/sync_type axi_ad9361/tdd_terminal_type
-ad_connect  tdd_sync_t axi_ad9361/tdd_terminal_type
+ad_connect  util_ad9361_tdd_sync/sync_mode axi_ad9361/tdd_sync_cntr
+ad_connect  tdd_sync_t axi_ad9361/tdd_sync_cntr
 ad_connect  tdd_sync_o util_ad9361_tdd_sync/sync_out
 ad_connect  tdd_sync_i util_ad9361_tdd_sync/sync_in
 
@@ -168,7 +168,7 @@ ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
 
 # ila (adc)
 
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_adc]
+set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_adc]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc
@@ -185,16 +185,4 @@ ad_connect  util_ad9361_adc_fifo/dout_data_2 ila_adc/probe2
 ad_connect  util_ad9361_adc_fifo/dout_data_3 ila_adc/probe3
 ad_connect  util_ad9361_adc_fifo/dout_valid_0 ila_adc/probe4
 ad_connect  sys_cpu_clk ila_adc/clk
-
-# ila (tdd)
-
-set ila_tdd [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tdd]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tdd
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_tdd
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_tdd
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {1}] $ila_tdd
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {42}] $ila_tdd
-
-ad_connect  axi_ad9361_clk          ila_tdd/clk
-ad_connect  axi_ad9361/tdd_dbg      ila_tdd/probe0
 

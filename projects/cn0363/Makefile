@@ -7,14 +7,17 @@
 
 .PHONY: all clean clean-all 
 all:
+	-make -C microzed all
 	-make -C zed all
 
 
 clean: 
+	make -C microzed clean
 	make -C zed clean
 
 
 clean-all:
+	make -C microzed clean-all
 	make -C zed clean-all
 
 ####################################################################################

@@ -1,6 +1,6 @@
 
 ## constraints
-## loopback
+## loopback (P2/P13 are pin swapped on board - so skip gp_*[65]) 
 ## p4
 
 set_property  -dict {PACKAGE_PIN  D4    IOSTANDARD  LVCMOS18} [get_ports  gp_out[0]]        ; ## IO_L2P_T0_33              
@@ -220,39 +220,19 @@ set_property  -dict {PACKAGE_PIN  AE1}  [get_ports  gt_tx_n[2]]                 
 set_property  -dict {PACKAGE_PIN  AC2}  [get_ports  gt_tx_p[3]]                             ; ## MGTXTXP3_111              
 set_property  -dict {PACKAGE_PIN  AC1}  [get_ports  gt_tx_n[3]]                             ; ## MGTXTXN3_111              
 
-## clocks
-
-create_clock -name ref_clk      -period  4.00 [get_ports gt_ref_clk_p]
-create_clock -name tx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
-create_clock -name tx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[1].i_channel/i_gt/i_gtxe2_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[1].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
-create_clock -name tx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[2].i_channel/i_gt/i_gtxe2_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[2].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
-create_clock -name tx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[3].i_channel/i_gt/i_gtxe2_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pzslb_gt/inst/g_lane_1[3].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
-
-## MIO loopbacks (fixed-io)
-## the following are connected to AD9361 GPIO
-
-##  JX4.86    A23   PS_MIO12_500_JX4    <==>  JX4.2     NA    AD9361_GPO1           
-##  JX4.88    B26   PS_MIO11_500_JX4    <==>  JX4.1     NA    AD9361_GPO0           
-##  JX4.91    B25   PS_MIO13_500_JX4    <==>  JX4.3     NA    AD9361_GPO2           
-##  JX4.93    D23   PS_MIO14_500_JX4    <==>  JX4.4     NA    AD9361_GPO3           
-
-## the following are mio-to-mio loopback (excluding Push-Buttons to LED)
-
-##  JX4.92    E17   PS_MIO46_501_JX4    <==>  JX4.94    B19   PS_MIO47_501_JX4
-
-## the following are mio-to-pl loopback
-
-##  JX4.97    E26   PS_MIO00_500_JX4    <==>  JX1.76    K3    IO_L11N_T1_SRCC_33        
-##  JX4.100   B20   PS_MIO51_501_JX4    <==>  JX4.67    A9    IO_L17P_T2_34             
-##  JX4.85    C24   PS_MIO15_500_JX4    <==>  JX4.37    E5    IO_L7N_T1_34              
-##  JX4.87    A25   PS_MIO10_500_JX4    <==>  JX4.42    E6    IO_L10P_T1_34             
+## mio
 
 set_property  -dict {PACKAGE_PIN  K3    IOSTANDARD  LVCMOS18} [get_ports  gp_in_mio[0]]     ; ## IO_L11N_T1_SRCC_33        
 set_property  -dict {PACKAGE_PIN  A9    IOSTANDARD  LVCMOS18} [get_ports  gp_in_mio[1]]     ; ## IO_L17P_T2_34             
 set_property  -dict {PACKAGE_PIN  E5    IOSTANDARD  LVCMOS18} [get_ports  gp_in_mio[2]]     ; ## IO_L7N_T1_34              
 set_property  -dict {PACKAGE_PIN  E6    IOSTANDARD  LVCMOS18} [get_ports  gp_in_mio[3]]     ; ## IO_L10P_T1_34             
+
+## clocks
+
+create_clock -name ref_clk      -period  4.00 [get_ports gt_ref_clk_p]
+create_clock -name xcvr_clk_0   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[0].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
+create_clock -name xcvr_clk_1   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[1].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
+create_clock -name xcvr_clk_2   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[2].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
+create_clock -name xcvr_clk_3   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[3].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
+
 

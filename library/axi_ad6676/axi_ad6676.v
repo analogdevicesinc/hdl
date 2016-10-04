@@ -80,7 +80,9 @@ module axi_ad6676 (
   s_axi_rvalid,
   s_axi_rresp,
   s_axi_rdata,
-  s_axi_rready);
+  s_axi_rready,
+  s_axi_awprot,
+  s_axi_arprot);
 
   parameter ID = 0;
   parameter DEVICE_TYPE = 0;
@@ -126,6 +128,9 @@ module axi_ad6676 (
   output  [ 1:0]  s_axi_rresp;
   output  [31:0]  s_axi_rdata;
   input           s_axi_rready;
+  input   [ 2:0]  s_axi_awprot;
+  input   [ 2:0]  s_axi_arprot;
+
 
   // internal registers
 
@@ -273,7 +278,7 @@ module axi_ad6676 (
     .up_drp_wr (),
     .up_drp_addr (),
     .up_drp_wdata (),
-    .up_drp_rdata (16'd0),
+    .up_drp_rdata (32'd0),
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
     .up_usr_chanmax (),

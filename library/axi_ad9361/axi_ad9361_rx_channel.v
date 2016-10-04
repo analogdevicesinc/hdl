@@ -34,87 +34,54 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
-// ADC channel-need to work on dual mode for pn sequence
 
 `timescale 1ns/100ps
 
-module axi_ad9361_rx_channel (
-
-  // adc interface
-
-  adc_clk,
-  adc_rst,
-  adc_valid,
-  adc_data,
-  adc_data_q,
-  adc_or,
-  dac_data,
-
-  // channel interface
-
-  adc_dcfilter_data_out,
-  adc_dcfilter_data_in,
-  adc_iqcor_valid,
-  adc_iqcor_data,
-  adc_enable,
-  up_adc_pn_err,
-  up_adc_pn_oos,
-  up_adc_or,
-
-  // processor interface
-
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+module axi_ad9361_rx_channel #(
 
   // parameters
 
-  parameter Q_OR_I_N = 0;
-  parameter CHANNEL_ID = 0;
-  parameter DATAPATH_DISABLE = 0;
+  parameter   Q_OR_I_N = 0,
+  parameter   CHANNEL_ID = 0,
+  parameter   DISABLE = 0,
+  parameter   USERPORTS_DISABLE = 0,
+  parameter   DATAFORMAT_DISABLE = 0,
+  parameter   DCFILTER_DISABLE = 0,
+  parameter   IQCORRECTION_DISABLE = 0) (
 
   // adc interface
 
-  input           adc_clk;
-  input           adc_rst;
-  input           adc_valid;
-  input   [11:0]  adc_data;
-  input   [11:0]  adc_data_q;
-  input           adc_or;
-  input   [11:0]  dac_data;
+  input           adc_clk,
+  input           adc_rst,
+  input           adc_valid,
+  input   [11:0]  adc_data,
+  input   [11:0]  adc_data_q,
+  input           adc_or,
+  input   [11:0]  dac_data,
 
   // channel interface
 
-  output  [15:0]  adc_dcfilter_data_out;
-  input   [15:0]  adc_dcfilter_data_in;
-  output          adc_iqcor_valid;
-  output  [15:0]  adc_iqcor_data;
-  output          adc_enable;
-  output          up_adc_pn_err;
-  output          up_adc_pn_oos;
-  output          up_adc_or;
+  output  [15:0]  adc_dcfilter_data_out,
+  input   [15:0]  adc_dcfilter_data_in,
+  output          adc_iqcor_valid,
+  output  [15:0]  adc_iqcor_data,
+  output          adc_enable,
+  output          up_adc_pn_err,
+  output          up_adc_pn_oos,
+  output          up_adc_or,
 
   // processor interface
 
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
+  input           up_rstn,
+  input           up_clk,
+  input           up_wreq,
+  input   [13:0]  up_waddr,
+  input   [31:0]  up_wdata,
+  output          up_wack,
+  input           up_rreq,
+  input   [13:0]  up_raddr,
+  output  [31:0]  up_rdata,
+  output          up_rack);
 
   // internal signals
 
@@ -137,12 +104,35 @@ module axi_ad9361_rx_channel (
   wire            adc_pn_err_s;
   wire            adc_pn_oos_s;
 
+  // data-path disable
+
+  generate
+  if (DISABLE == 1) begin
+  assign adc_dcfilter_data_out = 16'd0;
+  assign adc_iqcor_valid = 1'd0;
+  assign adc_iqcor_data = 16'd0;
+  assign adc_enable = 1'd0;
+  assign up_adc_pn_err = 1'd0;
+  assign up_adc_pn_oos = 1'd0;
+  assign up_adc_or = 1'd0;
+  assign up_wack = 1'd0;
+  assign up_rdata = 32'd0;
+  assign up_rack = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (DISABLE == 0) begin
+
   // iq correction inputs
 
   assign adc_data_s = (adc_data_sel_s == 4'h0) ? adc_data : dac_data;
   assign adc_dcfilter_data_out = adc_dcfilter_data_s;
 
-  axi_ad9361_rx_pnmon #(.Q_OR_I_N (Q_OR_I_N), .PRBS_SEL (CHANNEL_ID)) i_rx_pnmon (
+  axi_ad9361_rx_pnmon #(
+    .Q_OR_I_N (Q_OR_I_N),
+    .PRBS_SEL (CHANNEL_ID))
+  i_rx_pnmon (
     .adc_clk (adc_clk),
     .adc_valid (adc_valid),
     .adc_data_i (adc_data),
@@ -151,12 +141,10 @@ module axi_ad9361_rx_channel (
     .adc_pn_oos (adc_pn_oos_s),
     .adc_pn_err (adc_pn_err_s));
 
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign adc_dfmt_valid_s = adc_valid;
-  assign adc_dfmt_data_s = {4'd0, adc_data_s};
-  end else begin
-  ad_datafmt #(.DATA_WIDTH (12)) i_ad_datafmt (
+  ad_datafmt #(
+    .DATA_WIDTH (12),
+    .DISABLE (DATAFORMAT_DISABLE))
+  i_ad_datafmt (
     .clk (adc_clk),
     .valid (adc_valid),
     .data (adc_data_s),
@@ -165,15 +153,10 @@ module axi_ad9361_rx_channel (
     .dfmt_enable (adc_dfmt_enable_s),
     .dfmt_type (adc_dfmt_type_s),
     .dfmt_se (adc_dfmt_se_s));
-  end
-  endgenerate
 
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign adc_dcfilter_valid_s = adc_dfmt_valid_s;
-  assign adc_dcfilter_data_s = adc_dfmt_data_s;
-  end else begin
-  ad_dcfilter i_ad_dcfilter (
+  ad_dcfilter #(
+    .DISABLE (DCFILTER_DISABLE))
+  i_ad_dcfilter (
     .clk (adc_clk),
     .valid (adc_dfmt_valid_s),
     .data (adc_dfmt_data_s),
@@ -182,15 +165,11 @@ module axi_ad9361_rx_channel (
     .dcfilt_enb (adc_dcfilt_enb_s),
     .dcfilt_coeff (adc_dcfilt_coeff_s),
     .dcfilt_offset (adc_dcfilt_offset_s));
-  end
-  endgenerate
 
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign adc_iqcor_valid = adc_dcfilter_valid_s;
-  assign adc_iqcor_data = adc_dcfilter_data_s;
-  end else begin
-  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N),
+    .DISABLE (IQCORRECTION_DISABLE))
+  i_ad_iqcor (
     .clk (adc_clk),
     .valid (adc_dcfilter_valid_s),
     .data_in (adc_dcfilter_data_s),
@@ -200,10 +179,14 @@ module axi_ad9361_rx_channel (
     .iqcor_enable (adc_iqcor_enb_s),
     .iqcor_coeff_1 (adc_iqcor_coeff_1_s),
     .iqcor_coeff_2 (adc_iqcor_coeff_2_s));
-  end
-  endgenerate
 
-  up_adc_channel #(.ADC_CHANNEL_ID (CHANNEL_ID)) i_up_adc_channel (
+  up_adc_channel #(
+    .CHANNEL_ID (CHANNEL_ID),
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
+  i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),
@@ -248,6 +231,9 @@ module axi_ad9361_rx_channel (
     .up_raddr (up_raddr),
     .up_rdata (up_rdata),
     .up_rack (up_rack));
+
+  end
+  endgenerate
 
 endmodule
 

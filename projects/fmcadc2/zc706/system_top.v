@@ -112,10 +112,11 @@ module system_top (
   spi_adc_csn,
   spi_adc_clk,
   spi_adc_sdio,
-  spi_ext_csn_0,
-  spi_ext_csn_1,
-  spi_ext_clk,
-  spi_ext_sdio);
+
+  spi_adf4355_data_or_csn_0,
+  spi_adf4355_clk_or_csn_1,
+  spi_adf4355_le_or_clk,
+  spi_adf4355_ce_or_sdio);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -188,10 +189,11 @@ module system_top (
   output          spi_adc_csn;
   output          spi_adc_clk;
   inout           spi_adc_sdio;
-  output          spi_ext_csn_0;
-  output          spi_ext_csn_1;
-  output          spi_ext_clk;
-  inout           spi_ext_sdio;
+
+  output          spi_adf4355_data_or_csn_0;
+  output          spi_adf4355_clk_or_csn_1;
+  output          spi_adf4355_le_or_clk;
+  inout           spi_adf4355_ce_or_sdio;
 
   // internal signals
 
@@ -209,14 +211,6 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
-
-  // spi
-
-  assign spi_adc_csn = spi0_csn[0];
-  assign spi_adc_clk = spi0_clk;
-  assign spi_ext_csn_0 = spi0_csn[1];
-  assign spi_ext_csn_1 = spi0_csn[2];
-  assign spi_ext_clk = spi0_clk;
 
   // instantiations
 
@@ -237,22 +231,30 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
+  // spi
+
+  assign gpio_i[37:36] = gpio_o[37:36];
+
   fmcadc2_spi i_fmcadc2_spi (
-    .spi_adc_csn (spi_adc_csn),
-    .spi_ext_csn_0 (spi_ext_csn_0),
-    .spi_ext_csn_1 (spi_ext_csn_1),
+    .spi_adf4355 (gpio_o[36]),
+    .spi_adf4355_ce (gpio_o[37]),
     .spi_clk (spi0_clk),
+    .spi_csn (spi0_csn),
     .spi_mosi (spi0_mosi),
     .spi_miso (spi0_miso),
+    .spi_adc_csn (spi_adc_csn),
+    .spi_adc_clk (spi_adc_clk),
     .spi_adc_sdio (spi_adc_sdio),
-    .spi_ext_sdio (spi_ext_sdio));
+    .spi_adf4355_data_or_csn_0 (spi_adf4355_data_or_csn_0),
+    .spi_adf4355_clk_or_csn_1 (spi_adf4355_clk_or_csn_1),
+    .spi_adf4355_le_or_clk (spi_adf4355_le_or_clk),
+    .spi_adf4355_ce_or_sdio (spi_adf4355_ce_or_sdio));
 
   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf (
     .dio_t (gpio_t[33:32]),
     .dio_i (gpio_o[33:32]),
     .dio_o (gpio_i[33:32]),
-    .dio_p ({ adc_irq,    // 33
-              adc_fd}));  // 32
+    .dio_p ({adc_irq, adc_fd}));
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),

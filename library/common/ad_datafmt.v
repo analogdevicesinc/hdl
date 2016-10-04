@@ -34,72 +34,73 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // data format (offset binary or 2's complement only)
 
 `timescale 1ps/1ps
 
-module ad_datafmt (
+module ad_datafmt #(
+
+  // data bus width
+
+  parameter   DATA_WIDTH = 16,
+  parameter   DISABLE = 0) (
 
   // data path
 
-  clk,
-  valid,
-  data,
-  valid_out,
-  data_out,
+  input                       clk,
+  input                       valid,
+  input   [(DATA_WIDTH-1):0]  data,
+  output                      valid_out,
+  output  [15:0]              data_out,
 
   // control signals
 
-  dfmt_enable,
-  dfmt_type,
-  dfmt_se);
-
-  // delayed data bus width
-
-  parameter   DATA_WIDTH = 16;
-  localparam  DW = DATA_WIDTH - 1;
-
-  // data path
-
-  input           clk;
-  input           valid;
-  input   [DW:0]  data;
-  output          valid_out;
-  output  [15:0]  data_out;
-
-  // control signals
-
-  input           dfmt_enable;
-  input           dfmt_type;
-  input           dfmt_se;
+  input                       dfmt_enable,
+  input                       dfmt_type,
+  input                       dfmt_se);
 
   // internal registers
 
-  reg             valid_out = 'd0;
-  reg     [15:0]  data_out = 'd0;
+  reg                         valid_int = 'd0;
+  reg     [15:0]              data_int = 'd0;
 
   // internal signals
 
-  wire            type_s;
-  wire            signext_s;
-  wire    [DW:0]  data_s;
-  wire    [23:0]  sign_s;
-  wire    [23:0]  data_out_s;
+  wire                        type_s;
+  wire                        signext_s;
+  wire                        sign_s;
+  wire    [15:0]              data_out_s;
+
+  // data-path disable
+
+  generate
+  if (DISABLE == 1) begin
+  assign valid_out = valid;
+  assign data_out = data;
+  end else begin
+  assign valid_out = valid_int;
+  assign data_out = data_int;
+  end
+  endgenerate
 
   // if offset-binary convert to 2's complement first
 
   assign type_s = dfmt_enable & dfmt_type;
   assign signext_s = dfmt_enable & dfmt_se;
+  assign sign_s = signext_s & (type_s ^ data[(DATA_WIDTH-1)]);
 
-  assign data_s = (type_s == 1'b1) ? {~data[DW], data[(DW-1):0]} : data;
-  assign sign_s = (signext_s == 1'b1) ? {{24{data_s[DW]}}} : 24'd0;
-  assign data_out_s = {sign_s[23:(DW+1)], data_s};
+  generate
+  if (DATA_WIDTH < 16) begin
+  assign data_out_s[15:DATA_WIDTH] = {(16-DATA_WIDTH){sign_s}};
+  end
+  endgenerate
+  
+  assign data_out_s[(DATA_WIDTH-1)] = type_s ^ data[(DATA_WIDTH-1)];
+  assign data_out_s[(DATA_WIDTH-2):0] = data[(DATA_WIDTH-2):0];
 
   always @(posedge clk) begin
-    valid_out <= valid;
-    data_out <= data_out_s[15:0];
+    valid_int <= valid;
+    data_int <= data_out_s[15:0];
   end
 
 endmodule

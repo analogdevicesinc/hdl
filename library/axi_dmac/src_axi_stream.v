@@ -37,32 +37,32 @@
 // ***************************************************************************
 
 module dmac_src_axi_stream (
-	input s_axis_aclk,
-	input s_axis_aresetn,
+  input s_axis_aclk,
+  input s_axis_aresetn,
 
-	input enable,
-	output enabled,
-	input sync_id,
-	output sync_id_ret,
+  input enable,
+  output enabled,
+  input sync_id,
+  output sync_id_ret,
 
-	input [ID_WIDTH-1:0] request_id,
-	output [ID_WIDTH-1:0] response_id,
-	input eot,
+  input [ID_WIDTH-1:0] request_id,
+  output [ID_WIDTH-1:0] response_id,
+  input eot,
 
-	output s_axis_ready,
-	input s_axis_valid,
-	input [S_AXIS_DATA_WIDTH-1:0] s_axis_data,
-	input [0:0] s_axis_user,
-	output s_axis_xfer_req,
+  output s_axis_ready,
+  input s_axis_valid,
+  input [S_AXIS_DATA_WIDTH-1:0] s_axis_data,
+  input [0:0] s_axis_user,
+  output s_axis_xfer_req,
 
-	input fifo_ready,
-	output fifo_valid,
-	output [S_AXIS_DATA_WIDTH-1:0] fifo_data,
+  input fifo_ready,
+  output fifo_valid,
+  output [S_AXIS_DATA_WIDTH-1:0] fifo_data,
 
-	input req_valid,
-	output req_ready,
-	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
-	input req_sync_transfer_start
+  input req_valid,
+  output req_ready,
+  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+  input req_sync_transfer_start
 );
 
 parameter ID_WIDTH = 3;
@@ -78,46 +78,46 @@ assign sync_id_ret = sync_id;
 
 always @(posedge s_axis_aclk)
 begin
-	if (s_axis_aresetn == 1'b0) begin
-		needs_sync <= 1'b0;
-	end else begin
-		if (s_axis_valid && s_axis_ready && sync) begin
-			needs_sync <= 1'b0;
-		end else if (req_valid && req_ready) begin
-			needs_sync <= req_sync_transfer_start;
-		end
-	end
+  if (s_axis_aresetn == 1'b0) begin
+    needs_sync <= 1'b0;
+  end else begin
+    if (s_axis_valid && s_axis_ready && sync) begin
+      needs_sync <= 1'b0;
+    end else if (req_valid && req_ready) begin
+      needs_sync <= req_sync_transfer_start;
+    end
+  end
 end
 
 dmac_data_mover # (
-	.ID_WIDTH(ID_WIDTH),
-	.DATA_WIDTH(S_AXIS_DATA_WIDTH),
-	.DISABLE_WAIT_FOR_ID(0),
-	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
+  .ID_WIDTH(ID_WIDTH),
+  .DATA_WIDTH(S_AXIS_DATA_WIDTH),
+  .DISABLE_WAIT_FOR_ID(0),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
 ) i_data_mover (
-	.clk(s_axis_aclk),
-	.resetn(s_axis_aresetn),
+  .clk(s_axis_aclk),
+  .resetn(s_axis_aresetn),
 
-	.enable(enable),
-	.enabled(enabled),
-	.sync_id(sync_id),
+  .enable(enable),
+  .enabled(enabled),
+  .sync_id(sync_id),
 
-	.xfer_req(s_axis_xfer_req),
+  .xfer_req(s_axis_xfer_req),
 
-	.request_id(request_id),
-	.response_id(response_id),
-	.eot(eot),
-	
-	.req_valid(req_valid),
-	.req_ready(req_ready),
-	.req_last_burst_length(req_last_burst_length),
+  .request_id(request_id),
+  .response_id(response_id),
+  .eot(eot),
+  
+  .req_valid(req_valid),
+  .req_ready(req_ready),
+  .req_last_burst_length(req_last_burst_length),
 
-	.s_axi_ready(s_axis_ready),
-	.s_axi_valid(sync_valid),
-	.s_axi_data(s_axis_data),
-	.m_axi_ready(fifo_ready),
-	.m_axi_valid(fifo_valid),
-	.m_axi_data(fifo_data)
+  .s_axi_ready(s_axis_ready),
+  .s_axi_valid(sync_valid),
+  .s_axi_data(s_axis_data),
+  .m_axi_ready(fifo_ready),
+  .m_axi_valid(fifo_valid),
+  .m_axi_data(fifo_data)
 );
 
 endmodule

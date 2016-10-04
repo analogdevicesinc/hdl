@@ -11,13 +11,16 @@ all: lib
 
 clean:
 	make -C axi_ad6676 clean
+	make -C axi_ad7616 clean
 	make -C axi_ad9122 clean
 	make -C axi_ad9144 clean
 	make -C axi_ad9152 clean
+	make -C axi_ad9162 clean
 	make -C axi_ad9234 clean
 	make -C axi_ad9250 clean
 	make -C axi_ad9265 clean
 	make -C axi_ad9361 clean
+	make -C axi_ad9371 clean
 	make -C axi_ad9434 clean
 	make -C axi_ad9467 clean
 	make -C axi_ad9625 clean
@@ -25,8 +28,8 @@ clean:
 	make -C axi_ad9652 clean
 	make -C axi_ad9671 clean
 	make -C axi_ad9680 clean
+	make -C axi_ad9684 clean
 	make -C axi_ad9739a clean
-	make -C axi_adcfifo clean
 	make -C axi_clkgen clean
 	make -C axi_dmac clean
 	make -C axi_generic_adc clean
@@ -49,14 +52,13 @@ clean:
 	make -C spi_engine/spi_engine_execution clean
 	make -C spi_engine/spi_engine_interconnect clean
 	make -C spi_engine/spi_engine_offload clean
-	make -C util_adc_pack clean
 	make -C util_adcfifo clean
 	make -C util_axis_fifo clean
 	make -C util_axis_resize clean
 	make -C util_bsplit clean
 	make -C util_ccat clean
+	make -C util_clkdiv clean
 	make -C util_cpack clean
-	make -C util_dac_unpack clean
 	make -C util_dacfifo clean
 	make -C util_gmii_to_rgmii clean
 	make -C util_gtlb clean
@@ -70,6 +72,11 @@ clean:
 	make -C util_tdd_sync clean
 	make -C util_upack clean
 	make -C util_wfifo clean
+	make -C xilinx/axi_adcfifo clean
+	make -C xilinx/axi_adxcvr clean
+	make -C xilinx/axi_dacfifo clean
+	make -C xilinx/axi_xcvrlb clean
+	make -C xilinx/util_adxcvr clean
 
 
 clean-all:clean
@@ -77,13 +84,16 @@ clean-all:clean
 
 lib:
 	-make -C axi_ad6676
+	-make -C axi_ad7616
 	-make -C axi_ad9122
 	-make -C axi_ad9144
 	-make -C axi_ad9152
+	-make -C axi_ad9162
 	-make -C axi_ad9234
 	-make -C axi_ad9250
 	-make -C axi_ad9265
 	-make -C axi_ad9361
+	-make -C axi_ad9371
 	-make -C axi_ad9434
 	-make -C axi_ad9467
 	-make -C axi_ad9625
@@ -91,8 +101,8 @@ lib:
 	-make -C axi_ad9652
 	-make -C axi_ad9671
 	-make -C axi_ad9680
+	-make -C axi_ad9684
 	-make -C axi_ad9739a
-	-make -C axi_adcfifo
 	-make -C axi_clkgen
 	-make -C axi_dmac
 	-make -C axi_generic_adc
@@ -115,14 +125,13 @@ lib:
 	-make -C spi_engine/spi_engine_execution
 	-make -C spi_engine/spi_engine_interconnect
 	-make -C spi_engine/spi_engine_offload
-	-make -C util_adc_pack
 	-make -C util_adcfifo
 	-make -C util_axis_fifo
 	-make -C util_axis_resize
 	-make -C util_bsplit
 	-make -C util_ccat
+	-make -C util_clkdiv
 	-make -C util_cpack
-	-make -C util_dac_unpack
 	-make -C util_dacfifo
 	-make -C util_gmii_to_rgmii
 	-make -C util_gtlb
@@ -136,6 +145,11 @@ lib:
 	-make -C util_tdd_sync
 	-make -C util_upack
 	-make -C util_wfifo
+	-make -C xilinx/axi_adcfifo
+	-make -C xilinx/axi_adxcvr
+	-make -C xilinx/axi_dacfifo
+	-make -C xilinx/axi_xcvrlb
+	-make -C xilinx/util_adxcvr
 
 ####################################################################################
 ####################################################################################

@@ -68,7 +68,10 @@ module axi_mc_speed
     output          s_axi_rvalid,
     output  [ 1:0]  s_axi_rresp,
     output  [31:0]  s_axi_rdata,
-    input           s_axi_rready);
+    input           s_axi_rready,
+    input   [ 2:0]  s_axi_awprot,
+    input   [ 2:0]  s_axi_arprot
+);
 
 //------------------------------------------------------------------------------
 //----------- Registers Declarations -------------------------------------------

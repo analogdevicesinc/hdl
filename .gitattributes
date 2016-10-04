@@ -11,4 +11,5 @@
 *.xdc text
 *.xml text
 *.qsys text
+*.xise text
 Makefile text

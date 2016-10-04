@@ -65,7 +65,9 @@ module axi_clkgen (
   s_axi_rvalid,
   s_axi_rdata,
   s_axi_rresp,
-  s_axi_rready);
+  s_axi_rready,
+  s_axi_awprot,
+  s_axi_arprot);
 
   // parameters
 
@@ -76,7 +78,11 @@ module axi_clkgen (
   parameter   VCO_DIV = 11;
   parameter   VCO_MUL = 49;
   parameter   CLK0_DIV = 6;
+  parameter   CLK0_PHASE = 0.000;
   parameter   CLK1_DIV = 6;
+  parameter   CLK1_PHASE = 0.000;
+  parameter   CLK2_DIV = 6;
+  parameter   CLK2_PHASE = 0.000;
 
   // clocks
 
@@ -106,6 +112,10 @@ module axi_clkgen (
   output  [31:0]  s_axi_rdata;
   output  [ 1:0]  s_axi_rresp;
   input           s_axi_rready;
+  input   [ 2:0]  s_axi_awprot;
+  input   [ 2:0]  s_axi_arprot;
+
+
 
   // reset and clocks
 
@@ -200,14 +210,17 @@ module axi_clkgen (
     .MMCM_VCO_DIV (VCO_DIV),
     .MMCM_VCO_MUL (VCO_MUL),
     .MMCM_CLK0_DIV (CLK0_DIV),
-    .MMCM_CLK1_DIV (CLK1_DIV))
+    .MMCM_CLK0_PHASE (CLK0_PHASE),
+    .MMCM_CLK1_DIV (CLK1_DIV),
+    .MMCM_CLK1_PHASE (CLK1_PHASE))
   i_mmcm_drp (
     .clk (clk),
     .clk2 (clk2),
-    .mmcm_rst (mmcm_rst),
     .clk_sel(clk_sel),
+    .mmcm_rst (mmcm_rst),
     .mmcm_clk_0 (clk_0),
     .mmcm_clk_1 (clk_1),
+    .mmcm_clk_2 (),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel_s),

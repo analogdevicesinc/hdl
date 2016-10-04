@@ -1,9 +1,9 @@
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
-source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3.tcl
-source $ad_hdl_dir/projects/common/xilinx/sys_dmafifo.tcl
+source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3_adcfifo.tcl
+source $ad_hdl_dir/projects/common/xilinx/sys_dacfifo.tcl
 
-p_plddr3_fifo [current_bd_instance .] axi_ad9680_fifo 128
+p_plddr3_adcfifo [current_bd_instance .] axi_ad9680_fifo 128
 p_sys_dacfifo [current_bd_instance .] axi_ad9152_fifo 128 10
 
 create_bd_port -dir I -type rst sys_rst
@@ -23,14 +23,14 @@ create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
 
 source ../common/daq3_bd.tcl
 
-# ila 
+# ila
 
 set mfifo_adc [create_bd_cell -type ip -vlnv analog.com:user:util_mfifo:1.0 mfifo_adc]
 set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $mfifo_adc
 set_property -dict [list CONFIG.DIN_DATA_WIDTH {64}] $mfifo_adc
 set_property -dict [list CONFIG.ADDRESS_WIDTH {8}] $mfifo_adc
 
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_adc]
+set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_adc]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc

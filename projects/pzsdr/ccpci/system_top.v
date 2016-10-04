@@ -65,8 +65,6 @@ module system_top (
   iic_scl,
   iic_sda,
 
-  gpio_bd,
-
   rx_clk_in_p,
   rx_clk_in_n,
   rx_frame_in_p,
@@ -97,16 +95,15 @@ module system_top (
   spi_miso,
 
   pcie_rstn,
-  pcie_prsntn,
-  pcie_prsnt1n,
-  pcie_prsnt4n,
   pcie_waken,
   pcie_ref_clk_p,
   pcie_ref_clk_n,
   pcie_data_rx_p,
   pcie_data_rx_n,
   pcie_data_tx_p,
-  pcie_data_tx_n);
+  pcie_data_tx_n,
+
+  pcie_rstn_good);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -133,8 +130,6 @@ module system_top (
 
   inout           iic_scl;
   inout           iic_sda;
-
-  inout   [11:0]  gpio_bd;
 
   input           rx_clk_in_p;
   input           rx_clk_in_n;
@@ -166,9 +161,6 @@ module system_top (
   input           spi_miso;
 
   input           pcie_rstn;
-  input           pcie_prsntn;
-  output          pcie_prsnt1n;
-  output          pcie_prsnt4n;
   inout           pcie_waken;
   input           pcie_ref_clk_p;
   input           pcie_ref_clk_n;
@@ -177,18 +169,48 @@ module system_top (
   output  [ 3:0]  pcie_data_tx_p;
   output  [ 3:0]  pcie_data_tx_n;
 
+  output          pcie_rstn_good;
+
   // internal signals
+
+  reg [3:0]       pcie_rstn_cnt0 = 'h00;
+  reg [3:0]       pcie_rstn_cnt1 = 'h00;
+  reg             pcie_rstn_good = 1'b0;
 
   wire            pcie_ref_clk;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
+  wire    [63:0]  gpio_ps_i;
+
   // assignments
 
   assign pcie_waken = 1'bz;
-  assign pcie_prsnt1n = 1'b1;
-  assign pcie_prsnt4n = pcie_prsntn;
+  assign gpio_ps_i[0] = pcie_rstn_good;
+  assign gpio_ps_i[63:1] = 'h00;
+
+  // PCIe reset monitor
+
+  always @(posedge pcie_ref_clk) begin
+    // If we see a stable low level followed by a stable high level we assume we
+    // got a good PCIe reset
+    if (pcie_rstn_cnt0 != 'hf) begin
+      if (pcie_rstn == 1'b0) begin
+        pcie_rstn_cnt0 <= pcie_rstn_cnt0 + 1'b1;
+      end else begin
+        pcie_rstn_cnt0 <= 'h00;
+      end
+    end else if (pcie_rstn_cnt1 != 'hf) begin
+      if (pcie_rstn == 1'b1) begin
+        pcie_rstn_cnt1 <= pcie_rstn_cnt1 + 1'b1;
+      end else begin
+        pcie_rstn_cnt1 <= 'h00;
+      end
+    end else begin
+      pcie_rstn_good <= 1'b1;
+    end
+  end
 
   // instantiations
 
@@ -209,12 +231,6 @@ module system_top (
               gpio_en_agc,        // 44:44
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
-
-  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_bd (
-    .dio_t (gpio_t[11:0]),
-    .dio_i (gpio_o[11:0]),
-    .dio_o (gpio_i[11:0]),
-    .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -239,9 +255,9 @@ module system_top (
     .fixed_io_ps_clk (fixed_io_ps_clk),
     .fixed_io_ps_porb (fixed_io_ps_porb),
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
-    .gpio_i (gpio_i),
-    .gpio_o (gpio_o),
-    .gpio_t (gpio_t),
+    .gpio_i (gpio_ps_i),
+    .gpio_o (),
+    .gpio_t (),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
@@ -271,14 +287,14 @@ module system_top (
     .rx_frame_in_n (rx_frame_in_n),
     .rx_frame_in_p (rx_frame_in_p),
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (spi_clk),
-    .spi0_csn_0_o (spi_csn),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (spi_miso),
+    .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_mosi),
+    .spi0_sdo_o (),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -299,7 +315,20 @@ module system_top (
     .tx_frame_out_p (tx_frame_out_p),
     .txnrx (txnrx),
     .up_enable (gpio_o[47]),
-    .up_txnrx (gpio_o[48]));
+    .up_txnrx (gpio_o[48]),
+    .pl_spi_clk_o(spi_clk),
+    .pl_spi_clk_i(spi_clk),
+    .pl_spi_sdo_o(spi_mosi),
+    .pl_spi_sdo_i(spi_mosi),
+    .pl_spi_sdi_i(spi_miso),
+    .pl_spi_csn_o(spi_csn),
+    .pl_spi_csn_i(spi_csn),
+    .pl_gpio0_o(gpio_o[31:0]),
+    .pl_gpio0_t(gpio_t[31:0]),
+    .pl_gpio0_i(gpio_i[31:0]),
+    .pl_gpio1_o(gpio_o[63:32]),
+    .pl_gpio1_t(gpio_t[63:32]),
+    .pl_gpio1_i(gpio_i[63:32]));
 
 endmodule
 

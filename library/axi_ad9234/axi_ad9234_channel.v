@@ -120,7 +120,7 @@ module axi_ad9234_channel (
 
   assign adc_dfmt_data = adc_data;
 
-  up_adc_channel #(.ADC_CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
+  up_adc_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),

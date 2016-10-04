@@ -19,6 +19,8 @@ M_DEPS += ../common/ad_jesd_align.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_gt_channel.v
 M_DEPS += ../common/up_gt.v
+M_DEPS += axi_jesd_gt_tx_constr.xdc
+M_DEPS += axi_jesd_gt_rx_constr.xdc
 M_DEPS += axi_jesd_gt_constr.xdc
 M_DEPS += axi_jesd_gt.v
 M_DEPS += ../interfaces/if_gt_qpll.xml
@@ -41,6 +43,10 @@ M_FLIST += *.log
 M_FLIST += component.xml
 M_FLIST += *.jou
 M_FLIST +=  xgui
+M_FLIST += *.ip_user_files
+M_FLIST += *.srcs
+M_FLIST += *.hw
+M_FLIST += *.sim
 M_FLIST += .Xil
 
 
@@ -57,7 +63,7 @@ clean-all:
 
 
 axi_jesd_gt.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_jesd_gt_ip.tcl  >> axi_jesd_gt_ip.log 2>&1
 
 dep:

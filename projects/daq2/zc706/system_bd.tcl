@@ -1,10 +1,10 @@
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
-source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3.tcl
-source $ad_hdl_dir/projects/common/xilinx/sys_dmafifo.tcl
+source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3_adcfifo.tcl
+source $ad_hdl_dir/projects/common/xilinx/sys_dacfifo.tcl
 
-p_plddr3_fifo [current_bd_instance .] axi_ad9680_fifo 128
 p_sys_dacfifo [current_bd_instance .] axi_ad9144_fifo 128 10
+p_plddr3_adcfifo [current_bd_instance .] axi_ad9680_fifo 128
 
 create_bd_port -dir I -type rst sys_rst
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr3

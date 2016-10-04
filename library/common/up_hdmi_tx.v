@@ -43,7 +43,6 @@ module up_hdmi_tx (
 
   hdmi_clk,
   hdmi_rst,
-  hdmi_full_range,
   hdmi_csc_bypass,
   hdmi_ss_bypass,
   hdmi_srcsel,
@@ -58,6 +57,8 @@ module up_hdmi_tx (
   hdmi_vs_width,
   hdmi_ve_max,
   hdmi_ve_min,
+  hdmi_clip_max,
+  hdmi_clip_min,
   hdmi_status,
   hdmi_tpm_oos,
   hdmi_clk_ratio,
@@ -92,7 +93,6 @@ module up_hdmi_tx (
 
   input           hdmi_clk;
   output          hdmi_rst;
-  output          hdmi_full_range;
   output          hdmi_csc_bypass;
   output          hdmi_ss_bypass;
   output  [ 1:0]  hdmi_srcsel;
@@ -107,6 +107,8 @@ module up_hdmi_tx (
   output  [15:0]  hdmi_vs_width;
   output  [15:0]  hdmi_ve_max;
   output  [15:0]  hdmi_ve_min;
+  output  [23:0]  hdmi_clip_max;
+  output  [23:0]  hdmi_clip_min;
   input           hdmi_status;
   input           hdmi_tpm_oos;
   input   [31:0]  hdmi_clk_ratio;
@@ -138,7 +140,6 @@ module up_hdmi_tx (
   reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_resetn = 'd0;
-  reg             up_full_range = 'd0;
   reg             up_csc_bypass = 'd0;
   reg             up_ss_bypass = 'd0;
   reg     [ 1:0]  up_srcsel = 'd1;
@@ -157,6 +158,8 @@ module up_hdmi_tx (
   reg     [15:0]  up_vs_width = 'd0;
   reg     [15:0]  up_ve_max = 'd0;
   reg     [15:0]  up_ve_min = 'd0;
+  reg     [23:0]  up_clip_max = 'd0;
+  reg     [23:0]  up_clip_min = 'd0;
   reg             up_rack = 'd0;
   reg     [31:0]  up_rdata = 'd0;
 
@@ -184,7 +187,6 @@ module up_hdmi_tx (
       up_wack <= 'd0;
       up_scratch <= 'd0;
       up_resetn <= 'd0;
-      up_full_range <= 'd0;
       up_csc_bypass <= 'd0;
       up_ss_bypass <= 'd0;
       up_srcsel <= 'd1;
@@ -203,6 +205,8 @@ module up_hdmi_tx (
       up_vs_width <= 'd0;
       up_ve_max <= 'd0;
       up_ve_min <= 'd0;
+      up_clip_max <= 24'hf0ebf0;
+      up_clip_min <= 24'h101010;
     end else begin
       up_core_preset <= ~up_resetn;
       up_wack <= up_wreq_s;
@@ -214,7 +218,6 @@ module up_hdmi_tx (
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h011)) begin
         up_ss_bypass <= up_wdata[2];
-        up_full_range <= up_wdata[1];
         up_csc_bypass <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h012)) begin
@@ -242,6 +245,12 @@ module up_hdmi_tx (
         up_vdma_tpm_oos <= 1'b1;
       end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
         up_vdma_tpm_oos <= up_vdma_tpm_oos & ~up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h01a)) begin
+        up_clip_max <= up_wdata[23:0];
+      end
+    if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h01b)) begin
+        up_clip_min <= up_wdata[23:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h100)) begin
         up_hl_active <= up_wdata[31:16];
@@ -282,7 +291,7 @@ module up_hdmi_tx (
           12'h001: up_rdata <= ID;
           12'h002: up_rdata <= up_scratch;
           12'h010: up_rdata <= {31'd0, up_resetn};
-          12'h011: up_rdata <= {29'd0, up_ss_bypass, up_full_range, up_csc_bypass};
+          12'h011: up_rdata <= {29'd0, up_ss_bypass, 1'b0, up_csc_bypass};
           12'h012: up_rdata <= {30'd0, up_srcsel};
           12'h013: up_rdata <= {8'd0, up_const_rgb};
           12'h015: up_rdata <= up_hdmi_clk_count_s;
@@ -290,6 +299,9 @@ module up_hdmi_tx (
           12'h017: up_rdata <= {31'd0, up_hdmi_status_s};
           12'h018: up_rdata <= {30'd0, up_vdma_ovf, up_vdma_unf};
           12'h019: up_rdata <= {30'd0, up_hdmi_tpm_oos, up_vdma_tpm_oos};
+          12'h01a: up_rdata <= {8'd0, up_clip_max};
+          12'h01b: up_rdata <= {8'd0, up_clip_min};
+
           12'h100: up_rdata <= {up_hl_active, up_hl_width};
           12'h101: up_rdata <= {16'd0, up_hs_width};
           12'h102: up_rdata <= {up_he_max, up_he_min};
@@ -311,11 +323,10 @@ module up_hdmi_tx (
 
   // hdmi control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(189)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(236)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_ss_bypass,
-                      up_full_range,
                       up_csc_bypass,
                       up_srcsel,
                       up_const_rgb,
@@ -328,12 +339,13 @@ module up_hdmi_tx (
                       up_vf_width,
                       up_vs_width,
                       up_ve_max,
-                      up_ve_min}),
+                      up_ve_min,
+                      up_clip_max,
+                      up_clip_min}),
     .up_xfer_done (),
     .d_rst (hdmi_rst),
     .d_clk (hdmi_clk),
     .d_data_cntrl ({  hdmi_ss_bypass,
-                      hdmi_full_range,
                       hdmi_csc_bypass,
                       hdmi_srcsel,
                       hdmi_const_rgb,
@@ -346,7 +358,9 @@ module up_hdmi_tx (
                       hdmi_vf_width,
                       hdmi_vs_width,
                       hdmi_ve_max,
-                      hdmi_ve_min}));
+                      hdmi_ve_min,
+                      hdmi_clip_max,
+                      hdmi_clip_min}));
 
   up_xfer_status #(.DATA_WIDTH(2)) i_xfer_status (
     .up_rstn (up_rstn),

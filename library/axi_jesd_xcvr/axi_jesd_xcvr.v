@@ -102,6 +102,9 @@ module axi_jesd_xcvr (
   parameter   TX_NUM_OF_LANES = 4;
   parameter   RX_NUM_OF_LANES = 4;
 
+  localparam  TX_LANECNT  = (TX_NUM_OF_LANES == 0) ? 1 : TX_NUM_OF_LANES;
+  localparam  RX_LANECNT  = (RX_NUM_OF_LANES == 0) ? 1 : RX_NUM_OF_LANES;
+
   output                                        rst;
 
   // receive interface
@@ -111,14 +114,14 @@ module axi_jesd_xcvr (
   input                                         rx_ext_sysref_in;
   output                                        rx_ext_sysref_out;
   output                                        rx_sync;
-  output  [((RX_NUM_OF_LANES* 1)-1):0]          rx_sof;
-  output  [((RX_NUM_OF_LANES*32)-1):0]          rx_data;
-  input   [((RX_NUM_OF_LANES* 1)-1):0]          rx_ready;
+  output  [((RX_LANECNT* 1)-1):0]               rx_sof;
+  output  [((RX_LANECNT*32)-1):0]               rx_data;
+  input   [((RX_LANECNT* 1)-1):0]               rx_ready;
   output                                        rx_ip_sysref;
   input                                         rx_ip_sync;
   input   [  3:0]                               rx_ip_sof;
   input                                         rx_ip_valid;
-  input   [((RX_NUM_OF_LANES*32)-1):0]          rx_ip_data;
+  input   [((RX_LANECNT*32)-1):0]               rx_ip_data;
   output                                        rx_ip_ready;
 
   // transmit interface
@@ -128,12 +131,12 @@ module axi_jesd_xcvr (
   input                                         tx_ext_sysref_in;
   output                                        tx_ext_sysref_out;
   input                                         tx_sync;
-  input   [((TX_NUM_OF_LANES*32)-1):0]          tx_data;
-  input   [((RX_NUM_OF_LANES* 1)-1):0]          tx_ready;
+  input   [((TX_LANECNT*32)-1):0]               tx_data;
+  input   [((TX_LANECNT* 1)-1):0]               tx_ready;
   output                                        tx_ip_sysref;
   output                                        tx_ip_sync;
   output                                        tx_ip_valid;
-  output  [((RX_NUM_OF_LANES*32)-1):0]          tx_ip_data;
+  output  [((TX_LANECNT*32)-1):0]               tx_ip_data;
   input                                         tx_ip_ready;
 
   // axi interface
@@ -166,7 +169,7 @@ module axi_jesd_xcvr (
   wire                                          up_clk;
   wire    [  7:0]                               status_s;
   wire    [  3:0]                               rx_ip_sof_s;
-  wire    [((RX_NUM_OF_LANES*32)-1):0]          rx_ip_data_s;
+  wire    [((RX_LANECNT*32)-1):0]               rx_ip_data_s;
   wire    [  7:0]                               rx_status_s;
   wire    [  7:0]                               tx_status_s;
   wire                                          up_wreq_s;
@@ -197,7 +200,7 @@ module axi_jesd_xcvr (
   assign rx_ip_sof_s[0] = rx_ip_sof[3];
 
   generate
-  for (n = 0; n < RX_NUM_OF_LANES; n = n + 1) begin: g_rx_swap
+  for (n = 0; n < RX_LANECNT; n = n + 1) begin: g_rx_swap
   assign rx_ip_data_s[((n*32) + 31):((n*32) + 24)] = rx_ip_data[((n*32) +  7):((n*32) +  0)];
   assign rx_ip_data_s[((n*32) + 23):((n*32) + 16)] = rx_ip_data[((n*32) + 15):((n*32) +  8)];
   assign rx_ip_data_s[((n*32) + 15):((n*32) +  8)] = rx_ip_data[((n*32) + 23):((n*32) + 16)];
@@ -206,16 +209,16 @@ module axi_jesd_xcvr (
   endgenerate
 
   generate
-  if (RX_NUM_OF_LANES < 8) begin
-  assign rx_status_s[7:RX_NUM_OF_LANES] = status_s[7:RX_NUM_OF_LANES];
-  assign rx_status_s[(RX_NUM_OF_LANES-1):0] = rx_ready;
+  if (RX_LANECNT < 8) begin
+  assign rx_status_s[7:RX_LANECNT] = status_s[7:RX_LANECNT];
+  assign rx_status_s[(RX_LANECNT-1):0] = rx_ready;
   end else begin
   assign rx_status_s = rx_ready[7:0];
   end
   endgenerate
 
   generate
-  for (n = 0; n < RX_NUM_OF_LANES; n = n + 1) begin: g_rx_align
+  for (n = 0; n < RX_LANECNT; n = n + 1) begin: g_rx_align
   ad_jesd_align i_jesd_align (
     .rx_clk (rx_clk),
     .rx_ip_sof (rx_ip_sof_s),
@@ -229,7 +232,7 @@ module axi_jesd_xcvr (
   assign tx_ip_sysref = tx_ext_sysref_out;
 
   generate
-  for (n = 0; n < TX_NUM_OF_LANES; n = n + 1) begin: g_tx_swap
+  for (n = 0; n < TX_LANECNT; n = n + 1) begin: g_tx_swap
   assign tx_ip_data[((n*32) + 31):((n*32) + 24)] = tx_data[((n*32) +  7):((n*32) +  0)];
   assign tx_ip_data[((n*32) + 23):((n*32) + 16)] = tx_data[((n*32) + 15):((n*32) +  8)];
   assign tx_ip_data[((n*32) + 15):((n*32) +  8)] = tx_data[((n*32) + 23):((n*32) + 16)];
@@ -238,9 +241,9 @@ module axi_jesd_xcvr (
   endgenerate
 
   generate
-  if (TX_NUM_OF_LANES < 8) begin
-  assign tx_status_s[7:TX_NUM_OF_LANES] = status_s[7:TX_NUM_OF_LANES];
-  assign tx_status_s[(TX_NUM_OF_LANES-1):0] = tx_ready;
+  if (TX_LANECNT < 8) begin
+  assign tx_status_s[7:TX_LANECNT] = status_s[7:TX_LANECNT];
+  assign tx_status_s[(TX_LANECNT-1):0] = tx_ready;
   end else begin
   assign tx_status_s = tx_ready[7:0];
   end

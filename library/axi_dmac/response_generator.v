@@ -37,22 +37,22 @@
 // ***************************************************************************
 
 module dmac_response_generator (
-	input clk,
-	input resetn,
+  input clk,
+  input resetn,
 
-	input enable,
-	output reg enabled,
+  input enable,
+  output reg enabled,
 
-	input [ID_WIDTH-1:0] request_id,
-	output reg [ID_WIDTH-1:0] response_id,
-	input sync_id,
+  input [ID_WIDTH-1:0] request_id,
+  output reg [ID_WIDTH-1:0] response_id,
+  input sync_id,
 
-	input eot,
+  input eot,
 
-	output resp_valid,
-	input resp_ready,
-	output resp_eot,
-	output [1:0] resp_resp
+  output resp_valid,
+  input resp_ready,
+  output resp_eot,
+  output [1:0] resp_resp
 );
 
 parameter ID_WIDTH = 3;
@@ -67,24 +67,24 @@ assign resp_valid = request_id != response_id && enabled;
 
 // We have to wait for all responses before we can disable the response handler
 always @(posedge clk) begin
-	if (resetn == 1'b0) begin
-		enabled <= 1'b0;
-	end else begin
-		if (enable)
-			enabled <= 1'b1;
-		else if (request_id == response_id)
-			enabled <= 1'b0;
-	end
+  if (resetn == 1'b0) begin
+    enabled <= 1'b0;
+  end else begin
+    if (enable)
+      enabled <= 1'b1;
+    else if (request_id == response_id)
+      enabled <= 1'b0;
+  end
 end
 
 always @(posedge clk) begin
-	if (resetn == 1'b0) begin
-		response_id <= 'h0;
-	end else begin
-		if ((resp_valid && resp_ready) ||
-			(sync_id && response_id != request_id))
-			response_id <= inc_id(response_id);
-	end
+  if (resetn == 1'b0) begin
+    response_id <= 'h0;
+  end else begin
+    if ((resp_valid && resp_ready) ||
+      (sync_id && response_id != request_id))
+      response_id <= inc_id(response_id);
+  end
 end
 
 endmodule

@@ -7,7 +7,7 @@ variable p_prcfg_list
 variable p_prcfg_status
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2015.2.1"
+  set REQUIRED_VIVADO_VERSION "2016.2"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -15,6 +15,10 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
 } elseif {![info exists IGNORE_VERSION_CHECK]} {
   set IGNORE_VERSION_CHECK 0
 }
+
+set p_board "not-applicable"
+set p_device "none"
+set sys_zynq 1
 
 proc adi_project_create {project_name {mode 0}} {
 
@@ -25,10 +29,6 @@ proc adi_project_create {project_name {mode 0}} {
   global sys_zynq
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
-
-  set p_device "none"
-  set p_board "none"
-  set sys_zynq 0
 
   if [regexp "_ac701$" $project_name] {
     set p_device "xc7a200tfbg676-2"
@@ -47,12 +47,17 @@ proc adi_project_create {project_name {mode 0}} {
   }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
-    set p_board "xilinx.com:kcu105:part0:1.0"
+    set p_board "xilinx.com:kcu105:part0:1.1"
     set sys_zynq 0
   }
   if [regexp "_zed$" $project_name] {
     set p_device "xc7z020clg484-1"
     set p_board "em.avnet.com:zed:part0:1.3"
+    set sys_zynq 1
+  }
+  if [regexp "_microzed$" $project_name] {
+    set p_device "xc7z010clg400-1"
+    set p_board "not-applicable"
     set sys_zynq 1
   }
   if [regexp "_zc702$" $project_name] {
@@ -74,6 +79,16 @@ proc adi_project_create {project_name {mode 0}} {
     set p_device "xc7z035ifbg676-2L"
     set p_board "not-applicable"
     set sys_zynq 1
+  }
+  if [regexp "_pzsdr1$" $project_name] {
+    set p_device "xc7z020clg400-1"
+    set p_board "not-applicable"
+    set sys_zynq 1
+  }
+  if [regexp "_zcu102$" $project_name] {
+    set p_device "xczu9eg-ffvb1156-1-i-es1"
+    set p_board "xilinx.com:zcu102:part0:1.2"
+    set sys_zynq 2
   }
 
   if {!$IGNORE_VERSION_CHECK && [string compare [version -short] $REQUIRED_VIVADO_VERSION] != 0} {
@@ -126,6 +141,12 @@ proc adi_project_create {project_name {mode 0}} {
   } else {
     write_hwdef -file "$project_name.data/$project_name.hwdef"
   }
+
+  if {![info exists ::env(ADI_NO_BITSTREAM_COMPRESSION)] && ![info exists ADI_NO_BITSTREAM_COMPRESSION]} {
+    add_files -norecurse -fileset sources_1 \
+		"$ad_hdl_dir/projects/common/xilinx/compression_system_constr.xdc"
+  }
+
 }
 
 proc adi_project_files {project_name project_files} {

@@ -32,6 +32,10 @@ M_FLIST += *.log
 M_FLIST += component.xml
 M_FLIST += *.jou
 M_FLIST +=  xgui
+M_FLIST += *.ip_user_files
+M_FLIST += *.srcs
+M_FLIST += *.hw
+M_FLIST += *.sim
 M_FLIST += .Xil
 
 
@@ -48,7 +52,7 @@ clean-all:
 
 
 axi_ad6676.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_ad6676_ip.tcl  >> axi_ad6676_ip.log 2>&1
 
 ####################################################################################

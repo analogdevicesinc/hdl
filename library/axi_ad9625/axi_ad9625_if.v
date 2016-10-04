@@ -34,9 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
-// This is the LVDS/DDR interface
 
 `timescale 1ns/100ps
 
@@ -46,6 +43,7 @@ module axi_ad9625_if (
   // rx_clk is (line-rate/40)
 
   rx_clk,
+  rx_sof,
   rx_data,
 
   // adc data output
@@ -59,12 +57,16 @@ module axi_ad9625_if (
   adc_raddr_in,
   adc_raddr_out);
 
+  // parameters
+
   parameter   ID = 0;
+  parameter   DEVICE_TYPE = 0;
 
   // jesd interface 
   // rx_clk is ref_clk/4
 
   input           rx_clk;
+  input   [  3:0] rx_sof;
   input   [255:0] rx_data;
 
   // adc data output
@@ -119,6 +121,7 @@ module axi_ad9625_if (
   wire    [ 31:0] rx_data5_s;
   wire    [ 31:0] rx_data6_s;
   wire    [ 31:0] rx_data7_s;
+  wire    [255:0] rx_data_s;
 
   // nothing much to do on clock & over-range
 
@@ -198,14 +201,14 @@ module axi_ad9625_if (
   assign adc_data_s01_s = {rx_data3_s[ 3: 0], rx_data2_s[ 7: 0], rx_data3_s[ 7: 4]};
   assign adc_data_s00_s = {rx_data1_s[ 3: 0], rx_data0_s[ 7: 0], rx_data1_s[ 7: 4]};
 
-  assign rx_data0_s = rx_data[ 31:  0];
-  assign rx_data1_s = rx_data[ 63: 32];
-  assign rx_data2_s = rx_data[ 95: 64];
-  assign rx_data3_s = rx_data[127: 96];
-  assign rx_data4_s = rx_data[159:128];
-  assign rx_data5_s = rx_data[191:160];
-  assign rx_data6_s = rx_data[223:192];
-  assign rx_data7_s = rx_data[255:224];
+  assign rx_data0_s = rx_data_s[ 31:  0];
+  assign rx_data1_s = rx_data_s[ 63: 32];
+  assign rx_data2_s = rx_data_s[ 95: 64];
+  assign rx_data3_s = rx_data_s[127: 96];
+  assign rx_data4_s = rx_data_s[159:128];
+  assign rx_data5_s = rx_data_s[191:160];
+  assign rx_data6_s = rx_data_s[223:192];
+  assign rx_data7_s = rx_data_s[255:224];
 
   // status
 
@@ -227,6 +230,21 @@ module axi_ad9625_if (
     .clkb (rx_clk),
     .addrb (adc_raddr_s),
     .doutb (adc_rdata_s));
+
+  // frame-alignment
+
+  genvar n;
+
+  generate
+  for (n = 0; n < 8; n = n + 1) begin: g_xcvr_if
+  ad_xcvr_rx_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_xcvr_if (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_sof),
+    .rx_ip_data (rx_data[((n*32)+31):(n*32)]),
+    .rx_sof (),
+    .rx_data (rx_data_s[((n*32)+31):(n*32)]));
+  end
+  endgenerate
 
 endmodule
 

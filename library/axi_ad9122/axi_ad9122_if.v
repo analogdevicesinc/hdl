@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -100,6 +100,11 @@ module axi_ad9122_if (
   parameter   DEVICE_TYPE = 0;
   parameter   SERDES_OR_DDR_N = 1;
   parameter   MMCM_OR_BUFIO_N = 1;
+  parameter   MMCM_CLKIN_PERIOD = 1.667;
+  parameter   MMCM_VCO_DIV = 6;
+  parameter   MMCM_VCO_MUL = 12;
+  parameter   MMCM_CLK0_DIV = 2;
+  parameter   MMCM_CLK1_DIV = 8;
   parameter   IO_DELAY_GROUP = "dac_if_delay_group";
 
   // dac interface
@@ -151,8 +156,8 @@ module axi_ad9122_if (
   input           up_drp_sel;
   input           up_drp_wr;
   input   [11:0]  up_drp_addr;
-  input   [15:0]  up_drp_wdata;
-  output  [15:0]  up_drp_rdata;
+  input   [31:0]  up_drp_wdata;
+  output  [31:0]  up_drp_rdata;
   output          up_drp_ready;
   output          up_drp_locked;
 
@@ -160,6 +165,10 @@ module axi_ad9122_if (
 
   reg             dac_status_m1 = 'd0;
   reg             dac_status = 'd0;
+
+  // internal signals
+
+  wire            dac_out_clk;
 
   // dac status
 
@@ -177,12 +186,13 @@ module axi_ad9122_if (
 
   ad_serdes_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SERDES_OR_DDR_N(SERDES_OR_DDR_N),
-    .DATA_WIDTH(16))
+    .DDR_OR_SDR_N (SERDES_OR_DDR_N),
+    .DATA_WIDTH (16))
   i_serdes_out_data (
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
+    .loaden (1'b0),
     .data_s0 (dac_data_i0),
     .data_s1 (dac_data_q0),
     .data_s2 (dac_data_i1),
@@ -195,15 +205,16 @@ module axi_ad9122_if (
     .data_out_n (dac_data_out_n));
 
   // dac frame output serdes & buffer
-  
+
   ad_serdes_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SERDES_OR_DDR_N(SERDES_OR_DDR_N),
-    .DATA_WIDTH(1))
+    .DDR_OR_SDR_N (SERDES_OR_DDR_N),
+    .DATA_WIDTH (1))
   i_serdes_out_frame (
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
+    .loaden (1'b0),
     .data_s0 (dac_frame_i0),
     .data_s1 (dac_frame_q0),
     .data_s2 (dac_frame_i1),
@@ -216,15 +227,16 @@ module axi_ad9122_if (
     .data_out_n (dac_frame_out_n));
 
   // dac clock output serdes & buffer
-  
+
   ad_serdes_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SERDES_OR_DDR_N(SERDES_OR_DDR_N),
-    .DATA_WIDTH(1))
+    .DDR_OR_SDR_N (SERDES_OR_DDR_N),
+    .DATA_WIDTH (1))
   i_serdes_out_clk (
     .rst (dac_rst),
-    .clk (dac_clk),
+    .clk (dac_out_clk),
     .div_clk (dac_div_clk),
+    .loaden (1'b0),
     .data_s0 (1'b1),
     .data_s1 (1'b0),
     .data_s2 (1'b1),
@@ -239,20 +251,23 @@ module axi_ad9122_if (
   // dac clock input buffers
 
   ad_serdes_clk #(
-    .SERDES_OR_DDR_N (SERDES_OR_DDR_N),
+    .DDR_OR_SDR_N (SERDES_OR_DDR_N),
     .MMCM_OR_BUFR_N (MMCM_OR_BUFIO_N),
-    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
-    .MMCM_CLKIN_PERIOD (1.667),
-    .MMCM_VCO_DIV (6),
-    .MMCM_VCO_MUL (12),
-    .MMCM_CLK0_DIV (2),
-    .MMCM_CLK1_DIV (8))
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
+    .MMCM_VCO_DIV (MMCM_VCO_DIV),
+    .MMCM_VCO_MUL (MMCM_VCO_MUL),
+    .MMCM_CLK0_DIV (MMCM_CLK0_DIV),
+    .MMCM_CLK1_DIV (MMCM_CLK1_DIV))
   i_serdes_clk (
-    .mmcm_rst (mmcm_rst),
+    .rst (mmcm_rst),
     .clk_in_p (dac_clk_in_p),
     .clk_in_n (dac_clk_in_n),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
+    .out_clk (dac_out_clk),
+    .loaden (),
+    .phase (),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel),

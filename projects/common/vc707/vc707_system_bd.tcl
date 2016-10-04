@@ -49,7 +49,7 @@ set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] [get_bd_ports sys_rst]
 
 # instance: microblaze - processor
 
-set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.5 sys_mb]
+set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.6 sys_mb]
 set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
 set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
 
@@ -64,7 +64,7 @@ set_property -dict [list CONFIG.C_ECC {0}] $sys_dlmb_cntlr
 set sys_ilmb_cntlr [create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 sys_ilmb_cntlr]
 set_property -dict [list CONFIG.C_ECC {0}] $sys_ilmb_cntlr
 
-set sys_lmb_bram [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.2 sys_lmb_bram]
+set sys_lmb_bram [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 sys_lmb_bram]
 set_property -dict [list CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.use_bram_block {BRAM_Controller}] $sys_lmb_bram
 
 # instance: microblaze- mdm
@@ -78,7 +78,7 @@ set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 s
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:2.3 axi_ddr_cntrl]
+set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:4.0 axi_ddr_cntrl]
 set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
 file copy -force $ad_hdl_dir/projects/common/vc707/vc707_system_mig.prj "$axi_ddr_cntrl_dir/"
 set_property -dict [list CONFIG.XML_INPUT_FILE {vc707_system_mig.prj}] $axi_ddr_cntrl

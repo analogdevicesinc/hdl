@@ -16,7 +16,8 @@ adi_ip_files axi_spdif_rx [list \
   "axi_spdif_rx.vhd" \
   "axi_spdif_rx_constr.xdc"]
 
-adi_ip_properties_lite axi_spdif_rx
+adi_ip_properties axi_spdif_rx
+adi_ip_infer_interfaces axi_spdif_rx
 adi_ip_constraints axi_spdif_tx axi_spdif_rx_constr.xdc
 
 adi_add_bus "DMA_ACK" "slave" \
@@ -49,4 +50,5 @@ adi_set_ports_dependency "DMA_REQ_RSTN" \
 	"(spirit:decode(id('MODELPARAM_VALUE.C_DMA_TYPE')) = 1)"
 
 ipx::save_core [ipx::current_core]
+ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXI_ARESETN [ipx::current_core]
 

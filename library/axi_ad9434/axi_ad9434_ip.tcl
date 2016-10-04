@@ -5,9 +5,9 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_ad9434
 adi_ip_files axi_ad9434 [list \
-  "$ad_hdl_dir/library/common/ad_serdes_clk.v" \
-  "$ad_hdl_dir/library/common/ad_mmcm_drp.v" \
-  "$ad_hdl_dir/library/common/ad_serdes_in.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_serdes_clk.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_mmcm_drp.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \

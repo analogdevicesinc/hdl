@@ -14,7 +14,7 @@ set_property -dict [list CONFIG.ID {0}] $axi_ad9680_core_0
 set axi_ad9680_core_1 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core_1]
 set_property -dict [list CONFIG.ID {1}] $axi_ad9680_core_1
 
-set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.1 axi_ad9680_jesd]
+set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9680_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
 set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9680_jesd
 
@@ -46,6 +46,7 @@ set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $axi_fmcadc4_gt
 set_property -dict [list CONFIG.RX_CLKBUF_ENABLE_0 {1}] $axi_fmcadc4_gt
 
 set util_fmcadc4_gt [create_bd_cell -type ip -vlnv analog.com:user:util_jesd_gt:1.0 util_fmcadc4_gt]
+set_property -dict [list CONFIG.QPLL_TX_OR_RX_N {0}] $util_fmcadc4_gt
 set_property -dict [list CONFIG.QPLL0_ENABLE {1}] $util_fmcadc4_gt
 set_property -dict [list CONFIG.QPLL1_ENABLE {1}] $util_fmcadc4_gt
 set_property -dict [list CONFIG.NUM_OF_LANES {8}] $util_fmcadc4_gt

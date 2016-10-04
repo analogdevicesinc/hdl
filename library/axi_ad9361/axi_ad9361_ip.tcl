@@ -7,10 +7,13 @@ adi_ip_create axi_ad9361
 adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/common/ad_lvds_clk.v" \
-  "$ad_hdl_dir/library/common/ad_lvds_in.v" \
-  "$ad_hdl_dir/library/common/ad_lvds_out.v" \
-  "$ad_hdl_dir/library/common/ad_mul.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_lvds_clk.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_lvds_in.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_lvds_out.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_cmos_clk.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_cmos_in.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_cmos_out.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
@@ -31,7 +34,8 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
   "axi_ad9361_constr.xdc" \
-  "axi_ad9361_dev_if.v" \
+  "axi_ad9361_lvds_if.v" \
+  "axi_ad9361_cmos_if.v" \
   "axi_ad9361_rx_pnmon.v" \
   "axi_ad9361_rx_channel.v" \
   "axi_ad9361_rx.v" \
@@ -46,10 +50,35 @@ adi_ip_constraints axi_ad9361 [list \
   "axi_ad9361_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" ]
 
+set_property driver_value 0 [ipx::get_ports *rx_clk_in* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *rx_frame_in* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *rx_data_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dac_sync_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *gpio_in* -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CMOS_OR_LVDS_N')) == 0} \
+  [ipx::get_ports rx_clk_in_p     -of_objects [ipx::current_core]] \
+  [ipx::get_ports rx_clk_in_n     -of_objects [ipx::current_core]] \
+  [ipx::get_ports rx_frame_in_p   -of_objects [ipx::current_core]] \
+  [ipx::get_ports rx_frame_in_n   -of_objects [ipx::current_core]] \
+  [ipx::get_ports rx_data_in_p    -of_objects [ipx::current_core]] \
+  [ipx::get_ports rx_data_in_n    -of_objects [ipx::current_core]] \
+  [ipx::get_ports tx_clk_out_p    -of_objects [ipx::current_core]] \
+  [ipx::get_ports tx_clk_out_n    -of_objects [ipx::current_core]] \
+  [ipx::get_ports tx_frame_out_p  -of_objects [ipx::current_core]] \
+  [ipx::get_ports tx_frame_out_n  -of_objects [ipx::current_core]] \
+  [ipx::get_ports tx_data_out_p   -of_objects [ipx::current_core]] \
+  [ipx::get_ports tx_data_out_n   -of_objects [ipx::current_core]]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CMOS_OR_LVDS_N')) == 1} \
+  [ipx::get_ports rx_clk_in       -of_objects [ipx::current_core]] \
+  [ipx::get_ports rx_frame_in     -of_objects [ipx::current_core]] \
+  [ipx::get_ports rx_data_in      -of_objects [ipx::current_core]] \
+  [ipx::get_ports tx_clk_out      -of_objects [ipx::current_core]] \
+  [ipx::get_ports tx_frame_out    -of_objects [ipx::current_core]] \
+  [ipx::get_ports tx_data_out     -of_objects [ipx::current_core]]
 
 ipx::remove_bus_interface rst [ipx::current_core]
 ipx::remove_bus_interface clk [ipx::current_core]

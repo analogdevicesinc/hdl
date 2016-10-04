@@ -5,6 +5,12 @@
 ####################################################################################
 ####################################################################################
 
+ifeq ($(MMU),)
+  MMU := 1
+endif
+
+export ALT_NIOS_MMU_ENABLED := $(MMU)
+
 M_DEPS += system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.sdc
@@ -13,12 +19,25 @@ M_DEPS += ../common/arradio_bd.qsys
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/c5soc/c5soc_system_bd.qsys
 M_DEPS += ../../common/c5soc/c5soc_system_assign.tcl
-M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/altera/common/ad_cmos_clk.v
+M_DEPS += ../../../library/altera/common/ad_cmos_in.v
+M_DEPS += ../../../library/altera/common/ad_cmos_out.v
+M_DEPS += ../../../library/altera/common/ad_dcfilter.v
+M_DEPS += ../../../library/altera/common/ad_lvds_clk.v
+M_DEPS += ../../../library/altera/common/ad_lvds_in.v
+M_DEPS += ../../../library/altera/common/ad_lvds_out.v
+M_DEPS += ../../../library/altera/common/ad_mul.v
+M_DEPS += ../../../library/altera_avalon_pio/altera_avalon_pio_hw.tcl
+M_DEPS += ../../../library/altera_avalon_spi/altera_avalon_spi_hw.tcl
+M_DEPS += ../../../library/altera_clock_bridge/altera_clock_bridge_hw.tcl
+M_DEPS += ../../../library/altera_hps/altera_hps_hw.tcl
+M_DEPS += ../../../library/altera_irq_bridge/altera_irq_bridge_hw.tcl
+M_DEPS += ../../../library/altera_pll/altera_pll_hw.tcl
+M_DEPS += ../../../library/altera_reset_bridge/altera_reset_bridge_hw.tcl
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361.v
-M_DEPS += ../../../library/axi_ad9361/axi_ad9361_alt_lvds_rx.v
-M_DEPS += ../../../library/axi_ad9361/axi_ad9361_alt_lvds_tx.v
-M_DEPS += ../../../library/axi_ad9361/axi_ad9361_dev_if_alt.v
+M_DEPS += ../../../library/axi_ad9361/axi_ad9361_cmos_if.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_hw.tcl
+M_DEPS += ../../../library/axi_ad9361/axi_ad9361_lvds_if.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_rx.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_rx_channel.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_rx_pnmon.v
@@ -47,20 +66,14 @@ M_DEPS += ../../../library/axi_dmac/src_axi_stream.v
 M_DEPS += ../../../library/axi_dmac/src_fifo_inf.v
 M_DEPS += ../../../library/common/ad_addsub.v
 M_DEPS += ../../../library/common/ad_datafmt.v
-M_DEPS += ../../../library/common/ad_dcfilter.v
 M_DEPS += ../../../library/common/ad_dds.v
 M_DEPS += ../../../library/common/ad_dds_1.v
 M_DEPS += ../../../library/common/ad_dds_sine.v
 M_DEPS += ../../../library/common/ad_iqcor.v
-M_DEPS += ../../../library/common/ad_mul.v
+M_DEPS += ../../../library/common/ad_mem.v
 M_DEPS += ../../../library/common/ad_pnmon.v
 M_DEPS += ../../../library/common/ad_rst.v
 M_DEPS += ../../../library/common/ad_tdd_control.v
-M_DEPS += ../../../library/common/altera/DSP48E1.v
-M_DEPS += ../../../library/common/altera/MULT_MACRO.v
-M_DEPS += ../../../library/common/altera/ad_lvds_clk.v
-M_DEPS += ../../../library/common/altera/ad_lvds_in.v
-M_DEPS += ../../../library/common/altera/ad_lvds_out.v
 M_DEPS += ../../../library/common/sync_bits.v
 M_DEPS += ../../../library/common/sync_gray.v
 M_DEPS += ../../../library/common/up_adc_channel.v
@@ -82,10 +95,14 @@ M_DEPS += ../../../library/util_cpack/util_cpack.v
 M_DEPS += ../../../library/util_cpack/util_cpack_dsf.v
 M_DEPS += ../../../library/util_cpack/util_cpack_hw.tcl
 M_DEPS += ../../../library/util_cpack/util_cpack_mux.v
+M_DEPS += ../../../library/util_rfifo/util_rfifo.v
+M_DEPS += ../../../library/util_rfifo/util_rfifo_hw.tcl
 M_DEPS += ../../../library/util_upack/util_upack.v
 M_DEPS += ../../../library/util_upack/util_upack_dmx.v
 M_DEPS += ../../../library/util_upack/util_upack_dsf.v
 M_DEPS += ../../../library/util_upack/util_upack_hw.tcl
+M_DEPS += ../../../library/util_wfifo/util_wfifo.v
+M_DEPS += ../../../library/util_wfifo/util_wfifo_hw.tcl
 
 
 M_ALTERA := quartus_sh --64bit -t 
@@ -118,6 +135,8 @@ M_FLIST += reconfig_mif
 M_FLIST += *.sopcinfo
 M_FLIST +=  *.jdi
 M_FLIST += *.pin
+M_FLIST += *_summary.csv
+M_FLIST += *.dpf
 
 
 
@@ -134,7 +153,7 @@ clean-all:
 
 
 arradio_c5soc.sof: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_ALTERA) system_project.tcl  >> arradio_c5soc_quartus.log 2>&1
 
 ####################################################################################
