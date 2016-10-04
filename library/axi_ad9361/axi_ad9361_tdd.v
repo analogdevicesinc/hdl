@@ -115,8 +115,6 @@ module axi_ad9361_tdd (
   output  [31:0]    up_rdata;
   output            up_rack;
 
-  reg               tdd_slave_synced = 1'b0;
-
   reg               tdd_tx_valid = 1'b0;
   reg               tdd_rx_valid = 1'b0;
 
