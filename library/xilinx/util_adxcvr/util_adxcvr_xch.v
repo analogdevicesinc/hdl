@@ -302,28 +302,6 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 1) begin
-  BUFG_GT i_rx_bufg (
-    .CE (1'b1),
-    .CEMASK (1'b0),
-    .CLR (1'b0),
-    .CLRMASK (1'b0),
-    .DIV (3'd0),
-    .I (rx_out_clk_s),
-    .O (rx_out_clk));
-
-  BUFG_GT i_tx_bufg (
-    .CE (1'b1),
-    .CEMASK (1'b0),
-    .CLR (1'b0),
-    .CLRMASK (1'b0),
-    .DIV (3'd0),
-    .I (tx_out_clk_s),
-    .O (tx_out_clk));
-  end
-  endgenerate
-
-  generate
   if (XCVR_TYPE == 0) begin
   assign rx_sys_clk_sel_s = up_rx_sys_clk_sel;
   assign tx_sys_clk_sel_s = up_tx_sys_clk_sel;
@@ -765,6 +743,28 @@ module util_adxcvr_xch #(
     .TXPRBSSEL (3'd0),
     .TXQPISENP (),
     .TXQPISENN ());
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 1) begin
+  BUFG_GT i_rx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (rx_out_clk_s),
+    .O (rx_out_clk));
+
+  BUFG_GT i_tx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (tx_out_clk_s),
+    .O (tx_out_clk));
   end
   endgenerate
 
@@ -1497,6 +1497,28 @@ module util_adxcvr_xch #(
     .TXRESETDONE (tx_rst_done_s),
     .TXSYNCDONE (),
     .TXSYNCOUT ());
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 2) begin
+  BUFG_GT i_rx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (rx_out_clk_s),
+    .O (rx_out_clk));
+
+  BUFG_GT i_tx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (tx_out_clk_s),
+    .O (tx_out_clk));
   end
   endgenerate
 
