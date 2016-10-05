@@ -12,8 +12,8 @@ create_bd_port -dir O spi1_sclk
 create_bd_port -dir O spi1_mosi
 create_bd_port -dir I spi1_miso
 
-create_bd_port -dir I -from 95 -to 0 gpio_i
-create_bd_port -dir O -from 95 -to 0 gpio_o
+create_bd_port -dir I -from 94 -to 0 gpio_i
+create_bd_port -dir O -from 94 -to 0 gpio_o
 
 # interrupts
 
@@ -2459,6 +2459,11 @@ set_property -dict [list\
   CONFIG.PSU__SPI1__PERIPHERAL__IO {EMIO} \
 ] $sys_ps8
 
+set_property -dict [list\
+  CONFIG.PSU__CRL_APB__SPI0_REF_CTRL__FREQMHZ {100} \
+  CONFIG.PSU__CRL_APB__SPI1_REF_CTRL__FREQMHZ {100} \
+] $sys_ps8
+
 set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
 
@@ -2478,23 +2483,21 @@ ad_connect  gpio_o sys_ps8/emio_gpio_o
 
 # spi
 
+ad_connect  sys_ps8/emio_spi0_ss_o_n spi0_csn
+ad_connect  sys_ps8/emio_spi0_sclk_o spi0_sclk
+ad_connect  sys_ps8/emio_spi0_m_o spi0_mosi
+ad_connect  sys_ps8/emio_spi0_m_i spi0_miso
 ad_connect  sys_ps8/emio_spi0_ss_i_n VCC
-ad_connect  sys_ps8/emio_spi0_sclk_i sys_ps8/emio_spi0_sclk_o
-ad_connect  sys_ps8/emio_spi0_m_i sys_ps8/emio_spi0_m_o
+ad_connect  sys_ps8/emio_spi0_sclk_i GND
+ad_connect  sys_ps8/emio_spi0_s_i GND
 
-ad_connect  spi0_csn sys_ps8/emio_spi0_ss_o_n
-ad_connect  spi0_sclk sys_ps8/emio_spi0_sclk_o
-ad_connect  spi0_mosi sys_ps8/emio_spi0_m_o
-ad_connect  spi0_miso sys_ps8/emio_spi0_s_i
-
+ad_connect  sys_ps8/emio_spi1_ss_o_n spi1_csn
+ad_connect  sys_ps8/emio_spi1_sclk_o spi1_sclk
+ad_connect  sys_ps8/emio_spi1_m_o spi1_mosi
+ad_connect  sys_ps8/emio_spi1_m_i spi1_miso
 ad_connect  sys_ps8/emio_spi1_ss_i_n VCC
-ad_connect  sys_ps8/emio_spi1_sclk_i sys_ps8/emio_spi1_sclk_o
-ad_connect  sys_ps8/emio_spi1_m_i sys_ps8/emio_spi1_m_o
-
-ad_connect  spi1_csn sys_ps8/emio_spi1_ss_o_n
-ad_connect  spi1_sclk sys_ps8/emio_spi1_sclk_o
-ad_connect  spi1_mosi sys_ps8/emio_spi1_m_o
-ad_connect  spi1_miso sys_ps8/emio_spi1_s_i
+ad_connect  sys_ps8/emio_spi1_sclk_i GND
+ad_connect  sys_ps8/emio_spi1_s_i GND
 
 # interrupts
 
