@@ -1501,7 +1501,7 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 1) begin
+  if (XCVR_TYPE == 2) begin
   assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
   assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
   assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
@@ -1510,7 +1510,7 @@ module util_adxcvr_xch #(
   endgenerate
 
   generate
-  if (XCVR_TYPE == 1) begin
+  if (XCVR_TYPE == 2) begin
   GTHE4_CHANNEL #(
     .ACJTAG_DEBUG_MODE (1'b0),
     .ACJTAG_MODE (1'b0),
