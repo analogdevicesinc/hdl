@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -336,7 +336,7 @@ module util_adxcvr_xch #(
   if (XCVR_TYPE == 0) begin
   GTXE2_CHANNEL #(
     .SIM_RECEIVER_DETECT_PASS ("TRUE"),
-    .SIM_TX_EIDLE_DRIVE_LEVEL ("X"), 
+    .SIM_TX_EIDLE_DRIVE_LEVEL ("X"),
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_CPLLREFCLK_SEL (3'b001),
     .SIM_VERSION ("3.0"),
@@ -1163,11 +1163,11 @@ module util_adxcvr_xch #(
     .TX_RXDETECT_CFG (14'b00000000110010),
     .TX_RXDETECT_REF (3'b100),
     .TX_SAMPLE_PERIOD (3'b101),
-    .TX_SARC_LPBK_ENB (1'b0),                   
-    .TX_XCLK_SEL ("TXOUT"),                     
-    .USE_PCS_CLK_PHASE_SEL (1'b0),              
-    .WB_MODE (2'b00))                                                                        
-  i_gthe3_channel (                                                            
+    .TX_SARC_LPBK_ENB (1'b0),
+    .TX_XCLK_SEL ("TXOUT"),
+    .USE_PCS_CLK_PHASE_SEL (1'b0),
+    .WB_MODE (2'b00))
+  i_gthe3_channel (
     .CFGRESET (1'd0),
     .CLKRSVD0 (1'd0),
     .CLKRSVD1 (1'd0),
@@ -2013,7 +2013,7 @@ module util_adxcvr_xch #(
     .USB_U2_SAS_MAX_COM (64),
     .USB_U2_SAS_MIN_COM (36),
     .USE_PCS_CLK_PHASE_SEL (1'b0),
-    .Y_ALL_MODE (1'b0)) 
+    .Y_ALL_MODE (1'b0))
   i_gthe4_channel (
     .BUFGTCE (),
     .BUFGTCEMASK (),
@@ -2359,7 +2359,7 @@ module util_adxcvr_xch #(
   end
   endgenerate
 
-endmodule     
+endmodule
 
 // ***************************************************************************
 // ***************************************************************************
