@@ -39,14 +39,14 @@ set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
 set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_adc
 set_property -dict [list CONFIG.C_PROBE2_WIDTH {16}] $ila_adc
 
-ad_connect  util_daq3_gt/rx_rst mfifo_adc/din_rst
-ad_connect  util_daq3_gt/rx_out_clk mfifo_adc/din_clk
+ad_connect  util_daq3_xcvr/up_tx_rst_done_0 mfifo_adc/din_rst
+ad_connect  util_daq3_xcvr/rx_out_clk_0 mfifo_adc/din_clk
 ad_connect  axi_ad9680_core/adc_valid_0 mfifo_adc/din_valid
 ad_connect  axi_ad9680_core/adc_data_0 mfifo_adc/din_data_0
 ad_connect  axi_ad9680_core/adc_data_1 mfifo_adc/din_data_1
-ad_connect  util_daq3_gt/rx_rst mfifo_adc/dout_rst
-ad_connect  util_daq3_gt/rx_out_clk mfifo_adc/dout_clk
-ad_connect  util_daq3_gt/rx_out_clk ila_adc/clk
+ad_connect  util_daq3_xcvr/up_tx_rst_done_0 mfifo_adc/dout_rst
+ad_connect  util_daq3_xcvr/rx_out_clk_0 mfifo_adc/dout_clk
+ad_connect  util_daq3_xcvr/rx_out_clk_0 ila_adc/clk
 ad_connect  mfifo_adc/dout_valid ila_adc/probe0
 ad_connect  mfifo_adc/dout_data_0 ila_adc/probe1
 ad_connect  mfifo_adc/dout_data_1 ila_adc/probe2
