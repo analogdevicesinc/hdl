@@ -240,10 +240,10 @@ module system_top (
               adc_agc3,
               adc_agc4}));
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
-    .dio_t (gpio_t[14:0]),
-    .dio_i (gpio_o[14:0]),
-    .dio_o (gpio_i[14:0]),
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
