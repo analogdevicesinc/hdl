@@ -39,166 +39,52 @@
 
 module system_top (
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input   [12:0]  gpio_bd_i,
+  output  [ 7:0]  gpio_bd_o,
 
-  uart_sin,
-  uart_sout,
+  input           rx_ref_clk_p,
+  input           rx_ref_clk_n,
+  input           rx_sysref_p,
+  input           rx_sysref_n,
+  output          rx_sync_p,
+  output          rx_sync_n,
+  input   [ 3:0]  rx_data_p,
+  input   [ 3:0]  rx_data_n,
 
-  ddr4_act_n,
-  ddr4_addr,
-  ddr4_ba,
-  ddr4_bg,
-  ddr4_ck_p,
-  ddr4_ck_n,
-  ddr4_cke,
-  ddr4_cs_n,
-  ddr4_dm_n,
-  ddr4_dq,
-  ddr4_dqs_p,
-  ddr4_dqs_n,
-  ddr4_odt,
-  ddr4_reset_n,
+  input           tx_ref_clk_p,
+  input           tx_ref_clk_n,
+  input           tx_sysref_p,
+  input           tx_sysref_n,
+  input           tx_sync_p,
+  input           tx_sync_n,
+  output  [ 3:0]  tx_data_p,
+  output  [ 3:0]  tx_data_n,
 
-  mdio_mdc,
-  mdio_mdio,
-  phy_clk_p,
-  phy_clk_n,
-  phy_rst_n,
-  phy_rx_p,
-  phy_rx_n,
-  phy_tx_p,
-  phy_tx_n,
+  input           trig_p,
+  input           trig_n,
 
-  fan_pwm,
+  inout           adc_fdb,
+  inout           adc_fda,
+  inout           dac_irq,
+  inout   [ 1:0]  clkd_status,
 
-  gpio_bd,
+  inout           adc_pd,
+  inout           dac_txen,
+  inout           dac_reset,
+  inout           clkd_sync,
 
-  iic_scl,
-  iic_sda,
-
-  rx_ref_clk_p,
-  rx_ref_clk_n,
-  rx_sysref_p,
-  rx_sysref_n,
-  rx_sync_p,
-  rx_sync_n,
-  rx_data_p,
-  rx_data_n,
-
-  tx_ref_clk_p,
-  tx_ref_clk_n,
-  tx_sysref_p,
-  tx_sysref_n,
-  tx_sync_p,
-  tx_sync_n,
-  tx_data_p,
-  tx_data_n,
-
-  trig_p,
-  trig_n,
-
-  adc_fdb,
-  adc_fda,
-  dac_irq,
-  clkd_status,
-
-  adc_pd,
-  dac_txen,
-  dac_reset,
-  clkd_sync,
-
-  spi_csn_clk,
-  spi_csn_dac,
-  spi_csn_adc,
-  spi_clk,
-  spi_sdio,
-  spi_dir);
-
-  input           sys_rst;
-  input           sys_clk_p;
-  input           sys_clk_n;
-
-  input           uart_sin;
-  output          uart_sout;
-
-  output          ddr4_act_n;
-  output  [16:0]  ddr4_addr;
-  output  [ 1:0]  ddr4_ba;
-  output  [ 0:0]  ddr4_bg;
-  output          ddr4_ck_p;
-  output          ddr4_ck_n;
-  output  [ 0:0]  ddr4_cke;
-  output  [ 0:0]  ddr4_cs_n;
-  inout   [ 7:0]  ddr4_dm_n;
-  inout   [63:0]  ddr4_dq;
-  inout   [ 7:0]  ddr4_dqs_p;
-  inout   [ 7:0]  ddr4_dqs_n;
-  output  [ 0:0]  ddr4_odt;
-  output          ddr4_reset_n;
-
-  output          mdio_mdc;
-  inout           mdio_mdio;
-  input           phy_clk_p;
-  input           phy_clk_n;
-  output          phy_rst_n;
-  input           phy_rx_p;
-  input           phy_rx_n;
-  output          phy_tx_p;
-  output          phy_tx_n;
-
-  output          fan_pwm;
-
-  inout   [16:0]  gpio_bd;
-
-  inout           iic_scl;
-  inout           iic_sda;
-
-  input           rx_ref_clk_p;
-  input           rx_ref_clk_n;
-  input           rx_sysref_p;
-  input           rx_sysref_n;
-  output          rx_sync_p;
-  output          rx_sync_n;
-  input   [ 3:0]  rx_data_p;
-  input   [ 3:0]  rx_data_n;
-
-  input           tx_ref_clk_p;
-  input           tx_ref_clk_n;
-  input           tx_sysref_p;
-  input           tx_sysref_n;
-  input           tx_sync_p;
-  input           tx_sync_n;
-  output  [ 3:0]  tx_data_p;
-  output  [ 3:0]  tx_data_n;
-
-  input           trig_p;
-  input           trig_n;
-
-  inout           adc_fdb;
-  inout           adc_fda;
-  inout           dac_irq;
-  inout   [ 1:0]  clkd_status;
-
-  inout           adc_pd;
-  inout           dac_txen;
-  inout           dac_reset;
-  inout           clkd_sync;
-
-  output          spi_csn_clk;
-  output          spi_csn_dac;
-  output          spi_csn_adc;
-  output          spi_clk;
-  inout           spi_sdio;
-  output          spi_dir;
+  output          spi_csn_clk,
+  output          spi_csn_dac,
+  output          spi_csn_adc,
+  output          spi_clk,
+  inout           spi_sdio,
+  output          spi_dir);
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 7:0]  spi_csn;
+  wire    [94:0]  gpio_i;
+  wire    [94:0]  gpio_o;
+  wire    [ 2:0]  spi_csn;
   wire            spi_mosi;
   wire            spi_miso;
   wire            trig;
@@ -215,13 +101,9 @@ module system_top (
   assign spi_csn_dac = spi_csn[1];
   assign spi_csn_clk = spi_csn[0];
 
-  // default logic
-
-  assign fan_pwm = 1'b1;
-
   // instantiations
 
-  IBUFDS_GTE3 i_ibufds_rx_ref_clk (
+  IBUFDS_GTE4 i_ibufds_rx_ref_clk (
     .CEB (1'd0),
     .I (rx_ref_clk_p),
     .IB (rx_ref_clk_n),
@@ -238,7 +120,7 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
-  IBUFDS_GTE3 i_ibufds_tx_ref_clk (
+  IBUFDS_GTE4 i_ibufds_tx_ref_clk (
     .CEB (1'd0),
     .I (tx_ref_clk_p),
     .IB (tx_ref_clk_n),
@@ -256,7 +138,7 @@ module system_top (
     .O (tx_sync));
 
   daq2_spi i_spi (
-    .spi_csn (spi_csn[2:0]),
+    .spi_csn (spi_csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
@@ -268,62 +150,40 @@ module system_top (
     .IB (trig_n),
     .O (trig));
 
-  assign gpio_i[43] = trig;
+  assign adc_pd = gpio_o[42];
+  assign dac_txen = gpio_o[41];
+  assign dac_reset = gpio_o[40];
+  assign clkd_sync = gpio_o[38];
+  assign gpio_bd_o = gpio_o[7:0];
 
-  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
-    .dio_t ({gpio_t[42:40], gpio_t[38], gpio_t[36:32]}),
-    .dio_i ({gpio_o[42:40], gpio_o[38], gpio_o[36:32]}),
-    .dio_o ({gpio_i[42:40], gpio_i[38], gpio_i[36:32]}),
-    .dio_p ({ adc_pd,           // 42
-              dac_txen,         // 41
-              dac_reset,        // 40
-              clkd_sync,        // 38
-              adc_fdb,          // 36
-              adc_fda,          // 35
-              dac_irq,          // 34
-              clkd_status}));   // 32
-
-  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
-    .dio_t (gpio_t[16:0]),
-    .dio_i (gpio_o[16:0]),
-    .dio_o (gpio_i[16:0]),
-    .dio_p (gpio_bd));
+  assign gpio_i[94:44] = gpio_o[94:44];
+  assign gpio_i[43:43] = trig;
+  assign gpio_i[42:37] = gpio_o[42:37];
+  assign gpio_i[36:36] = adc_fdb;
+  assign gpio_i[35:35] = adc_fda;
+  assign gpio_i[34:34] = dac_irq;
+  assign gpio_i[33:32] = clkd_status;
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[ 7: 0] = gpio_o[7:0];
 
   system_wrapper i_system_wrapper (
-    .c0_ddr4_act_n (ddr4_act_n),
-    .c0_ddr4_adr (ddr4_addr),
-    .c0_ddr4_ba (ddr4_ba),
-    .c0_ddr4_bg (ddr4_bg),
-    .c0_ddr4_ck_c (ddr4_ck_n),
-    .c0_ddr4_ck_t (ddr4_ck_p),
-    .c0_ddr4_cke (ddr4_cke),
-    .c0_ddr4_cs_n (ddr4_cs_n),
-    .c0_ddr4_dm_n (ddr4_dm_n),
-    .c0_ddr4_dq (ddr4_dq),
-    .c0_ddr4_dqs_c (ddr4_dqs_n),
-    .c0_ddr4_dqs_t (ddr4_dqs_p),
-    .c0_ddr4_odt (ddr4_odt),
-    .c0_ddr4_reset_n (ddr4_reset_n),
-    .gpio0_i (gpio_i[31:0]),
-    .gpio0_o (gpio_o[31:0]),
-    .gpio0_t (gpio_t[31:0]),
-    .gpio1_i (gpio_i[63:32]),
-    .gpio1_o (gpio_o[63:32]),
-    .gpio1_t (gpio_t[63:32]),
-    .iic_main_scl_io (iic_scl),
-    .iic_main_sda_io (iic_sda),
-    .mb_intr_05 (1'b0),
-    .mb_intr_06 (1'b0),
-    .mb_intr_07 (1'b0),
-    .mb_intr_08 (1'b0),
-    .mb_intr_14 (1'b0),
-    .mb_intr_15 (1'b0),
-    .mdio_mdc (mdio_mdc),
-    .mdio_mdio_io (mdio_mdio),
-    .phy_clk_clk_n (phy_clk_n),
-    .phy_clk_clk_p (phy_clk_p),
-    .phy_rst_n (phy_rst_n),
-    .phy_sd (1'b1),
+    .gpio_i (gpio_i),
+    .gpio_o (gpio_o),
+    .ps_intr_00 (1'd0),
+    .ps_intr_01 (1'd0),
+    .ps_intr_02 (1'd0),
+    .ps_intr_03 (1'd0),
+    .ps_intr_04 (1'd0),
+    .ps_intr_05 (1'd0),
+    .ps_intr_06 (1'd0),
+    .ps_intr_07 (1'd0),
+    .ps_intr_08 (1'd0),
+    .ps_intr_09 (1'd0),
+    .ps_intr_10 (1'd0),
+    .ps_intr_11 (1'd0),
+    .ps_intr_14 (1'd0),
+    .ps_intr_15 (1'd0),
     .rx_data_0_n (rx_data_n[0]),
     .rx_data_0_p (rx_data_p[0]),
     .rx_data_1_n (rx_data_n[1]),
@@ -335,20 +195,14 @@ module system_top (
     .rx_ref_clk (rx_ref_clk),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
-    .sgmii_rxn (phy_rx_n),
-    .sgmii_rxp (phy_rx_p),
-    .sgmii_txn (phy_tx_n),
-    .sgmii_txp (phy_tx_p),
-    .spi_clk_i (spi_clk),
-    .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
-    .spi_sdi_i (spi_miso),
-    .spi_sdo_i (spi_mosi),
-    .spi_sdo_o (spi_mosi),
-    .sys_clk_clk_n (sys_clk_n),
-    .sys_clk_clk_p (sys_clk_p),
-    .sys_rst (sys_rst),
+    .spi0_csn (spi_csn),
+    .spi0_miso (spi_miso),
+    .spi0_mosi (spi_mosi),
+    .spi0_sclk (spi_clk),
+    .spi1_csn (),
+    .spi1_miso (1'd0),
+    .spi1_mosi (),
+    .spi1_sclk (),
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
     .tx_data_1_n (tx_data_n[1]),
@@ -359,9 +213,7 @@ module system_top (
     .tx_data_3_p (tx_data_p[3]),
     .tx_ref_clk (tx_ref_clk),
     .tx_sync (tx_sync),
-    .tx_sysref (tx_sysref),
-    .uart_sin (uart_sin),
-    .uart_sout (uart_sout));
+    .tx_sysref (tx_sysref));
 
 endmodule
 
