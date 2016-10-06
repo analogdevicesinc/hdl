@@ -63,15 +63,15 @@ module system_top (
   input           trig_p,
   input           trig_n,
 
-  inout           adc_fdb,
-  inout           adc_fda,
-  inout           dac_irq,
-  inout   [ 1:0]  clkd_status,
+  input           adc_fdb,
+  input           adc_fda,
+  input           dac_irq,
+  input   [ 1:0]  clkd_status,
 
-  inout           adc_pd,
-  inout           dac_txen,
-  inout           dac_reset,
-  inout           clkd_sync,
+  output          adc_pd,
+  output          dac_txen,
+  output          dac_reset,
+  output          clkd_sync,
 
   output          spi_csn_clk,
   output          spi_csn_dac,

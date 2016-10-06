@@ -2474,7 +2474,7 @@ ad_connect  sys_200m_clk sys_ps8/pl_clk1
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
-ad_connect  sys_rstgen/ext_reset_in GND
+ad_connect  sys_ps8/pl_resetn0 sys_rstgen/ext_reset_in
 
 # gpio
 
