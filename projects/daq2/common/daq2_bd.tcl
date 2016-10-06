@@ -1,30 +1,4 @@
 
-# daq2
-
-create_bd_port -dir I rx_ref_clk
-create_bd_port -dir O rx_sync
-create_bd_port -dir I rx_sysref
-create_bd_port -dir I rx_data_0_p
-create_bd_port -dir I rx_data_0_n
-create_bd_port -dir I rx_data_1_p
-create_bd_port -dir I rx_data_1_n
-create_bd_port -dir I rx_data_2_p
-create_bd_port -dir I rx_data_2_n
-create_bd_port -dir I rx_data_3_p
-create_bd_port -dir I rx_data_3_n
-
-create_bd_port -dir I tx_ref_clk
-create_bd_port -dir I tx_sync
-create_bd_port -dir I tx_sysref
-create_bd_port -dir O tx_data_0_p
-create_bd_port -dir O tx_data_0_n
-create_bd_port -dir O tx_data_1_p
-create_bd_port -dir O tx_data_1_n
-create_bd_port -dir O tx_data_2_p
-create_bd_port -dir O tx_data_2_n
-create_bd_port -dir O tx_data_3_p
-create_bd_port -dir O tx_data_3_n
-
 # dac peripherals
 
 set axi_ad9144_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9144_xcvr]
@@ -32,14 +6,16 @@ set_property -dict [list CONFIG.NUM_OF_LANES {4}] $axi_ad9144_xcvr
 set_property -dict [list CONFIG.QPLL_ENABLE {1}] $axi_ad9144_xcvr
 set_property -dict [list CONFIG.TX_OR_RX_N {1}] $axi_ad9144_xcvr
 
-set sys_ad9144_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_ad9144_rstgen]
+set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9144_jesd]
+set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
+set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9144_jesd
 
 set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
 set_property -dict [list CONFIG.QUAD_OR_DUAL_N {0}] $axi_ad9144_core
 
-set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9144_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
-set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9144_jesd
+set axi_ad9144_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 axi_ad9144_upack]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9144_upack
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9144_upack
 
 set axi_ad9144_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9144_dma]
 set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9144_dma
@@ -53,10 +29,6 @@ set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9144_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9144_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9144_dma
 
-set axi_ad9144_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 axi_ad9144_upack]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9144_upack
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9144_upack
-
 # adc peripherals
 
 set axi_ad9680_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9680_xcvr]
@@ -64,13 +36,15 @@ set_property -dict [list CONFIG.NUM_OF_LANES {4}] $axi_ad9680_xcvr
 set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9680_xcvr
 set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9680_xcvr
 
-set sys_ad9680_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_ad9680_rstgen]
-
-set axi_ad9680_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core]
-
 set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9680_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
+
+set axi_ad9680_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core]
+
+set axi_ad9680_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 axi_ad9680_cpack]
+set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9680_cpack
+set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9680_cpack
 
 set axi_ad9680_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9680_dma]
 set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad9680_dma
@@ -85,10 +59,6 @@ set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9680_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9680_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9680_dma
 
-set axi_ad9680_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 axi_ad9680_cpack]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9680_cpack
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9680_cpack
-
 # shared transceiver core
 
 set util_daq2_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_daq2_xcvr]
@@ -100,26 +70,11 @@ ad_connect  sys_cpu_clk util_daq2_xcvr/up_clk
 
 # connections (dac)
 
-ad_connect  axi_ad9144_xcvr/up_cm_0 util_daq2_xcvr/up_cm_0
-ad_connect  axi_ad9144_xcvr/up_ch_0 util_daq2_xcvr/up_tx_0
-ad_connect  axi_ad9144_xcvr/up_ch_1 util_daq2_xcvr/up_tx_1
-ad_connect  axi_ad9144_xcvr/up_ch_2 util_daq2_xcvr/up_tx_2
-ad_connect  axi_ad9144_xcvr/up_ch_3 util_daq2_xcvr/up_tx_3
-ad_connect  axi_ad9144_jesd/gt0_tx util_daq2_xcvr/tx_0
-ad_connect  axi_ad9144_jesd/gt3_tx util_daq2_xcvr/tx_1
-ad_connect  axi_ad9144_jesd/gt1_tx util_daq2_xcvr/tx_2
-ad_connect  axi_ad9144_jesd/gt2_tx util_daq2_xcvr/tx_3
-ad_connect  util_daq2_xcvr/tx_out_clk_0 util_daq2_xcvr/tx_clk_0
-ad_connect  util_daq2_xcvr/tx_out_clk_0 util_daq2_xcvr/tx_clk_1
-ad_connect  util_daq2_xcvr/tx_out_clk_0 util_daq2_xcvr/tx_clk_2
-ad_connect  util_daq2_xcvr/tx_out_clk_0 util_daq2_xcvr/tx_clk_3
-ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_jesd/tx_core_clk
-ad_connect  util_daq2_xcvr/tx_out_clk_0 sys_ad9144_rstgen/slowest_sync_clk
-ad_connect  sys_cpu_resetn sys_ad9144_rstgen/ext_reset_in
-ad_connect  tx_sysref axi_ad9144_jesd/tx_sysref
-ad_connect  tx_sync axi_ad9144_jesd/tx_sync
-ad_connect  sys_ad9144_rstgen/peripheral_reset axi_ad9144_jesd/tx_reset
-ad_connect  axi_ad9144_xcvr/up_status axi_ad9144_jesd/tx_reset_done
+ad_xcvrcon  util_daq2_xcvr axi_ad9144_xcvr axi_ad9144_jesd
+ad_reconct  util_daq2_xcvr/tx_0 axi_ad9144_jesd/gt0_tx
+ad_reconct  util_daq2_xcvr/tx_1 axi_ad9144_jesd/gt3_tx
+ad_reconct  util_daq2_xcvr/tx_2 axi_ad9144_jesd/gt1_tx
+ad_reconct  util_daq2_xcvr/tx_3 axi_ad9144_jesd/gt2_tx
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_core/tx_clk
 ad_connect  axi_ad9144_jesd/tx_tdata axi_ad9144_core/tx_data
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_upack/dac_clk
@@ -142,53 +97,15 @@ ad_connect  axi_ad9144_fifo/dma_ready axi_ad9144_dma/m_axis_ready
 ad_connect  axi_ad9144_fifo/dma_data axi_ad9144_dma/m_axis_data
 ad_connect  axi_ad9144_fifo/dma_valid axi_ad9144_dma/m_axis_valid
 ad_connect  axi_ad9144_fifo/dma_xfer_last axi_ad9144_dma/m_axis_last
-ad_connect  util_daq2_xcvr/cpll_ref_clk_0 tx_ref_clk
-ad_connect  util_daq2_xcvr/cpll_ref_clk_1 tx_ref_clk
-ad_connect  util_daq2_xcvr/cpll_ref_clk_2 tx_ref_clk
-ad_connect  util_daq2_xcvr/cpll_ref_clk_3 tx_ref_clk
-ad_connect  util_daq2_xcvr/tx_0_p tx_data_0_p
-ad_connect  util_daq2_xcvr/tx_0_n tx_data_0_n
-ad_connect  util_daq2_xcvr/tx_1_p tx_data_1_p
-ad_connect  util_daq2_xcvr/tx_1_n tx_data_1_n
-ad_connect  util_daq2_xcvr/tx_2_p tx_data_2_p
-ad_connect  util_daq2_xcvr/tx_2_n tx_data_2_n
-ad_connect  util_daq2_xcvr/tx_3_p tx_data_3_p
-ad_connect  util_daq2_xcvr/tx_3_n tx_data_3_n
 
 # connections (adc)
 
-ad_connect  axi_ad9680_xcvr/up_es_0 util_daq2_xcvr/up_es_0
-ad_connect  axi_ad9680_xcvr/up_es_1 util_daq2_xcvr/up_es_1
-ad_connect  axi_ad9680_xcvr/up_es_2 util_daq2_xcvr/up_es_2
-ad_connect  axi_ad9680_xcvr/up_es_3 util_daq2_xcvr/up_es_3
-ad_connect  axi_ad9680_xcvr/up_ch_0 util_daq2_xcvr/up_rx_0
-ad_connect  axi_ad9680_xcvr/up_ch_1 util_daq2_xcvr/up_rx_1
-ad_connect  axi_ad9680_xcvr/up_ch_2 util_daq2_xcvr/up_rx_2
-ad_connect  axi_ad9680_xcvr/up_ch_3 util_daq2_xcvr/up_rx_3
-ad_connect  axi_ad9680_jesd/gt0_rx util_daq2_xcvr/rx_0
-ad_connect  axi_ad9680_jesd/gt1_rx util_daq2_xcvr/rx_1
-ad_connect  axi_ad9680_jesd/gt2_rx util_daq2_xcvr/rx_2
-ad_connect  axi_ad9680_jesd/gt3_rx util_daq2_xcvr/rx_3
-ad_connect  axi_ad9680_jesd/rxencommaalign_out util_daq2_xcvr/rx_calign_0
-ad_connect  axi_ad9680_jesd/rxencommaalign_out util_daq2_xcvr/rx_calign_1
-ad_connect  axi_ad9680_jesd/rxencommaalign_out util_daq2_xcvr/rx_calign_2
-ad_connect  axi_ad9680_jesd/rxencommaalign_out util_daq2_xcvr/rx_calign_3
-ad_connect  util_daq2_xcvr/rx_out_clk_0 util_daq2_xcvr/rx_clk_0
-ad_connect  util_daq2_xcvr/rx_out_clk_0 util_daq2_xcvr/rx_clk_1
-ad_connect  util_daq2_xcvr/rx_out_clk_0 util_daq2_xcvr/rx_clk_2
-ad_connect  util_daq2_xcvr/rx_out_clk_0 util_daq2_xcvr/rx_clk_3
-ad_connect  util_daq2_xcvr/rx_out_clk_0 axi_ad9680_jesd/rx_core_clk
-ad_connect  util_daq2_xcvr/tx_out_clk_0 sys_ad9680_rstgen/slowest_sync_clk
-ad_connect  sys_cpu_resetn sys_ad9680_rstgen/ext_reset_in
-ad_connect  rx_sysref axi_ad9680_jesd/rx_sysref
-ad_connect  rx_sync axi_ad9680_jesd/rx_sync
-ad_connect  sys_ad9680_rstgen/peripheral_reset axi_ad9680_jesd/rx_reset
-ad_connect  axi_ad9680_xcvr/up_status axi_ad9680_jesd/rx_reset_done
+ad_xcvrcon  util_daq2_xcvr axi_ad9680_xcvr axi_ad9680_jesd
 ad_connect  util_daq2_xcvr/rx_out_clk_0 axi_ad9680_core/rx_clk
 ad_connect  axi_ad9680_jesd/rx_start_of_frame axi_ad9680_core/rx_sof
 ad_connect  axi_ad9680_jesd/rx_tdata axi_ad9680_core/rx_data
 ad_connect  util_daq2_xcvr/rx_out_clk_0 axi_ad9680_cpack/adc_clk
-ad_connect  sys_ad9680_rstgen/peripheral_reset axi_ad9680_cpack/adc_rst
+ad_connect  axi_ad9680_jesd_rstgen/peripheral_reset axi_ad9680_cpack/adc_rst
 ad_connect  axi_ad9680_core/adc_enable_0 axi_ad9680_cpack/adc_enable_0
 ad_connect  axi_ad9680_core/adc_valid_0 axi_ad9680_cpack/adc_valid_0
 ad_connect  axi_ad9680_core/adc_data_0 axi_ad9680_cpack/adc_data_0
@@ -196,7 +113,7 @@ ad_connect  axi_ad9680_core/adc_enable_1 axi_ad9680_cpack/adc_enable_1
 ad_connect  axi_ad9680_core/adc_valid_1 axi_ad9680_cpack/adc_valid_1
 ad_connect  axi_ad9680_core/adc_data_1 axi_ad9680_cpack/adc_data_1
 ad_connect  util_daq2_xcvr/rx_out_clk_0 axi_ad9680_fifo/adc_clk
-ad_connect  sys_ad9680_rstgen/peripheral_reset axi_ad9680_fifo/adc_rst
+ad_connect  axi_ad9680_jesd_rstgen/peripheral_reset axi_ad9680_fifo/adc_rst
 ad_connect  axi_ad9680_cpack/adc_valid axi_ad9680_fifo/adc_wr
 ad_connect  axi_ad9680_cpack/adc_data axi_ad9680_fifo/adc_wdata
 ad_connect  sys_cpu_clk axi_ad9680_fifo/dma_clk
@@ -207,15 +124,6 @@ ad_connect  axi_ad9680_fifo/dma_wdata axi_ad9680_dma/s_axis_data
 ad_connect  axi_ad9680_fifo/dma_wready axi_ad9680_dma/s_axis_ready
 ad_connect  axi_ad9680_fifo/dma_xfer_req axi_ad9680_dma/s_axis_xfer_req
 ad_connect  axi_ad9680_core/adc_dovf axi_ad9680_fifo/adc_wovf
-ad_connect  util_daq2_xcvr/qpll_ref_clk_0 rx_ref_clk
-ad_connect  util_daq2_xcvr/rx_0_p rx_data_0_p
-ad_connect  util_daq2_xcvr/rx_0_n rx_data_0_n
-ad_connect  util_daq2_xcvr/rx_1_p rx_data_1_p
-ad_connect  util_daq2_xcvr/rx_1_n rx_data_1_n
-ad_connect  util_daq2_xcvr/rx_2_p rx_data_2_p
-ad_connect  util_daq2_xcvr/rx_2_n rx_data_2_n
-ad_connect  util_daq2_xcvr/rx_3_p rx_data_3_p
-ad_connect  util_daq2_xcvr/rx_3_n rx_data_3_n
 
 # interconnect (cpu)
 

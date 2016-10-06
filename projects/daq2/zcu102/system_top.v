@@ -192,9 +192,9 @@ module system_top (
     .rx_data_2_p (rx_data_p[2]),
     .rx_data_3_n (rx_data_n[3]),
     .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk (rx_ref_clk),
-    .rx_sync (rx_sync),
-    .rx_sysref (rx_sysref),
+    .rx_ref_clk_0 (rx_ref_clk),
+    .rx_sync_0 (rx_sync),
+    .rx_sysref_0 (rx_sysref),
     .spi0_csn (spi_csn),
     .spi0_miso (spi_miso),
     .spi0_mosi (spi_mosi),
@@ -211,9 +211,9 @@ module system_top (
     .tx_data_2_p (tx_data_p[2]),
     .tx_data_3_n (tx_data_n[3]),
     .tx_data_3_p (tx_data_p[3]),
-    .tx_ref_clk (tx_ref_clk),
-    .tx_sync (tx_sync),
-    .tx_sysref (tx_sysref));
+    .tx_ref_clk_0 (tx_ref_clk),
+    .tx_sync_0 (tx_sync),
+    .tx_sysref_0 (tx_sysref));
 
 endmodule
 
