@@ -222,7 +222,7 @@ add_connection sys_clk.clk_reset axi_ad9680_core.s_axi_reset
 add_connection sys_clk.clk axi_ad9680_core.s_axi_clock
 add_connection sys_cpu.data_master axi_ad9680_core.s_axi
 
-add_connection xcvr_core.jesd204_rx_link axi_ad9680_core.if_rx_ip_avl
+add_connection xcvr_core.jesd204_rx_link axi_ad9680_core.if_rx_data
 add_connection xcvr_core.rx_sof axi_ad9680_core.if_rx_sof
 
 # ad9680-pack
