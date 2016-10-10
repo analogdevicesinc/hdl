@@ -60,6 +60,16 @@ set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to tx_sync
 set_instance_assignment -name IO_STANDARD LVDS -to tx_sysref
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to tx_sysref
 
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_0 -to rx_data[0]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_1 -to rx_data[1]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_2 -to rx_data[2]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_3 -to rx_data[3]
+
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_0 -to tx_data[0]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_1 -to tx_data[1]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_2 -to tx_data[2]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_3 -to tx_data[3]
+
 # gpio
 
 set_location_assignment PIN_AT17  -to trig                  ; ## H13  FMCA_LA07_P
