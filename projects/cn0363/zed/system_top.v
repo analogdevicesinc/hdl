@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -91,7 +91,7 @@ module system_top (
   led_clk_o,
   gain0_o,
   gain1_o,
-  
+
   otg_vbusoc);
 
   inout   [14:0]  ddr_addr;
@@ -138,7 +138,7 @@ module system_top (
   inout           iic_sda;
   inout   [ 1:0]  iic_mux_scl;
   inout   [ 1:0]  iic_mux_sda;
-  
+
   input           spi_sdi;
   inout           spi_sdo;
   output          spi_sclk;
@@ -168,8 +168,10 @@ module system_top (
 
   assign gain0_o = gpio_o[32];
   assign gain1_o = gpio_o[33];
-  
+
   assign gpio_i[34] = spi_sdi; // Interrupt
+  assign gpio_i[33] = gpio_o[33];
+  assign gpio_i[32] = gpio_o[32];
   assign led_clk_o = excitation;
 
   ad_iobuf #(
@@ -177,6 +179,7 @@ module system_top (
   ) i_sdo_iobuf (
     .dio_t(spi_sdo_t),
     .dio_i(spi_sdo_o),
+    .dio_o(),
     .dio_p(spi_sdo)
   );
 
@@ -268,7 +271,25 @@ module system_top (
     .spi_sclk (spi_sclk),
     .excitation (excitation),
     .otg_vbusoc (otg_vbusoc),
-    .spdif (spdif));
+    .spdif (spdif),
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
+    .spi0_csn_1_o (),
+    .spi0_csn_2_o (),
+    .spi0_csn_i (1'b1),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
+    .spi1_clk_i (1'b0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'b1),
+    .spi1_sdi_i (1'b0),
+    .spi1_sdo_i (1'b0),
+    .spi1_sdo_o ());
 
 endmodule
 
