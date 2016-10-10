@@ -174,7 +174,7 @@ module ad_serdes_in #(
   if (DEVICE_TYPE == DEVICE_7SERIES) begin
   ISERDESE2  #(
     .DATA_RATE (DATA_RATE),
-    .DATA_WIDTH (8),
+    .DATA_WIDTH (SERDES_FACTOR),
     .DYN_CLKDIV_INV_EN ("FALSE"),
     .DYN_CLK_INV_EN ("FALSE"),
     .INIT_Q1 (1'b0),
@@ -223,7 +223,7 @@ module ad_serdes_in #(
   if (DEVICE_TYPE == DEVICE_6SERIES) begin
   ISERDESE1 #(
     .DATA_RATE (DATA_RATE),
-    .DATA_WIDTH (8),
+    .DATA_WIDTH (SERDES_FACTOR),
     .DYN_CLKDIV_INV_EN ("FALSE"),
     .DYN_CLK_INV_EN ("FALSE"),
     .INIT_Q1 (1'b0),
@@ -267,7 +267,7 @@ module ad_serdes_in #(
 
   ISERDESE1 #(
     .DATA_RATE (DATA_RATE),
-    .DATA_WIDTH (8),
+    .DATA_WIDTH (SERDES_FACTOR),
     .DYN_CLKDIV_INV_EN ("FALSE"),
     .DYN_CLK_INV_EN ("FALSE"),
     .INIT_Q1 (1'b0),

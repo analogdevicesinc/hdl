@@ -84,7 +84,7 @@ module ad_serdes_out #(
       OSERDESE2  #(
         .DATA_RATE_OQ ("DDR"),
         .DATA_RATE_TQ ("SDR"),
-        .DATA_WIDTH (8),
+        .DATA_WIDTH (SERDES_FACTOR),
         .TRISTATE_WIDTH (1),
         .SERDES_MODE ("MASTER"))
       i_serdes (
@@ -121,7 +121,7 @@ module ad_serdes_out #(
       OSERDESE1  #(
         .DATA_RATE_OQ ("DDR"),
         .DATA_RATE_TQ ("SDR"),
-        .DATA_WIDTH (8),
+        .DATA_WIDTH (SERDES_FACTOR),
         .INTERFACE_TYPE ("DEFAULT"),
         .TRISTATE_WIDTH (1),
         .SERDES_MODE ("MASTER"))
@@ -158,7 +158,7 @@ module ad_serdes_out #(
       OSERDESE1  #(
         .DATA_RATE_OQ ("DDR"),
         .DATA_RATE_TQ ("SDR"),
-        .DATA_WIDTH (8),
+        .DATA_WIDTH (SERDES_FACTOR),
         .INTERFACE_TYPE ("DEFAULT"),
         .TRISTATE_WIDTH (1),
         .SERDES_MODE ("SLAVE"))
