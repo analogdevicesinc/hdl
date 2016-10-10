@@ -111,6 +111,9 @@ module axi_usb_fx3_core (
   fifof_header_size,
   fifof_buffer_size,
 
+  length_fx32dma,
+  length_dma2fx3,
+
   // fx3 interface
   // IN -> TO HOST / FX3
   // OUT -> FROM HOST / FX3
@@ -205,6 +208,9 @@ module axi_usb_fx3_core (
   input   [ 7:0]  fifof_header_size;
   input   [15:0]  fifof_buffer_size;
 
+  output  [31:0]  length_fx32dma;
+  output  [31:0]  length_dma2fx3;
+
   // FX3 interface
   // IN -> ZYNQ TO HOST / FX3
   // OUT -> ZYNQ FROM HOST / FX3
@@ -213,7 +219,7 @@ module axi_usb_fx3_core (
   output          fx32dma_ready;
   input   [31:0]  fx32dma_data;
   input           fx32dma_sop;
-  input           fx32dma_eop;
+  output          fx32dma_eop;
 
   input           dma2fx3_ready;
   output          dma2fx3_valid;
@@ -244,7 +250,7 @@ module axi_usb_fx3_core (
 
   // internal registers
 
-  reg     [31:0]  data_size_transaction = 32'h0;
+  reg     [31:0]  data_size_transaction = 32'hffffffff;
   reg     [15:0]  buffer_size_current = 16'h0;
   reg     [ 7:0]  header_size_current = 8'h0;
 
@@ -280,6 +286,11 @@ module axi_usb_fx3_core (
   reg     [31:0]  expected_data = 32'h0;
   reg             monitor_error = 1'b0;
   reg             first_transfer = 1'b0;
+
+  reg     [31:0]  length_fx32dma = 0;
+  reg     [31:0]  length_dma2fx3 = 0;
+
+  reg             fx32dma_eop = 1'b0;
 
   function [31:0] pn23;
     input [31:0] din;
@@ -447,11 +458,12 @@ module axi_usb_fx3_core (
 
   always @(*) begin
     m_axis_tdata = fx32dma_data;
+    fx32dma_eop = 1'b0;
+    m_axis_tlast = 1'b0;
     case(state_fx32dma)
       IDLE: begin
         m_axis_tvalid = 1'b0;
         m_axis_tkeep = 4'h0;
-        m_axis_tlast = 1'b0;
         eot_fx32dma  = 1'b0;
       end
       READ_HEADER: begin
@@ -462,13 +474,18 @@ module axi_usb_fx3_core (
       end
       READ_DATA: begin
         m_axis_tvalid = fx32dma_valid;
-        m_axis_tlast = fx32dma_eop;
-        eot_fx32dma = fx32dma_eop;
         if (fx32dma_valid == 1'b1) begin
+          if (data_size_transaction > 12 ) begin
+            fx32dma_eop = 1'b0;
+          end else begin
+            fx32dma_eop = 1'b1;
+          end
           if (data_size_transaction > 4) begin
+            m_axis_tlast = 1'b0;
             m_axis_tkeep = 4'hf;
             eot_fx32dma  = 1'b0;
           end else begin
+            m_axis_tlast = 1'b1;
             eot_fx32dma  = 1'b1;
             m_axis_tlast = 1'b1;
             case (data_size_transaction)
@@ -491,6 +508,7 @@ module axi_usb_fx3_core (
       end
     endcase
   end
+
   always @(posedge clk) begin
     header_read <= 1'b0;
     if (state_fx32dma == IDLE) begin
@@ -516,6 +534,7 @@ module axi_usb_fx3_core (
         end
         if (header_pointer == 4) begin
           data_size_transaction <= fx32dma_data;
+          length_fx32dma <= fx32dma_data;
           if (fx32dma_data > buffer_size_current) begin
             error_fx32dma <= 1'b1;
           end
@@ -677,6 +696,7 @@ module axi_usb_fx3_core (
 
     if(state_dma2fx3 == ADD_FOOTER) begin
       footer_pointer <= footer_pointer + 4;
+      length_dma2fx3 <= dma2fx3_counter;
       case(footer_pointer)
         32'h4: dma2fx3_data_reg <= dma2fx3_counter;
         32'h8: dma2fx3_data_reg <= 32'h0;

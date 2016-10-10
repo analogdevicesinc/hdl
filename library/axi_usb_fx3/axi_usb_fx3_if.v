@@ -67,6 +67,7 @@ module axi_usb_fx3_if (
   fx32dma_data,
   fx32dma_sop,
   fx32dma_eop,
+  eot_fx32dma,
 
   dma2fx3_ready,
   dma2fx3_valid,
@@ -101,7 +102,8 @@ module axi_usb_fx3_if (
   input           fx32dma_ready;
   output  [31:0]  fx32dma_data;
   output          fx32dma_sop;
-  output          fx32dma_eop;
+  input           fx32dma_eop;
+  input           eot_fx32dma;
 
   input           dma2fx3_valid;
   output          dma2fx3_ready;
@@ -110,36 +112,33 @@ module axi_usb_fx3_if (
 
   // internal registers
 
-
-  reg [10:0]  fifo_ready;
+  reg [10:0]  fifo_ready = 0;
 
   reg [31:0]  fx32dma_data = 0;
-  reg         fx32dma_eop;
-
-  reg [ 1:0]  rd_oe_delay;
 
   reg [ 3:0]  state_gpif_ii = 4'h0;
   reg [ 3:0]  next_state_gpif_ii = 4'h0;
 
-  reg         current_direction;
-  reg         current_fifo;
-  reg         current_fifo_d1;
-  reg         current_fifo_d2;
-  reg         current_fifo_d3;
-  reg         slcs_n;
-  reg         slrd_n;
-  reg         sloe_n;
-  reg [ 1:0]  addr;
-  reg         sloe_n_d1;
-  reg         sloe_n_d2;
-  reg         sloe_n_d3;
-  reg         slwr_n;
-  reg         fx32dma_valid;
-  reg         dma2fx3_ready;
-  reg         fx32dma_sop;
-  reg         fx32dma_sop_d1;
-  reg         pktend_n;
-  reg         slcs_n_d1;
+  reg         current_direction = 0;
+  reg         current_fifo = 0;
+  reg         slcs_n = 0;
+  reg         slcs_n_d1 = 0;
+  reg         slcs_n_d2 = 0;
+  reg         slcs_n_d3 = 0;
+  reg         slcs_n_d4 = 0;
+  reg         slrd_n = 0;
+  reg         slrd_n_d1 = 0;
+  reg         slrd_n_d2 = 0;
+  reg         slrd_n_d3 = 0;
+  reg         sloe_n = 0;
+  reg [ 1:0]  addr = 0;
+  reg         sloe_n_d1 = 0;
+  reg         slwr_n = 0;
+  reg         fx32dma_valid = 0;
+  reg         dma2fx3_ready = 0;
+  reg         fx32dma_sop = 0;
+  reg         pktend_n = 0;
+  reg         pip = 0;
 
   localparam IDLE         = 4'b0001;
   localparam READ_START   = 4'b0010;
@@ -198,8 +197,9 @@ module axi_usb_fx3_if (
     endcase
   end
 
+  // STATE MACHINE GPIF II
   always @(posedge pclk) begin
-    if (reset_n == 1'b0) begin
+    if (reset_n == 1'b0 || trig == 1'b0 ) begin
       state_gpif_ii <= IDLE;
     end else begin
       state_gpif_ii <= next_state_gpif_ii;
@@ -219,13 +219,9 @@ module axi_usb_fx3_if (
           next_state_gpif_ii = IDLE;
         end
       READ_START:
-        if(rd_oe_delay == 2'h3) begin
           next_state_gpif_ii = READ_DATA;
-        end else begin
-          next_state_gpif_ii = READ_START;
-        end
       READ_DATA:
-        if (sloe_n == 1'b1) begin
+        if (eot_fx32dma == 1'b1) begin
           next_state_gpif_ii = IDLE;
         end else begin
           next_state_gpif_ii = READ_DATA;
@@ -252,31 +248,28 @@ module axi_usb_fx3_if (
         slwr_n        = 1'b1;
         pktend_n      = 1'b1;
         dma2fx3_ready = 1'b0;
-        fx32dma_eop   = 1'b0;
       end
       READ_START: begin
         slcs_n        = 1'b0;
         sloe_n        = 1'b0;
-        slrd_n        = slcs_n_d1;
+        slrd_n        = 1'b1;
         fx32dma_valid = 1'b0;
         fx32dma_sop   = 1'b0;
         fx32dma_data  = 32'h0;
         slwr_n        = 1'b1;
         pktend_n      = 1'b1;
         dma2fx3_ready = 1'b0;
-        fx32dma_eop   = 1'b0;
       end
       READ_DATA: begin
         slcs_n        = 1'b0;
-        sloe_n        = sloe_n_d2;
-        slrd_n        = !current_fifo_d3;
-        fx32dma_valid = !sloe_n_d3;
-        fx32dma_sop   = fx32dma_sop_d1;
+        sloe_n        = 1'b0;
+        slrd_n        = !fx32dma_ready | fx32dma_eop;
+        fx32dma_valid = !slcs_n_d4 & !slrd_n_d3;
+        fx32dma_sop   = !slcs_n_d4 & !slrd_n_d3 & pip;
         fx32dma_data  = data;
         slwr_n        = 1'b1;
         pktend_n      = 1'b1;
         dma2fx3_ready = 1'b0;
-        fx32dma_eop   = sloe_n_d2;
       end
       WRITE_DATA: begin
         slcs_n        = 1'b0;
@@ -285,10 +278,9 @@ module axi_usb_fx3_if (
         fx32dma_valid = 1'b0;
         fx32dma_sop   = 1'b0;
         fx32dma_data  = 32'h0;
-        slwr_n = (state_gpif_ii == WRITE_DATA) ? (!dma2fx3_valid | !current_fifo) : 1'b1;
+        slwr_n =  !dma2fx3_valid | !current_fifo;
         dma2fx3_ready = current_fifo;
-        pktend_n = (state_gpif_ii == WRITE_DATA ) ? !dma2fx3_eop : 1'b1;
-        fx32dma_eop   = 1'b0;
+        pktend_n = !dma2fx3_eop;
       end
       default: begin
         slcs_n        = 1'b1;
@@ -300,35 +292,27 @@ module axi_usb_fx3_if (
         slwr_n        = 1'b1;
         pktend_n      = 1'b1;
         dma2fx3_ready = 1'b0;
-        fx32dma_eop   = 1'b0;
       end
     endcase
   end
 
   always @(posedge pclk) begin
-    slcs_n_d1 <= slcs_n;
-    current_fifo_d1 <= current_fifo;
-    current_fifo_d2 <= current_fifo_d1;
-    current_fifo_d3 <= current_fifo_d2;
     fifo_ready <= {7'h0,fifo_rdy};
-    if(state_gpif_ii == READ_DATA) begin
-      fx32dma_sop_d1 <= 1'b0;
-    end else begin
-      fx32dma_sop_d1 <= 1'b1;
-    end
-
-    sloe_n_d1     <= slrd_n;
-    sloe_n_d2     <= sloe_n_d1;
-    sloe_n_d3     <= sloe_n_d2;
-
+    slrd_n_d1     <= slrd_n;
+    slrd_n_d2     <= slrd_n_d1;
+    slrd_n_d3     <= slrd_n_d2;
+    slcs_n_d1     <= slcs_n;
+    slcs_n_d2     <= slcs_n_d1;
+    slcs_n_d3     <= slcs_n_d2;
+    slcs_n_d4     <= slcs_n_d3;
     addr          <= fifo_num[1:0];
-
-    if(state_gpif_ii == READ_START) begin
-      rd_oe_delay   <= rd_oe_delay + 1'b1;
+    if (state_gpif_ii == IDLE) begin
+      pip <= 1'b1;
     end else begin
-      rd_oe_delay   <= 2'h0;
+      if (fx32dma_sop == 1'b1) begin
+        pip <= 1'b0;
+      end
     end
-
   end
 
 endmodule
