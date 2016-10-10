@@ -108,11 +108,19 @@ module ad_lvds_in (
 
   generate
   if (IODELAY_CTRL == 1) begin
+  if (DEVICE_TYPE == ULTRASCALE) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL #(.SIM_DEVICE ("ULTRASCALE")) i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end else begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYCTRL i_delay_ctrl (
     .RST (delay_rst),
     .REFCLK (delay_clk),
     .RDY (delay_locked));
+  end
   end else begin
   assign delay_locked = 1'b1;
   end
@@ -196,6 +204,7 @@ module ad_lvds_in (
   assign up_drdata = up_drdata_s[8:4];
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYE3 #(
+    .SIM_DEVICE ("ULTRASCALE_PLUS_ES1"),
     .DELAY_SRC ("IDATAIN"),
     .DELAY_TYPE ("VAR_LOAD"),
     .REFCLK_FREQUENCY (200.0),
