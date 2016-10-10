@@ -155,6 +155,9 @@ module system_top (
   wire            spi1_mosi;
   wire            spi1_miso;
 
+  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[31:15] = gpio_o[31:15];
+
   // spi
 
   assign spi_clk = spi0_clk;
