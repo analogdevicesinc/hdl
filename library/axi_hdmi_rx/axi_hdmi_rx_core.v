@@ -347,7 +347,7 @@ module axi_hdmi_rx_core (
     .hdmi_hs_de (hdmi_hs_de_s),
     .hdmi_data_de (hdmi_data_de_s));
 
-  // test patttern matcher
+  // test pattern matcher
 
   axi_hdmi_rx_tpm i_tpm (
     .hdmi_clk (hdmi_clk),
