@@ -50,7 +50,7 @@ set_property  -dict {PACKAGE_PIN   N20    IOSTANDARD LVCMOS25}    [get_ports  hd
 
 # clock definition
 
-create_clock -period 6.66667  -name hdmi_rx_clk  [get_ports hdmi_rx_clk]
+create_clock -period 6.667  -name hdmi_rx_clk  [get_ports hdmi_rx_clk]
 
 # i2s
 

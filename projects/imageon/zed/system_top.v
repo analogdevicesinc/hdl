@@ -156,6 +156,8 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
+  assign gpio_i[63:34] = gpio_o[63:34];
+
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(2)) i_gpio (
@@ -252,7 +254,7 @@ module system_top (
     .spi0_csn_0_o (),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
-    .spi0_csn_i (1'b0),
+    .spi0_csn_i (1'b1),
     .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (),
@@ -261,7 +263,7 @@ module system_top (
     .spi1_csn_0_o (),
     .spi1_csn_1_o (),
     .spi1_csn_2_o (),
-    .spi1_csn_i (1'b0),
+    .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o ());
