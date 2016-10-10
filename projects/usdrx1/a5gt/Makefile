@@ -18,14 +18,6 @@ M_DEPS += ../../common/a5gt/a5gt_system_bd.qsys
 M_DEPS += ../../common/a5gt/a5gt_system_assign.tcl
 M_DEPS += ../../../library/common/altera/ad_xcvr_rx_rst.v
 M_DEPS += ../../../library/common/altera/ad_jesd_align.v
-M_DEPS += ../../../library/altera_avalon_pio/altera_avalon_pio_hw.tcl
-M_DEPS += ../../../library/altera_avalon_spi/altera_avalon_spi_hw.tcl
-M_DEPS += ../../../library/altera_clock_bridge/altera_clock_bridge_hw.tcl
-M_DEPS += ../../../library/altera_eth_tse/altera_eth_tse_hw.tcl
-M_DEPS += ../../../library/altera_irq_bridge/altera_irq_bridge_hw.tcl
-M_DEPS += ../../../library/altera_nios2_gen2/altera_nios2_gen2_hw.tcl
-M_DEPS += ../../../library/altera_pll/altera_pll_hw.tcl
-M_DEPS += ../../../library/altera_reset_bridge/altera_reset_bridge_hw.tcl
 
 
 M_ALTERA := quartus_sh --64bit -t 
