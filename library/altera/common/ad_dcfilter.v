@@ -39,35 +39,25 @@
 
 `timescale 1ps/1ps
 
-module ad_dcfilter (
+module ad_dcfilter #(
+
+  // data path disable
+
+  parameter   DISABLE = 0) (
 
   // data interface
 
-  clk,
-  valid,
-  data,
-  valid_out,
-  data_out,
+  input               clk,
+  input               valid,
+  input       [15:0]  data,
+  output reg          valid_out,
+  output reg  [15:0]  data_out,
 
   // control interface
 
-  dcfilt_enb,
-  dcfilt_coeff,
-  dcfilt_offset);
-
-  // data interface
-
-  input           clk;
-  input           valid;
-  input   [15:0]  data;
-  output          valid_out;
-  output  [15:0]  data_out;
-
-  // control interface
-
-  input           dcfilt_enb;
-  input   [15:0]  dcfilt_coeff;
-  input   [15:0]  dcfilt_offset;
+  input           dcfilt_enb,
+  input   [15:0]  dcfilt_coeff,
+  input   [15:0]  dcfilt_offset);
 
   // internal registers
 
@@ -75,8 +65,6 @@ module ad_dcfilter (
   reg     [15:0]  data_d = 'd0;
   reg             valid_2d = 'd0;
   reg     [15:0]  data_2d = 'd0;
-  reg             valid_out = 'd0;
-  reg     [15:0]  data_out = 'd0;
 
   // internal signals
 
