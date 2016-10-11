@@ -47,9 +47,13 @@ proc p_alt_serdes {} {
 
   set m_hs_data_rate [expr ($m_clkin_frequency * ($m_ddr_or_sdr_n + 1))]
   set m_ls_data_rate [expr ($m_hs_data_rate/$m_serdes_factor)]
-  set m_ls_phase 315.0
+  set m_ls_phase 22.5
+  set m_ld_phase 315.0
+  set m_ld_duty_cycle 12.5
   if {$m_serdes_factor == 4} {
-    set m_ls_phase 270.0
+    set m_ls_phase 45
+    set m_ld_phase 270.0
+    set m_ld_duty_cycle 25.0
   }
 
   if {$m_mode == "CLK"} {
@@ -66,9 +70,10 @@ proc p_alt_serdes {} {
     set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg0} {180.0}
     set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency1} $m_ls_data_rate
     set_instance_parameter_value alt_serdes_pll {gui_ps_units1} {degrees}
-    set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg1} $m_ls_phase
-    set_instance_parameter_value alt_serdes_pll {gui_duty_cycle1} {12.5}
+    set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg1} $m_ld_phase
+    set_instance_parameter_value alt_serdes_pll {gui_duty_cycle1} $m_ld_duty_cycle
     set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency2} $m_ls_data_rate
+    set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg2} $m_ls_phase
     set_instance_parameter_value alt_serdes_pll {gui_ps_units2} {degrees}
     add_interface rst reset sink
     set_interface_property rst EXPORT_OF alt_serdes_pll.reset
@@ -148,5 +153,3 @@ proc p_alt_serdes {} {
     set_interface_property data_s EXPORT_OF alt_serdes_out.tx_in
   }
 }
-
-
