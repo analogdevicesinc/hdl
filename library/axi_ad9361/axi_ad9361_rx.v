@@ -106,7 +106,17 @@ module axi_ad9361_rx #(
   input           up_rreq,
   input   [13:0]  up_raddr,
   output  [31:0]  up_rdata,
-  output          up_rack);
+  output          up_rack,
+
+  // drp interface
+
+  output          up_drp_sel,
+  output          up_drp_wr,
+  output   [11:0] up_drp_addr,
+  output   [31:0] up_drp_wdata,
+  input    [31:0] up_drp_rdata,
+  input           up_drp_ready,
+  input           up_drp_locked);
 
   // configuration settings
 
@@ -335,13 +345,13 @@ module axi_ad9361_rx #(
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),
-    .up_drp_sel (),
-    .up_drp_wr (),
-    .up_drp_addr (),
-    .up_drp_wdata (),
-    .up_drp_rdata (32'd0),
-    .up_drp_ready (1'd0),
-    .up_drp_locked (1'd1),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked),
     .up_usr_chanmax (),
     .adc_usr_chanmax (8'd3),
     .up_adc_gpio_in (up_adc_gpio_in),
