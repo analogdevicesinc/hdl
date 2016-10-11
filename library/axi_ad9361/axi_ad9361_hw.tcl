@@ -17,6 +17,9 @@ add_fileset quartus_synth QUARTUS_SYNTH "" ""
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9361
 add_fileset_file ad_rst.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
 add_fileset_file ad_lvds_clk.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_lvds_clk.v
+add_fileset_file ad_serdes_clk.v          VERILOG PATH $ad_hdl_dir/library/altera/common/ad_serdes_clk.v
+add_fileset_file ad_serdes_in.v           VERILOG PATH $ad_hdl_dir/library/altera/common/ad_serdes_in.v
+add_fileset_file ad_serdes_out.v          VERILOG PATH $ad_hdl_dir/library/altera/common/ad_serdes_out.v
 add_fileset_file ad_lvds_in.v             VERILOG PATH $ad_hdl_dir/library/altera/common/ad_lvds_in.v
 add_fileset_file ad_lvds_out.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_lvds_out.v
 add_fileset_file ad_cmos_clk.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_cmos_clk.v
@@ -42,8 +45,8 @@ add_fileset_file up_adc_channel.v         VERILOG PATH $ad_hdl_dir/library/commo
 add_fileset_file up_dac_common.v          VERILOG PATH $ad_hdl_dir/library/common/up_dac_common.v
 add_fileset_file up_dac_channel.v         VERILOG PATH $ad_hdl_dir/library/common/up_dac_channel.v
 add_fileset_file up_tdd_cntrl.v           VERILOG PATH $ad_hdl_dir/library/common/up_tdd_cntrl.v
-add_fileset_file axi_ad9361_lvds_if.v     VERILOG PATH axi_ad9361_lvds_if.v
-add_fileset_file axi_ad9361_cmos_if.v     VERILOG PATH axi_ad9361_cmos_if.v
+add_fileset_file axi_ad9361_lvds_if.v     VERILOG PATH altera/axi_ad9361_lvds_if.v
+add_fileset_file axi_ad9361_cmos_if.v     VERILOG PATH altera/axi_ad9361_cmos_if.v
 add_fileset_file axi_ad9361_rx_pnmon.v    VERILOG PATH axi_ad9361_rx_pnmon.v
 add_fileset_file axi_ad9361_rx_channel.v  VERILOG PATH axi_ad9361_rx_channel.v
 add_fileset_file axi_ad9361_rx.v          VERILOG PATH axi_ad9361_rx.v
@@ -235,15 +238,23 @@ set_instance_parameter_value alt_ddio_out {SIZE} {1}
 set_instance_parameter_value alt_ddio_out {gui_diff_buff} {0}
 set_instance_parameter_value alt_ddio_out {gui_io_reg_mode} {DDIO}
 
-add_hdl_instance alt_clk altera_iopll
-set_instance_parameter_value alt_clk {gui_reference_clock_frequency} {250.0}
-set_instance_parameter_value alt_clk {gui_use_locked} {1}
-set_instance_parameter_value alt_clk {gui_operation_mode} {source synchronous}
-set_instance_parameter_value alt_clk {gui_number_of_clocks} {1}
-set_instance_parameter_value alt_clk {gui_output_clock_frequency0} {250.0}
-set_instance_parameter_value alt_clk {gui_ps_units0} {degrees}
-set_instance_parameter_value alt_clk {gui_phase_shift_deg0} {90.0}
-set_instance_parameter_value alt_clk {system_info_device_family} DEVICE_FAMILY
+add_hdl_instance alt_serdes_clk_core alt_serdes
+set_instance_parameter_value alt_serdes_clk_core {MODE} {CLK}
+set_instance_parameter_value alt_serdes_clk_core {DDR_OR_SDR_N} {1}
+set_instance_parameter_value alt_serdes_clk_core {SERDES_FACTOR} {4}
+set_instance_parameter_value alt_serdes_clk_core {CLKIN_FREQUENCY} {250.0}
+
+add_hdl_instance alt_serdes_in_core alt_serdes
+set_instance_parameter_value alt_serdes_in_core {MODE} {IN}
+set_instance_parameter_value alt_serdes_in_core {DDR_OR_SDR_N} {1}
+set_instance_parameter_value alt_serdes_in_core {SERDES_FACTOR} {4}
+set_instance_parameter_value alt_serdes_in_core {CLKIN_FREQUENCY} {250.0}
+
+add_hdl_instance alt_serdes_out_core alt_serdes
+set_instance_parameter_value alt_serdes_out_core {MODE} {OUT}
+set_instance_parameter_value alt_serdes_out_core {DDR_OR_SDR_N} {1}
+set_instance_parameter_value alt_serdes_out_core {SERDES_FACTOR} {4}
+set_instance_parameter_value alt_serdes_out_core {CLKIN_FREQUENCY} {250.0}
 
 # updates
 
