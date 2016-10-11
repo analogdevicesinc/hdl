@@ -659,14 +659,6 @@ module axi_ad9361_lvds_if (
     .clk_in_n (rx_clk_in_n),
     .clk (l_clk));
 
-  // debug
-	ila_TEST_DAC_MODE ila_dac_mode (
-	.clk(clk),
-	.probe0(dac_r1_mode),
-	.probe1(dac_valid));
-
-// end debug
-
 endmodule
 
 // ***************************************************************************
