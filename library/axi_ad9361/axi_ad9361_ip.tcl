@@ -34,8 +34,8 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
   "axi_ad9361_constr.xdc" \
-  "axi_ad9361_lvds_if.v" \
-  "axi_ad9361_cmos_if.v" \
+  "xilinx/axi_ad9361_lvds_if.v" \
+  "xilinx/axi_ad9361_cmos_if.v" \
   "axi_ad9361_rx_pnmon.v" \
   "axi_ad9361_rx_channel.v" \
   "axi_ad9361_rx.v" \

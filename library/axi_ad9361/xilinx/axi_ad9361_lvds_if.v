@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -103,7 +103,17 @@ module axi_ad9361_lvds_if (
   up_dac_drdata,
   delay_clk,
   delay_rst,
-  delay_locked);
+  delay_locked,
+
+  //drp interface
+
+  up_drp_sel,
+  up_drp_wr,
+  up_drp_addr,
+  up_drp_wdata,
+  up_drp_rdata,
+  up_drp_ready,
+  up_drp_locked);
 
   // this parameter controls the buffer type based on the target device.
 
@@ -177,6 +187,16 @@ module axi_ad9361_lvds_if (
   input           delay_rst;
   output          delay_locked;
 
+  //drp interface
+
+  input               up_drp_sel;
+  input               up_drp_wr;
+  input   [11:0]      up_drp_addr;
+  input   [31:0]      up_drp_wdata;
+  output  [31:0]      up_drp_rdata;
+  output              up_drp_ready;
+  output              up_drp_locked;
+
   // internal registers
 
   reg     [ 5:0]  rx_data_p = 0;
@@ -244,6 +264,12 @@ module axi_ad9361_lvds_if (
   wire            rx_frame_p_s;
   wire            rx_frame_n_s;
   wire            locked_s;
+
+  // drp interface signals
+
+  assign up_drp_rdata = 32'd0;
+  assign up_drp_ready = 1'd0;
+  assign up_drp_locked = 1'd1;
 
   genvar          l_inst;
 
@@ -632,6 +658,14 @@ module axi_ad9361_lvds_if (
     .clk_in_p (rx_clk_in_p),
     .clk_in_n (rx_clk_in_n),
     .clk (l_clk));
+
+  // debug
+	ila_TEST_DAC_MODE ila_dac_mode (
+	.clk(clk),
+	.probe0(dac_r1_mode),
+	.probe1(dac_valid));
+
+// end debug
 
 endmodule
 
