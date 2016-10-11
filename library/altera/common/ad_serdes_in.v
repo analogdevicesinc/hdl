@@ -43,6 +43,7 @@ module ad_serdes_in #(
   // parameters
 
   parameter   DEVICE_TYPE = 0,
+  parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16) (
 
   // reset and clocks
@@ -83,17 +84,31 @@ module ad_serdes_in #(
   // internal signals
 
   wire    [(DATA_WIDTH-1):0]      delay_locked_s;
+  wire    [(DATA_WIDTH-1):0]      data_out_s[ 7:0];
+  wire    [(DATA_WIDTH-1):0]      data_sel_s[ 7:0];
 
   // assignments
 
   assign up_drdata = 5'd0;
   assign delay_locked = & delay_locked_s;
 
+  assign data_s0 = data_sel_s[0];
+  assign data_s1 = data_sel_s[1];
+  assign data_s2 = data_sel_s[2];
+  assign data_s3 = data_sel_s[3];
+  assign data_s4 = data_sel_s[4];
+  assign data_s5 = data_sel_s[5];
+  assign data_s6 = data_sel_s[6];
+  assign data_s7 = data_sel_s[7];
+
   // instantiations
 
-  genvar l_inst;
+  genvar l_inst, l_order;
   generate
   for (l_inst = 0; l_inst < DATA_WIDTH; l_inst = l_inst + 1) begin: g_data
+    for (l_order = 0; l_order < SERDES_FACTOR; l_order = l_order + 1) begin: g_order
+      assign data_sel_s[l_order][l_inst] = data_out_s[8 - SERDES_FACTOR + l_order][l_inst];
+    end
   alt_serdes_in_core i_core (
     .clk_export (clk),
     .div_clk_export (div_clk),
@@ -101,14 +116,14 @@ module ad_serdes_in #(
     .loaden_export (loaden),
     .locked_export (locked),
     .data_in_export (data_in_p[l_inst]),
-    .data_s_export ({ data_s0[l_inst],
-                      data_s1[l_inst],
-                      data_s2[l_inst],
-                      data_s3[l_inst],
-                      data_s4[l_inst],
-                      data_s5[l_inst],
-                      data_s6[l_inst],
-                      data_s7[l_inst]}),
+    .data_s_export ({data_out_s[0][l_inst],
+                     data_out_s[1][l_inst],
+                     data_out_s[2][l_inst],
+                     data_out_s[3][l_inst],
+                     data_out_s[4][l_inst],
+                     data_out_s[5][l_inst],
+                     data_out_s[6][l_inst],
+                     data_out_s[7][l_inst]}),
     .delay_locked_export (delay_locked_s[l_inst]));
   end
   endgenerate

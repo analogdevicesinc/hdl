@@ -41,6 +41,7 @@
 module ad_serdes_out #(
 
   parameter   DEVICE_TYPE = 0,
+  parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16) (
 
   // reset and clocks
@@ -63,29 +64,49 @@ module ad_serdes_out #(
   output  [(DATA_WIDTH-1):0]  data_out_p,
   output  [(DATA_WIDTH-1):0]  data_out_n);
 
+  // internal signals
+
+  wire    [(DATA_WIDTH-1):0]  data_in_s[ 7:0];
+  wire    [(DATA_WIDTH-1):0]  data_in_s2[ 7:0];
+
   // defaults
 
   assign data_out_n = 'd0;
 
   // instantiations
 
+    assign data_in_s[0] = data_s0;
+    assign data_in_s[1] = data_s1;
+    assign data_in_s[2] = data_s2;
+    assign data_in_s[3] = data_s3;
+    assign data_in_s[4] = data_s4;
+    assign data_in_s[5] = data_s5;
+    assign data_in_s[6] = data_s6;
+    assign data_in_s[7] = data_s7;
+
+  genvar l_order;
+  generate
+    for (l_order = 0; l_order < 8; l_order = l_order + 1) begin: g_order
+      assign data_in_s2[l_order] = (l_order < 8-SERDES_FACTOR) ? 1'b0 : data_in_s[l_order -8 + SERDES_FACTOR];
+    end
+  endgenerate
+
   genvar l_inst;
   generate
   for (l_inst = 0; l_inst < DATA_WIDTH; l_inst = l_inst + 1) begin: g_data
-
     alt_serdes_out_core i_core (
       .clk_export (clk),
       .div_clk_export (div_clk),
       .loaden_export (loaden),
       .data_out_export (data_out_p[l_inst]),
-      .data_s_export ({ data_s0[l_inst],
-                        data_s1[l_inst],
-                        data_s2[l_inst],
-                        data_s3[l_inst],
-                        data_s4[l_inst],
-                        data_s5[l_inst],
-                        data_s6[l_inst],
-                        data_s7[l_inst]}));
+      .data_s_export ({data_in_s2[0][l_inst],
+                       data_in_s2[1][l_inst],
+                       data_in_s2[2][l_inst],
+                       data_in_s2[3][l_inst],
+                       data_in_s2[4][l_inst],
+                       data_in_s2[5][l_inst],
+                       data_in_s2[6][l_inst],
+                       data_in_s2[7][l_inst]}));
   end
   endgenerate
 
