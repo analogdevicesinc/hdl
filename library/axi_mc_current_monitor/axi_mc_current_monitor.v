@@ -404,6 +404,7 @@ up_axi i_up_axi(
         .up_wreq (up_wreq_s),
         .up_waddr (up_waddr_s),
         .up_wdata (up_wdata_s),
+        .up_wack (up_wack),
         .up_rreq (up_rreq_s),
         .up_raddr (up_raddr_s),
         .up_rdata (up_rdata),
