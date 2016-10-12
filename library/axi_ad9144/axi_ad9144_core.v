@@ -287,6 +287,7 @@ module axi_ad9144_core (
     .dac_rst (dac_rst),
     .dac_sync (dac_sync_s),
     .dac_frame (),
+    .dac_clksel (),
     .dac_par_type (),
     .dac_par_enb (),
     .dac_r1_mode (),
