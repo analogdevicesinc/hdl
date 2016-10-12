@@ -121,8 +121,8 @@ module axi_ad9684_if (
   input           up_drp_sel;
   input           up_drp_wr;
   input   [11:0]  up_drp_addr;
-  input   [15:0]  up_drp_wdata;
-  output  [15:0]  up_drp_rdata;
+  input   [31:0]  up_drp_wdata;
+  output  [31:0]  up_drp_rdata;
   output          up_drp_ready;
   output          up_drp_locked;
 

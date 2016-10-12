@@ -187,8 +187,8 @@ module axi_ad9684 (
   wire            up_drp_sel_s;
   wire            up_drp_wr_s;
   wire    [11:0]  up_drp_addr_s;
-  wire    [15:0]  up_drp_wdata_s;
-  wire    [15:0]  up_drp_rdata_s;
+  wire    [31:0]  up_drp_wdata_s;
+  wire    [31:0]  up_drp_rdata_s;
   wire            up_drp_ready_s;
   wire            up_drp_locked_s;
   wire            rst_s;
