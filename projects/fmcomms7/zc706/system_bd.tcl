@@ -22,4 +22,3 @@ create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
   SEG_axi_ddr_cntrl_memaddr
 
 source ../common/fmcomms7_bd.tcl
-
