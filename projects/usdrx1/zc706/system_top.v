@@ -265,11 +265,6 @@ module system_top (
   wire            adc_dovf_1;
   wire            adc_dovf_2;
   wire            adc_dovf_3;
-  wire   [255:0]  gt_rx_data;
-  wire    [63:0]  gt_rx_data_0;
-  wire    [63:0]  gt_rx_data_1;
-  wire    [63:0]  gt_rx_data_2;
-  wire    [63:0]  gt_rx_data_3;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -300,11 +295,6 @@ module system_top (
     .spi_clk_sdio (spi_clk_sdio));
 
   // single dma for all channels
-
-  assign gt_rx_data_3 = gt_rx_data[255:192];
-  assign gt_rx_data_2 = gt_rx_data[191:128];
-  assign gt_rx_data_1 = gt_rx_data[127: 64];
-  assign gt_rx_data_0 = gt_rx_data[ 63:  0];
 
   assign adc_data   = {adc_data_3, adc_data_2, adc_data_1, adc_data_0};
   assign adc_valid  = (|adc_valid_0) | (|adc_valid_1) | (|adc_valid_2) | (|adc_valid_3) ;
@@ -452,11 +442,6 @@ module system_top (
     .adc_dovf_1 (adc_dovf_1),
     .adc_dovf_2 (adc_dovf_2),
     .adc_dovf_3 (adc_dovf_3),
-    .gt_rx_data (gt_rx_data),
-    .gt_rx_data_0 (gt_rx_data_0),
-    .gt_rx_data_1 (gt_rx_data_1),
-    .gt_rx_data_2 (gt_rx_data_2),
-    .gt_rx_data_3 (gt_rx_data_3),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
@@ -476,11 +461,25 @@ module system_top (
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
     .ps_intr_11 (1'b0),
-    .rx_data_n (rx_data_n),
-    .rx_data_p (rx_data_p),
-    .rx_ref_clk (rx_ref_clk),
-    .rx_sync (rx_sync),
-    .rx_sysref (rx_sysref),
+    .rx_data_0_n (rx_data_n[0]),
+    .rx_data_0_p (rx_data_p[0]),
+    .rx_data_1_n (rx_data_n[1]),
+    .rx_data_1_p (rx_data_p[1]),
+    .rx_data_2_n (rx_data_n[2]),
+    .rx_data_2_p (rx_data_p[2]),
+    .rx_data_3_n (rx_data_n[3]),
+    .rx_data_3_p (rx_data_p[3]),
+    .rx_data_4_n (rx_data_n[4]),
+    .rx_data_4_p (rx_data_p[4]),
+    .rx_data_5_n (rx_data_n[5]),
+    .rx_data_5_p (rx_data_p[5]),
+    .rx_data_6_n (rx_data_n[6]),
+    .rx_data_6_p (rx_data_p[6]),
+    .rx_data_7_n (rx_data_n[7]),
+    .rx_data_7_p (rx_data_p[7]),
+    .rx_ref_clk_0 (rx_ref_clk),
+    .rx_sync_0 (rx_sync),
+    .rx_sysref_0 (rx_sysref),
     .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
