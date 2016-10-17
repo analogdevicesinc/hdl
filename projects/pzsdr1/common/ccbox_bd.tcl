@@ -8,6 +8,8 @@ ad_connect  sys_ps7/ENET1_GMII_TX_CLK GND
 
 set_property CONFIG.PCW_UART0_PERIPHERAL_ENABLE {1} [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_UART0_UART0_IO {MIO 14 .. 15} [get_bd_cells sys_ps7]
+set_property CONFIG.PCW_USE_DMA1 1 [get_bd_cells sys_ps7]
+set_property CONFIG.PCW_USE_DMA2 1 [get_bd_cells sys_ps7]
 
 # i2s
 

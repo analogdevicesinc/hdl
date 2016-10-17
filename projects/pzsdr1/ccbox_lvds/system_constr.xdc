@@ -20,7 +20,7 @@ set_property  -dict {PACKAGE_PIN  V5    IOSTANDARD  LVCMOS25} [get_ports  oled_c
 set_property  -dict {PACKAGE_PIN  V7    IOSTANDARD  LVCMOS25} [get_ports  oled_scl]         ; ## JX2.37   IO_L11N_T1_SRCC_13
 set_property  -dict {PACKAGE_PIN  T9    IOSTANDARD  LVCMOS25} [get_ports  oled_sdi]         ; ## JX2.36   IO_L12P_T1_MRCC_13
 set_property  -dict {PACKAGE_PIN  U10   IOSTANDARD  LVCMOS25} [get_ports  oled_d_c]         ; ## JX2.38   IO_L12N_T1_MRCC_13
-set_property  -dict {PACKAGE_PIN  U7    IOSTANDARD  LVCMOS25} [get_ports  oled_res          ; ## JX2.35   IO_L11P_T1_SRCC_13
+set_property  -dict {PACKAGE_PIN  U7    IOSTANDARD  LVCMOS25} [get_ports  oled_res]         ; ## JX2.35   IO_L11P_T1_SRCC_13
 
 # adp5061
 

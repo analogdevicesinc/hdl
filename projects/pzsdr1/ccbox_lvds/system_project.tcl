@@ -11,7 +11,6 @@ adi_project_files ccbox_lvds_pzsdr1 [list \
   "$ad_hdl_dir/projects/common/pzsdr1/pzsdr1_system_constr.xdc" \
   "$ad_hdl_dir/projects/common/pzsdr1/pzsdr1_lvds_system_constr.xdc" ]
 
-set_property is_enabled false [get_files  *axi_gpreg_constr.xdc]
 adi_project_run ccbox_lvds_pzsdr1
 
 
