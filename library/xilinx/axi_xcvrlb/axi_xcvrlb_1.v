@@ -244,14 +244,15 @@ module axi_xcvrlb_1 (
 
   util_adxcvr_xch #(
     .XCVR_ID (0),
-    .GTH_OR_GTX_N (0),
-    .CPLL_TX_OR_RX_N (0),
+    .XCVR_TYPE (0),
     .CPLL_FBDIV (2),
-    .RX_OUT_DIV (1),
-    .RX_CLK25_DIV (10),
+    .CPLL_FBDIV_4_5 (5),
+    .CPLL_TX_OR_RX_N (0),
     .TX_OUT_DIV (1),
     .TX_CLK25_DIV (10),
-    .PMA_RSV ('h00018480),
+    .RX_OUT_DIV (1),
+    .RX_CLK25_DIV (10),
+    .RX_PMA_CFG ('h00018480),
     .RX_CDR_CFG ('h03000023ff20400020))
   i_xch (
     .qpll2ch_clk (1'b0),
