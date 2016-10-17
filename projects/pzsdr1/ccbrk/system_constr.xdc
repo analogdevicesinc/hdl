@@ -1,4 +1,11 @@
 
+# gpio
+
+set_property  -dict {PACKAGE_PIN  Y14  IOSTANDARD LVCMOS25} [get_ports gpio_bd[0]]                        ; ## (pb)  IO_L8N_T1_34        
+set_property  -dict {PACKAGE_PIN  T16  IOSTANDARD LVCMOS25} [get_ports gpio_bd[1]]                        ; ## (pb)  IO_L9P_T1_DQS_34    
+set_property  -dict {PACKAGE_PIN  U17  IOSTANDARD LVCMOS25} [get_ports gpio_bd[2]]                        ; ## (pb)  IO_L9N_T1_DQS_34    
+set_property  -dict {PACKAGE_PIN  Y19  IOSTANDARD LVCMOS25} [get_ports gpio_bd[3]]                        ; ## (led) IO_L17N_T2_34       
+
 ## constraints
 ## loopback
 ## p6

@@ -34,10 +34,3 @@ set_property  -dict {PACKAGE_PIN  J15  IOSTANDARD LVCMOS25} [get_ports clk_out] 
 set_property  -dict {PACKAGE_PIN  W6   IOSTANDARD LVCMOS25 PULLTYPE PULLUP} [get_ports iic_scl]           ; ## IO_L22N_T3_13              
 set_property  -dict {PACKAGE_PIN  V6   IOSTANDARD LVCMOS25 PULLTYPE PULLUP} [get_ports iic_sda]           ; ## IO_L22P_T3_13              
 
-# gpio
-
-set_property  -dict {PACKAGE_PIN  Y14  IOSTANDARD LVCMOS25} [get_ports gpio_bd[0]]                        ; ## (pb)  IO_L8N_T1_34        
-set_property  -dict {PACKAGE_PIN  T16  IOSTANDARD LVCMOS25} [get_ports gpio_bd[1]]                        ; ## (pb)  IO_L9P_T1_DQS_34    
-set_property  -dict {PACKAGE_PIN  U17  IOSTANDARD LVCMOS25} [get_ports gpio_bd[2]]                        ; ## (pb)  IO_L9N_T1_DQS_34    
-set_property  -dict {PACKAGE_PIN  Y19  IOSTANDARD LVCMOS25} [get_ports gpio_bd[3]]                        ; ## (led) IO_L17N_T2_34       
-
