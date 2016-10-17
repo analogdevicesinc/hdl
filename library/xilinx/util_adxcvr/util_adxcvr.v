@@ -40,23 +40,36 @@
 
 module util_adxcvr #(
 
-  // parameters
+  // gtxe2(0), gthe3(1), gthe4(2)
 
-  parameter   integer RX_NUM_OF_LANES = 8,
-  parameter   integer TX_NUM_OF_LANES = 8,
   parameter   integer XCVR_TYPE = 0,
-  parameter   integer CPLL_TX_OR_RX_N = 0,
-  parameter   integer CPLL_FBDIV = 2,
+
+  // qpll-configuration
+
   parameter   integer QPLL_REFCLK_DIV = 1,
   parameter   integer QPLL_FBDIV_RATIO = 1,
-  parameter   integer RX_OUT_DIV = 1,
-  parameter   integer RX_CLK25_DIV = 20,
+  parameter   [26:0]  QPLL_CFG = 27'h0680181,
+  parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000,
+
+  // cpll-configuration
+
+  parameter   integer CPLL_FBDIV = 2,
+  parameter   integer CPLL_FBDIV_4_5 = 5,
+  parameter   integer CPLL_TX_OR_RX_N = 0,
+
+  // tx-configuration
+
+  parameter   integer TX_NUM_OF_LANES = 8,
   parameter   integer TX_OUT_DIV = 1,
   parameter   integer TX_CLK25_DIV = 20,
-  parameter   [31:0]  PMA_RSV = 32'h001e7080,
-  parameter   [72:0]  RX_CDR_CFG = 72'h0b000023ff10400020,
-  parameter   [26:0]  QPLL_CFG = 27'h0680181,
-  parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000) (
+
+  // rx-configuration
+
+  parameter   integer RX_NUM_OF_LANES = 8,
+  parameter   integer RX_OUT_DIV = 1,
+  parameter   integer RX_CLK25_DIV = 20,
+  parameter   [31:0]  RX_PMA_CFG = 32'h001e7080,
+  parameter   [72:0]  RX_CDR_CFG = 72'h0b000023ff10400020) (
 
   input           up_rstn,
   input           up_clk,
@@ -1108,13 +1121,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (0),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_0 (
     .qpll2ch_clk (qpll2ch_clk_0),
@@ -1205,13 +1219,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (1),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_1 (
     .qpll2ch_clk (qpll2ch_clk_0),
@@ -1302,13 +1317,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (2),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_2 (
     .qpll2ch_clk (qpll2ch_clk_0),
@@ -1399,13 +1415,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (3),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_3 (
     .qpll2ch_clk (qpll2ch_clk_0),
@@ -1528,13 +1545,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (4),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_4 (
     .qpll2ch_clk (qpll2ch_clk_4),
@@ -1625,13 +1643,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (5),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_5 (
     .qpll2ch_clk (qpll2ch_clk_4),
@@ -1722,13 +1741,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (6),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_6 (
     .qpll2ch_clk (qpll2ch_clk_4),
@@ -1819,13 +1839,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (7),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_7 (
     .qpll2ch_clk (qpll2ch_clk_4),
@@ -1948,13 +1969,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (8),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_8 (
     .qpll2ch_clk (qpll2ch_clk_8),
@@ -2045,13 +2067,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (9),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_9 (
     .qpll2ch_clk (qpll2ch_clk_8),
@@ -2142,13 +2165,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (10),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_10 (
     .qpll2ch_clk (qpll2ch_clk_8),
@@ -2239,13 +2263,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (11),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_11 (
     .qpll2ch_clk (qpll2ch_clk_8),
@@ -2368,13 +2393,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (12),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_12 (
     .qpll2ch_clk (qpll2ch_clk_12),
@@ -2465,13 +2491,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (13),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_13 (
     .qpll2ch_clk (qpll2ch_clk_12),
@@ -2562,13 +2589,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (14),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_14 (
     .qpll2ch_clk (qpll2ch_clk_12),
@@ -2659,13 +2687,14 @@ module util_adxcvr #(
   util_adxcvr_xch #(
     .XCVR_ID (15),
     .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .CPLL_FBDIV (CPLL_FBDIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .CPLL_TX_OR_RX_N (CPLL_TX_OR_RX_N),
     .TX_OUT_DIV (TX_OUT_DIV),
     .TX_CLK25_DIV (TX_CLK25_DIV),
-    .PMA_RSV (PMA_RSV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_15 (
     .qpll2ch_clk (qpll2ch_clk_12),

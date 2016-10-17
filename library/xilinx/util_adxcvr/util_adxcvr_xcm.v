@@ -43,9 +43,9 @@ module util_adxcvr_xcm #(
 
   parameter   integer XCVR_ID = 0,
   parameter   integer XCVR_TYPE = 0,
-  parameter   integer QPLL_REFCLK_DIV = 2,
+  parameter   integer QPLL_REFCLK_DIV = 1,
   parameter   integer QPLL_FBDIV_RATIO = 1,
-  parameter   [26:0]  QPLL_CFG = 27'h06801C1,
+  parameter   [26:0]  QPLL_CFG = 27'h0680181,
   parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000) (
 
   // reset and clocks
@@ -119,11 +119,11 @@ module util_adxcvr_xcm #(
   generate
   if (XCVR_TYPE == 0) begin
   GTXE2_COMMON #(
-    .SIM_RESET_SPEEDUP ("TRUE"),
-    .SIM_QPLLREFCLK_SEL (3'b001),
-    .SIM_VERSION ("3.0"),
     .BIAS_CFG (64'h0000040000001000),
     .COMMON_CFG (32'h00000000),
+    .IS_DRPCLK_INVERTED (1'b0),
+    .IS_GTGREFCLK_INVERTED (1'b0),
+    .IS_QPLLLOCKDETCLK_INVERTED (1'b0),
     .QPLL_CFG (QPLL_CFG),
     .QPLL_CLKOUT_CFG (4'b0000),
     .QPLL_COARSE_FREQ_OVRD (6'b010000),
@@ -137,43 +137,43 @@ module util_adxcvr_xcm #(
     .QPLL_INIT_CFG (24'h000006),
     .QPLL_LOCK_CFG (16'h21E8),
     .QPLL_LPF (4'b1111),
-    .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV))
+    .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
+    .SIM_QPLLREFCLK_SEL (3'b001),
+    .SIM_RESET_SPEEDUP ("TRUE"),
+    .SIM_VERSION ("4.0"))
   i_gtxe2_common (
-    .DRPCLK (up_clk),
-    .DRPEN (up_enb_int),
+    .BGBYPASSB (1'h1),
+    .BGMONITORENB (1'h1),
+    .BGPDB (1'h1),
+    .BGRCALOVRD (5'h1f),
     .DRPADDR (up_addr_int[7:0]),
-    .DRPWE (up_wr_int),
+    .DRPCLK (up_clk),
     .DRPDI (up_wdata_int),
     .DRPDO (up_rdata_s),
+    .DRPEN (up_enb_int),
     .DRPRDY (up_ready_s),
-    .GTGREFCLK (1'd0),
-    .GTNORTHREFCLK0 (1'd0),
-    .GTNORTHREFCLK1 (1'd0),
+    .DRPWE (up_wr_int),
+    .GTGREFCLK (1'h0),
+    .GTNORTHREFCLK0 (1'h0),
+    .GTNORTHREFCLK1 (1'h0),
     .GTREFCLK0 (qpll_ref_clk),
-    .GTREFCLK1 (1'd0),
-    .GTSOUTHREFCLK0 (1'd0),
-    .GTSOUTHREFCLK1 (1'd0),
-    .QPLLDMONITOR (),
-    .QPLLOUTCLK (qpll2ch_clk),
-    .QPLLOUTREFCLK (qpll2ch_ref_clk),
-    .REFCLKOUTMONITOR (),
-    .QPLLFBCLKLOST (),
+    .GTREFCLK1 (1'h0),
+    .GTSOUTHREFCLK0 (1'h0),
+    .GTSOUTHREFCLK1 (1'h0),
+    .PMARSVD (8'h0),
     .QPLLLOCK (qpll2ch_locked),
     .QPLLLOCKDETCLK (up_clk),
-    .QPLLLOCKEN (1'd1),
-    .QPLLOUTRESET (1'd0),
-    .QPLLPD (1'd0),
+    .QPLLLOCKEN (1'h1),
+    .QPLLOUTCLK (qpll2ch_clk),
+    .QPLLOUTREFCLK (qpll2ch_ref_clk),
+    .QPLLOUTRESET (1'h0),
+    .QPLLPD (1'h0),
     .QPLLREFCLKLOST (),
-    .QPLLREFCLKSEL (3'b001),
+    .QPLLREFCLKSEL (3'h1),
     .QPLLRESET (up_qpll_rst),
-    .QPLLRSVD1 (16'b0000000000000000),
-    .QPLLRSVD2 (5'b11111),
-    .BGBYPASSB (1'd1),
-    .BGMONITORENB (1'd1),
-    .BGPDB (1'd1),
-    .BGRCALOVRD (5'b00000),
-    .PMARSVD (8'b00000000),
-    .RCALENB (1'd1));
+    .QPLLRSVD1 (16'h0),
+    .QPLLRSVD2 (5'h1f),
+    .RCALENB (1'h1));
   end
   endgenerate
 
@@ -406,7 +406,7 @@ module util_adxcvr_xcm #(
     .SDM1INITSEED0_1 (9'b000010001),
     .SIM_MODE ("FAST"),
     .SIM_RESET_SPEEDUP ("TRUE"),
-    .SIM_VERSION (1)) 
+    .SIM_VERSION (1'h1)) 
   i_gthe4_common (
     .BGBYPASSB (1'd1),
     .BGMONITORENB (1'd1),
