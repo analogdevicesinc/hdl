@@ -28,8 +28,15 @@ set_property -dict [list CONFIG.c_mm2s_burst_size {256}] $axi_usb_fx3_dma
 set_property -dict [list CONFIG.c_s2mm_burst_size {256}] $axi_usb_fx3_dma
 set_property -dict [list CONFIG.c_sg_length_width {16}] $axi_usb_fx3_dma
 
-ad_connect axi_usb_fx3_dma/S_AXIS_S2MM axi_usb_fx3/m_axis
+set usb_fx3_rx_axis_fifo [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_data_fifo:1.1 usb_fx3_rx_axis_fifo ]
+
 ad_connect axi_usb_fx3/s_axis axi_usb_fx3_dma/M_AXIS_MM2S
+
+ad_connect sys_cpu_clk usb_fx3_rx_axis_fifo/s_axis_aclk
+ad_connect sys_cpu_resetn usb_fx3_rx_axis_fifo/s_axis_aresetn
+
+ad_connect axi_usb_fx3/m_axis usb_fx3_rx_axis_fifo/S_AXIS
+ad_connect axi_usb_fx3_dma/S_AXIS_S2MM usb_fx3_rx_axis_fifo/M_AXIS
 
 ad_connect axi_uart/rx usb_fx3_uart_tx
 ad_connect axi_uart/tx usb_fx3_uart_rx
@@ -49,6 +56,7 @@ ad_connect axi_usb_fx3/sloe_n sloe_n
 ad_connect axi_usb_fx3/slwr_n slwr_n
 ad_connect axi_usb_fx3/pktend_n pktend_n
 ad_connect axi_usb_fx3/epswitch_n epswitch_n
+
 
 ad_cpu_interrupt ps-13 mb-12 axi_usb_fx3/irq
 ad_cpu_interrupt ps-12 mb-13 axi_usb_fx3_dma/mm2s_introut
