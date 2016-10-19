@@ -16,17 +16,17 @@ set_property  -dict {PACKAGE_PIN  T14   IOSTANDARD  LVCMOS25} [get_ports  ltc295
 
 # oled
 
-set_property  -dict {PACKAGE_PIN  V5    IOSTANDARD  LVCMOS25} [get_ports  oled_cs_n]        ; ## JX2.18   IO_L6N_T0_VREF_13
-set_property  -dict {PACKAGE_PIN  V7    IOSTANDARD  LVCMOS25} [get_ports  oled_scl]         ; ## JX2.37   IO_L11N_T1_SRCC_13
-set_property  -dict {PACKAGE_PIN  T9    IOSTANDARD  LVCMOS25} [get_ports  oled_sdi]         ; ## JX2.36   IO_L12P_T1_MRCC_13
-set_property  -dict {PACKAGE_PIN  U10   IOSTANDARD  LVCMOS25} [get_ports  oled_d_c]         ; ## JX2.38   IO_L12N_T1_MRCC_13
-set_property  -dict {PACKAGE_PIN  U7    IOSTANDARD  LVCMOS25} [get_ports  oled_res]         ; ## JX2.35   IO_L11P_T1_SRCC_13
+set_property  -dict {PACKAGE_PIN  V5    IOSTANDARD  LVCMOS25} [get_ports  oled_csn]         ; ## JX2.18   IO_L6N_T0_VREF_13
+set_property  -dict {PACKAGE_PIN  V7    IOSTANDARD  LVCMOS25} [get_ports  oled_clk]         ; ## JX2.37   IO_L11N_T1_SRCC_13
+set_property  -dict {PACKAGE_PIN  T9    IOSTANDARD  LVCMOS25} [get_ports  oled_mosi]        ; ## JX2.36   IO_L12P_T1_MRCC_13
+set_property  -dict {PACKAGE_PIN  U7    IOSTANDARD  LVCMOS25} [get_ports  oled_rst]         ; ## JX2.35   IO_L11P_T1_SRCC_13
+set_property  -dict {PACKAGE_PIN  U10   IOSTANDARD  LVCMOS25} [get_ports  oled_dc]          ; ## JX2.38   IO_L12N_T1_MRCC_13
 
 # adp5061
 
-set_property  -dict {PACKAGE_PIN  T11   IOSTANDARD  LVCMOS25} [get_ports  adp5061_io1]      ; ## JX4.19   IO_L1P_T0_34
-set_property  -dict {PACKAGE_PIN  T10   IOSTANDARD  LVCMOS25} [get_ports  adp5061_io2]      ; ## JX4.21   IO_L1N_T0_34
-set_property  -dict {PACKAGE_PIN  T12   IOSTANDARD  LVCMOS25} [get_ports  adp5061_io3]      ; ## JX4.20   IO_L2P_T0_34
+set_property  -dict {PACKAGE_PIN  T11   IOSTANDARD  LVCMOS25} [get_ports  adp5061_io[0]]    ; ## JX4.19   IO_L1P_T0_34
+set_property  -dict {PACKAGE_PIN  T10   IOSTANDARD  LVCMOS25} [get_ports  adp5061_io[1]]    ; ## JX4.21   IO_L1N_T0_34
+set_property  -dict {PACKAGE_PIN  T12   IOSTANDARD  LVCMOS25} [get_ports  adp5061_io[2]]    ; ## JX4.20   IO_L2P_T0_34
 
 # GPS
 
@@ -37,13 +37,13 @@ set_property  -dict {PACKAGE_PIN  T5    IOSTANDARD  LVCMOS25} [get_ports  gps_pp
 
 # imu
 
-set_property  -dict {PACKAGE_PIN  W8    IOSTANDARD  LVCMOS25} [get_ports  imu_rst_n]        ; ## JX2,49   IO_L15N_T2_DQS_13
-set_property  -dict {PACKAGE_PIN  W10   IOSTANDARD  LVCMOS25} [get_ports  imu_cs_n]         ; ## JX2,48   IO_L16P_T2_13
-set_property  -dict {PACKAGE_PIN  W9    IOSTANDARD  LVCMOS25} [get_ports  imu_sclk]         ; ## JX2,50   IO_L16N_T2_13
-set_property  -dict {PACKAGE_PIN  U9    IOSTANDARD  LVCMOS25} [get_ports  imu_din]          ; ## JX2,53   IO_L17P_T2_13
-set_property  -dict {PACKAGE_PIN  Y11   IOSTANDARD  LVCMOS25} [get_ports  imu_dout]         ; ## JX2,56   IO_L18N_T2_13
-set_property  -dict {PACKAGE_PIN  U8    IOSTANDARD  LVCMOS25} [get_ports  imu_dr]           ; ## JX2,55   IO_L17N_T2_13
+set_property  -dict {PACKAGE_PIN  W10   IOSTANDARD  LVCMOS25} [get_ports  imu_csn]          ; ## JX2,48   IO_L16P_T2_13
+set_property  -dict {PACKAGE_PIN  W9    IOSTANDARD  LVCMOS25} [get_ports  imu_clk]          ; ## JX2,50   IO_L16N_T2_13
+set_property  -dict {PACKAGE_PIN  U9    IOSTANDARD  LVCMOS25} [get_ports  imu_mosi]         ; ## JX2,53   IO_L17P_T2_13
+set_property  -dict {PACKAGE_PIN  Y11   IOSTANDARD  LVCMOS25} [get_ports  imu_miso]         ; ## JX2,56   IO_L18N_T2_13
+set_property  -dict {PACKAGE_PIN  W8    IOSTANDARD  LVCMOS25} [get_ports  imu_rstn]         ; ## JX2,49   IO_L15N_T2_DQS_13
 set_property  -dict {PACKAGE_PIN  W11   IOSTANDARD  LVCMOS25} [get_ports  imu_sync]         ; ## JX2,54   IO_L18P_T2_13
+set_property  -dict {PACKAGE_PIN  U8    IOSTANDARD  LVCMOS25} [get_ports  imu_ready]        ; ## JX2,55   IO_L17N_T2_13
 
 # audio
 
@@ -64,8 +64,8 @@ set_property  -dict {PACKAGE_PIN  V15   IOSTANDARD  LVCMOS25} [get_ports  switch
 
 # power source
 
-set_property  -dict {PACKAGE_PIN  V13   IOSTANDARD  LVCMOS25} [get_ports  pss_valid1_n]     ; ## JX4,27   IO_L3N_T0_DQS_34
-set_property  -dict {PACKAGE_PIN  V12   IOSTANDARD  LVCMOS25} [get_ports  pss_valid2_n]     ; ## JX4,26   IO_L4P_T0_34
-set_property  -dict {PACKAGE_PIN  W13   IOSTANDARD  LVCMOS25} [get_ports  pss_valid3_n]     ; ## JX4,28   IO_L4N_T0_34
+set_property  -dict {PACKAGE_PIN  V13   IOSTANDARD  LVCMOS25} [get_ports  pss_valid_n[0]]   ; ## JX4,27   IO_L3N_T0_DQS_34
+set_property  -dict {PACKAGE_PIN  V12   IOSTANDARD  LVCMOS25} [get_ports  pss_valid_n[1]]   ; ## JX4,26   IO_L4P_T0_34
+set_property  -dict {PACKAGE_PIN  W13   IOSTANDARD  LVCMOS25} [get_ports  pss_valid_n[2]]   ; ## JX4,28   IO_L4N_T0_34
 
 

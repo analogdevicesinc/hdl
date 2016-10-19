@@ -71,35 +71,36 @@ module system_top (
   output          i2s_sdata_out,
   input           i2s_sdata_in,
 
-  inout           imu_rst_n,
-  inout           imu_cs_n,
-  inout           imu_sclk,
-  inout           imu_din,
-  inout           imu_dout,
-  inout           imu_dr,
+  output          imu_csn,
+  output          imu_clk,
+  output          imu_mosi,
+  input           imu_miso,
+  input           imu_ready,
+  output          imu_rstn,
   inout           imu_sync,
-  inout           oled_cs_n,
-  inout           oled_scl,
-  inout           oled_sdi,
-  inout           oled_d_c,
-  inout           oled_res,
+
+  output          oled_csn,
+  output          oled_clk,
+  output          oled_mosi,
+  output          oled_rst,
+  output          oled_dc,
+
+  output          switch_led_r,
+  output          switch_led_g,
+  output          switch_led_b,
+
+  output          gps_reset,
+  output          gps_force_on,
+  output          gps_standby,
+  input           gps_pps,
+
+  input   [ 2:0]  pss_valid_n,
+  inout   [ 2:0]  adp5061_io,
+
   inout           ltc2955_kill_n,
   inout           ltc2955_int_n,
-  inout           adp5061_io1,
-  inout           adp5061_io2,
-  inout           adp5061_io3,
-  inout           gps_reset,
-  inout           gps_force_on,
-  inout           gps_standby,
-  inout           gps_pps,
   inout           mic_present_n,
   inout           ts3a227_int_n,
-  inout           switch_led_r,
-  inout           switch_led_g,
-  inout           switch_led_b,
-  inout           pss_valid1_n,
-  inout           pss_valid2_n,
-  inout           pss_valid3_n,
 
   input           rx_clk_in_p,
   input           rx_clk_in_n,
@@ -137,7 +138,68 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  // instantiations
+  // assignments
+
+  assign oled_clk = spi_clk;
+  assign oled_mosi = spi_mosi;
+  assign gpio_i[31:24] = gpio_o[31:24];
+
+  // gpio[23:20] controls misc stuff (keep as io)
+
+  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_misc (
+    .dio_t (gpio_t[23:20]),
+    .dio_i (gpio_o[23:20]),
+    .dio_o (gpio_i[23:20]),
+    .dio_p ({ ltc2955_kill_n,
+              ltc2955_int_n,
+              ts3a227_int_n,
+              mic_present_n}));
+
+  // gpio[19:16] controls adp5061 (keep as io)
+
+  assign gpio_i[19] = gpio_o[19];
+
+  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf_adp5061 (
+    .dio_t (gpio_t[18:16]),
+    .dio_i (gpio_o[18:16]),
+    .dio_o (gpio_i[18:16]),
+    .dio_p (adp5061_io));
+
+  // gpio[15:12] reads power source select valids
+
+  assign gpio_i[15:12] = {gpio_o[15], pss_valid_n};
+
+  // gpio[11:8] controls the imu/oled reset & such.
+
+  assign oled_dc = gpio_o[11];
+  assign oled_rst = gpio_o[10];
+  assign imu_rstn = gpio_o[9];
+  assign gpio_i[11:9] = gpio_o[11:9];
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_imu_sync (
+    .dio_t (gpio_t[8]),
+    .dio_i (gpio_o[8]),
+    .dio_o (gpio_i[8]),
+    .dio_p (imu_sync));
+
+  // gpio[7:4] controls the gps
+
+  assign gps_reset = gpio_o[6];
+  assign gps_force_on = gpio_o[5];
+  assign gps_standby = gpio_o[4];
+  assign gpio_i[7:4] = {gps_pps, gpio_o[6:4]};
+
+  // gpio[3:0] controls the power switch led colors
+
+  assign switch_led_r = gpio_o[2];
+  assign switch_led_g = gpio_o[1];
+  assign switch_led_b = gpio_o[0];
+  assign gpio_i[3:0] = gpio_o[3:0];
+
+  // ad9361 gpio
+
+  assign gpio_i[63:58] = gpio_o[63:58];
+  assign gpio_i[50:47] = gpio_o[50:47];
 
   ad_iobuf #(.DATA_WIDTH(22)) i_iobuf (
     .dio_t ({gpio_t[57:51], gpio_t[46:32]}),
@@ -151,39 +213,7 @@ module system_top (
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
 
-  ad_iobuf #(.DATA_WIDTH(29)) i_iobuf_bd (
-    .dio_t (gpio_t[28:0]),
-    .dio_i (gpio_o[28:0]),
-    .dio_o (gpio_i[28:0]),
-    .dio_p ({ imu_rst_n,
-              imu_cs_n,
-              imu_sclk,
-              imu_din,
-              imu_dout,
-              imu_dr,
-              imu_sync,
-              oled_cs_n,
-              oled_scl,
-              oled_sdi,
-              oled_d_c,
-              oled_res,
-              ltc2955_kill_n,
-              ltc2955_int_n,
-              adp5061_io1,
-              adp5061_io2,
-              adp5061_io3,
-              gps_reset,
-              gps_force_on,
-              gps_standby,
-              gps_pps,
-              mic_present_n,
-              ts3a227_int_n,
-              switch_led_r,
-              switch_led_g,
-              switch_led_b,
-              pss_valid1_n,
-              pss_valid2_n,
-              pss_valid3_n}));
+  // instantiations
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -219,7 +249,7 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
-    .ps_intr_00 (1'b0),
+    .ps_intr_00 (imu_ready),
     .ps_intr_01 (1'b0),
     .ps_intr_02 (1'b0),
     .ps_intr_03 (1'b0),
@@ -241,22 +271,22 @@ module system_top (
     .spi0_clk_i (1'b0),
     .spi0_clk_o (spi_clk),
     .spi0_csn_0_o (spi_csn),
-    .spi0_csn_1_o (),
+    .spi0_csn_1_o (oled_csn),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
     .spi0_sdi_i (spi_miso),
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (spi_mosi),
     .spi1_clk_i (1'b0),
-    .spi1_clk_o (),
-    .spi1_csn_0_o (),
+    .spi1_clk_o (imu_clk),
+    .spi1_csn_0_o (imu_csn),
     .spi1_csn_1_o (),
     .spi1_csn_2_o (),
     .spi1_csn_i (1'b1),
-    .spi1_sdi_i (1'b0),
+    .spi1_sdi_i (imu_miso),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (),
-    .tdd_sync_i (1'b0),
+    .spi1_sdo_o (imu_mosi),
+    .tdd_sync_i (gps_pps),
     .tdd_sync_o (),
     .tdd_sync_t (),
     .tx_clk_out_n (tx_clk_out_n),
