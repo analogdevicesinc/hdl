@@ -45,7 +45,6 @@ set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5
 
 set_property -dict [list CONFIG.PCW_PRESET_BANK0_VOLTAGE {LVCMOS 1.8V}] $sys_ps7
 set_property -dict [list CONFIG.PCW_PRESET_BANK1_VOLTAGE {LVCMOS 1.8V}] $sys_ps7
-set_property -dict [list CONFIG.PCW_PACKAGE_NAME {clg225}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
@@ -54,8 +53,8 @@ set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {17}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_I2C0_PERIPHERAL_ENABLE {0}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_I2C0_PERIPHERAL_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_UART1_PERIPHERAL_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_UART1_UART1_IO {MIO 12 .. 13}] $sys_ps7
 set_property -dict [list CONFIG.PCW_I2C1_PERIPHERAL_ENABLE {0}] $sys_ps7

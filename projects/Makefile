@@ -41,6 +41,7 @@ all:
 	-make -C sdrstk all
 	-make -C usb_fx3 all
 	-make -C usdrx1 all
+	-make -C usrpe31x all
 
 
 clean:
@@ -78,6 +79,7 @@ clean:
 	make -C sdrstk clean
 	make -C usb_fx3 clean
 	make -C usdrx1 clean
+	make -C usrpe31x clean
 
 
 clean-all:
@@ -115,6 +117,7 @@ clean-all:
 	make -C sdrstk clean-all
 	make -C usb_fx3 clean-all
 	make -C usdrx1 clean-all
+	make -C usrpe31x clean-all
 
 ####################################################################################
 ####################################################################################
