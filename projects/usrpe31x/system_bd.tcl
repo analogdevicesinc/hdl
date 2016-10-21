@@ -4,19 +4,21 @@
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
 
-create_bd_port -dir O spi0_csn_2_o
-create_bd_port -dir O spi0_csn_1_o
-create_bd_port -dir O spi0_csn_0_o
-create_bd_port -dir I spi0_csn_i
-create_bd_port -dir I spi0_clk_i
-create_bd_port -dir O spi0_clk_o
-create_bd_port -dir I spi0_sdo_i
-create_bd_port -dir O spi0_sdo_o
-create_bd_port -dir I spi0_sdi_i
+create_bd_port -dir O spi0_csn_0
+create_bd_port -dir O spi0_csn_1
+create_bd_port -dir O spi0_csn_2
+create_bd_port -dir O spi0_clk
+create_bd_port -dir O spi0_mosi
+create_bd_port -dir I spi0_miso
 
-create_bd_port -dir I -from 16 -to 0 gpio_i
-create_bd_port -dir O -from 16 -to 0 gpio_o
-create_bd_port -dir O -from 16 -to 0 gpio_t
+create_bd_port -dir I spi1_csn
+create_bd_port -dir I spi1_clk
+create_bd_port -dir I spi1_mosi
+create_bd_port -dir O spi1_miso
+
+create_bd_port -dir I -from 63 -to 0 ps_gpio_i
+create_bd_port -dir O -from 63 -to 0 ps_gpio_o
+create_bd_port -dir O -from 63 -to 0 ps_gpio_t
 
 # interrupts
 
@@ -51,40 +53,52 @@ set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {17}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_I2C0_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UART1_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UART1_UART1_IO {MIO 12 .. 13}] $sys_ps7
-set_property -dict [list CONFIG.PCW_I2C1_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_QSPI_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_QSPI_GRP_SINGLE_SS_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SD0_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
-set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USB0_PERIPHERAL_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_IO {MIO}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USB0_RESET_IO {MIO 52}] $sys_ps7
+set_property -dict [list CONFIG.PCW_ENET0_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_ENET0_ENET0_IO {MIO 16 .. 27}] $sys_ps7
+set_property -dict [list CONFIG.PCW_ENET0_RESET_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_ENET0_RESET_IO {MIO 11}] $sys_ps7
+set_property -dict [list CONFIG.PCW_ENET0_GRP_MDIO_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_ENET0_GRP_MDIO_IO {MIO 52 .. 53}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USB0_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USB0_USB0_IO {MIO 28 .. 39}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USB0_RESET_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USB0_RESET_IO {MIO 9}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SD0_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SD0_SD0_IO {MIO 40 .. 45}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SD0_GRP_CD_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SD0_GRP_CD_IO {MIO 0}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SDIO_PERIPHERAL_FREQMHZ {50}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_SPI1_SPI1_IO {EMIO}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UART0_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UART0_UART0_IO {MIO 14 .. 15}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UART1_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UART1_UART1_IO {MIO 48 .. 49}] $sys_ps7
+set_property -dict [list CONFIG.PCW_I2C0_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_I2C0_I2C0_IO {MIO 46 .. 47}] $sys_ps7
+set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_INTR {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_MODE {REVERSE}] $sys_ps7
 
 # DDR MT41K256M16 HA-125 (32M, 16bit, 8banks)
 
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_PARTNO {MT41K256M16 RE-125}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BUS_WIDTH {16 Bit}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_PARTNO {Custom}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BUS_WIDTH {32 Bit}] $sys_ps7
 set_property -dict [list CONFIG.PCW_UIPARAM_DDR_USE_INTERNAL_VREF {0}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DRAM_WIDTH {16 Bits}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DEVICE_CAPACITY {4096 MBits}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_CWL {6}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_T_RC {48.75}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_T_RAS_MIN {35.0}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UIPARAM_DDR_T_FAW {40.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_WRITE_LEVEL {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_READ_GATE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_DATA_EYE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 {0.048}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 {0.050}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 {0.241}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 {0.240}] $sys_ps7
 
 set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
 set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
@@ -104,22 +118,28 @@ ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
 # interface connections
 
 ad_connect  ddr sys_ps7/DDR
-ad_connect  gpio_i sys_ps7/GPIO_I
-ad_connect  gpio_o sys_ps7/GPIO_O
-ad_connect  gpio_t sys_ps7/GPIO_T
+ad_connect  ps_gpio_i sys_ps7/GPIO_I
+ad_connect  ps_gpio_o sys_ps7/GPIO_O
+ad_connect  ps_gpio_t sys_ps7/GPIO_T
 ad_connect  fixed_io sys_ps7/FIXED_IO
 
 # spi connections
 
-ad_connect  spi0_csn_2_o sys_ps7/SPI0_SS2_O
-ad_connect  spi0_csn_1_o sys_ps7/SPI0_SS1_O
-ad_connect  spi0_csn_0_o sys_ps7/SPI0_SS_O
-ad_connect  spi0_csn_i sys_ps7/SPI0_SS_I
-ad_connect  spi0_clk_i sys_ps7/SPI0_SCLK_I
-ad_connect  spi0_clk_o sys_ps7/SPI0_SCLK_O
-ad_connect  spi0_sdo_i sys_ps7/SPI0_MOSI_I
-ad_connect  spi0_sdo_o sys_ps7/SPI0_MOSI_O
-ad_connect  spi0_sdi_i sys_ps7/SPI0_MISO_I
+ad_connect  sys_ps7/SPI0_SS_O spi0_csn_0
+ad_connect  sys_ps7/SPI0_SS1_O spi0_csn_1
+ad_connect  sys_ps7/SPI0_SS2_O spi0_csn_2
+ad_connect  sys_ps7/SPI0_SCLK_O spi0_clk
+ad_connect  sys_ps7/SPI0_MOSI_O spi0_mosi
+ad_connect  sys_ps7/SPI0_MISO_I spi0_miso 
+ad_connect  sys_ps7/SPI0_SS_I VCC
+ad_connect  sys_ps7/SPI0_SCLK_I GND
+ad_connect  sys_ps7/SPI0_MOSI_I GND
+
+ad_connect  sys_ps7/SPI1_SS_I spi1_csn
+ad_connect  sys_ps7/SPI1_SCLK_I spi1_clk
+ad_connect  sys_ps7/SPI1_MOSI_I spi1_mosi
+ad_connect  sys_ps7/SPI1_MISO_O spi1_miso
+ad_connect  sys_ps7/SPI1_MISO_I GND 
 
 # interrupts
 
@@ -140,16 +160,6 @@ ad_connect  sys_concat_intc/In3 ps_intr_03
 ad_connect  sys_concat_intc/In2 ps_intr_02
 ad_connect  sys_concat_intc/In1 ps_intr_01
 ad_connect  sys_concat_intc/In0 ps_intr_00
-
-# iic
-
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main
-
-set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
-
-ad_connect  iic_main axi_iic_main/iic
-ad_cpu_interconnect 0x41600000 axi_iic_main
-ad_cpu_interrupt ps-15 mb-15 axi_iic_main/iic2intc_irpt
 
 # ad9361
 
@@ -213,7 +223,6 @@ ad_connect  txnrx axi_ad9361/txnrx
 ad_connect  up_enable axi_ad9361/up_enable
 ad_connect  up_txnrx axi_ad9361/up_txnrx
 
-ad_connect  axi_ad9361/tdd_sync GND
 ad_connect  sys_200m_clk axi_ad9361/delay_clk
 ad_connect  axi_ad9361/l_clk axi_ad9361/clk
 
@@ -261,4 +270,33 @@ ad_connect  sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
 
+# tdd-sync
+
+set util_ad9361_tdd_sync [create_bd_cell -type ip -vlnv analog.com:user:util_tdd_sync:1.0 util_ad9361_tdd_sync]
+set_property -dict [list CONFIG.TDD_SYNC_PERIOD {10000000}] $util_ad9361_tdd_sync
+
+create_bd_port -dir I tdd_sync
+
+ad_connect  tdd_sync util_ad9361_tdd_sync/sync_in
+ad_connect  sys_cpu_clk util_ad9361_tdd_sync/clk
+ad_connect  sys_cpu_resetn util_ad9361_tdd_sync/rstn
+ad_connect  util_ad9361_tdd_sync/sync_out axi_ad9361/tdd_sync
+ad_connect  util_ad9361_tdd_sync/sync_mode axi_ad9361/tdd_sync_cntr
+
+# gpio
+
+create_bd_port -dir I -from 31 -to 0 pl_gpio_i
+create_bd_port -dir O -from 31 -to 0 pl_gpio_o
+create_bd_port -dir O -from 31 -to 0 pl_gpio_t
+
+set axi_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio]
+set_property -dict [list CONFIG.C_GPIO_WIDTH {32}] $axi_gpio
+set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio
+
+ad_connect  pl_gpio_i axi_gpio/gpio_io_i
+ad_connect  pl_gpio_o axi_gpio/gpio_io_o
+ad_connect  pl_gpio_t axi_gpio/gpio_io_t
+
+ad_cpu_interconnect 0x41600000 axi_gpio
+ad_cpu_interrupt ps-15 mb-15 axi_gpio/ip2intc_irpt
 
