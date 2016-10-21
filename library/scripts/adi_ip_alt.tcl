@@ -70,3 +70,22 @@ proc ad_conduit {if_name if_port port dir width} {
   add_interface_port $if_name $port $if_port $dir $width
 }
 
+proc ad_generate_module_inst { inst_name mark source_file target_file } {
+
+  set fp_source [open $source_file "r"]
+  set fp_target [open $target_file "w+"]
+
+  fconfigure $fp_source -buffering line
+
+  while { [gets $fp_source data] >= 0 } {
+
+    # update the required module name
+    regsub $inst_name $data "&_$mark" data
+    puts $data
+    puts $fp_target $data
+  }
+
+  close $fp_source
+  close $fp_target
+}
+
