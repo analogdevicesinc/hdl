@@ -58,7 +58,7 @@ set_property -dict [list CONFIG.TX_NUM_OF_LANES {8}] $util_fmcomms11_xcvr
 set_property -dict [list CONFIG.CPLL_FBDIV {4}] $util_fmcomms11_xcvr
 set_property -dict [list CONFIG.RX_CLK25_DIV {7}] $util_fmcomms11_xcvr
 set_property -dict [list CONFIG.TX_CLK25_DIV {7}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.PMA_RSV {0x00018480}] $util_fmcomms11_xcvr
+set_property -dict [list CONFIG.RX_PMA_CFG {0x00018480}] $util_fmcomms11_xcvr
 set_property -dict [list CONFIG.QPLL_FBDIV {"0100100000"}] $util_fmcomms11_xcvr
 
 ad_connect  sys_cpu_resetn util_fmcomms11_xcvr/up_rstn
