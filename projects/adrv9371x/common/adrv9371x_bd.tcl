@@ -118,7 +118,7 @@ set_property -dict [list CONFIG.TX_OUT_DIV {2}] $util_ad9371_xcvr
 set_property -dict [list CONFIG.CPLL_FBDIV {4}] $util_ad9371_xcvr
 set_property -dict [list CONFIG.RX_CLK25_DIV {5}] $util_ad9371_xcvr
 set_property -dict [list CONFIG.TX_CLK25_DIV {5}] $util_ad9371_xcvr
-set_property -dict [list CONFIG.PMA_RSV {0x00018480}] $util_ad9371_xcvr
+set_property -dict [list CONFIG.RX_PMA_CFG {0x00018480}] $util_ad9371_xcvr
 set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff20400020}] $util_ad9371_xcvr
 set_property -dict [list CONFIG.QPLL_FBDIV {"0100100000"}] $util_ad9371_xcvr
 
