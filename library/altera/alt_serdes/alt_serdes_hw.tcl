@@ -38,6 +38,57 @@ set_parameter_property CLKIN_FREQUENCY UNITS None
 set_parameter_property CLKIN_FREQUENCY DISPLAY_UNITS "MHz"
 set_parameter_property CLKIN_FREQUENCY HDL_PARAMETER false
 
+# these paramteres are needed just because of cross-platform requirments
+# are NOT used in the core
+
+add_parameter DEVICE_TYPE INTEGER 0
+set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
+set_parameter_property DEVICE_TYPE TYPE INTEGER
+set_parameter_property DEVICE_TYPE UNITS None
+set_parameter_property DEVICE_TYPE HDL_PARAMETER false
+
+add_parameter MMCM_OR_BUFR_N INTEGER 0
+set_parameter_property MMCM_OR_BUFR_N DEFAULT_VALUE 0
+set_parameter_property MMCM_OR_BUFR_N DISPLAY_NAME MMCM_OR_BUFIO_N
+set_parameter_property MMCM_OR_BUFR_N TYPE INTEGER
+set_parameter_property MMCM_OR_BUFR_N UNITS None
+set_parameter_property MMCM_OR_BUFR_N HDL_PARAMETER false
+
+add_parameter MMCM_CLKIN_PERIOD FLOAT 0
+set_parameter_property MMCM_CLKIN_PERIOD DEFAULT_VALUE 1.667
+set_parameter_property MMCM_CLKIN_PERIOD DISPLAY_NAME MMCM_CLKIN_PERIOD
+set_parameter_property MMCM_CLKIN_PERIOD TYPE INTEGER
+set_parameter_property MMCM_CLKIN_PERIOD UNITS None
+set_parameter_property MMCM_CLKIN_PERIOD HDL_PARAMETER false
+
+add_parameter MMCM_VCO_DIV INTEGER 0
+set_parameter_property MMCM_VCO_DIV DEFAULT_VALUE 2
+set_parameter_property MMCM_VCO_DIV DISPLAY_NAME MMCM_VCO_DIV
+set_parameter_property MMCM_VCO_DIV TYPE INTEGER
+set_parameter_property MMCM_VCO_DIV UNITS None
+set_parameter_property MMCM_VCO_DIV HDL_PARAMETER false
+
+add_parameter MMCM_VCO_MUL INTEGER 0
+set_parameter_property MMCM_VCO_MUL DEFAULT_VALUE 4
+set_parameter_property MMCM_VCO_MUL DISPLAY_NAME MMCM_VCO_MUL
+set_parameter_property MMCM_VCO_MUL TYPE INTEGER
+set_parameter_property MMCM_VCO_MUL UNITS None
+set_parameter_property MMCM_VCO_MUL HDL_PARAMETER false
+
+add_parameter MMCM_CLK0_DIV INTEGER 0
+set_parameter_property MMCM_CLK0_DIV DEFAULT_VALUE 2
+set_parameter_property MMCM_CLK0_DIV DISPLAY_NAME MMCM_CLK0_DIV
+set_parameter_property MMCM_CLK0_DIV TYPE INTEGER
+set_parameter_property MMCM_CLK0_DIV UNITS None
+set_parameter_property MMCM_CLK0_DIV HDL_PARAMETER false
+
+add_parameter MMCM_CLK1_DIV INTEGER 0
+set_parameter_property MMCM_CLK1_DIV DEFAULT_VALUE 8
+set_parameter_property MMCM_CLK1_DIV DISPLAY_NAME MMCM_CLK1_DIV
+set_parameter_property MMCM_CLK1_DIV TYPE INTEGER
+set_parameter_property MMCM_CLK1_DIV UNITS None
+set_parameter_property MMCM_CLK1_DIV HDL_PARAMETER false
+
 proc p_alt_serdes {} {
 
   set m_mode [get_parameter_value "MODE"]
