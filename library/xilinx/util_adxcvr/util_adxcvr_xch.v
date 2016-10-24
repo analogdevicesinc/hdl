@@ -53,6 +53,7 @@ module util_adxcvr_xch #(
 
   parameter   integer RX_OUT_DIV = 1,
   parameter   integer RX_CLK25_DIV = 20,
+  parameter   [15:0]  RX_DFE_LPM_CFG = 16'h0104,
   parameter   [31:0]  RX_PMA_CFG = 32'h001e7080,
   parameter   [72:0]  RX_CDR_CFG = 72'h0b000023ff10400020) (
 
@@ -453,7 +454,7 @@ module util_adxcvr_xch #(
     .RX_DFE_H5_CFG (11'b00011100000),
     .RX_DFE_KL_CFG (13'b0000011111110),
     .RX_DFE_KL_CFG2 (32'h301148AC),
-    .RX_DFE_LPM_CFG (16'h0104),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_DFE_LPM_HOLD_DURING_EIDLE (1'b0),
     .RX_DFE_UT_CFG (17'b10001111000000000),
     .RX_DFE_VP_CFG (17'b00011111100000011),

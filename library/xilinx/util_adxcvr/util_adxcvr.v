@@ -68,6 +68,7 @@ module util_adxcvr #(
   parameter   integer RX_NUM_OF_LANES = 8,
   parameter   integer RX_OUT_DIV = 1,
   parameter   integer RX_CLK25_DIV = 20,
+  parameter   [15:0]  RX_DFE_LPM_CFG = 16'h0104,
   parameter   [31:0]  RX_PMA_CFG = 32'h001e7080,
   parameter   [72:0]  RX_CDR_CFG = 72'h0b000023ff10400020) (
 
@@ -1128,6 +1129,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_0 (
@@ -1226,6 +1228,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_1 (
@@ -1324,6 +1327,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_2 (
@@ -1422,6 +1426,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_3 (
@@ -1552,6 +1557,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_4 (
@@ -1650,6 +1656,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_5 (
@@ -1748,6 +1755,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_6 (
@@ -1846,6 +1854,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_7 (
@@ -1976,6 +1985,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_8 (
@@ -2074,6 +2084,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_9 (
@@ -2172,6 +2183,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_10 (
@@ -2270,6 +2282,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_11 (
@@ -2400,6 +2413,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_12 (
@@ -2498,6 +2512,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_13 (
@@ -2596,6 +2611,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_14 (
@@ -2694,6 +2710,7 @@ module util_adxcvr #(
     .TX_CLK25_DIV (TX_CLK25_DIV),
     .RX_OUT_DIV (RX_OUT_DIV),
     .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
     .RX_PMA_CFG (RX_PMA_CFG),
     .RX_CDR_CFG (RX_CDR_CFG))
   i_xch_15 (

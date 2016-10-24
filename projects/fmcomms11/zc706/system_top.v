@@ -295,7 +295,7 @@ module system_top (
     .rx_data_6_p (rx_data_p[6]),
     .rx_data_7_n (rx_data_n[7]),
     .rx_data_7_p (rx_data_p[7]),
-    .rx_ref_clk_0 (rx_ref_clk),
+    .rx_ref_clk_0 (tx_ref_clk),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (sysref),
     .spdif (spdif),
