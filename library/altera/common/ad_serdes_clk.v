@@ -38,7 +38,11 @@
 
 `timescale 1ps/1ps
 
-module ad_serdes_clk (
+module ad_serdes_clk #(
+
+  // parameters
+
+	parameter DEVICE_TYPE = 0 ) (
 
   // clock and divided clock
 
@@ -64,6 +68,10 @@ module ad_serdes_clk (
   output          up_drp_ready,
   output          up_drp_locked);
 
+  // local parameter
+
+  localparam C5SOC = 1;
+
   // internal registers
 
   reg             up_drp_sel_int = 'd0;
@@ -81,6 +89,8 @@ module ad_serdes_clk (
   wire    [31:0]  up_drp_rdata_int_s;
   wire            up_drp_busy_int_s;
   wire            up_drp_locked_int_s;
+  wire            buf_loaden;
+  wire            buf_lvdsclk;
 
   // defaults
 
@@ -134,25 +144,53 @@ module ad_serdes_clk (
     end
   end
 
-  // instantiations (ip- hw.tcl must generate this core)
+  generate
+    if (DEVICE_TYPE == C5SOC) begin
+      alt_serdes_clk_core i_core (
+        .rst_reset (rst),
+        .ref_clk_clk (clk_in_p),
+        .locked_export (up_drp_locked_int_s),
+        .hs_phase_phout (phase),
+        .hs_clk_clk (buf_lvdsclk),
+        .loaden_clk (buf_loaden),
+        .ls_clk_clk (div_clk),
+        .drp_clk_clk (up_clk),
+        .drp_rst_reset (up_drp_reset),
+        .pll_reconfig_waitrequest (up_drp_busy_int_s),
+        .pll_reconfig_read (up_drp_rd_int),
+        .pll_reconfig_write (up_drp_wr_int),
+        .pll_reconfig_readdata (up_drp_rdata_int_s),
+        .pll_reconfig_address (up_drp_addr_int),
+        .pll_reconfig_writedata (up_drp_wdata_int));
 
-  alt_serdes_clk_core i_core (
-    .rst_reset (rst),
-    .ref_clk_clk (clk_in_p),
-    .locked_export (up_drp_locked_int_s),
-    .hs_phase_phout (phase),
-    .hs_clk_lvds_clk (clk),
-    .loaden_loaden (loaden),
-    .ls_clk_clk (div_clk),
-    .drp_clk_clk (up_clk),
-    .drp_rst_reset (up_drp_reset),
-    .pll_reconfig_waitrequest (up_drp_busy_int_s),
-    .pll_reconfig_read (up_drp_rd_int),
-    .pll_reconfig_write (up_drp_wr_int),
-    .pll_reconfig_readdata (up_drp_rdata_int_s),
-    .pll_reconfig_address (up_drp_addr_int),
-    .pll_reconfig_writedata (up_drp_wdata_int));
-  
+      // clock buffer
+      cyclonev_pll_lvds_output #(
+        .pll_loaden_enable_disable("true"),
+        .pll_lvdsclk_enable_disable("true"))
+      cyclonev_pll_lvds_output_inst (
+        .ccout({buf_loaden, buf_lvdsclk}),
+        .loaden(loaden),
+        .lvdsclk(clk));
+
+    end else begin
+      alt_serdes_clk_core i_core (
+        .rst_reset (rst),
+        .ref_clk_clk (clk_in_p),
+        .locked_export (up_drp_locked_int_s),
+        .hs_phase_phout (phase),
+        .hs_clk_lvds_clk (clk),
+        .loaden_loaden (loaden),
+        .ls_clk_clk (div_clk),
+        .drp_clk_clk (up_clk),
+        .drp_rst_reset (up_drp_reset),
+        .pll_reconfig_waitrequest (up_drp_busy_int_s),
+        .pll_reconfig_read (up_drp_rd_int),
+        .pll_reconfig_write (up_drp_wr_int),
+        .pll_reconfig_readdata (up_drp_rdata_int_s),
+        .pll_reconfig_address (up_drp_addr_int),
+        .pll_reconfig_writedata (up_drp_wdata_int));
+    end
+  endgenerate
 endmodule
 
 // ***************************************************************************

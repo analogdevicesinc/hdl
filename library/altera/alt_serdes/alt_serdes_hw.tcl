@@ -41,6 +41,12 @@ set_parameter_property CLKIN_FREQUENCY HDL_PARAMETER false
 # these paramteres are needed just because of cross-platform requirments
 # are NOT used in the core
 
+add_parameter DEVICE_FAMILY STRING
+set_parameter_property DEVICE_FAMILY SYSTEM_INFO {DEVICE_FAMILY}
+set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
+set_parameter_property DEVICE_FAMILY HDL_PARAMETER false
+set_parameter_property DEVICE_FAMILY ENABLED false
+
 add_parameter DEVICE_TYPE INTEGER 0
 set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
 set_parameter_property DEVICE_TYPE TYPE INTEGER
@@ -95,6 +101,7 @@ proc p_alt_serdes {} {
   set m_ddr_or_sdr_n [get_parameter_value "DDR_OR_SDR_N"]
   set m_serdes_factor [get_parameter_value "SERDES_FACTOR"]
   set m_clkin_frequency [get_parameter_value "CLKIN_FREQUENCY"]
+  set m_device_family [get_parameter_value DEVICE_FAMILY]
 
   set m_hs_data_rate [expr ($m_clkin_frequency * ($m_ddr_or_sdr_n + 1))]
   set m_ls_data_rate [expr ($m_hs_data_rate/$m_serdes_factor)]
@@ -109,47 +116,93 @@ proc p_alt_serdes {} {
 
   if {$m_mode == "CLK"} {
 
-    add_instance alt_serdes_pll altera_iopll
-    set_instance_parameter_value alt_serdes_pll {gui_reference_clock_frequency} $m_clkin_frequency
-    set_instance_parameter_value alt_serdes_pll {gui_use_locked} {1}
-    set_instance_parameter_value alt_serdes_pll {gui_operation_mode} {lvds}
-    set_instance_parameter_value alt_serdes_pll {gui_en_lvds_ports} {Enable LVDS_CLK/LOADEN 0}
-    set_instance_parameter_value alt_serdes_pll {gui_en_phout_ports} {true}
-    set_instance_parameter_value alt_serdes_pll {gui_en_reconf} {true}
-    set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency0} $m_hs_data_rate
-    set_instance_parameter_value alt_serdes_pll {gui_ps_units0} {degrees}
-    set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg0} {180.0}
-    set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency1} $m_ls_data_rate
-    set_instance_parameter_value alt_serdes_pll {gui_ps_units1} {degrees}
-    set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg1} $m_ld_phase
-    set_instance_parameter_value alt_serdes_pll {gui_duty_cycle1} $m_ld_duty_cycle
-    set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency2} $m_ls_data_rate
-    set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg2} $m_ls_phase
-    set_instance_parameter_value alt_serdes_pll {gui_ps_units2} {degrees}
-    add_interface rst reset sink
-    set_interface_property rst EXPORT_OF alt_serdes_pll.reset
-    add_interface ref_clk clock sink
-    set_interface_property ref_clk EXPORT_OF alt_serdes_pll.refclk
-    add_interface locked conduit end
-    set_interface_property locked EXPORT_OF alt_serdes_pll.locked
-    add_interface hs_phase conduit end
-    set_interface_property hs_phase EXPORT_OF alt_serdes_pll.phout
-    add_interface hs_clk conduit end
-    set_interface_property hs_clk EXPORT_OF alt_serdes_pll.lvds_clk
-    add_interface loaden conduit end
-    set_interface_property loaden EXPORT_OF alt_serdes_pll.loaden
-    add_interface ls_clk clock source
-    set_interface_property ls_clk EXPORT_OF alt_serdes_pll.outclk2
+    if {$m_device_family == "Arria 10"} {
+      add_instance alt_serdes_pll altera_iopll
+      set_instance_parameter_value alt_serdes_pll {gui_reference_clock_frequency} $m_clkin_frequency
+      set_instance_parameter_value alt_serdes_pll {gui_use_locked} {1}
+      set_instance_parameter_value alt_serdes_pll {gui_operation_mode} {lvds}
+      set_instance_parameter_value alt_serdes_pll {gui_en_lvds_ports} {Enable LVDS_CLK/LOADEN 0}
+      set_instance_parameter_value alt_serdes_pll {gui_en_phout_ports} {true}
+      set_instance_parameter_value alt_serdes_pll {gui_en_reconf} {true}
+      set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency0} $m_hs_data_rate
+      set_instance_parameter_value alt_serdes_pll {gui_ps_units0} {degrees}
+      set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg0} {180.0}
+      set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency1} $m_ls_data_rate
+      set_instance_parameter_value alt_serdes_pll {gui_ps_units1} {degrees}
+      set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg1} $m_ld_phase
+      set_instance_parameter_value alt_serdes_pll {gui_duty_cycle1} $m_ld_duty_cycle
+      set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency2} $m_ls_data_rate
+      set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg2} $m_ls_phase
+      set_instance_parameter_value alt_serdes_pll {gui_ps_units2} {degrees}
+      add_interface rst reset sink
+      set_interface_property rst EXPORT_OF alt_serdes_pll.reset
+      add_interface ref_clk clock sink
+      set_interface_property ref_clk EXPORT_OF alt_serdes_pll.refclk
+      add_interface locked conduit end
+      set_interface_property locked EXPORT_OF alt_serdes_pll.locked
+      add_interface hs_phase conduit end
+      set_interface_property hs_phase EXPORT_OF alt_serdes_pll.phout
+      add_interface hs_clk conduit end
+      set_interface_property hs_clk EXPORT_OF alt_serdes_pll.lvds_clk
+      add_interface loaden conduit end
+      set_interface_property loaden EXPORT_OF alt_serdes_pll.loaden
+      add_interface ls_clk clock source
+      set_interface_property ls_clk EXPORT_OF alt_serdes_pll.outclk2
 
-    add_instance alt_serdes_pll_reconfig altera_pll_reconfig
-    add_connection alt_serdes_pll.reconfig_from_pll alt_serdes_pll_reconfig.reconfig_from_pll
-    add_connection alt_serdes_pll_reconfig.reconfig_to_pll alt_serdes_pll.reconfig_to_pll
-    add_interface drp_clk clock sink
-    set_interface_property drp_clk EXPORT_OF alt_serdes_pll_reconfig.mgmt_clk
-    add_interface drp_rst reset sink
-    set_interface_property drp_rst EXPORT_OF alt_serdes_pll_reconfig.mgmt_reset
-    add_interface pll_reconfig avalon slave
-    set_interface_property pll_reconfig EXPORT_OF alt_serdes_pll_reconfig.mgmt_avalon_slave
+      add_instance alt_serdes_pll_reconfig altera_pll_reconfig
+      add_connection alt_serdes_pll.reconfig_from_pll alt_serdes_pll_reconfig.reconfig_from_pll
+      add_connection alt_serdes_pll_reconfig.reconfig_to_pll alt_serdes_pll.reconfig_to_pll
+      add_interface drp_clk clock sink
+      set_interface_property drp_clk EXPORT_OF alt_serdes_pll_reconfig.mgmt_clk
+      add_interface drp_rst reset sink
+      set_interface_property drp_rst EXPORT_OF alt_serdes_pll_reconfig.mgmt_reset
+      add_interface pll_reconfig avalon slave
+      set_interface_property pll_reconfig EXPORT_OF alt_serdes_pll_reconfig.mgmt_avalon_slave
+    }
+
+    if {$m_device_family == "Cyclone V"} {
+      add_instance alt_serdes_pll altera_pll
+      set_instance_parameter_value alt_serdes_pll {gui_reference_clock_frequency} $m_clkin_frequency
+      set_instance_parameter_value alt_serdes_pll {gui_use_locked} {1}
+      set_instance_parameter_value alt_serdes_pll {gui_operation_mode} {lvds}
+      set_instance_parameter_value alt_serdes_pll {gui_number_of_clocks} {3}
+      set_instance_parameter_value alt_serdes_pll {gui_en_phout_ports} {true}
+      set_instance_parameter_value alt_serdes_pll {gui_en_reconf} {true}
+      set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency0} $m_hs_data_rate
+      set_instance_parameter_value alt_serdes_pll {gui_ps_units0} {degrees}
+      set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg0} {180.0}
+      set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency1} $m_ls_data_rate
+      set_instance_parameter_value alt_serdes_pll {gui_ps_units1} {degrees}
+      set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg1} $m_ld_phase
+      set_instance_parameter_value alt_serdes_pll {gui_duty_cycle1} $m_ld_duty_cycle
+      set_instance_parameter_value alt_serdes_pll {gui_output_clock_frequency2} $m_ls_data_rate
+      set_instance_parameter_value alt_serdes_pll {gui_phase_shift_deg2} $m_ls_phase
+      set_instance_parameter_value alt_serdes_pll {gui_ps_units2} {degrees}
+      add_interface rst reset sink
+      set_interface_property rst EXPORT_OF alt_serdes_pll.reset
+      add_interface ref_clk clock sink
+      set_interface_property ref_clk EXPORT_OF alt_serdes_pll.refclk
+      add_interface locked conduit end
+      set_interface_property locked EXPORT_OF alt_serdes_pll.locked
+      add_interface hs_phase conduit end
+      set_interface_property hs_phase EXPORT_OF alt_serdes_pll.phout
+      add_interface hs_clk clock source
+      set_interface_property hs_clk EXPORT_OF alt_serdes_pll.outclk0
+      add_interface loaden clock source
+      set_interface_property loaden EXPORT_OF alt_serdes_pll.outclk1
+      add_interface ls_clk clock source
+      set_interface_property ls_clk EXPORT_OF alt_serdes_pll.outclk2
+
+      add_instance alt_serdes_pll_reconfig altera_pll_reconfig
+      add_connection alt_serdes_pll.reconfig_from_pll alt_serdes_pll_reconfig.reconfig_from_pll
+      add_connection alt_serdes_pll_reconfig.reconfig_to_pll alt_serdes_pll.reconfig_to_pll
+      add_interface drp_clk clock sink
+      set_interface_property drp_clk EXPORT_OF alt_serdes_pll_reconfig.mgmt_clk
+      add_interface drp_rst reset sink
+      set_interface_property drp_rst EXPORT_OF alt_serdes_pll_reconfig.mgmt_reset
+      add_interface pll_reconfig avalon slave
+      set_interface_property pll_reconfig EXPORT_OF alt_serdes_pll_reconfig.mgmt_avalon_slave
+    }
   }
 
   if {$m_mode == "IN"} {
