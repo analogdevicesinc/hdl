@@ -150,7 +150,6 @@ module axi_ad9361_lvds_if #(
   reg             txnrx_n_int = 'd0;
   reg             enable_p_int = 'd0;
   reg             txnrx_p_int = 'd0;
-  reg    [47:0]   tx_data_lclk = 'd0;
   reg    [ 5:0]   tx_p_data_d_0 = 'd0;
   reg    [ 5:0]   tx_p_data_d_1 = 'd0;
   reg    [ 5:0]   tx_p_data_d_2 = 'd0;
@@ -498,7 +497,9 @@ module axi_ad9361_lvds_if #(
 
   // serdes clock interface
 
-  ad_serdes_clk ad_serdes_clk (
+  ad_serdes_clk #(
+    .DEVICE_TYPE(DEVICE_TYPE))
+  ad_serdes_clk (
     .rst (mmcm_rst),
     .clk_in_p (rx_clk_in_p),
     .clk_in_n (rx_clk_in_n),
