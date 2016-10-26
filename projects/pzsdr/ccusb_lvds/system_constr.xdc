@@ -1,3 +1,6 @@
+# Default constraints have LVCMOS25, overwite it
+set_property  -dict {IOSTANDARD LVCMOS18} [get_ports iic_scl]                                           ; ## IO_L5P_T0_13
+set_property  -dict {IOSTANDARD LVCMOS18} [get_ports iic_sda]                                           ; ## IO_L5N_T0_13
 
 # USB_FX3
 
