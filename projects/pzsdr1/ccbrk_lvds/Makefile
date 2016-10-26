@@ -47,7 +47,7 @@ M_FLIST += *.ip_user_files
 
 
 .PHONY: all lib clean clean-all
-all: lib ccbrk_pzsdr1.sdk/system_top.hdf
+all: lib ccbrk_lvds_pzsdr1.sdk/system_top.hdf
 
 
 clean: 
@@ -64,9 +64,9 @@ clean-all:clean
 	make -C ../../../library/util_wfifo clean
 
 
-ccbrk_pzsdr1.sdk/system_top.hdf: $(M_DEPS)
+ccbrk_lvds_pzsdr1.sdk/system_top.hdf: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> ccbrk_pzsdr1_vivado.log 2>&1
+	$(M_VIVADO) system_project.tcl >> ccbrk_lvds_pzsdr1_vivado.log 2>&1
 
 
 lib:
