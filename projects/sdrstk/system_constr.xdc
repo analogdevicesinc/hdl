@@ -62,7 +62,7 @@ set_property  -dict {PACKAGE_PIN  F12  IOSTANDARD LVCMOS18} [get_ports spi_miso]
 set_property  -dict {PACKAGE_PIN  K13  IOSTANDARD LVCMOS18} [get_ports gpio_bd]
 set_property  -dict {PACKAGE_PIN  P8   IOSTANDARD LVCMOS18} [get_ports clk_out]
 
-create_clock -name rx_clk -period  16 [get_ports rx_clk_in]
+create_clock -name rx_clk -period  7.77 [get_ports rx_clk_in]
 
 # probably gone in 2016.4
 
@@ -199,4 +199,6 @@ set_property PACKAGE_PIN B2 [get_ports ddr_dqs_n[0]]
 set_property PACKAGE_PIN G2 [get_ports ddr_dqs_p[1]]
 set_property PACKAGE_PIN F2 [get_ports ddr_dqs_n[1]]
 
+set_false_path -from [get_pins {i_system_wrapper/system_i/axi_ad9361/inst/i_rx/i_up_adc_common/up_adc_gpio_out_int_reg[0]/C}]
+set_false_path -from [get_pins {i_system_wrapper/system_i/axi_ad9361/inst/i_tx/i_up_dac_common/up_dac_gpio_out_int_reg[0]/C}]
 
