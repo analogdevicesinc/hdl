@@ -189,6 +189,12 @@ proc ad_dma_interconnect {m_port} {
   set_connection_parameter_value ${m_port}/sys_hps.f2sdram0_data baseAddress {0x0}
 }
 
+# common dma interfaces
+
+add_instance sys_dma_clk clock_source 16.0
+add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
+add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
+
 # gpio-in
 
 add_instance sys_gpio_in altera_avalon_pio 16.0
@@ -238,10 +244,4 @@ ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port
 
 ad_cpu_interrupt 5 sys_gpio_in.irq
 ad_cpu_interrupt 7 sys_spi.irq
-
-# common dma interfaces
-
-add_instance sys_dma_clk clock_source 16.0
-add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
-add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 

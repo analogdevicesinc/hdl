@@ -25,7 +25,6 @@ set_instance_parameter_value sys_int_mem {dataWidth} {32}
 set_instance_parameter_value sys_int_mem {dualPort} {0}
 set_instance_parameter_value sys_int_mem {initMemContent} {0}
 set_instance_parameter_value sys_int_mem {memorySize} {163840.0}
-
 add_connection sys_clk.clk sys_int_mem.clk1
 add_connection sys_clk.clk_reset sys_int_mem.reset1
 
@@ -36,7 +35,6 @@ set_instance_parameter_value sys_tlb_mem {dataWidth} {32}
 set_instance_parameter_value sys_tlb_mem {dualPort} {1}
 set_instance_parameter_value sys_tlb_mem {initMemContent} {1}
 set_instance_parameter_value sys_tlb_mem {memorySize} {163840.0}
-
 add_connection sys_clk.clk sys_tlb_mem.clk1
 add_connection sys_clk.clk_reset sys_tlb_mem.reset1
 add_connection sys_clk.clk sys_tlb_mem.clk2
@@ -72,12 +70,10 @@ set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_TRCD_NS} {10.285}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_TRP_NS} {10.285}
 set_instance_parameter_value sys_ddr3_cntrl {BOARD_DDR3_USER_RCLK_SLEW_RATE} {4.0}
 set_instance_parameter_value sys_ddr3_cntrl {SHORT_QSYS_INTERFACE_NAMES} {1}
-
 add_connection sys_clk.clk_reset sys_ddr3_cntrl.global_reset_n
 add_interface sys_ddr3_cntrl_mem conduit end
 add_interface sys_ddr3_cntrl_oct conduit end
 add_interface sys_ddr3_cntrl_pll_ref_clk clock sink
-
 set_interface_property sys_ddr3_cntrl_mem EXPORT_OF sys_ddr3_cntrl.mem
 set_interface_property sys_ddr3_cntrl_oct EXPORT_OF sys_ddr3_cntrl.oct
 set_interface_property sys_ddr3_cntrl_pll_ref_clk EXPORT_OF sys_ddr3_cntrl.pll_ref_clk
@@ -103,19 +99,47 @@ set_instance_parameter_value sys_cpu {setting_dc_ecc_present} {0}
 set_instance_parameter_value sys_cpu {setting_itcm_ecc_present} {0}
 set_instance_parameter_value sys_cpu {setting_dtcm_ecc_present} {0}
 set_instance_parameter_value sys_cpu {mmu_enabled} $mmu_enabled
-
 add_connection sys_clk.clk sys_cpu.clk
 add_connection sys_clk.clk_reset sys_cpu.reset
 add_connection sys_cpu.debug_reset_request sys_cpu.reset
-
 add_connection sys_cpu.instruction_master sys_cpu.debug_mem_slave
-add_connection sys_cpu.data_master sys_cpu.debug_mem_slave
 add_connection sys_cpu.instruction_master sys_int_mem.s1
-add_connection sys_cpu.data_master sys_int_mem.s1
 add_connection sys_cpu.tightly_coupled_instruction_master_0 sys_tlb_mem.s2
 add_connection sys_cpu.tightly_coupled_data_master_0 sys_tlb_mem.s1
 add_connection sys_cpu.instruction_master sys_ddr3_cntrl.ctrl_amm_0
 add_connection sys_cpu.data_master sys_ddr3_cntrl.ctrl_amm_0
+set_connection_parameter_value sys_cpu.data_master/sys_ddr3_cntrl.ctrl_amm_0 baseAddress {0x0}
+set_connection_parameter_value sys_cpu.instruction_master/sys_ddr3_cntrl.ctrl_amm_0 baseAddress {0x0}
+set_connection_parameter_value sys_cpu.instruction_master/sys_cpu.debug_mem_slave baseAddress {0x10180800}
+set_connection_parameter_value sys_cpu.instruction_master/sys_int_mem.s1 baseAddress {0x10140000}
+set_connection_parameter_value sys_cpu.tightly_coupled_instruction_master_0/sys_tlb_mem.s2 baseAddress {0x10200000}
+set_connection_parameter_value sys_cpu.tightly_coupled_data_master_0/sys_tlb_mem.s1 baseAddress {0x10200000}
+
+# cpu/hps handling
+
+proc ad_cpu_interrupt {m_irq m_port} {
+
+  add_connection sys_cpu.irq ${m_port}
+  set_connection_parameter_value sys_cpu.irq/${m_port} irqNumber ${m_irq}
+}
+
+proc ad_cpu_interconnect {m_base m_port} {
+
+  add_connection sys_cpu.data_master ${m_port}
+  set_connection_parameter_value sys_cpu.data_master/${m_port} baseAddress [expr ($m_base + 0x10000000)]
+}
+
+proc ad_dma_interconnect {m_port} {
+
+  add_connection ${m_port} sys_ddr3_cntrl.ctrl_amm_0
+  set_connection_parameter_value ${m_port}/sys_ddr3_cntrl.ctrl_amm_0  baseAddress {0x0}
+}
+
+# common dma interfaces
+
+add_instance sys_dma_clk clock_source 16.0
+add_connection sys_ddr3_cntrl.emif_usr_clk sys_dma_clk.clk_in
+add_connection sys_ddr3_cntrl.emif_usr_reset_n sys_dma_clk.clk_in_reset
 
 # ethernet
 
@@ -172,18 +196,8 @@ add_connection sys_clk.clk sys_ethernet.transmit_clock_connection
 add_connection sys_clk.clk sys_ethernet_dma_rx.clock
 add_connection sys_clk.clk sys_ethernet_dma_tx.clock
 add_connection sys_clk.clk sys_ethernet_reset.clk
-add_connection sys_cpu.data_master sys_ethernet.control_port
-add_connection sys_cpu.data_master sys_ethernet_dma_rx.csr
-add_connection sys_cpu.data_master sys_ethernet_dma_rx.response
-add_connection sys_cpu.data_master sys_ethernet_dma_rx.descriptor_slave
-add_connection sys_cpu.data_master sys_ethernet_dma_tx.csr
-add_connection sys_cpu.data_master sys_ethernet_dma_tx.descriptor_slave
-add_connection sys_cpu.irq sys_ethernet_dma_rx.csr_irq
-add_connection sys_cpu.irq sys_ethernet_dma_tx.csr_irq
 add_connection sys_ethernet.receive sys_ethernet_dma_rx.st_sink
 add_connection sys_ethernet_dma_tx.st_source sys_ethernet.transmit
-add_connection sys_ethernet_dma_rx.mm_write sys_ddr3_cntrl.ctrl_amm_0
-add_connection sys_ethernet_dma_tx.mm_read sys_ddr3_cntrl.ctrl_amm_0
 add_interface sys_ethernet_reset reset source
 add_interface sys_ethernet_ref_clk clock sink
 add_interface sys_ethernet_mdio conduit end
@@ -198,40 +212,29 @@ set_interface_property sys_ethernet_sgmii EXPORT_OF sys_ethernet.serial_connecti
 
 add_instance sys_id altera_avalon_sysid_qsys 16.0
 set_instance_parameter_value sys_id {id} {182193580}
-
 add_connection sys_clk.clk_reset sys_id.reset
 add_connection sys_clk.clk sys_id.clk
-add_connection sys_cpu.data_master sys_id.control_slave
 
 # timer-1
 
 add_instance sys_timer_1 altera_avalon_timer 16.0
 set_instance_parameter_value sys_timer_1 {counterSize} {32}
-
 add_connection sys_clk.clk_reset sys_timer_1.reset
 add_connection sys_clk.clk sys_timer_1.clk
-add_connection sys_cpu.data_master sys_timer_1.s1
-add_connection sys_cpu.irq sys_timer_1.irq
 
 # timer-2
 
 add_instance sys_timer_2 altera_avalon_timer 16.0
 set_instance_parameter_value sys_timer_2 {counterSize} {32}
-
 add_connection sys_clk.clk_reset sys_timer_2.reset
 add_connection sys_clk.clk sys_timer_2.clk
-add_connection sys_cpu.data_master sys_timer_2.s1
-add_connection sys_cpu.irq sys_timer_2.irq
 
 # uart
 
 add_instance sys_uart altera_avalon_jtag_uart 16.0
 set_instance_parameter_value sys_uart {allowMultipleConnections} {0}
-
 add_connection sys_clk.clk_reset sys_uart.reset
 add_connection sys_clk.clk sys_uart.clk
-add_connection sys_cpu.data_master sys_uart.avalon_jtag_slave
-add_connection sys_cpu.irq sys_uart.irq
 
 # gpio-bd
 
@@ -239,13 +242,9 @@ add_instance sys_gpio_bd altera_avalon_pio 16.0
 set_instance_parameter_value sys_gpio_bd {direction} {InOut}
 set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_bd {width} {32}
-
 add_connection sys_clk.clk_reset sys_gpio_bd.reset
 add_connection sys_clk.clk sys_gpio_bd.clk
-add_connection sys_cpu.data_master sys_gpio_bd.s1
-add_connection sys_cpu.irq sys_gpio_bd.irq
 add_interface sys_gpio_bd conduit end
-
 set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
 
 # gpio-in
@@ -254,13 +253,9 @@ add_instance sys_gpio_in altera_avalon_pio 16.0
 set_instance_parameter_value sys_gpio_in {direction} {Input}
 set_instance_parameter_value sys_gpio_in {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_in {width} {32}
-
 add_connection sys_clk.clk_reset sys_gpio_in.reset
 add_connection sys_clk.clk sys_gpio_in.clk
-add_connection sys_cpu.data_master sys_gpio_in.s1
-add_connection sys_cpu.irq sys_gpio_in.irq
 add_interface sys_gpio_in conduit end
-
 set_interface_property sys_gpio_in EXPORT_OF sys_gpio_in.external_connection
 
 # gpio-out
@@ -269,12 +264,9 @@ add_instance sys_gpio_out altera_avalon_pio 16.0
 set_instance_parameter_value sys_gpio_out {direction} {Output}
 set_instance_parameter_value sys_gpio_out {generateIRQ} {0}
 set_instance_parameter_value sys_gpio_out {width} {32}
-
 add_connection sys_clk.clk_reset sys_gpio_out.reset
 add_connection sys_clk.clk sys_gpio_out.clk
-add_connection sys_cpu.data_master sys_gpio_out.s1
 add_interface sys_gpio_out conduit end
-
 set_interface_property sys_gpio_out EXPORT_OF sys_gpio_out.external_connection
 
 # spi
@@ -286,51 +278,44 @@ set_instance_parameter_value sys_spi {dataWidth} {8}
 set_instance_parameter_value sys_spi {masterSPI} {1}
 set_instance_parameter_value sys_spi {numberOfSlaves} {8}
 set_instance_parameter_value sys_spi {targetClockRate} {128000.0}
-
 add_connection sys_clk.clk_reset sys_spi.reset
 add_connection sys_clk.clk sys_spi.clk
-add_connection sys_cpu.data_master sys_spi.spi_control_port
-add_connection sys_cpu.irq sys_spi.irq
 add_interface sys_spi conduit end
-
 set_interface_property sys_spi EXPORT_OF sys_spi.external
 
-# addresses
+# base-addresses
 
-set_connection_parameter_value sys_cpu.data_master/sys_ddr3_cntrl.ctrl_amm_0                baseAddress {0x00000000}
-set_connection_parameter_value sys_cpu.data_master/sys_int_mem.s1                           baseAddress {0x10140000}
-set_connection_parameter_value sys_cpu.data_master/sys_cpu.debug_mem_slave                  baseAddress {0x10180800}
-set_connection_parameter_value sys_cpu.data_master/sys_uart.avalon_jtag_slave               baseAddress {0x101814f0}
-set_connection_parameter_value sys_cpu.data_master/sys_ethernet.control_port                baseAddress {0x10181000}
-set_connection_parameter_value sys_cpu.data_master/sys_ethernet_dma_rx.csr                  baseAddress {0x101814a0}
-set_connection_parameter_value sys_cpu.data_master/sys_ethernet_dma_rx.response             baseAddress {0x101814e0}
-set_connection_parameter_value sys_cpu.data_master/sys_ethernet_dma_rx.descriptor_slave     baseAddress {0x10181440}
-set_connection_parameter_value sys_cpu.data_master/sys_ethernet_dma_tx.csr                  baseAddress {0x10181480}
-set_connection_parameter_value sys_cpu.data_master/sys_ethernet_dma_tx.descriptor_slave     baseAddress {0x10181460}
-set_connection_parameter_value sys_cpu.data_master/sys_spi.spi_control_port                 baseAddress {0x10181400}
-set_connection_parameter_value sys_cpu.data_master/sys_gpio_out.s1                          baseAddress {0x10181500}
-set_connection_parameter_value sys_cpu.data_master/sys_gpio_in.s1                           baseAddress {0x101814c0}
-set_connection_parameter_value sys_cpu.data_master/sys_gpio_bd.s1                           baseAddress {0x101814d0}
-set_connection_parameter_value sys_cpu.data_master/sys_timer_2.s1                           baseAddress {0x10181520}
-set_connection_parameter_value sys_cpu.data_master/sys_timer_1.s1                           baseAddress {0x10181420}
-set_connection_parameter_value sys_cpu.data_master/sys_id.control_slave                     baseAddress {0x101814e8}
-set_connection_parameter_value sys_cpu.instruction_master/sys_ddr3_cntrl.ctrl_amm_0         baseAddress {0x00000000}
-set_connection_parameter_value sys_cpu.instruction_master/sys_cpu.debug_mem_slave           baseAddress {0x10180800}
-set_connection_parameter_value sys_cpu.instruction_master/sys_int_mem.s1                    baseAddress {0x10140000}
-set_connection_parameter_value sys_cpu.tightly_coupled_instruction_master_0/sys_tlb_mem.s2  baseAddress {0x10200000}
-set_connection_parameter_value sys_cpu.tightly_coupled_data_master_0/sys_tlb_mem.s1         baseAddress {0x10200000}
-set_connection_parameter_value sys_ethernet_dma_tx.mm_read/sys_ddr3_cntrl.ctrl_amm_0        baseAddress {0x00000000}
-set_connection_parameter_value sys_ethernet_dma_rx.mm_write/sys_ddr3_cntrl.ctrl_amm_0       baseAddress {0x00000000}
+ad_cpu_interconnect 0x00180800 sys_cpu.debug_mem_slave
+ad_cpu_interconnect 0x00140000 sys_int_mem.s1
+ad_cpu_interconnect 0x00181000 sys_ethernet.control_port
+ad_cpu_interconnect 0x001814a0 sys_ethernet_dma_rx.csr
+ad_cpu_interconnect 0x001814e0 sys_ethernet_dma_rx.response
+ad_cpu_interconnect 0x00181440 sys_ethernet_dma_rx.descriptor_slave
+ad_cpu_interconnect 0x00181480 sys_ethernet_dma_tx.csr
+ad_cpu_interconnect 0x00181460 sys_ethernet_dma_tx.descriptor_slave
+ad_cpu_interconnect 0x001814e8 sys_id.control_slave
+ad_cpu_interconnect 0x00181420 sys_timer_1.s1
+ad_cpu_interconnect 0x00181520 sys_timer_2.s1
+ad_cpu_interconnect 0x001814f0 sys_uart.avalon_jtag_slave
+ad_cpu_interconnect 0x001814d0 sys_gpio_bd.s1
+ad_cpu_interconnect 0x001814c0 sys_gpio_in.s1
+ad_cpu_interconnect 0x00181500 sys_gpio_out.s1
+ad_cpu_interconnect 0x00181400 sys_spi.spi_control_port
 
-set_connection_parameter_value sys_cpu.irq/sys_ethernet_dma_rx.csr_irq irqNumber  {0}
-set_connection_parameter_value sys_cpu.irq/sys_ethernet_dma_tx.csr_irq irqNumber  {1}
-set_connection_parameter_value sys_cpu.irq/sys_uart.irq irqNumber                 {2}
-set_connection_parameter_value sys_cpu.irq/sys_timer_2.irq irqNumber              {3}
-set_connection_parameter_value sys_cpu.irq/sys_timer_1.irq irqNumber              {4}
-set_connection_parameter_value sys_cpu.irq/sys_gpio_in.irq irqNumber              {5}
-set_connection_parameter_value sys_cpu.irq/sys_gpio_bd.irq irqNumber              {6}
-set_connection_parameter_value sys_cpu.irq/sys_spi.irq irqNumber                  {7}
+# dma interconnects
+
+ad_dma_interconnect sys_ethernet_dma_tx.mm_read
+ad_dma_interconnect sys_ethernet_dma_rx.mm_write
 
 # interrupts
+
+ad_cpu_interrupt 0 sys_ethernet_dma_rx.csr_irq
+ad_cpu_interrupt 1 sys_ethernet_dma_tx.csr_irq
+ad_cpu_interrupt 2 sys_uart.irq
+ad_cpu_interrupt 3 sys_timer_2.irq
+ad_cpu_interrupt 4 sys_timer_1.irq
+ad_cpu_interrupt 5 sys_gpio_in.irq
+ad_cpu_interrupt 6 sys_gpio_bd.irq
+ad_cpu_interrupt 7 sys_spi.irq
 
 

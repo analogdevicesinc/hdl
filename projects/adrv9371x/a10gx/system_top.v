@@ -41,140 +41,72 @@ module system_top (
 
   // clock and resets
 
-  sys_clk,
-  sys_resetn,
+  input             sys_clk,
+  input             sys_resetn,
 
   // ddr3
 
-  ddr3_clk_p,
-  ddr3_clk_n,
-  ddr3_a,
-  ddr3_ba,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_odt,
-  ddr3_reset_n,
-  ddr3_we_n,
-  ddr3_ras_n,
-  ddr3_cas_n,
-  ddr3_dqs_p,
-  ddr3_dqs_n,
-  ddr3_dq,
-  ddr3_dm,
-  ddr3_rzq,
-  ddr3_ref_clk,
+  output            ddr3_clk_p,
+  output            ddr3_clk_n,
+  output  [ 14:0]   ddr3_a,
+  output  [  2:0]   ddr3_ba,
+  output            ddr3_cke,
+  output            ddr3_cs_n,
+  output            ddr3_odt,
+  output            ddr3_reset_n,
+  output            ddr3_we_n,
+  output            ddr3_ras_n,
+  output            ddr3_cas_n,
+  inout   [  7:0]   ddr3_dqs_p,
+  inout   [  7:0]   ddr3_dqs_n,
+  inout   [ 63:0]   ddr3_dq,
+  output  [  7:0]   ddr3_dm,
+  input             ddr3_rzq,
+  input             ddr3_ref_clk,
 
   // ethernet
 
-  eth_ref_clk,
-  eth_rxd,
-  eth_txd,
-  eth_mdc,
-  eth_mdio,
-  eth_resetn,
-  eth_intn,
+  input             eth_ref_clk,
+  input             eth_rxd,
+  output            eth_txd,
+  output            eth_mdc,
+  inout             eth_mdio,
+  output            eth_resetn,
+  input             eth_intn,
 
   // board gpio
 
-  gpio_bd_i,
-  gpio_bd_o,
+  input   [ 10:0]   gpio_bd_i,
+  output  [ 15:0]   gpio_bd_o,
 
   // lane interface
 
-  ref_clk0,
-  ref_clk1,
-  rx_data,
-  tx_data,
-  rx_sync,
-  rx_os_sync,
-  tx_sync,
-  sysref,
+  input             ref_clk0,
+  input             ref_clk1,
+  input   [  3:0]   rx_data,
+  output  [  3:0]   tx_data,
+  output            rx_sync,
+  output            rx_os_sync,
+  input             tx_sync,
+  input             sysref,
 
-  ad9528_reset_b,
-  ad9528_sysref_req,
-  ad9371_tx1_enable,
-  ad9371_tx2_enable,
-  ad9371_rx1_enable,
-  ad9371_rx2_enable,
-  ad9371_test,
-  ad9371_reset_b,
-  ad9371_gpint,
-  ad9371_gpio,
+  output            ad9528_reset_b,
+  output            ad9528_sysref_req,
+  output            ad9371_tx1_enable,
+  output            ad9371_tx2_enable,
+  output            ad9371_rx1_enable,
+  output            ad9371_rx2_enable,
+  output            ad9371_test,
+  output            ad9371_reset_b,
+  input             ad9371_gpint,
 
-  spi_csn_ad9528,
-  spi_csn_ad9371,
-  spi_clk,
-  spi_mosi,
-  spi_miso);
+  inout   [ 18:0]   ad9371_gpio,
 
-  // clock and resets
-
-  input             sys_clk;
-  input             sys_resetn;
-
-  // ddr3
-
-  output            ddr3_clk_p;
-  output            ddr3_clk_n;
-  output  [ 14:0]   ddr3_a;
-  output  [  2:0]   ddr3_ba;
-  output            ddr3_cke;
-  output            ddr3_cs_n;
-  output            ddr3_odt;
-  output            ddr3_reset_n;
-  output            ddr3_we_n;
-  output            ddr3_ras_n;
-  output            ddr3_cas_n;
-  inout   [  7:0]   ddr3_dqs_p;
-  inout   [  7:0]   ddr3_dqs_n;
-  inout   [ 63:0]   ddr3_dq;
-  output  [  7:0]   ddr3_dm;
-  input             ddr3_rzq;
-  input             ddr3_ref_clk;
-
-  // ethernet
-
-  input             eth_ref_clk;
-  input             eth_rxd;
-  output            eth_txd;
-  output            eth_mdc;
-  inout             eth_mdio;
-  output            eth_resetn;
-  input             eth_intn;
-
-  // board gpio
-
-  input   [ 10:0]   gpio_bd_i;
-  output  [ 15:0]   gpio_bd_o;
-
-  // lane interface
-
-  input             ref_clk0;
-  input             ref_clk1;
-  input   [  3:0]   rx_data;
-  output  [  3:0]   tx_data;
-  output            rx_sync;
-  output            rx_os_sync;
-  input             tx_sync;
-  input             sysref;
-
-  output            ad9528_reset_b;
-  output            ad9528_sysref_req;
-  output            ad9371_tx1_enable;
-  output            ad9371_tx2_enable;
-  output            ad9371_rx1_enable;
-  output            ad9371_rx2_enable;
-  output            ad9371_test;
-  output            ad9371_reset_b;
-  input             ad9371_gpint;
-
-  inout   [ 18:0]   ad9371_gpio;
-
-  output            spi_csn_ad9528;
-  output            spi_csn_ad9371;
-  output            spi_clk;
-  output            spi_mosi;
-  input             spi_miso;
+  output            spi_csn_ad9528,
+  output            spi_csn_ad9371,
+  output            spi_clk,
+  output            spi_mosi,
+  input             spi_miso);
 
   // internal signals
 
@@ -185,6 +117,8 @@ module system_top (
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [  7:0]   spi_csn_s;
+
+  // assignments
 
   assign spi_csn_ad9371 = spi_csn_s[0];
   assign spi_csn_ad9528 = spi_csn_s[1];
@@ -219,6 +153,17 @@ module system_top (
   assign gpio_bd_o = gpio_o[15:0];
 
   system_bd i_system_bd (
+    .avl_ad9371_gpio_export(ad9371_gpio),
+    .rx_data_0_rx_serial_data (rx_data[0]),
+    .rx_data_1_rx_serial_data (rx_data[1]),
+    .rx_data_2_rx_serial_data (rx_data[2]),
+    .rx_data_3_rx_serial_data (rx_data[3]),
+    .rx_os_ref_clk_clk (ref_clk1),
+    .rx_os_sync_export (rx_os_sync),
+    .rx_os_sysref_export (sysref),
+    .rx_ref_clk_clk (ref_clk1),
+    .rx_sync_export (rx_sync),
+    .rx_sysref_export (sysref),
     .sys_clk_clk (sys_clk),
     .sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
     .sys_ddr3_cntrl_mem_mem_ck_n (ddr3_clk_n),
@@ -254,18 +199,13 @@ module system_top (
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
-    .ad9371_gpio_export(ad9371_gpio),
-    .xcvr_ref_clk_clk(ref_clk1),
-    .rx_data_rx_serial_data (rx_data[1:0]),
-    .rx_os_data_rx_serial_data (rx_data[3:2]),
-    .rx_os_sync_rx_sync (rx_os_sync),
-    .rx_os_sysref_rx_ext_sysref_in (sysref),
-    .rx_sync_rx_sync (rx_sync),
-    .rx_sysref_rx_ext_sysref_in (sysref),
-    .tx_data_tx_serial_data ({tx_data[0],tx_data[3],tx_data[2],tx_data[1]}),
-    .tx_sync_tx_sync (tx_sync),
-    .tx_sysref_tx_ext_sysref_in (sysref)
-  );
+    .tx_data_0_tx_serial_data (tx_data[0]),
+    .tx_data_1_tx_serial_data (tx_data[1]),
+    .tx_data_2_tx_serial_data (tx_data[2]),
+    .tx_data_3_tx_serial_data (tx_data[3]),
+    .tx_ref_clk_clk (ref_clk1),
+    .tx_sync_export (tx_sync),
+    .tx_sysref_export (sysref));
 
 endmodule
 
