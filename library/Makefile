@@ -60,6 +60,8 @@ clean:
 	make -C util_clkdiv clean
 	make -C util_cpack clean
 	make -C util_dacfifo clean
+	make -C util_fir_dec clean
+	make -C util_fir_int clean
 	make -C util_gmii_to_rgmii clean
 	make -C util_gtlb clean
 	make -C util_i2c_mixer clean
@@ -133,6 +135,8 @@ lib:
 	-make -C util_clkdiv
 	-make -C util_cpack
 	-make -C util_dacfifo
+	-make -C util_fir_dec
+	-make -C util_fir_int
 	-make -C util_gmii_to_rgmii
 	-make -C util_gtlb
 	-make -C util_i2c_mixer
