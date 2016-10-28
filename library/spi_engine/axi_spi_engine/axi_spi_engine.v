@@ -1,3 +1,4 @@
+`timescale 1ns/100ps
 
 module axi_spi_engine (
         // Slave AXI interface
@@ -40,6 +41,7 @@ module axi_spi_engine (
         output reg irq,
 
         // SPI signals
+
         input spi_clk,
 
         output spi_resetn,
@@ -61,6 +63,7 @@ module axi_spi_engine (
         input [7:0] sync_data,
 
         // Offload ctrl signals
+
         output offload0_cmd_wr_en,
         output [15:0] offload0_cmd_wr_data,
 
