@@ -34,44 +34,45 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// serial data output interface: serdes(x8)
 
 `timescale 1ps/1ps
 
-module ad_serdes_out #(
+module __ad_serdes_out__ #(
 
   parameter   DEVICE_TYPE = 0,
+  parameter   DDR_OR_SDR_N = 1,
   parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16) (
 
   // reset and clocks
 
-  input                       rst,
-  input                       clk,
-  input                       div_clk,
-  input                       loaden,
-
-  // data interface
-
-  input   [(DATA_WIDTH-1):0]  data_s0,
-  input   [(DATA_WIDTH-1):0]  data_s1,
-  input   [(DATA_WIDTH-1):0]  data_s2,
-  input   [(DATA_WIDTH-1):0]  data_s3,
-  input   [(DATA_WIDTH-1):0]  data_s4,
-  input   [(DATA_WIDTH-1):0]  data_s5,
-  input   [(DATA_WIDTH-1):0]  data_s6,
-  input   [(DATA_WIDTH-1):0]  data_s7,
-  output  [(DATA_WIDTH-1):0]  data_out_p,
-  output  [(DATA_WIDTH-1):0]  data_out_n);
+  input                           rst,
+  input                           clk,
+  input                           div_clk,
+  input                           loaden,
+                                  
+  // data interface               
+                                  
+  input   [(DATA_WIDTH-1):0]      data_s0,
+  input   [(DATA_WIDTH-1):0]      data_s1,
+  input   [(DATA_WIDTH-1):0]      data_s2,
+  input   [(DATA_WIDTH-1):0]      data_s3,
+  input   [(DATA_WIDTH-1):0]      data_s4,
+  input   [(DATA_WIDTH-1):0]      data_s5,
+  input   [(DATA_WIDTH-1):0]      data_s6,
+  input   [(DATA_WIDTH-1):0]      data_s7,
+  output  [(DATA_WIDTH-1):0]      data_out_p,
+  output  [(DATA_WIDTH-1):0]      data_out_n);
 
   // local parameter
 
-  localparam C5SOC = 1;
+  localparam ARRIA10 = 0;
+  localparam CYCLONE5 = 1;
 
   // internal signals
 
-  wire    [(DATA_WIDTH-1):0]  data_in_s[ 7:0];
-  wire    [(DATA_WIDTH-1):0]  data_in_s2[ 7:0];
+  wire    [(DATA_WIDTH-1):0]      data_samples_s[0:(SERDES_FACTOR-1)];
+  wire    [(SERDES_FACTOR-1):0]   data_in_s[0:(DATA_WIDTH-1)];
 
   // defaults
 
@@ -79,96 +80,93 @@ module ad_serdes_out #(
 
   // instantiations
 
-    assign data_in_s[0] = data_s0;
-    assign data_in_s[1] = data_s1;
-    assign data_in_s[2] = data_s2;
-    assign data_in_s[3] = data_s3;
-    assign data_in_s[4] = data_s4;
-    assign data_in_s[5] = data_s5;
-    assign data_in_s[6] = data_s6;
-    assign data_in_s[7] = data_s7;
+  genvar n;
+  genvar i;
 
-  genvar l_order;
   generate
-    for (l_order = 0; l_order < 8; l_order = l_order + 1) begin: g_order
-      assign data_in_s2[l_order] = (l_order < 8-SERDES_FACTOR) ? 1'b0 : data_in_s[l_order -8 + SERDES_FACTOR];
-    end
+  if (SERDES_FACTOR == 8) begin
+  assign data_samples_s[7] = data_s7;
+  assign data_samples_s[6] = data_s6;
+  assign data_samples_s[5] = data_s5;
+  assign data_samples_s[4] = data_s4;
+  end
   endgenerate
 
-  genvar l_inst;
-  generate
-  for (l_inst = 0; l_inst < DATA_WIDTH; l_inst = l_inst + 1) begin: g_data
-    if (DEVICE_TYPE == C5SOC) begin
-      altlvds_tx #(
-        .center_align_msb ("UNUSED"),
-        .common_rx_tx_pll ("ON"),
-        .coreclock_divide_by (1),
-        .data_rate ("500.0 Mbps"),
-        .deserialization_factor (4),
-        .differential_drive (0),
-        .enable_clock_pin_mode ("UNUSED"),
-        .implement_in_les ("OFF"),
-        .inclock_boost (0),
-        .inclock_data_alignment ("EDGE_ALIGNED"),
-        .inclock_period (4000),
-        .inclock_phase_shift (0),
-        .intended_device_family ("Cyclone V"),
-        .lpm_hint ("CBX_MODULE_PREFIX=ad_serdes_out"),
-        .lpm_type ("altlvds_tx"),
-        .multi_clock ("OFF"),
-        .number_of_channels (DATA_WIDTH),
-        .outclock_alignment ("EDGE_ALIGNED"),
-        .outclock_divide_by (2),
-        .outclock_duty_cycle (50),
-        .outclock_multiply_by (1),
-        .outclock_phase_shift (0),
-        .outclock_resource ("Regional clock"),
-        .output_data_rate (500),
-        .pll_compensation_mode ("AUTO"),
-        .pll_self_reset_on_loss_lock ("OFF"),
-        .preemphasis_setting (0),
-        .refclk_frequency ("250.000000 MHz"),
-        .registered_input ("TX_CORECLK"),
-        .use_external_pll ("ON"),
-        .use_no_phase_shift ("ON"),
-        .vod_setting (0),
-        .clk_src_is_pll ("off"))
-      i_altlvds_tx (
-        .tx_inclock (clk),
-        .tx_coreclock (div_clk),
-        .tx_in ({data_in_s2[0][l_inst],
-                 data_in_s2[1][l_inst],
-                 data_in_s2[2][l_inst],
-                 data_in_s2[3][l_inst],
-                 data_in_s2[4][l_inst],
-                 data_in_s2[5][l_inst],
-                 data_in_s2[6][l_inst],
-                 data_in_s2[7][l_inst]}),
-        .tx_outclock (),
-        .tx_out (data_out_p[l_inst]),
-        .tx_locked (),
-        .pll_areset (1'b0),
-        .sync_inclock (1'b0),
-        .tx_data_reset (1'b0),
-        .tx_enable (loaden),
-        .tx_pll_enable (1'b1),
-        .tx_syncclock (1'b0));
+  assign data_samples_s[3] = data_s3;
+  assign data_samples_s[2] = data_s2;
+  assign data_samples_s[1] = data_s1;
+  assign data_samples_s[0] = data_s0;
 
-    end else begin
-      alt_serdes_out_core i_core (
-        .clk_export (clk),
-        .div_clk_export (div_clk),
-        .loaden_export (loaden),
-        .data_out_export (data_out_p[l_inst]),
-        .data_s_export ({data_in_s2[0][l_inst],
-                         data_in_s2[1][l_inst],
-                         data_in_s2[2][l_inst],
-                         data_in_s2[3][l_inst],
-                         data_in_s2[4][l_inst],
-                         data_in_s2[5][l_inst],
-                         data_in_s2[6][l_inst],
-                         data_in_s2[7][l_inst]}));
+  generate
+  for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_swap
+    for (i = 0; i < SERDES_FACTOR; i = i + 1) begin: g_samples
+      assign data_in_s[n][((SERDES_FACTOR-1)-i)] = data_samples_s[i][n];
     end
+  end
+  endgenerate
+
+  generate
+  for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_data
+
+  if (DEVICE_TYPE == CYCLONE5) begin
+  altlvds_tx #(
+    .center_align_msb ("UNUSED"),
+    .common_rx_tx_pll ("ON"),
+    .coreclock_divide_by (1),
+    .data_rate ("500.0 Mbps"),
+    .deserialization_factor (4),
+    .differential_drive (0),
+    .enable_clock_pin_mode ("UNUSED"),
+    .implement_in_les ("OFF"),
+    .inclock_boost (0),
+    .inclock_data_alignment ("EDGE_ALIGNED"),
+    .inclock_period (4000),
+    .inclock_phase_shift (0),
+    .intended_device_family ("Cyclone V"),
+    .lpm_hint ("CBX_MODULE_PREFIX=ad_serdes_out"),
+    .lpm_type ("altlvds_tx"),
+    .multi_clock ("OFF"),
+    .number_of_channels (DATA_WIDTH),
+    .outclock_alignment ("EDGE_ALIGNED"),
+    .outclock_divide_by (2),
+    .outclock_duty_cycle (50),
+    .outclock_multiply_by (1),
+    .outclock_phase_shift (0),
+    .outclock_resource ("Regional clock"),
+    .output_data_rate (500),
+    .pll_compensation_mode ("AUTO"),
+    .pll_self_reset_on_loss_lock ("OFF"),
+    .preemphasis_setting (0),
+    .refclk_frequency ("250.000000 MHz"),
+    .registered_input ("TX_CORECLK"),
+    .use_external_pll ("ON"),
+    .use_no_phase_shift ("ON"),
+    .vod_setting (0),
+    .clk_src_is_pll ("off"))
+  i_altlvds_tx (
+    .tx_inclock (clk),
+    .tx_coreclock (div_clk),
+    .tx_in (data_in_s[n]),
+    .tx_outclock (),
+    .tx_out (data_out_p[n]),
+    .tx_locked (),
+    .pll_areset (1'b0),
+    .sync_inclock (1'b0),
+    .tx_data_reset (1'b0),
+    .tx_enable (loaden),
+    .tx_pll_enable (1'b1),
+    .tx_syncclock (1'b0));
+  end
+
+  if (DEVICE_TYPE == ARRIA10) begin
+  __ad_serdes_out_1__ i_core (
+    .clk_export (clk),
+    .div_clk_export (div_clk),
+    .loaden_export (loaden),
+    .data_out_export (data_out_p[n]),
+    .data_s_export (data_in_s[n]));
+  end
+
   end
   endgenerate
 

@@ -403,7 +403,14 @@ module axi_ad9361_lvds_if #(
     .data_s6 (),
     .data_s7 (),
     .data_in_p (rx_data_in_p),
-    .data_in_n (rx_data_in_n));
+    .data_in_n (rx_data_in_n),
+    .up_clk (1'd0),
+    .up_dld (6'd0),
+    .up_dwdata (30'd0),
+    .up_drdata (),
+    .delay_clk (1'd0),
+    .delay_rst (1'd0),
+    .delay_locked ());
 
   // receive frame interface
 
@@ -427,7 +434,14 @@ module axi_ad9361_lvds_if #(
     .data_s6 (),
     .data_s7 (),
     .data_in_p (rx_frame_in_p),
-    .data_in_n (rx_frame_in_n));
+    .data_in_n (rx_frame_in_n),
+    .up_clk (1'd0),
+    .up_dld (6'd0),
+    .up_dwdata (30'd0),
+    .up_drdata (),
+    .delay_clk (1'd0),
+    .delay_rst (1'd0),
+    .delay_locked ());
 
   // transmit data interface
 

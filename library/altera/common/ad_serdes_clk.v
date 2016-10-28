@@ -34,9 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// serial data output interface: serdes(x8)
-// do NOT use this module AS IT IS, the sub modules must be generated inside _hw.tcl file.
-// replace __*__ names with the component names
 
 `timescale 1ps/1ps
 
@@ -157,7 +154,7 @@ module __ad_serdes_clk__ #(
 
   generate
   if (DEVICE_TYPE == ARRIA10) begin
-  __alt_serdes_clk_core__ i_core (
+  __ad_serdes_clk_1__ i_core (
     .rst_reset (rst),
     .ref_clk_clk (clk_in_p),
     .locked_export (up_drp_locked_int_s),
@@ -181,7 +178,7 @@ module __ad_serdes_clk__ #(
 
   assign phase = 8'd0;
 
-  __alt_serdes_clk_core__ i_core (
+  __ad_serdes_clk_1__ i_core (
     .rst_reset (rst),
     .ref_clk_clk (clk_in_p),
     .locked_export (up_drp_locked_int_s),

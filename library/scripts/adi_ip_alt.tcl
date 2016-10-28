@@ -89,3 +89,60 @@ proc ad_generate_module_inst { inst_name mark source_file target_file } {
   close $fp_target
 }
 
+proc ad_ip_intf_s_axi {aclk arstn} {
+
+  add_interface s_axi_clock clock end
+  add_interface_port s_axi_clock ${aclk} clk Input 1
+
+  add_interface s_axi_reset reset end
+  set_interface_property s_axi_reset associatedClock s_axi_clock
+  add_interface_port s_axi_reset ${arstn} reset_n Input 1
+
+  add_interface s_axi axi4lite end
+  set_interface_property s_axi associatedClock s_axi_clock
+  set_interface_property s_axi associatedReset s_axi_reset
+  add_interface_port s_axi s_axi_awvalid awvalid Input 1
+  add_interface_port s_axi s_axi_awaddr awaddr Input 16
+  add_interface_port s_axi s_axi_awprot awprot Input 3
+  add_interface_port s_axi s_axi_awready awready Output 1
+  add_interface_port s_axi s_axi_wvalid wvalid Input 1
+  add_interface_port s_axi s_axi_wdata wdata Input 32
+  add_interface_port s_axi s_axi_wstrb wstrb Input 4
+  add_interface_port s_axi s_axi_wready wready Output 1
+  add_interface_port s_axi s_axi_bvalid bvalid Output 1
+  add_interface_port s_axi s_axi_bresp bresp Output 2
+  add_interface_port s_axi s_axi_bready bready Input 1
+  add_interface_port s_axi s_axi_arvalid arvalid Input 1
+  add_interface_port s_axi s_axi_araddr araddr Input 16
+  add_interface_port s_axi s_axi_arprot arprot Input 3
+  add_interface_port s_axi s_axi_arready arready Output 1
+  add_interface_port s_axi s_axi_rvalid rvalid Output 1
+  add_interface_port s_axi s_axi_rresp rresp Output 2
+  add_interface_port s_axi s_axi_rdata rdata Output 32
+  add_interface_port s_axi s_axi_rready rready Input 1
+}
+
+proc ad_ip_file {ifile ofile flist} {
+
+  global ad_hdl_dir
+
+  set srcfile [open ${ad_hdl_dir}/library/altera/common/${ifile} r]
+  set dstfile [open ${ofile} w]
+
+  regsub {\..$} $ifile {} imodule
+  regsub {\..$} $ofile {} omodule
+
+  while {[gets $srcfile srcline] >= 0} {
+    regsub __${imodule}__ $srcline $omodule dstline
+    set index 0
+    foreach fword $flist {
+      incr index
+      regsub __${imodule}_${index}__ $dstline $fword dstline
+    }
+    puts $dstfile $dstline
+  }
+
+  close $srcfile
+  close $dstfile
+}
+

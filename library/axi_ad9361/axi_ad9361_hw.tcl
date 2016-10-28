@@ -13,22 +13,16 @@ set_module_property ELABORATION_CALLBACK p_axi_ad9361
 
 # files
 
-add_fileset quartus_synth QUARTUS_SYNTH "" ""
+add_fileset quartus_synth QUARTUS_SYNTH "p_axi_ad9361_fset" ""
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9361
 add_fileset_file ad_rst.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
-add_fileset_file ad_serdes_clk.v          VERILOG PATH $ad_hdl_dir/library/altera/common/ad_serdes_clk.v
-add_fileset_file ad_serdes_in.v           VERILOG PATH $ad_hdl_dir/library/altera/common/ad_serdes_in.v
-add_fileset_file ad_serdes_out.v          VERILOG PATH $ad_hdl_dir/library/altera/common/ad_serdes_out.v
-add_fileset_file ad_cmos_clk.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_cmos_clk.v
-add_fileset_file ad_cmos_in.v             VERILOG PATH $ad_hdl_dir/library/altera/common/ad_cmos_in.v
-add_fileset_file ad_cmos_out.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_cmos_out.v
 add_fileset_file ad_mul.v                 VERILOG PATH $ad_hdl_dir/library/altera/common/ad_mul.v
+add_fileset_file ad_dcfilter.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_dcfilter.v
 add_fileset_file ad_pnmon.v               VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
 add_fileset_file ad_dds_sine.v            VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine.v
 add_fileset_file ad_dds_1.v               VERILOG PATH $ad_hdl_dir/library/common/ad_dds_1.v
 add_fileset_file ad_dds.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_dds.v
 add_fileset_file ad_datafmt.v             VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
-add_fileset_file ad_dcfilter.v            VERILOG PATH $ad_hdl_dir/library/altera/common/ad_dcfilter.v
 add_fileset_file ad_iqcor.v               VERILOG PATH $ad_hdl_dir/library/common/ad_iqcor.v
 add_fileset_file ad_addsub.v              VERILOG PATH $ad_hdl_dir/library/common/ad_addsub.v
 add_fileset_file ad_tdd_control.v         VERILOG PATH $ad_hdl_dir/library/common/ad_tdd_control.v
@@ -57,79 +51,33 @@ add_fileset_file axi_ad9361_constr.sdc    SDC     PATH axi_ad9361_constr.sdc
 
 # parameters
 
-add_parameter ID INTEGER 0
-set_parameter_property ID DEFAULT_VALUE 0
-set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
-set_parameter_property ID UNITS None
-set_parameter_property ID HDL_PARAMETER true
-
-add_parameter DEVICE_TYPE INTEGER 0
-set_parameter_property DEVICE_TYPE DEFAULT_VALUE 0
-set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
-set_parameter_property DEVICE_TYPE TYPE INTEGER
-set_parameter_property DEVICE_TYPE UNITS None
-set_parameter_property DEVICE_TYPE HDL_PARAMETER true
-
-add_parameter CMOS_OR_LVDS_N INTEGER 0
-set_parameter_property CMOS_OR_LVDS_N DEFAULT_VALUE 0
-set_parameter_property CMOS_OR_LVDS_N DISPLAY_NAME CMOS_OR_LVDS_N
-set_parameter_property CMOS_OR_LVDS_N TYPE INTEGER
-set_parameter_property CMOS_OR_LVDS_N UNITS None
-set_parameter_property CMOS_OR_LVDS_N HDL_PARAMETER true
-
-add_parameter DAC_DATAPATH_DISABLE INTEGER 0
-set_parameter_property DAC_DATAPATH_DISABLE DEFAULT_VALUE 0
-set_parameter_property DAC_DATAPATH_DISABLE DISPLAY_NAME DAC_DATAPATH_DISABLE
-set_parameter_property DAC_DATAPATH_DISABLE TYPE INTEGER
-set_parameter_property DAC_DATAPATH_DISABLE UNITS None
-set_parameter_property DAC_DATAPATH_DISABLE HDL_PARAMETER true
-
-add_parameter ADC_DATAPATH_DISABLE INTEGER 0
-set_parameter_property ADC_DATAPATH_DISABLE DEFAULT_VALUE 0
-set_parameter_property ADC_DATAPATH_DISABLE DISPLAY_NAME ADC_DATAPATH_DISABLE
-set_parameter_property ADC_DATAPATH_DISABLE TYPE INTEGER
-set_parameter_property ADC_DATAPATH_DISABLE UNITS None
-set_parameter_property ADC_DATAPATH_DISABLE HDL_PARAMETER true
-
 add_parameter DEVICE_FAMILY STRING
 set_parameter_property DEVICE_FAMILY SYSTEM_INFO {DEVICE_FAMILY}
 set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
 set_parameter_property DEVICE_FAMILY HDL_PARAMETER false
 set_parameter_property DEVICE_FAMILY ENABLED false
 
-# axi4 slave interface
+add_parameter ID INTEGER 0
+add_parameter MODE_1R1T INTEGER 0
+add_parameter DEVICE_TYPE INTEGER 0
+add_parameter TDD_DISABLE INTEGER 0
+add_parameter CMOS_OR_LVDS_N INTEGER 0
+add_parameter ADC_DATAPATH_DISABLE INTEGER 0
+add_parameter ADC_USERPORTS_DISABLE INTEGER 0
+add_parameter ADC_DATAFORMAT_DISABLE INTEGER 0
+add_parameter ADC_DCFILTER_DISABLE INTEGER 0
+add_parameter ADC_IQCORRECTION_DISABLE INTEGER 0
+add_parameter DAC_IODELAY_ENABLE INTEGER 0
+add_parameter DAC_DATAPATH_DISABLE INTEGER 0
+add_parameter DAC_DDS_DISABLE INTEGER 0
+add_parameter DAC_USERPORTS_DISABLE INTEGER 0
+add_parameter DAC_IQCORRECTION_DISABLE INTEGER 0
+add_parameter IO_DELAY_GROUP STRING "dev_if_delay_group"
 
-add_interface s_axi_clock clock end
-add_interface_port s_axi_clock s_axi_aclk clk Input 1
+# interfaces
 
-add_interface s_axi_reset reset end
-set_interface_property s_axi_reset associatedClock s_axi_clock
-add_interface_port s_axi_reset s_axi_aresetn reset_n Input 1
-
-add_interface s_axi axi4lite end
-set_interface_property s_axi associatedClock s_axi_clock
-set_interface_property s_axi associatedReset s_axi_reset
-add_interface_port s_axi s_axi_awvalid awvalid Input 1
-add_interface_port s_axi s_axi_awaddr awaddr Input 16
-add_interface_port s_axi s_axi_awprot awprot Input 3
-add_interface_port s_axi s_axi_awready awready Output 1
-add_interface_port s_axi s_axi_wvalid wvalid Input 1
-add_interface_port s_axi s_axi_wdata wdata Input 32
-add_interface_port s_axi s_axi_wstrb wstrb Input 4
-add_interface_port s_axi s_axi_wready wready Output 1
-add_interface_port s_axi s_axi_bvalid bvalid Output 1
-add_interface_port s_axi s_axi_bresp bresp Output 2
-add_interface_port s_axi s_axi_bready bready Input 1
-add_interface_port s_axi s_axi_arvalid arvalid Input 1
-add_interface_port s_axi s_axi_araddr araddr Input 16
-add_interface_port s_axi s_axi_arprot arprot Input 3
-add_interface_port s_axi s_axi_arready arready Output 1
-add_interface_port s_axi s_axi_rvalid rvalid Output 1
-add_interface_port s_axi s_axi_rresp rresp Output 2
-add_interface_port s_axi s_axi_rdata rdata Output 32
-add_interface_port s_axi s_axi_rready rready Input 1
-
+ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
+ 
 # master-slave interface
 
 ad_alt_intf signal dac_sync_in input 1
@@ -223,42 +171,11 @@ ad_alt_intf signal up_dac_gpio_out output 32
 ad_alt_intf signal up_adc_gpio_in input 32
 ad_alt_intf signal up_adc_gpio_out output 32
 
-add_hdl_instance alt_ddio_in altera_gpio
-set_instance_parameter_value alt_ddio_in {PIN_TYPE_GUI} {Input}
-set_instance_parameter_value alt_ddio_in {SIZE} {1}
-set_instance_parameter_value alt_ddio_in {gui_diff_buff} {0}
-set_instance_parameter_value alt_ddio_in {gui_io_reg_mode} {DDIO}
-
-add_hdl_instance alt_ddio_out altera_gpio
-set_instance_parameter_value alt_ddio_out {PIN_TYPE_GUI} {Output}
-set_instance_parameter_value alt_ddio_out {SIZE} {1}
-set_instance_parameter_value alt_ddio_out {gui_diff_buff} {0}
-set_instance_parameter_value alt_ddio_out {gui_io_reg_mode} {DDIO}
-
-add_hdl_instance alt_serdes_clk_core alt_serdes
-set_instance_parameter_value alt_serdes_clk_core {MODE} {CLK}
-set_instance_parameter_value alt_serdes_clk_core {DDR_OR_SDR_N} {1}
-set_instance_parameter_value alt_serdes_clk_core {SERDES_FACTOR} {4}
-set_instance_parameter_value alt_serdes_clk_core {CLKIN_FREQUENCY} {250.0}
-
-add_hdl_instance alt_serdes_in_core alt_serdes
-set_instance_parameter_value alt_serdes_in_core {MODE} {IN}
-set_instance_parameter_value alt_serdes_in_core {DDR_OR_SDR_N} {1}
-set_instance_parameter_value alt_serdes_in_core {SERDES_FACTOR} {4}
-set_instance_parameter_value alt_serdes_in_core {CLKIN_FREQUENCY} {250.0}
-
-add_hdl_instance alt_serdes_out_core alt_serdes
-set_instance_parameter_value alt_serdes_out_core {MODE} {OUT}
-set_instance_parameter_value alt_serdes_out_core {DDR_OR_SDR_N} {1}
-set_instance_parameter_value alt_serdes_out_core {SERDES_FACTOR} {4}
-set_instance_parameter_value alt_serdes_out_core {CLKIN_FREQUENCY} {250.0}
-
 # updates
 
 proc p_axi_ad9361 {} {
 
   set m_cmos_or_lvds_n [get_parameter_value CMOS_OR_LVDS_N]
-  set m_device_type [get_parameter_value DEVICE_TYPE]
   set m_device_family [get_parameter_value DEVICE_FAMILY]
 
   add_interface device_if conduit end
@@ -294,14 +211,57 @@ proc p_axi_ad9361 {} {
   add_interface_port device_if enable enable Output 1
   add_interface_port device_if txnrx txnrx Output 1
 
-  if {$m_device_type == 1} {
+  if {$m_device_family == "Arria 10"} {
+
+    add_hdl_instance alt_serdes_clk_core alt_serdes
+    set_instance_parameter_value alt_serdes_clk_core {MODE} {CLK}
+    set_instance_parameter_value alt_serdes_clk_core {DDR_OR_SDR_N} {1}
+    set_instance_parameter_value alt_serdes_clk_core {SERDES_FACTOR} {4}
+    set_instance_parameter_value alt_serdes_clk_core {CLKIN_FREQUENCY} {250.0}
+
+    add_hdl_instance alt_serdes_in_core alt_serdes
+    set_instance_parameter_value alt_serdes_in_core {MODE} {IN}
+    set_instance_parameter_value alt_serdes_in_core {DDR_OR_SDR_N} {1}
+    set_instance_parameter_value alt_serdes_in_core {SERDES_FACTOR} {4}
+    set_instance_parameter_value alt_serdes_in_core {CLKIN_FREQUENCY} {250.0}
+
+    add_hdl_instance alt_serdes_out_core alt_serdes
+    set_instance_parameter_value alt_serdes_out_core {MODE} {OUT}
+    set_instance_parameter_value alt_serdes_out_core {DDR_OR_SDR_N} {1}
+    set_instance_parameter_value alt_serdes_out_core {SERDES_FACTOR} {4}
+    set_instance_parameter_value alt_serdes_out_core {CLKIN_FREQUENCY} {250.0}
+
+    add_hdl_instance alt_ddio_in altera_gpio
+    set_instance_parameter_value alt_ddio_in {PIN_TYPE_GUI} {Input}
+    set_instance_parameter_value alt_ddio_in {SIZE} {1}
+    set_instance_parameter_value alt_ddio_in {gui_diff_buff} {0}
+    set_instance_parameter_value alt_ddio_in {gui_io_reg_mode} {DDIO}
+
+    add_hdl_instance alt_ddio_out altera_gpio
+    set_instance_parameter_value alt_ddio_out {PIN_TYPE_GUI} {Output}
+    set_instance_parameter_value alt_ddio_out {SIZE} {1}
+    set_instance_parameter_value alt_ddio_out {gui_diff_buff} {0}
+    set_instance_parameter_value alt_ddio_out {gui_io_reg_mode} {DDIO}
+  }
+
+  if {$m_device_family == "Cyclone V"} {
 
     ## add_hdl_instance do not work here (pending altera support)
   }
+}
 
-  if {$m_device_type == 0} {
+proc p_axi_ad9361_fset {entityName} {
 
-    ## add_hdl_instance do not work here (pending altera support)
-  }
+  ad_ip_file ad_serdes_in.v ad_serdes_in.v ad_serdes_in_core
+  ad_ip_file ad_serdes_out.v ad_serdes_out.v ad_serdes_out_core
+  ad_ip_file ad_serdes_clk.v ad_serdes_clk.v ad_serdes_clk_core
+  ad_ip_file ad_cmos_in.v ad_cmos_in.v ad_cmos_in_core
+  ad_ip_file ad_cmos_out.v ad_cmos_out.v ad_cmos_out_core
+
+  add_fileset_file ad_serdes_in.v VERILOG PATH ad_serdes_in.v
+  add_fileset_file ad_serdes_out.v VERILOG PATH ad_serdes_out.v
+  add_fileset_file ad_serdes_clk.v VERILOG PATH ad_serdes_clk.v
+  add_fileset_file ad_cmos_in.v VERILOG PATH ad_cmos_in.v
+  add_fileset_file ad_cmos_out.v VERILOG PATH ad_cmos_out.v
 }
 
