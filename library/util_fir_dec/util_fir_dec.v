@@ -58,7 +58,7 @@ module util_fir_dec (
   assign s_axis_data_tdata = {channel_1, channel_0};
 
   assign m_axis_data_tvalid = (decimate == 1'b1) ? m_axis_data_tvalid_s : s_axis_data_tvalid;
-  assign m_axis_data_tdata = (decimate == 1'b1) ? m_axis_data_tdata_s : {channel_1, channel_0};
+  assign m_axis_data_tdata = (decimate == 1'b1) ? {m_axis_data_tdata_s[30:16], 1'b0, m_axis_data_tdata_s[14:0], 1'b0} : {channel_1, channel_0};
 
   fir_decim decimator (
     .aclk(aclk),

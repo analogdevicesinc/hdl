@@ -9,6 +9,7 @@ CONFIG.Clock_Frequency {128.8} \
 CONFIG.CoefficientSource {COE_File} \
 CONFIG.Coefficient_File {../../../../coefile_dec.coe} \
 CONFIG.Coefficient_Fractional_Bits {0} \
+CONFIG.Data_Fractional_Bits {15} \
 CONFIG.Coefficient_Sets {1} \
 CONFIG.Coefficient_Sign {Signed} \
 CONFIG.Coefficient_Structure {Inferred} \
