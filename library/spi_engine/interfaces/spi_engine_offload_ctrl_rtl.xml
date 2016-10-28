@@ -43,11 +43,11 @@
 			<spirit:logicalName>SDO_WR_EN</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>1</spirit:width>
 				</spirit:onMaster>
 				<spirit:onSlave>
-					<spirit:presence>required</spirit:presence>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>1</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
@@ -57,11 +57,11 @@
 			<spirit:logicalName>SDO_WR_DATA</spirit:logicalName>
 			<spirit:wire>
 				<spirit:onMaster>
-					<spirit:presence>required</spirit:presence>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>8</spirit:width>
 				</spirit:onMaster>
 				<spirit:onSlave>
-					<spirit:presence>required</spirit:presence>
+					<spirit:presence>optional</spirit:presence>
 					<spirit:width>8</spirit:width>
 					<spirit:direction>in</spirit:direction>
 				</spirit:onSlave>
