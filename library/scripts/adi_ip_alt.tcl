@@ -89,6 +89,41 @@ proc ad_generate_module_inst { inst_name mark source_file target_file } {
   close $fp_target
 }
 
+proc ad_ip_parameter {pname ptype pdefault} {
+
+  add_parameter $pname $ptype $pdefault
+  set_parameter_property $pname HDL_PARAMETER true
+  set_parameter_property $pname ENABLED true
+}
+
+proc ad_ip_files {pname pfiles {pfunction ""}} {
+
+  set ftopfile [lindex $pfiles end]
+  set pfiles [lreplace $pfiles end end]
+
+  add_fileset quartus_synth QUARTUS_SYNTH $pfunction ""
+  set_fileset_property quartus_synth TOP_LEVEL $pname
+
+  foreach pfile $pfiles {
+    set pmodule [file tail $pfile]
+    add_fileset_file $pmodule VERILOG PATH $pfile
+  }
+  set pfile $ftopfile
+  set pmodule [file tail $pfile]
+  add_fileset_file $pmodule VERILOG PATH $pfile TOP_LEVEL_FILE
+
+  add_fileset quartus_sim SIM_VERILOG $pfunction ""
+  set_fileset_property quartus_sim TOP_LEVEL $pname
+
+  foreach pfile $pfiles {
+    set pmodule [file tail $pfile]
+    add_fileset_file $pmodule VERILOG PATH $pfile
+  }
+  set pfile $ftopfile
+  set pmodule [file tail $pfile]
+  add_fileset_file $pmodule VERILOG PATH $pfile TOP_LEVEL_FILE
+}
+
 proc ad_ip_intf_s_axi {aclk arstn} {
 
   add_interface s_axi_clock clock end

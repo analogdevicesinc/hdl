@@ -191,7 +191,7 @@ module __ad_serdes_clk__ #(
     .pll_reconfig_read (up_drp_rd_int),
     .pll_reconfig_write (up_drp_wr_int),
     .pll_reconfig_readdata (up_drp_rdata_int_s),
-    .pll_reconfig_address (up_drp_addr_int),
+    .pll_reconfig_address (up_drp_addr_int[5:0]),
     .pll_reconfig_writedata (up_drp_wdata_int));
 
   cyclonev_pll_lvds_output #(
