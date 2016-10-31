@@ -35,65 +35,33 @@
 // ***************************************************************************
 // ***************************************************************************
 
-`timescale 1ns/100ps
+`timescale 1ns/1ps
 
-module __ad_cmos_out__ #(
-
-  parameter   DEVICE_TYPE = 0,
-  parameter   SINGLE_ENDED = 0,
-  parameter   IODELAY_ENABLE = 0,
-  parameter   IODELAY_CTRL = 0,
-  parameter   IODELAY_GROUP = "dev_if_delay_group") (
+module ad_cmos_out_core_c5 (
 
   // data interface
 
-  input               tx_clk,
-  input               tx_data_p,
-  input               tx_data_n,
-  output              tx_data_out,
-
-  // delay-data interface
-
-  input               up_clk,
-  input               up_dld,
-  input       [ 4:0]  up_dwdata,
-  output      [ 4:0]  up_drdata,
-
-  // delay-cntrl interface
-
-  input               delay_clk,
-  input               delay_rst,
-  output              delay_locked);
-
-  // local parameter
-
-  localparam ARRIA10 = 0;
-  localparam CYCLONE5 = 1;
-
-  // defaults
-
-  assign up_drdata = 5'd0;
-  assign delay_locked = 1'b1;
+  input               clk,
+  input   [ 1:0]      din,
+  output              pad_out);
 
   // instantiations
 
-  generate
-  if (DEVICE_TYPE == ARRIA10) begin
-  __ad_cmos_out_1__ i_tx_data_oddr (
-    .ck (tx_clk),
-    .din ({tx_data_p, tx_data_n}),
-    .pad_out (tx_data_out));
-  end
-  endgenerate
-
-  generate
-  if (DEVICE_TYPE == CYCLONE5) begin
-  ad_cmos_out_core_c5 i_tx_data_oddr (
-    .clk (tx_clk),
-    .din ({tx_data_p, tx_data_n}),
-    .pad_out (tx_data_out));
-  end
-  endgenerate
+  altddio_out #(
+    .width (1),
+    .lpm_hint ("UNUSED"))
+  i_altddio_out (
+    .outclock (clk),
+    .datain_h (din[1]),
+    .datain_l (din[0]),
+    .dataout (pad_out),
+    .outclocken (1'b1),
+    .oe_out (),
+    .oe (1'b1),
+    .aclr (1'b0),
+    .aset (1'b0),
+    .sclr (1'b0),
+    .sset (1'b0));
 
 endmodule
 

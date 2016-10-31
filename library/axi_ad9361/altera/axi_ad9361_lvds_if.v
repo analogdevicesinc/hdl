@@ -384,9 +384,9 @@ module axi_ad9361_lvds_if #(
   // receive data path interface
 
   ad_serdes_in #(
-    .DATA_WIDTH(6),
-    .SERDES_FACTOR(4),
-    .DEVICE_TYPE(DEVICE_TYPE))
+    .DATA_WIDTH (6),
+    .SERDES_FACTOR (4),
+    .DEVICE_TYPE (DEVICE_TYPE))
   ad_serdes_data_in (
     .rst (mmcm_rst),
     .clk (s_clk),
@@ -415,9 +415,9 @@ module axi_ad9361_lvds_if #(
   // receive frame interface
 
   ad_serdes_in #(
-    .DATA_WIDTH(1),
-    .SERDES_FACTOR(4),
-    .DEVICE_TYPE(DEVICE_TYPE))
+    .DATA_WIDTH (1),
+    .SERDES_FACTOR (4),
+    .DEVICE_TYPE (DEVICE_TYPE))
   ad_serdes_frame_in (
     .rst (mmcm_rst),
     .clk (s_clk),
@@ -446,9 +446,9 @@ module axi_ad9361_lvds_if #(
   // transmit data interface
 
   ad_serdes_out #(
-    .DATA_WIDTH(6),
-    .SERDES_FACTOR(4),
-    .DEVICE_TYPE(DEVICE_TYPE))
+    .DATA_WIDTH (6),
+    .SERDES_FACTOR (4),
+    .DEVICE_TYPE (DEVICE_TYPE))
   ad_serdes_data_out (
     .rst (mmcm_rst),
     .clk (s_clk),
@@ -458,19 +458,19 @@ module axi_ad9361_lvds_if #(
     .data_s1 (tx_p_data_d_1),
     .data_s2 (tx_p_data_d_2),
     .data_s3 (tx_p_data_d_3),
-    .data_s4 (6'b0),
-    .data_s5 (6'b0),
-    .data_s6 (6'b0),
-    .data_s7 (6'b0),
+    .data_s4 (6'd0),
+    .data_s5 (6'd0),
+    .data_s6 (6'd0),
+    .data_s7 (6'd0),
     .data_out_p (tx_data_out_p),
     .data_out_n (tx_data_out_n));
 
   // transmit frame interface
 
   ad_serdes_out #(
-    .DATA_WIDTH(1),
-    .SERDES_FACTOR(4),
-    .DEVICE_TYPE(DEVICE_TYPE))
+    .DATA_WIDTH (1),
+    .SERDES_FACTOR (4),
+    .DEVICE_TYPE (DEVICE_TYPE))
   ad_serdes_frame_out (
     .rst (mmcm_rst),
     .clk (s_clk),
@@ -480,10 +480,10 @@ module axi_ad9361_lvds_if #(
     .data_s1 (tx_p_frame[1]),
     .data_s2 (tx_p_frame[2]),
     .data_s3 (tx_p_frame[3]),
-    .data_s4 (1'b1),
-    .data_s5 (1'b1),
-    .data_s6 (1'b1),
-    .data_s7 (1'b1),
+    .data_s4 (1'd0),
+    .data_s5 (1'd0),
+    .data_s6 (1'd0),
+    .data_s7 (1'd0),
     .data_out_p (tx_frame_out_p),
     .data_out_n (tx_frame_out_n));
 
@@ -502,17 +502,17 @@ module axi_ad9361_lvds_if #(
     .data_s1 (~dac_clksel),
     .data_s2 (dac_clksel),
     .data_s3 (~dac_clksel),
-    .data_s4 (1'b0),
-    .data_s5 (1'b0),
-    .data_s6 (1'b0),
-    .data_s7 (1'b0),
+    .data_s4 (1'd0),
+    .data_s5 (1'd0),
+    .data_s6 (1'd0),
+    .data_s7 (1'd0),
     .data_out_p (tx_clk_out_p),
     .data_out_n (tx_clk_out_n));
 
   // serdes clock interface
 
   ad_serdes_clk #(
-    .DEVICE_TYPE(DEVICE_TYPE))
+    .DEVICE_TYPE (DEVICE_TYPE))
   ad_serdes_clk (
     .rst (mmcm_rst),
     .clk_in_p (rx_clk_in_p),
@@ -534,47 +534,23 @@ module axi_ad9361_lvds_if #(
 
  // enable
 
-  ad_serdes_out #(
-    .DATA_WIDTH(1),
-    .SERDES_FACTOR(4),
-    .DEVICE_TYPE(DEVICE_TYPE))
-  i_enable(
-    .rst (mmcm_rst),
-    .clk (s_clk),
-    .div_clk (l_clk),
-    .loaden (loaden),
-    .data_s0 (enable_p_int),
-    .data_s1 (enable_p_int),
-    .data_s2 (enable_p_int),
-    .data_s3 (enable_p_int),
-    .data_s4 (1'b0),
-    .data_s5 (1'b0),
-    .data_s6 (1'b0),
-    .data_s7 (1'b0),
-    .data_out_p (enable),
-    .data_out_n ());
+  ad_cmos_out #(
+    .DEVICE_TYPE (DEVICE_TYPE))
+  i_enable (
+    .tx_clk (l_clk),
+    .tx_data_p (enable_p_int),
+    .tx_data_n (enable_p_int),
+    .tx_data_out (enable));
 
   // txnrx
 
-    ad_serdes_out #(
-    .DATA_WIDTH(1),
-    .SERDES_FACTOR(4),
-    .DEVICE_TYPE(DEVICE_TYPE))
-  i_txnrx(
-    .rst (mmcm_rst),
-    .clk (s_clk),
-    .div_clk (l_clk),
-    .loaden (loaden),
-    .data_s0 (txnrx_p_int),
-    .data_s1 (txnrx_p_int),
-    .data_s2 (txnrx_p_int),
-    .data_s3 (txnrx_p_int),
-    .data_s4 (1'b0),
-    .data_s5 (1'b0),
-    .data_s6 (1'b0),
-    .data_s7 (1'b0),
-    .data_out_p (txnrx),
-    .data_out_n ());
+  ad_cmos_out #(
+    .DEVICE_TYPE (DEVICE_TYPE))
+  i_txnrx (
+    .tx_clk (l_clk),
+    .tx_data_p (txnrx_p_int),
+    .tx_data_n (txnrx_p_int),
+    .tx_data_out (txnrx));
 
 endmodule
 
