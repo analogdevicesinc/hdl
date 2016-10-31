@@ -29,7 +29,7 @@ set_parameter_property SERDES_FACTOR DISPLAY_NAME SERDES_FACTOR
 set_parameter_property SERDES_FACTOR TYPE INTEGER
 set_parameter_property SERDES_FACTOR UNITS None
 set_parameter_property SERDES_FACTOR HDL_PARAMETER false
-set_parameter_property SERDES_FACTOR ALLOWED_RANGES {4 8}
+set_parameter_property SERDES_FACTOR ALLOWED_RANGES {2 4 8}
 
 add_parameter CLKIN_FREQUENCY FLOAT 500.0
 set_parameter_property CLKIN_FREQUENCY DISPLAY_NAME CLKIN_FREQUENCY
@@ -65,6 +65,22 @@ proc p_alt_serdes {} {
   }
 
   ## arria 10, serdes clock, data-in and data-out
+
+  if {($m_serdes_factor == 2) && ($m_device_family == "Arria 10")} {
+
+    add_hdl_instance alt_serdes_out altera_gpio
+    set_instance_parameter_value alt_serdes_out {PIN_TYPE_GUI} {Output}
+    set_instance_parameter_value alt_serdes_out {SIZE} {1}
+    set_instance_parameter_value alt_serdes_out {gui_diff_buff} {0}
+    set_instance_parameter_value alt_serdes_out {gui_io_reg_mode} {DDIO}
+
+    return
+  }
+
+  if {($m_serdes_factor == 2) && ($m_device_family == "Cyclone V")} {
+
+    return
+  }
 
   if {($m_mode == "CLK") && ($m_device_family == "Arria 10")} {
 
@@ -109,6 +125,8 @@ proc p_alt_serdes {} {
     set_interface_property drp_rst EXPORT_OF alt_serdes_pll_reconfig.mgmt_reset
     add_interface pll_reconfig avalon slave
     set_interface_property pll_reconfig EXPORT_OF alt_serdes_pll_reconfig.mgmt_avalon_slave
+
+    return
   }
 
   if {($m_mode == "IN") && ($m_device_family == "Arria 10")} {
@@ -137,6 +155,8 @@ proc p_alt_serdes {} {
     set_interface_property data_s EXPORT_OF alt_serdes_in.rx_out
     add_interface delay_locked conduit end
     set_interface_property delay_locked EXPORT_OF alt_serdes_in.rx_dpa_locked
+
+    return
   }
 
   if {($m_mode == "OUT") && ($m_device_family == "Arria 10")} {
@@ -161,6 +181,8 @@ proc p_alt_serdes {} {
     set_interface_property div_clk EXPORT_OF alt_serdes_out.ext_coreclock
     add_interface data_s conduit end
     set_interface_property data_s EXPORT_OF alt_serdes_out.tx_in
+
+    return
   }
 
   ## cyclone v, serdes clock, data-in and data-out
@@ -205,6 +227,8 @@ proc p_alt_serdes {} {
     set_interface_property drp_rst EXPORT_OF alt_serdes_pll_reconfig.mgmt_reset
     add_interface pll_reconfig avalon slave
     set_interface_property pll_reconfig EXPORT_OF alt_serdes_pll_reconfig.mgmt_avalon_slave
+
+    return
   }
 }
 

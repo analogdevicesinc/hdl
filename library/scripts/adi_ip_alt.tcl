@@ -1,4 +1,5 @@
-
+###################################################################################################
+###################################################################################################
 # keep interface-mess out of the way - keeping it pretty is a waste of time
 
 proc ad_alt_intf {type name dir width {arg_1 ""} {arg_2 ""}} {
@@ -89,40 +90,86 @@ proc ad_generate_module_inst { inst_name mark source_file target_file } {
   close $fp_target
 }
 
+###################################################################################################
+###################################################################################################
+
+proc ad_ip_create {pname pdesc {pelabfunction ""} {pcomposefunction ""}} {
+
+  set_module_property NAME $pname
+  set_module_property DESCRIPTION $pdesc
+  set_module_property VERSION 1.0
+  set_module_property GROUP "Analog Devices"
+  set_module_property DISPLAY_NAME $pname
+  
+  if {$pelabfunction ne ""} {
+    set_module_property ELABORATION_CALLBACK $pelabfunction
+  }
+
+  if {$pcomposefunction ne ""} {
+    set_module_property ELABORATION_CALLBACK $pcomposefunction
+  }
+}
+
+###################################################################################################
+###################################################################################################
+
 proc ad_ip_parameter {pname ptype pdefault} {
+
+  if {$pname eq "DEVICE_FAMILY"} {
+    add_parameter DEVICE_FAMILY STRING
+    set_parameter_property DEVICE_FAMILY SYSTEM_INFO {DEVICE_FAMILY}
+    set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
+    set_parameter_property DEVICE_FAMILY HDL_PARAMETER false
+    set_parameter_property DEVICE_FAMILY ENABLED false
+    return
+  }
 
   add_parameter $pname $ptype $pdefault
   set_parameter_property $pname HDL_PARAMETER true
   set_parameter_property $pname ENABLED true
 }
 
-proc ad_ip_files {pname pfiles {pfunction ""}} {
+###################################################################################################
+###################################################################################################
 
-  set ftopfile [lindex $pfiles end]
-  set pfiles [lreplace $pfiles end end]
+proc ad_ip_addfile {pname pfile} {
+
+  set pmodule [file tail $pfile]  
+
+  regsub {\..$} $pmodule {} mname
+  if {$pname eq $mname} {
+    add_fileset_file $pmodule VERILOG PATH $pfile TOP_LEVEL_FILE
+    return
+  }
+
+  set ptype [file extension $pfile]
+  if {$ptype eq ".v"} {
+    add_fileset_file $pmodule VERILOG PATH $pfile
+    return
+  }
+  if {$ptype eq ".sdc"} {
+    add_fileset_file $pmodule SDC PATH $pfile
+    return
+  }
+}
+
+proc ad_ip_files {pname pfiles {pfunction ""}} {
 
   add_fileset quartus_synth QUARTUS_SYNTH $pfunction ""
   set_fileset_property quartus_synth TOP_LEVEL $pname
-
   foreach pfile $pfiles {
-    set pmodule [file tail $pfile]
-    add_fileset_file $pmodule VERILOG PATH $pfile
+    ad_ip_addfile $pname $pfile
   }
-  set pfile $ftopfile
-  set pmodule [file tail $pfile]
-  add_fileset_file $pmodule VERILOG PATH $pfile TOP_LEVEL_FILE
 
   add_fileset quartus_sim SIM_VERILOG $pfunction ""
   set_fileset_property quartus_sim TOP_LEVEL $pname
-
   foreach pfile $pfiles {
-    set pmodule [file tail $pfile]
-    add_fileset_file $pmodule VERILOG PATH $pfile
+    ad_ip_addfile $pname $pfile
   }
-  set pfile $ftopfile
-  set pmodule [file tail $pfile]
-  add_fileset_file $pmodule VERILOG PATH $pfile TOP_LEVEL_FILE
 }
+
+###################################################################################################
+###################################################################################################
 
 proc ad_ip_intf_s_axi {aclk arstn} {
 
@@ -157,7 +204,10 @@ proc ad_ip_intf_s_axi {aclk arstn} {
   add_interface_port s_axi s_axi_rready rready Input 1
 }
 
-proc ad_ip_file {ifile ofile flist} {
+###################################################################################################
+###################################################################################################
+
+proc ad_ip_modfile {ifile ofile flist} {
 
   global ad_hdl_dir
 
@@ -179,5 +229,10 @@ proc ad_ip_file {ifile ofile flist} {
 
   close $srcfile
   close $dstfile
+
+  ad_ip_addfile ad_ip_addfile $ofile
 }
+
+###################################################################################################
+###################################################################################################
 
