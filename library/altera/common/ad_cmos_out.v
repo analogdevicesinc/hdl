@@ -80,9 +80,9 @@ module __ad_cmos_out__ #(
   generate
   if (DEVICE_TYPE == ARRIA10) begin
   __ad_cmos_out_1__ i_tx_data_oddr (
-    .ck (tx_clk),
-    .din ({tx_data_p, tx_data_n}),
-    .pad_out (tx_data_out));
+    .clk_export (tx_clk),
+    .din_export ({tx_data_p, tx_data_n}),
+    .pad_out_export (tx_data_out));
   end
   endgenerate
 

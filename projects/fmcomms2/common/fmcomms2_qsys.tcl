@@ -5,6 +5,7 @@
 
 add_instance axi_ad9361 axi_ad9361 1.0
 set_instance_parameter_value axi_ad9361 {ID} {0}
+set_instance_parameter_value axi_ad9361 {DEVICE_TYPE} {0}
 
 add_connection sys_clk.clk_reset axi_ad9361.s_axi_reset
 add_connection sys_clk.clk axi_ad9361.s_axi_clock

@@ -64,23 +64,33 @@ proc p_alt_serdes {} {
     set m_ld_duty_cycle 25.0
   }
 
-  ## arria 10, serdes clock, data-in and data-out
+  ## arria 10, cmos data-in and data-out
 
   if {($m_serdes_factor == 2) && ($m_device_family == "Arria 10")} {
 
-    add_hdl_instance alt_serdes_out altera_gpio
+    add_instance alt_serdes_out altera_gpio
     set_instance_parameter_value alt_serdes_out {PIN_TYPE_GUI} {Output}
     set_instance_parameter_value alt_serdes_out {SIZE} {1}
     set_instance_parameter_value alt_serdes_out {gui_diff_buff} {0}
     set_instance_parameter_value alt_serdes_out {gui_io_reg_mode} {DDIO}
+    add_interface clk conduit end
+    set_interface_property clk EXPORT_OF alt_serdes_out.ck
+    add_interface din conduit end
+    set_interface_property din EXPORT_OF alt_serdes_out.din
+    add_interface pad_out conduit end
+    set_interface_property pad_out EXPORT_OF alt_serdes_out.pad_out
 
     return
   }
+
+  ## cyclone v, cmos data-in and data-out
 
   if {($m_serdes_factor == 2) && ($m_device_family == "Cyclone V")} {
 
     return
   }
+
+  ## arria 10, serdes clock, data-in and data-out
 
   if {($m_mode == "CLK") && ($m_device_family == "Arria 10")} {
 

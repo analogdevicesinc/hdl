@@ -226,9 +226,9 @@ proc axi_ad9361_elab {} {
 
 proc axi_ad9361_fileset {entityName} {
 
-  ad_ip_modfile ad_cmos_out.v ad_cmos_out.v ad_cmos_out_core
-  ad_ip_modfile ad_serdes_in.v ad_serdes_in.v ad_serdes_in_core
-  ad_ip_modfile ad_serdes_out.v ad_serdes_out.v ad_serdes_out_core
+  ad_ip_modfile ad_cmos_out.v ad_cmos_out.v ad_cmos_out_core_a10
+  ad_ip_modfile ad_serdes_in.v ad_serdes_in.v ad_serdes_in_core_a10
+  ad_ip_modfile ad_serdes_out.v ad_serdes_out.v ad_serdes_out_core_a10
   ad_ip_modfile ad_serdes_clk.v ad_serdes_clk.v ad_serdes_clk_core
 }
 
