@@ -93,7 +93,7 @@ module system_top (
   output          spi_sclk,
   output          spi_cs,
 
-  output          reset);
+  inout           reset);
 
   // internal signals
 
@@ -109,7 +109,13 @@ module system_top (
 
   // instantiations
 
-  assign reset = gpio_o[32];
+  ad_iobuf #(
+    .DATA_WIDTH(32)
+  ) i_iobuf_reset (
+    .dio_t(gpio_t[32]),
+    .dio_i(gpio_o[32]),
+    .dio_o(gpio_i[32]),
+    .dio_p(reset));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
