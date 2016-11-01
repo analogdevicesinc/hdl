@@ -332,13 +332,13 @@ module up_tdd_cntrl (
         up_tdd_tx_on_2 <= up_wdata[23:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h37)) begin
-        up_tdd_rx_off_2 <= up_wdata[23:0];
+        up_tdd_tx_off_2 <= up_wdata[23:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h38)) begin
         up_tdd_rx_dp_on_2 <= up_wdata[23:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h39)) begin
-        up_tdd_tx_dp_off_2 <= up_wdata[23:0];
+        up_tdd_rx_dp_off_2 <= up_wdata[23:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h3a)) begin
         up_tdd_tx_dp_on_2 <= up_wdata[23:0];
