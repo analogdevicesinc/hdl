@@ -14,40 +14,38 @@ set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # lane interface
 
-set_location_assignment PIN_AV15 -to rx_clk_in             ; ## G6   FMC_LPC_LA00_CC_P
-set_location_assignment PIN_AU15 -to "rx_clk_in(n)"        ; ## G7   FMC_LPC_LA00_CC_N
-set_location_assignment PIN_AT10 -to rx_frame_in           ; ## D8   FMC_LPC_LA01_CC_P
-set_location_assignment PIN_AR11 -to "rx_frame_in(n)"      ; ## D9   FMC_LPC_LA01_CC_N
-set_location_assignment PIN_AR22 -to rx_data_in[0]         ; ## H7   FMC_LPC_LA02_P
-set_location_assignment PIN_AT22 -to "rx_data_in[0](n)"    ; ## H8   FMC_LPC_LA02_N
-set_location_assignment PIN_AR20 -to rx_data_in[1]         ; ## G9   FMC_LPC_LA03_P
-set_location_assignment PIN_AR19 -to "rx_data_in[1](n)"    ; ## G10  FMC_LPC_LA03_N
-set_location_assignment PIN_AN20 -to rx_data_in[2]         ; ## H10  FMC_LPC_LA04_P
-set_location_assignment PIN_AP19 -to "rx_data_in[2](n)"    ; ## H11  FMC_LPC_LA04_N
-set_location_assignment PIN_AV11 -to rx_data_in[3]         ; ## D11  FMC_LPC_LA05_P
-set_location_assignment PIN_AW11 -to "rx_data_in[3](n)"    ; ## D12  FMC_LPC_LA05_N
-set_location_assignment PIN_AV14 -to rx_data_in[4]         ; ## C10  FMC_LPC_LA06_P
-set_location_assignment PIN_AW14 -to "rx_data_in[4](n)"    ; ## C11  FMC_LPC_LA06_N
-set_location_assignment PIN_AT17 -to rx_data_in[5]         ; ## H13  FMC_LPC_LA07_P
-set_location_assignment PIN_AU17 -to "rx_data_in[5](n)"    ; ## H14  FMC_LPC_LA07_N
-set_location_assignment PIN_AP18 -to tx_clk_out            ; ## G12  FMC_LPC_LA08_P
-set_location_assignment PIN_AN19 -to "tx_clk_out(n)"       ; ## G13  FMC_LPC_LA08_N
-set_location_assignment PIN_AW13 -to tx_frame_out          ; ## D14  FMC_LPC_LA09_P
-set_location_assignment PIN_AV13 -to "tx_frame_out(n)"     ; ## D15  FMC_LPC_LA09_N
-set_location_assignment PIN_AT14 -to tx_data_out[0]        ; ## H16  FMC_LPC_LA11_P
-set_location_assignment PIN_AR14 -to "tx_data_out[0](n)"   ; ## H17  FMC_LPC_LA11_N
-set_location_assignment PIN_AR16 -to tx_data_out[1]        ; ## G15  FMC_LPC_LA12_P
-set_location_assignment PIN_AP16 -to "tx_data_out[1](n)"   ; ## G16  FMC_LPC_LA12_N
-set_location_assignment PIN_AR17 -to tx_data_out[2]        ; ## D17  FMC_LPC_LA13_P
-set_location_assignment PIN_AP17 -to "tx_data_out[2](n)"   ; ## D18  FMC_LPC_LA13_N
-set_location_assignment PIN_AR15 -to tx_data_out[3]        ; ## C14  FMC_LPC_LA10_P
-set_location_assignment PIN_AT15 -to "tx_data_out[3](n)"   ; ## C15  FMC_LPC_LA10_N
-set_location_assignment PIN_AW18 -to tx_data_out[4]        ; ## C18  FMC_LPC_LA14_P
-set_location_assignment PIN_AV18 -to "tx_data_out[4](n)"   ; ## C19  FMC_LPC_LA14_N
-set_location_assignment PIN_AR9  -to tx_data_out[5]        ; ## H19  FMC_LPC_LA15_P
-set_location_assignment PIN_AT9  -to "tx_data_out[5](n)"   ; ## H20  FMC_LPC_LA15_N
-set_location_assignment PIN_AT13 -to enable]               ; ## G18  FMC_LPC_LA16_P
-set_location_assignment PIN_AU13 -to txnrx]                ; ## G19  FMC_LPC_LA16_N
+set_location_assignment PIN_AV15 -to rx_clk_in             ; ## G6   FMC_LPC_LA00_CC_P (3B)
+set_location_assignment PIN_AU15 -to "rx_clk_in(n)"        ; ## G7   FMC_LPC_LA00_CC_N (3B)
+set_location_assignment PIN_AV19 -to rx_frame_in           ; ## D20  FMC_LPC_LA17_CC_P (3B) ## D8   FMC_LPC_LA01_CC_P (3C) PIN_AT10
+set_location_assignment PIN_AW19 -to "rx_frame_in(n)"      ; ## D21  FMC_LPC_LA17_CC_N (3B) ## D9   FMC_LPC_LA01_CC_N (3C) PIN_AR11
+set_location_assignment PIN_AR22 -to rx_data_in[0]         ; ## H7   FMC_LPC_LA02_P (3B)
+set_location_assignment PIN_AT22 -to "rx_data_in[0](n)"    ; ## H8   FMC_LPC_LA02_N (3B)
+set_location_assignment PIN_AR20 -to rx_data_in[1]         ; ## G9   FMC_LPC_LA03_P (3B)
+set_location_assignment PIN_AR19 -to "rx_data_in[1](n)"    ; ## G10  FMC_LPC_LA03_N (3B)
+set_location_assignment PIN_AN20 -to rx_data_in[2]         ; ## H10  FMC_LPC_LA04_P (3B)
+set_location_assignment PIN_AP19 -to "rx_data_in[2](n)"    ; ## H11  FMC_LPC_LA04_N (3B)
+set_location_assignment PIN_AU21 -to rx_data_in[3]         ; ## C22  FMC_LPC_LA18_CC_P (3B) ## D11  FMC_LPC_LA05_P (3C) PIN_AV11 
+set_location_assignment PIN_AV21 -to "rx_data_in[3](n)"    ; ## C23  FMC_LPC_LA18_CC_N (3B) ## D12  FMC_LPC_LA05_N (3C) PIN_AW11 
+set_location_assignment PIN_AV14 -to rx_data_in[4]         ; ## C10  FMC_LPC_LA06_P (3B)
+set_location_assignment PIN_AW14 -to "rx_data_in[4](n)"    ; ## C11  FMC_LPC_LA06_N (3B)
+set_location_assignment PIN_AT17 -to rx_data_in[5]         ; ## H13  FMC_LPC_LA07_P (3B)
+set_location_assignment PIN_AU17 -to "rx_data_in[5](n)"    ; ## H14  FMC_LPC_LA07_N (3B)
+set_location_assignment PIN_AP18 -to tx_clk_out            ; ## G12  FMC_LPC_LA08_P (3B)
+set_location_assignment PIN_AN19 -to "tx_clk_out(n)"       ; ## G13  FMC_LPC_LA08_N (3B)
+set_location_assignment PIN_AV20 -to tx_frame_out          ; ## H37  FMC_LPC_LA32_P (3B) ## D14  FMC_LPC_LA09_P (3C) PIN_AW13 
+set_location_assignment PIN_AU20 -to "tx_frame_out(n)"     ; ## H38  FMC_LPC_LA32_N (3B) ## D15  FMC_LPC_LA09_N (3C) PIN_AV13 
+set_location_assignment PIN_AT14 -to tx_data_out[0]        ; ## H16  FMC_LPC_LA11_P (3B)
+set_location_assignment PIN_AR14 -to "tx_data_out[0](n)"   ; ## H17  FMC_LPC_LA11_N (3B)
+set_location_assignment PIN_AR16 -to tx_data_out[1]        ; ## G15  FMC_LPC_LA12_P (3B)
+set_location_assignment PIN_AP16 -to "tx_data_out[1](n)"   ; ## G16  FMC_LPC_LA12_N (3B)
+set_location_assignment PIN_AR17 -to tx_data_out[2]        ; ## D17  FMC_LPC_LA13_P (3B)
+set_location_assignment PIN_AP17 -to "tx_data_out[2](n)"   ; ## D18  FMC_LPC_LA13_N (3B)
+set_location_assignment PIN_AR15 -to tx_data_out[3]        ; ## C14  FMC_LPC_LA10_P (3B)
+set_location_assignment PIN_AT15 -to "tx_data_out[3](n)"   ; ## C15  FMC_LPC_LA10_N (3B)
+set_location_assignment PIN_AW18 -to tx_data_out[4]        ; ## C18  FMC_LPC_LA14_P (3B)
+set_location_assignment PIN_AV18 -to "tx_data_out[4](n)"   ; ## C19  FMC_LPC_LA14_N (3B)
+set_location_assignment PIN_AY17 -to tx_data_out[5]        ; ## G36  FMC_LPC_LA33_P (3B) ## H19  FMC_LPC_LA15_P (3C) PIN_AR9  
+set_location_assignment PIN_AW17 -to "tx_data_out[5](n)"   ; ## G37  FMC_LPC_LA33_N (3B) ## H20  FMC_LPC_LA15_N (3C) PIN_AT9  
 
 set_instance_assignment -name IO_STANDARD LVDS -to rx_clk_in
 set_instance_assignment -name IO_STANDARD LVDS -to rx_frame_in
@@ -65,8 +63,12 @@ set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[2]
 set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[3]
 set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[4]
 set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[5]
-set_instance_assignment -name IO_STANDARD LVDS -to enable
-set_instance_assignment -name IO_STANDARD LVDS -to txnrx
+
+set_location_assignment PIN_AT13 -to enable]               ; ## G18  FMC_LPC_LA16_P
+set_location_assignment PIN_AU13 -to txnrx]                ; ## G19  FMC_LPC_LA16_N
+
+set_instance_assignment -name IO_STANDARD "1.8 V" -to enable
+set_instance_assignment -name IO_STANDARD "1.8 V" -to txnrx
 
 # gpio
 
