@@ -261,15 +261,15 @@ module axi_ad5766 #(
   end
 
   always @(posedge ctrl_clk) begin
-    if (ctrl_cmd_wr_en) begin
+    if (ctrl_cmd_wr_en == 1'b1) begin
       cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
     end
   end
 
   always @(posedge ctrl_clk) begin
-    if (ctrl_mem_reset) begin
+    if (ctrl_mem_reset == 1'b1) begin
       ctrl_cmd_wr_addr <= 0;
-    end else if (ctrl_cmd_wr_en) begin
+    end else if (ctrl_cmd_wr_en == 1'b1) begin
       ctrl_cmd_wr_addr <= ctrl_cmd_wr_addr + 1;
     end
   end
@@ -277,21 +277,21 @@ module axi_ad5766 #(
   // request data from the DMA at the desired rate
 
   always @(posedge dma_clk) begin
-    if (!dma_xfer_req) begin
+    if (dma_xfer_req == 1'b0) begin
       dma_valid <= 1'b0;
     end else begin
-      if (trigger_s) begin
+      if ((trigger_s == 1'b1) && (dma_enable == 1'b1) && (spi_enable_s == 1'b1)) begin
         dma_valid <= 1'b1;
       end
-      if (dma_valid) begin
+      if (dma_valid == 1'b1) begin
         dma_valid <= 1'b0;
       end
     end
-    if (dma_valid) begin
+    if (dma_valid == 1'b1) begin
       sdo_mem[1] <= dma_data[15:8];
       sdo_mem[2] <= dma_data[ 7:0];
     end
-    if (sequence_valid_s) begin
+    if (sequence_valid_s == 1'b1) begin
       sdo_mem[0] <= sequence_data_s;
     end
   end
@@ -311,7 +311,7 @@ module axi_ad5766 #(
   // offset of the sequencer registers are 8'h40
 
   always @(negedge up_rstn or posedge spi_clk) begin
-    if (up_rstn == 0) begin
+    if (up_rstn == 1'b0) begin
       up_rdata <= 'd0;
       up_rack <= 'd0;
       up_wack <= 'd0;
