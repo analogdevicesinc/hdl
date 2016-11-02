@@ -8,8 +8,12 @@ current_bd_instance /spi
         create_bd_pin -dir I -type rst resetn
         create_bd_pin -dir O irq
         create_bd_pin -dir O dma_clk
+        create_bd_pin -dir I dma_enable
+        create_bd_pin -dir O dma_valid
+        create_bd_pin -dir I -from 15 -to 0 dma_data
+        create_bd_pin -dir I dma_xfer_req
+        create_bd_pin -dir I dma_underflow
         create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
-        create_bd_intf_pin -mode Master -vlnv analog.com:interface:fifo_rd_rtl:1.1 dac_data
 
         set spi_engine [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_execution:1.0 execution]
         set axi_spi_engine [create_bd_cell -type ip -vlnv analog.com:user:axi_spi_engine:1.0 axi]
@@ -25,7 +29,11 @@ current_bd_instance /spi
         ad_connect  axi_ad5766/spi_engine_ctrl interconnect/s1_ctrl
         ad_connect  interconnect/m_ctrl execution/ctrl
         ad_connect  m_spi execution/spi
-        ad_connect  dac_data axi_ad5766/dma_fifo_tx
+        ad_connect  dma_data axi_ad5766/dma_data
+        ad_connect  dma_enable axi_ad5766/dma_enable
+        ad_connect  dma_valid axi_ad5766/dma_valid
+        ad_connect  dma_xfer_req axi_ad5766/dma_xfer_req
+        ad_connect  dma_underflow axi_ad5766/dma_underflow
 
         ad_connect  clk execution/clk
         ad_connect  clk axi/s_axi_aclk
@@ -60,10 +68,14 @@ set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad5766_dac_dma
 set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad5766_dac_dma
 set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad5766_dac_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad5766_dac_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad5766_dac_dma
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16}] $axi_ad5766_dac_dma
 
 ad_connect  spi/dma_clk axi_ad5766_dac_dma/fifo_rd_clk
-ad_connect  spi/dac_data axi_ad5766_dac_dma/fifo_rd
+ad_connect  spi/dma_valid axi_ad5766_dac_dma/fifo_rd_en
+ad_connect  spi/dma_xfer_req axi_ad5766_dac_dma/fifo_rd_xfer_req
+ad_connect  spi/dma_data axi_ad5766_dac_dma/fifo_rd_dout
+ad_connect  spi/dma_underflow axi_ad5766_dac_dma/fifo_rd_underflow
+ad_connect  spi/dma_enable VCC
 
 ad_cpu_interconnect 0x44a00000 spi/axi
 ad_cpu_interconnect 0x44a10000 spi/axi_ad5766
