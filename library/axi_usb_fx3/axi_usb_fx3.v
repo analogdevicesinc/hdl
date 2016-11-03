@@ -255,6 +255,9 @@ module axi_usb_fx3 (
   wire    [31:0]  length_fx32dma;
   wire    [31:0]  length_dma2fx3;
 
+  wire            trig;
+  wire            zlp;
+
   // signal name changes
 
   assign up_clk   = s_axi_aclk;
@@ -332,6 +335,8 @@ module axi_usb_fx3 (
     .test_mode_tpg(test_mode_tpg),
     .monitor_error(monitor_error),
 
+    .zlp(zlp),
+
     .fifo_num(fifo_num));
 
   // register map
@@ -343,6 +348,7 @@ module axi_usb_fx3 (
     .eot_fx32dma(eot_fx32dma),
     .eot_dma2fx3(eot_dma2fx3),
     .trig(trig),
+    .zlp(zlp),
     .fifo_num(fifo_num),
 
     .error(error),

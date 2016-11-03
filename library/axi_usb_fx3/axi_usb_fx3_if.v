@@ -278,9 +278,9 @@ module axi_usb_fx3_if (
         fx32dma_valid = 1'b0;
         fx32dma_sop   = 1'b0;
         fx32dma_data  = 32'h0;
-        slwr_n =  !dma2fx3_valid | !current_fifo;
+        slwr_n        = !dma2fx3_valid | !current_fifo;
         dma2fx3_ready = current_fifo;
-        pktend_n = !dma2fx3_eop;
+        pktend_n      = !dma2fx3_eop;
       end
       default: begin
         slcs_n        = 1'b1;

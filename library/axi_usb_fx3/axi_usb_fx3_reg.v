@@ -48,6 +48,7 @@ module axi_usb_fx3_reg (
   eot_fx32dma,
   eot_dma2fx3,
   trig,
+  zlp,
   fifo_num,
 
   error,
@@ -125,6 +126,7 @@ module axi_usb_fx3_reg (
   input           eot_fx32dma;
   input           eot_dma2fx3;
   output          trig;
+  output          zlp;
   output  [ 4:0]  fifo_num;
 
   input           error;
@@ -241,6 +243,7 @@ module axi_usb_fx3_reg (
   assign up_rreq_s = ((up_raddr[13:8] == 6'h00)) ? up_rreq : 1'b0;
 
   assign trig       = transfer_config[31];
+  assign zlp        = transfer_config[30];
   assign fifo_num   = transfer_config[4:0];
 
   assign test_mode_tpm = tpm_config[2:0];
@@ -373,6 +376,7 @@ module axi_usb_fx3_reg (
       end
       if (eot_fx32dma == 1'b1 || eot_dma2fx3 == 1'b1 || error == 1'b1) begin
         transfer_config[31] <= 1'b0;
+        transfer_config[30] <= 1'b0;
       end else if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
         transfer_config <= up_wdata;
       end

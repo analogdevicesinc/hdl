@@ -35,8 +35,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -137,6 +135,8 @@ module axi_usb_fx3_core (
   test_mode_tpg,
   monitor_error,
 
+  zlp,
+
   fifo_num);
 
   input           clk;
@@ -233,6 +233,8 @@ module axi_usb_fx3_core (
   input   [ 2:0]  test_mode_tpm;
   input   [ 2:0]  test_mode_tpg;
   output          monitor_error;
+
+  input           zlp;
 
   input   [ 4:0]  fifo_num;
 
@@ -527,6 +529,9 @@ module axi_usb_fx3_core (
     end
     if (state_fx32dma == READ_HEADER) begin
       if (fx32dma_valid == 1'b1) begin
+        if (m_axis_tready == 1'b0) begin
+          error_fx32dma <= 1'b1;
+        end
         if(header_pointer < header_size_current - 4) begin
           header_pointer <= header_pointer + 8;
         end else begin
@@ -549,7 +554,9 @@ module axi_usb_fx3_core (
           data_size_transaction <= data_size_transaction - 4;
         end
       end
+
       // monitor
+
       if (test_mode_active_tpm == 1'b1) begin
         if (first_transfer == 1) begin
           expected_data <= fx32dma_data;
@@ -586,7 +593,11 @@ module axi_usb_fx3_core (
     case(state_dma2fx3)
       IDLE:
         if(dma2fx3_ready == 1'b1) begin
-          next_state_dma2fx3 = READ_DATA;
+          if  (zlp == 1'b1) begin
+            next_state_dma2fx3 = ADD_FOOTER;
+          end else begin
+            next_state_dma2fx3 = READ_DATA;
+          end
         end else begin
           next_state_dma2fx3 = IDLE;
         end
@@ -611,9 +622,9 @@ module axi_usb_fx3_core (
       IDLE: begin
         s_axis_tready = 1'b0;
         dma2fx3_valid = 1'b0;
-        eot_dma2fx3 = 1'b0;
-        dma2fx3_eop = 1'b0;
-        dma2fx3_data = dma2fx3_data_reg;
+        eot_dma2fx3   = 1'b0;
+        dma2fx3_eop   = 1'b0;
+        dma2fx3_data  = dma2fx3_data_reg;
       end
       READ_DATA: begin
         eot_dma2fx3 = 1'b0;
@@ -646,25 +657,27 @@ module axi_usb_fx3_core (
       default: begin
         s_axis_tready = 1'b0;
         dma2fx3_valid = 1'b0;
-        eot_dma2fx3 = 1'b0;
-        dma2fx3_eop = 1'b0;
-        dma2fx3_data = dma2fx3_data_reg;
+        eot_dma2fx3   = 1'b0;
+        dma2fx3_eop   = 1'b0;
+        dma2fx3_data  = dma2fx3_data_reg;
       end
     endcase
   end
 
   always @(posedge clk) begin
     if(state_dma2fx3 == IDLE) begin
-      footer_pointer <= 0;
+      footer_pointer <= 4;
       dma2fx3_counter <= 0;
       case (test_mode_tpg)
         4'h1: dma2fx3_data_reg <= 32'haaaaaaaa;
         default:  dma2fx3_data_reg <= 32'hffffffff;
       endcase
+      if (zlp == 1'b1) begin
+        dma2fx3_data_reg <= 32'h0ff00ff0;
+      end
     end
 
     if(state_dma2fx3 == READ_DATA) begin
-      footer_pointer <= 4;
       if (test_mode_active_tpg == 1'b1) begin
         if (dma2fx3_ready == 1'b1) begin
           dma2fx3_counter <= dma2fx3_counter + 4;
