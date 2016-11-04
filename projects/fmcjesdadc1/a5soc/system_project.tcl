@@ -5,12 +5,10 @@ source ../../scripts/adi_env.tcl
 project_new fmcjesdadc1_a5soc -overwrite
 
 source "../../common/a5soc/a5soc_system_assign.tcl"
-set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/a5soc;../../../library/**/*"
-set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/a5soc/;../../../library/**/*"
-set_global_assignment -name QSYS_FILE system_bd.qsys
 
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
 set_global_assignment -name VERILOG_FILE system_top.v
+set_global_assignment -name QSYS_FILE system_bd.qsys
 
 set_global_assignment -name SDC_FILE system_constr.sdc
 set_global_assignment -name TOP_LEVEL_ENTITY system_top
