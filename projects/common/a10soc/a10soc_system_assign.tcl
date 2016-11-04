@@ -254,16 +254,6 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[2]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[3]
 
-# globals
-
-set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
-set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
-set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
-set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
-set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
-set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
-set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
-
 # source defaults
 
 source $ad_hdl_dir/projects/common/altera/sys_gen.tcl
