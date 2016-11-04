@@ -124,15 +124,30 @@ proc p_avl_adxcvr {} {
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF alt_ref_clk.in_clk
 
-  add_instance alt_core_pll altera_iopll 16.0
-  set_instance_parameter_value alt_core_pll {gui_en_reconf} {1}
-  set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
-  set_instance_parameter_value alt_core_pll {gui_use_locked} {1}
-  set_instance_parameter_value alt_core_pll {gui_output_clock_frequency0} $m_coreclk_frequency
-  add_connection alt_ref_clk.out_clk alt_core_pll.refclk
-  add_connection alt_sys_clk.clk_reset alt_core_pll.reset
-  add_interface core_pll_locked conduit end
-  set_interface_property core_pll_locked EXPORT_OF alt_core_pll.locked
+  if {$m_device_family eq "Arria V"} {
+
+    add_instance alt_core_pll altera_pll 16.0
+    set_instance_parameter_value alt_core_pll {gui_en_reconf} {1}
+    set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
+    set_instance_parameter_value alt_core_pll {gui_use_locked} {1}
+    set_instance_parameter_value alt_core_pll {gui_output_clock_frequency0} $m_coreclk_frequency
+    add_connection alt_ref_clk.out_clk alt_core_pll.refclk
+    add_connection alt_sys_clk.clk_reset alt_core_pll.reset
+    add_interface core_pll_locked conduit end
+    set_interface_property core_pll_locked EXPORT_OF alt_core_pll.locked
+
+  } else {
+
+    add_instance alt_core_pll altera_iopll 16.0
+    set_instance_parameter_value alt_core_pll {gui_en_reconf} {1}
+    set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
+    set_instance_parameter_value alt_core_pll {gui_use_locked} {1}
+    set_instance_parameter_value alt_core_pll {gui_output_clock_frequency0} $m_coreclk_frequency
+    add_connection alt_ref_clk.out_clk alt_core_pll.refclk
+    add_connection alt_sys_clk.clk_reset alt_core_pll.reset
+    add_interface core_pll_locked conduit end
+    set_interface_property core_pll_locked EXPORT_OF alt_core_pll.locked
+  }
 
   add_instance alt_core_pll_reconfig altera_pll_reconfig 16.0
   add_connection alt_sys_clk.clk_reset alt_core_pll_reconfig.mgmt_reset
@@ -257,10 +272,26 @@ proc p_avl_adxcvr {} {
       add_connection alt_xphy.tx_phy${n}_analogreset alt_phy_${n}.tx_analogreset
       add_connection alt_xphy.tx_phy${n}_digitalreset alt_phy_${n}.tx_digitalreset
       add_connection alt_lane_pll.tx_serial_clk alt_phy_${n}.tx_serial_clk0
-      add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
-      add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
-      add_interface phy_reconfig_${n} avalon slave
-      set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
+
+      if {$m_device_family eq "Arria V"} {
+
+        add_instance alt_phy_reconfig_${n} alt_xcvr_reconfig 16.0
+        set_instance_parameter_value alt_phy_reconfig_${n} {number_of_reconfig_interfaces} {1}
+        add_connection alt_sys_clk.clk alt_phy_reconfig_${n}.mgmt_clk_clk
+        add_connection alt_sys_clk.clk_reset alt_phy_reconfig_${n}.mgmt_rst_reset
+        add_interface phy_reconfig_${n} avalon slave
+        set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_reconfig_${n}.reconfig_mgmt
+        add_connection alt_phy_reconfig_${n}.reconfig_to_xcvr alt_phy_${n}.reconfig_to_xcvr
+        add_connection alt_phy_${n}.reconfig_from_xcvr alt_phy_reconfig_${n}.reconfig_from_xcvr
+
+      } else {
+
+        add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
+        add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
+        add_interface phy_reconfig_${n} avalon slave
+        set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
+      }
+
       add_connection alt_phy_${n}.tx_cal_busy alt_xphy.tx_phy${n}_cal_busy
       add_connection alt_phy_${n}.phy_csr_tx_pcfifo_full alt_xphy.tx_phy${n}_pcfifo_full
       add_connection alt_phy_${n}.phy_csr_tx_pcfifo_empty alt_xphy.tx_phy${n}_pcfifo_empty
@@ -355,10 +386,26 @@ proc p_avl_adxcvr {} {
       set_instance_parameter_value alt_phy_${n} {set_user_identifier} $m_id
       set_instance_parameter_value alt_phy_${n} {set_csr_soft_logic_enable} {1}
       set_instance_parameter_value alt_phy_${n} {L} 1
-      add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
-      add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
-      add_interface phy_reconfig_${n} avalon slave
-      set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
+
+      if {$m_device_family eq "Arria V"} {
+
+        add_instance alt_phy_reconfig_${n} alt_xcvr_reconfig 16.0
+        set_instance_parameter_value alt_phy_reconfig_${n} {number_of_reconfig_interfaces} {1}
+        add_connection alt_sys_clk.clk alt_phy_reconfig_${n}.mgmt_clk_clk
+        add_connection alt_sys_clk.clk_reset alt_phy_reconfig_${n}.mgmt_rst_reset
+        add_interface phy_reconfig_${n} avalon slave
+        set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_reconfig_${n}.reconfig_mgmt
+        add_connection alt_phy_reconfig_${n}.reconfig_to_xcvr alt_phy_${n}.reconfig_to_xcvr
+        add_connection alt_phy_${n}.reconfig_from_xcvr alt_phy_reconfig_${n}.reconfig_from_xcvr
+
+      } else {
+
+        add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
+        add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
+        add_interface phy_reconfig_${n} avalon slave
+        set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
+      }
+
       add_connection alt_ref_clk.out_clk alt_phy_${n}.pll_ref_clk
       add_connection alt_core_pll.outclk0 alt_phy_${n}.rxlink_clk
       add_connection alt_sys_clk.clk_reset alt_phy_${n}.rxlink_rst_n
