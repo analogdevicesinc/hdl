@@ -4,17 +4,6 @@
 set_global_assignment -name FAMILY "Arria V"
 set_global_assignment -name DEVICE 5ASTFD5K3F40I3ES
 
-# i2c (fmc)
-
-set_location_assignment PIN_F26 -to hdmi_scl
-set_location_assignment PIN_G26 -to hdmi_sda
-set_location_assignment PIN_N23 -to hdmi_rstn
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_scl
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_sda
-set_instance_assignment -name IO_STANDARD "2.5 V" -to hdmi_rstn
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hdmi_scl
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hdmi_sda
-
 # led & switches
 
 set_location_assignment PIN_AH24  -to gpio_bd[0]    ; ## led[0]
@@ -434,14 +423,9 @@ set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
 set_global_assignment -name ECO_REGENERATE_REPORT ON
-set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
-set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
-set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
-set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
-set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
-set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
-set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
-set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
+# source defaults
+
+source $ad_hdl_dir/projects/common/altera/sys_gen.tcl
 
