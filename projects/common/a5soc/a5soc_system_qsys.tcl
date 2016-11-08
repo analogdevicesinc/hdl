@@ -50,10 +50,11 @@ set_instance_parameter_value sys_hps {UART0_Mode} {No Flow Control}
 set_instance_parameter_value sys_hps {I2C0_PinMuxing} {FPGA}
 set_instance_parameter_value sys_hps {I2C0_Mode} {Full}
 set_instance_parameter_value sys_hps {use_default_mpu_clk} {0}
+set_instance_parameter_value sys_hps {desired_cfg_clk_mhz} {50.0}
 set_instance_parameter_value sys_hps {S2FCLK_USER0CLK_Enable} {1}
-set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_Enable} {0}
+set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_Enable} {1}
 set_instance_parameter_value sys_hps {S2FCLK_USER2CLK_Enable} {0}
-set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_FREQ} {150.0}
+set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_FREQ} {100.0}
 set_instance_parameter_value sys_hps {S2FCLK_USER2CLK_FREQ} {100.0}
 set_instance_parameter_value sys_hps {HPS_PROTOCOL} {DDR3}
 set_instance_parameter_value sys_hps {MEM_CLK_FREQ} {400.0}
@@ -88,8 +89,10 @@ set_instance_parameter_value sys_hps {MEM_TFAW_NS} {35.0}
 set_instance_parameter_value sys_hps {MEM_TRRD_NS} {6.0}
 set_instance_parameter_value sys_hps {MEM_TRTP_NS} {7.5}
 
-add_interface sys_hps_clk clock source
-set_interface_property sys_hps_clk EXPORT_OF sys_hps.h2f_user0_clock
+add_interface sys_hps_cpu_clk clock source
+set_interface_property sys_hps_cpu_clk EXPORT_OF sys_hps.h2f_user0_clock
+add_interface sys_hps_dma_clk clock source
+set_interface_property sys_hps_dma_clk EXPORT_OF sys_hps.h2f_user1_clock
 add_interface sys_hps_spim0 conduit end
 set_interface_property sys_hps_spim0 EXPORT_OF sys_hps.spim0
 add_interface sys_hps_spim0_sclk clock source
