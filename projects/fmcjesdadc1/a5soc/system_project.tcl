@@ -62,7 +62,6 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_sdio
 
 set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_cntrl
 set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_status
-set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xcvr
 
 execute_flow -compile
 
