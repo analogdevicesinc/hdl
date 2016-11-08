@@ -32,6 +32,10 @@ add_interface rx_sysref conduit end
 set_interface_property rx_sysref EXPORT_OF avl_ad9250_xcvr.sysref
 add_interface rx_sync conduit end
 set_interface_property rx_sync EXPORT_OF avl_ad9250_xcvr.sync
+add_interface rx_ip_sof conduit end
+set_interface_property rx_ip_sof EXPORT_OF avl_ad9250_xcvr.ip_sof
+add_interface rx_ip_data avalon_streaming source
+set_interface_property rx_ip_data EXPORT_OF avl_ad9250_xcvr.ip_data
 
 # ad9250-xcvr
 
@@ -51,16 +55,20 @@ add_connection axi_ad9250_xcvr.core_pll_locked avl_ad9250_xcvr.core_pll_locked
 add_instance axi_ad9250_core_0 axi_ad9250 1.0
 
 add_connection avl_ad9250_xcvr.core_clk axi_ad9250_core_0.if_rx_clk
-add_connection avl_ad9250_xcvr.ip_sof axi_ad9250_core_0.if_rx_sof
-add_connection avl_ad9250_xcvr.ip_data axi_ad9250_core_0.if_rx_data
+add_interface rx_ip_sof_0 conduit end
+set_interface_property rx_ip_sof_0 EXPORT_OF axi_ad9250_core_0.if_rx_sof
+add_interface rx_ip_data_0 avalon_streaming sink
+set_interface_property rx_ip_data_0 EXPORT_OF axi_ad9250_core_0.if_rx_data
 add_connection sys_clk.clk_reset axi_ad9250_core_0.s_axi_reset
 add_connection sys_clk.clk axi_ad9250_core_0.s_axi_clock
 
 add_instance axi_ad9250_core_1 axi_ad9250 1.0
 
 add_connection avl_ad9250_xcvr.core_clk axi_ad9250_core_1.if_rx_clk
-add_connection avl_ad9250_xcvr.ip_sof axi_ad9250_core_1.if_rx_sof
-add_connection avl_ad9250_xcvr.ip_data axi_ad9250_core_1.if_rx_data
+add_interface rx_ip_sof_1 conduit end
+set_interface_property rx_ip_sof_1 EXPORT_OF axi_ad9250_core_1.if_rx_sof
+add_interface rx_ip_data_1 avalon_streaming sink
+set_interface_property rx_ip_data_1 EXPORT_OF axi_ad9250_core_1.if_rx_data
 add_connection sys_clk.clk_reset axi_ad9250_core_1.s_axi_reset
 add_connection sys_clk.clk axi_ad9250_core_1.s_axi_clock
 
@@ -115,12 +123,32 @@ add_connection sys_clk.clk axi_ad9250_dma.s_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9250_dma.m_dest_axi_reset
 add_connection sys_dma_clk.clk axi_ad9250_dma.m_dest_axi_clock
 
+# core-clock
+
+add_instance rx_core_clk altera_clock_bridge 16.0
+add_connection avl_ad9250_xcvr.core_clk rx_core_clk.in_clk
+add_interface rx_core_clk clock source
+set_interface_property rx_core_clk EXPORT_OF rx_core_clk.out_clk
+
+# phy reconfiguration
+
+add_instance avl_phy_reconfig alt_xcvr_reconfig 16.0
+set_instance_parameter_value avl_phy_reconfig {number_of_reconfig_interfaces} {4}
+set_instance_parameter_value avl_phy_reconfig {gui_split_sizes} {1,1,1,1}
+add_connection avl_phy_reconfig.ch0_0_to_xcvr avl_ad9250_xcvr.phy_reconfig_to_xcvr_0 
+add_connection avl_ad9250_xcvr.phy_reconfig_from_xcvr_0 avl_phy_reconfig.ch0_0_from_xcvr 
+add_connection avl_phy_reconfig.ch1_1_to_xcvr avl_ad9250_xcvr.phy_reconfig_to_xcvr_1 
+add_connection avl_ad9250_xcvr.phy_reconfig_from_xcvr_1 avl_phy_reconfig.ch1_1_from_xcvr 
+add_connection avl_phy_reconfig.ch2_2_to_xcvr avl_ad9250_xcvr.phy_reconfig_to_xcvr_2 
+add_connection avl_ad9250_xcvr.phy_reconfig_from_xcvr_2 avl_phy_reconfig.ch2_2_from_xcvr 
+add_connection avl_phy_reconfig.ch3_3_to_xcvr avl_ad9250_xcvr.phy_reconfig_to_xcvr_3 
+add_connection avl_ad9250_xcvr.phy_reconfig_from_xcvr_3 avl_phy_reconfig.ch3_3_from_xcvr 
+add_connection sys_clk.clk_reset avl_phy_reconfig.mgmt_rst_reset
+add_connection sys_clk.clk avl_phy_reconfig.mgmt_clk_clk
+
 # addresses
 
-ad_cpu_interconnect 0x00010000 avl_ad9250_xcvr.phy_reconfig_0
-ad_cpu_interconnect 0x00011000 avl_ad9250_xcvr.phy_reconfig_1
-ad_cpu_interconnect 0x00012000 avl_ad9250_xcvr.phy_reconfig_2
-ad_cpu_interconnect 0x00013000 avl_ad9250_xcvr.phy_reconfig_3
+ad_cpu_interconnect 0x00010000 avl_phy_reconfig.reconfig_mgmt
 ad_cpu_interconnect 0x00018000 avl_ad9250_xcvr.core_pll_reconfig
 ad_cpu_interconnect 0x00019000 avl_ad9250_xcvr.ip_reconfig
 ad_cpu_interconnect 0x00020000 axi_ad9250_xcvr.s_axi
