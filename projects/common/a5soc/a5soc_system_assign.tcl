@@ -4,33 +4,42 @@
 set_global_assignment -name FAMILY "Arria V"
 set_global_assignment -name DEVICE 5ASTFD5K3F40I3ES
 
+# i2c (fmc)
+
+set_location_assignment PIN_F26 -to fmca_scl
+set_location_assignment PIN_G26 -to fmca_sda
+set_instance_assignment -name IO_STANDARD "2.5 V" -to fmca_scl
+set_instance_assignment -name IO_STANDARD "2.5 V" -to fmca_sda
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to fmca_scl
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to fmca_sda
+
 # led & switches
 
-set_location_assignment PIN_AH24  -to gpio_bd[0]    ; ## led[0]
-set_location_assignment PIN_AU24  -to gpio_bd[1]    ; ## led[1]
-set_location_assignment PIN_AT24  -to gpio_bd[2]    ; ## led[2]
-set_location_assignment PIN_AD24  -to gpio_bd[3]    ; ## led[3]
-set_location_assignment PIN_AT23  -to gpio_bd[4]    ; ## push_buttons[0]
-set_location_assignment PIN_AP24  -to gpio_bd[5]    ; ## push_buttons[1]
-set_location_assignment PIN_AW24  -to gpio_bd[6]    ; ## push_buttons[2]
-set_location_assignment PIN_AW23  -to gpio_bd[7]    ; ## push_buttons[3]
-set_location_assignment PIN_AL24  -to gpio_bd[8]    ; ## dip_switches[0]
-set_location_assignment PIN_AF24  -to gpio_bd[9]    ; ## dip_switches[1]
-set_location_assignment PIN_AE24  -to gpio_bd[10]   ; ## dip_switches[2]
-set_location_assignment PIN_AU23  -to gpio_bd[11]   ; ## dip_switches[3]
+set_location_assignment PIN_AH24  -to gpio_bd_o[0]   ; ## led[0]
+set_location_assignment PIN_AU24  -to gpio_bd_o[1]   ; ## led[1]
+set_location_assignment PIN_AT24  -to gpio_bd_o[2]   ; ## led[2]
+set_location_assignment PIN_AD24  -to gpio_bd_o[3]   ; ## led[3]
+set_location_assignment PIN_AT23  -to gpio_bd_i[0]   ; ## push_buttons[0]
+set_location_assignment PIN_AP24  -to gpio_bd_i[1]   ; ## push_buttons[1]
+set_location_assignment PIN_AW24  -to gpio_bd_i[2]   ; ## push_buttons[2]
+set_location_assignment PIN_AW23  -to gpio_bd_i[3]   ; ## push_buttons[3]
+set_location_assignment PIN_AL24  -to gpio_bd_i[4]   ; ## dip_switches[0]
+set_location_assignment PIN_AF24  -to gpio_bd_i[5]   ; ## dip_switches[1]
+set_location_assignment PIN_AE24  -to gpio_bd_i[6]   ; ## dip_switches[2]
+set_location_assignment PIN_AU23  -to gpio_bd_i[7]   ; ## dip_switches[3]
 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[0] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[1] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[2] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[3] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[4] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[5] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[6] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[7] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[8] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[9] 
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[10]
-set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd[11]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_o[0] 
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_o[1] 
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_o[2] 
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_o[3] 
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_i[0]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_i[1]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_i[2]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_i[3]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_i[4]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_i[5]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_i[6]
+set_instance_assignment -name IO_STANDARD "1.5 V" -to gpio_bd_i[7]
 
 # uart
 
