@@ -389,14 +389,10 @@ proc p_avl_adxcvr {} {
 
       if {$m_device_family eq "Arria V"} {
 
-        add_instance alt_phy_reconfig_${n} alt_xcvr_reconfig 16.0
-        set_instance_parameter_value alt_phy_reconfig_${n} {number_of_reconfig_interfaces} {1}
-        add_connection alt_sys_clk.clk alt_phy_reconfig_${n}.mgmt_clk_clk
-        add_connection alt_sys_clk.clk_reset alt_phy_reconfig_${n}.mgmt_rst_reset
-        add_interface phy_reconfig_${n} avalon slave
-        set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_reconfig_${n}.reconfig_mgmt
-        add_connection alt_phy_reconfig_${n}.reconfig_to_xcvr alt_phy_${n}.reconfig_to_xcvr
-        add_connection alt_phy_${n}.reconfig_from_xcvr alt_phy_reconfig_${n}.reconfig_from_xcvr
+        add_interface phy_reconfig_to_xcvr_${n} conduit end
+        set_interface_property phy_reconfig_to_xcvr_${n} EXPORT_OF alt_phy_${n}.reconfig_to_xcvr
+        add_interface phy_reconfig_from_xcvr_${n} conduit end
+        set_interface_property phy_reconfig_from_xcvr_${n} EXPORT_OF alt_phy_${n}.reconfig_from_xcvr
 
       } else {
 
