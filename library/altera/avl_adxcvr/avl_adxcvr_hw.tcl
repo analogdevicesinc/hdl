@@ -41,6 +41,12 @@ set_parameter_property LANE_RATE UNITS None
 set_parameter_property LANE_RATE DISPLAY_UNITS "Mbps"
 set_parameter_property LANE_RATE HDL_PARAMETER false
 
+add_parameter SYSCLK_FREQUENCY FLOAT 100.0
+set_parameter_property SYSCLK_FREQUENCY DISPLAY_NAME SYSCLK_FREQUENCY
+set_parameter_property SYSCLK_FREQUENCY TYPE FLOAT
+set_parameter_property SYSCLK_FREQUENCY UNITS Megahertz
+set_parameter_property SYSCLK_FREQUENCY HDL_PARAMETER false
+
 add_parameter PLLCLK_FREQUENCY FLOAT 5000.0
 set_parameter_property PLLCLK_FREQUENCY DISPLAY_NAME PLLCLK_FREQUENCY
 set_parameter_property PLLCLK_FREQUENCY TYPE FLOAT
@@ -103,6 +109,7 @@ proc p_avl_adxcvr {} {
   set m_tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
   set m_num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set m_device_family [get_parameter_value "DEVICE_FAMILY"]
+  set m_sysclk_frequency [get_parameter_value "SYSCLK_FREQUENCY"]
   set m_pllclk_frequency [get_parameter_value "PLLCLK_FREQUENCY"]
   set m_refclk_frequency [get_parameter_value "REFCLK_FREQUENCY"]
   set m_coreclk_frequency [get_parameter_value "CORECLK_FREQUENCY"]
@@ -113,7 +120,7 @@ proc p_avl_adxcvr {} {
   set m_hd [get_parameter_value "HD"]
 
   add_instance alt_sys_clk clock_source 16.0
-  set_instance_parameter_value alt_sys_clk {clockFrequency} {100000000.0}
+  set_instance_parameter_value alt_sys_clk {clockFrequency} [expr $m_sysclk_frequency*1000000]
   add_interface sys_clk clock sink
   set_interface_property sys_clk EXPORT_OF alt_sys_clk.clk_in
   add_interface sys_resetn reset sink
@@ -167,7 +174,7 @@ proc p_avl_adxcvr {} {
 
     add_instance alt_rst_cntrol altera_xcvr_reset_control 16.0
     set_instance_parameter_value alt_rst_cntrol {CHANNELS} $m_num_of_lanes
-    set_instance_parameter_value alt_rst_cntrol {SYS_CLK_IN_MHZ} {100}
+    set_instance_parameter_value alt_rst_cntrol {SYS_CLK_IN_MHZ} $m_sysclk_frequency
     set_instance_parameter_value alt_rst_cntrol {TX_PLL_ENABLE} {1}
     set_instance_parameter_value alt_rst_cntrol {T_PLL_POWERDOWN} {1000}
     set_instance_parameter_value alt_rst_cntrol {TX_ENABLE} {1}
@@ -309,7 +316,7 @@ proc p_avl_adxcvr {} {
 
     add_instance alt_rst_cntrol altera_xcvr_reset_control 16.0
     set_instance_parameter_value alt_rst_cntrol {CHANNELS} $m_num_of_lanes
-    set_instance_parameter_value alt_rst_cntrol {SYS_CLK_IN_MHZ} {100}
+    set_instance_parameter_value alt_rst_cntrol {SYS_CLK_IN_MHZ} $m_sysclk_frequency
     set_instance_parameter_value alt_rst_cntrol {TX_PLL_ENABLE} {0}
     set_instance_parameter_value alt_rst_cntrol {TX_ENABLE} {0}
     set_instance_parameter_value alt_rst_cntrol {RX_ENABLE} {1}

@@ -6,6 +6,7 @@ set_instance_parameter_value avl_ad9250_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9250_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9250_xcvr {PCS_CONFIG} {JESD_PCS_CFG1}
 set_instance_parameter_value avl_ad9250_xcvr {LANE_RATE} {5000.0}
+set_instance_parameter_value avl_ad9250_xcvr {SYSCLK_FREQUENCY} {50.0}
 set_instance_parameter_value avl_ad9250_xcvr {PLLCLK_FREQUENCY} {2500.0}
 set_instance_parameter_value avl_ad9250_xcvr {REFCLK_FREQUENCY} {250.0}
 set_instance_parameter_value avl_ad9250_xcvr {CORECLK_FREQUENCY} {125.0}
