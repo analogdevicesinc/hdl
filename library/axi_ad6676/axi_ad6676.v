@@ -45,18 +45,21 @@ module axi_ad6676 (
   // rx_clk is (line-rate/40)
 
   rx_clk,
+  rx_sof,
+  rx_valid,
+  rx_ready,
   rx_data,
 
   // dma interface
 
   adc_clk,
   adc_rst,
-  adc_valid_a,
-  adc_enable_a,
-  adc_data_a,
-  adc_valid_b,
-  adc_enable_b,
-  adc_data_b,
+  adc_valid_0,
+  adc_enable_0,
+  adc_data_0,
+  adc_valid_1,
+  adc_enable_1,
+  adc_data_1,
   adc_dovf,
   adc_dunf,
 
@@ -92,18 +95,21 @@ module axi_ad6676 (
   // rx_clk is (line-rate/40)
 
   input           rx_clk;
+  input   [ 3:0]  rx_sof;
+  input           rx_valid;
+  output          rx_ready;
   input   [63:0]  rx_data;
 
   // dma interface
 
   output          adc_clk;
   output          adc_rst;
-  output          adc_valid_a;
-  output          adc_enable_a;
-  output  [31:0]  adc_data_a;
-  output          adc_valid_b;
-  output          adc_enable_b;
-  output  [31:0]  adc_data_b;
+  output          adc_valid_0;
+  output          adc_enable_0;
+  output  [31:0]  adc_data_0;
+  output          adc_valid_1;
+  output          adc_enable_1;
+  output  [31:0]  adc_data_1;
   input           adc_dovf;
   input           adc_dunf;
 
@@ -149,8 +155,8 @@ module axi_ad6676 (
 
   // internal signals
 
-  wire    [31:0]  adc_data_a_s;
-  wire    [31:0]  adc_data_b_s;
+  wire    [31:0]  adc_data_0_s;
+  wire    [31:0]  adc_data_1_s;
   wire            adc_or_a_s;
   wire            adc_or_b_s;
   wire            adc_status_s;
@@ -170,6 +176,8 @@ module axi_ad6676 (
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+
+  assign rx_ready = 1'b1;
 
   // processor read interface
 
@@ -193,18 +201,19 @@ module axi_ad6676 (
 
   // adc valid
 
-  assign adc_valid_a = 1'b1;
-  assign adc_valid_b = 1'b1;
+  assign adc_valid_0 = 1'b1;
+  assign adc_valid_1 = 1'b1;
 
   // main (device interface)
 
-  axi_ad6676_if i_if (
+  axi_ad6676_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
     .rx_clk (rx_clk),
+    .rx_sof (rx_sof),
     .rx_data (rx_data),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_data_a (adc_data_a_s),
-    .adc_data_b (adc_data_b_s),
+    .adc_data_a (adc_data_0_s),
+    .adc_data_b (adc_data_1_s),
     .adc_or_a (adc_or_a_s),
     .adc_or_b (adc_or_b_s),
     .adc_status (adc_status_s));
@@ -214,10 +223,10 @@ module axi_ad6676 (
   axi_ad6676_channel #(.Q_OR_I_N(0), .CHANNEL_ID(0)) i_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_data (adc_data_a_s),
+    .adc_data (adc_data_0_s),
     .adc_or (adc_or_a_s),
-    .adc_dfmt_data (adc_data_a),
-    .adc_enable (adc_enable_a),
+    .adc_dfmt_data (adc_data_0),
+    .adc_enable (adc_enable_0),
     .up_adc_pn_err (up_status_pn_err_s[0]),
     .up_adc_pn_oos (up_status_pn_oos_s[0]),
     .up_adc_or (up_status_or_s[0]),
@@ -237,10 +246,10 @@ module axi_ad6676 (
   axi_ad6676_channel #(.Q_OR_I_N(1), .CHANNEL_ID(1)) i_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_data (adc_data_b_s),
+    .adc_data (adc_data_1_s),
     .adc_or (adc_or_b_s),
-    .adc_dfmt_data (adc_data_b),
-    .adc_enable (adc_enable_b),
+    .adc_dfmt_data (adc_data_1),
+    .adc_enable (adc_enable_1),
     .up_adc_pn_err (up_status_pn_err_s[1]),
     .up_adc_pn_oos (up_status_pn_oos_s[1]),
     .up_adc_or (up_status_or_s[1]),

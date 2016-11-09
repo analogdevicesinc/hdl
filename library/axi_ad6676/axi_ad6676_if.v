@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -41,10 +41,11 @@
 
 module axi_ad6676_if (
 
-  // jesd interface 
+  // jesd interface
   // rx_clk is (line-rate/40)
 
   rx_clk,
+  rx_sof,
   rx_data,
 
   // adc data output
@@ -57,10 +58,14 @@ module axi_ad6676_if (
   adc_or_b,
   adc_status);
 
-  // jesd interface 
-  // rx_clk is (line-rate/40)
+  // parameters
+
+  parameter DEVICE_TYPE = 0;
+
+  // jesd interface
 
   input           rx_clk;
+  input   [ 3:0]  rx_sof;
   input   [63:0]  rx_data;
 
   // adc data output
@@ -83,6 +88,7 @@ module axi_ad6676_if (
   wire    [15:0]  adc_data_a_s0_s;
   wire    [15:0]  adc_data_b_s1_s;
   wire    [15:0]  adc_data_b_s0_s;
+  wire    [63:0]  rx_data_s;
 
   // adc clock is the reference clock
 
@@ -99,7 +105,7 @@ module axi_ad6676_if (
 
   assign adc_data_a_s1_s = {rx_data[23:16], rx_data[31:24]};
   assign adc_data_a_s0_s = {rx_data[ 7: 0], rx_data[15: 8]};
-  assign adc_data_b_s1_s = {rx_data[55:48], rx_data[63:56]}; 
+  assign adc_data_b_s1_s = {rx_data[55:48], rx_data[63:56]};
   assign adc_data_b_s0_s = {rx_data[39:32], rx_data[47:40]};
 
   // status
@@ -111,6 +117,21 @@ module axi_ad6676_if (
       adc_status <= 1'b1;
     end
   end
+
+  // frame-alignment
+
+  genvar n;
+
+  generate
+  for (n = 0; n < 2; n = n + 1) begin: g_xcvr_if
+  ad_xcvr_rx_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_xcvr_if (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_sof),
+    .rx_ip_data (rx_data[((n*32)+31):(n*32)]),
+    .rx_sof (),
+    .rx_data (rx_data_s[((n*32)+31):(n*32)]));
+  end
+  endgenerate
 
 endmodule
 
