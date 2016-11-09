@@ -17,13 +17,13 @@ M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad6676/axi_ad6676.xpr
+M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
-M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
+M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
-M_DEPS += ../../../library/util_jesd_gt/util_jesd_gt.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -53,13 +53,13 @@ clean:
 
 clean-all:clean
 	make -C ../../../library/axi_ad6676 clean
+	make -C ../../../library/xilinx/axi_adxcvr clean
 	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_hdmi_tx clean
-	make -C ../../../library/axi_jesd_gt clean
 	make -C ../../../library/axi_spdif_tx clean
+	make -C ../../../library/xilinx/util_adxcvr clean
 	make -C ../../../library/util_cpack clean
-	make -C ../../../library/util_jesd_gt clean
 
 
 ad6676evb_zc706.sdk/system_top.hdf: $(M_DEPS)
@@ -69,13 +69,13 @@ ad6676evb_zc706.sdk/system_top.hdf: $(M_DEPS)
 
 lib:
 	make -C ../../../library/axi_ad6676
+	make -C ../../../library/xilinx/axi_adxcvr
 	make -C ../../../library/axi_clkgen
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_hdmi_tx
-	make -C ../../../library/axi_jesd_gt
 	make -C ../../../library/axi_spdif_tx
+	make -C ../../../library/xilinx/util_adxcvr
 	make -C ../../../library/util_cpack
-	make -C ../../../library/util_jesd_gt
 
 ####################################################################################
 ####################################################################################
