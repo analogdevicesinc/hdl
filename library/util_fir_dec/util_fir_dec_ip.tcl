@@ -5,7 +5,7 @@ adi_ip_create util_fir_dec
 
 set fir_decim [create_ip -name fir_compiler -vendor xilinx.com -library ip -version 7.2 -module_name fir_decim]
  set_property -dict [ list \
-CONFIG.Clock_Frequency {128.8} \
+CONFIG.Clock_Frequency {61.44} \
 CONFIG.CoefficientSource {COE_File} \
 CONFIG.Coefficient_File {../../../../coefile_dec.coe} \
 CONFIG.Coefficient_Fractional_Bits {0} \
@@ -25,7 +25,7 @@ CONFIG.Output_Rounding_Mode {Truncate_LSBs} \
 CONFIG.Output_Width {16} \
 CONFIG.Quantization {Integer_Coefficients} \
 CONFIG.RateSpecification {Frequency_Specification} \
-CONFIG.Sample_Frequency {64.4} \
+CONFIG.Sample_Frequency {61.44} \
 CONFIG.Zero_Pack_Factor {1} \
  ] [get_ips fir_decim]
 
