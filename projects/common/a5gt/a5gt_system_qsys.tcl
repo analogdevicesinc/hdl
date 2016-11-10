@@ -18,6 +18,26 @@ set_instance_parameter_value sys_clk {clockFrequency} {100000000.0}
 set_instance_parameter_value sys_clk {clockFrequencyKnown} {1}
 set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
+# system-pll
+
+add_instance sys_pll altera_pll 16.0
+set_instance_parameter_value sys_pll {gui_reference_clock_frequency} {100.0}
+set_instance_parameter_value sys_pll {gui_use_locked} {1}
+set_instance_parameter_value sys_pll {gui_number_of_clocks} {3}
+set_instance_parameter_value sys_pll {gui_output_clock_frequency0} {125.0}
+set_instance_parameter_value sys_pll {gui_output_clock_frequency1} {25.0}
+set_instance_parameter_value sys_pll {gui_output_clock_frequency2} {2.5}
+add_connection sys_clk.clk sys_pll.refclk
+add_connection sys_clk.clk_reset sys_pll.reset
+add_interface sys_125m_clk clock source
+add_interface sys_25m_clk clock source
+add_interface sys_2m5_clk clock source
+add_interface sys_pll_locked conduit end
+set_interface_property sys_125m_clk EXPORT_OF sys_pll.outclk0
+set_interface_property sys_25m_clk EXPORT_OF sys_pll.outclk1
+set_interface_property sys_2m5_clk EXPORT_OF sys_pll.outclk2
+set_interface_property sys_pll_locked EXPORT_OF sys_pll.locked
+
 # memory (int)
 
 add_instance sys_int_mem altera_avalon_onchip_memory2 16.0
