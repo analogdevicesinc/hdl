@@ -14,6 +14,7 @@ adi_ip_files axi_ad9250 [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
+  "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
   "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
   "axi_ad9250_pnmon.v" \
   "axi_ad9250_channel.v" \
