@@ -19,11 +19,11 @@ M_DEPS += ../../common/vc707/vc707_system_constr.xdc
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9250/axi_ad9250.xpr
+M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
-M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
+M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
-M_DEPS += ../../../library/util_jesd_gt/util_jesd_gt.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -53,11 +53,11 @@ clean:
 
 clean-all:clean
 	make -C ../../../library/axi_ad9250 clean
+	make -C ../../../library/xilinx/axi_adxcvr clean
 	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_jesd_gt clean
+	make -C ../../../library/xilinx/util_adxcvr clean
 	make -C ../../../library/util_bsplit clean
 	make -C ../../../library/util_cpack clean
-	make -C ../../../library/util_jesd_gt clean
 
 
 fmcjesdadc1_vc707.sdk/system_top.hdf: $(M_DEPS)
@@ -67,11 +67,11 @@ fmcjesdadc1_vc707.sdk/system_top.hdf: $(M_DEPS)
 
 lib:
 	make -C ../../../library/axi_ad9250
+	make -C ../../../library/xilinx/axi_adxcvr
 	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_jesd_gt
+	make -C ../../../library/xilinx/util_adxcvr
 	make -C ../../../library/util_bsplit
 	make -C ../../../library/util_cpack
-	make -C ../../../library/util_jesd_gt
 
 ####################################################################################
 ####################################################################################
