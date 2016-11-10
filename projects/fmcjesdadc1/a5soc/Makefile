@@ -53,6 +53,7 @@ M_DEPS += ../../../library/common/ad_datafmt.v
 M_DEPS += ../../../library/common/ad_mem_asym.v
 M_DEPS += ../../../library/common/ad_pnmon.v
 M_DEPS += ../../../library/common/ad_rst.v
+M_DEPS += ../../../library/common/ad_xcvr_rx_if.v
 M_DEPS += ../../../library/common/sync_bits.v
 M_DEPS += ../../../library/common/sync_gray.v
 M_DEPS += ../../../library/common/up_adc_channel.v
