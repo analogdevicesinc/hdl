@@ -159,7 +159,7 @@ module system_top (
   assign rx_sysref = rx_sysref_int;
 
   always @(posedge rx_clk) begin
-    rx_sysref_m1 <= gpio_o[12];
+    rx_sysref_m1 <= gpio_o[32];
     rx_sysref_m2 <= rx_sysref_m1;
     rx_sysref_int <= rx_sysref_m1 & ~rx_sysref_m2;
   end
