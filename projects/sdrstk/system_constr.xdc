@@ -62,7 +62,7 @@ set_property  -dict {PACKAGE_PIN  F12  IOSTANDARD LVCMOS18} [get_ports spi_miso]
 set_property  -dict {PACKAGE_PIN  K13  IOSTANDARD LVCMOS18} [get_ports gpio_bd]
 set_property  -dict {PACKAGE_PIN  P8   IOSTANDARD LVCMOS18} [get_ports clk_out]
 
-create_clock -name rx_clk -period  7.77 [get_ports rx_clk_in]
+create_clock -name rx_clk -period  16.27 [get_ports rx_clk_in]
 
 # probably gone in 2016.4
 
