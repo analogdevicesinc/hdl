@@ -54,7 +54,7 @@ module util_fir_int (
   wire [31:0] m_axis_data_tdata_s;
   wire        s_axis_data_tready_s;
 
-  assign {channel_1, channel_0} = (interpolate == 1'b1) ? {m_axis_data_tdata_s[30:16], 1'b0, m_axis_data_tdata_s[14:0], 1'b0} : s_axis_data_tdata;
+  assign {channel_1, channel_0} = (interpolate == 1'b1) ? m_axis_data_tdata_s : s_axis_data_tdata;
   assign s_axis_data_tready = (interpolate == 1'b1) ? s_axis_data_tready_s : dac_read;
 
   fir_interp interpolator (
