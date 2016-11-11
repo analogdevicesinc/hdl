@@ -180,7 +180,7 @@ set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9361_dac_dma
+set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_dac_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {32}] $axi_ad9361_dac_dma
 
@@ -228,7 +228,6 @@ ad_connect fir_decimator/decimate decim_slice/Dout
 
 ad_connect axi_ad9361/l_clk fir_interpolator/aclk
 ad_connect axi_ad9361_dac_dma/fifo_rd_dout fir_interpolator/s_axis_data_tdata
-ad_connect axi_ad9361_dac_dma/fifo_rd_valid fir_interpolator/s_axis_data_tvalid
 ad_connect axi_ad9361/dac_valid_i0 fir_interpolator/dac_read
 ad_connect axi_ad9361_dac_dma/fifo_rd_en fir_interpolator/s_axis_data_tready
 ad_connect axi_ad9361/dac_data_i0 fir_interpolator/channel_0

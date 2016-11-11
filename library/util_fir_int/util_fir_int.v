@@ -42,7 +42,6 @@
 
 module util_fir_int (
   input               aclk,
-  input               s_axis_data_tvalid,
   output              s_axis_data_tready,
   input       [31:0]  s_axis_data_tdata,
   output      [15:0]  channel_0,
@@ -59,7 +58,7 @@ module util_fir_int (
 
   fir_interp interpolator (
     .aclk(aclk),
-    .s_axis_data_tvalid(s_axis_data_tvalid),
+    .s_axis_data_tvalid(1'b1),
     .s_axis_data_tready(s_axis_data_tready_s),
     .s_axis_data_tdata(s_axis_data_tdata),
     .m_axis_data_tvalid(m_axis_data_tvalid),
