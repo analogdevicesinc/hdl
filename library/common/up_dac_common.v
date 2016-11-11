@@ -63,7 +63,7 @@ module up_dac_common #(
   output              dac_par_enb,
   output              dac_r1_mode,
   output              dac_datafmt,
-  output      [ 7:0]  dac_datarate,
+  output      [15:0]  dac_datarate,
   input               dac_status,
   input               dac_status_ovf,
   input               dac_status_unf,
@@ -118,7 +118,7 @@ module up_dac_common #(
   reg             up_dac_par_enb = 'd0;
   reg             up_dac_r1_mode = 'd0;
   reg             up_dac_datafmt = 'd0;
-  reg     [ 7:0]  up_dac_datarate = 'd0;
+  reg     [15:0]  up_dac_datarate = 'd0;
   reg             up_dac_frame = 'd0;
   reg             up_dac_clksel = 'd0;
   reg             up_drp_sel_int = 'd0;
@@ -209,7 +209,7 @@ module up_dac_common #(
         up_dac_datafmt <= up_wdata[4];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h13)) begin
-        up_dac_datarate <= up_wdata[7:0];
+        up_dac_datarate <= up_wdata[15:0];
       end
       if (up_dac_frame == 1'b1) begin
         if (up_xfer_done_s == 1'b1) begin
@@ -357,7 +357,7 @@ module up_dac_common #(
           8'h11: up_rdata_int <= {31'd0, up_dac_sync};
           8'h12: up_rdata_int <= {24'd0, up_dac_par_type, up_dac_par_enb, up_dac_r1_mode,
                               up_dac_datafmt, 4'd0};
-          8'h13: up_rdata_int <= {24'd0, up_dac_datarate};
+          8'h13: up_rdata_int <= {16'd0, up_dac_datarate};
           8'h14: up_rdata_int <= {31'd0, up_dac_frame};
           8'h15: up_rdata_int <= up_dac_clk_count_s;
           8'h16: up_rdata_int <= dac_clk_ratio;
@@ -386,7 +386,7 @@ module up_dac_common #(
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(15)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(23)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_sync,

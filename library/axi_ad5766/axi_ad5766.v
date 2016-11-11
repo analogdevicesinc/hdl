@@ -121,7 +121,7 @@ module axi_ad5766 #(
   wire                                  up_wack_s[0:1];
   wire                                  trigger_s;
   wire        [31:0]                    pulse_period_s;
-  wire        [ 7:0]                    dac_datarate_s;
+  wire        [15:0]                    dac_datarate_s;
   wire                                  spi_reset;
   wire                                  spi_enable_s;
   wire        [ 3:0]                    sequencer[15:0];
@@ -324,7 +324,7 @@ module axi_ad5766 #(
 
   // DAC common registermap
 
-  assign pulse_period_s = {24'h0, dac_datarate_s};
+  assign pulse_period_s = {16'h0, dac_datarate_s};
 
   up_ad5766_sequencer #(
     .SEQ_ID(4))
