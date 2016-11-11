@@ -37,7 +37,7 @@ M_FLIST += *.ip_user_files
 
 
 .PHONY: all lib clean clean-all
-all: lib sdrstk.sdk/system_top.hdf
+all: lib pluto.sdk/system_top.hdf
 
 
 clean: 
@@ -51,9 +51,9 @@ clean-all:clean
 	make -C ../../library/util_fir_int clean
 
 
-sdrstk.sdk/system_top.hdf: $(M_DEPS)
+pluto.sdk/system_top.hdf: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> sdrstk_vivado.log 2>&1
+	$(M_VIVADO) system_project.tcl >> pluto_vivado.log 2>&1
 
 
 lib:
