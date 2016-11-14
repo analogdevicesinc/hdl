@@ -272,7 +272,14 @@ module axi_ad9361 #(
   wire            tdd_rx_rf_en_s;
   wire            tdd_tx_rf_en_s;
   wire    [ 7:0]  tdd_status_s;
-    
+  wire            up_drp_sel;
+  wire            up_drp_wr;
+  wire    [11:0]  up_drp_addr;
+  wire    [31:0]  up_drp_wdata;
+  wire    [31:0]  up_drp_rdata;
+  wire            up_drp_ready;
+  wire            up_drp_locked;
+
   // signal name changes
 
   assign up_clk = s_axi_aclk;

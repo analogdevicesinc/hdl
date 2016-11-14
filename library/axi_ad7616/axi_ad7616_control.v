@@ -150,6 +150,7 @@ module axi_ad7616_control (
       up_cnvst_en <= 1'b0;
       up_conv_rate <= 32'b0;
       up_burst_length <= 5'h0;
+      up_write_data <= 16'h0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin

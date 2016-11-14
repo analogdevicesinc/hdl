@@ -142,6 +142,9 @@ module util_adxcvr_xcm #(
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_VERSION ("4.0"))
   i_gtxe2_common (
+    .QPLLDMONITOR (),
+    .QPLLFBCLKLOST (),
+    .REFCLKOUTMONITOR (),
     .BGBYPASSB (1'h1),
     .BGMONITORENB (1'h1),
     .BGPDB (1'h1),
