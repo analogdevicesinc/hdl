@@ -47,7 +47,3 @@ ad_connect  gp_out_2 axi_gpreg/up_gp_out_2
 ad_connect  gp_out_3 axi_gpreg/up_gp_out_3
 ad_cpu_interconnect 0x41200000 axi_gpreg
 
-## temporary (remove ila indirectly)
-
-delete_bd_objs [get_bd_cells ila_adc]
-
