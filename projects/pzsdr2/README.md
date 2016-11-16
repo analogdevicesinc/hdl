@@ -3,7 +3,6 @@
 This folder contains the PZSDR2 SOM projects for each of the carrier boards.
 
 ## Board Design Files
----
 
 | Directory/File       | Description                            |
 |----------------------|----------------------------------------|
@@ -16,7 +15,6 @@ This folder contains the PZSDR2 SOM projects for each of the carrier boards.
 FMC & BRK carrier designs includes loopback daughtercards for connectivity testing.
 
 ## Board Constraint Files
----
 
 | Directory/File                | Description                                   |
 |-------------------------------|-----------------------------------------------|
@@ -31,7 +29,7 @@ FMC & BRK carrier designs includes loopback daughtercards for connectivity testi
 FMC & BRK carrier designs includes loopback daughtercards for connectivity testing.
 
 ## Building, Generating Bit Files
----
+
 [pzsdr2] cd ccbrk_cmos
 
 [pzsdr2/ccbrk_cmos] make
@@ -39,7 +37,7 @@ FMC & BRK carrier designs includes loopback daughtercards for connectivity testi
 The make in each carrier directory builds the corresponding project. The above example builds PZSDR2-CCBRK hardware bit files in CMOS mode.
 
 ## Documentation
----
+
  * [HDL Design User Guide]
  * [IP User Guide]
  * [PZSDR2 Wiki page]
