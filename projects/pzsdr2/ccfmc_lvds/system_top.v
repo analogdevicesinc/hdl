@@ -91,7 +91,7 @@ module system_top (
   inout           iic_scl,
   inout           iic_sda,
 
-  inout   [11:0]  gpio_bd,
+  inout   [20:0]  gpio_bd,
 
   output          fan_pwm,
   input           fan_tach,
@@ -100,16 +100,13 @@ module system_top (
   input           clk_0_n,
   input           clk_1_p,
   input           clk_1_n,
-  input           clk_2_p,
-  input           clk_2_n,
-  input           gp_in_0,
-  input           gp_in_1,
-  inout   [ 6:0]  gp_inout,
   output  [53:0]  gp_out,
   input   [53:0]  gp_in,
 
-  input           gt_ref_clk_p,
-  input           gt_ref_clk_n,
+  input           gt_ref_clk_0_p,
+  input           gt_ref_clk_0_n,
+  input           gt_ref_clk_1_p,
+  input           gt_ref_clk_1_n,
   output  [ 1:0]  gt_tx_p,
   output  [ 1:0]  gt_tx_n,
   input   [ 1:0]  gt_rx_p,
@@ -139,13 +136,14 @@ module system_top (
 
   output          enable,
   output          txnrx,
-  input           clk_out,
+  input           clkout_in,
   inout           tdd_sync,
 
   inout           gpio_rf0,
   inout           gpio_rf1,
   inout           gpio_rf2,
   inout           gpio_rf3,
+  inout           gpio_rf4,
   inout           gpio_rfpwr_enable,
   inout           gpio_clksel,
   inout           gpio_resetb,
@@ -167,13 +165,10 @@ module system_top (
   wire            spi_miso_s;
   wire            clk_0;
   wire            clk_1;
-  wire            clk_2;
-  wire            gt_ref_clk;
+  wire            gt_ref_clk_1;
+  wire            gt_ref_clk_0;
   wire    [63:0]  gp_out_s;
   wire    [63:0]  gp_in_s;
-  wire    [63:0]  gp_misc_out_s;
-  wire    [63:0]  gp_misc_in_s;
-  wire    [63:0]  gp_misc_ioenb_s;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -193,10 +188,6 @@ module system_top (
   assign ad9517_mosi = spi_mosi_s;
   assign spi_miso_s = (~spi_csn_s[0] & spi_miso) | (~spi_csn_s[1] & ad9517_miso); 
 
-  assign gp_misc_in_s[63:10] = gp_misc_out_s[63:18];
-  assign gp_misc_in_s[9] = gp_in_1;
-  assign gp_misc_in_s[8] = gp_in_0;
-  assign gp_misc_in_s[7] = gp_misc_out_s[7];
 
   assign gp_out[53:0] = gp_out_s[53:0];
   assign gp_in_s[63:54] = gp_out_s[63:54];
@@ -214,25 +205,19 @@ module system_top (
     .IB (clk_1_n),
     .O (clk_1));
 
-  IBUFDS_GTE2 i_ibufds_clk_2 (
+  IBUFDS_GTE2 i_ibufds_gt_ref_clk_0 (
     .CEB (1'd0),
-    .I (clk_2_p),
-    .IB (clk_2_n),
-    .O (clk_2),
+    .I (gt_ref_clk_0_p),
+    .IB (gt_ref_clk_0_n),
+    .O (gt_ref_clk_0),
     .ODIV2 ());
 
-  IBUFDS_GTE2 i_ibufds_gt_ref_clk (
+  IBUFDS_GTE2 i_ibufds_gt_ref_clk_1 (
     .CEB (1'd0),
-    .I (gt_ref_clk_p),
-    .IB (gt_ref_clk_n),
-    .O (gt_ref_clk),
+    .I (gt_ref_clk_1_p),
+    .IB (gt_ref_clk_1_n),
+    .O (gt_ref_clk_1),
     .ODIV2 ());
-
-  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf_sfp (
-    .dio_t (gp_misc_ioenb_s[6:0]),
-    .dio_i (gp_misc_out_s[6:0]),
-    .dio_o (gp_misc_in_s[6:0]),
-    .dio_p (gp_inout));
 
   ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_tdd_sync (
     .dio_t (tdd_sync_t),
@@ -240,11 +225,12 @@ module system_top (
     .dio_o (tdd_sync_i),
     .dio_p (tdd_sync));
 
-  ad_iobuf #(.DATA_WIDTH(25)) i_iobuf (
-    .dio_t ({gpio_t[60:51], gpio_t[46:32]}),
-    .dio_i ({gpio_o[60:51], gpio_o[46:32]}),
-    .dio_o ({gpio_i[60:51], gpio_i[46:32]}),
-    .dio_p ({ ad9517_pdn,         // 60:60
+  ad_iobuf #(.DATA_WIDTH(26)) i_iobuf (
+    .dio_t ({gpio_t[61:51], gpio_t[46:32]}),
+    .dio_i ({gpio_o[61:51], gpio_o[46:32]}),
+    .dio_o ({gpio_i[61:51], gpio_i[46:32]}),
+    .dio_p ({ gpio_rf4,           // 61:61
+              ad9517_pdn,         // 60:60
               ad9517_ref_sel,     // 59:59
               ad9517_ld,          // 58:58
               ad9517_status,      // 57:57
@@ -260,16 +246,15 @@ module system_top (
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
 
-  ad_iobuf #(.DATA_WIDTH(12)) i_iobuf_bd (
-    .dio_t (gpio_t[11:0]),
-    .dio_i (gpio_o[11:0]),
-    .dio_o (gpio_i[11:0]),
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
 
   system_wrapper i_system_wrapper (
     .clk_0 (clk_0),
     .clk_1 (clk_1),
-    .clk_2 (clk_2),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
@@ -303,20 +288,13 @@ module system_top (
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
     .gp_in_0 (gp_in_s[31:0]),
     .gp_in_1 (gp_in_s[63:32]),
-    .gp_in_2 (gp_misc_in_s[31:0]),
-    .gp_in_3 (gp_misc_in_s[63:32]),
-    .gp_ioenb_0 (),
-    .gp_ioenb_1 (),
-    .gp_ioenb_2 (gp_misc_ioenb_s[31:0]),
-    .gp_ioenb_3 (gp_misc_ioenb_s[63:32]),
     .gp_out_0 (gp_out_s[31:0]),
     .gp_out_1 (gp_out_s[63:32]),
-    .gp_out_2 (gp_misc_out_s[31:0]),
-    .gp_out_3 (gp_misc_out_s[63:32]),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .gt_ref_clk (gt_ref_clk),
+    .gt_ref_clk_0 (gt_ref_clk_0),
+    .gt_ref_clk_1 (gt_ref_clk_1),
     .gt_rx_n (gt_rx_n),
     .gt_rx_p (gt_rx_p),
     .gt_tx_n (gt_tx_n),

@@ -3,15 +3,15 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project_create ccfmc_lvds_pzsdr
-adi_project_files ccfmc_lvds_pzsdr [list \
-  "system_top.v" \
-  "system_constr.xdc"\
+set p_device "xc7z035ifbg676-2L"
+adi_project_create pzsdr2_ccfmc_lvds
+adi_project_files pzsdr2_ccfmc_lvds [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/pzsdr/pzsdr_system_constr.xdc" \
-  "$ad_hdl_dir/projects/common/pzsdr/pzsdr_bd_system_constr.xdc" \
-  "$ad_hdl_dir/projects/common/pzsdr/pzsdr_lvds_system_constr.xdc" ]
+  "../common/pzsdr2_constr.xdc" \
+  "../common/pzsdr2_constr_lvds.xdc" \
+  "../common/ccfmc_constr.xdc" \
+  "system_top.v" ]
 
-adi_project_run ccfmc_lvds_pzsdr
+adi_project_run pzsdr2_ccfmc_lvds
 
 

@@ -31,8 +31,8 @@ set_property  -dict {PACKAGE_PIN  K12  IOSTANDARD LVCMOS18} [get_ports clkout_in
 
 # iic (ccbrk with loopback drives i2c back to the FPGA)
 
-set_property  -dict {PACKAGE_PIN  AF24 IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports iic_scl]           ; ## IO_L5P_T0_13                 U1,AF24,SCL,JX2,17,I2C_SCL,P2,14,P2,4,U1,Y16,IO_L23_12_JX2_P,JX2,97,LED_GPIO_3,P2,4
-set_property  -dict {PACKAGE_PIN  AF25 IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports iic_sda]           ; ## IO_L5N_T0_13                 U1,AF25,SDA,JX2,19,I2C_SDA,P2,16,P2,15,U1,AB24,IO_L06_13_JX2_N,JX2,20,IO_L06_13_JX2_N,P2,15
+set_property  -dict {PACKAGE_PIN  AF24 IOSTANDARD LVCMOS25 PULLTYPE PULLUP} [get_ports iic_scl]           ; ## IO_L5P_T0_13                 U1,AF24,SCL,JX2,17,I2C_SCL,P2,14,P2,4,U1,Y16,IO_L23_12_JX2_P,JX2,97,LED_GPIO_3,P2,4
+set_property  -dict {PACKAGE_PIN  AF25 IOSTANDARD LVCMOS25 PULLTYPE PULLUP} [get_ports iic_sda]           ; ## IO_L5N_T0_13                 U1,AF25,SDA,JX2,19,I2C_SDA,P2,16,P2,15,U1,AB24,IO_L06_13_JX2_N,JX2,20,IO_L06_13_JX2_N,P2,15
 
 ##    reference-only
 ##    --------------

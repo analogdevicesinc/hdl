@@ -142,14 +142,14 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_hdmi_dma/M_AXI_MM2S
 set axi_pz_xcvrlb [create_bd_cell -type ip -vlnv analog.com:user:axi_xcvrlb:1.0 axi_pz_xcvrlb]
 set_property -dict [list CONFIG.NUM_OF_LANES {2}] $axi_pz_xcvrlb
 
-create_bd_port -dir I gt_ref_clk
+create_bd_port -dir I gt_ref_clk_0
 create_bd_port -dir I -from 1 -to 0 gt_rx_p
 create_bd_port -dir I -from 1 -to 0 gt_rx_n
 create_bd_port -dir O -from 1 -to 0 gt_tx_p
 create_bd_port -dir O -from 1 -to 0 gt_tx_n
 
 ad_cpu_interconnect 0x44A60000 axi_pz_xcvrlb
-ad_connect  axi_pz_xcvrlb/ref_clk gt_ref_clk
+ad_connect  axi_pz_xcvrlb/ref_clk gt_ref_clk_0
 ad_connect  axi_pz_xcvrlb/rx_p gt_rx_p
 ad_connect  axi_pz_xcvrlb/rx_n gt_rx_n
 ad_connect  axi_pz_xcvrlb/tx_p gt_tx_p
@@ -159,42 +159,26 @@ ad_connect  axi_pz_xcvrlb/tx_n gt_tx_n
 
 set axi_gpreg [create_bd_cell -type ip -vlnv analog.com:user:axi_gpreg:1.0 axi_gpreg]
 set_property -dict [list CONFIG.NUM_OF_CLK_MONS {3}] $axi_gpreg
-set_property -dict [list CONFIG.NUM_OF_IO {4}] $axi_gpreg
+set_property -dict [list CONFIG.NUM_OF_IO {2}] $axi_gpreg
 set_property -dict [list CONFIG.BUF_ENABLE_0 {1}] $axi_gpreg
 set_property -dict [list CONFIG.BUF_ENABLE_1 {1}] $axi_gpreg
 set_property -dict [list CONFIG.BUF_ENABLE_2 {1}] $axi_gpreg
 
 create_bd_port -dir I -from 31 -to 0 gp_in_0
 create_bd_port -dir I -from 31 -to 0 gp_in_1
-create_bd_port -dir I -from 31 -to 0 gp_in_2
-create_bd_port -dir I -from 31 -to 0 gp_in_3
 create_bd_port -dir O -from 31 -to 0 gp_out_0
 create_bd_port -dir O -from 31 -to 0 gp_out_1
-create_bd_port -dir O -from 31 -to 0 gp_out_2
-create_bd_port -dir O -from 31 -to 0 gp_out_3
-create_bd_port -dir O -from 31 -to 0 gp_ioenb_0
-create_bd_port -dir O -from 31 -to 0 gp_ioenb_1
-create_bd_port -dir O -from 31 -to 0 gp_ioenb_2
-create_bd_port -dir O -from 31 -to 0 gp_ioenb_3
 create_bd_port -dir I clk_0
 create_bd_port -dir I clk_1
-create_bd_port -dir I clk_2
+create_bd_port -dir I gt_ref_clk_1
 
 ad_connect  clk_0 axi_gpreg/d_clk_0
 ad_connect  clk_1 axi_gpreg/d_clk_1
-ad_connect  clk_2 axi_gpreg/d_clk_2
+ad_connect  gt_ref_clk_1 axi_gpreg/d_clk_2
 ad_connect  gp_in_0 axi_gpreg/up_gp_in_0
 ad_connect  gp_in_1 axi_gpreg/up_gp_in_1
-ad_connect  gp_in_2 axi_gpreg/up_gp_in_2
-ad_connect  gp_in_3 axi_gpreg/up_gp_in_3
 ad_connect  gp_out_0 axi_gpreg/up_gp_out_0
 ad_connect  gp_out_1 axi_gpreg/up_gp_out_1
-ad_connect  gp_out_2 axi_gpreg/up_gp_out_2
-ad_connect  gp_out_3 axi_gpreg/up_gp_out_3
-ad_connect  gp_ioenb_0 axi_gpreg/up_gp_ioenb_0
-ad_connect  gp_ioenb_1 axi_gpreg/up_gp_ioenb_1
-ad_connect  gp_ioenb_2 axi_gpreg/up_gp_ioenb_2
-ad_connect  gp_ioenb_3 axi_gpreg/up_gp_ioenb_3
 ad_cpu_interconnect 0x41200000 axi_gpreg
 
 ## temporary (remove ila indirectly)
