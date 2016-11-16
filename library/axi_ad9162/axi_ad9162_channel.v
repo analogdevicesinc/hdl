@@ -100,8 +100,7 @@ module axi_ad9162_channel (
     
     reg               dac_enable = 'd0;
     reg     [255:0]   dac_data = 'd0;
-    reg     [255:0]   dac_pn7_data = 'd0;
-    reg     [255:0]   dac_pn15_data = 'd0;
+    reg     [255:0]   dac_data_int = 'd0;
     reg     [ 15:0]   dac_dds_phase_00_0 = 'd0;
     reg     [ 15:0]   dac_dds_phase_00_1 = 'd0;
     reg     [ 15:0]   dac_dds_phase_01_0 = 'd0;
@@ -150,65 +149,33 @@ module axi_ad9162_channel (
     wire    [ 15:0]   dac_pat_data_2_s;
     wire    [  3:0]   dac_data_sel_s;
     wire              dac_iq_mode_s;
-    wire    [255:0]   dac_pn7_data_i_s;
-    wire    [255:0]   dac_pn15_data_i_s;
-    wire    [255:0]   dac_pn7_data_s;
-    wire    [255:0]   dac_pn15_data_s;
     wire    [255:0]   dac_pat_data_s;
     wire    [255:0]   dac_dds_data_s;
+
+    // dac sample mux
+
+    always @(posedge dac_clk) begin
+      dac_data[255:240] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[255:240] : dac_data_int[255:240];
+      dac_data[239:224] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[223:208] : dac_data_int[239:224];
+      dac_data[223:208] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[239:224] : dac_data_int[223:208];
+      dac_data[207:192] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[207:192] : dac_data_int[207:192];
+      dac_data[191:176] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[191:176] : dac_data_int[191:176];
+      dac_data[175:160] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[159:144] : dac_data_int[175:160];
+      dac_data[159:144] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[175:160] : dac_data_int[159:144];
+      dac_data[143:128] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[143:128] : dac_data_int[143:128];
+      dac_data[127:112] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[127:112] : dac_data_int[127:112];
+      dac_data[111: 96] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[ 95: 80] : dac_data_int[111: 96];
+      dac_data[ 95: 80] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[111: 96] : dac_data_int[ 95: 80];
+      dac_data[ 79: 64] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[ 79: 64] : dac_data_int[ 79: 64];
+      dac_data[ 63: 48] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[ 63: 48] : dac_data_int[ 63: 48];
+      dac_data[ 47: 32] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[ 31: 16] : dac_data_int[ 47: 32];
+      dac_data[ 31: 16] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[ 47: 32] : dac_data_int[ 31: 16];
+      dac_data[ 15:  0] <= (dac_iq_mode_s == 1'b1) ? dac_data_int[ 15:  0] : dac_data_int[ 15:  0];
+    end
     
+    // dac pattern data
+
     genvar n;
-
-    // PN7 function
-    
-    function [255:0] pn7;
-         input [7:0] din;
-         reg   [255:0] dout;
-         reg   [15:0] dout16;
-         reg   [7:0] din_reg;
-         integer i;
-         integer j;
-         begin
-         din_reg = din;
-           for ( j=0 ; j<16 ; j=j+1)begin
-             for ( i=0 ; i<16 ; i= i+1)begin
-                 din_reg = {din_reg,din_reg[6]^din_reg[5]};
-                 dout16[15-i] = din_reg[0];
-              end
-              dout = {dout16,dout[255:16]};
-           end         
-           pn7 = dout;
-         end
-    endfunction
-    
-    // PN15 function
-    
-    function [255:0] pn15;
-         input [15:0] din;
-         reg   [255:0] dout;
-         reg   [15:0] dout16;
-         reg   [15:0] din_reg;
-         integer i;
-         integer j;
-         begin
-         din_reg = din;
-           for (j=0 ; j<16 ; j=j+1)begin
-             for (i=0 ; i<16 ; i= i+1)begin
-                 din_reg = {din_reg,din_reg[14]^din_reg[13]};
-                 dout16[15-i] = din_reg[0];
-              end
-              dout = {dout16,dout[255:16]};
-           end         
-           pn15 = dout;
-         end
-    endfunction
-    
-    assign dac_pn7_data_i_s = ~dac_pn7_data;
-    assign dac_pn15_data_i_s = ~dac_pn15_data;
-    
-    assign dac_pn7_data_s = dac_pn7_data;
-    assign dac_pn15_data_s = dac_pn15_data;
-
     generate
     for (n = 0; n < 8; n = n + 1) begin: g_dac_pat_data
     assign dac_pat_data_s[((32*n)+31):((32*n)+16)] = dac_pat_data_2_s;
@@ -221,27 +188,11 @@ module axi_ad9162_channel (
     always @(posedge dac_clk) begin
       dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
       case (dac_data_sel_s)
-        4'h7: dac_data <= dac_pn15_data_s;
-        4'h6: dac_data <= dac_pn7_data_s;
-        4'h5: dac_data <= dac_pn15_data_i_s;
-        4'h4: dac_data <= dac_pn7_data_i_s;
-        4'h3: dac_data <= 256'd0;
-        4'h2: dac_data <= dma_data;
-        4'h1: dac_data <= dac_pat_data_s;
-        default: dac_data <= dac_dds_data;
+        4'h3: dac_data_int <= 256'd0;
+        4'h2: dac_data_int <= dma_data;
+        4'h1: dac_data_int <= dac_pat_data_s;
+        default: dac_data_int <= dac_dds_data;
       endcase
-    end
-    
-    // pn registers
-    
-    always @(posedge dac_clk) begin
-      if (dac_data_sync == 1'b1) begin
-        dac_pn7_data <= {255{1'd1}};
-        dac_pn15_data <= {255{1'd1}};
-      end else begin
-        dac_pn7_data <= pn7(dac_pn7_data[247:240]);
-        dac_pn15_data <= pn15(dac_pn15_data[255:240]);
-      end
     end
     
     // dds
@@ -358,11 +309,7 @@ module axi_ad9162_channel (
       end
     end
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[15:0] = 16'd0;
-    end else begin
-    ad_dds i_dds_00 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_00 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_00_0),
@@ -370,14 +317,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_00_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[15:0]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[31:16] = 16'd0;
-    end else begin
-    ad_dds i_dds_01 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_01 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_01_0),
@@ -385,14 +326,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_01_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[31:16]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[47:32] = 16'd0;
-    end else begin
-    ad_dds i_dds_02 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_02 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_02_0),
@@ -400,14 +335,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_02_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[47:32]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[63:48] = 16'd0;
-    end else begin
-    ad_dds i_dds_03 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_03 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_03_0),
@@ -415,14 +344,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_03_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[63:48]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[79:64] = 16'd0;
-    end else begin
-    ad_dds i_dds_04 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_04 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_04_0),
@@ -430,14 +353,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_04_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[79:64]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[95:80] = 16'd0;
-    end else begin
-    ad_dds i_dds_05 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_05 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_05_0),
@@ -445,14 +362,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_05_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[95:80]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[111:96] = 16'd0;
-    end else begin
-    ad_dds i_dds_06 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_06 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_06_0),
@@ -460,14 +371,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_06_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[111:96]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[127:112] = 16'd0;
-    end else begin
-    ad_dds i_dds_07 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_07 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_07_0),
@@ -475,14 +380,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_07_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[127:112]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[143:128] = 16'd0;
-    end else begin
-    ad_dds i_dds_08 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_08 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_08_0),
@@ -490,14 +389,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_08_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[143:128]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[159:144] = 16'd0;
-    end else begin
-    ad_dds i_dds_09 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_09 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_09_0),
@@ -505,14 +398,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_09_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[159:144]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[175:160] = 16'd0;
-    end else begin
-    ad_dds i_dds_10 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_10 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_10_0),
@@ -520,14 +407,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_10_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[175:160]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[191:176] = 16'd0;
-    end else begin
-    ad_dds i_dds_11 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_11 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_11_0),
@@ -535,14 +416,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_11_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[191:176]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[207:192] = 16'd0;
-    end else begin
-    ad_dds i_dds_12 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_12 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_12_0),
@@ -550,14 +425,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_12_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[207:192]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[223:208] = 16'd0;
-    end else begin
-    ad_dds i_dds_13 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_13 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_13_0),
@@ -565,14 +434,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_13_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[223:208]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[239:224] = 16'd0;
-    end else begin
-    ad_dds i_dds_14 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_14 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_14_0),
@@ -580,14 +443,8 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_14_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[239:224]));
-    end
-    endgenerate
     
-    generate
-    if (DATAPATH_DISABLE == 1) begin
-    assign dac_dds_data_s[255:240] = 16'd0;
-    end else begin
-    ad_dds i_dds_15 (
+    ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_15 (
       .clk (dac_clk),
       .dds_format (dac_dds_format),
       .dds_phase_0 (dac_dds_phase_15_0),
@@ -595,8 +452,6 @@ module axi_ad9162_channel (
       .dds_phase_1 (dac_dds_phase_15_1),
       .dds_scale_1 (dac_dds_scale_2_s),
       .dds_data (dac_dds_data_s[255:240]));
-    end
-    endgenerate
     
     // single channel processor
     
