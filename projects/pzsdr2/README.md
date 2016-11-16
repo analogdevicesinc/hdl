@@ -40,7 +40,11 @@ The make in each carrier directory builds the corresponding project. The above e
 
 ## Documentation
 ---
-HDL User Guide
-HDL IP User Guide
-PZSDR2 Wiki
+ * [HDL Design User Guide]
+ * [IP User Guide]
+ * [PZSDR2 Wiki page]
+ 
+[HDL Design User Guide]:http://wiki.analog.com/resources/fpga/docs/hdl
+[IP User Guide]:http://wiki.analog.com/resources/fpga/docs/axi_ad9361 
+[PZSDR2 Wiki page]:https://wiki.analog.com/resources/eval/user-guides/picozed_sdr
 
