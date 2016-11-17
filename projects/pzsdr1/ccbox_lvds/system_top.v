@@ -117,9 +117,14 @@ module system_top (
 
   output          enable,
   output          txnrx,
-  input           clk_out,
+  input           clkout_in,
 
-  inout   [ 5:0]  gpio_rf,
+  inout           gpio_rf0,
+  inout           gpio_rf1,
+  inout           gpio_rf2,
+  inout           gpio_rf3,
+  inout           gpio_rf4,
+  inout           gpio_rfpwr_enable,
   inout           gpio_clksel,
   inout           gpio_resetb,
   inout           gpio_sync,
@@ -142,9 +147,10 @@ module system_top (
 
   assign oled_clk = spi_clk;
   assign oled_mosi = spi_mosi;
-  assign gpio_i[31:24] = gpio_o[31:24];
 
-  // gpio[23:20] controls misc stuff (keep as io)
+  // gpio[31:20] controls misc stuff (keep as io)
+
+  assign gpio_i[31:24] = gpio_o[31:24];
 
   ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_misc (
     .dio_t (gpio_t[23:20]),
@@ -196,16 +202,22 @@ module system_top (
   assign switch_led_b = gpio_o[0];
   assign gpio_i[3:0] = gpio_o[3:0];
 
-  // ad9361 gpio
+  // ad9361 gpio - 63-32
 
-  assign gpio_i[63:58] = gpio_o[63:58];
+  assign gpio_i[63:62] = gpio_o[63:62];
+  assign gpio_i[60:57] = gpio_o[60:57];
   assign gpio_i[50:47] = gpio_o[50:47];
 
   ad_iobuf #(.DATA_WIDTH(22)) i_iobuf (
-    .dio_t ({gpio_t[57:51], gpio_t[46:32]}),
-    .dio_i ({gpio_o[57:51], gpio_o[46:32]}),
-    .dio_o ({gpio_i[57:51], gpio_i[46:32]}),
-    .dio_p ({ gpio_rf,            // 57:52
+    .dio_t ({gpio_t[61:61], gpio_t[56:51], gpio_t[46:32]}),
+    .dio_i ({gpio_o[61:61], gpio_o[56:51], gpio_o[46:32]}),
+    .dio_o ({gpio_i[61:61], gpio_i[56:51], gpio_i[46:32]}),
+    .dio_p ({ gpio_rf4,           // 61:61
+              gpio_rf0,           // 56:56
+              gpio_rf1,           // 55:55
+              gpio_rf2,           // 54:54
+              gpio_rf3,           // 53:53
+              gpio_rfpwr_enable,  // 52:52
               gpio_clksel,        // 51:51
               gpio_resetb,        // 46:46
               gpio_sync,          // 45:45
