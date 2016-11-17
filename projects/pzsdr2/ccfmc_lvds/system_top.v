@@ -188,6 +188,7 @@ module system_top (
   assign ad9517_mosi = spi_mosi_s;
   assign spi_miso_s = (~spi_csn_s[0] & spi_miso) | (~spi_csn_s[1] & ad9517_miso); 
 
+  // loopback signals
 
   assign gp_out[53:0] = gp_out_s[53:0];
   assign gp_in_s[63:54] = gp_out_s[63:54];
@@ -225,6 +226,21 @@ module system_top (
     .dio_o (tdd_sync_i),
     .dio_p (tdd_sync));
 
+  // board gpio - 31-0
+
+  assign gpio_i[31:21] = gpio_o[31:21];
+
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
+
+  // ad9361 gpio - 63-32
+
+  assign gpio_i[63:62] = gpio_o[63:62];
+  assign gpio_i[50:47] = gpio_o[50:47];
+
   ad_iobuf #(.DATA_WIDTH(26)) i_iobuf (
     .dio_t ({gpio_t[61:51], gpio_t[46:32]}),
     .dio_i ({gpio_o[61:51], gpio_o[46:32]}),
@@ -246,11 +262,7 @@ module system_top (
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
 
-  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
-    .dio_t (gpio_t[20:0]),
-    .dio_i (gpio_o[20:0]),
-    .dio_o (gpio_i[20:0]),
-    .dio_p (gpio_bd));
+  // instantiations
 
   system_wrapper i_system_wrapper (
     .clk_0 (clk_0),

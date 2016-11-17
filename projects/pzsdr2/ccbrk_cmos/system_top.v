@@ -128,6 +128,21 @@ module system_top (
     .O (gt_ref_clk),
     .ODIV2 ());
 
+  // board gpio - 31-0
+
+  assign gpio_i[31:20] = gpio_o[31:20];
+
+  ad_iobuf #(.DATA_WIDTH(20)) i_iobuf_bd (
+    .dio_t (gpio_t[19:0]),
+    .dio_i (gpio_o[19:0]),
+    .dio_o (gpio_i[19:0]),
+    .dio_p (gpio_bd));
+
+  // ad9361 gpio - 63-32
+
+  assign gpio_i[63:52] = gpio_o[63:52];
+  assign gpio_i[50:47] = gpio_o[50:47];
+
   ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
     .dio_t ({gpio_t[51], gpio_t[46:32]}),
     .dio_i ({gpio_o[51], gpio_o[46:32]}),
@@ -139,11 +154,7 @@ module system_top (
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
 
-  ad_iobuf #(.DATA_WIDTH(20)) i_iobuf_bd (
-    .dio_t (gpio_t[19:0]),
-    .dio_i (gpio_o[19:0]),
-    .dio_o (gpio_i[19:0]),
-    .dio_p (gpio_bd));
+  // instantiations
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
