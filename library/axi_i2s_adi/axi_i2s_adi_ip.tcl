@@ -103,5 +103,11 @@ ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXIS_ARESETN -clear [ip
 # Tie-off optional inputs to 0
 set_property driver_value 0 [ipx::get_ports -filter "direction==in && enablement_dependency!={}"  -of_objects [ipx::current_core]]
 
+# Incorrectly inferred interfaces
+ipx::remove_bus_interface DMA_REQ_TX_RSTN [ipx::current_core]
+ipx::remove_bus_interface DMA_REQ_RX_RSTN [ipx::current_core]
+ipx::remove_bus_interface DMA_REQ_TX_ACLK [ipx::current_core]
+ipx::remove_bus_interface DMA_REQ_RX_ACLK [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 
