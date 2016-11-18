@@ -8,8 +8,8 @@ ad_connect  sys_ps7/ENET1_GMII_TX_CLK GND
 
 set_property CONFIG.PCW_UART0_PERIPHERAL_ENABLE {1} [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_UART0_UART0_IO {MIO 14 .. 15} [get_bd_cells sys_ps7]
+set_property CONFIG.PCW_USE_DMA0 1 [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_USE_DMA1 1 [get_bd_cells sys_ps7]
-set_property CONFIG.PCW_USE_DMA2 1 [get_bd_cells sys_ps7]
 
 # i2s
 
@@ -30,14 +30,14 @@ ad_connect  sys_200m_clk sys_audio_clkgen/clk_in1
 ad_connect  sys_cpu_resetn sys_audio_clkgen/resetn
 ad_connect  sys_cpu_clk axi_i2s_adi/DMA_REQ_RX_ACLK
 ad_connect  sys_cpu_clk axi_i2s_adi/DMA_REQ_TX_ACLK
+ad_connect  sys_cpu_clk sys_ps7/DMA0_ACLK
 ad_connect  sys_cpu_clk sys_ps7/DMA1_ACLK
-ad_connect  sys_cpu_clk sys_ps7/DMA2_ACLK
 ad_connect  sys_cpu_resetn axi_i2s_adi/DMA_REQ_RX_RSTN
 ad_connect  sys_cpu_resetn axi_i2s_adi/DMA_REQ_TX_RSTN
-ad_connect  sys_ps7/DMA1_REQ axi_i2s_adi/DMA_REQ_TX
-ad_connect  sys_ps7/DMA1_ACK axi_i2s_adi/DMA_ACK_TX
-ad_connect  sys_ps7/DMA2_REQ axi_i2s_adi/DMA_REQ_RX
-ad_connect  sys_ps7/DMA2_ACK axi_i2s_adi/DMA_ACK_RX
+ad_connect  sys_ps7/DMA0_REQ axi_i2s_adi/DMA_REQ_TX
+ad_connect  sys_ps7/DMA0_ACK axi_i2s_adi/DMA_ACK_TX
+ad_connect  sys_ps7/DMA1_REQ axi_i2s_adi/DMA_REQ_RX
+ad_connect  sys_ps7/DMA1_ACK axi_i2s_adi/DMA_ACK_RX
 ad_connect  sys_audio_clkgen/clk_out1 i2s_mclk
 ad_connect  sys_audio_clkgen/clk_out1 axi_i2s_adi/DATA_CLK_I
 ad_connect  i2s axi_i2s_adi/I2S
