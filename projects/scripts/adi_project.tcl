@@ -75,16 +75,6 @@ proc adi_project_create {project_name {mode 0}} {
     set p_board "not-applicable"
     set sys_zynq 1
   }
-  if [regexp "_pzsdr$" $project_name] {
-    set p_device "xc7z035ifbg676-2L"
-    set p_board "not-applicable"
-    set sys_zynq 1
-  }
-  if [regexp "_pzsdr1$" $project_name] {
-    set p_device "xc7z020clg400-1"
-    set p_board "not-applicable"
-    set sys_zynq 1
-  }
   if [regexp "_zcu102$" $project_name] {
     set p_device "xczu9eg-ffvb1156-1-i-es1"
     set p_board "xilinx.com:zcu102:part0:1.2"
