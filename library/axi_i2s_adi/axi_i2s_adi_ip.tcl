@@ -100,5 +100,8 @@ adi_set_ports_dependency "DMA_REQ_RX_RSTN" \
 ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXI_ARESETN [ipx::current_core]
 ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXIS_ARESETN -clear [ipx::current_core]
 
+# Tie-off optional inputs to 0
+set_property driver_value 0 [ipx::get_ports -filter "direction==in && enablement_dependency!={}"  -of_objects [ipx::current_core]]
+
 ipx::save_core [ipx::current_core]
 
