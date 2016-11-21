@@ -88,8 +88,13 @@ module system_top (
   tx_data_out_p,
   tx_data_out_n,
 
-  gpio_txnrx,
-  gpio_enable,
+  enable,
+  txnrx,
+
+  tdd_sync,
+
+  gpio_muxout_tx,
+  gpio_muxout_rx,
   gpio_resetb,
   gpio_sync,
   gpio_en_agc,
@@ -99,7 +104,12 @@ module system_top (
   spi_csn,
   spi_clk,
   spi_mosi,
-  spi_miso);
+  spi_miso,
+
+  spi_udc_csn_tx,
+  spi_udc_csn_rx,
+  spi_udc_sclk,
+  spi_udc_data);
 
   inout   [14:0]  ddr_addr;
   inout   [ 2:0]  ddr_ba;
@@ -150,8 +160,13 @@ module system_top (
   output  [ 5:0]  tx_data_out_p;
   output  [ 5:0]  tx_data_out_n;
 
-  inout           gpio_txnrx;
-  inout           gpio_enable;
+  output          enable;
+  output          txnrx;
+
+  inout           tdd_sync;
+
+  inout           gpio_muxout_tx;
+  inout           gpio_muxout_rx;
   inout           gpio_resetb;
   inout           gpio_sync;
   inout           gpio_en_agc;
@@ -163,12 +178,16 @@ module system_top (
   output          spi_mosi;
   input           spi_miso;
 
+  output          spi_udc_csn_tx;
+  output          spi_udc_csn_rx;
+  output          spi_udc_sclk;
+  output          spi_udc_data;
+
   // internal signals
 
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-
   wire            clk;
   wire            dma_dac_i0_enable;
   wire    [15:0]  dma_dac_i0_data;
@@ -218,7 +237,6 @@ module system_top (
   wire            core_adc_q1_enable;
   wire    [15:0]  core_adc_q1_data;
   wire            core_adc_q1_valid;
-
   wire    [31:0]  adc_gpio_input;
   wire    [31:0]  adc_gpio_output;
   wire    [31:0]  dac_gpio_input;
@@ -254,6 +272,7 @@ module system_top (
     .dio_p (tdd_sync));
 
   // prcfg instance
+
   prcfg i_prcfg (
     .clk (clk),
     .adc_gpio_input (adc_gpio_input),
@@ -307,8 +326,7 @@ module system_top (
     .core_adc_i1_valid (core_adc_i1_valid),
     .core_adc_q1_enable (core_adc_q1_enable),
     .core_adc_q1_data (core_adc_q1_data),
-    .core_adc_q1_valid (core_adc_q1_valid)
-  );
+    .core_adc_q1_valid (core_adc_q1_valid));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -371,13 +389,27 @@ module system_top (
     .spi0_sdi_i (spi_miso),
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (spi_mosi),
+    .spi1_clk_i (1'b0),
+    .spi1_clk_o (spi_udc_sclk),
+    .spi1_csn_0_o (spi_udc_csn_tx),
+    .spi1_csn_1_o (spi_udc_csn_rx),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'b1),
+    .spi1_sdi_i (1'b0),
+    .spi1_sdo_i (spi_udc_data),
+    .spi1_sdo_o (spi_udc_data),
+    .tdd_sync_i (tdd_sync_i),
+    .tdd_sync_o (tdd_sync_o),
+    .tdd_sync_t (tdd_sync_t),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_data_out_n),
     .tx_data_out_p (tx_data_out_p),
     .tx_frame_out_n (tx_frame_out_n),
     .tx_frame_out_p (tx_frame_out_p),
-    // pr related ports
+    .txnrx (txnrx),
+    .up_enable (gpio_o[47]),
+    .up_txnrx (gpio_o[48]),
     .clk (clk),
     .up_adc_gpio_in (adc_gpio_input),
     .up_adc_gpio_out (adc_gpio_output),
@@ -430,8 +462,7 @@ module system_top (
     .core_adc_i1_valid (core_adc_i1_valid),
     .core_adc_q1_enable (core_adc_q1_enable),
     .core_adc_q1_data (core_adc_q1_data),
-    .core_adc_q1_valid (core_adc_q1_valid)
-  );
+    .core_adc_q1_valid (core_adc_q1_valid));
 
 endmodule
 
