@@ -668,8 +668,8 @@ module axi_jesd_gt #(
 
   // axi - clock & reset
 
-  input                                       axi_aclk,
-  input                                       axi_aresetn,
+  input                                       s_axi_aclk,
+  input                                       s_axi_aresetn,
 
   // axi interface
 
@@ -831,8 +831,8 @@ module axi_jesd_gt #(
 
   // signal name changes
 
-  assign up_rstn = axi_aresetn;
-  assign up_clk = axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+  assign up_clk = s_axi_aclk;
 
   // pll 
 

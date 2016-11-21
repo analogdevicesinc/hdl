@@ -413,6 +413,11 @@
          value = "2";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
    }
    element mem_rst
    {
@@ -420,6 +425,11 @@
       {
          value = "3";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
       }
    }
    element sys_clk
@@ -429,6 +439,11 @@
          value = "0";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
    }
    element sys_rst
    {
@@ -436,6 +451,11 @@
       {
          value = "1";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
       }
    }
    element system_bd
@@ -709,11 +729,16 @@
          value = "4";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="10AX115S3F45I2SGE2" />
+ <parameter name="device" value="10AX115S2F45I2SG" />
  <parameter name="deviceFamily" value="Arria 10" />
  <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
@@ -909,7 +934,7 @@
  <module name="xcvr_core" kind="altera_jesd204" version="15.1" enabled="1">
   <parameter name="ADJCNT" value="0" />
   <parameter name="ADJDIR" value="0" />
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AX115S2F45I2SG" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="BID" value="0" />
   <parameter name="CF" value="0" />
@@ -957,8 +982,8 @@
   <parameter name="bitrev_en" value="false" />
   <parameter name="bonded_mode" value="non_bonded" />
   <parameter name="lane_rate" value="10000.0" />
-  <parameter name="part_trait_bd" value="NIGHTFURY5ES2" />
-  <parameter name="part_trait_dp" value="10AX115S3F45I2SGE2" />
+  <parameter name="part_trait_bd" value="NIGHTFURY5" />
+  <parameter name="part_trait_dp" value="10AX115S2F45I2SG" />
   <parameter name="pll_reconfig_enable" value="false" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="rcfg_jtag_enable" value="false" />
@@ -985,12 +1010,12 @@
   <parameter name="TX_ENABLE" value="1" />
   <parameter name="TX_PER_CHANNEL" value="1" />
   <parameter name="TX_PLL_ENABLE" value="1" />
-  <parameter name="T_PLL_LOCK_HYST" value="0" />
+  <parameter name="T_PLL_LOCK_HYST" value="1000" />
   <parameter name="T_PLL_POWERDOWN" value="1000" />
-  <parameter name="T_RX_ANALOGRESET" value="40" />
-  <parameter name="T_RX_DIGITALRESET" value="4000" />
-  <parameter name="T_TX_ANALOGRESET" value="40" />
-  <parameter name="T_TX_DIGITALRESET" value="4000" />
+  <parameter name="T_RX_ANALOGRESET" value="100000" />
+  <parameter name="T_RX_DIGITALRESET" value="100000" />
+  <parameter name="T_TX_ANALOGRESET" value="100000" />
+  <parameter name="T_TX_DIGITALRESET" value="100000" />
   <parameter name="device_family" value="Arria 10" />
   <parameter name="gui_pll_cal_busy" value="1" />
   <parameter name="gui_rx_auto_reset" value="0" />
@@ -1275,7 +1300,7 @@
   <parameter name="gui_use_NDFB_modes" value="false" />
   <parameter name="gui_use_locked" value="false" />
   <parameter name="gui_vco_frequency" value="600.0" />
-  <parameter name="system_info_device_component" value="10AX115S3F45I2SGE2" />
+  <parameter name="system_info_device_component" value="10AX115S2F45I2SG" />
   <parameter name="system_info_device_family" value="Arria 10" />
   <parameter name="system_info_device_speed_grade" value="2" />
   <parameter name="system_part_trait_speed_grade" value="2" />
@@ -1291,42 +1316,29 @@
  </module>
  <module
    name="xcvr_tx_lane_pll"
-   kind="altera_xcvr_atx_pll_a10"
+   kind="altera_xcvr_cdr_pll_a10"
    version="15.1"
    enabled="1">
-  <parameter name="base_device" value="NIGHTFURY5ES2" />
-  <parameter name="bw_sel" value="medium" />
-  <parameter name="device" value="10AX115S3F45I2SGE2" />
+  <parameter name="base_device" value="NIGHTFURY5" />
+  <parameter name="bw_sel" value="Medium" />
+  <parameter name="cdr_pll_cgb_div" value="1" />
+  <parameter name="cdr_pll_initial_settings" value="true" />
+  <parameter name="cdr_pll_is_cascaded_pll" value="false" />
+  <parameter name="cdr_pll_optimal" value="false" />
+  <parameter name="device" value="10AX115S2F45I2SG" />
   <parameter name="device_family" value="Arria 10" />
-  <parameter name="enable_16G_path" value="0" />
-  <parameter name="enable_8G_path" value="1" />
+  <parameter name="diag_loopback_enable" value="false" />
   <parameter name="enable_analog_resets" value="0" />
-  <parameter name="enable_atx_to_fpll_cascade_out" value="0" />
-  <parameter name="enable_bonding_clks" value="1" />
-  <parameter name="enable_cascade_out" value="0" />
-  <parameter name="enable_debug_ports_parameters" value="0" />
-  <parameter name="enable_fb_comp_bonding" value="0" />
-  <parameter name="enable_fractional" value="0" />
-  <parameter name="enable_hfreq_clk" value="0" />
-  <parameter name="enable_hip_cal_done_port" value="0" />
-  <parameter name="enable_manual_configuration" value="1" />
-  <parameter name="enable_mcgb" value="0" />
-  <parameter name="enable_mcgb_pcie_clksw" value="0" />
-  <parameter name="enable_pcie_clk" value="0" />
-  <parameter name="enable_pld_atx_cal_busy_port" value="1" />
-  <parameter name="enable_pld_mcgb_cal_busy_port" value="0" />
   <parameter name="enable_pll_reconfig" value="0" />
   <parameter name="generate_add_hdl_instance_example" value="0" />
   <parameter name="generate_docs" value="1" />
-  <parameter name="mcgb_aux_clkin_cnt" value="0" />
-  <parameter name="mcgb_div" value="1" />
+  <parameter name="gui_tx_pll_prot_mode" value="Basic" />
+  <parameter name="manual_counters" value="" />
   <parameter name="message_level" value="error" />
-  <parameter name="pma_width" value="64" />
-  <parameter name="primary_pll_buffer">GX clock output buffer</parameter>
-  <parameter name="prot_mode" value="Basic" />
+  <parameter name="output_clock_frequency" value="5000" />
   <parameter name="rcfg_debug" value="0" />
   <parameter name="rcfg_enable_avmm_busy_port" value="0" />
-  <parameter name="rcfg_file_prefix">altera_xcvr_atx_pll_a10</parameter>
+  <parameter name="rcfg_file_prefix">altera_xcvr_cdr_pll_a10</parameter>
   <parameter name="rcfg_h_file_enable" value="0" />
   <parameter name="rcfg_jtag_enable" value="0" />
   <parameter name="rcfg_mif_file_enable" value="0" />
@@ -1340,25 +1352,14 @@
   <parameter name="rcfg_txt_file_enable" value="0" />
   <parameter name="refclk_cnt" value="1" />
   <parameter name="refclk_index" value="0" />
+  <parameter name="refclk_select_mux_powerdown_mode" value="powerup" />
+  <parameter name="reference_clock_frequency" value="500.0" />
   <parameter name="select_manual_config" value="false" />
-  <parameter name="set_altera_xcvr_atx_pll_a10_calibration_en" value="1" />
-  <parameter name="set_auto_reference_clock_frequency" value="500.0" />
+  <parameter name="set_altera_xcvr_cdr_pll_a10_calibration_en" value="1" />
   <parameter name="set_capability_reg_enable" value="0" />
   <parameter name="set_csr_soft_logic_enable" value="0" />
-  <parameter name="set_fref_clock_frequency" value="100.0" />
-  <parameter name="set_hip_cal_en" value="0" />
-  <parameter name="set_k_counter" value="1" />
-  <parameter name="set_l_cascade_counter" value="4" />
-  <parameter name="set_l_cascade_predivider" value="1" />
-  <parameter name="set_l_counter" value="4" />
-  <parameter name="set_m_counter" value="50" />
-  <parameter name="set_manual_reference_clock_frequency" value="100.0" />
-  <parameter name="set_output_clock_frequency" value="5000.0" />
-  <parameter name="set_ref_clk_div" value="1" />
   <parameter name="set_user_identifier" value="0" />
-  <parameter name="silicon_rev" value="false" />
   <parameter name="support_mode" value="user_mode" />
-  <parameter name="test_mode" value="0" />
  </module>
  <module name="xcvr_tx_pll" kind="altera_iopll" version="15.1" enabled="1">
   <parameter name="gui_active_clk" value="false" />
@@ -1638,7 +1639,7 @@
   <parameter name="gui_use_NDFB_modes" value="false" />
   <parameter name="gui_use_locked" value="false" />
   <parameter name="gui_vco_frequency" value="600.0" />
-  <parameter name="system_info_device_component" value="10AX115S3F45I2SGE2" />
+  <parameter name="system_info_device_component" value="10AX115S2F45I2SG" />
   <parameter name="system_info_device_family" value="Arria 10" />
   <parameter name="system_info_device_speed_grade" value="2" />
   <parameter name="system_part_trait_speed_grade" value="2" />
@@ -2006,8 +2007,8 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="xcvr_rst_cntrl.pll_cal_busy"
-   end="xcvr_tx_lane_pll.pll_cal_busy">
+   start="xcvr_tx_lane_pll.pll_cal_busy"
+   end="xcvr_rst_cntrl.pll_cal_busy">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />

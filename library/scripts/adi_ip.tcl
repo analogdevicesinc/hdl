@@ -2,7 +2,7 @@
 # check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2015.2.1"
+  set REQUIRED_VIVADO_VERSION "2015.4.2"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -78,13 +78,6 @@ proc adi_ip_bd {ip_name ip_bd_files} {
 proc adi_ip_properties {ip_name} {
 
   ipx::package_project -root_dir .
-  ipx::remove_memory_map {s_axi} [ipx::current_core]
-  ipx::add_memory_map {s_axi} [ipx::current_core]
-  set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interfaces s_axi -of_objects [ipx::current_core]]
-
-  ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]
-  set_property range {65536} [ipx::get_address_blocks axi_lite \
-    -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
 
   set_property vendor {analog.com} [ipx::current_core]
   set_property library {user} [ipx::current_core]
@@ -109,6 +102,47 @@ proc adi_ip_properties {ip_name} {
      {qzynq}      {Production} \
      {azynq}      {Production}} \
   [ipx::current_core]
+
+  ipx::remove_all_bus_interface [ipx::current_core]
+  ipx::infer_bus_interface {\
+    s_axi_awvalid \
+    s_axi_awaddr \
+    s_axi_awprot \
+    s_axi_awready \
+    s_axi_wvalid \
+    s_axi_wdata \
+    s_axi_wstrb \
+    s_axi_wready \
+    s_axi_bvalid \
+    s_axi_bresp \
+    s_axi_bready \
+    s_axi_arvalid \
+    s_axi_araddr \
+    s_axi_arprot \
+    s_axi_arready \
+    s_axi_rvalid \
+    s_axi_rdata \
+    s_axi_rresp \
+    s_axi_rready} \
+  xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
+
+  ipx::infer_bus_interface s_axi_aclk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+  ipx::infer_bus_interface s_axi_aresetn xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+  ipx::add_memory_map {s_axi} [ipx::current_core]
+  set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interfaces s_axi -of_objects [ipx::current_core]]
+  ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]
+  set_property range {65536} [ipx::get_address_blocks axi_lite \
+    -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
+  ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces s_axi_aclk \
+    -of_objects [ipx::current_core]]
+  set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
+    -of_objects [ipx::get_bus_interfaces s_axi_aclk \
+    -of_objects [ipx::current_core]]]
+
+    ipx::infer_bus_interfaces xilinx.com:interface:clock_rtl:1.0 [ipx::current_core]
+    ipx::infer_bus_interfaces xilinx.com:interface:reset_rtl:1.0 [ipx::current_core]
+    ipx::infer_bus_interfaces xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
+    ipx::infer_bus_interfaces xilinx.com:interface:axis_rtl:1.0 [ipx::current_core]
 }
 
 proc adi_ip_properties_lite {ip_name} {
