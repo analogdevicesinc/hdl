@@ -122,7 +122,6 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
     set index $xcvr_tx_index
   }
 
-  create_bd_port -dir I ${txrx}_ref_clk_${index}
   create_bd_port -dir I ${txrx}_sysref_${index}
   create_bd_port -dir ${ctrl_dir} ${txrx}_sync_${index}
   create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 ${a_jesd}_rstgen
@@ -143,14 +142,6 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
     ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${m}
     ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/gt${n}_${txrx}
     ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${u_xcvr}/${txrx}_clk_${m}
-
-    if {(($m%4) == 0) && ($qpll_enable == 1)} {
-      ad_connect  ${u_xcvr}/qpll_ref_clk_${m} ${txrx}_ref_clk_${index}
-    }
-
-    if {$qpll_enable == 0} {
-      ad_connect  ${u_xcvr}/cpll_ref_clk_${m} ${txrx}_ref_clk_${index}
-    }
 
     create_bd_port -dir ${data_dir} ${txrx}_data_${m}_p
     create_bd_port -dir ${data_dir} ${txrx}_data_${m}_n
