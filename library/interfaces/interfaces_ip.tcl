@@ -13,7 +13,6 @@ adi_if_ports input    16  rdata
 adi_if_ports input     1  ready
 
 adi_if_define if_xcvr_ch
-adi_if_ports output    1  pll_rst
 adi_if_ports input     1  pll_locked
 adi_if_ports output    1  rst
 adi_if_ports output    1  user_ready
