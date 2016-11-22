@@ -39,11 +39,19 @@ set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $axi_ad9680_cpack
 set util_fmcadc4_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_fmcadc4_xcvr]
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $util_fmcadc4_xcvr
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $util_fmcadc4_xcvr
-set_property -dict [list CONFIG.CPLL_TX_OR_RX_N {1}] $util_fmcadc4_xcvr
 
 create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 util_bsplit_rx_data
 set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {128}] [get_bd_cells util_bsplit_rx_data]
 set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] [get_bd_cells util_bsplit_rx_data]
+
+# reference clocks & resets
+
+create_bd_port -dir I rx_ref_clk_0
+
+ad_xcvrpll  rx_ref_clk_0 util_fmcadc4_xcvr/qpll_ref_clk_*
+ad_xcvrpll  rx_ref_clk_0 util_fmcadc4_xcvr/cpll_ref_clk_*
+ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_fmcadc4_xcvr/up_qpll_rst_*
+ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_fmcadc4_xcvr/up_cpll_rst_*
 
 # connections (gt)
 
