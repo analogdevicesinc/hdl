@@ -68,6 +68,23 @@ set_property -dict [list CONFIG.TX_NUM_OF_LANES {4}] $util_daq2_xcvr
 ad_connect  sys_cpu_resetn util_daq2_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_daq2_xcvr/up_clk
 
+# reference clocks & resets
+
+create_bd_port -dir I tx_ref_clk_0
+create_bd_port -dir I rx_ref_clk_0
+
+ad_connect  tx_ref_clk_0 util_daq2_xcvr/qpll_ref_clk_0
+ad_connect  axi_ad9144_xcvr/up_pll_rst util_daq2_xcvr/up_qpll_rst_0
+
+ad_connect  rx_ref_clk_0 util_daq2_xcvr/cpll_ref_clk_0
+ad_connect  rx_ref_clk_0 util_daq2_xcvr/cpll_ref_clk_1
+ad_connect  rx_ref_clk_0 util_daq2_xcvr/cpll_ref_clk_2
+ad_connect  rx_ref_clk_0 util_daq2_xcvr/cpll_ref_clk_3
+ad_connect  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_0
+ad_connect  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_1
+ad_connect  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_2
+ad_connect  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_3
+
 # connections (dac)
 
 ad_xcvrcon  util_daq2_xcvr axi_ad9144_xcvr axi_ad9144_jesd
