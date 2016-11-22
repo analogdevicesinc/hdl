@@ -92,18 +92,21 @@ module system_top (
   input           usb_fx3_uart_tx,
   output          usb_fx3_uart_rx,
 
-  input   [ 3:0]  fifo_rdy,
+  input   [ 7:0]  fifo_rdy,
 
   inout   [31:0]  data,
-  output  [1:0]   addr,
+  output  [ 4:0]  addr,
   output          pclk,
   output          slcs_n,
   output          slrd_n,
   output          sloe_n,
   output          slwr_n,
   output          pktend_n,
+  output          epswitch_n,
 
-  output  [ 1:0]  pmode,
+  output          reset_n,
+
+  output  [ 2:0]  pmode,
 
   output          spi_csn,
   output          spi_clk,
@@ -118,7 +121,11 @@ module system_top (
 
   // assignments
 
-  assign pmode = 2'b11;
+  assign pmode      = 3'b111;
+  assign addr[4:2]  = 3'b000;
+
+  assign epswitch_n = 1'b1;
+  assign reset_n = 1'b1;
 
   // instantiations
 
@@ -213,10 +220,10 @@ module system_top (
     .usb_fx3_uart_rx(usb_fx3_uart_rx),
     .dma_rdy(),
     .dma_wmk(),
-    .fifo_rdy(fifo_rdy),
+    .fifo_rdy(fifo_rdy[3:0]),
     .pclk(pclk),
     .data(data),
-    .addr(addr),
+    .addr(addr[1:0]),
     .slcs_n(slcs_n),
     .slrd_n(slrd_n),
     .sloe_n(sloe_n),
