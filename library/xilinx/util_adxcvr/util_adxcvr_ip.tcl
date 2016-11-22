@@ -40,7 +40,6 @@ for {set n 0} {$n < 16} {incr n} {
     "ready               up_es_ready_${n}       "]
 
   adi_if_infer_bus ADI:user:if_xcvr_ch slave up_rx_${n} [list \
-    "pll_rst             up_rx_pll_rst_${n}     "\
     "pll_locked          up_rx_pll_locked_${n}  "\
     "rst                 up_rx_rst_${n}         "\
     "user_ready          up_rx_user_ready_${n}  "\
@@ -58,7 +57,6 @@ for {set n 0} {$n < 16} {incr n} {
     "ready               up_rx_ready_${n}       "]
 
   adi_if_infer_bus ADI:user:if_xcvr_ch slave up_tx_${n} [list \
-    "pll_rst             up_tx_pll_rst_${n}     "\
     "pll_locked          up_tx_pll_locked_${n}  "\
     "rst                 up_tx_rst_${n}         "\
     "user_ready          up_tx_user_ready_${n}  "\

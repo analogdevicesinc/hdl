@@ -46,7 +46,6 @@ module util_adxcvr_xch #(
 
   parameter   integer CPLL_FBDIV = 2,
   parameter   integer CPLL_FBDIV_4_5 = 5,
-  parameter   integer CPLL_TX_OR_RX_N = 0,
 
   parameter   integer TX_OUT_DIV = 1,
   parameter   integer TX_CLK25_DIV = 20,
@@ -63,6 +62,7 @@ module util_adxcvr_xch #(
   input           qpll2ch_ref_clk,
   input           qpll2ch_locked,
   input           cpll_ref_clk,
+  input           up_cpll_rst,
 
   // receive
 
@@ -98,7 +98,6 @@ module util_adxcvr_xch #(
   input   [15:0]  up_es_wdata,
   output  [15:0]  up_es_rdata,
   output          up_es_ready,
-  input           up_rx_pll_rst,
   output          up_rx_pll_locked,
   input           up_rx_rst,
   input           up_rx_user_ready,
@@ -114,7 +113,6 @@ module util_adxcvr_xch #(
   input   [15:0]  up_rx_wdata,
   output  [15:0]  up_rx_rdata,
   output          up_rx_ready,
-  input           up_tx_pll_rst,
   output          up_tx_pll_locked,
   input           up_tx_rst,
   input           up_tx_user_ready,
@@ -155,7 +153,6 @@ module util_adxcvr_xch #(
 
   // internal signals
 
-  wire            up_cpll_rst;
   wire            up_es_enb_s;
   wire            up_rx_enb_s;
   wire            up_tx_enb_s;
@@ -177,7 +174,6 @@ module util_adxcvr_xch #(
 
   // pll
 
-  assign up_cpll_rst = (CPLL_TX_OR_RX_N == 1) ? up_tx_pll_rst : up_rx_pll_rst;
   assign up_rx_pll_locked = (up_rx_sys_clk_sel == 2'd3) ? qpll2ch_locked : cpll_locked_s;
   assign up_tx_pll_locked = (up_tx_sys_clk_sel == 2'd3) ? qpll2ch_locked : cpll_locked_s;
 
