@@ -1,4 +1,13 @@
 
+# spi2
+
+set axi_fmcomms7_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_fmcomms7_spi]
+set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_fmcomms7_spi
+set_property -dict [list CONFIG.C_NUM_SS_BITS {12}] $axi_fmcomms7_spi
+set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_fmcomms7_spi
+
+# connections (spi2)
+
 create_bd_port -dir O -from 11 -to 0 spi2_csn_o
 create_bd_port -dir I -from 11 -to 0 spi2_csn_i
 create_bd_port -dir I spi2_clk_i
@@ -6,6 +15,15 @@ create_bd_port -dir O spi2_clk_o
 create_bd_port -dir I spi2_sdo_i
 create_bd_port -dir O spi2_sdo_o
 create_bd_port -dir I spi2_sdi_i
+
+ad_connect  spi2_csn_i axi_fmcomms7_spi/ss_i
+ad_connect  spi2_csn_o axi_fmcomms7_spi/ss_o
+ad_connect  spi2_clk_i axi_fmcomms7_spi/sck_i
+ad_connect  spi2_clk_o axi_fmcomms7_spi/sck_o
+ad_connect  spi2_sdo_i axi_fmcomms7_spi/io0_i
+ad_connect  spi2_sdo_o axi_fmcomms7_spi/io0_o
+ad_connect  spi2_sdi_i axi_fmcomms7_spi/io1_i
+ad_connect  sys_cpu_clk axi_fmcomms7_spi/ext_spi_clk
 
 # dac peripherals
 
@@ -73,21 +91,17 @@ set util_fmcomms7_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcv
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {4}] $util_fmcomms7_xcvr
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {8}] $util_fmcomms7_xcvr
 
-set axi_fmcomms7_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_fmcomms7_spi]
-set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_fmcomms7_spi
-set_property -dict [list CONFIG.C_NUM_SS_BITS {12}] $axi_fmcomms7_spi
-set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_fmcomms7_spi
+# reference clocks & resets
 
-# connections (spi2)
+create_bd_port -dir I tx_ref_clk_0
+create_bd_port -dir I rx_ref_clk_0
 
-ad_connect  spi2_csn_i axi_fmcomms7_spi/ss_i
-ad_connect  spi2_csn_o axi_fmcomms7_spi/ss_o
-ad_connect  spi2_clk_i axi_fmcomms7_spi/sck_i
-ad_connect  spi2_clk_o axi_fmcomms7_spi/sck_o
-ad_connect  spi2_sdo_i axi_fmcomms7_spi/io0_i
-ad_connect  spi2_sdo_o axi_fmcomms7_spi/io0_o
-ad_connect  spi2_sdi_i axi_fmcomms7_spi/io1_i
-ad_connect  sys_cpu_clk axi_fmcomms7_spi/ext_spi_clk
+ad_xcvrpll  tx_ref_clk_0 util_fmcomms7_xcvr/qpll_ref_clk_*
+ad_xcvrpll  rx_ref_clk_0 util_fmcomms7_xcvr/cpll_ref_clk_*
+ad_xcvrpll  axi_ad9144_xcvr/up_pll_rst util_fmcomms7_xcvr/up_qpll_rst_*
+ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_fmcomms7_xcvr/up_cpll_rst_*
+ad_connect  sys_cpu_resetn util_fmcomms7_xcvr/up_rstn
+ad_connect  sys_cpu_clk util_fmcomms7_xcvr/up_clk
 
 # connections (dac)
 

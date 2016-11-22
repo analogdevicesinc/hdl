@@ -51,52 +51,68 @@ set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9250_1_dma
 # transceiver core
 
 set util_fmcjesdadc1_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_fmcjesdadc1_xcvr]
-set_property -dict [list CONFIG.RX_NUM_OF_LANES {4}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.QPLL_FBDIV {"0010000000"}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.CPLL_FBDIV {2}] $util_fmcjesdadc1_xcvr
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.TX_OUT_DIV {1}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.TX_CLK25_DIV {10}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.RX_NUM_OF_LANES {4}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.RX_OUT_DIV {1}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.RX_CLK25_DIV {10}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff10200020}] $util_fmcjesdadc1_xcvr
 
+# reference clocks & resets
+
+create_bd_port -dir I rx_ref_clk_0
+
+ad_xcvrpll  rx_ref_clk_0 util_fmcjesdadc1_xcvr/qpll_ref_clk_*
+ad_xcvrpll  rx_ref_clk_0 util_fmcjesdadc1_xcvr/cpll_ref_clk_*
+ad_xcvrpll  axi_ad9250_xcvr/up_pll_rst util_fmcjesdadc1_xcvr/up_qpll_rst_*
+ad_xcvrpll  axi_ad9250_xcvr/up_pll_rst util_fmcjesdadc1_xcvr/up_cpll_rst_*
 ad_connect  sys_cpu_resetn util_fmcjesdadc1_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_fmcjesdadc1_xcvr/up_clk
 
 # connections (adc)
 
-ad_xcvrcon  util_fmcjesdadc1_xcvr  axi_ad9250_xcvr axi_ad9250_jesd
-ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0   axi_ad9250_0_core/rx_clk
-ad_connect  axi_ad9250_jesd/rx_start_of_frame   axi_ad9250_0_core/rx_sof
-ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0   axi_ad9250_1_core/rx_clk
-ad_connect  axi_ad9250_jesd/rx_start_of_frame   axi_ad9250_1_core/rx_sof
+ad_xcvrcon  util_fmcjesdadc1_xcvr axi_ad9250_xcvr axi_ad9250_jesd
+ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_0_core/rx_clk
+ad_connect  axi_ad9250_jesd/rx_start_of_frame axi_ad9250_0_core/rx_sof
+ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_1_core/rx_clk
+ad_connect  axi_ad9250_jesd/rx_start_of_frame axi_ad9250_1_core/rx_sof
 
-ad_connect  axi_ad9250_jesd/rx_tdata  data_bsplit/data
-ad_connect  axi_ad9250_0_core/rx_data   data_bsplit/split_data_0
-ad_connect  axi_ad9250_1_core/rx_data   data_bsplit/split_data_1
+ad_connect  axi_ad9250_jesd/rx_tdata data_bsplit/data
+ad_connect  axi_ad9250_0_core/rx_data data_bsplit/split_data_0
+ad_connect  axi_ad9250_1_core/rx_data data_bsplit/split_data_1
 
-ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0   axi_ad9250_0_cpack/adc_clk
-ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0   axi_ad9250_1_cpack/adc_clk
-ad_connect  axi_ad9250_jesd_rstgen/peripheral_reset   axi_ad9250_0_cpack/adc_rst
-ad_connect  axi_ad9250_jesd_rstgen/peripheral_reset   axi_ad9250_1_cpack/adc_rst
+ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_0_cpack/adc_clk
+ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_1_cpack/adc_clk
+ad_connect  axi_ad9250_jesd_rstgen/peripheral_reset axi_ad9250_0_cpack/adc_rst
+ad_connect  axi_ad9250_jesd_rstgen/peripheral_reset axi_ad9250_1_cpack/adc_rst
 
-ad_connect  axi_ad9250_0_core/adc_enable_a  axi_ad9250_0_cpack/adc_enable_0
-ad_connect  axi_ad9250_0_core/adc_valid_a   axi_ad9250_0_cpack/adc_valid_0
-ad_connect  axi_ad9250_0_core/adc_data_a  axi_ad9250_0_cpack/adc_data_0
-ad_connect  axi_ad9250_0_core/adc_enable_b  axi_ad9250_0_cpack/adc_enable_1
-ad_connect  axi_ad9250_0_core/adc_valid_b   axi_ad9250_0_cpack/adc_valid_1
-ad_connect  axi_ad9250_0_core/adc_data_b  axi_ad9250_0_cpack/adc_data_1
-ad_connect  axi_ad9250_1_core/adc_enable_a  axi_ad9250_1_cpack/adc_enable_0
-ad_connect  axi_ad9250_1_core/adc_valid_a   axi_ad9250_1_cpack/adc_valid_0
-ad_connect  axi_ad9250_1_core/adc_data_a  axi_ad9250_1_cpack/adc_data_0
-ad_connect  axi_ad9250_1_core/adc_enable_b  axi_ad9250_1_cpack/adc_enable_1
-ad_connect  axi_ad9250_1_core/adc_valid_b   axi_ad9250_1_cpack/adc_valid_1
-ad_connect  axi_ad9250_1_core/adc_data_b  axi_ad9250_1_cpack/adc_data_1
+ad_connect  axi_ad9250_0_core/adc_enable_a axi_ad9250_0_cpack/adc_enable_0
+ad_connect  axi_ad9250_0_core/adc_valid_a axi_ad9250_0_cpack/adc_valid_0
+ad_connect  axi_ad9250_0_core/adc_data_a axi_ad9250_0_cpack/adc_data_0
+ad_connect  axi_ad9250_0_core/adc_enable_b axi_ad9250_0_cpack/adc_enable_1
+ad_connect  axi_ad9250_0_core/adc_valid_b axi_ad9250_0_cpack/adc_valid_1
+ad_connect  axi_ad9250_0_core/adc_data_b axi_ad9250_0_cpack/adc_data_1
+ad_connect  axi_ad9250_1_core/adc_enable_a axi_ad9250_1_cpack/adc_enable_0
+ad_connect  axi_ad9250_1_core/adc_valid_a axi_ad9250_1_cpack/adc_valid_0
+ad_connect  axi_ad9250_1_core/adc_data_a axi_ad9250_1_cpack/adc_data_0
+ad_connect  axi_ad9250_1_core/adc_enable_b axi_ad9250_1_cpack/adc_enable_1
+ad_connect  axi_ad9250_1_core/adc_valid_b axi_ad9250_1_cpack/adc_valid_1
+ad_connect  axi_ad9250_1_core/adc_data_b axi_ad9250_1_cpack/adc_data_1
 
-ad_connect  axi_ad9250_0_core/adc_clk   axi_ad9250_0_dma/fifo_wr_clk
-ad_connect  axi_ad9250_0_dma/fifo_wr_en   axi_ad9250_0_cpack/adc_valid
-ad_connect  axi_ad9250_0_dma/fifo_wr_sync   axi_ad9250_0_cpack/adc_sync
-ad_connect  axi_ad9250_0_dma/fifo_wr_din  axi_ad9250_0_cpack/adc_data
-ad_connect  axi_ad9250_0_core/adc_dovf  axi_ad9250_0_dma/fifo_wr_overflow
-ad_connect  axi_ad9250_1_core/adc_clk   axi_ad9250_1_dma/fifo_wr_clk
-ad_connect  axi_ad9250_1_dma/fifo_wr_en   axi_ad9250_1_cpack/adc_valid
-ad_connect  axi_ad9250_1_dma/fifo_wr_sync   axi_ad9250_1_cpack/adc_sync
-ad_connect  axi_ad9250_1_dma/fifo_wr_din  axi_ad9250_1_cpack/adc_data
-ad_connect  axi_ad9250_1_core/adc_dovf  axi_ad9250_1_dma/fifo_wr_overflow
+ad_connect  axi_ad9250_0_core/adc_clk axi_ad9250_0_dma/fifo_wr_clk
+ad_connect  axi_ad9250_0_dma/fifo_wr_en axi_ad9250_0_cpack/adc_valid
+ad_connect  axi_ad9250_0_dma/fifo_wr_sync axi_ad9250_0_cpack/adc_sync
+ad_connect  axi_ad9250_0_dma/fifo_wr_din axi_ad9250_0_cpack/adc_data
+ad_connect  axi_ad9250_0_core/adc_dovf axi_ad9250_0_dma/fifo_wr_overflow
+ad_connect  axi_ad9250_1_core/adc_clk axi_ad9250_1_dma/fifo_wr_clk
+ad_connect  axi_ad9250_1_dma/fifo_wr_en axi_ad9250_1_cpack/adc_valid
+ad_connect  axi_ad9250_1_dma/fifo_wr_sync axi_ad9250_1_cpack/adc_sync
+ad_connect  axi_ad9250_1_dma/fifo_wr_din axi_ad9250_1_cpack/adc_data
+ad_connect  axi_ad9250_1_core/adc_dovf axi_ad9250_1_dma/fifo_wr_overflow
 
 # interconnect (cpu)
 

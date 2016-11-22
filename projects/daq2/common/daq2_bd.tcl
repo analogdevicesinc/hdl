@@ -73,17 +73,10 @@ ad_connect  sys_cpu_clk util_daq2_xcvr/up_clk
 create_bd_port -dir I tx_ref_clk_0
 create_bd_port -dir I rx_ref_clk_0
 
-ad_connect  tx_ref_clk_0 util_daq2_xcvr/qpll_ref_clk_0
-ad_connect  axi_ad9144_xcvr/up_pll_rst util_daq2_xcvr/up_qpll_rst_0
-
-ad_connect  rx_ref_clk_0 util_daq2_xcvr/cpll_ref_clk_0
-ad_connect  rx_ref_clk_0 util_daq2_xcvr/cpll_ref_clk_1
-ad_connect  rx_ref_clk_0 util_daq2_xcvr/cpll_ref_clk_2
-ad_connect  rx_ref_clk_0 util_daq2_xcvr/cpll_ref_clk_3
-ad_connect  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_0
-ad_connect  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_1
-ad_connect  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_2
-ad_connect  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_3
+ad_xcvrpll  tx_ref_clk_0 util_daq2_xcvr/qpll_ref_clk_*
+ad_xcvrpll  rx_ref_clk_0 util_daq2_xcvr/cpll_ref_clk_*
+ad_xcvrpll  axi_ad9144_xcvr/up_pll_rst util_daq2_xcvr/up_qpll_rst_*
+ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_*
 
 # connections (dac)
 

@@ -53,15 +53,24 @@ set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
 # shared transceiver core
 
 set util_fmcomms11_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_fmcomms11_xcvr]
-set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.TX_NUM_OF_LANES {8}] $util_fmcomms11_xcvr
+set_property -dict [list CONFIG.QPLL_FBDIV {"0100100000"}] $util_fmcomms11_xcvr
 set_property -dict [list CONFIG.CPLL_FBDIV {4}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.RX_CLK25_DIV {7}] $util_fmcomms11_xcvr
+set_property -dict [list CONFIG.TX_NUM_OF_LANES {8}] $util_fmcomms11_xcvr
 set_property -dict [list CONFIG.TX_CLK25_DIV {7}] $util_fmcomms11_xcvr
+set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $util_fmcomms11_xcvr
+set_property -dict [list CONFIG.RX_CLK25_DIV {7}] $util_fmcomms11_xcvr
 set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_fmcomms11_xcvr
 set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff10400020}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.QPLL_FBDIV {"0100100000"}] $util_fmcomms11_xcvr
 
+# reference clocks & resets
+
+create_bd_port -dir I tx_ref_clk_0
+create_bd_port -dir I rx_ref_clk_0
+
+ad_xcvrpll  tx_ref_clk_0 util_fmcomms11_xcvr/qpll_ref_clk_*
+ad_xcvrpll  rx_ref_clk_0 util_fmcomms11_xcvr/cpll_ref_clk_*
+ad_xcvrpll  axi_ad9162_xcvr/up_pll_rst util_fmcomms11_xcvr/up_qpll_rst_*
+ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcomms11_xcvr/up_cpll_rst_*
 ad_connect  sys_cpu_resetn util_fmcomms11_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_fmcomms11_xcvr/up_clk
 
