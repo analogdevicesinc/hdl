@@ -56,7 +56,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_0,
   input           up_es_ready_0,
 
-  output          up_ch_pll_rst_0,
   input           up_ch_pll_locked_0,
   output          up_ch_rst_0,
   output          up_ch_user_ready_0,
@@ -81,7 +80,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_1,
   input           up_es_ready_1,
 
-  output          up_ch_pll_rst_1,
   input           up_ch_pll_locked_1,
   output          up_ch_rst_1,
   output          up_ch_user_ready_1,
@@ -106,7 +104,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_2,
   input           up_es_ready_2,
 
-  output          up_ch_pll_rst_2,
   input           up_ch_pll_locked_2,
   output          up_ch_rst_2,
   output          up_ch_user_ready_2,
@@ -131,7 +128,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_3,
   input           up_es_ready_3,
 
-  output          up_ch_pll_rst_3,
   input           up_ch_pll_locked_3,
   output          up_ch_rst_3,
   output          up_ch_user_ready_3,
@@ -164,7 +160,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_4,
   input           up_es_ready_4,
 
-  output          up_ch_pll_rst_4,
   input           up_ch_pll_locked_4,
   output          up_ch_rst_4,
   output          up_ch_user_ready_4,
@@ -189,7 +184,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_5,
   input           up_es_ready_5,
 
-  output          up_ch_pll_rst_5,
   input           up_ch_pll_locked_5,
   output          up_ch_rst_5,
   output          up_ch_user_ready_5,
@@ -214,7 +208,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_6,
   input           up_es_ready_6,
 
-  output          up_ch_pll_rst_6,
   input           up_ch_pll_locked_6,
   output          up_ch_rst_6,
   output          up_ch_user_ready_6,
@@ -239,7 +232,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_7,
   input           up_es_ready_7,
 
-  output          up_ch_pll_rst_7,
   input           up_ch_pll_locked_7,
   output          up_ch_rst_7,
   output          up_ch_user_ready_7,
@@ -272,7 +264,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_8,
   input           up_es_ready_8,
 
-  output          up_ch_pll_rst_8,
   input           up_ch_pll_locked_8,
   output          up_ch_rst_8,
   output          up_ch_user_ready_8,
@@ -297,7 +288,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_9,
   input           up_es_ready_9,
 
-  output          up_ch_pll_rst_9,
   input           up_ch_pll_locked_9,
   output          up_ch_rst_9,
   output          up_ch_user_ready_9,
@@ -322,7 +312,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_10,
   input           up_es_ready_10,
 
-  output          up_ch_pll_rst_10,
   input           up_ch_pll_locked_10,
   output          up_ch_rst_10,
   output          up_ch_user_ready_10,
@@ -347,7 +336,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_11,
   input           up_es_ready_11,
 
-  output          up_ch_pll_rst_11,
   input           up_ch_pll_locked_11,
   output          up_ch_rst_11,
   output          up_ch_user_ready_11,
@@ -380,7 +368,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_12,
   input           up_es_ready_12,
 
-  output          up_ch_pll_rst_12,
   input           up_ch_pll_locked_12,
   output          up_ch_rst_12,
   output          up_ch_user_ready_12,
@@ -405,7 +392,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_13,
   input           up_es_ready_13,
 
-  output          up_ch_pll_rst_13,
   input           up_ch_pll_locked_13,
   output          up_ch_rst_13,
   output          up_ch_user_ready_13,
@@ -430,7 +416,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_14,
   input           up_es_ready_14,
 
-  output          up_ch_pll_rst_14,
   input           up_ch_pll_locked_14,
   output          up_ch_rst_14,
   output          up_ch_user_ready_14,
@@ -455,7 +440,6 @@ module axi_adxcvr (
   input   [15:0]  up_es_rdata_15,
   input           up_es_ready_15,
 
-  output          up_ch_pll_rst_15,
   input           up_ch_pll_locked_15,
   output          up_ch_rst_15,
   output          up_ch_user_ready_15,
@@ -475,6 +459,7 @@ module axi_adxcvr (
   input           axi_clk,
   input           axi_aresetn,
   output          up_status,
+  output          up_pll_rst,
 
   input           s_axi_awvalid,
   input   [31:0]  s_axi_awaddr,
@@ -576,7 +561,6 @@ module axi_adxcvr (
   wire            up_es_ready_14_s;
   wire    [15:0]  up_es_rdata_15_s;
   wire            up_es_ready_15_s;
-  wire            up_ch_pll_rst;
   wire            up_ch_rst;
   wire            up_ch_user_ready;
   wire            up_ch_lpm_dfe_n;
@@ -722,7 +706,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_0_s),
     .up_ready_out (up_es_ready_0_s));
 
-  assign up_ch_pll_rst_0 = up_ch_pll_rst;
   assign up_ch_rst_0 = up_ch_rst;
   assign up_ch_user_ready_0 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_0 = up_ch_lpm_dfe_n;
@@ -785,7 +768,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_1_s),
     .up_ready_out (up_es_ready_1_s));
 
-  assign up_ch_pll_rst_1 = up_ch_pll_rst;
   assign up_ch_rst_1 = up_ch_rst;
   assign up_ch_user_ready_1 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_1 = up_ch_lpm_dfe_n;
@@ -848,7 +830,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_2_s),
     .up_ready_out (up_es_ready_2_s));
 
-  assign up_ch_pll_rst_2 = up_ch_pll_rst;
   assign up_ch_rst_2 = up_ch_rst;
   assign up_ch_user_ready_2 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_2 = up_ch_lpm_dfe_n;
@@ -911,7 +892,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_3_s),
     .up_ready_out (up_es_ready_3_s));
 
-  assign up_ch_pll_rst_3 = up_ch_pll_rst;
   assign up_ch_rst_3 = up_ch_rst;
   assign up_ch_user_ready_3 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_3 = up_ch_lpm_dfe_n;
@@ -995,7 +975,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_4_s),
     .up_ready_out (up_es_ready_4_s));
 
-  assign up_ch_pll_rst_4 = up_ch_pll_rst;
   assign up_ch_rst_4 = up_ch_rst;
   assign up_ch_user_ready_4 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_4 = up_ch_lpm_dfe_n;
@@ -1058,7 +1037,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_5_s),
     .up_ready_out (up_es_ready_5_s));
 
-  assign up_ch_pll_rst_5 = up_ch_pll_rst;
   assign up_ch_rst_5 = up_ch_rst;
   assign up_ch_user_ready_5 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_5 = up_ch_lpm_dfe_n;
@@ -1121,7 +1099,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_6_s),
     .up_ready_out (up_es_ready_6_s));
 
-  assign up_ch_pll_rst_6 = up_ch_pll_rst;
   assign up_ch_rst_6 = up_ch_rst;
   assign up_ch_user_ready_6 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_6 = up_ch_lpm_dfe_n;
@@ -1184,7 +1161,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_7_s),
     .up_ready_out (up_es_ready_7_s));
 
-  assign up_ch_pll_rst_7 = up_ch_pll_rst;
   assign up_ch_rst_7 = up_ch_rst;
   assign up_ch_user_ready_7 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_7 = up_ch_lpm_dfe_n;
@@ -1268,7 +1244,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_8_s),
     .up_ready_out (up_es_ready_8_s));
 
-  assign up_ch_pll_rst_8 = up_ch_pll_rst;
   assign up_ch_rst_8 = up_ch_rst;
   assign up_ch_user_ready_8 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_8 = up_ch_lpm_dfe_n;
@@ -1331,7 +1306,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_9_s),
     .up_ready_out (up_es_ready_9_s));
 
-  assign up_ch_pll_rst_9 = up_ch_pll_rst;
   assign up_ch_rst_9 = up_ch_rst;
   assign up_ch_user_ready_9 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_9 = up_ch_lpm_dfe_n;
@@ -1394,7 +1368,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_10_s),
     .up_ready_out (up_es_ready_10_s));
 
-  assign up_ch_pll_rst_10 = up_ch_pll_rst;
   assign up_ch_rst_10 = up_ch_rst;
   assign up_ch_user_ready_10 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_10 = up_ch_lpm_dfe_n;
@@ -1457,7 +1430,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_11_s),
     .up_ready_out (up_es_ready_11_s));
 
-  assign up_ch_pll_rst_11 = up_ch_pll_rst;
   assign up_ch_rst_11 = up_ch_rst;
   assign up_ch_user_ready_11 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_11 = up_ch_lpm_dfe_n;
@@ -1541,7 +1513,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_12_s),
     .up_ready_out (up_es_ready_12_s));
 
-  assign up_ch_pll_rst_12 = up_ch_pll_rst;
   assign up_ch_rst_12 = up_ch_rst;
   assign up_ch_user_ready_12 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_12 = up_ch_lpm_dfe_n;
@@ -1604,7 +1575,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_13_s),
     .up_ready_out (up_es_ready_13_s));
 
-  assign up_ch_pll_rst_13 = up_ch_pll_rst;
   assign up_ch_rst_13 = up_ch_rst;
   assign up_ch_user_ready_13 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_13 = up_ch_lpm_dfe_n;
@@ -1667,7 +1637,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_14_s),
     .up_ready_out (up_es_ready_14_s));
 
-  assign up_ch_pll_rst_14 = up_ch_pll_rst;
   assign up_ch_rst_14 = up_ch_rst;
   assign up_ch_user_ready_14 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_14 = up_ch_lpm_dfe_n;
@@ -1730,7 +1699,6 @@ module axi_adxcvr (
     .up_rdata_out (up_es_rdata_15_s),
     .up_ready_out (up_es_ready_15_s));
 
-  assign up_ch_pll_rst_15 = up_ch_pll_rst;
   assign up_ch_rst_15 = up_ch_rst;
   assign up_ch_user_ready_15 = up_ch_user_ready;
   assign up_ch_lpm_dfe_n_15 = up_ch_lpm_dfe_n;
@@ -1829,7 +1797,6 @@ module axi_adxcvr (
     .up_cm_wdata (up_cm_wdata),
     .up_cm_rdata (up_cm_rdata_12_s),
     .up_cm_ready (up_cm_ready_12_s),
-    .up_ch_pll_rst (up_ch_pll_rst),
     .up_ch_pll_locked (up_ch_pll_locked_15_s),
     .up_ch_rst (up_ch_rst),
     .up_ch_user_ready (up_ch_user_ready),
@@ -1859,6 +1826,7 @@ module axi_adxcvr (
     .up_es_saddr (up_es_saddr),
     .up_es_status (up_es_status),
     .up_status (up_status),
+    .up_pll_rst (up_pll_rst),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),

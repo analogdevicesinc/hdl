@@ -100,7 +100,6 @@ for {set n 0} {$n < 16} {incr n} {
     "ready               up_es_ready_${n}       "]
 
   adi_if_infer_bus ADI:user:if_xcvr_ch master up_ch_${n} [list \
-    "pll_rst             up_ch_pll_rst_${n}     "\
     "pll_locked          up_ch_pll_locked_${n}  "\
     "rst                 up_ch_rst_${n}         "\
     "user_ready          up_ch_user_ready_${n}  "\

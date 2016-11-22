@@ -51,7 +51,6 @@ module axi_adxcvr_up (
 
   // channel
 
-  output          up_ch_pll_rst,
   input           up_ch_pll_locked,
   output          up_ch_rst,
   output          up_ch_user_ready,
@@ -87,6 +86,7 @@ module axi_adxcvr_up (
   // status
 
   output          up_status,
+  output          up_pll_rst,
 
   // bus interface
 
@@ -176,7 +176,7 @@ module axi_adxcvr_up (
     end
   end
 
-  assign up_ch_pll_rst = up_pll_rst_cnt[3];
+  assign up_pll_rst = up_pll_rst_cnt[3];
   assign up_ch_rst = up_rst_cnt[3];
   assign up_ch_user_ready = up_user_ready_cnt[6];
   assign up_status = up_status_int;
