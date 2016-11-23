@@ -67,6 +67,7 @@ set_property -dict [list CONFIG.PCIEBAR2AXIBAR_0 {0x40000000}] $axi_pcie_x4
 set_property -dict [list CONFIG.AXIBAR2PCIEBAR_0 {0x00000000}] $axi_pcie_x4
 
 set axi_pcie_x4_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_pcie_x4_rstgen]
+set_property -dict [list CONFIG.C_EXT_RST_WIDTH {16}] $axi_pcie_x4_rstgen
 
 set axi_pcie_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_pcie_intc]
 set_property -dict [list CONFIG.C_HAS_FAST {0}] $axi_pcie_intc
@@ -87,6 +88,12 @@ ad_connect  sys_cpu_resetn axi_pcie_x4_rstgen/aux_reset_in
 ad_connect  axi_pcie_x4/mmcm_lock axi_pcie_x4_rstgen/dcm_locked
 ad_connect  axi_pcie_x4/axi_ctl_aclk_out axi_pcie_x4_rstgen/slowest_sync_clk
 ad_connect  pcie_axi_resetn axi_pcie_x4/axi_aresetn
+
+create_bd_port -dir O pcie_rst
+create_bd_port -dir O pcie_clk
+
+ad_connect  axi_pcie_x4_rstgen/bus_struct_reset pcie_rst
+ad_connect  axi_pcie_x4/axi_ctl_aclk_out pcie_clk
 
 # interrupts
 

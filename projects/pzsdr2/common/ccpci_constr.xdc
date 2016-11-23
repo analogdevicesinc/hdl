@@ -21,9 +21,9 @@ set_property  -dict {PACKAGE_PIN  W2 }  [get_ports pcie_data_tx_p[2]]           
 set_property  -dict {PACKAGE_PIN  W1 }  [get_ports pcie_data_tx_n[2]]                                   ; ## U1,W1,MGTXTX1_112_JX3_N,JX3,15,MGTXTX1_112_JX3_N,P2,A26
 set_property  -dict {PACKAGE_PIN  AA2}  [get_ports pcie_data_tx_p[3]]                                   ; ## U1,AA2,MGTXTX0_112_JX3_P,JX3,8,MGTXTX0_112_JX3_P,P2,A29
 set_property  -dict {PACKAGE_PIN  AA1}  [get_ports pcie_data_tx_n[3]]                                   ; ## U1,AA1,MGTXTX0_112_JX3_N,JX3,10,MGTXTX0_112_JX3_N,P2,A30
-set_property  -dict {PACKAGE_PIN  W20   IOSTANDARD LVCMOS18} [get_ports pcie_rstn]                      ; ## U1,W20,IO_L19_13_JX2_P,JX2,61,PCIE_PRSNT,P2,A11
-set_property  -dict {PACKAGE_PIN  AB20  IOSTANDARD LVCMOS18} [get_ports pcie_waken]                     ; ## U1,AB20,IO_L20_13_JX2_N,JX2,64,PCIE_WAKEB,P2,B11
-set_property  -dict {PACKAGE_PIN  AA14  IOSTANDARD LVCMOS18} [get_ports pcie_rstn_good]                 ; ## IO_L22N_T3_12, NOT-CONNECTED ????
+set_property  -dict {PACKAGE_PIN  W20   IOSTANDARD LVCMOS25} [get_ports pcie_rstn]                      ; ## U1,W20,IO_L19_13_JX2_P,JX2,61,PCIE_PRSNT,P2,A11
+set_property  -dict {PACKAGE_PIN  AB20  IOSTANDARD LVCMOS25} [get_ports pcie_waken]                     ; ## U1,AB20,IO_L20_13_JX2_N,JX2,64,PCIE_WAKEB,P2,B11
+set_property  -dict {PACKAGE_PIN  AA14  IOSTANDARD LVCMOS25} [get_ports pcie_reset_done]                ; ## IO_L22N_T3_12, NOT-CONNECTED ????
 
 set_property PULLUP true [get_ports pcie_rstn]
 create_clock -name pcie_ref_clock -period 10 [get_ports pcie_ref_clk_p]
