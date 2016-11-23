@@ -124,6 +124,20 @@ set_property -dict [list CONFIG.QPLL_FBDIV {"0100100000"}] $util_ad9371_xcvr
 
 # xcvr interfaces
 
+create_bd_port -dir I tx_ref_clk_0
+create_bd_port -dir I rx_ref_clk_0
+create_bd_port -dir I rx_ref_clk_2
+
+ad_xcvrpll  tx_ref_clk_0 util_ad9371_xcvr/qpll_ref_clk_0
+ad_xcvrpll  rx_ref_clk_0 util_ad9371_xcvr/cpll_ref_clk_0
+ad_xcvrpll  rx_ref_clk_0 util_ad9371_xcvr/cpll_ref_clk_1
+ad_xcvrpll  rx_ref_clk_2 util_ad9371_xcvr/cpll_ref_clk_2
+ad_xcvrpll  rx_ref_clk_2 util_ad9371_xcvr/cpll_ref_clk_3
+ad_xcvrpll  axi_ad9371_tx_xcvr/up_pll_rst util_ad9371_xcvr/up_qpll_rst_0
+ad_xcvrpll  axi_ad9371_rx_xcvr/up_pll_rst util_ad9371_xcvr/up_cpll_rst_0
+ad_xcvrpll  axi_ad9371_rx_xcvr/up_pll_rst util_ad9371_xcvr/up_cpll_rst_1
+ad_xcvrpll  axi_ad9371_rx_os_xcvr/up_pll_rst util_ad9371_xcvr/up_cpll_rst_2
+ad_xcvrpll  axi_ad9371_rx_os_xcvr/up_pll_rst util_ad9371_xcvr/up_cpll_rst_3
 ad_connect  sys_cpu_resetn util_ad9371_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_ad9371_xcvr/up_clk
 
