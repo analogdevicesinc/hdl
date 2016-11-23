@@ -8,8 +8,10 @@ variable sys_hp2_interconnect_index
 variable sys_hp3_interconnect_index
 variable sys_mem_interconnect_index
 
+variable xcvr_index
 variable xcvr_tx_index
 variable xcvr_rx_index
+variable xcvr_instance
 
 ###################################################################################################
 ###################################################################################################
@@ -21,8 +23,10 @@ set sys_hp2_interconnect_index -1
 set sys_hp3_interconnect_index -1
 set sys_mem_interconnect_index -1
 
+set xcvr_index -1
 set xcvr_tx_index 0
 set xcvr_rx_index 0
+set xcvr_instance NONE
 
 ###################################################################################################
 ###################################################################################################
@@ -138,13 +142,22 @@ proc ad_reconct {p_name_1 p_name_2} {
 ###################################################################################################
 
 proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
-
+  
+  global xcvr_index
   global xcvr_tx_index
   global xcvr_rx_index
+  global xcvr_instance
 
   set no_of_lanes [get_property CONFIG.NUM_OF_LANES [get_bd_cells $a_xcvr]]
   set qpll_enable [get_property CONFIG.QPLL_ENABLE [get_bd_cells $a_xcvr]]
   set tx_or_rx_n [get_property CONFIG.TX_OR_RX_N [get_bd_cells $a_xcvr]]
+
+  if {$xcvr_instance ne $u_xcvr} {
+    set xcvr_index [expr ($xcvr_index + 1)]
+    set xcvr_tx_index 0
+    set xcvr_rx_index 0
+    set xcvr_instance $u_xcvr
+  }
 
   set txrx "rx"
   set data_dir "I"
@@ -159,8 +172,19 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
     set index $xcvr_tx_index
   }
 
-  create_bd_port -dir I ${txrx}_sysref_${index}
-  create_bd_port -dir ${ctrl_dir} ${txrx}_sync_${index}
+  set m_sysref ${txrx}_sysref_${index}
+  set m_sync ${txrx}_sync_${index}
+  set m_data ${txrx}_data
+
+  if {$xcvr_index >= 1} {
+
+    set m_sysref ${txrx}_sysref_${xcvr_index}_${index}
+    set m_sync ${txrx}_sync_${xcvr_index}_${index}
+    set m_data ${txrx}_data_${xcvr_index}
+  }
+
+  create_bd_port -dir I $m_sysref
+  create_bd_port -dir ${ctrl_dir} $m_sync
   create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 ${a_jesd}_rstgen
 
   for {set n 0} {$n < $no_of_lanes} {incr n} {
@@ -180,14 +204,14 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
     ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/gt${n}_${txrx}
     ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${u_xcvr}/${txrx}_clk_${m}
 
-    create_bd_port -dir ${data_dir} ${txrx}_data_${m}_p
-    create_bd_port -dir ${data_dir} ${txrx}_data_${m}_n
-    ad_connect  ${u_xcvr}/${txrx}_${m}_p ${txrx}_data_${m}_p
-    ad_connect  ${u_xcvr}/${txrx}_${m}_n ${txrx}_data_${m}_n
+    create_bd_port -dir ${data_dir} ${m_data}_${m}_p
+    create_bd_port -dir ${data_dir} ${m_data}_${m}_n
+    ad_connect  ${u_xcvr}/${txrx}_${m}_p ${m_data}_${m}_p
+    ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
   }
 
-  ad_connect  ${a_jesd}/${txrx}_sysref ${txrx}_sysref_${index}
-  ad_connect  ${a_jesd}/${txrx}_sync ${txrx}_sync_${index}
+  ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
+  ad_connect  ${a_jesd}/${txrx}_sync $m_sync
   ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/${txrx}_core_clk
   ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
   ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}_rstgen/slowest_sync_clk
