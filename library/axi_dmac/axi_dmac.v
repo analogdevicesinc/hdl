@@ -225,14 +225,13 @@ localparam BYTES_PER_BEAT_WIDTH_SRC = DMA_DATA_WIDTH_SRC > 1024 ? 8 :
   DMA_DATA_WIDTH_SRC > 32 ? 3 :
   DMA_DATA_WIDTH_SRC > 16 ? 2 :
   DMA_DATA_WIDTH_SRC > 8 ? 1 : 0;
-localparam ID_WIDTH = (FIFO_SIZE*2) > 1024 ? 8 :
-  (FIFO_SIZE*2) > 512 ? 7 :
-  (FIFO_SIZE*2) > 256 ? 6 :
-  (FIFO_SIZE*2) > 128 ? 5 :
-  (FIFO_SIZE*2) > 64 ? 4 :
-  (FIFO_SIZE*2) > 32 ? 3 :
-  (FIFO_SIZE*2) > 16 ? 2 :
-  (FIFO_SIZE*2) > 8 ? 1 : 0;
+localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
+  (FIFO_SIZE) > 32 ? 7 :
+  (FIFO_SIZE) > 16 ? 6 :
+  (FIFO_SIZE) > 8 ? 5 :
+  (FIFO_SIZE) > 4 ? 4 :
+  (FIFO_SIZE) > 2 ? 3 :
+  (FIFO_SIZE) > 1 ? 2 : 1;
 
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
