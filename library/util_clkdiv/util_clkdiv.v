@@ -34,30 +34,44 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
+// Divides the input clock to 4 if clk_sel is 0 or 2 if clk_sel is 1 using
+// BUFR and BUFGMUX primitives
 // ***************************************************************************
 // ***************************************************************************
 
 `timescale 1ns/100ps
 
 module util_clkdiv (
-  clk,
-  clk_out
+  input   clk,
+  input   clk_sel,
+  output  clk_out
  );
 
-  input   clk;
-  output  clk_out;
-  
+  wire clk_div_2_s;
+  wire clk_div_4_s;
+
   BUFR #(
-    .BUFR_DIVIDE("4"),
+    .BUFR_DIVIDE("2"),
     .SIM_DEVICE("7SERIES")
-  ) clk_divide (
+  ) clk_divide_2 (
     .I(clk),
     .CE(1),
     .CLR(0),
-    .O(clk_div_s));
-   
-  BUFG i_div_clk_gbuf (
-    .I (clk_div_s),
+    .O(clk_div_2_s));
+
+  BUFR #(
+    .BUFR_DIVIDE("4"),
+    .SIM_DEVICE("7SERIES")
+  ) clk_divide_4 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_4_s));
+
+  BUFGMUX i_div_clk_gbuf (
+    .I0(clk_div_4_s), // 1-bit input: Clock input (S=0)
+    .I1(clk_div_2_s), // 1-bit input: Clock input (S=1)
+    .S(clk_sel),
     .O (clk_out));
 
 endmodule  // util_clkdiv
