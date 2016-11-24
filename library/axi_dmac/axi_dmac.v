@@ -225,6 +225,14 @@ localparam BYTES_PER_BEAT_WIDTH_SRC = DMA_DATA_WIDTH_SRC > 1024 ? 8 :
   DMA_DATA_WIDTH_SRC > 32 ? 3 :
   DMA_DATA_WIDTH_SRC > 16 ? 2 :
   DMA_DATA_WIDTH_SRC > 8 ? 1 : 0;
+localparam ID_WIDTH = (FIFO_SIZE*2) > 1024 ? 8 :
+  (FIFO_SIZE*2) > 512 ? 7 :
+  (FIFO_SIZE*2) > 256 ? 6 :
+  (FIFO_SIZE*2) > 128 ? 5 :
+  (FIFO_SIZE*2) > 64 ? 4 :
+  (FIFO_SIZE*2) > 32 ? 3 :
+  (FIFO_SIZE*2) > 16 ? 2 :
+  (FIFO_SIZE*2) > 8 ? 1 : 0;
 
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
@@ -273,14 +281,14 @@ reg up_dma_cyclic = CYCLIC;
 wire up_dma_sync_transfer_start = SYNC_TRANSFER_START ? 1'b1 : 1'b0;
 
 // ID signals from the DMAC, just for debugging
-wire [2:0] dest_request_id;
-wire [2:0] dest_data_id;
-wire [2:0] dest_address_id;
-wire [2:0] dest_response_id;
-wire [2:0] src_request_id;
-wire [2:0] src_data_id;
-wire [2:0] src_address_id;
-wire [2:0] src_response_id;
+wire [ID_WIDTH-1:0] dest_request_id;
+wire [ID_WIDTH-1:0] dest_data_id;
+wire [ID_WIDTH-1:0] dest_address_id;
+wire [ID_WIDTH-1:0] dest_response_id;
+wire [ID_WIDTH-1:0] src_request_id;
+wire [ID_WIDTH-1:0] src_data_id;
+wire [ID_WIDTH-1:0] src_address_id;
+wire [ID_WIDTH-1:0] src_response_id;
 wire [7:0] dbg_status;
 
 assign m_dest_axi_araddr = 'd0;
@@ -528,7 +536,8 @@ dmac_request_arb #(
   .AXI_SLICE_DEST(AXI_SLICE_DEST),
   .AXI_SLICE_SRC(AXI_SLICE_SRC),
   .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
-  .FIFO_SIZE(FIFO_SIZE)
+  .FIFO_SIZE(FIFO_SIZE),
+  .ID_WIDTH(ID_WIDTH)
 ) i_request_arb (
   .req_aclk(s_axi_aclk),
   .req_aresetn(s_axi_aresetn),
