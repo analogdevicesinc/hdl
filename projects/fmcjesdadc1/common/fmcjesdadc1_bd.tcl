@@ -60,6 +60,7 @@ set_property -dict [list CONFIG.RX_NUM_OF_LANES {4}] $util_fmcjesdadc1_xcvr
 set_property -dict [list CONFIG.RX_OUT_DIV {1}] $util_fmcjesdadc1_xcvr
 set_property -dict [list CONFIG.RX_CLK25_DIV {10}] $util_fmcjesdadc1_xcvr
 set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_fmcjesdadc1_xcvr
+set_property -dict [list CONFIG.RX_PMA_CFG {0x00018480}] $util_fmcjesdadc1_xcvr
 set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff10200020}] $util_fmcjesdadc1_xcvr
 
 # reference clocks & resets
