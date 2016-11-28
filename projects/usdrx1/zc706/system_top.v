@@ -246,25 +246,6 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
-  wire   [511:0]  adc_data;
-  wire   [127:0]  adc_data_0;
-  wire   [127:0]  adc_data_1;
-  wire   [127:0]  adc_data_2;
-  wire   [127:0]  adc_data_3;
-  wire            adc_valid;
-  wire   [  7:0]  adc_valid_0;
-  wire   [  7:0]  adc_valid_1;
-  wire   [  7:0]  adc_valid_2;
-  wire   [  7:0]  adc_valid_3;
-  wire   [  7:0]  adc_enable_0;
-  wire   [  7:0]  adc_enable_1;
-  wire   [  7:0]  adc_enable_2;
-  wire   [  7:0]  adc_enable_3;
-  wire            adc_dovf;
-  wire            adc_dovf_0;
-  wire            adc_dovf_1;
-  wire            adc_dovf_2;
-  wire            adc_dovf_3;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -285,33 +266,12 @@ module system_top (
   assign spi_afe_clk          = spi_clk;
   assign spi_clk_clk          = spi_clk;
 
-  usdrx1_spi i_spi (
-    .spi_afe_csn (spi_csn[4:1]),
-    .spi_clk_csn (spi_csn[0]),
-    .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi),
-    .spi_miso (spi_miso),
-    .spi_afe_sdio (spi_afe_sdio),
-    .spi_clk_sdio (spi_clk_sdio));
-
-  // single dma for all channels
-
-  assign adc_data   = {adc_data_3, adc_data_2, adc_data_1, adc_data_0};
-  assign adc_valid  = (|adc_valid_0) | (|adc_valid_1) | (|adc_valid_2) | (|adc_valid_3) ;
-  assign adc_dovf_0 = adc_dovf;
-  assign adc_dovf_1 = adc_dovf;
-  assign adc_dovf_2 = adc_dovf;
-  assign adc_dovf_3 = adc_dovf;
-
-  // data interface
-
   IBUFDS_GTE2 i_ibufds_rx_ref_clk (
     .CEB (1'd0),
     .I (rx_ref_clk_p),
     .IB (rx_ref_clk_n),
     .O (rx_ref_clk),
     .ODIV2 ());
-
   OBUFDS i_obufds_rx_sysref (
     .I (rx_sysref),
     .O (rx_sysref_p),
@@ -321,40 +281,6 @@ module system_top (
     .I (rx_sync),
     .O (rx_sync_p),
     .OB (rx_sync_n));
-
-  // gpio/control interface
-
-  IOBUF i_iobuf_gpio_prc_sdo_q  (
-    .I (gpio_o[43]),
-    .O (gpio_i[43]),
-    .T (gpio_t[43]),
-    .IO (prc_sdo_q));
-
-  IOBUF i_iobuf_gpio_prc_sdo_i  (
-    .I (gpio_o[42]),
-    .O (gpio_i[42]),
-    .T (gpio_t[42]),
-    .IO (prc_sdo_i));
-
-  IOBUF i_iobuf_gpio_prc_cnv    (
-    .I (gpio_o[41]),
-    .O (gpio_i[41]),
-    .T (gpio_t[41]),
-    .IO (prc_cnv));
-
-  IOBUF i_iobuf_gpio_prc_sck    (
-    .I (gpio_o[40]),
-    .O (gpio_i[40]),
-    .T (gpio_t[40]),
-    .IO (prc_sck));
-
-  assign dac_sleep  = gpio_o[44];
-  assign amp_disbn  = gpio_o[39];
-  assign gpio_i[38] = clk_status;
-  assign clk_syncn  = gpio_o[37];
-  assign clk_resetn = gpio_o[36];
-  assign afe_stby   = gpio_o[35];
-  assign afe_pdn    = gpio_o[34];
 
   OBUFDS i_obufds_gpio_afe_trig (
     .I (gpio_o[33]),
@@ -366,19 +292,39 @@ module system_top (
     .O (afe_rst_p),
     .OB (afe_rst_n));
 
-  genvar n;
-  generate
-  for (n = 0; n <= 13; n = n + 1) begin: g_iobuf_gpio_dac_data
-    assign dac_data[n]   = gpio_o[45+n];
-  end
-  for (n = 0; n <= 14; n = n + 1) begin: g_iobuf_gpio_bd
-  IOBUF i_iobuf_gpio_bd (
-    .I (gpio_o[n]),
-    .O (gpio_i[n]),
-    .T (gpio_t[n]),
-    .IO (gpio_bd[n]));
-  end
-  endgenerate
+  assign dac_sleep  = gpio_o[44];
+  assign amp_disbn  = gpio_o[39];
+  assign gpio_i[38] = clk_status;
+  assign clk_syncn  = gpio_o[37];
+  assign clk_resetn = gpio_o[36];
+  assign afe_stby   = gpio_o[35];
+  assign afe_pdn    = gpio_o[34];
+
+  assign dac_data   = gpio_o[59:45];
+
+  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_prc (
+    .dio_t (gpio_t[43:40]),
+    .dio_i (gpio_o[43:40]),
+    .dio_o (gpio_i[43:40]),
+    .dio_p ({prc_sdo_q,
+            prc_sdo_i,
+            prc_cnv,
+            prc_sck}));
+
+  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
+    .dio_t (gpio_t[14:0]),
+    .dio_i (gpio_o[14:0]),
+    .dio_o (gpio_i[14:0]),
+    .dio_p (gpio_bd));
+
+  usdrx1_spi i_spi (
+    .spi_afe_csn (spi_csn[4:1]),
+    .spi_clk_csn (spi_csn[0]),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_afe_sdio (spi_afe_sdio),
+    .spi_clk_sdio (spi_clk_sdio));
 
   system_wrapper i_system_wrapper (
     .sys_clk_clk_n (sys_clk_n),
@@ -423,25 +369,6 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .adc_data (adc_data),
-    .adc_data_0 (adc_data_0),
-    .adc_data_1 (adc_data_1),
-    .adc_data_2 (adc_data_2),
-    .adc_data_3 (adc_data_3),
-    .adc_wr_en(adc_valid),
-    .adc_valid_0 (adc_valid_0),
-    .adc_valid_1 (adc_valid_1),
-    .adc_valid_2 (adc_valid_2),
-    .adc_valid_3 (adc_valid_3),
-    .adc_enable_0 (adc_enable_0),
-    .adc_enable_1 (adc_enable_1),
-    .adc_enable_2 (adc_enable_2),
-    .adc_enable_3 (adc_enable_3),
-    .adc_dovf (adc_dovf),
-    .adc_dovf_0 (adc_dovf_0),
-    .adc_dovf_1 (adc_dovf_1),
-    .adc_dovf_2 (adc_dovf_2),
-    .adc_dovf_3 (adc_dovf_3),
     .hdmi_data (hdmi_data),
     .hdmi_data_e (hdmi_data_e),
     .hdmi_hsync (hdmi_hsync),
