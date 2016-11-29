@@ -36,6 +36,7 @@ set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {14}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_hdmi_rx_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_hdmi_rx_dma
+set_property -dict [list CONFIG.FIFO_SIZE {16}] $axi_hdmi_rx_dma
 
 create_bd_port -dir I hdmi_rx_clk
 create_bd_port -dir I -from 15 -to 0 hdmi_rx_data
