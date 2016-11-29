@@ -14,6 +14,7 @@ delete_bd_objs [get_bd_ports hdmi_data_e]
 delete_bd_objs [get_bd_ports hdmi_data]
 
 set_property CONFIG.EMBEDDED_SYNC {1} [get_bd_cells axi_hdmi_core]
+set_property CONFIG.OUT_CLK_POLARITY {1} [get_bd_cells axi_hdmi_core]
 
 create_bd_port -dir O hdmi_tx_clk
 create_bd_port -dir O -from 15 -to 0 hdmi_tx_data
