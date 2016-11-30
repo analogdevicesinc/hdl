@@ -63,6 +63,10 @@ set_property  -dict {PACKAGE_PIN  W15   IOSTANDARD LVCMOS25} [get_ports fifo_rdy
 set_property  -dict {PACKAGE_PIN  U19   IOSTANDARD LVCMOS25} [get_ports fifo_rdy[6]]      ;
 set_property  -dict {PACKAGE_PIN  P20   IOSTANDARD LVCMOS25} [get_ports fifo_rdy[7]]      ;
 
+set_property  -dict {PACKAGE_PIN  W10   IOSTANDARD LVCMOS25} [get_ports flag_a]      ;
+set_property  -dict {PACKAGE_PIN  W9    IOSTANDARD LVCMOS25} [get_ports flag_b]      ;
+
+
 set_property  -dict {PACKAGE_PIN  W20   IOSTANDARD LVCMOS25} [get_ports pmode[0]]         ;
 set_property  -dict {PACKAGE_PIN  T19   IOSTANDARD LVCMOS25} [get_ports pmode[1]]         ;
 set_property  -dict {PACKAGE_PIN  R18   IOSTANDARD LVCMOS25} [get_ports pmode[2]]         ;
