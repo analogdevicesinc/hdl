@@ -63,9 +63,12 @@ set_property  -dict {PACKAGE_PIN  D5    IOSTANDARD LVCMOS18} [get_ports fifo_rdy
 set_property  -dict {PACKAGE_PIN  F7    IOSTANDARD LVCMOS18} [get_ports fifo_rdy[6]]      ;
 set_property  -dict {PACKAGE_PIN  C6    IOSTANDARD LVCMOS18} [get_ports fifo_rdy[7]]      ;
 
-set_property  -dict {PACKAGE_PIN  A10    IOSTANDARD LVCMOS18} [get_ports pmode[0]]        ;
-set_property  -dict {PACKAGE_PIN  K10    IOSTANDARD LVCMOS18} [get_ports pmode[1]]        ;
-set_property  -dict {PACKAGE_PIN  B4     IOSTANDARD LVCMOS18} [get_ports pmode[2]]        ;
+set_property  -dict {PACKAGE_PIN  AE20  IOSTANDARD LVCMOS18} [get_ports flag_a]      ;
+set_property  -dict {PACKAGE_PIN  AE21  IOSTANDARD LVCMOS18} [get_ports flag_b]      ;
 
-set_property  -dict {PACKAGE_PIN  AC23   IOSTANDARD LVCMOS18} [get_ports reset_n]         ;
-set_property  -dict {PACKAGE_PIN  AD18   IOSTANDARD LVCMOS18} [get_ports epswitch_n]      ;
+set_property  -dict {PACKAGE_PIN  A10   IOSTANDARD LVCMOS18} [get_ports pmode[0]]        ;
+set_property  -dict {PACKAGE_PIN  K10   IOSTANDARD LVCMOS18} [get_ports pmode[1]]        ;
+set_property  -dict {PACKAGE_PIN  B4    IOSTANDARD LVCMOS18} [get_ports pmode[2]]        ;
+
+set_property  -dict {PACKAGE_PIN  AC23  IOSTANDARD LVCMOS18} [get_ports reset_n]         ;
+set_property  -dict {PACKAGE_PIN  AD18  IOSTANDARD LVCMOS18} [get_ports epswitch_n]      ;

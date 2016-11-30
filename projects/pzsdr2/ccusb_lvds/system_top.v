@@ -104,6 +104,9 @@ module system_top (
   output          pktend_n,
   output          epswitch_n,
 
+  input           flag_a,
+  input           flag_b,
+
   output          reset_n,
 
   output  [ 2:0]  pmode,
