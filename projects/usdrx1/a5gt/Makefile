@@ -14,7 +14,6 @@ export ALT_NIOS_MMU_ENABLED := $(MMU)
 M_DEPS += system_project.tcl
 M_DEPS += ../common/usdrx1_spi.v
 M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../common/a5gt/a5gt_system_bd.qsys
 M_DEPS += ../../common/a5gt/a5gt_system_assign.tcl
 M_DEPS += ../../../library/common/altera/ad_xcvr_rx_rst.v
 M_DEPS += ../../../library/common/altera/ad_jesd_align.v

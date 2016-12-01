@@ -32,7 +32,6 @@ M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_dacfifo/util_dacfifo.xpr
-M_DEPS += ../../../library/util_mfifo/util_mfifo.xpr
 M_DEPS += ../../../library/util_upack/util_upack.xpr
 
 M_VIVADO := vivado -mode batch -source
@@ -73,7 +72,6 @@ clean-all:clean
 	make -C ../../../library/xilinx/util_adxcvr clean
 	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_dacfifo clean
-	make -C ../../../library/util_mfifo clean
 	make -C ../../../library/util_upack clean
 
 
@@ -94,7 +92,6 @@ lib:
 	make -C ../../../library/xilinx/util_adxcvr
 	make -C ../../../library/util_cpack
 	make -C ../../../library/util_dacfifo
-	make -C ../../../library/util_mfifo
 	make -C ../../../library/util_upack
 
 ####################################################################################
