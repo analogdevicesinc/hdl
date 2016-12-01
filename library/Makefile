@@ -37,7 +37,7 @@ clean:
 	make -C axi_hdmi_rx clean
 	make -C axi_hdmi_tx clean
 	make -C axi_i2s_adi clean
-	make -C axi_jesd_gt clean
+	make -C axi_intr_monitor clean
 	make -C axi_mc_controller clean
 	make -C axi_mc_current_monitor clean
 	make -C axi_mc_speed clean
@@ -112,7 +112,7 @@ lib:
 	-make -C axi_hdmi_rx
 	-make -C axi_hdmi_tx
 	-make -C axi_i2s_adi
-	-make -C axi_jesd_gt
+	-make -C axi_intr_monitor
 	-make -C axi_mc_controller
 	-make -C axi_mc_current_monitor
 	-make -C axi_mc_speed
