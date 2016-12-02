@@ -105,7 +105,7 @@ wire    [31:0]  up_wdata_s;
 //----------- Assign/Always Blocks ---------------------------------------------
 //------------------------------------------------------------------------------
 
-assign irq = interrupt & control[0];
+assign irq = interrupt;
 
 always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
   if (s_axi_aresetn == 1'b0 || control[0] == 1'b0) begin
@@ -152,10 +152,12 @@ always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
     if ((up_wreq_s == 1'b1) && (up_waddr_s[3:0] == 4'h2)) begin
       control <= up_wdata_s;
     end
-    if ((up_wreq_s == 1'b1) && (up_waddr_s[3:0] == 4'h3)) begin
+    if (control[0] == 1'b0) begin
+      interrupt <= 1'b0;
+    end else if ((up_wreq_s == 1'b1) && (up_waddr_s[3:0] == 4'h3)) begin
       interrupt <= interrupt & ~up_wdata_s[0];
     end else begin
-      if (counter_to_interrupt_cnt == 32'h0 && control[0] == 1'b1) begin
+      if (counter_to_interrupt_cnt == 32'h0) begin
         interrupt <= 1'b1;
       end
     end
