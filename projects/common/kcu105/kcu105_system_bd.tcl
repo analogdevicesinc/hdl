@@ -255,6 +255,8 @@ ad_cpu_interconnect 0x44A70000 axi_spi
 create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ddr_interconnect
 set_property CONFIG.NUM_MI {1} [get_bd_cells axi_ddr_interconnect]
 set_property CONFIG.NUM_SI {1} [get_bd_cells axi_ddr_interconnect]
+set_property CONFIG.S00_HAS_REGSLICE {4} [get_bd_cells axi_ddr_interconnect]
+set_property CONFIG.S00_HAS_DATA_FIFO {1} [get_bd_cells axi_ddr_interconnect]
 
 ad_connect axi_ddr_interconnect/M00_AXI axi_ddr_cntrl/C0_DDR4_S_AXI
 ad_connect sys_mem_clk axi_ddr_interconnect/ACLK
