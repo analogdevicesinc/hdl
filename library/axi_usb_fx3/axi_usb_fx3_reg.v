@@ -48,6 +48,7 @@ module axi_usb_fx3_reg (
   eot_fx32dma,
   eot_dma2fx3,
   trig,
+  zlp,
   fifo_num,
 
   error,
@@ -102,6 +103,9 @@ module axi_usb_fx3_reg (
   fifoa_header_size,
   fifoa_buffer_size,
 
+  length_fx32dma,
+  length_dma2fx3,
+
   // bus interface
 
   up_rstn,
@@ -122,6 +126,7 @@ module axi_usb_fx3_reg (
   input           eot_fx32dma;
   input           eot_dma2fx3;
   output          trig;
+  output          zlp;
   output  [ 4:0]  fifo_num;
 
   input           error;
@@ -175,6 +180,9 @@ module axi_usb_fx3_reg (
   output          fifoa_direction;
   output  [ 7:0]  fifoa_header_size;
   output  [15:0]  fifoa_buffer_size;
+
+  input   [31:0]  length_fx32dma;
+  input   [31:0]  length_dma2fx3;
 
  // bus interface
 
@@ -235,6 +243,7 @@ module axi_usb_fx3_reg (
   assign up_rreq_s = ((up_raddr[13:8] == 6'h00)) ? up_rreq : 1'b0;
 
   assign trig       = transfer_config[31];
+  assign zlp        = transfer_config[30];
   assign fifo_num   = transfer_config[4:0];
 
   assign test_mode_tpm = tpm_config[2:0];
@@ -325,6 +334,7 @@ module axi_usb_fx3_reg (
       tpm_status <= 32'h0;
       tpg_config <= 32'h0;
       tpg_status <= 32'h0;
+      fifo_status <= 32'h0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h0)) begin
@@ -366,6 +376,7 @@ module axi_usb_fx3_reg (
       end
       if (eot_fx32dma == 1'b1 || eot_dma2fx3 == 1'b1 || error == 1'b1) begin
         transfer_config[31] <= 1'b0;
+        transfer_config[30] <= 1'b0;
       end else if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
         transfer_config <= up_wdata;
       end
@@ -420,6 +431,8 @@ module axi_usb_fx3_reg (
           5'h15: up_rdata <= tpm_status;
           5'h16: up_rdata <= tpg_config;
           5'h17: up_rdata <= tpg_status;
+          5'h18: up_rdata <= length_fx32dma;
+          5'h19: up_rdata <= length_dma2fx3;
           default: up_rdata <= 0;
         endcase
       end else begin

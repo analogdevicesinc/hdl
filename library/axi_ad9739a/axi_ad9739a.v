@@ -81,7 +81,9 @@ module axi_ad9739a (
   s_axi_rvalid,
   s_axi_rdata,
   s_axi_rresp,
-  s_axi_rready);
+  s_axi_rready,
+  s_axi_awprot,
+  s_axi_arprot);
 
   // parameters
 
@@ -133,6 +135,9 @@ module axi_ad9739a (
   output  [ 31:0]   s_axi_rdata;
   output  [  1:0]   s_axi_rresp;
   input             s_axi_rready;
+  input   [ 2:0]    s_axi_awprot;
+  input   [ 2:0]    s_axi_arprot;
+
 
   // internal clocks and resets
 

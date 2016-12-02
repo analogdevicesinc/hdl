@@ -3,6 +3,32 @@
 source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
+adi_if_define if_xcvr_cm
+adi_if_ports output    8  sel
+adi_if_ports output    1  enb
+adi_if_ports output   12  addr
+adi_if_ports output    1  wr  
+adi_if_ports output   16  wdata
+adi_if_ports input    16  rdata
+adi_if_ports input     1  ready
+
+adi_if_define if_xcvr_ch
+adi_if_ports input     1  pll_locked
+adi_if_ports output    1  rst
+adi_if_ports output    1  user_ready
+adi_if_ports input     1  rst_done
+adi_if_ports output    1  lpm_dfe_n
+adi_if_ports output    3  rate
+adi_if_ports output    2  sys_clk_sel
+adi_if_ports output    3  out_clk_sel
+adi_if_ports output    8  sel
+adi_if_ports output    1  enb
+adi_if_ports output   12  addr
+adi_if_ports output    1  wr
+adi_if_ports output   16  wdata
+adi_if_ports input    16  rdata
+adi_if_ports input     1  ready
+
 adi_if_define if_gt_qpll
 adi_if_ports output    1  qpll_rst            reset
 adi_if_ports output    1  qpll_ref_clk        clock

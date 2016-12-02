@@ -79,7 +79,9 @@ module axi_ad9434 (
   s_axi_rvalid,
   s_axi_rresp,
   s_axi_rdata,
-  s_axi_rready);
+  s_axi_rready,
+  s_axi_awprot,
+  s_axi_arprot);
 
 
   // parameters
@@ -128,6 +130,9 @@ module axi_ad9434 (
   output  [ 1:0]  s_axi_rresp;
   output  [31:0]  s_axi_rdata;
   input           s_axi_rready;
+  input   [ 2:0]  s_axi_awprot;
+  input   [ 2:0]  s_axi_arprot;
+
 
   // internal clocks & resets
   wire            adc_rst;
@@ -162,8 +167,8 @@ module axi_ad9434 (
   wire            up_drp_sel_s;
   wire            up_drp_wr_s;
   wire    [11:0]  up_drp_addr_s;
-  wire    [15:0]  up_drp_wdata_s;
-  wire    [15:0]  up_drp_rdata_s;
+  wire    [31:0]  up_drp_wdata_s;
+  wire    [31:0]  up_drp_rdata_s;
   wire            up_drp_ready_s;
   wire            up_drp_locked_s;
 

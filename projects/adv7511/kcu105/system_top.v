@@ -144,6 +144,7 @@ module system_top (
   // default logic
 
   assign fan_pwm = 1'b1;
+  assign gpio_i[63:17] = gpio_o[63:17];
 
   // instantiations
 
@@ -195,6 +196,13 @@ module system_top (
     .mb_intr_13 (1'b0),
     .mb_intr_14 (1'b0),
     .mb_intr_15 (1'b0),
+    .spi_clk_i (1'b0),
+    .spi_clk_o (),
+    .spi_csn_i (1'b1),
+    .spi_csn_o (),
+    .spi_sdi_i (1'b0),
+    .spi_sdo_i (1'b0),
+    .spi_sdo_o (),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .phy_clk_clk_n (phy_clk_n),

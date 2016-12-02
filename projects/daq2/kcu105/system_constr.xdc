@@ -40,8 +40,8 @@ set_property  -dict {PACKAGE_PIN  E8  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [g
 
 create_clock -name tx_ref_clk   -period  2.00 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  2.00 [get_ports rx_ref_clk_p]
-create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_daq2_gt/inst/g_lane_1[0].i_channel/i_gt/i_gthe3_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_daq2_gt/inst/g_lane_1[0].i_channel/i_gt/i_gthe3_channel/RXOUTCLK]
+create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_daq2_xcvr/inst/i_xch_0/i_gthe3_channel/TXOUTCLK]
+create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_daq2_xcvr/inst/i_xch_0/i_gthe3_channel/RXOUTCLK]
 
 # gt pin assignments below are for reference only and are ignored by the tool!
 
@@ -62,8 +62,11 @@ create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_
 ##  set_property  -dict {PACKAGE_PIN  D6} [get_ports tx_data_p[3]] ; ## A22  FMC_HPC_DP1_C2M_P (tx_data_p[2])
 ##  set_property  -dict {PACKAGE_PIN  D5} [get_ports tx_data_n[3]] ; ## A23  FMC_HPC_DP1_C2M_N (tx_data_n[2])
 
-set_property LOC GTHE3_CHANNEL_X0Y19 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[0].i_channel/i_gt/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y16 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[1].i_channel/i_gt/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y18 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[2].i_channel/i_gt/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y17 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[3].i_channel/i_gt/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y19 [get_cells -hierarchical -filter {NAME =~ *util_daq2_xcvr/inst/i_xch_0/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y16 [get_cells -hierarchical -filter {NAME =~ *util_daq2_xcvr/inst/i_xch_1/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y18 [get_cells -hierarchical -filter {NAME =~ *util_daq2_xcvr/inst/i_xch_2/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y17 [get_cells -hierarchical -filter {NAME =~ *util_daq2_xcvr/inst/i_xch_3/i_gthe3_channel}]
+
+set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9144_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
+set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9680_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
 

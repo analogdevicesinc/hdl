@@ -95,14 +95,6 @@ module system_top (
   iic_scl,
   iic_sda,
 
-  hdmi_out_clk,
-  hdmi_hsync,
-  hdmi_vsync,
-  hdmi_data_e,
-  hdmi_data,
-
-  spdif,
-
   adc_clk_in_n,
   adc_clk_in_p,
   adc_data_in_n,
@@ -169,14 +161,6 @@ module system_top (
   inout           iic_scl;
   inout           iic_sda;
 
-  output          hdmi_out_clk;
-  output          hdmi_hsync;
-  output          hdmi_vsync;
-  output          hdmi_data_e;
-  output  [15:0]  hdmi_data;
-
-  output          spdif;
-
   input           adc_clk_in_n;
   input           adc_clk_in_p;
   input  [ 7:0]   adc_data_in_n;
@@ -189,7 +173,7 @@ module system_top (
   inout           spi_sdio;
 
   // internal signals
-  wire   [ 1:0]   spi_csn;
+  wire   [ 7:0]   spi_csn;
   wire            spi_miso;
   wire            spi_mosi;
 
@@ -206,7 +190,7 @@ module system_top (
   assign spi_csn_clk = spi_csn[1];
 
   ad9467_spi i_spi (
-      .spi_csn(spi_csn),
+      .spi_csn(spi_csn[1:0]),
       .spi_clk(spi_clk),
       .spi_mosi(spi_mosi),
       .spi_miso(spi_miso),
@@ -275,19 +259,19 @@ module system_top (
       .sys_rst (sys_rst),
       .uart_sin (uart_sin),
       .uart_sout (uart_sout),
-      .adc_clk_in_n(adc_clk_in_n),
-      .adc_clk_in_p(adc_clk_in_p),
-      .adc_data_in_n(adc_data_in_n),
-      .adc_data_in_p(adc_data_in_p),
-      .adc_data_or_n(adc_data_or_n),
-      .adc_data_or_p(adc_data_or_p),
-      .spi_clk_i(1'b0),
-      .spi_clk_o(spi_clk),
-      .spi_csn_i(1'b1),
-      .spi_csn_o(spi_csn),
-      .spi_sdi_i(spi_miso),
-      .spi_sdo_i(1'b0),
-      .spi_sdo_o(spi_mosi));
+      .adc_clk_in_n (adc_clk_in_n),
+      .adc_clk_in_p (adc_clk_in_p),
+      .adc_data_in_n (adc_data_in_n),
+      .adc_data_in_p (adc_data_in_p),
+      .adc_data_or_n (adc_data_or_n),
+      .adc_data_or_p (adc_data_or_p),
+      .spi_clk_i (1'b0),
+      .spi_clk_o (spi_clk),
+      .spi_csn_i (1'b1),
+      .spi_csn_o (spi_csn),
+      .spi_sdi_i (spi_miso),
+      .spi_sdo_i (1'b0),
+      .spi_sdo_o (spi_mosi));
 
   endmodule
 

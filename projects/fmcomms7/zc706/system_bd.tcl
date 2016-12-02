@@ -1,9 +1,9 @@
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
-source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3.tcl
-source $ad_hdl_dir/projects/common/xilinx/sys_dmafifo.tcl
+source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3_adcfifo.tcl
+source $ad_hdl_dir/projects/common/xilinx/sys_dacfifo.tcl
 
-p_plddr3_fifo [current_bd_instance .] axi_ad9680_fifo 128
+p_plddr3_adcfifo [current_bd_instance .] axi_ad9680_fifo 128
 p_sys_dacfifo [current_bd_instance .] axi_ad9144_fifo 256 10
 
 create_bd_port -dir I -type rst sys_rst
@@ -22,4 +22,3 @@ create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
   SEG_axi_ddr_cntrl_memaddr
 
 source ../common/fmcomms7_bd.tcl
-

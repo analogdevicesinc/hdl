@@ -9,7 +9,7 @@
     <LowPower_En>ON</LowPower_En>
     <XADC_En>Disabled</XADC_En>
     <TargetFPGA>xc7z045-ffg900/-2</TargetFPGA>
-    <Version>2.1</Version>
+    <Version>4.0</Version>
     <SystemClock>Differential</SystemClock>
     <ReferenceClock>Use System Clock</ReferenceClock>
     <SysResetPolarity>ACTIVE HIGH</SysResetPolarity>
@@ -24,6 +24,7 @@
         <PHYRatio>4:1</PHYRatio>
         <InputClkFreq>200</InputClkFreq>
         <UIExtraClocks>1</UIExtraClocks>
+        <MMCM_VCO>800</MMCM_VCO>
         <MMCMClkOut0> 1.000</MMCMClkOut0>
         <MMCMClkOut1>1</MMCMClkOut1>
         <MMCMClkOut2>1</MMCMClkOut2>

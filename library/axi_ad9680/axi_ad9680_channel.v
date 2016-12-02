@@ -72,7 +72,6 @@ module axi_ad9680_channel (
 
   // parameters
 
-  parameter Q_OR_I_N = 0;
   parameter CHANNEL_ID = 0;
 
   // adc interface
@@ -136,7 +135,7 @@ module axi_ad9680_channel (
   end
   endgenerate
 
-  up_adc_channel #(.ADC_CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
+  up_adc_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),

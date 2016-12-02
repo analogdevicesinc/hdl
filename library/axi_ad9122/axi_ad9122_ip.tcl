@@ -5,14 +5,14 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_ad9122
 adi_ip_files axi_ad9122 [list \
-  "$ad_hdl_dir/library/common/ad_mul.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/common/ad_mmcm_drp.v" \
-  "$ad_hdl_dir/library/common/ad_serdes_out.v" \
-  "$ad_hdl_dir/library/common/ad_serdes_clk.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_mmcm_drp.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_serdes_out.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_serdes_clk.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \

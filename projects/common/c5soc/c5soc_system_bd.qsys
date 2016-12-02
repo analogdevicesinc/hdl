@@ -18,7 +18,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -39,7 +39,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -52,7 +52,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -73,7 +73,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -107,7 +107,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -128,7 +128,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -154,7 +154,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -183,7 +183,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -196,7 +196,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -209,7 +209,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -318,7 +318,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -331,7 +331,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -352,7 +352,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -365,7 +365,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -424,16 +424,6 @@
    internal="sys_hps.memory"
    type="conduit"
    dir="end" />
- <interface
-   name="sys_hps_spim0"
-   internal="sys_hps.spim0"
-   type="conduit"
-   dir="end" />
- <interface
-   name="sys_hps_spim0_sclk_out"
-   internal="sys_hps.spim0_sclk_out"
-   type="clock"
-   dir="start" />
  <interface
    name="sys_intr"
    internal="sys_intr.receiver_irq"
@@ -938,8 +928,8 @@
   <parameter name="SKIP_MEM_INIT" value="true" />
   <parameter name="SOPC_COMPAT_RESET" value="false" />
   <parameter name="SPEED_GRADE" value="7" />
-  <parameter name="SPIM0_Mode" value="Full" />
-  <parameter name="SPIM0_PinMuxing" value="FPGA" />
+  <parameter name="SPIM0_Mode" value="N/A" />
+  <parameter name="SPIM0_PinMuxing" value="Unused" />
   <parameter name="SPIM1_Mode" value="Single Slave Select" />
   <parameter name="SPIM1_PinMuxing" value="HPS I/O Set 0" />
   <parameter name="SPIS0_Mode" value="N/A" />

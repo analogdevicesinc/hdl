@@ -109,8 +109,8 @@ module axi_ad9434_core (
   output          up_drp_sel;
   output          up_drp_wr;
   output  [11:0]  up_drp_addr;
-  output  [15:0]  up_drp_wdata;
-  input   [15:0]  up_drp_rdata;
+  output  [31:0]  up_drp_wdata;
+  input   [31:0]  up_drp_rdata;
   input           up_drp_ready;
   input           up_drp_locked;
 
@@ -246,7 +246,7 @@ module axi_ad9434_core (
     .up_rack (up_rack_s[0]));
 
   up_adc_channel #(
-    .ADC_CHANNEL_ID(0))
+    .CHANNEL_ID(0))
   i_adc_channel(
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

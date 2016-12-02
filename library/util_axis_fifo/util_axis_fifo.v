@@ -37,20 +37,20 @@
 // ***************************************************************************
 
 module util_axis_fifo (
-	input m_axis_aclk,
-	input m_axis_aresetn,
-	input m_axis_ready,
-	output m_axis_valid,
-	output [DATA_WIDTH-1:0] m_axis_data,
-	output [ADDRESS_WIDTH:0] m_axis_level,
+  input m_axis_aclk,
+  input m_axis_aresetn,
+  input m_axis_ready,
+  output m_axis_valid,
+  output [DATA_WIDTH-1:0] m_axis_data,
+  output [ADDRESS_WIDTH:0] m_axis_level,
 
-	input s_axis_aclk,
-	input s_axis_aresetn,
-	output s_axis_ready,
-	input s_axis_valid,
-	input [DATA_WIDTH-1:0] s_axis_data,
-	output s_axis_empty,
-	output [ADDRESS_WIDTH:0] s_axis_room
+  input s_axis_aclk,
+  input s_axis_aresetn,
+  output s_axis_ready,
+  input s_axis_valid,
+  input [DATA_WIDTH-1:0] s_axis_data,
+  output s_axis_empty,
+  output [ADDRESS_WIDTH:0] s_axis_room
 );
 
 parameter DATA_WIDTH = 64;
@@ -68,23 +68,23 @@ wire m_axis_waddr;
 wire s_axis_raddr;
 
 sync_bits #(
-	.NUM_OF_BITS(1),
-	.ASYNC_CLK(ASYNC_CLK)
+  .NUM_OF_BITS(1),
+  .ASYNC_CLK(ASYNC_CLK)
 ) i_waddr_sync (
-	.out_clk(m_axis_aclk),
-	.out_resetn(m_axis_aresetn),
-	.in(s_axis_waddr),
-	.out(m_axis_waddr)
+  .out_clk(m_axis_aclk),
+  .out_resetn(m_axis_aresetn),
+  .in(s_axis_waddr),
+  .out(m_axis_waddr)
 );
 
 sync_bits #(
-	.NUM_OF_BITS(1),
-	.ASYNC_CLK(ASYNC_CLK)
+  .NUM_OF_BITS(1),
+  .ASYNC_CLK(ASYNC_CLK)
 ) i_raddr_sync (
-	.out_clk(s_axis_aclk),
-	.out_resetn(s_axis_aresetn),
-	.in(m_axis_raddr),
-	.out(s_axis_raddr)
+  .out_clk(s_axis_aclk),
+  .out_resetn(s_axis_aresetn),
+  .in(m_axis_raddr),
+  .out(s_axis_raddr)
 );
 
 assign m_axis_valid = m_axis_raddr != m_axis_waddr;
@@ -94,27 +94,27 @@ assign s_axis_empty = s_axis_ready;
 assign s_axis_room = s_axis_ready;
 
 always @(posedge s_axis_aclk) begin
-	if (s_axis_ready)
-		cdc_sync_fifo_ram <= s_axis_data;
+  if (s_axis_ready)
+    cdc_sync_fifo_ram <= s_axis_data;
 end
 
 always @(posedge s_axis_aclk) begin
-	if (s_axis_aresetn == 1'b0) begin
-		s_axis_waddr <= 1'b0;
-	end else begin
-		if (s_axis_ready & s_axis_valid) begin
-			s_axis_waddr <= s_axis_waddr + 1'b1;
-		end
-	end
+  if (s_axis_aresetn == 1'b0) begin
+    s_axis_waddr <= 1'b0;
+  end else begin
+    if (s_axis_ready & s_axis_valid) begin
+      s_axis_waddr <= s_axis_waddr + 1'b1;
+    end
+  end
 end
 
 always @(posedge m_axis_aclk) begin
-	if (m_axis_aresetn == 1'b0) begin
-		m_axis_raddr <= 1'b0;
-	end else begin
-		if (m_axis_valid & m_axis_ready)
-			m_axis_raddr <= m_axis_raddr + 1'b1;
-	end
+  if (m_axis_aresetn == 1'b0) begin
+    m_axis_raddr <= 1'b0;
+  end else begin
+    if (m_axis_valid & m_axis_ready)
+      m_axis_raddr <= m_axis_raddr + 1'b1;
+  end
 end
 
 assign m_axis_data = cdc_sync_fifo_ram;
@@ -131,48 +131,48 @@ wire _m_axis_valid;
 if (ASYNC_CLK == 1) begin
 
 fifo_address_gray_pipelined #(
-	.ADDRESS_WIDTH(ADDRESS_WIDTH)
+  .ADDRESS_WIDTH(ADDRESS_WIDTH)
 ) i_address_gray (
-	.m_axis_aclk(m_axis_aclk),
-	.m_axis_aresetn(m_axis_aresetn),
-	.m_axis_ready(_m_axis_ready),
-	.m_axis_valid(_m_axis_valid),
-	.m_axis_raddr(m_axis_raddr),
-	.m_axis_level(m_axis_level),
+  .m_axis_aclk(m_axis_aclk),
+  .m_axis_aresetn(m_axis_aresetn),
+  .m_axis_ready(_m_axis_ready),
+  .m_axis_valid(_m_axis_valid),
+  .m_axis_raddr(m_axis_raddr),
+  .m_axis_level(m_axis_level),
 
-	.s_axis_aclk(s_axis_aclk),
-	.s_axis_aresetn(s_axis_aresetn),
-	.s_axis_ready(s_axis_ready),
-	.s_axis_valid(s_axis_valid),
-	.s_axis_empty(s_axis_empty),
-	.s_axis_waddr(s_axis_waddr),
-	.s_axis_room(s_axis_room)
+  .s_axis_aclk(s_axis_aclk),
+  .s_axis_aresetn(s_axis_aresetn),
+  .s_axis_ready(s_axis_ready),
+  .s_axis_valid(s_axis_valid),
+  .s_axis_empty(s_axis_empty),
+  .s_axis_waddr(s_axis_waddr),
+  .s_axis_room(s_axis_room)
 );
 
 end else begin
 
 fifo_address_sync #(
-	.ADDRESS_WIDTH(ADDRESS_WIDTH)
+  .ADDRESS_WIDTH(ADDRESS_WIDTH)
 ) i_address_sync (
-	.clk(m_axis_aclk),
-	.resetn(m_axis_aresetn),
-	.m_axis_ready(_m_axis_ready),
-	.m_axis_valid(_m_axis_valid),
-	.m_axis_raddr(m_axis_raddr),
-	.m_axis_level(m_axis_level),
+  .clk(m_axis_aclk),
+  .resetn(m_axis_aresetn),
+  .m_axis_ready(_m_axis_ready),
+  .m_axis_valid(_m_axis_valid),
+  .m_axis_raddr(m_axis_raddr),
+  .m_axis_level(m_axis_level),
 
-	.s_axis_ready(s_axis_ready),
-	.s_axis_valid(s_axis_valid),
-	.s_axis_empty(s_axis_empty),
-	.s_axis_waddr(s_axis_waddr),
-	.s_axis_room(s_axis_room)
+  .s_axis_ready(s_axis_ready),
+  .s_axis_valid(s_axis_valid),
+  .s_axis_empty(s_axis_empty),
+  .s_axis_waddr(s_axis_waddr),
+  .s_axis_room(s_axis_room)
 );
 
 end
 
 always @(posedge s_axis_aclk) begin
-	if (s_axis_ready)
-		ram[s_axis_waddr] <= s_axis_data;
+  if (s_axis_ready)
+    ram[s_axis_waddr] <= s_axis_data;
 end
 
 if (S_AXIS_REGISTERED == 1) begin
@@ -181,19 +181,19 @@ reg [DATA_WIDTH-1:0] data;
 reg valid;
 
 always @(posedge m_axis_aclk) begin
-	if (m_axis_aresetn == 1'b0) begin
-		valid <= 1'b0;
-	end else begin
-		if (_m_axis_valid)
-			valid <= 1'b1;
-		else if (m_axis_ready)
-			valid <= 1'b0;
-	end
+  if (m_axis_aresetn == 1'b0) begin
+    valid <= 1'b0;
+  end else begin
+    if (_m_axis_valid)
+      valid <= 1'b1;
+    else if (m_axis_ready)
+      valid <= 1'b0;
+  end
 end
 
 always @(posedge m_axis_aclk) begin
-	if (~valid || m_axis_ready)
-		data <= ram[m_axis_raddr];
+  if (~valid || m_axis_ready)
+    data <= ram[m_axis_raddr];
 end
 
 assign _m_axis_ready = ~valid || m_axis_ready;

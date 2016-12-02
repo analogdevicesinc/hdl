@@ -37,14 +37,14 @@
 
 
 module splitter (
-	input clk,
-	input resetn,
+  input clk,
+  input resetn,
 
-	input s_valid,
-	output s_ready,
+  input s_valid,
+  output s_ready,
 
-	output [NUM_M-1:0] m_valid,
-	input [NUM_M-1:0] m_ready
+  output [NUM_M-1:0] m_valid,
+  input [NUM_M-1:0] m_ready
 );
 
 parameter NUM_M = 2;
@@ -56,14 +56,14 @@ assign m_valid = s_valid ? ~acked : {NUM_M{1'b0}};
 
 always @(posedge clk)
 begin
-	if (resetn == 1'b0) begin
-		acked <= {NUM_M{1'b0}};
-	end else begin
-		if (s_valid & s_ready)
-			acked <= {NUM_M{1'b0}};
-		else
-			acked <= acked | (m_ready & m_valid);
-	end
+  if (resetn == 1'b0) begin
+    acked <= {NUM_M{1'b0}};
+  end else begin
+    if (s_valid & s_ready)
+      acked <= {NUM_M{1'b0}};
+    else
+      acked <= acked | (m_ready & m_valid);
+  end
 end
 
 endmodule

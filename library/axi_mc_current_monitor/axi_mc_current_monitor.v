@@ -77,7 +77,10 @@ module axi_mc_current_monitor (
     output          s_axi_rvalid,
     output  [1:0]   s_axi_rresp,
     output  [31:0]  s_axi_rdata,
-    input           s_axi_rready
+    input           s_axi_rready,
+    input   [ 2:0]  s_axi_awprot,
+    input   [ 2:0]  s_axi_arprot
+  
 );
 
 //------------------------------------------------------------------------------
@@ -193,7 +196,7 @@ ad7401 vbus_if(
     .data_rd_ready_o(),
     .adc_mdata_i(adc_vbus_dat_i));
 
-up_adc_channel #(.ADC_CHANNEL_ID(0)) i_up_adc_channel_ia(
+up_adc_channel #(.CHANNEL_ID(0)) i_up_adc_channel_ia(
     .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_ia),
@@ -239,7 +242,7 @@ up_adc_channel #(.ADC_CHANNEL_ID(0)) i_up_adc_channel_ia(
     .up_rdata (up_rdata_0_s),
     .up_rack (up_rack_0_s));
 
-up_adc_channel #(.ADC_CHANNEL_ID(1)) i_up_adc_channel_ib(
+up_adc_channel #(.CHANNEL_ID(1)) i_up_adc_channel_ib(
     .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_ib),
@@ -285,7 +288,7 @@ up_adc_channel #(.ADC_CHANNEL_ID(1)) i_up_adc_channel_ib(
     .up_rdata (up_rdata_1_s),
     .up_rack (up_rack_1_s));
 
-up_adc_channel #(.ADC_CHANNEL_ID(2)) i_up_adc_channel_vbus(
+up_adc_channel #(.CHANNEL_ID(2)) i_up_adc_channel_vbus(
     .adc_clk(adc_clk_o),
     .adc_rst(adc_rst),
     .adc_enable(adc_enable_vbus),
@@ -401,6 +404,7 @@ up_axi i_up_axi(
         .up_wreq (up_wreq_s),
         .up_waddr (up_waddr_s),
         .up_wdata (up_wdata_s),
+        .up_wack (up_wack),
         .up_rreq (up_rreq_s),
         .up_raddr (up_raddr_s),
         .up_rdata (up_rdata),

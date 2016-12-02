@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -143,13 +143,14 @@ module axi_ad9739a_if (
   // dac data output serdes(s) & buffers
 
   ad_serdes_out #(
-    .SERDES_OR_DDR_N(1),
+    .DDR_OR_SDR_N(1),
     .DATA_WIDTH(14),
     .DEVICE_TYPE (DEVICE_TYPE))
   i_serdes_out_data_a (
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
+    .loaden (1'b0),
     .data_s0 (dac_data_00[15:2]),
     .data_s1 (dac_data_02[15:2]),
     .data_s2 (dac_data_04[15:2]),
@@ -162,15 +163,16 @@ module axi_ad9739a_if (
     .data_out_n (dac_data_out_a_n));
 
   // dac data output serdes(s) & buffers
-  
+
   ad_serdes_out #(
-    .SERDES_OR_DDR_N(1),
+    .DDR_OR_SDR_N(1),
     .DATA_WIDTH(14),
     .DEVICE_TYPE (DEVICE_TYPE))
   i_serdes_out_data_b (
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
+    .loaden (1'b0),
     .data_s0 (dac_data_01[15:2]),
     .data_s1 (dac_data_03[15:2]),
     .data_s2 (dac_data_05[15:2]),
@@ -183,15 +185,16 @@ module axi_ad9739a_if (
     .data_out_n (dac_data_out_b_n));
 
   // dac clock output serdes & buffer
-  
+
   ad_serdes_out #(
-    .SERDES_OR_DDR_N(1),
+    .DDR_OR_SDR_N(1),
     .DATA_WIDTH(1),
     .DEVICE_TYPE (DEVICE_TYPE))
   i_serdes_out_clk (
     .rst (dac_rst),
     .clk (dac_clk),
     .div_clk (dac_div_clk),
+    .loaden (1'b0),
     .data_s0 (1'b1),
     .data_s1 (1'b0),
     .data_s2 (1'b1),

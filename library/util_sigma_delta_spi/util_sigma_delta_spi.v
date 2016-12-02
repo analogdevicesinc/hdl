@@ -1,23 +1,23 @@
 
 module util_sigma_delta_spi (
-	input clk,
-	input resetn,
+  input clk,
+  input resetn,
 
-	input spi_active,
+  input spi_active,
 
-	input s_sclk,
-	input s_sdo,
-	input s_sdo_t,
-	output s_sdi,
-	input [NUM_OF_CS-1:0] s_cs,
+  input s_sclk,
+  input s_sdo,
+  input s_sdo_t,
+  output s_sdi,
+  input [NUM_OF_CS-1:0] s_cs,
 
-	output m_sclk,
-	output m_sdo,
-	output m_sdo_t,
-	input m_sdi,
-	output [NUM_OF_CS-1:0] m_cs,
+  output m_sclk,
+  output m_sdo,
+  output m_sdo_t,
+  input m_sdi,
+  output [NUM_OF_CS-1:0] m_cs,
 
-	output reg data_ready
+  output reg data_ready
 );
 
 parameter NUM_OF_CS = 1;
@@ -46,29 +46,29 @@ reg [$clog2(IDLE_TIMEOUT)-1:0] counter = IDLE_TIMEOUT;
 reg [2:0] sdi_d = 'h00;
 
 always @(posedge clk) begin
-	if (resetn == 1'b0) begin
-		counter <= IDLE_TIMEOUT;
-	end else begin
-		if (s_cs[CS_PIN] == 1'b0 && spi_active == 1'b0) begin
-			if (counter != 'h00)
-				counter <= counter - 1'b1;
-		end else begin
-			counter <= IDLE_TIMEOUT;
-		end
-	end
+  if (resetn == 1'b0) begin
+    counter <= IDLE_TIMEOUT;
+  end else begin
+    if (s_cs[CS_PIN] == 1'b0 && spi_active == 1'b0) begin
+      if (counter != 'h00)
+        counter <= counter - 1'b1;
+    end else begin
+      counter <= IDLE_TIMEOUT;
+    end
+  end
 end
 
 always @(posedge clk) begin
-	/* The data ready signal is fully asynchronous */
-	sdi_d <= {sdi_d[1:0], m_sdi};
+  /* The data ready signal is fully asynchronous */
+  sdi_d <= {sdi_d[1:0], m_sdi};
 end
 
 always @(posedge clk) begin
-	if (counter == 'h00 && sdi_d[2] == 1'b0) begin
-		data_ready <= 1'b1;
-	end else begin
-		data_ready <= 1'b0;
-	end
+  if (counter == 'h00 && sdi_d[2] == 1'b0) begin
+    data_ready <= 1'b1;
+  end else begin
+    data_ready <= 1'b0;
+  end
 end
 
 endmodule

@@ -69,6 +69,7 @@ module axi_ad9467(
   s_axi_aresetn,
   s_axi_awvalid,
   s_axi_awaddr,
+  s_axi_awprot,
   s_axi_awready,
   s_axi_wvalid,
   s_axi_wdata,
@@ -79,6 +80,7 @@ module axi_ad9467(
   s_axi_bready,
   s_axi_arvalid,
   s_axi_araddr,
+  s_axi_arprot,
   s_axi_arready,
   s_axi_rvalid,
   s_axi_rresp,
@@ -134,6 +136,9 @@ module axi_ad9467(
   output  [ 1:0]  s_axi_rresp;
   output  [31:0]  s_axi_rdata;
   input           s_axi_rready;
+  input   [ 2:0]  s_axi_awprot;
+  input   [ 2:0]  s_axi_arprot;
+
 
   // internal registers
 

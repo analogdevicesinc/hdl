@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -374,11 +372,17 @@ module system_top (
     .mii_tx_clk (mii_tx_clk),
     .mii_tx_en (mii_tx_en),
     .mii_txd (mii_txd),
-    .rx_data_n (rx_data_n),
-    .rx_data_p (rx_data_p),
-    .rx_ref_clk (rx_ref_clk),
-    .rx_sync (rx_sync),
-    .rx_sysref (rx_sysref),
+    .rx_data_0_n (rx_data_n[0]),
+    .rx_data_0_p (rx_data_p[0]),
+    .rx_data_1_n (rx_data_n[1]),
+    .rx_data_1_p (rx_data_p[1]),
+    .rx_data_2_n (rx_data_n[2]),
+    .rx_data_2_p (rx_data_p[2]),
+    .rx_data_3_n (rx_data_n[3]),
+    .rx_data_3_p (rx_data_p[3]),
+    .rx_ref_clk_0 (rx_ref_clk),
+    .rx_sync_0 (rx_sync),
+    .rx_sysref_0 (rx_sysref),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
     .spi_csn_i (spi_csn),
@@ -389,11 +393,17 @@ module system_top (
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
-    .tx_data_n (tx_data_n),
-    .tx_data_p (tx_data_p),
-    .tx_ref_clk (tx_ref_clk),
-    .tx_sync (tx_sync),
-    .tx_sysref (tx_sysref),
+    .tx_data_0_n (tx_data_n[0]),
+    .tx_data_0_p (tx_data_p[0]),
+    .tx_data_1_n (tx_data_n[1]),
+    .tx_data_1_p (tx_data_p[1]),
+    .tx_data_2_n (tx_data_n[2]),
+    .tx_data_2_p (tx_data_p[2]),
+    .tx_data_3_n (tx_data_n[3]),
+    .tx_data_3_p (tx_data_p[3]),
+    .tx_ref_clk_0 (tx_ref_clk),
+    .tx_sync_0 (tx_sync),
+    .tx_sysref_0 (tx_sysref),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout));
 

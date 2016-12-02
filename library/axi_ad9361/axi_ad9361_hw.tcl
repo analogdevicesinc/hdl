@@ -1,185 +1,234 @@
 
-
 package require -exact qsys 13.0
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 
-set_module_property NAME axi_ad9361
-set_module_property DESCRIPTION "AXI AD9361 Interface"
-set_module_property VERSION 1.0
-set_module_property GROUP "Analog Devices"
-set_module_property DISPLAY_NAME axi_ad9361
-
-# files
-
-add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
-set_fileset_property quartus_synth TOP_LEVEL axi_ad9361
-add_fileset_file ad_rst.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
-add_fileset_file ad_lvds_clk.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_lvds_clk.v
-add_fileset_file ad_lvds_in.v             VERILOG PATH $ad_hdl_dir/library/common/altera/ad_lvds_in.v
-add_fileset_file ad_lvds_out.v            VERILOG PATH $ad_hdl_dir/library/common/altera/ad_lvds_out.v
-add_fileset_file MULT_MACRO.v             VERILOG PATH $ad_hdl_dir/library/common/altera/MULT_MACRO.v
-add_fileset_file DSP48E1.v                VERILOG PATH $ad_hdl_dir/library/common/altera/DSP48E1.v
-add_fileset_file ad_mul.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_mul.v
-add_fileset_file ad_pnmon.v               VERILOG PATH $ad_hdl_dir/library/common/ad_pnmon.v
-add_fileset_file ad_dds_sine.v            VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine.v
-add_fileset_file ad_dds_1.v               VERILOG PATH $ad_hdl_dir/library/common/ad_dds_1.v
-add_fileset_file ad_dds.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_dds.v
-add_fileset_file ad_datafmt.v             VERILOG PATH $ad_hdl_dir/library/common/ad_datafmt.v
-add_fileset_file ad_dcfilter.v            VERILOG PATH $ad_hdl_dir/library/common/ad_dcfilter.v
-add_fileset_file ad_iqcor.v               VERILOG PATH $ad_hdl_dir/library/common/ad_iqcor.v
-add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
-add_fileset_file up_xfer_cntrl.v          VERILOG PATH $ad_hdl_dir/library/common/up_xfer_cntrl.v
-add_fileset_file up_xfer_status.v         VERILOG PATH $ad_hdl_dir/library/common/up_xfer_status.v
-add_fileset_file up_clock_mon.v           VERILOG PATH $ad_hdl_dir/library/common/up_clock_mon.v
-add_fileset_file up_delay_cntrl.v         VERILOG PATH $ad_hdl_dir/library/common/up_delay_cntrl.v
-add_fileset_file up_adc_common.v          VERILOG PATH $ad_hdl_dir/library/common/up_adc_common.v
-add_fileset_file up_adc_channel.v         VERILOG PATH $ad_hdl_dir/library/common/up_adc_channel.v
-add_fileset_file up_dac_common.v          VERILOG PATH $ad_hdl_dir/library/common/up_dac_common.v
-add_fileset_file up_dac_channel.v         VERILOG PATH $ad_hdl_dir/library/common/up_dac_channel.v
-add_fileset_file up_tdd_cntrl.v           VERILOG PATH $ad_hdl_dir/library/common/up_tdd_cntrl.v
-add_fileset_file ad_tdd_control.v         VERILOG PATH $ad_hdl_dir/library/common/ad_tdd_control.v
-add_fileset_file ad_addsub.v              VERILOG PATH $ad_hdl_dir/library/common/ad_addsub.v
-add_fileset_file axi_ad9361_alt_lvds_tx.v VERILOG PATH axi_ad9361_alt_lvds_tx.v
-add_fileset_file axi_ad9361_alt_lvds_rx.v VERILOG PATH axi_ad9361_alt_lvds_rx.v
-add_fileset_file axi_ad9361_dev_if_alt.v  VERILOG PATH axi_ad9361_dev_if_alt.v
-add_fileset_file axi_ad9361_rx_pnmon.v    VERILOG PATH axi_ad9361_rx_pnmon.v
-add_fileset_file axi_ad9361_rx_channel.v  VERILOG PATH axi_ad9361_rx_channel.v
-add_fileset_file axi_ad9361_rx.v          VERILOG PATH axi_ad9361_rx.v
-add_fileset_file axi_ad9361_tx_channel.v  VERILOG PATH axi_ad9361_tx_channel.v
-add_fileset_file axi_ad9361_tx.v          VERILOG PATH axi_ad9361_tx.v
-add_fileset_file axi_ad9361_tdd.v         VERILOG PATH axi_ad9361_tdd.v
-add_fileset_file axi_ad9361_tdd_if.v      VERILOG PATH axi_ad9361_tdd_if.v
-add_fileset_file axi_ad9361.v             VERILOG PATH axi_ad9361.v TOP_LEVEL_FILE
+ad_ip_create axi_ad9361 {AXI AD9361 Interface} axi_ad9361_elab
+ad_ip_files axi_ad9361 [list\
+  $ad_hdl_dir/library/altera/common/ad_cmos_out_core_c5.v \
+  $ad_hdl_dir/library/altera/common/ad_serdes_in_core_c5.v \
+  $ad_hdl_dir/library/altera/common/ad_serdes_out_core_c5.v \
+  $ad_hdl_dir/library/altera/common/ad_mul.v \
+  $ad_hdl_dir/library/altera/common/ad_dcfilter.v \
+  $ad_hdl_dir/library/common/ad_rst.v \
+  $ad_hdl_dir/library/common/ad_pnmon.v \
+  $ad_hdl_dir/library/common/ad_dds_sine.v \
+  $ad_hdl_dir/library/common/ad_dds_1.v \
+  $ad_hdl_dir/library/common/ad_dds.v \
+  $ad_hdl_dir/library/common/ad_datafmt.v \
+  $ad_hdl_dir/library/common/ad_iqcor.v \
+  $ad_hdl_dir/library/common/ad_addsub.v \
+  $ad_hdl_dir/library/common/ad_tdd_control.v \
+  $ad_hdl_dir/library/common/up_axi.v \
+  $ad_hdl_dir/library/common/up_xfer_cntrl.v \
+  $ad_hdl_dir/library/common/up_xfer_status.v \
+  $ad_hdl_dir/library/common/up_clock_mon.v \
+  $ad_hdl_dir/library/common/up_delay_cntrl.v \
+  $ad_hdl_dir/library/common/up_adc_common.v \
+  $ad_hdl_dir/library/common/up_adc_channel.v \
+  $ad_hdl_dir/library/common/up_dac_common.v \
+  $ad_hdl_dir/library/common/up_dac_channel.v \
+  $ad_hdl_dir/library/common/up_tdd_cntrl.v \
+  altera/axi_ad9361_lvds_if.v \
+  altera/axi_ad9361_cmos_if.v \
+  axi_ad9361_rx_pnmon.v \
+  axi_ad9361_rx_channel.v \
+  axi_ad9361_rx.v \
+  axi_ad9361_tx_channel.v \
+  axi_ad9361_tx.v \
+  axi_ad9361_tdd.v \
+  axi_ad9361_tdd_if.v \
+  axi_ad9361.v \
+  $ad_hdl_dir/library/common/ad_axi_ip_constr.sdc \
+  axi_ad9361_constr.sdc] \
+  axi_ad9361_fileset
 
 # parameters
 
-add_parameter ID INTEGER 0
-set_parameter_property ID DEFAULT_VALUE 0
-set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
-set_parameter_property ID UNITS None
-set_parameter_property ID HDL_PARAMETER true
+ad_ip_parameter DEVICE_FAMILY STRING {Arria 10}
+ad_ip_parameter ID INTEGER 0
+ad_ip_parameter MODE_1R1T INTEGER 0
+ad_ip_parameter DEVICE_TYPE INTEGER 0
+ad_ip_parameter TDD_DISABLE INTEGER 0
+ad_ip_parameter CMOS_OR_LVDS_N INTEGER 0
+ad_ip_parameter ADC_DATAPATH_DISABLE INTEGER 0
+ad_ip_parameter ADC_USERPORTS_DISABLE INTEGER 0
+ad_ip_parameter ADC_DATAFORMAT_DISABLE INTEGER 0
+ad_ip_parameter ADC_DCFILTER_DISABLE INTEGER 0
+ad_ip_parameter ADC_IQCORRECTION_DISABLE INTEGER 0
+ad_ip_parameter DAC_IODELAY_ENABLE INTEGER 0
+ad_ip_parameter DAC_DATAPATH_DISABLE INTEGER 0
+ad_ip_parameter DAC_DDS_DISABLE INTEGER 0
+ad_ip_parameter DAC_USERPORTS_DISABLE INTEGER 0
+ad_ip_parameter DAC_IQCORRECTION_DISABLE INTEGER 0
+ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
 
-add_parameter DEVICE_TYPE INTEGER 0
-set_parameter_property DEVICE_TYPE DEFAULT_VALUE 0
-set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
-set_parameter_property DEVICE_TYPE TYPE INTEGER
-set_parameter_property DEVICE_TYPE UNITS None
-set_parameter_property DEVICE_TYPE HDL_PARAMETER true
+# interfaces
 
-# axi4 slave
+ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
+ 
+ad_alt_intf signal dac_sync_in input 1
+ad_alt_intf signal dac_sync_out output 1
+ad_alt_intf signal tdd_sync input 1
+ad_alt_intf signal tdd_sync_cntr output 1
 
-add_interface s_axi_clock clock end
-add_interface_port s_axi_clock s_axi_aclk clk Input 1
+ad_alt_intf clock delay_clk input 1
+ad_alt_intf clock l_clk output 1
+ad_alt_intf clock clk input 1
 
-add_interface s_axi_reset reset end
-set_interface_property s_axi_reset associatedClock s_axi_clock
-add_interface_port s_axi_reset s_axi_aresetn reset_n Input 1
+ad_alt_intf reset rst output 1 if_clk
+set_interface_property if_rst associatedResetSinks s_axi_reset
 
-add_interface s_axi axi4lite end
-set_interface_property s_axi associatedClock s_axi_clock
-set_interface_property s_axi associatedReset s_axi_reset
-add_interface_port s_axi s_axi_awvalid awvalid Input 1
-add_interface_port s_axi s_axi_awaddr awaddr Input 16
-add_interface_port s_axi s_axi_awprot awprot Input 3
-add_interface_port s_axi s_axi_awready awready Output 1
-add_interface_port s_axi s_axi_wvalid wvalid Input 1
-add_interface_port s_axi s_axi_wdata wdata Input 32
-add_interface_port s_axi s_axi_wstrb wstrb Input 4
-add_interface_port s_axi s_axi_wready wready Output 1
-add_interface_port s_axi s_axi_bvalid bvalid Output 1
-add_interface_port s_axi s_axi_bresp bresp Output 2
-add_interface_port s_axi s_axi_bready bready Input 1
-add_interface_port s_axi s_axi_arvalid arvalid Input 1
-add_interface_port s_axi s_axi_araddr araddr Input 16
-add_interface_port s_axi s_axi_arprot arprot Input 3
-add_interface_port s_axi s_axi_arready arready Output 1
-add_interface_port s_axi s_axi_rvalid rvalid Output 1
-add_interface_port s_axi s_axi_rresp rresp Output 2
-add_interface_port s_axi s_axi_rdata rdata Output 32
-add_interface_port s_axi s_axi_rready rready Input 1
+add_interface adc_ch_0 conduit end
+add_interface_port adc_ch_0 adc_enable_i0 enable Output 1
+add_interface_port adc_ch_0 adc_valid_i0 valid Output 1
+add_interface_port adc_ch_0 adc_data_i0 data Output 16
 
-# device interface
+set_interface_property adc_ch_0 associatedClock if_clk
+set_interface_property adc_ch_0 associatedReset none
 
-add_interface device_clock clock end
-add_interface_port device_clock clk clk Input 1
+add_interface adc_ch_1 conduit end
+add_interface_port adc_ch_1 adc_enable_q0 enable Output 1
+add_interface_port adc_ch_1 adc_valid_q0 valid Output 1
+add_interface_port adc_ch_1 adc_data_q0 data Output 16
 
-add_interface device_if conduit end
-set_interface_property device_if associatedClock device_clock
-add_interface_port device_if rx_clk_in_p rx_clk_in_p Input 1
-add_interface_port device_if rx_clk_in_n rx_clk_in_n Input 1
-add_interface_port device_if rx_frame_in_p rx_frame_in_p Input 1
-add_interface_port device_if rx_frame_in_n rx_frame_in_n Input 1
-add_interface_port device_if rx_data_in_p rx_data_in_p Input 6
-add_interface_port device_if rx_data_in_n rx_data_in_n Input 6
-add_interface_port device_if tx_clk_out_p tx_clk_out_p Output 1
-add_interface_port device_if tx_clk_out_n tx_clk_out_n Output 1
-add_interface_port device_if tx_frame_out_p tx_frame_out_p Output 1
-add_interface_port device_if tx_frame_out_n tx_frame_out_n Output 1
-add_interface_port device_if tx_data_out_p tx_data_out_p Output 6
-add_interface_port device_if tx_data_out_n tx_data_out_n Output 6
+set_interface_property adc_ch_1 associatedClock if_clk
+set_interface_property adc_ch_1 associatedReset none
 
-ad_alt_intf signal  dac_sync_in     input   1   sync
-ad_alt_intf signal  dac_sync_out    output  1   sync
+add_interface adc_ch_2 conduit end
+add_interface_port adc_ch_2 adc_enable_i1 enable Output 1
+add_interface_port adc_ch_2 adc_valid_i1 valid Output 1
+add_interface_port adc_ch_2 adc_data_i1 data Output 16
 
-ad_alt_intf clock   l_clk           output  1
-ad_alt_intf reset   rst             output  1   if_l_clk
+set_interface_property adc_ch_2 associatedClock if_clk
+set_interface_property adc_ch_2 associatedReset none
 
-add_interface fifo_ch_0_in conduit end
-#set_interface_property fifo_ch_0_in associatedClock if_l_clk
-add_interface_port fifo_ch_0_in  adc_enable_i0 enable   Output  1
-add_interface_port fifo_ch_0_in  adc_valid_i0  valid    Output  1
-add_interface_port fifo_ch_0_in  adc_data_i0   data     Output  16
+add_interface adc_ch_3 conduit end
+add_interface_port adc_ch_3 adc_enable_q1 enable Output 1
+add_interface_port adc_ch_3 adc_valid_q1 valid Output 1
+add_interface_port adc_ch_3 adc_data_q1 data Output 16
 
-add_interface fifo_ch_1_in conduit end
-#set_interface_property fifo_ch_1_in associatedClock if_l_clk
-add_interface_port fifo_ch_1_in  adc_enable_q0 enable   Output  1
-add_interface_port fifo_ch_1_in  adc_valid_q0  valid    Output  1
-add_interface_port fifo_ch_1_in  adc_data_q0   data     Output  16
+set_interface_property adc_ch_3 associatedClock if_clk
+set_interface_property adc_ch_3 associatedReset none
 
-add_interface fifo_ch_2_in conduit end
-#set_interface_property fifo_ch_2_in associatedClock if_l_clk
-add_interface_port fifo_ch_2_in  adc_enable_i1 enable   Output  1
-add_interface_port fifo_ch_2_in  adc_valid_i1  valid    Output  1
-add_interface_port fifo_ch_2_in  adc_data_i1   data     Output  16
+ad_alt_intf signal adc_dovf input 1 ovf
+ad_alt_intf signal adc_dunf input 1 unf
+ad_alt_intf signal adc_r1_mode output 1 r1_mode
 
-add_interface fifo_ch_3_in conduit end
-#set_interface_property fifo_ch_3_in associatedClock if_l_clk
-add_interface_port fifo_ch_3_in  adc_enable_q1 enable   Output  1
-add_interface_port fifo_ch_3_in  adc_valid_q1  valid    Output  1
-add_interface_port fifo_ch_3_in  adc_data_q1   data     Output  16
+add_interface dac_ch_0 conduit end
+add_interface_port dac_ch_0 dac_enable_i0 enable Output 1
+add_interface_port dac_ch_0 dac_valid_i0 valid Output 1
+add_interface_port dac_ch_0 dac_data_i0 data Input 16
 
-ad_alt_intf signal  adc_dovf        input  1   ovf
-ad_alt_intf signal  adc_dunf        input  1   unf
+set_interface_property dac_ch_0 associatedClock if_clk
+set_interface_property dac_ch_0 associatedReset none
 
-add_interface fifo_ch_0_out conduit end
-#set_interface_property fifo_ch_0_out associatedClock if_l_clk
-add_interface_port fifo_ch_0_out  dac_enable_i0 enable   Output  1
-add_interface_port fifo_ch_0_out  dac_valid_i0  valid    Output  1
-add_interface_port fifo_ch_0_out  dac_data_i0   data     Input   16
+add_interface dac_ch_1 conduit end
+add_interface_port dac_ch_1 dac_enable_q0 enable Output 1
+add_interface_port dac_ch_1 dac_valid_q0 valid Output 1
+add_interface_port dac_ch_1 dac_data_q0 data Input 16
 
-add_interface fifo_ch_1_out conduit end
-#set_interface_property fifo_ch_1_out associatedClock if_l_clk
-add_interface_port fifo_ch_1_out  dac_enable_q0 enable   Output  1
-add_interface_port fifo_ch_1_out  dac_valid_q0  valid    Output  1
-add_interface_port fifo_ch_1_out  dac_data_q0   data     Input   16
+set_interface_property dac_ch_1 associatedClock if_clk
+set_interface_property dac_ch_1 associatedReset none
 
-add_interface fifo_ch_2_out conduit end
-#set_interface_property fifo_ch_2_out associatedClock if_l_clk
-add_interface_port fifo_ch_2_out  dac_enable_i1 enable   Output  1
-add_interface_port fifo_ch_2_out  dac_valid_i1  valid    Output  1
-add_interface_port fifo_ch_2_out  dac_data_i1   data     Input   16
+add_interface dac_ch_2 conduit end
+add_interface_port dac_ch_2 dac_enable_i1 enable Output 1
+add_interface_port dac_ch_2 dac_valid_i1 valid Output 1
+add_interface_port dac_ch_2 dac_data_i1 data Input 16
 
-add_interface fifo_ch_3_out conduit end
-#set_interface_property fifo_ch_3_out associatedClock if_l_clk
-add_interface_port fifo_ch_3_out  dac_enable_q1 enable   Output  1
-add_interface_port fifo_ch_3_out  dac_valid_q1  valid    Output  1
-add_interface_port fifo_ch_3_out  dac_data_q1   data     Input   16
+set_interface_property dac_ch_2 associatedClock if_clk
+set_interface_property dac_ch_2 associatedReset none
 
-ad_alt_intf signal  dac_dovf       input   1 ovf
-ad_alt_intf signal  dac_dunf       input   1 unf
+add_interface dac_ch_3 conduit end
+add_interface_port dac_ch_3 dac_enable_q1 enable Output 1
+add_interface_port dac_ch_3 dac_valid_q1 valid Output 1
+add_interface_port dac_ch_3 dac_data_q1 data Input 16
 
-add_interface delay_clock clock end
-add_interface_port delay_clock delay_clk clk Input 1
+set_interface_property dac_ch_3 associatedClock if_clk
+set_interface_property dac_ch_3 associatedReset none
+
+ad_alt_intf signal dac_dovf input 1 ovf
+ad_alt_intf signal dac_dunf input 1 unf
+ad_alt_intf signal dac_r1_mode output 1 r1_mode
+
+ad_alt_intf signal up_enable input 1
+ad_alt_intf signal up_txnrx input 1
+ad_alt_intf signal up_dac_gpio_in input 32
+ad_alt_intf signal up_dac_gpio_out output 32
+ad_alt_intf signal up_adc_gpio_in input 32
+ad_alt_intf signal up_adc_gpio_out output 32
+
+# generated cores
+
+add_hdl_instance ad_serdes_clk_core alt_serdes
+set_instance_parameter_value ad_serdes_clk_core {MODE} {CLK}
+set_instance_parameter_value ad_serdes_clk_core {DDR_OR_SDR_N} {1}
+set_instance_parameter_value ad_serdes_clk_core {SERDES_FACTOR} {4}
+set_instance_parameter_value ad_serdes_clk_core {CLKIN_FREQUENCY} {250.0}
+
+add_hdl_instance ad_serdes_in_core_a10 alt_serdes
+set_instance_parameter_value ad_serdes_in_core_a10 {MODE} {IN}
+set_instance_parameter_value ad_serdes_in_core_a10 {DDR_OR_SDR_N} {1}
+set_instance_parameter_value ad_serdes_in_core_a10 {SERDES_FACTOR} {4}
+set_instance_parameter_value ad_serdes_in_core_a10 {CLKIN_FREQUENCY} {250.0}
+
+add_hdl_instance ad_serdes_out_core_a10 alt_serdes
+set_instance_parameter_value ad_serdes_out_core_a10 {MODE} {OUT}
+set_instance_parameter_value ad_serdes_out_core_a10 {DDR_OR_SDR_N} {1}
+set_instance_parameter_value ad_serdes_out_core_a10 {SERDES_FACTOR} {4}
+set_instance_parameter_value ad_serdes_out_core_a10 {CLKIN_FREQUENCY} {250.0}
+
+add_hdl_instance ad_cmos_out_core_a10 alt_serdes
+set_instance_parameter_value ad_cmos_out_core_a10 {MODE} {OUT}
+set_instance_parameter_value ad_cmos_out_core_a10 {DDR_OR_SDR_N} {1}
+set_instance_parameter_value ad_cmos_out_core_a10 {SERDES_FACTOR} {2}
+set_instance_parameter_value ad_cmos_out_core_a10 {CLKIN_FREQUENCY} {250.0}
+
+# updates
+
+proc axi_ad9361_elab {} {
+
+  set m_cmos_or_lvds_n [get_parameter_value CMOS_OR_LVDS_N]
+
+  add_interface device_if conduit end
+  set_interface_property device_if associatedClock none
+  set_interface_property device_if associatedReset none
+
+  if {$m_cmos_or_lvds_n == 1} {
+
+    add_interface_port device_if rx_clk_in rx_clk_in Input 1
+    add_interface_port device_if rx_frame_in rx_frame_in Input 1
+    add_interface_port device_if rx_data_in rx_data_in Input 12
+    add_interface_port device_if tx_clk_out tx_clk_out Output 1
+    add_interface_port device_if tx_frame_out tx_frame_out Output 1
+    add_interface_port device_if tx_data_out tx_data_out Output 12
+  }
+
+  if {$m_cmos_or_lvds_n == 0} {
+
+    add_interface_port device_if rx_clk_in_p rx_clk_in_p Input 1
+    add_interface_port device_if rx_clk_in_n rx_clk_in_n Input 1
+    add_interface_port device_if rx_frame_in_p rx_frame_in_p Input 1
+    add_interface_port device_if rx_frame_in_n rx_frame_in_n Input 1
+    add_interface_port device_if rx_data_in_p rx_data_in_p Input 6
+    add_interface_port device_if rx_data_in_n rx_data_in_n Input 6
+    add_interface_port device_if tx_clk_out_p tx_clk_out_p Output 1
+    add_interface_port device_if tx_clk_out_n tx_clk_out_n Output 1
+    add_interface_port device_if tx_frame_out_p tx_frame_out_p Output 1
+    add_interface_port device_if tx_frame_out_n tx_frame_out_n Output 1
+    add_interface_port device_if tx_data_out_p tx_data_out_p Output 6
+    add_interface_port device_if tx_data_out_n tx_data_out_n Output 6
+  }
+
+  add_interface_port device_if enable enable Output 1
+  add_interface_port device_if txnrx txnrx Output 1
+}
+
+proc axi_ad9361_fileset {entityName} {
+
+  ad_ip_modfile ad_cmos_out.v ad_cmos_out.v ad_cmos_out_core_a10
+  ad_ip_modfile ad_serdes_in.v ad_serdes_in.v ad_serdes_in_core_a10
+  ad_ip_modfile ad_serdes_out.v ad_serdes_out.v ad_serdes_out_core_a10
+  ad_ip_modfile ad_serdes_clk.v ad_serdes_clk.v ad_serdes_clk_core
+}
 

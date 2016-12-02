@@ -82,4 +82,4 @@ set_property  -dict {PACKAGE_PIN  AK17  IOSTANDARD LVCMOS25} [get_ports dac_data
 # clocks
 
 create_clock -name rx_ref_clk   -period 12.50 [get_ports rx_ref_clk_p]
-create_clock -name rx_div_clk   -period 12.50 [get_nets i_system_wrapper/system_i/axi_usdrx1_gt_rx_clk]
+create_clock -name rx_div_clk   -period 12.50 [get_pins i_system_wrapper/system_i/util_usdrx1_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]

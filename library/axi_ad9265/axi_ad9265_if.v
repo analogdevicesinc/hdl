@@ -175,6 +175,8 @@ module axi_ad9265_if (
   ad_lvds_clk #(
     .DEVICE_TYPE (DEVICE_TYPE))
   i_adc_clk (
+    .rst (1'b0),
+    .locked (),
     .clk_in_p (adc_clk_in_p),
     .clk_in_n (adc_clk_in_n),
     .clk (adc_clk));

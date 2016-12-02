@@ -9,8 +9,8 @@ M_DEPS := axi_ad9265_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/ad_lvds_clk.v
-M_DEPS += ../common/ad_lvds_in.v
+M_DEPS += ../xilinx/common/ad_lvds_clk.v
+M_DEPS += ../xilinx/common/ad_lvds_in.v
 M_DEPS += ../common/ad_datafmt.v
 M_DEPS += ../common/ad_dcfilter.v
 M_DEPS += ../common/ad_pnmon.v
@@ -37,6 +37,10 @@ M_FLIST += *.log
 M_FLIST += component.xml
 M_FLIST += *.jou
 M_FLIST +=  xgui
+M_FLIST += *.ip_user_files
+M_FLIST += *.srcs
+M_FLIST += *.hw
+M_FLIST += *.sim
 M_FLIST += .Xil
 
 
@@ -53,7 +57,7 @@ clean-all:
 
 
 axi_ad9265.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_ad9265_ip.tcl  >> axi_ad9265_ip.log 2>&1
 
 ####################################################################################

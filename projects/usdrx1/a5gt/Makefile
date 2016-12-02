@@ -5,6 +5,12 @@
 ####################################################################################
 ####################################################################################
 
+ifeq ($(MMU),)
+  MMU := 1
+endif
+
+export ALT_NIOS_MMU_ENABLED := $(MMU)
+
 M_DEPS += system_project.tcl
 M_DEPS += ../common/usdrx1_spi.v
 M_DEPS += ../../scripts/adi_env.tcl
@@ -43,6 +49,8 @@ M_FLIST += reconfig_mif
 M_FLIST += *.sopcinfo
 M_FLIST +=  *.jdi
 M_FLIST += *.pin
+M_FLIST += *_summary.csv
+M_FLIST += *.dpf
 
 
 
@@ -59,7 +67,7 @@ clean-all:
 
 
 usdrx1_a5gt.sof: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_ALTERA) system_project.tcl  >> usdrx1_a5gt_quartus.log 2>&1
 
 ####################################################################################
