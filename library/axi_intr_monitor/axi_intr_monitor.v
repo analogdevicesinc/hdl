@@ -90,6 +90,8 @@ reg     [31:0]  counter_interrupt_handling  = 'd0;
 reg     [31:0]  min_interrupt_handling      = 'd0;
 reg     [31:0]  max_interrupt_handling      = 'd0;
 reg             interrupt_d1                = 'd0;
+reg             arm_counter                 = 'd0;
+reg             counter_active              = 'd0;
 
 //------------------------------------------------------------------------------
 //----------- Wires Declarations -----------------------------------------------
@@ -115,15 +117,26 @@ always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
     min_interrupt_handling <= 'd0;
     max_interrupt_handling <= 'd0;
     interrupt_d1 <= 0;
+    counter_active <= 1'b0;
   end else begin
     interrupt_d1 <= irq;
-    if (irq == 1'b1) begin
+
+    if (arm_counter == 1'b1) begin
       counter_to_interrupt_cnt <= counter_to_interrupt;
+      counter_active <= 1'b1;
     end else if (counter_to_interrupt_cnt > 0) begin
       counter_to_interrupt_cnt <= counter_to_interrupt_cnt - 1;
+    end else begin
+      counter_active <= 1'b0;
     end
-    if (irq == 1'b0 && interrupt_d1 == 1'b1) begin
+
+    if (irq == 1'b1 && interrupt_d1 == 1'b0) begin
       counter_from_interrupt <= 32'h0;
+    end else begin
+      counter_from_interrupt <= counter_from_interrupt + 1;
+    end
+
+    if (irq == 1'b0 && interrupt_d1 == 1'b1) begin
       counter_interrupt_handling <= counter_from_interrupt;
       if (min_interrupt_handling > counter_from_interrupt) begin
         min_interrupt_handling <= counter_from_interrupt;
@@ -131,8 +144,6 @@ always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
       if (max_interrupt_handling < counter_from_interrupt) begin
         max_interrupt_handling <= counter_from_interrupt;
       end
-    end else begin
-      counter_from_interrupt <= counter_from_interrupt + 1;
     end
   end
 end
@@ -144,8 +155,10 @@ always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
     control                    <= 'd0;
     interrupt                  <= 'd0;
     counter_to_interrupt       <= 'd0;
+    arm_counter                <= 'd0;
   end else begin
     up_wack  <= up_wreq_s;
+    arm_counter <= 1'b0;
     if ((up_wreq_s == 1'b1) && (up_waddr_s[3:0] == 4'h1)) begin
       scratch <= up_wdata_s;
     end
@@ -157,12 +170,13 @@ always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
     end else if ((up_wreq_s == 1'b1) && (up_waddr_s[3:0] == 4'h3)) begin
       interrupt <= interrupt & ~up_wdata_s[0];
     end else begin
-      if (counter_to_interrupt_cnt == 32'h0) begin
+      if (counter_to_interrupt_cnt == 32'h0 && counter_active == 1'b1) begin
         interrupt <= 1'b1;
       end
     end
     if ((up_wreq_s == 1'b1) && (up_waddr_s[3:0] == 4'h4)) begin
       counter_to_interrupt <= up_wdata_s;
+      arm_counter <= 1'b1;
     end
   end
 end
