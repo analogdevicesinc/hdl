@@ -11,4 +11,16 @@ set_property -dict [list CONFIG.GTH_OR_GTX_N {1}] $axi_daq2_gt
 set_property -dict [list CONFIG.QPLL0_FBDIV {20}] $axi_daq2_gt
 set_property -dict [list CONFIG.QPLL0_REFCLK_DIV {1}] $axi_daq2_gt
 
+set_property -dict [list CONFIG.S00_HAS_REGSLICE {4}] [get_bd_cells axi_mem_interconnect]
+set_property -dict [list CONFIG.S01_HAS_REGSLICE {4}] [get_bd_cells axi_mem_interconnect]
+set_property -dict [list CONFIG.S02_HAS_REGSLICE {4}] [get_bd_cells axi_mem_interconnect]
+set_property -dict [list CONFIG.S03_HAS_REGSLICE {4}] [get_bd_cells axi_mem_interconnect]
+set_property -dict [list CONFIG.S04_HAS_REGSLICE {4}] [get_bd_cells axi_mem_interconnect]
+set_property -dict [list CONFIG.S05_HAS_REGSLICE {4}] [get_bd_cells axi_mem_interconnect]
+set_property -dict [list CONFIG.S06_HAS_REGSLICE {4}] [get_bd_cells axi_mem_interconnect]
+set_property -dict [list CONFIG.S07_HAS_REGSLICE {4}] [get_bd_cells axi_mem_interconnect]
+
+set_property -dict [list CONFIG.ENABLE_ADVANCED_OPTIONS {1}] [get_bd_cells axi_ddr_interconnect]
+set_property -dict [list CONFIG.XBAR_DATA_WIDTH.VALUE_SRC USER] [get_bd_cells axi_ddr_interconnect]
+set_property -dict [list CONFIG.XBAR_DATA_WIDTH {512}] [get_bd_cells axi_ddr_interconnect]
 
