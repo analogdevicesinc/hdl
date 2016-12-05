@@ -124,7 +124,6 @@ proc adi_ip_infer_interfaces {ip_name} {
 
   ipx::infer_bus_interfaces xilinx.com:interface:clock_rtl:1.0 [ipx::current_core]
   ipx::infer_bus_interfaces xilinx.com:interface:reset_rtl:1.0 [ipx::current_core]
-  ipx::infer_bus_interfaces xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
   ipx::infer_bus_interfaces xilinx.com:interface:axis_rtl:1.0 [ipx::current_core]
 }
 
