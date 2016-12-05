@@ -267,7 +267,7 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
-    .ps_intr_00 (imu_ready),
+    .ps_intr_00 (1'b0),
     .ps_intr_01 (1'b0),
     .ps_intr_02 (1'b0),
     .ps_intr_03 (1'b0),
