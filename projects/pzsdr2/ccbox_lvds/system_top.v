@@ -152,7 +152,9 @@ module system_top (
 
   // gpio[31:20] controls misc stuff (keep as io)
 
-  assign gpio_i[31:26] = gpio_o[31:26];
+  assign gpio_i[31:29] = gpio_o[31:29];
+  assign gpio_i[28:28] = imu_ready;
+  assign gpio_i[27:26] = gpio_o[27:26];
 
   ad_iobuf #(.DATA_WIDTH(6)) i_iobuf_misc (
     .dio_t (gpio_t[25:20]),

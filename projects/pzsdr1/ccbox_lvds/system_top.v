@@ -150,7 +150,9 @@ module system_top (
 
   // gpio[31:20] controls misc stuff (keep as io)
 
-  assign gpio_i[31:24] = gpio_o[31:24];
+  assign gpio_i[31:29] = gpio_o[31:29];
+  assign gpio_i[28:28] = imu_ready;
+  assign gpio_i[27:24] = gpio_o[27:24];
 
   ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_misc (
     .dio_t (gpio_t[23:20]),
@@ -261,7 +263,7 @@ module system_top (
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .otg_vbusoc (1'b0),
-    .ps_intr_00 (imu_ready),
+    .ps_intr_00 (1'b0),
     .ps_intr_01 (1'b0),
     .ps_intr_02 (1'b0),
     .ps_intr_03 (1'b0),
