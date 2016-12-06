@@ -38,11 +38,12 @@ set_parameter_property CLKIN_FREQUENCY UNITS None
 set_parameter_property CLKIN_FREQUENCY DISPLAY_UNITS "MHz"
 set_parameter_property CLKIN_FREQUENCY HDL_PARAMETER false
 
-add_parameter DEVICE_FAMILY STRING
+add_parameter DEVICE_FAMILY STRING "Arria 10"
 set_parameter_property DEVICE_FAMILY SYSTEM_INFO {DEVICE_FAMILY}
 set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
 set_parameter_property DEVICE_FAMILY HDL_PARAMETER false
 set_parameter_property DEVICE_FAMILY ENABLED false
+set_parameter_property DEVICE_FAMILY ALLOWED_RANGES {"Arria 10" "Cyclone V"}
 
 proc p_alt_serdes {} {
 
