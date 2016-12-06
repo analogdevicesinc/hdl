@@ -137,6 +137,9 @@ module axi_ad9684_if (
   wire            adc_div_clk;
   wire  [ 1:0]    adc_data_or_a_s;
   wire  [ 1:0]    adc_data_or_b_s;
+  wire            loaden_s;
+  wire  [ 7:0]    phase_s;
+
 
   genvar          l_inst;
 
@@ -157,8 +160,8 @@ module axi_ad9684_if (
     .rst(adc_rst),
     .clk(adc_clk_in),
     .div_clk(adc_div_clk),
-    .loaden(1'b0),
-    .phase(8'b0),
+    .loaden(loaden_s),
+    .phase(phase_s),
     .locked(1'b0),
     .data_s0(adc_data_b[27:14]),
     .data_s1(adc_data_a[27:14]),
@@ -190,8 +193,8 @@ module axi_ad9684_if (
       .rst(adc_rst),
       .clk(adc_clk_in),
       .div_clk(adc_div_clk),
-      .loaden(1'b0),
-      .phase(8'b0),
+      .loaden(loaden_s),
+      .phase(phase_s),
       .locked(1'b0),
       .data_s0(adc_data_or_b_s[1]),
       .data_s1(adc_data_or_a_s[1]),
@@ -238,8 +241,8 @@ module axi_ad9684_if (
     .clk (adc_clk_in),
     .div_clk (adc_div_clk),
     .out_clk (),
-    .loaden (),
-    .phase (),
+    .loaden (loaden_s),
+    .phase (phase_s),
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_drp_sel (up_drp_sel),
