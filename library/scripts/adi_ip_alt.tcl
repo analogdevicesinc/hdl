@@ -106,7 +106,7 @@ proc ad_ip_create {pname pdesc {pelabfunction ""} {pcomposefunction ""}} {
   }
 
   if {$pcomposefunction ne ""} {
-    set_module_property ELABORATION_CALLBACK $pcomposefunction
+    set_module_property COMPOSITION_CALLBACK $pcomposefunction
   }
 }
 
