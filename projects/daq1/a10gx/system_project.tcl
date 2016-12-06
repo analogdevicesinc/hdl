@@ -6,6 +6,7 @@ project_new daq1_a10gx -overwrite
 
 source "../../common/a10gx/a10gx_system_assign.tcl"
 
+set_global_assignment -name VERILOG_FILE ../common/daq1_spi.v
 set_global_assignment -name VERILOG_FILE system_top.v
 set_global_assignment -name QSYS_FILE system_bd.qsys
 
