@@ -172,20 +172,20 @@ module system_top (
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn),
 
-    .spi_int(spi_int),
+    .spi_int_irq(spi_int),
 
-    .adc_clk_in_n (adc_clk_in_n),
-    .adc_clk_in_p (adc_clk_in_p),
-    .adc_data_in_n (adc_data_in_n),
-    .adc_data_in_p (adc_data_in_p),
-    .dac_clk_in_n (dac_clk_in_n),
-    .dac_clk_in_p (dac_clk_in_p),
-    .dac_clk_out_n (dac_clk_out_n),
-    .dac_clk_out_p (dac_clk_out_p),
-    .dac_data_out_n (dac_data_out_n),
-    .dac_data_out_p (dac_data_out_p),
-    .dac_frame_out_n (dac_frame_out_n),
-    .dac_frame_out_p (dac_frame_out_p)
+    .axi_ad9684_device_if_adc_clk_in_n (adc_clk_in_n),
+    .axi_ad9684_device_if_adc_clk_in_p (adc_clk_in_p),
+    .axi_ad9684_device_if_adc_data_in_n (adc_data_in_n),
+    .axi_ad9684_device_if_adc_data_in_p (adc_data_in_p),
+    .axi_ad9122_device_if_dac_clk_in_n (dac_clk_in_n),
+    .axi_ad9122_device_if_dac_clk_in_p (dac_clk_in_p),
+    .axi_ad9122_device_if_dac_clk_out_n (dac_clk_out_n),
+    .axi_ad9122_device_if_dac_clk_out_p (dac_clk_out_p),
+    .axi_ad9122_device_if_dac_data_out_n (dac_data_out_n),
+    .axi_ad9122_device_if_dac_data_out_p (dac_data_out_p),
+    .axi_ad9122_device_if_dac_frame_out_n (dac_frame_out_n),
+    .axi_ad9122_device_if_dac_frame_out_p (dac_frame_out_p)
 );
 
 endmodule
