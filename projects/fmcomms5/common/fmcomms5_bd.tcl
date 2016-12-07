@@ -16,6 +16,11 @@ create_bd_port -dir O tx_frame_out_0_n
 create_bd_port -dir O -from 5 -to 0 tx_data_out_0_p
 create_bd_port -dir O -from 5 -to 0 tx_data_out_0_n
 
+create_bd_port -dir O enable_0
+create_bd_port -dir O txnrx_0
+create_bd_port -dir I up_enable_0
+create_bd_port -dir I up_txnrx_0
+
 # slave
 
 create_bd_port -dir I rx_clk_in_1_p
@@ -30,6 +35,11 @@ create_bd_port -dir O tx_frame_out_1_p
 create_bd_port -dir O tx_frame_out_1_n
 create_bd_port -dir O -from 5 -to 0 tx_data_out_1_p
 create_bd_port -dir O -from 5 -to 0 tx_data_out_1_n
+
+create_bd_port -dir O enable_1
+create_bd_port -dir O txnrx_1
+create_bd_port -dir I up_enable_1
+create_bd_port -dir I up_txnrx_1
 
 create_bd_port -dir O sys_100m_resetn
 
@@ -223,6 +233,16 @@ ad_connect  util_upack_dac/dac_valid    axi_ad9361_dac_dma/fifo_rd_en
 ad_connect  util_upack_dac/dac_data     axi_ad9361_dac_dma/fifo_rd_dout
 ad_connect  axi_ad9361_0/adc_dovf       axi_ad9361_adc_dma/fifo_wr_overflow
 ad_connect  axi_ad9361_0/dac_dunf       axi_ad9361_dac_dma/fifo_rd_underflow
+
+ad_connect  axi_ad9361_0/up_enable      up_enable_0
+ad_connect  axi_ad9361_0/up_txnrx       up_txnrx_0
+ad_connect  axi_ad9361_1/up_enable      up_enable_1
+ad_connect  axi_ad9361_1/up_txnrx       up_txnrx_1
+
+ad_connect  axi_ad9361_0/enable         enable_0
+ad_connect  axi_ad9361_0/txnrx          txnrx_0
+ad_connect  axi_ad9361_1/enable         enable_1
+ad_connect  axi_ad9361_1/txnrx          txnrx_1
 
 # address map
 
