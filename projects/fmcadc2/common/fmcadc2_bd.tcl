@@ -25,20 +25,21 @@ set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9625_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
 
 set util_fmcadc2_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_fmcadc2_xcvr]
-set_property -dict [list CONFIG.QPLL_FBDIV {"0010000000"}] $util_fmcadc2_xcvr
-set_property -dict [list CONFIG.CPLL_FBDIV {2}] $util_fmcadc2_xcvr
+set_property -dict [list CONFIG.QPLL_FBDIV {"0010000000"}] $util_fmcadc2_xcvr ;# N = 40
+set_property -dict [list CONFIG.CPLL_FBDIV {1}] $util_fmcadc2_xcvr
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $util_fmcadc2_xcvr
-set_property -dict [list CONFIG.TX_OUT_DIV {2}] $util_fmcadc2_xcvr
-set_property -dict [list CONFIG.TX_CLK25_DIV {10}] $util_fmcadc2_xcvr
+set_property -dict [list CONFIG.TX_OUT_DIV {1}] $util_fmcadc2_xcvr
+set_property -dict [list CONFIG.TX_CLK25_DIV {25}] $util_fmcadc2_xcvr
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $util_fmcadc2_xcvr
 set_property -dict [list CONFIG.RX_OUT_DIV {1}] $util_fmcadc2_xcvr
-set_property -dict [list CONFIG.RX_CLK25_DIV {10}] $util_fmcadc2_xcvr
+set_property -dict [list CONFIG.RX_CLK25_DIV {25}] $util_fmcadc2_xcvr
 set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_fmcadc2_xcvr
-set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff10200020}] $util_fmcadc2_xcvr
+set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff20400020}] $util_fmcadc2_xcvr ;# DFE mode refclk +-200
 
 # reference clocks & resets
 
 create_bd_port -dir I rx_ref_clk_0
+create_bd_port -dir O rx_clk
 
 ad_xcvrpll  rx_ref_clk_0 util_fmcadc2_xcvr/qpll_ref_clk_*
 ad_xcvrpll  rx_ref_clk_0 util_fmcadc2_xcvr/cpll_ref_clk_*
@@ -46,6 +47,7 @@ ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcadc2_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcadc2_xcvr/up_cpll_rst_*
 ad_connect  sys_cpu_resetn util_fmcadc2_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_fmcadc2_xcvr/up_clk
+ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 rx_clk
 
 # connections (adc)
 

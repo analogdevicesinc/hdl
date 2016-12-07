@@ -195,6 +195,11 @@ module system_top (
   output          spi_adf4355_le_or_clk;
   inout           spi_adf4355_ce_or_sdio;
 
+  // internal registers
+
+  reg             rx_sysref = 'd0;
+  reg             rx_sysref_d = 'd0;
+
   // internal signals
 
   wire    [63:0]  gpio_i;
@@ -209,8 +214,15 @@ module system_top (
   wire            spi1_mosi;
   wire            spi1_miso;
   wire            rx_ref_clk;
-  wire            rx_sysref;
   wire            rx_sync;
+  wire            rx_clk;
+
+  // sysref internal
+
+  always @(posedge rx_clk) begin
+    rx_sysref_d <= gpio_o[34];
+    rx_sysref <= rx_sysref_d;
+  end
 
   // instantiations
 
@@ -362,7 +374,8 @@ module system_top (
     .spi1_sdo_o (spi1_mosi),
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
-    .sys_rst (sys_rst));
+    .sys_rst (sys_rst),
+    .rx_clk (rx_clk));
 
 endmodule
 
