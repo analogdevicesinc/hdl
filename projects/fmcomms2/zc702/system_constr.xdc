@@ -62,6 +62,13 @@ set_property  -dict {PACKAGE_PIN  C18  IOSTANDARD LVCMOS25} [get_ports spi_miso]
 
 create_clock -name rx_clk       -period  4 [get_ports rx_clk_in_p]
 
+# disconnect gpio_bd 8-11
+
+set_property package_pin "" [get_ports [list  gpio_bd[8]]]
+set_property package_pin "" [get_ports [list  gpio_bd[9]]]
+set_property package_pin "" [get_ports [list  gpio_bd[10]]]
+set_property package_pin "" [get_ports [list  gpio_bd[11]]]
+
 # spi pmod J63
 
 set_property  -dict {PACKAGE_PIN  E15  IOSTANDARD LVCMOS25  PULLTYPE PULLUP} [get_ports spi_udc_csn_tx]  ; ## PMOD1_0_LS
