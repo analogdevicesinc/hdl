@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -81,14 +79,15 @@ module axi_ad9671_if (
   // parameters
 
   parameter QUAD_OR_DUAL_N = 1;
+  parameter DEVICE_TYPE = 0;
   parameter ID = 0;
 
   // jesd interface 
   // rx_clk is (line-rate/40)
 
   input                                 rx_clk;
-  input                                 rx_sof;
-  input   [(64*QUAD_OR_DUAL_N)+63:0]     rx_data;
+  input   [  3:0]                       rx_sof;
+  input   [(64*QUAD_OR_DUAL_N)+63:0]    rx_data;
 
   // adc data output
 
@@ -122,6 +121,8 @@ module axi_ad9671_if (
 
   // internal wires
 
+  wire    [(2*QUAD_OR_DUAL_N)+1:0]      rx_sof_s;
+  wire    [(64*QUAD_OR_DUAL_N)+63:0]    rx_data_s;
   wire    [127:0]                       adc_wdata;
   wire    [127:0]                       adc_rdata;
   wire    [ 15:0]                       adc_data_a_s;
@@ -142,17 +143,16 @@ module axi_ad9671_if (
   reg                                   adc_status = 'd0;
   reg                                   adc_sync_status = 'd0;
   reg                                   rx_sof_d = 'd0;
-
   reg     [  3:0]                       adc_waddr = 'd0;
   reg     [  3:0]                       adc_raddr_out = 'd0;
-  reg     [ 15:0]                       adc_data_a;
-  reg     [ 15:0]                       adc_data_b;
-  reg     [ 15:0]                       adc_data_c;
-  reg     [ 15:0]                       adc_data_d;
-  reg     [ 15:0]                       adc_data_e;
-  reg     [ 15:0]                       adc_data_f;
-  reg     [ 15:0]                       adc_data_g;
-  reg     [ 15:0]                       adc_data_h;
+  reg     [ 15:0]                       adc_data_a = 'd0;
+  reg     [ 15:0]                       adc_data_b = 'd0;
+  reg     [ 15:0]                       adc_data_c = 'd0;
+  reg     [ 15:0]                       adc_data_d = 'd0;
+  reg     [ 15:0]                       adc_data_e = 'd0;
+  reg     [ 15:0]                       adc_data_f = 'd0;
+  reg     [ 15:0]                       adc_data_g = 'd0;
+  reg     [ 15:0]                       adc_data_h = 'd0;
 
   // adc clock & valid
 
@@ -219,12 +219,12 @@ module axi_ad9671_if (
   always @(posedge rx_clk) begin
     if (QUAD_OR_DUAL_N == 1'b1) begin
       int_valid <= 1'b1;
-      int_data  <= rx_data;
+      int_data  <= rx_data_s;
     end else begin
-      rx_sof_d          <= rx_sof;
+      rx_sof_d          <= &rx_sof_s;
       int_valid         <= rx_sof_d;
-      int_data[63:0]    <= {rx_data[31:0], int_data[63:32]};
-      int_data[127:64]  <= {rx_data[63:32], int_data[127:96]};
+      int_data[63:0]    <= {rx_data_s[31: 0], int_data[ 63:32]};
+      int_data[127:64]  <= {rx_data_s[63:32], int_data[127:96]};
     end
   end
 
@@ -244,6 +244,21 @@ module axi_ad9671_if (
     .clkb(rx_clk),
     .addrb(adc_raddr_s),
     .doutb(adc_rdata));
+
+  // frame-alignment
+
+  genvar n;
+
+  generate
+  for (n = 0; n < ((2*QUAD_OR_DUAL_N)+2); n = n + 1) begin: g_xcvr_if
+  ad_xcvr_rx_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_xcvr_if (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_sof),
+    .rx_ip_data (rx_data[((n*32)+31):(n*32)]),
+    .rx_sof (rx_sof_s[n]),
+    .rx_data (rx_data_s[((n*32)+31):(n*32)]));
+  end
+  endgenerate
 
 endmodule
 
