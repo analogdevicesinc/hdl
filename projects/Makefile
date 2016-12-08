@@ -32,7 +32,6 @@ all:
 	-make -C fmcomms11 all
 	-make -C fmcomms2 all
 	-make -C fmcomms5 all
-	-make -C fmcomms6 all
 	-make -C fmcomms7 all
 	-make -C imageon all
 	-make -C motcon2_fmc all
@@ -70,7 +69,6 @@ clean:
 	make -C fmcomms11 clean
 	make -C fmcomms2 clean
 	make -C fmcomms5 clean
-	make -C fmcomms6 clean
 	make -C fmcomms7 clean
 	make -C imageon clean
 	make -C motcon2_fmc clean
@@ -108,7 +106,6 @@ clean-all:
 	make -C fmcomms11 clean-all
 	make -C fmcomms2 clean-all
 	make -C fmcomms5 clean-all
-	make -C fmcomms6 clean-all
 	make -C fmcomms7 clean-all
 	make -C imageon clean-all
 	make -C motcon2_fmc clean-all
