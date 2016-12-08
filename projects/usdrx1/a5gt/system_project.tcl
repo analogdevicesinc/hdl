@@ -4,11 +4,14 @@ load_package flow
 source ../../scripts/adi_env.tcl
 project_new usdrx1_a5gt -overwrite
 
-source $ad_hdl_dir/projects/common/a5gt/a5gt_system_assign.tcl
+source "../../common/a5gt/a5gt_system_assign.tcl"
 
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_jesd_align.v
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_xcvr_rx_rst.v
 set_global_assignment -name VERILOG_FILE ../common/usdrx1_spi.v
+set_global_assignment -name VERILOG_FILE system_top.v
+set_global_assignment -name QSYS_FILE system_bd.qsys
+
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # reference clock
 
