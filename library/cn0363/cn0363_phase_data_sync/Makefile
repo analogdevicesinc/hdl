@@ -5,10 +5,10 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := cn0363_phase_data_sync_ip.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_ip.tcl
 M_DEPS += cn0363_phase_data_sync.v
+M_DEPS += cn0363_phase_data_sync_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 

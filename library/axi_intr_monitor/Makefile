@@ -5,11 +5,11 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_intr_monitor_ip.tcl
+M_DEPS += ../common/up_axi.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/up_axi.v
 M_DEPS += axi_intr_monitor.v
+M_DEPS += axi_intr_monitor_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 

@@ -5,10 +5,10 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_i2c_mixer_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_i2c_mixer.vhd
+M_DEPS += util_i2c_mixer_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 

@@ -5,19 +5,19 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_spdif_rx_ip.tcl
-M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += ../common/axi_ctrlif.vhd
 M_DEPS += ../common/axi_streaming_dma_rx_fifo.vhd
-M_DEPS += ../common/pl330_dma_fifo.vhd
 M_DEPS += ../common/dma_fifo.vhd
-M_DEPS += rx_phase_det.vhd
-M_DEPS += rx_package.vhd
-M_DEPS += rx_decode.vhd
-M_DEPS += rx_status_reg.vhd
+M_DEPS += ../common/pl330_dma_fifo.vhd
+M_DEPS += ../scripts/adi_env.tcl
+M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += axi_spdif_rx.vhd
 M_DEPS += axi_spdif_rx_constr.xdc
+M_DEPS += axi_spdif_rx_ip.tcl
+M_DEPS += rx_decode.vhd
+M_DEPS += rx_package.vhd
+M_DEPS += rx_phase_det.vhd
+M_DEPS += rx_status_reg.vhd
 
 M_VIVADO := vivado -mode batch -source
 

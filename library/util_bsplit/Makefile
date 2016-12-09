@@ -5,11 +5,11 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_bsplit_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_bsplit.v
 M_DEPS += util_bsplit_constr.xdc
+M_DEPS += util_bsplit_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 

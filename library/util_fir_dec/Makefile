@@ -5,10 +5,10 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_fir_dec_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_fir_dec.v
+M_DEPS += util_fir_dec_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 

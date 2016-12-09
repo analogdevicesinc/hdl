@@ -5,14 +5,14 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_usb_fx3_ip.tcl
+M_DEPS += ../common/up_axi.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/up_axi.v
+M_DEPS += axi_usb_fx3.v
 M_DEPS += axi_usb_fx3_core.v
 M_DEPS += axi_usb_fx3_if.v
+M_DEPS += axi_usb_fx3_ip.tcl
 M_DEPS += axi_usb_fx3_reg.v
-M_DEPS += axi_usb_fx3.v
 
 M_VIVADO := vivado -mode batch -source
 

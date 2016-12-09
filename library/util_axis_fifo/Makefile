@@ -5,15 +5,15 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_axis_fifo_ip.tcl
-M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += ../common/sync_bits.v
 M_DEPS += ../common/sync_gray.v
+M_DEPS += ../scripts/adi_env.tcl
+M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += address_gray.v
 M_DEPS += address_gray_pipelined.v
 M_DEPS += address_sync.v
 M_DEPS += util_axis_fifo.v
+M_DEPS += util_axis_fifo_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 

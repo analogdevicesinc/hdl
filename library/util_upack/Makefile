@@ -5,13 +5,13 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_upack_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += util_upack_dmx.v
-M_DEPS += util_upack_dsf.v
 M_DEPS += util_upack.v
 M_DEPS += util_upack_constr.xdc
+M_DEPS += util_upack_dmx.v
+M_DEPS += util_upack_dsf.v
+M_DEPS += util_upack_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 

@@ -5,26 +5,26 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_ad9625_ip.tcl
-M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/ad_rst.v
+M_DEPS += ../common/ad_axi_ip_constr.xdc
+M_DEPS += ../common/ad_datafmt.v
 M_DEPS += ../common/ad_mem.v
 M_DEPS += ../common/ad_pnmon.v
-M_DEPS += ../common/ad_datafmt.v
+M_DEPS += ../common/ad_rst.v
+M_DEPS += ../common/ad_xcvr_rx_if.v
+M_DEPS += ../common/up_adc_channel.v
+M_DEPS += ../common/up_adc_common.v
 M_DEPS += ../common/up_axi.v
+M_DEPS += ../common/up_clock_mon.v
 M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_xfer_status.v
-M_DEPS += ../common/up_clock_mon.v
-M_DEPS += ../common/up_adc_common.v
-M_DEPS += ../common/up_adc_channel.v
-M_DEPS += ../common/ad_axi_ip_constr.xdc
-M_DEPS += ../common/ad_xcvr_rx_if.v
-M_DEPS += axi_ad9625_pnmon.v
-M_DEPS += axi_ad9625_channel.v
-M_DEPS += axi_ad9625_if.v
+M_DEPS += ../scripts/adi_env.tcl
+M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += axi_ad9625.v
+M_DEPS += axi_ad9625_channel.v
 M_DEPS += axi_ad9625_constr.xdc
+M_DEPS += axi_ad9625_if.v
+M_DEPS += axi_ad9625_ip.tcl
+M_DEPS += axi_ad9625_pnmon.v
 
 M_VIVADO := vivado -mode batch -source
 

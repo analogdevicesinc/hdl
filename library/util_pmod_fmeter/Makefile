@@ -5,15 +5,15 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_pmod_fmeter_ip.tcl
-M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_pmod.v
+M_DEPS += ../common/up_xfer_status.v
+M_DEPS += ../scripts/adi_env.tcl
+M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_pmod_fmeter.v
 M_DEPS += util_pmod_fmeter_core.v
+M_DEPS += util_pmod_fmeter_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 
