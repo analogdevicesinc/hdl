@@ -5,10 +5,13 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := cn0363_dma_sequencer_ip.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_ip.tcl
 M_DEPS += cn0363_dma_sequencer.v
+M_DEPS += cn0363_dma_sequencer_ip.tcl
+
+M_DEPS += ../../interfaces/fifo_wr.xml
+M_DEPS += ../../interfaces/fifo_wr_rtl.xml
 
 M_VIVADO := vivado -mode batch -source
 

@@ -5,16 +5,16 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_xcvrlb_ip.tcl
+M_DEPS += ../../common/ad_pnmon.v
+M_DEPS += ../../common/up_axi.v
+M_DEPS += ../../common/up_xfer_status.v
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_ip.tcl
 M_DEPS += ../../xilinx/util_adxcvr/util_adxcvr_xch.v
-M_DEPS += ../../common/up_xfer_status.v
-M_DEPS += ../../common/ad_pnmon.v
-M_DEPS += ../../common/up_axi.v
-M_DEPS += axi_xcvrlb_constr.xdc
-M_DEPS += axi_xcvrlb_1.v
 M_DEPS += axi_xcvrlb.v
+M_DEPS += axi_xcvrlb_1.v
+M_DEPS += axi_xcvrlb_constr.xdc
+M_DEPS += axi_xcvrlb_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 

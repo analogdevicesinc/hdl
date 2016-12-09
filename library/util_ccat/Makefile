@@ -5,11 +5,11 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_ccat_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_ccat.v
 M_DEPS += util_ccat_constr.xdc
+M_DEPS += util_ccat_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 

@@ -5,16 +5,17 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_gtlb_ip.tcl
+M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/up_xfer_status.v
-M_DEPS += util_gtlb_constr.xdc
 M_DEPS += util_gtlb.v
-M_DEPS += ../interfaces/if_gt_qpll.xml
-M_DEPS += ../interfaces/if_gt_qpll_rtl.xml
+M_DEPS += util_gtlb_constr.xdc
+M_DEPS += util_gtlb_ip.tcl
+
 M_DEPS += ../interfaces/if_gt_pll.xml
 M_DEPS += ../interfaces/if_gt_pll_rtl.xml
+M_DEPS += ../interfaces/if_gt_qpll.xml
+M_DEPS += ../interfaces/if_gt_qpll_rtl.xml
 M_DEPS += ../interfaces/if_gt_rx.xml
 M_DEPS += ../interfaces/if_gt_rx_rtl.xml
 M_DEPS += ../interfaces/if_gt_tx.xml

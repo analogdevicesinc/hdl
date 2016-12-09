@@ -14,7 +14,6 @@ export ALT_NIOS_MMU_ENABLED := $(MMU)
 M_DEPS += system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../../projects/scripts/adi_tquest.tcl
 
 
 M_ALTERA := quartus_sh --64bit -t 

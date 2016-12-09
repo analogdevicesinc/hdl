@@ -5,14 +5,15 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_jesd_gt_ip.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_jesd_gt.v
-M_DEPS += ../interfaces/if_gt_qpll.xml
-M_DEPS += ../interfaces/if_gt_qpll_rtl.xml
+M_DEPS += util_jesd_gt_ip.tcl
+
 M_DEPS += ../interfaces/if_gt_pll.xml
 M_DEPS += ../interfaces/if_gt_pll_rtl.xml
+M_DEPS += ../interfaces/if_gt_qpll.xml
+M_DEPS += ../interfaces/if_gt_qpll_rtl.xml
 M_DEPS += ../interfaces/if_gt_rx.xml
 M_DEPS += ../interfaces/if_gt_rx_rtl.xml
 M_DEPS += ../interfaces/if_gt_tx.xml

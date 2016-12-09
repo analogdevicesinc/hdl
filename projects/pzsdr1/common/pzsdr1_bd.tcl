@@ -334,7 +334,7 @@ ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
 ## 2R2T supports 1R1T as a run time option.
 ## 1R1T allows core to run at a lower rate (1/2 of 2R2T)
 
-set_property CONFIG.MODE_1R1T 0 [get_bd_cells axi_ad9361] 
+set_property CONFIG.MODE_1R1T 1 [get_bd_cells axi_ad9361]
 
 ## interface type - CMOS (1) or LVDS (0) (default is LVDS)
 ## CMOS allows core to run at a lower rate (1/2 of LVDS)

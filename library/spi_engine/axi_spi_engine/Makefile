@@ -5,15 +5,21 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_spi_engine_ip.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_ip.tcl
-M_DEPS += axi_spi_engine.v
+M_DEPS += ../../common/ad_rst.v
 M_DEPS += ../../common/sync_bits.v
 M_DEPS += ../../common/sync_gray.v
 M_DEPS += ../../common/up_axi.v
-M_DEPS += ../../common/ad_rst.v
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_ip.tcl
+M_DEPS += axi_spi_engine.v
+M_DEPS += axi_spi_engine_ip.tcl
+
 M_DEPS += ../../util_axis_fifo/util_axis_fifo.xpr
+
+M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml
+M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
+M_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl.xml
+M_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl_rtl.xml
 
 M_VIVADO := vivado -mode batch -source
 

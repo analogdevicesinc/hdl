@@ -5,19 +5,19 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_adcfifo_ip.tcl
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_ip.tcl
+M_DEPS += ../../common/ad_axis_inf_rx.v
 M_DEPS += ../../common/ad_mem.v
 M_DEPS += ../../common/ad_mem_asym.v
 M_DEPS += ../../common/up_xfer_status.v
-M_DEPS += ../../common/ad_axis_inf_rx.v
-M_DEPS += axi_adcfifo_adc.v
-M_DEPS += axi_adcfifo_dma.v
-M_DEPS += axi_adcfifo_wr.v
-M_DEPS += axi_adcfifo_rd.v
+M_DEPS += ../../scripts/adi_env.tcl
+M_DEPS += ../../scripts/adi_ip.tcl
 M_DEPS += axi_adcfifo.v
+M_DEPS += axi_adcfifo_adc.v
 M_DEPS += axi_adcfifo_constr.xdc
+M_DEPS += axi_adcfifo_dma.v
+M_DEPS += axi_adcfifo_ip.tcl
+M_DEPS += axi_adcfifo_rd.v
+M_DEPS += axi_adcfifo_wr.v
 
 M_VIVADO := vivado -mode batch -source
 

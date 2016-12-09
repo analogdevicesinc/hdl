@@ -5,19 +5,20 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_ad7616_ip.tcl
-M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += ../common/ad_edge_detect.v
 M_DEPS += ../common/up_axi.v
-M_DEPS += axi_ad7616_control.v
-M_DEPS += axi_ad7616_pif.v
-M_DEPS += axi_ad7616_maxis2wrfifo.v
+M_DEPS += ../scripts/adi_env.tcl
+M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += axi_ad7616.v
-M_DEPS += ../spi_engine/spi_engine_execution/spi_engine_execution.xpr
+M_DEPS += axi_ad7616_control.v
+M_DEPS += axi_ad7616_ip.tcl
+M_DEPS += axi_ad7616_maxis2wrfifo.v
+M_DEPS += axi_ad7616_pif.v
+
 M_DEPS += ../spi_engine/axi_spi_engine/axi_spi_engine.xpr
-M_DEPS += ../spi_engine/spi_engine_offload/spi_engine_offload.xpr
+M_DEPS += ../spi_engine/spi_engine_execution/spi_engine_execution.xpr
 M_DEPS += ../spi_engine/spi_engine_interconnect/spi_engine_interconnect.xpr
+M_DEPS += ../spi_engine/spi_engine_offload/spi_engine_offload.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -52,9 +53,9 @@ axi_ad7616.xpr: $(M_DEPS)
 	$(M_VIVADO) axi_ad7616_ip.tcl  >> axi_ad7616_ip.log 2>&1
 
 dep:
-	make -C ../spi_engine/spi_engine_execution/
 	make -C ../spi_engine/axi_spi_engine/
-	make -C ../spi_engine/spi_engine_offload/
+	make -C ../spi_engine/spi_engine_execution/
 	make -C ../spi_engine/spi_engine_interconnect/
+	make -C ../spi_engine/spi_engine_offload/
 ####################################################################################
 ####################################################################################

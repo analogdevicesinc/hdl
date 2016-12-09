@@ -5,12 +5,12 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := util_dacfifo_ip.tcl
+M_DEPS += ../common/ad_mem.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/ad_mem.v
 M_DEPS += util_dacfifo.v
 M_DEPS += util_dacfifo_constr.xdc
+M_DEPS += util_dacfifo_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 
