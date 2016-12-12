@@ -67,3 +67,5 @@ set_property LOC GTHE3_CHANNEL_X0Y16 [get_cells -hierarchical -filter {NAME =~ *
 set_property LOC GTHE3_CHANNEL_X0Y18 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[2].i_channel/i_gt/i_gthe3_channel}]
 set_property LOC GTHE3_CHANNEL_X0Y17 [get_cells -hierarchical -filter {NAME =~ *axi_daq2_gt/inst/g_lane_1[3].i_channel/i_gt/i_gthe3_channel}]
 
+set_false_path -from [get_pins -hierarchical -filter {NAME =~ *pcs_pma/inst/core_clocking_i/idelayctrl_reset_gen/*/C}]
+
