@@ -98,13 +98,11 @@ module daq3_spi (
     end
   end
 
-  // io butter
+  // io buffer
 
-  IOBUF i_iobuf_sdio (
-    .T (spi_enable_s),
-    .I (spi_mosi),
-    .O (spi_miso),
-    .IO (spi_sdio));
+  assign spi_miso = spi_sdio;
+  assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
+
 
 endmodule
 

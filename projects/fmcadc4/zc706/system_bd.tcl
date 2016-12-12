@@ -28,7 +28,7 @@ set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $mfifo_adc
 set_property -dict [list CONFIG.DIN_DATA_WIDTH {64}] $mfifo_adc
 set_property -dict [list CONFIG.ADDRESS_WIDTH {8}] $mfifo_adc
 
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_adc]
+set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_adc]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
 set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
 set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc

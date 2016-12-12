@@ -148,7 +148,7 @@ ad_connect  up_adc_gpio_out axi_ad9361/up_adc_gpio_out
 
 # rx side monitoring
 
-set ila_rx_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_rx_0]
+set ila_rx_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_rx_0]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_rx_0
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_rx_0
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_rx_0
@@ -159,7 +159,7 @@ ad_connect  sys_cpu_clk ila_rx_0/clk
 ad_connect  util_ad9361_adc_pack/adc_valid_0 ila_rx_0/probe0
 ad_connect  util_ad9361_adc_pack/adc_data_0 ila_rx_0/probe1
 
-set ila_rx_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_rx_1]
+set ila_rx_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_rx_1]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_rx_1
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_rx_1
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_rx_1
@@ -205,7 +205,7 @@ ad_connect  axi_ad9361/l_clk ila_tx_0/clk
 ad_connect  util_ad9361_adc_fifo/dout_valid_0 ila_tx_0/probe0
 ad_connect  util_ad9361_adc_fifo/dout_data_0 ila_tx_0/probe1
 
-set ila_tx_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tx_1]
+set ila_tx_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_tx_1]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tx_1
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_tx_1
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_tx_1
@@ -216,7 +216,7 @@ ad_connect  axi_ad9361/l_clk ila_tx_1/clk
 ad_connect  util_ad9361_adc_fifo/dout_valid_1 ila_tx_1/probe0
 ad_connect  util_ad9361_adc_fifo/dout_data_1 ila_tx_1/probe1
 
-set ila_tx_2 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tx_2]
+set ila_tx_2 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_tx_2]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tx_2
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_tx_2
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_tx_2
@@ -227,7 +227,7 @@ ad_connect  axi_ad9361/l_clk ila_tx_2/clk
 ad_connect  util_ad9361_adc_fifo/dout_valid_2 ila_tx_2/probe0
 ad_connect  util_ad9361_adc_fifo/dout_data_2 ila_tx_2/probe1
 
-set ila_tx_3 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_tx_3]
+set ila_tx_3 [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_tx_3]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_tx_3
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_tx_3
 set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_tx_3

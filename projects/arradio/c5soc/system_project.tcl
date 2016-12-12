@@ -96,5 +96,18 @@ set_location_assignment PIN_H12 -to spi_clk
 set_location_assignment PIN_H13 -to spi_mosi
 set_location_assignment PIN_G11 -to spi_miso
 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to scl
+set_instance_assignment -name IO_STANDARD "2.5 V" -to sda
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ga0
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ga1
+
+set_location_assignment PIN_F15 -to scl
+set_location_assignment PIN_G13 -to sda
+set_location_assignment PIN_C7  -to ga0
+set_location_assignment PIN_H14 -to ga1
+
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to scl
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to sda
+
 execute_flow -compile
 

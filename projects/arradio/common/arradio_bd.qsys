@@ -86,6 +86,14 @@
          type = "String";
       }
    }
+   element arradio_bd
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
    element axi_ad9361
    {
       datum _sortIndex

@@ -18,7 +18,7 @@ create_bd_port -dir O -from 3 -to 0 tx_data_n
 set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
 set_property -dict [list CONFIG.QUAD_OR_DUAL_N {0}] $axi_ad9144_core
 
-set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.1 axi_ad9144_jesd]
+set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9144_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9144_jesd
 
@@ -42,7 +42,7 @@ set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9144_upack
 
 set axi_ad9680_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core]
 
-set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.1 axi_ad9680_jesd]
+set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:6.2 axi_ad9680_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
 set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
 
@@ -142,6 +142,7 @@ ad_connect  axi_ad9144_core/dac_valid_1 axi_ad9144_upack/dac_valid_1
 ad_connect  util_daq2_gt/tx_out_clk axi_ad9144_fifo/dac_clk
 ad_connect  axi_ad9144_upack/dac_valid axi_ad9144_fifo/dac_valid
 ad_connect  axi_ad9144_upack/dac_data axi_ad9144_fifo/dac_data
+ad_connect  axi_ad9144_upack/dma_xfer_in axi_ad9144_fifo/dac_xfer_out
 ad_connect  sys_cpu_clk axi_ad9144_fifo/dma_clk
 ad_connect  sys_cpu_reset axi_ad9144_fifo/dma_rst
 ad_connect  sys_cpu_clk axi_ad9144_dma/m_axis_aclk

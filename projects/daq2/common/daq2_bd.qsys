@@ -13,7 +13,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "11";
          type = "int";
       }
    }
@@ -21,7 +21,7 @@
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "16";
          type = "int";
       }
    }
@@ -37,7 +37,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "14";
          type = "int";
       }
    }
@@ -53,7 +53,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "13";
          type = "int";
       }
    }
@@ -69,7 +69,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "10";
          type = "int";
       }
       datum sopceditor_expanded
@@ -90,7 +90,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "17";
          type = "int";
       }
    }
@@ -642,7 +642,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "12";
          type = "int";
       }
    }
@@ -650,7 +650,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "15";
          type = "int";
       }
    }
@@ -658,7 +658,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "20";
          type = "int";
       }
    }
@@ -666,7 +666,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "18";
          type = "int";
       }
    }
@@ -674,7 +674,15 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "8";
+         type = "int";
+      }
+   }
+   element xcvr_rx_pll_reconfig
+   {
+      datum _sortIndex
+      {
+         value = "9";
          type = "int";
       }
    }
@@ -682,7 +690,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "7";
          type = "int";
       }
    }
@@ -690,7 +698,7 @@
    {
       datum _sortIndex
       {
-         value = "17";
+         value = "19";
          type = "int";
       }
    }
@@ -699,6 +707,14 @@
       datum _sortIndex
       {
          value = "5";
+         type = "int";
+      }
+   }
+   element xcvr_tx_pll_reconfig
+   {
+      datum _sortIndex
+      {
+         value = "6";
          type = "int";
       }
    }
@@ -713,7 +729,7 @@
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="10AX115S3F45I2SGE2" />
+ <parameter name="device" value="10AX115S3F45E2SGE3" />
  <parameter name="deviceFamily" value="Arria 10" />
  <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
@@ -821,6 +837,36 @@
    internal="axi_jesd_xcvr.if_tx_ext_sysref_in"
    type="conduit"
    dir="end" />
+ <interface
+   name="xcvr_core_jesd204_rx_s_avl"
+   internal="xcvr_core.jesd204_rx_avs"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="xcvr_core_jesd204_tx_s_avl"
+   internal="xcvr_core.jesd204_tx_avs"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="xcvr_core_reconfig_s_avl"
+   internal="xcvr_core.reconfig_avmm"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="xcvr_rx_pll_reconfig_s_avl"
+   internal="xcvr_rx_pll_reconfig.mgmt_avalon_slave"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="xcvr_tx_lane_pll_s_avl"
+   internal="xcvr_tx_lane_pll.reconfig_avmm0"
+   type="avalon"
+   dir="end" />
+ <interface
+   name="xcvr_tx_pll_reconfig_s_avl"
+   internal="xcvr_tx_pll_reconfig.mgmt_avalon_slave"
+   type="avalon"
+   dir="end" />
  <module name="ad9680_adcfifo" kind="util_adcfifo" version="1.0" enabled="1">
   <parameter name="ADC_DATA_WIDTH" value="128" />
   <parameter name="DMA_ADDRESS_WIDTH" value="16" />
@@ -909,7 +955,7 @@
  <module name="xcvr_core" kind="altera_jesd204" version="15.1" enabled="1">
   <parameter name="ADJCNT" value="0" />
   <parameter name="ADJDIR" value="0" />
-  <parameter name="AUTO_DEVICE" value="10AX115S3F45I2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AX115S3F45E2SGE3" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="BID" value="0" />
   <parameter name="CF" value="0" />
@@ -957,14 +1003,14 @@
   <parameter name="bitrev_en" value="false" />
   <parameter name="bonded_mode" value="non_bonded" />
   <parameter name="lane_rate" value="10000.0" />
-  <parameter name="part_trait_bd" value="NIGHTFURY5ES2" />
-  <parameter name="part_trait_dp" value="10AX115S3F45I2SGE2" />
-  <parameter name="pll_reconfig_enable" value="false" />
+  <parameter name="part_trait_bd" value="NIGHTFURY5" />
+  <parameter name="part_trait_dp" value="10AX115S3F45E2SGE3" />
+  <parameter name="pll_reconfig_enable" value="true" />
   <parameter name="pll_type" value="CMU" />
   <parameter name="rcfg_jtag_enable" value="false" />
   <parameter name="sdc_constraint" value="1.0" />
-  <parameter name="set_capability_reg_enable" value="false" />
-  <parameter name="set_csr_soft_logic_enable" value="false" />
+  <parameter name="set_capability_reg_enable" value="true" />
+  <parameter name="set_csr_soft_logic_enable" value="true" />
   <parameter name="set_prbs_soft_logic_enable" value="false" />
   <parameter name="set_user_identifier" value="0" />
   <parameter name="wrapper_opt" value="base_phy" />
@@ -978,19 +1024,19 @@
   <parameter name="PLLS" value="1" />
   <parameter name="REDUCED_SIM_TIME" value="1" />
   <parameter name="RX_ENABLE" value="1" />
-  <parameter name="RX_PER_CHANNEL" value="1" />
+  <parameter name="RX_PER_CHANNEL" value="0" />
   <parameter name="SYNCHRONIZE_PLL_RESET" value="0" />
   <parameter name="SYNCHRONIZE_RESET" value="1" />
   <parameter name="SYS_CLK_IN_MHZ" value="100" />
   <parameter name="TX_ENABLE" value="1" />
-  <parameter name="TX_PER_CHANNEL" value="1" />
+  <parameter name="TX_PER_CHANNEL" value="0" />
   <parameter name="TX_PLL_ENABLE" value="1" />
   <parameter name="T_PLL_LOCK_HYST" value="0" />
   <parameter name="T_PLL_POWERDOWN" value="1000" />
-  <parameter name="T_RX_ANALOGRESET" value="40" />
+  <parameter name="T_RX_ANALOGRESET" value="70000" />
   <parameter name="T_RX_DIGITALRESET" value="4000" />
-  <parameter name="T_TX_ANALOGRESET" value="40" />
-  <parameter name="T_TX_DIGITALRESET" value="4000" />
+  <parameter name="T_TX_ANALOGRESET" value="70000" />
+  <parameter name="T_TX_DIGITALRESET" value="70000" />
   <parameter name="device_family" value="Arria 10" />
   <parameter name="gui_pll_cal_busy" value="1" />
   <parameter name="gui_rx_auto_reset" value="0" />
@@ -1174,7 +1220,7 @@
   <parameter name="gui_en_extclkout_ports" value="false" />
   <parameter name="gui_en_lvds_ports" value="Disabled" />
   <parameter name="gui_en_phout_ports" value="false" />
-  <parameter name="gui_en_reconf" value="false" />
+  <parameter name="gui_en_reconf" value="true" />
   <parameter name="gui_enable_cascade_in" value="false" />
   <parameter name="gui_enable_cascade_out" value="false" />
   <parameter name="gui_enable_mif_dps" value="false" />
@@ -1275,10 +1321,20 @@
   <parameter name="gui_use_NDFB_modes" value="false" />
   <parameter name="gui_use_locked" value="false" />
   <parameter name="gui_vco_frequency" value="600.0" />
-  <parameter name="system_info_device_component" value="10AX115S3F45I2SGE2" />
+  <parameter name="system_info_device_component" value="10AX115S3F45E2SGE3" />
   <parameter name="system_info_device_family" value="Arria 10" />
   <parameter name="system_info_device_speed_grade" value="2" />
   <parameter name="system_part_trait_speed_grade" value="2" />
+ </module>
+ <module
+   name="xcvr_rx_pll_reconfig"
+   kind="altera_pll_reconfig"
+   version="15.1"
+   enabled="1">
+  <parameter name="ENABLE_BYTEENABLE" value="false" />
+  <parameter name="ENABLE_MIF" value="false" />
+  <parameter name="MIF_FILE_NAME" value="" />
+  <parameter name="device_family" value="Arria 10" />
  </module>
  <module
    name="xcvr_rx_ref_clk"
@@ -1294,15 +1350,15 @@
    kind="altera_xcvr_atx_pll_a10"
    version="15.1"
    enabled="1">
-  <parameter name="base_device" value="NIGHTFURY5ES2" />
+  <parameter name="base_device" value="NIGHTFURY5" />
   <parameter name="bw_sel" value="medium" />
-  <parameter name="device" value="10AX115S3F45I2SGE2" />
+  <parameter name="device" value="10AX115S3F45E2SGE3" />
   <parameter name="device_family" value="Arria 10" />
   <parameter name="enable_16G_path" value="0" />
   <parameter name="enable_8G_path" value="1" />
   <parameter name="enable_analog_resets" value="0" />
   <parameter name="enable_atx_to_fpll_cascade_out" value="0" />
-  <parameter name="enable_bonding_clks" value="1" />
+  <parameter name="enable_bonding_clks" value="0" />
   <parameter name="enable_cascade_out" value="0" />
   <parameter name="enable_debug_ports_parameters" value="0" />
   <parameter name="enable_fb_comp_bonding" value="0" />
@@ -1315,7 +1371,7 @@
   <parameter name="enable_pcie_clk" value="0" />
   <parameter name="enable_pld_atx_cal_busy_port" value="1" />
   <parameter name="enable_pld_mcgb_cal_busy_port" value="0" />
-  <parameter name="enable_pll_reconfig" value="0" />
+  <parameter name="enable_pll_reconfig" value="1" />
   <parameter name="generate_add_hdl_instance_example" value="0" />
   <parameter name="generate_docs" value="1" />
   <parameter name="mcgb_aux_clkin_cnt" value="0" />
@@ -1335,7 +1391,7 @@
   <parameter name="rcfg_param_vals2" value="" />
   <parameter name="rcfg_profile_cnt" value="2" />
   <parameter name="rcfg_profile_select" value="1" />
-  <parameter name="rcfg_separate_avmm_busy" value="0" />
+  <parameter name="rcfg_separate_avmm_busy" value="1" />
   <parameter name="rcfg_sv_file_enable" value="0" />
   <parameter name="rcfg_txt_file_enable" value="0" />
   <parameter name="refclk_cnt" value="1" />
@@ -1343,16 +1399,16 @@
   <parameter name="select_manual_config" value="false" />
   <parameter name="set_altera_xcvr_atx_pll_a10_calibration_en" value="1" />
   <parameter name="set_auto_reference_clock_frequency" value="500.0" />
-  <parameter name="set_capability_reg_enable" value="0" />
-  <parameter name="set_csr_soft_logic_enable" value="0" />
-  <parameter name="set_fref_clock_frequency" value="100.0" />
+  <parameter name="set_capability_reg_enable" value="1" />
+  <parameter name="set_csr_soft_logic_enable" value="1" />
+  <parameter name="set_fref_clock_frequency" value="156.25" />
   <parameter name="set_hip_cal_en" value="0" />
-  <parameter name="set_k_counter" value="1" />
-  <parameter name="set_l_cascade_counter" value="4" />
+  <parameter name="set_k_counter" value="2000000000" />
+  <parameter name="set_l_cascade_counter" value="15" />
   <parameter name="set_l_cascade_predivider" value="1" />
-  <parameter name="set_l_counter" value="4" />
-  <parameter name="set_m_counter" value="50" />
-  <parameter name="set_manual_reference_clock_frequency" value="100.0" />
+  <parameter name="set_l_counter" value="16" />
+  <parameter name="set_m_counter" value="24" />
+  <parameter name="set_manual_reference_clock_frequency" value="200.0" />
   <parameter name="set_output_clock_frequency" value="5000.0" />
   <parameter name="set_ref_clk_div" value="1" />
   <parameter name="set_user_identifier" value="0" />
@@ -1537,7 +1593,7 @@
   <parameter name="gui_en_extclkout_ports" value="false" />
   <parameter name="gui_en_lvds_ports" value="Disabled" />
   <parameter name="gui_en_phout_ports" value="false" />
-  <parameter name="gui_en_reconf" value="false" />
+  <parameter name="gui_en_reconf" value="true" />
   <parameter name="gui_enable_cascade_in" value="false" />
   <parameter name="gui_enable_cascade_out" value="false" />
   <parameter name="gui_enable_mif_dps" value="false" />
@@ -1638,10 +1694,20 @@
   <parameter name="gui_use_NDFB_modes" value="false" />
   <parameter name="gui_use_locked" value="false" />
   <parameter name="gui_vco_frequency" value="600.0" />
-  <parameter name="system_info_device_component" value="10AX115S3F45I2SGE2" />
+  <parameter name="system_info_device_component" value="10AX115S3F45E2SGE3" />
   <parameter name="system_info_device_family" value="Arria 10" />
   <parameter name="system_info_device_speed_grade" value="2" />
   <parameter name="system_part_trait_speed_grade" value="2" />
+ </module>
+ <module
+   name="xcvr_tx_pll_reconfig"
+   kind="altera_pll_reconfig"
+   version="15.1"
+   enabled="1">
+  <parameter name="ENABLE_BYTEENABLE" value="false" />
+  <parameter name="ENABLE_MIF" value="false" />
+  <parameter name="MIF_FILE_NAME" value="" />
+  <parameter name="device_family" value="Arria 10" />
  </module>
  <module
    name="xcvr_tx_ref_clk"
@@ -1702,8 +1768,28 @@
  <connection
    kind="clock"
    version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_tx_pll_reconfig.mgmt_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_rx_pll_reconfig.mgmt_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
    start="xcvr_tx_ref_clk.out_clk"
    end="xcvr_tx_lane_pll.pll_refclk0" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_core.reconfig_clk" />
+ <connection
+   kind="clock"
+   version="15.1"
+   start="sys_clk.out_clk"
+   end="xcvr_tx_lane_pll.reconfig_clk0" />
  <connection
    kind="clock"
    version="15.1"
@@ -1995,19 +2081,8 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="axi_jesd_xcvr.if_tx_ready"
-   end="xcvr_rst_cntrl.tx_ready">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="15.1"
-   start="xcvr_rst_cntrl.pll_cal_busy"
-   end="xcvr_tx_lane_pll.pll_cal_busy">
+   start="xcvr_tx_lane_pll.pll_cal_busy"
+   end="xcvr_rst_cntrl.pll_cal_busy">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -2028,8 +2103,52 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="xcvr_tx_lane_pll.pll_powerdown"
-   end="xcvr_rst_cntrl.pll_powerdown">
+   start="xcvr_rst_cntrl.pll_powerdown"
+   end="xcvr_tx_lane_pll.pll_powerdown">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_pll_reconfig.reconfig_from_pll"
+   end="xcvr_tx_pll.reconfig_from_pll">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_pll.reconfig_from_pll"
+   end="xcvr_rx_pll_reconfig.reconfig_from_pll">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_tx_pll.reconfig_to_pll"
+   end="xcvr_tx_pll_reconfig.reconfig_to_pll">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rx_pll_reconfig.reconfig_to_pll"
+   end="xcvr_rx_pll.reconfig_to_pll">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -2127,8 +2246,19 @@
  <connection
    kind="conduit"
    version="15.1"
-   start="xcvr_rst_cntrl.tx_digitalreset"
-   end="xcvr_core.tx_digitalreset">
+   start="xcvr_core.tx_digitalreset"
+   end="xcvr_rst_cntrl.tx_digitalreset">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="15.1"
+   start="xcvr_rst_cntrl.tx_ready"
+   end="axi_jesd_xcvr.if_tx_ready">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />
@@ -2224,12 +2354,37 @@
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
+   end="xcvr_tx_pll_reconfig.mgmt_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="xcvr_rx_pll_reconfig.mgmt_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="xcvr_core.reconfig_reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="xcvr_tx_lane_pll.reconfig_reset0" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
    end="xcvr_tx_pll.reset" />
  <connection
    kind="reset"
    version="15.1"
    start="sys_rst.out_reset"
    end="xcvr_rx_pll.reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="sys_rst.out_reset"
+   end="xcvr_rst_cntrl.reset" />
  <connection
    kind="reset"
    version="15.1"

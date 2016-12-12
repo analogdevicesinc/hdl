@@ -49,7 +49,7 @@ ad_connect  pl_gpio1_t axi_gpio/gpio2_io_t
 
 # pci-express
 
-set axi_pcie_x4 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_pcie:2.6 axi_pcie_x4]
+set axi_pcie_x4 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_pcie:2.7 axi_pcie_x4]
 set_property -dict [list CONFIG.NO_OF_LANES {X4}] $axi_pcie_x4
 set_property -dict [list CONFIG.MAX_LINK_SPEED {5.0_GT/s}] $axi_pcie_x4
 set_property -dict [list CONFIG.VENDOR_ID {0x11D4}] $axi_pcie_x4

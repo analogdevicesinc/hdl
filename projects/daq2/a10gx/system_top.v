@@ -76,7 +76,8 @@ module system_top (
 
   // board gpio
 
-  gpio_bd,
+  gpio_bd_i,
+  gpio_bd_o,
 
   // lane interface
 
@@ -147,7 +148,8 @@ module system_top (
 
   // board gpio
 
-  inout   [ 26:0]   gpio_bd;
+  input   [ 10:0]   gpio_bd_i;
+  output  [ 15:0]   gpio_bd_o;
 
   // lane interface
 
@@ -187,8 +189,8 @@ module system_top (
   wire              eth_mdio_i;
   wire              eth_mdio_o;
   wire              eth_mdio_t;
-  wire    [ 31:0]   gpio_i;
-  wire    [ 31:0]   gpio_o;
+  wire    [ 63:0]   gpio_i;
+  wire    [ 63:0]   gpio_o;
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
@@ -207,6 +209,20 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
+  // gpio in & out are separate cores
+
+  assign adc_pd = gpio_o[42];
+  assign dac_txen = gpio_o[41];
+  assign dac_reset = gpio_o[40];
+  assign clkd_sync = gpio_o[38];
+
+  assign gpio_i[63:38] = gpio_o[63:38];
+  assign gpio_i[37:37] = trig;
+  assign gpio_i[36:36] = adc_fdb;
+  assign gpio_i[35:35] = adc_fda;
+  assign gpio_i[34:34] = dac_irq;
+  assign gpio_i[33:32] = clkd_status;
+
   // board stuff
 
   assign eth_resetn = ~eth_reset;
@@ -216,12 +232,10 @@ module system_top (
   assign ddr3_a[14:12] = 3'd0;
 
   assign gpio_i[31:27] = gpio_o[31:27];
+  assign gpio_i[26:16] = gpio_bd_i;
+  assign gpio_i[15: 0] = gpio_o[15:0];
 
-  ad_iobuf #(.DATA_WIDTH(27)) i_iobuf_bd (
-    .dio_t ({11'h7ff, 16'h0}),
-    .dio_i (gpio_o[26:0]),
-    .dio_o (gpio_i[26:0]),
-    .dio_p (gpio_bd));
+  assign gpio_bd_o = gpio_o[15:0];
 
   system_bd i_system_bd (
     .a10gx_base_sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
@@ -249,8 +263,8 @@ module system_top (
     .a10gx_base_sys_ethernet_reset_reset (eth_reset),
     .a10gx_base_sys_ethernet_sgmii_rxp_0 (eth_rxd),
     .a10gx_base_sys_ethernet_sgmii_txp_0 (eth_txd),
-    .a10gx_base_sys_gpio_in_export ({trig, adc_fdb, adc_fda, dac_irq, clkd_status[1], clkd_status[0]}),
-    .a10gx_base_sys_gpio_out_export ({adc_pd, dac_txen, dac_reset, clkd_sync}),
+    .a10gx_base_sys_gpio_in_export (gpio_i[63:32]),
+    .a10gx_base_sys_gpio_out_export (gpio_o[63:32]),
     .a10gx_base_sys_gpio_bd_in_port (gpio_i[31:0]),
     .a10gx_base_sys_gpio_bd_out_port (gpio_o[31:0]),
     .a10gx_base_sys_spi_MISO (spi_miso_s),
@@ -272,3 +286,4 @@ endmodule
 
 // ***************************************************************************
 // ***************************************************************************
+

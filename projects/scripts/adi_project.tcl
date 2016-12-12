@@ -7,7 +7,7 @@ variable p_prcfg_list
 variable p_prcfg_status
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2015.2.1"
+  set REQUIRED_VIVADO_VERSION "2015.4.2"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -47,7 +47,7 @@ proc adi_project_create {project_name {mode 0}} {
   }
   if [regexp "_kcu105$" $project_name] {
     set p_device "xcku040-ffva1156-2-e"
-    set p_board "xilinx.com:kcu105:part0:1.0"
+    set p_board "xilinx.com:kcu105:part0:1.1"
     set sys_zynq 0
   }
   if [regexp "_zed$" $project_name] {
@@ -126,6 +126,12 @@ proc adi_project_create {project_name {mode 0}} {
   } else {
     write_hwdef -file "$project_name.data/$project_name.hwdef"
   }
+
+  if {![info exists ::env(ADI_NO_BITSTREAM_COMPRESSION)] && ![info exists ADI_NO_BITSTREAM_COMPRESSION]} {
+    add_files -norecurse -fileset sources_1 \
+		"$ad_hdl_dir/projects/common/xilinx/compression_system_constr.xdc"
+  }
+
 }
 
 proc adi_project_files {project_name project_files} {

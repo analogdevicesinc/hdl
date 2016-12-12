@@ -24,16 +24,7 @@ adi_ip_properties axi_jesd_gt
 adi_ip_constraints axi_jesd_gt [list \
   "axi_jesd_gt_constr.xdc" ]
 
-ipx::remove_bus_interface qpll0_rst [ipx::current_core]
-ipx::remove_bus_interface qpll1_rst [ipx::current_core]
-
-set_property value m_axi:s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
-  -of_objects [ipx::get_bus_interfaces axi_aclk \
-  -of_objects [ipx::current_core]]]
-
-set_property value axi_aresetn [ipx::get_bus_parameters ASSOCIATED_RESET \
-  -of_objects [ipx::get_bus_interfaces axi_aclk \
-  -of_objects [ipx::current_core]]]
+ipx::associate_bus_interfaces -busif m_axi -clock s_axi_aclk [ipx::current_core]
 
 adi_if_infer_bus ADI:user:if_gt_qpll slave gt_qpll_0 [list \
   "qpll_rst            qpll0_rst              "\

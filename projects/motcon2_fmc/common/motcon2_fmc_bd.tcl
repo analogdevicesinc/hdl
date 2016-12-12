@@ -12,6 +12,7 @@
   # current monitor interface
     # clock
   create_bd_port -dir O adc_clk_o
+
     # data motor 1
   create_bd_port -dir I adc_m1_ia_dat_i
   create_bd_port -dir I adc_m1_ib_dat_i
@@ -120,6 +121,7 @@
   set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $current_monitor_m1_dma
   set_property -dict [list CONFIG.CYCLIC {0}] $current_monitor_m1_dma
   set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {0}] $current_monitor_m1_dma
+  set_property -dict [list CONFIG.SYNC_TRANSFER_START {true}] $current_monitor_m1_dma
     # data packer motor 1
   #
   set current_monitor_m1_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m1_pack ]
@@ -134,6 +136,7 @@
   set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $current_monitor_m2_dma
   set_property -dict [list CONFIG.CYCLIC {0}] $current_monitor_m2_dma
   set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {0}] $current_monitor_m2_dma
+  set_property -dict [list CONFIG.SYNC_TRANSFER_START {true}] $current_monitor_m2_dma
     # data packer motor 2
   set current_monitor_m2_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m2_pack ]
   set_property -dict [ list CONFIG.NUM_OF_CHANNELS {4}  ] $current_monitor_m2_pack
@@ -159,7 +162,7 @@
   set iic_ee2  [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 iic_ee2 ]
 
   # xadc
-  set xadc_core [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.1 xadc_core ]
+  set xadc_core [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.2 xadc_core ]
   set_property -dict [ list CONFIG.XADC_STARUP_SELECTION {simultaneous_sampling} ] $xadc_core
   set_property -dict [ list CONFIG.ENABLE_EXTERNAL_MUX {true} ] $xadc_core
   set_property -dict [ list CONFIG.EXTERNAL_MUX_CHANNEL  {VAUXP0_VAUXN0} ] $xadc_core
@@ -219,6 +222,7 @@
   ad_connect current_monitor_m1/vbus_o current_monitor_m1_pack/adc_data_2
   ad_connect current_monitor_m1_pack/adc_data current_monitor_m1_dma/fifo_wr_din
   ad_connect current_monitor_m1_pack/adc_valid current_monitor_m1_dma/fifo_wr_en
+  ad_connect current_monitor_m1_dma/fifo_wr_sync  current_monitor_m1_pack/adc_sync
 
     # motor 2
   ad_connect  sys_cpu_clk current_monitor_m2/ref_clk
@@ -244,6 +248,7 @@
   ad_connect current_monitor_m2/vbus_o            current_monitor_m2_pack/adc_data_2
   ad_connect current_monitor_m2_pack/adc_valid    current_monitor_m2_dma/fifo_wr_en
   ad_connect current_monitor_m2_pack/adc_data     current_monitor_m2_dma/fifo_wr_din
+  ad_connect current_monitor_m2_dma/fifo_wr_sync  current_monitor_m2_pack/adc_sync
 
   #controller
     # motor 1

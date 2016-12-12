@@ -76,7 +76,7 @@ ad_cpu_interrupt ps-12 mb-12 axi_hdmi_rx_dma/irq
 
 # debug
 
-set ila_fifo_dma_rx [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:5.1 ila_fifo_dma_rx]
+set ila_fifo_dma_rx [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.0 ila_fifo_dma_rx]
 set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_fifo_dma_rx
 set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_fifo_dma_rx
 set_property -dict [list CONFIG.C_DATA_DEPTH {4096}] $ila_fifo_dma_rx

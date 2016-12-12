@@ -202,6 +202,8 @@ module axi_hdmi_tx (
   wire    [15:0]  hdmi_vs_width_s;
   wire    [15:0]  hdmi_ve_max_s;
   wire    [15:0]  hdmi_ve_min_s;
+  wire    [31:0]  hdmi_clip_max_s;
+  wire    [31:0]  hdmi_clip_min_s;
   wire            hdmi_fs_toggle_s;
   wire    [ 8:0]  hdmi_raddr_g_s;
   wire            hdmi_tpm_oos_s;
@@ -271,6 +273,8 @@ module axi_hdmi_tx (
     .hdmi_vs_width (hdmi_vs_width_s),
     .hdmi_ve_max (hdmi_ve_max_s),
     .hdmi_ve_min (hdmi_ve_min_s),
+    .hdmi_clip_max (hdmi_clip_max_s),
+    .hdmi_clip_min (hdmi_clip_min_s),
     .hdmi_status (hdmi_status_s),
     .hdmi_tpm_oos (hdmi_tpm_oos_s),
     .hdmi_clk_ratio (32'd1),
@@ -356,7 +360,9 @@ module axi_hdmi_tx (
     .hdmi_vf_width (hdmi_vf_width_s),
     .hdmi_vs_width (hdmi_vs_width_s),
     .hdmi_ve_max (hdmi_ve_max_s),
-    .hdmi_ve_min (hdmi_ve_min_s));
+    .hdmi_ve_min (hdmi_ve_min_s),
+    .hdmi_clip_max (hdmi_clip_max_s),
+    .hdmi_clip_min (hdmi_clip_min_s));
 
   // hdmi output clock
 

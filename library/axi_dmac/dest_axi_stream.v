@@ -100,7 +100,8 @@ dmac_data_mover # (
 	.ID_WIDTH(ID_WIDTH),
 	.DATA_WIDTH(S_AXIS_DATA_WIDTH),
 	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
-	.DISABLE_WAIT_FOR_ID(0)
+	.DISABLE_WAIT_FOR_ID(0),
+	.LAST(1)
 ) i_data_mover (
 	.clk(s_axis_aclk),
 	.resetn(s_axis_aresetn),
