@@ -3,8 +3,8 @@
 # interface ports
 
 create_bd_port -dir I -type rst sys_rst
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 c0_ddr4
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sys_clk
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 c0_ddr4
 
 create_bd_port -dir I phy_sd
 create_bd_port -dir O -type rst phy_rst_n
@@ -78,13 +78,12 @@ set_property -dict [list CONFIG.C_USE_UART {1}] $sys_mb_debug
 
 set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
 
-# instance: ddr (mig)
+# instance: ddr4
 
 set axi_ddr_cntrl [ create_bd_cell -type ip -vlnv xilinx.com:ip:ddr4:1.1 axi_ddr_cntrl ]
 set_property -dict [list CONFIG.C0_CLOCK_BOARD_INTERFACE {default_sysclk_300}] $axi_ddr_cntrl
 set_property -dict [list CONFIG.C0_DDR4_BOARD_INTERFACE {ddr4_sdram}] $axi_ddr_cntrl
 set_property -dict [list CONFIG.RESET_BOARD_INTERFACE {reset}] $axi_ddr_cntrl
-set_property -dict [list CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {100}] $axi_ddr_cntrl
 set_property -dict [list CONFIG.ADDN_UI_CLKOUT2_FREQ_HZ {200}] $axi_ddr_cntrl
 
 set axi_ddr_cntrl_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_ddr_cntrl_rstgen]
@@ -92,15 +91,10 @@ set axi_ddr_cntrl_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_r
 # instance: default peripherals
 
 set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernet:7.0 axi_ethernet]
-set_property -dict [list CONFIG.SupportLevel {1}] $axi_ethernet
 set_property -dict [list CONFIG.ETHERNET_BOARD_INTERFACE {sgmii_lvds}] $axi_ethernet
 set_property -dict [list CONFIG.MDIO_BOARD_INTERFACE {mdio_mdc}] $axi_ethernet
 set_property -dict [list CONFIG.DIFFCLK_BOARD_INTERFACE {sgmii_phyclk}] $axi_ethernet
-set_property -dict [list CONFIG.lvdsclkrate {625}] $axi_ethernet
-set_property -dict [list CONFIG.TXCSUM {Full}] $axi_ethernet
-set_property -dict [list CONFIG.RXCSUM {Full}] $axi_ethernet
-set_property -dict [list CONFIG.TXMEM {8k}] $axi_ethernet
-set_property -dict [list CONFIG.RXMEM {8k}] $axi_ethernet
+set_property -dict [list CONFIG.PHYRST_BOARD_INTERFACE {phy_reset_out}] $axi_ethernet
 
 set axi_ethernet_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_ethernet_dma]
 set_property -dict [list CONFIG.c_include_mm2s_dre {1}] $axi_ethernet_dma
@@ -133,94 +127,64 @@ set_property -dict [list CONFIG.C_HAS_FAST {0}] $axi_intc
 set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
 set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
 
-# connections
+# ddr4
 
-ad_connect  sys_mb_debug/Debug_SYS_Rst sys_rstgen/mb_debug_sys_rst
+ad_connect  sys_rst axi_ddr_cntrl/sys_rst
+ad_connect  sys_clk axi_ddr_cntrl/C0_SYS_CLK
+ad_connect  c0_ddr4 axi_ddr_cntrl/C0_DDR4
+ad_connect  axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_rstgen/ext_reset_in
+ad_connect  axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst axi_ddr_cntrl_rstgen/ext_reset_in
+ad_connect  sys_mem_clk axi_ddr_cntrl/c0_ddr4_ui_clk
+ad_connect  sys_mem_clk axi_ddr_cntrl_rstgen/slowest_sync_clk
+ad_connect  sys_cpu_clk axi_ddr_cntrl/addn_ui_clkout1
+ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
+ad_connect  sys_mem_resetn axi_ddr_cntrl_rstgen/peripheral_aresetn
+ad_connect  sys_mem_resetn axi_ddr_cntrl/c0_ddr4_aresetn
+ad_connect  sys_200m_clk axi_ddr_cntrl/addn_ui_clkout2
+
+# microblaze
+
+ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
+ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
+ad_connect  sys_cpu_clk sys_mb/Clk
+ad_connect  sys_cpu_clk sys_dlmb/LMB_Clk
+ad_connect  sys_cpu_clk sys_ilmb/LMB_Clk
+ad_connect  sys_cpu_clk sys_dlmb_cntlr/LMB_Clk
+ad_connect  sys_cpu_clk sys_ilmb_cntlr/LMB_Clk
 ad_connect  sys_rstgen/mb_reset sys_mb/Reset
 ad_connect  sys_rstgen/bus_struct_reset sys_dlmb/SYS_Rst
 ad_connect  sys_rstgen/bus_struct_reset sys_ilmb/SYS_Rst
 ad_connect  sys_rstgen/bus_struct_reset sys_dlmb_cntlr/LMB_Rst
 ad_connect  sys_rstgen/bus_struct_reset sys_ilmb_cntlr/LMB_Rst
-
-# microblaze local memory
-
 ad_connect  sys_mb/DLMB sys_dlmb/LMB_M
 ad_connect  sys_mb/ILMB sys_ilmb/LMB_M
 ad_connect  sys_dlmb/LMB_Sl_0 sys_dlmb_cntlr/SLMB
 ad_connect  sys_ilmb/LMB_Sl_0 sys_ilmb_cntlr/SLMB
 ad_connect  sys_dlmb_cntlr/BRAM_PORT sys_lmb_bram/BRAM_PORTA
 ad_connect  sys_ilmb_cntlr/BRAM_PORT sys_lmb_bram/BRAM_PORTB
-
-# microblaze debug & interrupt
-
+ad_connect  sys_mb_debug/Debug_SYS_Rst sys_rstgen/mb_debug_sys_rst
 ad_connect  sys_mb_debug/MBDEBUG_0 sys_mb/DEBUG
 ad_connect  axi_intc/interrupt sys_mb/INTERRUPT
 ad_connect  axi_intc/intr sys_concat_intc/dout
 
-# defaults (peripherals)
+# ethernet
 
-ad_connect  sys_mem_clk axi_ddr_cntrl/c0_ddr4_ui_clk
-ad_connect  sys_cpu_clk axi_ddr_cntrl/addn_ui_clkout1
-ad_connect  sys_200m_clk axi_ddr_cntrl/addn_ui_clkout2
-ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
-ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
-ad_connect  sys_mem_resetn axi_ddr_cntrl_rstgen/peripheral_aresetn
-ad_connect  sys_mem_resetn axi_ddr_cntrl/c0_ddr4_aresetn
-
-ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
-ad_connect  sys_cpu_clk sys_mb/Clk
-ad_connect  sys_cpu_clk sys_dlmb/LMB_Clk
-ad_connect  sys_cpu_clk sys_ilmb/LMB_Clk
-ad_connect  sys_cpu_clk sys_dlmb_cntlr/LMB_Clk
-ad_connect  sys_cpu_clk sys_ilmb_cntlr/LMB_Clk
-ad_connect  sys_cpu_clk axi_ethernet/axis_clk
-
-# defaults (interrupts)
-
-ad_connect  sys_concat_intc/In0 axi_timer/interrupt
-ad_connect  sys_concat_intc/In1 axi_ethernet/interrupt
-ad_connect  sys_concat_intc/In2 axi_ethernet_dma/mm2s_introut
-ad_connect  sys_concat_intc/In3 axi_ethernet_dma/s2mm_introut
-ad_connect  sys_concat_intc/In4 axi_uart/interrupt
-ad_connect  sys_concat_intc/In5 mb_intr_05
-ad_connect  sys_concat_intc/In6 mb_intr_06
-ad_connect  sys_concat_intc/In7 mb_intr_07
-ad_connect  sys_concat_intc/In8 mb_intr_08
-ad_connect  sys_concat_intc/In9 axi_iic_main/iic2intc_irpt
-ad_connect  sys_concat_intc/In10 axi_spi/ip2intc_irpt
-ad_connect  sys_concat_intc/In11 axi_gpio/ip2intc_irpt
-ad_connect  sys_concat_intc/In12 mb_intr_12
-ad_connect  sys_concat_intc/In13 mb_intr_13
-ad_connect  sys_concat_intc/In14 mb_intr_14
-ad_connect  sys_concat_intc/In15 mb_intr_15
-
-# defaults (ddr)
-
-ad_connect  sys_rst axi_ddr_cntrl/sys_rst
-ad_connect  c0_ddr4 axi_ddr_cntrl/C0_DDR4
-ad_connect  sys_clk axi_ddr_cntrl/C0_SYS_CLK
-
-ad_connect  axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst sys_rstgen/ext_reset_in
-ad_connect  axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst axi_ddr_cntrl_rstgen/ext_reset_in
-ad_connect  sys_mem_clk axi_ddr_cntrl_rstgen/slowest_sync_clk
-
-# defaults (ethernet)
-
+ad_connect  sgmii axi_ethernet/sgmii
 ad_connect  phy_clk axi_ethernet/lvds_clk
 ad_connect  mdio axi_ethernet/mdio
-ad_connect  sgmii axi_ethernet/sgmii
+ad_connect  phy_sd axi_ethernet/signal_detect
+ad_connect  axi_ethernet/phy_rst_n phy_rst_n
+ad_connect  sys_cpu_clk axi_ethernet/axis_clk
 ad_connect  axi_ethernet/s_axis_txd axi_ethernet_dma/M_AXIS_MM2S
 ad_connect  axi_ethernet/s_axis_txc axi_ethernet_dma/M_AXIS_CNTRL
 ad_connect  axi_ethernet/m_axis_rxd axi_ethernet_dma/S_AXIS_S2MM
 ad_connect  axi_ethernet/m_axis_rxs axi_ethernet_dma/S_AXIS_STS
-ad_connect  phy_sd axi_ethernet/signal_detect
-ad_connect  sys_cpu_resetn phy_rst_n
 ad_connect  axi_ethernet/axi_txd_arstn axi_ethernet_dma/mm2s_prmry_reset_out_n
 ad_connect  axi_ethernet/axi_txc_arstn axi_ethernet_dma/mm2s_cntrl_reset_out_n
 ad_connect  axi_ethernet/axi_rxd_arstn axi_ethernet_dma/s2mm_prmry_reset_out_n
 ad_connect  axi_ethernet/axi_rxs_arstn axi_ethernet_dma/s2mm_sts_reset_out_n
 
-# defaults (misc)
+# iic, spi and gpio
 
 ad_connect  iic_main axi_iic_main/iic
 ad_connect  uart_sin axi_uart/rx
@@ -240,7 +204,26 @@ ad_connect  gpio1_o axi_gpio/gpio2_io_o
 ad_connect  gpio1_t axi_gpio/gpio2_io_t
 ad_connect  sys_cpu_clk axi_spi/ext_spi_clk
 
-# defaults (interconnect - processor)
+# interrupts
+
+ad_connect  sys_concat_intc/In0 axi_timer/interrupt
+ad_connect  sys_concat_intc/In1 axi_ethernet/interrupt
+ad_connect  sys_concat_intc/In2 axi_ethernet_dma/mm2s_introut
+ad_connect  sys_concat_intc/In3 axi_ethernet_dma/s2mm_introut
+ad_connect  sys_concat_intc/In4 axi_uart/interrupt
+ad_connect  sys_concat_intc/In5 mb_intr_05
+ad_connect  sys_concat_intc/In6 mb_intr_06
+ad_connect  sys_concat_intc/In7 mb_intr_07
+ad_connect  sys_concat_intc/In8 mb_intr_08
+ad_connect  sys_concat_intc/In9 axi_iic_main/iic2intc_irpt
+ad_connect  sys_concat_intc/In10 axi_spi/ip2intc_irpt
+ad_connect  sys_concat_intc/In11 axi_gpio/ip2intc_irpt
+ad_connect  sys_concat_intc/In12 mb_intr_12
+ad_connect  sys_concat_intc/In13 mb_intr_13
+ad_connect  sys_concat_intc/In14 mb_intr_14
+ad_connect  sys_concat_intc/In15 mb_intr_15
+
+# interconnect - processor
 
 ad_cpu_interconnect 0x41400000 sys_mb_debug
 ad_cpu_interconnect 0x40E00000 axi_ethernet
@@ -252,20 +235,13 @@ ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_cpu_interconnect 0x40000000 axi_gpio
 ad_cpu_interconnect 0x44A70000 axi_spi
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ddr_interconnect
-set_property CONFIG.NUM_MI {1} [get_bd_cells axi_ddr_interconnect]
-set_property CONFIG.NUM_SI {1} [get_bd_cells axi_ddr_interconnect]
-set_property CONFIG.S00_HAS_REGSLICE {4} [get_bd_cells axi_ddr_interconnect]
-set_property CONFIG.S00_HAS_DATA_FIFO {1} [get_bd_cells axi_ddr_interconnect]
+# interconnect - memory
 
-ad_connect axi_ddr_interconnect/M00_AXI axi_ddr_cntrl/C0_DDR4_S_AXI
-ad_connect sys_mem_clk axi_ddr_interconnect/ACLK
-ad_connect sys_mem_clk axi_ddr_interconnect/M00_ACLK
-ad_connect sys_mem_resetn axi_ddr_interconnect/ARESETN
-ad_connect sys_mem_resetn axi_ddr_interconnect/M00_ARESETN
-ad_connect sys_cpu_resetn axi_ddr_interconnect/S00_ARESETN
-
-ad_mem_hp0_interconnect sys_cpu_clk axi_ddr_interconnect/S00_AXI
+ad_mem_hp0_interconnect sys_mem_clk axi_ddr_cntrl/C0_DDR4_S_AXI
+disconnect_bd_net [get_bd_nets sys_mem_clk] [get_bd_pins axi_mem_interconnect/ACLK]
+disconnect_bd_net [get_bd_nets sys_cpu_resetn] [get_bd_pins axi_mem_interconnect/M00_ARESETN]
+ad_connect  sys_cpu_clk axi_mem_interconnect/ACLK
+ad_connect  sys_mem_resetn axi_mem_interconnect/M00_ARESETN
 ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_DC
 ad_mem_hp0_interconnect sys_cpu_clk sys_mb/M_AXI_IC
 ad_mem_hp0_interconnect sys_cpu_clk axi_ethernet_dma/M_AXI_SG
@@ -276,7 +252,5 @@ create_bd_addr_seg -range 0x20000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
   [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem] SEG_dlmb_cntlr
 create_bd_addr_seg -range 0x20000 -offset 0x0 [get_bd_addr_spaces sys_mb/Instruction] \
   [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_ilmb_cntlr
-
-
 
 
