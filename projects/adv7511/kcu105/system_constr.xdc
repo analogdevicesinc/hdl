@@ -26,3 +26,5 @@ set_property -dict  {PACKAGE_PIN  AJ11  IOSTANDARD  LVCMOS18} [get_ports hdmi_da
 
 set_property -dict  {PACKAGE_PIN  AE12  IOSTANDARD  LVCMOS18} [get_ports spdif]
 
+set_false_path -from [get_pins -hierarchical -filter {NAME =~ *pcs_pma/inst/core_clocking_i/idelayctrl_reset_gen/*/C}]
+
