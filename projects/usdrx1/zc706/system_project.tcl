@@ -14,6 +14,8 @@ adi_project_files usdrx1_zc706 [list \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_mig_constr.xdc" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc" ]
 
+set_property is_enabled false [get_files  *system_axi*_spi*.xdc]
+
 adi_project_run usdrx1_zc706
 
 
