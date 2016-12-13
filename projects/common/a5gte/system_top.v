@@ -100,7 +100,8 @@ module system_top (
 
   reg     [ 4:0]  eth_tx_data_h_d;
   reg     [ 4:0]  phy_rx_data_h_d;
-
+  reg     [ 4:0]  phy_rx_data_h_d1;
+  reg     [ 4:0]  phy_rx_data_l_d;
   // RX path
 
   altera_pll #(
@@ -194,8 +195,9 @@ module system_top (
   always @(posedge phy_rx_clk)
   begin
     phy_rx_data_h_d <= phy_rx_data_h;
+    phy_rx_data_h_d1 <= phy_rx_data_h_d;
+    phy_rx_data_l_d <= phy_rx_data_l;
   end
-
 
   altddio_out #(
     .extend_oe_disable("OFF"),
@@ -207,8 +209,8 @@ module system_top (
     .power_up_high("OFF"),
     .width(5)
   ) eth_rx_path_out (
-    .datain_h (phy_rx_data_h_d),
-    .datain_l (phy_rx_data_l),
+    .datain_h (phy_rx_data_h_d1),
+    .datain_l (phy_rx_data_l_d),
     .outclock (phy_rx_clk),
     .dataout ({eth_rx_cntrl,eth_rx_data}),
     .aclr (~eth_phy_resetn),
