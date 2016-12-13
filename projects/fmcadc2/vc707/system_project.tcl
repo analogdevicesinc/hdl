@@ -13,6 +13,8 @@ adi_project_files fmcadc2_vc707 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vc707/vc707_system_constr.xdc" ]
 
+set_property is_enabled false [get_files  *system_axi*_spi*.xdc]
+
 adi_project_run fmcadc2_vc707
 
 

@@ -16,6 +16,7 @@ adi_project_files fmcomms7_zc706 [list \
 
 set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc]
 set_property PROCESSING_ORDER EARLY [get_files system_constr.xdc]
+set_property is_enabled false [get_files  *system_axi*_spi*.xdc]
 
 adi_project_run fmcomms7_zc706
 
