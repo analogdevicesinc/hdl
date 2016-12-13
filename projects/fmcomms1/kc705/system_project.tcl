@@ -12,6 +12,7 @@ adi_project_files fmcomms1_kc705 [list \
 
 set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/kc705/kc705_system_constr.xdc]
 set_property PROCESSING_ORDER EARLY [get_files system_constr.xdc]
+set_property is_enabled false [get_files  *system_axi*_spi*.xdc]
 
 adi_project_run fmcomms1_kc705
 
