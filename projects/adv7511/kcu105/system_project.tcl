@@ -29,7 +29,7 @@ adi_project_files adv7511_kcu105 [list \
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc" ]
 
 file copy -force $::env(MYVIVADO)/../../AR66052/bd_0_pcs_pma_0_serdes_1_to_10_ser8.v \
-  daq2_kcu105.srcs/sources_1/bd/system/ip/system_axi_ethernet_0/bd_0/ip/ip_2/synth/sgmii_lvds_transceiver/bd_0_pcs_pma_0_serdes_1_to_10_ser8.v
+  adv7511_kcu105.srcs/sources_1/bd/system/ip/system_axi_ethernet_0/bd_0/ip/ip_2/synth/sgmii_lvds_transceiver/bd_0_pcs_pma_0_serdes_1_to_10_ser8.v
 
 adi_project_run adv7511_kcu105
 
