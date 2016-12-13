@@ -54,8 +54,9 @@ current_bd_instance /spi
   ad_ip_instance util_sigma_delta_spi util_sigma_delta_spi
 
   ad_ip_parameter execution CONFIG.NUM_OF_CS 2
-
   ad_ip_parameter util_sigma_delta_spi CONFIG.NUM_OF_CS 2
+  ad_ip_parameter interconnect CONFIG.NUM_OF_SDI 2
+  ad_ip_parameter axi CONFIG.NUM_OFFLOAD 1
 
 	ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
 	ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
