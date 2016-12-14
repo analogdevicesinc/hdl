@@ -193,6 +193,8 @@ module system_top (
     .I (rx_sysref),
     .O (rx_sysref_p),
     .OB (rx_sysref_n));
+  assign rx_sysref = gpio_o[48];
+
 
   OBUFDS i_obufds_rx_sync (
     .I (rx_sync),
