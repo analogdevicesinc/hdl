@@ -33,14 +33,13 @@ set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad6676_dma
 set util_ad6676_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_ad6676_xcvr]
 set_property -dict [list CONFIG.QPLL_FBDIV {"0010000000"}] $util_ad6676_xcvr
 set_property -dict [list CONFIG.CPLL_FBDIV {2}] $util_ad6676_xcvr
+set_property -dict [list CONFIG.CPLL_FBDIV_4_5 {5}] $util_ad6676_xcvr
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.TX_OUT_DIV {1}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.TX_CLK25_DIV {10}] $util_ad6676_xcvr
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {2}] $util_ad6676_xcvr
 set_property -dict [list CONFIG.RX_OUT_DIV {1}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.RX_CLK25_DIV {10}] $util_ad6676_xcvr
+set_property -dict [list CONFIG.RX_CLK25_DIV {8}] $util_ad6676_xcvr
 set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff10200020}] $util_ad6676_xcvr
+set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff20400020}] $util_ad6676_xcvr
 
 # reference clocks & resets
 
