@@ -27,5 +27,5 @@ set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9250_jesd_rstgen
 set_false_path -to [get_cells i_system_wrapper/system_i/axi_ad9250_jesd/inst/rx_sysref_r_reg/D]
 
 set_property shreg_extract no [get_cells -hier -filter {name =~ *sysref_en_m*}]
-set_false_path -to [get_cells -hier -filter {name =~ *sysref_en_m*  && IS_SEQUENTIAL}]
+set_false_path -to [get_cells -hier -filter {name =~ *sysref_en_m1*  && IS_SEQUENTIAL}]
 
