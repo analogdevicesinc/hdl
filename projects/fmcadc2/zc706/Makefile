@@ -21,6 +21,7 @@ M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_lvds_out.v
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_sysref_gen.v
 M_DEPS += ../../../library/axi_ad9625/axi_ad9625.xpr
 M_DEPS += ../../../library/xilinx/axi_adcfifo/axi_adcfifo.xpr
 M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
