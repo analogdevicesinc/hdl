@@ -181,13 +181,6 @@ module system_top (
   output            spi_adf4355_le_or_clk;
   inout             spi_adf4355_ce_or_sdio;
 
-  // internal registers
-
-  reg             rx_sysref = 'd0;
-  reg             rx_sysref_m1 = 'd0;
-  reg             rx_sysref_m2 = 'd0;
-  reg             rx_sysref_m3 = 'd0;
-
   // internal signals
 
   wire    [63:0]    gpio_i;
@@ -198,19 +191,14 @@ module system_top (
   wire              spi_miso;
   wire              rx_ref_clk;
   wire              rx_sync;
+  wire              rx_sysref;
+  wire              rx_clk;
 
   // default logic
 
   assign fan_pwm = 1'b1;
   assign iic_rstn = 1'b1;
 
-  // sysref internal
-
-  always @(posedge rx_clk) begin
-    rx_sysref_m1 <= gpio_o[34];
-    rx_sysref_m2 <= rx_sysref_m1;
-    rx_sysref <= rx_sysref_m2;
-  end
 
   // instantiations
 
@@ -230,10 +218,6 @@ module system_top (
     .I (rx_sync),
     .O (rx_sync_p),
     .OB (rx_sync_n));
-
-    // spi
-
-    assign gpio_i[37:36] = gpio_o[37:36];
 
   fmcadc2_spi i_fmcadc2_spi (
     .spi_adf4355 (gpio_o[36]),
@@ -261,6 +245,11 @@ module system_top (
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
+
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[34]),
+    .sysref_out (rx_sysref));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -323,6 +312,7 @@ module system_top (
     .rx_ref_clk_0 (rx_ref_clk),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (rx_sysref),
+    .rx_core_clk (rx_clk),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),
@@ -338,8 +328,7 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .rx_clk (rx_clk));
+    .uart_sout (uart_sout));
 
 endmodule
 

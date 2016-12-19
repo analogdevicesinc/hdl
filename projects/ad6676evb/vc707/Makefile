@@ -17,6 +17,7 @@ M_DEPS += ../../common/vc707/vc707_system_mig.prj
 M_DEPS += ../../common/vc707/vc707_system_constr.xdc
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_sysref_gen.v
 M_DEPS += ../../../library/axi_ad6676/axi_ad6676.xpr
 M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr

@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -121,12 +121,6 @@ module system_top (
   output            spi_clk,
   inout             spi_sdio);
 
-  // internal registers
-
-  reg               rx_sysref_m1 = 'd0;
-  reg               rx_sysref_m2 = 'd0;
-  reg               rx_sysref_int = 'd0;
-
   // internal signals
 
   wire              sys_cpu_clk;
@@ -156,13 +150,10 @@ module system_top (
 
   // sysref
 
-  assign rx_sysref = rx_sysref_int;
-
-  always @(posedge rx_clk) begin
-    rx_sysref_m1 <= gpio_o[32];
-    rx_sysref_m2 <= rx_sysref_m1;
-    rx_sysref_int <= rx_sysref_m1 & ~rx_sysref_m2;
-  end
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[32]),
+    .sysref_out (rx_sysref));
 
   // instantiations
 
@@ -193,7 +184,7 @@ module system_top (
     .rx_ip_sof_1_export (rx_ip_sof),
     .rx_ref_clk_clk (ref_clk),
     .rx_sync_export (rx_sync),
-    .rx_sysref_export (rx_sysref_int),
+    .rx_sysref_export (rx_sysref),
     .sys_clk_clk (sys_cpu_clk),
     .sys_dma_clk_clk (sys_dma_clk),
     .sys_dma_rst_reset_n (sys_rstn),

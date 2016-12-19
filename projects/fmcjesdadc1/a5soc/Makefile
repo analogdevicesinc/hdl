@@ -22,6 +22,7 @@ M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/altera/sys_gen.tcl
 M_DEPS += ../../common/a5soc/a5soc_system_qsys.tcl
 M_DEPS += ../../common/a5soc/a5soc_system_assign.tcl
+M_DEPS += ../../../library/common/ad_sysref_gen.v
 M_DEPS += ../../../library/altera/avl_adxcvr/avl_adxcvr_hw.tcl
 M_DEPS += ../../../library/altera/axi_adxcvr/axi_adxcvr.v
 M_DEPS += ../../../library/altera/axi_adxcvr/axi_adxcvr_hw.tcl

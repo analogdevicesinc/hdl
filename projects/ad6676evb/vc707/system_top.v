@@ -200,6 +200,7 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
+  wire            rx_clk;
 
   // default logic
 
@@ -219,7 +220,6 @@ module system_top (
     .I (rx_sysref),
     .O (rx_sysref_p),
     .OB (rx_sysref_n));
-  assign rx_sysref = gpio_o[48]
 
   OBUFDS i_obufds_rx_sync (
     .I (rx_sync),
@@ -246,6 +246,11 @@ module system_top (
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
+
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[48]),
+    .sysref_out (rx_sysref));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -297,6 +302,7 @@ module system_top (
     .rx_ref_clk_0 (rx_ref_clk),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (rx_sysref),
+    .rx_core_clk (rx_clk),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),

@@ -7,6 +7,7 @@ project_new usdrx1_a5gt -overwrite
 source "../../common/a5gt/a5gt_system_assign.tcl"
 
 set_global_assignment -name VERILOG_FILE ../common/usdrx1_spi.v
+set_global_assignment -name VERILOG_FILE ../../../library/common/ad_sysref_gen.v
 set_global_assignment -name VERILOG_FILE system_top.v
 set_global_assignment -name QSYS_FILE system_bd.qsys
 
