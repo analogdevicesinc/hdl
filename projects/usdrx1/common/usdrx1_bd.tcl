@@ -8,6 +8,7 @@ create_bd_port -dir O spi_clk_o
 create_bd_port -dir I spi_sdo_i
 create_bd_port -dir O spi_sdo_o
 create_bd_port -dir I spi_sdi_i
+create_bd_port -dir O rx_core_clk
 
 # adc peripherals
 
@@ -129,6 +130,7 @@ ad_connect  util_usdrx1_xcvr/rx_out_clk_0 axi_ad9671_core_0/rx_clk
 ad_connect  util_usdrx1_xcvr/rx_out_clk_0 axi_ad9671_core_1/rx_clk
 ad_connect  util_usdrx1_xcvr/rx_out_clk_0 axi_ad9671_core_2/rx_clk
 ad_connect  util_usdrx1_xcvr/rx_out_clk_0 axi_ad9671_core_3/rx_clk
+ad_connect  util_usdrx1_xcvr/rx_out_clk_0 rx_core_clk
 ad_connect  axi_usdrx1_jesd/rx_start_of_frame axi_ad9671_core_0/rx_sof
 ad_connect  axi_usdrx1_jesd/rx_start_of_frame axi_ad9671_core_1/rx_sof
 ad_connect  axi_usdrx1_jesd/rx_start_of_frame axi_ad9671_core_2/rx_sof

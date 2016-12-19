@@ -25,3 +25,5 @@ set_false_path -from [get_clocks {sys_clk}] -through [get_nets *altera_jesd204_r
 set_false_path -from [get_clocks {i_system_bd|avl_usdrx1_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}]\
   -through [get_nets *altera_jesd204_rx_csr_inst*] -to [get_clocks {sys_clk}]
 
+set_false_path -from [get_clocks {sys_clk}] [get_nets *sysref_en*] \
+  -to [get_clocks {i_system_bd|avl_usdrx1_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}]

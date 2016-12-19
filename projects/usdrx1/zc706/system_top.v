@@ -250,6 +250,7 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
   wire    [15:0]  ps_intrs;
+  wire            rx_clk;
 
   // spi assignments
 
@@ -272,6 +273,7 @@ module system_top (
     .IB (rx_ref_clk_n),
     .O (rx_ref_clk),
     .ODIV2 ());
+
   OBUFDS i_obufds_rx_sysref (
     .I (rx_sysref),
     .O (rx_sysref_p),
@@ -325,6 +327,11 @@ module system_top (
     .spi_miso (spi_miso),
     .spi_afe_sdio (spi_afe_sdio),
     .spi_clk_sdio (spi_clk_sdio));
+
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[60]),
+    .sysref_out (rx_sysref));
 
   system_wrapper i_system_wrapper (
     .sys_clk_clk_n (sys_clk_n),
@@ -407,6 +414,7 @@ module system_top (
     .rx_ref_clk_0 (rx_ref_clk),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (rx_sysref),
+    .rx_core_clk (rx_clk),
     .spdif (spdif),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),

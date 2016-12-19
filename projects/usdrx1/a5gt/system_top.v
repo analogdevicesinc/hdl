@@ -127,9 +127,6 @@ module system_top (
 
   reg     [  3:0]   phy_rst_cnt = 0;
   reg               phy_rst_reg = 0;
-  reg               rx_sysref_m1 = 'd0;
-  reg               rx_sysref_m2 = 'd0;
-  reg               rx_sysref_int = 'd0;
 
   // internal signals
 
@@ -198,13 +195,10 @@ module system_top (
 
   // sysref
 
-  assign rx_sysref = rx_sysref_int;
-
-  always @(posedge rx_clk) begin
-    rx_sysref_m1 <= gpio_o[32];
-    rx_sysref_m2 <= rx_sysref_m1;
-    rx_sysref_int <= rx_sysref_m1 & ~rx_sysref_m2;
-  end
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[60]),
+    .sysref_out (rx_sysref));
 
   // spi (fanout buffers)
 
@@ -324,7 +318,7 @@ module system_top (
     .rx_ip_sof_3_export (rx_ip_sof),
     .rx_ref_clk_clk (ref_clk),
     .rx_sync_export (rx_sync),
-    .rx_sysref_export (rx_sysref_int),
+    .rx_sysref_export (rx_sysref),
     .sys_125m_clk_clk (sys_125m_clk),
     .sys_25m_clk_clk (sys_25m_clk),
     .sys_2m5_clk_clk (sys_2m5_clk),
