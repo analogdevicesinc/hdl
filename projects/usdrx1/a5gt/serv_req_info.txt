@@ -1,8 +1,0 @@
-<internal_error>
-	<executable>quartus_sta</executable>
-	<sub_system>MEM</sub_system>
-	<error>*** Fatal Error: Out of memory in module quartus_sta (4441 megabytes used)</error>
-	<date>Mon Dec 19 13:19:17 2016</date>
-	<version>Version 16.0.2 Build 222 07/20/2016 SJ Standard Edition</version>
-</internal_error>
-

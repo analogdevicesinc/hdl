@@ -29,6 +29,10 @@
 *.xrpt
 *.err
 *_html
+*.sld
+*.txt
+*.qsys
+*.csv
 xst
 netgen
 iseconfig
@@ -55,6 +59,7 @@ db
 *.qpf
 *.qws
 *.sof
+system_qsys_script.tcl
 hc_output
 hps_isw_handoff
 hps_sdram_*.csv
