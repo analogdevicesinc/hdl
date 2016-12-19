@@ -44,6 +44,7 @@ set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff20400020}] $util_ad6676_
 # reference clocks & resets
 
 create_bd_port -dir I rx_ref_clk_0
+create_bd_port -dir O rx_core_clk
 
 ad_xcvrpll  rx_ref_clk_0 util_ad6676_xcvr/qpll_ref_clk_*
 ad_xcvrpll  rx_ref_clk_0 util_ad6676_xcvr/cpll_ref_clk_*
@@ -56,6 +57,7 @@ ad_connect  sys_cpu_clk util_ad6676_xcvr/up_clk
 
 ad_xcvrcon  util_ad6676_xcvr axi_ad6676_xcvr axi_ad6676_jesd
 ad_connect  util_ad6676_xcvr/rx_out_clk_0 axi_ad6676_core/rx_clk
+ad_connect  util_ad6676_xcvr/rx_out_clk_0 rx_core_clk
 ad_connect  axi_ad6676_jesd/rx_start_of_frame axi_ad6676_core/rx_sof
 ad_connect  axi_ad6676_jesd/rx_tdata axi_ad6676_core/rx_data
 ad_connect  util_ad6676_xcvr/rx_out_clk_0 axi_ad6676_cpack/adc_clk
