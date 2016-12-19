@@ -180,6 +180,8 @@ module system_top (
   wire            spi_mosi;
   wire            spi_miso;
   wire            rx_ref_clk;
+  wire            rx_clk;
+  wire            rx_sysref;
 
   assign ddr3_1_p = 2'b11;
   assign ddr3_1_n = 3'b000;
@@ -208,6 +210,11 @@ module system_top (
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
+
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[32]),
+    .sysref_out (rx_sysref));
 
   // instantiations
 
@@ -277,6 +284,7 @@ module system_top (
     .rx_ref_clk_0 (rx_ref_clk),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (rx_sysref),
+    .rx_core_clk (rx_clk),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
     .spi_csn_i (spi_csn),
