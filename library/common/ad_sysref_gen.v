@@ -77,8 +77,10 @@ module ad_sysref_gen (
 
   // generate SYSREF
   always @(posedge core_clk) begin
-    if (counter == SYSREF_HALFPERIOD) begin
-      sysref_out <= ~sysref_out;
+    if (sysref_en_int) begin
+      if (counter == SYSREF_HALFPERIOD) begin
+        sysref_out <= ~sysref_out;
+      end
     end else begin
       sysref_out <= 1'b0;
     end
