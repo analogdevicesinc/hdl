@@ -8,5 +8,5 @@ set_false_path  -from [get_registers *up_xfer_status:i_xfer_status|d_xfer_data*]
 set_false_path  -from [get_registers *up_clock_mon:i_clock_mon|d_count_toggle*]       -to [get_registers *up_clock_mon:i_clock_mon|up_count_toggle_m1*]
 set_false_path  -from [get_registers *up_clock_mon:i_clock_mon|d_count_hold*]         -to [get_registers *up_clock_mon:i_clock_mon|up_d_count*]
 set_false_path  -from [get_registers *up_clock_mon:i_clock_mon|up_count_toggle*]      -to [get_registers *up_clock_mon:i_clock_mon|d_count_toggle_m1*]
-set_false_path  -from [get_registers *up_core_preset*]                                -to [get_registers *ad_rst:i_core_rst_reg|ad_rst_sync_m1*]
+set_false_path  -from [get_registers *up_*preset*]                                    -to [get_registers *ad_rst:i_core_rst_reg|ad_rst_sync_m1*]
 
