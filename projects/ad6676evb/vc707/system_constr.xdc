@@ -36,5 +36,5 @@ create_clock -name rx_div_clk   -period  10.00 [get_pins i_system_wrapper/system
 set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad6676_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
 
 set_property shreg_extract no [get_cells -hier -filter {name =~ *sysref_en_m*}]
-set_false_path -to [get_cells -hier -filter {name =~ *sysref_en_m*  && IS_SEQUENTIAL}]
+set_false_path -to [get_cells -hier -filter {name =~ *sysref_en_m1*  && IS_SEQUENTIAL}]
 
