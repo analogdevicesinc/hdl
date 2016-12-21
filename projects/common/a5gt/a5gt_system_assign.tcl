@@ -807,6 +807,9 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[8]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[9]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[10]
 
+set_instance_assignment -name OPTIMIZATION_TECHNIQUE SPEED -to *
+set_instance_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON -to *
+
 # source defaults
 
 source $ad_hdl_dir/projects/common/altera/sys_gen.tcl

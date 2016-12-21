@@ -9,12 +9,21 @@ set system_type nios
 
 # clock-&-reset
 
+add_instance sys_ref_clk clock_source 16.0
+add_interface sys_ref_clk clock sink
+add_interface sys_ref_rst reset sink
+set_interface_property sys_ref_clk EXPORT_OF sys_ref_clk.clk_in
+set_interface_property sys_ref_rst EXPORT_OF sys_ref_clk.clk_in_reset
+set_instance_parameter_value sys_ref_clk {clockFrequency} {100000000.0}
+set_instance_parameter_value sys_ref_clk {clockFrequencyKnown} {1}
+set_instance_parameter_value sys_ref_clk {resetSynchronousEdges} {DEASSERT}
+
 add_instance sys_clk clock_source 16.0
 add_interface sys_clk clock sink
 add_interface sys_rst reset sink
 set_interface_property sys_clk EXPORT_OF sys_clk.clk_in
 set_interface_property sys_rst EXPORT_OF sys_clk.clk_in_reset
-set_instance_parameter_value sys_clk {clockFrequency} {100000000.0}
+set_instance_parameter_value sys_clk {clockFrequency} {50000000.0}
 set_instance_parameter_value sys_clk {clockFrequencyKnown} {1}
 set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
@@ -27,8 +36,8 @@ set_instance_parameter_value sys_pll {gui_number_of_clocks} {3}
 set_instance_parameter_value sys_pll {gui_output_clock_frequency0} {125.0}
 set_instance_parameter_value sys_pll {gui_output_clock_frequency1} {25.0}
 set_instance_parameter_value sys_pll {gui_output_clock_frequency2} {2.5}
-add_connection sys_clk.clk sys_pll.refclk
-add_connection sys_clk.clk_reset sys_pll.reset
+add_connection sys_ref_clk.clk sys_pll.refclk
+add_connection sys_ref_clk.clk_reset sys_pll.reset
 add_interface sys_125m_clk clock source
 add_interface sys_25m_clk clock source
 add_interface sys_2m5_clk clock source
@@ -67,6 +76,7 @@ set_instance_parameter_value sys_ddr3_cntrl {SPEED_GRADE} {3}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_CLK_FREQ} {400.0}
 set_instance_parameter_value sys_ddr3_cntrl {REF_CLK_FREQ} {100.0}
 set_instance_parameter_value sys_ddr3_cntrl {RATE} {Quarter}
+set_instance_parameter_value sys_ddr3_cntrl {EXPORT_AFI_HALF_CLK} {1}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_VENDOR} {Micron}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_CLK_FREQ_MAX} {666.667}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_DQ_WIDTH} {64}
@@ -100,14 +110,23 @@ set_instance_parameter_value sys_ddr3_cntrl {MEM_TFAW_NS} {30.0}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_TRRD_NS} {6.0}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_TRTP_NS} {7.5}
 set_instance_parameter_value sys_ddr3_cntrl {AVL_MAX_SIZE} {256}
-add_connection sys_clk.clk sys_ddr3_cntrl.pll_ref_clk
-add_connection sys_clk.clk_reset sys_ddr3_cntrl.global_reset
-add_connection sys_clk.clk_reset sys_ddr3_cntrl.soft_reset
+add_connection sys_ref_clk.clk sys_ddr3_cntrl.pll_ref_clk
+add_connection sys_ref_clk.clk_reset sys_ddr3_cntrl.global_reset
+add_connection sys_ref_clk.clk_reset sys_ddr3_cntrl.soft_reset
 add_interface sys_ddr3_cntrl_mem conduit end
 set_interface_property sys_ddr3_cntrl_mem EXPORT_OF sys_ddr3_cntrl.memory
 add_interface sys_ddr3_cntrl_oct conduit end
 set_interface_property sys_ddr3_cntrl_oct EXPORT_OF sys_ddr3_cntrl.oct
 
+# cpu clock
+
+add_instance sys_cpu_clk clock_source 16.0
+add_connection sys_ddr3_cntrl.afi_half_clk sys_cpu_clk.clk_in
+add_connection sys_ddr3_cntrl.afi_reset sys_cpu_clk.clk_in_reset
+add_interface sys_cpu_clk clock source
+set_interface_property sys_cpu_clk EXPORT_OF sys_cpu_clk.clk
+add_interface sys_cpu_reset reset source
+set_interface_property sys_cpu_reset EXPORT_OF sys_cpu_clk.clk_reset
 
 # cpu
 
