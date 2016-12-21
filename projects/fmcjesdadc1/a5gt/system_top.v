@@ -105,6 +105,9 @@ module system_top (
   wire              sys_125m_clk;
   wire              sys_25m_clk;
   wire              sys_2m5_clk;
+  wire              sys_cpu_clk;
+  wire              sys_cpu_mem_resetn;
+  wire              sys_cpu_resetn;
   wire              sys_pll_locked;
   wire              eth_tx_clk;
   wire              eth_tx_mode_1g;
@@ -117,6 +120,10 @@ module system_top (
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [  7:0]   spi_csn_s;
+
+  // sys reset
+
+  assign sys_cpu_resetn = sys_resetn & sys_cpu_mem_resetn & sys_pll_locked;
 
   // ethernet transmit clock
 
@@ -194,7 +201,9 @@ module system_top (
     .sys_125m_clk_clk (sys_125m_clk),
     .sys_25m_clk_clk (sys_25m_clk),
     .sys_2m5_clk_clk (sys_2m5_clk),
-    .sys_clk_clk (sys_clk),
+    .sys_clk_clk (sys_cpu_clk),
+    .sys_cpu_clk_clk (sys_cpu_clk),
+    .sys_cpu_reset_reset_n (sys_cpu_mem_resetn),
     .sys_ddr3_cntrl_mem_mem_a (ddr3_a),
     .sys_ddr3_cntrl_mem_mem_ba (ddr3_ba),
     .sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
@@ -230,7 +239,9 @@ module system_top (
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
     .sys_pll_locked_export (sys_pll_locked),
-    .sys_rst_reset_n (sys_resetn),
+    .sys_ref_clk_clk (sys_clk),
+    .sys_ref_rst_reset_n (sys_resetn),
+    .sys_rst_reset_n (sys_cpu_resetn),
     .sys_spi_MISO (spi_miso),
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
