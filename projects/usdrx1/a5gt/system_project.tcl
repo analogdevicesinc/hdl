@@ -167,5 +167,11 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to dac_data[11]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dac_data[12]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dac_data[13]
 
+# disable auto-pack
+
+set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
+set_global_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF
+set_global_assignment -name QII_AUTO_PACKED_REGISTERS OFF
+
 execute_flow -compile
 
