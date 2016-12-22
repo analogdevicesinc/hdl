@@ -11,17 +11,17 @@ set_clock_groups -exclusive \
   -group [get_clocks {i_system_bd|sys_pll|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] \
   -group [get_clocks {i_system_bd|sys_pll|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]
 
-set_false_path -to [get_registers {rx_sysref_m1}]
+set_false_path -to [get_registers *sysref_en_m1*]
 
-set_false_path -from [get_clocks {sys_clk}] -through [get_nets *altera_jesd204_rx_ctl_inst*]\
+set_false_path -from [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll6~PLL_OUTPUT_COUNTER|divclk}] -through [get_nets *altera_jesd204_rx_ctl_inst*] \
   -to [get_clocks {i_system_bd|avl_ad9250_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}]
 
-set_false_path -from [get_clocks {i_system_bd|avl_ad9250_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}]\
-  -through [get_nets *altera_jesd204_rx_ctl_inst*] -to [get_clocks {sys_clk}]
+set_false_path -from [get_clocks {i_system_bd|avl_ad9250_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}] \
+  -through [get_nets *altera_jesd204_rx_ctl_inst*] -to [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll6~PLL_OUTPUT_COUNTER|divclk}]
 
-set_false_path -from [get_clocks {sys_clk}] -through [get_nets *altera_jesd204_rx_csr_inst*]\
+set_false_path -from [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll6~PLL_OUTPUT_COUNTER|divclk}] -through [get_nets *altera_jesd204_rx_csr_inst*] \
   -to [get_clocks {i_system_bd|avl_ad9250_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}]
 
-set_false_path -from [get_clocks {i_system_bd|avl_ad9250_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}]\
-  -through [get_nets *altera_jesd204_rx_csr_inst*] -to [get_clocks {sys_clk}]
+set_false_path -from [get_clocks {i_system_bd|avl_ad9250_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}] \
+  -through [get_nets *altera_jesd204_rx_csr_inst*] -to [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll6~PLL_OUTPUT_COUNTER|divclk}]
 

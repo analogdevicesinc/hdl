@@ -61,8 +61,9 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_sdio
 
 # disable auto-pack
 
-set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to * -entity ad_sysref_gen
-set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity ad_sysref_gen
+set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
+set_global_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF
+set_global_assignment -name QII_AUTO_PACKED_REGISTERS OFF
 
 execute_flow -compile
 
