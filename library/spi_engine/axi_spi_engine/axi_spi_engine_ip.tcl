@@ -62,4 +62,28 @@ foreach port {"up_clk" "up_rstn" "up_wreq" "up_waddr" "up_wdata" "up_rreq" "up_r
 adi_set_bus_dependency "spi_engine_offload_ctrl0" "spi_engine_offload_ctrl0" \
 	"(spirit:decode(id('MODELPARAM_VALUE.NUM_OFFLOAD')) > 0)"
 
+adi_set_bus_dependency "s_axi" "s_axi" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 0)"
+
+adi_set_ports_dependency "up_clk" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+adi_set_ports_dependency "up_rstn" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+adi_set_ports_dependency "up_wreq" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+adi_set_ports_dependency "up_waddr" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+adi_set_ports_dependency "up_wdata" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+adi_set_ports_dependency "up_rreq" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+adi_set_ports_dependency "up_raddr" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+adi_set_ports_dependency "up_wack" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+adi_set_ports_dependency "up_rdata" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+adi_set_ports_dependency "up_rack" \
+      "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
+
 ipx::save_core [ipx::current_core]
