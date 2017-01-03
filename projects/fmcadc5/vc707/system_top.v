@@ -138,9 +138,6 @@ module system_top (
 
   reg     [  4:0]   gpio_o_60_56_d = 'd0;
   reg               gpio_dld = 'd0;
-  reg               rx_sysref_m1 = 'd0;
-  reg               rx_sysref_m2 = 'd0;
-  reg               rx_sysref_int = 'd0;
 
   // internal signals
 
@@ -160,6 +157,7 @@ module system_top (
   wire              rx_sync_1;
   wire              up_rstn;
   wire              up_clk;
+  wire              rx_sysref_int;
 
   // spi
 
@@ -194,11 +192,10 @@ module system_top (
 
   // sysref internal
 
-  always @(posedge rx_clk) begin
-    rx_sysref_m1 <= gpio_o[32];
-    rx_sysref_m2 <= rx_sysref_m1;
-    rx_sysref_int <= rx_sysref_m1 & ~rx_sysref_m2;
-  end
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[32]),
+    .sysref_out (rx_sysref_int));
 
   // instantiations
 
