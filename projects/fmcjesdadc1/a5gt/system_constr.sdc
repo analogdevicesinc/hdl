@@ -25,3 +25,6 @@ set_false_path -from [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll6~PLL_OUTPU
 set_false_path -from [get_clocks {i_system_bd|avl_ad9250_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}] \
   -through [get_nets *altera_jesd204_rx_csr_inst*] -to [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll6~PLL_OUTPUT_COUNTER|divclk}]
 
+set_max_delay -from [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll8~PLL_OUTPUT_COUNTER|divclk}] \
+  -to [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll4~PLL_OUTPUT_COUNTER|divclk}] 2
+
