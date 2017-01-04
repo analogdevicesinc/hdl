@@ -46,5 +46,11 @@ adi_add_bus_clock "clk" "spi" "resetn"
 foreach port {"sdi_1" "sdi_2" "sdi_3"} {
   set_property DRIVER_VALUE "0" [ipx::get_ports $port]
 }
+adi_set_ports_dependency "sdi_1" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 1)"
+adi_set_ports_dependency "sdi_2" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 2)"
+adi_set_ports_dependency "sdi_3" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 3)"
 
 ipx::save_core [ipx::current_core]
