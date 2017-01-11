@@ -34,8 +34,8 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// Divides the input clock to 4 if clk_sel is 0 or 2 if clk_sel is 1 using
-// BUFR and BUFGMUX primitives
+// Divides the input clock to 4 if clk_sel is 0 or 2 if clk_sel is 1
+// IP uses BUFR and BUFGMUX primitives
 // ***************************************************************************
 // ***************************************************************************
 
