@@ -72,11 +72,11 @@ module util_pulse_gen #(
     if (rstn == 1'b0) begin
       pulse_period_cnt <= 32'h0;
     end else begin
-      pulse_period_cnt <= (pulse_period_cnt < pulse_period) ? (pulse_period_cnt + 1) : 32'b0;
+      pulse_period_cnt <= (pulse_period_cnt < pulse_period_d) ? (pulse_period_cnt + 1) : 32'b0;
     end
   end
 
-  assign  end_of_period_s = (pulse_period_cnt == (pulse_period - 1)) ? 1'b1 : 1'b0;
+  assign  end_of_period_s = (pulse_period_cnt == (pulse_period_d - 1)) ? 1'b1 : 1'b0;
 
   // generate pulse with a specified width
 
