@@ -16,15 +16,19 @@ current_bd_instance /spi
   set axi_spi_engine [create_bd_cell -type ip -vlnv analog.com:user:axi_spi_engine:1.0 axi]
   set spi_engine_offload [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_offload:1.0 offload]
   set spi_engine_interconnect [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_interconnect:1.0 interconnect]
-  set util_sigma_delta_spi [create_bd_cell -type ip -vlnv analog.com:user:util_sigma_delta_spi:1.0 util_sigma_delta_spi]
+  set spi_engine_trigger_gen [create_bd_cell -type ip -vlnv analog.com:user:util_pulse_gen:1.0 trigger_gen]
 
   set_property -dict [list CONFIG.DATA_WIDTH 16] $spi_engine_offload
   set_property -dict [list CONFIG.DATA_WIDTH 16] $axi_spi_engine
   set_property -dict [list CONFIG.DATA_WIDTH 16] $spi_engine_interconnect
   set_property -dict [list CONFIG.DATA_WIDTH 16] $spi_engine
 
+  ## to setup the sample rate of the system change the PULSE_PERIOD value
+  ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
+  set_property -dict [list CONFIG.PULSE_PERIOD 100] $spi_engine_trigger_gen
+  set_property -dict [list CONFIG.PULSE_WIDTH 1] $spi_engine_trigger_gen
+
   set_property -dict [list CONFIG.NUM_OF_CS 1] $spi_engine
-  set_property -dict [list CONFIG.NUM_OF_CS 1] $util_sigma_delta_spi
   set_property -dict [list CONFIG.NUM_OFFLOAD 1] $axi_spi_engine
 
   ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
@@ -33,11 +37,7 @@ current_bd_instance /spi
   ad_connect interconnect/m_ctrl execution/ctrl
   ad_connect offload/offload_sdi M_AXIS_SAMPLE
 
-  ad_connect util_sigma_delta_spi/data_ready offload/trigger
-
-  ad_connect execution/active util_sigma_delta_spi/spi_active
-  ad_connect execution/spi util_sigma_delta_spi/s_spi
-  ad_connect util_sigma_delta_spi/m_spi m_spi
+  ad_connect execution/spi m_spi
 
   ad_connect clk offload/spi_clk
   ad_connect clk offload/ctrl_clk
@@ -45,12 +45,16 @@ current_bd_instance /spi
   ad_connect clk axi/s_axi_aclk
   ad_connect clk axi/spi_clk
   ad_connect clk interconnect/clk
-  ad_connect clk util_sigma_delta_spi/clk
+  ad_connect clk trigger_gen/clk
 
   ad_connect axi/spi_resetn offload/spi_resetn
   ad_connect axi/spi_resetn execution/resetn
   ad_connect axi/spi_resetn interconnect/resetn
-  ad_connect axi/spi_resetn util_sigma_delta_spi/resetn
+  ad_connect axi/spi_resetn trigger_gen/rstn
+  ad_connect trigger_gen/pulse_period_en GND
+  ad_connect trigger_gen/pulse_period GND
+
+  ad_connect trigger_gen/pulse offload/trigger
 
   ad_connect resetn axi/s_axi_aresetn
   ad_connect irq axi/irq
