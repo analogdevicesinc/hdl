@@ -120,11 +120,10 @@ proc adi_ip_properties {ip_name} {
     -of_objects [ipx::current_core]]]
 }
 
-proc adi_ip_infer_interfaces {ip_name} {
+proc adi_ip_infer_streaming_interfaces {ip_name} {
 
-  ipx::infer_bus_interfaces xilinx.com:interface:clock_rtl:1.0 [ipx::current_core]
-  ipx::infer_bus_interfaces xilinx.com:interface:reset_rtl:1.0 [ipx::current_core]
   ipx::infer_bus_interfaces xilinx.com:interface:axis_rtl:1.0 [ipx::current_core]
+
 }
 
 proc adi_ip_properties_lite {ip_name} {

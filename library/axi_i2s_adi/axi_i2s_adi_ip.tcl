@@ -20,7 +20,7 @@ adi_ip_files axi_i2s_adi [list \
 ]
 
 adi_ip_properties axi_i2s_adi
-adi_ip_infer_interfaces axi_i2s_adi
+adi_ip_infer_streaming_interfaces axi_i2s_adi
 adi_ip_constraints axi_spdif_tx axi_i2s_adi_constr.xdc late
 
 adi_add_bus "DMA_ACK_RX" "slave" \

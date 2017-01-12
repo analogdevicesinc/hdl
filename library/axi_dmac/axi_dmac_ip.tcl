@@ -27,7 +27,7 @@ adi_ip_files axi_dmac [list \
   "bd/bd.tcl" ]
 
 adi_ip_properties axi_dmac
-adi_ip_infer_interfaces axi_dmac
+adi_ip_infer_streaming_interfaces axi_dmac
 adi_ip_ttcl axi_dmac "axi_dmac_constr.ttcl"
 adi_ip_bd axi_dmac "bd/bd.tcl"
 
