@@ -182,7 +182,7 @@ module system_top (
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
 
-  ad_sysref_gen i_sysref (
+  ad_sysref_gen #(.SYSREF_PERIOD(64)) i_sysref (
     .core_clk (rx_clk),
     .sysref_en (gpio_o[32]),
     .sysref_out (rx_sysref));
