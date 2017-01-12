@@ -63,7 +63,6 @@ clean:
 	make -C util_fir_dec clean
 	make -C util_fir_int clean
 	make -C util_gmii_to_rgmii clean
-	make -C util_gtlb clean
 	make -C util_i2c_mixer clean
 	make -C util_jesd_gt clean
 	make -C util_mfifo clean
