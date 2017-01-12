@@ -39,7 +39,7 @@ set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff20400020}] $util_fmcadc2
 # reference clocks & resets
 
 create_bd_port -dir I rx_ref_clk_0
-create_bd_port -dir O rx_clk
+create_bd_port -dir O rx_core_clk
 
 ad_xcvrpll  rx_ref_clk_0 util_fmcadc2_xcvr/qpll_ref_clk_*
 ad_xcvrpll  rx_ref_clk_0 util_fmcadc2_xcvr/cpll_ref_clk_*
@@ -47,19 +47,19 @@ ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcadc2_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcadc2_xcvr/up_cpll_rst_*
 ad_connect  sys_cpu_resetn util_fmcadc2_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_fmcadc2_xcvr/up_clk
-ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 rx_clk
 
 # connections (adc)
 
 ad_xcvrcon  util_fmcadc2_xcvr axi_ad9625_xcvr axi_ad9625_jesd
 ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 axi_ad9625_core/rx_clk
+ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 rx_core_clk
 ad_connect  axi_ad9625_jesd/rx_tdata axi_ad9625_core/rx_data
 ad_connect  axi_ad9625_jesd/rx_start_of_frame axi_ad9625_core/rx_sof
 ad_connect  sys_cpu_clk axi_ad9625_fifo/dma_clk
 ad_connect  sys_cpu_clk axi_ad9625_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
 ad_connect  axi_ad9625_core/adc_clk axi_ad9625_fifo/adc_clk
-ad_connect  axi_ad9625_fifo/adc_rst axi_ad9625_core/adc_rst
+ad_connect  axi_ad9625_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
 ad_connect  axi_ad9625_core/adc_enable axi_ad9625_fifo/adc_wr
 ad_connect  axi_ad9625_core/adc_data axi_ad9625_fifo/adc_wdata
 ad_connect  axi_ad9625_core/adc_dovf axi_ad9625_fifo/adc_wovf

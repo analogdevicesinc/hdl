@@ -73,7 +73,7 @@ module axi_adxcvr_up #(
   reg                           up_wreq_d = 'd0;
   reg     [31:0]                up_scratch = 'd0;
   reg                           up_resetn = 'd0;
-  reg     [ 3:0]                up_rst_cnt = 'd0;
+  reg     [ 3:0]                up_rst_cnt = 'd8;
   reg                           up_status_int = 'd0;
   reg                           up_rreq_d = 'd0;
   reg     [31:0]                up_rdata_d = 'd0;

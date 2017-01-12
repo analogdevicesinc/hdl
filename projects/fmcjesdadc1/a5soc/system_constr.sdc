@@ -6,7 +6,7 @@ create_clock -period "10.000 ns" -name sys_dma_clk [get_pins {i_system_bd|sys_hp
 derive_pll_clocks
 derive_clock_uncertainty
 
-set_false_path -to [get_registers {rx_sysref_m1}]
+set_false_path -to [get_registers *sysref_en_m1*]
 
 set_false_path -from [get_clocks {sys_cpu_clk}] -through [get_nets *altera_jesd204_rx_ctl_inst*]\
   -to [get_clocks {i_system_bd|avl_ad9250_xcvr|alt_core_pll|altera_pll_i|arriav_pll|counter[0].output_counter|divclk}]

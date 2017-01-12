@@ -6,6 +6,7 @@ set_instance_parameter_value avl_usdrx1_xcvr {ID} {1}
 set_instance_parameter_value avl_usdrx1_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_usdrx1_xcvr {PCS_CONFIG} {JESD_PCS_CFG1}
 set_instance_parameter_value avl_usdrx1_xcvr {LANE_RATE} {3200.0}
+set_instance_parameter_value avl_usdrx1_xcvr {SYSCLK_FREQUENCY} {50.0}
 set_instance_parameter_value avl_usdrx1_xcvr {PLLCLK_FREQUENCY} {1600.0}
 set_instance_parameter_value avl_usdrx1_xcvr {REFCLK_FREQUENCY} {80.0}
 set_instance_parameter_value avl_usdrx1_xcvr {CORECLK_FREQUENCY} {80.0}

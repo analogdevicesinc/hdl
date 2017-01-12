@@ -532,10 +532,18 @@ proc ad_cpu_interconnect {p_address p_name} {
   set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
   set p_index 0
   foreach p_seg_name $p_seg {
-    if {($p_index == 0) && ($sys_zynq < 2)} {
+    if {$p_index == 0} {
       set p_seg_range [get_property range $p_seg_name]
       if {$p_seg_range < 0x1000} {
         set p_seg_range 0x1000
+      }
+      if {$sys_zynq == 2} {
+        if {($p_address >= 0x40000000) && ($p_address <= 0x4fffffff)} {
+          set p_address [expr ($p_address + 0x40000000)]
+        }
+        if {($p_address >= 0x70000000) && ($p_address <= 0x7fffffff)} {
+          set p_address [expr ($p_address + 0x20000000)]
+        }
       }
       create_bd_addr_seg -range $p_seg_range \
         -offset $p_address $sys_addr_cntrl_space \

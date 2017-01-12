@@ -221,6 +221,10 @@
   ad_connect current_monitor_m1_pack/adc_data current_monitor_m1_dma/fifo_wr_din
   ad_connect current_monitor_m1_pack/adc_valid current_monitor_m1_dma/fifo_wr_en
 
+  ad_connect current_monitor_m1_pack/adc_enable_3 GND
+  ad_connect current_monitor_m1_pack/adc_valid_3  GND
+  ad_connect current_monitor_m1_pack/adc_data_3   GND
+
     # motor 2
   ad_connect  sys_cpu_clk current_monitor_m2/ref_clk
 
@@ -246,6 +250,10 @@
   ad_connect current_monitor_m2_pack/adc_valid    current_monitor_m2_dma/fifo_wr_en
   ad_connect current_monitor_m2_pack/adc_data     current_monitor_m2_dma/fifo_wr_din
 
+  ad_connect current_monitor_m2_pack/adc_enable_3 GND
+  ad_connect current_monitor_m2_pack/adc_valid_3  GND
+  ad_connect current_monitor_m2_pack/adc_data_3   GND
+
   #controller
     # motor 1
   ad_connect sys_cpu_clk controller_m1/ref_clk
@@ -261,6 +269,13 @@
 
   ad_connect controller_m1/sensors_o          speed_detector_m1/hall_bemf_i
   ad_connect controller_m1/position_i         speed_detector_m1/position_o
+
+  ad_connect controller_m1/pwm_a_i GND
+  ad_connect controller_m1/pwm_b_i GND
+  ad_connect controller_m1/pwm_c_i GND
+  ad_connect controller_m2/pwm_a_i GND
+  ad_connect controller_m2/pwm_b_i GND
+  ad_connect controller_m2/pwm_c_i GND
 
     # motor 2
   ad_connect sys_cpu_clk controller_m2/ref_clk

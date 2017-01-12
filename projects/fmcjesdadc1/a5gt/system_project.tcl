@@ -7,6 +7,7 @@ project_new fmcjesdadc1_a5gt -overwrite
 source "../../common/a5gt/a5gt_system_assign.tcl"
 
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
+set_global_assignment -name VERILOG_FILE ../../../library/common/ad_sysref_gen.v
 set_global_assignment -name VERILOG_FILE system_top.v
 set_global_assignment -name QSYS_FILE system_bd.qsys
 
@@ -60,8 +61,9 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_sdio
 
 # disable auto-pack
 
-set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_cntrl
-set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_status
+set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
+set_global_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF
+set_global_assignment -name QII_AUTO_PACKED_REGISTERS OFF
 
 execute_flow -compile
 

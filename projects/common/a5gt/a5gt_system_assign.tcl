@@ -659,42 +659,6 @@ set_instance_assignment -name MEM_INTERFACE_DELAY_CHAIN_CONFIG FLEXIBLE_TIMING -
 set_instance_assignment -name MEM_INTERFACE_DELAY_CHAIN_CONFIG FLEXIBLE_TIMING -to ddr3_dq[30] 
 set_instance_assignment -name MEM_INTERFACE_DELAY_CHAIN_CONFIG FLEXIBLE_TIMING -to ddr3_dq[31] 
 
-set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to i_system_bd|sys_ddr3_cntrl 
-
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_addr_cmd_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_avl_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_config_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_afi_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_hr_clk 
-
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[0].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[1].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[2].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[3].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[4].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[5].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[6].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[7].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[2] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[3] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[4] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[5] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[6] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[7] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[0] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[2] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[3] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[4] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[5] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[6] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[7] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|ureset|phy_reset_mem_stable_n 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|ureset|phy_reset_n 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n 
-
 # ethernet interface
 
 set_location_assignment PIN_A6 -to eth_rx_clk
@@ -806,6 +770,9 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[7]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[8]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[9]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[10]
+
+set_instance_assignment -name OPTIMIZATION_TECHNIQUE SPEED -to *
+set_instance_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON -to *
 
 # source defaults
 

@@ -28,8 +28,22 @@ puts $QFILE "set mmu_enabled $mmu_enabled"
 puts $QFILE "set ad_hdl_dir $ad_hdl_dir"
 puts $QFILE "set ad_phdl_dir $ad_phdl_dir"
 puts $QFILE "source system_qsys.tcl"
+puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.clockCrossingAdapter} {FIFO}"
+puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.maxAdditionalLatency} {2}"
+puts $QFILE "save_system {system_bd.qsys}"
 close $QFILE
 
 exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
   --script=system_qsys_script.tcl
+
+# remove altshift_taps
+
+set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to * -entity up_xfer_cntrl
+set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to * -entity up_xfer_status
+set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to * -entity up_clock_mon
+set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to * -entity ad_rst
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_cntrl
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_xfer_status
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity up_clock_mon
+set_instance_assignment -name QII_AUTO_PACKED_REGISTERS OFF -to * -entity ad_rst
 

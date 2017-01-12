@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014(c) Analog Devices, Inc.
+// Copyright 2016(c) Analog Devices, Inc.
 //
 // All rights reserved.
 //
@@ -34,45 +34,56 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// Divides the input clock to 4 if clk_sel is 0 or 2 if clk_sel is 1
-// IP uses BUFR and BUFGMUX primitives
 // ***************************************************************************
 // ***************************************************************************
 
 `timescale 1ns/100ps
 
-module util_clkdiv (
-  input   clk,
-  input   clk_sel,
-  output  clk_out
- );
+module ad_sysref_gen (
 
-  wire clk_div_2_s;
-  wire clk_div_4_s;
+    input       core_clk,
 
-  BUFR #(
-    .BUFR_DIVIDE("2"),
-    .SIM_DEVICE("7SERIES")
-  ) clk_divide_2 (
-    .I(clk),
-    .CE(1),
-    .CLR(0),
-    .O(clk_div_2_s));
+    input       sysref_en,
+    output reg  sysref_out
+);
 
-  BUFR #(
-    .BUFR_DIVIDE("4"),
-    .SIM_DEVICE("7SERIES")
-  ) clk_divide_4 (
-    .I(clk),
-    .CE(1),
-    .CLR(0),
-    .O(clk_div_4_s));
+  // SYSREF period is multiple of core_clk, and has a duty cycle of 50%
+  // NOTE: if SYSREF always on (this is a JESD204 IP configuration),
+  // the period must be a correct multiple of the multiframe period
+  parameter    SYSREF_PERIOD = 128;
 
-  BUFGMUX i_div_clk_gbuf (
-    .I0(clk_div_4_s), // 1-bit input: Clock input (S=0)
-    .I1(clk_div_2_s), // 1-bit input: Clock input (S=1)
-    .S(clk_sel),
-    .O (clk_out));
+  localparam   SYSREF_HALFPERIOD = SYSREF_PERIOD/2 - 1;
 
-endmodule  // util_clkdiv
+  reg  [ 7:0]   counter;
+  reg           sysref_en_m1;
+  reg           sysref_en_m2;
+  reg           sysref_en_int;
 
+  // bring the enable signal to JESD core clock domain
+  always @(posedge core_clk) begin
+    sysref_en_m1 <= sysref_en;
+    sysref_en_m2 <= sysref_en_m1;
+    sysref_en_int <= sysref_en_m2;
+  end
+
+  // free running counter for periodic SYSREF generation
+  always @(posedge core_clk) begin
+    if (sysref_en_int) begin
+      counter <= (counter < SYSREF_HALFPERIOD) ? counter + 1 : 0;
+    end else begin
+      counter <= 0;
+    end
+  end
+
+  // generate SYSREF
+  always @(posedge core_clk) begin
+    if (sysref_en_int) begin
+      if (counter == SYSREF_HALFPERIOD) begin
+        sysref_out <= ~sysref_out;
+      end
+    end else begin
+      sysref_out <= 1'b0;
+    end
+  end
+
+endmodule

@@ -74,10 +74,13 @@ ad_xcvrpll  axi_ad9250_xcvr/up_pll_rst util_fmcjesdadc1_xcvr/up_cpll_rst_*
 ad_connect  sys_cpu_resetn util_fmcjesdadc1_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_fmcjesdadc1_xcvr/up_clk
 
+create_bd_port -dir O rx_core_clk
+
 # connections (adc)
 
 ad_xcvrcon  util_fmcjesdadc1_xcvr axi_ad9250_xcvr axi_ad9250_jesd
 ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_0_core/rx_clk
+ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 rx_core_clk
 ad_connect  axi_ad9250_jesd/rx_start_of_frame axi_ad9250_0_core/rx_sof
 ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_1_core/rx_clk
 ad_connect  axi_ad9250_jesd/rx_start_of_frame axi_ad9250_1_core/rx_sof

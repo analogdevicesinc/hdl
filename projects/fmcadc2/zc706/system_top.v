@@ -195,11 +195,6 @@ module system_top (
   output          spi_adf4355_le_or_clk;
   inout           spi_adf4355_ce_or_sdio;
 
-  // internal registers
-
-  reg             rx_sysref = 'd0;
-  reg             rx_sysref_d = 'd0;
-
   // internal signals
 
   wire    [63:0]  gpio_i;
@@ -216,13 +211,7 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sync;
   wire            rx_clk;
-
-  // sysref internal
-
-  always @(posedge rx_clk) begin
-    rx_sysref_d <= gpio_o[34];
-    rx_sysref <= rx_sysref_d;
-  end
+  wire            rx_sysref;
 
   // instantiations
 
@@ -244,8 +233,6 @@ module system_top (
     .OB (rx_sync_n));
 
   // spi
-
-  assign gpio_i[37:36] = gpio_o[37:36];
 
   fmcadc2_spi i_fmcadc2_spi (
     .spi_adf4355 (gpio_o[36]),
@@ -273,6 +260,11 @@ module system_top (
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
+
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[34]),
+    .sysref_out (rx_sysref));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -353,6 +345,7 @@ module system_top (
     .rx_ref_clk_0 (rx_ref_clk),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (rx_sysref),
+    .rx_core_clk (rx_clk),
     .spdif (spdif),
     .spi0_clk_i (spi0_clk),
     .spi0_clk_o (spi0_clk),
@@ -374,8 +367,7 @@ module system_top (
     .spi1_sdo_o (spi1_mosi),
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
-    .sys_rst (sys_rst),
-    .rx_clk (rx_clk));
+    .sys_rst (sys_rst));
 
 endmodule
 
