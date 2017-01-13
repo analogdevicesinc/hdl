@@ -13,4 +13,7 @@ adi_ip_constraints util_clkdiv [list \
 
 set_property driver_value 0 [ipx::get_ports clk_sel -of_objects [ipx::current_core]]
 
+set_property value_validation_type list [ipx::get_user_parameters C_SIM_DEVICE -of_objects [ipx::current_core]]
+set_property value_validation_list {7SERIES ULTRASCALE} [ipx::get_user_parameters C_SIM_DEVICE -of_objects [ipx::current_core]]
+
 ipx::save_core [ipx::current_core]

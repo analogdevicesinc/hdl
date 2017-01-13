@@ -35,7 +35,8 @@
 // ***************************************************************************
 // ***************************************************************************
 // Divides the input clock to 4 if clk_sel is 0 or 2 if clk_sel is 1
-// IP uses BUFR and BUFGMUX primitives
+// IP uses BUFR and BUFGMUX_CTRL primitive
+// IP provides a glitch free output clock
 // ***************************************************************************
 // ***************************************************************************
 
@@ -47,8 +48,12 @@ module util_clkdiv (
   output  clk_out
  );
 
+parameter C_SIM_DEVICE = "7SERIES";
+
   wire clk_div_2_s;
   wire clk_div_4_s;
+
+generate if (C_SIM_DEVICE == "7SERIES") begin
 
   BUFR #(
     .BUFR_DIVIDE("2"),
@@ -68,7 +73,27 @@ module util_clkdiv (
     .CLR(0),
     .O(clk_div_4_s));
 
-  BUFGMUX i_div_clk_gbuf (
+end else if (C_SIM_DEVICE == "ULTRASCALE") begin
+
+  BUFGCE_DIV #(
+    .BUFGCE_DIVIDE("2")
+  ) clk_divide_2 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_2_s));
+
+  BUFGCE_DIV #(
+    .BUFGCE_DIVIDE("4")
+  ) clk_divide_4 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_4_s));
+
+end endgenerate
+
+  BUFGMUX_CTRL i_div_clk_gbuf (
     .I0(clk_div_4_s), // 1-bit input: Clock input (S=0)
     .I1(clk_div_2_s), // 1-bit input: Clock input (S=1)
     .S(clk_sel),
