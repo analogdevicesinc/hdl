@@ -75,6 +75,12 @@ set_property -dict [list CONFIG.DIN_DATA_WIDTH {16}] $dac_fifo
 set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16}] $dac_fifo
 set_property -dict [list CONFIG.DIN_ADDRESS_WIDTH {4}] $dac_fifo
 
+set clkdiv_sel_logic [create_bd_cell -type ip -vlnv xilinx.com:ip:util_reduced_logic:2.0 clkdiv_sel_logic]
+set_property -dict [list CONFIG.C_SIZE {2}] $clkdiv_sel_logic
+
+set concat_logic [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_logic]
+set_property -dict [list CONFIG.NUM_PORTS {2}] $concat_logic
+
 # connections
 
 ad_connect sys_200m_clk axi_ad9361/delay_clk
@@ -128,7 +134,12 @@ ad_connect util_ad9361_adc_pack/adc_data axi_ad9361_adc_dma/fifo_wr_din
 ad_connect axi_ad9361_adc_dma/fifo_wr_overflow util_ad9361_adc_fifo/dout_ovf
 ad_connect util_ad9361_adc_fifo/din_ovf axi_ad9361/adc_dovf
 ad_connect axi_ad9361_clk clkdiv/clk
-ad_connect axi_ad9361/adc_r1_mode clkdiv/clk_sel
+
+ad_connect axi_ad9361/adc_r1_mode concat_logic/In0
+ad_connect axi_ad9361/dac_r1_mode concat_logic/In1
+ad_connect concat_logic/dout clkdiv_sel_logic/Op1
+ad_connect clkdiv/clk_sel clkdiv_sel_logic/Res
+
 ad_connect clkdiv/clk_out axi_ad9361_adc_dma/fifo_wr_clk
 ad_connect clkdiv/clk_out util_ad9361_adc_fifo/dout_clk
 ad_connect clkdiv/clk_out util_ad9361_adc_pack/adc_clk
