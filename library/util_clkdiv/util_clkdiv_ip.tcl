@@ -17,9 +17,9 @@ set_property value_validation_type list [ipx::get_user_parameters SIM_DEVICE -of
 set_property value_validation_list {7SERIES ULTRASCALE} [ipx::get_user_parameters SIM_DEVICE -of_objects [ipx::current_core]]
 
 set_property value_validation_type list [ipx::get_user_parameters SEL_0_DIV -of_objects [ipx::current_core]]
-set_property value_validation_list {BYPASS 0 1 2 3 4 5 6 7 8} [ipx::get_user_parameters SEL_0_DIV -of_objects [ipx::current_core]]
+set_property value_validation_list {1 2 3 4 5 6 7 8} [ipx::get_user_parameters SEL_0_DIV -of_objects [ipx::current_core]]
 
 set_property value_validation_type list [ipx::get_user_parameters SEL_1_DIV -of_objects [ipx::current_core]]
-set_property value_validation_list {BYPASS 0 1 2 3 4 5 6 7 8} [ipx::get_user_parameters SEL_1_DIV -of_objects [ipx::current_core]]
+set_property value_validation_list {1 2 3 4 5 6 7 8} [ipx::get_user_parameters SEL_1_DIV -of_objects [ipx::current_core]]
 
 ipx::save_core [ipx::current_core]
