@@ -264,6 +264,7 @@ always @(posedge clk) begin
         8'h00: up_rdata_ff <= PCORE_VERSION;
         8'h01: up_rdata_ff <= ID;
         8'h02: up_rdata_ff <= up_scratch;
+        8'h03: up_rdata_ff <= DATA_WIDTH;
         8'h10: up_rdata_ff <= up_sw_reset;
         8'h20: up_rdata_ff <= up_irq_mask;
         8'h21: up_rdata_ff <= up_irq_pending;
