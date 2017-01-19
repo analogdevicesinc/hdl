@@ -661,8 +661,8 @@ module axi_adxcvr (
 
   // channel broadcast
 
-  assign up_rstn = axi_aresetn;
-  assign up_clk = axi_clk;
+  assign up_rstn = s_axi_aresetn;
+  assign up_clk = s_axi_aclk;
 
   assign up_cm_sel_0 = up_cm_sel;
   assign up_cm_enb_0 = up_cm_enb;
