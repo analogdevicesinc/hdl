@@ -27,7 +27,7 @@ adi_ip_files axi_dmac [list \
   "bd/bd.tcl" ]
 
 adi_ip_properties axi_dmac
-adi_ip_infer_streaming_interfaces axi_dmac
+adi_ip_infer_mm_interfaces axi_dmac
 adi_ip_ttcl axi_dmac "axi_dmac_constr.ttcl"
 adi_ip_bd axi_dmac "bd/bd.tcl"
 
@@ -103,6 +103,13 @@ set dummy_axi_ports [list \
 foreach p $dummy_axi_ports {
 	adi_set_ports_dependency $p "0"
 }
+
+set_property master_address_space_ref m_dest_axi \
+    [ipx::get_bus_interfaces m_dest_axi \
+    -of_objects [ipx::current_core]]
+set_property master_address_space_ref m_src_axi \
+    [ipx::get_bus_interfaces m_src_axi \
+    -of_objects [ipx::current_core]]
 
 adi_add_bus "fifo_wr" "slave" \
 	"analog.com:interface:fifo_wr_rtl:1.0" \
