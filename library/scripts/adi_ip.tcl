@@ -126,56 +126,65 @@ proc adi_ip_infer_streaming_interfaces {ip_name} {
 
 }
 
+proc adi_ip_infer_mm_interfaces {ip_name} {
+
+  ipx::infer_bus_interfaces xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
+
+}
+
 proc adi_ip_properties_lite {ip_name} {
 
   ipx::package_project -root_dir . \
     -vendor analog.com \
     -library user \
-    -taxonomy /Analog_Devices 
+    -taxonomy /Analog_Devices
 
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
   set_property company_url {www.analog.com} [ipx::current_core]
 
   set_property supported_families {\
-    virtex7       Production
-    qvirtex7      Production
-    kintex7       Production
-    kintex7l      Production
-    qkintex7      Production
-    qkintex7l     Production
-    artix7        Production
-    artix7l       Production
-    aartix7       Production
-    qartix7       Production
-    zynq          Production
-    qzynq         Production
-    azynq         Production
-    virtexu       Production
-    kintexuplus   Production
-    zynquplus     Production
-    kintexu       Production
-    virtex7       Beta
-    qvirtex7      Beta
-    kintex7       Beta
-    kintex7l      Beta
-    qkintex7      Beta
-    qkintex7l     Beta
-    artix7        Beta
-    artix7l       Beta
-    aartix7       Beta
-    qartix7       Beta
-    zynq          Beta 
-    qzynq         Beta
-    azynq         Beta
-    virtexu       Beta
-    virtexuplus   Beta
-    kintexuplus   Beta
-    zynquplus     Beta
+    virtex7       Production \
+    qvirtex7      Production \
+    kintex7       Production \
+    kintex7l      Production \
+    qkintex7      Production \
+    qkintex7l     Production \
+    artix7        Production \
+    artix7l       Production \
+    aartix7       Production \
+    qartix7       Production \
+    zynq          Production \
+    qzynq         Production \
+    azynq         Production \
+    virtexu       Production \
+    kintexuplus   Production \
+    zynquplus     Production \
+    kintexu       Production \
+    virtex7       Beta \
+    qvirtex7      Beta \
+    kintex7       Beta \
+    kintex7l      Beta \
+    qkintex7      Beta \
+    qkintex7l     Beta \
+    artix7        Beta \
+    artix7l       Beta \
+    aartix7       Beta \
+    qartix7       Beta \
+    zynq          Beta \
+    qzynq         Beta \
+    azynq         Beta \
+    virtexu       Beta \
+    virtexuplus   Beta \
+    kintexuplus   Beta \
+    zynquplus     Beta \
     kintexu       Beta}\
   [ipx::current_core]
 
-  ipx::remove_all_bus_interface -quiet [ipx::current_core]
-  ipx::remove_all_address_block -quiet [ipx::get_memory_maps * -of_objects [ipx::current_core]]
+  ipx::remove_all_bus_interface [ipx::current_core]
+  set memory_maps [ipx::get_memory_maps * -of_objects [ipx::current_core]]
+  foreach map $memory_maps {
+    ipx::remove_memory_map [lindex $map 2] [ipx::current_core ]
+  }
 }
 
 proc adi_set_ports_dependency {port_prefix dependency} {
