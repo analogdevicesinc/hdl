@@ -64,7 +64,6 @@ clean:
 	make -C util_fir_int clean
 	make -C util_gmii_to_rgmii clean
 	make -C util_i2c_mixer clean
-	make -C util_jesd_gt clean
 	make -C util_mfifo clean
 	make -C util_pmod_adc clean
 	make -C util_pmod_fmeter clean
@@ -139,7 +138,6 @@ lib:
 	-make -C util_gmii_to_rgmii
 	-make -C util_gtlb
 	-make -C util_i2c_mixer
-	-make -C util_jesd_gt
 	-make -C util_mfifo
 	-make -C util_pmod_adc
 	-make -C util_pmod_fmeter
