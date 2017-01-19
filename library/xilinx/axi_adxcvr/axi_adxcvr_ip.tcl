@@ -12,70 +12,14 @@ adi_ip_files axi_adxcvr [list \
   "axi_adxcvr_mstatus.v" \
   "axi_adxcvr.v" ]
 
-adi_ip_properties_lite axi_adxcvr
-
-ipx::remove_all_bus_interface [ipx::current_core]
+adi_ip_properties axi_adxcvr
+adi_ip_infer_mm_interfaces axi_adxcvr
 
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects [ipx::current_core]]
 
-ipx::infer_bus_interface {\
-  s_axi_awvalid \
-  s_axi_awaddr \
-  s_axi_awprot \
-  s_axi_awready \
-  s_axi_wvalid \
-  s_axi_wdata \
-  s_axi_wstrb \
-  s_axi_wready \
-  s_axi_bvalid \
-  s_axi_bresp \
-  s_axi_bready \
-  s_axi_arvalid \
-  s_axi_araddr \
-  s_axi_arprot \
-  s_axi_arready \
-  s_axi_rvalid \
-  s_axi_rdata \
-  s_axi_rresp \
-  s_axi_rready} \
-xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
-
-ipx::infer_bus_interface {\
-  m_axi_awvalid \
-  m_axi_awaddr \
-  m_axi_awprot \
-  m_axi_awready \
-  m_axi_wvalid \
-  m_axi_wdata \
-  m_axi_wstrb \
-  m_axi_wready \
-  m_axi_bvalid \
-  m_axi_bresp \
-  m_axi_bready \
-  m_axi_arvalid \
-  m_axi_araddr \
-  m_axi_arprot \
-  m_axi_arready \
-  m_axi_rvalid \
-  m_axi_rdata \
-  m_axi_rresp \
-  m_axi_rready} \
-xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
-
-ipx::infer_bus_interface axi_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-ipx::infer_bus_interface axi_aresetn xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
-
-ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces axi_clk \
-  -of_objects [ipx::current_core]]
-set_property value s_axi:m_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
-  -of_objects [ipx::get_bus_interfaces axi_clk \
-  -of_objects [ipx::current_core]]]
-
-ipx::add_memory_map {s_axi} [ipx::current_core]
-set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interfaces s_axi -of_objects [ipx::current_core]]
-ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]
-set_property range {4096} [ipx::get_address_blocks axi_lite \
-  -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
+set_property master_address_space_ref m_axi \
+    [ipx::get_bus_interfaces m_axi \
+    -of_objects [ipx::current_core]]
 
 for {set n 0} {$n < 16} {incr n} {
 

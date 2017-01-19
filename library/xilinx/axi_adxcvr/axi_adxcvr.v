@@ -456,8 +456,8 @@ module axi_adxcvr (
   input   [15:0]  up_ch_rdata_15,
   input           up_ch_ready_15,
 
-  input           axi_clk,
-  input           axi_aresetn,
+  input           s_axi_aclk,
+  input           s_axi_aresetn,
   output          up_status,
   output          up_pll_rst,
 
