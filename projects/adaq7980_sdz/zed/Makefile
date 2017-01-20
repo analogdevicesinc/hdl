@@ -26,7 +26,7 @@ M_DEPS += ../../../library/spi_engine/spi_engine_execution/spi_engine_execution.
 M_DEPS += ../../../library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.xpr
 M_DEPS += ../../../library/spi_engine/spi_engine_offload/spi_engine_offload.xpr
 M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
-M_DEPS += ../../../library/util_sigma_delta_spi/util_sigma_delta_spi.xpr
+M_DEPS += ../../../library/util_pulse_gen/util_pulse_gen.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -65,7 +65,7 @@ clean-all:clean
 	make -C ../../../library/spi_engine/spi_engine_interconnect clean
 	make -C ../../../library/spi_engine/spi_engine_offload clean
 	make -C ../../../library/util_i2c_mixer clean
-	make -C ../../../library/util_sigma_delta_spi clean
+	make -C ../../../library/util_pulse_gen clean
 
 
 adaq7980_sdz_zed.sdk/system_top.hdf: $(M_DEPS)
@@ -84,7 +84,7 @@ lib:
 	make -C ../../../library/spi_engine/spi_engine_interconnect
 	make -C ../../../library/spi_engine/spi_engine_offload
 	make -C ../../../library/util_i2c_mixer
-	make -C ../../../library/util_sigma_delta_spi
+	make -C ../../../library/util_pulse_gen
 
 ####################################################################################
 ####################################################################################
