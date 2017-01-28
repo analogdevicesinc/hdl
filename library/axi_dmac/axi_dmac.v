@@ -420,6 +420,7 @@ begin
     12'h000: up_rdata <= PCORE_VERSION;
     12'h001: up_rdata <= ID;
     12'h002: up_rdata <= up_scratch;
+    12'h003: up_rdata <= 32'h444d4143; // "DMAC"
     12'h020: up_rdata <= up_irq_mask;
     12'h021: up_rdata <= up_irq_pending;
     12'h022: up_rdata <= up_irq_source;
