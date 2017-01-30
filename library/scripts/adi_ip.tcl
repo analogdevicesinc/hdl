@@ -212,6 +212,7 @@ proc adi_ip_properties_lite {ip_name} {
   global ip_constr_files
 
   ipx::package_project -root_dir . -vendor analog.com -library user -taxonomy /Analog_Devices
+  set_property name $ip_name [ipx::current_core]
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
   set_property company_url {www.analog.com} [ipx::current_core]
 
