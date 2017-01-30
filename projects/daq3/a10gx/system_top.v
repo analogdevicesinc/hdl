@@ -209,12 +209,14 @@ module system_top (
 
   // gpio in & out are separate cores
 
-  assign sysref = gpio_o[43];
-  assign adc_pd = gpio_o[42];
-  assign dac_txen = gpio_o[41];
+  assign gpio_i[63:40] = gpio_o[63:40];
+  assign sysref = gpio_o[40];
+  assign gpio_i[39:39] = trig;
 
-  assign gpio_i[63:38] = gpio_o[63:38];
-  assign gpio_i[37:37] = trig;
+  assign gpio_i[38:37] = gpio_o[38:37];
+  assign adc_pd = gpio_o[38];
+  assign dac_txen = gpio_o[37];
+
   assign gpio_i[36:36] = adc_fdb;
   assign gpio_i[35:35] = adc_fda;
   assign gpio_i[34:34] = dac_irq;
