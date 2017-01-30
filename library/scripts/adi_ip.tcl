@@ -132,7 +132,11 @@ proc adi_add_bus_clock {clock_signal_name bus_inf_name {reset_signal_name ""} {r
     set_property physical_name $reset_signal_name $reset_map
 
     set reset_polarity [ipx::add_bus_parameter "POLARITY" $reset_inf]
-    set_property value "ACTIVE_LOW" $reset_polarity
+    if {[string match {*[Nn]} $reset_signal_name] == 1} {
+      set_property value "ACTIVE_LOW" $reset_polarity
+    } else {
+      set_property value "ACTIVE_HIGH" $reset_polarity
+    }
   }
 }
 
