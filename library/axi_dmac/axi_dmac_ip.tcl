@@ -36,6 +36,9 @@ adi_ip_add_core_dependencies { \
 	analog.com:user:util_axis_fifo:1.0 \
 }
 
+set_property display_name "ADI AXI DMA Controller" [ipx::current_core]
+set_property description "ADI AXI DMA Controller" [ipx::current_core]
+
 adi_add_bus "s_axis" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
