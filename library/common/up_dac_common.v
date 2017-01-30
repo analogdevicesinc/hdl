@@ -104,8 +104,8 @@ module up_dac_common #(
 
   // internal registers
 
-  reg             up_core_preset = 'd0;
-  reg             up_mmcm_preset = 'd0;
+  reg             up_core_preset = 'd1;
+  reg             up_mmcm_preset = 'd1;
   reg             up_wack_int = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_mmcm_resetn = 'd0;
