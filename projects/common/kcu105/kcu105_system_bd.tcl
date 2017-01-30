@@ -95,6 +95,10 @@ set_property -dict [list CONFIG.ETHERNET_BOARD_INTERFACE {sgmii_lvds}] $axi_ethe
 set_property -dict [list CONFIG.MDIO_BOARD_INTERFACE {mdio_mdc}] $axi_ethernet
 set_property -dict [list CONFIG.DIFFCLK_BOARD_INTERFACE {sgmii_phyclk}] $axi_ethernet
 set_property -dict [list CONFIG.PHYRST_BOARD_INTERFACE {phy_reset_out}] $axi_ethernet
+set_property -dict [list CONFIG.TXCSUM {Full}] $axi_ethernet
+set_property -dict [list CONFIG.RXCSUM {Full}] $axi_ethernet
+set_property -dict [list CONFIG.TXMEM {8k}] $axi_ethernet
+set_property -dict [list CONFIG.RXMEM {8k}] $axi_ethernet
 
 set axi_ethernet_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_ethernet_dma]
 set_property -dict [list CONFIG.c_include_mm2s_dre {1}] $axi_ethernet_dma

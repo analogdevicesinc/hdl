@@ -14,10 +14,8 @@ adi_project_files daq3_zc706 [list \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_mig_constr.xdc" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc" ]
 
-set_property part "xc7z045ffg900-3" [current_project]
-set_property PROCESSING_ORDER EARLY [get_files $ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc]
-set_property PROCESSING_ORDER EARLY [get_files system_constr.xdc]
-
+set_property part "xc7z045ffg900-3" [get_runs synth_1]
+set_property part "xc7z045ffg900-3" [get_runs impl_1]
 adi_project_run daq3_zc706
 
 

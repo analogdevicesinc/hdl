@@ -34,68 +34,49 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
-module ad_lvds_in (
-
-  // data interface
-
-  rx_clk,
-  rx_data_in_p,
-  rx_data_in_n,
-  rx_data_p,
-  rx_data_n,
-
-  // delay-data interface
-
-  up_clk,
-  up_dld,
-  up_dwdata,
-  up_drdata,
-
-  // delay-cntrl interface
-
-  delay_clk,
-  delay_rst,
-  delay_locked);
+module ad_lvds_in #(
 
   // parameters
 
-  parameter   SINGLE_ENDED = 0;
-  parameter   DEVICE_TYPE = 0;
-  parameter   IODELAY_CTRL = 0;
-  parameter   IODELAY_GROUP = "dev_if_delay_group";
-  localparam  VIRTEX7 = 0;
-  localparam  VIRTEX6 = 1;
-  localparam  ULTRASCALE = 2;
+  parameter   SINGLE_ENDED = 0,
+  parameter   DEVICE_TYPE = 0,
+  parameter   IODELAY_CTRL = 0,
+  parameter   IODELAY_GROUP = "dev_if_delay_group") (
 
   // data interface
 
-  input               rx_clk;
-  input               rx_data_in_p;
-  input               rx_data_in_n;
-  output              rx_data_p;
-  output              rx_data_n;
+  input               rx_clk,
+  input               rx_data_in_p,
+  input               rx_data_in_n,
+  output              rx_data_p,
+  output              rx_data_n,
 
   // delay-data interface
 
-  input               up_clk;
-  input               up_dld;
-  input       [ 4:0]  up_dwdata;
-  output      [ 4:0]  up_drdata;
+  input               up_clk,
+  input               up_dld,
+  input       [ 4:0]  up_dwdata,
+  output      [ 4:0]  up_drdata,
 
   // delay-cntrl interface
 
-  input               delay_clk;
-  input               delay_rst;
-  output              delay_locked;
+  input               delay_clk,
+  input               delay_rst,
+  output              delay_locked);
+
+  // internal parameters
+
+  localparam  VIRTEX7 = 0;
+  localparam  VIRTEX6 = 1;
+  localparam  ULTRASCALE_PLUS = 2;
+  localparam  ULTRASCALE = 3;
 
   // internal registers
 
-  reg                 rx_data_n;
+  reg                 rx_data_n_d = 'd0;
 
   // internal signals
 
@@ -107,21 +88,37 @@ module ad_lvds_in (
   // delay controller
 
   generate
-  if (IODELAY_CTRL == 1) begin
-  if (DEVICE_TYPE == ULTRASCALE) begin
+  if ((IODELAY_CTRL == 1) && (DEVICE_TYPE == ULTRASCALE_PLUS)) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYCTRL #(.SIM_DEVICE ("ULTRASCALE")) i_delay_ctrl (
     .RST (delay_rst),
     .REFCLK (delay_clk),
     .RDY (delay_locked));
-  end else begin
+  end
+  endgenerate
+
+  generate
+  if ((IODELAY_CTRL == 1) && (DEVICE_TYPE == ULTRASCALE)) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL #(.SIM_DEVICE ("ULTRASCALE")) i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end
+  endgenerate
+
+  generate
+  if ((IODELAY_CTRL == 1) && ((DEVICE_TYPE == VIRTEX7) || (DEVICE_TYPE == VIRTEX6))) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYCTRL i_delay_ctrl (
     .RST (delay_rst),
     .REFCLK (delay_clk),
     .RDY (delay_locked));
   end
-  end else begin
+  endgenerate
+
+  generate
+  if (IODELAY_CTRL == 0) begin
   assign delay_locked = 1'b1;
   end
   endgenerate
@@ -140,6 +137,8 @@ module ad_lvds_in (
     .O (rx_data_ibuf_s));
   end
   endgenerate
+
+  // idelay
 
   generate
   if (DEVICE_TYPE == VIRTEX6) begin
@@ -204,7 +203,7 @@ module ad_lvds_in (
   assign up_drdata = up_drdata_s[8:4];
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYE3 #(
-    .SIM_DEVICE ("ULTRASCALE_PLUS_ES1"),
+    .SIM_DEVICE ("ULTRASCALE"),
     .DELAY_SRC ("IDATAIN"),
     .DELAY_TYPE ("VAR_LOAD"),
     .REFCLK_FREQUENCY (200.0),
@@ -228,6 +227,36 @@ module ad_lvds_in (
   endgenerate
 
   generate
+  if (DEVICE_TYPE == ULTRASCALE_PLUS) begin
+  assign up_drdata = up_drdata_s[8:4];
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYE3 #(
+    .SIM_DEVICE ("ULTRASCALE_PLUS_ES1"),
+    .DELAY_SRC ("IDATAIN"),
+    .DELAY_TYPE ("VAR_LOAD"),
+    .REFCLK_FREQUENCY (200.0),
+    .DELAY_FORMAT ("COUNT"))
+  i_rx_data_idelay (
+    .CASC_RETURN (1'b0),
+    .CASC_IN (1'b0),
+    .CASC_OUT (),
+    .CE (1'b0),
+    .CLK (up_clk),
+    .INC (1'b0),
+    .LOAD (up_dld),
+    .CNTVALUEIN ({up_dwdata, 4'd0}),
+    .CNTVALUEOUT (up_drdata_s),
+    .DATAIN (1'b0),
+    .IDATAIN (rx_data_ibuf_s),
+    .DATAOUT (rx_data_idelay_s),
+    .RST (1'b0),
+    .EN_VTC (~up_dld));
+  end
+  endgenerate
+
+  // iddr
+
+  generate
   if (DEVICE_TYPE == ULTRASCALE) begin
   IDDRE1 #(
     .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"))
@@ -238,7 +267,25 @@ module ad_lvds_in (
     .D (rx_data_idelay_s),
     .Q1 (rx_data_p),
     .Q2 (rx_data_n_s));
-  end else begin
+  end
+  endgenerate
+
+  generate
+  if (DEVICE_TYPE == ULTRASCALE_PLUS) begin
+  IDDRE1 #(
+    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"))
+  i_rx_data_iddr (
+    .R (1'b0),
+    .C (rx_clk),
+    .CB (~rx_clk),
+    .D (rx_data_idelay_s),
+    .Q1 (rx_data_p),
+    .Q2 (rx_data_n_s));
+  end
+  endgenerate
+
+  generate
+  if ((DEVICE_TYPE == VIRTEX7) || (DEVICE_TYPE == VIRTEX6)) begin
   IDDR #(
     .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
     .INIT_Q1 (1'b0),
@@ -255,8 +302,10 @@ module ad_lvds_in (
   end
   endgenerate
 
+  assign rx_data_n = rx_data_n_d;
+
   always @(posedge rx_clk) begin
-    rx_data_n <= rx_data_n_s;
+    rx_data_n_d <= rx_data_n_s;
   end
 
 endmodule

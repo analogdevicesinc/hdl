@@ -66,88 +66,127 @@ set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16}] $util_ad9361_adc_fifo
 set util_ad9361_tdd_sync [create_bd_cell -type ip -vlnv analog.com:user:util_tdd_sync:1.0 util_ad9361_tdd_sync]
 set_property -dict [list CONFIG.TDD_SYNC_PERIOD {10000000}] $util_ad9361_tdd_sync
 
+set clkdiv [ create_bd_cell -type ip -vlnv analog.com:user:util_clkdiv:1.0 clkdiv ]
+
+set clkdiv_reset [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 clkdiv_reset]
+
+set dac_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_rfifo:1.0 dac_fifo]
+set_property -dict [list CONFIG.DIN_DATA_WIDTH {16}] $dac_fifo
+set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16}] $dac_fifo
+set_property -dict [list CONFIG.DIN_ADDRESS_WIDTH {4}] $dac_fifo
+
+set clkdiv_sel_logic [create_bd_cell -type ip -vlnv xilinx.com:ip:util_reduced_logic:2.0 clkdiv_sel_logic]
+set_property -dict [list CONFIG.C_SIZE {2}] $clkdiv_sel_logic
+
+set concat_logic [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_logic]
+set_property -dict [list CONFIG.NUM_PORTS {2}] $concat_logic
+
 # connections
 
-ad_connect  sys_200m_clk axi_ad9361/delay_clk
-ad_connect  axi_ad9361_clk axi_ad9361/l_clk
-ad_connect  axi_ad9361_clk axi_ad9361/clk
-ad_connect  rx_clk_in_p axi_ad9361/rx_clk_in_p
-ad_connect  rx_clk_in_n axi_ad9361/rx_clk_in_n
-ad_connect  rx_frame_in_p axi_ad9361/rx_frame_in_p
-ad_connect  rx_frame_in_n axi_ad9361/rx_frame_in_n
-ad_connect  rx_data_in_p axi_ad9361/rx_data_in_p
-ad_connect  rx_data_in_n axi_ad9361/rx_data_in_n
-ad_connect  tx_clk_out_p axi_ad9361/tx_clk_out_p
-ad_connect  tx_clk_out_n axi_ad9361/tx_clk_out_n
-ad_connect  tx_frame_out_p axi_ad9361/tx_frame_out_p
-ad_connect  tx_frame_out_n axi_ad9361/tx_frame_out_n
-ad_connect  tx_data_out_p axi_ad9361/tx_data_out_p
-ad_connect  tx_data_out_n axi_ad9361/tx_data_out_n
-ad_connect  enable axi_ad9361/enable
-ad_connect  txnrx axi_ad9361/txnrx
-ad_connect  up_enable axi_ad9361/up_enable
-ad_connect  up_txnrx axi_ad9361/up_txnrx
-ad_connect  axi_ad9361_clk util_ad9361_adc_fifo/din_clk
-ad_connect  axi_ad9361/rst util_ad9361_adc_fifo/din_rst
-ad_connect  sys_cpu_clk util_ad9361_adc_fifo/dout_clk
-ad_connect  sys_cpu_resetn util_ad9361_adc_fifo/dout_rstn
-ad_connect  sys_cpu_clk util_ad9361_adc_pack/adc_clk
-ad_connect  sys_cpu_reset util_ad9361_adc_pack/adc_rst
-ad_connect  sys_cpu_clk axi_ad9361_adc_dma/fifo_wr_clk
-ad_connect  axi_ad9361/adc_enable_i0 util_ad9361_adc_fifo/din_enable_0
-ad_connect  axi_ad9361/adc_valid_i0 util_ad9361_adc_fifo/din_valid_0
-ad_connect  axi_ad9361/adc_data_i0 util_ad9361_adc_fifo/din_data_0
-ad_connect  axi_ad9361/adc_enable_q0 util_ad9361_adc_fifo/din_enable_1
-ad_connect  axi_ad9361/adc_valid_q0 util_ad9361_adc_fifo/din_valid_1
-ad_connect  axi_ad9361/adc_data_q0 util_ad9361_adc_fifo/din_data_1
-ad_connect  axi_ad9361/adc_enable_i1 util_ad9361_adc_fifo/din_enable_2
-ad_connect  axi_ad9361/adc_valid_i1 util_ad9361_adc_fifo/din_valid_2
-ad_connect  axi_ad9361/adc_data_i1 util_ad9361_adc_fifo/din_data_2
-ad_connect  axi_ad9361/adc_enable_q1 util_ad9361_adc_fifo/din_enable_3
-ad_connect  axi_ad9361/adc_valid_q1 util_ad9361_adc_fifo/din_valid_3
-ad_connect  axi_ad9361/adc_data_q1 util_ad9361_adc_fifo/din_data_3
-ad_connect  util_ad9361_adc_fifo/dout_enable_0 util_ad9361_adc_pack/adc_enable_0
-ad_connect  util_ad9361_adc_fifo/dout_valid_0 util_ad9361_adc_pack/adc_valid_0
-ad_connect  util_ad9361_adc_fifo/dout_data_0 util_ad9361_adc_pack/adc_data_0
-ad_connect  util_ad9361_adc_fifo/dout_enable_1 util_ad9361_adc_pack/adc_enable_1
-ad_connect  util_ad9361_adc_fifo/dout_valid_1 util_ad9361_adc_pack/adc_valid_1
-ad_connect  util_ad9361_adc_fifo/dout_data_1 util_ad9361_adc_pack/adc_data_1
-ad_connect  util_ad9361_adc_fifo/dout_enable_2 util_ad9361_adc_pack/adc_enable_2
-ad_connect  util_ad9361_adc_fifo/dout_valid_2 util_ad9361_adc_pack/adc_valid_2
-ad_connect  util_ad9361_adc_fifo/dout_data_2 util_ad9361_adc_pack/adc_data_2
-ad_connect  util_ad9361_adc_fifo/dout_enable_3 util_ad9361_adc_pack/adc_enable_3
-ad_connect  util_ad9361_adc_fifo/dout_valid_3 util_ad9361_adc_pack/adc_valid_3
-ad_connect  util_ad9361_adc_fifo/dout_data_3 util_ad9361_adc_pack/adc_data_3
-ad_connect  util_ad9361_adc_pack/adc_valid axi_ad9361_adc_dma/fifo_wr_en
-ad_connect  util_ad9361_adc_pack/adc_sync axi_ad9361_adc_dma/fifo_wr_sync
-ad_connect  util_ad9361_adc_pack/adc_data axi_ad9361_adc_dma/fifo_wr_din
-ad_connect  axi_ad9361_adc_dma/fifo_wr_overflow util_ad9361_adc_fifo/dout_ovf
-ad_connect  util_ad9361_adc_fifo/din_ovf axi_ad9361/adc_dovf
-ad_connect  axi_ad9361_clk util_ad9361_dac_upack/dac_clk
-ad_connect  axi_ad9361_clk axi_ad9361_dac_dma/fifo_rd_clk
-ad_connect  util_ad9361_dac_upack/dac_enable_0 axi_ad9361/dac_enable_i0
-ad_connect  util_ad9361_dac_upack/dac_valid_0 axi_ad9361/dac_valid_i0
-ad_connect  util_ad9361_dac_upack/dac_data_0 axi_ad9361/dac_data_i0
-ad_connect  util_ad9361_dac_upack/dac_enable_1 axi_ad9361/dac_enable_q0
-ad_connect  util_ad9361_dac_upack/dac_valid_1 axi_ad9361/dac_valid_q0
-ad_connect  util_ad9361_dac_upack/dac_data_1 axi_ad9361/dac_data_q0
-ad_connect  util_ad9361_dac_upack/dac_enable_2 axi_ad9361/dac_enable_i1
-ad_connect  util_ad9361_dac_upack/dac_valid_2 axi_ad9361/dac_valid_i1
-ad_connect  util_ad9361_dac_upack/dac_data_2 axi_ad9361/dac_data_i1
-ad_connect  util_ad9361_dac_upack/dac_enable_3 axi_ad9361/dac_enable_q1
-ad_connect  util_ad9361_dac_upack/dac_valid_3 axi_ad9361/dac_valid_q1
-ad_connect  util_ad9361_dac_upack/dac_data_3 axi_ad9361/dac_data_q1
-ad_connect  util_ad9361_dac_upack/dac_valid axi_ad9361_dac_dma/fifo_rd_en
-ad_connect  util_ad9361_dac_upack/dac_data axi_ad9361_dac_dma/fifo_rd_dout
-ad_connect  axi_ad9361_dac_dma/fifo_rd_underflow axi_ad9361/dac_dunf
+ad_connect sys_200m_clk axi_ad9361/delay_clk
+ad_connect axi_ad9361_clk axi_ad9361/l_clk
+ad_connect axi_ad9361_clk axi_ad9361/clk
+ad_connect rx_clk_in_p axi_ad9361/rx_clk_in_p
+ad_connect rx_clk_in_n axi_ad9361/rx_clk_in_n
+ad_connect rx_frame_in_p axi_ad9361/rx_frame_in_p
+ad_connect rx_frame_in_n axi_ad9361/rx_frame_in_n
+ad_connect rx_data_in_p axi_ad9361/rx_data_in_p
+ad_connect rx_data_in_n axi_ad9361/rx_data_in_n
+ad_connect tx_clk_out_p axi_ad9361/tx_clk_out_p
+ad_connect tx_clk_out_n axi_ad9361/tx_clk_out_n
+ad_connect tx_frame_out_p axi_ad9361/tx_frame_out_p
+ad_connect tx_frame_out_n axi_ad9361/tx_frame_out_n
+ad_connect tx_data_out_p axi_ad9361/tx_data_out_p
+ad_connect tx_data_out_n axi_ad9361/tx_data_out_n
+ad_connect enable axi_ad9361/enable
+ad_connect txnrx axi_ad9361/txnrx
+ad_connect up_enable axi_ad9361/up_enable
+ad_connect up_txnrx axi_ad9361/up_txnrx
+ad_connect axi_ad9361_clk util_ad9361_adc_fifo/din_clk
+ad_connect axi_ad9361/rst util_ad9361_adc_fifo/din_rst
+ad_connect axi_ad9361/adc_enable_i0 util_ad9361_adc_fifo/din_enable_0
+ad_connect axi_ad9361/adc_valid_i0 util_ad9361_adc_fifo/din_valid_0
+ad_connect axi_ad9361/adc_data_i0 util_ad9361_adc_fifo/din_data_0
+ad_connect axi_ad9361/adc_enable_q0 util_ad9361_adc_fifo/din_enable_1
+ad_connect axi_ad9361/adc_valid_q0 util_ad9361_adc_fifo/din_valid_1
+ad_connect axi_ad9361/adc_data_q0 util_ad9361_adc_fifo/din_data_1
+ad_connect axi_ad9361/adc_enable_i1 util_ad9361_adc_fifo/din_enable_2
+ad_connect axi_ad9361/adc_valid_i1 util_ad9361_adc_fifo/din_valid_2
+ad_connect axi_ad9361/adc_data_i1 util_ad9361_adc_fifo/din_data_2
+ad_connect axi_ad9361/adc_enable_q1 util_ad9361_adc_fifo/din_enable_3
+ad_connect axi_ad9361/adc_valid_q1 util_ad9361_adc_fifo/din_valid_3
+ad_connect axi_ad9361/adc_data_q1 util_ad9361_adc_fifo/din_data_3
+ad_connect util_ad9361_adc_fifo/dout_enable_0 util_ad9361_adc_pack/adc_enable_0
+ad_connect util_ad9361_adc_fifo/dout_valid_0 util_ad9361_adc_pack/adc_valid_0
+ad_connect util_ad9361_adc_fifo/dout_data_0 util_ad9361_adc_pack/adc_data_0
+ad_connect util_ad9361_adc_fifo/dout_enable_1 util_ad9361_adc_pack/adc_enable_1
+ad_connect util_ad9361_adc_fifo/dout_valid_1 util_ad9361_adc_pack/adc_valid_1
+ad_connect util_ad9361_adc_fifo/dout_data_1 util_ad9361_adc_pack/adc_data_1
+ad_connect util_ad9361_adc_fifo/dout_enable_2 util_ad9361_adc_pack/adc_enable_2
+ad_connect util_ad9361_adc_fifo/dout_valid_2 util_ad9361_adc_pack/adc_valid_2
+ad_connect util_ad9361_adc_fifo/dout_data_2 util_ad9361_adc_pack/adc_data_2
+ad_connect util_ad9361_adc_fifo/dout_enable_3 util_ad9361_adc_pack/adc_enable_3
+ad_connect util_ad9361_adc_fifo/dout_valid_3 util_ad9361_adc_pack/adc_valid_3
+ad_connect util_ad9361_adc_fifo/dout_data_3 util_ad9361_adc_pack/adc_data_3
+ad_connect util_ad9361_adc_pack/adc_valid axi_ad9361_adc_dma/fifo_wr_en
+ad_connect util_ad9361_adc_pack/adc_sync axi_ad9361_adc_dma/fifo_wr_sync
+ad_connect util_ad9361_adc_pack/adc_data axi_ad9361_adc_dma/fifo_wr_din
+ad_connect axi_ad9361_adc_dma/fifo_wr_overflow util_ad9361_adc_fifo/dout_ovf
+ad_connect util_ad9361_adc_fifo/din_ovf axi_ad9361/adc_dovf
+ad_connect axi_ad9361_clk clkdiv/clk
 
-ad_connect  sys_cpu_clk util_ad9361_tdd_sync/clk
-ad_connect  sys_cpu_resetn util_ad9361_tdd_sync/rstn
-ad_connect  util_ad9361_tdd_sync/sync_out axi_ad9361/tdd_sync
-ad_connect  util_ad9361_tdd_sync/sync_mode axi_ad9361/tdd_sync_cntr
-ad_connect  tdd_sync_t axi_ad9361/tdd_sync_cntr
-ad_connect  tdd_sync_o util_ad9361_tdd_sync/sync_out
-ad_connect  tdd_sync_i util_ad9361_tdd_sync/sync_in
+ad_connect axi_ad9361/adc_r1_mode concat_logic/In0
+ad_connect axi_ad9361/dac_r1_mode concat_logic/In1
+ad_connect concat_logic/dout clkdiv_sel_logic/Op1
+ad_connect clkdiv/clk_sel clkdiv_sel_logic/Res
+
+ad_connect clkdiv/clk_out axi_ad9361_adc_dma/fifo_wr_clk
+ad_connect clkdiv/clk_out util_ad9361_adc_fifo/dout_clk
+ad_connect clkdiv/clk_out util_ad9361_adc_pack/adc_clk
+ad_connect clkdiv_reset/ext_reset_in sys_rstgen/peripheral_aresetn
+ad_connect clkdiv_reset/slowest_sync_clk clkdiv/clk_out
+ad_connect util_ad9361_adc_pack/adc_rst clkdiv_reset/peripheral_reset
+ad_connect util_ad9361_adc_fifo/dout_rstn clkdiv_reset/peripheral_aresetn
+ad_connect util_ad9361_dac_upack/dac_valid axi_ad9361_dac_dma/fifo_rd_en
+ad_connect util_ad9361_dac_upack/dac_data axi_ad9361_dac_dma/fifo_rd_dout
+ad_connect clkdiv/clk_out axi_ad9361_dac_dma/fifo_rd_clk
+ad_connect axi_ad9361/dac_dunf dac_fifo/dout_unf
+ad_connect dac_fifo/din_clk clkdiv/clk_out
+ad_connect dac_fifo/din_rstn clkdiv_reset/peripheral_aresetn
+ad_connect axi_ad9361_clk dac_fifo/dout_clk
+ad_connect dac_fifo/dout_rst axi_ad9361/rst
+ad_connect util_ad9361_dac_upack/dac_clk clkdiv/clk_out
+ad_connect dac_fifo/din_enable_0 util_ad9361_dac_upack/dac_enable_0
+ad_connect dac_fifo/din_valid_0 util_ad9361_dac_upack/dac_valid_0
+ad_connect dac_fifo/din_enable_1 util_ad9361_dac_upack/dac_enable_1
+ad_connect dac_fifo/din_valid_1 util_ad9361_dac_upack/dac_valid_1
+ad_connect dac_fifo/din_enable_2 util_ad9361_dac_upack/dac_enable_2
+ad_connect dac_fifo/din_valid_2 util_ad9361_dac_upack/dac_valid_2
+ad_connect dac_fifo/din_enable_3 util_ad9361_dac_upack/dac_enable_3
+ad_connect dac_fifo/din_valid_3 util_ad9361_dac_upack/dac_valid_3
+ad_connect util_ad9361_dac_upack/dac_data_0 dac_fifo/din_data_0
+ad_connect util_ad9361_dac_upack/dac_data_1 dac_fifo/din_data_1
+ad_connect util_ad9361_dac_upack/dac_data_2 dac_fifo/din_data_2
+ad_connect util_ad9361_dac_upack/dac_data_3 dac_fifo/din_data_3
+ad_connect axi_ad9361/dac_enable_i0 dac_fifo/dout_enable_0
+ad_connect axi_ad9361/dac_valid_i0 dac_fifo/dout_valid_0
+ad_connect axi_ad9361/dac_enable_q0 dac_fifo/dout_enable_1
+ad_connect axi_ad9361/dac_valid_q0 dac_fifo/dout_valid_1
+ad_connect axi_ad9361/dac_enable_i1 dac_fifo/dout_enable_2
+ad_connect axi_ad9361/dac_valid_i1 dac_fifo/dout_valid_2
+ad_connect axi_ad9361/dac_enable_q1 dac_fifo/dout_enable_3
+ad_connect axi_ad9361/dac_valid_q1 dac_fifo/dout_valid_3
+ad_connect dac_fifo/dout_data_0 axi_ad9361/dac_data_i0
+ad_connect dac_fifo/dout_data_1 axi_ad9361/dac_data_q0
+ad_connect dac_fifo/dout_data_2 axi_ad9361/dac_data_i1
+ad_connect dac_fifo/dout_data_3 axi_ad9361/dac_data_q1
+ad_connect sys_cpu_clk util_ad9361_tdd_sync/clk
+ad_connect sys_cpu_resetn util_ad9361_tdd_sync/rstn
+ad_connect util_ad9361_tdd_sync/sync_out axi_ad9361/tdd_sync
+ad_connect util_ad9361_tdd_sync/sync_mode axi_ad9361/tdd_sync_cntr
+ad_connect tdd_sync_t axi_ad9361/tdd_sync_cntr
+ad_connect tdd_sync_o util_ad9361_tdd_sync/sync_out
+ad_connect tdd_sync_i util_ad9361_tdd_sync/sync_in
 
 # interconnects
 
@@ -165,24 +204,4 @@ ad_connect  sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
-
-# ila (adc)
-
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_adc]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {5}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {16}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {16}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {16}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE4_WIDTH {1}] $ila_adc
-
-ad_connect  util_ad9361_adc_fifo/dout_data_0 ila_adc/probe0
-ad_connect  util_ad9361_adc_fifo/dout_data_1 ila_adc/probe1
-ad_connect  util_ad9361_adc_fifo/dout_data_2 ila_adc/probe2
-ad_connect  util_ad9361_adc_fifo/dout_data_3 ila_adc/probe3
-ad_connect  util_ad9361_adc_fifo/dout_valid_0 ila_adc/probe4
-ad_connect  sys_cpu_clk ila_adc/clk
 

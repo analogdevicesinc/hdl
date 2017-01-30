@@ -38,7 +38,19 @@
 
 `timescale 1ns/1ps
 
-module axi_adxcvr (
+module axi_adxcvr #(
+
+  // parameters
+
+  parameter   integer ID = 0,
+  parameter   integer NUM_OF_LANES = 8,
+  parameter   integer GTH_OR_GTX_N = 0,
+  parameter   integer TX_OR_RX_N = 0,
+  parameter   integer QPLL_ENABLE = 1,
+  parameter           LPM_OR_DFE_N = 1,
+  parameter   [ 2:0]  RATE = 3'd0,
+  parameter   [ 1:0]  SYS_CLK_SEL = 2'd3,
+  parameter   [ 2:0]  OUT_CLK_SEL = 3'd4) (
 
   output  [ 7:0]  up_cm_sel_0,
   output          up_cm_enb_0,
@@ -500,14 +512,6 @@ module axi_adxcvr (
   input   [31:0]  m_axi_rdata,
   input   [ 1:0]  m_axi_rresp,
   output          m_axi_rready);
-
-  // parameters
-
-  parameter   integer ID = 0;
-  parameter   integer NUM_OF_LANES = 8;
-  parameter   integer GTH_OR_GTX_N = 0;
-  parameter   integer TX_OR_RX_N = 0;
-  parameter   integer QPLL_ENABLE = 1;
 
   // internal signals
 
@@ -1788,7 +1792,11 @@ module axi_adxcvr (
   axi_adxcvr_up #(
     .ID (ID),
     .TX_OR_RX_N (TX_OR_RX_N),
-    .QPLL_ENABLE (QPLL_ENABLE))
+    .QPLL_ENABLE (QPLL_ENABLE),
+    .LPM_OR_DFE_N (LPM_OR_DFE_N),
+    .RATE (RATE),
+    .SYS_CLK_SEL (SYS_CLK_SEL),
+    .OUT_CLK_SEL (OUT_CLK_SEL))
   i_up (
     .up_cm_sel (up_cm_sel),
     .up_cm_enb (up_cm_enb),

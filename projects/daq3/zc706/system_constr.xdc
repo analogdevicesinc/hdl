@@ -52,8 +52,11 @@ set_property  -dict {PACKAGE_PIN  AJ24  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_
 
 # clocks
 
-create_clock -name tx_ref_clk   -period  2.00 [get_ports tx_ref_clk_p]
-create_clock -name rx_ref_clk   -period  2.00 [get_ports rx_ref_clk_p]
-create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gtxe2_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+create_clock -name tx_ref_clk   -period  1.60 [get_ports tx_ref_clk_p]
+create_clock -name rx_ref_clk   -period  1.60 [get_ports rx_ref_clk_p]
+create_clock -name tx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gtxe2_channel/TXOUTCLK]
+create_clock -name rx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+
+set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9680_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]*]
+set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9152_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]*]
 

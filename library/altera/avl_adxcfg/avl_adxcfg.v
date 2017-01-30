@@ -80,8 +80,8 @@ module avl_adxcfg (
   reg     [ 9:0]  rcfg_address_int = 'd0;
   reg     [31:0]  rcfg_writedata_int = 'd0;
   reg     [31:0]  rcfg_readdata_int = 'd0;
-  reg             rcfg_waitrequest_int_0 = 'd0;
-  reg             rcfg_waitrequest_int_1 = 'd0;
+  reg             rcfg_waitrequest_int_0 = 'd1;
+  reg             rcfg_waitrequest_int_1 = 'd1;
 
   // internal signals
 

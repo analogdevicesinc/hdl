@@ -37,7 +37,17 @@
 
 `timescale 1ns/100ps
 
-module axi_adxcvr_up (
+module axi_adxcvr_up #(
+
+  // parameters
+
+  parameter   integer ID = 0,
+  parameter   integer TX_OR_RX_N = 0,
+  parameter   integer QPLL_ENABLE = 1,
+  parameter           LPM_OR_DFE_N = 1,
+  parameter   [ 2:0]  RATE = 3'd0,
+  parameter   [ 1:0]  SYS_CLK_SEL = 2'd3,
+  parameter   [ 2:0]  OUT_CLK_SEL = 3'd4) (
 
   // common
 
@@ -104,9 +114,6 @@ module axi_adxcvr_up (
   // parameters
 
   localparam  [31:0]  VERSION = 32'h00100161;
-  parameter   integer ID = 0;
-  parameter   integer TX_OR_RX_N = 0;
-  parameter   integer QPLL_ENABLE = 1;
 
   // internal registers
 
@@ -221,10 +228,10 @@ module axi_adxcvr_up (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_lpm_dfe_n <= 'd0;
-      up_rate <= 'd0;
-      up_sys_clk_sel <= 'd0;
-      up_out_clk_sel <= 'd0;
+      up_lpm_dfe_n <= LPM_OR_DFE_N;
+      up_rate <= RATE;
+      up_sys_clk_sel <= SYS_CLK_SEL;
+      up_out_clk_sel <= OUT_CLK_SEL;
     end else begin
       if ((up_wreq == 1'b1) && (up_waddr == 10'h008)) begin
         up_lpm_dfe_n <= up_wdata[12];
