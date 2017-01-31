@@ -34,6 +34,7 @@ all:
 	-make -C fmcomms5 all
 	-make -C fmcomms7 all
 	-make -C imageon all
+	-make -C m2k all
 	-make -C motcon2_fmc all
 	-make -C pluto all
 	-make -C pzsdr1 all
@@ -71,6 +72,7 @@ clean:
 	make -C fmcomms5 clean
 	make -C fmcomms7 clean
 	make -C imageon clean
+	make -C m2k clean
 	make -C motcon2_fmc clean
 	make -C pluto clean
 	make -C pzsdr1 clean
@@ -108,6 +110,7 @@ clean-all:
 	make -C fmcomms5 clean-all
 	make -C fmcomms7 clean-all
 	make -C imageon clean-all
+	make -C m2k clean-all
 	make -C motcon2_fmc clean-all
 	make -C pluto clean-all
 	make -C pzsdr1 clean-all
