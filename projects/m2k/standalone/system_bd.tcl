@@ -41,16 +41,17 @@ create_bd_port -dir I -type intr ps_intr_15
 # instance: sys_ps7
 
 set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 sys_ps7]
+
 set_property -dict [list CONFIG.PCW_PRESET_BANK0_VOLTAGE {LVCMOS 3.3V}] $sys_ps7
 set_property -dict [list CONFIG.PCW_PRESET_BANK1_VOLTAGE {LVCMOS 3.3V}] $sys_ps7
 set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
+set_property -dict [list CONFIG.PCW_PACKAGE_NAME {clg225}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_INTR {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
@@ -58,6 +59,13 @@ set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {64}] $sys_ps7
 set_property -dict [list CONFIG.PCW_IRQ_F2P_MODE {REVERSE}] $sys_ps7
 set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UART1_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_UART1_UART1_IO {MIO 12 .. 13}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USB0_RESET_IO {MIO 52}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USB0_RESET_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_USB0_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_QSPI_PERIPHERAL_ENABLE {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_QSPI_GRP_SINGLE_SS_ENABLE {1}] $sys_ps7
 
 # DDR MT41K256M16 HA-125 (32M, 16bit, 8banks)
 
