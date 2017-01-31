@@ -30,7 +30,11 @@ clean:
 	make -C axi_ad9680 clean
 	make -C axi_ad9684 clean
 	make -C axi_ad9739a clean
+	make -C axi_ad9963 clean
+	make -C axi_adc_decimate clean
+	make -C axi_adc_trigger clean
 	make -C axi_clkgen clean
+	make -C axi_dac_interpolate clean
 	make -C axi_dmac clean
 	make -C axi_generic_adc clean
 	make -C axi_gpreg clean
@@ -38,6 +42,7 @@ clean:
 	make -C axi_hdmi_tx clean
 	make -C axi_i2s_adi clean
 	make -C axi_intr_monitor clean
+	make -C axi_logic_analyzer clean
 	make -C axi_mc_controller clean
 	make -C axi_mc_current_monitor clean
 	make -C axi_mc_speed clean
@@ -60,6 +65,7 @@ clean:
 	make -C util_clkdiv clean
 	make -C util_cpack clean
 	make -C util_dacfifo clean
+	make -C util_extract clean
 	make -C util_fir_dec clean
 	make -C util_fir_int clean
 	make -C util_gmii_to_rgmii clean
@@ -71,6 +77,7 @@ clean:
 	make -C util_sigma_delta_spi clean
 	make -C util_tdd_sync clean
 	make -C util_upack clean
+	make -C util_var_fifo clean
 	make -C util_wfifo clean
 	make -C xilinx/axi_adcfifo clean
 	make -C xilinx/axi_adxcvr clean
@@ -103,7 +110,11 @@ lib:
 	-make -C axi_ad9680
 	-make -C axi_ad9684
 	-make -C axi_ad9739a
+	-make -C axi_ad9963
+	-make -C axi_adc_decimate
+	-make -C axi_adc_trigger
 	-make -C axi_clkgen
+	-make -C axi_dac_interpolate
 	-make -C axi_dmac
 	-make -C axi_generic_adc
 	-make -C axi_gpreg
@@ -111,6 +122,7 @@ lib:
 	-make -C axi_hdmi_tx
 	-make -C axi_i2s_adi
 	-make -C axi_intr_monitor
+	-make -C axi_logic_analyzer
 	-make -C axi_mc_controller
 	-make -C axi_mc_current_monitor
 	-make -C axi_mc_speed
@@ -133,10 +145,10 @@ lib:
 	-make -C util_clkdiv
 	-make -C util_cpack
 	-make -C util_dacfifo
+	-make -C util_extract
 	-make -C util_fir_dec
 	-make -C util_fir_int
 	-make -C util_gmii_to_rgmii
-	-make -C util_gtlb
 	-make -C util_i2c_mixer
 	-make -C util_mfifo
 	-make -C util_pmod_adc
@@ -145,6 +157,7 @@ lib:
 	-make -C util_sigma_delta_spi
 	-make -C util_tdd_sync
 	-make -C util_upack
+	-make -C util_var_fifo
 	-make -C util_wfifo
 	-make -C xilinx/axi_adcfifo
 	-make -C xilinx/axi_adxcvr
