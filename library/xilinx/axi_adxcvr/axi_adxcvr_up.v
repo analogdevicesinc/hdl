@@ -42,6 +42,8 @@ module axi_adxcvr_up #(
   // parameters
 
   parameter   integer ID = 0,
+  parameter   integer NUM_OF_LANES = 8,
+  parameter   integer GTH_OR_GTX_N = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer QPLL_ENABLE = 1,
   parameter           LPM_OR_DFE_N = 1,
@@ -154,6 +156,10 @@ module axi_adxcvr_up #(
   reg             up_ies_status = 'd0;
   reg             up_rreq_d = 'd0;
   reg     [31:0]  up_rdata_d = 'd0;
+
+  // internal signals
+
+  wire    [31:0]  up_rparam_s;
 
   // defaults
 
@@ -438,6 +444,22 @@ module axi_adxcvr_up #(
   assign up_rack = up_rreq_d;
   assign up_rdata = up_rdata_d;
 
+  // altera specific
+
+  assign up_rparam_s[31:24] = 8'd0;
+
+  // xilinx specific
+ 
+  assign up_rparam_s[23:21] = 3'd0;
+  assign up_rparam_s[20:20] = (QPLL_ENABLE == 0) ? 1'b0 : 1'b1;
+  assign up_rparam_s[19:16] = (GTH_OR_GTX_N == 0) ? 1'b0 : 1'b1;
+
+  // generic
+
+  assign up_rparam_s[15: 9] = 7'd0;
+  assign up_rparam_s[ 8: 8] = (TX_OR_RX_N == 0) ? 1'b0 : 1'b1;
+  assign up_rparam_s[ 7: 0] = NUM_OF_LANES;
+
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rreq_d <= 'd0;
@@ -453,6 +475,7 @@ module axi_adxcvr_up #(
           10'h005: up_rdata_d <= {31'd0, up_status_int};
           10'h006: up_rdata_d <= {17'd0, up_user_ready_cnt, up_rst_cnt, up_pll_rst_cnt};
           10'h008: up_rdata_d <= {19'd0, up_lpm_dfe_n, 1'd0, up_rate, 2'd0, up_sys_clk_sel, 1'd0, up_out_clk_sel};
+          10'h009: up_rdata_d <= up_rparam_s;
           10'h010: up_rdata_d <= {24'd0, up_icm_sel};
           10'h011: up_rdata_d <= {3'd0, up_icm_data};
           10'h012: up_rdata_d <= {15'd0, up_icm_busy, up_icm_rdata};
