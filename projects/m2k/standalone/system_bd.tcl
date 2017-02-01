@@ -16,9 +16,9 @@ create_bd_port -dir I spi0_sdo_i
 create_bd_port -dir O spi0_sdo_o
 create_bd_port -dir I spi0_sdi_i
 
-create_bd_port -dir I -from 17 -to 0 gpio_i
-create_bd_port -dir O -from 17 -to 0 gpio_o
-create_bd_port -dir O -from 17 -to 0 gpio_t
+create_bd_port -dir I -from 16 -to 0 gpio_i
+create_bd_port -dir O -from 16 -to 0 gpio_o
+create_bd_port -dir O -from 16 -to 0 gpio_t
 
 # interrupts
 
