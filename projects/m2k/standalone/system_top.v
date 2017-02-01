@@ -85,7 +85,9 @@ module system_top (
 
   // internal signals
 
-  wire    [63:0]  gpio_o;
+  wire    [16:0]  gpio_i;
+  wire    [16:0]  gpio_o;
+  wire    [16:0]  gpio_t;
 
   wire    [15:0]  data_i;
   wire    [15:0]  data_o;
@@ -100,9 +102,6 @@ module system_top (
   wire            spi0_mosi;
   wire            spi0_miso;
 
-  assign ad9963_resetn = gpio_o[32];
-  assign en_power_analog = gpio_o[33];
-
   assign ad9963_csn = spi0_csn[0];
   assign adf4360_cs = spi0_csn[1];
   assign spi_clk = spi0_clk;
@@ -110,6 +109,13 @@ module system_top (
   assign spi0_miso = spi_miso;
 
   // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf (
+    .dio_t (gpio_t[ 1:0]),
+    .dio_i (gpio_o[ 1:0]),
+    .dio_o (gpio_i[ 1:0]),
+    .dio_p ({ en_power_analog,
+              ad9963_resetn}));
 
   ad_iobuf #(
     .DATA_WIDTH(16)
@@ -157,9 +163,9 @@ module system_top (
     .fixed_io_ps_clk (fixed_io_ps_clk),
     .fixed_io_ps_porb (fixed_io_ps_porb),
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
-    .gpio_i (64'h0),
+    .gpio_i (gpio_i),
     .gpio_o (gpio_o),
-    .gpio_t (),
+    .gpio_t (gpio_t),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .data_i(data_i),
