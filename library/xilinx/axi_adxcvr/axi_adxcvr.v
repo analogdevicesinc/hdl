@@ -1791,6 +1791,8 @@ module axi_adxcvr #(
 
   axi_adxcvr_up #(
     .ID (ID),
+    .NUM_OF_LANES (NUM_OF_LANES),
+    .GTH_OR_GTX_N (GTH_OR_GTX_N),
     .TX_OR_RX_N (TX_OR_RX_N),
     .QPLL_ENABLE (QPLL_ENABLE),
     .LPM_OR_DFE_N (LPM_OR_DFE_N),
