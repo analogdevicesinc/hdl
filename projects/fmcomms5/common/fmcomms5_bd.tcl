@@ -180,7 +180,8 @@ ad_connect  concat_logic/In3     axi_ad9361_1/dac_r1_mode
 ad_connect  concat_logic/dout    clkdiv_sel_logic/Op1
 ad_connect  clkdiv_sel_logic/Res clkdiv/clk_sel
 
-ad_connect  adc_wfifo/dout_ovf          axi_ad9361_0/adc_dovf
+ad_connect  axi_ad9361_adc_dma/fifo_wr_overflow adc_wfifo/dout_ovf          
+ad_connect  adc_wfifo/din_ovf axi_ad9361_0/adc_dovf
 ad_connect  axi_ad9361_0/adc_enable_i0  adc_wfifo/din_enable_0
 ad_connect  axi_ad9361_0/adc_valid_i0   adc_wfifo/din_valid_0
 ad_connect  axi_ad9361_0/adc_data_i0    adc_wfifo/din_data_0
