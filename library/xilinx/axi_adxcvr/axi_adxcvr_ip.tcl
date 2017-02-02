@@ -62,6 +62,9 @@ for {set n 0} {$n < 16} {incr n} {
 
 }
 
+set_property value s_axi:m_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
+  -of_objects [ipx::get_bus_interfaces s_axi_aclk -of_objects [ipx::current_core]]]
+
 set_property enablement_dependency \
   {spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0} \
   [ipx::get_bus_interfaces m_axi -of_objects [ipx::current_core]]
