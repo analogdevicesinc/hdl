@@ -2448,6 +2448,8 @@ set_property CONFIG.PSU__FPGA_PL0_ENABLE {1} $sys_ps8
 set_property CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ {100} $sys_ps8
 set_property CONFIG.PSU__FPGA_PL1_ENABLE {1} $sys_ps8
 set_property CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ {200} $sys_ps8
+set_property CONFIG.PSU__CRL_APB__PL1_REF_CTRL__DIVISOR0 {3} $sys_ps8
+set_property CONFIG.PSU__CRL_APB__PL1_REF_CTRL__DIVISOR1 {2} $sys_ps8
 set_property CONFIG.PSU__USE__IRQ0 {1} $sys_ps8
 set_property CONFIG.PSU__USE__IRQ1 {1} $sys_ps8
 set_property CONFIG.PSU__GPIO_EMIO__PERIPHERAL__ENABLE {1} $sys_ps8
