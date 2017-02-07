@@ -21,5 +21,7 @@ adi_ip_add_core_dependencies { \
     analog.com:user:spi_engine_interconnect:1.0 \
 }
 
+set_property DRIVER_VALUE "0" [ipx::get_ports rx_db_i]
+
 ipx::save_core [ipx::current_core]
 
