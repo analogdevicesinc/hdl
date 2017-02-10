@@ -52,7 +52,6 @@ clean:
 	make -C cn0363/cn0363_dma_sequencer clean
 	make -C cn0363/cn0363_phase_data_sync clean
 	make -C cordic_demod clean
-	make -C interfaces clean
 	make -C spi_engine/axi_spi_engine clean
 	make -C spi_engine/spi_engine_execution clean
 	make -C spi_engine/spi_engine_interconnect clean
@@ -84,6 +83,8 @@ clean:
 	make -C xilinx/axi_dacfifo clean
 	make -C xilinx/axi_xcvrlb clean
 	make -C xilinx/util_adxcvr clean
+
+	make -C interfaces clean
 
 
 clean-all:clean
@@ -132,7 +133,6 @@ lib:
 	-make -C cn0363/cn0363_dma_sequencer
 	-make -C cn0363/cn0363_phase_data_sync
 	-make -C cordic_demod
-	-make -C interfaces
 	-make -C spi_engine/axi_spi_engine
 	-make -C spi_engine/spi_engine_execution
 	-make -C spi_engine/spi_engine_interconnect
@@ -164,6 +164,8 @@ lib:
 	-make -C xilinx/axi_dacfifo
 	-make -C xilinx/axi_xcvrlb
 	-make -C xilinx/util_adxcvr
+
+	-make -C interfaces
 
 ####################################################################################
 ####################################################################################
