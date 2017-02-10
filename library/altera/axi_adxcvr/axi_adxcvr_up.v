@@ -82,6 +82,7 @@ module axi_adxcvr_up #(
 
   wire                          up_ready_s;
   wire    [31:0]                up_status_32_s;
+  wire    [31:0]                up_rparam_s;
 
   // defaults
 
@@ -135,6 +136,20 @@ module axi_adxcvr_up #(
     end
   end
 
+  // altera specific
+
+  assign up_rparam_s[31:24] = 8'd0;
+
+  // xilinx specific
+
+  assign up_rparam_s[23:16] = 8'd0;
+
+  // generic
+
+  assign up_rparam_s[15: 9] = 7'd0;
+  assign up_rparam_s[ 8: 8] = (TX_OR_RX_N == 0) ? 1'b0 : 1'b1;
+  assign up_rparam_s[ 7: 0] = NUM_OF_LANES;
+
   // read interface
 
   assign up_rack = up_rreq_d;
@@ -154,6 +169,7 @@ module axi_adxcvr_up #(
           10'h004: up_rdata_d <= {31'd0, up_resetn};
           10'h005: up_rdata_d <= {31'd0, up_status_int};
           10'h006: up_rdata_d <= up_status_32_s;
+          10'h009: up_rdata_d <= up_rparam_s;
           default: up_rdata_d <= 32'd0;
         endcase
       end else begin
