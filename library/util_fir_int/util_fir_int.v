@@ -42,6 +42,7 @@
 
 module util_fir_int (
   input               aclk,
+  input               s_axis_data_tvalid,
   output              s_axis_data_tready,
   input       [31:0]  s_axis_data_tdata,
   output      [15:0]  channel_0,
@@ -51,15 +52,26 @@ module util_fir_int (
   input               dac_read);
 
   wire [31:0] m_axis_data_tdata_s;
-  wire        s_axis_data_tready_s;
+
+  reg         s_axis_data_tready_r;
+  reg   [2:0] ready_counter;
+
+  always @(posedge aclk) begin
+    ready_counter <= ready_counter + 1;
+    if (ready_counter == 0) begin
+      s_axis_data_tready_r <= 1'b1;
+    end else begin
+      s_axis_data_tready_r <= 1'b0;
+    end
+  end
 
   assign {channel_1, channel_0} = (interpolate == 1'b1) ? m_axis_data_tdata_s : s_axis_data_tdata;
-  assign s_axis_data_tready = (interpolate == 1'b1) ? s_axis_data_tready_s : dac_read;
+  assign s_axis_data_tready = (interpolate == 1'b1) ? s_axis_data_tready_r : dac_read;
 
   fir_interp interpolator (
     .aclk(aclk),
-    .s_axis_data_tvalid(1'b1),
-    .s_axis_data_tready(s_axis_data_tready_s),
+    .s_axis_data_tvalid(s_axis_data_tvalid),
+    .s_axis_data_tready(),
     .s_axis_data_tdata(s_axis_data_tdata),
     .m_axis_data_tvalid(m_axis_data_tvalid),
     .m_axis_data_tdata(m_axis_data_tdata_s)

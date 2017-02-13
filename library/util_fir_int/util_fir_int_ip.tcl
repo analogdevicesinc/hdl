@@ -12,6 +12,7 @@ CONFIG.Coefficient_Fractional_Bits {0} \
 CONFIG.Data_Fractional_Bits {15} \
 CONFIG.Coefficient_Sets {1} \
 CONFIG.Coefficient_Sign {Signed} \
+CONFIG.S_DATA_Has_FIFO {true} \
 CONFIG.Coefficient_Structure {Inferred} \
 CONFIG.Coefficient_Width {16} \
 CONFIG.ColumnConfig {5} \
