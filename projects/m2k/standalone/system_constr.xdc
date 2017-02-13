@@ -65,6 +65,9 @@ create_clock -period 10.000 -name rx_clk [get_ports rx_clk]
 create_clock -period 12.500 -name trigger_clk [get_ports {trigger_bd[0]}]
 create_clock -period 12.500 -name data_clk [get_ports {data_bd[0]}]
 
+create_clock -name clk_fpga_0 -period 10 [get_pins "i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[0]"]
+create_clock -name clk_fpga_1 -period  5 [get_pins "i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[1]"]
+
 set_input_jitter clk_fpga_0 0.3
 set_input_jitter clk_fpga_1 0.15
 
