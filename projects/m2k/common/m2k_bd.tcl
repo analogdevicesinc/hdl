@@ -84,6 +84,9 @@ set adc_trigger [create_bd_cell -type ip -vlnv analog.com:user:axi_adc_trigger:1
 set axi_adc_decimate [create_bd_cell -type ip -vlnv analog.com:user:axi_adc_decimate:1.0 axi_adc_decimate]
 set axi_dac_interpolate [create_bd_cell -type ip -vlnv analog.com:user:axi_dac_interpolate:1.0 axi_dac_interpolate]
 
+set logic_analyzer_reset [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 logic_analyzer_reset]
+
+
 ad_connect data_i     logic_analyzer/data_i
 ad_connect trigger_i  logic_analyzer/trigger_i
 ad_connect data_o     logic_analyzer/data_o
@@ -98,6 +101,9 @@ ad_connect pattern_generator_dmac/fifo_rd_clk clk_generator/clk_0
 
 ad_connect clk_generator/clk_0  la_trigger_fifo/clk
 ad_connect logic_analyzer_dmac/fifo_wr_clk clk_generator/clk_0
+ad_connect logic_analyzer_reset/slowest_sync_clk clk_generator/clk_0
+ad_connect logic_analyzer_reset/ext_reset_in sys_rstgen/peripheral_aresetn
+ad_connect logic_analyzer_reset/bus_struct_reset la_trigger_fifo/rst
 
 ad_connect la_trigger_fifo/data_in        logic_analyzer/adc_data
 ad_connect la_trigger_fifo/data_in_valid  logic_analyzer/adc_valid
