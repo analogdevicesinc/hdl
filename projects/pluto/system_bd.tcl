@@ -228,6 +228,7 @@ ad_connect fir_decimator/decimate decim_slice/Dout
 
 ad_connect axi_ad9361/l_clk fir_interpolator/aclk
 ad_connect axi_ad9361_dac_dma/fifo_rd_dout fir_interpolator/s_axis_data_tdata
+ad_connect axi_ad9361_dac_dma/fifo_rd_valid fir_interpolator/s_axis_data_tvalid
 ad_connect axi_ad9361/dac_valid_i0 fir_interpolator/dac_read
 ad_connect axi_ad9361_dac_dma/fifo_rd_en fir_interpolator/s_axis_data_tready
 ad_connect axi_ad9361/dac_data_i0 fir_interpolator/channel_0
