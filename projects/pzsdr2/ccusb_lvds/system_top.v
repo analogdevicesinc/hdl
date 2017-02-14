@@ -80,7 +80,7 @@ module system_top (
 
   output          enable,
   output          txnrx,
-  input           clk_out,
+  input           clkout_in,
 
   inout           gpio_clksel,
   inout           gpio_resetb,
