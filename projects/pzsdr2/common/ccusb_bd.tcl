@@ -1,4 +1,7 @@
 
+ad_connect  sys_ps7/ENET1_GMII_RX_CLK GND
+ad_connect  sys_ps7/ENET1_GMII_TX_CLK GND
+
 create_bd_port -dir I usb_fx3_uart_tx
 create_bd_port -dir O usb_fx3_uart_rx
 
