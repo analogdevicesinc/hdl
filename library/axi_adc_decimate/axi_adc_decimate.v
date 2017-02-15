@@ -191,7 +191,7 @@ module axi_adc_decimate(
       16'h3: decim_rate_cic = 16'd500;
       16'h6: decim_rate_cic = 16'd5000;
       16'h7: decim_rate_cic = 16'd50000;
-      default: decim_rate_cic = 9'd1;
+      default: decim_rate_cic = 16'd1;
     endcase
   end
 
