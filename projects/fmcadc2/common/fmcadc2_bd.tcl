@@ -10,6 +10,9 @@ set axi_ad9625_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.
 set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_ad9625_xcvr
 set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9625_xcvr
 set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9625_xcvr
+set_property -dict [list CONFIG.LPM_OR_DFE_N {1}] $axi_ad9625_xcvr
+set_property -dict [list CONFIG.SYS_CLK_SEL {0}] $axi_ad9625_xcvr
+set_property -dict [list CONFIG.OUT_CLK_SEL {2}] $axi_ad9625_xcvr
 
 set axi_ad9625_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9625_dma]
 set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad9625_dma
