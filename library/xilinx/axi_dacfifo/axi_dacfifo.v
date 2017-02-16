@@ -117,7 +117,6 @@ module axi_dacfifo (
   parameter   AXI_LENGTH = 15;
   parameter   AXI_ADDRESS = 32'h00000000;
   parameter   AXI_ADDRESS_LIMIT = 32'hffffffff;
-  parameter   AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
 
   // dma interface
 
@@ -157,7 +156,7 @@ module axi_dacfifo (
   input                               axi_awready;
   output                              axi_wvalid;
   output  [(AXI_DATA_WIDTH-1):0]      axi_wdata;
-  output  [(AXI_BYTE_WIDTH-1):0]      axi_wstrb;
+  output  [(AXI_DATA_WIDTH/8-1):0]    axi_wstrb;
   output                              axi_wlast;
   output  [  3:0]                     axi_wuser;
   input                               axi_wready;
