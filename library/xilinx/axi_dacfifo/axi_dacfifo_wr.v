@@ -198,7 +198,7 @@ module axi_dacfifo_wr (
   reg                                       axi_reset = 1'b0;
   reg                                       axi_xfer_out = 1'b0;
   reg     [31:0]                            axi_last_addr = 32'b0;
-  reg     [ 3:0]                            axi_last_beats = 15'b0;
+  reg     [ 3:0]                            axi_last_beats = 4'b0;
   reg                                       axi_awvalid = 1'b0;
   reg     [31:0]                            axi_awaddr = 32'b0;
   reg                                       axi_xfer_init = 1'b0;
@@ -317,7 +317,7 @@ module axi_dacfifo_wr (
       dma_last_beats <= 4'b0;
     end else begin
       if ((dma_ready == 1'b1) && (dma_valid == 1'b1)) begin
-        dma_last_beats <= (dma_last_beats < MEM_RATIO-1) ? dma_last_beats + 1 : 0;
+        dma_last_beats <= (dma_last_beats < MEM_RATIO-1) ? dma_last_beats + 4'b1 : 4'b0;
       end
     end
   end
@@ -341,7 +341,7 @@ module axi_dacfifo_wr (
     end else begin
       dma_mem_last_read_toggle_m = {dma_mem_last_read_toggle_m[1:0], axi_mem_last_read_toggle};
       if (dma_mem_wea_s == 1'b1) begin
-        dma_mem_waddr <= dma_mem_waddr + 8'b1;
+        dma_mem_waddr <= dma_mem_waddr + 1;
         if (dma_xfer_last == 1'b1) begin
           if (dma_last_beats != (MEM_RATIO - 1)) begin
             dma_mem_waddr <= dma_mem_waddr + (MEM_RATIO - dma_last_beats);
@@ -417,9 +417,7 @@ module axi_dacfifo_wr (
     if (axi_resetn == 1'b0) begin
       axi_endof_transaction <= 1'b0;
       axi_endof_transaction_d <= 1'b0;
-      axi_mem_addr_diff <= 'b0;
     end else begin
-     axi_mem_addr_diff <= axi_mem_addr_diff_s[(AXI_MEM_ADDRESS_WIDTH-1):0];
      axi_endof_transaction_d <= axi_endof_transaction;
      if ((axi_xfer_req_m[4] == 1'b1) && (axi_xfer_last_m[4] == 1'b1) && (axi_xfer_last_m[3] == 1'b0)) begin
         axi_endof_transaction <= 1'b1;
@@ -470,7 +468,7 @@ module axi_dacfifo_wr (
       axi_mem_raddr <= 'b0;
       axi_wvalid_counter <= 4'b0;
       axi_mem_last_read_toggle <= 1'b1;
-      axi_mem_raddr_g <= 8'b0;
+      axi_mem_raddr_g <= 'b0;
     end else begin
       axi_mem_rvalid <= axi_mem_rvalid_s;
       axi_mem_rvalid_d <= axi_mem_rvalid;
@@ -479,7 +477,7 @@ module axi_dacfifo_wr (
       axi_mem_rdata <= axi_mem_rdata_s;
       if (axi_mem_rvalid_s == 1'b1) begin
         axi_mem_raddr <= axi_mem_raddr + 1;
-        axi_wvalid_counter <= ((axi_wvalid_counter == axi_awlen) || (axi_xfer_init == 1'b1)) ? 4'b0 : axi_wvalid_counter + 1;
+        axi_wvalid_counter <= ((axi_wvalid_counter == axi_awlen) || (axi_xfer_init == 1'b1)) ? 4'b0 : axi_wvalid_counter + 4'b1;
       end
       if ((axi_endof_transaction == 1'b0) && (axi_endof_transaction_d == 1'b1)) begin
         axi_mem_raddr <= 'b0;
