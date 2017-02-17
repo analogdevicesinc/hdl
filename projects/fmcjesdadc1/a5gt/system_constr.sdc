@@ -27,6 +27,8 @@ set_false_path -from [get_clocks {i_system_bd|avl_ad9250_xcvr|alt_core_pll|alter
 
 if {[string equal "quartus_fit" $::TimeQuestInfo(nameofexecutable)]} {
   set_max_delay -from [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll8~PLL_OUTPUT_COUNTER|divclk}] \
-    -to [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll4~PLL_OUTPUT_COUNTER|divclk}] 2
+    -to [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll4~PLL_OUTPUT_COUNTER|divclk}] 0.150
+  set_min_delay -from [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll8~PLL_OUTPUT_COUNTER|divclk}] \
+    -to [get_clocks {i_system_bd|sys_ddr3_cntrl|pll0|pll4~PLL_OUTPUT_COUNTER|divclk}] 0.000
 }
 
