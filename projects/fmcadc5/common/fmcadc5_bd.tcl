@@ -2,35 +2,44 @@
 
 set util_fmcadc5_0_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_fmcadc5_0_xcvr]
 set_property -dict [list CONFIG.QPLL_FBDIV {"0010000000"}] $util_fmcadc5_0_xcvr
-set_property -dict [list CONFIG.CPLL_FBDIV {2}] $util_fmcadc5_0_xcvr
+set_property -dict [list CONFIG.CPLL_FBDIV {1}] $util_fmcadc5_0_xcvr
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $util_fmcadc5_0_xcvr
 set_property -dict [list CONFIG.TX_OUT_DIV {2}] $util_fmcadc5_0_xcvr
 set_property -dict [list CONFIG.TX_CLK25_DIV {10}] $util_fmcadc5_0_xcvr
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $util_fmcadc5_0_xcvr
 set_property -dict [list CONFIG.RX_OUT_DIV {1}] $util_fmcadc5_0_xcvr
 set_property -dict [list CONFIG.RX_CLK25_DIV {25}] $util_fmcadc5_0_xcvr
-set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_fmcadc5_0_xcvr
+set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0954}] $util_fmcadc5_0_xcvr
 set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff20400020}] $util_fmcadc5_0_xcvr
+set_property -dict [list CONFIG.RX_PMA_CFG {0x00018480}] $util_fmcadc5_0_xcvr
 set util_fmcadc5_1_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_fmcadc5_1_xcvr]
 set_property -dict [list CONFIG.QPLL_FBDIV {"0010000000"}] $util_fmcadc5_1_xcvr
-set_property -dict [list CONFIG.CPLL_FBDIV {2}] $util_fmcadc5_1_xcvr
+set_property -dict [list CONFIG.CPLL_FBDIV {1}] $util_fmcadc5_1_xcvr
 set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $util_fmcadc5_1_xcvr
 set_property -dict [list CONFIG.TX_OUT_DIV {2}] $util_fmcadc5_1_xcvr
 set_property -dict [list CONFIG.TX_CLK25_DIV {10}] $util_fmcadc5_1_xcvr
 set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $util_fmcadc5_1_xcvr
 set_property -dict [list CONFIG.RX_OUT_DIV {1}] $util_fmcadc5_1_xcvr
 set_property -dict [list CONFIG.RX_CLK25_DIV {25}] $util_fmcadc5_1_xcvr
-set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_fmcadc5_1_xcvr
+set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0954}] $util_fmcadc5_1_xcvr
 set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff20400020}] $util_fmcadc5_1_xcvr
+set_property -dict [list CONFIG.RX_PMA_CFG {0x00018480}] $util_fmcadc5_1_xcvr
 
 set axi_ad9625_0_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9625_0_xcvr]
 set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_ad9625_0_xcvr
 set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9625_0_xcvr
 set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9625_0_xcvr
+set_property -dict [list CONFIG.LPM_OR_DFE_N {0}] $axi_ad9625_0_xcvr
+set_property -dict [list CONFIG.SYS_CLK_SEL {"00"}] $axi_ad9625_0_xcvr
+set_property -dict [list CONFIG.OUT_CLK_SEL {"010"}] $axi_ad9625_0_xcvr
+
 set axi_ad9625_1_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9625_1_xcvr]
 set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_ad9625_1_xcvr
 set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9625_1_xcvr
 set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9625_1_xcvr
+set_property -dict [list CONFIG.LPM_OR_DFE_N {0}] $axi_ad9625_1_xcvr
+set_property -dict [list CONFIG.SYS_CLK_SEL {"00"}] $axi_ad9625_1_xcvr
+set_property -dict [list CONFIG.OUT_CLK_SEL {"010"}] $axi_ad9625_1_xcvr
 
 set axi_ad9625_0_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9625_0_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9625_0_jesd
