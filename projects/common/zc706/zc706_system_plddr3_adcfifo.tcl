@@ -47,7 +47,6 @@ proc p_plddr3_adcfifo {p_name m_name adc_data_width} {
   set_property -dict [list CONFIG.AXI_LENGTH {4}] $axi_adcfifo
   set_property -dict [list CONFIG.AXI_ADDRESS {0x80000000}] $axi_adcfifo
   set_property -dict [list CONFIG.AXI_ADDRESS_LIMIT {0xa0000000}] $axi_adcfifo
-  set_property -dict [list CONFIG.AXI_BYTE_WIDTH {64}] $axi_adcfifo
 
   ad_connect  sys_rst axi_ddr_cntrl/sys_rst
   ad_connect  sys_clk axi_ddr_cntrl/SYS_CLK

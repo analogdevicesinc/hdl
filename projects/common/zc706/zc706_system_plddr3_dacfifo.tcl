@@ -50,7 +50,6 @@ proc p_plddr3_dacfifo {p_name m_name dma_data_width dac_data_width} {
   set_property -dict [list CONFIG.AXI_LENGTH {15}] $axi_dacfifo
   set_property -dict [list CONFIG.AXI_ADDRESS {0x80000000}] $axi_dacfifo
   set_property -dict [list CONFIG.AXI_ADDRESS_LIMIT {0xa0000000}] $axi_dacfifo
-  set_property -dict [list CONFIG.BYPASS_EN {1}] $axi_dacfifo
 
   ## clock and reset
 

@@ -117,8 +117,6 @@ module axi_dacfifo (
   parameter   AXI_LENGTH = 15;
   parameter   AXI_ADDRESS = 32'h00000000;
   parameter   AXI_ADDRESS_LIMIT = 32'hffffffff;
-  parameter   AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
-  parameter   BYPASS_EN = 1;
 
   // dma interface
 
@@ -158,7 +156,7 @@ module axi_dacfifo (
   input                               axi_awready;
   output                              axi_wvalid;
   output  [(AXI_DATA_WIDTH-1):0]      axi_wdata;
-  output  [(AXI_BYTE_WIDTH-1):0]      axi_wstrb;
+  output  [(AXI_DATA_WIDTH/8-1):0]    axi_wstrb;
   output                              axi_wlast;
   output  [  3:0]                     axi_wuser;
   input                               axi_wready;
@@ -311,34 +309,23 @@ module axi_dacfifo (
 
   // bypass logic
 
-  generate if (BYPASS_EN == 1) begin
+  util_axis_resize #(
+    .MASTER_DATA_WIDTH (AXI_DATA_WIDTH),
+    .SLAVE_DATA_WIDTH (DMA_DATA_WIDTH)
+  ) i_util_axis_resize (
+    .clk (axi_clk),
+    .resetn (axi_resetn),
+    .s_valid (dma_valid),
+    .s_ready (dma_ready_bp_s),
+    .s_data (dma_data),
+    .m_valid (dma_valid_bp_s),
+    .m_ready (axi_rd_ready_s),
+    .m_data (dma_data_bp_s)
+  );
 
-    util_axis_resize #(
-      .MASTER_DATA_WIDTH (AXI_DATA_WIDTH),
-      .SLAVE_DATA_WIDTH (DMA_DATA_WIDTH)
-    ) i_util_axis_resize (
-      .clk (axi_clk),
-      .resetn (axi_resetn),
-      .s_valid (dma_valid),
-      .s_ready (dma_ready_bp_s),
-      .s_data (dma_data),
-      .m_valid (dma_valid_bp_s),
-      .m_ready (axi_rd_ready_s),
-      .m_data (dma_data_bp_s)
-    );
-
-    assign  dac_rd_valid_s = (dac_fifo_bypass) ? dma_valid_bp_s : axi_rd_valid_s;
-    assign  dac_rd_data_s = (dac_fifo_bypass) ? dma_data_bp_s : axi_rd_data_s;
-    assign  dma_ready = (dac_fifo_bypass) ? dma_ready_bp_s : dma_ready_s;
-
-  end else begin
-
-    assign  dac_rd_valid_s = axi_rd_valid_s;
-    assign  dac_rd_data_s = axi_rd_data_s;
-    assign  dma_ready = dma_ready_s;
-
-  end
-  endgenerate
+  assign  dac_rd_valid_s = (dac_fifo_bypass) ? dma_valid_bp_s : axi_rd_valid_s;
+  assign  dac_rd_data_s = (dac_fifo_bypass) ? dma_data_bp_s : axi_rd_data_s;
+  assign  dma_ready = (dac_fifo_bypass) ? dma_ready_bp_s : dma_ready_s;
 
 endmodule
 
