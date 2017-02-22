@@ -13,7 +13,6 @@ M_DEPS += ../common/fmcomms2_bd.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
-M_DEPS += ../../common/xilinx/sys_wfifo.tcl
 M_DEPS += ../../common/ac701/ac701_system_mig.prj
 M_DEPS += ../../common/ac701/ac701_system_constr.xdc
 M_DEPS += ../../common/ac701/ac701_system_bd.tcl
