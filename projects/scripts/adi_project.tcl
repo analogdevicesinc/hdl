@@ -131,12 +131,6 @@ proc adi_project_create {project_name {mode 0}} {
   } else {
     write_hwdef -file "$project_name.data/$project_name.hwdef"
   }
-
-  if {![info exists ::env(ADI_NO_BITSTREAM_COMPRESSION)] && ![info exists ADI_NO_BITSTREAM_COMPRESSION]} {
-    add_files -norecurse -fileset sources_1 \
-		"$ad_hdl_dir/projects/common/xilinx/compression_system_constr.xdc"
-  }
-
 }
 
 proc adi_project_files {project_name project_files} {
@@ -166,6 +160,9 @@ proc adi_project_run {project_name} {
   set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
   set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE Explore [get_runs impl_1]
   set_property STRATEGY "Performance_Explore" [get_runs impl_1]
+  if {![info exists ::env(ADI_NO_BITSTREAM_COMPRESSION)] && ![info exists ADI_NO_BITSTREAM_COMPRESSION]} {
+    set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+  }
 
   launch_runs impl_1 -to_step write_bitstream
   wait_on_run impl_1
