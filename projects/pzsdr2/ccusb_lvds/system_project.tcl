@@ -12,9 +12,6 @@ adi_project_files pzsdr2_ccusb_lvds [list \
   "../common/pzsdr2_constr_lvds.xdc" \
   "../common/ccusb_constr.xdc" ]
 
-set_property PROCESSING_ORDER EARLY [get_files ../common/pzsdr2_constr.xdc]
-set_property PROCESSING_ORDER LATE [get_files ../common/ccusb_constr.xdc]
-
 adi_project_run pzsdr2_ccusb_lvds
 
 

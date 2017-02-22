@@ -11,7 +11,5 @@ adi_project_files m2k_fmc_zed [list \
   "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v"]
 
-set_property PROCESSING_ORDER EARLY [get_files "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
-
 adi_project_run m2k_fmc_zed
 
