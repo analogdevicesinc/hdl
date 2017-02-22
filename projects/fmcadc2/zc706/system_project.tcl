@@ -11,7 +11,7 @@ adi_project_files fmcadc2_zc706 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_lvds_out.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/library/common/ad_sysref_gen.v" \
-  "$ad_hdl_dir/projects/common/zc706/zc706_system_mig_constr.xdc" \
+  "$ad_hdl_dir/projects/common/zc706/zc706_plddr3_constr.xdc" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc" ]
 
 adi_project_run fmcadc2_zc706

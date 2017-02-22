@@ -1,7 +1,7 @@
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
-source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3_adcfifo.tcl
-source $ad_hdl_dir/projects/common/xilinx/sys_dacfifo.tcl
+source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_adcfifo_bd.tcl
+source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
 p_sys_dacfifo [current_bd_instance .] axi_ad9162_fifo 256 10
 p_plddr3_adcfifo [current_bd_instance .] axi_ad9625_fifo 256

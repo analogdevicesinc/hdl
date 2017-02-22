@@ -1,6 +1,6 @@
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
-source $ad_hdl_dir/projects/common/zc706/zc706_system_plddr3_dacfifo.tcl
+source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_dacfifo_bd.tcl
 
 p_plddr3_dacfifo [current_bd_instance .] axi_ad9371_dacfifo 128 128
 

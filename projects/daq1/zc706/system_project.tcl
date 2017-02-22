@@ -8,7 +8,7 @@ adi_project_files daq1_zc706 [list \
   "../common/daq1_spi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "system_constr.xdc"\
-  "$ad_hdl_dir/projects/common/zc706/zc706_system_mig_constr.xdc" \
+  "$ad_hdl_dir/projects/common/zc706/zc706_plddr3_constr.xdc" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc" \
   "system_top.v" ]
 

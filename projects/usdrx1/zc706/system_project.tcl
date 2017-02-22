@@ -12,7 +12,7 @@ adi_project_files usdrx1_zc706 [list \
   "../common/usdrx1_spi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/library/common/ad_sysref_gen.v" \
-  "$ad_hdl_dir/projects/common/zc706/zc706_system_mig_constr.xdc" \
+  "$ad_hdl_dir/projects/common/zc706/zc706_plddr3_constr.xdc" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc" ]
 
 set_property is_enabled false [get_files  *system_axi*_spi*.xdc]

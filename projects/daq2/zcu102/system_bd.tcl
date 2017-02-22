@@ -1,7 +1,7 @@
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/sys_adcfifo.tcl
-source $ad_hdl_dir/projects/common/xilinx/sys_dacfifo.tcl
+source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
+source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
 p_sys_adcfifo [current_bd_instance .] axi_ad9680_fifo 128 16
 p_sys_dacfifo [current_bd_instance .] axi_ad9144_fifo 128 10
