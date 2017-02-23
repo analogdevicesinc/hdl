@@ -16,6 +16,7 @@ M_DEPS += axi_dacfifo_dac.v
 M_DEPS += axi_dacfifo_ip.tcl
 M_DEPS += axi_dacfifo_rd.v
 M_DEPS += axi_dacfifo_wr.v
+M_DEPS += axi_dacfifo_bypass.v
 
 M_VIVADO := vivado -mode batch -source
 

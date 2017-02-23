@@ -79,7 +79,7 @@ proc p_plddr3_dacfifo {p_name m_name dma_data_width dac_data_width} {
   ad_connect  dma_xfer_req axi_dacfifo/dma_xfer_req
   ad_connect  dma_xfer_last axi_dacfifo/dma_xfer_last
 
-  ad_connect  dac_fifo_bypass axi_dacfifo/dac_fifo_bypass
+  ad_connect  dac_fifo_bypass axi_dacfifo/bypass
   ad_connect  dac_valid axi_dacfifo/dac_valid
   ad_connect  dac_data axi_dacfifo/dac_data
   ad_connect  dac_dunf axi_dacfifo/dac_dunf
