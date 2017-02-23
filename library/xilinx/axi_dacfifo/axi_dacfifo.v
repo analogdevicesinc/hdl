@@ -59,7 +59,7 @@ module axi_dacfifo (
   dac_dunf,
   dac_xfer_out,
 
-  dac_fifo_bypass,
+  bypass,
 
   // axi interface
 
@@ -136,7 +136,7 @@ module axi_dacfifo (
   output                              dac_dunf;
   output                              dac_xfer_out;
 
-  input                               dac_fifo_bypass;
+  input                               bypass;
 
   // axi interface
 
@@ -185,6 +185,17 @@ module axi_dacfifo (
   input   [(AXI_DATA_WIDTH-1):0]      axi_rdata;
   output                              axi_rready;
 
+  reg                                 dma_ready = 1'b0;
+  reg                                 dma_bypass_m1 = 1'b0;
+  reg                                 dma_bypass = 1'b0;
+  reg                                 dac_bypass_m1 = 1'b0;
+  reg                                 dac_bypass = 1'b0;
+  reg                                 dac_xfer_out = 1'b0;
+  reg                                 dac_xfer_out_m1 = 1'b0;
+  reg                                 dac_xfer_out_bypass = 1'b0;
+  reg                                 dac_dunf = 1'b0;
+  reg     [(DAC_DATA_WIDTH-1):0]      dac_data = 'b0;
+
   // internal signals
 
   wire    [(AXI_DATA_WIDTH-1):0]      axi_wr_data_s;
@@ -206,6 +217,12 @@ module axi_dacfifo (
   wire                                dma_valid_bp_s;
   wire    [(AXI_DATA_WIDTH-1):0]      dma_data_bp_s;
   wire                                dma_ready_bp_s;
+  wire    [(DAC_DATA_WIDTH-1):0]      dac_data_fifo_s;
+  wire    [(DAC_DATA_WIDTH-1):0]      dac_data_bypass_s;
+  wire                                dac_xfer_fifo_out_s;
+  wire                                dac_dunf_fifo_s;
+  wire                                dac_dunf_bypass_s;
+  wire                                dma_ready_wr_s;
 
   axi_dacfifo_wr #(
     .AXI_DATA_WIDTH (AXI_DATA_WIDTH),
@@ -217,7 +234,8 @@ module axi_dacfifo (
   ) i_wr (
     .dma_clk (dma_clk),
     .dma_data (dma_data),
-    .dma_ready (dma_ready_s),
+    .dma_ready (dma_ready),
+    .dma_ready_out (dma_ready_wr_s),
     .dma_valid (dma_valid),
     .dma_xfer_req (dma_xfer_req),
     .dma_xfer_last (dma_xfer_last),
@@ -294,8 +312,8 @@ module axi_dacfifo (
     .DAC_DATA_WIDTH (DAC_DATA_WIDTH)
   ) i_dac (
     .axi_clk (axi_clk),
-    .axi_dvalid (dac_rd_valid_s),
-    .axi_ddata (dac_rd_data_s),
+    .axi_dvalid (dac_valid),
+    .axi_ddata (axi_rd_data_s),
     .axi_dready (axi_rd_ready_s),
     .axi_dlast (axi_dlast_s),
     .axi_xfer_req (axi_xfer_req_s),
@@ -303,29 +321,54 @@ module axi_dacfifo (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_valid (dac_valid),
-    .dac_data (dac_data),
-    .dac_xfer_out (dac_xfer_out),
-    .dac_dunf (dac_dunf));
+    .dac_data (dac_data_fifo_s),
+    .dac_xfer_out (dac_xfer_fifo_out_s),
+    .dac_dunf (dac_dunf_fifo_s));
 
   // bypass logic
 
-  util_axis_resize #(
-    .MASTER_DATA_WIDTH (AXI_DATA_WIDTH),
-    .SLAVE_DATA_WIDTH (DMA_DATA_WIDTH)
-  ) i_util_axis_resize (
-    .clk (axi_clk),
-    .resetn (axi_resetn),
-    .s_valid (dma_valid),
-    .s_ready (dma_ready_bp_s),
-    .s_data (dma_data),
-    .m_valid (dma_valid_bp_s),
-    .m_ready (axi_rd_ready_s),
-    .m_data (dma_data_bp_s)
+  axi_dacfifo_bypass #(
+    .DAC_DATA_WIDTH (DAC_DATA_WIDTH),
+    .DMA_DATA_WIDTH (DMA_DATA_WIDTH)
+  ) i_dacfifo_bypass (
+    .dma_clk(dma_clk),
+    .dma_data(dma_data),
+    .dma_ready(dma_ready),
+    .dma_ready_out(dma_ready_bypass_s),
+    .dma_valid(dma_valid),
+    .dma_xfer_req(dma_xfer_req),
+    .dac_clk(dac_clk),
+    .dac_rst(dac_rst),
+    .dac_valid(dac_valid),
+    .dac_data(dac_data_bypass_s),
+    .dac_dunf(dac_dunf_bypass_s)
   );
 
-  assign  dac_rd_valid_s = (dac_fifo_bypass) ? dma_valid_bp_s : axi_rd_valid_s;
-  assign  dac_rd_data_s = (dac_fifo_bypass) ? dma_data_bp_s : axi_rd_data_s;
-  assign  dma_ready = (dac_fifo_bypass) ? dma_ready_bp_s : dma_ready_s;
+  always @(posedge dma_clk) begin
+    dma_bypass_m1 <= bypass;
+    dma_bypass <= dma_bypass_m1;
+  end
+
+  always @(posedge dac_clk) begin
+    dac_bypass_m1 <= bypass;
+    dac_bypass <= dac_bypass_m1;
+    dac_xfer_out_m1 <= dma_xfer_req;
+    dac_xfer_out_bypass <= dac_xfer_out_m1;
+  end
+
+  // mux for the dma_ready
+
+  always @(posedge dma_clk) begin
+    dma_ready <= (dma_bypass) ? dma_ready_wr_s : dma_ready_bypass_s;
+  end
+
+  // mux for dac data
+
+  always @(posedge dac_clk) begin
+    dac_data <= (dac_bypass) ? dac_data_bypass_s : dac_data_fifo_s;
+    dac_xfer_out <= (dac_bypass) ? dac_xfer_out_bypass : dac_xfer_fifo_out_s;
+    dac_dunf <= (dac_bypass) ? dac_dunf_bypass_s : dac_dunf_fifo_s;
+  end
 
 endmodule
 

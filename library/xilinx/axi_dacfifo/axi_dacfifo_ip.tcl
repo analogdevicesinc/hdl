@@ -13,6 +13,7 @@ adi_ip_files axi_dacfifo [list \
   "axi_dacfifo_dac.v" \
   "axi_dacfifo_wr.v" \
   "axi_dacfifo_rd.v" \
+  "axi_dacfifo_bypass.v" \
   "axi_dacfifo.v"]
 
 adi_ip_properties_lite axi_dacfifo

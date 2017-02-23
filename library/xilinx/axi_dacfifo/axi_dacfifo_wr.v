@@ -46,6 +46,7 @@ module axi_dacfifo_wr (
   dma_clk,
   dma_data,
   dma_ready,
+  dma_ready_out,
   dma_valid,
 
   // request and syncronizaiton
@@ -120,7 +121,8 @@ module axi_dacfifo_wr (
 
   input                                     dma_clk;
   input   [(DMA_DATA_WIDTH-1):0]            dma_data;
-  output                                    dma_ready;
+  input                                     dma_ready;
+  output                                    dma_ready_out;
   input                                     dma_valid;
 
   input                                     dma_xfer_req;
@@ -169,7 +171,7 @@ module axi_dacfifo_wr (
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m1 = 'd0;
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2 = 'd0;
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr = 'd0;
-  reg                                       dma_ready = 1'b0;
+  reg                                       dma_ready_out = 1'b0;
   reg                                       dma_rst_m1 = 1'b0;
   reg                                       dma_rst_m2 = 1'b0;
   reg     [ 2:0]                            dma_mem_last_read_toggle_m = 3'b0;
@@ -363,16 +365,16 @@ module axi_dacfifo_wr (
       dma_mem_raddr_m1 <= 'b0;
       dma_mem_raddr_m2 <= 'b0;
       dma_mem_raddr <= 'b0;
-      dma_ready <= 1'b0;
+      dma_ready_out <= 1'b0;
     end else begin
       dma_mem_raddr_m1 <= axi_mem_raddr_g;
       dma_mem_raddr_m2 <= dma_mem_raddr_m1;
       dma_mem_raddr <= g2b(dma_mem_raddr_m2);
       dma_mem_addr_diff <= dma_mem_addr_diff_s[DMA_MEM_ADDRESS_WIDTH-1:0];
       if (dma_mem_addr_diff >= DMA_BUF_THRESHOLD_HI) begin
-        dma_ready <= 1'b0;
+        dma_ready_out <= 1'b0;
       end else begin
-        dma_ready <= 1'b1;
+        dma_ready_out <= 1'b1;
       end
     end
   end
