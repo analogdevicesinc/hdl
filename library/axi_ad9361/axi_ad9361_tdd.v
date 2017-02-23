@@ -117,6 +117,7 @@ module axi_ad9361_tdd (
 
   reg               tdd_tx_valid = 1'b0;
   reg               tdd_rx_valid = 1'b0;
+  reg               tdd_sync_cntr = 1'b0;
 
   // internal signals
 
@@ -163,7 +164,16 @@ module axi_ad9361_tdd (
   wire              tdd_tx_dp_en_s;
 
   assign  tdd_enabled = tdd_enable_s;
-  assign  tdd_sync_cntr = ~(tdd_enable_s & tdd_terminal_type_s);
+
+  // syncronization control signal
+
+  always @(posedge clk) begin
+    if (tdd_enable_s == 1'b1) begin
+      tdd_sync_cntr <= ~tdd_terminal_type_s;
+    end else begin
+      tdd_sync_cntr <= 1'b0;
+    end
+  end
 
   // tx/rx data flow control
 
