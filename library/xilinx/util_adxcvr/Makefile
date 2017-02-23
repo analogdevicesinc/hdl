@@ -35,8 +35,8 @@ M_FLIST += .Xil
 
 
 
-.PHONY: all clean clean-all
-all: util_adxcvr.xpr
+.PHONY: all dep clean clean-all
+all: dep util_adxcvr.xpr
 
 
 clean:clean-all
@@ -50,5 +50,7 @@ util_adxcvr.xpr: $(M_DEPS)
 	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_adxcvr_ip.tcl  >> util_adxcvr_ip.log 2>&1
 
+dep:
+	make -C ../../interfaces
 ####################################################################################
 ####################################################################################
