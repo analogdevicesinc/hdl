@@ -200,8 +200,8 @@ ad_connect  axi_ad9371_rx_jesd_rstgen/peripheral_reset axi_ad9371_dacfifo/dac_rs
 ad_connect  util_ad9371_tx_upack/dac_valid axi_ad9371_dacfifo/dac_valid
 ad_connect  util_ad9371_tx_upack/dac_data axi_ad9371_dacfifo/dac_data
 ad_connect  util_ad9371_tx_upack/dma_xfer_in axi_ad9371_dacfifo/dac_xfer_out
-ad_connect  axi_ad9371_dacfifo/ddr_clk axi_ad9371_dacfifo/dma_clk
-ad_connect  axi_ad9371_dacfifo/ddr_clk axi_ad9371_tx_dma/m_axis_aclk
+ad_connect  sys_dma_clk axi_ad9371_dacfifo/dma_clk
+ad_connect  sys_dma_clk axi_ad9371_tx_dma/m_axis_aclk
 ad_connect  axi_ad9371_dacfifo/dma_rvalid axi_ad9371_tx_dma/m_axis_valid
 ad_connect  axi_ad9371_dacfifo/dma_rdata axi_ad9371_tx_dma/m_axis_data
 ad_connect  axi_ad9371_dacfifo/dma_rready axi_ad9371_tx_dma/m_axis_ready
