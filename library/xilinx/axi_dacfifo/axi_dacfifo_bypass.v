@@ -230,7 +230,7 @@ module axi_dacfifo_bypass #(
 
   assign dac_mem_rea_s = dac_valid & dac_mem_ready;
 
-  always @(posedge dma_clk) begin
+  always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
       dac_mem_raddr <= 'h0;
       dac_mem_raddr_g <= 'h0;
