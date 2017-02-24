@@ -6,7 +6,6 @@ set_property ASYNC_REG TRUE \
   [get_cells -hier *dac_bypass_*] \
   [get_cells -hier *dma_bypass_*]
 
-
 set_false_path -to [get_cells  -hier -filter {name =~ *_xfer_req_m_reg[0]* && IS_SEQUENTIAL}]
 set_false_path -to [get_cells  -hier -filter {name =~ *_xfer_last_m_reg[0]* && IS_SEQUENTIAL}]
 set_false_path -to [get_cells  -hier -filter {name =~ *dac_xfer_out_m1* && IS_SEQUENTIAL}]
