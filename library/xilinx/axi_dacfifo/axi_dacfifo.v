@@ -110,13 +110,15 @@ module axi_dacfifo (
 
   // parameters
 
-  parameter   DAC_DATA_WIDTH = 128;
+  parameter   DAC_DATA_WIDTH = 64;
   parameter   DMA_DATA_WIDTH = 64;
   parameter   AXI_DATA_WIDTH = 512;
   parameter   AXI_SIZE = 2;
   parameter   AXI_LENGTH = 15;
   parameter   AXI_ADDRESS = 32'h00000000;
   parameter   AXI_ADDRESS_LIMIT = 32'hffffffff;
+
+  localparam  FIFO_BYPASS = (DAC_DATA_WIDTH == DMA_DATA_WIDTH) ? 1 : 0;
 
   // dma interface
 
@@ -325,50 +327,71 @@ module axi_dacfifo (
     .dac_xfer_out (dac_xfer_fifo_out_s),
     .dac_dunf (dac_dunf_fifo_s));
 
-  // bypass logic
+  // bypass logic -- supported if DAC_DATA_WIDTH == DMA_DATA_WIDTH
 
-  axi_dacfifo_bypass #(
-    .DAC_DATA_WIDTH (DAC_DATA_WIDTH),
-    .DMA_DATA_WIDTH (DMA_DATA_WIDTH)
-  ) i_dacfifo_bypass (
-    .dma_clk(dma_clk),
-    .dma_data(dma_data),
-    .dma_ready(dma_ready),
-    .dma_ready_out(dma_ready_bypass_s),
-    .dma_valid(dma_valid),
-    .dma_xfer_req(dma_xfer_req),
-    .dac_clk(dac_clk),
-    .dac_rst(dac_rst),
-    .dac_valid(dac_valid),
-    .dac_data(dac_data_bypass_s),
-    .dac_dunf(dac_dunf_bypass_s)
-  );
+  generate
+  if (FIFO_BYPASS) begin
 
-  always @(posedge dma_clk) begin
-    dma_bypass_m1 <= bypass;
-    dma_bypass <= dma_bypass_m1;
+    axi_dacfifo_bypass #(
+      .DAC_DATA_WIDTH (DAC_DATA_WIDTH),
+      .DMA_DATA_WIDTH (DMA_DATA_WIDTH)
+    ) i_dacfifo_bypass (
+      .dma_clk(dma_clk),
+      .dma_data(dma_data),
+      .dma_ready(dma_ready),
+      .dma_ready_out(dma_ready_bypass_s),
+      .dma_valid(dma_valid),
+      .dma_xfer_req(dma_xfer_req),
+      .dac_clk(dac_clk),
+      .dac_rst(dac_rst),
+      .dac_valid(dac_valid),
+      .dac_data(dac_data_bypass_s),
+      .dac_dunf(dac_dunf_bypass_s)
+    );
+
+    always @(posedge dma_clk) begin
+      dma_bypass_m1 <= bypass;
+      dma_bypass <= dma_bypass_m1;
+    end
+
+    always @(posedge dac_clk) begin
+      dac_bypass_m1 <= bypass;
+      dac_bypass <= dac_bypass_m1;
+      dac_xfer_out_m1 <= dma_xfer_req;
+      dac_xfer_out_bypass <= dac_xfer_out_m1;
+    end
+
+    // mux for the dma_ready
+
+    always @(posedge dma_clk) begin
+      dma_ready <= (dma_bypass) ? dma_ready_wr_s : dma_ready_bypass_s;
+    end
+
+    // mux for dac data
+
+    always @(posedge dac_clk) begin
+      if (dac_valid) begin
+        dac_data <= (dac_bypass) ? dac_data_bypass_s : dac_data_fifo_s;
+      end
+      dac_xfer_out <= (dac_bypass) ? dac_xfer_out_bypass : dac_xfer_fifo_out_s;
+      dac_dunf <= (dac_bypass) ? dac_dunf_bypass_s : dac_dunf_fifo_s;
+    end
+
+  end else begin /* if (~FIFO_BYPASS) */
+
+    always @(posedge dma_clk) begin
+      dma_ready <= dma_ready_wr_s;
+    end
+    always @(posedge dac_clk) begin
+      if (dac_valid) begin
+        dac_data <= dac_data_fifo_s;
+      end
+      dac_xfer_out <= dac_xfer_fifo_out_s;
+      dac_dunf <= dac_dunf_fifo_s;
+    end
+
   end
-
-  always @(posedge dac_clk) begin
-    dac_bypass_m1 <= bypass;
-    dac_bypass <= dac_bypass_m1;
-    dac_xfer_out_m1 <= dma_xfer_req;
-    dac_xfer_out_bypass <= dac_xfer_out_m1;
-  end
-
-  // mux for the dma_ready
-
-  always @(posedge dma_clk) begin
-    dma_ready <= (dma_bypass) ? dma_ready_wr_s : dma_ready_bypass_s;
-  end
-
-  // mux for dac data
-
-  always @(posedge dac_clk) begin
-    dac_data <= (dac_bypass) ? dac_data_bypass_s : dac_data_fifo_s;
-    dac_xfer_out <= (dac_bypass) ? dac_xfer_out_bypass : dac_xfer_fifo_out_s;
-    dac_dunf <= (dac_bypass) ? dac_dunf_bypass_s : dac_dunf_fifo_s;
-  end
+  endgenerate
 
 endmodule
 
