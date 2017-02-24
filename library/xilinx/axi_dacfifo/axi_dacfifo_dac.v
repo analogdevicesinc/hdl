@@ -135,6 +135,7 @@ module axi_dacfifo_dac (
   reg                                 dac_dlast_m1 = 1'b0;
   reg                                 dac_dlast_m2 = 1'b0;
   reg                                 dac_dlast_inmem = 1'b0;
+  reg                                 dac_mem_valid = 1'b0;
 
   // internal signals
 
@@ -144,7 +145,6 @@ module axi_dacfifo_dac (
   wire    [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_laddr_s;
 
   wire    [DAC_ADDRESS_WIDTH:0]       dac_mem_addr_diff_s;
-  wire                                dac_mem_valid_s;
   wire                                dac_xfer_init_s;
   wire                                dac_last_axi_beats_s;
 
@@ -303,7 +303,9 @@ module axi_dacfifo_dac (
   end
 
   assign dac_mem_addr_diff_s = {1'b1, dac_mem_waddr} - dac_mem_raddr;
-  assign dac_mem_valid_s = (dac_mem_enable) ? dac_valid : 1'b0;
+  always @(posedge dac_clk) begin
+    dac_mem_valid <= (dac_mem_enable) ? dac_valid : 1'b0;
+  end
 
   // CDC for the dma_last_beats
 
@@ -335,7 +337,7 @@ module axi_dacfifo_dac (
       end else if (dac_mem_raddr == dac_mem_laddr + MEM_RATIO) begin
         dac_dlast_inmem <= 1'b0;
       end
-      if (dac_mem_valid_s == 1'b1) begin
+      if (dac_mem_valid == 1'b1) begin
         dac_beat_cnt <= ((dac_beat_cnt >= MEM_RATIO-1) ||
                          ((dac_last_beats > 1'b1) && (dac_last_axi_beats_s > 1'b0) && (dac_beat_cnt == dac_last_beats-1))) ? 0 : dac_beat_cnt + 1;
         dac_mem_raddr <= ((dac_last_axi_beats_s) && (dac_beat_cnt == dac_last_beats-1)) ? (dac_mem_laddr + MEM_RATIO) : dac_mem_raddr + 1'b1;
