@@ -333,7 +333,7 @@ module axi_dacfifo_wr (
                            (MEM_RATIO == 8) ? {dma_mem_raddr, 3'b0} :
                                               {dma_mem_raddr, 4'b0};
   assign dma_mem_last_read_s = dma_mem_last_read_toggle_m[2] ^ dma_mem_last_read_toggle_m[1];
-  assign dma_mem_wea_s = dma_xfer_req & dma_valid;
+  assign dma_mem_wea_s = dma_xfer_req & dma_valid & dma_ready;
 
   always @(posedge dma_clk) begin
     if (dma_rst_s == 1'b1) begin
