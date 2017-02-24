@@ -312,7 +312,7 @@ module axi_dacfifo (
     .DAC_DATA_WIDTH (DAC_DATA_WIDTH)
   ) i_dac (
     .axi_clk (axi_clk),
-    .axi_dvalid (dac_valid),
+    .axi_dvalid (axi_rd_valid_s),
     .axi_ddata (axi_rd_data_s),
     .axi_dready (axi_rd_ready_s),
     .axi_dlast (axi_dlast_s),
