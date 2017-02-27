@@ -70,8 +70,6 @@ set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9625_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9625_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
 
-p_sys_adcfifo [current_bd_instance .] axi_ad9625_fifo 512 18
-
 # reference clocks & resets
 
 create_bd_port -dir I rx_ref_clk_0
