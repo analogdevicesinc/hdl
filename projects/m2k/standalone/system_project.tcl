@@ -13,5 +13,11 @@ adi_project_files m2k [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v"]
 
 set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
+
+set_msg_config -suppress -id {Common 17-55} -string {{CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [c:/workspace/hdl/projects/m2k/standalone/system_constr.xdc:74]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.} }
+set_msg_config -suppress -id {Common 17-55} -string {{CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [c:/workspace/hdl/projects/m2k/standalone/system_constr.xdc:75]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.} }
+
 adi_project_run m2k
 
