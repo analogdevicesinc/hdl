@@ -142,7 +142,7 @@ module axi_logic_analyzer (
   end
   endgenerate
 
-  BUFGMUX BUFGMUX_inst (
+  BUFGMUX_CTRL BUFGMUX_CTRL_inst (
     .O (clk_out),
     .I0 (data_i[0]),
     .I1 (trigger_i[0]),

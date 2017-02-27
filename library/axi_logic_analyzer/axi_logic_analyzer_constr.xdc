@@ -28,3 +28,4 @@ set_false_path  -from [get_cells -hier -filter {name =~ *up_xfer_toggle_reg*  &&
 set_false_path  -to [get_cells -hier -filter {name =~ *trigger_m1_reg*     && IS_SEQUENTIAL}]
 
 set_false_path  -to [get_cells -hier -filter {name =~ *ad_rst_sync_m1_reg*     && IS_SEQUENTIAL}]
+set_false_path  -to [get_pins BUFGMUX_CTRL_inst/S*]
