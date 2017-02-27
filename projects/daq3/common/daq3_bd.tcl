@@ -162,5 +162,5 @@ ad_mem_hp2_interconnect sys_cpu_clk axi_ad9680_dma/m_dest_axi
 ad_cpu_interrupt ps-12 mb-13 axi_ad9152_dma/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9680_dma/irq
 
-ad_connect  axi_ad9152_fifo/dac_fifo_bypass GND
+ad_connect  axi_ad9152_fifo/bypass GND
 

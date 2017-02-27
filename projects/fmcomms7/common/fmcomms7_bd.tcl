@@ -202,4 +202,4 @@ ad_cpu_interrupt ps-9  mb-9  axi_ad9144_dma/irq
 ad_cpu_interrupt ps-10 mb-10 axi_ad9680_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_fmcomms7_spi/ip2intc_irpt
 
-ad_connect  axi_ad9144_fifo/dac_fifo_bypass GND
+ad_connect  axi_ad9144_fifo/bypass GND

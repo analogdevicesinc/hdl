@@ -141,5 +141,5 @@ ad_cpu_interrupt ps-13 mb-13 axi_ad9625_dma/irq
 
 # unused
 
-ad_connect  axi_ad9162_fifo/dac_fifo_bypass GND
+ad_connect  axi_ad9162_fifo/bypass GND
 
