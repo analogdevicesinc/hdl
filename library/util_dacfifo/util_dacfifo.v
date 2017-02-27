@@ -58,7 +58,7 @@ module util_dacfifo (
   dac_data,
   dac_xfer_out,
 
-  dac_fifo_bypass
+  bypass
 );
 
   // depth of the FIFO
@@ -85,7 +85,7 @@ module util_dacfifo (
   output  [(DATA_WIDTH-1):0]          dac_data;
   output                              dac_xfer_out;
 
-  input                               dac_fifo_bypass;
+  input                               bypass;
 
   // internal registers
 
@@ -175,8 +175,8 @@ module util_dacfifo (
 
   // output logic
 
-  assign dac_data = (dac_fifo_bypass) ? dma_data : dac_data_s;
-  assign dma_ready = (dac_fifo_bypass) ? dac_valid : dma_ready_d;
+  assign dac_data = (bypass) ? dma_data : dac_data_s;
+  assign dma_ready = (bypass) ? dac_valid : dma_ready_d;
 
 endmodule
 
