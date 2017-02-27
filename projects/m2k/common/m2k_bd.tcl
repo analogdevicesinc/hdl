@@ -93,7 +93,7 @@ ad_connect data_o     logic_analyzer/data_o
 ad_connect data_t     logic_analyzer/data_t
 
 ad_connect sys_cpu_clk            clk_generator/clk
-#ad_connect logic_analyzer/clk_out clk_generator/clk2
+ad_connect logic_analyzer/clk_out clk_generator/clk2
 
 ad_connect logic_analyzer/clk     clk_generator/clk_0
 
