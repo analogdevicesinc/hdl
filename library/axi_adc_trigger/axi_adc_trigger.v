@@ -345,6 +345,7 @@ module axi_adc_trigger(
 
   .io_selection(io_selection),
   .trigger_o(trigger_o),
+  .triggered(trigger_out_mixed),
 
   .low_level(low_level),
   .high_level(high_level),

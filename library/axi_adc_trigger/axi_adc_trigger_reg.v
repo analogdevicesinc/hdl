@@ -43,6 +43,7 @@ module axi_adc_trigger_reg (
 
   output reg  [ 1:0]  io_selection,
   output reg  [ 1:0]  trigger_o,
+  input               triggered,
 
   output      [ 1:0]  low_level,
   output      [ 1:0]  high_level,
@@ -97,6 +98,7 @@ module axi_adc_trigger_reg (
   reg     [ 3:0]  up_trigger_l_mix_b = 32'h0;
   reg     [ 2:0]  up_trigger_out_mix = 32'h0;
   reg     [31:0]  up_delay_trigger= 32'h0;
+  reg             up_triggered = 1'h0;
 
   assign up_wreq_s = ((up_waddr[13:5] == 6'h00)) ? up_wreq : 1'b0;
   assign up_rreq_s = ((up_raddr[13:5] == 6'h00)) ? up_rreq : 1'b0;
@@ -124,6 +126,7 @@ module axi_adc_trigger_reg (
       up_trigger_l_mix_a <= 'd0;
       up_trigger_l_mix_b <= 'd0;
       up_trigger_out_mix <= 'd0;
+      up_triggered <= 1'd0;
     end else begin
       up_wack <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
@@ -168,6 +171,11 @@ module axi_adc_trigger_reg (
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'he)) begin
         up_delay_trigger <= up_wdata;
       end
+      if (triggered == 1'b1) begin
+        up_triggered <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hf)) begin
+        up_triggered <= up_wdata[0];
+      end
     end
   end
 
@@ -196,6 +204,7 @@ module axi_adc_trigger_reg (
           5'hc: up_rdata <= {28'h0,up_trigger_l_mix_b};
           5'hd: up_rdata <= {29'h0,up_trigger_out_mix};
           5'he: up_rdata <= up_delay_trigger;
+          5'hf: up_rdata <= {31'h0,up_triggered};
           default: up_rdata <= 0;
         endcase
       end else begin
