@@ -236,9 +236,12 @@ module axi_ad9371 (
 
   wire              up_clk;
   wire              up_rstn;
+  wire              adc_rst;
+  wire              adc_os_rst;
   wire    [ 63:0]   adc_data_s;
   wire              adc_os_valid_s;
   wire    [ 63:0]   adc_os_data_s;
+  wire              dac_rst;
   wire    [127:0]   dac_data_s;
   wire              up_wreq_s;
   wire    [ 13:0]   up_waddr_s;
