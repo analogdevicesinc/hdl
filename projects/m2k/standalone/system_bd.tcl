@@ -150,6 +150,3 @@ ad_connect  sys_concat_intc/In0 ps_intr_00
 ad_cpu_interconnect 0x41600000 axi_iic_main
 
 source ../common/m2k_bd.tcl
-
-set_property -dict [list CONFIG.DAC_DATAPATH_DISABLE {1}] $axi_ad9963
-set_property -dict [list CONFIG.ADC_DATAPATH_DISABLE {1}] $axi_ad9963
