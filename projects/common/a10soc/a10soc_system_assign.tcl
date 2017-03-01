@@ -3,6 +3,8 @@
 
 set_global_assignment -name FAMILY "Arria 10"
 set_global_assignment -name DEVICE 10AS066N3F40E2SGE2
+set_global_assignment -name MESSAGE_DISABLE 17951 ; ## disable unused RX channels message
+set_global_assignment -name MESSAGE_DISABLE 18655 ; ## disable unused TX channels message
 
 # clocks and resets
 
