@@ -5,7 +5,7 @@ source ../../scripts/adi_ip_alt.tcl
 
 ad_ip_create axi_dacfifo {AXI DAC FIFO Interface}
 ad_ip_files axi_dacfifo [list\
-  $ad_hdl_dir/library/common/ad_mem_asym.v \
+  $ad_hdl_dir/library/altera/common/ad_mem_asym.v \
   $ad_hdl_dir/library/common/ad_axis_inf_rx.v \
   axi_dacfifo_dac.v \
   axi_dacfifo_wr.v \
