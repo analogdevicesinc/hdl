@@ -6,7 +6,7 @@ source ../scripts/adi_ip_alt.tcl
 
 ad_ip_create util_adcfifo {UTIL ADC FIFO Interface}
 ad_ip_files util_adcfifo [list\
-  $ad_hdl_dir/library/common/ad_mem_asym.v \
+  $ad_hdl_dir/library/altera/common/ad_mem_asym.v \
   $ad_hdl_dir/library/common/ad_axis_inf_rx.v \
   util_adcfifo.v \
   util_adcfifo_constr.sdc]
