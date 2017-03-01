@@ -4,7 +4,9 @@ load_package flow
 source ../../scripts/adi_env.tcl
 project_new adrv9371x_a10soc -overwrite
 
-source "../../common/a10soc/a10soc_system_assign.tcl"
+source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
+source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
+source $ad_hdl_dir/projects/common/altera/sys_gen.tcl
 
 set_global_assignment -name QSYS_FILE system_bd.qsys
 set_global_assignment -name VERILOG_FILE system_top.v

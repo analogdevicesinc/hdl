@@ -179,6 +179,12 @@ add_connection axi_ad9371.adc_os_ch_1 axi_ad9371_rx_os_cpack.adc_ch_1
 
 # dac & adc fifos
 
+add_connection axi_ad9371_tx_xcvr.if_up_rst axi_ad9371_tx_fifo.if_dac_rst
+add_connection avl_ad9371_tx_xcvr.core_clk axi_ad9371_tx_fifo.if_dac_clk
+add_connection axi_ad9371_tx_upack.if_dac_valid axi_ad9371_tx_fifo.if_dac_valid
+add_connection axi_ad9371_tx_fifo.if_dac_data axi_ad9371_tx_upack.if_dac_data
+add_connection axi_ad9371_tx_fifo.if_dac_dunf axi_ad9371.if_dac_dunf
+
 add_instance axi_ad9371_rx_fifo util_adcfifo 1.0
 set_instance_parameter_value axi_ad9371_rx_fifo {ADC_DATA_WIDTH} {64}
 set_instance_parameter_value axi_ad9371_rx_fifo {DMA_DATA_WIDTH} {64}
@@ -217,13 +223,16 @@ set_instance_parameter_value axi_ad9371_tx_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {CYCLIC} {1}
-set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_DEST} {2}
+set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {FIFO_SIZE} {16}
-add_connection avl_ad9371_tx_xcvr.core_clk axi_ad9371_tx_dma.if_fifo_rd_clk
-add_connection axi_ad9371_tx_upack.if_dac_valid axi_ad9371_tx_dma.if_fifo_rd_en
-add_connection axi_ad9371_tx_dma.if_fifo_rd_dout axi_ad9371_tx_upack.if_dac_data
-add_connection axi_ad9371_tx_dma.if_fifo_rd_underflow axi_ad9371.if_dac_dunf
+add_connection sys_dma_clk.clk axi_ad9371_tx_fifo.if_dma_clk
+add_connection sys_dma_clk.clk axi_ad9371_tx_dma.if_m_axis_aclk
+add_connection axi_ad9371_tx_dma.if_m_axis_valid axi_ad9371_tx_fifo.if_dma_valid
+add_connection axi_ad9371_tx_dma.if_m_axis_data axi_ad9371_tx_fifo.if_dma_data 
+add_connection axi_ad9371_tx_dma.if_m_axis_last axi_ad9371_tx_fifo.if_dma_xfer_last
+add_connection axi_ad9371_tx_dma.if_m_axis_xfer_req axi_ad9371_tx_fifo.if_dma_xfer_req
+add_connection axi_ad9371_tx_fifo.if_dma_ready axi_ad9371_tx_dma.if_m_axis_ready
 add_connection sys_clk.clk axi_ad9371_tx_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_ad9371_tx_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_ad9371_tx_dma.m_src_axi_clock
