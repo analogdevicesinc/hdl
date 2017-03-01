@@ -34,6 +34,11 @@ set_location_assignment PIN_N36   -to "tx_data[2](n)"       ; ## C03  FMC_HPC_DP
 set_location_assignment PIN_K39   -to tx_data[3]            ; ## A30  FMC_HPC_DP3_C2M_P (tx_data_p[2])
 set_location_assignment PIN_K38   -to "tx_data[3](n)"       ; ## A31  FMC_HPC_DP3_C2M_N (tx_data_n[2])
 
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to ref_clk0
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to ref_clk1
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_data
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_data
+
 set_instance_assignment -name IO_STANDARD LVDS -to ref_clk0
 set_instance_assignment -name IO_STANDARD LVDS -to ref_clk1
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[0]

@@ -35,6 +35,10 @@ set_location_assignment PIN_BC8   -to "tx_data[2](n)"     ; ## C03  FMCA_DP0_C2M
 set_location_assignment PIN_BC3   -to tx_data[3]          ; ## A30  FMCA_DP3_C2M_P (tx_data_p[3])
 set_location_assignment PIN_BC4   -to "tx_data[3](n)"     ; ## A31  FMCA_DP3_C2M_N (tx_data_n[3])
 
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to ref_clk0
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to ref_clk1
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_data
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_data
 
 set_instance_assignment -name IO_STANDARD LVDS -to ref_clk0
 set_instance_assignment -name IO_STANDARD LVDS -to ref_clk1
