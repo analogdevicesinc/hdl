@@ -28,6 +28,7 @@ ad_ip_parameter AXI_ADDRESS_LIMIT INTEGER -1
 # interfaces
 
 ad_alt_intf clock dma_clk input 1 clk
+ad_alt_intf reset dma_rst input 1 if_dma_clk
 ad_alt_intf signal dma_valid input 1 valid
 ad_alt_intf signal dma_data input DMA_DATA_WIDTH data
 ad_alt_intf signal dma_ready output 1 ready

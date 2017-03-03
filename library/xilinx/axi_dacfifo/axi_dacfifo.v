@@ -44,6 +44,7 @@ module axi_dacfifo (
   // dma interface (AXI Stream)
 
   dma_clk,
+  dma_rst,
   dma_valid,
   dma_data,
   dma_ready,
@@ -123,6 +124,7 @@ module axi_dacfifo (
   // dma interface
 
   input                               dma_clk;
+  input                               dma_rst;
   input                               dma_valid;
   input   [(DMA_DATA_WIDTH-1):0]      dma_data;
   output                              dma_ready;
