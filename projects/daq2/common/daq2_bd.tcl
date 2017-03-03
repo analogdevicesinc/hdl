@@ -95,6 +95,7 @@ ad_connect  axi_ad9144_core/dac_enable_1 axi_ad9144_upack/dac_enable_1
 ad_connect  axi_ad9144_core/dac_ddata_1 axi_ad9144_upack/dac_data_1
 ad_connect  axi_ad9144_core/dac_valid_1 axi_ad9144_upack/dac_valid_1
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_fifo/dac_clk
+ad_connect  sys_cpu_resetn axi_ad9144_fifo/dac_rst
 ad_connect  axi_ad9144_upack/dac_valid axi_ad9144_fifo/dac_valid
 ad_connect  axi_ad9144_upack/dac_data axi_ad9144_fifo/dac_data
 ad_connect  axi_ad9144_upack/dma_xfer_in axi_ad9144_fifo/dac_xfer_out
