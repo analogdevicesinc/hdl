@@ -54,8 +54,10 @@ module util_dacfifo (
   // DAC interface
 
   dac_clk,
+  dac_rst,
   dac_valid,
   dac_data,
+  dac_dunf,
   dac_xfer_out,
 
   bypass
@@ -81,81 +83,236 @@ module util_dacfifo (
   // DAC interface
 
   input                               dac_clk;
+  input                               dac_rst;
   input                               dac_valid;
   output  [(DATA_WIDTH-1):0]          dac_data;
+  output                              dac_dunf;
   output                              dac_xfer_out;
 
   input                               bypass;
 
+  localparam  FIFO_THRESHOLD_HI = {(ADDRESS_WIDTH){1'b1}} - 4;
+
   // internal registers
 
   reg     [(ADDRESS_WIDTH-1):0]       dma_waddr = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_d = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_2d = 'b0;
-  reg                                 dma_xfer_req_ff = 1'b0;
-  reg                                 dma_ready_d = 1'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_waddr_g = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr_g = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_raddr_m1 = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_raddr_m2 = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_raddr = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dma_addr_diff = 'b0;
+  reg                                 dma_ready = 1'b0;
+  reg                                 dma_ready_fifo = 1'b0;
+  reg                                 dma_ready_bypass = 1'b0;
+  reg                                 dma_bypass = 1'b0;
+  reg                                 dma_bypass_m1 = 1'b0;
+  reg                                 dma_xfer_out_fifo = 1'b0;
+  reg                                 dma_xfer_out_bypass = 1'b0;
 
   reg     [(ADDRESS_WIDTH-1):0]       dac_raddr = 'b0;
-  reg                                 dma_xfer_out = 1'b0;
-  reg     [ 2:0]                      dac_xfer_out_m = 3'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_raddr_g = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_waddr = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_waddr_m1 = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_waddr_m2 = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_addr_diff = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_m1 = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_m2 = 'b0;
+  reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr = 'b0;
+  reg     [(DATA_WIDTH-1):0]          dac_data = 'b0;
+  reg                                 dac_mem_ready = 1'b0;
+  reg                                 dac_xfer_out = 1'b0;
+  reg                                 dac_xfer_out_fifo = 1'b0;
+  reg                                 dac_xfer_out_fifo_m1 = 1'b0;
+  reg                                 dac_xfer_out_bypass = 1'b0;
+  reg                                 dac_xfer_out_bypass_m1 = 1'b0;
+  reg                                 dac_bypass = 1'b0;
+  reg                                 dac_bypass_m1 = 1'b0;
+  reg                                 dac_dunf = 1'b0;
 
   // internal wires
 
-  wire                                dma_wren;
+  wire                                dma_wren_s;
   wire    [(DATA_WIDTH-1):0]          dac_data_s;
+  wire    [(ADDRESS_WIDTH):0]         dma_addr_diff_s;
+  wire    [(ADDRESS_WIDTH):0]         dac_addr_diff_s;
 
-  // write interface
+  // binary to grey conversion
+
+  function [9:0] b2g;
+    input [9:0] b;
+    reg   [9:0] g;
+    begin
+      g[9] = b[9];
+      g[8] = b[9] ^ b[8];
+      g[7] = b[8] ^ b[7];
+      g[6] = b[7] ^ b[6];
+      g[5] = b[6] ^ b[5];
+      g[4] = b[5] ^ b[4];
+      g[3] = b[4] ^ b[3];
+      g[2] = b[3] ^ b[2];
+      g[1] = b[2] ^ b[1];
+      g[0] = b[1] ^ b[0];
+      b2g = g;
+    end
+  endfunction
+
+  // grey to binary conversion
+
+  function [9:0] g2b;
+    input [9:0] g;
+    reg   [9:0] b;
+    begin
+      b[9] = g[9];
+      b[8] = b[9] ^ g[8];
+      b[7] = b[8] ^ g[7];
+      b[6] = b[7] ^ g[6];
+      b[5] = b[6] ^ g[5];
+      b[4] = b[5] ^ g[4];
+      b[3] = b[4] ^ g[3];
+      b[2] = b[3] ^ g[2];
+      b[1] = b[2] ^ g[1];
+      b[0] = b[1] ^ g[0];
+      g2b = b;
+    end
+  endfunction
+
+  // DMA / Write interface
+
+  // fifo is always ready, if it's not in bypass mode
 
   always @(posedge dma_clk) begin
     if(dma_rst == 1'b1) begin
-      dma_ready_d <= 1'b0;
-      dma_xfer_req_ff <= 1'b0;
+      dma_ready_fifo <= 1'b0;
     end else begin
-      dma_ready_d <= 1'b1;                                // Fifo is always ready
-      dma_xfer_req_ff <= dma_xfer_req;
+      dma_ready_fifo <= 1'b1;
     end
   end
+
+  // if bypass is enabled, fifo request data until reaches the high threshold.
+
+  assign dma_addr_diff_s = {1'b1, dma_waddr} - dma_raddr;
+
+  always @(posedge dma_clk) begin
+    if (dma_rst == 1'b1) begin
+      dma_addr_diff <= 'b0;
+      dma_raddr_m1 <= 'b0;
+      dma_raddr_m2 <= 'b0;
+      dma_raddr <= 'b0;
+      dma_ready_bypass <= 1'b0;
+    end else begin
+      dma_raddr_m1 <= dac_raddr_g;
+      dma_raddr_m2 <= dma_raddr_m1;
+      dma_raddr <= g2b(dma_raddr_m2);
+      dma_addr_diff <= dma_addr_diff_s[ADDRESS_WIDTH-1:0];
+      if (dma_addr_diff >= FIFO_THRESHOLD_HI) begin
+        dma_ready_bypass <= 1'b0;
+      end else begin
+        dma_ready_bypass <= 1'b1;
+      end
+    end
+  end
+
+  // write address generation
+
+  assign dma_wren_s = dma_valid & dma_xfer_req & dma_ready;
 
   always @(posedge dma_clk) begin
     if(dma_rst == 1'b1) begin
       dma_waddr <= 'b0;
-      dma_lastaddr <= 'b0;
-      dma_xfer_out <= 1'b0;
+      dma_waddr_g <= 'b0;
+      dma_xfer_out_fifo <= 1'b0;
+      dma_xfer_out_bypass <= 1'b0;
     end else begin
-      if (dma_valid && dma_xfer_req) begin
+      if (dma_wren_s == 1'b1) begin
         dma_waddr <= dma_waddr + 1;
-        dma_xfer_out <= 1'b0;
+        dma_xfer_out_fifo <= 1'b0;
       end
-      if (dma_xfer_last) begin
-        dma_lastaddr <= dma_waddr;
+      if (dma_xfer_last == 1'b1) begin
         dma_waddr <= 'b0;
-        dma_xfer_out <= 1'b1;
+        dma_xfer_out_fifo <= 1'b1;
+      end
+      dma_waddr_g <= b2g(dma_waddr);
+      dma_xfer_out_bypass <= dma_xfer_req;
+    end
+  end
+
+  // save the last write address
+
+  always @(posedge dma_clk) begin
+    if (dma_rst == 1'b1) begin
+      dma_lastaddr_g <= 'b0;
+    end else begin
+      if (dma_bypass == 1'b0) begin
+        dma_lastaddr_g <= (dma_xfer_last == 1'b1)? b2g(dma_waddr) : dma_lastaddr_g;
       end
     end
   end
 
-  assign dma_wren = dma_valid & dma_xfer_req;
+  // DAC / Read interface
+
+  // The memory module is ready if it's not empty
+
+  assign dac_addr_diff_s = {1'b1, dac_waddr} - dac_raddr;
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_addr_diff <= 'b0;
+      dac_waddr_m1 <= 'b0;
+      dac_waddr_m2 <= 'b0;
+      dac_waddr <= 'b0;
+      dac_mem_ready <= 1'b0;
+    end else begin
+      dac_waddr_m1 <= dma_waddr_g;
+      dac_waddr_m2 <= dac_waddr_m1;
+      dac_waddr <= g2b(dac_waddr_m2);
+      dac_addr_diff <= dac_addr_diff_s[ADDRESS_WIDTH-1:0];
+      if (dac_addr_diff > 0) begin
+        dac_mem_ready <= 1'b1;
+      end else begin
+        dac_mem_ready <= 1'b0;
+      end
+    end
+  end
 
   // sync lastaddr to dac clock domain
 
   always @(posedge dac_clk) begin
-    dac_lastaddr_d <= dma_lastaddr;
-    dac_lastaddr_2d <= dac_lastaddr_d;
-    dac_xfer_out_m <= {dac_xfer_out_m[1:0], dma_xfer_out};
+    if (dac_rst == 1'b1) begin
+      dac_lastaddr_m1 <= 1'b0;
+      dac_lastaddr_m2 <= 1'b0;
+      dac_xfer_out_fifo_m1 <= 1'b0;
+      dac_xfer_out_fifo <= 1'b0;
+      dac_xfer_out_bypass_m1 <= 1'b0;
+      dac_xfer_out_bypass <= 1'b0;
+    end else begin
+      dac_lastaddr_m1 <= dma_lastaddr_g;
+      dac_lastaddr_m2 <= dac_lastaddr_m1;
+      dac_lastaddr <= g2b(dac_lastaddr_m2);
+      dac_xfer_out_fifo_m1 <= dma_xfer_out_fifo;
+      dac_xfer_out_fifo <= dac_xfer_out_fifo_m1;
+      dac_xfer_out_bypass_m1 <= dma_xfer_out_bypass;
+      dac_xfer_out_bypass <= dac_xfer_out_bypass_m1;
+    end
   end
-
-  assign dac_xfer_out = dac_xfer_out_m[2];
 
   // generate dac read address
 
+  assign dac_mem_ren_s = (dac_bypass == 1'b1) ? (dac_valid & dac_mem_ready) : (dac_valid & dac_xfer_out_fifo);
+
   always @(posedge dac_clk) begin
-    if(dac_valid == 1'b1) begin
-      if (dac_lastaddr_2d == 'h0) begin
-        dac_raddr <= dac_raddr + 1;
-      end else begin
-        dac_raddr <= (dac_raddr < dac_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
+    if (dac_rst == 1'b1) begin
+      dac_raddr <= 'b0;
+      dac_raddr_g <= 'b0;
+    end else begin
+      if (dac_mem_ren_s == 1'b1) begin
+        if (dac_lastaddr == 'b0) begin
+          dac_raddr <= dac_raddr + 1;
+        end else begin
+          dac_raddr <= (dac_raddr < dac_lastaddr) ? (dac_raddr + 1) : 'b0;
+        end
       end
+      dac_raddr_g <= b2g(dac_raddr);
     end
   end
 
@@ -166,17 +323,44 @@ module util_dacfifo (
     .DATA_WIDTH (DATA_WIDTH))
   i_mem_fifo (
     .clka (dma_clk),
-    .wea (dma_wren),
+    .wea (dma_wren_s),
     .addra (dma_waddr),
     .dina (dma_data),
     .clkb (dac_clk),
     .addrb (dac_raddr),
     .doutb (dac_data_s));
 
+  // define underflow
+  // underflow make sense just if bypass is enabled
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_dunf <= 1'b0;
+    end else begin
+      dac_dunf <= (dac_bypass == 1'b1) ? (dac_valid & dac_xfer_out_bypass & ~dac_mem_ren_s) : 1'b0;
+    end
+  end
+
   // output logic
 
-  assign dac_data = (bypass) ? dma_data : dac_data_s;
-  assign dma_ready = (bypass) ? dac_valid : dma_ready_d;
+  always @(posedge dma_clk) begin
+    dma_bypass_m1 <= bypass;
+    dma_bypass <= dma_bypass_m1;
+  end
+
+  always @(posedge dac_clk) begin
+    dac_bypass_m1 <= bypass;
+    dac_bypass <= dac_bypass_m1;
+  end
+
+  always @(posedge dma_clk) begin
+    dma_ready <= (dma_bypass == 1'b1) ? dma_ready_bypass : dma_ready_fifo;
+  end
+
+  always @(posedge dac_clk) begin
+    dac_data <= dac_data_s;
+    dac_xfer_out <= (dac_bypass == 1'b1) ? dac_xfer_out_bypass : dac_xfer_out_fifo;
+  end
 
 endmodule
 

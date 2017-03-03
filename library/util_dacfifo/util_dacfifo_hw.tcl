@@ -26,9 +26,11 @@ ad_alt_intf signal dma_xfer_req input 1 xfer_req
 ad_alt_intf signal dma_xfer_last input 1 last
 
 ad_alt_intf clock dac_clk input 1
+ad_alt_intf reset dac_rst input 1 if_dac_clk
 ad_alt_intf signal dac_valid input 1 valid
 ad_alt_intf signal dac_data output DATA_WIDTH data
 ad_alt_intf signal dac_xfer_out output 1 xfer_req
+ad_alt_intf signal dac_dunf output 1 unf
 
 ad_alt_intf signal bypass input 1 bypass
 
