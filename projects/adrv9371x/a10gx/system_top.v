@@ -117,6 +117,7 @@ module system_top (
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [  7:0]   spi_csn_s;
+  wire              ad9371_tx_fifo_bypass;
 
   // assignments
 
@@ -125,6 +126,14 @@ module system_top (
 
   // gpio (ad9371)
 
+  assign gpio_i[63:58] = gpio_o[63:58];
+
+  assign ad9371_tx_fifo_bypass = gpio_o[57];
+  assign gpio_i[57:57] = gpio_o[57];
+
+  assign gpio_i[56:56] = ad9371_gpint;
+
+  assign gpio_i[55:48] = gpio_o[55:48];
   assign ad9371_tx1_enable = gpio_o[55];
   assign ad9371_tx2_enable = gpio_o[54];
   assign ad9371_rx1_enable = gpio_o[53];
@@ -134,9 +143,7 @@ module system_top (
   assign ad9528_sysref_req = gpio_o[49];
   assign ad9528_reset_b = gpio_o[48];
 
-  assign gpio_i[63:57] = gpio_o[63:57];
-  assign gpio_i[56:56] = ad9371_gpint;
-  assign gpio_i[55:32] = gpio_o[55:32];
+  assign gpio_i[47:32] = gpio_o[47:32];
 
   // board stuff
 
@@ -203,6 +210,7 @@ module system_top (
     .tx_data_1_tx_serial_data (tx_data[1]),
     .tx_data_2_tx_serial_data (tx_data[2]),
     .tx_data_3_tx_serial_data (tx_data[3]),
+    .tx_fifo_bypass_bypass (ad9371_tx_fifo_bypass),
     .tx_ref_clk_clk (ref_clk1),
     .tx_sync_export (tx_sync),
     .tx_sysref_export (sysref));
