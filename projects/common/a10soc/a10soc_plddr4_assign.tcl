@@ -2,6 +2,11 @@
 # pl-ddr4 settings
 
 set_location_assignment PIN_AG5   -to sys_ddr_ref_clk
+set_location_assignment PIN_AG6   -to "sys_ddr_ref_clk(n)"
+
+set_instance_assignment -name IO_STANDARD LVDS -to sys_ddr_ref_clk
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sys_ddr_ref_clk -disable
+
 set_location_assignment PIN_AK1   -to sys_ddr_clk_p
 set_location_assignment PIN_AK2   -to sys_ddr_clk_n
 set_location_assignment PIN_AN3   -to sys_ddr_a[0]
