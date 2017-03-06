@@ -178,6 +178,9 @@ add_connection axi_ad9371.adc_os_ch_0 axi_ad9371_rx_os_cpack.adc_ch_0
 add_connection axi_ad9371.adc_os_ch_1 axi_ad9371_rx_os_cpack.adc_ch_1
 
 # dac & adc fifos
+#
+add_interface tx_fifo_bypass conduit end
+set_interface_property tx_fifo_bypass EXPORT_OF axi_ad9371_tx_fifo.if_bypass
 
 add_connection axi_ad9371_tx_xcvr.if_up_rst axi_ad9371_tx_fifo.if_dac_rst
 add_connection avl_ad9371_tx_xcvr.core_clk axi_ad9371_tx_fifo.if_dac_clk
@@ -227,6 +230,7 @@ set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {FIFO_SIZE} {16}
 add_connection sys_dma_clk.clk axi_ad9371_tx_fifo.if_dma_clk
+add_connection sys_dma_clk.clk_reset axi_ad9371_tx_fifo.if_dma_rst
 add_connection sys_dma_clk.clk axi_ad9371_tx_dma.if_m_axis_aclk
 add_connection axi_ad9371_tx_dma.if_m_axis_valid axi_ad9371_tx_fifo.if_dma_valid
 add_connection axi_ad9371_tx_dma.if_m_axis_data axi_ad9371_tx_fifo.if_dma_data 
