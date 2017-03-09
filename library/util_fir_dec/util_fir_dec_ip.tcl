@@ -21,7 +21,7 @@ CONFIG.Filter_Type {Decimation} \
 CONFIG.Interpolation_Rate {1} \
 CONFIG.Number_Channels {1} \
 CONFIG.Number_Paths {2} \
-CONFIG.Output_Rounding_Mode {Truncate_LSBs} \
+CONFIG.Output_Rounding_Mode {Symmetric_Rounding_to_Zero} \
 CONFIG.Output_Width {16} \
 CONFIG.Quantization {Integer_Coefficients} \
 CONFIG.RateSpecification {Frequency_Specification} \
