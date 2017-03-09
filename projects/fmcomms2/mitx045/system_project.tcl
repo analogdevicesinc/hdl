@@ -11,5 +11,5 @@ adi_project_files fmcomms2_mitx045 [list \
   "$ad_hdl_dir/projects/common/mitx045/mitx045_system_constr.xdc" ]
 
 adi_project_run fmcomms2_mitx045
-
+source ../common/fmcomms2_delay.tcl
 

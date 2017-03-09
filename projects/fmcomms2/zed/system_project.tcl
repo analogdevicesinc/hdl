@@ -11,4 +11,5 @@ adi_project_files fmcomms2_zed [list \
   "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" ]
 
 adi_project_run fmcomms2_zed
+source ../common/fmcomms2_delay.tcl
 

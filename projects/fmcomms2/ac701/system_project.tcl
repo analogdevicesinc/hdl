@@ -11,5 +11,5 @@ adi_project_files fmcomms2_ac701 [list \
   "$ad_hdl_dir/projects/common/ac701/ac701_system_constr.xdc" ]
 
 adi_project_run fmcomms2_ac701
-
+source ../common/fmcomms2_delay.tcl
 
