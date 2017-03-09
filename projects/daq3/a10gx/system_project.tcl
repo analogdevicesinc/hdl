@@ -44,6 +44,11 @@ set_location_assignment PIN_AT22  -to "tx_sync(n)"          ; ## H08  FMCA_LA02_
 set_location_assignment PIN_AN20  -to tx_sysref             ; ## H10  FMCA_LA04_P
 set_location_assignment PIN_AP19  -to "tx_sysref(n)"        ; ## H11  FMCA_LA04_N
 
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_ref_clk
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_ref_clk
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_data
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_data
+
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[0]
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[1]
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[2]
