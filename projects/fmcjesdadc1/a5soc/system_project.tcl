@@ -40,6 +40,7 @@ set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[0]
 set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[1]
 set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[2]
 set_instance_assignment -name XCVR_IO_PIN_TERMINATION 100_OHMS -to rx_data[3]
+set_instance_assignment -name GXB_0PPM_CORECLK ON -to rx_data
 
 # jesd signals
 

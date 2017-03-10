@@ -40,6 +40,7 @@ set_location_assignment PIN_L1    -to rx_data[6]
 set_location_assignment PIN_L2    -to "rx_data[6](n)"
 set_location_assignment PIN_G1    -to rx_data[7]
 set_location_assignment PIN_G2    -to "rx_data[7](n)"
+set_instance_assignment -name GXB_0PPM_CORECLK ON -to rx_data
 set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[0]
 set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[1]
 set_instance_assignment -name IO_STANDARD "1.5-V PCML" -to rx_data[2]
