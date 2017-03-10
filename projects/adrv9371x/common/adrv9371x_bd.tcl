@@ -177,6 +177,7 @@ ad_connect  sys_dma_clk sys_ps7/FCLK_CLK2
 ad_connect  sys_dma_clk sys_dma_rstgen/slowest_sync_clk
 ad_connect  sys_ps7/FCLK_RESET2_N sys_dma_rstgen/ext_reset_in
 ad_connect  sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
+ad_connect  sys_cpu_reset axi_ad9371_dacfifo/dma_rst
 
 # connections (dac)
 
