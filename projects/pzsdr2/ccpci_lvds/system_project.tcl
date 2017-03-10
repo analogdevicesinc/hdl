@@ -13,5 +13,5 @@ adi_project_files pzsdr2_ccpci_lvds [list \
   "system_top.v" ]
 
 adi_project_run pzsdr2_ccpci_lvds
-
+source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 

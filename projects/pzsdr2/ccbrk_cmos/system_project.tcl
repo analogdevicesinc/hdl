@@ -14,5 +14,5 @@ adi_project_files pzsdr2_ccbrk_cmos [list \
 
 set_property is_enabled false [get_files  *axi_gpreg_constr.xdc]
 adi_project_run pzsdr2_ccbrk_cmos
-
+source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 

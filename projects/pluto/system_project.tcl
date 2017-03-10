@@ -13,5 +13,5 @@ adi_project_files pluto [list \
 
 set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
 adi_project_run pluto
-
+source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 
