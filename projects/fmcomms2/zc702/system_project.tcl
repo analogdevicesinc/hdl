@@ -11,5 +11,5 @@ adi_project_files fmcomms2_zc702 [list \
   "system_constr.xdc" ]
 
 adi_project_run fmcomms2_zc702
-source ../common/fmcomms2_delay.tcl
+source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 

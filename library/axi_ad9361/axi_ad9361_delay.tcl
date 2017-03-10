@@ -1,7 +1,7 @@
 # report delays
 
-set m_file [open "timing_delay.log" w]
-set m_ios [get_ports -filter {NAME =~ rx_*_in_p*}]
+set m_file [open "axi_ad9361_delay.log" w]
+set m_ios [get_ports -filter {NAME =~ rx_*_in*}]
 set m_ddr_ios [get_pins -hierarchical -filter {NAME =~ *i_rx_data_iddr/C || NAME =~ *i_rx_data_iddr/D}]
 set m_info [report_timing -no_header -return_string -from $m_ios -to $m_ddr_ios -max_paths 100]
 
@@ -23,10 +23,10 @@ while {[regexp {\s+Data\s+Path\s+Delay:\s+(.*?)\s+(.*)} $m_string m1 m_value m_s
 
 set m_size [llength $m_sources]
 if {[llength $m_destinations] != $m_size} {
-  puts "CRITICAL WARNING: fmcomms2_delay.tcl, source-destination size mismatch"
+  puts "CRITICAL WARNING: axi_ad9361_delay.tcl, source-destination size mismatch"
 }
 if {[llength $m_delays] != $m_size} {
-  puts "CRITICAL WARNING: fmcomms2_delay.tcl, source-delay size mismatch"
+  puts "CRITICAL WARNING: axi_ad9361_delay.tcl, source-delay size mismatch"
 }
 
 for {set m_index 0} {$m_index < $m_size} {incr m_index} {
