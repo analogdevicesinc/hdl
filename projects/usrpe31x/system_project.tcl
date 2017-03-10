@@ -12,5 +12,5 @@ adi_project_files usrpe31x [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v"]
 
 adi_project_run usrpe31x
-
+source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 
