@@ -42,6 +42,7 @@ module up_delay_cntrl #(
   // parameters
 
   parameter   DISABLE = 0,
+  parameter   INIT_DELAY = 0,
   parameter   DATA_WIDTH = 8,
   parameter   BASE_ADDRESS = 6'h02) (
 
@@ -77,6 +78,8 @@ module up_delay_cntrl #(
   reg                             up_rack_int = 'd0;
   reg     [31:0]                  up_rdata_int = 'd0;
   reg                             up_dlocked_m1 = 'd0;
+  reg                             up_dlocked_m2 = 'd0;
+  reg                             up_dlocked_m3 = 'd0;
   reg                             up_dlocked = 'd0;
   reg     [(DATA_WIDTH-1):0]      up_dld_int = 'd0;
   reg     [((DATA_WIDTH*5)-1):0]  up_dwdata_int = 'd0;
@@ -93,6 +96,8 @@ module up_delay_cntrl #(
   wire    [(DATA_WIDTH-1):0]      up_drdata0_s;
   wire    [(DATA_WIDTH-1):0]      up_dld_s;
   wire    [((DATA_WIDTH*5)-1):0]  up_dwdata_s;
+  wire    [(DATA_WIDTH-1):0]      up_dinit_s;
+  wire    [((DATA_WIDTH*5)-1):0]  up_dinitdata_s;
   wire                            delay_rst_s;
 
   // variables
@@ -132,6 +137,8 @@ module up_delay_cntrl #(
       up_rack_int <= 'd0;
       up_rdata_int <= 'd0;
       up_dlocked_m1 <= 'd0;
+      up_dlocked_m2 <= 'd0;
+      up_dlocked_m3 <= 'd0;
       up_dlocked <= 'd0;
     end else begin
       up_preset <= 1'd0;
@@ -147,9 +154,20 @@ module up_delay_cntrl #(
         up_rdata_int <= 32'd0;
       end
       up_dlocked_m1 <= delay_locked;
-      up_dlocked <= up_dlocked_m1;
+      up_dlocked_m2 <= up_dlocked_m1;
+      up_dlocked_m3 <= up_dlocked_m2;
+      up_dlocked <= up_dlocked_m3;
     end
   end
+
+  // init delay values (after delay locked)
+
+  generate
+  for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_dinit
+  assign up_dinit_s[n] = up_dlocked_m2 & ~up_dlocked_m3;
+  assign up_dinitdata_s[((n*5)+4):(n*5)] = INIT_DELAY;
+  end
+  endgenerate
 
   // write does not hold- read back what goes into effect. 
 
@@ -169,8 +187,10 @@ module up_delay_cntrl #(
       up_dld_int <= 'd0;
       up_dwdata_int <= 'd0;
     end else begin
-      up_dld_int <= up_dld_s;
-      if (up_wreq_s == 1'b1) begin
+      up_dld_int <= up_dld_s | up_dinit_s;
+      if ((up_dlocked_m2 == 1'b1) && (up_dlocked_m3 == 1'b0)) begin
+        up_dwdata_int <= up_dinitdata_s;
+      end else if (up_wreq_s == 1'b1) begin
         up_dwdata_int <= up_dwdata_s;
       end
     end
