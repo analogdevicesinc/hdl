@@ -43,6 +43,7 @@ module axi_ad9361_tx #(
 
   parameter   ID = 0,
   parameter   MODE_1R1T = 0,
+  parameter   INIT_DELAY = 0,
   parameter   DDS_DISABLE = 0,
   parameter   USERPORTS_DISABLE = 0,
   parameter   DELAYCNTRL_DISABLE = 0,
@@ -371,6 +372,7 @@ module axi_ad9361_tx #(
 
   up_delay_cntrl #(
     .DISABLE (DELAYCNTRL_DISABLE),
+    .INIT_DELAY (INIT_DELAY),
     .DATA_WIDTH(16),
     .BASE_ADDRESS(6'h12))
   i_delay_cntrl (

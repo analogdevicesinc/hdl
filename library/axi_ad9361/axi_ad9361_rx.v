@@ -44,6 +44,7 @@ module axi_ad9361_rx #(
 
   parameter   ID = 0,
   parameter   MODE_1R1T = 0,
+  parameter   INIT_DELAY = 0,
   parameter   USERPORTS_DISABLE = 0,
   parameter   DATAFORMAT_DISABLE = 0,
   parameter   DCFILTER_DISABLE = 0,
@@ -370,6 +371,7 @@ module axi_ad9361_rx #(
   // adc delay control
 
   up_delay_cntrl #(
+    .INIT_DELAY (INIT_DELAY),
     .DATA_WIDTH (13),
     .BASE_ADDRESS (6'h02))
   i_delay_cntrl (
