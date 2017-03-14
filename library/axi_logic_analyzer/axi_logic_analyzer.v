@@ -215,6 +215,7 @@ module axi_logic_analyzer (
     .reset (reset),
 
     .data (adc_data),
+    .data_valid(sample_valid_la),
     .trigger (trigger_m2),
 
     .edge_detect_enable (edge_detect_enable),

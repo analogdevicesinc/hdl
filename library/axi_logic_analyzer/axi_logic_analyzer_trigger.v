@@ -43,6 +43,7 @@ module axi_logic_analyzer_trigger (
   input                 reset,
 
   input       [15:0]    data,
+  input                 data_valid,
   input       [ 1:0]    trigger,
 
   input       [17:0]    edge_detect_enable,
@@ -98,12 +99,14 @@ module axi_logic_analyzer_trigger (
       low_level <= 'd0;
       high_level <= 'd0;
     end else begin
-      data_m1 <= {trigger, data} ;
-      edge_detect <= data_m1 ^ {trigger, data};
-      rise_edge <= (data_m1 ^ {trigger, data} ) & {trigger, data};
-      fall_edge <= (data_m1 ^ {trigger, data}) & ~{trigger, data};
-      low_level <= ~{trigger, data};
-      high_level <= {trigger, data};
+      if (data_valid == 1'b1) begin
+        data_m1 <= {trigger, data} ;
+        edge_detect <= data_m1 ^ {trigger, data};
+        rise_edge <= (data_m1 ^ {trigger, data} ) & {trigger, data};
+        fall_edge <= (data_m1 ^ {trigger, data}) & ~{trigger, data};
+        low_level <= ~{trigger, data};
+        high_level <= {trigger, data};
+      end
     end
   end
 
