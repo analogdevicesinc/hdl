@@ -104,7 +104,7 @@ set dummy_axi_ports [list \
 ]
 
 foreach p $dummy_axi_ports {
-	adi_set_ports_dependency $p "0"
+	adi_set_ports_dependency $p "false"
 }
 
 set_property master_address_space_ref m_dest_axi \
