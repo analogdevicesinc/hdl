@@ -54,7 +54,7 @@ module axi_logic_analyzer_trigger (
 
   input                 trigger_logic,
 
-  output                trigger_out);
+  output  reg           trigger_out);
 
   reg     [ 17:0]   data_m1 = 'd0;
   reg     [ 17:0]   low_level = 'd0;
@@ -66,7 +66,9 @@ module axi_logic_analyzer_trigger (
 
   reg              trigger_active;
 
-  assign trigger_out = trigger_active;
+  always @(posedge clk) begin
+    trigger_out <= trigger_active;
+  end
 
   // trigger logic:
   // 0 OR
