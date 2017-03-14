@@ -209,13 +209,19 @@ ad_cpu_interconnect 0x7C4c0000 adc_trigger
 ad_cpu_interconnect 0x7C500000 axi_adc_decimate
 ad_cpu_interconnect 0x7C5a0000 axi_dac_interpolate
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk logic_analyzer_dmac/m_dest_axi
-ad_mem_hp1_interconnect sys_cpu_clk pattern_generator_dmac/m_src_axi
-ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk ad9963_adc_dmac/m_dest_axi
-ad_mem_hp2_interconnect sys_cpu_clk ad9963_dac_dmac_a/m_src_axi
-ad_mem_hp2_interconnect sys_cpu_clk ad9963_dac_dmac_b/m_src_axi
+set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] [get_bd_cells sys_ps7]
+ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
+ad_connect sys_cpu_clk ad9963_adc_dmac/m_dest_axi_aclk
+ad_connect ad9963_adc_dmac/m_dest_axi sys_ps7/S_AXI_HP1
+assign_bd_address
+
+ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp2_interconnect sys_cpu_clk logic_analyzer_dmac/m_dest_axi
+ad_mem_hp2_interconnect sys_cpu_clk pattern_generator_dmac/m_src_axi
+ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
+ad_mem_hp3_interconnect sys_cpu_clk ad9963_dac_dmac_a/m_src_axi
+ad_mem_hp3_interconnect sys_cpu_clk ad9963_dac_dmac_b/m_src_axi
+
 ad_connect  sys_cpu_resetn logic_analyzer_dmac/m_dest_axi_aresetn
 ad_connect  sys_cpu_resetn pattern_generator_dmac/m_src_axi_aresetn
 ad_connect  sys_cpu_resetn ad9963_adc_dmac/m_dest_axi_aresetn
