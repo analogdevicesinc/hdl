@@ -173,6 +173,7 @@ set axi_ad9361 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi
 set_property -dict [list CONFIG.ID {0}] $axi_ad9361
 set_property -dict [list CONFIG.CMOS_OR_LVDS_N {1}] $axi_ad9361
 set_property -dict [list CONFIG.MODE_1R1T {1}] $axi_ad9361
+set_property -dict [list CONFIG.ADC_INIT_DELAY {21}] $axi_ad9361
 
 set axi_ad9361_dac_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9361_dac_dma]
 set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9361_dac_dma

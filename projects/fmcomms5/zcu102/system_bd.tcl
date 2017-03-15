@@ -9,6 +9,8 @@ ad_connect  sys_dma_clk sys_ps8/pl_clk2
 source ../common/fmcomms5_bd.tcl
 
 set_property CONFIG.DEVICE_TYPE 2 [get_bd_cells axi_ad9361_0]
+set_property CONFIG.ADC_INIT_DELAY 8 [get_bd_cells axi_ad9361_0]
 set_property CONFIG.DEVICE_TYPE 2 [get_bd_cells axi_ad9361_1]
+set_property CONFIG.ADC_INIT_DELAY 8 [get_bd_cells axi_ad9361_1]
 
 set_property -dict [list CONFIG.SIM_DEVICE {ULTRASCALE}] $clkdiv
