@@ -168,16 +168,10 @@ module axi_ad9963 #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
-    if (up_rstn == 0) begin
-      up_wack <= 'd0;
-      up_rack <= 'd0;
-      up_rdata <= 'd0;
-    end else begin
-      up_wack <= up_wack_rx_s | up_wack_tx_s ;
-      up_rack <= up_rack_rx_s | up_rack_tx_s ;
-      up_rdata <= up_rdata_rx_s | up_rdata_tx_s ;
-    end
+  always @(*) begin
+    up_wack <= up_wack_rx_s | up_wack_tx_s;
+    up_rack <= up_rack_rx_s | up_rack_tx_s;
+    up_rdata <= up_rdata_rx_s | up_rdata_tx_s;
   end
 
   // device interface

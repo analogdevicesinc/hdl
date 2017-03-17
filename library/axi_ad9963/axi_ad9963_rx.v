@@ -109,17 +109,17 @@ module axi_ad9963_rx #(
       up_status_pn_err <= 'd0;
       up_status_pn_oos <= 'd0;
       up_status_or <= 'd0;
-      up_rdata <= 'd0;
-      up_rack <= 'd0;
-      up_wack <= 'd0;
     end else begin
       up_status_pn_err <= | up_adc_pn_err_s;
       up_status_pn_oos <= | up_adc_pn_oos_s;
       up_status_or <= | up_adc_or_s;
-      up_rdata  <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3];
-      up_rack   <= up_rack_s[0]  | up_rack_s[1]  | up_rack_s[2]  | up_rack_s[3];
-      up_wack   <= up_wack_s[0]  | up_wack_s[1]  | up_wack_s[2]  | up_wack_s[3];
     end
+  end
+
+  always @(*) begin
+    up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3];
+    up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3];
+    up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3];
   end
 
   // channel 0 (i)

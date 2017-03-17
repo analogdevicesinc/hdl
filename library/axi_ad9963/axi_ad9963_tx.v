@@ -136,16 +136,10 @@ module axi_ad9963_tx #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
-    if (up_rstn == 0) begin
-      up_rdata <= 'd0;
-      up_rack <= 'd0;
-      up_wack <= 'd0;
-    end else begin
-      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3];
-      up_rack <=  up_rack_s[0]  | up_rack_s[1]  | up_rack_s[2]  | up_rack_s[3];
-      up_wack <=  up_wack_s[0]  | up_wack_s[1]  | up_wack_s[2]  | up_wack_s[3];
-    end
+  always @(*) begin
+    up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3];
+    up_rack <=  up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3];
+    up_wack <=  up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3];
   end
 
   // dac channel
