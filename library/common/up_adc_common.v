@@ -45,7 +45,9 @@ module up_adc_common #(
   parameter   CONFIG = 0,
   parameter   COMMON_ID = 6'h00,
   parameter   DRP_DISABLE = 6'h00,
-  parameter   USERPORTS_DISABLE = 0) (
+  parameter   USERPORTS_DISABLE = 0,
+  parameter   GPIO_DISABLE = 0,
+  parameter   START_CODE_DISABLE = 0) (
 
   // clock reset
 
@@ -285,19 +287,41 @@ module up_adc_common #(
 
   assign up_adc_gpio_out = up_adc_gpio_out_int;
 
+  generate
+  if (GPIO_DISABLE == 1) begin
+  always @(posedge up_clk) begin
+    up_adc_gpio_out_int <= 'd0;
+  end
+  end else begin
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_adc_start_code <= 'd0;
       up_adc_gpio_out_int <= 'd0;
     end else begin
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h29)) begin
-        up_adc_start_code <= up_wdata[31:0];
-      end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2f)) begin
         up_adc_gpio_out_int <= up_wdata;
       end
     end
   end
+  end
+  endgenerate
+
+  generate
+  if (START_CODE_DISABLE == 1) begin
+  always @(posedge up_clk) begin
+    up_adc_start_code <= 'd0;
+  end
+  end else begin
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_adc_start_code <= 'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h29)) begin
+        up_adc_start_code <= up_wdata[31:0];
+      end
+    end
+  end
+  end
+  endgenerate
 
   // processor read interface
 
