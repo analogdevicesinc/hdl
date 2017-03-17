@@ -186,7 +186,13 @@ module axi_ad9963_rx #(
 
   // common processor control
 
-  up_adc_common #(.ID (ID)) i_up_adc_common (
+  up_adc_common #(
+    .ID (ID),
+    .DRP_DISABLE (1),
+    .USERPORTS_DISABLE (1),
+    .GPIO_DISABLE (1),
+    .START_CODE_DISABLE (1)
+  ) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

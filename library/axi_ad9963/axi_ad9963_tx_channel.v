@@ -370,7 +370,12 @@ module axi_ad9963_tx_channel #(
 
   // single channel processor
 
-  up_dac_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
+  up_dac_channel #(
+    .CHANNEL_ID(CHANNEL_ID),
+    .DDS_DISABLE(DATAPATH_DISABLE),
+    .IQCORRECTION_DISABLE(DATAPATH_DISABLE),
+    .USERPORTS_DISABLE(1)
+  ) i_up_dac_channel (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),

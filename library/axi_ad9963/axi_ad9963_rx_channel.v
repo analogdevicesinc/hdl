@@ -161,7 +161,13 @@ module axi_ad9963_rx_channel #(
   end
   endgenerate
 
-  up_adc_channel #(.CHANNEL_ID (CHANNEL_ID)) i_up_adc_channel (
+  up_adc_channel #(
+    .CHANNEL_ID (CHANNEL_ID),
+    .DATAFORMAT_DISABLE (DATAPATH_DISABLE),
+    .DCFILTER_DISABLE (DATAPATH_DISABLE),
+    .IQCORRECTION_DISABLE (DATAPATH_DISABLE),
+    .USERPORTS_DISABLE (1)
+  ) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),
