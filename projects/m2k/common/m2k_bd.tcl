@@ -38,10 +38,10 @@ set_property -dict [list CONFIG.SYNC_TRANSFER_START {true} ] $logic_analyzer_dma
 set pattern_generator_dmac [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 pattern_generator_dmac]
 set_property -dict [list CONFIG.DMA_TYPE_DEST {2} ] $pattern_generator_dmac
 set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $pattern_generator_dmac
-set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {32}] $pattern_generator_dmac
+set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {128}] $pattern_generator_dmac
 set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $pattern_generator_dmac
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16} ] $pattern_generator_dmac
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $pattern_generator_dmac
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $pattern_generator_dmac
 set_property -dict [list CONFIG.CYCLIC {true}] $pattern_generator_dmac
 
 set axi_ad9963 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9963:1.0 axi_ad9963]
@@ -66,18 +66,18 @@ set ad9963_dac_dmac_a [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.
 set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $ad9963_dac_dmac_a
 set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $ad9963_dac_dmac_a
 set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {64}] $ad9963_dac_dmac_a
+set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {128}] $ad9963_dac_dmac_a
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $ad9963_dac_dmac_a
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $ad9963_dac_dmac_a
 set_property -dict [list CONFIG.CYCLIC {true}] $ad9963_dac_dmac_a
 
 set ad9963_dac_dmac_b [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 ad9963_dac_dmac_b]
 set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $ad9963_dac_dmac_b
 set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $ad9963_dac_dmac_b
 set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $ad9963_dac_dmac_b
-set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {64}] $ad9963_dac_dmac_b
+set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {128}] $ad9963_dac_dmac_b
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16}] $ad9963_dac_dmac_b
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $ad9963_dac_dmac_a
+set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $ad9963_dac_dmac_a
 set_property -dict [list CONFIG.CYCLIC {true}] $ad9963_dac_dmac_b
 
 set adc_trigger [create_bd_cell -type ip -vlnv analog.com:user:axi_adc_trigger:1.0 adc_trigger]
@@ -87,6 +87,8 @@ set axi_dac_interpolate [create_bd_cell -type ip -vlnv analog.com:user:axi_dac_i
 
 set logic_analyzer_reset [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 logic_analyzer_reset]
 
+set axi_rd_wr_combiner_logic [create_bd_cell -type ip -vlnv analog.com:user:axi_rd_wr_combiner:1.0 axi_rd_wr_combiner_logic]
+set axi_rd_wr_combiner_converter [create_bd_cell -type ip -vlnv analog.com:user:axi_rd_wr_combiner:1.0 axi_rd_wr_combiner_converter]
 
 ad_connect data_i     logic_analyzer/data_i
 ad_connect trigger_i  logic_analyzer/trigger_i
@@ -206,14 +208,40 @@ ad_cpu_interconnect 0x7C4c0000 adc_trigger
 ad_cpu_interconnect 0x7C500000 axi_adc_decimate
 ad_cpu_interconnect 0x7C5a0000 axi_dac_interpolate
 
+ad_connect sys_cpu_clk axi_rd_wr_combiner_logic/clk
+ad_connect sys_cpu_clk axi_rd_wr_combiner_converter/clk
+ad_connect sys_cpu_clk logic_analyzer_dmac/m_dest_axi_aclk
+ad_connect sys_cpu_clk pattern_generator_dmac/m_src_axi_aclk
+ad_connect sys_cpu_clk ad9963_adc_dmac/m_dest_axi_aclk
+ad_connect sys_cpu_clk ad9963_dac_dmac_a/m_src_axi_aclk
+
+ad_connect logic_analyzer_dmac/m_dest_axi axi_rd_wr_combiner_logic/s_wr_axi
+ad_connect pattern_generator_dmac/m_src_axi axi_rd_wr_combiner_logic/s_rd_axi
+
+ad_connect ad9963_adc_dmac/m_dest_axi axi_rd_wr_combiner_converter/s_wr_axi
+ad_connect ad9963_dac_dmac_a/m_src_axi axi_rd_wr_combiner_converter/s_rd_axi
+
 ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk ad9963_adc_dmac/m_dest_axi
+ad_mem_hp1_interconnect sys_cpu_clk axi_rd_wr_combiner_logic/m_axi
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk logic_analyzer_dmac/m_dest_axi
-ad_mem_hp2_interconnect sys_cpu_clk pattern_generator_dmac/m_src_axi
+ad_mem_hp2_interconnect sys_cpu_clk axi_rd_wr_combiner_converter/m_axi
 ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_cpu_clk ad9963_dac_dmac_a/m_src_axi
 ad_mem_hp3_interconnect sys_cpu_clk ad9963_dac_dmac_b/m_src_axi
+
+# Map rd-wr combiner
+assign_bd_address [get_bd_addr_segs { \
+  axi_rd_wr_combiner_converter/s_rd_axi/reg0 \
+  axi_rd_wr_combiner_converter/s_wr_axi/reg0 \
+  axi_rd_wr_combiner_logic/s_rd_axi/reg0 \
+  axi_rd_wr_combiner_logic/s_wr_axi/reg0 \
+}]
+
+set_property range 512M [get_bd_addr_segs { \
+  ad9963_dac_dmac_a/m_src_axi/SEG_axi_rd_wr_combiner_converter_reg0 \
+  ad9963_adc_dmac/m_dest_axi/SEG_axi_rd_wr_combiner_converter_reg0 \
+  pattern_generator_dmac/m_src_axi/SEG_axi_rd_wr_combiner_logic_reg0 \
+  logic_analyzer_dmac/m_dest_axi/SEG_axi_rd_wr_combiner_logic_reg0 \
+}]
 
 ad_connect  sys_cpu_resetn logic_analyzer_dmac/m_dest_axi_aresetn
 ad_connect  sys_cpu_resetn pattern_generator_dmac/m_src_axi_aresetn

@@ -22,6 +22,7 @@ M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dac_interpolate/axi_dac_interpolate.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_logic_analyzer/axi_logic_analyzer.xpr
+M_DEPS += ../../../library/axi_rd_wr_combiner/axi_rd_wr_combiner.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_extract/util_extract.xpr
 M_DEPS += ../../../library/util_var_fifo/util_var_fifo.xpr
@@ -60,6 +61,7 @@ clean-all:clean
 	make -C ../../../library/axi_dac_interpolate clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_logic_analyzer clean
+	make -C ../../../library/axi_rd_wr_combiner clean
 	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_extract clean
 	make -C ../../../library/util_var_fifo clean
@@ -78,6 +80,7 @@ lib:
 	make -C ../../../library/axi_dac_interpolate
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_logic_analyzer
+	make -C ../../../library/axi_rd_wr_combiner
 	make -C ../../../library/util_cpack
 	make -C ../../../library/util_extract
 	make -C ../../../library/util_var_fifo
