@@ -45,7 +45,8 @@ module up_dac_common #(
   parameter   CONFIG = 0,
   parameter   COMMON_ID = 6'h10,
   parameter   DRP_DISABLE = 6'h00,
-  parameter   USERPORTS_DISABLE = 0) (
+  parameter   USERPORTS_DISABLE = 0,
+  parameter   GPIO_DISABLE = 0) (
 
   // mmcm reset
 
@@ -310,6 +311,12 @@ module up_dac_common #(
 
   assign up_dac_gpio_out = up_dac_gpio_out_int;
 
+  generate
+  if (GPIO_DISABLE == 1) begin
+  always @(posedge up_clk) begin
+    up_dac_gpio_out_int <= 'd0;
+  end
+  end else begin
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_gpio_out_int <= 'd0;
@@ -319,6 +326,8 @@ module up_dac_common #(
       end
     end
   end
+  end
+  endgenerate
 
   // processor read interface
 
