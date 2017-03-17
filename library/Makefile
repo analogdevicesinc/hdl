@@ -46,6 +46,7 @@ clean:
 	make -C axi_mc_controller clean
 	make -C axi_mc_current_monitor clean
 	make -C axi_mc_speed clean
+	make -C axi_rd_wr_combiner clean
 	make -C axi_spdif_rx clean
 	make -C axi_spdif_tx clean
 	make -C axi_usb_fx3 clean
@@ -127,6 +128,7 @@ lib:
 	-make -C axi_mc_controller
 	-make -C axi_mc_current_monitor
 	-make -C axi_mc_speed
+	-make -C axi_rd_wr_combiner
 	-make -C axi_spdif_rx
 	-make -C axi_spdif_tx
 	-make -C axi_usb_fx3
