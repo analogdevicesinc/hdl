@@ -17,6 +17,7 @@ M_DEPS += ../../common/ac701/ac701_system_mig.prj
 M_DEPS += ../../common/ac701/ac701_system_constr.xdc
 M_DEPS += ../../common/ac701/ac701_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/axi_ad9361/axi_ad9361_delay.tcl
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/util_clkdiv/util_clkdiv.xpr

@@ -13,6 +13,7 @@ M_DEPS += ../scripts/adi_project.tcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_board.tcl
 M_DEPS += ../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../library/axi_ad9361/axi_ad9361_delay.tcl
 M_DEPS += ../../library/axi_ad9361/axi_ad9361.xpr
 M_DEPS += ../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../library/util_cpack/util_cpack.xpr
