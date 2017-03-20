@@ -3,8 +3,12 @@
 
 set_global_assignment -name FAMILY "Arria 10"
 set_global_assignment -name DEVICE 10AS066N3F40E2SGE2
+
+# ignored warnings and such
+
 set_global_assignment -name MESSAGE_DISABLE 17951 ; ## disable unused RX channels message
 set_global_assignment -name MESSAGE_DISABLE 18655 ; ## disable unused TX channels message
+set_global_assignment -name SOURCE_FILE $ad_hdl_dir/projects/common/altera/messages.srf
 
 # clocks and resets
 
