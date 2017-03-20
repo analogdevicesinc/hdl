@@ -444,6 +444,81 @@ set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to ddr3_we_n
 set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to i_system_bd|sys_hps|hps_io|border|hps_sdram_inst
 set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to i_system_bd|sys_hps|hps_io|border|hps_sdram_inst|pll0|fbout
 
+# ddr3 pin locations (quartus critical warnings)
+
+set_location_assignment PIN_F26   -to ddr3_a[0]
+set_location_assignment PIN_G30   -to ddr3_a[1]
+set_location_assignment PIN_F28   -to ddr3_a[2]
+set_location_assignment PIN_F30   -to ddr3_a[3]
+set_location_assignment PIN_J25   -to ddr3_a[4]
+set_location_assignment PIN_J27   -to ddr3_a[5]
+set_location_assignment PIN_F29   -to ddr3_a[6]
+set_location_assignment PIN_E28   -to ddr3_a[7]
+set_location_assignment PIN_H27   -to ddr3_a[8]
+set_location_assignment PIN_G26   -to ddr3_a[9]
+set_location_assignment PIN_D29   -to ddr3_a[10]
+set_location_assignment PIN_C30   -to ddr3_a[11]
+set_location_assignment PIN_B30   -to ddr3_a[12]
+set_location_assignment PIN_C29   -to ddr3_a[13]
+set_location_assignment PIN_H25   -to ddr3_a[14]
+set_location_assignment PIN_E29   -to ddr3_ba[0]
+set_location_assignment PIN_J24   -to ddr3_ba[1]
+set_location_assignment PIN_J23   -to ddr3_ba[2]
+set_location_assignment PIN_E27   -to ddr3_cas_n
+set_location_assignment PIN_M23   -to ddr3_ck_p
+set_location_assignment PIN_L23   -to ddr3_ck_n
+set_location_assignment PIN_L29   -to ddr3_cke
+set_location_assignment PIN_H24   -to ddr3_cs_n
+set_location_assignment PIN_K28   -to ddr3_dm[0]
+set_location_assignment PIN_M28   -to ddr3_dm[1]
+set_location_assignment PIN_R28   -to ddr3_dm[2]
+set_location_assignment PIN_W30   -to ddr3_dm[3]
+set_location_assignment PIN_K23   -to ddr3_dq[0]
+set_location_assignment PIN_K22   -to ddr3_dq[1]
+set_location_assignment PIN_H30   -to ddr3_dq[2]
+set_location_assignment PIN_G28   -to ddr3_dq[3]
+set_location_assignment PIN_L25   -to ddr3_dq[4]
+set_location_assignment PIN_L24   -to ddr3_dq[5]
+set_location_assignment PIN_J30   -to ddr3_dq[6]
+set_location_assignment PIN_J29   -to ddr3_dq[7]
+set_location_assignment PIN_K26   -to ddr3_dq[8]
+set_location_assignment PIN_L26   -to ddr3_dq[9]
+set_location_assignment PIN_K29   -to ddr3_dq[10]
+set_location_assignment PIN_K27   -to ddr3_dq[11]
+set_location_assignment PIN_M26   -to ddr3_dq[12]
+set_location_assignment PIN_M27   -to ddr3_dq[13]
+set_location_assignment PIN_L28   -to ddr3_dq[14]
+set_location_assignment PIN_M30   -to ddr3_dq[15]
+set_location_assignment PIN_U26   -to ddr3_dq[16]
+set_location_assignment PIN_T26   -to ddr3_dq[17]
+set_location_assignment PIN_N29   -to ddr3_dq[18]
+set_location_assignment PIN_N28   -to ddr3_dq[19]
+set_location_assignment PIN_P26   -to ddr3_dq[20]
+set_location_assignment PIN_P27   -to ddr3_dq[21]
+set_location_assignment PIN_N27   -to ddr3_dq[22]
+set_location_assignment PIN_R29   -to ddr3_dq[23]
+set_location_assignment PIN_P24   -to ddr3_dq[24]
+set_location_assignment PIN_P25   -to ddr3_dq[25]
+set_location_assignment PIN_T29   -to ddr3_dq[26]
+set_location_assignment PIN_T28   -to ddr3_dq[27]
+set_location_assignment PIN_R27   -to ddr3_dq[28]
+set_location_assignment PIN_R26   -to ddr3_dq[29]
+set_location_assignment PIN_V30   -to ddr3_dq[30]
+set_location_assignment PIN_W29   -to ddr3_dq[31]
+set_location_assignment PIN_N18   -to ddr3_dqs_p[0]
+set_location_assignment PIN_M19   -to ddr3_dqs_n[0]
+set_location_assignment PIN_N25   -to ddr3_dqs_p[1]
+set_location_assignment PIN_N24   -to ddr3_dqs_n[1]
+set_location_assignment PIN_R19   -to ddr3_dqs_p[2]
+set_location_assignment PIN_R18   -to ddr3_dqs_n[2]
+set_location_assignment PIN_R22   -to ddr3_dqs_p[3]
+set_location_assignment PIN_R21   -to ddr3_dqs_n[3]
+set_location_assignment PIN_H28   -to ddr3_odt
+set_location_assignment PIN_D30   -to ddr3_ras_n
+set_location_assignment PIN_P30   -to ddr3_reset_n
+set_location_assignment PIN_C28   -to ddr3_we_n
+set_location_assignment PIN_D27   -to ddr3_rzq
+
 # globals
 
 set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
