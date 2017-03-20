@@ -190,7 +190,7 @@ module util_wfifo (
   reg     [(ADDRESS_WIDTH-4):0]       dout_rinit = 'd0;
   reg                                 dout_ovf_d = 'd0;
   reg     [ 3:0]                      dout_req_cnt = 'd0;
-  reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd0;
+  reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd8;
   reg                                 dout_rd_d = 'd0;
   reg                                 dout_valid = 'd0;
   reg     [ 7:0]                      dout_enable_m1 = 'd0;
