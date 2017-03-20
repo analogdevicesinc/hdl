@@ -110,7 +110,7 @@ add_connection sys_clk.clk sys_hps.h2f_lw_axi_clock
 proc ad_cpu_interrupt {m_irq m_port} {
 
   add_connection sys_hps.f2h_irq0 ${m_port}
-  set_connection_parameter_value sys_hsp.f2h_irq0/${m_port} irqNumber ${m_irq}
+  set_connection_parameter_value sys_hps.f2h_irq0/${m_port} irqNumber ${m_irq}
 }
 
 proc ad_cpu_interconnect {m_base m_port} {
@@ -121,9 +121,10 @@ proc ad_cpu_interconnect {m_base m_port} {
 
 proc ad_dma_interconnect {m_port m_id} {
 
-  if {${id} == 1} {
+  if {${m_id} == 1} {
     add_connection ${m_port} sys_hps.f2h_sdram1_data
     set_connection_parameter_value ${m_port}/sys_hps.f2h_sdram1_data baseAddress {0x0000}
+    return
   }
 
   add_connection ${m_port} sys_hps.f2h_sdram2_data
@@ -164,7 +165,7 @@ add_connection sys_clk.clk_reset vga_pll.reset
 
 # display (vga-frame-reader)
 
-add_instance vga_frame_reader alt_vip_vfr 16.0
+add_instance vga_frame_reader alt_vip_vfr 14.0
 set_instance_parameter_value vga_frame_reader {BITS_PER_PIXEL_PER_COLOR_PLANE} {8}
 set_instance_parameter_value vga_frame_reader {NUMBER_OF_CHANNELS_IN_PARALLEL} {4}
 set_instance_parameter_value vga_frame_reader {NUMBER_OF_CHANNELS_IN_SEQUENCE} {1}
@@ -247,7 +248,7 @@ set_instance_parameter_value sys_gpio_bd {width} {32}
 add_connection sys_clk.clk sys_gpio_bd.clk
 add_connection sys_clk.clk_reset sys_gpio_bd.reset
 add_interface sys_gpio_bd conduit end
-set_interface_property sys_gpio_bd EXPORT_OF sys_gpio.external_connection
+set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
 
 # gpio-in
 

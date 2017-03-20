@@ -461,14 +461,6 @@ set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
-# set libraries
+# source defaults
 
-set ad_lib_folders "../common/;../../common/c5soc/;../../../library/**/*"
-
-set_user_option -name USER_IP_SEARCH_PATHS $ad_lib_folders
-set_global_assignment -name IP_SEARCH_PATHS $ad_lib_folders
-
-
-
-
-
+source $ad_hdl_dir/projects/common/altera/sys_gen.tcl
