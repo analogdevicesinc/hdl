@@ -73,5 +73,6 @@ set_output_delay -add_delay -fall -min  0.2 -clock {v_tx_clk} [get_ports {tx_dat
 set_output_delay -add_delay -fall -min  0.2 -clock {v_tx_clk} [get_ports {tx_data_out[4]}]
 set_output_delay -add_delay -fall -min  0.2 -clock {v_tx_clk} [get_ports {tx_data_out[5]}]
 
+# frame reader seems to use the wrong reset!
 
-
+set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out*]
