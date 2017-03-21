@@ -10,6 +10,7 @@ set_global_assignment -name FAMILY "Arria V"
 set_global_assignment -name DEVICE 5AGTFD7K3F40I3
 set_global_assignment -name TOP_LEVEL_ENTITY system_top
 set_global_assignment -name VERILOG_FILE system_top.v
+set_global_assignment -name SDC_FILE system_constr.sdc
 
 # fmc fpga interface
 
