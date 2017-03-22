@@ -81,19 +81,13 @@ module system_top (
 
   // daq1 interface
 
-  input               dac_clk_in_p,
-  input               dac_clk_in_n,
-  output              dac_clk_out_p,
-  output              dac_clk_out_n,
-  output              dac_frame_out_p,
-  output              dac_frame_out_n,
-  output  [15:0]      dac_data_out_p,
-  output  [15:0]      dac_data_out_n,
+  input               dac_clk_in,
+  output              dac_clk_out,
+  output              dac_frame_out,
+  output  [15:0]      dac_data_out,
 
-  input               adc_clk_in_p,
-  input               adc_clk_in_n,
-  input  [13:0]       adc_data_in_p,
-  input  [13:0]       adc_data_in_n,
+  input               adc_clk_in,
+  input  [13:0]       adc_data_in,
 
   output              spi_clk,
   output              spi_csn,
@@ -174,18 +168,18 @@ module system_top (
 
     .spi_int_irq(spi_int),
 
-    .axi_ad9684_device_if_adc_clk_in_n (adc_clk_in_n),
-    .axi_ad9684_device_if_adc_clk_in_p (adc_clk_in_p),
-    .axi_ad9684_device_if_adc_data_in_n (adc_data_in_n),
-    .axi_ad9684_device_if_adc_data_in_p (adc_data_in_p),
-    .axi_ad9122_device_if_dac_clk_in_n (dac_clk_in_n),
-    .axi_ad9122_device_if_dac_clk_in_p (dac_clk_in_p),
-    .axi_ad9122_device_if_dac_clk_out_n (dac_clk_out_n),
-    .axi_ad9122_device_if_dac_clk_out_p (dac_clk_out_p),
-    .axi_ad9122_device_if_dac_data_out_n (dac_data_out_n),
-    .axi_ad9122_device_if_dac_data_out_p (dac_data_out_p),
-    .axi_ad9122_device_if_dac_frame_out_n (dac_frame_out_n),
-    .axi_ad9122_device_if_dac_frame_out_p (dac_frame_out_p)
+    .axi_ad9684_device_if_adc_clk_in_n (1'd0),
+    .axi_ad9684_device_if_adc_clk_in_p (adc_clk_in),
+    .axi_ad9684_device_if_adc_data_in_n (14'd0),
+    .axi_ad9684_device_if_adc_data_in_p (adc_data_in),
+    .axi_ad9122_device_if_dac_clk_in_n (1'd0),
+    .axi_ad9122_device_if_dac_clk_in_p (dac_clk_in),
+    .axi_ad9122_device_if_dac_clk_out_n (),
+    .axi_ad9122_device_if_dac_clk_out_p (dac_clk_out),
+    .axi_ad9122_device_if_dac_data_out_n (),
+    .axi_ad9122_device_if_dac_data_out_p (dac_data_out),
+    .axi_ad9122_device_if_dac_frame_out_n (),
+    .axi_ad9122_device_if_dac_frame_out_p (dac_frame_out)
 );
 
 endmodule

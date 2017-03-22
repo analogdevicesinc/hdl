@@ -64,8 +64,8 @@ set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[3]
 set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[4]
 set_instance_assignment -name IO_STANDARD LVDS -to tx_data_out[5]
 
-set_location_assignment PIN_AT13 -to enable]               ; ## G18  FMC_LPC_LA16_P
-set_location_assignment PIN_AU13 -to txnrx]                ; ## G19  FMC_LPC_LA16_N
+set_location_assignment PIN_AT13 -to enable                ; ## G18  FMC_LPC_LA16_P
+set_location_assignment PIN_AU13 -to txnrx                 ; ## G19  FMC_LPC_LA16_N
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to enable
 set_instance_assignment -name IO_STANDARD "1.8 V" -to txnrx
