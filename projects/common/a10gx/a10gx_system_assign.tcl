@@ -8,7 +8,6 @@ set_global_assignment -name DEVICE 10AX115S3F45E2SGE3
 
 set_global_assignment -name MESSAGE_DISABLE 17951 ; ## disable unused RX channels message
 set_global_assignment -name MESSAGE_DISABLE 18655 ; ## disable unused TX channels message
-set_global_assignment -name SOURCE_FILE $ad_hdl_dir/projects/common/altera/messages.srf
 
 # clocks and resets
 
