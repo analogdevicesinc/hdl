@@ -14,15 +14,12 @@ create_bd_port -dir I tx_clk
 create_bd_port -dir O txiq
 create_bd_port -dir O -from 11 -to 0 txd
 
-set clk_generator [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 clk_generator]
-set_property -dict [list CONFIG.VCO_DIV {1}] $clk_generator
-set_property -dict [list CONFIG.VCO_MUL {8}] $clk_generator
-set_property -dict [list CONFIG.CLK0_DIV {10}] $clk_generator
-set_property -dict [list CONFIG.CLK1_DIV {5}] $clk_generator
-set_property -dict [list CONFIG.CLK0_PHASE {180}] $clk_generator
-set_property -dict [list CONFIG.CLK1_PHASE {180}] $clk_generator
-set_property -dict [list CONFIG.CLKIN_PERIOD {10}] $clk_generator
-set_property -dict [list CONFIG.CLKIN2_PERIOD {12.5}] $clk_generator
+# Logic analyzer (FCLK2): 100 MHz
+
+set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
+
+ad_connect logic_analyzer_clk sys_ps7/FCLK_CLK2
 
 set logic_analyzer [create_bd_cell -type ip -vlnv analog.com:user:axi_logic_analyzer:1.0 logic_analyzer]
 
@@ -98,16 +95,13 @@ ad_connect trigger_i  logic_analyzer/trigger_i
 ad_connect data_o     logic_analyzer/data_o
 ad_connect data_t     logic_analyzer/data_t
 
-ad_connect sys_cpu_clk            clk_generator/clk
+ad_connect logic_analyzer_clk logic_analyzer/clk
 
-ad_connect logic_analyzer/clk     clk_generator/clk_0
-ad_connect logic_analyzer/clk_out clk_generator/clk2
+ad_connect logic_analyzer_clk pattern_generator_dmac/fifo_rd_clk
 
-ad_connect pattern_generator_dmac/fifo_rd_clk clk_generator/clk_0
-
-ad_connect clk_generator/clk_0  la_trigger_fifo/clk
-ad_connect logic_analyzer_dmac/fifo_wr_clk clk_generator/clk_0
-ad_connect logic_analyzer_reset/slowest_sync_clk clk_generator/clk_0
+ad_connect logic_analyzer_clk la_trigger_fifo/clk
+ad_connect logic_analyzer_clk logic_analyzer_dmac/fifo_wr_clk
+ad_connect logic_analyzer_clk logic_analyzer_reset/slowest_sync_clk
 ad_connect logic_analyzer_reset/ext_reset_in sys_rstgen/peripheral_aresetn
 ad_connect logic_analyzer_reset/bus_struct_reset la_trigger_fifo/rst
 
@@ -209,7 +203,7 @@ ad_connect axi_ad9963/dac_dunf    ad9963_dac_dmac_a/fifo_rd_underflow
 
 # interconnects
 
-ad_cpu_interconnect 0x70000000 clk_generator
+#ad_cpu_interconnect 0x70000000 clk_generator
 ad_cpu_interconnect 0x70100000 logic_analyzer
 ad_cpu_interconnect 0x70200000 axi_ad9963
 ad_cpu_interconnect 0x7C400000 logic_analyzer_dmac

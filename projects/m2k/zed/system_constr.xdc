@@ -64,9 +64,3 @@ create_clock -name tx_clk       -period   6.66  [get_ports tx_clk]
 
 create_clock -name trigger_clk  -period   12.5  [get_ports trigger_bd[0]]
 create_clock -name data_clk     -period   12.5  [get_ports data_bd[0]]
-
-set_clock_groups -name exclusive_ -physically_exclusive \
--group  [get_clocks mmcm_clk_0_s_1] -group  [get_clocks mmcm_clk_0_s_2] -group [get_clocks mmcm_clk_0_s_3]
-
-set_false_path -from [get_clocks data_clk] -to [get_pins {i_system_wrapper/system_i/logic_analyzer/inst/data_m1_reg[0]/D}]
-set_false_path -from [get_clocks trigger_clk] -to [get_pins {i_system_wrapper/system_i/logic_analyzer/inst/trigger_m1_reg[0]/D}]
