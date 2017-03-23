@@ -5,6 +5,9 @@ set axi_ad9250_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.
 set_property -dict [list CONFIG.NUM_OF_LANES {4}] $axi_ad9250_xcvr
 set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9250_xcvr
 set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9250_xcvr
+set_property -dict [list CONFIG.LPM_OR_DFE_N {0}] $axi_ad9250_xcvr
+set_property -dict [list CONFIG.OUT_CLK_SEL {"010"}] $axi_ad9250_xcvr
+set_property -dict [list CONFIG.SYS_CLK_SEL {"00"}] $axi_ad9250_xcvr
 
 set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9250_jesd]
 set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9250_jesd
