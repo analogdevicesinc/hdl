@@ -53,9 +53,12 @@ set_property -dict [list CONFIG.ADDRESS_WIDTH {13} ] $adc_trigger_fifo
 
 set adc_trigger_extract [create_bd_cell -type ip -vlnv analog.com:user:util_extract:1.0 adc_trigger_extract]
 
-set util_cpack_ad9963 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_ad9963]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_cpack_ad9963
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_cpack_ad9963
+# FIXME: Bring this back eventually
+#set util_cpack_ad9963 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_ad9963]
+#set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_cpack_ad9963
+#set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_cpack_ad9963
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 ad9963_adc_concat
 
 set ad9963_adc_dmac [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 ad9963_adc_dmac]
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $ad9963_adc_dmac
@@ -126,14 +129,14 @@ ad_connect pattern_generator_dmac/fifo_rd_valid   logic_analyzer/dac_valid
 ad_connect sys_200m_clk             axi_ad9963/delay_clk
 
 ad_connect axi_ad9963/adc_clk  adc_trigger_fifo/clk
-ad_connect axi_ad9963/adc_clk  util_cpack_ad9963/adc_clk
+#ad_connect axi_ad9963/adc_clk  util_cpack_ad9963/adc_clk
 ad_connect axi_adc_decimate/adc_clk axi_ad9963/adc_clk
 ad_connect axi_adc_decimate/adc_rst axi_ad9963/adc_rst
 
 ad_connect adc_trigger_extract/clk         axi_ad9963/adc_clk
 ad_connect ad9963_adc_dmac/fifo_wr_clk     axi_ad9963/adc_clk
 
-ad_connect axi_ad9963/adc_rst    util_cpack_ad9963/adc_rst
+#ad_connect axi_ad9963/adc_rst    util_cpack_ad9963/adc_rst
 ad_connect axi_ad9963/adc_rst    adc_trigger_fifo/rst
 
 ad_connect axi_adc_decimate/adc_data_a axi_ad9963/adc_data_i
@@ -141,20 +144,27 @@ ad_connect axi_adc_decimate/adc_data_b axi_ad9963/adc_data_q
 ad_connect axi_adc_decimate/adc_valid_a axi_ad9963/adc_valid_i
 ad_connect axi_adc_decimate/adc_valid_b axi_ad9963/adc_valid_q
 
-ad_connect axi_ad9963/adc_enable_i        util_cpack_ad9963/adc_enable_0
-ad_connect adc_trigger/data_valid_a_trig  util_cpack_ad9963/adc_valid_0
-ad_connect adc_trigger/data_a_trig        util_cpack_ad9963/adc_data_0
-ad_connect axi_ad9963/adc_enable_q        util_cpack_ad9963/adc_enable_1
-ad_connect adc_trigger/data_valid_b_trig  util_cpack_ad9963/adc_valid_1
-ad_connect adc_trigger/data_b_trig        util_cpack_ad9963/adc_data_1
+#ad_connect axi_ad9963/adc_enable_i        util_cpack_ad9963/adc_enable_0
+#ad_connect adc_trigger/data_valid_a_trig  util_cpack_ad9963/adc_valid_0
+#ad_connect adc_trigger/data_a_trig        util_cpack_ad9963/adc_data_0
+#ad_connect axi_ad9963/adc_enable_q        util_cpack_ad9963/adc_enable_1
+#ad_connect adc_trigger/data_valid_b_trig  util_cpack_ad9963/adc_valid_1
+#ad_connect adc_trigger/data_b_trig        util_cpack_ad9963/adc_data_1
 
-ad_connect adc_trigger_fifo/data_in        util_cpack_ad9963/adc_data
-ad_connect adc_trigger_fifo/data_in_valid  util_cpack_ad9963/adc_valid
+#ad_connect adc_trigger_fifo/data_in        util_cpack_ad9963/adc_data
+#ad_connect adc_trigger_fifo/data_in_valid  util_cpack_ad9963/adc_valid
+#ad_connect util_cpack_ad9963/adc_data      adc_trigger_extract/data_in_trigger
+
+ad_connect adc_trigger/data_a_trig       ad9963_adc_concat/In0
+ad_connect adc_trigger/data_b_trig       ad9963_adc_concat/In1
+ad_connect adc_trigger/data_valid_a_trig adc_trigger_fifo/data_in_valid
+ad_connect ad9963_adc_concat/dout        adc_trigger_fifo/data_in
+ad_connect ad9963_adc_concat/dout        adc_trigger_extract/data_in_trigger
+
 ad_connect adc_trigger_fifo/depth          adc_trigger/trigger_offset
 
 ad_connect adc_trigger_fifo/data_out       adc_trigger_extract/data_in
 ad_connect adc_trigger_fifo/data_out_valid adc_trigger_extract/data_valid
-ad_connect util_cpack_ad9963/adc_data      adc_trigger_extract/data_in_trigger
 
 ad_connect adc_trigger_extract/data_out     ad9963_adc_dmac/fifo_wr_din
 ad_connect adc_trigger_extract/trigger_out  ad9963_adc_dmac/fifo_wr_sync
