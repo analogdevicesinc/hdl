@@ -49,6 +49,7 @@ set_property -dict [list CONFIG.CYCLIC {true}] $pattern_generator_dmac
 
 set axi_ad9963 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9963:1.0 axi_ad9963]
 set_property -dict [list CONFIG.DAC_DATAPATH_DISABLE {1}] $axi_ad9963
+set_property -dict [list CONFIG.ADC_DATAPATH_DISABLE {1}] $axi_ad9963
 
 set adc_trigger_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_var_fifo:1.0 adc_trigger_fifo]
 set_property -dict [list CONFIG.DATA_WIDTH {32} ] $adc_trigger_fifo
