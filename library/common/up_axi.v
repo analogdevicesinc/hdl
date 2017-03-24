@@ -39,7 +39,8 @@
 
 module up_axi #(
 
-  parameter   ADDRESS_WIDTH = 14) (
+  parameter   ADDRESS_WIDTH = 14,
+  parameter   AXI_ADDRESS_WIDTH = 32) (
 
   // reset and clocks
 
@@ -49,7 +50,7 @@ module up_axi #(
   // axi4 interface
 
   input                   up_axi_awvalid,
-  input       [31:0]      up_axi_awaddr,
+  input       [AXI_AW:0]  up_axi_awaddr,
   output  reg             up_axi_awready,
   input                   up_axi_wvalid,
   input       [31:0]      up_axi_wdata,
@@ -59,7 +60,7 @@ module up_axi #(
   output      [ 1:0]      up_axi_bresp,
   input                   up_axi_bready,
   input                   up_axi_arvalid,
-  input       [31:0]      up_axi_araddr,
+  input       [AXI_AW:0]  up_axi_araddr,
   output  reg             up_axi_arready,
   output  reg             up_axi_rvalid,
   output      [ 1:0]      up_axi_rresp,
@@ -77,6 +78,7 @@ module up_axi #(
   input       [31:0]      up_rdata,
   input                   up_rack);
 
+  localparam  AXI_AW = AXI_ADDRESS_WIDTH - 1;
   localparam  AW = ADDRESS_WIDTH - 1;
 
   // internal registers
