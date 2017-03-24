@@ -43,6 +43,7 @@ module ad_lvds_in #(
 
   parameter   SINGLE_ENDED = 0,
   parameter   DEVICE_TYPE = 0,
+  parameter   IODELAY_ENABLE = 1,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group") (
 
@@ -74,13 +75,8 @@ module ad_lvds_in #(
   localparam  ULTRASCALE_PLUS = 2;
   localparam  ULTRASCALE = 3;
 
-  // internal registers
-
-  reg                 rx_data_n_d = 'd0;
-
   // internal signals
 
-  wire                rx_data_n_s;
   wire                rx_data_ibuf_s;
   wire                rx_data_idelay_s;
   wire        [ 8:0]  up_drdata_s;
@@ -259,35 +255,35 @@ module ad_lvds_in #(
   generate
   if (DEVICE_TYPE == ULTRASCALE) begin
   IDDRE1 #(
-    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"))
+    .DDR_CLK_EDGE ("SAME_EDGE"))
   i_rx_data_iddr (
     .R (1'b0),
     .C (rx_clk),
     .CB (~rx_clk),
     .D (rx_data_idelay_s),
     .Q1 (rx_data_p),
-    .Q2 (rx_data_n_s));
+    .Q2 (rx_data_n));
   end
   endgenerate
 
   generate
   if (DEVICE_TYPE == ULTRASCALE_PLUS) begin
   IDDRE1 #(
-    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"))
+    .DDR_CLK_EDGE ("SAME_EDGE"))
   i_rx_data_iddr (
     .R (1'b0),
     .C (rx_clk),
     .CB (~rx_clk),
     .D (rx_data_idelay_s),
     .Q1 (rx_data_p),
-    .Q2 (rx_data_n_s));
+    .Q2 (rx_data_n));
   end
   endgenerate
 
   generate
   if ((DEVICE_TYPE == VIRTEX7) || (DEVICE_TYPE == VIRTEX6)) begin
   IDDR #(
-    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
+    .DDR_CLK_EDGE ("SAME_EDGE"),
     .INIT_Q1 (1'b0),
     .INIT_Q2 (1'b0),
     .SRTYPE ("ASYNC"))
@@ -298,15 +294,9 @@ module ad_lvds_in #(
     .C (rx_clk),
     .D (rx_data_idelay_s),
     .Q1 (rx_data_p),
-    .Q2 (rx_data_n_s));
+    .Q2 (rx_data_n));
   end
   endgenerate
-
-  assign rx_data_n = rx_data_n_d;
-
-  always @(posedge rx_clk) begin
-    rx_data_n_d <= rx_data_n_s;
-  end
 
 endmodule
 
