@@ -42,7 +42,7 @@ module axi_dmac (
   input s_axi_aresetn,
 
   input         s_axi_awvalid,
-  input  [31:0] s_axi_awaddr,
+  input  [10:0] s_axi_awaddr,
   output        s_axi_awready,
   input   [2:0] s_axi_awprot,
   input         s_axi_wvalid,
@@ -53,7 +53,7 @@ module axi_dmac (
   output [ 1:0] s_axi_bresp,
   input         s_axi_bready,
   input         s_axi_arvalid,
-  input  [31:0] s_axi_araddr,
+  input  [10:0] s_axi_araddr,
   output        s_axi_arready,
   input   [2:0] s_axi_arprot,
   output        s_axi_rvalid,
@@ -244,8 +244,8 @@ reg          up_rack = 1'b0;
 wire         up_wreq;
 wire         up_rreq;
 wire [31:0]  up_wdata;
-wire [11:0]  up_waddr;
-wire [11:0]  up_raddr;
+wire [ 8:0]  up_waddr;
+wire [ 8:0]  up_raddr;
 
 // Scratch register
 reg [31:0] up_scratch = 'h00;
@@ -312,7 +312,8 @@ assign m_src_axi_wstrb = 'd0;
 assign m_src_axi_wlast = 'd0;
 
 up_axi #(
-  .ADDRESS_WIDTH (12)
+  .AXI_ADDRESS_WIDTH (11),
+  .ADDRESS_WIDTH (9)
 ) i_up_axi (
   .up_rstn(s_axi_aresetn),
   .up_clk(s_axi_aclk),
@@ -346,7 +347,7 @@ up_axi #(
 // IRQ handling
 assign up_irq_pending = ~up_irq_mask & up_irq_source;
 assign up_irq_trigger  = {up_eot, up_sot};
-assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 12'h021) ? up_wdata[1:0] : 0;
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 0;
 
 always @(posedge s_axi_aclk)
 begin
@@ -385,7 +386,7 @@ begin
   end else begin
     up_wack <= up_wreq;
     if (up_enable == 1'b1) begin
-      if (up_wreq && up_waddr == 12'h102) begin
+      if (up_wreq && up_waddr == 9'h102) begin
         up_dma_req_valid <= up_dma_req_valid | up_wdata[0];
       end else if (up_sot) begin
         up_dma_req_valid <= 1'b0;
@@ -396,19 +397,19 @@ begin
 
     if (up_wreq) begin
       case (up_waddr)
-      12'h002: up_scratch <= up_wdata;
-      12'h020: up_irq_mask <= up_wdata;
-      12'h100: {up_pause, up_enable} <= up_wdata[1:0];
-                        12'h103: begin
+      9'h002: up_scratch <= up_wdata;
+      9'h020: up_irq_mask <= up_wdata;
+      9'h100: {up_pause, up_enable} <= up_wdata[1:0];
+                        9'h103: begin
                           if (CYCLIC) up_dma_cyclic <= up_wdata[0];
                           up_axis_xlast <= up_wdata[1];
                         end
-      12'h104: up_dma_dest_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
-      12'h105: up_dma_src_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
-      12'h106: up_dma_x_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-      12'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-      12'h108: up_dma_dest_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-      12'h109: up_dma_src_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      9'h104: up_dma_dest_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
+      9'h105: up_dma_src_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
+      9'h106: up_dma_x_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      9'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      9'h108: up_dma_dest_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      9'h109: up_dma_src_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
       endcase
     end
   end
@@ -428,30 +429,30 @@ begin
   end else begin
     up_rack <= up_rreq;
     case (up_raddr)
-    12'h000: up_rdata <= PCORE_VERSION;
-    12'h001: up_rdata <= ID;
-    12'h002: up_rdata <= up_scratch;
-    12'h003: up_rdata <= 32'h444d4143; // "DMAC"
-    12'h020: up_rdata <= up_irq_mask;
-    12'h021: up_rdata <= up_irq_pending;
-    12'h022: up_rdata <= up_irq_source;
-    12'h100: up_rdata <= {up_pause, up_enable};
-    12'h101: up_rdata <= up_transfer_id;
-    12'h102: up_rdata <= up_dma_req_valid;
-    12'h103: up_rdata <= {30'h00, up_axis_xlast, up_dma_cyclic}; // Flags
-    12'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
-    12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
-    12'h106: up_rdata <= up_dma_x_length;
-    12'h107: up_rdata <= DMA_2D_TRANSFER ? up_dma_y_length : 'h00;
-    12'h108: up_rdata <= DMA_2D_TRANSFER ? up_dma_dest_stride : 'h00;
-    12'h109: up_rdata <= DMA_2D_TRANSFER ? up_dma_src_stride : 'h00;
-    12'h10a: up_rdata <= up_transfer_done_bitmap;
-    12'h10b: up_rdata <= up_transfer_id_eot;
-    12'h10c: up_rdata <= 'h00; // Status
-    12'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : m_dest_axi_awaddr; //HAS_DEST_ADDR ? 'h00 : 'h00; // Current dest address
-    12'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : m_src_axi_araddr; //HAS_SRC_ADDR ? 'h00 : 'h00; // Current src address
-    12'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids;
-    12'h110: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
+    9'h000: up_rdata <= PCORE_VERSION;
+    9'h001: up_rdata <= ID;
+    9'h002: up_rdata <= up_scratch;
+    9'h003: up_rdata <= 32'h444d4143; // "DMAC"
+    9'h020: up_rdata <= up_irq_mask;
+    9'h021: up_rdata <= up_irq_pending;
+    9'h022: up_rdata <= up_irq_source;
+    9'h100: up_rdata <= {up_pause, up_enable};
+    9'h101: up_rdata <= up_transfer_id;
+    9'h102: up_rdata <= up_dma_req_valid;
+    9'h103: up_rdata <= {30'h00, up_axis_xlast, up_dma_cyclic}; // Flags
+    9'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
+    9'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
+    9'h106: up_rdata <= up_dma_x_length;
+    9'h107: up_rdata <= DMA_2D_TRANSFER ? up_dma_y_length : 'h00;
+    9'h108: up_rdata <= DMA_2D_TRANSFER ? up_dma_dest_stride : 'h00;
+    9'h109: up_rdata <= DMA_2D_TRANSFER ? up_dma_src_stride : 'h00;
+    9'h10a: up_rdata <= up_transfer_done_bitmap;
+    9'h10b: up_rdata <= up_transfer_id_eot;
+    9'h10c: up_rdata <= 'h00; // Status
+    9'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : m_dest_axi_awaddr; //HAS_DEST_ADDR ? 'h00 : 'h00; // Current dest address
+    9'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : m_src_axi_araddr; //HAS_SRC_ADDR ? 'h00 : 'h00; // Current src address
+    9'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids;
+    9'h110: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
     default: up_rdata <= 'h00;
     endcase
   end
