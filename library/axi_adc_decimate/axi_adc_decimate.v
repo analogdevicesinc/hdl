@@ -47,10 +47,10 @@ module axi_adc_decimate(
   input                 adc_valid_a,
   input                 adc_valid_b,
 
-  output reg  [15:0]    adc_dec_data_a,
-  output reg  [15:0]    adc_dec_data_b,
-  output reg            adc_dec_valid_a,
-  output reg            adc_dec_valid_b,
+  output      [15:0]    adc_dec_data_a,
+  output      [15:0]    adc_dec_data_b,
+  output                adc_dec_valid_a,
+  output                adc_dec_valid_b,
 
   // axi interface
 
@@ -92,132 +92,27 @@ module axi_adc_decimate(
   wire    [31:0]    decimation_ratio;
   wire    [31:0]    filter_mask;
 
-  wire    [105:0]   adc_cic_data_a;
-  wire              adc_cic_valid_a;
-  wire    [105:0]   adc_cic_data_b;
-  wire              adc_cic_valid_b;
-
-  wire    [25:0]    adc_fir_data_a;
-  wire              adc_fir_valid_a;
-  wire    [25:0]    adc_fir_data_b;
-  wire              adc_fir_valid_b;
-
-  reg               adc_dec_valid_a_filter;
-  reg               adc_dec_valid_b_filter;
-
-  reg     [31:0]    decimation_counter;
-  reg     [15:0]    decim_rate_cic;
-
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  cic_decim cic_decimation_a (
-    .clk(adc_clk),
-    .clk_enable(adc_valid_a),
-    .reset(adc_rst),
-    .filter_in(adc_data_a[11:0]),
-    .rate(decim_rate_cic),
-    .load_rate(1'b0),
-    .filter_out(adc_cic_data_a),
-    .ce_out(adc_cic_valid_a));
+  axi_adc_decimate_filter axi_adc_decimate_filter (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
 
-  cic_decim cic_decimation_b (
-    .clk(adc_clk),
-    .clk_enable(adc_valid_b),
-    .reset(adc_rst),
-    .filter_in(adc_data_b[11:0]),
-    .rate(decim_rate_cic),
-    .load_rate(1'b0),
-    .filter_out(adc_cic_data_b),
-    .ce_out(adc_cic_valid_b));
+    .decimation_ratio (decimation_ratio),
+    .filter_mask (filter_mask),
 
-  fir_decim fir_decimation_a (
-    .clk(adc_clk),
-    .clk_enable(adc_cic_valid_a),
-    .reset(adc_rst),
-    .filter_in(adc_cic_data_a[11:0]),
-    .filter_out(adc_fir_data_a),
-    .ce_out(adc_fir_valid_a));
+    .adc_valid_a(adc_valid_a),
+    .adc_valid_b(adc_valid_b),
+    .adc_data_a(adc_data_a[11:0]),
+    .adc_data_b(adc_data_b[11:0]),
 
-  fir_decim fir_decimation_b (
-    .clk(adc_clk),
-    .clk_enable(adc_cic_valid_b),
-    .reset(adc_rst),
-    .filter_in(adc_cic_data_b[11:0]),
-    .filter_out(adc_fir_data_b),
-    .ce_out(adc_fir_valid_b));
-
-  always @(*) begin
-    case (filter_mask)
-      16'h1: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      16'h2: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      16'h3: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      16'h6: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      16'h7: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      default: adc_dec_data_a = adc_data_a;
-    endcase
-
-    case (filter_mask)
-      16'h1: adc_dec_valid_a_filter = adc_fir_valid_a;
-      16'h2: adc_dec_valid_a_filter = adc_fir_valid_a;
-      16'h3: adc_dec_valid_a_filter = adc_fir_valid_a;
-      16'h6: adc_dec_valid_a_filter = adc_fir_valid_a;
-      16'h7: adc_dec_valid_a_filter = adc_fir_valid_a;
-      default: adc_dec_valid_a_filter = adc_valid_a;
-    endcase
-
-     case (filter_mask)
-      16'h1: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      16'h2: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      16'h3: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      16'h6: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      16'h7: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      default: adc_dec_data_b = adc_data_b;
-    endcase
-
-    case (filter_mask)
-      16'h1: adc_dec_valid_b_filter = adc_fir_valid_b;
-      16'h2: adc_dec_valid_b_filter = adc_fir_valid_b;
-      16'h3: adc_dec_valid_b_filter = adc_fir_valid_b;
-      16'h6: adc_dec_valid_b_filter = adc_fir_valid_b;
-      16'h7: adc_dec_valid_b_filter = adc_fir_valid_b;
-      default: adc_dec_valid_b_filter = adc_valid_b;
-    endcase
-
-    case (filter_mask)
-      16'h1: decim_rate_cic = 16'd5;
-      16'h2: decim_rate_cic = 16'd50;
-      16'h3: decim_rate_cic = 16'd500;
-      16'h6: decim_rate_cic = 16'd5000;
-      16'h7: decim_rate_cic = 16'd50000;
-      default: decim_rate_cic = 16'd1;
-    endcase
-  end
-
-  always @(posedge adc_clk) begin
-    if (adc_rst == 1'b1) begin
-      decimation_counter <= 32'b0;
-      adc_dec_valid_a <= 1'b0;
-      adc_dec_valid_b <= 1'b0;
-    end else begin
-      if (adc_dec_valid_a_filter == 1'b1) begin
-        if (decimation_counter < decimation_ratio) begin
-          decimation_counter <= decimation_counter + 1;
-          adc_dec_valid_a <= 1'b0;
-          adc_dec_valid_b <= 1'b0;
-        end else begin
-          decimation_counter <= 0;
-          adc_dec_valid_a <= 1'b1;
-          adc_dec_valid_b <= 1'b1;
-        end
-      end else begin
-          adc_dec_valid_a <= 1'b0;
-          adc_dec_valid_b <= 1'b0;
-      end
-    end
-  end
+    .adc_dec_data_a(adc_dec_data_a),
+    .adc_dec_data_b(adc_dec_data_b),
+    .adc_dec_valid_a(adc_dec_valid_a),
+    .adc_dec_valid_b(adc_dec_valid_b));
 
   axi_adc_decimate_reg axi_adc_decimate_reg (
 

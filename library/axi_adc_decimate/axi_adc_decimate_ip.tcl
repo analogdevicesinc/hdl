@@ -10,6 +10,7 @@ adi_ip_files axi_adc_decimate [list \
   "axi_adc_decimate_constr.xdc" \
   "fir_decim.v" \
   "cic_decim.v" \
+  "axi_adc_decimate_filter.v" \
   "axi_adc_decimate_reg.v" \
   "axi_adc_decimate.v" ]
 
