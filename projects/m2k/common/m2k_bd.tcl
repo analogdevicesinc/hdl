@@ -14,12 +14,18 @@ create_bd_port -dir I tx_clk
 create_bd_port -dir O txiq
 create_bd_port -dir O -from 11 -to 0 txd
 
+# AXI control interface and logic analyzer DMA (FCLK0): 27.8 MHz
 # Logic analyzer (FCLK2): 100 MHz
+# Converter DMA (FCLK3): 55.6 MHz
 
 set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_EN_CLK3_PORT {1}] $sys_ps7
+set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {27.778}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
+set_property -dict [list CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ {55.556}] $sys_ps7
 
 ad_connect logic_analyzer_clk sys_ps7/FCLK_CLK2
+ad_connect converter_dma_clk sys_ps7/FCLK_CLK3
 
 set logic_analyzer [create_bd_cell -type ip -vlnv analog.com:user:axi_logic_analyzer:1.0 logic_analyzer]
 
@@ -215,23 +221,29 @@ ad_cpu_interconnect 0x7C4c0000 adc_trigger
 ad_cpu_interconnect 0x7C500000 axi_adc_decimate
 ad_cpu_interconnect 0x7C5a0000 axi_dac_interpolate
 
+# Logic analyzer DMA
 ad_connect sys_cpu_clk axi_rd_wr_combiner_logic/clk
-ad_connect sys_cpu_clk axi_rd_wr_combiner_converter/clk
 ad_connect sys_cpu_clk logic_analyzer_dmac/m_dest_axi_aclk
 ad_connect sys_cpu_clk pattern_generator_dmac/m_src_axi_aclk
-ad_connect sys_cpu_clk ad9963_adc_dmac/m_dest_axi_aclk
-ad_connect sys_cpu_clk ad9963_dac_dmac_a/m_src_axi_aclk
 
 ad_connect logic_analyzer_dmac/m_dest_axi axi_rd_wr_combiner_logic/s_wr_axi
 ad_connect pattern_generator_dmac/m_src_axi axi_rd_wr_combiner_logic/s_rd_axi
 
+ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect sys_cpu_clk axi_rd_wr_combiner_logic/m_axi
+
+# Converter DMA
+ad_connect converter_dma_clk axi_rd_wr_combiner_converter/clk
+ad_connect converter_dma_clk ad9963_adc_dmac/m_dest_axi_aclk
+ad_connect converter_dma_clk ad9963_dac_dmac_a/m_src_axi_aclk
+
 ad_connect ad9963_adc_dmac/m_dest_axi axi_rd_wr_combiner_converter/s_wr_axi
 ad_connect ad9963_dac_dmac_a/m_src_axi axi_rd_wr_combiner_converter/s_rd_axi
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_rd_wr_combiner_logic/m_axi
-ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk axi_rd_wr_combiner_converter/m_axi
+ad_mem_hp2_interconnect converter_dma_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect converter_dma_clk axi_rd_wr_combiner_converter/m_axi
+
+# Only 16-bit we can run at a slower clock
 ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
 ad_mem_hp3_interconnect sys_cpu_clk ad9963_dac_dmac_b/m_src_axi
 
