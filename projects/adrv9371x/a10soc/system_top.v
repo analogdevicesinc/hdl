@@ -165,33 +165,40 @@ module system_top (
   wire              sys_ddr_cal_fail;
   wire              sys_hps_resetn;
   wire              sys_resetn_s;
-  wire    [  7:0]   spi_csn;
-  wire    [ 31:0]   gpio_i;
-  wire    [ 31:0]   gpio_o;
-  wire              ad9371_tx_fifo_bypass;
+  wire    [ 63:0]   gpio_i;
+  wire    [ 63:0]   gpio_o;
+  wire    [  7:0]   spi_csn_s;
+  wire              dac_fifo_bypass;
+
+  // assignments
+
+  assign spi_csn_ad9371 = spi_csn_s[0];
+  assign spi_csn_ad9528 = spi_csn_s[1];
 
   // gpio (ad9371)
 
-  assign gpio_i[31:26] = gpio_o[31:26];
+  assign gpio_i[63:61] = gpio_o[63:61];
 
-  assign ad9371_tx_fifo_bypass = gpio_o[25];
-  assign gpio_i[25:25] = gpio_o[25];
+  assign dac_fifo_bypass = gpio_o[60];
+  assign gpio_i[60:60] = gpio_o[60];
 
-  assign gpio_i[24:24] = ad9371_gpint;
+  assign ad9528_reset_b = gpio_o[59];
+  assign ad9528_sysref_req = gpio_o[58];
+  assign ad9371_tx1_enable = gpio_o[57];
+  assign ad9371_tx2_enable = gpio_o[56];
+  assign ad9371_rx1_enable = gpio_o[55];
+  assign ad9371_rx2_enable = gpio_o[54];
+  assign ad9371_test = gpio_o[53];
+  assign ad9371_reset_b = gpio_o[52];
+  assign gpio_i[59:52] = gpio_o[59:52];
 
-  assign gpio_i[23:16] = gpio_o[23:16];
-  assign ad9371_tx1_enable = gpio_o[23];
-  assign ad9371_tx2_enable = gpio_o[22];
-  assign ad9371_rx1_enable = gpio_o[21];
-  assign ad9371_rx2_enable = gpio_o[20];
-  assign ad9371_test = gpio_o[19];
-  assign ad9371_reset_b = gpio_o[18];
-  assign ad9528_sysref_req = gpio_o[17];
-  assign ad9528_reset_b = gpio_o[16];
+  assign gpio_i[51:51] = ad9371_gpint;
+
+  assign gpio_i[50:32] = gpio_o[50:32];
   
-  // gpio (max-v-u21)
+  // board stuff (max-v-u21)
 
-  assign gpio_i[15:14] = gpio_o[15:14];
+  assign gpio_i[31:14] = gpio_o[31:14];
   assign gpio_i[13:13] = sys_ddr_cal_success;
   assign gpio_i[12:12] = sys_ddr_cal_fail;
   assign gpio_i[11: 4] = gpio_bd_i;
@@ -199,16 +206,14 @@ module system_top (
 
   assign gpio_bd_o = gpio_o[3:0];
 
-  // spi
+  // peripheral reset
 
-  assign spi_csn_ad9528 = spi_csn[1];
-  assign spi_csn_ad9371 = spi_csn[0];
   assign sys_resetn_s = sys_resetn & sys_hps_resetn;
 
   // instantiations
 
   system_bd i_system_bd (
-    .avl_ad9371_gpio_export (ad9371_gpio),
+    .ad9371_gpio_export (ad9371_gpio),
     .rx_data_0_rx_serial_data (rx_data[0]),
     .rx_data_1_rx_serial_data (rx_data[1]),
     .rx_data_2_rx_serial_data (rx_data[2]),
@@ -240,8 +245,10 @@ module system_top (
     .sys_ddr_ref_clk_clk (sys_ddr_ref_clk),
     .sys_ddr_status_local_cal_success (sys_ddr_cal_success),
     .sys_ddr_status_local_cal_fail (sys_ddr_cal_fail),
-    .sys_gpio_in_export (gpio_i),
-    .sys_gpio_out_export (gpio_o),
+    .sys_gpio_bd_in_port (gpio_i[31:0]),
+    .sys_gpio_bd_out_port (gpio_o[31:0]),
+    .sys_gpio_in_export (gpio_i[63:32]),
+    .sys_gpio_out_export (gpio_o[63:32]),
     .sys_hps_ddr_mem_ck (hps_ddr_clk_p),
     .sys_hps_ddr_mem_ck_n (hps_ddr_clk_n),
     .sys_hps_ddr_mem_a (hps_ddr_a),
@@ -311,12 +318,12 @@ module system_top (
     .sys_spi_MISO (spi_miso),
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn),
+    .sys_spi_SS_n (spi_csn_s),
     .tx_data_0_tx_serial_data (tx_data[0]),
     .tx_data_1_tx_serial_data (tx_data[1]),
     .tx_data_2_tx_serial_data (tx_data[2]),
     .tx_data_3_tx_serial_data (tx_data[3]),
-    .tx_fifo_bypass_bypass (ad9371_tx_fifo_bypass),
+    .tx_fifo_bypass_bypass (dac_fifo_bypass),
     .tx_ref_clk_clk (ref_clk1),
     .tx_sync_export (tx_sync),
     .tx_sysref_export (sysref));

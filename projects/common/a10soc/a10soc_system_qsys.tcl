@@ -195,6 +195,18 @@ add_instance sys_dma_clk clock_source 16.0
 add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
 add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 
+# gpio-bd
+
+add_instance sys_gpio_bd altera_avalon_pio 16.0
+set_instance_parameter_value sys_gpio_bd {direction} {InOut}
+set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
+set_instance_parameter_value sys_gpio_bd {width} {32}
+
+add_connection sys_clk.clk_reset sys_gpio_bd.reset
+add_connection sys_clk.clk sys_gpio_bd.clk
+add_interface sys_gpio_bd conduit end
+set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
+
 # gpio-in
 
 add_instance sys_gpio_in altera_avalon_pio 16.0
@@ -236,6 +248,7 @@ set_interface_property sys_spi EXPORT_OF sys_spi.external
 
 # base-addresses
 
+ad_cpu_interconnect 0x000000d0 sys_gpio_bd.s1
 ad_cpu_interconnect 0x00000000 sys_gpio_in.s1
 ad_cpu_interconnect 0x00000020 sys_gpio_out.s1
 ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port
@@ -243,5 +256,6 @@ ad_cpu_interconnect 0x00000040 sys_spi.spi_control_port
 # interrupts
 
 ad_cpu_interrupt 5 sys_gpio_in.irq
+ad_cpu_interrupt 6 sys_gpio_bd.irq
 ad_cpu_interrupt 7 sys_spi.irq
 
