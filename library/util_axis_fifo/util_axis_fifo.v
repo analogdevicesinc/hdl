@@ -94,7 +94,7 @@ assign s_axis_empty = s_axis_ready;
 assign s_axis_room = s_axis_ready;
 
 always @(posedge s_axis_aclk) begin
-  if (s_axis_ready)
+  if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
     cdc_sync_fifo_ram <= s_axis_data;
 end
 
@@ -171,7 +171,7 @@ fifo_address_sync #(
 end
 
 always @(posedge s_axis_aclk) begin
-  if (s_axis_ready)
+  if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
     ram[s_axis_waddr] <= s_axis_data;
 end
 
@@ -192,7 +192,7 @@ always @(posedge m_axis_aclk) begin
 end
 
 always @(posedge m_axis_aclk) begin
-  if (~valid || m_axis_ready)
+  if ((~valid || m_axis_ready) && _m_axis_valid)
     data <= ram[m_axis_raddr];
 end
 
