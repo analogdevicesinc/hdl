@@ -304,8 +304,8 @@ set_instance_parameter_value avl_ad9371_gpio {generateIRQ} {1}
 set_instance_parameter_value avl_ad9371_gpio {width} {19}
 add_connection sys_clk.clk avl_ad9371_gpio.clk
 add_connection sys_clk.clk_reset avl_ad9371_gpio.reset
-add_interface avl_ad9371_gpio conduit end
-set_interface_property avl_ad9371_gpio EXPORT_OF avl_ad9371_gpio.external_connection
+add_interface ad9371_gpio conduit end
+set_interface_property ad9371_gpio EXPORT_OF avl_ad9371_gpio.external_connection
 
 # reconfig sharing
 

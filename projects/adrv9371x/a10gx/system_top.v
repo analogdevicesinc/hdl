@@ -117,7 +117,7 @@ module system_top (
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [  7:0]   spi_csn_s;
-  wire              ad9371_tx_fifo_bypass;
+  wire              dac_fifo_bypass;
 
   // assignments
 
@@ -126,24 +126,24 @@ module system_top (
 
   // gpio (ad9371)
 
-  assign gpio_i[63:58] = gpio_o[63:58];
+  assign gpio_i[63:61] = gpio_o[63:61];
 
-  assign ad9371_tx_fifo_bypass = gpio_o[57];
-  assign gpio_i[57:57] = gpio_o[57];
+  assign dac_fifo_bypass = gpio_o[60];
+  assign gpio_i[60:60] = gpio_o[60];
 
-  assign gpio_i[56:56] = ad9371_gpint;
+  assign ad9528_reset_b = gpio_o[59];
+  assign ad9528_sysref_req = gpio_o[58];
+  assign ad9371_tx1_enable = gpio_o[57];
+  assign ad9371_tx2_enable = gpio_o[56];
+  assign ad9371_rx1_enable = gpio_o[55];
+  assign ad9371_rx2_enable = gpio_o[54];
+  assign ad9371_test = gpio_o[53];
+  assign ad9371_reset_b = gpio_o[52];
+  assign gpio_i[59:52] = gpio_o[59:52];
 
-  assign gpio_i[55:48] = gpio_o[55:48];
-  assign ad9371_tx1_enable = gpio_o[55];
-  assign ad9371_tx2_enable = gpio_o[54];
-  assign ad9371_rx1_enable = gpio_o[53];
-  assign ad9371_rx2_enable = gpio_o[52];
-  assign ad9371_test = gpio_o[51];
-  assign ad9371_reset_b = gpio_o[50];
-  assign ad9528_sysref_req = gpio_o[49];
-  assign ad9528_reset_b = gpio_o[48];
+  assign gpio_i[51:51] = ad9371_gpint;
 
-  assign gpio_i[47:32] = gpio_o[47:32];
+  assign gpio_i[50:32] = gpio_o[50:32];
 
   // board stuff
 
@@ -160,7 +160,7 @@ module system_top (
   assign gpio_bd_o = gpio_o[15:0];
 
   system_bd i_system_bd (
-    .avl_ad9371_gpio_export(ad9371_gpio),
+    .ad9371_gpio_export (ad9371_gpio),
     .rx_data_0_rx_serial_data (rx_data[0]),
     .rx_data_1_rx_serial_data (rx_data[1]),
     .rx_data_2_rx_serial_data (rx_data[2]),
@@ -210,7 +210,7 @@ module system_top (
     .tx_data_1_tx_serial_data (tx_data[1]),
     .tx_data_2_tx_serial_data (tx_data[2]),
     .tx_data_3_tx_serial_data (tx_data[3]),
-    .tx_fifo_bypass_bypass (ad9371_tx_fifo_bypass),
+    .tx_fifo_bypass_bypass (dac_fifo_bypass),
     .tx_ref_clk_clk (ref_clk1),
     .tx_sync_export (tx_sync),
     .tx_sysref_export (sysref));
