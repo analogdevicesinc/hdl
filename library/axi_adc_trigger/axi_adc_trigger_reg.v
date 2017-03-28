@@ -171,11 +171,11 @@ module axi_adc_trigger_reg (
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'he)) begin
         up_delay_trigger <= up_wdata;
       end
-      if (triggered == 1'b1) begin
-        up_triggered <= 1'b1;
-      end else if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hf)) begin
-        up_triggered <= up_wdata[0];
-      end
+//      if (triggered == 1'b1) begin
+//        up_triggered <= 1'b1;
+//      end else if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hf)) begin
+//        up_triggered <= up_wdata[0];
+//      end
     end
   end
 
