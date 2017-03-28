@@ -117,6 +117,8 @@ module system_top (
     .dio_p ({ en_power_analog,
               ad9963_resetn}));
 
+  assign gpio_i[16:2] = 'h0;
+
   ad_iobuf #(
     .DATA_WIDTH(16)
   ) i_data_bd (
