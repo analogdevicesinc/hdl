@@ -112,7 +112,7 @@ module axi_ad9963_rx_channel #(
   generate
   if (DATAPATH_DISABLE == 1) begin
   assign adc_dfmt_valid_s = adc_valid;
-  assign adc_dfmt_data_s = {4'd0, adc_data};
+  assign adc_dfmt_data_s = {{4{adc_data[11]}}, adc_data};
   end else begin
   ad_datafmt #(.DATA_WIDTH (12)) i_ad_datafmt (
     .clk (adc_clk),
