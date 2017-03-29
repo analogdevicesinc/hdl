@@ -40,7 +40,6 @@
 module axi_adc_decimate_reg(
 
   input               clk,
-  output              adc_rst,
 
   output      [31:0]  adc_decimation_ratio,
   output      [31:0]  adc_filter_mask,
@@ -73,8 +72,6 @@ module axi_adc_decimate_reg(
 
   assign up_wreq_s = ((up_waddr[13:5] == 6'h00)) ? up_wreq : 1'b0;
   assign up_rreq_s = ((up_raddr[13:5] == 6'h00)) ? up_rreq : 1'b0;
-
-  ad_rst i_core_rst_reg (.preset(~up_rstn), .clk(clk), .rst(adc_rst));
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin

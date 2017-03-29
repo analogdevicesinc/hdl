@@ -40,6 +40,7 @@
 module axi_adc_decimate(
 
   input                 adc_clk,
+  input                 adc_rst,
 
   input       [15:0]    adc_data_a,
   input       [15:0]    adc_data_b,
@@ -221,7 +222,6 @@ module axi_adc_decimate(
   axi_adc_decimate_reg axi_adc_decimate_reg (
 
     .clk (adc_clk),
-    .adc_rst (adc_rst),
 
     .adc_decimation_ratio (decimation_ratio),
     .adc_filter_mask (filter_mask),

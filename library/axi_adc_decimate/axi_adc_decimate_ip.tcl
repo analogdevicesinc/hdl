@@ -6,7 +6,6 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_adc_decimate
 adi_ip_files axi_adc_decimate [list \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "axi_adc_decimate_constr.xdc" \
   "fir_decim.v" \
