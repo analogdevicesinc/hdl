@@ -125,14 +125,14 @@ ad_connect pattern_generator_dmac/fifo_rd_valid   logic_analyzer/dac_valid
 
 ad_connect sys_200m_clk             axi_ad9963/delay_clk
 
-ad_connect axi_ad9963/l_clk  adc_trigger_fifo/clk
-ad_connect axi_ad9963/l_clk  util_cpack_ad9963/adc_clk
-ad_connect axi_adc_decimate/adc_clk axi_ad9963/l_clk
-ad_connect adc_trigger_extract/clk         axi_ad9963/l_clk
-ad_connect ad9963_adc_dmac/fifo_wr_clk     axi_ad9963/l_clk
+ad_connect axi_ad9963/adc_clk  adc_trigger_fifo/clk
+ad_connect axi_ad9963/adc_clk  util_cpack_ad9963/adc_clk
+ad_connect axi_adc_decimate/adc_clk axi_ad9963/adc_clk
+ad_connect adc_trigger_extract/clk         axi_ad9963/adc_clk
+ad_connect ad9963_adc_dmac/fifo_wr_clk     axi_ad9963/adc_clk
 
-ad_connect axi_ad9963/rst    util_cpack_ad9963/adc_rst
-ad_connect axi_ad9963/rst    adc_trigger_fifo/rst
+ad_connect axi_ad9963/adc_rst    util_cpack_ad9963/adc_rst
+ad_connect axi_ad9963/adc_rst    adc_trigger_fifo/rst
 
 ad_connect axi_adc_decimate/adc_data_a axi_ad9963/adc_data_i
 ad_connect axi_adc_decimate/adc_data_b axi_ad9963/adc_data_q
@@ -185,7 +185,7 @@ ad_connect adc_trigger/data_valid_a axi_adc_decimate/adc_dec_valid_a
 ad_connect adc_trigger/data_b axi_adc_decimate/adc_dec_data_b
 ad_connect adc_trigger/data_valid_b axi_adc_decimate/adc_dec_valid_b
 
-ad_connect adc_trigger/clk axi_ad9963/l_clk
+ad_connect adc_trigger/clk axi_ad9963/adc_clk
 ad_connect trigger_i adc_trigger/trigger_i
 ad_connect trigger_o adc_trigger/trigger_o
 ad_connect trigger_t adc_trigger/trigger_t
