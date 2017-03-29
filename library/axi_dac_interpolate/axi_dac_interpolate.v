@@ -40,6 +40,7 @@
 module axi_dac_interpolate(
 
   input                 dac_clk,
+  input                 dac_rst,
 
   input       [15:0]    dac_data_a,
   input       [15:0]    dac_data_b,
@@ -120,8 +121,6 @@ module axi_dac_interpolate(
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
-
-  ad_rst i_core_rst_reg (.preset(~up_rstn), .clk(dac_clk), .rst(dac_rst));
 
   fir_interp fir_interpolation_a (
     .clk (dac_clk),
