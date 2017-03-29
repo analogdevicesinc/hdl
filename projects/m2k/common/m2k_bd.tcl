@@ -128,6 +128,8 @@ ad_connect sys_200m_clk             axi_ad9963/delay_clk
 ad_connect axi_ad9963/adc_clk  adc_trigger_fifo/clk
 ad_connect axi_ad9963/adc_clk  util_cpack_ad9963/adc_clk
 ad_connect axi_adc_decimate/adc_clk axi_ad9963/adc_clk
+ad_connect axi_adc_decimate/adc_rst axi_ad9963/adc_rst
+
 ad_connect adc_trigger_extract/clk         axi_ad9963/adc_clk
 ad_connect ad9963_adc_dmac/fifo_wr_clk     axi_ad9963/adc_clk
 
@@ -159,6 +161,7 @@ ad_connect adc_trigger_extract/trigger_out  ad9963_adc_dmac/fifo_wr_sync
 ad_connect adc_trigger_fifo/data_out_valid  ad9963_adc_dmac/fifo_wr_en
 
 ad_connect axi_dac_interpolate/dac_clk      axi_ad9963/dac_clk
+ad_connect axi_dac_interpolate/dac_rst      axi_ad9963/dac_rst
 
 ad_connect axi_dac_interpolate/dac_valid_a      axi_ad9963/dac_valid_i
 ad_connect axi_dac_interpolate/dac_valid_b      axi_ad9963/dac_valid_q
