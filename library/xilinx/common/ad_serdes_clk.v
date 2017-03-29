@@ -42,6 +42,7 @@ module ad_serdes_clk #(
 
   parameter       DEVICE_TYPE = 0,
   parameter       DDR_OR_SDR_N = 1,
+  parameter       CLKIN_DS_OR_SE_N = 1,
   parameter       SERDES_FACTOR = 8,
   parameter       MMCM_OR_BUFR_N = 1,
   parameter       MMCM_CLKIN_PERIOD  = 1.667,
@@ -73,6 +74,8 @@ module ad_serdes_clk #(
   output          up_drp_ready,
   output          up_drp_locked);
 
+  localparam BUFR_DIVIDE = (DDR_OR_SDR_N == 1'b1) ? SERDES_FACTOR / 2 : SERDES_FACTOR;
+
   // internal signals
 
   wire            clk_in_s;
@@ -85,10 +88,18 @@ module ad_serdes_clk #(
 
   // instantiations
 
+  generate
+  if (CLKIN_DS_OR_SE_N == 1'b1) begin
   IBUFGDS i_clk_in_ibuf (
     .I (clk_in_p),
     .IB (clk_in_n),
     .O (clk_in_s));
+  end else begin
+  IBUF IBUF_inst (
+      .O(clk_in_s),
+      .I(clk_in_p));
+  end
+  endgenerate
 
   generate
   if (MMCM_OR_BUFR_N == 1) begin
@@ -128,13 +139,17 @@ module ad_serdes_clk #(
     .I (clk_in_s),
     .O (clk));
 
-  BUFR #(.BUFR_DIVIDE("4")) i_div_clk_buf (
+  BUFR #(.BUFR_DIVIDE(BUFR_DIVIDE)) i_div_clk_buf (
     .CLR (1'b0),
     .CE (1'b1),
     .I (clk_in_s),
     .O (div_clk));
 
   assign out_clk = clk;
+  assign up_drp_rdata[15:0] = 'd0;
+  assign up_drp_ready = 'd0;
+  assign up_drp_locked = 'd0;
+
   end
   endgenerate
 
