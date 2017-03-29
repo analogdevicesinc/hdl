@@ -121,8 +121,8 @@ module system_top (
 
   // assignments
 
-  assign spi_csn_ad9371 = spi_csn_s[0];
-  assign spi_csn_ad9528 = spi_csn_s[1];
+  assign spi_csn_ad9528 = spi_csn_s[0];
+  assign spi_csn_ad9371 = spi_csn_s[1];
 
   // gpio (ad9371)
 
