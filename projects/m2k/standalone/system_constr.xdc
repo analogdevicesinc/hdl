@@ -62,6 +62,8 @@ set_property  -dict {PACKAGE_PIN  J11 IOSTANDARD LVCMOS33} [get_ports txd[10]]
 set_property  -dict {PACKAGE_PIN  H11 IOSTANDARD LVCMOS33} [get_ports txd[11]]
 
 create_clock -period 10.000 -name rx_clk [get_ports rx_clk]
+create_clock -period 6.66 -name tx_clk [get_ports tx_clk]
+
 create_clock -period 12.500 -name trigger_clk [get_ports {trigger_bd[0]}]
 create_clock -period 12.500 -name data_clk [get_ports {data_bd[0]}]
 

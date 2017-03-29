@@ -60,6 +60,8 @@ set_property  -dict {PACKAGE_PIN  R19  IOSTANDARD LVCMOS25} [get_ports txd[10]] 
 set_property  -dict {PACKAGE_PIN  T19  IOSTANDARD LVCMOS25} [get_ports txd[11]]                  ; ## G25  FMC_LPC_LA22_N
 
 create_clock -name rx_clk       -period   10.00 [get_ports rx_clk]
+create_clock -name tx_clk       -period   6.66  [get_ports tx_clk]
+
 create_clock -name trigger_clk  -period   12.5  [get_ports trigger_bd[0]]
 create_clock -name data_clk     -period   12.5  [get_ports data_bd[0]]
 

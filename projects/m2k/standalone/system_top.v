@@ -68,7 +68,7 @@ module system_top (
   input           rx_clk,
   input           rxiq,
   input   [11:0]  rxd,
-  output          tx_clk,
+  input           tx_clk,
   output          txiq,
   output  [11:0]  txd,
 

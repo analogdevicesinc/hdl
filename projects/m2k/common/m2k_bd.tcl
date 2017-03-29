@@ -10,7 +10,7 @@ create_bd_port -dir O -from  1 -to 0 trigger_t
 create_bd_port -dir I rx_clk
 create_bd_port -dir I rxiq
 create_bd_port -dir I -from 11 -to 0 rxd
-create_bd_port -dir O tx_clk
+create_bd_port -dir I tx_clk
 create_bd_port -dir O txiq
 create_bd_port -dir O -from 11 -to 0 txd
 
@@ -96,9 +96,9 @@ ad_connect data_o     logic_analyzer/data_o
 ad_connect data_t     logic_analyzer/data_t
 
 ad_connect sys_cpu_clk            clk_generator/clk
-ad_connect logic_analyzer/clk_out clk_generator/clk2
 
 ad_connect logic_analyzer/clk     clk_generator/clk_0
+ad_connect logic_analyzer/clk_out clk_generator/clk2
 
 ad_connect pattern_generator_dmac/fifo_rd_clk clk_generator/clk_0
 
