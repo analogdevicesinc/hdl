@@ -57,7 +57,14 @@ proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
     ipx::add_file $f_name $proj_filegroup
     set_property type xdc [ipx::get_files $f_name -of_objects $proj_filegroup]
     set_property processing_order $processing_order [ipx::get_files $f_name -of_objects $proj_filegroup]
+    puts [string range $f_name [expr [string last / $f_name] +1] \
+                                                     [expr [string last "_constr.xdc" $f_name] -1]]
+    set_property SCOPED_TO_REF [string range $f_name [expr [string last / $f_name] +1] \
+                                                     [expr [string last "_constr.xdc" $f_name] -1]] \
+                               [ipx::get_files $f_name -of_objects $proj_filegroup]
   }
+
+  ipx::save_core
 }
 
 proc adi_ip_ttcl {ip_name ip_constr_files} {
@@ -118,6 +125,8 @@ proc adi_ip_properties {ip_name} {
   set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
     -of_objects [ipx::get_bus_interfaces s_axi_aclk \
     -of_objects [ipx::current_core]]]
+
+  ipx::save_core
 }
 
 proc adi_ip_infer_streaming_interfaces {ip_name} {
@@ -185,6 +194,8 @@ proc adi_ip_properties_lite {ip_name} {
   foreach map $memory_maps {
     ipx::remove_memory_map [lindex $map 2] [ipx::current_core ]
   }
+
+  ipx::save_core
 }
 
 proc adi_set_ports_dependency {port_prefix dependency} {
