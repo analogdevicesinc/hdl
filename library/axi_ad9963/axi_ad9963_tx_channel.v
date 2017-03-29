@@ -114,122 +114,6 @@ module axi_ad9963_tx_channel #(
   wire    [15:0]  dac_iqcor_coeff_1_s;
   wire    [15:0]  dac_iqcor_coeff_2_s;
 
-  // standard prbs functions
-
-  function [23:0] pn1fn;
-    input [23:0] din;
-    reg   [23:0] dout;
-    begin
-      case (PRBS_SEL)
-        PRBS_P09: begin
-          dout[23] = din[ 8] ^ din[ 4];
-          dout[22] = din[ 7] ^ din[ 3];
-          dout[21] = din[ 6] ^ din[ 2];
-          dout[20] = din[ 5] ^ din[ 1];
-          dout[19] = din[ 4] ^ din[ 0];
-          dout[18] = din[ 3] ^ din[ 8] ^ din[ 4];
-          dout[17] = din[ 2] ^ din[ 7] ^ din[ 3];
-          dout[16] = din[ 1] ^ din[ 6] ^ din[ 2];
-          dout[15] = din[ 0] ^ din[ 5] ^ din[ 1];
-          dout[14] = din[ 8] ^ din[ 0];
-          dout[13] = din[ 7] ^ din[ 8] ^ din[ 4];
-          dout[12] = din[ 6] ^ din[ 7] ^ din[ 3];
-          dout[11] = din[ 5] ^ din[ 6] ^ din[ 2];
-          dout[10] = din[ 4] ^ din[ 5] ^ din[ 1];
-          dout[ 9] = din[ 3] ^ din[ 4] ^ din[ 0];
-          dout[ 8] = din[ 2] ^ din[ 3] ^ din[ 8] ^ din[ 4];
-          dout[ 7] = din[ 1] ^ din[ 2] ^ din[ 7] ^ din[ 3];
-          dout[ 6] = din[ 0] ^ din[ 1] ^ din[ 6] ^ din[ 2];
-          dout[ 5] = din[ 8] ^ din[ 0] ^ din[ 4] ^ din[ 5] ^ din[ 1];
-          dout[ 4] = din[ 7] ^ din[ 8] ^ din[ 3] ^ din[ 0];
-          dout[ 3] = din[ 6] ^ din[ 7] ^ din[ 2] ^ din[ 8] ^ din[ 4];
-          dout[ 2] = din[ 5] ^ din[ 6] ^ din[ 1] ^ din[ 7] ^ din[ 3];
-          dout[ 1] = din[ 4] ^ din[ 5] ^ din[ 0] ^ din[ 6] ^ din[ 2];
-          dout[ 0] = din[ 3] ^ din[ 8] ^ din[ 5] ^ din[ 1];
-        end
-        PRBS_P11: begin
-          dout[23] = din[10] ^ din[ 8];
-          dout[22] = din[ 9] ^ din[ 7];
-          dout[21] = din[ 8] ^ din[ 6];
-          dout[20] = din[ 7] ^ din[ 5];
-          dout[19] = din[ 6] ^ din[ 4];
-          dout[18] = din[ 5] ^ din[ 3];
-          dout[17] = din[ 4] ^ din[ 2];
-          dout[16] = din[ 3] ^ din[ 1];
-          dout[15] = din[ 2] ^ din[ 0];
-          dout[14] = din[ 1] ^ din[10] ^ din[ 8];
-          dout[13] = din[ 0] ^ din[ 9] ^ din[ 7];
-          dout[12] = din[10] ^ din[ 6];
-          dout[11] = din[ 9] ^ din[ 5];
-          dout[10] = din[ 8] ^ din[ 4];
-          dout[ 9] = din[ 7] ^ din[ 3];
-          dout[ 8] = din[ 6] ^ din[ 2];
-          dout[ 7] = din[ 5] ^ din[ 1];
-          dout[ 6] = din[ 4] ^ din[ 0];
-          dout[ 5] = din[ 3] ^ din[10] ^ din[ 8];
-          dout[ 4] = din[ 2] ^ din[ 9] ^ din[ 7];
-          dout[ 3] = din[ 1] ^ din[ 8] ^ din[ 6];
-          dout[ 2] = din[ 0] ^ din[ 7] ^ din[ 5];
-          dout[ 1] = din[10] ^ din[ 6] ^ din[ 8] ^ din[ 4];
-          dout[ 0] = din[ 9] ^ din[ 5] ^ din[ 7] ^ din[ 3];
-        end
-        PRBS_P15: begin
-          dout[23] = din[14] ^ din[13];
-          dout[22] = din[13] ^ din[12];
-          dout[21] = din[12] ^ din[11];
-          dout[20] = din[11] ^ din[10];
-          dout[19] = din[10] ^ din[ 9];
-          dout[18] = din[ 9] ^ din[ 8];
-          dout[17] = din[ 8] ^ din[ 7];
-          dout[16] = din[ 7] ^ din[ 6];
-          dout[15] = din[ 6] ^ din[ 5];
-          dout[14] = din[ 5] ^ din[ 4];
-          dout[13] = din[ 4] ^ din[ 3];
-          dout[12] = din[ 3] ^ din[ 2];
-          dout[11] = din[ 2] ^ din[ 1];
-          dout[10] = din[ 1] ^ din[ 0];
-          dout[ 9] = din[ 0] ^ din[14] ^ din[13];
-          dout[ 8] = din[14] ^ din[12];
-          dout[ 7] = din[13] ^ din[11];
-          dout[ 6] = din[12] ^ din[10];
-          dout[ 5] = din[11] ^ din[ 9];
-          dout[ 4] = din[10] ^ din[ 8];
-          dout[ 3] = din[ 9] ^ din[ 7];
-          dout[ 2] = din[ 8] ^ din[ 6];
-          dout[ 1] = din[ 7] ^ din[ 5];
-          dout[ 0] = din[ 6] ^ din[ 4];
-        end
-        PRBS_P20: begin
-          dout[23] = din[19] ^ din[ 2];
-          dout[22] = din[18] ^ din[ 1];
-          dout[21] = din[17] ^ din[ 0];
-          dout[20] = din[16] ^ din[19] ^ din[ 2];
-          dout[19] = din[15] ^ din[18] ^ din[ 1];
-          dout[18] = din[14] ^ din[17] ^ din[ 0];
-          dout[17] = din[13] ^ din[16] ^ din[19] ^ din[ 2];
-          dout[16] = din[12] ^ din[15] ^ din[18] ^ din[ 1];
-          dout[15] = din[11] ^ din[14] ^ din[17] ^ din[ 0];
-          dout[14] = din[10] ^ din[13] ^ din[16] ^ din[19] ^ din[ 2];
-          dout[13] = din[ 9] ^ din[12] ^ din[15] ^ din[18] ^ din[ 1];
-          dout[12] = din[ 8] ^ din[11] ^ din[14] ^ din[17] ^ din[ 0];
-          dout[11] = din[ 7] ^ din[10] ^ din[13] ^ din[16] ^ din[19] ^ din[ 2];
-          dout[10] = din[ 6] ^ din[ 9] ^ din[12] ^ din[15] ^ din[18] ^ din[ 1];
-          dout[ 9] = din[ 5] ^ din[ 8] ^ din[11] ^ din[14] ^ din[17] ^ din[ 0];
-          dout[ 8] = din[ 4] ^ din[ 7] ^ din[10] ^ din[13] ^ din[16] ^ din[19] ^ din[ 2];
-          dout[ 7] = din[ 3] ^ din[ 6] ^ din[ 9] ^ din[12] ^ din[15] ^ din[18] ^ din[ 1];
-          dout[ 6] = din[ 2] ^ din[ 5] ^ din[ 8] ^ din[11] ^ din[14] ^ din[17] ^ din[ 0];
-          dout[ 5] = din[ 1] ^ din[ 4] ^ din[ 7] ^ din[10] ^ din[13] ^ din[16] ^ din[19] ^ din[ 2];
-          dout[ 4] = din[ 0] ^ din[ 3] ^ din[ 6] ^ din[ 9] ^ din[12] ^ din[15] ^ din[18] ^ din[ 1];
-          dout[ 3] = din[19] ^ din[ 5] ^ din[ 8] ^ din[11] ^ din[14] ^ din[17] ^ din[ 0];
-          dout[ 2] = din[18] ^ din[ 4] ^ din[ 7] ^ din[10] ^ din[13] ^ din[16] ^ din[19] ^ din[ 2];
-          dout[ 1] = din[17] ^ din[ 3] ^ din[ 6] ^ din[ 9] ^ din[12] ^ din[15] ^ din[18] ^ din[ 1];
-          dout[ 0] = din[16] ^ din[ 2] ^ din[ 5] ^ din[ 8] ^ din[11] ^ din[14] ^ din[17] ^ din[ 0];
-        end
-      endcase
-      pn1fn = dout;
-    end
-  endfunction
-
   // global toggle
 
   always @(posedge dac_clk) begin
@@ -271,8 +155,6 @@ module axi_ad9963_tx_channel #(
 
   always @(posedge dac_clk) begin
     case (dac_data_sel_s)
-      4'h9: dac_data_out <= dac_pn_data;
-      4'h8: dac_data_out <= 16'h0;
       4'h6: dac_data_out <= dac_test_data[11:0];
       4'h5: dac_data_out <= dac_data_out-1;
       4'h4: dac_data_out <= dac_data_out+1;
@@ -304,23 +186,6 @@ module axi_ad9963_tx_channel #(
     end
   end
 
-  // prbs sequences
-
-  always @(posedge dac_clk) begin
-    if (dac_data_sync == 1'b1) begin
-      dac_pn_seq <= 24'hffffff;
-      dac_pn_data <= 12'd0;
-    end else if (dac_valid == 1'b1) begin
-      if (dac_valid_sel == 1'b1) begin
-        dac_pn_seq <= pn1fn(dac_pn_seq);
-        dac_pn_data <= dac_pn_seq[11: 0];
-      end else begin
-        dac_pn_seq <= dac_pn_seq;
-        dac_pn_data <= dac_pn_seq[23:12];
-      end
-    end
-  end
-
   // pattern
 
   always @(posedge dac_clk) begin
@@ -334,6 +199,11 @@ module axi_ad9963_tx_channel #(
   end
 
   // dds
+
+  generate
+  if (DATAPATH_DISABLE == 1) begin
+  assign dac_dds_data_s = 16'd0;
+  end else begin
 
   always @(posedge dac_clk) begin
     if (dac_data_sync == 1'b1) begin
@@ -351,12 +221,6 @@ module axi_ad9963_tx_channel #(
     end
   end
 
-  // dds
-
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign dac_dds_data_s = 16'd0;
-  end else begin
   ad_dds i_dds (
     .clk (dac_clk),
     .dds_format (dac_dds_format),

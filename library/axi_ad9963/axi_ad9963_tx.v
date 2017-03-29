@@ -47,6 +47,7 @@ module axi_ad9963_tx #(
   // dac interface
 
   input               dac_clk,
+  output              dac_rst,
   output reg          dac_valid,
   output      [23:0]  dac_data,
   input       [23:0]  adc_data,
@@ -93,10 +94,6 @@ module axi_ad9963_tx #(
 
   reg             dac_data_sync = 'd0;
   reg     [ 7:0]  dac_rate_cnt = 'd0;
-
-  // internal clock and resets
-
-  wire            dac_rst;
 
   // internal signals
 

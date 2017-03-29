@@ -56,7 +56,7 @@ module axi_ad9963 #(
 
   // physical interface (transmit)
 
-  output          tx_clk,
+  input           tx_clk,
   output          tx_iq,
   output  [11:0]  tx_data,
 
@@ -145,9 +145,6 @@ module axi_ad9963 #(
   wire    [12:0]  up_adc_dld_s;
   wire    [64:0]  up_adc_dwdata_s;
   wire    [64:0]  up_adc_drdata_s;
-  wire    [13:0]  up_dac_dld_s;
-  wire    [69:0]  up_dac_dwdata_s;
-  wire    [69:0]  up_dac_drdata_s;
   wire            delay_locked_s;
   wire            up_wreq_s;
   wire    [13:0]  up_waddr_s;
@@ -160,6 +157,8 @@ module axi_ad9963 #(
   wire            up_rack_rx_s;
   wire    [31:0]  up_rdata_tx_s;
   wire            up_rack_tx_s;
+
+  wire            dac_rst;
 
   // signal name changes
 
@@ -190,6 +189,7 @@ module axi_ad9963 #(
     .rst (rst),
     .l_clk (l_clk),
     .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
@@ -199,9 +199,6 @@ module axi_ad9963 #(
     .up_adc_dld (up_adc_dld_s),
     .up_adc_dwdata (up_adc_dwdata_s),
     .up_adc_drdata (up_adc_drdata_s),
-    .up_dac_dld (up_dac_dld_s),
-    .up_dac_dwdata (up_dac_dwdata_s),
-    .up_dac_drdata (up_dac_drdata_s),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s));
@@ -249,12 +246,13 @@ module axi_ad9963 #(
     .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
   i_tx (
     .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
     .adc_data (adc_data_s),
-    .up_dld (up_dac_dld_s),
-    .up_dwdata (up_dac_dwdata_s),
-    .up_drdata (up_dac_drdata_s),
+    .up_dld (),
+    .up_dwdata (),
+    .up_drdata (69'h0),
     .delay_clk (delay_clk),
     .delay_rst (),
     .delay_locked (delay_locked_s),
