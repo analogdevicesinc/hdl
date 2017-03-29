@@ -71,9 +71,10 @@ module axi_ad9963 #(
 
   // master interface
 
-  output          l_clk,
+  output          adc_clk,
   output          dac_clk,
-  output          rst,
+  output          adc_rst,
+  output          dac_rst,
 
   // dma interface
 
@@ -158,8 +159,6 @@ module axi_ad9963 #(
   wire    [31:0]  up_rdata_tx_s;
   wire            up_rack_tx_s;
 
-  wire            dac_rst;
-
   // signal name changes
 
   assign up_clk = s_axi_aclk;
@@ -186,8 +185,8 @@ module axi_ad9963 #(
     .tx_clk (tx_clk),
     .tx_iq (tx_iq),
     .tx_data (tx_data),
-    .rst (rst),
-    .l_clk (l_clk),
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .adc_valid (adc_valid_s),
@@ -209,8 +208,8 @@ module axi_ad9963 #(
     .ID (ID),
     .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE))
   i_rx (
-    .adc_rst (rst),
-    .adc_clk (l_clk),
+    .adc_rst (adc_rst),
+    .adc_clk (adc_clk),
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),

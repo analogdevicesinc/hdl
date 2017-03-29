@@ -52,10 +52,10 @@ module axi_ad9963_if #(
 
   // clock (common to both receive and transmit)
 
-  input               rst,
-  output              l_clk,
-  output              dac_clk,
+  input               adc_rst,
   input               dac_rst,
+  output              adc_clk,
+  output              dac_clk,
 
   // receive data path interface
 
@@ -96,7 +96,7 @@ module axi_ad9963_if #(
 
   genvar          l_inst;
 
-  always @(posedge l_clk) begin
+  always @(posedge adc_clk) begin
     if( rx_iq_p_s == 1'b1) begin
       adc_data  <= {rx_data_n_s, rx_data_p_s} ;  // data[11:00] I
       adc_valid <= 1'b1;                        // data[23:12] Q
@@ -114,8 +114,8 @@ module axi_ad9963_if #(
     end
   end
 
-  always @(posedge l_clk) begin
-    if (rst == 1'b1) begin
+  always @(posedge adc_clk) begin
+    if (adc_rst == 1'b1) begin
       adc_status <= 1'b0;
     end else begin
       adc_status <= 1'b1;
@@ -126,7 +126,7 @@ module axi_ad9963_if #(
 
   BUFG i_clk_gbuf (
     .I (trx_clk),
-    .O (l_clk));
+    .O (adc_clk));
 
   // receive data interface, ibuf -> idelay -> iddr
 
@@ -138,7 +138,7 @@ module axi_ad9963_if #(
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
   i_rx_data (
-    .rx_clk (l_clk),
+    .rx_clk (adc_clk),
     .rx_data_in_p (trx_data[l_inst]),
     .rx_data_in_n (1'b0),
     .rx_data_p (rx_data_p_s[l_inst]),
@@ -161,7 +161,7 @@ module axi_ad9963_if #(
     .IODELAY_CTRL (1),
     .IODELAY_GROUP (IO_DELAY_GROUP))
   i_rx_iq (
-    .rx_clk (l_clk),
+    .rx_clk (adc_clk),
     .rx_data_in_p (trx_iq),
     .rx_data_in_n (1'b0),
     .rx_data_p (rx_iq_p_s),
