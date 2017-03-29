@@ -62,17 +62,21 @@ module ad_serdes_out #(
   input   [(DATA_WIDTH-1):0]  data_s5,
   input   [(DATA_WIDTH-1):0]  data_s6,
   input   [(DATA_WIDTH-1):0]  data_s7,
+  output  [(DATA_WIDTH-1):0]  data_out_se,
   output  [(DATA_WIDTH-1):0]  data_out_p,
   output  [(DATA_WIDTH-1):0]  data_out_n);
 
   localparam  DEVICE_6SERIES = 1;
   localparam  DEVICE_7SERIES = 0;
+  localparam  DR_OQ_DDR = DDR_OR_SDR_N == 1'b1 ? "DDR": "SDR";
 
   // internal signals
 
   wire    [(DATA_WIDTH-1):0]  data_out_s;
   wire    [(DATA_WIDTH-1):0]  serdes_shift1_s;
   wire    [(DATA_WIDTH-1):0]  serdes_shift2_s;
+
+  assign data_out_se =  data_out_s;
 
   // instantiations
 
@@ -82,7 +86,7 @@ module ad_serdes_out #(
 
     if (DEVICE_TYPE == DEVICE_7SERIES) begin
       OSERDESE2  #(
-        .DATA_RATE_OQ ("DDR"),
+        .DATA_RATE_OQ (DR_OQ_DDR),
         .DATA_RATE_TQ ("SDR"),
         .DATA_WIDTH (SERDES_FACTOR),
         .TRISTATE_WIDTH (1),
@@ -119,7 +123,7 @@ module ad_serdes_out #(
 
     if (DEVICE_TYPE == DEVICE_6SERIES) begin
       OSERDESE1  #(
-        .DATA_RATE_OQ ("DDR"),
+        .DATA_RATE_OQ (DR_OQ_DDR),
         .DATA_RATE_TQ ("SDR"),
         .DATA_WIDTH (SERDES_FACTOR),
         .INTERFACE_TYPE ("DEFAULT"),
@@ -156,7 +160,7 @@ module ad_serdes_out #(
         .RST (rst));
 
       OSERDESE1  #(
-        .DATA_RATE_OQ ("DDR"),
+        .DATA_RATE_OQ (DR_OQ_DDR),
         .DATA_RATE_TQ ("SDR"),
         .DATA_WIDTH (SERDES_FACTOR),
         .INTERFACE_TYPE ("DEFAULT"),
