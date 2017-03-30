@@ -178,6 +178,7 @@ foreach {k v} { \
 		"SYNC_TRANSFER_START" "false" \
 		"AXI_SLICE_SRC" "false" \
 		"AXI_SLICE_DEST" "false" \
+		"DISABLE_DEBUG_REGISTERS" "false" \
 	} { \
 	set_property -dict [list \
 			"value_format" "bool" \
@@ -325,6 +326,15 @@ set p [ipgui::get_guiparamspec -name "ASYNC_CLK_DEST_REQ" -component $cc]
 ipgui::move_param -component $cc -order 2 $p -parent $clk_group
 set_property -dict [list \
 	"display_name" "Destination and Request Clock Asynchronous" \
+] $p
+
+set dbg_group [ipgui::add_group -name {Debug} -component $cc \
+		-parent $page0 -display_name {Debug}]
+
+set p [ipgui::get_guiparamspec -name "DISABLE_DEBUG_REGISTERS" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $dbg_group
+set_property -dict [list \
+	"display_name" "Disable Debug Registers" \
 ] $p
 
 ipx::create_xgui_files [ipx::current_core]

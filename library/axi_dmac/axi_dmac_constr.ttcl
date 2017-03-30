@@ -6,6 +6,7 @@
 <: set async_dest_req [getBooleanValue "ASYNC_CLK_DEST_REQ"] :>
 <: set async_req_src [getBooleanValue "ASYNC_CLK_REQ_SRC"] :>
 <: set async_src_dest [getBooleanValue "ASYNC_CLK_SRC_DEST"] :>
+<: set disable_debug_registers [getBooleanValue "DISABLE_DEBUG_REGISTERS"] :>
 
 set req_clk [get_clocks -of_objects [get_ports s_axi_aclk]]
 set src_clk [get_clocks -of_objects [get_ports -quiet {fifo_wr_clk s_axis_aclk m_src_axi_aclk}]]
@@ -151,6 +152,7 @@ set_false_path -quiet \
 	-to [get_pins -quiet -hier *reset_shift_reg*/PRE]
 
 # Ignore timing for debug signals to register map
+<: if {!$disable_debug_registers} { :>
 set_false_path -quiet \
 	-from [get_cells -quiet -hier *cdc_sync_stage2_reg* \
 		-filter {name =~ *i_sync_src_request_id* && IS_SEQUENTIAL}] \
@@ -165,3 +167,4 @@ set_false_path -quiet \
 set_false_path -quiet \
 	-from [get_cells -quiet -hier *address_reg* -filter {name =~ *i_addr_gen* && IS_SEQUENTIAL}] \
 	-to [get_cells -quiet -hier *up_rdata_reg* -filter {IS_SEQUENTIAL}]
+<: } :>

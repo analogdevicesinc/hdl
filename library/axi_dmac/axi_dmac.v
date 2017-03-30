@@ -199,6 +199,8 @@ parameter DMA_TYPE_SRC = 2;
 parameter MAX_BYTES_PER_BURST = 128;
 parameter FIFO_SIZE = 4; // In bursts
 
+parameter DISABLE_DEBUG_REGISTERS = 0;
+
 localparam DMA_TYPE_AXI_MM = 0;
 localparam DMA_TYPE_AXI_STREAM = 1;
 localparam DMA_TYPE_FIFO = 2;
@@ -289,6 +291,7 @@ wire [ID_WIDTH-1:0] src_data_id;
 wire [ID_WIDTH-1:0] src_address_id;
 wire [ID_WIDTH-1:0] src_response_id;
 wire [7:0] dbg_status;
+wire [31:0] dbg_ids;
 
 assign m_dest_axi_araddr = 'd0;
 assign m_dest_axi_arlen = 'd0;
@@ -409,6 +412,12 @@ begin
   end
 end
 
+assign dbg_ids = {
+  src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0,
+  src_request_id, 1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0,
+  dest_address_id, 1'b0, dest_request_id
+};
+
 always @(posedge s_axi_aclk)
 begin
   if (s_axi_aresetn == 1'b0) begin
@@ -437,11 +446,10 @@ begin
     12'h10a: up_rdata <= up_transfer_done_bitmap;
     12'h10b: up_rdata <= up_transfer_id_eot;
     12'h10c: up_rdata <= 'h00; // Status
-    12'h10d: up_rdata <= m_dest_axi_awaddr; //HAS_DEST_ADDR ? 'h00 : 'h00; // Current dest address
-    12'h10e: up_rdata <= m_src_axi_araddr; //HAS_SRC_ADDR ? 'h00 : 'h00; // Current src address
-    12'h10f: up_rdata <= {src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0, src_request_id,
-              1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0, dest_address_id, 1'b0, dest_request_id};
-    12'h110: up_rdata <= dbg_status;
+    12'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : m_dest_axi_awaddr; //HAS_DEST_ADDR ? 'h00 : 'h00; // Current dest address
+    12'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : m_src_axi_araddr; //HAS_SRC_ADDR ? 'h00 : 'h00; // Current src address
+    12'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids;
+    12'h110: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
     default: up_rdata <= 'h00;
     endcase
   end
