@@ -11,8 +11,6 @@ adi_ip_files axi_ad9963 [list \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_lvds_in.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_serdes_out.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_serdes_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \

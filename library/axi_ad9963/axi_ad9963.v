@@ -44,7 +44,6 @@ module axi_ad9963 #(
   parameter   ID = 0,
   parameter   DEVICE_TYPE = 0,
   parameter   ADC_IODELAY_ENABLE = 0,
-  parameter   DAC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
   parameter   DAC_DATAPATH_DISABLE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0 ) (
@@ -140,10 +139,6 @@ module axi_ad9963 #(
   wire            adc_status_s;
   wire            dac_valid_s;
   wire    [23:0]  dac_data_s;
-  wire            dac_valid_i0_s;
-  wire            dac_valid_q0_s;
-  wire            dac_valid_i1_s;
-  wire            dac_valid_q1_s;
   wire    [12:0]  up_adc_dld_s;
   wire    [64:0]  up_adc_dwdata_s;
   wire    [64:0]  up_adc_drdata_s;
@@ -168,9 +163,9 @@ module axi_ad9963 #(
   // processor read interface
 
   always @(*) begin
-    up_wack <= up_wack_rx_s | up_wack_tx_s;
-    up_rack <= up_rack_rx_s | up_rack_tx_s;
-    up_rdata <= up_rdata_rx_s | up_rdata_tx_s;
+    up_wack = up_wack_rx_s | up_wack_tx_s;
+    up_rack = up_rack_rx_s | up_rack_tx_s;
+    up_rdata = up_rdata_rx_s | up_rdata_tx_s;
   end
 
   // device interface
@@ -178,7 +173,6 @@ module axi_ad9963 #(
   axi_ad9963_if #(
     .DEVICE_TYPE (DEVICE_TYPE),
     .ADC_IODELAY_ENABLE (ADC_IODELAY_ENABLE),
-    .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IO_DELAY_GROUP (IO_DELAY_GROUP))
   i_dev_if (
     .trx_clk (trx_clk),
@@ -252,12 +246,6 @@ module axi_ad9963 #(
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
     .adc_data (adc_data_s),
-    .up_dld (),
-    .up_dwdata (),
-    .up_drdata (69'h0),
-    .delay_clk (delay_clk),
-    .delay_rst (),
-    .delay_locked (delay_locked_s),
     .dac_sync_in (dac_sync_in),
     .dac_sync_out (dac_sync_out),
     .dac_enable_i (dac_enable_i),

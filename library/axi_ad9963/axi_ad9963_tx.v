@@ -52,15 +52,6 @@ module axi_ad9963_tx #(
   output      [23:0]  dac_data,
   input       [23:0]  adc_data,
 
-  // delay interface
-
-  output      [13:0]  up_dld,
-  output      [69:0]  up_dwdata,
-  input       [69:0]  up_drdata,
-  input               delay_clk,
-  output              delay_rst,
-  input               delay_locked,
-
   // master/slave
 
   input               dac_sync_in,
@@ -101,9 +92,9 @@ module axi_ad9963_tx #(
   wire            dac_dds_format_s;
   wire    [ 7:0]  dac_datarate_s;
   wire    [23:0]  dac_data_int_s;
-  wire    [31:0]  up_rdata_s[0:3];
-  wire            up_rack_s[0:3];
-  wire            up_wack_s[0:3];
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_rack_s[0:2];
+  wire            up_wack_s[0:2];
 
   // master/slave
 
@@ -134,9 +125,9 @@ module axi_ad9963_tx #(
   // processor read interface
 
   always @(*) begin
-    up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3];
-    up_rack <=  up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3];
-    up_wack <=  up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3];
+    up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+    up_rack <=  up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
+    up_wack <=  up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
   end
 
   // dac channel
@@ -241,26 +232,6 @@ module axi_ad9963_tx #(
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[2]),
     .up_rack (up_rack_s[2]));
-
-  // dac delay control
-
-  up_delay_cntrl #(.DATA_WIDTH(14), .BASE_ADDRESS(6'h12)) i_delay_cntrl (
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_locked (delay_locked),
-    .up_dld (up_dld),
-    .up_dwdata (up_dwdata),
-    .up_drdata (up_drdata),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_s[3]),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_s[3]),
-    .up_rack (up_rack_s[3]));
 
 endmodule
 

@@ -35,7 +35,6 @@ module axi_ad9963_if #(
   // this parameter controls the buffer type based on the target device.
 
   parameter   DEVICE_TYPE = 0,
-  parameter   DAC_IODELAY_ENABLE = 0,
   parameter   ADC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
@@ -92,7 +91,6 @@ module axi_ad9963_if #(
   wire            rx_iq_p_s;
   wire            rx_iq_n_s;
 
-  wire            tx_clk_serdes;
   wire            div_clk;
 
   genvar          l_inst;
@@ -179,56 +177,45 @@ module axi_ad9963_if #(
 
   // transmit data interface
 
+  BUFR #(.BUFR_DIVIDE(2)) i_div_clk_buf (
+    .CLR (1'b0),
+    .CE (1'b1),
+    .I (tx_clk),
+    .O (div_clk));
+
   BUFG dac_bufg (
     .I(div_clk),
     .O(dac_clk));
 
-  ad_serdes_clk #(
-    .DEVICE_TYPE(DEVICE_TYPE),
-    .DDR_OR_SDR_N(0),
-    .MMCM_OR_BUFR_N (1'b0),
-    .CLKIN_DS_OR_SE_N(0),
-    .SERDES_FACTOR(2)) 
-  tx_serdes_clk (
-    .rst(1'b0),
-    .clk_in_p(tx_clk),
-    .clk_in_n(1'b0),
-    .clk(tx_clk_serdes),
-    .div_clk(div_clk),
-    .out_clk(),
-    .loaden(),
-    .phase(),
-    .up_clk(1'b0),
-    .up_rstn(1'b0),
-    .up_drp_sel(1'b0),
-    .up_drp_wr(1'b0),
-    .up_drp_addr(12'h0),
-    .up_drp_wdata(32'h0),
-    .up_drp_rdata(),
-    .up_drp_ready(),
-    .up_drp_locked());
+  generate
+  for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin: g_tx_data
+  ODDR #(
+    .DDR_CLK_EDGE ("SAME_EDGE"),
+    .INIT (1'b0),
+    .SRTYPE ("SYNC"))
+  i_tx_data_oddr (
+    .CE (1'b1),
+    .R (dac_rst),
+    .S (1'b0),
+    .C (dac_clk),
+    .D1 (tx_data_p[l_inst]),
+    .D2 (tx_data_n[l_inst]),
+    .Q (tx_data[l_inst]));
+    end
+  endgenerate
 
-  ad_serdes_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
-    .DDR_OR_SDR_N (1'b0),
-    .SERDES_FACTOR(2),
-    .DATA_WIDTH (13))
-  i_serdes_out_data (
-    .rst (dac_rst),
-    .clk (tx_clk_serdes),
-    .div_clk (div_clk),
-    .loaden (1'b0),
-    .data_s0 ({1'b1,tx_data_p}),
-    .data_s1 ({1'b0,tx_data_n}),
-    .data_s2 (13'h0),
-    .data_s3 (13'h0),
-    .data_s4 (13'h0),
-    .data_s5 (13'h0),
-    .data_s6 (13'h0),
-    .data_s7 (13'h0),
-    .data_out_se ({tx_iq,tx_data}),
-    .data_out_p (),
-    .data_out_n ());
+  ODDR #(
+    .DDR_CLK_EDGE ("SAME_EDGE"),
+    .INIT (1'b0),
+    .SRTYPE ("SYNC"))
+  i_tx_data_oddr (
+    .CE (1'b1),
+    .R (dac_rst),
+    .S (1'b0),
+    .C (dac_clk),
+    .D1 (1'b1),
+    .D2 (1'b0),
+    .Q (tx_iq));
 
 endmodule
 

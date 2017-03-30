@@ -87,8 +87,6 @@ module axi_ad9963_tx_channel #(
   reg             dac_valid_sel = 'd0;
   reg     [23:0]  dac_test_data = 'd0;
   reg     [15:0]  dac_test_counter = 'd0;
-  reg     [23:0]  dac_pn_seq = 'd0;
-  reg     [11:0]  dac_pn_data = 'd0;
   reg     [15:0]  dac_pat_data = 'd0;
   reg     [15:0]  dac_dds_phase_0 = 'd0;
   reg     [15:0]  dac_dds_phase_1 = 'd0;
@@ -113,16 +111,6 @@ module axi_ad9963_tx_channel #(
   wire            dac_iqcor_enb_s;
   wire    [15:0]  dac_iqcor_coeff_1_s;
   wire    [15:0]  dac_iqcor_coeff_2_s;
-
-  // global toggle
-
-  always @(posedge dac_clk) begin
-    if (dac_data_sync == 1'b1) begin
-      dac_valid_sel <= 1'b0;
-    end else if (dac_valid == 1'b1) begin
-      dac_valid_sel <= ~dac_valid_sel;
-    end
-  end
 
   // dac iq correction
 
@@ -186,7 +174,21 @@ module axi_ad9963_tx_channel #(
     end
   end
 
+  // dds
+
+  generate
+  if (DATAPATH_DISABLE == 1) begin
+  assign dac_dds_data_s = 16'd0;
+  end else begin
+
   // pattern
+  always @(posedge dac_clk) begin
+    if (dac_data_sync == 1'b1) begin
+      dac_valid_sel <= 1'b0;
+    end else if (dac_valid == 1'b1) begin
+      dac_valid_sel <= ~dac_valid_sel;
+    end
+  end
 
   always @(posedge dac_clk) begin
     if (dac_valid == 1'b1) begin
@@ -197,13 +199,6 @@ module axi_ad9963_tx_channel #(
       end
     end
   end
-
-  // dds
-
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign dac_dds_data_s = 16'd0;
-  end else begin
 
   always @(posedge dac_clk) begin
     if (dac_data_sync == 1'b1) begin
