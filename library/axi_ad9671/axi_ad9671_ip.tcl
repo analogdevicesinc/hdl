@@ -16,7 +16,10 @@ adi_ip_files axi_ad9671 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/ad_mem.v" \
   "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
-  "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_ad9671_pnmon.v" \
   "axi_ad9671_channel.v" \
   "axi_ad9671_if.v" \
@@ -26,7 +29,10 @@ adi_ip_files axi_ad9671 [list \
 adi_ip_properties axi_ad9671
 
 adi_ip_constraints axi_ad9671 [list \
-  "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_ad9671_constr.xdc" ]
 
 set_property driver_value 0 [ipx::get_ports *rx_valid* -of_objects [ipx::current_core]]
