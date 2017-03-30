@@ -1,4 +1,6 @@
 
+set DEBUG_BUILD 0
+
 # create board design
 # default ports
 

@@ -1,4 +1,10 @@
 
+if {[info exists DEBUG_BUILD] == 0} {
+  set DEBUG_BUILD 1
+}
+
+set DISABLE_DMAC_DEBUG [expr !$DEBUG_BUILD]
+
 create_bd_port -dir I -from 15 -to 0  data_i
 create_bd_port -dir I -from  1 -to 0  trigger_i
 
@@ -37,6 +43,7 @@ set logic_analyzer_dmac [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16} ] $logic_analyzer_dmac
 set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {1} ] $logic_analyzer_dmac
 set_property -dict [list CONFIG.SYNC_TRANSFER_START {true} ] $logic_analyzer_dmac
+set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $logic_analyzer_dmac
 
 set pattern_generator_dmac [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 pattern_generator_dmac]
 set_property -dict [list CONFIG.DMA_TYPE_DEST {2} ] $pattern_generator_dmac
@@ -46,6 +53,7 @@ set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $pattern_generator_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16} ] $pattern_generator_dmac
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $pattern_generator_dmac
 set_property -dict [list CONFIG.CYCLIC {true}] $pattern_generator_dmac
+set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $pattern_generator_dmac
 
 set axi_ad9963 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9963:1.0 axi_ad9963]
 set_property -dict [list CONFIG.DAC_DATAPATH_DISABLE {1}] $axi_ad9963
@@ -68,6 +76,7 @@ set ad9963_adc_dmac [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $ad9963_adc_dmac
 set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {1}] $ad9963_adc_dmac
 set_property -dict [list CONFIG.SYNC_TRANSFER_START {true}]  $ad9963_adc_dmac
+set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $ad9963_adc_dmac
 
 set ad9963_dac_dmac_a [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 ad9963_dac_dmac_a]
 set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $ad9963_dac_dmac_a
@@ -77,6 +86,7 @@ set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {128}] $ad9963_dac_dmac_a
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16}] $ad9963_dac_dmac_a
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $ad9963_dac_dmac_a
 set_property -dict [list CONFIG.CYCLIC {true}] $ad9963_dac_dmac_a
+set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $ad9963_dac_dmac_a
 
 set ad9963_dac_dmac_b [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 ad9963_dac_dmac_b]
 set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $ad9963_dac_dmac_b
@@ -86,6 +96,7 @@ set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {128}] $ad9963_dac_dmac_b
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16}] $ad9963_dac_dmac_b
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $ad9963_dac_dmac_a
 set_property -dict [list CONFIG.CYCLIC {true}] $ad9963_dac_dmac_b
+set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $ad9963_dac_dmac_b
 
 set adc_trigger [create_bd_cell -type ip -vlnv analog.com:user:axi_adc_trigger:1.0 adc_trigger]
 
