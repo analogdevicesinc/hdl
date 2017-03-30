@@ -57,7 +57,7 @@ module dmac_address_generator (
   input                        addr_ready,
   output reg                   addr_valid,
   output     [31:0]            addr,
-  output     [ 7:0]            len,
+  output     [LENGTH_WIDTH-1:0] len,
   output     [ 2:0]            size,
   output     [ 1:0]            burst,
   output     [ 2:0]            prot,
@@ -69,6 +69,8 @@ parameter ID_WIDTH = 3;
 parameter DMA_DATA_WIDTH = 64;
 parameter BEATS_PER_BURST_WIDTH = 4;
 parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8);
+parameter LENGTH_WIDTH = 8;
+
 localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
 
 `include "inc_id.h"
@@ -79,7 +81,7 @@ assign cache = 4'b0011;
 assign len = length;
 assign size = $clog2(DMA_DATA_WIDTH/8);
 
-reg [7:0] length = 'h0;
+reg [LENGTH_WIDTH-1:0] length = 'h0;
 reg [31-BYTES_PER_BEAT_WIDTH:0] address = 'h00;
 reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
 assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};

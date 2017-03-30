@@ -61,7 +61,7 @@ module dmac_request_arb (
 
   // Write address
   output [31:0]                       m_axi_awaddr,
-  output [ 7:0]                       m_axi_awlen,
+  output [AXI_LENGTH_WIDTH-1:0]       m_axi_awlen,
   output [ 2:0]                       m_axi_awsize,
   output [ 1:0]                       m_axi_awburst,
   output [ 2:0]                       m_axi_awprot,
@@ -85,7 +85,7 @@ module dmac_request_arb (
   input                               m_axi_arready,
   output                              m_axi_arvalid,
   output [31:0]                       m_axi_araddr,
-  output [ 7:0]                       m_axi_arlen,
+  output [AXI_LENGTH_WIDTH-1:0]       m_axi_arlen,
   output [ 2:0]                       m_axi_arsize,
   output [ 1:0]                       m_axi_arburst,
   output [ 2:0]                       m_axi_arprot,
@@ -161,6 +161,8 @@ parameter MAX_BYTES_PER_BURST = 128;
 parameter FIFO_SIZE = 4;
 
 parameter ID_WIDTH = $clog2(FIFO_SIZE*2);
+
+parameter AXI_LENGTH_WIDTH = 8;
 
 localparam DMA_TYPE_MM_AXI = 0;
 localparam DMA_TYPE_STREAM_AXI = 1;
@@ -403,7 +405,8 @@ dmac_dest_mm_axi #(
   .ID_WIDTH(ID_WIDTH),
   .DMA_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST),
-  .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_DEST)
+  .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_DEST),
+  .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH)
 ) i_dest_dma_mm (
   .m_axi_aclk(m_dest_axi_aclk),
   .m_axi_aresetn(dest_resetn),
@@ -616,7 +619,8 @@ dmac_src_mm_axi #(
   .ID_WIDTH(ID_WIDTH),
   .DMA_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
-  .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_SRC)
+  .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_SRC),
+  .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH)
 ) i_src_dma_mm (
   .m_axi_aclk(m_src_axi_aclk),
   .m_axi_aresetn(src_resetn),
