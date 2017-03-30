@@ -6,7 +6,6 @@
 ####################################################################################
 
 M_DEPS += ../common/ad_addsub.v
-M_DEPS += ../common/ad_axi_ip_constr.xdc
 M_DEPS += ../common/ad_datafmt.v
 M_DEPS += ../common/ad_dcfilter.v
 M_DEPS += ../common/ad_dds.v
@@ -35,6 +34,10 @@ M_DEPS += ../xilinx/common/ad_lvds_clk.v
 M_DEPS += ../xilinx/common/ad_lvds_in.v
 M_DEPS += ../xilinx/common/ad_lvds_out.v
 M_DEPS += ../xilinx/common/ad_mul.v
+M_DEPS += ../xilinx/common/ad_rst_constr.xdc
+M_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
+M_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
+M_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 M_DEPS += axi_ad9361.v
 M_DEPS += axi_ad9361_constr.xdc
 M_DEPS += axi_ad9361_ip.tcl

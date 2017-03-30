@@ -5,7 +5,6 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS += ../common/ad_axi_ip_constr.xdc
 M_DEPS += ../common/ad_csc_1.v
 M_DEPS += ../common/ad_csc_1_add.v
 M_DEPS += ../common/ad_csc_1_mul.v
@@ -19,6 +18,10 @@ M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += ../xilinx/common/ad_rst_constr.xdc
+M_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
+M_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
+M_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 M_DEPS += axi_hdmi_rx.v
 M_DEPS += axi_hdmi_rx_constr.xdc
 M_DEPS += axi_hdmi_rx_core.v
