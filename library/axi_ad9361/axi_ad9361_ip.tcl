@@ -32,10 +32,10 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
-  "$ad_hdl_dir/library/common/up_xfer_cntrl_constr.xdc" \
-  "$ad_hdl_dir/library/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/common/up_clock_mon_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_ad9361_constr.xdc" \
   "xilinx/axi_ad9361_lvds_if.v" \
   "xilinx/axi_ad9361_cmos_if.v" \
@@ -51,10 +51,10 @@ adi_ip_files axi_ad9361 [list \
 adi_ip_properties axi_ad9361
 
 adi_ip_constraints axi_ad9361 [list \
-  "$ad_hdl_dir/library/common/up_xfer_cntrl_constr.xdc" \
-  "$ad_hdl_dir/library/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/common/up_clock_mon_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_ad9361_constr.xdc"]
 
 set_property driver_value 0 [ipx::get_ports *rx_clk_in* -of_objects [ipx::current_core]]
