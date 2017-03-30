@@ -43,12 +43,8 @@ module axi_ad9963_tx_channel #(
 
   parameter   CHANNEL_ID = 32'h0,
   parameter   Q_OR_I_N = 0,
-  parameter   DATAPATH_DISABLE = 0,
-  localparam  PRBS_SEL = CHANNEL_ID,
-  localparam  PRBS_P09  = 0,
-  localparam  PRBS_P11  = 1,
-  localparam  PRBS_P15  = 2,
-  localparam  PRBS_P20  = 3) (
+  parameter   DATAPATH_DISABLE = 0
+) (
 
   // dac interface
 
@@ -79,6 +75,12 @@ module axi_ad9963_tx_channel #(
   input       [13:0]  up_raddr,
   output      [31:0]  up_rdata,
   output              up_rack);
+
+  localparam  PRBS_SEL = CHANNEL_ID;
+  localparam  PRBS_P09 = 0;
+  localparam  PRBS_P11 = 1;
+  localparam  PRBS_P15 = 2;
+  localparam  PRBS_P20 = 3;
 
   // internal registers
 
