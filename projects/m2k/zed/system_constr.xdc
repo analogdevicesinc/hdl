@@ -62,5 +62,9 @@ set_property  -dict {PACKAGE_PIN  T19  IOSTANDARD LVCMOS25} [get_ports txd[11]] 
 create_clock -name rx_clk       -period   10.00 [get_ports rx_clk]
 create_clock -name tx_clk       -period   6.66  [get_ports tx_clk]
 
-create_clock -name trigger_clk  -period   12.5  [get_ports trigger_bd[0]]
 create_clock -name data_clk     -period   12.5  [get_ports data_bd[0]]
+
+set_clock_groups -name exclusive_ -physically_exclusive \
+-group  [get_clocks data_clk] -group  [get_clocks clk_fpga_2]
+
+set_false_path -from [get_clocks data_clk] -to [get_pins {i_system_wrapper/system_i/logic_analyzer/inst/data_m1_reg[0]/D}]

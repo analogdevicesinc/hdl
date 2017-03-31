@@ -30,7 +30,7 @@ set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {27.778}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ {55.556}] $sys_ps7
 
-ad_connect logic_analyzer_clk sys_ps7/FCLK_CLK2
+ad_connect logic_analyzer_clk_in sys_ps7/FCLK_CLK2
 ad_connect converter_dma_clk sys_ps7/FCLK_CLK3
 
 set logic_analyzer [create_bd_cell -type ip -vlnv analog.com:user:axi_logic_analyzer:1.0 logic_analyzer]
@@ -113,7 +113,8 @@ ad_connect trigger_i  logic_analyzer/trigger_i
 ad_connect data_o     logic_analyzer/data_o
 ad_connect data_t     logic_analyzer/data_t
 
-ad_connect logic_analyzer_clk logic_analyzer/clk
+ad_connect logic_analyzer_clk_in logic_analyzer/clk
+ad_connect logic_analyzer_clk logic_analyzer/clk_out
 
 ad_connect logic_analyzer_clk pattern_generator_dmac/fifo_rd_clk
 
