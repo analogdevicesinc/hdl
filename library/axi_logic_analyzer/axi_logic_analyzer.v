@@ -136,7 +136,7 @@ module axi_logic_analyzer (
   generate
   for (i = 0 ; i < 16; i = i + 1) begin
     assign data_t[i] = od_pp_n[i] ? io_selection[i] & !data_o[i] : io_selection[i];
-    always @(posedge clk) begin
+    always @(posedge clk_out) begin
       data_o[i] <= overwrite_enable[i] ? overwrite_data[i] : data_r[i];
     end
   end
@@ -144,13 +144,13 @@ module axi_logic_analyzer (
 
   BUFGMUX_CTRL BUFGMUX_CTRL_inst (
     .O (clk_out),
-    .I0 (data_i[0]),
-    .I1 (trigger_i[0]),
+    .I0 (clk),
+    .I1 (data_i[0]),
     .S (clock_select));
 
   // synchronization
 
-  always @(posedge clk) begin
+  always @(posedge clk_out) begin
     data_m1 <= data_i;
     trigger_m1 <= trigger_i;
     trigger_m2 <= trigger_m1;
@@ -159,7 +159,7 @@ module axi_logic_analyzer (
   // transfer data at clock frequency
   // if capture is enabled
 
-  always @(posedge clk) begin
+  always @(posedge clk_out) begin
   adc_valid_d1 <= adc_valid_d2;
   adc_valid <= adc_valid_d1;
     if (sample_valid_la == 1'b1) begin
@@ -172,7 +172,7 @@ module axi_logic_analyzer (
 
   // downsampler logic analyzer
 
-  always @(posedge clk) begin
+  always @(posedge clk_out) begin
     if (reset == 1'b1) begin
       sample_valid_la <= 1'b0;
       downsampler_counter_la <= 32'h0;
@@ -189,7 +189,7 @@ module axi_logic_analyzer (
 
   // upsampler pattern generator
 
-  always @(posedge clk) begin
+  always @(posedge clk_out) begin
     if (reset == 1'b1) begin
       upsampler_counter_pg <= 32'h0;
       dac_read <= 1'b0;
@@ -204,14 +204,14 @@ module axi_logic_analyzer (
     end
   end
 
-  always @(posedge clk) begin
+  always @(posedge clk_out) begin
     if (dac_valid == 1'b1) begin
       data_r <= dac_data;
     end
   end
 
   axi_logic_analyzer_trigger i_trigger (
-    .clk (clk),
+    .clk (clk_out),
     .reset (reset),
 
     .data (adc_data),
@@ -228,7 +228,7 @@ module axi_logic_analyzer (
 
    axi_logic_analyzer_reg i_registers (
 
-    .clk (clk),
+    .clk (clk_out),
     .reset (reset),
 
     .divider_counter_la (divider_counter_la),
