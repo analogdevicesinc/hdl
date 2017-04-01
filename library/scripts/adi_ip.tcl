@@ -1,5 +1,6 @@
-
-# check tool version
+## ###############################################################################################
+## ###############################################################################################
+## check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
   set REQUIRED_VIVADO_VERSION "2016.2"
@@ -11,61 +12,9 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
   set IGNORE_VERSION_CHECK 0
 }
 
-# ip related stuff
-
-proc adi_ip_create {ip_name} {
-
-  global ad_hdl_dir
-  global ad_phdl_dir
-  global REQUIRED_VIVADO_VERSION
-  global IGNORE_VERSION_CHECK
-
-  if {!$IGNORE_VERSION_CHECK && [string compare [version -short] $REQUIRED_VIVADO_VERSION] != 0} {
-    return -code error [format "ERROR: This library requires Vivado %s." $REQUIRED_VIVADO_VERSION]
-  }
-
-  create_project $ip_name . -force
-
-  set_msg_config -id {IP_Flow 19-3656} -new_severity INFO
-  set_msg_config -id {IP_Flow 19-2999} -new_severity INFO 
-  set_msg_config -id {IP_Flow 19-1654} -new_severity INFO 
-  set_msg_config -id {IP_Flow 19-459} -new_severity INFO 
-
-  set lib_dirs $ad_hdl_dir/library
-  if {$ad_hdl_dir ne $ad_phdl_dir} {
-    lappend lib_dirs $ad_phdl_dir/library
-  }
-
-  set_property ip_repo_paths $lib_dirs [current_fileset]
-  update_ip_catalog
-
-  set proj_dir [get_property directory [current_project]]
-  set proj_name [get_projects $ip_name]
-}
-
-proc adi_ip_files {ip_name ip_files} {
-
-  set proj_fileset [get_filesets sources_1]
-  add_files -norecurse -scan_for_includes -fileset $proj_fileset $ip_files
-  set_property "top" "$ip_name" $proj_fileset
-}
-
-proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
-
-  set proj_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
-  foreach f_name $ip_constr_files {
-    ipx::add_file $f_name $proj_filegroup
-    set_property type xdc [ipx::get_files $f_name -of_objects $proj_filegroup]
-    set_property processing_order $processing_order [ipx::get_files $f_name -of_objects $proj_filegroup]
-    puts [string range $f_name [expr [string last / $f_name] +1] \
-                                                     [expr [string last "_constr.xdc" $f_name] -1]]
-    set_property SCOPED_TO_REF [string range $f_name [expr [string last / $f_name] +1] \
-                                                     [expr [string last "_constr.xdc" $f_name] -1]] \
-                               [ipx::get_files $f_name -of_objects $proj_filegroup]
-  }
-
-  ipx::save_core
-}
+## ###############################################################################################
+## ###############################################################################################
+## ip related stuff
 
 proc adi_ip_ttcl {ip_name ip_constr_files} {
 
@@ -87,48 +36,6 @@ proc adi_ip_bd {ip_name ip_bd_files} {
   ] $f
 }
 
-proc adi_ip_properties {ip_name} {
-
-  adi_ip_properties_lite $ip_name
-
-  ipx::infer_bus_interface {\
-    s_axi_awvalid \
-    s_axi_awaddr \
-    s_axi_awprot \
-    s_axi_awready \
-    s_axi_wvalid \
-    s_axi_wdata \
-    s_axi_wstrb \
-    s_axi_wready \
-    s_axi_bvalid \
-    s_axi_bresp \
-    s_axi_bready \
-    s_axi_arvalid \
-    s_axi_araddr \
-    s_axi_arprot \
-    s_axi_arready \
-    s_axi_rvalid \
-    s_axi_rdata \
-    s_axi_rresp \
-    s_axi_rready} \
-  xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
-
-  ipx::infer_bus_interface s_axi_aclk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-  ipx::infer_bus_interface s_axi_aresetn xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
-  ipx::add_memory_map {s_axi} [ipx::current_core]
-  set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interfaces s_axi -of_objects [ipx::current_core]]
-  ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]
-  set_property range {65536} [ipx::get_address_blocks axi_lite \
-    -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
-  ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces s_axi_aclk \
-    -of_objects [ipx::current_core]]
-  set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
-    -of_objects [ipx::get_bus_interfaces s_axi_aclk \
-    -of_objects [ipx::current_core]]]
-
-  ipx::save_core
-}
-
 proc adi_ip_infer_streaming_interfaces {ip_name} {
 
   ipx::infer_bus_interfaces xilinx.com:interface:axis_rtl:1.0 [ipx::current_core]
@@ -139,63 +46,6 @@ proc adi_ip_infer_mm_interfaces {ip_name} {
 
   ipx::infer_bus_interfaces xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
 
-}
-
-proc adi_ip_properties_lite {ip_name} {
-
-  ipx::package_project -root_dir . \
-    -vendor analog.com \
-    -library user \
-    -taxonomy /Analog_Devices
-
-  set_property vendor_display_name {Analog Devices} [ipx::current_core]
-  set_property company_url {www.analog.com} [ipx::current_core]
-
-  set_property supported_families {\
-    virtex7       Production \
-    qvirtex7      Production \
-    kintex7       Production \
-    kintex7l      Production \
-    qkintex7      Production \
-    qkintex7l     Production \
-    artix7        Production \
-    artix7l       Production \
-    aartix7       Production \
-    qartix7       Production \
-    zynq          Production \
-    qzynq         Production \
-    azynq         Production \
-    virtexu       Production \
-    kintexuplus   Production \
-    zynquplus     Production \
-    kintexu       Production \
-    virtex7       Beta \
-    qvirtex7      Beta \
-    kintex7       Beta \
-    kintex7l      Beta \
-    qkintex7      Beta \
-    qkintex7l     Beta \
-    artix7        Beta \
-    artix7l       Beta \
-    aartix7       Beta \
-    qartix7       Beta \
-    zynq          Beta \
-    qzynq         Beta \
-    azynq         Beta \
-    virtexu       Beta \
-    virtexuplus   Beta \
-    kintexuplus   Beta \
-    zynquplus     Beta \
-    kintexu       Beta}\
-  [ipx::current_core]
-
-  ipx::remove_all_bus_interface [ipx::current_core]
-  set memory_maps [ipx::get_memory_maps * -of_objects [ipx::current_core]]
-  foreach map $memory_maps {
-    ipx::remove_memory_map [lindex $map 2] [ipx::current_core ]
-  }
-
-  ipx::save_core
 }
 
 proc adi_set_ports_dependency {port_prefix dependency} {
@@ -266,6 +116,165 @@ proc adi_ip_add_core_dependencies {vlnvs} {
   }
 }
 
+## ###############################################################################################
+## ###############################################################################################
+## ip related stuff
+proc adi_ip_create {ip_name} {
+
+  global ad_hdl_dir
+  global ad_phdl_dir
+  global REQUIRED_VIVADO_VERSION
+  global IGNORE_VERSION_CHECK
+
+  if {!$IGNORE_VERSION_CHECK && [string compare [version -short] $REQUIRED_VIVADO_VERSION] != 0} {
+    return -code error [format "ERROR: This library requires Vivado %s." $REQUIRED_VIVADO_VERSION]
+  }
+
+  create_project $ip_name . -force
+
+  set_msg_config -id {IP_Flow 19-3656} -new_severity INFO
+  set_msg_config -id {IP_Flow 19-2999} -new_severity INFO 
+  set_msg_config -id {IP_Flow 19-1654} -new_severity INFO 
+  set_msg_config -id {IP_Flow 19-459} -new_severity INFO 
+
+  set lib_dirs $ad_hdl_dir/library
+  if {$ad_hdl_dir ne $ad_phdl_dir} {
+    lappend lib_dirs $ad_phdl_dir/library
+  }
+
+  set_property ip_repo_paths $lib_dirs [current_fileset]
+  update_ip_catalog
+
+  set proj_dir [get_property directory [current_project]]
+  set proj_name [get_projects $ip_name]
+}
+
+proc adi_ip_files {ip_name ip_files} {
+
+  set proj_fileset [get_filesets sources_1]
+  add_files -norecurse -scan_for_includes -fileset $proj_fileset $ip_files
+  set_property "top" "$ip_name" $proj_fileset
+}
+
+proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
+
+  set proj_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
+  foreach f_name $ip_constr_files {
+    ipx::add_file $f_name $proj_filegroup
+    set_property type xdc [ipx::get_files $f_name -of_objects $proj_filegroup]
+    set_property processing_order $processing_order [ipx::get_files $f_name -of_objects $proj_filegroup]
+    puts [string range $f_name [expr [string last / $f_name] +1] \
+                                                     [expr [string last "_constr.xdc" $f_name] -1]]
+    set_property SCOPED_TO_REF [string range $f_name [expr [string last / $f_name] +1] \
+                                                     [expr [string last "_constr.xdc" $f_name] -1]] \
+                               [ipx::get_files $f_name -of_objects $proj_filegroup]
+  }
+
+  ipx::save_core
+}
+
+proc adi_ip_properties_lite {ip_name} {
+
+  ipx::package_project -root_dir . \
+    -vendor analog.com \
+    -library user \
+    -taxonomy /Analog_Devices
+
+  set_property vendor_display_name {Analog Devices} [ipx::current_core]
+  set_property company_url {www.analog.com} [ipx::current_core]
+
+  set_property supported_families {\
+    virtex7       Production \
+    qvirtex7      Production \
+    kintex7       Production \
+    kintex7l      Production \
+    qkintex7      Production \
+    qkintex7l     Production \
+    artix7        Production \
+    artix7l       Production \
+    aartix7       Production \
+    qartix7       Production \
+    zynq          Production \
+    qzynq         Production \
+    azynq         Production \
+    virtexu       Production \
+    kintexuplus   Production \
+    zynquplus     Production \
+    kintexu       Production \
+    virtex7       Beta \
+    qvirtex7      Beta \
+    kintex7       Beta \
+    kintex7l      Beta \
+    qkintex7      Beta \
+    qkintex7l     Beta \
+    artix7        Beta \
+    artix7l       Beta \
+    aartix7       Beta \
+    qartix7       Beta \
+    zynq          Beta \
+    qzynq         Beta \
+    azynq         Beta \
+    virtexu       Beta \
+    virtexuplus   Beta \
+    kintexuplus   Beta \
+    zynquplus     Beta \
+    kintexu       Beta}\
+  [ipx::current_core]
+
+  ipx::remove_all_bus_interface [ipx::current_core]
+  set memory_maps [ipx::get_memory_maps * -of_objects [ipx::current_core]]
+  foreach map $memory_maps {
+    ipx::remove_memory_map [lindex $map 2] [ipx::current_core ]
+  }
+
+  ipx::save_core
+}
+
+proc adi_ip_properties {ip_name} {
+
+  adi_ip_properties_lite $ip_name
+
+  ipx::infer_bus_interface {\
+    s_axi_awvalid \
+    s_axi_awaddr \
+    s_axi_awprot \
+    s_axi_awready \
+    s_axi_wvalid \
+    s_axi_wdata \
+    s_axi_wstrb \
+    s_axi_wready \
+    s_axi_bvalid \
+    s_axi_bresp \
+    s_axi_bready \
+    s_axi_arvalid \
+    s_axi_araddr \
+    s_axi_arprot \
+    s_axi_arready \
+    s_axi_rvalid \
+    s_axi_rdata \
+    s_axi_rresp \
+    s_axi_rready} \
+  xilinx.com:interface:aximm_rtl:1.0 [ipx::current_core]
+
+  ipx::infer_bus_interface s_axi_aclk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+  ipx::infer_bus_interface s_axi_aresetn xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+  ipx::add_memory_map {s_axi} [ipx::current_core]
+  set_property slave_memory_map_ref {s_axi} [ipx::get_bus_interfaces s_axi -of_objects [ipx::current_core]]
+  ipx::add_address_block {axi_lite} [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]
+  set_property range {65536} [ipx::get_address_blocks axi_lite \
+    -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
+  ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces s_axi_aclk \
+    -of_objects [ipx::current_core]]
+  set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
+    -of_objects [ipx::get_bus_interfaces s_axi_aclk \
+    -of_objects [ipx::current_core]]]
+  ipx::save_core
+}
+
+## ###############################################################################################
+## ###############################################################################################
+## interface related stuff
+
 proc adi_if_define {name} {
 
   ipx::create_abstraction_definition ADI user ${name}_rtl 1.0
@@ -322,3 +331,5 @@ proc adi_if_infer_bus {if_name mode name maps} {
   }
 }
 
+## ###############################################################################################
+## ###############################################################################################
