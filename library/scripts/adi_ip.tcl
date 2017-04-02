@@ -119,6 +119,9 @@ proc adi_ip_add_core_dependencies {vlnvs} {
 ## ###############################################################################################
 ## ###############################################################################################
 ## ip related stuff
+
+variable ip_constr_files
+
 proc adi_ip_create {ip_name} {
 
   global ad_hdl_dir
@@ -135,6 +138,7 @@ proc adi_ip_create {ip_name} {
   set_msg_config -id {IP_Flow 19-3656} -new_severity INFO
   set_msg_config -id {IP_Flow 19-2999} -new_severity INFO 
   set_msg_config -id {IP_Flow 19-1654} -new_severity INFO 
+  set_msg_config -id {IP_Flow 19-4623} -new_severity INFO 
   set_msg_config -id {IP_Flow 19-459} -new_severity INFO 
 
   set lib_dirs $ad_hdl_dir/library
@@ -144,12 +148,18 @@ proc adi_ip_create {ip_name} {
 
   set_property ip_repo_paths $lib_dirs [current_fileset]
   update_ip_catalog
-
-  set proj_dir [get_property directory [current_project]]
-  set proj_name [get_projects $ip_name]
 }
 
 proc adi_ip_files {ip_name ip_files} {
+
+  global ip_constr_files
+
+  set ip_constr_files ""
+  foreach m_file $ip_files {
+    if {[file extension $m_file] eq ".xdc"} {
+      lappend ip_constr_files $m_file
+    }
+  }
 
   set proj_fileset [get_filesets sources_1]
   add_files -norecurse -scan_for_includes -fileset $proj_fileset $ip_files
@@ -158,75 +168,45 @@ proc adi_ip_files {ip_name ip_files} {
 
 proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
 
-  set proj_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
-  foreach f_name $ip_constr_files {
-    ipx::add_file $f_name $proj_filegroup
-    set_property type xdc [ipx::get_files $f_name -of_objects $proj_filegroup]
-    set_property processing_order $processing_order [ipx::get_files $f_name -of_objects $proj_filegroup]
-    puts [string range $f_name [expr [string last / $f_name] +1] \
-                                                     [expr [string last "_constr.xdc" $f_name] -1]]
-    set_property SCOPED_TO_REF [string range $f_name [expr [string last / $f_name] +1] \
-                                                     [expr [string last "_constr.xdc" $f_name] -1]] \
-                               [ipx::get_files $f_name -of_objects $proj_filegroup]
-  }
-
+  puts "CRITICAL WARNING: Obsolete Procedure adi_ip_constraints"
   ipx::save_core
 }
 
 proc adi_ip_properties_lite {ip_name} {
 
-  ipx::package_project -root_dir . \
-    -vendor analog.com \
-    -library user \
-    -taxonomy /Analog_Devices
+  global ip_constr_files
 
+  ipx::package_project -root_dir . -vendor analog.com -library user -taxonomy /Analog_Devices
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
   set_property company_url {www.analog.com} [ipx::current_core]
 
-  set_property supported_families {\
-    virtex7       Production \
-    qvirtex7      Production \
-    kintex7       Production \
-    kintex7l      Production \
-    qkintex7      Production \
-    qkintex7l     Production \
-    artix7        Production \
-    artix7l       Production \
-    aartix7       Production \
-    qartix7       Production \
-    zynq          Production \
-    qzynq         Production \
-    azynq         Production \
-    virtexu       Production \
-    kintexuplus   Production \
-    zynquplus     Production \
-    kintexu       Production \
-    virtex7       Beta \
-    qvirtex7      Beta \
-    kintex7       Beta \
-    kintex7l      Beta \
-    qkintex7      Beta \
-    qkintex7l     Beta \
-    artix7        Beta \
-    artix7l       Beta \
-    aartix7       Beta \
-    qartix7       Beta \
-    zynq          Beta \
-    qzynq         Beta \
-    azynq         Beta \
-    virtexu       Beta \
-    virtexuplus   Beta \
-    kintexuplus   Beta \
-    zynquplus     Beta \
-    kintexu       Beta}\
-  [ipx::current_core]
+  set i_families ""
+  foreach i_part [get_parts] {
+    lappend i_families [get_property FAMILY $i_part]
+  }
+  set i_families [lsort -unique $i_families]
+  set s_families [get_property supported_families [ipx::current_core]]
+  foreach i_family $i_families {
+    set s_families "$s_families $i_family Production"
+    set s_families "$s_families $i_family Beta"
+  }
+  set_property supported_families $s_families [ipx::current_core]
+  ipx::save_core
 
   ipx::remove_all_bus_interface [ipx::current_core]
   set memory_maps [ipx::get_memory_maps * -of_objects [ipx::current_core]]
   foreach map $memory_maps {
     ipx::remove_memory_map [lindex $map 2] [ipx::current_core ]
   }
+  ipx::save_core
 
+  set i_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
+  foreach i_file $ip_constr_files {
+    set i_module [file tail $i_file]
+    regsub {_constr\.xdc} $i_module {} i_module
+    ipx::add_file $i_file $i_filegroup
+    set_property SCOPED_TO_REF $i_module [ipx::get_files $i_file -of_objects $i_filegroup]
+  }
   ipx::save_core
 }
 
