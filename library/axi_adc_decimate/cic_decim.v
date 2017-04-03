@@ -109,17 +109,28 @@ module cic_decim (
         .data_in(data_stage[i]),
         .data_out(data_stage[i+1])
       );
-
-      cic_comb #(
-        .DATA_WIDTH(DATA_WIDTH)
-      ) i_comb (
-        .clk(clk),
-        .ce(ce_comb),
-        .data_in(data_stage[i+6]),
-        .data_out(data_stage[i+7])
-      );
     end
   endgenerate
+
+  cic_comb #(
+    .DATA_WIDTH(DATA_WIDTH),
+    .SEQ(5)
+  ) i_comb0 (
+    .clk(clk),
+    .ce(ce_comb),
+    .data_in(data_stage[6]),
+    .data_out(data_stage[11])
+  );
+
+  cic_comb #(
+    .DATA_WIDTH(DATA_WIDTH),
+    .SEQ(1)
+  ) i_comb1 (
+    .clk(clk),
+    .ce(ce_comb),
+    .data_in(data_stage[11]),
+    .data_out(data_stage[12])
+  );
 
   assign data_final_stage = data_stage[2*NUM_STAGES];
 
