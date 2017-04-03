@@ -94,6 +94,8 @@ module axi_logic_analyzer (
   reg               adc_valid_d1 = 'd0;
   reg               adc_valid_d2 = 'd0;
 
+  reg     [15:0]    io_selection; // 1 - input, 0 - output
+
   // internal signals
 
   wire              up_clk;
@@ -121,7 +123,7 @@ module axi_logic_analyzer (
   wire    [15:0]    overwrite_enable;
   wire    [15:0]    overwrite_data;
 
-  wire    [15:0]    io_selection;
+  wire    [15:0]    io_selection_s; // 1 - input, 0 - output
   wire    [15:0]    od_pp_n; // 0 - push/pull, 1 - open drain
 
   genvar i;
@@ -138,6 +140,18 @@ module axi_logic_analyzer (
     assign data_t[i] = od_pp_n[i] ? io_selection[i] & !data_o[i] : io_selection[i];
     always @(posedge clk_out) begin
       data_o[i] <= overwrite_enable[i] ? overwrite_data[i] : data_r[i];
+    end
+    always @(posedge clk_out) begin
+      if(dac_valid == 1'b1) begin
+        data_r[i] <= dac_data[i];
+      end
+      if (io_selection_s[i] == 1'b1) begin
+        io_selection[i] <= 1'b1;
+      end else begin
+        if(dac_valid == 1'b1 || overwrite_data[i] == 1'b1) begin
+          io_selection[i] <= 1'b0;
+        end
+      end
     end
   end
   endgenerate
@@ -204,11 +218,6 @@ module axi_logic_analyzer (
     end
   end
 
-  always @(posedge clk_out) begin
-    if (dac_valid == 1'b1) begin
-      data_r <= dac_data;
-    end
-  end
 
   axi_logic_analyzer_trigger i_trigger (
     .clk (clk_out),
@@ -233,7 +242,7 @@ module axi_logic_analyzer (
 
     .divider_counter_la (divider_counter_la),
     .divider_counter_pg (divider_counter_pg),
-    .io_selection (io_selection),
+    .io_selection (io_selection_s),
 
     .edge_detect_enable (edge_detect_enable),
     .rise_edge_enable (rise_edge_enable),
