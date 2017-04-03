@@ -6,6 +6,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create util_rfifo
 adi_ip_files util_rfifo [list \
   "$ad_hdl_dir/library/common/ad_mem.v" \
+  "util_rfifo_constr.xdc" \
   "util_rfifo.v" ]
 
 adi_ip_properties_lite util_rfifo
@@ -19,7 +20,7 @@ set_property driver_value 0 [ipx::get_ports *dout_valid* -of_objects [ipx::curre
 set_property driver_value 0 [ipx::get_ports *din_data* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *din_unf* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 1} \
-  [ipx::get_ports *_1* -of_objects [ipx::current_core]] 
+  [ipx::get_ports *_1* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 2} \
   [ipx::get_ports *_2* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 3} \
