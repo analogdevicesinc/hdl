@@ -63,6 +63,8 @@ module axi_adc_decimate_filter (
   reg               adc_dec_valid_a_filter;
   reg               adc_dec_valid_b_filter;
 
+  reg               filter_enable = 1'b0;
+
   wire    [25:0]    adc_fir_data_a;
   wire              adc_fir_valid_a;
   wire    [25:0]    adc_fir_data_b;
@@ -107,41 +109,32 @@ module axi_adc_decimate_filter (
     .filter_out(adc_fir_data_b),
     .ce_out(adc_fir_valid_b));
 
+  always @(posedge adc_clk) begin
+    case (filter_mask)
+      3'b000: filter_enable <= 1'b0;
+      default: filter_enable <= 1'b1;
+    endcase
+  end
+
   always @(*) begin
-    case (filter_mask)
-      16'h1: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      16'h2: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      16'h3: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      16'h6: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      16'h7: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
-      default: adc_dec_data_a = adc_data_a;
+    case (filter_enable)
+      1'b0: adc_dec_data_a = adc_data_a;
+      default: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
     endcase
 
-    case (filter_mask)
-      16'h1: adc_dec_valid_a_filter = adc_fir_valid_a;
-      16'h2: adc_dec_valid_a_filter = adc_fir_valid_a;
-      16'h3: adc_dec_valid_a_filter = adc_fir_valid_a;
-      16'h6: adc_dec_valid_a_filter = adc_fir_valid_a;
-      16'h7: adc_dec_valid_a_filter = adc_fir_valid_a;
-      default: adc_dec_valid_a_filter = adc_valid_a;
+    case (filter_enable)
+      1'b0: adc_dec_valid_a_filter = adc_valid_a;
+      default: adc_dec_valid_a_filter = adc_fir_valid_a;
     endcase
 
-     case (filter_mask)
-      16'h1: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      16'h2: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      16'h3: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      16'h6: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      16'h7: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
-      default: adc_dec_data_b = adc_data_b;
+     case (filter_enable)
+      1'b0: adc_dec_data_b = adc_data_b;
+      default adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
     endcase
 
-    case (filter_mask)
-      16'h1: adc_dec_valid_b_filter = adc_fir_valid_b;
-      16'h2: adc_dec_valid_b_filter = adc_fir_valid_b;
-      16'h3: adc_dec_valid_b_filter = adc_fir_valid_b;
-      16'h6: adc_dec_valid_b_filter = adc_fir_valid_b;
-      16'h7: adc_dec_valid_b_filter = adc_fir_valid_b;
-      default: adc_dec_valid_b_filter = adc_valid_b;
+    case (filter_enable)
+      1'b0: adc_dec_valid_b_filter = adc_valid_b;
+      default: adc_dec_valid_b_filter = adc_fir_valid_b;
     endcase
   end
 
