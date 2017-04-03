@@ -59,7 +59,6 @@ module axi_adc_decimate_filter (
   // internal signals
 
   reg     [31:0]    decimation_counter;
-  reg     [15:0]    decim_rate_cic;
 
   reg               adc_dec_valid_a_filter;
   reg               adc_dec_valid_b_filter;
@@ -79,8 +78,7 @@ module axi_adc_decimate_filter (
     .clk_enable(adc_valid_a),
     .reset(adc_rst),
     .filter_in(adc_data_a[11:0]),
-    .rate(decim_rate_cic),
-    .load_rate(1'b0),
+    .rate_sel(filter_mask),
     .filter_out(adc_cic_data_a),
     .ce_out(adc_cic_valid_a));
 
@@ -89,8 +87,7 @@ module axi_adc_decimate_filter (
     .clk_enable(adc_valid_b),
     .reset(adc_rst),
     .filter_in(adc_data_b[11:0]),
-    .rate(decim_rate_cic),
-    .load_rate(1'b0),
+    .rate_sel(filter_mask),
     .filter_out(adc_cic_data_b),
     .ce_out(adc_cic_valid_b));
 
@@ -145,15 +142,6 @@ module axi_adc_decimate_filter (
       16'h6: adc_dec_valid_b_filter = adc_fir_valid_b;
       16'h7: adc_dec_valid_b_filter = adc_fir_valid_b;
       default: adc_dec_valid_b_filter = adc_valid_b;
-    endcase
-
-    case (filter_mask)
-      16'h1: decim_rate_cic = 16'd5;
-      16'h2: decim_rate_cic = 16'd50;
-      16'h3: decim_rate_cic = 16'd500;
-      16'h6: decim_rate_cic = 16'd5000;
-      16'h7: decim_rate_cic = 16'd50000;
-      default: decim_rate_cic = 16'd1;
     endcase
   end
 
