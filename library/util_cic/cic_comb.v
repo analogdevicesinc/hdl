@@ -37,10 +37,13 @@
 
 module cic_comb #(
   parameter DATA_WIDTH = 32,
-  parameter SEQ = 1
+  parameter SEQ = 1,
+  parameter STAGE_WIDTH = 1,
+  parameter NUM_STAGES = 1
 ) (
   input clk,
   input ce,
+  input [NUM_STAGES-1:0] enable,
   input [DATA_WIDTH-1:0] data_in,
   output [DATA_WIDTH-1:0] data_out
 );
@@ -76,8 +79,10 @@ end
 end
 endgenerate
 
+wire [DATA_WIDTH-1:0] mask;
 reg [DATA_WIDTH-1:0] data_in_seq;
 wire [DATA_WIDTH-1:0] storage_out;
+wire [DATA_WIDTH-1:0] diff = (data_in_seq | ~mask) - (storage_out & mask);
 
 always @(*) begin
   if (ce == 1'b1) begin
@@ -87,18 +92,19 @@ always @(*) begin
   end
 end
 
-always @(posedge clk) begin
-  if (ce == 1'b1 || active == 1'b1) begin
-    state <= data_in_seq - storage_out;
-  end
-end
-
 generate
-  genvar i;
+genvar i, j;
 
-  for (i = 0; i < DATA_WIDTH; i = i + 1) begin: shift_r
+for (j = 0; j < NUM_STAGES; j = j + 1) begin
+  localparam k = NUM_STAGES - j - 1;
+  localparam H = DATA_WIDTH - STAGE_WIDTH * j - 1;
+  localparam L = k == 0 ? 0 : DATA_WIDTH - STAGE_WIDTH * (j+1);
+
+  assign mask[H:L] = {{H-L{1'b1}},k != 0 ? enable[k] : 1'b1};
+
+  for (i = L; i <= H; i = i + 1) begin: shift_r
     always @(posedge clk) begin
-      if (ce == 1'b1 || active == 1'b1) begin
+      if (enable[k] == 1'b1 && (ce == 1'b1 || active == 1'b1)) begin
         if (SEQ > 1) begin
           storage[i] <= {storage[i][SEQ-2:0],data_in_seq[i]};
         end else begin
@@ -108,7 +114,16 @@ generate
     end
 
     assign storage_out[i] = storage[i][SEQ-1];
+
   end
+
+  always @(posedge clk) begin
+    if (enable[k] == 1'b1 && (ce == 1'b1 || active == 1'b1)) begin
+      state[H:L] <= diff[H:L];
+    end
+  end
+end
+
 endgenerate
 
 assign data_out = state;

@@ -36,24 +36,39 @@
 // ***************************************************************************
 
 module cic_int #(
-  parameter DATA_WIDTH = 12
+  parameter DATA_WIDTH = 12,
+  parameter STAGE_WIDTH = 1,
+  parameter NUM_STAGES = 1
 ) (
   input clk,
-  input ce,
+  input [NUM_STAGES-1:0] ce,
   input [DATA_WIDTH-1:0] data_in,
   output [DATA_WIDTH-1:0] data_out
 );
 
 reg [DATA_WIDTH-1:0] state = 'h00;
 wire [DATA_WIDTH-1:0] sum;
+wire [DATA_WIDTH-1:0] mask;
 
 assign data_out = state;
-assign sum = data_in + state;
+assign sum = (data_in & mask) + (state & mask);
+generate
+genvar i;
 
-always @(posedge clk) begin
-  if (ce == 1'b1) begin
-    state <= sum;
+for (i = 0; i < NUM_STAGES; i = i + 1) begin
+  localparam j = NUM_STAGES - i - 1;
+  localparam H = DATA_WIDTH - STAGE_WIDTH * i - 1;
+  localparam L = j == 0 ? 0 : DATA_WIDTH - STAGE_WIDTH * (i+1);
+
+  assign mask[H:L] = {{H-L{1'b1}},j != 0 ? ce[j] : 1'b1};
+
+  always @(posedge clk) begin
+    if (ce[j] == 1'b1) begin
+      state[H:L] <= sum[H:L];
+    end
   end
 end
+
+endgenerate
 
 endmodule
