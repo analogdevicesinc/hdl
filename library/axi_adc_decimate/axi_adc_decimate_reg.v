@@ -42,7 +42,7 @@ module axi_adc_decimate_reg(
   input               clk,
 
   output      [31:0]  adc_decimation_ratio,
-  output      [31:0]  adc_filter_mask,
+  output      [ 2:0]  adc_filter_mask,
 
  // bus interface
 
@@ -68,7 +68,7 @@ module axi_adc_decimate_reg(
   reg     [31:0]  up_scratch = 32'h0;
 
   reg     [31:0]  up_decimation_ratio = 32'h0;
-  reg     [31:0]  up_filter_mask  = 32'h0;
+  reg     [ 2:0]  up_filter_mask  = 32'h0;
 
   assign up_wreq_s = ((up_waddr[13:5] == 6'h00)) ? up_wreq : 1'b0;
   assign up_rreq_s = ((up_raddr[13:5] == 6'h00)) ? up_rreq : 1'b0;
@@ -88,7 +88,7 @@ module axi_adc_decimate_reg(
         up_decimation_ratio <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
-        up_filter_mask <= up_wdata;
+        up_filter_mask <= up_wdata[2:0];
       end
     end
   end
@@ -115,17 +115,17 @@ module axi_adc_decimate_reg(
     end
   end
 
-   up_xfer_cntrl #(.DATA_WIDTH(64)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(35)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_decimation_ratio,  // 32
-                      up_filter_mask}),     // 32
+                      up_filter_mask}),     // 3
 
     .up_xfer_done (),
     .d_rst (1'b0),
     .d_clk (clk),
     .d_data_cntrl ({  adc_decimation_ratio, // 32
-                      adc_filter_mask}));   // 32
+                      adc_filter_mask}));   // 3
 
 endmodule
 

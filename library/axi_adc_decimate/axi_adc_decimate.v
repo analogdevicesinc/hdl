@@ -90,7 +90,7 @@ module axi_adc_decimate(
   wire    [13:0]    up_raddr;
 
   wire    [31:0]    decimation_ratio;
-  wire    [31:0]    filter_mask;
+  wire    [ 2:0]    filter_mask;
 
   // signal name changes
 

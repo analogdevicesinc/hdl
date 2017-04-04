@@ -43,7 +43,7 @@ module axi_adc_decimate_filter (
   input                 adc_rst,
 
   input       [31:0]    decimation_ratio,
-  input       [31:0]    filter_mask,
+  input       [ 2:0]    filter_mask,
 
   input                 adc_valid_a,
   input                 adc_valid_b,
