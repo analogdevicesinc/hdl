@@ -47,10 +47,10 @@ module axi_dac_interpolate(
   input                 dac_valid_a,
   input                 dac_valid_b,
 
-  output  reg [15:0]    dac_int_data_a,
-  output  reg [15:0]    dac_int_data_b,
-  output  reg           dac_int_valid_a,
-  output  reg           dac_int_valid_b,
+  output      [15:0]    dac_int_data_a,
+  output      [15:0]    dac_int_data_b,
+  output                dac_int_valid_a,
+  output                dac_int_valid_b,
 
   // axi interface
 
@@ -94,176 +94,42 @@ module axi_dac_interpolate(
   wire    [31:0]    filter_mask_a;
   wire    [31:0]    filter_mask_b;
 
-  wire              dac_fir_valid_a;
-  wire    [35:0]    dac_fir_data_a;
-  wire              dac_fir_valid_b;
-  wire    [35:0]    dac_fir_data_b;
-
-  wire              dac_cic_valid_a;
-  wire    [109:0]   dac_cic_data_a;
-  wire              dac_cic_valid_b;
-  wire    [109:0]   dac_cic_data_b;
-
   wire              dma_transfer_suspend;
-
-  reg               dac_filt_int_valid_a;
-  reg               dac_filt_int_valid_b;
-  reg     [15:0]    interp_rate_cic_a;
-  reg     [15:0]    interp_rate_cic_b;
-  reg     [31:0]    filter_mask_a_d1;
-  reg     [31:0]    filter_mask_b_d1;
-  reg               cic_change_rate_a;
-  reg               cic_change_rate_b;
-  reg     [31:0]    interpolation_counter_a;
-  reg     [31:0]    interpolation_counter_b;
 
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  fir_interp fir_interpolation_a (
-    .clk (dac_clk),
-    .clk_enable (dac_cic_valid_a),
-    .reset (dac_rst | dma_transfer_suspend),
-    .filter_in (dac_data_a),
-    .filter_out (dac_fir_data_a),
-    .ce_out (dac_fir_valid_a));
+  axi_dac_interpolate_filter i_filter_a (
+    .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
 
-  fir_interp fir_interpolation_b (
-    .clk (dac_clk),
-    .clk_enable (dac_cic_valid_b),
-    .reset (dac_rst | dma_transfer_suspend),
-    .filter_in (dac_data_b),
-    .filter_out (dac_fir_data_b),
-    .ce_out (dac_fir_valid_b));
+    .dac_data (dac_data_a),
+    .dac_valid (dac_valid_a),
 
-  cic_interp cic_interpolation_a (
-    .clk (dac_clk),
-    .clk_enable (dac_valid_a),
-    .reset (dac_rst | cic_change_rate_a | dma_transfer_suspend),
-    .rate (interp_rate_cic_a),
-    .load_rate (1'b0),
-    .filter_in (dac_fir_data_a[30:0]),
-    .filter_out (dac_cic_data_a),
-    .ce_out (dac_cic_valid_a));
+    .dac_int_data (dac_int_data_a),
+    .dac_int_valid (dac_int_valid_a),
 
-  cic_interp cic_interpolation_b (
-    .clk (dac_clk),
-    .clk_enable (dac_valid_b),
-    .reset (dac_rst | cic_change_rate_b | dma_transfer_suspend),
-    .rate (interp_rate_cic_b),
-    .load_rate (1'b0),
-    .filter_in (dac_fir_data_b[30:0]),
-    .filter_out (dac_cic_data_b),
-    .ce_out (dac_cic_valid_b));
+    .filter_mask (filter_mask_a),
+    .interpolation_ratio (interpolation_ratio_a),
+    .dma_transfer_suspend (dma_transfer_suspend)
+  );
 
-  always @(posedge dac_clk) begin
-    filter_mask_a_d1 <= filter_mask_a;
-    filter_mask_b_d1 <= filter_mask_b;
-    if (filter_mask_a_d1 != filter_mask_a) begin
-      cic_change_rate_a <= 1'b1;
-    end else begin
-      cic_change_rate_a <= 1'b0;
-    end
-    if (filter_mask_b_d1 != filter_mask_b) begin
-      cic_change_rate_b <= 1'b1;
-    end else begin
-      cic_change_rate_b <= 1'b0;
-    end
-  end
+  axi_dac_interpolate_filter i_filter_b (
+    .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
 
-  always @(posedge dac_clk) begin
-    if (interpolation_ratio_a == 0 || interpolation_ratio_a == 1) begin
-      dac_int_valid_a <= dac_filt_int_valid_a;
-    end else begin
-      if (dac_filt_int_valid_a == 1'b1) begin
-        if (interpolation_counter_a  < interpolation_ratio_a) begin
-          interpolation_counter_a <= interpolation_counter_a + 1;
-          dac_int_valid_a <= 1'b0;
-        end else begin
-          interpolation_counter_a <= 0;
-          dac_int_valid_a <= 1'b1;
-        end
-      end else begin
-        dac_int_valid_a <= 1'b0;
-      end
-    end
-  end
+    .dac_data (dac_data_b),
+    .dac_valid (dac_valid_b),
 
-  always @(posedge dac_clk) begin
-    if (interpolation_ratio_b == 0 || interpolation_ratio_b == 1) begin
-      dac_int_valid_b <= dac_filt_int_valid_b;
-    end else begin
-      if (dac_filt_int_valid_b == 1'b1) begin
-        if (interpolation_counter_b  < interpolation_ratio_b) begin
-          interpolation_counter_b <= interpolation_counter_b + 1;
-          dac_int_valid_b <= 1'b0;
-        end else begin
-          interpolation_counter_b <= 0;
-          dac_int_valid_b <= 1'b1;
-        end
-      end else begin
-        dac_int_valid_b <= 1'b0;
-      end
-    end
-  end
+    .dac_int_data (dac_int_data_b),
+    .dac_int_valid (dac_int_valid_b),
 
-  always @(*) begin
-    case (filter_mask_a)
-      16'h1: dac_int_data_a = dac_cic_data_a[31:16];
-      16'h2: dac_int_data_a = dac_cic_data_a[31:16];
-      16'h3: dac_int_data_a = dac_cic_data_a[31:16];
-      16'h6: dac_int_data_a = dac_cic_data_a[31:16];
-      16'h7: dac_int_data_a = dac_cic_data_a[31:16];
-      default: dac_int_data_a = dac_data_a;
-    endcase
-
-    case (filter_mask_a)
-      16'h1: dac_filt_int_valid_a = dac_fir_valid_a;
-      16'h2: dac_filt_int_valid_a = dac_fir_valid_a;
-      16'h3: dac_filt_int_valid_a = dac_fir_valid_a;
-      16'h6: dac_filt_int_valid_a = dac_fir_valid_a;
-      16'h7: dac_filt_int_valid_a = dac_fir_valid_a;
-      default: dac_filt_int_valid_a = dac_valid_a & !dma_transfer_suspend;
-    endcase
-
-    case (filter_mask_b)
-      16'h1: dac_int_data_b = dac_cic_data_b[31:16];
-      16'h2: dac_int_data_b = dac_cic_data_b[31:16];
-      16'h3: dac_int_data_b = dac_cic_data_b[31:16];
-      16'h6: dac_int_data_b = dac_cic_data_b[31:16];
-      16'h7: dac_int_data_b = dac_cic_data_b[31:16];
-      default: dac_int_data_b = dac_data_b;
-    endcase
-
-    case (filter_mask_b)
-      16'h1: dac_filt_int_valid_b = dac_fir_valid_b;
-      16'h2: dac_filt_int_valid_b = dac_fir_valid_b;
-      16'h3: dac_filt_int_valid_b = dac_fir_valid_b;
-      16'h6: dac_filt_int_valid_b = dac_fir_valid_b;
-      16'h7: dac_filt_int_valid_b = dac_fir_valid_b;
-      default: dac_filt_int_valid_b = dac_valid_b & !dma_transfer_suspend;
-    endcase
-
-    case (filter_mask_a)
-      16'h1: interp_rate_cic_a = 16'd5;
-      16'h2: interp_rate_cic_a = 16'd50;
-      16'h3: interp_rate_cic_a = 16'd500;
-      16'h6: interp_rate_cic_a = 16'd5000;
-      16'h7: interp_rate_cic_a = 16'd50000;
-      default: interp_rate_cic_a = 16'd1;
-    endcase
-
-    case (filter_mask_b)
-      16'h1: interp_rate_cic_b = 16'd5;
-      16'h2: interp_rate_cic_b = 16'd50;
-      16'h3: interp_rate_cic_b = 16'd500;
-      16'h6: interp_rate_cic_b = 16'd5000;
-      16'h7: interp_rate_cic_b = 16'd50000;
-      default: interp_rate_cic_b = 16'd1;
-    endcase
-  end
+    .filter_mask (filter_mask_b),
+    .interpolation_ratio (interpolation_ratio_b),
+    .dma_transfer_suspend (dma_transfer_suspend)
+  );
 
   axi_dac_interpolate_reg axi_dac_interpolate_reg_inst (
 

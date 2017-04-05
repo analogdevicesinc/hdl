@@ -11,6 +11,7 @@ adi_ip_files axi_dac_interpolate [list \
   "cic_interp.v" \
   "fir_interp.v" \
   "axi_dac_interpolate_reg.v" \
+  "axi_dac_interpolate_filter.v" \
   "axi_dac_interpolate.v" ]
 
 adi_ip_properties axi_dac_interpolate
