@@ -50,9 +50,7 @@ set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_PACKAGE_NAME {clg225}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {17}] $sys_ps7
 set_property -dict [list CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {0}] $sys_ps7
@@ -99,7 +97,6 @@ set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
 # system reset/clock definitions
 
 ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
-ad_connect  sys_200m_clk sys_ps7/FCLK_CLK1
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
