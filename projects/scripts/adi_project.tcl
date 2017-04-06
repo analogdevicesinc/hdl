@@ -19,6 +19,7 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
 set p_board "not-applicable"
 set p_device "none"
 set sys_zynq 1
+set ADI_POWER_OPTIMIZATION 0
 
 proc adi_project_create {project_name {mode 0}} {
 
@@ -140,6 +141,7 @@ proc adi_project_files {project_name project_files} {
 }
 
 proc adi_project_run {project_name} {
+  global ADI_POWER_OPTIMIZATION
 
   set_property strategy Flow_PerfOptimized_high [get_runs synth_1]
   set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
@@ -151,6 +153,11 @@ proc adi_project_run {project_name} {
 
   if {![info exists ::env(ADI_NO_BITSTREAM_COMPRESSION)] && ![info exists ADI_NO_BITSTREAM_COMPRESSION]} {
     set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+  }
+
+  if {$ADI_POWER_OPTIMIZATION == 1} {
+  set_property STEPS.POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+  set_property STEPS.POST_PLACE_POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
   }
 
   launch_runs impl_1 -to_step write_bitstream
