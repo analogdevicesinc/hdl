@@ -31,6 +31,20 @@ set xcvr_instance NONE
 ###################################################################################################
 ###################################################################################################
 
+proc ad_ip_instance {i_ip i_name} {
+
+  create_bd_cell -type ip -vlnv [get_ipdefs -all -filter "VLNV =~ *:${i_ip}:* && \
+    design_tool_contexts =~ *IPI* && UPGRADE_VERSIONS == \"\""] ${i_name}
+}
+
+proc ad_ip_parameter {i_name i_param i_value} {
+
+  set_property ${i_param} ${i_value} [get_bd_cells ${i_name}]
+}
+
+###################################################################################################
+###################################################################################################
+
 proc ad_connect_type {p_name} {
 
   set m_name ""
