@@ -53,5 +53,7 @@ set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
   -of_objects [ipx::get_bus_interfaces s_axi_aclk \
   -of_objects [ipx::current_core]]]
 
+adi_set_ports_dependency "delay_clk" "ADC_IODELAY_ENABLE == 1" 0
+
 ipx::save_core [ipx::current_core]
 
