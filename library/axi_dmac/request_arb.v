@@ -42,8 +42,8 @@ module dmac_request_arb (
 
   input req_valid,
   output req_ready,
-  input [31:BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
-  input [31:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
+  input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
+  input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
   input [DMA_LENGTH_WIDTH-1:0] req_length,
         input req_xlast,
   input req_sync_transfer_start,
@@ -60,7 +60,7 @@ module dmac_request_arb (
   input                               m_src_axi_aresetn,
 
   // Write address
-  output [31:0]                       m_axi_awaddr,
+  output [DMA_AXI_ADDR_WIDTH-1:0]     m_axi_awaddr,
   output [AXI_LENGTH_WIDTH-1:0]       m_axi_awlen,
   output [ 2:0]                       m_axi_awsize,
   output [ 1:0]                       m_axi_awburst,
@@ -84,7 +84,7 @@ module dmac_request_arb (
   // Read address
   input                               m_axi_arready,
   output                              m_axi_arvalid,
-  output [31:0]                       m_axi_araddr,
+  output [DMA_AXI_ADDR_WIDTH-1:0]     m_axi_araddr,
   output [AXI_LENGTH_WIDTH-1:0]       m_axi_arlen,
   output [ 2:0]                       m_axi_arsize,
   output [ 1:0]                       m_axi_arburst,
@@ -150,6 +150,8 @@ parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(DMA_DATA_WIDTH_SRC/8);
 parameter DMA_TYPE_DEST = DMA_TYPE_MM_AXI;
 parameter DMA_TYPE_SRC = DMA_TYPE_FIFO;
 
+parameter DMA_AXI_ADDR_WIDTH = 32;
+
 parameter ASYNC_CLK_REQ_SRC = 1;
 parameter ASYNC_CLK_SRC_DEST = 1;
 parameter ASYNC_CLK_DEST_REQ = 1;
@@ -168,8 +170,8 @@ localparam DMA_TYPE_MM_AXI = 0;
 localparam DMA_TYPE_STREAM_AXI = 1;
 localparam DMA_TYPE_FIFO = 2;
 
-localparam DMA_ADDRESS_WIDTH_DEST = 32 - BYTES_PER_BEAT_WIDTH_DEST;
-localparam DMA_ADDRESS_WIDTH_SRC = 32 - BYTES_PER_BEAT_WIDTH_SRC;
+localparam DMA_ADDRESS_WIDTH_DEST = DMA_AXI_ADDR_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
+localparam DMA_ADDRESS_WIDTH_SRC = DMA_AXI_ADDR_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
 
 localparam DMA_DATA_WIDTH = DMA_DATA_WIDTH_SRC < DMA_DATA_WIDTH_DEST ?
   DMA_DATA_WIDTH_DEST : DMA_DATA_WIDTH_SRC;
@@ -404,6 +406,7 @@ assign dbg_dest_data_id = dest_data_id;
 dmac_dest_mm_axi #(
   .ID_WIDTH(ID_WIDTH),
   .DMA_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+  .DMA_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST),
   .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_DEST),
   .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH)
@@ -618,6 +621,7 @@ assign dbg_src_data_id = src_data_id;
 dmac_src_mm_axi #(
   .ID_WIDTH(ID_WIDTH),
   .DMA_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+  .DMA_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
   .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_SRC),
   .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH)

@@ -69,7 +69,7 @@ module axi_dmac (
   input                                    m_dest_axi_aresetn,
 
   // Write address
-  output [31:0]                            m_dest_axi_awaddr,
+  output [DMA_AXI_ADDR_WIDTH-1:0]          m_dest_axi_awaddr,
   output [7-(4*DMA_AXI_PROTOCOL_DEST):0] m_dest_axi_awlen,
   output [ 2:0]                            m_dest_axi_awsize,
   output [ 1:0]                            m_dest_axi_awburst,
@@ -92,7 +92,7 @@ module axi_dmac (
 
   // Unused read interface
   output                                   m_dest_axi_arvalid,
-  output [31:0]                            m_dest_axi_araddr,
+  output [DMA_AXI_ADDR_WIDTH-1:0]          m_dest_axi_araddr,
   output [7-(4*DMA_AXI_PROTOCOL_DEST):0] m_dest_axi_arlen,
   output [ 2:0]                            m_dest_axi_arsize,
   output [ 1:0]                            m_dest_axi_arburst,
@@ -111,7 +111,7 @@ module axi_dmac (
   // Read address
   input                                    m_src_axi_arready,
   output                                   m_src_axi_arvalid,
-  output [31:0]                            m_src_axi_araddr,
+  output [DMA_AXI_ADDR_WIDTH-1:0]          m_src_axi_araddr,
   output [7-(4*DMA_AXI_PROTOCOL_SRC):0]  m_src_axi_arlen,
   output [ 2:0]                            m_src_axi_arsize,
   output [ 1:0]                            m_src_axi_arburst,
@@ -126,7 +126,7 @@ module axi_dmac (
 
   // Unused write interface
   output                                   m_src_axi_awvalid,
-  output [31:0]                            m_src_axi_awaddr,
+  output [DMA_AXI_ADDR_WIDTH-1:0]          m_src_axi_awaddr,
   output [7-(4*DMA_AXI_PROTOCOL_SRC):0]  m_src_axi_awlen,
   output [ 2:0]                            m_src_axi_awsize,
   output [ 1:0]                            m_src_axi_awburst,
@@ -195,6 +195,8 @@ parameter DMA_AXI_PROTOCOL_DEST = 0;
 parameter DMA_AXI_PROTOCOL_SRC = 0;
 parameter DMA_TYPE_DEST = 0;
 parameter DMA_TYPE_SRC = 2;
+
+parameter DMA_AXI_ADDR_WIDTH = 32;
 
 parameter MAX_BYTES_PER_BURST = 128;
 parameter FIFO_SIZE = 4; // In bursts
@@ -272,8 +274,8 @@ reg [1:0] up_transfer_id_eot = 2'b0;
 reg [3:0] up_transfer_done_bitmap = 4'b0;
 reg       up_axis_xlast = 1'b1;
 
-reg [31:BYTES_PER_BEAT_WIDTH_DEST]   up_dma_dest_address = 'h00;
-reg [31:BYTES_PER_BEAT_WIDTH_SRC]   up_dma_src_address = 'h00;
+reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_dest_address = 'h00;
+reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC]  up_dma_src_address = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
@@ -401,8 +403,8 @@ begin
                           if (CYCLIC) up_dma_cyclic <= up_wdata[0];
                           up_axis_xlast <= up_wdata[1];
                         end
-      12'h104: up_dma_dest_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_DEST];
-      12'h105: up_dma_src_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_SRC];
+      12'h104: up_dma_dest_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
+      12'h105: up_dma_src_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
       12'h106: up_dma_x_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
       12'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
       12'h108: up_dma_dest_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
@@ -476,8 +478,8 @@ end
 
 wire dma_req_valid;
 wire dma_req_ready;
-wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
-wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
+wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
+wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
 wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
 wire dma_req_eot;
 wire dma_req_sync_transfer_start;
@@ -538,6 +540,7 @@ dmac_request_arb #(
   .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
   .DMA_TYPE_DEST(DMA_TYPE_DEST),
   .DMA_TYPE_SRC(DMA_TYPE_SRC),
+  .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
   .ASYNC_CLK_REQ_SRC(ASYNC_CLK_REQ_SRC),
   .ASYNC_CLK_SRC_DEST(ASYNC_CLK_SRC_DEST),
   .ASYNC_CLK_DEST_REQ(ASYNC_CLK_DEST_REQ),

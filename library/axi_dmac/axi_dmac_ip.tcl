@@ -337,5 +337,8 @@ set_property -dict [list \
 	"display_name" "Disable Debug Registers" \
 ] $p
 
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXI_ADDR_WIDTH" -component $cc]
+
+
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core $cc

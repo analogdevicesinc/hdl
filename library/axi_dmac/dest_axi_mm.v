@@ -42,7 +42,7 @@ module dmac_dest_mm_axi (
 
   input                               req_valid,
   output                              req_ready,
-  input [31:BYTES_PER_BEAT_WIDTH]   req_address,
+  input [DMA_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH] req_address,
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
   input [BYTES_PER_BEAT_WIDTH-1:0]  req_last_beat_bytes,
 
@@ -73,7 +73,7 @@ module dmac_dest_mm_axi (
   // Write address
   input                               m_axi_awready,
   output                              m_axi_awvalid,
-  output [31:0]                       m_axi_awaddr,
+  output [DMA_ADDR_WIDTH-1:0]         m_axi_awaddr,
   output [AXI_LENGTH_WIDTH-1:0]       m_axi_awlen,
   output [ 2:0]                       m_axi_awsize,
   output [ 1:0]                       m_axi_awburst,
@@ -95,6 +95,7 @@ module dmac_dest_mm_axi (
 
 parameter ID_WIDTH = 3;
 parameter DMA_DATA_WIDTH = 64;
+parameter DMA_ADDR_WIDTH = 32;
 parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8);
 parameter BEATS_PER_BURST_WIDTH = 4;
 parameter AXI_LENGTH_WIDTH = 8;
@@ -135,7 +136,8 @@ dmac_address_generator #(
   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
   .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),
   .DMA_DATA_WIDTH(DMA_DATA_WIDTH),
-  .LENGTH_WIDTH(AXI_LENGTH_WIDTH)
+  .LENGTH_WIDTH(AXI_LENGTH_WIDTH),
+  .DMA_ADDR_WIDTH(DMA_ADDR_WIDTH)
 ) i_addr_gen (
   .clk(m_axi_aclk),
   .resetn(m_axi_aresetn),

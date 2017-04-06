@@ -5,6 +5,9 @@ proc init {cellpath otherInfo} {
 	bd::mark_propagate_override $ip \
 		"ASYNC_CLK_REQ_SRC ASYNC_CLK_SRC_DEST ASYNC_CLK_DEST_REQ"
 
+	bd::mark_propagate_only $ip \
+		"DMA_AXI_ADDR_WIDTH"
+
 	# On ZYNQ the core is most likely connected to the AXI3 HP ports so use AXI3
 	# as the default.
 	set family [string tolower [get_property FAMILY [get_property PART [current_project]]]]
@@ -112,4 +115,30 @@ proc propagate {cellpath otherinfo} {
 	axi_dmac_detect_async_clk $cellpath $ip "ASYNC_CLK_REQ_SRC" $req_clk $src_clk
 	axi_dmac_detect_async_clk $cellpath $ip "ASYNC_CLK_SRC_DEST" $src_clk $dest_clk
 	axi_dmac_detect_async_clk $cellpath $ip "ASYNC_CLK_DEST_REQ" $dest_clk $req_clk
+}
+
+proc post_propagate {cellpath otherinfo} {
+	set ip [get_bd_cells $cellpath]
+
+	set addr_width 16
+
+	foreach dir {"SRC" "DEST"} {
+		set type [get_property "CONFIG.DMA_TYPE_$dir" $ip]
+		if {$type != 0} {
+			continue
+		}
+
+		set intf [get_bd_intf_pins [format "%s/m_%s_axi" $cellpath [string tolower $dir]]]
+		set addr_seg [get_bd_addr_segs -of_objects  [get_bd_addr_spaces $intf]]
+
+		if {$addr_seg != {}} {
+		   set range [get_property "range" $addr_seg]
+		   set addr_width [expr max(round(log($range) / log(2)), $addr_width)]
+		} else {
+			set addr_width 32
+		}
+
+	}
+
+	set_property "CONFIG.DMA_AXI_ADDR_WIDTH" $addr_width $ip
 }
