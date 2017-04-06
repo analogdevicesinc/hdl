@@ -48,9 +48,12 @@ proc adi_ip_infer_mm_interfaces {ip_name} {
 
 }
 
-proc adi_set_ports_dependency {port_prefix dependency} {
+proc adi_set_ports_dependency {port_prefix dependency {driver_value {}}} {
   foreach port [ipx::get_ports [format "%s%s" $port_prefix "*"]] {
     set_property ENABLEMENT_DEPENDENCY $dependency $port
+    if {$driver_value != {}} {
+      set_property DRIVER_VALUE $driver_value $port
+    }
   }
 }
 
