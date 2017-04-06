@@ -10,14 +10,11 @@ adi_ip_files util_mfifo [list \
 
 adi_ip_properties_lite util_mfifo
 
-adi_ip_constraints util_mfifo [list \
-  "util_mfifo_constr.xdc" ]
-
 ipx::remove_all_bus_interface [ipx::current_core]
 set_property driver_value 0 [ipx::get_ports *din_valid* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *din_data* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 1} \
-  [ipx::get_ports *_1* -of_objects [ipx::current_core]] 
+  [ipx::get_ports *_1* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 2} \
   [ipx::get_ports *_2* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 3} \

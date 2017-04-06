@@ -16,7 +16,6 @@ adi_ip_files axi_spdif_tx [list \
 
 adi_ip_properties axi_spdif_tx
 adi_ip_infer_streaming_interfaces axi_spdif_tx
-adi_ip_constraints axi_spdif_tx axi_spdif_tx_constr.xdc
 
 adi_add_bus "DMA_ACK" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \

@@ -25,12 +25,6 @@ adi_ip_files axi_ad6676 [list \
   "axi_ad6676.v" ]
 
 adi_ip_properties axi_ad6676
-adi_ip_constraints axi_ad6676 [list \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
-  "axi_ad6676_constr.xdc" ]
 
 set_property driver_value 0 [ipx::get_ports *rx_valid* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]

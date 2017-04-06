@@ -21,9 +21,6 @@ adi_ip_files axi_mc_speed [list \
 
 adi_ip_properties axi_mc_speed
 
-adi_ip_constraints axi_mc_speed [list \
-  "axi_mc_speed_constr.xdc" ]
-
 ipx::save_core [ipx::current_core]
 
 

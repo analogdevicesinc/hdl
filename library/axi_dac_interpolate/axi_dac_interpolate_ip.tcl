@@ -15,8 +15,6 @@ adi_ip_files axi_dac_interpolate [list \
   "axi_dac_interpolate.v" ]
 
 adi_ip_properties axi_dac_interpolate
-adi_ip_constraints axi_dac_interpolate [list \
-  "axi_dac_interpolate_constr.xdc" ]
 
 ipx::remove_bus_interface {clk} [ipx::current_core]
 ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]

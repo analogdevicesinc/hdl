@@ -13,7 +13,6 @@ adi_ip_files axi_xcvrlb [list \
   "axi_xcvrlb.v" ]
 
 adi_ip_properties_lite axi_xcvrlb
-adi_ip_constraints axi_xcvrlb "axi_xcvrlb_constr.xdc"
 
 ipx::remove_all_bus_interface [ipx::current_core]
 

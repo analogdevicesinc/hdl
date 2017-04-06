@@ -11,9 +11,6 @@ adi_ip_files util_rfifo [list \
 
 adi_ip_properties_lite util_rfifo
 
-adi_ip_constraints util_rfifo [list \
-  "util_rfifo_constr.xdc" ]
-
 ipx::remove_all_bus_interface [ipx::current_core]
 set_property driver_value 0 [ipx::get_ports *dout_enable* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dout_valid* -of_objects [ipx::current_core]]

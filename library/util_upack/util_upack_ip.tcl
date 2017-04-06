@@ -11,8 +11,6 @@ adi_ip_files util_upack [list \
   "util_upack_constr.xdc" ]
 
 adi_ip_properties_lite util_upack
-adi_ip_constraints util_upack [list \
-  "util_upack_constr.xdc" ]
 
 set_property driver_value 0 [ipx::get_ports *dac_enable* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dac_valid* -of_objects [ipx::current_core]]

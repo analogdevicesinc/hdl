@@ -22,9 +22,6 @@ adi_ip_files axi_mc_controller [list \
 
 adi_ip_properties axi_mc_controller
 
-adi_ip_constraints axi_mc_controller [list \
-  "axi_mc_controller_constr.xdc" ]
-
 ipx::save_core [ipx::current_core]
 
 

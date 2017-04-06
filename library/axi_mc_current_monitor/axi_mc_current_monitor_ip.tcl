@@ -20,9 +20,6 @@ adi_ip_files axi_mc_current_monitor [list \
 
 adi_ip_properties axi_mc_current_monitor
 
-adi_ip_constraints axi_mc_current_monitor [list \
-  "axi_mc_current_monitor_constr.xdc" ]
-
 ipx::save_core [ipx::current_core]
 
 

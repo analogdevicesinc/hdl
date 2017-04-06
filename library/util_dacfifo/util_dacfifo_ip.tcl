@@ -10,8 +10,6 @@ adi_ip_files util_dacfifo [list \
   "util_dacfifo_constr.xdc"]
 
 adi_ip_properties_lite util_dacfifo
-adi_ip_constraints util_dacfifo [list \
-  "util_dacfifo_constr.xdc" ]
 
 ipx::remove_all_bus_interface [ipx::current_core]
 ipx::save_core [ipx::current_core]
