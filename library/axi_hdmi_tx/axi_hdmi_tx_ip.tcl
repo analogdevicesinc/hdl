@@ -29,13 +29,6 @@ adi_ip_files axi_hdmi_tx [list \
 
 adi_ip_properties axi_hdmi_tx
 
-adi_ip_constraints axi_hdmi_tx [list \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
-  "axi_hdmi_tx_constr.xdc"]
-
 ipx::remove_bus_interface hdmi_clk [ipx::current_core]
 ipx::remove_bus_interface hdmi_out_clk [ipx::current_core]
 ipx::remove_bus_interface vdma_clk [ipx::current_core]

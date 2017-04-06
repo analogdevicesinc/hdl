@@ -27,12 +27,6 @@ adi_ip_files axi_hdmi_rx [list \
   "axi_hdmi_rx_core.v" ]
 
 adi_ip_properties axi_hdmi_rx
-adi_ip_constraints axi_hdmi_rx [list \
-  "axi_hdmi_rx_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" ]
 
 ipx::save_core [ipx::current_core]
 

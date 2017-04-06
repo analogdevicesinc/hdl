@@ -11,8 +11,5 @@ adi_ip_files util_pmod_adc [list \
 
 adi_ip_properties_lite util_pmod_adc
 
-adi_ip_constraints util_pmod_adc [list \
-  "util_pmod_adc_constr.xdc" ]
-
 ipx::save_core [ipx::current_core]
 

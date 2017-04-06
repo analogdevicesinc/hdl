@@ -16,8 +16,6 @@ adi_ip_files axi_dacfifo [list \
   "axi_dacfifo.v"]
 
 adi_ip_properties_lite axi_dacfifo
-adi_ip_constraints axi_dacfifo [list \
-  "axi_dacfifo_constr.xdc" ]
 
 ipx::infer_bus_interface {\
   axi_awvalid \

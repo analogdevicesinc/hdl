@@ -11,8 +11,6 @@ adi_ip_files util_cpack [list \
   "util_cpack_constr.xdc" ]
 
 adi_ip_properties_lite util_cpack
-adi_ip_constraints util_cpack [list \
-  "util_cpack_constr.xdc" ]
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 1} \
   [ipx::get_ports *_1* -of_objects [ipx::current_core]]

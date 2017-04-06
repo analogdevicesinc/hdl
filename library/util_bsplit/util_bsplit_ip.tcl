@@ -9,8 +9,6 @@ adi_ip_files util_bsplit [list \
   "util_bsplit_constr.xdc" ]
 
 adi_ip_properties_lite util_bsplit
-adi_ip_constraints util_bsplit [list \
-  "util_bsplit_constr.xdc" ]
 
 set_property -dict {driver_value {0} enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 1}} \
   [ipx::get_ports *_1* -of_objects [ipx::current_core]] \
