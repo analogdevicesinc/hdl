@@ -51,7 +51,6 @@ set_property -dict [list CONFIG.PCW_PACKAGE_NAME {clg225}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
 set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
