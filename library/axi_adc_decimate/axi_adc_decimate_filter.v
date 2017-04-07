@@ -124,7 +124,7 @@ module axi_adc_decimate_filter (
 
   always @(*) begin
     case (filter_enable[0])
-      1'b0: adc_dec_data_a = adc_data_a;
+      1'b0: adc_dec_data_a = {{4{adc_data_a[11]}},adc_data_a};
       default: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
     endcase
 
@@ -134,7 +134,7 @@ module axi_adc_decimate_filter (
     endcase
 
      case (filter_enable[0])
-      1'b0: adc_dec_data_b = adc_data_b;
+      1'b0: adc_dec_data_b = {{4{adc_data_b[11]}},adc_data_b};
       default adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
     endcase
 
