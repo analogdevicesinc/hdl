@@ -54,50 +54,51 @@ module up_dac_common #(
 
   // dac interface
 
-  input           dac_clk,
-  output          dac_rst,
-  output          dac_sync,
-  output          dac_frame,
-  output          dac_clksel,
-  output          dac_par_type,
-  output          dac_par_enb,
-  output          dac_r1_mode,
-  output          dac_datafmt,
-  output  [ 7:0]  dac_datarate,
-  input           dac_status,
-  input           dac_status_ovf,
-  input           dac_status_unf,
-  input   [31:0]  dac_clk_ratio,
+  input               dac_clk,
+  output              dac_rst,
+  output              dac_sync,
+  output              dac_frame,
+  output              dac_clksel,
+  output              dac_par_type,
+  output              dac_par_enb,
+  output              dac_r1_mode,
+  output              dac_datafmt,
+  output      [ 7:0]  dac_datarate,
+  input               dac_status,
+  input               dac_status_ovf,
+  input               dac_status_unf,
+  input       [31:0]  dac_clk_ratio,
+  output reg          up_dac_ce,
 
   // drp interface
 
-  output          up_drp_sel,
-  output          up_drp_wr,
-  output  [11:0]  up_drp_addr,
-  output  [31:0]  up_drp_wdata,
-  input   [31:0]  up_drp_rdata,
-  input           up_drp_ready,
-  input           up_drp_locked,
+  output              up_drp_sel,
+  output              up_drp_wr,
+  output      [11:0]  up_drp_addr,
+  output      [31:0]  up_drp_wdata,
+  input       [31:0]  up_drp_rdata,
+  input               up_drp_ready,
+  input               up_drp_locked,
 
   // user channel control
 
-  output  [ 7:0]  up_usr_chanmax,
-  input   [ 7:0]  dac_usr_chanmax,
-  input   [31:0]  up_dac_gpio_in,
-  output  [31:0]  up_dac_gpio_out,
+  output      [ 7:0]  up_usr_chanmax,
+  input       [ 7:0]  dac_usr_chanmax,
+  input       [31:0]  up_dac_gpio_in,
+  output      [31:0]  up_dac_gpio_out,
 
   // bus interface
 
-  input           up_rstn,
-  input           up_clk,
-  input           up_wreq,
-  input   [13:0]  up_waddr,
-  input   [31:0]  up_wdata,
-  output          up_wack,
-  input           up_rreq,
-  input   [13:0]  up_raddr,
-  output  [31:0]  up_rdata,
-  output          up_rack);
+  input               up_rstn,
+  input               up_clk,
+  input               up_wreq,
+  input       [13:0]  up_waddr,
+  input       [31:0]  up_wdata,
+  output              up_wack,
+  input               up_rreq,
+  input       [13:0]  up_raddr,
+  output      [31:0]  up_rdata,
+  output              up_rack);
 
   // parameters
 
@@ -109,6 +110,7 @@ module up_dac_common #(
   reg             up_mmcm_preset = 'd1;
   reg             up_wack_int = 'd0;
   reg     [31:0]  up_scratch = 'd0;
+  reg             up_dac_ce_int = 'd0;
   reg             up_mmcm_resetn = 'd0;
   reg             up_resetn = 'd0;
   reg             up_dac_sync = 'd0;
@@ -157,16 +159,19 @@ module up_dac_common #(
   assign up_wreq_s = (up_waddr[13:8] == COMMON_ID) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:8] == COMMON_ID) ? up_rreq : 1'b0;
 
+
   // processor write interface
 
   assign up_wack = up_wack_int;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_dac_ce <= 1'd1;
       up_core_preset <= 1'd1;
       up_mmcm_preset <= 1'd1;
       up_wack_int <= 'd0;
       up_scratch <= 'd0;
+      up_dac_ce_int <= 'd0;
       up_mmcm_resetn <= 'd0;
       up_resetn <= 'd0;
       up_dac_sync <= 'd0;
@@ -178,6 +183,7 @@ module up_dac_common #(
       up_dac_frame <= 'd0;
       up_dac_clksel <= 'd0;
     end else begin
+      up_dac_ce <= ~up_dac_ce_int;
       up_core_preset <= ~up_resetn;
       up_mmcm_preset <= ~up_mmcm_resetn;
       up_wack_int <= up_wreq_s;
@@ -185,6 +191,7 @@ module up_dac_common #(
         up_scratch <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+        up_dac_ce_int <= up_wdata[2];
         up_mmcm_resetn <= up_wdata[1];
         up_resetn <= up_wdata[0];
       end
@@ -346,7 +353,7 @@ module up_dac_common #(
           8'h01: up_rdata_int <= ID;
           8'h02: up_rdata_int <= up_scratch;
           8'h03: up_rdata_int <= CONFIG;
-          8'h10: up_rdata_int <= {30'd0, up_mmcm_resetn, up_resetn};
+          8'h10: up_rdata_int <= {29'd0, up_dac_ce_int, up_mmcm_resetn, up_resetn};
           8'h11: up_rdata_int <= {31'd0, up_dac_sync};
           8'h12: up_rdata_int <= {24'd0, up_dac_par_type, up_dac_par_enb, up_dac_r1_mode,
                               up_dac_datafmt, 4'd0};
