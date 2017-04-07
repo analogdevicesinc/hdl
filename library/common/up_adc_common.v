@@ -55,54 +55,55 @@ module up_adc_common #(
 
   // adc interface
 
-  input           adc_clk,
-  output          adc_rst,
-  output          adc_r1_mode,
-  output          adc_ddr_edgesel,
-  output          adc_pin_mode,
-  input           adc_status,
-  input           adc_sync_status,
-  input           adc_status_ovf,
-  input           adc_status_unf,
-  input   [31:0]  adc_clk_ratio,
-  output  [31:0]  adc_start_code,
-  output          adc_sync,
+  input               adc_clk,
+  output              adc_rst,
+  output              adc_r1_mode,
+  output              adc_ddr_edgesel,
+  output              adc_pin_mode,
+  input               adc_status,
+  input               adc_sync_status,
+  input               adc_status_ovf,
+  input               adc_status_unf,
+  input       [31:0]  adc_clk_ratio,
+  output      [31:0]  adc_start_code,
+  output              adc_sync,
+  output reg          up_adc_ce,
 
   // channel interface
 
-  input           up_status_pn_err,
-  input           up_status_pn_oos,
-  input           up_status_or,
+  input               up_status_pn_err,
+  input               up_status_pn_oos,
+  input               up_status_or,
 
   // drp interface
 
-  output          up_drp_sel,
-  output          up_drp_wr,
-  output  [11:0]  up_drp_addr,
-  output  [31:0]  up_drp_wdata,
-  input   [31:0]  up_drp_rdata,
-  input           up_drp_ready,
-  input           up_drp_locked,
+  output              up_drp_sel,
+  output              up_drp_wr,
+  output      [11:0]  up_drp_addr,
+  output      [31:0]  up_drp_wdata,
+  input       [31:0]  up_drp_rdata,
+  input               up_drp_ready,
+  input               up_drp_locked,
 
   // user channel control
 
-  output  [ 7:0]  up_usr_chanmax,
-  input   [ 7:0]  adc_usr_chanmax,
-  input   [31:0]  up_adc_gpio_in,
-  output  [31:0]  up_adc_gpio_out,
+  output      [ 7:0]  up_usr_chanmax,
+  input       [ 7:0]  adc_usr_chanmax,
+  input       [31:0]  up_adc_gpio_in,
+  output      [31:0]  up_adc_gpio_out,
 
   // bus interface
 
-  input           up_rstn,
-  input           up_clk,
-  input           up_wreq,
-  input   [13:0]  up_waddr,
-  input   [31:0]  up_wdata,
-  output          up_wack,
-  input           up_rreq,
-  input   [13:0]  up_raddr,
-  output  [31:0]  up_rdata,
-  output          up_rack);
+  input               up_rstn,
+  input               up_clk,
+  input               up_wreq,
+  input       [13:0]  up_waddr,
+  input       [31:0]  up_wdata,
+  output              up_wack,
+  input               up_rreq,
+  input       [13:0]  up_raddr,
+  output      [31:0]  up_rdata,
+  output              up_rack);
 
   // parameters
 
@@ -114,6 +115,7 @@ module up_adc_common #(
   reg             up_mmcm_preset = 'd1;
   reg             up_wack_int = 'd0;
   reg     [31:0]  up_scratch = 'd0;
+  reg             up_adc_ce_int = 'd0;
   reg             up_mmcm_resetn = 'd0;
   reg             up_resetn = 'd0;
   reg             up_adc_sync = 'd0;
@@ -151,16 +153,19 @@ module up_adc_common #(
   assign up_wreq_s = (up_waddr[13:8] == COMMON_ID) ? up_wreq : 1'b0;
   assign up_rreq_s = (up_raddr[13:8] == COMMON_ID) ? up_rreq : 1'b0;
 
+
   // processor write interface
 
   assign up_wack = up_wack_int;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_adc_ce <= 1'd1;
       up_core_preset <= 1'd1;
       up_mmcm_preset <= 1'd1;
       up_wack_int <= 'd0;
       up_scratch <= 'd0;
+      up_adc_ce_int <= 'd0;
       up_mmcm_resetn <= 'd0;
       up_resetn <= 'd0;
       up_adc_sync <= 'd0;
@@ -170,11 +175,13 @@ module up_adc_common #(
     end else begin
       up_core_preset <= ~up_resetn;
       up_mmcm_preset <= ~up_mmcm_resetn;
+      up_adc_ce <= ~up_adc_ce_int;
       up_wack_int <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+        up_adc_ce_int <= up_wdata[2];
         up_mmcm_resetn <= up_wdata[1];
         up_resetn <= up_wdata[0];
       end
@@ -340,7 +347,7 @@ module up_adc_common #(
           8'h01: up_rdata_int <= ID;
           8'h02: up_rdata_int <= up_scratch;
           8'h03: up_rdata_int <= CONFIG;
-          8'h10: up_rdata_int <= {30'd0, up_mmcm_resetn, up_resetn};
+          8'h10: up_rdata_int <= {29'd0, up_adc_ce_int, up_mmcm_resetn, up_resetn};
           8'h11: up_rdata_int <= {28'd0, up_adc_sync, up_adc_r1_mode, up_adc_ddr_edgesel, up_adc_pin_mode};
           8'h15: up_rdata_int <= up_adc_clk_count_s;
           8'h16: up_rdata_int <= adc_clk_ratio;
