@@ -49,18 +49,13 @@ module axi_adc_decimate_reg(
   input               up_rstn,
   input               up_clk,
   input               up_wreq,
-  input       [13:0]  up_waddr,
+  input       [ 4:0]  up_waddr,
   input       [31:0]  up_wdata,
   output  reg         up_wack,
   input               up_rreq,
-  input       [13:0]  up_raddr,
+  input       [ 4:0]  up_raddr,
   output  reg [31:0]  up_rdata,
   output  reg         up_rack);
-
-  // internal signals
-
-  wire            up_wreq_s;
-  wire            up_rreq_s;
 
   // internal registers
 
@@ -70,9 +65,6 @@ module axi_adc_decimate_reg(
   reg     [31:0]  up_decimation_ratio = 32'h0;
   reg     [ 2:0]  up_filter_mask  = 32'h0;
 
-  assign up_wreq_s = ((up_waddr[13:5] == 6'h00)) ? up_wreq : 1'b0;
-  assign up_rreq_s = ((up_raddr[13:5] == 6'h00)) ? up_rreq : 1'b0;
-
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
@@ -80,14 +72,14 @@ module axi_adc_decimate_reg(
       up_decimation_ratio <= 'd0;
       up_filter_mask <= 'd0;
     end else begin
-      up_wack <= up_wreq_s;
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
         up_scratch <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
         up_decimation_ratio <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
         up_filter_mask <= up_wdata[2:0];
       end
     end
@@ -100,8 +92,8 @@ module axi_adc_decimate_reg(
       up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_rack <= up_rreq_s;
-      if (up_rreq_s == 1'b1) begin
+      up_rack <= up_rreq;
+      if (up_rreq == 1'b1) begin
         case (up_raddr[4:0])
           5'h0: up_rdata  <= up_version;
           5'h1: up_rdata  <= up_scratch;
