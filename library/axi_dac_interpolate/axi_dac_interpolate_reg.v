@@ -42,9 +42,9 @@ module axi_dac_interpolate_reg(
   input               clk,
 
   output      [31:0]  dac_interpolation_ratio_a,
-  output      [31:0]  dac_filter_mask_a,
+  output      [ 2:0]  dac_filter_mask_a,
   output      [31:0]  dac_interpolation_ratio_b,
-  output      [31:0]  dac_filter_mask_b,
+  output      [ 2:0]  dac_filter_mask_b,
   output              dma_transfer_suspend,
 
  // bus interface
@@ -71,9 +71,9 @@ module axi_dac_interpolate_reg(
   reg     [31:0]  up_scratch = 32'h0;
 
   reg     [31:0]  up_interpolation_ratio_a = 32'h0;
-  reg     [31:0]  up_filter_mask_a  = 32'h0;
+  reg     [ 2:0]  up_filter_mask_a = 3'h0;
   reg     [31:0]  up_interpolation_ratio_b = 32'h0;
-  reg     [31:0]  up_filter_mask_b  = 32'h0;
+  reg     [ 2:0]  up_filter_mask_b = 3'h0;
   reg     [31:0]  up_flags  = 32'h0;
 
   assign up_wreq_s = ((up_waddr[13:5] == 6'h00)) ? up_wreq : 1'b0;
@@ -97,13 +97,13 @@ module axi_dac_interpolate_reg(
         up_interpolation_ratio_a <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
-        up_filter_mask_a <= up_wdata;
+        up_filter_mask_a <= up_wdata[2:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
         up_interpolation_ratio_b <= up_wdata;
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h13)) begin
-        up_filter_mask_b <= up_wdata;
+        up_filter_mask_b <= up_wdata[2:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h14)) begin
         up_flags <= up_wdata;
@@ -136,14 +136,14 @@ module axi_dac_interpolate_reg(
     end
   end
 
-   up_xfer_cntrl #(.DATA_WIDTH(129)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(71)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_flags[0],              //  1
                       up_interpolation_ratio_b, // 32
                       up_interpolation_ratio_a, // 32
-                      up_filter_mask_b,         // 32
-                      up_filter_mask_a}),       // 32
+                      up_filter_mask_b,         // 3
+                      up_filter_mask_a}),       // 3
 
     .up_xfer_done (),
     .d_rst (1'b0),
@@ -151,8 +151,8 @@ module axi_dac_interpolate_reg(
     .d_data_cntrl ({  dma_transfer_suspend,       //  1
                       dac_interpolation_ratio_b,  // 32
                       dac_interpolation_ratio_a,  // 32
-                      dac_filter_mask_b,          // 32
-                      dac_filter_mask_a}));       // 32
+                      dac_filter_mask_b,          // 3
+                      dac_filter_mask_a}));       // 3
 
 endmodule
 

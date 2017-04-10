@@ -91,8 +91,8 @@ module axi_dac_interpolate(
 
   wire    [31:0]    interpolation_ratio_a;
   wire    [31:0]    interpolation_ratio_b;
-  wire    [31:0]    filter_mask_a;
-  wire    [31:0]    filter_mask_b;
+  wire    [ 2:0]    filter_mask_a;
+  wire    [ 2:0]    filter_mask_b;
 
   wire              dma_transfer_suspend;
 
