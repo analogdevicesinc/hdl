@@ -62,7 +62,7 @@ module axi_adc_trigger(
   input                 s_axi_aclk,
   input                 s_axi_aresetn,
   input                 s_axi_awvalid,
-  input       [31:0]    s_axi_awaddr,
+  input       [ 6:0]    s_axi_awaddr,
   input       [ 2:0]    s_axi_awprot,
   output                s_axi_awready,
   input                 s_axi_wvalid,
@@ -73,7 +73,7 @@ module axi_adc_trigger(
   output      [ 1:0]    s_axi_bresp,
   input                 s_axi_bready,
   input                 s_axi_arvalid,
-  input       [31:0]    s_axi_araddr,
+  input       [ 6:0]    s_axi_araddr,
   input       [ 2:0]    s_axi_arprot,
   output                s_axi_arready,
   output                s_axi_rvalid,
@@ -85,14 +85,14 @@ module axi_adc_trigger(
 
   wire              up_clk;
   wire              up_rstn;
-  wire    [13:0]    up_waddr;
+  wire    [ 4:0]    up_waddr;
   wire    [31:0]    up_wdata;
   wire              up_wack;
   wire              up_wreq;
   wire              up_rack;
   wire    [31:0]    up_rdata;
   wire              up_rreq;
-  wire    [13:0]    up_raddr;
+  wire    [ 4:0]    up_raddr;
 
   wire    [ 1:0]    io_selection;
 
@@ -379,7 +379,10 @@ module axi_adc_trigger(
   .up_rdata(up_rdata),
   .up_rack(up_rack));
 
- up_axi i_up_axi (
+ up_axi #(
+    .AXI_ADDRESS_WIDTH(7),
+    .ADDRESS_WIDTH(5)
+ ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

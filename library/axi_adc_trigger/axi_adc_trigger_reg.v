@@ -69,18 +69,16 @@ module axi_adc_trigger_reg (
   input               up_rstn,
   input               up_clk,
   input               up_wreq,
-  input       [13:0]  up_waddr,
+  input       [ 4:0]  up_waddr,
   input       [31:0]  up_wdata,
   output reg          up_wack,
   input               up_rreq,
-  input       [13:0]  up_raddr,
+  input       [ 4:0]  up_raddr,
   output reg  [31:0]  up_rdata,
   output reg          up_rack);
 
   // internal signals
 
-  wire            up_wreq_s;
-  wire            up_rreq_s;
   wire    [ 9:0]  config_trigger;
 
   // internal registers
@@ -99,9 +97,6 @@ module axi_adc_trigger_reg (
   reg     [ 2:0]  up_trigger_out_mix = 32'h0;
   reg     [31:0]  up_delay_trigger= 32'h0;
   reg             up_triggered = 1'h0;
-
-  assign up_wreq_s = ((up_waddr[13:5] == 6'h00)) ? up_wreq : 1'b0;
-  assign up_rreq_s = ((up_raddr[13:5] == 6'h00)) ? up_rreq : 1'b0;
 
   assign low_level  = config_trigger[1:0];
   assign high_level = config_trigger[3:2];
@@ -128,52 +123,52 @@ module axi_adc_trigger_reg (
       up_trigger_out_mix <= 'd0;
       up_triggered <= 1'd0;
     end else begin
-      up_wack <= up_wreq_s;
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
         up_scratch <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h2)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h2)) begin
         trigger_o <= up_wdata[1:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h3)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h3)) begin
         io_selection <= up_wdata[1:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h4)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h4)) begin
         up_config_trigger <= up_wdata[9:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h5)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h5)) begin
         up_limit_a <= up_wdata[15:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h6)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h6)) begin
         up_function_a <= up_wdata[1:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h7)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h7)) begin
         up_hysteresis_a <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h8)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h8)) begin
         up_trigger_l_mix_a <= up_wdata[3:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h9)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h9)) begin
         up_limit_b <= up_wdata[15:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'ha)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'ha)) begin
         up_function_b <= up_wdata[1:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hb)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hb)) begin
         up_hysteresis_b <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hc)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hc)) begin
         up_trigger_l_mix_b <= up_wdata[3:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hd)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hd)) begin
         up_trigger_out_mix <= up_wdata[2:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'he)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'he)) begin
         up_delay_trigger <= up_wdata;
       end
 //      if (triggered == 1'b1) begin
 //        up_triggered <= 1'b1;
-//      end else if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hf)) begin
+//      end else if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hf)) begin
 //        up_triggered <= up_wdata[0];
 //      end
     end
@@ -186,8 +181,8 @@ module axi_adc_trigger_reg (
       up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_rack <= up_rreq_s;
-      if (up_rreq_s == 1'b1) begin
+      up_rack <= up_rreq;
+      if (up_rreq == 1'b1) begin
         case (up_raddr[4:0])
           5'h0: up_rdata <= up_version;
           5'h1: up_rdata <= up_scratch;
