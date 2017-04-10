@@ -61,6 +61,8 @@ module axi_dac_interpolate_filter (
   reg               cic_change_rate;
   reg     [31:0]    interpolation_counter;
 
+  reg               filter_enable = 1'b0;
+
   wire              dac_fir_valid;
   wire    [35:0]    dac_fir_data;
 
@@ -112,23 +114,22 @@ module axi_dac_interpolate_filter (
     end
   end
 
-  always @(*) begin
+  always @(posedge dac_clk) begin
     case (filter_mask)
-      3'h1: dac_int_data = dac_cic_data[31:16];
-      3'h2: dac_int_data = dac_cic_data[31:16];
-      3'h3: dac_int_data = dac_cic_data[31:16];
-      3'h6: dac_int_data = dac_cic_data[31:16];
-      3'h7: dac_int_data = dac_cic_data[31:16];
-      default: dac_int_data = dac_data;
+      3'b000: filter_enable <= 1'b0;
+      default: filter_enable <= 1'b1;
+    endcase
+  end
+
+  always @(*) begin
+    case (filter_enable)
+      1'b0: dac_int_data = dac_data;
+      default: dac_int_data = dac_cic_data[31:16];
     endcase
 
     case (filter_mask)
-      3'h1: dac_filt_int_valid = dac_fir_valid;
-      3'h2: dac_filt_int_valid = dac_fir_valid;
-      3'h3: dac_filt_int_valid = dac_fir_valid;
-      3'h6: dac_filt_int_valid = dac_fir_valid;
-      3'h7: dac_filt_int_valid = dac_fir_valid;
-      default: dac_filt_int_valid = dac_valid & !dma_transfer_suspend;
+      1'b0: dac_filt_int_valid = dac_valid & !dma_transfer_suspend;
+      default: dac_filt_int_valid = dac_fir_valid;
     endcase
 
     case (filter_mask)
