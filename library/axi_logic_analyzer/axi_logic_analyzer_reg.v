@@ -64,18 +64,13 @@ module axi_logic_analyzer_reg (
   input               up_rstn,
   input               up_clk,
   input               up_wreq,
-  input       [13:0]  up_waddr,
+  input       [ 4:0]  up_waddr,
   input       [31:0]  up_wdata,
   output reg          up_wack,
   input               up_rreq,
-  input       [13:0]  up_raddr,
+  input       [ 4:0]  up_raddr,
   output reg  [31:0]  up_rdata,
   output reg          up_rack);
-
-  // internal signals
-
-  wire            up_wreq_s;
-  wire            up_rreq_s;
 
   // internal registers
 
@@ -99,9 +94,6 @@ module axi_logic_analyzer_reg (
 
   wire    [15:0]  up_input_data;
 
-  assign up_wreq_s = ((up_waddr[13:5] == 6'h00)) ? up_wreq : 1'b0;
-  assign up_rreq_s = ((up_raddr[13:5] == 6'h00)) ? up_rreq : 1'b0;
-
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
@@ -121,50 +113,50 @@ module axi_logic_analyzer_reg (
       up_io_selection <= 16'h0;
       up_od_pp_n <= 16'h0;
     end else begin
-      up_wack <= up_wreq_s;
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
         up_scratch <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h2)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h2)) begin
         up_divider_counter_la <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h3)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h3)) begin
         up_divider_counter_pg <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h4)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h4)) begin
         up_io_selection <= up_wdata[15:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h5)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h5)) begin
         up_edge_detect_enable <= up_wdata[17:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h6)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h6)) begin
         up_rise_edge_enable <= up_wdata[17:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h7)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h7)) begin
         up_fall_edge_enable <= up_wdata[17:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h8)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h8)) begin
         up_low_level_enable <= up_wdata[17:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h9)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h9)) begin
         up_high_level_enable <= up_wdata[17:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'ha)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'ha)) begin
         up_trigger_delay <= up_wdata;
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hb)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hb)) begin
         up_trigger_logic <= up_wdata[0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hc)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hc)) begin
         up_clock_select <= up_wdata[0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'hd)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hd)) begin
         up_overwrite_enable <= up_wdata[15:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'he)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'he)) begin
         up_overwrite_data <= up_wdata[15:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
         up_od_pp_n <= up_wdata[15:0];
       end
     end
@@ -177,8 +169,8 @@ module axi_logic_analyzer_reg (
       up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_rack <= up_rreq_s;
-      if (up_rreq_s == 1'b1) begin
+      up_rack <= up_rreq;
+      if (up_rreq == 1'b1) begin
         case (up_raddr[4:0])
           5'h0: up_rdata <= up_version;
           5'h1: up_rdata <= up_scratch;
