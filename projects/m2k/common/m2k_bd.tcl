@@ -39,6 +39,21 @@ set la_trigger_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_var_fifo
 set_property -dict [list CONFIG.DATA_WIDTH {16} ] $la_trigger_fifo
 set_property -dict [list CONFIG.ADDRESS_WIDTH {13} ] $la_trigger_fifo
 
+set bram_la [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 bram_la]
+set_property -dict [list CONFIG.use_bram_block {Stand_Alone}] $bram_la
+set_property -dict [list CONFIG.Memory_Type {Simple_Dual_Port_RAM}] $bram_la
+set_property -dict [list CONFIG.Assume_Synchronous_Clk {true}] $bram_la
+set_property -dict [list CONFIG.Algorithm {Low_Power}] $bram_la
+set_property -dict [list CONFIG.Use_Byte_Write_Enable {false}] $bram_la
+set_property -dict [list CONFIG.Operating_Mode_A {NO_CHANGE}] $bram_la
+set_property -dict [list CONFIG.Register_PortB_Output_of_Memory_Primitives {true}] $bram_la
+set_property -dict [list CONFIG.Use_RSTA_Pin {false} CONFIG.Port_B_Clock {100}] $bram_la
+set_property -dict [list CONFIG.Port_B_Enable_Rate {100}] $bram_la
+set_property -dict [list CONFIG.Write_Width_A {16}] $bram_la
+set_property -dict [list CONFIG.Write_Width_B {16}] $bram_la
+set_property -dict [list CONFIG.Read_Width_B {16}] $bram_la
+set_property -dict [list CONFIG.Write_Depth_A {8192}] $bram_la
+
 set logic_analyzer_dmac [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 logic_analyzer_dmac]
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16} ] $logic_analyzer_dmac
 set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {1} ] $logic_analyzer_dmac
@@ -62,6 +77,22 @@ set_property -dict [list CONFIG.ADC_DATAPATH_DISABLE {1}] $axi_ad9963
 set adc_trigger_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_var_fifo:1.0 adc_trigger_fifo]
 set_property -dict [list CONFIG.DATA_WIDTH {32} ] $adc_trigger_fifo
 set_property -dict [list CONFIG.ADDRESS_WIDTH {13} ] $adc_trigger_fifo
+
+set bram_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 bram_adc]
+set_property -dict [list CONFIG.use_bram_block {Stand_Alone}] $bram_adc
+set_property -dict [list CONFIG.Memory_Type {Simple_Dual_Port_RAM}] $bram_adc
+set_property -dict [list CONFIG.Assume_Synchronous_Clk {true}] $bram_adc
+set_property -dict [list CONFIG.Algorithm {Low_Power}] $bram_adc
+set_property -dict [list CONFIG.Enable_32bit_Address {false}] $bram_adc
+set_property -dict [list CONFIG.Use_Byte_Write_Enable {false}] $bram_adc
+set_property -dict [list CONFIG.Operating_Mode_A {NO_CHANGE}] $bram_adc
+set_property -dict [list CONFIG.Register_PortB_Output_of_Memory_Primitives {true}] $bram_adc
+set_property -dict [list CONFIG.Use_RSTA_Pin {false} CONFIG.Port_B_Clock {100}] $bram_adc
+set_property -dict [list CONFIG.Port_B_Enable_Rate {100}] $bram_adc
+set_property -dict [list CONFIG.Write_Width_A {32}] $bram_adc
+set_property -dict [list CONFIG.Write_Width_B {32}] $bram_adc
+set_property -dict [list CONFIG.Read_Width_B {32}] $bram_adc
+set_property -dict [list CONFIG.Write_Depth_A {8192}] $bram_adc
 
 set adc_trigger_extract [create_bd_cell -type ip -vlnv analog.com:user:util_extract:1.0 adc_trigger_extract]
 
@@ -119,6 +150,8 @@ ad_connect logic_analyzer_clk logic_analyzer/clk_out
 ad_connect logic_analyzer_clk pattern_generator_dmac/fifo_rd_clk
 
 ad_connect logic_analyzer_clk la_trigger_fifo/clk
+ad_connect logic_analyzer_clk bram_la/clkb
+ad_connect logic_analyzer_clk bram_la/clka
 ad_connect logic_analyzer_clk logic_analyzer_dmac/fifo_wr_clk
 ad_connect logic_analyzer_clk logic_analyzer_reset/slowest_sync_clk
 ad_connect logic_analyzer_reset/ext_reset_in sys_rstgen/peripheral_aresetn
@@ -127,8 +160,16 @@ ad_connect logic_analyzer_reset/bus_struct_reset la_trigger_fifo/rst
 ad_connect la_trigger_fifo/data_in        logic_analyzer/adc_data
 ad_connect la_trigger_fifo/data_in_valid  logic_analyzer/adc_valid
 
-ad_connect logic_analyzer_dmac/fifo_wr_din la_trigger_fifo/data_out
-ad_connect logic_analyzer_dmac/fifo_wr_en  la_trigger_fifo/data_out_valid
+ad_connect bram_la/addra                    la_trigger_fifo/addr_w
+ad_connect bram_la/dina                     la_trigger_fifo/din_w
+ad_connect bram_la/ena                      la_trigger_fifo/en_w
+ad_connect bram_la/wea                      la_trigger_fifo/wea_w
+ad_connect bram_la/addrb                    la_trigger_fifo/addr_r
+ad_connect bram_la/doutb                    la_trigger_fifo/dout_r
+ad_connect bram_la/enb                      la_trigger_fifo/en_r
+
+ad_connect logic_analyzer_dmac/fifo_wr_din  la_trigger_fifo/data_out
+ad_connect logic_analyzer_dmac/fifo_wr_en   la_trigger_fifo/data_out_valid
 
 ad_connect logic_analyzer/trigger_offset la_trigger_fifo/depth
 
@@ -146,6 +187,8 @@ ad_connect axi_adc_decimate/adc_rst axi_ad9963/adc_rst
 
 ad_connect adc_trigger_extract/clk         axi_ad9963/adc_clk
 ad_connect ad9963_adc_dmac/fifo_wr_clk     axi_ad9963/adc_clk
+ad_connect bram_adc/clka                   axi_ad9963/adc_clk
+ad_connect bram_adc/clkb                   axi_ad9963/adc_clk
 
 #ad_connect axi_ad9963/adc_rst    util_cpack_ad9963/adc_rst
 ad_connect axi_ad9963/adc_rst    adc_trigger_fifo/rst
@@ -165,6 +208,14 @@ ad_connect axi_adc_decimate/adc_valid_b axi_ad9963/adc_valid_q
 #ad_connect adc_trigger_fifo/data_in        util_cpack_ad9963/adc_data
 #ad_connect adc_trigger_fifo/data_in_valid  util_cpack_ad9963/adc_valid
 #ad_connect util_cpack_ad9963/adc_data      adc_trigger_extract/data_in_trigger
+
+ad_connect adc_trigger_fifo/din_w       bram_adc/dina
+ad_connect adc_trigger_fifo/en_w        bram_adc/ena
+ad_connect adc_trigger_fifo/wea_w       bram_adc/wea
+ad_connect adc_trigger_fifo/addr_w      bram_adc/addra
+ad_connect bram_adc/addrb               adc_trigger_fifo/addr_r
+ad_connect bram_adc/doutb               adc_trigger_fifo/dout_r
+ad_connect bram_adc/enb                 adc_trigger_fifo/en_r
 
 ad_connect adc_trigger/data_a_trig       ad9963_adc_concat/In0
 ad_connect adc_trigger/data_b_trig       ad9963_adc_concat/In1
