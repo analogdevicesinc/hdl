@@ -39,46 +39,64 @@
 
 module util_var_fifo #(
 
-  parameter       DATA_WIDTH = 32,
-  parameter       ADDRESS_WIDTH =  13) (
+  // parameters
 
-  input                   clk,
-  input                   rst,
+  parameter DATA_WIDTH = 32,
+  parameter ADDRESS_WIDTH =  13) (
 
-  input       [31:0]      depth,
+  input                       clk,
+  input                       rst,
 
-  input       [ -1:0]     data_in,
-  input                   data_in_valid,
+  input   [31:0]              depth,
 
-  output      [DATA_WIDTH-1:0]  data_out,
-  output                  data_out_valid
-);
+  input   [DATA_WIDTH -1:0]   data_in,
+  input                       data_in_valid,
 
+  output  [DATA_WIDTH-1:0]    data_out,
+  output                      data_out_valid,
+
+  output                      wea_w,
+  output                      en_w,
+  output  [ADDRESS_WIDTH-1:0] addr_w,
+  output  [DATA_WIDTH-1:0]    din_w,
+  output                      en_r,
+  output  [ADDRESS_WIDTH-1:0] addr_r,
+  input   [DATA_WIDTH-1:0]    dout_r);
 
   localparam      MAX_DEPTH = (2 ** ADDRESS_WIDTH) - 1;
 
+
   // internal registers
 
-  reg     [ADDRESS_WIDTH-1:0]    addra = 'd0;
-  reg     [ADDRESS_WIDTH-1:0]    addrb = 'd0;
+  reg [ADDRESS_WIDTH-1:0]    addra = 'd0;
+  reg [ADDRESS_WIDTH-1:0]    addrb = 'd0;
 
-  reg     [31:0]    depth_d1 = 'd0;
-  reg     [31:0]    data_in_d1 = 'd0;
-  reg     [31:0]    data_in_d2 = 'd0;
-  reg               data_active = 'd0;
+  reg [31:0]            depth_d1 = 'd0;
+  reg [DATA_WIDTH-1:0]  data_in_d1 = 'd0;
+  reg [DATA_WIDTH-1:0]  data_in_d2 = 'd0;
+  reg                   data_active = 'd0;
 
   // internal signals
 
   wire                    reset;
-  wire  [31:0]            depth;
   wire  [DATA_WIDTH-1:0]  data_out_s;
   wire                    data_out_valid_s;
+  wire                    fifo_active;
 
   assign reset = ((rst == 1'b1) || (depth != depth_d1)) ? 1 : 0;
 
   assign data_out = (depth == 0) ? data_in_d2 : data_out_s;
   assign data_out_valid_s = data_active & data_in_valid;
   assign data_out_valid = (depth == 0) ? data_in_valid : data_out_valid_s;
+  assign fifo_active = (depth == 0) ? 1'b0 : !reset ;
+
+  assign wea_w = data_in_valid;
+  assign en_w = fifo_active;
+  assign addr_w = addra;
+  assign din_w = data_in;
+  assign en_r = fifo_active;
+  assign addr_r = addrb;
+  assign data_out_s = dout_r ;
 
   always @(posedge clk) begin
     depth_d1 <= depth;
@@ -103,19 +121,6 @@ module util_var_fifo #(
       end
     end
   end
-
-  ad_mem #(
-    .DATA_WIDTH(DATA_WIDTH),
-    .ADDRESS_WIDTH(ADDRESS_WIDTH)
-  ) data_fifo (
-    .clka(clk),
-    .wea(data_in_valid),
-    .addra(addra),
-    .dina(data_in),
-
-    .clkb(clk),
-    .addrb(addrb),
-    .doutb(data_out_s));
 
 endmodule
 
