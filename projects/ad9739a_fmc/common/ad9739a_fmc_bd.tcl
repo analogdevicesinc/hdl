@@ -12,19 +12,19 @@ create_bd_port -dir O -from 13 -to 0 dac_data_out_b_n
 
 # dac peripherals
 
-set axi_ad9739a [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9739a:1.0 axi_ad9739a]
+ad_ip_instance axi_ad9739a axi_ad9739a
 
-set axi_ad9739a_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9739a_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.FIFO_SIZE {32}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {1}]  $axi_ad9739a_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {256}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $axi_ad9739a_dma
-set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $axi_ad9739a_dma
+ad_ip_instance axi_dmac axi_ad9739a_dma
+ad_ip_parameter axi_ad9739a_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_ad9739a_dma CONFIG.DMA_TYPE_DEST 2
+ad_ip_parameter axi_ad9739a_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_ad9739a_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9739a_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_ad9739a_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter axi_ad9739a_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter axi_ad9739a_dma CONFIG.DMA_DATA_WIDTH_DEST 256
+ad_ip_parameter axi_ad9739a_dma CONFIG.DMA_DATA_WIDTH_SRC 256
+ad_ip_parameter axi_ad9739a_dma CONFIG.DMA_AXI_PROTOCOL_SRC 1
 
 # connections (dac)
 

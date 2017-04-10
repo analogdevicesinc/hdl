@@ -10,18 +10,18 @@ create_bd_port -dir I -from 7 -to 0 adc_data_in_p
 
 # adc peripheral
 
-set axi_ad9265  [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9265:1.0 axi_ad9265]
+ad_ip_instance axi_ad9265 axi_ad9265
 
-set axi_ad9265_dma  [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9265_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9265_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9265_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16}] $axi_ad9265_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9265_dma
+ad_ip_instance axi_dmac axi_ad9265_dma
+ad_ip_parameter axi_ad9265_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad9265_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9265_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9265_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ad9265_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9265_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9265_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9265_dma CONFIG.DMA_DATA_WIDTH_SRC 16
+ad_ip_parameter axi_ad9265_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # connections (ad9265)
 

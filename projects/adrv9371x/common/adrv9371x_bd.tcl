@@ -5,122 +5,122 @@ create_bd_port -dir I dac_fifo_bypass
 
 # dac peripherals
 
-set axi_ad9371_tx_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_ad9371_tx_clkgen]
-set_property -dict [list CONFIG.ID {2}] $axi_ad9371_tx_clkgen
-set_property -dict [list CONFIG.CLKIN_PERIOD {8}] $axi_ad9371_tx_clkgen
-set_property -dict [list CONFIG.VCO_DIV {1}] $axi_ad9371_tx_clkgen
-set_property -dict [list CONFIG.VCO_MUL {8}] $axi_ad9371_tx_clkgen
-set_property -dict [list CONFIG.CLK0_DIV {8}] $axi_ad9371_tx_clkgen
+ad_ip_instance axi_clkgen axi_ad9371_tx_clkgen
+ad_ip_parameter axi_ad9371_tx_clkgen CONFIG.ID 2
+ad_ip_parameter axi_ad9371_tx_clkgen CONFIG.CLKIN_PERIOD 8
+ad_ip_parameter axi_ad9371_tx_clkgen CONFIG.VCO_DIV 1
+ad_ip_parameter axi_ad9371_tx_clkgen CONFIG.VCO_MUL 8
+ad_ip_parameter axi_ad9371_tx_clkgen CONFIG.CLK0_DIV 8
 
-set axi_ad9371_tx_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9371_tx_xcvr]
-set_property -dict [list CONFIG.NUM_OF_LANES {4}] $axi_ad9371_tx_xcvr
-set_property -dict [list CONFIG.QPLL_ENABLE {1}] $axi_ad9371_tx_xcvr
-set_property -dict [list CONFIG.TX_OR_RX_N {1}] $axi_ad9371_tx_xcvr
+ad_ip_instance axi_adxcvr axi_ad9371_tx_xcvr
+ad_ip_parameter axi_ad9371_tx_xcvr CONFIG.NUM_OF_LANES 4
+ad_ip_parameter axi_ad9371_tx_xcvr CONFIG.QPLL_ENABLE 1
+ad_ip_parameter axi_ad9371_tx_xcvr CONFIG.TX_OR_RX_N 1
 
-set axi_ad9371_tx_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9371_tx_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9371_tx_jesd
-set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9371_tx_jesd
+ad_ip_instance jesd204 axi_ad9371_tx_jesd
+ad_ip_parameter axi_ad9371_tx_jesd CONFIG.C_NODE_IS_TRANSMIT 1
+ad_ip_parameter axi_ad9371_tx_jesd CONFIG.C_LANES 4
 
-set util_ad9371_tx_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_ad9371_tx_upack]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] $util_ad9371_tx_upack
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9371_tx_upack
+ad_ip_instance util_upack util_ad9371_tx_upack
+ad_ip_parameter util_ad9371_tx_upack CONFIG.CHANNEL_DATA_WIDTH 32
+ad_ip_parameter util_ad9371_tx_upack CONFIG.NUM_OF_CHANNELS 4
 
-set axi_ad9371_tx_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9371_tx_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9371_tx_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9371_tx_dma
+ad_ip_instance axi_dmac axi_ad9371_tx_dma
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.DMA_TYPE_DEST 1
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 # adc peripherals
 
-set axi_ad9371_rx_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_ad9371_rx_clkgen]
-set_property -dict [list CONFIG.ID {2}] $axi_ad9371_rx_clkgen
-set_property -dict [list CONFIG.CLKIN_PERIOD {8}] $axi_ad9371_rx_clkgen
-set_property -dict [list CONFIG.VCO_DIV {1}] $axi_ad9371_rx_clkgen
-set_property -dict [list CONFIG.VCO_MUL {8}] $axi_ad9371_rx_clkgen
-set_property -dict [list CONFIG.CLK0_DIV {8}] $axi_ad9371_rx_clkgen
+ad_ip_instance axi_clkgen axi_ad9371_rx_clkgen
+ad_ip_parameter axi_ad9371_rx_clkgen CONFIG.ID 2
+ad_ip_parameter axi_ad9371_rx_clkgen CONFIG.CLKIN_PERIOD 8
+ad_ip_parameter axi_ad9371_rx_clkgen CONFIG.VCO_DIV 1
+ad_ip_parameter axi_ad9371_rx_clkgen CONFIG.VCO_MUL 8
+ad_ip_parameter axi_ad9371_rx_clkgen CONFIG.CLK0_DIV 8
 
-set axi_ad9371_rx_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9371_rx_xcvr]
-set_property -dict [list CONFIG.NUM_OF_LANES {2}] $axi_ad9371_rx_xcvr
-set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9371_rx_xcvr
-set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9371_rx_xcvr
+ad_ip_instance axi_adxcvr axi_ad9371_rx_xcvr
+ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.NUM_OF_LANES 2
+ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.TX_OR_RX_N 0
 
-set axi_ad9371_rx_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9371_rx_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9371_rx_jesd
-set_property -dict [list CONFIG.C_LANES {2}] $axi_ad9371_rx_jesd
+ad_ip_instance jesd204 axi_ad9371_rx_jesd
+ad_ip_parameter axi_ad9371_rx_jesd CONFIG.C_NODE_IS_TRANSMIT 0
+ad_ip_parameter axi_ad9371_rx_jesd CONFIG.C_LANES 2
 
-set util_ad9371_rx_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_ad9371_rx_cpack]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_ad9371_rx_cpack
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9371_rx_cpack
+ad_ip_instance util_cpack util_ad9371_rx_cpack
+ad_ip_parameter util_ad9371_rx_cpack CONFIG.CHANNEL_DATA_WIDTH 16
+ad_ip_parameter util_ad9371_rx_cpack CONFIG.NUM_OF_CHANNELS 4
 
-set axi_ad9371_rx_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9371_rx_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9371_rx_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9371_rx_dma
+ad_ip_instance axi_dmac axi_ad9371_rx_dma
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 
 # adc-os peripherals
 
-set axi_ad9371_rx_os_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_ad9371_rx_os_clkgen]
-set_property -dict [list CONFIG.ID {2}] $axi_ad9371_rx_os_clkgen
-set_property -dict [list CONFIG.CLKIN_PERIOD {8}] $axi_ad9371_rx_os_clkgen
-set_property -dict [list CONFIG.VCO_DIV {1}] $axi_ad9371_rx_os_clkgen
-set_property -dict [list CONFIG.VCO_MUL {8}] $axi_ad9371_rx_os_clkgen
-set_property -dict [list CONFIG.CLK0_DIV {8}] $axi_ad9371_rx_os_clkgen
+ad_ip_instance axi_clkgen axi_ad9371_rx_os_clkgen
+ad_ip_parameter axi_ad9371_rx_os_clkgen CONFIG.ID 2
+ad_ip_parameter axi_ad9371_rx_os_clkgen CONFIG.CLKIN_PERIOD 8
+ad_ip_parameter axi_ad9371_rx_os_clkgen CONFIG.VCO_DIV 1
+ad_ip_parameter axi_ad9371_rx_os_clkgen CONFIG.VCO_MUL 8
+ad_ip_parameter axi_ad9371_rx_os_clkgen CONFIG.CLK0_DIV 8
 
-set axi_ad9371_rx_os_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9371_rx_os_xcvr]
-set_property -dict [list CONFIG.NUM_OF_LANES {2}] $axi_ad9371_rx_os_xcvr
-set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9371_rx_os_xcvr
-set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9371_rx_os_xcvr
+ad_ip_instance axi_adxcvr axi_ad9371_rx_os_xcvr
+ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.NUM_OF_LANES 2
+ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.TX_OR_RX_N 0
 
-set axi_ad9371_rx_os_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9371_rx_os_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9371_rx_os_jesd
-set_property -dict [list CONFIG.C_LANES {2}] $axi_ad9371_rx_os_jesd
+ad_ip_instance jesd204 axi_ad9371_rx_os_jesd
+ad_ip_parameter axi_ad9371_rx_os_jesd CONFIG.C_NODE_IS_TRANSMIT 0
+ad_ip_parameter axi_ad9371_rx_os_jesd CONFIG.C_LANES 2
 
-set util_ad9371_rx_os_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_ad9371_rx_os_cpack]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] $util_ad9371_rx_os_cpack
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_ad9371_rx_os_cpack
+ad_ip_instance util_cpack util_ad9371_rx_os_cpack
+ad_ip_parameter util_ad9371_rx_os_cpack CONFIG.CHANNEL_DATA_WIDTH 32
+ad_ip_parameter util_ad9371_rx_os_cpack CONFIG.NUM_OF_CHANNELS 2
 
-set axi_ad9371_rx_os_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9371_rx_os_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.ASYNC_CLK_DEST_REQ {1}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.ASYNC_CLK_SRC_DEST {1}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.ASYNC_CLK_REQ_SRC {1}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9371_rx_os_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9371_rx_os_dma
+ad_ip_instance axi_dmac axi_ad9371_rx_os_dma
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.ASYNC_CLK_DEST_REQ 1
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.ASYNC_CLK_SRC_DEST 1
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.ASYNC_CLK_REQ_SRC 1
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 
 # common cores
 
-set axi_ad9371_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9371:1.0 axi_ad9371_core]
+ad_ip_instance axi_ad9371 axi_ad9371_core
 
-set util_ad9371_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_ad9371_xcvr]
-set_property -dict [list CONFIG.RX_NUM_OF_LANES {4}] $util_ad9371_xcvr
-set_property -dict [list CONFIG.TX_NUM_OF_LANES {4}] $util_ad9371_xcvr
-set_property -dict [list CONFIG.TX_OUT_DIV {2}] $util_ad9371_xcvr
-set_property -dict [list CONFIG.CPLL_FBDIV {4}] $util_ad9371_xcvr
-set_property -dict [list CONFIG.RX_CLK25_DIV {5}] $util_ad9371_xcvr
-set_property -dict [list CONFIG.TX_CLK25_DIV {5}] $util_ad9371_xcvr
-set_property -dict [list CONFIG.RX_PMA_CFG {0x00018480}] $util_ad9371_xcvr
-set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff20400020}] $util_ad9371_xcvr
-set_property -dict [list CONFIG.QPLL_FBDIV {"0100100000"}] $util_ad9371_xcvr
+ad_ip_instance util_adxcvr util_ad9371_xcvr
+ad_ip_parameter util_ad9371_xcvr CONFIG.RX_NUM_OF_LANES 4
+ad_ip_parameter util_ad9371_xcvr CONFIG.TX_NUM_OF_LANES 4
+ad_ip_parameter util_ad9371_xcvr CONFIG.TX_OUT_DIV 2
+ad_ip_parameter util_ad9371_xcvr CONFIG.CPLL_FBDIV 4
+ad_ip_parameter util_ad9371_xcvr CONFIG.RX_CLK25_DIV 5
+ad_ip_parameter util_ad9371_xcvr CONFIG.TX_CLK25_DIV 5
+ad_ip_parameter util_ad9371_xcvr CONFIG.RX_PMA_CFG 0x00018480
+ad_ip_parameter util_ad9371_xcvr CONFIG.RX_CDR_CFG 0x03000023ff20400020
+ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_FBDIV "0100100000"
 
 # xcvr interfaces
 
@@ -168,10 +168,10 @@ ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd_rstgen/slowest_s
 
 # dma clock & reset
 
-set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {150}] $sys_ps7
+ ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 150
 
-set sys_dma_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_dma_rstgen]
-set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_dma_rstgen
+ad_ip_instance proc_sys_reset sys_dma_rstgen
+ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 ad_connect  sys_dma_clk sys_ps7/FCLK_CLK2
 ad_connect  sys_dma_clk sys_dma_rstgen/slowest_sync_clk
@@ -296,15 +296,15 @@ ad_cpu_interrupt ps-13 mb-13 axi_ad9371_rx_dma/irq
 
 # ila
 
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_adc]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {16}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {16}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {16}] $ila_adc
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]  $ila_adc
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
+ad_ip_instance ila ila_adc
+ad_ip_parameter ila_adc CONFIG.C_MONITOR_TYPE Native
+ad_ip_parameter ila_adc CONFIG.C_NUM_OF_PROBES 4
+ad_ip_parameter ila_adc CONFIG.C_PROBE0_WIDTH 16
+ad_ip_parameter ila_adc CONFIG.C_PROBE1_WIDTH 16
+ad_ip_parameter ila_adc CONFIG.C_PROBE2_WIDTH 16
+ad_ip_parameter ila_adc CONFIG.C_PROBE3_WIDTH 16
+ad_ip_parameter ila_adc CONFIG.C_EN_STRG_QUAL 1
+ad_ip_parameter ila_adc CONFIG.C_TRIGIN_EN false
 
 ad_connect  axi_ad9371_rx_clkgen/clk_0 ila_adc/clk
 ad_connect  axi_ad9371_core/adc_data_i0 ila_adc/probe0
@@ -312,25 +312,25 @@ ad_connect  axi_ad9371_core/adc_data_q0 ila_adc/probe1
 ad_connect  axi_ad9371_core/adc_data_i1 ila_adc/probe2
 ad_connect  axi_ad9371_core/adc_data_q1 ila_adc/probe3
 
-set bsplit_os_adc_0 [create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 bsplit_os_adc_0]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $bsplit_os_adc_0
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $bsplit_os_adc_0
+ad_ip_instance util_bsplit bsplit_os_adc_0
+ad_ip_parameter bsplit_os_adc_0 CONFIG.CHANNEL_DATA_WIDTH 16
+ad_ip_parameter bsplit_os_adc_0 CONFIG.NUM_OF_CHANNELS 2
 
-set bsplit_os_adc_1 [create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 bsplit_os_adc_1]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $bsplit_os_adc_1
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $bsplit_os_adc_1
+ad_ip_instance util_bsplit bsplit_os_adc_1
+ad_ip_parameter bsplit_os_adc_1 CONFIG.CHANNEL_DATA_WIDTH 16
+ad_ip_parameter bsplit_os_adc_1 CONFIG.NUM_OF_CHANNELS 2
 
-set ila_os_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_os_adc]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_os_adc
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {6}] $ila_os_adc
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_os_adc
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_os_adc
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {16}] $ila_os_adc
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}] $ila_os_adc
-set_property -dict [list CONFIG.C_PROBE4_WIDTH {16}] $ila_os_adc
-set_property -dict [list CONFIG.C_PROBE5_WIDTH {16}] $ila_os_adc
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]  $ila_os_adc
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_os_adc
+ad_ip_instance ila ila_os_adc
+ad_ip_parameter ila_os_adc CONFIG.C_MONITOR_TYPE Native
+ad_ip_parameter ila_os_adc CONFIG.C_NUM_OF_PROBES 6
+ad_ip_parameter ila_os_adc CONFIG.C_PROBE0_WIDTH 1
+ad_ip_parameter ila_os_adc CONFIG.C_PROBE1_WIDTH 16
+ad_ip_parameter ila_os_adc CONFIG.C_PROBE2_WIDTH 16
+ad_ip_parameter ila_os_adc CONFIG.C_PROBE3_WIDTH 1
+ad_ip_parameter ila_os_adc CONFIG.C_PROBE4_WIDTH 16
+ad_ip_parameter ila_os_adc CONFIG.C_PROBE5_WIDTH 16
+ad_ip_parameter ila_os_adc CONFIG.C_EN_STRG_QUAL 1
+ad_ip_parameter ila_os_adc CONFIG.C_TRIGIN_EN false
 
 ad_connect  axi_ad9371_core/adc_os_data_i0 bsplit_os_adc_0/data
 ad_connect  axi_ad9371_core/adc_os_data_q0 bsplit_os_adc_1/data

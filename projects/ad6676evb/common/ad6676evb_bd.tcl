@@ -1,48 +1,48 @@
 
 # adc peripherals
 
-set axi_ad6676_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad6676_xcvr]
-set_property -dict [list CONFIG.NUM_OF_LANES {2}] $axi_ad6676_xcvr
-set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad6676_xcvr
-set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad6676_xcvr
-set_property -dict [list CONFIG.LPM_OR_DFE_N {0}] $axi_ad6676_xcvr
-set_property -dict [list CONFIG.SYS_CLK_SEL {"00"}] $axi_ad6676_xcvr
-set_property -dict [list CONFIG.OUT_CLK_SEL {"100"}] $axi_ad6676_xcvr
+ad_ip_instance axi_adxcvr axi_ad6676_xcvr
+ad_ip_parameter axi_ad6676_xcvr CONFIG.NUM_OF_LANES 2
+ad_ip_parameter axi_ad6676_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_ad6676_xcvr CONFIG.TX_OR_RX_N 0
+ad_ip_parameter axi_ad6676_xcvr CONFIG.LPM_OR_DFE_N 0
+ad_ip_parameter axi_ad6676_xcvr CONFIG.SYS_CLK_SEL "00"
+ad_ip_parameter axi_ad6676_xcvr CONFIG.OUT_CLK_SEL "100"
 
-set axi_ad6676_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad6676_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad6676_jesd
-set_property -dict [list CONFIG.C_LANES {2}] $axi_ad6676_jesd
+ad_ip_instance jesd204 axi_ad6676_jesd
+ad_ip_parameter axi_ad6676_jesd CONFIG.C_NODE_IS_TRANSMIT 0
+ad_ip_parameter axi_ad6676_jesd CONFIG.C_LANES 2
 
-set axi_ad6676_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad6676:1.0 axi_ad6676_core]
+ad_ip_instance axi_ad6676 axi_ad6676_core
 
-set axi_ad6676_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 axi_ad6676_cpack]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad6676_cpack
+ad_ip_instance util_cpack axi_ad6676_cpack
+ad_ip_parameter axi_ad6676_cpack CONFIG.NUM_OF_CHANNELS 2
 
-set axi_ad6676_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad6676_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad6676_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad6676_dma
-set_property -dict [list CONFIG.ID {0}] $axi_ad6676_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad6676_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad6676_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad6676_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad6676_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad6676_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad6676_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad6676_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad6676_dma
+ad_ip_instance axi_dmac axi_ad6676_dma
+ad_ip_parameter axi_ad6676_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad6676_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad6676_dma CONFIG.ID 0
+ad_ip_parameter axi_ad6676_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad6676_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad6676_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad6676_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad6676_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad6676_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad6676_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad6676_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # transceiver core
 
-set util_ad6676_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_ad6676_xcvr]
-set_property -dict [list CONFIG.QPLL_FBDIV {"0010000000"}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.CPLL_FBDIV {2}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.CPLL_FBDIV_4_5 {5}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.RX_NUM_OF_LANES {2}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.RX_OUT_DIV {1}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.RX_CLK25_DIV {8}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_ad6676_xcvr
-set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff20400020}] $util_ad6676_xcvr
+ad_ip_instance util_adxcvr util_ad6676_xcvr
+ad_ip_parameter util_ad6676_xcvr CONFIG.QPLL_FBDIV "0010000000"
+ad_ip_parameter util_ad6676_xcvr CONFIG.CPLL_FBDIV 2
+ad_ip_parameter util_ad6676_xcvr CONFIG.CPLL_FBDIV_4_5 5
+ad_ip_parameter util_ad6676_xcvr CONFIG.TX_NUM_OF_LANES 0
+ad_ip_parameter util_ad6676_xcvr CONFIG.RX_NUM_OF_LANES 2
+ad_ip_parameter util_ad6676_xcvr CONFIG.RX_OUT_DIV 1
+ad_ip_parameter util_ad6676_xcvr CONFIG.RX_CLK25_DIV 8
+ad_ip_parameter util_ad6676_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
+ad_ip_parameter util_ad6676_xcvr CONFIG.RX_CDR_CFG 0x03000023ff20400020
 
 # reference clocks & resets
 

@@ -22,16 +22,16 @@ create_bd_port -dir I rx_busy
 
 # instantiation
 
-set axi_ad7616 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad7616:1.0 axi_ad7616]
-set_property -dict [list CONFIG.IF_TYPE $ad7616_if] $axi_ad7616
+ad_ip_instance axi_ad7616 axi_ad7616
+ad_ip_parameter axi_ad7616 CONFIG.IF_TYPE $ad7616_if
 
-set axi_ad7616_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad7616_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad7616_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad7616_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad7616_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad7616_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16}] $axi_ad7616_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad7616_dma
+ad_ip_instance axi_dmac axi_ad7616_dma
+ad_ip_parameter axi_ad7616_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad7616_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad7616_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad7616_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_SRC 16
+ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # interface connections
 if {$ad7616_if == 0} {

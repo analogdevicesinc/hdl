@@ -13,27 +13,27 @@ create_bd_port -dir O -from 31 -to 0 adc_gpio_1_t
 
 # instances
 
-set ad7768_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 ad7768_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $ad7768_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $ad7768_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $ad7768_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $ad7768_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $ad7768_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $ad7768_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $ad7768_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $ad7768_dma
+ad_ip_instance axi_dmac ad7768_dma
+ad_ip_parameter ad7768_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter ad7768_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter ad7768_dma CONFIG.CYCLIC 0
+ad_ip_parameter ad7768_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter ad7768_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter ad7768_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter ad7768_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter ad7768_dma CONFIG.DMA_DATA_WIDTH_SRC 32
 
 # ps7-hp1
 
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 1
 
 # gpio
 
-set ad7768_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 ad7768_gpio]
-set_property -dict [list CONFIG.C_IS_DUAL {1}] $ad7768_gpio
-set_property -dict [list CONFIG.C_GPIO_WIDTH {32}] $ad7768_gpio
-set_property -dict [list CONFIG.C_GPIO2_WIDTH {32}] $ad7768_gpio
-set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $ad7768_gpio
+ad_ip_instance axi_gpio ad7768_gpio
+ad_ip_parameter ad7768_gpio CONFIG.C_IS_DUAL 1
+ad_ip_parameter ad7768_gpio CONFIG.C_GPIO_WIDTH 32
+ad_ip_parameter ad7768_gpio CONFIG.C_GPIO2_WIDTH 32
+ad_ip_parameter ad7768_gpio CONFIG.C_INTERRUPT_PRESENT 1
 
 # interconnects
 

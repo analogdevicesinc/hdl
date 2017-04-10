@@ -21,27 +21,27 @@ create_bd_port -dir O spdif
 
 # hdmi peripherals
 
-set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]
-set axi_hdmi_core [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_tx:1.0 axi_hdmi_core]
+ad_ip_instance axi_clkgen axi_hdmi_clkgen
+ad_ip_instance axi_hdmi_tx axi_hdmi_core
 
-set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_hdmi_dma]
-set_property -dict [list CONFIG.c_m_axis_mm2s_tdata_width {64}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_use_mm2s_fsync {1}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
+ad_ip_instance axi_vdma axi_hdmi_dma
+ad_ip_parameter axi_hdmi_dma CONFIG.c_m_axis_mm2s_tdata_width 64
+ad_ip_parameter axi_hdmi_dma CONFIG.c_use_mm2s_fsync 1
+ad_ip_parameter axi_hdmi_dma CONFIG.c_include_s2mm 0
 
 # audio peripherals
 
-set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.3 sys_audio_clkgen]
-set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
-set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
+ad_ip_instance clk_wiz sys_audio_clkgen
+ad_ip_parameter sys_audio_clkgen CONFIG.PRIM_IN_FREQ 200.000
+ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 12.288
 
-set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
-set_property -dict [list CONFIG.DMA_TYPE {0}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_tx_core
+ad_ip_instance axi_spdif_tx axi_spdif_tx_core
+ad_ip_parameter axi_spdif_tx_core CONFIG.DMA_TYPE 0
+ad_ip_parameter axi_spdif_tx_core CONFIG.S_AXI_ADDRESS_WIDTH 16
 
-set axi_spdif_tx_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_spdif_tx_dma]
-set_property -dict [list CONFIG.C_INCLUDE_S2MM {0}] $axi_spdif_tx_dma
-set_property -dict [list CONFIG.C_SG_INCLUDE_STSCNTRL_STRM {0}] $axi_spdif_tx_dma
+ad_ip_instance axi_dma axi_spdif_tx_dma
+ad_ip_parameter axi_spdif_tx_dma CONFIG.C_INCLUDE_S2MM 0
+ad_ip_parameter axi_spdif_tx_dma CONFIG.C_SG_INCLUDE_STSCNTRL_STRM 0
 
 # hdmi
 
