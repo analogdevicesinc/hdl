@@ -75,8 +75,7 @@ proc ad_connect {p_name_1 p_name_2} {
     } else {
       set p_value 0
     }
-    puts "create_bd_cell(xlconstant) size($p_size) value($p_value) name($p_cell_name)"
-    create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 $p_cell_name
+    ad_ip_instance xlconstant $p_cell_name
     set_property CONFIG.CONST_WIDTH $p_size [get_bd_cells $p_cell_name]
     set_property CONFIG.CONST_VAL $p_value [get_bd_cells $p_cell_name]
     puts "connect_bd_net $p_cell_name/dout $p_name_1"
@@ -199,7 +198,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
 
   create_bd_port -dir I $m_sysref
   create_bd_port -dir ${ctrl_dir} $m_sync
-  create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 ${a_jesd}_rstgen
+  ad_ip_instance proc_sys_reset ${a_jesd}_rstgen
 
   for {set n 0} {$n < $no_of_lanes} {incr n} {
 
@@ -305,7 +304,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   if {$p_sel eq "MEM"} {
     if {$sys_mem_interconnect_index < 0} {
-      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_mem_interconnect
+      ad_ip_instance axi_interconnect axi_mem_interconnect
     }
     set m_interconnect_index $sys_mem_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_mem_interconnect]
@@ -316,7 +315,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp0_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP0
       set_property CONFIG.PCW_USE_S_AXI_HP0 {1} [get_bd_cells sys_ps7]
-      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp0_interconnect
+      ad_ip_instance axi_interconnect axi_hp0_interconnect
     }
     set m_interconnect_index $sys_hp0_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp0_interconnect]
@@ -327,7 +326,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp1_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP1
       set_property CONFIG.PCW_USE_S_AXI_HP1 {1} [get_bd_cells sys_ps7]
-      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp1_interconnect
+      ad_ip_instance axi_interconnect axi_hp1_interconnect
     }
     set m_interconnect_index $sys_hp1_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp1_interconnect]
@@ -338,7 +337,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp2_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP2
       set_property CONFIG.PCW_USE_S_AXI_HP2 {1} [get_bd_cells sys_ps7]
-      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp2_interconnect
+      ad_ip_instance axi_interconnect axi_hp2_interconnect
     }
     set m_interconnect_index $sys_hp2_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp2_interconnect]
@@ -349,7 +348,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp3_interconnect_index < 0} {
       set p_name_int sys_ps7/S_AXI_HP3
       set_property CONFIG.PCW_USE_S_AXI_HP3 {1} [get_bd_cells sys_ps7]
-      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp3_interconnect
+      ad_ip_instance axi_interconnect axi_hp3_interconnect
     }
     set m_interconnect_index $sys_hp3_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
@@ -360,7 +359,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp0_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP0_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP2 {1} [get_bd_cells sys_ps8]
-      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp0_interconnect
+      ad_ip_instance axi_interconnect axi_hp0_interconnect
     }
     set m_interconnect_index $sys_hp0_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp0_interconnect]
@@ -371,7 +370,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp1_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP1_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP3 {1} [get_bd_cells sys_ps8]
-      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp1_interconnect
+      ad_ip_instance axi_interconnect axi_hp1_interconnect
     }
     set m_interconnect_index $sys_hp1_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp1_interconnect]
@@ -382,7 +381,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp2_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP2_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP4 {1} [get_bd_cells sys_ps8]
-      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp2_interconnect
+      ad_ip_instance axi_interconnect axi_hp2_interconnect
     }
     set m_interconnect_index $sys_hp2_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp2_interconnect]
@@ -393,7 +392,7 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
     if {$sys_hp3_interconnect_index < 0} {
       set p_name_int sys_ps8/S_AXI_HP3_FPD
       set_property CONFIG.PSU__USE__S_AXI_GP5 {1} [get_bd_cells sys_ps8]
-      create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_hp3_interconnect
+      ad_ip_instance axi_interconnect axi_hp3_interconnect
     }
     set m_interconnect_index $sys_hp3_interconnect_index
     set m_interconnect_cell [get_bd_cells axi_hp3_interconnect]
@@ -470,7 +469,7 @@ proc ad_cpu_interconnect {p_address p_name} {
   }
 
   if {$sys_cpu_interconnect_index == 0} {
-    create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_cpu_interconnect
+    ad_ip_instance axi_interconnect axi_cpu_interconnect
     if {$sys_zynq == 2} {
       ad_connect sys_cpu_clk sys_ps8/maxihpm0_lpd_aclk
       ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
