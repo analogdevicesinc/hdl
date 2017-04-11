@@ -119,10 +119,10 @@ proc adi_project_create {project_name {mode 0}} {
   create_bd_design "system"
   source system_bd.tcl
 
-  regenerate_bd_layout
   save_bd_design
   validate_bd_design
 
+  set_property synth_checkpoint_mode None [get_files  $project_system_dir/system.bd]
   generate_target {synthesis implementation} [get_files  $project_system_dir/system.bd]
   make_wrapper -files [get_files $project_system_dir/system.bd] -top
 
@@ -135,31 +135,20 @@ proc adi_project_create {project_name {mode 0}} {
 
 proc adi_project_files {project_name project_files} {
 
-  global ad_hdl_dir
-  global ad_phdl_dir
-
   add_files -norecurse -fileset sources_1 $project_files
   set_property top system_top [current_fileset]
 }
 
 proc adi_project_run {project_name} {
 
-  global ad_hdl_dir
-  global ad_phdl_dir
-  global p_board
-
-  set project_system_dir "./$project_name.srcs/sources_1/bd/system"
-
-  set_property constrs_type XDC [current_fileset -constrset]
+  set_property strategy Flow_PerfOptimized_high [get_runs synth_1]
+  set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
 
   launch_runs synth_1
   wait_on_run synth_1
   open_run synth_1
   report_timing_summary -file timing_synth.log
 
-  set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
-  set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE Explore [get_runs impl_1]
-  set_property STRATEGY "Performance_Explore" [get_runs impl_1]
   if {![info exists ::env(ADI_NO_BITSTREAM_COMPRESSION)] && ![info exists ADI_NO_BITSTREAM_COMPRESSION]} {
     set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
   }
@@ -170,12 +159,12 @@ proc adi_project_run {project_name} {
   report_timing_summary -file timing_impl.log
 
   file mkdir $project_name.sdk
+
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
     file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top_bad_timing.hdf
   } else {
     file copy -force $project_name.runs/impl_1/system_top.sysdef $project_name.sdk/system_top.hdf
   }
-
 
   if [expr [get_property SLACK [get_timing_paths]] < 0] {
     return -code error [format "ERROR: Timing Constraints NOT met!"]
