@@ -109,6 +109,8 @@ module axi_logic_analyzer (
   wire              up_rreq;
   wire    [13:0]    up_raddr;
 
+  wire              reset;
+
   wire    [31:0]    divider_counter_la;
   wire    [31:0]    divider_counter_pg;
 
