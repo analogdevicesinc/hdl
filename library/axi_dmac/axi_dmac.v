@@ -382,6 +382,8 @@ begin
     up_irq_mask <= 3'b11;
     up_dma_req_valid <= 1'b0;
     up_scratch <= 'h00;
+    up_dma_cyclic <= 1'b0;
+    up_axis_xlast <= 1'b0;
     up_wack <= 1'b0;
   end else begin
     up_wack <= up_wreq;
