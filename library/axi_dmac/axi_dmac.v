@@ -427,9 +427,14 @@ always @(posedge s_axi_aclk)
 begin
   if (s_axi_aresetn == 1'b0) begin
     up_rack <= 'd0;
-    up_rdata <= 'h00;
   end else begin
     up_rack <= up_rreq;
+  end
+end
+
+always @(posedge s_axi_aclk)
+begin
+  if (up_rreq) begin
     case (up_raddr)
     9'h000: up_rdata <= PCORE_VERSION;
     9'h001: up_rdata <= ID;
