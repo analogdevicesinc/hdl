@@ -75,37 +75,43 @@ module util_var_fifo #(
   reg [DATA_WIDTH-1:0]  data_in_d1 = 'd0;
   reg [DATA_WIDTH-1:0]  data_in_d2 = 'd0;
   reg                   data_active = 'd0;
+  reg                   fifo_active = 'd0;
 
   // internal signals
 
   wire                    reset;
   wire  [DATA_WIDTH-1:0]  data_out_s;
   wire                    data_out_valid_s;
-  wire                    fifo_active;
 
   assign reset = ((rst == 1'b1) || (depth != depth_d1)) ? 1 : 0;
 
   assign data_out = (depth == 0) ? data_in_d2 : data_out_s;
   assign data_out_valid_s = data_active & data_in_valid;
   assign data_out_valid = (depth == 0) ? data_in_valid : data_out_valid_s;
-  assign fifo_active = (depth == 0) ? 1'b0 : !reset ;
 
-  assign wea_w = data_in_valid;
+  assign wea_w = data_in_valid & fifo_active;
   assign en_w = fifo_active;
   assign addr_w = addra;
   assign din_w = data_in;
   assign en_r = fifo_active;
   assign addr_r = addrb;
-  assign data_out_s = dout_r ;
+  assign data_out_s = dout_r;
 
   always @(posedge clk) begin
     depth_d1 <= depth;
-    data_in_d1 <= data_in;
-    data_in_d2 <= data_in_d1;
+    if (depth == 32'h0) begin
+      fifo_active = 0;
+    end else begin
+      fifo_active = 1;
+    end
+    if (data_in_valid == 1'b1 && fifo_active == 1'b0) begin
+      data_in_d1 <= data_in;
+      data_in_d2 <= data_in_d1;
+    end
   end
 
   always @(posedge clk) begin
-    if(reset == 1'b1) begin
+    if(reset == 1'b1 || fifo_active == 1'b0) begin
       addra <= 0;
       addrb <= 0;
       data_active <= 1'b0;
