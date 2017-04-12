@@ -16,15 +16,15 @@ adi_project_files fmcadc2_zc706 [list \
 
 adi_project_run fmcadc2_zc706
 
-set ila_core [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_core]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_core
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_core
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_core
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $ila_core
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_core
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_core
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $ila_core
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {256}] $ila_core
+ad_ip_instance ila ila_core
+ad_ip_parameter ila_core CONFIG.C_MONITOR_TYPE Native
+ad_ip_parameter ila_core CONFIG.C_TRIGIN_EN false
+ad_ip_parameter ila_core CONFIG.C_EN_STRG_QUAL 1
+ad_ip_parameter ila_core CONFIG.C_NUM_OF_PROBES 4
+ad_ip_parameter ila_core CONFIG.C_PROBE0_WIDTH 1
+ad_ip_parameter ila_core CONFIG.C_PROBE1_WIDTH 1
+ad_ip_parameter ila_core CONFIG.C_PROBE2_WIDTH 1
+ad_ip_parameter ila_core CONFIG.C_PROBE3_WIDTH 256
 
 ad_connect  axi_ad9625_core/adc_clk ila_core/clk
 ad_connect  axi_ad9625_core/adc_rst ila_core/probe0

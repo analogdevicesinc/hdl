@@ -10,18 +10,18 @@ source ../common/fmcadc5_bd.tcl
 
 # ila 
 
-set mfifo_adc [create_bd_cell -type ip -vlnv analog.com:user:util_mfifo:1.0 mfifo_adc]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {1}] $mfifo_adc
-set_property -dict [list CONFIG.DIN_DATA_WIDTH {512}] $mfifo_adc
-set_property -dict [list CONFIG.ADDRESS_WIDTH {6}] $mfifo_adc
+ad_ip_instance util_mfifo mfifo_adc
+ad_ip_parameter mfifo_adc CONFIG.NUM_OF_CHANNELS 1
+ad_ip_parameter mfifo_adc CONFIG.DIN_DATA_WIDTH 512
+ad_ip_parameter mfifo_adc CONFIG.ADDRESS_WIDTH 6
 
-set ila_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_adc]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_adc
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_adc
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila_adc
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {2}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_adc
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_adc
+ad_ip_instance ila ila_adc
+ad_ip_parameter ila_adc CONFIG.C_MONITOR_TYPE Native
+ad_ip_parameter ila_adc CONFIG.C_TRIGIN_EN false
+ad_ip_parameter ila_adc CONFIG.C_EN_STRG_QUAL 1
+ad_ip_parameter ila_adc CONFIG.C_NUM_OF_PROBES 2
+ad_ip_parameter ila_adc CONFIG.C_PROBE0_WIDTH 1
+ad_ip_parameter ila_adc CONFIG.C_PROBE1_WIDTH 16
 
 ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 mfifo_adc/din_clk
 ad_connect  axi_ad9625_0_jesd_rstgen/peripheral_reset mfifo_adc/din_rst
