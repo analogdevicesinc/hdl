@@ -85,9 +85,9 @@ module util_var_fifo #(
 
   assign reset = ((rst == 1'b1) || (depth != depth_d1)) ? 1 : 0;
 
-  assign data_out = (depth == 0) ? data_in_d2 : data_out_s;
+  assign data_out = fifo_active ? data_out_s : data_in_d2;
   assign data_out_valid_s = data_active & data_in_valid;
-  assign data_out_valid = (depth == 0) ? data_in_valid : data_out_valid_s;
+  assign data_out_valid = fifo_active ? data_out_valid_s : data_in_valid;
 
   assign wea_w = data_in_valid & fifo_active;
   assign en_w = fifo_active;
@@ -100,9 +100,9 @@ module util_var_fifo #(
   always @(posedge clk) begin
     depth_d1 <= depth;
     if (depth == 32'h0) begin
-      fifo_active = 0;
+      fifo_active <= 0;
     end else begin
-      fifo_active = 1;
+      fifo_active <= 1;
     end
     if (data_in_valid == 1'b1 && fifo_active == 1'b0) begin
       data_in_d1 <= data_in;
