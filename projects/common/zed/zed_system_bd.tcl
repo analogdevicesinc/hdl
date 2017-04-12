@@ -76,72 +76,73 @@ create_bd_port -dir I -type intr ps_intr_13
 
 # instance: sys_ps7
 
-set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 sys_ps7]
-set_property -dict [list CONFIG.PCW_IMPORT_BOARD_PRESET {ZedBoard}] $sys_ps7
-set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP0 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_IRQ_F2P_INTR {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {64}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_DMA0 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_DMA1 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_DMA2 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_IRQ_F2P_MODE {REVERSE}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI1_SPI1_IO {EMIO}] $sys_ps7
+ad_ip_instance processing_system7 sys_ps7
+ad_ip_parameter sys_ps7 CONFIG.PCW_IMPORT_BOARD_PRESET ZedBoard
+ad_ip_parameter sys_ps7 CONFIG.PCW_TTC0_PERIPHERAL_ENABLE 0
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK1_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST1_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 100.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ 200.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_FABRIC_INTERRUPT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP0 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_INTR 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 64
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA0 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA1 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA2 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_MODE REVERSE
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI0_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI0_SPI0_IO EMIO
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_SPI1_IO EMIO
 
-set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
-set_property -dict [list CONFIG.USE_BOARD_FLOW {true} ] $axi_iic_main
-set_property -dict [list CONFIG.IIC_BOARD_INTERFACE {Custom}] $axi_iic_main
+ad_ip_instance axi_iic axi_iic_main
+ad_ip_parameter axi_iic_main CONFIG.USE_BOARD_FLOW true
+ad_ip_parameter axi_iic_main CONFIG.IIC_BOARD_INTERFACE Custom
 
-set sys_i2c_mixer [create_bd_cell -type ip -vlnv analog.com:user:util_i2c_mixer:1.0 sys_i2c_mixer]
+ad_ip_instance util_i2c_mixer sys_i2c_mixer
 
-set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
+ad_ip_instance xlconcat sys_concat_intc
+ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
-set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
-set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
+ad_ip_instance proc_sys_reset sys_rstgen
+ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
-set sys_logic_inv [create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 sys_logic_inv]
-set_property -dict [list CONFIG.C_SIZE {1}] $sys_logic_inv
-set_property -dict [list CONFIG.C_OPERATION {not}] $sys_logic_inv
+ad_ip_instance util_vector_logic sys_logic_inv
+ad_ip_parameter sys_logic_inv CONFIG.C_SIZE 1
+ad_ip_parameter sys_logic_inv CONFIG.C_OPERATION not
 
 # hdmi peripherals
 
-set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]
-set axi_hdmi_core [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_tx:1.0 axi_hdmi_core]
+ad_ip_instance axi_clkgen axi_hdmi_clkgen
+ad_ip_instance axi_hdmi_tx axi_hdmi_core
 
-set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_hdmi_dma]
-set_property -dict [list CONFIG.C_M_AXIS_MM2S_TDATA_WIDTH {64}] $axi_hdmi_dma
-set_property -dict [list CONFIG.C_USE_MM2S_FSYNC {1}] $axi_hdmi_dma
-set_property -dict [list CONFIG.C_INCLUDE_S2MM {0}] $axi_hdmi_dma
+ad_ip_instance axi_vdma axi_hdmi_dma
+ad_ip_parameter axi_hdmi_dma CONFIG.C_M_AXIS_MM2S_TDATA_WIDTH 64
+ad_ip_parameter axi_hdmi_dma CONFIG.C_USE_MM2S_FSYNC 1
+ad_ip_parameter axi_hdmi_dma CONFIG.C_INCLUDE_S2MM 0
 
 # audio peripherals
 
-set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.3 sys_audio_clkgen]
-set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
-set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
+ad_ip_instance clk_wiz sys_audio_clkgen
+ad_ip_parameter sys_audio_clkgen CONFIG.PRIM_IN_FREQ 200.000
+ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 12.288
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_LOCKED false
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_RESET true
+ad_ip_parameter sys_audio_clkgen CONFIG.RESET_TYPE ACTIVE_LOW
 
-set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
-set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_tx_core
+ad_ip_instance axi_spdif_tx axi_spdif_tx_core
+ad_ip_parameter axi_spdif_tx_core CONFIG.DMA_TYPE 1
+ad_ip_parameter axi_spdif_tx_core CONFIG.S_AXI_ADDRESS_WIDTH 16
 
-set axi_i2s_adi [create_bd_cell -type ip -vlnv analog.com:user:axi_i2s_adi:1.0 axi_i2s_adi]
-set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_i2s_adi
-set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_i2s_adi
+ad_ip_instance axi_i2s_adi axi_i2s_adi
+ad_ip_parameter axi_i2s_adi CONFIG.DMA_TYPE 1
+ad_ip_parameter axi_i2s_adi CONFIG.S_AXI_ADDRESS_WIDTH 16
 
 # iic (fmc)
 
-set axi_iic_fmc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_fmc]
+ad_ip_instance axi_iic axi_iic_fmc
 
 # system reset/clock definitions
 
