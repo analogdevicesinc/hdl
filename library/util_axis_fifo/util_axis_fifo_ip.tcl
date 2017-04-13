@@ -14,7 +14,7 @@ adi_ip_files util_axis_fifo [list \
 
 adi_ip_properties_lite util_axis_fifo
 
-adi_add_bus "S_AXIS" "slave" \
+adi_add_bus "s_axis" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{
@@ -23,7 +23,7 @@ adi_add_bus "S_AXIS" "slave" \
 		{"s_axis_data" "TDATA"} \
 	}
 
-adi_add_bus "M_AXIS" "master" \
+adi_add_bus "m_axis" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{
@@ -32,7 +32,7 @@ adi_add_bus "M_AXIS" "master" \
 		{"m_axis_data" "TDATA"} \
 	}
 
-adi_add_bus_clock "m_axis_aclk" "M_AXIS" "m_axis_aresetn"
-adi_add_bus_clock "s_axis_aclk" "S_AXIS" "m_axis_aresetn"
+adi_add_bus_clock "m_axis_aclk" "m_axis" "m_axis_aresetn"
+adi_add_bus_clock "s_axis_aclk" "s_axis" "m_axis_aresetn"
 
 ipx::save_core [ipx::current_core]

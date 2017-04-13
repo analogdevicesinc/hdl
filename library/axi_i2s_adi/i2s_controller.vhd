@@ -59,10 +59,10 @@ entity i2s_controller is
 		resetn			: in  std_logic; 	-- System reset
 
 		data_clk		: in  std_logic;	-- Data clock should be less than clk / 4
-		BCLK_O			: out std_logic_vector(C_NUM_CH - 1 downto 0); 	-- Bit Clock
-		LRCLK_O			: out std_logic_vector(C_NUM_CH - 1 downto 0);	-- Frame Clock
-		SDATA_O			: out std_logic_vector(C_NUM_CH - 1 downto 0);	-- Serial Data Output
-		SDATA_I			: in  std_logic_vector(C_NUM_CH - 1 downto 0);	-- Serial Data Input
+		bclk_o			: out std_logic_vector(C_NUM_CH - 1 downto 0); 	-- Bit Clock
+		lrclk_o			: out std_logic_vector(C_NUM_CH - 1 downto 0);	-- Frame Clock
+		sdata_o			: out std_logic_vector(C_NUM_CH - 1 downto 0);	-- Serial Data Output
+		sdata_i			: in  std_logic_vector(C_NUM_CH - 1 downto 0);	-- Serial Data Input
 
 		tx_enable		: in  Boolean;	-- Enable TX
 		tx_ack			: out std_logic;	-- Request new Slot Data
@@ -164,29 +164,29 @@ begin
 	begin
 		if rising_edge(data_clk) then
 			if data_resetn = '0' then
-				BCLK_O <= (others => '1');
-				LRCLK_O <= (others => '1');
-				SDATA_O <= (others => '0');
+				bclk_o <= (others => '1');
+				lrclk_o <= (others => '1');
+				sdata_o <= (others => '0');
 			else
 				if C_BCLK_POL = 0 then
-					BCLK_O <= (others => tx_sync_fifo_out(2));
+					bclk_o <= (others => tx_sync_fifo_out(2));
 				else
-					BCLK_O <= (others => not tx_sync_fifo_out(2));
+					bclk_o <= (others => not tx_sync_fifo_out(2));
 				end if;
 
 				if C_LRCLK_POL = 0 then
-					LRCLK_O <= (others => tx_sync_fifo_out(3));
+					lrclk_o <= (others => tx_sync_fifo_out(3));
 				else
-					LRCLK_O <= (others => not tx_sync_fifo_out(3));
+					lrclk_o <= (others => not tx_sync_fifo_out(3));
 				end if;
 
 				if C_HAS_TX = 1 then
-					SDATA_O <= tx_sync_fifo_out(3 + NUM_TX downto 4);
+					sdata_o <= tx_sync_fifo_out(3 + NUM_TX downto 4);
 				end if;
 	
 				if  C_HAS_RX = 1 then
 					rx_sync_fifo_in(3 downto 0) <= tx_sync_fifo_out(3 downto 0);
-					rx_sync_fifo_in(3 + NUM_RX downto 4) <= SDATA_I;
+					rx_sync_fifo_in(3 + NUM_RX downto 4) <= sdata_i;
 				end if;
 			end if;
 		end if;

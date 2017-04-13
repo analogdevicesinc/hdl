@@ -20,12 +20,12 @@ entity axi_streaming_dma_rx_fifo is
 		period_len	: in integer range 0 to 65535;
 
 		-- Read port
-		M_AXIS_ACLK	: in std_logic;
-		M_AXIS_TREADY	: in std_logic;
-		M_AXIS_TDATA	: out std_logic_vector(FIFO_DWIDTH-1 downto 0);
-		M_AXIS_TLAST	: out std_logic;
-		M_AXIS_TVALID	: out std_logic;
-		M_AXIS_TKEEP	: out std_logic_vector(3 downto 0);
+		m_axis_aclk	: in std_logic;
+		m_axis_tready	: in std_logic;
+		m_axis_tdata	: out std_logic_vector(FIFO_DWIDTH-1 downto 0);
+		m_axis_tlast	: out std_logic;
+		m_axis_tvalid	: out std_logic;
+		m_axis_tkeep	: out std_logic_vector(3 downto 0);
 
 		-- Write port
 		in_stb		: in std_logic;
@@ -41,7 +41,7 @@ architecture imp of axi_streaming_dma_rx_fifo is
 	signal last			: std_logic;
 begin
 
-	M_AXIS_TVALID <= out_stb;
+	m_axis_tvalid <= out_stb;
 
 	fifo: entity dma_fifo
 		generic map (
@@ -56,19 +56,19 @@ begin
 			in_ack => in_ack,
 			in_data => in_data,
 			out_stb => out_stb,
-			out_ack => M_AXIS_TREADY,
-			out_data => M_AXIS_TDATA
+			out_ack => m_axis_tready,
+			out_data => m_axis_tdata
 		);
 
-	M_AXIS_TKEEP <= "1111";
-	M_AXIS_TLAST <= '1' when period_count = 0 else '0';
+	m_axis_tkeep <= "1111";
+	m_axis_tlast <= '1' when period_count = 0 else '0';
 
-	period_counter: process(M_AXIS_ACLK) is
+	period_counter: process(m_axis_aclk) is
 	begin
 		if resetn = '0' then
 			period_count <= period_len;
 		else
-			if out_stb = '1' and M_AXIS_TREADY = '1' then
+			if out_stb = '1' and m_axis_tready = '1' then
 				if period_count = 0 then
 					period_count <= period_len;
 				else

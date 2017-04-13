@@ -1,5 +1,5 @@
-set ctrl_clk [get_clocks -of_objects [get_ports S_AXI_ACLK]]
-set data_clk [get_clocks -of_objects [get_ports DATA_CLK_I]]
+set ctrl_clk [get_clocks -of_objects [get_ports s_axi_aclk]]
+set data_clk [get_clocks -of_objects [get_ports data_clk_i]]
 
 set_property ASYNC_REG TRUE \
 	[get_cells -hier cdc_sync_stage1_*_reg] \

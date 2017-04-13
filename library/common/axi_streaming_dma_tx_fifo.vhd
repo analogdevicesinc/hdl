@@ -18,11 +18,11 @@ entity axi_streaming_dma_tx_fifo is
 		enable		: in Boolean;
 
 		-- Write port
-		S_AXIS_ACLK	: in std_logic;
-		S_AXIS_TREADY	: out std_logic;
-		S_AXIS_TDATA	: in std_logic_vector(FIFO_DWIDTH-1 downto 0);
-		S_AXIS_TLAST	: in std_logic;
-		S_AXIS_TVALID	: in std_logic;
+		s_axis_aclk	: in std_logic;
+		s_axis_tready	: out std_logic;
+		s_axis_tdata	: in std_logic_vector(FIFO_DWIDTH-1 downto 0);
+		s_axis_tlast	: in std_logic;
+		s_axis_tvalid	: in std_logic;
 
 		-- Read port
 		out_stb		: out std_logic;
@@ -45,22 +45,22 @@ begin
 			clk => clk,
 			resetn => resetn,
 			fifo_reset => fifo_reset,
-			in_stb => S_AXIS_TVALID,
+			in_stb => s_axis_tvalid,
 			in_ack => in_ack,
-			in_data => S_AXIS_TDATA,
+			in_data => s_axis_tdata,
 			out_stb => out_stb,
 			out_ack => out_ack,
 			out_data => out_data
 		);
 
-	drain_process: process (S_AXIS_ACLK) is
+	drain_process: process (s_axis_aclk) is
 		variable enable_d1 : Boolean;
 	begin
-		if rising_edge(S_AXIS_ACLK) then
+		if rising_edge(s_axis_aclk) then
 			if resetn = '0' then
 				drain_dma <= False;
 			else
-				if S_AXIS_TLAST = '1' then
+				if s_axis_tlast = '1' then
 					drain_dma <= False;
 				elsif enable_d1 and enable then
 					drain_dma <= True;
@@ -70,5 +70,5 @@ begin
 		end if;
 	end process;
 
-	S_AXIS_TREADY <= '1' when in_ack = '1' or drain_dma else '0';
+	s_axis_tready <= '1' when in_ack = '1' or drain_dma else '0';
 end;

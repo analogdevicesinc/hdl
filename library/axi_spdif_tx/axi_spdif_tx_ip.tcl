@@ -17,36 +17,36 @@ adi_ip_files axi_spdif_tx [list \
 adi_ip_properties axi_spdif_tx
 adi_ip_infer_streaming_interfaces axi_spdif_tx
 
-adi_add_bus "DMA_ACK" "slave" \
+adi_add_bus "dma_ack" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
-	[list {"DMA_REQ_DAVALID" "TVALID"} \
-		{"DMA_REQ_DAREADY" "TREADY"} \
-		{"DMA_REQ_DATYPE" "TUSER"} ]
-adi_add_bus "DMA_REQ" "master" \
+	[list {"dma_req_davalid" "TVALID"} \
+		{"dma_req_daready" "TREADY"} \
+		{"dma_req_datype" "TUSER"} ]
+adi_add_bus "dma_req" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
-	[list {"DMA_REQ_DRVALID" "TVALID"} \
-		{"DMA_REQ_DRREADY" "TREADY"} \
-		{"DMA_REQ_DRTYPE" "TUSER"} \
-		{"DMA_REQ_DRLAST" "TLAST"} ]
+	[list {"dma_req_drvalid" "TVALID"} \
+		{"dma_req_drready" "TREADY"} \
+		{"dma_req_drtype" "TUSER"} \
+		{"dma_req_drlast" "TLAST"} ]
 
-# Clock and reset are for both DMA_REQ and DMA_ACK
-adi_add_bus_clock "DMA_REQ_ACLK" "DMA_REQ:DMA_ACK" "DMA_REQ_RSTN"
+# Clock and reset are for both dma_req and dma_ack
+adi_add_bus_clock "dma_req_aclk" "dma_req:dma_ack" "dma_req_rstn"
 
-adi_set_bus_dependency "S_AXIS" "S_AXIS" \
+adi_set_bus_dependency "s_axis" "s_axis" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 0)"
 
-adi_set_bus_dependency "DMA_ACK" "DMA_REQ_DA" \
+adi_set_bus_dependency "dma_ack" "dma_req_da" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_bus_dependency "DMA_REQ" "DMA_REQ_DR" \
+adi_set_bus_dependency "dma_req" "dma_req_dr" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_ports_dependency "DMA_REQ_ACLK" \
+adi_set_ports_dependency "dma_req_aclk" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_ports_dependency "DMA_REQ_RSTN" \
+adi_set_ports_dependency "dma_req_rstn" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXIS_ARESETN -clear [ipx::current_core]
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXI_ARESETN [ipx::current_core]
+ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axis_aresetn -clear [ipx::current_core]
+ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axi_aresetn [ipx::current_core]
 ipx::save_core [ipx::current_core]
 

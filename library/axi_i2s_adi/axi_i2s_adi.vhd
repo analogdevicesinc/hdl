@@ -38,72 +38,72 @@ entity axi_i2s_adi is
 	port
 	(
 		-- Serial Data interface
-		DATA_CLK_I		: in  std_logic;
-		BCLK_O			: out std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
-		LRCLK_O			: out std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
-		SDATA_O			: out std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
-		SDATA_I			: in  std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
+		data_clk_i		: in  std_logic;
+		bclk_o			: out std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
+		lrclk_o			: out std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
+		sdata_o			: out std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
+		sdata_i			: in  std_logic_vector(NUM_OF_CHANNEL - 1 downto 0);
 
 		-- AXI Streaming DMA TX interface
-		S_AXIS_ACLK		: in  std_logic;
-		S_AXIS_ARESETN		: in  std_logic;
-		S_AXIS_TREADY		: out std_logic;
-		S_AXIS_TDATA		: in  std_logic_vector(31 downto 0);
-		S_AXIS_TLAST		: in  std_logic;
-		S_AXIS_TVALID		: in  std_logic;
+		s_axis_aclk		: in  std_logic;
+		s_axis_aresetn		: in  std_logic;
+		s_axis_tready		: out std_logic;
+		s_axis_tdata		: in  std_logic_vector(31 downto 0);
+		s_axis_tlast		: in  std_logic;
+		s_axis_tvalid		: in  std_logic;
 
 		-- AXI Streaming DMA RX interface
-		M_AXIS_ACLK		: in  std_logic;
-		M_AXIS_TREADY		: in  std_logic;
-		M_AXIS_TDATA		: out std_logic_vector(31 downto 0);
-		M_AXIS_TLAST		: out std_logic;
-		M_AXIS_TVALID		: out std_logic;
-		M_AXIS_TKEEP		: out std_logic_vector(3 downto 0);
+		m_axis_aclk		: in  std_logic;
+		m_axis_tready		: in  std_logic;
+		m_axis_tdata		: out std_logic_vector(31 downto 0);
+		m_axis_tlast		: out std_logic;
+		m_axis_tvalid		: out std_logic;
+		m_axis_tkeep		: out std_logic_vector(3 downto 0);
 
 		--PL330 DMA TX interface
-		DMA_REQ_TX_ACLK    : in  std_logic;
-		DMA_REQ_TX_RSTN    : in  std_logic;
-		DMA_REQ_TX_DAVALID : in  std_logic;
-		DMA_REQ_TX_DATYPE  : in  std_logic_vector(1 downto 0);
-		DMA_REQ_TX_DAREADY : out std_logic;
-		DMA_REQ_TX_DRVALID : out std_logic;
-		DMA_REQ_TX_DRTYPE  : out std_logic_vector(1 downto 0);
-		DMA_REQ_TX_DRLAST  : out std_logic;
-		DMA_REQ_TX_DRREADY : in  std_logic;
+		dma_req_tx_aclk    : in  std_logic;
+		dma_req_tx_rstn    : in  std_logic;
+		dma_req_tx_davalid : in  std_logic;
+		dma_req_tx_datype  : in  std_logic_vector(1 downto 0);
+		dma_req_tx_daready : out std_logic;
+		dma_req_tx_drvalid : out std_logic;
+		dma_req_tx_drtype  : out std_logic_vector(1 downto 0);
+		dma_req_tx_drlast  : out std_logic;
+		dma_req_tx_drready : in  std_logic;
 
 		-- PL330 DMA RX interface
-		DMA_REQ_RX_ACLK    : in  std_logic;
-		DMA_REQ_RX_RSTN    : in  std_logic;
-		DMA_REQ_RX_DAVALID : in  std_logic;
-		DMA_REQ_RX_DATYPE  : in  std_logic_vector(1 downto 0);
-		DMA_REQ_RX_DAREADY : out std_logic;
-		DMA_REQ_RX_DRVALID : out std_logic;
-		DMA_REQ_RX_DRTYPE  : out std_logic_vector(1 downto 0);
-		DMA_REQ_RX_DRLAST  : out std_logic;
-		DMA_REQ_RX_DRREADY : in  std_logic;
+		dma_req_rx_aclk    : in  std_logic;
+		dma_req_rx_rstn    : in  std_logic;
+		dma_req_rx_davalid : in  std_logic;
+		dma_req_rx_datype  : in  std_logic_vector(1 downto 0);
+		dma_req_rx_daready : out std_logic;
+		dma_req_rx_drvalid : out std_logic;
+		dma_req_rx_drtype  : out std_logic_vector(1 downto 0);
+		dma_req_rx_drlast  : out std_logic;
+		dma_req_rx_drready : in  std_logic;
 
 		-- AXI bus interface
-		S_AXI_ACLK		: in  std_logic;
-		S_AXI_ARESETN		: in  std_logic;
-		S_AXI_AWADDR		: in  std_logic_vector(S_AXI_ADDRESS_WIDTH-1 downto 0);
-		S_AXI_AWVALID		: in  std_logic;
-		S_AXI_WDATA		: in  std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
-		S_AXI_WSTRB		: in  std_logic_vector((S_AXI_DATA_WIDTH/8)-1 downto 0);
-		S_AXI_WVALID		: in  std_logic;
-		S_AXI_BREADY		: in  std_logic;
-		S_AXI_ARADDR		: in  std_logic_vector(S_AXI_ADDRESS_WIDTH-1 downto 0);
-		S_AXI_ARVALID		: in  std_logic;
-		S_AXI_RREADY		: in  std_logic;
-		S_AXI_ARREADY		: out std_logic;
-		S_AXI_RDATA		: out std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
-		S_AXI_RRESP		: out std_logic_vector(1 downto 0);
-		S_AXI_RVALID		: out std_logic;
-		S_AXI_WREADY		: out std_logic;
-		S_AXI_BRESP		: out std_logic_vector(1 downto 0);
-		S_AXI_BVALID		: out std_logic;
-		S_AXI_AWREADY		: out std_logic;
-    S_AXI_AWPROT  : in  std_logic_vector(2 downto 0);
-    S_AXI_ARPROT  : in  std_logic_vector(2 downto 0)
+		s_axi_aclk		: in  std_logic;
+		s_axi_aresetn		: in  std_logic;
+		s_axi_awaddr		: in  std_logic_vector(S_AXI_ADDRESS_WIDTH-1 downto 0);
+		s_axi_awvalid		: in  std_logic;
+		s_axi_wdata		: in  std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
+		s_axi_wstrb		: in  std_logic_vector((S_AXI_DATA_WIDTH/8)-1 downto 0);
+		s_axi_wvalid		: in  std_logic;
+		s_axi_bready		: in  std_logic;
+		s_axi_araddr		: in  std_logic_vector(S_AXI_ADDRESS_WIDTH-1 downto 0);
+		s_axi_arvalid		: in  std_logic;
+		s_axi_rready		: in  std_logic;
+		s_axi_arready		: out std_logic;
+		s_axi_rdata		: out std_logic_vector(S_AXI_DATA_WIDTH-1 downto 0);
+		s_axi_rresp		: out std_logic_vector(1 downto 0);
+		s_axi_rvalid		: out std_logic;
+		s_axi_wready		: out std_logic;
+		s_axi_bresp		: out std_logic_vector(1 downto 0);
+		s_axi_bvalid		: out std_logic;
+		s_axi_awready		: out std_logic;
+    s_axi_awprot  : in  std_logic_vector(2 downto 0);
+    s_axi_arprot  : in  std_logic_vector(2 downto 0)
 
 	);
 end entity axi_i2s_adi;
@@ -167,10 +167,10 @@ begin
 
   const_1 <= '1';
 
-	process (S_AXI_ACLK)
+	process (s_axi_aclk)
 	begin
-		if rising_edge(S_AXI_ACLK) then
-			if S_AXI_ARESETN = '0' then
+		if rising_edge(s_axi_aclk) then
+			if s_axi_aresetn = '0' then
 				cnt <= 0;
 			else
 				cnt <= (cnt + 1) mod 2**16;
@@ -185,16 +185,16 @@ begin
 				FIFO_DWIDTH => 24
 			)
 			port map(
-				clk => S_AXI_ACLK,
-				resetn => S_AXI_ARESETN,
+				clk => s_axi_aclk,
+				resetn => s_axi_aresetn,
 				fifo_reset => tx_fifo_reset,
 				enable => tx_enable,
 
-				S_AXIS_ACLK => S_AXIS_ACLK,
-				S_AXIS_TREADY => S_AXIS_TREADY,
-				S_AXIS_TDATA => S_AXIS_TDATA(31 downto 8),
-				S_AXIS_TLAST => S_AXIS_TLAST,
-				S_AXIS_TVALID => S_AXIS_TVALID,
+				s_axis_aclk => s_axis_aclk,
+				s_axis_tready => s_axis_tready,
+				s_axis_tdata => s_axis_tdata(31 downto 8),
+				s_axis_tlast => s_axis_tlast,
+				s_axis_tvalid => s_axis_tvalid,
 
 				out_stb => tx_stb,
 				out_ack => tx_ack,
@@ -203,7 +203,7 @@ begin
 	end generate;
 
 	no_streaming_dma_tx_gen: if DMA_TYPE /= 0 or HAS_TX /= 1 generate
-		S_AXIS_TREADY <= '0';
+		s_axis_tready <= '0';
 	end generate;
 
 	streaming_dma_rx_gen: if DMA_TYPE = 0 and HAS_RX = 1 generate
@@ -213,8 +213,8 @@ begin
 				FIFO_DWIDTH => 24
 			)
 			port map(
-				clk => S_AXI_ACLK,
-				resetn => S_AXI_ARESETN,
+				clk => s_axi_aclk,
+				resetn => s_axi_aresetn,
 				fifo_reset => tx_fifo_reset,
 				enable => tx_enable,
 
@@ -224,22 +224,22 @@ begin
 				in_ack => rx_ack,
 				in_data => rx_data,
 
-				M_AXIS_ACLK => M_AXIS_ACLK,
-				M_AXIS_TREADY => M_AXIS_TREADY,
-				M_AXIS_TDATA => M_AXIS_TDATA(31 downto 8),
-				M_AXIS_TLAST => M_AXIS_TLAST,
-				M_AXIS_TVALID => M_AXIS_TVALID,
-				M_AXIS_TKEEP => M_AXIS_TKEEP
+				m_axis_aclk => m_axis_aclk,
+				m_axis_tready => m_axis_tready,
+				m_axis_tdata => m_axis_tdata(31 downto 8),
+				m_axis_tlast => m_axis_tlast,
+				m_axis_tvalid => m_axis_tvalid,
+				m_axis_tkeep => m_axis_tkeep
 			);
 
-			M_AXIS_TDATA(7 downto 0) <= (others => '0');
+			m_axis_tdata(7 downto 0) <= (others => '0');
 	end generate;
 
 	no_streaming_dma_rx_gen: if DMA_TYPE /= 0 or HAS_RX /= 1 generate
-		M_AXIS_TDATA <= (others => '0');
-		M_AXIS_TLAST <= '0';
-		M_AXIS_TVALID <= '0';
-		M_AXIS_TKEEP <= (others => '0');
+		m_axis_tdata <= (others => '0');
+		m_axis_tlast <= '0';
+		m_axis_tvalid <= '0';
+		m_axis_tkeep <= (others => '0');
 	end generate;
 
 
@@ -254,8 +254,8 @@ begin
 				FIFO_DIRECTION => 0
 			)
 			port map (
-				clk => S_AXI_ACLK,
-				resetn => S_AXI_ARESETN,
+				clk => s_axi_aclk,
+				resetn => s_axi_aresetn,
 				fifo_reset => tx_fifo_reset,
 				enable => tx_enable,
 
@@ -266,23 +266,23 @@ begin
 				out_stb => tx_stb,
 				out_data => tx_data,
 
-				dclk => DMA_REQ_TX_ACLK,
-				dresetn => DMA_REQ_TX_RSTN,
-				davalid => DMA_REQ_TX_DAVALID,
-				daready => DMA_REQ_TX_DAREADY,
-				datype => DMA_REQ_TX_DATYPE,
-				drvalid => DMA_REQ_TX_DRVALID,
-				drready => DMA_REQ_TX_DRREADY,
-				drtype => DMA_REQ_TX_DRTYPE,
-				drlast => DMA_REQ_TX_DRLAST
+				dclk => dma_req_tx_aclk,
+				dresetn => dma_req_tx_rstn,
+				davalid => dma_req_tx_davalid,
+				daready => dma_req_tx_daready,
+				datype => dma_req_tx_datype,
+				drvalid => dma_req_tx_drvalid,
+				drready => dma_req_tx_drready,
+				drtype => dma_req_tx_drtype,
+				drlast => dma_req_tx_drlast
 			);
 	end generate;
 
 	no_pl330_dma_tx_gen: if DMA_TYPE /= 1 or HAS_TX /= 1 generate
-		DMA_REQ_TX_DAREADY <= '0';
-		DMA_REQ_TX_DRVALID <= '0';
-		DMA_REQ_TX_DRTYPE <= (others => '0');
-		DMA_REQ_TX_DRLAST <= '0';
+		dma_req_tx_daready <= '0';
+		dma_req_tx_drvalid <= '0';
+		dma_req_tx_drtype <= (others => '0');
+		dma_req_tx_drlast <= '0';
 	end generate;
 
 	pl330_dma_rx_gen: if DMA_TYPE = 1 and HAS_RX = 1 generate
@@ -295,8 +295,8 @@ begin
 				FIFO_DIRECTION => 1
 			)
 			port map (
-				clk => S_AXI_ACLK,
-				resetn => S_AXI_ARESETN,
+				clk => s_axi_aclk,
+				resetn => s_axi_aresetn,
 				fifo_reset => rx_fifo_reset,
 				enable => rx_enable,
 
@@ -307,24 +307,24 @@ begin
 				out_data => rx_sample,
 				out_ack => rx_fifo_ack,
 
-				dclk => DMA_REQ_RX_ACLK,
-				dresetn => DMA_REQ_RX_RSTN,
-				davalid => DMA_REQ_RX_DAVALID,
-				daready => DMA_REQ_RX_DAREADY,
-				datype => DMA_REQ_RX_DATYPE,
-				drvalid => DMA_REQ_RX_DRVALID,
-				drready => DMA_REQ_RX_DRREADY,
-				drtype => DMA_REQ_RX_DRTYPE,
-				drlast => DMA_REQ_RX_DRLAST
+				dclk => dma_req_rx_aclk,
+				dresetn => dma_req_rx_rstn,
+				davalid => dma_req_rx_davalid,
+				daready => dma_req_rx_daready,
+				datype => dma_req_rx_datype,
+				drvalid => dma_req_rx_drvalid,
+				drready => dma_req_rx_drready,
+				drtype => dma_req_rx_drtype,
+				drlast => dma_req_rx_drlast
 			);
 
 	end generate;
 
 	no_pl330_dma_rx_gen: if DMA_TYPE /= 1 or HAS_RX /= 1 generate
-		DMA_REQ_RX_DAREADY <= '0';
-		DMA_REQ_RX_DRVALID <= '0';
-		DMA_REQ_RX_DRTYPE <= (others => '0');
-		DMA_REQ_RX_DRLAST <= '0';
+		dma_req_rx_daready <= '0';
+		dma_req_rx_drvalid <= '0';
+		dma_req_rx_drtype <= (others => '0');
+		dma_req_rx_drlast <= '0';
 	end generate;
 
 	ctrl : entity i2s_controller
@@ -337,14 +337,14 @@ begin
 			C_HAS_RX => HAS_RX
 		)
 		port map (
-			clk => S_AXI_ACLK,
-			resetn => S_AXI_ARESETN,
+			clk => s_axi_aclk,
+			resetn => s_axi_aresetn,
 
-			data_clk => DATA_CLK_I,
-			BCLK_O => BCLK_O,
-			LRCLK_O => LRCLK_O,
-			SDATA_O => SDATA_O,
-			SDATA_I => SDATA_I,
+			data_clk => data_clk_i,
+			bclk_o => bclk_o,
+			lrclk_o => lrclk_o,
+			sdata_o => sdata_o,
+			sdata_i => sdata_i,
 
 			tx_enable => tx_enable,
 			tx_ack => tx_ack,
@@ -376,25 +376,25 @@ begin
 			C_NUM_REG => 12
 		)
 		port map(
-			S_AXI_ACLK		=> S_AXI_ACLK,
-			S_AXI_ARESETN		=> S_AXI_ARESETN,
-			S_AXI_AWADDR		=> S_AXI_AWADDR,
-			S_AXI_AWVALID		=> S_AXI_AWVALID,
-			S_AXI_WDATA		=> S_AXI_WDATA,
-			S_AXI_WSTRB		=> S_AXI_WSTRB,
-			S_AXI_WVALID		=> S_AXI_WVALID,
-			S_AXI_BREADY		=> S_AXI_BREADY,
-			S_AXI_ARADDR		=> S_AXI_ARADDR,
-			S_AXI_ARVALID		=> S_AXI_ARVALID,
-			S_AXI_RREADY		=> S_AXI_RREADY,
-			S_AXI_ARREADY		=> S_AXI_ARREADY,
-			S_AXI_RDATA		=> S_AXI_RDATA,
-			S_AXI_RRESP		=> S_AXI_RRESP,
-			S_AXI_RVALID		=> S_AXI_RVALID,
-			S_AXI_WREADY		=> S_AXI_WREADY,
-			S_AXI_BRESP		=> S_AXI_BRESP,
-			S_AXI_BVALID		=> S_AXI_BVALID,
-			S_AXI_AWREADY		=> S_AXI_AWREADY,
+			s_axi_aclk		=> s_axi_aclk,
+			s_axi_aresetn		=> s_axi_aresetn,
+			s_axi_awaddr		=> s_axi_awaddr,
+			s_axi_awvalid		=> s_axi_awvalid,
+			s_axi_wdata		=> s_axi_wdata,
+			s_axi_wstrb		=> s_axi_wstrb,
+			s_axi_wvalid		=> s_axi_wvalid,
+			s_axi_bready		=> s_axi_bready,
+			s_axi_araddr		=> s_axi_araddr,
+			s_axi_arvalid		=> s_axi_arvalid,
+			s_axi_rready		=> s_axi_rready,
+			s_axi_arready		=> s_axi_arready,
+			s_axi_rdata		=> s_axi_rdata,
+			s_axi_rresp		=> s_axi_rresp,
+			s_axi_rvalid		=> s_axi_rvalid,
+			s_axi_wready		=> s_axi_wready,
+			s_axi_bresp		=> s_axi_bresp,
+			s_axi_bvalid		=> s_axi_bvalid,
+			s_axi_awready		=> s_axi_awready,
 
 			rd_addr			=> rd_addr,
 			rd_data			=> rd_data,
@@ -418,10 +418,10 @@ begin
 		end case;
 	end process;
 
-	process(S_AXI_ACLK) is
+	process(s_axi_aclk) is
 	begin
-		if rising_edge(S_AXI_ACLK) then
-			if S_AXI_ARESETN = '0' then
+		if rising_edge(s_axi_aclk) then
+			if s_axi_aresetn = '0' then
 				I2S_RESET_REG <= (others => '0');
 				I2S_CONTROL_REG <= (others => '0');
 				I2S_CLK_CONTROL_REG <= (others => '0');

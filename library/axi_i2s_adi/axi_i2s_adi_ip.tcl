@@ -22,91 +22,91 @@ adi_ip_files axi_i2s_adi [list \
 adi_ip_properties axi_i2s_adi
 adi_ip_infer_streaming_interfaces axi_i2s_adi
 
-adi_add_bus "DMA_ACK_RX" "slave" \
+adi_add_bus "dma_ack_rx" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{ \
-		{"DMA_REQ_RX_DAVALID" "TVALID"} \
-		{"DMA_REQ_RX_DAREADY" "TREADY"} \
-		{"DMA_REQ_RX_DATYPE" "TUSER"} \
+		{"dma_req_rx_davalid" "TVALID"} \
+		{"dma_req_rx_daready" "TREADY"} \
+		{"dma_req_rx_datype" "TUSER"} \
 	}
 
-adi_add_bus "DMA_REQ_RX" "master" \
+adi_add_bus "dma_req_rx" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{ \
-		{"DMA_REQ_RX_DRVALID" "TVALID"} \
-		{"DMA_REQ_RX_DRREADY" "TREADY"} \
-		{"DMA_REQ_RX_DRTYPE" "TUSER"} \
-		{"DMA_REQ_RX_DRLAST" "TLAST"} \
+		{"dma_req_rx_drvalid" "TVALID"} \
+		{"dma_req_rx_drready" "TREADY"} \
+		{"dma_req_rx_drtype" "TUSER"} \
+		{"dma_req_rx_drlast" "TLAST"} \
 	}
-# Clock and reset are for both DMA_REQ and DMA_ACK
-adi_add_bus_clock "DMA_REQ_RX_ACLK" "DMA_REQ_RX:DMA_ACK_RX" "DMA_REQ_RX_RSTN"
+# Clock and reset are for both dma_req and dma_ack
+adi_add_bus_clock "dma_req_rx_aclk" "dma_req_rx:dma_ack_rx" "dma_req_rx_rstn"
 
-adi_add_bus "DMA_ACK_TX" "slave" \
+adi_add_bus "dma_ack_tx" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{ \
-		{"DMA_REQ_TX_DAVALID" "TVALID"} \
-		{"DMA_REQ_TX_DAREADY" "TREADY"} \
-		{"DMA_REQ_TX_DATYPE" "TUSER"} \
+		{"dma_req_tx_davalid" "TVALID"} \
+		{"dma_req_tx_daready" "TREADY"} \
+		{"dma_req_tx_datype" "TUSER"} \
 	}
-adi_add_bus "DMA_REQ_TX" "master" \
+adi_add_bus "dma_req_tx" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
 	"xilinx.com:interface:axis:1.0" \
 	{ \
-		{"DMA_REQ_TX_DRVALID" "TVALID"} \
-		{"DMA_REQ_TX_DRREADY" "TREADY"} \
-		{"DMA_REQ_TX_DRTYPE" "TUSER"} \
-		{"DMA_REQ_TX_DRLAST" "TLAST"} \
+		{"dma_req_tx_drvalid" "TVALID"} \
+		{"dma_req_tx_drready" "TREADY"} \
+		{"dma_req_tx_drtype" "TUSER"} \
+		{"dma_req_tx_drlast" "TLAST"} \
 	}
-# Clock and reset are for both DMA_REQ and DMA_ACK
-adi_add_bus_clock "DMA_REQ_TX_ACLK" "DMA_REQ_TX:DMA_ACK_TX" "DMA_REQ_TX_RSTN"
+# Clock and reset are for both dma_req and dma_ack
+adi_add_bus_clock "dma_req_tx_aclk" "dma_req_tx:dma_ack_tx" "dma_req_tx_rstn"
 
-adi_add_bus "I2S" "master" \
+adi_add_bus "i2s" "master" \
 	"analog.com:interface:i2s_rtl:1.0" \
 	"analog.com:interface:i2s:1.0" \
 	{ \
-		{"BCLK_O" "BCLK"} \
-		{"LRCLK_O" "LRCLK"} \
-		{"SDATA_O" "SDATA_OUT"} \
-		{"SDATA_I" "SDATA_IN"} \
+		{"bclk_o" "BCLK"} \
+		{"lrclk_o" "LRCLK"} \
+		{"sdata_o" "SDATA_OUT"} \
+		{"sdata_i" "SDATA_IN"} \
 	}
-adi_add_bus_clock "DATA_CLK_I" "i2s"
+adi_add_bus_clock "data_clk_i" "i2s"
 
-adi_set_bus_dependency "S_AXIS" "S_AXIS" \
+adi_set_bus_dependency "s_axis" "s_axis" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 0)"
-adi_set_bus_dependency "M_AXIS" "M_AXIS" \
+adi_set_bus_dependency "m_axis" "m_axis" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 0)"
 
-adi_set_bus_dependency "DMA_ACK_TX" "DMA_REQ_TX_DA" \
+adi_set_bus_dependency "dma_ack_tx" "dma_req_tx_da" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_bus_dependency "DMA_REQ_TX" "DMA_REQ_TX_DR" \
+adi_set_bus_dependency "dma_req_tx" "dma_req_tx_dr" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_ports_dependency "DMA_REQ_TX_ACLK" \
+adi_set_ports_dependency "dma_req_tx_aclk" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_ports_dependency "DMA_REQ_TX_RSTN" \
+adi_set_ports_dependency "dma_req_tx_rstn" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_bus_dependency "DMA_ACK_RX" "DMA_REQ_RX_DA" \
+adi_set_bus_dependency "dma_ack_rx" "dma_req_rx_da" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_bus_dependency "DMA_REQ_RX" "DMA_REQ_RX_DR" \
+adi_set_bus_dependency "dma_req_rx" "dma_req_rx_dr" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_ports_dependency "DMA_REQ_RX_ACLK" \
+adi_set_ports_dependency "dma_req_rx_aclk" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
-adi_set_ports_dependency "DMA_REQ_RX_RSTN" \
+adi_set_ports_dependency "dma_req_rx_rstn" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXI_ARESETN [ipx::current_core]
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXIS_ARESETN -clear [ipx::current_core]
+ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axi_aresetn [ipx::current_core]
+ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axis_aresetn -clear [ipx::current_core]
 
 # Tie-off optional inputs to 0
 set_property driver_value 0 [ipx::get_ports -filter "direction==in && enablement_dependency!={}"  -of_objects [ipx::current_core]]
 
 # Incorrectly inferred interfaces
-ipx::remove_bus_interface DMA_REQ_TX_RSTN [ipx::current_core]
-ipx::remove_bus_interface DMA_REQ_RX_RSTN [ipx::current_core]
-ipx::remove_bus_interface DMA_REQ_TX_ACLK [ipx::current_core]
-ipx::remove_bus_interface DMA_REQ_RX_ACLK [ipx::current_core]
+ipx::remove_bus_interface dma_req_tx_rstn [ipx::current_core]
+ipx::remove_bus_interface dma_req_rx_rstn [ipx::current_core]
+ipx::remove_bus_interface dma_req_tx_aclk [ipx::current_core]
+ipx::remove_bus_interface dma_req_rx_aclk [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

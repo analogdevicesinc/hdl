@@ -51,25 +51,25 @@ entity axi_ctrlif is
 	port
 	(
 		-- AXI bus interface
-		S_AXI_ACLK		: in  std_logic;
-		S_AXI_ARESETN		: in  std_logic;
-		S_AXI_AWADDR		: in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
-		S_AXI_AWVALID		: in  std_logic;
-		S_AXI_WDATA		: in  std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-		S_AXI_WSTRB		: in  std_logic_vector((C_S_AXI_DATA_WIDTH/8)-1 downto 0);
-		S_AXI_WVALID		: in  std_logic;
-		S_AXI_BREADY		: in  std_logic;
-		S_AXI_ARADDR		: in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
-		S_AXI_ARVALID		: in  std_logic;
-		S_AXI_RREADY		: in  std_logic;
-		S_AXI_ARREADY		: out std_logic;
-		S_AXI_RDATA		: out std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-		S_AXI_RRESP		: out std_logic_vector(1 downto 0);
-		S_AXI_RVALID		: out std_logic;
-		S_AXI_WREADY		: out std_logic;
-		S_AXI_BRESP		: out std_logic_vector(1 downto 0);
-		S_AXI_BVALID		: out std_logic;
-		S_AXI_AWREADY		: out std_logic;
+		s_axi_aclk		: in  std_logic;
+		s_axi_aresetn		: in  std_logic;
+		s_axi_awaddr		: in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
+		s_axi_awvalid		: in  std_logic;
+		s_axi_wdata		: in  std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+		s_axi_wstrb		: in  std_logic_vector((C_S_AXI_DATA_WIDTH/8)-1 downto 0);
+		s_axi_wvalid		: in  std_logic;
+		s_axi_bready		: in  std_logic;
+		s_axi_araddr		: in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
+		s_axi_arvalid		: in  std_logic;
+		s_axi_rready		: in  std_logic;
+		s_axi_arready		: out std_logic;
+		s_axi_rdata		: out std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+		s_axi_rresp		: out std_logic_vector(1 downto 0);
+		s_axi_rvalid		: out std_logic;
+		s_axi_wready		: out std_logic;
+		s_axi_bresp		: out std_logic_vector(1 downto 0);
+		s_axi_bvalid		: out std_logic;
+		s_axi_awready		: out std_logic;
 
 		rd_addr : out integer range 0 to C_NUM_REG - 1;
 		rd_data : in  std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
@@ -89,20 +89,20 @@ architecture Behavioral of axi_ctrlif is
 	signal rd_state : state_type;
 	signal wr_state : state_type;
 begin
-	process (S_AXI_ACLK)
+	process (s_axi_aclk)
 	begin
-		if rising_edge(S_AXI_ACLK) then
-			if S_AXI_ARESETN = '0' then
+		if rising_edge(s_axi_aclk) then
+			if s_axi_aresetn = '0' then
 				rd_state <= IDLE;
 			else
 				case rd_state is
 				when IDLE =>
-					if S_AXI_ARVALID = '1' then
+					if s_axi_arvalid = '1' then
 						rd_state <= RESP;
-						rd_addr <= to_integer(unsigned(S_AXI_ARADDR((C_S_AXI_ADDR_WIDTH-1) downto 2)));
+						rd_addr <= to_integer(unsigned(s_axi_araddr((C_S_AXI_ADDR_WIDTH-1) downto 2)));
 					end if;
 				when RESP =>
-					if rd_stb = '1' and S_AXI_RREADY = '1' then
+					if rd_stb = '1' and s_axi_rready = '1' then
 						rd_state <= IDLE;
 					end if;
 				when others => null;
@@ -111,27 +111,27 @@ begin
 		end if;
 	end process;
 
-	S_AXI_ARREADY <= '1' when rd_state = IDLE else '0';
-	S_AXI_RVALID <= '1' when rd_state = RESP and rd_stb = '1' else '0';
-	S_AXI_RRESP <= "00";
-	rd_ack <= '1' when rd_state = RESP and S_AXI_RREADY = '1' else '0';
-	S_AXI_RDATA <= rd_data;
+	s_axi_arready <= '1' when rd_state = IDLE else '0';
+	s_axi_rvalid <= '1' when rd_state = RESP and rd_stb = '1' else '0';
+	s_axi_rresp <= "00";
+	rd_ack <= '1' when rd_state = RESP and s_axi_rready = '1' else '0';
+	s_axi_rdata <= rd_data;
 
-	process (S_AXI_ACLK)
+	process (s_axi_aclk)
 	begin
-		if rising_edge(S_AXI_ACLK) then
-			if S_AXI_ARESETN = '0' then
+		if rising_edge(s_axi_aclk) then
+			if s_axi_aresetn = '0' then
 				wr_state <= IDLE;
 			else
 				case wr_state is
 				when IDLE =>
-					if S_AXI_AWVALID = '1' and S_AXI_WVALID = '1' and wr_ack = '1' then
+					if s_axi_awvalid = '1' and s_axi_wvalid = '1' and wr_ack = '1' then
 						wr_state <= ACK;
 					end if;
 				when ACK =>
 					wr_state <= RESP;
 				when RESP =>
-					if S_AXI_BREADY = '1' then
+					if s_axi_bready = '1' then
 						wr_state <= IDLE;
 					end if;
 				end case;
@@ -139,13 +139,13 @@ begin
 		end if;
 	end process;
 
-	wr_stb <= '1' when S_AXI_AWVALID = '1' and S_AXI_WVALID = '1' and wr_state = IDLE else '0';
-	wr_data <= S_AXI_WDATA;
-	wr_addr <= to_integer(unsigned(S_AXI_AWADDR((C_S_AXI_ADDR_WIDTH-1) downto 2)));
+	wr_stb <= '1' when s_axi_awvalid = '1' and s_axi_wvalid = '1' and wr_state = IDLE else '0';
+	wr_data <= s_axi_wdata;
+	wr_addr <= to_integer(unsigned(s_axi_awaddr((C_S_AXI_ADDR_WIDTH-1) downto 2)));
 
-	S_AXI_AWREADY <= '1' when wr_state = ACK else '0';
-	S_AXI_WREADY <= '1' when wr_state = ACK else '0';
+	s_axi_awready <= '1' when wr_state = ACK else '0';
+	s_axi_wready <= '1' when wr_state = ACK else '0';
 
-	S_AXI_BRESP <= "00";
-	S_AXI_BVALID <= '1' when wr_state = RESP else '0';
+	s_axi_bresp <= "00";
+	s_axi_bvalid <= '1' when wr_state = RESP else '0';
 end;
