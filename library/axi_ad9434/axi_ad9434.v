@@ -40,98 +40,55 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9434 (
+module axi_ad9434 #(
+
+  parameter ID = 0,
+  parameter DEVICE_TYPE = SERIES7,
+  parameter IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // physical interface
-  adc_clk_in_p,
-  adc_clk_in_n,
-  adc_data_in_p,
-  adc_data_in_n,
-  adc_or_in_p,
-  adc_or_in_n,
+  input                   adc_clk_in_p,
+  input                   adc_clk_in_n,
+  input       [11:0]      adc_data_in_p,
+  input       [11:0]      adc_data_in_n,
+  input                   adc_or_in_p,
+  input                   adc_or_in_n,
 
   // delay interface
-  delay_clk,
+  input                   delay_clk,
 
   // dma interface
-  adc_clk,
-  adc_enable,
-  adc_valid,
-  adc_data,
-  adc_dovf,
+  output                  adc_clk,
+  output                  adc_enable,
+  output                  adc_valid,
+  output      [63:0]      adc_data,
+  input                   adc_dovf,
 
   // axi interface
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rresp,
-  s_axi_rdata,
-  s_axi_rready,
-  s_axi_awprot,
-  s_axi_arprot);
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [31:0]      s_axi_awaddr,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [31:0]      s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [31:0]      s_axi_araddr,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [ 1:0]      s_axi_rresp,
+  output      [31:0]      s_axi_rdata,
+  input                   s_axi_rready,
+  input       [ 2:0]      s_axi_awprot,
+  input       [ 2:0]      s_axi_arprot);
 
-
-  // parameters
   localparam SERIES7 = 0;
   localparam SERIES6 = 1;
-
-  parameter ID = 0;
-  parameter DEVICE_TYPE = SERIES7;
-  parameter IO_DELAY_GROUP = "dev_if_delay_group";
-
-  // physical interface
-  input           adc_clk_in_p;
-  input           adc_clk_in_n;
-  input  [11:0]   adc_data_in_p;
-  input  [11:0]   adc_data_in_n;
-  input           adc_or_in_p;
-  input           adc_or_in_n;
-
-  // delay interface
-  input           delay_clk;
-
-  // dma interface
-  output          adc_clk;
-  output          adc_valid;
-  output          adc_enable;
-  output [63:0]   adc_data;
-  input           adc_dovf;
-
-  // axi interface
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [ 1:0]  s_axi_rresp;
-  output  [31:0]  s_axi_rdata;
-  input           s_axi_rready;
-  input   [ 2:0]  s_axi_awprot;
-  input   [ 2:0]  s_axi_arprot;
 
 
   // internal clocks & resets
@@ -162,7 +119,6 @@ module axi_ad9434 (
   wire            delay_clk_s;
   wire            delay_rst;
   wire            delay_locked_s;
-
 
   wire            up_drp_sel_s;
   wire            up_drp_wr_s;

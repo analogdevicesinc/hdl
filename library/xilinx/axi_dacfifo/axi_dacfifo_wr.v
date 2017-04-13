@@ -39,69 +39,66 @@
 
 `timescale 1ns/100ps
 
-module axi_dacfifo_wr (
+module axi_dacfifo_wr #(
+
+  parameter       AXI_DATA_WIDTH = 512,
+  parameter       DMA_DATA_WIDTH = 64,
+  parameter       AXI_SIZE = 6,
+  parameter       AXI_LENGTH = 15,
+  parameter       AXI_ADDRESS = 32'h00000000,
+  parameter       AXI_ADDRESS_LIMIT = 32'h00000000,
+  parameter       DMA_MEM_ADDRESS_WIDTH = 8) (
 
   // dma fifo interface
 
-  dma_clk,
-  dma_data,
-  dma_ready,
-  dma_ready_out,
-  dma_valid,
+  input                   dma_clk,
+  input       [(DMA_DATA_WIDTH-1):0]  dma_data,
+  input                   dma_ready,
+  output  reg             dma_ready_out,
+  input                   dma_valid,
 
   // request and syncronizaiton
 
-  dma_xfer_req,
-  dma_xfer_last,
-  dma_last_beats,
+  input                   dma_xfer_req,
+  input                   dma_xfer_last,
+  output  reg [ 3:0]      dma_last_beats,
 
   // syncronization for the read side
 
-  axi_last_addr,
-  axi_last_beats,
-  axi_xfer_out,
+  output  reg [31:0]      axi_last_addr,
+  output  reg [ 3:0]      axi_last_beats,
+  output  reg             axi_xfer_out,
 
   // axi write address, write data and write response channels
 
-  axi_clk,
-  axi_resetn,
-  axi_awvalid,
-  axi_awid,
-  axi_awburst,
-  axi_awlock,
-  axi_awcache,
-  axi_awprot,
-  axi_awqos,
-  axi_awuser,
-  axi_awlen,
-  axi_awsize,
-  axi_awaddr,
-  axi_awready,
-  axi_wvalid,
-  axi_wdata,
-  axi_wstrb,
-  axi_wlast,
-  axi_wuser,
-  axi_wready,
-  axi_bvalid,
-  axi_bid,
-  axi_bresp,
-  axi_buser,
-  axi_bready,
+  input                   axi_clk,
+  input                   axi_resetn,
+  output  reg             axi_awvalid,
+  output      [ 3:0]      axi_awid,
+  output      [ 1:0]      axi_awburst,
+  output                  axi_awlock,
+  output      [ 3:0]      axi_awcache,
+  output      [ 2:0]      axi_awprot,
+  output      [ 3:0]      axi_awqos,
+  output      [ 3:0]      axi_awuser,
+  output      [ 7:0]      axi_awlen,
+  output      [ 2:0]      axi_awsize,
+  output  reg [31:0]      axi_awaddr,
+  input                   axi_awready,
+  output                  axi_wvalid,
+  output      [(AXI_DATA_WIDTH-1):0]  axi_wdata,
+  output      [(AXI_BYTE_WIDTH-1):0]  axi_wstrb,
+  output                  axi_wlast,
+  output      [ 3:0]      axi_wuser,
+  input                   axi_wready,
+  input                   axi_bvalid,
+  input       [ 3:0]      axi_bid,
+  input       [ 1:0]      axi_bresp,
+  input       [ 3:0]      axi_buser,
+  output                  axi_bready,
 
-  axi_werror);
+  output  reg             axi_werror);
 
-  // parameters
-
-  parameter       AXI_DATA_WIDTH = 512;
-  parameter       DMA_DATA_WIDTH = 64;
-  parameter       AXI_SIZE = 6;                     // axi_awsize format
-  parameter       AXI_LENGTH = 15;                  // axi_awlength format
-  parameter       AXI_ADDRESS = 32'h00000000;
-  parameter       AXI_ADDRESS_LIMIT = 32'h00000000;
-  parameter       DMA_MEM_ADDRESS_WIDTH = 8;
-
-  // for the syncronization buffer
 
   localparam      MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;  // Max supported MEM_RATIO is 16
   localparam      AXI_MEM_ADDRESS_WIDTH = (MEM_RATIO == 1) ?  DMA_MEM_ADDRESS_WIDTH :
@@ -110,58 +107,10 @@ module axi_dacfifo_wr (
                                           (MEM_RATIO == 8) ? (DMA_MEM_ADDRESS_WIDTH - 3) :
                                                              (DMA_MEM_ADDRESS_WIDTH - 4);
 
-  // for the AXI interface
-
   localparam      AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
   localparam      DMA_BYTE_WIDTH = DMA_DATA_WIDTH/8;
   localparam      AXI_AWINCR = (AXI_LENGTH + 1) * AXI_BYTE_WIDTH;
   localparam      DMA_BUF_THRESHOLD_HI = {(DMA_MEM_ADDRESS_WIDTH){1'b1}} - 4;
-
-  // dma fifo interface
-
-  input                                     dma_clk;
-  input   [(DMA_DATA_WIDTH-1):0]            dma_data;
-  input                                     dma_ready;
-  output                                    dma_ready_out;
-  input                                     dma_valid;
-
-  input                                     dma_xfer_req;
-  input                                     dma_xfer_last;
-  output  [ 3:0]                            dma_last_beats;
-
-  output  [31:0]                            axi_last_addr;
-  output  [ 3:0]                            axi_last_beats;
-  output                                    axi_xfer_out;
-
-  // axi interface
-
-  input                                     axi_clk;
-  input                                     axi_resetn;
-  output                                    axi_awvalid;
-  output  [ 3:0]                            axi_awid;
-  output  [ 1:0]                            axi_awburst;
-  output                                    axi_awlock;
-  output  [ 3:0]                            axi_awcache;
-  output  [ 2:0]                            axi_awprot;
-  output  [ 3:0]                            axi_awqos;
-  output  [ 3:0]                            axi_awuser;
-  output  [ 7:0]                            axi_awlen;
-  output  [ 2:0]                            axi_awsize;
-  output  [31:0]                            axi_awaddr;
-  input                                     axi_awready;
-  output                                    axi_wvalid;
-  output  [(AXI_DATA_WIDTH-1):0]            axi_wdata;
-  output  [(AXI_BYTE_WIDTH-1):0]            axi_wstrb;
-  output                                    axi_wlast;
-  output  [ 3:0]                            axi_wuser;
-  input                                     axi_wready;
-  input                                     axi_bvalid;
-  input   [ 3:0]                            axi_bid;
-  input   [ 1:0]                            axi_bresp;
-  input   [ 3:0]                            axi_buser;
-  output                                    axi_bready;
-
-  output                                    axi_werror;
 
   // registers
 
@@ -171,12 +120,10 @@ module axi_dacfifo_wr (
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m1 = 'd0;
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2 = 'd0;
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr = 'd0;
-  reg                                       dma_ready_out = 1'b0;
   reg                                       dma_rst_m1 = 1'b0;
   reg                                       dma_rst_m2 = 1'b0;
   reg     [ 2:0]                            dma_mem_last_read_toggle_m = 3'b0;
   reg                                       dma_xfer_req_d = 1'b0;
-  reg     [ 3:0]                            dma_last_beats = 4'b0;
 
   reg     [ 4:0]                            axi_xfer_req_m = 3'b0;
   reg     [ 4:0]                            axi_xfer_last_m = 3'b0;
@@ -198,13 +145,7 @@ module axi_dacfifo_wr (
   reg                                       axi_mem_last_read_toggle = 1'b0;
 
   reg                                       axi_reset = 1'b0;
-  reg                                       axi_xfer_out = 1'b0;
-  reg     [31:0]                            axi_last_addr = 32'b0;
-  reg     [ 3:0]                            axi_last_beats = 4'b0;
-  reg                                       axi_awvalid = 1'b0;
-  reg     [31:0]                            axi_awaddr = 32'b0;
   reg                                       axi_xfer_init = 1'b0;
-  reg                                       axi_werror = 1'b0;
   reg     [ 3:0]                            axi_wvalid_counter = 4'b0;
 
   reg                                       axi_endof_transaction = 1'b0;

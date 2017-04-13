@@ -37,21 +37,16 @@
 
 `timescale 1ns/100ps
 
-module ad_cmos_clk (
+module ad_cmos_clk #(
 
-  rst,
-  locked,
+  parameter   DEVICE_TYPE   = 0) (
 
-  clk_in,
-  clk);
+  input                   rst,
+  output                  locked,
 
-  parameter   DEVICE_TYPE   = 0;
+  input                   clk_in,
+  output                  clk);
 
-  input     rst;
-  output    locked;
-
-  input     clk_in;
-  output    clk;
 
   // instantiations
 

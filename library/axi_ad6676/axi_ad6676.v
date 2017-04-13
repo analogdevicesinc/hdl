@@ -39,103 +39,57 @@
 
 `timescale 1ns/100ps
 
-module axi_ad6676 (
+module axi_ad6676 #(
+
+  parameter ID = 0,
+  parameter DEVICE_TYPE = 0,
+  parameter IO_DELAY_GROUP = "adc_if_delay_group") (
 
   // jesd interface
   // rx_clk is (line-rate/40)
 
-  rx_clk,
-  rx_sof,
-  rx_valid,
-  rx_ready,
-  rx_data,
+  input                   rx_clk,
+  input       [ 3:0]      rx_sof,
+  input                   rx_valid,
+  output                  rx_ready,
+  input       [63:0]      rx_data,
 
   // dma interface
 
-  adc_clk,
-  adc_rst,
-  adc_valid_0,
-  adc_enable_0,
-  adc_data_0,
-  adc_valid_1,
-  adc_enable_1,
-  adc_data_1,
-  adc_dovf,
-  adc_dunf,
+  output                  adc_clk,
+  output                  adc_rst,
+  output                  adc_valid_0,
+  output                  adc_enable_0,
+  output      [31:0]      adc_data_0,
+  output                  adc_valid_1,
+  output                  adc_enable_1,
+  output      [31:0]      adc_data_1,
+  input                   adc_dovf,
+  input                   adc_dunf,
 
   // axi interface
 
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rresp,
-  s_axi_rdata,
-  s_axi_rready,
-  s_axi_awprot,
-  s_axi_arprot);
-
-  parameter ID = 0;
-  parameter DEVICE_TYPE = 0;
-  parameter IO_DELAY_GROUP = "adc_if_delay_group";
-
-  // jesd interface
-  // rx_clk is (line-rate/40)
-
-  input           rx_clk;
-  input   [ 3:0]  rx_sof;
-  input           rx_valid;
-  output          rx_ready;
-  input   [63:0]  rx_data;
-
-  // dma interface
-
-  output          adc_clk;
-  output          adc_rst;
-  output          adc_valid_0;
-  output          adc_enable_0;
-  output  [31:0]  adc_data_0;
-  output          adc_valid_1;
-  output          adc_enable_1;
-  output  [31:0]  adc_data_1;
-  input           adc_dovf;
-  input           adc_dunf;
-
-  // axi interface
-
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [ 1:0]  s_axi_rresp;
-  output  [31:0]  s_axi_rdata;
-  input           s_axi_rready;
-  input   [ 2:0]  s_axi_awprot;
-  input   [ 2:0]  s_axi_arprot;
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [31:0]      s_axi_awaddr,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [31:0]      s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [31:0]      s_axi_araddr,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [ 1:0]      s_axi_rresp,
+  output      [31:0]      s_axi_rdata,
+  input                   s_axi_rready,
+  input       [ 2:0]      s_axi_awprot,
+  input       [ 2:0]      s_axi_arprot);
 
 
   // internal registers

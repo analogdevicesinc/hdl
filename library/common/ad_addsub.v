@@ -43,34 +43,23 @@
 
 `timescale 1ns/1ps
 
-module ad_addsub (
-  clk,
-  A,
-  Amax,
-  out,
-  CE
-);
+module ad_addsub #(
 
-  // parameters
+  parameter   A_DATA_WIDTH = 32,
+  parameter   B_DATA_VALUE = 32'h1,
+  parameter   ADD_OR_SUB_N = 0) (
+  input                   clk,
+  input       [(A_DATA_WIDTH-1):0]  A,
+  input       [(A_DATA_WIDTH-1):0]  Amax,
+  output  reg [(A_DATA_WIDTH-1):0]  out,
+  input                   CE);
 
-  parameter   A_DATA_WIDTH = 32;
-  parameter   B_DATA_VALUE = 32'h1;
-  parameter   ADD_OR_SUB_N = 0;
 
   localparam  ADDER = 1;
   localparam  SUBSTRACTER = 0;
 
-  // I/O definitions
-
-  input                     clk;
-  input   [(A_DATA_WIDTH-1):0]   A;
-  input   [(A_DATA_WIDTH-1):0]   Amax;
-  output  [(A_DATA_WIDTH-1):0]   out;
-  input                     CE;
-
   // registers
 
-  reg     [(A_DATA_WIDTH-1):0]   out = 'b0;
   reg     [A_DATA_WIDTH:0]       out_d = 'b0;
   reg     [A_DATA_WIDTH:0]       out_d2 = 'b0;
   reg     [(A_DATA_WIDTH-1):0]   A_d = 'b0;

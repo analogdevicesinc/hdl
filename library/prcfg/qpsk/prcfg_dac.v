@@ -40,51 +40,34 @@
 
 `timescale 1ns/1ns
 
-module prcfg_dac(
+module prcfg_dac#(
 
-  clk,
+  parameter   CHANNEL_ID    = 0,
+  parameter   DATA_WIDTH    = 16) (
+
+  input                   clk,
 
   // control ports
-  control,
-  status,
+  input       [31:0]      control,
+  output  reg [31:0]      status,
 
   // FIFO interface
-  src_dac_enable,
-  src_dac_data,
-  src_dac_valid,
+  output  reg             src_dac_enable,
+  input       [(DATA_WIDTH-1):0]  src_dac_data,
+  output  reg             src_dac_valid,
 
-  dst_dac_enable,
-  dst_dac_data,
-  dst_dac_valid
-);
+  input                   dst_dac_enable,
+  output  reg [(DATA_WIDTH-1):0]  dst_dac_data,
+  input                   dst_dac_valid);
 
-  parameter   CHANNEL_ID    = 0;
-  parameter   DATA_WIDTH    = 16;
 
   localparam  SYMBOL_WIDTH  = 2;
   localparam  RP_ID         = 8'hA2;
 
-  input                               clk;
-
-  input   [31:0]                      control;
-  output  [31:0]                      status;
-
-  output                              src_dac_enable;
-  input   [(DATA_WIDTH-1):0]          src_dac_data;
-  output                              src_dac_valid;
-
-  input                               dst_dac_enable;
-  output  [(DATA_WIDTH-1):0]          dst_dac_data;
-  input                               dst_dac_valid;
-
   // output register to improve timing
-  reg     [(DATA_WIDTH-1):0]          dst_dac_data   = 'h0;
-  reg                                 src_dac_valid  = 'h0;
-  reg                                 src_dac_enable = 'h0;
 
   // internal registers
   reg     [ 7:0]                      pn_data        = 'hF2;
-  reg     [31:0]                      status         = 'h0;
   reg     [ 3:0]                      mode           = 'h0;
 
   // internal wires

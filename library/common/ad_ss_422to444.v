@@ -38,37 +38,24 @@
 // ***************************************************************************
 // Input must be RGB or CrYCb in that order, output is CrY/CbY
 
-module ad_ss_422to444 (
+module ad_ss_422to444 #(
+
+  parameter   CR_CB_N = 0,
+  parameter   DELAY_DATA_WIDTH = 16) (
 
   // 422 inputs
 
-  clk,
-  s422_de,
-  s422_sync,
-  s422_data,
+  input                   clk,
+  input                   s422_de,
+  input       [DW:0]      s422_sync,
+  input       [15:0]      s422_data,
 
   // 444 outputs
 
-  s444_sync,
-  s444_data);
+  output  reg [DW:0]      s444_sync,
+  output  reg [23:0]      s444_data);
 
-  // parameters
-
-  parameter   CR_CB_N = 0;
-  parameter   DELAY_DATA_WIDTH = 16;
   localparam  DW = DELAY_DATA_WIDTH - 1;
-
-  // 422 inputs
-
-  input           clk;
-  input           s422_de;
-  input   [DW:0]  s422_sync;
-  input   [15:0]  s422_data;
-
-  // 444 inputs
-
-  output  [DW:0]  s444_sync;
-  output  [23:0]  s444_data;
 
   // internal registers
 
@@ -79,8 +66,6 @@ module ad_ss_422to444 (
   reg      [7:0]  s422_Y_d;
   reg      [7:0]  s422_CbCr_d;
   reg      [7:0]  s422_CbCr_2d;
-  reg     [DW:0]  s444_sync = 'd0;
-  reg     [23:0]  s444_data = 'd0;
   reg     [ 8:0]  s422_CbCr_avg;
 
   // internal wires
@@ -99,7 +84,6 @@ module ad_ss_422to444 (
 
   assign s422_Y = s422_data[7:0];
   assign s422_CbCr = s422_data[15:8];
-
 
   // first data on de assertion is cb (0x0), then cr (0x1).
   // previous data is held when not current

@@ -38,36 +38,23 @@
 
 `timescale 1ns/100ps
 
-module util_bsplit (
+module util_bsplit #(
 
-  data,
+  parameter   CHANNEL_DATA_WIDTH     = 1,
+  parameter   NUM_OF_CHANNELS    = 8) (
 
-  split_data_0,
-  split_data_1,
-  split_data_2,
-  split_data_3,
-  split_data_4,
-  split_data_5,
-  split_data_6,
-  split_data_7);
+  input       [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]  data,
 
-  // parameters
+  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_0,
+  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_1,
+  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_2,
+  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_3,
+  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_4,
+  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_5,
+  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_6,
+  output      [(CHANNEL_DATA_WIDTH-1):0]  split_data_7);
 
-  parameter   CHANNEL_DATA_WIDTH     = 1;
-  parameter   NUM_OF_CHANNELS    = 8;
   localparam  NUM_OF_CHANNELS_M   = 9;
-
-  // interface
-
-  input   [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    data;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_0;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_1;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_2;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_3;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_4;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_5;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_6;
-  output  [(CHANNEL_DATA_WIDTH-1):0]             split_data_7;
 
   // internal signals
 

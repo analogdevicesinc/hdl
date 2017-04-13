@@ -35,86 +35,50 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module up_hdmi_rx (
+module up_hdmi_rx #(
+
+  parameter   ID = 0) (
 
   // hdmi interface
 
-  hdmi_clk,
-  hdmi_rst,
-  hdmi_edge_sel,
-  hdmi_bgr,
-  hdmi_packed,
-  hdmi_csc_bypass,
-  hdmi_vs_count,
-  hdmi_hs_count,
-  hdmi_dma_ovf,
-  hdmi_dma_unf,
-  hdmi_tpm_oos,
-  hdmi_vs_oos,
-  hdmi_hs_oos,
-  hdmi_vs_mismatch,
-  hdmi_hs_mismatch,
-  hdmi_vs,
-  hdmi_hs,
-  hdmi_clk_ratio,
+  input                   hdmi_clk,
+  output                  hdmi_rst,
+  output                  hdmi_edge_sel,
+  output                  hdmi_bgr,
+  output                  hdmi_packed,
+  output                  hdmi_csc_bypass,
+  output      [15:0]      hdmi_vs_count,
+  output      [15:0]      hdmi_hs_count,
+  input                   hdmi_dma_ovf,
+  input                   hdmi_dma_unf,
+  input                   hdmi_tpm_oos,
+  input                   hdmi_vs_oos,
+  input                   hdmi_hs_oos,
+  input                   hdmi_vs_mismatch,
+  input                   hdmi_hs_mismatch,
+  input       [15:0]      hdmi_vs,
+  input       [15:0]      hdmi_hs,
+  input       [31:0]      hdmi_clk_ratio,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
-
-  // parameters
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
   localparam  PCORE_VERSION = 32'h00040063;
-  parameter   ID = 0;
-
-  // hdmi interface
-
-  input           hdmi_clk;
-  output          hdmi_rst;
-  output          hdmi_edge_sel;
-  output          hdmi_bgr;
-  output          hdmi_packed;
-  output          hdmi_csc_bypass;
-  output  [15:0]  hdmi_vs_count;
-  output  [15:0]  hdmi_hs_count;
-  input           hdmi_dma_ovf;
-  input           hdmi_dma_unf;
-  input           hdmi_tpm_oos;
-  input           hdmi_vs_oos;
-  input           hdmi_hs_oos;
-  input           hdmi_vs_mismatch;
-  input           hdmi_hs_mismatch;
-  input   [15:0]  hdmi_vs;
-  input   [15:0]  hdmi_hs;
-  input   [31:0]  hdmi_clk_ratio;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal registers
 
   reg             up_core_preset = 'd0;
   reg             up_resetn = 'd0;
-  reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_edge_sel = 'd0;
   reg             up_bgr = 'd0;
@@ -129,8 +93,6 @@ module up_hdmi_rx (
   reg             up_hs_mismatch = 'd0;
   reg     [15:0]  up_vs_count = 'd0;
   reg     [15:0]  up_hs_count = 'd0;
-  reg             up_rack = 'd0;
-  reg     [31:0]  up_rdata = 'd0;
 
   // internal signals
 

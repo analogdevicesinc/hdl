@@ -39,27 +39,14 @@
 
 module usdrx1_spi (
 
-  spi_afe_csn,
-  spi_clk_csn,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
+  input       [ 3:0]      spi_afe_csn,
+  input                   spi_clk_csn,
+  input                   spi_clk,
+  input                   spi_mosi,
+  output                  spi_miso,
 
-  spi_afe_sdio,
-  spi_clk_sdio);
-
-  // 4 wire
-
-  input   [ 3:0]  spi_afe_csn;
-  input           spi_clk_csn;
-  input           spi_clk;
-  input           spi_mosi;
-  output          spi_miso;
-
-  // 3 wire
-
-  inout           spi_afe_sdio;
-  inout           spi_clk_sdio;
+  inout                   spi_afe_sdio,
+  inout                   spi_clk_sdio);
 
   // internal registers
 

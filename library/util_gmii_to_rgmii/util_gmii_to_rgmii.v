@@ -38,70 +38,42 @@
 // specific for MOTCON2 ADI board
 // works correctly if the PHY is set with Autonegotiation on
 
-module util_gmii_to_rgmii (
+module util_gmii_to_rgmii #(
 
-  clk_20m,
-  clk_25m,
-  clk_125m,
-  idelayctrl_clk,
+  parameter PHY_AD = 5'b10000,
+  parameter IODELAY_CTRL = 1'b0,
+  parameter IDELAY_VALUE = 18,
+  parameter IODELAY_GROUP = "if_delay_group") (
 
-  reset,
+  input                   clk_20m,
+  input                   clk_25m,
+  input                   clk_125m,
+  input                   idelayctrl_clk,
 
-  rgmii_td,
-  rgmii_tx_ctl,
-  rgmii_txc,
-  rgmii_rd,
-  rgmii_rx_ctl,
-  rgmii_rxc,
+  input                   reset,
 
-  mdio_mdc,
-  mdio_in_w,
-  mdio_in_r,
+  output      [ 3:0]      rgmii_td,
+  output                  rgmii_tx_ctl,
+  output                  rgmii_txc,
+  input       [ 3:0]      rgmii_rd,
+  input                   rgmii_rx_ctl,
+  input                   rgmii_rxc,
 
-  gmii_txd,
-  gmii_tx_en,
-  gmii_tx_er,
-  gmii_tx_clk,
-  gmii_crs,
-  gmii_col,
-  gmii_rxd,
-  gmii_rx_dv,
-  gmii_rx_er,
-  gmii_rx_clk);
+  input                   mdio_mdc,
+  input                   mdio_in_w,
+  input                   mdio_in_r,
 
-  parameter PHY_AD = 5'b10000;
-  parameter IODELAY_CTRL = 1'b0;
-  parameter IDELAY_VALUE = 18;
-  parameter IODELAY_GROUP = "if_delay_group";
+  input       [ 7:0]      gmii_txd,
+  input                   gmii_tx_en,
+  input                   gmii_tx_er,
+  output                  gmii_tx_clk,
+  output  reg             gmii_crs,
+  output  reg             gmii_col,
+  output  reg [ 7:0]      gmii_rxd,
+  output  reg             gmii_rx_dv,
+  output  reg             gmii_rx_er,
+  output                  gmii_rx_clk);
 
-  input           clk_20m;
-  input           clk_25m;
-  input           clk_125m;
-  input           idelayctrl_clk;
-
-  input           reset;
-
-  output  [ 3:0]  rgmii_td;
-  output          rgmii_tx_ctl;
-  output          rgmii_txc;
-  input   [ 3:0]  rgmii_rd;
-  input           rgmii_rx_ctl;
-  input           rgmii_rxc;
-
-  input           mdio_mdc;
-  input           mdio_in_w;
-  input           mdio_in_r;
-
-  input   [ 7:0]  gmii_txd;
-  input           gmii_tx_en;
-  input           gmii_tx_er;
-  output          gmii_tx_clk;
-  output          gmii_crs;
-  output          gmii_col;
-  output  [ 7:0]  gmii_rxd;
-  output          gmii_rx_dv;
-  output          gmii_rx_er;
-  output          gmii_rx_clk;
 
   // wires
   wire            clk_2_5m;
@@ -127,12 +99,6 @@ module util_gmii_to_rgmii (
 
   reg             rgmii_tx_ctl_r;
   reg   [ 3:0]    gmii_txd_low;
-  reg             gmii_col;
-  reg             gmii_crs;
-
-  reg  [ 7:0]     gmii_rxd;
-  reg             gmii_rx_dv;
-  reg             gmii_rx_er;
 
   reg             idelayctrl_reset;
   reg [ 3:0]      idelay_reset_cnt;

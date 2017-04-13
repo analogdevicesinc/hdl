@@ -41,78 +41,34 @@ module util_cpack_mux (
 
   // adc interface
 
-  adc_clk,
-  adc_valid,
-  adc_enable,
-  adc_data,
+  input                   adc_clk,
+  input                   adc_valid,
+  input       [ 7:0]      adc_enable,
+  input       [127:0]     adc_data,
 
   // fifo interface
 
-  adc_mux_valid,
-  adc_mux_enable_0,
-  adc_mux_data_0,
-  adc_mux_enable_1,
-  adc_mux_data_1,
-  adc_mux_enable_2,
-  adc_mux_data_2,
-  adc_mux_enable_3,
-  adc_mux_data_3,
-  adc_mux_enable_4,
-  adc_mux_data_4,
-  adc_mux_enable_5,
-  adc_mux_data_5,
-  adc_mux_enable_6,
-  adc_mux_data_6,
-  adc_mux_enable_7,
-  adc_mux_data_7);
-
-  // adc interface
-
-  input             adc_clk;
-  input             adc_valid;
-  input   [  7:0]   adc_enable;
-  input   [127:0]   adc_data;
-
-  // fifo interface
-
-  output            adc_mux_valid;
-  output            adc_mux_enable_0;
-  output  [ 15:0]   adc_mux_data_0;
-  output            adc_mux_enable_1;
-  output  [ 31:0]   adc_mux_data_1;
-  output            adc_mux_enable_2;
-  output  [ 47:0]   adc_mux_data_2;
-  output            adc_mux_enable_3;
-  output  [ 63:0]   adc_mux_data_3;
-  output            adc_mux_enable_4;
-  output  [ 79:0]   adc_mux_data_4;
-  output            adc_mux_enable_5;
-  output  [ 95:0]   adc_mux_data_5;
-  output            adc_mux_enable_6;
-  output  [111:0]   adc_mux_data_6;
-  output            adc_mux_enable_7;
-  output  [127:0]   adc_mux_data_7;
+  output  reg             adc_mux_valid,
+  output  reg             adc_mux_enable_0,
+  output  reg [ 15:0]     adc_mux_data_0,
+  output  reg             adc_mux_enable_1,
+  output  reg [ 31:0]     adc_mux_data_1,
+  output  reg             adc_mux_enable_2,
+  output  reg [ 47:0]     adc_mux_data_2,
+  output  reg             adc_mux_enable_3,
+  output  reg [ 63:0]     adc_mux_data_3,
+  output  reg             adc_mux_enable_4,
+  output  reg [ 79:0]     adc_mux_data_4,
+  output  reg             adc_mux_enable_5,
+  output  reg [ 95:0]     adc_mux_data_5,
+  output  reg             adc_mux_enable_6,
+  output  reg [111:0]     adc_mux_data_6,
+  output  reg             adc_mux_enable_7,
+  output  reg [127:0]     adc_mux_data_7);
 
   // internal registers
 
   reg               adc_valid_d = 'd0;
-  reg               adc_mux_valid = 'd0;
-  reg               adc_mux_enable_0 = 'd0;
-  reg               adc_mux_enable_1 = 'd0;
-  reg               adc_mux_enable_2 = 'd0;
-  reg               adc_mux_enable_3 = 'd0;
-  reg               adc_mux_enable_4 = 'd0;
-  reg               adc_mux_enable_5 = 'd0;
-  reg               adc_mux_enable_6 = 'd0;
-  reg               adc_mux_enable_7 = 'd0;
-  reg     [ 15:0]   adc_mux_data_0 = 'd0;
-  reg     [ 31:0]   adc_mux_data_1 = 'd0;
-  reg     [ 47:0]   adc_mux_data_2 = 'd0;
-  reg     [ 63:0]   adc_mux_data_3 = 'd0;
-  reg     [ 79:0]   adc_mux_data_4 = 'd0;
-  reg     [ 95:0]   adc_mux_data_5 = 'd0;
-  reg     [111:0]   adc_mux_data_6 = 'd0;
-  reg     [127:0]   adc_mux_data_7 = 'd0;
   reg               adc_mux_enable_0_0 = 'd0;
   reg     [ 15:0]   adc_mux_data_0_0 = 'd0;
   reg               adc_mux_enable_1_0 = 'd0;

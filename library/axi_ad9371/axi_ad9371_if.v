@@ -37,49 +37,30 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9371_if (
+module axi_ad9371_if #(
+
+  parameter   DEVICE_TYPE = 0) (
 
   // receive
 
-  adc_clk,
-  adc_rx_sof,
-  adc_rx_data,
-  adc_os_clk,
-  adc_rx_os_sof,
-  adc_rx_os_data,
+  input                   adc_clk,
+  input       [ 3:0]      adc_rx_sof,
+  input       [ 63:0]     adc_rx_data,
+  input                   adc_os_clk,
+  input       [ 3:0]      adc_rx_os_sof,
+  input       [ 63:0]     adc_rx_os_data,
 
-  adc_data,
-  adc_os_valid,
-  adc_os_data,
-
-  // transmit
-
-  dac_clk,
-  dac_tx_data,
-
-  dac_data);
-
-  // parameters
-
-  parameter   DEVICE_TYPE = 0;
-
-  // receive
-
-  input             adc_clk;
-  input   [  3:0]   adc_rx_sof;
-  input   [ 63:0]   adc_rx_data;
-  input             adc_os_clk;
-  input   [  3:0]   adc_rx_os_sof;
-  input   [ 63:0]   adc_rx_os_data;
-  output  [ 63:0]   adc_data;
-  output            adc_os_valid;
-  output  [ 63:0]   adc_os_data;
+  output      [ 63:0]     adc_data,
+  output                  adc_os_valid,
+  output      [ 63:0]     adc_os_data,
 
   // transmit
 
-  input             dac_clk;
-  output  [127:0]   dac_tx_data;
-  input   [127:0]   dac_data;
+  input                   dac_clk,
+  output      [127:0]     dac_tx_data,
+
+  input       [127:0]     dac_data);
+
 
   // internal signals
 

@@ -37,54 +37,33 @@
 
 `timescale 1ns/100ps
 
-module axi_gpreg_clock_mon (
+module axi_gpreg_clock_mon #(
+
+  parameter   ID = 0,
+  parameter   BUF_ENABLE = 0) (
 
   // clock
 
-  d_clk,
+  input                   d_clk,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
-  // parameters
-
-  parameter   ID = 0;
-  parameter   BUF_ENABLE = 0;
-
-  // clock
-
-  input           d_clk;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal registers
 
   reg             up_d_preset = 'd0;
-  reg             up_wack = 'd0;
   reg             up_d_resetn = 'd0;
-  reg             up_rack = 'd0;
-  reg     [31:0]  up_rdata = 'd0;
 
   // internal signals
 

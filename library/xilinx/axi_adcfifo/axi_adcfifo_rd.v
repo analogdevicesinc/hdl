@@ -39,107 +39,62 @@
 
 `timescale 1ns/100ps
 
-module axi_adcfifo_rd (
+module axi_adcfifo_rd #(
+
+  parameter   AXI_DATA_WIDTH = 512,
+  parameter   AXI_SIZE = 2,
+  parameter   AXI_LENGTH = 16,
+  parameter   AXI_ADDRESS = 32'h00000000,
+  parameter   AXI_ADDRESS_LIMIT = 32'h00000000) (
 
   // request and synchronization
 
-  dma_xfer_req,
+  input                   dma_xfer_req,
 
   // read interface
 
-  axi_rd_req,
-  axi_rd_addr,
+  input                   axi_rd_req,
+  input       [ 31:0]     axi_rd_addr,
 
   // axi interface
 
-  axi_clk,
-  axi_resetn,
-  axi_arvalid,
-  axi_arid,
-  axi_arburst,
-  axi_arlock,
-  axi_arcache,
-  axi_arprot,
-  axi_arqos,
-  axi_aruser,
-  axi_arlen,
-  axi_arsize,
-  axi_araddr,
-  axi_arready,
-  axi_rvalid,
-  axi_rid,
-  axi_ruser,
-  axi_rresp,
-  axi_rlast,
-  axi_rdata,
-  axi_rready,
+  input                   axi_clk,
+  input                   axi_resetn,
+  output  reg             axi_arvalid,
+  output      [ 3:0]      axi_arid,
+  output      [ 1:0]      axi_arburst,
+  output                  axi_arlock,
+  output      [ 3:0]      axi_arcache,
+  output      [ 2:0]      axi_arprot,
+  output      [ 3:0]      axi_arqos,
+  output      [ 3:0]      axi_aruser,
+  output      [ 7:0]      axi_arlen,
+  output      [ 2:0]      axi_arsize,
+  output  reg [ 31:0]     axi_araddr,
+  input                   axi_arready,
+  input                   axi_rvalid,
+  input       [ 3:0]      axi_rid,
+  input       [ 3:0]      axi_ruser,
+  input       [ 1:0]      axi_rresp,
+  input                   axi_rlast,
+  input       [AXI_DATA_WIDTH-1:0]  axi_rdata,
+  output  reg             axi_rready,
 
   // axi status
 
-  axi_rerror,
+  output  reg             axi_rerror,
 
   // fifo interface
 
-  axi_drst,
-  axi_dvalid,
-  axi_ddata,
-  axi_dready);
+  output  reg             axi_drst,
+  output  reg             axi_dvalid,
+  output  reg [AXI_DATA_WIDTH-1:0]  axi_ddata,
+  input                   axi_dready);
 
-  // parameters
-
-  parameter   AXI_DATA_WIDTH = 512;
-  parameter   AXI_SIZE = 2;
-  parameter   AXI_LENGTH = 16;
-  parameter   AXI_ADDRESS = 32'h00000000;
-  parameter   AXI_ADDRESS_LIMIT = 32'h00000000;
   localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
   localparam  AXI_AWINCR = AXI_LENGTH * AXI_BYTE_WIDTH;
   localparam  BUF_THRESHOLD_LO = 6'd3;
   localparam  BUF_THRESHOLD_HI = 6'd60;
-
-  // request and synchronization
-
-  input                           dma_xfer_req;
-
-  // read interface
-
-  input                           axi_rd_req;
-  input   [ 31:0]                 axi_rd_addr;
-
-  // axi interface
-
-  input                           axi_clk;
-  input                           axi_resetn;
-  output                          axi_arvalid;
-  output  [  3:0]                 axi_arid;
-  output  [  1:0]                 axi_arburst;
-  output                          axi_arlock;
-  output  [  3:0]                 axi_arcache;
-  output  [  2:0]                 axi_arprot;
-  output  [  3:0]                 axi_arqos;
-  output  [  3:0]                 axi_aruser;
-  output  [  7:0]                 axi_arlen;
-  output  [  2:0]                 axi_arsize;
-  output  [ 31:0]                 axi_araddr;
-  input                           axi_arready;
-  input                           axi_rvalid;
-  input   [  3:0]                 axi_rid;
-  input   [  3:0]                 axi_ruser;
-  input   [  1:0]                 axi_rresp;
-  input                           axi_rlast;
-  input   [AXI_DATA_WIDTH-1:0]    axi_rdata;
-  output                          axi_rready;
-
-  // axi status
-
-  output                          axi_rerror;
-
-  // fifo interface
-
-  output                          axi_drst;
-  output                          axi_dvalid;
-  output  [AXI_DATA_WIDTH-1:0]    axi_ddata;
-  input                           axi_dready;
 
   // internal registers
 
@@ -149,13 +104,6 @@ module axi_adcfifo_rd (
   reg     [  2:0]                 axi_xfer_req_m = 'd0;
   reg                             axi_xfer_init = 'd0;
   reg                             axi_xfer_enable = 'd0;
-  reg                             axi_arvalid = 'd0;
-  reg     [ 31:0]                 axi_araddr = 'd0;
-  reg                             axi_drst = 'd0;
-  reg                             axi_dvalid = 'd0;
-  reg     [AXI_DATA_WIDTH-1:0]    axi_ddata = 'd0;
-  reg                             axi_rready = 'd0;
-  reg                             axi_rerror = 'd0;
 
   // internal signals
 

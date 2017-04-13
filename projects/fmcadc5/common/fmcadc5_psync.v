@@ -39,24 +39,15 @@
 
 module fmcadc5_psync (
 
-  up_rstn,
-  up_clk,
+  input                   up_rstn,
+  input                   up_clk,
 
-  psync_0,
-  psync_1);
-
-  // 4 wire
-
-  input           up_rstn;
-  input           up_clk;
-  output          psync_0;
-  output          psync_1;
+  output  reg             psync_0,
+  output  reg             psync_1);
 
   // internal registers
 
   reg     [ 7:0]  psync_count = 'd0;
-  reg             psync_0 = 'd0;
-  reg             psync_1 = 'd0;
 
   // ~602K
 

@@ -37,35 +37,27 @@
 
 `timescale 1ns/100ps
 
-module util_extract (
+module util_extract #(
 
-  clk,
+  parameter   CHANNELS = 2,
+  parameter  DW = CHANNELS * 16) (
 
-  data_in,
-  data_in_trigger,
-  data_valid,
+  input                   clk,
 
-  data_out,
-  trigger_out
+  input       [DW-1:0]    data_in,
+  input       [DW-1:0]    data_in_trigger,
+  input                   data_valid,
 
+  output      [DW-1:0]    data_out,
+  output  reg             trigger_out
 );
 
-  parameter   CHANNELS = 2;
 
-  parameter  DW = CHANNELS * 16;
-  input             clk;
-  input   [DW-1:0]  data_in;
-  input   [DW-1:0]  data_in_trigger;
-  input             data_valid;
-
-  output  [DW-1:0]  data_out;
-  output            trigger_out;
 
    // loop variables
 
   genvar  n;
 
-  reg trigger_out;
   reg trigger_d1;
 
   wire [15:0] trigger; // 16 maximum channels

@@ -39,147 +39,76 @@
 
 module system_top (
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input                   sys_rst,
+  input                   sys_clk_p,
+  input                   sys_clk_n,
 
-  uart_sin,
-  uart_sout,
+  input                   uart_sin,
+  output                  uart_sout,
 
-  ddr3_reset_n,
-  ddr3_addr,
-  ddr3_ba,
-  ddr3_cas_n,
-  ddr3_ras_n,
-  ddr3_we_n,
-  ddr3_ck_n,
-  ddr3_ck_p,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_dm,
-  ddr3_dq,
-  ddr3_dqs_n,
-  ddr3_dqs_p,
-  ddr3_odt,
+  output                  ddr3_reset_n,
+  output      [13:0]      ddr3_addr,
+  output      [ 2:0]      ddr3_ba,
+  output                  ddr3_cas_n,
+  output                  ddr3_ras_n,
+  output                  ddr3_we_n,
+  output      [ 0:0]      ddr3_ck_n,
+  output      [ 0:0]      ddr3_ck_p,
+  output      [ 0:0]      ddr3_cke,
+  output      [ 0:0]      ddr3_cs_n,
+  output      [ 7:0]      ddr3_dm,
+  inout       [63:0]      ddr3_dq,
+  inout       [ 7:0]      ddr3_dqs_n,
+  inout       [ 7:0]      ddr3_dqs_p,
+  output      [ 0:0]      ddr3_odt,
 
-  sgmii_rxp,
-  sgmii_rxn,
-  sgmii_txp,
-  sgmii_txn,
+  input                   sgmii_rxp,
+  input                   sgmii_rxn,
+  output                  sgmii_txp,
+  output                  sgmii_txn,
 
-  phy_rstn,
-  mgt_clk_p,
-  mgt_clk_n,
-  mdio_mdc,
-  mdio_mdio,
+  output                  phy_rstn,
+  input                   mgt_clk_p,
+  input                   mgt_clk_n,
+  output                  mdio_mdc,
+  inout                   mdio_mdio,
 
-  linear_flash_addr,
-  linear_flash_adv_ldn,
-  linear_flash_ce_n,
-  linear_flash_dq_io,
-  linear_flash_oen,
-  linear_flash_wen,
+  output      [26:1]      linear_flash_addr,
+  output                  linear_flash_adv_ldn,
+  output                  linear_flash_ce_n,
+  inout       [15:0]      linear_flash_dq_io,
+  output                  linear_flash_oen,
+  output                  linear_flash_wen,
 
-  fan_pwm,
+  output                  fan_pwm,
 
-  gpio_lcd,
-  gpio_bd,
+  inout       [ 6:0]      gpio_lcd,
+  inout       [20:0]      gpio_bd,
 
-  iic_rstn,
-  iic_scl,
-  iic_sda,
+  output                  iic_rstn,
+  inout                   iic_scl,
+  inout                   iic_sda,
 
-  rx_ref_clk_p,
-  rx_ref_clk_n,
-  rx_sysref_p,
-  rx_sysref_n,
-  rx_sync_p,
-  rx_sync_n,
-  rx_data_p,
-  rx_data_n,
+  input                   rx_ref_clk_p,
+  input                   rx_ref_clk_n,
+  output                  rx_sysref_p,
+  output                  rx_sysref_n,
+  output                  rx_sync_p,
+  output                  rx_sync_n,
+  input       [ 7:0]      rx_data_p,
+  input       [ 7:0]      rx_data_n,
 
-  adc_irq,
-  adc_fd,
+  inout                   adc_irq,
+  inout                   adc_fd,
 
-  spi_adc_csn,
-  spi_adc_clk,
-  spi_adc_sdio,
+  output                  spi_adc_csn,
+  output                  spi_adc_clk,
+  inout                   spi_adc_sdio,
 
-  spi_adf4355_data_or_csn_0,
-  spi_adf4355_clk_or_csn_1,
-  spi_adf4355_le_or_clk,
-  spi_adf4355_ce_or_sdio);
-
-  input             sys_rst;
-  input             sys_clk_p;
-  input             sys_clk_n;
-
-  input             uart_sin;
-  output            uart_sout;
-
-  output            ddr3_reset_n;
-  output  [13:0]    ddr3_addr;
-  output  [ 2:0]    ddr3_ba;
-  output            ddr3_cas_n;
-  output            ddr3_ras_n;
-  output            ddr3_we_n;
-  output  [ 0:0]    ddr3_ck_n;
-  output  [ 0:0]    ddr3_ck_p;
-  output  [ 0:0]    ddr3_cke;
-  output  [ 0:0]    ddr3_cs_n;
-  output  [ 7:0]    ddr3_dm;
-  inout   [63:0]    ddr3_dq;
-  inout   [ 7:0]    ddr3_dqs_n;
-  inout   [ 7:0]    ddr3_dqs_p;
-  output  [ 0:0]    ddr3_odt;
-
-  input             sgmii_rxp;
-  input             sgmii_rxn;
-  output            sgmii_txp;
-  output            sgmii_txn;
-
-  output            phy_rstn;
-  input             mgt_clk_p;
-  input             mgt_clk_n;
-  output            mdio_mdc;
-  inout             mdio_mdio;
-
-  output  [26:1]    linear_flash_addr;
-  output            linear_flash_adv_ldn;
-  output            linear_flash_ce_n;
-  inout   [15:0]    linear_flash_dq_io;
-  output            linear_flash_oen;
-  output            linear_flash_wen;
-
-  output            fan_pwm;
-
-  inout   [ 6:0]    gpio_lcd;
-  inout   [20:0]    gpio_bd;
-
-  output            iic_rstn;
-  inout             iic_scl;
-  inout             iic_sda;
-
-  input             rx_ref_clk_p;
-  input             rx_ref_clk_n;
-  output            rx_sysref_p;
-  output            rx_sysref_n;
-  output            rx_sync_p;
-  output            rx_sync_n;
-  input   [ 7:0]    rx_data_p;
-  input   [ 7:0]    rx_data_n;
-
-  inout             adc_irq;
-  inout             adc_fd;
-
-  output            spi_adc_csn;
-  output            spi_adc_clk;
-  inout             spi_adc_sdio;
-
-  output            spi_adf4355_data_or_csn_0;
-  output            spi_adf4355_clk_or_csn_1;
-  output            spi_adf4355_le_or_clk;
-  inout             spi_adf4355_ce_or_sdio;
+  output                  spi_adf4355_data_or_csn_0,
+  output                  spi_adf4355_clk_or_csn_1,
+  output                  spi_adf4355_le_or_clk,
+  inout                   spi_adf4355_ce_or_sdio);
 
   // internal signals
 
@@ -198,7 +127,6 @@ module system_top (
 
   assign fan_pwm = 1'b1;
   assign iic_rstn = 1'b1;
-
 
   // instantiations
 

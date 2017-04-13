@@ -37,95 +37,60 @@
 
 `timescale 1ns / 1ps
 
-module axi_ad9162 (
+module axi_ad9162 #(
+
+  parameter   ID = 0,
+  parameter   DEVICE_TYPE = 0,
+  parameter   DAC_DATAPATH_DISABLE = 0) (
 
     // jesd interface
     // tx_clk is (line-rate/40)
     
-    tx_clk,
-    tx_valid,
-    tx_data,
-    tx_ready,
+  input                   tx_clk,
+  output                  tx_valid,
+  output      [255:0]     tx_data,
+  input                   tx_ready,
     
     // dma interface
     
-    dac_clk,
-    dac_valid,
-    dac_enable,
-    dac_ddata,
-    dac_dovf,
-    dac_dunf,
+  output                  dac_clk,
+  output                  dac_valid,
+  output                  dac_enable,
+  input       [255:0]     dac_ddata,
+  input                   dac_dovf,
+  input                   dac_dunf,
     
     // axi interface
     
-    s_axi_aclk,
-    s_axi_aresetn,
-    s_axi_awvalid,
-    s_axi_awaddr,
-    s_axi_awprot,
-    s_axi_awready,
-    s_axi_wvalid,
-    s_axi_wdata,
-    s_axi_wstrb,
-    s_axi_wready,
-    s_axi_bvalid,
-    s_axi_bresp,
-    s_axi_bready,
-    s_axi_arvalid,
-    s_axi_araddr,
-    s_axi_arprot,
-    s_axi_arready,
-    s_axi_rvalid,
-    s_axi_rdata,
-    s_axi_rresp,
-    s_axi_rready);
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [ 31:0]     s_axi_awaddr,
+  input       [ 2:0]      s_axi_awprot,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [ 31:0]     s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [ 31:0]     s_axi_araddr,
+  input       [ 2:0]      s_axi_arprot,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [ 31:0]     s_axi_rdata,
+  output      [ 1:0]      s_axi_rresp,
+  input                   s_axi_rready);
     
-    // parameters
     
-    parameter   ID = 0;
-    parameter   DEVICE_TYPE = 0;
-    parameter   DAC_DATAPATH_DISABLE = 0;
     
-    // jesd interface
-    // tx_clk is (line-rate/40)
     
-    input             tx_clk;
-    output            tx_valid;
-    output  [255:0]   tx_data;
-    input             tx_ready;
     
-    // dma interface
     
-    output            dac_clk;
-    output            dac_valid;
-    output            dac_enable;
-    input   [255:0]   dac_ddata;
-    input             dac_dovf;
-    input             dac_dunf;
     
-    // axi interface
     
-    input             s_axi_aclk;
-    input             s_axi_aresetn;
-    input             s_axi_awvalid;
-    input   [ 31:0]   s_axi_awaddr;
-    input   [  2:0]   s_axi_awprot;
-    output            s_axi_awready;
-    input             s_axi_wvalid;
-    input   [ 31:0]   s_axi_wdata;
-    input   [  3:0]   s_axi_wstrb;
-    output            s_axi_wready;
-    output            s_axi_bvalid;
-    output  [  1:0]   s_axi_bresp;
-    input             s_axi_bready;
-    input             s_axi_arvalid;
-    input   [ 31:0]   s_axi_araddr;
-    input   [  2:0]   s_axi_arprot;
-    output            s_axi_arready;
-    output            s_axi_rvalid;
-    output  [ 31:0]   s_axi_rdata;
-    output  [  1:0]   s_axi_rresp;
-    input             s_axi_rready;
     
     // internal clocks and resets
     

@@ -40,95 +40,56 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9684_if (
+module axi_ad9684_if #(
+
+  parameter DEVICE_TYPE = 0,
+  parameter IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter OR_STATUS = 0) (
 
   // device interface
-  adc_clk_in_p,
-  adc_clk_in_n,
-  adc_data_in_p,
-  adc_data_in_n,
-  adc_data_or_p,
-  adc_data_or_n,
+  input                   adc_clk_in_p,
+  input                   adc_clk_in_n,
+  input       [13:0]      adc_data_in_p,
+  input       [13:0]      adc_data_in_n,
+  input                   adc_data_or_p,
+  input                   adc_data_or_n,
 
   // data interface
-  adc_clk,
-  adc_rst,
-  adc_data_a,
-  adc_or_a,
-  adc_data_b,
-  adc_or_b,
-  adc_status,
+  output                  adc_clk,
+  input                   adc_rst,
+  output      [27:0]      adc_data_a,
+  output                  adc_or_a,
+  output      [27:0]      adc_data_b,
+  output                  adc_or_b,
+  output  reg             adc_status,
 
   // delay interface
-  delay_clk,
-  delay_rst,
-  delay_dload,
-  delay_wdata,
-  delay_rdata,
-  delay_locked,
+  input                   delay_clk,
+  input                   delay_rst,
+  input       [14:0]      delay_dload,
+  input       [74:0]      delay_wdata,
+  output      [74:0]      delay_rdata,
+  output                  delay_locked,
 
   // reset
-  rst,
+  input                   rst,
 
   // drp interface
-  up_clk,
-  up_rstn,
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_locked
-);
+  input                   up_clk,
+  input                   up_rstn,
+  input                   up_drp_sel,
+  input                   up_drp_wr,
+  input       [11:0]      up_drp_addr,
+  input       [31:0]      up_drp_wdata,
+  output      [31:0]      up_drp_rdata,
+  output                  up_drp_ready,
+  output                  up_drp_locked);
 
-  // parameters
-  parameter DEVICE_TYPE = 0;                  // 0 - 7Series / 1 - 6Series
-  parameter IO_DELAY_GROUP = "dev_if_delay_group";
-  parameter OR_STATUS = 0;
 
-  // buffer type based on the target device
   localparam DDR_OR_SDR_N = 1;
-
-  // IO definitions
-
-  input           adc_clk_in_p;
-  input           adc_clk_in_n;
-  input   [13:0]  adc_data_in_p;
-  input   [13:0]  adc_data_in_n;
-  input           adc_data_or_p;
-  input           adc_data_or_n;
-
-  output          adc_clk;
-  input           adc_rst;
-  output  [27:0]  adc_data_a;
-  output          adc_or_a;
-  output  [27:0]  adc_data_b;
-  output          adc_or_b;
-  output          adc_status;
-
-  input           delay_clk;
-  input           delay_rst;
-  input   [14:0]  delay_dload;
-  input   [74:0]  delay_wdata;
-  output  [74:0]  delay_rdata;
-  output          delay_locked;
-
-  input           rst;
-
-  input           up_clk;
-  input           up_rstn;
-  input           up_drp_sel;
-  input           up_drp_wr;
-  input   [11:0]  up_drp_addr;
-  input   [31:0]  up_drp_wdata;
-  output  [31:0]  up_drp_rdata;
-  output          up_drp_ready;
-  output          up_drp_locked;
 
   // internal registers
 
-  reg             adc_status    = 'd0;
   reg             adc_status_m1 = 'd0;
 
   // internal signals
@@ -139,7 +100,6 @@ module axi_ad9684_if (
   wire  [ 1:0]    adc_data_or_b_s;
   wire            loaden_s;
   wire  [ 7:0]    phase_s;
-
 
   genvar          l_inst;
 

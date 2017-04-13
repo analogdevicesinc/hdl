@@ -37,87 +37,47 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module axi_hdmi_rx  (
+module axi_hdmi_rx  #(
+
+  parameter   ID = 0) (
 
   // hdmi interface
 
-  hdmi_rx_clk,
-  hdmi_rx_data,
+  input                   hdmi_rx_clk,
+  input       [15:0]      hdmi_rx_data,
 
   // dma interface
 
-  hdmi_clk,
-  hdmi_dma_sof,
-  hdmi_dma_de,
-  hdmi_dma_data,
-  hdmi_dma_ovf,
-  hdmi_dma_unf,
+  output                  hdmi_clk,
+  output                  hdmi_dma_sof,
+  output                  hdmi_dma_de,
+  output      [63:0]      hdmi_dma_data,
+  input                   hdmi_dma_ovf,
+  input                   hdmi_dma_unf,
 
   // processor interface
 
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rresp,
-  s_axi_rdata,
-  s_axi_rready,
-  s_axi_awprot,
-  s_axi_arprot);
-
-  // parameters
-
-  parameter   ID = 0;
-
-  // hdmi interface
-
-  input           hdmi_rx_clk;
-  input   [15:0]  hdmi_rx_data;
-
-  // vdma interface
-
-  output          hdmi_clk;
-  output          hdmi_dma_sof;
-  output          hdmi_dma_de;
-  output  [63:0]  hdmi_dma_data;
-  input           hdmi_dma_ovf;
-  input           hdmi_dma_unf;
-
-  // processor interface
-
-  input           s_axi_aresetn;
-  input           s_axi_aclk;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [ 1:0]  s_axi_rresp;
-  output  [31:0]  s_axi_rdata;
-  input           s_axi_rready;
-  input   [ 2:0]  s_axi_awprot;
-  input   [ 2:0]  s_axi_arprot;
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [31:0]      s_axi_awaddr,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [31:0]      s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [31:0]      s_axi_araddr,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [ 1:0]      s_axi_rresp,
+  output      [31:0]      s_axi_rdata,
+  input                   s_axi_rready,
+  input       [ 2:0]      s_axi_awprot,
+  input       [ 2:0]      s_axi_arprot);
 
 
   // internal signals

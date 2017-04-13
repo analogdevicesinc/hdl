@@ -39,25 +39,13 @@
 
 module daq3_spi (
 
-  spi_csn,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
+  input       [ 2:0]      spi_csn,
+  input                   spi_clk,
+  input                   spi_mosi,
+  output                  spi_miso,
 
-  spi_sdio,
-  spi_dir);
-
-  // 4 wire
-
-  input   [ 2:0]  spi_csn;
-  input           spi_clk;
-  input           spi_mosi;
-  output          spi_miso;
-
-  // 3 wire
-
-  inout           spi_sdio;
-  output          spi_dir;
+  inout                   spi_sdio,
+  output                  spi_dir);
 
   // internal registers
 

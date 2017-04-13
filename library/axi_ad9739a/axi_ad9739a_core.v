@@ -39,104 +39,56 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9739a_core (
+module axi_ad9739a_core #(
+
+  parameter   ID = 0,
+  parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface
 
-  dac_div_clk,
-  dac_rst,
-  dac_data_00,
-  dac_data_01,
-  dac_data_02,
-  dac_data_03,
-  dac_data_04,
-  dac_data_05,
-  dac_data_06,
-  dac_data_07,
-  dac_data_08,
-  dac_data_09,
-  dac_data_10,
-  dac_data_11,
-  dac_data_12,
-  dac_data_13,
-  dac_data_14,
-  dac_data_15,
-  dac_status,
+  input                   dac_div_clk,
+  output                  dac_rst,
+  output      [ 15:0]     dac_data_00,
+  output      [ 15:0]     dac_data_01,
+  output      [ 15:0]     dac_data_02,
+  output      [ 15:0]     dac_data_03,
+  output      [ 15:0]     dac_data_04,
+  output      [ 15:0]     dac_data_05,
+  output      [ 15:0]     dac_data_06,
+  output      [ 15:0]     dac_data_07,
+  output      [ 15:0]     dac_data_08,
+  output      [ 15:0]     dac_data_09,
+  output      [ 15:0]     dac_data_10,
+  output      [ 15:0]     dac_data_11,
+  output      [ 15:0]     dac_data_12,
+  output      [ 15:0]     dac_data_13,
+  output      [ 15:0]     dac_data_14,
+  output      [ 15:0]     dac_data_15,
+  input                   dac_status,
 
   // dma interface
 
-  dac_valid,
-  dac_enable,
-  dac_ddata,
-  dac_dovf,
-  dac_dunf,
+  output                  dac_valid,
+  output                  dac_enable,
+  input       [255:0]     dac_ddata,
+  input                   dac_dovf,
+  input                   dac_dunf,
 
   // processor interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [ 13:0]     up_waddr,
+  input       [ 31:0]     up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [ 13:0]     up_raddr,
+  output  reg [ 31:0]     up_rdata,
+  output  reg             up_rack);
 
-  // parameters
-
-  parameter   ID = 0;
-  parameter   DATAPATH_DISABLE = 0;
-
-  // dac interface
-
-  input             dac_div_clk;
-  output            dac_rst;
-  output  [ 15:0]   dac_data_00;
-  output  [ 15:0]   dac_data_01;
-  output  [ 15:0]   dac_data_02;
-  output  [ 15:0]   dac_data_03;
-  output  [ 15:0]   dac_data_04;
-  output  [ 15:0]   dac_data_05;
-  output  [ 15:0]   dac_data_06;
-  output  [ 15:0]   dac_data_07;
-  output  [ 15:0]   dac_data_08;
-  output  [ 15:0]   dac_data_09;
-  output  [ 15:0]   dac_data_10;
-  output  [ 15:0]   dac_data_11;
-  output  [ 15:0]   dac_data_12;
-  output  [ 15:0]   dac_data_13;
-  output  [ 15:0]   dac_data_14;
-  output  [ 15:0]   dac_data_15;
-  input             dac_status;
-
-  // dma interface
-
-  output            dac_valid;
-  output            dac_enable;
-  input   [255:0]   dac_ddata;
-  input             dac_dovf;
-  input             dac_dunf;
-
-  // processor interface
-
-  input             up_rstn;
-  input             up_clk;
-  input             up_wreq;
-  input   [ 13:0]   up_waddr;
-  input   [ 31:0]   up_wdata;
-  output            up_wack;
-  input             up_rreq;
-  input   [ 13:0]   up_raddr;
-  output  [ 31:0]   up_rdata;
-  output            up_rack;
 
   // internal registers
-
-  reg     [ 31:0]   up_rdata = 'd0;
-  reg               up_rack = 'd0;
-  reg               up_wack = 'd0;
 
   // internal signals
 

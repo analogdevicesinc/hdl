@@ -41,143 +41,74 @@
 
 module system_top (
 
-  ddr_addr,
-  ddr_ba,
-  ddr_cas_n,
-  ddr_ck_n,
-  ddr_ck_p,
-  ddr_cke,
-  ddr_cs_n,
-  ddr_dm,
-  ddr_dq,
-  ddr_dqs_n,
-  ddr_dqs_p,
-  ddr_odt,
-  ddr_ras_n,
-  ddr_reset_n,
-  ddr_we_n,
+  inout       [14:0]      ddr_addr,
+  inout       [ 2:0]      ddr_ba,
+  inout                   ddr_cas_n,
+  inout                   ddr_ck_n,
+  inout                   ddr_ck_p,
+  inout                   ddr_cke,
+  inout                   ddr_cs_n,
+  inout       [ 3:0]      ddr_dm,
+  inout       [31:0]      ddr_dq,
+  inout       [ 3:0]      ddr_dqs_n,
+  inout       [ 3:0]      ddr_dqs_p,
+  inout                   ddr_odt,
+  inout                   ddr_ras_n,
+  inout                   ddr_reset_n,
+  inout                   ddr_we_n,
 
-  fixed_io_ddr_vrn,
-  fixed_io_ddr_vrp,
-  fixed_io_mio,
-  fixed_io_ps_clk,
-  fixed_io_ps_porb,
-  fixed_io_ps_srstb,
+  inout                   fixed_io_ddr_vrn,
+  inout                   fixed_io_ddr_vrp,
+  inout       [53:0]      fixed_io_mio,
+  inout                   fixed_io_ps_clk,
+  inout                   fixed_io_ps_porb,
+  inout                   fixed_io_ps_srstb,
 
-  gpio_bd,
+  inout       [11:0]      gpio_bd,
 
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
+  output                  hdmi_out_clk,
+  output                  hdmi_vsync,
+  output                  hdmi_hsync,
+  output                  hdmi_data_e,
+  output      [15:0]      hdmi_data,
 
-  spdif,
+  output                  spdif,
 
-  i2s_mclk,
-  i2s_bclk,
-  i2s_lrclk,
-  i2s_sdata_out,
-  i2s_sdata_in,
+  output                  i2s_mclk,
+  output                  i2s_bclk,
+  output                  i2s_lrclk,
+  output                  i2s_sdata_out,
+  input                   i2s_sdata_in,
 
-  iic_scl,
-  iic_sda,
+  inout                   iic_scl,
+  inout                   iic_sda,
 
-  rx_clk_in_p,
-  rx_clk_in_n,
-  rx_frame_in_p,
-  rx_frame_in_n,
-  rx_data_in_p,
-  rx_data_in_n,
-  tx_clk_out_p,
-  tx_clk_out_n,
-  tx_frame_out_p,
-  tx_frame_out_n,
-  tx_data_out_p,
-  tx_data_out_n,
+  input                   rx_clk_in_p,
+  input                   rx_clk_in_n,
+  input                   rx_frame_in_p,
+  input                   rx_frame_in_n,
+  input       [ 5:0]      rx_data_in_p,
+  input       [ 5:0]      rx_data_in_n,
+  output                  tx_clk_out_p,
+  output                  tx_clk_out_n,
+  output                  tx_frame_out_p,
+  output                  tx_frame_out_n,
+  output      [ 5:0]      tx_data_out_p,
+  output      [ 5:0]      tx_data_out_n,
 
-  txnrx,
-  enable,
+  output                  txnrx,
+  output                  enable,
 
-  gpio_resetb,
-  gpio_sync,
-  gpio_en_agc,
-  gpio_ctl,
-  gpio_status,
+  inout                   gpio_resetb,
+  inout                   gpio_sync,
+  inout                   gpio_en_agc,
+  inout       [ 3:0]      gpio_ctl,
+  inout       [ 7:0]      gpio_status,
 
-  spi_csn,
-  spi_clk,
-  spi_mosi,
-  spi_miso);
-
-  inout   [14:0]  ddr_addr;
-  inout   [ 2:0]  ddr_ba;
-  inout           ddr_cas_n;
-  inout           ddr_ck_n;
-  inout           ddr_ck_p;
-  inout           ddr_cke;
-  inout           ddr_cs_n;
-  inout   [ 3:0]  ddr_dm;
-  inout   [31:0]  ddr_dq;
-  inout   [ 3:0]  ddr_dqs_n;
-  inout   [ 3:0]  ddr_dqs_p;
-  inout           ddr_odt;
-  inout           ddr_ras_n;
-  inout           ddr_reset_n;
-  inout           ddr_we_n;
-
-  inout           fixed_io_ddr_vrn;
-  inout           fixed_io_ddr_vrp;
-  inout   [53:0]  fixed_io_mio;
-  inout           fixed_io_ps_clk;
-  inout           fixed_io_ps_porb;
-  inout           fixed_io_ps_srstb;
-
-  inout   [11:0]  gpio_bd;
-
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output  [15:0]  hdmi_data;
-
-  output          spdif;
-
-  output          i2s_mclk;
-  output          i2s_bclk;
-  output          i2s_lrclk;
-  output          i2s_sdata_out;
-  input           i2s_sdata_in;
-
-  inout           iic_scl;
-  inout           iic_sda;
-
-  input           rx_clk_in_p;
-  input           rx_clk_in_n;
-  input           rx_frame_in_p;
-  input           rx_frame_in_n;
-  input   [ 5:0]  rx_data_in_p;
-  input   [ 5:0]  rx_data_in_n;
-  output          tx_clk_out_p;
-  output          tx_clk_out_n;
-  output          tx_frame_out_p;
-  output          tx_frame_out_n;
-  output  [ 5:0]  tx_data_out_p;
-  output  [ 5:0]  tx_data_out_n;
-
-  output          txnrx;
-  output          enable;
-
-  inout           gpio_resetb;
-  inout           gpio_sync;
-  inout           gpio_en_agc;
-  inout   [ 3:0]  gpio_ctl;
-  inout   [ 7:0]  gpio_status;
-
-  output          spi_csn;
-  output          spi_clk;
-  output          spi_mosi;
-  input           spi_miso;
+  output                  spi_csn,
+  output                  spi_clk,
+  output                  spi_mosi,
+  input                   spi_miso);
 
   // internal signals
 

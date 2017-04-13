@@ -37,83 +37,48 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9371_rx_os (
+module axi_ad9371_rx_os #(
+
+  parameter   DATAPATH_DISABLE = 0,
+  parameter   ID = 0) (
 
   // adc interface
 
-  adc_os_rst,
-  adc_os_clk,
-  adc_os_valid,
-  adc_os_data,
+  output                  adc_os_rst,
+  input                   adc_os_clk,
+  input                   adc_os_valid,
+  input       [ 63:0]     adc_os_data,
 
   // dma interface
 
-  adc_os_enable_i0,
-  adc_os_valid_i0,
-  adc_os_data_i0,
-  adc_os_enable_q0,
-  adc_os_valid_q0,
-  adc_os_data_q0,
-  adc_os_dovf,
-  adc_os_dunf,
+  output                  adc_os_enable_i0,
+  output                  adc_os_valid_i0,
+  output      [ 31:0]     adc_os_data_i0,
+  output                  adc_os_enable_q0,
+  output                  adc_os_valid_q0,
+  output      [ 31:0]     adc_os_data_q0,
+  input                   adc_os_dovf,
+  input                   adc_os_dunf,
 
   // processor interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [ 13:0]     up_waddr,
+  input       [ 31:0]     up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [ 13:0]     up_raddr,
+  output  reg [ 31:0]     up_rdata,
+  output  reg             up_rack);
 
-  // parameters
-
-  parameter   DATAPATH_DISABLE = 0;
-  parameter   ID = 0;
-
-  // adc interface
-
-  output            adc_os_rst;
-  input             adc_os_clk;
-  input             adc_os_valid;
-  input   [ 63:0]   adc_os_data;
-
-  // dma interface
-
-  output            adc_os_enable_i0;
-  output            adc_os_valid_i0;
-  output  [ 31:0]   adc_os_data_i0;
-  output            adc_os_enable_q0;
-  output            adc_os_valid_q0;
-  output  [ 31:0]   adc_os_data_q0;
-  input             adc_os_dovf;
-  input             adc_os_dunf;
-
-  // processor interface
-
-  input             up_rstn;
-  input             up_clk;
-  input             up_wreq;
-  input   [ 13:0]   up_waddr;
-  input   [ 31:0]   up_wdata;
-  output            up_wack;
-  input             up_rreq;
-  input   [ 13:0]   up_raddr;
-  output  [ 31:0]   up_rdata;
-  output            up_rack;
 
   // internal registers
 
   reg               up_status_pn_err = 'd0;
   reg               up_status_pn_oos = 'd0;
   reg               up_status_or = 'd0;
-  reg               up_wack = 'd0;
-  reg               up_rack = 'd0;
-  reg     [ 31:0]   up_rdata = 'd0;
 
   // internal signals
 

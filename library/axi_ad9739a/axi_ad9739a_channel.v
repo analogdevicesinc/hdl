@@ -39,114 +39,55 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9739a_channel (
+module axi_ad9739a_channel #(
+
+  parameter CHANNEL_ID = 32'h0,
+  parameter DATAPATH_DISABLE = 0) (
 
   // dac interface
 
-  dac_div_clk,
-  dac_rst,
-  dac_enable,
-  dac_data_00,
-  dac_data_01,
-  dac_data_02,
-  dac_data_03,
-  dac_data_04,
-  dac_data_05,
-  dac_data_06,
-  dac_data_07,
-  dac_data_08,
-  dac_data_09,
-  dac_data_10,
-  dac_data_11,
-  dac_data_12,
-  dac_data_13,
-  dac_data_14,
-  dac_data_15,
-  dma_data,
+  input                   dac_div_clk,
+  input                   dac_rst,
+  output  reg             dac_enable,
+  output  reg [ 15:0]     dac_data_00,
+  output  reg [ 15:0]     dac_data_01,
+  output  reg [ 15:0]     dac_data_02,
+  output  reg [ 15:0]     dac_data_03,
+  output  reg [ 15:0]     dac_data_04,
+  output  reg [ 15:0]     dac_data_05,
+  output  reg [ 15:0]     dac_data_06,
+  output  reg [ 15:0]     dac_data_07,
+  output  reg [ 15:0]     dac_data_08,
+  output  reg [ 15:0]     dac_data_09,
+  output  reg [ 15:0]     dac_data_10,
+  output  reg [ 15:0]     dac_data_11,
+  output  reg [ 15:0]     dac_data_12,
+  output  reg [ 15:0]     dac_data_13,
+  output  reg [ 15:0]     dac_data_14,
+  output  reg [ 15:0]     dac_data_15,
+  input       [255:0]     dma_data,
 
   // processor interface
 
-  dac_data_sync,
-  dac_dds_format,
+  input                   dac_data_sync,
+  input                   dac_dds_format,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [ 13:0]     up_waddr,
+  input       [ 31:0]     up_wdata,
+  output                  up_wack,
+  input                   up_rreq,
+  input       [ 13:0]     up_raddr,
+  output      [ 31:0]     up_rdata,
+  output                  up_rack);
 
-  // parameters
-
-  parameter CHANNEL_ID = 32'h0;
-  parameter DATAPATH_DISABLE = 0;
-
-  // dac interface
-
-  input             dac_div_clk;
-  input             dac_rst;
-  output            dac_enable;
-  output  [ 15:0]   dac_data_00;
-  output  [ 15:0]   dac_data_01;
-  output  [ 15:0]   dac_data_02;
-  output  [ 15:0]   dac_data_03;
-  output  [ 15:0]   dac_data_04;
-  output  [ 15:0]   dac_data_05;
-  output  [ 15:0]   dac_data_06;
-  output  [ 15:0]   dac_data_07;
-  output  [ 15:0]   dac_data_08;
-  output  [ 15:0]   dac_data_09;
-  output  [ 15:0]   dac_data_10;
-  output  [ 15:0]   dac_data_11;
-  output  [ 15:0]   dac_data_12;
-  output  [ 15:0]   dac_data_13;
-  output  [ 15:0]   dac_data_14;
-  output  [ 15:0]   dac_data_15;
-  input   [255:0]   dma_data;
-
-  // processor interface
-
-  input             dac_data_sync;
-  input             dac_dds_format;
-
-  // bus interface
-
-  input             up_rstn;
-  input             up_clk;
-  input             up_wreq;
-  input   [ 13:0]   up_waddr;
-  input   [ 31:0]   up_wdata;
-  output            up_wack;
-  input             up_rreq;
-  input   [ 13:0]   up_raddr;
-  output  [ 31:0]   up_rdata;
-  output            up_rack;
 
   // internal registers
 
-  reg               dac_enable = 'd0;
-  reg     [ 15:0]   dac_data_00 = 'd0;
-  reg     [ 15:0]   dac_data_01 = 'd0;
-  reg     [ 15:0]   dac_data_02 = 'd0;
-  reg     [ 15:0]   dac_data_03 = 'd0;
-  reg     [ 15:0]   dac_data_04 = 'd0;
-  reg     [ 15:0]   dac_data_05 = 'd0;
-  reg     [ 15:0]   dac_data_06 = 'd0;
-  reg     [ 15:0]   dac_data_07 = 'd0;
-  reg     [ 15:0]   dac_data_08 = 'd0;
-  reg     [ 15:0]   dac_data_09 = 'd0;
-  reg     [ 15:0]   dac_data_10 = 'd0;
-  reg     [ 15:0]   dac_data_11 = 'd0;
-  reg     [ 15:0]   dac_data_12 = 'd0;
-  reg     [ 15:0]   dac_data_13 = 'd0;
-  reg     [ 15:0]   dac_data_14 = 'd0;
-  reg     [ 15:0]   dac_data_15 = 'd0;
   reg     [ 15:0]   dac_dds_phase_00_0 = 'd0;
   reg     [ 15:0]   dac_dds_phase_00_1 = 'd0;
   reg     [ 15:0]   dac_dds_phase_01_0 = 'd0;

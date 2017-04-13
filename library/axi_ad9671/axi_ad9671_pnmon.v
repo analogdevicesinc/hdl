@@ -44,27 +44,15 @@ module axi_ad9671_pnmon (
 
   // adc interface
 
-  adc_clk,
-  adc_valid,
-  adc_data,
+  input                   adc_clk,
+  input                   adc_valid,
+  input       [15:0]      adc_data,
 
   // pn out of sync and error
 
-  adc_pn_oos,
-  adc_pn_err,
-  adc_pnseq_sel);
-
-  // adc interface
-
-  input           adc_clk;
-  input           adc_valid;
-  input   [15:0]  adc_data;
-
-  // pn out of sync and error
-
-  output          adc_pn_oos;
-  output          adc_pn_err;
-  input   [ 3:0]  adc_pnseq_sel;
+  output                  adc_pn_oos,
+  output                  adc_pn_err,
+  input       [ 3:0]      adc_pnseq_sel);
 
   // internal registers
 

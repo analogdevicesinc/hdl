@@ -38,37 +38,24 @@
 // ***************************************************************************
 // Input must be RGB or CrYCb in that order, output is CrY/CbY
 
-module ad_ss_444to422 (
+module ad_ss_444to422 #(
+
+  parameter   CR_CB_N = 0,
+  parameter   DELAY_DATA_WIDTH = 16) (
 
   // 444 inputs
 
-  clk,
-  s444_de,
-  s444_sync,
-  s444_data,
+  input                   clk,
+  input                   s444_de,
+  input       [DW:0]      s444_sync,
+  input       [23:0]      s444_data,
 
   // 422 outputs
 
-  s422_sync,
-  s422_data);
+  output  reg [DW:0]      s422_sync,
+  output  reg [15:0]      s422_data);
 
-  // parameters
-
-  parameter   CR_CB_N = 0;
-  parameter   DELAY_DATA_WIDTH = 16;
   localparam  DW = DELAY_DATA_WIDTH - 1;
-
-  // 444 inputs
-
-  input           clk;
-  input           s444_de;
-  input   [DW:0]  s444_sync;
-  input   [23:0]  s444_data;
-
-  // 422 outputs
-
-  output  [DW:0]  s422_sync;
-  output  [15:0]  s422_data;
 
   // internal registers
 
@@ -84,8 +71,6 @@ module ad_ss_444to422 (
   reg     [ 7:0]  cr = 'd0;
   reg     [ 7:0]  cb = 'd0;
   reg             cr_cb_sel = 'd0;
-  reg     [DW:0]  s422_sync = 'd0;
-  reg     [15:0]  s422_data = 'd0;
 
   // internal wires
 

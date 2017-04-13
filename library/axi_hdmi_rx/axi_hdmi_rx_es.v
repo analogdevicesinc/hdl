@@ -36,31 +36,19 @@
 // ***************************************************************************
 // Receive HDMI, hdmi embedded syncs data in, video dma data out.
 
-module axi_hdmi_rx_es (
+module axi_hdmi_rx_es #(
+
+  parameter   DATA_WIDTH = 32) (
 
   // hdmi interface
 
-  hdmi_clk,
-  hdmi_data,
-  hdmi_vs_de,
-  hdmi_hs_de,
-  hdmi_data_de);
+  input                   hdmi_clk,
+  input       [(DATA_WIDTH-1):0]  hdmi_data,
+  output  reg             hdmi_vs_de,
+  output  reg             hdmi_hs_de,
+  output  reg [(DATA_WIDTH-1):0]  hdmi_data_de);
 
-  // parameters
-
-  parameter   DATA_WIDTH = 32;
   localparam  BYTE_WIDTH = DATA_WIDTH/8;
-
-  // hdmi interface
-
-  input                       hdmi_clk;
-  input   [(DATA_WIDTH-1):0]  hdmi_data;
-
-  // dma interface
-
-  output                      hdmi_vs_de;
-  output                      hdmi_hs_de;
-  output  [(DATA_WIDTH-1):0]  hdmi_data_de;
 
   // internal registers
 
@@ -76,9 +64,6 @@ module axi_hdmi_rx_es (
   reg     [(DATA_WIDTH-1):0]  hdmi_data_4d = 'd0;
   reg                         hdmi_hs_de_rcv_4d = 'd0;
   reg                         hdmi_vs_de_rcv_4d = 'd0;
-  reg     [(DATA_WIDTH-1):0]  hdmi_data_de = 'd0;
-  reg                         hdmi_hs_de = 'd0;
-  reg                         hdmi_vs_de = 'd0;
   reg     [ 1:0]              hdmi_preamble_cnt = 'd0;
   reg                         hdmi_hs_de_rcv = 'd0;
   reg                         hdmi_vs_de_rcv = 'd0;

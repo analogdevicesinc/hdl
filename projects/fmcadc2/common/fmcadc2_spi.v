@@ -39,47 +39,22 @@
 
 module fmcadc2_spi (
 
-  spi_adf4355,
-  spi_adf4355_ce,
+  input                   spi_adf4355,
+  input                   spi_adf4355_ce,
 
-  spi_clk,
-  spi_csn,
-  spi_mosi,
-  spi_miso,
+  input                   spi_clk,
+  input       [ 2:0]      spi_csn,
+  input                   spi_mosi,
+  output                  spi_miso,
 
-  spi_adc_csn,
-  spi_adc_clk,
-  spi_adc_sdio,
+  output                  spi_adc_csn,
+  output                  spi_adc_clk,
+  inout                   spi_adc_sdio,
 
-  spi_adf4355_data_or_csn_0,
-  spi_adf4355_clk_or_csn_1,
-  spi_adf4355_le_or_clk,
-  spi_adf4355_ce_or_sdio);
-
-  // select (adf4355 = 0x1), (normal = 0x0)
-
-  input           spi_adf4355;
-  input           spi_adf4355_ce;
-
-  // 4 wire
-
-  input           spi_clk;
-  input   [ 2:0]  spi_csn;
-  input           spi_mosi;
-  output          spi_miso;
-
-  // adc interface (3 wire)
-
-  output          spi_adc_csn;
-  output          spi_adc_clk;
-  inout           spi_adc_sdio;
-
-  // adf4355 or normal (AMP/EXT)
-
-  output          spi_adf4355_data_or_csn_0;
-  output          spi_adf4355_clk_or_csn_1;
-  output          spi_adf4355_le_or_clk;
-  inout           spi_adf4355_ce_or_sdio;
+  output                  spi_adf4355_data_or_csn_0,
+  output                  spi_adf4355_clk_or_csn_1,
+  output                  spi_adf4355_le_or_clk,
+  inout                   spi_adf4355_ce_or_sdio);
 
   // internal registers
 

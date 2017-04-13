@@ -38,28 +38,19 @@
 // ***************************************************************************
 // Transmit HDMI, video dma data in, hdmi separate syncs data out.
 
-module axi_hdmi_tx_es (
+module axi_hdmi_tx_es #(
+
+  parameter   DATA_WIDTH = 32) (
 
   // hdmi interface
 
-  hdmi_clk,
-  hdmi_hs_de,
-  hdmi_vs_de,
-  hdmi_data_de,
-  hdmi_data);
+  input                   hdmi_clk,
+  input                   hdmi_hs_de,
+  input                   hdmi_vs_de,
+  input       [(DATA_WIDTH-1):0]  hdmi_data_de,
+  output  reg [(DATA_WIDTH-1):0]  hdmi_data);
 
-  // parameters
-
-  parameter   DATA_WIDTH = 32;
   localparam  BYTE_WIDTH = DATA_WIDTH/8;
-
-  // hdmi interface
-
-  input                       hdmi_clk;
-  input                       hdmi_hs_de;
-  input                       hdmi_vs_de;
-  input   [(DATA_WIDTH-1):0]  hdmi_data_de;
-  output  [(DATA_WIDTH-1):0]  hdmi_data;
 
   // internal registers
 
@@ -73,7 +64,6 @@ module axi_hdmi_tx_es (
   reg     [(DATA_WIDTH-1):0]  hdmi_data_4d = 'd0;
   reg                         hdmi_hs_de_5d = 'd0;
   reg     [(DATA_WIDTH-1):0]  hdmi_data_5d = 'd0;
-  reg     [(DATA_WIDTH-1):0]  hdmi_data = 'd0;
 
   // internal wires
 

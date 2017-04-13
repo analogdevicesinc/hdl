@@ -39,58 +39,34 @@
 
 `timescale 1ns/1ps
 
-module axi_ad9361_tdd_if(
+module axi_ad9361_tdd_if#(
+
+  parameter       LEVEL_OR_PULSE_N = 0) (
 
   // clock
 
-  clk,
-  rst,
+  input                   clk,
+  input                   rst,
 
   // control signals from the tdd control
 
-  tdd_rx_vco_en,
-  tdd_tx_vco_en,
-  tdd_rx_rf_en,
-  tdd_tx_rf_en,
+  input                   tdd_rx_vco_en,
+  input                   tdd_tx_vco_en,
+  input                   tdd_rx_rf_en,
+  input                   tdd_tx_rf_en,
 
   // device interface
 
-  ad9361_txnrx,
-  ad9361_enable,
+  output                  ad9361_txnrx,
+  output                  ad9361_enable,
 
   // interface status
 
-  ad9361_tdd_status
-);
+  output      [ 7:0]      ad9361_tdd_status);
 
-  // parameters
-
-  parameter       LEVEL_OR_PULSE_N = 0;   // the control signals are edge (pulse) or level sensitive
 
   localparam      PULSE_MODE = 0;
   localparam      LEVEL_MODE = 1;
-
-  // clock
-
-  input           clk;
-  input           rst;
-
-  // control signals from the tdd control
-
-  input           tdd_rx_vco_en;
-  input           tdd_tx_vco_en;
-  input           tdd_rx_rf_en;
-  input           tdd_tx_rf_en;
-
-  // device interface
-
-  output          ad9361_txnrx;
-  output          ad9361_enable;
-
-  // interface status
-
-  output  [ 7:0]  ad9361_tdd_status;
-
 
   // internal registers
 

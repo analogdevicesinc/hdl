@@ -39,23 +39,12 @@
 
 module ad9265_spi (
 
-  spi_csn,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
+  input       [ 1:0]      spi_csn,
+  input                   spi_clk,
+  input                   spi_mosi,
+  output                  spi_miso,
 
-  spi_sdio);
-
-  // 4 wire
-
-  input   [ 1:0]  spi_csn;
-  input           spi_clk;
-  input           spi_mosi;
-  output          spi_miso;
-
-  // 3 wire
-
-  inout           spi_sdio;
+  inout                   spi_sdio);
 
   // internal registers
 

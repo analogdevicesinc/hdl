@@ -38,36 +38,23 @@
 
 `timescale 1ns/100ps
 
-module util_ccat (
+module util_ccat #(
 
-  data_0,
-  data_1,
-  data_2,
-  data_3,
-  data_4,
-  data_5,
-  data_6,
-  data_7,
+  parameter   CHANNEL_DATA_WIDTH     = 1,
+  parameter   NUM_OF_CHANNELS    = 8) (
 
-  ccat_data);
+  input       [(CHANNEL_DATA_WIDTH-1):0]  data_0,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  data_1,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  data_2,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  data_3,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  data_4,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  data_5,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  data_6,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  data_7,
 
-  // parameters
+  output      [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]  ccat_data);
 
-  parameter   CHANNEL_DATA_WIDTH     = 1;
-  parameter   NUM_OF_CHANNELS    = 8;
   localparam  NUM_OF_CHANNELS_M   = 8;
-
-  // interface
-
-  input   [(CHANNEL_DATA_WIDTH-1):0]             data_0;
-  input   [(CHANNEL_DATA_WIDTH-1):0]             data_1;
-  input   [(CHANNEL_DATA_WIDTH-1):0]             data_2;
-  input   [(CHANNEL_DATA_WIDTH-1):0]             data_3;
-  input   [(CHANNEL_DATA_WIDTH-1):0]             data_4;
-  input   [(CHANNEL_DATA_WIDTH-1):0]             data_5;
-  input   [(CHANNEL_DATA_WIDTH-1):0]             data_6;
-  input   [(CHANNEL_DATA_WIDTH-1):0]             data_7;
-  output  [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    ccat_data;
 
   // internal signals
 

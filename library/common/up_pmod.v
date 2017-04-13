@@ -39,54 +39,33 @@
 
 `timescale 1ns/100ps
 
-module up_pmod (
+module up_pmod #(
 
-  pmod_clk,
-  pmod_rst,
-  pmod_signal_freq,
+  parameter       ID = 0) (
+
+  input                   pmod_clk,
+  output                  pmod_rst,
+  input       [31:0]      pmod_signal_freq,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
-
-  // parameters
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
   localparam      PCORE_VERSION = 32'h00010001;
-  parameter       ID = 0;
-
-  input           pmod_clk;
-  output          pmod_rst;
-  input   [31:0]  pmod_signal_freq;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal registers
 
-  reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_resetn = 'd0;
-  reg             up_rack = 'd0;
-  reg     [31:0]  up_rdata = 'd0;
 
   // internal signals
 

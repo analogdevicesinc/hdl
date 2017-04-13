@@ -37,70 +37,45 @@
 
 `timescale 1ns/1ps
 
-module ad_gt_common_1 (
+module ad_gt_common_1 #(
+
+  parameter   integer ID = 0,
+  parameter   integer GTH_OR_GTX_N = 0,
+  parameter   integer QPLL0_ENABLE = 1,
+  parameter   integer QPLL0_REFCLK_DIV = 2,
+  parameter   [26:0]  QPLL0_CFG = 27'h06801C1,
+  parameter   integer QPLL0_FBDIV_RATIO = 1'b1,
+  parameter   [ 9:0]  QPLL0_FBDIV = 10'b0000110000,
+  parameter   integer QPLL1_ENABLE = 1,
+  parameter   integer QPLL1_REFCLK_DIV = 2,
+  parameter   [26:0]  QPLL1_CFG = 27'h06801C1,
+  parameter   integer QPLL1_FBDIV_RATIO = 1'b1,
+  parameter   [ 9:0]  QPLL1_FBDIV = 10'b0000110000) (
 
   // reset and clocks
 
-  qpll0_rst,
-  qpll0_ref_clk_in,
-  qpll1_rst,
-  qpll1_ref_clk_in,
+  input                   qpll0_rst,
+  input                   qpll0_ref_clk_in,
+  input                   qpll1_rst,
+  input                   qpll1_ref_clk_in,
 
-  qpll_clk,
-  qpll_ref_clk,
-  qpll_locked,
-
-  // bus interface
-
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
-
-  // parameters
-
-  parameter   integer ID = 0;
-  parameter   integer GTH_OR_GTX_N = 0;
-  parameter   integer QPLL0_ENABLE = 1;
-  parameter   integer QPLL0_REFCLK_DIV = 2;
-  parameter   [26:0]  QPLL0_CFG = 27'h06801C1;
-  parameter   integer QPLL0_FBDIV_RATIO = 1'b1;
-  parameter   [ 9:0]  QPLL0_FBDIV = 10'b0000110000;
-  parameter   integer QPLL1_ENABLE = 1;
-  parameter   integer QPLL1_REFCLK_DIV = 2;
-  parameter   [26:0]  QPLL1_CFG = 27'h06801C1;
-  parameter   integer QPLL1_FBDIV_RATIO = 1'b1;
-  parameter   [ 9:0]  QPLL1_FBDIV = 10'b0000110000;
-
-  // reset and clocks
-
-  input           qpll0_rst;
-  input           qpll0_ref_clk_in;
-  input           qpll1_rst;
-  input           qpll1_ref_clk_in;
-
-  output  [ 7:0]  qpll_clk;
-  output  [ 7:0]  qpll_ref_clk;
-  output  [ 7:0]  qpll_locked;
+  output      [ 7:0]      qpll_clk,
+  output      [ 7:0]      qpll_ref_clk,
+  output      [ 7:0]      qpll_locked,
 
   // bus interface
 
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output                  up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output      [31:0]      up_rdata,
+  output                  up_rack);
+
 
   // internal signals
 

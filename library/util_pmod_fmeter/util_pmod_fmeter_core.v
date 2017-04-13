@@ -38,19 +38,13 @@
 // ***************************************************************************
 
 module util_pmod_fmeter_core (
-  ref_clk,
-  reset,
-  square_signal,
-  signal_freq);
-
-  input           ref_clk;
-  input           reset;
-  input           square_signal;
-  output  [31:0]  signal_freq;
+  input                   ref_clk,
+  input                   reset,
+  input                   square_signal,
+  output  reg [31:0]      signal_freq);
 
   // registers
 
-  reg     [31:0]  signal_freq         = 'h0;
   reg     [31:0]  signal_freq_counter = 'h0;
   reg     [ 2:0]  square_signal_buf   = 'h0;
 

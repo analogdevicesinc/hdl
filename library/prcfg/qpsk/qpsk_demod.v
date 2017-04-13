@@ -39,18 +39,11 @@
 `timescale 1ns/1ns
 
 module qpsk_demod (
-  clk,
-  data_qpsk_i,
-  data_qpsk_q,
-  data_valid,
-  data_output
-);
-
-  input             clk;
-  input   [15:0]    data_qpsk_i;
-  input   [15:0]    data_qpsk_q;
-  input             data_valid;
-  output  [ 1:0]    data_output;
+  input                   clk,
+  input       [15:0]      data_qpsk_i,
+  input       [15:0]      data_qpsk_q,
+  input                   data_valid,
+  output      [ 1:0]      data_output);
 
   wire    [15:0]    filtered_data_i;
   wire    [15:0]    filtered_data_q;

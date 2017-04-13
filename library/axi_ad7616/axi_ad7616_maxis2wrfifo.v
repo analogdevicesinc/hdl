@@ -39,49 +39,29 @@
 
 `timescale 1ns/100ps
 
-module axi_ad7616_maxis2wrfifo (
+module axi_ad7616_maxis2wrfifo #(
 
-  clk,
-  rstn,
-  sync_in,
+  parameter   DATA_WIDTH = 16) (
+
+  input                   clk,
+  input                   rstn,
+  input                   sync_in,
 
   // m_axis interface
 
-  m_axis_data,
-  m_axis_ready,
-  m_axis_valid,
-  m_axis_xfer_req,
+  input       [DATA_WIDTH-1:0]  m_axis_data,
+  output  reg             m_axis_ready,
+  input                   m_axis_valid,
+  output  reg             m_axis_xfer_req,
 
   // write fifo interface
 
-  fifo_wr_en,
-  fifo_wr_data,
-  fifo_wr_sync,
-  fifo_wr_xfer_req
-
+  output  reg             fifo_wr_en,
+  output  reg [DATA_WIDTH-1:0]  fifo_wr_data,
+  output  reg             fifo_wr_sync,
+  input                   fifo_wr_xfer_req
 );
 
-  parameter   DATA_WIDTH = 16;
-
-  input                     clk;
-  input                     rstn;
-  input                     sync_in;
-
-  input  [DATA_WIDTH-1:0]   m_axis_data;
-  output                    m_axis_ready;
-  input                     m_axis_valid;
-  output                    m_axis_xfer_req;
-
-  output                    fifo_wr_en;
-  output [DATA_WIDTH-1:0]   fifo_wr_data;
-  output                    fifo_wr_sync;
-  input                     fifo_wr_xfer_req;
-
-  reg                       m_axis_ready = 1'b0;
-  reg                       m_axis_xfer_req = 1'b0;
-  reg                       fifo_wr_en = 1'b0;
-  reg    [DATA_WIDTH-1:0]   fifo_wr_data = 'b0;
-  reg                       fifo_wr_sync = 1'b0;
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin

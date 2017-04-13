@@ -37,60 +37,38 @@
 
 `timescale 1ns/100ps
 
-module ad_lvds_out (
+module ad_lvds_out #(
+
+  parameter   DEVICE_TYPE = 0,
+  parameter   SINGLE_ENDED = 0,
+  parameter   IODELAY_ENABLE = 0,
+  parameter   IODELAY_CTRL = 0,
+  parameter   IODELAY_GROUP = "dev_if_delay_group") (
 
   // data interface
 
-  tx_clk,
-  tx_data_p,
-  tx_data_n,
-  tx_data_out_p,
-  tx_data_out_n,
+  input                   tx_clk,
+  input                   tx_data_p,
+  input                   tx_data_n,
+  output                  tx_data_out_p,
+  output                  tx_data_out_n,
 
   // delay-data interface
 
-  up_clk,
-  up_dld,
-  up_dwdata,
-  up_drdata,
+  input                   up_clk,
+  input                   up_dld,
+  input       [ 4:0]      up_dwdata,
+  output      [ 4:0]      up_drdata,
 
   // delay-cntrl interface
 
-  delay_clk,
-  delay_rst,
-  delay_locked);
+  input                   delay_clk,
+  input                   delay_rst,
+  output                  delay_locked);
 
-  // parameters
-
-  parameter   DEVICE_TYPE = 0;
-  parameter   SINGLE_ENDED = 0;
-  parameter   IODELAY_ENABLE = 0;
-  parameter   IODELAY_CTRL = 0;
-  parameter   IODELAY_GROUP = "dev_if_delay_group";
   localparam  VIRTEX7 = 0;
   localparam  VIRTEX6 = 1;
   localparam  ULTRASCALE = 2;
-
-  // data interface
-
-  input               tx_clk;
-  input               tx_data_p;
-  input               tx_data_n;
-  output              tx_data_out_p;
-  output              tx_data_out_n;
-
-  // delay-data interface
-
-  input               up_clk;
-  input               up_dld;
-  input       [ 4:0]  up_dwdata;
-  output      [ 4:0]  up_drdata;
-
-  // delay-cntrl interface
-
-  input               delay_clk;
-  input               delay_rst;
-  output              delay_locked;
 
   // internal signals
 

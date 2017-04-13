@@ -41,108 +41,56 @@
 
 module system_top (
 
-  ddr_addr,
-  ddr_ba,
-  ddr_cas_n,
-  ddr_ck_n,
-  ddr_ck_p,
-  ddr_cke,
-  ddr_cs_n,
-  ddr_dm,
-  ddr_dq,
-  ddr_dqs_n,
-  ddr_dqs_p,
-  ddr_odt,
-  ddr_ras_n,
-  ddr_reset_n,
-  ddr_we_n,
+  inout       [14:0]      ddr_addr,
+  inout       [ 2:0]      ddr_ba,
+  inout                   ddr_cas_n,
+  inout                   ddr_ck_n,
+  inout                   ddr_ck_p,
+  inout                   ddr_cke,
+  inout                   ddr_cs_n,
+  inout       [ 3:0]      ddr_dm,
+  inout       [31:0]      ddr_dq,
+  inout       [ 3:0]      ddr_dqs_n,
+  inout       [ 3:0]      ddr_dqs_p,
+  inout                   ddr_odt,
+  inout                   ddr_ras_n,
+  inout                   ddr_reset_n,
+  inout                   ddr_we_n,
 
-  fixed_io_ddr_vrn,
-  fixed_io_ddr_vrp,
-  fixed_io_mio,
-  fixed_io_ps_clk,
-  fixed_io_ps_porb,
-  fixed_io_ps_srstb,
+  inout                   fixed_io_ddr_vrn,
+  inout                   fixed_io_ddr_vrp,
+  inout       [53:0]      fixed_io_mio,
+  inout                   fixed_io_ps_clk,
+  inout                   fixed_io_ps_porb,
+  inout                   fixed_io_ps_srstb,
 
-  gpio_bd,
+  inout       [31:0]      gpio_bd,
 
-  i2s_mclk,
-  i2s_bclk,
-  i2s_lrclk,
-  i2s_sdata_out,
-  i2s_sdata_in,
+  output                  i2s_mclk,
+  output                  i2s_bclk,
+  output                  i2s_lrclk,
+  output                  i2s_sdata_out,
+  input                   i2s_sdata_in,
 
-  iic_scl,
-  iic_sda,
-  iic_mux_scl,
-  iic_mux_sda,
+  inout                   iic_scl,
+  inout                   iic_sda,
+  inout       [ 1:0]      iic_mux_scl,
+  inout       [ 1:0]      iic_mux_sda,
 
-  hdmi_rx_clk,
-  hdmi_rx_data,
-  hdmi_rx_int,
-  hdmi_rx_spdif,
+  input                   hdmi_rx_clk,
+  input       [15:0]      hdmi_rx_data,
+  inout                   hdmi_rx_int,
+  input                   hdmi_rx_spdif,
 
-  hdmi_tx_clk,
-  hdmi_tx_data,
-  hdmi_tx_spdif,
+  output                  hdmi_tx_clk,
+  output      [15:0]      hdmi_tx_data,
+  output                  hdmi_tx_spdif,
 
-  hdmi_iic_scl,
-  hdmi_iic_sda,
-  hdmi_iic_rstn,
+  inout                   hdmi_iic_scl,
+  inout                   hdmi_iic_sda,
+  inout                   hdmi_iic_rstn,
 
-  otg_vbusoc);
-
-  inout   [14:0]  ddr_addr;
-  inout   [ 2:0]  ddr_ba;
-  inout           ddr_cas_n;
-  inout           ddr_ck_n;
-  inout           ddr_ck_p;
-  inout           ddr_cke;
-  inout           ddr_cs_n;
-  inout   [ 3:0]  ddr_dm;
-  inout   [31:0]  ddr_dq;
-  inout   [ 3:0]  ddr_dqs_n;
-  inout   [ 3:0]  ddr_dqs_p;
-  inout           ddr_odt;
-  inout           ddr_ras_n;
-  inout           ddr_reset_n;
-  inout           ddr_we_n;
-
-  inout           fixed_io_ddr_vrn;
-  inout           fixed_io_ddr_vrp;
-  inout   [53:0]  fixed_io_mio;
-  inout           fixed_io_ps_clk;
-  inout           fixed_io_ps_porb;
-  inout           fixed_io_ps_srstb;
-
-  inout   [31:0]  gpio_bd;
-
-  output          i2s_mclk;
-  output          i2s_bclk;
-  output          i2s_lrclk;
-  output          i2s_sdata_out;
-  input           i2s_sdata_in;
-
-
-  inout           iic_scl;
-  inout           iic_sda;
-  inout   [ 1:0]  iic_mux_scl;
-  inout   [ 1:0]  iic_mux_sda;
-
-  input           hdmi_rx_clk;
-  input   [15:0]  hdmi_rx_data;
-  inout           hdmi_rx_int;
-  input           hdmi_rx_spdif;
-
-  output          hdmi_tx_clk;
-  output  [15:0]  hdmi_tx_data;
-  output          hdmi_tx_spdif;
-
-  inout           hdmi_iic_rstn;
-  inout           hdmi_iic_scl;
-  inout           hdmi_iic_sda;
-
-  input           otg_vbusoc;
+  input                   otg_vbusoc);
 
   // internal signals
 

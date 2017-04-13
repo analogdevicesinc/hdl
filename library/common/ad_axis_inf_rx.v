@@ -42,42 +42,26 @@
 
 `timescale 1ns/100ps
 
-module ad_axis_inf_rx (
+module ad_axis_inf_rx #(
+
+  parameter   DATA_WIDTH = 16) (
 
   // adi interface
 
-  clk,
-  rst,
-  valid,
-  last,
-  data,
+  input                   clk,
+  input                   rst,
+  input                   valid,
+  input                   last,
+  input       [DW:0]      data,
 
   // xilinx interface
 
-  inf_valid,
-  inf_last,
-  inf_data,
-  inf_ready);
+  output  reg             inf_valid,
+  output  reg             inf_last,
+  output  reg [DW:0]      inf_data,
+  input                   inf_ready);
 
-  // parameter for data width
-
-  parameter   DATA_WIDTH = 16;
   localparam  DW = DATA_WIDTH - 1;
-
-  // adi interface
-
-  input           clk;
-  input           rst;
-  input           valid;
-  input           last;
-  input   [DW:0]  data;
-
-  // xil interface
-
-  output          inf_valid;
-  output          inf_last;
-  output  [DW:0]  inf_data;
-  input           inf_ready;
 
   // internal registers
 
@@ -99,9 +83,6 @@ module ad_axis_inf_rx (
   reg             wlast_7 = 'd0;
   reg     [DW:0]  wdata_7 = 'd0;
   reg     [ 2:0]  rcnt    = 'd0;
-  reg             inf_valid = 'd0;
-  reg             inf_last = 'd0;
-  reg     [DW:0]  inf_data = 'd0;
 
   // internal signals
 

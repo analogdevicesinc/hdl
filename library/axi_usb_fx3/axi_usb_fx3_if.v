@@ -39,105 +39,56 @@
 
 module axi_usb_fx3_if (
 
-  dma_rdy,
-  dma_wmk,
+  input                   dma_rdy,
+  input                   dma_wmk,
 
-  fifo_rdy,
+  input       [ 3:0]      fifo_rdy,
 
-  pclk,          //output clk 100 Mhz and 180 phase shift
-  reset_n,
+  input                   pclk,
+  input                   reset_n,
 
-  data,
-  addr,          //output fifo address
+  inout       [31:0]      data,
+  output  reg [ 1:0]      addr,
 
-  slcs_n,        //output chip select
-  slrd_n,        //output read select
-  sloe_n,        //output output enable select
-  slwr_n,        //output write select
-  pktend_n,      //output pkt end
-  epswitch_n,    //output pkt end
+  output  reg             slcs_n,
+  output  reg             slrd_n,
+  output  reg             sloe_n,
+  output  reg             slwr_n,
+  output  reg             pktend_n,
+  output                  epswitch_n,
 
-  fifo_num,
-  fifo_direction,
-  trig,
-  fifo_ready,
+  input       [ 4:0]      fifo_num,
+  input       [10:0]      fifo_direction,
+  input                   trig,
+  output  reg [10:0]      fifo_ready,
 
-  fx32dma_valid,
-  fx32dma_ready,
-  fx32dma_data,
-  fx32dma_sop,
-  fx32dma_eop,
-  eot_fx32dma,
+  output  reg             fx32dma_valid,
+  input                   fx32dma_ready,
+  output  reg [31:0]      fx32dma_data,
+  output  reg             fx32dma_sop,
+  input                   fx32dma_eop,
+  input                   eot_fx32dma,
 
-  dma2fx3_ready,
-  dma2fx3_valid,
-  dma2fx3_data,
-  dma2fx3_eop);
-
-  input           pclk;
-  input           reset_n;
-
-  input           dma_rdy;
-  input           dma_wmk;
-
-  input   [ 3:0]  fifo_rdy;
-
-  inout   [31:0]  data;
-  output  [ 1:0]  addr;
-
-  output          slcs_n;
-  output          slrd_n;
-  output          sloe_n;
-  output          slwr_n;
-  output          pktend_n;
-  output          epswitch_n;
-
-  output  [10:0]  fifo_ready;
-
-  input   [ 4:0]  fifo_num;
-  input   [10:0]  fifo_direction;
-  input           trig;
-
-  output          fx32dma_valid;
-  input           fx32dma_ready;
-  output  [31:0]  fx32dma_data;
-  output          fx32dma_sop;
-  input           fx32dma_eop;
-  input           eot_fx32dma;
-
-  input           dma2fx3_valid;
-  output          dma2fx3_ready;
-  input   [31:0]  dma2fx3_data;
-  input           dma2fx3_eop;
+  output  reg             dma2fx3_ready,
+  input                   dma2fx3_valid,
+  input       [31:0]      dma2fx3_data,
+  input                   dma2fx3_eop);
 
   // internal registers
-
-  reg [10:0]  fifo_ready = 0;
-
-  reg [31:0]  fx32dma_data = 0;
 
   reg [ 3:0]  state_gpif_ii = 4'h0;
   reg [ 3:0]  next_state_gpif_ii = 4'h0;
 
   reg         current_direction = 0;
   reg         current_fifo = 0;
-  reg         slcs_n = 0;
   reg         slcs_n_d1 = 0;
   reg         slcs_n_d2 = 0;
   reg         slcs_n_d3 = 0;
   reg         slcs_n_d4 = 0;
-  reg         slrd_n = 0;
   reg         slrd_n_d1 = 0;
   reg         slrd_n_d2 = 0;
   reg         slrd_n_d3 = 0;
-  reg         sloe_n = 0;
-  reg [ 1:0]  addr = 0;
   reg         sloe_n_d1 = 0;
-  reg         slwr_n = 0;
-  reg         fx32dma_valid = 0;
-  reg         dma2fx3_ready = 0;
-  reg         fx32dma_sop = 0;
-  reg         pktend_n = 0;
   reg         pip = 0;
 
   localparam IDLE         = 4'b0001;

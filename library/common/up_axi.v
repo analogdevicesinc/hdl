@@ -37,104 +37,56 @@
 
 `timescale 1ns/100ps
 
-module up_axi (
+module up_axi #(
+
+  parameter   ADDRESS_WIDTH = 14) (
 
   // reset and clocks
 
-  up_rstn,
-  up_clk,
+  input                   up_rstn,
+  input                   up_clk,
 
   // axi4 interface
 
-  up_axi_awvalid,
-  up_axi_awaddr,
-  up_axi_awready,
-  up_axi_wvalid,
-  up_axi_wdata,
-  up_axi_wstrb,
-  up_axi_wready,
-  up_axi_bvalid,
-  up_axi_bresp,
-  up_axi_bready,
-  up_axi_arvalid,
-  up_axi_araddr,
-  up_axi_arready,
-  up_axi_rvalid,
-  up_axi_rresp,
-  up_axi_rdata,
-  up_axi_rready,
+  input                   up_axi_awvalid,
+  input       [31:0]      up_axi_awaddr,
+  output  reg             up_axi_awready,
+  input                   up_axi_wvalid,
+  input       [31:0]      up_axi_wdata,
+  input       [ 3:0]      up_axi_wstrb,
+  output  reg             up_axi_wready,
+  output  reg             up_axi_bvalid,
+  output      [ 1:0]      up_axi_bresp,
+  input                   up_axi_bready,
+  input                   up_axi_arvalid,
+  input       [31:0]      up_axi_araddr,
+  output  reg             up_axi_arready,
+  output  reg             up_axi_rvalid,
+  output      [ 1:0]      up_axi_rresp,
+  output  reg [31:0]      up_axi_rdata,
+  input                   up_axi_rready,
 
   // pcore interface
 
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  output  reg             up_wreq,
+  output  reg [AW:0]      up_waddr,
+  output  reg [31:0]      up_wdata,
+  input                   up_wack,
+  output  reg             up_rreq,
+  output  reg [AW:0]      up_raddr,
+  input       [31:0]      up_rdata,
+  input                   up_rack);
 
-  // parameters
-
-  parameter   ADDRESS_WIDTH = 14;
   localparam  AW = ADDRESS_WIDTH - 1;
-
-  // reset and clocks
-
-  input           up_rstn;
-  input           up_clk;
-
-  // axi4 interface
-
-  input           up_axi_awvalid;
-  input   [31:0]  up_axi_awaddr;
-  output          up_axi_awready;
-  input           up_axi_wvalid;
-  input   [31:0]  up_axi_wdata;
-  input   [ 3:0]  up_axi_wstrb;
-  output          up_axi_wready;
-  output          up_axi_bvalid;
-  output  [ 1:0]  up_axi_bresp;
-  input           up_axi_bready;
-  input           up_axi_arvalid;
-  input   [31:0]  up_axi_araddr;
-  output          up_axi_arready;
-  output          up_axi_rvalid;
-  output  [ 1:0]  up_axi_rresp;
-  output  [31:0]  up_axi_rdata;
-  input           up_axi_rready;
-
-  // pcore interface
-
-  output          up_wreq;
-  output  [AW:0]  up_waddr;
-  output  [31:0]  up_wdata;
-  input           up_wack;
-  output          up_rreq;
-  output  [AW:0]  up_raddr;
-  input   [31:0]  up_rdata;
-  input           up_rack;
 
   // internal registers
 
-  reg             up_axi_awready = 'd0;
-  reg             up_axi_wready = 'd0;
-  reg             up_axi_bvalid = 'd0;
   reg             up_wack_d = 'd0;
   reg             up_wsel = 'd0;
-  reg             up_wreq = 'd0;
-  reg     [AW:0]  up_waddr = 'd0;
-  reg     [31:0]  up_wdata = 'd0;
   reg     [ 4:0]  up_wcount = 'd0;
-  reg             up_axi_arready = 'd0;
-  reg             up_axi_rvalid = 'd0;
-  reg     [31:0]  up_axi_rdata = 'd0;
   reg             up_rack_d = 'd0;
   reg     [31:0]  up_rdata_d = 'd0;
   reg             up_rsel = 'd0;
-  reg             up_rreq = 'd0;
-  reg     [AW:0]  up_raddr = 'd0;
   reg     [ 4:0]  up_rcount = 'd0;
 
   // internal signals

@@ -41,145 +41,74 @@ module system_top (
 
   // clock and resets
 
-  sys_clk,
-  sys_resetn,
+  input                   sys_clk,
+  input                   sys_resetn,
 
   // ddr3
 
-  ddr3_clk_p,
-  ddr3_clk_n,
-  ddr3_a,
-  ddr3_ba,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_odt,
-  ddr3_reset_n,
-  ddr3_we_n,
-  ddr3_ras_n,
-  ddr3_cas_n,
-  ddr3_dqs_p,
-  ddr3_dqs_n,
-  ddr3_dq,
-  ddr3_dm,
-  ddr3_rzq,
-  ddr3_ref_clk,
+  output                  ddr3_clk_p,
+  output                  ddr3_clk_n,
+  output      [ 14:0]     ddr3_a,
+  output      [ 2:0]      ddr3_ba,
+  output                  ddr3_cke,
+  output                  ddr3_cs_n,
+  output                  ddr3_odt,
+  output                  ddr3_reset_n,
+  output                  ddr3_we_n,
+  output                  ddr3_ras_n,
+  output                  ddr3_cas_n,
+  inout       [ 7:0]      ddr3_dqs_p,
+  inout       [ 7:0]      ddr3_dqs_n,
+  inout       [ 63:0]     ddr3_dq,
+  output      [ 7:0]      ddr3_dm,
+  input                   ddr3_rzq,
+  input                   ddr3_ref_clk,
 
   // ethernet
 
-  eth_ref_clk,
-  eth_rxd,
-  eth_txd,
-  eth_mdc,
-  eth_mdio,
-  eth_resetn,
-  eth_intn,
+  input                   eth_ref_clk,
+  input                   eth_rxd,
+  output                  eth_txd,
+  output                  eth_mdc,
+  inout                   eth_mdio,
+  output                  eth_resetn,
+  input                   eth_intn,
 
   // board gpio
 
-  gpio_bd_i,
-  gpio_bd_o,
+  input       [ 10:0]     gpio_bd_i,
+  output      [ 15:0]     gpio_bd_o,
 
   // lane interface
 
-  rx_ref_clk,
-  rx_sysref,
-  rx_sync,
-  rx_data,
-  tx_ref_clk,
-  tx_sysref,
-  tx_sync,
-  tx_data,
+  input                   rx_ref_clk,
+  input                   rx_sysref,
+  output                  rx_sync,
+  input       [ 3:0]      rx_data,
+  input                   tx_ref_clk,
+  input                   tx_sysref,
+  input                   tx_sync,
+  output      [ 3:0]      tx_data,
 
   // gpio
 
-  trig,
-  adc_fdb,
-  adc_fda,
-  dac_irq,
-  clkd_status,
-  adc_pd,
-  dac_txen,
-  sysref,
+  input                   trig,
+  input                   adc_fdb,
+  input                   adc_fda,
+  input                   dac_irq,
+  input       [ 1:0]      clkd_status,
+  output                  adc_pd,
+  output                  dac_txen,
+  output                  sysref,
 
   // spi
 
-  spi_csn_clk,
-  spi_csn_dac,
-  spi_csn_adc,
-  spi_clk,
-  spi_sdio,
-  spi_dir);
-
-  // clock and resets
-
-  input             sys_clk;
-  input             sys_resetn;
-
-  // ddr3
-
-  output            ddr3_clk_p;
-  output            ddr3_clk_n;
-  output  [ 14:0]   ddr3_a;
-  output  [  2:0]   ddr3_ba;
-  output            ddr3_cke;
-  output            ddr3_cs_n;
-  output            ddr3_odt;
-  output            ddr3_reset_n;
-  output            ddr3_we_n;
-  output            ddr3_ras_n;
-  output            ddr3_cas_n;
-  inout   [  7:0]   ddr3_dqs_p;
-  inout   [  7:0]   ddr3_dqs_n;
-  inout   [ 63:0]   ddr3_dq;
-  output  [  7:0]   ddr3_dm;
-  input             ddr3_rzq;
-  input             ddr3_ref_clk;
-
-  // ethernet
-
-  input             eth_ref_clk;
-  input             eth_rxd;
-  output            eth_txd;
-  output            eth_mdc;
-  inout             eth_mdio;
-  output            eth_resetn;
-  input             eth_intn;
-
-  // board gpio
-
-  input   [ 10:0]   gpio_bd_i;
-  output  [ 15:0]   gpio_bd_o;
-
-  // lane interface
-
-  input             rx_ref_clk;
-  input             rx_sysref;
-  output            rx_sync;
-  input   [  3:0]   rx_data;
-  input             tx_ref_clk;
-  input             tx_sysref;
-  input             tx_sync;
-  output  [  3:0]   tx_data;
-
-  // gpio
-
-  input             trig;
-  input             adc_fdb;
-  input             adc_fda;
-  input             dac_irq;
-  input   [  1:0]   clkd_status;
-  output            adc_pd;
-  output            dac_txen;
-  output            sysref;
-
-  // spi
-
-  output            spi_csn_clk;
-  output            spi_csn_dac;
-  output            spi_csn_adc;
-  output            spi_clk;
-  inout             spi_sdio;
-  output            spi_dir;
+  output                  spi_csn_clk,
+  output                  spi_csn_dac,
+  output                  spi_csn_adc,
+  output                  spi_clk,
+  inout                   spi_sdio,
+  output                  spi_dir);
 
   // internal signals
 

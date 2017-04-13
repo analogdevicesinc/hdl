@@ -41,72 +41,70 @@ module ad_gt_es_axi (
 
   // es interface
 
-  up_rstn,
-  up_clk,
-  up_es_dma_req_0,
-  up_es_dma_addr_0,
-  up_es_dma_data_0,
-  up_es_dma_ack_0,
-  up_es_dma_err_0,
-  up_es_dma_req_1,
-  up_es_dma_addr_1,
-  up_es_dma_data_1,
-  up_es_dma_ack_1,
-  up_es_dma_err_1,
-  up_es_dma_req_2,
-  up_es_dma_addr_2,
-  up_es_dma_data_2,
-  up_es_dma_ack_2,
-  up_es_dma_err_2,
-  up_es_dma_req_3,
-  up_es_dma_addr_3,
-  up_es_dma_data_3,
-  up_es_dma_ack_3,
-  up_es_dma_err_3,
-  up_es_dma_req_4,
-  up_es_dma_addr_4,
-  up_es_dma_data_4,
-  up_es_dma_ack_4,
-  up_es_dma_err_4,
-  up_es_dma_req_5,
-  up_es_dma_addr_5,
-  up_es_dma_data_5,
-  up_es_dma_ack_5,
-  up_es_dma_err_5,
-  up_es_dma_req_6,
-  up_es_dma_addr_6,
-  up_es_dma_data_6,
-  up_es_dma_ack_6,
-  up_es_dma_err_6,
-  up_es_dma_req_7,
-  up_es_dma_addr_7,
-  up_es_dma_data_7,
-  up_es_dma_ack_7,
-  up_es_dma_err_7,
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_es_dma_req_0,
+  input       [31:0]      up_es_dma_addr_0,
+  input       [31:0]      up_es_dma_data_0,
+  output  reg             up_es_dma_ack_0,
+  output  reg             up_es_dma_err_0,
+  input                   up_es_dma_req_1,
+  input       [31:0]      up_es_dma_addr_1,
+  input       [31:0]      up_es_dma_data_1,
+  output  reg             up_es_dma_ack_1,
+  output  reg             up_es_dma_err_1,
+  input                   up_es_dma_req_2,
+  input       [31:0]      up_es_dma_addr_2,
+  input       [31:0]      up_es_dma_data_2,
+  output  reg             up_es_dma_ack_2,
+  output  reg             up_es_dma_err_2,
+  input                   up_es_dma_req_3,
+  input       [31:0]      up_es_dma_addr_3,
+  input       [31:0]      up_es_dma_data_3,
+  output  reg             up_es_dma_ack_3,
+  output  reg             up_es_dma_err_3,
+  input                   up_es_dma_req_4,
+  input       [31:0]      up_es_dma_addr_4,
+  input       [31:0]      up_es_dma_data_4,
+  output  reg             up_es_dma_ack_4,
+  output  reg             up_es_dma_err_4,
+  input                   up_es_dma_req_5,
+  input       [31:0]      up_es_dma_addr_5,
+  input       [31:0]      up_es_dma_data_5,
+  output  reg             up_es_dma_ack_5,
+  output  reg             up_es_dma_err_5,
+  input                   up_es_dma_req_6,
+  input       [31:0]      up_es_dma_addr_6,
+  input       [31:0]      up_es_dma_data_6,
+  output  reg             up_es_dma_ack_6,
+  output  reg             up_es_dma_err_6,
+  input                   up_es_dma_req_7,
+  input       [31:0]      up_es_dma_addr_7,
+  input       [31:0]      up_es_dma_data_7,
+  output  reg             up_es_dma_ack_7,
+  output  reg             up_es_dma_err_7,
 
   // axi4 interface
 
-  axi_awvalid,
-  axi_awaddr,
-  axi_awprot,
-  axi_awready,
-  axi_wvalid,
-  axi_wdata,
-  axi_wstrb,
-  axi_wready,
-  axi_bvalid,
-  axi_bresp,
-  axi_bready,
-  axi_arvalid,
-  axi_araddr,
-  axi_arprot,
-  axi_arready,
-  axi_rvalid,
-  axi_rresp,
-  axi_rdata,
-  axi_rready);
-
-  // state machine (fair RR?)
+  output  reg             axi_awvalid,
+  output  reg [31:0]      axi_awaddr,
+  output      [ 2:0]      axi_awprot,
+  input                   axi_awready,
+  output  reg             axi_wvalid,
+  output  reg [31:0]      axi_wdata,
+  output      [ 3:0]      axi_wstrb,
+  input                   axi_wready,
+  input                   axi_bvalid,
+  input       [ 1:0]      axi_bresp,
+  output                  axi_bready,
+  output                  axi_arvalid,
+  output      [31:0]      axi_araddr,
+  output      [ 2:0]      axi_arprot,
+  input                   axi_arready,
+  input                   axi_rvalid,
+  input       [ 1:0]      axi_rresp,
+  input       [31:0]      axi_rdata,
+  output                  axi_rready);
 
   localparam  [ 3:0]  AXI_FSM_SCAN_0  = 4'h0;
   localparam  [ 3:0]  AXI_FSM_SCAN_1  = 4'h1;
@@ -120,95 +118,8 @@ module ad_gt_es_axi (
   localparam  [ 3:0]  AXI_FSM_WAIT    = 4'h9;
   localparam  [ 3:0]  AXI_FSM_ACK     = 4'ha;
 
-  // es interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_es_dma_req_0;
-  input   [31:0]  up_es_dma_addr_0;
-  input   [31:0]  up_es_dma_data_0;
-  output          up_es_dma_ack_0;
-  output          up_es_dma_err_0;
-  input           up_es_dma_req_1;
-  input   [31:0]  up_es_dma_addr_1;
-  input   [31:0]  up_es_dma_data_1;
-  output          up_es_dma_ack_1;
-  output          up_es_dma_err_1;
-  input           up_es_dma_req_2;
-  input   [31:0]  up_es_dma_addr_2;
-  input   [31:0]  up_es_dma_data_2;
-  output          up_es_dma_ack_2;
-  output          up_es_dma_err_2;
-  input           up_es_dma_req_3;
-  input   [31:0]  up_es_dma_addr_3;
-  input   [31:0]  up_es_dma_data_3;
-  output          up_es_dma_ack_3;
-  output          up_es_dma_err_3;
-  input           up_es_dma_req_4;
-  input   [31:0]  up_es_dma_addr_4;
-  input   [31:0]  up_es_dma_data_4;
-  output          up_es_dma_ack_4;
-  output          up_es_dma_err_4;
-  input           up_es_dma_req_5;
-  input   [31:0]  up_es_dma_addr_5;
-  input   [31:0]  up_es_dma_data_5;
-  output          up_es_dma_ack_5;
-  output          up_es_dma_err_5;
-  input           up_es_dma_req_6;
-  input   [31:0]  up_es_dma_addr_6;
-  input   [31:0]  up_es_dma_data_6;
-  output          up_es_dma_ack_6;
-  output          up_es_dma_err_6;
-  input           up_es_dma_req_7;
-  input   [31:0]  up_es_dma_addr_7;
-  input   [31:0]  up_es_dma_data_7;
-  output          up_es_dma_ack_7;
-  output          up_es_dma_err_7;
-
-  // axi4 interface
-
-  output          axi_awvalid;
-  output  [31:0]  axi_awaddr;
-  output  [ 2:0]  axi_awprot;
-  input           axi_awready;
-  output          axi_wvalid;
-  output  [31:0]  axi_wdata;
-  output  [ 3:0]  axi_wstrb;
-  input           axi_wready;
-  input           axi_bvalid;
-  input   [ 1:0]  axi_bresp;
-  output          axi_bready;
-  output          axi_arvalid;
-  output  [31:0]  axi_araddr;
-  output  [ 2:0]  axi_arprot;
-  input           axi_arready;
-  input           axi_rvalid;
-  input   [31:0]  axi_rdata;
-  input   [ 1:0]  axi_rresp;
-  output          axi_rready;
-
   // internal registers
 
-  reg             up_es_dma_ack_0 = 'd0;
-  reg             up_es_dma_err_0 = 'd0;
-  reg             up_es_dma_ack_1 = 'd0;
-  reg             up_es_dma_err_1 = 'd0;
-  reg             up_es_dma_ack_2 = 'd0;
-  reg             up_es_dma_err_2 = 'd0;
-  reg             up_es_dma_ack_3 = 'd0;
-  reg             up_es_dma_err_3 = 'd0;
-  reg             up_es_dma_ack_4 = 'd0;
-  reg             up_es_dma_err_4 = 'd0;
-  reg             up_es_dma_ack_5 = 'd0;
-  reg             up_es_dma_err_5 = 'd0;
-  reg             up_es_dma_ack_6 = 'd0;
-  reg             up_es_dma_err_6 = 'd0;
-  reg             up_es_dma_ack_7 = 'd0;
-  reg             up_es_dma_err_7 = 'd0;
-  reg             axi_awvalid = 'd0;
-  reg     [31:0]  axi_awaddr = 'd0;
-  reg             axi_wvalid = 'd0;
-  reg     [31:0]  axi_wdata = 'd0;
   reg             axi_error = 'd0;
   reg     [ 2:0]  axi_sel = 'd0;
   reg     [ 3:0]  axi_fsm = 'd0;

@@ -43,21 +43,12 @@ module ad_dds_1 (
 
   // interface
 
-  clk,
-  angle,
-  scale,
-  dds_data);
-
-  // interface
-
-  input           clk;
-  input   [15:0]  angle;
-  input   [15:0]  scale;
-  output  [15:0]  dds_data;
+  input                   clk,
+  input       [15:0]      angle,
+  input       [15:0]      scale,
+  output  reg [15:0]      dds_data);
 
   // internal registers
-
-  reg     [15:0]  dds_data = 'd0;
 
   // internal signals
 

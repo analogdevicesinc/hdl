@@ -41,25 +41,14 @@ module up_clock_mon (
 
   // processor interface
 
-  up_rstn,
-  up_clk,
-  up_d_count,
+  input                   up_rstn,
+  input                   up_clk,
+  output  reg [31:0]      up_d_count,
 
   // device interface
 
-  d_rst,
-  d_clk);
-
-  // processor interface
-
-  input           up_rstn;
-  input           up_clk;
-  output  [31:0]  up_d_count;
-
-  // device interface
-
-  input           d_rst;
-  input           d_clk;
+  input                   d_rst,
+  input                   d_clk);
 
   // internal registers
 
@@ -68,7 +57,6 @@ module up_clock_mon (
   reg             up_count_toggle_m1 = 'd0;
   reg             up_count_toggle_m2 = 'd0;
   reg             up_count_toggle_m3 = 'd0;
-  reg     [31:0]  up_d_count = 'd0;
   reg             d_count_toggle_m1 = 'd0;
   reg             d_count_toggle_m2 = 'd0;
   reg             d_count_toggle_m3 = 'd0;

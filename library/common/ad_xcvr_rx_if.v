@@ -37,38 +37,24 @@
 
 `timescale 1ns/100ps
 
-module ad_xcvr_rx_if (
+module ad_xcvr_rx_if #(
+
+  parameter DEVICE_TYPE = 0) (
 
   // jesd interface
 
-  rx_clk,
-  rx_ip_sof,
-  rx_ip_data,
-  rx_sof,
-  rx_data);
+  input                   rx_clk,
+  input       [ 3:0]      rx_ip_sof,
+  input       [31:0]      rx_ip_data,
+  output  reg             rx_sof,
+  output  reg [31:0]      rx_data);
 
-  // parameter
-
-  parameter DEVICE_TYPE = 0;
-
-  // jesd interface
-
-  input           rx_clk;
-  input   [ 3:0]  rx_ip_sof;
-  input   [31:0]  rx_ip_data;
-
-  // aligned data
-
-  output          rx_sof;
-  output  [31:0]  rx_data;
 
   // internal registers
 
   reg     [31:0]  rx_ip_data_d = 'd0;
   reg     [ 3:0]  rx_ip_sof_hold = 'd0;
-  reg             rx_sof = 'd0;
   reg             rx_ip_sof_d = 'd0;
-  reg     [31:0]  rx_data = 'd0;
 
   // internal signals
 

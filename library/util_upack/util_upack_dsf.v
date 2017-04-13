@@ -37,27 +37,26 @@
 
 `timescale 1ns/100ps
 
-module util_upack_dsf (
+module util_upack_dsf #(
+
+  parameter   NUM_OF_CHANNELS_P   =  4,
+  parameter   NUM_OF_CHANNELS_M   =  8,
+  parameter   CHANNEL_DATA_WIDTH  = 32,
+  parameter   NUM_OF_CHANNELS_O   =  4) (
 
   // dac interface
 
-  dac_clk,
-  dac_valid,
-  dac_data,
+  input                   dac_clk,
+  input                   dac_valid,
+  input       [(P_WIDTH-1):0]  dac_data,
 
   // dmx interface
 
-  dac_dmx_enable,
-  dac_dsf_valid,
-  dac_dsf_sync,
-  dac_dsf_data);
+  input                   dac_dmx_enable,
+  output  reg             dac_dsf_valid,
+  output  reg             dac_dsf_sync,
+  output  reg [(M_WIDTH-1):0]  dac_dsf_data);
 
-  // parameters
-
-  parameter   NUM_OF_CHANNELS_P   =  4;
-  parameter   NUM_OF_CHANNELS_M   =  8;
-  parameter   CHANNEL_DATA_WIDTH  = 32;
-  parameter   NUM_OF_CHANNELS_O   =  4;
 
   localparam  CH_SCNT = CHANNEL_DATA_WIDTH/16;
   localparam  P_WIDTH = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_P;
@@ -66,31 +65,15 @@ module util_upack_dsf (
   localparam  E_WIDTH = CHANNEL_DATA_WIDTH*(NUM_OF_CHANNELS_M+1);
   localparam  CH_DCNT = NUM_OF_CHANNELS_P - NUM_OF_CHANNELS_O;
 
-  // dac interface
-
-  input                     dac_clk;
-  input                     dac_valid;
-  input   [(P_WIDTH-1):0]   dac_data;
-
-  // dmx interface
-
-  input                     dac_dmx_enable;
-  output                    dac_dsf_valid;
-  output                    dac_dsf_sync;
-  output  [(M_WIDTH-1):0]   dac_dsf_data;
-
   // internal registers
 
   reg                       dac_dmx_valid = 'd0;
-  reg                       dac_dsf_valid = 'd0;
-  reg                       dac_dsf_sync = 'd0;
   reg     [  2:0]           dac_samples_int = 'd0;
   reg                       dac_dmx_valid_d = 'd0;
   reg                       dac_dsf_valid_d = 'd0;
   reg     [  2:0]           dac_samples_int_d = 'd0;
   reg     [(M_WIDTH-1):0]   dac_data_int = 'd0;
   reg     [(M_WIDTH-1):0]   dac_dsf_data_int = 'd0;
-  reg     [(M_WIDTH-1):0]   dac_dsf_data = 'd0;
   reg                       dac_valid_d1 = 'd0;
 
   // internal signals
@@ -147,7 +130,6 @@ module util_upack_dsf (
 
   assign dac_samples_int_s =  (dac_dsf_valid == 1'b1) ? (dac_samples_int + CH_DCNT) :
             ((dac_samples_int >= NUM_OF_CHANNELS_O) ? (dac_samples_int - NUM_OF_CHANNELS_O) : dac_samples_int);
-
 
   always @(posedge dac_clk) begin
     dac_dmx_valid <= dac_valid & dac_dmx_enable;

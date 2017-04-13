@@ -42,46 +42,32 @@
 
 `timescale 1ns/100ps
 
-module ad_mem_asym (
+module ad_mem_asym #(
 
-  clka,
-  wea,
-  addra,
-  dina,
+  parameter   A_ADDRESS_WIDTH =  8,
+  parameter   A_DATA_WIDTH = 256,
+  parameter   B_ADDRESS_WIDTH =   10,
+  parameter   B_DATA_WIDTH =  64) (
 
-  clkb,
-  addrb,
-  doutb);
+  input                   clka,
+  input                   wea,
+  input       [A_ADDRESS_WIDTH-1:0]  addra,
+  input       [A_DATA_WIDTH-1:0]  dina,
 
-  parameter   A_ADDRESS_WIDTH =  8;
-  parameter   A_DATA_WIDTH = 256;
-  parameter   B_ADDRESS_WIDTH =   10;
-  parameter   B_DATA_WIDTH =  64;
+  input                   clkb,
+  input       [B_ADDRESS_WIDTH-1:0]  addrb,
+  output  reg [B_DATA_WIDTH-1:0]  doutb);
+
 
   localparam  MEM_ADDRESS_WIDTH = (A_ADDRESS_WIDTH > B_ADDRESS_WIDTH) ? A_ADDRESS_WIDTH : B_ADDRESS_WIDTH;
   localparam  MEM_DATA_WIDTH = (A_DATA_WIDTH > B_DATA_WIDTH) ? B_DATA_WIDTH : A_DATA_WIDTH;
   localparam  MEM_SIZE = 2 ** MEM_ADDRESS_WIDTH;
-  // suported ratios: 1:1 / 1:2 / 1:4 / 1:8 / 2:1 / 4:1 / 8:1
   localparam  MEM_RATIO = (A_DATA_WIDTH > B_DATA_WIDTH) ? A_DATA_WIDTH/B_DATA_WIDTH : B_DATA_WIDTH/A_DATA_WIDTH;
   localparam  MEM_IO_COMP = (A_DATA_WIDTH > B_DATA_WIDTH) ? 1'b1 : 1'b0;
-
-  // write interface
-
-  input                           clka;
-  input                           wea;
-  input   [A_ADDRESS_WIDTH-1:0]   addra;
-  input   [A_DATA_WIDTH-1:0]      dina;
-
-  // read interface
-
-  input                           clkb;
-  input   [B_ADDRESS_WIDTH-1:0]   addrb;
-  output  [B_DATA_WIDTH-1:0]      doutb;
 
   // internal registers
 
   reg     [MEM_DATA_WIDTH-1:0]    m_ram[0:MEM_SIZE-1];
-  reg     [B_DATA_WIDTH-1:0]      doutb;
 
   // write interface options
 

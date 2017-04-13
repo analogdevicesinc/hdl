@@ -37,59 +37,36 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9625_if (
+module axi_ad9625_if #(
+
+  parameter   ID = 0,
+  parameter   DEVICE_TYPE = 0) (
 
   // jesd interface 
   // rx_clk is (line-rate/40)
 
-  rx_clk,
-  rx_sof,
-  rx_data,
+  input                   rx_clk,
+  input       [ 3:0]      rx_sof,
+  input       [255:0]     rx_data,
 
   // adc data output
 
-  adc_clk,
-  adc_rst,
-  adc_data,
-  adc_or,
-  adc_status,
-  adc_sref,
-  adc_raddr_in,
-  adc_raddr_out);
+  output                  adc_clk,
+  input                   adc_rst,
+  output  reg [191:0]     adc_data,
+  output                  adc_or,
+  output  reg             adc_status,
+  output  reg [ 15:0]     adc_sref,
+  input       [ 3:0]      adc_raddr_in,
+  output  reg [ 3:0]      adc_raddr_out);
 
-  // parameters
-
-  parameter   ID = 0;
-  parameter   DEVICE_TYPE = 0;
-
-  // jesd interface 
-  // rx_clk is ref_clk/4
-
-  input           rx_clk;
-  input   [  3:0] rx_sof;
-  input   [255:0] rx_data;
-
-  // adc data output
-
-  output          adc_clk;
-  input           adc_rst;
-  output  [191:0] adc_data;
-  output          adc_or;
-  output          adc_status;
-  output  [ 15:0] adc_sref;
-  input   [  3:0] adc_raddr_in;
-  output  [  3:0] adc_raddr_out;
 
   // internal registers
 
-  reg     [191:0] adc_data = 'd0;
-  reg     [ 15:0] adc_sref = 'd0;
   reg     [191:0] adc_data_cur = 'd0;
   reg     [191:0] adc_data_prv = 'd0;
   reg     [  3:0] adc_waddr = 'd0;
-  reg     [  3:0] adc_raddr_out = 'd0;
   reg     [191:0] adc_wdata = 'd0;
-  reg             adc_status = 'd0;
 
   // internal signals
 

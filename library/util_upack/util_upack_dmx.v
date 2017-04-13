@@ -41,51 +41,24 @@ module util_upack_dmx (
 
   // dac interface
 
-  dac_clk,
-  dac_enable,
-  dac_data_0,
-  dac_data_1,
-  dac_data_2,
-  dac_data_3,
-  dac_data_4,
-  dac_data_5,
-  dac_data_6,
-  dac_data_7,
+  input                   dac_clk,
+  input       [ 7:0]      dac_enable,
+  output  reg [ 15:0]     dac_data_0,
+  output  reg [ 15:0]     dac_data_1,
+  output  reg [ 15:0]     dac_data_2,
+  output  reg [ 15:0]     dac_data_3,
+  output  reg [ 15:0]     dac_data_4,
+  output  reg [ 15:0]     dac_data_5,
+  output  reg [ 15:0]     dac_data_6,
+  output  reg [ 15:0]     dac_data_7,
 
   // dmx interface
 
-  dac_dmx_enable,
-  dac_dsf_data);
-
-  // dac interface
-
-  input             dac_clk;
-  input   [  7:0]   dac_enable;
-  output  [ 15:0]   dac_data_0;
-  output  [ 15:0]   dac_data_1;
-  output  [ 15:0]   dac_data_2;
-  output  [ 15:0]   dac_data_3;
-  output  [ 15:0]   dac_data_4;
-  output  [ 15:0]   dac_data_5;
-  output  [ 15:0]   dac_data_6;
-  output  [ 15:0]   dac_data_7;
-
-  // dmx interface
-
-  output  [  7:0]   dac_dmx_enable;
-  input   [127:0]   dac_dsf_data;
+  output  reg [ 7:0]      dac_dmx_enable,
+  input       [127:0]     dac_dsf_data);
 
   // internal registers
 
-  reg     [  7:0]   dac_dmx_enable = 'd0;
-  reg     [ 15:0]   dac_data_0 = 'd0;
-  reg     [ 15:0]   dac_data_1 = 'd0;
-  reg     [ 15:0]   dac_data_2 = 'd0;
-  reg     [ 15:0]   dac_data_3 = 'd0;
-  reg     [ 15:0]   dac_data_4 = 'd0;
-  reg     [ 15:0]   dac_data_5 = 'd0;
-  reg     [ 15:0]   dac_data_6 = 'd0;
-  reg     [ 15:0]   dac_data_7 = 'd0;
   reg               dac_dmx_enable_0 = 'd0;
   reg     [ 15:0]   dac_dmx_data_0_0 = 'd0;
   reg     [ 15:0]   dac_dmx_data_1_0 = 'd0;

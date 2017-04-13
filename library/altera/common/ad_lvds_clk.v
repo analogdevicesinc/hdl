@@ -37,23 +37,18 @@
 
 `timescale 1ns/100ps
 
-module ad_lvds_clk (
+module ad_lvds_clk #(
 
-  rst,
-  locked,
+  parameter   DEVICE_TYPE       = 0) (
 
-  clk_in_p,
-  clk_in_n,
-  clk);
+  input                   rst,
+  output                  locked,
 
-  parameter   DEVICE_TYPE       = 0;
+  input                   clk_in_p,
+  input                   clk_in_n,
+  output                  clk);
 
-  input     rst;
-  output    locked;
 
-  input     clk_in_p;
-  input     clk_in_n;
-  output    clk;
   
   // instantiations
 

@@ -40,48 +40,30 @@
 
 `timescale 1ns/1ns
 
-module prcfg_adc (
-  clk,
+module prcfg_adc #(
+
+  parameter   CHANNEL_ID    = 0,
+  parameter   DATA_WIDTH    = 32) (
+  input                   clk,
 
   // control ports
-  control,
-  status,
+  input       [31:0]      control,
+  output  reg [31:0]      status,
 
   // FIFO interface
-  src_adc_valid,
-  src_adc_data,
-  src_adc_enable,
+  input                   src_adc_valid,
+  input       [(DATA_WIDTH-1):0]  src_adc_data,
+  input                   src_adc_enable,
 
-  dst_adc_valid,
-  dst_adc_data,
-  dst_adc_enable
-);
+  output  reg             dst_adc_valid,
+  output  reg [(DATA_WIDTH-1):0]  dst_adc_data,
+  output  reg             dst_adc_enable);
 
-  parameter   CHANNEL_ID    = 0;
-  parameter   DATA_WIDTH    = 32;
 
   localparam  SYMBOL_WIDTH  = 2;
   localparam  RP_ID         = 8'hA2;
 
-  input                               clk;
-
-  input   [31:0]                      control;
-  output  [31:0]                      status;
-
-  input                               src_adc_valid;
-  input   [(DATA_WIDTH-1):0]          src_adc_data;
-  input                               src_adc_enable;
-
-  output                              dst_adc_valid;
-  output  [(DATA_WIDTH-1):0]          dst_adc_data;
-  output                              dst_adc_enable;
-
-  reg                                 dst_adc_valid   = 'h0;
-  reg     [(DATA_WIDTH-1):0]          dst_adc_data    = 'h0;
-  reg                                 dst_adc_enable  = 'h0;
-
   reg     [ 7:0]                      adc_pn_data     = 'hF1;
-  reg     [31:0]                      status          = 'h0;
   reg     [ 3:0]                      mode            = 'h0;
   reg     [ 3:0]                      channel_sel     = 'h0;
 

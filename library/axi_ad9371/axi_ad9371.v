@@ -37,194 +37,103 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9371 (
+module axi_ad9371 #(
+
+  parameter   ID = 0,
+  parameter   DEVICE_TYPE = 0,
+  parameter   DAC_DATAPATH_DISABLE = 0,
+  parameter   ADC_DATAPATH_DISABLE = 0) (
 
   // receive
 
-  adc_clk,
-  adc_rx_valid,
-  adc_rx_sof,
-  adc_rx_data,
-  adc_rx_ready,
-  adc_os_clk,
-  adc_rx_os_valid,
-  adc_rx_os_sof,
-  adc_rx_os_data,
-  adc_rx_os_ready,
+  input                   adc_clk,
+  input                   adc_rx_valid,
+  input       [ 3:0]      adc_rx_sof,
+  input       [ 63:0]     adc_rx_data,
+  output                  adc_rx_ready,
+  input                   adc_os_clk,
+  input                   adc_rx_os_valid,
+  input       [ 3:0]      adc_rx_os_sof,
+  input       [ 63:0]     adc_rx_os_data,
+  output                  adc_rx_os_ready,
 
   // transmit
 
-  dac_clk,
-  dac_tx_valid,
-  dac_tx_data,
-  dac_tx_ready,
+  input                   dac_clk,
+  output                  dac_tx_valid,
+  output      [127:0]     dac_tx_data,
+  input                   dac_tx_ready,
 
   // master/slave
 
-  dac_sync_in,
-  dac_sync_out,
+  input                   dac_sync_in,
+  output                  dac_sync_out,
 
   // dma interface
 
-  adc_enable_i0,
-  adc_valid_i0,
-  adc_data_i0,
-  adc_enable_q0,
-  adc_valid_q0,
-  adc_data_q0,
-  adc_enable_i1,
-  adc_valid_i1,
-  adc_data_i1,
-  adc_enable_q1,
-  adc_valid_q1,
-  adc_data_q1,
-  adc_dovf,
-  adc_dunf,
+  output                  adc_enable_i0,
+  output                  adc_valid_i0,
+  output      [ 15:0]     adc_data_i0,
+  output                  adc_enable_q0,
+  output                  adc_valid_q0,
+  output      [ 15:0]     adc_data_q0,
+  output                  adc_enable_i1,
+  output                  adc_valid_i1,
+  output      [ 15:0]     adc_data_i1,
+  output                  adc_enable_q1,
+  output                  adc_valid_q1,
+  output      [ 15:0]     adc_data_q1,
+  input                   adc_dovf,
+  input                   adc_dunf,
 
-  adc_os_enable_i0,
-  adc_os_valid_i0,
-  adc_os_data_i0,
-  adc_os_enable_q0,
-  adc_os_valid_q0,
-  adc_os_data_q0,
-  adc_os_dovf,
-  adc_os_dunf,
+  output                  adc_os_enable_i0,
+  output                  adc_os_valid_i0,
+  output      [ 31:0]     adc_os_data_i0,
+  output                  adc_os_enable_q0,
+  output                  adc_os_valid_q0,
+  output      [ 31:0]     adc_os_data_q0,
+  input                   adc_os_dovf,
+  input                   adc_os_dunf,
 
-  dac_enable_i0,
-  dac_valid_i0,
-  dac_data_i0,
-  dac_enable_q0,
-  dac_valid_q0,
-  dac_data_q0,
-  dac_enable_i1,
-  dac_valid_i1,
-  dac_data_i1,
-  dac_enable_q1,
-  dac_valid_q1,
-  dac_data_q1,
-  dac_dovf,
-  dac_dunf,
-
-  // axi interface
-
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awprot,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arprot,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rdata,
-  s_axi_rresp,
-  s_axi_rready);
-
-  // parameters
-
-  parameter   ID = 0;
-  parameter   DEVICE_TYPE = 0;
-  parameter   DAC_DATAPATH_DISABLE = 0;
-  parameter   ADC_DATAPATH_DISABLE = 0;
-
-  // receive
-
-  input             adc_clk;
-  input             adc_rx_valid;
-  input   [  3:0]   adc_rx_sof;
-  input   [ 63:0]   adc_rx_data;
-  output            adc_rx_ready;
-  input             adc_os_clk;
-  input             adc_rx_os_valid;
-  input   [  3:0]   adc_rx_os_sof;
-  input   [ 63:0]   adc_rx_os_data;
-  output            adc_rx_os_ready;
-
-  // transmit
-
-  input             dac_clk;
-  output            dac_tx_valid;
-  output  [127:0]   dac_tx_data;
-  input             dac_tx_ready;
-
-  // master/slave
-
-  input             dac_sync_in;
-  output            dac_sync_out;
-
-  // dma interface
-
-  output            adc_enable_i0;
-  output            adc_valid_i0;
-  output  [ 15:0]   adc_data_i0;
-  output            adc_enable_q0;
-  output            adc_valid_q0;
-  output  [ 15:0]   adc_data_q0;
-  output            adc_enable_i1;
-  output            adc_valid_i1;
-  output  [ 15:0]   adc_data_i1;
-  output            adc_enable_q1;
-  output            adc_valid_q1;
-  output  [ 15:0]   adc_data_q1;
-  input             adc_dovf;
-  input             adc_dunf;
-
-  output            adc_os_enable_i0;
-  output            adc_os_valid_i0;
-  output  [ 31:0]   adc_os_data_i0;
-  output            adc_os_enable_q0;
-  output            adc_os_valid_q0;
-  output  [ 31:0]   adc_os_data_q0;
-  input             adc_os_dovf;
-  input             adc_os_dunf;
-
-  output            dac_enable_i0;
-  output            dac_valid_i0;
-  input   [ 31:0]   dac_data_i0;
-  output            dac_enable_q0;
-  output            dac_valid_q0;
-  input   [ 31:0]   dac_data_q0;
-  output            dac_enable_i1;
-  output            dac_valid_i1;
-  input   [ 31:0]   dac_data_i1;
-  output            dac_enable_q1;
-  output            dac_valid_q1;
-  input   [ 31:0]   dac_data_q1;
-  input             dac_dovf;
-  input             dac_dunf;
+  output                  dac_enable_i0,
+  output                  dac_valid_i0,
+  input       [ 31:0]     dac_data_i0,
+  output                  dac_enable_q0,
+  output                  dac_valid_q0,
+  input       [ 31:0]     dac_data_q0,
+  output                  dac_enable_i1,
+  output                  dac_valid_i1,
+  input       [ 31:0]     dac_data_i1,
+  output                  dac_enable_q1,
+  output                  dac_valid_q1,
+  input       [ 31:0]     dac_data_q1,
+  input                   dac_dovf,
+  input                   dac_dunf,
 
   // axi interface
 
-  input             s_axi_aclk;
-  input             s_axi_aresetn;
-  input             s_axi_awvalid;
-  input   [ 31:0]   s_axi_awaddr;
-  input   [  2:0]   s_axi_awprot;
-  output            s_axi_awready;
-  input             s_axi_wvalid;
-  input   [ 31:0]   s_axi_wdata;
-  input   [  3:0]   s_axi_wstrb;
-  output            s_axi_wready;
-  output            s_axi_bvalid;
-  output  [  1:0]   s_axi_bresp;
-  input             s_axi_bready;
-  input             s_axi_arvalid;
-  input   [ 31:0]   s_axi_araddr;
-  input   [  2:0]   s_axi_arprot;
-  output            s_axi_arready;
-  output            s_axi_rvalid;
-  output  [ 31:0]   s_axi_rdata;
-  output  [  1:0]   s_axi_rresp;
-  input             s_axi_rready;
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [ 31:0]     s_axi_awaddr,
+  input       [ 2:0]      s_axi_awprot,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [ 31:0]     s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [ 31:0]     s_axi_araddr,
+  input       [ 2:0]      s_axi_arprot,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [ 31:0]     s_axi_rdata,
+  output      [ 1:0]      s_axi_rresp,
+  input                   s_axi_rready);
+
 
   // internal registers
 

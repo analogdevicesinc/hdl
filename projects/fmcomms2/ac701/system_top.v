@@ -41,146 +41,75 @@
 
 module system_top (
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input                   sys_rst,
+  input                   sys_clk_p,
+  input                   sys_clk_n,
 
-  uart_sin,
-  uart_sout,
+  input                   uart_sin,
+  output                  uart_sout,
 
-  ddr3_addr,
-  ddr3_ba,
-  ddr3_cas_n,
-  ddr3_ck_n,
-  ddr3_ck_p,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_dm,
-  ddr3_dq,
-  ddr3_dqs_n,
-  ddr3_dqs_p,
-  ddr3_odt,
-  ddr3_ras_n,
-  ddr3_reset_n,
-  ddr3_we_n,
+  output      [13:0]      ddr3_addr,
+  output      [ 2:0]      ddr3_ba,
+  output                  ddr3_cas_n,
+  output      [ 0:0]      ddr3_ck_n,
+  output      [ 0:0]      ddr3_ck_p,
+  output      [ 0:0]      ddr3_cke,
+  output      [ 0:0]      ddr3_cs_n,
+  output      [ 7:0]      ddr3_dm,
+  inout       [63:0]      ddr3_dq,
+  inout       [ 7:0]      ddr3_dqs_n,
+  inout       [ 7:0]      ddr3_dqs_p,
+  output      [ 0:0]      ddr3_odt,
+  output                  ddr3_ras_n,
+  output                  ddr3_reset_n,
+  output                  ddr3_we_n,
 
-  phy_reset_n,
-  phy_mdc,
-  phy_mdio,
-  phy_tx_clk,
-  phy_tx_ctrl,
-  phy_tx_data,
-  phy_rx_clk,
-  phy_rx_ctrl,
-  phy_rx_data,
+  output                  phy_reset_n,
+  output                  phy_mdc,
+  inout                   phy_mdio,
+  output                  phy_tx_clk,
+  output                  phy_tx_ctrl,
+  output      [ 3:0]      phy_tx_data,
+  input                   phy_rx_clk,
+  input                   phy_rx_ctrl,
+  input       [ 3:0]      phy_rx_data,
 
-  fan_pwm,
+  output                  fan_pwm,
 
-  gpio_lcd,
-  gpio_bd,
+  inout       [ 6:0]      gpio_lcd,
+  inout       [12:0]      gpio_bd,
 
-  iic_rstn,
-  iic_scl,
-  iic_sda,
+  output                  iic_rstn,
+  inout                   iic_scl,
+  inout                   iic_sda,
 
-  rx_clk_in_p,
-  rx_clk_in_n,
-  rx_frame_in_p,
-  rx_frame_in_n,
-  rx_data_in_p,
-  rx_data_in_n,
+  input                   rx_clk_in_p,
+  input                   rx_clk_in_n,
+  input                   rx_frame_in_p,
+  input                   rx_frame_in_n,
+  input       [ 5:0]      rx_data_in_p,
+  input       [ 5:0]      rx_data_in_n,
 
-  tx_clk_out_p,
-  tx_clk_out_n,
-  tx_frame_out_p,
-  tx_frame_out_n,
-  tx_data_out_p,
-  tx_data_out_n,
+  output                  tx_clk_out_p,
+  output                  tx_clk_out_n,
+  output                  tx_frame_out_p,
+  output                  tx_frame_out_n,
+  output      [ 5:0]      tx_data_out_p,
+  output      [ 5:0]      tx_data_out_n,
 
-  txnrx,
-  enable,
+  output                  txnrx,
+  output                  enable,
 
-  gpio_resetb,
-  gpio_sync,
-  gpio_en_agc,
-  gpio_ctl,
-  gpio_status,
+  inout                   gpio_resetb,
+  inout                   gpio_sync,
+  inout                   gpio_en_agc,
+  inout       [ 3:0]      gpio_ctl,
+  inout       [ 7:0]      gpio_status,
 
-  spi_csn_0,
-  spi_clk,
-  spi_mosi,
-  spi_miso
- );
-
-  input           sys_rst;
-  input           sys_clk_p;
-  input           sys_clk_n;
-
-  input           uart_sin;
-  output          uart_sout;
-
-  output  [13:0]  ddr3_addr;
-  output  [ 2:0]  ddr3_ba;
-  output          ddr3_cas_n;
-  output  [ 0:0]  ddr3_ck_n;
-  output  [ 0:0]  ddr3_ck_p;
-  output  [ 0:0]  ddr3_cke;
-  output  [ 0:0]  ddr3_cs_n;
-  output  [ 7:0]  ddr3_dm;
-  inout   [63:0]  ddr3_dq;
-  inout   [ 7:0]  ddr3_dqs_n;
-  inout   [ 7:0]  ddr3_dqs_p;
-  output  [ 0:0]  ddr3_odt;
-  output          ddr3_ras_n;
-  output          ddr3_reset_n;
-  output          ddr3_we_n;
-
-  output          phy_reset_n;
-  output          phy_mdc;
-  inout           phy_mdio;
-  output          phy_tx_clk;
-  output          phy_tx_ctrl;
-  output  [ 3:0]  phy_tx_data;
-  input           phy_rx_clk;
-  input           phy_rx_ctrl;
-  input   [ 3:0]  phy_rx_data;
-
-  output          fan_pwm;
-
-  inout   [ 6:0]  gpio_lcd;
-  inout   [12:0]  gpio_bd;
-
-  output          iic_rstn;
-  inout           iic_scl;
-  inout           iic_sda;
-
-  input           rx_clk_in_p;
-  input           rx_clk_in_n;
-  input           rx_frame_in_p;
-  input           rx_frame_in_n;
-  input   [ 5:0]  rx_data_in_p;
-  input   [ 5:0]  rx_data_in_n;
-
-  output          tx_clk_out_p;
-  output          tx_clk_out_n;
-  output          tx_frame_out_p;
-  output          tx_frame_out_n;
-  output  [ 5:0]  tx_data_out_p;
-  output  [ 5:0]  tx_data_out_n;
-
-  output          txnrx;
-  output          enable;
-
-  inout           gpio_resetb;
-  inout           gpio_sync;
-  inout           gpio_en_agc;
-  inout   [ 3:0]  gpio_ctl;
-  inout   [ 7:0]  gpio_status;
-
-  output          spi_csn_0;
-  output          spi_clk;
-  output          spi_mosi;
-  input           spi_miso;
+  output                  spi_csn_0,
+  output                  spi_clk,
+  output                  spi_mosi,
+  input                   spi_miso );
 
   // internal signals
 

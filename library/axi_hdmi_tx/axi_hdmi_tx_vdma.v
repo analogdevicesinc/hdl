@@ -40,79 +40,44 @@ module axi_hdmi_tx_vdma (
 
   // hdmi interface
 
-  hdmi_fs_toggle,
-  hdmi_raddr_g,
+  input                   hdmi_fs_toggle,
+  input       [ 8:0]      hdmi_raddr_g,
 
   // vdma interface
 
-  vdma_clk,
-  vdma_rst,
-  vdma_fs,
-  vdma_fs_ret,
-  vdma_valid,
-  vdma_data,
-  vdma_ready,
-  vdma_wr,
-  vdma_waddr,
-  vdma_wdata,
-  vdma_fs_ret_toggle,
-  vdma_fs_waddr,
-  vdma_tpm_oos,
-  vdma_ovf,
-  vdma_unf);
-
-  // parameters
+  input                   vdma_clk,
+  input                   vdma_rst,
+  output  reg             vdma_fs,
+  input                   vdma_fs_ret,
+  input                   vdma_valid,
+  input       [63:0]      vdma_data,
+  output  reg             vdma_ready,
+  output  reg             vdma_wr,
+  output  reg [ 8:0]      vdma_waddr,
+  output  reg [47:0]      vdma_wdata,
+  output  reg             vdma_fs_ret_toggle,
+  output  reg [ 8:0]      vdma_fs_waddr,
+  output  reg             vdma_tpm_oos,
+  output  reg             vdma_ovf,
+  output  reg             vdma_unf);
 
   localparam      BUF_THRESHOLD_LO = 9'd3;
   localparam      BUF_THRESHOLD_HI = 9'd509;
   localparam      RDY_THRESHOLD_LO = 9'd450;
   localparam      RDY_THRESHOLD_HI = 9'd500;
 
-  // hdmi interface
-
-  input           hdmi_fs_toggle;
-  input   [ 8:0]  hdmi_raddr_g;
-
-  // vdma interface
-
-  input           vdma_clk;
-  input           vdma_rst;
-  output          vdma_fs;
-  input           vdma_fs_ret;
-  input           vdma_valid;
-  input   [63:0]  vdma_data;
-  output          vdma_ready;
-  output          vdma_wr;
-  output  [ 8:0]  vdma_waddr;
-  output  [47:0]  vdma_wdata;
-  output          vdma_fs_ret_toggle;
-  output  [ 8:0]  vdma_fs_waddr;
-  output          vdma_tpm_oos;
-  output          vdma_ovf;
-  output          vdma_unf;
-
   // internal registers
 
   reg             vdma_fs_toggle_m1 = 'd0;
   reg             vdma_fs_toggle_m2 = 'd0;
   reg             vdma_fs_toggle_m3 = 'd0;
-  reg             vdma_fs = 'd0;
-  reg     [ 8:0]  vdma_fs_waddr = 'd0;
-  reg             vdma_fs_ret_toggle = 'd0;
-  reg             vdma_wr = 'd0;
-  reg     [ 8:0]  vdma_waddr = 'd0;
-  reg     [47:0]  vdma_wdata = 'd0;
   reg     [22:0]  vdma_tpm_data = 'd0;
-  reg             vdma_tpm_oos = 'd0;
   reg     [ 8:0]  vdma_raddr_g_m1 = 'd0;
   reg     [ 8:0]  vdma_raddr_g_m2 = 'd0;
   reg     [ 8:0]  vdma_raddr = 'd0;
   reg     [ 8:0]  vdma_addr_diff = 'd0;
-  reg             vdma_ready = 'd0;
   reg             vdma_almost_full = 'd0;
   reg             vdma_almost_empty = 'd0;
-  reg             vdma_ovf = 'd0;
-  reg             vdma_unf = 'd0;
 
   // internal wires
 

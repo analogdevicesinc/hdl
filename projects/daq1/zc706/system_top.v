@@ -39,156 +39,80 @@
 
 module system_top (
 
-  ddr_addr,
-  ddr_ba,
-  ddr_cas_n,
-  ddr_ck_n,
-  ddr_ck_p,
-  ddr_cke,
-  ddr_cs_n,
-  ddr_dm,
-  ddr_dq,
-  ddr_dqs_n,
-  ddr_dqs_p,
-  ddr_odt,
-  ddr_ras_n,
-  ddr_reset_n,
-  ddr_we_n,
+  inout       [14:0]      ddr_addr,
+  inout       [ 2:0]      ddr_ba,
+  inout                   ddr_cas_n,
+  inout                   ddr_ck_n,
+  inout                   ddr_ck_p,
+  inout                   ddr_cke,
+  inout                   ddr_cs_n,
+  inout       [ 3:0]      ddr_dm,
+  inout       [31:0]      ddr_dq,
+  inout       [ 3:0]      ddr_dqs_n,
+  inout       [ 3:0]      ddr_dqs_p,
+  inout                   ddr_odt,
+  inout                   ddr_ras_n,
+  inout                   ddr_reset_n,
+  inout                   ddr_we_n,
 
-  fixed_io_ddr_vrn,
-  fixed_io_ddr_vrp,
-  fixed_io_mio,
-  fixed_io_ps_clk,
-  fixed_io_ps_porb,
-  fixed_io_ps_srstb,
+  inout                   fixed_io_ddr_vrn,
+  inout                   fixed_io_ddr_vrp,
+  inout       [53:0]      fixed_io_mio,
+  inout                   fixed_io_ps_clk,
+  inout                   fixed_io_ps_porb,
+  inout                   fixed_io_ps_srstb,
 
-  gpio_bd,
+  inout       [14:0]      gpio_bd,
 
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
+  output                  hdmi_out_clk,
+  output                  hdmi_vsync,
+  output                  hdmi_hsync,
+  output                  hdmi_data_e,
+  output      [23:0]      hdmi_data,
 
-  spdif,
+  output                  spdif,
 
-  iic_scl,
-  iic_sda,
+  inout                   iic_scl,
+  inout                   iic_sda,
 
-  dac_clk_in_p,
-  dac_clk_in_n,
-  dac_clk_out_p,
-  dac_clk_out_n,
-  dac_frame_out_p,
-  dac_frame_out_n,
-  dac_data_out_p,
-  dac_data_out_n,
+  input                   dac_clk_in_p,
+  input                   dac_clk_in_n,
+  output                  dac_clk_out_p,
+  output                  dac_clk_out_n,
+  output                  dac_frame_out_p,
+  output                  dac_frame_out_n,
+  output      [15:0]      dac_data_out_p,
+  output      [15:0]      dac_data_out_n,
 
-  adc_clk_in_p,
-  adc_clk_in_n,
-  adc_data_in_p,
-  adc_data_in_n,
+  input                   adc_clk_in_p,
+  input                   adc_clk_in_n,
+  input       [13:0]      adc_data_in_p,
+  input       [13:0]      adc_data_in_n,
 
-  spi_clk,
-  spi_csn,
-  spi_sdio,
-  spi_int,
+  output                  spi_clk,
+  output                  spi_csn,
+  inout                   spi_sdio,
+  input                   spi_int,
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input                   sys_rst,
+  input                   sys_clk_p,
+  input                   sys_clk_n,
 
-  ddr3_addr,
-  ddr3_ba,
-  ddr3_cas_n,
-  ddr3_ck_n,
-  ddr3_ck_p,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_dm,
-  ddr3_dq,
-  ddr3_dqs_n,
-  ddr3_dqs_p,
-  ddr3_odt,
-  ddr3_ras_n,
-  ddr3_reset_n,
-  ddr3_we_n
-);
-
-  inout   [14:0]  ddr_addr;
-  inout   [ 2:0]  ddr_ba;
-  inout           ddr_cas_n;
-  inout           ddr_ck_n;
-  inout           ddr_ck_p;
-  inout           ddr_cke;
-  inout           ddr_cs_n;
-  inout   [ 3:0]  ddr_dm;
-  inout   [31:0]  ddr_dq;
-  inout   [ 3:0]  ddr_dqs_n;
-  inout   [ 3:0]  ddr_dqs_p;
-  inout           ddr_odt;
-  inout           ddr_ras_n;
-  inout           ddr_reset_n;
-  inout           ddr_we_n;
-
-  inout           fixed_io_ddr_vrn;
-  inout           fixed_io_ddr_vrp;
-  inout   [53:0]  fixed_io_mio;
-  inout           fixed_io_ps_clk;
-  inout           fixed_io_ps_porb;
-  inout           fixed_io_ps_srstb;
-
-  inout   [14:0]  gpio_bd;
-
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output  [23:0]  hdmi_data;
-
-  output          spdif;
-
-  inout           iic_scl;
-  inout           iic_sda;
-
-  input           dac_clk_in_p;
-  input           dac_clk_in_n;
-  output          dac_clk_out_p;
-  output          dac_clk_out_n;
-  output          dac_frame_out_p;
-  output          dac_frame_out_n;
-  output  [15:0]  dac_data_out_p;
-  output  [15:0]  dac_data_out_n;
-
-  input           adc_clk_in_p;
-  input           adc_clk_in_n;
-  input  [13:0]   adc_data_in_p;
-  input  [13:0]   adc_data_in_n;
-
-  output          spi_clk;
-  output          spi_csn;
-  inout           spi_sdio;
-  input           spi_int;
-
-  input           sys_rst;
-  input           sys_clk_p;
-  input           sys_clk_n;
-
-  output  [13:0]  ddr3_addr;
-  output  [ 2:0]  ddr3_ba;
-  output          ddr3_cas_n;
-  output  [ 0:0]  ddr3_ck_n;
-  output  [ 0:0]  ddr3_ck_p;
-  output  [ 0:0]  ddr3_cke;
-  output  [ 0:0]  ddr3_cs_n;
-  output  [ 7:0]  ddr3_dm;
-  inout   [63:0]  ddr3_dq;
-  inout   [ 7:0]  ddr3_dqs_n;
-  inout   [ 7:0]  ddr3_dqs_p;
-  output  [ 0:0]  ddr3_odt;
-  output          ddr3_ras_n;
-  output          ddr3_reset_n;
-  output          ddr3_we_n;
+  output      [13:0]      ddr3_addr,
+  output      [ 2:0]      ddr3_ba,
+  output                  ddr3_cas_n,
+  output      [ 0:0]      ddr3_ck_n,
+  output      [ 0:0]      ddr3_ck_p,
+  output      [ 0:0]      ddr3_cke,
+  output      [ 0:0]      ddr3_cs_n,
+  output      [ 7:0]      ddr3_dm,
+  inout       [63:0]      ddr3_dq,
+  inout       [ 7:0]      ddr3_dqs_n,
+  inout       [ 7:0]      ddr3_dqs_p,
+  output      [ 0:0]      ddr3_odt,
+  output                  ddr3_ras_n,
+  output                  ddr3_reset_n,
+  output                  ddr3_we_n);
 
   // internal signals
 

@@ -41,239 +41,122 @@
 
 module system_top (
 
-  ddr_addr,
-  ddr_ba,
-  ddr_cas_n,
-  ddr_ck_n,
-  ddr_ck_p,
-  ddr_cke,
-  ddr_cs_n,
-  ddr_dm,
-  ddr_dq,
-  ddr_dqs_n,
-  ddr_dqs_p,
-  ddr_odt,
-  ddr_ras_n,
-  ddr_reset_n,
-  ddr_we_n,
+  inout       [ 14:0]     ddr_addr,
+  inout       [ 2:0]      ddr_ba,
+  inout                   ddr_cas_n,
+  inout                   ddr_ck_n,
+  inout                   ddr_ck_p,
+  inout                   ddr_cke,
+  inout                   ddr_cs_n,
+  inout       [ 3:0]      ddr_dm,
+  inout       [ 31:0]     ddr_dq,
+  inout       [ 3:0]      ddr_dqs_n,
+  inout       [ 3:0]      ddr_dqs_p,
+  inout                   ddr_odt,
+  inout                   ddr_ras_n,
+  inout                   ddr_reset_n,
+  inout                   ddr_we_n,
 
-  fixed_io_ddr_vrn,
-  fixed_io_ddr_vrp,
-  fixed_io_mio,
-  fixed_io_ps_clk,
-  fixed_io_ps_porb,
-  fixed_io_ps_srstb,
+  inout                   fixed_io_ddr_vrn,
+  inout                   fixed_io_ddr_vrp,
+  inout       [ 53:0]     fixed_io_mio,
+  inout                   fixed_io_ps_clk,
+  inout                   fixed_io_ps_porb,
+  inout                   fixed_io_ps_srstb,
 
-  gpio_bd,
+  inout       [ 14:0]     gpio_bd,
 
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
+  output                  hdmi_out_clk,
+  output                  hdmi_vsync,
+  output                  hdmi_hsync,
+  output                  hdmi_data_e,
+  output      [ 23:0]     hdmi_data,
 
-  spdif,
+  output                  spdif,
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input                   sys_rst,
+  input                   sys_clk_p,
+  input                   sys_clk_n,
 
-  ddr3_addr,
-  ddr3_ba,
-  ddr3_cas_n,
-  ddr3_ck_n,
-  ddr3_ck_p,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_dm,
-  ddr3_dq,
-  ddr3_dqs_n,
-  ddr3_dqs_p,
-  ddr3_odt,
-  ddr3_ras_n,
-  ddr3_reset_n,
-  ddr3_we_n,
+  output      [ 13:0]     ddr3_addr,
+  output      [ 2:0]      ddr3_ba,
+  output                  ddr3_cas_n,
+  output      [ 0:0]      ddr3_ck_n,
+  output      [ 0:0]      ddr3_ck_p,
+  output      [ 0:0]      ddr3_cke,
+  output      [ 0:0]      ddr3_cs_n,
+  output      [ 7:0]      ddr3_dm,
+  inout       [ 63:0]     ddr3_dq,
+  inout       [ 7:0]      ddr3_dqs_n,
+  inout       [ 7:0]      ddr3_dqs_p,
+  output      [ 0:0]      ddr3_odt,
+  output                  ddr3_ras_n,
+  output                  ddr3_reset_n,
+  output                  ddr3_we_n,
 
-  iic_scl,
-  iic_sda,
+  inout                   iic_scl,
+  inout                   iic_sda,
 
-  rx_ref_clk_p,
-  rx_ref_clk_n,
-  rx_sysref_p,
-  rx_sysref_n,
-  rx_sync_p,
-  rx_sync_n,
-  rx_data_p,
-  rx_data_n,
+  input                   rx_ref_clk_p,
+  input                   rx_ref_clk_n,
+  input                   rx_sysref_p,
+  input                   rx_sysref_n,
+  output                  rx_sync_p,
+  output                  rx_sync_n,
+  input       [ 3:0]      rx_data_p,
+  input       [ 3:0]      rx_data_n,
 
-  tx_ref_clk_p,
-  tx_ref_clk_n,
-  tx_sysref_p,
-  tx_sysref_n,
-  tx_sync0_p,
-  tx_sync0_n,
-  tx_sync1_p,
-  tx_sync1_n,
-  tx_data_p,
-  tx_data_n,
+  input                   tx_ref_clk_p,
+  input                   tx_ref_clk_n,
+  input                   tx_sysref_p,
+  input                   tx_sysref_n,
+  input                   tx_sync0_p,
+  input                   tx_sync0_n,
+  input                   tx_sync1_p,
+  input                   tx_sync1_n,
+  output      [ 7:0]      tx_data_p,
+  output      [ 7:0]      tx_data_n,
 
-  trig_p,
-  trig_n,
+  input                   trig_p,
+  input                   trig_n,
 
-  spi_csn_clk,
-  spi_csn_dac,
-  spi_csn_adc,
-  spi_clk,
-  spi_sdio,
-  spi_dir,
+  output                  spi_csn_clk,
+  output                  spi_csn_dac,
+  output                  spi_csn_adc,
+  output                  spi_clk,
+  inout                   spi_sdio,
+  output                  spi_dir,
 
-  spi2_csn_adf4355_1,
-  spi2_csn_adf4355_2,
-  spi2_csn_hmc1044_1,
-  spi2_csn_hmc1044_2,
-  spi2_csn_hmc1044_3,
-  spi2_csn_adl5240_1,
-  spi2_csn_adl5240_2,
-  spi2_csn_hmc271_1,
-  spi2_csn_hmc271_2,
-  spi2_clk,
-  spi2_sdo,
-  spi2_sdi_hmc271_1,
-  spi2_sdi_hmc271_2,
+  output                  spi2_csn_adf4355_1,
+  output                  spi2_csn_adf4355_2,
+  output                  spi2_csn_hmc1044_1,
+  output                  spi2_csn_hmc1044_2,
+  output                  spi2_csn_hmc1044_3,
+  output                  spi2_csn_adl5240_1,
+  output                  spi2_csn_adl5240_2,
+  output                  spi2_csn_hmc271_1,
+  output                  spi2_csn_hmc271_2,
+  output                  spi2_clk,
+  output                  spi2_sdo,
+  input                   spi2_sdi_hmc271_1,
+  input                   spi2_sdi_hmc271_2,
 
-  clk_gpio,
-  adc_fda,
-  adc_fdb,
-  dac_irq,
-  adf4355_1_ld,
-  adf4355_2_ld,
-  xo_en,
-  clk_sync,
-  adf4355_2_pd,
-  dac_txen0,
-  dac_txen1,
-  hmc271_1_reset,
-  hmc271_2_reset,
-  hmc349_sel,
-  hmc922_a,
-  hmc922_b);
-
-  inout  [ 14:0]  ddr_addr;
-  inout  [  2:0]  ddr_ba;
-  inout           ddr_cas_n;
-  inout           ddr_ck_n;
-  inout           ddr_ck_p;
-  inout           ddr_cke;
-  inout           ddr_cs_n;
-  inout  [  3:0]  ddr_dm;
-  inout  [ 31:0]  ddr_dq;
-  inout  [  3:0]  ddr_dqs_n;
-  inout  [  3:0]  ddr_dqs_p;
-  inout           ddr_odt;
-  inout           ddr_ras_n;
-  inout           ddr_reset_n;
-  inout           ddr_we_n;
-
-  inout           fixed_io_ddr_vrn;
-  inout           fixed_io_ddr_vrp;
-  inout  [ 53:0]  fixed_io_mio;
-  inout           fixed_io_ps_clk;
-  inout           fixed_io_ps_porb;
-  inout           fixed_io_ps_srstb;
-
-  inout  [ 14:0]  gpio_bd;
-
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output [ 23:0]  hdmi_data;
-
-  output          spdif;
-
-  input           sys_rst;
-  input           sys_clk_p;
-  input           sys_clk_n;
-
-  output [ 13:0]  ddr3_addr;
-  output [  2:0]  ddr3_ba;
-  output          ddr3_cas_n;
-  output [  0:0]  ddr3_ck_n;
-  output [  0:0]  ddr3_ck_p;
-  output [  0:0]  ddr3_cke;
-  output [  0:0]  ddr3_cs_n;
-  output [  7:0]  ddr3_dm;
-  inout  [ 63:0]  ddr3_dq;
-  inout  [  7:0]  ddr3_dqs_n;
-  inout  [  7:0]  ddr3_dqs_p;
-  output [  0:0]  ddr3_odt;
-  output          ddr3_ras_n;
-  output          ddr3_reset_n;
-  output          ddr3_we_n;
-
-  inout           iic_scl;
-  inout           iic_sda;
-
-  input           rx_ref_clk_p;
-  input           rx_ref_clk_n;
-  input           rx_sysref_p;
-  input           rx_sysref_n;
-  output          rx_sync_p;
-  output          rx_sync_n;
-  input  [  3:0]  rx_data_p;
-  input  [  3:0]  rx_data_n;
-
-  input           tx_ref_clk_p;
-  input           tx_ref_clk_n;
-  input           tx_sysref_p;
-  input           tx_sysref_n;
-  input           tx_sync0_p;
-  input           tx_sync0_n;
-  input           tx_sync1_p;
-  input           tx_sync1_n;
-  output [  7:0]  tx_data_p;
-  output [  7:0]  tx_data_n;
-
-  input           trig_p;
-  input           trig_n;
-
-  output          spi_csn_clk;
-  output          spi_csn_dac;
-  output          spi_csn_adc;
-  output          spi_clk;
-  inout           spi_sdio;
-  output          spi_dir;
-
-  output          spi2_csn_adf4355_1;
-  output          spi2_csn_adf4355_2;
-  output          spi2_csn_hmc1044_1;
-  output          spi2_csn_hmc1044_2;
-  output          spi2_csn_hmc1044_3;
-  output          spi2_csn_adl5240_1;
-  output          spi2_csn_adl5240_2;
-  output          spi2_csn_hmc271_1;
-  output          spi2_csn_hmc271_2;
-  output          spi2_clk;
-  output          spi2_sdo;
-  input           spi2_sdi_hmc271_1;
-  input           spi2_sdi_hmc271_2;
-
-  inout  [  3:0]  clk_gpio;
-  inout           adc_fda;
-  inout           adc_fdb;
-  inout           dac_irq;
-  inout           adf4355_1_ld;
-  inout           adf4355_2_ld;
-  inout           xo_en;
-  inout           clk_sync;
-  inout           adf4355_2_pd;
-  inout           dac_txen0;
-  inout           dac_txen1;
-  inout           hmc271_1_reset;
-  inout           hmc271_2_reset;
-  inout           hmc349_sel;
-  inout           hmc922_a;
-  inout           hmc922_b;
+  inout       [ 3:0]      clk_gpio,
+  inout                   adc_fda,
+  inout                   adc_fdb,
+  inout                   dac_irq,
+  inout                   adf4355_1_ld,
+  inout                   adf4355_2_ld,
+  inout                   xo_en,
+  inout                   clk_sync,
+  inout                   adf4355_2_pd,
+  inout                   dac_txen0,
+  inout                   dac_txen1,
+  inout                   hmc271_1_reset,
+  inout                   hmc271_2_reset,
+  inout                   hmc349_sel,
+  inout                   hmc922_a,
+  inout                   hmc922_b);
 
   // internal registers
 

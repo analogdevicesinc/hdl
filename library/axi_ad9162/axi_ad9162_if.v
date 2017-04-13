@@ -37,39 +37,30 @@
 
 `timescale 1ns / 1ps
 
-module axi_ad9162_if (
+module axi_ad9162_if #(
+
+  parameter DEVICE_TYPE = 0) (
 
     // jesd interface
     // tx_clk is (line-rate/40)
     
-    tx_clk,
-    tx_data,
+  input                   tx_clk,
+  output  reg [255:0]     tx_data,
     
     // dac interface
     
-    dac_clk,
-    dac_rst,
-    dac_data);
+  output                  dac_clk,
+  input                   dac_rst,
+  input       [255:0]     dac_data);
     
-    // altera (0x1) or xilinx (0x0)
 
-    parameter DEVICE_TYPE = 0;
 
-    // jesd interface
-    // tx_clk is (line-rate/40)
     
-    input             tx_clk;
-    output  [255:0]   tx_data;
     
-    // dac interface
     
-    output            dac_clk;
-    input             dac_rst;
-    input   [255:0]   dac_data;
 
     // internal registers
 
-    reg     [255:0]   tx_data = 'd0;
     
     // reorder data for the jesd links
     

@@ -42,90 +42,52 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9652_if (
+module axi_ad9652_if #(
+
+  parameter   DEVICE_TYPE = 0,
+  parameter   IO_DELAY_GROUP = "adc_if_delay_group") (
 
   // adc interface (clk, data, over-range)
 
-  adc_clk_in_p,
-  adc_clk_in_n,
-  adc_data_in_p,
-  adc_data_in_n,
-  adc_or_in_p,
-  adc_or_in_n,
+  input                   adc_clk_in_p,
+  input                   adc_clk_in_n,
+  input       [15:0]      adc_data_in_p,
+  input       [15:0]      adc_data_in_n,
+  input                   adc_or_in_p,
+  input                   adc_or_in_n,
 
   // interface outputs
 
-  adc_clk,
-  adc_data_a,
-  adc_data_b,
-  adc_or_a,
-  adc_or_b,
-  adc_status,
+  output                  adc_clk,
+  output  reg [15:0]      adc_data_a,
+  output  reg [15:0]      adc_data_b,
+  output  reg             adc_or_a,
+  output  reg             adc_or_b,
+  output  reg             adc_status,
 
   // processor control signals
 
-  adc_ddr_edgesel,
+  input                   adc_ddr_edgesel,
 
   // delay control signals
 
-  up_clk,
-  up_dld,
-  up_dwdata,
-  up_drdata,
-  delay_clk,
-  delay_rst,
-  delay_locked);
+  input                   up_clk,
+  input       [16:0]      up_dld,
+  input       [84:0]      up_dwdata,
+  output      [84:0]      up_drdata,
+  input                   delay_clk,
+  input                   delay_rst,
+  output                  delay_locked);
 
-  // This parameter controls the buffer type based on the target device.
-
-  parameter   DEVICE_TYPE = 0;
-  parameter   IO_DELAY_GROUP = "adc_if_delay_group";
-
-  // adc interface (clk, data, over-range)
-
-  input           adc_clk_in_p;
-  input           adc_clk_in_n;
-  input   [15:0]  adc_data_in_p;
-  input   [15:0]  adc_data_in_n;
-  input           adc_or_in_p;
-  input           adc_or_in_n;
-
-  // interface outputs
-
-  output          adc_clk;
-  output  [15:0]  adc_data_a;
-  output  [15:0]  adc_data_b;
-  output          adc_or_a;
-  output          adc_or_b;
-  output          adc_status;
-
-  // processor control signals
-
-  input           adc_ddr_edgesel;
-
-  // delay control signals
-
-  input           up_clk;
-  input   [16:0]  up_dld;
-  input   [84:0]  up_dwdata;
-  output  [84:0]  up_drdata;
-  input           delay_clk;
-  input           delay_rst;
-  output          delay_locked;
 
   // internal registers
 
-  reg             adc_status = 'd0;
   reg     [15:0]  adc_data_p = 'd0;
   reg     [15:0]  adc_data_n = 'd0;
   reg     [15:0]  adc_data_p_d = 'd0;
   reg             adc_or_p = 'd0;
   reg             adc_or_n = 'd0;
   reg             adc_or_p_d = 'd0;
-  reg     [15:0]  adc_data_a = 'd0;
-  reg     [15:0]  adc_data_b = 'd0;
-  reg             adc_or_a = 'd0;
-  reg             adc_or_b = 'd0;
 
   // internal signals
 
@@ -163,7 +125,6 @@ module axi_ad9652_if (
       adc_or_b <= adc_or_p;
     end
   end
-
 
   // data interface
 

@@ -39,64 +39,40 @@
 
 `timescale 1ns/100ps
 
-module axi_ad7616_pif (
+module axi_ad7616_pif #(
+
+  parameter UP_ADDRESS_WIDTH = 14) (
 
   // physical interface
 
-  cs_n,
-  db_o,
-  db_i,
-  db_t,
-  rd_n,
-  wr_n,
+  output                  cs_n,
+  output      [15:0]      db_o,
+  input       [15:0]      db_i,
+  output                  db_t,
+  output                  rd_n,
+  output                  wr_n,
 
   // FIFO interface
 
-  adc_data,
-  adc_valid,
-  adc_sync,
+  output      [15:0]      adc_data,
+  output                  adc_valid,
+  output  reg             adc_sync,
 
   // end of convertion
 
-  end_of_conv,
-  burst_length,
+  input                   end_of_conv,
+  input       [ 4:0]      burst_length,
 
   // register access
 
-  clk,
-  rstn,
-  rd_req,
-  wr_req,
-  wr_data,
-  rd_data,
-  rd_valid
-);
+  input                   clk,
+  input                   rstn,
+  input                   rd_req,
+  input                   wr_req,
+  input       [15:0]      wr_data,
+  output  reg [15:0]      rd_data,
+  output  reg             rd_valid);
 
-  parameter UP_ADDRESS_WIDTH = 14;
-
-  // IO definitions
-
-  output                          cs_n;
-  output  [15:0]                  db_o;
-  input   [15:0]                  db_i;
-  output                          db_t;
-  output                          rd_n;
-  output                          wr_n;
-
-  input                           end_of_conv;
-  input   [ 4:0]                  burst_length;
-
-  input                           clk;
-  input                           rstn;
-  input                           rd_req;
-  input                           wr_req;
-  input   [15:0]                  wr_data;
-  output  [15:0]                  rd_data;
-  output                          rd_valid;
-
-  output  [15:0]                  adc_data;
-  output                          adc_valid;
-  output                          adc_sync;
 
   // state registers
 
@@ -121,10 +97,7 @@ module axi_ad7616_pif (
 
   reg                             xfer_req_d = 1'h0;
 
-  reg                             adc_sync = 1'h0;
-  reg                             rd_valid = 1'h0;
   reg                             rd_valid_d = 1'h0;
-  reg     [15:0]                  rd_data = 16'h0;
 
   // internal wires
 

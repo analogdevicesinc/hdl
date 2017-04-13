@@ -37,118 +37,64 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9643 (
+module axi_ad9643 #(
+
+  parameter ID = 0,
+  parameter DEVICE_TYPE = 0,
+  parameter ADC_DATAPATH_DISABLE = 0,
+  parameter IO_DELAY_GROUP = "adc_if_delay_group") (
 
   // adc interface (clk, data, over-range)
 
-  adc_clk_in_p,
-  adc_clk_in_n,
-  adc_data_in_p,
-  adc_data_in_n,
-  adc_or_in_p,
-  adc_or_in_n,
+  input                   adc_clk_in_p,
+  input                   adc_clk_in_n,
+  input       [13:0]      adc_data_in_p,
+  input       [13:0]      adc_data_in_n,
+  input                   adc_or_in_p,
+  input                   adc_or_in_n,
 
   // delay interface
 
-  delay_clk,
+  input                   delay_clk,
 
   // dma interface
 
-  adc_clk,
-  adc_valid_0,
-  adc_enable_0,
-  adc_data_0,
-  adc_valid_1,
-  adc_enable_1,
-  adc_data_1,
-  adc_dovf,
-  adc_dunf,
-  up_adc_gpio_in,
-  up_adc_gpio_out,
-  adc_rst,
+  output                  adc_clk,
+  output                  adc_valid_0,
+  output                  adc_enable_0,
+  output      [15:0]      adc_data_0,
+  output                  adc_valid_1,
+  output                  adc_enable_1,
+  output      [15:0]      adc_data_1,
+  input                   adc_dovf,
+  input                   adc_dunf,
+  input       [31:0]      up_adc_gpio_in,
+  output      [31:0]      up_adc_gpio_out,
+  output                  adc_rst,
 
   // axi interface
 
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rresp,
-  s_axi_rdata,
-  s_axi_rready,
-  s_axi_awprot,
-  s_axi_arprot);
-
-  // parameters
-
-  parameter ID = 0;
-  parameter DEVICE_TYPE = 0;
-  parameter ADC_DATAPATH_DISABLE = 0;
-  parameter IO_DELAY_GROUP = "adc_if_delay_group";
-
-  // adc interface (clk, data, over-range)
-
-  input           adc_clk_in_p;
-  input           adc_clk_in_n;
-  input   [13:0]  adc_data_in_p;
-  input   [13:0]  adc_data_in_n;
-  input           adc_or_in_p;
-  input           adc_or_in_n;
-
-  // delay interface
-
-  input           delay_clk;
-
-  // dma interface
-
-  output          adc_clk;
-  output          adc_valid_0;
-  output          adc_enable_0;
-  output  [15:0]  adc_data_0;
-  output          adc_valid_1;
-  output          adc_enable_1;
-  output  [15:0]  adc_data_1;
-  input           adc_dovf;
-  input           adc_dunf;
-  input   [31:0]  up_adc_gpio_in;
-  output  [31:0]  up_adc_gpio_out;
-  output          adc_rst;
-
-  // axi interface
-
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [ 1:0]  s_axi_rresp;
-  output  [31:0]  s_axi_rdata;
-  input           s_axi_rready;
-  input   [ 2:0]  s_axi_awprot;
-  input   [ 2:0]  s_axi_arprot;
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [31:0]      s_axi_awaddr,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [31:0]      s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [31:0]      s_axi_araddr,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [ 1:0]      s_axi_rresp,
+  output      [31:0]      s_axi_rdata,
+  input                   s_axi_rready,
+  input       [ 2:0]      s_axi_awprot,
+  input       [ 2:0]      s_axi_arprot);
 
 
   // internal registers

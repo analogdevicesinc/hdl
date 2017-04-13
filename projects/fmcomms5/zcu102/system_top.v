@@ -41,134 +41,71 @@
 
 module system_top (
 
-  gpio_bd_i,
-  gpio_bd_o,
+  input       [12:0]      gpio_bd_i,
+  output      [ 7:0]      gpio_bd_o,
 
-  rx_clk_in_0_p,
-  rx_clk_in_0_n,
-  rx_frame_in_0_p,
-  rx_frame_in_0_n,
-  rx_data_in_0_p,
-  rx_data_in_0_n,
-  tx_clk_out_0_p,
-  tx_clk_out_0_n,
-  tx_frame_out_0_p,
-  tx_frame_out_0_n,
-  tx_data_out_0_p,
-  tx_data_out_0_n,
-  gpio_status_0,
-  gpio_ctl_0,
-  gpio_en_agc_0,
-  mcs_sync,
-  gpio_resetb_0,
-  enable_0,
-  txnrx_0,
-  gpio_debug_1_0,
-  gpio_debug_2_0,
-  gpio_calsw_1_0,
-  gpio_calsw_2_0,
-  gpio_ad5355_rfen,
-  gpio_ad5355_lock,
+  input                   rx_clk_in_0_p,
+  input                   rx_clk_in_0_n,
+  input                   rx_frame_in_0_p,
+  input                   rx_frame_in_0_n,
+  input       [ 5:0]      rx_data_in_0_p,
+  input       [ 5:0]      rx_data_in_0_n,
+  output                  tx_clk_out_0_p,
+  output                  tx_clk_out_0_n,
+  output                  tx_frame_out_0_p,
+  output                  tx_frame_out_0_n,
+  output      [ 5:0]      tx_data_out_0_p,
+  output      [ 5:0]      tx_data_out_0_n,
+  input       [ 7:0]      gpio_status_0,
+  output      [ 3:0]      gpio_ctl_0,
+  output                  gpio_en_agc_0,
+  output  reg             mcs_sync,
+  output                  gpio_resetb_0,
+  output                  enable_0,
+  output                  txnrx_0,
+  output                  gpio_debug_1_0,
+  output                  gpio_debug_2_0,
+  output                  gpio_calsw_1_0,
+  output                  gpio_calsw_2_0,
+  output                  gpio_ad5355_rfen,
+  input                   gpio_ad5355_lock,
 
-  rx_clk_in_1_p,
-  rx_clk_in_1_n,
-  rx_frame_in_1_p,
-  rx_frame_in_1_n,
-  rx_data_in_1_p,
-  rx_data_in_1_n,
-  tx_clk_out_1_p,
-  tx_clk_out_1_n,
-  tx_frame_out_1_p,
-  tx_frame_out_1_n,
-  tx_data_out_1_p,
-  tx_data_out_1_n,
-  gpio_status_1,
-  gpio_ctl_1,
-  gpio_en_agc_1,
-  gpio_resetb_1,
-  enable_1,
-  txnrx_1,
-  gpio_debug_3_1,
-  gpio_debug_4_1,
-  gpio_calsw_3_1,
-  gpio_calsw_4_1,
+  input                   rx_clk_in_1_p,
+  input                   rx_clk_in_1_n,
+  input                   rx_frame_in_1_p,
+  input                   rx_frame_in_1_n,
+  input       [ 5:0]      rx_data_in_1_p,
+  input       [ 5:0]      rx_data_in_1_n,
+  output                  tx_clk_out_1_p,
+  output                  tx_clk_out_1_n,
+  output                  tx_frame_out_1_p,
+  output                  tx_frame_out_1_n,
+  output      [ 5:0]      tx_data_out_1_p,
+  output      [ 5:0]      tx_data_out_1_n,
+  input       [ 7:0]      gpio_status_1,
+  output      [ 3:0]      gpio_ctl_1,
+  output                  gpio_en_agc_1,
+  output                  gpio_resetb_1,
+  output                  enable_1,
+  output                  txnrx_1,
+  output                  gpio_debug_3_1,
+  output                  gpio_debug_4_1,
+  output                  gpio_calsw_3_1,
+  output                  gpio_calsw_4_1,
 
-  spi_ad9361_0,
-  spi_ad9361_1,
-  spi_ad5355,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
+  output                  spi_ad9361_0,
+  output                  spi_ad9361_1,
+  output                  spi_ad5355,
+  output                  spi_clk,
+  output                  spi_mosi,
+  input                   spi_miso,
 
-  ref_clk_p,
-  ref_clk_n);
-
-  input   [12:0]  gpio_bd_i;
-  output  [ 7:0]  gpio_bd_o;
-
-  input           rx_clk_in_0_p;
-  input           rx_clk_in_0_n;
-  input           rx_frame_in_0_p;
-  input           rx_frame_in_0_n;
-  input   [  5:0] rx_data_in_0_p;
-  input   [  5:0] rx_data_in_0_n;
-  output          tx_clk_out_0_p;
-  output          tx_clk_out_0_n;
-  output          tx_frame_out_0_p;
-  output          tx_frame_out_0_n;
-  output  [  5:0] tx_data_out_0_p;
-  output  [  5:0] tx_data_out_0_n;
-  input   [  7:0] gpio_status_0;
-  output  [  3:0] gpio_ctl_0;
-  output          gpio_en_agc_0;
-  output          mcs_sync;
-  output          gpio_resetb_0;
-  output          enable_0;
-  output          txnrx_0;
-  output          gpio_debug_1_0;
-  output          gpio_debug_2_0;
-  output          gpio_calsw_1_0;
-  output          gpio_calsw_2_0;
-  output          gpio_ad5355_rfen;
-  input           gpio_ad5355_lock;
-
-  input           rx_clk_in_1_p;
-  input           rx_clk_in_1_n;
-  input           rx_frame_in_1_p;
-  input           rx_frame_in_1_n;
-  input   [  5:0] rx_data_in_1_p;
-  input   [  5:0] rx_data_in_1_n;
-  output          tx_clk_out_1_p;
-  output          tx_clk_out_1_n;
-  output          tx_frame_out_1_p;
-  output          tx_frame_out_1_n;
-  output  [  5:0] tx_data_out_1_p;
-  output  [  5:0] tx_data_out_1_n;
-  input   [  7:0] gpio_status_1;
-  output  [  3:0] gpio_ctl_1;
-  output          gpio_en_agc_1;
-  output          gpio_resetb_1;
-  output          enable_1;
-  output          txnrx_1;
-  output          gpio_debug_3_1;
-  output          gpio_debug_4_1;
-  output          gpio_calsw_3_1;
-  output          gpio_calsw_4_1;
-
-  output          spi_ad9361_0;
-  output          spi_ad9361_1;
-  output          spi_ad5355;
-  output          spi_clk;
-  output          spi_mosi;
-  input           spi_miso;
-
-  input           ref_clk_p;
-  input           ref_clk_n;
+  input                   ref_clk_p,
+  input                   ref_clk_n);
 
   // internal registers
 
   reg     [  2:0] mcs_sync_m = 'd0;
-  reg             mcs_sync = 'd0;
 
   // internal signals
 

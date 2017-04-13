@@ -39,159 +39,82 @@
 
 module system_top (
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input                   sys_rst,
+  input                   sys_clk_p,
+  input                   sys_clk_n,
 
-  uart_sin,
-  uart_sout,
+  input                   uart_sin,
+  output                  uart_sout,
 
-  ddr4_act_n,
-  ddr4_addr,
-  ddr4_ba,
-  ddr4_bg,
-  ddr4_ck_p,
-  ddr4_ck_n,
-  ddr4_cke,
-  ddr4_cs_n,
-  ddr4_dm_n,
-  ddr4_dq,
-  ddr4_dqs_p,
-  ddr4_dqs_n,
-  ddr4_odt,
-  ddr4_reset_n,
+  output                  ddr4_act_n,
+  output      [16:0]      ddr4_addr,
+  output      [ 1:0]      ddr4_ba,
+  output      [ 0:0]      ddr4_bg,
+  output                  ddr4_ck_p,
+  output                  ddr4_ck_n,
+  output      [ 0:0]      ddr4_cke,
+  output      [ 0:0]      ddr4_cs_n,
+  inout       [ 7:0]      ddr4_dm_n,
+  inout       [63:0]      ddr4_dq,
+  inout       [ 7:0]      ddr4_dqs_p,
+  inout       [ 7:0]      ddr4_dqs_n,
+  output      [ 0:0]      ddr4_odt,
+  output                  ddr4_reset_n,
 
-  mdio_mdc,
-  mdio_mdio,
-  phy_clk_p,
-  phy_clk_n,
-  phy_rst_n,
-  phy_rx_p,
-  phy_rx_n,
-  phy_tx_p,
-  phy_tx_n,
+  output                  mdio_mdc,
+  inout                   mdio_mdio,
+  input                   phy_clk_p,
+  input                   phy_clk_n,
+  output                  phy_rst_n,
+  input                   phy_rx_p,
+  input                   phy_rx_n,
+  output                  phy_tx_p,
+  output                  phy_tx_n,
 
-  fan_pwm,
+  output                  fan_pwm,
 
-  gpio_bd,
+  inout       [16:0]      gpio_bd,
 
-  iic_scl,
-  iic_sda,
+  inout                   iic_scl,
+  inout                   iic_sda,
 
-  rx_ref_clk_p,
-  rx_ref_clk_n,
-  rx_sysref_p,
-  rx_sysref_n,
-  rx_sync_p,
-  rx_sync_n,
-  rx_data_p,
-  rx_data_n,
+  input                   rx_ref_clk_p,
+  input                   rx_ref_clk_n,
+  input                   rx_sysref_p,
+  input                   rx_sysref_n,
+  output                  rx_sync_p,
+  output                  rx_sync_n,
+  input       [ 3:0]      rx_data_p,
+  input       [ 3:0]      rx_data_n,
 
-  tx_ref_clk_p,
-  tx_ref_clk_n,
-  tx_sysref_p,
-  tx_sysref_n,
-  tx_sync_p,
-  tx_sync_n,
-  tx_data_p,
-  tx_data_n,
+  input                   tx_ref_clk_p,
+  input                   tx_ref_clk_n,
+  input                   tx_sysref_p,
+  input                   tx_sysref_n,
+  input                   tx_sync_p,
+  input                   tx_sync_n,
+  output      [ 3:0]      tx_data_p,
+  output      [ 3:0]      tx_data_n,
 
-  trig_p,
-  trig_n,
+  input                   trig_p,
+  input                   trig_n,
 
-  adc_fdb,
-  adc_fda,
-  dac_irq,
-  clkd_status,
+  inout                   adc_fdb,
+  inout                   adc_fda,
+  inout                   dac_irq,
+  inout       [ 1:0]      clkd_status,
 
-  adc_pd,
-  dac_txen,
-  dac_reset,
-  clkd_sync,
+  inout                   adc_pd,
+  inout                   dac_txen,
+  inout                   dac_reset,
+  inout                   clkd_sync,
 
-  spi_csn_clk,
-  spi_csn_dac,
-  spi_csn_adc,
-  spi_clk,
-  spi_sdio,
-  spi_dir);
-
-  input           sys_rst;
-  input           sys_clk_p;
-  input           sys_clk_n;
-
-  input           uart_sin;
-  output          uart_sout;
-
-  output          ddr4_act_n;
-  output  [16:0]  ddr4_addr;
-  output  [ 1:0]  ddr4_ba;
-  output  [ 0:0]  ddr4_bg;
-  output          ddr4_ck_p;
-  output          ddr4_ck_n;
-  output  [ 0:0]  ddr4_cke;
-  output  [ 0:0]  ddr4_cs_n;
-  inout   [ 7:0]  ddr4_dm_n;
-  inout   [63:0]  ddr4_dq;
-  inout   [ 7:0]  ddr4_dqs_p;
-  inout   [ 7:0]  ddr4_dqs_n;
-  output  [ 0:0]  ddr4_odt;
-  output          ddr4_reset_n;
-
-  output          mdio_mdc;
-  inout           mdio_mdio;
-  input           phy_clk_p;
-  input           phy_clk_n;
-  output          phy_rst_n;
-  input           phy_rx_p;
-  input           phy_rx_n;
-  output          phy_tx_p;
-  output          phy_tx_n;
-
-  output          fan_pwm;
-
-  inout   [16:0]  gpio_bd;
-
-  inout           iic_scl;
-  inout           iic_sda;
-
-  input           rx_ref_clk_p;
-  input           rx_ref_clk_n;
-  input           rx_sysref_p;
-  input           rx_sysref_n;
-  output          rx_sync_p;
-  output          rx_sync_n;
-  input   [ 3:0]  rx_data_p;
-  input   [ 3:0]  rx_data_n;
-
-  input           tx_ref_clk_p;
-  input           tx_ref_clk_n;
-  input           tx_sysref_p;
-  input           tx_sysref_n;
-  input           tx_sync_p;
-  input           tx_sync_n;
-  output  [ 3:0]  tx_data_p;
-  output  [ 3:0]  tx_data_n;
-
-  input           trig_p;
-  input           trig_n;
-
-  inout           adc_fdb;
-  inout           adc_fda;
-  inout           dac_irq;
-  inout   [ 1:0]  clkd_status;
-
-  inout           adc_pd;
-  inout           dac_txen;
-  inout           dac_reset;
-  inout           clkd_sync;
-
-  output          spi_csn_clk;
-  output          spi_csn_dac;
-  output          spi_csn_adc;
-  output          spi_clk;
-  inout           spi_sdio;
-  output          spi_dir;
+  output                  spi_csn_clk,
+  output                  spi_csn_dac,
+  output                  spi_csn_adc,
+  output                  spi_clk,
+  inout                   spi_sdio,
+  output                  spi_dir);
 
   // internal signals
 

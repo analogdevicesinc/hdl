@@ -40,60 +40,32 @@ module axi_hdmi_rx_core (
 
   // hdmi interface
 
-  hdmi_clk,
-  hdmi_rst,
-  hdmi_data,
-  hdmi_edge_sel,
-  hdmi_bgr,
-  hdmi_packed,
-  hdmi_csc_bypass,
-  hdmi_vs_count,
-  hdmi_hs_count,
-  hdmi_tpm_oos,
-  hdmi_vs_oos,
-  hdmi_hs_oos,
-  hdmi_vs_mismatch,
-  hdmi_hs_mismatch,
-  hdmi_vs,
-  hdmi_hs,
+  input                   hdmi_clk,
+  input                   hdmi_rst,
+  input       [15:0]      hdmi_data,
+  input                   hdmi_edge_sel,
+  input                   hdmi_bgr,
+  input                   hdmi_packed,
+  input                   hdmi_csc_bypass,
+  input       [15:0]      hdmi_vs_count,
+  input       [15:0]      hdmi_hs_count,
+  output                  hdmi_tpm_oos,
+  output  reg             hdmi_vs_oos,
+  output  reg             hdmi_hs_oos,
+  output  reg             hdmi_vs_mismatch,
+  output  reg             hdmi_hs_mismatch,
+  output  reg [15:0]      hdmi_vs,
+  output  reg [15:0]      hdmi_hs,
 
   // dma interface
 
-  hdmi_dma_sof,
-  hdmi_dma_de,
-  hdmi_dma_data);
-
-  // hdmi interface
-
-  input           hdmi_clk;
-  input           hdmi_rst;
-  input   [15:0]  hdmi_data;
-  input           hdmi_edge_sel;
-  input           hdmi_bgr;
-  input           hdmi_packed;
-  input           hdmi_csc_bypass;
-  input   [15:0]  hdmi_vs_count;
-  input   [15:0]  hdmi_hs_count;
-  output          hdmi_tpm_oos;
-  output          hdmi_vs_oos;
-  output          hdmi_hs_oos;
-  output          hdmi_vs_mismatch;
-  output          hdmi_hs_mismatch;
-  output  [15:0]  hdmi_vs;
-  output  [15:0]  hdmi_hs;
-
-  // dma interface
-
-  output          hdmi_dma_sof;
-  output          hdmi_dma_de;
-  output  [63:0]  hdmi_dma_data;
+  output  reg             hdmi_dma_sof,
+  output  reg             hdmi_dma_de,
+  output  reg [63:0]      hdmi_dma_data);
 
   // internal registers
 
-  reg             hdmi_dma_sof = 'd0;
-  reg             hdmi_dma_de = 'd0;
   reg             hdmi_dma_de_cnt = 'd0;
-  reg     [63:0]  hdmi_dma_data = 'd0;
   reg             hdmi_dma_sof_int = 'd0;
   reg             hdmi_dma_de_int = 'd0;
   reg     [31:0]  hdmi_dma_data_int = 'd0;
@@ -110,12 +82,6 @@ module axi_hdmi_rx_core (
   reg             hdmi_de_444_p = 'd0;
   reg     [31:0]  hdmi_data_444_p = 'd0;
   reg             hdmi_dma_enable = 'd0;
-  reg     [15:0]  hdmi_vs = 'd0;
-  reg     [15:0]  hdmi_hs = 'd0;
-  reg             hdmi_vs_oos = 'd0;
-  reg             hdmi_hs_oos = 'd0;
-  reg             hdmi_vs_mismatch = 'd0;
-  reg             hdmi_hs_mismatch = 'd0;
   reg             hdmi_hs_de_d = 'd0;
   reg             hdmi_vs_de_d = 'd0;
   reg             hdmi_sof = 'd0;

@@ -37,165 +37,88 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9361_lvds_if (
+module axi_ad9361_lvds_if #(
+
+  parameter   DEVICE_TYPE = 0,
+  parameter   DAC_IODELAY_ENABLE = 0,
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // physical interface (receive)
 
-  rx_clk_in_p,
-  rx_clk_in_n,
-  rx_frame_in_p,
-  rx_frame_in_n,
-  rx_data_in_p,
-  rx_data_in_n,
+  input                   rx_clk_in_p,
+  input                   rx_clk_in_n,
+  input                   rx_frame_in_p,
+  input                   rx_frame_in_n,
+  input       [ 5:0]      rx_data_in_p,
+  input       [ 5:0]      rx_data_in_n,
 
   // physical interface (transmit)
 
-  tx_clk_out_p,
-  tx_clk_out_n,
-  tx_frame_out_p,
-  tx_frame_out_n,
-  tx_data_out_p,
-  tx_data_out_n,
+  output                  tx_clk_out_p,
+  output                  tx_clk_out_n,
+  output                  tx_frame_out_p,
+  output                  tx_frame_out_n,
+  output      [ 5:0]      tx_data_out_p,
+  output      [ 5:0]      tx_data_out_n,
 
   // ensm control
 
-  enable,
-  txnrx,
+  output                  enable,
+  output                  txnrx,
 
   // clock (common to both receive and transmit)
 
-  rst,
-  clk,
-  l_clk,
+  input                   rst,
+  input                   clk,
+  output                  l_clk,
 
   // receive data path interface
 
-  adc_valid,
-  adc_data,
-  adc_status,
-  adc_r1_mode,
-  adc_ddr_edgesel,
+  output  reg             adc_valid,
+  output  reg [47:0]      adc_data,
+  output  reg             adc_status,
+  input                   adc_r1_mode,
+  input                   adc_ddr_edgesel,
 
   // transmit data path interface
 
-  dac_valid,
-  dac_data,
-  dac_clksel,
-  dac_r1_mode,
+  input                   dac_valid,
+  input       [47:0]      dac_data,
+  input                   dac_clksel,
+  input                   dac_r1_mode,
 
   // tdd interface
 
-  tdd_enable,
-  tdd_txnrx,
-  tdd_mode,
+  input                   tdd_enable,
+  input                   tdd_txnrx,
+  input                   tdd_mode,
 
   // delay interface
 
-  mmcm_rst,
-  up_clk,
-  up_enable,
-  up_txnrx,
-  up_adc_dld,
-  up_adc_dwdata,
-  up_adc_drdata,
-  up_dac_dld,
-  up_dac_dwdata,
-  up_dac_drdata,
-  delay_clk,
-  delay_rst,
-  delay_locked,
+  input                   mmcm_rst,
+  input                   up_clk,
+  input                   up_enable,
+  input                   up_txnrx,
+  input       [ 6:0]      up_adc_dld,
+  input       [34:0]      up_adc_dwdata,
+  output      [34:0]      up_adc_drdata,
+  input       [ 9:0]      up_dac_dld,
+  input       [49:0]      up_dac_dwdata,
+  output      [49:0]      up_dac_drdata,
+  input                   delay_clk,
+  input                   delay_rst,
+  output                  delay_locked,
 
   //drp interface
 
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_locked);
+  input                   up_drp_sel,
+  input                   up_drp_wr,
+  input       [11:0]      up_drp_addr,
+  input       [31:0]      up_drp_wdata,
+  output      [31:0]      up_drp_rdata,
+  output                  up_drp_ready,
+  output                  up_drp_locked);
 
-  // this parameter controls the buffer type based on the target device.
-
-  parameter   DEVICE_TYPE = 0;
-  parameter   DAC_IODELAY_ENABLE = 0;
-  parameter   IO_DELAY_GROUP = "dev_if_delay_group";
-
-  // physical interface (receive)
-
-  input           rx_clk_in_p;
-  input           rx_clk_in_n;
-  input           rx_frame_in_p;
-  input           rx_frame_in_n;
-  input   [ 5:0]  rx_data_in_p;
-  input   [ 5:0]  rx_data_in_n;
-
-  // physical interface (transmit)
-
-  output          tx_clk_out_p;
-  output          tx_clk_out_n;
-  output          tx_frame_out_p;
-  output          tx_frame_out_n;
-  output  [ 5:0]  tx_data_out_p;
-  output  [ 5:0]  tx_data_out_n;
-
-  // ensm control
-
-  output          enable;
-  output          txnrx;
-
-  // clock (common to both receive and transmit)
-
-  input           rst;
-  input           clk;
-  output          l_clk;
-
-  // receive data path interface
-
-  output          adc_valid;
-  output  [47:0]  adc_data;
-  output          adc_status;
-  input           adc_r1_mode;
-  input           adc_ddr_edgesel;
-
-  // transmit data path interface
-
-  input           dac_valid;
-  input   [47:0]  dac_data;
-  input           dac_clksel;
-  input           dac_r1_mode;
-
-  // tdd interface
-
-  input           tdd_enable;
-  input           tdd_txnrx;
-  input           tdd_mode;
-
-  // delay interface
-
-  input           mmcm_rst;
-  input           up_clk;
-  input           up_enable;
-  input           up_txnrx;
-  input   [ 6:0]  up_adc_dld;
-  input   [34:0]  up_adc_dwdata;
-  output  [34:0]  up_adc_drdata;
-  input   [ 9:0]  up_dac_dld;
-  input   [49:0]  up_dac_dwdata;
-  output  [49:0]  up_dac_drdata;
-  input           delay_clk;
-  input           delay_rst;
-  output          delay_locked;
-
-  //drp interface
-
-  input               up_drp_sel;
-  input               up_drp_wr;
-  input   [11:0]      up_drp_addr;
-  input   [31:0]      up_drp_wdata;
-  output  [31:0]      up_drp_rdata;
-  output              up_drp_ready;
-  output              up_drp_locked;
 
   // internal registers
 
@@ -223,9 +146,6 @@ module axi_ad9361_lvds_if (
   reg             adc_valid_int = 'd0;
   reg     [47:0]  adc_data_int = 'd0;
   reg             adc_status_int = 'd0;
-  reg             adc_valid = 'd0;
-  reg     [47:0]  adc_data = 'd0;
-  reg             adc_status = 'd0;
   reg     [ 2:0]  tx_data_cnt = 'd0;
   reg     [47:0]  tx_data = 'd0;
   reg             tx_frame = 'd0;

@@ -41,137 +41,71 @@
 
 module system_top (
 
-  ddr_addr,
-  ddr_ba,
-  ddr_cas_n,
-  ddr_ck_n,
-  ddr_ck_p,
-  ddr_cke,
-  ddr_cs_n,
-  ddr_dm,
-  ddr_dq,
-  ddr_dqs_n,
-  ddr_dqs_p,
-  ddr_odt,
-  ddr_ras_n,
-  ddr_reset_n,
-  ddr_we_n,
+  inout       [14:0]      ddr_addr,
+  inout       [ 2:0]      ddr_ba,
+  inout                   ddr_cas_n,
+  inout                   ddr_ck_n,
+  inout                   ddr_ck_p,
+  inout                   ddr_cke,
+  inout                   ddr_cs_n,
+  inout       [ 3:0]      ddr_dm,
+  inout       [31:0]      ddr_dq,
+  inout       [ 3:0]      ddr_dqs_n,
+  inout       [ 3:0]      ddr_dqs_p,
+  inout                   ddr_odt,
+  inout                   ddr_ras_n,
+  inout                   ddr_reset_n,
+  inout                   ddr_we_n,
 
-  fixed_io_ddr_vrn,
-  fixed_io_ddr_vrp,
-  fixed_io_mio,
-  fixed_io_ps_clk,
-  fixed_io_ps_porb,
-  fixed_io_ps_srstb,
+  inout                   fixed_io_ddr_vrn,
+  inout                   fixed_io_ddr_vrp,
+  inout       [53:0]      fixed_io_mio,
+  inout                   fixed_io_ps_clk,
+  inout                   fixed_io_ps_porb,
+  inout                   fixed_io_ps_srstb,
 
-  gpio_bd,
+  inout       [31:0]      gpio_bd,
 
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
+  output                  hdmi_out_clk,
+  output                  hdmi_vsync,
+  output                  hdmi_hsync,
+  output                  hdmi_data_e,
+  output      [15:0]      hdmi_data,
 
-  i2s_mclk,
-  i2s_bclk,
-  i2s_lrclk,
-  i2s_sdata_out,
-  i2s_sdata_in,
+  output                  i2s_mclk,
+  output                  i2s_bclk,
+  output                  i2s_lrclk,
+  output                  i2s_sdata_out,
+  input                   i2s_sdata_in,
 
-  spdif,
+  output                  spdif,
 
-  iic_scl,
-  iic_sda,
-  iic_mux_scl,
-  iic_mux_sda,
+  inout                   iic_scl,
+  inout                   iic_sda,
+  inout       [ 1:0]      iic_mux_scl,
+  inout       [ 1:0]      iic_mux_sda,
 
-  otg_vbusoc,
+  input                   otg_vbusoc,
 
-  clk_in,
-  ready_in,
-  data_in,
+  input                   clk_in,
+  input                   ready_in,
+  input       [ 7:0]      data_in,
 
-  spi_csn,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
+  output                  spi_csn,
+  output                  spi_clk,
+  output                  spi_mosi,
+  input                   spi_miso,
 
-  gpio_0_mode_0,
-  gpio_1_mode_1,
-  gpio_2_mode_2,
-  gpio_3_mode_3,
-  gpio_4_filter,
-  reset_n,
-  start_n,
-  sync_n,
-  sync_in_n,
-  mclk);
-
-  inout   [14:0]  ddr_addr;
-  inout   [ 2:0]  ddr_ba;
-  inout           ddr_cas_n;
-  inout           ddr_ck_n;
-  inout           ddr_ck_p;
-  inout           ddr_cke;
-  inout           ddr_cs_n;
-  inout   [ 3:0]  ddr_dm;
-  inout   [31:0]  ddr_dq;
-  inout   [ 3:0]  ddr_dqs_n;
-  inout   [ 3:0]  ddr_dqs_p;
-  inout           ddr_odt;
-  inout           ddr_ras_n;
-  inout           ddr_reset_n;
-  inout           ddr_we_n;
-
-  inout           fixed_io_ddr_vrn;
-  inout           fixed_io_ddr_vrp;
-  inout   [53:0]  fixed_io_mio;
-  inout           fixed_io_ps_clk;
-  inout           fixed_io_ps_porb;
-  inout           fixed_io_ps_srstb;
-
-  inout   [31:0]  gpio_bd;
-
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output  [15:0]  hdmi_data;
-
-  output          spdif;
-
-  output          i2s_mclk;
-  output          i2s_bclk;
-  output          i2s_lrclk;
-  output          i2s_sdata_out;
-  input           i2s_sdata_in;
-
-  inout           iic_scl;
-  inout           iic_sda;
-  inout   [ 1:0]  iic_mux_scl;
-  inout   [ 1:0]  iic_mux_sda;
-
-  input           otg_vbusoc;
-
-  input           clk_in;
-  input           ready_in;
-  input   [ 7:0]  data_in;
-
-  output          spi_csn;
-  output          spi_clk;
-  output          spi_mosi;
-  input           spi_miso;
-
-  inout           gpio_0_mode_0;
-  inout           gpio_1_mode_1;
-  inout           gpio_2_mode_2;
-  inout           gpio_3_mode_3;
-  inout           gpio_4_filter;
-  inout           reset_n;
-  inout           start_n;
-  inout           sync_n;
-  inout           sync_in_n;
-  output          mclk;
+  inout                   gpio_0_mode_0,
+  inout                   gpio_1_mode_1,
+  inout                   gpio_2_mode_2,
+  inout                   gpio_3_mode_3,
+  inout                   gpio_4_filter,
+  inout                   reset_n,
+  inout                   start_n,
+  inout                   sync_n,
+  inout                   sync_in_n,
+  output                  mclk);
 
   // internal signals
 

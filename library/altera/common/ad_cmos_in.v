@@ -37,59 +37,35 @@
 
 `timescale 1ns/100ps
 
-module ad_cmos_in (
+module ad_cmos_in #(
+
+  parameter   SINGLE_ENDED = 0,
+  parameter   DEVICE_TYPE = 0,
+  parameter   IODELAY_CTRL = 0,
+  parameter   IODELAY_GROUP = "dev_if_delay_group") (
 
   // data interface
 
-  rx_clk,
-  rx_data_in,
-  rx_data_p,
-  rx_data_n,
+  input                   rx_clk,
+  input                   rx_data_in,
+  output  reg             rx_data_p,
+  output  reg             rx_data_n,
 
   // delay-data interface
 
-  up_clk,
-  up_dld,
-  up_dwdata,
-  up_drdata,
+  input                   up_clk,
+  input                   up_dld,
+  input       [ 4:0]      up_dwdata,
+  output      [ 4:0]      up_drdata,
 
   // delay-cntrl interface
 
-  delay_clk,
-  delay_rst,
-  delay_locked);
+  input                   delay_clk,
+  input                   delay_rst,
+  output                  delay_locked);
 
-  // parameters
-
-  parameter   SINGLE_ENDED = 0;
-  parameter   DEVICE_TYPE = 0;
-  parameter   IODELAY_CTRL = 0;
-  parameter   IODELAY_GROUP = "dev_if_delay_group";
-
-  // data interface
-
-  input               rx_clk;
-  input               rx_data_in;
-  output              rx_data_p;
-  output              rx_data_n;
-
-  // delay-data interface
-
-  input               up_clk;
-  input               up_dld;
-  input       [ 4:0]  up_dwdata;
-  output      [ 4:0]  up_drdata;
-
-  // delay-cntrl interface
-
-  input               delay_clk;
-  input               delay_rst;
-  output              delay_locked;
 
   // internal registers
-
-  reg                 rx_data_p = 'd0;
-  reg                 rx_data_n = 'd0;
 
   // internal signals
 

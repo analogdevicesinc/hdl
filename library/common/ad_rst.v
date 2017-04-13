@@ -41,21 +41,14 @@ module ad_rst (
 
   // clock reset
 
-  preset,
-  clk,
-  rst);
-
-  // clock reset
-
-  input           preset;
-  input           clk;
-  output          rst;
+  input                   preset,
+  input                   clk,
+  output  reg             rst);
 
   // internal registers
 
   reg             ad_rst_sync_m1 = 'd0 /* synthesis preserve */;
   reg             ad_rst_sync = 'd0 /* synthesis preserve */;
-  reg             rst = 'd0;
 
   // simple reset gen
 

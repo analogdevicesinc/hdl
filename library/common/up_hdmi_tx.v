@@ -37,107 +37,60 @@
 
 `timescale 1ns/100ps
 
-module up_hdmi_tx (
+module up_hdmi_tx #(
+
+  parameter   ID = 0) (
 
   // hdmi interface
 
-  hdmi_clk,
-  hdmi_rst,
-  hdmi_csc_bypass,
-  hdmi_ss_bypass,
-  hdmi_srcsel,
-  hdmi_const_rgb,
-  hdmi_hl_active,
-  hdmi_hl_width,
-  hdmi_hs_width,
-  hdmi_he_max,
-  hdmi_he_min,
-  hdmi_vf_active,
-  hdmi_vf_width,
-  hdmi_vs_width,
-  hdmi_ve_max,
-  hdmi_ve_min,
-  hdmi_clip_max,
-  hdmi_clip_min,
-  hdmi_status,
-  hdmi_tpm_oos,
-  hdmi_clk_ratio,
+  input                   hdmi_clk,
+  output                  hdmi_rst,
+  output                  hdmi_csc_bypass,
+  output                  hdmi_ss_bypass,
+  output      [ 1:0]      hdmi_srcsel,
+  output      [23:0]      hdmi_const_rgb,
+  output      [15:0]      hdmi_hl_active,
+  output      [15:0]      hdmi_hl_width,
+  output      [15:0]      hdmi_hs_width,
+  output      [15:0]      hdmi_he_max,
+  output      [15:0]      hdmi_he_min,
+  output      [15:0]      hdmi_vf_active,
+  output      [15:0]      hdmi_vf_width,
+  output      [15:0]      hdmi_vs_width,
+  output      [15:0]      hdmi_ve_max,
+  output      [15:0]      hdmi_ve_min,
+  output      [23:0]      hdmi_clip_max,
+  output      [23:0]      hdmi_clip_min,
+  input                   hdmi_status,
+  input                   hdmi_tpm_oos,
+  input       [31:0]      hdmi_clk_ratio,
 
   // vdma interface
 
-  vdma_clk,
-  vdma_rst,
-  vdma_ovf,
-  vdma_unf,
-  vdma_tpm_oos,
+  input                   vdma_clk,
+  output                  vdma_rst,
+  input                   vdma_ovf,
+  input                   vdma_unf,
+  input                   vdma_tpm_oos,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
-
-  // parameters
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
   localparam  PCORE_VERSION = 32'h00040063;
-  parameter   ID = 0;
-
-  // hdmi interface
-
-  input           hdmi_clk;
-  output          hdmi_rst;
-  output          hdmi_csc_bypass;
-  output          hdmi_ss_bypass;
-  output  [ 1:0]  hdmi_srcsel;
-  output  [23:0]  hdmi_const_rgb;
-  output  [15:0]  hdmi_hl_active;
-  output  [15:0]  hdmi_hl_width;
-  output  [15:0]  hdmi_hs_width;
-  output  [15:0]  hdmi_he_max;
-  output  [15:0]  hdmi_he_min;
-  output  [15:0]  hdmi_vf_active;
-  output  [15:0]  hdmi_vf_width;
-  output  [15:0]  hdmi_vs_width;
-  output  [15:0]  hdmi_ve_max;
-  output  [15:0]  hdmi_ve_min;
-  output  [23:0]  hdmi_clip_max;
-  output  [23:0]  hdmi_clip_min;
-  input           hdmi_status;
-  input           hdmi_tpm_oos;
-  input   [31:0]  hdmi_clk_ratio;
-
-  // vdma interface
-
-  input           vdma_clk;
-  output          vdma_rst;
-  input           vdma_ovf;
-  input           vdma_unf;
-  input           vdma_tpm_oos;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal registers
 
   reg             up_core_preset = 'd0;
-  reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_resetn = 'd0;
   reg             up_csc_bypass = 'd0;
@@ -160,8 +113,6 @@ module up_hdmi_tx (
   reg     [15:0]  up_ve_min = 'd0;
   reg     [23:0]  up_clip_max = 'd0;
   reg     [23:0]  up_clip_min = 'd0;
-  reg             up_rack = 'd0;
-  reg     [31:0]  up_rdata = 'd0;
 
   // internal signals
 

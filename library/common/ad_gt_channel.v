@@ -37,146 +37,82 @@
 
 `timescale 1ns/1ps
 
-module ad_gt_channel (
+module ad_gt_channel #(
+
+  parameter   integer GTH_OR_GTX_N = 0,
+  parameter   [31:0]  PMA_RSV = 32'h00018480,
+  parameter   integer CPLL_FBDIV = 2,
+  parameter   integer RX_OUT_DIV = 1,
+  parameter   integer RX_CLK25_DIV = 10,
+  parameter   integer RX_CLKBUF_ENABLE = 0,
+  parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020,
+  parameter   integer TX_OUT_DIV = 1,
+  parameter   integer TX_CLK25_DIV = 10,
+  parameter   integer TX_CLKBUF_ENABLE = 0) (
 
   // rst and clocks
 
-  lpm_dfe_n,
-  cpll_ref_clk_in,
-  cpll_pd,
-  cpll_rst,
-  qpll_clk,
-  qpll_ref_clk,
-  qpll_locked,
+  input                   lpm_dfe_n,
+  input                   cpll_ref_clk_in,
+  input                   cpll_pd,
+  input                   cpll_rst,
+  input                   qpll_clk,
+  input                   qpll_ref_clk,
+  input                   qpll_locked,
 
   // receive
 
-  rx_gt_rst_m,
-  rx_p,
-  rx_n,
+  input                   rx_gt_rst_m,
+  input                   rx_p,
+  input                   rx_n,
 
-  rx_sys_clk_sel,
-  rx_out_clk_sel,
-  rx_out_clk,
-  rx_rst_done,
-  rx_pll_locked,
-  rx_user_ready_m,
+  input       [ 1:0]      rx_sys_clk_sel,
+  input       [ 2:0]      rx_out_clk_sel,
+  output                  rx_out_clk,
+  output                  rx_rst_done,
+  output                  rx_pll_locked,
+  input                   rx_user_ready_m,
 
-  rx_clk,
-  rx_gt_charisk,
-  rx_gt_disperr,
-  rx_gt_notintable,
-  rx_gt_data,
-  rx_gt_comma_align_enb,
-  rx_gt_ilas_f,
-  rx_gt_ilas_q,
-  rx_gt_ilas_a,
-  rx_gt_ilas_r,
-  rx_gt_cgs_k,
-
-  // transmit
-
-  tx_gt_rst_m,
-  tx_p,
-  tx_n,
-
-  tx_sys_clk_sel,
-  tx_out_clk_sel,
-  tx_out_clk,
-  tx_rst_done,
-  tx_pll_locked,
-  tx_user_ready_m,
-
-  tx_clk,
-  tx_gt_charisk,
-  tx_gt_data,
-
-  // drp interface
-
-  up_clk,
-  up_drp_sel,
-  up_drp_addr,
-  up_drp_wr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_rxrate);
-
-  // parameters
-
-  parameter   integer GTH_OR_GTX_N = 0;
-  parameter   [31:0]  PMA_RSV = 32'h00018480;
-  parameter   integer CPLL_FBDIV = 2;
-  parameter   integer RX_OUT_DIV = 1;
-  parameter   integer RX_CLK25_DIV = 10;
-  parameter   integer RX_CLKBUF_ENABLE = 0;
-  parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020;
-  parameter   integer TX_OUT_DIV = 1;
-  parameter   integer TX_CLK25_DIV = 10;
-  parameter   integer TX_CLKBUF_ENABLE = 0;
-
-  // rst and clocks
-
-  input           lpm_dfe_n;
-  input           cpll_ref_clk_in;
-  input           cpll_pd;
-  input           cpll_rst;
-  input           qpll_clk;
-  input           qpll_ref_clk;
-  input           qpll_locked;
-
-  // receive
-
-  input           rx_gt_rst_m;
-  input           rx_p;
-  input           rx_n;
-
-  input   [ 1:0]  rx_sys_clk_sel;
-  input   [ 2:0]  rx_out_clk_sel;
-  output          rx_out_clk;
-  output          rx_rst_done;
-  output          rx_pll_locked;
-  input           rx_user_ready_m;
-
-  input           rx_clk;
-  output  [ 3:0]  rx_gt_charisk;
-  output  [ 3:0]  rx_gt_disperr;
-  output  [ 3:0]  rx_gt_notintable;
-  output  [31:0]  rx_gt_data;
-  input           rx_gt_comma_align_enb;
-  output  [ 3:0]  rx_gt_ilas_f;
-  output  [ 3:0]  rx_gt_ilas_q;
-  output  [ 3:0]  rx_gt_ilas_a;
-  output  [ 3:0]  rx_gt_ilas_r;
-  output  [ 3:0]  rx_gt_cgs_k;
+  input                   rx_clk,
+  output      [ 3:0]      rx_gt_charisk,
+  output      [ 3:0]      rx_gt_disperr,
+  output      [ 3:0]      rx_gt_notintable,
+  output      [31:0]      rx_gt_data,
+  input                   rx_gt_comma_align_enb,
+  output      [ 3:0]      rx_gt_ilas_f,
+  output      [ 3:0]      rx_gt_ilas_q,
+  output      [ 3:0]      rx_gt_ilas_a,
+  output      [ 3:0]      rx_gt_ilas_r,
+  output      [ 3:0]      rx_gt_cgs_k,
 
   // transmit
 
-  input           tx_gt_rst_m;
-  output          tx_p;
-  output          tx_n;
+  input                   tx_gt_rst_m,
+  output                  tx_p,
+  output                  tx_n,
 
-  input   [ 1:0]  tx_sys_clk_sel;
-  input   [ 2:0]  tx_out_clk_sel;
-  output          tx_out_clk;
-  output          tx_rst_done;
-  output          tx_pll_locked;
-  input           tx_user_ready_m;
+  input       [ 1:0]      tx_sys_clk_sel,
+  input       [ 2:0]      tx_out_clk_sel,
+  output                  tx_out_clk,
+  output                  tx_rst_done,
+  output                  tx_pll_locked,
+  input                   tx_user_ready_m,
 
-  input           tx_clk;
-  input   [ 3:0]  tx_gt_charisk;
-  input   [31:0]  tx_gt_data;
+  input                   tx_clk,
+  input       [ 3:0]      tx_gt_charisk,
+  input       [31:0]      tx_gt_data,
 
   // drp interface
 
-  input           up_clk;
-  input           up_drp_sel;
-  input   [11:0]  up_drp_addr;
-  input           up_drp_wr;
-  input   [15:0]  up_drp_wdata;
-  output  [15:0]  up_drp_rdata;
-  output          up_drp_ready;
-  output  [ 7:0]  up_drp_rxrate;
+  input                   up_clk,
+  input                   up_drp_sel,
+  input       [11:0]      up_drp_addr,
+  input                   up_drp_wr,
+  input       [15:0]      up_drp_wdata,
+  output      [15:0]      up_drp_rdata,
+  output                  up_drp_ready,
+  output      [ 7:0]      up_drp_rxrate);
+
 
   // internal signals
 

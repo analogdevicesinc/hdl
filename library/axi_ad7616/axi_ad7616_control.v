@@ -39,39 +39,39 @@
 
 `timescale 1ns/100ps
 
-module axi_ad7616_control (
+module axi_ad7616_control #(
+
+  parameter   ID = 0,
+  parameter   IF_TYPE = 0) (
 
   // control signals
 
-  cnvst,
-  busy,
+  output                  cnvst,
+  input                   busy,
 
-  up_read_data,
-  up_read_valid,
-  up_write_data,
-  up_read_req,
-  up_write_req,
+  input       [15:0]      up_read_data,
+  input                   up_read_valid,
+  output  reg [15:0]      up_write_data,
+  output                  up_read_req,
+  output                  up_write_req,
 
-  up_burst_length,
-  end_of_conv,
+  output  reg [ 4:0]      up_burst_length,
+  output                  end_of_conv,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack
-
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack
 );
 
-  parameter   ID = 0;
-  parameter   IF_TYPE = 0;
 
   localparam  PCORE_VERSION = 'h0001001;
   localparam  POS_EDGE = 0;
@@ -79,42 +79,12 @@ module axi_ad7616_control (
   localparam  SERIAL = 0;
   localparam  PARALLEL = 1;
 
-  output          cnvst;
-  input           busy;
-
-  output          end_of_conv;
-  output  [ 4:0]  up_burst_length;
-
-  input   [15:0]  up_read_data;
-  input           up_read_valid;
-  output  [15:0]  up_write_data;
-  output          up_read_req;
-  output          up_write_req;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
-
   // internal signals
 
   reg     [31:0]  up_scratch = 32'b0;
   reg             up_resetn = 1'b0;
   reg             up_cnvst_en = 1'b0;
-  reg             up_wack = 1'b0;
-  reg             up_rack = 1'b0;
-  reg     [31:0]  up_rdata = 32'b0;
   reg     [31:0]  up_conv_rate = 32'b0;
-  reg     [ 4:0]  up_burst_length = 5'h0;
-  reg     [15:0]  up_write_data = 16'h0;
 
   reg     [31:0]  cnvst_counter = 32'b0;
   reg     [ 3:0]  pulse_counter = 8'b0;

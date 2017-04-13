@@ -37,92 +37,52 @@
 
 `timescale 1ns/100ps
 
-module up_clkgen (
+module up_clkgen #(
+
+  parameter   ID = 0) (
 
   // mmcm reset
 
-  mmcm_rst,
+  output                  mmcm_rst,
 
   // clock selection
 
-  clk_sel,
+  output                  clk_sel,
 
   // drp interface
 
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_locked,
+  output  reg             up_drp_sel,
+  output  reg             up_drp_wr,
+  output  reg [11:0]      up_drp_addr,
+  output  reg [15:0]      up_drp_wdata,
+  input       [15:0]      up_drp_rdata,
+  input                   up_drp_ready,
+  input                   up_drp_locked,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
-
-  // parameters
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
   localparam  PCORE_VERSION = 32'h00040063;
-  parameter   ID = 0;
-
-  // mmcm reset
-
-  output          mmcm_rst;
-
-  // clock selection
-
-  output clk_sel;
-
-  // drp interface
-
-  output          up_drp_sel;
-  output          up_drp_wr;
-  output  [11:0]  up_drp_addr;
-  output  [15:0]  up_drp_wdata;
-  input   [15:0]  up_drp_rdata;
-  input           up_drp_ready;
-  input           up_drp_locked;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
-
 
   // internal registers
 
   reg             up_mmcm_preset = 'd0;
-  reg             up_wack = 'd0;
   reg     [31:0]  up_scratch = 'd0;
   reg             up_mmcm_resetn = 'd0;
   reg             up_resetn = 'd0;
-  reg             up_drp_sel = 'd0;
-  reg             up_drp_wr = 'd0;
   reg             up_drp_status = 'd0;
   reg             up_drp_rwn = 'd0;
-  reg     [11:0]  up_drp_addr = 'd0;
-  reg     [15:0]  up_drp_wdata = 'd0;
   reg     [15:0]  up_drp_rdata_hold = 'd0;
-  reg             up_rack = 'd0;
-  reg     [31:0]  up_rdata = 'd0;
   reg             up_clk_sel = 'd0;
 
   // internal signals

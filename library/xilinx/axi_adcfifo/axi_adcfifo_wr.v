@@ -39,119 +39,68 @@
 
 `timescale 1ns/100ps
 
-module axi_adcfifo_wr (
+module axi_adcfifo_wr #(
+
+  parameter   AXI_DATA_WIDTH = 512,
+  parameter   AXI_SIZE = 2,
+  parameter   AXI_LENGTH = 16,
+  parameter   AXI_ADDRESS = 32'h00000000,
+  parameter   AXI_ADDRESS_LIMIT = 32'h00000000) (
 
   // request and synchronization
 
-  dma_xfer_req,
+  input                   dma_xfer_req,
 
   // read interface
 
-  axi_rd_req,
-  axi_rd_addr,
+  output  reg             axi_rd_req,
+  output  reg [ 31:0]     axi_rd_addr,
 
   // fifo interface
 
-  adc_rst,
-  adc_clk,
-  adc_wr,
-  adc_wdata,
+  input                   adc_rst,
+  input                   adc_clk,
+  input                   adc_wr,
+  input       [AXI_DATA_WIDTH-1:0]  adc_wdata,
 
   // axi interface
 
-  axi_clk,
-  axi_resetn,
-  axi_awvalid,
-  axi_awid,
-  axi_awburst,
-  axi_awlock,
-  axi_awcache,
-  axi_awprot,
-  axi_awqos,
-  axi_awuser,
-  axi_awlen,
-  axi_awsize,
-  axi_awaddr,
-  axi_awready,
-  axi_wvalid,
-  axi_wdata,
-  axi_wstrb,
-  axi_wlast,
-  axi_wuser,
-  axi_wready,
-  axi_bvalid,
-  axi_bid,
-  axi_bresp,
-  axi_buser,
-  axi_bready,
+  input                   axi_clk,
+  input                   axi_resetn,
+  output  reg             axi_awvalid,
+  output      [ 3:0]      axi_awid,
+  output      [ 1:0]      axi_awburst,
+  output                  axi_awlock,
+  output      [ 3:0]      axi_awcache,
+  output      [ 2:0]      axi_awprot,
+  output      [ 3:0]      axi_awqos,
+  output      [ 3:0]      axi_awuser,
+  output      [ 7:0]      axi_awlen,
+  output      [ 2:0]      axi_awsize,
+  output  reg [ 31:0]     axi_awaddr,
+  input                   axi_awready,
+  output                  axi_wvalid,
+  output      [AXI_DATA_WIDTH-1:0]  axi_wdata,
+  output      [AXI_BYTE_WIDTH-1:0]  axi_wstrb,
+  output                  axi_wlast,
+  output      [ 3:0]      axi_wuser,
+  input                   axi_wready,
+  input                   axi_bvalid,
+  input       [ 3:0]      axi_bid,
+  input       [ 1:0]      axi_bresp,
+  input       [ 3:0]      axi_buser,
+  output                  axi_bready,
 
   // axi status
 
-  axi_dwovf,
-  axi_dwunf,
-  axi_werror);
+  output  reg             axi_dwovf,
+  output  reg             axi_dwunf,
+  output  reg             axi_werror);
 
-  // parameters
-
-  parameter   AXI_DATA_WIDTH = 512;
-  parameter   AXI_SIZE = 2;
-  parameter   AXI_LENGTH = 16;
-  parameter   AXI_ADDRESS = 32'h00000000;
-  parameter   AXI_ADDRESS_LIMIT = 32'h00000000;
   localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
   localparam  AXI_AWINCR = AXI_LENGTH * AXI_BYTE_WIDTH;
   localparam  BUF_THRESHOLD_LO = 8'd6;
   localparam  BUF_THRESHOLD_HI = 8'd250;
-
-  // request and synchronization
-
-  input                           dma_xfer_req;
-
-  // read interface
-
-  output                          axi_rd_req;
-  output  [ 31:0]                 axi_rd_addr;
-
-  // fifo interface
-
-  input                           adc_rst;
-  input                           adc_clk;
-  input                           adc_wr;
-  input   [AXI_DATA_WIDTH-1:0]    adc_wdata;
-
-  // axi interface
-
-  input                           axi_clk;
-  input                           axi_resetn;
-  output                          axi_awvalid;
-  output  [  3:0]                 axi_awid;
-  output  [  1:0]                 axi_awburst;
-  output                          axi_awlock;
-  output  [  3:0]                 axi_awcache;
-  output  [  2:0]                 axi_awprot;
-  output  [  3:0]                 axi_awqos;
-  output  [  3:0]                 axi_awuser;
-  output  [  7:0]                 axi_awlen;
-  output  [  2:0]                 axi_awsize;
-  output  [ 31:0]                 axi_awaddr;
-  input                           axi_awready;
-  output                          axi_wvalid;
-  output  [AXI_DATA_WIDTH-1:0]    axi_wdata;
-  output  [AXI_BYTE_WIDTH-1:0]    axi_wstrb;
-  output                          axi_wlast;
-  output  [  3:0]                 axi_wuser;
-  input                           axi_wready;
-  input                           axi_bvalid;
-  input   [  3:0]                 axi_bid;
-  input   [  1:0]                 axi_bresp;
-  input   [  3:0]                 axi_buser;
-  output                          axi_bready;
-
-  // axi status
-
-  output                          axi_dwovf;
-  output                          axi_dwunf;
-  output                          axi_werror;
 
   // internal registers
 
@@ -172,9 +121,7 @@ module axi_adcfifo_wr (
   reg     [  7:0]                 axi_waddr = 'd0;
   reg     [  7:0]                 axi_addr_diff = 'd0;
   reg                             axi_almost_full = 'd0;
-  reg                             axi_dwunf = 'd0;
   reg                             axi_almost_empty = 'd0;
-  reg                             axi_dwovf = 'd0;
   reg     [  2:0]                 axi_xfer_req_m = 'd0;
   reg                             axi_xfer_init = 'd0;
   reg     [  7:0]                 axi_raddr = 'd0;
@@ -183,11 +130,6 @@ module axi_adcfifo_wr (
   reg                             axi_rd_d = 'd0;
   reg                             axi_rlast_d = 'd0;
   reg     [AXI_DATA_WIDTH-1:0]    axi_rdata_d = 'd0;
-  reg                             axi_rd_req = 'd0;
-  reg     [ 31:0]                 axi_rd_addr = 'd0;
-  reg                             axi_awvalid = 'd0;
-  reg     [ 31:0]                 axi_awaddr = 'd0;
-  reg                             axi_werror = 'd0;
   reg                             axi_reset = 'd0;
 
   // internal signals

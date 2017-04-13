@@ -39,111 +39,62 @@
 
 `timescale 1ns/100ps
 
-module axi_dacfifo_rd (
+module axi_dacfifo_rd #(
+
+  parameter   AXI_DATA_WIDTH = 512,
+  parameter   AXI_SIZE = 2,
+  parameter   AXI_LENGTH = 15,
+  parameter   AXI_ADDRESS = 32'h00000000) (
 
  // xfer last for read/write synchronization
 
-  axi_xfer_req,
-  axi_last_raddr,
-  axi_last_beats,
+  input                   axi_xfer_req,
+  input       [31:0]      axi_last_raddr,
+  input       [ 3:0]      axi_last_beats,
 
   // axi read address and read data channels
 
-  axi_clk,
-  axi_resetn,
-  axi_arvalid,
-  axi_arid,
-  axi_arburst,
-  axi_arlock,
-  axi_arcache,
-  axi_arprot,
-  axi_arqos,
-  axi_aruser,
-  axi_arlen,
-  axi_arsize,
-  axi_araddr,
-  axi_arready,
-  axi_rvalid,
-  axi_rid,
-  axi_ruser,
-  axi_rresp,
-  axi_rlast,
-  axi_rdata,
-  axi_rready,
+  input                   axi_clk,
+  input                   axi_resetn,
+  output  reg             axi_arvalid,
+  output      [ 3:0]      axi_arid,
+  output      [ 1:0]      axi_arburst,
+  output                  axi_arlock,
+  output      [ 3:0]      axi_arcache,
+  output      [ 2:0]      axi_arprot,
+  output      [ 3:0]      axi_arqos,
+  output      [ 3:0]      axi_aruser,
+  output      [ 7:0]      axi_arlen,
+  output      [ 2:0]      axi_arsize,
+  output  reg [31:0]      axi_araddr,
+  input                   axi_arready,
+  input                   axi_rvalid,
+  input       [ 3:0]      axi_rid,
+  input       [ 3:0]      axi_ruser,
+  input       [ 1:0]      axi_rresp,
+  input                   axi_rlast,
+  input       [(AXI_DATA_WIDTH-1):0]  axi_rdata,
+  output  reg             axi_rready,
 
   // axi status
 
-  axi_rerror,
+  output  reg             axi_rerror,
 
   // fifo interface
 
-  axi_dvalid,
-  axi_ddata,
-  axi_dready,
-  axi_dlast);
+  output  reg             axi_dvalid,
+  output  reg [(AXI_DATA_WIDTH-1):0]  axi_ddata,
+  input                   axi_dready,
+  output  reg             axi_dlast);
 
-  // parameters
-
-  parameter   AXI_DATA_WIDTH = 512;
-  parameter   AXI_SIZE = 2;
-  parameter   AXI_LENGTH = 15;
-  parameter   AXI_ADDRESS = 32'h00000000;
   localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
   localparam  AXI_AWINCR = (AXI_LENGTH + 1) * AXI_BYTE_WIDTH;
-
-  // xfer last for read/write synchronization
-
-  input                           axi_xfer_req;
-  input   [31:0]                 axi_last_raddr;
-  input   [ 3:0]                 axi_last_beats;
-
-  // axi interface
-
-  input                           axi_clk;
-  input                           axi_resetn;
-  output                          axi_arvalid;
-  output  [ 3:0]                  axi_arid;
-  output  [ 1:0]                  axi_arburst;
-  output                          axi_arlock;
-  output  [ 3:0]                  axi_arcache;
-  output  [ 2:0]                  axi_arprot;
-  output  [ 3:0]                  axi_arqos;
-  output  [ 3:0]                  axi_aruser;
-  output  [ 7:0]                  axi_arlen;
-  output  [ 2:0]                  axi_arsize;
-  output  [31:0]                  axi_araddr;
-  input                           axi_arready;
-  input                           axi_rvalid;
-  input   [ 3:0]                  axi_rid;
-  input   [ 3:0]                  axi_ruser;
-  input   [ 1:0]                  axi_rresp;
-  input                           axi_rlast;
-  input   [(AXI_DATA_WIDTH-1):0]  axi_rdata;
-  output                          axi_rready;
-
-  // axi status
-
-  output                          axi_rerror;
-
-  // fifo interface
-
-  output                          axi_dvalid;
-  output  [(AXI_DATA_WIDTH-1):0]  axi_ddata;
-  input                           axi_dready;
-  output                          axi_dlast;
 
   // internal registers
 
   reg                             axi_rnext = 1'b0;
   reg                             axi_ractive = 1'b0;
-  reg                             axi_arvalid = 1'b0;
-  reg     [ 31:0]                 axi_araddr = 32'b0;
   reg     [ 31:0]                 axi_araddr_prev = 32'b0;
-  reg     [(AXI_DATA_WIDTH-1):0]  axi_ddata = 'b0;
-  reg                             axi_dvalid = 1'b0;
-  reg                             axi_dlast = 1'b0;
-  reg                             axi_rready = 1'b0;
-  reg                             axi_rerror = 1'b0;
   reg     [ 1:0]                  axi_xfer_req_m = 2'b0;
   reg     [ 4:0]                  axi_last_beats_cntr = 16'b0;
 

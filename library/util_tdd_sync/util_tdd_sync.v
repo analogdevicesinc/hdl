@@ -45,29 +45,20 @@
 
 `timescale 1ns/1ps
 
-module util_tdd_sync (
-  clk,
-  rstn,
+module util_tdd_sync #(
 
-  sync_mode,
+  parameter     TDD_SYNC_PERIOD = 100000000) (
+  input                   clk,
+  input                   rstn,
 
-  sync_in,
-  sync_out
-);
+  input                   sync_mode,
 
-  input         clk;
-  input         rstn;
+  input                   sync_in,
+  output  reg             sync_out);
 
-  input         sync_mode;
-
-  input         sync_in;
-  output        sync_out;
-
-  parameter     TDD_SYNC_PERIOD = 100000000;
 
   reg           sync_mode_d1 = 1'b0;
   reg           sync_mode_d2 = 1'b0;
-  reg           sync_out = 1'b0;
 
   wire          sync_internal;
   wire          sync_external;

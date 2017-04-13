@@ -39,53 +39,35 @@
 
 `timescale 1ns/100ps
 
-module util_adcfifo (
+module util_adcfifo #(
+
+  parameter   ADC_DATA_WIDTH = 256,
+  parameter   DMA_DATA_WIDTH =  64,
+  parameter   DMA_READY_ENABLE = 1,
+  parameter   DMA_ADDRESS_WIDTH =  10) (
 
   // fifo interface
 
-  adc_rst,
-  adc_clk,
-  adc_wr,
-  adc_wdata,
-  adc_wovf,
+  input                   adc_rst,
+  input                   adc_clk,
+  input                   adc_wr,
+  input       [ADC_DATA_WIDTH-1:0]  adc_wdata,
+  output                  adc_wovf,
 
   // dma interface
 
-  dma_clk,
-  dma_wr,
-  dma_wdata,
-  dma_wready,
-  dma_xfer_req,
-  dma_xfer_status);
+  input                   dma_clk,
+  output                  dma_wr,
+  output      [DMA_DATA_WIDTH-1:0]  dma_wdata,
+  input                   dma_wready,
+  input                   dma_xfer_req,
+  output      [ 3:0]      dma_xfer_status);
 
-  // parameters
-
-  parameter   ADC_DATA_WIDTH = 256;
-  parameter   DMA_DATA_WIDTH =  64;
-  parameter   DMA_READY_ENABLE = 1;
-  parameter   DMA_ADDRESS_WIDTH =  10;
 
   localparam  DMA_MEM_RATIO = ADC_DATA_WIDTH/DMA_DATA_WIDTH;
   localparam  ADC_ADDRESS_WIDTH = (DMA_MEM_RATIO == 1) ? (DMA_ADDRESS_WIDTH) : (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
     ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) : (DMA_ADDRESS_WIDTH - 3));
   localparam  ADC_ADDR_LIMIT = (2**ADC_ADDRESS_WIDTH)-1;
-
-  // adc interface
-
-  input                           adc_rst;
-  input                           adc_clk;
-  input                           adc_wr;
-  input   [ADC_DATA_WIDTH-1:0]    adc_wdata;
-  output                          adc_wovf;
-
-  // dma interface
-
-  input                           dma_clk;
-  output                          dma_wr;
-  output  [DMA_DATA_WIDTH-1:0]    dma_wdata;
-  input                           dma_wready;
-  input                           dma_xfer_req;
-  output  [  3:0]                 dma_xfer_status;
 
   // internal registers
 
@@ -133,7 +115,6 @@ module util_adcfifo (
       end
     end
   end
-
 
   always @(posedge adc_clk or posedge adc_rst) begin
     if (adc_rst == 1'b1) begin

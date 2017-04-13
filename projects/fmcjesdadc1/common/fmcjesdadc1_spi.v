@@ -41,14 +41,12 @@
 
 module fmcjesdadc1_spi (
 
-  spi_csn,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
+  input                   spi_csn,
+  input                   spi_clk,
+  input                   spi_mosi,
+  output                  spi_miso,
 
-  spi_sdio);
-
-  // parameters
+  inout                   spi_sdio);
 
   localparam  FMC27X_CPLD = 8'h00;
   localparam  FMC27X_AD9517 = 8'h84;
@@ -56,17 +54,6 @@ module fmcjesdadc1_spi (
   localparam  FMC27X_AD9250_1 = 8'h81;
   localparam  FMC27X_AD9129_0 = 8'h82;
   localparam  FMC27X_AD9129_1 = 8'h83;
-
-  // 4-wire
-
-  input           spi_csn;
-  input           spi_clk;
-  input           spi_mosi;
-  output          spi_miso;
-
-  // 3-wire
-
-  inout           spi_sdio;
 
   // internal registers
 

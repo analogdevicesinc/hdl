@@ -37,87 +37,49 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9671_if (
+module axi_ad9671_if #(
+
+  parameter QUAD_OR_DUAL_N = 1,
+  parameter DEVICE_TYPE = 0,
+  parameter ID = 0) (
 
   // jesd interface 
   // rx_clk is (line-rate/40)
 
-  rx_clk,
-  rx_sof,
-  rx_data,
+  input                   rx_clk,
+  input       [ 3:0]      rx_sof,
+  input       [(64*QUAD_OR_DUAL_N)+63:0]  rx_data,
 
   // adc data output
 
-  adc_clk,
-  adc_rst,
-  adc_valid,
-  adc_data_a,
-  adc_or_a,
-  adc_data_b,
-  adc_or_b,
-  adc_data_c,
-  adc_or_c,
-  adc_data_d,
-  adc_or_d,
-  adc_data_e,
-  adc_or_e,
-  adc_data_f,
-  adc_or_f,
-  adc_data_g,
-  adc_or_g,
-  adc_data_h,
-  adc_or_h,
-  adc_start_code,
-  adc_sync_in,
-  adc_sync_out,
-  adc_sync,
-  adc_sync_status,
-  adc_status,
-  adc_raddr_in,
-  adc_raddr_out);
+  output                  adc_clk,
+  input                   adc_rst,
+  output                  adc_valid,
+  output  reg [ 15:0]     adc_data_a,
+  output                  adc_or_a,
+  output  reg [ 15:0]     adc_data_b,
+  output                  adc_or_b,
+  output  reg [ 15:0]     adc_data_c,
+  output                  adc_or_c,
+  output  reg [ 15:0]     adc_data_d,
+  output                  adc_or_d,
+  output  reg [ 15:0]     adc_data_e,
+  output                  adc_or_e,
+  output  reg [ 15:0]     adc_data_f,
+  output                  adc_or_f,
+  output  reg [ 15:0]     adc_data_g,
+  output                  adc_or_g,
+  output  reg [ 15:0]     adc_data_h,
+  output                  adc_or_h,
+  input       [ 31:0]     adc_start_code,
+  input                   adc_sync_in,
+  output                  adc_sync_out,
+  input                   adc_sync,
+  output  reg             adc_sync_status,
+  output  reg             adc_status,
+  input       [ 3:0]      adc_raddr_in,
+  output  reg [ 3:0]      adc_raddr_out);
 
-  // parameters
-
-  parameter QUAD_OR_DUAL_N = 1;
-  parameter DEVICE_TYPE = 0;
-  parameter ID = 0;
-
-  // jesd interface 
-  // rx_clk is (line-rate/40)
-
-  input                                 rx_clk;
-  input   [  3:0]                       rx_sof;
-  input   [(64*QUAD_OR_DUAL_N)+63:0]    rx_data;
-
-  // adc data output
-
-  output                                adc_clk;
-  input                                 adc_rst;
-  output                                adc_valid;
-  output  [ 15:0]                       adc_data_a;
-  output                                adc_or_a;
-  output  [ 15:0]                       adc_data_b;
-  output                                adc_or_b;
-  output  [ 15:0]                       adc_data_c;
-  output                                adc_or_c;
-  output  [ 15:0]                       adc_data_d;
-  output                                adc_or_d;
-  output  [ 15:0]                       adc_data_e;
-  output                                adc_or_e;
-  output  [ 15:0]                       adc_data_f;
-  output                                adc_or_f;
-  output  [ 15:0]                       adc_data_g;
-  output                                adc_or_g;
-  output  [ 15:0]                       adc_data_h;
-  output                                adc_or_h;
-  input   [ 31:0]                       adc_start_code;
-  input                                 adc_sync_in;
-  output                                adc_sync_out;
-  input                                 adc_sync;
-  output                                adc_sync_status;
-  output                                adc_status;
-  input   [ 3:0]                        adc_raddr_in;
-  output  [ 3:0]                        adc_raddr_out;
 
   // internal wires
 
@@ -140,19 +102,8 @@ module axi_ad9671_if (
 
   reg                                   int_valid = 'd0;
   reg     [127:0]                       int_data = 'd0;
-  reg                                   adc_status = 'd0;
-  reg                                   adc_sync_status = 'd0;
   reg                                   rx_sof_d = 'd0;
   reg     [  3:0]                       adc_waddr = 'd0;
-  reg     [  3:0]                       adc_raddr_out = 'd0;
-  reg     [ 15:0]                       adc_data_a = 'd0;
-  reg     [ 15:0]                       adc_data_b = 'd0;
-  reg     [ 15:0]                       adc_data_c = 'd0;
-  reg     [ 15:0]                       adc_data_d = 'd0;
-  reg     [ 15:0]                       adc_data_e = 'd0;
-  reg     [ 15:0]                       adc_data_f = 'd0;
-  reg     [ 15:0]                       adc_data_g = 'd0;
-  reg     [ 15:0]                       adc_data_h = 'd0;
 
   // adc clock & valid
 

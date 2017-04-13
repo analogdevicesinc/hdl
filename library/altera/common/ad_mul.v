@@ -39,41 +39,27 @@
 
 `timescale 1ps/1ps
 
-module ad_mul (
+module ad_mul #(
+
+  parameter   DELAY_DATA_WIDTH = 16) (
 
   // data_p = data_a * data_b;
 
-  clk,
-  data_a,
-  data_b,
-  data_p,
+  input                   clk,
+  input       [16:0]      data_a,
+  input       [16:0]      data_b,
+  output      [33:0]      data_p,
 
   // delay interface
 
-  ddata_in,
-  ddata_out);
+  input       [(DELAY_DATA_WIDTH-1):0]  ddata_in,
+  output  reg [(DELAY_DATA_WIDTH-1):0]  ddata_out);
 
-  // delayed data bus width
-
-  parameter   DELAY_DATA_WIDTH = 16;
-
-  // data_p = data_a * data_b;
-
-  input                               clk;
-  input   [16:0]                      data_a;
-  input   [16:0]                      data_b;
-  output  [33:0]                      data_p;
-
-  // delay interface
-
-  input   [(DELAY_DATA_WIDTH-1):0]    ddata_in;
-  output  [(DELAY_DATA_WIDTH-1):0]    ddata_out;
 
   // internal registers
 
   reg     [(DELAY_DATA_WIDTH-1):0]    p1_ddata = 'd0;
   reg     [(DELAY_DATA_WIDTH-1):0]    p2_ddata = 'd0;
-  reg     [(DELAY_DATA_WIDTH-1):0]    ddata_out = 'd0;
 
   // a/b reg, m-reg, p-reg delay match
 

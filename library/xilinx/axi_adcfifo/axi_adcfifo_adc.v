@@ -39,52 +39,32 @@
 
 `timescale 1ns/100ps
 
-module axi_adcfifo_adc (
+module axi_adcfifo_adc #(
+
+  parameter   ADC_DATA_WIDTH = 128,
+  parameter   AXI_DATA_WIDTH = 512) (
 
   // fifo interface
 
-  adc_rst,
-  adc_clk,
-  adc_wr,
-  adc_wdata,
-  adc_wovf,
-  adc_dwr,
-  adc_ddata,
+  input                   adc_rst,
+  input                   adc_clk,
+  input                   adc_wr,
+  input       [ADC_DATA_WIDTH-1:0]  adc_wdata,
+  output  reg             adc_wovf,
+  output  reg             adc_dwr,
+  output  reg [AXI_DATA_WIDTH-1:0]  adc_ddata,
 
   // axi interface
 
-  axi_drst,
-  axi_clk,
-  axi_xfer_status);
+  input                   axi_drst,
+  input                   axi_clk,
+  input       [ 3:0]      axi_xfer_status);
 
-  // parameters
-
-  parameter   ADC_DATA_WIDTH = 128;
-  parameter   AXI_DATA_WIDTH = 512;
   localparam  ADC_MEM_RATIO = AXI_DATA_WIDTH/ADC_DATA_WIDTH;
-
-  // adc interface
-
-  input                           adc_rst;
-  input                           adc_clk;
-  input                           adc_wr;
-  input   [ADC_DATA_WIDTH-1:0]    adc_wdata;
-  output                          adc_wovf;
-  output                          adc_dwr;
-  output  [AXI_DATA_WIDTH-1:0]    adc_ddata;
-
-  // axi interface
-
-  input                           axi_clk;
-  input                           axi_drst;
-  input   [  3:0]                 axi_xfer_status;
 
   // internal registers
 
-  reg                             adc_wovf      = 'd0;
   reg     [  2:0]                 adc_wcnt_int  = 'd0;
-  reg                             adc_dwr       = 'd0;
-  reg     [AXI_DATA_WIDTH-1:0]    adc_ddata     = 'd0;
 
   // internal signals
 

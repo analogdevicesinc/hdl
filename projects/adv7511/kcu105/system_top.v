@@ -41,99 +41,52 @@
 
 module system_top (
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input                   sys_rst,
+  input                   sys_clk_p,
+  input                   sys_clk_n,
 
-  uart_sin,
-  uart_sout,
+  input                   uart_sin,
+  output                  uart_sout,
 
-  ddr4_act_n,
-  ddr4_addr,
-  ddr4_ba,
-  ddr4_bg,
-  ddr4_ck_p,
-  ddr4_ck_n,
-  ddr4_cke,
-  ddr4_cs_n,
-  ddr4_dm_n,
-  ddr4_dq,
-  ddr4_dqs_p,
-  ddr4_dqs_n,
-  ddr4_odt,
-  ddr4_reset_n,
+  output                  ddr4_act_n,
+  output      [16:0]      ddr4_addr,
+  output      [ 1:0]      ddr4_ba,
+  output      [ 0:0]      ddr4_bg,
+  output                  ddr4_ck_p,
+  output                  ddr4_ck_n,
+  output      [ 0:0]      ddr4_cke,
+  output      [ 0:0]      ddr4_cs_n,
+  inout       [ 7:0]      ddr4_dm_n,
+  inout       [63:0]      ddr4_dq,
+  inout       [ 7:0]      ddr4_dqs_p,
+  inout       [ 7:0]      ddr4_dqs_n,
+  output      [ 0:0]      ddr4_odt,
+  output                  ddr4_reset_n,
 
-  mdio_mdc,
-  mdio_mdio,
-  phy_clk_p,
-  phy_clk_n,
-  phy_rst_n,
-  phy_rx_p,
-  phy_rx_n,
-  phy_tx_p,
-  phy_tx_n,
+  output                  mdio_mdc,
+  inout                   mdio_mdio,
+  input                   phy_clk_p,
+  input                   phy_clk_n,
+  output                  phy_rst_n,
+  input                   phy_rx_p,
+  input                   phy_rx_n,
+  output                  phy_tx_p,
+  output                  phy_tx_n,
 
-  fan_pwm,
+  output                  fan_pwm,
 
-  gpio_bd,
+  inout       [16:0]      gpio_bd,
 
-  iic_scl,
-  iic_sda,
+  inout                   iic_scl,
+  inout                   iic_sda,
 
-  hdmi_out_clk,
-  hdmi_hsync,
-  hdmi_vsync,
-  hdmi_data_e,
-  hdmi_data,
+  output                  hdmi_out_clk,
+  output                  hdmi_hsync,
+  output                  hdmi_vsync,
+  output                  hdmi_data_e,
+  output      [15:0]      hdmi_data,
 
-  spdif);
-
-  input           sys_rst;
-  input           sys_clk_p;
-  input           sys_clk_n;
-
-  input           uart_sin;
-  output          uart_sout;
-
-  output          ddr4_act_n;
-  output  [16:0]  ddr4_addr;
-  output  [ 1:0]  ddr4_ba;
-  output  [ 0:0]  ddr4_bg;
-  output          ddr4_ck_p;
-  output          ddr4_ck_n;
-  output  [ 0:0]  ddr4_cke;
-  output  [ 0:0]  ddr4_cs_n;
-  inout   [ 7:0]  ddr4_dm_n;
-  inout   [63:0]  ddr4_dq;
-  inout   [ 7:0]  ddr4_dqs_p;
-  inout   [ 7:0]  ddr4_dqs_n;
-  output  [ 0:0]  ddr4_odt;
-  output          ddr4_reset_n;
-
-  output          mdio_mdc;
-  inout           mdio_mdio;
-  input           phy_clk_p;
-  input           phy_clk_n;
-  output          phy_rst_n;
-  input           phy_rx_p;
-  input           phy_rx_n;
-  output          phy_tx_p;
-  output          phy_tx_n;
-
-  output          fan_pwm;
-
-  inout   [16:0]  gpio_bd;
-
-  inout           iic_scl;
-  inout           iic_sda;
-
-  output          hdmi_out_clk;
-  output          hdmi_hsync;
-  output          hdmi_vsync;
-  output          hdmi_data_e;
-  output  [15:0]  hdmi_data;
-
-  output          spdif;
+  output                  spdif);
 
   // internal signals
 

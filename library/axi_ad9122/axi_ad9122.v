@@ -37,125 +37,71 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9122 (
+module axi_ad9122 #(
+
+  parameter   ID = 0,
+  parameter   DEVICE_TYPE = 0,
+  parameter   SERDES_OR_DDR_N = 1,
+  parameter   MMCM_OR_BUFIO_N = 1,
+  parameter   MMCM_CLKIN_PERIOD = 1.667,
+  parameter   MMCM_VCO_DIV = 2,
+  parameter   MMCM_VCO_MUL = 4,
+  parameter   MMCM_CLK0_DIV = 2,
+  parameter   MMCM_CLK1_DIV = 8,
+  parameter   DAC_DATAPATH_DISABLE = 0,
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // dac interface
 
-  dac_clk_in_p,
-  dac_clk_in_n,
-  dac_clk_out_p,
-  dac_clk_out_n,
-  dac_frame_out_p,
-  dac_frame_out_n,
-  dac_data_out_p,
-  dac_data_out_n,
+  input                   dac_clk_in_p,
+  input                   dac_clk_in_n,
+  output                  dac_clk_out_p,
+  output                  dac_clk_out_n,
+  output                  dac_frame_out_p,
+  output                  dac_frame_out_n,
+  output      [15:0]      dac_data_out_p,
+  output      [15:0]      dac_data_out_n,
 
   // master/slave
 
-  dac_sync_out,
-  dac_sync_in,
+  output                  dac_sync_out,
+  input                   dac_sync_in,
 
   // dma interface
 
-  dac_div_clk,
-  dac_valid_0,
-  dac_enable_0,
-  dac_ddata_0,
-  dac_valid_1,
-  dac_enable_1,
-  dac_ddata_1,
-  dac_dovf,
-  dac_dunf,
+  output                  dac_div_clk,
+  output                  dac_valid_0,
+  output                  dac_enable_0,
+  input       [63:0]      dac_ddata_0,
+  output                  dac_valid_1,
+  output                  dac_enable_1,
+  input       [63:0]      dac_ddata_1,
+  input                   dac_dovf,
+  input                   dac_dunf,
 
   // axi interface
 
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rdata,
-  s_axi_rresp,
-  s_axi_rready,
-  s_axi_awprot,
-  s_axi_arprot);
-
-  // parameters
-
-  parameter   ID = 0;
-  parameter   DEVICE_TYPE = 0;
-  parameter   SERDES_OR_DDR_N = 1;
-  parameter   MMCM_OR_BUFIO_N = 1;
-  parameter   MMCM_CLKIN_PERIOD = 1.667;
-  parameter   MMCM_VCO_DIV = 2;
-  parameter   MMCM_VCO_MUL = 4;
-  parameter   MMCM_CLK0_DIV = 2;
-  parameter   MMCM_CLK1_DIV = 8;
-  parameter   DAC_DATAPATH_DISABLE = 0;
-  parameter   IO_DELAY_GROUP = "dev_if_delay_group";
-
-  // dac interface
-
-  input           dac_clk_in_p;
-  input           dac_clk_in_n;
-  output          dac_clk_out_p;
-  output          dac_clk_out_n;
-  output          dac_frame_out_p;
-  output          dac_frame_out_n;
-  output  [15:0]  dac_data_out_p;
-  output  [15:0]  dac_data_out_n;
-
-  // master/slave
-
-  output          dac_sync_out;
-  input           dac_sync_in;
-
-  // dma interface
-
-  output          dac_div_clk;
-  output          dac_valid_0;
-  output          dac_enable_0;
-  input   [63:0]  dac_ddata_0;
-  output          dac_valid_1;
-  output          dac_enable_1;
-  input   [63:0]  dac_ddata_1;
-  input           dac_dovf;
-  input           dac_dunf;
-
-  // axi interface
-
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [31:0]  s_axi_rdata;
-  output  [ 1:0]  s_axi_rresp;
-  input           s_axi_rready;
-  input   [ 2:0]  s_axi_awprot;
-  input   [ 2:0]  s_axi_arprot;
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [31:0]      s_axi_awaddr,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [31:0]      s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [31:0]      s_axi_araddr,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [31:0]      s_axi_rdata,
+  output      [ 1:0]      s_axi_rresp,
+  input                   s_axi_rready,
+  input       [ 2:0]      s_axi_awprot,
+  input       [ 2:0]      s_axi_arprot);
 
 
   // internal clocks and resets

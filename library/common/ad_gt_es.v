@@ -37,59 +37,56 @@
 
 `timescale 1ns/100ps
 
-module ad_gt_es (
+module ad_gt_es #(
 
-  lpm_dfe_n,
+  parameter   integer GTH_OR_GTX_N = 0) (
+
+  input                   lpm_dfe_n,
 
   // drp interface
 
-  up_rstn,
-  up_clk,
-  up_es_drp_sel,
-  up_es_drp_wr,
-  up_es_drp_addr,
-  up_es_drp_wdata,
-  up_es_drp_rdata,
-  up_es_drp_ready,
+  input                   up_rstn,
+  input                   up_clk,
+  output  reg             up_es_drp_sel,
+  output  reg             up_es_drp_wr,
+  output  reg [11:0]      up_es_drp_addr,
+  output  reg [15:0]      up_es_drp_wdata,
+  input       [15:0]      up_es_drp_rdata,
+  input                   up_es_drp_ready,
 
   // dma interface
 
-  up_es_dma_req,
-  up_es_dma_addr,
-  up_es_dma_data,
-  up_es_dma_ack,
+  output  reg             up_es_dma_req,
+  output  reg [31:0]      up_es_dma_addr,
+  output  reg [31:0]      up_es_dma_data,
+  input                   up_es_dma_ack,
 
   // processor interface
 
-  up_es_start,
-  up_es_stop,
-  up_es_init,
-  up_es_sdata0,
-  up_es_sdata1,
-  up_es_sdata2,
-  up_es_sdata3,
-  up_es_sdata4,
-  up_es_qdata0,
-  up_es_qdata1,
-  up_es_qdata2,
-  up_es_qdata3,
-  up_es_qdata4,
-  up_es_prescale,
-  up_es_hoffset_min,
-  up_es_hoffset_max,
-  up_es_hoffset_step,
-  up_es_voffset_min,
-  up_es_voffset_max,
-  up_es_voffset_step,
-  up_es_voffset_range,
-  up_es_start_addr,
-  up_es_status);
+  input                   up_es_start,
+  input                   up_es_stop,
+  input                   up_es_init,
+  input       [15:0]      up_es_sdata0,
+  input       [15:0]      up_es_sdata1,
+  input       [15:0]      up_es_sdata2,
+  input       [15:0]      up_es_sdata3,
+  input       [15:0]      up_es_sdata4,
+  input       [15:0]      up_es_qdata0,
+  input       [15:0]      up_es_qdata1,
+  input       [15:0]      up_es_qdata2,
+  input       [15:0]      up_es_qdata3,
+  input       [15:0]      up_es_qdata4,
+  input       [ 4:0]      up_es_prescale,
+  input       [11:0]      up_es_hoffset_min,
+  input       [11:0]      up_es_hoffset_max,
+  input       [11:0]      up_es_hoffset_step,
+  input       [ 7:0]      up_es_voffset_min,
+  input       [ 7:0]      up_es_voffset_max,
+  input       [ 7:0]      up_es_voffset_step,
+  input       [ 1:0]      up_es_voffset_range,
+  input       [31:0]      up_es_start_addr,
+  output  reg             up_es_status);
 
-  // parameters
-
-  parameter   integer GTH_OR_GTX_N = 0;
-
-  // gt address
 
   localparam  [11:0]  ES_DRP_CTRL_ADDR    = (GTH_OR_GTX_N == 1) ? 12'h03c : 12'h03d; // GTH-7 12'h03d 
   localparam  [11:0]  ES_DRP_SDATA0_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h049 : 12'h036; // GTH-7 12'h036 
@@ -107,8 +104,6 @@ module ad_gt_es (
   localparam  [11:0]  ES_DRP_STATUS_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h153 : 12'h151; // GTH-7 12'h153 
   localparam  [11:0]  ES_DRP_SCNT_ADDR    = (GTH_OR_GTX_N == 1) ? 12'h152 : 12'h150; // GTH-7 12'h152 
   localparam  [11:0]  ES_DRP_ECNT_ADDR    = (GTH_OR_GTX_N == 1) ? 12'h151 : 12'h14f; // GTH-7 12'h151 
-
-  // state machine
 
   localparam  [ 5:0]  ES_FSM_IDLE             = 6'h00;
   localparam  [ 5:0]  ES_FSM_STATUS           = 6'h01;
@@ -163,58 +158,8 @@ module ad_gt_es (
   localparam  [ 5:0]  ES_FSM_DMA_READY        = 6'h32;
   localparam  [ 5:0]  ES_FSM_UPDATE           = 6'h33;
 
-  input           lpm_dfe_n;
-
-  // drp interface
-
-  input           up_rstn;
-  input           up_clk;
-  output          up_es_drp_sel;
-  output          up_es_drp_wr;
-  output  [11:0]  up_es_drp_addr;
-  output  [15:0]  up_es_drp_wdata;
-  input   [15:0]  up_es_drp_rdata;
-  input           up_es_drp_ready;
-
-  // dma interface
-
-  output          up_es_dma_req;
-  output  [31:0]  up_es_dma_addr;
-  output  [31:0]  up_es_dma_data;
-  input           up_es_dma_ack;
-
-  // processor interface
-
-  input           up_es_start;
-  input           up_es_stop;
-  input           up_es_init;
-  input   [15:0]  up_es_sdata0;
-  input   [15:0]  up_es_sdata1;
-  input   [15:0]  up_es_sdata2;
-  input   [15:0]  up_es_sdata3;
-  input   [15:0]  up_es_sdata4;
-  input   [15:0]  up_es_qdata0;
-  input   [15:0]  up_es_qdata1;
-  input   [15:0]  up_es_qdata2;
-  input   [15:0]  up_es_qdata3;
-  input   [15:0]  up_es_qdata4;
-  input   [ 4:0]  up_es_prescale;
-  input   [11:0]  up_es_hoffset_min;
-  input   [11:0]  up_es_hoffset_max;
-  input   [11:0]  up_es_hoffset_step;
-  input   [ 7:0]  up_es_voffset_min;
-  input   [ 7:0]  up_es_voffset_max;
-  input   [ 7:0]  up_es_voffset_step;
-  input   [ 1:0]  up_es_voffset_range;
-  input   [31:0]  up_es_start_addr;
-  output          up_es_status;
-
   // internal registers
 
-  reg             up_es_dma_req = 'd0;
-  reg     [31:0]  up_es_dma_addr = 'd0;
-  reg     [31:0]  up_es_dma_data = 'd0;
-  reg             up_es_status = 'd0;
   reg             up_es_ut = 'd0;
   reg     [31:0]  up_es_addr = 'd0;
   reg     [11:0]  up_es_hoffset = 'd0;
@@ -225,10 +170,6 @@ module ad_gt_es (
   reg     [15:0]  up_es_scnt_rdata = 'd0;
   reg     [15:0]  up_es_ecnt_rdata = 'd0;
   reg     [ 5:0]  up_es_fsm = 'd0;
-  reg             up_es_drp_sel = 'd0;
-  reg             up_es_drp_wr = 'd0;
-  reg     [11:0]  up_es_drp_addr = 'd0;
-  reg     [15:0]  up_es_drp_wdata = 'd0;
 
   // internal signals
 

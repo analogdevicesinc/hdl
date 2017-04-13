@@ -43,22 +43,13 @@
 module axi_ad9434_pnmon (
 
   // adc interface
-  adc_clk,
-  adc_data,
+  input                   adc_clk,
+  input       [47:0]      adc_data,
 
   // pn interface
-  adc_pnseq_sel,
-  adc_pn_err,
-  adc_pn_oos);
-
-  // adc interface
-  input           adc_clk;
-  input   [47:0]  adc_data;
-
-  // pn out sync and error
-  input   [ 3:0]  adc_pnseq_sel;
-  output          adc_pn_err;
-  output          adc_pn_oos;
+  input       [ 3:0]      adc_pnseq_sel,
+  output                  adc_pn_err,
+  output                  adc_pn_oos);
 
   // internal registers
   reg     [47:0]  adc_pn_data_pn = 'd0;

@@ -41,28 +41,19 @@
 
 `timescale 1ns/100ps
 
-module ad_dds_sine (
+module ad_dds_sine #(
+
+  parameter   DELAY_DATA_WIDTH = 16) (
 
   // sine = sin(angle)
 
-  clk,
-  angle,
-  sine,
-  ddata_in,
-  ddata_out);
+  input                   clk,
+  input       [ 15:0]     angle,
+  output  reg [ 15:0]     sine,
+  input       [ DW:0]     ddata_in,
+  output  reg [ DW:0]     ddata_out);
 
-  // parameters
-
-  parameter   DELAY_DATA_WIDTH = 16;
   localparam  DW = DELAY_DATA_WIDTH - 1;
-
-  // sine = sin(angle)
-
-  input             clk;
-  input   [ 15:0]   angle;
-  output  [ 15:0]   sine;
-  input   [ DW:0]   ddata_in;
-  output  [ DW:0]   ddata_out;
 
   // internal registers
 
@@ -89,8 +80,6 @@ module ad_dds_sine (
   reg     [ DW:0]   s6_ddata = 'd0;
   reg     [ 33:0]   s7_data = 'd0;
   reg     [ DW:0]   s7_ddata = 'd0;
-  reg     [ 15:0]   sine = 'd0;
-  reg     [ DW:0]   ddata_out = 'd0;
 
   // internal signals
 

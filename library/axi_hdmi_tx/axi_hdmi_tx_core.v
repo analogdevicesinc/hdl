@@ -36,145 +36,80 @@
 // ***************************************************************************
 // Transmit HDMI, video dma data in, hdmi separate syncs data out.
 
-module axi_hdmi_tx_core (
+module axi_hdmi_tx_core #(
+
+  parameter   CR_CB_N = 0,
+  parameter   EMBEDDED_SYNC = 0) (
 
   // hdmi interface
 
-  hdmi_clk,
-  hdmi_rst,
+  input                   hdmi_clk,
+  input                   hdmi_rst,
 
   // 16-bit interface
 
-  hdmi_16_hsync,
-  hdmi_16_vsync,
-  hdmi_16_data_e,
-  hdmi_16_data,
-  hdmi_16_es_data,
+  output  reg             hdmi_16_hsync,
+  output  reg             hdmi_16_vsync,
+  output  reg             hdmi_16_data_e,
+  output  reg [15:0]      hdmi_16_data,
+  output  reg [15:0]      hdmi_16_es_data,
 
   // 24-bit interface
 
-  hdmi_24_hsync,
-  hdmi_24_vsync,
-  hdmi_24_data_e,
-  hdmi_24_data,
+  output  reg             hdmi_24_hsync,
+  output  reg             hdmi_24_vsync,
+  output  reg             hdmi_24_data_e,
+  output  reg [23:0]      hdmi_24_data,
 
   // 36-bit interface
 
-  hdmi_36_hsync,
-  hdmi_36_vsync,
-  hdmi_36_data_e,
-  hdmi_36_data,
+  output  reg             hdmi_36_hsync,
+  output  reg             hdmi_36_vsync,
+  output  reg             hdmi_36_data_e,
+  output  reg [35:0]      hdmi_36_data,
 
   // control signals
 
-  hdmi_fs_toggle,
-  hdmi_raddr_g,
-  hdmi_tpm_oos,
-  hdmi_status,
+  output  reg             hdmi_fs_toggle,
+  output  reg [ 8:0]      hdmi_raddr_g,
+  output  reg             hdmi_tpm_oos,
+  output  reg             hdmi_status,
 
   // vdma interface
 
-  vdma_clk,
-  vdma_wr,
-  vdma_waddr,
-  vdma_wdata,
-  vdma_fs_ret_toggle,
-  vdma_fs_waddr,
+  input                   vdma_clk,
+  input                   vdma_wr,
+  input       [ 8:0]      vdma_waddr,
+  input       [47:0]      vdma_wdata,
+  input                   vdma_fs_ret_toggle,
+  input       [ 8:0]      vdma_fs_waddr,
 
   // processor interface
 
-  hdmi_csc_bypass,
-  hdmi_ss_bypass,
-  hdmi_srcsel,
-  hdmi_const_rgb,
-  hdmi_hl_active,
-  hdmi_hl_width,
-  hdmi_hs_width,
-  hdmi_he_max,
-  hdmi_he_min,
-  hdmi_vf_active,
-  hdmi_vf_width,
-  hdmi_vs_width,
-  hdmi_ve_max,
-  hdmi_ve_min,
-  hdmi_clip_max,
-  hdmi_clip_min);
+  input                   hdmi_csc_bypass,
+  input                   hdmi_ss_bypass,
+  input       [ 1:0]      hdmi_srcsel,
+  input       [23:0]      hdmi_const_rgb,
+  input       [15:0]      hdmi_hl_active,
+  input       [15:0]      hdmi_hl_width,
+  input       [15:0]      hdmi_hs_width,
+  input       [15:0]      hdmi_he_max,
+  input       [15:0]      hdmi_he_min,
+  input       [15:0]      hdmi_vf_active,
+  input       [15:0]      hdmi_vf_width,
+  input       [15:0]      hdmi_vs_width,
+  input       [15:0]      hdmi_ve_max,
+  input       [15:0]      hdmi_ve_min,
+  input       [23:0]      hdmi_clip_max,
+  input       [23:0]      hdmi_clip_min);
 
-  // parameters
-
-  parameter   CR_CB_N = 0;
-  parameter   EMBEDDED_SYNC = 0;
-
-  // hdmi interface
-
-  input           hdmi_clk;
-  input           hdmi_rst;
-
-  // 16-bit interface
-
-  output          hdmi_16_hsync;
-  output          hdmi_16_vsync;
-  output          hdmi_16_data_e;
-  output  [15:0]  hdmi_16_data;
-  output  [15:0]  hdmi_16_es_data;
-
-  // 24-bit interface
-
-  output          hdmi_24_hsync;
-  output          hdmi_24_vsync;
-  output          hdmi_24_data_e;
-  output  [23:0]  hdmi_24_data;
-
-  // 36-bit interface
-
-  output          hdmi_36_hsync;
-  output          hdmi_36_vsync;
-  output          hdmi_36_data_e;
-  output  [35:0]  hdmi_36_data;
-
-  // control signals
-
-  output          hdmi_fs_toggle;
-  output  [ 8:0]  hdmi_raddr_g;
-  output          hdmi_tpm_oos;
-  output          hdmi_status;
-
-  // vdma interface
-
-  input           vdma_clk;
-  input           vdma_wr;
-  input   [ 8:0]  vdma_waddr;
-  input   [47:0]  vdma_wdata;
-  input           vdma_fs_ret_toggle;
-  input   [ 8:0]  vdma_fs_waddr;
-
-  // processor interface
-
-  input           hdmi_csc_bypass;
-  input           hdmi_ss_bypass;
-  input   [ 1:0]  hdmi_srcsel;
-  input   [23:0]  hdmi_const_rgb;
-  input   [15:0]  hdmi_hl_active;
-  input   [15:0]  hdmi_hl_width;
-  input   [15:0]  hdmi_hs_width;
-  input   [15:0]  hdmi_he_max;
-  input   [15:0]  hdmi_he_min;
-  input   [15:0]  hdmi_vf_active;
-  input   [15:0]  hdmi_vf_width;
-  input   [15:0]  hdmi_vs_width;
-  input   [15:0]  hdmi_ve_max;
-  input   [15:0]  hdmi_ve_min;
-  input   [23:0]  hdmi_clip_max;
-  input   [23:0]  hdmi_clip_min;
 
   // internal registers
 
-  reg             hdmi_status = 'd0;
   reg             hdmi_enable = 'd0;
   reg     [15:0]  hdmi_hs_count = 'd0;
   reg     [15:0]  hdmi_vs_count = 'd0;
   reg             hdmi_fs = 'd0;
-  reg             hdmi_fs_toggle = 'd0;
   reg             hdmi_fs_ret_toggle_m1 = 'd0;
   reg             hdmi_fs_ret_toggle_m2 = 'd0;
   reg             hdmi_fs_ret_toggle_m3 = 'd0;
@@ -185,7 +120,6 @@ module axi_hdmi_tx_core (
   reg             hdmi_hs_de = 'd0;
   reg             hdmi_vs_de = 'd0;
   reg     [ 9:0]  hdmi_raddr = 'd0;
-  reg     [ 8:0]  hdmi_raddr_g = 'd0;
   reg             hdmi_hs_d = 'd0;
   reg             hdmi_vs_d = 'd0;
   reg             hdmi_hs_de_d = 'd0;
@@ -200,11 +134,6 @@ module axi_hdmi_tx_core (
   reg             hdmi_data_sel_2d = 'd0;
   reg     [47:0]  hdmi_data_2d = 'd0;
   reg     [23:0]  hdmi_tpm_data = 'd0;
-  reg             hdmi_tpm_oos = 'd0;
-  reg             hdmi_36_hsync = 'd0;
-  reg             hdmi_36_vsync = 'd0;
-  reg             hdmi_36_data_e = 'd0;
-  reg     [35:0]  hdmi_36_data = 'd0;
   reg             hdmi_hsync = 'd0;
   reg             hdmi_vsync = 'd0;
   reg             hdmi_hsync_data_e = 'd0;
@@ -217,14 +146,8 @@ module axi_hdmi_tx_core (
   reg             hdmi_24_csc_vsync_data_e = 'd0;
   reg             hdmi_24_csc_data_e = 'd0;
   reg     [23:0]  hdmi_24_csc_data = 'd0;
-  reg             hdmi_24_hsync = 'd0;
-  reg             hdmi_24_vsync = 'd0;
   reg             hdmi_24_hsync_data_e = 'd0;
   reg             hdmi_24_vsync_data_e = 'd0;
-  reg             hdmi_24_data_e = 'd0;
-  reg     [23:0]  hdmi_24_data = 'd0;
-  reg             hdmi_16_hsync = 'd0;
-  reg             hdmi_16_vsync = 'd0;
   reg             hdmi_16_hsync_data_e = 'd0;
   reg             hdmi_16_vsync_data_e = 'd0;
   reg             hdmi_16_hsync_d = 'd0;
@@ -233,12 +156,9 @@ module axi_hdmi_tx_core (
   reg             hdmi_16_vsync_data_e_d = 'd0;
   reg             hdmi_16_data_e_d = 'd0;
   reg     [15:0]  hdmi_16_data_d = 'd0;
-  reg             hdmi_16_data_e = 'd0;
-  reg     [15:0]  hdmi_16_data = 'd0;
   reg             hdmi_es_hs_de = 'd0;
   reg             hdmi_es_vs_de = 'd0;
   reg     [15:0]  hdmi_es_data = 'd0;
-  reg     [15:0]  hdmi_16_es_data = 'd0;
   reg     [23:0]  hdmi_clip_data = 'd0;
   reg             hdmi_clip_hs_de_d = 'd0;
   reg             hdmi_clip_vs_de_d = 'd0;
@@ -271,7 +191,6 @@ module axi_hdmi_tx_core (
   wire            hdmi_ss_data_e_s;
   wire    [15:0]  hdmi_ss_data_s;
   wire    [15:0]  hdmi_es_data_s;
-
 
   // binary to grey conversion
 

@@ -37,52 +37,33 @@
 
 `timescale 1ns/1ps
 
-module ad_gt_common (
+module ad_gt_common #(
+
+  parameter   integer GTH_OR_GTX_N = 0,
+  parameter   integer QPLL_ENABLE = 1,
+  parameter   integer QPLL_REFCLK_DIV = 2,
+  parameter   [26:0]  QPLL_CFG = 27'h06801C1,
+  parameter   integer QPLL_FBDIV_RATIO = 1'b1,
+  parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000) (
 
   // reset and clocks
 
-  qpll_ref_clk_in,
-  qpll_rst,
-  qpll_clk,
-  qpll_ref_clk,
-  qpll_locked,
+  input                   qpll_ref_clk_in,
+  input                   qpll_rst,
+  output                  qpll_clk,
+  output                  qpll_ref_clk,
+  output                  qpll_locked,
 
   // drp interface
 
-  up_clk,
-  up_drp_sel,
-  up_drp_addr,
-  up_drp_wr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready);
+  input                   up_clk,
+  input                   up_drp_sel,
+  input       [11:0]      up_drp_addr,
+  input                   up_drp_wr,
+  input       [15:0]      up_drp_wdata,
+  output      [15:0]      up_drp_rdata,
+  output                  up_drp_ready);
 
-  // parameters
-
-  parameter   integer GTH_OR_GTX_N = 0;
-  parameter   integer QPLL_ENABLE = 1;
-  parameter   integer QPLL_REFCLK_DIV = 2;
-  parameter   [26:0]  QPLL_CFG = 27'h06801C1;
-  parameter   integer QPLL_FBDIV_RATIO = 1'b1;
-  parameter   [ 9:0]  QPLL_FBDIV =  10'b0000110000;
-
-  // reset and clocks
-
-  input           qpll_ref_clk_in;
-  input           qpll_rst;
-  output          qpll_clk;
-  output          qpll_ref_clk;
-  output          qpll_locked;
-
-  // drp interface
-
-  input           up_clk;
-  input           up_drp_sel;
-  input   [11:0]  up_drp_addr;
-  input           up_drp_wr;
-  input   [15:0]  up_drp_wdata;
-  output  [15:0]  up_drp_rdata;
-  output          up_drp_ready;
 
   // instantiations
 

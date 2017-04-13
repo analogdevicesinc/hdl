@@ -41,225 +41,116 @@
 
 module system_top (
 
-  ddr_addr,
-  ddr_ba,
-  ddr_cas_n,
-  ddr_ck_n,
-  ddr_ck_p,
-  ddr_cke,
-  ddr_cs_n,
-  ddr_dm,
-  ddr_dq,
-  ddr_dqs_n,
-  ddr_dqs_p,
-  ddr_odt,
-  ddr_ras_n,
-  ddr_reset_n,
-  ddr_we_n,
+  inout       [14:0]      ddr_addr,
+  inout       [ 2:0]      ddr_ba,
+  inout                   ddr_cas_n,
+  inout                   ddr_ck_n,
+  inout                   ddr_ck_p,
+  inout                   ddr_cke,
+  inout                   ddr_cs_n,
+  inout       [ 3:0]      ddr_dm,
+  inout       [31:0]      ddr_dq,
+  inout       [ 3:0]      ddr_dqs_n,
+  inout       [ 3:0]      ddr_dqs_p,
+  inout                   ddr_odt,
+  inout                   ddr_ras_n,
+  inout                   ddr_reset_n,
+  inout                   ddr_we_n,
 
-  eth1_rgmii_rd,
-  eth1_rgmii_rx_ctl,
-  eth1_rgmii_rxc,
-  eth1_rgmii_td,
-  eth1_rgmii_tx_ctl,
-  eth1_rgmii_txc,
+  input       [3:0]       eth1_rgmii_rd,
+  input                   eth1_rgmii_rx_ctl,
+  input                   eth1_rgmii_rxc,
+  output      [3:0]       eth1_rgmii_td,
+  output                  eth1_rgmii_tx_ctl,
+  output                  eth1_rgmii_txc,
 
-  eth2_rgmii_rd,
-  eth2_rgmii_rx_ctl,
-  eth2_rgmii_rxc,
-  eth2_rgmii_td,
-  eth2_rgmii_tx_ctl,
-  eth2_rgmii_txc,
+  input       [3:0]       eth2_rgmii_rd,
+  input                   eth2_rgmii_rx_ctl,
+  input                   eth2_rgmii_rxc,
+  output      [3:0]       eth2_rgmii_td,
+  output                  eth2_rgmii_tx_ctl,
+  output                  eth2_rgmii_txc,
 
-  eth_mdio_p,
-  eth_mdio_mdc,
-  eth_phy_rst_n,
+  inout                   eth_mdio_p,
+  output                  eth_mdio_mdc,
+  output                  eth_phy_rst_n,
 
-  fixed_io_ddr_vrn,
-  fixed_io_ddr_vrp,
-  fixed_io_mio,
-  fixed_io_ps_clk,
-  fixed_io_ps_porb,
-  fixed_io_ps_srstb,
+  inout                   fixed_io_ddr_vrn,
+  inout                   fixed_io_ddr_vrp,
+  inout       [53:0]      fixed_io_mio,
+  inout                   fixed_io_ps_clk,
+  inout                   fixed_io_ps_porb,
+  inout                   fixed_io_ps_srstb,
 
-  gpio_bd,
+  inout       [31:0]      gpio_bd,
 
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
+  output                  hdmi_out_clk,
+  output                  hdmi_vsync,
+  output                  hdmi_hsync,
+  output                  hdmi_data_e,
+  output      [15:0]      hdmi_data,
 
-  position_m1_i,
-  position_m2_i,
-  adc_clk_o,
-  adc_m1_ia_dat_i,
-  adc_m1_ib_dat_i,
-  adc_m1_vbus_dat_i,
-  fmc_m1_en_o,
-  fmc_m2_en_o,
-  adc_m2_ia_dat_i,
-  adc_m2_ib_dat_i,
-  adc_m2_vbus_dat_i,
-  pwm_m1_ah_o,
-  pwm_m1_al_o,
-  pwm_m1_bh_o,
-  pwm_m1_bl_o,
-  pwm_m1_ch_o,
-  pwm_m1_cl_o,
-  pwm_m1_dh_o,
-  pwm_m1_dl_o,
-  pwm_m2_ah_o,
-  pwm_m2_al_o,
-  pwm_m2_bh_o,
-  pwm_m2_bl_o,
-  pwm_m2_ch_o,
-  pwm_m2_cl_o,
-  pwm_m2_dh_o,
-  pwm_m2_dl_o,
-  vt_enable,
-  vauxn0,
-  vauxn8,
-  vauxp0,
-  vauxp8,
+  input       [2:0]       position_m1_i,
+  input       [2:0]       position_m2_i,
+  output                  adc_clk_o,
+  input                   adc_m1_ia_dat_i,
+  input                   adc_m1_ib_dat_i,
+  input                   adc_m1_vbus_dat_i,
+  output                  fmc_m1_en_o,
+  output                  fmc_m2_en_o,
+  input                   adc_m2_ia_dat_i,
+  input                   adc_m2_ib_dat_i,
+  input                   adc_m2_vbus_dat_i,
+  output                  pwm_m1_ah_o,
+  output                  pwm_m1_al_o,
+  output                  pwm_m1_bh_o,
+  output                  pwm_m1_bl_o,
+  output                  pwm_m1_ch_o,
+  output                  pwm_m1_cl_o,
+  output                  pwm_m1_dh_o,
+  output                  pwm_m1_dl_o,
+  output                  pwm_m2_ah_o,
+  output                  pwm_m2_al_o,
+  output                  pwm_m2_bh_o,
+  output                  pwm_m2_bl_o,
+  output                  pwm_m2_ch_o,
+  output                  pwm_m2_cl_o,
+  output                  pwm_m2_dh_o,
+  output                  pwm_m2_dl_o,
+  output                  vt_enable,
+  input                   vauxn0,
+  input                   vauxn8,
+  input                   vauxp0,
+  input                   vauxp8,
 /*  muxaddr_out,*/
 
-  i2s_mclk,
-  i2s_bclk,
-  i2s_lrclk,
-  i2s_sdata_out,
-  i2s_sdata_in,
+  output                  i2s_mclk,
+  output                  i2s_bclk,
+  output                  i2s_lrclk,
+  output                  i2s_sdata_out,
+  input                   i2s_sdata_in,
 
-  spdif,
+  output                  spdif,
 
-  iic_scl,
-  iic_sda,
-  iic_mux_scl,
-  iic_mux_sda,
+  inout                   iic_scl,
+  inout                   iic_sda,
+  inout       [ 1:0]      iic_mux_scl,
+  inout       [ 1:0]      iic_mux_sda,
 
-  iic_ee2_scl_io,
-  iic_ee2_sda_io,
+  inout                   iic_ee2_scl_io,
+  inout                   iic_ee2_sda_io,
 
-  fmc_spi1_sel1_rdc,
-  fmc_spi1_miso,
-  fmc_spi1_mosi,
-  fmc_spi1_sck,
-  fmc_sample_n,
-  gpo,
-  gpi,
+  output                  fmc_spi1_sel1_rdc,
+  input                   fmc_spi1_miso,
+  output                  fmc_spi1_mosi,
+  output                  fmc_spi1_sck,
+  output                  fmc_sample_n,
+  output      [ 3:0]      gpo,
+  input       [ 1:0]      gpi,
 
-  otg_vbusoc);
+  input                   otg_vbusoc);
 
-  inout   [14:0]  ddr_addr;
-  inout   [ 2:0]  ddr_ba;
-  inout           ddr_cas_n;
-  inout           ddr_ck_n;
-  inout           ddr_ck_p;
-  inout           ddr_cke;
-  inout           ddr_cs_n;
-  inout   [ 3:0]  ddr_dm;
-  inout   [31:0]  ddr_dq;
-  inout   [ 3:0]  ddr_dqs_n;
-  inout   [ 3:0]  ddr_dqs_p;
-  inout           ddr_odt;
-  inout           ddr_ras_n;
-  inout           ddr_reset_n;
-  inout           ddr_we_n;
-
-  input   [3:0]   eth1_rgmii_rd;
-  input           eth1_rgmii_rx_ctl;
-  input           eth1_rgmii_rxc;
-  output  [3:0]   eth1_rgmii_td;
-  output          eth1_rgmii_tx_ctl;
-  output          eth1_rgmii_txc;
-
-  input   [3:0]   eth2_rgmii_rd;
-  input           eth2_rgmii_rx_ctl;
-  input           eth2_rgmii_rxc;
-  output  [3:0]   eth2_rgmii_td;
-  output          eth2_rgmii_tx_ctl;
-  output          eth2_rgmii_txc;
-
-  inout           eth_mdio_p;
-  output          eth_mdio_mdc;
-  output          eth_phy_rst_n;
-
-  inout           fixed_io_ddr_vrn;
-  inout           fixed_io_ddr_vrp;
-  inout   [53:0]  fixed_io_mio;
-  inout           fixed_io_ps_clk;
-  inout           fixed_io_ps_porb;
-  inout           fixed_io_ps_srstb;
-
-  inout   [31:0]  gpio_bd;
-
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output  [15:0]  hdmi_data;
-
-  input  [2:0]    position_m1_i;
-  input  [2:0]    position_m2_i;
-  output          adc_clk_o;
-  output          fmc_m1_en_o;
-  input           adc_m1_ia_dat_i;
-  input           adc_m1_ib_dat_i;
-  input           adc_m1_vbus_dat_i;
-  output          fmc_m2_en_o;
-  input           adc_m2_ia_dat_i;
-  input           adc_m2_ib_dat_i;
-  input           adc_m2_vbus_dat_i;
-  output          pwm_m1_ah_o;
-  output          pwm_m1_al_o;
-  output          pwm_m1_bh_o;
-  output          pwm_m1_bl_o;
-  output          pwm_m1_ch_o;
-  output          pwm_m1_cl_o;
-  output          pwm_m1_dh_o;
-  output          pwm_m1_dl_o;
-  output          pwm_m2_ah_o;
-  output          pwm_m2_al_o;
-  output          pwm_m2_bh_o;
-  output          pwm_m2_bl_o;
-  output          pwm_m2_ch_o;
-  output          pwm_m2_cl_o;
-  output          pwm_m2_dh_o;
-  output          pwm_m2_dl_o;
-
-  output          vt_enable;
-
-  input           vauxn0;
-  input           vauxn8;
-  input           vauxp0;
-  input           vauxp8;
 /*  output  [ 3:0]  muxaddr_out;*/
-
-  output          spdif;
-
-  output          i2s_mclk;
-  output          i2s_bclk;
-  output          i2s_lrclk;
-  output          i2s_sdata_out;
-  input           i2s_sdata_in;
-
-  inout           iic_scl;
-  inout           iic_sda;
-  inout   [ 1:0]  iic_mux_scl;
-  inout   [ 1:0]  iic_mux_sda;
-
-  inout           iic_ee2_scl_io;
-  inout           iic_ee2_sda_io;
-
-  output          fmc_spi1_sel1_rdc;
-  input           fmc_spi1_miso;
-  output          fmc_spi1_mosi;
-  output          fmc_spi1_sck;
-  output          fmc_sample_n;
-  output  [ 3:0]  gpo;
-  input   [ 1:0]  gpi;
-
-  input           otg_vbusoc;
 
   // internal signals
 
@@ -276,7 +167,6 @@ module system_top (
   wire            eth_mdio_o;
   wire            eth_mdio_i;
   wire            eth_mdio_t;
-
 
   // assignments
 

@@ -37,87 +37,51 @@
 
 `timescale 1ns/100ps
 
-module util_cpack (
+module util_cpack #(
+
+  parameter   CHANNEL_DATA_WIDTH  = 32,
+  parameter   NUM_OF_CHANNELS     = 8) (
 
   // adc interface
 
-  adc_rst,
-  adc_clk,
-  adc_enable_0,
-  adc_valid_0,
-  adc_data_0,
-  adc_enable_1,
-  adc_valid_1,
-  adc_data_1,
-  adc_enable_2,
-  adc_valid_2,
-  adc_data_2,
-  adc_enable_3,
-  adc_valid_3,
-  adc_data_3,
-  adc_enable_4,
-  adc_valid_4,
-  adc_data_4,
-  adc_enable_5,
-  adc_valid_5,
-  adc_data_5,
-  adc_enable_6,
-  adc_valid_6,
-  adc_data_6,
-  adc_enable_7,
-  adc_valid_7,
-  adc_data_7,
+  input                   adc_rst,
+  input                   adc_clk,
+  input                   adc_enable_0,
+  input                   adc_valid_0,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  adc_data_0,
+  input                   adc_enable_1,
+  input                   adc_valid_1,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  adc_data_1,
+  input                   adc_enable_2,
+  input                   adc_valid_2,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  adc_data_2,
+  input                   adc_enable_3,
+  input                   adc_valid_3,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  adc_data_3,
+  input                   adc_enable_4,
+  input                   adc_valid_4,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  adc_data_4,
+  input                   adc_enable_5,
+  input                   adc_valid_5,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  adc_data_5,
+  input                   adc_enable_6,
+  input                   adc_valid_6,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  adc_data_6,
+  input                   adc_enable_7,
+  input                   adc_valid_7,
+  input       [(CHANNEL_DATA_WIDTH-1):0]  adc_data_7,
 
   // fifo interface
 
-  adc_valid,
-  adc_sync,
-  adc_data);
+  output  reg             adc_valid,
+  output  reg             adc_sync,
+  output  reg [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]  adc_data);
 
-  // parameters
-
-  parameter   CHANNEL_DATA_WIDTH  = 32;
-  parameter   NUM_OF_CHANNELS     = 8;
 
   localparam  SAMPLES_PCHANNEL    = CHANNEL_DATA_WIDTH/16;
   localparam  NUM_OF_CHANNELS_M   = 8;
   localparam  BUS_DATA_WIDTH      = NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH;
   localparam  NUM_OF_CHANNELS_P   = NUM_OF_CHANNELS;
-
-  // adc interface
-
-  input                               adc_rst;
-  input                               adc_clk;
-  input                               adc_enable_0;
-  input                               adc_valid_0;
-  input   [(CHANNEL_DATA_WIDTH-1):0]  adc_data_0;
-  input                               adc_enable_1;
-  input                               adc_valid_1;
-  input   [(CHANNEL_DATA_WIDTH-1):0]  adc_data_1;
-  input                               adc_enable_2;
-  input                               adc_valid_2;
-  input   [(CHANNEL_DATA_WIDTH-1):0]  adc_data_2;
-  input                               adc_enable_3;
-  input                               adc_valid_3;
-  input   [(CHANNEL_DATA_WIDTH-1):0]  adc_data_3;
-  input                               adc_enable_4;
-  input                               adc_valid_4;
-  input   [(CHANNEL_DATA_WIDTH-1):0]  adc_data_4;
-  input                               adc_enable_5;
-  input                               adc_valid_5;
-  input   [(CHANNEL_DATA_WIDTH-1):0]  adc_data_5;
-  input                               adc_enable_6;
-  input                               adc_valid_6;
-  input   [(CHANNEL_DATA_WIDTH-1):0]  adc_data_6;
-  input                               adc_enable_7;
-  input                               adc_valid_7;
-  input   [(CHANNEL_DATA_WIDTH-1):0]  adc_data_7;
-
-  // fifo interface
-
-  output                                                  adc_valid;
-  output                                                  adc_sync;
-  output  [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    adc_data;
 
   // internal registers
 
@@ -126,9 +90,6 @@ module util_cpack (
   reg                                                     adc_mux_valid = 'd0;
   reg     [(NUM_OF_CHANNELS_M-1):0]                       adc_mux_enable = 'd0;
   reg     [((SAMPLES_PCHANNEL*16*79)-1):0]                         adc_mux_data = 'd0;
-  reg                                                     adc_valid = 'd0;
-  reg                                                     adc_sync = 'd0;
-  reg     [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]    adc_data = 'd0;
 
   // internal signals
 

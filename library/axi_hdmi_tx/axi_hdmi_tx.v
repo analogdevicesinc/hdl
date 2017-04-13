@@ -35,140 +35,79 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module axi_hdmi_tx (
+module axi_hdmi_tx #(
+
+  parameter   ID = 0,
+  parameter   CR_CB_N = 0,
+  parameter   DEVICE_TYPE = 0,
+  parameter   EMBEDDED_SYNC = 0,
+  parameter   OUT_CLK_POLARITY = 0) (
 
   // hdmi interface
 
-  hdmi_clk,
-  hdmi_out_clk,
+  input                   hdmi_clk,
+  output                  hdmi_out_clk,
 
   // 16-bit interface
 
-  hdmi_16_hsync,
-  hdmi_16_vsync,
-  hdmi_16_data_e,
-  hdmi_16_data,
-  hdmi_16_es_data,
+  output                  hdmi_16_hsync,
+  output                  hdmi_16_vsync,
+  output                  hdmi_16_data_e,
+  output      [15:0]      hdmi_16_data,
+  output      [15:0]      hdmi_16_es_data,
 
   // 24-bit interface
 
-  hdmi_24_hsync,
-  hdmi_24_vsync,
-  hdmi_24_data_e,
-  hdmi_24_data,
+  output                  hdmi_24_hsync,
+  output                  hdmi_24_vsync,
+  output                  hdmi_24_data_e,
+  output      [23:0]      hdmi_24_data,
 
   // 36-bit interface
 
-  hdmi_36_hsync,
-  hdmi_36_vsync,
-  hdmi_36_data_e,
-  hdmi_36_data,
+  output                  hdmi_36_hsync,
+  output                  hdmi_36_vsync,
+  output                  hdmi_36_data_e,
+  output      [35:0]      hdmi_36_data,
 
   // vdma interface
 
-  vdma_clk,
-  vdma_fs,
-  vdma_fs_ret,
-  vdma_valid,
-  vdma_data,
-  vdma_ready,
+  input                   vdma_clk,
+  output                  vdma_fs,
+  input                   vdma_fs_ret,
+  input                   vdma_valid,
+  input       [63:0]      vdma_data,
+  output                  vdma_ready,
 
   // axi interface
 
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awprot,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arprot,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rresp,
-  s_axi_rdata,
-  s_axi_rready);
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [31:0]      s_axi_awaddr,
+  input       [ 2:0]      s_axi_awprot,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [31:0]      s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [31:0]      s_axi_araddr,
+  input       [ 2:0]      s_axi_arprot,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [ 1:0]      s_axi_rresp,
+  output      [31:0]      s_axi_rdata,
+  input                   s_axi_rready);
 
-  // parameters
-
-  parameter   ID = 0;
-  parameter   CR_CB_N = 0;
-  parameter   DEVICE_TYPE = 0;
-  parameter   EMBEDDED_SYNC = 0;
   /* 0 = Launch on rising edge, 1 = Launch on falling edge */
-  parameter   OUT_CLK_POLARITY = 0;
 
   localparam  XILINX_7SERIES = 0;
   localparam  XILINX_ULTRASCALE = 1;
   localparam  ALTERA_5SERIES = 16;
-
-  // hdmi interface
-
-  input           hdmi_clk;
-  output          hdmi_out_clk;
-
-  // 16-bit interface
-
-  output          hdmi_16_hsync;
-  output          hdmi_16_vsync;
-  output          hdmi_16_data_e;
-  output  [15:0]  hdmi_16_data;
-  output  [15:0]  hdmi_16_es_data;
-
-  // 24-bit interface
-
-  output          hdmi_24_hsync;
-  output          hdmi_24_vsync;
-  output          hdmi_24_data_e;
-  output  [23:0]  hdmi_24_data;
-
-  // 36-bit interface
-
-  output          hdmi_36_hsync;
-  output          hdmi_36_vsync;
-  output          hdmi_36_data_e;
-  output  [35:0]  hdmi_36_data;
-
-  // vdma interface
-
-  input           vdma_clk;
-  output          vdma_fs;
-  input           vdma_fs_ret;
-  input           vdma_valid;
-  input   [63:0]  vdma_data;
-  output          vdma_ready;
-
-  // axi interface
-
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  input   [ 2:0]  s_axi_awprot;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  input   [ 2:0]  s_axi_arprot;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [ 1:0]  s_axi_rresp;
-  output  [31:0]  s_axi_rdata;
-  input           s_axi_rready;
 
   // reset and clocks
 

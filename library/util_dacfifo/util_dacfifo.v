@@ -39,57 +39,32 @@
 
 `timescale 1ns/100ps
 
-module util_dacfifo (
+module util_dacfifo #(
+
+  parameter       ADDRESS_WIDTH = 6,
+  parameter       DATA_WIDTH = 128) (
 
   // DMA interface
 
-  dma_clk,
-  dma_rst,
-  dma_valid,
-  dma_data,
-  dma_ready,
-  dma_xfer_req,
-  dma_xfer_last,
+  input                   dma_clk,
+  input                   dma_rst,
+  input                   dma_valid,
+  input       [(DATA_WIDTH-1):0]  dma_data,
+  output  reg             dma_ready,
+  input                   dma_xfer_req,
+  input                   dma_xfer_last,
 
   // DAC interface
 
-  dac_clk,
-  dac_rst,
-  dac_valid,
-  dac_data,
-  dac_dunf,
-  dac_xfer_out,
+  input                   dac_clk,
+  input                   dac_rst,
+  input                   dac_valid,
+  output  reg [(DATA_WIDTH-1):0]  dac_data,
+  output  reg             dac_dunf,
+  output  reg             dac_xfer_out,
 
-  bypass
-);
+  input                   bypass);
 
-  // depth of the FIFO
-
-  parameter       ADDRESS_WIDTH = 6;
-  parameter       DATA_WIDTH = 128;
-
-  // port definitions
-
-  // DMA interface
-
-  input                               dma_clk;
-  input                               dma_rst;
-  input                               dma_valid;
-  input   [(DATA_WIDTH-1):0]          dma_data;
-  output                              dma_ready;
-  input                               dma_xfer_req;
-  input                               dma_xfer_last;
-
-  // DAC interface
-
-  input                               dac_clk;
-  input                               dac_rst;
-  input                               dac_valid;
-  output  [(DATA_WIDTH-1):0]          dac_data;
-  output                              dac_dunf;
-  output                              dac_xfer_out;
-
-  input                               bypass;
 
   localparam  FIFO_THRESHOLD_HI = {(ADDRESS_WIDTH){1'b1}} - 4;
 
@@ -102,7 +77,6 @@ module util_dacfifo (
   reg     [(ADDRESS_WIDTH-1):0]       dma_raddr_m2 = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dma_raddr = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dma_addr_diff = 'b0;
-  reg                                 dma_ready = 1'b0;
   reg                                 dma_ready_fifo = 1'b0;
   reg                                 dma_ready_bypass = 1'b0;
   reg                                 dma_bypass = 1'b0;
@@ -119,16 +93,13 @@ module util_dacfifo (
   reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_m1 = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_m2 = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr = 'b0;
-  reg     [(DATA_WIDTH-1):0]          dac_data = 'b0;
   reg                                 dac_mem_ready = 1'b0;
-  reg                                 dac_xfer_out = 1'b0;
   reg                                 dac_xfer_out_fifo = 1'b0;
   reg                                 dac_xfer_out_fifo_m1 = 1'b0;
   reg                                 dac_xfer_out_bypass = 1'b0;
   reg                                 dac_xfer_out_bypass_m1 = 1'b0;
   reg                                 dac_bypass = 1'b0;
   reg                                 dac_bypass_m1 = 1'b0;
-  reg                                 dac_dunf = 1'b0;
 
   // internal wires
 

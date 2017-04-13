@@ -35,22 +35,17 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module mdc_mdio (
+module mdc_mdio #(
 
-  mdio_mdc,
-  mdio_in_w,
-  mdio_in_r,
+  parameter PHY_AD = 5'b10000) (
 
-  speed_select,
-  duplex_mode);
+  input                   mdio_mdc,
+  input                   mdio_in_w,
+  input                   mdio_in_r,
 
-  parameter PHY_AD = 5'b10000;
+  output  reg [ 1:0]      speed_select,
+  output  reg             duplex_mode);
 
-  input           mdio_mdc;
-  input           mdio_in_w;
-  input           mdio_in_r;
-  output  [ 1:0]  speed_select;
-  output          duplex_mode;
 
   localparam IDLE     = 2'b01;
   localparam ACQUIRE  = 2'b10;
@@ -62,8 +57,6 @@ module mdc_mdio (
   reg [31:0]  data_in       = 32'h0;
   reg [31:0]  data_in_r     = 32'h0;
   reg [ 5:0]  data_counter  = 6'h0;
-  reg [ 1:0]  speed_select  = 2'h0;
-  reg         duplex_mode   = 1'h0;
 
   assign preamble = &data_in;
 

@@ -37,49 +37,29 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9250_if (
+module axi_ad9250_if #(
+
+  parameter DEVICE_TYPE = 0) (
 
   // jesd interface 
   // rx_clk is (line-rate/40)
 
-  rx_clk,
-  rx_sof,
-  rx_data,
+  input                   rx_clk,
+  input       [ 3:0]      rx_sof,
+  input       [63:0]      rx_data,
 
   // adc data output
 
-  adc_clk,
-  adc_rst,
-  adc_data_a,
-  adc_data_b,
-  adc_or_a,
-  adc_or_b,
-  adc_status);
+  output                  adc_clk,
+  input                   adc_rst,
+  output      [27:0]      adc_data_a,
+  output      [27:0]      adc_data_b,
+  output                  adc_or_a,
+  output                  adc_or_b,
+  output  reg             adc_status);
 
-  // parameters
-
-  parameter DEVICE_TYPE = 0;
-
-  // jesd interface 
-  // rx_clk is (line-rate/40)
-
-  input           rx_clk;
-  input  [  3:0]  rx_sof;
-  input   [63:0]  rx_data;
-
-  // adc data output
-
-  output          adc_clk;
-  input           adc_rst;
-  output  [27:0]  adc_data_a;
-  output  [27:0]  adc_data_b;
-  output          adc_or_a;
-  output          adc_or_b;
-  output          adc_status;
 
   // internal registers
-
-  reg             adc_status = 'd0;
 
   // internal signals
 

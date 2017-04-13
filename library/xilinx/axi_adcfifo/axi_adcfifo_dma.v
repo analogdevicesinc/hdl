@@ -39,50 +39,32 @@
 
 `timescale 1ns/100ps
 
-module axi_adcfifo_dma (
+module axi_adcfifo_dma #(
 
-  axi_clk,
-  axi_drst,
-  axi_dvalid,
-  axi_ddata,
-  axi_dready,
-  axi_xfer_status,
+  parameter   AXI_DATA_WIDTH = 512,
+  parameter   DMA_DATA_WIDTH =  64,
+  parameter   DMA_READY_ENABLE = 1) (
 
-  dma_clk,
-  dma_wr,
-  dma_wdata,
-  dma_wready,
-  dma_xfer_req,
-  dma_xfer_status);
+  input                   axi_clk,
+  input                   axi_drst,
+  input                   axi_dvalid,
+  input       [AXI_DATA_WIDTH-1:0]  axi_ddata,
+  output  reg             axi_dready,
+  input       [ 3:0]      axi_xfer_status,
 
-  // parameters
+  input                   dma_clk,
+  output                  dma_wr,
+  output      [DMA_DATA_WIDTH-1:0]  dma_wdata,
+  input                   dma_wready,
+  input                   dma_xfer_req,
+  output      [ 3:0]      dma_xfer_status);
 
-  parameter   AXI_DATA_WIDTH = 512;
-  parameter   DMA_DATA_WIDTH =  64;
-  parameter   DMA_READY_ENABLE = 1;
 
   localparam  DMA_MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;
   localparam  DMA_ADDRESS_WIDTH = 8;
   localparam  AXI_ADDRESS_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
     ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) : (DMA_ADDRESS_WIDTH - 3));
  
-  // adc write
-
-  input                           axi_clk;
-  input                           axi_drst;
-  input                           axi_dvalid;
-  input   [AXI_DATA_WIDTH-1:0]    axi_ddata;
-  output                          axi_dready;
-  input   [  3:0]                 axi_xfer_status;
-
-  // dma read
-
-  input                           dma_clk;
-  output                          dma_wr;
-  output  [DMA_DATA_WIDTH-1:0]    dma_wdata;
-  input                           dma_wready;
-  input                           dma_xfer_req;
-  output  [  3:0]                 dma_xfer_status;
 
   // internal registers
 
@@ -93,7 +75,6 @@ module axi_adcfifo_dma (
   reg     [  2:0]                 axi_raddr_rel_t_m = 'd0;
   reg     [DMA_ADDRESS_WIDTH-1:0]    axi_raddr_rel = 'd0;
   reg     [DMA_ADDRESS_WIDTH-1:0]    axi_addr_diff = 'd0;
-  reg                             axi_dready = 'd0;
   reg                             dma_rst = 'd0;
   reg     [  2:0]                 dma_waddr_rel_t_m = 'd0;
   reg     [AXI_ADDRESS_WIDTH-1:0]    dma_waddr_rel = 'd0;

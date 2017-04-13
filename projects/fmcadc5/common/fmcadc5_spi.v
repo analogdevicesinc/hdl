@@ -39,27 +39,14 @@
 
 module fmcadc5_spi (
 
-  spi_csn_0,
-  spi_csn_1,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
+  input                   spi_csn_0,
+  input                   spi_csn_1,
+  input                   spi_clk,
+  input                   spi_mosi,
+  output                  spi_miso,
 
-  spi_sdio,
-  spi_dirn);
-
-  // 4 wire
-
-  input           spi_csn_0;
-  input           spi_csn_1;
-  input           spi_clk;
-  input           spi_mosi;
-  output          spi_miso;
-
-  // 3 wire
-
-  inout           spi_sdio;
-  output          spi_dirn;
+  inout                   spi_sdio,
+  output                  spi_dirn);
 
   // internal registers
 

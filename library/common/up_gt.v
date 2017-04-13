@@ -37,87 +37,47 @@
 
 `timescale 1ns/100ps
 
-module up_gt (
+module up_gt #(
+
+  parameter   integer GTH_OR_GTX_N = 0) (
 
   // drp interface
 
-  up_drp_qpll0_sel,
-  up_drp_qpll0_wr,
-  up_drp_qpll0_addr,
-  up_drp_qpll0_wdata,
-  up_drp_qpll0_rdata,
-  up_drp_qpll0_ready,
-  up_drp_qpll1_sel,
-  up_drp_qpll1_wr,
-  up_drp_qpll1_addr,
-  up_drp_qpll1_wdata,
-  up_drp_qpll1_rdata,
-  up_drp_qpll1_ready,
+  output  reg             up_drp_qpll0_sel,
+  output  reg             up_drp_qpll0_wr,
+  output  reg [11:0]      up_drp_qpll0_addr,
+  output  reg [15:0]      up_drp_qpll0_wdata,
+  input       [15:0]      up_drp_qpll0_rdata,
+  input                   up_drp_qpll0_ready,
+  output  reg             up_drp_qpll1_sel,
+  output  reg             up_drp_qpll1_wr,
+  output  reg [11:0]      up_drp_qpll1_addr,
+  output  reg [15:0]      up_drp_qpll1_wdata,
+  input       [15:0]      up_drp_qpll1_rdata,
+  input                   up_drp_qpll1_ready,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
-  // parameters
-
-  parameter   integer GTH_OR_GTX_N = 0;
-
-  // drp interface
-
-  output          up_drp_qpll0_sel;
-  output          up_drp_qpll0_wr;
-  output  [11:0]  up_drp_qpll0_addr;
-  output  [15:0]  up_drp_qpll0_wdata;
-  input   [15:0]  up_drp_qpll0_rdata;
-  input           up_drp_qpll0_ready;
-  output          up_drp_qpll1_sel;
-  output          up_drp_qpll1_wr;
-  output  [11:0]  up_drp_qpll1_addr;
-  output  [15:0]  up_drp_qpll1_wdata;
-  input   [15:0]  up_drp_qpll1_rdata;
-  input           up_drp_qpll1_ready;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal registers
 
-  reg             up_wack = 'd0;
-  reg             up_drp_qpll0_sel = 'd0;
-  reg             up_drp_qpll0_wr = 'd0;
   reg             up_drp_qpll0_status = 'd0;
   reg             up_drp_qpll0_rwn = 'd0;
-  reg     [11:0]  up_drp_qpll0_addr = 'd0;
-  reg     [15:0]  up_drp_qpll0_wdata = 'd0;
   reg     [15:0]  up_drp_qpll0_rdata_hold = 'd0;
-  reg             up_drp_qpll1_sel = 'd0;
-  reg             up_drp_qpll1_wr = 'd0;
   reg             up_drp_qpll1_status = 'd0;
   reg             up_drp_qpll1_rwn = 'd0;
-  reg     [11:0]  up_drp_qpll1_addr = 'd0;
-  reg     [15:0]  up_drp_qpll1_wdata = 'd0;
   reg     [15:0]  up_drp_qpll1_rdata_hold = 'd0;
-  reg             up_rack = 'd0;
-  reg     [31:0]  up_rdata = 'd0;
 
   // internal signals
 

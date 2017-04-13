@@ -38,48 +38,29 @@
 // ***************************************************************************
 // csc = c1*d[23:16] + c2*d[15:8] + c3*d[7:0] + c4;
 
-module ad_csc_1 (
+module ad_csc_1 #(
+
+  parameter   DELAY_DATA_WIDTH = 16) (
 
   // data
 
-  clk,
-  sync,
-  data,
+  input                   clk,
+  input       [DW:0]      sync,
+  input       [23:0]      data,
 
   // constants
 
-  C1,
-  C2,
-  C3,
-  C4,
+  input       [16:0]      C1,
+  input       [16:0]      C2,
+  input       [16:0]      C3,
+  input       [24:0]      C4,
 
   // sync is delay matched
 
-  csc_sync_1,
-  csc_data_1);
+  output      [DW:0]      csc_sync_1,
+  output      [ 7:0]      csc_data_1);
 
-  // parameters
-
-  parameter   DELAY_DATA_WIDTH = 16;
   localparam  DW = DELAY_DATA_WIDTH - 1;
-
-  // data
-
-  input           clk;
-  input   [DW:0]  sync;
-  input   [23:0]  data;
-
-  // constants
-
-  input   [16:0]  C1;
-  input   [16:0]  C2;
-  input   [16:0]  C3;
-  input   [24:0]  C4;
-
-  // sync is delay matched
-
-  output  [DW:0]  csc_sync_1;
-  output  [ 7:0]  csc_data_1;
 
   // internal wires
 

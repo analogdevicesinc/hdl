@@ -37,231 +37,125 @@
 
 `timescale 1ns/1ps
 
-module ad_gt_channel_1 (
+module ad_gt_channel_1 #(
+
+  parameter   integer ID = 0,
+  parameter   integer GTH_OR_GTX_N = 0,
+  parameter   [31:0]  PMA_RSV = 32'h00018480,
+  parameter   integer CPLL_FBDIV = 2,
+  parameter   integer RX_OUT_DIV = 1,
+  parameter   integer RX_CLK25_DIV = 10,
+  parameter   integer RX_CLKBUF_ENABLE = 0,
+  parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020,
+  parameter   integer TX_OUT_DIV = 1,
+  parameter   integer TX_CLK25_DIV = 10,
+  parameter   integer TX_CLKBUF_ENABLE = 0) (
 
   // channel interface (pll)
 
-  cpll_rst_m,
-  cpll_ref_clk_in,
-  qpll_ref_clk,
-  qpll_locked,
-  qpll_clk,
+  input                   cpll_rst_m,
+  input                   cpll_ref_clk_in,
+  input                   qpll_ref_clk,
+  input                   qpll_locked,
+  input                   qpll_clk,
 
   // channel interface (rx)
 
-  rx_p,
-  rx_n,
+  input                   rx_p,
+  input                   rx_n,
 
-  rx_out_clk,
-  rx_clk,
-  rx_rst,
-  rx_rst_m,
-  rx_sof,
-  rx_data,
-  rx_sysref,
-  rx_sync,
+  output                  rx_out_clk,
+  input                   rx_clk,
+  output                  rx_rst,
+  input                   rx_rst_m,
+  output                  rx_sof,
+  output      [31:0]      rx_data,
+  input                   rx_sysref,
+  output                  rx_sync,
 
-  rx_pll_rst,
-  rx_gt_rst,
-  rx_gt_rst_m,
-  rx_gt_charisk,
-  rx_gt_disperr,
-  rx_gt_notintable,
-  rx_gt_data,
-  rx_gt_comma_align_enb,
-  rx_gt_ilas_f,
-  rx_gt_ilas_q,
-  rx_gt_ilas_a,
-  rx_gt_ilas_r,
-  rx_gt_cgs_k,
+  output                  rx_pll_rst,
+  output                  rx_gt_rst,
+  input                   rx_gt_rst_m,
+  output      [ 3:0]      rx_gt_charisk,
+  output      [ 3:0]      rx_gt_disperr,
+  output      [ 3:0]      rx_gt_notintable,
+  output      [31:0]      rx_gt_data,
+  input                   rx_gt_comma_align_enb,
+  output      [ 3:0]      rx_gt_ilas_f,
+  output      [ 3:0]      rx_gt_ilas_q,
+  output      [ 3:0]      rx_gt_ilas_a,
+  output      [ 3:0]      rx_gt_ilas_r,
+  output      [ 3:0]      rx_gt_cgs_k,
 
-  rx_ip_rst,
-  rx_ip_sof,
-  rx_ip_data,
-  rx_ip_sysref,
-  rx_ip_sync,
-  rx_ip_rst_done,
+  output                  rx_ip_rst,
+  input       [ 3:0]      rx_ip_sof,
+  input       [31:0]      rx_ip_data,
+  output                  rx_ip_sysref,
+  input                   rx_ip_sync,
+  output                  rx_ip_rst_done,
 
-  rx_pll_locked,
-  rx_user_ready,
-  rx_rst_done,
+  output                  rx_pll_locked,
+  output                  rx_user_ready,
+  output                  rx_rst_done,
 
-  rx_pll_locked_m,
-  rx_user_ready_m,
-  rx_rst_done_m,
-
-  // channel interface (tx)
-
-  tx_p,
-  tx_n,
-
-  tx_out_clk,
-  tx_clk,
-  tx_rst,
-  tx_rst_m,
-  tx_data,
-  tx_sysref,
-  tx_sync,
-
-  tx_pll_rst,
-  tx_gt_rst,
-  tx_gt_rst_m,
-  tx_gt_charisk,
-  tx_gt_data,
-
-  tx_ip_rst,
-  tx_ip_data,
-  tx_ip_sysref,
-  tx_ip_sync,
-  tx_ip_rst_done,
-
-  tx_pll_locked,
-  tx_user_ready,
-  tx_rst_done,
-
-  tx_pll_locked_m,
-  tx_user_ready_m,
-  tx_rst_done_m,
-
-  // dma interface
-
-  up_es_dma_req,
-  up_es_dma_addr,
-  up_es_dma_data,
-  up_es_dma_ack,
-  up_es_dma_err,
-
-  // bus interface
-
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
-
-  // parameters
-
-  parameter   integer ID = 0;
-  parameter   integer GTH_OR_GTX_N = 0;
-  parameter   [31:0]  PMA_RSV = 32'h00018480;
-  parameter   integer CPLL_FBDIV = 2;
-  parameter   integer RX_OUT_DIV = 1;
-  parameter   integer RX_CLK25_DIV = 10;
-  parameter   integer RX_CLKBUF_ENABLE = 0;
-  parameter   [72:0]  RX_CDR_CFG = 72'h03000023ff20400020;
-  parameter   integer TX_OUT_DIV = 1;
-  parameter   integer TX_CLK25_DIV = 10;
-  parameter   integer TX_CLKBUF_ENABLE = 0;
-
-  // channel interface (pll)
-
-  input           cpll_rst_m;
-  input           cpll_ref_clk_in;
-  input           qpll_ref_clk;
-  input           qpll_locked;
-  input           qpll_clk;
-
-  // channel interface (rx)
-
-  input           rx_p;
-  input           rx_n;
-
-  output          rx_out_clk;
-  input           rx_clk;
-  output          rx_rst;
-  input           rx_rst_m;
-  output          rx_sof;
-  output  [31:0]  rx_data;
-  input           rx_sysref;
-  output          rx_sync;
-
-  output          rx_pll_rst;
-  output          rx_gt_rst;
-  input           rx_gt_rst_m;
-  output  [ 3:0]  rx_gt_charisk;
-  output  [ 3:0]  rx_gt_disperr;
-  output  [ 3:0]  rx_gt_notintable;
-  output  [31:0]  rx_gt_data;
-  input           rx_gt_comma_align_enb;
-  output  [ 3:0]  rx_gt_ilas_f;
-  output  [ 3:0]  rx_gt_ilas_q;
-  output  [ 3:0]  rx_gt_ilas_a;
-  output  [ 3:0]  rx_gt_ilas_r;
-  output  [ 3:0]  rx_gt_cgs_k;
-
-  output          rx_ip_rst;
-  input   [ 3:0]  rx_ip_sof;
-  input   [31:0]  rx_ip_data;
-  output          rx_ip_sysref;
-  input           rx_ip_sync;
-  output          rx_ip_rst_done;
-
-  output          rx_pll_locked;
-  output          rx_user_ready;
-  output          rx_rst_done;
-
-  input           rx_pll_locked_m;
-  input           rx_user_ready_m;
-  input           rx_rst_done_m;
+  input                   rx_pll_locked_m,
+  input                   rx_user_ready_m,
+  input                   rx_rst_done_m,
 
   // channel interface (tx)
 
-  output          tx_p;
-  output          tx_n;
+  output                  tx_p,
+  output                  tx_n,
 
-  output          tx_out_clk;
-  input           tx_clk;
-  output          tx_rst;
-  input           tx_rst_m;
-  input   [31:0]  tx_data;
-  input           tx_sysref;
-  input           tx_sync;
+  output                  tx_out_clk,
+  input                   tx_clk,
+  output                  tx_rst,
+  input                   tx_rst_m,
+  input       [31:0]      tx_data,
+  input                   tx_sysref,
+  input                   tx_sync,
 
-  output          tx_pll_rst;
-  output          tx_gt_rst;
-  input           tx_gt_rst_m;
-  input   [ 3:0]  tx_gt_charisk;
-  input   [31:0]  tx_gt_data;
+  output                  tx_pll_rst,
+  output                  tx_gt_rst,
+  input                   tx_gt_rst_m,
+  input       [ 3:0]      tx_gt_charisk,
+  input       [31:0]      tx_gt_data,
 
-  output          tx_ip_rst;
-  output  [31:0]  tx_ip_data;
-  output          tx_ip_sysref;
-  output          tx_ip_sync;
-  output          tx_ip_rst_done;
+  output                  tx_ip_rst,
+  output      [31:0]      tx_ip_data,
+  output                  tx_ip_sysref,
+  output                  tx_ip_sync,
+  output                  tx_ip_rst_done,
 
-  output          tx_pll_locked;
-  output          tx_user_ready;
-  output          tx_rst_done;
+  output                  tx_pll_locked,
+  output                  tx_user_ready,
+  output                  tx_rst_done,
 
-  input           tx_pll_locked_m;
-  input           tx_user_ready_m;
-  input           tx_rst_done_m;
+  input                   tx_pll_locked_m,
+  input                   tx_user_ready_m,
+  input                   tx_rst_done_m,
 
   // dma interface
 
-  output          up_es_dma_req;
-  output  [31:0]  up_es_dma_addr;
-  output  [31:0]  up_es_dma_data;
-  input           up_es_dma_ack;
-  input           up_es_dma_err;
+  output                  up_es_dma_req,
+  output      [31:0]      up_es_dma_addr,
+  output      [31:0]      up_es_dma_data,
+  input                   up_es_dma_ack,
+  input                   up_es_dma_err,
 
   // bus interface
 
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output                  up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output      [31:0]      up_rdata,
+  output                  up_rack);
+
 
   // internal signals
 

@@ -37,36 +37,23 @@
 
 `timescale 1ns/100ps
 
-module up_xfer_status (
+module up_xfer_status #(
+
+  parameter     DATA_WIDTH = 8) (
 
   // up interface
 
-  up_rstn,
-  up_clk,
-  up_data_status,
+  input                   up_rstn,
+  input                   up_clk,
+  output  reg [DW:0]      up_data_status,
 
   // device interface
 
-  d_rst,
-  d_clk,
-  d_data_status);
+  input                   d_rst,
+  input                   d_clk,
+  input       [DW:0]      d_data_status);
 
-  // parameters
-
-  parameter     DATA_WIDTH = 8;
   localparam    DW = DATA_WIDTH - 1;
-
-  // up interface
-
-  input           up_rstn;
-  input           up_clk;
-  output  [DW:0]  up_data_status;
-
-  // device interface
-
-  input           d_rst;
-  input           d_clk;
-  input   [DW:0]  d_data_status;
 
   // internal registers
 
@@ -81,7 +68,6 @@ module up_xfer_status (
   reg             up_xfer_toggle_m2 = 'd0;
   reg             up_xfer_toggle_m3 = 'd0;
   reg             up_xfer_toggle = 'd0;
-  reg     [DW:0]  up_data_status = 'd0;
 
   // internal signals
 

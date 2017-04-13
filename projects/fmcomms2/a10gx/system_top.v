@@ -41,129 +41,66 @@ module system_top (
 
   // clock and resets
 
-  sys_clk,
-  sys_resetn,
+  input                   sys_clk,
+  input                   sys_resetn,
 
   // ddr3
 
-  ddr3_clk_p,
-  ddr3_clk_n,
-  ddr3_a,
-  ddr3_ba,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_odt,
-  ddr3_reset_n,
-  ddr3_we_n,
-  ddr3_ras_n,
-  ddr3_cas_n,
-  ddr3_dqs_p,
-  ddr3_dqs_n,
-  ddr3_dq,
-  ddr3_dm,
-  ddr3_rzq,
-  ddr3_ref_clk,
+  output                  ddr3_clk_p,
+  output                  ddr3_clk_n,
+  output      [ 14:0]     ddr3_a,
+  output      [ 2:0]      ddr3_ba,
+  output                  ddr3_cke,
+  output                  ddr3_cs_n,
+  output                  ddr3_odt,
+  output                  ddr3_reset_n,
+  output                  ddr3_we_n,
+  output                  ddr3_ras_n,
+  output                  ddr3_cas_n,
+  inout       [ 7:0]      ddr3_dqs_p,
+  inout       [ 7:0]      ddr3_dqs_n,
+  inout       [ 63:0]     ddr3_dq,
+  output      [ 7:0]      ddr3_dm,
+  input                   ddr3_rzq,
+  input                   ddr3_ref_clk,
 
   // ethernet
 
-  eth_ref_clk,
-  eth_rxd,
-  eth_txd,
-  eth_mdc,
-  eth_mdio,
-  eth_resetn,
-  eth_intn,
+  input                   eth_ref_clk,
+  input                   eth_rxd,
+  output                  eth_txd,
+  output                  eth_mdc,
+  inout                   eth_mdio,
+  output                  eth_resetn,
+  input                   eth_intn,
 
   // board gpio
 
-  gpio_bd_i,
-  gpio_bd_o,
+  input       [ 10:0]     gpio_bd_i,
+  output      [ 15:0]     gpio_bd_o,
 
   // ad9361-interface
 
-  rx_clk_in,
-  rx_frame_in,
-  rx_data_in,
-  tx_clk_out,
-  tx_frame_out,
-  tx_data_out,
+  input                   rx_clk_in,
+  input                   rx_frame_in,
+  input       [ 5:0]      rx_data_in,
+  output                  tx_clk_out,
+  output                  tx_frame_out,
+  output      [ 5:0]      tx_data_out,
 
-  enable,
-  txnrx,
+  output                  enable,
+  output                  txnrx,
 
-  gpio_resetb,
-  gpio_sync,
-  gpio_en_agc,
-  gpio_ctl,
-  gpio_status,
+  output                  gpio_resetb,
+  output                  gpio_sync,
+  output                  gpio_en_agc,
+  output      [ 3:0]      gpio_ctl,
+  input       [ 7:0]      gpio_status,
 
-  spi_csn,
-  spi_clk,
-  spi_mosi,
-  spi_miso);
-
-
- // clock and resets
-
-  input             sys_clk;
-  input             sys_resetn;
-
-  // ddr3
-
-  output            ddr3_clk_p;
-  output            ddr3_clk_n;
-  output  [ 14:0]   ddr3_a;
-  output  [  2:0]   ddr3_ba;
-  output            ddr3_cke;
-  output            ddr3_cs_n;
-  output            ddr3_odt;
-  output            ddr3_reset_n;
-  output            ddr3_we_n;
-  output            ddr3_ras_n;
-  output            ddr3_cas_n;
-  inout   [  7:0]   ddr3_dqs_p;
-  inout   [  7:0]   ddr3_dqs_n;
-  inout   [ 63:0]   ddr3_dq;
-  output  [  7:0]   ddr3_dm;
-  input             ddr3_rzq;
-  input             ddr3_ref_clk;
-
-  // ethernet
-
-  input             eth_ref_clk;
-  input             eth_rxd;
-  output            eth_txd;
-  output            eth_mdc;
-  inout             eth_mdio;
-  output            eth_resetn;
-  input             eth_intn;
-
-  // board gpio
-
-  input   [ 10:0]   gpio_bd_i;
-  output  [ 15:0]   gpio_bd_o;
-
-  // ad9361-interface
-
-  input             rx_clk_in;
-  input             rx_frame_in;
-  input   [  5:0]   rx_data_in;
-  output            tx_clk_out;
-  output            tx_frame_out;
-  output  [  5:0]   tx_data_out;
-  output            enable;
-  output            txnrx;
-
-  output            gpio_resetb;
-  output            gpio_sync;
-  output            gpio_en_agc;
-  output  [  3:0]   gpio_ctl;
-  input   [  7:0]   gpio_status;
-
-  output            spi_csn;
-  output            spi_clk;
-  output            spi_mosi;
-  input             spi_miso;
+  output                  spi_csn,
+  output                  spi_clk,
+  output                  spi_mosi,
+  input                   spi_miso);
 
   // internal signals
 
@@ -244,7 +181,6 @@ module system_top (
     .up_txnrx_up_txnrx (gpio_o[48]));
 
 endmodule
-
 
 // ***************************************************************************
 // ***************************************************************************

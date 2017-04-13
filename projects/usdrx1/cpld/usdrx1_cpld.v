@@ -42,14 +42,14 @@
 module usdrx1_cpld (
 
   // Bank 1.8 V
-  fmc_dac_db,
-  fmc_dac_sleep,
-  fmc_clkd_spi_sclk,
-  fmc_clkd_spi_csb,
-  fmc_clkd_spi_sdio,
+  input       [13:0]      fmc_dac_db,
+  input                   fmc_dac_sleep,
+  input                   fmc_clkd_spi_sclk,
+  input                   fmc_clkd_spi_csb,
+  inout                   fmc_clkd_spi_sdio,
 
-  fmc_clkd_syncn,
-  fmc_clkd_resetn,
+  input                   fmc_clkd_syncn,
+  input                   fmc_clkd_resetn,
   //fmc_clkd_status,
 
   //tbd1
@@ -57,42 +57,15 @@ module usdrx1_cpld (
   //tbd3
 
   // Bank 3.3 V
-  dac_db,
-  dac_sleep,
+  output      [13:0]      dac_db,
+  output                  dac_sleep,
 
-  clkd_spi_sclk,
-  clkd_spi_csb,
-  clkd_spi_sdio,
+  output                  clkd_spi_sclk,
+  output                  clkd_spi_csb,
+  inout                   clkd_spi_sdio,
   //clkd_status,
-  clkd_syncn,
-  clkd_resetn
-);
-
-// Bank 1.8 V
-  input [13:0]  fmc_dac_db;
-  input         fmc_dac_sleep;
-  input         fmc_clkd_spi_sclk;
-  input         fmc_clkd_spi_csb;
-  inout         fmc_clkd_spi_sdio;
-
-  input         fmc_clkd_syncn;
-  input         fmc_clkd_resetn;
-  //output       fmc_clkd_status;
-
-  //tbd1;
-  //tbd2;
-  //tbd3;
-
-  // Bank 3.3 V
-  output  [13:0]  dac_db;
-  output          dac_sleep;
-
-  output          clkd_spi_sclk;
-  output          clkd_spi_csb;
-  inout           clkd_spi_sdio;
-  //input          clkd_status;
-  output          clkd_syncn;
-  output          clkd_resetn;
+  output                  clkd_syncn,
+  output                  clkd_resetn);
 
   reg [15:0]  cnt ;
   reg         fpga_to_clkd ; // 1 if fpga sends data to ad9517, 0 if fpga reads data from ad9517

@@ -39,132 +39,76 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9122_if (
+module axi_ad9122_if #(
+
+  parameter   DEVICE_TYPE = 0,
+  parameter   SERDES_OR_DDR_N = 1,
+  parameter   MMCM_OR_BUFIO_N = 1,
+  parameter   MMCM_CLKIN_PERIOD = 1.667,
+  parameter   MMCM_VCO_DIV = 6,
+  parameter   MMCM_VCO_MUL = 12,
+  parameter   MMCM_CLK0_DIV = 2,
+  parameter   MMCM_CLK1_DIV = 8,
+  parameter   IO_DELAY_GROUP = "dac_if_delay_group") (
 
   // dac interface
 
-  dac_clk_in_p,
-  dac_clk_in_n,
-  dac_clk_out_p,
-  dac_clk_out_n,
-  dac_frame_out_p,
-  dac_frame_out_n,
-  dac_data_out_p,
-  dac_data_out_n,
+  input                   dac_clk_in_p,
+  input                   dac_clk_in_n,
+  output                  dac_clk_out_p,
+  output                  dac_clk_out_n,
+  output                  dac_frame_out_p,
+  output                  dac_frame_out_n,
+  output      [15:0]      dac_data_out_p,
+  output      [15:0]      dac_data_out_n,
 
   // internal resets and clocks
 
-  dac_rst,
-  dac_clk,
-  dac_div_clk,
-  dac_status,
+  input                   dac_rst,
+  output                  dac_clk,
+  output                  dac_div_clk,
+  output  reg             dac_status,
 
   // data interface
 
-  dac_frame_i0,
-  dac_data_i0,
-  dac_frame_i1,
-  dac_data_i1,
-  dac_frame_i2,
-  dac_data_i2,
-  dac_frame_i3,
-  dac_data_i3,
+  input                   dac_frame_i0,
+  input       [15:0]      dac_data_i0,
+  input                   dac_frame_i1,
+  input       [15:0]      dac_data_i1,
+  input                   dac_frame_i2,
+  input       [15:0]      dac_data_i2,
+  input                   dac_frame_i3,
+  input       [15:0]      dac_data_i3,
 
-  dac_frame_q0,
-  dac_data_q0,
-  dac_frame_q1,
-  dac_data_q1,
-  dac_frame_q2,
-  dac_data_q2,
-  dac_frame_q3,
-  dac_data_q3,
-
-  // mmcm reset
-
-  mmcm_rst,
-
-  // drp interface
-
-  up_clk,
-  up_rstn,
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_locked);
-
-  // parameters
-
-  parameter   DEVICE_TYPE = 0;
-  parameter   SERDES_OR_DDR_N = 1;
-  parameter   MMCM_OR_BUFIO_N = 1;
-  parameter   MMCM_CLKIN_PERIOD = 1.667;
-  parameter   MMCM_VCO_DIV = 6;
-  parameter   MMCM_VCO_MUL = 12;
-  parameter   MMCM_CLK0_DIV = 2;
-  parameter   MMCM_CLK1_DIV = 8;
-  parameter   IO_DELAY_GROUP = "dac_if_delay_group";
-
-  // dac interface
-
-  input           dac_clk_in_p;
-  input           dac_clk_in_n;
-  output          dac_clk_out_p;
-  output          dac_clk_out_n;
-  output          dac_frame_out_p;
-  output          dac_frame_out_n;
-  output  [15:0]  dac_data_out_p;
-  output  [15:0]  dac_data_out_n;
-
-  // internal resets and clocks
-
-  input           dac_rst;
-  output          dac_clk;
-  output          dac_div_clk;
-  output          dac_status;
-
-  // data interface
-
-  input           dac_frame_i0;
-  input   [15:0]  dac_data_i0;
-  input           dac_frame_i1;
-  input   [15:0]  dac_data_i1;
-  input           dac_frame_i2;
-  input   [15:0]  dac_data_i2;
-  input           dac_frame_i3;
-  input   [15:0]  dac_data_i3;
-
-  input           dac_frame_q0;
-  input   [15:0]  dac_data_q0;
-  input           dac_frame_q1;
-  input   [15:0]  dac_data_q1;
-  input           dac_frame_q2;
-  input   [15:0]  dac_data_q2;
-  input           dac_frame_q3;
-  input   [15:0]  dac_data_q3;
+  input                   dac_frame_q0,
+  input       [15:0]      dac_data_q0,
+  input                   dac_frame_q1,
+  input       [15:0]      dac_data_q1,
+  input                   dac_frame_q2,
+  input       [15:0]      dac_data_q2,
+  input                   dac_frame_q3,
+  input       [15:0]      dac_data_q3,
 
   // mmcm reset
 
-  input           mmcm_rst;
+  input                   mmcm_rst,
 
   // drp interface
 
-  input           up_clk;
-  input           up_rstn;
-  input           up_drp_sel;
-  input           up_drp_wr;
-  input   [11:0]  up_drp_addr;
-  input   [31:0]  up_drp_wdata;
-  output  [31:0]  up_drp_rdata;
-  output          up_drp_ready;
-  output          up_drp_locked;
+  input                   up_clk,
+  input                   up_rstn,
+  input                   up_drp_sel,
+  input                   up_drp_wr,
+  input       [11:0]      up_drp_addr,
+  input       [31:0]      up_drp_wdata,
+  output      [31:0]      up_drp_rdata,
+  output                  up_drp_ready,
+  output                  up_drp_locked);
+
 
   // internal registers
 
   reg             dac_status_m1 = 'd0;
-  reg             dac_status = 'd0;
 
   // internal signals
 

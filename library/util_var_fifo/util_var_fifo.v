@@ -37,36 +37,25 @@
 
 `timescale 1ns/100ps
 
-module util_var_fifo (
+module util_var_fifo #(
 
-  clk,
-  rst,
+  parameter       DATA_WIDTH = 32,
+  parameter       ADDRESS_WIDTH =  13) (
 
-  depth,
+  input                   clk,
+  input                   rst,
 
-  data_in,
-  data_in_valid,
+  input       [31:0]      depth,
 
-  data_out,
-  data_out_valid
+  input       [ -1:0]     data_in,
+  input                   data_in_valid,
 
+  output      [DATA_WIDTH-1:0]  data_out,
+  output                  data_out_valid
 );
 
-  parameter       DATA_WIDTH = 32;
-  parameter       ADDRESS_WIDTH =  13;
 
   localparam      MAX_DEPTH = (2 ** ADDRESS_WIDTH) - 1;
-
-  input             clk;
-  input             rst;
-
-  input   [31:0]    depth;
-
-  input   [DATA_WIDTH -1:0]    data_in;
-  input             data_in_valid;
-
-  output  [DATA_WIDTH-1:0]    data_out;
-  output            data_out_valid;
 
   // internal registers
 

@@ -40,139 +40,79 @@
 
 `timescale 1ns/1ns
 
-module prcfg_top(
+module prcfg_top#(
 
-  clk,
+  parameter   NUM_CHANNEL = 4,
+  parameter   ADC_EN      = 1,
+  parameter   DAC_EN      = 1) (
+
+  input                   clk,
 
   // gpio
-  dac_gpio_input,
-  dac_gpio_output,
-  adc_gpio_input,
-  adc_gpio_output,
+  input       [31:0]      dac_gpio_input,
+  output      [31:0]      dac_gpio_output,
+  input       [31:0]      adc_gpio_input,
+  output      [31:0]      adc_gpio_output,
 
   // TX side
-  dma_dac_0_enable,
-  dma_dac_0_data,
-  dma_dac_0_valid,
-  dma_dac_1_enable,
-  dma_dac_1_data,
-  dma_dac_1_valid,
-  dma_dac_2_enable,
-  dma_dac_2_data,
-  dma_dac_2_valid,
-  dma_dac_3_enable,
-  dma_dac_3_data,
-  dma_dac_3_valid,
+  input                   dma_dac_0_enable,
+  output      [(DBUS_WIDTH-1):0]  dma_dac_0_data,
+  input                   dma_dac_0_valid,
+  input                   dma_dac_1_enable,
+  output      [(DBUS_WIDTH-1):0]  dma_dac_1_data,
+  input                   dma_dac_1_valid,
+  input                   dma_dac_2_enable,
+  output      [(DBUS_WIDTH-1):0]  dma_dac_2_data,
+  input                   dma_dac_2_valid,
+  input                   dma_dac_3_enable,
+  output      [(DBUS_WIDTH-1):0]  dma_dac_3_data,
+  input                   dma_dac_3_valid,
 
-  core_dac_0_enable,
-  core_dac_0_data,
-  core_dac_0_valid,
-  core_dac_1_enable,
-  core_dac_1_data,
-  core_dac_1_valid,
-  core_dac_2_enable,
-  core_dac_2_data,
-  core_dac_2_valid,
-  core_dac_3_enable,
-  core_dac_3_data,
-  core_dac_3_valid,
+  output                  core_dac_0_enable,
+  input       [(DBUS_WIDTH-1):0]  core_dac_0_data,
+  output                  core_dac_0_valid,
+  output                  core_dac_1_enable,
+  input       [(DBUS_WIDTH-1):0]  core_dac_1_data,
+  output                  core_dac_1_valid,
+  output                  core_dac_2_enable,
+  input       [(DBUS_WIDTH-1):0]  core_dac_2_data,
+  output                  core_dac_2_valid,
+  output                  core_dac_3_enable,
+  input       [(DBUS_WIDTH-1):0]  core_dac_3_data,
+  output                  core_dac_3_valid,
 
   // RX side
-  dma_adc_0_enable,
-  dma_adc_0_data,
-  dma_adc_0_valid,
-  dma_adc_1_enable,
-  dma_adc_1_data,
-  dma_adc_1_valid,
-  dma_adc_2_enable,
-  dma_adc_2_data,
-  dma_adc_2_valid,
-  dma_adc_3_enable,
-  dma_adc_3_data,
-  dma_adc_3_valid,
+  input                   dma_adc_0_enable,
+  input       [(DBUS_WIDTH-1):0]  dma_adc_0_data,
+  input                   dma_adc_0_valid,
+  input                   dma_adc_1_enable,
+  input       [(DBUS_WIDTH-1):0]  dma_adc_1_data,
+  input                   dma_adc_1_valid,
+  input                   dma_adc_2_enable,
+  input       [(DBUS_WIDTH-1):0]  dma_adc_2_data,
+  input                   dma_adc_2_valid,
+  input                   dma_adc_3_enable,
+  input       [(DBUS_WIDTH-1):0]  dma_adc_3_data,
+  input                   dma_adc_3_valid,
 
-  core_adc_0_enable,
-  core_adc_0_data,
-  core_adc_0_valid,
-  core_adc_1_enable,
-  core_adc_1_data,
-  core_adc_1_valid,
-  core_adc_2_enable,
-  core_adc_2_data,
-  core_adc_2_valid,
-  core_adc_3_enable,
-  core_adc_3_data,
-  core_adc_3_valid
-);
+  output                  core_adc_0_enable,
+  output      [(DBUS_WIDTH-1):0]  core_adc_0_data,
+  output                  core_adc_0_valid,
+  output                  core_adc_1_enable,
+  output      [(DBUS_WIDTH-1):0]  core_adc_1_data,
+  output                  core_adc_1_valid,
+  output                  core_adc_2_enable,
+  output      [(DBUS_WIDTH-1):0]  core_adc_2_data,
+  output                  core_adc_2_valid,
+  output                  core_adc_3_enable,
+  output      [(DBUS_WIDTH-1):0]  core_adc_3_data,
+  output                  core_adc_3_valid);
 
   localparam  ENABELED    = 1;
   localparam  DATA_WIDTH  = 16;
 
-  parameter   NUM_CHANNEL = 4;
-  parameter   ADC_EN      = 1;
-  parameter   DAC_EN      = 1;
 
   localparam  DBUS_WIDTH  = DATA_WIDTH * NUM_CHANNEL;
-
-  input                             clk;
-
-  input   [31:0]                    dac_gpio_input;
-  output  [31:0]                    dac_gpio_output;
-  input   [31:0]                    adc_gpio_input;
-  output  [31:0]                    adc_gpio_output;
-
-  input                             dma_dac_0_enable;
-  output  [(DBUS_WIDTH-1):0]        dma_dac_0_data;
-  input                             dma_dac_0_valid;
-  input                             dma_dac_1_enable;
-  output  [(DBUS_WIDTH-1):0]        dma_dac_1_data;
-  input                             dma_dac_1_valid;
-  input                             dma_dac_2_enable;
-  output  [(DBUS_WIDTH-1):0]        dma_dac_2_data;
-  input                             dma_dac_2_valid;
-  input                             dma_dac_3_enable;
-  output  [(DBUS_WIDTH-1):0]        dma_dac_3_data;
-  input                             dma_dac_3_valid;
-
-  output                            core_dac_0_enable;
-  input   [(DBUS_WIDTH-1):0]        core_dac_0_data;
-  output                            core_dac_0_valid;
-  output                            core_dac_1_enable;
-  input   [(DBUS_WIDTH-1):0]        core_dac_1_data;
-  output                            core_dac_1_valid;
-  output                            core_dac_2_enable;
-  input   [(DBUS_WIDTH-1):0]        core_dac_2_data;
-  output                            core_dac_2_valid;
-  output                            core_dac_3_enable;
-  input   [(DBUS_WIDTH-1):0]        core_dac_3_data;
-  output                            core_dac_3_valid;
-
-  // RX side
-  input                             dma_adc_0_enable;
-  input   [(DBUS_WIDTH-1):0]        dma_adc_0_data;
-  input                             dma_adc_0_valid;
-  input                             dma_adc_1_enable;
-  input   [(DBUS_WIDTH-1):0]        dma_adc_1_data;
-  input                             dma_adc_1_valid;
-  input                             dma_adc_2_enable;
-  input   [(DBUS_WIDTH-1):0]        dma_adc_2_data;
-  input                             dma_adc_2_valid;
-  input                             dma_adc_3_enable;
-  input   [(DBUS_WIDTH-1):0]        dma_adc_3_data;
-  input                             dma_adc_3_valid;
-
-  output                            core_adc_0_enable;
-  output  [(DBUS_WIDTH-1):0]        core_adc_0_data;
-  output                            core_adc_0_valid;
-  output                            core_adc_1_enable;
-  output  [(DBUS_WIDTH-1):0]        core_adc_1_data;
-  output                            core_adc_1_valid;
-  output                            core_adc_2_enable;
-  output  [(DBUS_WIDTH-1):0]        core_adc_2_data;
-  output                            core_adc_2_valid;
-  output                            core_adc_3_enable;
-  output  [(DBUS_WIDTH-1):0]        core_adc_3_data;
-  output                            core_adc_3_valid;
 
   wire    [31:0]                    adc_gpio_out_s[(NUM_CHANNEL - 1):0];
   wire    [(NUM_CHANNEL - 1):0]     adc_gpio_out_s_inv[31:0];

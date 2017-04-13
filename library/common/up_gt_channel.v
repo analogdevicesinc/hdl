@@ -37,218 +37,114 @@
 
 `timescale 1ns/100ps
 
-module up_gt_channel (
+module up_gt_channel #(
+
+  parameter   integer ID = 0) (
 
   // gt interface
 
-  lpm_dfe_n,
-  cpll_pd,
+  output                  lpm_dfe_n,
+  output                  cpll_pd,
 
   // receive interface
 
-  rx_pll_rst,
-  rx_sys_clk_sel,
-  rx_out_clk_sel,
-  rx_clk,
-  rx_gt_rst,
-  rx_rst,
-  rx_rst_m,
-  rx_ip_rst,
-  rx_sysref,
-  rx_ip_sysref,
-  rx_ip_sync,
-  rx_sync,
-  rx_rst_done,
-  rx_rst_done_m,
-  rx_pll_locked,
-  rx_pll_locked_m,
-  rx_user_ready,
-  rx_ip_rst_done,
+  output                  rx_pll_rst,
+  output      [ 1:0]      rx_sys_clk_sel,
+  output      [ 2:0]      rx_out_clk_sel,
+  input                   rx_clk,
+  output                  rx_gt_rst,
+  output                  rx_rst,
+  input                   rx_rst_m,
+  output                  rx_ip_rst,
+  input                   rx_sysref,
+  output  reg             rx_ip_sysref,
+  input                   rx_ip_sync,
+  output  reg             rx_sync,
+  input                   rx_rst_done,
+  input                   rx_rst_done_m,
+  input                   rx_pll_locked,
+  input                   rx_pll_locked_m,
+  output                  rx_user_ready,
+  output                  rx_ip_rst_done,
 
   // transmit interface
 
-  tx_pll_rst,
-  tx_sys_clk_sel,
-  tx_out_clk_sel,
-  tx_clk,
-  tx_gt_rst,
-  tx_rst,
-  tx_rst_m,
-  tx_ip_rst,
-  tx_sysref,
-  tx_ip_sysref,
-  tx_sync,
-  tx_ip_sync,
-  tx_rst_done,
-  tx_rst_done_m,
-  tx_pll_locked,
-  tx_pll_locked_m,
-  tx_user_ready,
-  tx_ip_rst_done,
+  output                  tx_pll_rst,
+  output      [ 1:0]      tx_sys_clk_sel,
+  output      [ 2:0]      tx_out_clk_sel,
+  input                   tx_clk,
+  output                  tx_gt_rst,
+  output                  tx_rst,
+  input                   tx_rst_m,
+  output                  tx_ip_rst,
+  input                   tx_sysref,
+  output  reg             tx_ip_sysref,
+  input                   tx_sync,
+  output  reg             tx_ip_sync,
+  input                   tx_rst_done,
+  input                   tx_rst_done_m,
+  input                   tx_pll_locked,
+  input                   tx_pll_locked_m,
+  output                  tx_user_ready,
+  output                  tx_ip_rst_done,
 
   // drp interface
 
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_rxrate,
+  output  reg             up_drp_sel,
+  output  reg             up_drp_wr,
+  output  reg [11:0]      up_drp_addr,
+  output  reg [15:0]      up_drp_wdata,
+  input       [15:0]      up_drp_rdata,
+  input                   up_drp_ready,
+  input       [ 7:0]      up_drp_rxrate,
 
   // es interface
 
-  up_es_drp_sel,
-  up_es_drp_wr,
-  up_es_drp_addr,
-  up_es_drp_wdata,
-  up_es_drp_rdata,
-  up_es_drp_ready,
-  up_es_start,
-  up_es_stop,
-  up_es_init,
-  up_es_prescale,
-  up_es_voffset_range,
-  up_es_voffset_step,
-  up_es_voffset_max,
-  up_es_voffset_min,
-  up_es_hoffset_max,
-  up_es_hoffset_min,
-  up_es_hoffset_step,
-  up_es_start_addr,
-  up_es_sdata0,
-  up_es_sdata1,
-  up_es_sdata2,
-  up_es_sdata3,
-  up_es_sdata4,
-  up_es_qdata0,
-  up_es_qdata1,
-  up_es_qdata2,
-  up_es_qdata3,
-  up_es_qdata4,
-  up_es_dma_err,
-  up_es_status,
+  input                   up_es_drp_sel,
+  input                   up_es_drp_wr,
+  input       [11:0]      up_es_drp_addr,
+  input       [15:0]      up_es_drp_wdata,
+  output  reg [15:0]      up_es_drp_rdata,
+  output  reg             up_es_drp_ready,
+  output  reg             up_es_start,
+  output  reg             up_es_stop,
+  output  reg             up_es_init,
+  output  reg [ 4:0]      up_es_prescale,
+  output  reg [ 1:0]      up_es_voffset_range,
+  output  reg [ 7:0]      up_es_voffset_step,
+  output  reg [ 7:0]      up_es_voffset_max,
+  output  reg [ 7:0]      up_es_voffset_min,
+  output  reg [11:0]      up_es_hoffset_max,
+  output  reg [11:0]      up_es_hoffset_min,
+  output  reg [11:0]      up_es_hoffset_step,
+  output  reg [31:0]      up_es_start_addr,
+  output  reg [15:0]      up_es_sdata0,
+  output  reg [15:0]      up_es_sdata1,
+  output  reg [15:0]      up_es_sdata2,
+  output  reg [15:0]      up_es_sdata3,
+  output  reg [15:0]      up_es_sdata4,
+  output  reg [15:0]      up_es_qdata0,
+  output  reg [15:0]      up_es_qdata1,
+  output  reg [15:0]      up_es_qdata2,
+  output  reg [15:0]      up_es_qdata3,
+  output  reg [15:0]      up_es_qdata4,
+  input                   up_es_dma_err,
+  input                   up_es_status,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
-
-  // parameters
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
   localparam  [31:0]  VERSION = 32'h00070161;
-  parameter   integer ID = 0;
-
-  // gt interface
-
-  output          lpm_dfe_n;
-  output          cpll_pd;
-
-  // receive interface
-
-  output          rx_pll_rst;
-  output  [ 1:0]  rx_sys_clk_sel;
-  output  [ 2:0]  rx_out_clk_sel;
-  input           rx_clk;
-  output          rx_gt_rst;
-  output          rx_rst;
-  input           rx_rst_m;
-  output          rx_ip_rst;
-  input           rx_sysref;
-  output          rx_ip_sysref;
-  input           rx_ip_sync;
-  output          rx_sync;
-  input           rx_rst_done;
-  input           rx_rst_done_m;
-  input           rx_pll_locked;
-  input           rx_pll_locked_m;
-  output          rx_user_ready;
-  output          rx_ip_rst_done;
-
-  // transmit interface
-
-  output          tx_pll_rst;
-  output  [ 1:0]  tx_sys_clk_sel;
-  output  [ 2:0]  tx_out_clk_sel;
-  input           tx_clk;
-  output          tx_gt_rst;
-  output          tx_rst;
-  input           tx_rst_m;
-  output          tx_ip_rst;
-  input           tx_sysref;
-  output          tx_ip_sysref;
-  input           tx_sync;
-  output          tx_ip_sync;
-  input           tx_rst_done;
-  input           tx_rst_done_m;
-  input           tx_pll_locked;
-  input           tx_pll_locked_m;
-  output          tx_user_ready;
-  output          tx_ip_rst_done;
-
-  // drp interface
-
-  output          up_drp_sel;
-  output          up_drp_wr;
-  output  [11:0]  up_drp_addr;
-  output  [15:0]  up_drp_wdata;
-  input   [15:0]  up_drp_rdata;
-  input           up_drp_ready;
-  input   [ 7:0]  up_drp_rxrate;
-
-  // es interface
-
-  input           up_es_drp_sel;
-  input           up_es_drp_wr;
-  input   [11:0]  up_es_drp_addr;
-  input   [15:0]  up_es_drp_wdata;
-  output  [15:0]  up_es_drp_rdata;
-  output          up_es_drp_ready;
-  output          up_es_start;
-  output          up_es_stop;
-  output          up_es_init;
-  output  [ 4:0]  up_es_prescale;
-  output  [ 1:0]  up_es_voffset_range;
-  output  [ 7:0]  up_es_voffset_step;
-  output  [ 7:0]  up_es_voffset_max;
-  output  [ 7:0]  up_es_voffset_min;
-  output  [11:0]  up_es_hoffset_max;
-  output  [11:0]  up_es_hoffset_min;
-  output  [11:0]  up_es_hoffset_step;
-  output  [31:0]  up_es_start_addr;
-  output  [15:0]  up_es_sdata0;
-  output  [15:0]  up_es_sdata1;
-  output  [15:0]  up_es_sdata2;
-  output  [15:0]  up_es_sdata3;
-  output  [15:0]  up_es_sdata4;
-  output  [15:0]  up_es_qdata0;
-  output  [15:0]  up_es_qdata1;
-  output  [15:0]  up_es_qdata2;
-  output  [15:0]  up_es_qdata3;
-  output  [15:0]  up_es_qdata4;
-  input           up_es_dma_err;
-  input           up_es_status;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal registers
 
@@ -258,7 +154,6 @@ module up_gt_channel (
   reg             up_tx_pll_preset = 'd1;
   reg             up_tx_gt_preset = 'd1;
   reg             up_tx_preset = 'd1;
-  reg             up_wack = 'd0;
   reg             up_lpm_dfe_n = 'd0;
   reg             up_cpll_pd = 'd0;
   reg             up_drp_resetn = 'd0;
@@ -287,33 +182,9 @@ module up_gt_channel (
   reg     [11:0]  up_drp_addr_int = 'd0;
   reg     [15:0]  up_drp_wdata_int = 'd0;
   reg     [15:0]  up_drp_rdata_hold = 'd0;
-  reg             up_es_init = 'd0;
-  reg             up_es_stop = 'd0;
   reg             up_es_stop_hold = 'd0;
-  reg             up_es_start = 'd0;
   reg             up_es_start_hold = 'd0;
-  reg     [ 4:0]  up_es_prescale = 'd0;
-  reg     [ 1:0]  up_es_voffset_range = 'd0;
-  reg     [ 7:0]  up_es_voffset_step = 'd0;
-  reg     [ 7:0]  up_es_voffset_max = 'd0;
-  reg     [ 7:0]  up_es_voffset_min = 'd0;
-  reg     [11:0]  up_es_hoffset_max = 'd0;
-  reg     [11:0]  up_es_hoffset_min = 'd0;
-  reg     [11:0]  up_es_hoffset_step = 'd0;
-  reg     [31:0]  up_es_start_addr = 'd0;
-  reg     [15:0]  up_es_sdata1 = 'd0;
-  reg     [15:0]  up_es_sdata0 = 'd0;
-  reg     [15:0]  up_es_sdata3 = 'd0;
-  reg     [15:0]  up_es_sdata2 = 'd0;
-  reg     [15:0]  up_es_sdata4 = 'd0;
-  reg     [15:0]  up_es_qdata1 = 'd0;
-  reg     [15:0]  up_es_qdata0 = 'd0;
-  reg     [15:0]  up_es_qdata3 = 'd0;
-  reg     [15:0]  up_es_qdata2 = 'd0;
-  reg     [15:0]  up_es_qdata4 = 'd0;
   reg             up_es_dma_err_hold = 'd0;
-  reg             up_rack = 'd0;
-  reg     [31:0]  up_rdata = 'd0;
   reg             up_rx_rst_done_m1 = 'd0;
   reg             up_rx_rst_done = 'd0;
   reg             up_rx_rst_done_m_m1 = 'd0;
@@ -334,30 +205,20 @@ module up_gt_channel (
   reg             up_tx_pll_locked_m = 'd0;
   reg             up_tx_status_m1 = 'd0;
   reg             up_tx_status = 'd0;
-  reg             up_drp_sel = 'd0;
-  reg             up_drp_wr = 'd0;
-  reg     [11:0]  up_drp_addr = 'd0;
-  reg     [15:0]  up_drp_wdata = 'd0;
-  reg     [15:0]  up_es_drp_rdata = 'd0;
-  reg             up_es_drp_ready = 'd0;
   reg     [15:0]  up_drp_rdata_int = 'd0;
   reg             up_drp_ready_int = 'd0;
   reg             rx_sysref_sel_m1 = 'd0;
   reg             rx_sysref_sel = 'd0;
   reg             rx_up_sysref_m1 = 'd0;
   reg             rx_up_sysref = 'd0;
-  reg             rx_ip_sysref = 'd0;
   reg             rx_up_sync_m1 = 'd0;
   reg             rx_up_sync = 'd0;
-  reg             rx_sync = 'd0;
   reg             tx_sysref_sel_m1 = 'd0;
   reg             tx_sysref_sel = 'd0;
   reg             tx_up_sysref_m1 = 'd0;
   reg             tx_up_sysref = 'd0;
-  reg             tx_ip_sysref = 'd0;
   reg             tx_up_sync_m1 = 'd0;
   reg             tx_up_sync = 'd0;
-  reg             tx_ip_sync = 'd0;
   reg     [31:0]  up_scratch = 'd0;
 
   // internal signals

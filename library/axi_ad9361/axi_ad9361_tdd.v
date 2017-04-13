@@ -43,81 +43,43 @@ module axi_ad9361_tdd (
 
   // clock
 
-  clk,
-  rst,
+  input                   clk,
+  input                   rst,
 
   // control signals from the tdd control
 
-  tdd_rx_vco_en,
-  tdd_tx_vco_en,
-  tdd_rx_rf_en,
-  tdd_tx_rf_en,
+  output                  tdd_rx_vco_en,
+  output                  tdd_tx_vco_en,
+  output                  tdd_rx_rf_en,
+  output                  tdd_tx_rf_en,
 
   // status signal
 
-  tdd_enabled,
-  tdd_status,
+  output                  tdd_enabled,
+  input       [ 7:0]      tdd_status,
 
   // sync signal
 
-  tdd_sync,
-  tdd_sync_cntr,
+  input                   tdd_sync,
+  output  reg             tdd_sync_cntr,
 
   // tx/rx data flow control
 
-  tdd_tx_valid,
-  tdd_rx_valid,
+  output  reg             tdd_tx_valid,
+  output  reg             tdd_rx_valid,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
-
-  input             clk;
-  input             rst;
-
-  // control signals from the tdd control
-
-  output            tdd_rx_vco_en;
-  output            tdd_tx_vco_en;
-  output            tdd_rx_rf_en;
-  output            tdd_tx_rf_en;
-
-  output            tdd_enabled;
-  input   [ 7:0]    tdd_status;
-
-  input             tdd_sync;
-  output            tdd_sync_cntr;
-
-  // data flow control
-
-  output            tdd_tx_valid;
-  output            tdd_rx_valid;
-
-  // bus interface
-
-  input             up_rstn;
-  input             up_clk;
-  input             up_wreq;
-  input   [13:0]    up_waddr;
-  input   [31:0]    up_wdata;
-  output            up_wack;
-  input             up_rreq;
-  input   [13:0]    up_raddr;
-  output  [31:0]    up_rdata;
-  output            up_rack;
-
-  reg               tdd_tx_valid = 1'b0;
-  reg               tdd_rx_valid = 1'b0;
-  reg               tdd_sync_cntr = 1'b0;
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output                  up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output      [31:0]      up_rdata,
+  output                  up_rack);
 
   // internal signals
 

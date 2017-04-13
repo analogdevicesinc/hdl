@@ -37,74 +37,43 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9371_tx_channel (
+module axi_ad9371_tx_channel #(
+
+  parameter   CHANNEL_ID = 32'h0,
+  parameter   Q_OR_I_N = 0,
+  parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface
 
-  dac_clk,
-  dac_rst,
-  dac_data_in,
-  dac_data_out,
-  dac_data_iq_in,
-  dac_data_iq_out,
+  input                   dac_clk,
+  input                   dac_rst,
+  input       [31:0]      dac_data_in,
+  output      [31:0]      dac_data_out,
+  input       [31:0]      dac_data_iq_in,
+  output  reg [31:0]      dac_data_iq_out,
 
   // processor interface
 
-  dac_enable,
-  dac_data_sync,
-  dac_dds_format,
+  output  reg             dac_enable,
+  input                   dac_data_sync,
+  input                   dac_dds_format,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output                  up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output      [31:0]      up_rdata,
+  output                  up_rack);
 
-  // parameters
-
-  parameter   CHANNEL_ID = 32'h0;
-  parameter   Q_OR_I_N = 0;
-  parameter   DATAPATH_DISABLE = 0;
-
-  // dac interface
-
-  input           dac_clk;
-  input           dac_rst;
-  input   [31:0]  dac_data_in;
-  output  [31:0]  dac_data_out;
-  input   [31:0]  dac_data_iq_in;
-  output  [31:0]  dac_data_iq_out;
-
-  // processor interface
-
-  output          dac_enable;
-  input           dac_data_sync;
-  input           dac_dds_format;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal registers
 
-  reg             dac_enable = 'd0;
-  reg     [31:0]  dac_data_iq_out = 'd0;
   reg     [31:0]  dac_pat_data = 'd0;
   reg     [15:0]  dac_dds_phase_0_0 = 'd0;
   reg     [15:0]  dac_dds_phase_0_1 = 'd0;

@@ -37,69 +37,39 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9144_if (
+module axi_ad9144_if #(
+
+  parameter DEVICE_TYPE = 0) (
 
   // jesd interface
   // tx_clk is (line-rate/40)
 
-  tx_clk,
-  tx_data,
+  input                   tx_clk,
+  output  reg [255:0]     tx_data,
 
   // dac interface
 
-  dac_clk,
-  dac_rst,
-  dac_data_0_0,
-  dac_data_0_1,
-  dac_data_0_2,
-  dac_data_0_3,
-  dac_data_1_0,
-  dac_data_1_1,
-  dac_data_1_2,
-  dac_data_1_3,
-  dac_data_2_0,
-  dac_data_2_1,
-  dac_data_2_2,
-  dac_data_2_3,
-  dac_data_3_0,
-  dac_data_3_1,
-  dac_data_3_2,
-  dac_data_3_3);
+  output                  dac_clk,
+  input                   dac_rst,
+  input       [15:0]      dac_data_0_0,
+  input       [15:0]      dac_data_0_1,
+  input       [15:0]      dac_data_0_2,
+  input       [15:0]      dac_data_0_3,
+  input       [15:0]      dac_data_1_0,
+  input       [15:0]      dac_data_1_1,
+  input       [15:0]      dac_data_1_2,
+  input       [15:0]      dac_data_1_3,
+  input       [15:0]      dac_data_2_0,
+  input       [15:0]      dac_data_2_1,
+  input       [15:0]      dac_data_2_2,
+  input       [15:0]      dac_data_2_3,
+  input       [15:0]      dac_data_3_0,
+  input       [15:0]      dac_data_3_1,
+  input       [15:0]      dac_data_3_2,
+  input       [15:0]      dac_data_3_3);
 
-  // altera (0x1) or xilinx (0x0)
-
-  parameter DEVICE_TYPE = 0;
-
-  // jesd interface
-  // tx_clk is (line-rate/40)
-
-  input           tx_clk;
-  output [255:0]  tx_data;
-
-  // dac interface
-
-  output          dac_clk;
-  input           dac_rst;
-  input   [15:0]  dac_data_0_0;
-  input   [15:0]  dac_data_0_1;
-  input   [15:0]  dac_data_0_2;
-  input   [15:0]  dac_data_0_3;
-  input   [15:0]  dac_data_1_0;
-  input   [15:0]  dac_data_1_1;
-  input   [15:0]  dac_data_1_2;
-  input   [15:0]  dac_data_1_3;
-  input   [15:0]  dac_data_2_0;
-  input   [15:0]  dac_data_2_1;
-  input   [15:0]  dac_data_2_2;
-  input   [15:0]  dac_data_2_3;
-  input   [15:0]  dac_data_3_0;
-  input   [15:0]  dac_data_3_1;
-  input   [15:0]  dac_data_3_2;
-  input   [15:0]  dac_data_3_3;
 
   // internal registers
-
-  reg    [255:0]  tx_data = 'd0;
 
   // reorder data for the jesd links
 

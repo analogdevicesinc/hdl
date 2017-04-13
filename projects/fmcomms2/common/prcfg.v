@@ -39,135 +39,70 @@
 
 module prcfg  (
 
-  clk,
+  input                   clk,
 
   // gpio
 
-  dac_gpio_input,
-  dac_gpio_output,
-  adc_gpio_input,
-  adc_gpio_output,
+  input       [31:0]      dac_gpio_input,
+  output      [31:0]      dac_gpio_output,
+  input       [31:0]      adc_gpio_input,
+  output      [31:0]      adc_gpio_output,
 
   // tx side
 
-  dma_dac_i0_enable,
-  dma_dac_i0_data,
-  dma_dac_i0_valid,
-  dma_dac_q0_enable,
-  dma_dac_q0_data,
-  dma_dac_q0_valid,
-  dma_dac_i1_enable,
-  dma_dac_i1_data,
-  dma_dac_i1_valid,
-  dma_dac_q1_enable,
-  dma_dac_q1_data,
-  dma_dac_q1_valid,
+  input                   dma_dac_i0_enable,
+  output      [15:0]      dma_dac_i0_data,
+  input                   dma_dac_i0_valid,
+  input                   dma_dac_q0_enable,
+  output      [15:0]      dma_dac_q0_data,
+  input                   dma_dac_q0_valid,
+  input                   dma_dac_i1_enable,
+  output      [15:0]      dma_dac_i1_data,
+  input                   dma_dac_i1_valid,
+  input                   dma_dac_q1_enable,
+  output      [15:0]      dma_dac_q1_data,
+  input                   dma_dac_q1_valid,
 
-  core_dac_i0_enable,
-  core_dac_i0_data,
-  core_dac_i0_valid,
-  core_dac_q0_enable,
-  core_dac_q0_data,
-  core_dac_q0_valid,
-  core_dac_i1_enable,
-  core_dac_i1_data,
-  core_dac_i1_valid,
-  core_dac_q1_enable,
-  core_dac_q1_data,
-  core_dac_q1_valid,
-
-  // rx side
-
-  dma_adc_i0_enable,
-  dma_adc_i0_data,
-  dma_adc_i0_valid,
-  dma_adc_q0_enable,
-  dma_adc_q0_data,
-  dma_adc_q0_valid,
-  dma_adc_i1_enable,
-  dma_adc_i1_data,
-  dma_adc_i1_valid,
-  dma_adc_q1_enable,
-  dma_adc_q1_data,
-  dma_adc_q1_valid,
-
-  core_adc_i0_enable,
-  core_adc_i0_data,
-  core_adc_i0_valid,
-  core_adc_q0_enable,
-  core_adc_q0_data,
-  core_adc_q0_valid,
-  core_adc_i1_enable,
-  core_adc_i1_data,
-  core_adc_i1_valid,
-  core_adc_q1_enable,
-  core_adc_q1_data,
-  core_adc_q1_valid);
-
-  input                  clk;
-
-  // gpio
-
-  input   [31:0]         adc_gpio_input;
-  output  [31:0]         adc_gpio_output;
-  input   [31:0]         dac_gpio_input;
-  output  [31:0]         dac_gpio_output;
-
-  // tx side
-
-  input                  dma_dac_i0_enable;
-  output  [15:0]         dma_dac_i0_data;
-  input                  dma_dac_i0_valid;
-  input                  dma_dac_q0_enable;
-  output  [15:0]         dma_dac_q0_data;
-  input                  dma_dac_q0_valid;
-  input                  dma_dac_i1_enable;
-  output  [15:0]         dma_dac_i1_data;
-  input                  dma_dac_i1_valid;
-  input                  dma_dac_q1_enable;
-  output  [15:0]         dma_dac_q1_data;
-  input                  dma_dac_q1_valid;
-
-  output                 core_dac_i0_enable;
-  input   [15:0]         core_dac_i0_data;
-  output                 core_dac_i0_valid;
-  output                 core_dac_q0_enable;
-  input   [15:0]         core_dac_q0_data;
-  output                 core_dac_q0_valid;
-  output                 core_dac_i1_enable;
-  input   [15:0]         core_dac_i1_data;
-  output                 core_dac_i1_valid;
-  output                 core_dac_q1_enable;
-  input   [15:0]         core_dac_q1_data;
-  output                 core_dac_q1_valid;
+  output                  core_dac_i0_enable,
+  input       [15:0]      core_dac_i0_data,
+  output                  core_dac_i0_valid,
+  output                  core_dac_q0_enable,
+  input       [15:0]      core_dac_q0_data,
+  output                  core_dac_q0_valid,
+  output                  core_dac_i1_enable,
+  input       [15:0]      core_dac_i1_data,
+  output                  core_dac_i1_valid,
+  output                  core_dac_q1_enable,
+  input       [15:0]      core_dac_q1_data,
+  output                  core_dac_q1_valid,
 
   // rx side
 
-  input                  dma_adc_i0_enable;
-  input   [15:0]         dma_adc_i0_data;
-  input                  dma_adc_i0_valid;
-  input                  dma_adc_q0_enable;
-  input   [15:0]         dma_adc_q0_data;
-  input                  dma_adc_q0_valid;
-  input                  dma_adc_i1_enable;
-  input   [15:0]         dma_adc_i1_data;
-  input                  dma_adc_i1_valid;
-  input                  dma_adc_q1_enable;
-  input   [15:0]         dma_adc_q1_data;
-  input                  dma_adc_q1_valid;
+  input                   dma_adc_i0_enable,
+  input       [15:0]      dma_adc_i0_data,
+  input                   dma_adc_i0_valid,
+  input                   dma_adc_q0_enable,
+  input       [15:0]      dma_adc_q0_data,
+  input                   dma_adc_q0_valid,
+  input                   dma_adc_i1_enable,
+  input       [15:0]      dma_adc_i1_data,
+  input                   dma_adc_i1_valid,
+  input                   dma_adc_q1_enable,
+  input       [15:0]      dma_adc_q1_data,
+  input                   dma_adc_q1_valid,
 
-  output                 core_adc_i0_enable;
-  output  [15:0]         core_adc_i0_data;
-  output                 core_adc_i0_valid;
-  output                 core_adc_q0_enable;
-  output  [15:0]         core_adc_q0_data;
-  output                 core_adc_q0_valid;
-  output                 core_adc_i1_enable;
-  output  [15:0]         core_adc_i1_data;
-  output                 core_adc_i1_valid;
-  output                 core_adc_q1_enable;
-  output  [15:0]         core_adc_q1_data;
-  output                 core_adc_q1_valid;
+  output                  core_adc_i0_enable,
+  output      [15:0]      core_adc_i0_data,
+  output                  core_adc_i0_valid,
+  output                  core_adc_q0_enable,
+  output      [15:0]      core_adc_q0_data,
+  output                  core_adc_q0_valid,
+  output                  core_adc_i1_enable,
+  output      [15:0]      core_adc_i1_data,
+  output                  core_adc_i1_valid,
+  output                  core_adc_q1_enable,
+  output      [15:0]      core_adc_q1_data,
+  output                  core_adc_q1_valid);
 
   // fmcomms2 configuration
 

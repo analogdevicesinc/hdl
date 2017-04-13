@@ -41,45 +41,24 @@ module ad7768_if (
 
   // device-interface
 
-  clk_in,
-  ready_in,
-  data_in,
+  input                   clk_in,
+  input                   ready_in,
+  input       [ 7:0]      data_in,
 
   // data path interface
 
-  adc_clk,
-  adc_valid,
-  adc_data,
+  output                  adc_clk,
+  output  reg             adc_valid,
+  output  reg [ 31:0]     adc_data,
 
   // control interface
 
-  up_sshot,
-  up_format,
-  up_crc_enable,
-  up_crc_4_or_16_n,
-  up_status_clr,
-  up_status);
-
-  // device-interface
-
-  input             clk_in;
-  input             ready_in;
-  input   [  7:0]   data_in;
-
-  // data path interface
-
-  output            adc_clk;
-  output            adc_valid;
-  output  [ 31:0]   adc_data;
-
-  // control interface
-
-  input             up_sshot;
-  input   [  1:0]   up_format;
-  input             up_crc_enable;
-  input             up_crc_4_or_16_n;
-  input   [ 35:0]   up_status_clr;
-  output  [ 35:0]   up_status;
+  input                   up_sshot,
+  input       [ 1:0]      up_format,
+  input                   up_crc_enable,
+  input                   up_crc_4_or_16_n,
+  input       [ 35:0]     up_status_clr,
+  output      [ 35:0]     up_status);
 
   // internal registers
 
@@ -92,8 +71,6 @@ module ad7768_if (
   reg     [  2:0]   adc_status_2 = 'd0;
   reg     [  2:0]   adc_status_1 = 'd0;
   reg     [  2:0]   adc_status_0 = 'd0;
-  reg               adc_valid = 'd0;
-  reg     [ 31:0]   adc_data = 'd0;
   reg     [  2:0]   adc_seq = 'd0;
   reg     [  4:0]   adc_status = 'd0;
   reg     [ 63:0]   adc_crc_8 = 'd0;

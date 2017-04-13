@@ -40,70 +40,42 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9684_channel (
+module axi_ad9684_channel #(
+
+  parameter Q_OR_I_N = 0,
+  parameter CHANNEL_ID = 0,
+  parameter DATAPATH_DISABLE = 0) (
 
   // adc data interface
 
-  adc_clk,
-  adc_rst,
-  adc_data,
-  adc_data_q,
-  adc_or,
+  input                   adc_clk,
+  input                   adc_rst,
+  input       [27:0]      adc_data,
+  input       [27:0]      adc_data_q,
+  input                   adc_or,
 
   // channel interface
 
-  adc_dfmt_data,
-  adc_valid,
-  adc_enable,
-  up_adc_pn_err,
-  up_adc_pn_oos,
-  up_adc_or,
+  output      [31:0]      adc_dfmt_data,
+  output                  adc_valid,
+  output                  adc_enable,
+  output                  up_adc_pn_err,
+  output                  up_adc_pn_oos,
+  output                  up_adc_or,
 
   // up interface
 
-  up_clk,
-  up_rstn,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack
-);
+  input                   up_clk,
+  input                   up_rstn,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output                  up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output      [31:0]      up_rdata,
+  output                  up_rack);
 
-  // parameters
-
-  parameter Q_OR_I_N = 0;
-  parameter CHANNEL_ID = 0;
-  parameter DATAPATH_DISABLE = 0;
-
-  // IO definitions
-
-  input           adc_clk;
-  input           adc_rst;
-  input   [27:0]  adc_data;
-  input   [27:0]  adc_data_q;
-  input           adc_or;
-
-  output  [31:0]  adc_dfmt_data;
-  output          adc_enable;
-  output          adc_valid;
-  output          up_adc_pn_err;
-  output          up_adc_pn_oos;
-  output          up_adc_or;
-
-  input           up_clk;
-  input           up_rstn;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal signals
 

@@ -37,148 +37,78 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9122_core (
+module axi_ad9122_core #(
+
+  parameter   ID = 0,
+  parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface
 
-  dac_div_clk,
-  dac_rst,
-  dac_frame_i0,
-  dac_data_i0,
-  dac_frame_i1,
-  dac_data_i1,
-  dac_frame_i2,
-  dac_data_i2,
-  dac_frame_i3,
-  dac_data_i3,
-  dac_frame_q0,
-  dac_data_q0,
-  dac_frame_q1,
-  dac_data_q1,
-  dac_frame_q2,
-  dac_data_q2,
-  dac_frame_q3,
-  dac_data_q3,
-  dac_status,
+  input                   dac_div_clk,
+  output                  dac_rst,
+  output                  dac_frame_i0,
+  output      [15:0]      dac_data_i0,
+  output                  dac_frame_i1,
+  output      [15:0]      dac_data_i1,
+  output                  dac_frame_i2,
+  output      [15:0]      dac_data_i2,
+  output                  dac_frame_i3,
+  output      [15:0]      dac_data_i3,
+  output                  dac_frame_q0,
+  output      [15:0]      dac_data_q0,
+  output                  dac_frame_q1,
+  output      [15:0]      dac_data_q1,
+  output                  dac_frame_q2,
+  output      [15:0]      dac_data_q2,
+  output                  dac_frame_q3,
+  output      [15:0]      dac_data_q3,
+  input                   dac_status,
 
   // master/slave
 
-  dac_sync_out,
-  dac_sync_in,
+  output                  dac_sync_out,
+  input                   dac_sync_in,
 
   // dma interface
 
-  dac_valid_0,
-  dac_enable_0,
-  dac_ddata_0,
-  dac_valid_1,
-  dac_enable_1,
-  dac_ddata_1,
-  dac_dovf,
-  dac_dunf,
+  output                  dac_valid_0,
+  output                  dac_enable_0,
+  input       [63:0]      dac_ddata_0,
+  output                  dac_valid_1,
+  output                  dac_enable_1,
+  input       [63:0]      dac_ddata_1,
+  input                   dac_dovf,
+  input                   dac_dunf,
 
   // mmcm reset
 
-  mmcm_rst,
+  output                  mmcm_rst,
 
   // drp interface
 
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_locked,
+  output                  up_drp_sel,
+  output                  up_drp_wr,
+  output      [11:0]      up_drp_addr,
+  output      [31:0]      up_drp_wdata,
+  input       [31:0]      up_drp_rdata,
+  input                   up_drp_ready,
+  input                   up_drp_locked,
 
   // processor interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
-  // parameters
-
-  parameter   ID = 0;
-  parameter   DATAPATH_DISABLE = 0;
-
-  // dac interface
-
-  input           dac_div_clk;
-  output          dac_rst;
-  output          dac_frame_i0;
-  output  [15:0]  dac_data_i0;
-  output          dac_frame_i1;
-  output  [15:0]  dac_data_i1;
-  output          dac_frame_i2;
-  output  [15:0]  dac_data_i2;
-  output          dac_frame_i3;
-  output  [15:0]  dac_data_i3;
-  output          dac_frame_q0;
-  output  [15:0]  dac_data_q0;
-  output          dac_frame_q1;
-  output  [15:0]  dac_data_q1;
-  output          dac_frame_q2;
-  output  [15:0]  dac_data_q2;
-  output          dac_frame_q3;
-  output  [15:0]  dac_data_q3;
-  input           dac_status;
-
-  // master/slave
-
-  output          dac_sync_out;
-  input           dac_sync_in;
-
-  // dma interface
-
-  output          dac_valid_0;
-  output          dac_enable_0;
-  input   [63:0]  dac_ddata_0;
-  output          dac_valid_1;
-  output          dac_enable_1;
-  input   [63:0]  dac_ddata_1;
-  input           dac_dovf;
-  input           dac_dunf;
-
-  // mmcm reset
-
-  output          mmcm_rst;
-
-  // drp interface
-
-  output          up_drp_sel;
-  output          up_drp_wr;
-  output  [11:0]  up_drp_addr;
-  output  [31:0]  up_drp_wdata;
-  input   [31:0]  up_drp_rdata;
-  input           up_drp_ready;
-  input           up_drp_locked;
-
-  // processor interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal registers
-
-  reg     [31:0]  up_rdata = 'd0;
-  reg             up_rack = 'd0;
-  reg             up_wack = 'd0;
 
   // internal signals
 

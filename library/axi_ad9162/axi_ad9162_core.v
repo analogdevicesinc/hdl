@@ -37,73 +37,49 @@
 
 `timescale 1ns / 1ps
 
-module axi_ad9162_core (
+module axi_ad9162_core #(
+
+  parameter   ID = 0,
+  parameter   DATAPATH_DISABLE = 0) (
 
     // dac interface
     
-    dac_clk,
-    dac_rst,
-    dac_data,
+  input                   dac_clk,
+  output                  dac_rst,
+  output      [255:0]     dac_data,
     
     // dma interface
     
-    dac_valid,
-    dac_enable,
-    dac_ddata,
-    dac_dovf,
-    dac_dunf,
+  output                  dac_valid,
+  output                  dac_enable,
+  input       [255:0]     dac_ddata,
+  input                   dac_dovf,
+  input                   dac_dunf,
     
     // processor interface
     
-    up_rstn,
-    up_clk,
-    up_wreq,
-    up_waddr,
-    up_wdata,
-    up_wack,
-    up_rreq,
-    up_raddr,
-    up_rdata,
-    up_rack);
-    
-    // parameters
-    
-    parameter   ID = 0;
-    parameter   DATAPATH_DISABLE = 0;
-    
-    // dac interface
-    
-    input             dac_clk;
-    output            dac_rst;
-    output  [255:0]   dac_data;
-    
-    // dma interface
-    
-    output            dac_valid;
-    output            dac_enable;
-    input   [255:0]   dac_ddata;
-    input             dac_dovf;
-    input             dac_dunf;
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [ 13:0]     up_waddr,
+  input       [ 31:0]     up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [ 13:0]     up_raddr,
+  output  reg [ 31:0]     up_rdata,
+  output  reg             up_rack);
     
     
-    // processor interface
     
-    input             up_rstn;
-    input             up_clk;
-    input             up_wreq;
-    input   [ 13:0]   up_waddr;
-    input   [ 31:0]   up_wdata;
-    output            up_wack;
-    input             up_rreq;
-    input   [ 13:0]   up_raddr;
-    output  [ 31:0]   up_rdata;
-    output            up_rack;
+    
+    
+    
+    
+    
+    
     
     // internal registers
     
-    reg     [ 31:0]   up_rdata = 'd0;
-    reg               up_rack = 'd0;
-    reg               up_wack = 'd0;
     
     // internal signals
     

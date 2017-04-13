@@ -39,19 +39,15 @@
 
 `timescale 1ns/100ps
 
-module ad_iobuf (
+module ad_iobuf #(
 
-  dio_t,
-  dio_i,
-  dio_o,
-  dio_p);
+  parameter     DATA_WIDTH = 1) (
 
-  parameter     DATA_WIDTH = 1;
+  input       [(DATA_WIDTH-1):0]  dio_t,
+  input       [(DATA_WIDTH-1):0]  dio_i,
+  output      [(DATA_WIDTH-1):0]  dio_o,
+  inout       [(DATA_WIDTH-1):0]  dio_p);
 
-  input   [(DATA_WIDTH-1):0]  dio_t;
-  input   [(DATA_WIDTH-1):0]  dio_i;
-  output  [(DATA_WIDTH-1):0]  dio_o;
-  inout   [(DATA_WIDTH-1):0]  dio_p;
 
   genvar n;
   generate

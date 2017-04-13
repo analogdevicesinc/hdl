@@ -39,34 +39,25 @@
 
 `timescale 1ns/100ps
 
-module ad_mem (
+module ad_mem #(
 
-  clka,
-  wea,
-  addra,
-  dina,
+  parameter       DATA_WIDTH = 16,
+  parameter       ADDRESS_WIDTH =  5) (
 
-  clkb,
-  addrb,
-  doutb);
+  input                   clka,
+  input                   wea,
+  input       [AW:0]      addra,
+  input       [DW:0]      dina,
 
-  parameter       DATA_WIDTH = 16;
-  parameter       ADDRESS_WIDTH =  5;
+  input                   clkb,
+  input       [AW:0]      addrb,
+  output  reg [DW:0]      doutb);
+
   localparam      DW = DATA_WIDTH - 1;
   localparam      AW = ADDRESS_WIDTH - 1;
 
-  input           clka;
-  input           wea;
-  input   [AW:0]  addra;
-  input   [DW:0]  dina;
-
-  input           clkb;
-  input   [AW:0]  addrb;
-  output  [DW:0]  doutb;
-
   (* ram_style = "block" *)
   reg     [DW:0]  m_ram[0:((2**ADDRESS_WIDTH)-1)];
-  reg     [DW:0]  doutb;
 
   always @(posedge clka) begin
     if (wea == 1'b1) begin

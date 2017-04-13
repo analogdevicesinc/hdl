@@ -42,40 +42,25 @@
 
 `timescale 1ps/1ps
 
-module ad_csc_1_add (
+module ad_csc_1_add #(
+
+  parameter   DELAY_DATA_WIDTH = 16) (
 
   // all signed
 
-  clk,
-  data_1,
-  data_2,
-  data_3,
-  data_4,
-  data_p,
+  input                   clk,
+  input       [24:0]      data_1,
+  input       [24:0]      data_2,
+  input       [24:0]      data_3,
+  input       [24:0]      data_4,
+  output  reg [ 7:0]      data_p,
 
   // delay match
 
-  ddata_in,
-  ddata_out);
+  input       [DW:0]      ddata_in,
+  output  reg [DW:0]      ddata_out);
 
-  // parameters
-
-  parameter   DELAY_DATA_WIDTH = 16;
   localparam  DW = DELAY_DATA_WIDTH - 1;
-
-  // all signed
-
-  input           clk;
-  input   [24:0]  data_1;
-  input   [24:0]  data_2;
-  input   [24:0]  data_3;
-  input   [24:0]  data_4;
-  output  [ 7:0]  data_p;
-
-  // delay match
-
-  input   [DW:0]  ddata_in;
-  output  [DW:0]  ddata_out;
 
   // internal registers
 
@@ -89,8 +74,6 @@ module ad_csc_1_add (
   reg     [24:0]  p2_data_1 = 'd0;
   reg     [DW:0]  p3_ddata = 'd0;
   reg     [24:0]  p3_data = 'd0;
-  reg     [DW:0]  ddata_out = 'd0;
-  reg     [ 7:0]  data_p = 'd0;
 
   // internal signals
 

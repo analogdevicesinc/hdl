@@ -39,118 +39,68 @@
 
 `timescale 1ns/100ps
 
-module axi_ad7616 (
+module axi_ad7616 #(
+
+  parameter       ID = 0,
+  parameter       IF_TYPE = 1) (
 
   // physical data interface
 
-  rx_sclk,
-  rx_cs_n,
-  rx_sdo,
-  rx_sdi_0,
-  rx_sdi_1,
+  output                  rx_sclk,
+  output                  rx_cs_n,
+  output                  rx_sdo,
+  input                   rx_sdi_0,
+  input                   rx_sdi_1,
 
-  rx_db_o,
-  rx_db_i,
-  rx_db_t,
-  rx_rd_n,
-  rx_wr_n,
+  output      [15:0]      rx_db_o,
+  input       [15:0]      rx_db_i,
+  output                  rx_db_t,
+  output                  rx_rd_n,
+  output                  rx_wr_n,
 
   // physical control interface
 
-  rx_cnvst,
-  rx_busy,
+  output                  rx_cnvst,
+  input                   rx_busy,
 
   // AXI Slave Memory Map
 
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awprot,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arprot,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rresp,
-  s_axi_rdata,
-  s_axi_rready,
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [31:0]      s_axi_awaddr,
+  input       [ 2:0]      s_axi_awprot,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [31:0]      s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [31:0]      s_axi_araddr,
+  input       [ 2:0]      s_axi_arprot,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [ 1:0]      s_axi_rresp,
+  output      [31:0]      s_axi_rdata,
+  input                   s_axi_rready,
 
   // Write FIFO interface
 
-  adc_valid,
-  adc_data,
-  adc_sync,
+  output                  adc_valid,
+  output      [15:0]      adc_data,
+  output                  adc_sync,
 
-  irq
-);
+  output                  irq);
 
-  // parameters
-
-  parameter       ID = 0;
-  parameter       IF_TYPE = 1;
-
-  // local parameters
 
   localparam      NUM_OF_SDI = 2;
   localparam      SERIAL = 0;
   localparam      PARALLEL = 1;
   localparam      NEG_EDGE = 1;
   localparam      UP_ADDRESS_WIDTH = 14;
-
-  // IO definitions
-
-  output                            rx_sclk;
-  output                            rx_cs_n;
-  output                            rx_sdo;
-  input                             rx_sdi_0;
-  input                             rx_sdi_1;
-
-  output  [15:0]                    rx_db_o;
-  input   [15:0]                    rx_db_i;
-  output                            rx_db_t;
-  output                            rx_rd_n;
-  output                            rx_wr_n;
-
-  output                            rx_cnvst;
-  input                             rx_busy;
-
-  input                             s_axi_aclk;
-  input                             s_axi_aresetn;
-  input                             s_axi_awvalid;
-  input   [31:0]                    s_axi_awaddr;
-  output                            s_axi_awready;
-  input                             s_axi_wvalid;
-  input   [31:0]                    s_axi_wdata;
-  input   [ 3:0]                    s_axi_wstrb;
-  output                            s_axi_wready;
-  output                            s_axi_bvalid;
-  output  [ 1:0]                    s_axi_bresp;
-  input                             s_axi_bready;
-  input                             s_axi_arvalid;
-  input   [31:0]                    s_axi_araddr;
-  output                            s_axi_arready;
-  output                            s_axi_rvalid;
-  output  [ 1:0]                    s_axi_rresp;
-  output  [31:0]                    s_axi_rdata;
-  input                             s_axi_rready;
-  input   [ 2:0]                    s_axi_awprot;
-  input   [ 2:0]                    s_axi_arprot;
-
-
-  output                            adc_valid;
-  output  [15:0]                    adc_data;
-  output                            adc_sync;
-
-  output                            irq;
 
   // internal registers
 

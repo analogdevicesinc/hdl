@@ -37,102 +37,57 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9250 (
+module axi_ad9250 #(
+
+  parameter ID = 0,
+  parameter DEVICE_TYPE = 0) (
 
   // jesd interface 
   // rx_clk is (line-rate/40)
 
-  rx_clk,
-  rx_sof,
-  rx_valid,
-  rx_data,
-  rx_ready,
+  input                   rx_clk,
+  input       [ 3:0]      rx_sof,
+  input                   rx_valid,
+  input       [63:0]      rx_data,
+  output                  rx_ready,
 
   // dma interface
 
-  adc_clk,
-  adc_rst,
-  adc_valid_a,
-  adc_enable_a,
-  adc_data_a,
-  adc_valid_b,
-  adc_enable_b,
-  adc_data_b,
-  adc_dovf,
-  adc_dunf,
+  output                  adc_clk,
+  output                  adc_rst,
+  output                  adc_valid_a,
+  output                  adc_enable_a,
+  output      [31:0]      adc_data_a,
+  output                  adc_valid_b,
+  output                  adc_enable_b,
+  output      [31:0]      adc_data_b,
+  input                   adc_dovf,
+  input                   adc_dunf,
 
   // axi interface
 
-  s_axi_aclk,
-  s_axi_aresetn,
-  s_axi_awvalid,
-  s_axi_awaddr,
-  s_axi_awprot,
-  s_axi_awready,
-  s_axi_wvalid,
-  s_axi_wdata,
-  s_axi_wstrb,
-  s_axi_wready,
-  s_axi_bvalid,
-  s_axi_bresp,
-  s_axi_bready,
-  s_axi_arvalid,
-  s_axi_araddr,
-  s_axi_arprot,
-  s_axi_arready,
-  s_axi_rvalid,
-  s_axi_rdata,
-  s_axi_rresp,
-  s_axi_rready);
+  input                   s_axi_aclk,
+  input                   s_axi_aresetn,
+  input                   s_axi_awvalid,
+  input       [31:0]      s_axi_awaddr,
+  input       [ 2:0]      s_axi_awprot,
+  output                  s_axi_awready,
+  input                   s_axi_wvalid,
+  input       [31:0]      s_axi_wdata,
+  input       [ 3:0]      s_axi_wstrb,
+  output                  s_axi_wready,
+  output                  s_axi_bvalid,
+  output      [ 1:0]      s_axi_bresp,
+  input                   s_axi_bready,
+  input                   s_axi_arvalid,
+  input       [31:0]      s_axi_araddr,
+  input       [ 2:0]      s_axi_arprot,
+  output                  s_axi_arready,
+  output                  s_axi_rvalid,
+  output      [31:0]      s_axi_rdata,
+  output      [ 1:0]      s_axi_rresp,
+  input                   s_axi_rready);
 
-  parameter ID = 0;
-  parameter DEVICE_TYPE = 0;
-
-  // jesd interface 
-  // rx_clk is (line-rate/40)
-
-  input           rx_clk;
-  input  [  3:0]  rx_sof;
-  input           rx_valid;
-  input   [63:0]  rx_data;
-  output          rx_ready;
-
-  // dma interface
-
-  output          adc_clk;
-  output          adc_rst;
-  output          adc_valid_a;
-  output          adc_enable_a;
-  output  [31:0]  adc_data_a;
-  output          adc_valid_b;
-  output          adc_enable_b;
-  output  [31:0]  adc_data_b;
-  input           adc_dovf;
-  input           adc_dunf;
-
-  // axi interface
-
-  input           s_axi_aclk;
-  input           s_axi_aresetn;
-  input           s_axi_awvalid;
-  input   [31:0]  s_axi_awaddr;
-  input   [ 2:0]  s_axi_awprot;
-  output          s_axi_awready;
-  input           s_axi_wvalid;
-  input   [31:0]  s_axi_wdata;
-  input   [ 3:0]  s_axi_wstrb;
-  output          s_axi_wready;
-  output          s_axi_bvalid;
-  output  [ 1:0]  s_axi_bresp;
-  input           s_axi_bready;
-  input           s_axi_arvalid;
-  input   [31:0]  s_axi_araddr;
-  input   [ 2:0]  s_axi_arprot;
-  output          s_axi_arready;
-  output          s_axi_rvalid;
-  output  [31:0]  s_axi_rdata;
-  output  [ 1:0]  s_axi_rresp;
-  input           s_axi_rready;
 
   // internal registers
 

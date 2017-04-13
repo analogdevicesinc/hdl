@@ -39,166 +39,93 @@
 
 `timescale 1ns/100ps
 
-module axi_dacfifo (
+module axi_dacfifo #(
+
+  parameter   DAC_DATA_WIDTH = 64,
+  parameter   DMA_DATA_WIDTH = 64,
+  parameter   AXI_DATA_WIDTH = 512,
+  parameter   AXI_SIZE = 2,
+  parameter   AXI_LENGTH = 15,
+  parameter   AXI_ADDRESS = 32'h00000000,
+  parameter   AXI_ADDRESS_LIMIT = 32'hffffffff) (
 
   // dma interface (AXI Stream)
 
-  dma_clk,
-  dma_rst,
-  dma_valid,
-  dma_data,
-  dma_ready,
-  dma_xfer_req,
-  dma_xfer_last,
+  input                   dma_clk,
+  input                   dma_rst,
+  input                   dma_valid,
+  input       [(DMA_DATA_WIDTH-1):0]  dma_data,
+  output  reg             dma_ready,
+  input                   dma_xfer_req,
+  input                   dma_xfer_last,
 
   // dac interface
 
-  dac_clk,
-  dac_rst,
-  dac_valid,
-  dac_data,
-  dac_dunf,
-  dac_xfer_out,
+  input                   dac_clk,
+  input                   dac_rst,
+  input                   dac_valid,
+  output  reg [(DAC_DATA_WIDTH-1):0]  dac_data,
+  output  reg             dac_dunf,
+  output  reg             dac_xfer_out,
 
-  bypass,
+  input                   bypass,
 
   // axi interface
 
-  axi_clk,
-  axi_resetn,
-  axi_awvalid,
-  axi_awid,
-  axi_awburst,
-  axi_awlock,
-  axi_awcache,
-  axi_awprot,
-  axi_awqos,
-  axi_awuser,
-  axi_awlen,
-  axi_awsize,
-  axi_awaddr,
-  axi_awready,
-  axi_wvalid,
-  axi_wdata,
-  axi_wstrb,
-  axi_wlast,
-  axi_wuser,
-  axi_wready,
-  axi_bvalid,
-  axi_bid,
-  axi_bresp,
-  axi_buser,
-  axi_bready,
-  axi_arvalid,
-  axi_arid,
-  axi_arburst,
-  axi_arlock,
-  axi_arcache,
-  axi_arprot,
-  axi_arqos,
-  axi_aruser,
-  axi_arlen,
-  axi_arsize,
-  axi_araddr,
-  axi_arready,
-  axi_rvalid,
-  axi_rid,
-  axi_ruser,
-  axi_rresp,
-  axi_rlast,
-  axi_rdata,
-  axi_rready);
+  input                   axi_clk,
+  input                   axi_resetn,
+  output                  axi_awvalid,
+  output      [ 3:0]      axi_awid,
+  output      [ 1:0]      axi_awburst,
+  output                  axi_awlock,
+  output      [ 3:0]      axi_awcache,
+  output      [ 2:0]      axi_awprot,
+  output      [ 3:0]      axi_awqos,
+  output      [ 3:0]      axi_awuser,
+  output      [ 7:0]      axi_awlen,
+  output      [ 2:0]      axi_awsize,
+  output      [ 31:0]     axi_awaddr,
+  input                   axi_awready,
+  output                  axi_wvalid,
+  output      [(AXI_DATA_WIDTH-1):0]  axi_wdata,
+  output      [(AXI_DATA_WIDTH/8-1):0]  axi_wstrb,
+  output                  axi_wlast,
+  output      [ 3:0]      axi_wuser,
+  input                   axi_wready,
+  input                   axi_bvalid,
+  input       [ 3:0]      axi_bid,
+  input       [ 1:0]      axi_bresp,
+  input       [ 3:0]      axi_buser,
+  output                  axi_bready,
+  output                  axi_arvalid,
+  output      [ 3:0]      axi_arid,
+  output      [ 1:0]      axi_arburst,
+  output                  axi_arlock,
+  output      [ 3:0]      axi_arcache,
+  output      [ 2:0]      axi_arprot,
+  output      [ 3:0]      axi_arqos,
+  output      [ 3:0]      axi_aruser,
+  output      [ 7:0]      axi_arlen,
+  output      [ 2:0]      axi_arsize,
+  output      [ 31:0]     axi_araddr,
+  input                   axi_arready,
+  input                   axi_rvalid,
+  input       [ 3:0]      axi_rid,
+  input       [ 3:0]      axi_ruser,
+  input       [ 1:0]      axi_rresp,
+  input                   axi_rlast,
+  input       [(AXI_DATA_WIDTH-1):0]  axi_rdata,
+  output                  axi_rready);
 
-  // parameters
-
-  parameter   DAC_DATA_WIDTH = 64;
-  parameter   DMA_DATA_WIDTH = 64;
-  parameter   AXI_DATA_WIDTH = 512;
-  parameter   AXI_SIZE = 2;
-  parameter   AXI_LENGTH = 15;
-  parameter   AXI_ADDRESS = 32'h00000000;
-  parameter   AXI_ADDRESS_LIMIT = 32'hffffffff;
 
   localparam  FIFO_BYPASS = (DAC_DATA_WIDTH == DMA_DATA_WIDTH) ? 1 : 0;
 
-  // dma interface
-
-  input                               dma_clk;
-  input                               dma_rst;
-  input                               dma_valid;
-  input   [(DMA_DATA_WIDTH-1):0]      dma_data;
-  output                              dma_ready;
-  input                               dma_xfer_req;
-  input                               dma_xfer_last;
-
-  // dac interface
-
-  input                               dac_clk;
-  input                               dac_rst;
-  input                               dac_valid;
-  output  [(DAC_DATA_WIDTH-1):0]      dac_data;
-  output                              dac_dunf;
-  output                              dac_xfer_out;
-
-  input                               bypass;
-
-  // axi interface
-
-  input                               axi_clk;
-  input                               axi_resetn;
-  output                              axi_awvalid;
-  output  [  3:0]                     axi_awid;
-  output  [  1:0]                     axi_awburst;
-  output                              axi_awlock;
-  output  [  3:0]                     axi_awcache;
-  output  [  2:0]                     axi_awprot;
-  output  [  3:0]                     axi_awqos;
-  output  [  3:0]                     axi_awuser;
-  output  [  7:0]                     axi_awlen;
-  output  [  2:0]                     axi_awsize;
-  output  [ 31:0]                     axi_awaddr;
-  input                               axi_awready;
-  output                              axi_wvalid;
-  output  [(AXI_DATA_WIDTH-1):0]      axi_wdata;
-  output  [(AXI_DATA_WIDTH/8-1):0]    axi_wstrb;
-  output                              axi_wlast;
-  output  [  3:0]                     axi_wuser;
-  input                               axi_wready;
-  input                               axi_bvalid;
-  input   [  3:0]                     axi_bid;
-  input   [  1:0]                     axi_bresp;
-  input   [  3:0]                     axi_buser;
-  output                              axi_bready;
-  output                              axi_arvalid;
-  output  [  3:0]                     axi_arid;
-  output  [  1:0]                     axi_arburst;
-  output                              axi_arlock;
-  output  [  3:0]                     axi_arcache;
-  output  [  2:0]                     axi_arprot;
-  output  [  3:0]                     axi_arqos;
-  output  [  3:0]                     axi_aruser;
-  output  [  7:0]                     axi_arlen;
-  output  [  2:0]                     axi_arsize;
-  output  [ 31:0]                     axi_araddr;
-  input                               axi_arready;
-  input                               axi_rvalid;
-  input   [  3:0]                     axi_rid;
-  input   [  3:0]                     axi_ruser;
-  input   [  1:0]                     axi_rresp;
-  input                               axi_rlast;
-  input   [(AXI_DATA_WIDTH-1):0]      axi_rdata;
-  output                              axi_rready;
-
-  reg                                 dma_ready = 1'b0;
   reg                                 dma_bypass_m1 = 1'b0;
   reg                                 dma_bypass = 1'b0;
   reg                                 dac_bypass_m1 = 1'b0;
   reg                                 dac_bypass = 1'b0;
-  reg                                 dac_xfer_out = 1'b0;
   reg                                 dac_xfer_out_m1 = 1'b0;
   reg                                 dac_xfer_out_bypass = 1'b0;
-  reg                                 dac_dunf = 1'b0;
-  reg     [(DAC_DATA_WIDTH-1):0]      dac_data = 'b0;
 
   // internal signals
 

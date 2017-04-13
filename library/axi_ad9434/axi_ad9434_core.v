@@ -40,108 +40,62 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9434_core (
+module axi_ad9434_core #(
+
+  parameter ID = 0) (
 
   // device interface
 
-  adc_clk,
-  adc_data,
-  adc_or,
+  input                   adc_clk,
+  input       [47:0]      adc_data,
+  input                   adc_or,
 
   // dma interface
 
-  dma_dvalid,
-  dma_data,
-  dma_dovf,
+  output                  dma_dvalid,
+  output      [63:0]      dma_data,
+  input                   dma_dovf,
 
   // drp interface
 
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_locked,
+  output                  up_drp_sel,
+  output                  up_drp_wr,
+  output      [11:0]      up_drp_addr,
+  output      [31:0]      up_drp_wdata,
+  input       [31:0]      up_drp_rdata,
+  input                   up_drp_ready,
+  input                   up_drp_locked,
 
   // delay interface
 
-  up_dld,
-  up_dwdata,
-  up_drdata,
-  delay_clk,
-  delay_rst,
-  delay_locked,
+  output      [12:0]      up_dld,
+  output      [64:0]      up_dwdata,
+  input       [64:0]      up_drdata,
+  input                   delay_clk,
+  output                  delay_rst,
+  input                   delay_locked,
 
   // processor interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack,
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack,
 
   // status and control signals
 
-  mmcm_rst,
-  adc_rst,
-  adc_status);
+  output                  mmcm_rst,
+  output                  adc_rst,
+  input                   adc_status);
 
-  // parameters
-  parameter ID = 0;
-
-  // device interface
-  input           adc_clk;
-  input  [47:0]   adc_data;
-  input           adc_or;
-
-  // dma interface
-  output          dma_dvalid;
-  output [63:0]   dma_data;
-  input           dma_dovf;
-
-  // drp interface
-  output          up_drp_sel;
-  output          up_drp_wr;
-  output  [11:0]  up_drp_addr;
-  output  [31:0]  up_drp_wdata;
-  input   [31:0]  up_drp_rdata;
-  input           up_drp_ready;
-  input           up_drp_locked;
-
-  // delay interface
-  output  [12:0]  up_dld;
-  output  [64:0]  up_dwdata;
-  input   [64:0]  up_drdata;
-  input           delay_clk;
-  output          delay_rst;
-  input           delay_locked;
-
-  // processor interface
-  input           up_clk;
-  input           up_rstn;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
-
-  output          mmcm_rst;
-  output          adc_rst;
-  input           adc_status;
 
   // internal registers
-  reg             up_wack;
-  reg     [31:0]  up_rdata;
-  reg             up_rack;
 
   // internal signals
   wire            up_status_pn_err_s;

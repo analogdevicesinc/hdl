@@ -41,65 +41,36 @@ module daq1_cpld (
 
   // FMC SPI interface
 
-  fmc_spi_sclk,
-  fmc_spi_csn,
-  fmc_spi_sdio,
-  fmc_irq,
+  input                   fmc_spi_sclk,
+  input                   fmc_spi_csn,
+  inout                   fmc_spi_sdio,
+  output                  fmc_irq,
 
   // on board SPI interface
 
-  adc_spicsn,
-  dac_spicsn,
-  clk_spicsn,
-  sclk,
-  sdio,
+  output                  adc_spicsn,
+  output                  dac_spicsn,
+  output                  clk_spicsn,
+  output                  sclk,
+  inout                   sdio,
 
   // control and status lines
 
-  adc_fda,
-  adc_fdb,
-  adc_status_p,
-  adc_status_n,
-  adc_pwdn_stby,
+  input                   adc_fda,
+  input                   adc_fdb,
+  input                   adc_status_p,
+  input                   adc_status_n,
+  output                  adc_pwdn_stby,
 
-  dac_irqn,
-  dac_resetn,
+  input                   dac_irqn,
+  output                  dac_resetn,
 
-  clk_status1,
-  clk_status2,
-  clk_pwdnn,
-  clk_syncn,
-  clk_resetn
-
+  input                   clk_status1,
+  input                   clk_status2,
+  output                  clk_pwdnn,
+  output                  clk_syncn,
+  output                  clk_resetn
 );
-
-  input   fmc_spi_csn;
-  input   fmc_spi_sclk;
-  inout   fmc_spi_sdio;
-  output  fmc_irq;
-
-  output  adc_spicsn;
-  output  dac_spicsn;
-  output  clk_spicsn;
-  output  sclk;
-  inout   sdio;
-
-  // control and status lines
-
-  input   adc_fda;
-  input   adc_fdb;
-  input   adc_status_p;
-  input   adc_status_n;
-  output  adc_pwdn_stby;
-
-  input   dac_irqn;
-  output  dac_resetn;
-
-  input   clk_status1;
-  input   clk_status2;
-  output  clk_pwdnn;
-  output  clk_syncn;
-  output  clk_resetn;
 
   // FMC SPI Selects
 

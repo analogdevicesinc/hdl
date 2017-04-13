@@ -40,42 +40,28 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9361_rx_pnmon (
+module axi_ad9361_rx_pnmon #(
+
+  parameter   Q_OR_I_N     = 0,
+  parameter   PRBS_SEL  = 0) (
 
   // adc interface
 
-  adc_clk,
-  adc_valid,
-  adc_data_i,
-  adc_data_q,
+  input                   adc_clk,
+  input                   adc_valid,
+  input       [11:0]      adc_data_i,
+  input       [11:0]      adc_data_q,
 
   // pn out of sync and error
 
-  adc_pnseq_sel,
-  adc_pn_oos,
-  adc_pn_err);
+  input       [ 3:0]      adc_pnseq_sel,
+  output                  adc_pn_oos,
+  output                  adc_pn_err);
 
-  // parameters
-
-  parameter   Q_OR_I_N     = 0;
-  parameter   PRBS_SEL  = 0;
   localparam  PRBS_P09  = 0;
   localparam  PRBS_P11  = 1;
   localparam  PRBS_P15  = 2;
   localparam  PRBS_P20  = 3;
-
-  // adc interface
-
-  input           adc_clk;
-  input           adc_valid;
-  input   [11:0]  adc_data_i;
-  input   [11:0]  adc_data_q;
-
-  // pn out of sync and error
-
-  input   [ 3:0]  adc_pnseq_sel;
-  output          adc_pn_oos;
-  output          adc_pn_err;
 
   // internal registers
 

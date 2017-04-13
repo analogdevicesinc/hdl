@@ -43,159 +43,81 @@ module axi_usb_fx3_reg (
 
   // gpif ii
 
-  fifo_rdy,
+  input       [10:0]      fifo_rdy,
 
-  eot_fx32dma,
-  eot_dma2fx3,
-  trig,
-  zlp,
-  fifo_num,
+  input                   eot_fx32dma,
+  input                   eot_dma2fx3,
+  output                  trig,
+  output                  zlp,
+  output      [ 4:0]      fifo_num,
 
-  error,
+  input                   error,
 
-  test_mode_tpm,
-  test_mode_tpg,
-  monitor_error,
+  output      [ 2:0]      test_mode_tpm,
+  output      [ 2:0]      test_mode_tpg,
+  input                   monitor_error,
 
-  irq,
+  output                  irq,
 
-  fifo0_direction,
-  fifo0_header_size,
-  fifo0_buffer_size,
+  output                  fifo0_direction,
+  output      [ 7:0]      fifo0_header_size,
+  output      [15:0]      fifo0_buffer_size,
 
-  fifo1_direction,
-  fifo1_header_size,
-  fifo1_buffer_size,
+  output                  fifo1_direction,
+  output      [ 7:0]      fifo1_header_size,
+  output      [15:0]      fifo1_buffer_size,
 
-  fifo2_direction,
-  fifo2_header_size,
-  fifo2_buffer_size,
+  output                  fifo2_direction,
+  output      [ 7:0]      fifo2_header_size,
+  output      [15:0]      fifo2_buffer_size,
 
-  fifo3_direction,
-  fifo3_header_size,
-  fifo3_buffer_size,
+  output                  fifo3_direction,
+  output      [ 7:0]      fifo3_header_size,
+  output      [15:0]      fifo3_buffer_size,
 
-  fifo4_direction,
-  fifo4_header_size,
-  fifo4_buffer_size,
+  output                  fifo4_direction,
+  output      [ 7:0]      fifo4_header_size,
+  output      [15:0]      fifo4_buffer_size,
 
-  fifo5_direction,
-  fifo5_header_size,
-  fifo5_buffer_size,
+  output                  fifo5_direction,
+  output      [ 7:0]      fifo5_header_size,
+  output      [15:0]      fifo5_buffer_size,
 
-  fifo6_direction,
-  fifo6_header_size,
-  fifo6_buffer_size,
+  output                  fifo6_direction,
+  output      [ 7:0]      fifo6_header_size,
+  output      [15:0]      fifo6_buffer_size,
 
-  fifo7_direction,
-  fifo7_header_size,
-  fifo7_buffer_size,
+  output                  fifo7_direction,
+  output      [ 7:0]      fifo7_header_size,
+  output      [15:0]      fifo7_buffer_size,
 
-  fifo8_direction,
-  fifo8_header_size,
-  fifo8_buffer_size,
+  output                  fifo8_direction,
+  output      [ 7:0]      fifo8_header_size,
+  output      [15:0]      fifo8_buffer_size,
 
-  fifo9_direction,
-  fifo9_header_size,
-  fifo9_buffer_size,
+  output                  fifo9_direction,
+  output      [ 7:0]      fifo9_header_size,
+  output      [15:0]      fifo9_buffer_size,
 
-  fifoa_direction,
-  fifoa_header_size,
-  fifoa_buffer_size,
+  output                  fifoa_direction,
+  output      [ 7:0]      fifoa_header_size,
+  output      [15:0]      fifoa_buffer_size,
 
-  length_fx32dma,
-  length_dma2fx3,
+  input       [31:0]      length_fx32dma,
+  input       [31:0]      length_dma2fx3,
 
   // bus interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
-
- // GPIF II
-
-  input   [10:0]  fifo_rdy;
-
-  input           eot_fx32dma;
-  input           eot_dma2fx3;
-  output          trig;
-  output          zlp;
-  output  [ 4:0]  fifo_num;
-
-  input           error;
-
-  input           monitor_error;
-  output  [ 2:0]  test_mode_tpm;
-  output  [ 2:0]  test_mode_tpg;
-
-  output          irq;
-
-  output          fifo0_direction;
-  output  [ 7:0]  fifo0_header_size;
-  output  [15:0]  fifo0_buffer_size;
-
-  output          fifo1_direction;
-  output  [ 7:0]  fifo1_header_size;
-  output  [15:0]  fifo1_buffer_size;
-
-  output          fifo2_direction;
-  output  [ 7:0]  fifo2_header_size;
-  output  [15:0]  fifo2_buffer_size;
-
-  output          fifo3_direction;
-  output  [ 7:0]  fifo3_header_size;
-  output  [15:0]  fifo3_buffer_size;
-
-  output          fifo4_direction;
-  output  [ 7:0]  fifo4_header_size;
-  output  [15:0]  fifo4_buffer_size;
-
-  output          fifo5_direction;
-  output  [ 7:0]  fifo5_header_size;
-  output  [15:0]  fifo5_buffer_size;
-
-  output          fifo6_direction;
-  output  [ 7:0]  fifo6_header_size;
-  output  [15:0]  fifo6_buffer_size;
-
-  output          fifo7_direction;
-  output  [ 7:0]  fifo7_header_size;
-  output  [15:0]  fifo7_buffer_size;
-
-  output          fifo8_direction;
-  output  [ 7:0]  fifo8_header_size;
-  output  [15:0]  fifo8_buffer_size;
-
-  output          fifo9_direction;
-  output  [ 7:0]  fifo9_header_size;
-  output  [15:0]  fifo9_buffer_size;
-
-  output          fifoa_direction;
-  output  [ 7:0]  fifoa_header_size;
-  output  [15:0]  fifoa_buffer_size;
-
-  input   [31:0]  length_fx32dma;
-  input   [31:0]  length_dma2fx3;
-
- // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
   // internal signals
 
@@ -214,10 +136,6 @@ module axi_usb_fx3_reg (
   wire            fifoa_enable;
 
   // internal registers
-
-  reg     [31:0]  up_rdata = 32'h0;
-  reg             up_rack = 1'b0;
-  reg             up_wack = 1'b0;
 
   reg     [31:0]  fifo0_config = 32'h0;
   reg     [31:0]  fifo1_config = 32'h0;

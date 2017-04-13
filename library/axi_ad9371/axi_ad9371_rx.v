@@ -37,93 +37,53 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9371_rx (
+module axi_ad9371_rx #(
+
+  parameter   DATAPATH_DISABLE = 0,
+  parameter   ID = 0) (
 
   // adc interface
 
-  adc_rst,
-  adc_clk,
-  adc_data,
+  output                  adc_rst,
+  input                   adc_clk,
+  input       [ 63:0]     adc_data,
 
   // dma interface
 
-  adc_enable_i0,
-  adc_valid_i0,
-  adc_data_i0,
-  adc_enable_q0,
-  adc_valid_q0,
-  adc_data_q0,
-  adc_enable_i1,
-  adc_valid_i1,
-  adc_data_i1,
-  adc_enable_q1,
-  adc_valid_q1,
-  adc_data_q1,
-  adc_dovf,
-  adc_dunf,
+  output                  adc_enable_i0,
+  output                  adc_valid_i0,
+  output      [ 15:0]     adc_data_i0,
+  output                  adc_enable_q0,
+  output                  adc_valid_q0,
+  output      [ 15:0]     adc_data_q0,
+  output                  adc_enable_i1,
+  output                  adc_valid_i1,
+  output      [ 15:0]     adc_data_i1,
+  output                  adc_enable_q1,
+  output                  adc_valid_q1,
+  output      [ 15:0]     adc_data_q1,
+  input                   adc_dovf,
+  input                   adc_dunf,
 
   // processor interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [ 13:0]     up_waddr,
+  input       [ 31:0]     up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [ 13:0]     up_raddr,
+  output  reg [ 31:0]     up_rdata,
+  output  reg             up_rack);
 
-  // parameters
-
-  parameter   DATAPATH_DISABLE = 0;
-  parameter   ID = 0;
-
-  // adc interface
-
-  output            adc_rst;
-  input             adc_clk;
-  input   [ 63:0]   adc_data;
-
-  // dma interface
-
-  output            adc_enable_i0;
-  output            adc_valid_i0;
-  output  [ 15:0]   adc_data_i0;
-  output            adc_enable_q0;
-  output            adc_valid_q0;
-  output  [ 15:0]   adc_data_q0;
-  output            adc_enable_i1;
-  output            adc_valid_i1;
-  output  [ 15:0]   adc_data_i1;
-  output            adc_enable_q1;
-  output            adc_valid_q1;
-  output  [ 15:0]   adc_data_q1;
-  input             adc_dovf;
-  input             adc_dunf;
-
-  // processor interface
-
-  input             up_rstn;
-  input             up_clk;
-  input             up_wreq;
-  input   [ 13:0]   up_waddr;
-  input   [ 31:0]   up_wdata;
-  output            up_wack;
-  input             up_rreq;
-  input   [ 13:0]   up_raddr;
-  output  [ 31:0]   up_rdata;
-  output            up_rack;
 
   // internal registers
 
   reg               up_status_pn_err = 'd0;
   reg               up_status_pn_oos = 'd0;
   reg               up_status_or = 'd0;
-  reg               up_wack = 'd0;
-  reg               up_rack = 'd0;
-  reg     [ 31:0]   up_rdata = 'd0;
 
   // internal signals
 

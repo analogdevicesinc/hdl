@@ -39,123 +39,67 @@
 
 `timescale 1ns/1ps
 
-module ad_tdd_control(
+module ad_tdd_control#(
+
+  parameter   integer TX_DATA_PATH_DELAY = 0,
+  parameter   integer CONTROL_PATH_DELAY = 0) (
 
   // clock and reset
 
-  clk,
-  rst,
+  input                   clk,
+  input                   rst,
 
   // TDD timming signals
 
-  tdd_enable,
-  tdd_secondary,
-  tdd_tx_only,
-  tdd_rx_only,
-  tdd_burst_count,
-  tdd_counter_init,
-  tdd_frame_length,
-  tdd_vco_rx_on_1,
-  tdd_vco_rx_off_1,
-  tdd_vco_tx_on_1,
-  tdd_vco_tx_off_1,
-  tdd_rx_on_1,
-  tdd_rx_off_1,
-  tdd_rx_dp_on_1,
-  tdd_rx_dp_off_1,
-  tdd_tx_on_1,
-  tdd_tx_off_1,
-  tdd_tx_dp_on_1,
-  tdd_tx_dp_off_1,
-  tdd_vco_rx_on_2,
-  tdd_vco_rx_off_2,
-  tdd_vco_tx_on_2,
-  tdd_vco_tx_off_2,
-  tdd_rx_on_2,
-  tdd_rx_off_2,
-  tdd_rx_dp_on_2,
-  tdd_rx_dp_off_2,
-  tdd_tx_on_2,
-  tdd_tx_off_2,
-  tdd_tx_dp_on_2,
-  tdd_tx_dp_off_2,
-  tdd_sync,
+  input                   tdd_enable,
+  input                   tdd_secondary,
+  input                   tdd_tx_only,
+  input                   tdd_rx_only,
+  input       [ 7:0]      tdd_burst_count,
+  input       [23:0]      tdd_counter_init,
+  input       [23:0]      tdd_frame_length,
+  input       [23:0]      tdd_vco_rx_on_1,
+  input       [23:0]      tdd_vco_rx_off_1,
+  input       [23:0]      tdd_vco_tx_on_1,
+  input       [23:0]      tdd_vco_tx_off_1,
+  input       [23:0]      tdd_rx_on_1,
+  input       [23:0]      tdd_rx_off_1,
+  input       [23:0]      tdd_rx_dp_on_1,
+  input       [23:0]      tdd_rx_dp_off_1,
+  input       [23:0]      tdd_tx_on_1,
+  input       [23:0]      tdd_tx_off_1,
+  input       [23:0]      tdd_tx_dp_on_1,
+  input       [23:0]      tdd_tx_dp_off_1,
+  input       [23:0]      tdd_vco_rx_on_2,
+  input       [23:0]      tdd_vco_rx_off_2,
+  input       [23:0]      tdd_vco_tx_on_2,
+  input       [23:0]      tdd_vco_tx_off_2,
+  input       [23:0]      tdd_rx_on_2,
+  input       [23:0]      tdd_rx_off_2,
+  input       [23:0]      tdd_rx_dp_on_2,
+  input       [23:0]      tdd_rx_dp_off_2,
+  input       [23:0]      tdd_tx_on_2,
+  input       [23:0]      tdd_tx_off_2,
+  input       [23:0]      tdd_tx_dp_on_2,
+  input       [23:0]      tdd_tx_dp_off_2,
+  input                   tdd_sync,
 
   // TDD control signals
 
-  tdd_tx_dp_en,
-  tdd_rx_dp_en,
-  tdd_rx_vco_en,
-  tdd_tx_vco_en,
-  tdd_rx_rf_en,
-  tdd_tx_rf_en,
+  output  reg             tdd_tx_dp_en,
+  output  reg             tdd_rx_dp_en,
+  output  reg             tdd_rx_vco_en,
+  output  reg             tdd_tx_vco_en,
+  output  reg             tdd_rx_rf_en,
+  output  reg             tdd_tx_rf_en,
 
-  tdd_counter_status);
+  output      [23:0]      tdd_counter_status);
 
-  // parameters
-
-  parameter   integer TX_DATA_PATH_DELAY = 0;     // internally eliminate the delay introduced by the TX data path
-  parameter   integer CONTROL_PATH_DELAY = 0;     // internally eliminate the delay introduced by the control path
 
   localparam          ON = 1;
   localparam          OFF = 0;
 
-  // input/output signals
-
-  input           clk;
-  input           rst;
-
-  input           tdd_enable;
-  input           tdd_secondary;
-  input           tdd_tx_only;
-  input           tdd_rx_only;
-  input  [ 7:0]   tdd_burst_count;
-  input  [23:0]   tdd_counter_init;
-  input  [23:0]   tdd_frame_length;
-  input  [23:0]   tdd_vco_rx_on_1;
-  input  [23:0]   tdd_vco_rx_off_1;
-  input  [23:0]   tdd_vco_tx_on_1;
-  input  [23:0]   tdd_vco_tx_off_1;
-  input  [23:0]   tdd_rx_on_1;
-  input  [23:0]   tdd_rx_off_1;
-  input  [23:0]   tdd_rx_dp_on_1;
-  input  [23:0]   tdd_rx_dp_off_1;
-  input  [23:0]   tdd_tx_on_1;
-  input  [23:0]   tdd_tx_off_1;
-  input  [23:0]   tdd_tx_dp_on_1;
-  input  [23:0]   tdd_tx_dp_off_1;
-  input  [23:0]   tdd_vco_rx_on_2;
-  input  [23:0]   tdd_vco_rx_off_2;
-  input  [23:0]   tdd_vco_tx_on_2;
-  input  [23:0]   tdd_vco_tx_off_2;
-  input  [23:0]   tdd_rx_on_2;
-  input  [23:0]   tdd_rx_off_2;
-  input  [23:0]   tdd_rx_dp_on_2;
-  input  [23:0]   tdd_rx_dp_off_2;
-  input  [23:0]   tdd_tx_on_2;
-  input  [23:0]   tdd_tx_off_2;
-  input  [23:0]   tdd_tx_dp_on_2;
-  input  [23:0]   tdd_tx_dp_off_2;
-
-  input           tdd_sync;
-
-  output          tdd_rx_vco_en;      // initiate vco tx2rx switch
-  output          tdd_tx_vco_en;      // initiate vco rx2tx switch
-  output          tdd_rx_rf_en;       // power up RF Rx
-  output          tdd_tx_rf_en;       // power up RF Tx
-  output          tdd_tx_dp_en;       // enable Tx datapath
-  output          tdd_rx_dp_en;       // enable Rx datapath
-
-  output [23:0]   tdd_counter_status;
-
   // tdd control related
-
-  reg             tdd_tx_dp_en = 1'b0;
-  reg             tdd_rx_dp_en = 1'b0;
-  reg             tdd_rx_vco_en = 1'b0;
-  reg             tdd_tx_vco_en = 1'b0;
-  reg             tdd_rx_rf_en = 1'b0;
-  reg             tdd_tx_rf_en = 1'b0;
 
   // tdd counter related
 
@@ -554,7 +498,6 @@ module ad_tdd_control(
       counter_at_tdd_rx_dp_off_2 <= 1'b0;
     end
   end
-
 
   // control-path delay compensation
 

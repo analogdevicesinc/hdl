@@ -58,36 +58,34 @@
 
 `timescale 1ns/1ns
 
-module util_pmod_adc (
+module util_pmod_adc #(
+
+  parameter         FPGA_CLOCK_MHZ      = 100,
+  parameter         ADC_CONVST_NS       = 100,
+  parameter         ADC_CONVERT_NS      = 650,
+  parameter         ADC_TQUIET_NS       = 60,
+  parameter         SPI_WORD_LENGTH     = 12,
+  parameter         ADC_RESET_LENGTH    = 3,
+  parameter         ADC_CLK_DIVIDE      = 16) (
 
   // clock and reset signals
 
-  clk,
-  resetn,
+  input                   clk,
+  input                   resetn,
 
   // dma interface
-  adc_data,
-  adc_valid,
-  adc_dbg,
+  output  reg [15:0]      adc_data,
+  output  reg             adc_valid,
+  output  reg [24:0]      adc_dbg,
 
   // adc interface (clk, data, cs and conversion start)
 
-  adc_sdo,
-  adc_sclk,
-  adc_cs_n,
-  adc_convst_n
-);
+  input                   adc_sdo,
+  output                  adc_sclk,
+  output  reg             adc_cs_n,
+  output  reg             adc_convst_n);
 
-  // parameters and local parameters
-  parameter         FPGA_CLOCK_MHZ      = 100;  // FPGA clock frequency [MHz]
-  parameter         ADC_CONVST_NS       = 100;  // minimum time to keep /CONVST low is 10ns, default is 100ns
-  parameter         ADC_CONVERT_NS      = 650;  // conversion time [ns]
-  parameter         ADC_TQUIET_NS       = 60;   // quite time between the last SPI read and next conversion start
-  parameter         SPI_WORD_LENGTH     = 12;
-  parameter         ADC_RESET_LENGTH    = 3;
-  parameter         ADC_CLK_DIVIDE      = 16;
 
-  // ADC states
   localparam        ADC_POWERUP         = 0;
   localparam        ADC_SW_RESET        = 1;
   localparam        ADC_IDLE            = 2;
@@ -97,36 +95,12 @@ module util_pmod_adc (
   localparam        ADC_DATA_VALID      = 6;
   localparam        ADC_TQUIET          = 7;
 
-  // ADC timing
-
   localparam  [15:0]  FPGA_CLOCK_PERIOD_NS  = 1000 / FPGA_CLOCK_MHZ;
   localparam  [15:0]  ADC_CONVST_CNT        = ADC_CONVST_NS / FPGA_CLOCK_PERIOD_NS;
   localparam  [15:0]  ADC_CONVERT_CNT       = ADC_CONVERT_NS / FPGA_CLOCK_PERIOD_NS;
   localparam  [15:0]  ADC_TQUITE_CNT        = ADC_TQUIET_NS / FPGA_CLOCK_PERIOD_NS;
 
-  // clock and reset signals
-
-  input           clk;                          // system clock (100 MHz)
-  input           resetn;                       // active low reset signal
-
-  // dma interface
-
-  output  [15:0]  adc_data;
-  output          adc_valid;
-  output  [24:0]  adc_dbg;
-
-  // adc interface
-
-  input           adc_sdo;
-  output          adc_sclk;
-  output          adc_cs_n;
-  output          adc_convst_n;
-
   // Internal registers
-
-  reg [15:0]      adc_data          = 16'b0;
-  reg             adc_valid         = 1'b0;
-  reg [24:0]      adc_dbg           = 25'b0;
 
   reg [ 2:0]      adc_state         = 3'b0;     // current state for the ADC control state machine
   reg [ 2:0]      adc_next_state    = 3'b0;     // next state for the ADC control state machine
@@ -138,9 +112,7 @@ module util_pmod_adc (
   reg [15:0]      sclk_clk_cnt_m1   = 16'b0;
   reg [7:0]       adc_clk_cnt       = 8'h0;
 
-  reg             adc_convst_n      = 1'b1;
   reg             adc_clk_en        = 1'b0;
-  reg             adc_cs_n          = 1'b1;
   reg             adc_sw_reset      = 1'b0;
   reg             data_rd_ready     = 1'b0;
   reg             adc_spi_clk       = 1'b0;

@@ -39,30 +39,28 @@
 
 `timescale 1ns/100ps
 
-module axi_dacfifo_dac (
+module axi_dacfifo_dac #(
 
-  axi_clk,
-  axi_dvalid,
-  axi_ddata,
-  axi_dready,
-  axi_dlast,
-  axi_xfer_req,
+  parameter   AXI_DATA_WIDTH = 512,
+  parameter   AXI_LENGTH = 15,
+  parameter   DAC_DATA_WIDTH = 64) (
 
-  dma_last_beats,
+  input                   axi_clk,
+  input                   axi_dvalid,
+  input       [(AXI_DATA_WIDTH-1):0]  axi_ddata,
+  output  reg             axi_dready,
+  input                   axi_dlast,
+  input                   axi_xfer_req,
 
-  dac_clk,
-  dac_rst,
-  dac_valid,
-  dac_data,
-  dac_xfer_out,
-  dac_dunf
-);
+  input       [ 3:0]      dma_last_beats,
 
-  // parameters
+  input                   dac_clk,
+  input                   dac_rst,
+  input                   dac_valid,
+  output      [(DAC_DATA_WIDTH-1):0]  dac_data,
+  output                  dac_xfer_out,
+  output  reg             dac_dunf);
 
-  parameter   AXI_DATA_WIDTH = 512;
-  parameter   AXI_LENGTH = 15;
-  parameter   DAC_DATA_WIDTH = 64;
 
   localparam  MEM_RATIO = AXI_DATA_WIDTH/DAC_DATA_WIDTH;
   localparam  DAC_ADDRESS_WIDTH = 10;
@@ -71,33 +69,11 @@ module axi_dacfifo_dac (
                                   (MEM_RATIO == 4) ? (DAC_ADDRESS_WIDTH - 2) :
                                                      (DAC_ADDRESS_WIDTH - 3);
 
-  // BUF_THRESHOLD_LO will make sure that there are always at least two burst in the memmory
-
   localparam  AXI_BUF_THRESHOLD_LO = 3 * (AXI_LENGTH+1);
   localparam  AXI_BUF_THRESHOLD_HI = {(AXI_ADDRESS_WIDTH){1'b1}} - (AXI_LENGTH+1);
   localparam  DAC_BUF_THRESHOLD_LO = 3 * (AXI_LENGTH+1) * MEM_RATIO;
   localparam  DAC_BUF_THRESHOLD_HI = {(DAC_ADDRESS_WIDTH){1'b1}} - (AXI_LENGTH+1) * MEM_RATIO;
   localparam  DAC_ARINCR = (AXI_LENGTH+1) * MEM_RATIO;
-
-  // dma write
-
-  input                               axi_clk;
-  input                               axi_dvalid;
-  input   [(AXI_DATA_WIDTH-1):0]      axi_ddata;
-  output                              axi_dready;
-  input                               axi_dlast;
-  input                               axi_xfer_req;
-
-  input   [ 3:0]                      dma_last_beats;
-
-  // dac read
-
-  input                               dac_clk;
-  input                               dac_rst;
-  input                               dac_valid;
-  output  [(DAC_DATA_WIDTH-1):0]      dac_data;
-  output                              dac_xfer_out;
-  output                              dac_dunf;
 
   // internal registers
 
@@ -109,7 +85,6 @@ module axi_dacfifo_dac (
   reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr_m1 = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr_m2 = 'd0;
   reg     [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_addr_diff = 'd0;
-  reg                                 axi_dready = 'd0;
 
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_raddr = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_raddr_g = 'd0;
@@ -129,7 +104,6 @@ module axi_dacfifo_dac (
 
   reg     [ 3:0]                      dac_last_beats = 4'b0;
   reg     [ 3:0]                      dac_last_beats_m = 4'b0;
-  reg                                 dac_dunf = 1'b0;
   reg     [ 3:0]                      dac_beat_cnt = 4'b0;
   reg                                 dac_dlast = 1'b0;
   reg                                 dac_dlast_m1 = 1'b0;

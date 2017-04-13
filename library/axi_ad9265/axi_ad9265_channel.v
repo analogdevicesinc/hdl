@@ -40,70 +40,40 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9265_channel (
+module axi_ad9265_channel #(
+
+  parameter CHANNEL_ID = 0,
+  parameter DATAPATH_DISABLE = 0) (
 
   // adc interface
 
-  adc_clk,
-  adc_rst,
-  adc_data,
-  adc_or,
+  input                   adc_clk,
+  input                   adc_rst,
+  input       [15:0]      adc_data,
+  input                   adc_or,
 
   // channel interface
 
-  adc_dcfilter_data_out,
-  adc_valid,
-  adc_enable,
-  up_adc_pn_err,
-  up_adc_pn_oos,
-  up_adc_or,
+  output      [15:0]      adc_dcfilter_data_out,
+  output                  adc_valid,
+  output                  adc_enable,
+  output                  up_adc_pn_err,
+  output                  up_adc_pn_oos,
+  output                  up_adc_or,
 
   // processor interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output                  up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output      [31:0]      up_rdata,
+  output                  up_rack);
 
-  // parameters
-
-  parameter CHANNEL_ID = 0;
-  parameter DATAPATH_DISABLE = 0;
-
-  // adc interface
-
-  input           adc_clk;
-  input           adc_rst;
-  input   [15:0]  adc_data;
-  input           adc_or;
-
-  // channel interface
-
-  output  [15:0]  adc_dcfilter_data_out;
-  output          adc_valid;
-  output          adc_enable;
-  output          up_adc_pn_err;
-  output          up_adc_pn_oos;
-  output          up_adc_or;
-
-  // processor interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal signals
 

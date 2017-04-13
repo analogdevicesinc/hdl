@@ -40,44 +40,29 @@
 
 `timescale 1ns/100ps
 
-module ad_pnmon (
+module ad_pnmon #(
+
+  parameter DATA_WIDTH = 16) (
 
   // adc interface
 
-  adc_clk,
-  adc_valid_in,
-  adc_data_in,
-  adc_data_pn,
+  input                   adc_clk,
+  input                   adc_valid_in,
+  input       [DW:0]      adc_data_in,
+  input       [DW:0]      adc_data_pn,
 
   // pn out of sync and error
 
-  adc_pn_oos,
-  adc_pn_err);
+  output  reg             adc_pn_oos,
+  output  reg             adc_pn_err);
 
-  // parameters
-
-  parameter DATA_WIDTH = 16;
   localparam DW = DATA_WIDTH - 1;
-
-  // adc interface
-
-  input           adc_clk;
-  input           adc_valid_in;
-  input   [DW:0]  adc_data_in;
-  input   [DW:0]  adc_data_pn;
-
-  // pn out of sync and error
-
-  output          adc_pn_oos;
-  output          adc_pn_err;
 
   // internal registers
 
   reg             adc_valid_d = 'd0;
   reg             adc_pn_match_d = 'd0;
   reg             adc_pn_match_z = 'd0;
-  reg             adc_pn_err = 'd0;
-  reg             adc_pn_oos = 'd0;
   reg     [ 3:0]  adc_pn_oos_count = 'd0;
 
   // internal signals

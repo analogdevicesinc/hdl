@@ -37,140 +37,79 @@
 
 `timescale 1ns/100ps
 
-module util_rfifo (
+module util_rfifo #(
+
+  parameter   NUM_OF_CHANNELS = 4,
+  parameter   DIN_DATA_WIDTH = 32,
+  parameter   DOUT_DATA_WIDTH = 64,
+  parameter   DIN_ADDRESS_WIDTH = 8) (
 
   // d-in interface
 
-  din_rstn,
-  din_clk,
-  din_enable_0,
-  din_valid_0,
-  din_data_0,
-  din_enable_1,
-  din_valid_1,
-  din_data_1,
-  din_enable_2,
-  din_valid_2,
-  din_data_2,
-  din_enable_3,
-  din_valid_3,
-  din_data_3,
-  din_enable_4,
-  din_valid_4,
-  din_data_4,
-  din_enable_5,
-  din_valid_5,
-  din_data_5,
-  din_enable_6,
-  din_valid_6,
-  din_data_6,
-  din_enable_7,
-  din_valid_7,
-  din_data_7,
-  din_unf,
+  input                   din_rstn,
+  input                   din_clk,
+  output                  din_enable_0,
+  output                  din_valid_0,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_0,
+  output                  din_enable_1,
+  output                  din_valid_1,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_1,
+  output                  din_enable_2,
+  output                  din_valid_2,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_2,
+  output                  din_enable_3,
+  output                  din_valid_3,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_3,
+  output                  din_enable_4,
+  output                  din_valid_4,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_4,
+  output                  din_enable_5,
+  output                  din_valid_5,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_5,
+  output                  din_enable_6,
+  output                  din_valid_6,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_6,
+  output                  din_enable_7,
+  output                  din_valid_7,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_7,
+  input                   din_unf,
 
   // d-out interface
 
-  dout_rst,
-  dout_clk,
-  dout_enable_0,
-  dout_valid_0,
-  dout_data_0,
-  dout_enable_1,
-  dout_valid_1,
-  dout_data_1,
-  dout_enable_2,
-  dout_valid_2,
-  dout_data_2,
-  dout_enable_3,
-  dout_valid_3,
-  dout_data_3,
-  dout_enable_4,
-  dout_valid_4,
-  dout_data_4,
-  dout_enable_5,
-  dout_valid_5,
-  dout_data_5,
-  dout_enable_6,
-  dout_valid_6,
-  dout_data_6,
-  dout_enable_7,
-  dout_valid_7,
-  dout_data_7,
-  dout_unf);
+  input                   dout_rst,
+  input                   dout_clk,
+  input                   dout_enable_0,
+  input                   dout_valid_0,
+  output      [DOUT_DATA_WIDTH-1:0]  dout_data_0,
+  input                   dout_enable_1,
+  input                   dout_valid_1,
+  output      [DOUT_DATA_WIDTH-1:0]  dout_data_1,
+  input                   dout_enable_2,
+  input                   dout_valid_2,
+  output      [DOUT_DATA_WIDTH-1:0]  dout_data_2,
+  input                   dout_enable_3,
+  input                   dout_valid_3,
+  output      [DOUT_DATA_WIDTH-1:0]  dout_data_3,
+  input                   dout_enable_4,
+  input                   dout_valid_4,
+  output      [DOUT_DATA_WIDTH-1:0]  dout_data_4,
+  input                   dout_enable_5,
+  input                   dout_valid_5,
+  output      [DOUT_DATA_WIDTH-1:0]  dout_data_5,
+  input                   dout_enable_6,
+  input                   dout_valid_6,
+  output      [DOUT_DATA_WIDTH-1:0]  dout_data_6,
+  input                   dout_enable_7,
+  input                   dout_valid_7,
+  output      [DOUT_DATA_WIDTH-1:0]  dout_data_7,
+  output  reg             dout_unf);
 
-  // parameters
-
-  parameter   NUM_OF_CHANNELS = 4;
-  parameter   DIN_DATA_WIDTH = 32;
-  parameter   DOUT_DATA_WIDTH = 64;
-  parameter   DIN_ADDRESS_WIDTH = 8;
 
   localparam  M_MEM_RATIO = DOUT_DATA_WIDTH/DIN_DATA_WIDTH;
   localparam  ADDRESS_WIDTH = (DIN_ADDRESS_WIDTH > 5) ? DIN_ADDRESS_WIDTH : 5;
   localparam  DATA_WIDTH = DOUT_DATA_WIDTH * NUM_OF_CHANNELS;
   localparam  T_DIN_DATA_WIDTH = DIN_DATA_WIDTH * 8;
   localparam  T_DOUT_DATA_WIDTH = DOUT_DATA_WIDTH * 8;
-
-  // d-in interface
-
-  input                               din_rstn;
-  input                               din_clk;
-  output                              din_enable_0;
-  output                              din_valid_0;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_0;
-  output                              din_enable_1;
-  output                              din_valid_1;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_1;
-  output                              din_enable_2;
-  output                              din_valid_2;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_2;
-  output                              din_enable_3;
-  output                              din_valid_3;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_3;
-  output                              din_enable_4;
-  output                              din_valid_4;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_4;
-  output                              din_enable_5;
-  output                              din_valid_5;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_5;
-  output                              din_enable_6;
-  output                              din_valid_6;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_6;
-  output                              din_enable_7;
-  output                              din_valid_7;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_7;
-  input                               din_unf;
-
-  // dout interface
-
-  input                               dout_rst;
-  input                               dout_clk;
-  input                               dout_enable_0;
-  input                               dout_valid_0;
-  output  [DOUT_DATA_WIDTH-1:0]       dout_data_0;
-  input                               dout_enable_1;
-  input                               dout_valid_1;
-  output  [DOUT_DATA_WIDTH-1:0]       dout_data_1;
-  input                               dout_enable_2;
-  input                               dout_valid_2;
-  output  [DOUT_DATA_WIDTH-1:0]       dout_data_2;
-  input                               dout_enable_3;
-  input                               dout_valid_3;
-  output  [DOUT_DATA_WIDTH-1:0]       dout_data_3;
-  input                               dout_enable_4;
-  input                               dout_valid_4;
-  output  [DOUT_DATA_WIDTH-1:0]       dout_data_4;
-  input                               dout_enable_5;
-  input                               dout_valid_5;
-  output  [DOUT_DATA_WIDTH-1:0]       dout_data_5;
-  input                               dout_enable_6;
-  input                               dout_valid_6;
-  output  [DOUT_DATA_WIDTH-1:0]       dout_data_6;
-  input                               dout_enable_7;
-  input                               dout_valid_7;
-  output  [DOUT_DATA_WIDTH-1:0]       dout_data_7;
-  output                              dout_unf;
 
   // internal registers
 
@@ -194,7 +133,6 @@ module util_rfifo (
   reg     [(ADDRESS_WIDTH-4):0]       dout_rinit = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd0;
   reg                                 dout_unf_m1 = 'd0;
-  reg                                 dout_unf = 'd0;
 
   // internal signals
 

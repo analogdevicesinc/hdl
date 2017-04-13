@@ -39,23 +39,12 @@
 
 module fmcadc4_spi (
 
-  spi_csn,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
+  input       [ 2:0]      spi_csn,
+  input                   spi_clk,
+  input                   spi_mosi,
+  output                  spi_miso,
 
-  spi_sdio);
-
-  // 4 wire
-
-  input   [ 2:0]  spi_csn;
-  input           spi_clk;
-  input           spi_mosi;
-  output          spi_miso;
-
-  // 3 wire
-
-  inout           spi_sdio;
+  inout                   spi_sdio);
 
   // internal registers
 

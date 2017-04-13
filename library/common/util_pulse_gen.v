@@ -38,26 +38,21 @@
 // ***************************************************************************
 `timescale 1ns/1ps
 
-module util_pulse_gen (
+module util_pulse_gen #(
 
-  clk,
-  rstn,
+  parameter       PULSE_WIDTH = 7,
+  parameter       PULSE_PERIOD = 100000000) (
 
-  pulse
-);
+  input                   clk,
+  input                   rstn,
 
-  parameter       PULSE_WIDTH = 7;
-  parameter       PULSE_PERIOD = 100000000; // t_period * clk_freq
+  output  reg             pulse);
 
-  input           clk;
-  input           rstn;
-  output          pulse;
 
   // internal registers
 
   reg     [(PULSE_WIDTH-1):0]  pulse_width_cnt = {PULSE_WIDTH{1'b1}};
   reg     [31:0]               pulse_period_cnt = 32'h0;
-  reg                          pulse =  1'b0;
 
   wire                         end_of_period_s;
 

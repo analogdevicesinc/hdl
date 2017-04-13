@@ -39,120 +39,64 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9144_core (
+module axi_ad9144_core #(
+
+  parameter   ID = 0,
+  parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface
 
-  dac_clk,
-  dac_rst,
-  dac_data_0_0,
-  dac_data_0_1,
-  dac_data_0_2,
-  dac_data_0_3,
-  dac_data_1_0,
-  dac_data_1_1,
-  dac_data_1_2,
-  dac_data_1_3,
-  dac_data_2_0,
-  dac_data_2_1,
-  dac_data_2_2,
-  dac_data_2_3,
-  dac_data_3_0,
-  dac_data_3_1,
-  dac_data_3_2,
-  dac_data_3_3,
+  input                   dac_clk,
+  output                  dac_rst,
+  output      [15:0]      dac_data_0_0,
+  output      [15:0]      dac_data_0_1,
+  output      [15:0]      dac_data_0_2,
+  output      [15:0]      dac_data_0_3,
+  output      [15:0]      dac_data_1_0,
+  output      [15:0]      dac_data_1_1,
+  output      [15:0]      dac_data_1_2,
+  output      [15:0]      dac_data_1_3,
+  output      [15:0]      dac_data_2_0,
+  output      [15:0]      dac_data_2_1,
+  output      [15:0]      dac_data_2_2,
+  output      [15:0]      dac_data_2_3,
+  output      [15:0]      dac_data_3_0,
+  output      [15:0]      dac_data_3_1,
+  output      [15:0]      dac_data_3_2,
+  output      [15:0]      dac_data_3_3,
 
   // dma interface
 
-  dac_valid_0,
-  dac_enable_0,
-  dac_ddata_0,
-  dac_valid_1,
-  dac_enable_1,
-  dac_ddata_1,
-  dac_valid_2,
-  dac_enable_2,
-  dac_ddata_2,
-  dac_valid_3,
-  dac_enable_3,
-  dac_ddata_3,
-  dac_dovf,
-  dac_dunf,
+  output                  dac_valid_0,
+  output                  dac_enable_0,
+  input       [63:0]      dac_ddata_0,
+  output                  dac_valid_1,
+  output                  dac_enable_1,
+  input       [63:0]      dac_ddata_1,
+  output                  dac_valid_2,
+  output                  dac_enable_2,
+  input       [63:0]      dac_ddata_2,
+  output                  dac_valid_3,
+  output                  dac_enable_3,
+  input       [63:0]      dac_ddata_3,
+  input                   dac_dovf,
+  input                   dac_dunf,
 
   // processor interface
 
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+  input                   up_rstn,
+  input                   up_clk,
+  input                   up_wreq,
+  input       [13:0]      up_waddr,
+  input       [31:0]      up_wdata,
+  output  reg             up_wack,
+  input                   up_rreq,
+  input       [13:0]      up_raddr,
+  output  reg [31:0]      up_rdata,
+  output  reg             up_rack);
 
-  // parameters
-
-  parameter   ID = 0;
-  parameter   DATAPATH_DISABLE = 0;
-
-  // dac interface
-
-  input           dac_clk;
-  output          dac_rst;
-  output  [15:0]  dac_data_0_0;
-  output  [15:0]  dac_data_0_1;
-  output  [15:0]  dac_data_0_2;
-  output  [15:0]  dac_data_0_3;
-  output  [15:0]  dac_data_1_0;
-  output  [15:0]  dac_data_1_1;
-  output  [15:0]  dac_data_1_2;
-  output  [15:0]  dac_data_1_3;
-  output  [15:0]  dac_data_2_0;
-  output  [15:0]  dac_data_2_1;
-  output  [15:0]  dac_data_2_2;
-  output  [15:0]  dac_data_2_3;
-  output  [15:0]  dac_data_3_0;
-  output  [15:0]  dac_data_3_1;
-  output  [15:0]  dac_data_3_2;
-  output  [15:0]  dac_data_3_3;
-
-  // dma interface
-
-  output          dac_valid_0;
-  output          dac_enable_0;
-  input   [63:0]  dac_ddata_0;
-  output          dac_valid_1;
-  output          dac_enable_1;
-  input   [63:0]  dac_ddata_1;
-  output          dac_valid_2;
-  output          dac_enable_2;
-  input   [63:0]  dac_ddata_2;
-  output          dac_valid_3;
-  output          dac_enable_3;
-  input   [63:0]  dac_ddata_3;
-  input           dac_dovf;
-  input           dac_dunf;
-
-  // processor interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
 
   // internal registers
-
-  reg     [31:0]  up_rdata = 'd0;
-  reg             up_rack = 'd0;
-  reg             up_wack = 'd0;
 
   // internal signals
 

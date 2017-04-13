@@ -39,224 +39,114 @@
 
 module system_top (
 
-  ddr_addr,
-  ddr_ba,
-  ddr_cas_n,
-  ddr_ck_n,
-  ddr_ck_p,
-  ddr_cke,
-  ddr_cs_n,
-  ddr_dm,
-  ddr_dq,
-  ddr_dqs_n,
-  ddr_dqs_p,
-  ddr_odt,
-  ddr_ras_n,
-  ddr_reset_n,
-  ddr_we_n,
+  inout       [14:0]      ddr_addr,
+  inout       [ 2:0]      ddr_ba,
+  inout                   ddr_cas_n,
+  inout                   ddr_ck_n,
+  inout                   ddr_ck_p,
+  inout                   ddr_cke,
+  inout                   ddr_cs_n,
+  inout       [ 3:0]      ddr_dm,
+  inout       [31:0]      ddr_dq,
+  inout       [ 3:0]      ddr_dqs_n,
+  inout       [ 3:0]      ddr_dqs_p,
+  inout                   ddr_odt,
+  inout                   ddr_ras_n,
+  inout                   ddr_reset_n,
+  inout                   ddr_we_n,
 
-  fixed_io_ddr_vrn,
-  fixed_io_ddr_vrp,
-  fixed_io_mio,
-  fixed_io_ps_clk,
-  fixed_io_ps_porb,
-  fixed_io_ps_srstb,
+  inout                   fixed_io_ddr_vrn,
+  inout                   fixed_io_ddr_vrp,
+  inout       [53:0]      fixed_io_mio,
+  inout                   fixed_io_ps_clk,
+  inout                   fixed_io_ps_porb,
+  inout                   fixed_io_ps_srstb,
 
-  gpio_bd,
+  inout       [14:0]      gpio_bd,
 
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
+  output                  hdmi_out_clk,
+  output                  hdmi_vsync,
+  output                  hdmi_hsync,
+  output                  hdmi_data_e,
+  output      [23:0]      hdmi_data,
 
-  spdif,
+  output                  spdif,
 
-  iic_scl,
-  iic_sda,
+  inout                   iic_scl,
+  inout                   iic_sda,
 
-  ref_clk0_p,
-  ref_clk0_n,
-  ref_clk1_p,
-  ref_clk1_n,
-  rx_data_p,
-  rx_data_n,
-  tx_data_p,
-  tx_data_n,
-  rx_sync_p,
-  rx_sync_n,
-  rx_os_sync_p,
-  rx_os_sync_n,
-  tx_sync_p,
-  tx_sync_n,
-  sysref_p,
-  sysref_n,
+  input                   ref_clk0_p,
+  input                   ref_clk0_n,
+  input                   ref_clk1_p,
+  input                   ref_clk1_n,
+  input       [ 3:0]      rx_data_p,
+  input       [ 3:0]      rx_data_n,
+  output      [ 3:0]      tx_data_p,
+  output      [ 3:0]      tx_data_n,
+  output                  rx_sync_p,
+  output                  rx_sync_n,
+  output                  rx_os_sync_p,
+  output                  rx_os_sync_n,
+  input                   tx_sync_p,
+  input                   tx_sync_n,
+  input                   sysref_p,
+  input                   sysref_n,
 
-  spi_csn_ad9528,
-  spi_csn_ad9371,
-  spi_clk,
-  spi_mosi,
-  spi_miso,
+  output                  spi_csn_ad9528,
+  output                  spi_csn_ad9371,
+  output                  spi_clk,
+  output                  spi_mosi,
+  input                   spi_miso,
 
-  ad9528_reset_b,
-  ad9528_sysref_req,
-  ad9371_tx1_enable,
-  ad9371_tx2_enable,
-  ad9371_rx1_enable,
-  ad9371_rx2_enable,
-  ad9371_test,
-  ad9371_reset_b,
-  ad9371_gpint,
+  inout                   ad9528_reset_b,
+  inout                   ad9528_sysref_req,
+  inout                   ad9371_tx1_enable,
+  inout                   ad9371_tx2_enable,
+  inout                   ad9371_rx1_enable,
+  inout                   ad9371_rx2_enable,
+  inout                   ad9371_test,
+  inout                   ad9371_reset_b,
+  inout                   ad9371_gpint,
 
-  ad9371_gpio_00,
-  ad9371_gpio_01,
-  ad9371_gpio_02,
-  ad9371_gpio_03,
-  ad9371_gpio_04,
-  ad9371_gpio_05,
-  ad9371_gpio_06,
-  ad9371_gpio_07,
-  ad9371_gpio_15,
-  ad9371_gpio_08,
-  ad9371_gpio_09,
-  ad9371_gpio_10,
-  ad9371_gpio_11,
-  ad9371_gpio_12,
-  ad9371_gpio_14,
-  ad9371_gpio_13,
-  ad9371_gpio_17,
-  ad9371_gpio_16,
-  ad9371_gpio_18,
+  inout                   ad9371_gpio_00,
+  inout                   ad9371_gpio_01,
+  inout                   ad9371_gpio_02,
+  inout                   ad9371_gpio_03,
+  inout                   ad9371_gpio_04,
+  inout                   ad9371_gpio_05,
+  inout                   ad9371_gpio_06,
+  inout                   ad9371_gpio_07,
+  inout                   ad9371_gpio_15,
+  inout                   ad9371_gpio_08,
+  inout                   ad9371_gpio_09,
+  inout                   ad9371_gpio_10,
+  inout                   ad9371_gpio_11,
+  inout                   ad9371_gpio_12,
+  inout                   ad9371_gpio_14,
+  inout                   ad9371_gpio_13,
+  inout                   ad9371_gpio_17,
+  inout                   ad9371_gpio_16,
+  inout                   ad9371_gpio_18,
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input                   sys_rst,
+  input                   sys_clk_p,
+  input                   sys_clk_n,
 
-  ddr3_addr,
-  ddr3_ba,
-  ddr3_cas_n,
-  ddr3_ck_n,
-  ddr3_ck_p,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_dm,
-  ddr3_dq,
-  ddr3_dqs_n,
-  ddr3_dqs_p,
-  ddr3_odt,
-  ddr3_ras_n,
-  ddr3_reset_n,
-  ddr3_we_n);
-
-  inout   [14:0]  ddr_addr;
-  inout   [ 2:0]  ddr_ba;
-  inout           ddr_cas_n;
-  inout           ddr_ck_n;
-  inout           ddr_ck_p;
-  inout           ddr_cke;
-  inout           ddr_cs_n;
-  inout   [ 3:0]  ddr_dm;
-  inout   [31:0]  ddr_dq;
-  inout   [ 3:0]  ddr_dqs_n;
-  inout   [ 3:0]  ddr_dqs_p;
-  inout           ddr_odt;
-  inout           ddr_ras_n;
-  inout           ddr_reset_n;
-  inout           ddr_we_n;
-
-  inout           fixed_io_ddr_vrn;
-  inout           fixed_io_ddr_vrp;
-  inout   [53:0]  fixed_io_mio;
-  inout           fixed_io_ps_clk;
-  inout           fixed_io_ps_porb;
-  inout           fixed_io_ps_srstb;
-
-  inout   [14:0]  gpio_bd;
-
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output  [23:0]  hdmi_data;
-
-  output          spdif;
-
-  inout           iic_scl;
-  inout           iic_sda;
-
-  input           ref_clk0_p;
-  input           ref_clk0_n;
-  input           ref_clk1_p;
-  input           ref_clk1_n;
-  input   [ 3:0]  rx_data_p;
-  input   [ 3:0]  rx_data_n;
-  output  [ 3:0]  tx_data_p;
-  output  [ 3:0]  tx_data_n;
-  output          rx_sync_p;
-  output          rx_sync_n;
-  output          rx_os_sync_p;
-  output          rx_os_sync_n;
-  input           tx_sync_p;
-  input           tx_sync_n;
-  input           sysref_p;
-  input           sysref_n;
-
-  output          spi_csn_ad9528;
-  output          spi_csn_ad9371;
-  output          spi_clk;
-  output          spi_mosi;
-  input           spi_miso;
-
-  inout           ad9528_reset_b;
-  inout           ad9528_sysref_req;
-  inout           ad9371_tx1_enable;
-  inout           ad9371_tx2_enable;
-  inout           ad9371_rx1_enable;
-  inout           ad9371_rx2_enable;
-  inout           ad9371_test;
-  inout           ad9371_reset_b;
-  inout           ad9371_gpint;
-
-  inout           ad9371_gpio_00;
-  inout           ad9371_gpio_01;
-  inout           ad9371_gpio_02;
-  inout           ad9371_gpio_03;
-  inout           ad9371_gpio_04;
-  inout           ad9371_gpio_05;
-  inout           ad9371_gpio_06;
-  inout           ad9371_gpio_07;
-  inout           ad9371_gpio_15;
-  inout           ad9371_gpio_08;
-  inout           ad9371_gpio_09;
-  inout           ad9371_gpio_10;
-  inout           ad9371_gpio_11;
-  inout           ad9371_gpio_12;
-  inout           ad9371_gpio_14;
-  inout           ad9371_gpio_13;
-  inout           ad9371_gpio_17;
-  inout           ad9371_gpio_16;
-  inout           ad9371_gpio_18;
-
-  input           sys_rst;
-  input           sys_clk_p;
-  input           sys_clk_n;
-
-
-  output  [13:0]  ddr3_addr;
-  output  [ 2:0]  ddr3_ba;
-  output          ddr3_cas_n;
-  output  [ 0:0]  ddr3_ck_n;
-  output  [ 0:0]  ddr3_ck_p;
-  output  [ 0:0]  ddr3_cke;
-  output  [ 0:0]  ddr3_cs_n;
-  output  [ 7:0]  ddr3_dm;
-  inout   [63:0]  ddr3_dq;
-  inout   [ 7:0]  ddr3_dqs_n;
-  inout   [ 7:0]  ddr3_dqs_p;
-  output  [ 0:0]  ddr3_odt;
-  output          ddr3_ras_n;
-  output          ddr3_reset_n;
-  output          ddr3_we_n;
+  output      [13:0]      ddr3_addr,
+  output      [ 2:0]      ddr3_ba,
+  output                  ddr3_cas_n,
+  output      [ 0:0]      ddr3_ck_n,
+  output      [ 0:0]      ddr3_ck_p,
+  output      [ 0:0]      ddr3_cke,
+  output      [ 0:0]      ddr3_cs_n,
+  output      [ 7:0]      ddr3_dm,
+  inout       [63:0]      ddr3_dq,
+  inout       [ 7:0]      ddr3_dqs_n,
+  inout       [ 7:0]      ddr3_dqs_p,
+  output      [ 0:0]      ddr3_odt,
+  output                  ddr3_ras_n,
+  output                  ddr3_reset_n,
+  output                  ddr3_we_n);
 
   // internal signals
 

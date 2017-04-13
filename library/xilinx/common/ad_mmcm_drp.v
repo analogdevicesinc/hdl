@@ -38,75 +38,49 @@
 
 `timescale 1ns/100ps
 
-module ad_mmcm_drp (
+module ad_mmcm_drp #(
+
+  parameter   MMCM_DEVICE_TYPE = 0,
+  parameter   MMCM_CLKIN_PERIOD  = 1.667,
+  parameter   MMCM_CLKIN2_PERIOD  = 1.667,
+  parameter   MMCM_VCO_DIV  = 6,
+  parameter   MMCM_VCO_MUL = 12.000,
+  parameter   MMCM_CLK0_DIV = 2.000,
+  parameter   MMCM_CLK0_PHASE = 0.000,
+  parameter   MMCM_CLK1_DIV = 6,
+  parameter   MMCM_CLK1_PHASE = 0.000,
+  parameter   MMCM_CLK2_DIV = 2.000,
+  parameter   MMCM_CLK2_PHASE = 0.000) (
 
   // clocks
 
-  clk,
-  clk2,
-  clk_sel,
-  mmcm_rst,
-  mmcm_clk_0,
-  mmcm_clk_1,
-  mmcm_clk_2,
+  input                   clk,
+  input                   clk2,
+  input                   clk_sel,
+  input                   mmcm_rst,
+  output                  mmcm_clk_0,
+  output                  mmcm_clk_1,
+  output                  mmcm_clk_2,
 
   // drp interface
 
-  up_clk,
-  up_rstn,
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_locked);
+  input                   up_clk,
+  input                   up_rstn,
+  input                   up_drp_sel,
+  input                   up_drp_wr,
+  input       [11:0]      up_drp_addr,
+  input       [15:0]      up_drp_wdata,
+  output  reg [15:0]      up_drp_rdata,
+  output  reg             up_drp_ready,
+  output  reg             up_drp_locked);
 
-  // parameters
-
-  parameter   MMCM_DEVICE_TYPE = 0;
   localparam  MMCM_DEVICE_7SERIES = 0;
   localparam  MMCM_DEVICE_VIRTEX6 = 1;
 
-  parameter   MMCM_CLKIN_PERIOD  = 1.667;
-  parameter   MMCM_CLKIN2_PERIOD  = 1.667;
-  parameter   MMCM_VCO_DIV  = 6;
-  parameter   MMCM_VCO_MUL = 12.000;
-  parameter   MMCM_CLK0_DIV = 2.000;
-  parameter   MMCM_CLK0_PHASE = 0.000;
-  parameter   MMCM_CLK1_DIV = 6;
-  parameter   MMCM_CLK1_PHASE = 0.000;
-  parameter   MMCM_CLK2_DIV = 2.000;
-  parameter   MMCM_CLK2_PHASE = 0.000;
-
-  // clocks
-
-  input           clk;
-  input           clk2;
-  input           clk_sel;
-  input           mmcm_rst;
-  output          mmcm_clk_0;
-  output          mmcm_clk_1;
-  output          mmcm_clk_2;
-
-  // drp interface
-
-  input           up_clk;
-  input           up_rstn;
-  input           up_drp_sel;
-  input           up_drp_wr;
-  input   [11:0]  up_drp_addr;
-  input   [15:0]  up_drp_wdata;
-  output  [15:0]  up_drp_rdata;
-  output          up_drp_ready;
-  output          up_drp_locked;
 
   // internal registers
 
-  reg     [15:0]  up_drp_rdata = 'd0;
-  reg             up_drp_ready = 'd0;
   reg             up_drp_locked_m1 = 'd0;
-  reg             up_drp_locked = 'd0;
 
   // internal signals
 

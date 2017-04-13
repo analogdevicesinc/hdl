@@ -44,31 +44,17 @@ module axi_ad9684_pnmon (
 
   // adc interface
 
-  adc_clk,
-  adc_data,
+  input                   adc_clk,
+  input       [27:0]      adc_data,
 
   // pn out of sync and error
 
-  adc_pn_oos,
-  adc_pn_err,
+  output                  adc_pn_oos,
+  output                  adc_pn_err,
 
   // processor interface PN9 (0x0), PN23 (0x1)
 
-  adc_pnseq_sel);
-
-  // adc interface
-
-  input           adc_clk;
-  input   [27:0]  adc_data;
-
-  // pn out of sync and error
-
-  output          adc_pn_oos;
-  output          adc_pn_err;
-
-  // processor interface PN9 (0x0), PN23 (0x1)
-
-  input   [ 3:0]  adc_pnseq_sel;
+  input       [ 3:0]      adc_pnseq_sel);
 
   // internal registers
 

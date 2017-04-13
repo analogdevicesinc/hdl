@@ -41,89 +41,49 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9739a_if (
+module axi_ad9739a_if #(
+
+  parameter   DEVICE_TYPE = 0) (
 
   // dac interface
 
-  dac_clk_in_p,
-  dac_clk_in_n,
-  dac_clk_out_p,
-  dac_clk_out_n,
-  dac_data_out_a_p,
-  dac_data_out_a_n,
-  dac_data_out_b_p,
-  dac_data_out_b_n,
+  input                   dac_clk_in_p,
+  input                   dac_clk_in_n,
+  output                  dac_clk_out_p,
+  output                  dac_clk_out_n,
+  output      [13:0]      dac_data_out_a_p,
+  output      [13:0]      dac_data_out_a_n,
+  output      [13:0]      dac_data_out_b_p,
+  output      [13:0]      dac_data_out_b_n,
 
   // internal resets and clocks
 
-  dac_rst,
-  dac_clk,
-  dac_div_clk,
-  dac_status,
+  input                   dac_rst,
+  output                  dac_clk,
+  output                  dac_div_clk,
+  output  reg             dac_status,
 
   // data interface
 
-  dac_data_00,
-  dac_data_01,
-  dac_data_02,
-  dac_data_03,
-  dac_data_04,
-  dac_data_05,
-  dac_data_06,
-  dac_data_07,
-  dac_data_08,
-  dac_data_09,
-  dac_data_10,
-  dac_data_11,
-  dac_data_12,
-  dac_data_13,
-  dac_data_14,
-  dac_data_15);
+  input       [15:0]      dac_data_00,
+  input       [15:0]      dac_data_01,
+  input       [15:0]      dac_data_02,
+  input       [15:0]      dac_data_03,
+  input       [15:0]      dac_data_04,
+  input       [15:0]      dac_data_05,
+  input       [15:0]      dac_data_06,
+  input       [15:0]      dac_data_07,
+  input       [15:0]      dac_data_08,
+  input       [15:0]      dac_data_09,
+  input       [15:0]      dac_data_10,
+  input       [15:0]      dac_data_11,
+  input       [15:0]      dac_data_12,
+  input       [15:0]      dac_data_13,
+  input       [15:0]      dac_data_14,
+  input       [15:0]      dac_data_15);
 
-  // parameters
-
-  parameter   DEVICE_TYPE = 0;
-
-  // dac interface
-
-  input           dac_clk_in_p;
-  input           dac_clk_in_n;
-  output          dac_clk_out_p;
-  output          dac_clk_out_n;
-  output  [13:0]  dac_data_out_a_p;
-  output  [13:0]  dac_data_out_a_n;
-  output  [13:0]  dac_data_out_b_p;
-  output  [13:0]  dac_data_out_b_n;
-
-  // internal resets and clocks
-
-  input           dac_rst;
-  output          dac_clk;
-  output          dac_div_clk;
-  output          dac_status;
-
-  // data interface
-
-  input   [15:0]  dac_data_00;
-  input   [15:0]  dac_data_01;
-  input   [15:0]  dac_data_02;
-  input   [15:0]  dac_data_03;
-  input   [15:0]  dac_data_04;
-  input   [15:0]  dac_data_05;
-  input   [15:0]  dac_data_06;
-  input   [15:0]  dac_data_07;
-  input   [15:0]  dac_data_08;
-  input   [15:0]  dac_data_09;
-  input   [15:0]  dac_data_10;
-  input   [15:0]  dac_data_11;
-  input   [15:0]  dac_data_12;
-  input   [15:0]  dac_data_13;
-  input   [15:0]  dac_data_14;
-  input   [15:0]  dac_data_15;
 
   // internal registers
-
-  reg             dac_status = 'd0;
 
   // internal signals
 

@@ -40,203 +40,104 @@
 
 module axi_usb_fx3_core (
 
-  clk,
-  reset,
+  input                   clk,
+  input                   reset,
 
   // s2mm
 
-  s_axis_tdata,
-  s_axis_tkeep,
-  s_axis_tlast,
-  s_axis_tready,
-  s_axis_tvalid,
+  input       [31:0]      s_axis_tdata,
+  input       [ 3:0]      s_axis_tkeep,
+  input                   s_axis_tlast,
+  output  reg             s_axis_tready,
+  input                   s_axis_tvalid,
 
   // mm2s
 
-  m_axis_tdata,
-  m_axis_tkeep,
-  m_axis_tlast,
-  m_axis_tready,
-  m_axis_tvalid,
+  output  reg [31:0]      m_axis_tdata,
+  output  reg [ 3:0]      m_axis_tkeep,
+  output  reg             m_axis_tlast,
+  input                   m_axis_tready,
+  output  reg             m_axis_tvalid,
 
   // configuration
 
-  fifo0_header_size,
-  fifo0_buffer_size,
+  input       [ 7:0]      fifo0_header_size,
+  input       [15:0]      fifo0_buffer_size,
 
-  fifo1_header_size,
-  fifo1_buffer_size,
+  input       [ 7:0]      fifo1_header_size,
+  input       [15:0]      fifo1_buffer_size,
 
-  fifo2_header_size,
-  fifo2_buffer_size,
+  input       [ 7:0]      fifo2_header_size,
+  input       [15:0]      fifo2_buffer_size,
 
-  fifo3_header_size,
-  fifo3_buffer_size,
+  input       [ 7:0]      fifo3_header_size,
+  input       [15:0]      fifo3_buffer_size,
 
-  fifo4_header_size,
-  fifo4_buffer_size,
+  input       [ 7:0]      fifo4_header_size,
+  input       [15:0]      fifo4_buffer_size,
 
-  fifo5_header_size,
-  fifo5_buffer_size,
+  input       [ 7:0]      fifo5_header_size,
+  input       [15:0]      fifo5_buffer_size,
 
-  fifo6_header_size,
-  fifo6_buffer_size,
+  input       [ 7:0]      fifo6_header_size,
+  input       [15:0]      fifo6_buffer_size,
 
-  fifo7_header_size,
-  fifo7_buffer_size,
+  input       [ 7:0]      fifo7_header_size,
+  input       [15:0]      fifo7_buffer_size,
 
-  fifo8_header_size,
-  fifo8_buffer_size,
+  input       [ 7:0]      fifo8_header_size,
+  input       [15:0]      fifo8_buffer_size,
 
-  fifo9_header_size,
-  fifo9_buffer_size,
+  input       [ 7:0]      fifo9_header_size,
+  input       [15:0]      fifo9_buffer_size,
 
-  fifoa_header_size,
-  fifoa_buffer_size,
+  input       [ 7:0]      fifoa_header_size,
+  input       [15:0]      fifoa_buffer_size,
 
-  fifob_header_size,
-  fifob_buffer_size,
+  input       [ 7:0]      fifob_header_size,
+  input       [15:0]      fifob_buffer_size,
 
-  fifoc_header_size,
-  fifoc_buffer_size,
+  input       [ 7:0]      fifoc_header_size,
+  input       [15:0]      fifoc_buffer_size,
 
-  fifod_header_size,
-  fifod_buffer_size,
+  input       [ 7:0]      fifod_header_size,
+  input       [15:0]      fifod_buffer_size,
 
-  fifoe_header_size,
-  fifoe_buffer_size,
+  input       [ 7:0]      fifoe_header_size,
+  input       [15:0]      fifoe_buffer_size,
 
-  fifof_header_size,
-  fifof_buffer_size,
+  input       [ 7:0]      fifof_header_size,
+  input       [15:0]      fifof_buffer_size,
 
-  length_fx32dma,
-  length_dma2fx3,
+  output  reg [31:0]      length_fx32dma,
+  output  reg [31:0]      length_dma2fx3,
 
   // fx3 interface
   // IN -> TO HOST / FX3
   // OUT -> FROM HOST / FX3
 
-  fx32dma_valid,
-  fx32dma_ready,
-  fx32dma_data,
-  fx32dma_sop,
-  fx32dma_eop,
+  input                   fx32dma_valid,
+  output                  fx32dma_ready,
+  input       [31:0]      fx32dma_data,
+  input                   fx32dma_sop,
+  output  reg             fx32dma_eop,
 
-  dma2fx3_ready,
-  dma2fx3_valid,
-  dma2fx3_data,
-  dma2fx3_eop,
+  input                   dma2fx3_ready,
+  output  reg             dma2fx3_valid,
+  output  reg [31:0]      dma2fx3_data,
+  output  reg             dma2fx3_eop,
 
-  error,
-  eot_fx32dma,
-  eot_dma2fx3,
+  output                  error,
+  output  reg             eot_fx32dma,
+  output  reg             eot_dma2fx3,
 
-  test_mode_tpm,
-  test_mode_tpg,
-  monitor_error,
+  input       [ 2:0]      test_mode_tpm,
+  input       [ 2:0]      test_mode_tpg,
+  output  reg             monitor_error,
 
-  zlp,
+  input                   zlp,
 
-  fifo_num);
-
-  input           clk;
-  input           reset;
-
-  // s2mm
-
-  input           m_axis_tready;
-  output  [31:0]  m_axis_tdata;
-  output  [ 3:0]  m_axis_tkeep;
-  output          m_axis_tlast;
-  output          m_axis_tvalid;
-
-  // mm2s
-
-  input   [31:0]  s_axis_tdata;
-  input   [ 3:0]  s_axis_tkeep;
-  input           s_axis_tlast;
-  input           s_axis_tvalid;
-  output          s_axis_tready;
-
-  // configuration
-
-  input   [ 7:0]  fifo0_header_size;
-  input   [15:0]  fifo0_buffer_size;
-
-  input   [ 7:0]  fifo1_header_size;
-  input   [15:0]  fifo1_buffer_size;
-
-  input   [ 7:0]  fifo2_header_size;
-  input   [15:0]  fifo2_buffer_size;
-
-  input   [ 7:0]  fifo3_header_size;
-  input   [15:0]  fifo3_buffer_size;
-
-  input   [ 7:0]  fifo4_header_size;
-  input   [15:0]  fifo4_buffer_size;
-
-  input   [ 7:0]  fifo5_header_size;
-  input   [15:0]  fifo5_buffer_size;
-
-  input   [ 7:0]  fifo6_header_size;
-  input   [15:0]  fifo6_buffer_size;
-
-  input   [ 7:0]  fifo7_header_size;
-  input   [15:0]  fifo7_buffer_size;
-
-  input   [ 7:0]  fifo8_header_size;
-  input   [15:0]  fifo8_buffer_size;
-
-  input   [ 7:0]  fifo9_header_size;
-  input   [15:0]  fifo9_buffer_size;
-
-  input   [ 7:0]  fifoa_header_size;
-  input   [15:0]  fifoa_buffer_size;
-
-  input   [ 7:0]  fifob_header_size;
-  input   [15:0]  fifob_buffer_size;
-
-  input   [ 7:0]  fifoc_header_size;
-  input   [15:0]  fifoc_buffer_size;
-
-  input   [ 7:0]  fifod_header_size;
-  input   [15:0]  fifod_buffer_size;
-
-  input   [ 7:0]  fifoe_header_size;
-  input   [15:0]  fifoe_buffer_size;
-
-  input   [ 7:0]  fifof_header_size;
-  input   [15:0]  fifof_buffer_size;
-
-  output  [31:0]  length_fx32dma;
-  output  [31:0]  length_dma2fx3;
-
-  // FX3 interface
-  // IN -> ZYNQ TO HOST / FX3
-  // OUT -> ZYNQ FROM HOST / FX3
-
-  input           fx32dma_valid;
-  output          fx32dma_ready;
-  input   [31:0]  fx32dma_data;
-  input           fx32dma_sop;
-  output          fx32dma_eop;
-
-  input           dma2fx3_ready;
-  output          dma2fx3_valid;
-  output  [31:0]  dma2fx3_data;
-  output          dma2fx3_eop;
-
-  output          error;
-  output          eot_fx32dma;
-  output          eot_dma2fx3;
-
-  input   [ 2:0]  test_mode_tpm;
-  input   [ 2:0]  test_mode_tpg;
-  output          monitor_error;
-
-  input           zlp;
-
-  input   [ 4:0]  fifo_num;
+  input       [ 4:0]      fifo_num);
 
   // internal parameters
 
@@ -256,14 +157,6 @@ module axi_usb_fx3_core (
   reg     [15:0]  buffer_size_current = 16'h0;
   reg     [ 7:0]  header_size_current = 8'h0;
 
-  reg     [31:0]  m_axis_tdata = 32'h0;
-  reg     [ 3:0]  m_axis_tkeep = 4'h0;
-  reg             m_axis_tlast = 1'b0;
-  reg             m_axis_tvalid = 1'b0;
-
-  reg             eot_fx32dma = 1'b0;
-  reg             eot_dma2fx3 = 1'b0;
-
   reg             error_fx32dma = 1'b0;
   reg             error_dma2fx3 = 1'b0;
 
@@ -279,20 +172,10 @@ module axi_usb_fx3_core (
   reg     [31:0]  dma2fx3_counter = 32'h0;
   reg     [ 7:0]  footer_pointer = 8'h0;
 
-  reg             s_axis_tready = 1'b0;
-  reg             dma2fx3_valid = 1'b0;
-  reg     [31:0]  dma2fx3_data = 32'h0;
   reg     [31:0]  dma2fx3_data_reg = 32'h0;
-  reg             dma2fx3_eop = 1'b0;
 
   reg     [31:0]  expected_data = 32'h0;
-  reg             monitor_error = 1'b0;
   reg             first_transfer = 1'b0;
-
-  reg     [31:0]  length_fx32dma = 0;
-  reg     [31:0]  length_dma2fx3 = 0;
-
-  reg             fx32dma_eop = 1'b0;
 
   function [31:0] pn23;
     input [31:0] din;

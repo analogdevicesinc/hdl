@@ -43,34 +43,22 @@
 // Y  = (+065.738/256)*R + (+129.057/256)*G + (+025.064/256)*B +  16;
 // Cb = (-037.945/256)*R + (-074.494/256)*G + (+112.439/256)*B + 128;
 
-module ad_csc_RGB2CrYCb (
+module ad_csc_RGB2CrYCb #(
+
+  parameter   DELAY_DATA_WIDTH = 16) (
 
   // R-G-B inputs
 
-  clk,
-  RGB_sync,
-  RGB_data,
+  input                   clk,
+  input       [DW:0]      RGB_sync,
+  input       [23:0]      RGB_data,
 
   // Cr-Y-Cb outputs
 
-  CrYCb_sync,
-  CrYCb_data);
+  output      [DW:0]      CrYCb_sync,
+  output      [23:0]      CrYCb_data);
 
-  // parameters
-
-  parameter   DELAY_DATA_WIDTH = 16;
   localparam  DW = DELAY_DATA_WIDTH - 1;
-
-  // R-G-B inputs
-
-  input           clk;
-  input   [DW:0]  RGB_sync;
-  input   [23:0]  RGB_data;
-
-  // Cr-Y-Cb outputs
-
-  output  [DW:0]  CrYCb_sync;
-  output  [23:0]  CrYCb_data;
 
   // Cr (red-diff)
 

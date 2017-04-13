@@ -39,18 +39,11 @@
 `timescale 1ns/1ns
 
 module qpsk_mod (
-  clk,
-  data_input,
-  data_valid,
-  data_qpsk_i,
-  data_qpsk_q
-);
-
-  input             clk;
-  input   [ 1:0]    data_input;
-  input             data_valid;
-  output  [15:0]    data_qpsk_i;
-  output  [15:0]    data_qpsk_q;
+  input                   clk,
+  input       [ 1:0]      data_input,
+  input                   data_valid,
+  output      [15:0]      data_qpsk_i,
+  output      [15:0]      data_qpsk_q);
 
   wire    [15:0]    modulated_data_i;
   wire    [15:0]    modulated_data_q;

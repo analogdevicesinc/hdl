@@ -37,45 +37,31 @@
 
 `timescale 1ns/100ps
 
-module util_cpack_dsf (
+module util_cpack_dsf #(
+
+  parameter   CHANNEL_DATA_WIDTH  = 32,
+  parameter   NUM_OF_CHANNELS_I   =  4,
+  parameter   NUM_OF_CHANNELS_M   =  8,
+  parameter   NUM_OF_CHANNELS_P   =  4) (
 
   // adc interface
 
-  adc_clk,
-  adc_valid,
-  adc_enable,
-  adc_data,
+  input                   adc_clk,
+  input                   adc_valid,
+  input                   adc_enable,
+  input       [(I_WIDTH-1):0]  adc_data,
 
   // dma interface
 
-  adc_dsf_valid,
-  adc_dsf_sync,
-  adc_dsf_data);
+  output  reg             adc_dsf_valid,
+  output  reg             adc_dsf_sync,
+  output  reg [(P_WIDTH-1):0]  adc_dsf_data);
 
-  // parameters
-
-  parameter   CHANNEL_DATA_WIDTH  = 32;
-  parameter   NUM_OF_CHANNELS_I   =  4;
-  parameter   NUM_OF_CHANNELS_M   =  8;
-  parameter   NUM_OF_CHANNELS_P   =  4;
 
   localparam  CH_DCNT = NUM_OF_CHANNELS_P - NUM_OF_CHANNELS_I;
   localparam  I_WIDTH = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_I;
   localparam  P_WIDTH = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_P;
   localparam  M_WIDTH = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_M;
-
-  // adc interface
-
-  input                     adc_clk;
-  input                     adc_valid;
-  input                     adc_enable;
-  input   [(I_WIDTH-1):0]   adc_data;
-
-  // dma interface
-
-  output                    adc_dsf_valid;
-  output                    adc_dsf_sync;
-  output  [(P_WIDTH-1):0]   adc_dsf_data;
 
   // internal registers
 
@@ -85,9 +71,6 @@ module util_cpack_dsf (
   reg                       adc_dsf_valid_int = 'd0;
   reg                       adc_dsf_sync_int = 'd0;
   reg     [(P_WIDTH-1):0]   adc_dsf_data_int = 'd0;
-  reg                       adc_dsf_valid = 'd0;
-  reg                       adc_dsf_sync = 'd0;
-  reg     [(P_WIDTH-1):0]   adc_dsf_data = 'd0;
 
   // internal signals
 

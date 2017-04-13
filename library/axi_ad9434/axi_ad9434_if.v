@@ -40,98 +40,55 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9434_if (
+module axi_ad9434_if #(
+
+  parameter DEVICE_TYPE = 0,
+  parameter IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // device interface
-  adc_clk_in_p,
-  adc_clk_in_n,
-  adc_data_in_p,
-  adc_data_in_n,
-  adc_or_in_p,
-  adc_or_in_n,
+  input                   adc_clk_in_p,
+  input                   adc_clk_in_n,
+  input       [11:0]      adc_data_in_p,
+  input       [11:0]      adc_data_in_n,
+  input                   adc_or_in_p,
+  input                   adc_or_in_n,
 
   // interface outputs
-  adc_data,
-  adc_or,
+  output      [47:0]      adc_data,
+  output                  adc_or,
 
   // internl reset and clocks
-  adc_clk,
-  adc_rst,
-  adc_status,
+  output                  adc_clk,
+  input                   adc_rst,
+  output  reg             adc_status,
 
   // delay interface (for IDELAY macros)
-  up_clk,
-  up_adc_dld,
-  up_adc_dwdata,
-  up_adc_drdata,
-  delay_clk,
-  delay_rst,
-  delay_locked,
+  input                   up_clk,
+  input       [12:0]      up_adc_dld,
+  input       [64:0]      up_adc_dwdata,
+  output      [64:0]      up_adc_drdata,
+  input                   delay_clk,
+  input                   delay_rst,
+  output                  delay_locked,
 
   // mmcm reset
-  mmcm_rst,
+  input                   mmcm_rst,
 
   // drp interface for MMCM_OR_BUFR_N
-  up_rstn,
-  up_drp_sel,
-  up_drp_wr,
-  up_drp_addr,
-  up_drp_wdata,
-  up_drp_rdata,
-  up_drp_ready,
-  up_drp_locked);
+  input                   up_rstn,
+  input                   up_drp_sel,
+  input                   up_drp_wr,
+  input       [11:0]      up_drp_addr,
+  input       [31:0]      up_drp_wdata,
+  output      [31:0]      up_drp_rdata,
+  output                  up_drp_ready,
+  output                  up_drp_locked);
 
-  // parameters
-  parameter DEVICE_TYPE = 0;  // 0 - 7Series / 1 - 6Series
-  parameter IO_DELAY_GROUP = "dev_if_delay_group";
 
-  // buffer type based on the target device.
   localparam SDR = 0;
-
-  // adc interface (clk, data, over-range)
-  input           adc_clk_in_p;
-  input           adc_clk_in_n;
-  input   [11:0]  adc_data_in_p;
-  input   [11:0]  adc_data_in_n;
-  input           adc_or_in_p;
-  input           adc_or_in_n;
-
-  // interface outputs
-  output  [47:0]  adc_data;
-  output          adc_or;
-
-  // internal reset and clocks
-
-  output          adc_clk;
-  input           adc_rst;
-  output          adc_status;
-
-  // delay interface
-
-  input           up_clk;
-  input   [12:0]  up_adc_dld;
-  input   [64:0]  up_adc_dwdata;
-  output  [64:0]  up_adc_drdata;
-  input           delay_clk;
-  input           delay_rst;
-  output          delay_locked;
-
-  // mmcm reset
-  input           mmcm_rst;
-
-  // drp interface
-  input           up_rstn;
-  input           up_drp_sel;
-  input           up_drp_wr;
-  input   [11:0]  up_drp_addr;
-  input   [31:0]  up_drp_wdata;
-  output  [31:0]  up_drp_rdata;
-  output          up_drp_ready;
-  output          up_drp_locked;
 
   // internal registers
 
-  reg             adc_status    = 'd0;
   reg             adc_status_m1 = 'd0;
 
   // internal signals

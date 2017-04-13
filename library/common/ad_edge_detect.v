@@ -41,31 +41,23 @@
 
 `timescale 1ns/100ps
 
-module ad_edge_detect (
+module ad_edge_detect #(
 
-  clk,
-  rst,
+  parameter   EDGE = 0) (
 
-  in,
-  out
-);
+  input                   clk,
+  input                   rst,
 
-  parameter   EDGE = 0;
+  input                   in,
+  output  reg             out);
+
 
   localparam  POS_EDGE = 0;
   localparam  NEG_EDGE = 1;
   localparam  ANY_EDGE = 2;
 
-  input       clk;
-  input       rst;
-
-  input       in;
-  output      out;
-
   reg         ff_m1 = 0;
   reg         ff_m2 = 0;
-
-  reg         out = 0;
 
   always @(posedge clk) begin
     if (rst == 1) begin

@@ -37,69 +37,40 @@
 
 `timescale 1ns/100ps
 
-module util_mfifo (
+module util_mfifo #(
+
+  parameter   NUM_OF_CHANNELS = 4,
+  parameter   DIN_DATA_WIDTH = 32,
+  parameter   ADDRESS_WIDTH = 8) (
 
   // d-in interface
 
-  din_rst,
-  din_clk,
-  din_valid,
-  din_data_0,
-  din_data_1,
-  din_data_2,
-  din_data_3,
-  din_data_4,
-  din_data_5,
-  din_data_6,
-  din_data_7,
+  input                   din_rst,
+  input                   din_clk,
+  input                   din_valid,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_0,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_1,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_2,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_3,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_4,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_5,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_6,
+  input       [DIN_DATA_WIDTH-1:0]  din_data_7,
 
   // d-out interface
 
-  dout_rst,
-  dout_clk,
-  dout_valid,
-  dout_data_0,
-  dout_data_1,
-  dout_data_2,
-  dout_data_3,
-  dout_data_4,
-  dout_data_5,
-  dout_data_6,
-  dout_data_7);
+  input                   dout_rst,
+  input                   dout_clk,
+  output  reg             dout_valid,
+  output      [15:0]      dout_data_0,
+  output      [15:0]      dout_data_1,
+  output      [15:0]      dout_data_2,
+  output      [15:0]      dout_data_3,
+  output      [15:0]      dout_data_4,
+  output      [15:0]      dout_data_5,
+  output      [15:0]      dout_data_6,
+  output      [15:0]      dout_data_7);
 
-  // parameters
-
-  parameter   NUM_OF_CHANNELS = 4;
-  parameter   DIN_DATA_WIDTH = 32;
-  parameter   ADDRESS_WIDTH = 8;
-
-  // d-in interface
-
-  input                               din_rst;
-  input                               din_clk;
-  input                               din_valid;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_0;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_1;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_2;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_3;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_4;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_5;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_6;
-  input   [DIN_DATA_WIDTH-1:0]        din_data_7;
-
-  // dout interface
-
-  input                               dout_rst;
-  input                               dout_clk;
-  output                              dout_valid;
-  output  [15:0]                      dout_data_0;
-  output  [15:0]                      dout_data_1;
-  output  [15:0]                      dout_data_2;
-  output  [15:0]                      dout_data_3;
-  output  [15:0]                      dout_data_4;
-  output  [15:0]                      dout_data_5;
-  output  [15:0]                      dout_data_6;
-  output  [15:0]                      dout_data_7;
 
   // internal registers
 
@@ -119,7 +90,6 @@ module util_mfifo (
   reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd0;
   reg                                 dout_enable = 'd0;
   reg                                 dout_toggle = 'd0;
-  reg                                 dout_valid = 'd0;
   reg     [(DIN_DATA_WIDTH-1):0]      dout_rdata_0 = 'd0;
   reg     [(DIN_DATA_WIDTH-1):0]      dout_rdata_1 = 'd0;
   reg     [(DIN_DATA_WIDTH-1):0]      dout_rdata_2 = 'd0;
