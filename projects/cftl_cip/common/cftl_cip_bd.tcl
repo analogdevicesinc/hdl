@@ -12,26 +12,26 @@ create_bd_port -dir I pmod_gpio
 
 # instances
 
-set pmod_spi_core [create_bd_cell -type ip -vlnv analog.com:user:util_pmod_adc:1.0 pmod_spi_core]
-set_property -dict [list CONFIG.FPGA_CLOCK_MHZ {100}] $pmod_spi_core
+ad_ip_instance util_pmod_adc pmod_spi_core
+ad_ip_parameter pmod_spi_core CONFIG.FPGA_CLOCK_MHZ 100
 
-set pmod_spi_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 pmod_spi_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $pmod_spi_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.ID {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $pmod_spi_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $pmod_spi_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16}] $pmod_spi_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $pmod_spi_dma
+ad_ip_instance axi_dmac pmod_spi_dma
+ad_ip_parameter pmod_spi_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter pmod_spi_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter pmod_spi_dma CONFIG.ID 0
+ad_ip_parameter pmod_spi_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter pmod_spi_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter pmod_spi_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter pmod_spi_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter pmod_spi_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter pmod_spi_dma CONFIG.CYCLIC 0
+ad_ip_parameter pmod_spi_dma CONFIG.DMA_DATA_WIDTH_SRC 16
+ad_ip_parameter pmod_spi_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-set pmod_gpio_core [create_bd_cell -type ip -vlnv analog.com:user:util_pmod_fmeter:1.0 pmod_gpio_core]
+ad_ip_instance util_pmod_fmeter pmod_gpio_core
 
 # additional configurations
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 1
 
 ad_connect sys_cpu_clk pmod_spi_dma/fifo_wr_clk
 ad_connect sys_cpu_clk pmod_spi_core/clk
