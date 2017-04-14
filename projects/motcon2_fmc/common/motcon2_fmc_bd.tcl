@@ -71,106 +71,106 @@
 
   # additions to default configuration
     # Enable additional peripherals from the PS7 block
-  set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1} ] $sys_ps7
-  set_property -dict [list CONFIG.PCW_ENET0_ENET0_IO {EMIO} ] $sys_ps7
-  set_property -dict [list CONFIG.PCW_ENET1_PERIPHERAL_ENABLE {1} ] $sys_ps7
+  ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 1
+  ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_ENET0_IO EMIO
+  ad_ip_parameter sys_ps7 CONFIG.PCW_ENET1_PERIPHERAL_ENABLE 1
 
   # Add additional clocks to be used by gmii to rgmii modules and current monitoring modules
-  set_property -dict [ list CONFIG.CLKOUT2_USED {true} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT3_USED {true} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT4_USED {true} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT5_USED {true} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {125} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {25} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {20} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT5_REQUESTED_OUT_FREQ {20} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT2_DRIVES {No_buffer} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT3_DRIVES {No_buffer} ] $sys_audio_clkgen
-  set_property -dict [ list CONFIG.CLKOUT4_DRIVES {No_buffer} ] $sys_audio_clkgen
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT2_USED true
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT3_USED true
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT4_USED true
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT5_USED true
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT2_REQUESTED_OUT_FREQ 125
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT3_REQUESTED_OUT_FREQ 25
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT4_REQUESTED_OUT_FREQ 20
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT5_REQUESTED_OUT_FREQ 20
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT2_DRIVES No_buffer
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT3_DRIVES No_buffer
+  ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT4_DRIVES No_buffer
 
   # speed detectors
     # speed detector core motor 1
-  set speed_detector_m1 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_speed:1.0 speed_detector_m1 ]
+  ad_ip_instance axi_mc_speed speed_detector_m1
     # dma motor 1
-  set speed_detector_m1_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 speed_detector_m1_dma]
-  set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.CYCLIC {0}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $speed_detector_m1_dma
-  set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {0}] $speed_detector_m1_dma
+  ad_ip_instance axi_dmac speed_detector_m1_dma
+  ad_ip_parameter speed_detector_m1_dma CONFIG.DMA_TYPE_SRC 2
+  ad_ip_parameter speed_detector_m1_dma CONFIG.DMA_TYPE_DEST 0
+  ad_ip_parameter speed_detector_m1_dma CONFIG.DMA_2D_TRANSFER 0
+  ad_ip_parameter speed_detector_m1_dma CONFIG.CYCLIC 0
+  ad_ip_parameter speed_detector_m1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+  ad_ip_parameter speed_detector_m1_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+  ad_ip_parameter speed_detector_m1_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
     # speed detector core motor 2
-  set speed_detector_m2 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_speed:1.0 speed_detector_m2 ]
+  ad_ip_instance axi_mc_speed speed_detector_m2
     # dma motor 2
-  set speed_detector_m2_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 speed_detector_m2_dma]
-  set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.CYCLIC {0}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $speed_detector_m2_dma
-  set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {0}] $speed_detector_m2_dma
+  ad_ip_instance axi_dmac speed_detector_m2_dma
+  ad_ip_parameter speed_detector_m2_dma CONFIG.DMA_TYPE_SRC 2
+  ad_ip_parameter speed_detector_m2_dma CONFIG.DMA_TYPE_DEST 0
+  ad_ip_parameter speed_detector_m2_dma CONFIG.DMA_2D_TRANSFER 0
+  ad_ip_parameter speed_detector_m2_dma CONFIG.CYCLIC 0
+  ad_ip_parameter speed_detector_m2_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+  ad_ip_parameter speed_detector_m2_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+  ad_ip_parameter speed_detector_m2_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
 
   # current monitor peripherals
     # current monitor core motor 1
-  set current_monitor_m1 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_current_monitor:1.0 current_monitor_m1 ]
+  ad_ip_instance axi_mc_current_monitor current_monitor_m1
     # dma motor 1
-  set current_monitor_m1_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 current_monitor_m1_dma ]
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $current_monitor_m1_dma
-  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $current_monitor_m1_dma
-  set_property -dict [list CONFIG.CYCLIC {0}] $current_monitor_m1_dma
-  set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {0}] $current_monitor_m1_dma
+  ad_ip_instance axi_dmac current_monitor_m1_dma
+  ad_ip_parameter current_monitor_m1_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+  ad_ip_parameter current_monitor_m1_dma CONFIG.DMA_2D_TRANSFER 0
+  ad_ip_parameter current_monitor_m1_dma CONFIG.CYCLIC 0
+  ad_ip_parameter current_monitor_m1_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
     # data packer motor 1
   #
-  set current_monitor_m1_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m1_pack ]
-  set_property -dict [ list CONFIG.NUM_OF_CHANNELS {4}  ] $current_monitor_m1_pack
-  set_property -dict [ list CONFIG.CHANNEL_DATA_WIDTH {16}  ] $current_monitor_m1_pack
+  ad_ip_instance util_cpack current_monitor_m1_pack
+  ad_ip_parameter current_monitor_m1_pack CONFIG.NUM_OF_CHANNELS 4
+  ad_ip_parameter current_monitor_m1_pack CONFIG.CHANNEL_DATA_WIDTH 16
 
     # current monitor core motor 2
-  set current_monitor_m2 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_current_monitor:1.0 current_monitor_m2 ]
+  ad_ip_instance axi_mc_current_monitor current_monitor_m2
     # dma motor 2
-  set current_monitor_m2_dma [ create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 current_monitor_m2_dma ]
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $current_monitor_m2_dma
-  set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $current_monitor_m2_dma
-  set_property -dict [list CONFIG.CYCLIC {0}] $current_monitor_m2_dma
-  set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {0}] $current_monitor_m2_dma
+  ad_ip_instance axi_dmac current_monitor_m2_dma
+  ad_ip_parameter current_monitor_m2_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+  ad_ip_parameter current_monitor_m2_dma CONFIG.DMA_2D_TRANSFER 0
+  ad_ip_parameter current_monitor_m2_dma CONFIG.CYCLIC 0
+  ad_ip_parameter current_monitor_m2_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
     # data packer motor 2
-  set current_monitor_m2_pack [ create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 current_monitor_m2_pack ]
-  set_property -dict [ list CONFIG.NUM_OF_CHANNELS {4}  ] $current_monitor_m2_pack
-  set_property -dict [ list CONFIG.CHANNEL_DATA_WIDTH {16}  ] $current_monitor_m2_pack
+  ad_ip_instance util_cpack current_monitor_m2_pack
+  ad_ip_parameter current_monitor_m2_pack CONFIG.NUM_OF_CHANNELS 4
+  ad_ip_parameter current_monitor_m2_pack CONFIG.CHANNEL_DATA_WIDTH 16
 
   #controller
     # controller core motor 1
-  set controller_m1 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_controller:1.0 controller_m1 ]
+  ad_ip_instance axi_mc_controller controller_m1
     # controller core motor 2
-  set controller_m2 [ create_bd_cell -type ip -vlnv analog.com:user:axi_mc_controller:1.0 controller_m2 ]
+  ad_ip_instance axi_mc_controller controller_m2
 
   #ethernet gmii to rgmii converters
     # phy 1
-  set gmii_to_rgmii_eth1 [ create_bd_cell -type ip -vlnv analog.com:user:util_gmii_to_rgmii:1.0 gmii_to_rgmii_eth1 ]
-  set_property -dict [list CONFIG.PHY_AD {"00000"}] $gmii_to_rgmii_eth1
-  set_property -dict [list CONFIG.IODELAY_CTRL {1}] $gmii_to_rgmii_eth1
+  ad_ip_instance util_gmii_to_rgmii gmii_to_rgmii_eth1
+  ad_ip_parameter gmii_to_rgmii_eth1 CONFIG.PHY_AD "00000"
+  ad_ip_parameter gmii_to_rgmii_eth1 CONFIG.IODELAY_CTRL 1
 
     # phy 2
-  set gmii_to_rgmii_eth2 [ create_bd_cell -type ip -vlnv analog.com:user:util_gmii_to_rgmii:1.0 gmii_to_rgmii_eth2 ]
-  set_property -dict [list CONFIG.PHY_AD {"00001"}] $gmii_to_rgmii_eth2
+  ad_ip_instance util_gmii_to_rgmii gmii_to_rgmii_eth2
+  ad_ip_parameter gmii_to_rgmii_eth2 CONFIG.PHY_AD "00001"
 
   # iic
-  set iic_ee2  [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 iic_ee2 ]
+  ad_ip_instance axi_iic iic_ee2
 
   # xadc
-  set xadc_core [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.3 xadc_core ]
-  set_property -dict [ list CONFIG.XADC_STARUP_SELECTION {simultaneous_sampling} ] $xadc_core
-  set_property -dict [ list CONFIG.ENABLE_EXTERNAL_MUX {true} ] $xadc_core
-  set_property -dict [ list CONFIG.EXTERNAL_MUX_CHANNEL  {VAUXP0_VAUXN0} ] $xadc_core
-  set_property -dict [ list CONFIG.CHANNEL_ENABLE_VP_VN  {false} ] $xadc_core
-  set_property -dict [ list CONFIG.CHANNEL_ENABLE_VAUXP0_VAUXN0  {true} ] $xadc_core
-  set_property -dict [ list CONFIG.CHANNEL_ENABLE_VAUXP8_VAUXN8  {true} ] $xadc_core
-  set_property -dict [ list CONFIG.OT_ALARM {false} ] $xadc_core
-  set_property -dict [ list CONFIG.USER_TEMP_ALARM {false}  ] $xadc_core
-  set_property -dict [ list CONFIG.VCCAUX_ALARM {false} ] $xadc_core
-  set_property -dict [ list CONFIG.VCCINT_ALARM {false} ] $xadc_core
+  ad_ip_instance xadc_wiz xadc_core
+  ad_ip_parameter xadc_core CONFIG.XADC_STARUP_SELECTION simultaneous_sampling
+  ad_ip_parameter xadc_core CONFIG.ENABLE_EXTERNAL_MUX true
+  ad_ip_parameter xadc_core CONFIG.EXTERNAL_MUX_CHANNEL  VAUXP0_VAUXN0
+  ad_ip_parameter xadc_core CONFIG.CHANNEL_ENABLE_VP_VN  false
+  ad_ip_parameter xadc_core CONFIG.CHANNEL_ENABLE_VAUXP0_VAUXN0  true
+  ad_ip_parameter xadc_core CONFIG.CHANNEL_ENABLE_VAUXP8_VAUXN8  true
+  ad_ip_parameter xadc_core CONFIG.OT_ALARM false
+  ad_ip_parameter xadc_core CONFIG.USER_TEMP_ALARM false
+  ad_ip_parameter xadc_core CONFIG.VCCAUX_ALARM false
+  ad_ip_parameter xadc_core CONFIG.VCCINT_ALARM false
 
   # connections
 
