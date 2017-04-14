@@ -1,46 +1,56 @@
 # adc peripherals
 
 ad_ip_instance util_adxcvr util_fmcadc5_0_xcvr
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.QPLL_FBDIV "0010000000"
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.QPLL_REFCLK_DIV 1
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.QPLL_FBDIV_RATIO 1
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.QPLL_CFG 0x06801c1
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.QPLL_FBDIV 0x080
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.CPLL_FBDIV 1
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.CPLL_FBDIV_4_5 5
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.TX_NUM_OF_LANES 0
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.TX_OUT_DIV 2
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.TX_CLK25_DIV 10
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.TX_OUT_DIV 1
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.TX_CLK25_DIV 25
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_NUM_OF_LANES 8
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_CLK25_DIV 25
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_DFE_LPM_CFG 0x0954
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_CDR_CFG 0x03000023ff20400020
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_PMA_CFG 0x00018480
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10400020
 
 ad_ip_instance util_adxcvr util_fmcadc5_1_xcvr
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.QPLL_FBDIV "0010000000"
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.QPLL_REFCLK_DIV 1
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.QPLL_FBDIV_RATIO 1
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.QPLL_CFG 0x06801c1
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.QPLL_FBDIV 0x080
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.CPLL_FBDIV 1
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.CPLL_FBDIV_4_5 5
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.TX_NUM_OF_LANES 0
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.TX_OUT_DIV 2
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.TX_CLK25_DIV 10
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.TX_OUT_DIV 1
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.TX_CLK25_DIV 25
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_NUM_OF_LANES 8
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_CLK25_DIV 25
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_DFE_LPM_CFG 0x0954
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_CDR_CFG 0x03000023ff20400020
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_PMA_CFG 0x00018480
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10400020
 
 ad_ip_instance axi_adxcvr axi_ad9625_0_xcvr
+ad_ip_parameter axi_ad9625_0_xcvr CONFIG.ID 0
 ad_ip_parameter axi_ad9625_0_xcvr CONFIG.NUM_OF_LANES 8
-ad_ip_parameter axi_ad9625_0_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad9625_0_xcvr CONFIG.TX_OR_RX_N 0
-ad_ip_parameter axi_ad9625_0_xcvr CONFIG.LPM_OR_DFE_N 0
-ad_ip_parameter axi_ad9625_0_xcvr CONFIG.SYS_CLK_SEL "00"
-ad_ip_parameter axi_ad9625_0_xcvr CONFIG.OUT_CLK_SEL "010"
+ad_ip_parameter axi_ad9625_0_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_ad9625_0_xcvr CONFIG.LPM_OR_DFE_N 1
+ad_ip_parameter axi_ad9625_0_xcvr CONFIG.SYS_CLK_SEL 0x0
+ad_ip_parameter axi_ad9625_0_xcvr CONFIG.OUT_CLK_SEL 0x2
 
 ad_ip_instance axi_adxcvr axi_ad9625_1_xcvr
+ad_ip_parameter axi_ad9625_1_xcvr CONFIG.ID 1
 ad_ip_parameter axi_ad9625_1_xcvr CONFIG.NUM_OF_LANES 8
-ad_ip_parameter axi_ad9625_1_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad9625_1_xcvr CONFIG.TX_OR_RX_N 0
-ad_ip_parameter axi_ad9625_1_xcvr CONFIG.LPM_OR_DFE_N 0
-ad_ip_parameter axi_ad9625_1_xcvr CONFIG.SYS_CLK_SEL "00"
-ad_ip_parameter axi_ad9625_1_xcvr CONFIG.OUT_CLK_SEL "010"
+ad_ip_parameter axi_ad9625_1_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_ad9625_1_xcvr CONFIG.LPM_OR_DFE_N 1
+ad_ip_parameter axi_ad9625_1_xcvr CONFIG.SYS_CLK_SEL 0x0
+ad_ip_parameter axi_ad9625_1_xcvr CONFIG.OUT_CLK_SEL 0x2
 
 ad_ip_instance jesd204 axi_ad9625_0_jesd
 ad_ip_parameter axi_ad9625_0_jesd CONFIG.C_NODE_IS_TRANSMIT 0
