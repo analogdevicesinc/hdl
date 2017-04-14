@@ -15,20 +15,20 @@ create_bd_port -dir O slwr_n
 create_bd_port -dir O pktend_n
 create_bd_port -dir O epswitch_n
 
-set axi_uart [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uart]
-set_property -dict [list CONFIG.C_BAUDRATE {115200}] $axi_uart
+ad_ip_instance axi_uartlite axi_uart
+ad_ip_parameter axi_uart CONFIG.C_BAUDRATE 115200
 
-set axi_usb_fx3 [create_bd_cell -type ip -vlnv analog.com:user:axi_usb_fx3:1.0 axi_usb_fx3]
+ad_ip_instance axi_usb_fx3 axi_usb_fx3
 
-set axi_usb_fx3_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_usb_fx3_dma]
-set_property -dict [list CONFIG.c_sg_include_stscntrl_strm {0}] $axi_usb_fx3_dma
-set_property -dict [list CONFIG.c_mm2s_burst_size {256}] $axi_usb_fx3_dma
-set_property -dict [list CONFIG.c_s2mm_burst_size {256}] $axi_usb_fx3_dma
-set_property -dict [list CONFIG.c_sg_length_width {16}] $axi_usb_fx3_dma
+ad_ip_instance axi_dma axi_usb_fx3_dma
+ad_ip_parameter axi_usb_fx3_dma CONFIG.c_sg_include_stscntrl_strm 0
+ad_ip_parameter axi_usb_fx3_dma CONFIG.c_mm2s_burst_size 256
+ad_ip_parameter axi_usb_fx3_dma CONFIG.c_s2mm_burst_size 256
+ad_ip_parameter axi_usb_fx3_dma CONFIG.c_sg_length_width 16
 
-set usb_fx3_rx_axis_fifo [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_data_fifo:1.1 usb_fx3_rx_axis_fifo ]
+ad_ip_instance axis_data_fifo usb_fx3_rx_axis_fifo
 
-set intr_monitor [ create_bd_cell -type ip -vlnv analog.com:user:axi_intr_monitor:1.0 intr_monitor ]
+ad_ip_instance axi_intr_monitor intr_monitor
 
 ad_connect axi_usb_fx3/s_axis axi_usb_fx3_dma/M_AXIS_MM2S
 
@@ -75,22 +75,22 @@ ad_mem_hp1_interconnect sys_cpu_clk axi_usb_fx3_dma/M_AXI_S2MM
 
 # test
 
-set ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila]
+ad_ip_instance ila ila
 
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {11}] $ila
-set_property -dict [list CONFIG.C_PROBE10_WIDTH {4}] $ila
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {2}] $ila
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {15}] $ila
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {74}] $ila
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {75}] $ila
-set_property -dict [list CONFIG.C_DATA_DEPTH {65536}] $ila
-set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $ila
-set_property -dict [list CONFIG.C_PROBE2_MU_CNT {2}] $ila
-set_property -dict [list CONFIG.C_PROBE1_MU_CNT {2}] $ila
-set_property -dict [list CONFIG.C_PROBE0_MU_CNT {2}] $ila
-set_property -dict [list CONFIG.ALL_PROBE_SAME_MU_CNT {2}] $ila
-set_property -dict [list CONFIG.C_ENABLE_ILA_AXI_MON {false}] $ila
+ad_ip_parameter ila CONFIG.C_MONITOR_TYPE Native
+ad_ip_parameter ila CONFIG.C_NUM_OF_PROBES 11
+ad_ip_parameter ila CONFIG.C_PROBE10_WIDTH 4
+ad_ip_parameter ila CONFIG.C_PROBE3_WIDTH 2
+ad_ip_parameter ila CONFIG.C_PROBE2_WIDTH 15
+ad_ip_parameter ila CONFIG.C_PROBE1_WIDTH 74
+ad_ip_parameter ila CONFIG.C_PROBE0_WIDTH 75
+ad_ip_parameter ila CONFIG.C_DATA_DEPTH 65536
+ad_ip_parameter ila CONFIG.C_EN_STRG_QUAL 1
+ad_ip_parameter ila CONFIG.C_PROBE2_MU_CNT 2
+ad_ip_parameter ila CONFIG.C_PROBE1_MU_CNT 2
+ad_ip_parameter ila CONFIG.C_PROBE0_MU_CNT 2
+ad_ip_parameter ila CONFIG.ALL_PROBE_SAME_MU_CNT 2
+ad_ip_parameter ila CONFIG.C_ENABLE_ILA_AXI_MON false
 
 ad_connect ila/clk axi_usb_fx3/pclk
 ad_connect ila/probe0 axi_usb_fx3/debug_fx32dma
