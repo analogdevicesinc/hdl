@@ -6,7 +6,7 @@
 
   # iic
 
-  set_property -dict [list CONFIG.PCW_I2C0_PERIPHERAL_ENABLE {1} ] $sys_ps7
+  ad_ip_parameter sys_ps7 CONFIG.PCW_I2C0_PERIPHERAL_ENABLE 1
 
   # iic cftl
 
