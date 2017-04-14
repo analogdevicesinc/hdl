@@ -13,8 +13,8 @@ delete_bd_objs [get_bd_ports hdmi_hsync]
 delete_bd_objs [get_bd_ports hdmi_data_e]
 delete_bd_objs [get_bd_ports hdmi_data]
 
-set_property CONFIG.EMBEDDED_SYNC {1} [get_bd_cells axi_hdmi_core]
-set_property CONFIG.OUT_CLK_POLARITY {1} [get_bd_cells axi_hdmi_core]
+ad_ip_parameter axi_hdmi_core CONFIG.EMBEDDED_SYNC 1
+ad_ip_parameter axi_hdmi_core CONFIG.OUT_CLK_POLARITY 1
 
 create_bd_port -dir O hdmi_tx_clk
 create_bd_port -dir O -from 15 -to 0 hdmi_tx_data
@@ -24,20 +24,20 @@ ad_connect  hdmi_tx_data axi_hdmi_core/hdmi_16_es_data
 
 # adv7611
 
-set axi_hdmi_rx_core  [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_rx:1.0 axi_hdmi_rx_core]
+ad_ip_instance axi_hdmi_rx axi_hdmi_rx_core
 
-set axi_hdmi_rx_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_hdmi_rx_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {1}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {1}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {14}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_hdmi_rx_dma
-set_property -dict [list CONFIG.FIFO_SIZE {16}] $axi_hdmi_rx_dma
+ad_ip_instance axi_dmac axi_hdmi_rx_dma
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.DMA_2D_TRANSFER 1
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.DMA_LENGTH_WIDTH 14
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_hdmi_rx_dma CONFIG.FIFO_SIZE 16
 
 create_bd_port -dir I hdmi_rx_clk
 create_bd_port -dir I -from 15 -to 0 hdmi_rx_data
@@ -73,11 +73,11 @@ ad_connect  spdif_tx axi_spdif_tx_core/spdif_tx_o
 
 create_bd_port -dir I spdif_rx
 
-set axi_spdif_rx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_rx:1.0 axi_spdif_rx_core]
-set_property -dict [list CONFIG.C_S_AXI_ADDR_WIDTH {16}] $axi_spdif_rx_core
-set_property -dict [list CONFIG.C_DMA_TYPE {1}] $axi_spdif_rx_core
+ad_ip_instance axi_spdif_rx axi_spdif_rx_core
+ad_ip_parameter axi_spdif_rx_core CONFIG.C_S_AXI_ADDR_WIDTH 16
+ad_ip_parameter axi_spdif_rx_core CONFIG.C_DMA_TYPE 1
 
-set_property -dict [list CONFIG.PCW_USE_DMA3 {1}] $sys_ps7
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA3 1
 
 ad_connect  sys_cpu_clk axi_spdif_rx_core/DMA_REQ_ACLK
 ad_connect  sys_cpu_clk sys_ps7/DMA3_ACLK
@@ -90,9 +90,9 @@ ad_cpu_interconnect 0x75C20000 axi_spdif_rx_core
 
 # iic interface
 
-set axi_iic_imageon [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_imageon]
-set_property -dict [list CONFIG.USE_BOARD_FLOW {true}] $axi_iic_imageon
-set_property -dict [list CONFIG.IIC_BOARD_INTERFACE {Custom}] $axi_iic_imageon
+ad_ip_instance axi_iic axi_iic_imageon
+ad_ip_parameter axi_iic_imageon CONFIG.USE_BOARD_FLOW true
+ad_ip_parameter axi_iic_imageon CONFIG.IIC_BOARD_INTERFACE Custom
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_imageon
 ad_connect  iic_imageon axi_iic_imageon/iic
