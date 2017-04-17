@@ -42,6 +42,7 @@ module axi_ad9963_rx #(
   // parameters
 
   parameter   DATAPATH_DISABLE = 0,
+  parameter   IODELAY_ENABLE = 0,
   parameter   ID = 0) (
 
   // adc interface
@@ -233,6 +234,8 @@ module axi_ad9963_rx #(
 
   // adc delay control
 
+  generate if (IODELAY_ENABLE == 1) begin
+
   up_delay_cntrl #(.DATA_WIDTH(13), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
@@ -250,6 +253,16 @@ module axi_ad9963_rx #(
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[3]),
     .up_rack (up_rack_s[3]));
+
+  end else begin
+    assign up_dld = 'h00;
+    assign up_dwdata = 'h00;
+    assign delay_rst = 1'b1;
+    assign up_wack_s[3] = 0;
+    assign up_rack_s[3] = 0;
+    assign up_rdata_s[3] = 'h00;
+  end
+  endgenerate
 
 endmodule
 

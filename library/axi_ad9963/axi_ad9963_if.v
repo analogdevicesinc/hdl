@@ -36,6 +36,7 @@ module axi_ad9963_if #(
 
   parameter   DEVICE_TYPE = 0,
   parameter   DAC_IODELAY_ENABLE = 0,
+  parameter   ADC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // physical interface (receive)
@@ -135,6 +136,7 @@ module axi_ad9963_if #(
   ad_lvds_in #(
     .SINGLE_ENDED (1),
     .DEVICE_TYPE (DEVICE_TYPE),
+    .IODELAY_ENABLE (ADC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
   i_rx_data (
@@ -158,6 +160,7 @@ module axi_ad9963_if #(
   ad_lvds_in #(
     .SINGLE_ENDED (1),
     .DEVICE_TYPE (DEVICE_TYPE),
+    .IODELAY_ENABLE (ADC_IODELAY_ENABLE),
     .IODELAY_CTRL (1),
     .IODELAY_GROUP (IO_DELAY_GROUP))
   i_rx_iq (
