@@ -83,39 +83,23 @@ module ad_lvds_in #(
 
   // delay controller
 
-  generate
-  if ((IODELAY_CTRL == 1) && (DEVICE_TYPE == ULTRASCALE_PLUS)) begin
-  (* IODELAY_GROUP = IODELAY_GROUP *)
-  IDELAYCTRL #(.SIM_DEVICE ("ULTRASCALE")) i_delay_ctrl (
-    .RST (delay_rst),
-    .REFCLK (delay_clk),
-    .RDY (delay_locked));
-  end
-  endgenerate
-
-  generate
-  if ((IODELAY_CTRL == 1) && (DEVICE_TYPE == ULTRASCALE)) begin
-  (* IODELAY_GROUP = IODELAY_GROUP *)
-  IDELAYCTRL #(.SIM_DEVICE ("ULTRASCALE")) i_delay_ctrl (
-    .RST (delay_rst),
-    .REFCLK (delay_clk),
-    .RDY (delay_locked));
-  end
-  endgenerate
-
-  generate
-  if ((IODELAY_CTRL == 1) && ((DEVICE_TYPE == VIRTEX7) || (DEVICE_TYPE == VIRTEX6))) begin
-  (* IODELAY_GROUP = IODELAY_GROUP *)
-  IDELAYCTRL i_delay_ctrl (
-    .RST (delay_rst),
-    .REFCLK (delay_clk),
-    .RDY (delay_locked));
-  end
-  endgenerate
-
-  generate
-  if (IODELAY_CTRL == 0) begin
-  assign delay_locked = 1'b1;
+  generate if (IODELAY_ENABLE == 1 && IODELAY_CTRL == 1) begin
+    if ((DEVICE_TYPE == ULTRASCALE_PLUS) || (DEVICE_TYPE == ULTRASCALE)) begin
+    (* IODELAY_GROUP = IODELAY_GROUP *)
+    IDELAYCTRL #(.SIM_DEVICE ("ULTRASCALE")) i_delay_ctrl (
+      .RST (delay_rst),
+      .REFCLK (delay_clk),
+      .RDY (delay_locked));
+    end
+    if ((DEVICE_TYPE == VIRTEX7) || (DEVICE_TYPE == VIRTEX6)) begin
+    (* IODELAY_GROUP = IODELAY_GROUP *)
+    IDELAYCTRL i_delay_ctrl (
+      .RST (delay_rst),
+      .REFCLK (delay_clk),
+      .RDY (delay_locked));
+    end
+  end else begin
+     assign delay_locked = 1'b1;
   end
   endgenerate
 
@@ -136,7 +120,7 @@ module ad_lvds_in #(
 
   // idelay
 
-  generate
+  generate if (IODELAY_ENABLE == 1) begin
   if (DEVICE_TYPE == VIRTEX6) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IODELAYE1 #(
@@ -164,9 +148,7 @@ module ad_lvds_in #(
     .CNTVALUEIN (up_dwdata),
     .CNTVALUEOUT (up_drdata));
   end
-  endgenerate
 
-  generate
   if (DEVICE_TYPE == VIRTEX7) begin
   (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYE2 #(
@@ -192,9 +174,7 @@ module ad_lvds_in #(
     .CNTVALUEIN (up_dwdata),
     .CNTVALUEOUT (up_drdata));
   end
-  endgenerate
 
-  generate
   if (DEVICE_TYPE == ULTRASCALE) begin
   assign up_drdata = up_drdata_s[8:4];
   (* IODELAY_GROUP = IODELAY_GROUP *)
@@ -220,9 +200,7 @@ module ad_lvds_in #(
     .RST (1'b0),
     .EN_VTC (~up_dld));
   end
-  endgenerate
 
-  generate
   if (DEVICE_TYPE == ULTRASCALE_PLUS) begin
   assign up_drdata = up_drdata_s[8:4];
   (* IODELAY_GROUP = IODELAY_GROUP *)
@@ -247,6 +225,11 @@ module ad_lvds_in #(
     .DATAOUT (rx_data_idelay_s),
     .RST (1'b0),
     .EN_VTC (~up_dld));
+  end
+
+  end else begin
+    assign rx_data_idelay_s = rx_data_ibuf_s;
+	assign up_drdata = 'h00;
   end
   endgenerate
 
