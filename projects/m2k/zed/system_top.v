@@ -138,6 +138,8 @@ module system_top (
   assign spi_mosi = spi0_mosi;
   assign spi0_miso = spi_miso;
 
+  assign gpio_i[63:32] = gpio_o[63:32];
+
   // instantiations
 
   ad_iobuf #(
