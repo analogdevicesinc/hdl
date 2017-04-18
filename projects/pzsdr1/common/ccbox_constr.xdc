@@ -70,3 +70,16 @@ set_property  -dict {PACKAGE_PIN  V13   IOSTANDARD  LVCMOS25} [get_ports  pss_va
 set_property  -dict {PACKAGE_PIN  V12   IOSTANDARD  LVCMOS25} [get_ports  pss_valid_n[1]]   ; ## U1,V12,IO_L04_34_JX4_P,JX4,26,PSS_VALID2_N
 set_property  -dict {PACKAGE_PIN  W13   IOSTANDARD  LVCMOS25} [get_ports  pss_valid_n[2]]   ; ## U1,W13,IO_L04_34_JX4_N,JX4,28,PSS_VALID3_N
 
+## tsw
+
+set_property  -dict {PACKAGE_PIN  V16   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_com_a]    ; ## U1,V16,IO_L18_34_JX4_P,JX4,68,TSW_COM_A
+set_property  -dict {PACKAGE_PIN  W16   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_s1]       ; ## U1,W16,IO_L18_34_JX4_N,JX4,70,TSW_S1
+set_property  -dict {PACKAGE_PIN  R16   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_a]        ; ## U1,R16,IO_L19_34_JX4_P,JX4,73,TSW_A
+set_property  -dict {PACKAGE_PIN  R17   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_b]        ; ## U1,R17,IO_L19_34_JX4_N,JX4,75,TSW_B
+set_property  -dict {PACKAGE_PIN  T17   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_misc]     ; ## U1,T17,IO_L20_34_JX4_P,JX4,74,TSW_?
+set_property  -dict {PACKAGE_PIN  R18   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_com_b]    ; ## U1,R18,IO_L20_34_JX4_N,JX4,76,TSW_COM_B
+set_property  -dict {PACKAGE_PIN  V17   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_s2]       ; ## U1,V17,IO_L21_34_JX4_P,JX4,77,TSW_S2
+set_property  -dict {PACKAGE_PIN  V18   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_s3]       ; ## U1,V18,IO_L21_34_JX4_N,JX4,79,TSW_S3
+set_property  -dict {PACKAGE_PIN  W18   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_s4]       ; ## U1,W18,IO_L22_34_JX4_P,JX4,78,TSW_S4
+set_property  -dict {PACKAGE_PIN  W19   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_s5]       ; ## U1,W19,IO_L22_34_JX4_N,JX4,80,TSW_S5
+
