@@ -116,6 +116,8 @@ module system_top (
   wire            iic_mux_sda_t_s;
   wire    [15:0]  ps_intrs;
 
+  assign gpio_i[63:34] = gpio_o[63:34];
+
   // instantiations
 
   ad_iobuf #(
