@@ -5,11 +5,11 @@
 ####################################################################################
 ####################################################################################
 
-ifeq ($(MMU),)
-  MMU := 1
+ifeq ($(NIOS2_MMU),)
+  NIOS2_MMU := 1
 endif
 
-export ALT_NIOS_MMU_ENABLED := $(MMU)
+export ALT_NIOS_MMU_ENABLED := $(NIOS2_MMU)
 
 M_DEPS += system_top.v
 M_DEPS += system_qsys.tcl
