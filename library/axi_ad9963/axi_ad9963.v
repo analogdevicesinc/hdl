@@ -154,6 +154,8 @@ module axi_ad9963 #(
   wire            up_rack_rx_s;
   wire    [31:0]  up_rdata_tx_s;
   wire            up_rack_tx_s;
+  wire            up_adc_ce;
+  wire            up_dac_ce;
 
   // signal name changes
 
@@ -188,8 +190,10 @@ module axi_ad9963 #(
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
+    .up_adc_ce(up_adc_ce),
     .dac_valid (dac_valid_s),
     .dac_data (dac_data_s),
+    .up_dac_ce(up_dac_ce),
     .up_clk (up_clk),
     .up_adc_dld (up_adc_dld_s),
     .up_adc_dwdata (up_adc_dwdata_s),
@@ -210,6 +214,7 @@ module axi_ad9963 #(
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
+    .up_adc_ce(up_adc_ce),
     .up_dld (up_adc_dld_s),
     .up_dwdata (up_adc_dwdata_s),
     .up_drdata (up_adc_drdata_s),
@@ -256,6 +261,7 @@ module axi_ad9963 #(
     .dac_data_q (dac_data_q),
     .dac_dovf(dac_dovf),
     .dac_dunf(dac_dunf),
+    .up_dac_ce(up_dac_ce),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),

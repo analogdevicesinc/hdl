@@ -24,9 +24,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// This interface includes both the transmit and receive components -
-// They both uses the same clock (sourced from the receiving side).
-// assumes RX_IQ is 1 for I and 0 for Q (RX_IFIRST = 1 , RXIQ_HILO = 1)
 
 `timescale 1ns/100ps
 
@@ -62,21 +59,23 @@ module axi_ad9963_if #(
   output reg          adc_valid,
   output reg  [23:0]  adc_data,
   output reg          adc_status,
+  input               up_adc_ce,
 
   // transmit data path interface
 
-  input           dac_valid,
-  input   [23:0]  dac_data,
+  input               dac_valid,
+  input       [23:0]  dac_data,
+  input               up_dac_ce,
 
   // delay interface
 
-  input           up_clk,
-  input   [12:0]  up_adc_dld,
-  input   [64:0]  up_adc_dwdata,
-  output  [64:0]  up_adc_drdata,
-  input           delay_clk,
-  input           delay_rst,
-  output          delay_locked);
+  input               up_clk,
+  input       [12:0]  up_adc_dld,
+  input       [64:0]  up_adc_dwdata,
+  output      [64:0]  up_adc_drdata,
+  input               delay_clk,
+  input               delay_rst,
+  output              delay_locked);
 
   // internal registers
 
@@ -101,7 +100,7 @@ module axi_ad9963_if #(
       adc_valid <= 1'b1;                        // data[23:12] Q
     end else begin
       rx_data_p <= rx_data_p_s;               // if this happens it means that risedge data is sampled on falledge
-      adc_data  <= {rx_data_p, rx_data_n_s} ;  // so we take current N data with previous P data
+      adc_data  <= {rx_data_p, rx_data_n_s};  // so we take current N data with previous P data
       adc_valid <= 1'b1;                      // in order to have data sampled at the same instance sent to the DMA
     end
   end
@@ -123,9 +122,22 @@ module axi_ad9963_if #(
 
   // device clock interface (receive clock)
 
-  BUFG i_clk_gbuf (
-    .I (trx_clk),
-    .O (adc_clk));
+  BUFGCTRL #(
+      .INIT_OUT(0),
+      .PRESELECT_I0("FALSE"),
+      .PRESELECT_I1("FALSE")
+      )
+  bufgctrl_adc (
+      .O(adc_clk),
+      .CE0(1'b1),
+      .CE1(1'b0),
+      .I0(trx_clk),
+      .I1(1'b0),
+      .IGNORE0(1'b0),
+      .IGNORE1(1'b0),
+      .S0(up_adc_ce),
+      .S1(1'b0)
+      );
 
   // receive data interface, ibuf -> idelay -> iddr
 
@@ -183,9 +195,22 @@ module axi_ad9963_if #(
     .I (tx_clk),
     .O (div_clk));
 
-  BUFG dac_bufg (
-    .I(div_clk),
-    .O(dac_clk));
+  BUFGCTRL #(
+    .INIT_OUT(0),
+    .PRESELECT_I0("FALSE"),
+    .PRESELECT_I1("FALSE")
+    )
+  bufgctrl_dac (
+    .O(dac_clk),
+    .CE0(1'b1),
+    .CE1(1'b0),
+    .I0(div_clk),
+    .I1(1'b0),
+    .IGNORE0(1'b0),
+    .IGNORE1(1'b0),
+    .S0(up_dac_ce),
+    .S1(1'b0)
+    );
 
   generate
   for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin: g_tx_data

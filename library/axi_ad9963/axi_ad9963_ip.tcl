@@ -28,6 +28,7 @@ adi_ip_files axi_ad9963 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
+  "axi_ad9963_constr.xdc" \
   "axi_ad9963_if.v" \
   "axi_ad9963_rx_pnmon.v" \
   "axi_ad9963_rx_channel.v" \
@@ -44,7 +45,6 @@ set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_cor
 
 ipx::remove_bus_interface rst [ipx::current_core]
 ipx::remove_bus_interface clk [ipx::current_core]
-ipx::remove_bus_interface l_clk [ipx::current_core]
 ipx::remove_bus_interface delay_clk [ipx::current_core]
 
 ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces s_axi_aclk \

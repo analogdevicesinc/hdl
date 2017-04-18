@@ -68,6 +68,8 @@ module axi_ad9963_tx #(
   input               dac_dovf,
   input               dac_dunf,
 
+  output              up_dac_ce,
+
   // processor interface
 
   input               up_rstn,
@@ -81,16 +83,10 @@ module axi_ad9963_tx #(
   output reg  [31:0]  up_rdata,
   output reg          up_rack);
 
-  // internal registers
-
-  reg             dac_data_sync = 'd0;
-  reg     [ 7:0]  dac_rate_cnt = 'd0;
-
   // internal signals
 
   wire            dac_data_sync_s;
   wire            dac_dds_format_s;
-  wire    [ 7:0]  dac_datarate_s;
   wire    [23:0]  dac_data_int_s;
   wire    [31:0]  up_rdata_s[0:2];
   wire            up_rack_s[0:2];
@@ -100,26 +96,18 @@ module axi_ad9963_tx #(
 
   assign dac_data_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
 
-  always @(posedge dac_clk) begin
-    dac_data_sync <= dac_data_sync_s;
-  end
-
-  // rate counters and data sync signals
-
-  always @(posedge dac_clk) begin
-    if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 8'd0)) begin
-      dac_rate_cnt <= dac_datarate_s;
-    end else begin
-      dac_rate_cnt <= dac_rate_cnt - 1'b1;
-    end
-  end
-
   // dma interface
 
   always @(posedge dac_clk) begin
-    dac_valid <= (dac_rate_cnt == 8'd0) ? 1'b1 : 1'b0;
-    dac_valid_i <= dac_valid;
-    dac_valid_q <= dac_valid;
+    if (dac_rst == 1'b1) begin
+      dac_valid <= 1'b0;
+      dac_valid_i <= 1'b0;
+      dac_valid_q <= 1'b0;
+    end else begin
+      dac_valid <= 1'b1;
+      dac_valid_i <= dac_valid;
+      dac_valid_q <= dac_valid;
+    end
   end
 
   // processor read interface
@@ -146,7 +134,7 @@ module axi_ad9963_tx #(
     .dac_data_out (dac_data_int_s[11:0]),
     .dac_data_in (dac_data_int_s[23:12]),
     .dac_enable (dac_enable_i),
-    .dac_data_sync (dac_data_sync),
+    .dac_data_sync (dac_data_sync_s),
     .dac_dds_format (dac_dds_format_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -175,7 +163,7 @@ module axi_ad9963_tx #(
     .dac_data_out (dac_data_int_s[23:12]),
     .dac_data_in (dac_data_int_s[11:0]),
     .dac_enable (dac_enable_q),
-    .dac_data_sync (dac_data_sync),
+    .dac_data_sync (dac_data_sync_s),
     .dac_dds_format (dac_dds_format_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -206,11 +194,12 @@ module axi_ad9963_tx #(
     .dac_par_enb (),
     .dac_r1_mode (),
     .dac_datafmt (dac_dds_format_s),
-    .dac_datarate (dac_datarate_s),
+    .dac_datarate (),
     .dac_status (1'b1),
     .dac_status_ovf (dac_dovf),
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd1),
+    .up_dac_ce(up_dac_ce),
     .up_drp_sel (),
     .up_drp_wr (),
     .up_drp_addr (),
