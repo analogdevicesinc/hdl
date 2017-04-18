@@ -24,120 +24,122 @@ create_bd_port -dir O -from 11 -to 0 txd
 # Logic analyzer (FCLK2): 100 MHz
 # Converter DMA (FCLK3): 55.6 MHz
 
-set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_CLK3_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {27.778}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ {55.556}] $sys_ps7
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK3_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 27.778
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 100.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ 55.556
 
 ad_connect logic_analyzer_clk_in sys_ps7/FCLK_CLK2
 ad_connect converter_dma_clk sys_ps7/FCLK_CLK3
 
-set logic_analyzer [create_bd_cell -type ip -vlnv analog.com:user:axi_logic_analyzer:1.0 logic_analyzer]
+ad_ip_instance axi_logic_analyzer logic_analyzer
 
-set la_trigger_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_var_fifo:1.0 la_trigger_fifo]
-set_property -dict [list CONFIG.DATA_WIDTH {16} ] $la_trigger_fifo
-set_property -dict [list CONFIG.ADDRESS_WIDTH {13} ] $la_trigger_fifo
+ad_ip_instance util_var_fifo la_trigger_fifo
+ad_ip_parameter la_trigger_fifo CONFIG.DATA_WIDTH 16
+ad_ip_parameter la_trigger_fifo CONFIG.ADDRESS_WIDTH 13
 
-set bram_la [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 bram_la]
-set_property -dict [list CONFIG.use_bram_block {Stand_Alone}] $bram_la
-set_property -dict [list CONFIG.Memory_Type {Simple_Dual_Port_RAM}] $bram_la
-set_property -dict [list CONFIG.Assume_Synchronous_Clk {true}] $bram_la
-set_property -dict [list CONFIG.Algorithm {Low_Power}] $bram_la
-set_property -dict [list CONFIG.Use_Byte_Write_Enable {false}] $bram_la
-set_property -dict [list CONFIG.Operating_Mode_A {NO_CHANGE}] $bram_la
-set_property -dict [list CONFIG.Register_PortB_Output_of_Memory_Primitives {true}] $bram_la
-set_property -dict [list CONFIG.Use_RSTA_Pin {false} CONFIG.Port_B_Clock {100}] $bram_la
-set_property -dict [list CONFIG.Port_B_Enable_Rate {100}] $bram_la
-set_property -dict [list CONFIG.Write_Width_A {16}] $bram_la
-set_property -dict [list CONFIG.Write_Width_B {16}] $bram_la
-set_property -dict [list CONFIG.Read_Width_B {16}] $bram_la
-set_property -dict [list CONFIG.Write_Depth_A {8192}] $bram_la
+ad_ip_instance blk_mem_gen bram_la
+ad_ip_parameter bram_la CONFIG.use_bram_block {Stand_Alone}
+ad_ip_parameter bram_la CONFIG.Memory_Type {Simple_Dual_Port_RAM}
+ad_ip_parameter bram_la CONFIG.Assume_Synchronous_Clk {true}
+ad_ip_parameter bram_la CONFIG.Algorithm {Low_Power}
+ad_ip_parameter bram_la CONFIG.Use_Byte_Write_Enable {false}
+ad_ip_parameter bram_la CONFIG.Operating_Mode_A {NO_CHANGE}
+ad_ip_parameter bram_la CONFIG.Register_PortB_Output_of_Memory_Primitives {true}
+ad_ip_parameter bram_la CONFIG.Use_RSTA_Pin {false} 
+ad_ip_parameter bram_la CONFIG.Port_B_Clock {100}
+ad_ip_parameter bram_la CONFIG.Port_B_Enable_Rate {100}
+ad_ip_parameter bram_la CONFIG.Write_Width_A {16}
+ad_ip_parameter bram_la CONFIG.Write_Width_B {16}
+ad_ip_parameter bram_la CONFIG.Read_Width_B {16}
+ad_ip_parameter bram_la CONFIG.Write_Depth_A {8192}
 
-set logic_analyzer_dmac [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 logic_analyzer_dmac]
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16} ] $logic_analyzer_dmac
-set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {1} ] $logic_analyzer_dmac
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {true} ] $logic_analyzer_dmac
-set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $logic_analyzer_dmac
+ad_ip_instance axi_dmac logic_analyzer_dmac
+ad_ip_parameter logic_analyzer_dmac CONFIG.DMA_DATA_WIDTH_SRC 16
+ad_ip_parameter logic_analyzer_dmac CONFIG.DMA_AXI_PROTOCOL_DEST 1
+ad_ip_parameter logic_analyzer_dmac CONFIG.SYNC_TRANSFER_START true
+ad_ip_parameter logic_analyzer_dmac CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG
 
-set pattern_generator_dmac [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 pattern_generator_dmac]
-set_property -dict [list CONFIG.DMA_TYPE_DEST {2} ] $pattern_generator_dmac
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $pattern_generator_dmac
-set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {128}] $pattern_generator_dmac
-set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $pattern_generator_dmac
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16} ] $pattern_generator_dmac
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $pattern_generator_dmac
-set_property -dict [list CONFIG.CYCLIC {true}] $pattern_generator_dmac
-set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $pattern_generator_dmac
+ad_ip_instance axi_dmac pattern_generator_dmac
+ad_ip_parameter pattern_generator_dmac CONFIG.DMA_TYPE_DEST 2
+ad_ip_parameter pattern_generator_dmac CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter pattern_generator_dmac CONFIG.MAX_BYTES_PER_BURST 128
+ad_ip_parameter pattern_generator_dmac CONFIG.DMA_AXI_PROTOCOL_SRC 1
+ad_ip_parameter pattern_generator_dmac CONFIG.DMA_DATA_WIDTH_DEST 16
+ad_ip_parameter pattern_generator_dmac CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter pattern_generator_dmac CONFIG.CYCLIC true
+ad_ip_parameter pattern_generator_dmac CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG
 
-set axi_ad9963 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9963:1.0 axi_ad9963]
-set_property -dict [list CONFIG.DAC_DATAPATH_DISABLE {1}] $axi_ad9963
-set_property -dict [list CONFIG.ADC_DATAPATH_DISABLE {1}] $axi_ad9963
+ad_ip_instance axi_ad9963 axi_ad9963
+ad_ip_parameter axi_ad9963 CONFIG.DAC_DATAPATH_DISABLE 1
+ad_ip_parameter axi_ad9963 CONFIG.ADC_DATAPATH_DISABLE 1
 
-set adc_trigger_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_var_fifo:1.0 adc_trigger_fifo]
-set_property -dict [list CONFIG.DATA_WIDTH {32} ] $adc_trigger_fifo
-set_property -dict [list CONFIG.ADDRESS_WIDTH {13} ] $adc_trigger_fifo
+ad_ip_instance util_var_fifo adc_trigger_fifo
+ad_ip_parameter adc_trigger_fifo CONFIG.DATA_WIDTH 32
+ad_ip_parameter adc_trigger_fifo CONFIG.ADDRESS_WIDTH 13
 
-set bram_adc [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 bram_adc]
-set_property -dict [list CONFIG.use_bram_block {Stand_Alone}] $bram_adc
-set_property -dict [list CONFIG.Memory_Type {Simple_Dual_Port_RAM}] $bram_adc
-set_property -dict [list CONFIG.Assume_Synchronous_Clk {true}] $bram_adc
-set_property -dict [list CONFIG.Algorithm {Low_Power}] $bram_adc
-set_property -dict [list CONFIG.Enable_32bit_Address {false}] $bram_adc
-set_property -dict [list CONFIG.Use_Byte_Write_Enable {false}] $bram_adc
-set_property -dict [list CONFIG.Operating_Mode_A {NO_CHANGE}] $bram_adc
-set_property -dict [list CONFIG.Register_PortB_Output_of_Memory_Primitives {true}] $bram_adc
-set_property -dict [list CONFIG.Use_RSTA_Pin {false} CONFIG.Port_B_Clock {100}] $bram_adc
-set_property -dict [list CONFIG.Port_B_Enable_Rate {100}] $bram_adc
-set_property -dict [list CONFIG.Write_Width_A {32}] $bram_adc
-set_property -dict [list CONFIG.Write_Width_B {32}] $bram_adc
-set_property -dict [list CONFIG.Read_Width_B {32}] $bram_adc
-set_property -dict [list CONFIG.Write_Depth_A {8192}] $bram_adc
+ad_ip_instance blk_mem_gen bram_adc
+ad_ip_parameter bram_adc CONFIG.use_bram_block {Stand_Alone}
+ad_ip_parameter bram_adc CONFIG.Memory_Type {Simple_Dual_Port_RAM}
+ad_ip_parameter bram_adc CONFIG.Assume_Synchronous_Clk true
+ad_ip_parameter bram_adc CONFIG.Algorithm {Low_Power}
+ad_ip_parameter bram_adc CONFIG.Enable_32bit_Address false
+ad_ip_parameter bram_adc CONFIG.Use_Byte_Write_Enable false
+ad_ip_parameter bram_adc CONFIG.Operating_Mode_A {NO_CHANGE}
+ad_ip_parameter bram_adc CONFIG.Register_PortB_Output_of_Memory_Primitives true
+ad_ip_parameter bram_adc CONFIG.Use_RSTA_Pin {false} 
+ad_ip_parameter bram_adc CONFIG.Port_B_Clock 100
+ad_ip_parameter bram_adc CONFIG.Port_B_Enable_Rate 100
+ad_ip_parameter bram_adc CONFIG.Write_Width_A 32
+ad_ip_parameter bram_adc CONFIG.Write_Width_B 32
+ad_ip_parameter bram_adc CONFIG.Read_Width_B 32
+ad_ip_parameter bram_adc CONFIG.Write_Depth_A 8192
 
-set adc_trigger_extract [create_bd_cell -type ip -vlnv analog.com:user:util_extract:1.0 adc_trigger_extract]
+ad_ip_instance util_extract adc_trigger_extract
 
 # FIXME: Bring this back eventually
-#set util_cpack_ad9963 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_ad9963]
-#set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_cpack_ad9963
-#set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_cpack_ad9963
+#ad_ip_instance util_cpack util_cpack_ad9963
+#ad_ip_parameter util_cpack_ad9963 CONFIG.NUM_OF_CHANNELS 2
+#ad_ip_parameter util_cpack_ad9963 CONFIG.CHANNEL_DATA_WIDTH 16
 
 create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 ad9963_adc_concat
 
-set ad9963_adc_dmac [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 ad9963_adc_dmac]
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {32}] $ad9963_adc_dmac
-set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {1}] $ad9963_adc_dmac
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {true}]  $ad9963_adc_dmac
-set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $ad9963_adc_dmac
+ad_ip_instance axi_dmac ad9963_adc_dmac
+ad_ip_parameter ad9963_adc_dmac CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter ad9963_adc_dmac CONFIG.DMA_AXI_PROTOCOL_DEST 1
+ad_ip_parameter ad9963_adc_dmac CONFIG.SYNC_TRANSFER_START true
+ad_ip_parameter ad9963_adc_dmac CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG
 
-set ad9963_dac_dmac_a [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 ad9963_dac_dmac_a]
-set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {128}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.CYCLIC {true}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $ad9963_dac_dmac_a
+ad_ip_instance axi_dmac ad9963_dac_dmac_a
+ad_ip_parameter ad9963_dac_dmac_a CONFIG.DMA_TYPE_DEST 2
+ad_ip_parameter ad9963_dac_dmac_a CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter ad9963_dac_dmac_a CONFIG.DMA_AXI_PROTOCOL_SRC 1
+ad_ip_parameter ad9963_dac_dmac_a CONFIG.MAX_BYTES_PER_BURST 128
+ad_ip_parameter ad9963_dac_dmac_a CONFIG.DMA_DATA_WIDTH_DEST 16
+ad_ip_parameter ad9963_dac_dmac_a CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter ad9963_dac_dmac_a CONFIG.CYCLIC {true}
+ad_ip_parameter ad9963_dac_dmac_a CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG
 
-set ad9963_dac_dmac_b [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 ad9963_dac_dmac_b]
-set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $ad9963_dac_dmac_b
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $ad9963_dac_dmac_b
-set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $ad9963_dac_dmac_b
-set_property -dict [list CONFIG.MAX_BYTES_PER_BURST {128}] $ad9963_dac_dmac_b
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16}] $ad9963_dac_dmac_b
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $ad9963_dac_dmac_a
-set_property -dict [list CONFIG.CYCLIC {true}] $ad9963_dac_dmac_b
-set_property -dict [list CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG] $ad9963_dac_dmac_b
+ad_ip_instance axi_dmac ad9963_dac_dmac_b
+ad_ip_parameter ad9963_dac_dmac_b CONFIG.DMA_TYPE_DEST 2
+ad_ip_parameter ad9963_dac_dmac_b CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter ad9963_dac_dmac_b CONFIG.DMA_AXI_PROTOCOL_SRC 1
+ad_ip_parameter ad9963_dac_dmac_b CONFIG.MAX_BYTES_PER_BURST 128
+ad_ip_parameter ad9963_dac_dmac_b CONFIG.DMA_DATA_WIDTH_DEST 16
+ad_ip_parameter ad9963_dac_dmac_b CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter ad9963_dac_dmac_b CONFIG.CYCLIC {true}
+ad_ip_parameter ad9963_dac_dmac_b CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_DEBUG
 
-set adc_trigger [create_bd_cell -type ip -vlnv analog.com:user:axi_adc_trigger:1.0 adc_trigger]
+ad_ip_instance axi_adc_trigger adc_trigger
 
-set axi_adc_decimate [create_bd_cell -type ip -vlnv analog.com:user:axi_adc_decimate:1.0 axi_adc_decimate]
-set axi_dac_interpolate [create_bd_cell -type ip -vlnv analog.com:user:axi_dac_interpolate:1.0 axi_dac_interpolate]
+ad_ip_instance axi_adc_decimate axi_adc_decimate
+ad_ip_instance axi_dac_interpolate axi_dac_interpolate
 
-set logic_analyzer_reset [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 logic_analyzer_reset]
+ad_ip_instance proc_sys_reset logic_analyzer_reset
 
-set axi_rd_wr_combiner_logic [create_bd_cell -type ip -vlnv analog.com:user:axi_rd_wr_combiner:1.0 axi_rd_wr_combiner_logic]
-set axi_rd_wr_combiner_converter [create_bd_cell -type ip -vlnv analog.com:user:axi_rd_wr_combiner:1.0 axi_rd_wr_combiner_converter]
+ad_ip_instance axi_rd_wr_combiner axi_rd_wr_combiner_logic
+ad_ip_instance axi_rd_wr_combiner axi_rd_wr_combiner_converter
 
 ad_connect data_i     logic_analyzer/data_i
 ad_connect trigger_i  logic_analyzer/trigger_i

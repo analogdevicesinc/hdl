@@ -42,94 +42,92 @@ create_bd_port -dir I -type intr ps_intr_15
 
 # instance: sys_ps7
 
-set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 sys_ps7]
+ad_ip_instance processing_system7 sys_ps7
 
-set_property -dict [list CONFIG.PCW_PRESET_BANK0_VOLTAGE {LVCMOS 1.8V}] $sys_ps7
-set_property -dict [list CONFIG.PCW_PRESET_BANK1_VOLTAGE {LVCMOS 1.8V}] $sys_ps7
-set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_PACKAGE_NAME {clg225}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {17}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_I2C0_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UART1_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UART1_UART1_IO {MIO 12 .. 13}] $sys_ps7
-set_property -dict [list CONFIG.PCW_I2C1_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_QSPI_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_QSPI_GRP_SINGLE_SS_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SD0_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
-set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USB0_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_IO {MIO}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USB0_RESET_IO {MIO 52}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USB0_RESET_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_IRQ_F2P_INTR {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_IRQ_F2P_MODE {REVERSE}] $sys_ps7
+ad_ip_parameter sys_ps7 CONFIG.PCW_PRESET_BANK0_VOLTAGE {LVCMOS 1.8V}
+ad_ip_parameter sys_ps7 CONFIG.PCW_PRESET_BANK1_VOLTAGE {LVCMOS 1.8V}
+ad_ip_parameter sys_ps7 CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_PACKAGE_NAME {clg225}
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO {17}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_I2C0_PERIPHERAL_ENABLE {0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_PERIPHERAL_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_UART1_IO {MIO 12 .. 13}
+ad_ip_parameter sys_ps7 CONFIG.PCW_I2C1_PERIPHERAL_ENABLE {0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_PERIPHERAL_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_GRP_SINGLE_SS_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SD0_PERIPHERAL_ENABLE {0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI0_SPI0_IO {EMIO}
+ad_ip_parameter sys_ps7 CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_FABRIC_INTERRUPT {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_PERIPHERAL_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_MIO_GPIO_IO {MIO}
+ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_RESET_IO {MIO 52}
+ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_RESET_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_INTR {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_MODE {REVERSE}
 
 # Clock the whole system of the DDR PLL, disable ARM and IO PLL
 # * PLL: 1000 MHz
 # * DDR: 500 MHz (2.0Gb/s),
 # * CPU: 500 MHz (downclocked to 250 MHz when idle)
-set_property -dict [list \
-	CONFIG.PCW_OVERRIDE_BASIC_CLOCK {1} \
-	CONFIG.PCW_APU_CLK_RATIO_ENABLE {6:2:1} \
-	CONFIG.PCW_QSPI_PERIPHERAL_DIVISOR0 {5} \
-	CONFIG.PCW_SPI_PERIPHERAL_DIVISOR0 {20} \
-	CONFIG.PCW_DCI_PERIPHERAL_DIVISOR0 {16} \
-	CONFIG.PCW_DCI_PERIPHERAL_DIVISOR1 {6} \
-	CONFIG.PCW_UART_PERIPHERAL_DIVISOR0 {40} \
-	CONFIG.PCW_PCAP_PERIPHERAL_DIVISOR0 {40} \
-	CONFIG.PCW_FCLK0_PERIPHERAL_DIVISOR0 {6} \
-	CONFIG.PCW_FCLK0_PERIPHERAL_DIVISOR1 {6} \
-	CONFIG.PCW_FCLK2_PERIPHERAL_DIVISOR0 {5} \
-	CONFIG.PCW_FCLK2_PERIPHERAL_DIVISOR1 {2} \
-	CONFIG.PCW_FCLK3_PERIPHERAL_DIVISOR0 {6} \
-	CONFIG.PCW_FCLK3_PERIPHERAL_DIVISOR1 {3} \
-	CONFIG.PCW_IOPLL_CTRL_FBDIV {30} \
-	CONFIG.PCW_ARMPLL_CTRL_FBDIV {30} \
-	CONFIG.PCW_DDRPLL_CTRL_FBDIV {30} \
-	CONFIG.PCW_CPU_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_SMC_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_QSPI_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_UART_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_SPI_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_FCLK0_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_FCLK1_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_FCLK2_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_FCLK3_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_PCAP_PERIPHERAL_CLKSRC {DDR PLL} \
-	CONFIG.PCW_UIPARAM_DDR_FREQ_MHZ {500} \
-	CONFIG.PCW_APU_PERIPHERAL_FREQMHZ {500}
-] [get_bd_cells sys_ps7]
+ad_ip_parameter sys_ps7 CONFIG.PCW_CPU_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SMC_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UART_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK0_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK1_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK2_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK3_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_PCAP_PERIPHERAL_CLKSRC {DDR PLL}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_FREQ_MHZ {500}
+ad_ip_parameter sys_ps7 CONFIG.PCW_APU_PERIPHERAL_FREQMHZ {500}
+ad_ip_parameter sys_ps7 CONFIG.PCW_OVERRIDE_BASIC_CLOCK {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_APU_CLK_RATIO_ENABLE {6:2:1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_PERIPHERAL_DIVISOR0 {5}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI_PERIPHERAL_DIVISOR0 {20}
+ad_ip_parameter sys_ps7 CONFIG.PCW_DCI_PERIPHERAL_DIVISOR0 {16}
+ad_ip_parameter sys_ps7 CONFIG.PCW_DCI_PERIPHERAL_DIVISOR1 {6}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UART_PERIPHERAL_DIVISOR0 {40}
+ad_ip_parameter sys_ps7 CONFIG.PCW_PCAP_PERIPHERAL_DIVISOR0 {40}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK0_PERIPHERAL_DIVISOR0 {6}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK0_PERIPHERAL_DIVISOR1 {6}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK2_PERIPHERAL_DIVISOR0 {5}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK2_PERIPHERAL_DIVISOR1 {2}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK3_PERIPHERAL_DIVISOR0 {6}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FCLK3_PERIPHERAL_DIVISOR1 {3}
+ad_ip_parameter sys_ps7 CONFIG.PCW_IOPLL_CTRL_FBDIV {30}
+ad_ip_parameter sys_ps7 CONFIG.PCW_ARMPLL_CTRL_FBDIV {30}
+ad_ip_parameter sys_ps7 CONFIG.PCW_DDRPLL_CTRL_FBDIV {30}
 
 # DDR MT41K256M16 HA-125 (32M, 16bit, 8banks)
 
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_PARTNO {MT41K256M16 RE-125}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BUS_WIDTH {16 Bit}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_USE_INTERNAL_VREF {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_WRITE_LEVEL {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_READ_GATE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_DATA_EYE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 {0.048}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 {0.050}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 {0.241}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 {0.240}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_FREQ_MHZ {500.0}] $sys_ps7
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_PARTNO {MT41K256M16 RE-125}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BUS_WIDTH {16 Bit}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_USE_INTERNAL_VREF {0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_TRAIN_WRITE_LEVEL {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_TRAIN_READ_GATE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_TRAIN_DATA_EYE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 {0.048}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 {0.050}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 {0.241}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 {0.240}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_FREQ_MHZ {500.0}
 
-set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
+ad_ip_instance axi_iic axi_iic_main
 
-set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
+ad_ip_instance xlconcat sys_concat_intc
+ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
-set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
-set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
+ad_ip_instance proc_sys_reset sys_rstgen
+ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # system reset/clock definitions
 
