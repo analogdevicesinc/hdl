@@ -83,7 +83,6 @@ module axi_ad9361_tdd (
 
   // internal signals
 
-  wire              rst;
   wire              tdd_enable_s;
   wire              tdd_secondary_s;
   wire    [ 7:0]    tdd_burst_count_s;
