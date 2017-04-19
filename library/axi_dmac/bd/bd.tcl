@@ -129,12 +129,14 @@ proc post_propagate {cellpath otherinfo} {
 		}
 
 		set intf [get_bd_intf_pins [format "%s/m_%s_axi" $cellpath [string tolower $dir]]]
-		set addr_seg [get_bd_addr_segs -of_objects  [get_bd_addr_spaces $intf]]
+		set addr_segs [get_bd_addr_segs -of_objects  [get_bd_addr_spaces $intf]]
 
-		if {$addr_seg != {}} {
-			set range [get_property "range" $addr_seg]
-			set offset [get_property "offset" $addr_seg]
-			set addr_width [expr max(round(log($range + $offset) / log(2)), $addr_width)]
+		if {$addr_segs != {}} {
+			foreach addr_seg $addr_segs {
+				set range [get_property "range" $addr_seg]
+				set offset [get_property "offset" $addr_seg]
+				set addr_width [expr max(round(log($range + $offset) / log(2)), $addr_width)]
+			}
 		} else {
 			set addr_width 32
 		}
