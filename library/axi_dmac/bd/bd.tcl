@@ -132,8 +132,9 @@ proc post_propagate {cellpath otherinfo} {
 		set addr_seg [get_bd_addr_segs -of_objects  [get_bd_addr_spaces $intf]]
 
 		if {$addr_seg != {}} {
-		   set range [get_property "range" $addr_seg]
-		   set addr_width [expr max(round(log($range) / log(2)), $addr_width)]
+			set range [get_property "range" $addr_seg]
+			set offset [get_property "offset" $addr_seg]
+			set addr_width [expr max(round(log($range + $offset) / log(2)), $addr_width)]
 		} else {
 			set addr_width 32
 		}
