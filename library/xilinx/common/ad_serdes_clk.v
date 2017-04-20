@@ -89,66 +89,68 @@ module ad_serdes_clk #(
   // instantiations
 
   generate
-  if (CLKIN_DS_OR_SE_N == 1'b1) begin
-  IBUFGDS i_clk_in_ibuf (
-    .I (clk_in_p),
-    .IB (clk_in_n),
-    .O (clk_in_s));
+  if (CLKIN_DS_OR_SE_N == 1) begin
+    IBUFGDS i_clk_in_ibuf (
+      .I (clk_in_p),
+      .IB (clk_in_n),
+      .O (clk_in_s));
   end else begin
-  IBUF IBUF_inst (
-      .O(clk_in_s),
-      .I(clk_in_p));
+    IBUF IBUF_inst (
+        .O(clk_in_s),
+        .I(clk_in_p));
   end
   endgenerate
 
   generate
   if (MMCM_OR_BUFR_N == 1) begin
-  ad_mmcm_drp #(
-    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
-    .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
-    .MMCM_CLKIN2_PERIOD (MMCM_CLKIN_PERIOD),
-    .MMCM_VCO_DIV (MMCM_VCO_DIV),
-    .MMCM_VCO_MUL (MMCM_VCO_MUL),
-    .MMCM_CLK0_DIV (MMCM_CLK0_DIV),
-    .MMCM_CLK0_PHASE (0.0),
-    .MMCM_CLK1_DIV (MMCM_CLK1_DIV),
-    .MMCM_CLK1_PHASE (0.0),
-    .MMCM_CLK2_DIV (MMCM_CLK0_DIV),
-    .MMCM_CLK2_PHASE (90.0))
-  i_mmcm_drp (
-    .clk (clk_in_s),
-    .clk2 (1'b0),
-    .clk_sel (1'b1),
-    .mmcm_rst (rst),
-    .mmcm_clk_0 (clk),
-    .mmcm_clk_1 (div_clk),
-    .mmcm_clk_2 (out_clk),
-    .up_clk (up_clk),
-    .up_rstn (up_rstn),
-    .up_drp_sel (up_drp_sel),
-    .up_drp_wr (up_drp_wr),
-    .up_drp_addr (up_drp_addr),
-    .up_drp_wdata (up_drp_wdata[15:0]),
-    .up_drp_rdata (up_drp_rdata[15:0]),
-    .up_drp_ready (up_drp_ready),
-    .up_drp_locked (up_drp_locked));
-  end
+    ad_mmcm_drp #(
+      .MMCM_DEVICE_TYPE (DEVICE_TYPE),
+      .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
+      .MMCM_CLKIN2_PERIOD (MMCM_CLKIN_PERIOD),
+      .MMCM_VCO_DIV (MMCM_VCO_DIV),
+      .MMCM_VCO_MUL (MMCM_VCO_MUL),
+      .MMCM_CLK0_DIV (MMCM_CLK0_DIV),
+      .MMCM_CLK0_PHASE (0.0),
+      .MMCM_CLK1_DIV (MMCM_CLK1_DIV),
+      .MMCM_CLK1_PHASE (0.0),
+      .MMCM_CLK2_DIV (MMCM_CLK0_DIV),
+      .MMCM_CLK2_PHASE (90.0))
+    i_mmcm_drp (
+      .clk (clk_in_s),
+      .clk2 (1'b0),
+      .clk_sel (1'b1),
+      .mmcm_rst (rst),
+      .mmcm_clk_0 (clk),
+      .mmcm_clk_1 (div_clk),
+      .mmcm_clk_2 (out_clk),
+      .up_clk (up_clk),
+      .up_rstn (up_rstn),
+      .up_drp_sel (up_drp_sel),
+      .up_drp_wr (up_drp_wr),
+      .up_drp_addr (up_drp_addr),
+      .up_drp_wdata (up_drp_wdata[15:0]),
+      .up_drp_rdata (up_drp_rdata[15:0]),
+      .up_drp_ready (up_drp_ready),
+      .up_drp_locked (up_drp_locked));
+    end
+  endgenerate
 
+  generate
   if (MMCM_OR_BUFR_N == 0) begin
-  BUFIO i_clk_buf (
-    .I (clk_in_s),
-    .O (clk));
+    BUFIO i_clk_buf (
+      .I (clk_in_s),
+      .O (clk));
 
-  BUFR #(.BUFR_DIVIDE(BUFR_DIVIDE)) i_div_clk_buf (
-    .CLR (1'b0),
-    .CE (1'b1),
-    .I (clk_in_s),
-    .O (div_clk));
+    BUFR #(.BUFR_DIVIDE(BUFR_DIVIDE)) i_div_clk_buf (
+      .CLR (1'b0),
+      .CE (1'b1),
+      .I (clk_in_s),
+      .O (div_clk));
 
-  assign out_clk = clk;
-  assign up_drp_rdata[15:0] = 'd0;
-  assign up_drp_ready = 'd0;
-  assign up_drp_locked = 'd0;
+    assign out_clk = clk;
+    assign up_drp_rdata[15:0] = 'd0;
+    assign up_drp_ready = 'd0;
+    assign up_drp_locked = 'd0;
 
   end
   endgenerate
