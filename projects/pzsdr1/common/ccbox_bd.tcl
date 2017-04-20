@@ -17,7 +17,6 @@ create_bd_port -dir O -type clk i2s_mclk
 create_bd_intf_port -mode Master -vlnv analog.com:interface:i2s_rtl:1.0 i2s
 
 set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.3 sys_audio_clkgen]
-set_property -dict [list CONFIG.PRIM_IN_FREQ {200.000}] $sys_audio_clkgen
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
 set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
 set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
