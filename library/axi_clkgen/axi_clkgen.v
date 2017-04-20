@@ -38,16 +38,16 @@
 
 module axi_clkgen #(
 
-  parameter   ID = 0,
-  parameter   DEVICE_TYPE = 0,
-  parameter   CLKIN_PERIOD  = 5.0,
-  parameter   CLKIN2_PERIOD  = 5.0,
-  parameter   VCO_DIV = 11,
-  parameter   VCO_MUL = 49,
-  parameter   CLK0_DIV = 6,
-  parameter   CLK0_PHASE = 0.000,
-  parameter   CLK1_DIV = 6,
-  parameter   CLK1_PHASE = 0.000) (
+  parameter         ID = 0,
+  parameter         DEVICE_TYPE = 0,
+  parameter real    CLKIN_PERIOD  = 5.000,
+  parameter real    CLKIN2_PERIOD  = 5.000,
+  parameter integer VCO_DIV = 11,
+  parameter real    VCO_MUL = 49.000,
+  parameter real    CLK0_DIV = 6.000,
+  parameter real    CLK0_PHASE = 0.000,
+  parameter integer CLK1_DIV = 6,
+  parameter real    CLK1_PHASE = 0.000) (
 
   // clocks
 
