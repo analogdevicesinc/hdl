@@ -17,6 +17,11 @@ adi_ip_properties axi_clkgen
 ipx::remove_bus_interface {clk} [ipx::current_core]
 ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]
 
+ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface clk2 xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface clk_0 xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface clk_1 xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
 set cc [ipx::current_core]
 set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
 
