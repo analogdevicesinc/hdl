@@ -115,6 +115,7 @@ ad_ip_instance clk_wiz sys_audio_clkgen
 ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 12.288
 ad_ip_parameter sys_audio_clkgen CONFIG.USE_LOCKED false
 ad_ip_parameter sys_audio_clkgen CONFIG.USE_RESET true 
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_PHASE_ALIGNMENT false
 ad_ip_parameter sys_audio_clkgen CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter sys_audio_clkgen CONFIG.PRIM_SOURCE No_buffer
 
