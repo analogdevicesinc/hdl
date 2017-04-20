@@ -23,6 +23,10 @@ set video_dma_resets [list \
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ 100.0
 
+ad_ip_parameter axi_hdmi_clkgen CONFIG.VCO_DIV 4
+ad_ip_parameter axi_hdmi_clkgen CONFIG.VCO_MUL 37.125
+ad_ip_parameter axi_hdmi_clkgen CONFIG.CLK0_DIV 6.250
+
 ad_ip_instance proc_sys_reset video_dma_reset
 ad_connect sys_ps7/FCLK_CLK1 video_dma_reset/slowest_sync_clk
 ad_connect sys_rstgen/peripheral_aresetn video_dma_reset/ext_reset_in
