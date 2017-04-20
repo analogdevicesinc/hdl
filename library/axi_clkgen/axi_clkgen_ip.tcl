@@ -10,9 +10,11 @@ adi_ip_files axi_clkgen [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_clkgen.v" \
   "axi_clkgen_constr.xdc" \
+  "bd/bd.tcl" \
   "axi_clkgen.v" ]
 
 adi_ip_properties axi_clkgen
+adi_ip_bd axi_clkgen "bd/bd.tcl"
 
 ipx::remove_bus_interface {clk} [ipx::current_core]
 ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]
