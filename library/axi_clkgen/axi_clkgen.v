@@ -47,9 +47,7 @@ module axi_clkgen #(
   parameter   CLK0_DIV = 6,
   parameter   CLK0_PHASE = 0.000,
   parameter   CLK1_DIV = 6,
-  parameter   CLK1_PHASE = 0.000,
-  parameter   CLK2_DIV = 6,
-  parameter   CLK2_PHASE = 0.000) (
+  parameter   CLK1_PHASE = 0.000) (
 
   // clocks
 
