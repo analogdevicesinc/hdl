@@ -97,9 +97,6 @@ module system_top (
   wire            spi_miso;
   wire            spi_mosi;
 
-  wire            spi_csn_adc;
-  wire            spi_csn_clk;
-
   // instantiations
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_gpio (
