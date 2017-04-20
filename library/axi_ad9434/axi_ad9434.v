@@ -96,7 +96,6 @@ module axi_ad9434 #(
   wire            up_rstn;
   wire            mmcm_rst;
   wire            up_clk;
-  wire            adc_clk;
 
   // internal signals
   wire            up_wreq_s;
