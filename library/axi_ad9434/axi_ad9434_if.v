@@ -170,6 +170,8 @@ module axi_ad9434_if #(
   // clock input buffers and MMCM_OR_BUFR_N
   ad_serdes_clk #(
     .DEVICE_TYPE (DEVICE_TYPE),
+    .CLKIN_DS_OR_SE_N (1),
+    .MMCM_OR_BUFR_N (1),
     .MMCM_CLKIN_PERIOD (2),
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),
