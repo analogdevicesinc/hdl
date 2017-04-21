@@ -17,26 +17,24 @@ proc load_fir_filter_vector {filter_file} {
 	return $filter
 }
 
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {35}] $sys_ps7
+ad_ip_parameter CONFIG.PCW_GPIO_EMIO_GPIO_IO 35
 
 set_property LEFT 34 [get_bd_ports GPIO_I]
 set_property LEFT 34 [get_bd_ports GPIO_O]
 set_property LEFT 34 [get_bd_ports GPIO_T]
 
-set axi_dma  [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_dma]
-set_property -dict [list \
-		CONFIG.FIFO_SIZE 2 \
-		CONFIG.DMA_TYPE_SRC 2 \
-		CONFIG.DMA_TYPE_DEST 0 \
-		CONFIG.CYCLIC 0 \
-		CONFIG.SYNC_TRANSFER_START 1 \
-		CONFIG.AXI_SLICE_SRC 0 \
-		CONFIG.AXI_SLICE_DEST 0 \
-		CONFIG.DMA_2D_TRANSFER 0 \
-		CONFIG.DMA_DATA_WIDTH_SRC 32 \
-		CONFIG.DMA_DATA_WIDTH_DEST 64 \
-		CONFIG.DMA_AXI_PROTOCOL_DEST 1 \
-	] $axi_dma
+ad_ip_instance axi_dmac axi_dma
+ad_ip_parameter axi_dma CONFIG.FIFO_SIZE 2
+ad_ip_parameter axi_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter axi_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_dma CONFIG.DMA_AXI_PROTOCOL_DEST 1
 
 # Create SPI engine controller with offload
 create_bd_cell -type hier spi
@@ -49,15 +47,15 @@ current_bd_instance /spi
 	create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
 	create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
 
-	set spi_engine [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_execution:1.0 execution]
-	set axi_spi_engine [create_bd_cell -type ip -vlnv analog.com:user:axi_spi_engine:1.0 axi]
-	set spi_engine_offload [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_offload:1.0 offload]
-	set spi_engine_interconnect [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_interconnect:1.0 interconnect]
-	set util_sigma_delta_spi [create_bd_cell -type ip -vlnv analog.com:user:util_sigma_delta_spi:1.0 util_sigma_delta_spi]
+  ad_ip_instance spi_engine_execution execution
+  ad_ip_instance axi_spi_engine axi
+  ad_ip_instance spi_engine_offload offload
+  ad_ip_instance spi_engine_interconnect interconnect
+  ad_ip_instance util_sigma_delta_spi util_sigma_delta_spi
 
-	set_property -dict [list CONFIG.NUM_OF_CS 2] $spi_engine
+  ad_ip_parameter spi_engine CONFIG.NUM_OF_CS 2
 
-	set_property -dict [list CONFIG.NUM_OF_CS 2] $util_sigma_delta_spi
+  ad_ip_parameter util_sigma_delta_spi CONFIG.NUM_OF_CS 2
 
 	ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
 	ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
@@ -97,22 +95,18 @@ current_bd_instance /
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 spi
 ad_connect spi/m_spi spi
 
-set phase_gen [create_bd_cell -type ip -vlnv xilinx.com:ip:c_counter_binary:12.0 phase_gen]
-set phase_slice [create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 phase_slice]
+ad_ip_instance c_counter_binary phase_gen
+ad_ip_instance xlslice phase_slice
 create_bd_port -dir O excitation
 
 set excitation_freq 1020
 
-set_property -dict [list \
-		CONFIG.Output_Width 32 \
-		CONFIG.Increment_Value [format "%x" [expr $excitation_freq * (1<<32) / 100000000]] \
-	] $phase_gen
+ad_ip_parameter phase_gen	CONFIG.Output_Width 32
+ad_ip_parameter phase_gen	CONFIG.Increment_Value [format "%x" [expr $excitation_freq * (1<<32) / 100000000]]
 
-set_property -dict [list \
-		CONFIG.DIN_TO {31} \
-		CONFIG.DIN_FROM {31} \
-		CONFIG.DOUT_WIDTH {1} \
-	] $phase_slice
+ad_ip_parameter phase_slice	CONFIG.DIN_TO 31
+ad_ip_parameter phase_slice	CONFIG.DIN_FROM 31
+ad_ip_parameter phase_slice	CONFIG.DOUT_WIDTH 1
 
 ad_connect /phase_gen/Q /phase_slice/Din
 ad_connect /phase_slice/Dout excitation
@@ -129,64 +123,56 @@ current_bd_instance /processing
 	create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_SAMPLE
 	create_bd_intf_pin -mode Master -vlnv analog.com:interface:fifo_wr_rtl:1.0 DMA_WR
 
-	create_bd_cell -type ip -vlnv analog.com:user:cn0363_phase_data_sync:1.0 phase_data_sync
-	create_bd_cell -type ip -vlnv analog.com:user:cn0363_dma_sequencer:1.0 sequencer
-	create_bd_cell -type ip -vlnv analog.com:user:cordic_demod:1.0 cordic_demod
+  ad_ip_instance cn0363_phase_data_sync phase_data_syn
+  ad_ip_instance cn0363_dma_sequencer sequence
+  ad_ip_instance cordic_demod cordic_demo
 
-	create_bd_cell -type ip -vlnv xilinx.com:ip:axis_broadcaster:1.1 phase_broadcast
-	create_bd_cell -type ip -vlnv xilinx.com:ip:axis_broadcaster:1.1 sample_broadcast
-	create_bd_cell -type ip -vlnv xilinx.com:ip:axis_broadcaster:1.1 sample_filtered_broadcast
-	create_bd_cell -type ip -vlnv xilinx.com:ip:axis_broadcaster:1.1 i_q_broadcast
-	create_bd_cell -type ip -vlnv xilinx.com:ip:axis_combiner:1.1 phase_sample_combine
-	set i_q_resize [create_bd_cell -type ip -vlnv analog.com:user:util_axis_resize:1.0 i_q_resize]
+  ad_ip_instance axis_broadcaster phase_broadcas
+  ad_ip_instance axis_broadcaster sample_broadcas
+  ad_ip_instance axis_broadcaster sample_filtered_broadcas
+  ad_ip_instance axis_broadcaster i_q_broadcas
+  ad_ip_instance axis_combiner phase_sample_combin
+  ad_ip_instance util_axis_resize i_q_resize
 
-	set_property -dict [list \
-		CONFIG.MASTER_DATA_WIDTH 32 \
-		CONFIG.SLAVE_DATA_WIDTH 64 \
-	] $i_q_resize
+	ad_ip_parameter i_q_size	CONFIG.MASTER_DATA_WIDTH 32
+	ad_ip_parameter i_q_size	CONFIG.SLAVE_DATA_WIDTH 64
 
-	set hpf [create_bd_cell -type ip -vlnv xilinx.com:ip:fir_compiler:7.2 hpf]
-	set lpf [create_bd_cell -type ip -vlnv xilinx.com:ip:fir_compiler:7.2 lpf]
+  ad_ip_instance fir_compiler hpf
+  ad_ip_instance fir_compiler lpf
 
-	set_property -dict [list \
-		CONFIG.Data_Fractional_Bits.VALUE_SRC USER \
-		CONFIG.Data_Sign.VALUE_SRC USER \
-		CONFIG.Data_Width.VALUE_SRC USER \
-		CONFIG.M_DATA_Has_TREADY true \
-		CONFIG.Number_Channels 2 \
-		CONFIG.Sample_Frequency 0.025 \
-		CONFIG.Clock_Frequency 100 \
-		CONFIG.Coefficient_Width 16 \
-		CONFIG.Data_Width 24 \
-		CONFIG.Output_Width 32 \
-		CONFIG.Output_Rounding_Mode Truncate_LSBs \
-		CONFIG.Has_ARESETn true \
-		CONFIG.Reset_Data_Vector false \
-		CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/hpf.mat"] \
-	] $hpf
+	ad_ip_parameter hpf	CONFIG.Data_Fractional_Bits.VALUE_SRC USER
+	ad_ip_parameter hpf	CONFIG.Data_Sign.VALUE_SRC USER
+	ad_ip_parameter hpf	CONFIG.Data_Width.VALUE_SRC USER
+	ad_ip_parameter hpf	CONFIG.M_DATA_Has_TREADY true
+	ad_ip_parameter hpf	CONFIG.Number_Channels 2
+	ad_ip_parameter hpf	CONFIG.Sample_Frequency 0.025
+	ad_ip_parameter hpf	CONFIG.Clock_Frequency 100
+	ad_ip_parameter hpf	CONFIG.Coefficient_Width 16
+	ad_ip_parameter hpf	CONFIG.Data_Width 24
+	ad_ip_parameter hpf	CONFIG.Output_Width 32
+	ad_ip_parameter hpf	CONFIG.Output_Rounding_Mode Truncate_LSBs
+	ad_ip_parameter hpf	CONFIG.Has_ARESETn true
+	ad_ip_parameter hpf	CONFIG.Reset_Data_Vector false
+	ad_ip_parameter hpf	CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/hpf.mat"]
 
-	set_property -dict [list \
-		CONFIG.Data_Fractional_Bits.VALUE_SRC USER \
-		CONFIG.Data_Sign.VALUE_SRC USER \
-		CONFIG.Data_Width.VALUE_SRC USER \
-		CONFIG.M_DATA_Has_TREADY true \
-		CONFIG.Number_Channels 4 \
-		CONFIG.Sample_Frequency 0.025 \
-		CONFIG.Clock_Frequency 100 \
-		CONFIG.Coefficient_Width 24 \
-		CONFIG.Data_Width 32 \
-		CONFIG.Output_Width 32 \
-		CONFIG.Output_Rounding_Mode Truncate_LSBs \
-		CONFIG.Has_ARESETn true \
-		CONFIG.Reset_Data_Vector false \
-		CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/lpf.mat"] \
-	] $lpf
+	ad_ip_parameter lpf	CONFIG.Data_Fractional_Bits.VALUE_SRC USER
+	ad_ip_parameter lpf	CONFIG.Data_Sign.VALUE_SRC USER
+	ad_ip_parameter lpf	CONFIG.Data_Width.VALUE_SRC USER
+	ad_ip_parameter lpf	CONFIG.M_DATA_Has_TREADY true
+	ad_ip_parameter lpf	CONFIG.Number_Channels 4
+	ad_ip_parameter lpf	CONFIG.Sample_Frequency 0.025
+	ad_ip_parameter lpf	CONFIG.Clock_Frequency 100
+	ad_ip_parameter lpf	CONFIG.Coefficient_Width 24
+	ad_ip_parameter lpf	CONFIG.Data_Width 32
+	ad_ip_parameter lpf	CONFIG.Output_Width 32
+	ad_ip_parameter lpf	CONFIG.Output_Rounding_Mode Truncate_LSBs
+	ad_ip_parameter lpf	CONFIG.Has_ARESETn true
+	ad_ip_parameter lpf	CONFIG.Reset_Data_Vector false
+	ad_ip_parameter lpf	CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/lpf.mat"]
 
-	set overflow_or [create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 overflow_or]
-	set_property -dict [list \
-		CONFIG.C_SIZE 1 \
-		CONFIG.C_OPERATION {or} \
-	] $overflow_or
+  ad_ip_instance util_vector_logic overflow_or
+	ad_ip_parameter overflow_or	CONFIG.C_SIZE 1
+	ad_ip_parameter overflow_or	CONFIG.C_OPERATION or
 
 	ad_connect S_AXIS_SAMPLE phase_data_sync/S_AXIS_SAMPLE
 	ad_connect conv_done phase_data_sync/conv_done
@@ -260,10 +246,8 @@ ad_connect /spi/M_AXIS_SAMPLE /processing/S_AXIS_SAMPLE
 ad_connect /spi/conv_done /processing/conv_done
 ad_connect /phase_gen/Q /processing/phase
 
-set axi_adc [create_bd_cell -type ip -vlnv analog.com:user:axi_generic_adc:1.0 axi_adc]
-set_property -dict [list \
-		CONFIG.NUM_OF_CHANNELS 14 \
-	] $axi_adc
+ad_ip_instance axi_generic_adc axi_adc
+ad_ip_parameter axi_dac	CONFIG.NUM_OF_CHANNELS 14
 
 ad_connect processing/overflow axi_adc/adc_dovf
 ad_connect axi_adc/adc_enable processing/channel_enable
