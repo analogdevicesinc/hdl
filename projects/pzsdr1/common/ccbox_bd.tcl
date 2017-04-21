@@ -20,6 +20,7 @@ set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.3 sy
 set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
 set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
 set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
+set_property -dict [list CONFIG.USE_PHASE_ALIGNMENT false] $sys_audio_clkgen
 
 set axi_i2s_adi [create_bd_cell -type ip -vlnv analog.com:user:axi_i2s_adi:1.0 axi_i2s_adi]
 set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_i2s_adi
