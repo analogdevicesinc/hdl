@@ -39,7 +39,7 @@
 
 `timescale 1ns/100ps
 
-module axi_dacfifo_bypass #(
+module util_dacfifo_bypass #(
 
   parameter   DAC_DATA_WIDTH = 64,
   parameter   DMA_DATA_WIDTH = 64) (

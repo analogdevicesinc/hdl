@@ -250,7 +250,7 @@ module axi_dacfifo #(
   generate
   if (FIFO_BYPASS) begin
 
-    axi_dacfifo_bypass #(
+    util_dacfifo_bypass #(
       .DAC_DATA_WIDTH (DAC_DATA_WIDTH),
       .DMA_DATA_WIDTH (DMA_DATA_WIDTH)
     ) i_dacfifo_bypass (

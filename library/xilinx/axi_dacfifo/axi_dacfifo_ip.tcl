@@ -8,11 +8,11 @@ adi_ip_create axi_dacfifo
 adi_ip_files axi_dacfifo [list \
   "$ad_hdl_dir/library/common/ad_mem_asym.v" \
   "$ad_hdl_dir/library/common/ad_axis_inf_rx.v" \
+  "$ad_hdl_dir/library/common/util_dacfifo_bypass.v" \
   "axi_dacfifo_constr.xdc" \
   "axi_dacfifo_dac.v" \
   "axi_dacfifo_wr.v" \
   "axi_dacfifo_rd.v" \
-  "axi_dacfifo_bypass.v" \
   "axi_dacfifo.v"]
 
 adi_ip_properties_lite axi_dacfifo
