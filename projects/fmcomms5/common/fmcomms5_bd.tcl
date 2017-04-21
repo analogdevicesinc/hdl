@@ -45,75 +45,75 @@ create_bd_port -dir O sys_100m_resetn
 
 # instances
 
-set axi_ad9361_0 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361_0]
-set_property -dict [list CONFIG.ID {0}] $axi_ad9361_0
-set_property -dict [list CONFIG.IO_DELAY_GROUP {dev_0_if_delay_group}] $axi_ad9361_0
+ad_ip_instance axi_ad9361 axi_ad9361_0
+ad_ip_parameter axi_ad9361_0 CONFIG.ID 0
+ad_ip_parameter axi_ad9361_0 CONFIG.IO_DELAY_GROUP dev_0_if_delay_group
 
-set axi_ad9361_1 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361_1]
-set_property -dict [list CONFIG.ID {1}] $axi_ad9361_1
-set_property -dict [list CONFIG.IO_DELAY_GROUP {dev_1_if_delay_group}] $axi_ad9361_1
+ad_ip_instance axi_ad9361 axi_ad9361_1
+ad_ip_parameter axi_ad9361_1 CONFIG.ID 1
+ad_ip_parameter axi_ad9361_1 CONFIG.IO_DELAY_GROUP dev_1_if_delay_group
 
-set axi_ad9361_dac_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9361_dac_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9361_dac_dma
-
-if {$sys_zynq == 1} {
-  set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_SRC {1}] $axi_ad9361_dac_dma
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9361_dac_dma
-}
-
-set axi_ad9361_adc_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9361_adc_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {128}] $axi_ad9361_adc_dma
+ad_ip_instance axi_dmac axi_ad9361_dac_dma
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_DEST 2
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 
 if {$sys_zynq == 1} {
-  set_property -dict [list CONFIG.DMA_AXI_PROTOCOL_DEST {1}] $axi_ad9361_adc_dma
-  set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9361_adc_dma
+  ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_AXI_PROTOCOL_SRC 1
+  ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 }
 
-set util_upack_dac [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_upack_dac]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_upack_dac
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] $util_upack_dac
+ad_ip_instance axi_dmac axi_ad9361_adc_dma
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 
-set util_cpack_adc [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_adc]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_cpack_adc
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] $util_cpack_adc
+if {$sys_zynq == 1} {
+  ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_AXI_PROTOCOL_DEST 1
+  ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+}
 
-set adc_wfifo [create_bd_cell -type ip -vlnv analog.com:user:util_wfifo:1.0 adc_wfifo]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {8} ] $adc_wfifo
-set_property -dict [list CONFIG.DIN_DATA_WIDTH {16} ] $adc_wfifo
-set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16} ] $adc_wfifo
-set_property -dict [list CONFIG.DIN_ADDRESS_WIDTH {4}] $adc_wfifo
+ad_ip_instance util_upack util_upack_dac
+ad_ip_parameter util_upack_dac CONFIG.CHANNEL_DATA_WIDTH 16
+ad_ip_parameter util_upack_dac CONFIG.NUM_OF_CHANNELS 8
 
-set clkdiv [ create_bd_cell -type ip -vlnv analog.com:user:util_clkdiv:1.0 clkdiv ]
+ad_ip_instance util_cpack util_cpack_adc
+ad_ip_parameter util_cpack_adc CONFIG.CHANNEL_DATA_WIDTH 16
+ad_ip_parameter util_cpack_adc CONFIG.NUM_OF_CHANNELS 8
 
-set clkdiv_reset [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 clkdiv_reset]
+ad_ip_instance util_wfifo adc_wfifo
+ad_ip_parameter adc_wfifo CONFIG.NUM_OF_CHANNELS 8
+ad_ip_parameter adc_wfifo CONFIG.DIN_DATA_WIDTH 16
+ad_ip_parameter adc_wfifo CONFIG.DOUT_DATA_WIDTH 16
+ad_ip_parameter adc_wfifo CONFIG.DIN_ADDRESS_WIDTH 4
 
-set dac_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_rfifo:1.0 dac_fifo]
-set_property -dict [list CONFIG.DIN_DATA_WIDTH {16}] $dac_fifo
-set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16}] $dac_fifo
-set_property -dict [list CONFIG.DIN_ADDRESS_WIDTH {4}] $dac_fifo
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {8}] $dac_fifo
+ad_ip_instance util_clkdiv clkdiv
 
-set clkdiv_sel_logic [create_bd_cell -type ip -vlnv xilinx.com:ip:util_reduced_logic:2.0 clkdiv_sel_logic]
-set_property -dict [list CONFIG.C_SIZE {4}] $clkdiv_sel_logic
+ad_ip_instance proc_sys_reset clkdiv_reset
 
-set concat_logic [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_logic]
-set_property -dict [list CONFIG.NUM_PORTS {4}] $concat_logic
+ad_ip_instance util_rfifo dac_fifo
+ad_ip_parameter dac_fifo CONFIG.DIN_DATA_WIDTH 16
+ad_ip_parameter dac_fifo CONFIG.DOUT_DATA_WIDTH 16
+ad_ip_parameter dac_fifo CONFIG.DIN_ADDRESS_WIDTH 4
+ad_ip_parameter dac_fifo CONFIG.NUM_OF_CHANNELS 8
+
+ad_ip_instance util_reduced_logic clkdiv_sel_logic
+ad_ip_parameter clkdiv_sel_logic CONFIG.C_SIZE 4
+
+ad_ip_instance xlconcat concat_logic
+ad_ip_parameter concat_logic CONFIG.NUM_PORTS 4
 
 # connections (ad9361)
 
@@ -180,7 +180,7 @@ ad_connect  concat_logic/In3     axi_ad9361_1/dac_r1_mode
 ad_connect  concat_logic/dout    clkdiv_sel_logic/Op1
 ad_connect  clkdiv_sel_logic/Res clkdiv/clk_sel
 
-ad_connect  axi_ad9361_adc_dma/fifo_wr_overflow adc_wfifo/dout_ovf          
+ad_connect  axi_ad9361_adc_dma/fifo_wr_overflow adc_wfifo/dout_ovf
 ad_connect  adc_wfifo/din_ovf axi_ad9361_0/adc_dovf
 ad_connect  axi_ad9361_0/adc_enable_i0  adc_wfifo/din_enable_0
 ad_connect  axi_ad9361_0/adc_valid_i0   adc_wfifo/din_valid_0
