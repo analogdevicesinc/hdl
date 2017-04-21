@@ -14,7 +14,7 @@ source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/daq3_bd.tcl
 
-set_property -dict [list CONFIG.XCVR_TYPE {1}] $util_daq3_xcvr
-set_property -dict [list CONFIG.QPLL_FBDIV {20}] $util_daq3_xcvr
-set_property -dict [list CONFIG.QPLL_REFCLK_DIV {1}] $util_daq3_xcvr
+ad_ip_parameter util_daq3_xcvr CONFIG.XCVR_TYPE 1
+ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV 20
+ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_REFCLK_DIV 1
 
