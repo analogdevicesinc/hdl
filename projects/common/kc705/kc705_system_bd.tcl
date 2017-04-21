@@ -53,94 +53,95 @@ set_property -dict [list CONFIG.POLARITY {ACTIVE_HIGH}] [get_bd_ports sys_rst]
 
 # instance: microblaze - processor
 
-set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.6 sys_mb]
-set_property -dict [list CONFIG.G_TEMPLATE_LIST {4}] $sys_mb
-set_property -dict [list CONFIG.C_DCACHE_FORCE_TAG_LUTRAM {1}] $sys_mb
+ad_ip_instance microblaze sys_mb
+ad_ip_parameter sys_mb CONFIG.G_TEMPLATE_LIST 4
+ad_ip_parameter sys_mb CONFIG.C_DCACHE_FORCE_TAG_LUTRAM 1
 
 # instance: microblaze - local memory & bus
 
-set sys_dlmb [create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_v10:3.0 sys_dlmb]
-set sys_ilmb [create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_v10:3.0 sys_ilmb]
+ad_ip_instance lmb_v10 sys_dlmb
+ad_ip_instance lmb_v10 sys_ilmb
 
-set sys_dlmb_cntlr [create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 sys_dlmb_cntlr]
-set_property -dict [list CONFIG.C_ECC {0}] $sys_dlmb_cntlr
+ad_ip_instance lmb_bram_if_cntlr sys_dlmb_cntlr
+ad_ip_parameter sys_dlmb_cntlr CONFIG.C_ECC 0
 
-set sys_ilmb_cntlr [create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 sys_ilmb_cntlr]
-set_property -dict [list CONFIG.C_ECC {0}] $sys_ilmb_cntlr
+ad_ip_instance lmb_bram_if_cntlr sys_ilmb_cntlr
+ad_ip_parameter sys_ilmb_cntlr CONFIG.C_ECC 0
 
-set sys_lmb_bram [create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 sys_lmb_bram]
-set_property -dict [list CONFIG.Memory_Type {True_Dual_Port_RAM} CONFIG.use_bram_block {BRAM_Controller}] $sys_lmb_bram
+ad_ip_instance blk_mem_gen sys_lmb_bram
+ad_ip_parameter sys_lmb_bram CONFIG.Memory_Type True_Dual_Port_RAM
+ad_ip_parameter sys_lmb_bram CONFIG.use_bram_block BRAM_Controller
 
 # instance: microblaze- mdm
 
-set sys_mb_debug [create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.2 sys_mb_debug]
-set_property -dict [list CONFIG.C_USE_UART {1}] $sys_mb_debug
+ad_ip_instance mdm sys_mb_debug
+ad_ip_parameter sys_mb_debug CONFIG.C_USE_UART 1
 
 # instance: system reset/clocks
 
-set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
+ad_ip_instance proc_sys_reset sys_rstgen
 
 # instance: ddr (mig)
 
-set axi_ddr_cntrl [create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:4.0 axi_ddr_cntrl]
-set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name $axi_ddr_cntrl]]]
+ad_ip_instance mig_7series axi_ddr_cntrl
+set axi_ddr_cntrl_dir [get_property IP_DIR [get_ips [get_property CONFIG.Component_Name [get_bd_cells axi_ddr_cntrl]]]]
 file copy -force $ad_hdl_dir/projects/common/kc705/kc705_system_mig.prj "$axi_ddr_cntrl_dir/"
-set_property -dict [list CONFIG.XML_INPUT_FILE {kc705_system_mig.prj}] $axi_ddr_cntrl
+ad_ip_parameter axi_ddr_cntrl CONFIG.XML_INPUT_FILE kc705_system_mig.prj
 
 # instance: default peripherals
 
-set axi_ethernet [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_ethernetlite:3.0 axi_ethernet]
-set_property -dict [list CONFIG.USE_BOARD_FLOW {true}] $axi_ethernet
-set_property -dict [list CONFIG.MII_BOARD_INTERFACE {mii}] $axi_ethernet
-set_property -dict [list CONFIG.MDIO_BOARD_INTERFACE {mdio_mdc}] $axi_ethernet
+ad_ip_instance axi_ethernetlite axi_ethernet
+ad_ip_parameter axi_ethernet CONFIG.USE_BOARD_FLOW true
+ad_ip_parameter axi_ethernet CONFIG.MII_BOARD_INTERFACE mii
+ad_ip_parameter axi_ethernet CONFIG.MDIO_BOARD_INTERFACE mdio_mdc
 
-set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
+ad_ip_instance axi_iic axi_iic_main
 
-set axi_uart [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uart]
-set_property -dict [list CONFIG.C_BAUDRATE {115200}] $axi_uart
+ad_ip_instance axi_uartlite axi_uart
+ad_ip_parameter axi_uart CONFIG.C_BAUDRATE 115200
 
-set axi_timer [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_timer:2.0 axi_timer]
+ad_ip_instance axi_timer axi_timer
 
-set axi_gpio_lcd [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_lcd]
-set_property -dict [list CONFIG.C_GPIO_WIDTH {7}] $axi_gpio_lcd
-set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio_lcd
+ad_ip_instance axi_gpio axi_gpio_lcd
+ad_ip_parameter axi_gpio_lcd CONFIG.C_GPIO_WIDTH 7
+ad_ip_parameter axi_gpio_lcd CONFIG.C_INTERRUPT_PRESENT 1
 
-set axi_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_spi]
-set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_spi
-set_property -dict [list CONFIG.C_NUM_SS_BITS {8}] $axi_spi
-set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_spi
+ad_ip_instance axi_quad_spi axi_spi
+ad_ip_parameter axi_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_spi CONFIG.C_NUM_SS_BITS 8
+ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 8
 
-set axi_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio]
-set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio
-set_property -dict [list CONFIG.C_GPIO_WIDTH {32}] $axi_gpio
-set_property -dict [list CONFIG.C_GPIO2_WIDTH {32}] $axi_gpio
-set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio
+ad_ip_instance axi_gpio axi_gpio
+ad_ip_parameter axi_gpio CONFIG.C_IS_DUAL 1
+ad_ip_parameter axi_gpio CONFIG.C_GPIO_WIDTH 32
+ad_ip_parameter axi_gpio CONFIG.C_GPIO2_WIDTH 32
+ad_ip_parameter axi_gpio CONFIG.C_INTERRUPT_PRESENT 1
 
 # instance: interrupt
 
-set axi_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_intc]
-set_property -dict [list CONFIG.C_HAS_FAST {0}] $axi_intc
+ad_ip_instance axi_intc axi_intc
+ad_ip_parameter axi_intc CONFIG.C_HAS_FAST 0
 
-set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
+ad_ip_instance xlconcat sys_concat_intc
+ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 # linear flash
 
-set axi_linear_flash [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_emc:3.0 axi_linear_flash]
-set_property -dict [list CONFIG.USE_BOARD_FLOW {true} ] $axi_linear_flash
-set_property -dict [list CONFIG.EMC_BOARD_INTERFACE {linear_flash}] $axi_linear_flash
-set_property -dict [list CONFIG.C_MEM0_TYPE {2}] $axi_linear_flash
-set_property -dict [list CONFIG.C_S_AXI_MEM_ID_WIDTH {0}] $axi_linear_flash
-set_property -dict [list CONFIG.C_THZCE_PS_MEM_0 {20000}] $axi_linear_flash
-set_property -dict [list CONFIG.C_TLZWE_PS_MEM_0 {0}] $axi_linear_flash
-set_property -dict [list CONFIG.C_TWC_PS_MEM_0 {19000}] $axi_linear_flash
-set_property -dict [list CONFIG.C_WR_REC_TIME_MEM_0 {0}] $axi_linear_flash
-set_property -dict [list CONFIG.C_TWP_PS_MEM_0 {50000}] $axi_linear_flash
-set_property -dict [list CONFIG.C_TWPH_PS_MEM_0 {20000}] $axi_linear_flash
-set_property -dict [list CONFIG.C_TPACC_PS_FLASH_0 {25000}] $axi_linear_flash
-set_property -dict [list CONFIG.C_TCEDV_PS_MEM_0 {100000}] $axi_linear_flash
-set_property -dict [list CONFIG.C_TAVDV_PS_MEM_0 {100000}] $axi_linear_flash
-set_property -dict [list CONFIG.C_THZOE_PS_MEM_0 {15000}] $axi_linear_flash
+ad_ip_instance axi_emc axi_linear_flash
+ad_ip_parameter axi_linear_flash CONFIG.USE_BOARD_FLOW true
+ad_ip_parameter axi_linear_flash CONFIG.EMC_BOARD_INTERFACE linear_flash
+ad_ip_parameter axi_linear_flash CONFIG.C_MEM0_TYPE 2
+ad_ip_parameter axi_linear_flash CONFIG.C_S_AXI_MEM_ID_WIDTH 0
+ad_ip_parameter axi_linear_flash CONFIG.C_THZCE_PS_MEM_0 20000
+ad_ip_parameter axi_linear_flash CONFIG.C_TLZWE_PS_MEM_0 0
+ad_ip_parameter axi_linear_flash CONFIG.C_TWC_PS_MEM_0 19000
+ad_ip_parameter axi_linear_flash CONFIG.C_WR_REC_TIME_MEM_0 0
+ad_ip_parameter axi_linear_flash CONFIG.C_TWP_PS_MEM_0 50000
+ad_ip_parameter axi_linear_flash CONFIG.C_TWPH_PS_MEM_0 20000
+ad_ip_parameter axi_linear_flash CONFIG.C_TPACC_PS_FLASH_0 25000
+ad_ip_parameter axi_linear_flash CONFIG.C_TCEDV_PS_MEM_0 100000
+ad_ip_parameter axi_linear_flash CONFIG.C_TAVDV_PS_MEM_0 100000
+ad_ip_parameter axi_linear_flash CONFIG.C_THZOE_PS_MEM_0 15000
 
 # connections
 
