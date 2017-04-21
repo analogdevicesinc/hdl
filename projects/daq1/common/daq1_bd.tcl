@@ -23,42 +23,42 @@ create_bd_port -dir I spi_int
 
 # dac peripherals
 
-set axi_ad9122_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9122:1.0 axi_ad9122_core]
+ad_ip_instance axi_ad9122 axi_ad9122_core
 
-set axi_ad9122_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9122_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9122_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9122_dma
-set_property -dict [list CONFIG.ID {0}] $axi_ad9122_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9122_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9122_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9122_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9122_dma
-set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9122_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {128}] $axi_ad9122_dma
+ad_ip_instance axi_dmac axi_ad9122_dma
+ad_ip_parameter axi_ad9122_dma CONFIG.DMA_TYPE_SRC {0}] $
+ad_ip_parameter axi_ad9122_dma CONFIG.DMA_TYPE_DEST 2
+ad_ip_parameter axi_ad9122_dma CONFIG.ID 0
+ad_ip_parameter axi_ad9122_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9122_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9122_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad9122_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9122_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_ad9122_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
-set util_upack_ad9122 [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_upack_ad9122]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $util_upack_ad9122
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_upack_ad9122
+ad_ip_instance util_upack util_upack_ad9122
+ad_ip_parameter util_upack_ad9122 CONFIG.CHANNEL_DATA_WIDTH 64
+ad_ip_parameter util_upack_ad9122 CONFIG.NUM_OF_CHANNELS 2
 
 # adc peripherals
 
-set axi_ad9684_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9684:1.0 axi_ad9684_core]
-set_property -dict [list CONFIG.OR_STATUS {0}] $axi_ad9684_core
+ad_ip_instance axi_ad9684 axi_ad9684_core
+ad_ip_parameter axi_ad9684_core CONFIG.OR_STATUS 0
 
-set axi_ad9684_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9684_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad9684_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9684_dma
-set_property -dict [list CONFIG.ID {1}] $axi_ad9684_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9684_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9684_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9684_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9684_dma
-set_property -dict [list CONFIG.FIFO_SIZE {16}] $axi_ad9684_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9684_dma
+ad_ip_instance axi_dmac axi_ad9684_dma
+ad_ip_parameter axi_ad9684_dma CONFIG.DMA_TYPE_SRC 1
+ad_ip_parameter axi_ad9684_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9684_dma CONFIG.ID 1
+ad_ip_parameter axi_ad9684_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9684_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9684_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad9684_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9684_dma CONFIG.FIFO_SIZE 16
+ad_ip_parameter axi_ad9684_dma CONFIG.CYCLIC 0
 
-set util_cpack_ad9684 [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_cpack_ad9684]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {32}] $util_cpack_ad9684
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $util_cpack_ad9684
+ad_ip_instance util_cpack util_cpack_ad9684
+ad_ip_parameter util_cpack_ad9684 CONFIG.CHANNEL_DATA_WIDTH 32
+ad_ip_parameter util_cpack_ad9684 CONFIG.NUM_OF_CHANNELS 2
 
 # connections (dac)
 
