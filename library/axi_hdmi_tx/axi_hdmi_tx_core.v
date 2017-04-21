@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -459,12 +459,12 @@ module axi_hdmi_tx_core #(
 
   always @(posedge hdmi_clk) begin
 
-    hdmi_36_hsync = hdmi_clip_hs_d;
-    hdmi_36_vsync = hdmi_clip_vs_d;
-    hdmi_36_data_e = hdmi_clip_de_d;
-    hdmi_36_data[35:24] = {hdmi_clip_data[23:16], hdmi_clip_data[23:20]};
-    hdmi_36_data[23:12] = {hdmi_clip_data[15: 8], hdmi_clip_data[15:12]};
-    hdmi_36_data[11: 0] = {hdmi_clip_data[ 7: 0], hdmi_clip_data[ 7: 4]};
+    hdmi_36_hsync <= hdmi_clip_hs_d;
+    hdmi_36_vsync <= hdmi_clip_vs_d;
+    hdmi_36_data_e <= hdmi_clip_de_d;
+    hdmi_36_data[35:24] <= {hdmi_clip_data[23:16], hdmi_clip_data[23:20]};
+    hdmi_36_data[23:12] <= {hdmi_clip_data[15: 8], hdmi_clip_data[15:12]};
+    hdmi_36_data[11: 0] <= {hdmi_clip_data[ 7: 0], hdmi_clip_data[ 7: 4]};
 
     hdmi_24_hsync <= hdmi_clip_hs_d;
     hdmi_24_vsync <= hdmi_clip_vs_d;
