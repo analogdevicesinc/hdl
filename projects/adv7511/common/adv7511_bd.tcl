@@ -34,6 +34,8 @@ ad_ip_parameter axi_hdmi_dma CONFIG.c_include_s2mm 0
 ad_ip_instance clk_wiz sys_audio_clkgen
 ad_ip_parameter sys_audio_clkgen CONFIG.PRIM_IN_FREQ 200.000
 ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 12.288
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_LOCKED false
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_RESET false
 
 ad_ip_instance axi_spdif_tx axi_spdif_tx_core
 ad_ip_parameter axi_spdif_tx_core CONFIG.DMA_TYPE 0
