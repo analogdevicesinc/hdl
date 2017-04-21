@@ -1,10 +1,10 @@
 
 # spi2
 
-set axi_fmcomms7_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_fmcomms7_spi]
-set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_fmcomms7_spi
-set_property -dict [list CONFIG.C_NUM_SS_BITS {12}] $axi_fmcomms7_spi
-set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_fmcomms7_spi
+ad_ip_instance axi_quad_spi axi_fmcomms7_spi
+ad_ip_parameter axi_fmcomms7_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_fmcomms7_spi CONFIG.C_NUM_SS_BITS 12
+ad_ip_parameter axi_fmcomms7_spi CONFIG.C_SCK_RATIO 8
 
 # connections (spi2)
 
@@ -27,69 +27,69 @@ ad_connect  sys_cpu_clk axi_fmcomms7_spi/ext_spi_clk
 
 # dac peripherals
 
-set axi_ad9144_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9144_xcvr]
-set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_ad9144_xcvr
-set_property -dict [list CONFIG.QPLL_ENABLE {1}] $axi_ad9144_xcvr
-set_property -dict [list CONFIG.TX_OR_RX_N {1}] $axi_ad9144_xcvr
+ad_ip_instance axi_adxcvr axi_ad9144_xcvr
+ad_ip_parameter axi_ad9144_xcvr CONFIG.NUM_OF_LANES 8
+ad_ip_parameter axi_ad9144_xcvr CONFIG.QPLL_ENABLE 1
+ad_ip_parameter axi_ad9144_xcvr CONFIG.TX_OR_RX_N 1
 
-set axi_ad9144_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9144_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9144_jesd
-set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9144_jesd
+ad_ip_instance jesd204 axi_ad9144_jesd
+ad_ip_parameter axi_ad9144_jesd CONFIG.C_NODE_IS_TRANSMIT 1
+ad_ip_parameter axi_ad9144_jesd CONFIG.C_LANES 8
 
-set axi_ad9144_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9144:1.0 axi_ad9144_core]
-set_property -dict [list CONFIG.QUAD_OR_DUAL_N {1}] $axi_ad9144_core
+ad_ip_instance axi_ad9144 axi_ad9144_core
+ad_ip_parameter axi_ad9144_core CONFIG.QUAD_OR_DUAL_N 1
 
-set axi_ad9144_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9144_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.ID {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9144_dma
-set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $axi_ad9144_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {256}] $axi_ad9144_dma
+ad_ip_instance axi_dmac axi_ad9144_dma
+ad_ip_parameter axi_ad9144_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_ad9144_dma CONFIG.DMA_TYPE_DEST 1
+ad_ip_parameter axi_ad9144_dma CONFIG.ID 1
+ad_ip_parameter axi_ad9144_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9144_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9144_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad9144_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9144_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_ad9144_dma CONFIG.DMA_DATA_WIDTH_SRC 256
+ad_ip_parameter axi_ad9144_dma CONFIG.DMA_DATA_WIDTH_DEST 256
 
-set axi_ad9144_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 axi_ad9144_upack]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9144_upack
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $axi_ad9144_upack
+ad_ip_instance util_upack axi_ad9144_upack
+ad_ip_parameter axi_ad9144_upack CONFIG.CHANNEL_DATA_WIDTH 64
+ad_ip_parameter axi_ad9144_upack CONFIG.NUM_OF_CHANNELS 4
 
 # adc peripherals
 
-set axi_ad9680_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9680_xcvr]
-set_property -dict [list CONFIG.NUM_OF_LANES {4}] $axi_ad9680_xcvr
-set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9680_xcvr
-set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9680_xcvr
+ad_ip_instance axi_adxcvr axi_ad9680_xcvr
+ad_ip_parameter axi_ad9680_xcvr CONFIG.NUM_OF_LANES 4
+ad_ip_parameter axi_ad9680_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_ad9680_xcvr CONFIG.TX_OR_RX_N 0
 
-set axi_ad9680_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9680_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9680_jesd
-set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9680_jesd
+ad_ip_instance jesd204 axi_ad9680_jesd
+ad_ip_parameter axi_ad9680_jesd CONFIG.C_NODE_IS_TRANSMIT 0
+ad_ip_parameter axi_ad9680_jesd CONFIG.C_LANES 4
 
-set axi_ad9680_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9680:1.0 axi_ad9680_core]
+ad_ip_instance axi_ad9680 axi_ad9680_core
 
-set axi_ad9680_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9680_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad9680_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.ID {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9680_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9680_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9680_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9680_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9680_dma
+ad_ip_instance axi_dmac axi_ad9680_dma
+ad_ip_parameter axi_ad9680_dma CONFIG.DMA_TYPE_SRC 1
+ad_ip_parameter axi_ad9680_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9680_dma CONFIG.ID 0
+ad_ip_parameter axi_ad9680_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9680_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9680_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9680_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad9680_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9680_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-set axi_ad9680_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 axi_ad9680_cpack]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64}] $axi_ad9680_cpack
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9680_cpack
+ad_ip_instance util_cpack axi_ad9680_cpack
+ad_ip_parameter axi_ad9680_cpack CONFIG.CHANNEL_DATA_WIDTH 64
+ad_ip_parameter axi_ad9680_cpack CONFIG.NUM_OF_CHANNELS 2
 
 # dac/adc common gt
 
-set util_fmcomms7_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_fmcomms7_xcvr]
-set_property -dict [list CONFIG.RX_NUM_OF_LANES {4}] $util_fmcomms7_xcvr
-set_property -dict [list CONFIG.TX_NUM_OF_LANES {8}] $util_fmcomms7_xcvr
+ad_ip_instance util_adxcvr util_fmcomms7_xcvr
+ad_ip_parameter util_fmcomms7_xcvr CONFIG.RX_NUM_OF_LANES 4
+ad_ip_parameter util_fmcomms7_xcvr CONFIG.TX_NUM_OF_LANES 8
 
 # reference clocks & resets
 
