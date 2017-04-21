@@ -2,8 +2,8 @@
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source ../common/fmcomms2_bd.tcl
 
-set_property -dict [list CONFIG.SIM_DEVICE {ULTRASCALE}] $clkdiv
+ad_ip_parameter clkdiv CONFIG.SIM_DEVICE ULTRASCALE
 
-set_property CONFIG.DEVICE_TYPE 2 [get_bd_cells axi_ad9361]
-set_property CONFIG.ADC_INIT_DELAY 11 [get_bd_cells axi_ad9361]
+ad_ip_parameter axi_ad9361 CONFIG.DEVICE_TYPE 2
+ad_ip_parameter axi_ad9361 CONFIG.ADC_INIT_DELAY 11
 
