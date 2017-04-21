@@ -1,66 +1,66 @@
 
 # dac peripherals
 
-set axi_ad9162_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9162_xcvr]
-set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_ad9162_xcvr
-set_property -dict [list CONFIG.QPLL_ENABLE {1}] $axi_ad9162_xcvr
-set_property -dict [list CONFIG.TX_OR_RX_N {1}] $axi_ad9162_xcvr
+ad_ip_instance axi_adxcvr axi_ad9162_xcvr
+ad_ip_parameter axi_ad9162_xcvr CONFIG.NUM_OF_LANES 8
+ad_ip_parameter axi_ad9162_xcvr CONFIG.QPLL_ENABLE 1
+ad_ip_parameter axi_ad9162_xcvr CONFIG.TX_OR_RX_N 1
 
-set axi_ad9162_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9162:1.0 axi_ad9162_core]
+ad_ip_instance axi_ad9162 axi_ad9162_core
 
-set axi_ad9162_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9162_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {1}] $axi_ad9162_jesd
-set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9162_jesd
+ad_ip_instance jesd204 axi_ad9162_jesd
+ad_ip_parameter axi_ad9162_jesd CONFIG.C_NODE_IS_TRANSMIT 1
+ad_ip_parameter axi_ad9162_jesd CONFIG.C_LANES 8
 
-set axi_ad9162_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9162_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9162_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {1}] $axi_ad9162_dma
-set_property -dict [list CONFIG.ID {1}] $axi_ad9162_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9162_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9162_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9162_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9162_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9162_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {256}] $axi_ad9162_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {256}] $axi_ad9162_dma
+ad_ip_instance axi_dmac axi_ad9162_dma
+ad_ip_parameter axi_ad9162_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_ad9162_dma CONFIG.DMA_TYPE_DEST 1
+ad_ip_parameter axi_ad9162_dma CONFIG.ID 1
+ad_ip_parameter axi_ad9162_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9162_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9162_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad9162_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9162_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9162_dma CONFIG.DMA_DATA_WIDTH_SRC 256
+ad_ip_parameter axi_ad9162_dma CONFIG.DMA_DATA_WIDTH_DEST 256
 
 # adc peripherals
 
-set axi_ad9625_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9625_xcvr]
-set_property -dict [list CONFIG.NUM_OF_LANES {8}] $axi_ad9625_xcvr
-set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9625_xcvr
-set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9625_xcvr
+ad_ip_instance axi_adxcvr axi_ad9625_xcvr
+ad_ip_parameter axi_ad9625_xcvr CONFIG.NUM_OF_LANES 8
+ad_ip_parameter axi_ad9625_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_ad9625_xcvr CONFIG.TX_OR_RX_N 0
 
-set axi_ad9625_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9625:1.0 axi_ad9625_core]
+ad_ip_instance axi_ad9625 axi_ad9625_core
 
-set axi_ad9625_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9625_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9625_jesd
-set_property -dict [list CONFIG.C_LANES {8}] $axi_ad9625_jesd
+ad_ip_instance jesd204 axi_ad9625_jesd
+ad_ip_parameter axi_ad9625_jesd CONFIG.C_NODE_IS_TRANSMIT 0
+ad_ip_parameter axi_ad9625_jesd CONFIG.C_LANES 8
 
-set axi_ad9625_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9625_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_ad9625_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.ID {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9625_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9625_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9625_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9625_dma
+ad_ip_instance axi_dmac axi_ad9625_dma
+ad_ip_parameter axi_ad9625_dma CONFIG.DMA_TYPE_SRC 1
+ad_ip_parameter axi_ad9625_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9625_dma CONFIG.ID 0
+ad_ip_parameter axi_ad9625_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9625_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9625_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ad9625_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad9625_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9625_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # shared transceiver core
 
-set util_fmcomms11_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_fmcomms11_xcvr]
-set_property -dict [list CONFIG.QPLL_FBDIV {"0100100000"}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.CPLL_FBDIV {4}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.TX_NUM_OF_LANES {8}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.TX_CLK25_DIV {7}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.RX_NUM_OF_LANES {8}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.RX_CLK25_DIV {7}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_fmcomms11_xcvr
-set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff10400020}] $util_fmcomms11_xcvr
+ad_ip_instance util_adxcvr util_fmcomms11_xcvr
+ad_ip_parameter util_fmcomms11_xcvr CONFIG.QPLL_FBDIV "0100100000"
+ad_ip_parameter util_fmcomms11_xcvr CONFIG.CPLL_FBDIV 4
+ad_ip_parameter util_fmcomms11_xcvr CONFIG.TX_NUM_OF_LANES 8
+ad_ip_parameter util_fmcomms11_xcvr CONFIG.TX_CLK25_DIV 7
+ad_ip_parameter util_fmcomms11_xcvr CONFIG.RX_NUM_OF_LANES 8
+ad_ip_parameter util_fmcomms11_xcvr CONFIG.RX_CLK25_DIV 7
+ad_ip_parameter util_fmcomms11_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
+ad_ip_parameter util_fmcomms11_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10400020
 
 # reference clocks & resets
 
