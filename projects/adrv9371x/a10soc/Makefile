@@ -97,13 +97,12 @@ M_DEPS += ../../../library/util_upack/util_upack.v
 M_DEPS += ../../../library/util_upack/util_upack_dmx.v
 M_DEPS += ../../../library/util_upack/util_upack_dsf.v
 M_DEPS += ../../../library/util_upack/util_upack_hw.tcl
-M_DEPS += ../../../library/xilinx/axi_dacfifo/axi_dacfifo.v
-M_DEPS += ../../../library/xilinx/axi_dacfifo/axi_dacfifo_bypass.v
-M_DEPS += ../../../library/xilinx/axi_dacfifo/axi_dacfifo_constr.sdc
-M_DEPS += ../../../library/xilinx/axi_dacfifo/axi_dacfifo_dac.v
-M_DEPS += ../../../library/xilinx/axi_dacfifo/axi_dacfifo_hw.tcl
-M_DEPS += ../../../library/xilinx/axi_dacfifo/axi_dacfifo_rd.v
-M_DEPS += ../../../library/xilinx/axi_dacfifo/axi_dacfifo_wr.v
+M_DEPS += ../../../library/altera/avl_dacfifo/avl_dacfifo_hw.tcl
+M_DEPS += ../../../library/altera/avl_dacfifo/avl_dacfifo.v
+M_DEPS += ../../../library/altera/avl_dacfifo/avl_dacfifo_rd.v
+M_DEPS += ../../../library/altera/avl_dacfifo/avl_dacfifo_wr.v
+M_DEPS += ../../../library/common/util_dacfifo_bypass.v
+M_DEPS += ../../../library/altera/avl_dacfifo/avl_dacfifo_constr.sdc
 
 
 M_ALTERA := quartus_sh --64bit -t 

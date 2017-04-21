@@ -60,16 +60,16 @@ set_interface_property sys_ddr_mem EXPORT_OF sys_ddr4_cntrl.mem_conduit_end
 add_interface sys_ddr_status conduit end
 set_interface_property sys_ddr_status EXPORT_OF sys_ddr4_cntrl.status_conduit_end
 
-add_instance $dac_fifo_name axi_dacfifo 1.0
+add_instance $dac_fifo_name avl_dacfifo 1.0
 set_instance_parameter_value $dac_fifo_name {DAC_DATA_WIDTH} $dac_data_width
 set_instance_parameter_value $dac_fifo_name {DMA_DATA_WIDTH} $dac_dma_data_width
-set_instance_parameter_value $dac_fifo_name {AXI_DATA_WIDTH} {512}
-set_instance_parameter_value $dac_fifo_name {AXI_ADDRESS} {0}
-set_instance_parameter_value $dac_fifo_name {AXI_ADDRESS_LIMIT} {0x7fffffff}
+set_instance_parameter_value $dac_fifo_name {AVL_DATA_WIDTH} {512}
+set_instance_parameter_value $dac_fifo_name {AVL_BASE_ADDRESS} {0}
+set_instance_parameter_value $dac_fifo_name {AVL_ADDRESS_LIMIT} {0x1fffffff}
 
 add_connection sys_clk.clk_reset sys_ddr4_cntrl.global_reset_reset_sink
-add_connection sys_ddr4_cntrl.emif_usr_reset_reset_source $dac_fifo_name.axi_reset_n
-add_connection sys_ddr4_cntrl.emif_usr_clk_clock_source $dac_fifo_name.axi_clock
-add_connection $dac_fifo_name.m_axi sys_ddr4_cntrl.ctrl_amm_avalon_slave_0
-set_connection_parameter_value $dac_fifo_name.m_axi/sys_ddr4_cntrl.ctrl_amm_avalon_slave_0 baseAddress {0x0}
+add_connection sys_ddr4_cntrl.emif_usr_reset_reset_source $dac_fifo_name.avl_reset
+add_connection sys_ddr4_cntrl.emif_usr_clk_clock_source $dac_fifo_name.avl_clock
+add_connection $dac_fifo_name.amm_ddr sys_ddr4_cntrl.ctrl_amm_avalon_slave_0
+set_connection_parameter_value $dac_fifo_name.amm_ddr/sys_ddr4_cntrl.ctrl_amm_avalon_slave_0 baseAddress {0x0}
 
