@@ -1,70 +1,70 @@
 
 # adc peripherals
 
-set axi_ad9250_xcvr [create_bd_cell -type ip -vlnv analog.com:user:axi_adxcvr:1.0 axi_ad9250_xcvr]
-set_property -dict [list CONFIG.NUM_OF_LANES {4}] $axi_ad9250_xcvr
-set_property -dict [list CONFIG.QPLL_ENABLE {0}] $axi_ad9250_xcvr
-set_property -dict [list CONFIG.TX_OR_RX_N {0}] $axi_ad9250_xcvr
-set_property -dict [list CONFIG.LPM_OR_DFE_N {0}] $axi_ad9250_xcvr
-set_property -dict [list CONFIG.OUT_CLK_SEL {"010"}] $axi_ad9250_xcvr
-set_property -dict [list CONFIG.SYS_CLK_SEL {"00"}] $axi_ad9250_xcvr
+ad_ip_instance axi_adxcvr axi_ad9250_xcvr
+ad_ip_parameter axi_ad9250_xcvr CONFIG.NUM_OF_LANES 4
+ad_ip_parameter axi_ad9250_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_ad9250_xcvr CONFIG.TX_OR_RX_N 0
+ad_ip_parameter axi_ad9250_xcvr CONFIG.LPM_OR_DFE_N 0
+ad_ip_parameter axi_ad9250_xcvr CONFIG.OUT_CLK_SEL "010"
+ad_ip_parameter axi_ad9250_xcvr CONFIG.SYS_CLK_SEL "00"
 
-set axi_ad9250_jesd [create_bd_cell -type ip -vlnv xilinx.com:ip:jesd204:7.0 axi_ad9250_jesd]
-set_property -dict [list CONFIG.C_NODE_IS_TRANSMIT {0}] $axi_ad9250_jesd
-set_property -dict [list CONFIG.C_LANES {4}] $axi_ad9250_jesd
+ad_ip_instance jesd204 axi_ad9250_jesd
+ad_ip_parameter axi_ad9250_jesd CONFIG.C_NODE_IS_TRANSMIT 0
+ad_ip_parameter axi_ad9250_jesd CONFIG.C_LANES 4
 
-set data_bsplit [create_bd_cell -type ip -vlnv analog.com:user:util_bsplit:1.0 data_bsplit]
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {64} ] $data_bsplit
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $data_bsplit
+ad_ip_instance util_bsplit data_bsplit
+ad_ip_parameter data_bsplit CONFIG.CHANNEL_DATA_WIDTH 64
+ad_ip_parameter data_bsplit CONFIG.NUM_OF_CHANNELS 2
 
-set axi_ad9250_0_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_0_core]
-set axi_ad9250_1_core [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9250:1.0 axi_ad9250_1_core]
+ad_ip_instance axi_ad9250 axi_ad9250_0_core
+ad_ip_instance axi_ad9250 axi_ad9250_1_core
 
-set axi_ad9250_0_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 axi_ad9250_0_cpack]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9250_0_cpack
-set axi_ad9250_1_cpack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 axi_ad9250_1_cpack]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {2}] $axi_ad9250_1_cpack
+ad_ip_instance util_cpack axi_ad9250_0_cpack
+ad_ip_parameter axi_ad9250_0_cpack CONFIG.NUM_OF_CHANNELS 2
+ad_ip_instance util_cpack axi_ad9250_1_cpack
+ad_ip_parameter axi_ad9250_1_cpack CONFIG.NUM_OF_CHANNELS 2
 
-set axi_ad9250_0_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9250_0_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.ID {0}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9250_0_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9250_0_dma
+ad_ip_instance axi_dmac axi_ad9250_0_dma
+ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9250_0_dma CONFIG.ID 0
+ad_ip_parameter axi_ad9250_0_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9250_0_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9250_0_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9250_0_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-set axi_ad9250_1_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9250_1_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.ID {0}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.DMA_LENGTH_WIDTH {24}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}] $axi_ad9250_1_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9250_1_dma
+ad_ip_instance axi_dmac axi_ad9250_1_dma
+ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9250_1_dma CONFIG.ID 0
+ad_ip_parameter axi_ad9250_1_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9250_1_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9250_1_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9250_1_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad9250_1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # transceiver core
 
-set util_fmcjesdadc1_xcvr [create_bd_cell -type ip -vlnv analog.com:user:util_adxcvr:1.0 util_fmcjesdadc1_xcvr]
-set_property -dict [list CONFIG.QPLL_FBDIV {"0010000000"}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.CPLL_FBDIV {2}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.TX_NUM_OF_LANES {0}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.TX_OUT_DIV {1}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.TX_CLK25_DIV {10}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.RX_NUM_OF_LANES {4}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.RX_OUT_DIV {1}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.RX_CLK25_DIV {10}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.RX_DFE_LPM_CFG {0x0904}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.RX_PMA_CFG {0x00018480}] $util_fmcjesdadc1_xcvr
-set_property -dict [list CONFIG.RX_CDR_CFG {0x03000023ff10200020}] $util_fmcjesdadc1_xcvr
+ad_ip_instance util_adxcvr util_fmcjesdadc1_xcvr
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.QPLL_FBDIV "0010000000"
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.CPLL_FBDIV 2
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.TX_NUM_OF_LANES 0
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.TX_OUT_DIV 1
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.TX_CLK25_DIV 10
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_NUM_OF_LANES 4
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_OUT_DIV 1
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_CLK25_DIV 10
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_PMA_CFG 0x00018480
+ad_ip_parameter util_fmcjesdadc1_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10200020
 
 # reference clocks & resets
 
