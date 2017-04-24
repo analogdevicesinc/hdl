@@ -26,7 +26,7 @@ create_bd_port -dir I spi_int
 ad_ip_instance axi_ad9122 axi_ad9122_core
 
 ad_ip_instance axi_dmac axi_ad9122_dma
-ad_ip_parameter axi_ad9122_dma CONFIG.DMA_TYPE_SRC {0}] $
+ad_ip_parameter axi_ad9122_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_ad9122_dma CONFIG.DMA_TYPE_DEST 2
 ad_ip_parameter axi_ad9122_dma CONFIG.ID 0
 ad_ip_parameter axi_ad9122_dma CONFIG.AXI_SLICE_SRC 0
