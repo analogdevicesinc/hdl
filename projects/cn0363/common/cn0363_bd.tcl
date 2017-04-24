@@ -17,7 +17,7 @@ proc load_fir_filter_vector {filter_file} {
 	return $filter
 }
 
-ad_ip_parameter CONFIG.PCW_GPIO_EMIO_GPIO_IO 35
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 35
 
 set_property LEFT 34 [get_bd_ports GPIO_I]
 set_property LEFT 34 [get_bd_ports GPIO_O]
@@ -53,7 +53,7 @@ current_bd_instance /spi
   ad_ip_instance spi_engine_interconnect interconnect
   ad_ip_instance util_sigma_delta_spi util_sigma_delta_spi
 
-  ad_ip_parameter spi_engine CONFIG.NUM_OF_CS 2
+  ad_ip_parameter execution CONFIG.NUM_OF_CS 2
 
   ad_ip_parameter util_sigma_delta_spi CONFIG.NUM_OF_CS 2
 
@@ -123,19 +123,19 @@ current_bd_instance /processing
 	create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_SAMPLE
 	create_bd_intf_pin -mode Master -vlnv analog.com:interface:fifo_wr_rtl:1.0 DMA_WR
 
-  ad_ip_instance cn0363_phase_data_sync phase_data_syn
-  ad_ip_instance cn0363_dma_sequencer sequence
-  ad_ip_instance cordic_demod cordic_demo
+  ad_ip_instance cn0363_phase_data_sync phase_data_sync
+  ad_ip_instance cn0363_dma_sequencer sequencer
+  ad_ip_instance cordic_demod cordic_demod
 
-  ad_ip_instance axis_broadcaster phase_broadcas
-  ad_ip_instance axis_broadcaster sample_broadcas
-  ad_ip_instance axis_broadcaster sample_filtered_broadcas
-  ad_ip_instance axis_broadcaster i_q_broadcas
-  ad_ip_instance axis_combiner phase_sample_combin
+  ad_ip_instance axis_broadcaster phase_broadcast
+  ad_ip_instance axis_broadcaster sample_broadcast
+  ad_ip_instance axis_broadcaster sample_filtered_broadcast
+  ad_ip_instance axis_broadcaster i_q_broadcast
+  ad_ip_instance axis_combiner phase_sample_combine
   ad_ip_instance util_axis_resize i_q_resize
 
-	ad_ip_parameter i_q_size	CONFIG.MASTER_DATA_WIDTH 32
-	ad_ip_parameter i_q_size	CONFIG.SLAVE_DATA_WIDTH 64
+	ad_ip_parameter i_q_resize	CONFIG.MASTER_DATA_WIDTH 32
+	ad_ip_parameter i_q_resize	CONFIG.SLAVE_DATA_WIDTH 64
 
   ad_ip_instance fir_compiler hpf
   ad_ip_instance fir_compiler lpf
@@ -247,7 +247,7 @@ ad_connect /spi/conv_done /processing/conv_done
 ad_connect /phase_gen/Q /processing/phase
 
 ad_ip_instance axi_generic_adc axi_adc
-ad_ip_parameter axi_dac	CONFIG.NUM_OF_CHANNELS 14
+ad_ip_parameter axi_adc	CONFIG.NUM_OF_CHANNELS 14
 
 ad_connect processing/overflow axi_adc/adc_dovf
 ad_connect axi_adc/adc_enable processing/channel_enable
