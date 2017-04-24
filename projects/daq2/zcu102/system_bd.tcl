@@ -14,7 +14,7 @@ source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/daq2_bd.tcl
 
-adi_ip_parameter util_daq2_xcvr CONFIG.XCVR_TYPE 2
-adi_ip_parameter util_daq2_xcvr CONFIG.QPLL_FBDIV 20
-adi_ip_parameter util_daq2_xcvr CONFIG.QPLL_REFCLK_DIV 1
+ad_ip_parameter util_daq2_xcvr CONFIG.XCVR_TYPE 2
+ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_FBDIV 20
+ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_REFCLK_DIV 1
 
