@@ -5,13 +5,13 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS += ../common/ad_rst.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += axi_dac_interpolate.v
 M_DEPS += axi_dac_interpolate_constr.xdc
+M_DEPS += axi_dac_interpolate_filter.v
 M_DEPS += axi_dac_interpolate_ip.tcl
 M_DEPS += axi_dac_interpolate_reg.v
 M_DEPS += cic_interp.v

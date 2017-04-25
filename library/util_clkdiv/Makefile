@@ -7,6 +7,7 @@
 
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += set_propertyprocessing_orderLATEipx::get_filesutil_clkdiv_constr.xdc
 M_DEPS += util_clkdiv.v
 M_DEPS += util_clkdiv_constr.xdc
 M_DEPS += util_clkdiv_ip.tcl

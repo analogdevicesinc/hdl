@@ -5,16 +5,13 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS += ../common/ad_rst.v
 M_DEPS += ../common/up_axi.v
-M_DEPS += ../common/up_clock_mon.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += axi_gpreg.v
-M_DEPS += axi_gpreg_clock_mon.v
-M_DEPS += axi_gpreg_constr.xdc
-M_DEPS += axi_gpreg_io.v
-M_DEPS += axi_gpreg_ip.tcl
+M_DEPS += ../xilinx/common/ad_lvds_out.v
+M_DEPS += axi_fmcadc5_sync.v
+M_DEPS += axi_fmcadc5_sync_constr.xdc
+M_DEPS += axi_fmcadc5_sync_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 
@@ -34,7 +31,7 @@ M_FLIST += .Xil
 
 
 .PHONY: all clean clean-all
-all: axi_gpreg.xpr
+all: axi_fmcadc5_sync.xpr
 
 
 clean:clean-all
@@ -44,9 +41,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-axi_gpreg.xpr: $(M_DEPS)
+axi_fmcadc5_sync.xpr: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_VIVADO) axi_gpreg_ip.tcl  >> axi_gpreg_ip.log 2>&1
+	$(M_VIVADO) axi_fmcadc5_sync_ip.tcl  >> axi_fmcadc5_sync_ip.log 2>&1
 
 ####################################################################################
 ####################################################################################

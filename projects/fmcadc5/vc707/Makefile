@@ -25,6 +25,7 @@ M_DEPS += ../../../library/common/ad_sysref_gen.v
 M_DEPS += ../../../library/axi_ad9625/axi_ad9625.xpr
 M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
+M_DEPS += ../../../library/axi_fmcadc5_sync/axi_fmcadc5_sync.xpr
 M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
 M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
@@ -60,6 +61,7 @@ clean-all:clean
 	make -C ../../../library/axi_ad9625 clean
 	make -C ../../../library/xilinx/axi_adxcvr clean
 	make -C ../../../library/axi_dmac clean
+	make -C ../../../library/axi_fmcadc5_sync clean
 	make -C ../../../library/util_adcfifo clean
 	make -C ../../../library/xilinx/util_adxcvr clean
 	make -C ../../../library/util_cpack clean
@@ -75,6 +77,7 @@ lib:
 	make -C ../../../library/axi_ad9625
 	make -C ../../../library/xilinx/axi_adxcvr
 	make -C ../../../library/axi_dmac
+	make -C ../../../library/axi_fmcadc5_sync
 	make -C ../../../library/util_adcfifo
 	make -C ../../../library/xilinx/util_adxcvr
 	make -C ../../../library/util_cpack

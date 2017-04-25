@@ -5,7 +5,11 @@
 ####################################################################################
 ####################################################################################
 
+M_DEPS += ../scripts/adi_env.tcl
+M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += axi_rd_wr_combiner.v
+M_DEPS += axi_rd_wr_combiner_ip.tcl
+
 M_VIVADO := vivado -mode batch -source
 
 M_FLIST := *.cache
@@ -23,8 +27,8 @@ M_FLIST += .Xil
 
 
 
-.PHONY: all dep clean clean-all
-all: dep axi_rd_wr_combiner.xpr
+.PHONY: all clean clean-all
+all: axi_rd_wr_combiner.xpr
 
 
 clean:clean-all

@@ -18,7 +18,6 @@ M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9963/axi_ad9963.xpr
 M_DEPS += ../../../library/axi_adc_decimate/axi_adc_decimate.xpr
 M_DEPS += ../../../library/axi_adc_trigger/axi_adc_trigger.xpr
-M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dac_interpolate/axi_dac_interpolate.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_logic_analyzer/axi_logic_analyzer.xpr
@@ -57,7 +56,6 @@ clean-all:clean
 	make -C ../../../library/axi_ad9963 clean
 	make -C ../../../library/axi_adc_decimate clean
 	make -C ../../../library/axi_adc_trigger clean
-	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/axi_dac_interpolate clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_logic_analyzer clean
@@ -76,7 +74,6 @@ lib:
 	make -C ../../../library/axi_ad9963
 	make -C ../../../library/axi_adc_decimate
 	make -C ../../../library/axi_adc_trigger
-	make -C ../../../library/axi_clkgen
 	make -C ../../../library/axi_dac_interpolate
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_logic_analyzer
