@@ -64,7 +64,10 @@ module ad_cmos_in #(
   output                  delay_locked);
 
 
-  // internal registers
+  // local parameter
+
+  localparam ARRIA10 = 0;
+  localparam CYCLONE5 = 1;
 
   // internal signals
 
@@ -79,7 +82,7 @@ module ad_cmos_in #(
   // instantiations
 
   generate
-  if (DEVICE_TYPE == 0) begin
+  if (DEVICE_TYPE == ARRIA10) begin
   alt_ddio_in i_rx_data_iddr (
     .ck (rx_clk),
     .pad_in (rx_data_in),
@@ -88,7 +91,7 @@ module ad_cmos_in #(
   endgenerate
 
   generate
-  if (DEVICE_TYPE == 1) begin
+  if (DEVICE_TYPE == CYCLONE5) begin
   altddio_in #(.width (1), .lpm_hint("UNUSED")) i_rx_data_iddr (
     .inclock (rx_clk),
     .datain (rx_data_in),
