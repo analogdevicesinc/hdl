@@ -40,7 +40,7 @@
 
 `timescale 1ns/100ps
 
-module axi_fmcadc5_sync (
+module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
     // receive interface
  
@@ -169,6 +169,7 @@ module axi_fmcadc5_sync (
   wire              rx_sysref_req_t_s;
   wire              rx_sysref_enb_e_s;
   wire              rx_sync_control_t_s;
+  wire    [  4:0]   up_delay_rdata_s;
   wire              up_delay_locked_s;
   wire              up_wreq_s;
   wire    [ 13:0]   up_waddr_s;
@@ -377,7 +378,7 @@ module axi_fmcadc5_sync (
           14'h0014: up_rdata <= {24'd0, up_spi_in_s};
           14'h0015: up_rdata <= {31'd0, up_spi_cnt[5]};
           14'h0020: up_rdata <= {27'd0, up_delay_wdata};
-          14'h0021: up_rdata <= {27'd0, up_delay_rdata};
+          14'h0021: up_rdata <= {27'd0, up_delay_rdata_s};
           14'h0022: up_rdata <= {31'd0, up_delay_locked_s};
           14'h0030: up_rdata <= {29'd0, up_sync_mode, up_sync_disable_1, up_sync_disable_0};
           14'h0031: up_rdata <= {30'd0, up_sync_status_1, up_sync_status_0};
@@ -499,7 +500,7 @@ module axi_fmcadc5_sync (
     .up_clk (up_clk),
     .up_dld (up_delay_ld),
     .up_dwdata (up_delay_wdata),
-    .up_drdata (up_delay_rdata),
+    .up_drdata (up_delay_rdata_s),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (up_delay_locked_s));
