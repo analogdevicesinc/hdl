@@ -140,6 +140,7 @@ current_bd_instance /processing
   ad_ip_instance fir_compiler hpf
   ad_ip_instance fir_compiler lpf
 
+	ad_ip_parameter hpf	CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/hpf.mat"]
 	ad_ip_parameter hpf	CONFIG.Data_Fractional_Bits.VALUE_SRC USER
 	ad_ip_parameter hpf	CONFIG.Data_Sign.VALUE_SRC USER
 	ad_ip_parameter hpf	CONFIG.Data_Width.VALUE_SRC USER
@@ -149,12 +150,12 @@ current_bd_instance /processing
 	ad_ip_parameter hpf	CONFIG.Clock_Frequency 100
 	ad_ip_parameter hpf	CONFIG.Coefficient_Width 16
 	ad_ip_parameter hpf	CONFIG.Data_Width 24
-	ad_ip_parameter hpf	CONFIG.Output_Width 32
 	ad_ip_parameter hpf	CONFIG.Output_Rounding_Mode Truncate_LSBs
+	ad_ip_parameter hpf	CONFIG.Output_Width 32
 	ad_ip_parameter hpf	CONFIG.Has_ARESETn true
 	ad_ip_parameter hpf	CONFIG.Reset_Data_Vector false
-	ad_ip_parameter hpf	CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/hpf.mat"]
 
+	ad_ip_parameter lpf	CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/lpf.mat"]
 	ad_ip_parameter lpf	CONFIG.Data_Fractional_Bits.VALUE_SRC USER
 	ad_ip_parameter lpf	CONFIG.Data_Sign.VALUE_SRC USER
 	ad_ip_parameter lpf	CONFIG.Data_Width.VALUE_SRC USER
@@ -164,11 +165,10 @@ current_bd_instance /processing
 	ad_ip_parameter lpf	CONFIG.Clock_Frequency 100
 	ad_ip_parameter lpf	CONFIG.Coefficient_Width 24
 	ad_ip_parameter lpf	CONFIG.Data_Width 32
-	ad_ip_parameter lpf	CONFIG.Output_Width 32
 	ad_ip_parameter lpf	CONFIG.Output_Rounding_Mode Truncate_LSBs
+	ad_ip_parameter lpf	CONFIG.Output_Width 32
 	ad_ip_parameter lpf	CONFIG.Has_ARESETn true
 	ad_ip_parameter lpf	CONFIG.Reset_Data_Vector false
-	ad_ip_parameter lpf	CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/lpf.mat"]
 
   ad_ip_instance util_vector_logic overflow_or
 	ad_ip_parameter overflow_or	CONFIG.C_SIZE 1
