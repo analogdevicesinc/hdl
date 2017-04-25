@@ -39,7 +39,6 @@
 
 module ad_cmos_in #(
 
-  parameter   SINGLE_ENDED = 0,
   parameter   DEVICE_TYPE = 0,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group") (
