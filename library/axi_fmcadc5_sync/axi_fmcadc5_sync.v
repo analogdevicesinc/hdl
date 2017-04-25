@@ -34,62 +34,40 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
+// this module is a helper core for linux. as much as possible, try not to use this core.
+// best thing to do is look at no-os and implement a proper frame work in linux.
+// most controls are scattered around other cores, here we collect them to provide a common access.
 
 `timescale 1ns/100ps
 
-module axi_gpreg #(
+module axi_fmcadc5_sync (
 
-  parameter   integer ID = 0,
-  parameter   integer NUM_OF_IO = 8,
-  parameter   integer NUM_OF_CLK_MONS = 8,
-  parameter   integer BUF_ENABLE_0 = 1,
-  parameter   integer BUF_ENABLE_1 = 1,
-  parameter   integer BUF_ENABLE_2 = 1,
-  parameter   integer BUF_ENABLE_3 = 1,
-  parameter   integer BUF_ENABLE_4 = 1,
-  parameter   integer BUF_ENABLE_5 = 1,
-  parameter   integer BUF_ENABLE_6 = 1,
-  parameter   integer BUF_ENABLE_7 = 1)
+    // receive interface
+ 
+  input             rx_clk, 
+  output            rx_sysref,
+  input             rx_sync_0,
+  input             rx_sync_1,
+  output            rx_sysref_p,
+  output            rx_sysref_n,
+  output            rx_sync_0_p,
+  output            rx_sync_0_n,
+  output            rx_sync_1_p,
+  output            rx_sync_1_n,
 
- (
+  // delay interface
+ 
+  input             delay_rst,
+  input             delay_clk,
 
-  // io
+  // spi override
 
-  output  [ 31:0]   up_gp_ioenb_0,
-  output  [ 31:0]   up_gp_out_0,
-  input   [ 31:0]   up_gp_in_0,
-  output  [ 31:0]   up_gp_ioenb_1,
-  output  [ 31:0]   up_gp_out_1,
-  input   [ 31:0]   up_gp_in_1,
-  output  [ 31:0]   up_gp_ioenb_2,
-  output  [ 31:0]   up_gp_out_2,
-  input   [ 31:0]   up_gp_in_2,
-  output  [ 31:0]   up_gp_ioenb_3,
-  output  [ 31:0]   up_gp_out_3,
-  input   [ 31:0]   up_gp_in_3,
-  output  [ 31:0]   up_gp_ioenb_4,
-  output  [ 31:0]   up_gp_out_4,
-  input   [ 31:0]   up_gp_in_4,
-  output  [ 31:0]   up_gp_ioenb_5,
-  output  [ 31:0]   up_gp_out_5,
-  input   [ 31:0]   up_gp_in_5,
-  output  [ 31:0]   up_gp_ioenb_6,
-  output  [ 31:0]   up_gp_out_6,
-  input   [ 31:0]   up_gp_in_6,
-  output  [ 31:0]   up_gp_ioenb_7,
-  output  [ 31:0]   up_gp_out_7,
-  input   [ 31:0]   up_gp_in_7,
-
-  // clock monitors
-
-  input             d_clk_0,
-  input             d_clk_1,
-  input             d_clk_2,
-  input             d_clk_3,
-  input             d_clk_4,
-  input             d_clk_5,
-  input             d_clk_6,
-  input             d_clk_7,
+  output            up_spi_req,
+  input             up_spi_gnt,
+  output  [  7:0]   up_spi_csn,
+  output            up_spi_clk,
+  output            up_spi_mosi,
+  input             up_spi_miso,
 
   // axi interface
 
@@ -115,122 +93,264 @@ module axi_gpreg #(
   input   [ 2:0]    s_axi_awprot,
   input   [ 2:0]    s_axi_arprot);
 
-
   // version
 
   localparam  [31:0]  PCORE_VERSION = 32'h00040063;
-  localparam  integer BUF_ENABLE[7:0] = {BUF_ENABLE_7, BUF_ENABLE_6, BUF_ENABLE_5, BUF_ENABLE_4,
-    BUF_ENABLE_3, BUF_ENABLE_2, BUF_ENABLE_1, BUF_ENABLE_0};
 
   // internal registers
 
-  reg               up_wack_d = 'd0;
-  reg               up_rack_d = 'd0;
-  reg     [ 31:0]   up_rdata_d = 'd0;
-  reg               up_wack = 'd0;
+  reg               up_sysref_ack_t_m1 = 'd0;
+  reg               up_sysref_ack_t_m2 = 'd0;
+  reg               up_sysref_ack_t_m3 = 'd0;
+  reg               up_sysref_control_t = 'd0;
+  reg     [  1:0]   up_sysref_mode_e = 'd0;
+  reg               up_sysref_mode_i = 'd0;
+  reg               up_sysref_req_t = 'd0;
+  reg               up_sysref_status = 'd0;
+  reg               up_sync_control_t = 'd0;
+  reg               up_sync_mode = 'd0;
+  reg               up_sync_disable_1 = 'd0;
+  reg               up_sync_disable_0 = 'd0;
+  reg               up_sync_status_t_m1 = 'd0;
+  reg               up_sync_status_t_m2 = 'd0;
+  reg               up_sync_status_t_m3 = 'd0;
+  reg               up_sync_status_1 = 'd0;
+  reg               up_sync_status_0 = 'd0;
+  reg               up_delay_ld = 'd0;
+  reg     [  4:0]   up_delay_wdata = 'd0;
+  reg               up_spi_req_int = 'd0;
+  reg     [  7:0]   up_spi_csn_int = 'd0;
+  reg     [  5:0]   up_spi_cnt = 'd0;
+  reg     [ 31:0]   up_spi_clk_32 = 'd0;
+  reg     [ 31:0]   up_spi_out_32 = 'd0;
+  reg     [ 31:0]   up_spi_in_32 = 'd0;
+  reg     [  7:0]   up_spi_out = 'd0;
   reg     [ 31:0]   up_scratch = 'd0;
+  reg               up_wack = 'd0;
   reg               up_rack = 'd0;
   reg     [ 31:0]   up_rdata = 'd0;
+  reg     [  7:0]   rx_sysref_cnt = 'd0;
+  reg               rx_sysref_control_t_m1 = 'd0;
+  reg               rx_sysref_control_t_m2 = 'd0;
+  reg               rx_sysref_control_t_m3 = 'd0;
+  reg     [  1:0]   rx_sysref_mode_e = 'd0;
+  reg               rx_sysref_mode_i = 'd0;
+  reg               rx_sysref_req_t_m1 = 'd0;
+  reg               rx_sysref_req_t_m2 = 'd0;
+  reg               rx_sysref_req_t_m3 = 'd0;
+  reg               rx_sysref_req = 'd0;
+  reg               rx_sysref_e = 'd0;
+  reg               rx_sysref_i = 'd0;
+  reg               rx_sysref_ack_t = 'd0;
+  reg               rx_sysref_enb_e = 'd0;
+  reg               rx_sysref_enb_i = 'd0;
+  reg               rx_sync_control_t_m1 = 'd0;
+  reg               rx_sync_control_t_m2 = 'd0;
+  reg               rx_sync_control_t_m3 = 'd0;
+  reg               rx_sync_mode = 'd0;
+  reg               rx_sync_disable_1 = 'd0;
+  reg               rx_sync_disable_0 = 'd0;
+  reg               rx_sync_out_1 = 'd0;
+  reg               rx_sync_out_0 = 'd0;
+  reg     [  7:0]   rx_sync_cnt = 'd0;
+  reg               rx_sync_hold_1 = 'd0;
+  reg               rx_sync_hold_0 = 'd0;
+  reg               rx_sync_status_t = 'd0;
+  reg               rx_sync_status_1 = 'd0;
+  reg               rx_sync_status_0 = 'd0;
 
   // internal signals
 
+  wire              up_sysref_ack_t_s;
+  wire              up_sync_status_t_s;
+  wire    [ 31:0]   up_spi_out_32_s;
+  wire    [  7:0]   up_spi_in_s;
+  wire              rx_sysref_control_t_s;
+  wire              rx_sysref_req_t_s;
+  wire              rx_sysref_enb_e_s;
+  wire              rx_sync_control_t_s;
+  wire              up_delay_locked_s;
+  wire              up_wreq_s;
+  wire    [ 13:0]   up_waddr_s;
+  wire    [ 31:0]   up_wdata_s;
+  wire              up_rreq_s;
+  wire    [ 13:0]   up_raddr_s;
   wire              up_rstn;
   wire              up_clk;
-  wire              up_wreq;
-  wire    [ 13:0]   up_waddr;
-  wire    [ 31:0]   up_wdata;
-  wire              up_rreq;
-  wire    [ 13:0]   up_raddr;
-  wire              up_wreq_s;
-  wire              up_rreq_s;
-  wire    [ 31:0]   up_gp_ioenb_s[7:0];
-  wire    [ 31:0]   up_gp_out_s[7:0];
-  wire    [ 31:0]   up_gp_in_s[7:0];
-  wire    [  7:0]   d_clk_s;
-  wire    [ 16:0]   up_wack_s;
-  wire    [ 16:0]   up_rack_s;
-  wire    [ 31:0]   up_rdata_s[16:0];
 
   // signal name changes
 
   assign up_rstn = s_axi_aresetn;
   assign up_clk = s_axi_aclk;
 
-  // split-up interfaces
+  // sysref register(s) 
 
-  assign up_gp_ioenb_0 = up_gp_ioenb_s[0];
-  assign up_gp_out_0 = up_gp_out_s[0];
-  assign up_gp_in_s[0] = up_gp_in_0;
-  assign up_gp_ioenb_1 = up_gp_ioenb_s[1];
-  assign up_gp_out_1 = up_gp_out_s[1];
-  assign up_gp_in_s[1] = up_gp_in_1;
-  assign up_gp_ioenb_2 = up_gp_ioenb_s[2];
-  assign up_gp_out_2 = up_gp_out_s[2];
-  assign up_gp_in_s[2] = up_gp_in_2;
-  assign up_gp_ioenb_3 = up_gp_ioenb_s[3];
-  assign up_gp_out_3 = up_gp_out_s[3];
-  assign up_gp_in_s[3] = up_gp_in_3;
-  assign up_gp_ioenb_4 = up_gp_ioenb_s[4];
-  assign up_gp_out_4 = up_gp_out_s[4];
-  assign up_gp_in_s[4] = up_gp_in_4;
-  assign up_gp_ioenb_5 = up_gp_ioenb_s[5];
-  assign up_gp_out_5 = up_gp_out_s[5];
-  assign up_gp_in_s[5] = up_gp_in_5;
-  assign up_gp_ioenb_6 = up_gp_ioenb_s[6];
-  assign up_gp_out_6 = up_gp_out_s[6];
-  assign up_gp_in_s[6] = up_gp_in_6;
-  assign up_gp_ioenb_7 = up_gp_ioenb_s[7];
-  assign up_gp_out_7 = up_gp_out_s[7];
-  assign up_gp_in_s[7] = up_gp_in_7;
+  assign up_sysref_ack_t_s = up_sysref_ack_t_m3 ^ up_sysref_ack_t_m2;
 
-  assign d_clk_s[0] = d_clk_0;
-  assign d_clk_s[1] = d_clk_1;
-  assign d_clk_s[2] = d_clk_2;
-  assign d_clk_s[3] = d_clk_3;
-  assign d_clk_s[4] = d_clk_4;
-  assign d_clk_s[5] = d_clk_5;
-  assign d_clk_s[6] = d_clk_6;
-  assign d_clk_s[7] = d_clk_7;
-
-  // up signals
-
-  always @(posedge up_clk or negedge up_rstn) begin
+  always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
-      up_wack_d <= 1'd0;
-      up_rack_d <= 1'd0;
-      up_rdata_d <= 32'd0;
+      up_sysref_ack_t_m1 <= 1'd0;
+      up_sysref_ack_t_m2 <= 1'd0;
+      up_sysref_ack_t_m3 <= 1'd0;
     end else begin
-      up_wack_d <= | up_wack_s;
-      up_rack_d <= | up_rack_s;
-      up_rdata_d <= up_rdata_s[ 0] | up_rdata_s[ 1] | up_rdata_s[ 2] |
-        up_rdata_s[ 3] | up_rdata_s[ 4] | up_rdata_s[ 5] | up_rdata_s[ 6] |
-        up_rdata_s[ 7] | up_rdata_s[ 8] | up_rdata_s[ 9] | up_rdata_s[10] |
-        up_rdata_s[11] | up_rdata_s[12] | up_rdata_s[13] | up_rdata_s[14] |
-        up_rdata_s[15] | up_rdata_s[16];
+      up_sysref_ack_t_m1 <= rx_sysref_ack_t;
+      up_sysref_ack_t_m2 <= up_sysref_ack_t_m1;
+      up_sysref_ack_t_m3 <= up_sysref_ack_t_m2;
     end
   end
 
-  // generic register map
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_sysref_control_t <= 1'd0;
+      up_sysref_mode_e <= 2'd0;
+      up_sysref_mode_i <= 1'd0;
+      up_sysref_req_t <= 1'd0;
+      up_sysref_status <= 1'b0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0040)) begin
+        up_sysref_control_t <= ~up_sysref_control_t;
+        up_sysref_mode_e <= up_wdata_s[5:4];
+        up_sysref_mode_i <= up_wdata_s[0];
+      end
+      if (up_sysref_status == 1'b1) begin
+        if (up_sysref_ack_t_s == 1'b1) begin
+          up_sysref_req_t <= up_sysref_req_t;
+          up_sysref_status <= 1'b0;
+        end
+      end else if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0041)) begin
+        if (up_wdata_s[0] == 1'b1) begin
+          up_sysref_req_t <= ~up_sysref_req_t;
+          up_sysref_status <= 1'b1;
+        end
+      end
+    end
+  end
 
-  assign up_wack_s[16] = up_wack;
-  assign up_rack_s[16] = up_rack;
-  assign up_rdata_s[16] = up_rdata;
-
-  // decode block select
-
-  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
-  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
-
-  // processor write interface
+  // sync register(s) 
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_wack <= 'd0;
+      up_sync_control_t <= 1'd0;
+      up_sync_mode <= 1'd0;
+      up_sync_disable_1 <= 1'd0;
+      up_sync_disable_0 <= 1'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0030)) begin
+        up_sync_control_t <= ~up_sync_control_t;
+        up_sync_mode <= up_wdata_s[2];
+        up_sync_disable_1 <= up_wdata_s[1];
+        up_sync_disable_0 <= up_wdata_s[0];
+      end
+    end
+  end
+
+  // simple current status (no persistence)
+ 
+  assign up_sync_status_t_s = up_sync_status_t_m3 ^ up_sync_status_t_m2;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_sync_status_t_m1 <= 1'd0;
+      up_sync_status_t_m2 <= 1'd0;
+      up_sync_status_t_m3 <= 1'd0;
+      up_sync_status_1 <= 1'd0;
+      up_sync_status_0 <= 1'd0;
+    end else begin
+      up_sync_status_t_m1 <= rx_sync_status_t;
+      up_sync_status_t_m2 <= up_sync_status_t_m1;
+      up_sync_status_t_m3 <= up_sync_status_t_m2;
+      if (up_sync_status_t_s == 1'b1) begin
+        up_sync_status_1 <= rx_sync_status_1;
+        up_sync_status_0 <= rx_sync_status_0;
+      end
+    end
+  end
+
+  // delay register(s)
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_delay_ld <= 1'd0;
+      up_delay_wdata <= 5'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0020)) begin
+        up_delay_ld <= 1'b1;
+      end else begin
+        up_delay_ld <= 1'b0;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0020)) begin
+        up_delay_wdata <= up_wdata_s[4:0];
+      end
+    end
+  end
+
+  // spi access
+ 
+  assign up_spi_req = up_spi_req_int;
+  assign up_spi_csn = up_spi_csn_int;
+  assign up_spi_clk = up_spi_clk_32[31];
+  assign up_spi_mosi = up_spi_out_32[31];
+
+  assign up_spi_out_32_s[31:28] = {4{up_wdata_s[7]}};
+  assign up_spi_out_32_s[27:24] = {4{up_wdata_s[6]}};
+  assign up_spi_out_32_s[23:20] = {4{up_wdata_s[5]}};
+  assign up_spi_out_32_s[19:16] = {4{up_wdata_s[4]}};
+  assign up_spi_out_32_s[15:12] = {4{up_wdata_s[3]}};
+  assign up_spi_out_32_s[11: 8] = {4{up_wdata_s[2]}};
+  assign up_spi_out_32_s[ 7: 4] = {4{up_wdata_s[1]}};
+  assign up_spi_out_32_s[ 3: 0] = {4{up_wdata_s[0]}};
+
+  assign up_spi_in_s[7] = up_spi_in_32[28];
+  assign up_spi_in_s[6] = up_spi_in_32[24];
+  assign up_spi_in_s[5] = up_spi_in_32[20];
+  assign up_spi_in_s[4] = up_spi_in_32[16];
+  assign up_spi_in_s[3] = up_spi_in_32[12];
+  assign up_spi_in_s[2] = up_spi_in_32[ 8];
+  assign up_spi_in_s[1] = up_spi_in_32[ 4];
+  assign up_spi_in_s[0] = up_spi_in_32[ 0];
+
+  // spi register(s)
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_spi_req_int <= 1'd0;
+      up_spi_csn_int <= {8{1'b1}};
+      up_spi_cnt <= 6'd0;
+      up_spi_clk_32 <= 32'd0;
+      up_spi_out_32 <= 32'd0;
+      up_spi_in_32 <= 32'd0;
+      up_spi_out <= 8'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0010)) begin
+        up_spi_req_int <= up_wdata_s[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0012)) begin
+        up_spi_csn_int <= up_wdata_s[7:0];
+      end
+      if (up_spi_cnt[5] == 1'b1) begin
+        up_spi_cnt <= up_spi_cnt + 1'b1;
+        up_spi_clk_32 <= {up_spi_clk_32[30:0], 1'd0};
+        up_spi_out_32 <= {up_spi_out_32[30:0], 1'd0};
+        up_spi_in_32 <= {up_spi_in_32[30:0], up_spi_miso};
+        up_spi_out <= up_spi_out;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0013)) begin
+        up_spi_cnt <= 6'h20;
+        up_spi_clk_32 <= {8{4'h6}};
+        up_spi_out_32 <= up_spi_out_32_s;
+        up_spi_in_32 <= {31'd0, up_spi_miso};
+        up_spi_out <= up_wdata_s[7:0];
+      end
+    end
+  end
+
+  // scratch register(s)
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
       up_scratch <= 'd0;
     end else begin
-      up_wack <= up_wreq_s;
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
-        up_scratch <= up_wdata;
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0002)) begin
+        up_scratch <= up_wdata_s;
       end
     end
   end
@@ -239,15 +359,30 @@ module axi_gpreg #(
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_wack <= 'd0;
       up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
+      up_wack <= up_wreq_s;
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
-        case (up_raddr[7:0])
-          8'h00: up_rdata <= PCORE_VERSION;
-          8'h01: up_rdata <= ID;
-          8'h02: up_rdata <= up_scratch;
+        case (up_raddr_s)
+          14'h0000: up_rdata <= PCORE_VERSION;
+          14'h0001: up_rdata <= ID;
+          14'h0002: up_rdata <= up_scratch;
+          14'h0010: up_rdata <= {31'd0, up_spi_req_int};
+          14'h0011: up_rdata <= {31'd0, up_spi_gnt};
+          14'h0012: up_rdata <= {24'd0, up_spi_csn_int};
+          14'h0013: up_rdata <= {24'd0, up_spi_out};
+          14'h0014: up_rdata <= {24'd0, up_spi_in_s};
+          14'h0015: up_rdata <= {31'd0, up_spi_cnt[5]};
+          14'h0020: up_rdata <= {27'd0, up_delay_wdata};
+          14'h0021: up_rdata <= {27'd0, up_delay_rdata};
+          14'h0022: up_rdata <= {31'd0, up_delay_locked_s};
+          14'h0030: up_rdata <= {29'd0, up_sync_mode, up_sync_disable_1, up_sync_disable_0};
+          14'h0031: up_rdata <= {30'd0, up_sync_status_1, up_sync_status_0};
+          14'h0040: up_rdata <= {26'd0, up_sysref_mode_e, 3'b0, up_sysref_mode_i};
+          14'h0041: up_rdata <= {31'd0, up_sysref_status};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -256,70 +391,121 @@ module axi_gpreg #(
     end
   end
 
-  // instantiations
+  // sysref-control at receive clock
 
-  genvar n;
-  generate
-
-  // gpio
-
-  if (NUM_OF_IO < 8) begin
-  for (n = NUM_OF_IO; n < 8; n = n + 1) begin: g_unused_io
-  assign up_gp_ioenb_s[n] = 32'd0;
-  assign up_gp_out_s[n] = 32'd0;
-  assign up_wack_s[n] = 1'd0;
-  assign up_rdata_s[n] = 32'd0;
-  assign up_rack_s[n] = 1'd0;
-  end
+  always @(posedge rx_clk) begin
+    rx_sysref_cnt <= rx_sysref_cnt + 1'b1;
   end
 
-  for (n = 0; n < NUM_OF_IO; n = n + 1) begin: g_io
-  axi_gpreg_io #(.ID (16+n)) i_gpreg_io (
-    .up_gp_ioenb (up_gp_ioenb_s[n]),
-    .up_gp_out (up_gp_out_s[n]),
-    .up_gp_in (up_gp_in_s[n]),
-    .up_rstn (up_rstn),
+  assign rx_sysref_control_t_s = rx_sysref_control_t_m3 ^ rx_sysref_control_t_m2;
+  assign rx_sysref_req_t_s = rx_sysref_req_t_m3 ^ rx_sysref_req_t_m2;
+
+  always @(posedge rx_clk) begin
+    rx_sysref_control_t_m1 <= up_sysref_control_t;
+    rx_sysref_control_t_m2 <= rx_sysref_control_t_m1;
+    rx_sysref_control_t_m3 <= rx_sysref_control_t_m2;
+    if (rx_sysref_control_t_s == 1'b1) begin
+      rx_sysref_mode_e <= up_sysref_mode_e;
+      rx_sysref_mode_i <= up_sysref_mode_i;
+    end
+    rx_sysref_req_t_m1 <= up_sysref_req_t;
+    rx_sysref_req_t_m2 <= rx_sysref_req_t_m1;
+    rx_sysref_req_t_m3 <= rx_sysref_req_t_m2;
+    if ((rx_sysref_cnt == 8'd0) || (rx_sysref_req_t_s == 1'b1)) begin
+      rx_sysref_req <= rx_sysref_req_t_s;
+    end
+  end
+
+  assign rx_sysref_enb_e_s = (rx_sysref_mode_e == 2'b10) ? rx_sysref_req :
+    ((rx_sysref_mode_e == 2'b00) ? 1'b1 : 1'b0);
+
+  always @(posedge rx_clk) begin
+    rx_sysref_e <= rx_sysref_cnt[7] & rx_sysref_enb_e;
+    rx_sysref_i <= rx_sysref_cnt[7] & rx_sysref_enb_i;
+    if (rx_sysref_cnt == 8'd0) begin
+      if (rx_sysref_enb_e == 1'b1) begin
+        rx_sysref_ack_t <= ~rx_sysref_ack_t;
+      end
+      rx_sysref_enb_e <= rx_sysref_enb_e_s;
+      rx_sysref_enb_i <= ~rx_sysref_mode_i;
+    end
+  end
+
+  // sync-control at receive clock
+
+  assign rx_sync_control_t_s = rx_sync_control_t_m3 ^ rx_sync_control_t_m2;
+
+  always @(posedge rx_clk) begin
+    rx_sync_control_t_m1 <= up_sync_control_t;
+    rx_sync_control_t_m2 <= rx_sync_control_t_m1;
+    rx_sync_control_t_m3 <= rx_sync_control_t_m2;
+    if (rx_sync_control_t_s == 1'b1) begin
+      rx_sync_mode <= up_sync_mode;
+      rx_sync_disable_1 <= up_sync_disable_1;
+      rx_sync_disable_0 <= up_sync_disable_0;
+    end
+    if (rx_sync_mode == 1'b1) begin
+      rx_sync_out_1 <= ~rx_sync_disable_1 & rx_sync_1 & rx_sync_0;
+      rx_sync_out_0 <= ~rx_sync_disable_0 & rx_sync_1 & rx_sync_0;
+    end else begin
+      rx_sync_out_1 <= ~rx_sync_disable_1 & rx_sync_1;
+      rx_sync_out_0 <= ~rx_sync_disable_0 & rx_sync_0;
+    end
+  end
+
+  always @(posedge rx_clk) begin
+    rx_sync_cnt <= rx_sync_cnt + 1'b1;
+    if ((rx_sync_cnt == 8'd0) || (rx_sync_1 == 1'b0)) begin
+      rx_sync_hold_1 <= rx_sync_1;
+    end
+    if ((rx_sync_cnt == 8'd0) || (rx_sync_0 == 1'b0)) begin
+      rx_sync_hold_0 <= rx_sync_0;
+    end
+    if (rx_sync_cnt == 8'd0) begin
+      rx_sync_status_t <= ~rx_sync_status_t;
+      rx_sync_status_1 <= rx_sync_hold_1;
+      rx_sync_status_0 <= rx_sync_hold_0;
+    end
+  end
+
+  // sync buffers
+ 
+  OBUFDS i_obufds_rx_sync_1 (
+    .I (rx_sync_out_1),
+    .O (rx_sync_1_p),
+    .OB (rx_sync_1_n));
+
+  OBUFDS i_obufds_rx_sync_0 (
+    .I (rx_sync_out_0),
+    .O (rx_sync_0_p),
+    .OB (rx_sync_0_n));
+
+  // sysref delay control
+
+  assign rx_sysref = rx_sysref_i;
+
+  ad_lvds_out #(
+    .DEVICE_TYPE (0),
+    .SINGLE_ENDED (0),
+    .IODELAY_ENABLE (1),
+    .IODELAY_CTRL (1),
+    .IODELAY_GROUP ("FMCADC5_SYSREF_IODELAY_GROUP"))
+  i_rx_sysref (
+    .tx_clk (rx_clk),
+    .tx_data_p (rx_sysref_e),
+    .tx_data_n (rx_sysref_e),
+    .tx_data_out_p (rx_sysref_p),
+    .tx_data_out_n (rx_sysref_n),
     .up_clk (up_clk),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_s[n]),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_s[n]),
-    .up_rack (up_rack_s[n]));
-  end
+    .up_dld (up_delay_ld),
+    .up_dwdata (up_delay_wdata),
+    .up_drdata (up_delay_rdata),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (up_delay_locked_s));
 
-  // clock monitors
-
-  if (NUM_OF_CLK_MONS < 8) begin
-  for (n = NUM_OF_CLK_MONS; n < 8; n = n + 1) begin: g_unused_clock_mon
-  assign up_wack_s[(8+n)] = 1'd0;
-  assign up_rdata_s[(8+n)] = 32'd0;
-  assign up_rack_s[(8+n)] = 1'd0;
-  end
-  end
-
-  for (n = 0; n < NUM_OF_CLK_MONS; n = n + 1) begin: g_clock_mon
-  axi_gpreg_clock_mon #(
-    .ID (32+n),
-    .BUF_ENABLE (BUF_ENABLE[n]))
-  i_gpreg_clock_mon (
-    .d_clk (d_clk_s[n]),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_s[(8+n)]),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_s[(8+n)]),
-    .up_rack (up_rack_s[(8+n)]));
-  end
-
-  endgenerate
-
+  // up == micro("u") processor
+ 
   up_axi i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -340,14 +526,14 @@ module axi_gpreg #(
     .up_axi_rresp (s_axi_rresp),
     .up_axi_rdata (s_axi_rdata),
     .up_axi_rready (s_axi_rready),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_d),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_d),
-    .up_rack (up_rack_d));
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata),
+    .up_rack (up_rack));
 
 endmodule
 
