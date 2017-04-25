@@ -93,6 +93,8 @@ module avl_dacfifo #(
   reg                                 dac_bypass = 1'b0;
   reg                                 dac_xfer_out_m1 = 1'b0;
   reg                                 dac_xfer_out_bypass = 1'b0;
+  reg                                 avl_xfer_req_m1 = 1'b0;
+  reg                                 avl_xfer_req = 1'b0;
 
   // internal signals
 
@@ -169,6 +171,11 @@ module avl_dacfifo #(
   // avalon address multiplexer and output registers
 
   always @(posedge avl_clk) begin
+    avl_xfer_req_m1 <= dma_xfer_req;
+    avl_xfer_req <= avl_xfer_req_m1;
+  end
+
+  always @(posedge avl_clk) begin
     if (avl_reset == 1'b1) begin
       avl_address <= 0;
       avl_burstcount <= 0;
@@ -177,9 +184,9 @@ module avl_dacfifo #(
       avl_write <= 0;
       avl_writedata <= 0;
     end else begin
-      avl_address <= (dma_xfer_req == 1'b1) ? avl_wr_address_s : avl_rd_address_s;
-      avl_burstcount <= (dma_xfer_req == 1'b1) ? avl_wr_burstcount_s : avl_rd_burstcount_s;
-      avl_byteenable <= (dma_xfer_req == 1'b1) ? avl_wr_byteenable_s : avl_rd_byteenable_s;
+      avl_address <= (avl_xfer_req == 1'b1) ? avl_wr_address_s : avl_rd_address_s;
+      avl_burstcount <= (avl_xfer_req == 1'b1) ? avl_wr_burstcount_s : avl_rd_burstcount_s;
+      avl_byteenable <= (avl_xfer_req == 1'b1) ? avl_wr_byteenable_s : avl_rd_byteenable_s;
       avl_read <= avl_read_s;
       avl_write <= avl_write_s;
       avl_writedata <= avl_writedata_s;
