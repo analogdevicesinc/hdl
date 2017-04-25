@@ -14,7 +14,5 @@ adi_project_files m2k [list \
 
 set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
 
-set ADI_POWER_OPTIMIZATION 1
-
 adi_project_run m2k
 
