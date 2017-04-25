@@ -163,18 +163,46 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
 
 ad_cpu_interrupt ps-12 mb-12 axi_ad9625_dma/irq
 
-# sync
+# interleave-sync
 
-create_bd_port -dir O rx_clk
-create_bd_port -dir O up_clk
-create_bd_port -dir O up_rstn
-create_bd_port -dir O delay_clk
-create_bd_port -dir O delay_rst
+ad_disconnect  rx_sysref_0 axi_ad9625_0_jesd/rx_sysref
+ad_disconnect  rx_sync_0 axi_ad9625_0_jesd/rx_sync
+ad_disconnect  rx_sysref_1_0 axi_ad9625_1_jesd/rx_sysref
+ad_disconnect  rx_sync_1_0 axi_ad9625_1_jesd/rx_sync
 
-ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 rx_clk
-ad_connect  sys_cpu_clk up_clk
-ad_connect  sys_cpu_resetn up_rstn
-ad_connect  sys_200m_clk delay_clk
-ad_connect  sys_cpu_reset delay_rst
+ad_ip_instance axi_fmcadc5_sync axi_fmcadc5_sync
+ad_cpu_interconnect 0x44a20000 axi_fmcadc5_sync
+ad_connect sys_cpu_reset axi_fmcadc5_sync/delay_rst
+ad_connect sys_200m_clk axi_fmcadc5_sync/delay_clk
+ad_connect util_fmcadc5_0_xcvr/rx_out_clk_0 axi_fmcadc5_sync/rx_clk
+ad_connect axi_fmcadc5_sync/rx_sysref axi_ad9625_0_jesd/rx_sysref
+ad_connect axi_ad9625_0_jesd/rx_sync axi_fmcadc5_sync/rx_sync_0
+ad_connect axi_fmcadc5_sync/rx_sysref axi_ad9625_1_jesd/rx_sysref
+ad_connect axi_ad9625_1_jesd/rx_sync axi_fmcadc5_sync/rx_sync_1
 
+create_bd_port -dir O rx_sysref_p
+create_bd_port -dir O rx_sysref_n
+create_bd_port -dir O rx_sync_0_p
+create_bd_port -dir O rx_sync_0_n
+create_bd_port -dir O rx_sync_1_p
+create_bd_port -dir O rx_sync_1_n
+create_bd_port -dir O up_spi_req
+create_bd_port -dir I up_spi_gnt
+create_bd_port -dir O -from 7 -to 0 up_spi_csn
+create_bd_port -dir O up_spi_clk
+create_bd_port -dir O up_spi_mosi
+create_bd_port -dir I up_spi_miso
+
+ad_connect  axi_fmcadc5_sync/rx_sysref_p rx_sysref_p
+ad_connect  axi_fmcadc5_sync/rx_sysref_n rx_sysref_n
+ad_connect  axi_fmcadc5_sync/rx_sync_0_p rx_sync_0_p
+ad_connect  axi_fmcadc5_sync/rx_sync_0_n rx_sync_0_n
+ad_connect  axi_fmcadc5_sync/rx_sync_1_p rx_sync_1_p
+ad_connect  axi_fmcadc5_sync/rx_sync_1_n rx_sync_1_n
+ad_connect  axi_fmcadc5_sync/up_spi_req up_spi_req
+ad_connect  axi_fmcadc5_sync/up_spi_gnt up_spi_gnt
+ad_connect  axi_fmcadc5_sync/up_spi_csn up_spi_csn
+ad_connect  axi_fmcadc5_sync/up_spi_clk up_spi_clk
+ad_connect  axi_fmcadc5_sync/up_spi_mosi up_spi_mosi
+ad_connect  axi_fmcadc5_sync/up_spi_miso up_spi_miso
 
