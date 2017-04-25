@@ -350,7 +350,6 @@ module axi_ad9361_cmos_if #(
   generate
   for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin: g_rx_data
   ad_cmos_in #(
-    .SINGLE_ENDED (1),
     .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -372,7 +371,6 @@ module axi_ad9361_cmos_if #(
   // receive frame interface, ibuf -> idelay -> iddr
 
   ad_cmos_in #(
-    .SINGLE_ENDED (1),
     .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_CTRL (1),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -395,7 +393,6 @@ module axi_ad9361_cmos_if #(
   for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin: g_tx_data
   ad_cmos_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SINGLE_ENDED (1),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -418,7 +415,6 @@ module axi_ad9361_cmos_if #(
 
   ad_cmos_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SINGLE_ENDED (1),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -439,7 +435,6 @@ module axi_ad9361_cmos_if #(
 
   ad_cmos_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SINGLE_ENDED (1),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -460,7 +455,6 @@ module axi_ad9361_cmos_if #(
 
   ad_cmos_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SINGLE_ENDED (1),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -481,7 +475,6 @@ module axi_ad9361_cmos_if #(
 
   ad_cmos_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SINGLE_ENDED (1),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))

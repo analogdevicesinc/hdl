@@ -40,7 +40,6 @@
 module __ad_cmos_out__ #(
 
   parameter   DEVICE_TYPE = 0,
-  parameter   SINGLE_ENDED = 0,
   parameter   IODELAY_ENABLE = 0,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group") (
