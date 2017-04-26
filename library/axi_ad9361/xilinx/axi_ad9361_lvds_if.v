@@ -525,7 +525,6 @@ module axi_ad9361_lvds_if #(
 
   ad_cmos_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SINGLE_ENDED (1),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -546,7 +545,6 @@ module axi_ad9361_lvds_if #(
 
   ad_cmos_out #(
     .DEVICE_TYPE (DEVICE_TYPE),
-    .SINGLE_ENDED (1),
     .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
