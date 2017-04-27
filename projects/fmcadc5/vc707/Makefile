@@ -10,7 +10,6 @@ M_DEPS += system_project.tcl
 M_DEPS += system_constr.xdc
 M_DEPS += system_bd.tcl
 M_DEPS += ../common/fmcadc5_spi.v
-M_DEPS += ../common/fmcadc5_psync.v
 M_DEPS += ../common/fmcadc5_bd.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
