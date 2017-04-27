@@ -346,7 +346,7 @@ module axi_ad5766 #(
     .up_rack (up_rack_s[1]));
 
   up_dac_common #(
-    .DAC_COMMON_ID (0)
+    .COMMON_ID (0)
   ) i_dac_common (
     .mmcm_rst (),
     .dac_clk (spi_clk),
