@@ -12,7 +12,6 @@ adi_project_files fmcadc5_vc707 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/library/common/ad_sysref_gen.v" \
   "../common/fmcadc5_spi.v" \
-  "../common/fmcadc5_psync.v" \
   "system_constr.xdc"\
   "system_top.v"]
 
