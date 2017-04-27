@@ -60,7 +60,7 @@ module up_dac_channel #(
   output  [15:0]  dac_pat_data_1,
   output  [15:0]  dac_pat_data_2,
   output  [ 3:0]  dac_data_sel,
-  output          dac_iq_mode,
+  output  [ 1:0]  dac_iq_mode,
   output          dac_iqcor_enb,
   output  [15:0]  dac_iqcor_coeff_1,
   output  [15:0]  dac_iqcor_coeff_2,
@@ -119,7 +119,7 @@ module up_dac_channel #(
   reg     [ 7:0]  up_usr_datatype_bits_int = 'd0;
   reg     [15:0]  up_usr_interpolation_m_int = 'd0;
   reg     [15:0]  up_usr_interpolation_n_int = 'd0;
-  reg             up_dac_iq_mode = 'd0;
+  reg     [ 1:0]  up_dac_iq_mode = 'd0;
   reg             up_rack_int = 'd0;
   reg     [31:0]  up_rdata_int = 'd0;
   reg     [15:0]  up_dac_dds_scale_tc_1 = 'd0;
@@ -322,7 +322,7 @@ module up_dac_channel #(
       up_dac_iq_mode <= 'd0;
     end else begin
       if ((up_wreq_s == 1'b1) && (up_waddr[3:0] == 4'ha)) begin
-        up_dac_iq_mode <= up_wdata[0];
+        up_dac_iq_mode <= up_wdata[1:0];
       end
     end
   end
@@ -352,7 +352,7 @@ module up_dac_channel #(
                                   dac_usr_datatype_shift, dac_usr_datatype_total_bits,
                                   dac_usr_datatype_bits};
           4'h9: up_rdata_int <= { dac_usr_interpolation_m, dac_usr_interpolation_n};
-          4'ha: up_rdata_int <= { 31'd0, up_dac_iq_mode};
+          4'ha: up_rdata_int <= { 30'd0, up_dac_iq_mode};
           default: up_rdata_int <= 0;
         endcase
       end else begin
@@ -393,7 +393,7 @@ module up_dac_channel #(
 
   // dac control & status
 
-  up_xfer_cntrl #(.DATA_WIDTH(166)) i_xfer_cntrl (
+  up_xfer_cntrl #(.DATA_WIDTH(167)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_dac_iq_mode,
