@@ -133,6 +133,13 @@ proc ad_disconnect {p_name_1 p_name_2} {
     delete_bd_objs -quiet $m_name_1
     return
   }
+
+  if {[get_property CLASS $m_name_1] eq "bd_pin"} {
+    delete_bd_objs -quiet [get_bd_nets -quiet -of_objects \
+      [find_bd_objs -relation connected_to $m_name_1]]
+    delete_bd_objs -quiet $m_name_1
+    return
+  }
 }
 
 proc ad_reconct {p_name_1 p_name_2} {
