@@ -134,15 +134,8 @@ module system_top (
   output            drst_0,
   output            arst_0);
 
-  // internal registers
-
-  reg     [  4:0]   gpio_o_60_56_d = 'd0;
-  reg               gpio_dld = 'd0;
-
   // internal signals
 
-  wire              delay_clk;
-  wire              delay_rst;
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [ 63:0]   gpio_t;
@@ -150,16 +143,11 @@ module system_top (
   wire              spi_clk;
   wire              spi_mosi;
   wire              spi_miso;
-  wire              rx_clk;
   wire              rx_ref_clk_0;
   wire              rx_ref_clk_1;
-  wire              rx_sync_0;
-  wire              rx_sync_1;
-  wire              up_rstn;
-  wire              up_clk;
-  wire              rx_sysref_int;
+  wire              psync;
 
-  // spi
+  // spi & misc
 
   assign iic_rstn = 1'b1;
   assign fan_pwm = 1'b1;
@@ -173,51 +161,10 @@ module system_top (
   assign arst_1 = 1'b0;
   assign drst_0 = 1'b0;
   assign arst_0 = 1'b0;
+  assign psync_0 = psync;
+  assign psync_1 = psync;
 
-  // sysref iob
-
-  always @(posedge up_clk or negedge up_rstn) begin
-    if (up_rstn == 1'b0) begin
-      gpio_o_60_56_d <= 5'd0;
-      gpio_dld <= 1'b0;
-    end else begin
-      gpio_o_60_56_d <= gpio_o[60:56];
-      if (gpio_o[60:56] == gpio_o_60_56_d) begin
-        gpio_dld <= 1'b0;
-      end else begin
-        gpio_dld <= 1'b1;
-      end
-    end
-  end
-
-  // sysref internal
-
-  ad_sysref_gen i_sysref (
-    .core_clk (rx_clk),
-    .sysref_en (gpio_o[32]),
-    .sysref_out (rx_sysref_int));
-
-  // instantiations
-
-  ad_lvds_out #(
-    .DEVICE_TYPE (0),
-    .SINGLE_ENDED (0),
-    .IODELAY_ENABLE (1),
-    .IODELAY_CTRL (1),
-    .IODELAY_GROUP ("FMCADC5_SYSREF_IODELAY_GROUP"))
-  i_rx_sysref (
-    .tx_clk (rx_clk),
-    .tx_data_p (rx_sysref_int),
-    .tx_data_n (rx_sysref_int),
-    .tx_data_out_p (rx_sysref_p),
-    .tx_data_out_n (rx_sysref_n),
-    .up_clk (up_clk),
-    .up_dld (gpio_dld),
-    .up_dwdata (gpio_o[60:56]),
-    .up_drdata (gpio_i[60:56]),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_locked (gpio_i[61]));
+  // lvds buffers
 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk_0 (
     .CEB (1'd0),
@@ -233,16 +180,6 @@ module system_top (
     .O (rx_ref_clk_1),
     .ODIV2 ());
 
-  OBUFDS i_obufds_rx_sync_0 (
-    .I (rx_sync_0),
-    .O (rx_sync_0_p),
-    .OB (rx_sync_0_n));
-
-  OBUFDS i_obufds_rx_sync_1 (
-    .I (rx_sync_1),
-    .O (rx_sync_1_p),
-    .OB (rx_sync_1_n));
-
   IBUFDS i_ibufds_trig (
     .I (trig_p),
     .IB (trig_n),
@@ -253,11 +190,7 @@ module system_top (
     .O (vdither_p),
     .OB (vdither_n));
 
-  fmcadc5_psync i_fmcadc5_psync (
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .psync_0 (psync_0),
-    .psync_1 (psync_1));
+  // spi
 
   fmcadc5_spi i_fmcadc5_spi (
     .spi_csn_0 (spi_csn[0]),
@@ -268,25 +201,35 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dirn (spi_dirn));
 
-  ad_iobuf #(.DATA_WIDTH(9)) i_iobuf (
-    .dio_t ({gpio_t[44:40], gpio_t[39:38], gpio_t[35:34]}),
-    .dio_i ({gpio_o[44:40], gpio_o[39:38], gpio_o[35:34]}),
-    .dio_o ({gpio_i[44:40], gpio_i[39:38], gpio_i[35:34]}),
-    .dio_p ({ pwr_good,       // 44
-              fd_1,           // 43
-              irq_1,          // 42
-              fd_0,           // 41
-              irq_0,          // 40
-              pwdn_1,         // 39
-              rst_1,          // 38
-              pwdn_0,         // 35
-              rst_0}));       // 34
+  // fmcadc5 board controls
+
+  ad_iobuf #(.DATA_WIDTH(5)) i_iobuf_fmcadc5 (
+    .dio_t (gpio_t[44:40]),
+    .dio_i (gpio_o[44:40]),
+    .dio_o (gpio_i[44:40]),
+    .dio_p ({pwr_good, fd_1, irq_1, fd_0, irq_0}));
+
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_ad9625_1 (
+    .dio_t (gpio_t[39:38]),
+    .dio_i (gpio_o[39:38]),
+    .dio_o (gpio_i[39:38]),
+    .dio_p ({pwdn_1, rst_1}));
+
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_ad9625_0 (
+    .dio_t (gpio_t[35:34]),
+    .dio_i (gpio_o[35:34]),
+    .dio_o (gpio_i[35:34]),
+    .dio_p ({pwdn_0, rst_0}));
+
+  // vc707 board controls
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
+
+  // ipi design
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -304,8 +247,6 @@ module system_top (
     .ddr3_ras_n (ddr3_ras_n),
     .ddr3_reset_n (ddr3_reset_n),
     .ddr3_we_n (ddr3_we_n),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
@@ -333,7 +274,7 @@ module system_top (
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
     .phy_sd (1'b1),
-    .rx_clk (rx_clk),
+    .psync (psync),
     .rx_data_0_n (rx_data_0_n[0]),
     .rx_data_0_p (rx_data_0_p[0]),
     .rx_data_1_0_n (rx_data_1_n[0]),
@@ -368,28 +309,25 @@ module system_top (
     .rx_data_7_p (rx_data_0_p[7]),
     .rx_ref_clk_0 (rx_ref_clk_0),
     .rx_ref_clk_1 (rx_ref_clk_1),
-    .rx_sync_0 (rx_sync_0),
-    .rx_sync_1_0 (rx_sync_1),
-    .rx_sysref_0 (rx_sysref_int),
-    .rx_sysref_1_0 (rx_sysref_int),
+    .rx_sync_0_n (rx_sync_0_n),
+    .rx_sync_0_p (rx_sync_0_p),
+    .rx_sync_1_n (rx_sync_1_n),
+    .rx_sync_1_p (rx_sync_1_p),
+    .rx_sysref_n (rx_sysref_n),
+    .rx_sysref_p (rx_sysref_p),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),
     .sgmii_txp (sgmii_txp),
-    .spi_clk_i (1'b0),
-    .spi_clk_o (spi_clk),
-    .spi_csn_i (8'hff),
-    .spi_csn_o (spi_csn),
-    .spi_sdi_i (spi_miso),
-    .spi_sdo_i (1'b0),
-    .spi_sdo_o (spi_mosi),
+    .spi_clk (spi_clk),
+    .spi_csn (spi_csn),
+    .spi_miso (spi_miso),
+    .spi_mosi (spi_mosi),
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .up_clk (up_clk),
-    .up_rstn (up_rstn));
+    .uart_sout (uart_sout));
 
 endmodule
 

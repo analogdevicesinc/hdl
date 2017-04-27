@@ -169,16 +169,29 @@ ad_disconnect  rx_sysref_0 axi_ad9625_0_jesd/rx_sysref
 ad_disconnect  rx_sync_0 axi_ad9625_0_jesd/rx_sync
 ad_disconnect  rx_sysref_1_0 axi_ad9625_1_jesd/rx_sysref
 ad_disconnect  rx_sync_1_0 axi_ad9625_1_jesd/rx_sync
+ad_disconnect  spi_csn_o axi_spi/ss_o
+ad_disconnect  spi_csn_i axi_spi/ss_i
+ad_disconnect  spi_clk_i axi_spi/sck_i
+ad_disconnect  spi_clk_o axi_spi/sck_o
+ad_disconnect  spi_sdo_i axi_spi/io0_i
+ad_disconnect  spi_sdo_o axi_spi/io0_o
+ad_disconnect  spi_sdi_i axi_spi/io1_i
 
 ad_ip_instance axi_fmcadc5_sync axi_fmcadc5_sync
 ad_cpu_interconnect 0x44a20000 axi_fmcadc5_sync
-ad_connect sys_cpu_reset axi_fmcadc5_sync/delay_rst
-ad_connect sys_200m_clk axi_fmcadc5_sync/delay_clk
-ad_connect util_fmcadc5_0_xcvr/rx_out_clk_0 axi_fmcadc5_sync/rx_clk
-ad_connect axi_fmcadc5_sync/rx_sysref axi_ad9625_0_jesd/rx_sysref
-ad_connect axi_ad9625_0_jesd/rx_sync axi_fmcadc5_sync/rx_sync_0
-ad_connect axi_fmcadc5_sync/rx_sysref axi_ad9625_1_jesd/rx_sysref
-ad_connect axi_ad9625_1_jesd/rx_sync axi_fmcadc5_sync/rx_sync_1
+ad_connect  sys_cpu_reset axi_fmcadc5_sync/delay_rst
+ad_connect  sys_200m_clk axi_fmcadc5_sync/delay_clk
+ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_fmcadc5_sync/rx_clk
+ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_0_jesd/rx_sysref
+ad_connect  axi_ad9625_0_jesd/rx_sync axi_fmcadc5_sync/rx_sync_0
+ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_1_jesd/rx_sysref
+ad_connect  axi_ad9625_1_jesd/rx_sync axi_fmcadc5_sync/rx_sync_1
+ad_connect  axi_spi/ss_o axi_fmcadc5_sync/spi_csn_o
+ad_connect  axi_spi/sck_o axi_fmcadc5_sync/spi_clk_o
+ad_connect  axi_spi/io0_o axi_fmcadc5_sync/spi_sdo_o
+ad_connect  axi_spi/ss_i GND
+ad_connect  axi_spi/sck_i GND
+ad_connect  axi_spi/io0_i GND
 
 create_bd_port -dir O rx_sysref_p
 create_bd_port -dir O rx_sysref_n
@@ -186,12 +199,11 @@ create_bd_port -dir O rx_sync_0_p
 create_bd_port -dir O rx_sync_0_n
 create_bd_port -dir O rx_sync_1_p
 create_bd_port -dir O rx_sync_1_n
-create_bd_port -dir O up_spi_req
-create_bd_port -dir I up_spi_gnt
-create_bd_port -dir O -from 7 -to 0 up_spi_csn
-create_bd_port -dir O up_spi_clk
-create_bd_port -dir O up_spi_mosi
-create_bd_port -dir I up_spi_miso
+create_bd_port -dir O -from 7 -to 0 spi_csn
+create_bd_port -dir O spi_clk
+create_bd_port -dir O spi_mosi
+create_bd_port -dir I spi_miso
+create_bd_port -dir O psync
 
 ad_connect  axi_fmcadc5_sync/rx_sysref_p rx_sysref_p
 ad_connect  axi_fmcadc5_sync/rx_sysref_n rx_sysref_n
@@ -199,10 +211,10 @@ ad_connect  axi_fmcadc5_sync/rx_sync_0_p rx_sync_0_p
 ad_connect  axi_fmcadc5_sync/rx_sync_0_n rx_sync_0_n
 ad_connect  axi_fmcadc5_sync/rx_sync_1_p rx_sync_1_p
 ad_connect  axi_fmcadc5_sync/rx_sync_1_n rx_sync_1_n
-ad_connect  axi_fmcadc5_sync/up_spi_req up_spi_req
-ad_connect  axi_fmcadc5_sync/up_spi_gnt up_spi_gnt
-ad_connect  axi_fmcadc5_sync/up_spi_csn up_spi_csn
-ad_connect  axi_fmcadc5_sync/up_spi_clk up_spi_clk
-ad_connect  axi_fmcadc5_sync/up_spi_mosi up_spi_mosi
-ad_connect  axi_fmcadc5_sync/up_spi_miso up_spi_miso
+ad_connect  axi_fmcadc5_sync/psync psync
+ad_connect  axi_fmcadc5_sync/spi_csn spi_csn
+ad_connect  axi_fmcadc5_sync/spi_clk spi_clk
+ad_connect  axi_fmcadc5_sync/spi_mosi spi_mosi
+ad_connect  spi_miso axi_fmcadc5_sync/spi_miso
+ad_connect  spi_miso axi_spi/io1_i
 
