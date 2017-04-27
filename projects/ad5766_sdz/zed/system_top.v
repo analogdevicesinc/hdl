@@ -110,7 +110,7 @@ module system_top (
   // instantiations
 
   ad_iobuf #(
-    .DATA_WIDTH(32)
+    .DATA_WIDTH(1)
   ) i_iobuf_reset (
     .dio_t(gpio_t[32]),
     .dio_i(gpio_o[32]),
