@@ -53,7 +53,7 @@ ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 # shared transceiver core
 
 ad_ip_instance util_adxcvr util_fmcomms11_xcvr
-ad_ip_parameter util_fmcomms11_xcvr CONFIG.QPLL_FBDIV "0100100000"
+ad_ip_parameter util_fmcomms11_xcvr CONFIG.QPLL_FBDIV 0x120
 ad_ip_parameter util_fmcomms11_xcvr CONFIG.CPLL_FBDIV 4
 ad_ip_parameter util_fmcomms11_xcvr CONFIG.TX_NUM_OF_LANES 8
 ad_ip_parameter util_fmcomms11_xcvr CONFIG.TX_CLK25_DIV 7

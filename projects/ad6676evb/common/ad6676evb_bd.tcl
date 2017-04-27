@@ -34,7 +34,7 @@ ad_ip_parameter axi_ad6676_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 # transceiver core
 
 ad_ip_instance util_adxcvr util_ad6676_xcvr
-ad_ip_parameter util_ad6676_xcvr CONFIG.QPLL_FBDIV "0010000000"
+ad_ip_parameter util_ad6676_xcvr CONFIG.QPLL_FBDIV 0x80
 ad_ip_parameter util_ad6676_xcvr CONFIG.CPLL_FBDIV 2
 ad_ip_parameter util_ad6676_xcvr CONFIG.CPLL_FBDIV_4_5 5
 ad_ip_parameter util_ad6676_xcvr CONFIG.TX_NUM_OF_LANES 0
