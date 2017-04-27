@@ -55,6 +55,10 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   output            rx_sync_1_p,
   output            rx_sync_1_n,
 
+  // switching regulator clocks
+
+  output            psync,
+
   // delay interface
  
   input             delay_rst,
@@ -62,12 +66,14 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   // spi override
 
-  output            up_spi_req,
-  input             up_spi_gnt,
-  output  [  7:0]   up_spi_csn,
-  output            up_spi_clk,
-  output            up_spi_mosi,
-  input             up_spi_miso,
+  input   [  7:0]   spi_csn_o,
+  input             spi_clk_o,
+  input             spi_sdo_o,
+
+  output  [  7:0]   spi_csn,
+  output            spi_clk,
+  output            spi_mosi,
+  input             spi_miso,
 
   // axi interface
 
@@ -99,6 +105,8 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   // internal registers
 
+  reg     [  7:0]   up_psync_count = 'd0;
+  reg               up_psync = 'd0;
   reg               up_sysref_ack_t_m1 = 'd0;
   reg               up_sysref_ack_t_m2 = 'd0;
   reg               up_sysref_ack_t_m3 = 'd0;
@@ -118,8 +126,12 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   reg               up_sync_status_0 = 'd0;
   reg               up_delay_ld = 'd0;
   reg     [  4:0]   up_delay_wdata = 'd0;
-  reg               up_spi_req_int = 'd0;
   reg     [  7:0]   up_spi_csn_int = 'd0;
+  reg               up_spi_clk_int = 'd0;
+  reg               up_spi_mosi_int = 'd0;
+  reg               up_spi_gnt = 'd0;
+  reg               up_spi_req = 'd0;
+  reg     [  7:0]   up_spi_csn = 'd0;
   reg     [  5:0]   up_spi_cnt = 'd0;
   reg     [ 31:0]   up_spi_clk_32 = 'd0;
   reg     [ 31:0]   up_spi_out_32 = 'd0;
@@ -163,6 +175,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   wire              up_sysref_ack_t_s;
   wire              up_sync_status_t_s;
+  wire              up_spi_gnt_s;
   wire    [ 31:0]   up_spi_out_32_s;
   wire    [  7:0]   up_spi_in_s;
   wire              rx_sysref_control_t_s;
@@ -183,6 +196,26 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   assign up_rstn = s_axi_aresetn;
   assign up_clk = s_axi_aclk;
+
+  // switching regulator clocks (~602K)
+ 
+  assign psync = up_psync;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_psync_count <= 7'd0;
+      up_psync <= 1'b0;
+    end else begin
+      if (up_psync_count >= 7'h52) begin
+        up_psync_count <= 7'd0;
+      end else begin
+        up_psync_count <= up_psync_count + 1'b1;
+      end
+      if (up_psync_count >= 7'h4f) begin
+        up_psync <= ~up_psync;
+      end
+    end
+  end
 
   // sysref register(s) 
 
@@ -285,12 +318,37 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
     end
   end
 
-  // spi access
+  // switching must be glitchless
  
-  assign up_spi_req = up_spi_req_int;
-  assign up_spi_csn = up_spi_csn_int;
-  assign up_spi_clk = up_spi_clk_32[31];
-  assign up_spi_mosi = up_spi_out_32[31];
+  assign spi_csn = up_spi_csn_int;
+  assign spi_clk = up_spi_clk_int;
+  assign spi_mosi = up_spi_mosi_int;
+
+  always @(negedge up_clk) begin
+    if (up_spi_gnt == 1'b1) begin
+      up_spi_csn_int <= up_spi_csn;
+      up_spi_clk_int <= up_spi_clk_32[31];
+      up_spi_mosi_int <= up_spi_out_32[31];
+    end else begin
+      up_spi_csn_int <= spi_csn_o;
+      up_spi_clk_int <= spi_clk_o;
+      up_spi_mosi_int <= spi_sdo_o;
+    end
+  end
+  
+  assign up_spi_gnt_s = (&spi_csn_o) & ~spi_clk_o;
+
+  always @(posedge up_clk or negedge up_rstn) begin
+    if (up_rstn == 1'b0) begin
+      up_spi_gnt <= 1'd0;
+    end else begin
+      if (up_spi_gnt_s == 1'b1) begin
+        up_spi_gnt <= up_spi_req;
+      end
+    end
+  end
+
+  // spi data stretching
 
   assign up_spi_out_32_s[31:28] = {4{up_wdata_s[7]}};
   assign up_spi_out_32_s[27:24] = {4{up_wdata_s[6]}};
@@ -314,8 +372,8 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_spi_req_int <= 1'd0;
-      up_spi_csn_int <= {8{1'b1}};
+      up_spi_req <= 1'd0;
+      up_spi_csn <= {8{1'b1}};
       up_spi_cnt <= 6'd0;
       up_spi_clk_32 <= 32'd0;
       up_spi_out_32 <= 32'd0;
@@ -323,22 +381,22 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
       up_spi_out <= 8'd0;
     end else begin
       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0010)) begin
-        up_spi_req_int <= up_wdata_s[0];
+        up_spi_req <= up_wdata_s[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0012)) begin
-        up_spi_csn_int <= up_wdata_s[7:0];
+        up_spi_csn <= up_wdata_s[7:0];
       end
       if (up_spi_cnt[5] == 1'b1) begin
         up_spi_cnt <= up_spi_cnt + 1'b1;
         up_spi_clk_32 <= {up_spi_clk_32[30:0], 1'd0};
         up_spi_out_32 <= {up_spi_out_32[30:0], 1'd0};
-        up_spi_in_32 <= {up_spi_in_32[30:0], up_spi_miso};
+        up_spi_in_32 <= {up_spi_in_32[30:0], spi_miso};
         up_spi_out <= up_spi_out;
       end else if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0013)) begin
         up_spi_cnt <= 6'h20;
         up_spi_clk_32 <= {8{4'h6}};
         up_spi_out_32 <= up_spi_out_32_s;
-        up_spi_in_32 <= {31'd0, up_spi_miso};
+        up_spi_in_32 <= {31'd0, spi_miso};
         up_spi_out <= up_wdata_s[7:0];
       end
     end
@@ -371,9 +429,9 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
           14'h0000: up_rdata <= PCORE_VERSION;
           14'h0001: up_rdata <= ID;
           14'h0002: up_rdata <= up_scratch;
-          14'h0010: up_rdata <= {31'd0, up_spi_req_int};
+          14'h0010: up_rdata <= {31'd0, up_spi_req};
           14'h0011: up_rdata <= {31'd0, up_spi_gnt};
-          14'h0012: up_rdata <= {24'd0, up_spi_csn_int};
+          14'h0012: up_rdata <= {24'd0, up_spi_csn};
           14'h0013: up_rdata <= {24'd0, up_spi_out};
           14'h0014: up_rdata <= {24'd0, up_spi_in_s};
           14'h0015: up_rdata <= {31'd0, up_spi_cnt[5]};
