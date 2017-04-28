@@ -1,6 +1,10 @@
 
 
-module spi_engine_interconnect (
+module spi_engine_interconnect #(
+
+  parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
+  parameter NUM_OF_SDI = 1 ) (
+
   input clk,
   input resetn,
 
@@ -54,9 +58,6 @@ module spi_engine_interconnect (
   input s1_sync_ready,
   output [7:0] s1_sync
 );
-
-parameter DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
-parameter NUM_OF_SDI = 1;
 
 reg s_active = 1'b0;
 

@@ -1,5 +1,12 @@
 
-module spi_engine_execution (
+module spi_engine_execution #(
+
+  parameter NUM_OF_CS = 1,
+  parameter DEFAULT_SPI_CFG = 0,
+  parameter DEFAULT_CLK_DIV = 0,
+  parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
+  parameter NUM_OF_SDI = 1 ) (
+
   input clk,
   input resetn,
 
@@ -32,12 +39,6 @@ module spi_engine_execution (
   output reg [NUM_OF_CS-1:0] cs,
   output reg three_wire
 );
-
-parameter NUM_OF_CS = 1;
-parameter DEFAULT_SPI_CFG = 0;
-parameter DEFAULT_CLK_DIV = 0;
-parameter DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
-parameter NUM_OF_SDI = 1;
 
 localparam CMD_TRANSFER = 2'b00;
 localparam CMD_CHIPSELECT = 2'b01;

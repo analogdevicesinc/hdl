@@ -1,6 +1,20 @@
 `timescale 1ns/100ps
 
-module axi_spi_engine (
+module axi_spi_engine #(
+
+        parameter CMD_FIFO_ADDRESS_WIDTH = 4,
+        parameter SDO_FIFO_ADDRESS_WIDTH = 5,
+        parameter SDI_FIFO_ADDRESS_WIDTH = 5,
+        parameter MM_IF_TYPE = 0,
+        parameter UP_ADDRESS_WIDTH = 14,
+        parameter ASYNC_SPI_CLK = 0,
+        parameter NUM_OFFLOAD = 0,
+        parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH = 4,
+        parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH = 4,
+        parameter ID = 0,
+        parameter DATA_WIDTH = 8,
+        parameter NUM_OF_SDI = 1 ) (
+
         // Slave AXI interface
 
         input         s_axi_aclk,
@@ -74,23 +88,6 @@ module axi_spi_engine (
         output reg offload0_enable,
         input offload0_enabled
 );
-
-parameter CMD_FIFO_ADDRESS_WIDTH = 4;
-parameter SDO_FIFO_ADDRESS_WIDTH = 5;
-parameter SDI_FIFO_ADDRESS_WIDTH = 5;
-parameter MM_IF_TYPE = 0;
-parameter UP_ADDRESS_WIDTH = 14;
-
-parameter ASYNC_SPI_CLK = 0;
-
-parameter NUM_OFFLOAD = 0;
-
-parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH = 4;
-parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH = 4;
-
-parameter ID = 'h00;
-parameter DATA_WIDTH = 8;
-parameter NUM_OF_SDI = 1;
 
 localparam PCORE_VERSION = 'h010071;
 localparam S_AXI = 0;

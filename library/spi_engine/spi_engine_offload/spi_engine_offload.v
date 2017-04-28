@@ -1,5 +1,12 @@
 
-module spi_engine_offload (
+module spi_engine_offload #(
+
+  parameter ASYNC_SPI_CLK = 0,
+  parameter CMD_MEM_ADDRESS_WIDTH = 4,
+  parameter SDO_MEM_ADDRESS_WIDTH = 4,
+  parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
+  parameter NUM_OF_SDI = 1 ) (
+
   input ctrl_clk,
 
   input ctrl_cmd_wr_en,
@@ -37,12 +44,6 @@ module spi_engine_offload (
   input offload_sdi_ready,
   output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data
 );
-
-parameter ASYNC_SPI_CLK = 0;
-parameter CMD_MEM_ADDRESS_WIDTH = 4;
-parameter SDO_MEM_ADDRESS_WIDTH = 4;
-parameter DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
-parameter NUM_OF_SDI = 1;
 
 reg spi_active = 1'b0;
 
