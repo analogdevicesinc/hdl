@@ -5,7 +5,7 @@ set adc_data_width 128
 set adc_dma_data_width 64
 
 set dac_fifo_name axi_ad9144_fifo
-set dac_fifo_address_width 10
+set dac_fifo_address_width 16
 set dac_data_width 128
 set dac_dma_data_width 128
 
