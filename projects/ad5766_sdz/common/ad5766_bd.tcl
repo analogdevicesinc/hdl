@@ -15,14 +15,14 @@ current_bd_instance /spi
         create_bd_pin -dir I dma_underflow
         create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
 
-        set spi_engine [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_execution:1.0 execution]
-        set axi_spi_engine [create_bd_cell -type ip -vlnv analog.com:user:axi_spi_engine:1.0 axi]
-        set axi_ad5766_seq [create_bd_cell -type ip -vlnv analog.com:user:axi_ad5766:1.0 axi_ad5766]
-        set spi_engine_interconnect [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_interconnect:1.0 interconnect]
+        ad_ip_instance spi_engine_execution execution
+        ad_ip_instance axi_spi_engine axi
+        ad_ip_instance axi_ad5766 axi_ad5766
+        ad_ip_instance spi_engine_interconnect interconnect
 
-        set_property -dict [list CONFIG.NUM_OF_CS 1] $spi_engine
-        set_property -dict [list CONFIG.NUM_OFFLOAD 1] $axi_spi_engine
-        set_property -dict [list CONFIG.NUM_OF_SDI 2] $spi_engine_interconnect
+        ad_ip_parameter execution CONFIG.NUM_OF_CS 1
+        ad_ip_parameter axi CONFIG.NUM_OFFLOAD 1
+        ad_ip_parameter interconnect CONFIG.NUM_OF_SDI 2
 
         ad_connect  axi/spi_engine_offload_ctrl0 axi_ad5766/spi_engine_offload_ctrl
         ad_connect  axi/spi_engine_ctrl interconnect/s0_ctrl
@@ -60,15 +60,15 @@ ad_connect  sys_cpu_resetn spi/resetn
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 spi
 ad_connect spi/m_spi spi
 
-set axi_ad5766_dac_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad5766_dac_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad5766_dac_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad5766_dac_dma
-set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad5766_dac_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_ad5766_dac_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad5766_dac_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad5766_dac_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad5766_dac_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {16}] $axi_ad5766_dac_dma
+ad_ip_instance axi_dmac axi_ad5766_dac_dma
+ad_ip_parameter axi_ad5766_dac_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_ad5766_dac_dma CONFIG.DMA_TYPE_DEST 2
+ad_ip_parameter axi_ad5766_dac_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_ad5766_dac_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ad5766_dac_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad5766_dac_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter axi_ad5766_dac_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad5766_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 16
 
 ad_connect  spi/dma_clk axi_ad5766_dac_dma/fifo_rd_clk
 ad_connect  spi/dma_valid axi_ad5766_dac_dma/fifo_rd_en
