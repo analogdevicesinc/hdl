@@ -204,6 +204,7 @@ create_bd_port -dir O spi_clk
 create_bd_port -dir O spi_mosi
 create_bd_port -dir I spi_miso
 create_bd_port -dir O psync
+create_bd_port -dir O vcal
 
 ad_connect  axi_fmcadc5_sync/rx_sysref_p rx_sysref_p
 ad_connect  axi_fmcadc5_sync/rx_sysref_n rx_sysref_n
@@ -212,6 +213,7 @@ ad_connect  axi_fmcadc5_sync/rx_sync_0_n rx_sync_0_n
 ad_connect  axi_fmcadc5_sync/rx_sync_1_p rx_sync_1_p
 ad_connect  axi_fmcadc5_sync/rx_sync_1_n rx_sync_1_n
 ad_connect  axi_fmcadc5_sync/psync psync
+ad_connect  axi_fmcadc5_sync/vcal vcal
 ad_connect  axi_fmcadc5_sync/spi_csn spi_csn
 ad_connect  axi_fmcadc5_sync/spi_clk spi_clk
 ad_connect  axi_fmcadc5_sync/spi_mosi spi_mosi

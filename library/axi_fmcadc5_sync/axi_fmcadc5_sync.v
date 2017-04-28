@@ -55,6 +55,11 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   output            rx_sync_1_p,
   output            rx_sync_1_n,
 
+  // calibration signal
+
+  output            vcal,
+  output            vcal_enable,
+
   // switching regulator clocks
 
   output            psync,
@@ -107,6 +112,10 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   reg     [  7:0]   up_psync_count = 'd0;
   reg               up_psync = 'd0;
+  reg     [  7:0]   up_vcal_8 = 'd0;
+  reg               up_vcal = 'd0;
+  reg     [  7:0]   up_vcal_cnt = 'd0;
+  reg     [  1:0]   up_vcal_enable = 'd0;
   reg               up_sysref_ack_t_m1 = 'd0;
   reg               up_sysref_ack_t_m2 = 'd0;
   reg               up_sysref_ack_t_m3 = 'd0;
@@ -213,6 +222,34 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
       end
       if (up_psync_count >= 7'h4f) begin
         up_psync <= ~up_psync;
+      end
+    end
+  end
+
+  // calibration signal register(s) 
+
+  assign vcal = up_vcal;
+  assign vcal_enable = up_vcal_enable[0];
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_vcal_8 <= 8'd0;
+      up_vcal <= 1'd0;
+      up_vcal_cnt <= 8'd0;
+      up_vcal_enable <= 2'd0;
+    end else begin
+      if (up_vcal_8 >= up_vcal_cnt) begin
+        up_vcal_8 <= 8'd0;
+        up_vcal <= ~up_vcal & up_vcal_enable[1];
+      end else begin
+        up_vcal_8 <= up_vcal_8 + 1'b1;
+        up_vcal <= up_vcal;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0050)) begin
+        up_vcal_cnt <= up_wdata_s[7:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0051)) begin
+        up_vcal_enable <= up_wdata_s[1:0];
       end
     end
   end
@@ -442,6 +479,8 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
           14'h0031: up_rdata <= {30'd0, up_sync_status_1, up_sync_status_0};
           14'h0040: up_rdata <= {26'd0, up_sysref_mode_e, 3'b0, up_sysref_mode_i};
           14'h0041: up_rdata <= {31'd0, up_sysref_status};
+          14'h0050: up_rdata <= {24'd0, up_vcal_cnt};
+          14'h0051: up_rdata <= {30'd0, up_vcal_enable};
           default: up_rdata <= 0;
         endcase
       end else begin

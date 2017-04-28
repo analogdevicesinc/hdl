@@ -146,6 +146,7 @@ module system_top (
   wire              rx_ref_clk_0;
   wire              rx_ref_clk_1;
   wire              psync;
+  wire              vcal;
 
   // spi & misc
 
@@ -186,7 +187,7 @@ module system_top (
     .O (gpio_i[46]));
 
   OBUFDS i_obufds_vdither (
-    .I (gpio_o[45]),
+    .I (vcal),
     .O (vdither_p),
     .OB (vdither_n));
 
@@ -327,7 +328,8 @@ module system_top (
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout));
+    .uart_sout (uart_sout),
+    .vcal (vcal));
 
 endmodule
 
