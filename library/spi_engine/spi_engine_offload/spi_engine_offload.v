@@ -2,6 +2,7 @@
 module spi_engine_offload #(
 
   parameter ASYNC_SPI_CLK = 0,
+  parameter ASYNC_TRIG = 0,
   parameter CMD_MEM_ADDRESS_WIDTH = 4,
   parameter SDO_MEM_ADDRESS_WIDTH = 4,
   parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
@@ -125,12 +126,23 @@ end endgenerate
 
 assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
 
+wire trigger_s;
+sync_bits #(
+  .NUM_OF_BITS(1),
+  .ASYNC_CLK(ASYNC_TRIG)
+) i_sync_trigger (
+  .in(trigger),
+  .out_clk(spi_clk),
+  .out_resetn(1'b1),
+  .out(trigger_s)
+);
+
 always @(posedge spi_clk) begin
   if (spi_resetn == 1'b0) begin
     spi_active <= 1'b0;
   end else begin
     if (spi_active == 1'b0) begin
-      if (trigger == 1'b1 && spi_enable == 1'b1)
+      if (trigger_s == 1'b1 && spi_enable == 1'b1)
         spi_active <= 1'b1;
     end else if (cmd_ready == 1'b1 && spi_cmd_rd_addr_next == ctrl_cmd_wr_addr) begin
       spi_active <= 1'b0;
