@@ -12,24 +12,24 @@ current_bd_instance /spi
   create_bd_intf_pin -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 m_spi
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
 
-  set spi_engine [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_execution:1.0 execution]
-  set axi_spi_engine [create_bd_cell -type ip -vlnv analog.com:user:axi_spi_engine:1.0 axi]
-  set spi_engine_offload [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_offload:1.0 offload]
-  set spi_engine_interconnect [create_bd_cell -type ip -vlnv analog.com:user:spi_engine_interconnect:1.0 interconnect]
-  set spi_engine_trigger_gen [create_bd_cell -type ip -vlnv analog.com:user:util_pulse_gen:1.0 trigger_gen]
+  ad_ip_instance spi_engine_execution execution
+  ad_ip_instance axi_spi_engine axi
+  ad_ip_instance spi_engine_offload offload
+  ad_ip_instance spi_engine_interconnect interconnect
+  ad_ip_instance util_pulse_gen trigger_gen
 
-  set_property -dict [list CONFIG.DATA_WIDTH 16] $spi_engine_offload
-  set_property -dict [list CONFIG.DATA_WIDTH 16] $axi_spi_engine
-  set_property -dict [list CONFIG.DATA_WIDTH 16] $spi_engine_interconnect
-  set_property -dict [list CONFIG.DATA_WIDTH 16] $spi_engine
+  ad_ip_parameter offload CONFIG.DATA_WIDTH 16
+  ad_ip_parameter axi CONFIG.DATA_WIDTH 16
+  ad_ip_parameter interconnect CONFIG.DATA_WIDTH 16
+  ad_ip_parameter execution CONFIG.DATA_WIDTH 16
 
   ## to setup the sample rate of the system change the PULSE_PERIOD value
   ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
-  set_property -dict [list CONFIG.PULSE_PERIOD 100] $spi_engine_trigger_gen
-  set_property -dict [list CONFIG.PULSE_WIDTH 1] $spi_engine_trigger_gen
+  ad_ip_parameter trigger_gen CONFIG.PULSE_PERIOD 100
+  ad_ip_parameter trigger_gen CONFIG.PULSE_WIDTH 1
 
-  set_property -dict [list CONFIG.NUM_OF_CS 1] $spi_engine
-  set_property -dict [list CONFIG.NUM_OFFLOAD 1] $axi_spi_engine
+  ad_ip_parameter execution CONFIG.NUM_OF_CS 1
+  ad_ip_parameter axi CONFIG.NUM_OFFLOAD 1
 
   ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl
   ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
@@ -61,16 +61,16 @@ current_bd_instance /spi
 
 current_bd_instance /
 
-set axi_adaq7980_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_adaq7980_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {1}] $axi_adaq7980_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_adaq7980_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_adaq7980_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {0}] $axi_adaq7980_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_adaq7980_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_adaq7980_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_adaq7980_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {16}] $axi_adaq7980_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_adaq7980_dma
+ad_ip_instance axi_dmac axi_adaq7980_dma
+ad_ip_parameter axi_adaq7980_dma CONFIG.DMA_TYPE_SRC 1
+ad_ip_parameter axi_adaq7980_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_adaq7980_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_adaq7980_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_adaq7980_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_adaq7980_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter axi_adaq7980_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_adaq7980_dma CONFIG.DMA_DATA_WIDTH_SRC 16
+ad_ip_parameter axi_adaq7980_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 ad_connect  sys_cpu_clk spi/clk
 ad_connect  sys_cpu_resetn spi/resetn
