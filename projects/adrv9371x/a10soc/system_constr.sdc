@@ -10,8 +10,8 @@ create_clock -period  "7.503 ns"  -name sys_ddr_ref_clk_133mhz  [get_ports {sys_
 derive_pll_clocks
 derive_clock_uncertainty
 
-set_false_path -to [get_registers *sys_gpio_in|readdata[12]*]
-set_false_path -to [get_registers *sys_gpio_in|readdata[13]*]
+set_false_path -to [get_registers *sys_gpio_bd|readdata[12]*]
+set_false_path -to [get_registers *sys_gpio_bd|readdata[13]*]
 
 set_false_path -from [get_clocks {sys_clk_100mhz}]\
   -through [get_nets *altera_jesd204_tx_csr_inst*]\
