@@ -16,16 +16,17 @@ set_property CONFIG.PCW_USE_DMA1 1 [get_bd_cells sys_ps7]
 create_bd_port -dir O -type clk i2s_mclk
 create_bd_intf_port -mode Master -vlnv analog.com:interface:i2s_rtl:1.0 i2s
 
-set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.3 sys_audio_clkgen]
-set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_PHASE_ALIGNMENT false] $sys_audio_clkgen
-set_property -dict [list CONFIG.PRIM_SOURCE No_buffer] $sys_audio_clkgen
+ad_ip_instance clk_wiz sys_audio_clkgen
+ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 12.288
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_LOCKED false
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_RESET true
+ad_ip_parameter sys_audio_clkgen CONFIG.RESET_TYPE ACTIVE_LOW
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_PHASE_ALIGNMENT false
+ad_ip_parameter sys_audio_clkgen CONFIG.PRIM_SOURCE No_buffer
 
-set axi_i2s_adi [create_bd_cell -type ip -vlnv analog.com:user:axi_i2s_adi:1.0 axi_i2s_adi]
-set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_i2s_adi
-set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_i2s_adi
+ad_ip_instance axi_i2s_adi axi_i2s_adi
+ad_ip_parameter axi_i2s_adi CONFIG.DMA_TYPE 1
+ad_ip_parameter axi_i2s_adi CONFIG.S_AXI_ADDRESS_WIDTH 16
 
 ad_connect  sys_200m_clk sys_audio_clkgen/clk_in1
 ad_connect  sys_cpu_resetn sys_audio_clkgen/resetn

@@ -6,10 +6,10 @@ ad_connect  sys_ps7/ENET1_GMII_TX_CLK GND
 
 # peripherals in pl
 
-set axi_spi [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_spi]
-set_property -dict [list CONFIG.C_USE_STARTUP {0}] $axi_spi
-set_property -dict [list CONFIG.C_NUM_SS_BITS {8}] $axi_spi
-set_property -dict [list CONFIG.C_SCK_RATIO {8}] $axi_spi
+ad_ip_instance axi_quad_spi axi_spi
+ad_ip_parameter axi_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_spi CONFIG.C_NUM_SS_BITS 8
+ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 8
 
 create_bd_port -dir O -from 7 -to 0 pl_spi_csn_o
 create_bd_port -dir I -from 7 -to 0 pl_spi_csn_i
@@ -27,11 +27,11 @@ ad_connect  pl_spi_sdo_i axi_spi/io0_i
 ad_connect  pl_spi_sdo_o axi_spi/io0_o
 ad_connect  pl_spi_sdi_i axi_spi/io1_i
 
-set axi_gpio [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio]
-set_property -dict [list CONFIG.C_IS_DUAL {1}] $axi_gpio
-set_property -dict [list CONFIG.C_GPIO_WIDTH {32}] $axi_gpio
-set_property -dict [list CONFIG.C_GPIO2_WIDTH {32}] $axi_gpio
-set_property -dict [list CONFIG.C_INTERRUPT_PRESENT {1}] $axi_gpio
+ad_ip_instance axi_gpio axi_gpio
+ad_ip_parameter axi_gpio CONFIG.C_IS_DUAL 1
+ad_ip_parameter axi_gpio CONFIG.C_GPIO_WIDTH 32
+ad_ip_parameter axi_gpio CONFIG.C_GPIO2_WIDTH 32
+ad_ip_parameter axi_gpio CONFIG.C_INTERRUPT_PRESENT 1
 
 create_bd_port -dir I -from 31 -to 0 pl_gpio0_i
 create_bd_port -dir O -from 31 -to 0 pl_gpio0_o
@@ -49,31 +49,31 @@ ad_connect  pl_gpio1_t axi_gpio/gpio2_io_t
 
 # pci-express
 
-set axi_pcie_x4 [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_pcie:2.8 axi_pcie_x4]
-set_property -dict [list CONFIG.NO_OF_LANES {X4}] $axi_pcie_x4
-set_property -dict [list CONFIG.MAX_LINK_SPEED {5.0_GT/s}] $axi_pcie_x4
-set_property -dict [list CONFIG.VENDOR_ID {0x11D4}] $axi_pcie_x4
-set_property -dict [list CONFIG.DEVICE_ID {0x9361}] $axi_pcie_x4
-set_property -dict [list CONFIG.SUBSYSTEM_VENDOR_ID {0x11D4}] $axi_pcie_x4
-set_property -dict [list CONFIG.SUBSYSTEM_ID {0x0405}] $axi_pcie_x4
-set_property -dict [list CONFIG.ENABLE_CLASS_CODE {true}] $axi_pcie_x4
-set_property -dict [list CONFIG.CLASS_CODE {0x0D1000}] $axi_pcie_x4
-set_property -dict [list CONFIG.BAR0_ENABLED {true}] $axi_pcie_x4
-set_property -dict [list CONFIG.BAR0_TYPE {Memory}] $axi_pcie_x4
-set_property -dict [list CONFIG.BAR0_SCALE {Gigabytes}] $axi_pcie_x4
-set_property -dict [list CONFIG.BAR0_SIZE {1}] $axi_pcie_x4
-set_property -dict [list CONFIG.NUM_MSI_REQ {1}] $axi_pcie_x4
-set_property -dict [list CONFIG.PCIEBAR2AXIBAR_0 {0x40000000}] $axi_pcie_x4
-set_property -dict [list CONFIG.AXIBAR2PCIEBAR_0 {0x00000000}] $axi_pcie_x4
+ad_ip_instance axi_pcie axi_pcie_x4
+ad_ip_parameter axi_pcie_x4 CONFIG.NO_OF_LANES X4
+ad_ip_parameter axi_pcie_x4 CONFIG.MAX_LINK_SPEED 5.0_GT/s
+ad_ip_parameter axi_pcie_x4 CONFIG.VENDOR_ID 0x11D4
+ad_ip_parameter axi_pcie_x4 CONFIG.DEVICE_ID 0x9361
+ad_ip_parameter axi_pcie_x4 CONFIG.SUBSYSTEM_VENDOR_ID 0x11D4
+ad_ip_parameter axi_pcie_x4 CONFIG.SUBSYSTEM_ID 0x0405
+ad_ip_parameter axi_pcie_x4 CONFIG.ENABLE_CLASS_CODE true
+ad_ip_parameter axi_pcie_x4 CONFIG.CLASS_CODE 0x0D1000
+ad_ip_parameter axi_pcie_x4 CONFIG.BAR0_ENABLED true
+ad_ip_parameter axi_pcie_x4 CONFIG.BAR0_TYPE Memory
+ad_ip_parameter axi_pcie_x4 CONFIG.BAR0_SCALE Gigabytes
+ad_ip_parameter axi_pcie_x4 CONFIG.BAR0_SIZE 1
+ad_ip_parameter axi_pcie_x4 CONFIG.NUM_MSI_REQ 1
+ad_ip_parameter axi_pcie_x4 CONFIG.PCIEBAR2AXIBAR_0 0x40000000
+ad_ip_parameter axi_pcie_x4 CONFIG.AXIBAR2PCIEBAR_0 0x00000000
 
-set axi_pcie_x4_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 axi_pcie_x4_rstgen]
-set_property -dict [list CONFIG.C_EXT_RST_WIDTH {16}] $axi_pcie_x4_rstgen
+ad_ip_instance proc_sys_reset axi_pcie_x4_rstgen
+ad_ip_parameter axi_pcie_x4_rstgen CONFIG.C_EXT_RST_WIDTH 16
 
-set axi_pcie_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_pcie_intc]
-set_property -dict [list CONFIG.C_HAS_FAST {0}] $axi_pcie_intc
+ad_ip_instance axi_intc axi_pcie_intc
+ad_ip_parameter axi_pcie_intc CONFIG.C_HAS_FAST 0
 
-set pcie_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 pcie_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {5}] $pcie_concat_intc
+ad_ip_instance xlconcat pcie_concat_intc
+ad_ip_parameter pcie_concat_intc CONFIG.NUM_PORTS 5
 
 create_bd_port -dir I -type rst pcie_rstn
 create_bd_port -dir I -type clk pcie_ref_clk
@@ -117,8 +117,8 @@ delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_t
 delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_to [get_bd_intf_pins axi_cpu_interconnect/M02_AXI]]]
 delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_to [get_bd_intf_pins axi_cpu_interconnect/M03_AXI]]]
 
-set_property CONFIG.NUM_MI 8 [get_bd_cells axi_cpu_interconnect]
-set_property CONFIG.NUM_SI 2 [get_bd_cells axi_cpu_interconnect]
+ad_ip_parameter axi_cpu_interconnect CONFIG.NUM_MI 8
+ad_ip_parameter axi_cpu_interconnect CONFIG.NUM_SI 2
 
 ad_connect  axi_pcie_x4/axi_ctl_aclk_out axi_cpu_interconnect/M04_ACLK
 ad_connect  pcie_axi_resetn axi_cpu_interconnect/M04_ARESETN
@@ -159,10 +159,10 @@ delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_t
 
 # pci-e slave
 
-set axi_pcie_s_interconnect [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_pcie_s_interconnect]
-set_property -dict [list CONFIG.NUM_SI {2}] $axi_pcie_s_interconnect
-set_property -dict [list CONFIG.NUM_MI {1}] $axi_pcie_s_interconnect
-set_property -dict [list CONFIG.STRATEGY {2} ] $axi_pcie_s_interconnect
+ad_ip_instance axi_interconnect axi_pcie_s_interconnect
+ad_ip_parameter axi_pcie_s_interconnect CONFIG.NUM_SI 2
+ad_ip_parameter axi_pcie_s_interconnect CONFIG.NUM_MI 1
+ad_ip_parameter axi_pcie_s_interconnect CONFIG.STRATEGY 2
 
 ad_connect  pcie_axi_clk axi_pcie_s_interconnect/ACLK
 ad_connect  pcie_axi_clk axi_pcie_s_interconnect/M00_ACLK
@@ -178,9 +178,9 @@ ad_connect  axi_pcie_s_interconnect/M00_AXI axi_pcie_x4/S_AXI
 
 # hps7  slave
 
-set_property CONFIG.PCW_USE_S_AXI_HP0 {0} [get_bd_cells sys_ps7]
-set_property CONFIG.PCW_USE_S_AXI_HP1 {0} [get_bd_cells sys_ps7]
-set_property CONFIG.PCW_USE_S_AXI_HP2 {0} [get_bd_cells sys_ps7]
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP0 0
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 0
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 0
 
 # reassign addresses
 

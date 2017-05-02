@@ -26,45 +26,46 @@ create_bd_port -dir O spdif
 
 ## ps7 modifications
 
-set_property -dict [list CONFIG.PCW_USE_DMA0 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_DMA1 {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_DMA2 {1}] $sys_ps7
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA0  1
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA1  1
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA2  1
 
 # ethernet-1
 
-set sys_rgmii [create_bd_cell -type ip -vlnv xilinx.com:ip:gmii_to_rgmii:4.0 sys_rgmii]
-set_property -dict [list CONFIG.SupportLevel {Include_Shared_Logic_in_Core}] $sys_rgmii
+ad_ip_instance gmii_to_rgmii sys_rgmii
+ad_ip_parameter sys_rgmii CONFIG.SupportLevel Include_Shared_Logic_in_Core
 
-set sys_rgmii_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rgmii_rstgen]
-set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rgmii_rstgen
+ad_ip_instance proc_sys_reset sys_rgmii_rstgen
+ad_ip_parameter sys_rgmii_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # hdmi peripherals
 
-set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]
-set axi_hdmi_core [create_bd_cell -type ip -vlnv analog.com:user:axi_hdmi_tx:1.0 axi_hdmi_core]
-set_property -dict [list CONFIG.OUT_CLK_POLARITY {1}] $axi_hdmi_core
+ad_ip_instance axi_clkgen axi_hdmi_clkgen
+ad_ip_instance axi_hdmi_tx axi_hdmi_core
+ad_ip_parameter axi_hdmi_core CONFIG.OUT_CLK_POLARITY 1
 
-set axi_hdmi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_hdmi_dma]
-set_property -dict [list CONFIG.c_m_axis_mm2s_tdata_width {64}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_use_mm2s_fsync {1}] $axi_hdmi_dma
-set_property -dict [list CONFIG.c_include_s2mm {0}] $axi_hdmi_dma
+ad_ip_instance axi_vdma axi_hdmi_dma
+ad_ip_parameter axi_hdmi_dma CONFIG.c_m_axis_mm2s_tdata_width 64
+ad_ip_parameter axi_hdmi_dma CONFIG.c_use_mm2s_fsync 1
+ad_ip_parameter axi_hdmi_dma CONFIG.c_include_s2mm 0
 
 # audio peripherals
 
-set sys_audio_clkgen [create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.3 sys_audio_clkgen]
-set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {12.288}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_LOCKED {false}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_RESET {true} CONFIG.RESET_TYPE {ACTIVE_LOW}] $sys_audio_clkgen
-set_property -dict [list CONFIG.USE_PHASE_ALIGNMENT false] $sys_audio_clkgen
-set_property -dict [list CONFIG.PRIM_SOURCE No_buffer] $sys_audio_clkgen
+ad_ip_instance clk_wiz sys_audio_clkgen
+ad_ip_parameter sys_audio_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 12.288
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_LOCKED false
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_RESET true
+ad_ip_parameter sys_audio_clkgen CONFIG.RESET_TYPE ACTIVE_LOW
+ad_ip_parameter sys_audio_clkgen CONFIG.USE_PHASE_ALIGNMENT false
+ad_ip_parameter sys_audio_clkgen CONFIG.PRIM_SOURCE No_buffer
 
-set axi_spdif_tx_core [create_bd_cell -type ip -vlnv analog.com:user:axi_spdif_tx:1.0 axi_spdif_tx_core]
-set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_spdif_tx_core
-set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_spdif_tx_core
+ad_ip_instance axi_spdif_tx axi_spdif_tx_core
+ad_ip_parameter axi_spdif_tx_core CONFIG.DMA_TYPE 1
+ad_ip_parameter axi_spdif_tx_core CONFIG.S_AXI_ADDRESS_WIDTH 16
 
-set axi_i2s_adi [create_bd_cell -type ip -vlnv analog.com:user:axi_i2s_adi:1.0 axi_i2s_adi]
-set_property -dict [list CONFIG.DMA_TYPE {1}] $axi_i2s_adi
-set_property -dict [list CONFIG.S_AXI_ADDRESS_WIDTH {16}] $axi_i2s_adi
+ad_ip_instance axi_i2s_adi axi_i2s_adi
+ad_ip_parameter axi_i2s_adi CONFIG.DMA_TYPE 1
+ad_ip_parameter axi_i2s_adi CONFIG.S_AXI_ADDRESS_WIDTH 16
 
 # system reset/clock definitions
 
@@ -140,8 +141,8 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_hdmi_dma/M_AXI_MM2S
 
 # un-used io (gt)
 
-set axi_pz_xcvrlb [create_bd_cell -type ip -vlnv analog.com:user:axi_xcvrlb:1.0 axi_pz_xcvrlb]
-set_property -dict [list CONFIG.NUM_OF_LANES {2}] $axi_pz_xcvrlb
+ad_ip_instance axi_xcvrlb axi_pz_xcvrlb
+ad_ip_parameter axi_pz_xcvrlb CONFIG.NUM_OF_LANES 2
 
 create_bd_port -dir I gt_ref_clk_0
 create_bd_port -dir I -from 1 -to 0 gt_rx_p
@@ -158,12 +159,12 @@ ad_connect  axi_pz_xcvrlb/tx_n gt_tx_n
 
 # un-used io (regular)
 
-set axi_gpreg [create_bd_cell -type ip -vlnv analog.com:user:axi_gpreg:1.0 axi_gpreg]
-set_property -dict [list CONFIG.NUM_OF_CLK_MONS {3}] $axi_gpreg
-set_property -dict [list CONFIG.NUM_OF_IO {2}] $axi_gpreg
-set_property -dict [list CONFIG.BUF_ENABLE_0 {1}] $axi_gpreg
-set_property -dict [list CONFIG.BUF_ENABLE_1 {1}] $axi_gpreg
-set_property -dict [list CONFIG.BUF_ENABLE_2 {1}] $axi_gpreg
+ad_ip_instance axi_gpreg axi_gpreg
+ad_ip_parameter axi_gpreg CONFIG.NUM_OF_CLK_MONS 3
+ad_ip_parameter axi_gpreg CONFIG.NUM_OF_IO 2
+ad_ip_parameter axi_gpreg CONFIG.BUF_ENABLE_0 1
+ad_ip_parameter axi_gpreg CONFIG.BUF_ENABLE_1 1
+ad_ip_parameter axi_gpreg CONFIG.BUF_ENABLE_2 1
 
 create_bd_port -dir I -from 31 -to 0 gp_in_0
 create_bd_port -dir I -from 31 -to 0 gp_in_1

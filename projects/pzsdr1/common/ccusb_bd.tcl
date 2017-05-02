@@ -18,18 +18,18 @@ create_bd_port -dir O slwr_n
 create_bd_port -dir O pktend_n
 create_bd_port -dir O epswitch_n
 
-set axi_uart [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uart]
-set_property -dict [list CONFIG.C_BAUDRATE {115200}] $axi_uart
+ad_ip_instance axi_uartlite axi_uart
+ad_ip_parameter axi_uart CONFIG.C_BAUDRATE 115200
 
-set axi_usb_fx3 [create_bd_cell -type ip -vlnv analog.com:user:axi_usb_fx3:1.0 axi_usb_fx3]
+ad_ip_instance axi_usb_fx3 axi_usb_fx3
 
-set axi_usb_fx3_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_usb_fx3_dma]
-set_property -dict [list CONFIG.c_sg_include_stscntrl_strm {0}] $axi_usb_fx3_dma
-set_property -dict [list CONFIG.c_mm2s_burst_size {256}] $axi_usb_fx3_dma
-set_property -dict [list CONFIG.c_s2mm_burst_size {256}] $axi_usb_fx3_dma
-set_property -dict [list CONFIG.c_sg_length_width {16}] $axi_usb_fx3_dma
+ad_ip_instance axi_dma axi_usb_fx3_dma
+ad_ip_parameter axi_usb_fx3_dma CONFIG.c_sg_include_stscntrl_strm 0
+ad_ip_parameter axi_usb_fx3_dma CONFIG.c_mm2s_burst_size 256
+ad_ip_parameter axi_usb_fx3_dma CONFIG.c_s2mm_burst_size 256
+ad_ip_parameter axi_usb_fx3_dma CONFIG.c_sg_length_width 16
 
-set usb_fx3_rx_axis_fifo [ create_bd_cell -type ip -vlnv xilinx.com:ip:axis_data_fifo:1.1 usb_fx3_rx_axis_fifo ]
+ad_ip_instance axis_data_fifo usb_fx3_rx_axis_fifo
 
 ad_connect axi_usb_fx3/s_axis axi_usb_fx3_dma/M_AXIS_MM2S
 

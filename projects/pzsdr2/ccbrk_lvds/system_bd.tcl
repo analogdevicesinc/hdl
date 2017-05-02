@@ -4,5 +4,5 @@ source ../common/ccbrk_bd.tcl
 
 cfg_ad9361_interface LVDS
 
-set_property CONFIG.ADC_INIT_DELAY 29 [get_bd_cells axi_ad9361]
+ad_ip_parameter axi_ad9361 CONFIG.ADC_INIT_DELAY 29
 

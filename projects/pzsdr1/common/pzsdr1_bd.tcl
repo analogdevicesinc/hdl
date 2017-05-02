@@ -54,74 +54,74 @@ create_bd_port -dir I -type intr ps_intr_15
 
 # instance: sys_ps7
 
-set sys_ps7  [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 sys_ps7]
-set_property -dict [list CONFIG.PCW_PRESET_BANK0_VOLTAGE {LVCMOS 1.8V}] $sys_ps7
-set_property -dict [list CONFIG.PCW_PRESET_BANK1_VOLTAGE {LVCMOS 1.8V}] $sys_ps7
-set_property -dict [list CONFIG.PCW_PACKAGE_NAME {fbg676}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_ENET0_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_ENET0_ENET0_IO {MIO 16 .. 27}] $sys_ps7
-set_property -dict [list CONFIG.PCW_ENET0_GRP_MDIO_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_ENET1_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_ENET_RESET_SELECT {Separate reset pins}] $sys_ps7
-set_property -dict [list CONFIG.PCW_ENET0_RESET_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_ENET0_RESET_IO {MIO 8}] $sys_ps7
-set_property -dict [list CONFIG.PCW_ENET1_RESET_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_ENET1_RESET_IO {MIO 51}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SD0_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SD0_GRP_CD_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SD0_GRP_CD_IO {MIO 50}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SDIO_PERIPHERAL_FREQMHZ {50}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UART1_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USB0_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USB0_RESET_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USB0_RESET_IO {MIO 7}] $sys_ps7
-set_property -dict [list CONFIG.PCW_QSPI_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_PARTNO {MT41K256M16 RE-125}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BUS_WIDTH {32 Bit}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_USE_INTERNAL_VREF {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_WRITE_LEVEL {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_READ_GATE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_TRAIN_DATA_EYE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 {0.110}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 {0.095}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_2 {0.249}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_3 {0.249}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 {0.202}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 {0.217}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY2 {0.216}] $sys_ps7
-set_property -dict [list CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY3 {0.217}] $sys_ps7
-set_property -dict [list CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_CLK1_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_RST1_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_CLK2_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_EN_RST2_PORT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {200.0}] $sys_ps7
-set_property -dict [list CONFIG.PCW_USE_FABRIC_INTERRUPT {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_IRQ_F2P_INTR {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_GPIO_EMIO_GPIO_IO {64}] $sys_ps7
-set_property -dict [list CONFIG.PCW_IRQ_F2P_MODE {REVERSE}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI0_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI0_SPI0_IO {EMIO}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI1_PERIPHERAL_ENABLE {1}] $sys_ps7
-set_property -dict [list CONFIG.PCW_SPI1_SPI1_IO {EMIO}] $sys_ps7
+ad_ip_instance processing_system7 sys_ps7
+ad_ip_parameter sys_ps7 CONFIG.PCW_PRESET_BANK0_VOLTAGE "LVCMOS 1.8V"
+ad_ip_parameter sys_ps7 CONFIG.PCW_PRESET_BANK1_VOLTAGE "LVCMOS 1.8V"
+ad_ip_parameter sys_ps7 CONFIG.PCW_PACKAGE_NAME fbg676
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_MIO_GPIO_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_ENET0_IO "MIO 16 .. 27"
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_GRP_MDIO_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET1_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET_RESET_SELECT "Separate reset pins"
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_RESET_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_RESET_IO "MIO 8"
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET1_RESET_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET1_RESET_IO "MIO 51"
+ad_ip_parameter sys_ps7 CONFIG.PCW_SD0_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_SD0_GRP_CD_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_SD0_GRP_CD_IO "MIO 50"
+ad_ip_parameter sys_ps7 CONFIG.PCW_SDIO_PERIPHERAL_FREQMHZ 50
+ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_RESET_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_RESET_IO "MIO 7"
+ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_PARTNO "MT41K256M16 RE-125"
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BUS_WIDTH "32 Bit"
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_USE_INTERNAL_VREF 0
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_TRAIN_WRITE_LEVEL 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_TRAIN_READ_GATE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_TRAIN_DATA_EYE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 0.110
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 0.095
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_2 0.249
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_3 0.249
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 0.202
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 0.217
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY2 0.216
+ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY3 0.217
+ad_ip_parameter sys_ps7 CONFIG.PCW_TTC0_PERIPHERAL_ENABLE 0
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK1_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST1_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST2_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 100.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ 200.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 200.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_FABRIC_INTERRUPT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_INTR 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 64
+ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_MODE REVERSE
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI0_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI0_SPI0_IO EMIO
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_PERIPHERAL_ENABLE 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_SPI1_IO EMIO
 
-set axi_iic_main [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 axi_iic_main]
-set_property -dict [list CONFIG.USE_BOARD_FLOW {true}] $axi_iic_main
-set_property -dict [list CONFIG.IIC_BOARD_INTERFACE {Custom}] $axi_iic_main
+ad_ip_instance axi_iic axi_iic_main
+ad_ip_parameter axi_iic_main CONFIG.USE_BOARD_FLOW true
+ad_ip_parameter axi_iic_main CONFIG.IIC_BOARD_INTERFACE Custom
 
-set sys_concat_intc [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc]
-set_property -dict [list CONFIG.NUM_PORTS {16}] $sys_concat_intc
+ad_ip_instance xlconcat sys_concat_intc
+ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
-set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
-set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
+ad_ip_instance proc_sys_reset sys_rstgen
+ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
-set sys_logic_inv [create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 sys_logic_inv]
-set_property -dict [list CONFIG.C_SIZE {1}] $sys_logic_inv
-set_property -dict [list CONFIG.C_OPERATION {not}] $sys_logic_inv
+ad_ip_instance util_vector_logic sys_logic_inv
+ad_ip_parameter sys_logic_inv CONFIG.C_SIZE 1
+ad_ip_parameter sys_logic_inv CONFIG.C_OPERATION not
 
 # system reset/clock definitions
 
@@ -201,60 +201,60 @@ create_bd_port -dir O tdd_sync_t
 
 # ad9361 core
 
-set axi_ad9361 [create_bd_cell -type ip -vlnv analog.com:user:axi_ad9361:1.0 axi_ad9361]
-set_property -dict [list CONFIG.ID {0}] $axi_ad9361
-set_property -dict [list CONFIG.DAC_IODELAY_ENABLE {0}] $axi_ad9361
+ad_ip_instance axi_ad9361 axi_ad9361
+ad_ip_parameter axi_ad9361 CONFIG.ID 0
+ad_ip_parameter axi_ad9361 CONFIG.DAC_IODELAY_ENABLE 0
 
-set axi_ad9361_dac_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9361_dac_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {2}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.CYCLIC {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {1}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_dac_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_DEST {64}] $axi_ad9361_dac_dma
+ad_ip_instance axi_dmac axi_ad9361_dac_dma
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_DEST 2
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-set util_ad9361_dac_upack [create_bd_cell -type ip -vlnv analog.com:user:util_upack:1.0 util_ad9361_dac_upack]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9361_dac_upack
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_ad9361_dac_upack
+ad_ip_instance util_upack util_ad9361_dac_upack
+ad_ip_parameter util_ad9361_dac_upack CONFIG.NUM_OF_CHANNELS 4
+ad_ip_parameter util_ad9361_dac_upack CONFIG.CHANNEL_DATA_WIDTH 16
 
-set axi_ad9361_adc_dma [create_bd_cell -type ip -vlnv analog.com:user:axi_dmac:1.0 axi_ad9361_adc_dma]
-set_property -dict [list CONFIG.DMA_TYPE_SRC {2}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.DMA_TYPE_DEST {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.CYCLIC {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.SYNC_TRANSFER_START {1}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.AXI_SLICE_SRC {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9361_adc_dma
-set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}]  $axi_ad9361_adc_dma
+ad_ip_instance axi_dmac axi_ad9361_adc_dma
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 
-set util_ad9361_adc_pack [create_bd_cell -type ip -vlnv analog.com:user:util_cpack:1.0 util_ad9361_adc_pack]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9361_adc_pack
-set_property -dict [list CONFIG.CHANNEL_DATA_WIDTH {16}] $util_ad9361_adc_pack
+ad_ip_instance util_cpack util_ad9361_adc_pack
+ad_ip_parameter util_ad9361_adc_pack CONFIG.NUM_OF_CHANNELS 4
+ad_ip_parameter util_ad9361_adc_pack CONFIG.CHANNEL_DATA_WIDTH 16
 
-set util_ad9361_adc_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_wfifo:1.0 util_ad9361_adc_fifo]
-set_property -dict [list CONFIG.NUM_OF_CHANNELS {4}] $util_ad9361_adc_fifo
-set_property -dict [list CONFIG.DIN_ADDRESS_WIDTH {4}] $util_ad9361_adc_fifo
-set_property -dict [list CONFIG.DIN_DATA_WIDTH {16}] $util_ad9361_adc_fifo
-set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16}] $util_ad9361_adc_fifo
+ad_ip_instance util_wfifo util_ad9361_adc_fifo
+ad_ip_parameter util_ad9361_adc_fifo CONFIG.NUM_OF_CHANNELS 4
+ad_ip_parameter util_ad9361_adc_fifo CONFIG.DIN_ADDRESS_WIDTH 4
+ad_ip_parameter util_ad9361_adc_fifo CONFIG.DIN_DATA_WIDTH 16
+ad_ip_parameter util_ad9361_adc_fifo CONFIG.DOUT_DATA_WIDTH 16
 
-set util_ad9361_tdd_sync [create_bd_cell -type ip -vlnv analog.com:user:util_tdd_sync:1.0 util_ad9361_tdd_sync]
-set_property -dict [list CONFIG.TDD_SYNC_PERIOD {10000000}] $util_ad9361_tdd_sync
+ad_ip_instance util_tdd_sync util_ad9361_tdd_sync
+ad_ip_parameter util_ad9361_tdd_sync CONFIG.TDD_SYNC_PERIOD 10000000
 
-set clkdiv [ create_bd_cell -type ip -vlnv analog.com:user:util_clkdiv:1.0 clkdiv ]
+ad_ip_instance util_clkdiv clkdiv
 
-set clkdiv_reset [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 clkdiv_reset]
+ad_ip_instance proc_sys_reset clkdiv_reset
 
-set dac_fifo [create_bd_cell -type ip -vlnv analog.com:user:util_rfifo:1.0 dac_fifo]
-set_property -dict [list CONFIG.DIN_DATA_WIDTH {16}] $dac_fifo
-set_property -dict [list CONFIG.DOUT_DATA_WIDTH {16}] $dac_fifo
-set_property -dict [list CONFIG.DIN_ADDRESS_WIDTH {4}] $dac_fifo
+ad_ip_instance util_rfifo dac_fifo
+ad_ip_parameter dac_fifo CONFIG.DIN_DATA_WIDTH 16
+ad_ip_parameter dac_fifo CONFIG.DOUT_DATA_WIDTH 16
+ad_ip_parameter dac_fifo CONFIG.DIN_ADDRESS_WIDTH 4
 
-set clkdiv_sel_logic [create_bd_cell -type ip -vlnv xilinx.com:ip:util_reduced_logic:2.0 clkdiv_sel_logic]
-set_property -dict [list CONFIG.C_SIZE {2}] $clkdiv_sel_logic
+ad_ip_instance util_reduced_logic clkdiv_sel_logic
+ad_ip_parameter clkdiv_sel_logic CONFIG.C_SIZE 2
 
-set concat_logic [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_logic]
-set_property -dict [list CONFIG.NUM_PORTS {2}] $concat_logic
+ad_ip_instance xlconcat concat_logic
+ad_ip_parameter concat_logic CONFIG.NUM_PORTS 2
 
 # connections
 

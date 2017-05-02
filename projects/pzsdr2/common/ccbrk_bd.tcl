@@ -6,8 +6,8 @@ ad_connect  sys_ps7/ENET1_GMII_TX_CLK GND
 
 # un-used io (gt)
 
-set axi_pz_xcvrlb [create_bd_cell -type ip -vlnv analog.com:user:axi_xcvrlb:1.0 axi_pz_xcvrlb]
-set_property -dict [list CONFIG.NUM_OF_LANES {4}] $axi_pz_xcvrlb
+ad_ip_instance axi_xcvrlb axi_pz_xcvrlb
+ad_ip_parameter axi_pz_xcvrlb CONFIG.NUM_OF_LANES 4
 
 create_bd_port -dir I gt_ref_clk
 create_bd_port -dir I -from 3 -to 0 gt_rx_p
@@ -24,9 +24,9 @@ ad_connect  axi_pz_xcvrlb/tx_n gt_tx_n
 
 # un-used io (regular)
 
-set axi_gpreg [create_bd_cell -type ip -vlnv analog.com:user:axi_gpreg:1.0 axi_gpreg]
-set_property -dict [list CONFIG.NUM_OF_CLK_MONS {0}] $axi_gpreg
-set_property -dict [list CONFIG.NUM_OF_IO {4}] $axi_gpreg
+ad_ip_instance axi_gpreg axi_gpreg
+ad_ip_parameter axi_gpreg CONFIG.NUM_OF_CLK_MONS 0
+ad_ip_parameter axi_gpreg CONFIG.NUM_OF_IO 4
 
 create_bd_port -dir I -from 31 -to 0 gp_in_0
 create_bd_port -dir I -from 31 -to 0 gp_in_1
