@@ -36,7 +36,7 @@ create_bd_port -dir I -type intr ps_intr_15
 
 # instance: sys_ps8
 
-set sys_ps8  [create_bd_cell -type ip -vlnv xilinx.com:ip:zynq_ultra_ps_e:1.2 sys_ps8]
+ad_ip_instance zynq_ultra_ps_e sys_ps8
 
 # defaults -- remove after board is supported in the tool
 
@@ -1377,7 +1377,7 @@ set_property -dict [list \
   CONFIG.PSU__USE__IRQ0 {1} \
   CONFIG.PSU__USE__M_AXI_GP2 {1} \
   CONFIG.PSU__VIDEO_REF_CLK__FREQMHZ {33.333} \
-] $sys_ps8
+] [get_bd_cells sys_ps8]
 
 set_property -dict [list \
   CONFIG.PSU_BANK_0_IO_STANDARD.VALUE_SRC {DEFAULT} \
@@ -2439,7 +2439,7 @@ set_property -dict [list \
   CONFIG.PSU__USB3_1__PERIPHERAL__IO.VALUE_SRC {DEFAULT} \
   CONFIG.PSU__USE__FABRIC__RST.VALUE_SRC {DEFAULT} \
   CONFIG.PSU__VIDEO_REF_CLK__FREQMHZ.VALUE_SRC {DEFAULT} \
-] $sys_ps8
+] [get_bd_cells sys_ps8]
 
 
 set_property CONFIG.PSU__USE__M_AXI_GP2 {1} $sys_ps8
@@ -2459,15 +2459,15 @@ set_property -dict [list\
   CONFIG.PSU__SPI0__PERIPHERAL__IO {EMIO} \
   CONFIG.PSU__SPI1__PERIPHERAL__ENABLE {1} \
   CONFIG.PSU__SPI1__PERIPHERAL__IO {EMIO} \
-] $sys_ps8
+] [get_bd_cells sys_ps8]
 
 set_property -dict [list\
   CONFIG.PSU__CRL_APB__SPI0_REF_CTRL__FREQMHZ {100} \
   CONFIG.PSU__CRL_APB__SPI1_REF_CTRL__FREQMHZ {100} \
-] $sys_ps8
+] [get_bd_cells sys_ps8]
 
-set sys_rstgen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 sys_rstgen]
-set_property -dict [list CONFIG.C_EXT_RST_WIDTH {1}] $sys_rstgen
+ad_ip_instance proc_sys_reset sys_rstgen
+ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # system reset/clock definitions
 
@@ -2503,11 +2503,11 @@ ad_connect  sys_ps8/emio_spi1_s_i GND
 
 # interrupts
 
-set sys_concat_intc_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc_0]
-set_property -dict [list CONFIG.NUM_PORTS {8}] $sys_concat_intc_0
+ad_ip_instance xlconcat sys_concat_intc_0
+ad_ip_parameter sys_concat_intc_0 CONFIG.NUM_PORTS 8
 
-set sys_concat_intc_1 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 sys_concat_intc_1]
-set_property -dict [list CONFIG.NUM_PORTS {8}] $sys_concat_intc_1
+ad_ip_instance xlconcat sys_concat_intc_1
+ad_ip_parameter sys_concat_intc_1 CONFIG.NUM_PORTS 8
 
 ad_connect  sys_concat_intc_0/dout sys_ps8/pl_ps_irq0
 ad_connect  sys_concat_intc_1/dout sys_ps8/pl_ps_irq1
