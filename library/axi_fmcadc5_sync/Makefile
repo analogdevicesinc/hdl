@@ -9,7 +9,9 @@ M_DEPS += ../common/up_axi.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += ../xilinx/common/ad_lvds_out.v
+M_DEPS += ../xilinx/common/ad_mul.v
 M_DEPS += axi_fmcadc5_sync.v
+M_DEPS += axi_fmcadc5_sync_calcor.v
 M_DEPS += axi_fmcadc5_sync_constr.xdc
 M_DEPS += axi_fmcadc5_sync_ip.tcl
 
