@@ -54,11 +54,12 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   output            rx_sync_0_n,
   output            rx_sync_1_p,
   output            rx_sync_1_n,
+  input   [511:0]   rx_data,
+  output  [511:0]   rx_cor_data,
 
   // calibration signal
 
   output            vcal,
-  output            vcal_enable,
 
   // switching regulator clocks
 
@@ -112,10 +113,24 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   reg     [  7:0]   up_psync_count = 'd0;
   reg               up_psync = 'd0;
+  reg               up_cal_done_t_m1 = 'd0;
+  reg               up_cal_done_t_m2 = 'd0;
+  reg               up_cal_done_t_m3 = 'd0;
+  reg     [ 15:0]   up_cal_max_0 = 'd0;
+  reg     [ 15:0]   up_cal_min_0 = 'd0;
+  reg     [ 15:0]   up_cal_max_1 = 'd0;
+  reg     [ 15:0]   up_cal_min_1 = 'd0;
+  reg               up_cal_enable = 'd0;
+  reg               up_cor_enable    = 'd0;
+  reg               up_cor_enable_t = 'd0;
+  reg     [ 15:0]   up_cor_scale_0 = 'd0;
+  reg     [ 15:0]   up_cor_offset_0 = 'd0;
+  reg     [ 15:0]   up_cor_scale_1 = 'd0;
+  reg     [ 15:0]   up_cor_offset_1 = 'd0;
   reg     [  7:0]   up_vcal_8 = 'd0;
   reg               up_vcal = 'd0;
   reg     [  7:0]   up_vcal_cnt = 'd0;
-  reg     [  1:0]   up_vcal_enable = 'd0;
+  reg               up_vcal_enable = 'd0;
   reg               up_sysref_ack_t_m1 = 'd0;
   reg               up_sysref_ack_t_m2 = 'd0;
   reg               up_sysref_ack_t_m3 = 'd0;
@@ -150,6 +165,20 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   reg               up_wack = 'd0;
   reg               up_rack = 'd0;
   reg     [ 31:0]   up_rdata = 'd0;
+  reg               rx_cal_enable_m1 = 'd0;
+  reg               rx_cal_enable = 'd0;
+  reg               rx_cor_enable_t_m1 = 'd0;
+  reg               rx_cor_enable_t_m2 = 'd0;
+  reg               rx_cor_enable_t_m3 = 'd0;
+  reg               rx_cor_enable = 'd0;
+  reg     [ 15:0]   rx_cor_scale_0 = 'd0;
+  reg     [ 15:0]   rx_cor_offset_0 = 'd0;
+  reg     [ 15:0]   rx_cor_scale_1 = 'd0;
+  reg     [ 15:0]   rx_cor_offset_1 = 'd0;
+  reg     [ 15:0]   rx_cor_scale_d_0 = 'd0;
+  reg     [ 15:0]   rx_cor_offset_d_0 = 'd0;
+  reg     [ 15:0]   rx_cor_scale_d_1 = 'd0;
+  reg     [ 15:0]   rx_cor_offset_d_1 = 'd0;
   reg     [  7:0]   rx_sysref_cnt = 'd0;
   reg               rx_sysref_control_t_m1 = 'd0;
   reg               rx_sysref_control_t_m2 = 'd0;
@@ -182,11 +211,18 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   // internal signals
 
+  wire              up_cal_done_t_s;
   wire              up_sysref_ack_t_s;
   wire              up_sync_status_t_s;
   wire              up_spi_gnt_s;
   wire    [ 31:0]   up_spi_out_32_s;
   wire    [  7:0]   up_spi_in_s;
+  wire              rx_cor_enable_t_s;
+  wire              rx_cal_done_t_s;
+  wire    [ 15:0]   rx_cal_max_0_s;
+  wire    [ 15:0]   rx_cal_min_0_s;
+  wire    [ 15:0]   rx_cal_max_1_s;
+  wire    [ 15:0]   rx_cal_min_1_s;
   wire              rx_sysref_control_t_s;
   wire              rx_sysref_req_t_s;
   wire              rx_sysref_enb_e_s;
@@ -226,21 +262,84 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
     end
   end
 
+  // calibration (offset & gain only)
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_cal_done_t_m1 <= 1'd0;
+      up_cal_done_t_m2 <= 1'd0;
+      up_cal_done_t_m3 <= 1'd0;
+    end else begin
+      up_cal_done_t_m1 <= rx_cal_done_t_s;
+      up_cal_done_t_m2 <= up_cal_done_t_m1;
+      up_cal_done_t_m3 <= up_cal_done_t_m2;
+    end
+  end
+
+  assign up_cal_done_t_s = up_cal_done_t_m3 ^ up_cal_done_t_m2;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_cal_max_0 <= 16'd0;
+      up_cal_min_0 <= 16'd0;
+      up_cal_max_1 <= 16'd0;
+      up_cal_min_1 <= 16'd0;
+    end else begin
+      if (up_cal_done_t_s == 1'b1) begin
+        up_cal_max_0 <= rx_cal_max_0_s;
+        up_cal_min_0 <= rx_cal_min_0_s;
+        up_cal_max_1 <= rx_cal_max_1_s;
+        up_cal_min_1 <= rx_cal_min_1_s;
+      end
+    end
+  end
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_cal_enable <= 1'd0;
+      up_cor_enable <= 1'd0;
+      up_cor_enable_t <= 1'd0;
+      up_cor_scale_0 <= 16'd0;
+      up_cor_offset_0 <= 16'd0;
+      up_cor_scale_1 <= 16'd0;
+      up_cor_offset_1 <= 16'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0060)) begin
+        up_cal_enable <= up_wdata_s[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0061)) begin
+        up_cor_enable <= up_wdata_s[0];
+        up_cor_enable_t <= ~up_cor_enable_t;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+        up_cor_scale_0 <= up_wdata_s[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+        up_cor_offset_0 <= up_wdata_s[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+        up_cor_scale_1 <= up_wdata_s[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+        up_cor_offset_1 <= up_wdata_s[15:0];
+      end
+    end
+  end
+
   // calibration signal register(s) 
 
   assign vcal = up_vcal;
-  assign vcal_enable = up_vcal_enable[0];
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_vcal_8 <= 8'd0;
       up_vcal <= 1'd0;
       up_vcal_cnt <= 8'd0;
-      up_vcal_enable <= 2'd0;
+      up_vcal_enable <= 1'd0;
     end else begin
       if (up_vcal_8 >= up_vcal_cnt) begin
         up_vcal_8 <= 8'd0;
-        up_vcal <= ~up_vcal & up_vcal_enable[1];
+        up_vcal <= ~up_vcal & up_vcal_enable;
       end else begin
         up_vcal_8 <= up_vcal_8 + 1'b1;
         up_vcal <= up_vcal;
@@ -249,7 +348,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
         up_vcal_cnt <= up_wdata_s[7:0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0051)) begin
-        up_vcal_enable <= up_wdata_s[1:0];
+        up_vcal_enable <= up_wdata_s[0];
       end
     end
   end
@@ -480,7 +579,17 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
           14'h0040: up_rdata <= {26'd0, up_sysref_mode_e, 3'b0, up_sysref_mode_i};
           14'h0041: up_rdata <= {31'd0, up_sysref_status};
           14'h0050: up_rdata <= {24'd0, up_vcal_cnt};
-          14'h0051: up_rdata <= {30'd0, up_vcal_enable};
+          14'h0051: up_rdata <= {31'd0, up_vcal_enable};
+          14'h0060: up_rdata <= {30'd0, up_cal_enable};
+          14'h0061: up_rdata <= {30'd0, up_cor_enable};
+          14'h0064: up_rdata <= {16'd0, up_cal_max_0};
+          14'h0065: up_rdata <= {16'd0, up_cal_min_0};
+          14'h0066: up_rdata <= {16'd0, up_cal_max_1};
+          14'h0067: up_rdata <= {16'd0, up_cal_min_1};
+          14'h0068: up_rdata <= {16'd0, up_cor_scale_0};
+          14'h0069: up_rdata <= {16'd0, up_cor_offset_0};
+          14'h006a: up_rdata <= {16'd0, up_cor_scale_1};
+          14'h006b: up_rdata <= {16'd0, up_cor_offset_1};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -488,6 +597,57 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
       end
     end
   end
+
+  // calibration at receive clock
+
+  always @(posedge rx_clk) begin
+    rx_cal_enable_m1 <= up_cal_enable;
+    rx_cal_enable <= rx_cal_enable_m1;
+    rx_cor_enable_t_m1 <= up_cor_enable_t;
+    rx_cor_enable_t_m2 <= rx_cor_enable_t_m1;
+    rx_cor_enable_t_m3 <= rx_cor_enable_t_m2;
+  end
+
+  assign rx_cor_enable_t_s = rx_cor_enable_t_m3 ^ rx_cor_enable_t_m2;
+
+  always @(posedge rx_clk) begin
+    if (rx_cor_enable_t_s == 1'b1) begin
+      rx_cor_enable <= up_cor_enable;
+      rx_cor_scale_0 <= up_cor_scale_0;
+      rx_cor_offset_0 <= up_cor_offset_0;
+      rx_cor_scale_1 <= up_cor_scale_1;
+      rx_cor_offset_1 <= up_cor_offset_1;
+    end
+  end
+
+  always @(posedge rx_clk) begin
+    if (rx_cor_enable == 1'b0) begin
+      rx_cor_scale_d_0 <= 16'h8000;
+      rx_cor_offset_d_0 <= 16'h0000;
+      rx_cor_scale_d_1 <= 16'h8000;
+      rx_cor_offset_d_1 <= 16'h0000;
+    end else begin
+      rx_cor_scale_d_0 <= rx_cor_scale_0;
+      rx_cor_offset_d_0 <= rx_cor_offset_0;
+      rx_cor_scale_d_1 <= rx_cor_scale_1;
+      rx_cor_offset_d_1 <= rx_cor_offset_1;
+    end
+  end
+
+  axi_fmcadc5_sync_calcor i_calcor (
+    .rx_clk (rx_clk),
+    .rx_data (rx_data),
+    .rx_cor_data (rx_cor_data),
+    .rx_cal_enable (rx_cal_enable),
+    .rx_cal_done_t (rx_cal_done_t_s),
+    .rx_cal_max_0 (rx_cal_max_0_s),
+    .rx_cal_min_0 (rx_cal_min_0_s),
+    .rx_cal_max_1 (rx_cal_max_1_s),
+    .rx_cal_min_1 (rx_cal_min_1_s),
+    .rx_cor_scale_0 (rx_cor_scale_d_0),
+    .rx_cor_offset_0 (rx_cor_offset_d_0),
+    .rx_cor_scale_1 (rx_cor_scale_d_1),
+    .rx_cor_offset_1 (rx_cor_offset_d_1));
 
   // sysref-control at receive clock
 
