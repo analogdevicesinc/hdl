@@ -109,7 +109,8 @@ module axi_ad9434_if #(
     .IODELAY_CTRL(0),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(SDR),
-    .DATA_WIDTH(12))
+    .DATA_WIDTH(12),
+    .SERDES_FACTOR(4))
   i_adc_data (
     .rst(adc_rst),
     .clk(adc_clk_in),
@@ -141,7 +142,8 @@ module axi_ad9434_if #(
     .IODELAY_CTRL(1),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(SDR),
-    .DATA_WIDTH(1))
+    .DATA_WIDTH(1),
+    .SERDES_FACTOR(4))
   i_adc_or (
     .rst(adc_rst),
     .clk(adc_clk_in),
@@ -176,7 +178,8 @@ module axi_ad9434_if #(
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),
     .MMCM_CLK0_DIV (2),
-    .MMCM_CLK1_DIV (8))
+    .MMCM_CLK1_DIV (8),
+    .SERDES_FACTOR(4))
   i_serdes_clk (
     .rst (mmcm_rst),
     .clk_in_p (adc_clk_in_p),
