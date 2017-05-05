@@ -1,4 +1,6 @@
 
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+
 # dac peripherals
 
 ad_ip_instance axi_adxcvr axi_ad9162_xcvr
@@ -8,9 +10,7 @@ ad_ip_parameter axi_ad9162_xcvr CONFIG.TX_OR_RX_N 1
 
 ad_ip_instance axi_ad9162 axi_ad9162_core
 
-ad_ip_instance jesd204 axi_ad9162_jesd
-ad_ip_parameter axi_ad9162_jesd CONFIG.C_NODE_IS_TRANSMIT 1
-ad_ip_parameter axi_ad9162_jesd CONFIG.C_LANES 8
+adi_axi_jesd204_tx_create axi_ad9162_jesd 8
 
 ad_ip_instance axi_dmac axi_ad9162_dma
 ad_ip_parameter axi_ad9162_dma CONFIG.DMA_TYPE_SRC 0
@@ -33,9 +33,7 @@ ad_ip_parameter axi_ad9625_xcvr CONFIG.TX_OR_RX_N 0
 
 ad_ip_instance axi_ad9625 axi_ad9625_core
 
-ad_ip_instance jesd204 axi_ad9625_jesd
-ad_ip_parameter axi_ad9625_jesd CONFIG.C_NODE_IS_TRANSMIT 0
-ad_ip_parameter axi_ad9625_jesd CONFIG.C_LANES 8
+adi_axi_jesd204_rx_create axi_ad9625_jesd 8
 
 ad_ip_instance axi_dmac axi_ad9625_dma
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_TYPE_SRC 1
@@ -78,7 +76,7 @@ ad_connect  sys_cpu_clk util_fmcomms11_xcvr/up_clk
 
 ad_xcvrcon  util_fmcomms11_xcvr axi_ad9162_xcvr axi_ad9162_jesd
 ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_core/tx_clk
-ad_connect  axi_ad9162_jesd/tx_tdata axi_ad9162_core/tx_data
+ad_connect  axi_ad9162_jesd/tx_data_tdata axi_ad9162_core/tx_data
 ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_fifo/dac_clk
 ad_connect  axi_ad9162_core/dac_valid axi_ad9162_fifo/dac_valid
 ad_connect  axi_ad9162_core/dac_ddata axi_ad9162_fifo/dac_data
@@ -97,8 +95,8 @@ ad_connect  axi_ad9162_fifo/dma_xfer_last axi_ad9162_dma/m_axis_last
 
 ad_xcvrcon  util_fmcomms11_xcvr axi_ad9625_xcvr axi_ad9625_jesd
 ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 axi_ad9625_core/rx_clk
-ad_connect  axi_ad9625_jesd/rx_start_of_frame axi_ad9625_core/rx_sof
-ad_connect  axi_ad9625_jesd/rx_tdata axi_ad9625_core/rx_data
+ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/rx_sof
+ad_connect  axi_ad9625_jesd/rx_data_tdata axi_ad9625_core/rx_data
 ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 axi_ad9625_fifo/adc_clk
 ad_connect  axi_ad9625_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
 ad_connect  axi_ad9625_core/adc_valid axi_ad9625_fifo/adc_wr
@@ -120,7 +118,7 @@ ad_cpu_interconnect 0x44A90000 axi_ad9162_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9162_dma
 ad_cpu_interconnect 0x44A50000 axi_ad9625_xcvr
 ad_cpu_interconnect 0x44A10000 axi_ad9625_core
-ad_cpu_interconnect 0x44A91000 axi_ad9625_jesd
+ad_cpu_interconnect 0x44AA0000 axi_ad9625_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9625_dma
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4
