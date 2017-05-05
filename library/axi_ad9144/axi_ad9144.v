@@ -64,7 +64,6 @@ module axi_ad9144 #(
   output                  dac_valid_3,
   output                  dac_enable_3,
   input       [63:0]      dac_ddata_3,
-  input                   dac_dovf,
   input                   dac_dunf,
 
   // axi interface
@@ -193,7 +192,6 @@ module axi_ad9144 #(
     .dac_valid_3 (dac_valid_3),
     .dac_enable_3 (dac_enable_3),
     .dac_ddata_3 (dac_ddata_3),
-    .dac_dovf (dac_dovf),
     .dac_dunf (dac_dunf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),

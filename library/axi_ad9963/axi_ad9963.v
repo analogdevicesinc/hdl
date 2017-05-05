@@ -96,7 +96,6 @@ module axi_ad9963 #(
   output          dac_enable_q,
   output          dac_valid_q,
   input   [15:0]  dac_data_q,
-  input           dac_dovf,
   input           dac_dunf,
 
   // axi interface
@@ -266,7 +265,6 @@ module axi_ad9963 #(
     .dac_enable_q (dac_enable_q),
     .dac_valid_q (dac_valid_q),
     .dac_data_q (dac_data_q),
-    .dac_dovf(dac_dovf),
     .dac_dunf(dac_dunf),
     .up_dac_ce(up_dac_ce),
     .up_rstn (up_rstn),

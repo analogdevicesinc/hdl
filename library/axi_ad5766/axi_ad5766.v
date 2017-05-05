@@ -361,7 +361,6 @@ module axi_ad5766 #(
     .dac_datafmt (dac_datafmt),
     .dac_datarate (dac_datarate_s),
     .dac_status (1'b0),
-    .dac_status_ovf (1'b0),
     .dac_status_unf (dma_underflow),
     .dac_clk_ratio (32'b0),
     .up_dac_ce (),

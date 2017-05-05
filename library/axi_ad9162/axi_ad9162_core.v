@@ -51,7 +51,6 @@ module axi_ad9162_core #(
   output                  dac_valid,
   output                  dac_enable,
   input       [255:0]     dac_ddata,
-  input                   dac_dovf,
   input                   dac_dunf,
 
   // processor interface
@@ -143,7 +142,6 @@ module axi_ad9162_core #(
     .dac_datafmt (dac_datafmt_s),
     .dac_datarate (),
     .dac_status (1'b1),
-    .dac_status_ovf (dac_dovf),
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd16),
     .up_dac_ce (),

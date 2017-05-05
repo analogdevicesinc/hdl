@@ -74,7 +74,6 @@ module axi_ad9122 #(
   output                  dac_valid_1,
   output                  dac_enable_1,
   input       [63:0]      dac_ddata_1,
-  input                   dac_dovf,
   input                   dac_dunf,
 
   // axi interface
@@ -230,7 +229,6 @@ module axi_ad9122 #(
     .dac_valid_1 (dac_valid_1),
     .dac_enable_1 (dac_enable_1),
     .dac_ddata_1 (dac_ddata_1),
-    .dac_dovf (dac_dovf),
     .dac_dunf (dac_dunf),
     .mmcm_rst (mmcm_rst),
     .up_drp_sel (up_drp_sel_s),

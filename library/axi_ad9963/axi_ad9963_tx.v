@@ -63,7 +63,6 @@ module axi_ad9963_tx #(
   output              dac_enable_q,
   output reg          dac_valid_q,
   input       [15:0]  dac_data_q,
-  input               dac_dovf,
   input               dac_dunf,
 
   output              up_dac_ce,
@@ -197,7 +196,6 @@ module axi_ad9963_tx #(
     .dac_datafmt (dac_dds_format_s),
     .dac_datarate (),
     .dac_status (1'b1),
-    .dac_status_ovf (dac_dovf),
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd1),
     .up_dac_ce(up_dac_ce),

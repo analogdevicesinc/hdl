@@ -65,7 +65,6 @@ module axi_ad9371_tx #(
   output                  dac_enable_q1,
   output                  dac_valid_q1,
   input       [ 31:0]     dac_data_q1,
-  input                   dac_dovf,
   input                   dac_dunf,
 
   // processor interface
@@ -254,7 +253,6 @@ module axi_ad9371_tx #(
     .dac_datafmt (dac_dds_format_s),
     .dac_datarate (),
     .dac_status (1'b1),
-    .dac_status_ovf (dac_dovf),
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd2),
     .up_dac_ce (),

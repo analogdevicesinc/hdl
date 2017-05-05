@@ -57,7 +57,6 @@ module axi_ad9152 #(
   output                  dac_valid_1,
   output                  dac_enable_1,
   input       [ 63:0]     dac_ddata_1,
-  input                   dac_dovf,
   input                   dac_dunf,
 
   // axi interface
@@ -151,7 +150,6 @@ module axi_ad9152 #(
     .dac_valid_1 (dac_valid_1),
     .dac_enable_1 (dac_enable_1),
     .dac_ddata_1 (dac_ddata_1),
-    .dac_dovf (dac_dovf),
     .dac_dunf (dac_dunf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
