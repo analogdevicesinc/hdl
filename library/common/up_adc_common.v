@@ -61,7 +61,6 @@ module up_adc_common #(
   input               adc_status,
   input               adc_sync_status,
   input               adc_status_ovf,
-  input               adc_status_unf,
   input       [31:0]  adc_clk_ratio,
   output      [31:0]  adc_start_code,
   output              adc_sref_sync,
@@ -127,7 +126,6 @@ module up_adc_common #(
   reg                 up_adc_ddr_edgesel = 'd0;
   reg                 up_adc_pin_mode = 'd0;
   reg                 up_status_ovf = 'd0;
-  reg                 up_status_unf = 'd0;
   reg         [ 7:0]  up_usr_chanmax_int = 'd0;
   reg         [31:0]  up_adc_start_code = 'd0;
   reg         [31:0]  up_adc_gpio_out_int = 'd0;
@@ -142,7 +140,6 @@ module up_adc_common #(
   wire                up_status_s;
   wire                up_sync_status_s;
   wire                up_status_ovf_s;
-  wire                up_status_unf_s;
   wire                up_cntrl_xfer_done_s;
   wire        [31:0]  up_adc_clk_count_s;
   wire                up_drp_status_s;
@@ -277,17 +274,11 @@ module up_adc_common #(
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_status_ovf <= 'd0;
-      up_status_unf <= 'd0;
     end else begin
       if (up_status_ovf_s == 1'b1) begin
         up_status_ovf <= 1'b1;
       end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
         up_status_ovf <= up_status_ovf & ~up_wdata[2];
-      end
-      if (up_status_unf_s == 1'b1) begin
-        up_status_unf <= 1'b1;
-      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
-        up_status_unf <= up_status_unf & ~up_wdata[1];
       end
     end
   end
@@ -393,7 +384,7 @@ module up_adc_common #(
           8'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
           8'h1e: up_rdata_int <= up_drp_wdata;
           8'h1f: up_rdata_int <= up_drp_rdata_hold_s;
-          8'h22: up_rdata_int <= {29'd0, up_status_ovf, up_status_unf, 1'b0};
+          8'h22: up_rdata_int <= {29'd0, up_status_ovf, 2'b0};
           8'h23: up_rdata_int <= 32'd8;
           8'h28: up_rdata_int <= {24'd0, up_usr_chanmax_in};
           8'h29: up_rdata_int <= up_adc_start_code;
@@ -436,19 +427,17 @@ module up_adc_common #(
                       adc_ddr_edgesel,
                       adc_pin_mode}));
 
-  up_xfer_status #(.DATA_WIDTH(4)) i_xfer_status (
+  up_xfer_status #(.DATA_WIDTH(3)) i_xfer_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_status ({up_sync_status_s,
                       up_status_s,
-                      up_status_ovf_s,
-                      up_status_unf_s}),
+                      up_status_ovf_s}),
     .d_rst (adc_rst),
     .d_clk (adc_clk),
     .d_data_status ({ adc_sync_status,
                       adc_status,
-                      adc_status_ovf,
-                      adc_status_unf}));
+                      adc_status_ovf}));
 
   // adc clock monitor
 

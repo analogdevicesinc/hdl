@@ -87,5 +87,4 @@ set_interface_property adc_ch associatedClock if_rx_clk
 set_interface_property adc_ch associatedReset none
 
 ad_alt_intf signal  adc_dovf      input   1     ovf
-ad_alt_intf signal  adc_dunf      input   1     unf
 

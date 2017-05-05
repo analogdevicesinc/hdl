@@ -56,7 +56,6 @@ module axi_adrv9009_rx_os #(
   output                  adc_os_valid_q0,
   output      [ 31:0]     adc_os_data_q0,
   input                   adc_os_dovf,
-  input                   adc_os_dunf,
 
   // processor interface
 
@@ -188,7 +187,6 @@ module axi_adrv9009_rx_os #(
     .adc_status (1'b1),
     .adc_sync_status (1'd0),
     .adc_status_ovf (adc_os_dovf),
-    .adc_status_unf (adc_os_dunf),
     .adc_clk_ratio (32'd1),
     .adc_start_code (),
     .adc_sref_sync (),

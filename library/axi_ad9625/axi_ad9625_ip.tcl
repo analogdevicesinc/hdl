@@ -28,7 +28,6 @@ adi_ip_files axi_ad9625 [list \
 adi_ip_properties axi_ad9625
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
-set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *raddr_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *rx_valid* -of_objects [ipx::current_core]]
 

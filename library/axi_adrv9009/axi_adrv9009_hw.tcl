@@ -138,7 +138,6 @@ set_interface_property adc_ch_3 associatedClock if_adc_clk
 set_interface_property adc_ch_3 associatedReset none
 
 ad_alt_intf signal  adc_dovf      input   1 ovf
-ad_alt_intf signal  adc_dunf      input   1 unf
 
 # adc-os-channel interface
 
@@ -159,7 +158,6 @@ set_interface_property adc_os_ch_1 associatedClock if_adc_os_clk
 set_interface_property adc_os_ch_1 associatedReset none
 
 ad_alt_intf signal  adc_os_dovf      input   1 ovf
-ad_alt_intf signal  adc_os_dunf      input   1 unf
 
 # dac-channel interface
 

@@ -188,7 +188,6 @@ up_adc_common i_up_adc_common(
   .adc_status(1'b1),
   .adc_sync_status(1'b1),
   .adc_status_ovf(1'b0),
-  .adc_status_unf(1'b0),
   .adc_clk_ratio(32'd1),
   .adc_start_code(),
   .adc_sref_sync(),

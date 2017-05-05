@@ -87,7 +87,6 @@ set_interface_property adc_ch_1 associatedClock if_adc_clk
 set_interface_property adc_ch_1 associatedReset none
 
 ad_alt_intf signal adc_dovf input 1 ovf
-ad_alt_intf signal adc_dunf input 1 unf
 
 # SERDES instances and configurations
 
