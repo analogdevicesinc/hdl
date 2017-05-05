@@ -15,7 +15,6 @@ GENERIC_DEPS += rx_package.vhd
 GENERIC_DEPS += rx_phase_det.vhd
 GENERIC_DEPS += rx_status_reg.vhd
 
-XILINX_DEPS += axi_spdif_rx_constr.xdc
 XILINX_DEPS += axi_spdif_rx_ip.tcl
 
 include ../scripts/library.mk

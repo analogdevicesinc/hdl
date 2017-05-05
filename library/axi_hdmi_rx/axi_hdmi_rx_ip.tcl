@@ -23,7 +23,6 @@ adi_ip_files axi_hdmi_rx [list \
   "axi_hdmi_rx.v" \
   "axi_hdmi_rx_es.v" \
   "axi_hdmi_rx_tpm.v" \
-  "axi_hdmi_rx_constr.xdc" \
   "axi_hdmi_rx_core.v" ]
 
 adi_ip_properties axi_hdmi_rx
