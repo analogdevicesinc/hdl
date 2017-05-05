@@ -1,10 +1,11 @@
+
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+
 # adc peripherals
 
 ad_ip_instance axi_ad9625 axi_ad9625_core
 
-ad_ip_instance jesd204 axi_ad9625_jesd
-ad_ip_parameter axi_ad9625_jesd CONFIG.C_NODE_IS_TRANSMIT 0
-ad_ip_parameter axi_ad9625_jesd CONFIG.C_LANES 8
+adi_axi_jesd204_rx_create axi_ad9625_jesd 8
 
 ad_ip_instance axi_adxcvr axi_ad9625_xcvr
 ad_ip_parameter axi_ad9625_xcvr CONFIG.NUM_OF_LANES 8
@@ -56,8 +57,8 @@ ad_connect  sys_cpu_clk util_fmcadc2_xcvr/up_clk
 ad_xcvrcon  util_fmcadc2_xcvr axi_ad9625_xcvr axi_ad9625_jesd
 ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 axi_ad9625_core/rx_clk
 ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 rx_core_clk
-ad_connect  axi_ad9625_jesd/rx_tdata axi_ad9625_core/rx_data
-ad_connect  axi_ad9625_jesd/rx_start_of_frame axi_ad9625_core/rx_sof
+ad_connect  axi_ad9625_jesd/rx_data_tdata axi_ad9625_core/rx_data
+ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/rx_sof
 ad_connect  sys_cpu_clk axi_ad9625_fifo/dma_clk
 ad_connect  sys_cpu_clk axi_ad9625_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
@@ -75,7 +76,7 @@ ad_connect  axi_ad9625_fifo/dma_xfer_req axi_ad9625_dma/s_axis_xfer_req
 
 ad_cpu_interconnect 0x44A60000 axi_ad9625_xcvr
 ad_cpu_interconnect 0x44A10000 axi_ad9625_core
-ad_cpu_interconnect 0x44A91000 axi_ad9625_jesd
+ad_cpu_interconnect 0x44AA0000 axi_ad9625_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9625_dma
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4
