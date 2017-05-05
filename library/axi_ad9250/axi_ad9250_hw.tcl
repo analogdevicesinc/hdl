@@ -24,9 +24,14 @@ add_fileset_file up_clock_mon.v       VERILOG PATH $ad_hdl_dir/library/common/up
 add_fileset_file up_adc_common.v      VERILOG PATH $ad_hdl_dir/library/common/up_adc_common.v
 add_fileset_file up_adc_channel.v     VERILOG PATH $ad_hdl_dir/library/common/up_adc_channel.v
 add_fileset_file ad_xcvr_rx_if.v      VERILOG PATH $ad_hdl_dir/library/common/ad_xcvr_rx_if.v
-add_fileset_file axi_ad9250_pnmon.v   VERILOG PATH axi_ad9250_pnmon.v
-add_fileset_file axi_ad9250_if.v      VERILOG PATH axi_ad9250_if.v
-add_fileset_file axi_ad9250_channel.v VERILOG PATH axi_ad9250_channel.v
+
+add_fileset_file ad_ip_jesd204_adc_pnmon.v     VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_pnmon.v
+add_fileset_file ad_ip_jesd204_adc_channel.v   VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_channel.v
+add_fileset_file ad_ip_jesd204_adc_core.v      VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v
+add_fileset_file ad_ip_jesd204_adc_deframer.v  VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v
+add_fileset_file ad_ip_jesd204_adc_regmap.v    VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_regmap.v
+add_fileset_file ad_ip_jesd204_adc.v           VERILOG PATH $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v
+
 add_fileset_file axi_ad9250.v         VERILOG PATH axi_ad9250.v TOP_LEVEL_FILE
 add_fileset_file up_xfer_cntrl_constr.sdc   SDC PATH  $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc
 add_fileset_file up_xfer_status_constr.sdc  SDC PATH  $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc
@@ -61,7 +66,6 @@ set_interface_property if_rx_data dataBitsPerSymbol 64
 # dma interface
 
 ad_alt_intf clock   adc_clk     output  1
-ad_alt_intf reset   adc_rst     output  1 if_adc_clk
 
 add_interface adc_ch_0 conduit end
 add_interface_port adc_ch_0  adc_enable_a enable   Output  1
