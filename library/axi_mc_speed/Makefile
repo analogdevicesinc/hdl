@@ -16,7 +16,6 @@ GENERIC_DEPS += debouncer.v
 GENERIC_DEPS += delay_30_degrees.v
 GENERIC_DEPS += speed_detector.v
 
-XILINX_DEPS += axi_mc_speed_constr.xdc
 XILINX_DEPS += axi_mc_speed_ip.tcl
 
 include ../scripts/library.mk

@@ -23,7 +23,6 @@ adi_ip_files axi_ad9671 [list \
   "axi_ad9671_pnmon.v" \
   "axi_ad9671_channel.v" \
   "axi_ad9671_if.v" \
-  "axi_ad9671_constr.xdc" \
   "axi_ad9671.v" ]
 
 adi_ip_properties axi_ad9671

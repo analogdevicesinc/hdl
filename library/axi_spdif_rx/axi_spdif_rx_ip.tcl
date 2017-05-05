@@ -13,8 +13,7 @@ adi_ip_files axi_spdif_rx [list \
   "rx_package.vhd" \
   "rx_decode.vhd" \
   "rx_status_reg.vhd" \
-  "axi_spdif_rx.vhd" \
-  "axi_spdif_rx_constr.xdc"]
+  "axi_spdif_rx.vhd" ]
 
 adi_ip_properties axi_spdif_rx
 adi_ip_infer_streaming_interfaces axi_spdif_rx

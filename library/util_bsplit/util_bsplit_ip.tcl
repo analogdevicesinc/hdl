@@ -5,8 +5,7 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create util_bsplit
 adi_ip_files util_bsplit [list \
-  "util_bsplit.v" \
-  "util_bsplit_constr.xdc" ]
+  "util_bsplit.v" ]
 
 adi_ip_properties_lite util_bsplit
 
