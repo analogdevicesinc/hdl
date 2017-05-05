@@ -80,7 +80,6 @@ for {set i 0} {$i < 4} {incr i} {
   set_interface_property dac_ch_${i} associatedReset none
 }
 
-ad_alt_intf signal  dac_dovf      input   1 ovf
 ad_alt_intf signal  dac_dunf      input   1 unf
 
 proc p_axi_ad9144 {} {

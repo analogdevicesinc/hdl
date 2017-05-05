@@ -104,7 +104,6 @@ module axi_ad9371 #(
   output                  dac_enable_q1,
   output                  dac_valid_q1,
   input       [ 31:0]     dac_data_q1,
-  input                   dac_dovf,
   input                   dac_dunf,
 
   // axi interface
@@ -285,7 +284,6 @@ module axi_ad9371 #(
     .dac_enable_q1 (dac_enable_q1),
     .dac_valid_q1 (dac_valid_q1),
     .dac_data_q1 (dac_data_q1),
-    .dac_dovf(dac_dovf),
     .dac_dunf(dac_dunf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),

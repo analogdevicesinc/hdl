@@ -54,7 +54,6 @@ module axi_ad9162 #(
   output                  dac_valid,
   output                  dac_enable,
   input       [255:0]     dac_ddata,
-  input                   dac_dovf,
   input                   dac_dunf,
 
   // axi interface
@@ -129,7 +128,6 @@ module axi_ad9162 #(
     .dac_valid (dac_valid),
     .dac_enable (dac_enable),
     .dac_ddata (dac_ddata),
-    .dac_dovf (dac_dovf),
     .dac_dunf (dac_dunf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),

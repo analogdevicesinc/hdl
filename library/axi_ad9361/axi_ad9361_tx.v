@@ -87,7 +87,6 @@ module axi_ad9361_tx #(
   output          dac_enable_q1,
   output          dac_valid_q1,
   input   [15:0]  dac_data_q1,
-  input           dac_dovf,
   input           dac_dunf,
 
   // gpio
@@ -358,7 +357,6 @@ module axi_ad9361_tx #(
     .dac_datafmt (dac_dds_format_s),
     .dac_datarate (dac_datarate_s),
     .dac_status (1'b1),
-    .dac_status_ovf (dac_dovf),
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd1),
     .up_dac_ce (),

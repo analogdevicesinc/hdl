@@ -75,7 +75,6 @@ module axi_ad9122_core #(
   output                  dac_valid_1,
   output                  dac_enable_1,
   input       [63:0]      dac_ddata_1,
-  input                   dac_dovf,
   input                   dac_dunf,
 
   // mmcm reset
@@ -221,7 +220,6 @@ module axi_ad9122_core #(
     .dac_datafmt (dac_datafmt_s),
     .dac_datarate (),
     .dac_status (dac_status),
-    .dac_status_ovf (dac_dovf),
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd4),
     .up_dac_ce (),

@@ -149,7 +149,6 @@ add_interface_port dac_ch_3 dac_data_q1 data Input 16
 set_interface_property dac_ch_3 associatedClock if_clk
 set_interface_property dac_ch_3 associatedReset none
 
-ad_alt_intf signal dac_dovf input 1 ovf
 ad_alt_intf signal dac_dunf input 1 unf
 ad_alt_intf signal dac_r1_mode output 1 r1_mode
 

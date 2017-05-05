@@ -84,7 +84,6 @@ add_interface_port dac_ch_1 dac_ddata_1   data   Input 64
 set_interface_property dac_ch_1 associatedClock if_dac_div_clk
 set_interface_property dac_ch_1 associatedReset none
 
-ad_alt_intf signal dac_dovf input 1 ovf
 ad_alt_intf signal dac_dunf input 1 unf
 
 # SERDES instances and configurations
