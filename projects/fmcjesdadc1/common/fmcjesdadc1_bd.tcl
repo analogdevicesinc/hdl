@@ -1,4 +1,6 @@
 
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+
 # adc peripherals
 
 ad_ip_instance axi_adxcvr axi_ad9250_xcvr
@@ -9,9 +11,7 @@ ad_ip_parameter axi_ad9250_xcvr CONFIG.LPM_OR_DFE_N 0
 ad_ip_parameter axi_ad9250_xcvr CONFIG.OUT_CLK_SEL "010"
 ad_ip_parameter axi_ad9250_xcvr CONFIG.SYS_CLK_SEL "00"
 
-ad_ip_instance jesd204 axi_ad9250_jesd
-ad_ip_parameter axi_ad9250_jesd CONFIG.C_NODE_IS_TRANSMIT 0
-ad_ip_parameter axi_ad9250_jesd CONFIG.C_LANES 4
+adi_axi_jesd204_rx_create axi_ad9250_jesd 4
 
 ad_ip_instance util_bsplit data_bsplit
 ad_ip_parameter data_bsplit CONFIG.CHANNEL_DATA_WIDTH 64
@@ -84,11 +84,11 @@ create_bd_port -dir O rx_core_clk
 ad_xcvrcon  util_fmcjesdadc1_xcvr axi_ad9250_xcvr axi_ad9250_jesd
 ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_0_core/rx_clk
 ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 rx_core_clk
-ad_connect  axi_ad9250_jesd/rx_start_of_frame axi_ad9250_0_core/rx_sof
+ad_connect  axi_ad9250_jesd/rx_sof axi_ad9250_0_core/rx_sof
 ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_1_core/rx_clk
-ad_connect  axi_ad9250_jesd/rx_start_of_frame axi_ad9250_1_core/rx_sof
+ad_connect  axi_ad9250_jesd/rx_sof axi_ad9250_1_core/rx_sof
 
-ad_connect  axi_ad9250_jesd/rx_tdata data_bsplit/data
+ad_connect  axi_ad9250_jesd/rx_data_tdata data_bsplit/data
 ad_connect  axi_ad9250_0_core/rx_data data_bsplit/split_data_0
 ad_connect  axi_ad9250_1_core/rx_data data_bsplit/split_data_1
 
@@ -126,7 +126,7 @@ ad_connect  axi_ad9250_1_core/adc_dovf axi_ad9250_1_dma/fifo_wr_overflow
 ad_cpu_interconnect 0x44A60000 axi_ad9250_xcvr
 ad_cpu_interconnect 0x44A10000 axi_ad9250_0_core
 ad_cpu_interconnect 0x44A20000 axi_ad9250_1_core
-ad_cpu_interconnect 0x44A91000 axi_ad9250_jesd
+ad_cpu_interconnect 0x44AA0000 axi_ad9250_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9250_0_dma
 ad_cpu_interconnect 0x7c430000 axi_ad9250_1_dma
 
