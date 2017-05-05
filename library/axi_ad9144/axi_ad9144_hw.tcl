@@ -13,27 +13,31 @@ set_module_property ELABORATION_CALLBACK p_axi_ad9144
 
 # files
 
-add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
-set_fileset_property quartus_synth TOP_LEVEL axi_ad9144
-add_fileset_file ad_mul.v             VERILOG PATH $ad_hdl_dir/library/altera/common/ad_mul.v
-add_fileset_file ad_dds_sine.v        VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine.v
-add_fileset_file ad_dds_1.v           VERILOG PATH $ad_hdl_dir/library/common/ad_dds_1.v
-add_fileset_file ad_dds.v             VERILOG PATH $ad_hdl_dir/library/common/ad_dds.v
-add_fileset_file ad_rst.v             VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
-add_fileset_file up_axi.v             VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
-add_fileset_file up_xfer_cntrl.v      VERILOG PATH $ad_hdl_dir/library/common/up_xfer_cntrl.v
-add_fileset_file up_xfer_status.v     VERILOG PATH $ad_hdl_dir/library/common/up_xfer_status.v
-add_fileset_file up_clock_mon.v       VERILOG PATH $ad_hdl_dir/library/common/up_clock_mon.v
-add_fileset_file up_dac_common.v      VERILOG PATH $ad_hdl_dir/library/common/up_dac_common.v
-add_fileset_file up_dac_channel.v     VERILOG PATH $ad_hdl_dir/library/common/up_dac_channel.v
-add_fileset_file axi_ad9144_channel.v VERILOG PATH axi_ad9144_channel.v
-add_fileset_file axi_ad9144_core.v    VERILOG PATH axi_ad9144_core.v
-add_fileset_file axi_ad9144_if.v      VERILOG PATH axi_ad9144_if.v
-add_fileset_file axi_ad9144.v         VERILOG PATH axi_ad9144.v TOP_LEVEL_FILE
-add_fileset_file up_xfer_cntrl_constr.sdc SDC PATH $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc
-add_fileset_file up_xfer_status_constr.sdc  SDC PATH $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc
-add_fileset_file up_clock_mon_constr.sdc  SDC PATH $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc
-add_fileset_file up_rst_constr.sdc  SDC PATH $ad_hdl_dir/library/altera/common/up_rst_constr.sdc
+ad_ip_files axi_ad9144 [list \
+  $ad_hdl_dir/library/altera/common/ad_mul.v \
+  $ad_hdl_dir/library/common/ad_dds_sine.v \
+  $ad_hdl_dir/library/common/ad_dds_1.v \
+  $ad_hdl_dir/library/common/ad_dds.v \
+  $ad_hdl_dir/library/common/ad_rst.v \
+  $ad_hdl_dir/library/common/up_axi.v \
+  $ad_hdl_dir/library/common/up_xfer_cntrl.v \
+  $ad_hdl_dir/library/common/up_xfer_status.v \
+  $ad_hdl_dir/library/common/up_clock_mon.v \
+  $ad_hdl_dir/library/common/up_dac_common.v \
+  $ad_hdl_dir/library/common/up_dac_channel.v \
+  \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_channel.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_core.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_framer.v \
+  $ad_hdl_dir/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v \
+  \
+  axi_ad9144.v \
+  $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc \
+  $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc \
+  $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc \
+  $ad_hdl_dir/library/altera/common/up_rst_constr.sdc \
+]
 
 # parameters
 
