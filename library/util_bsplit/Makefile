@@ -7,7 +7,6 @@ LIBRARY_NAME := util_bsplit
 
 GENERIC_DEPS += util_bsplit.v
 
-XILINX_DEPS += util_bsplit_constr.xdc
 XILINX_DEPS += util_bsplit_ip.tcl
 
 ALTERA_DEPS += util_bsplit_hw.tcl

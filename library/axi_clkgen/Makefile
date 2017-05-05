@@ -11,7 +11,6 @@ GENERIC_DEPS += ../common/up_clkgen.v
 GENERIC_DEPS += axi_clkgen.v
 
 XILINX_DEPS += ../xilinx/common/ad_mmcm_drp.v
-XILINX_DEPS += axi_clkgen_constr.xdc
 XILINX_DEPS += axi_clkgen_ip.tcl
 XILINX_DEPS += bd/bd.tcl
 

@@ -9,7 +9,6 @@ GENERIC_DEPS += util_upack.v
 GENERIC_DEPS += util_upack_dmx.v
 GENERIC_DEPS += util_upack_dsf.v
 
-XILINX_DEPS += util_upack_constr.xdc
 XILINX_DEPS += util_upack_ip.tcl
 
 ALTERA_DEPS += util_upack_hw.tcl

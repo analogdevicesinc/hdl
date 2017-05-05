@@ -9,7 +9,6 @@ adi_ip_files axi_clkgen [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mmcm_drp.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_clkgen.v" \
-  "axi_clkgen_constr.xdc" \
   "bd/bd.tcl" \
   "axi_clkgen.v" ]
 

@@ -24,7 +24,6 @@ adi_ip_files axi_ad9467 [list \
   "axi_ad9467_pnmon.v" \
   "axi_ad9467_if.v" \
   "axi_ad9467_channel.v" \
-  "axi_ad9467_constr.xdc" \
   "axi_ad9467.v"]
 
 adi_ip_properties axi_ad9467

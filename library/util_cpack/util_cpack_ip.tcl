@@ -7,8 +7,7 @@ adi_ip_create util_cpack
 adi_ip_files util_cpack [list \
   "util_cpack_mux.v" \
   "util_cpack_dsf.v" \
-  "util_cpack.v" \
-  "util_cpack_constr.xdc" ]
+  "util_cpack.v" ]
 
 adi_ip_properties_lite util_cpack
 

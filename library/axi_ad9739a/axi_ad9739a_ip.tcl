@@ -24,7 +24,6 @@ adi_ip_files axi_ad9739a [list \
   "axi_ad9739a_channel.v" \
   "axi_ad9739a_core.v" \
   "axi_ad9739a_if.v" \
-  "axi_ad9739a_constr.xdc" \
   "axi_ad9739a.v" ]
 
 adi_ip_properties axi_ad9739a
