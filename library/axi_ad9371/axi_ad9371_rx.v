@@ -61,7 +61,6 @@ module axi_ad9371_rx #(
   output                  adc_valid_q1,
   output      [ 15:0]     adc_data_q1,
   input                   adc_dovf,
-  input                   adc_dunf,
 
   // processor interface
 
@@ -271,7 +270,6 @@ module axi_ad9371_rx #(
     .adc_status (1'b1),
     .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
-    .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
     .adc_start_code (),
     .adc_sref_sync (),

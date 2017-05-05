@@ -88,7 +88,6 @@ module axi_ad9963 #(
   output          adc_valid_q,
   output  [15:0]  adc_data_q,
   input           adc_dovf,
-  input           adc_dunf,
 
   output          dac_enable_i,
   output          dac_valid_i,
@@ -234,7 +233,6 @@ module axi_ad9963 #(
     .adc_valid_q (adc_valid_q),
     .adc_data_q (adc_data_q),
     .adc_dovf (adc_dovf),
-    .adc_dunf (adc_dunf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),

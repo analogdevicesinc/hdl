@@ -127,7 +127,6 @@ up_adc_common #(.ID(ID)) i_up_adc_common (
   .adc_status ('h00),
   .adc_sync_status (1'b1),
   .adc_status_ovf (adc_dovf),
-  .adc_status_unf (1'b0),
   .adc_clk_ratio (32'd1),
   .adc_start_code (),
   .adc_sref_sync (),

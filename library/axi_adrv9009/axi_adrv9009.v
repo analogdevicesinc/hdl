@@ -81,7 +81,6 @@ module axi_adrv9009 #(
   output                  adc_valid_q1,
   output      [ 15:0]     adc_data_q1,
   input                   adc_dovf,
-  input                   adc_dunf,
 
   output                  adc_os_enable_i0,
   output                  adc_os_valid_i0,
@@ -90,7 +89,6 @@ module axi_adrv9009 #(
   output                  adc_os_valid_q0,
   output      [ 31:0]     adc_os_data_q0,
   input                   adc_os_dovf,
-  input                   adc_os_dunf,
 
   output                  dac_enable_i0,
   output                  dac_valid_i0,
@@ -220,7 +218,6 @@ module axi_adrv9009 #(
     .adc_valid_q1 (adc_valid_q1),
     .adc_data_q1 (adc_data_q1),
     .adc_dovf (adc_dovf),
-    .adc_dunf (adc_dunf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
@@ -249,7 +246,6 @@ module axi_adrv9009 #(
     .adc_os_valid_q0 (adc_os_valid_q0),
     .adc_os_data_q0 (adc_os_data_q0),
     .adc_os_dovf (adc_os_dovf),
-    .adc_os_dunf (adc_os_dunf),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
