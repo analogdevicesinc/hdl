@@ -90,30 +90,56 @@ module axi_ad9144 #(
   output      [ 1:0]      s_axi_rresp,
   input                   s_axi_rready);
 
+  localparam NUM_CHANNELS = QUAD_OR_DUAL_N ? 4 : 2;
+
   // internal signals
 
-  wire    [255:0]                         tx_data_s;
+  wire [NUM_CHANNELS-1:0] dac_valid_s;
+  wire [NUM_CHANNELS-1:0] dac_enable_s;
+  wire [NUM_CHANNELS*64-1:0] dac_ddata_s;
 
   // dual/quad cores
 
-  assign tx_data = tx_data_s[(128*QUAD_OR_DUAL_N)+127:0];
   assign dac_clk = tx_clk;
+
+  assign dac_valid_0 = dac_valid_s[0];
+  assign dac_valid_1 = dac_valid_s[1];
+  assign dac_enable_0 = dac_enable_s[0];
+  assign dac_enable_1 = dac_enable_s[1];
+  assign dac_ddata_s[63:0] = dac_ddata_0;
+  assign dac_ddata_s[127:64] = dac_ddata_1;
+
+  generate
+  if (QUAD_OR_DUAL_N == 1) begin
+    assign dac_valid_2 = dac_valid_s[2];
+    assign dac_valid_3 = dac_valid_s[3];
+    assign dac_enable_2 = dac_enable_s[2];
+    assign dac_enable_3 = dac_enable_s[3];
+    assign dac_ddata_s[191:128] = dac_ddata_2;
+    assign dac_ddata_s[255:192] = dac_ddata_3;
+  end else begin
+    assign dac_valid_2 = 1'b0;
+    assign dac_valid_3 = 1'b0;
+    assign dac_enable_2 = 1'b0;
+    assign dac_enable_3 = 1'b0;
+  end
+  endgenerate
 
   ad_ip_jesd204_tpl_dac #(
     .ID (ID),
-    .NUM_LANES (8),
-    .NUM_CHANNELS (4),
+    .NUM_LANES (NUM_CHANNELS * 2),
+    .NUM_CHANNELS (NUM_CHANNELS),
     .DAC_DATAPATH_DISABLE (DAC_DATAPATH_DISABLE)
   ) i_dac_jesd204 (
     .link_clk (tx_clk),
 
     .link_valid (tx_valid),
-    .link_data (tx_data_s),
+    .link_data (tx_data),
     .link_ready (tx_ready),
 
-    .enable ({dac_enable_3,dac_enable_2,dac_enable_1,dac_enable_0}),
-    .dac_valid ({dac_valid_3,dac_valid_2,dac_valid_1,dac_valid_0}),
-    .dac_ddata ({dac_ddata_3,dac_ddata_2,dac_ddata_1,dac_ddata_0}),
+    .enable (dac_enable_s),
+    .dac_valid (dac_valid_s),
+    .dac_ddata (dac_ddata_s),
     .dac_dunf (dac_dunf),
 
     .s_axi_aclk (s_axi_aclk),
