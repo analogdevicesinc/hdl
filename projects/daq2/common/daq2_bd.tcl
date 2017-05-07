@@ -160,7 +160,5 @@ ad_cpu_interrupt ps-11 mb-14 axi_ad9680_jesd/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9144_dma/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9680_dma/irq
 
-ad_connect  axi_ad9144_core/dac_ddata_2 GND
-ad_connect  axi_ad9144_core/dac_ddata_3 GND
 ad_connect  axi_ad9144_fifo/bypass GND
 
