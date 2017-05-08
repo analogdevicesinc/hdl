@@ -54,8 +54,10 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   output            rx_sync_0_n,
   output            rx_sync_1_p,
   output            rx_sync_1_n,
-  input   [511:0]   rx_data,
-  output  [511:0]   rx_cor_data,
+  input   [255:0]   rx_data_0,
+  input   [255:0]   rx_data_1,
+  output  [255:0]   rx_cor_data_0,
+  output  [255:0]   rx_cor_data_1,
 
   // calibration signal
 
@@ -314,13 +316,13 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
         up_cor_scale_0 <= up_wdata_s[15:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0069)) begin
         up_cor_offset_0 <= up_wdata_s[15:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h006a)) begin
         up_cor_scale_1 <= up_wdata_s[15:0];
       end
-      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h006b)) begin
         up_cor_offset_1 <= up_wdata_s[15:0];
       end
     end
@@ -636,8 +638,10 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   axi_fmcadc5_sync_calcor i_calcor (
     .rx_clk (rx_clk),
-    .rx_data (rx_data),
-    .rx_cor_data (rx_cor_data),
+    .rx_data_0 (rx_data_0),
+    .rx_data_1 (rx_data_1),
+    .rx_cor_data_0 (rx_cor_data_0),
+    .rx_cor_data_1 (rx_cor_data_1),
     .rx_cal_enable (rx_cal_enable),
     .rx_cal_done_t (rx_cal_done_t_s),
     .rx_cal_max_0 (rx_cal_max_0_s),

@@ -45,8 +45,10 @@ module axi_fmcadc5_sync_calcor (
   // receive interface
  
   input             rx_clk, 
-  input   [511:0]   rx_data,
-  output  [511:0]   rx_cor_data,
+  input   [255:0]   rx_data_0,
+  input   [255:0]   rx_data_1,
+  output  [255:0]   rx_cor_data_0,
+  output  [255:0]   rx_cor_data_1,
 
   // calibration signals
 
@@ -63,8 +65,8 @@ module axi_fmcadc5_sync_calcor (
 
   // internal registers
 
-  reg     [ 15:0]   rx_cor_data_0[0:15];
-  reg     [ 15:0]   rx_cor_data_1[0:15];
+  reg     [ 15:0]   rx_cor_data_int_0[0:15];
+  reg     [ 15:0]   rx_cor_data_int_1[0:15];
   reg               rx_cal_done_int_t = 'd0;
   reg     [ 15:0]   rx_cal_max_0_6 = 'd0;
   reg     [ 15:0]   rx_cal_min_0_6 = 'd0;
@@ -106,8 +108,8 @@ module axi_fmcadc5_sync_calcor (
  
   generate
   for (n = 0; n <= 15; n = n + 1) begin: g_rx_cal_data
-  assign rx_cor_data[((n*32)+15):((n*32)+ 0)] = rx_cor_data_0_s[n][30:15];
-  assign rx_cor_data[((n*32)+31):((n*32)+16)] = rx_cor_data_1_s[n][30:15];
+  assign rx_cor_data_0[((n*16)+15):(n*16)] = rx_cor_data_0_s[n][30:15];
+  assign rx_cor_data_1[((n*16)+15):(n*16)] = rx_cor_data_1_s[n][30:15];
   end
   endgenerate
 
@@ -117,14 +119,14 @@ module axi_fmcadc5_sync_calcor (
   for (n = 0; n <= 15; n = n + 1) begin: g_rx_gain
   ad_mul #(.DELAY_DATA_WIDTH(1)) i_rx_gain_0 (
     .clk (rx_clk),
-    .data_a ({rx_cor_data_0[n][15], rx_cor_data_0[n]}),
+    .data_a ({rx_cor_data_int_0[n][15], rx_cor_data_int_0[n]}),
     .data_b ({1'b0, rx_cor_scale_0}),
     .data_p (rx_cor_data_0_s[n]),
     .ddata_in (1'd0),
     .ddata_out ());
   ad_mul #(.DELAY_DATA_WIDTH(1)) i_rx_gain_1 (
     .clk (rx_clk),
-    .data_a ({rx_cor_data_1[n][15], rx_cor_data_1[n]}),
+    .data_a ({rx_cor_data_int_1[n][15], rx_cor_data_int_1[n]}),
     .data_b ({1'b0, rx_cor_scale_1}),
     .data_p (rx_cor_data_1_s[n]),
     .ddata_in (1'd0),
@@ -137,8 +139,8 @@ module axi_fmcadc5_sync_calcor (
   generate
   for (n = 0; n <= 15; n = n + 1) begin: g_rx_offset
   always @(posedge rx_clk) begin
-    rx_cor_data_0[n] <= rx_data_0_s[n] + rx_cor_offset_0;
-    rx_cor_data_1[n] <= rx_data_1_s[n] + rx_cor_offset_1;
+    rx_cor_data_int_0[n] <= rx_data_0_s[n] + rx_cor_offset_0;
+    rx_cor_data_int_1[n] <= rx_data_1_s[n] + rx_cor_offset_1;
   end
   end
   endgenerate
@@ -302,8 +304,8 @@ module axi_fmcadc5_sync_calcor (
 
   generate
   for (n = 0; n <= 15; n = n + 1) begin: g_rx_data
-  assign rx_data_0_s[n] = rx_data[((n*32)+15):((n*32)+ 0)];
-  assign rx_data_1_s[n] = rx_data[((n*32)+31):((n*32)+16)];
+  assign rx_data_0_s[n] = rx_data_0[((n*16)+15):(n*16)];
+  assign rx_data_1_s[n] = rx_data_1[((n*16)+15):(n*16)];
   end
   endgenerate
 
