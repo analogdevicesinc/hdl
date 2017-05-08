@@ -125,10 +125,8 @@ ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 util_ad9625_cpack/adc_clk
 ad_connect  axi_ad9625_0_jesd_rstgen/peripheral_reset util_ad9625_cpack/adc_rst
 ad_connect  axi_ad9625_0_core/adc_enable util_ad9625_cpack/adc_enable_0
 ad_connect  axi_ad9625_0_core/adc_valid util_ad9625_cpack/adc_valid_0
-ad_connect  axi_ad9625_0_core/adc_data util_ad9625_cpack/adc_data_0
 ad_connect  axi_ad9625_1_core/adc_enable util_ad9625_cpack/adc_enable_1
 ad_connect  axi_ad9625_1_core/adc_valid util_ad9625_cpack/adc_valid_1
-ad_connect  axi_ad9625_1_core/adc_data util_ad9625_cpack/adc_data_1
 ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_fifo/adc_clk
 ad_connect  axi_ad9625_0_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
 ad_connect  util_ad9625_cpack/adc_valid axi_ad9625_fifo/adc_wr
@@ -182,6 +180,10 @@ ad_cpu_interconnect 0x44a20000 axi_fmcadc5_sync
 ad_connect  sys_cpu_reset axi_fmcadc5_sync/delay_rst
 ad_connect  sys_200m_clk axi_fmcadc5_sync/delay_clk
 ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_fmcadc5_sync/rx_clk
+ad_connect  axi_ad9625_0_core/adc_data axi_fmcadc5_sync/rx_data_0
+ad_connect  axi_ad9625_1_core/adc_data axi_fmcadc5_sync/rx_data_1
+ad_connect  axi_fmcadc5_sync/rx_cor_data_0 util_ad9625_cpack/adc_data_0
+ad_connect  axi_fmcadc5_sync/rx_cor_data_1 util_ad9625_cpack/adc_data_1
 ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_0_jesd/rx_sysref
 ad_connect  axi_ad9625_0_jesd/rx_sync axi_fmcadc5_sync/rx_sync_0
 ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_1_jesd/rx_sysref
