@@ -104,8 +104,8 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   output  [ 31:0]   s_axi_rdata,
   output  [  1:0]   s_axi_rresp,
   input             s_axi_rready,
-  input   [ 2:0]    s_axi_awprot,
-  input   [ 2:0]    s_axi_arprot);
+  input   [  2:0]   s_axi_awprot,
+  input   [  2:0]   s_axi_arprot);
 
   // version
 

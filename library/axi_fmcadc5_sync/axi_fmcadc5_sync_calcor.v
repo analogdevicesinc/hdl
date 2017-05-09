@@ -145,7 +145,7 @@ module axi_fmcadc5_sync_calcor (
   end
   endgenerate
 
-  // calibration peaks
+  // calibration peaks (average would be better)
 
   assign rx_cal_done_t = rx_cal_done_int_t;
   assign rx_cal_max_0 = rx_cal_max_0_6;
@@ -304,8 +304,8 @@ module axi_fmcadc5_sync_calcor (
 
   generate
   for (n = 0; n <= 15; n = n + 1) begin: g_rx_data
-  assign rx_data_0_s[n] = rx_data_0[((n*16)+15):(n*16)];
-  assign rx_data_1_s[n] = rx_data_1[((n*16)+15):(n*16)];
+  assign rx_data_0_s[n] = {{4{rx_data_0[((n*16)+11)]}}, rx_data_0[((n*16)+11):(n*16)]};
+  assign rx_data_1_s[n] = {{4{rx_data_1[((n*16)+11)]}}, rx_data_1[((n*16)+11):(n*16)]};
   end
   endgenerate
 
