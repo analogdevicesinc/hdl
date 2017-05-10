@@ -58,8 +58,8 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   input   [255:0]   rx_data_0,
   input             rx_enable_1,
   input   [255:0]   rx_data_1,
-  output            rx_cor_enable,
-  output  [511:0]   rx_cor_data,
+  output            rx_enable,
+  output  [511:0]   rx_data,
 
   // calibration signal
 
@@ -644,8 +644,8 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
     .rx_data_0 (rx_data_0),
     .rx_enable_1 (rx_enable_1),
     .rx_data_1 (rx_data_1),
-    .rx_cor_enable (rx_cor_enable),
-    .rx_cor_data (rx_cor_data),
+    .rx_enable (rx_enable),
+    .rx_data (rx_data),
     .rx_cal_enable (rx_cal_enable),
     .rx_cal_done_t (rx_cal_done_t_s),
     .rx_cal_max_0 (rx_cal_max_0_s),

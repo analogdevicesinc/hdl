@@ -172,8 +172,8 @@ ad_connect  axi_ad9625_0_core/adc_enable axi_fmcadc5_sync/rx_enable_0
 ad_connect  axi_ad9625_0_core/adc_data axi_fmcadc5_sync/rx_data_0
 ad_connect  axi_ad9625_1_core/adc_enable axi_fmcadc5_sync/rx_enable_1
 ad_connect  axi_ad9625_1_core/adc_data axi_fmcadc5_sync/rx_data_1
-ad_connect  axi_fmcadc5_sync/rx_cor_enable axi_ad9625_fifo/adc_wr
-ad_connect  axi_fmcadc5_sync/rx_cor_data axi_ad9625_fifo/adc_wdata
+ad_connect  axi_fmcadc5_sync/rx_enable axi_ad9625_fifo/adc_wr
+ad_connect  axi_fmcadc5_sync/rx_data axi_ad9625_fifo/adc_wdata
 ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_0_jesd/rx_sysref
 ad_connect  axi_ad9625_0_jesd/rx_sync axi_fmcadc5_sync/rx_sync_0
 ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_1_jesd/rx_sysref

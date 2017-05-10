@@ -49,8 +49,8 @@ module axi_fmcadc5_sync_calcor (
   input   [255:0]   rx_data_0,
   input             rx_enable_1,
   input   [255:0]   rx_data_1,
-  output            rx_cor_enable,
-  output  [511:0]   rx_cor_data,
+  output            rx_enable,
+  output  [511:0]   rx_data,
 
   // calibration signals
 
@@ -67,7 +67,7 @@ module axi_fmcadc5_sync_calcor (
 
   // internal registers
 
-  reg               rx_cor_enable_int = 'd0;
+  reg               rx_enable_int = 'd0;
   reg     [ 15:0]   rx_cor_data_0[0:15];
   reg     [ 15:0]   rx_cor_data_1[0:15];
   reg               rx_cal_done_int_t = 'd0;
@@ -109,16 +109,16 @@ module axi_fmcadc5_sync_calcor (
 
   // offset & gain
  
-  assign rx_cor_enable = rx_cor_enable_int;
+  assign rx_enable = rx_enable_int;
 
   always @(posedge rx_clk) begin
-    rx_cor_enable_int = rx_enable_0 & rx_enable_1;
+    rx_enable_int = rx_enable_0 & rx_enable_1;
   end
 
   generate
   for (n = 0; n <= 15; n = n + 1) begin: g_rx_cal_data
-  assign rx_cor_data[((n*32)+15):((n*32)+ 0)] = rx_cor_data_0_s[n][30:15];
-  assign rx_cor_data[((n*32)+31):((n*32)+16)] = rx_cor_data_1_s[n][30:15];
+  assign rx_data[((n*32)+15):((n*32)+ 0)] = rx_cor_data_0_s[n][30:15];
+  assign rx_data[((n*32)+31):((n*32)+16)] = rx_cor_data_1_s[n][30:15];
   end
   endgenerate
 
