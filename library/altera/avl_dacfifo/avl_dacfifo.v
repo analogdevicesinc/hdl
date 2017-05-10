@@ -34,71 +34,71 @@ module avl_dacfifo #(
 
   // dma interface
 
-  input                               dma_clk,
-  input                               dma_rst,
-  input                               dma_valid,
-  input       [(DMA_DATA_WIDTH-1):0]  dma_data,
-  output  reg                         dma_ready,
-  input                               dma_xfer_req,
-  input                               dma_xfer_last,
+  input                                 dma_clk,
+  input                                 dma_rst,
+  input                                 dma_valid,
+  input       [(DMA_DATA_WIDTH-1):0]    dma_data,
+  output  reg                           dma_ready,
+  input                                 dma_xfer_req,
+  input                                 dma_xfer_last,
 
   // dac interface
 
-  input                               dac_clk,
-  input                               dac_rst,
-  input                               dac_valid,
-  output  reg [(DAC_DATA_WIDTH-1):0]  dac_data,
-  output  reg                         dac_dunf,
-  output  reg                         dac_xfer_out,
+  input                                 dac_clk,
+  input                                 dac_rst,
+  input                                 dac_valid,
+  output  reg [(DAC_DATA_WIDTH-1):0]    dac_data,
+  output  reg                           dac_dunf,
+  output  reg                           dac_xfer_out,
 
-  input                               bypass,
+  input                                 bypass,
 
   // avalon interface
 
-  input                               avl_clk,
-  input                               avl_reset,
+  input                                 avl_clk,
+  input                                 avl_reset,
 
   output  reg [(AVL_ADDRESS_WIDTH-1):0] avl_address,
-  output  reg [  6:0]                 avl_burstcount,
-  output  reg [ 63:0]                 avl_byteenable,
-  output  reg                         avl_read,
-  input       [511:0]                 avl_readdata,
-  input                               avl_readdata_valid,
-  input                               avl_ready,
-  output  reg                         avl_write,
-  output  reg [511:0]                 avl_writedata);
+  output  reg [  6:0]                   avl_burstcount,
+  output  reg [ 63:0]                   avl_byteenable,
+  output  reg                           avl_read,
+  input       [(AVL_DATA_WIDTH-1):0]    avl_readdata,
+  input                                 avl_readdata_valid,
+  input                                 avl_ready,
+  output  reg                           avl_write,
+  output  reg [(AVL_DATA_WIDTH-1):0]    avl_writedata);
 
   localparam  FIFO_BYPASS = (DAC_DATA_WIDTH == DMA_DATA_WIDTH) ? 1 : 0;
 
   // internal register
 
-  reg                                 dma_bypass_m1 = 1'b0;
-  reg                                 dma_bypass = 1'b0;
-  reg                                 dac_bypass_m1 = 1'b0;
-  reg                                 dac_bypass = 1'b0;
-  reg                                 dac_xfer_out_m1 = 1'b0;
-  reg                                 dac_xfer_out_bypass = 1'b0;
-  reg                                 avl_xfer_req_m1 = 1'b0;
-  reg                                 avl_xfer_req = 1'b0;
+  reg                                   dma_bypass_m1 = 1'b0;
+  reg                                   dma_bypass = 1'b0;
+  reg                                   dac_bypass_m1 = 1'b0;
+  reg                                   dac_bypass = 1'b0;
+  reg                                   dac_xfer_out_m1 = 1'b0;
+  reg                                   dac_xfer_out_bypass = 1'b0;
+  reg                                   avl_xfer_req_m1 = 1'b0;
+  reg                                   avl_xfer_req = 1'b0;
 
   // internal signals
 
-  wire                                dma_ready_wr_s;
-  wire                                avl_read_s;
-  wire                                avl_write_s;
-  wire                                avl_writedata_s;
-  wire        [ 24:0]                 avl_wr_address_s;
-  wire        [ 24:0]                 avl_rd_address_s;
-  wire        [ 24:0]                 avl_last_address_s;
-  wire        [  5:0]                 avl_wr_burstcount_s;
-  wire        [  5:0]                 avl_rd_burstcount_s;
-  wire        [ 63:0]                 avl_wr_byteenable_s;
-  wire        [ 63:0]                 avl_rd_byteenable_s;
-  wire                                avl_xfer_out_s;
-  wire    [(DAC_DATA_WIDTH-1):0]      dac_data_fifo_s;
-  wire    [(DAC_DATA_WIDTH-1):0]      dac_data_bypass_s;
-  wire                                dac_xfer_fifo_out_s;
-  wire                                dac_dunf_fifo_s;
+  wire                                  dma_ready_wr_s;
+  wire                                  avl_read_s;
+  wire                                  avl_write_s;
+  wire   [(AVL_DATA_WIDTH-1):0]         avl_writedata_s;
+  wire        [ 24:0]                   avl_wr_address_s;
+  wire        [ 24:0]                   avl_rd_address_s;
+  wire        [ 24:0]                   avl_last_address_s;
+  wire        [  5:0]                   avl_wr_burstcount_s;
+  wire        [  5:0]                   avl_rd_burstcount_s;
+  wire        [ 63:0]                   avl_wr_byteenable_s;
+  wire        [ 63:0]                   avl_rd_byteenable_s;
+  wire                                  avl_xfer_out_s;
+  wire    [(DAC_DATA_WIDTH-1):0]        dac_data_fifo_s;
+  wire    [(DAC_DATA_WIDTH-1):0]        dac_data_bypass_s;
+  wire                                  dac_xfer_fifo_out_s;
+  wire                                  dac_dunf_fifo_s;
 
   avl_dacfifo_wr #(
     .AVL_DATA_WIDTH (AVL_DATA_WIDTH),
