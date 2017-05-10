@@ -27,7 +27,6 @@ M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_fmcadc5_sync/axi_fmcadc5_sync.xpr
 M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
 M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
-M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_mfifo/util_mfifo.xpr
 
 M_VIVADO := vivado -mode batch -source
@@ -63,7 +62,6 @@ clean-all:clean
 	make -C ../../../library/axi_fmcadc5_sync clean
 	make -C ../../../library/util_adcfifo clean
 	make -C ../../../library/xilinx/util_adxcvr clean
-	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_mfifo clean
 
 
@@ -79,7 +77,6 @@ lib:
 	make -C ../../../library/axi_fmcadc5_sync
 	make -C ../../../library/util_adcfifo
 	make -C ../../../library/xilinx/util_adxcvr
-	make -C ../../../library/util_cpack
 	make -C ../../../library/util_mfifo
 
 ####################################################################################
