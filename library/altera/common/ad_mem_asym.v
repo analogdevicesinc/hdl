@@ -29,7 +29,7 @@
 module ad_mem_asym #(
 
   // parameters
- 
+
   parameter   A_ADDRESS_WIDTH =  8,
   parameter   A_DATA_WIDTH = 256,
   parameter   B_ADDRESS_WIDTH =   10,
@@ -83,7 +83,7 @@ module ad_mem_asym #(
     .clock1 (clkb),
     .address_b (addrb),
     .wren_b (1'b0),
-    .data_b ('d0),
+    .data_b ({B_DATA_WIDTH{1'd0}}),
     .rden_b (1'b1),
     .q_b (doutb),
     .address2_a (1'b1),
