@@ -17,6 +17,7 @@ ad_ip_files avl_dacfifo [list\
 ad_ip_parameter DAC_DATA_WIDTH INTEGER 64
 ad_ip_parameter DMA_DATA_WIDTH INTEGER 64
 ad_ip_parameter AVL_DATA_WIDTH INTEGER 512
+ad_ip_parameter AVL_ADDRESS_WIDTH INTEGER 25
 ad_ip_parameter AVL_BASE_ADDRESS INTEGER 0
 ad_ip_parameter AVL_ADDRESS_LIMIT INTEGER 0x800000
 

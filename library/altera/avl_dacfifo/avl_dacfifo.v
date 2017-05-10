@@ -28,6 +28,7 @@ module avl_dacfifo #(
   parameter   DAC_DATA_WIDTH = 64,
   parameter   DMA_DATA_WIDTH = 64,
   parameter   AVL_DATA_WIDTH = 512,
+  parameter   AVL_ADDRESS_WIDTH = 25,
   parameter   AVL_BASE_ADDRESS = 32'h00000000,
   parameter   AVL_ADDRESS_LIMIT = 32'h1fffffff) (
 
@@ -57,7 +58,7 @@ module avl_dacfifo #(
   input                               avl_clk,
   input                               avl_reset,
 
-  output  reg [ 24:0]                 avl_address,
+  output  reg [(AVL_ADDRESS_WIDTH-1):0] avl_address,
   output  reg [  6:0]                 avl_burstcount,
   output  reg [ 63:0]                 avl_byteenable,
   output  reg                         avl_read,
