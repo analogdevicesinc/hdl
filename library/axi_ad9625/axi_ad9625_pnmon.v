@@ -34,9 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
-// PN monitors
 
 `timescale 1ns/100ps
 
@@ -54,16 +51,16 @@ module axi_ad9625_pnmon (
 
   // processor interface PN9 (0x0), PN23 (0x1)
 
-  input       [ 3:0]      adc_pnseq_sel);
+  input       [  3:0]     adc_pnseq_sel);
 
   // internal registers
 
-  reg     [191:0] adc_pn_data_in = 'd0;
-  reg     [191:0] adc_pn_data_pn = 'd0;
+  reg         [191:0]     adc_pn_data_in = 'd0;
+  reg         [191:0]     adc_pn_data_pn = 'd0;
 
   // internal signals
 
-  wire   [191:0]  adc_pn_data_pn_s;
+  wire        [191:0]     adc_pn_data_pn_s;
 
   // PN23 function
 

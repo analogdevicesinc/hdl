@@ -46,59 +46,63 @@ module axi_ad9625_if #(
   // rx_clk is (line-rate/40)
 
   input                   rx_clk,
-  input       [ 3:0]      rx_sof,
+  input       [  3:0]     rx_sof,
   input       [255:0]     rx_data,
 
   // adc data output
 
   output                  adc_clk,
   input                   adc_rst,
-  output  reg [191:0]     adc_data,
+  output      [191:0]     adc_data,
   output                  adc_or,
-  output  reg             adc_status,
-  output  reg [ 15:0]     adc_sref,
-  input       [ 3:0]      adc_raddr_in,
-  output  reg [ 3:0]      adc_raddr_out);
-
+  output                  adc_status,
+  output      [ 15:0]     adc_sref,
+  input                   adc_sref_sync,
+  input       [  3:0]     adc_raddr_in,
+  output      [  3:0]     adc_raddr_out);
 
   // internal registers
 
-  reg     [191:0] adc_data_cur = 'd0;
-  reg     [191:0] adc_data_prv = 'd0;
-  reg     [  3:0] adc_waddr = 'd0;
-  reg     [191:0] adc_wdata = 'd0;
+  reg         [191:0]     adc_data_int = 'd0;
+  reg                     adc_status_int = 'd0;
+  reg         [ 15:0]     adc_sref_int = 'd0;
+  reg         [191:0]     adc_data_cur = 'd0;
+  reg         [191:0]     adc_data_prv = 'd0;
+  reg         [  3:0]     adc_waddr = 'd0;
+  reg         [191:0]     adc_wdata = 'd0;
+  reg         [  3:0]     adc_raddr = 'd0;
 
   // internal signals
 
-  wire    [191:0] adc_rdata_s;
-  wire    [  3:0] adc_raddr_s;
-  wire    [ 15:0] adc_sref_s;
-  wire    [191:0] adc_data_s;
-  wire    [ 15:0] adc_data_s15_s;
-  wire    [ 15:0] adc_data_s14_s;
-  wire    [ 15:0] adc_data_s13_s;
-  wire    [ 15:0] adc_data_s12_s;
-  wire    [ 15:0] adc_data_s11_s;
-  wire    [ 15:0] adc_data_s10_s;
-  wire    [ 15:0] adc_data_s09_s;
-  wire    [ 15:0] adc_data_s08_s;
-  wire    [ 15:0] adc_data_s07_s;
-  wire    [ 15:0] adc_data_s06_s;
-  wire    [ 15:0] adc_data_s05_s;
-  wire    [ 15:0] adc_data_s04_s;
-  wire    [ 15:0] adc_data_s03_s;
-  wire    [ 15:0] adc_data_s02_s;
-  wire    [ 15:0] adc_data_s01_s;
-  wire    [ 15:0] adc_data_s00_s;
-  wire    [ 31:0] rx_data0_s;
-  wire    [ 31:0] rx_data1_s;
-  wire    [ 31:0] rx_data2_s;
-  wire    [ 31:0] rx_data3_s;
-  wire    [ 31:0] rx_data4_s;
-  wire    [ 31:0] rx_data5_s;
-  wire    [ 31:0] rx_data6_s;
-  wire    [ 31:0] rx_data7_s;
-  wire    [255:0] rx_data_s;
+  wire        [191:0]     adc_rdata_s;
+  wire        [  3:0]     adc_raddr_s;
+  wire        [ 15:0]     adc_sref_s;
+  wire        [191:0]     adc_data_s;
+  wire        [ 15:0]     adc_data_s15_s;
+  wire        [ 15:0]     adc_data_s14_s;
+  wire        [ 15:0]     adc_data_s13_s;
+  wire        [ 15:0]     adc_data_s12_s;
+  wire        [ 15:0]     adc_data_s11_s;
+  wire        [ 15:0]     adc_data_s10_s;
+  wire        [ 15:0]     adc_data_s09_s;
+  wire        [ 15:0]     adc_data_s08_s;
+  wire        [ 15:0]     adc_data_s07_s;
+  wire        [ 15:0]     adc_data_s06_s;
+  wire        [ 15:0]     adc_data_s05_s;
+  wire        [ 15:0]     adc_data_s04_s;
+  wire        [ 15:0]     adc_data_s03_s;
+  wire        [ 15:0]     adc_data_s02_s;
+  wire        [ 15:0]     adc_data_s01_s;
+  wire        [ 15:0]     adc_data_s00_s;
+  wire        [ 31:0]     rx_data0_s;
+  wire        [ 31:0]     rx_data1_s;
+  wire        [ 31:0]     rx_data2_s;
+  wire        [ 31:0]     rx_data3_s;
+  wire        [ 31:0]     rx_data4_s;
+  wire        [ 31:0]     rx_data5_s;
+  wire        [ 31:0]     rx_data6_s;
+  wire        [ 31:0]     rx_data7_s;
+  wire        [255:0]     rx_data_s;
 
   // nothing much to do on clock & over-range
 
@@ -107,23 +111,31 @@ module axi_ad9625_if #(
 
   // synchronization mode, multiple instances
 
-  assign adc_raddr_s = (ID == 0) ? adc_raddr_out : adc_raddr_in;
+  assign adc_data = adc_data_int;
+  assign adc_status = adc_status_int;
+  assign adc_sref = adc_sref_int;
+  assign adc_raddr_out = adc_raddr;
+  assign adc_raddr_s = (ID == 0) ? adc_raddr : adc_raddr_in;
 
   always @(posedge rx_clk) begin
-    adc_data <= adc_rdata_s;
+    if (adc_sref_sync == 1'b1) begin
+      adc_data_int <= adc_rdata_s;
+    end else begin
+      adc_data_int <= adc_data_s;
+    end
     if (adc_sref_s != 16'd0) begin
-      adc_sref <= adc_sref_s;
+      adc_sref_int <= adc_sref_s;
     end
     adc_data_cur <= adc_data_s;
     adc_data_prv <= adc_data_cur;
     if (adc_sref_s == 16'd0) begin
       adc_waddr <= adc_waddr + 1'b1;
-      adc_raddr_out <= adc_raddr_out + 1'b1;
+      adc_raddr <= adc_raddr + 1'b1;
     end else begin
       adc_waddr <= 4'h0;
-      adc_raddr_out <= 4'h8;
+      adc_raddr <= 4'h8;
     end
-    case (adc_sref)
+    case (adc_sref_int)
       16'h8000: adc_wdata <= {adc_data_cur[179:0], adc_data_prv[191:180]};
       16'h4000: adc_wdata <= {adc_data_cur[167:0], adc_data_prv[191:168]};
       16'h2000: adc_wdata <= {adc_data_cur[155:0], adc_data_prv[191:156]};
@@ -191,9 +203,9 @@ module axi_ad9625_if #(
 
   always @(posedge rx_clk) begin
     if (adc_rst == 1'b1) begin
-      adc_status <= 1'b0;
+      adc_status_int <= 1'b0;
     end else begin
-      adc_status <= 1'b1;
+      adc_status_int <= 1'b1;
     end
   end
 
@@ -211,7 +223,6 @@ module axi_ad9625_if #(
   // frame-alignment
 
   genvar n;
-
   generate
   for (n = 0; n < 8; n = n + 1) begin: g_xcvr_if
   ad_xcvr_rx_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_xcvr_if (

@@ -47,7 +47,7 @@ module axi_ad9625 #(
   // rx_clk is (line-rate/40)
 
   input                   rx_clk,
-  input       [ 3:0]      rx_sof,
+  input       [  3:0]     rx_sof,
   input                   rx_valid,
   input       [255:0]     rx_data,
   output                  rx_ready,
@@ -62,8 +62,8 @@ module axi_ad9625 #(
   input                   adc_dovf,
   input                   adc_dunf,
   output      [ 15:0]     adc_sref,
-  input       [ 3:0]      adc_raddr_in,
-  output      [ 3:0]      adc_raddr_out,
+  input       [  3:0]     adc_raddr_in,
+  output      [  3:0]     adc_raddr_out,
 
   // axi interface
 
@@ -74,49 +74,46 @@ module axi_ad9625 #(
   output                  s_axi_awready,
   input                   s_axi_wvalid,
   input       [ 31:0]     s_axi_wdata,
-  input       [ 3:0]      s_axi_wstrb,
+  input       [  3:0]     s_axi_wstrb,
   output                  s_axi_wready,
   output                  s_axi_bvalid,
-  output      [ 1:0]      s_axi_bresp,
+  output      [  1:0]     s_axi_bresp,
   input                   s_axi_bready,
   input                   s_axi_arvalid,
   input       [ 31:0]     s_axi_araddr,
   output                  s_axi_arready,
   output                  s_axi_rvalid,
-  output      [ 1:0]      s_axi_rresp,
+  output      [  1:0]     s_axi_rresp,
   output      [ 31:0]     s_axi_rdata,
   input                   s_axi_rready,
-  input       [ 2:0]      s_axi_awprot,
-  input       [ 2:0]      s_axi_arprot);
-
+  input       [  2:0]     s_axi_awprot,
+  input       [  2:0]     s_axi_arprot);
 
   // internal registers
 
-  reg     [ 31:0] up_rdata = 'd0;
-  reg             up_rack = 'd0;
-  reg             up_wack = 'd0;
-
-  // internal clocks & resets
-
-  wire            up_rstn;
-  wire            up_clk;
+  reg         [ 31:0]     up_rdata = 'd0;
+  reg                     up_rack = 'd0;
+  reg                     up_wack = 'd0;
 
   // internal signals
 
-  wire    [191:0] adc_data_s;
-  wire            adc_or_s;
-  wire            adc_status_s;
-  wire            up_adc_pn_err_s;
-  wire            up_adc_pn_oos_s;
-  wire            up_adc_or_s;
-  wire    [ 31:0] up_rdata_s[0:1];
-  wire            up_rack_s[0:1];
-  wire            up_wack_s[0:1];
-  wire            up_wreq_s;
-  wire    [ 13:0] up_waddr_s;
-  wire    [ 31:0] up_wdata_s;
-  wire            up_rreq_s;
-  wire    [ 13:0] up_raddr_s;
+  wire                    up_rstn;
+  wire                    up_clk;
+  wire        [191:0]     adc_data_s;
+  wire                    adc_or_s;
+  wire                    adc_status_s;
+  wire                    adc_sref_sync_s;
+  wire                    up_adc_pn_err_s;
+  wire                    up_adc_pn_oos_s;
+  wire                    up_adc_or_s;
+  wire        [ 31:0]     up_rdata_s[0:1];
+  wire                    up_rack_s[0:1];
+  wire                    up_wack_s[0:1];
+  wire                    up_wreq_s;
+  wire        [ 13:0]     up_waddr_s;
+  wire        [ 31:0]     up_wdata_s;
+  wire                    up_rreq_s;
+  wire        [ 13:0]     up_raddr_s;
 
   // signal name changes
 
@@ -158,6 +155,7 @@ module axi_ad9625 #(
     .adc_or (adc_or_s),
     .adc_status (adc_status_s),
     .adc_sref (adc_sref),
+    .adc_sref_sync (adc_sref_sync_s),
     .adc_raddr_in (adc_raddr_in),
     .adc_raddr_out (adc_raddr_out));
 
@@ -200,6 +198,7 @@ module axi_ad9625 #(
     .adc_clk_ratio (32'd16),
     .adc_start_code (),
     .adc_sync (),
+    .adc_sref_sync (adc_sref_sync_s),
     .up_status_pn_err (up_adc_pn_err_s),
     .up_status_pn_oos (up_adc_pn_oos_s),
     .up_status_or (up_adc_or_s),

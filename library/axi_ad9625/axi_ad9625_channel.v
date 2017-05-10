@@ -34,9 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
-// ADC channel-
 
 `timescale 1ns/100ps
 
@@ -62,22 +59,22 @@ module axi_ad9625_channel (
   input                   up_rstn,
   input                   up_clk,
   input                   up_wreq,
-  input       [13:0]      up_waddr,
-  input       [31:0]      up_wdata,
+  input       [ 13:0]     up_waddr,
+  input       [ 31:0]     up_wdata,
   output                  up_wack,
   input                   up_rreq,
-  input       [13:0]      up_raddr,
-  output      [31:0]      up_rdata,
+  input       [ 13:0]     up_raddr,
+  output      [ 31:0]     up_rdata,
   output                  up_rack);
 
   // internal signals
 
-  wire            adc_pn_oos_s;
-  wire            adc_pn_err_s;
-  wire            adc_dfmt_enable_s;
-  wire            adc_dfmt_type_s;
-  wire            adc_dfmt_se_s;
-  wire    [ 3:0]  adc_pnseq_sel_s;
+  wire                    adc_pn_oos_s;
+  wire                    adc_pn_err_s;
+  wire                    adc_dfmt_enable_s;
+  wire                    adc_dfmt_type_s;
+  wire                    adc_dfmt_se_s;
+  wire        [  3:0]     adc_pnseq_sel_s;
 
   // instantiations
 
