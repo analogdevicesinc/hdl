@@ -183,8 +183,8 @@ module axi_ad9434_core #(
     .up_drp_ready (up_drp_ready),
     .up_drp_locked (up_drp_locked),
 
-    .up_usr_chanmax (),
-    .adc_usr_chanmax (8'd0),
+    .up_usr_chanmax_out (),
+    .up_usr_chanmax_in (8'd0),
     .up_adc_gpio_in (32'd0),
     .up_adc_gpio_out (),
 

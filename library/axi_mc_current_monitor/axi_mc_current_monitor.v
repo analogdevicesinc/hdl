@@ -363,8 +363,8 @@ up_adc_common i_up_adc_common(
     .up_drp_ready(1'b0),
     .up_drp_locked(1'b0),
 
-    .up_usr_chanmax(),
-    .adc_usr_chanmax(8'd3),
+    .up_usr_chanmax_out(),
+    .up_usr_chanmax_in(8'd3),
     .up_adc_gpio_in(32'h0),
     .up_adc_gpio_out(),
 
