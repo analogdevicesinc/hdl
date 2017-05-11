@@ -166,6 +166,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   reg     [ 31:0]   up_spi_in_32 = 'd0;
   reg     [  7:0]   up_spi_out = 'd0;
   reg     [ 31:0]   up_scratch = 'd0;
+  reg     [ 31:0]   up_timer = 'd0;
   reg               up_wack = 'd0;
   reg               up_rack = 'd0;
   reg     [ 31:0]   up_rdata = 'd0;
@@ -547,9 +548,15 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_scratch <= 'd0;
+      up_timer <= 'd0;
     end else begin
       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0002)) begin
         up_scratch <= up_wdata_s;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0003)) begin
+        up_timer <= up_wdata_s;
+      end else if (up_timer > 0) begin
+        up_timer <= up_timer - 1'b1;
       end
     end
   end
@@ -569,6 +576,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
           14'h0000: up_rdata <= PCORE_VERSION;
           14'h0001: up_rdata <= ID;
           14'h0002: up_rdata <= up_scratch;
+          14'h0003: up_rdata <= up_timer;
           14'h0010: up_rdata <= {31'd0, up_spi_req};
           14'h0011: up_rdata <= {31'd0, up_spi_gnt};
           14'h0012: up_rdata <= {24'd0, up_spi_csn};
