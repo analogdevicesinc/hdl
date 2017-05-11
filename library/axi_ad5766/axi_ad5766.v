@@ -361,6 +361,7 @@ module axi_ad5766 #(
     .dac_status_ovf (),
     .dac_status_unf (dma_underflow),
     .dac_clk_ratio (32'b0),
+    .up_dac_ce (),
     .up_drp_sel (),
     .up_drp_wr (),
     .up_drp_addr (),
