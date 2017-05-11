@@ -138,7 +138,7 @@ module axi_ad5766 #(
   reg                                   up_rack = 0;
   reg                                   up_wack = 1'b0;
   reg         [15:0]                    cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
-  reg         [ 7:0]                    sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+  reg         [ 7:0]                    sdo_mem[0:2];
   reg [CMD_MEM_ADDRESS_WIDTH-1:0]       ctrl_cmd_wr_addr = 'b0;
   reg [CMD_MEM_ADDRESS_WIDTH-1:0]       spi_cmd_rd_addr = 'b0;
   reg [SDO_MEM_ADDRESS_WIDTH-1:0]       ctrl_sdo_wr_addr = 'b0;
