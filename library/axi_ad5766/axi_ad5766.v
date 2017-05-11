@@ -39,8 +39,6 @@
 
 module axi_ad5766 #(
 
-  parameter   DATA_WIDTH = 8,
-  parameter   NUM_OF_SDI = 1,
   parameter   ASYNC_SPI_CLK = 0,
   parameter   CMD_MEM_ADDRESS_WIDTH = 4,
   parameter   SDO_MEM_ADDRESS_WIDTH = 4)(
@@ -89,11 +87,11 @@ module axi_ad5766 #(
 
   input                                 sdo_data_ready,
   output                                sdo_data_valid,
-  output [(DATA_WIDTH-1):0]             sdo_data,
+  output      [ 7:0]                    sdo_data,
 
   output                                sdi_data_ready,
   input                                 sdi_data_valid,
-  input [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
+  input       [ 7:0]                    sdi_data,
 
   output                                sync_ready,
   input                                 sync_valid,
@@ -140,7 +138,7 @@ module axi_ad5766 #(
   reg                                   up_rack = 0;
   reg                                   up_wack = 1'b0;
   reg         [15:0]                    cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
-  reg    [(DATA_WIDTH-1):0]             sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+  reg         [ 7:0]                    sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
   reg [CMD_MEM_ADDRESS_WIDTH-1:0]       ctrl_cmd_wr_addr = 'b0;
   reg [CMD_MEM_ADDRESS_WIDTH-1:0]       spi_cmd_rd_addr = 'b0;
   reg [SDO_MEM_ADDRESS_WIDTH-1:0]       ctrl_sdo_wr_addr = 'b0;
