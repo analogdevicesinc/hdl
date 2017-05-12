@@ -68,6 +68,7 @@ clean:
 	make -C util_clkdiv clean
 	make -C util_cpack clean
 	make -C util_dacfifo clean
+	make -C util_delay clean
 	make -C util_extract clean
 	make -C util_fir_dec clean
 	make -C util_fir_int clean
@@ -154,6 +155,7 @@ lib:
 	make -C util_clkdiv
 	make -C util_cpack
 	make -C util_dacfifo
+	make -C util_delay
 	make -C util_extract
 	make -C util_fir_dec
 	make -C util_fir_int
