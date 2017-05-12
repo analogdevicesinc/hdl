@@ -1,6 +1,6 @@
 
 
-package require -exact qsys 14.0
+package require qsys
 source ../scripts/adi_env.tcl
 source ../scripts/adi_ip_alt.tcl
 

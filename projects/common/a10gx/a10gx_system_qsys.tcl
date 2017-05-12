@@ -9,7 +9,7 @@ set system_type nios
 
 # clock-&-reset
 
-add_instance sys_clk clock_source 16.0
+add_instance sys_clk clock_source
 add_interface sys_clk clock sink
 add_interface sys_rst reset sink
 set_interface_property sys_clk EXPORT_OF sys_clk.clk_in

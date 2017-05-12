@@ -1,5 +1,5 @@
 
-package require -exact qsys 14.0
+package require qsys
 
 set_module_property NAME alt_serdes
 set_module_property DESCRIPTION "Altera SERDES"
