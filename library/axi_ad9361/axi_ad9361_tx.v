@@ -118,7 +118,7 @@ module axi_ad9361_tx #(
   // internal registers
 
   reg             dac_data_sync = 'd0;
-  reg     [ 7:0]  dac_rate_cnt = 'd0;
+  reg     [15:0]  dac_rate_cnt = 'd0;
   reg             dac_valid_int = 'd0;
   reg             dac_valid_i0_int = 'd0;
   reg             dac_valid_q0_int = 'd0;
@@ -136,7 +136,7 @@ module axi_ad9361_tx #(
 
   wire            dac_data_sync_s;
   wire            dac_dds_format_s;
-  wire    [ 7:0]  dac_datarate_s;
+  wire    [15:0]  dac_datarate_s;
   wire    [47:0]  dac_data_int_s;
   wire    [ 5:0]  up_wack_s;
   wire    [ 5:0]  up_rack_s;
@@ -153,10 +153,10 @@ module axi_ad9361_tx #(
   // rate counters and data sync signals
 
   always @(posedge dac_clk) begin
-    if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 8'd0)) begin
+    if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 16'd0)) begin
       dac_rate_cnt <= dac_datarate_s;
     end else begin
-      dac_rate_cnt <= dac_rate_cnt - 1'b1;
+      dac_rate_cnt <= dac_rate_cnt - 1;
     end
   end
 
@@ -169,7 +169,7 @@ module axi_ad9361_tx #(
   assign dac_valid_q1 = dac_valid_q1_int;
 
   always @(posedge dac_clk) begin
-    dac_valid_int <= (dac_rate_cnt == 8'd0) ? 1'b1 : 1'b0;
+    dac_valid_int <= (dac_rate_cnt == 16'd0) ? 1'b1 : 1'b0;
     dac_valid_i0_int <= dac_valid_int;
     dac_valid_q0_int <= dac_valid_int;
     dac_valid_i1_int <= dac_valid_int & ~dac_r1_mode;
