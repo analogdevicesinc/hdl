@@ -46,7 +46,7 @@ module dmac_dest_axi_stream #(
   output enabled,
   input sync_id,
   output sync_id_ret,
-        output xfer_req,
+  output xfer_req,
 
   input [ID_WIDTH-1:0] request_id,
   output [ID_WIDTH-1:0] response_id,
@@ -57,7 +57,7 @@ module dmac_dest_axi_stream #(
   input m_axis_ready,
   output m_axis_valid,
   output [S_AXIS_DATA_WIDTH-1:0] m_axis_data,
-        output m_axis_last,
+  output m_axis_last,
 
   output fifo_ready,
   input fifo_valid,
@@ -66,7 +66,7 @@ module dmac_dest_axi_stream #(
   input req_valid,
   output req_ready,
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
-        input req_xlast,
+  input req_xlast,
 
   output response_valid,
   input response_ready,
@@ -108,7 +108,7 @@ dmac_data_mover # (
   .enable(enable),
   .enabled(data_enabled),
   .sync_id(sync_id),
-        .xfer_req(xfer_req),
+  .xfer_req(xfer_req),
 
   .request_id(request_id),
   .response_id(data_id),
@@ -121,7 +121,7 @@ dmac_data_mover # (
   .m_axi_ready(m_axis_ready),
   .m_axi_valid(m_axis_valid),
   .m_axi_data(m_axis_data),
-        .m_axi_last(m_axis_last_s),
+  .m_axi_last(m_axis_last_s),
   .s_axi_ready(_fifo_ready),
   .s_axi_valid(fifo_valid),
   .s_axi_data(fifo_data)
