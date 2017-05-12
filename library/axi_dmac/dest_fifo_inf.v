@@ -98,7 +98,7 @@ dmac_data_mover # (
   .enable(enable),
   .enabled(data_enabled),
   .sync_id(sync_id),
-        .xfer_req(xfer_req),
+  .xfer_req(xfer_req),
 
   .request_id(request_id),
   .response_id(data_id),
