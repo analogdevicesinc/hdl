@@ -81,7 +81,7 @@ always @(negedge up_rstn or posedge up_clk) begin
     up_wack <= up_wack_r;
   end
 end
- 
+
 up_adc_common #(.ID(ID)) i_up_adc_common (
   .mmcm_rst (),
   .adc_clk (adc_clk),
@@ -95,8 +95,9 @@ up_adc_common #(.ID(ID)) i_up_adc_common (
   .adc_status_unf (1'b0),
   .adc_clk_ratio (32'd1),
   .adc_start_code (),
+  .adc_sref_sync (),
   .adc_sync (),
-
+  .up_adc_ce (),
   .up_status_pn_err (1'b0),
   .up_status_pn_oos (1'b0),
   .up_status_or (1'b0),

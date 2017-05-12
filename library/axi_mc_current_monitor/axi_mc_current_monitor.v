@@ -349,8 +349,10 @@ up_adc_common i_up_adc_common(
     .adc_status_unf(1'b0),
     .adc_clk_ratio(32'd1),
     .adc_start_code(),
+    .adc_sref_sync(),
     .adc_sync(),
 
+    .up_adc_ce(),
     .up_status_pn_err(1'b0),
     .up_status_pn_oos(1'b0),
     .up_status_or(1'b0),

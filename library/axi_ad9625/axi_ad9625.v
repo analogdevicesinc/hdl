@@ -199,6 +199,7 @@ module axi_ad9625 #(
     .adc_start_code (),
     .adc_sync (),
     .adc_sref_sync (adc_sref_sync_s),
+    .up_adc_ce (),
     .up_status_pn_err (up_adc_pn_err_s),
     .up_status_pn_oos (up_adc_pn_oos_s),
     .up_status_or (up_adc_or_s),

@@ -169,8 +169,10 @@ module axi_ad9434_core #(
     .adc_status_unf (1'b0),
     .adc_clk_ratio (32'd4),
     .adc_start_code (),
+    .adc_sref_sync (),
     .adc_sync (),
 
+    .up_adc_ce (),
     .up_status_pn_err (up_status_pn_err_s),
     .up_status_pn_oos (up_status_pn_oos_s),
     .up_status_or (up_status_or_s),

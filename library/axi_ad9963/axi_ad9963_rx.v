@@ -208,6 +208,7 @@ module axi_ad9963_rx #(
     .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd1),
     .adc_start_code (),
+    .adc_sref_sync (),
     .adc_sync (),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
