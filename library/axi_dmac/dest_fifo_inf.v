@@ -58,7 +58,7 @@ module dmac_dest_fifo_inf #(
   output valid,
   output underflow,
 
-        output xfer_req,
+  output xfer_req,
 
   output fifo_ready,
   input fifo_valid,
@@ -109,7 +109,7 @@ dmac_data_mover # (
   .enable(enable),
   .enabled(data_enabled),
   .sync_id(sync_id),
-        .xfer_req(xfer_req),
+  .xfer_req(xfer_req),
 
   .request_id(request_id),
   .response_id(data_id),

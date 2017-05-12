@@ -61,7 +61,7 @@ module dmac_request_arb #(
   input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
   input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
   input [DMA_LENGTH_WIDTH-1:0] req_length,
-        input req_xlast,
+  input req_xlast,
   input req_sync_transfer_start,
 
   output reg eot,
@@ -108,7 +108,7 @@ module dmac_request_arb #(
   output [ 3:0]                       m_axi_arcache,
 
   // Read data and response
-  input  [DMA_DATA_WIDTH_SRC-1:0]   m_axi_rdata,
+  input  [DMA_DATA_WIDTH_SRC-1:0]     m_axi_rdata,
   output                              m_axi_rready,
   input                               m_axi_rvalid,
   input  [ 1:0]                       m_axi_rresp,
@@ -117,7 +117,7 @@ module dmac_request_arb #(
   input                               s_axis_aclk,
   output                              s_axis_ready,
   input                               s_axis_valid,
-  input  [DMA_DATA_WIDTH_SRC-1:0]   s_axis_data,
+  input  [DMA_DATA_WIDTH_SRC-1:0]     s_axis_data,
   input  [0:0]                        s_axis_user,
   output                              s_axis_xfer_req,
 
@@ -126,13 +126,13 @@ module dmac_request_arb #(
   input                               m_axis_ready,
   output                              m_axis_valid,
   output [DMA_DATA_WIDTH_DEST-1:0]  m_axis_data,
-        output                              m_axis_last,
-        output                              m_axis_xfer_req,
+  output                              m_axis_last,
+  output                              m_axis_xfer_req,
 
   // Input FIFO interface
   input                               fifo_wr_clk,
   input                               fifo_wr_en,
-  input  [DMA_DATA_WIDTH_SRC-1:0]   fifo_wr_din,
+  input  [DMA_DATA_WIDTH_SRC-1:0]     fifo_wr_din,
   output                              fifo_wr_overflow,
   input                               fifo_wr_sync,
   output                              fifo_wr_xfer_req,
@@ -141,18 +141,18 @@ module dmac_request_arb #(
   input                               fifo_rd_clk,
   input                               fifo_rd_en,
   output                              fifo_rd_valid,
-  output [DMA_DATA_WIDTH_DEST-1:0]  fifo_rd_dout,
+  output [DMA_DATA_WIDTH_DEST-1:0]    fifo_rd_dout,
   output                              fifo_rd_underflow,
-        output                              fifo_rd_xfer_req,
+  output                              fifo_rd_xfer_req,
 
-  output [ID_WIDTH-1:0]        dbg_dest_request_id,
-  output [ID_WIDTH-1:0]        dbg_dest_address_id,
-  output [ID_WIDTH-1:0]        dbg_dest_data_id,
-  output [ID_WIDTH-1:0]        dbg_dest_response_id,
-  output [ID_WIDTH-1:0]        dbg_src_request_id,
-  output [ID_WIDTH-1:0]        dbg_src_address_id,
-  output [ID_WIDTH-1:0]        dbg_src_data_id,
-  output [ID_WIDTH-1:0]        dbg_src_response_id,
+  output [ID_WIDTH-1:0]               dbg_dest_request_id,
+  output [ID_WIDTH-1:0]               dbg_dest_address_id,
+  output [ID_WIDTH-1:0]               dbg_dest_data_id,
+  output [ID_WIDTH-1:0]               dbg_dest_response_id,
+  output [ID_WIDTH-1:0]               dbg_src_request_id,
+  output [ID_WIDTH-1:0]               dbg_src_address_id,
+  output [ID_WIDTH-1:0]               dbg_src_data_id,
+  output [ID_WIDTH-1:0]               dbg_src_response_id,
   output [7:0]                        dbg_status
 );
 
@@ -501,7 +501,7 @@ dmac_dest_axi_stream #(
   .req_valid(dest_req_valid),
   .req_ready(dest_req_ready),
   .req_last_burst_length(dest_req_last_burst_length),
-        .req_xlast(dest_req_xlast),
+  .req_xlast(dest_req_xlast),
 
   .response_valid(dest_response_valid),
   .response_ready(dest_response_ready),
@@ -513,7 +513,7 @@ dmac_dest_axi_stream #(
   .data_id(data_id),
   .sync_id(dest_sync_id),
   .sync_id_ret(dest_sync_id_ret),
-        .xfer_req(m_axis_xfer_req),
+  .xfer_req(m_axis_xfer_req),
 
   .data_eot(data_eot),
   .response_eot(response_eot),
@@ -525,7 +525,7 @@ dmac_dest_axi_stream #(
   .m_axis_valid(m_axis_valid),
   .m_axis_ready(m_axis_ready),
   .m_axis_data(m_axis_data),
-        .m_axis_last(m_axis_last)
+  .m_axis_last(m_axis_last)
 );
 
 end else begin
@@ -586,7 +586,7 @@ dmac_dest_fifo_inf #(
   .valid(fifo_rd_valid),
   .dout(fifo_rd_dout),
   .underflow(fifo_rd_underflow),
-        .xfer_req(fifo_rd_xfer_req)
+  .xfer_req(fifo_rd_xfer_req)
 );
 
 end else begin
