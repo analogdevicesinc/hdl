@@ -132,8 +132,11 @@ proc adi_ip_create {ip_name} {
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
 
-  if {!$IGNORE_VERSION_CHECK && [string compare [version -short] $REQUIRED_VIVADO_VERSION] != 0} {
-    return -code error [format "ERROR: This library requires Vivado %s." $REQUIRED_VIVADO_VERSION]
+  set VIVADO_VERSION [version -short]
+  if {[string compare $VIVADO_VERSION $REQUIRED_VIVADO_VERSION] != 0} {
+    puts -nonewline "CRITICAL WARNING: vivado version mismatch; "
+    puts -nonewline "expected $REQUIRED_VIVADO_VERSION, "
+    puts -nonewline "got $VIVADO_VERSION.\n"
   }
 
   create_project $ip_name . -force
