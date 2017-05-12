@@ -1,7 +1,7 @@
 
 # ad9144-xcvr
 
-add_instance avl_ad9144_xcvr avl_adxcvr 1.0
+add_instance avl_ad9144_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9144_xcvr {ID} {0}
 set_instance_parameter_value avl_ad9144_xcvr {TX_OR_RX_N} {1}
 set_instance_parameter_value avl_ad9144_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
@@ -43,7 +43,7 @@ add_connection avl_ad9144_xcvr.tx_ip_d_2 avl_ad9144_xcvr.tx_phy_d_3
 
 # ad9144-xcvr
 
-add_instance axi_ad9144_xcvr axi_adxcvr 1.0
+add_instance axi_ad9144_xcvr axi_adxcvr
 set_instance_parameter_value axi_ad9144_xcvr {ID} {0}
 set_instance_parameter_value axi_ad9144_xcvr {TX_OR_RX_N} {1}
 set_instance_parameter_value axi_ad9144_xcvr {NUM_OF_LANES} {4}
@@ -56,7 +56,7 @@ add_connection axi_ad9144_xcvr.core_pll_locked avl_ad9144_xcvr.core_pll_locked
 
 # ad9144-core
 
-add_instance axi_ad9144_core axi_ad9144 1.0
+add_instance axi_ad9144_core axi_ad9144
 set_instance_parameter_value axi_ad9144_core {QUAD_OR_DUAL_N} {0}
 
 add_connection avl_ad9144_xcvr.core_clk axi_ad9144_core.if_tx_clk
@@ -66,7 +66,7 @@ add_connection sys_clk.clk axi_ad9144_core.s_axi_clock
 
 # ad9144-unpack
 
-add_instance util_ad9144_upack util_upack 1.0
+add_instance util_ad9144_upack util_upack
 set_instance_parameter_value util_ad9144_upack {CHANNEL_DATA_WIDTH} {64}
 set_instance_parameter_value util_ad9144_upack {NUM_OF_CHANNELS} {2}
 
@@ -76,7 +76,7 @@ add_connection axi_ad9144_core.dac_ch_1 util_ad9144_upack.dac_ch_1
 
 # ad9144-dma
 
-add_instance axi_ad9144_dma axi_dmac 1.0
+add_instance axi_ad9144_dma axi_dmac
 set_instance_parameter_value axi_ad9144_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_ad9144_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9144_dma {DMA_2D_TRANSFER} {0}
@@ -94,7 +94,7 @@ add_connection sys_ddr3_cntrl.emif_usr_clk axi_ad9144_dma.m_src_axi_clock
 
 # ad9680-xcvr
 
-add_instance avl_ad9680_xcvr avl_adxcvr 1.0
+add_instance avl_ad9680_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9680_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9680_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9680_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
@@ -128,7 +128,7 @@ set_interface_property rx_sync EXPORT_OF avl_ad9680_xcvr.sync
 
 # ad9680-xcvr
 
-add_instance axi_ad9680_xcvr axi_adxcvr 1.0
+add_instance axi_ad9680_xcvr axi_adxcvr
 set_instance_parameter_value axi_ad9680_xcvr {ID} {1}
 set_instance_parameter_value axi_ad9680_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value axi_ad9680_xcvr {NUM_OF_LANES} {4}
@@ -141,7 +141,7 @@ add_connection axi_ad9680_xcvr.core_pll_locked avl_ad9680_xcvr.core_pll_locked
 
 # ad9680
 
-add_instance axi_ad9680_core axi_ad9680 1.0
+add_instance axi_ad9680_core axi_ad9680
 
 add_connection avl_ad9680_xcvr.core_clk axi_ad9680_core.if_rx_clk
 add_connection avl_ad9680_xcvr.ip_sof axi_ad9680_core.if_rx_sof
@@ -151,7 +151,7 @@ add_connection sys_clk.clk axi_ad9680_core.s_axi_clock
 
 # ad9680-pack
 
-add_instance util_ad9680_cpack util_cpack 1.0
+add_instance util_ad9680_cpack util_cpack
 set_instance_parameter_value util_ad9680_cpack {CHANNEL_DATA_WIDTH} {64}
 set_instance_parameter_value util_ad9680_cpack {NUM_OF_CHANNELS} {2}
 
@@ -163,7 +163,7 @@ add_connection axi_ad9680_core.adc_ch_1 util_ad9680_cpack.adc_ch_1
 
 # ad9680-fifo
 
-add_instance ad9680_adcfifo util_adcfifo 1.0
+add_instance ad9680_adcfifo util_adcfifo
 set_instance_parameter_value ad9680_adcfifo {ADC_DATA_WIDTH} {128}
 set_instance_parameter_value ad9680_adcfifo {DMA_DATA_WIDTH} {128}
 set_instance_parameter_value ad9680_adcfifo {DMA_ADDRESS_WIDTH} {16}
@@ -177,7 +177,7 @@ add_connection sys_ddr3_cntrl.emif_usr_clk ad9680_adcfifo.if_dma_clk
 
 # ad9680-dma
 
-add_instance axi_ad9680_dma axi_dmac 1.0
+add_instance axi_ad9680_dma axi_dmac
 set_instance_parameter_value axi_ad9680_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_ad9680_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9680_dma {DMA_LENGTH_WIDTH} {24}
@@ -200,25 +200,25 @@ add_connection sys_ddr3_cntrl.emif_usr_clk axi_ad9680_dma.m_dest_axi_clock
 
 # reconfig sharing
 
-add_instance avl_adxcfg_0 avl_adxcfg 1.0
+add_instance avl_adxcfg_0 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_0.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_0.rcfg_reset_n
 add_connection avl_adxcfg_0.rcfg_m0 avl_ad9144_xcvr.phy_reconfig_0
 add_connection avl_adxcfg_0.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_0
 
-add_instance avl_adxcfg_1 avl_adxcfg 1.0
+add_instance avl_adxcfg_1 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_1.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_1.rcfg_reset_n
 add_connection avl_adxcfg_1.rcfg_m0 avl_ad9144_xcvr.phy_reconfig_1
 add_connection avl_adxcfg_1.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_1
 
-add_instance avl_adxcfg_2 avl_adxcfg 1.0
+add_instance avl_adxcfg_2 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_2.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_2.rcfg_reset_n
 add_connection avl_adxcfg_2.rcfg_m0 avl_ad9144_xcvr.phy_reconfig_2
 add_connection avl_adxcfg_2.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_2
 
-add_instance avl_adxcfg_3 avl_adxcfg 1.0
+add_instance avl_adxcfg_3 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_3.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_3.rcfg_reset_n
 add_connection avl_adxcfg_3.rcfg_m0 avl_ad9144_xcvr.phy_reconfig_3

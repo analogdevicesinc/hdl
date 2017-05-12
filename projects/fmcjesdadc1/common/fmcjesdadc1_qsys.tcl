@@ -1,7 +1,7 @@
 
 # ad9250-xcvr
 
-add_instance avl_ad9250_xcvr avl_adxcvr 1.0
+add_instance avl_ad9250_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9250_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9250_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9250_xcvr {PCS_CONFIG} {JESD_PCS_CFG1}
@@ -40,7 +40,7 @@ set_interface_property rx_ip_data EXPORT_OF avl_ad9250_xcvr.ip_data
 
 # ad9250-xcvr
 
-add_instance axi_ad9250_xcvr axi_adxcvr 1.0
+add_instance axi_ad9250_xcvr axi_adxcvr
 set_instance_parameter_value axi_ad9250_xcvr {ID} {1}
 set_instance_parameter_value axi_ad9250_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value axi_ad9250_xcvr {NUM_OF_LANES} {4}
@@ -53,7 +53,7 @@ add_connection axi_ad9250_xcvr.core_pll_locked avl_ad9250_xcvr.core_pll_locked
 
 # ad9250
 
-add_instance axi_ad9250_core_0 axi_ad9250 1.0
+add_instance axi_ad9250_core_0 axi_ad9250
 
 add_connection avl_ad9250_xcvr.core_clk axi_ad9250_core_0.if_rx_clk
 add_interface rx_ip_sof_0 conduit end
@@ -63,7 +63,7 @@ set_interface_property rx_ip_data_0 EXPORT_OF axi_ad9250_core_0.if_rx_data
 add_connection sys_clk.clk_reset axi_ad9250_core_0.s_axi_reset
 add_connection sys_clk.clk axi_ad9250_core_0.s_axi_clock
 
-add_instance axi_ad9250_core_1 axi_ad9250 1.0
+add_instance axi_ad9250_core_1 axi_ad9250
 
 add_connection avl_ad9250_xcvr.core_clk axi_ad9250_core_1.if_rx_clk
 add_interface rx_ip_sof_1 conduit end
@@ -75,7 +75,7 @@ add_connection sys_clk.clk axi_ad9250_core_1.s_axi_clock
 
 # ad9250-pack
 
-add_instance util_ad9250_cpack_0 util_cpack 1.0
+add_instance util_ad9250_cpack_0 util_cpack
 set_instance_parameter_value util_ad9250_cpack_0 {CHANNEL_DATA_WIDTH} {32}
 set_instance_parameter_value util_ad9250_cpack_0 {NUM_OF_CHANNELS} {2}
 
@@ -84,7 +84,7 @@ add_connection avl_ad9250_xcvr.core_clk util_ad9250_cpack_0.if_adc_clk
 add_connection axi_ad9250_core_0.adc_ch_0 util_ad9250_cpack_0.adc_ch_0
 add_connection axi_ad9250_core_0.adc_ch_1 util_ad9250_cpack_0.adc_ch_1
 
-add_instance util_ad9250_cpack_1 util_cpack 1.0
+add_instance util_ad9250_cpack_1 util_cpack
 set_instance_parameter_value util_ad9250_cpack_1 {CHANNEL_DATA_WIDTH} {32}
 set_instance_parameter_value util_ad9250_cpack_1 {NUM_OF_CHANNELS} {2}
 
@@ -95,7 +95,7 @@ add_connection axi_ad9250_core_1.adc_ch_1 util_ad9250_cpack_1.adc_ch_1
 
 # ad9250-dma
 
-add_instance axi_ad9250_dma_0 axi_dmac 1.0
+add_instance axi_ad9250_dma_0 axi_dmac
 set_instance_parameter_value axi_ad9250_dma_0 {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_ad9250_dma_0 {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_ad9250_dma_0 {ID} {0}
@@ -118,7 +118,7 @@ add_connection sys_clk.clk axi_ad9250_dma_0.s_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9250_dma_0.m_dest_axi_reset
 add_connection sys_dma_clk.clk axi_ad9250_dma_0.m_dest_axi_clock
 
-add_instance axi_ad9250_dma_1 axi_dmac 1.0
+add_instance axi_ad9250_dma_1 axi_dmac
 set_instance_parameter_value axi_ad9250_dma_1 {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_ad9250_dma_1 {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_ad9250_dma_1 {ID} {0}
@@ -143,14 +143,14 @@ add_connection sys_dma_clk.clk axi_ad9250_dma_1.m_dest_axi_clock
 
 # core-clock
 
-add_instance rx_core_clk altera_clock_bridge 16.0
+add_instance rx_core_clk altera_clock_bridge
 add_connection avl_ad9250_xcvr.core_clk rx_core_clk.in_clk
 add_interface rx_core_clk clock source
 set_interface_property rx_core_clk EXPORT_OF rx_core_clk.out_clk
 
 # phy reconfiguration
 
-add_instance avl_phy_reconfig alt_xcvr_reconfig 16.0
+add_instance avl_phy_reconfig alt_xcvr_reconfig
 set_instance_parameter_value avl_phy_reconfig {number_of_reconfig_interfaces} {4}
 set_instance_parameter_value avl_phy_reconfig {gui_split_sizes} {1,1,1,1}
 add_connection avl_phy_reconfig.ch0_0_to_xcvr avl_ad9250_xcvr.phy_reconfig_to_xcvr_0 

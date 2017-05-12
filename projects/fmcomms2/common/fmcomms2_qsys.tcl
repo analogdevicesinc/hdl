@@ -3,7 +3,7 @@
 
 # ad9361 core
 
-add_instance axi_ad9361 axi_ad9361 1.0
+add_instance axi_ad9361 axi_ad9361
 set_instance_parameter_value axi_ad9361 {ID} {0}
 set_instance_parameter_value axi_ad9361 {DEVICE_TYPE} {0}
 
@@ -14,7 +14,7 @@ add_connection  axi_ad9361.if_l_clk axi_ad9361.if_clk
 
 # ad9361-unpack (dac)
 
-add_instance util_ad9361_dac_upack util_upack 1.0
+add_instance util_ad9361_dac_upack util_upack
 set_instance_parameter_value util_ad9361_dac_upack {CHANNEL_DATA_WIDTH} {16}
 set_instance_parameter_value util_ad9361_dac_upack {NUM_OF_CHANNELS} {4}
 
@@ -22,7 +22,7 @@ add_connection  axi_ad9361.if_l_clk util_ad9361_dac_upack.if_dac_clk
 
 # ad9361-dma (dac)
 
-add_instance axi_ad9361_dac_dma axi_dmac 1.0
+add_instance axi_ad9361_dac_dma axi_dmac
 set_instance_parameter_value axi_ad9361_dac_dma {DMA_DATA_WIDTH_DEST} {64}
 set_instance_parameter_value axi_ad9361_dac_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_ad9361_dac_dma {DMA_TYPE_DEST} {2}
@@ -53,7 +53,7 @@ add_connection  axi_ad9361.if_l_clk axi_ad9361_dac_dma.if_fifo_rd_clk
 
 # ad9361-adc-fifo
 
-add_instance util_ad9361_adc_fifo util_wfifo 1.0
+add_instance util_ad9361_adc_fifo util_wfifo
 set_instance_parameter_value util_ad9361_adc_fifo {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value util_ad9361_adc_fifo {DIN_ADDRESS_WIDTH} {4}
 set_instance_parameter_value util_ad9361_adc_fifo {DIN_DATA_WIDTH} {16}
@@ -66,7 +66,7 @@ add_connection  sys_clk.clk util_ad9361_adc_fifo.if_dout_clk
 
 # ad9361-pack (adc)
 
-add_instance util_ad9361_adc_cpack util_cpack 1.0
+add_instance util_ad9361_adc_cpack util_cpack
 set_instance_parameter_value util_ad9361_adc_cpack {CHANNEL_DATA_WIDTH} {16}
 set_instance_parameter_value util_ad9361_adc_cpack {NUM_OF_CHANNELS} {4}
 
@@ -75,7 +75,7 @@ add_connection  sys_clk.clk_reset util_ad9361_adc_cpack.if_adc_rst
 
 # ad9361-dma (adc)
 
-add_instance axi_ad9361_adc_dma axi_dmac 1.0
+add_instance axi_ad9361_adc_dma axi_dmac
 set_instance_parameter_value axi_ad9361_adc_dma {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_ad9361_adc_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_ad9361_adc_dma {AXI_SLICE_SRC} {0}

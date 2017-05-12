@@ -7,7 +7,7 @@ set_project_property DEVICE {10AS066N3F40E2SGE2}
 
 set system_type a10soc
 
-add_instance sys_clk clock_source 16.0
+add_instance sys_clk clock_source
 add_interface sys_clk clock sink
 set_interface_property sys_clk EXPORT_OF sys_clk.clk_in
 add_interface sys_rstn reset sink
@@ -90,7 +90,7 @@ set_hps_io  IO_SHARED_Q4_10   NONE
 set_hps_io  IO_SHARED_Q4_11   NONE
 set_hps_io  IO_SHARED_Q4_12   NONE
 
-add_instance sys_hps altera_arria10_hps 16.0
+add_instance sys_hps altera_arria10_hps
 set_instance_parameter_value sys_hps {MPU_EVENTS_Enable} {0}
 set_instance_parameter_value sys_hps {F2S_Width} {0}
 set_instance_parameter_value sys_hps {S2F_Width} {0}
@@ -125,7 +125,7 @@ set_interface_property sys_hps_io EXPORT_OF sys_hps.hps_io
 
 # ddr4 interface
 
-add_instance sys_hps_ddr4_cntrl altera_emif_a10_hps 16.0
+add_instance sys_hps_ddr4_cntrl altera_emif_a10_hps
 set_instance_parameter_value sys_hps_ddr4_cntrl {PROTOCOL_ENUM} {PROTOCOL_DDR4}
 set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_MEM_CLK_FREQ_MHZ} {1066.667}
 set_instance_parameter_value sys_hps_ddr4_cntrl {PHY_DDR4_DEFAULT_REF_CLK_FREQ} {0}
@@ -191,13 +191,13 @@ proc ad_dma_interconnect {m_port} {
 
 # common dma interfaces
 
-add_instance sys_dma_clk clock_source 16.0
+add_instance sys_dma_clk clock_source
 add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
 add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 
 # gpio-bd
 
-add_instance sys_gpio_bd altera_avalon_pio 16.0
+add_instance sys_gpio_bd altera_avalon_pio
 set_instance_parameter_value sys_gpio_bd {direction} {InOut}
 set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_bd {width} {32}
@@ -209,7 +209,7 @@ set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
 
 # gpio-in
 
-add_instance sys_gpio_in altera_avalon_pio 16.0
+add_instance sys_gpio_in altera_avalon_pio
 set_instance_parameter_value sys_gpio_in {direction} {Input}
 set_instance_parameter_value sys_gpio_in {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_in {width} {32}
@@ -221,7 +221,7 @@ set_interface_property sys_gpio_in EXPORT_OF sys_gpio_in.external_connection
 
 # gpio-out
 
-add_instance sys_gpio_out altera_avalon_pio 16.0
+add_instance sys_gpio_out altera_avalon_pio
 set_instance_parameter_value sys_gpio_out {direction} {Output}
 set_instance_parameter_value sys_gpio_out {generateIRQ} {0}
 set_instance_parameter_value sys_gpio_out {width} {32}
@@ -233,7 +233,7 @@ set_interface_property sys_gpio_out EXPORT_OF sys_gpio_out.external_connection
 
 # spi
 
-add_instance sys_spi altera_avalon_spi 16.0
+add_instance sys_spi altera_avalon_spi
 set_instance_parameter_value sys_spi {clockPhase} {0}
 set_instance_parameter_value sys_spi {clockPolarity} {0}
 set_instance_parameter_value sys_spi {dataWidth} {8}

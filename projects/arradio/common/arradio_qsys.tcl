@@ -1,7 +1,7 @@
 
 # ad9361
 
-add_instance axi_ad9361 axi_ad9361 1.0
+add_instance axi_ad9361 axi_ad9361
 set_instance_parameter_value axi_ad9361 {ID} {0}
 set_instance_parameter_value axi_ad9361 {MODE_1R1T} {0}
 set_instance_parameter_value axi_ad9361 {DEVICE_TYPE} {1}
@@ -22,7 +22,7 @@ add_connection sys_clk.clk_reset axi_ad9361.s_axi_reset
 
 # adc-wfifo & dac-rfifo
 
-add_instance util_adc_wfifo util_wfifo 1.0
+add_instance util_adc_wfifo util_wfifo
 set_instance_parameter_value util_adc_wfifo {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value util_adc_wfifo {DIN_DATA_WIDTH} {16}
 set_instance_parameter_value util_adc_wfifo {DOUT_DATA_WIDTH} {16}
@@ -39,7 +39,7 @@ add_connection util_adc_wfifo.if_din_ovf axi_ad9361.if_adc_dovf
 
 # adc-wfifo & dac-rfifo
 
-add_instance util_dac_rfifo util_rfifo 1.0
+add_instance util_dac_rfifo util_rfifo
 set_instance_parameter_value util_dac_rfifo {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value util_dac_rfifo {DIN_DATA_WIDTH} {16}
 set_instance_parameter_value util_dac_rfifo {DOUT_DATA_WIDTH} {16}
@@ -56,7 +56,7 @@ add_connection util_dac_rfifo.if_dout_unf axi_ad9361.if_dac_dunf
 
 # adc-pack & dac-unpack
 
-add_instance util_adc_pack util_cpack 1.0
+add_instance util_adc_pack util_cpack
 set_instance_parameter_value util_adc_pack {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value util_adc_pack {CHANNEL_DATA_WIDTH} {16}
 add_connection sys_dma_clk.clk util_adc_pack.if_adc_clk
@@ -68,7 +68,7 @@ add_connection util_adc_wfifo.dout_3 util_adc_pack.adc_ch_3
 
 # adc-pack & dac-unpack
 
-add_instance util_dac_upack util_upack 1.0
+add_instance util_dac_upack util_upack
 set_instance_parameter_value util_dac_upack {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value util_dac_upack {CHANNEL_DATA_WIDTH} {16}
 add_connection sys_dma_clk.clk util_dac_upack.if_dac_clk
@@ -79,7 +79,7 @@ add_connection util_dac_upack.dac_ch_3 util_dac_rfifo.din_3
 
 # adc-dma & dac-dma
 
-add_instance axi_adc_dma axi_dmac 1.0
+add_instance axi_adc_dma axi_dmac
 set_instance_parameter_value axi_adc_dma {ID} {0}
 set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_DEST} {64}
@@ -107,7 +107,7 @@ add_connection axi_adc_dma.if_fifo_wr_overflow util_adc_wfifo.if_dout_ovf
 
 # adc-dma & dac-dma
 
-add_instance axi_dac_dma axi_dmac 1.0
+add_instance axi_dac_dma axi_dmac
 set_instance_parameter_value axi_dac_dma {ID} {0}
 set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_dac_dma {DMA_DATA_WIDTH_DEST} {64}

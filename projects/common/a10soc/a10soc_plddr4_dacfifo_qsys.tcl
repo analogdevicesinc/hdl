@@ -1,7 +1,7 @@
 
 # pl-ddr4 settings
 
-add_instance sys_ddr4_cntrl altera_emif 16.0
+add_instance sys_ddr4_cntrl altera_emif
 set_instance_parameter_value sys_ddr4_cntrl {PROTOCOL_ENUM} {PROTOCOL_DDR4}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_MEM_CLK_FREQ_MHZ} {1066.667}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_DEFAULT_REF_CLK_FREQ} {0}
@@ -60,7 +60,7 @@ set_interface_property sys_ddr_mem EXPORT_OF sys_ddr4_cntrl.mem_conduit_end
 add_interface sys_ddr_status conduit end
 set_interface_property sys_ddr_status EXPORT_OF sys_ddr4_cntrl.status_conduit_end
 
-add_instance $dac_fifo_name avl_dacfifo 1.0
+add_instance $dac_fifo_name avl_dacfifo
 set_instance_parameter_value $dac_fifo_name {DAC_DATA_WIDTH} $dac_data_width
 set_instance_parameter_value $dac_fifo_name {DMA_DATA_WIDTH} $dac_dma_data_width
 set_instance_parameter_value $dac_fifo_name {AVL_DATA_WIDTH} {512}

@@ -9,7 +9,7 @@ set system_type nios
 
 # clock-&-reset
 
-add_instance sys_clk clock_source 16.0
+add_instance sys_clk clock_source
 add_interface sys_clk clock sink
 add_interface sys_rst reset sink
 set_interface_property sys_clk EXPORT_OF sys_clk.clk_in
@@ -20,7 +20,7 @@ set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
 # memory (int)
 
-add_instance sys_int_mem altera_avalon_onchip_memory2 16.0
+add_instance sys_int_mem altera_avalon_onchip_memory2
 set_instance_parameter_value sys_int_mem {dataWidth} {64}
 set_instance_parameter_value sys_int_mem {dualPort} {0}
 set_instance_parameter_value sys_int_mem {initMemContent} {0}
@@ -30,7 +30,7 @@ add_connection sys_clk.clk_reset sys_int_mem.reset1
 
 # hps
 
-add_instance sys_hps altera_hps 16.0
+add_instance sys_hps altera_hps
 set_instance_parameter_value sys_hps {MPU_EVENTS_Enable} {0}
 set_instance_parameter_value sys_hps {F2SDRAM_Type} {}
 set_instance_parameter_value sys_hps {F2SDRAM_Width} {}
@@ -136,7 +136,7 @@ proc ad_dma_interconnect {m_port} {
 
 # common dma interfaces
 
-add_instance sys_dma_clk clock_source 16.0
+add_instance sys_dma_clk clock_source
 add_interface sys_dma_clk clock sink
 add_interface sys_dma_rst reset sink
 set_interface_property sys_dma_clk EXPORT_OF sys_dma_clk.clk_in
@@ -148,14 +148,14 @@ add_connection sys_dma_clk.clk sys_hps.f2h_axi_clock
 
 # sys-id
 
-add_instance sys_id altera_avalon_sysid_qsys 16.0
+add_instance sys_id altera_avalon_sysid_qsys
 set_instance_parameter_value sys_id {id} {182193580}
 add_connection sys_clk.clk_reset sys_id.reset
 add_connection sys_clk.clk sys_id.clk
 
 # gpio-bd
 
-add_instance sys_gpio_bd altera_avalon_pio 16.0
+add_instance sys_gpio_bd altera_avalon_pio
 set_instance_parameter_value sys_gpio_bd {direction} {InOut}
 set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_bd {width} {32}
@@ -166,7 +166,7 @@ set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
 
 # gpio-in
 
-add_instance sys_gpio_in altera_avalon_pio 16.0
+add_instance sys_gpio_in altera_avalon_pio
 set_instance_parameter_value sys_gpio_in {direction} {Input}
 set_instance_parameter_value sys_gpio_in {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_in {width} {32}
@@ -177,7 +177,7 @@ set_interface_property sys_gpio_in EXPORT_OF sys_gpio_in.external_connection
 
 # gpio-out
 
-add_instance sys_gpio_out altera_avalon_pio 16.0
+add_instance sys_gpio_out altera_avalon_pio
 set_instance_parameter_value sys_gpio_out {direction} {Output}
 set_instance_parameter_value sys_gpio_out {generateIRQ} {0}
 set_instance_parameter_value sys_gpio_out {width} {32}

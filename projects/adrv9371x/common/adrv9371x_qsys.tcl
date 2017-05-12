@@ -1,7 +1,7 @@
 
 # ad9371_tx-xcvr
 
-add_instance avl_ad9371_tx_xcvr avl_adxcvr 1.0
+add_instance avl_ad9371_tx_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9371_tx_xcvr {ID} {0}
 set_instance_parameter_value avl_ad9371_tx_xcvr {TX_OR_RX_N} {1}
 set_instance_parameter_value avl_ad9371_tx_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
@@ -42,7 +42,7 @@ add_connection avl_ad9371_tx_xcvr.tx_ip_d_2 avl_ad9371_tx_xcvr.tx_phy_d_3
 
 # ad9371_tx-xcvr
 
-add_instance axi_ad9371_tx_xcvr axi_adxcvr 1.0
+add_instance axi_ad9371_tx_xcvr axi_adxcvr
 set_instance_parameter_value axi_ad9371_tx_xcvr {ID} {0}
 set_instance_parameter_value axi_ad9371_tx_xcvr {TX_OR_RX_N} {1}
 set_instance_parameter_value axi_ad9371_tx_xcvr {NUM_OF_LANES} {4}
@@ -54,7 +54,7 @@ add_connection axi_ad9371_tx_xcvr.core_pll_locked avl_ad9371_tx_xcvr.core_pll_lo
 
 # ad9371_rx-xcvr
 
-add_instance avl_ad9371_rx_xcvr avl_adxcvr 1.0
+add_instance avl_ad9371_rx_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9371_rx_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9371_rx_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9371_rx_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
@@ -83,7 +83,7 @@ set_interface_property rx_sync EXPORT_OF avl_ad9371_rx_xcvr.sync
 
 # ad9371_rx-xcvr
 
-add_instance axi_ad9371_rx_xcvr axi_adxcvr 1.0
+add_instance axi_ad9371_rx_xcvr axi_adxcvr
 set_instance_parameter_value axi_ad9371_rx_xcvr {ID} {1}
 set_instance_parameter_value axi_ad9371_rx_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value axi_ad9371_rx_xcvr {NUM_OF_LANES} {2}
@@ -95,7 +95,7 @@ add_connection axi_ad9371_rx_xcvr.core_pll_locked avl_ad9371_rx_xcvr.core_pll_lo
 
 # ad9371_rx_os-xcvr
 
-add_instance avl_ad9371_rx_os_xcvr avl_adxcvr 1.0
+add_instance avl_ad9371_rx_os_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
@@ -124,7 +124,7 @@ set_interface_property rx_os_sync EXPORT_OF avl_ad9371_rx_os_xcvr.sync
 
 # ad9371_rx_os-xcvr
 
-add_instance axi_ad9371_rx_os_xcvr axi_adxcvr 1.0
+add_instance axi_ad9371_rx_os_xcvr axi_adxcvr
 set_instance_parameter_value axi_ad9371_rx_os_xcvr {ID} {2}
 set_instance_parameter_value axi_ad9371_rx_os_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value axi_ad9371_rx_os_xcvr {NUM_OF_LANES} {2}
@@ -136,7 +136,7 @@ add_connection axi_ad9371_rx_os_xcvr.core_pll_locked avl_ad9371_rx_os_xcvr.core_
 
 # ad9371-core
 
-add_instance axi_ad9371 axi_ad9371 1.0
+add_instance axi_ad9371 axi_ad9371
 add_connection avl_ad9371_tx_xcvr.core_clk axi_ad9371.if_dac_clk
 add_connection axi_ad9371.if_dac_tx_data avl_ad9371_tx_xcvr.ip_data
 add_connection avl_ad9371_rx_xcvr.core_clk axi_ad9371.if_adc_clk
@@ -150,7 +150,7 @@ add_connection sys_clk.clk_reset axi_ad9371.s_axi_reset
 
 # pack(s) & unpack(s)
 
-add_instance axi_ad9371_tx_upack util_upack 1.0
+add_instance axi_ad9371_tx_upack util_upack
 set_instance_parameter_value axi_ad9371_tx_upack {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value axi_ad9371_tx_upack {CHANNEL_DATA_WIDTH} {32}
 add_connection avl_ad9371_tx_xcvr.core_clk axi_ad9371_tx_upack.if_dac_clk
@@ -159,7 +159,7 @@ add_connection axi_ad9371_tx_upack.dac_ch_1 axi_ad9371.dac_ch_1
 add_connection axi_ad9371_tx_upack.dac_ch_2 axi_ad9371.dac_ch_2
 add_connection axi_ad9371_tx_upack.dac_ch_3 axi_ad9371.dac_ch_3
 
-add_instance axi_ad9371_rx_cpack util_cpack 1.0
+add_instance axi_ad9371_rx_cpack util_cpack
 set_instance_parameter_value axi_ad9371_rx_cpack {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value axi_ad9371_rx_cpack {CHANNEL_DATA_WIDTH} {16}
 add_connection sys_clk.clk_reset axi_ad9371_rx_cpack.if_adc_rst
@@ -169,7 +169,7 @@ add_connection axi_ad9371.adc_ch_1 axi_ad9371_rx_cpack.adc_ch_1
 add_connection axi_ad9371.adc_ch_2 axi_ad9371_rx_cpack.adc_ch_2
 add_connection axi_ad9371.adc_ch_3 axi_ad9371_rx_cpack.adc_ch_3
 
-add_instance axi_ad9371_rx_os_cpack util_cpack 1.0
+add_instance axi_ad9371_rx_os_cpack util_cpack
 set_instance_parameter_value axi_ad9371_rx_os_cpack {NUM_OF_CHANNELS} {2}
 set_instance_parameter_value axi_ad9371_rx_os_cpack {CHANNEL_DATA_WIDTH} {32}
 add_connection sys_clk.clk_reset axi_ad9371_rx_os_cpack.if_adc_rst
@@ -188,7 +188,7 @@ add_connection axi_ad9371_tx_upack.if_dac_valid avl_ad9371_tx_fifo.if_dac_valid
 add_connection avl_ad9371_tx_fifo.if_dac_data axi_ad9371_tx_upack.if_dac_data
 add_connection avl_ad9371_tx_fifo.if_dac_dunf axi_ad9371.if_dac_dunf
 
-add_instance axi_ad9371_rx_fifo util_adcfifo 1.0
+add_instance axi_ad9371_rx_fifo util_adcfifo
 set_instance_parameter_value axi_ad9371_rx_fifo {ADC_DATA_WIDTH} {64}
 set_instance_parameter_value axi_ad9371_rx_fifo {DMA_DATA_WIDTH} {64}
 set_instance_parameter_value axi_ad9371_rx_fifo {DMA_READY_ENABLE} {1}
@@ -199,7 +199,7 @@ add_connection axi_ad9371_rx_cpack.if_adc_valid axi_ad9371_rx_fifo.if_adc_wr
 add_connection axi_ad9371_rx_cpack.if_adc_data axi_ad9371_rx_fifo.if_adc_wdata
 add_connection axi_ad9371_rx_fifo.if_adc_wovf axi_ad9371.if_adc_dovf
 
-add_instance axi_ad9371_rx_os_fifo util_adcfifo 1.0
+add_instance axi_ad9371_rx_os_fifo util_adcfifo
 set_instance_parameter_value axi_ad9371_rx_os_fifo {ADC_DATA_WIDTH} {64}
 set_instance_parameter_value axi_ad9371_rx_os_fifo {DMA_DATA_WIDTH} {64}
 set_instance_parameter_value axi_ad9371_rx_os_fifo {DMA_READY_ENABLE} {1}
@@ -213,7 +213,7 @@ add_connection axi_ad9371_rx_os_fifo.if_adc_wovf axi_ad9371.if_adc_dovf
 
 # dac & adc dma
 
-add_instance axi_ad9371_tx_dma axi_dmac 1.0
+add_instance axi_ad9371_tx_dma axi_dmac
 set_instance_parameter_value axi_ad9371_tx_dma {ID} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_DATA_WIDTH_DEST} {128}
@@ -242,7 +242,7 @@ add_connection sys_clk.clk_reset axi_ad9371_tx_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_ad9371_tx_dma.m_src_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9371_tx_dma.m_src_axi_reset
 
-add_instance axi_ad9371_rx_dma axi_dmac 1.0
+add_instance axi_ad9371_rx_dma axi_dmac
 set_instance_parameter_value axi_ad9371_rx_dma {ID} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_ad9371_rx_dma {DMA_DATA_WIDTH_DEST} {128}
@@ -269,7 +269,7 @@ add_connection sys_clk.clk_reset axi_ad9371_rx_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_ad9371_rx_dma.m_dest_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9371_rx_dma.m_dest_axi_reset
 
-add_instance axi_ad9371_rx_os_dma axi_dmac 1.0
+add_instance axi_ad9371_rx_os_dma axi_dmac
 set_instance_parameter_value axi_ad9371_rx_os_dma {ID} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_DATA_WIDTH_DEST} {128}
@@ -298,7 +298,7 @@ add_connection sys_dma_clk.clk_reset axi_ad9371_rx_os_dma.m_dest_axi_reset
 
 # ad9371 gpio
 
-add_instance avl_ad9371_gpio altera_avalon_pio 16.0
+add_instance avl_ad9371_gpio altera_avalon_pio
 set_instance_parameter_value avl_ad9371_gpio {direction} {Bidir}
 set_instance_parameter_value avl_ad9371_gpio {generateIRQ} {1}
 set_instance_parameter_value avl_ad9371_gpio {width} {19}
@@ -309,25 +309,25 @@ set_interface_property ad9371_gpio EXPORT_OF avl_ad9371_gpio.external_connection
 
 # reconfig sharing
 
-add_instance avl_adxcfg_0 avl_adxcfg 1.0
+add_instance avl_adxcfg_0 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_0.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_0.rcfg_reset_n
 add_connection avl_adxcfg_0.rcfg_m0 avl_ad9371_tx_xcvr.phy_reconfig_0
 add_connection avl_adxcfg_0.rcfg_m1 avl_ad9371_rx_xcvr.phy_reconfig_0
 
-add_instance avl_adxcfg_1 avl_adxcfg 1.0
+add_instance avl_adxcfg_1 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_1.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_1.rcfg_reset_n
 add_connection avl_adxcfg_1.rcfg_m0 avl_ad9371_tx_xcvr.phy_reconfig_1
 add_connection avl_adxcfg_1.rcfg_m1 avl_ad9371_rx_xcvr.phy_reconfig_1
 
-add_instance avl_adxcfg_2 avl_adxcfg 1.0
+add_instance avl_adxcfg_2 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_2.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_2.rcfg_reset_n
 add_connection avl_adxcfg_2.rcfg_m0 avl_ad9371_tx_xcvr.phy_reconfig_2
 add_connection avl_adxcfg_2.rcfg_m1 avl_ad9371_rx_os_xcvr.phy_reconfig_0
 
-add_instance avl_adxcfg_3 avl_adxcfg 1.0
+add_instance avl_adxcfg_3 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_3.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_3.rcfg_reset_n
 add_connection avl_adxcfg_3.rcfg_m0 avl_ad9371_tx_xcvr.phy_reconfig_3

@@ -1,7 +1,7 @@
 
 # usdrx1-xcvr
 
-add_instance avl_usdrx1_xcvr avl_adxcvr 1.0
+add_instance avl_usdrx1_xcvr avl_adxcvr
 set_instance_parameter_value avl_usdrx1_xcvr {ID} {1}
 set_instance_parameter_value avl_usdrx1_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_usdrx1_xcvr {PCS_CONFIG} {JESD_PCS_CFG1}
@@ -48,7 +48,7 @@ set_interface_property rx_ip_data EXPORT_OF avl_usdrx1_xcvr.ip_data
 
 # usdrx1-xcvr
 
-add_instance axi_usdrx1_xcvr axi_adxcvr 1.0
+add_instance axi_usdrx1_xcvr axi_adxcvr
 set_instance_parameter_value axi_usdrx1_xcvr {ID} {1}
 set_instance_parameter_value axi_usdrx1_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value axi_usdrx1_xcvr {NUM_OF_LANES} {8}
@@ -61,7 +61,7 @@ add_connection axi_usdrx1_xcvr.core_pll_locked avl_usdrx1_xcvr.core_pll_locked
 
 # ad9671
 
-add_instance axi_ad9671_core_0 axi_ad9671 1.0
+add_instance axi_ad9671_core_0 axi_ad9671
 set_instance_parameter_value axi_ad9671_core_0 {ID} {0}
 set_instance_parameter_value axi_ad9671_core_0 {QUAD_OR_DUAL_N} {0}
 add_connection avl_usdrx1_xcvr.core_clk axi_ad9671_core_0.if_rx_clk
@@ -80,7 +80,7 @@ set_interface_property rx_core_ovf_0 EXPORT_OF axi_ad9671_core_0.if_adc_dovf
 add_interface rx_core_unf_0 conduit end
 set_interface_property rx_core_unf_0 EXPORT_OF axi_ad9671_core_0.if_adc_dunf
 
-add_instance axi_ad9671_core_1 axi_ad9671 1.0
+add_instance axi_ad9671_core_1 axi_ad9671
 set_instance_parameter_value axi_ad9671_core_1 {ID} {1}
 set_instance_parameter_value axi_ad9671_core_1 {QUAD_OR_DUAL_N} {0}
 add_connection avl_usdrx1_xcvr.core_clk axi_ad9671_core_1.if_rx_clk
@@ -99,7 +99,7 @@ set_interface_property rx_core_ovf_1 EXPORT_OF axi_ad9671_core_1.if_adc_dovf
 add_interface rx_core_unf_1 conduit end
 set_interface_property rx_core_unf_1 EXPORT_OF axi_ad9671_core_1.if_adc_dunf
 
-add_instance axi_ad9671_core_2 axi_ad9671 1.0
+add_instance axi_ad9671_core_2 axi_ad9671
 set_instance_parameter_value axi_ad9671_core_2 {ID} {2}
 set_instance_parameter_value axi_ad9671_core_2 {QUAD_OR_DUAL_N} {0}
 add_connection avl_usdrx1_xcvr.core_clk axi_ad9671_core_2.if_rx_clk
@@ -118,7 +118,7 @@ set_interface_property rx_core_ovf_2 EXPORT_OF axi_ad9671_core_2.if_adc_dovf
 add_interface rx_core_unf_2 conduit end
 set_interface_property rx_core_unf_2 EXPORT_OF axi_ad9671_core_2.if_adc_dunf
 
-add_instance axi_ad9671_core_3 axi_ad9671 1.0
+add_instance axi_ad9671_core_3 axi_ad9671
 set_instance_parameter_value axi_ad9671_core_3 {ID} {3}
 set_instance_parameter_value axi_ad9671_core_3 {QUAD_OR_DUAL_N} {0}
 add_connection avl_usdrx1_xcvr.core_clk axi_ad9671_core_3.if_rx_clk
@@ -139,7 +139,7 @@ set_interface_property rx_core_unf_3 EXPORT_OF axi_ad9671_core_3.if_adc_dunf
 
 # usdrx1-fifo
 
-add_instance usdrx1_adcfifo util_adcfifo 1.0
+add_instance usdrx1_adcfifo util_adcfifo
 set_instance_parameter_value usdrx1_adcfifo {ADC_DATA_WIDTH} {512}
 set_instance_parameter_value usdrx1_adcfifo {DMA_DATA_WIDTH} {512}
 set_instance_parameter_value usdrx1_adcfifo {DMA_ADDRESS_WIDTH} {10}
@@ -157,7 +157,7 @@ add_connection sys_dma_clk.clk usdrx1_adcfifo.if_dma_clk
 
 # usdrx1-dma
 
-add_instance axi_usdrx1_dma axi_dmac 1.0
+add_instance axi_usdrx1_dma axi_dmac
 set_instance_parameter_value axi_usdrx1_dma {DMA_DATA_WIDTH_SRC} {512}
 set_instance_parameter_value axi_usdrx1_dma {DMA_DATA_WIDTH_DEST} {512}
 set_instance_parameter_value axi_usdrx1_dma {DMA_LENGTH_WIDTH} {24}
@@ -179,14 +179,14 @@ add_connection sys_dma_clk.clk axi_usdrx1_dma.m_dest_axi_clock
 
 # core-clock
 
-add_instance rx_core_clk altera_clock_bridge 16.0
+add_instance rx_core_clk altera_clock_bridge
 add_connection avl_usdrx1_xcvr.core_clk rx_core_clk.in_clk
 add_interface rx_core_clk clock source
 set_interface_property rx_core_clk EXPORT_OF rx_core_clk.out_clk
 
 # phy reconfiguration
 
-add_instance avl_phy_reconfig alt_xcvr_reconfig 16.0
+add_instance avl_phy_reconfig alt_xcvr_reconfig
 set_instance_parameter_value avl_phy_reconfig {number_of_reconfig_interfaces} {8}
 set_instance_parameter_value avl_phy_reconfig {gui_split_sizes} {1,1,1,1,1,1,1,1}
 add_connection avl_phy_reconfig.ch0_0_to_xcvr avl_usdrx1_xcvr.phy_reconfig_to_xcvr_0 

@@ -119,21 +119,21 @@ proc p_avl_adxcvr {} {
   set m_mf_fcnt [get_parameter_value "MF_FCNT"]
   set m_hd [get_parameter_value "HD"]
 
-  add_instance alt_sys_clk clock_source 16.0
+  add_instance alt_sys_clk clock_source
   set_instance_parameter_value alt_sys_clk {clockFrequency} [expr $m_sysclk_frequency*1000000]
   add_interface sys_clk clock sink
   set_interface_property sys_clk EXPORT_OF alt_sys_clk.clk_in
   add_interface sys_resetn reset sink
   set_interface_property sys_resetn EXPORT_OF alt_sys_clk.clk_in_reset
 
-  add_instance alt_ref_clk altera_clock_bridge 16.0
+  add_instance alt_ref_clk altera_clock_bridge
   set_instance_parameter_value alt_ref_clk {EXPLICIT_CLOCK_RATE} [expr $m_refclk_frequency*1000000]
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF alt_ref_clk.in_clk
 
   if {$m_device_family eq "Arria V"} {
 
-    add_instance alt_core_pll altera_pll 16.0
+    add_instance alt_core_pll altera_pll
     set_instance_parameter_value alt_core_pll {gui_en_reconf} {1}
     set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
     set_instance_parameter_value alt_core_pll {gui_use_locked} {1}
@@ -145,7 +145,7 @@ proc p_avl_adxcvr {} {
 
   } else {
 
-    add_instance alt_core_pll altera_iopll 16.0
+    add_instance alt_core_pll altera_iopll
     set_instance_parameter_value alt_core_pll {gui_en_reconf} {1}
     set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
     set_instance_parameter_value alt_core_pll {gui_use_locked} {1}
@@ -156,7 +156,7 @@ proc p_avl_adxcvr {} {
     set_interface_property core_pll_locked EXPORT_OF alt_core_pll.locked
   }
 
-  add_instance alt_core_pll_reconfig altera_pll_reconfig 16.0
+  add_instance alt_core_pll_reconfig altera_pll_reconfig
   add_connection alt_sys_clk.clk_reset alt_core_pll_reconfig.mgmt_reset
   add_connection alt_sys_clk.clk alt_core_pll_reconfig.mgmt_clk
   add_connection alt_core_pll_reconfig.reconfig_to_pll alt_core_pll.reconfig_to_pll
@@ -164,7 +164,7 @@ proc p_avl_adxcvr {} {
   add_interface core_pll_reconfig avalon slave
   set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll_reconfig.mgmt_avalon_slave
 
-  add_instance alt_core_clk altera_clock_bridge 16.0
+  add_instance alt_core_clk altera_clock_bridge
   set_instance_parameter_value alt_core_clk {EXPLICIT_CLOCK_RATE} $m_coreclk_frequency
   add_connection alt_core_pll.outclk0 alt_core_clk.in_clk
   add_interface core_clk clock source
@@ -172,7 +172,7 @@ proc p_avl_adxcvr {} {
 
   if {$m_tx_or_rx_n == 1} {
 
-    add_instance alt_rst_cntrol altera_xcvr_reset_control 16.0
+    add_instance alt_rst_cntrol altera_xcvr_reset_control
     set_instance_parameter_value alt_rst_cntrol {CHANNELS} $m_num_of_lanes
     set_instance_parameter_value alt_rst_cntrol {SYS_CLK_IN_MHZ} $m_sysclk_frequency
     set_instance_parameter_value alt_rst_cntrol {TX_PLL_ENABLE} {1}
@@ -188,7 +188,7 @@ proc p_avl_adxcvr {} {
     add_interface ready conduit end
     set_interface_property ready EXPORT_OF alt_rst_cntrol.tx_ready
 
-    add_instance alt_lane_pll altera_xcvr_atx_pll_a10 16.0
+    add_instance alt_lane_pll altera_xcvr_atx_pll_a10
     set_instance_parameter_value alt_lane_pll {enable_pll_reconfig} {1}
     set_instance_parameter_value alt_lane_pll {rcfg_separate_avmm_busy} {1}
     set_instance_parameter_value alt_lane_pll {set_capability_reg_enable} {1}
@@ -205,7 +205,7 @@ proc p_avl_adxcvr {} {
     add_interface lane_pll_reconfig avalon slave
     set_interface_property lane_pll_reconfig EXPORT_OF alt_lane_pll.reconfig_avmm0
 
-    add_instance alt_ip altera_jesd204 16.0
+    add_instance alt_ip altera_jesd204
     set_instance_parameter_value alt_ip {wrapper_opt} {base}
     set_instance_parameter_value alt_ip {DATA_PATH} {TX}
     set_instance_parameter_value alt_ip {lane_rate} $m_lane_rate
@@ -233,7 +233,7 @@ proc p_avl_adxcvr {} {
     set_interface_property sync EXPORT_OF alt_ip.sync_n
     add_connection alt_ip.dev_sync_n alt_ip.mdev_sync_n
 
-    add_instance alt_xphy avl_adxphy 1.0
+    add_instance alt_xphy avl_adxphy
     set_instance_parameter_value alt_xphy {TX_OR_RX_N} {1}
     set_instance_parameter_value alt_xphy {NUM_OF_LANES} $m_num_of_lanes
     add_connection alt_rst_cntrol.tx_analogreset alt_xphy.tx_core_analogreset
@@ -261,7 +261,7 @@ proc p_avl_adxcvr {} {
       add_interface tx_phy_d_${n} conduit end
       set_interface_property tx_phy_d_${n} EXPORT_OF alt_xphy.tx_phy_d_${n}
 
-      add_instance alt_phy_${n} altera_jesd204 16.0
+      add_instance alt_phy_${n} altera_jesd204
       set_instance_parameter_value alt_phy_${n} {wrapper_opt} {phy}
       set_instance_parameter_value alt_phy_${n} {DATA_PATH} {TX}
       set_instance_parameter_value alt_phy_${n} {lane_rate} $m_lane_rate
@@ -282,7 +282,7 @@ proc p_avl_adxcvr {} {
 
       if {$m_device_family eq "Arria V"} {
 
-        add_instance alt_phy_reconfig_${n} alt_xcvr_reconfig 16.0
+        add_instance alt_phy_reconfig_${n} alt_xcvr_reconfig
         set_instance_parameter_value alt_phy_reconfig_${n} {number_of_reconfig_interfaces} {1}
         add_connection alt_sys_clk.clk alt_phy_reconfig_${n}.mgmt_clk_clk
         add_connection alt_sys_clk.clk_reset alt_phy_reconfig_${n}.mgmt_rst_reset
@@ -314,7 +314,7 @@ proc p_avl_adxcvr {} {
 
   if {$m_tx_or_rx_n == 0} {
 
-    add_instance alt_rst_cntrol altera_xcvr_reset_control 16.0
+    add_instance alt_rst_cntrol altera_xcvr_reset_control
     set_instance_parameter_value alt_rst_cntrol {CHANNELS} $m_num_of_lanes
     set_instance_parameter_value alt_rst_cntrol {SYS_CLK_IN_MHZ} $m_sysclk_frequency
     set_instance_parameter_value alt_rst_cntrol {TX_PLL_ENABLE} {0}
@@ -328,7 +328,7 @@ proc p_avl_adxcvr {} {
     add_interface ready conduit end
     set_interface_property ready EXPORT_OF alt_rst_cntrol.rx_ready
 
-    add_instance alt_ip altera_jesd204 16.0
+    add_instance alt_ip altera_jesd204
     set_instance_parameter_value alt_ip {wrapper_opt} {base}
     set_instance_parameter_value alt_ip {DATA_PATH} {RX}
     set_instance_parameter_value alt_ip {lane_rate} $m_lane_rate
@@ -358,7 +358,7 @@ proc p_avl_adxcvr {} {
     set_interface_property sync EXPORT_OF alt_ip.dev_sync_n
     add_connection alt_ip.dev_lane_aligned alt_ip.alldev_lane_aligned
 
-    add_instance alt_xphy avl_adxphy 1.0
+    add_instance alt_xphy avl_adxphy
     set_instance_parameter_value alt_xphy {TX_OR_RX_N} {0}
     set_instance_parameter_value alt_xphy {NUM_OF_LANES} $m_num_of_lanes
     add_connection alt_rst_cntrol.rx_analogreset alt_xphy.rx_core_analogreset
@@ -382,7 +382,7 @@ proc p_avl_adxcvr {} {
 
     for {set n 0} {$n < $m_num_of_lanes} {incr n} {
 
-      add_instance alt_phy_${n} altera_jesd204 16.0
+      add_instance alt_phy_${n} altera_jesd204
       set_instance_parameter_value alt_phy_${n} {wrapper_opt} {phy}
       set_instance_parameter_value alt_phy_${n} {DATA_PATH} {RX}
       set_instance_parameter_value alt_phy_${n} {lane_rate} $m_lane_rate

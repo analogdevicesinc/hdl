@@ -9,7 +9,7 @@ set system_type nios
 
 # clock-&-reset
 
-add_instance sys_ref_clk clock_source 16.0
+add_instance sys_ref_clk clock_source
 add_interface sys_ref_clk clock sink
 add_interface sys_ref_rst reset sink
 set_interface_property sys_ref_clk EXPORT_OF sys_ref_clk.clk_in
@@ -18,7 +18,7 @@ set_instance_parameter_value sys_ref_clk {clockFrequency} {100000000.0}
 set_instance_parameter_value sys_ref_clk {clockFrequencyKnown} {1}
 set_instance_parameter_value sys_ref_clk {resetSynchronousEdges} {DEASSERT}
 
-add_instance sys_clk clock_source 16.0
+add_instance sys_clk clock_source
 add_interface sys_clk clock sink
 add_interface sys_rst reset sink
 set_interface_property sys_clk EXPORT_OF sys_clk.clk_in
@@ -29,7 +29,7 @@ set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
 
 # system-pll
 
-add_instance sys_pll altera_pll 16.0
+add_instance sys_pll altera_pll
 set_instance_parameter_value sys_pll {gui_reference_clock_frequency} {100.0}
 set_instance_parameter_value sys_pll {gui_use_locked} {1}
 set_instance_parameter_value sys_pll {gui_number_of_clocks} {3}
@@ -49,7 +49,7 @@ set_interface_property sys_pll_locked EXPORT_OF sys_pll.locked
 
 # memory (int)
 
-add_instance sys_int_mem altera_avalon_onchip_memory2 16.0
+add_instance sys_int_mem altera_avalon_onchip_memory2
 set_instance_parameter_value sys_int_mem {dataWidth} {32}
 set_instance_parameter_value sys_int_mem {dualPort} {0}
 set_instance_parameter_value sys_int_mem {initMemContent} {0}
@@ -59,7 +59,7 @@ add_connection sys_clk.clk_reset sys_int_mem.reset1
 
 # memory (tlb)
 
-add_instance sys_tlb_mem altera_avalon_onchip_memory2 16.0
+add_instance sys_tlb_mem altera_avalon_onchip_memory2
 set_instance_parameter_value sys_tlb_mem {dataWidth} {32}
 set_instance_parameter_value sys_tlb_mem {dualPort} {1}
 set_instance_parameter_value sys_tlb_mem {initMemContent} {1}
@@ -71,7 +71,7 @@ add_connection sys_clk.clk_reset sys_tlb_mem.reset2
 
 # memory (ddr)
 
-add_instance sys_ddr3_cntrl altera_mem_if_ddr3_emif 16.0
+add_instance sys_ddr3_cntrl altera_mem_if_ddr3_emif
 set_instance_parameter_value sys_ddr3_cntrl {SPEED_GRADE} {3}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_CLK_FREQ} {400.0}
 set_instance_parameter_value sys_ddr3_cntrl {REF_CLK_FREQ} {100.0}
@@ -120,7 +120,7 @@ set_interface_property sys_ddr3_cntrl_oct EXPORT_OF sys_ddr3_cntrl.oct
 
 # cpu clock
 
-add_instance sys_cpu_clk clock_source 16.0
+add_instance sys_cpu_clk clock_source
 add_connection sys_ddr3_cntrl.afi_half_clk sys_cpu_clk.clk_in
 add_connection sys_ddr3_cntrl.afi_reset sys_cpu_clk.clk_in_reset
 add_interface sys_cpu_clk clock source
@@ -130,7 +130,7 @@ set_interface_property sys_cpu_reset EXPORT_OF sys_cpu_clk.clk_reset
 
 # cpu
 
-add_instance sys_cpu altera_nios2_gen2 16.0
+add_instance sys_cpu altera_nios2_gen2
 set_instance_parameter_value sys_cpu {setting_support31bitdcachebypass} {0}
 set_instance_parameter_value sys_cpu {setting_activateTrace} {1}
 set_instance_parameter_value sys_cpu {mmu_autoAssignTlbPtrSz} {0}
@@ -187,20 +187,20 @@ proc ad_dma_interconnect {m_port} {
 
 # common dma interfaces
 
-add_instance sys_dma_clk clock_source 16.0
+add_instance sys_dma_clk clock_source
 add_connection sys_ddr3_cntrl.afi_clk sys_dma_clk.clk_in
 add_connection sys_ddr3_cntrl.afi_reset sys_dma_clk.clk_in_reset
 
 # ethernet
 
-add_instance sys_ethernet altera_eth_tse 16.0
+add_instance sys_ethernet altera_eth_tse
 set_instance_parameter_value sys_ethernet {core_variation} {MAC_ONLY}
 set_instance_parameter_value sys_ethernet {ifGMII} {RGMII}
 set_instance_parameter_value sys_ethernet {enable_mac_flow_ctrl} {1}
 set_instance_parameter_value sys_ethernet {useMDIO} {1}
 set_instance_parameter_value sys_ethernet {mdio_clk_div} {30}
 
-add_instance sys_ethernet_dma_rx altera_msgdma 16.0
+add_instance sys_ethernet_dma_rx altera_msgdma
 set_instance_parameter_value sys_ethernet_dma_rx {MODE} {2}
 set_instance_parameter_value sys_ethernet_dma_rx {DATA_WIDTH} {64}
 set_instance_parameter_value sys_ethernet_dma_rx {DATA_FIFO_DEPTH} {256}
@@ -215,7 +215,7 @@ set_instance_parameter_value sys_ethernet_dma_rx {PACKET_ENABLE} {1}
 set_instance_parameter_value sys_ethernet_dma_rx {ERROR_ENABLE} {1}
 set_instance_parameter_value sys_ethernet_dma_rx {ERROR_WIDTH} {6}
 
-add_instance sys_ethernet_dma_tx altera_msgdma 16.0
+add_instance sys_ethernet_dma_tx altera_msgdma
 set_instance_parameter_value sys_ethernet_dma_tx {MODE} {1}
 set_instance_parameter_value sys_ethernet_dma_tx {DATA_WIDTH} {64}
 set_instance_parameter_value sys_ethernet_dma_tx {DATA_FIFO_DEPTH} {256}
@@ -253,35 +253,35 @@ set_interface_property sys_ethernet_mdio EXPORT_OF sys_ethernet.mac_mdio_connect
 
 # sys-id
 
-add_instance sys_id altera_avalon_sysid_qsys 16.0
+add_instance sys_id altera_avalon_sysid_qsys
 set_instance_parameter_value sys_id {id} {182193580}
 add_connection sys_clk.clk_reset sys_id.reset
 add_connection sys_clk.clk sys_id.clk
 
 # timer-1
 
-add_instance sys_timer_1 altera_avalon_timer 16.0
+add_instance sys_timer_1 altera_avalon_timer
 set_instance_parameter_value sys_timer_1 {counterSize} {32}
 add_connection sys_clk.clk_reset sys_timer_1.reset
 add_connection sys_clk.clk sys_timer_1.clk
 
 # timer-2
 
-add_instance sys_timer_2 altera_avalon_timer 16.0
+add_instance sys_timer_2 altera_avalon_timer
 set_instance_parameter_value sys_timer_2 {counterSize} {32}
 add_connection sys_clk.clk_reset sys_timer_2.reset
 add_connection sys_clk.clk sys_timer_2.clk
 
 # uart
 
-add_instance sys_uart altera_avalon_jtag_uart 16.0
+add_instance sys_uart altera_avalon_jtag_uart
 set_instance_parameter_value sys_uart {allowMultipleConnections} {0}
 add_connection sys_clk.clk_reset sys_uart.reset
 add_connection sys_clk.clk sys_uart.clk
 
 # gpio-bd
 
-add_instance sys_gpio_bd altera_avalon_pio 16.0
+add_instance sys_gpio_bd altera_avalon_pio
 set_instance_parameter_value sys_gpio_bd {direction} {InOut}
 set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_bd {width} {32}
@@ -292,7 +292,7 @@ set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
 
 # gpio-in
 
-add_instance sys_gpio_in altera_avalon_pio 16.0
+add_instance sys_gpio_in altera_avalon_pio
 set_instance_parameter_value sys_gpio_in {direction} {Input}
 set_instance_parameter_value sys_gpio_in {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_in {width} {32}
@@ -303,7 +303,7 @@ set_interface_property sys_gpio_in EXPORT_OF sys_gpio_in.external_connection
 
 # gpio-out
 
-add_instance sys_gpio_out altera_avalon_pio 16.0
+add_instance sys_gpio_out altera_avalon_pio
 set_instance_parameter_value sys_gpio_out {direction} {Output}
 set_instance_parameter_value sys_gpio_out {generateIRQ} {0}
 set_instance_parameter_value sys_gpio_out {width} {32}
@@ -314,7 +314,7 @@ set_interface_property sys_gpio_out EXPORT_OF sys_gpio_out.external_connection
 
 # spi
 
-add_instance sys_spi altera_avalon_spi 16.0
+add_instance sys_spi altera_avalon_spi
 set_instance_parameter_value sys_spi {clockPhase} {0}
 set_instance_parameter_value sys_spi {clockPolarity} {0}
 set_instance_parameter_value sys_spi {dataWidth} {8}

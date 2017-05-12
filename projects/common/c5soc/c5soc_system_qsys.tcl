@@ -7,7 +7,7 @@ set_project_property DEVICE {5CSXFC6D6F31C8ES}
 
 # system clock
 
-add_instance sys_clk clock_source 16.0
+add_instance sys_clk clock_source
 set_instance_parameter_value sys_clk {clockFrequency} {50000000.0}
 set_instance_parameter_value sys_clk {clockFrequencyKnown} {1}
 set_instance_parameter_value sys_clk {resetSynchronousEdges} {NONE}
@@ -18,7 +18,7 @@ set_interface_property sys_rst EXPORT_OF sys_clk.clk_in_reset
 
 # hps
 
-add_instance sys_hps altera_hps 16.0
+add_instance sys_hps altera_hps
 set_instance_parameter_value sys_hps {MPU_EVENTS_Enable} {0}
 set_instance_parameter_value sys_hps {F2SDRAM_Type} {Avalon-MM\ Bidirectional AXI-3 AXI-3}
 set_instance_parameter_value sys_hps {F2SDRAM_Width} {64 64 64}
@@ -133,7 +133,7 @@ proc ad_dma_interconnect {m_port m_id} {
 
 # common dma interfaces
 
-add_instance sys_dma_clk clock_source 16.0
+add_instance sys_dma_clk clock_source
 add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
 add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 add_connection sys_dma_clk.clk sys_hps.f2h_sdram1_clock
@@ -141,7 +141,7 @@ add_connection sys_dma_clk.clk sys_hps.f2h_sdram2_clock
 
 # internal memory
 
-add_instance sys_int_mem altera_avalon_onchip_memory2 16.0
+add_instance sys_int_mem altera_avalon_onchip_memory2
 set_instance_parameter_value sys_int_mem {dualPort} {0}
 set_instance_parameter_value sys_int_mem {dataWidth} {64}
 set_instance_parameter_value sys_int_mem {memorySize} {65536.0}
@@ -153,7 +153,7 @@ set_connection_parameter_value sys_hps.h2f_axi_master/sys_int_mem.s1 baseAddress
 
 # display (vga-pll)
 
-add_instance vga_pll altera_pll 16.0
+add_instance vga_pll altera_pll
 set_instance_parameter_value vga_pll {gui_device_speed_grade} {2}
 set_instance_parameter_value vga_pll {gui_reference_clock_frequency} {50.0}
 set_instance_parameter_value vga_pll {gui_use_locked} {0}
@@ -165,7 +165,7 @@ add_connection sys_clk.clk_reset vga_pll.reset
 
 # display (vga-frame-reader)
 
-add_instance vga_frame_reader alt_vip_vfr 14.0
+add_instance vga_frame_reader alt_vip_vfr
 set_instance_parameter_value vga_frame_reader {BITS_PER_PIXEL_PER_COLOR_PLANE} {8}
 set_instance_parameter_value vga_frame_reader {NUMBER_OF_CHANNELS_IN_PARALLEL} {4}
 set_instance_parameter_value vga_frame_reader {NUMBER_OF_CHANNELS_IN_SEQUENCE} {1}
@@ -184,7 +184,7 @@ add_connection sys_clk.clk_reset vga_frame_reader.clock_reset_reset
 
 # display (vga-out-clock)
 
-add_instance vga_out_clock altera_clock_bridge 16.0
+add_instance vga_out_clock altera_clock_bridge
 set_instance_parameter_value vga_out_clock {NUM_CLOCK_OUTPUTS} {1}
 add_connection vga_pll.outclk0 vga_out_clock.in_clk
 add_interface vga_out_clk clock source
@@ -192,7 +192,7 @@ set_interface_property vga_out_clk EXPORT_OF vga_out_clock.out_clk
 
 # display (vga-out-data)
 
-add_instance vga_out_data alt_vip_itc 14.0
+add_instance vga_out_data alt_vip_itc
 set_instance_parameter_value vga_out_data {H_ACTIVE_PIXELS} {1360}
 set_instance_parameter_value vga_out_data {V_ACTIVE_LINES} {768}
 set_instance_parameter_value vga_out_data {BPS} {8}
@@ -234,14 +234,14 @@ set_interface_property vga_out_data EXPORT_OF vga_out_data.clocked_video
 
 # id
 
-add_instance sys_id altera_avalon_sysid_qsys 16.0
+add_instance sys_id altera_avalon_sysid_qsys
 set_instance_parameter_value sys_id {id} {-1395322110}
 add_connection sys_clk.clk sys_id.clk
 add_connection sys_clk.clk_reset sys_id.reset
 
 # gpio-bd
 
-add_instance sys_gpio_bd altera_avalon_pio 16.0
+add_instance sys_gpio_bd altera_avalon_pio
 set_instance_parameter_value sys_gpio_bd {direction} {InOut}
 set_instance_parameter_value sys_gpio_bd {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_bd {width} {32}
@@ -252,7 +252,7 @@ set_interface_property sys_gpio_bd EXPORT_OF sys_gpio_bd.external_connection
 
 # gpio-in
 
-add_instance sys_gpio_in altera_avalon_pio 16.0
+add_instance sys_gpio_in altera_avalon_pio
 set_instance_parameter_value sys_gpio_in {direction} {Input}
 set_instance_parameter_value sys_gpio_in {generateIRQ} {1}
 set_instance_parameter_value sys_gpio_in {width} {32}
@@ -263,7 +263,7 @@ set_interface_property sys_gpio_in EXPORT_OF sys_gpio_in.external_connection
 
 # gpio-out
 
-add_instance sys_gpio_out altera_avalon_pio 16.0
+add_instance sys_gpio_out altera_avalon_pio
 set_instance_parameter_value sys_gpio_out {direction} {Output}
 set_instance_parameter_value sys_gpio_out {generateIRQ} {0}
 set_instance_parameter_value sys_gpio_out {width} {32}
@@ -274,7 +274,7 @@ set_interface_property sys_gpio_out EXPORT_OF sys_gpio_out.external_connection
 
 # spi
 
-add_instance sys_spi altera_avalon_spi 16.0
+add_instance sys_spi altera_avalon_spi
 set_instance_parameter_value sys_spi {clockPhase} {0}
 set_instance_parameter_value sys_spi {clockPolarity} {1}
 set_instance_parameter_value sys_spi {dataWidth} {8}

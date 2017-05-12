@@ -1,7 +1,7 @@
 
 # ad9152-xcvr
 
-add_instance avl_ad9152_xcvr avl_adxcvr 1.0
+add_instance avl_ad9152_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9152_xcvr {ID} {0}
 set_instance_parameter_value avl_ad9152_xcvr {TX_OR_RX_N} {1}
 set_instance_parameter_value avl_ad9152_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
@@ -44,7 +44,7 @@ add_connection sys_cpu.data_master avl_ad9152_xcvr.core_pll_reconfig
 add_connection sys_cpu.data_master avl_ad9152_xcvr.lane_pll_reconfig
 add_connection sys_cpu.data_master avl_ad9152_xcvr.ip_reconfig
 
-add_instance axi_ad9152_xcvr axi_adxcvr 1.0
+add_instance axi_ad9152_xcvr axi_adxcvr
 set_instance_parameter_value axi_ad9152_xcvr {ID} {0}
 set_instance_parameter_value axi_ad9152_xcvr {TX_OR_RX_N} {1}
 set_instance_parameter_value axi_ad9152_xcvr {NUM_OF_LANES} {4}
@@ -58,7 +58,7 @@ add_connection sys_cpu.data_master axi_ad9152_xcvr.s_axi
 
 # ad9152-core
 
-add_instance axi_ad9152_core axi_ad9152 1.0
+add_instance axi_ad9152_core axi_ad9152
 set_instance_parameter_value axi_ad9152_core {DEVICE_TYPE} {1}
 
 add_connection avl_ad9152_xcvr.core_clk axi_ad9152_core.if_tx_clk
@@ -69,7 +69,7 @@ add_connection sys_cpu.data_master axi_ad9152_core.s_axi
 
 # ad9152-unpack
 
-add_instance util_ad9152_upack util_upack 1.0
+add_instance util_ad9152_upack util_upack
 set_instance_parameter_value util_ad9152_upack {CHANNEL_DATA_WIDTH} {64}
 set_instance_parameter_value util_ad9152_upack {NUM_OF_CHANNELS} {2}
 
@@ -79,7 +79,7 @@ add_connection axi_ad9152_core.dac_ch_1 util_ad9152_upack.dac_ch_1
 
 # ad9152-dma
 
-add_instance axi_ad9152_dma axi_dmac 1.0
+add_instance axi_ad9152_dma axi_dmac
 set_instance_parameter_value axi_ad9152_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_ad9152_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9152_dma {DMA_2D_TRANSFER} {0}
@@ -100,7 +100,7 @@ add_connection sys_cpu.irq axi_ad9152_dma.interrupt_sender
 
 # ad9680-xcvr
 
-add_instance avl_ad9680_xcvr avl_adxcvr 1.0
+add_instance avl_ad9680_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9680_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9680_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9680_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
@@ -136,7 +136,7 @@ add_connection sys_cpu.data_master avl_ad9680_xcvr.ip_reconfig
 
 # ad9680-xcvr
 
-add_instance axi_ad9680_xcvr axi_adxcvr 1.0
+add_instance axi_ad9680_xcvr axi_adxcvr
 set_instance_parameter_value axi_ad9680_xcvr {ID} {1}
 set_instance_parameter_value axi_ad9680_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value axi_ad9680_xcvr {NUM_OF_LANES} {4}
@@ -150,7 +150,7 @@ add_connection sys_cpu.data_master axi_ad9680_xcvr.s_axi
 
 # ad9680
 
-add_instance axi_ad9680_core axi_ad9680 1.0
+add_instance axi_ad9680_core axi_ad9680
 
 add_connection avl_ad9680_xcvr.core_clk axi_ad9680_core.if_rx_clk
 add_connection avl_ad9680_xcvr.ip_sof axi_ad9680_core.if_rx_sof
@@ -161,7 +161,7 @@ add_connection sys_cpu.data_master axi_ad9680_core.s_axi
 
 # ad9680-pack
 
-add_instance util_ad9680_cpack util_cpack 1.0
+add_instance util_ad9680_cpack util_cpack
 set_instance_parameter_value util_ad9680_cpack {CHANNEL_DATA_WIDTH} {64}
 set_instance_parameter_value util_ad9680_cpack {NUM_OF_CHANNELS} {2}
 
@@ -173,7 +173,7 @@ add_connection axi_ad9680_core.adc_ch_1 util_ad9680_cpack.adc_ch_1
 
 # ad9680-fifo
 
-add_instance ad9680_adcfifo util_adcfifo 1.0
+add_instance ad9680_adcfifo util_adcfifo
 set_instance_parameter_value ad9680_adcfifo {ADC_DATA_WIDTH} {128}
 set_instance_parameter_value ad9680_adcfifo {DMA_DATA_WIDTH} {128}
 set_instance_parameter_value ad9680_adcfifo {DMA_ADDRESS_WIDTH} {16}
@@ -187,7 +187,7 @@ add_connection sys_ddr3_cntrl.emif_usr_clk ad9680_adcfifo.if_dma_clk
 
 # ad9680-dma
 
-add_instance axi_ad9680_dma axi_dmac 1.0
+add_instance axi_ad9680_dma axi_dmac
 set_instance_parameter_value axi_ad9680_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_ad9680_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9680_dma {DMA_LENGTH_WIDTH} {24}
@@ -213,7 +213,7 @@ add_connection sys_cpu.irq axi_ad9680_dma.interrupt_sender
 
 # reconfig sharing
 
-add_instance avl_adxcfg_0 avl_adxcfg 1.0
+add_instance avl_adxcfg_0 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_0.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_0.rcfg_reset_n
 add_connection sys_cpu.data_master avl_adxcfg_0.rcfg_s0
@@ -221,7 +221,7 @@ add_connection sys_cpu.data_master avl_adxcfg_0.rcfg_s1
 add_connection avl_adxcfg_0.rcfg_m0 avl_ad9152_xcvr.phy_reconfig_0
 add_connection avl_adxcfg_0.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_0
 
-add_instance avl_adxcfg_1 avl_adxcfg 1.0
+add_instance avl_adxcfg_1 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_1.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_1.rcfg_reset_n
 add_connection sys_cpu.data_master avl_adxcfg_1.rcfg_s0
@@ -229,7 +229,7 @@ add_connection sys_cpu.data_master avl_adxcfg_1.rcfg_s1
 add_connection avl_adxcfg_1.rcfg_m0 avl_ad9152_xcvr.phy_reconfig_1
 add_connection avl_adxcfg_1.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_1
 
-add_instance avl_adxcfg_2 avl_adxcfg 1.0
+add_instance avl_adxcfg_2 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_2.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_2.rcfg_reset_n
 add_connection sys_cpu.data_master avl_adxcfg_2.rcfg_s0
@@ -237,7 +237,7 @@ add_connection sys_cpu.data_master avl_adxcfg_2.rcfg_s1
 add_connection avl_adxcfg_2.rcfg_m0 avl_ad9152_xcvr.phy_reconfig_2
 add_connection avl_adxcfg_2.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_2
 
-add_instance avl_adxcfg_3 avl_adxcfg 1.0
+add_instance avl_adxcfg_3 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_3.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_3.rcfg_reset_n
 add_connection sys_cpu.data_master avl_adxcfg_3.rcfg_s0
