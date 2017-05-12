@@ -9,6 +9,16 @@ set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
+# version check
+
+set REQUIRED_QUARTUS_VERSION "2016.2"
+set QUARTUS_VERSION $quartus(version)
+if {[string compare $QUARTUS_VERSION $REQUIRED_QUARTUS_VERSION] != 0} {
+  puts -nonewline "Critical Warning: quartus version mismatch; "
+  puts -nonewline "expected $REQUIRED_QUARTUS_VERSION, "
+  puts -nonewline "got $QUARTUS_VERSION.\n"
+}
+
 # library paths
 
 set ad_lib_folders "$ad_hdl_dir/library/**/*;$ad_phdl_dir/library/**/*"
