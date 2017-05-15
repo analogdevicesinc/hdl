@@ -45,7 +45,7 @@ add_connection sys_clk.clk_reset sys_tlb_mem.reset2
 add_instance sys_ddr3_cntrl altera_emif
 set_instance_parameter_value sys_ddr3_cntrl {PROTOCOL_ENUM} {PROTOCOL_DDR3}
 set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_CONFIG_ENUM} {CONFIG_PHY_AND_HARD_CTRL}
-set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_MEM_CLK_FREQ_MHZ} {533.333}
+set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_MEM_CLK_FREQ_MHZ} {1066.667}
 set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_DEFAULT_REF_CLK_FREQ} {0}
 set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_USER_REF_CLK_FREQ_MHZ} {133.333}
 set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_DEFAULT_IO} {0}
@@ -56,7 +56,7 @@ set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_USER_CK_MODE_ENUM} {CURREN
 set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_USER_DATA_IO_STD_ENUM} {IO_STD_SSTL_15}
 set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_USER_DATA_OUT_MODE_ENUM} {OUT_OCT_34_CAL}
 set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_USER_RZQ_IO_STD_ENUM} {IO_STD_CMOS_15}
-set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_USER_DATA_IN_MODE_ENUM} {IN_OCT_40_CAL}
+set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_USER_DATA_IN_MODE_ENUM} {IN_OCT_120_CAL}
 set_instance_parameter_value sys_ddr3_cntrl {PHY_DDR3_USER_PLL_REF_CLK_IO_STD_ENUM} {IO_STD_LVDS}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_FORMAT_ENUM} {MEM_FORMAT_UDIMM}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_DQ_WIDTH} {64}
@@ -64,11 +64,11 @@ set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_ROW_ADDR_WIDTH} {12}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_COL_ADDR_WIDTH} {10}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_BANK_ADDR_WIDTH} {3}
 set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_DM_EN} {1}
-set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_TCL} {13}
-set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_WTCL} {9}
-set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_TRCD_NS} {10.285}
-set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_TRP_NS} {10.285}
-set_instance_parameter_value sys_ddr3_cntrl {BOARD_DDR3_USER_RCLK_SLEW_RATE} {4.0}
+set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_TCL} {14}
+set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_WTCL} {10}
+set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_TRCD_NS} {13.09}
+set_instance_parameter_value sys_ddr3_cntrl {MEM_DDR3_TRP_NS} {13.09}
+set_instance_parameter_value sys_ddr3_cntrl {BOARD_DDR3_USER_RCLK_SLEW_RATE} {5.0}
 set_instance_parameter_value sys_ddr3_cntrl {SHORT_QSYS_INTERFACE_NAMES} {1}
 add_connection sys_clk.clk_reset sys_ddr3_cntrl.global_reset_n
 add_interface sys_ddr3_cntrl_mem conduit end
