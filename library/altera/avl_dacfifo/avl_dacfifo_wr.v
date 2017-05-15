@@ -76,6 +76,7 @@ module avl_dacfifo_wr #(
   wire    [AVL_DATA_WIDTH-1:0]          avl_mem_rdata_s;
   wire                                  avl_mem_fetch_wr_address_s;
   wire                                  avl_mem_readen_s;
+  wire    [AVL_MEM_ADDRESS_WIDTH :0]    avl_mem_address_diff_s;
   wire                                  avl_write_transfer_s;
   wire                                  avl_last_transfer_req_s;
   wire                                  avl_xfer_req_init_s;
@@ -96,7 +97,6 @@ module avl_dacfifo_wr #(
   reg     [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address;
   reg     [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_g;
   reg     [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_wr_address;
-  reg     [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_wr_address_next;
   reg                                   avl_mem_fetch_wr_address;
   reg                                   avl_mem_fetch_wr_address_m1;
   reg                                   avl_mem_fetch_wr_address_m2;
@@ -250,21 +250,20 @@ module avl_dacfifo_wr #(
       avl_mem_fetch_wr_address_m2 <= 0;
       avl_mem_fetch_wr_address <= 0;
       avl_mem_wr_address <= 0;
-      avl_mem_wr_address_next <= 0;
     end else begin
       avl_mem_fetch_wr_address_m1 <= dma_mem_read_control;
       avl_mem_fetch_wr_address_m2 <= avl_mem_fetch_wr_address_m1;
       avl_mem_fetch_wr_address <= avl_mem_fetch_wr_address_m2;
       if (avl_mem_fetch_wr_address_s == 1'b1) begin
         avl_mem_wr_address <= dma_mem_wr_address_d;
-        avl_mem_wr_address_next <= avl_mem_wr_address + 1;
       end
     end
   end
 
   // Avalon write address and fifo read address generation
 
-  assign avl_mem_readen_s = (avl_mem_rd_address == avl_mem_wr_address_next) ? 0 : avl_write_xfer_req;
+  assign avl_mem_address_diff_s = {1'b1, avl_mem_wr_address} - avl_mem_rd_address;
+  assign avl_mem_readen_s = (avl_mem_address_diff_s[AVL_MEM_ADDRESS_WIDTH-1:0] == 0) ? 0 : (avl_write_xfer_req & avl_ready);
   assign avl_write_transfer_s = avl_write & avl_ready;
   assign avl_write_transfer_done_s = avl_write_transfer & ~avl_write_transfer_s;
 
