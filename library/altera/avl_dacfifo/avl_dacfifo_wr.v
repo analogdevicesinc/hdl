@@ -81,6 +81,7 @@ module avl_dacfifo_wr #(
   wire                                  avl_last_transfer_req_s;
   wire                                  avl_xfer_req_init_s;
   wire                                  avl_write_transfer_done_s;
+  wire                                  avl_pending_write_cycle_s;
 
   reg     [DMA_MEM_ADDRESS_WIDTH-1:0]   dma_mem_wr_address;
   reg     [AVL_MEM_ADDRESS_WIDTH-1:0]   dma_mem_wr_address_d;
@@ -100,7 +101,7 @@ module avl_dacfifo_wr #(
   reg                                   avl_mem_fetch_wr_address;
   reg                                   avl_mem_fetch_wr_address_m1;
   reg                                   avl_mem_fetch_wr_address_m2;
-  reg                                   avl_write_d;
+  reg     [ 1:0]                        avl_write_d;
   reg                                   avl_mem_readen;
   reg                                   avl_write_transfer;
   reg                                   avl_last_beat_req_m1;
@@ -292,6 +293,10 @@ module avl_dacfifo_wr #(
   // avalon write signaling
 
   assign avl_last_transfer_req_s = avl_last_beat_req & ~avl_mem_readen;
+  assign avl_pending_write_cycle_s = ~avl_write & ~avl_write_d[0] & ~avl_write_d[1];
+
+  // min distance between two consecutive writes is three avalon clock cycles,
+  // this constraint comes from ad_mem_asym
 
   always @(negedge avl_clk) begin
     if (avl_reset == 1'b1) begin
@@ -300,12 +305,12 @@ module avl_dacfifo_wr #(
     end else begin
       if ((((avl_mem_readen == 1'b1) && (avl_write_xfer_req == 1'b1)) ||
           ((avl_last_transfer_req_s == 1'b1) && (avl_write_xfer_req == 1'b1)))   &&
-           (avl_write == 1'b0) && (avl_write_d == 1'b0)) begin
+           (avl_pending_write_cycle_s == 1'b1)) begin
         avl_write <= 1'b1;
       end else if (avl_write_transfer == 1'b1) begin
         avl_write <= 1'b0;
       end
-      avl_write_d <= avl_write;
+      avl_write_d <= {avl_write_d[0], avl_write};
     end
   end
 
