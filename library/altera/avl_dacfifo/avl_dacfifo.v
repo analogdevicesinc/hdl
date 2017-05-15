@@ -49,7 +49,7 @@ module avl_dacfifo #(
   input                                 dac_valid,
   output  reg [(DAC_DATA_WIDTH-1):0]    dac_data,
   output  reg                           dac_dunf,
-  output  reg                           dac_xfer_out,
+  output                                dac_xfer_out,
 
   input                                 bypass,
 
@@ -77,6 +77,7 @@ module avl_dacfifo #(
   reg                                   dac_bypass_m1 = 1'b0;
   reg                                   dac_bypass = 1'b0;
   reg                                   dac_xfer_out_m1 = 1'b0;
+  reg                                   dac_xfer_out_int = 1'b0;
   reg                                   dac_xfer_out_bypass = 1'b0;
   reg                                   avl_xfer_wren = 1'b0;
   reg                                   avl_dma_xfer_req = 1'b0;
@@ -238,7 +239,7 @@ module avl_dacfifo #(
       if (dac_valid) begin
         dac_data <= (dac_bypass) ? dac_data_bypass_s : dac_data_fifo_s;
       end
-      dac_xfer_out <= (dac_bypass) ? dac_xfer_out_bypass : dac_xfer_fifo_out_s;
+      dac_xfer_out_int <= (dac_bypass) ? dac_xfer_out_bypass : dac_xfer_fifo_out_s;
       dac_dunf <= (dac_bypass) ? dac_dunf_bypass_s : dac_dunf_fifo_s;
     end
 
@@ -251,13 +252,28 @@ module avl_dacfifo #(
       if (dac_valid) begin
         dac_data <= dac_data_fifo_s;
       end
-      dac_xfer_out <= dac_xfer_fifo_out_s;
+      dac_xfer_out_int <= dac_xfer_fifo_out_s;
       dac_dunf <= dac_dunf_fifo_s;
     end
 
   end
   endgenerate
 
+  // the ad_mem_asym memory read interface has a 3 clock cycle delay, from the
+  // moment of the address change until a valid data arrives on the bus;
+  // because the dac_xfer_out is going to validate the outgoing samples (in conjunction
+  // with the DAC VALID, which is free a running signal), this module will compensate
+  // this delay, to prevent duplicated samples in the beginning of the
+  // transaction
+
+  util_delay #(
+    .DATA_WIDTH(1),
+    .DELAY_CYCLES(3)
+  ) i_delay (
+    .clk(dac_clk),
+    .reset(dac_reset),
+    .din(dac_xfer_out_int),
+    .dout(dac_xfer_out));
 
 endmodule
 

@@ -7,6 +7,7 @@ ad_ip_create avl_dacfifo {Avalon DDR DAC Fifo}
 ad_ip_files avl_dacfifo [list\
   $ad_hdl_dir/library/altera/common/ad_mem_asym.v \
   $ad_hdl_dir/library/common/util_dacfifo_bypass.v \
+  $ad_hdl_dir/library/common/util_delay.v \
   avl_dacfifo_wr.v \
   avl_dacfifo_rd.v \
   avl_dacfifo.v \
