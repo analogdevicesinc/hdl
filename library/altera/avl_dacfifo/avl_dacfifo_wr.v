@@ -43,7 +43,7 @@ module avl_dacfifo_wr #(
   input                                 avl_clk,
   input                                 avl_reset,
   output  reg [24:0]                    avl_address,
-  output  reg [ 5:0]                    avl_burstcount,
+  output      [ 5:0]                    avl_burstcount,
   output  reg [63:0]                    avl_byteenable,
   input                                 avl_ready,
   output  reg                           avl_write,
@@ -77,7 +77,7 @@ module avl_dacfifo_wr #(
   wire                                  avl_mem_fetch_wr_address_s;
   wire                                  avl_mem_readen_s;
   wire                                  avl_write_transfer_s;
-  wire                                  avl_last_transfer_req;
+  wire                                  avl_last_transfer_req_s;
   wire                                  avl_xfer_req_init_s;
   wire                                  avl_write_transfer_done_s;
 
@@ -104,6 +104,7 @@ module avl_dacfifo_wr #(
   reg                                   avl_mem_readen;
   reg                                   avl_write_transfer;
   reg                                   avl_last_beat_req_m1;
+  reg                                   avl_last_beat_req_m2;
   reg                                   avl_last_beat_req;
   reg                                   avl_dma_xfer_req;
   reg                                   avl_dma_xfer_req_m1;
@@ -112,6 +113,7 @@ module avl_dacfifo_wr #(
   reg     [MEM_WIDTH_DIFF-1:0]          avl_last_beats_m1;
   reg     [MEM_WIDTH_DIFF-1:0]          avl_last_beats_m2;
   reg                                   avl_write_xfer_req;
+  reg                                   avl_write_xfer_req_d;
 
   // binary to grey conversion
 
@@ -290,7 +292,7 @@ module avl_dacfifo_wr #(
 
   // avalon write signaling
 
-  assign avl_last_transfer_req = avl_last_beat_req & ~avl_mem_readen;
+  assign avl_last_transfer_req_s = avl_last_beat_req & ~avl_mem_readen;
 
   always @(negedge avl_clk) begin
     if (avl_reset == 1'b1) begin
@@ -298,7 +300,7 @@ module avl_dacfifo_wr #(
       avl_write_d <= 1'b0;
     end else begin
       if ((((avl_mem_readen == 1'b1) && (avl_write_xfer_req == 1'b1)) ||
-          ((avl_last_transfer_req == 1'b1) && (avl_write_xfer_req == 1'b1)))   &&
+          ((avl_last_transfer_req_s == 1'b1) && (avl_write_xfer_req == 1'b1)))   &&
            (avl_write == 1'b0) && (avl_write_d == 1'b0)) begin
         avl_write <= 1'b1;
       end else if (avl_write_transfer == 1'b1) begin
@@ -313,23 +315,27 @@ module avl_dacfifo_wr #(
   always @(posedge avl_clk) begin
     if (avl_reset == 1'b1) begin
       avl_last_beat_req_m1 <= 1'b0;
+      avl_last_beat_req_m2 <= 1'b0;
       avl_last_beat_req <= 1'b0;
       avl_write_xfer_req <= 1'b0;
+      avl_write_xfer_req_d <= 1'b0;
       avl_dma_xfer_req_m1 <= 1'b0;
       avl_dma_xfer_req_m2 <= 1'b0;
       avl_dma_xfer_req <= 1'b0;
     end else begin
       avl_last_beat_req_m1 <= dma_last_beat_ack;
-      avl_last_beat_req <= avl_last_beat_req_m1;
+      avl_last_beat_req_m2 <= avl_last_beat_req_m1;
+      avl_last_beat_req <= avl_last_beat_req_m2;
       avl_dma_xfer_req_m1 <= dma_xfer_req;
       avl_dma_xfer_req_m2 <= avl_dma_xfer_req_m1;
       avl_dma_xfer_req <= avl_dma_xfer_req_m2;
       if (avl_xfer_req_init_s == 1'b1) begin
         avl_write_xfer_req <= 1'b1;
-      end else if ((avl_last_transfer_req == 1'b1) &&
+      end else if ((avl_last_transfer_req_s == 1'b1) &&
                   (avl_write_transfer == 1'b1)) begin
         avl_write_xfer_req <= 1'b0;
       end
+      avl_write_xfer_req_d <= avl_write_xfer_req;
     end
   end
 
@@ -348,7 +354,7 @@ module avl_dacfifo_wr #(
   end
 
   always @(posedge avl_clk) begin
-    if (avl_last_transfer_req == 1'b1) begin
+    if (avl_last_transfer_req_s == 1'b1) begin
       case (avl_last_beats)
         0 : begin
           case (MEM_RATIO)
@@ -459,8 +465,9 @@ module avl_dacfifo_wr #(
     end else begin
       avl_byteenable <= {64{1'b1}};
     end
-    avl_burstcount <= 6'b1;
   end
+
+  assign avl_burstcount = 6'b1;
 
   // save the last address and byteenable
 
@@ -469,7 +476,7 @@ module avl_dacfifo_wr #(
       avl_last_address <= 0;
       avl_last_byteenable <= 0;
     end else begin
-      if ((avl_write == 1'b1) && (avl_last_transfer_req == 1'b1)) begin
+      if ((avl_write == 1'b1) && (avl_last_transfer_req_s == 1'b1)) begin
         avl_last_address <= avl_address;
         avl_last_byteenable <= avl_byteenable;
       end
@@ -483,7 +490,7 @@ module avl_dacfifo_wr #(
     if (avl_reset == 1'b1) begin
       avl_xfer_req <= 1'b0;
     end else begin
-      if ((avl_last_transfer_req == 1'b1) &&
+      if ((avl_last_transfer_req_s == 1'b1) &&
          (avl_write_transfer == 1'b1)) begin
         avl_xfer_req <= 1'b1;
       end else if ((avl_xfer_req == 1'b1) && (avl_dma_xfer_req == 1'b1)) begin
