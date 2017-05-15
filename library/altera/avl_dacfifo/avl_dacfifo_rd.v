@@ -54,11 +54,12 @@ module avl_dacfifo_rd #(
 
   // Max supported MEM_RATIO is 16
   localparam  MEM_RATIO = AVL_DATA_WIDTH/DAC_DATA_WIDTH;
-  localparam  AVL_MEM_ADDRESS_WIDTH = (MEM_RATIO == 1) ?  DAC_MEM_ADDRESS_WIDTH :
-                                      (MEM_RATIO == 2) ? (DAC_MEM_ADDRESS_WIDTH - 1) :
-                                      (MEM_RATIO == 4) ? (DAC_MEM_ADDRESS_WIDTH - 2) :
-                                      (MEM_RATIO == 8) ? (DAC_MEM_ADDRESS_WIDTH - 3) :
-                                                         (DAC_MEM_ADDRESS_WIDTH - 4);
+  localparam  AVL_MEM_ADDRESS_WIDTH = (MEM_RATIO ==  1) ?  DAC_MEM_ADDRESS_WIDTH :
+                                      (MEM_RATIO ==  2) ? (DAC_MEM_ADDRESS_WIDTH - 1) :
+                                      (MEM_RATIO ==  4) ? (DAC_MEM_ADDRESS_WIDTH - 2) :
+                                      (MEM_RATIO ==  8) ? (DAC_MEM_ADDRESS_WIDTH - 3) :
+                                      (MEM_RATIO == 16) ? (DAC_MEM_ADDRESS_WIDTH - 4) :
+                                                          (DAC_MEM_ADDRESS_WIDTH - 5);
   localparam  AVL_MEM_THRESHOLD_LO = 8;
   localparam  AVL_MEM_THRESHOLD_HI = {(AVL_MEM_ADDRESS_WIDTH){1'b1}} - 7;
 
@@ -232,11 +233,12 @@ module avl_dacfifo_rd #(
   // control the FIFO to prevent overflow, underfloq is monitored
   // ==========================================================================
 
-  assign avl_mem_rd_address_s = (MEM_RATIO == 1) ? avl_mem_rd_address :
-                                (MEM_RATIO == 2) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):1] :
-                                (MEM_RATIO == 4) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):2] :
-                                (MEM_RATIO == 8) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):3] :
-                                                   avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):4];
+  assign avl_mem_rd_address_s = (MEM_RATIO ==  1) ? avl_mem_rd_address :
+                                (MEM_RATIO ==  2) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):1] :
+                                (MEM_RATIO ==  4) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):2] :
+                                (MEM_RATIO ==  8) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):3] :
+                                (MEM_RATIO == 16) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):4] :
+                                                    avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):5];
 
   assign avl_mem_address_diff_s = {1'b1, avl_mem_wr_address} - avl_mem_rd_address_s;
 
@@ -266,11 +268,12 @@ module avl_dacfifo_rd #(
   // ready, data will be dropped
   // ==========================================================================
 
-  assign dac_mem_wr_address_s = (MEM_RATIO == 1) ?  dac_mem_wr_address :
-                                (MEM_RATIO == 2) ? {dac_mem_wr_address, 1'b0} :
-                                (MEM_RATIO == 4) ? {dac_mem_wr_address, 2'b0} :
-                                (MEM_RATIO == 8) ? {dac_mem_wr_address, 3'b0} :
-                                                   {dac_mem_wr_address, 4'b0};
+  assign dac_mem_wr_address_s = (MEM_RATIO ==  1) ?  dac_mem_wr_address :
+                                (MEM_RATIO ==  2) ? {dac_mem_wr_address, 1'b0} :
+                                (MEM_RATIO ==  4) ? {dac_mem_wr_address, 2'b0} :
+                                (MEM_RATIO ==  8) ? {dac_mem_wr_address, 3'b0} :
+                                (MEM_RATIO == 16) ? {dac_mem_wr_address, 4'b0} :
+                                                    {dac_mem_wr_address, 5'b0};
 
   assign dac_mem_address_diff_s = {1'b1, dac_mem_wr_address_s} - dac_mem_rd_address;
 
