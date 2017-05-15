@@ -292,7 +292,7 @@ module avl_dacfifo_wr #(
 
   // avalon write signaling
 
-  assign avl_last_transfer_req_s = avl_last_beat_req & ~avl_mem_readen;
+  assign avl_last_transfer_req_s = avl_last_beat_req & ~avl_mem_readen & ~avl_xfer_req;
   assign avl_pending_write_cycle_s = ~avl_write & ~avl_write_d[0] & ~avl_write_d[1];
 
   // min distance between two consecutive writes is three avalon clock cycles,
@@ -494,8 +494,7 @@ module avl_dacfifo_wr #(
     if (avl_reset == 1'b1) begin
       avl_xfer_req <= 1'b0;
     end else begin
-      if ((avl_last_transfer_req_s == 1'b1) &&
-         (avl_write_transfer == 1'b1)) begin
+      if ((avl_write_xfer_req == 0) && (avl_write_xfer_req_d == 1)) begin
         avl_xfer_req <= 1'b1;
       end else if ((avl_xfer_req == 1'b1) && (avl_dma_xfer_req == 1'b1)) begin
         avl_xfer_req <= 1'b0;
