@@ -44,7 +44,7 @@ module avl_dacfifo_wr #(
   input                                 avl_reset,
   output  reg [24:0]                    avl_address,
   output      [ 5:0]                    avl_burstcount,
-  output  reg [63:0]                    avl_byteenable,
+  output      [63:0]                    avl_byteenable,
   input                                 avl_ready,
   output  reg                           avl_write,
   output  reg [AVL_DATA_WIDTH-1:0]      avl_data,
@@ -354,186 +354,18 @@ module avl_dacfifo_wr #(
     end else begin
       avl_last_beats_m1 <= dma_mem_last_beats;
       avl_last_beats_m2 <= avl_last_beats_m1;
-      avl_last_beats <= (avl_last_beat_req == 1'b1) ? avl_last_beats_m2 : avl_last_beats;
+      avl_last_beats <= (avl_last_beat_req_s == 1'b1) ? avl_last_beats_m2 : avl_last_beats;
     end
   end
 
-  always @(posedge avl_clk) begin
-    if (avl_last_transfer_req_s == 1'b1) begin
-      case (avl_last_beats)
-        0 : begin
-          case (MEM_RATIO)
-             2 : avl_byteenable <= {32'b0, {32{1'b1}}};
-             4 : avl_byteenable <= {48'b0, {16{1'b1}}};
-             8 : avl_byteenable <= {56'b0, {8{1'b1}}};
-            16 : avl_byteenable <= {60'b0, {4{1'b1}}};
-            32 : avl_byteenable <= {62'b0, {2{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        1 : begin
-          case (MEM_RATIO)
-             4 : avl_byteenable <= {32'b0, {32{1'b1}}};
-             8 : avl_byteenable <= {48'b0, {16{1'b1}}};
-            16 : avl_byteenable <= {56'b0, {8{1'b1}}};
-            32 : avl_byteenable <= {60'b0, {4{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        2 : begin
-          case (MEM_RATIO)
-             4 : avl_byteenable <= {16'b0, {48{1'b1}}};
-             8 : avl_byteenable <= {40'b0, {24{1'b1}}};
-            16 : avl_byteenable <= {52'b0, {12{1'b1}}};
-            32 : avl_byteenable <= {58'b0, {6{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        3 : begin
-          case (MEM_RATIO)
-             8 : avl_byteenable <= {32'b0, {32{1'b1}}};
-            16 : avl_byteenable <= {48'b0, {16{1'b1}}};
-            32 : avl_byteenable <= {56'b0, {8{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        4 : begin
-          case (MEM_RATIO)
-             8 : avl_byteenable <= {24'b0, {40{1'b1}}};
-            16 : avl_byteenable <= {44'b0, {20{1'b1}}};
-            32 : avl_byteenable <= {54'b0, {10{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        5 : begin
-          case (MEM_RATIO)
-             8 : avl_byteenable <= {16'b0, {48{1'b1}}};
-            16 : avl_byteenable <= {40'b0, {24{1'b1}}};
-            32 : avl_byteenable <= {52'b0, {12{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        6 : begin
-          case (MEM_RATIO)
-             8 : avl_byteenable <= {8'b0, {56{1'b1}}};
-            16 : avl_byteenable <= {36'b0, {28{1'b1}}};
-            32 : avl_byteenable <= {50'b0, {14{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        7 : begin
-          case (MEM_RATIO)
-            16 : avl_byteenable <= {32'b0, {32{1'b1}}};
-            32 : avl_byteenable <= {48'b0, {16{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        8 : begin
-          case (MEM_RATIO)
-            16 : avl_byteenable <= {28'b0, {36{1'b1}}};
-            32 : avl_byteenable <= {46'b0, {18{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        9 : begin
-          case (MEM_RATIO)
-            16 : avl_byteenable <= {24'b0, {40{1'b1}}};
-            32 : avl_byteenable <= {44'b0, {20{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        10 : begin
-          case (MEM_RATIO)
-            16 : avl_byteenable <= {20'b0, {44{1'b1}}};
-            32 : avl_byteenable <= {42'b0, {22{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        11 : begin
-          case (MEM_RATIO)
-            16 : avl_byteenable <= {16'b0, {48{1'b1}}};
-            32 : avl_byteenable <= {40'b0, {24{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        12 : begin
-          case (MEM_RATIO)
-            16 : avl_byteenable <= {12'b0, {52{1'b1}}};
-            32 : avl_byteenable <= {38'b0, {26{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        13 : begin
-          case (MEM_RATIO)
-            16 : avl_byteenable <= {8'b0, {56{1'b1}}};
-            32 : avl_byteenable <= {36'b0, {28{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        14 : begin
-          case (MEM_RATIO)
-            16 : avl_byteenable <= {4'b0, {60{1'b1}}};
-            32 : avl_byteenable <= {34'b0, {30{1'b1}}};
-            default : avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        15 : begin
-          case (MEM_RATIO)
-            32 : avl_byteenable <= {32'b0, {32{1'b1}}};
-            default: avl_byteenable <= {64{1'b1}};
-          endcase
-        end
-        16 : begin
-          avl_byteenable <= {30'b0, {34{1'b1}}};
-        end
-        17 : begin
-          avl_byteenable <= {28'b0, {36{1'b1}}};
-        end
-        18 : begin
-          avl_byteenable <= {26'b0, {38{1'b1}}};
-        end
-        19 : begin
-          avl_byteenable <= {24'b0, {40{1'b1}}};
-        end
-        20 : begin
-          avl_byteenable <= {22'b0, {42{1'b1}}};
-        end
-        21 : begin
-          avl_byteenable <= {20'b0, {44{1'b1}}};
-        end
-        22 : begin
-          avl_byteenable <= {18'b0, {46{1'b1}}};
-        end
-        23 : begin
-          avl_byteenable <= {16'b0, {48{1'b1}}};
-        end
-        24 : begin
-          avl_byteenable <= {14'b0, {50{1'b1}}};
-        end
-        25 : begin
-          avl_byteenable <= {12'b0, {52{1'b1}}};
-        end
-        26 : begin
-          avl_byteenable <= {10'b0, {54{1'b1}}};
-        end
-        27 : begin
-          avl_byteenable <= {8'b0, {56{1'b1}}};
-        end
-        28 : begin
-          avl_byteenable <= {6'b0, {58{1'b1}}};
-        end
-        29 : begin
-          avl_byteenable <= {4'b0, {60{1'b1}}};
-        end
-        30 : begin
-          avl_byteenable <= {2'b0, {62{1'b1}}};
-        end
-        default : avl_byteenable <= {64{1'b1}};
-      endcase
-    end else begin
-      avl_byteenable <= {64{1'b1}};
-    end
-  end
+  avl_dacfifo_byteenable_coder #(
+    .MEM_RATIO(MEM_RATIO),
+    .LAST_BEATS_WIDTH(MEM_WIDTH_DIFF)
+  ) i_byteenable_coder (
+    .avl_clk (avl_clk),
+    .avl_last_beats (avl_last_beats),
+    .avl_enable (avl_last_transfer_req_s),
+    .avl_byteenable (avl_byteenable));
 
   assign avl_burstcount = 6'b1;
 
