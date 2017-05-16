@@ -103,7 +103,6 @@ module axi_ad6676 #(
 
   // internal clocks & resets
 
-  wire            adc_rst;
   wire            up_rstn;
   wire            up_clk;
 

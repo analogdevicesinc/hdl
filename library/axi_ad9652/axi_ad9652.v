@@ -108,7 +108,6 @@ module axi_ad9652 #(
 
   // internal clocks & resets
 
-  wire            adc_rst;
   wire            up_rstn;
   wire            up_clk;
   wire            delay_rst;
