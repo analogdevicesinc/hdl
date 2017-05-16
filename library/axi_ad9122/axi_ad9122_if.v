@@ -146,6 +146,7 @@ module axi_ad9122_if #(
     .data_s5 (dac_data_q2),
     .data_s6 (dac_data_i3),
     .data_s7 (dac_data_q3),
+    .data_out_se (),
     .data_out_p (dac_data_out_p),
     .data_out_n (dac_data_out_n));
 
@@ -168,6 +169,7 @@ module axi_ad9122_if #(
     .data_s5 (dac_frame_q2),
     .data_s6 (dac_frame_i3),
     .data_s7 (dac_frame_q3),
+    .data_out_se (),
     .data_out_p (dac_frame_out_p),
     .data_out_n (dac_frame_out_n));
 
@@ -190,6 +192,7 @@ module axi_ad9122_if #(
     .data_s5 (1'b0),
     .data_s6 (1'b1),
     .data_s7 (1'b0),
+    .data_out_se (),
     .data_out_p (dac_clk_out_p),
     .data_out_n (dac_clk_out_n));
 

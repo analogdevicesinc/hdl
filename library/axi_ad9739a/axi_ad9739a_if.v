@@ -105,6 +105,7 @@ module axi_ad9739a_if #(
   ad_serdes_out #(
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(14),
+    .SERDES_FACTOR(8),
     .DEVICE_TYPE (DEVICE_TYPE))
   i_serdes_out_data_a (
     .rst (dac_rst),
@@ -119,6 +120,7 @@ module axi_ad9739a_if #(
     .data_s5 (dac_data_10[15:2]),
     .data_s6 (dac_data_12[15:2]),
     .data_s7 (dac_data_14[15:2]),
+    .data_out_se (),
     .data_out_p (dac_data_out_a_p),
     .data_out_n (dac_data_out_a_n));
 
@@ -127,6 +129,7 @@ module axi_ad9739a_if #(
   ad_serdes_out #(
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(14),
+    .SERDES_FACTOR(8),
     .DEVICE_TYPE (DEVICE_TYPE))
   i_serdes_out_data_b (
     .rst (dac_rst),
@@ -141,6 +144,7 @@ module axi_ad9739a_if #(
     .data_s5 (dac_data_11[15:2]),
     .data_s6 (dac_data_13[15:2]),
     .data_s7 (dac_data_15[15:2]),
+    .data_out_se (),
     .data_out_p (dac_data_out_b_p),
     .data_out_n (dac_data_out_b_n));
 
@@ -149,6 +153,7 @@ module axi_ad9739a_if #(
   ad_serdes_out #(
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(1),
+    .SERDES_FACTOR(8),
     .DEVICE_TYPE (DEVICE_TYPE))
   i_serdes_out_clk (
     .rst (dac_rst),
@@ -163,6 +168,7 @@ module axi_ad9739a_if #(
     .data_s5 (1'b0),
     .data_s6 (1'b1),
     .data_s7 (1'b0),
+    .data_out_se (),
     .data_out_p (dac_clk_out_p),
     .data_out_n (dac_clk_out_n));
 
