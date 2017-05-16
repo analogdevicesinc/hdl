@@ -63,7 +63,7 @@ module cic_decim (
 
   reg [15:0] rate;
 
-  wire [4:0] enable = filter_enable & {5{clk_enable}};
+  wire [4:0] enable = (clk_enable == 1'b1) ? filter_enable : 5'b0;
 
   always @(*) begin
     case (rate_sel)
