@@ -71,6 +71,8 @@ module util_tdd_sync #(
     i_tdd_sync (
     .clk (clk),
     .rstn (rstn),
+    .pulse_period (31'd0),
+    .pulse_period_en (1'd0),
     .pulse (sync_internal)
   );
 
