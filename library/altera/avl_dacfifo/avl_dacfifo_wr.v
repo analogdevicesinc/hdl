@@ -82,7 +82,6 @@ module avl_dacfifo_wr #(
   wire                                  avl_write_transfer_s;
   wire                                  avl_last_transfer_req_s;
   wire                                  avl_xfer_req_init_s;
-  wire                                  avl_write_transfer_done_s;
   wire                                  avl_pending_write_cycle_s;
 
   reg     [DMA_MEM_ADDRESS_WIDTH-1:0]   dma_mem_wr_address;
@@ -200,7 +199,7 @@ module avl_dacfifo_wr #(
         dma_mem_wr_address_d <= dma_mem_wr_address[DMA_MEM_ADDRESS_WIDTH-1:MEM_WIDTH_DIFF];
       end
     end
-    if ((dma_xfer_last == 1'b1) && (dma_mem_wea_s)) begin
+    if ((dma_xfer_last == 1'b1) && (dma_mem_wea_s == 1'b1)) begin
       dma_mem_last_beats <= dma_mem_wr_address[MEM_WIDTH_DIFF-1:0];
     end
   end
@@ -246,7 +245,7 @@ module avl_dacfifo_wr #(
 
   // transfer the mem_write address to the avalons clock domain
 
-  assign avl_mem_fetch_wr_address_s = avl_mem_fetch_wr_address ^ avl_mem_fetch_wr_address_m1;
+  assign avl_mem_fetch_wr_address_s = avl_mem_fetch_wr_address ^ avl_mem_fetch_wr_address_m2;
 
   always @(posedge avl_clk) begin
     if (avl_reset == 1'b1) begin
@@ -269,7 +268,6 @@ module avl_dacfifo_wr #(
   assign avl_mem_address_diff_s = {1'b1, avl_mem_wr_address} - avl_mem_rd_address;
   assign avl_mem_readen_s = (avl_mem_address_diff_s[AVL_MEM_ADDRESS_WIDTH-1:0] == 0) ? 0 : (avl_write_xfer_req & avl_ready);
   assign avl_write_transfer_s = avl_write & avl_ready;
-  assign avl_write_transfer_done_s = avl_write_transfer & ~avl_write_transfer_s;
 
   always @(posedge avl_clk) begin
     if ((avl_reset == 1'b1) || (avl_write_xfer_req == 1'b0)) begin
@@ -280,7 +278,7 @@ module avl_dacfifo_wr #(
       avl_mem_rd_address <= 0;
       avl_mem_rd_address_g <= 0;
     end else begin
-      if (avl_write_transfer_done_s == 1'b1) begin
+      if (avl_write_transfer == 1'b1) begin
           avl_address <= (avl_address < AVL_DDR_ADDRESS_LIMIT) ? avl_address + 1 : 0;
       end
       if (avl_write_transfer_s == 1'b1) begin
