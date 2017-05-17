@@ -120,6 +120,7 @@ add_interface sys_hps_out_rstn reset source
 set_interface_property sys_hps_out_rstn EXPORT_OF sys_hps.h2f_reset
 add_connection sys_clk.clk sys_hps.h2f_lw_axi_clock
 add_connection sys_hps.h2f_user0_clock sys_hps.f2sdram0_clock
+add_connection sys_clk.clk_reset sys_hps.f2sdram0_reset
 add_interface sys_hps_io conduit end
 set_interface_property sys_hps_io EXPORT_OF sys_hps.hps_io
 
