@@ -1,0 +1,10 @@
+#!/bin/bash
+
+SOURCE="rx_lane_tb.v "
+SOURCE+=" ../jesd204_rx/rx_lane.v ../jesd204_rx/rx_cgs.v ../jesd204_rx/elastic_buffer.v"
+SOURCE+=" ../jesd204_rx/align_mux.v ../jesd204_rx/ilas_monitor.v"
+SOURCE+=" ../jesd204_common/scrambler.v"
+SOURCE+=" ../jesd204_common/pipeline_stage.v"
+
+cd `dirname $0`
+source run_tb.sh
