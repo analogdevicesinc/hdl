@@ -23,35 +23,37 @@
 
 `timescale 1ns/100ps
 
-module up_clock_mon (
+module up_clock_mon #(
+  parameter TOTAL_WIDTH = 32
+) (
 
   // processor interface
 
-  input                   up_rstn,
-  input                   up_clk,
-  output  reg [31:0]      up_d_count,
+  input                              up_rstn,
+  input                              up_clk,
+  output  reg [TOTAL_WIDTH-1:0]      up_d_count,
 
   // device interface
 
-  input                   d_rst,
-  input                   d_clk);
+  input                              d_rst,
+  input                              d_clk);
 
   // internal registers
 
-  reg     [15:0]  up_count = 'd1;
-  reg             up_count_run = 'd0;
-  reg             up_count_running_m1 = 'd0;
-  reg             up_count_running_m2 = 'd0;
-  reg             up_count_running_m3 = 'd0;
-  reg             d_count_run_m1 = 'd0;
-  reg             d_count_run_m2 = 'd0;
-  reg             d_count_run_m3 = 'd0;
-  reg     [32:0]  d_count = 'd0;
+  reg     [15:0]           up_count = 'd1;
+  reg                      up_count_run = 'd0;
+  reg                      up_count_running_m1 = 'd0;
+  reg                      up_count_running_m2 = 'd0;
+  reg                      up_count_running_m3 = 'd0;
+  reg                      d_count_run_m1 = 'd0;
+  reg                      d_count_run_m2 = 'd0;
+  reg                      d_count_run_m3 = 'd0;
+  reg     [TOTAL_WIDTH:0]  d_count = 'd0;
 
   // internal signals
 
-  wire            up_count_capture_s;
-  wire            d_count_reset_s;
+  wire                     up_count_capture_s;
+  wire                     d_count_reset_s;
 
   // processor reference
 
@@ -118,10 +120,10 @@ module up_clock_mon (
     if (d_count_reset_s == 1'b1) begin
       d_count <= 'h00;
     end else if (d_count_run_m3 == 1'b1) begin
-      if (d_count[32] == 1'b0) begin
+      if (d_count[TOTAL_WIDTH] == 1'b0) begin
         d_count <= d_count + 1'b1;
       end else begin
-        d_count <= {33{1'b1}};
+        d_count <= {TOTAL_WIDTH+1{1'b1}};
       end
     end
   end
