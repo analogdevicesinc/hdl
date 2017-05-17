@@ -83,6 +83,8 @@ module up_clock_mon (
 
       if (up_count_capture_s == 1'b1) begin
         up_d_count <= d_count;
+      end else if (up_count == 'h00 && up_count_running_m3 == 1'b0) begin
+        up_d_count <= 'h00;
       end
     end
   end
