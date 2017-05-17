@@ -11,12 +11,12 @@
 --
 --   1. The GNU General Public License version 2 as published by the
 --      Free Software Foundation, which can be found in the top level directory, or at:
--- https:--www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+-- http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 --
 -- OR
 --
 --   2.  An ADI specific BSD license as noted in the top level directory, or on-line at:
--- https:--github.com/analogdevicesinc/hdl/blob/dev/LICENSE
+-- http://github.com/analogdevicesinc/hdl/blob/dev/LICENSE
 --
 -- ***************************************************************************
 -- ***************************************************************************
