@@ -80,7 +80,7 @@ module axi_jesd204_tx #(
   output [7:0] core_cfg_octets_per_frame,
   output [7:0] core_cfg_lmfc_offset,
   output core_cfg_sysref_oneshot,
-  output core_cfg_sysref_required,
+  output core_cfg_sysref_disable,
   output core_cfg_continuous_cgs,
   output core_cfg_continuous_ilas,
   output core_cfg_skip_ilas,
@@ -125,7 +125,7 @@ wire up_cfg_continuous_cgs;
 wire [7:0] up_cfg_mframes_per_ilas;
 wire [7:0] up_cfg_lmfc_offset;
 wire up_cfg_sysref_oneshot;
-wire up_cfg_sysref_required;
+wire up_cfg_sysref_disable;
 wire up_cfg_is_writeable;
 
 wire [4:0] up_irq_trigger;
@@ -216,7 +216,7 @@ jesd204_up_common #(
   .core_cfg_disable_char_replacement(core_cfg_disable_char_replacement),
 
   .up_extra_cfg({
-    /*    20 */ up_cfg_sysref_required,
+    /*    20 */ up_cfg_sysref_disable,
     /*    19 */ up_cfg_sysref_oneshot,
     /*    18 */ up_cfg_continuous_cgs,
     /*    17 */ up_cfg_continuous_ilas,
@@ -225,7 +225,7 @@ jesd204_up_common #(
     /* 00-07 */ up_cfg_mframes_per_ilas
   }),
   .core_extra_cfg({
-    /*    20 */ core_cfg_sysref_required,
+    /*    20 */ core_cfg_sysref_disable,
     /*    19 */ core_cfg_sysref_oneshot,
     /*    18 */ core_cfg_continuous_cgs,
     /*    17 */ core_cfg_continuous_ilas,
@@ -244,7 +244,7 @@ jesd204_up_sysref i_up_sysref (
 
   .up_cfg_lmfc_offset(up_cfg_lmfc_offset),
   .up_cfg_sysref_oneshot(up_cfg_sysref_oneshot),
-  .up_cfg_sysref_required(up_cfg_sysref_required),
+  .up_cfg_sysref_disable(up_cfg_sysref_disable),
 
   .up_raddr(up_raddr),
   .up_rdata(up_rdata_sysref),

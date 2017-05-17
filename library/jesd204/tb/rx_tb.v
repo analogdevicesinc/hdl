@@ -138,7 +138,7 @@ module rx_tb;
   wire [7:0] cfg_octets_per_frame;
   wire [7:0] cfg_lmfc_offset;
   wire cfg_sysref_oneshot;
-  wire cfg_sysref_required;
+  wire cfg_sysref_disable;
   wire cfg_buffer_early_release;
   wire cfg_disable_scrambler;
 
@@ -154,7 +154,7 @@ module rx_tb;
     .cfg_octets_per_frame(cfg_octets_per_frame),
     .cfg_lmfc_offset(cfg_lmfc_offset),
     .cfg_sysref_oneshot(cfg_sysref_oneshot),
-    .cfg_sysref_required(cfg_sysref_required),
+    .cfg_sysref_disable(cfg_sysref_disable),
     .cfg_disable_scrambler(tx_cfg_disable_scrambler),
     .cfg_buffer_early_release(rx_buffer_early_release)
   );
@@ -170,7 +170,7 @@ module rx_tb;
     .cfg_octets_per_frame(cfg_octets_per_frame),
     .cfg_lmfc_offset(cfg_lmfc_offset),
     .cfg_sysref_oneshot(cfg_sysref_oneshot),
-    .cfg_sysref_required(cfg_sysref_required),
+    .cfg_sysref_disable(cfg_sysref_disable),
     .cfg_disable_scrambler(tx_cfg_disable_scrambler),
     .cfg_buffer_early_release(rx_buffer_early_release),
 

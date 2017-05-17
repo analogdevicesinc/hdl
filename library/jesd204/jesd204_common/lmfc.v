@@ -51,9 +51,8 @@ module jesd204_lmfc (
   input [7:0] cfg_beats_per_multiframe,
   input [7:0] cfg_lmfc_offset,
   input cfg_sysref_oneshot,
-  input cfg_sysref_required,
-
   input clear_sysref_captured,
+  input cfg_sysref_disable,
 
   output reg lmfc_edge,
   output reg lmfc_clk,
@@ -93,7 +92,7 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-  if (sysref_d3 == 1'b0 && sysref_d2 == 1'b1) begin
+  if (sysref_d3 == 1'b0 && sysref_d2 == 1'b1 && cfg_sysref_disable == 1'b0) begin
     sysref_edge <= 1'b1;
   end else begin
     sysref_edge <= 1'b0;
@@ -129,8 +128,8 @@ end
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
-    lmfc_counter <= 'h00;
-    lmfc_active <= ~cfg_sysref_required;
+    lmfc_counter <= 'h01;
+    lmfc_active <= cfg_sysref_disable;
   end else begin
     /*
      * In oneshot mode only the first occurence of the
@@ -155,7 +154,7 @@ always @(posedge clk) begin
      * setting.
      */
     sysref_alignment_error <= 1'b0;
-    if (sysref_edge == 1'b1 &&
+    if (sysref_edge == 1'b1 && lmfc_active == 1'b1 &&
         lmfc_counter_next != cfg_lmfc_offset) begin
       sysref_alignment_error <= 1'b1;
     end

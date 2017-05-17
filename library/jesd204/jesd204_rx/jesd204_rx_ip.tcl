@@ -99,7 +99,7 @@ adi_add_bus "rx_cfg" "slave" \
     { "cfg_octets_per_frame" "octets_per_frame" } \
     { "cfg_lmfc_offset" "lmfc_offset" } \
     { "cfg_sysref_oneshot" "sysref_oneshot" } \
-    { "cfg_sysref_required" "sysref_required" } \
+    { "cfg_sysref_disable" "sysref_disable" } \
     { "cfg_buffer_delay" "buffer_delay" } \
     { "cfg_buffer_early_release" "buffer_early_release" } \
     { "cfg_disable_char_replacement" "disable_char_replacement" } \

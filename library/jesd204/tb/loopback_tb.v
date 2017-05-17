@@ -136,7 +136,8 @@ module loopback_tb;
   wire [7:0] tx_cfg_beats_per_multiframe;
   wire [7:0] tx_cfg_octets_per_frame;
   wire [7:0] tx_cfg_lmfc_offset;
-  wire tx_cfg_sysref_required;
+  wire tx_cfg_sysref_disable;
+  wire tx_cfg_sysref_oneshot;
   wire tx_cfg_continuous_cgs;
   wire tx_cfg_continuous_ilas;
   wire tx_cfg_skip_ilas;
@@ -160,7 +161,8 @@ module loopback_tb;
     .cfg_beats_per_multiframe(tx_cfg_beats_per_multiframe),
     .cfg_octets_per_frame(tx_cfg_octets_per_frame),
     .cfg_lmfc_offset(tx_cfg_lmfc_offset),
-    .cfg_sysref_required(tx_cfg_sysref_required),
+    .cfg_sysref_disable(tx_cfg_sysref_disable),
+    .cfg_sysref_oneshot(tx_cfg_sysref_oneshot),
     .cfg_continuous_cgs(tx_cfg_continuous_cgs),
     .cfg_continuous_ilas(tx_cfg_continuous_ilas),
     .cfg_skip_ilas(tx_cfg_skip_ilas),
@@ -183,7 +185,8 @@ module loopback_tb;
     .cfg_beats_per_multiframe(tx_cfg_beats_per_multiframe),
     .cfg_octets_per_frame(tx_cfg_octets_per_frame),
     .cfg_lmfc_offset(tx_cfg_lmfc_offset),
-    .cfg_sysref_required(tx_cfg_sysref_required),
+    .cfg_sysref_disable(tx_cfg_sysref_disable),
+    .cfg_sysref_oneshot(tx_cfg_sysref_oneshot),
     .cfg_continuous_cgs(tx_cfg_continuous_cgs),
     .cfg_continuous_ilas(tx_cfg_continuous_ilas),
     .cfg_skip_ilas(tx_cfg_skip_ilas),
@@ -211,7 +214,8 @@ module loopback_tb;
   wire [7:0] rx_cfg_beats_per_multiframe;
   wire [7:0] rx_cfg_octets_per_frame;
   wire [7:0] rx_cfg_lmfc_offset;
-  wire rx_sysref_required;
+  wire rx_sysref_disable;
+  wire rx_sysref_oneshot;
   wire rx_cfg_disable_scrambler;
   wire rx_cfg_disable_char_replacement;
   wire rx_cfg_buffer_early_release;
@@ -232,7 +236,8 @@ module loopback_tb;
     .cfg_beats_per_multiframe(rx_cfg_beats_per_multiframe),
     .cfg_octets_per_frame(rx_cfg_octets_per_frame),
     .cfg_lmfc_offset(rx_cfg_lmfc_offset),
-    .cfg_sysref_required(rx_cfg_sysref_required),
+    .cfg_sysref_disable(rx_cfg_sysref_disable),
+    .cfg_sysref_oneshot(rx_cfg_sysref_oneshot),
     .cfg_disable_scrambler(rx_cfg_disable_scrambler),
     .cfg_disable_char_replacement(rx_cfg_disable_char_replacement),
     .cfg_buffer_delay(rx_cfg_buffer_delay),
@@ -249,7 +254,8 @@ module loopback_tb;
     .cfg_beats_per_multiframe(rx_cfg_beats_per_multiframe),
     .cfg_octets_per_frame(rx_cfg_octets_per_frame),
     .cfg_lmfc_offset(rx_cfg_lmfc_offset),
-    .cfg_sysref_required(rx_cfg_sysref_required),
+    .cfg_sysref_disable(rx_cfg_sysref_disable),
+    .cfg_sysref_oneshot(rx_cfg_sysref_oneshot),
     .cfg_disable_scrambler(rx_cfg_disable_scrambler),
     .cfg_disable_char_replacement(rx_cfg_disable_char_replacement),
     .cfg_buffer_delay(rx_cfg_buffer_delay),

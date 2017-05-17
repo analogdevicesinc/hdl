@@ -80,7 +80,7 @@ adi_add_bus "rx_cfg" "master" \
     { "core_cfg_octets_per_frame" "octets_per_frame" } \
     { "core_cfg_lmfc_offset" "lmfc_offset" } \
     { "core_cfg_sysref_oneshot" "sysref_oneshot" } \
-    { "core_cfg_sysref_required" "sysref_required" } \
+    { "core_cfg_sysref_disable" "sysref_disable" } \
     { "core_cfg_buffer_early_release" "buffer_early_release" } \
     { "core_cfg_buffer_delay" "buffer_delay" } \
     { "core_cfg_disable_char_replacement" "disable_char_replacement" } \

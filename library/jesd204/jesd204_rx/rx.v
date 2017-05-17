@@ -73,7 +73,7 @@ module jesd204_rx #(
   input [7:0] cfg_beats_per_multiframe,
   input [7:0] cfg_octets_per_frame,
   input [7:0] cfg_lmfc_offset,
-  input cfg_sysref_required,
+  input cfg_sysref_disable,
   input cfg_sysref_oneshot,
   input cfg_buffer_early_release,
   input [7:0] cfg_buffer_delay,
@@ -213,7 +213,7 @@ jesd204_lmfc i_lmfc (
   .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
   .cfg_lmfc_offset(cfg_lmfc_offset),
   .cfg_sysref_oneshot(cfg_sysref_oneshot),
-  .cfg_sysref_required(cfg_sysref_required),
+  .cfg_sysref_disable(cfg_sysref_disable),
 
   .sysref(sysref),
   .lmfc_edge(lmfc_edge),

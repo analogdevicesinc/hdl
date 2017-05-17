@@ -65,7 +65,7 @@ module jesd204_tx #(
   input [7:0] cfg_octets_per_frame,
   input [7:0] cfg_lmfc_offset,
   input cfg_sysref_oneshot,
-  input cfg_sysref_required,
+  input cfg_sysref_disable,
   input cfg_continuous_cgs,
   input cfg_continuous_ilas,
   input cfg_skip_ilas,
@@ -123,7 +123,7 @@ jesd204_lmfc i_lmfc (
   .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
   .cfg_lmfc_offset(cfg_lmfc_offset),
   .cfg_sysref_oneshot(cfg_sysref_oneshot),
-  .cfg_sysref_required(cfg_sysref_required),
+  .cfg_sysref_disable(cfg_sysref_disable),
 
   .sysref(sysref),
 

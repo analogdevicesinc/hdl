@@ -59,7 +59,7 @@ module jesd204_up_sysref (
 
   output reg up_cfg_sysref_oneshot,
   output reg [7:0] up_cfg_lmfc_offset,
-  output reg up_cfg_sysref_required,
+  output reg up_cfg_sysref_disable,
 
   input core_event_sysref_alignment_error
 );
@@ -70,7 +70,11 @@ wire up_status_sysref_captured;
 always @(*) begin
   case (up_raddr)
   /* JESD SYSREF configuraton */
-  12'h040: up_rdata <= {30'h00,up_cfg_sysref_required,up_cfg_sysref_oneshot};
+  12'h040: up_rdata <= {
+    /* 02-31 */ 30'h00, /* Reserved for future use */
+    /*    01 */ up_cfg_sysref_oneshot,
+    /*    00 */ up_cfg_sysref_disable
+  };
   12'h041: up_rdata <= up_cfg_lmfc_offset;
   default: up_rdata <= 32'h00000000;
   endcase
@@ -80,13 +84,13 @@ always @(posedge up_clk) begin
   if (up_reset == 1'b1) begin
     up_cfg_sysref_oneshot <= 1'b0;
     up_cfg_lmfc_offset <= 'h00;
-    up_cfg_sysref_required <= 1'b1;
+    up_cfg_sysref_disable <= 1'b0;
   end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
     case (up_waddr)
     /* JESD SYSREF configuraton */
     12'h040: begin
-      up_cfg_sysref_required <= up_wdata[1];
-      up_cfg_sysref_oneshot <= up_wdata[0];
+      up_cfg_sysref_oneshot <= up_wdata[1];
+      up_cfg_sysref_disable <= up_wdata[0];
     end
     12'h041: up_cfg_lmfc_offset <= up_wdata[7:0];
     endcase

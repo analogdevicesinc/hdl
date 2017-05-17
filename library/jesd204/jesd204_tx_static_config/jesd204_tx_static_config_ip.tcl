@@ -62,7 +62,7 @@ adi_add_bus "tx_cfg" "master" \
     { "cfg_octets_per_frame" "octets_per_frame" } \
     { "cfg_lmfc_offset" "lmfc_offset" } \
     { "cfg_sysref_oneshot" "sysref_oneshot" } \
-    { "cfg_sysref_required" "sysref_required" } \
+    { "cfg_sysref_disable" "sysref_disable" } \
     { "cfg_continuous_cgs" "continuous_cgs" } \
     { "cfg_continuous_ilas" "continuous_ilas" } \
     { "cfg_skip_ilas" "skip_ilas" } \

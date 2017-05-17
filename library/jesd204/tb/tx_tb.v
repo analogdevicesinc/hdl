@@ -78,7 +78,7 @@ module tx_tb;
   wire [7:0] cfg_octets_per_frame;
   wire [7:0] cfg_lmfc_offset;
   wire cfg_sysref_oneshot;
-  wire cfg_sysref_required;
+  wire cfg_sysref_disable;
   wire cfg_continuous_cgs;
   wire cfg_continuous_ilas;
   wire cfg_skip_ilas;
@@ -106,7 +106,7 @@ module tx_tb;
     .cfg_disable_char_replacement(cfg_disable_char_replacement),
     .cfg_disable_scrambler(cfg_disable_scrambler),
     .cfg_sysref_oneshot(cfg_sysref_oneshot),
-    .cfg_sysref_required(cfg_sysref_required),
+    .cfg_sysref_disable(cfg_sysref_disable),
 
     .ilas_config_rd(tx_ilas_config_rd),
     .ilas_config_addr(tx_ilas_config_addr),
@@ -130,7 +130,7 @@ module tx_tb;
     .cfg_disable_char_replacement(cfg_disable_char_replacement),
     .cfg_disable_scrambler(cfg_disable_scrambler),
     .cfg_sysref_oneshot(cfg_sysref_oneshot),
-    .cfg_sysref_required(cfg_sysref_required),
+    .cfg_sysref_disable(cfg_sysref_disable),
 
     .ilas_config_rd(tx_ilas_config_rd),
     .ilas_config_addr(tx_ilas_config_addr),
