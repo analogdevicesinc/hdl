@@ -25,6 +25,7 @@
 
 module util_adcfifo #(
 
+  parameter   DEVICE_TYPE = 0,
   parameter   ADC_DATA_WIDTH = 256,
   parameter   DMA_DATA_WIDTH =  64,
   parameter   DMA_READY_ENABLE = 1,
@@ -32,52 +33,55 @@ module util_adcfifo #(
 
   // fifo interface
 
-  input                   adc_rst,
-  input                   adc_clk,
-  input                   adc_wr,
-  input       [ADC_DATA_WIDTH-1:0]  adc_wdata,
-  output                  adc_wovf,
+  input                                 adc_rst,
+  input                                 adc_clk,
+  input                                 adc_wr,
+  input       [ADC_DATA_WIDTH-1:0]      adc_wdata,
+  output                                adc_wovf,
 
   // dma interface
 
-  input                   dma_clk,
-  output                  dma_wr,
-  output      [DMA_DATA_WIDTH-1:0]  dma_wdata,
-  input                   dma_wready,
-  input                   dma_xfer_req,
-  output      [ 3:0]      dma_xfer_status);
+  input                                 dma_clk,
+  output                                dma_wr,
+  output      [DMA_DATA_WIDTH-1:0]      dma_wdata,
+  input                                 dma_wready,
+  input                                 dma_xfer_req,
+  output      [ 3:0]                    dma_xfer_status);
 
 
   localparam  DMA_MEM_RATIO = ADC_DATA_WIDTH/DMA_DATA_WIDTH;
-  localparam  ADC_ADDRESS_WIDTH = (DMA_MEM_RATIO == 1) ? (DMA_ADDRESS_WIDTH) : (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
-    ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) : (DMA_ADDRESS_WIDTH - 3));
+  localparam  ADC_ADDRESS_WIDTH = (DMA_MEM_RATIO == 1) ? (DMA_ADDRESS_WIDTH) :
+                                  (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
+                                  ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) :
+                                  (DMA_ADDRESS_WIDTH - 3));
   localparam  ADC_ADDR_LIMIT = (2**ADC_ADDRESS_WIDTH)-1;
+  localparam  DMA_ADDR_LIMIT = (2**DMA_ADDRESS_WIDTH)-1;
 
   // internal registers
 
-  reg     [  2:0]                 adc_xfer_req_m = 'd0;
-  reg                             adc_xfer_init = 'd0;
-  reg                             adc_xfer_enable = 'd0;
-  reg                             adc_wr_int = 'd0;
-  reg     [ADC_DATA_WIDTH-1:0]    adc_wdata_int = 'd0;
-  reg     [ADC_ADDRESS_WIDTH-1:0] adc_waddr_int = 'd0;
-  reg                             adc_waddr_rel_t = 'd0;
-  reg     [ADC_ADDRESS_WIDTH-1:0] adc_waddr_rel = 'd0;
-  reg                             dma_rst = 'd0;
-  reg     [  2:0]                 dma_waddr_rel_t_m = 'd0;
-  reg     [ADC_ADDRESS_WIDTH-1:0] dma_waddr_rel = 'd0;
-  reg                             dma_rd = 'd0;
-  reg                             dma_rd_d = 'd0;
-  reg     [DMA_DATA_WIDTH-1:0]    dma_rdata_d = 'd0;
-  reg     [DMA_ADDRESS_WIDTH-1:0] dma_raddr = 'd0;
+  reg         [ 2:0]                    adc_xfer_req_m = 'd0;
+  reg                                   adc_xfer_init = 'd0;
+  reg                                   adc_xfer_enable = 'd0;
+  reg                                   adc_wr_int = 'd0;
+  reg         [ADC_DATA_WIDTH-1:0]      adc_wdata_int = 'd0;
+  reg         [ADC_ADDRESS_WIDTH-1:0]   adc_waddr_int = 'd0;
+  reg                                   adc_waddr_rel_t = 'd0;
+  reg         [ADC_ADDRESS_WIDTH-1:0]   adc_waddr_rel = 'd0;
+  reg                                   dma_rst = 'd0;
+  reg         [ 2:0]                    dma_waddr_rel_t_m = 'd0;
+  reg         [ADC_ADDRESS_WIDTH-1:0]   dma_waddr_rel = 'd0;
+  reg                                   dma_rd = 'd0;
+  reg                                   dma_rd_d = 'd0;
+  reg         [DMA_DATA_WIDTH-1:0]      dma_rdata_d = 'd0;
+  reg         [DMA_ADDRESS_WIDTH-1:0]   dma_raddr = 'd0;
 
   // internal signals
 
-  wire                            dma_waddr_rel_t_s;
-  wire    [DMA_ADDRESS_WIDTH-1:0] dma_waddr_rel_s;
-  wire                            dma_wready_s;
-  wire                            dma_rd_s;
-  wire    [DMA_DATA_WIDTH-1:0]    dma_rdata_s;
+  wire                                  dma_waddr_rel_t_s;
+  wire        [DMA_ADDRESS_WIDTH-1:0]   dma_waddr_rel_s;
+  wire                                  dma_wready_s;
+  wire                                  dma_rd_s;
+  wire        [DMA_DATA_WIDTH-1:0]      dma_rdata_s;
 
   // write interface
 
@@ -136,8 +140,10 @@ module util_adcfifo #(
 
   assign dma_xfer_status = 4'd0;
   assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
-  assign dma_waddr_rel_s = (DMA_MEM_RATIO == 1) ? dma_waddr_rel : (DMA_MEM_RATIO == 2) ? {dma_waddr_rel, 1'd0} :
-    ((DMA_MEM_RATIO == 4) ? {dma_waddr_rel, 2'd0} : {dma_waddr_rel, 3'd0});
+  assign dma_waddr_rel_s =  (DMA_MEM_RATIO == 1) ? dma_waddr_rel :
+                            (DMA_MEM_RATIO == 2) ? {dma_waddr_rel, 1'd0} :
+                            ((DMA_MEM_RATIO == 4) ? {dma_waddr_rel, 2'd0} :
+                            {dma_waddr_rel, 3'd0});
 
   always @(posedge dma_clk) begin
     if (dma_xfer_req == 1'b0) begin
@@ -154,7 +160,7 @@ module util_adcfifo #(
   end
 
   assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
-  assign dma_rd_s = (dma_raddr < ADC_ADDR_LIMIT) ?  ((dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_wready_s) : dma_wready_s ;
+  assign dma_rd_s = (dma_raddr < dma_waddr_rel_s) ? dma_wready_s : 1'b0;
 
   always @(posedge dma_clk) begin
     if (dma_xfer_req == 1'b0) begin
@@ -167,7 +173,7 @@ module util_adcfifo #(
       dma_rd_d <= dma_rd;
       dma_rdata_d <= dma_rdata_s;
       if (dma_rd_s == 1'b1) begin
-        if (dma_raddr < ADC_ADDR_LIMIT) begin
+        if (dma_raddr < DMA_ADDR_LIMIT) begin
           dma_raddr <= dma_raddr + 1'b1;
         end
       end
@@ -176,6 +182,17 @@ module util_adcfifo #(
 
   // instantiations
 
+  generate
+  if (DEVICE_TYPE == 1) begin
+  alt_mem_asym i_mem_asym (
+    .mem_i_wrclock (adc_clk),
+    .mem_i_wren (adc_wr_int),
+    .mem_i_wraddress (adc_waddr_int),
+    .mem_i_datain (adc_wdata_int),
+    .mem_i_rdclock (dma_clk),
+    .mem_i_rdaddress (dma_raddr),
+    .mem_o_dataout (dma_rdata_s));
+  end else begin
   ad_mem_asym #(
     .A_ADDRESS_WIDTH (ADC_ADDRESS_WIDTH),
     .A_DATA_WIDTH (ADC_DATA_WIDTH),
@@ -189,6 +206,8 @@ module util_adcfifo #(
     .clkb (dma_clk),
     .addrb (dma_raddr),
     .doutb (dma_rdata_s));
+  end
+  endgenerate
 
  ad_axis_inf_rx #(.DATA_WIDTH(DMA_DATA_WIDTH)) i_axis_inf (
     .clk (dma_clk),
