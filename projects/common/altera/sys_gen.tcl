@@ -12,7 +12,7 @@ set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 # version check
 
 set REQUIRED_QUARTUS_VERSION "16.1"
-set QUARTUS_VERSION $quartus(version)
+set QUARTUS_VERSION [lindex $quartus(version) 1]
 if {[string compare $QUARTUS_VERSION $REQUIRED_QUARTUS_VERSION] != 0} {
   puts -nonewline "Critical Warning: quartus version mismatch; "
   puts -nonewline "expected $REQUIRED_QUARTUS_VERSION, "
