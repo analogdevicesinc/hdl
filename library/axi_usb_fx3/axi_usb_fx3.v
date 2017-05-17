@@ -227,6 +227,17 @@ module axi_usb_fx3 (
     .fifoa_header_size(fifoa_header_size),
     .fifoa_buffer_size(fifoa_buffer_size),
 
+    .fifob_header_size(0),
+    .fifob_buffer_size(0),
+    .fifoc_header_size(0),
+    .fifoc_buffer_size(0),
+    .fifod_header_size(0),
+    .fifod_buffer_size(0),
+    .fifoe_header_size(0),
+    .fifoe_buffer_size(0),
+    .fifof_header_size(0),
+    .fifof_buffer_size(0),
+
     .length_fx32dma(length_fx32dma),
     .length_dma2fx3(length_dma2fx3),
 
