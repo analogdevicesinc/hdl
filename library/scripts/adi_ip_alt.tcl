@@ -120,7 +120,7 @@ proc ad_ip_parameter {pname ptype pdefault} {
     set_parameter_property DEVICE_FAMILY SYSTEM_INFO {DEVICE_FAMILY}
     set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
     set_parameter_property DEVICE_FAMILY HDL_PARAMETER false
-    set_parameter_property DEVICE_FAMILY ENABLED false
+    set_parameter_property DEVICE_FAMILY ENABLED true
     return
   }
 
