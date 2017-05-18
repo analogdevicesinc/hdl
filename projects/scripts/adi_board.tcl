@@ -519,21 +519,78 @@ proc ad_cpu_interconnect {p_address p_name} {
   }
 
   set sys_cpu_interconnect_index [expr $sys_cpu_interconnect_index + 1]
+
+
+  set p_cell [get_bd_cells $p_name]
   set p_intf [get_bd_intf_pins -filter "MODE == Slave && VLNV == xilinx.com:interface:aximm_rtl:1.0"\
-    -of_objects [get_bd_cells $p_name]]
-  set p_intf_name [lrange [split $p_intf "/"] end end]
-  set p_intf_clock [get_bd_pins -filter "TYPE == clk && (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" -quiet -of_objects [get_bd_cells $p_name]]
-  set p_intf_reset [get_bd_pins -filter "TYPE == rst && (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" -quiet -of_objects [get_bd_cells $p_name]]
-  if {($p_intf_clock ne "") && ($p_intf_reset eq "")} {
-    set p_intf_reset [get_property CONFIG.ASSOCIATED_RESET [get_bd_pins ${p_intf_clock}]]
-    if {$p_intf_reset ne ""} {
-      set p_intf_reset [get_bd_pins $p_name/$p_intf_reset]
+    -of_objects $p_cell]
+
+  set p_hier_cell $p_cell
+  set p_hier_intf $p_intf
+
+  while {$p_hier_intf != "" && [get_property TYPE $p_hier_cell] == "hier"} {
+    set p_hier_intf [find_bd_objs -boundary_type lower \
+      -relation connected_to $p_hier_intf]
+    if {$p_hier_intf != {}} {
+      set p_hier_cell [get_bd_cells -of_objects $p_hier_intf]
+    } else {
+      set p_hier_cell {}
     }
   }
+
+  set p_intf_clock ""
+  set p_intf_reset ""
+
+  if {$p_hier_cell != {}} {
+    set p_intf_name [lrange [split $p_hier_intf "/"] end end]
+
+    set p_intf_clock [get_bd_pins -filter "TYPE == clk && \
+      (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
+      CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || \
+      CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
+      CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" \
+      -quiet -of_objects $p_hier_cell]
+    set p_intf_reset [get_bd_pins -filter "TYPE == rst && \
+      (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
+       CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* ||
+       CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
+       CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" \
+       -quiet -of_objects $p_hier_cell]
+
+    if {($p_intf_clock ne "") && ($p_intf_reset eq "")} {
+      set p_intf_reset [get_property CONFIG.ASSOCIATED_RESET [get_bd_pins ${p_intf_clock}]]
+      if {$p_intf_reset ne ""} {
+        set p_intf_reset [get_bd_pins -filter "NAME == $p_intf_reset" -of_objects $p_hier_cell]
+      }
+    }
+
+    # Trace back up
+    set p_hier_cell2 $p_hier_cell
+
+    while {$p_intf_clock != {} && $p_hier_cell2 != $p_cell && $p_hier_cell2 != {}} {
+      puts $p_intf_clock
+      puts $p_hier_cell2
+      set p_intf_clock [find_bd_objs -boundary_type upper \
+        -relation connected_to $p_intf_clock]
+      if {$p_intf_clock != {}} {
+        set p_intf_clock [get_bd_pins [get_property PATH $p_intf_clock]]
+        set p_hier_cell2 [get_bd_cells -of_objects $p_intf_clock]
+      }
+    }
+
+    set p_hier_cell2 $p_hier_cell
+
+    while {$p_intf_reset != {} && $p_hier_cell2 != $p_cell && $p_hier_cell2 != {}} {
+      set p_intf_reset [find_bd_objs -boundary_type upper \
+        -relation connected_to $p_intf_reset]
+      if {$p_intf_reset != {}} {
+        set p_intf_reset [get_bd_pins [get_property PATH $p_intf_reset]]
+        set p_hier_cell2 [get_bd_cells -of_objects $p_intf_reset]
+      }
+    }
+  }
+
+
   if {[find_bd_objs -quiet -relation connected_to $p_intf_clock] ne ""} {
     set p_intf_clock ""
   }
@@ -555,7 +612,7 @@ proc ad_cpu_interconnect {p_address p_name} {
   }
   ad_connect axi_cpu_interconnect/${i_str}_AXI ${p_intf}
 
-  set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
+  set p_seg [get_bd_addr_segs -of_objects $p_hier_cell]
   set p_index 0
   foreach p_seg_name $p_seg {
     if {$p_index == 0} {
