@@ -15,8 +15,8 @@ set_module_property ELABORATION_CALLBACK axi_dmac_elaborate
 
 add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_dmac
-add_fileset_file sync_bits.v              VERILOG PATH $ad_hdl_dir/library/common/sync_bits.v
-add_fileset_file sync_gray.v              VERILOG PATH $ad_hdl_dir/library/common/sync_gray.v
+add_fileset_file sync_bits.v              VERILOG PATH $ad_hdl_dir/library/util_cdc/sync_bits.v
+add_fileset_file sync_gray.v              VERILOG PATH $ad_hdl_dir/library/util_cdc/sync_gray.v
 add_fileset_file up_axi.v                 VERILOG PATH $ad_hdl_dir/library/common/up_axi.v
 add_fileset_file axi_repack.v             VERILOG PATH $ad_hdl_dir/library/util_axis_resize/util_axis_resize.v
 add_fileset_file fifo.v                   VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v

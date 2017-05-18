@@ -5,8 +5,6 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS += ../common/sync_bits.v
-M_DEPS += ../common/sync_gray.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += address_gray.v
@@ -14,6 +12,8 @@ M_DEPS += address_gray_pipelined.v
 M_DEPS += address_sync.v
 M_DEPS += util_axis_fifo.v
 M_DEPS += util_axis_fifo_ip.tcl
+
+M_DEPS += ../util_cdc/util_cdc.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -32,8 +32,8 @@ M_FLIST += .Xil
 
 
 
-.PHONY: all clean clean-all
-all: util_axis_fifo.xpr
+.PHONY: all dep clean clean-all
+all: dep util_axis_fifo.xpr
 
 
 clean:clean-all
@@ -47,5 +47,7 @@ util_axis_fifo.xpr: $(M_DEPS)
 	-rm -rf $(M_FLIST)
 	$(M_VIVADO) util_axis_fifo_ip.tcl  >> util_axis_fifo_ip.log 2>&1
 
+dep:
+	make -C ../util_cdc/
 ####################################################################################
 ####################################################################################

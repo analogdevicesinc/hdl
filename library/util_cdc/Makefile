@@ -5,20 +5,13 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS += ../../common/ad_rst.v
-M_DEPS += ../../common/up_axi.v
-M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../scripts/adi_ip.tcl
-M_DEPS += axi_spi_engine.v
-M_DEPS += axi_spi_engine_ip.tcl
-
-M_DEPS += ../../util_axis_fifo/util_axis_fifo.xpr
-M_DEPS += ../../util_cdc/util_cdc.xpr
-
-M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml
-M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
-M_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl.xml
-M_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl_rtl.xml
+M_DEPS += ../scripts/adi_env.tcl
+M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += sync_bits.v
+M_DEPS += sync_data.v
+M_DEPS += sync_event.v
+M_DEPS += sync_gray.v
+M_DEPS += util_cdc_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 
@@ -37,8 +30,8 @@ M_FLIST += .Xil
 
 
 
-.PHONY: all dep clean clean-all
-all: dep axi_spi_engine.xpr
+.PHONY: all clean clean-all
+all: util_cdc.xpr
 
 
 clean:clean-all
@@ -48,12 +41,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-axi_spi_engine.xpr: $(M_DEPS)
+util_cdc.xpr: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_VIVADO) axi_spi_engine_ip.tcl  >> axi_spi_engine_ip.log 2>&1
+	$(M_VIVADO) util_cdc_ip.tcl  >> util_cdc_ip.log 2>&1
 
-dep:
-	make -C ../../util_axis_fifo/
-	make -C ../../util_cdc/
 ####################################################################################
 ####################################################################################

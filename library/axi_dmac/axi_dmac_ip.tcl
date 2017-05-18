@@ -5,7 +5,6 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_dmac
 adi_ip_files axi_dmac [list \
-  "$ad_hdl_dir/library/common/sync_bits.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "address_generator.v" \
   "data_mover.v" \
@@ -34,6 +33,7 @@ adi_ip_bd axi_dmac "bd/bd.tcl"
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_axis_resize:1.0 \
 	analog.com:user:util_axis_fifo:1.0 \
+	analog.com:user:util_cdc:1.0 \
 }
 
 set_property display_name "ADI AXI DMA Controller" [ipx::current_core]
