@@ -178,6 +178,24 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
   set qpll_enable [get_property CONFIG.QPLL_ENABLE [get_bd_cells $a_xcvr]]
   set tx_or_rx_n [get_property CONFIG.TX_OR_RX_N [get_bd_cells $a_xcvr]]
 
+#  set jesd204_vlnv [get_property VLNV $a_jesd]
+#
+#  if {[string first "analog.com" $jesd204_vlnv] == 0} {
+#    set jesd204_type 0
+#  } elseif {[string first "xilinx.com" $jesd204_vlnv] == 0} {
+#    set jesd204_type 1
+#  } else {
+#    return -code 1 "Unsupported JESD204 core type."
+#  }
+
+  set jesd204_bd_type [get_property TYPE [get_bd_cells $a_jesd]]
+
+  if {$jesd204_bd_type == "hier"} {
+    set jesd204_type 0
+  } else {
+    set jesd204_type 1
+  }
+
   if {$xcvr_instance ne $u_xcvr} {
     set xcvr_index [expr ($xcvr_index + 1)]
     set xcvr_tx_index 0
@@ -219,7 +237,11 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
 
     if {$tx_or_rx_n == 0} {
       ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${m}
-      ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${m}
+      if {$jesd204_type == 0} {
+        ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${m}
+      } else {
+        ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${m}
+      }
     }
 
     if {(($m%4) == 0) && ($qpll_enable == 1)} {
@@ -227,8 +249,12 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
     }
 
     ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${m}
-    ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/gt${n}_${txrx}
     ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${u_xcvr}/${txrx}_clk_${m}
+    if {$jesd204_type == 0} {
+      ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/${txrx}_phy${n}
+    } else {
+      ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/gt${n}_${txrx}
+    }
 
     create_bd_port -dir ${data_dir} ${m_data}_${m}_p
     create_bd_port -dir ${data_dir} ${m_data}_${m}_n
@@ -236,13 +262,23 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
     ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
   }
 
-  ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
-  ad_connect  ${a_jesd}/${txrx}_sync $m_sync
-  ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/${txrx}_core_clk
-  ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
+  if {$jesd204_type == 0} {
+    ad_connect  ${a_jesd}/sysref $m_sysref
+    ad_connect  ${a_jesd}/sync $m_sync
+    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/device_clk
+#    if {$tx_or_rx_n == 0} {
+#      ad_connect  ${a_xcvr}/up_status ${a_jesd}/phy_ready
+#    }
+  } else {
+    ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
+    ad_connect  ${a_jesd}/${txrx}_sync $m_sync
+    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/${txrx}_core_clk
+    ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
+    ad_connect  ${a_jesd}_rstgen/peripheral_reset ${a_jesd}/${txrx}_reset
+  }
+
   ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}_rstgen/slowest_sync_clk
   ad_connect  sys_cpu_resetn ${a_jesd}_rstgen/ext_reset_in
-  ad_connect  ${a_jesd}_rstgen/peripheral_reset ${a_jesd}/${txrx}_reset
 
   if {$tx_or_rx_n == 0} {
     set xcvr_rx_index [expr ($xcvr_rx_index + $no_of_lanes)]
