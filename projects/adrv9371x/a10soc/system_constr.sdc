@@ -46,4 +46,5 @@ set_false_path -from [get_clocks {i_system_bd|avl_ad9371_rx_os_xcvr|alt_core_pll
   -to [get_clocks {sys_clk_100mhz}]
 
 set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out*]
+set_false_path -to [get_registers *altera_jesd204_rx_csr_inst|phy_csr_rx_pcfifo_full_latched*]
 
