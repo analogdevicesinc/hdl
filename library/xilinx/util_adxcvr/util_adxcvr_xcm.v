@@ -395,8 +395,7 @@ module util_adxcvr_xcm #(
     .SDM1INITSEED0_0 (16'b0000000100010001),
     .SDM1INITSEED0_1 (9'b000010001),
     .SIM_MODE ("FAST"),
-    .SIM_RESET_SPEEDUP ("TRUE"),
-    .SIM_VERSION (1'h1)) 
+    .SIM_RESET_SPEEDUP ("TRUE"))
   i_gthe4_common (
     .BGBYPASSB (1'd1),
     .BGMONITORENB (1'd1),

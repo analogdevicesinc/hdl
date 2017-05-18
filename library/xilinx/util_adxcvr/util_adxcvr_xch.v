@@ -1907,7 +1907,6 @@ module util_adxcvr_xch #(
     .SIM_RECEIVER_DETECT_PASS ("TRUE"),
     .SIM_RESET_SPEEDUP ("TRUE"),
     .SIM_TX_EIDLE_DRIVE_LEVEL ("Z"),
-    .SIM_VERSION (1'h1),
     .SRSTMODE (1'b0),
     .TAPDLY_SET_TX (2'h0),
     .TEMPERATURE_PAR (4'b0010),
