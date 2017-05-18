@@ -211,6 +211,7 @@ proc adi_ip_properties_lite {ip_name} {
     set i_module [file tail $i_file]
     regsub {_constr\.xdc} $i_module {} i_module
     ipx::add_file $i_file $i_filegroup
+    set_property PROCESSING_ORDER LATE [ipx::get_files $i_file -of_objects $i_filegroup]
     set_property SCOPED_TO_REF $i_module [ipx::get_files $i_file -of_objects $i_filegroup]
   }
   ipx::save_core
