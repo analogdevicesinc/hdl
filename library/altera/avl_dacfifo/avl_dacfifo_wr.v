@@ -2,8 +2,8 @@
 // ***************************************************************************
 // Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
 //
-// Each core or library found in this collection may have its own licensing terms. 
-// The user should keep this in in mind while exploring these cores. 
+// Each core or library found in this collection may have its own licensing terms.
+// The user should keep this in in mind while exploring these cores.
 //
 // Redistribution and use in source and binary forms,
 // with or without modification of this file, are permitted under the terms of either
@@ -84,7 +84,10 @@ module avl_dacfifo_wr #(
   wire                                  avl_last_transfer_req_s;
   wire                                  avl_xfer_req_init_s;
   wire                                  avl_pending_write_cycle_s;
+  wire                                  avl_last_beat_req_pos_s;
+  wire                                  avl_last_beat_req_neg_s;
   wire    [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_b2g_s;
+  wire                                  avl_last_beats_full;
 
   reg     [DMA_MEM_ADDRESS_WIDTH-1:0]   dma_mem_wr_address;
   reg     [AVL_MEM_ADDRESS_WIDTH-1:0]   dma_mem_wr_address_d;
@@ -117,7 +120,6 @@ module avl_dacfifo_wr #(
   reg     [MEM_WIDTH_DIFF-1:0]          avl_last_beats_m1;
   reg     [MEM_WIDTH_DIFF-1:0]          avl_last_beats_m2;
   reg                                   avl_write_xfer_req;
-  reg                                   avl_write_xfer_req_d;
 
   // An asymmetric memory to transfer data from DMAC interface to AXI Memory Map
   // interface
@@ -142,13 +144,6 @@ module avl_dacfifo_wr #(
 
   // write address generation
 
-  assign dma_mem_address_diff_s = {1'b1, dma_mem_wr_address} - dma_mem_rd_address_s;
-  assign dma_mem_rd_address_s = (MEM_RATIO ==  1) ?  dma_mem_rd_address :
-                                (MEM_RATIO ==  2) ? {dma_mem_rd_address, 1'b0} :
-                                (MEM_RATIO ==  4) ? {dma_mem_rd_address, 2'b0} :
-                                (MEM_RATIO ==  8) ? {dma_mem_rd_address, 3'b0} :
-                                (MEM_RATIO == 16) ? {dma_mem_rd_address, 4'b0} :
-                                                    {dma_mem_rd_address, 5'b0};
   assign dma_mem_wea_s = dma_ready & dma_valid & dma_xfer_req;
 
   always @(posedge dma_clk) begin
@@ -162,7 +157,7 @@ module avl_dacfifo_wr #(
       end
       if (dma_mem_wr_address[MEM_WIDTH_DIFF-1:0] == {MEM_WIDTH_DIFF{1'b1}}) begin
         dma_mem_read_control <= ~dma_mem_read_control;
-        dma_mem_wr_address_d <= dma_mem_wr_address[DMA_MEM_ADDRESS_WIDTH-1:MEM_WIDTH_DIFF];
+        dma_mem_wr_address_d <= dma_mem_wr_address[DMA_MEM_ADDRESS_WIDTH-1:MEM_WIDTH_DIFF] + 1;
       end
     end
     if ((dma_xfer_last == 1'b1) && (dma_mem_wea_s == 1'b1)) begin
@@ -171,6 +166,14 @@ module avl_dacfifo_wr #(
   end
 
   // The memory module request data until reaches the high threshold.
+
+  assign dma_mem_address_diff_s = {1'b1, dma_mem_wr_address} - dma_mem_rd_address_s;
+  assign dma_mem_rd_address_s = (MEM_RATIO ==  1) ?  dma_mem_rd_address :
+                                (MEM_RATIO ==  2) ? {dma_mem_rd_address, 1'b0} :
+                                (MEM_RATIO ==  4) ? {dma_mem_rd_address, 2'b0} :
+                                (MEM_RATIO ==  8) ? {dma_mem_rd_address, 3'b0} :
+                                (MEM_RATIO == 16) ? {dma_mem_rd_address, 4'b0} :
+                                                    {dma_mem_rd_address, 5'b0};
 
   always @(posedge dma_clk) begin
     if (dma_resetn == 1'b0) begin
@@ -220,7 +223,7 @@ module avl_dacfifo_wr #(
   assign avl_mem_fetch_wr_address_s = avl_mem_fetch_wr_address ^ avl_mem_fetch_wr_address_m2;
 
   always @(posedge avl_clk) begin
-    if (avl_reset == 1'b1) begin
+    if ((avl_reset == 1'b1) || (avl_write_xfer_req == 1'b0)) begin
       avl_mem_fetch_wr_address_m1 <= 0;
       avl_mem_fetch_wr_address_m2 <= 0;
       avl_mem_fetch_wr_address <= 0;
@@ -277,7 +280,7 @@ module avl_dacfifo_wr #(
   // min distance between two consecutive writes is three avalon clock cycles,
   // this constraint comes from ad_mem_asym
 
-  always @(negedge avl_clk) begin
+  always @(posedge avl_clk) begin
     if (avl_reset == 1'b1) begin
       avl_write <= 1'b0;
       avl_write_d <= 1'b0;
@@ -286,7 +289,7 @@ module avl_dacfifo_wr #(
           ((avl_last_transfer_req_s == 1'b1) && (avl_write_xfer_req == 1'b1)))   &&
            (avl_pending_write_cycle_s == 1'b1)) begin
         avl_write <= 1'b1;
-      end else if (avl_write_transfer == 1'b1) begin
+      end else begin
         avl_write <= 1'b0;
       end
       avl_write_d <= {avl_write_d[0], avl_write};
@@ -295,13 +298,13 @@ module avl_dacfifo_wr #(
 
   assign avl_xfer_req_init_s = ~avl_dma_xfer_req & avl_dma_xfer_req_m2;
 
+  assign avl_last_beats_full = &avl_last_beats;
   always @(posedge avl_clk) begin
     if (avl_reset == 1'b1) begin
       avl_last_beat_req_m1 <= 1'b0;
       avl_last_beat_req_m2 <= 1'b0;
       avl_last_beat_req <= 1'b0;
       avl_write_xfer_req <= 1'b0;
-      avl_write_xfer_req_d <= 1'b0;
       avl_dma_xfer_req_m1 <= 1'b0;
       avl_dma_xfer_req_m2 <= 1'b0;
       avl_dma_xfer_req <= 1'b0;
@@ -314,16 +317,18 @@ module avl_dacfifo_wr #(
       avl_dma_xfer_req <= avl_dma_xfer_req_m2;
       if (avl_xfer_req_init_s == 1'b1) begin
         avl_write_xfer_req <= 1'b1;
-      end else if ((avl_last_transfer_req_s == 1'b1) &&
-                  (avl_write_transfer == 1'b1)) begin
+      end else if ((avl_last_beat_req == 1'b1) &&
+                   (avl_write == 1'b1) &&
+                   (avl_mem_readen == avl_last_beats_full)) begin
         avl_write_xfer_req <= 1'b0;
       end
-      avl_write_xfer_req_d <= avl_write_xfer_req;
     end
   end
 
   // generate avl_byteenable signal
 
+  assign avl_last_beat_req_pos_s = ~avl_last_beat_req & avl_last_beat_req_m2;
+  assign avl_last_beat_req_neg_s = avl_last_beat_req & ~avl_last_beat_req_m2;
   always @(posedge avl_clk) begin
     if (avl_reset == 1'b1) begin
       avl_last_beats_m1 <= 1'b0;
@@ -332,7 +337,7 @@ module avl_dacfifo_wr #(
     end else begin
       avl_last_beats_m1 <= dma_mem_last_beats;
       avl_last_beats_m2 <= avl_last_beats_m1;
-      avl_last_beats <= (avl_last_beat_req_s == 1'b1) ? avl_last_beats_m2 : avl_last_beats;
+      avl_last_beats <= (avl_last_beat_req_pos_s == 1'b1) ? avl_last_beats_m2 : avl_last_beats;
     end
   end
 
@@ -342,7 +347,7 @@ module avl_dacfifo_wr #(
   ) i_byteenable_coder (
     .avl_clk (avl_clk),
     .avl_last_beats (avl_last_beats),
-    .avl_enable (avl_last_transfer_req_s),
+    .avl_enable (avl_last_beat_req),
     .avl_byteenable (avl_byteenable));
 
   assign avl_burstcount = 6'b1;
@@ -354,7 +359,7 @@ module avl_dacfifo_wr #(
       avl_last_address <= 0;
       avl_last_byteenable <= 0;
     end else begin
-      if ((avl_write == 1'b1) && (avl_last_transfer_req_s == 1'b1)) begin
+      if ((avl_write == 1'b1) && (avl_last_beat_req == 1'b1)) begin
         avl_last_address <= avl_address;
         avl_last_byteenable <= avl_byteenable;
       end
@@ -368,7 +373,7 @@ module avl_dacfifo_wr #(
     if (avl_reset == 1'b1) begin
       avl_xfer_req <= 1'b0;
     end else begin
-      if ((avl_write_xfer_req == 0) && (avl_write_xfer_req_d == 1)) begin
+      if (avl_last_beat_req_neg_s == 1'b1) begin
         avl_xfer_req <= 1'b1;
       end else if ((avl_xfer_req == 1'b1) && (avl_dma_xfer_req == 1'b1)) begin
         avl_xfer_req <= 1'b0;
