@@ -22,7 +22,9 @@
 // ***************************************************************************
 // Receive HDMI, hdmi embedded syncs data in, video dma data out.
 
-module axi_hdmi_rx_core (
+module axi_hdmi_rx_core #(
+  
+  parameter   IO_INTERFACE = 1) (
 
   // hdmi interface
 
@@ -51,49 +53,48 @@ module axi_hdmi_rx_core (
 
   // internal registers
 
-  reg             hdmi_dma_de_cnt = 'd0;
-  reg             hdmi_dma_sof_int = 'd0;
-  reg             hdmi_dma_de_int = 'd0;
-  reg     [31:0]  hdmi_dma_data_int = 'd0;
-  reg             hdmi_sof_422 = 'd0;
-  reg             hdmi_de_422 = 'd0;
-  reg             hdmi_de_422_cnt = 'd0;
-  reg     [15:0]  hdmi_data_422 = 'd0;
-  reg             hdmi_sof_444 = 'd0;
-  reg             hdmi_de_444 = 'd0;
-  reg     [23:0]  hdmi_data_444 = 'd0;
-  reg     [ 1:0]  hdmi_de_444_cnt = 'd0;
-  reg     [15:0]  hdmi_data_444_hold = 'd0;
-  reg             hdmi_sof_444_p = 'd0;
-  reg             hdmi_de_444_p = 'd0;
-  reg     [31:0]  hdmi_data_444_p = 'd0;
-  reg             hdmi_dma_enable = 'd0;
-  reg             hdmi_hs_de_d = 'd0;
-  reg             hdmi_vs_de_d = 'd0;
-  reg             hdmi_sof = 'd0;
-  reg     [15:0]  hdmi_hs_rcv = 'd0;
-  reg     [15:0]  hdmi_hs_cur = 'd0;
-  reg             hdmi_hs_oos_int = 'd0;
-  reg     [15:0]  hdmi_vs_rcv = 'd0;
-  reg     [15:0]  hdmi_vs_cur = 'd0;
-  reg             hdmi_vs_oos_int = 'd0;
-  reg     [15:0]  hdmi_data_neg_p = 'd0;
-  reg     [15:0]  hdmi_data_pos_p = 'd0;
-  reg     [15:0]  hdmi_data_p = 'd0;
-  reg     [15:0]  hdmi_data_neg = 'd0;
+  reg                     hdmi_dma_de_cnt = 'd0;
+  reg                     hdmi_dma_sof_int = 'd0;
+  reg                     hdmi_dma_de_int = 'd0;
+  reg         [31:0]      hdmi_dma_data_int = 'd0;
+  reg                     hdmi_sof_422 = 'd0;
+  reg                     hdmi_de_422 = 'd0;
+  reg                     hdmi_de_422_cnt = 'd0;
+  reg         [15:0]      hdmi_data_422 = 'd0;
+  reg                     hdmi_sof_444 = 'd0;
+  reg                     hdmi_de_444 = 'd0;
+  reg         [23:0]      hdmi_data_444 = 'd0;
+  reg         [ 1:0]      hdmi_de_444_cnt = 'd0;
+  reg         [15:0]      hdmi_data_444_hold = 'd0;
+  reg                     hdmi_sof_444_p = 'd0;
+  reg                     hdmi_de_444_p = 'd0;
+  reg         [31:0]      hdmi_data_444_p = 'd0;
+  reg                     hdmi_dma_enable = 'd0;
+  reg                     hdmi_hs_de_d = 'd0;
+  reg                     hdmi_vs_de_d = 'd0;
+  reg                     hdmi_sof = 'd0;
+  reg         [15:0]      hdmi_hs_rcv = 'd0;
+  reg         [15:0]      hdmi_hs_cur = 'd0;
+  reg                     hdmi_hs_oos_int = 'd0;
+  reg         [15:0]      hdmi_vs_rcv = 'd0;
+  reg         [15:0]      hdmi_vs_cur = 'd0;
+  reg                     hdmi_vs_oos_int = 'd0;
+  reg         [15:0]      hdmi_data_p = 'd0;
 
   // internal signals
 
-  wire            hdmi_sof_s;
-  wire            hdmi_sof_ss_s;
-  wire            hdmi_de_ss_s;
-  wire    [23:0]  hdmi_data_ss_s;
-  wire            hdmi_sof_444_s;
-  wire            hdmi_de_444_s;
-  wire    [23:0]  hdmi_data_444_s;
-  wire    [15:0]  hdmi_data_de_s;
-  wire            hdmi_hs_de_s;
-  wire            hdmi_vs_de_s;
+  wire        [15:0]      hdmi_data_p_s;
+  wire        [15:0]      hdmi_data_n_s;
+  wire                    hdmi_sof_s;
+  wire                    hdmi_sof_ss_s;
+  wire                    hdmi_de_ss_s;
+  wire        [23:0]      hdmi_data_ss_s;
+  wire                    hdmi_sof_444_s;
+  wire                    hdmi_de_444_s;
+  wire        [23:0]      hdmi_data_444_s;
+  wire        [15:0]      hdmi_data_de_s;
+  wire                    hdmi_hs_de_s;
+  wire                    hdmi_vs_de_s;
 
   // dma interface
 
@@ -256,19 +257,39 @@ module axi_hdmi_rx_core (
   end
 
   // hdmi input data registers
+  // use iddr if interfacing off-chip (keeps iob)
+  // use same edge (or register falling edge again)
+
+  genvar n;
+  generate
+  if (IO_INTERFACE == 0) begin
+  for (n = 0; n < 16; n = n + 1) begin: g_hdmi_data
+  IDDR #(
+    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
+    .INIT_Q1 (1'b0),
+    .INIT_Q2 (1'b0),
+    .SRTYPE ("ASYNC"))
+  i_rx_data_iddr (
+    .CE (1'b1),
+    .R (1'b0),
+    .S (1'b0),
+    .C (hdmi_clk),
+    .D (hdmi_data[n]),
+    .Q1 (hdmi_data_p_s[n]),
+    .Q2 (hdmi_data_n_s[n]));
+  end
+  end else begin
+  assign hdmi_data_p_s = hdmi_data;
+  assign hdmi_data_n_s = hdmi_data;
+  end
+  endgenerate
 
   always @(posedge hdmi_clk) begin
-    hdmi_data_neg_p <= hdmi_data_neg;
-    hdmi_data_pos_p <= hdmi_data;
     if (hdmi_edge_sel == 1'b1) begin
-      hdmi_data_p <= hdmi_data_neg_p;
+      hdmi_data_p <= hdmi_data_n_s;
     end else begin
-      hdmi_data_p <= hdmi_data_pos_p;
+      hdmi_data_p <= hdmi_data_p_s;
     end
-  end
-
-  always @(negedge hdmi_clk) begin
-    hdmi_data_neg <= hdmi_data;
   end
 
   // super sampling, 422 to 444

@@ -23,7 +23,8 @@
 
 module axi_hdmi_rx  #(
 
-  parameter   ID = 0) (
+  parameter   ID = 0,
+  parameter   IO_INTERFACE = 1) (
 
   // hdmi interface
 
@@ -63,32 +64,31 @@ module axi_hdmi_rx  #(
   input       [ 2:0]      s_axi_awprot,
   input       [ 2:0]      s_axi_arprot);
 
-
   // internal signals
 
-  wire            up_wreq_s;
-  wire    [13:0]  up_waddr_s;
-  wire    [31:0]  up_wdata_s;
-  wire            up_wack_s;
-  wire            up_rreq_s;
-  wire    [13:0]  up_raddr_s;
-  wire    [31:0]  up_rdata_s;
-  wire            up_rack_s;
-  wire            hdmi_edge_sel_s;
-  wire            hdmi_bgr_s;
-  wire            hdmi_packed_s;
-  wire            hdmi_csc_bypass_s;
-  wire    [15:0]  hdmi_vs_count_s;
-  wire    [15:0]  hdmi_hs_count_s;
-  wire            hdmi_tpm_oos_s;
-  wire            hdmi_vs_oos_s;
-  wire            hdmi_hs_oos_s;
-  wire            hdmi_vs_mismatch_s;
-  wire            hdmi_hs_mismatch_s;
-  wire    [15:0]  hdmi_vs_s;
-  wire    [15:0]  hdmi_hs_s;
-  wire            hdmi_rst;
-  wire    [15:0]  hdmi_data;
+  wire                    up_wreq_s;
+  wire        [13:0]      up_waddr_s;
+  wire        [31:0]      up_wdata_s;
+  wire                    up_wack_s;
+  wire                    up_rreq_s;
+  wire        [13:0]      up_raddr_s;
+  wire        [31:0]      up_rdata_s;
+  wire                    up_rack_s;
+  wire                    hdmi_edge_sel_s;
+  wire                    hdmi_bgr_s;
+  wire                    hdmi_packed_s;
+  wire                    hdmi_csc_bypass_s;
+  wire        [15:0]      hdmi_vs_count_s;
+  wire        [15:0]      hdmi_hs_count_s;
+  wire                    hdmi_tpm_oos_s;
+  wire                    hdmi_vs_oos_s;
+  wire                    hdmi_hs_oos_s;
+  wire                    hdmi_vs_mismatch_s;
+  wire                    hdmi_hs_mismatch_s;
+  wire        [15:0]      hdmi_vs_s;
+  wire        [15:0]      hdmi_hs_s;
+  wire                    hdmi_rst;
+  wire        [15:0]      hdmi_data;
 
   // signal name changes
 
