@@ -52,4 +52,3 @@ set_property -dict  {INTERNAL_VREF {0.84}}  [get_iobanks 46]
 
 create_clock -name phy_clk      -period  1.60 [get_ports phy_clk_p]
 
-set_false_path -to [get_pins -hier -filter {name =~ *ethernet*idelayctrl*/RST}]
