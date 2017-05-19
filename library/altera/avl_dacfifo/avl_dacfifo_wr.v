@@ -74,6 +74,7 @@ module avl_dacfifo_wr #(
   wire                                  dma_mem_wea_s;
   wire    [DMA_MEM_ADDRESS_WIDTH  :0]   dma_mem_address_diff_s;
   wire    [DMA_MEM_ADDRESS_WIDTH-1:0]   dma_mem_rd_address_s;
+  wire    [AVL_MEM_ADDRESS_WIDTH-1:0]   dma_mem_rd_address_g2b_s;
 
   wire    [AVL_DATA_WIDTH-1:0]          avl_mem_rdata_s;
   wire                                  avl_mem_fetch_wr_address_s;
@@ -83,6 +84,7 @@ module avl_dacfifo_wr #(
   wire                                  avl_last_transfer_req_s;
   wire                                  avl_xfer_req_init_s;
   wire                                  avl_pending_write_cycle_s;
+  wire    [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_b2g_s;
 
   reg     [DMA_MEM_ADDRESS_WIDTH-1:0]   dma_mem_wr_address;
   reg     [AVL_MEM_ADDRESS_WIDTH-1:0]   dma_mem_wr_address_d;
@@ -116,42 +118,6 @@ module avl_dacfifo_wr #(
   reg     [MEM_WIDTH_DIFF-1:0]          avl_last_beats_m2;
   reg                                   avl_write_xfer_req;
   reg                                   avl_write_xfer_req_d;
-
-  // binary to grey conversion
-
-  function [7:0] b2g;
-    input [7:0] b;
-    reg   [7:0] g;
-    begin
-      g[7] = b[7];
-      g[6] = b[7] ^ b[6];
-      g[5] = b[6] ^ b[5];
-      g[4] = b[5] ^ b[4];
-      g[3] = b[4] ^ b[3];
-      g[2] = b[3] ^ b[2];
-      g[1] = b[2] ^ b[1];
-      g[0] = b[1] ^ b[0];
-      b2g = g;
-    end
-  endfunction
-
-  // grey to binary conversion
-
-  function [7:0] g2b;
-    input [7:0] g;
-    reg   [7:0] b;
-    begin
-      b[7] = g[7];
-      b[6] = b[7] ^ g[6];
-      b[5] = b[6] ^ g[5];
-      b[4] = b[5] ^ g[4];
-      b[3] = b[4] ^ g[3];
-      b[2] = b[3] ^ g[2];
-      b[1] = b[2] ^ g[1];
-      b[0] = b[1] ^ g[0];
-      g2b = b;
-    end
-  endfunction
 
   // An asymmetric memory to transfer data from DMAC interface to AXI Memory Map
   // interface
@@ -216,7 +182,7 @@ module avl_dacfifo_wr #(
     end else begin
       dma_mem_rd_address_m1 <= avl_mem_rd_address_g;
       dma_mem_rd_address_m2 <= dma_mem_rd_address_m1;
-      dma_mem_rd_address <= g2b(dma_mem_rd_address_m2);
+      dma_mem_rd_address <= dma_mem_rd_address_g2b_s;
       dma_mem_address_diff <= dma_mem_address_diff_s[DMA_MEM_ADDRESS_WIDTH-1:0];
       if (dma_mem_address_diff >= DMA_BUF_THRESHOLD_HI) begin
         dma_ready_out <= 1'b0;
@@ -225,6 +191,12 @@ module avl_dacfifo_wr #(
       end
     end
   end
+
+  ad_g2b #(
+    .DATA_WIDTH(AVL_MEM_ADDRESS_WIDTH)
+  ) i_dma_mem_rd_address_g2b (
+    .din (dma_mem_rd_address_m2),
+    .dout (dma_mem_rd_address_g2b_s));
 
   // last DMA beat
 
@@ -285,11 +257,17 @@ module avl_dacfifo_wr #(
         avl_mem_rd_address <= avl_mem_rd_address + 1;
       end
       avl_data <= avl_mem_rdata_s;
-      avl_mem_rd_address_g <= b2g(avl_mem_rd_address);
+      avl_mem_rd_address_g <= avl_mem_rd_address_b2g_s;
       avl_write_transfer <= avl_write_transfer_s;
       avl_mem_readen <= avl_mem_readen_s;
     end
   end
+
+  ad_b2g #(
+    .DATA_WIDTH(AVL_MEM_ADDRESS_WIDTH)
+  ) i_avl_mem_rd_address_b2g (
+    .din (avl_mem_rd_address),
+    .dout (avl_mem_rd_address_b2g_s));
 
   // avalon write signaling
 

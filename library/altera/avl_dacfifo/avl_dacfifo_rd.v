@@ -93,49 +93,17 @@ module avl_dacfifo_rd #(
 
   wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_s;
   wire        [AVL_MEM_ADDRESS_WIDTH:0]     avl_mem_address_diff_s;
+  wire        [AVL_MEM_ADDRESS_WIDTH:0]     avl_mem_wr_address_b2g_s;
   wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_address_diff_s;
   wire                                      avl_xfer_req_init_s;
 
   wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_wr_address_s;
+  wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address_g2b_s;
+  wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_g2b_s;
+  wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_rd_address_b2g_s;
   wire                                      dac_mem_rd_enable_s;
   wire        [DAC_DATA_WIDTH-1:0]          dac_mem_data_s;
 
-  // ==========================================================================
-  // binary to grey conversion and grey to binary conversion for CDC circuitry
-  // ==========================================================================
-
-  function [7:0] b2g;
-    input [7:0] b;
-    reg   [7:0] g;
-    begin
-      g[7] = b[7];
-      g[6] = b[7] ^ b[6];
-      g[5] = b[6] ^ b[5];
-      g[4] = b[5] ^ b[4];
-      g[3] = b[4] ^ b[3];
-      g[2] = b[3] ^ b[2];
-      g[1] = b[2] ^ b[1];
-      g[0] = b[1] ^ b[0];
-      b2g = g;
-    end
-  endfunction
-
-
-  function [7:0] g2b;
-    input [7:0] g;
-    reg   [7:0] b;
-    begin
-      b[7] = g[7];
-      b[6] = b[7] ^ g[6];
-      b[5] = b[6] ^ g[5];
-      b[4] = b[5] ^ g[4];
-      b[3] = b[4] ^ g[3];
-      b[2] = b[3] ^ g[2];
-      b[1] = b[2] ^ g[1];
-      b[0] = b[1] ^ g[0];
-      g2b = b;
-    end
-  endfunction
 
   // ==========================================================================
   // An asymmetric memory to transfer data from Avalon interface to DAC
@@ -225,9 +193,15 @@ module avl_dacfifo_rd #(
       if (avl_mem_wr_enable == 1'b1) begin
         avl_mem_wr_address <= avl_mem_wr_address + 1;
       end
-      avl_mem_wr_address_g <= b2g(avl_mem_wr_address);
+      avl_mem_wr_address_g <= avl_mem_wr_address_b2g_s;
     end
   end
+
+  ad_b2g #(
+    .DATA_WIDTH(AVL_MEM_ADDRESS_WIDTH)
+  ) i_avl_mem_wr_address_b2g (
+    .din (avl_mem_wr_address),
+    .dout (avl_mem_wr_address_b2g_s));
 
   // ==========================================================================
   // control the FIFO to prevent overflow, underfloq is monitored
@@ -252,7 +226,7 @@ module avl_dacfifo_rd #(
     end else begin
       avl_mem_rd_address_m1 <= dac_mem_rd_address_g;
       avl_mem_rd_address_m2 <= avl_mem_rd_address_m1;
-      avl_mem_rd_address <= g2b(avl_mem_rd_address_m2);
+      avl_mem_rd_address <= avl_mem_rd_address_g2b_s;
       avl_mem_address_diff <= avl_mem_address_diff_s[AVL_MEM_ADDRESS_WIDTH-1:0];
       if (avl_mem_address_diff >= AVL_MEM_THRESHOLD_HI) begin
         avl_mem_request_data <= 1'b0;
@@ -262,6 +236,11 @@ module avl_dacfifo_rd #(
     end
   end
 
+  ad_g2b #(
+    .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
+  ) i_avl_mem_rd_address_g2b (
+    .din (avl_mem_rd_address_m2),
+    .dout (avl_mem_rd_address_g2b_s));
   // ==========================================================================
   // Push data from the async FIFO to the DAC
   // Data flow is controlled by the DAC, no back-pressure. If FIFO is not
@@ -285,9 +264,15 @@ module avl_dacfifo_rd #(
     end else begin
       dac_mem_wr_address_m1 <= avl_mem_wr_address_g;
       dac_mem_wr_address_m2 <= dac_mem_wr_address_m1;
-      dac_mem_wr_address <= g2b(dac_mem_wr_address_m2);
+      dac_mem_wr_address <= dac_mem_wr_address_g2b_s;
     end
   end
+
+  ad_g2b #(
+    .DATA_WIDTH(AVL_MEM_ADDRESS_WIDTH)
+  ) i_dac_mem_wr_address_g2b (
+    .din (dac_mem_wr_address_m2),
+    .dout (dac_mem_wr_address_g2b_s));
 
   always @(posedge dac_clk) begin
     if (dac_reset == 1'b1) begin
@@ -312,9 +297,15 @@ module avl_dacfifo_rd #(
       if (dac_mem_rd_enable_s == 1'b1) begin
         dac_mem_rd_address <= dac_mem_rd_address + 1;
       end
-      dac_mem_rd_address_g <= b2g(dac_mem_rd_address);
+      dac_mem_rd_address_g <= dac_mem_rd_address_b2g_s;
     end
   end
+
+  ad_b2g #(
+    .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
+  ) i_dac_mem_rd_address_b2g (
+    .din (dac_mem_rd_address),
+    .dout (dac_mem_rd_address_b2g_s));
 
   always @(posedge dac_clk) begin
     if (dac_reset == 1'b1) begin
