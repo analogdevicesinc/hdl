@@ -63,6 +63,11 @@ module avl_dacfifo_rd #(
   localparam  AVL_MEM_THRESHOLD_LO = 8;
   localparam  AVL_MEM_THRESHOLD_HI = {(AVL_MEM_ADDRESS_WIDTH){1'b1}} - 7;
 
+  localparam  MEM_WIDTH_DIFF = (MEM_RATIO > 16) ? 5 :
+                               (MEM_RATIO >  8) ? 4 :
+                               (MEM_RATIO >  4) ? 3 :
+                               (MEM_RATIO >  2) ? 2 :
+                               (MEM_RATIO >  1) ? 1 : 1;
   // internal register
 
   reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_wr_address;
@@ -74,20 +79,26 @@ module avl_dacfifo_rd #(
   reg                                       avl_mem_request_data;
   reg         [AVL_DATA_WIDTH-1:0]          avl_mem_data;
   reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_address_diff;
-  reg                                       avl_xfer_req_d;
-  reg                                       avl_xfer_req_dd;
   reg                                       avl_read_inprogress;
+  reg                                       avl_last_transfer;
 
   reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address;
-  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address_m2;
   reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address_m1;
+  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address_m2;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_last_address;
   reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_rd_address;
   reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_rd_address_g;
   reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_address_diff;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_rd_last_address;
+  reg                                       dac_mem_last_transfer_active;
 
   reg                                       dac_avl_xfer_req;
   reg                                       dac_avl_xfer_req_m1;
   reg                                       dac_avl_xfer_req_m2;
+
+  reg                                       dac_avl_last_transfer_m1;
+  reg                                       dac_avl_last_transfer_m2;
+  reg                                       dac_avl_last_transfer;
 
   // internal signals
 
@@ -95,7 +106,6 @@ module avl_dacfifo_rd #(
   wire        [AVL_MEM_ADDRESS_WIDTH:0]     avl_mem_address_diff_s;
   wire        [AVL_MEM_ADDRESS_WIDTH:0]     avl_mem_wr_address_b2g_s;
   wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_address_diff_s;
-  wire                                      avl_xfer_req_init_s;
 
   wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_wr_address_s;
   wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address_g2b_s;
@@ -104,6 +114,8 @@ module avl_dacfifo_rd #(
   wire                                      dac_mem_rd_enable_s;
   wire        [DAC_DATA_WIDTH-1:0]          dac_mem_data_s;
 
+  wire        [MEM_WIDTH_DIFF-1:0]          avl_last_beats_s;
+  wire                                      avl_last_transfer_s;
 
   // ==========================================================================
   // An asymmetric memory to transfer data from Avalon interface to DAC
@@ -131,7 +143,7 @@ module avl_dacfifo_rd #(
   // Avalon address generation and read control signaling
 
   always @(posedge avl_clk) begin
-    if (avl_reset == 1'b1) begin
+    if ((avl_reset == 1'b1) || (avl_xfer_req == 1'b0)) begin
       avl_address <= AVL_DDR_BASE_ADDRESS;
     end else begin
       if (avl_readdatavalid == 1'b1) begin
@@ -159,9 +171,11 @@ module avl_dacfifo_rd #(
     end
   end
 
+  assign avl_last_transfer_s = (avl_address == avl_last_address) ? 1'b1 : 1'b0;
   always @(posedge avl_clk) begin
     avl_burstcount <= 1'b1;
-    avl_byteenable <= {64{1'b1}};
+    avl_byteenable <= (avl_last_transfer_s) ? avl_last_byteenable : {64{1'b1}};
+    avl_last_transfer <= avl_last_transfer_s;
   end
 
   // write data from Avalon interface into the async FIFO
@@ -180,13 +194,7 @@ module avl_dacfifo_rd #(
   end
 
   always @(posedge avl_clk) begin
-      avl_xfer_req_d <= avl_xfer_req;
-      avl_xfer_req_dd <= avl_xfer_req_d;
-  end
-  assign avl_xfer_req_init_s = avl_xfer_req_d & ~avl_xfer_req_dd;
-
-  always @(posedge avl_clk) begin
-    if ((avl_reset == 1'b1) || (avl_xfer_req_init_s == 1'b1)) begin
+    if ((avl_reset == 1'b1) || (avl_xfer_req == 1'b0)) begin
       avl_mem_wr_address <= 0;
       avl_mem_wr_address_g <= 0;
     end else begin
@@ -241,6 +249,17 @@ module avl_dacfifo_rd #(
   ) i_avl_mem_rd_address_g2b (
     .din (avl_mem_rd_address_m2),
     .dout (avl_mem_rd_address_g2b_s));
+
+  avl_dacfifo_byteenable_decoder #(
+    .MEM_RATIO (MEM_RATIO),
+    .LAST_BEATS_WIDTH (MEM_WIDTH_DIFF)
+  ) i_byteenable_decoder (
+    .avl_clk (avl_clk),
+    .avl_byteenable (avl_last_byteenable),
+    .avl_enable (1'b1),
+    .avl_last_beats (avl_last_beats_s)
+  );
+
   // ==========================================================================
   // Push data from the async FIFO to the DAC
   // Data flow is controlled by the DAC, no back-pressure. If FIFO is not
@@ -261,10 +280,12 @@ module avl_dacfifo_rd #(
       dac_mem_wr_address_m2 <= 0;
       dac_mem_wr_address_m1 <= 0;
       dac_mem_wr_address <= 0;
+      dac_mem_wr_last_address <= 0;
     end else begin
       dac_mem_wr_address_m1 <= avl_mem_wr_address_g;
       dac_mem_wr_address_m2 <= dac_mem_wr_address_m1;
       dac_mem_wr_address <= dac_mem_wr_address_g2b_s;
+      dac_mem_wr_last_address <= (dac_avl_last_transfer == 1'b1) ? dac_mem_wr_address_s : dac_mem_wr_last_address;
     end
   end
 
@@ -276,26 +297,54 @@ module avl_dacfifo_rd #(
 
   always @(posedge dac_clk) begin
     if (dac_reset == 1'b1) begin
+      dac_avl_last_transfer_m1 <= 0;
+      dac_avl_last_transfer_m2 <= 0;
+      dac_avl_last_transfer <= 0;
+    end else begin
+      dac_avl_last_transfer_m1 <= (avl_last_transfer & avl_readdatavalid);
+      dac_avl_last_transfer_m2 <= dac_avl_last_transfer_m1;
+      dac_avl_last_transfer <= dac_avl_last_transfer_m2;
+    end
+  end
+
+  always @(posedge dac_clk) begin
+    if (dac_reset == 1'b1) begin
       dac_avl_xfer_req_m2 <= 0;
       dac_avl_xfer_req_m1 <= 0;
       dac_avl_xfer_req <= 0;
     end else begin
       dac_avl_xfer_req_m1 <= avl_xfer_req;
       dac_avl_xfer_req_m2 <= dac_avl_xfer_req_m1;
-      dac_avl_xfer_req <= dac_avl_xfer_req_m1;
+      dac_avl_xfer_req <= dac_avl_xfer_req_m2;
     end
   end
 
-  assign dac_mem_rd_enable_s = (dac_xfer_req == 1'b1) ? dac_valid : 0;
+  always @(posedge dac_clk) begin
+    if (dac_reset == 1'b1) begin
+      dac_mem_last_transfer_active <= 1'b0;
+    end else begin
+      if (dac_avl_last_transfer == 1'b1) begin
+        dac_mem_last_transfer_active <= 1'b1;
+      end else if (dac_mem_rd_address == dac_mem_rd_last_address) begin
+        dac_mem_last_transfer_active <= 1'b0;
+      end
+    end
+  end
+
+  assign dac_mem_rd_enable_s = (dac_mem_address_diff[DAC_MEM_ADDRESS_WIDTH-1:0] == 1'b0) ? 0 : (dac_xfer_req & dac_valid);
   always @(posedge dac_clk) begin
     if ((dac_reset == 1'b1) || ((dac_avl_xfer_req == 1'b0) && (dac_xfer_req == 1'b0))) begin
       dac_mem_rd_address <= 0;
       dac_mem_rd_address_g <= 0;
       dac_mem_address_diff <= 0;
+      dac_mem_rd_last_address <= 0;
     end else begin
       dac_mem_address_diff <= dac_mem_address_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0];
+      dac_mem_rd_last_address <= dac_mem_wr_last_address + avl_last_beats_s;
       if (dac_mem_rd_enable_s == 1'b1) begin
-        dac_mem_rd_address <= dac_mem_rd_address + 1;
+        dac_mem_rd_address <= ((dac_mem_rd_address == dac_mem_rd_last_address) && (dac_mem_last_transfer_active == 1'b1)) ?
+                                                            (dac_mem_wr_last_address + {MEM_WIDTH_DIFF{1'b1}} + 1) :
+                                                            (dac_mem_rd_address + 1);
       end
       dac_mem_rd_address_g <= dac_mem_rd_address_b2g_s;
     end

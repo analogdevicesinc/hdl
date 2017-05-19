@@ -92,6 +92,7 @@ module avl_dacfifo #(
   wire        [ 24:0]                   avl_wr_address_s;
   wire        [ 24:0]                   avl_rd_address_s;
   wire        [ 24:0]                   avl_last_address_s;
+  wire        [ 63:0]                   avl_last_byteenable_s;
   wire        [  5:0]                   avl_wr_burstcount_s;
   wire        [  5:0]                   avl_rd_burstcount_s;
   wire        [ 63:0]                   avl_wr_byteenable_s;
@@ -117,7 +118,7 @@ module avl_dacfifo #(
     .dma_xfer_last (dma_xfer_last),
     .dma_last_beat (),
     .avl_last_address (avl_last_address_s),
-    .avl_last_byteenable (),
+    .avl_last_byteenable (avl_last_byteenable_s),
     .avl_clk (avl_clk),
     .avl_reset (avl_reset),
     .avl_address (avl_wr_address_s),
@@ -152,7 +153,7 @@ module avl_dacfifo #(
     .avl_read(avl_read_s),
     .avl_data(avl_readdata),
     .avl_last_address(avl_last_address_s),
-    .avl_last_byteenable(),
+    .avl_last_byteenable(avl_last_byteenable_s),
     .avl_xfer_req(avl_xfer_out_s));
 
   // avalon address multiplexer and output registers

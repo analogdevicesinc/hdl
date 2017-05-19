@@ -11,6 +11,7 @@ ad_ip_files avl_dacfifo [list\
   $ad_hdl_dir/library/common/ad_b2g.v \
   $ad_hdl_dir/library/common/ad_g2b.v \
   avl_dacfifo_byteenable_coder.v \
+  avl_dacfifo_byteenable_decoder.v \
   avl_dacfifo_wr.v \
   avl_dacfifo_rd.v \
   avl_dacfifo.v \
