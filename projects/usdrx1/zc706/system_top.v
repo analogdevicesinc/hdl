@@ -105,6 +105,8 @@ module system_top (
   output                  spi_clk_clk,
   inout                   spi_clk_sdio,
 
+  output                  afe_mlo_p,
+  output                  afe_mlo_n,
   output                  afe_rst_p,
   output                  afe_rst_n,
   output                  afe_trig_p,
@@ -125,18 +127,18 @@ module system_top (
 
   // internal signals
 
-  wire    [ 4:0]  spi_csn;
-  wire            spi_clk;
-  wire            spi_mosi;
-  wire            spi_miso;
-  wire            rx_ref_clk;
-  wire            rx_sysref;
-  wire            rx_sync;
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [15:0]  ps_intrs;
-  wire            rx_clk;
+  wire        [ 4:0]      spi_csn;
+  wire                    spi_clk;
+  wire                    spi_mosi;
+  wire                    spi_miso;
+  wire                    rx_ref_clk;
+  wire                    rx_sysref;
+  wire                    rx_sync;
+  wire        [63:0]      gpio_i;
+  wire        [63:0]      gpio_o;
+  wire        [63:0]      gpio_t;
+  wire        [15:0]      ps_intrs;
+  wire                    rx_clk;
 
   // spi assignments
 
@@ -179,6 +181,11 @@ module system_top (
     .I (gpio_o[32]),
     .O (afe_rst_p),
     .OB (afe_rst_n));
+
+  OBUFDS i_obufds_afe_mlo (
+    .I (1'b0),
+    .O (afe_mlo_p),
+    .OB (afe_mlo_n));
 
   assign dac_sleep  = gpio_o[44];
   assign amp_disbn  = gpio_o[39];

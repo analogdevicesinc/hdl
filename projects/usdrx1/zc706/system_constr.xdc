@@ -24,8 +24,8 @@ set_property  -dict {PACKAGE_PIN  P25   IOSTANDARD LVDS_25} [get_ports rx_sysref
 set_property  -dict {PACKAGE_PIN  P26   IOSTANDARD LVDS_25} [get_ports rx_sysref_n]           ; ## D24  FMC_HPC_LA23_N             
 set_property  -dict {PACKAGE_PIN  R28   IOSTANDARD LVDS_25} [get_ports rx_sync_p]             ; ## D26  FMC_HPC_LA26_P             
 set_property  -dict {PACKAGE_PIN  T28   IOSTANDARD LVDS_25} [get_ports rx_sync_n]             ; ## D27  FMC_HPC_LA26_N             
-#set_property  -dict {PACKAGE_PIN  V23   IOSTANDARD LVDS_25} [get_ports afe_mlo_p]             ; ## D20  FMC_HPC_LA17_CC_P          
-#set_property  -dict {PACKAGE_PIN  W24   IOSTANDARD LVDS_25} [get_ports afe_mlo_n]             ; ## D21  FMC_HPC_LA17_CC_N          
+set_property  -dict {PACKAGE_PIN  V23   IOSTANDARD LVDS_25} [get_ports afe_mlo_p]             ; ## D20  FMC_HPC_LA17_CC_P          
+set_property  -dict {PACKAGE_PIN  W24   IOSTANDARD LVDS_25} [get_ports afe_mlo_n]             ; ## D21  FMC_HPC_LA17_CC_N          
 set_property  -dict {PACKAGE_PIN  T29   IOSTANDARD LVDS_25} [get_ports afe_rst_p]             ; ## G27  FMC_HPC_LA25_P             
 set_property  -dict {PACKAGE_PIN  U29   IOSTANDARD LVDS_25} [get_ports afe_rst_n]             ; ## G28  FMC_HPC_LA25_N             
 set_property  -dict {PACKAGE_PIN  T30   IOSTANDARD LVDS_25} [get_ports afe_trig_p]            ; ## H28  FMC_HPC_LA24_P             
@@ -83,3 +83,5 @@ set_property  -dict {PACKAGE_PIN  AK17  IOSTANDARD LVCMOS25} [get_ports dac_data
 
 create_clock -name rx_ref_clk   -period 12.50 [get_ports rx_ref_clk_p]
 create_clock -name rx_div_clk   -period 12.50 [get_pins i_system_wrapper/system_i/util_usdrx1_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+set_property IOB false [get_cells -hierarchical -filter {name =~ *SCK_O_NE_4_FDRE_INST}]
+
