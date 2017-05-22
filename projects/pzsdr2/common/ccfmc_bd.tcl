@@ -29,6 +29,7 @@ create_bd_port -dir O spdif
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA0  1
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA1  1
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_DMA2  1
+ad_ip_parameter sys_ps7 CONFIG.PCW_ENET1_GRP_MDIO_ENABLE 1
 
 # ethernet-1
 
