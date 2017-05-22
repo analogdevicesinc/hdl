@@ -19,7 +19,7 @@ set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects 
 for {set n 0} {$n < 16} {incr n} {
 
   if {($n%4) == 0} {
-  adi_if_infer_bus ADI:user:if_xcvr_cm slave up_cm_${n} [list \
+  adi_if_infer_bus analog.com:interface:if_xcvr_cm slave up_cm_${n} [list \
     "sel                 up_cm_sel_${n}         "\
     "enb                 up_cm_enb_${n}         "\
     "addr                up_cm_addr_${n}        "\
@@ -29,7 +29,7 @@ for {set n 0} {$n < 16} {incr n} {
     "ready               up_cm_ready_${n}       "]
   }
 
-  adi_if_infer_bus ADI:user:if_xcvr_cm slave up_es_${n} [list \
+  adi_if_infer_bus analog.com:interface:if_xcvr_cm slave up_es_${n} [list \
     "sel                 up_es_sel_${n}         "\
     "enb                 up_es_enb_${n}         "\
     "addr                up_es_addr_${n}        "\
@@ -38,7 +38,7 @@ for {set n 0} {$n < 16} {incr n} {
     "rdata               up_es_rdata_${n}       "\
     "ready               up_es_ready_${n}       "]
 
-  adi_if_infer_bus ADI:user:if_xcvr_ch slave up_rx_${n} [list \
+  adi_if_infer_bus analog.com:interface:if_xcvr_ch slave up_rx_${n} [list \
     "pll_locked          up_rx_pll_locked_${n}  "\
     "rst                 up_rx_rst_${n}         "\
     "user_ready          up_rx_user_ready_${n}  "\
@@ -55,7 +55,7 @@ for {set n 0} {$n < 16} {incr n} {
     "rdata               up_rx_rdata_${n}       "\
     "ready               up_rx_ready_${n}       "]
 
-  adi_if_infer_bus ADI:user:if_xcvr_ch slave up_tx_${n} [list \
+  adi_if_infer_bus analog.com:interface:if_xcvr_ch slave up_tx_${n} [list \
     "pll_locked          up_tx_pll_locked_${n}  "\
     "rst                 up_tx_rst_${n}         "\
     "user_ready          up_tx_user_ready_${n}  "\

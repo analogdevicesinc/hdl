@@ -278,12 +278,12 @@ proc adi_ip_properties {ip_name} {
 
 proc adi_if_define {name} {
 
-  ipx::create_abstraction_definition ADI user ${name}_rtl 1.0
-  ipx::create_bus_definition ADI user $name 1.0
+  ipx::create_abstraction_definition analog.com interface ${name}_rtl 1.0
+  ipx::create_bus_definition analog.com interface $name 1.0
 
   set_property xml_file_name ${name}_rtl.xml [ipx::current_busabs]
   set_property xml_file_name ${name}.xml [ipx::current_busdef]
-  set_property bus_type_vlnv ADI:user:${name}:1.0 [ipx::current_busabs]
+  set_property bus_type_vlnv analog.com:interface:${name}:1.0 [ipx::current_busabs]
 
   ipx::save_abstraction_definition [ipx::current_busabs]
   ipx::save_bus_definition [ipx::current_busdef]
