@@ -73,6 +73,7 @@
     # Enable additional peripherals from the PS7 block
   ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 1
   ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_ENET0_IO EMIO
+  ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_GRP_MDIO_IO EMIO
   ad_ip_parameter sys_ps7 CONFIG.PCW_ENET1_PERIPHERAL_ENABLE 1
 
   # Add additional clocks to be used by gmii to rgmii modules and current monitoring modules
