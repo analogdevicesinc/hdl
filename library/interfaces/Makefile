@@ -37,48 +37,8 @@ clean:clean-all
 clean-all:
 	rm -rf $(M_FLIST)
 
-if_xcvr_cm.xml:
+%.xml:
 	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_xcvr_cm_rtl.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_xcvr_ch.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_xcvr_ch_rtl.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_qpll.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_qpll_rtl.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_pll.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_pll_rtl.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_rx.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_rx_rtl.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_tx.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_tx_rtl.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_rx_ksig.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
-if_gt_rx_ksig_rtl.xml:
-	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
-
 
 ####################################################################################
 ####################################################################################
