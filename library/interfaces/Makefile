@@ -37,7 +37,7 @@ clean:clean-all
 clean-all:
 	rm -rf $(M_FLIST)
 
-%.xml:
+%.xml: $(M_DEPS)
 	$(M_VIVADO) interfaces_ip.tcl >> interfaces_ip.log 2>&1
 
 ####################################################################################
