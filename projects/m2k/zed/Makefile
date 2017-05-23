@@ -28,6 +28,7 @@ M_DEPS += ../../../library/axi_i2s_adi/axi_i2s_adi.xpr
 M_DEPS += ../../../library/axi_logic_analyzer/axi_logic_analyzer.xpr
 M_DEPS += ../../../library/axi_rd_wr_combiner/axi_rd_wr_combiner.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
+M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_extract/util_extract.xpr
 M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
 M_DEPS += ../../../library/util_var_fifo/util_var_fifo.xpr
@@ -70,6 +71,7 @@ clean-all:clean
 	make -C ../../../library/axi_logic_analyzer clean
 	make -C ../../../library/axi_rd_wr_combiner clean
 	make -C ../../../library/axi_spdif_tx clean
+	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_extract clean
 	make -C ../../../library/util_i2c_mixer clean
 	make -C ../../../library/util_var_fifo clean
@@ -92,6 +94,7 @@ lib:
 	make -C ../../../library/axi_logic_analyzer
 	make -C ../../../library/axi_rd_wr_combiner
 	make -C ../../../library/axi_spdif_tx
+	make -C ../../../library/util_cpack
 	make -C ../../../library/util_extract
 	make -C ../../../library/util_i2c_mixer
 	make -C ../../../library/util_var_fifo
