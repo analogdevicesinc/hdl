@@ -21,7 +21,10 @@ ad_ip_files axi_ad9122 [list \
     axi_ad9122_core.v \
     axi_ad9122_if.v \
     axi_ad9122.v \
-    $ad_hdl_dir/library/common/ad_axi_ip_constr.sdc \
+    $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc \
+    $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc \
+    $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc \
+    $ad_hdl_dir/library/altera/common/up_rst_constr.sdc \
     axi_ad9122_constr.sdc] \
     axi_ad9122_fileset
 

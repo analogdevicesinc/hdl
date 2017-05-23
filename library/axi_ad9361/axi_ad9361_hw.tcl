@@ -39,7 +39,10 @@ ad_ip_files axi_ad9361 [list\
   axi_ad9361_tdd.v \
   axi_ad9361_tdd_if.v \
   axi_ad9361.v \
-  $ad_hdl_dir/library/common/ad_axi_ip_constr.sdc \
+  $ad_hdl_dir/library/altera/common/up_xfer_cntrl_constr.sdc \
+  $ad_hdl_dir/library/altera/common/up_xfer_status_constr.sdc \
+  $ad_hdl_dir/library/altera/common/up_clock_mon_constr.sdc \
+  $ad_hdl_dir/library/altera/common/up_rst_constr.sdc \
   axi_ad9361_constr.sdc] \
   axi_ad9361_fileset
 
@@ -66,7 +69,7 @@ ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
 # interfaces
 
 ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
- 
+
 ad_alt_intf signal dac_sync_in input 1
 ad_alt_intf signal dac_sync_out output 1
 ad_alt_intf signal tdd_sync input 1
