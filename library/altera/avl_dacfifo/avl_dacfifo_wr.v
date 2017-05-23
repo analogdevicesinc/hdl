@@ -38,7 +38,6 @@ module avl_dacfifo_wr #(
   input                                 dma_valid,
   input                                 dma_xfer_req,
   input                                 dma_xfer_last,
-  output  reg [ 3:0]                    dma_last_beat,
 
   input                                 avl_clk,
   input                                 avl_reset,

@@ -104,11 +104,11 @@ module avl_dacfifo_rd #(
 
   wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_s;
   wire        [AVL_MEM_ADDRESS_WIDTH:0]     avl_mem_address_diff_s;
-  wire        [AVL_MEM_ADDRESS_WIDTH:0]     avl_mem_wr_address_b2g_s;
   wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_address_diff_s;
 
   wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_wr_address_s;
   wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address_g2b_s;
+  wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_wr_address_b2g_s;
   wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_g2b_s;
   wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_rd_address_b2g_s;
   wire                                      dac_mem_rd_enable_s;
@@ -116,6 +116,9 @@ module avl_dacfifo_rd #(
 
   wire        [MEM_WIDTH_DIFF-1:0]          avl_last_beats_s;
   wire                                      avl_last_transfer_s;
+  wire                                      avl_read_en_s;
+  wire                                      avl_mem_wr_enable_s;
+  wire                                      avl_last_readdatavalid_s;
 
   // ==========================================================================
   // An asymmetric memory to transfer data from Avalon interface to DAC
@@ -295,13 +298,14 @@ module avl_dacfifo_rd #(
     .din (dac_mem_wr_address_m2),
     .dout (dac_mem_wr_address_g2b_s));
 
+  assign avl_last_readdatavalid_s = (avl_last_transfer & avl_readdatavalid);
   always @(posedge dac_clk) begin
     if (dac_reset == 1'b1) begin
       dac_avl_last_transfer_m1 <= 0;
       dac_avl_last_transfer_m2 <= 0;
       dac_avl_last_transfer <= 0;
     end else begin
-      dac_avl_last_transfer_m1 <= (avl_last_transfer & avl_readdatavalid);
+      dac_avl_last_transfer_m1 <= avl_last_readdatavalid_s;
       dac_avl_last_transfer_m2 <= dac_avl_last_transfer_m1;
       dac_avl_last_transfer <= dac_avl_last_transfer_m2;
     end

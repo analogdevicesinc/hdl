@@ -86,6 +86,7 @@ module avl_dacfifo #(
   // internal signals
 
   wire                                  dma_ready_wr_s;
+  wire                                  dma_ready_bypass_s;
   wire                                  avl_read_s;
   wire                                  avl_write_s;
   wire   [(AVL_DATA_WIDTH-1):0]         avl_writedata_s;
@@ -102,6 +103,7 @@ module avl_dacfifo #(
   wire    [(DAC_DATA_WIDTH-1):0]        dac_data_bypass_s;
   wire                                  dac_xfer_fifo_out_s;
   wire                                  dac_dunf_fifo_s;
+  wire                                  dac_dunf_bypass_s;
 
   avl_dacfifo_wr #(
     .AVL_DATA_WIDTH (AVL_DATA_WIDTH),
@@ -116,7 +118,6 @@ module avl_dacfifo #(
     .dma_valid (dma_valid),
     .dma_xfer_req (dma_xfer_req),
     .dma_xfer_last (dma_xfer_last),
-    .dma_last_beat (),
     .avl_last_address (avl_last_address_s),
     .avl_last_byteenable (avl_last_byteenable_s),
     .avl_clk (avl_clk),
@@ -164,14 +165,14 @@ module avl_dacfifo #(
   end
 
   always @(posedge avl_clk) begin
-    if (avl_reset == 1) begin
-      avl_xfer_wren <= 0;
+    if (avl_reset == 1'b1) begin
+      avl_xfer_wren <= 1'b0;
     end else begin
-      if (avl_dma_xfer_req == 1) begin
-        avl_xfer_wren <= 1;
+      if (avl_dma_xfer_req == 1'b1) begin
+        avl_xfer_wren <= 1'b1;
       end
-      if (avl_xfer_out_s == 1) begin
-        avl_xfer_wren <= 0;
+      if (avl_xfer_out_s == 1'b1) begin
+        avl_xfer_wren <= 1'b0;
       end
     end
   end
@@ -272,7 +273,7 @@ module avl_dacfifo #(
     .DELAY_CYCLES(3)
   ) i_delay (
     .clk(dac_clk),
-    .reset(dac_reset),
+    .reset(dac_rst),
     .din(dac_xfer_out_int),
     .dout(dac_xfer_out));
 
