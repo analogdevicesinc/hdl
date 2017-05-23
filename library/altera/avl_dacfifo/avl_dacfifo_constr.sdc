@@ -6,6 +6,8 @@ set_false_path  -from [get_registers *avl_dacfifo_rd:i_rd|avl_mem_wr_address_g*]
                 -to [get_registers *avl_dacfifo_rd:i_rd|dac_mem_wr_address_m1*]
 set_false_path  -from [get_registers *avl_dacfifo_wr:i_wr|avl_xfer_req*]            \
                 -to [get_registers *avl_dacfifo_rd:i_rd|dac_avl_xfer_req_m1*]
+set_false_path  -from [get_registers *avl_dacfifo_wr:i_rd|avl_last_readdatavalid_s*]\
+                -to [get_registers *avl_dacfifo_rd:i_rd|dac_avl_last_transfer_m1*]
 
 set_false_path  -from [get_registers *avl_dacfifo_wr:i_wr|avl_mem_rd_address_g*]    \
                 -to [get_registers *avl_dacfifo_wr:i_wr|dma_mem_rd_address_m1*]
@@ -29,6 +31,7 @@ set_false_path  -from [get_registers *util_dacfifo_bypass:i_dacfifo_bypass|dma_m
                 -to [get_registers *util_dacfifo_bypass:i_dacfifo_bypass|dac_mem_waddr_m1*]
 set_false_path  -to [get_registers *util_dacfifo_bypass:i_dacfifo_bypass|dac_xfer_out_m1*]
 
-set_false_path  -to [get_registers *avl_dacfifo:*avl_xfer_req_m1*]
+set_false_path  -to [get_registers *avl_dacfifo:*avl_dma_xfer_req_m1*]
+set_false_path  -to [get_registers *avl_dacfifo:*dac_xfer_out_m1*]
 set_false_path  -to [get_registers *avl_dacfifo:*bypass_m1*]
 
