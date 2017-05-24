@@ -73,7 +73,11 @@ ad_ip_parameter pattern_generator_dmac CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_D
 
 ad_ip_instance axi_ad9963 axi_ad9963
 ad_ip_parameter axi_ad9963 CONFIG.DAC_DATAPATH_DISABLE 1
-ad_ip_parameter axi_ad9963 CONFIG.ADC_DATAPATH_DISABLE 1
+ad_ip_parameter axi_ad9963 CONFIG.ADC_USERPORTS_DISABLE 1
+ad_ip_parameter axi_ad9963 CONFIG.ADC_DATAFORMAT_DISABLE 1
+ad_ip_parameter axi_ad9963 CONFIG.ADC_DCFILTER_DISABLE 1
+ad_ip_parameter axi_ad9963 CONFIG.ADC_IQCORRECTION_DISABLE 0
+ad_ip_parameter axi_ad9963 CONFIG.ADC_SCALECORRECTION_ONLY 1
 
 ad_ip_instance util_var_fifo adc_trigger_fifo
 ad_ip_parameter adc_trigger_fifo CONFIG.DATA_WIDTH 32
