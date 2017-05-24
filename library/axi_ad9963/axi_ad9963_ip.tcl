@@ -19,6 +19,7 @@ adi_ip_files axi_ad9963 [list \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
   "$ad_hdl_dir/library/common/ad_dcfilter.v" \
   "$ad_hdl_dir/library/common/ad_iqcor.v" \
+  "$ad_hdl_dir/library/common/ad_scalecor.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \

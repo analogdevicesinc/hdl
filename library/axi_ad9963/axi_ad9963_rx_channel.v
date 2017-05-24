@@ -29,7 +29,11 @@ module axi_ad9963_rx_channel #(
 
   parameter Q_OR_I_N = 0,
   parameter CHANNEL_ID = 0,
-  parameter DATAPATH_DISABLE = 0) (
+  parameter USERPORTS_DISABLE = 0,
+  parameter DATAFORMAT_DISABLE = 0,
+  parameter DCFILTER_DISABLE = 0,
+  parameter IQCORRECTION_DISABLE = 0,
+  parameter SCALECORRECTION_ONLY = 1) (
 
   // adc interface
 
@@ -96,7 +100,7 @@ module axi_ad9963_rx_channel #(
     .adc_pn_err (adc_pn_err_s));
 
   generate
-  if (DATAPATH_DISABLE == 1) begin
+  if (DATAFORMAT_DISABLE == 1) begin
   assign adc_dfmt_valid_s = adc_valid;
   assign adc_dfmt_data_s = {{4{adc_data[11]}}, adc_data};
   end else begin
@@ -113,7 +117,7 @@ module axi_ad9963_rx_channel #(
   endgenerate
 
   generate
-  if (DATAPATH_DISABLE == 1) begin
+  if (DCFILTER_DISABLE == 1) begin
   assign adc_dcfilter_valid_s = adc_dfmt_valid_s;
   assign adc_dcfilter_data_s = adc_dfmt_data_s;
   end else begin
@@ -129,12 +133,10 @@ module axi_ad9963_rx_channel #(
   end
   endgenerate
 
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign adc_iqcor_valid = adc_dcfilter_valid_s;
-  assign adc_iqcor_data = adc_dcfilter_data_s;
-  end else begin
-  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
+  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N),
+             .DISABLE(IQCORRECTION_DISABLE == 1),
+             .SCALE_ONLY(SCALECORRECTION_ONLY)) 
+    i_ad_iqcor (
     .clk (adc_clk),
     .valid (adc_dcfilter_valid_s),
     .data_in (adc_dcfilter_data_s),
@@ -144,15 +146,13 @@ module axi_ad9963_rx_channel #(
     .iqcor_enable (adc_iqcor_enb_s),
     .iqcor_coeff_1 (adc_iqcor_coeff_1_s),
     .iqcor_coeff_2 (adc_iqcor_coeff_2_s));
-  end
-  endgenerate
 
   up_adc_channel #(
     .CHANNEL_ID (CHANNEL_ID),
-    .DATAFORMAT_DISABLE (DATAPATH_DISABLE),
-    .DCFILTER_DISABLE (DATAPATH_DISABLE),
-    .IQCORRECTION_DISABLE (DATAPATH_DISABLE),
-    .USERPORTS_DISABLE (1)
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE == 1),
+    .USERPORTS_DISABLE (USERPORTS_DISABLE)
   ) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

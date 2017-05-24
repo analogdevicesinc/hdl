@@ -27,9 +27,13 @@ module axi_ad9963_rx #(
 
   // parameters
 
-  parameter   DATAPATH_DISABLE = 0,
-  parameter   IODELAY_ENABLE = 0,
-  parameter   ID = 0) (
+  parameter USERPORTS_DISABLE = 0,
+  parameter DATAFORMAT_DISABLE = 0,
+  parameter DCFILTER_DISABLE = 0,
+  parameter IQCORRECTION_DISABLE = 0,
+  parameter SCALECORRECTION_ONLY = 1,
+  parameter IODELAY_ENABLE = 0,
+  parameter ID = 0) (
 
   // adc interface
 
@@ -74,6 +78,15 @@ module axi_ad9963_rx #(
   output reg  [31:0]  up_rdata,
   output reg          up_rack);
 
+ // configuration settings
+
+  localparam  CONFIG =  (SCALECORRECTION_ONLY * 32) +
+                        (0 * 16) +
+                        (USERPORTS_DISABLE * 8) +
+                        (DATAFORMAT_DISABLE * 4) +
+                        (DCFILTER_DISABLE * 2) +
+                        (IQCORRECTION_DISABLE * 1);
+
   // internal registers
 
   reg             up_status_pn_err = 'd0;
@@ -116,7 +129,11 @@ module axi_ad9963_rx #(
   axi_ad9963_rx_channel #(
     .Q_OR_I_N(0),
     .CHANNEL_ID(0),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .SCALECORRECTION_ONLY (SCALECORRECTION_ONLY))
   i_rx_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -147,7 +164,11 @@ module axi_ad9963_rx #(
   axi_ad9963_rx_channel #(
     .Q_OR_I_N(1),
     .CHANNEL_ID(1),
-    .DATAPATH_DISABLE (DATAPATH_DISABLE))
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .SCALECORRECTION_ONLY (SCALECORRECTION_ONLY))
   i_rx_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -177,6 +198,7 @@ module axi_ad9963_rx #(
 
   up_adc_common #(
     .ID (ID),
+    .CONFIG (CONFIG),
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (1),
     .GPIO_DISABLE (1),

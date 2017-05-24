@@ -31,8 +31,13 @@ module axi_ad9963 #(
   parameter   DEVICE_TYPE = 0,
   parameter   ADC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter   IODELAY_ENABLE = 0,
   parameter   DAC_DATAPATH_DISABLE = 0,
-  parameter   ADC_DATAPATH_DISABLE = 0 ) (
+  parameter   ADC_USERPORTS_DISABLE = 0,
+  parameter   ADC_DATAFORMAT_DISABLE = 0,
+  parameter   ADC_DCFILTER_DISABLE = 0,
+  parameter   ADC_IQCORRECTION_DISABLE = 0,
+  parameter   ADC_SCALECORRECTION_ONLY = 1) (
 
   // physical interface (receive)
 
@@ -192,7 +197,11 @@ module axi_ad9963 #(
 
   axi_ad9963_rx #(
     .ID (ID),
-    .DATAPATH_DISABLE (ADC_DATAPATH_DISABLE),
+    .USERPORTS_DISABLE (ADC_USERPORTS_DISABLE),
+    .DATAFORMAT_DISABLE (ADC_DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (ADC_DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (ADC_IQCORRECTION_DISABLE),
+    .SCALECORRECTION_ONLY (ADC_SCALECORRECTION_ONLY),
     .IODELAY_ENABLE (ADC_IODELAY_ENABLE)
   ) i_rx (
     .adc_rst (adc_rst),
