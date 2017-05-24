@@ -21,6 +21,8 @@
 // ***************************************************************************
 // ***************************************************************************
 // iq correction = a*(i+x) + b*(q+y); offsets are added in dcfilter.
+// if SCALE_ONLY is set to 1, b*(q+y) is set to 0, and the module is used for
+// scale correction of channel I
 
 `timescale 1ns/100ps
 
@@ -29,6 +31,7 @@ module ad_iqcor #(
   // select i/q if disabled
 
   parameter   Q_OR_I_N = 0,
+  parameter   SCALE_ONLY = 0,
   parameter   DISABLE = 0) (
 
   // data interface
@@ -81,7 +84,7 @@ module ad_iqcor #(
 
   // swap i & q
 
-  assign data_i_s = (Q_OR_I_N == 1) ? data_iq : data_in;
+  assign data_i_s = (Q_OR_I_N == 1 && SCALE_ONLY == 1'b0) ? data_iq : data_in;
   assign data_q_s = (Q_OR_I_N == 1) ? data_in : data_iq;
 
   // coefficients are flopped to remove warnings from vivado
@@ -101,6 +104,8 @@ module ad_iqcor #(
     .ddata_in ({valid, data_i_s}),
     .ddata_out ({p1_valid_s, p1_data_i_s}));
 
+  generate 
+  if (SCALE_ONLY == 0) begin
   // scaling functions - q
 
   ad_mul #(.DELAY_DATA_WIDTH(16)) i_mul_q (
@@ -112,6 +117,11 @@ module ad_iqcor #(
     .ddata_out (p1_data_q_s));
 
   // sum
+  end else begin
+  assign p1_data_p_q_s = 34'h0;
+  assign p1_data_q_s = 16'h0;
+  end
+  endgenerate
 
   always @(posedge clk) begin
     p1_valid <= p1_valid_s;
@@ -119,19 +129,19 @@ module ad_iqcor #(
     p1_data_q <= p1_data_q_s;
     p1_data_p <= p1_data_p_i_s + p1_data_p_q_s;
   end
-
   // output registers
 
   always @(posedge clk) begin
     valid_int <= p1_valid;
     if (iqcor_enable == 1'b1) begin
       data_int <= p1_data_p[29:14];
-    end else if (Q_OR_I_N == 1) begin
+    end else if (Q_OR_I_N == 1 && SCALE_ONLY == 0) begin
       data_int <= p1_data_q;
     end else begin
       data_int <= p1_data_i;
     end
   end
+
 
 endmodule
 
