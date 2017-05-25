@@ -1,5 +1,5 @@
 
-source ../common/pzsdr1_bd.tcl
+source ../common/adrv9364z7020_bd.tcl
 source ../common/ccusb_bd.tcl
 
 cfg_ad9361_interface LVDS

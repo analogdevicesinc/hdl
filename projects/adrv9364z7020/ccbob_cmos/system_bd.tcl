@@ -1,6 +1,6 @@
 
-source ../common/pzsdr1_bd.tcl
-source ../common/ccbrk_bd.tcl
+source ../common/adrv9364z7020_bd.tcl
+source ../common/ccbob_bd.tcl
 
 ad_ip_parameter clkdiv CONFIG.SEL_0_DIV 2
 ad_ip_parameter clkdiv CONFIG.SEL_1_DIV 1
