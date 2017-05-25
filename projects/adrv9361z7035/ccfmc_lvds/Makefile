@@ -8,19 +8,24 @@
 M_DEPS += system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += system_bd.tcl
-M_DEPS += ../common/pzsdr2_constr_lvds.xdc
-M_DEPS += ../common/pzsdr2_constr.xdc
-M_DEPS += ../common/pzsdr2_bd.tcl
-M_DEPS += ../common/ccbox_constr.xdc
-M_DEPS += ../common/ccbox_bd.tcl
+M_DEPS += ../common/ccfmc_constr.xdc
+M_DEPS += ../common/ccfmc_bd.tcl
+M_DEPS += ../common/adrv9361z7035_constr_lvds.xdc
+M_DEPS += ../common/adrv9361z7035_constr.xdc
+M_DEPS += ../common/adrv9361z7035_bd.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_delay.tcl
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361.xpr
+M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
+M_DEPS += ../../../library/axi_gpreg/axi_gpreg.xpr
+M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_i2s_adi/axi_i2s_adi.xpr
+M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
+M_DEPS += ../../../library/xilinx/axi_xcvrlb/axi_xcvrlb.xpr
 M_DEPS += ../../../library/util_clkdiv/util_clkdiv.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_rfifo/util_rfifo.xpr
@@ -47,7 +52,7 @@ M_FLIST += *.ip_user_files
 
 
 .PHONY: all lib clean clean-all
-all: lib pzsdr2_ccbox_lvds.sdk/system_top.hdf
+all: lib adrv9361z7035_ccfmc_lvds.sdk/system_top.hdf
 
 
 clean: 
@@ -56,8 +61,13 @@ clean:
 
 clean-all:clean
 	make -C ../../../library/axi_ad9361 clean
+	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/axi_dmac clean
+	make -C ../../../library/axi_gpreg clean
+	make -C ../../../library/axi_hdmi_tx clean
 	make -C ../../../library/axi_i2s_adi clean
+	make -C ../../../library/axi_spdif_tx clean
+	make -C ../../../library/xilinx/axi_xcvrlb clean
 	make -C ../../../library/util_clkdiv clean
 	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_rfifo clean
@@ -66,15 +76,20 @@ clean-all:clean
 	make -C ../../../library/util_wfifo clean
 
 
-pzsdr2_ccbox_lvds.sdk/system_top.hdf: $(M_DEPS)
+adrv9361z7035_ccfmc_lvds.sdk/system_top.hdf: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> pzsdr2_ccbox_lvds_vivado.log 2>&1
+	$(M_VIVADO) system_project.tcl >> adrv9361z7035_ccfmc_lvds_vivado.log 2>&1
 
 
 lib:
 	make -C ../../../library/axi_ad9361
+	make -C ../../../library/axi_clkgen
 	make -C ../../../library/axi_dmac
+	make -C ../../../library/axi_gpreg
+	make -C ../../../library/axi_hdmi_tx
 	make -C ../../../library/axi_i2s_adi
+	make -C ../../../library/axi_spdif_tx
+	make -C ../../../library/xilinx/axi_xcvrlb
 	make -C ../../../library/util_clkdiv
 	make -C ../../../library/util_cpack
 	make -C ../../../library/util_rfifo

@@ -8,11 +8,11 @@
 M_DEPS += system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += system_bd.tcl
-M_DEPS += ../common/pzsdr2_constr_lvds.xdc
-M_DEPS += ../common/pzsdr2_constr.xdc
-M_DEPS += ../common/pzsdr2_bd.tcl
 M_DEPS += ../common/ccusb_constr.xdc
 M_DEPS += ../common/ccusb_bd.tcl
+M_DEPS += ../common/adrv9361z7035_constr_lvds.xdc
+M_DEPS += ../common/adrv9361z7035_constr.xdc
+M_DEPS += ../common/adrv9361z7035_bd.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
@@ -47,7 +47,7 @@ M_FLIST += *.ip_user_files
 
 
 .PHONY: all lib clean clean-all
-all: lib pzsdr2_ccusb_lvds.sdk/system_top.hdf
+all: lib adrv9361z7035_ccusb_lvds.sdk/system_top.hdf
 
 
 clean: 
@@ -66,9 +66,9 @@ clean-all:clean
 	make -C ../../../library/util_wfifo clean
 
 
-pzsdr2_ccusb_lvds.sdk/system_top.hdf: $(M_DEPS)
+adrv9361z7035_ccusb_lvds.sdk/system_top.hdf: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> pzsdr2_ccusb_lvds_vivado.log 2>&1
+	$(M_VIVADO) system_project.tcl >> adrv9361z7035_ccusb_lvds_vivado.log 2>&1
 
 
 lib:
