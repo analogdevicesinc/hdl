@@ -108,60 +108,60 @@ module axi_ad9361_lvds_if #(
 
   // internal registers
 
-  reg     [ 3:0]  rx_frame = 'd0;
-  reg             rx_error = 'd0;
-  reg             rx_valid = 'd0;
-  reg     [ 5:0]  rx_data_3 = 'd0;
-  reg     [ 5:0]  rx_data_2 = 'd0;
-  reg     [ 5:0]  rx_data_1 = 'd0;
-  reg     [ 5:0]  rx_data_0 = 'd0;
-  reg     [23:0]  rx_data = 'd0;
-  reg     [ 3:0]  tx_frame = 'd0;
-  reg     [ 3:0]  tx_p_frame = 'd0;
-  reg     [ 3:0]  tx_n_frame = 'd0;
-  reg     [ 5:0]  tx_data_d_0 = 'd0;
-  reg     [ 5:0]  tx_data_d_1 = 'd0;
-  reg     [ 5:0]  tx_data_d_2 = 'd0;
-  reg     [ 5:0]  tx_data_d_3 = 'd0;
-  reg             tx_data_sel  = 'd0;
-  reg             up_enable_int = 'd0;
-  reg             up_txnrx_int = 'd0;
-  reg             enable_up_m1 = 'd0;
-  reg             txnrx_up_m1 = 'd0;
-  reg             enable_up = 'd0;
-  reg             txnrx_up = 'd0;
-  reg             enable_int = 'd0;
-  reg             txnrx_int = 'd0;
-  reg             enable_n_int = 'd0;
-  reg             txnrx_n_int = 'd0;
-  reg             enable_p_int = 'd0;
-  reg             txnrx_p_int = 'd0;
-  reg    [ 5:0]   tx_p_data_d_0 = 'd0;
-  reg    [ 5:0]   tx_p_data_d_1 = 'd0;
-  reg    [ 5:0]   tx_p_data_d_2 = 'd0;
-  reg    [ 5:0]   tx_p_data_d_3 = 'd0;
-  reg    [ 5:0]   tx_n_data_d_0 = 'd0;
-  reg    [ 5:0]   tx_n_data_d_1 = 'd0;
-  reg    [ 5:0]   tx_n_data_d_2 = 'd0;
-  reg    [ 5:0]   tx_n_data_d_3 = 'd0;
-  reg             adc_n_valid = 'd0;
-  reg             adc_p_valid = 'd0;
-  reg             adc_n_status = 'd0;
-  reg             adc_p_status = 'd0;
-  reg    [47:0]   adc_n_data = 'd0;
-  reg    [47:0]   adc_p_data = 'd0;
+  reg     [ 3:0]      rx_frame = 'd0;
+  reg                 rx_error = 'd0;
+  reg                 rx_valid = 'd0;
+  reg     [ 5:0]      rx_data_3 = 'd0;
+  reg     [ 5:0]      rx_data_2 = 'd0;
+  reg     [ 5:0]      rx_data_1 = 'd0;
+  reg     [ 5:0]      rx_data_0 = 'd0;
+  reg     [23:0]      rx_data = 'd0;
+  reg     [ 3:0]      tx_frame = 'd0;
+  reg     [ 3:0]      tx_p_frame = 'd0;
+  reg     [ 3:0]      tx_n_frame = 'd0;
+  reg     [ 5:0]      tx_data_d_0 = 'd0;
+  reg     [ 5:0]      tx_data_d_1 = 'd0;
+  reg     [ 5:0]      tx_data_d_2 = 'd0;
+  reg     [ 5:0]      tx_data_d_3 = 'd0;
+  reg                 tx_data_sel  = 'd0;
+  reg                 up_enable_int = 'd0;
+  reg                 up_txnrx_int = 'd0;
+  reg                 enable_up_m1 = 'd0;
+  reg                 txnrx_up_m1 = 'd0;
+  reg                 enable_up = 'd0;
+  reg                 txnrx_up = 'd0;
+  reg                 enable_int = 'd0;
+  reg                 txnrx_int = 'd0;
+  reg                 enable_n_int = 'd0;
+  reg                 txnrx_n_int = 'd0;
+  reg                 enable_p_int = 'd0;
+  reg                 txnrx_p_int = 'd0;
+  reg     [ 5:0]      tx_p_data_d_0 = 'd0;
+  reg     [ 5:0]      tx_p_data_d_1 = 'd0;
+  reg     [ 5:0]      tx_p_data_d_2 = 'd0;
+  reg     [ 5:0]      tx_p_data_d_3 = 'd0;
+  reg     [ 5:0]      tx_n_data_d_0 = 'd0;
+  reg     [ 5:0]      tx_n_data_d_1 = 'd0;
+  reg     [ 5:0]      tx_n_data_d_2 = 'd0;
+  reg     [ 5:0]      tx_n_data_d_3 = 'd0;
+  reg                 adc_n_valid = 'd0;
+  reg                 adc_p_valid = 'd0;
+  reg                 adc_n_status = 'd0;
+  reg                 adc_p_status = 'd0;
+  reg     [47:0]      adc_n_data = 'd0;
+  reg     [47:0]      adc_p_data = 'd0;
 
   // internal signals
 
-  wire            s_clk;
-  wire            loaden;
-  wire    [ 7:0]  phase_s;
-  wire    [ 3:0]  rx_frame_s;
-  wire    [ 5:0]  rx_data_s_3;
-  wire    [ 5:0]  rx_data_s_2;
-  wire    [ 5:0]  rx_data_s_1;
-  wire    [ 5:0]  rx_data_s_0;
-  wire    [ 3:0]  rx_frame_inv_s;
+  wire                s_clk;
+  wire                loaden;
+  wire    [ 7:0]      phase_s;
+  wire    [ 3:0]      rx_frame_s;
+  wire    [ 5:0]      rx_data_s_3;
+  wire    [ 5:0]      rx_data_s_2;
+  wire    [ 5:0]      rx_data_s_1;
+  wire    [ 5:0]      rx_data_s_0;
+  wire    [ 3:0]      rx_frame_inv_s;
 
   // unused interface signals
 
@@ -369,74 +369,48 @@ module axi_ad9361_lvds_if #(
 
   // receive data path interface
 
-  ad_serdes_in #(
-    .DATA_WIDTH (6),
-    .SERDES_FACTOR (4),
-    .DEVICE_TYPE (DEVICE_TYPE))
+  axi_ad9361_serdes_in #(
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .DATA_WIDTH (6))
   ad_serdes_data_in (
-    .rst (mmcm_rst),
     .clk (s_clk),
     .div_clk (l_clk),
     .loaden (loaden),
-    .locked (up_drp_locked),
     .phase (phase_s),
+    .locked (up_drp_locked),
     .data_s0 (rx_data_s_0),
     .data_s1 (rx_data_s_1),
     .data_s2 (rx_data_s_2),
     .data_s3 (rx_data_s_3),
-    .data_s4 (),
-    .data_s5 (),
-    .data_s6 (),
-    .data_s7 (),
     .data_in_p (rx_data_in_p),
     .data_in_n (rx_data_in_n),
-    .up_clk (1'd0),
-    .up_dld (6'd0),
-    .up_dwdata (30'd0),
-    .up_drdata (),
-    .delay_clk (1'd0),
-    .delay_rst (1'd0),
     .delay_locked ());
 
   // receive frame interface
 
-  ad_serdes_in #(
-    .DATA_WIDTH (1),
-    .SERDES_FACTOR (4),
-    .DEVICE_TYPE (DEVICE_TYPE))
+  axi_ad9361_serdes_in #(
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .DATA_WIDTH (1))
   ad_serdes_frame_in (
-    .rst (mmcm_rst),
     .clk (s_clk),
     .div_clk (l_clk),
     .loaden (loaden),
-    .locked (up_drp_locked),
     .phase (phase_s),
+    .locked (up_drp_locked),
     .data_s0 (rx_frame_s[0]),
     .data_s1 (rx_frame_s[1]),
     .data_s2 (rx_frame_s[2]),
     .data_s3 (rx_frame_s[3]),
-    .data_s4 (),
-    .data_s5 (),
-    .data_s6 (),
-    .data_s7 (),
     .data_in_p (rx_frame_in_p),
     .data_in_n (rx_frame_in_n),
-    .up_clk (1'd0),
-    .up_dld (1'd0),
-    .up_dwdata (5'd0),
-    .up_drdata (),
-    .delay_clk (1'd0),
-    .delay_rst (1'd0),
     .delay_locked ());
 
   // transmit data interface
 
-  ad_serdes_out #(
-    .DATA_WIDTH (6),
-    .SERDES_FACTOR (4),
-    .DEVICE_TYPE (DEVICE_TYPE))
+  axi_ad9361_serdes_out #(
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .DATA_WIDTH (6))
   ad_serdes_data_out (
-    .rst (mmcm_rst),
     .clk (s_clk),
     .div_clk (l_clk),
     .loaden (loaden),
@@ -444,21 +418,15 @@ module axi_ad9361_lvds_if #(
     .data_s1 (tx_p_data_d_1),
     .data_s2 (tx_p_data_d_2),
     .data_s3 (tx_p_data_d_3),
-    .data_s4 (6'd0),
-    .data_s5 (6'd0),
-    .data_s6 (6'd0),
-    .data_s7 (6'd0),
     .data_out_p (tx_data_out_p),
     .data_out_n (tx_data_out_n));
 
   // transmit frame interface
 
-  ad_serdes_out #(
-    .DATA_WIDTH (1),
-    .SERDES_FACTOR (4),
-    .DEVICE_TYPE (DEVICE_TYPE))
+  axi_ad9361_serdes_out #(
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .DATA_WIDTH (1))
   ad_serdes_frame_out (
-    .rst (mmcm_rst),
     .clk (s_clk),
     .div_clk (l_clk),
     .loaden (loaden),
@@ -466,21 +434,15 @@ module axi_ad9361_lvds_if #(
     .data_s1 (tx_p_frame[1]),
     .data_s2 (tx_p_frame[2]),
     .data_s3 (tx_p_frame[3]),
-    .data_s4 (1'd0),
-    .data_s5 (1'd0),
-    .data_s6 (1'd0),
-    .data_s7 (1'd0),
     .data_out_p (tx_frame_out_p),
     .data_out_n (tx_frame_out_n));
 
   // transmit clock interface
 
-  ad_serdes_out #(
-    .DATA_WIDTH(1),
-    .SERDES_FACTOR(4),
-    .DEVICE_TYPE(DEVICE_TYPE))
+  axi_ad9361_serdes_out #(
+    .DEVICE_TYPE (DEVICE_TYPE),
+    .DATA_WIDTH (1))
   ad_serdes_tx_clock_out(
-    .rst (mmcm_rst),
     .clk (s_clk),
     .div_clk (l_clk),
     .loaden (loaden),
@@ -488,16 +450,12 @@ module axi_ad9361_lvds_if #(
     .data_s1 (~dac_clksel),
     .data_s2 (dac_clksel),
     .data_s3 (~dac_clksel),
-    .data_s4 (1'd0),
-    .data_s5 (1'd0),
-    .data_s6 (1'd0),
-    .data_s7 (1'd0),
     .data_out_p (tx_clk_out_p),
     .data_out_n (tx_clk_out_n));
 
   // serdes clock interface
 
-  ad_serdes_clk #(
+  axi_ad9361_serdes_clk #(
     .DEVICE_TYPE (DEVICE_TYPE))
   ad_serdes_clk (
     .rst (mmcm_rst),
@@ -520,9 +478,9 @@ module axi_ad9361_lvds_if #(
 
  // enable
 
-  ad_cmos_out #(
+  axi_ad9361_cmos_out #(
     .DEVICE_TYPE (DEVICE_TYPE))
-  i_enable (
+  ad_serdes_enable (
     .tx_clk (l_clk),
     .tx_data_p (enable_p_int),
     .tx_data_n (enable_p_int),
@@ -530,9 +488,9 @@ module axi_ad9361_lvds_if #(
 
   // txnrx
 
-  ad_cmos_out #(
+  axi_ad9361_cmos_out #(
     .DEVICE_TYPE (DEVICE_TYPE))
-  i_txnrx (
+  ad_serdes_txnrx (
     .tx_clk (l_clk),
     .tx_data_p (txnrx_p_int),
     .tx_data_n (txnrx_p_int),
