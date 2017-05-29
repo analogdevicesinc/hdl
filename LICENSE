@@ -17,40 +17,41 @@ license for all the files. It is up to you, the user, to ensure that during the
 building a project, which combines these modules together so that they form a
 bit file (either one, or multiple for partial reconfiguration), all the individual
 licenses are compatible. For example, if a single module is covered by the GPL,
-the whole combination must also be released under the GPL—if you can't, or
+the whole combination must also be released under the GPL. If you can't, or
 won't, do that, you may not distribute the resulting bit file.
 
 The majority of ADI created modules are dual-licensed, allowing the user to pick
-which license they want to use, (and the any rights and obligations they have).
-    - The ADI BSD license. (which allows you to makeg  bit files, and not release your
-      source, as long as it attaches to an ADI device) o This is not truly open
+which license they want to use, (and the rights and obligations they have).
+    - The ADI BSD license, which allows you to make bit files, and not release your
+      source, as long as it attaches to an ADI device. This is not truly open
       source, since it does place extra restrictions on developers.
-    - The GPL v2 license (which allows you to make bit files, but you must release
-      all other HDL (except vendor produced, which we consider a run-time library,
-      permitted by GPL section 3), along with your bitfile).  o This is truly open
+    - The GPL 2 license, which allows you to make bit files, but you must release
+      all other HDL (except vendor produced, which we consider as a run-time library),
+      permitted by GPL section 3, along with your bit file. This is truly open
       source, and places no additional restrictions on use or fields of endeavor. The
-      GPL  is ideal for use cases such as open source projects with open source
+      GPL is ideal for use cases such as open source projects with open source
       distribution, student/academic purposes, hobby projects, internal research
       projects without external distribution, or other projects where all GPL
       obligations can be met.
 
 In these cases, support is handled via web (https://ez.analog.com/community/fpga),
-on a best effort basis. If you do not feel we are answering your questions
-fast enough on engineerzone - remember that our best efforts may not match your
-product development schedule. Free, non-deterministic support is not a replacement
-for professional services (contractors). If you need something done in a specific
-time frame - hire a professional. Just as you are free to use HDL modules you
-find here (under that module's license), you are free use an alternative,
-which may include commercial/deterministic support.
+on a best effort basis. Note that our best efforts may not match your product
+development schedule. This is a free, non-deterministic support, and is not meant
+as a replacement for professional services. However, if this is not adequate
+for your needs, or you require support within a specific time frame we recommend
+you seek alternatives including seeking professional service and/or commercial/deterministic
+support.
 
-Specific modules which do not follow this (this list may not be complete, it's
-up to each user to check each module license):
-    - SPDIF : which is released under the LGPL license only. 
-       + Please go to https://opencores.org/project, spdif_interface for support
-    - The ADI created JESD Core, which is released under the GPL and a
-      commercial license only.  
-       + The commercial license gives you the full rights to create and distribute 
-         bit files on your own terms without any open source license obligations, 
-         and special avenues for support may be possible.
-
+There are also specific modules which are only single-licensed, as listed
+below. This list may not be complete, it's up to the user to check each module
+license.
+    - SPDIF, which is released under the LGPL license only. See
+      https://opencores.org/project,spdif_interface for support.
+    - The ADI created JESD Core, which is released under the GPL and a commercial
+      license only.
+       + The commercial license gives you the full rights to create and distribute
+         bit files on your own terms without any open source license obligations,
+         and special avenues for support may be possible. If you are interested
+         in such a license, contact us at jesd204-licensing@analog.com for more
+         information.
 
