@@ -167,7 +167,11 @@ proc ad_reconct {p_name_1 p_name_2} {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
+#
+# lane_map maps the logical lane $n onto the physical lane $lane_map[$n]. If no
+# lane map is provided logical lane $n is mapped onto physical lane $n.
+#
+proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}}} {
   
   global xcvr_index
   global xcvr_tx_index
@@ -248,12 +252,18 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
       ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${m}
     }
 
+    if {$lane_map != {}} {
+      set phys_lane [expr [lindex $lane_map $n] + $index]
+    } else {
+      set phys_lane $m
+    }
+
     ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${m}
     ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${u_xcvr}/${txrx}_clk_${m}
     if {$jesd204_type == 0} {
-      ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/${txrx}_phy${n}
+      ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
     } else {
-      ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/gt${n}_${txrx}
+      ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/gt${n}_${txrx}
     }
 
     create_bd_port -dir ${data_dir} ${m_data}_${m}_p
