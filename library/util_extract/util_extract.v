@@ -27,17 +27,17 @@
 
 module util_extract #(
 
-  parameter   CHANNELS = 2,
-  parameter  DW = CHANNELS * 16) (
+  parameter  NUM_OF_CHANNELS = 2,
+  parameter  DATA_WIDTH = NUM_OF_CHANNELS * 16) (
 
-  input                   clk,
+  input                         clk,
 
-  input       [DW-1:0]    data_in,
-  input       [DW-1:0]    data_in_trigger,
-  input                   data_valid,
+  input       [DATA_WIDTH-1:0]  data_in,
+  input       [DATA_WIDTH-1:0]  data_in_trigger,
+  input                         data_valid,
 
-  output      [DW-1:0]    data_out,
-  output  reg             trigger_out
+  output      [DATA_WIDTH-1:0]  data_out,
+  output  reg                   trigger_out
 );
 
 
@@ -51,11 +51,11 @@ module util_extract #(
   wire [15:0] trigger; // 16 maximum channels
 
   generate
-  for (n = 0; n < CHANNELS; n = n + 1) begin: g_data_out
+  for (n = 0; n < NUM_OF_CHANNELS; n = n + 1) begin: g_data_out
     assign data_out[(n+1)*16-1:n*16] = {data_in[(n*16)+14],data_in[(n*16)+14:n*16]};
     assign trigger[n] = data_in_trigger[(16*n)+15];
   end
-  for (n = CHANNELS; n < 16; n = n + 1) begin: g_trigger_out
+  for (n = NUM_OF_CHANNELS; n < 16; n = n + 1) begin: g_trigger_out
     assign trigger[n] = 1'b0;
   end
   endgenerate
