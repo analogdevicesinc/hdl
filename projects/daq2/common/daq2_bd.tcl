@@ -78,7 +78,7 @@ ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_daq2_xcvr/up_cpll_rst_*
 
 # connections (dac)
 
-ad_xcvrcon  util_daq2_xcvr axi_ad9144_xcvr axi_ad9144_jesd
+ad_xcvrcon  util_daq2_xcvr axi_ad9144_xcvr axi_ad9144_jesd {0 2 3 1}
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_core/tx_clk
 ad_connect  axi_ad9144_jesd/tx_data_tdata axi_ad9144_core/tx_data
 ad_connect  util_daq2_xcvr/tx_out_clk_0 axi_ad9144_upack/dac_clk
