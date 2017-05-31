@@ -40,9 +40,7 @@ module util_extract #(
   output  reg                   trigger_out
 );
 
-
-
-   // loop variables
+  // loop variables
 
   genvar  n;
 
