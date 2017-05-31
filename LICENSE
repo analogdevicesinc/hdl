@@ -25,7 +25,7 @@ which license they want to use, (and the rights and obligations they have).
     - The ADI BSD license, which allows you to make bit files, and not release your
       source, as long as it attaches to an ADI device. This is not truly open
       source, since it does place extra restrictions on developers.
-    - The GPL 2 license, which allows you to make bit files, but you must release
+    - The GPL v2 license, which allows you to make bit files, but you must release
       all other HDL (except vendor produced, which we consider as a run-time library),
       permitted by GPL section 3, along with your bit file. This is truly open
       source, and places no additional restrictions on use or fields of endeavor. The
