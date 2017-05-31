@@ -6,7 +6,6 @@
 ####################################################################################
 
 M_DEPS += ../common/ad_rst.v
-M_DEPS += ../common/sync_bits.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_clock_mon.v
 M_DEPS += ../common/up_dac_common.v
@@ -18,6 +17,8 @@ M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += axi_ad5766.v
 M_DEPS += axi_ad5766_ip.tcl
 M_DEPS += up_ad5766_sequencer.v
+
+M_DEPS += ../util_cdc/util_cdc.xpr
 
 M_DEPS += ../interfaces/fifo_rd.xml
 M_DEPS += ../interfaces/fifo_rd_rtl.xml
@@ -43,8 +44,8 @@ M_FLIST += .Xil
 
 
 
-.PHONY: all clean clean-all
-all: axi_ad5766.xpr
+.PHONY: all dep clean clean-all
+all: dep axi_ad5766.xpr
 
 
 clean:clean-all
@@ -58,5 +59,7 @@ axi_ad5766.xpr: $(M_DEPS)
 	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_ad5766_ip.tcl  >> axi_ad5766_ip.log 2>&1
 
+dep:
+	make -C ../util_cdc/
 ####################################################################################
 ####################################################################################

@@ -7,7 +7,6 @@ adi_ip_create axi_ad5766
 adi_ip_files axi_ad5766 [list \
     "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
     "$ad_hdl_dir/library/common/up_xfer_status.v" \
-    "$ad_hdl_dir/library/common/sync_bits.v" \
     "$ad_hdl_dir/library/common/ad_rst.v" \
     "$ad_hdl_dir/library/common/up_dac_common.v" \
     "$ad_hdl_dir/library/common/up_clock_mon.v" \
@@ -17,6 +16,10 @@ adi_ip_files axi_ad5766 [list \
     "axi_ad5766.v" ]
 
 adi_ip_properties axi_ad5766
+
+adi_ip_add_core_dependencies { \
+	analog.com:user:util_cdc:1.0 \
+}
 
 adi_add_bus "spi_engine_ctrl" "master" \
 	"analog.com:interface:spi_engine_ctrl_rtl:1.0" \

@@ -5,7 +5,6 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS += ../common/sync_bits.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
@@ -29,6 +28,7 @@ M_DEPS += src_fifo_inf.v
 
 M_DEPS += ../util_axis_fifo/util_axis_fifo.xpr
 M_DEPS += ../util_axis_resize/util_axis_resize.xpr
+M_DEPS += ../util_cdc/util_cdc.xpr
 
 M_DEPS += ../interfaces/fifo_rd.xml
 M_DEPS += ../interfaces/fifo_rd_rtl.xml
@@ -70,5 +70,6 @@ axi_dmac.xpr: $(M_DEPS)
 dep:
 	make -C ../util_axis_fifo/
 	make -C ../util_axis_resize/
+	make -C ../util_cdc/
 ####################################################################################
 ####################################################################################

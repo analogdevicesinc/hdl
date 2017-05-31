@@ -6,8 +6,6 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_spi_engine
 adi_ip_files axi_spi_engine [list \
   "axi_spi_engine.v" \
-  "$ad_hdl_dir/library/common/sync_bits.v" \
-  "$ad_hdl_dir/library/common/sync_gray.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
 ]
@@ -20,6 +18,7 @@ ipx::remove_bus_interface spi_signal_reset [ipx::current_core]
 
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_axis_fifo:1.0 \
+	analog.com:user:util_cdc:1.0 \
 }
 
 adi_add_bus "spi_engine_ctrl" "master" \

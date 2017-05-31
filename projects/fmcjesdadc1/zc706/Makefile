@@ -17,13 +17,16 @@ M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_sysref_gen.v
 M_DEPS += ../../../library/axi_ad9250/axi_ad9250.xpr
 M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
+M_DEPS += ../../../library/jesd204/axi_jesd204_rx/axi_jesd204_rx.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
+M_DEPS += ../../../library/jesd204/jesd204_rx/jesd204_rx.xpr
 M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
 M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
@@ -60,7 +63,9 @@ clean-all:clean
 	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_hdmi_tx clean
+	make -C ../../../library/jesd204/axi_jesd204_rx clean
 	make -C ../../../library/axi_spdif_tx clean
+	make -C ../../../library/jesd204/jesd204_rx clean
 	make -C ../../../library/xilinx/util_adxcvr clean
 	make -C ../../../library/util_bsplit clean
 	make -C ../../../library/util_cpack clean
@@ -77,7 +82,9 @@ lib:
 	make -C ../../../library/axi_clkgen
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_hdmi_tx
+	make -C ../../../library/jesd204/axi_jesd204_rx
 	make -C ../../../library/axi_spdif_tx
+	make -C ../../../library/jesd204/jesd204_rx
 	make -C ../../../library/xilinx/util_adxcvr
 	make -C ../../../library/util_bsplit
 	make -C ../../../library/util_cpack

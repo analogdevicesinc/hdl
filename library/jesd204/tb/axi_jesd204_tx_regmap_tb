@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SOURCE="axi_jesd204_tx_regmap_tb.v"
+SOURCE+=" ../axi_jesd204_tx/axi_jesd204_tx.v"
+SOURCE+=" ../axi_jesd204_tx/jesd204_up_tx.v"
+SOURCE+=" ../axi_jesd204_common/jesd204_up_common.v"
+SOURCE+=" ../axi_jesd204_common/jesd204_up_sysref.v"
+SOURCE+=" ../../common/up_axi.v"
+SOURCE+=" ../../common/up_clock_mon.v"
+SOURCE+=" ../../util_cdc/sync_bits.v"
+SOURCE+=" ../../util_cdc/sync_data.v"
+SOURCE+=" ../../util_cdc/sync_event.v"
+
+cd `dirname $0`
+source run_tb.sh

@@ -5,11 +5,12 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS += ../../common/sync_bits.v
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_ip.tcl
 M_DEPS += spi_engine_offload.v
 M_DEPS += spi_engine_offload_ip.tcl
+
+M_DEPS += ../../util_cdc/util_cdc.xpr
 
 M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml
 M_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
@@ -33,8 +34,8 @@ M_FLIST += .Xil
 
 
 
-.PHONY: all clean clean-all
-all: spi_engine_offload.xpr
+.PHONY: all dep clean clean-all
+all: dep spi_engine_offload.xpr
 
 
 clean:clean-all
@@ -48,5 +49,7 @@ spi_engine_offload.xpr: $(M_DEPS)
 	-rm -rf $(M_FLIST)
 	$(M_VIVADO) spi_engine_offload_ip.tcl  >> spi_engine_offload_ip.log 2>&1
 
+dep:
+	make -C ../../util_cdc/
 ####################################################################################
 ####################################################################################

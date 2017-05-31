@@ -4,8 +4,6 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create util_axis_fifo
 adi_ip_files util_axis_fifo [list \
-	"$ad_hdl_dir/library/common/sync_bits.v" \
-	"$ad_hdl_dir/library/common/sync_gray.v" \
 	"address_gray.v" \
 	"address_gray_pipelined.v" \
 	"address_sync.v" \
@@ -13,6 +11,10 @@ adi_ip_files util_axis_fifo [list \
 ]
 
 adi_ip_properties_lite util_axis_fifo
+
+adi_ip_add_core_dependencies { \
+	analog.com:user:util_cdc:1.0 \
+}
 
 adi_add_bus "s_axis" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \

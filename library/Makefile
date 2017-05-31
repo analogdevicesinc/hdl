@@ -55,6 +55,14 @@ clean:
 	make -C cn0363/cn0363_dma_sequencer clean
 	make -C cn0363/cn0363_phase_data_sync clean
 	make -C cordic_demod clean
+	make -C jesd204/axi_jesd204_common clean
+	make -C jesd204/axi_jesd204_rx clean
+	make -C jesd204/axi_jesd204_tx clean
+	make -C jesd204/jesd204_common clean
+	make -C jesd204/jesd204_rx clean
+	make -C jesd204/jesd204_rx_static_config clean
+	make -C jesd204/jesd204_tx clean
+	make -C jesd204/jesd204_tx_static_config clean
 	make -C spi_engine/axi_spi_engine clean
 	make -C spi_engine/spi_engine_execution clean
 	make -C spi_engine/spi_engine_interconnect clean
@@ -64,6 +72,7 @@ clean:
 	make -C util_axis_resize clean
 	make -C util_bsplit clean
 	make -C util_ccat clean
+	make -C util_cdc clean
 	make -C util_cic clean
 	make -C util_clkdiv clean
 	make -C util_cpack clean
@@ -142,6 +151,14 @@ lib:
 	make -C cn0363/cn0363_dma_sequencer
 	make -C cn0363/cn0363_phase_data_sync
 	make -C cordic_demod
+	make -C jesd204/axi_jesd204_common
+	make -C jesd204/axi_jesd204_rx
+	make -C jesd204/axi_jesd204_tx
+	make -C jesd204/jesd204_common
+	make -C jesd204/jesd204_rx
+	make -C jesd204/jesd204_rx_static_config
+	make -C jesd204/jesd204_tx
+	make -C jesd204/jesd204_tx_static_config
 	make -C spi_engine/axi_spi_engine
 	make -C spi_engine/spi_engine_execution
 	make -C spi_engine/spi_engine_interconnect
@@ -151,6 +168,7 @@ lib:
 	make -C util_axis_resize
 	make -C util_bsplit
 	make -C util_ccat
+	make -C util_cdc
 	make -C util_cic
 	make -C util_clkdiv
 	make -C util_cpack

@@ -178,6 +178,24 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
   set qpll_enable [get_property CONFIG.QPLL_ENABLE [get_bd_cells $a_xcvr]]
   set tx_or_rx_n [get_property CONFIG.TX_OR_RX_N [get_bd_cells $a_xcvr]]
 
+#  set jesd204_vlnv [get_property VLNV $a_jesd]
+#
+#  if {[string first "analog.com" $jesd204_vlnv] == 0} {
+#    set jesd204_type 0
+#  } elseif {[string first "xilinx.com" $jesd204_vlnv] == 0} {
+#    set jesd204_type 1
+#  } else {
+#    return -code 1 "Unsupported JESD204 core type."
+#  }
+
+  set jesd204_bd_type [get_property TYPE [get_bd_cells $a_jesd]]
+
+  if {$jesd204_bd_type == "hier"} {
+    set jesd204_type 0
+  } else {
+    set jesd204_type 1
+  }
+
   if {$xcvr_instance ne $u_xcvr} {
     set xcvr_index [expr ($xcvr_index + 1)]
     set xcvr_tx_index 0
@@ -219,7 +237,11 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
 
     if {$tx_or_rx_n == 0} {
       ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${m}
-      ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${m}
+      if {$jesd204_type == 0} {
+        ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${m}
+      } else {
+        ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${m}
+      }
     }
 
     if {(($m%4) == 0) && ($qpll_enable == 1)} {
@@ -227,8 +249,12 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
     }
 
     ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${m}
-    ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/gt${n}_${txrx}
     ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${u_xcvr}/${txrx}_clk_${m}
+    if {$jesd204_type == 0} {
+      ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/${txrx}_phy${n}
+    } else {
+      ad_connect  ${u_xcvr}/${txrx}_${m} ${a_jesd}/gt${n}_${txrx}
+    }
 
     create_bd_port -dir ${data_dir} ${m_data}_${m}_p
     create_bd_port -dir ${data_dir} ${m_data}_${m}_n
@@ -236,13 +262,23 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
     ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
   }
 
-  ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
-  ad_connect  ${a_jesd}/${txrx}_sync $m_sync
-  ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/${txrx}_core_clk
-  ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
+  if {$jesd204_type == 0} {
+    ad_connect  ${a_jesd}/sysref $m_sysref
+    ad_connect  ${a_jesd}/sync $m_sync
+    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/device_clk
+#    if {$tx_or_rx_n == 0} {
+#      ad_connect  ${a_xcvr}/up_status ${a_jesd}/phy_ready
+#    }
+  } else {
+    ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
+    ad_connect  ${a_jesd}/${txrx}_sync $m_sync
+    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/${txrx}_core_clk
+    ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
+    ad_connect  ${a_jesd}_rstgen/peripheral_reset ${a_jesd}/${txrx}_reset
+  }
+
   ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}_rstgen/slowest_sync_clk
   ad_connect  sys_cpu_resetn ${a_jesd}_rstgen/ext_reset_in
-  ad_connect  ${a_jesd}_rstgen/peripheral_reset ${a_jesd}/${txrx}_reset
 
   if {$tx_or_rx_n == 0} {
     set xcvr_rx_index [expr ($xcvr_rx_index + $no_of_lanes)]
@@ -519,21 +555,78 @@ proc ad_cpu_interconnect {p_address p_name} {
   }
 
   set sys_cpu_interconnect_index [expr $sys_cpu_interconnect_index + 1]
+
+
+  set p_cell [get_bd_cells $p_name]
   set p_intf [get_bd_intf_pins -filter "MODE == Slave && VLNV == xilinx.com:interface:aximm_rtl:1.0"\
-    -of_objects [get_bd_cells $p_name]]
-  set p_intf_name [lrange [split $p_intf "/"] end end]
-  set p_intf_clock [get_bd_pins -filter "TYPE == clk && (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" -quiet -of_objects [get_bd_cells $p_name]]
-  set p_intf_reset [get_bd_pins -filter "TYPE == rst && (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
-    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" -quiet -of_objects [get_bd_cells $p_name]]
-  if {($p_intf_clock ne "") && ($p_intf_reset eq "")} {
-    set p_intf_reset [get_property CONFIG.ASSOCIATED_RESET [get_bd_pins ${p_intf_clock}]]
-    if {$p_intf_reset ne ""} {
-      set p_intf_reset [get_bd_pins $p_name/$p_intf_reset]
+    -of_objects $p_cell]
+
+  set p_hier_cell $p_cell
+  set p_hier_intf $p_intf
+
+  while {$p_hier_intf != "" && [get_property TYPE $p_hier_cell] == "hier"} {
+    set p_hier_intf [find_bd_objs -boundary_type lower \
+      -relation connected_to $p_hier_intf]
+    if {$p_hier_intf != {}} {
+      set p_hier_cell [get_bd_cells -of_objects $p_hier_intf]
+    } else {
+      set p_hier_cell {}
     }
   }
+
+  set p_intf_clock ""
+  set p_intf_reset ""
+
+  if {$p_hier_cell != {}} {
+    set p_intf_name [lrange [split $p_hier_intf "/"] end end]
+
+    set p_intf_clock [get_bd_pins -filter "TYPE == clk && \
+      (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
+      CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* || \
+      CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
+      CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" \
+      -quiet -of_objects $p_hier_cell]
+    set p_intf_reset [get_bd_pins -filter "TYPE == rst && \
+      (CONFIG.ASSOCIATED_BUSIF == ${p_intf_name} || \
+       CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_name}:* ||
+       CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name} || \
+       CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_name}:*)" \
+       -quiet -of_objects $p_hier_cell]
+
+    if {($p_intf_clock ne "") && ($p_intf_reset eq "")} {
+      set p_intf_reset [get_property CONFIG.ASSOCIATED_RESET [get_bd_pins ${p_intf_clock}]]
+      if {$p_intf_reset ne ""} {
+        set p_intf_reset [get_bd_pins -filter "NAME == $p_intf_reset" -of_objects $p_hier_cell]
+      }
+    }
+
+    # Trace back up
+    set p_hier_cell2 $p_hier_cell
+
+    while {$p_intf_clock != {} && $p_hier_cell2 != $p_cell && $p_hier_cell2 != {}} {
+      puts $p_intf_clock
+      puts $p_hier_cell2
+      set p_intf_clock [find_bd_objs -boundary_type upper \
+        -relation connected_to $p_intf_clock]
+      if {$p_intf_clock != {}} {
+        set p_intf_clock [get_bd_pins [get_property PATH $p_intf_clock]]
+        set p_hier_cell2 [get_bd_cells -of_objects $p_intf_clock]
+      }
+    }
+
+    set p_hier_cell2 $p_hier_cell
+
+    while {$p_intf_reset != {} && $p_hier_cell2 != $p_cell && $p_hier_cell2 != {}} {
+      set p_intf_reset [find_bd_objs -boundary_type upper \
+        -relation connected_to $p_intf_reset]
+      if {$p_intf_reset != {}} {
+        set p_intf_reset [get_bd_pins [get_property PATH $p_intf_reset]]
+        set p_hier_cell2 [get_bd_cells -of_objects $p_intf_reset]
+      }
+    }
+  }
+
+
   if {[find_bd_objs -quiet -relation connected_to $p_intf_clock] ne ""} {
     set p_intf_clock ""
   }
@@ -555,7 +648,7 @@ proc ad_cpu_interconnect {p_address p_name} {
   }
   ad_connect axi_cpu_interconnect/${i_str}_AXI ${p_intf}
 
-  set p_seg [get_bd_addr_segs -of_objects [get_bd_cells $p_name]]
+  set p_seg [get_bd_addr_segs -of_objects $p_hier_cell]
   set p_index 0
   foreach p_seg_name $p_seg {
     if {$p_index == 0} {

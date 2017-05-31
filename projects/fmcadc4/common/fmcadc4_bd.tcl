@@ -1,4 +1,6 @@
 
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+
 # fmcadc4
 
 # adc peripherals
@@ -13,9 +15,7 @@ ad_ip_parameter axi_ad9680_xcvr CONFIG.NUM_OF_LANES 8
 ad_ip_parameter axi_ad9680_xcvr CONFIG.QPLL_ENABLE 1
 ad_ip_parameter axi_ad9680_xcvr CONFIG.TX_OR_RX_N 0
 
-ad_ip_instance jesd204 axi_ad9680_jesd
-ad_ip_parameter axi_ad9680_jesd CONFIG.C_NODE_IS_TRANSMIT 0
-ad_ip_parameter axi_ad9680_jesd CONFIG.C_LANES 8
+adi_axi_jesd204_rx_create axi_ad9680_jesd 8
 
 ad_ip_instance axi_dmac axi_ad9680_dma
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_TYPE_SRC 1
@@ -59,9 +59,9 @@ ad_xcvrcon  util_fmcadc4_xcvr axi_ad9680_xcvr axi_ad9680_jesd
 ad_connect  util_fmcadc4_xcvr/rx_out_clk_0 axi_ad9680_cpack/adc_clk
 ad_connect  util_fmcadc4_xcvr/rx_out_clk_0 axi_ad9680_core_0/rx_clk
 ad_connect  util_fmcadc4_xcvr/rx_out_clk_0 axi_ad9680_core_1/rx_clk
-ad_connect  axi_ad9680_jesd/rx_start_of_frame axi_ad9680_core_0/rx_sof
-ad_connect  axi_ad9680_jesd/rx_start_of_frame axi_ad9680_core_1/rx_sof
-ad_connect  axi_ad9680_jesd/rx_tdata util_bsplit_rx_data/data
+ad_connect  axi_ad9680_jesd/rx_sof axi_ad9680_core_0/rx_sof
+ad_connect  axi_ad9680_jesd/rx_sof axi_ad9680_core_1/rx_sof
+ad_connect  axi_ad9680_jesd/rx_data_tdata util_bsplit_rx_data/data
 ad_connect  axi_ad9680_jesd_rstgen/peripheral_reset axi_ad9680_cpack/adc_rst
 
 # connections (adc)
@@ -101,7 +101,7 @@ ad_connect  sys_cpu_resetn util_fmcadc4_xcvr/up_rstn
 ad_cpu_interconnect 0x44A60000 axi_ad9680_xcvr
 ad_cpu_interconnect 0x44A00000 axi_ad9680_core_0
 ad_cpu_interconnect 0x44A10000 axi_ad9680_core_1
-ad_cpu_interconnect 0x44A91000 axi_ad9680_jesd
+ad_cpu_interconnect 0x44AA0000 axi_ad9680_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9680_dma
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4

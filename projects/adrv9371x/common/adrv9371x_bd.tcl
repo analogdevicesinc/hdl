@@ -1,4 +1,6 @@
 
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+
 # ad9371
 
 create_bd_port -dir I dac_fifo_bypass
@@ -17,9 +19,7 @@ ad_ip_parameter axi_ad9371_tx_xcvr CONFIG.NUM_OF_LANES 4
 ad_ip_parameter axi_ad9371_tx_xcvr CONFIG.QPLL_ENABLE 1
 ad_ip_parameter axi_ad9371_tx_xcvr CONFIG.TX_OR_RX_N 1
 
-ad_ip_instance jesd204 axi_ad9371_tx_jesd
-ad_ip_parameter axi_ad9371_tx_jesd CONFIG.C_NODE_IS_TRANSMIT 1
-ad_ip_parameter axi_ad9371_tx_jesd CONFIG.C_LANES 4
+adi_axi_jesd204_tx_create axi_ad9371_tx_jesd 4
 
 ad_ip_instance util_upack util_ad9371_tx_upack
 ad_ip_parameter util_ad9371_tx_upack CONFIG.CHANNEL_DATA_WIDTH 32
@@ -51,9 +51,7 @@ ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.NUM_OF_LANES 2
 ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.TX_OR_RX_N 0
 
-ad_ip_instance jesd204 axi_ad9371_rx_jesd
-ad_ip_parameter axi_ad9371_rx_jesd CONFIG.C_NODE_IS_TRANSMIT 0
-ad_ip_parameter axi_ad9371_rx_jesd CONFIG.C_LANES 2
+adi_axi_jesd204_rx_create axi_ad9371_rx_jesd 2
 
 ad_ip_instance util_cpack util_ad9371_rx_cpack
 ad_ip_parameter util_ad9371_rx_cpack CONFIG.CHANNEL_DATA_WIDTH 16
@@ -86,9 +84,7 @@ ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.NUM_OF_LANES 2
 ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.TX_OR_RX_N 0
 
-ad_ip_instance jesd204 axi_ad9371_rx_os_jesd
-ad_ip_parameter axi_ad9371_rx_os_jesd CONFIG.C_NODE_IS_TRANSMIT 0
-ad_ip_parameter axi_ad9371_rx_os_jesd CONFIG.C_LANES 2
+adi_axi_jesd204_rx_create axi_ad9371_rx_os_jesd 2
 
 ad_ip_instance util_cpack util_ad9371_rx_os_cpack
 ad_ip_parameter util_ad9371_rx_os_cpack CONFIG.CHANNEL_DATA_WIDTH 32
@@ -147,23 +143,23 @@ ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_0
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_1
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_2
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_3
-ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_tx_jesd/tx_core_clk
+ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_tx_jesd/device_clk
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_tx_jesd_rstgen/slowest_sync_clk
-ad_reconct  util_ad9371_xcvr/tx_0 axi_ad9371_tx_jesd/gt3_tx
-ad_reconct  util_ad9371_xcvr/tx_1 axi_ad9371_tx_jesd/gt0_tx
-ad_reconct  util_ad9371_xcvr/tx_2 axi_ad9371_tx_jesd/gt1_tx
-ad_reconct  util_ad9371_xcvr/tx_3 axi_ad9371_tx_jesd/gt2_tx
+ad_reconct  util_ad9371_xcvr/tx_0 axi_ad9371_tx_jesd/tx_phy3
+ad_reconct  util_ad9371_xcvr/tx_1 axi_ad9371_tx_jesd/tx_phy0
+ad_reconct  util_ad9371_xcvr/tx_2 axi_ad9371_tx_jesd/tx_phy1
+ad_reconct  util_ad9371_xcvr/tx_3 axi_ad9371_tx_jesd/tx_phy2
 ad_xcvrcon  util_ad9371_xcvr axi_ad9371_rx_xcvr axi_ad9371_rx_jesd
 ad_reconct  util_ad9371_xcvr/rx_out_clk_0 axi_ad9371_rx_clkgen/clk
 ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_xcvr/rx_clk_0
 ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_xcvr/rx_clk_1
-ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_jesd/rx_core_clk
+ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_jesd/device_clk
 ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_jesd_rstgen/slowest_sync_clk
 ad_xcvrcon  util_ad9371_xcvr axi_ad9371_rx_os_xcvr axi_ad9371_rx_os_jesd
 ad_reconct  util_ad9371_xcvr/rx_out_clk_2 axi_ad9371_rx_os_clkgen/clk
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_xcvr/rx_clk_2
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_xcvr/rx_clk_3
-ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd/rx_core_clk
+ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd/device_clk
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd_rstgen/slowest_sync_clk
 
 # dma clock & reset
@@ -182,7 +178,7 @@ ad_connect  sys_cpu_reset axi_ad9371_dacfifo/dma_rst
 # connections (dac)
 
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_core/dac_clk
-ad_connect  axi_ad9371_tx_jesd/tx_tdata axi_ad9371_core/dac_tx_data
+ad_connect  axi_ad9371_tx_jesd/tx_data_tdata axi_ad9371_core/dac_tx_data
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_tx_upack/dac_clk
 ad_connect  axi_ad9371_core/dac_valid_i0 util_ad9371_tx_upack/dac_valid_0
 ad_connect  axi_ad9371_core/dac_enable_i0 util_ad9371_tx_upack/dac_enable_0
@@ -215,8 +211,8 @@ ad_connect  sys_dma_resetn axi_ad9371_tx_dma/m_src_axi_aresetn
 # connections (adc)
 
 ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_core/adc_clk
-ad_connect  axi_ad9371_rx_jesd/rx_start_of_frame axi_ad9371_core/adc_rx_sof
-ad_connect  axi_ad9371_rx_jesd/rx_tdata axi_ad9371_core/adc_rx_data
+ad_connect  axi_ad9371_rx_jesd/rx_sof axi_ad9371_core/adc_rx_sof
+ad_connect  axi_ad9371_rx_jesd/rx_data_tdata axi_ad9371_core/adc_rx_data
 ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_rx_cpack/adc_clk
 ad_connect  axi_ad9371_rx_jesd_rstgen/peripheral_reset util_ad9371_rx_cpack/adc_rst
 ad_connect  axi_ad9371_core/adc_enable_i0 util_ad9371_rx_cpack/adc_enable_0
@@ -241,8 +237,8 @@ ad_connect  sys_dma_resetn axi_ad9371_rx_dma/m_dest_axi_aresetn
 # connections (adc-os)
 
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_core/adc_os_clk
-ad_connect  axi_ad9371_rx_os_jesd/rx_start_of_frame axi_ad9371_core/adc_rx_os_sof
-ad_connect  axi_ad9371_rx_os_jesd/rx_tdata axi_ad9371_core/adc_rx_os_data
+ad_connect  axi_ad9371_rx_os_jesd/rx_sof axi_ad9371_core/adc_rx_os_sof
+ad_connect  axi_ad9371_rx_os_jesd/rx_data_tdata axi_ad9371_core/adc_rx_os_data
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_rx_os_cpack/adc_clk
 ad_connect  axi_ad9371_rx_os_jesd_rstgen/peripheral_reset util_ad9371_rx_os_cpack/adc_rst
 ad_connect  axi_ad9371_core/adc_os_enable_i0 util_ad9371_rx_os_cpack/adc_enable_0
@@ -267,11 +263,11 @@ ad_cpu_interconnect 0x44A90000 axi_ad9371_tx_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9371_tx_dma
 ad_cpu_interconnect 0x44A60000 axi_ad9371_rx_xcvr
 ad_cpu_interconnect 0x43C10000 axi_ad9371_rx_clkgen
-ad_cpu_interconnect 0x44A91000 axi_ad9371_rx_jesd
+ad_cpu_interconnect 0x44AA0000 axi_ad9371_rx_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9371_rx_dma
 ad_cpu_interconnect 0x44A70000 axi_ad9371_rx_os_xcvr
 ad_cpu_interconnect 0x43C20000 axi_ad9371_rx_os_clkgen
-ad_cpu_interconnect 0x44A92000 axi_ad9371_rx_os_jesd
+ad_cpu_interconnect 0x44AB0000 axi_ad9371_rx_os_jesd
 ad_cpu_interconnect 0x7c440000 axi_ad9371_rx_os_dma
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4

@@ -80,6 +80,31 @@ proc adi_add_bus {bus_name mode abs_type bus_type port_maps} {
   }
 }
 
+proc adi_add_multi_bus {num bus_name_prefix mode abs_type bus_type port_maps dependency} {
+  for {set i 0} {$i < 8} {incr i} {
+    set bus_name [format "%s%d" $bus_name_prefix $i]
+    set bus [ipx::add_bus_interface $bus_name [ipx::current_core]]
+
+    set_property "ABSTRACTION_TYPE_VLNV" $abs_type $bus
+    set_property "BUS_TYPE_VLNV" $bus_type $bus
+    set_property "INTERFACE_MODE" $mode $bus
+
+    if {$dependency ne ""} {
+      set bus_dependency [string map [list "{i}" $i] $dependency]
+      set_property ENABLEMENT_DEPENDENCY $bus_dependency $bus
+    }
+
+    foreach port_map $port_maps {
+      lassign $port_map phys logic width
+      set map [ipx::add_port_map $phys $bus]
+      set_property "PHYSICAL_NAME" $phys $map
+      set_property "LOGICAL_NAME" $logic $map
+      set_property "PHYSICAL_RIGHT" [expr $i*$width] $map
+      set_property "PHYSICAL_LEFT" [expr ($i+1)*$width-1] $map
+    }
+  }
+}
+
 proc adi_add_bus_clock {clock_signal_name bus_inf_name {reset_signal_name ""} {reset_signal_mode "slave"}} {
   set bus_inf_name_clean [string map {":" "_"} $bus_inf_name]
   set clock_inf_name [format "%s%s" $bus_inf_name_clean "_signal_clock"]
@@ -107,7 +132,11 @@ proc adi_add_bus_clock {clock_signal_name bus_inf_name {reset_signal_name ""} {r
     set_property physical_name $reset_signal_name $reset_map
 
     set reset_polarity [ipx::add_bus_parameter "POLARITY" $reset_inf]
-    set_property value "ACTIVE_LOW" $reset_polarity
+    if {[string match {*[Nn]} $reset_signal_name] == 1} {
+      set_property value "ACTIVE_LOW" $reset_polarity
+    } else {
+      set_property value "ACTIVE_HIGH" $reset_polarity
+    }
   }
 }
 
@@ -183,6 +212,7 @@ proc adi_ip_properties_lite {ip_name} {
   global ip_constr_files
 
   ipx::package_project -root_dir . -vendor analog.com -library user -taxonomy /Analog_Devices
+  set_property name $ip_name [ipx::current_core]
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
   set_property company_url {www.analog.com} [ipx::current_core]
 
@@ -211,6 +241,7 @@ proc adi_ip_properties_lite {ip_name} {
     set i_module [file tail $i_file]
     regsub {_constr\.xdc} $i_module {} i_module
     ipx::add_file $i_file $i_filegroup
+    set_property PROCESSING_ORDER LATE [ipx::get_files $i_file -of_objects $i_filegroup]
     set_property SCOPED_TO_REF $i_module [ipx::get_files $i_file -of_objects $i_filegroup]
   }
   ipx::save_core

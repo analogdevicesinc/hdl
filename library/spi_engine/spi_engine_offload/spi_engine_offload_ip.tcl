@@ -3,13 +3,16 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create spi_engine_offload
 adi_ip_files spi_engine_offload [list \
-        "$ad_hdl_dir/library/common/sync_bits.v" \
 	"spi_engine_offload.v" \
 ]
 
 adi_ip_properties_lite spi_engine_offload
 # Remove all inferred interfaces
 ipx::remove_all_bus_interface [ipx::current_core]
+
+adi_ip_add_core_dependencies { \
+	analog.com:user:util_cdc:1.0 \
+}
 
 adi_add_bus "spi_engine_ctrl" "master" \
 	"analog.com:interface:spi_engine_ctrl_rtl:1.0" \
