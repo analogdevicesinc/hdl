@@ -46,7 +46,8 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create jesd204_common
-adi_ip_files jesd204_common [list \
+
+add_files -fileset [get_filesets sources_1] [list \
   "lmfc.v" \
   "scrambler.v" \
   "eof.v" \

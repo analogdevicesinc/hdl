@@ -25,7 +25,8 @@ source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create util_cdc
-adi_ip_files util_cdc [list \
+
+add_files -fileset [get_filesets sources_1] [list \
   "sync_gray.v" \
   "sync_bits.v" \
   "sync_data.v" \

@@ -46,7 +46,8 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_jesd204_common
-adi_ip_files axi_jesd204_common [list \
+
+add_files -fileset [get_filesets sources_1] [list \
   "jesd204_up_common.v" \
   "jesd204_up_sysref.v" \
 ]

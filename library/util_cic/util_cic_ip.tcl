@@ -2,7 +2,8 @@ source ../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create util_cic
-adi_ip_files util_cic [list \
+
+add_files -fileset [get_filesets sources_1] [list \
   "cic_int.v" \
   "cic_comb.v" \
 ]
