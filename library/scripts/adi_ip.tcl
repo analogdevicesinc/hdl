@@ -158,6 +158,7 @@ proc adi_ip_create {ip_name} {
 
   global ad_hdl_dir
   global ad_phdl_dir
+  global ip_constr_files
   global REQUIRED_VIVADO_VERSION
   global IGNORE_VERSION_CHECK
 
@@ -176,6 +177,7 @@ proc adi_ip_create {ip_name} {
   set_msg_config -id {IP_Flow 19-4623} -new_severity INFO 
   set_msg_config -id {IP_Flow 19-459} -new_severity INFO 
 
+  set ip_constr_files ""
   set lib_dirs $ad_hdl_dir/library
   if {$ad_hdl_dir ne $ad_phdl_dir} {
     lappend lib_dirs $ad_phdl_dir/library
@@ -199,12 +201,6 @@ proc adi_ip_files {ip_name ip_files} {
   set proj_fileset [get_filesets sources_1]
   add_files -norecurse -scan_for_includes -fileset $proj_fileset $ip_files
   set_property "top" "$ip_name" $proj_fileset
-}
-
-proc adi_ip_constraints {ip_name ip_constr_files {processing_order late}} {
-
-  puts "CRITICAL WARNING: Obsolete Procedure adi_ip_constraints"
-  ipx::save_core
 }
 
 proc adi_ip_properties_lite {ip_name} {
