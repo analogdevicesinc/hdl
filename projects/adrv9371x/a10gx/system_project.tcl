@@ -1,16 +1,10 @@
 
-load_package flow
-
 source ../../scripts/adi_env.tcl
-project_new adrv9371x_a10gx -overwrite
+source ../../scripts/adi_project_alt.tcl
+
+adi_project_create adrv9371x_a10gx
 
 source "../../common/a10gx/a10gx_system_assign.tcl"
-
-set_global_assignment -name VERILOG_FILE system_top.v
-set_global_assignment -name QSYS_FILE system_bd.qsys
-
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # lane interface
 
@@ -60,7 +54,6 @@ set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_0 -to tx_data[0]
 set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_1 -to tx_data[1]
 set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_2 -to tx_data[2]
 set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_3 -to tx_data[3]
-
 
 set_location_assignment PIN_AR20  -to rx_sync               ; ## G09  FMCA_HPC_LA03_P
 set_location_assignment PIN_AR19  -to rx_sync(n)            ; ## G10  FMCA_HPC_LA03_N

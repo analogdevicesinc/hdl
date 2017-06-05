@@ -1,9 +1,4 @@
-
-package require qsys
-
-set_module_property NAME {system_bd}
-set_project_property DEVICE_FAMILY {Arria 10}
-set_project_property DEVICE {10AX115S3F45E2SGE3}
+# a10gx carrier qsys
 
 set system_type nios
 
