@@ -78,12 +78,6 @@ proc adi_project_create {project_name} {
     system_bd.qsys --synthesis=VERILOG --output-directory=system_bd \
     --family=$family --part=$device
 
-  # carrier assignments
- 
-  if [regexp "_a10gx$" $project_name] {
-    source $ad_hdl_dir/projects/common/a10gx/a10gx_system_assign.tcl
-  }
-
   # ignored warnings and such
 
   set_global_assignment -name MESSAGE_DISABLE 17951 ; ## unused RX channels
