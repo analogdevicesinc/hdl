@@ -49,6 +49,7 @@ module axi_logic_analyzer_reg (
   output      [17:0]  fall_edge_enable,
   output      [17:0]  low_level_enable,
   output      [17:0]  high_level_enable,
+  output      [31:0]  fifo_depth,
   output      [31:0]  trigger_delay,
   output              trigger_logic,
   output              clock_select,
@@ -83,6 +84,7 @@ module axi_logic_analyzer_reg (
   reg     [17:0]  up_fall_edge_enable = 0;
   reg     [17:0]  up_low_level_enable = 0;
   reg     [17:0]  up_high_level_enable = 0;
+  reg     [31:0]  up_fifo_depth = 0;
   reg     [31:0]  up_trigger_delay = 0;
   reg             up_trigger_logic = 0;
   reg             up_clock_select = 0;
@@ -103,6 +105,7 @@ module axi_logic_analyzer_reg (
       up_fall_edge_enable <= 'd0;
       up_low_level_enable <= 'd0;
       up_high_level_enable <= 'd0;
+      up_fifo_depth <= 'd0;
       up_trigger_delay <= 'd0;
       up_trigger_logic <= 'd0;
       up_clock_select <= 'd0;
@@ -140,7 +143,7 @@ module axi_logic_analyzer_reg (
         up_high_level_enable <= up_wdata[17:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'ha)) begin
-        up_trigger_delay <= up_wdata;
+        up_fifo_depth <= up_wdata;
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hb)) begin
         up_trigger_logic <= up_wdata[0];
@@ -156,6 +159,9 @@ module axi_logic_analyzer_reg (
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
         up_od_pp_n <= up_wdata[15:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
+        up_trigger_delay <= up_wdata;
       end
     end
   end
@@ -180,13 +186,14 @@ module axi_logic_analyzer_reg (
           5'h7: up_rdata <= {14'h0,up_fall_edge_enable};
           5'h8: up_rdata <= {14'h0,up_low_level_enable};
           5'h9: up_rdata <= {14'h0,up_high_level_enable};
-          5'ha: up_rdata <= up_trigger_delay;
+          5'ha: up_rdata <= up_fifo_depth;
           5'hb: up_rdata <= {31'h0,up_trigger_logic};
           5'hc: up_rdata <= {31'h0,up_clock_select};
           5'hd: up_rdata <= {16'h0,up_overwrite_enable};
           5'he: up_rdata <= {16'h0,up_overwrite_data};
           5'hf: up_rdata <= {16'h0,up_input_data};
           5'h10: up_rdata <= {16'h0,up_od_pp_n};
+          5'h11: up_rdata <= up_trigger_delay;
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -197,7 +204,7 @@ module axi_logic_analyzer_reg (
 
   ad_rst i_core_rst_reg (.preset(!up_rstn), .clk(clk), .rst(reset));
 
-   up_xfer_cntrl #(.DATA_WIDTH(252)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(284)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_od_pp_n,               // 16
@@ -205,6 +212,7 @@ module axi_logic_analyzer_reg (
                       up_overwrite_enable,      // 16
                       up_clock_select,          // 1
                       up_trigger_logic,         // 1
+                      up_fifo_depth,         // 32
                       up_trigger_delay,         // 32
                       up_high_level_enable,     // 18
                       up_low_level_enable,      // 18
@@ -223,6 +231,7 @@ module axi_logic_analyzer_reg (
                       overwrite_enable,       // 16
                       clock_select,           // 1
                       trigger_logic,          // 1
+                      fifo_depth,             // 32
                       trigger_delay,          // 32
                       high_level_enable,      // 18
                       low_level_enable,       // 18

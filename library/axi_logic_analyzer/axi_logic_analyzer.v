@@ -53,7 +53,7 @@ module axi_logic_analyzer (
   output reg            dac_read,
 
   output                trigger_out,
-  output      [31:0]    trigger_offset,
+  output      [31:0]    fifo_depth,
 
   // axi interface
 
@@ -94,6 +94,10 @@ module axi_logic_analyzer (
 
   reg     [15:0]    io_selection; // 1 - input, 0 - output
 
+  reg               trigger_out_delayed;
+  reg     [31:0]    delay_counter = 'd0;
+  reg               triggered = 'd0;
+
   // internal signals
 
   wire              up_clk;
@@ -117,7 +121,6 @@ module axi_logic_analyzer (
   wire    [17:0]    fall_edge_enable;
   wire    [17:0]    low_level_enable;
   wire    [17:0]    high_level_enable;
-  wire    [31:0]    trigger_delay;
   wire              trigger_logic; // 0-OR,1-AND,2-XOR,3-NOR,4-NAND,5-NXOR
   wire              clock_select;
   wire    [15:0]    overwrite_enable;
@@ -126,6 +129,9 @@ module axi_logic_analyzer (
   wire    [15:0]    io_selection_s; // 1 - input, 0 - output
   wire    [15:0]    od_pp_n; // 0 - push/pull, 1 - open drain
 
+  wire              trigger_out_s;
+  wire    [31:0]    trigger_delay;
+
   genvar i;
 
   // signal name changes
@@ -133,7 +139,7 @@ module axi_logic_analyzer (
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  assign trigger_offset = trigger_delay;
+  assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s : trigger_out_delayed;
 
   generate
   for (i = 0 ; i < 16; i = i + 1) begin
@@ -174,8 +180,8 @@ module axi_logic_analyzer (
   // if capture is enabled
 
   always @(posedge clk_out) begin
-  adc_valid_d1 <= adc_valid_d2;
-  adc_valid <= adc_valid_d1;
+    adc_valid_d1 <= adc_valid_d2;
+    adc_valid <= adc_valid_d1;
     if (sample_valid_la == 1'b1) begin
       adc_data  <= data_m1;
       adc_valid_d2 <= 1'b1;
@@ -218,6 +224,25 @@ module axi_logic_analyzer (
     end
   end
 
+  always @(posedge clk_out) begin
+    if(trigger_delay == 32'h0) begin
+      delay_counter <= 32'h0;
+    end else begin
+      if (adc_valid == 1'b1) begin
+        triggered <= trigger_out_s;
+        trigger_out_delayed <= 1'b0;
+        if (delay_counter == 32'h0) begin
+          delay_counter <= trigger_delay;
+          trigger_out_delayed <= 1'b1;
+          triggered <= 1'b0;
+        end else begin
+          if(triggered == 1'b1) begin
+            delay_counter <= delay_counter - 1;
+          end
+        end
+      end
+    end
+  end
 
   axi_logic_analyzer_trigger i_trigger (
     .clk (clk_out),
@@ -233,7 +258,7 @@ module axi_logic_analyzer (
     .low_level_enable (low_level_enable),
     .high_level_enable (high_level_enable),
     .trigger_logic (trigger_logic),
-    .trigger_out (trigger_out));
+    .trigger_out (trigger_out_s));
 
    axi_logic_analyzer_reg i_registers (
 
@@ -249,6 +274,7 @@ module axi_logic_analyzer (
     .fall_edge_enable (fall_edge_enable),
     .low_level_enable (low_level_enable),
     .high_level_enable (high_level_enable),
+    .fifo_depth (fifo_depth),
     .trigger_delay (trigger_delay),
     .trigger_logic (trigger_logic),
     .clock_select (clock_select),
