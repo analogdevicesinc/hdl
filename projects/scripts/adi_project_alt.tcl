@@ -7,7 +7,7 @@ set family "none"
 set device "none"
 set version "16.1"
 
-proc adi_project_create {project_name} {
+proc adi_project_altera {project_name} {
 
   global ad_hdl_dir
   global ad_phdl_dir
