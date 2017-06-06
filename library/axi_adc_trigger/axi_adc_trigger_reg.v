@@ -60,7 +60,8 @@ module axi_adc_trigger_reg (
   output      [ 3:0]  trigger_l_mix_b,
 
   output      [ 2:0]  trigger_out_mix,
-  output      [31:0]  delay_trigger,
+  output      [31:0]  fifo_depth,
+  output      [31:0]  trigger_delay,
 
  // bus interface
 
@@ -93,7 +94,8 @@ module axi_adc_trigger_reg (
   reg     [31:0]  up_hysteresis_b = 32'h0;
   reg     [ 3:0]  up_trigger_l_mix_b = 32'h0;
   reg     [ 2:0]  up_trigger_out_mix = 32'h0;
-  reg     [31:0]  up_delay_trigger= 32'h0;
+  reg     [31:0]  up_fifo_depth = 32'h0;
+  reg     [31:0]  up_trigger_delay = 32'h0;
   reg             up_triggered = 1'h0;
 
   assign low_level  = config_trigger[1:0];
@@ -115,7 +117,8 @@ module axi_adc_trigger_reg (
       up_limit_b <= 'd0;
       up_function_b <= 'd0;
       up_hysteresis_b <= 'd0;
-      up_delay_trigger <= 'd0;
+      up_fifo_depth <= 'd0;
+      up_trigger_delay <= 'd0;
       up_trigger_l_mix_a <= 'd0;
       up_trigger_l_mix_b <= 'd0;
       up_trigger_out_mix <= 'd0;
@@ -162,13 +165,16 @@ module axi_adc_trigger_reg (
         up_trigger_out_mix <= up_wdata[2:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'he)) begin
-        up_delay_trigger <= up_wdata;
+        up_fifo_depth <= up_wdata;
       end
 //      if (triggered == 1'b1) begin
 //        up_triggered <= 1'b1;
 //      end else if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hf)) begin
 //        up_triggered <= up_wdata[0];
 //      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
+        up_trigger_delay <= up_wdata;
+      end
     end
   end
 
@@ -196,8 +202,9 @@ module axi_adc_trigger_reg (
           5'hb: up_rdata <= up_hysteresis_b;
           5'hc: up_rdata <= {28'h0,up_trigger_l_mix_b};
           5'hd: up_rdata <= {29'h0,up_trigger_out_mix};
-          5'he: up_rdata <= up_delay_trigger;
+          5'he: up_rdata <= up_fifo_depth;
           5'hf: up_rdata <= {31'h0,up_triggered};
+          5'h10: up_rdata <= up_trigger_delay;
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -206,7 +213,7 @@ module axi_adc_trigger_reg (
     end
   end
 
-   up_xfer_cntrl #(.DATA_WIDTH(153)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(185)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_data_cntrl ({ up_config_trigger,    // 10
@@ -219,7 +226,8 @@ module axi_adc_trigger_reg (
                       up_hysteresis_b,      // 32
                       up_trigger_l_mix_b,   // 4
                       up_trigger_out_mix,   // 3
-                      up_delay_trigger}), // 32
+                      up_fifo_depth,        // 32
+                      up_trigger_delay}),   // 32
 
     .up_xfer_done (),
     .d_rst (1'b0),
@@ -234,7 +242,8 @@ module axi_adc_trigger_reg (
                       hysteresis_b,       // 32
                       trigger_l_mix_b,    // 4
                       trigger_out_mix,    // 3
-                      delay_trigger})); // 32
+                      fifo_depth,         // 32
+                      trigger_delay}));   // 32
 
 endmodule
 

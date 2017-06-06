@@ -53,7 +53,7 @@ module axi_adc_trigger(
   output                data_valid_a_trig,
   output                data_valid_b_trig,
 
-  output      [31:0]    trigger_offset,
+  output      [31:0]    fifo_depth,
 
   // axi interface
 
@@ -111,7 +111,7 @@ module axi_adc_trigger(
   wire    [ 3:0]    trigger_l_mix_b;
 
   wire    [ 2:0]    trigger_out_mix;
-  wire    [31:0]    delay_trigger;
+  wire    [31:0]    trigger_delay;
 
   wire    [15:0]    data_a_cmp;
   wire    [15:0]    data_b_cmp;
@@ -157,17 +157,19 @@ module axi_adc_trigger(
 
   reg               trigger_out_mixed;
 
-  reg     [15:0]    data_a_r;
-  reg     [15:0]    data_b_r;
+  reg     [14:0]    data_a_r;
+  reg     [14:0]    data_b_r;
   reg               data_valid_a_r;
   reg               data_valid_b_r;
+
+  reg     [31:0]    trigger_delay_counter;
+  reg               trigger_out_delayed;
+  reg               triggered;
 
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
-
-  assign trigger_offset = delay_trigger;
 
   assign trigger_t = io_selection;
 
@@ -183,15 +185,35 @@ module axi_adc_trigger(
   assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
   assign limit_b_cmp  = {!limit_b[15],limit_b[14:0]};
 
-  assign data_a_trig = {trigger_out_mixed, data_a_r[14:0]};
-  assign data_b_trig = {trigger_out_mixed, data_b_r[14:0]};;
+  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed, data_a_r} :{trigger_out_delayed, data_a_r} ;
+  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed, data_b_r} :{trigger_out_delayed, data_b_r};
   assign data_valid_a_trig = data_valid_a_r;
   assign data_valid_b_trig = data_valid_b_r;
 
   always @(posedge clk) begin
-    data_a_r <= data_a;
+    if (trigger_delay == 0) begin
+      trigger_delay_counter <= 32'h0;
+    end else begin
+      if (data_valid_a_r == 1'b1) begin
+        triggered <= trigger_out_mixed;
+        trigger_out_delayed <= 1'b0;
+        if (trigger_delay_counter == 0) begin
+          trigger_delay_counter <= trigger_delay;
+          trigger_out_delayed <= 1'b1;
+          triggered <= 1'b0;
+        end else begin
+          if(triggered == 1'b1) begin
+            trigger_delay_counter <= trigger_delay_counter - 1;
+          end
+        end
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    data_a_r <= data_a[14:0];
     data_valid_a_r <= data_valid_a;
-    data_b_r <= data_b;
+    data_b_r <= data_b[14:0];
     data_valid_b_r <= data_valid_b;
   end
 
@@ -362,7 +384,8 @@ module axi_adc_trigger(
   .trigger_l_mix_b(trigger_l_mix_b),
 
   .trigger_out_mix(trigger_out_mix),
-  .delay_trigger(delay_trigger),
+  .trigger_delay(trigger_delay),
+  .fifo_depth(fifo_depth),
 
   // bus interface
 
