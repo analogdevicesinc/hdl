@@ -7,17 +7,14 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C a10gx all
 	-make -C zc706 all
 
 
 clean: 
-	make -C a10gx clean
 	make -C zc706 clean
 
 
 clean-all:
-	make -C a10gx clean-all
 	make -C zc706 clean-all
 
 ####################################################################################
