@@ -1,14 +1,4 @@
-
-# device settings
-
-set_global_assignment -name FAMILY "Arria 10"
-set_global_assignment -name DEVICE 10AS066N3F40E2SGE2
-
-# ignored warnings and such
-
-set_global_assignment -name MESSAGE_DISABLE 17951 ; ## disable unused RX channels message
-set_global_assignment -name MESSAGE_DISABLE 18655 ; ## disable unused TX channels message
-
+# a10soc carrier defaults
 # clocks and resets
 
 set_location_assignment PIN_AM10  -to sys_clk
@@ -259,6 +249,3 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[2]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[3]
 
-# source defaults
-
-source $ad_hdl_dir/projects/common/altera/sys_gen.tcl

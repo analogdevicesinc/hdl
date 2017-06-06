@@ -1,11 +1,8 @@
-
-package require qsys
-
-set_module_property NAME {system_bd}
-set_project_property DEVICE_FAMILY {Arria 10}
-set_project_property DEVICE {10AS066N3F40E2SGE2}
+# a10soc carrier qsys
 
 set system_type a10soc
+
+# clock-&-reset
 
 add_instance sys_clk clock_source
 add_interface sys_clk clock sink
