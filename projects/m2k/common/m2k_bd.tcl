@@ -177,7 +177,7 @@ ad_connect bram_la/enb                      la_trigger_fifo/en_r
 ad_connect logic_analyzer_dmac/fifo_wr_din  la_trigger_fifo/data_out
 ad_connect logic_analyzer_dmac/fifo_wr_en   la_trigger_fifo/data_out_valid
 
-ad_connect logic_analyzer/trigger_offset la_trigger_fifo/depth
+ad_connect logic_analyzer/fifo_depth la_trigger_fifo/depth
 
 ad_connect logic_analyzer/trigger_out logic_analyzer_dmac/fifo_wr_sync
 
@@ -229,7 +229,7 @@ ad_connect adc_trigger/data_valid_a_trig adc_trigger_fifo/data_in_valid
 ad_connect ad9963_adc_concat/dout        adc_trigger_fifo/data_in
 ad_connect ad9963_adc_concat/dout        adc_trigger_extract/data_in_trigger
 
-ad_connect adc_trigger_fifo/depth          adc_trigger/trigger_offset
+ad_connect adc_trigger_fifo/depth          adc_trigger/fifo_depth
 
 ad_connect adc_trigger_fifo/data_out       adc_trigger_extract/data_in
 ad_connect adc_trigger_fifo/data_out_valid adc_trigger_extract/data_valid
