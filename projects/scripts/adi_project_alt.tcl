@@ -5,7 +5,7 @@ variable version
 
 set family "none"
 set device "none"
-set version "16.1"
+set version "16.1.2"
 
 proc adi_project_altera {project_name} {
 
@@ -18,7 +18,12 @@ proc adi_project_altera {project_name} {
 
   if [regexp "_a10gx$" $project_name] {
     set family "Arria 10"
-    set device 10AX115S3F45E2SGE3
+    set device 10AX115S2F45I1SG
+  }
+
+  if [regexp "_a10soc$" $project_name] {
+    set family "Arria 10"
+    set device 10AS066N3F40E2SG
   }
 
   # version check
