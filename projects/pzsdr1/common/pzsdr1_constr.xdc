@@ -2,7 +2,7 @@
 # constraints (pzsdr1.b)
 # ad9361
 
-set_property  -dict {PACKAGE_PIN  L16  IOSTANDARD LVCMOS25} [get_ports enable]                            ; ## IO_L11P_T1_SRCC_35           U1,L16,IO_L11_35_ENABLE
+set_property  -dict {PACKAGE_PIN  K19  IOSTANDARD LVCMOS25} [get_ports enable]                            ; ## IO_L10P_T1_AD11P_35          U1,L16,IO_L11_35_ENABLE
 set_property  -dict {PACKAGE_PIN  L17  IOSTANDARD LVCMOS25} [get_ports txnrx]                             ; ## IO_L11N_T1_SRCC_35           U1,L17,IO_L11_35_TXNRX
 
 set_property  -dict {PACKAGE_PIN  H15  IOSTANDARD LVCMOS25} [get_ports gpio_status[0]]                    ; ## IO_L19P_T3_35                U1,H15,IO_L19_35_CTRL_OUT0
@@ -17,7 +17,7 @@ set_property  -dict {PACKAGE_PIN  N17  IOSTANDARD LVCMOS25} [get_ports gpio_ctl[
 set_property  -dict {PACKAGE_PIN  P18  IOSTANDARD LVCMOS25} [get_ports gpio_ctl[1]]                       ; ## IO_L23N_T3_34                U1,P18,IO_L23_34_CTRL_IN1
 set_property  -dict {PACKAGE_PIN  P15  IOSTANDARD LVCMOS25} [get_ports gpio_ctl[2]]                       ; ## IO_L24P_T3_34                U1,P15,IO_L24_34_CTRL_IN2
 set_property  -dict {PACKAGE_PIN  P16  IOSTANDARD LVCMOS25} [get_ports gpio_ctl[3]]                       ; ## IO_L24N_T3_34                U1,P16,IO_L24_34_CTRL_IN3
-set_property  -dict {PACKAGE_PIN  K19  IOSTANDARD LVCMOS25} [get_ports gpio_en_agc]                       ; ## IO_L10P_T1_AD11P_35          U1,K19,IO_L10_35_EN_AGC
+set_property  -dict {PACKAGE_PIN  L16  IOSTANDARD LVCMOS25} [get_ports gpio_en_agc]                       ; ## IO_L11P_T1_SRCC_35           U1,K19,IO_L10_35_EN_AGC
 set_property  -dict {PACKAGE_PIN  J19  IOSTANDARD LVCMOS25} [get_ports gpio_sync]                         ; ## IO_L10N_T1_AD11N_35          U1,J19,IO_L10_35_SYNC_IN
 set_property  -dict {PACKAGE_PIN  G14  IOSTANDARD LVCMOS25} [get_ports gpio_resetb]                       ; ## IO_0_35                      U1,G14,IO_00_35_AD9364_RST
 set_property  -dict {PACKAGE_PIN  R19  IOSTANDARD LVCMOS25} [get_ports gpio_clksel]                       ; ## IO_0_34                      U1,R19,IO_00_34_AD9364_CLKSEL
