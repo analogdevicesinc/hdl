@@ -18,6 +18,7 @@ M_DEPS += system_constr.sdc
 M_DEPS += ../common/daq2_spi.v
 M_DEPS += ../common/daq2_qsys.tcl
 M_DEPS += ../../scripts/adi_tquest.tcl
+M_DEPS += ../../scripts/adi_project_alt.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/a10gx/a10gx_system_qsys.tcl
 M_DEPS += ../../common/a10gx/a10gx_system_assign.tcl
