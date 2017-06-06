@@ -19,7 +19,6 @@ M_DEPS += ../common/daq3_spi.v
 M_DEPS += ../common/daq3_qsys.tcl
 M_DEPS += ../../scripts/adi_tquest.tcl
 M_DEPS += ../../scripts/adi_env.tcl
-M_DEPS += ../../common/altera/sys_gen.tcl
 M_DEPS += ../../common/a10gx/a10gx_system_qsys.tcl
 M_DEPS += ../../common/a10gx/a10gx_system_assign.tcl
 M_DEPS += ../../../library/altera/avl_adxcfg/avl_adxcfg.v
