@@ -59,7 +59,7 @@ module util_fir_int (
     if (ready_counter == 0) begin
       s_axis_data_tvalid_r <= 1'b1;
     end else begin
-      s_axis_data_tvalid_r <= 1'b1;
+      s_axis_data_tvalid_r <= 1'b0;
     end
   end
 
