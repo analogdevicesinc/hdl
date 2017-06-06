@@ -1,16 +1,11 @@
 
-load_package flow
-
 source ../../scripts/adi_env.tcl
-project_new adrv9371x_a10soc -overwrite
+source ../../scripts/adi_project_alt.tcl
+
+adi_project_altera adrv9371x_a10soc
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
-
-set_global_assignment -name QSYS_FILE system_bd.qsys
-set_global_assignment -name VERILOG_FILE system_top.v
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # ad9371
 
