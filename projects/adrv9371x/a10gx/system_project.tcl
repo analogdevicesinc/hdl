@@ -2,7 +2,7 @@
 source ../../scripts/adi_env.tcl
 source ../../scripts/adi_project_alt.tcl
 
-adi_project_create adrv9371x_a10gx
+adi_project_altera adrv9371x_a10gx
 
 source "../../common/a10gx/a10gx_system_assign.tcl"
 
