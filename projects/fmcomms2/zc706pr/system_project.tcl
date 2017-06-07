@@ -11,7 +11,7 @@ if {$::argc > 0} {
 
 if {$mode == 0} {
 
-  adi_project_create fmcomms2_zc706
+  adi_project_xilinx fmcomms2_zc706
   adi_project_files fmcomms2_zc706 [list \
     "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc" \
     "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
@@ -27,7 +27,7 @@ if {$mode == 0} {
   return
 }
 
-adi_project_create fmcomms2_zc706 1
+adi_project_xilinx fmcomms2_zc706 1
 adi_project_synth fmcomms2_zc706 "" \
   [list "system_top.v" \
   "../common/prcfg_bb.v" \

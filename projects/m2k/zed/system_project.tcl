@@ -3,7 +3,7 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project_create m2k_fmc_zed
+adi_project_xilinx m2k_fmc_zed
 adi_project_files m2k_fmc_zed [list \
   "../common/m2k_spi.v" \
   "system_top.v" \

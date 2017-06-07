@@ -21,7 +21,7 @@ set p_device "none"
 set sys_zynq 1
 set ADI_POWER_OPTIMIZATION 0
 
-proc adi_project_create {project_name {mode 0}} {
+proc adi_project_xilinx {project_name {mode 0}} {
 
   global ad_hdl_dir
   global ad_phdl_dir

@@ -11,7 +11,7 @@ set adc_spi_freq  7
 # EVAL-CN0350-PMDZ
 #set adc_spi_freq  50
 
-adi_project_create cftl_custom_zed
+adi_project_xilinx cftl_custom_zed
 adi_project_files cftl_custom_zed [list \
   "system_top.v" \
   "system_constr.xdc" \
