@@ -111,6 +111,9 @@ module avl_dacfifo_rd #(
   reg                                       dac_avl_last_transfer_m1;
   reg                                       dac_avl_last_transfer_m2;
   reg                                       dac_avl_last_transfer;
+  reg         [MEM_WIDTH_DIFF-1:0]          dac_avl_last_beats_m1;
+  reg         [MEM_WIDTH_DIFF-1:0]          dac_avl_last_beats_m2;
+  reg         [MEM_WIDTH_DIFF-1:0]          dac_avl_last_beats;
 
   // internal signals
 
@@ -347,6 +350,18 @@ module avl_dacfifo_rd #(
     end
   end
 
+  always @(posedge dac_clk) begin
+    if (dac_reset == 1'b1) begin
+      dac_avl_last_beats_m2 <= 0;
+      dac_avl_last_beats_m1 <= 0;
+      dac_avl_last_beats <= 0;
+    end else begin
+      dac_avl_last_beats_m1 <= avl_last_beats_s;
+      dac_avl_last_beats_m2 <= dac_avl_last_beats_m1;
+      dac_avl_last_beats <= dac_avl_last_beats_m2;
+    end
+  end
+
   assign dac_mem_rd_enable_s = (dac_mem_address_diff[DAC_MEM_ADDRESS_WIDTH-1:0] == 1'b0) ? 0 : (dac_xfer_req & dac_valid);
   always @(posedge dac_clk) begin
     if ((dac_reset == 1'b1) || ((dac_avl_xfer_req == 1'b0) && (dac_xfer_req == 1'b0))) begin
@@ -356,7 +371,7 @@ module avl_dacfifo_rd #(
       dac_mem_rd_last_address <= 0;
     end else begin
       dac_mem_address_diff <= dac_mem_address_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0];
-      dac_mem_rd_last_address <= dac_mem_wr_last_address + avl_last_beats_s;
+      dac_mem_rd_last_address <= dac_mem_wr_last_address + dac_avl_last_beats;
       if (dac_mem_rd_enable_s == 1'b1) begin
         dac_mem_rd_address <= ((dac_mem_rd_address == dac_mem_rd_last_address) && (dac_mem_last_transfer_active == 1'b1)) ?
                                                             (dac_mem_wr_last_address + {MEM_WIDTH_DIFF{1'b1}} + 1) :
