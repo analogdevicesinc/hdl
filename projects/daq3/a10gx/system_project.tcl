@@ -1,17 +1,14 @@
 
-load_package flow
-
 source ../../scripts/adi_env.tcl
-project_new daq3_a10gx -overwrite
+source ../../scripts/adi_project_alt.tcl
 
-source "../../common/a10gx/a10gx_system_assign.tcl"
+adi_project_altera daq3_a10gx
+
+source $ad_hdl_dir/projects/common/a10gx/a10gx_system_assign.tcl
+
+# files
 
 set_global_assignment -name VERILOG_FILE ../common/daq3_spi.v
-set_global_assignment -name VERILOG_FILE system_top.v
-set_global_assignment -name QSYS_FILE system_bd.qsys
-
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # lane interface
 
