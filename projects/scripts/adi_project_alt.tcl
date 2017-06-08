@@ -19,11 +19,19 @@ proc adi_project_altera {project_name} {
   if [regexp "_a10gx$" $project_name] {
     set family "Arria 10"
     set device 10AX115S2F45I1SG
+    set system_qip_file system_bd/system_bd.qip
   }
 
   if [regexp "_a10soc$" $project_name] {
     set family "Arria 10"
     set device 10AS066N3F40E2SG
+    set system_qip_file system_bd/system_bd.qip
+  }
+
+  if [regexp "_c5soc$" $project_name] {
+    set family "Cyclone V"
+    set device 5CSXFC6D6F31C8ES
+    set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
   # version check
@@ -90,7 +98,7 @@ proc adi_project_altera {project_name} {
 
   # default assignments
  
-  set_global_assignment -name QIP_FILE system_bd/system_bd.qip
+  set_global_assignment -name QIP_FILE $system_qip_file
   set_global_assignment -name VERILOG_FILE system_top.v
   set_global_assignment -name SDC_FILE system_constr.sdc
   set_global_assignment -name TOP_LEVEL_ENTITY system_top
