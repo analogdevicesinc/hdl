@@ -143,26 +143,31 @@ proc p_avl_adxcvr {} {
     add_interface core_pll_locked conduit end
     set_interface_property core_pll_locked EXPORT_OF alt_core_pll.locked
 
+    add_instance alt_core_pll_reconfig altera_pll_reconfig
+    add_connection alt_sys_clk.clk_reset alt_core_pll_reconfig.mgmt_reset
+    add_connection alt_sys_clk.clk alt_core_pll_reconfig.mgmt_clk
+    add_connection alt_core_pll_reconfig.reconfig_to_pll alt_core_pll.reconfig_to_pll
+    add_connection alt_core_pll.reconfig_from_pll alt_core_pll_reconfig.reconfig_from_pll
+    add_interface core_pll_reconfig avalon slave
+    set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll_reconfig.mgmt_avalon_slave
+
   } else {
 
-    add_instance alt_core_pll altera_iopll
-    set_instance_parameter_value alt_core_pll {gui_en_reconf} {1}
+    add_instance alt_core_pll altera_xcvr_fpll_a10
+    set_instance_parameter_value alt_core_pll {gui_fpll_mode} {0}
     set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
-    set_instance_parameter_value alt_core_pll {gui_use_locked} {1}
-    set_instance_parameter_value alt_core_pll {gui_output_clock_frequency0} $m_coreclk_frequency
-    add_connection alt_ref_clk.out_clk alt_core_pll.refclk
-    add_connection alt_sys_clk.clk_reset alt_core_pll.reset
+    set_instance_parameter_value alt_core_pll {gui_desired_outclk0_frequency} $m_coreclk_frequency
+    set_instance_parameter_value alt_core_pll {enable_pll_reconfig} {1}
+    set_instance_parameter_value alt_core_pll {set_capability_reg_enable} {1}
+    set_instance_parameter_value alt_core_pll {set_csr_soft_logic_enable} {1}
+    add_connection alt_ref_clk.out_clk alt_core_pll.pll_refclk0
     add_interface core_pll_locked conduit end
-    set_interface_property core_pll_locked EXPORT_OF alt_core_pll.locked
+    set_interface_property core_pll_locked EXPORT_OF alt_core_pll.pll_locked
+    add_connection alt_sys_clk.clk_reset alt_core_pll.reconfig_reset0
+    add_connection alt_sys_clk.clk alt_core_pll.reconfig_clk0
+    add_interface core_pll_reconfig avalon slave
+    set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll.reconfig_avmm0
   }
-
-  add_instance alt_core_pll_reconfig altera_pll_reconfig
-  add_connection alt_sys_clk.clk_reset alt_core_pll_reconfig.mgmt_reset
-  add_connection alt_sys_clk.clk alt_core_pll_reconfig.mgmt_clk
-  add_connection alt_core_pll_reconfig.reconfig_to_pll alt_core_pll.reconfig_to_pll
-  add_connection alt_core_pll.reconfig_from_pll alt_core_pll_reconfig.reconfig_from_pll
-  add_interface core_pll_reconfig avalon slave
-  set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll_reconfig.mgmt_avalon_slave
 
   add_instance alt_core_clk altera_clock_bridge
   set_instance_parameter_value alt_core_clk {EXPLICIT_CLOCK_RATE} $m_coreclk_frequency
