@@ -148,7 +148,6 @@ ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_1
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_2
 ad_connect  axi_ad9371_tx_clkgen/clk_0 util_ad9371_xcvr/tx_clk_3
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_tx_jesd/tx_core_clk
-ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_tx_jesd_rstgen/slowest_sync_clk
 ad_reconct  util_ad9371_xcvr/tx_0 axi_ad9371_tx_jesd/gt3_tx
 ad_reconct  util_ad9371_xcvr/tx_1 axi_ad9371_tx_jesd/gt0_tx
 ad_reconct  util_ad9371_xcvr/tx_2 axi_ad9371_tx_jesd/gt1_tx
@@ -158,13 +157,11 @@ ad_reconct  util_ad9371_xcvr/rx_out_clk_0 axi_ad9371_rx_clkgen/clk
 ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_xcvr/rx_clk_0
 ad_connect  axi_ad9371_rx_clkgen/clk_0 util_ad9371_xcvr/rx_clk_1
 ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_jesd/rx_core_clk
-ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_jesd_rstgen/slowest_sync_clk
 ad_xcvrcon  util_ad9371_xcvr axi_ad9371_rx_os_xcvr axi_ad9371_rx_os_jesd
 ad_reconct  util_ad9371_xcvr/rx_out_clk_2 axi_ad9371_rx_os_clkgen/clk
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_xcvr/rx_clk_2
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 util_ad9371_xcvr/rx_clk_3
 ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd/rx_core_clk
-ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd_rstgen/slowest_sync_clk
 
 # dma clock & reset
 
