@@ -1,15 +1,12 @@
 
-load_package flow
-
 source ../../scripts/adi_env.tcl
-project_new arradio_c5soc -overwrite
+source ../../scripts/adi_project_alt.tcl
 
-source "../../common/c5soc/c5soc_system_assign.tcl"
+adi_project_altera arradio_c5soc
 
-set_global_assignment -name QSYS_FILE system_bd.qsys
-set_global_assignment -name VERILOG_FILE system_top.v
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
+source $ad_hdl_dir/projects/common/c5soc/c5soc_system_assign.tcl
+
+# ad9361 interface
 
 set_location_assignment PIN_H15 -to rx_clk_in
 set_location_assignment PIN_G15 -to "rx_clk_in(n)"
