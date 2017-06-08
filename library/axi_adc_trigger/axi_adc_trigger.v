@@ -126,6 +126,7 @@ module axi_adc_trigger(
   wire              trigger_b_any_edge;
   wire              trigger_out_a;
   wire              trigger_out_b;
+  wire              trigger_out_delayed;
 
   reg               trigger_a_d1; // synchronization flip flop
   reg               trigger_a_d2; // synchronization flip flop
@@ -163,7 +164,6 @@ module axi_adc_trigger(
   reg               data_valid_b_r;
 
   reg     [31:0]    trigger_delay_counter;
-  reg               trigger_out_delayed;
   reg               triggered;
 
   // signal name changes
@@ -185,24 +185,24 @@ module axi_adc_trigger(
   assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
   assign limit_b_cmp  = {!limit_b[15],limit_b[14:0]};
 
-  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed, data_a_r} :{trigger_out_delayed, data_a_r} ;
-  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed, data_b_r} :{trigger_out_delayed, data_b_r};
+  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed, data_a_r} : {trigger_out_delayed, data_a_r};
+  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed, data_b_r} : {trigger_out_delayed, data_b_r};
   assign data_valid_a_trig = data_valid_a_r;
   assign data_valid_b_trig = data_valid_b_r;
+
+  assign trigger_out_delayed = (trigger_delay_counter == 32'h0) ? 1 : 0;
 
   always @(posedge clk) begin
     if (trigger_delay == 0) begin
       trigger_delay_counter <= 32'h0;
     end else begin
       if (data_valid_a_r == 1'b1) begin
-        triggered <= trigger_out_mixed;
-        trigger_out_delayed <= 1'b0;
+        triggered <= trigger_out_mixed | triggered;
         if (trigger_delay_counter == 0) begin
           trigger_delay_counter <= trigger_delay;
-          trigger_out_delayed <= 1'b1;
           triggered <= 1'b0;
         end else begin
-          if(triggered == 1'b1) begin
+          if(triggered == 1'b1 || trigger_out_mixed == 1'b1) begin
             trigger_delay_counter <= trigger_delay_counter - 1;
           end
         end
