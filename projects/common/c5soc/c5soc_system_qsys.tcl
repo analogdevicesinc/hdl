@@ -1,9 +1,6 @@
+# c5soc carrier qsys
 
-package require qsys
-
-set_module_property NAME {system_bd}
-set_project_property DEVICE_FAMILY {Cyclone V}
-set_project_property DEVICE {5CSXFC6D6F31C8ES}
+set system_type c5soc
 
 # system clock
 

@@ -1,9 +1,4 @@
-
-# device settings
-
-set_global_assignment -name FAMILY "Cyclone V"
-set_global_assignment -name DEVICE 5CSXFC6D6F31C8ES
-
+# c5soc carrier defaults
 # clocks
 
 set_location_assignment PIN_AF14 -to sys_clk
@@ -536,6 +531,3 @@ set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
 set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
-# source defaults
-
-source $ad_hdl_dir/projects/common/altera/sys_gen.tcl
