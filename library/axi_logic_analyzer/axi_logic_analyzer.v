@@ -94,7 +94,6 @@ module axi_logic_analyzer (
 
   reg     [15:0]    io_selection; // 1 - input, 0 - output
 
-  reg               trigger_out_delayed;
   reg     [31:0]    delay_counter = 'd0;
   reg               triggered = 'd0;
 
@@ -131,6 +130,7 @@ module axi_logic_analyzer (
 
   wire              trigger_out_s;
   wire    [31:0]    trigger_delay;
+  wire              trigger_out_delayed;
 
   genvar i;
 
@@ -140,6 +140,7 @@ module axi_logic_analyzer (
   assign up_rstn = s_axi_aresetn;
 
   assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s : trigger_out_delayed;
+  assign trigger_out_delayed = trigger_delay == 32'h0 ? 1: 0;
 
   generate
   for (i = 0 ; i < 16; i = i + 1) begin
@@ -229,14 +230,12 @@ module axi_logic_analyzer (
       delay_counter <= 32'h0;
     end else begin
       if (adc_valid == 1'b1) begin
-        triggered <= trigger_out_s;
-        trigger_out_delayed <= 1'b0;
+        triggered <= trigger_out_s | triggered;
         if (delay_counter == 32'h0) begin
           delay_counter <= trigger_delay;
-          trigger_out_delayed <= 1'b1;
           triggered <= 1'b0;
         end else begin
-          if(triggered == 1'b1) begin
+          if(triggered == 1'b1 || trigger_out_s == 1'b1) begin
             delay_counter <= delay_counter - 1;
           end
         end
