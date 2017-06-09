@@ -214,9 +214,9 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd} {
   ad_connect  ${a_jesd}/${txrx}_sync $m_sync
   ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/${txrx}_core_clk
   ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
-  ad_connect  sys_cpu_clk ${a_jesd}_rstgen/slowest_sync_clk
+  ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}_rstgen/slowest_sync_clk
   ad_connect  sys_cpu_resetn ${a_jesd}_rstgen/ext_reset_in
-  ad_connect  ${a_jesd}_rstgen/peripheral_reset ${a_jesd}/${txrx}_reset
+  ad_connect  sys_cpu_reset ${a_jesd}/${txrx}_reset
 
   if {$tx_or_rx_n == 0} {
     set xcvr_rx_index [expr ($xcvr_rx_index + $no_of_lanes)]
