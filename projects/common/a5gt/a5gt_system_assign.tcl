@@ -1,9 +1,4 @@
-
-# device settings
-
-set_global_assignment -name FAMILY "Arria V"
-set_global_assignment -name DEVICE 5AGTFD7K3F40I3
-
+# a5gx carrier defaults
 # clocks and resets
 
 set_location_assignment PIN_C34   -to sys_clk
@@ -821,7 +816,4 @@ set_location_assignment FF_X15_Y136_N40  -to system_bd:i_system_bd|system_bd_sys
 set_location_assignment FF_X15_Y136_N13  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uodt_qr_to_hr|dataout_r[0][0]
 set_location_assignment FF_X15_Y136_N43  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uodt_qr_to_hr|dataout_r[0][1]
 
-# source defaults
-
-source $ad_hdl_dir/projects/common/altera/sys_gen.tcl
 
