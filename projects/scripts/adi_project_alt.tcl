@@ -34,6 +34,18 @@ proc adi_project_altera {project_name} {
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
+  if [regexp "_a5soc$" $project_name] {
+    set family "Arria V"
+    set device 5CSXFC6D6F31C8ES
+    set system_qip_file system_bd/synthesis/system_bd.qip
+  }
+
+  if [regexp "_a5gt$" $project_name] {
+    set family "Arria V"
+    set device 5AGTFD7K3F40I3
+    set system_qip_file system_bd/synthesis/system_bd.qip
+  }
+
   # version check
 
   set m_version [lindex $quartus(version) 1]
