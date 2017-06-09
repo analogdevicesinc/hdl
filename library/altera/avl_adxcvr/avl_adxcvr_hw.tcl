@@ -140,8 +140,6 @@ proc p_avl_adxcvr {} {
     set_instance_parameter_value alt_core_pll {gui_output_clock_frequency0} $m_coreclk_frequency
     add_connection alt_ref_clk.out_clk alt_core_pll.refclk
     add_connection alt_sys_clk.clk_reset alt_core_pll.reset
-    add_interface core_pll_locked conduit end
-    set_interface_property core_pll_locked EXPORT_OF alt_core_pll.locked
 
     add_instance alt_core_pll_reconfig altera_pll_reconfig
     add_connection alt_sys_clk.clk_reset alt_core_pll_reconfig.mgmt_reset
@@ -150,6 +148,16 @@ proc p_avl_adxcvr {} {
     add_connection alt_core_pll.reconfig_from_pll alt_core_pll_reconfig.reconfig_from_pll
     add_interface core_pll_reconfig avalon slave
     set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll_reconfig.mgmt_avalon_slave
+
+    add_instance alt_core_pll_ifconv alt_ifconv
+    set_instance_parameter_value alt_core_pll_ifconv {width} {1}
+    set_instance_parameter_value alt_core_pll_ifconv {interface_name_in} {pll_locked_in}
+    set_instance_parameter_value alt_core_pll_ifconv {signal_name_in} {export}
+    set_instance_parameter_value alt_core_pll_ifconv {interface_name_out} {pll_locked_out}
+    set_instance_parameter_value alt_core_pll_ifconv {signal_name_out} {pll_locked}
+    add_connection alt_core_pll.locked alt_core_pll_ifconv.pll_locked_in
+    add_interface core_pll_locked conduit end
+    set_interface_property core_pll_locked EXPORT_OF alt_core_pll_ifconv.pll_locked_out
 
   } else {
 
