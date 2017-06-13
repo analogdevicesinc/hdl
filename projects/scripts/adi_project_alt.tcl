@@ -36,7 +36,7 @@ proc adi_project_altera {project_name} {
 
   if [regexp "_a5soc$" $project_name] {
     set family "Arria V"
-    set device 5CSXFC6D6F31C8ES
+    set device 5ASTFD5K3F40I3ES
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
