@@ -1,9 +1,4 @@
-
-# device settings
-
-set_global_assignment -name FAMILY "Arria V"
-set_global_assignment -name DEVICE 5ASTFD5K3F40I3ES
-
+# a10soc carrier defaults
 # i2c (fmc)
 
 set_location_assignment PIN_F26 -to fmca_scl
@@ -518,8 +513,4 @@ set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
 set_global_assignment -name ECO_REGENERATE_REPORT ON
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
-
-# source defaults
-
-source $ad_hdl_dir/projects/common/altera/sys_gen.tcl
 

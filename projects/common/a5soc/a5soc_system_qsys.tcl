@@ -1,11 +1,6 @@
+# a5soc carrier qsys
 
-package require qsys
-
-set_module_property NAME {system_bd}
-set_project_property DEVICE_FAMILY {Arria V}
-set_project_property DEVICE {5ASTFD5K3F40I3ES}
-
-set system_type nios
+set system_type a5soc
 
 # clock-&-reset
 
