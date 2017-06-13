@@ -1,18 +1,15 @@
 
-load_package flow
-
 source ../../scripts/adi_env.tcl
-project_new fmcjesdadc1_a5soc -overwrite
+source ../../scripts/adi_project_alt.tcl
 
-source "../../common/a5soc/a5soc_system_assign.tcl"
+adi_project_altera fmcjesdadc1_a5soc
+
+source $ad_hdl_dir/projects/common/a5soc/a5soc_system_assign.tcl
+
+# files
 
 set_global_assignment -name VERILOG_FILE ../common/fmcjesdadc1_spi.v
 set_global_assignment -name VERILOG_FILE ../../../library/common/ad_sysref_gen.v
-set_global_assignment -name VERILOG_FILE system_top.v
-set_global_assignment -name QSYS_FILE system_bd.qsys
-
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # reference clock
 
