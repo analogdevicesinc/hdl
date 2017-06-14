@@ -80,7 +80,7 @@ module system_top (
   // lane interface
 
   input                   ref_clk,
-  input                   rx_sysref,
+  output                  rx_sysref,
   output                  rx_sync,
   input       [  3:0]     rx_data,
 
@@ -105,10 +105,6 @@ module system_top (
   wire                    spi_mosi;
   wire        [  7:0]     spi_csn_s;
 
-  // gpio in & out are separate cores
-
-  assign gpio_i[63:32] = gpio_o[63:32];
-
   // board stuff
 
   assign eth_resetn = ~eth_reset;
@@ -117,19 +113,27 @@ module system_top (
 
   assign ddr3_a[14:12] = 3'd0;
 
+  assign gpio_i[63:32] = gpio_o[63:32];
   assign gpio_i[31:27] = gpio_o[31:27];
+  assign gpio_i[26:16] = gpio_bd_i;
   assign gpio_i[15: 0] = gpio_o[15:0];
+  assign gpio_bd_o = gpio_o[15:0];
+
+  assign spi_csn = spi_csn_s[0];
 
   // instantiations
  
-  assign spi_csn = spi_csn_s[0];
-
   fmcjesdadc1_spi i_fmcjesdadc1_spi (
     .spi_csn (spi_csn_s[0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
+
+  ad_sysref_gen #(.SYSREF_PERIOD(64)) i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[32]),
+    .sysref_out (rx_sysref));
 
   system_bd i_system_bd (
     .rx_core_clk_clk (rx_clk),
@@ -184,7 +188,7 @@ module system_top (
     .sys_gpio_out_export (gpio_o[63:32]),
     .sys_rst_reset_n (sys_resetn),
     .sys_spi_MISO (spi_miso),
-    .sys_spi_MOSI (spi_mosi_s),
+    .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s));
 
