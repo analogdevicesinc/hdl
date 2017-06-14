@@ -15,34 +15,27 @@ M_DEPS += system_top.v
 M_DEPS += system_qsys.tcl
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.sdc
-M_DEPS += ../common/daq2_spi.v
-M_DEPS += ../common/daq2_qsys.tcl
+M_DEPS += ../common/fmcjesdadc1_spi.v
+M_DEPS += ../common/fmcjesdadc1_qsys.tcl
 M_DEPS += ../../scripts/adi_tquest.tcl
 M_DEPS += ../../scripts/adi_project_alt.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../common/a10gx/a10gx_system_qsys.tcl
 M_DEPS += ../../common/a10gx/a10gx_system_assign.tcl
-M_DEPS += ../../../library/altera/avl_adxcfg/avl_adxcfg.v
-M_DEPS += ../../../library/altera/avl_adxcfg/avl_adxcfg_hw.tcl
+M_DEPS += ../../../library/common/ad_sysref_gen.v
 M_DEPS += ../../../library/altera/avl_adxcvr/avl_adxcvr_hw.tcl
 M_DEPS += ../../../library/altera/axi_adxcvr/axi_adxcvr.v
 M_DEPS += ../../../library/altera/axi_adxcvr/axi_adxcvr_hw.tcl
 M_DEPS += ../../../library/altera/axi_adxcvr/axi_adxcvr_up.v
-M_DEPS += ../../../library/altera/common/ad_mul.v
 M_DEPS += ../../../library/altera/common/up_clock_mon_constr.sdc
 M_DEPS += ../../../library/altera/common/up_rst_constr.sdc
 M_DEPS += ../../../library/altera/common/up_xfer_cntrl_constr.sdc
 M_DEPS += ../../../library/altera/common/up_xfer_status_constr.sdc
-M_DEPS += ../../../library/axi_ad9144/axi_ad9144.v
-M_DEPS += ../../../library/axi_ad9144/axi_ad9144_channel.v
-M_DEPS += ../../../library/axi_ad9144/axi_ad9144_core.v
-M_DEPS += ../../../library/axi_ad9144/axi_ad9144_hw.tcl
-M_DEPS += ../../../library/axi_ad9144/axi_ad9144_if.v
-M_DEPS += ../../../library/axi_ad9680/axi_ad9680.v
-M_DEPS += ../../../library/axi_ad9680/axi_ad9680_channel.v
-M_DEPS += ../../../library/axi_ad9680/axi_ad9680_hw.tcl
-M_DEPS += ../../../library/axi_ad9680/axi_ad9680_if.v
-M_DEPS += ../../../library/axi_ad9680/axi_ad9680_pnmon.v
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250.v
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250_channel.v
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250_hw.tcl
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250_if.v
+M_DEPS += ../../../library/axi_ad9250/axi_ad9250_pnmon.v
 M_DEPS += ../../../library/axi_dmac/2d_transfer.v
 M_DEPS += ../../../library/axi_dmac/address_generator.v
 M_DEPS += ../../../library/axi_dmac/axi_dmac.v
@@ -63,11 +56,7 @@ M_DEPS += ../../../library/axi_dmac/splitter.v
 M_DEPS += ../../../library/axi_dmac/src_axi_mm.v
 M_DEPS += ../../../library/axi_dmac/src_axi_stream.v
 M_DEPS += ../../../library/axi_dmac/src_fifo_inf.v
-M_DEPS += ../../../library/common/ad_axis_inf_rx.v
 M_DEPS += ../../../library/common/ad_datafmt.v
-M_DEPS += ../../../library/common/ad_dds.v
-M_DEPS += ../../../library/common/ad_dds_1.v
-M_DEPS += ../../../library/common/ad_dds_sine.v
 M_DEPS += ../../../library/common/ad_pnmon.v
 M_DEPS += ../../../library/common/ad_rst.v
 M_DEPS += ../../../library/common/ad_xcvr_rx_if.v
@@ -75,16 +64,11 @@ M_DEPS += ../../../library/common/up_adc_channel.v
 M_DEPS += ../../../library/common/up_adc_common.v
 M_DEPS += ../../../library/common/up_axi.v
 M_DEPS += ../../../library/common/up_clock_mon.v
-M_DEPS += ../../../library/common/up_dac_channel.v
-M_DEPS += ../../../library/common/up_dac_common.v
 M_DEPS += ../../../library/common/up_delay_cntrl.v
 M_DEPS += ../../../library/common/up_xfer_cntrl.v
 M_DEPS += ../../../library/common/up_xfer_status.v
 M_DEPS += ../../../library/scripts/adi_env.tcl
 M_DEPS += ../../../library/scripts/adi_ip_alt.tcl
-M_DEPS += ../../../library/util_adcfifo/util_adcfifo.v
-M_DEPS += ../../../library/util_adcfifo/util_adcfifo_constr.sdc
-M_DEPS += ../../../library/util_adcfifo/util_adcfifo_hw.tcl
 M_DEPS += ../../../library/util_axis_fifo/address_gray.v
 M_DEPS += ../../../library/util_axis_fifo/address_gray_pipelined.v
 M_DEPS += ../../../library/util_axis_fifo/address_sync.v
@@ -96,10 +80,6 @@ M_DEPS += ../../../library/util_cpack/util_cpack.v
 M_DEPS += ../../../library/util_cpack/util_cpack_dsf.v
 M_DEPS += ../../../library/util_cpack/util_cpack_hw.tcl
 M_DEPS += ../../../library/util_cpack/util_cpack_mux.v
-M_DEPS += ../../../library/util_upack/util_upack.v
-M_DEPS += ../../../library/util_upack/util_upack_dmx.v
-M_DEPS += ../../../library/util_upack/util_upack_dsf.v
-M_DEPS += ../../../library/util_upack/util_upack_hw.tcl
 
 
 M_ALTERA := quartus_sh --64bit -t 
@@ -138,7 +118,7 @@ M_FLIST += *.dpf
 
 
 .PHONY: all clean clean-all
-all: daq2_a10gx.sof
+all: fmcjesdadc1_a10gx.sof
 
 
 
@@ -149,9 +129,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-daq2_a10gx.sof: $(M_DEPS)
+fmcjesdadc1_a10gx.sof: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_ALTERA) system_project.tcl  >> daq2_a10gx_quartus.log 2>&1
+	$(M_ALTERA) system_project.tcl  >> fmcjesdadc1_a10gx_quartus.log 2>&1
 
 ####################################################################################
 ####################################################################################
