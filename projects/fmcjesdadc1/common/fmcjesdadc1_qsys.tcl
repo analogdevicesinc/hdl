@@ -2,11 +2,10 @@
 # ad9250-xcvr
 
 add_instance avl_ad9250_xcvr avl_adxcvr
-set_instance_parameter_value avl_ad9250_xcvr {ID} {1}
+set_instance_parameter_value avl_ad9250_xcvr {ID} {0}
 set_instance_parameter_value avl_ad9250_xcvr {TX_OR_RX_N} {0}
-set_instance_parameter_value avl_ad9250_xcvr {PCS_CONFIG} {JESD_PCS_CFG1}
+set_instance_parameter_value avl_ad9250_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
 set_instance_parameter_value avl_ad9250_xcvr {LANE_RATE} {5000.0}
-set_instance_parameter_value avl_ad9250_xcvr {SYSCLK_FREQUENCY} {50.0}
 set_instance_parameter_value avl_ad9250_xcvr {PLLCLK_FREQUENCY} {2500.0}
 set_instance_parameter_value avl_ad9250_xcvr {REFCLK_FREQUENCY} {250.0}
 set_instance_parameter_value avl_ad9250_xcvr {CORECLK_FREQUENCY} {125.0}
@@ -41,7 +40,7 @@ set_interface_property rx_ip_data EXPORT_OF avl_ad9250_xcvr.ip_data
 # ad9250-xcvr
 
 add_instance axi_ad9250_xcvr axi_adxcvr
-set_instance_parameter_value axi_ad9250_xcvr {ID} {1}
+set_instance_parameter_value axi_ad9250_xcvr {ID} {0}
 set_instance_parameter_value axi_ad9250_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value axi_ad9250_xcvr {NUM_OF_LANES} {4}
 
@@ -54,6 +53,7 @@ add_connection axi_ad9250_xcvr.core_pll_locked avl_ad9250_xcvr.core_pll_locked
 # ad9250
 
 add_instance axi_ad9250_core_0 axi_ad9250
+set_instance_parameter_value axi_ad9250_core_0 {ID} {0}
 
 add_connection avl_ad9250_xcvr.core_clk axi_ad9250_core_0.if_rx_clk
 add_interface rx_ip_sof_0 conduit end
@@ -64,6 +64,7 @@ add_connection sys_clk.clk_reset axi_ad9250_core_0.s_axi_reset
 add_connection sys_clk.clk axi_ad9250_core_0.s_axi_clock
 
 add_instance axi_ad9250_core_1 axi_ad9250
+set_instance_parameter_value axi_ad9250_core_1 {ID} {1}
 
 add_connection avl_ad9250_xcvr.core_clk axi_ad9250_core_1.if_rx_clk
 add_interface rx_ip_sof_1 conduit end
@@ -96,15 +97,11 @@ add_connection axi_ad9250_core_1.adc_ch_1 util_ad9250_cpack_1.adc_ch_1
 # ad9250-dma
 
 add_instance axi_ad9250_dma_0 axi_dmac
+set_instance_parameter_value axi_ad9250_dma_0 {ID} {0}
 set_instance_parameter_value axi_ad9250_dma_0 {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_ad9250_dma_0 {DMA_TYPE_DEST} {0}
-set_instance_parameter_value axi_ad9250_dma_0 {ID} {0}
-set_instance_parameter_value axi_ad9250_dma_0 {AXI_SLICE_SRC} {0}
-set_instance_parameter_value axi_ad9250_dma_0 {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_ad9250_dma_0 {SYNC_TRANSFER_START} {1}
 set_instance_parameter_value axi_ad9250_dma_0 {DMA_LENGTH_WIDTH} {24}
-set_instance_parameter_value axi_ad9250_dma_0 {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_ad9250_dma_0 {CYCLIC} {0}
 set_instance_parameter_value axi_ad9250_dma_0 {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_ad9250_dma_0 {DMA_DATA_WIDTH_DEST} {64}
 
@@ -119,15 +116,10 @@ add_connection sys_dma_clk.clk_reset axi_ad9250_dma_0.m_dest_axi_reset
 add_connection sys_dma_clk.clk axi_ad9250_dma_0.m_dest_axi_clock
 
 add_instance axi_ad9250_dma_1 axi_dmac
+set_instance_parameter_value axi_ad9250_dma_1 {ID} {1}
 set_instance_parameter_value axi_ad9250_dma_1 {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_ad9250_dma_1 {DMA_TYPE_DEST} {0}
-set_instance_parameter_value axi_ad9250_dma_1 {ID} {0}
-set_instance_parameter_value axi_ad9250_dma_1 {AXI_SLICE_SRC} {0}
-set_instance_parameter_value axi_ad9250_dma_1 {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_ad9250_dma_1 {SYNC_TRANSFER_START} {1}
-set_instance_parameter_value axi_ad9250_dma_1 {DMA_LENGTH_WIDTH} {24}
-set_instance_parameter_value axi_ad9250_dma_1 {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_ad9250_dma_1 {CYCLIC} {0}
 set_instance_parameter_value axi_ad9250_dma_1 {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_ad9250_dma_1 {DMA_DATA_WIDTH_DEST} {64}
 
@@ -148,32 +140,19 @@ add_connection avl_ad9250_xcvr.core_clk rx_core_clk.in_clk
 add_interface rx_core_clk clock source
 set_interface_property rx_core_clk EXPORT_OF rx_core_clk.out_clk
 
-# phy reconfiguration
-
-add_instance avl_phy_reconfig alt_xcvr_reconfig
-set_instance_parameter_value avl_phy_reconfig {number_of_reconfig_interfaces} {4}
-set_instance_parameter_value avl_phy_reconfig {gui_split_sizes} {1,1,1,1}
-add_connection avl_phy_reconfig.ch0_0_to_xcvr avl_ad9250_xcvr.phy_reconfig_to_xcvr_0 
-add_connection avl_ad9250_xcvr.phy_reconfig_from_xcvr_0 avl_phy_reconfig.ch0_0_from_xcvr 
-add_connection avl_phy_reconfig.ch1_1_to_xcvr avl_ad9250_xcvr.phy_reconfig_to_xcvr_1 
-add_connection avl_ad9250_xcvr.phy_reconfig_from_xcvr_1 avl_phy_reconfig.ch1_1_from_xcvr 
-add_connection avl_phy_reconfig.ch2_2_to_xcvr avl_ad9250_xcvr.phy_reconfig_to_xcvr_2 
-add_connection avl_ad9250_xcvr.phy_reconfig_from_xcvr_2 avl_phy_reconfig.ch2_2_from_xcvr 
-add_connection avl_phy_reconfig.ch3_3_to_xcvr avl_ad9250_xcvr.phy_reconfig_to_xcvr_3 
-add_connection avl_ad9250_xcvr.phy_reconfig_from_xcvr_3 avl_phy_reconfig.ch3_3_from_xcvr 
-add_connection sys_clk.clk_reset avl_phy_reconfig.mgmt_rst_reset
-add_connection sys_clk.clk avl_phy_reconfig.mgmt_clk_clk
-
 # addresses
 
-ad_cpu_interconnect 0x00010000 avl_phy_reconfig.reconfig_mgmt
-ad_cpu_interconnect 0x00018000 avl_ad9250_xcvr.core_pll_reconfig
-ad_cpu_interconnect 0x00019000 avl_ad9250_xcvr.ip_reconfig
-ad_cpu_interconnect 0x00020000 axi_ad9250_xcvr.s_axi
-ad_cpu_interconnect 0x00050000 axi_ad9250_core_0.s_axi
-ad_cpu_interconnect 0x00060000 axi_ad9250_core_1.s_axi
-ad_cpu_interconnect 0x00070000 axi_ad9250_dma_0.s_axi
-ad_cpu_interconnect 0x00080000 axi_ad9250_dma_1.s_axi
+ad_cpu_interconnect 0x00010000 avl_ad9250_xcvr.phy_reconfig_0
+ad_cpu_interconnect 0x00012000 avl_ad9250_xcvr.phy_reconfig_1
+ad_cpu_interconnect 0x00014000 avl_ad9250_xcvr.phy_reconfig_2
+ad_cpu_interconnect 0x00016000 avl_ad9250_xcvr.phy_reconfig_3
+ad_cpu_interconnect 0x0001b000 avl_ad9250_xcvr.core_pll_reconfig
+ad_cpu_interconnect 0x0001c000 avl_ad9250_xcvr.ip_reconfig
+ad_cpu_interconnect 0x00030000 axi_ad9250_xcvr.s_axi
+ad_cpu_interconnect 0x00040000 axi_ad9250_core_0.s_axi
+ad_cpu_interconnect 0x00050000 axi_ad9250_core_1.s_axi
+ad_cpu_interconnect 0x00060000 axi_ad9250_dma_0.s_axi
+ad_cpu_interconnect 0x00070000 axi_ad9250_dma_1.s_axi
 
 # dma interconnects
 
