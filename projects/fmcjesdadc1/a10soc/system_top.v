@@ -63,27 +63,6 @@ module system_top (
   inout   [  3:0]   hps_ddr_dbi_n,
   input             hps_ddr_rzq,
 
-  // pl-ddr4
- 
-  input             sys_ddr_ref_clk,
-  output  [  0:0]   sys_ddr_clk_p,
-  output  [  0:0]   sys_ddr_clk_n,
-  output  [ 16:0]   sys_ddr_a,
-  output  [  1:0]   sys_ddr_ba,
-  output  [  0:0]   sys_ddr_bg,
-  output  [  0:0]   sys_ddr_cke,
-  output  [  0:0]   sys_ddr_cs_n,
-  output  [  0:0]   sys_ddr_odt,
-  output  [  0:0]   sys_ddr_reset_n,
-  output  [  0:0]   sys_ddr_act_n,
-  output  [  0:0]   sys_ddr_par,
-  input   [  0:0]   sys_ddr_alert_n,
-  inout   [  7:0]   sys_ddr_dqs_p,
-  inout   [  7:0]   sys_ddr_dqs_n,
-  inout   [ 63:0]   sys_ddr_dq,
-  inout   [  7:0]   sys_ddr_dbi_n,
-  input             sys_ddr_rzq,
-
   // hps-ethernet
 
   input   [  0:0]   hps_eth_rxclk,
@@ -128,121 +107,77 @@ module system_top (
   input   [  7:0]   gpio_bd_i,
   output  [  3:0]   gpio_bd_o,
 
-  // ad9371-interface
+  // lane interface
 
-  input             ref_clk0,
-  input             ref_clk1,
-  input   [  3:0]   rx_data,
-  output  [  3:0]   tx_data,
+  input             ref_clk,
+  input             rx_sysref,
   output            rx_sync,
-  output            rx_os_sync,
-  input             tx_sync,
-  input             sysref,
+  input   [  3:0]   rx_data,
 
-  output            ad9528_reset_b,
-  output            ad9528_sysref_req,
-  output            ad9371_tx1_enable,
-  output            ad9371_tx2_enable,
-  output            ad9371_rx1_enable,
-  output            ad9371_rx2_enable,
-  output            ad9371_test,
-  output            ad9371_reset_b,
-  input             ad9371_gpint,
-                    
-  inout   [ 18:0]   ad9371_gpio,
+  // spi
 
-  output            spi_csn_ad9528,
-  output            spi_csn_ad9371,
+  output            spi_csn,
   output            spi_clk,
-  output            spi_mosi,
-  input             spi_miso);
+  inout             spi_sdio);
 
   // internal signals
 
-  wire              sys_ddr_cal_success;
-  wire              sys_ddr_cal_fail;
+  wire              rx_clk;
+  wire    [  3:0]   rx_ip_sof;
+  wire    [127:0]   rx_ip_data;
   wire              sys_hps_resetn;
   wire              sys_resetn_s;
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
+  wire              spi_miso;
+  wire              spi_mosi;
   wire    [  7:0]   spi_csn_s;
-  wire              dac_fifo_bypass;
 
-  // assignments
+  // gpio in & out are separate cores
 
-  assign spi_csn_ad9528 = spi_csn_s[0];
-  assign spi_csn_ad9371 = spi_csn_s[1];
+  assign gpio_i[63:32] = gpio_o[63:32];
 
-  // gpio (ad9371)
-
-  assign gpio_i[63:61] = gpio_o[63:61];
-
-  assign dac_fifo_bypass = gpio_o[60];
-  assign gpio_i[60:60] = gpio_o[60];
-
-  assign ad9528_reset_b = gpio_o[59];
-  assign ad9528_sysref_req = gpio_o[58];
-  assign ad9371_tx1_enable = gpio_o[57];
-  assign ad9371_tx2_enable = gpio_o[56];
-  assign ad9371_rx1_enable = gpio_o[55];
-  assign ad9371_rx2_enable = gpio_o[54];
-  assign ad9371_test = gpio_o[53];
-  assign ad9371_reset_b = gpio_o[52];
-  assign gpio_i[59:52] = gpio_o[59:52];
-
-  assign gpio_i[51:51] = ad9371_gpint;
-
-  assign gpio_i[50:32] = gpio_o[50:32];
-  
   // board stuff (max-v-u21)
 
-  assign gpio_i[31:14] = gpio_o[31:14];
-  assign gpio_i[13:13] = sys_ddr_cal_success;
-  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[31:12] = gpio_o[31:12];
   assign gpio_i[11: 4] = gpio_bd_i;
   assign gpio_i[ 3: 0] = gpio_o[3:0];
 
   assign gpio_bd_o = gpio_o[3:0];
 
-  // peripheral reset
-
-  assign sys_resetn_s = sys_resetn & sys_hps_resetn;
-
   // instantiations
+ 
+  assign spi_csn = spi_csn_s[0];
+
+  fmcjesdadc1_spi i_fmcjesdadc1_spi (
+    .spi_csn (spi_csn_s[0]),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_sdio (spi_sdio));
 
   system_bd i_system_bd (
-    .ad9371_gpio_export (ad9371_gpio),
+    .rx_core_clk_clk (rx_clk),
     .rx_data_0_rx_serial_data (rx_data[0]),
     .rx_data_1_rx_serial_data (rx_data[1]),
     .rx_data_2_rx_serial_data (rx_data[2]),
     .rx_data_3_rx_serial_data (rx_data[3]),
-    .rx_os_ref_clk_clk (ref_clk1),
-    .rx_os_sync_export (rx_os_sync),
-    .rx_os_sysref_export (sysref),
-    .rx_ref_clk_clk (ref_clk1),
+    .rx_ip_data_data (rx_ip_data),
+    .rx_ip_data_valid (),
+    .rx_ip_data_ready (1'b1),
+    .rx_ip_data_0_data (rx_ip_data[63:0]),
+    .rx_ip_data_0_valid (1'b1),
+    .rx_ip_data_0_ready (),
+    .rx_ip_data_1_data (rx_ip_data[127:64]),
+    .rx_ip_data_1_valid (1'b1),
+    .rx_ip_data_1_ready (),
+    .rx_ip_sof_export (rx_ip_sof),
+    .rx_ip_sof_0_export (rx_ip_sof),
+    .rx_ip_sof_1_export (rx_ip_sof),
+    .rx_ref_clk_clk (ref_clk),
     .rx_sync_export (rx_sync),
-    .rx_sysref_export (sysref),
+    .rx_sysref_export (rx_sysref),
     .sys_clk_clk (sys_clk),
-    .sys_ddr_mem_mem_ck (sys_ddr_clk_p),
-    .sys_ddr_mem_mem_ck_n (sys_ddr_clk_n),
-    .sys_ddr_mem_mem_a (sys_ddr_a),
-    .sys_ddr_mem_mem_act_n (sys_ddr_act_n),
-    .sys_ddr_mem_mem_ba (sys_ddr_ba),
-    .sys_ddr_mem_mem_bg (sys_ddr_bg),
-    .sys_ddr_mem_mem_cke (sys_ddr_cke),
-    .sys_ddr_mem_mem_cs_n (sys_ddr_cs_n),
-    .sys_ddr_mem_mem_odt (sys_ddr_odt),
-    .sys_ddr_mem_mem_reset_n (sys_ddr_reset_n),
-    .sys_ddr_mem_mem_par (sys_ddr_par),
-    .sys_ddr_mem_mem_alert_n (sys_ddr_alert_n),
-    .sys_ddr_mem_mem_dqs (sys_ddr_dqs_p),
-    .sys_ddr_mem_mem_dqs_n (sys_ddr_dqs_n),
-    .sys_ddr_mem_mem_dq (sys_ddr_dq),
-    .sys_ddr_mem_mem_dbi_n (sys_ddr_dbi_n),
-    .sys_ddr_oct_oct_rzqin (sys_ddr_rzq),
-    .sys_ddr_ref_clk_clk (sys_ddr_ref_clk),
-    .sys_ddr_status_local_cal_success (sys_ddr_cal_success),
-    .sys_ddr_status_local_cal_fail (sys_ddr_cal_fail),
     .sys_gpio_bd_in_port (gpio_i[31:0]),
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
@@ -316,15 +251,7 @@ module system_top (
     .sys_spi_MISO (spi_miso),
     .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn_s),
-    .tx_data_0_tx_serial_data (tx_data[0]),
-    .tx_data_1_tx_serial_data (tx_data[1]),
-    .tx_data_2_tx_serial_data (tx_data[2]),
-    .tx_data_3_tx_serial_data (tx_data[3]),
-    .tx_fifo_bypass_bypass (dac_fifo_bypass),
-    .tx_ref_clk_clk (ref_clk1),
-    .tx_sync_export (tx_sync),
-    .tx_sysref_export (sysref));
+    .sys_spi_SS_n (spi_csn_s));
 
 endmodule
 

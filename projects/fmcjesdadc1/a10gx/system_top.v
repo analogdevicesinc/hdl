@@ -47,7 +47,7 @@ module system_top (
   output                  ddr3_clk_p,
   output                  ddr3_clk_n,
   output      [ 14:0]     ddr3_a,
-  output      [ 2:0]      ddr3_ba,
+  output      [  2:0]     ddr3_ba,
   output                  ddr3_cke,
   output                  ddr3_cs_n,
   output                  ddr3_odt,
@@ -55,10 +55,10 @@ module system_top (
   output                  ddr3_we_n,
   output                  ddr3_ras_n,
   output                  ddr3_cas_n,
-  inout       [ 7:0]      ddr3_dqs_p,
-  inout       [ 7:0]      ddr3_dqs_n,
+  inout       [  7:0]     ddr3_dqs_p,
+  inout       [  7:0]     ddr3_dqs_n,
   inout       [ 63:0]     ddr3_dq,
-  output      [ 7:0]      ddr3_dm,
+  output      [  7:0]     ddr3_dm,
   input                   ddr3_rzq,
   input                   ddr3_ref_clk,
 
@@ -79,82 +79,35 @@ module system_top (
 
   // lane interface
 
-  input                   rx_ref_clk,
+  input                   ref_clk,
   input                   rx_sysref,
   output                  rx_sync,
-  input       [ 3:0]      rx_data,
-  input                   tx_ref_clk,
-  input                   tx_sysref,
-  input                   tx_sync,
-  output      [ 3:0]      tx_data,
-
-  // gpio
-
-  input                   trig,
-  input                   adc_fdb,
-  input                   adc_fda,
-  input                   dac_irq,
-  input       [ 1:0]      clkd_status,
-  output                  adc_pd,
-  output                  dac_txen,
-  output                  dac_reset,
-  output                  clkd_sync,
+  input       [  3:0]     rx_data,
 
   // spi
 
-  output                  spi_csn_clk,
-  output                  spi_csn_dac,
-  output                  spi_csn_adc,
+  output                  spi_csn,
   output                  spi_clk,
-  inout                   spi_sdio,
-  output                  spi_dir);
+  inout                   spi_sdio);
 
   // internal signals
 
-  wire              eth_reset;
-  wire              eth_mdio_i;
-  wire              eth_mdio_o;
-  wire              eth_mdio_t;
-  wire    [ 63:0]   gpio_i;
-  wire    [ 63:0]   gpio_o;
-  wire              spi_miso_s;
-  wire              spi_mosi_s;
-  wire    [  7:0]   spi_csn_s;
-
-  // daq2
-
-  assign spi_csn_adc = spi_csn_s[2];
-  assign spi_csn_dac = spi_csn_s[1];
-  assign spi_csn_clk = spi_csn_s[0];
-
-  daq2_spi i_daq2_spi (
-    .spi_csn (spi_csn_s[2:0]),
-    .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi_s),
-    .spi_miso (spi_miso_s),
-    .spi_sdio (spi_sdio),
-    .spi_dir (spi_dir));
+  wire                    rx_clk;
+  wire        [  3:0]     rx_ip_sof;
+  wire        [127:0]     rx_ip_data;
+  wire                    eth_reset;
+  wire                    eth_mdio_i;
+  wire                    eth_mdio_o;
+  wire                    eth_mdio_t;
+  wire        [ 63:0]     gpio_i;
+  wire        [ 63:0]     gpio_o;
+  wire                    spi_miso;
+  wire                    spi_mosi;
+  wire        [  7:0]     spi_csn_s;
 
   // gpio in & out are separate cores
 
-  assign gpio_i[63:44] = gpio_o[63:44];
-  assign gpio_i[43:43] = trig;
-
-  assign gpio_i[42:40] = gpio_o[42:40];
-  assign adc_pd = gpio_o[42];
-  assign dac_txen = gpio_o[41];
-  assign dac_reset = gpio_o[40];
-
-  assign gpio_i[39:39] = gpio_o[39];
-
-  assign gpio_i[38:38] = gpio_o[38];
-  assign clkd_sync = gpio_o[38];
-
-  assign gpio_i[37:37] = gpio_o[37];
-  assign gpio_i[36:36] = adc_fdb;
-  assign gpio_i[35:35] = adc_fda;
-  assign gpio_i[34:34] = dac_irq;
-  assign gpio_i[33:32] = clkd_status;
+  assign gpio_i[63:32] = gpio_o[63:32];
 
   // board stuff
 
@@ -165,17 +118,38 @@ module system_top (
   assign ddr3_a[14:12] = 3'd0;
 
   assign gpio_i[31:27] = gpio_o[31:27];
-  assign gpio_i[26:16] = gpio_bd_i;
   assign gpio_i[15: 0] = gpio_o[15:0];
 
-  assign gpio_bd_o = gpio_o[15:0];
+  // instantiations
+ 
+  assign spi_csn = spi_csn_s[0];
+
+  fmcjesdadc1_spi i_fmcjesdadc1_spi (
+    .spi_csn (spi_csn_s[0]),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_sdio (spi_sdio));
 
   system_bd i_system_bd (
+    .rx_core_clk_clk (rx_clk),
     .rx_data_0_rx_serial_data (rx_data[0]),
     .rx_data_1_rx_serial_data (rx_data[1]),
     .rx_data_2_rx_serial_data (rx_data[2]),
     .rx_data_3_rx_serial_data (rx_data[3]),
-    .rx_ref_clk_clk (rx_ref_clk),
+    .rx_ip_data_data (rx_ip_data),
+    .rx_ip_data_valid (),
+    .rx_ip_data_ready (1'b1),
+    .rx_ip_data_0_data (rx_ip_data[63:0]),
+    .rx_ip_data_0_valid (1'b1),
+    .rx_ip_data_0_ready (),
+    .rx_ip_data_1_data (rx_ip_data[127:64]),
+    .rx_ip_data_1_valid (1'b1),
+    .rx_ip_data_1_ready (),
+    .rx_ip_sof_export (rx_ip_sof),
+    .rx_ip_sof_0_export (rx_ip_sof),
+    .rx_ip_sof_1_export (rx_ip_sof),
+    .rx_ref_clk_clk (ref_clk),
     .rx_sync_export (rx_sync),
     .rx_sysref_export (rx_sysref),
     .sys_clk_clk (sys_clk),
@@ -209,17 +183,10 @@ module system_top (
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
     .sys_rst_reset_n (sys_resetn),
-    .sys_spi_MISO (spi_miso_s),
+    .sys_spi_MISO (spi_miso),
     .sys_spi_MOSI (spi_mosi_s),
     .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn_s),
-    .tx_data_0_tx_serial_data (tx_data[0]),
-    .tx_data_1_tx_serial_data (tx_data[1]),
-    .tx_data_2_tx_serial_data (tx_data[2]),
-    .tx_data_3_tx_serial_data (tx_data[3]),
-    .tx_ref_clk_clk (tx_ref_clk),
-    .tx_sync_export (tx_sync),
-    .tx_sysref_export (tx_sysref));
+    .sys_spi_SS_n (spi_csn_s));
 
 endmodule
 
