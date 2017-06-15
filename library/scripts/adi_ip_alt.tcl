@@ -113,7 +113,7 @@ proc ad_ip_create {pname pdesc {pelabfunction ""} {pcomposefunction ""}} {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_ip_parameter {pname ptype pdefault} {
+proc ad_ip_parameter {pname ptype pdefault {phdl true}} {
 
   if {$pname eq "DEVICE_FAMILY"} {
     add_parameter DEVICE_FAMILY STRING
@@ -125,7 +125,7 @@ proc ad_ip_parameter {pname ptype pdefault} {
   }
 
   add_parameter $pname $ptype $pdefault
-  set_parameter_property $pname HDL_PARAMETER true
+  set_parameter_property $pname HDL_PARAMETER $phdl
   set_parameter_property $pname ENABLED true
 }
 
