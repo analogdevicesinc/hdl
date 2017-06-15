@@ -80,21 +80,55 @@ module system_top (
   // lane interface
 
   input                   ref_clk,
-  input                   rx_sysref,
+  output                  rx_sysref,
   output                  rx_sync,
-  input       [  3:0]     rx_data,
+  input       [  7:0]     rx_data,
 
-  // spi
+  // mlo, reset & trigger
 
-  output                  spi_csn,
-  output                  spi_clk,
-  inout                   spi_sdio);
+  output                  afe_mlo,
+  output                  afe_rst,
+  output                  afe_trig,
+
+  // spi, gpio & misc
+
+  output                  spi_fout_enb_clk,
+  output                  spi_fout_enb_mlo,
+  output                  spi_fout_enb_rst,
+  output                  spi_fout_enb_sync,
+  output                  spi_fout_enb_sysref,
+  output                  spi_fout_enb_trig,
+  output                  spi_fout_clk,
+  output                  spi_fout_sdio,
+  output      [  3:0]     spi_afe_csn,
+  output                  spi_afe_clk,
+  inout                   spi_afe_sdio,
+  output                  spi_clk_csn,
+  output                  spi_clk_clk,
+  inout                   spi_clk_sdio,
+  output                  afe_pdn,
+  output                  afe_stby,
+  output                  clk_resetn,
+  output                  clk_syncn,
+  input                   clk_status,
+  output                  amp_disbn,
+  output                  prc_sck,
+  output                  prc_cnv,
+  input                   prc_sdo_i,
+  input                   prc_sdo_q,
+  output                  dac_sleep,
+  output  [ 13:0]         dac_data);
 
   // internal signals
 
   wire                    rx_clk;
+  wire        [ 31:0]     rx_ch_wr;
+  wire        [511:0]     rx_ch_wdata;
+  wire                    rx_ch_wovf;
+  wire                    rx_ch_sync;
+  wire        [  3:0]     rx_ch_raddr;
   wire        [  3:0]     rx_ip_sof;
-  wire        [127:0]     rx_ip_data;
+  wire        [255:0]     rx_ip_data;
   wire                    eth_reset;
   wire                    eth_mdio_i;
   wire                    eth_mdio_o;
@@ -103,11 +137,30 @@ module system_top (
   wire        [ 63:0]     gpio_o;
   wire                    spi_miso;
   wire                    spi_mosi;
+  wire                    spi_clk;
   wire        [  7:0]     spi_csn_s;
 
   // gpio in & out are separate cores
 
-  assign gpio_i[63:32] = gpio_o[63:32];
+  assign afe_mlo = 1'b0;
+
+  assign gpio_i[63:57] = gpio_o[63:57];
+  assign amp_disbn = gpio_o[56];
+
+  assign gpio_i[55:40] = gpio_o[55:40];
+  assign dac_sleep = gpio_o[54];
+  assign dac_data = gpio_o[53:40];
+
+  assign gpio_i[39:36] = gpio_o[39:36];
+  assign afe_stby = gpio_o[39];
+  assign afe_pdn = gpio_o[38];
+  assign afe_trig = gpio_o[37];
+  assign afe_rst = gpio_o[36];
+
+  assign gpio_i[35:35] = clk_status;
+  assign gpio_i[34:32] = gpio_o[34:32];
+  assign clk_syncn = gpio_o[34];
+  assign clk_resetn = gpio_o[33];
 
   // board stuff
 
@@ -118,25 +171,100 @@ module system_top (
   assign ddr3_a[14:12] = 3'd0;
 
   assign gpio_i[31:27] = gpio_o[31:27];
+  assign gpio_i[26:16] = gpio_bd_i;
   assign gpio_i[15: 0] = gpio_o[15:0];
+  assign gpio_bd_o = gpio_o[15:0];
+
+  // sysref
+
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[60]),
+    .sysref_out (rx_sysref));
+
+  // spi (fanout buffers)
+
+  assign spi_fout_enb_clk     = 1'b0;
+  assign spi_fout_enb_mlo     = 1'b0;
+  assign spi_fout_enb_rst     = 1'b0;
+  assign spi_fout_enb_sync    = 1'b0;
+  assign spi_fout_enb_sysref  = 1'b0;
+  assign spi_fout_enb_trig    = 1'b0;
+  assign spi_fout_clk         = 1'b0;
+  assign spi_fout_sdio        = 1'b0;
+
+  // spi (adc)
+
+  assign prc_sck = 1'b0;
+  assign prc_cnv = 1'b0;
+
+  // spi (main)
+
+  assign spi_afe_csn = spi_csn_s[ 4: 1];
+  assign spi_clk_csn = spi_csn_s[ 0: 0];
+  assign spi_afe_clk = spi_clk;
+  assign spi_clk_clk = spi_clk;
 
   // instantiations
- 
-  assign spi_csn = spi_csn_s[0];
 
-  fmcjesdadc1_spi i_fmcjesdadc1_spi (
-    .spi_csn (spi_csn_s[0]),
+  usdrx1_spi i_spi (
+    .spi_afe_csn (spi_csn_s[4:1]),
+    .spi_clk_csn (spi_csn_s[0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
-    .spi_sdio (spi_sdio));
+    .spi_afe_sdio (spi_afe_sdio),
+    .spi_clk_sdio (spi_clk_sdio));
 
   system_bd i_system_bd (
+    .rx_ch_wdata_data (rx_ch_wdata),
+    .rx_ch_wovf_ovf (rx_ch_wovf),
+    .rx_ch_wr_valid (&rx_ch_wr),
+    .rx_core_ch_0_enable (),
+    .rx_core_ch_0_valid (rx_ch_wr[7:0]),
+    .rx_core_ch_0_data (rx_ch_wdata[127:0]),
+    .rx_core_ch_1_enable (),
+    .rx_core_ch_1_valid (rx_ch_wr[15:8]),
+    .rx_core_ch_1_data (rx_ch_wdata[255:128]),
+    .rx_core_ch_2_enable (),
+    .rx_core_ch_2_valid (rx_ch_wr[23:16]),
+    .rx_core_ch_2_data (rx_ch_wdata[383:256]),
+    .rx_core_ch_3_enable (),
+    .rx_core_ch_3_valid (rx_ch_wr[31:24]),
+    .rx_core_ch_3_data (rx_ch_wdata[511:384]),
     .rx_core_clk_clk (rx_clk),
+    .rx_core_ovf_0_ovf (rx_ch_wovf),
+    .rx_core_ovf_1_ovf (rx_ch_wovf),
+    .rx_core_ovf_2_ovf (rx_ch_wovf),
+    .rx_core_ovf_3_ovf (rx_ch_wovf),
+    .rx_core_sync_0_sync_in (1'b0),
+    .rx_core_sync_0_sync_out (rx_ch_sync),
+    .rx_core_sync_0_raddr_in (4'd0),
+    .rx_core_sync_0_raddr_out (rx_ch_raddr),
+    .rx_core_sync_1_sync_in (rx_ch_sync),
+    .rx_core_sync_1_sync_out (),
+    .rx_core_sync_1_raddr_in (rx_ch_raddr),
+    .rx_core_sync_1_raddr_out (),
+    .rx_core_sync_2_sync_in (rx_ch_sync),
+    .rx_core_sync_2_sync_out (),
+    .rx_core_sync_2_raddr_in (rx_ch_raddr),
+    .rx_core_sync_2_raddr_out (),
+    .rx_core_sync_3_sync_in (rx_ch_sync),
+    .rx_core_sync_3_sync_out (),
+    .rx_core_sync_3_raddr_in (rx_ch_raddr),
+    .rx_core_sync_3_raddr_out (),
+    .rx_core_unf_0_unf (1'd0),
+    .rx_core_unf_1_unf (1'd0),
+    .rx_core_unf_2_unf (1'd0),
+    .rx_core_unf_3_unf (1'd0),
     .rx_data_0_rx_serial_data (rx_data[0]),
     .rx_data_1_rx_serial_data (rx_data[1]),
     .rx_data_2_rx_serial_data (rx_data[2]),
     .rx_data_3_rx_serial_data (rx_data[3]),
+    .rx_data_4_rx_serial_data (rx_data[4]),
+    .rx_data_5_rx_serial_data (rx_data[5]),
+    .rx_data_6_rx_serial_data (rx_data[6]),
+    .rx_data_7_rx_serial_data (rx_data[7]),
     .rx_ip_data_data (rx_ip_data),
     .rx_ip_data_valid (),
     .rx_ip_data_ready (1'b1),
@@ -146,9 +274,17 @@ module system_top (
     .rx_ip_data_1_data (rx_ip_data[127:64]),
     .rx_ip_data_1_valid (1'b1),
     .rx_ip_data_1_ready (),
+    .rx_ip_data_2_data (rx_ip_data[191:128]),
+    .rx_ip_data_2_valid (1'b1),
+    .rx_ip_data_2_ready (),
+    .rx_ip_data_3_data (rx_ip_data[255:192]),
+    .rx_ip_data_3_valid (1'b1),
+    .rx_ip_data_3_ready (),
     .rx_ip_sof_export (rx_ip_sof),
     .rx_ip_sof_0_export (rx_ip_sof),
     .rx_ip_sof_1_export (rx_ip_sof),
+    .rx_ip_sof_2_export (rx_ip_sof),
+    .rx_ip_sof_3_export (rx_ip_sof),
     .rx_ref_clk_clk (ref_clk),
     .rx_sync_export (rx_sync),
     .rx_sysref_export (rx_sysref),
@@ -184,7 +320,7 @@ module system_top (
     .sys_gpio_out_export (gpio_o[63:32]),
     .sys_rst_reset_n (sys_resetn),
     .sys_spi_MISO (spi_miso),
-    .sys_spi_MOSI (spi_mosi_s),
+    .sys_spi_MOSI (spi_mosi),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s));
 
