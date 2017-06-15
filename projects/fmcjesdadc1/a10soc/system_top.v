@@ -110,7 +110,7 @@ module system_top (
   // lane interface
 
   input             ref_clk,
-  input             rx_sysref,
+  output            rx_sysref,
   output            rx_sync,
   input   [  3:0]   rx_data,
 
@@ -133,28 +133,29 @@ module system_top (
   wire              spi_mosi;
   wire    [  7:0]   spi_csn_s;
 
-  // gpio in & out are separate cores
-
-  assign gpio_i[63:32] = gpio_o[63:32];
-
   // board stuff (max-v-u21)
 
+  assign gpio_i[63:32] = gpio_o[63:32];
   assign gpio_i[31:12] = gpio_o[31:12];
   assign gpio_i[11: 4] = gpio_bd_i;
   assign gpio_i[ 3: 0] = gpio_o[3:0];
-
   assign gpio_bd_o = gpio_o[3:0];
+
+  assign spi_csn = spi_csn_s[0];
 
   // instantiations
  
-  assign spi_csn = spi_csn_s[0];
-
   fmcjesdadc1_spi i_fmcjesdadc1_spi (
     .spi_csn (spi_csn_s[0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
+
+  ad_sysref_gen #(.SYSREF_PERIOD(64)) i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[32]),
+    .sysref_out (rx_sysref));
 
   system_bd i_system_bd (
     .rx_core_clk_clk (rx_clk),
