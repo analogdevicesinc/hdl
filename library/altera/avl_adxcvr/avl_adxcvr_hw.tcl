@@ -1,105 +1,34 @@
 
 package require qsys
+source ../../scripts/adi_env.tcl
+source ../../scripts/adi_ip_alt.tcl
 
-set_module_property NAME avl_adxcvr
-set_module_property DESCRIPTION "Avalon ADXCVR Core"
-set_module_property VERSION 1.0
-set_module_property GROUP "Analog Devices"
-set_module_property DISPLAY_NAME avl_adxcvr
+ad_ip_create avl_adxcvr {Avalon ADXCVR Core}
 set_module_property COMPOSITION_CALLBACK p_avl_adxcvr
 
 # parameters
 
-add_parameter DEVICE_FAMILY STRING 
-set_parameter_property DEVICE_FAMILY SYSTEM_INFO {DEVICE_FAMILY}
-set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
-set_parameter_property DEVICE_FAMILY HDL_PARAMETER false
-set_parameter_property DEVICE_FAMILY ENABLED false
+ad_ip_parameter DEVICE_FAMILY STRING {Arria 10}
+ad_ip_parameter TX_OR_RX_N INTEGER 0 false
+ad_ip_parameter ID INTEGER 0 false
+ad_ip_parameter PCS_CONFIG STRING "JESD_PCS_CFG2" false
+ad_ip_parameter LANE_RATE FLOAT 10000 false
+ad_ip_parameter SYSCLK_FREQUENCY FLOAT 100.0 false
+ad_ip_parameter PLLCLK_FREQUENCY FLOAT 5000.0 false
+ad_ip_parameter REFCLK_FREQUENCY FLOAT 500.0 false
+ad_ip_parameter CORECLK_FREQUENCY FLOAT 250.0 false
+ad_ip_parameter NUM_OF_LANES INTEGER 4 false
+ad_ip_parameter NUM_OF_CONVS INTEGER 2 false
+ad_ip_parameter FRM_BCNT INTEGER 1 false
+ad_ip_parameter FRM_SCNT INTEGER 1 false
+ad_ip_parameter MF_FCNT INTEGER 32 false
+ad_ip_parameter HD INTEGER 1 false
 
-add_parameter TX_OR_RX_N INTEGER 0
-set_parameter_property TX_OR_RX_N DISPLAY_NAME TX_OR_RX_N
-set_parameter_property TX_OR_RX_N TYPE INTEGER
-set_parameter_property TX_OR_RX_N UNITS None
-set_parameter_property TX_OR_RX_N HDL_PARAMETER false
-
-add_parameter ID INTEGER 0
-set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
-set_parameter_property ID UNITS None
-set_parameter_property ID HDL_PARAMETER false
-
-add_parameter PCS_CONFIG STRING "JESD_PCS_CFG2"
-set_parameter_property PCS_CONFIG DISPLAY_NAME PCS_CONFIG
-set_parameter_property PCS_CONFIG TYPE STRING
-set_parameter_property PCS_CONFIG UNITS None
-set_parameter_property PCS_CONFIG HDL_PARAMETER false
-
-add_parameter LANE_RATE FLOAT 10000
-set_parameter_property LANE_RATE DISPLAY_NAME LANE_RATE
-set_parameter_property LANE_RATE TYPE FLOAT
-set_parameter_property LANE_RATE UNITS None
 set_parameter_property LANE_RATE DISPLAY_UNITS "Mbps"
-set_parameter_property LANE_RATE HDL_PARAMETER false
-
-add_parameter SYSCLK_FREQUENCY FLOAT 100.0
-set_parameter_property SYSCLK_FREQUENCY DISPLAY_NAME SYSCLK_FREQUENCY
-set_parameter_property SYSCLK_FREQUENCY TYPE FLOAT
 set_parameter_property SYSCLK_FREQUENCY UNITS Megahertz
-set_parameter_property SYSCLK_FREQUENCY HDL_PARAMETER false
-
-add_parameter PLLCLK_FREQUENCY FLOAT 5000.0
-set_parameter_property PLLCLK_FREQUENCY DISPLAY_NAME PLLCLK_FREQUENCY
-set_parameter_property PLLCLK_FREQUENCY TYPE FLOAT
 set_parameter_property PLLCLK_FREQUENCY UNITS Megahertz
-set_parameter_property PLLCLK_FREQUENCY HDL_PARAMETER false
-
-add_parameter REFCLK_FREQUENCY FLOAT 500.0
-set_parameter_property REFCLK_FREQUENCY DISPLAY_NAME REFCLK_FREQUENCY
-set_parameter_property REFCLK_FREQUENCY TYPE FLOAT
 set_parameter_property REFCLK_FREQUENCY UNITS Megahertz
-set_parameter_property REFCLK_FREQUENCY HDL_PARAMETER false
-
-add_parameter CORECLK_FREQUENCY FLOAT 250.0
-set_parameter_property CORECLK_FREQUENCY DISPLAY_NAME CORECLK_FREQUENCY
-set_parameter_property CORECLK_FREQUENCY TYPE FLOAT
 set_parameter_property CORECLK_FREQUENCY UNITS Megahertz
-set_parameter_property CORECLK_FREQUENCY HDL_PARAMETER false
-
-add_parameter NUM_OF_LANES INTEGER 4
-set_parameter_property NUM_OF_LANES DISPLAY_NAME NUM_OF_LANES
-set_parameter_property NUM_OF_LANES TYPE INTEGER
-set_parameter_property NUM_OF_LANES UNITS None
-set_parameter_property NUM_OF_LANES HDL_PARAMETER false
-
-add_parameter NUM_OF_CONVS INTEGER 2
-set_parameter_property NUM_OF_CONVS DISPLAY_NAME NUM_OF_CONVS
-set_parameter_property NUM_OF_CONVS TYPE INTEGER
-set_parameter_property NUM_OF_CONVS UNITS None
-set_parameter_property NUM_OF_CONVS HDL_PARAMETER false
-
-add_parameter FRM_BCNT INTEGER 1
-set_parameter_property FRM_BCNT DISPLAY_NAME FRM_BCNT
-set_parameter_property FRM_BCNT TYPE INTEGER
-set_parameter_property FRM_BCNT UNITS None
-set_parameter_property FRM_BCNT HDL_PARAMETER false
-
-add_parameter FRM_SCNT INTEGER 1
-set_parameter_property FRM_SCNT DISPLAY_NAME FRM_SCNT
-set_parameter_property FRM_SCNT TYPE INTEGER
-set_parameter_property FRM_SCNT UNITS None
-set_parameter_property FRM_SCNT HDL_PARAMETER false
-
-add_parameter MF_FCNT INTEGER 32
-set_parameter_property MF_FCNT DISPLAY_NAME MF_FCNT
-set_parameter_property MF_FCNT TYPE INTEGER
-set_parameter_property MF_FCNT UNITS None
-set_parameter_property MF_FCNT HDL_PARAMETER false
-
-add_parameter HD INTEGER 1
-set_parameter_property HD DISPLAY_NAME HD
-set_parameter_property HD TYPE INTEGER
-set_parameter_property HD UNITS None
-set_parameter_property HD HDL_PARAMETER false
 
 proc p_avl_adxcvr {} {
 
@@ -131,51 +60,20 @@ proc p_avl_adxcvr {} {
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF alt_ref_clk.in_clk
 
-  if {$m_device_family eq "Arria V"} {
-
-    add_instance alt_core_pll altera_pll
-    set_instance_parameter_value alt_core_pll {gui_en_reconf} {1}
-    set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
-    set_instance_parameter_value alt_core_pll {gui_use_locked} {1}
-    set_instance_parameter_value alt_core_pll {gui_output_clock_frequency0} $m_coreclk_frequency
-    add_connection alt_ref_clk.out_clk alt_core_pll.refclk
-    add_connection alt_sys_clk.clk_reset alt_core_pll.reset
-
-    add_instance alt_core_pll_reconfig altera_pll_reconfig
-    add_connection alt_sys_clk.clk_reset alt_core_pll_reconfig.mgmt_reset
-    add_connection alt_sys_clk.clk alt_core_pll_reconfig.mgmt_clk
-    add_connection alt_core_pll_reconfig.reconfig_to_pll alt_core_pll.reconfig_to_pll
-    add_connection alt_core_pll.reconfig_from_pll alt_core_pll_reconfig.reconfig_from_pll
-    add_interface core_pll_reconfig avalon slave
-    set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll_reconfig.mgmt_avalon_slave
-
-    add_instance alt_core_pll_ifconv alt_ifconv
-    set_instance_parameter_value alt_core_pll_ifconv {width} {1}
-    set_instance_parameter_value alt_core_pll_ifconv {interface_name_in} {pll_locked_in}
-    set_instance_parameter_value alt_core_pll_ifconv {signal_name_in} {export}
-    set_instance_parameter_value alt_core_pll_ifconv {interface_name_out} {pll_locked_out}
-    set_instance_parameter_value alt_core_pll_ifconv {signal_name_out} {pll_locked}
-    add_connection alt_core_pll.locked alt_core_pll_ifconv.pll_locked_in
-    add_interface core_pll_locked conduit end
-    set_interface_property core_pll_locked EXPORT_OF alt_core_pll_ifconv.pll_locked_out
-
-  } else {
-
-    add_instance alt_core_pll altera_xcvr_fpll_a10
-    set_instance_parameter_value alt_core_pll {gui_fpll_mode} {0}
-    set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
-    set_instance_parameter_value alt_core_pll {gui_desired_outclk0_frequency} $m_coreclk_frequency
-    set_instance_parameter_value alt_core_pll {enable_pll_reconfig} {1}
-    set_instance_parameter_value alt_core_pll {set_capability_reg_enable} {1}
-    set_instance_parameter_value alt_core_pll {set_csr_soft_logic_enable} {1}
-    add_connection alt_ref_clk.out_clk alt_core_pll.pll_refclk0
-    add_interface core_pll_locked conduit end
-    set_interface_property core_pll_locked EXPORT_OF alt_core_pll.pll_locked
-    add_connection alt_sys_clk.clk_reset alt_core_pll.reconfig_reset0
-    add_connection alt_sys_clk.clk alt_core_pll.reconfig_clk0
-    add_interface core_pll_reconfig avalon slave
-    set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll.reconfig_avmm0
-  }
+  add_instance alt_core_pll altera_xcvr_fpll_a10
+  set_instance_parameter_value alt_core_pll {gui_fpll_mode} {0}
+  set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
+  set_instance_parameter_value alt_core_pll {gui_desired_outclk0_frequency} $m_coreclk_frequency
+  set_instance_parameter_value alt_core_pll {enable_pll_reconfig} {1}
+  set_instance_parameter_value alt_core_pll {set_capability_reg_enable} {1}
+  set_instance_parameter_value alt_core_pll {set_csr_soft_logic_enable} {1}
+  add_connection alt_ref_clk.out_clk alt_core_pll.pll_refclk0
+  add_interface core_pll_locked conduit end
+  set_interface_property core_pll_locked EXPORT_OF alt_core_pll.pll_locked
+  add_connection alt_sys_clk.clk_reset alt_core_pll.reconfig_reset0
+  add_connection alt_sys_clk.clk alt_core_pll.reconfig_clk0
+  add_interface core_pll_reconfig avalon slave
+  set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll.reconfig_avmm0
 
   add_instance alt_core_clk altera_clock_bridge
   set_instance_parameter_value alt_core_clk {EXPLICIT_CLOCK_RATE} $m_coreclk_frequency
@@ -265,15 +163,6 @@ proc p_avl_adxcvr {} {
 
     for {set n 0} {$n < $m_num_of_lanes} {incr n} {
 
-      add_interface tx_ip_s_${n} conduit end
-      set_interface_property tx_ip_s_${n} EXPORT_OF alt_xphy.tx_ip_s_${n}
-      add_interface tx_ip_d_${n} conduit end
-      set_interface_property tx_ip_d_${n} EXPORT_OF alt_xphy.tx_ip_d_${n}
-      add_interface tx_phy_s_${n} conduit end
-      set_interface_property tx_phy_s_${n} EXPORT_OF alt_xphy.tx_phy_s_${n}
-      add_interface tx_phy_d_${n} conduit end
-      set_interface_property tx_phy_d_${n} EXPORT_OF alt_xphy.tx_phy_d_${n}
-
       add_instance alt_phy_${n} altera_jesd204
       set_instance_parameter_value alt_phy_${n} {wrapper_opt} {phy}
       set_instance_parameter_value alt_phy_${n} {DATA_PATH} {TX}
@@ -292,25 +181,19 @@ proc p_avl_adxcvr {} {
       add_connection alt_xphy.tx_phy${n}_analogreset alt_phy_${n}.tx_analogreset
       add_connection alt_xphy.tx_phy${n}_digitalreset alt_phy_${n}.tx_digitalreset
       add_connection alt_lane_pll.tx_serial_clk alt_phy_${n}.tx_serial_clk0
+      add_interface tx_ip_s_${n} conduit end
+      set_interface_property tx_ip_s_${n} EXPORT_OF alt_xphy.tx_ip_s_${n}
+      add_interface tx_ip_d_${n} conduit end
+      set_interface_property tx_ip_d_${n} EXPORT_OF alt_xphy.tx_ip_d_${n}
+      add_interface tx_phy_s_${n} conduit end
+      set_interface_property tx_phy_s_${n} EXPORT_OF alt_xphy.tx_phy_s_${n}
+      add_interface tx_phy_d_${n} conduit end
+      set_interface_property tx_phy_d_${n} EXPORT_OF alt_xphy.tx_phy_d_${n}
 
-      if {$m_device_family eq "Arria V"} {
-
-        add_instance alt_phy_reconfig_${n} alt_xcvr_reconfig
-        set_instance_parameter_value alt_phy_reconfig_${n} {number_of_reconfig_interfaces} {1}
-        add_connection alt_sys_clk.clk alt_phy_reconfig_${n}.mgmt_clk_clk
-        add_connection alt_sys_clk.clk_reset alt_phy_reconfig_${n}.mgmt_rst_reset
-        add_interface phy_reconfig_${n} avalon slave
-        set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_reconfig_${n}.reconfig_mgmt
-        add_connection alt_phy_reconfig_${n}.reconfig_to_xcvr alt_phy_${n}.reconfig_to_xcvr
-        add_connection alt_phy_${n}.reconfig_from_xcvr alt_phy_reconfig_${n}.reconfig_from_xcvr
-
-      } else {
-
-        add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
-        add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
-        add_interface phy_reconfig_${n} avalon slave
-        set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
-      }
+      add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
+      add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
+      add_interface phy_reconfig_${n} avalon slave
+      set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
 
       add_connection alt_phy_${n}.tx_cal_busy alt_xphy.tx_phy${n}_cal_busy
       add_connection alt_phy_${n}.phy_csr_tx_pcfifo_full alt_xphy.tx_phy${n}_pcfifo_full
@@ -407,20 +290,10 @@ proc p_avl_adxcvr {} {
       set_instance_parameter_value alt_phy_${n} {set_csr_soft_logic_enable} {1}
       set_instance_parameter_value alt_phy_${n} {L} 1
 
-      if {$m_device_family eq "Arria V"} {
-
-        add_interface phy_reconfig_to_xcvr_${n} conduit end
-        set_interface_property phy_reconfig_to_xcvr_${n} EXPORT_OF alt_phy_${n}.reconfig_to_xcvr
-        add_interface phy_reconfig_from_xcvr_${n} conduit end
-        set_interface_property phy_reconfig_from_xcvr_${n} EXPORT_OF alt_phy_${n}.reconfig_from_xcvr
-
-      } else {
-
-        add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
-        add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
-        add_interface phy_reconfig_${n} avalon slave
-        set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
-      }
+      add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
+      add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
+      add_interface phy_reconfig_${n} avalon slave
+      set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
 
       add_connection alt_ref_clk.out_clk alt_phy_${n}.pll_ref_clk
       add_connection alt_core_pll.outclk0 alt_phy_${n}.rxlink_clk
