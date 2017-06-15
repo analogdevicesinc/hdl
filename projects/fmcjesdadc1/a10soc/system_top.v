@@ -142,6 +142,7 @@ module system_top (
   assign gpio_bd_o = gpio_o[3:0];
 
   assign spi_csn = spi_csn_s[0];
+  assign sys_resetn_s = sys_resetn & sys_hps_resetn;
 
   // instantiations
  
