@@ -31,6 +31,7 @@ set_location_assignment PIN_AV20  -to spi_sdio              ; ## H37  FMCA_HPC_L
 
 set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to ref_clk
 set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_data
+set_instance_assignment -name IO_STANDARD LVDS -to ref_clk
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[0]
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[1]
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[2]
