@@ -5,10 +5,10 @@ add_instance avl_ad9152_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9152_xcvr {ID} {0}
 set_instance_parameter_value avl_ad9152_xcvr {TX_OR_RX_N} {1}
 set_instance_parameter_value avl_ad9152_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
-set_instance_parameter_value avl_ad9152_xcvr {LANE_RATE} {10000.0}
-set_instance_parameter_value avl_ad9152_xcvr {PLLCLK_FREQUENCY} {5000.0}
-set_instance_parameter_value avl_ad9152_xcvr {REFCLK_FREQUENCY} {500.0}
-set_instance_parameter_value avl_ad9152_xcvr {CORECLK_FREQUENCY} {250.0}
+set_instance_parameter_value avl_ad9152_xcvr {LANE_RATE} {12500.0}
+set_instance_parameter_value avl_ad9152_xcvr {PLLCLK_FREQUENCY} {6250.0}
+set_instance_parameter_value avl_ad9152_xcvr {REFCLK_FREQUENCY} {625.0}
+set_instance_parameter_value avl_ad9152_xcvr {CORECLK_FREQUENCY} {312.5}
 set_instance_parameter_value avl_ad9152_xcvr {NUM_OF_LANES} {4}
 set_instance_parameter_value avl_ad9152_xcvr {NUM_OF_CONVS} {2}
 set_instance_parameter_value avl_ad9152_xcvr {FRM_BCNT} {1}
@@ -40,9 +40,8 @@ add_connection avl_ad9152_xcvr.tx_ip_d_0 avl_ad9152_xcvr.tx_phy_d_0
 add_connection avl_ad9152_xcvr.tx_ip_d_3 avl_ad9152_xcvr.tx_phy_d_1
 add_connection avl_ad9152_xcvr.tx_ip_d_1 avl_ad9152_xcvr.tx_phy_d_2
 add_connection avl_ad9152_xcvr.tx_ip_d_2 avl_ad9152_xcvr.tx_phy_d_3
-add_connection sys_cpu.data_master avl_ad9152_xcvr.core_pll_reconfig
-add_connection sys_cpu.data_master avl_ad9152_xcvr.lane_pll_reconfig
-add_connection sys_cpu.data_master avl_ad9152_xcvr.ip_reconfig
+
+# ad9152-xcvr
 
 add_instance axi_ad9152_xcvr axi_adxcvr
 set_instance_parameter_value axi_ad9152_xcvr {ID} {0}
@@ -54,18 +53,15 @@ add_connection sys_clk.clk_reset axi_ad9152_xcvr.s_axi_reset
 add_connection axi_ad9152_xcvr.if_up_rst avl_ad9152_xcvr.rst
 add_connection avl_ad9152_xcvr.ready axi_ad9152_xcvr.ready
 add_connection axi_ad9152_xcvr.core_pll_locked avl_ad9152_xcvr.core_pll_locked
-add_connection sys_cpu.data_master axi_ad9152_xcvr.s_axi
 
 # ad9152-core
 
 add_instance axi_ad9152_core axi_ad9152
-set_instance_parameter_value axi_ad9152_core {DEVICE_TYPE} {1}
 
 add_connection avl_ad9152_xcvr.core_clk axi_ad9152_core.if_tx_clk
 add_connection axi_ad9152_core.if_tx_data avl_ad9152_xcvr.ip_data
 add_connection sys_clk.clk_reset axi_ad9152_core.s_axi_reset
 add_connection sys_clk.clk axi_ad9152_core.s_axi_clock
-add_connection sys_cpu.data_master axi_ad9152_core.s_axi
 
 # ad9152-unpack
 
@@ -92,11 +88,8 @@ add_connection util_ad9152_upack.if_dac_data axi_ad9152_dma.if_fifo_rd_dout
 add_connection axi_ad9152_dma.if_fifo_rd_underflow axi_ad9152_core.if_dac_dunf
 add_connection sys_clk.clk_reset axi_ad9152_dma.s_axi_reset
 add_connection sys_clk.clk axi_ad9152_dma.s_axi_clock
-add_connection sys_cpu.data_master axi_ad9152_dma.s_axi
 add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_ad9152_dma.m_src_axi_reset
 add_connection sys_ddr3_cntrl.emif_usr_clk axi_ad9152_dma.m_src_axi_clock
-add_connection axi_ad9152_dma.m_src_axi sys_ddr3_cntrl.ctrl_amm_0
-add_connection sys_cpu.irq axi_ad9152_dma.interrupt_sender
 
 # ad9680-xcvr
 
@@ -104,10 +97,10 @@ add_instance avl_ad9680_xcvr avl_adxcvr
 set_instance_parameter_value avl_ad9680_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9680_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9680_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
-set_instance_parameter_value avl_ad9680_xcvr {LANE_RATE} {10000.0}
-set_instance_parameter_value avl_ad9680_xcvr {PLLCLK_FREQUENCY} {5000.0}
-set_instance_parameter_value avl_ad9680_xcvr {REFCLK_FREQUENCY} {500.0}
-set_instance_parameter_value avl_ad9680_xcvr {CORECLK_FREQUENCY} {250.0}
+set_instance_parameter_value avl_ad9680_xcvr {LANE_RATE} {12500.0}
+set_instance_parameter_value avl_ad9680_xcvr {PLLCLK_FREQUENCY} {6250.0}
+set_instance_parameter_value avl_ad9680_xcvr {REFCLK_FREQUENCY} {625.0}
+set_instance_parameter_value avl_ad9680_xcvr {CORECLK_FREQUENCY} {312.5}
 set_instance_parameter_value avl_ad9680_xcvr {NUM_OF_LANES} {4}
 set_instance_parameter_value avl_ad9680_xcvr {NUM_OF_CONVS} {2}
 set_instance_parameter_value avl_ad9680_xcvr {FRM_BCNT} {1}
@@ -131,8 +124,6 @@ add_interface rx_sysref conduit end
 set_interface_property rx_sysref EXPORT_OF avl_ad9680_xcvr.sysref
 add_interface rx_sync conduit end
 set_interface_property rx_sync EXPORT_OF avl_ad9680_xcvr.sync
-add_connection sys_cpu.data_master avl_ad9680_xcvr.core_pll_reconfig
-add_connection sys_cpu.data_master avl_ad9680_xcvr.ip_reconfig
 
 # ad9680-xcvr
 
@@ -146,7 +137,6 @@ add_connection sys_clk.clk_reset axi_ad9680_xcvr.s_axi_reset
 add_connection axi_ad9680_xcvr.if_up_rst avl_ad9680_xcvr.rst
 add_connection avl_ad9680_xcvr.ready axi_ad9680_xcvr.ready
 add_connection axi_ad9680_xcvr.core_pll_locked avl_ad9680_xcvr.core_pll_locked
-add_connection sys_cpu.data_master axi_ad9680_xcvr.s_axi
 
 # ad9680
 
@@ -157,7 +147,6 @@ add_connection avl_ad9680_xcvr.ip_sof axi_ad9680_core.if_rx_sof
 add_connection avl_ad9680_xcvr.ip_data axi_ad9680_core.if_rx_data
 add_connection sys_clk.clk_reset axi_ad9680_core.s_axi_reset
 add_connection sys_clk.clk axi_ad9680_core.s_axi_clock
-add_connection sys_cpu.data_master axi_ad9680_core.s_axi
 
 # ad9680-pack
 
@@ -205,72 +194,63 @@ add_connection ad9680_adcfifo.if_dma_xfer_req axi_ad9680_dma.if_s_axis_xfer_req
 add_connection ad9680_adcfifo.if_adc_wovf axi_ad9680_core.if_adc_dovf
 add_connection sys_clk.clk_reset axi_ad9680_dma.s_axi_reset
 add_connection sys_clk.clk axi_ad9680_dma.s_axi_clock
-add_connection sys_cpu.data_master axi_ad9680_dma.s_axi
 add_connection sys_ddr3_cntrl.emif_usr_reset_n axi_ad9680_dma.m_dest_axi_reset
 add_connection sys_ddr3_cntrl.emif_usr_clk axi_ad9680_dma.m_dest_axi_clock
-add_connection axi_ad9680_dma.m_dest_axi sys_ddr3_cntrl.ctrl_amm_0
-add_connection sys_cpu.irq axi_ad9680_dma.interrupt_sender
 
 # reconfig sharing
 
 add_instance avl_adxcfg_0 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_0.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_0.rcfg_reset_n
-add_connection sys_cpu.data_master avl_adxcfg_0.rcfg_s0
-add_connection sys_cpu.data_master avl_adxcfg_0.rcfg_s1
 add_connection avl_adxcfg_0.rcfg_m0 avl_ad9152_xcvr.phy_reconfig_0
 add_connection avl_adxcfg_0.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_0
 
 add_instance avl_adxcfg_1 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_1.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_1.rcfg_reset_n
-add_connection sys_cpu.data_master avl_adxcfg_1.rcfg_s0
-add_connection sys_cpu.data_master avl_adxcfg_1.rcfg_s1
 add_connection avl_adxcfg_1.rcfg_m0 avl_ad9152_xcvr.phy_reconfig_1
 add_connection avl_adxcfg_1.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_1
 
 add_instance avl_adxcfg_2 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_2.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_2.rcfg_reset_n
-add_connection sys_cpu.data_master avl_adxcfg_2.rcfg_s0
-add_connection sys_cpu.data_master avl_adxcfg_2.rcfg_s1
 add_connection avl_adxcfg_2.rcfg_m0 avl_ad9152_xcvr.phy_reconfig_2
 add_connection avl_adxcfg_2.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_2
 
 add_instance avl_adxcfg_3 avl_adxcfg
 add_connection sys_clk.clk avl_adxcfg_3.rcfg_clk
 add_connection sys_clk.clk_reset avl_adxcfg_3.rcfg_reset_n
-add_connection sys_cpu.data_master avl_adxcfg_3.rcfg_s0
-add_connection sys_cpu.data_master avl_adxcfg_3.rcfg_s1
 add_connection avl_adxcfg_3.rcfg_m0 avl_ad9152_xcvr.phy_reconfig_3
 add_connection avl_adxcfg_3.rcfg_m1 avl_ad9680_xcvr.phy_reconfig_3
 
 # addresses
 
-set_connection_parameter_value sys_cpu.data_master/avl_ad9152_xcvr.core_pll_reconfig      baseAddress {0x10400000}
-set_connection_parameter_value sys_cpu.data_master/avl_ad9152_xcvr.ip_reconfig            baseAddress {0x10401000}
-set_connection_parameter_value sys_cpu.data_master/avl_ad9152_xcvr.lane_pll_reconfig      baseAddress {0x10402000}
-set_connection_parameter_value sys_cpu.data_master/axi_ad9152_dma.s_axi                   baseAddress {0x1040c000}
-set_connection_parameter_value sys_cpu.data_master/axi_ad9152_xcvr.s_axi                  baseAddress {0x10410000}
-set_connection_parameter_value sys_cpu.data_master/axi_ad9152_core.s_axi                  baseAddress {0x10420000}
-set_connection_parameter_value sys_cpu.data_master/avl_ad9680_xcvr.core_pll_reconfig      baseAddress {0x10500000}
-set_connection_parameter_value sys_cpu.data_master/avl_ad9680_xcvr.ip_reconfig            baseAddress {0x10501000}
-set_connection_parameter_value sys_cpu.data_master/axi_ad9680_dma.s_axi                   baseAddress {0x1050c000}
-set_connection_parameter_value sys_cpu.data_master/axi_ad9680_xcvr.s_axi                  baseAddress {0x10510000}
-set_connection_parameter_value sys_cpu.data_master/axi_ad9680_core.s_axi                  baseAddress {0x10520000}
-set_connection_parameter_value axi_ad9152_dma.m_src_axi/sys_ddr3_cntrl.ctrl_amm_0         baseAddress {0x00000000}
-set_connection_parameter_value axi_ad9680_dma.m_dest_axi/sys_ddr3_cntrl.ctrl_amm_0        baseAddress {0x00000000}
-set_connection_parameter_value sys_cpu.data_master/avl_adxcfg_0.rcfg_s0                   baseAddress {0x10404000}
-set_connection_parameter_value sys_cpu.data_master/avl_adxcfg_1.rcfg_s0                   baseAddress {0x10405000}
-set_connection_parameter_value sys_cpu.data_master/avl_adxcfg_2.rcfg_s0                   baseAddress {0x10406000}
-set_connection_parameter_value sys_cpu.data_master/avl_adxcfg_3.rcfg_s0                   baseAddress {0x10407000}
-set_connection_parameter_value sys_cpu.data_master/avl_adxcfg_0.rcfg_s1                   baseAddress {0x10504000}
-set_connection_parameter_value sys_cpu.data_master/avl_adxcfg_1.rcfg_s1                   baseAddress {0x10505000}
-set_connection_parameter_value sys_cpu.data_master/avl_adxcfg_2.rcfg_s1                   baseAddress {0x10506000}
-set_connection_parameter_value sys_cpu.data_master/avl_adxcfg_3.rcfg_s1                   baseAddress {0x10507000}
+ad_cpu_interconnect 0x10404000 avl_adxcfg_0.rcfg_s0
+ad_cpu_interconnect 0x10504000 avl_adxcfg_0.rcfg_s1
+ad_cpu_interconnect 0x10405000 avl_adxcfg_1.rcfg_s0
+ad_cpu_interconnect 0x10505000 avl_adxcfg_1.rcfg_s1
+ad_cpu_interconnect 0x10406000 avl_adxcfg_2.rcfg_s0
+ad_cpu_interconnect 0x10506000 avl_adxcfg_2.rcfg_s1
+ad_cpu_interconnect 0x10407000 avl_adxcfg_3.rcfg_s0
+ad_cpu_interconnect 0x10507000 avl_adxcfg_3.rcfg_s1
+ad_cpu_interconnect 0x10400000 avl_ad9152_xcvr.core_pll_reconfig
+ad_cpu_interconnect 0x10402000 avl_ad9152_xcvr.lane_pll_reconfig
+ad_cpu_interconnect 0x10401000 avl_ad9152_xcvr.ip_reconfig
+ad_cpu_interconnect 0x1040c000 axi_ad9152_dma.s_axi
+ad_cpu_interconnect 0x10410000 axi_ad9152_xcvr.s_axi
+ad_cpu_interconnect 0x10420000 axi_ad9152_core.s_axi
+ad_cpu_interconnect 0x10500000 avl_ad9680_xcvr.core_pll_reconfig
+ad_cpu_interconnect 0x10501000 avl_ad9680_xcvr.ip_reconfig
+ad_cpu_interconnect 0x1050c000 axi_ad9680_dma.s_axi
+ad_cpu_interconnect 0x10510000 axi_ad9680_xcvr.s_axi
+ad_cpu_interconnect 0x10520000 axi_ad9680_core.s_axi
+
+# dma interconnects
+
+ad_dma_interconnect axi_ad9152_dma.m_src_axi
+ad_dma_interconnect axi_ad9680_dma.m_dest_axi
 
 # interrupts
 
-set_connection_parameter_value sys_cpu.irq/axi_ad9680_dma.interrupt_sender irqNumber {10}
-set_connection_parameter_value sys_cpu.irq/axi_ad9152_dma.interrupt_sender irqNumber {11}
-
+ad_cpu_interrupt 10 axi_ad9680_dma.interrupt_sender
+ad_cpu_interrupt 11 axi_ad9152_dma.interrupt_sender
