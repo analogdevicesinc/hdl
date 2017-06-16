@@ -60,6 +60,10 @@ adi_ip_files jesd204_rx [list \
 
 adi_ip_properties_lite jesd204_rx
 
+set_property PROCESSING_ORDER LATE [ipx::get_files jesd204_rx_constr.xdc \
+  -of_objects [ipx::get_file_groups -of_objects [ipx::current_core] \
+  -filter {NAME =~ *synthesis*}]]
+
 adi_ip_add_core_dependencies { \
   analog.com:user:jesd204_common:1.0 \
 }
