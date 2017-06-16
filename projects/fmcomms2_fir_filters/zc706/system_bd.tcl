@@ -14,41 +14,45 @@ delete_bd_objs [get_bd_nets -of_objects [find_bd_objs -relation connected_to [ge
 delete_bd_objs [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins util_ad9361_adc_pack/adc_enable_*]]]
 delete_bd_objs [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins util_ad9361_adc_pack/adc_data_*]]]
 
-set interp_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 interp_slice ]
-set fir_interpolator_0 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 fir_interpolator_0 ]
-set fir_interpolator_1 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 fir_interpolator_1 ]
+ad_ip_instance xlslice interp_slice
+ad_ip_instance util_fir_int fir_interpolator_0
+ad_ip_instance util_fir_int fir_interpolator_1
 
-set decim_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 decim_slice ]
-set fir_decimator_0 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_0 ]
-set fir_decimator_1 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_1 ]
+ad_ip_instance xlslice decim_slice
+ad_ip_instance util_fir_dec fir_decimator_0
+ad_ip_instance util_fir_dec fir_decimator_1
 
-set concat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_0 ]
-set_property -dict [list CONFIG.IN1_WIDTH.VALUE_SRC USER CONFIG.IN0_WIDTH.VALUE_SRC USER] $concat_0
-set_property -dict [list CONFIG.IN0_WIDTH {16} CONFIG.IN1_WIDTH {16}] $concat_0
+ad_ip_instance xlconcat concat_0
+ad_ip_parameter concat_0 CONFIG.IN1_WIDTH.VALUE_SRC USER
+ad_ip_parameter concat_0 CONFIG.IN0_WIDTH.VALUE_SRC USER
+ad_ip_parameter concat_0 CONFIG.IN0_WIDTH 16
+ad_ip_parameter concat_0 CONFIG.IN1_WIDTH 16
 
-set concat_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_1 ]
-set_property -dict [list CONFIG.IN1_WIDTH.VALUE_SRC USER CONFIG.IN0_WIDTH.VALUE_SRC USER] $concat_1
-set_property -dict [list CONFIG.IN0_WIDTH {16} CONFIG.IN1_WIDTH {16}] $concat_1
+ad_ip_instance xlconcat concat_1
+ad_ip_parameter concat_1 CONFIG.IN1_WIDTH.VALUE_SRC USER
+ad_ip_parameter concat_1 CONFIG.IN0_WIDTH.VALUE_SRC USER
+ad_ip_parameter concat_1 CONFIG.IN0_WIDTH 16
+ad_ip_parameter concat_1 CONFIG.IN1_WIDTH 16
 
-set pack0_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack0_slice_0 ]
-set_property -dict [list CONFIG.DIN_FROM {15}] $pack0_slice_0
-set_property -dict [list CONFIG.DIN_TO {0}] $pack0_slice_0
-set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack0_slice_0
+ad_ip_instance xlslice pack0_slice_0
+ad_ip_parameter pack0_slice_0 CONFIG.DIN_FROM 15
+ad_ip_parameter pack0_slice_0 CONFIG.DIN_TO 0
+ad_ip_parameter pack0_slice_0 CONFIG.DOUT_WIDTH 16
 
-set pack0_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack0_slice_1 ]
-set_property -dict [list CONFIG.DIN_FROM {31}] $pack0_slice_1
-set_property -dict [list CONFIG.DIN_TO {16}] $pack0_slice_1
-set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack0_slice_1
+ad_ip_instance xlslice pack0_slice_1
+ad_ip_parameter pack0_slice_1 CONFIG.DIN_FROM 31
+ad_ip_parameter pack0_slice_1 CONFIG.DIN_TO 16
+ad_ip_parameter pack0_slice_1 CONFIG.DOUT_WIDTH 16
 
-set pack1_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack1_slice_0 ]
-set_property -dict [list CONFIG.DIN_FROM {15}] $pack1_slice_0
-set_property -dict [list CONFIG.DIN_TO {0}] $pack1_slice_0
-set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack1_slice_0
+ad_ip_instance xlslice pack1_slice_0
+ad_ip_parameter pack1_slice_0 CONFIG.DIN_FROM 15
+ad_ip_parameter pack1_slice_0 CONFIG.DIN_TO 0
+ad_ip_parameter pack1_slice_0 CONFIG.DOUT_WIDTH 16
 
-set pack1_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack1_slice_1 ]
-set_property -dict [list CONFIG.DIN_FROM {31}] $pack1_slice_1
-set_property -dict [list CONFIG.DIN_TO {16}] $pack1_slice_1
-set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack1_slice_1
+ad_ip_instance xlslice pack1_slice_1
+ad_ip_parameter pack1_slice_1 CONFIG.DIN_FROM 31
+ad_ip_parameter pack1_slice_1 CONFIG.DIN_TO 16
+ad_ip_parameter pack1_slice_1 CONFIG.DOUT_WIDTH 16
 
 # fir interpolator 0
 ad_connect clkdiv/clk_out fir_interpolator_0/aclk
@@ -124,22 +128,22 @@ ad_connect fir_decimator_1/decimate decim_slice/Dout
 
 
 
-set ila_FIR_int [ create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_FIR_int ]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_FIR_int
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {12}] $ila_FIR_int
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {16}] $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {32}] $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}]  $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE4_WIDTH {1}]  $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE5_WIDTH {1}]  $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE6_WIDTH {16}] $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE7_WIDTH {16}] $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE8_WIDTH {32}] $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE9_WIDTH {1}]  $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE10_WIDTH {1}]  $ila_FIR_int
-set_property -dict [list CONFIG.C_PROBE11_WIDTH {1}]  $ila_FIR_int
+ad_ip_instance ila ila_FIR_int
+ad_ip_parameter ila_FIR_int CONFIG.C_MONITOR_TYPE Native
+ad_ip_parameter ila_FIR_int CONFIG.C_NUM_OF_PROBES 12
+ad_ip_parameter ila_FIR_int CONFIG.C_TRIGIN_EN false
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE0_WIDTH 16
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE1_WIDTH 16
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE2_WIDTH 32
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE3_WIDTH 1
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE4_WIDTH 1
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE5_WIDTH 1
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE6_WIDTH 16
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE7_WIDTH 16
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE8_WIDTH 32
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE9_WIDTH 1
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE10_WIDTH 1
+ad_ip_parameter ila_FIR_int CONFIG.C_PROBE11_WIDTH 1
 
 ad_connect ila_FIR_int/clk clkdiv/clk_out
 # interpolator 0
@@ -159,26 +163,26 @@ ad_connect ila_FIR_int/probe11 fir_interpolator_1/m_axis_data_tvalid
 
 
 
-set ila_dac_fifo [ create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_dac_fifo ]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {16}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE4_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE5_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE6_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE7_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE8_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE9_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE10_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE11_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE12_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE13_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE14_WIDTH {1}] $ila_dac_fifo
-set_property -dict [list CONFIG.C_PROBE15_WIDTH {1}] $ila_dac_fifo
+ad_ip_instance ila ila_dac_fifo
+ad_ip_parameter ila_dac_fifo CONFIG.C_MONITOR_TYPE Native
+ad_ip_parameter ila_dac_fifo CONFIG.C_NUM_OF_PROBES 16
+ad_ip_parameter ila_dac_fifo CONFIG.C_TRIGIN_EN false
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE0_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE1_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE2_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE3_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE4_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE5_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE6_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE7_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE8_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE9_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE10_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE11_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE12_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE13_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE14_WIDTH 1
+ad_ip_parameter ila_dac_fifo CONFIG.C_PROBE15_WIDTH 1
 
 ad_connect ila_dac_fifo/clk clkdiv/clk_out
 ad_connect ila_dac_fifo/probe0 dac_fifo/din_valid_0
@@ -199,20 +203,20 @@ ad_connect ila_dac_fifo/probe14 dac_fifo/dout_enable_2
 ad_connect ila_dac_fifo/probe15 dac_fifo/dout_enable_3
 
 
-set ila_FIR_dec [ create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_FIR_dec ]
-set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_NUM_OF_PROBES {10}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE0_WIDTH {16}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE1_WIDTH {16}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE2_WIDTH {32}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}]  $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE4_WIDTH {1}]  $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE5_WIDTH {16}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE6_WIDTH {16}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE7_WIDTH {32}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE8_WIDTH {1}] $ila_FIR_dec
-set_property -dict [list CONFIG.C_PROBE9_WIDTH {1}]  $ila_FIR_dec
+ad_ip_instance ila ila_FIR_dec
+ad_ip_parameter ila_FIR_dec CONFIG.C_MONITOR_TYPE Native
+ad_ip_parameter ila_FIR_dec CONFIG.C_NUM_OF_PROBES 10
+ad_ip_parameter ila_FIR_dec CONFIG.C_TRIGIN_EN false
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE0_WIDTH 16
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE1_WIDTH 16
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE2_WIDTH 32
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE3_WIDTH 1
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE4_WIDTH 1
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE5_WIDTH 16
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE6_WIDTH 16
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE7_WIDTH 32
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE8_WIDTH 1
+ad_ip_parameter ila_FIR_dec CONFIG.C_PROBE9_WIDTH 1
 
 ad_connect ila_FIR_dec/clk clkdiv/clk_out
 # decimator 0
