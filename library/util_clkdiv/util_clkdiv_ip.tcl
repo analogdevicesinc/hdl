@@ -22,4 +22,7 @@ set_property value_validation_list {1 2 3 4 5 6 7 8} [ipx::get_user_parameters S
 set_property value_validation_type list [ipx::get_user_parameters SEL_1_DIV -of_objects [ipx::current_core]]
 set_property value_validation_list {1 2 3 4 5 6 7 8} [ipx::get_user_parameters SEL_1_DIV -of_objects [ipx::current_core]]
 
+adi_add_bus clk_out master "xilinx.com:signal:clock_rtl:1.0" "xilinx.com:signal:clock:1.0" \
+  [list {"clk_out" "CLK"}]
+
 ipx::save_core [ipx::current_core]
