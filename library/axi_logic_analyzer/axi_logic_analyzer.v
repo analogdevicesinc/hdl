@@ -140,7 +140,7 @@ module axi_logic_analyzer (
   assign up_rstn = s_axi_aresetn;
 
   assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s : trigger_out_delayed;
-  assign trigger_out_delayed = trigger_delay == 32'h0 ? 1: 0;
+  assign trigger_out_delayed = delay_counter == 32'h0 ? 1 : 0;
 
   generate
   for (i = 0 ; i < 16; i = i + 1) begin
