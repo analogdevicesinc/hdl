@@ -211,9 +211,9 @@ always @(*) begin
     /* 00-09 */ up_cfg_beats_per_multiframe,{DATA_PATH_WIDTH{1'b1}}
   };
   12'h85: up_rdata <= {
-      /* 02-31 */ 30'h00, /* Reserved for future additions */
+    /* 02-31 */ 30'h00, /* Reserved for future additions */
     /*    01 */ up_cfg_disable_char_replacement, /* Disable character replacement */
-      /*    00 */ up_cfg_disable_scrambler /* Disable scrambler */
+    /*    00 */ up_cfg_disable_scrambler /* Disable scrambler */
   };
   /* 0x86-0x8f reserved for future use */
 
