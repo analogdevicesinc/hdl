@@ -146,7 +146,7 @@ module tx_ctrl_phase_tb;
     .cfg_continuous_cgs(1'b0),
     .cfg_continuous_ilas(1'b0),
     .cfg_skip_ilas(1'b0),
-    .cfg_mframes_per_ilas(3)
+    .cfg_mframes_per_ilas(8'h3)
   );
 
   jesd204_tx_ctrl i_tx_ctrl_b (
@@ -172,7 +172,7 @@ module tx_ctrl_phase_tb;
     .cfg_continuous_cgs(1'b0),
     .cfg_continuous_ilas(1'b0),
     .cfg_skip_ilas(1'b0),
-    .cfg_mframes_per_ilas(3)
+    .cfg_mframes_per_ilas(8'h3)
   );
 
   reg status = 1'b1;
