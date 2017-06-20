@@ -240,7 +240,8 @@ jesd204_up_sysref i_up_sysref (
   .up_reset(up_reset),
 
   .core_clk(core_clk),
-  .core_event_sysref_alignment_error(1'b0), // FIXME
+  .core_event_sysref_alignment_error(core_event_sysref_alignment_error),
+  .core_event_sysref_edge(core_event_sysref_edge),
 
   .up_cfg_lmfc_offset(up_cfg_lmfc_offset),
   .up_cfg_sysref_oneshot(up_cfg_sysref_oneshot),

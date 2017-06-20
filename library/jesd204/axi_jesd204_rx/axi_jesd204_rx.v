@@ -215,7 +215,8 @@ jesd204_up_sysref i_up_sysref (
   .up_reset(up_reset),
 
   .core_clk(core_clk),
-  .core_event_sysref_alignment_error(),
+  .core_event_sysref_edge(core_event_sysref_edge),
+  .core_event_sysref_alignment_error(core_event_sysref_alignment_error),
 
   .up_raddr(up_raddr),
   .up_rdata(up_rdata_sysref),

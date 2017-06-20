@@ -61,11 +61,36 @@ module jesd204_up_sysref (
   output reg [7:0] up_cfg_lmfc_offset,
   output reg up_cfg_sysref_disable,
 
-  input core_event_sysref_alignment_error
+  input core_event_sysref_alignment_error,
+  input core_event_sysref_edge
 );
 
 reg up_status_sysref_alignment_error = 1'b0;
 wire up_status_sysref_captured;
+
+reg [1:0] up_sysref_status;
+reg [1:0] up_sysref_status_clear;
+wire [1:0] up_sysref_event;
+
+sync_event #(
+  .NUM_OF_EVENTS(2)
+) i_sysref_event_sync (
+  .in_clk(core_clk),
+  .in_event({
+    core_event_sysref_alignment_error,
+    core_event_sysref_edge
+  }),
+  .out_clk(up_clk),
+  .out_event(up_sysref_event)
+);
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_sysref_status <= 2'b00;
+  end else begin
+    up_sysref_status <= (up_sysref_status & ~up_sysref_status_clear) | up_sysref_event;
+  end
+end
 
 always @(*) begin
   case (up_raddr)
@@ -79,6 +104,10 @@ always @(*) begin
     /* 10-31 */ 22'h00, /* Reserved for future use */
     /* 02-09 */ up_cfg_lmfc_offset,
     /* 00-01 */ 2'b00 /* data path alignment for cfg_lmfc_offset */
+  };
+  12'h042: up_rdata <= {
+    /* 02-31 */ 30'h00,
+    /* 00-01 */ up_sysref_status
   };
   default: up_rdata <= 32'h00000000;
   endcase
@@ -101,6 +130,14 @@ always @(posedge up_clk) begin
       up_cfg_lmfc_offset <= up_wdata[9:2];
     end
     endcase
+  end
+end
+
+always @(*) begin
+  if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
+    up_sysref_status_clear <= up_wdata[1:0];
+  end else begin
+    up_sysref_status_clear <= 2'b00;
   end
 end
 

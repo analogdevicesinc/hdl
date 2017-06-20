@@ -221,10 +221,7 @@ jesd204_lmfc i_lmfc (
   .lmfc_counter(lmfc_counter),
 
   .sysref_edge(event_sysref_edge),
-  .sysref_alignment_error(event_sysref_alignment_error),
-
-  .sysref_captured(),
-  .clear_sysref_captured(1'b0)
+  .sysref_alignment_error(event_sysref_alignment_error)
 );
 
 jesd204_rx_ctrl #(
