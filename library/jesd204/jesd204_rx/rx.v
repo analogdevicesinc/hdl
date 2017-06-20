@@ -336,9 +336,6 @@ jesd204_lane_latency_monitor #(
   .clk(clk),
   .reset(latency_monitor_reset),
 
-  .lmfc_edge(lmfc_edge),
-  .lmfc_counter(lmfc_counter),
-
   .lane_ready(ifs_ready_mux),
   .lane_frame_align(frame_align),
   .lane_latency_ready(status_lane_ifs_ready),

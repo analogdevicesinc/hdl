@@ -291,14 +291,11 @@ module loopback_tb;
   reg [NUM_LANES-1:0] lane_latency_match;
 
   generate for (i = 0; i < NUM_LANES; i = i + 1) begin
-    localparam LANE_OFFSET = BASE_LATENCY + LANE_DELAY + i;
-    localparam LANE_OFFSET_MFRAMES = LANE_OFFSET / BEATS_PER_MULTIFRAME + 1;
-    localparam LANE_OFFSET_BEATS = LANE_OFFSET % BEATS_PER_MULTIFRAME;
+    localparam LANE_OFFSET = BASE_LATENCY + LANE_DELAY + BEATS_PER_MULTIFRAME + i;
 
     always @(posedge clk) begin
       if (rx_status_lane_ifs_ready[i] == 1'b1 &&
-          rx_status_lane_latency[i*14+13:i*14+10] == LANE_OFFSET_MFRAMES &&
-          rx_status_lane_latency[i*14+9:i*14+2] == LANE_OFFSET_BEATS) begin
+          rx_status_lane_latency[i*14+13:i*14+2] == LANE_OFFSET) begin
         lane_latency_match[i] <= 1'b1;
       end else begin
         lane_latency_match[i] <= 1'b0;

@@ -51,36 +51,25 @@ module jesd204_lane_latency_monitor #(
   input [NUM_LANES-1:0] lane_ready,
   input [NUM_LANES*2-1:0] lane_frame_align,
 
-  input lmfc_edge,
-  input [7:0] lmfc_counter,
-
   output [14*NUM_LANES-1:0] lane_latency,
   output [NUM_LANES-1:0] lane_latency_ready
 );
 
-reg [2:0] mframe_counter;
+reg [11:0] beat_counter;
 
 reg [11:0] lane_latency_mem[0:NUM_LANES-1];
 reg [NUM_LANES-1:0] lane_captured = 'h00;
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
-    mframe_counter <= 'h0;
-  end else if (lmfc_edge == 1'b1 && mframe_counter != 'h7) begin
-    mframe_counter <= mframe_counter + 1'b1;
+    beat_counter <= 'h0;
+  end else if (beat_counter != 'hfff) begin
+    beat_counter <= beat_counter + 1'b1;
   end
 end
 
 generate
 genvar i;
-
-reg [7:0] lmfc_counter_d1;
-reg [7:0] lmfc_counter_d2;
-
-always @(posedge clk) begin
-  lmfc_counter_d1 <= lmfc_counter;
-  lmfc_counter_d2 <= lmfc_counter_d1;
-end
 
 for (i = 0; i < NUM_LANES; i = i + 1) begin
   always @(posedge clk) begin
@@ -88,7 +77,7 @@ for (i = 0; i < NUM_LANES; i = i + 1) begin
       lane_latency_mem[i] <= 'h00;
       lane_captured[i] <= 1'b0;
     end else if (lane_ready[i] == 1'b1 && lane_captured[i] == 1'b0) begin
-      lane_latency_mem[i] <= {mframe_counter,lmfc_counter_d2};
+      lane_latency_mem[i] <= beat_counter;
       lane_captured[i] <= 1'b1;
     end
   end
