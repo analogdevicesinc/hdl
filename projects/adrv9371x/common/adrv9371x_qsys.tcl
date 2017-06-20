@@ -177,31 +177,6 @@ add_connection avl_ad9371_rx_os_xcvr.core_clk axi_ad9371_rx_os_cpack.if_adc_clk
 add_connection axi_ad9371.adc_os_ch_0 axi_ad9371_rx_os_cpack.adc_ch_0
 add_connection axi_ad9371.adc_os_ch_1 axi_ad9371_rx_os_cpack.adc_ch_1
 
-# dac & adc fifos
-
-add_instance axi_ad9371_rx_fifo util_adcfifo 1.0
-set_instance_parameter_value axi_ad9371_rx_fifo {ADC_DATA_WIDTH} {64}
-set_instance_parameter_value axi_ad9371_rx_fifo {DMA_DATA_WIDTH} {64}
-set_instance_parameter_value axi_ad9371_rx_fifo {DMA_READY_ENABLE} {1}
-set_instance_parameter_value axi_ad9371_rx_fifo {DMA_ADDRESS_WIDTH} {16}
-add_connection sys_clk.clk_reset axi_ad9371_rx_fifo.if_adc_rst
-add_connection avl_ad9371_rx_xcvr.core_clk axi_ad9371_rx_fifo.if_adc_clk
-add_connection axi_ad9371_rx_cpack.if_adc_valid axi_ad9371_rx_fifo.if_adc_wr
-add_connection axi_ad9371_rx_cpack.if_adc_data axi_ad9371_rx_fifo.if_adc_wdata
-add_connection axi_ad9371_rx_fifo.if_adc_wovf axi_ad9371.if_adc_dovf
-
-add_instance axi_ad9371_rx_os_fifo util_adcfifo 1.0
-set_instance_parameter_value axi_ad9371_rx_os_fifo {ADC_DATA_WIDTH} {64}
-set_instance_parameter_value axi_ad9371_rx_os_fifo {DMA_DATA_WIDTH} {64}
-set_instance_parameter_value axi_ad9371_rx_os_fifo {DMA_READY_ENABLE} {1}
-set_instance_parameter_value axi_ad9371_rx_os_fifo {DMA_ADDRESS_WIDTH} {16}
-
-add_connection sys_clk.clk_reset axi_ad9371_rx_os_fifo.if_adc_rst
-add_connection avl_ad9371_rx_os_xcvr.core_clk axi_ad9371_rx_os_fifo.if_adc_clk
-add_connection axi_ad9371_rx_os_cpack.if_adc_valid axi_ad9371_rx_os_fifo.if_adc_wr
-add_connection axi_ad9371_rx_os_cpack.if_adc_data axi_ad9371_rx_os_fifo.if_adc_wdata
-add_connection axi_ad9371_rx_os_fifo.if_adc_wovf axi_ad9371.if_adc_dovf
-
 # dac & adc dma
 
 add_instance axi_ad9371_tx_dma axi_dmac 1.0
@@ -243,14 +218,13 @@ set_instance_parameter_value axi_ad9371_rx_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {CYCLIC} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {DMA_TYPE_DEST} {0}
-set_instance_parameter_value axi_ad9371_rx_dma {DMA_TYPE_SRC} {1}
+set_instance_parameter_value axi_ad9371_rx_dma {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_ad9371_rx_dma {FIFO_SIZE} {16}
-add_connection avl_ad9371_rx_xcvr.core_clk axi_ad9371_rx_fifo.if_dma_clk
-add_connection avl_ad9371_rx_xcvr.core_clk axi_ad9371_rx_dma.if_s_axis_aclk
-add_connection axi_ad9371_rx_fifo.if_dma_wr axi_ad9371_rx_dma.if_s_axis_valid
-add_connection axi_ad9371_rx_fifo.if_dma_wdata axi_ad9371_rx_dma.if_s_axis_data
-add_connection axi_ad9371_rx_dma.if_s_axis_ready axi_ad9371_rx_fifo.if_dma_wready
-add_connection axi_ad9371_rx_dma.if_s_axis_xfer_req axi_ad9371_rx_fifo.if_dma_xfer_req
+add_connection avl_ad9371_rx_xcvr.core_clk axi_ad9371_rx_dma.if_fifo_wr_clk
+add_connection axi_ad9371_rx_cpack.if_adc_valid axi_ad9371_rx_dma.if_fifo_wr_en
+add_connection axi_ad9371_rx_cpack.if_adc_sync axi_ad9371_rx_dma.if_fifo_wr_sync
+add_connection axi_ad9371_rx_cpack.if_adc_data axi_ad9371_rx_dma.if_fifo_wr_din
+add_connection axi_ad9371_rx_dma.if_fifo_wr_overflow axi_ad9371.if_adc_dovf
 add_connection sys_clk.clk axi_ad9371_rx_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_ad9371_rx_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_ad9371_rx_dma.m_dest_axi_clock
@@ -270,14 +244,13 @@ set_instance_parameter_value axi_ad9371_rx_os_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {CYCLIC} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_TYPE_DEST} {0}
-set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_TYPE_SRC} {1}
+set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_ad9371_rx_os_dma {FIFO_SIZE} {16}
-add_connection avl_ad9371_rx_os_xcvr.core_clk axi_ad9371_rx_os_fifo.if_dma_clk
-add_connection avl_ad9371_rx_os_xcvr.core_clk axi_ad9371_rx_os_dma.if_s_axis_aclk
-add_connection axi_ad9371_rx_os_fifo.if_dma_wr axi_ad9371_rx_os_dma.if_s_axis_valid
-add_connection axi_ad9371_rx_os_fifo.if_dma_wdata axi_ad9371_rx_os_dma.if_s_axis_data
-add_connection axi_ad9371_rx_os_dma.if_s_axis_ready axi_ad9371_rx_os_fifo.if_dma_wready
-add_connection axi_ad9371_rx_os_dma.if_s_axis_xfer_req axi_ad9371_rx_os_fifo.if_dma_xfer_req
+add_connection avl_ad9371_rx_os_xcvr.core_clk axi_ad9371_rx_os_dma.if_fifo_wr_clk
+add_connection axi_ad9371_rx_os_cpack.if_adc_valid axi_ad9371_rx_os_dma.if_fifo_wr_en
+add_connection axi_ad9371_rx_os_cpack.if_adc_sync axi_ad9371_rx_os_dma.if_fifo_wr_sync
+add_connection axi_ad9371_rx_os_cpack.if_adc_data axi_ad9371_rx_os_dma.if_fifo_wr_din
+add_connection axi_ad9371_rx_os_dma.if_fifo_wr_overflow axi_ad9371.if_adc_os_dovf
 add_connection sys_clk.clk axi_ad9371_rx_os_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_ad9371_rx_os_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_ad9371_rx_os_dma.m_dest_axi_clock
