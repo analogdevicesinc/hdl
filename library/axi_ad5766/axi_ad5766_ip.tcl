@@ -50,18 +50,6 @@ adi_add_bus "spi_engine_offload_ctrl" "slave" \
 		{ "ctrl_mem_reset" "MEM_RESET"} \
 	}
 
-adi_add_bus "dma_fifo_tx" "master" \
-	"analog.com:interface:fifo_rd_rtl:1.1" \
-	"analog.com:interface:fifo_rd:1.1" \
-	{ \
-		{ "dma_data" "DATA"} \
-		{ "dma_valid" "ENABLE"} \
-		{ "dma_enable" "VALID"} \
-		{ "dma_underflow" "UNDERFLOW"} \
-		{ "dma_xfer_req" "XFER_REQ"} \
-	}
-
-
 adi_add_bus_clock "ctrl_clk" "spi_engine_offload_ctrl"
 adi_add_bus_clock "spi_clk" "spi_engine_ctrl" "spi_resetn"
 adi_add_bus_clock "dma_clk" "dma_fifo_tx"
