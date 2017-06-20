@@ -75,7 +75,11 @@ always @(*) begin
     /*    01 */ up_cfg_sysref_oneshot,
     /*    00 */ up_cfg_sysref_disable
   };
-  12'h041: up_rdata <= up_cfg_lmfc_offset;
+  12'h041: up_rdata <= {
+    /* 10-31 */ 22'h00, /* Reserved for future use */
+    /* 02-09 */ up_cfg_lmfc_offset,
+    /* 00-01 */ 2'b00 /* data path alignment for cfg_lmfc_offset */
+  };
   default: up_rdata <= 32'h00000000;
   endcase
 end
@@ -92,7 +96,10 @@ always @(posedge up_clk) begin
       up_cfg_sysref_oneshot <= up_wdata[1];
       up_cfg_sysref_disable <= up_wdata[0];
     end
-    12'h041: up_cfg_lmfc_offset <= up_wdata[7:0];
+    12'h041: begin
+      /* Aligned to data path width */
+      up_cfg_lmfc_offset <= up_wdata[9:2];
+    end
     endcase
   end
 end
