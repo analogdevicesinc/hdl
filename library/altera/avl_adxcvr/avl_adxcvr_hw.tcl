@@ -55,19 +55,39 @@ proc p_avl_adxcvr {} {
   add_interface sys_resetn reset sink
   set_interface_property sys_resetn EXPORT_OF alt_sys_clk.clk_in_reset
 
+  add_instance alt_xcvr_rst altera_reset_bridge
+  add_connection alt_sys_clk.clk alt_xcvr_rst.clk
+  add_interface rst reset sink
+  set_interface_property rst EXPORT_OF alt_xcvr_rst.in_reset
+
   add_instance alt_ref_clk altera_clock_bridge
   set_instance_parameter_value alt_ref_clk {EXPLICIT_CLOCK_RATE} [expr $m_refclk_frequency*1000000]
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF alt_ref_clk.in_clk
 
+  add_instance alt_fpll_rst_cntrol altera_xcvr_reset_control
+  set_instance_parameter_value alt_fpll_rst_cntrol {SYS_CLK_IN_MHZ} $m_sysclk_frequency
+  set_instance_parameter_value alt_fpll_rst_cntrol {TX_PLL_ENABLE} {1}
+  set_instance_parameter_value alt_fpll_rst_cntrol {T_PLL_POWERDOWN} {1000}
+  set_instance_parameter_value alt_fpll_rst_cntrol {TX_ENABLE} {0}
+  set_instance_parameter_value alt_fpll_rst_cntrol {RX_ENABLE} {0}
+  add_connection alt_sys_clk.clk alt_fpll_rst_cntrol.clock
+  add_connection alt_xcvr_rst.out_reset alt_fpll_rst_cntrol.reset
+  add_connection alt_sys_clk.clk_reset alt_fpll_rst_cntrol.reset
+
   add_instance alt_core_pll altera_xcvr_fpll_a10
   set_instance_parameter_value alt_core_pll {gui_fpll_mode} {0}
   set_instance_parameter_value alt_core_pll {gui_reference_clock_frequency} $m_refclk_frequency
+  set_instance_parameter_value alt_core_pll {gui_number_of_output_clocks} 2
+  set_instance_parameter_value alt_core_pll {gui_enable_phase_alignment} 1
   set_instance_parameter_value alt_core_pll {gui_desired_outclk0_frequency} $m_coreclk_frequency
+  set m_pfdclk_frequency [get_instance_parameter_value alt_core_pll gui_pfd_frequency]
+  set_instance_parameter_value alt_core_pll {gui_desired_outclk1_frequency} $m_pfdclk_frequency
   set_instance_parameter_value alt_core_pll {enable_pll_reconfig} {1}
   set_instance_parameter_value alt_core_pll {set_capability_reg_enable} {1}
   set_instance_parameter_value alt_core_pll {set_csr_soft_logic_enable} {1}
   add_connection alt_ref_clk.out_clk alt_core_pll.pll_refclk0
+  add_connection alt_fpll_rst_cntrol.pll_powerdown alt_core_pll.pll_powerdown
   add_interface core_pll_locked conduit end
   set_interface_property core_pll_locked EXPORT_OF alt_core_pll.pll_locked
   add_connection alt_sys_clk.clk_reset alt_core_pll.reconfig_reset0
@@ -94,8 +114,8 @@ proc p_avl_adxcvr {} {
     set_instance_parameter_value alt_rst_cntrol {gui_pll_cal_busy} {1}
     set_instance_parameter_value alt_rst_cntrol {RX_ENABLE} {0}
     add_connection alt_sys_clk.clk alt_rst_cntrol.clock
-    add_interface rst reset sink
-    set_interface_property rst EXPORT_OF alt_rst_cntrol.reset
+    add_connection alt_xcvr_rst.out_reset alt_rst_cntrol.reset
+    add_connection alt_sys_clk.clk_reset alt_rst_cntrol.reset
     add_interface ready conduit end
     set_interface_property ready EXPORT_OF alt_rst_cntrol.tx_ready
 
@@ -219,8 +239,8 @@ proc p_avl_adxcvr {} {
     set_instance_parameter_value alt_rst_cntrol {T_RX_ANALOGRESET} {70000}
     set_instance_parameter_value alt_rst_cntrol {T_RX_DIGITALRESET} {4000}
     add_connection alt_sys_clk.clk alt_rst_cntrol.clock
-    add_interface rst reset sink
-    set_interface_property rst EXPORT_OF alt_rst_cntrol.reset
+    add_connection alt_xcvr_rst.out_reset alt_rst_cntrol.reset
+    add_connection alt_sys_clk.clk_reset alt_rst_cntrol.reset
     add_interface ready conduit end
     set_interface_property ready EXPORT_OF alt_rst_cntrol.rx_ready
 
