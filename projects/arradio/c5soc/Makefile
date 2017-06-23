@@ -34,6 +34,7 @@ M_FLIST += *.sta.*
 M_FLIST += *.qsf
 M_FLIST += *.qpf
 M_FLIST += *.qws
+M_FLIST += *.qsys
 M_FLIST += *.sof
 M_FLIST += *.cdf
 M_FLIST += *.sld
@@ -50,6 +51,7 @@ M_FLIST +=  *.jdi
 M_FLIST += *.pin
 M_FLIST += *_summary.csv
 M_FLIST += *.dpf
+M_FLIST += system_qsys_script.tcl
 
 
 
