@@ -57,6 +57,8 @@ module axi_logic_analyzer_reg (
   output      [15:0]  overwrite_data,
   input       [15:0]  input_data,
   output      [15:0]  od_pp_n,
+  
+  input               triggered,
 
  // bus interface
 
@@ -91,8 +93,10 @@ module axi_logic_analyzer_reg (
   reg     [15:0]  up_overwrite_enable = 0;
   reg     [15:0]  up_overwrite_data = 0;
   reg     [15:0]  up_od_pp_n = 0;
+  reg             up_triggered = 0;
 
   wire    [15:0]  up_input_data;
+  wire            adc_triggered;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -113,6 +117,7 @@ module axi_logic_analyzer_reg (
       up_overwrite_data <= 'd0;
       up_io_selection <= 16'h0;
       up_od_pp_n <= 16'h0;
+      up_triggered <= 1'd0;
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
@@ -163,6 +168,11 @@ module axi_logic_analyzer_reg (
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
         up_trigger_delay <= up_wdata;
       end
+      if (adc_triggered == 1'b1) begin
+        up_triggered <= 1'b1;
+      end else if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
+        up_triggered <= up_wdata[0];
+      end
     end
   end
 
@@ -194,6 +204,7 @@ module axi_logic_analyzer_reg (
           5'hf: up_rdata <= {16'h0,up_input_data};
           5'h10: up_rdata <= {16'h0,up_od_pp_n};
           5'h11: up_rdata <= up_trigger_delay;
+          5'h12: up_rdata <= {31'h0,up_triggered};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -242,19 +253,21 @@ module axi_logic_analyzer_reg (
                       divider_counter_pg,     // 32
                       divider_counter_la}));  // 32
 
- up_xfer_status #(.DATA_WIDTH(16)) i_xfer_status (
+ up_xfer_status #(.DATA_WIDTH(17)) i_xfer_status (
 
   // up interface
 
   .up_rstn(up_rstn),
   .up_clk(up_clk),
-  .up_data_status(up_input_data),
+  .up_data_status({ up_input_data,
+                    adc_triggered}),
 
   // device interface
 
   .d_rst(1'd0),
   .d_clk(clk),
-  .d_data_status(input_data));
+  .d_data_status({  input_data,
+                    triggered}));
 
 endmodule
 

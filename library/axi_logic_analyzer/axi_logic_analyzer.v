@@ -282,6 +282,8 @@ module axi_logic_analyzer (
     .input_data (adc_data),
     .od_pp_n (od_pp_n),
 
+    .triggered (trigger_out),
+
     // bus interface
 
     .up_rstn (up_rstn),
