@@ -17,7 +17,6 @@ clean:
 	make -C axi_ad9144 clean
 	make -C axi_ad9152 clean
 	make -C axi_ad9162 clean
-	make -C axi_ad9234 clean
 	make -C axi_ad9250 clean
 	make -C axi_ad9265 clean
 	make -C axi_ad9361 clean
@@ -25,8 +24,6 @@ clean:
 	make -C axi_ad9434 clean
 	make -C axi_ad9467 clean
 	make -C axi_ad9625 clean
-	make -C axi_ad9643 clean
-	make -C axi_ad9652 clean
 	make -C axi_ad9671 clean
 	make -C axi_ad9680 clean
 	make -C axi_ad9684 clean
@@ -71,7 +68,6 @@ clean:
 	make -C util_axis_fifo clean
 	make -C util_axis_resize clean
 	make -C util_bsplit clean
-	make -C util_ccat clean
 	make -C util_cdc clean
 	make -C util_cic clean
 	make -C util_clkdiv clean
@@ -113,7 +109,6 @@ lib:
 	make -C axi_ad9144
 	make -C axi_ad9152
 	make -C axi_ad9162
-	make -C axi_ad9234
 	make -C axi_ad9250
 	make -C axi_ad9265
 	make -C axi_ad9361
@@ -121,8 +116,6 @@ lib:
 	make -C axi_ad9434
 	make -C axi_ad9467
 	make -C axi_ad9625
-	make -C axi_ad9643
-	make -C axi_ad9652
 	make -C axi_ad9671
 	make -C axi_ad9680
 	make -C axi_ad9684
@@ -167,7 +160,6 @@ lib:
 	make -C util_axis_fifo
 	make -C util_axis_resize
 	make -C util_bsplit
-	make -C util_ccat
 	make -C util_cdc
 	make -C util_cic
 	make -C util_clkdiv

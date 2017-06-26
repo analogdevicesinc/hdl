@@ -20,8 +20,6 @@ M_DEPS += up_ad5766_sequencer.v
 
 M_DEPS += ../util_cdc/util_cdc.xpr
 
-M_DEPS += ../interfaces/fifo_rd.xml
-M_DEPS += ../interfaces/fifo_rd_rtl.xml
 M_DEPS += ../spi_engine/interfaces/spi_engine_ctrl.xml
 M_DEPS += ../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
 M_DEPS += ../spi_engine/interfaces/spi_engine_offload_ctrl.xml
