@@ -50,7 +50,6 @@ module axi_adxcvr #(
   parameter   [ 1:0]  SYS_CLK_SEL = 2'd3,
   parameter   [ 2:0]  OUT_CLK_SEL = 3'd4) (
 
-  output  [ 7:0]  up_cm_sel_0,
   output          up_cm_enb_0,
   output  [11:0]  up_cm_addr_0,
   output          up_cm_wr_0,
@@ -58,7 +57,6 @@ module axi_adxcvr #(
   input   [15:0]  up_cm_rdata_0,
   input           up_cm_ready_0,
 
-  output  [ 7:0]  up_es_sel_0,
   output          up_es_enb_0,
   output  [11:0]  up_es_addr_0,
   output          up_es_wr_0,
@@ -74,7 +72,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_0,
   output  [ 1:0]  up_ch_sys_clk_sel_0,
   output  [ 2:0]  up_ch_out_clk_sel_0,
-  output  [ 7:0]  up_ch_sel_0,
   output          up_ch_enb_0,
   output  [11:0]  up_ch_addr_0,
   output          up_ch_wr_0,
@@ -82,7 +79,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_0,
   input           up_ch_ready_0,
 
-  output  [ 7:0]  up_es_sel_1,
   output          up_es_enb_1,
   output  [11:0]  up_es_addr_1,
   output          up_es_wr_1,
@@ -98,7 +94,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_1,
   output  [ 1:0]  up_ch_sys_clk_sel_1,
   output  [ 2:0]  up_ch_out_clk_sel_1,
-  output  [ 7:0]  up_ch_sel_1,
   output          up_ch_enb_1,
   output  [11:0]  up_ch_addr_1,
   output          up_ch_wr_1,
@@ -106,7 +101,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_1,
   input           up_ch_ready_1,
 
-  output  [ 7:0]  up_es_sel_2,
   output          up_es_enb_2,
   output  [11:0]  up_es_addr_2,
   output          up_es_wr_2,
@@ -122,7 +116,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_2,
   output  [ 1:0]  up_ch_sys_clk_sel_2,
   output  [ 2:0]  up_ch_out_clk_sel_2,
-  output  [ 7:0]  up_ch_sel_2,
   output          up_ch_enb_2,
   output  [11:0]  up_ch_addr_2,
   output          up_ch_wr_2,
@@ -130,7 +123,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_2,
   input           up_ch_ready_2,
 
-  output  [ 7:0]  up_es_sel_3,
   output          up_es_enb_3,
   output  [11:0]  up_es_addr_3,
   output          up_es_wr_3,
@@ -146,7 +138,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_3,
   output  [ 1:0]  up_ch_sys_clk_sel_3,
   output  [ 2:0]  up_ch_out_clk_sel_3,
-  output  [ 7:0]  up_ch_sel_3,
   output          up_ch_enb_3,
   output  [11:0]  up_ch_addr_3,
   output          up_ch_wr_3,
@@ -154,7 +145,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_3,
   input           up_ch_ready_3,
 
-  output  [ 7:0]  up_cm_sel_4,
   output          up_cm_enb_4,
   output  [11:0]  up_cm_addr_4,
   output          up_cm_wr_4,
@@ -162,7 +152,6 @@ module axi_adxcvr #(
   input   [15:0]  up_cm_rdata_4,
   input           up_cm_ready_4,
 
-  output  [ 7:0]  up_es_sel_4,
   output          up_es_enb_4,
   output  [11:0]  up_es_addr_4,
   output          up_es_wr_4,
@@ -178,7 +167,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_4,
   output  [ 1:0]  up_ch_sys_clk_sel_4,
   output  [ 2:0]  up_ch_out_clk_sel_4,
-  output  [ 7:0]  up_ch_sel_4,
   output          up_ch_enb_4,
   output  [11:0]  up_ch_addr_4,
   output          up_ch_wr_4,
@@ -186,7 +174,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_4,
   input           up_ch_ready_4,
 
-  output  [ 7:0]  up_es_sel_5,
   output          up_es_enb_5,
   output  [11:0]  up_es_addr_5,
   output          up_es_wr_5,
@@ -202,7 +189,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_5,
   output  [ 1:0]  up_ch_sys_clk_sel_5,
   output  [ 2:0]  up_ch_out_clk_sel_5,
-  output  [ 7:0]  up_ch_sel_5,
   output          up_ch_enb_5,
   output  [11:0]  up_ch_addr_5,
   output          up_ch_wr_5,
@@ -210,7 +196,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_5,
   input           up_ch_ready_5,
 
-  output  [ 7:0]  up_es_sel_6,
   output          up_es_enb_6,
   output  [11:0]  up_es_addr_6,
   output          up_es_wr_6,
@@ -226,7 +211,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_6,
   output  [ 1:0]  up_ch_sys_clk_sel_6,
   output  [ 2:0]  up_ch_out_clk_sel_6,
-  output  [ 7:0]  up_ch_sel_6,
   output          up_ch_enb_6,
   output  [11:0]  up_ch_addr_6,
   output          up_ch_wr_6,
@@ -234,7 +218,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_6,
   input           up_ch_ready_6,
 
-  output  [ 7:0]  up_es_sel_7,
   output          up_es_enb_7,
   output  [11:0]  up_es_addr_7,
   output          up_es_wr_7,
@@ -250,7 +233,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_7,
   output  [ 1:0]  up_ch_sys_clk_sel_7,
   output  [ 2:0]  up_ch_out_clk_sel_7,
-  output  [ 7:0]  up_ch_sel_7,
   output          up_ch_enb_7,
   output  [11:0]  up_ch_addr_7,
   output          up_ch_wr_7,
@@ -258,7 +240,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_7,
   input           up_ch_ready_7,
 
-  output  [ 7:0]  up_cm_sel_8,
   output          up_cm_enb_8,
   output  [11:0]  up_cm_addr_8,
   output          up_cm_wr_8,
@@ -266,7 +247,6 @@ module axi_adxcvr #(
   input   [15:0]  up_cm_rdata_8,
   input           up_cm_ready_8,
 
-  output  [ 7:0]  up_es_sel_8,
   output          up_es_enb_8,
   output  [11:0]  up_es_addr_8,
   output          up_es_wr_8,
@@ -282,7 +262,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_8,
   output  [ 1:0]  up_ch_sys_clk_sel_8,
   output  [ 2:0]  up_ch_out_clk_sel_8,
-  output  [ 7:0]  up_ch_sel_8,
   output          up_ch_enb_8,
   output  [11:0]  up_ch_addr_8,
   output          up_ch_wr_8,
@@ -290,7 +269,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_8,
   input           up_ch_ready_8,
 
-  output  [ 7:0]  up_es_sel_9,
   output          up_es_enb_9,
   output  [11:0]  up_es_addr_9,
   output          up_es_wr_9,
@@ -306,7 +284,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_9,
   output  [ 1:0]  up_ch_sys_clk_sel_9,
   output  [ 2:0]  up_ch_out_clk_sel_9,
-  output  [ 7:0]  up_ch_sel_9,
   output          up_ch_enb_9,
   output  [11:0]  up_ch_addr_9,
   output          up_ch_wr_9,
@@ -314,7 +291,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_9,
   input           up_ch_ready_9,
 
-  output  [ 7:0]  up_es_sel_10,
   output          up_es_enb_10,
   output  [11:0]  up_es_addr_10,
   output          up_es_wr_10,
@@ -330,7 +306,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_10,
   output  [ 1:0]  up_ch_sys_clk_sel_10,
   output  [ 2:0]  up_ch_out_clk_sel_10,
-  output  [ 7:0]  up_ch_sel_10,
   output          up_ch_enb_10,
   output  [11:0]  up_ch_addr_10,
   output          up_ch_wr_10,
@@ -338,7 +313,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_10,
   input           up_ch_ready_10,
 
-  output  [ 7:0]  up_es_sel_11,
   output          up_es_enb_11,
   output  [11:0]  up_es_addr_11,
   output          up_es_wr_11,
@@ -354,7 +328,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_11,
   output  [ 1:0]  up_ch_sys_clk_sel_11,
   output  [ 2:0]  up_ch_out_clk_sel_11,
-  output  [ 7:0]  up_ch_sel_11,
   output          up_ch_enb_11,
   output  [11:0]  up_ch_addr_11,
   output          up_ch_wr_11,
@@ -362,7 +335,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_11,
   input           up_ch_ready_11,
 
-  output  [ 7:0]  up_cm_sel_12,
   output          up_cm_enb_12,
   output  [11:0]  up_cm_addr_12,
   output          up_cm_wr_12,
@@ -370,7 +342,6 @@ module axi_adxcvr #(
   input   [15:0]  up_cm_rdata_12,
   input           up_cm_ready_12,
 
-  output  [ 7:0]  up_es_sel_12,
   output          up_es_enb_12,
   output  [11:0]  up_es_addr_12,
   output          up_es_wr_12,
@@ -386,7 +357,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_12,
   output  [ 1:0]  up_ch_sys_clk_sel_12,
   output  [ 2:0]  up_ch_out_clk_sel_12,
-  output  [ 7:0]  up_ch_sel_12,
   output          up_ch_enb_12,
   output  [11:0]  up_ch_addr_12,
   output          up_ch_wr_12,
@@ -394,7 +364,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_12,
   input           up_ch_ready_12,
 
-  output  [ 7:0]  up_es_sel_13,
   output          up_es_enb_13,
   output  [11:0]  up_es_addr_13,
   output          up_es_wr_13,
@@ -410,7 +379,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_13,
   output  [ 1:0]  up_ch_sys_clk_sel_13,
   output  [ 2:0]  up_ch_out_clk_sel_13,
-  output  [ 7:0]  up_ch_sel_13,
   output          up_ch_enb_13,
   output  [11:0]  up_ch_addr_13,
   output          up_ch_wr_13,
@@ -418,7 +386,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_13,
   input           up_ch_ready_13,
 
-  output  [ 7:0]  up_es_sel_14,
   output          up_es_enb_14,
   output  [11:0]  up_es_addr_14,
   output          up_es_wr_14,
@@ -434,7 +401,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_14,
   output  [ 1:0]  up_ch_sys_clk_sel_14,
   output  [ 2:0]  up_ch_out_clk_sel_14,
-  output  [ 7:0]  up_ch_sel_14,
   output          up_ch_enb_14,
   output  [11:0]  up_ch_addr_14,
   output          up_ch_wr_14,
@@ -442,7 +408,6 @@ module axi_adxcvr #(
   input   [15:0]  up_ch_rdata_14,
   input           up_ch_ready_14,
 
-  output  [ 7:0]  up_es_sel_15,
   output          up_es_enb_15,
   output  [11:0]  up_es_addr_15,
   output          up_es_wr_15,
@@ -458,7 +423,6 @@ module axi_adxcvr #(
   output  [ 2:0]  up_ch_rate_15,
   output  [ 1:0]  up_ch_sys_clk_sel_15,
   output  [ 2:0]  up_ch_out_clk_sel_15,
-  output  [ 7:0]  up_ch_sel_15,
   output          up_ch_enb_15,
   output  [11:0]  up_ch_addr_15,
   output          up_ch_wr_15,
@@ -666,8 +630,6 @@ module axi_adxcvr #(
   assign up_rstn = s_axi_aresetn;
   assign up_clk = s_axi_aclk;
 
-  assign up_cm_sel_0 = up_cm_sel;
-  assign up_cm_enb_0 = up_cm_enb;
   assign up_cm_addr_0 = up_cm_addr;
   assign up_cm_wr_0 = up_cm_wr;
   assign up_cm_wdata_0 = up_cm_wdata;
@@ -680,6 +642,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_cm_sel),
     .up_enb (up_cm_enb),
+    .up_enb_out (up_cm_enb_0),
     .up_rdata_in (16'd0),
     .up_ready_in (1'd1),
     .up_rdata (up_cm_rdata_0),
@@ -687,8 +650,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_cm_rdata_0_s),
     .up_ready_out (up_cm_ready_0_s));
 
-  assign up_es_sel_0 = up_es_sel;
-  assign up_es_enb_0 = up_es_enb;
   assign up_es_addr_0 = up_es_addr;
   assign up_es_wr_0 = up_es_wr;
   assign up_es_wdata_0 = up_es_wdata;
@@ -701,6 +662,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_0),
     .up_rdata_in (16'd0),
     .up_ready_in (1'd1),
     .up_rdata (up_es_rdata_0),
@@ -728,8 +690,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_0_s),
     .up_rst_done_out (up_ch_rst_done_0_s));
 
-  assign up_ch_sel_0 = up_ch_sel;
-  assign up_ch_enb_0 = up_ch_enb;
   assign up_ch_addr_0 = up_ch_addr;
   assign up_ch_wr_0 = up_ch_wr;
   assign up_ch_wdata_0 = up_ch_wdata;
@@ -742,6 +702,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_0),
     .up_rdata_in (16'd0),
     .up_ready_in (1'd1),
     .up_rdata (up_ch_rdata_0),
@@ -749,8 +710,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_0_s),
     .up_ready_out (up_ch_ready_0_s));
 
-  assign up_es_sel_1 = up_es_sel;
-  assign up_es_enb_1 = up_es_enb;
   assign up_es_addr_1 = up_es_addr;
   assign up_es_wr_1 = up_es_wr;
   assign up_es_wdata_1 = up_es_wdata;
@@ -763,6 +722,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_1),
     .up_rdata_in (up_es_rdata_0_s),
     .up_ready_in (up_es_ready_0_s),
     .up_rdata (up_es_rdata_1),
@@ -790,8 +750,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_1_s),
     .up_rst_done_out (up_ch_rst_done_1_s));
 
-  assign up_ch_sel_1 = up_ch_sel;
-  assign up_ch_enb_1 = up_ch_enb;
   assign up_ch_addr_1 = up_ch_addr;
   assign up_ch_wr_1 = up_ch_wr;
   assign up_ch_wdata_1 = up_ch_wdata;
@@ -804,6 +762,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_1),
     .up_rdata_in (up_ch_rdata_0_s),
     .up_ready_in (up_ch_ready_0_s),
     .up_rdata (up_ch_rdata_1),
@@ -811,8 +770,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_1_s),
     .up_ready_out (up_ch_ready_1_s));
 
-  assign up_es_sel_2 = up_es_sel;
-  assign up_es_enb_2 = up_es_enb;
   assign up_es_addr_2 = up_es_addr;
   assign up_es_wr_2 = up_es_wr;
   assign up_es_wdata_2 = up_es_wdata;
@@ -825,6 +782,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_2),
     .up_rdata_in (up_es_rdata_1_s),
     .up_ready_in (up_es_ready_1_s),
     .up_rdata (up_es_rdata_2),
@@ -852,8 +810,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_2_s),
     .up_rst_done_out (up_ch_rst_done_2_s));
 
-  assign up_ch_sel_2 = up_ch_sel;
-  assign up_ch_enb_2 = up_ch_enb;
   assign up_ch_addr_2 = up_ch_addr;
   assign up_ch_wr_2 = up_ch_wr;
   assign up_ch_wdata_2 = up_ch_wdata;
@@ -866,6 +822,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_2),
     .up_rdata_in (up_ch_rdata_1_s),
     .up_ready_in (up_ch_ready_1_s),
     .up_rdata (up_ch_rdata_2),
@@ -873,8 +830,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_2_s),
     .up_ready_out (up_ch_ready_2_s));
 
-  assign up_es_sel_3 = up_es_sel;
-  assign up_es_enb_3 = up_es_enb;
   assign up_es_addr_3 = up_es_addr;
   assign up_es_wr_3 = up_es_wr;
   assign up_es_wdata_3 = up_es_wdata;
@@ -887,6 +842,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_3),
     .up_rdata_in (up_es_rdata_2_s),
     .up_ready_in (up_es_ready_2_s),
     .up_rdata (up_es_rdata_3),
@@ -914,8 +870,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_3_s),
     .up_rst_done_out (up_ch_rst_done_3_s));
 
-  assign up_ch_sel_3 = up_ch_sel;
-  assign up_ch_enb_3 = up_ch_enb;
   assign up_ch_addr_3 = up_ch_addr;
   assign up_ch_wr_3 = up_ch_wr;
   assign up_ch_wdata_3 = up_ch_wdata;
@@ -928,6 +882,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_3),
     .up_rdata_in (up_ch_rdata_2_s),
     .up_ready_in (up_ch_ready_2_s),
     .up_rdata (up_ch_rdata_3),
@@ -935,8 +890,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_3_s),
     .up_ready_out (up_ch_ready_3_s));
 
-  assign up_cm_sel_4 = up_cm_sel;
-  assign up_cm_enb_4 = up_cm_enb;
   assign up_cm_addr_4 = up_cm_addr;
   assign up_cm_wr_4 = up_cm_wr;
   assign up_cm_wdata_4 = up_cm_wdata;
@@ -949,6 +902,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_cm_sel),
     .up_enb (up_cm_enb),
+    .up_enb_out (up_cm_enb_4),
     .up_rdata_in (up_cm_rdata_0_s),
     .up_ready_in (up_cm_ready_0_s),
     .up_rdata (up_cm_rdata_4),
@@ -956,8 +910,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_cm_rdata_4_s),
     .up_ready_out (up_cm_ready_4_s));
 
-  assign up_es_sel_4 = up_es_sel;
-  assign up_es_enb_4 = up_es_enb;
   assign up_es_addr_4 = up_es_addr;
   assign up_es_wr_4 = up_es_wr;
   assign up_es_wdata_4 = up_es_wdata;
@@ -970,6 +922,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_4),
     .up_rdata_in (up_es_rdata_3_s),
     .up_ready_in (up_es_ready_3_s),
     .up_rdata (up_es_rdata_4),
@@ -997,8 +950,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_4_s),
     .up_rst_done_out (up_ch_rst_done_4_s));
 
-  assign up_ch_sel_4 = up_ch_sel;
-  assign up_ch_enb_4 = up_ch_enb;
   assign up_ch_addr_4 = up_ch_addr;
   assign up_ch_wr_4 = up_ch_wr;
   assign up_ch_wdata_4 = up_ch_wdata;
@@ -1011,6 +962,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_4),
     .up_rdata_in (up_ch_rdata_3_s),
     .up_ready_in (up_ch_ready_3_s),
     .up_rdata (up_ch_rdata_4),
@@ -1018,8 +970,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_4_s),
     .up_ready_out (up_ch_ready_4_s));
 
-  assign up_es_sel_5 = up_es_sel;
-  assign up_es_enb_5 = up_es_enb;
   assign up_es_addr_5 = up_es_addr;
   assign up_es_wr_5 = up_es_wr;
   assign up_es_wdata_5 = up_es_wdata;
@@ -1032,6 +982,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_5),
     .up_rdata_in (up_es_rdata_4_s),
     .up_ready_in (up_es_ready_4_s),
     .up_rdata (up_es_rdata_5),
@@ -1059,8 +1010,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_5_s),
     .up_rst_done_out (up_ch_rst_done_5_s));
 
-  assign up_ch_sel_5 = up_ch_sel;
-  assign up_ch_enb_5 = up_ch_enb;
   assign up_ch_addr_5 = up_ch_addr;
   assign up_ch_wr_5 = up_ch_wr;
   assign up_ch_wdata_5 = up_ch_wdata;
@@ -1073,6 +1022,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_5),
     .up_rdata_in (up_ch_rdata_4_s),
     .up_ready_in (up_ch_ready_4_s),
     .up_rdata (up_ch_rdata_5),
@@ -1080,8 +1030,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_5_s),
     .up_ready_out (up_ch_ready_5_s));
 
-  assign up_es_sel_6 = up_es_sel;
-  assign up_es_enb_6 = up_es_enb;
   assign up_es_addr_6 = up_es_addr;
   assign up_es_wr_6 = up_es_wr;
   assign up_es_wdata_6 = up_es_wdata;
@@ -1094,6 +1042,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_6),
     .up_rdata_in (up_es_rdata_5_s),
     .up_ready_in (up_es_ready_5_s),
     .up_rdata (up_es_rdata_6),
@@ -1121,8 +1070,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_6_s),
     .up_rst_done_out (up_ch_rst_done_6_s));
 
-  assign up_ch_sel_6 = up_ch_sel;
-  assign up_ch_enb_6 = up_ch_enb;
   assign up_ch_addr_6 = up_ch_addr;
   assign up_ch_wr_6 = up_ch_wr;
   assign up_ch_wdata_6 = up_ch_wdata;
@@ -1135,6 +1082,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_6),
     .up_rdata_in (up_ch_rdata_5_s),
     .up_ready_in (up_ch_ready_5_s),
     .up_rdata (up_ch_rdata_6),
@@ -1142,8 +1090,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_6_s),
     .up_ready_out (up_ch_ready_6_s));
 
-  assign up_es_sel_7 = up_es_sel;
-  assign up_es_enb_7 = up_es_enb;
   assign up_es_addr_7 = up_es_addr;
   assign up_es_wr_7 = up_es_wr;
   assign up_es_wdata_7 = up_es_wdata;
@@ -1156,6 +1102,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_7),
     .up_rdata_in (up_es_rdata_6_s),
     .up_ready_in (up_es_ready_6_s),
     .up_rdata (up_es_rdata_7),
@@ -1183,8 +1130,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_7_s),
     .up_rst_done_out (up_ch_rst_done_7_s));
 
-  assign up_ch_sel_7 = up_ch_sel;
-  assign up_ch_enb_7 = up_ch_enb;
   assign up_ch_addr_7 = up_ch_addr;
   assign up_ch_wr_7 = up_ch_wr;
   assign up_ch_wdata_7 = up_ch_wdata;
@@ -1197,6 +1142,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_7),
     .up_rdata_in (up_ch_rdata_6_s),
     .up_ready_in (up_ch_ready_6_s),
     .up_rdata (up_ch_rdata_7),
@@ -1204,8 +1150,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_7_s),
     .up_ready_out (up_ch_ready_7_s));
 
-  assign up_cm_sel_8 = up_cm_sel;
-  assign up_cm_enb_8 = up_cm_enb;
   assign up_cm_addr_8 = up_cm_addr;
   assign up_cm_wr_8 = up_cm_wr;
   assign up_cm_wdata_8 = up_cm_wdata;
@@ -1218,6 +1162,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_cm_sel),
     .up_enb (up_cm_enb),
+    .up_enb_out (up_cm_enb_8),
     .up_rdata_in (up_cm_rdata_4_s),
     .up_ready_in (up_cm_ready_4_s),
     .up_rdata (up_cm_rdata_8),
@@ -1225,8 +1170,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_cm_rdata_8_s),
     .up_ready_out (up_cm_ready_8_s));
 
-  assign up_es_sel_8 = up_es_sel;
-  assign up_es_enb_8 = up_es_enb;
   assign up_es_addr_8 = up_es_addr;
   assign up_es_wr_8 = up_es_wr;
   assign up_es_wdata_8 = up_es_wdata;
@@ -1239,6 +1182,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_8),
     .up_rdata_in (up_es_rdata_7_s),
     .up_ready_in (up_es_ready_7_s),
     .up_rdata (up_es_rdata_8),
@@ -1266,8 +1210,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_8_s),
     .up_rst_done_out (up_ch_rst_done_8_s));
 
-  assign up_ch_sel_8 = up_ch_sel;
-  assign up_ch_enb_8 = up_ch_enb;
   assign up_ch_addr_8 = up_ch_addr;
   assign up_ch_wr_8 = up_ch_wr;
   assign up_ch_wdata_8 = up_ch_wdata;
@@ -1280,6 +1222,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_8),
     .up_rdata_in (up_ch_rdata_7_s),
     .up_ready_in (up_ch_ready_7_s),
     .up_rdata (up_ch_rdata_8),
@@ -1287,8 +1230,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_8_s),
     .up_ready_out (up_ch_ready_8_s));
 
-  assign up_es_sel_9 = up_es_sel;
-  assign up_es_enb_9 = up_es_enb;
   assign up_es_addr_9 = up_es_addr;
   assign up_es_wr_9 = up_es_wr;
   assign up_es_wdata_9 = up_es_wdata;
@@ -1301,6 +1242,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_9),
     .up_rdata_in (up_es_rdata_8_s),
     .up_ready_in (up_es_ready_8_s),
     .up_rdata (up_es_rdata_9),
@@ -1328,8 +1270,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_9_s),
     .up_rst_done_out (up_ch_rst_done_9_s));
 
-  assign up_ch_sel_9 = up_ch_sel;
-  assign up_ch_enb_9 = up_ch_enb;
   assign up_ch_addr_9 = up_ch_addr;
   assign up_ch_wr_9 = up_ch_wr;
   assign up_ch_wdata_9 = up_ch_wdata;
@@ -1342,6 +1282,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_9),
     .up_rdata_in (up_ch_rdata_8_s),
     .up_ready_in (up_ch_ready_8_s),
     .up_rdata (up_ch_rdata_9),
@@ -1349,8 +1290,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_9_s),
     .up_ready_out (up_ch_ready_9_s));
 
-  assign up_es_sel_10 = up_es_sel;
-  assign up_es_enb_10 = up_es_enb;
   assign up_es_addr_10 = up_es_addr;
   assign up_es_wr_10 = up_es_wr;
   assign up_es_wdata_10 = up_es_wdata;
@@ -1363,6 +1302,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_10),
     .up_rdata_in (up_es_rdata_9_s),
     .up_ready_in (up_es_ready_9_s),
     .up_rdata (up_es_rdata_10),
@@ -1390,8 +1330,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_10_s),
     .up_rst_done_out (up_ch_rst_done_10_s));
 
-  assign up_ch_sel_10 = up_ch_sel;
-  assign up_ch_enb_10 = up_ch_enb;
   assign up_ch_addr_10 = up_ch_addr;
   assign up_ch_wr_10 = up_ch_wr;
   assign up_ch_wdata_10 = up_ch_wdata;
@@ -1404,6 +1342,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_10),
     .up_rdata_in (up_ch_rdata_9_s),
     .up_ready_in (up_ch_ready_9_s),
     .up_rdata (up_ch_rdata_10),
@@ -1411,8 +1350,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_10_s),
     .up_ready_out (up_ch_ready_10_s));
 
-  assign up_es_sel_11 = up_es_sel;
-  assign up_es_enb_11 = up_es_enb;
   assign up_es_addr_11 = up_es_addr;
   assign up_es_wr_11 = up_es_wr;
   assign up_es_wdata_11 = up_es_wdata;
@@ -1425,6 +1362,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_11),
     .up_rdata_in (up_es_rdata_10_s),
     .up_ready_in (up_es_ready_10_s),
     .up_rdata (up_es_rdata_11),
@@ -1452,8 +1390,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_11_s),
     .up_rst_done_out (up_ch_rst_done_11_s));
 
-  assign up_ch_sel_11 = up_ch_sel;
-  assign up_ch_enb_11 = up_ch_enb;
   assign up_ch_addr_11 = up_ch_addr;
   assign up_ch_wr_11 = up_ch_wr;
   assign up_ch_wdata_11 = up_ch_wdata;
@@ -1466,6 +1402,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_11),
     .up_rdata_in (up_ch_rdata_10_s),
     .up_ready_in (up_ch_ready_10_s),
     .up_rdata (up_ch_rdata_11),
@@ -1473,8 +1410,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_11_s),
     .up_ready_out (up_ch_ready_11_s));
 
-  assign up_cm_sel_12 = up_cm_sel;
-  assign up_cm_enb_12 = up_cm_enb;
   assign up_cm_addr_12 = up_cm_addr;
   assign up_cm_wr_12 = up_cm_wr;
   assign up_cm_wdata_12 = up_cm_wdata;
@@ -1487,6 +1422,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_cm_sel),
     .up_enb (up_cm_enb),
+    .up_enb_out (up_cm_enb_12),
     .up_rdata_in (up_cm_rdata_8_s),
     .up_ready_in (up_cm_ready_8_s),
     .up_rdata (up_cm_rdata_12),
@@ -1494,8 +1430,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_cm_rdata_12_s),
     .up_ready_out (up_cm_ready_12_s));
 
-  assign up_es_sel_12 = up_es_sel;
-  assign up_es_enb_12 = up_es_enb;
   assign up_es_addr_12 = up_es_addr;
   assign up_es_wr_12 = up_es_wr;
   assign up_es_wdata_12 = up_es_wdata;
@@ -1508,6 +1442,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_12),
     .up_rdata_in (up_es_rdata_11_s),
     .up_ready_in (up_es_ready_11_s),
     .up_rdata (up_es_rdata_12),
@@ -1535,8 +1470,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_12_s),
     .up_rst_done_out (up_ch_rst_done_12_s));
 
-  assign up_ch_sel_12 = up_ch_sel;
-  assign up_ch_enb_12 = up_ch_enb;
   assign up_ch_addr_12 = up_ch_addr;
   assign up_ch_wr_12 = up_ch_wr;
   assign up_ch_wdata_12 = up_ch_wdata;
@@ -1549,6 +1482,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_12),
     .up_rdata_in (up_ch_rdata_11_s),
     .up_ready_in (up_ch_ready_11_s),
     .up_rdata (up_ch_rdata_12),
@@ -1556,8 +1490,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_12_s),
     .up_ready_out (up_ch_ready_12_s));
 
-  assign up_es_sel_13 = up_es_sel;
-  assign up_es_enb_13 = up_es_enb;
   assign up_es_addr_13 = up_es_addr;
   assign up_es_wr_13 = up_es_wr;
   assign up_es_wdata_13 = up_es_wdata;
@@ -1570,6 +1502,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_13),
     .up_rdata_in (up_es_rdata_12_s),
     .up_ready_in (up_es_ready_12_s),
     .up_rdata (up_es_rdata_13),
@@ -1597,8 +1530,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_13_s),
     .up_rst_done_out (up_ch_rst_done_13_s));
 
-  assign up_ch_sel_13 = up_ch_sel;
-  assign up_ch_enb_13 = up_ch_enb;
   assign up_ch_addr_13 = up_ch_addr;
   assign up_ch_wr_13 = up_ch_wr;
   assign up_ch_wdata_13 = up_ch_wdata;
@@ -1611,6 +1542,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_13),
     .up_rdata_in (up_ch_rdata_12_s),
     .up_ready_in (up_ch_ready_12_s),
     .up_rdata (up_ch_rdata_13),
@@ -1618,8 +1550,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_13_s),
     .up_ready_out (up_ch_ready_13_s));
 
-  assign up_es_sel_14 = up_es_sel;
-  assign up_es_enb_14 = up_es_enb;
   assign up_es_addr_14 = up_es_addr;
   assign up_es_wr_14 = up_es_wr;
   assign up_es_wdata_14 = up_es_wdata;
@@ -1632,6 +1562,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_14),
     .up_rdata_in (up_es_rdata_13_s),
     .up_ready_in (up_es_ready_13_s),
     .up_rdata (up_es_rdata_14),
@@ -1659,8 +1590,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_14_s),
     .up_rst_done_out (up_ch_rst_done_14_s));
 
-  assign up_ch_sel_14 = up_ch_sel;
-  assign up_ch_enb_14 = up_ch_enb;
   assign up_ch_addr_14 = up_ch_addr;
   assign up_ch_wr_14 = up_ch_wr;
   assign up_ch_wdata_14 = up_ch_wdata;
@@ -1673,6 +1602,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_14),
     .up_rdata_in (up_ch_rdata_13_s),
     .up_ready_in (up_ch_ready_13_s),
     .up_rdata (up_ch_rdata_14),
@@ -1680,8 +1610,6 @@ module axi_adxcvr #(
     .up_rdata_out (up_ch_rdata_14_s),
     .up_ready_out (up_ch_ready_14_s));
 
-  assign up_es_sel_15 = up_es_sel;
-  assign up_es_enb_15 = up_es_enb;
   assign up_es_addr_15 = up_es_addr;
   assign up_es_wr_15 = up_es_wr;
   assign up_es_wdata_15 = up_es_wdata;
@@ -1694,6 +1622,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_es_sel),
     .up_enb (up_es_enb),
+    .up_enb_out (up_es_enb_15),
     .up_rdata_in (up_es_rdata_14_s),
     .up_ready_in (up_es_ready_14_s),
     .up_rdata (up_es_rdata_15),
@@ -1721,8 +1650,6 @@ module axi_adxcvr #(
     .up_pll_locked_out (up_ch_pll_locked_15_s),
     .up_rst_done_out (up_ch_rst_done_15_s));
 
-  assign up_ch_sel_15 = up_ch_sel;
-  assign up_ch_enb_15 = up_ch_enb;
   assign up_ch_addr_15 = up_ch_addr;
   assign up_ch_wr_15 = up_ch_wr;
   assign up_ch_wdata_15 = up_ch_wdata;
@@ -1735,6 +1662,7 @@ module axi_adxcvr #(
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
     .up_enb (up_ch_enb),
+    .up_enb_out (up_ch_enb_15),
     .up_rdata_in (up_ch_rdata_14_s),
     .up_ready_in (up_ch_ready_14_s),
     .up_rdata (up_ch_rdata_15),

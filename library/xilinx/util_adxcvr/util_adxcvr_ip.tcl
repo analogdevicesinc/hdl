@@ -20,7 +20,6 @@ for {set n 0} {$n < 16} {incr n} {
 
   if {($n%4) == 0} {
   adi_if_infer_bus analog.com:interface:if_xcvr_cm slave up_cm_${n} [list \
-    "sel                 up_cm_sel_${n}         "\
     "enb                 up_cm_enb_${n}         "\
     "addr                up_cm_addr_${n}        "\
     "wr                  up_cm_wr_${n}          "\
@@ -30,7 +29,6 @@ for {set n 0} {$n < 16} {incr n} {
   }
 
   adi_if_infer_bus analog.com:interface:if_xcvr_cm slave up_es_${n} [list \
-    "sel                 up_es_sel_${n}         "\
     "enb                 up_es_enb_${n}         "\
     "addr                up_es_addr_${n}        "\
     "wr                  up_es_wr_${n}          "\
@@ -47,7 +45,6 @@ for {set n 0} {$n < 16} {incr n} {
     "rate                up_rx_rate_${n}        "\
     "sys_clk_sel         up_rx_sys_clk_sel_${n} "\
     "out_clk_sel         up_rx_out_clk_sel_${n} "\
-    "sel                 up_rx_sel_${n}         "\
     "enb                 up_rx_enb_${n}         "\
     "addr                up_rx_addr_${n}        "\
     "wr                  up_rx_wr_${n}          "\
@@ -64,7 +61,6 @@ for {set n 0} {$n < 16} {incr n} {
     "rate                up_tx_rate_${n}        "\
     "sys_clk_sel         up_tx_sys_clk_sel_${n} "\
     "out_clk_sel         up_tx_out_clk_sel_${n} "\
-    "sel                 up_tx_sel_${n}         "\
     "enb                 up_tx_enb_${n}         "\
     "addr                up_tx_addr_${n}        "\
     "wr                  up_tx_wr_${n}          "\

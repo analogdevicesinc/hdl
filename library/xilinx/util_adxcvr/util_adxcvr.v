@@ -94,14 +94,12 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_0,
   input   [31:0]  tx_data_0,
 
-  input   [ 7:0]  up_cm_sel_0,
   input           up_cm_enb_0,
   input   [11:0]  up_cm_addr_0,
   input           up_cm_wr_0,
   input   [15:0]  up_cm_wdata_0,
   output  [15:0]  up_cm_rdata_0,
   output          up_cm_ready_0,
-  input   [ 7:0]  up_es_sel_0,
   input           up_es_enb_0,
   input   [11:0]  up_es_addr_0,
   input           up_es_wr_0,
@@ -116,7 +114,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_0,
   input   [ 1:0]  up_rx_sys_clk_sel_0,
   input   [ 2:0]  up_rx_out_clk_sel_0,
-  input   [ 7:0]  up_rx_sel_0,
   input           up_rx_enb_0,
   input   [11:0]  up_rx_addr_0,
   input           up_rx_wr_0,
@@ -131,7 +128,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_0,
   input   [ 1:0]  up_tx_sys_clk_sel_0,
   input   [ 2:0]  up_tx_out_clk_sel_0,
-  input   [ 7:0]  up_tx_sel_0,
   input           up_tx_enb_0,
   input   [11:0]  up_tx_addr_0,
   input           up_tx_wr_0,
@@ -159,7 +155,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_1,
   input   [31:0]  tx_data_1,
 
-  input   [ 7:0]  up_es_sel_1,
   input           up_es_enb_1,
   input   [11:0]  up_es_addr_1,
   input           up_es_wr_1,
@@ -174,7 +169,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_1,
   input   [ 1:0]  up_rx_sys_clk_sel_1,
   input   [ 2:0]  up_rx_out_clk_sel_1,
-  input   [ 7:0]  up_rx_sel_1,
   input           up_rx_enb_1,
   input   [11:0]  up_rx_addr_1,
   input           up_rx_wr_1,
@@ -189,7 +183,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_1,
   input   [ 1:0]  up_tx_sys_clk_sel_1,
   input   [ 2:0]  up_tx_out_clk_sel_1,
-  input   [ 7:0]  up_tx_sel_1,
   input           up_tx_enb_1,
   input   [11:0]  up_tx_addr_1,
   input           up_tx_wr_1,
@@ -217,7 +210,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_2,
   input   [31:0]  tx_data_2,
 
-  input   [ 7:0]  up_es_sel_2,
   input           up_es_enb_2,
   input   [11:0]  up_es_addr_2,
   input           up_es_wr_2,
@@ -232,7 +224,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_2,
   input   [ 1:0]  up_rx_sys_clk_sel_2,
   input   [ 2:0]  up_rx_out_clk_sel_2,
-  input   [ 7:0]  up_rx_sel_2,
   input           up_rx_enb_2,
   input   [11:0]  up_rx_addr_2,
   input           up_rx_wr_2,
@@ -247,7 +238,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_2,
   input   [ 1:0]  up_tx_sys_clk_sel_2,
   input   [ 2:0]  up_tx_out_clk_sel_2,
-  input   [ 7:0]  up_tx_sel_2,
   input           up_tx_enb_2,
   input   [11:0]  up_tx_addr_2,
   input           up_tx_wr_2,
@@ -275,7 +265,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_3,
   input   [31:0]  tx_data_3,
 
-  input   [ 7:0]  up_es_sel_3,
   input           up_es_enb_3,
   input   [11:0]  up_es_addr_3,
   input           up_es_wr_3,
@@ -290,7 +279,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_3,
   input   [ 1:0]  up_rx_sys_clk_sel_3,
   input   [ 2:0]  up_rx_out_clk_sel_3,
-  input   [ 7:0]  up_rx_sel_3,
   input           up_rx_enb_3,
   input   [11:0]  up_rx_addr_3,
   input           up_rx_wr_3,
@@ -305,7 +293,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_3,
   input   [ 1:0]  up_tx_sys_clk_sel_3,
   input   [ 2:0]  up_tx_out_clk_sel_3,
-  input   [ 7:0]  up_tx_sel_3,
   input           up_tx_enb_3,
   input   [11:0]  up_tx_addr_3,
   input           up_tx_wr_3,
@@ -335,14 +322,12 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_4,
   input   [31:0]  tx_data_4,
 
-  input   [ 7:0]  up_cm_sel_4,
   input           up_cm_enb_4,
   input   [11:0]  up_cm_addr_4,
   input           up_cm_wr_4,
   input   [15:0]  up_cm_wdata_4,
   output  [15:0]  up_cm_rdata_4,
   output          up_cm_ready_4,
-  input   [ 7:0]  up_es_sel_4,
   input           up_es_enb_4,
   input   [11:0]  up_es_addr_4,
   input           up_es_wr_4,
@@ -357,7 +342,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_4,
   input   [ 1:0]  up_rx_sys_clk_sel_4,
   input   [ 2:0]  up_rx_out_clk_sel_4,
-  input   [ 7:0]  up_rx_sel_4,
   input           up_rx_enb_4,
   input   [11:0]  up_rx_addr_4,
   input           up_rx_wr_4,
@@ -372,7 +356,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_4,
   input   [ 1:0]  up_tx_sys_clk_sel_4,
   input   [ 2:0]  up_tx_out_clk_sel_4,
-  input   [ 7:0]  up_tx_sel_4,
   input           up_tx_enb_4,
   input   [11:0]  up_tx_addr_4,
   input           up_tx_wr_4,
@@ -400,7 +383,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_5,
   input   [31:0]  tx_data_5,
 
-  input   [ 7:0]  up_es_sel_5,
   input           up_es_enb_5,
   input   [11:0]  up_es_addr_5,
   input           up_es_wr_5,
@@ -415,7 +397,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_5,
   input   [ 1:0]  up_rx_sys_clk_sel_5,
   input   [ 2:0]  up_rx_out_clk_sel_5,
-  input   [ 7:0]  up_rx_sel_5,
   input           up_rx_enb_5,
   input   [11:0]  up_rx_addr_5,
   input           up_rx_wr_5,
@@ -430,7 +411,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_5,
   input   [ 1:0]  up_tx_sys_clk_sel_5,
   input   [ 2:0]  up_tx_out_clk_sel_5,
-  input   [ 7:0]  up_tx_sel_5,
   input           up_tx_enb_5,
   input   [11:0]  up_tx_addr_5,
   input           up_tx_wr_5,
@@ -458,7 +438,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_6,
   input   [31:0]  tx_data_6,
 
-  input   [ 7:0]  up_es_sel_6,
   input           up_es_enb_6,
   input   [11:0]  up_es_addr_6,
   input           up_es_wr_6,
@@ -473,7 +452,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_6,
   input   [ 1:0]  up_rx_sys_clk_sel_6,
   input   [ 2:0]  up_rx_out_clk_sel_6,
-  input   [ 7:0]  up_rx_sel_6,
   input           up_rx_enb_6,
   input   [11:0]  up_rx_addr_6,
   input           up_rx_wr_6,
@@ -488,7 +466,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_6,
   input   [ 1:0]  up_tx_sys_clk_sel_6,
   input   [ 2:0]  up_tx_out_clk_sel_6,
-  input   [ 7:0]  up_tx_sel_6,
   input           up_tx_enb_6,
   input   [11:0]  up_tx_addr_6,
   input           up_tx_wr_6,
@@ -516,7 +493,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_7,
   input   [31:0]  tx_data_7,
 
-  input   [ 7:0]  up_es_sel_7,
   input           up_es_enb_7,
   input   [11:0]  up_es_addr_7,
   input           up_es_wr_7,
@@ -531,7 +507,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_7,
   input   [ 1:0]  up_rx_sys_clk_sel_7,
   input   [ 2:0]  up_rx_out_clk_sel_7,
-  input   [ 7:0]  up_rx_sel_7,
   input           up_rx_enb_7,
   input   [11:0]  up_rx_addr_7,
   input           up_rx_wr_7,
@@ -546,7 +521,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_7,
   input   [ 1:0]  up_tx_sys_clk_sel_7,
   input   [ 2:0]  up_tx_out_clk_sel_7,
-  input   [ 7:0]  up_tx_sel_7,
   input           up_tx_enb_7,
   input   [11:0]  up_tx_addr_7,
   input           up_tx_wr_7,
@@ -576,14 +550,12 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_8,
   input   [31:0]  tx_data_8,
 
-  input   [ 7:0]  up_cm_sel_8,
   input           up_cm_enb_8,
   input   [11:0]  up_cm_addr_8,
   input           up_cm_wr_8,
   input   [15:0]  up_cm_wdata_8,
   output  [15:0]  up_cm_rdata_8,
   output          up_cm_ready_8,
-  input   [ 7:0]  up_es_sel_8,
   input           up_es_enb_8,
   input   [11:0]  up_es_addr_8,
   input           up_es_wr_8,
@@ -598,7 +570,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_8,
   input   [ 1:0]  up_rx_sys_clk_sel_8,
   input   [ 2:0]  up_rx_out_clk_sel_8,
-  input   [ 7:0]  up_rx_sel_8,
   input           up_rx_enb_8,
   input   [11:0]  up_rx_addr_8,
   input           up_rx_wr_8,
@@ -613,7 +584,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_8,
   input   [ 1:0]  up_tx_sys_clk_sel_8,
   input   [ 2:0]  up_tx_out_clk_sel_8,
-  input   [ 7:0]  up_tx_sel_8,
   input           up_tx_enb_8,
   input   [11:0]  up_tx_addr_8,
   input           up_tx_wr_8,
@@ -641,7 +611,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_9,
   input   [31:0]  tx_data_9,
 
-  input   [ 7:0]  up_es_sel_9,
   input           up_es_enb_9,
   input   [11:0]  up_es_addr_9,
   input           up_es_wr_9,
@@ -656,7 +625,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_9,
   input   [ 1:0]  up_rx_sys_clk_sel_9,
   input   [ 2:0]  up_rx_out_clk_sel_9,
-  input   [ 7:0]  up_rx_sel_9,
   input           up_rx_enb_9,
   input   [11:0]  up_rx_addr_9,
   input           up_rx_wr_9,
@@ -671,7 +639,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_9,
   input   [ 1:0]  up_tx_sys_clk_sel_9,
   input   [ 2:0]  up_tx_out_clk_sel_9,
-  input   [ 7:0]  up_tx_sel_9,
   input           up_tx_enb_9,
   input   [11:0]  up_tx_addr_9,
   input           up_tx_wr_9,
@@ -699,7 +666,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_10,
   input   [31:0]  tx_data_10,
 
-  input   [ 7:0]  up_es_sel_10,
   input           up_es_enb_10,
   input   [11:0]  up_es_addr_10,
   input           up_es_wr_10,
@@ -714,7 +680,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_10,
   input   [ 1:0]  up_rx_sys_clk_sel_10,
   input   [ 2:0]  up_rx_out_clk_sel_10,
-  input   [ 7:0]  up_rx_sel_10,
   input           up_rx_enb_10,
   input   [11:0]  up_rx_addr_10,
   input           up_rx_wr_10,
@@ -729,7 +694,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_10,
   input   [ 1:0]  up_tx_sys_clk_sel_10,
   input   [ 2:0]  up_tx_out_clk_sel_10,
-  input   [ 7:0]  up_tx_sel_10,
   input           up_tx_enb_10,
   input   [11:0]  up_tx_addr_10,
   input           up_tx_wr_10,
@@ -757,7 +721,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_11,
   input   [31:0]  tx_data_11,
 
-  input   [ 7:0]  up_es_sel_11,
   input           up_es_enb_11,
   input   [11:0]  up_es_addr_11,
   input           up_es_wr_11,
@@ -772,7 +735,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_11,
   input   [ 1:0]  up_rx_sys_clk_sel_11,
   input   [ 2:0]  up_rx_out_clk_sel_11,
-  input   [ 7:0]  up_rx_sel_11,
   input           up_rx_enb_11,
   input   [11:0]  up_rx_addr_11,
   input           up_rx_wr_11,
@@ -787,7 +749,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_11,
   input   [ 1:0]  up_tx_sys_clk_sel_11,
   input   [ 2:0]  up_tx_out_clk_sel_11,
-  input   [ 7:0]  up_tx_sel_11,
   input           up_tx_enb_11,
   input   [11:0]  up_tx_addr_11,
   input           up_tx_wr_11,
@@ -817,14 +778,12 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_12,
   input   [31:0]  tx_data_12,
 
-  input   [ 7:0]  up_cm_sel_12,
   input           up_cm_enb_12,
   input   [11:0]  up_cm_addr_12,
   input           up_cm_wr_12,
   input   [15:0]  up_cm_wdata_12,
   output  [15:0]  up_cm_rdata_12,
   output          up_cm_ready_12,
-  input   [ 7:0]  up_es_sel_12,
   input           up_es_enb_12,
   input   [11:0]  up_es_addr_12,
   input           up_es_wr_12,
@@ -839,7 +798,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_12,
   input   [ 1:0]  up_rx_sys_clk_sel_12,
   input   [ 2:0]  up_rx_out_clk_sel_12,
-  input   [ 7:0]  up_rx_sel_12,
   input           up_rx_enb_12,
   input   [11:0]  up_rx_addr_12,
   input           up_rx_wr_12,
@@ -854,7 +812,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_12,
   input   [ 1:0]  up_tx_sys_clk_sel_12,
   input   [ 2:0]  up_tx_out_clk_sel_12,
-  input   [ 7:0]  up_tx_sel_12,
   input           up_tx_enb_12,
   input   [11:0]  up_tx_addr_12,
   input           up_tx_wr_12,
@@ -882,7 +839,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_13,
   input   [31:0]  tx_data_13,
 
-  input   [ 7:0]  up_es_sel_13,
   input           up_es_enb_13,
   input   [11:0]  up_es_addr_13,
   input           up_es_wr_13,
@@ -897,7 +853,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_13,
   input   [ 1:0]  up_rx_sys_clk_sel_13,
   input   [ 2:0]  up_rx_out_clk_sel_13,
-  input   [ 7:0]  up_rx_sel_13,
   input           up_rx_enb_13,
   input   [11:0]  up_rx_addr_13,
   input           up_rx_wr_13,
@@ -912,7 +867,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_13,
   input   [ 1:0]  up_tx_sys_clk_sel_13,
   input   [ 2:0]  up_tx_out_clk_sel_13,
-  input   [ 7:0]  up_tx_sel_13,
   input           up_tx_enb_13,
   input   [11:0]  up_tx_addr_13,
   input           up_tx_wr_13,
@@ -940,7 +894,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_14,
   input   [31:0]  tx_data_14,
 
-  input   [ 7:0]  up_es_sel_14,
   input           up_es_enb_14,
   input   [11:0]  up_es_addr_14,
   input           up_es_wr_14,
@@ -955,7 +908,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_14,
   input   [ 1:0]  up_rx_sys_clk_sel_14,
   input   [ 2:0]  up_rx_out_clk_sel_14,
-  input   [ 7:0]  up_rx_sel_14,
   input           up_rx_enb_14,
   input   [11:0]  up_rx_addr_14,
   input           up_rx_wr_14,
@@ -970,7 +922,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_14,
   input   [ 1:0]  up_tx_sys_clk_sel_14,
   input   [ 2:0]  up_tx_out_clk_sel_14,
-  input   [ 7:0]  up_tx_sel_14,
   input           up_tx_enb_14,
   input   [11:0]  up_tx_addr_14,
   input           up_tx_wr_14,
@@ -998,7 +949,6 @@ module util_adxcvr #(
   input   [ 3:0]  tx_charisk_15,
   input   [31:0]  tx_data_15,
 
-  input   [ 7:0]  up_es_sel_15,
   input           up_es_enb_15,
   input   [11:0]  up_es_addr_15,
   input           up_es_wr_15,
@@ -1013,7 +963,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_rx_rate_15,
   input   [ 1:0]  up_rx_sys_clk_sel_15,
   input   [ 2:0]  up_rx_out_clk_sel_15,
-  input   [ 7:0]  up_rx_sel_15,
   input           up_rx_enb_15,
   input   [11:0]  up_rx_addr_15,
   input           up_rx_wr_15,
@@ -1028,7 +977,6 @@ module util_adxcvr #(
   input   [ 2:0]  up_tx_rate_15,
   input   [ 1:0]  up_tx_sys_clk_sel_15,
   input   [ 2:0]  up_tx_out_clk_sel_15,
-  input   [ 7:0]  up_tx_sel_15,
   input           up_tx_enb_15,
   input   [11:0]  up_tx_addr_15,
   input           up_tx_wr_15,
@@ -1061,7 +1009,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 1) begin
   util_adxcvr_xcm #(
-    .XCVR_ID (0),
     .XCVR_TYPE (XCVR_TYPE),
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
     .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
@@ -1075,7 +1022,6 @@ module util_adxcvr #(
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_qpll_rst (up_qpll_rst_0),
-    .up_cm_sel (up_cm_sel_0),
     .up_cm_enb (up_cm_enb_0),
     .up_cm_addr (up_cm_addr_0),
     .up_cm_wr (up_cm_wr_0),
@@ -1094,7 +1040,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 1) begin
   util_adxcvr_xch #(
-    .XCVR_ID (0),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -1128,7 +1073,6 @@ module util_adxcvr #(
     .tx_data (tx_data_0),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_0),
     .up_es_enb (up_es_enb_0),
     .up_es_addr (up_es_addr_0),
     .up_es_wr (up_es_wr_0),
@@ -1143,7 +1087,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_0),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_0),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_0),
-    .up_rx_sel (up_rx_sel_0),
     .up_rx_enb (up_rx_enb_0),
     .up_rx_addr (up_rx_addr_0),
     .up_rx_wr (up_rx_wr_0),
@@ -1158,7 +1101,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_0),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_0),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_0),
-    .up_tx_sel (up_tx_sel_0),
     .up_tx_enb (up_tx_enb_0),
     .up_tx_addr (up_tx_addr_0),
     .up_tx_wr (up_tx_wr_0),
@@ -1191,7 +1133,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 2) begin
   util_adxcvr_xch #(
-    .XCVR_ID (1),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -1225,7 +1166,6 @@ module util_adxcvr #(
     .tx_data (tx_data_1),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_1),
     .up_es_enb (up_es_enb_1),
     .up_es_addr (up_es_addr_1),
     .up_es_wr (up_es_wr_1),
@@ -1240,7 +1180,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_1),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_1),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_1),
-    .up_rx_sel (up_rx_sel_1),
     .up_rx_enb (up_rx_enb_1),
     .up_rx_addr (up_rx_addr_1),
     .up_rx_wr (up_rx_wr_1),
@@ -1255,7 +1194,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_1),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_1),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_1),
-    .up_tx_sel (up_tx_sel_1),
     .up_tx_enb (up_tx_enb_1),
     .up_tx_addr (up_tx_addr_1),
     .up_tx_wr (up_tx_wr_1),
@@ -1288,7 +1226,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 3) begin
   util_adxcvr_xch #(
-    .XCVR_ID (2),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -1322,7 +1259,6 @@ module util_adxcvr #(
     .tx_data (tx_data_2),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_2),
     .up_es_enb (up_es_enb_2),
     .up_es_addr (up_es_addr_2),
     .up_es_wr (up_es_wr_2),
@@ -1337,7 +1273,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_2),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_2),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_2),
-    .up_rx_sel (up_rx_sel_2),
     .up_rx_enb (up_rx_enb_2),
     .up_rx_addr (up_rx_addr_2),
     .up_rx_wr (up_rx_wr_2),
@@ -1352,7 +1287,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_2),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_2),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_2),
-    .up_tx_sel (up_tx_sel_2),
     .up_tx_enb (up_tx_enb_2),
     .up_tx_addr (up_tx_addr_2),
     .up_tx_wr (up_tx_wr_2),
@@ -1385,7 +1319,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 4) begin
   util_adxcvr_xch #(
-    .XCVR_ID (3),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -1419,7 +1352,6 @@ module util_adxcvr #(
     .tx_data (tx_data_3),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_3),
     .up_es_enb (up_es_enb_3),
     .up_es_addr (up_es_addr_3),
     .up_es_wr (up_es_wr_3),
@@ -1434,7 +1366,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_3),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_3),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_3),
-    .up_rx_sel (up_rx_sel_3),
     .up_rx_enb (up_rx_enb_3),
     .up_rx_addr (up_rx_addr_3),
     .up_rx_wr (up_rx_wr_3),
@@ -1449,7 +1380,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_3),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_3),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_3),
-    .up_tx_sel (up_tx_sel_3),
     .up_tx_enb (up_tx_enb_3),
     .up_tx_addr (up_tx_addr_3),
     .up_tx_wr (up_tx_wr_3),
@@ -1481,7 +1411,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 5) begin
   util_adxcvr_xcm #(
-    .XCVR_ID (4),
     .XCVR_TYPE (XCVR_TYPE),
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
     .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
@@ -1495,7 +1424,6 @@ module util_adxcvr #(
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_qpll_rst (up_qpll_rst_4),
-    .up_cm_sel (up_cm_sel_4),
     .up_cm_enb (up_cm_enb_4),
     .up_cm_addr (up_cm_addr_4),
     .up_cm_wr (up_cm_wr_4),
@@ -1514,7 +1442,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 5) begin
   util_adxcvr_xch #(
-    .XCVR_ID (4),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -1548,7 +1475,6 @@ module util_adxcvr #(
     .tx_data (tx_data_4),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_4),
     .up_es_enb (up_es_enb_4),
     .up_es_addr (up_es_addr_4),
     .up_es_wr (up_es_wr_4),
@@ -1563,7 +1489,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_4),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_4),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_4),
-    .up_rx_sel (up_rx_sel_4),
     .up_rx_enb (up_rx_enb_4),
     .up_rx_addr (up_rx_addr_4),
     .up_rx_wr (up_rx_wr_4),
@@ -1578,7 +1503,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_4),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_4),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_4),
-    .up_tx_sel (up_tx_sel_4),
     .up_tx_enb (up_tx_enb_4),
     .up_tx_addr (up_tx_addr_4),
     .up_tx_wr (up_tx_wr_4),
@@ -1611,7 +1535,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 6) begin
   util_adxcvr_xch #(
-    .XCVR_ID (5),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -1645,7 +1568,6 @@ module util_adxcvr #(
     .tx_data (tx_data_5),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_5),
     .up_es_enb (up_es_enb_5),
     .up_es_addr (up_es_addr_5),
     .up_es_wr (up_es_wr_5),
@@ -1660,7 +1582,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_5),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_5),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_5),
-    .up_rx_sel (up_rx_sel_5),
     .up_rx_enb (up_rx_enb_5),
     .up_rx_addr (up_rx_addr_5),
     .up_rx_wr (up_rx_wr_5),
@@ -1675,7 +1596,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_5),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_5),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_5),
-    .up_tx_sel (up_tx_sel_5),
     .up_tx_enb (up_tx_enb_5),
     .up_tx_addr (up_tx_addr_5),
     .up_tx_wr (up_tx_wr_5),
@@ -1708,7 +1628,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 7) begin
   util_adxcvr_xch #(
-    .XCVR_ID (6),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -1742,7 +1661,6 @@ module util_adxcvr #(
     .tx_data (tx_data_6),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_6),
     .up_es_enb (up_es_enb_6),
     .up_es_addr (up_es_addr_6),
     .up_es_wr (up_es_wr_6),
@@ -1757,7 +1675,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_6),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_6),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_6),
-    .up_rx_sel (up_rx_sel_6),
     .up_rx_enb (up_rx_enb_6),
     .up_rx_addr (up_rx_addr_6),
     .up_rx_wr (up_rx_wr_6),
@@ -1772,7 +1689,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_6),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_6),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_6),
-    .up_tx_sel (up_tx_sel_6),
     .up_tx_enb (up_tx_enb_6),
     .up_tx_addr (up_tx_addr_6),
     .up_tx_wr (up_tx_wr_6),
@@ -1805,7 +1721,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 8) begin
   util_adxcvr_xch #(
-    .XCVR_ID (7),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -1839,7 +1754,6 @@ module util_adxcvr #(
     .tx_data (tx_data_7),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_7),
     .up_es_enb (up_es_enb_7),
     .up_es_addr (up_es_addr_7),
     .up_es_wr (up_es_wr_7),
@@ -1854,7 +1768,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_7),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_7),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_7),
-    .up_rx_sel (up_rx_sel_7),
     .up_rx_enb (up_rx_enb_7),
     .up_rx_addr (up_rx_addr_7),
     .up_rx_wr (up_rx_wr_7),
@@ -1869,7 +1782,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_7),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_7),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_7),
-    .up_tx_sel (up_tx_sel_7),
     .up_tx_enb (up_tx_enb_7),
     .up_tx_addr (up_tx_addr_7),
     .up_tx_wr (up_tx_wr_7),
@@ -1901,7 +1813,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 9) begin
   util_adxcvr_xcm #(
-    .XCVR_ID (8),
     .XCVR_TYPE (XCVR_TYPE),
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
     .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
@@ -1915,7 +1826,6 @@ module util_adxcvr #(
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_qpll_rst (up_qpll_rst_8),
-    .up_cm_sel (up_cm_sel_8),
     .up_cm_enb (up_cm_enb_8),
     .up_cm_addr (up_cm_addr_8),
     .up_cm_wr (up_cm_wr_8),
@@ -1934,7 +1844,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 9) begin
   util_adxcvr_xch #(
-    .XCVR_ID (8),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -1968,104 +1877,6 @@ module util_adxcvr #(
     .tx_data (tx_data_8),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_8),
-    .up_es_enb (up_es_enb_8),
-    .up_es_addr (up_es_addr_8),
-    .up_es_wr (up_es_wr_8),
-    .up_es_wdata (up_es_wdata_8),
-    .up_es_rdata (up_es_rdata_8),
-    .up_es_ready (up_es_ready_8),
-    .up_rx_pll_locked (up_rx_pll_locked_8),
-    .up_rx_rst (up_rx_rst_8),
-    .up_rx_user_ready (up_rx_user_ready_8),
-    .up_rx_rst_done (up_rx_rst_done_8),
-    .up_rx_lpm_dfe_n (up_rx_lpm_dfe_n_8),
-    .up_rx_rate (up_rx_rate_8),
-    .up_rx_sys_clk_sel (up_rx_sys_clk_sel_8),
-    .up_rx_out_clk_sel (up_rx_out_clk_sel_8),
-    .up_rx_sel (up_rx_sel_8),
-    .up_rx_enb (up_rx_enb_8),
-    .up_rx_addr (up_rx_addr_8),
-    .up_rx_wr (up_rx_wr_8),
-    .up_rx_wdata (up_rx_wdata_8),
-    .up_rx_rdata (up_rx_rdata_8),
-    .up_rx_ready (up_rx_ready_8),
-    .up_tx_pll_locked (up_tx_pll_locked_8),
-    .up_tx_rst (up_tx_rst_8),
-    .up_tx_user_ready (up_tx_user_ready_8),
-    .up_tx_rst_done (up_tx_rst_done_8),
-    .up_tx_lpm_dfe_n (up_tx_lpm_dfe_n_8),
-    .up_tx_rate (up_tx_rate_8),
-    .up_tx_sys_clk_sel (up_tx_sys_clk_sel_8),
-    .up_tx_out_clk_sel (up_tx_out_clk_sel_8),
-    .up_tx_sel (up_tx_sel_8),
-    .up_tx_enb (up_tx_enb_8),
-    .up_tx_addr (up_tx_addr_8),
-    .up_tx_wr (up_tx_wr_8),
-    .up_tx_wdata (up_tx_wdata_8),
-    .up_tx_rdata (up_tx_rdata_8),
-    .up_tx_ready (up_tx_ready_8));
-  end else begin
-  assign rx_out_clk_8 = 1'd0;
-  assign rx_charisk_8 = 4'd0;
-  assign rx_disperr_8 = 4'd0;
-  assign rx_notintable_8 = 4'd0;
-  assign rx_data_8 = 32'd0;
-  assign tx_8_p = 1'd0;
-  assign tx_8_n = 1'd0;
-  assign tx_out_clk_8 = 1'd0;
-  assign up_es_rdata_8 = 16'd0;
-  assign up_es_ready_8 = 1'd0;
-  assign up_rx_pll_locked_8 = 1'd0;
-  assign up_rx_rst_done_8 = 1'd0;
-  assign up_rx_rdata_8 = 16'd0;
-  assign up_rx_ready_8 = 1'd0;
-  assign up_tx_pll_locked_8 = 1'd0;
-  assign up_tx_rst_done_8 = 1'd0;
-  assign up_tx_rdata_8 = 16'd0;
-  assign up_tx_ready_8 = 1'd0;
-  end
-  endgenerate
-
-
-  generate
-  if (NUM_OF_LANES >= 10) begin
-  util_adxcvr_xch #(
-    .XCVR_ID (9),
-    .XCVR_TYPE (XCVR_TYPE),
-    .CPLL_FBDIV (CPLL_FBDIV),
-    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
-    .TX_OUT_DIV (TX_OUT_DIV),
-    .TX_CLK25_DIV (TX_CLK25_DIV),
-    .RX_OUT_DIV (RX_OUT_DIV),
-    .RX_CLK25_DIV (RX_CLK25_DIV),
-    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
-    .RX_PMA_CFG (RX_PMA_CFG),
-    .RX_CDR_CFG (RX_CDR_CFG))
-  i_xch_9 (
-    .qpll2ch_clk (qpll2ch_clk_8),
-    .qpll2ch_ref_clk (qpll2ch_ref_clk_8),
-    .qpll2ch_locked (qpll2ch_locked_8),
-    .cpll_ref_clk (cpll_ref_clk_9),
-    .up_cpll_rst (up_cpll_rst_9),
-    .rx_p (rx_9_p),
-    .rx_n (rx_9_n),
-    .rx_out_clk (rx_out_clk_9),
-    .rx_clk (rx_clk_9),
-    .rx_charisk (rx_charisk_9),
-    .rx_disperr (rx_disperr_9),
-    .rx_notintable (rx_notintable_9),
-    .rx_data (rx_data_9),
-    .rx_calign (rx_calign_9),
-    .tx_p (tx_9_p),
-    .tx_n (tx_9_n),
-    .tx_out_clk (tx_out_clk_9),
-    .tx_clk (tx_clk_9),
-    .tx_charisk (tx_charisk_9),
-    .tx_data (tx_data_9),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_es_sel (up_es_sel_9),
     .up_es_enb (up_es_enb_9),
     .up_es_addr (up_es_addr_9),
     .up_es_wr (up_es_wr_9),
@@ -2080,7 +1891,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_9),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_9),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_9),
-    .up_rx_sel (up_rx_sel_9),
     .up_rx_enb (up_rx_enb_9),
     .up_rx_addr (up_rx_addr_9),
     .up_rx_wr (up_rx_wr_9),
@@ -2095,7 +1905,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_9),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_9),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_9),
-    .up_tx_sel (up_tx_sel_9),
     .up_tx_enb (up_tx_enb_9),
     .up_tx_addr (up_tx_addr_9),
     .up_tx_wr (up_tx_wr_9),
@@ -2128,7 +1937,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 11) begin
   util_adxcvr_xch #(
-    .XCVR_ID (10),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -2162,7 +1970,6 @@ module util_adxcvr #(
     .tx_data (tx_data_10),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_10),
     .up_es_enb (up_es_enb_10),
     .up_es_addr (up_es_addr_10),
     .up_es_wr (up_es_wr_10),
@@ -2177,7 +1984,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_10),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_10),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_10),
-    .up_rx_sel (up_rx_sel_10),
     .up_rx_enb (up_rx_enb_10),
     .up_rx_addr (up_rx_addr_10),
     .up_rx_wr (up_rx_wr_10),
@@ -2192,7 +1998,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_10),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_10),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_10),
-    .up_tx_sel (up_tx_sel_10),
     .up_tx_enb (up_tx_enb_10),
     .up_tx_addr (up_tx_addr_10),
     .up_tx_wr (up_tx_wr_10),
@@ -2225,7 +2030,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 12) begin
   util_adxcvr_xch #(
-    .XCVR_ID (11),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -2259,7 +2063,6 @@ module util_adxcvr #(
     .tx_data (tx_data_11),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_11),
     .up_es_enb (up_es_enb_11),
     .up_es_addr (up_es_addr_11),
     .up_es_wr (up_es_wr_11),
@@ -2274,7 +2077,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_11),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_11),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_11),
-    .up_rx_sel (up_rx_sel_11),
     .up_rx_enb (up_rx_enb_11),
     .up_rx_addr (up_rx_addr_11),
     .up_rx_wr (up_rx_wr_11),
@@ -2289,7 +2091,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_11),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_11),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_11),
-    .up_tx_sel (up_tx_sel_11),
     .up_tx_enb (up_tx_enb_11),
     .up_tx_addr (up_tx_addr_11),
     .up_tx_wr (up_tx_wr_11),
@@ -2321,7 +2122,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 13) begin
   util_adxcvr_xcm #(
-    .XCVR_ID (12),
     .XCVR_TYPE (XCVR_TYPE),
     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
     .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
@@ -2335,7 +2135,6 @@ module util_adxcvr #(
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_qpll_rst (up_qpll_rst_12),
-    .up_cm_sel (up_cm_sel_12),
     .up_cm_enb (up_cm_enb_12),
     .up_cm_addr (up_cm_addr_12),
     .up_cm_wr (up_cm_wr_12),
@@ -2354,7 +2153,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 13) begin
   util_adxcvr_xch #(
-    .XCVR_ID (12),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -2388,7 +2186,6 @@ module util_adxcvr #(
     .tx_data (tx_data_12),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_12),
     .up_es_enb (up_es_enb_12),
     .up_es_addr (up_es_addr_12),
     .up_es_wr (up_es_wr_12),
@@ -2403,7 +2200,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_12),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_12),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_12),
-    .up_rx_sel (up_rx_sel_12),
     .up_rx_enb (up_rx_enb_12),
     .up_rx_addr (up_rx_addr_12),
     .up_rx_wr (up_rx_wr_12),
@@ -2418,7 +2214,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_12),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_12),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_12),
-    .up_tx_sel (up_tx_sel_12),
     .up_tx_enb (up_tx_enb_12),
     .up_tx_addr (up_tx_addr_12),
     .up_tx_wr (up_tx_wr_12),
@@ -2451,7 +2246,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 14) begin
   util_adxcvr_xch #(
-    .XCVR_ID (13),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -2485,7 +2279,6 @@ module util_adxcvr #(
     .tx_data (tx_data_13),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_13),
     .up_es_enb (up_es_enb_13),
     .up_es_addr (up_es_addr_13),
     .up_es_wr (up_es_wr_13),
@@ -2500,7 +2293,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_13),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_13),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_13),
-    .up_rx_sel (up_rx_sel_13),
     .up_rx_enb (up_rx_enb_13),
     .up_rx_addr (up_rx_addr_13),
     .up_rx_wr (up_rx_wr_13),
@@ -2515,7 +2307,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_13),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_13),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_13),
-    .up_tx_sel (up_tx_sel_13),
     .up_tx_enb (up_tx_enb_13),
     .up_tx_addr (up_tx_addr_13),
     .up_tx_wr (up_tx_wr_13),
@@ -2548,7 +2339,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 15) begin
   util_adxcvr_xch #(
-    .XCVR_ID (14),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -2582,7 +2372,6 @@ module util_adxcvr #(
     .tx_data (tx_data_14),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_14),
     .up_es_enb (up_es_enb_14),
     .up_es_addr (up_es_addr_14),
     .up_es_wr (up_es_wr_14),
@@ -2597,7 +2386,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_14),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_14),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_14),
-    .up_rx_sel (up_rx_sel_14),
     .up_rx_enb (up_rx_enb_14),
     .up_rx_addr (up_rx_addr_14),
     .up_rx_wr (up_rx_wr_14),
@@ -2612,7 +2400,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_14),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_14),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_14),
-    .up_tx_sel (up_tx_sel_14),
     .up_tx_enb (up_tx_enb_14),
     .up_tx_addr (up_tx_addr_14),
     .up_tx_wr (up_tx_wr_14),
@@ -2645,7 +2432,6 @@ module util_adxcvr #(
   generate
   if (NUM_OF_LANES >= 16) begin
   util_adxcvr_xch #(
-    .XCVR_ID (15),
     .XCVR_TYPE (XCVR_TYPE),
     .CPLL_FBDIV (CPLL_FBDIV),
     .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
@@ -2679,7 +2465,6 @@ module util_adxcvr #(
     .tx_data (tx_data_15),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (up_es_sel_15),
     .up_es_enb (up_es_enb_15),
     .up_es_addr (up_es_addr_15),
     .up_es_wr (up_es_wr_15),
@@ -2694,7 +2479,6 @@ module util_adxcvr #(
     .up_rx_rate (up_rx_rate_15),
     .up_rx_sys_clk_sel (up_rx_sys_clk_sel_15),
     .up_rx_out_clk_sel (up_rx_out_clk_sel_15),
-    .up_rx_sel (up_rx_sel_15),
     .up_rx_enb (up_rx_enb_15),
     .up_rx_addr (up_rx_addr_15),
     .up_rx_wr (up_rx_wr_15),
@@ -2709,7 +2493,6 @@ module util_adxcvr #(
     .up_tx_rate (up_tx_rate_15),
     .up_tx_sys_clk_sel (up_tx_sys_clk_sel_15),
     .up_tx_out_clk_sel (up_tx_out_clk_sel_15),
-    .up_tx_sel (up_tx_sel_15),
     .up_tx_enb (up_tx_enb_15),
     .up_tx_addr (up_tx_addr_15),
     .up_tx_wr (up_tx_wr_15),

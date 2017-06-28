@@ -39,7 +39,6 @@ module util_adxcvr_xch #(
 
   // parameters
 
-  parameter   integer XCVR_ID = 0,
   parameter   integer XCVR_TYPE = 0,
 
   parameter   integer CPLL_FBDIV = 2,
@@ -89,7 +88,6 @@ module util_adxcvr_xch #(
 
   input           up_rstn,
   input           up_clk,
-  input   [ 7:0]  up_es_sel,
   input           up_es_enb,
   input   [11:0]  up_es_addr,
   input           up_es_wr,
@@ -104,7 +102,6 @@ module util_adxcvr_xch #(
   input   [ 2:0]  up_rx_rate,
   input   [ 1:0]  up_rx_sys_clk_sel,
   input   [ 2:0]  up_rx_out_clk_sel,
-  input   [ 7:0]  up_rx_sel,
   input           up_rx_enb,
   input   [11:0]  up_rx_addr,
   input           up_rx_wr,
@@ -119,7 +116,6 @@ module util_adxcvr_xch #(
   input   [ 2:0]  up_tx_rate,
   input   [ 1:0]  up_tx_sys_clk_sel,
   input   [ 2:0]  up_tx_out_clk_sel,
-  input   [ 7:0]  up_tx_sel,
   input           up_tx_enb,
   input   [11:0]  up_tx_addr,
   input           up_tx_wr,
@@ -151,9 +147,6 @@ module util_adxcvr_xch #(
 
   // internal signals
 
-  wire            up_es_enb_s;
-  wire            up_rx_enb_s;
-  wire            up_tx_enb_s;
   wire    [15:0]  up_rdata_s;
   wire            up_ready_s;
   wire    [ 1:0]  rx_sys_clk_sel_s;
@@ -183,15 +176,6 @@ module util_adxcvr_xch #(
   assign up_rx_ready = up_rx_ready_int;
   assign up_tx_rdata = up_tx_rdata_int;
   assign up_tx_ready = up_tx_ready_int;
-
-  assign up_es_enb_s = ((up_es_sel == XCVR_ID) ||
-    (up_es_sel == 8'hff)) ? up_es_enb : 1'b0;
-
-  assign up_rx_enb_s = ((up_rx_sel == XCVR_ID) ||
-    (up_rx_sel == 8'hff)) ? up_rx_enb : 1'b0;
-
-  assign up_tx_enb_s = ((up_tx_sel == XCVR_ID) ||
-    (up_tx_sel == 8'hff)) ? up_tx_enb : 1'b0;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
@@ -236,19 +220,19 @@ module util_adxcvr_xch #(
         up_addr_int <= 12'd0;
         up_wr_int <= 1'd0;
         up_wdata_int <= 15'd0;
-      end else if (up_es_enb_s == 1'b1) begin
+      end else if (up_es_enb == 1'b1) begin
         up_sel_int <= 3'b100;
         up_enb_int <= 1'b1;
         up_addr_int <= up_es_addr;
         up_wr_int <= up_es_wr;
         up_wdata_int <= up_es_wdata;
-      end else if (up_rx_enb_s == 1'b1) begin
+      end else if (up_rx_enb == 1'b1) begin
         up_sel_int <= 3'b101;
         up_enb_int <= 1'b1;
         up_addr_int <= up_rx_addr;
         up_wr_int <= up_rx_wr;
         up_wdata_int <= up_rx_wdata;
-      end else if (up_tx_enb_s == 1'b1) begin
+      end else if (up_tx_enb == 1'b1) begin
         up_sel_int <= 3'b110;
         up_enb_int <= 1'b1;
         up_addr_int <= up_tx_addr;

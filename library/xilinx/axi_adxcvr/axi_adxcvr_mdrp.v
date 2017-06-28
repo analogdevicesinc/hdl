@@ -42,6 +42,7 @@ module axi_adxcvr_mdrp (
 
   input   [ 7:0]  up_sel,
   input           up_enb,
+  output          up_enb_out,
   input   [15:0]  up_rdata_in,
   input           up_ready_in,
   input   [15:0]  up_rdata,
@@ -74,6 +75,8 @@ module axi_adxcvr_mdrp (
 
   assign up_rdata_out = up_rdata_int;
   assign up_ready_out = up_ready_int;
+
+  assign up_enb_out = (up_sel == 8'hff || up_sel == XCVR_ID) ? up_enb : 1'b0;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin

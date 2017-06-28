@@ -39,7 +39,6 @@ module util_adxcvr_xcm #(
 
   // parameters
 
-  parameter   integer XCVR_ID = 0,
   parameter   integer XCVR_TYPE = 0,
   parameter   integer QPLL_REFCLK_DIV = 1,
   parameter   integer QPLL_FBDIV_RATIO = 1,
@@ -58,7 +57,6 @@ module util_adxcvr_xcm #(
   input           up_rstn,
   input           up_clk,
   input           up_qpll_rst,
-  input   [ 7:0]  up_cm_sel,
   input           up_cm_enb,
   input   [11:0]  up_cm_addr,
   input           up_cm_wr,
@@ -74,6 +72,7 @@ module util_adxcvr_xcm #(
   reg     [15:0]  up_wdata_int = 'd0;
   reg     [15:0]  up_rdata_int = 'd0;
   reg             up_ready_int = 'd0;
+  reg             up_sel_int = 'd0;
 
   // internal signals
 
@@ -93,21 +92,32 @@ module util_adxcvr_xcm #(
       up_wdata_int <= 16'd0;
       up_rdata_int <= 16'd0;
       up_ready_int <= 1'd0;
+      up_sel_int <= 1'b0;
     end else begin
-      if ((up_cm_sel == XCVR_ID) || (up_cm_sel == 8'hff)) begin
+      if (up_cm_enb == 1'b1) begin
         up_enb_int <= up_cm_enb;
         up_addr_int <= up_cm_addr;
         up_wr_int <= up_cm_wr;
         up_wdata_int <= up_cm_wdata;
-        up_rdata_int <= up_rdata_s;
-        up_ready_int <= up_ready_s;
       end else begin
         up_enb_int <= 1'd0;
         up_addr_int <= 12'd0;
         up_wr_int <= 1'd0;
         up_wdata_int <= 16'd0;
-        up_rdata_int <= 16'd0;
-        up_ready_int <= 1'd0;
+      end
+
+      if (up_cm_enb == 1'b1) begin
+        up_sel_int <= 1'b1;
+      end else if (up_ready_s == 1'b1) begin
+        up_sel_int <= 1'b0;
+      end
+
+      if (up_sel_int == 1'b1) begin
+        up_ready_int <= up_ready_s;
+        up_rdata_int <= up_rdata_s;
+      end else begin
+        up_ready_int <= 1'b0;
+        up_rdata_int <= 'h00;
       end
     end
   end
