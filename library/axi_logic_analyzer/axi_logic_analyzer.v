@@ -155,7 +155,7 @@ module axi_logic_analyzer (
       if (io_selection_s[i] == 1'b1) begin
         io_selection[i] <= 1'b1;
       end else begin
-        if(dac_valid == 1'b1 || overwrite_data[i] == 1'b1) begin
+        if(dac_valid == 1'b1 || overwrite_enable[i] == 1'b1) begin
           io_selection[i] <= 1'b0;
         end
       end
