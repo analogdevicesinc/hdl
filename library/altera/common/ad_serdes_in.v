@@ -127,7 +127,7 @@ module __ad_serdes_in__ #(
   generate
   for (i = 0; i < SERDES_FACTOR; i = i + 1) begin: g_samples
     for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_swap
-      assign data_samples_s[i][n] = data_out_s[n][i];
+      assign data_samples_s[i][n] = data_out_s[n][((SERDES_FACTOR-1)-i)];
     end
   end
   endgenerate
