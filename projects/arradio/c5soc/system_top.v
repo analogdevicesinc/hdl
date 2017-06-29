@@ -136,6 +136,13 @@ module system_top (
   output            ad9361_en_agc,
   output            ad9361_sync,
 
+  // iic interface
+
+  inout             scl,
+  inout             sda,
+  output            ga0,
+  output            ga1,
+
   // spi interface
 
   output            spi_csn,
@@ -151,6 +158,11 @@ module system_top (
   wire    [ 31:0]   sys_gpio_i;
   wire    [ 31:0]   sys_gpio_o;
 
+  wire              i2c0_out_data;
+  wire              i2c0_sda;
+  wire              i2c0_out_clk;
+  wire              i2c0_scl_in_clk;
+
   // defaults
 
   assign vga_blank_n = 1'b1;
@@ -164,6 +176,12 @@ module system_top (
   assign ad9361_resetb = sys_gpio_o[4];
   assign ad9361_en_agc = sys_gpio_o[3];
   assign ad9361_sync = sys_gpio_o[2];
+
+  assign ga0 = 1'b0;
+  assign ga1 = 1'b0;
+
+ ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
+ ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
 
   // instantiations
 
@@ -234,6 +252,10 @@ module system_top (
     .sys_hps_hps_io_hps_io_spim1_inst_SS0 (spim1_ss0),
     .sys_hps_hps_io_hps_io_uart0_inst_RX (uart0_rx),
     .sys_hps_hps_io_hps_io_uart0_inst_TX (uart0_tx),
+    .sys_hps_i2c0_out_data(i2c0_out_data),
+    .sys_hps_i2c0_sda(i2c0_sda),
+    .sys_hps_i2c0_clk_clk(i2c0_out_clk),
+    .sys_hps_i2c0_scl_in_clk(i2c0_scl_in_clk),
     .sys_hps_memory_mem_a (ddr3_a),
     .sys_hps_memory_mem_ba (ddr3_ba),
     .sys_hps_memory_mem_ck (ddr3_ck_p),

@@ -40,6 +40,8 @@ set_instance_parameter_value sys_hps {UART0_PinMuxing} {HPS I/O Set 0}
 set_instance_parameter_value sys_hps {UART0_Mode} {No Flow Control}
 set_instance_parameter_value sys_hps {UART1_PinMuxing} {Unused}
 set_instance_parameter_value sys_hps {UART1_Mode} {N/A}
+set_instance_parameter_value sys_hps {I2C0_PinMuxing} {FPGA}
+set_instance_parameter_value sys_hps {I2C0_Mode} {Full}
 set_instance_parameter_value sys_hps {desired_cfg_clk_mhz} {80.0}
 set_instance_parameter_value sys_hps {S2FCLK_USER0CLK_Enable} {1}
 set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_Enable} {0}
@@ -101,6 +103,12 @@ add_connection sys_clk.clk sys_hps.f2h_sdram0_clock
 add_connection sys_clk.clk sys_hps.h2f_axi_clock
 add_connection sys_clk.clk sys_hps.f2h_axi_clock
 add_connection sys_clk.clk sys_hps.h2f_lw_axi_clock
+add_interface sys_hps_i2c0 conduit end
+set_interface_property sys_hps_i2c0 EXPORT_OF sys_hps.i2c0
+add_interface sys_hps_i2c0_clk clock source
+set_interface_property sys_hps_i2c0_clk EXPORT_OF sys_hps.i2c0_clk
+add_interface sys_hps_i2c0_scl_in clock sink
+set_interface_property sys_hps_i2c0_scl_in EXPORT_OF sys_hps.i2c0_scl_in
 
 # cpu/hps handling
 

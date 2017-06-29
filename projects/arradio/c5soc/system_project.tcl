@@ -88,6 +88,18 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_mosi
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_miso
 
+set_location_assignment PIN_F15 -to scl
+set_location_assignment PIN_G13 -to sda
+set_location_assignment PIN_C7  -to ga0
+set_location_assignment PIN_H14 -to ga1
+set_instance_assignment -name IO_STANDARD "2.5 V" -to scl
+set_instance_assignment -name IO_STANDARD "2.5 V" -to sda
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ga0
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ga1
+
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to scl
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to sda
+
 set_instance_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF -to * -entity axi_ad9361
 
 execute_flow -compile
