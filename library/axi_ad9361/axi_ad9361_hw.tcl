@@ -5,9 +5,9 @@ source ../scripts/adi_ip_alt.tcl
 
 ad_ip_create axi_ad9361 {AXI AD9361 Interface} axi_ad9361_elab
 ad_ip_files axi_ad9361 [list\
-  $ad_hdl_dir/library/altera/common/ad_cmos_out_core_c5.v \
-  $ad_hdl_dir/library/altera/common/ad_serdes_in_core_c5.v \
-  $ad_hdl_dir/library/altera/common/ad_serdes_out_core_c5.v \
+  $ad_hdl_dir/library/altera/common/ad_lvds_clk.v \
+  $ad_hdl_dir/library/altera/common/ad_lvds_in.v \
+  $ad_hdl_dir/library/altera/common/ad_lvds_out.v \
   $ad_hdl_dir/library/altera/common/ad_mul.v \
   $ad_hdl_dir/library/altera/common/ad_dcfilter.v \
   $ad_hdl_dir/library/common/ad_rst.v \
@@ -29,8 +29,9 @@ ad_ip_files axi_ad9361 [list\
   $ad_hdl_dir/library/common/up_dac_common.v \
   $ad_hdl_dir/library/common/up_dac_channel.v \
   $ad_hdl_dir/library/common/up_tdd_cntrl.v \
+  altera/axi_ad9361_alt_lvds_tx.v \
+  altera/axi_ad9361_alt_lvds_rx.v \
   altera/axi_ad9361_lvds_if.v \
-  altera/axi_ad9361_cmos_if.v \
   axi_ad9361_rx_pnmon.v \
   axi_ad9361_rx_channel.v \
   axi_ad9361_rx.v \
@@ -40,8 +41,7 @@ ad_ip_files axi_ad9361 [list\
   axi_ad9361_tdd_if.v \
   axi_ad9361.v \
   $ad_hdl_dir/library/common/ad_axi_ip_constr.sdc \
-  axi_ad9361_constr.sdc] \
-  axi_ad9361_fileset
+  axi_ad9361_constr.sdc]
 
 # parameters
 
