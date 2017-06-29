@@ -1877,6 +1877,99 @@ module util_adxcvr #(
     .tx_data (tx_data_8),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
+    .up_es_enb (up_es_enb_8),
+    .up_es_addr (up_es_addr_8),
+    .up_es_wr (up_es_wr_8),
+    .up_es_wdata (up_es_wdata_8),
+    .up_es_rdata (up_es_rdata_8),
+    .up_es_ready (up_es_ready_8),
+    .up_rx_pll_locked (up_rx_pll_locked_8),
+    .up_rx_rst (up_rx_rst_8),
+    .up_rx_user_ready (up_rx_user_ready_8),
+    .up_rx_rst_done (up_rx_rst_done_8),
+    .up_rx_lpm_dfe_n (up_rx_lpm_dfe_n_8),
+    .up_rx_rate (up_rx_rate_8),
+    .up_rx_sys_clk_sel (up_rx_sys_clk_sel_8),
+    .up_rx_out_clk_sel (up_rx_out_clk_sel_8),
+    .up_rx_enb (up_rx_enb_8),
+    .up_rx_addr (up_rx_addr_8),
+    .up_rx_wr (up_rx_wr_8),
+    .up_rx_wdata (up_rx_wdata_8),
+    .up_rx_rdata (up_rx_rdata_8),
+    .up_rx_ready (up_rx_ready_8),
+    .up_tx_pll_locked (up_tx_pll_locked_8),
+    .up_tx_rst (up_tx_rst_8),
+    .up_tx_user_ready (up_tx_user_ready_8),
+    .up_tx_rst_done (up_tx_rst_done_8),
+    .up_tx_lpm_dfe_n (up_tx_lpm_dfe_n_8),
+    .up_tx_rate (up_tx_rate_8),
+    .up_tx_sys_clk_sel (up_tx_sys_clk_sel_8),
+    .up_tx_out_clk_sel (up_tx_out_clk_sel_8),
+    .up_tx_enb (up_tx_enb_8),
+    .up_tx_addr (up_tx_addr_8),
+    .up_tx_wr (up_tx_wr_8),
+    .up_tx_wdata (up_tx_wdata_8),
+    .up_tx_rdata (up_tx_rdata_8),
+    .up_tx_ready (up_tx_ready_8));
+  end else begin
+  assign rx_out_clk_8 = 1'd0;
+  assign rx_charisk_8 = 4'd0;
+  assign rx_disperr_8 = 4'd0;
+  assign rx_notintable_8 = 4'd0;
+  assign rx_data_8 = 32'd0;
+  assign tx_8_p = 1'd0;
+  assign tx_8_n = 1'd0;
+  assign tx_out_clk_8 = 1'd0;
+  assign up_es_rdata_8 = 16'd0;
+  assign up_es_ready_8 = 1'd0;
+  assign up_rx_pll_locked_8 = 1'd0;
+  assign up_rx_rst_done_8 = 1'd0;
+  assign up_rx_rdata_8 = 16'd0;
+  assign up_rx_ready_8 = 1'd0;
+  assign up_tx_pll_locked_8 = 1'd0;
+  assign up_tx_rst_done_8 = 1'd0;
+  assign up_tx_rdata_8 = 16'd0;
+  assign up_tx_ready_8 = 1'd0;
+  end
+  endgenerate
+
+
+  generate
+  if (NUM_OF_LANES >= 10) begin
+  util_adxcvr_xch #(
+    .XCVR_TYPE (XCVR_TYPE),
+    .CPLL_FBDIV (CPLL_FBDIV),
+    .CPLL_FBDIV_4_5 (CPLL_FBDIV_4_5),
+    .TX_OUT_DIV (TX_OUT_DIV),
+    .TX_CLK25_DIV (TX_CLK25_DIV),
+    .RX_OUT_DIV (RX_OUT_DIV),
+    .RX_CLK25_DIV (RX_CLK25_DIV),
+    .RX_DFE_LPM_CFG (RX_DFE_LPM_CFG),
+    .RX_PMA_CFG (RX_PMA_CFG),
+    .RX_CDR_CFG (RX_CDR_CFG))
+  i_xch_9 (
+    .qpll2ch_clk (qpll2ch_clk_8),
+    .qpll2ch_ref_clk (qpll2ch_ref_clk_8),
+    .qpll2ch_locked (qpll2ch_locked_8),
+    .cpll_ref_clk (cpll_ref_clk_9),
+    .up_cpll_rst (up_cpll_rst_9),
+    .rx_p (rx_9_p),
+    .rx_n (rx_9_n),
+    .rx_out_clk (rx_out_clk_9),
+    .rx_clk (rx_clk_9),
+    .rx_charisk (rx_charisk_9),
+    .rx_disperr (rx_disperr_9),
+    .rx_notintable (rx_notintable_9),
+    .rx_data (rx_data_9),
+    .rx_calign (rx_calign_9),
+    .tx_p (tx_9_p),
+    .tx_n (tx_9_n),
+    .tx_out_clk (tx_out_clk_9),
+    .tx_clk (tx_clk_9),
+    .tx_charisk (tx_charisk_9),
+    .tx_data (tx_data_9),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
     .up_es_enb (up_es_enb_9),
     .up_es_addr (up_es_addr_9),
     .up_es_wr (up_es_wr_9),
