@@ -108,7 +108,6 @@ module system_top (
   wire            spi_mosi;
   wire            spi_miso;
   wire            rx_ref_clk;
-  wire    [31:0]  mb_intrs;
   wire            rx_clk;
   wire            rx_sysref;
 
@@ -181,7 +180,7 @@ module system_top (
     .mb_intr_06 (1'b0),
     .mb_intr_07 (1'b0),
     .mb_intr_08 (1'b0),
-    .mb_intr_15 (mb_intrs[15]),
+    .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .mgt_clk_clk_n (mgt_clk_n),
