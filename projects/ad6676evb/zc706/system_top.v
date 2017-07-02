@@ -210,7 +210,6 @@ module system_top (
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
     .ps_intr_11 (1'b0),
-    .ps_intr_12 (1'b0),
     .rx_data_0_n (rx_data_n[0]),
     .rx_data_0_p (rx_data_p[0]),
     .rx_data_1_n (rx_data_n[1]),

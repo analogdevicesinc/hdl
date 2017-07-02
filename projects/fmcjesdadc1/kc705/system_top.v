@@ -179,7 +179,6 @@ module system_top (
     .mb_intr_06 (1'd0),
     .mb_intr_07 (1'd0),
     .mb_intr_08 (1'd0),
-    .mb_intr_14 (1'd0),
     .mb_intr_15 (1'd0),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),

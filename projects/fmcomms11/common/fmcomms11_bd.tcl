@@ -135,6 +135,8 @@ ad_mem_hp2_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
 
 # interrupts
 
+ad_cpu_interrupt ps-10 mb-15 axi_ad9162_jesd/irq
+ad_cpu_interrupt ps-11 mb-14 axi_ad9625_jesd/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9162_dma/irq
 ad_cpu_interrupt ps-13 mb-13 axi_ad9625_dma/irq
 

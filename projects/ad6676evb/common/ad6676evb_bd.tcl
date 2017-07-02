@@ -97,5 +97,6 @@ ad_connect  sys_cpu_resetn axi_ad6676_dma/m_dest_axi_aresetn
 
 # interrupts
 
+ad_cpu_interrupt ps-12 mb-12 axi_ad6676_jesd/irq
 ad_cpu_interrupt ps-13 mb-13 axi_ad6676_dma/irq
 

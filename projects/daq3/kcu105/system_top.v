@@ -240,8 +240,6 @@ module system_top (
     .mb_intr_06 (1'b0),
     .mb_intr_07 (1'b0),
     .mb_intr_08 (1'b0),
-    .mb_intr_14 (1'b0),
-    .mb_intr_15 (1'b0),
     .mdio_mdc (mdio_mdc),
     .mdio_mdio_io (mdio_mdio),
     .phy_clk_clk_n (phy_clk_n),
