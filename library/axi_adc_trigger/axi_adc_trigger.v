@@ -127,6 +127,7 @@ module axi_adc_trigger(
   wire              trigger_out_a;
   wire              trigger_out_b;
   wire              trigger_out_delayed;
+  wire              streaming;
 
   reg               trigger_a_d1; // synchronization flip flop
   reg               trigger_a_d2; // synchronization flip flop
@@ -174,6 +175,8 @@ module axi_adc_trigger(
   reg     [31:0]    trigger_delay_counter;
   reg               triggered;
 
+  reg               streaming_on;
+
   // signal name changes
 
   assign up_clk = s_axi_aclk;
@@ -193,8 +196,8 @@ module axi_adc_trigger(
   assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
   assign limit_b_cmp  = {!limit_b[15],limit_b[14:0]};
 
-  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed, data_a_r} : {trigger_out_delayed, data_a_r};
-  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed, data_b_r} : {trigger_out_delayed, data_b_r};
+  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_a_r} : {trigger_out_delayed |streaming_on, data_a_r};
+  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_b_r} : {trigger_out_delayed |streaming_on, data_b_r};
   assign data_valid_a_trig = data_valid_a_r;
   assign data_valid_b_trig = data_valid_b_r;
 
@@ -214,6 +217,22 @@ module axi_adc_trigger(
             trigger_delay_counter <= trigger_delay_counter - 1;
           end
         end
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (trigger_delay == 0) begin
+      if (streaming == 1'b1 && data_valid_a_r == 1'b1 && trigger_out_mixed == 1'b1) begin
+        streaming_on <= 1'b1;
+      end else if (streaming == 1'b0) begin
+        streaming_on <= 1'b0;
+      end
+    end else begin
+      if (streaming == 1'b1 && data_valid_a_r == 1'b1 && trigger_out_delayed == 1'b1) begin
+        streaming_on <= 1'b1;
+      end else if (streaming == 1'b0) begin
+        streaming_on <= 1'b0;
       end
     end
   end
@@ -411,6 +430,8 @@ module axi_adc_trigger(
   .trigger_out_mix(trigger_out_mix),
   .trigger_delay(trigger_delay),
   .fifo_depth(fifo_depth),
+
+  .streaming(streaming),
 
   // bus interface
 

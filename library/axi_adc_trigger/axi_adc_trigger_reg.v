@@ -62,6 +62,7 @@ module axi_adc_trigger_reg (
   output      [ 2:0]  trigger_out_mix,
   output      [31:0]  fifo_depth,
   output      [31:0]  trigger_delay,
+  output              streaming,
 
  // bus interface
 
@@ -97,6 +98,7 @@ module axi_adc_trigger_reg (
   reg     [31:0]  up_fifo_depth = 32'h0;
   reg     [31:0]  up_trigger_delay = 32'h0;
   reg             up_triggered = 1'h0;
+  reg             up_streaming = 1'h0;
 
   assign low_level  = config_trigger[1:0];
   assign high_level = config_trigger[3:2];
@@ -123,6 +125,7 @@ module axi_adc_trigger_reg (
       up_trigger_l_mix_b <= 'd0;
       up_trigger_out_mix <= 'd0;
       up_triggered <= 1'd0;
+      up_streaming <= 1'd0;
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
@@ -175,6 +178,9 @@ module axi_adc_trigger_reg (
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
         up_trigger_delay <= up_wdata;
       end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
+        up_streaming <= up_wdata[0];
+      end
     end
   end
 
@@ -205,6 +211,7 @@ module axi_adc_trigger_reg (
           5'he: up_rdata <= up_fifo_depth;
           5'hf: up_rdata <= {31'h0,up_triggered};
           5'h10: up_rdata <= up_trigger_delay;
+          5'h11: up_rdata <= {31'h0,up_streaming};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -213,10 +220,11 @@ module axi_adc_trigger_reg (
     end
   end
 
-   up_xfer_cntrl #(.DATA_WIDTH(185)) i_xfer_cntrl (
+   up_xfer_cntrl #(.DATA_WIDTH(186)) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_cntrl ({ up_config_trigger,    // 10
+    .up_data_cntrl ({ up_streaming,         // 1
+                      up_config_trigger,    // 10
                       up_limit_a,           // 16
                       up_function_a,        // 2
                       up_hysteresis_a,      // 32
@@ -232,7 +240,8 @@ module axi_adc_trigger_reg (
     .up_xfer_done (),
     .d_rst (1'b0),
     .d_clk (clk),
-    .d_data_cntrl ({  config_trigger,     // 10
+    .d_data_cntrl ({  streaming,          // 1
+                      config_trigger,     // 10
                       limit_a,            // 16
                       function_a,         // 2
                       hysteresis_a,       // 32
