@@ -97,6 +97,15 @@ module axi_logic_analyzer (
   reg     [31:0]    delay_counter = 'd0;
   reg               triggered = 'd0;
 
+  reg               up_triggered;
+  reg               up_triggered_d1;
+  reg               up_triggered_d2;
+
+  reg               up_triggered_set;
+  reg               up_triggered_reset;
+  reg               up_triggered_reset_d1;
+  reg               up_triggered_reset_d2;
+
   // internal signals
 
   wire              up_clk;
@@ -141,6 +150,23 @@ module axi_logic_analyzer (
 
   assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s : trigger_out_delayed;
   assign trigger_out_delayed = delay_counter == 32'h0 ? 1 : 0;
+
+ always @(posedge clk_out) begin
+    if (sample_valid_la == 1'b1 && trigger_out_s == 1'b1) begin
+      up_triggered_set <= 1'b1;
+    end else if (up_triggered_reset == 1'b1) begin
+      up_triggered_set <= 1'b0;
+    end
+    up_triggered_reset_d1 <= up_triggered;
+    up_triggered_reset_d2 <= up_triggered_reset_d1;
+    up_triggered_reset    <= up_triggered_reset_d2;
+  end
+
+  always @(posedge up_clk) begin
+    up_triggered_d1 <= up_triggered_set;
+    up_triggered_d2 <= up_triggered_d1;
+    up_triggered    <= up_triggered_d2;
+  end
 
   generate
   for (i = 0 ; i < 16; i = i + 1) begin
@@ -282,7 +308,7 @@ module axi_logic_analyzer (
     .input_data (adc_data),
     .od_pp_n (od_pp_n),
 
-    .triggered (trigger_out),
+    .triggered (up_triggered),
 
     // bus interface
 

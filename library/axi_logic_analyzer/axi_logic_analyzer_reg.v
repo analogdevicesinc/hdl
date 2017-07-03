@@ -96,7 +96,6 @@ module axi_logic_analyzer_reg (
   reg             up_triggered = 0;
 
   wire    [15:0]  up_input_data;
-  wire            adc_triggered;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -168,10 +167,10 @@ module axi_logic_analyzer_reg (
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
         up_trigger_delay <= up_wdata;
       end
-      if (adc_triggered == 1'b1) begin
+      if (triggered == 1'b1) begin
         up_triggered <= 1'b1;
       end else if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
-        up_triggered <= up_wdata[0];
+        up_triggered <= up_triggered & ~up_wdata[0];
       end
     end
   end
@@ -253,21 +252,19 @@ module axi_logic_analyzer_reg (
                       divider_counter_pg,     // 32
                       divider_counter_la}));  // 32
 
- up_xfer_status #(.DATA_WIDTH(17)) i_xfer_status (
+ up_xfer_status #(.DATA_WIDTH(16)) i_xfer_status (
 
   // up interface
 
   .up_rstn(up_rstn),
   .up_clk(up_clk),
-  .up_data_status({ up_input_data,
-                    adc_triggered}),
+  .up_data_status(up_input_data),
 
   // device interface
 
   .d_rst(1'd0),
   .d_clk(clk),
-  .d_data_status({  input_data,
-                    triggered}));
+  .d_data_status(input_data));
 
 endmodule
 
