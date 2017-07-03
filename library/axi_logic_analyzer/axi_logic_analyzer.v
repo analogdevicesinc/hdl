@@ -106,6 +106,8 @@ module axi_logic_analyzer (
   reg               up_triggered_reset_d1;
   reg               up_triggered_reset_d2;
 
+  reg               streaming_on;
+
   // internal signals
 
   wire              up_clk;
@@ -141,6 +143,8 @@ module axi_logic_analyzer (
   wire    [31:0]    trigger_delay;
   wire              trigger_out_delayed;
 
+  wire              streaming;
+
   genvar i;
 
   // signal name changes
@@ -148,8 +152,24 @@ module axi_logic_analyzer (
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s : trigger_out_delayed;
+  assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s | streaming_on : trigger_out_delayed | streaming_on;
   assign trigger_out_delayed = delay_counter == 32'h0 ? 1 : 0;
+
+ always @(posedge clk_out) begin
+    if (trigger_delay == 0) begin
+      if (streaming == 1'b1 && sample_valid_la == 1'b1 && trigger_out_s == 1'b1) begin
+        streaming_on <= 1'b1;
+      end else if (streaming == 1'b0) begin
+        streaming_on <= 1'b0;
+      end
+    end else begin
+      if (streaming == 1'b1 && sample_valid_la == 1'b1 && trigger_out_delayed == 1'b1) begin
+        streaming_on <= 1'b1;
+      end else if (streaming == 1'b0) begin
+        streaming_on <= 1'b0;
+      end
+    end
+  end
 
  always @(posedge clk_out) begin
     if (sample_valid_la == 1'b1 && trigger_out_s == 1'b1) begin
@@ -309,6 +329,8 @@ module axi_logic_analyzer (
     .od_pp_n (od_pp_n),
 
     .triggered (up_triggered),
+
+    .streaming(streaming),
 
     // bus interface
 
