@@ -157,6 +157,14 @@ module axi_adc_trigger(
   reg               trigger_b;
 
   reg               trigger_out_mixed;
+  reg               up_triggered;
+  reg               up_triggered_d1;
+  reg               up_triggered_d2;
+
+  reg               up_triggered_set;
+  reg               up_triggered_reset;
+  reg               up_triggered_reset_d1;
+  reg               up_triggered_reset_d2;
 
   reg     [14:0]    data_a_r;
   reg     [14:0]    data_b_r;
@@ -208,6 +216,23 @@ module axi_adc_trigger(
         end
       end
     end
+  end
+
+  always @(posedge clk) begin
+    if (data_valid_a_r == 1'b1 && trigger_out_mixed == 1'b1) begin
+      up_triggered_set <= 1'b1;
+    end else if (up_triggered_reset == 1'b1) begin
+      up_triggered_set <= 1'b0;
+    end
+    up_triggered_reset_d1 <= up_triggered;
+    up_triggered_reset_d2 <= up_triggered_reset_d1;
+    up_triggered_reset    <= up_triggered_reset_d2;
+  end
+
+  always @(posedge up_clk) begin
+    up_triggered_d1 <= up_triggered_set;
+    up_triggered_d2 <= up_triggered_d1;
+    up_triggered    <= up_triggered_d2;
   end
 
   always @(posedge clk) begin
@@ -365,7 +390,7 @@ module axi_adc_trigger(
 
   .io_selection(io_selection),
   .trigger_o(trigger_o),
-  .triggered(trigger_out_mixed),
+  .triggered(up_triggered),
 
   .low_level(low_level),
   .high_level(high_level),

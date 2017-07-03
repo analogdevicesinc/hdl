@@ -79,7 +79,6 @@ module axi_adc_trigger_reg (
   // internal signals
 
   wire    [ 9:0]  config_trigger;
-  wire            adc_triggered;
 
   // internal registers
 
@@ -168,10 +167,10 @@ module axi_adc_trigger_reg (
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'he)) begin
         up_fifo_depth <= up_wdata;
       end
-      if (adc_triggered == 1'b1) begin
+      if (triggered == 1'b1) begin
         up_triggered <= 1'b1;
       end else if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hf)) begin
-        up_triggered <= up_wdata[0];
+        up_triggered <= up_triggered & ~up_wdata[0];
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
         up_trigger_delay <= up_wdata;
@@ -245,20 +244,6 @@ module axi_adc_trigger_reg (
                       trigger_out_mix,    // 3
                       fifo_depth,         // 32
                       trigger_delay}));   // 32
-
-  up_xfer_status #(.DATA_WIDTH(1)) i_xfer_status (
-    
-    // up interface
-
-    .up_rstn(up_rstn),
-    .up_clk(up_clk),
-    .up_data_status(adc_triggered),
-
-    // device interface
-
-    .d_rst(1'd0),
-    .d_clk(clk),
-    .d_data_status(triggered));
 
 endmodule
 
