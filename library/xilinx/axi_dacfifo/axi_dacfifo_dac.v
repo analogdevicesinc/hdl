@@ -186,7 +186,7 @@ module axi_dacfifo_dac #(
       axi_mem_addr_diff <= axi_mem_addr_diff_s[AXI_ADDRESS_WIDTH-1:0];
       if (axi_mem_addr_diff >= AXI_BUF_THRESHOLD_HI) begin
         axi_dready <= 1'b0;
-      end else if (axi_mem_addr_diff <= AXI_BUF_THRESHOLD_LO) begin
+      end else  begin
         axi_dready <= 1'b1;
       end
     end
