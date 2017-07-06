@@ -109,54 +109,20 @@ module axi_dacfifo_dac #(
 
   // internal signals
 
-  wire    [AXI_ADDRESS_WIDTH:0]       axi_mem_addr_diff_s;
-  wire    [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_raddr_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_waddr_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_laddr_s;
+  wire    [AXI_ADDRESS_WIDTH:0]     axi_mem_addr_diff_s;
+  wire    [(AXI_ADDRESS_WIDTH-1):0] axi_mem_raddr_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_waddr_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_laddr_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_waddr_b2g_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_laddr_b2g_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_raddr_m2_g2b_s;
 
-  wire    [DAC_ADDRESS_WIDTH:0]       dac_mem_addr_diff_s;
-  wire                                dac_xfer_init_s;
-  wire                                dac_last_axi_beats_s;
-
-  // binary to grey conversion
-
-  function [9:0] b2g;
-    input [9:0] b;
-    reg   [9:0] g;
-    begin
-      g[9] = b[9];
-      g[8] = b[9] ^ b[8];
-      g[7] = b[8] ^ b[7];
-      g[6] = b[7] ^ b[6];
-      g[5] = b[6] ^ b[5];
-      g[4] = b[5] ^ b[4];
-      g[3] = b[4] ^ b[3];
-      g[2] = b[3] ^ b[2];
-      g[1] = b[2] ^ b[1];
-      g[0] = b[1] ^ b[0];
-      b2g = g;
-    end
-  endfunction
-
-  // grey to binary conversion
-
-  function [9:0] g2b;
-    input [9:0] g;
-    reg   [9:0] b;
-    begin
-      b[9] = g[9];
-      b[8] = b[9] ^ g[8];
-      b[7] = b[8] ^ g[7];
-      b[6] = b[7] ^ g[6];
-      b[5] = b[6] ^ g[5];
-      b[4] = b[5] ^ g[4];
-      b[3] = b[4] ^ g[3];
-      b[2] = b[3] ^ g[2];
-      b[1] = b[2] ^ g[1];
-      b[0] = b[1] ^ g[0];
-      g2b = b;
-    end
-  endfunction
+  wire    [DAC_ADDRESS_WIDTH:0]     dac_mem_addr_diff_s;
+  wire                              dac_xfer_init_s;
+  wire                              dac_last_axi_beats_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0] dac_mem_raddr_b2g_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0] dac_mem_waddr_m2_g2b_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0] dac_mem_laddr_m2_g2b_s;
 
   // write interface
 
@@ -170,10 +136,22 @@ module axi_dacfifo_dac #(
         axi_mem_waddr <= axi_mem_waddr + 1'b1;
         axi_mem_laddr <= (axi_dlast == 1'b1) ? axi_mem_waddr : axi_mem_laddr;
       end
-      axi_mem_waddr_g <= b2g(axi_mem_waddr_s);
-      axi_mem_laddr_g <= b2g(axi_mem_laddr_s);
+      axi_mem_waddr_g <= axi_mem_waddr_b2g_s;
+      axi_mem_laddr_g <= axi_mem_laddr_b2g_s;
     end
   end
+
+  ad_b2g # (
+    .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
+  ) i_axi_mem_waddr_b2g (
+    .din (axi_mem_waddr_s),
+    .dout (axi_mem_waddr_b2g_s));
+
+  ad_b2g # (
+    .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
+  ) i_axi_mem_laddr_b2g (
+    .din (axi_mem_laddr_s),
+    .dout (axi_mem_laddr_b2g_s));
 
   // scale the axi_mem_* addresses
 
@@ -204,7 +182,7 @@ module axi_dacfifo_dac #(
     end else begin
       axi_mem_raddr_m1 <= dac_mem_raddr_g;
       axi_mem_raddr_m2 <= axi_mem_raddr_m1;
-      axi_mem_raddr <= g2b(axi_mem_raddr_m2);
+      axi_mem_raddr <= axi_mem_raddr_m2_g2b_s;
       axi_mem_addr_diff <= axi_mem_addr_diff_s[AXI_ADDRESS_WIDTH-1:0];
       if (axi_mem_addr_diff >= AXI_BUF_THRESHOLD_HI) begin
         axi_dready <= 1'b0;
@@ -213,6 +191,12 @@ module axi_dacfifo_dac #(
       end
     end
   end
+
+  ad_g2b #(
+    .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
+  ) i_axi_mem_raddr_m2_g2b (
+    .din (axi_mem_raddr_m2),
+    .dout (axi_mem_raddr_m2_g2b_s));
 
   // CDC for xfer_req signal
 
@@ -262,15 +246,27 @@ module axi_dacfifo_dac #(
     end else begin
       dac_mem_waddr_m1 <= axi_mem_waddr_g;
       dac_mem_waddr_m2 <= dac_mem_waddr_m1;
-      dac_mem_waddr <= g2b(dac_mem_waddr_m2);
+      dac_mem_waddr <= dac_mem_waddr_m2_g2b_s;
       dac_mem_laddr_m1 <= axi_mem_laddr_g;
       dac_mem_laddr_m2 <= dac_mem_laddr_m1;
-      dac_mem_laddr <= g2b(dac_mem_laddr_m2);
+      dac_mem_laddr <= dac_mem_laddr_m2_g2b_s;
       dac_dlast_m1 <= axi_dlast;
       dac_dlast_m2 <= dac_dlast_m1;
       dac_dlast <= dac_dlast_m2;
     end
   end
+
+  ad_g2b #(
+    .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
+  ) i_dac_mem_waddr_m2_g2b (
+    .din (dac_mem_waddr_m2),
+    .dout (dac_mem_waddr_m2_g2b_s));
+
+  ad_g2b #(
+    .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
+  ) i_dac_mem_laddr_m2_g2b (
+    .din (dac_mem_laddr_m2),
+    .dout (dac_mem_laddr_m2_g2b_s));
 
   assign dac_mem_addr_diff_s = {1'b1, dac_mem_waddr} - dac_mem_raddr;
   always @(posedge dac_clk) begin
@@ -312,9 +308,15 @@ module axi_dacfifo_dac #(
                          ((dac_last_beats > 1'b1) && (dac_last_axi_beats_s > 1'b0) && (dac_beat_cnt == dac_last_beats-1))) ? 0 : dac_beat_cnt + 1;
         dac_mem_raddr <= ((dac_last_axi_beats_s) && (dac_beat_cnt == dac_last_beats-1)) ? (dac_mem_laddr + MEM_RATIO) : dac_mem_raddr + 1'b1;
       end
-      dac_mem_raddr_g <= b2g(dac_mem_raddr);
+      dac_mem_raddr_g <= dac_mem_raddr_b2g_s;
     end
   end
+
+  ad_b2g # (
+    .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
+  ) i_dac_mem_raddr_b2g (
+    .din (dac_mem_raddr),
+    .dout (dac_mem_raddr_b2g_s));
 
   // underflow generation, there is no overflow
 

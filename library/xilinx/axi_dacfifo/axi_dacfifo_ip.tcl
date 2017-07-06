@@ -6,6 +6,8 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_dacfifo
 
 adi_ip_files axi_dacfifo [list \
+  "$ad_hdl_dir/library/common/ad_g2b.v" \
+  "$ad_hdl_dir/library/common/ad_b2g.v" \
   "$ad_hdl_dir/library/common/ad_mem_asym.v" \
   "$ad_hdl_dir/library/common/ad_axis_inf_rx.v" \
   "$ad_hdl_dir/library/common/util_dacfifo_bypass.v" \

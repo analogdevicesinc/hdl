@@ -155,51 +155,19 @@ module axi_dacfifo_wr #(
   wire                                      dma_xfer_init;
   wire                                      dma_mem_wea_s;
   wire                                      dma_rst_s;
+  wire    [(DMA_MEM_ADDRESS_WIDTH-1):0]     dma_mem_waddr_b2g_s;
+  wire    [(AXI_MEM_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2_g2b_s;
 
   wire    [(AXI_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_s;
   wire    [AXI_MEM_ADDRESS_WIDTH:0]         axi_mem_addr_diff_s;
   wire    [(AXI_DATA_WIDTH-1):0]            axi_mem_rdata_s;
   wire                                      axi_mem_rvalid_s;
   wire                                      axi_mem_last_s;
+  wire    [(DMA_MEM_ADDRESS_WIDTH-1):0]     axi_mem_waddr_m2_g2b_s;
+  wire    [(AXI_MEM_ADDRESS_WIDTH-1):0]     axi_mem_raddr_b2g_s;
 
   wire                                      axi_waddr_ready_s;
   wire                                      axi_wready_s;
-
-  // binary to grey conversion
-
-  function [7:0] b2g;
-    input [7:0] b;
-    reg   [7:0] g;
-    begin
-      g[7] = b[7];
-      g[6] = b[7] ^ b[6];
-      g[5] = b[6] ^ b[5];
-      g[4] = b[5] ^ b[4];
-      g[3] = b[4] ^ b[3];
-      g[2] = b[3] ^ b[2];
-      g[1] = b[2] ^ b[1];
-      g[0] = b[1] ^ b[0];
-      b2g = g;
-    end
-  endfunction
-
-  // grey to binary conversion
-
-  function [7:0] g2b;
-    input [7:0] g;
-    reg   [7:0] b;
-    begin
-      b[7] = g[7];
-      b[6] = b[7] ^ g[6];
-      b[5] = b[6] ^ g[5];
-      b[4] = b[5] ^ g[4];
-      b[3] = b[4] ^ g[3];
-      b[2] = b[3] ^ g[2];
-      b[1] = b[2] ^ g[1];
-      b[0] = b[1] ^ g[0];
-      g2b = b;
-    end
-  endfunction
 
   // Instantiations
 
@@ -290,9 +258,15 @@ module axi_dacfifo_wr #(
       if (dma_mem_last_read_s == 1'b1) begin
         dma_mem_waddr <= 'h0;
       end
-      dma_mem_waddr_g <= b2g(dma_mem_waddr);
+      dma_mem_waddr_g <= dma_mem_waddr_b2g_s;
     end
   end
+
+  ad_b2g # (
+    .DATA_WIDTH(DMA_MEM_ADDRESS_WIDTH)
+  ) i_dma_mem_waddr_b2g (
+    .din (dma_mem_waddr),
+    .dout (dma_mem_waddr_b2g_s));
 
   // The memory module request data until reaches the high threshold.
 
@@ -306,7 +280,7 @@ module axi_dacfifo_wr #(
     end else begin
       dma_mem_raddr_m1 <= axi_mem_raddr_g;
       dma_mem_raddr_m2 <= dma_mem_raddr_m1;
-      dma_mem_raddr <= g2b(dma_mem_raddr_m2);
+      dma_mem_raddr <= dma_mem_raddr_m2_g2b_s;
       dma_mem_addr_diff <= dma_mem_addr_diff_s[DMA_MEM_ADDRESS_WIDTH-1:0];
       if (dma_mem_addr_diff >= DMA_BUF_THRESHOLD_HI) begin
         dma_ready_out <= 1'b0;
@@ -315,6 +289,12 @@ module axi_dacfifo_wr #(
       end
     end
   end
+
+  ad_g2b # (
+    .DATA_WIDTH(AXI_MEM_ADDRESS_WIDTH)
+  ) i_dma_mem_raddr_g2b (
+    .din (dma_mem_raddr_m2),
+    .dout (dma_mem_raddr_m2_g2b_s));
 
   // Read address generation for the asymmetric memory
 
@@ -334,9 +314,15 @@ module axi_dacfifo_wr #(
       axi_xfer_init = ~axi_xfer_req_m[2] & axi_xfer_req_m[1];
       axi_mem_waddr_m1 <= dma_mem_waddr_g;
       axi_mem_waddr_m2 <= axi_mem_waddr_m1;
-      axi_mem_waddr <= g2b(axi_mem_waddr_m2);
+      axi_mem_waddr <= axi_mem_waddr_m2_g2b_s;
     end
   end
+
+  ad_g2b # (
+    .DATA_WIDTH(DMA_MEM_ADDRESS_WIDTH)
+  ) i_axi_mem_waddr_g2b (
+    .din (axi_mem_waddr_m2),
+    .dout (axi_mem_waddr_m2_g2b_s));
 
   // check if the AXI write channel is ready
 
@@ -422,9 +408,15 @@ module axi_dacfifo_wr #(
         axi_mem_raddr <= 'b0;
         axi_mem_last_read_toggle <= ~axi_mem_last_read_toggle;
       end
-      axi_mem_raddr_g <= b2g(axi_mem_raddr);
+      axi_mem_raddr_g <= axi_mem_raddr_b2g_s;
     end
   end
+
+  ad_b2g # (
+    .DATA_WIDTH(AXI_MEM_ADDRESS_WIDTH)
+  ) i_axi_mem_raddr_b2g (
+    .din (axi_mem_raddr),
+    .dout (axi_mem_raddr_b2g_s));
 
   // AXI Memory Map interface write address channel
 
