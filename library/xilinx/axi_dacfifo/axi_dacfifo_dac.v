@@ -39,90 +39,90 @@ module axi_dacfifo_dac #(
 
   parameter   AXI_DATA_WIDTH = 512,
   parameter   AXI_LENGTH = 15,
-  parameter   DAC_DATA_WIDTH = 64) (
+  parameter   DAC_DATA_WIDTH = 64,
+  parameter   DAC_MEM_ADDRESS_WIDTH = 8) (
 
-  input                   axi_clk,
-  input                   axi_dvalid,
+  input                               axi_clk,
+  input                               axi_dvalid,
   input       [(AXI_DATA_WIDTH-1):0]  axi_ddata,
-  output  reg             axi_dready,
-  input                   axi_dlast,
-  input                   axi_xfer_req,
+  output  reg                         axi_dready,
+  input                               axi_dlast,
+  input                               axi_xfer_req,
 
-  input       [ 3:0]      dma_last_beats,
+  input       [ 3:0]                  dma_last_beats,
 
-  input                   dac_clk,
-  input                   dac_rst,
-  input                   dac_valid,
+  input                               dac_clk,
+  input                               dac_rst,
+  input                               dac_valid,
   output      [(DAC_DATA_WIDTH-1):0]  dac_data,
-  output                  dac_xfer_out,
-  output  reg             dac_dunf);
+  output                              dac_xfer_out,
+  output  reg                         dac_dunf);
 
 
   localparam  MEM_RATIO = AXI_DATA_WIDTH/DAC_DATA_WIDTH;
-  localparam  DAC_ADDRESS_WIDTH = 10;
-  localparam  AXI_ADDRESS_WIDTH = (MEM_RATIO == 1) ? DAC_ADDRESS_WIDTH :
-                                  (MEM_RATIO == 2) ? (DAC_ADDRESS_WIDTH - 1) :
-                                  (MEM_RATIO == 4) ? (DAC_ADDRESS_WIDTH - 2) :
-                                                     (DAC_ADDRESS_WIDTH - 3);
+  localparam  AXI_ADDRESS_WIDTH = (MEM_RATIO == 1) ? DAC_MEM_ADDRESS_WIDTH :
+                                  (MEM_RATIO == 2) ? (DAC_MEM_ADDRESS_WIDTH - 1) :
+                                  (MEM_RATIO == 4) ? (DAC_MEM_ADDRESS_WIDTH - 2) :
+                                                     (DAC_MEM_ADDRESS_WIDTH - 3);
 
   localparam  AXI_BUF_THRESHOLD_LO = 3 * (AXI_LENGTH+1);
   localparam  AXI_BUF_THRESHOLD_HI = {(AXI_ADDRESS_WIDTH){1'b1}} - (AXI_LENGTH+1);
   localparam  DAC_BUF_THRESHOLD_LO = 3 * (AXI_LENGTH+1) * MEM_RATIO;
-  localparam  DAC_BUF_THRESHOLD_HI = {(DAC_ADDRESS_WIDTH){1'b1}} - (AXI_LENGTH+1) * MEM_RATIO;
+  localparam  DAC_BUF_THRESHOLD_HI = {(DAC_MEM_ADDRESS_WIDTH){1'b1}} - (AXI_LENGTH+1) * MEM_RATIO;
   localparam  DAC_ARINCR = (AXI_LENGTH+1) * MEM_RATIO;
 
   // internal registers
 
-  reg     [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_waddr = 'd0;
-  reg     [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_laddr = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_waddr_g = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_laddr_g = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr_m1 = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   axi_mem_raddr_m2 = 'd0;
-  reg     [(AXI_ADDRESS_WIDTH-1):0]   axi_mem_addr_diff = 'd0;
+  reg     [(AXI_ADDRESS_WIDTH-1):0]     axi_mem_waddr = 'd0;
+  reg     [(AXI_ADDRESS_WIDTH-1):0]     axi_mem_laddr = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_waddr_g = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_laddr_g = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_m1 = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_m2 = 'd0;
+  reg     [(AXI_ADDRESS_WIDTH-1):0]     axi_mem_addr_diff = 'd0;
 
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_raddr = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_raddr_g = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr_m1 = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_waddr_m2 = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_laddr = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_laddr_m1 = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_laddr_m2 = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]   dac_mem_addr_diff = 'd0;
-  reg                                 dac_mem_init = 1'b0;
-  reg                                 dac_mem_init_d = 1'b0;
-  reg                                 dac_mem_enable = 1'b0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_raddr = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_raddr_g = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_waddr = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_waddr_m1 = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_waddr_m2 = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_laddr = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_laddr_m1 = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_laddr_m2 = 'd0;
+  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_addr_diff = 'd0;
+  reg                                   dac_mem_init = 1'b0;
+  reg                                   dac_mem_init_d = 1'b0;
+  reg                                   dac_mem_enable = 1'b0;
 
-  reg     [ 2:0]                      dac_xfer_req_m = 3'b0;
-  reg                                 dac_xfer_init = 1'b0;
+  reg     [ 2:0]                        dac_xfer_req_m = 3'b0;
+  reg                                   dac_xfer_init = 1'b0;
 
-  reg     [ 3:0]                      dac_last_beats = 4'b0;
-  reg     [ 3:0]                      dac_last_beats_m = 4'b0;
-  reg     [ 3:0]                      dac_beat_cnt = 4'b0;
-  reg                                 dac_dlast = 1'b0;
-  reg                                 dac_dlast_m1 = 1'b0;
-  reg                                 dac_dlast_m2 = 1'b0;
-  reg                                 dac_dlast_inmem = 1'b0;
-  reg                                 dac_mem_valid = 1'b0;
+  reg     [ 3:0]                        dac_last_beats = 4'b0;
+  reg     [ 3:0]                        dac_last_beats_m = 4'b0;
+  reg     [ 3:0]                        dac_beat_cnt = 4'b0;
+  reg                                   dac_dlast = 1'b0;
+  reg                                   dac_dlast_m1 = 1'b0;
+  reg                                   dac_dlast_m2 = 1'b0;
+  reg                                   dac_dlast_inmem = 1'b0;
+  reg                                   dac_mem_valid = 1'b0;
 
   // internal signals
 
-  wire    [AXI_ADDRESS_WIDTH:0]     axi_mem_addr_diff_s;
-  wire    [(AXI_ADDRESS_WIDTH-1):0] axi_mem_raddr_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_waddr_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_laddr_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_waddr_b2g_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_laddr_b2g_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0] axi_mem_raddr_m2_g2b_s;
+  wire    [AXI_ADDRESS_WIDTH:0]         axi_mem_addr_diff_s;
+  wire    [(AXI_ADDRESS_WIDTH-1):0]     axi_mem_raddr_s;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_waddr_s;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_laddr_s;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_waddr_b2g_s;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_laddr_b2g_s;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_m2_g2b_s;
 
-  wire    [DAC_ADDRESS_WIDTH:0]     dac_mem_addr_diff_s;
-  wire                              dac_xfer_init_s;
-  wire                              dac_last_axi_beats_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0] dac_mem_raddr_b2g_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0] dac_mem_waddr_m2_g2b_s;
-  wire    [(DAC_ADDRESS_WIDTH-1):0] dac_mem_laddr_m2_g2b_s;
+  wire    [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_addr_diff_s;
+  wire                                  dac_xfer_init_s;
+  wire                                  dac_last_axi_beats_s;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_raddr_b2g_s;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_waddr_m2_g2b_s;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_laddr_m2_g2b_s;
 
   // write interface
 
@@ -156,9 +156,9 @@ module axi_dacfifo_dac #(
   // scale the axi_mem_* addresses
 
   assign axi_mem_raddr_s = (MEM_RATIO == 1) ? axi_mem_raddr :
-                           (MEM_RATIO == 2) ? axi_mem_raddr[(DAC_ADDRESS_WIDTH-1):1] :
-                           (MEM_RATIO == 4) ? axi_mem_raddr[(DAC_ADDRESS_WIDTH-1):2] :
-                                              axi_mem_raddr[(DAC_ADDRESS_WIDTH-1):3];
+                           (MEM_RATIO == 2) ? axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):1] :
+                           (MEM_RATIO == 4) ? axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):2] :
+                                              axi_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):3];
   assign axi_mem_waddr_s = (MEM_RATIO == 1) ? axi_mem_waddr :
                            (MEM_RATIO == 2) ? {axi_mem_waddr, 1'b0} :
                            (MEM_RATIO == 4) ? {axi_mem_waddr, 2'b0} :
@@ -325,7 +325,7 @@ module axi_dacfifo_dac #(
       dac_mem_addr_diff <= 'b0;
       dac_dunf <= 1'b0;
     end else begin
-      dac_mem_addr_diff <= dac_mem_addr_diff_s[DAC_ADDRESS_WIDTH-1:0];
+      dac_mem_addr_diff <= dac_mem_addr_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0];
       dac_dunf <= (dac_mem_addr_diff == 1'b0) ? 1'b1 : 1'b0;
     end
   end
@@ -335,7 +335,7 @@ module axi_dacfifo_dac #(
   ad_mem_asym #(
     .A_ADDRESS_WIDTH (AXI_ADDRESS_WIDTH),
     .A_DATA_WIDTH (AXI_DATA_WIDTH),
-    .B_ADDRESS_WIDTH (DAC_ADDRESS_WIDTH),
+    .B_ADDRESS_WIDTH (DAC_MEM_ADDRESS_WIDTH),
     .B_DATA_WIDTH (DAC_DATA_WIDTH))
   i_mem_asym (
     .clka (axi_clk),

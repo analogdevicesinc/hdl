@@ -146,7 +146,8 @@ module axi_dacfifo #(
     .AXI_SIZE (AXI_SIZE),
     .AXI_LENGTH (AXI_LENGTH),
     .AXI_ADDRESS (AXI_ADDRESS),
-    .AXI_ADDRESS_LIMIT (AXI_ADDRESS_LIMIT)
+    .AXI_ADDRESS_LIMIT (AXI_ADDRESS_LIMIT),
+    .DMA_MEM_ADDRESS_WIDTH (14)
   ) i_wr (
     .dma_clk (dma_clk),
     .dma_data (dma_data),
@@ -225,7 +226,8 @@ module axi_dacfifo #(
   axi_dacfifo_dac #(
     .AXI_DATA_WIDTH (AXI_DATA_WIDTH),
     .AXI_LENGTH(AXI_LENGTH),
-    .DAC_DATA_WIDTH (DAC_DATA_WIDTH)
+    .DAC_DATA_WIDTH (DAC_DATA_WIDTH),
+    .DAC_MEM_ADDRESS_WIDTH (14)
   ) i_dac (
     .axi_clk (axi_clk),
     .axi_dvalid (axi_rd_valid_s),
