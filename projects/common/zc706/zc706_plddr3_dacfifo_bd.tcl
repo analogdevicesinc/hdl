@@ -23,7 +23,7 @@ ad_ip_parameter $dac_fifo_name CONFIG.DAC_DATA_WIDTH $dac_data_width
 ad_ip_parameter $dac_fifo_name CONFIG.DMA_DATA_WIDTH $dac_dma_data_width
 ad_ip_parameter $dac_fifo_name CONFIG.AXI_DATA_WIDTH 512
 ad_ip_parameter $dac_fifo_name CONFIG.AXI_SIZE 6
-ad_ip_parameter $dac_fifo_name CONFIG.AXI_LENGTH 15
+ad_ip_parameter $dac_fifo_name CONFIG.AXI_LENGTH 255
 ad_ip_parameter $dac_fifo_name CONFIG.AXI_ADDRESS 0x80000000
 ad_ip_parameter $dac_fifo_name CONFIG.AXI_ADDRESS_LIMIT 0xa0000000
 
