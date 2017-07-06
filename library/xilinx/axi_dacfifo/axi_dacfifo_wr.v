@@ -119,7 +119,7 @@ module axi_dacfifo_wr #(
   reg                                       dma_rst_m1 = 1'b0;
   reg                                       dma_rst_m2 = 1'b0;
   reg     [ 2:0]                            dma_mem_last_read_toggle_m = 3'b0;
-  reg                                       dma_xfer_req_d = 1'b0;
+  reg     [ 1:0]                            dma_xfer_req_d = 2'b0;
 
   reg     [ 4:0]                            axi_xfer_req_m = 3'b0;
   reg     [ 4:0]                            axi_xfer_last_m = 3'b0;
@@ -249,9 +249,9 @@ module axi_dacfifo_wr #(
 
   // DMA beat counter
 
-  assign dma_xfer_init = dma_xfer_req & ~dma_xfer_req_d;
+  assign dma_xfer_init = ~dma_xfer_req_d[1] & dma_xfer_req_d[0];
   always @(posedge dma_clk) begin
-    dma_xfer_req_d <= dma_xfer_req;
+    dma_xfer_req_d <= {dma_xfer_req_d[0], dma_xfer_req};
     if ((dma_rst_s == 1'b1) || (dma_xfer_init == 1'b1)) begin
       dma_last_beats <= 4'b0;
     end else begin
@@ -273,7 +273,7 @@ module axi_dacfifo_wr #(
   assign dma_mem_wea_s = dma_xfer_req & dma_valid & dma_ready;
 
   always @(posedge dma_clk) begin
-    if (dma_rst_s == 1'b1) begin
+    if ((dma_rst_s == 1'b1) || (dma_xfer_init == 1'b1)) begin
       dma_mem_waddr <= 'h0;
       dma_mem_waddr_g <= 'h0;
       dma_mem_last_read_toggle_m <= 3'b0;
@@ -297,12 +297,12 @@ module axi_dacfifo_wr #(
   // The memory module request data until reaches the high threshold.
 
   always @(posedge dma_clk) begin
-    if (dma_rst_s == 1'b1) begin
+    if ((dma_rst_s == 1'b1) || (dma_xfer_init == 1'b1)) begin
       dma_mem_addr_diff <= 'b0;
       dma_mem_raddr_m1 <= 'b0;
       dma_mem_raddr_m2 <= 'b0;
       dma_mem_raddr <= 'b0;
-      dma_ready_out <= 1'b0;
+      dma_ready_out <= 1'b1;
     end else begin
       dma_mem_raddr_m1 <= axi_mem_raddr_g;
       dma_mem_raddr_m2 <= dma_mem_raddr_m1;

@@ -278,7 +278,7 @@ module axi_dacfifo #(
     // mux for the dma_ready
 
     always @(posedge dma_clk) begin
-      dma_ready <= (dma_bypass) ? dma_ready_wr_s : dma_ready_bypass_s;
+      dma_ready <= (dma_bypass) ? dma_ready_bypass_s : dma_ready_wr_s;
     end
 
     // mux for dac data
