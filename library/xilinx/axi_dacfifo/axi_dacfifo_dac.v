@@ -277,8 +277,8 @@ module axi_dacfifo_dac #(
 
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
-      dac_last_beats <= 32'b0;
-      dac_last_beats_m <= 32'b0;
+      dac_last_beats <= 4'b0;
+      dac_last_beats_m <= 4'b0;
     end else begin
       dac_last_beats_m <= dma_last_beats;
       dac_last_beats <= dac_last_beats_m;
@@ -305,7 +305,7 @@ module axi_dacfifo_dac #(
       end
       if (dac_mem_valid == 1'b1) begin
         dac_beat_cnt <= ((dac_beat_cnt >= MEM_RATIO-1) ||
-                         ((dac_last_beats > 1'b1) && (dac_last_axi_beats_s > 1'b0) && (dac_beat_cnt == dac_last_beats-1))) ? 0 : dac_beat_cnt + 1;
+                         ((dac_last_beats > 4'b1) && (dac_last_axi_beats_s > 1'b0) && (dac_beat_cnt == dac_last_beats-1))) ? 0 : dac_beat_cnt + 1;
         dac_mem_raddr <= ((dac_last_axi_beats_s) && (dac_beat_cnt == dac_last_beats-1)) ? (dac_mem_laddr + MEM_RATIO) : dac_mem_raddr + 1'b1;
       end
       dac_mem_raddr_g <= dac_mem_raddr_b2g_s;
