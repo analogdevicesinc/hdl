@@ -62,7 +62,7 @@ module axi_dacfifo_wr #(
   // syncronization for the read side
 
   output  reg [31:0]      axi_last_addr,
-  output  reg [ 3:0]      axi_last_beats,
+  output  reg [ 7:0]      axi_last_beats,
   output  reg             axi_xfer_out,
 
   // axi write address, write data and write response channels
@@ -142,7 +142,7 @@ module axi_dacfifo_wr #(
 
   reg                                       axi_reset = 1'b0;
   reg                                       axi_xfer_init = 1'b0;
-  reg     [ 3:0]                            axi_wvalid_counter = 4'b0;
+  reg     [ 7:0]                            axi_wvalid_counter = 4'b0;
 
   reg                                       axi_endof_transaction = 1'b0;
   reg                                       axi_endof_transaction_d = 1'b0;
@@ -391,7 +391,7 @@ module axi_dacfifo_wr #(
       axi_mem_last_d <= 1'b0;
       axi_mem_rdata <= 'b0;
       axi_mem_raddr <= 'b0;
-      axi_wvalid_counter <= 4'b0;
+      axi_wvalid_counter <= 8'b0;
       axi_mem_last_read_toggle <= 1'b1;
       axi_mem_raddr_g <= 'b0;
     end else begin
@@ -402,7 +402,7 @@ module axi_dacfifo_wr #(
       axi_mem_rdata <= axi_mem_rdata_s;
       if (axi_mem_rvalid_s == 1'b1) begin
         axi_mem_raddr <= axi_mem_raddr + 1;
-        axi_wvalid_counter <= ((axi_wvalid_counter == axi_awlen) || (axi_xfer_init == 1'b1)) ? 4'b0 : axi_wvalid_counter + 4'b1;
+        axi_wvalid_counter <= ((axi_wvalid_counter == axi_awlen) || (axi_xfer_init == 1'b1)) ? 8'b0 : axi_wvalid_counter + 8'b1;
       end
       if ((axi_endof_transaction == 1'b0) && (axi_endof_transaction_d == 1'b1)) begin
         axi_mem_raddr <= 'b0;
@@ -484,7 +484,7 @@ module axi_dacfifo_wr #(
 
   always @(posedge axi_clk) begin
     if(axi_resetn == 1'b0) begin
-      axi_last_beats <= 4'b0;
+      axi_last_beats <= 8'b0;
     end else begin
       if ((axi_endof_transaction == 1'b1) && (axi_awready == 1'b1) && (axi_awvalid == 1'b1)) begin
         axi_last_beats <= axi_mem_addr_diff;

@@ -46,7 +46,7 @@ module axi_dacfifo_rd #(
 
   input                   axi_xfer_req,
   input       [31:0]      axi_last_raddr,
-  input       [ 3:0]      axi_last_beats,
+  input       [ 7:0]      axi_last_beats,
 
   // axi read address and read data channels
 
@@ -92,7 +92,7 @@ module axi_dacfifo_rd #(
   reg                             axi_ractive = 1'b0;
   reg     [ 31:0]                 axi_araddr_prev = 32'b0;
   reg     [ 1:0]                  axi_xfer_req_m = 2'b0;
-  reg     [ 4:0]                  axi_last_beats_cntr = 16'b0;
+  reg     [ 7:0]                  axi_last_beats_cntr = 8'b0;
 
   // internal signals
 
@@ -100,7 +100,7 @@ module axi_dacfifo_rd #(
   wire                            axi_xfer_req_init;
   wire                            axi_dvalid_s;
   wire                            axi_dlast_s;
-  wire    [ 4:0]                  axi_last_beats_s;
+  wire    [ 8:0]                  axi_last_beats_s;
 
   assign axi_ready_s = (~axi_arvalid | axi_arready) & axi_dready;
 

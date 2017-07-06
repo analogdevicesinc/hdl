@@ -130,7 +130,7 @@ module axi_dacfifo #(
   wire                                axi_rd_valid_s;
   wire                                axi_xfer_req_s;
   wire    [31:0]                      axi_last_addr_s;
-  wire    [ 3:0]                      axi_last_beats_s;
+  wire    [ 7:0]                      axi_last_beats_s;
   wire                                axi_dlast_s;
   wire    [ 3:0]                      dma_last_beats_s;
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_fifo_s;
