@@ -175,7 +175,7 @@ module axi_dacfifo_rd #(
 
   assign axi_last_beats_s = {1'b0, axi_last_beats} - 1;
   assign axi_dvalid_s = ((axi_last_beats_cntr > axi_last_beats_s) && (axi_araddr_prev == axi_last_raddr)) ? 0 : axi_rvalid & axi_rready;
-  assign axi_dlast_s = (axi_araddr_prev == axi_last_raddr) ? 1 : 0;
+  assign axi_dlast_s = (axi_araddr == axi_last_raddr) ? 1 : 0;
 
   always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
@@ -185,7 +185,7 @@ module axi_dacfifo_rd #(
     end else begin
       axi_ddata <= axi_rdata;
       axi_dvalid <= axi_dvalid_s;
-      axi_dlast <= axi_dlast_s;
+      axi_dlast <= axi_dlast_s & axi_rlast;
       if (axi_xfer_req == 1'b1) begin
         axi_rready <= axi_rvalid;
       end
