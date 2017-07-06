@@ -241,7 +241,6 @@ module axi_xcvrlb_1 (
     .d_data_status ({rx_pn_err_s, rx_pn_oos_s}));
 
   util_adxcvr_xch #(
-    .XCVR_ID (0),
     .XCVR_TYPE (0),
     .CPLL_FBDIV (2),
     .CPLL_FBDIV_4_5 (5),
@@ -275,7 +274,6 @@ module axi_xcvrlb_1 (
     .tx_data (tx_data),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_es_sel (1'd0),
     .up_es_enb (1'd0),
     .up_es_addr (12'd0),
     .up_es_wr (1'd0),
@@ -290,7 +288,6 @@ module axi_xcvrlb_1 (
     .up_rx_rate (3'd0),
     .up_rx_sys_clk_sel (2'd0),
     .up_rx_out_clk_sel (3'd2),
-    .up_rx_sel (1'd0),
     .up_rx_enb (1'd0),
     .up_rx_addr (12'd0),
     .up_rx_wr (1'd0),
@@ -305,7 +302,6 @@ module axi_xcvrlb_1 (
     .up_tx_rate (3'd0),
     .up_tx_sys_clk_sel (2'd0),
     .up_tx_out_clk_sel (3'd2),
-    .up_tx_sel (1'd0),
     .up_tx_enb (1'd0),
     .up_tx_addr (12'd0),
     .up_tx_wr (1'd0),
