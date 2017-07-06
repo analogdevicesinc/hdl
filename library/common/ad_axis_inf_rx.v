@@ -41,47 +41,45 @@ module ad_axis_inf_rx #(
 
   // adi interface
 
-  input                   clk,
-  input                   rst,
-  input                   valid,
-  input                   last,
-  input       [DW:0]      data,
+  input                           clk,
+  input                           rst,
+  input                           valid,
+  input                           last,
+  input       [(DATA_WIDTH-1):0]  data,
 
   // xilinx interface
 
-  output  reg             inf_valid,
-  output  reg             inf_last,
-  output  reg [DW:0]      inf_data,
-  input                   inf_ready);
-
-  localparam  DW = DATA_WIDTH - 1;
+  output  reg                     inf_valid,
+  output  reg                     inf_last,
+  output  reg [(DATA_WIDTH-1):0]  inf_data,
+  input                           inf_ready);
 
   // internal registers
 
-  reg     [ 2:0]  wcnt = 'd0;
-  reg             wlast_0 = 'd0;
-  reg     [DW:0]  wdata_0 = 'd0;
-  reg             wlast_1 = 'd0;
-  reg     [DW:0]  wdata_1 = 'd0;
-  reg             wlast_2 = 'd0;
-  reg     [DW:0]  wdata_2 = 'd0;
-  reg             wlast_3 = 'd0;
-  reg     [DW:0]  wdata_3 = 'd0;
-  reg             wlast_4 = 'd0;
-  reg     [DW:0]  wdata_4 = 'd0;
-  reg             wlast_5 = 'd0;
-  reg     [DW:0]  wdata_5 = 'd0;
-  reg             wlast_6 = 'd0;
-  reg     [DW:0]  wdata_6 = 'd0;
-  reg             wlast_7 = 'd0;
-  reg     [DW:0]  wdata_7 = 'd0;
-  reg     [ 2:0]  rcnt    = 'd0;
+  reg     [ 2:0]              wcnt = 'd0;
+  reg                         wlast_0 = 'd0;
+  reg     [(DATA_WIDTH-1):0]  wdata_0 = 'd0;
+  reg                         wlast_1 = 'd0;
+  reg     [(DATA_WIDTH-1):0]  wdata_1 = 'd0;
+  reg                         wlast_2 = 'd0;
+  reg     [(DATA_WIDTH-1):0]  wdata_2 = 'd0;
+  reg                         wlast_3 = 'd0;
+  reg     [(DATA_WIDTH-1):0]  wdata_3 = 'd0;
+  reg                         wlast_4 = 'd0;
+  reg     [(DATA_WIDTH-1):0]  wdata_4 = 'd0;
+  reg                         wlast_5 = 'd0;
+  reg     [(DATA_WIDTH-1):0]  wdata_5 = 'd0;
+  reg                         wlast_6 = 'd0;
+  reg     [(DATA_WIDTH-1):0]  wdata_6 = 'd0;
+  reg                         wlast_7 = 'd0;
+  reg     [(DATA_WIDTH-1):0]  wdata_7 = 'd0;
+  reg     [ 2:0]              rcnt    = 'd0;
 
   // internal signals
 
-  wire            inf_ready_s;
-  reg             inf_last_s;
-  reg     [DW:0]  inf_data_s;
+  wire                        inf_ready_s;
+  reg                         inf_last_s;
+  reg     [(DATA_WIDTH-1):0]  inf_data_s;
 
   // write interface
 
