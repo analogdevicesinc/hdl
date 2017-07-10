@@ -113,12 +113,7 @@ set_max_delay -datapath_only \
 
 set_max_delay -datapath_only \
   -from [get_pins {i_up_tx/up_cfg_ilas_data_*_reg*/C}] \
-  -to [get_pins {i_up_tx/*core_ilas_config_data_reg*/D}] \
-  [get_property -min PERIOD $core_clk]
-
-set_max_delay -datapath_only \
-  -from [get_pins {i_up_tx/up_cfg_ilas_data_*_reg*/C}] \
-  -to [get_pins {i_up_tx/*core_ilas_config_data_reg*/S}] \
+  -to [get_cells {i_up_tx/*core_ilas_config_data_reg*}] \
   [get_property -min PERIOD $core_clk]
 
 set_max_delay -datapath_only \
