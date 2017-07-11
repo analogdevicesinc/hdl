@@ -105,7 +105,7 @@ assign ilas_mem[3][31:24] = ilas_mem[0][23:16] + ilas_mem[0][31:24] +
 generate
 genvar i;
 
-for (i = 0; i < NUM_LANES; i = i + 1) begin
+for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
   always @(posedge clk) begin
     if (ilas_config_rd == 1'b1) begin
       ilas_config_data[i*32+31:i*32] <= ilas_mem[ilas_config_addr];

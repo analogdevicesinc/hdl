@@ -82,7 +82,7 @@ jesd204_scrambler #(
 generate
 genvar i;
 
-for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin
+for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
   assign scrambled_char[i] = scrambled_data[i*8+7:i*8];
 
   always @(*) begin

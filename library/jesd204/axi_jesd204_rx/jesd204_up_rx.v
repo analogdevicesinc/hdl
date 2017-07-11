@@ -143,7 +143,7 @@ always @(posedge up_clk) begin
 end
 
 genvar i;
-generate for (i = 0; i < NUM_LANES; i = i + 1) begin
+generate for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
     jesd204_up_rx_lane i_up_rx_lane (
       .up_clk(up_clk),
       .up_reset_synchronizer(up_reset_synchronizer),

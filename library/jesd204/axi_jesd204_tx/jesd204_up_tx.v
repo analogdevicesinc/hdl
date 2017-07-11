@@ -291,7 +291,7 @@ end
 
 genvar j;
 generate
-for (j = 0; j < NUM_LANES; j = j + 1) begin
+for (j = 0; j < NUM_LANES; j = j + 1) begin: gen_lane
   always @(posedge core_clk) begin
     if (core_ilas_config_rd == 1'b1) begin
       core_ilas_config_data[j*32+31:j*32] <= up_cfg_ilas_data[core_ilas_config_addr+4*j];

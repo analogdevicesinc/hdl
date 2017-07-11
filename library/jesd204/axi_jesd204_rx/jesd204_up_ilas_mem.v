@@ -70,7 +70,7 @@ sync_bits i_sync_ilas_ready (
 
 generate
 genvar i;
-for (i = 0; i < 32; i = i + 1) begin: ilas_mem
+for (i = 0; i < 32; i = i + 1) begin: gen_ilas_mem
   assign up_rdata[i] = mem[i][~up_raddr];
 
   always @(posedge core_clk) begin

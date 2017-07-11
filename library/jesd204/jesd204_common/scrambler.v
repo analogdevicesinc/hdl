@@ -63,7 +63,7 @@ wire [WIDTH-1+15:0] full_state;
 
 generate
 genvar i;
-for (i = 0; i < WIDTH / 8; i = i + 1) begin
+for (i = 0; i < WIDTH / 8; i = i + 1) begin: gen_swizzle
   assign swizzle_in[WIDTH-1-i*8:WIDTH-i*8-8] = data_in[i*8+7:i*8];
   assign data_out[WIDTH-1-i*8:WIDTH-i*8-8] = swizzle_out[i*8+7:i*8];
 end

@@ -267,7 +267,7 @@ jesd204_eof_generator  #(
 
 genvar i;
 generate
-for (i = 0; i < NUM_LANES; i = i + 1) begin
+for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
   localparam D_START = i * DATA_PATH_WIDTH*8;
   localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;

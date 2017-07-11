@@ -109,7 +109,7 @@ assign status_frame_align = frame_align;
 genvar i;
 generate
 
-for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin
+for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
   assign char[i] = phy_data[i*8+7:i*8];
   assign char_is_valid[i] = ~(phy_notintable[i] | phy_disperr[i]);
 

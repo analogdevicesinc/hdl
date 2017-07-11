@@ -71,7 +71,7 @@ end
 generate
 genvar i;
 
-for (i = 0; i < NUM_LANES; i = i + 1) begin
+for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
   always @(posedge clk) begin
     if (reset == 1'b1) begin
       lane_latency_mem[i] <= 'h00;
