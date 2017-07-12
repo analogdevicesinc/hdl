@@ -20,6 +20,12 @@ add_connection sys_clk.clk axi_ad9361.if_delay_clk
 add_connection sys_clk.clk axi_ad9361.s_axi_clock
 add_connection sys_clk.clk_reset axi_ad9361.s_axi_reset
 
+# clk division
+
+add_instance util_clkdiv_ad9361 util_clkdiv 1.0
+add_connection axi_ad9361.if_l_clk util_clkdiv_ad9361.if_clk
+add_connection axi_ad9361.if_rst util_clkdiv_ad9361.if_reset
+
 # adc-wfifo & dac-rfifo
 
 add_instance util_adc_wfifo util_wfifo 1.0
@@ -29,8 +35,8 @@ set_instance_parameter_value util_adc_wfifo {DOUT_DATA_WIDTH} {16}
 set_instance_parameter_value util_adc_wfifo {DIN_ADDRESS_WIDTH} {5}
 add_connection axi_ad9361.if_l_clk util_adc_wfifo.if_din_clk
 add_connection axi_ad9361.if_rst util_adc_wfifo.if_din_rst
-add_connection sys_dma_clk.clk util_adc_wfifo.if_dout_clk
-add_connection sys_dma_clk.clk_reset util_adc_wfifo.if_dout_rstn
+add_connection util_clkdiv_ad9361.if_clk_out util_adc_wfifo.if_dout_clk
+add_connection util_clkdiv_ad9361.if_reset_out util_adc_wfifo.if_dout_rstn
 add_connection axi_ad9361.adc_ch_0 util_adc_wfifo.din_0
 add_connection axi_ad9361.adc_ch_1 util_adc_wfifo.din_1
 add_connection axi_ad9361.adc_ch_2 util_adc_wfifo.din_2
@@ -46,8 +52,8 @@ set_instance_parameter_value util_dac_rfifo {DOUT_DATA_WIDTH} {16}
 set_instance_parameter_value util_dac_rfifo {DIN_ADDRESS_WIDTH} {5}
 add_connection axi_ad9361.if_l_clk util_dac_rfifo.if_dout_clk
 add_connection axi_ad9361.if_rst util_dac_rfifo.if_dout_rst
-add_connection sys_dma_clk.clk util_dac_rfifo.if_din_clk
-add_connection sys_dma_clk.clk_reset util_dac_rfifo.if_din_rstn
+add_connection util_clkdiv_ad9361.if_clk_out util_dac_rfifo.if_din_clk
+add_connection util_clkdiv_ad9361.if_reset_out util_dac_rfifo.if_din_rstn
 add_connection util_dac_rfifo.dout_0 axi_ad9361.dac_ch_0
 add_connection util_dac_rfifo.dout_1 axi_ad9361.dac_ch_1
 add_connection util_dac_rfifo.dout_2 axi_ad9361.dac_ch_2
@@ -59,8 +65,8 @@ add_connection util_dac_rfifo.if_dout_unf axi_ad9361.if_dac_dunf
 add_instance util_adc_pack util_cpack 1.0
 set_instance_parameter_value util_adc_pack {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value util_adc_pack {CHANNEL_DATA_WIDTH} {16}
-add_connection sys_dma_clk.clk util_adc_pack.if_adc_clk
-add_connection sys_dma_clk.clk_reset util_adc_pack.if_adc_rst
+add_connection util_clkdiv_ad9361.if_clk_out util_adc_pack.if_adc_clk
+add_connection util_clkdiv_ad9361.if_reset_out util_adc_pack.if_adc_rst
 add_connection util_adc_wfifo.dout_0 util_adc_pack.adc_ch_0
 add_connection util_adc_wfifo.dout_1 util_adc_pack.adc_ch_1
 add_connection util_adc_wfifo.dout_2 util_adc_pack.adc_ch_2
@@ -71,7 +77,7 @@ add_connection util_adc_wfifo.dout_3 util_adc_pack.adc_ch_3
 add_instance util_dac_upack util_upack 1.0
 set_instance_parameter_value util_dac_upack {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value util_dac_upack {CHANNEL_DATA_WIDTH} {16}
-add_connection sys_dma_clk.clk util_dac_upack.if_dac_clk
+add_connection util_clkdiv_ad9361.if_clk_out util_dac_upack.if_dac_clk
 add_connection util_dac_upack.dac_ch_0 util_dac_rfifo.din_0
 add_connection util_dac_upack.dac_ch_1 util_dac_rfifo.din_1
 add_connection util_dac_upack.dac_ch_2 util_dac_rfifo.din_2
@@ -99,7 +105,7 @@ add_connection sys_clk.clk axi_adc_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_adc_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_adc_dma.m_dest_axi_clock
 add_connection sys_dma_clk.clk_reset axi_adc_dma.m_dest_axi_reset
-add_connection sys_dma_clk.clk axi_adc_dma.if_fifo_wr_clk
+add_connection util_clkdiv_ad9361.if_clk_out axi_adc_dma.if_fifo_wr_clk
 add_connection util_adc_pack.if_adc_valid axi_adc_dma.if_fifo_wr_en
 add_connection util_adc_pack.if_adc_sync axi_adc_dma.if_fifo_wr_sync
 add_connection util_adc_pack.if_adc_data axi_adc_dma.if_fifo_wr_din
@@ -127,7 +133,7 @@ add_connection sys_clk.clk axi_dac_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_dac_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_dac_dma.m_src_axi_clock
 add_connection sys_dma_clk.clk_reset axi_dac_dma.m_src_axi_reset
-add_connection sys_dma_clk.clk axi_dac_dma.if_fifo_rd_clk
+add_connection util_clkdiv_ad9361.if_clk_out axi_dac_dma.if_fifo_rd_clk
 add_connection util_dac_upack.if_dac_valid axi_dac_dma.if_fifo_rd_en
 add_connection axi_dac_dma.if_fifo_rd_dout util_dac_upack.if_dac_data
 add_connection axi_dac_dma.if_fifo_rd_xfer_req util_dac_upack.if_dma_xfer_in
