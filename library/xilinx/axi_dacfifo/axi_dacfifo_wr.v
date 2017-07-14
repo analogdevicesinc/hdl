@@ -82,7 +82,7 @@ module axi_dacfifo_wr #(
   output  reg [31:0]      axi_awaddr,
   input                   axi_awready,
   output                  axi_wvalid,
-  output      [((AXI_DATA_WIDTH/8)-1):0]  axi_wdata,
+  output      [(AXI_DATA_WIDTH-1):0]      axi_wdata,
   output      [((AXI_DATA_WIDTH/8)-1):0]  axi_wstrb,
   output                  axi_wlast,
   output      [ 3:0]      axi_wuser,
