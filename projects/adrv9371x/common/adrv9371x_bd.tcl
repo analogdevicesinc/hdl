@@ -116,7 +116,7 @@ ad_ip_parameter util_ad9371_xcvr CONFIG.RX_CLK25_DIV 5
 ad_ip_parameter util_ad9371_xcvr CONFIG.TX_CLK25_DIV 5
 ad_ip_parameter util_ad9371_xcvr CONFIG.RX_PMA_CFG 0x00018480
 ad_ip_parameter util_ad9371_xcvr CONFIG.RX_CDR_CFG 0x03000023ff20400020
-ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_FBDIV "0100100000"
+ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_FBDIV 0x120
 
 # xcvr interfaces
 
