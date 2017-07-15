@@ -33,7 +33,10 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_response_generator (
+module dmac_response_generator #(
+
+  parameter ID_WIDTH = 3)(
+
   input clk,
   input resetn,
 
@@ -51,8 +54,6 @@ module dmac_response_generator (
   output resp_eot,
   output [1:0] resp_resp
 );
-
-parameter ID_WIDTH = 3;
 
 `include "inc_id.h"
 `include "resp.h"

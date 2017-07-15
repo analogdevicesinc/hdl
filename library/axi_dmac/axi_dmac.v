@@ -33,7 +33,29 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module axi_dmac (
+module axi_dmac #(
+
+  parameter ID = 0,
+  parameter DMA_DATA_WIDTH_SRC = 64,
+  parameter DMA_DATA_WIDTH_DEST = 64,
+  parameter DMA_LENGTH_WIDTH = 24,
+  parameter DMA_2D_TRANSFER = 1,
+  parameter ASYNC_CLK_REQ_SRC = 1,
+  parameter ASYNC_CLK_SRC_DEST = 1,
+  parameter ASYNC_CLK_DEST_REQ = 1,
+  parameter AXI_SLICE_DEST = 0,
+  parameter AXI_SLICE_SRC = 0,
+  parameter SYNC_TRANSFER_START = 0,
+  parameter CYCLIC = 1,
+  parameter DMA_AXI_PROTOCOL_DEST = 0,
+  parameter DMA_AXI_PROTOCOL_SRC = 0,
+  parameter DMA_TYPE_DEST = 0,
+  parameter DMA_TYPE_SRC = 2,
+  parameter DMA_AXI_ADDR_WIDTH = 32,
+  parameter MAX_BYTES_PER_BURST = 128,
+  parameter FIFO_SIZE = 4, // In bursts
+  parameter DISABLE_DEBUG_REGISTERS = 0)(
+
   // Slave AXI interface
   input s_axi_aclk,
   input s_axi_aresetn,
@@ -172,33 +194,6 @@ module axi_dmac (
         output                                   fifo_rd_xfer_req
 );
 
-parameter ID = 0;
-
-parameter DMA_DATA_WIDTH_SRC = 64;
-parameter DMA_DATA_WIDTH_DEST = 64;
-parameter DMA_LENGTH_WIDTH = 24;
-parameter DMA_2D_TRANSFER = 1;
-
-parameter ASYNC_CLK_REQ_SRC = 1;
-parameter ASYNC_CLK_SRC_DEST = 1;
-parameter ASYNC_CLK_DEST_REQ = 1;
-
-parameter AXI_SLICE_DEST = 0;
-parameter AXI_SLICE_SRC = 0;
-parameter SYNC_TRANSFER_START = 0;
-parameter CYCLIC = 1;
-
-parameter DMA_AXI_PROTOCOL_DEST = 0;
-parameter DMA_AXI_PROTOCOL_SRC = 0;
-parameter DMA_TYPE_DEST = 0;
-parameter DMA_TYPE_SRC = 2;
-
-parameter DMA_AXI_ADDR_WIDTH = 32;
-
-parameter MAX_BYTES_PER_BURST = 128;
-parameter FIFO_SIZE = 4; // In bursts
-
-parameter DISABLE_DEBUG_REGISTERS = 0;
 
 localparam DMA_TYPE_AXI_MM = 0;
 localparam DMA_TYPE_AXI_STREAM = 1;

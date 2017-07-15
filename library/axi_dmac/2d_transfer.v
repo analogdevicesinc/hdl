@@ -33,7 +33,12 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_2d_transfer (
+module dmac_2d_transfer #(
+
+  parameter DMA_LENGTH_WIDTH = 24,
+  parameter BYTES_PER_BEAT_WIDTH_SRC = 3,
+  parameter BYTES_PER_BEAT_WIDTH_DEST = 3)(
+
   input req_aclk,
   input req_aresetn,
 
@@ -48,7 +53,7 @@ module dmac_2d_transfer (
   input [DMA_LENGTH_WIDTH-1:0] req_src_stride,
   input req_sync_transfer_start,
   output reg req_eot,
-  
+
   output reg out_req_valid,
   input out_req_ready,
   output [31:BYTES_PER_BEAT_WIDTH_DEST] out_req_dest_address,
@@ -57,10 +62,6 @@ module dmac_2d_transfer (
   output reg out_req_sync_transfer_start,
   input out_eot
 );
-
-parameter DMA_LENGTH_WIDTH = 24;
-parameter BYTES_PER_BEAT_WIDTH_SRC = 3;
-parameter BYTES_PER_BEAT_WIDTH_DEST = 3;
 
 reg [31:BYTES_PER_BEAT_WIDTH_DEST] dest_address;
 reg [31:BYTES_PER_BEAT_WIDTH_SRC] src_address;

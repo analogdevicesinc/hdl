@@ -33,7 +33,26 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_request_arb (
+module dmac_request_arb #(
+
+  parameter DMA_DATA_WIDTH_SRC = 64,
+  parameter DMA_DATA_WIDTH_DEST = 64,
+  parameter DMA_LENGTH_WIDTH = 24,
+  parameter BYTES_PER_BEAT_WIDTH_DEST = $clog2(DMA_DATA_WIDTH_DEST/8),
+  parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(DMA_DATA_WIDTH_SRC/8),
+  parameter DMA_TYPE_DEST = DMA_TYPE_MM_AXI,
+  parameter DMA_TYPE_SRC = DMA_TYPE_FIFO,
+  parameter DMA_AXI_ADDR_WIDTH = 32,
+  parameter ASYNC_CLK_REQ_SRC = 1,
+  parameter ASYNC_CLK_SRC_DEST = 1,
+  parameter ASYNC_CLK_DEST_REQ = 1,
+  parameter AXI_SLICE_DEST = 0,
+  parameter AXI_SLICE_SRC = 0,
+  parameter MAX_BYTES_PER_BURST = 128,
+  parameter FIFO_SIZE = 4,
+  parameter ID_WIDTH = $clog2(FIFO_SIZE*2),
+  parameter AXI_LENGTH_WIDTH = 8)(
+
   input req_aclk,
   input req_aresetn,
 
@@ -136,32 +155,6 @@ module dmac_request_arb (
   output [ID_WIDTH-1:0]        dbg_src_response_id,
   output [7:0]                        dbg_status
 );
-
-parameter DMA_DATA_WIDTH_SRC = 64;
-parameter DMA_DATA_WIDTH_DEST = 64;
-parameter DMA_LENGTH_WIDTH = 24;
-
-parameter BYTES_PER_BEAT_WIDTH_DEST = $clog2(DMA_DATA_WIDTH_DEST/8);
-parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(DMA_DATA_WIDTH_SRC/8);
-
-parameter DMA_TYPE_DEST = DMA_TYPE_MM_AXI;
-parameter DMA_TYPE_SRC = DMA_TYPE_FIFO;
-
-parameter DMA_AXI_ADDR_WIDTH = 32;
-
-parameter ASYNC_CLK_REQ_SRC = 1;
-parameter ASYNC_CLK_SRC_DEST = 1;
-parameter ASYNC_CLK_DEST_REQ = 1;
-
-parameter AXI_SLICE_DEST = 0;
-parameter AXI_SLICE_SRC = 0;
-
-parameter MAX_BYTES_PER_BURST = 128;
-parameter FIFO_SIZE = 4;
-
-parameter ID_WIDTH = $clog2(FIFO_SIZE*2);
-
-parameter AXI_LENGTH_WIDTH = 8;
 
 localparam DMA_TYPE_MM_AXI = 0;
 localparam DMA_TYPE_STREAM_AXI = 1;

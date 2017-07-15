@@ -33,7 +33,11 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_request_generator (
+module dmac_request_generator #(
+
+  parameter ID_WIDTH = 3,
+  parameter BURSTS_PER_TRANSFER_WIDTH = 17)(
+
   input req_aclk,
   input req_aresetn,
 
@@ -49,9 +53,6 @@ module dmac_request_generator (
 
   output eot
 );
-
-parameter ID_WIDTH = 3;
-parameter BURSTS_PER_TRANSFER_WIDTH = 17;
 
 `include "inc_id.h"
 

@@ -33,7 +33,12 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module axi_register_slice (
+module axi_register_slice #(
+
+  parameter DATA_WIDTH = 32,
+  parameter FORWARD_REGISTERED = 0,
+  parameter BACKWARD_REGISTERED = 0)(
+
   input clk,
   input resetn,
 
@@ -45,11 +50,6 @@ module axi_register_slice (
   input m_axi_ready,
   output [DATA_WIDTH-1:0] m_axi_data
 );
-
-parameter DATA_WIDTH = 32;
-
-parameter FORWARD_REGISTERED = 0;
-parameter BACKWARD_REGISTERED = 0;
 
 /*
  s_axi_data  -> bwd_data     -> fwd_data(1)  -> m_axi_data
@@ -84,7 +84,7 @@ end
 always @(posedge clk) begin
   if (resetn == 1'b0) begin
     fwd_valid <= 1'b0;
-  end else begin 
+  end else begin
     if (bwd_valid_s)
       fwd_valid <= 1'b1;
     else if (m_axi_ready)

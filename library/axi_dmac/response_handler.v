@@ -33,7 +33,10 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_response_handler (
+module dmac_response_handler #(
+
+  parameter ID_WIDTH = 3)(
+
   input clk,
   input resetn,
 
@@ -55,8 +58,6 @@ module dmac_response_handler (
   output resp_eot,
   output [1:0] resp_resp
 );
-
-parameter ID_WIDTH = 3;
 
 `include "resp.h"
 `include "inc_id.h"

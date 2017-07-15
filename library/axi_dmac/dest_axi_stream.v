@@ -33,7 +33,12 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_dest_axi_stream (
+module dmac_dest_axi_stream #(
+
+  parameter ID_WIDTH = 3,
+  parameter S_AXIS_DATA_WIDTH = 64,
+  parameter BEATS_PER_BURST_WIDTH = 4)(
+
   input s_axis_aclk,
   input s_axis_aresetn,
 
@@ -69,9 +74,6 @@ module dmac_dest_axi_stream (
   output [1:0] response_resp
 );
 
-parameter ID_WIDTH = 3;
-parameter S_AXIS_DATA_WIDTH = 64;
-parameter BEATS_PER_BURST_WIDTH = 4;
 
 reg req_xlast_d = 1'b0;
 

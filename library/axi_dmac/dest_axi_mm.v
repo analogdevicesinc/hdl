@@ -33,7 +33,15 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_dest_mm_axi (
+module dmac_dest_mm_axi #(
+
+  parameter ID_WIDTH = 3,
+  parameter DMA_DATA_WIDTH = 64,
+  parameter DMA_ADDR_WIDTH = 32,
+  parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8),
+  parameter BEATS_PER_BURST_WIDTH = 4,
+  parameter AXI_LENGTH_WIDTH = 8)(
+
   input                               m_axi_aclk,
   input                               m_axi_aresetn,
 
@@ -89,13 +97,6 @@ module dmac_dest_mm_axi (
   input  [ 1:0]                       m_axi_bresp,
   output                              m_axi_bready
 );
-
-parameter ID_WIDTH = 3;
-parameter DMA_DATA_WIDTH = 64;
-parameter DMA_ADDR_WIDTH = 32;
-parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8);
-parameter BEATS_PER_BURST_WIDTH = 4;
-parameter AXI_LENGTH_WIDTH = 8;
 
 reg [(DMA_DATA_WIDTH/8)-1:0] wstrb;
 
@@ -205,7 +206,7 @@ begin
 end
 
 assign m_axi_wstrb = wstrb;
- 
+
 dmac_response_handler #(
   .ID_WIDTH(ID_WIDTH)
 ) i_response_handler (

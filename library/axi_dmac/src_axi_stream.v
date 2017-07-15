@@ -33,7 +33,13 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_src_axi_stream (
+module dmac_src_axi_stream #(
+
+  parameter ID_WIDTH = 3,
+  parameter S_AXIS_DATA_WIDTH = 64,
+  parameter LENGTH_WIDTH = 24,
+  parameter BEATS_PER_BURST_WIDTH = 4)(
+
   input s_axis_aclk,
   input s_axis_aresetn,
 
@@ -61,11 +67,6 @@ module dmac_src_axi_stream (
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
   input req_sync_transfer_start
 );
-
-parameter ID_WIDTH = 3;
-parameter S_AXIS_DATA_WIDTH = 64;
-parameter LENGTH_WIDTH = 24;
-parameter BEATS_PER_BURST_WIDTH = 4;
 
 reg needs_sync = 1'b0;
 wire sync = s_axis_user[0];
@@ -104,7 +105,7 @@ dmac_data_mover # (
   .request_id(request_id),
   .response_id(response_id),
   .eot(eot),
-  
+
   .req_valid(req_valid),
   .req_ready(req_ready),
   .req_last_burst_length(req_last_burst_length),

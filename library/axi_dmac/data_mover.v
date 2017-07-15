@@ -33,7 +33,14 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_data_mover (
+module dmac_data_mover #(
+
+  parameter ID_WIDTH = 3,
+  parameter DATA_WIDTH = 64,
+  parameter DISABLE_WAIT_FOR_ID = 1,
+  parameter BEATS_PER_BURST_WIDTH = 4,
+  parameter LAST = 0)( /* 0 = last asserted at the end of each burst, 1 = last only asserted at the end of the transfer */
+
   input clk,
   input resetn,
 
@@ -60,12 +67,6 @@ module dmac_data_mover (
   output req_ready,
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length
 );
-
-parameter ID_WIDTH = 3;
-parameter DATA_WIDTH = 64;
-parameter DISABLE_WAIT_FOR_ID = 1;
-parameter BEATS_PER_BURST_WIDTH = 4;
-parameter LAST = 0; /* 0 = last asserted at the end of each burst, 1 = last only asserted at the end of the transfer */
 
 localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
 
@@ -124,7 +125,7 @@ end
 
 always @(posedge clk) begin
   if (req_ready) begin
-    last_eot <= req_last_burst_length == 'h0; 
+    last_eot <= req_last_burst_length == 'h0;
     last_non_eot <= 1'b0;
     beat_counter <= 'h1;
   end else if (s_axi_ready && s_axi_valid) begin

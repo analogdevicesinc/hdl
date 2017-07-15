@@ -33,7 +33,15 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_address_generator (
+module dmac_address_generator #(
+
+  parameter ID_WIDTH = 3,
+  parameter DMA_DATA_WIDTH = 64,
+  parameter DMA_ADDR_WIDTH = 32,
+  parameter BEATS_PER_BURST_WIDTH = 4,
+  parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8),
+  parameter LENGTH_WIDTH = 8)(
+
   input                        clk,
   input                        resetn,
 
@@ -61,14 +69,6 @@ module dmac_address_generator (
   output     [ 2:0]            prot,
   output     [ 3:0]            cache
 );
-
-
-parameter ID_WIDTH = 3;
-parameter DMA_DATA_WIDTH = 64;
-parameter DMA_ADDR_WIDTH = 32;
-parameter BEATS_PER_BURST_WIDTH = 4;
-parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8);
-parameter LENGTH_WIDTH = 8;
 
 localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
 

@@ -34,7 +34,10 @@
 // ***************************************************************************
 
 
-module splitter (
+module splitter #(
+
+  parameter NUM_M = 2)(
+
   input clk,
   input resetn,
 
@@ -44,8 +47,6 @@ module splitter (
   output [NUM_M-1:0] m_valid,
   input [NUM_M-1:0] m_ready
 );
-
-parameter NUM_M = 2;
 
 reg [NUM_M-1:0] acked;
 

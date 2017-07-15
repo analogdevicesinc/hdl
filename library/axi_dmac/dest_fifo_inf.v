@@ -33,7 +33,12 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_dest_fifo_inf (
+module dmac_dest_fifo_inf #(
+
+  parameter ID_WIDTH = 3,
+  parameter DATA_WIDTH = 64,
+  parameter BEATS_PER_BURST_WIDTH = 4)(
+
   input clk,
   input resetn,
 
@@ -68,10 +73,6 @@ module dmac_dest_fifo_inf (
   output response_resp_eot,
   output [1:0] response_resp
 );
-
-parameter ID_WIDTH = 3;
-parameter DATA_WIDTH = 64;
-parameter BEATS_PER_BURST_WIDTH = 4;
 
 assign sync_id_ret = sync_id;
 wire data_enabled;
@@ -113,7 +114,7 @@ dmac_data_mover # (
   .request_id(request_id),
   .response_id(data_id),
   .eot(data_eot),
-  
+
   .req_valid(req_valid),
   .req_ready(req_ready),
   .req_last_burst_length(req_last_burst_length),
