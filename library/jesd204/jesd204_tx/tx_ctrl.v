@@ -94,7 +94,7 @@ always @(posedge clk) begin
   sync_sync <= {sync_sync[0],sync};
 end
 
-assign status_sync = sync_sync;
+assign status_sync = sync_sync[1];
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
