@@ -96,7 +96,7 @@ module up_clock_mon #(
       end
 
       if (up_count_capture_s == 1'b1) begin
-        up_d_count <= d_count;
+        up_d_count <= d_count[TOTAL_WIDTH-1:0];
       end else if (up_count == 'h00 && up_count_run != up_count_running_m3) begin
         up_d_count <= 'h00;
       end
