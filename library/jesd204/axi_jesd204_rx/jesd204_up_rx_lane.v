@@ -103,7 +103,7 @@ always @(*) begin
   end else begin
     case (up_raddr[1:0])
     2'b00: up_rdata <= {
-      /* 06-31 */ 28'h00, /* Reserved for future use */
+      /* 06-31 */ 26'h00, /* Reserved for future use */
       /*    05 */ up_ilas_ready,
       /*    04 */ up_status_ifs_ready,
       /* 02-03 */ 2'b00, /* Reserved for future extensions of cgs_state */
