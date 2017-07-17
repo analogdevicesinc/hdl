@@ -59,6 +59,7 @@ module jesd204_tx #(
 
   input [32*NUM_LANES-1:0] tx_data,
   output tx_ready,
+  input tx_valid,
 
   input [NUM_LANES-1:0] cfg_lanes_disable,
   input [7:0] cfg_beats_per_multiframe,

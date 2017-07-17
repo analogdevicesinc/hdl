@@ -71,6 +71,7 @@ adi_add_bus "tx_data" "slave" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
   { \
+    { "tx_valid" "TVALID" } \
     { "tx_ready" "TREADY" } \
     { "tx_data" "TDATA" } \
   }
