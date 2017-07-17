@@ -65,9 +65,6 @@ module jesd204_up_sysref (
   input core_event_sysref_edge
 );
 
-reg up_status_sysref_alignment_error = 1'b0;
-wire up_status_sysref_captured;
-
 reg [1:0] up_sysref_status;
 reg [1:0] up_sysref_status_clear;
 wire [1:0] up_sysref_event;
