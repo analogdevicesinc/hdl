@@ -200,6 +200,8 @@ wire src_pause;
 wire src_sync_id;
 wire src_sync_id_ret;
 
+wire req_gen_valid;
+wire req_gen_ready;
 wire req_dest_valid;
 wire req_dest_ready;
 wire req_dest_empty;
