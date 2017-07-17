@@ -70,7 +70,8 @@ module dmac_address_generator #(
   output     [ 3:0]            cache
 );
 
-localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
+localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};
+localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
 
 `include "inc_id.h"
 
@@ -78,7 +79,13 @@ assign burst = 2'b01;
 assign prot = 3'b000;
 assign cache = 4'b0011;
 assign len = length;
-assign size = $clog2(DMA_DATA_WIDTH/8);
+assign size = DMA_DATA_WIDTH == 1024 ? 3'b111 :
+              DMA_DATA_WIDTH ==  512 ? 3'b110 :
+              DMA_DATA_WIDTH ==  256 ? 3'b101 :
+              DMA_DATA_WIDTH ==  128 ? 3'b100 :
+              DMA_DATA_WIDTH ==   64 ? 3'b011 :
+              DMA_DATA_WIDTH ==   32 ? 3'b010 :
+              DMA_DATA_WIDTH ==   16 ? 3'b001 : 3'b000;
 
 reg [LENGTH_WIDTH-1:0] length = 'h0;
 reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
@@ -106,7 +113,7 @@ always @(posedge clk) begin
     if (eot == 1'b1)
       length <= last_burst_len;
     else
-      length <= MAX_BEATS_PER_BURST - 1;
+      length <= MAX_LENGTH;
   end
 end
 

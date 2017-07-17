@@ -59,8 +59,8 @@ function [ID_WIDTH-1:0] b2g;
 	end
 endfunction
 
-function [ID_WIDTH:0] inc_id;
-input [ID_WIDTH:0] id;
+function [ID_WIDTH-1:0] inc_id;
+input [ID_WIDTH-1:0] id;
 begin
 	inc_id = b2g(g2b(id) + 1);
 end

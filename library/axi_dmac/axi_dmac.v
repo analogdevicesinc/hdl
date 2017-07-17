@@ -272,7 +272,7 @@ reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
-reg up_dma_cyclic = CYCLIC;
+reg up_dma_cyclic = CYCLIC ? 1'b1 : 1'b0;
 wire up_dma_sync_transfer_start = SYNC_TRANSFER_START ? 1'b1 : 1'b0;
 
 // ID signals from the DMAC, just for debugging
@@ -339,7 +339,7 @@ up_axi #(
 // IRQ handling
 assign up_irq_pending = ~up_irq_mask & up_irq_source;
 assign up_irq_trigger  = {up_eot, up_sot};
-assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 0;
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 2'b00;
 
 always @(posedge s_axi_aclk)
 begin
@@ -371,7 +371,7 @@ begin
     up_dma_x_length <= 'h00;
     up_dma_dest_stride <= 'h00;
     up_dma_src_stride <= 'h00;
-    up_irq_mask <= 3'b11;
+    up_irq_mask <= 2'b11;
     up_dma_req_valid <= 1'b0;
     up_scratch <= 'h00;
     up_dma_cyclic <= 1'b0;
@@ -392,7 +392,7 @@ begin
     if (up_wreq) begin
       case (up_waddr)
       9'h002: up_scratch <= up_wdata;
-      9'h020: up_irq_mask <= up_wdata;
+      9'h020: up_irq_mask <= up_wdata[1:0];
       9'h100: {up_pause, up_enable} <= up_wdata[1:0];
                         9'h103: begin
                           if (CYCLIC) up_dma_cyclic <= up_wdata[0];
