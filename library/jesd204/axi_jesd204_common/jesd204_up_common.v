@@ -103,6 +103,7 @@ reg [1:0] up_reset_synchronizer_vector = 2'b11;
 assign up_reset_synchronizer = up_reset_synchronizer_vector[0];
 
 /* Transfer two cycles before the core comes out of reset */
+wire core_cfg_transfer_en;
 assign core_cfg_transfer_en = core_reset_vector[2] ^ core_reset_vector[1];
 
 reg up_reset_core = 1'b1;
