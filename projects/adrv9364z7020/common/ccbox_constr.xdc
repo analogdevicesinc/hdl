@@ -72,14 +72,11 @@ set_property  -dict {PACKAGE_PIN  W13   IOSTANDARD  LVCMOS25} [get_ports  pss_va
 
 ## tsw
 
-set_property  -dict {PACKAGE_PIN  V16   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_com_a]    ; ## U1,V16,IO_L18_34_JX4_P,JX4,68,TSW_COM_A
-set_property  -dict {PACKAGE_PIN  W16   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_s1]       ; ## U1,W16,IO_L18_34_JX4_N,JX4,70,TSW_S1
-set_property  -dict {PACKAGE_PIN  R16   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_a]        ; ## U1,R16,IO_L19_34_JX4_P,JX4,73,TSW_A
-set_property  -dict {PACKAGE_PIN  R17   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_b]        ; ## U1,R17,IO_L19_34_JX4_N,JX4,75,TSW_B
-set_property  -dict {PACKAGE_PIN  T17   IOSTANDARD  LVCMOS25} [get_ports  tsw_rot_misc]     ; ## U1,T17,IO_L20_34_JX4_P,JX4,74,TSW_?
-set_property  -dict {PACKAGE_PIN  R18   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_com_b]    ; ## U1,R18,IO_L20_34_JX4_N,JX4,76,TSW_COM_B
-set_property  -dict {PACKAGE_PIN  V17   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_s2]       ; ## U1,V17,IO_L21_34_JX4_P,JX4,77,TSW_S2
-set_property  -dict {PACKAGE_PIN  V18   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_s3]       ; ## U1,V18,IO_L21_34_JX4_N,JX4,79,TSW_S3
-set_property  -dict {PACKAGE_PIN  W18   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_s4]       ; ## U1,W18,IO_L22_34_JX4_P,JX4,78,TSW_S4
-set_property  -dict {PACKAGE_PIN  W19   IOSTANDARD  LVCMOS25} [get_ports  tsw_dir_s5]       ; ## U1,W19,IO_L22_34_JX4_N,JX4,80,TSW_S5
+set_property  -dict {PACKAGE_PIN  T20   IOSTANDARD  LVCMOS25} [get_ports  tsw_s1]           ; ## U1,T20,IO_L15_34_JX4_P,JX4,57,P11,2,NAV_SWITCH_S1
+set_property  -dict {PACKAGE_PIN  W20   IOSTANDARD  LVCMOS25} [get_ports  tsw_s2]           ; ## U1,W20,IO_L16_34_JX4_N,JX4,60,P11,4,NAV_SWITCH_S2
+set_property  -dict {PACKAGE_PIN  Y18   IOSTANDARD  LVCMOS25} [get_ports  tsw_s3]           ; ## U1,Y18,IO_L17_34_JX4_P,JX4,67,P11,6,NAV_SWITCH_S3
+set_property  -dict {PACKAGE_PIN  V16   IOSTANDARD  LVCMOS25} [get_ports  tsw_s4]           ; ## U1,V16,IO_L18_34_JX4_P,JX4,68,P11,8,NAV_SWITCH_S4
+set_property  -dict {PACKAGE_PIN  V10   IOSTANDARD  LVCMOS25} [get_ports  tsw_s5]           ; ## U1,V10,IO_L21_13_JX2_N,JX2,69,P11,10,NAV_SWITCH_S5
+set_property  -dict {PACKAGE_PIN  V20   IOSTANDARD  LVCMOS25} [get_ports  tsw_a]            ; ## U1,V20,IO_L16_34_JX4_P,JX4,58,P11,1,NAV_SWITCH_A
+set_property  -dict {PACKAGE_PIN  U20   IOSTANDARD  LVCMOS25} [get_ports  tsw_b]            ; ## U1,U20,IO_L15_34_JX4_N,JX4,59,P11,3,NAV_SWITCH_B
 
