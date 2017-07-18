@@ -95,16 +95,13 @@ module system_top (
   input   [ 2:0]  pss_valid_n,
   inout   [ 2:0]  adp5061_io,
 
-  inout           tsw_rot_com_a,
-  inout           tsw_dir_com_b,
-  inout           tsw_rot_s1,
-  inout           tsw_rot_a,
-  inout           tsw_rot_b,
-  inout           tsw_rot_misc,
-  inout           tsw_dir_s2,
-  inout           tsw_dir_s3,
-  inout           tsw_dir_s4,
-  inout           tsw_dir_s5,
+  inout           tsw_s1,
+  inout           tsw_s2,
+  inout           tsw_s3,
+  inout           tsw_s4,
+  inout           tsw_s5,
+  inout           tsw_a,
+  inout           tsw_b,
 
   inout           otg_ctrl,
   inout           adp1614_en,
@@ -219,20 +216,21 @@ module system_top (
 
   // ad9361 gpio - tact-scroll-wheel
  
-  ad_iobuf #(.DATA_WIDTH(10)) i_iobuf_tsw (
-    .dio_t ({gpio_t[63:62], gpio_t[60:57], gpio_t[50:47]}),
-    .dio_i ({gpio_o[63:62], gpio_o[60:57], gpio_o[50:47]}),
-    .dio_o ({gpio_i[63:62], gpio_i[60:57], gpio_i[50:47]}),
-    .dio_p ({ tsw_rot_com_a,      // 63
-              tsw_dir_com_b,      // 62
-              tsw_rot_s1,         // 60
-              tsw_rot_a,          // 59
-              tsw_rot_b,          // 58
-              tsw_rot_misc,       // 57
-              tsw_dir_s2,         // 50
-              tsw_dir_s3,         // 49
-              tsw_dir_s4,         // 48
-              tsw_dir_s5}));      // 47
+  assign gpio_i[63] = gpio_o[63];
+  assign gpio_i[62] = gpio_o[62];
+  assign gpio_i[60] = gpio_o[60];
+
+  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf_tsw (
+    .dio_t ({gpio_t[59:57], gpio_t[50:47]}),
+    .dio_i ({gpio_o[59:57], gpio_o[50:47]}),
+    .dio_o ({gpio_i[59:57], gpio_i[50:47]}),
+    .dio_p ({ tsw_a,          // 59
+              tsw_b,          // 58
+              tsw_s1,         // 57
+              tsw_s2,         // 50
+              tsw_s3,         // 49
+              tsw_s4,         // 48
+              tsw_s5}));      // 47
 
   // ad9361 gpio - 63-32
 
