@@ -83,7 +83,7 @@ endgenerate
 
 always @(posedge core_clk) begin
   if (core_reset == 1'b1) begin
-    core_ilas_captured = 1'b0;
+    core_ilas_captured <= 1'b0;
   end else begin
     if (core_ilas_config_valid == 1'b1 && core_ilas_config_addr == 'h3) begin
       core_ilas_captured <= 1'b1;
