@@ -41,124 +41,279 @@ module system_top (
 
   // clock and resets
 
-  input             sys_clk,
+  sys_clk,
 
-  // hps-ddr
+  // hps
 
-  output  [ 14:0]   ddr3_a,
-  output  [  2:0]   ddr3_ba,
-  output            ddr3_reset_n,
-  output            ddr3_ck_p,
-  output            ddr3_ck_n,
-  output            ddr3_cke,
-  output            ddr3_cs_n,
-  output            ddr3_ras_n,
-  output            ddr3_cas_n,
-  output            ddr3_we_n,
-  inout   [ 31:0]   ddr3_dq,
-  inout   [  3:0]   ddr3_dqs_p,
-  inout   [  3:0]   ddr3_dqs_n,
-  output  [  3:0]   ddr3_dm,
-  output            ddr3_odt,
-  input             ddr3_rzq,
-
-  // hps-ethernet
-
-  output            eth1_tx_clk,
-  output            eth1_tx_ctl,
-  output  [  3:0]   eth1_tx_d,
-  input             eth1_rx_clk,
-  input             eth1_rx_ctl,
-  input   [  3:0]   eth1_rx_d,
-  output            eth1_mdc,
-  inout             eth1_mdio,
-
-  // hps-qspi
-
-  output            qspi_ss0,
-  output            qspi_clk,
-  inout   [  3:0]   qspi_io,
-
-  // hps-sdio
-
-  output            sdio_clk,
-  inout             sdio_cmd,
-  inout   [  3:0]   sdio_d,
-
-  // hps-usb
-
-  input             usb1_clk,
-  output            usb1_stp,
-  input             usb1_dir,
-  input             usb1_nxt,
-  inout   [  7:0]   usb1_d,
-
-  // hps-spim1-lcd
-
-  output            spim1_ss0,
-  output            spim1_clk,
-  output            spim1_mosi,
-  input             spim1_miso,
-
-  // iic interface
-
-  inout             scl,
-  inout             sda,
-  output            ga0,
-  output            ga1,
-
-  // hps-uart
-
-  input             uart0_rx,
-  output            uart0_tx,
+  ddr3_a,
+  ddr3_ba,
+  ddr3_ck_p,
+  ddr3_ck_n,
+  ddr3_cke,
+  ddr3_cs_n,
+  ddr3_ras_n,
+  ddr3_cas_n,
+  ddr3_we_n,
+  ddr3_reset_n,
+  ddr3_dq,
+  ddr3_dqs_p,
+  ddr3_dqs_n,
+  ddr3_odt,
+  ddr3_dm,
+  ddr3_oct_rzqin,
+  eth1_tx_clk,
+  eth1_tx_ctl,
+  eth1_txd0,
+  eth1_txd1,
+  eth1_txd2,
+  eth1_txd3,
+  eth1_rx_clk,
+  eth1_rx_ctl,
+  eth1_rxd0,
+  eth1_rxd1,
+  eth1_rxd2,
+  eth1_rxd3,
+  eth1_mdc,
+  eth1_mdio,
+  qspi_ss0,
+  qspi_clk,
+  qspi_io0,
+  qspi_io1,
+  qspi_io2,
+  qspi_io3,
+  sdio_clk,
+  sdio_cmd,
+  sdio_d0,
+  sdio_d1,
+  sdio_d2,
+  sdio_d3,
+  usb1_clk,
+  usb1_stp,
+  usb1_dir,
+  usb1_nxt,
+  usb1_d0,
+  usb1_d1,
+  usb1_d2,
+  usb1_d3,
+  usb1_d4,
+  usb1_d5,
+  usb1_d6,
+  usb1_d7,
+  spim1_ss0,
+  spim1_clk,
+  spim1_mosi,
+  spim1_miso,
+  uart0_rx,
+  uart0_tx,
 
   // board gpio
 
-  output  [  3:0]   gpio_bd_o,
-  input   [  7:0]   gpio_bd_i,
+  led,
+  push_buttons,
+  dip_switches,
 
   // display
 
-  output            vga_clk,
-  output            vga_blank_n,
-  output            vga_sync_n,
-  output            vga_hsync,
-  output            vga_vsync,
-  output  [  7:0]   vga_red,
-  output  [  7:0]   vga_grn,
-  output  [  7:0]   vga_blu,
+  vga_clk,
+  vga_blank_n,
+  vga_sync_n,
+  vga_hs,
+  vga_vs,
+  vga_r,
+  vga_g,
+  vga_b,
 
-  // ad9361
+  // data interface
 
-  input             rx_clk_in,
-  input             rx_frame_in,
-  input   [  5:0]   rx_data_in,
-  output            tx_clk_out,
-  output            tx_frame_out,
-  output  [  5:0]   tx_data_out,
-  output            enable,
-  output            txnrx,
+  rx_clk_in,
+  rx_frame_in,
+  rx_data_in,
+  tx_clk_out,
+  tx_frame_out,
+  tx_data_out,
 
   // gpio interface
 
-  output            ad9361_resetb,
-  output            ad9361_en_agc,
-  output            ad9361_sync,
+  ad9361_resetb,
+  ad9361_en_agc,
+  ad9361_sync,
+  ad9361_enable,
+  ad9361_txnrx,
+
+  // iic interface
+
+  scl,
+  sda,
+  ga0,
+  ga1,
+
+  // spi
+
+  spi_csn,
+  spi_clk,
+  spi_mosi,
+  spi_miso);
+
+  // clock and resets
+
+  input             sys_clk;
+
+  // hps
+
+  output  [ 14:0]   ddr3_a;
+  output  [  2:0]   ddr3_ba;
+  output            ddr3_ck_p;
+  output            ddr3_ck_n;
+  output            ddr3_cke;
+  output            ddr3_cs_n;
+  output            ddr3_ras_n;
+  output            ddr3_cas_n;
+  output            ddr3_we_n;
+  output            ddr3_reset_n;
+  inout   [ 31:0]   ddr3_dq;
+  inout   [  3:0]   ddr3_dqs_p;
+  inout   [  3:0]   ddr3_dqs_n;
+  output            ddr3_odt;
+  output  [  3:0]   ddr3_dm;
+  input             ddr3_oct_rzqin;
+  output            eth1_tx_clk;
+  output            eth1_tx_ctl;
+  output            eth1_txd0;
+  output            eth1_txd1;
+  output            eth1_txd2;
+  output            eth1_txd3;
+  input             eth1_rx_clk;
+  input             eth1_rx_ctl;
+  input             eth1_rxd0;
+  input             eth1_rxd1;
+  input             eth1_rxd2;
+  input             eth1_rxd3;
+  output            eth1_mdc;
+  inout             eth1_mdio;
+  output            qspi_ss0;
+  output            qspi_clk;
+  inout             qspi_io0;
+  inout             qspi_io1;
+  inout             qspi_io2;
+  inout             qspi_io3;
+  output            sdio_clk;
+  inout             sdio_cmd;
+  inout             sdio_d0;
+  inout             sdio_d1;
+  inout             sdio_d2;
+  inout             sdio_d3;
+  input             usb1_clk;
+  output            usb1_stp;
+  input             usb1_dir;
+  input             usb1_nxt;
+  inout             usb1_d0;
+  inout             usb1_d1;
+  inout             usb1_d2;
+  inout             usb1_d3;
+  inout             usb1_d4;
+  inout             usb1_d5;
+  inout             usb1_d6;
+  inout             usb1_d7;
+  output            spim1_ss0;
+  output            spim1_clk;
+  output            spim1_mosi;
+  input             spim1_miso;
+  input             uart0_rx;
+  output            uart0_tx;
+
+  // board gpio
+
+  output  [  3:0]   led;
+  input   [  3:0]   push_buttons;
+  input   [  3:0]   dip_switches;
+
+  // display
+
+  output            vga_clk;
+  output            vga_blank_n;
+  output            vga_sync_n;
+  output            vga_hs;
+  output            vga_vs;
+  output  [  7:0]   vga_r;
+  output  [  7:0]   vga_g;
+  output  [  7:0]   vga_b;
+
+  // data interface
+
+  input             rx_clk_in;
+  input             rx_frame_in;
+  input   [  5:0]   rx_data_in;
+  output            tx_clk_out;
+  output            tx_frame_out;
+  output  [  5:0]   tx_data_out;
+
+  // gpio interface
+
+  output            ad9361_resetb;
+  output            ad9361_en_agc;
+  output            ad9361_sync;
+  output            ad9361_enable;
+  output            ad9361_txnrx;
+
+  // iic interface
+
+  inout             scl;
+  inout             sda;
+  output            ga0;
+  output            ga1;
+
 
   // spi interface
 
-  output            spi_csn,
-  output            spi_clk,
-  output            spi_mosi,
-  input             spi_miso);
+  output            spi_csn;
+  output            spi_clk;
+  output            spi_mosi;
+  input             spi_miso;
+
+  // internal clocks and resets
+
+  wire    [ 31:0]   gpio_open;
+  wire              sys_resetn;
+  wire              clk;
 
   // internal signals
 
-  wire              sys_resetn;
-  wire    [ 31:0]   sys_gpio_bd_i;
-  wire    [ 31:0]   sys_gpio_bd_o;
-  wire    [ 31:0]   sys_gpio_i;
-  wire    [ 31:0]   sys_gpio_o;
+  wire              adc_enable_i0;
+  wire              adc_enable_q0;
+  wire              adc_enable_i1;
+  wire              adc_enable_q1;
+  wire              adc_valid_i0;
+  wire              adc_valid_q0;
+  wire              adc_valid_i1;
+  wire              adc_valid_q1;
+  wire              adc_dwr;
+  wire              adc_dsync;
+  wire    [ 15:0]   adc_chan_i0;
+  wire    [ 15:0]   adc_chan_q0;
+  wire    [ 15:0]   adc_chan_i1;
+  wire    [ 15:0]   adc_chan_q1;
+  wire    [ 63:0]   adc_ddata;
+  wire              adc_dovf;
+  wire              dac_enable_i0;
+  wire              dac_enable_q0;
+  wire              dac_enable_i1;
+  wire              dac_enable_q1;
+  wire              dac_valid_i0;
+  wire              dac_valid_q0;
+  wire              dac_valid_i1;
+  wire              dac_valid_q1;
+  wire    [ 15:0]   dac_data_i0;
+  wire    [ 15:0]   dac_data_q0;
+  wire    [ 15:0]   dac_data_i1;
+  wire    [ 15:0]   dac_data_q1;
+  wire    [ 63:0]   dac_ddata;
+  wire              dac_dunf;
+  wire              dac_rd_en;
+  wire              dac_fifo_valid;  
+  wire              vga_pixel_clock;
+  wire              vid_v_sync;
+  wire              vid_h_sync;
+  wire    [7:0]     vid_r,vid_g,vid_b;
 
   wire              i2c0_out_data;
   wire              i2c0_sda;
@@ -167,96 +322,48 @@ module system_top (
 
   // defaults
 
+  assign vga_clk = vga_pixel_clock;
   assign vga_blank_n = 1'b1;
   assign vga_sync_n = 1'b0;
-
-  assign gpio_bd_o = sys_gpio_bd_o[3:0];
-
-  assign sys_gpio_bd_i[31:8] = sys_gpio_bd_o[31:8];
-  assign sys_gpio_bd_i[ 7:0] = gpio_bd_i;
-  
-  assign ad9361_resetb = sys_gpio_o[4];
-  assign ad9361_en_agc = sys_gpio_o[3];
-  assign ad9361_sync = sys_gpio_o[2];
+  assign vga_hs = vid_h_sync;
+  assign vga_vs = vid_v_sync;
+  assign {vga_b,vga_g,vga_r} =  {vid_b,vid_g,vid_r};
   assign ga0 = 1'b0;
   assign ga1 = 1'b0;
 
- ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
- ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
+
+ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl)); //
+ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda)); //
+
 
   // instantiations
 
+  sld_signaltap #(
+    .sld_advanced_trigger_entity ("basic,1,"),
+    .sld_data_bits (64),
+    .sld_data_bit_cntr_bits (7),
+    .sld_enable_advanced_trigger (0),
+    .sld_mem_address_bits (10),
+    .sld_node_crc_bits (32),
+    .sld_node_crc_hiword (13323),
+    .sld_node_crc_loword (24084),
+    .sld_node_info (1076736),
+    .sld_ram_block_type ("AUTO"),
+    .sld_sample_depth (1024),
+    .sld_storage_qualifier_gap_record (0),
+    .sld_storage_qualifier_mode ("OFF"),
+    .sld_trigger_bits (1),
+    .sld_trigger_in_enabled (0),
+    .sld_trigger_level (1),
+    .sld_trigger_level_pipeline (1))
+  i_ila_adc (
+    .acq_clk (clk),
+    .acq_data_in (adc_ddata),
+    .acq_trigger_in (adc_valid_i0));
+
   system_bd i_system_bd (
-    .axi_ad9361_device_if_rx_clk_in_p (rx_clk_in),
-    .axi_ad9361_device_if_rx_clk_in_n (1'd0),
-    .axi_ad9361_device_if_rx_frame_in_p (rx_frame_in),
-    .axi_ad9361_device_if_rx_frame_in_n (1'd0),
-    .axi_ad9361_device_if_rx_data_in_p (rx_data_in),
-    .axi_ad9361_device_if_rx_data_in_n (6'd0),
-    .axi_ad9361_device_if_tx_clk_out_p (tx_clk_out),
-    .axi_ad9361_device_if_tx_clk_out_n (),
-    .axi_ad9361_device_if_tx_frame_out_p (tx_frame_out),
-    .axi_ad9361_device_if_tx_frame_out_n (),
-    .axi_ad9361_device_if_tx_data_out_p (tx_data_out),
-    .axi_ad9361_device_if_tx_data_out_n (),
-    .axi_ad9361_device_if_enable (enable),
-    .axi_ad9361_device_if_txnrx (txnrx),
-    .axi_ad9361_up_enable_up_enable (sys_gpio_o[1]),
-    .axi_ad9361_up_txnrx_up_txnrx (sys_gpio_o[0]),
-    .sys_clk_clk (sys_clk),
-    .sys_gpio_bd_in_port (sys_gpio_bd_i),
-    .sys_gpio_bd_out_port (sys_gpio_bd_o),
-    .sys_gpio_in_export (sys_gpio_i),
-    .sys_gpio_out_export (sys_gpio_o),
-    .sys_hps_h2f_reset_reset_n (sys_resetn),
-    .sys_hps_hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
-    .sys_hps_hps_io_hps_io_emac1_inst_TXD0 (eth1_tx_d[0]),
-    .sys_hps_hps_io_hps_io_emac1_inst_TXD1 (eth1_tx_d[1]),
-    .sys_hps_hps_io_hps_io_emac1_inst_TXD2 (eth1_tx_d[2]),
-    .sys_hps_hps_io_hps_io_emac1_inst_TXD3 (eth1_tx_d[3]),
-    .sys_hps_hps_io_hps_io_emac1_inst_RXD0 (eth1_rx_d[0]),
-    .sys_hps_hps_io_hps_io_emac1_inst_MDIO (eth1_mdio),
-    .sys_hps_hps_io_hps_io_emac1_inst_MDC (eth1_mdc),
-    .sys_hps_hps_io_hps_io_emac1_inst_RX_CTL (eth1_rx_ctl),
-    .sys_hps_hps_io_hps_io_emac1_inst_TX_CTL (eth1_tx_ctl),
-    .sys_hps_hps_io_hps_io_emac1_inst_RX_CLK (eth1_rx_clk),
-    .sys_hps_hps_io_hps_io_emac1_inst_RXD1 (eth1_rx_d[1]),
-    .sys_hps_hps_io_hps_io_emac1_inst_RXD2 (eth1_rx_d[2]),
-    .sys_hps_hps_io_hps_io_emac1_inst_RXD3 (eth1_rx_d[3]),
-    .sys_hps_hps_io_hps_io_qspi_inst_IO0 (qspi_io[0]),
-    .sys_hps_hps_io_hps_io_qspi_inst_IO1 (qspi_io[1]),
-    .sys_hps_hps_io_hps_io_qspi_inst_IO2 (qspi_io[2]),
-    .sys_hps_hps_io_hps_io_qspi_inst_IO3 (qspi_io[3]),
-    .sys_hps_hps_io_hps_io_qspi_inst_SS0 (qspi_ss0),
-    .sys_hps_hps_io_hps_io_qspi_inst_CLK (qspi_clk),
-    .sys_hps_hps_io_hps_io_sdio_inst_CMD (sdio_cmd),
-    .sys_hps_hps_io_hps_io_sdio_inst_D0 (sdio_d[0]),
-    .sys_hps_hps_io_hps_io_sdio_inst_D1 (sdio_d[1]),
-    .sys_hps_hps_io_hps_io_sdio_inst_CLK (sdio_clk),
-    .sys_hps_hps_io_hps_io_sdio_inst_D2 (sdio_d[2]),
-    .sys_hps_hps_io_hps_io_sdio_inst_D3 (sdio_d[3]),
-    .sys_hps_hps_io_hps_io_usb1_inst_D0 (usb1_d[0]),
-    .sys_hps_hps_io_hps_io_usb1_inst_D1 (usb1_d[1]),
-    .sys_hps_hps_io_hps_io_usb1_inst_D2 (usb1_d[2]),
-    .sys_hps_hps_io_hps_io_usb1_inst_D3 (usb1_d[3]),
-    .sys_hps_hps_io_hps_io_usb1_inst_D4 (usb1_d[4]),
-    .sys_hps_hps_io_hps_io_usb1_inst_D5 (usb1_d[5]),
-    .sys_hps_hps_io_hps_io_usb1_inst_D6 (usb1_d[6]),
-    .sys_hps_hps_io_hps_io_usb1_inst_D7 (usb1_d[7]),
-    .sys_hps_hps_io_hps_io_usb1_inst_CLK (usb1_clk),
-    .sys_hps_hps_io_hps_io_usb1_inst_STP (usb1_stp),
-    .sys_hps_hps_io_hps_io_usb1_inst_DIR (usb1_dir),
-    .sys_hps_hps_io_hps_io_usb1_inst_NXT (usb1_nxt),
-    .sys_hps_hps_io_hps_io_spim1_inst_CLK (spim1_clk),
-    .sys_hps_hps_io_hps_io_spim1_inst_MOSI (spim1_mosi),
-    .sys_hps_hps_io_hps_io_spim1_inst_MISO (spim1_miso),
-    .sys_hps_hps_io_hps_io_spim1_inst_SS0 (spim1_ss0),
-    .sys_hps_hps_io_hps_io_uart0_inst_RX (uart0_rx),
-    .sys_hps_hps_io_hps_io_uart0_inst_TX (uart0_tx),
-    .sys_hps_i2c0_out_data(i2c0_out_data),
-    .sys_hps_i2c0_sda(i2c0_sda),
-    .sys_hps_i2c0_clk_clk(i2c0_out_clk),
-    .sys_hps_i2c0_scl_in_clk(i2c0_scl_in_clk),
+    .clk_clk (sys_clk),
+    .reset_reset_n (sys_resetn),
     .sys_hps_memory_mem_a (ddr3_a),
     .sys_hps_memory_mem_ba (ddr3_ba),
     .sys_hps_memory_mem_ck (ddr3_ck_p),
@@ -272,24 +379,96 @@ module system_top (
     .sys_hps_memory_mem_dqs_n (ddr3_dqs_n),
     .sys_hps_memory_mem_odt (ddr3_odt),
     .sys_hps_memory_mem_dm (ddr3_dm),
-    .sys_hps_memory_oct_rzqin (ddr3_rzq),
-    .sys_rst_reset_n (sys_resetn),
-    .sys_spi_MISO (spi_miso),
-    .sys_spi_MOSI (spi_mosi),
-    .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn),
-    .vga_out_clk_clk (vga_clk),
-    .vga_out_data_vid_clk (vga_clk),
-    .vga_out_data_vid_data ({vga_red, vga_grn, vga_blu}),
-    .vga_out_data_underflow (),
-    .vga_out_data_vid_datavalid (),
-    .vga_out_data_vid_v_sync (vga_vsync),
-    .vga_out_data_vid_h_sync (vga_hsync),
-    .vga_out_data_vid_f (),
-    .vga_out_data_vid_h (),
-    .vga_out_data_vid_v (),
-    .vga_if_vid_v ()
-	 );
+    .sys_hps_memory_oct_rzqin (ddr3_oct_rzqin),
+    .sys_hps_hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
+    .sys_hps_hps_io_hps_io_emac1_inst_TXD0 (eth1_txd0),
+    .sys_hps_hps_io_hps_io_emac1_inst_TXD1 (eth1_txd1),
+    .sys_hps_hps_io_hps_io_emac1_inst_TXD2 (eth1_txd2),
+    .sys_hps_hps_io_hps_io_emac1_inst_TXD3 (eth1_txd3),
+    .sys_hps_hps_io_hps_io_emac1_inst_RXD0 (eth1_rxd0),
+    .sys_hps_hps_io_hps_io_emac1_inst_MDIO (eth1_mdio),
+    .sys_hps_hps_io_hps_io_emac1_inst_MDC (eth1_mdc),
+    .sys_hps_hps_io_hps_io_emac1_inst_RX_CTL (eth1_rx_ctl),
+    .sys_hps_hps_io_hps_io_emac1_inst_TX_CTL (eth1_tx_ctl),
+    .sys_hps_hps_io_hps_io_emac1_inst_RX_CLK (eth1_rx_clk),
+    .sys_hps_hps_io_hps_io_emac1_inst_RXD1 (eth1_rxd1),
+    .sys_hps_hps_io_hps_io_emac1_inst_RXD2 (eth1_rxd2),
+    .sys_hps_hps_io_hps_io_emac1_inst_RXD3 (eth1_rxd3),
+    .sys_hps_hps_io_hps_io_qspi_inst_IO0 (qspi_io0),
+    .sys_hps_hps_io_hps_io_qspi_inst_IO1 (qspi_io1),
+    .sys_hps_hps_io_hps_io_qspi_inst_IO2 (qspi_io2),
+    .sys_hps_hps_io_hps_io_qspi_inst_IO3 (qspi_io3),
+    .sys_hps_hps_io_hps_io_qspi_inst_SS0 (qspi_ss0),
+    .sys_hps_hps_io_hps_io_qspi_inst_CLK (qspi_clk),
+    .sys_hps_hps_io_hps_io_sdio_inst_CMD (sdio_cmd),
+    .sys_hps_hps_io_hps_io_sdio_inst_D0 (sdio_d0),
+    .sys_hps_hps_io_hps_io_sdio_inst_D1 (sdio_d1),
+    .sys_hps_hps_io_hps_io_sdio_inst_CLK (sdio_clk),
+    .sys_hps_hps_io_hps_io_sdio_inst_D2 (sdio_d2),
+    .sys_hps_hps_io_hps_io_sdio_inst_D3 (sdio_d3),
+    .sys_hps_hps_io_hps_io_usb1_inst_D0 (usb1_d0),
+    .sys_hps_hps_io_hps_io_usb1_inst_D1 (usb1_d1),
+    .sys_hps_hps_io_hps_io_usb1_inst_D2 (usb1_d2),
+    .sys_hps_hps_io_hps_io_usb1_inst_D3 (usb1_d3),
+    .sys_hps_hps_io_hps_io_usb1_inst_D4 (usb1_d4),
+    .sys_hps_hps_io_hps_io_usb1_inst_D5 (usb1_d5),
+    .sys_hps_hps_io_hps_io_usb1_inst_D6 (usb1_d6),
+    .sys_hps_hps_io_hps_io_usb1_inst_D7 (usb1_d7),
+    .sys_hps_hps_io_hps_io_usb1_inst_CLK (usb1_clk),
+    .sys_hps_hps_io_hps_io_usb1_inst_STP (usb1_stp),
+    .sys_hps_hps_io_hps_io_usb1_inst_DIR (usb1_dir),
+    .sys_hps_hps_io_hps_io_usb1_inst_NXT (usb1_nxt),
+    .sys_hps_hps_io_hps_io_spim1_inst_CLK (spim1_clk),
+    .sys_hps_hps_io_hps_io_spim1_inst_MOSI (spim1_mosi),
+    .sys_hps_hps_io_hps_io_spim1_inst_MISO (spim1_miso),
+    .sys_hps_hps_io_hps_io_spim1_inst_SS0 (spim1_ss0),
+    .sys_hps_hps_io_hps_io_uart0_inst_RX (uart0_rx),
+    .sys_hps_hps_io_hps_io_uart0_inst_TX (uart0_tx),
+    .sys_gpio_external_connection_in_port ({16'd0, 4'd0, led, push_buttons, dip_switches}),
+    .sys_gpio_external_connection_out_port ({gpio_open[31:16], gpio_open[15:12], led, gpio_open[7:0]}),
+    .sys_hps_h2f_reset_reset_n (sys_resetn),
+    .sys_hps_spim0_txd (),
+    .sys_hps_spim0_rxd (),
+    .sys_hps_spim0_ss_in_n (1'b1),
+    .sys_hps_spim0_ssi_oe_n (),
+    .sys_hps_spim0_ss_0_n (),
+    .sys_hps_spim0_ss_1_n (),
+    .sys_hps_spim0_ss_2_n (),
+    .sys_hps_spim0_ss_3_n (),
+    .sys_hps_spim0_sclk_out_clk (),
+    .axi_ad9361_device_if_rx_clk_in_p (rx_clk_in),
+    .axi_ad9361_device_if_rx_clk_in_n (1'b0),
+    .axi_ad9361_device_if_rx_frame_in_p (rx_frame_in),
+    .axi_ad9361_device_if_rx_frame_in_n (1'b0),
+    .axi_ad9361_device_if_rx_data_in_p (rx_data_in),
+    .axi_ad9361_device_if_rx_data_in_n (6'd0),
+    .axi_ad9361_device_if_tx_clk_out_p (tx_clk_out),
+    .axi_ad9361_device_if_tx_clk_out_n (),
+    .axi_ad9361_device_if_tx_frame_out_p (tx_frame_out),
+    .axi_ad9361_device_if_tx_frame_out_n (),
+    .axi_ad9361_device_if_tx_data_out_p (tx_data_out),
+    .axi_ad9361_device_if_tx_data_out_n (),
+    .axi_ad9361_l_clk_clk (clk),
+    .spi_ad9361_external_MISO (spi_miso),
+    .spi_ad9361_external_MOSI (spi_mosi),
+    .spi_ad9361_external_SCLK (spi_clk),
+    .spi_ad9361_external_SS_n (spi_csn),
+    .vga_pixel_clock_bridge_out_clk_clk (vga_pixel_clock),
+    .vga_clock_video_output_clocked_video_vid_clk (vga_pixel_clock),
+    .vga_clock_video_output_clocked_video_vid_data ({vid_r,vid_g,vid_b}),
+    .vga_clock_video_output_clocked_video_underflow (),
+    .vga_clock_video_output_clocked_video_vid_datavalid (),
+    .vga_clock_video_output_clocked_video_vid_v_sync (vid_v_sync),
+    .vga_clock_video_output_clocked_video_vid_h_sync (vid_h_sync),
+    .vga_clock_video_output_clocked_video_vid_f (),
+    .vga_clock_video_output_clocked_video_vid_h (),
+    .vga_clock_video_output_clocked_video_vid_v (),
+    .sys_hps_i2c0_out_data(i2c0_out_data),
+    .sys_hps_i2c0_sda(i2c0_sda),
+    .sys_hps_i2c0_clk_clk(i2c0_out_clk),
+    .sys_hps_i2c0_scl_in_clk(i2c0_scl_in_clk),
+    .gpio_external_connection_export ({ad9361_resetb, ad9361_en_agc, ad9361_sync, ad9361_enable, ad9361_txnrx})
+  );
 
 endmodule
 
