@@ -283,7 +283,7 @@ end
 
 up_clock_mon #(
   .TOTAL_WIDTH(21)
-) i_clk_mon (
+) i_clock_mon (
   .up_rstn(~up_reset),
   .up_clk(up_clk),
   .up_d_count(clk_mon_count),
