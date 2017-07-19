@@ -67,7 +67,7 @@ set_parameter_property DMA_DATA_WIDTH_DEST UNITS None
 set_parameter_property DMA_DATA_WIDTH_DEST HDL_PARAMETER true
 
 add_parameter DMA_LENGTH_WIDTH INTEGER 0
-set_parameter_property DMA_LENGTH_WIDTH DEFAULT_VALUE 14
+set_parameter_property DMA_LENGTH_WIDTH DEFAULT_VALUE 24
 set_parameter_property DMA_LENGTH_WIDTH DISPLAY_NAME DMA_LENGTH_WIDTH
 set_parameter_property DMA_LENGTH_WIDTH TYPE INTEGER
 set_parameter_property DMA_LENGTH_WIDTH UNITS None
