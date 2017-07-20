@@ -248,8 +248,8 @@ module axi_ad9361_tx_channel #(
 
   // dac iq correction
 
-  assign dac_enable = (DISABLE == 1) ? 'd0 : dac_enable_int;
-  assign dac_data = (DISABLE == 1) ? 'd0 : dac_data_int;
+  assign dac_enable = (DISABLE == 1) ? 1'd0 : dac_enable_int;
+  assign dac_data = (DISABLE == 1) ? 12'd0 : dac_data_int;
 
   always @(posedge dac_clk) begin
     dac_enable_int <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
@@ -274,7 +274,7 @@ module axi_ad9361_tx_channel #(
 
   // dac mux
 
-  assign dac_data_out = (DISABLE == 1) ? 'd0 : dac_data_out_int;
+  assign dac_data_out = (DISABLE == 1) ? 12'd0 : dac_data_out_int;
 
   always @(posedge dac_clk) begin
     case (dac_data_sel_s)
@@ -349,9 +349,9 @@ module axi_ad9361_tx_channel #(
 
   // single channel processor
 
-  assign up_wack = (DISABLE == 1) ? 'd0 : up_wack_s;
-  assign up_rack = (DISABLE == 1) ? 'd0 : up_rack_s;
-  assign up_rdata = (DISABLE == 1) ? 'd0 : up_rdata_s;
+  assign up_wack = (DISABLE == 1) ? 1'd0 : up_wack_s;
+  assign up_rack = (DISABLE == 1) ? 1'd0 : up_rack_s;
+  assign up_rdata = (DISABLE == 1) ? 32'd0 : up_rdata_s;
 
   up_dac_channel #(
     .CHANNEL_ID (CHANNEL_ID),

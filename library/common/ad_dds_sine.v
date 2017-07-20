@@ -43,52 +43,52 @@ module ad_dds_sine #(
 
   // sine = sin(angle)
 
-  input                   clk,
-  input       [ 15:0]     angle,
-  output  reg [ 15:0]     sine,
-  input       [ DW:0]     ddata_in,
-  output  reg [ DW:0]     ddata_out);
-
-  localparam  DW = DELAY_DATA_WIDTH - 1;
+  input                             clk,
+  input   [15:0]                    angle,
+  output  [15:0]                    sine,
+  input   [(DELAY_DATA_WIDTH-1):0]  ddata_in,
+  output  [(DELAY_DATA_WIDTH-1):0]  ddata_out);
 
   // internal registers
 
-  reg     [ 33:0]   s1_data_p = 'd0;
-  reg     [ 33:0]   s1_data_n = 'd0;
-  reg     [ 15:0]   s1_angle = 'd0;
-  reg     [ DW:0]   s1_ddata = 'd0;
-  reg     [ 18:0]   s2_data_0 = 'd0;
-  reg     [ 18:0]   s2_data_1 = 'd0;
-  reg     [ DW:0]   s2_ddata = 'd0;
-  reg     [ 18:0]   s3_data = 'd0;
-  reg     [ DW:0]   s3_ddata = 'd0;
-  reg     [ 33:0]   s4_data2_p = 'd0;
-  reg     [ 33:0]   s4_data2_n = 'd0;
-  reg     [ 16:0]   s4_data1_p = 'd0;
-  reg     [ 16:0]   s4_data1_n = 'd0;
-  reg     [ DW:0]   s4_ddata = 'd0;
-  reg     [ 16:0]   s5_data2_0 = 'd0;
-  reg     [ 16:0]   s5_data2_1 = 'd0;
-  reg     [ 16:0]   s5_data1 = 'd0;
-  reg     [ DW:0]   s5_ddata = 'd0;
-  reg     [ 16:0]   s6_data2 = 'd0;
-  reg     [ 16:0]   s6_data1 = 'd0;
-  reg     [ DW:0]   s6_ddata = 'd0;
-  reg     [ 33:0]   s7_data = 'd0;
-  reg     [ DW:0]   s7_ddata = 'd0;
+  reg     [33:0]                    s1_data_p = 'd0;
+  reg     [33:0]                    s1_data_n = 'd0;
+  reg     [15:0]                    s1_angle = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  s1_ddata = 'd0;
+  reg     [18:0]                    s2_data_0 = 'd0;
+  reg     [18:0]                    s2_data_1 = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  s2_ddata = 'd0;
+  reg     [18:0]                    s3_data = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  s3_ddata = 'd0;
+  reg     [33:0]                    s4_data2_p = 'd0;
+  reg     [33:0]                    s4_data2_n = 'd0;
+  reg     [16:0]                    s4_data1_p = 'd0;
+  reg     [16:0]                    s4_data1_n = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  s4_ddata = 'd0;
+  reg     [16:0]                    s5_data2_0 = 'd0;
+  reg     [16:0]                    s5_data2_1 = 'd0;
+  reg     [16:0]                    s5_data1 = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  s5_ddata = 'd0;
+  reg     [16:0]                    s6_data2 = 'd0;
+  reg     [16:0]                    s6_data1 = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  s6_ddata = 'd0;
+  reg     [33:0]                    s7_data = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  s7_ddata = 'd0;
+  reg     [15:0]                    sine_int = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  ddata_out_int = 'd0;
 
   // internal signals
 
-  wire    [ 15:0]   angle_s;
-  wire    [ 33:0]   s1_data_s;
-  wire    [ DW:0]   s1_ddata_s;
-  wire    [ 15:0]   s1_angle_s;
-  wire    [ 33:0]   s4_data2_s;
-  wire    [ DW:0]   s4_ddata_s;
-  wire    [ 16:0]   s4_data1_s;
-  wire    [ 33:0]   s7_data2_s;
-  wire    [ 33:0]   s7_data1_s;
-  wire    [ DW:0]   s7_ddata_s;
+  wire    [15:0]                    angle_s;
+  wire    [33:0]                    s1_data_s;
+  wire    [(DELAY_DATA_WIDTH-1):0]  s1_ddata_s;
+  wire    [15:0]                    s1_angle_s;
+  wire    [33:0]                    s4_data2_s;
+  wire    [(DELAY_DATA_WIDTH-1):0]  s4_ddata_s;
+  wire    [16:0]                    s4_data1_s;
+  wire    [33:0]                    s7_data2_s;
+  wire    [33:0]                    s7_data1_s;
+  wire    [(DELAY_DATA_WIDTH-1):0]  s7_ddata_s;
 
   // make angle 2's complement
 
@@ -192,9 +192,12 @@ module ad_dds_sine #(
 
   // output registers
 
+  assign sine = sine_int;
+  assign ddata_out = ddata_out_int;
+
   always @(posedge clk) begin
-    sine <= s7_data[30:15];
-    ddata_out <= s7_ddata;
+    sine_int <= s7_data[30:15];
+    ddata_out_int <= s7_ddata;
   end
 
 endmodule

@@ -41,36 +41,35 @@ module up_xfer_status #(
 
   // up interface
 
-  input                   up_rstn,
-  input                   up_clk,
-  output  reg [DW:0]      up_data_status,
+  input                       up_rstn,
+  input                       up_clk,
+  output  [(DATA_WIDTH-1):0]  up_data_status,
 
   // device interface
 
-  input                   d_rst,
-  input                   d_clk,
-  input       [DW:0]      d_data_status);
-
-  localparam    DW = DATA_WIDTH - 1;
+  input                       d_rst,
+  input                       d_clk,
+  input   [(DATA_WIDTH-1):0]  d_data_status);
 
   // internal registers
 
-  reg             d_xfer_state_m1 = 'd0;
-  reg             d_xfer_state_m2 = 'd0;
-  reg             d_xfer_state = 'd0;
-  reg     [ 5:0]  d_xfer_count = 'd0;
-  reg             d_xfer_toggle = 'd0;
-  reg     [DW:0]  d_xfer_data = 'd0;
-  reg     [DW:0]  d_acc_data = 'd0;
-  reg             up_xfer_toggle_m1 = 'd0;
-  reg             up_xfer_toggle_m2 = 'd0;
-  reg             up_xfer_toggle_m3 = 'd0;
-  reg             up_xfer_toggle = 'd0;
+  reg                         d_xfer_state_m1 = 'd0;
+  reg                         d_xfer_state_m2 = 'd0;
+  reg                         d_xfer_state = 'd0;
+  reg     [ 5:0]              d_xfer_count = 'd0;
+  reg                         d_xfer_toggle = 'd0;
+  reg     [(DATA_WIDTH-1):0]  d_xfer_data = 'd0;
+  reg     [(DATA_WIDTH-1):0]  d_acc_data = 'd0;
+  reg                         up_xfer_toggle_m1 = 'd0;
+  reg                         up_xfer_toggle_m2 = 'd0;
+  reg                         up_xfer_toggle_m3 = 'd0;
+  reg                         up_xfer_toggle = 'd0;
+  reg     [(DATA_WIDTH-1):0]  up_data_status_int = 'd0;
 
   // internal signals
 
-  wire            d_xfer_enable_s;
-  wire            up_xfer_toggle_s;
+  wire                        d_xfer_enable_s;
+  wire                        up_xfer_toggle_s;
 
   // device status transfer
 
@@ -102,6 +101,7 @@ module up_xfer_status #(
     end
   end
 
+  assign up_data_status = up_data_status_int;
   assign up_xfer_toggle_s = up_xfer_toggle_m3 ^ up_xfer_toggle_m2;
 
   always @(negedge up_rstn or posedge up_clk) begin
@@ -110,14 +110,14 @@ module up_xfer_status #(
       up_xfer_toggle_m2 <= 'd0;
       up_xfer_toggle_m3 <= 'd0;
       up_xfer_toggle <= 'd0;
-      up_data_status <= 'd0;
+      up_data_status_int <= 'd0;
     end else begin
       up_xfer_toggle_m1 <= d_xfer_toggle;
       up_xfer_toggle_m2 <= up_xfer_toggle_m1;
       up_xfer_toggle_m3 <= up_xfer_toggle_m2;
       up_xfer_toggle <= up_xfer_toggle_m3;
       if (up_xfer_toggle_s == 1'b1) begin
-        up_data_status <= d_xfer_data;
+        up_data_status_int <= d_xfer_data;
       end
     end
   end
