@@ -179,8 +179,9 @@ foreach domain [list {*}$src_clks {*}$dest_clks] {
 ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
 
 add_interface interrupt_sender interrupt end
-set_interface_property interrupt_sender associatedAddressablePoint ""
+set_interface_property interrupt_sender associatedAddressablePoint s_axi
 set_interface_property interrupt_sender associatedClock s_axi_clock
+set_interface_property interrupt_sender associatedReset s_axi_reset
 set_interface_property interrupt_sender ENABLED true
 set_interface_property interrupt_sender EXPORT_OF ""
 set_interface_property interrupt_sender PORT_NAME_MAP ""
