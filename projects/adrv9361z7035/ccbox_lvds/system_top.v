@@ -105,6 +105,7 @@ module system_top (
 
   inout           otg_ctrl,
   inout           adp1614_en,
+  inout           rtc_int,
   inout           ltc2955_kill_n,
   inout           ltc2955_int_n,
   inout           mic_present_n,
@@ -160,13 +161,14 @@ module system_top (
 
   assign gpio_i[31:29] = gpio_o[31:29];
   assign gpio_i[28:28] = imu_ready;
-  assign gpio_i[27:26] = gpio_o[27:26];
+  assign gpio_i[27:27] = gpio_o[27:27];
 
-  ad_iobuf #(.DATA_WIDTH(6)) i_iobuf_misc (
-    .dio_t (gpio_t[25:20]),
-    .dio_i (gpio_o[25:20]),
-    .dio_o (gpio_i[25:20]),
-    .dio_p ({ adp1614_en,
+  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf_misc (
+    .dio_t (gpio_t[26:20]),
+    .dio_i (gpio_o[26:20]),
+    .dio_o (gpio_i[26:20]),
+    .dio_p ({ rtc_int,
+              adp1614_en,
               otg_ctrl,
               ltc2955_kill_n,
               ltc2955_int_n,
