@@ -404,6 +404,7 @@ module axi_ad9361 #(
     .tdd_mode (tdd_mode_s),
     .mmcm_rst (mmcm_rst),
     .up_clk (up_clk),
+    .up_rstn (up_rstn),
     .up_enable (up_enable),
     .up_txnrx (up_txnrx),
     .up_adc_dld (up_adc_dld_s[6:0]),

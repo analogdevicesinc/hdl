@@ -75,6 +75,7 @@ module ad_mul #(
   i_lpm_mult (
     .clken (1'b1),
     .aclr (1'b0),
+    .sclr (1'b0),
     .sum (1'b0),
     .clock (clk),
     .dataa (data_a),
