@@ -72,9 +72,9 @@ module axi_ad9361_lvds_if #(
 
   // receive data path interface
 
-  output  reg         adc_valid,
-  output  reg [47:0]  adc_data,
-  output  reg         adc_status,
+  output              adc_valid,
+  output      [47:0]  adc_data,
+  output              adc_status,
   input               adc_r1_mode,
   input               adc_ddr_edgesel,
 
@@ -120,22 +120,40 @@ module axi_ad9361_lvds_if #(
 
   // internal registers
 
-  reg     [ 3:0]      rx_frame = 'd0;
-  reg                 rx_error = 'd0;
-  reg                 rx_valid = 'd0;
+  reg                 up_drp_locked_m1 = 1'd0;
+  reg                 up_drp_locked_int = 1'd0;
+  reg                 adc_r1_mode_n = 'd0;
+  reg                 rx_r1_mode = 'd0;
+  reg     [ 3:0]      rx_frame_d = 'd0;
   reg     [ 5:0]      rx_data_3 = 'd0;
   reg     [ 5:0]      rx_data_2 = 'd0;
   reg     [ 5:0]      rx_data_1 = 'd0;
-  reg     [ 5:0]      rx_data_0 = 'd0;
-  reg     [23:0]      rx_data = 'd0;
+  reg                 adc_valid_p = 'd0;
+  reg     [47:0]      adc_data_p = 'd0;
+  reg                 adc_status_p = 'd0;
+  reg                 adc_valid_n = 'd0;
+  reg     [47:0]      adc_data_n = 'd0;
+  reg                 adc_status_n = 'd0;
+  reg                 adc_valid_int = 'd0;
+  reg     [47:0]      adc_data_int = 'd0;
+  reg                 adc_status_int = 'd0;
+  reg                 tx_valid = 'd0;
+  reg     [47:0]      tx_data = 'd0;
+  reg     [ 3:0]      tx_frame_p = 'd0;
+  reg     [ 5:0]      tx_data_0_p = 'd0;
+  reg     [ 5:0]      tx_data_1_p = 'd0;
+  reg     [ 5:0]      tx_data_2_p = 'd0;
+  reg     [ 5:0]      tx_data_3_p = 'd0;
+  reg     [ 3:0]      tx_frame_n = 'd0;
+  reg     [ 5:0]      tx_data_0_n = 'd0;
+  reg     [ 5:0]      tx_data_1_n = 'd0;
+  reg     [ 5:0]      tx_data_2_n = 'd0;
+  reg     [ 5:0]      tx_data_3_n = 'd0;
   reg     [ 3:0]      tx_frame = 'd0;
-  reg     [ 3:0]      tx_p_frame = 'd0;
-  reg     [ 3:0]      tx_n_frame = 'd0;
-  reg     [ 5:0]      tx_data_d_0 = 'd0;
-  reg     [ 5:0]      tx_data_d_1 = 'd0;
-  reg     [ 5:0]      tx_data_d_2 = 'd0;
-  reg     [ 5:0]      tx_data_d_3 = 'd0;
-  reg                 tx_data_sel  = 'd0;
+  reg     [ 5:0]      tx_data_0 = 'd0;
+  reg     [ 5:0]      tx_data_1 = 'd0;
+  reg     [ 5:0]      tx_data_2 = 'd0;
+  reg     [ 5:0]      tx_data_3 = 'd0;
   reg                 up_enable_int = 'd0;
   reg                 up_txnrx_int = 'd0;
   reg                 enable_up_m1 = 'd0;
@@ -144,36 +162,24 @@ module axi_ad9361_lvds_if #(
   reg                 txnrx_up = 'd0;
   reg                 enable_int = 'd0;
   reg                 txnrx_int = 'd0;
-  reg                 enable_n_int = 'd0;
-  reg                 txnrx_n_int = 'd0;
-  reg                 enable_p_int = 'd0;
-  reg                 txnrx_p_int = 'd0;
-  reg     [ 5:0]      tx_p_data_d_0 = 'd0;
-  reg     [ 5:0]      tx_p_data_d_1 = 'd0;
-  reg     [ 5:0]      tx_p_data_d_2 = 'd0;
-  reg     [ 5:0]      tx_p_data_d_3 = 'd0;
-  reg     [ 5:0]      tx_n_data_d_0 = 'd0;
-  reg     [ 5:0]      tx_n_data_d_1 = 'd0;
-  reg     [ 5:0]      tx_n_data_d_2 = 'd0;
-  reg     [ 5:0]      tx_n_data_d_3 = 'd0;
-  reg                 adc_n_valid = 'd0;
-  reg                 adc_p_valid = 'd0;
-  reg                 adc_n_status = 'd0;
-  reg                 adc_p_status = 'd0;
-  reg     [47:0]      adc_n_data = 'd0;
-  reg     [47:0]      adc_p_data = 'd0;
+  reg                 enable_int_n = 'd0;
+  reg                 txnrx_int_n = 'd0;
+  reg                 enable_int_p = 'd0;
+  reg                 txnrx_int_p = 'd0;
 
   // internal signals
 
-  wire                s_clk;
-  wire                loaden;
-  wire    [ 7:0]      phase_s;
+  wire                locked_s;
   wire    [ 3:0]      rx_frame_s;
-  wire    [ 5:0]      rx_data_s_3;
-  wire    [ 5:0]      rx_data_s_2;
-  wire    [ 5:0]      rx_data_s_1;
-  wire    [ 5:0]      rx_data_s_0;
-  wire    [ 3:0]      rx_frame_inv_s;
+  wire    [ 5:0]      rx_data_3_s;
+  wire    [ 5:0]      rx_data_2_s;
+  wire    [ 5:0]      rx_data_1_s;
+  wire    [ 5:0]      rx_data_0_s;
+
+  // local parameters
+
+  localparam ARRIA10 = 0;
+  localparam CYCLONE5 = 1;
 
   // unused interface signals
 
@@ -181,161 +187,206 @@ module axi_ad9361_lvds_if #(
   assign up_dac_drdata = 50'b0;
   assign delay_locked = 1'b1;
 
-  assign rx_frame_inv_s = ~rx_frame;
+  // drp locked must be on up-clock
+
+  assign up_drp_locked = up_drp_locked_int;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_drp_locked_m1 <= 1'd0;
+      up_drp_locked_int <= 1'd0;
+    end else begin
+      up_drp_locked_m1 <= locked_s;
+      up_drp_locked_int <= up_drp_locked_m1;
+    end
+  end
+
+  // r1mode
+ 
+  always @(negedge clk) begin
+    adc_r1_mode_n <= adc_r1_mode;
+  end
 
   always @(posedge l_clk) begin
-    rx_frame <= rx_frame_s;
-    rx_data_3 <= rx_data_s_3;
-    rx_data_2 <= rx_data_s_2;
-    rx_data_1 <= rx_data_s_1;
-    rx_data_0 <= rx_data_s_0;
-    if (rx_frame_inv_s == rx_frame_s) begin
-      rx_error <= 1'b0;
+    rx_r1_mode <= adc_r1_mode_n;
+  end
+
+  // frame check
+ 
+  always @(posedge l_clk) begin
+    if (rx_r1_mode == 1'd1) begin
+      rx_frame_d <= rx_frame_s;
     end else begin
-      rx_error <= 1'b1;
+      rx_frame_d <= ~rx_frame_s;
     end
-    case ({adc_r1_mode, rx_frame})
-      // R2 Mode
+  end
+
+  // data hold
+ 
+  always @(posedge l_clk) begin
+    rx_data_3 <= rx_data_3_s;
+    rx_data_2 <= rx_data_2_s;
+    rx_data_1 <= rx_data_1_s;
+  end
+
+  // delineation
+ 
+  always @(posedge l_clk) begin
+    case ({rx_r1_mode, rx_frame_s})
       5'b01111: begin
-        rx_valid <= 1'b1;
-        rx_data[23:12] <= {rx_data_1,   rx_data_3};
-        rx_data[11: 0] <= {rx_data_0,   rx_data_2};
-      end
-      5'b01110: begin
-        rx_valid <= 1'b1;
-        rx_data[23:12] <= {rx_data_2,   rx_data_s_0};
-        rx_data[11: 0] <= {rx_data_1,   rx_data_3};
-      end
-      5'b01100: begin
-        rx_valid <= 1'b1;
-        rx_data[23:12] <= {rx_data_3,   rx_data_s_1};
-        rx_data[11: 0] <= {rx_data_2,   rx_data_s_0};
-      end
-      5'b01000: begin
-        rx_valid <= 1'b1;
-        rx_data[23:12] <= {rx_data_s_0, rx_data_s_2};
-        rx_data[11: 0] <= {rx_data_3,   rx_data_s_1};
+        adc_valid_p <= 1'b0;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_1_s, rx_data_3_s};
+        adc_data_p[11: 0] <= {rx_data_0_s, rx_data_2_s};
       end
       5'b00000: begin
-        rx_valid <= 1'b0;
-        rx_data[23:12] <= {rx_data_1,   rx_data_3};
-        rx_data[11: 0] <= {rx_data_0,   rx_data_2};
-      end
-      5'b00001: begin
-        rx_valid <= 1'b0;
-        rx_data[23:12] <= {rx_data_2,   rx_data_s_0};
-        rx_data[11: 0] <= {rx_data_1,   rx_data_3};
-      end
-      5'b00011: begin
-        rx_valid <= 1'b0;
-        rx_data[23:12] <= {rx_data_3,   rx_data_s_1};
-        rx_data[11: 0] <= {rx_data_2,   rx_data_s_0};
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:36] <= {rx_data_1_s, rx_data_3_s};
+        adc_data_p[35:24] <= {rx_data_0_s, rx_data_2_s};
+        adc_data_p[23: 0] <= adc_data_p[23:0];
       end
       5'b00111: begin
-        rx_valid <= 1'b0;
-        rx_data[23:12] <= {rx_data_s_0, rx_data_s_2};
-        rx_data[11: 0] <= {rx_data_3,   rx_data_s_1};
+        adc_valid_p <= 1'b0;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_0_s, rx_data_2_s};
+        adc_data_p[11: 0] <= {rx_data_3, rx_data_1_s};
       end
-      // R1 Mode
-      5'b11100: begin
-        rx_valid <= 1'b0;
-        rx_data[23:12] <= {rx_data_s_1, rx_data_s_3};
-        rx_data[11: 0] <= {rx_data_s_0, rx_data_s_2};
+      5'b01000: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:36] <= {rx_data_0_s, rx_data_2_s};
+        adc_data_p[35:24] <= {rx_data_3, rx_data_1_s};
+        adc_data_p[23: 0] <= adc_data_p[23:0];
       end
-      5'b10110: begin
-        rx_valid <= 1'b0;
-        rx_data[23:12] <= {rx_data_2, rx_data_s_0};
-        rx_data[11: 0] <= {rx_data_1, rx_data_3};
+      5'b00011: begin
+        adc_valid_p <= 1'b0;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_3, rx_data_1_s};
+        adc_data_p[11: 0] <= {rx_data_2, rx_data_0_s};
       end
-      5'b11001: begin
-        rx_valid <= 1'b0;
-        rx_data[23:12] <= {rx_data_s_0, rx_data_s_2};
-        rx_data[11: 0] <= {rx_data_3, rx_data_s_1};
+      5'b01100: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:36] <= {rx_data_3, rx_data_1_s};
+        adc_data_p[35:24] <= {rx_data_2, rx_data_0_s};
+        adc_data_p[23: 0] <= adc_data_p[23:0];
+      end
+      5'b00001: begin
+        adc_valid_p <= 1'b0;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_2, rx_data_0_s};
+        adc_data_p[11: 0] <= {rx_data_1, rx_data_3};
+      end
+      5'b01110: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:36] <= {rx_data_2, rx_data_0_s};
+        adc_data_p[35:24] <= {rx_data_1, rx_data_3};
+        adc_data_p[23: 0] <= adc_data_p[23:0];
       end
       5'b10011: begin
-        rx_valid <= 1'b0;
-        rx_data[23:12] <= {rx_data_3, rx_data_s_1};
-        rx_data[11: 0] <= {rx_data_2, rx_data_s_0};
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_1_s, rx_data_3_s};
+        adc_data_p[11: 0] <= {rx_data_0_s, rx_data_2_s};
+      end
+      5'b11001: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_0_s, rx_data_2_s};
+        adc_data_p[11: 0] <= {rx_data_3, rx_data_1_s};
+      end
+      5'b11100: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_3, rx_data_1_s};
+        adc_data_p[11: 0] <= {rx_data_2, rx_data_0_s};
+      end
+      5'b10110: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_2, rx_data_0_s};
+        adc_data_p[11: 0] <= {rx_data_1, rx_data_3};
       end
       default: begin
-        rx_valid <= 1'b0;
-        rx_data[23:12] <= 12'd0;
-        rx_data[11: 0] <= 12'd0;
+        adc_valid_p <= 1'b0;
+        adc_data_p <= 48'd0;
       end
     endcase
-    if (rx_valid == 1'b1) begin
-      adc_p_valid <= 1'b0;
-      adc_p_data <= {24'd0, rx_data};
-    end else begin
-      adc_p_valid <= 1'b1;
-      adc_p_data <= (adc_r1_mode) ? {24'd0, rx_data} : {rx_data, adc_p_data[23:0]};
-    end
-    adc_p_status <= ~rx_error & up_drp_locked;
   end
 
-  // transfer to a synchronous common clock
+  // adc-status
+ 
+  always @(posedge l_clk) begin
+    if (rx_frame_d == rx_frame_s) begin
+      adc_status_p <= locked_s;
+    end else begin
+      adc_status_p <= 1'b1;
+    end
+  end
+
+  // transfer to common clock
 
   always @(negedge l_clk) begin
-    adc_n_valid <= adc_p_valid;
-    adc_n_data <= adc_p_data;
-    adc_n_status <= adc_p_status;
+    adc_valid_n <= adc_valid_p;
+    adc_data_n <= adc_data_p;
+    adc_status_n <= adc_status_p;
   end
 
-  always @(posedge clk) begin
-    adc_valid <= adc_n_valid;
-    adc_data <= adc_n_data;
-    adc_status <= adc_n_status;
-  end
+  assign adc_valid = adc_valid_int;
+  assign adc_data = adc_data_int;
+  assign adc_status = adc_status_int;
 
   always @(posedge clk) begin
-    if (dac_r1_mode == 1'b0) begin
-      tx_data_sel <= ~tx_data_sel;
-    end else begin
-      tx_data_sel <= 1'b0;
+    adc_valid_int <= adc_valid_n;
+    adc_data_int <= adc_data_n;
+    adc_status_int <= adc_status_n;
+  end
+
+  // dac-tx interface
+
+  always @(posedge clk) begin
+    tx_valid <= dac_valid;
+    if (dac_valid == 1'b1) begin
+      tx_data <= dac_data;
     end
-
-    case ({dac_r1_mode, tx_data_sel})
-      2'b10: begin
-         tx_frame <= 4'b1100;
-         tx_data_d_0 <= dac_data[11: 6]; // i msb
-         tx_data_d_1 <= dac_data[23:18]; // q msb
-         tx_data_d_2 <= dac_data[ 5: 0]; // i lsb
-         tx_data_d_3 <= dac_data[17:12]; // q lsb
-      end
-      2'b00: begin
-         tx_frame <= 4'b1111;
-         tx_data_d_0 <= dac_data[11: 6]; // i msb 0
-         tx_data_d_1 <= dac_data[23:18]; // q msb 0
-         tx_data_d_2 <= dac_data[ 5: 0]; // i lsb 0
-         tx_data_d_3 <= dac_data[17:12]; // q lsb 0
-      end
-      2'b01: begin
-         tx_frame <= 4'b0000;
-         tx_data_d_0 <= dac_data[35:30]; // i msb 1
-         tx_data_d_1 <= dac_data[47:42]; // q msb 1
-         tx_data_d_2 <= dac_data[29:24]; // i lsb 1
-         tx_data_d_3 <= dac_data[41:36]; // q lsb 1
-      end
-    endcase
-
   end
 
-  // transfer data from a synchronous clock (skew less than 2ns)
+  always @(posedge clk) begin
+    if (dac_r1_mode == 1'b1) begin
+      tx_frame_p <= 4'b0011;
+      tx_data_0_p <= tx_data[11: 6];
+      tx_data_1_p <= tx_data[23:18];
+      tx_data_2_p <= tx_data[ 5: 0];
+      tx_data_3_p <= tx_data[17:12];
+    end else if (tx_valid == 1'b1) begin
+      tx_frame_p <= 4'b1111;
+      tx_data_0_p <= tx_data[11: 6];
+      tx_data_1_p <= tx_data[23:18];
+      tx_data_2_p <= tx_data[ 5: 0];
+      tx_data_3_p <= tx_data[17:12];
+    end else begin
+      tx_frame_p <= 4'b0000;
+      tx_data_0_p <= tx_data[35:30];
+      tx_data_1_p <= tx_data[47:42];
+      tx_data_2_p <= tx_data[29:24];
+      tx_data_3_p <= tx_data[41:36];
+    end
+  end
+
+  // transfer to local clock
 
   always @(negedge clk) begin
-    tx_n_frame <= tx_frame;
-    tx_n_data_d_0 <= tx_data_d_0;
-    tx_n_data_d_1 <= tx_data_d_1;
-    tx_n_data_d_2 <= tx_data_d_2;
-    tx_n_data_d_3 <= tx_data_d_3;
+    tx_frame_n <= tx_frame_p;
+    tx_data_0_n <= tx_data_0_p;
+    tx_data_1_n <= tx_data_1_p;
+    tx_data_2_n <= tx_data_2_p;
+    tx_data_3_n <= tx_data_3_p;
   end
 
   always @(posedge l_clk) begin
-    tx_p_frame <= tx_n_frame;
-    tx_p_data_d_0 <= tx_n_data_d_0;
-    tx_p_data_d_1 <= tx_n_data_d_1;
-    tx_p_data_d_2 <= tx_n_data_d_2;
-    tx_p_data_d_3 <= tx_n_data_d_3;
+    tx_frame <= tx_frame_n;
+    tx_data_0 <= tx_data_0_n;
+    tx_data_1 <= tx_data_1_n;
+    tx_data_2 <= tx_data_2_n;
+    tx_data_3 <= tx_data_3_n;
   end
 
   // tdd/ensm control
@@ -370,143 +421,55 @@ module axi_ad9361_lvds_if #(
   end
 
   always @(negedge clk) begin
-    enable_n_int <= enable_int;
-    txnrx_n_int <= txnrx_int;
+    enable_int_n <= enable_int;
+    txnrx_int_n <= txnrx_int;
   end
 
   always @(posedge l_clk) begin
-    enable_p_int <= enable_n_int;
-    txnrx_p_int <= txnrx_n_int;
+    enable_int_p <= enable_int_n;
+    txnrx_int_p <= txnrx_int_n;
   end
 
-  // receive data path interface
-
-  axi_ad9361_serdes_in #(
-    .DEVICE_TYPE (DEVICE_TYPE),
-    .DATA_WIDTH (6))
-  ad_serdes_data_in (
-    .clk (s_clk),
-    .div_clk (l_clk),
-    .loaden (loaden),
-    .phase (phase_s),
-    .locked (up_drp_locked),
-    .data_s0 (rx_data_s_0),
-    .data_s1 (rx_data_s_1),
-    .data_s2 (rx_data_s_2),
-    .data_s3 (rx_data_s_3),
-    .data_in_p (rx_data_in_p),
-    .data_in_n (rx_data_in_n),
-    .delay_locked ());
-
-  // receive frame interface
-
-  axi_ad9361_serdes_in #(
-    .DEVICE_TYPE (DEVICE_TYPE),
-    .DATA_WIDTH (1))
-  ad_serdes_frame_in (
-    .clk (s_clk),
-    .div_clk (l_clk),
-    .loaden (loaden),
-    .phase (phase_s),
-    .locked (up_drp_locked),
-    .data_s0 (rx_frame_s[0]),
-    .data_s1 (rx_frame_s[1]),
-    .data_s2 (rx_frame_s[2]),
-    .data_s3 (rx_frame_s[3]),
-    .data_in_p (rx_frame_in_p),
-    .data_in_n (rx_frame_in_n),
-    .delay_locked ());
-
-  // transmit data interface
-
-  axi_ad9361_serdes_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
-    .DATA_WIDTH (6))
-  ad_serdes_data_out (
-    .clk (s_clk),
-    .div_clk (l_clk),
-    .loaden (loaden),
-    .data_s0 (tx_p_data_d_0),
-    .data_s1 (tx_p_data_d_1),
-    .data_s2 (tx_p_data_d_2),
-    .data_s3 (tx_p_data_d_3),
-    .data_out_p (tx_data_out_p),
-    .data_out_n (tx_data_out_n));
-
-  // transmit frame interface
-
-  axi_ad9361_serdes_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
-    .DATA_WIDTH (1))
-  ad_serdes_frame_out (
-    .clk (s_clk),
-    .div_clk (l_clk),
-    .loaden (loaden),
-    .data_s0 (tx_p_frame[0]),
-    .data_s1 (tx_p_frame[1]),
-    .data_s2 (tx_p_frame[2]),
-    .data_s3 (tx_p_frame[3]),
-    .data_out_p (tx_frame_out_p),
-    .data_out_n (tx_frame_out_n));
-
-  // transmit clock interface
-
-  axi_ad9361_serdes_out #(
-    .DEVICE_TYPE (DEVICE_TYPE),
-    .DATA_WIDTH (1))
-  ad_serdes_tx_clock_out(
-    .clk (s_clk),
-    .div_clk (l_clk),
-    .loaden (loaden),
-    .data_s0 (dac_clksel),
-    .data_s1 (~dac_clksel),
-    .data_s2 (dac_clksel),
-    .data_s3 (~dac_clksel),
-    .data_out_p (tx_clk_out_p),
-    .data_out_n (tx_clk_out_n));
-
-  // serdes clock interface
-
-  axi_ad9361_serdes_clk #(
-    .DEVICE_TYPE (DEVICE_TYPE))
-  ad_serdes_clk (
-    .rst (mmcm_rst),
-    .clk_in_p (rx_clk_in_p),
-    .clk_in_n (rx_clk_in_n),
-    .clk (s_clk),
-    .div_clk (l_clk),
-    .out_clk (),
-    .loaden (loaden),
-    .phase (phase_s),
+  generate
+  if (DEVICE_TYPE == CYCLONE5) begin
+  axi_ad9361_lvds_if_c5 i_axi_ad9361_lvds_if_c5 (
+    .rx_clk_in_p (rx_clk_in_p),
+    .rx_clk_in_n (rx_clk_in_n),
+    .rx_frame_in_p (rx_frame_in_p),
+    .rx_frame_in_n (rx_frame_in_n),
+    .rx_data_in_p (rx_data_in_p),
+    .rx_data_in_n (rx_data_in_n),
+    .tx_clk_out_p (tx_clk_out_p),
+    .tx_clk_out_n (tx_clk_out_n),
+    .tx_frame_out_p (tx_frame_out_p),
+    .tx_frame_out_n (tx_frame_out_n),
+    .tx_data_out_p (tx_data_out_p),
+    .tx_data_out_n (tx_data_out_n),
+    .enable (enable),
+    .txnrx (txnrx),
+    .clk (l_clk),
+    .rx_frame (rx_frame_s),
+    .rx_data_0 (rx_data_0_s),
+    .rx_data_1 (rx_data_1_s),
+    .rx_data_2 (rx_data_2_s),
+    .rx_data_3 (rx_data_3_s),
+    .tx_frame (tx_frame),
+    .tx_data_0 (tx_data_0),
+    .tx_data_1 (tx_data_1),
+    .tx_data_2 (tx_data_2),
+    .tx_data_3 (tx_data_3),
+    .tx_enable (enable_int_p),
+    .tx_txnrx (txnrx_int_p),
+    .locked (locked_s),
     .up_clk (up_clk),
-    .up_rstn (up_rstn),
-    .up_drp_sel (up_drp_sel),
-    .up_drp_wr (up_drp_wr),
-    .up_drp_addr (up_drp_addr),
-    .up_drp_wdata (up_drp_wdata),
-    .up_drp_rdata (up_drp_rdata),
-    .up_drp_ready (up_drp_ready),
-    .up_drp_locked (up_drp_locked));
+    .up_rstn (up_rstn));
+  end
+  endgenerate
 
- // enable
-
-  axi_ad9361_cmos_out #(
-    .DEVICE_TYPE (DEVICE_TYPE))
-  ad_serdes_enable (
-    .tx_clk (l_clk),
-    .tx_data_p (enable_p_int),
-    .tx_data_n (enable_p_int),
-    .tx_data_out (enable));
-
-  // txnrx
-
-  axi_ad9361_cmos_out #(
-    .DEVICE_TYPE (DEVICE_TYPE))
-  ad_serdes_txnrx (
-    .tx_clk (l_clk),
-    .tx_data_p (txnrx_p_int),
-    .tx_data_n (txnrx_p_int),
-    .tx_data_out (txnrx));
+  generate
+  if (DEVICE_TYPE == ARRIA10) begin
+  end
+  endgenerate
 
 endmodule
 

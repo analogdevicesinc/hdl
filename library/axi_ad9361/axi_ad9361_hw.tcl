@@ -31,6 +31,7 @@ ad_ip_files axi_ad9361 [list\
   altera/axi_ad9361_serdes_in.v \
   altera/axi_ad9361_cmos_out.v \
   altera/axi_ad9361_lvds_if.v \
+  altera/axi_ad9361_lvds_if_c5.v \
   altera/axi_ad9361_cmos_if.v \
   axi_ad9361_rx_pnmon.v \
   axi_ad9361_rx_channel.v \
@@ -167,16 +168,6 @@ proc axi_ad9361_elab {} {
 
   set m_device_family [get_parameter_value "DEVICE_FAMILY"]
   set m_cmos_or_lvds_n [get_parameter_value CMOS_OR_LVDS_N]
-
-  if {$m_device_family eq "Cyclone V"} {
-
-    add_hdl_instance axi_ad9361_serdes_clk_pll alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_clk_pll {DEVICE_FAMILY} $m_device_family
-    set_instance_parameter_value axi_ad9361_serdes_clk_pll {MODE} {CLK}
-    set_instance_parameter_value axi_ad9361_serdes_clk_pll {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_clk_pll {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_clk_pll {CLKIN_FREQUENCY} {250.0}
-  }
 
   if {$m_device_family eq "Arria 10"} {
 
