@@ -1,59 +1,62 @@
 
 
 module spi_engine_interconnect (
-	input clk,
-	input resetn,
+  input clk,
+  input resetn,
 
-	output m_cmd_valid,
-	input m_cmd_ready,
-	output [15:0] m_cmd_data,
+  output m_cmd_valid,
+  input m_cmd_ready,
+  output [15:0] m_cmd_data,
 
-	output m_sdo_valid,
-	input m_sdo_ready,
-	output [7:0] m_sdo_data,
+  output m_sdo_valid,
+  input m_sdo_ready,
+  output [(DATA_WIDTH-1):0] m_sdo_data,
 
-	input m_sdi_valid,
-	output m_sdi_ready,
-	input [7:0] m_sdi_data,
+  input m_sdi_valid,
+  output m_sdi_ready,
+  input [(NUM_OF_SDI * DATA_WIDTH-1):0] m_sdi_data,
 
-	input m_sync_valid,
-	output m_sync_ready,
-	input [7:0] m_sync,
-
-
-	input s0_cmd_valid,
-	output s0_cmd_ready,
-	input [15:0] s0_cmd_data,
-
-	input s0_sdo_valid,
-	output s0_sdo_ready,
-	input [7:0] s0_sdo_data,
-
-	output s0_sdi_valid,
-	input s0_sdi_ready,
-	output [7:0] s0_sdi_data,
-
-	output s0_sync_valid,
-	input s0_sync_ready,
-	output [7:0] s0_sync,
+  input m_sync_valid,
+  output m_sync_ready,
+  input [7:0] m_sync,
 
 
-	input s1_cmd_valid,
-	output s1_cmd_ready,
-	input [15:0] s1_cmd_data,
+  input s0_cmd_valid,
+  output s0_cmd_ready,
+  input [15:0] s0_cmd_data,
 
-	input s1_sdo_valid,
-	output s1_sdo_ready,
-	input [7:0] s1_sdo_data,
+  input s0_sdo_valid,
+  output s0_sdo_ready,
+  input [(DATA_WIDTH-1):0] s0_sdo_data,
 
-	output s1_sdi_valid,
-	input s1_sdi_ready,
-	output [7:0] s1_sdi_data,
+  output s0_sdi_valid,
+  input s0_sdi_ready,
+  output [(NUM_OF_SDI * DATA_WIDTH-1):0] s0_sdi_data,
 
-	output s1_sync_valid,
-	input s1_sync_ready,
-	output [7:0] s1_sync
+  output s0_sync_valid,
+  input s0_sync_ready,
+  output [7:0] s0_sync,
+
+
+  input s1_cmd_valid,
+  output s1_cmd_ready,
+  input [15:0] s1_cmd_data,
+
+  input s1_sdo_valid,
+  output s1_sdo_ready,
+  input [(DATA_WIDTH-1):0] s1_sdo_data,
+
+  output s1_sdi_valid,
+  input s1_sdi_ready,
+  output [(NUM_OF_SDI * DATA_WIDTH-1):0] s1_sdi_data,
+
+  output s1_sync_valid,
+  input s1_sync_ready,
+  output [7:0] s1_sync
 );
+
+parameter DATA_WIDTH = 8;                   // Valid data widths values are 8/16/24/32
+parameter NUM_OF_SDI = 1;
 
 reg s_active = 1'b0;
 
@@ -84,24 +87,24 @@ assign s0_sync_valid = `spi_engine_interconnect_mux(m_sync_valid, 1'b0);
 assign s1_sync_valid = `spi_engine_interconnect_mux(1'b0, m_sync_valid);
 
 always @(posedge clk) begin
-	if (idle == 1'b1) begin
-		if (s0_cmd_valid)
-			s_active <= 1'b0;
-		else if (s1_cmd_valid)
-			s_active <= 1'b1;
-	end
+  if (idle == 1'b1) begin
+    if (s0_cmd_valid)
+      s_active <= 1'b0;
+    else if (s1_cmd_valid)
+      s_active <= 1'b1;
+  end
 end
 
 always @(posedge clk) begin
-	if (resetn == 1'b0) begin
-		idle = 1'b1;
-	end else begin
-		if (m_sync_valid == 1'b1 && m_sync_ready == 1'b1) begin
-			idle <= 1'b1;
-		end else if (s0_cmd_valid == 1'b1 || s1_cmd_valid == 1'b1) begin
-			idle <= 1'b0;
-		end
-	end
+  if (resetn == 1'b0) begin
+    idle = 1'b1;
+  end else begin
+    if (m_sync_valid == 1'b1 && m_sync_ready == 1'b1) begin
+      idle <= 1'b1;
+    end else if (s0_cmd_valid == 1'b1 || s1_cmd_valid == 1'b1) begin
+      idle <= 1'b0;
+    end
+  end
 end
 
 endmodule

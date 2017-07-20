@@ -659,42 +659,6 @@ set_instance_assignment -name MEM_INTERFACE_DELAY_CHAIN_CONFIG FLEXIBLE_TIMING -
 set_instance_assignment -name MEM_INTERFACE_DELAY_CHAIN_CONFIG FLEXIBLE_TIMING -to ddr3_dq[30] 
 set_instance_assignment -name MEM_INTERFACE_DELAY_CHAIN_CONFIG FLEXIBLE_TIMING -to ddr3_dq[31] 
 
-set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to i_system_bd|sys_ddr3_cntrl 
-
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_addr_cmd_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_avl_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_config_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_afi_clk 
-set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to i_system_bd|sys_ddr3_cntrl|pll0|pll_hr_clk 
-
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[0].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[1].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[2].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[3].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[4].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[5].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[6].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uio_pads|dq_ddio[7].read_capture_clk_buffer 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[2] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[3] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[4] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[5] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[6] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[7] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[0] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[2] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[3] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[4] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[5] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[6] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|uread_datapath|reset_n_fifo_write_side[7] 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|ureset|phy_reset_mem_stable_n 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|p0|umemphy|ureset|phy_reset_n 
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to i_system_bd|sys_ddr3_cntrl|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n 
-
 # ethernet interface
 
 set_location_assignment PIN_A6 -to eth_rx_clk
@@ -751,70 +715,113 @@ set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to eth_rx_clk
 
 # leds
 
-set_location_assignment PIN_M19   -to gpio_bd[0]    ; ## led_grn[0]
-set_location_assignment PIN_L19   -to gpio_bd[1]    ; ## led_grn[1]
-set_location_assignment PIN_K19   -to gpio_bd[2]    ; ## led_grn[2]
-set_location_assignment PIN_J19   -to gpio_bd[3]    ; ## led_grn[3]
-set_location_assignment PIN_K20   -to gpio_bd[4]    ; ## led_grn[4]
-set_location_assignment PIN_J20   -to gpio_bd[5]    ; ## led_grn[5]
-set_location_assignment PIN_T20   -to gpio_bd[6]    ; ## led_grn[6]
-set_location_assignment PIN_R20   -to gpio_bd[7]    ; ## led_grn[7]
-set_location_assignment PIN_N20   -to gpio_bd[8]    ; ## led_red[0]
-set_location_assignment PIN_C15   -to gpio_bd[9]    ; ## led_red[1]
-set_location_assignment PIN_AL28  -to gpio_bd[10]   ; ## led_red[2]
-set_location_assignment PIN_F11   -to gpio_bd[11]   ; ## led_red[3]
-set_location_assignment PIN_AJ31  -to gpio_bd[12]   ; ## led_red[4]
-set_location_assignment PIN_AN34  -to gpio_bd[13]   ; ## led_red[5]
-set_location_assignment PIN_AJ34  -to gpio_bd[14]   ; ## led_red[6]
-set_location_assignment PIN_AK33  -to gpio_bd[15]   ; ## led_red[7]
-set_location_assignment PIN_C8    -to gpio_bd[16]   ; ## dip_switches[0]
-set_location_assignment PIN_D8    -to gpio_bd[17]   ; ## dip_switches[1]
-set_location_assignment PIN_E7    -to gpio_bd[18]   ; ## dip_switches[2]
-set_location_assignment PIN_E6    -to gpio_bd[19]   ; ## dip_switches[3]
-set_location_assignment PIN_G8    -to gpio_bd[20]   ; ## dip_switches[4]
-set_location_assignment PIN_F8    -to gpio_bd[21]   ; ## dip_switches[5]
-set_location_assignment PIN_D15   -to gpio_bd[22]   ; ## dip_switches[6]
-set_location_assignment PIN_G11   -to gpio_bd[23]   ; ## dip_switches[7]
-set_location_assignment PIN_D6    -to gpio_bd[24]   ; ## push_buttons[0]
-set_location_assignment PIN_C6    -to gpio_bd[25]   ; ## push_buttons[1]
-set_location_assignment PIN_K7    -to gpio_bd[26]   ; ## push_buttons[2]
+set_location_assignment PIN_M19   -to gpio_bd_o[0]    ; ## led_grn[0]
+set_location_assignment PIN_L19   -to gpio_bd_o[1]    ; ## led_grn[1]
+set_location_assignment PIN_K19   -to gpio_bd_o[2]    ; ## led_grn[2]
+set_location_assignment PIN_J19   -to gpio_bd_o[3]    ; ## led_grn[3]
+set_location_assignment PIN_K20   -to gpio_bd_o[4]    ; ## led_grn[4]
+set_location_assignment PIN_J20   -to gpio_bd_o[5]    ; ## led_grn[5]
+set_location_assignment PIN_T20   -to gpio_bd_o[6]    ; ## led_grn[6]
+set_location_assignment PIN_R20   -to gpio_bd_o[7]    ; ## led_grn[7]
+set_location_assignment PIN_N20   -to gpio_bd_o[8]    ; ## led_red[0]
+set_location_assignment PIN_C15   -to gpio_bd_o[9]    ; ## led_red[1]
+set_location_assignment PIN_AL28  -to gpio_bd_o[10]   ; ## led_red[2]
+set_location_assignment PIN_F11   -to gpio_bd_o[11]   ; ## led_red[3]
+set_location_assignment PIN_AJ31  -to gpio_bd_o[12]   ; ## led_red[4]
+set_location_assignment PIN_AN34  -to gpio_bd_o[13]   ; ## led_red[5]
+set_location_assignment PIN_AJ34  -to gpio_bd_o[14]   ; ## led_red[6]
+set_location_assignment PIN_AK33  -to gpio_bd_o[15]   ; ## led_red[7]
+set_location_assignment PIN_C8    -to gpio_bd_i[0]    ; ## dip_switches[0]
+set_location_assignment PIN_D8    -to gpio_bd_i[1]    ; ## dip_switches[1]
+set_location_assignment PIN_E7    -to gpio_bd_i[2]    ; ## dip_switches[2]
+set_location_assignment PIN_E6    -to gpio_bd_i[3]    ; ## dip_switches[3]
+set_location_assignment PIN_G8    -to gpio_bd_i[4]    ; ## dip_switches[4]
+set_location_assignment PIN_F8    -to gpio_bd_i[5]    ; ## dip_switches[5]
+set_location_assignment PIN_D15   -to gpio_bd_i[6]    ; ## dip_switches[6]
+set_location_assignment PIN_G11   -to gpio_bd_i[7]    ; ## dip_switches[7]
+set_location_assignment PIN_D6    -to gpio_bd_i[8]    ; ## push_buttons[0]
+set_location_assignment PIN_C6    -to gpio_bd_i[9]    ; ## push_buttons[1]
+set_location_assignment PIN_K7    -to gpio_bd_i[10]   ; ## push_buttons[2]
 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[0] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[1] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[2] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[3] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[4] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[5] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[6] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[7] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[8] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[9] 
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[10]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[11]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[12]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[13]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[14]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[15]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[16]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[17]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[18]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[19]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[20]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[21]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[22]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[23]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[24]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[25]
-set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd[26]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[0] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[1] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[2] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[3] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[4] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[5] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[6] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[7] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[8] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[9] 
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[10]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[11]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[12]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[13]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[14]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_o[15]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[2]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[3]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[4]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[5]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[6]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[7]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[8]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[9]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_bd_i[10]
 
-# globals
+set_instance_assignment -name OPTIMIZATION_TECHNIQUE SPEED -to *
+set_instance_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON -to *
 
-set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
-set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
-set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
-set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
-set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
-set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
-set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
+set_location_assignment FF_X25_Y136_N31  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ucke_qr_to_hr|dataout_r[0][0]
+set_location_assignment FF_X25_Y136_N1   -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ucke_qr_to_hr|dataout_r[0][1]
+set_location_assignment FF_X15_Y136_N56  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ucs_n_qr_to_hr|dataout_r[0][0]
+set_location_assignment FF_X15_Y136_N2   -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ucs_n_qr_to_hr|dataout_r[0][1]
+set_location_assignment FF_X18_Y136_N5   -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ubank_qr_to_hr|dataout_r[0][0]
+set_location_assignment FF_X18_Y136_N14  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ubank_qr_to_hr|dataout_r[0][1]
+set_location_assignment FF_X18_Y136_N35  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ubank_qr_to_hr|dataout_r[0][2]
+set_location_assignment FF_X18_Y136_N56  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ubank_qr_to_hr|dataout_r[0][3]
+set_location_assignment FF_X18_Y136_N38  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ubank_qr_to_hr|dataout_r[0][4]
+set_location_assignment FF_X18_Y136_N29  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ubank_qr_to_hr|dataout_r[0][5]
+set_location_assignment FF_X25_Y136_N14  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][0]
+set_location_assignment FF_X25_Y136_N17  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][1]
+set_location_assignment FF_X25_Y136_N50  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][2]
+set_location_assignment FF_X25_Y136_N44  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][3]
+set_location_assignment FF_X21_Y136_N31  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][4]
+set_location_assignment FF_X21_Y136_N55  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][5]
+set_location_assignment FF_X21_Y136_N43  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][6]
+set_location_assignment FF_X21_Y136_N16  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][7]
+set_location_assignment FF_X20_Y136_N13  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][8]
+set_location_assignment FF_X20_Y136_N37  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][9]
+set_location_assignment FF_X20_Y136_N43  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][10]
+set_location_assignment FF_X20_Y136_N55  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][11]
+set_location_assignment FF_X18_Y136_N22  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][12]
+set_location_assignment FF_X25_Y136_N41  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][13]
+set_location_assignment FF_X25_Y136_N38  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][14]
+set_location_assignment FF_X25_Y136_N35  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][15]
+set_location_assignment FF_X25_Y136_N8   -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][16]
+set_location_assignment FF_X21_Y136_N58  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][17]
+set_location_assignment FF_X21_Y136_N40  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][18]
+set_location_assignment FF_X21_Y136_N7   -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][19]
+set_location_assignment FF_X21_Y136_N49  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][20]
+set_location_assignment FF_X20_Y136_N7   -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][21]
+set_location_assignment FF_X20_Y136_N49  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][22]
+set_location_assignment FF_X20_Y136_N25  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][23]
+set_location_assignment FF_X20_Y136_N31  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][24]
+set_location_assignment FF_X18_Y136_N49  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uaddress_qr_to_hr|dataout_r[0][25]
+set_location_assignment FF_X28_Y136_N47  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ureset_n_qr_to_hr|dataout_r[0][0]
+set_location_assignment FF_X28_Y136_N26  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ureset_n_qr_to_hr|dataout_r[0][1]
+set_location_assignment FF_X18_Y136_N47  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uras_n_qr_to_hr|dataout_r[0][0]
+set_location_assignment FF_X18_Y136_N8   -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uras_n_qr_to_hr|dataout_r[0][1]
+set_location_assignment FF_X15_Y136_N7   -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ucas_n_qr_to_hr|dataout_r[0][0]
+set_location_assignment FF_X15_Y136_N34  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:ucas_n_qr_to_hr|dataout_r[0][1]
+set_location_assignment FF_X15_Y136_N52  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uwe_n_qr_to_hr|dataout_r[0][0]
+set_location_assignment FF_X15_Y136_N40  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uwe_n_qr_to_hr|dataout_r[0][1]
+set_location_assignment FF_X15_Y136_N13  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uodt_qr_to_hr|dataout_r[0][0]
+set_location_assignment FF_X15_Y136_N43  -to system_bd:i_system_bd|system_bd_sys_ddr3_cntrl:sys_ddr3_cntrl|system_bd_sys_ddr3_cntrl_p0:p0|system_bd_sys_ddr3_cntrl_p0_memphy:umemphy|system_bd_sys_ddr3_cntrl_p0_new_io_pads:uio_pads|system_bd_sys_ddr3_cntrl_p0_addr_cmd_pads:uaddr_cmd_pads|system_bd_sys_ddr3_cntrl_p0_simple_ddio_out:uodt_qr_to_hr|dataout_r[0][1]
 
+# source defaults
+
+source $ad_hdl_dir/projects/common/altera/sys_gen.tcl
 

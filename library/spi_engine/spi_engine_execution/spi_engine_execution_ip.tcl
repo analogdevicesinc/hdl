@@ -43,4 +43,8 @@ adi_add_bus "spi" "master" \
 	}
 adi_add_bus_clock "clk" "spi" "resetn"
 
+foreach port {"sdi_1" "sdi_2" "sdi_3"} {
+  set_property DRIVER_VALUE "0" [ipx::get_ports $port]
+}
+
 ipx::save_core [ipx::current_core]

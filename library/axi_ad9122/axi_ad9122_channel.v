@@ -1,9 +1,9 @@
 // ***************************************************************************
 // ***************************************************************************
 // Copyright 2011(c) Analog Devices, Inc.
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
 //     - Redistributions of source code must retain the above copyright
@@ -21,16 +21,16 @@
 //       patent holders to use this software.
 //     - Use of the software either in source or binary form, must be run
 //       on or directly connected to an Analog Devices Inc. component.
-//    
+//
 // THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
 // PARTICULAR PURPOSE ARE DISCLAIMED.
 //
 // IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 // EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 // BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
@@ -141,8 +141,8 @@ module axi_ad9122_channel (
     dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
     case (dac_data_sel_s)
       4'h2: dac_data <= dma_data;
-      4'h1: dac_data <= { dac_pat_data_2_s, dac_pat_data_1_s,
-                          dac_pat_data_2_s, dac_pat_data_1_s};
+      4'ha, 4'h1: dac_data <= {dac_pat_data_2_s, dac_pat_data_1_s,
+        dac_pat_data_2_s, dac_pat_data_1_s};
       default: dac_data <= dac_dds_data;
     endcase
     if (dac_data_sel_s == 4'h1) begin
@@ -197,7 +197,7 @@ module axi_ad9122_channel (
     .dds_data (dac_dds_data_0_s));
   end
   endgenerate
-  
+
   generate
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_1_s = 16'd0;
@@ -212,7 +212,7 @@ module axi_ad9122_channel (
     .dds_data (dac_dds_data_1_s));
   end
   endgenerate
-  
+
   generate
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_2_s = 16'd0;
@@ -227,7 +227,7 @@ module axi_ad9122_channel (
     .dds_data (dac_dds_data_2_s));
   end
   endgenerate
-  
+
   generate
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_3_s = 16'd0;
@@ -242,10 +242,10 @@ module axi_ad9122_channel (
     .dds_data (dac_dds_data_3_s));
   end
   endgenerate
-  
+
   // single channel processor
 
-  up_dac_channel #(.DAC_CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
+  up_dac_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),
@@ -257,6 +257,7 @@ module axi_ad9122_channel (
     .dac_pat_data_1 (dac_pat_data_1_s),
     .dac_pat_data_2 (dac_pat_data_2_s),
     .dac_data_sel (dac_data_sel_s),
+    .dac_iq_mode (),
     .dac_iqcor_enb (),
     .dac_iqcor_coeff_1 (),
     .dac_iqcor_coeff_2 (),
@@ -284,7 +285,7 @@ module axi_ad9122_channel (
     .up_raddr (up_raddr),
     .up_rdata (up_rdata),
     .up_rack (up_rack));
-  
+
 endmodule
 
 // ***************************************************************************

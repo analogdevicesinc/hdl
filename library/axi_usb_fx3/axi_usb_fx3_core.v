@@ -35,8 +35,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -111,6 +109,9 @@ module axi_usb_fx3_core (
   fifof_header_size,
   fifof_buffer_size,
 
+  length_fx32dma,
+  length_dma2fx3,
+
   // fx3 interface
   // IN -> TO HOST / FX3
   // OUT -> FROM HOST / FX3
@@ -133,6 +134,8 @@ module axi_usb_fx3_core (
   test_mode_tpm,
   test_mode_tpg,
   monitor_error,
+
+  zlp,
 
   fifo_num);
 
@@ -205,6 +208,9 @@ module axi_usb_fx3_core (
   input   [ 7:0]  fifof_header_size;
   input   [15:0]  fifof_buffer_size;
 
+  output  [31:0]  length_fx32dma;
+  output  [31:0]  length_dma2fx3;
+
   // FX3 interface
   // IN -> ZYNQ TO HOST / FX3
   // OUT -> ZYNQ FROM HOST / FX3
@@ -213,7 +219,7 @@ module axi_usb_fx3_core (
   output          fx32dma_ready;
   input   [31:0]  fx32dma_data;
   input           fx32dma_sop;
-  input           fx32dma_eop;
+  output          fx32dma_eop;
 
   input           dma2fx3_ready;
   output          dma2fx3_valid;
@@ -227,6 +233,8 @@ module axi_usb_fx3_core (
   input   [ 2:0]  test_mode_tpm;
   input   [ 2:0]  test_mode_tpg;
   output          monitor_error;
+
+  input           zlp;
 
   input   [ 4:0]  fifo_num;
 
@@ -244,7 +252,7 @@ module axi_usb_fx3_core (
 
   // internal registers
 
-  reg     [31:0]  data_size_transaction = 32'h0;
+  reg     [31:0]  data_size_transaction = 32'hffffffff;
   reg     [15:0]  buffer_size_current = 16'h0;
   reg     [ 7:0]  header_size_current = 8'h0;
 
@@ -268,17 +276,23 @@ module axi_usb_fx3_core (
   reg     [ 7:0]  header_pointer = 8'h0;
   reg             header_read = 1'b0;
 
-  reg     [31:0]  dma2fx3_counter = 1'b0;
-  reg     [31:0]  footer_pointer = 1'b0;
+  reg     [31:0]  dma2fx3_counter = 32'h0;
+  reg     [ 7:0]  footer_pointer = 8'h0;
 
   reg             s_axis_tready = 1'b0;
   reg             dma2fx3_valid = 1'b0;
   reg     [31:0]  dma2fx3_data = 32'h0;
+  reg     [31:0]  dma2fx3_data_reg = 32'h0;
   reg             dma2fx3_eop = 1'b0;
 
   reg     [31:0]  expected_data = 32'h0;
   reg             monitor_error = 1'b0;
   reg             first_transfer = 1'b0;
+
+  reg     [31:0]  length_fx32dma = 0;
+  reg     [31:0]  length_dma2fx3 = 0;
+
+  reg             fx32dma_eop = 1'b0;
 
   function [31:0] pn23;
     input [31:0] din;
@@ -369,132 +383,6 @@ module axi_usb_fx3_core (
 
   assign fx32dma_ready = m_axis_tready;
 
-  // state machine
-
-  always @(posedge clk) begin
-    if (reset == 1'b1 || error_fx32dma == 1'b1) begin
-      state_fx32dma <= IDLE;
-    end else begin
-      state_fx32dma <= next_state_fx32dma;
-    end
-  end
-
-  always @(*) begin
-    case(state_fx32dma)
-      IDLE:
-      if(fx32dma_sop == 1'b1) begin
-        next_state_fx32dma = READ_HEADER;
-      end else begin
-        next_state_fx32dma = state_fx32dma;
-      end
-      READ_HEADER:
-      if(header_read == 1'b1) begin
-        next_state_fx32dma = READ_DATA;
-      end else begin
-        next_state_fx32dma = state_fx32dma;
-      end
-      READ_DATA:
-      if(data_size_transaction <= 4) begin
-        next_state_fx32dma = IDLE;
-      end else begin
-        next_state_fx32dma = state_fx32dma;
-      end
-      default: next_state_fx32dma = IDLE;
-    endcase
-  end
-
-  always @(posedge clk) begin
-    case(state_fx32dma)
-      IDLE: begin
-        m_axis_tvalid <= 1'b0;
-        m_axis_tkeep <= 4'h0;
-        m_axis_tlast <= 1'b0;
-        error_fx32dma <= 1'b0;
-        eot_fx32dma <= 1'b0;
-        header_read <= 1'b0;
-        header_pointer <= 8'h4;
-        first_transfer <= 1'b1;
-        monitor_error <= 1'b0;
-        if (fx32dma_sop == 1'b1) begin
-          if(fx32dma_valid == 1'b1) begin
-            if(fx32dma_data != 32'hf00ff00f) begin
-              error_fx32dma <= 1'b1;
-            end else begin
-              error_fx32dma <= 1'b0;
-            end
-          end
-        end
-        case (test_mode_tpm)
-          4'h1: expected_data <= 32'haaaaaaaa;
-          default:  expected_data <= 32'hffffffff;
-        endcase
-      end
-      READ_HEADER: begin
-        m_axis_tvalid <= 1'b0;
-        m_axis_tkeep <= 4'h0;
-        m_axis_tlast <= 1'b0;
-        error_fx32dma <= 1'b0;
-        eot_fx32dma <= 1'b0;
-        first_transfer <= 1'b1;
-        monitor_error <= 1'b0;
-        if( fx32dma_valid == 1'b1) begin
-          if(header_pointer < header_size_current - 8) begin
-            header_pointer <= header_pointer + 4;
-          end else begin
-            header_read <= 1'b1;
-          end
-          if (header_pointer == 4) begin
-            data_size_transaction <= fx32dma_data;
-            if (fx32dma_data > buffer_size_current) begin
-              error_fx32dma <= 1'b1;
-            end
-          end
-        end
-      end
-      READ_DATA: begin
-        m_axis_tvalid <= fx32dma_valid;
-        m_axis_tdata <= fx32dma_data;
-        if (fx32dma_valid == 1'b1) begin
-          first_transfer <= 1'b0;
-          if (data_size_transaction > 4) begin
-            m_axis_tkeep <= 4'hf;
-            m_axis_tlast <= 1'b0;
-            data_size_transaction <= data_size_transaction - 4;
-          end else begin
-            m_axis_tlast <= 1'b1;
-            eot_fx32dma <= 1'b1;
-            case (data_size_transaction)
-              1: m_axis_tkeep <= 4'h1;
-              2: m_axis_tkeep <= 4'h3;
-              3: m_axis_tkeep <= 4'h7;
-              default: m_axis_tkeep <= 4'hf;
-            endcase
-          end
-        end
-        // monitor
-        if (test_mode_active_tpm == 1'b1) begin
-          if (first_transfer == 1) begin
-            expected_data <= fx32dma_data;
-          end else begin
-            case (test_mode_tpm)
-              4'h1: expected_data <= ~expected_data;
-              4'h2: expected_data <= ~expected_data;
-              4'h3: expected_data <= pn9(expected_data);
-              4'h4: expected_data <= pn23(expected_data);
-              4'h7: expected_data <= expected_data + 1;
-              default:  expected_data <= 0;
-            endcase
-            if (expected_data != m_axis_tdata) begin
-              monitor_error <= 1'b1;
-            end else begin
-              monitor_error <= 1'b0;
-            end
-          end
-        end
-      end
-    endcase
-  end
-
   always @(*) begin
     case (fifo_num)
       5'h0: buffer_size_current = fifo0_buffer_size;
@@ -536,6 +424,161 @@ module axi_usb_fx3_core (
     endcase
   end
 
+  // state machine
+
+  always @(posedge clk) begin
+    if (reset == 1'b1 || error_fx32dma == 1'b1) begin
+      state_fx32dma <= IDLE;
+    end else begin
+      state_fx32dma <= next_state_fx32dma;
+    end
+  end
+
+  always @(*) begin
+    case(state_fx32dma)
+      IDLE:
+      if(fx32dma_sop == 1'b1) begin
+        next_state_fx32dma = READ_HEADER;
+      end else begin
+        next_state_fx32dma = state_fx32dma;
+      end
+      READ_HEADER:
+      if(header_read == 1'b1) begin
+        next_state_fx32dma = READ_DATA;
+      end else begin
+        next_state_fx32dma = state_fx32dma;
+      end
+      READ_DATA:
+      if(data_size_transaction <= 4) begin
+        next_state_fx32dma = IDLE;
+      end else begin
+        next_state_fx32dma = state_fx32dma;
+      end
+      default: next_state_fx32dma = IDLE;
+    endcase
+  end
+
+  always @(*) begin
+    m_axis_tdata = fx32dma_data;
+    fx32dma_eop = 1'b0;
+    m_axis_tlast = 1'b0;
+    case(state_fx32dma)
+      IDLE: begin
+        m_axis_tvalid = 1'b0;
+        m_axis_tkeep = 4'h0;
+        eot_fx32dma  = 1'b0;
+      end
+      READ_HEADER: begin
+        m_axis_tvalid = 1'b0;
+        m_axis_tkeep = 4'h0;
+        m_axis_tlast = 1'b0;
+        eot_fx32dma  = 1'b0;
+      end
+      READ_DATA: begin
+        m_axis_tvalid = fx32dma_valid;
+        if (fx32dma_valid == 1'b1) begin
+          if (data_size_transaction > 12 ) begin
+            fx32dma_eop = 1'b0;
+          end else begin
+            fx32dma_eop = 1'b1;
+          end
+          if (data_size_transaction > 4) begin
+            m_axis_tlast = 1'b0;
+            m_axis_tkeep = 4'hf;
+            eot_fx32dma  = 1'b0;
+          end else begin
+            m_axis_tlast = 1'b1;
+            eot_fx32dma  = 1'b1;
+            m_axis_tlast = 1'b1;
+            case (data_size_transaction)
+              1: m_axis_tkeep = 4'h1;
+              2: m_axis_tkeep = 4'h3;
+              3: m_axis_tkeep = 4'h7;
+              default: m_axis_tkeep = 4'hf;
+            endcase
+          end
+        end else begin
+          m_axis_tkeep = 4'h0;
+          eot_fx32dma  = 1'b0;
+        end
+      end
+      default: begin
+        m_axis_tvalid = 1'b0;
+        m_axis_tkeep = 4'h0;
+        m_axis_tlast = 1'b0;
+        eot_fx32dma  = 1'b0;
+      end
+    endcase
+  end
+
+  always @(posedge clk) begin
+    header_read <= 1'b0;
+    if (state_fx32dma == IDLE) begin
+      if (fx32dma_sop == 1'b1) begin
+        header_pointer <= 8'h4;
+        if (fx32dma_data != 32'h0ff00ff0) begin
+          error_fx32dma <= 1'b1;
+        end else begin
+          error_fx32dma <= 1'b0;
+        end
+      end
+      case (test_mode_tpm)
+        4'h1: expected_data <= 32'haaaaaaaa;
+        default: expected_data <= 32'hffffffff;
+      endcase
+    end
+    if (state_fx32dma == READ_HEADER) begin
+      if (fx32dma_valid == 1'b1) begin
+        if (m_axis_tready == 1'b0) begin
+          error_fx32dma <= 1'b1;
+        end
+        if(header_pointer < header_size_current - 4) begin
+          header_pointer <= header_pointer + 8;
+        end else begin
+          header_read <= 1'b1;
+        end
+        if (header_pointer == 4) begin
+          data_size_transaction <= fx32dma_data;
+          length_fx32dma <= fx32dma_data;
+          if (fx32dma_data > buffer_size_current) begin
+            error_fx32dma <= 1'b1;
+          end
+        end
+      end
+    end
+    if (state_fx32dma == READ_DATA) begin
+      first_transfer <= 1'b1;
+      if (fx32dma_valid == 1'b1) begin
+        first_transfer <= 1'b0;
+        if (data_size_transaction > 4) begin
+          data_size_transaction <= data_size_transaction - 4;
+        end
+      end
+
+      // monitor
+
+      if (test_mode_active_tpm == 1'b1) begin
+        if (first_transfer == 1) begin
+          expected_data <= fx32dma_data;
+        end else begin
+          case (test_mode_tpm)
+            4'h1: expected_data <= ~expected_data;
+            4'h2: expected_data <= ~expected_data;
+            4'h3: expected_data <= pn9(expected_data);
+            4'h4: expected_data <= pn23(expected_data);
+            4'h7: expected_data <= expected_data + 1;
+            default:  expected_data <= 0;
+          endcase
+          if (expected_data != m_axis_tdata) begin
+            monitor_error <= 1'b1;
+          end else begin
+            monitor_error <= 1'b0;
+          end
+        end
+      end
+    end
+  end
+
   // dma2fx3
 
   always @(posedge clk) begin
@@ -550,94 +593,129 @@ module axi_usb_fx3_core (
     case(state_dma2fx3)
       IDLE:
         if(dma2fx3_ready == 1'b1) begin
-          next_state_dma2fx3 = READ_DATA;
+          if  (zlp == 1'b1) begin
+            next_state_dma2fx3 = ADD_FOOTER;
+          end else begin
+            next_state_dma2fx3 = READ_DATA;
+          end
         end else begin
-          next_state_dma2fx3 = state_dma2fx3;
+          next_state_dma2fx3 = IDLE;
         end
       READ_DATA:
         if(s_axis_tlast == 1'b1 || dma2fx3_counter >= buffer_size_current - 4) begin
           next_state_dma2fx3 = ADD_FOOTER;
         end else begin
-          next_state_dma2fx3 = state_dma2fx3;
+          next_state_dma2fx3 = READ_DATA;
         end
       ADD_FOOTER:
         if(dma2fx3_eop == 1'b1) begin
           next_state_dma2fx3 = IDLE;
         end else begin
-          next_state_dma2fx3 = state_dma2fx3;
+          next_state_dma2fx3 = ADD_FOOTER;
         end
-        default: next_state_dma2fx3 = IDLE;
+      default: next_state_dma2fx3 = IDLE;
+    endcase
+  end
+
+  always @(*) begin
+    case(state_dma2fx3)
+      IDLE: begin
+        s_axis_tready = 1'b0;
+        dma2fx3_valid = 1'b0;
+        eot_dma2fx3   = 1'b0;
+        dma2fx3_eop   = 1'b0;
+        dma2fx3_data  = dma2fx3_data_reg;
+      end
+      READ_DATA: begin
+        eot_dma2fx3 = 1'b0;
+        if (test_mode_active_tpg == 1'b1) begin
+          s_axis_tready = 1'b0;
+          dma2fx3_valid = 1'b1;
+        end else begin
+          dma2fx3_valid = s_axis_tvalid & s_axis_tready;
+          s_axis_tready = dma2fx3_ready;
+        end
+        dma2fx3_eop = 1'b0;
+        if (test_mode_active_tpg == 1'b1) begin
+          dma2fx3_data = dma2fx3_data_reg;
+        end else begin
+          dma2fx3_data = s_axis_tdata;
+        end
+      end
+      ADD_FOOTER: begin
+        s_axis_tready = 1'b0;
+        dma2fx3_valid = 1'b1;
+        if (footer_pointer == header_size_current) begin
+          dma2fx3_eop = 1'b1;
+          eot_dma2fx3 = 1'b1;
+        end else begin
+          dma2fx3_eop = 1'b0;
+          eot_dma2fx3 = 1'b0;
+        end
+        dma2fx3_data = dma2fx3_data_reg;
+      end
+      default: begin
+        s_axis_tready = 1'b0;
+        dma2fx3_valid = 1'b0;
+        eot_dma2fx3   = 1'b0;
+        dma2fx3_eop   = 1'b0;
+        dma2fx3_data  = dma2fx3_data_reg;
+      end
     endcase
   end
 
   always @(posedge clk) begin
-    case(state_dma2fx3)
-      IDLE: begin
-        dma2fx3_eop <= 1'b0;
-        eot_dma2fx3 <= 1'b0;
-        s_axis_tready <= 1'b0;
-        footer_pointer <= 0;
-        dma2fx3_counter <= 0;
-        dma2fx3_valid <= 1'b0;
-        case (test_mode_tpg)
-          4'h1: dma2fx3_data <= 32'haaaaaaaa;
-          default:  dma2fx3_data <= 32'hffffffff;
-        endcase
+    if(state_dma2fx3 == IDLE) begin
+      footer_pointer <= 4;
+      dma2fx3_counter <= 0;
+      case (test_mode_tpg)
+        4'h1: dma2fx3_data_reg <= 32'haaaaaaaa;
+        default:  dma2fx3_data_reg <= 32'hffffffff;
+      endcase
+      if (zlp == 1'b1) begin
+        dma2fx3_data_reg <= 32'h0ff00ff0;
       end
-      READ_DATA: begin
-        dma2fx3_eop <= 1'b0;
-        eot_dma2fx3 <= 1'b0;
-        footer_pointer <= 0;
-        if (test_mode_active_tpg == 1'b1) begin
-          s_axis_tready <= 1'b0;
-          dma2fx3_valid <= 1'b1;
-          if (dma2fx3_ready == 1'b1) begin
-            dma2fx3_counter <= dma2fx3_counter + 4;
-            case (test_mode_tpg)
-              4'h1: dma2fx3_data <= ~dma2fx3_data;
-              4'h2: dma2fx3_data <= ~dma2fx3_data;
-              4'h3: dma2fx3_data <= pn9(dma2fx3_data);
-              4'h4: dma2fx3_data <= pn23(dma2fx3_data);
-              4'h7: dma2fx3_data <= dma2fx3_data + 1;
-              default:  dma2fx3_data <= 0;
-            endcase
-          end
-        end else begin
-          dma2fx3_data <= s_axis_tdata;
-          if (s_axis_tlast == 1'b0) begin
-            s_axis_tready <= dma2fx3_ready;
+    end
+
+    if(state_dma2fx3 == READ_DATA) begin
+      if (test_mode_active_tpg == 1'b1) begin
+        if (dma2fx3_ready == 1'b1) begin
+          dma2fx3_counter <= dma2fx3_counter + 4;
+          if (dma2fx3_counter >= buffer_size_current - 4) begin
+            dma2fx3_data_reg <= 32'h0ff00ff0;
           end else begin
-            s_axis_tready <= 1'b0;
-          end
-          dma2fx3_valid <= s_axis_tvalid & s_axis_tready;
-          if (s_axis_tvalid== 1'b1 && s_axis_tready == 1'b1) begin
-            case (s_axis_tkeep)
-              1: dma2fx3_counter <= dma2fx3_counter + 1;
-              3: dma2fx3_counter <= dma2fx3_counter + 2;
-              7: dma2fx3_counter <= dma2fx3_counter + 3;
-              default: dma2fx3_counter <= dma2fx3_counter + 4;
+            case (test_mode_tpg)
+              4'h1: dma2fx3_data_reg <= ~dma2fx3_data_reg;
+              4'h2: dma2fx3_data_reg <= ~dma2fx3_data_reg;
+              4'h3: dma2fx3_data_reg <= pn9(dma2fx3_data_reg);
+              4'h4: dma2fx3_data_reg <= pn23(dma2fx3_data_reg);
+              4'h7: dma2fx3_data_reg <= dma2fx3_data_reg + 1;
+              default:  dma2fx3_data_reg <= 0;
             endcase
           end
         end
-      end
-      ADD_FOOTER: begin
-        dma2fx3_valid <= ~eot_dma2fx3;
-        dma2fx3_eop <= 1'b0;
-        eot_dma2fx3 <= 1'b0;
-        s_axis_tready <= 1'b0;
-        footer_pointer <= footer_pointer + 4;
-        case(footer_pointer)
-          32'h0: dma2fx3_data <= 32'hf00ff00f;
-          32'h4: dma2fx3_data <= dma2fx3_counter;
-          32'h8: dma2fx3_data <= 32'h0;
-          default: dma2fx3_data <= 32'h0;
-        endcase
-        if (footer_pointer == header_size_current - 4) begin
-          dma2fx3_eop <= 1'b1;
-          eot_dma2fx3 <= 1'b1;
+      end else begin
+          dma2fx3_data_reg <= 32'h0ff00ff0;
+        if (s_axis_tvalid== 1'b1 && s_axis_tready == 1'b1) begin
+          case (s_axis_tkeep)
+            1: dma2fx3_counter <= dma2fx3_counter + 1;
+            3: dma2fx3_counter <= dma2fx3_counter + 2;
+            7: dma2fx3_counter <= dma2fx3_counter + 3;
+            default: dma2fx3_counter <= dma2fx3_counter + 4;
+          endcase
         end
       end
-    endcase
+    end
+
+    if(state_dma2fx3 == ADD_FOOTER) begin
+      footer_pointer <= footer_pointer + 4;
+      length_dma2fx3 <= dma2fx3_counter;
+      case(footer_pointer)
+        32'h4: dma2fx3_data_reg <= dma2fx3_counter;
+        32'h8: dma2fx3_data_reg <= 32'h0;
+        default: dma2fx3_data_reg <= 32'h0;
+      endcase
+    end
   end
 
 endmodule

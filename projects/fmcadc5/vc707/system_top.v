@@ -34,202 +34,105 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
 module system_top (
 
-  sys_rst,
-  sys_clk_p,
-  sys_clk_n,
+  input             sys_rst,
+  input             sys_clk_p,
+  input             sys_clk_n,
 
-  uart_sin,
-  uart_sout,
+  input             uart_sin,
+  output            uart_sout,
 
-  ddr3_addr,
-  ddr3_ba,
-  ddr3_cas_n,
-  ddr3_ck_n,
-  ddr3_ck_p,
-  ddr3_cke,
-  ddr3_cs_n,
-  ddr3_dm,
-  ddr3_dq,
-  ddr3_dqs_n,
-  ddr3_dqs_p,
-  ddr3_odt,
-  ddr3_ras_n,
-  ddr3_reset_n,
-  ddr3_we_n,
+  output  [ 13:0]   ddr3_addr,
+  output  [  2:0]   ddr3_ba,
+  output            ddr3_cas_n,
+  output  [  0:0]   ddr3_ck_n,
+  output  [  0:0]   ddr3_ck_p,
+  output  [  0:0]   ddr3_cke,
+  output  [  0:0]   ddr3_cs_n,
+  output  [  7:0]   ddr3_dm,
+  inout   [ 63:0]   ddr3_dq,
+  inout   [  7:0]   ddr3_dqs_n,
+  inout   [  7:0]   ddr3_dqs_p,
+  output  [  0:0]   ddr3_odt,
+  output            ddr3_ras_n,
+  output            ddr3_reset_n,
+  output            ddr3_we_n,
 
-  sgmii_rxp,
-  sgmii_rxn,
-  sgmii_txp,
-  sgmii_txn,
+  input             sgmii_rxp,
+  input             sgmii_rxn,
+  output            sgmii_txp,
+  output            sgmii_txn,
 
-  phy_rstn,
-  mgt_clk_p,
-  mgt_clk_n,
-  mdio_mdc,
-  mdio_mdio,
+  output            phy_rstn,
+  input             mgt_clk_p,
+  input             mgt_clk_n,
+  output            mdio_mdc,
+  inout             mdio_mdio,
 
-  fan_pwm,
+  output            fan_pwm,
 
-  linear_flash_addr,
-  linear_flash_adv_ldn,
-  linear_flash_ce_n,
-  linear_flash_oen,
-  linear_flash_wen,
-  linear_flash_dq_io,
+  output  [26:1]    linear_flash_addr,
+  output            linear_flash_adv_ldn,
+  output            linear_flash_ce_n,
+  output            linear_flash_oen,
+  output            linear_flash_wen,
+  inout   [15:0]    linear_flash_dq_io,
 
-  gpio_lcd,
-  gpio_bd,
+  inout   [  6:0]   gpio_lcd,
+  inout   [ 20:0]   gpio_bd,
 
-  iic_rstn,
-  iic_scl,
-  iic_sda,
+  output            iic_rstn,
+  inout             iic_scl,
+  inout             iic_sda,
 
-  rx_ref_clk_0_p,
-  rx_ref_clk_0_n,
-  rx_data_0_p,
-  rx_data_0_n,
-  rx_ref_clk_1_p,
-  rx_ref_clk_1_n,
-  rx_data_1_p,
-  rx_data_1_n,
-  rx_sysref_p,
-  rx_sysref_n,
-  rx_sync_0_p,
-  rx_sync_0_n,
-  rx_sync_1_p,
-  rx_sync_1_n,
+  input             rx_ref_clk_0_p,
+  input             rx_ref_clk_0_n,
+  input   [  7:0]   rx_data_0_p,
+  input   [  7:0]   rx_data_0_n,
+  input             rx_ref_clk_1_p,
+  input             rx_ref_clk_1_n,
+  input   [  7:0]   rx_data_1_p,
+  input   [  7:0]   rx_data_1_n,
+  output            rx_sysref_p,
+  output            rx_sysref_n,
+  output            rx_sync_0_p,
+  output            rx_sync_0_n,
+  output            rx_sync_1_p,
+  output            rx_sync_1_n,
 
-  spi_csn_0,
-  spi_csn_1,
-  spi_clk,
-  spi_sdio,
-  spi_dirn,
+  output            spi_csn_0,
+  output            spi_csn_1,
+  output            spi_clk,
+  inout             spi_sdio,
+  output            spi_dirn,
+  output            dac_clk,
+  output            dac_data,
+  output            dac_sync_0,
+  output            dac_sync_1,
 
-  psync_0,
-  psync_1,
-  trig_p,
-  trig_n,
-  vdither_p,
-  vdither_n,
-  pwr_good,
-  dac_clk,
-  dac_data,
-  dac_sync_0,
-  dac_sync_1,
-  fd_1,
-  irq_1,
-  fd_0,
-  irq_0,
-  pwdn_1,
-  rst_1,
-  drst_1,
-  arst_1,
-  pwdn_0,
-  rst_0,
-  drst_0,
-  arst_0);
-
-  input             sys_rst;
-  input             sys_clk_p;
-  input             sys_clk_n;
-
-  input             uart_sin;
-  output            uart_sout;
-
-  output  [ 13:0]   ddr3_addr;
-  output  [  2:0]   ddr3_ba;
-  output            ddr3_cas_n;
-  output  [  0:0]   ddr3_ck_n;
-  output  [  0:0]   ddr3_ck_p;
-  output  [  0:0]   ddr3_cke;
-  output  [  0:0]   ddr3_cs_n;
-  output  [  7:0]   ddr3_dm;
-  inout   [ 63:0]   ddr3_dq;
-  inout   [  7:0]   ddr3_dqs_n;
-  inout   [  7:0]   ddr3_dqs_p;
-  output  [  0:0]   ddr3_odt;
-  output            ddr3_ras_n;
-  output            ddr3_reset_n;
-  output            ddr3_we_n;
-
-  input             sgmii_rxp;
-  input             sgmii_rxn;
-  output            sgmii_txp;
-  output            sgmii_txn;
-
-  output            phy_rstn;
-  input             mgt_clk_p;
-  input             mgt_clk_n;
-  output            mdio_mdc;
-  inout             mdio_mdio;
-
-  output            fan_pwm;
-
-  output  [26:1]    linear_flash_addr;
-  output            linear_flash_adv_ldn;
-  output            linear_flash_ce_n;
-  output            linear_flash_oen;
-  output            linear_flash_wen;
-  inout   [15:0]    linear_flash_dq_io;
-
-  inout   [  6:0]   gpio_lcd;
-  inout   [ 20:0]   gpio_bd;
-
-  output            iic_rstn;
-  inout             iic_scl;
-  inout             iic_sda;
-
-  input             rx_ref_clk_0_p;
-  input             rx_ref_clk_0_n;
-  input   [  7:0]   rx_data_0_p;
-  input   [  7:0]   rx_data_0_n;
-  input             rx_ref_clk_1_p;
-  input             rx_ref_clk_1_n;
-  input   [  7:0]   rx_data_1_p;
-  input   [  7:0]   rx_data_1_n;
-  output            rx_sysref_p;
-  output            rx_sysref_n;
-  output            rx_sync_0_p;
-  output            rx_sync_0_n;
-  output            rx_sync_1_p;
-  output            rx_sync_1_n;
-
-  output            spi_csn_0;
-  output            spi_csn_1;
-  output            spi_clk;
-  inout             spi_sdio;
-  output            spi_dirn;
-  output            dac_clk;
-  output            dac_data;
-  output            dac_sync_0;
-  output            dac_sync_1;
-
-  output            psync_0;
-  output            psync_1;
-  input             trig_p;
-  input             trig_n;
-  output            vdither_p;
-  output            vdither_n;
-  inout             pwr_good;
-  inout             fd_1;
-  inout             irq_1;
-  inout             fd_0;
-  inout             irq_0;
-  inout             pwdn_1;
-  inout             rst_1;
-  output            drst_1;
-  output            arst_1;
-  inout             pwdn_0;
-  inout             rst_0;
-  output            drst_0;
-  output            arst_0;
+  output            psync_0,
+  output            psync_1,
+  input             trig_p,
+  input             trig_n,
+  output            vdither_p,
+  output            vdither_n,
+  inout             pwr_good,
+  inout             fd_1,
+  inout             irq_1,
+  inout             fd_0,
+  inout             irq_0,
+  inout             pwdn_1,
+  inout             rst_1,
+  output            drst_1,
+  output            arst_1,
+  inout             pwdn_0,
+  inout             rst_0,
+  output            drst_0,
+  output            arst_0);
 
   // internal registers
 
@@ -250,11 +153,11 @@ module system_top (
   wire              rx_clk;
   wire              rx_ref_clk_0;
   wire              rx_ref_clk_1;
-  wire              rx_sysref_s;
   wire              rx_sync_0;
   wire              rx_sync_1;
   wire              up_rstn;
   wire              up_clk;
+  wire              rx_sysref_int;
 
   // spi
 
@@ -287,6 +190,13 @@ module system_top (
     end
   end
 
+  // sysref internal
+
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[32]),
+    .sysref_out (rx_sysref_int));
+
   // instantiations
 
   ad_lvds_out #(
@@ -297,8 +207,8 @@ module system_top (
     .IODELAY_GROUP ("FMCADC5_SYSREF_IODELAY_GROUP"))
   i_rx_sysref (
     .tx_clk (rx_clk),
-    .tx_data_p (rx_sysref_s),
-    .tx_data_n (rx_sysref_s),
+    .tx_data_p (rx_sysref_int),
+    .tx_data_n (rx_sysref_int),
     .tx_data_out_p (rx_sysref_p),
     .tx_data_out_n (rx_sysref_n),
     .up_clk (up_clk),
@@ -424,15 +334,44 @@ module system_top (
     .phy_rstn (phy_rstn),
     .phy_sd (1'b1),
     .rx_clk (rx_clk),
-    .rx_data_0_n (rx_data_0_n),
-    .rx_data_0_p (rx_data_0_p),
-    .rx_data_1_n (rx_data_1_n),
-    .rx_data_1_p (rx_data_1_p),
+    .rx_data_0_n (rx_data_0_n[0]),
+    .rx_data_0_p (rx_data_0_p[0]),
+    .rx_data_1_0_n (rx_data_1_n[0]),
+    .rx_data_1_0_p (rx_data_1_p[0]),
+    .rx_data_1_1_n (rx_data_1_n[1]),
+    .rx_data_1_1_p (rx_data_1_p[1]),
+    .rx_data_1_2_n (rx_data_1_n[2]),
+    .rx_data_1_2_p (rx_data_1_p[2]),
+    .rx_data_1_3_n (rx_data_1_n[3]),
+    .rx_data_1_3_p (rx_data_1_p[3]),
+    .rx_data_1_4_n (rx_data_1_n[4]),
+    .rx_data_1_4_p (rx_data_1_p[4]),
+    .rx_data_1_5_n (rx_data_1_n[5]),
+    .rx_data_1_5_p (rx_data_1_p[5]),
+    .rx_data_1_6_n (rx_data_1_n[6]),
+    .rx_data_1_6_p (rx_data_1_p[6]),
+    .rx_data_1_7_n (rx_data_1_n[7]),
+    .rx_data_1_7_p (rx_data_1_p[7]),
+    .rx_data_1_n (rx_data_0_n[1]),
+    .rx_data_1_p (rx_data_0_p[1]),
+    .rx_data_2_n (rx_data_0_n[2]),
+    .rx_data_2_p (rx_data_0_p[2]),
+    .rx_data_3_n (rx_data_0_n[3]),
+    .rx_data_3_p (rx_data_0_p[3]),
+    .rx_data_4_n (rx_data_0_n[4]),
+    .rx_data_4_p (rx_data_0_p[4]),
+    .rx_data_5_n (rx_data_0_n[5]),
+    .rx_data_5_p (rx_data_0_p[5]),
+    .rx_data_6_n (rx_data_0_n[6]),
+    .rx_data_6_p (rx_data_0_p[6]),
+    .rx_data_7_n (rx_data_0_n[7]),
+    .rx_data_7_p (rx_data_0_p[7]),
     .rx_ref_clk_0 (rx_ref_clk_0),
     .rx_ref_clk_1 (rx_ref_clk_1),
     .rx_sync_0 (rx_sync_0),
-    .rx_sync_1 (rx_sync_1),
-    .rx_sysref (rx_sysref_s),
+    .rx_sync_1_0 (rx_sync_1),
+    .rx_sysref_0 (rx_sysref_int),
+    .rx_sysref_1_0 (rx_sysref_int),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),

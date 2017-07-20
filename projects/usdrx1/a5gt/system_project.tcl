@@ -4,11 +4,15 @@ load_package flow
 source ../../scripts/adi_env.tcl
 project_new usdrx1_a5gt -overwrite
 
-source $ad_hdl_dir/projects/common/a5gt/a5gt_system_assign.tcl
+source "../../common/a5gt/a5gt_system_assign.tcl"
 
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_jesd_align.v
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/altera/ad_xcvr_rx_rst.v
 set_global_assignment -name VERILOG_FILE ../common/usdrx1_spi.v
+set_global_assignment -name VERILOG_FILE ../../../library/common/ad_sysref_gen.v
+set_global_assignment -name VERILOG_FILE system_top.v
+set_global_assignment -name QSYS_FILE system_bd.qsys
+
+set_global_assignment -name SDC_FILE system_constr.sdc
+set_global_assignment -name TOP_LEVEL_ENTITY system_top
 
 # reference clock
 
@@ -162,6 +166,12 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to dac_data[10]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dac_data[11]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dac_data[12]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to dac_data[13]
+
+# disable auto-pack
+
+set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
+set_global_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION OFF
+set_global_assignment -name QII_AUTO_PACKED_REGISTERS OFF
 
 execute_flow -compile
 

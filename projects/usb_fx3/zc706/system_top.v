@@ -34,90 +34,64 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
 module system_top (
 
-  ddr_addr,
-  ddr_ba,
-  ddr_cas_n,
-  ddr_ck_n,
-  ddr_ck_p,
-  ddr_cke,
-  ddr_cs_n,
-  ddr_dm,
-  ddr_dq,
-  ddr_dqs_n,
-  ddr_dqs_p,
-  ddr_odt,
-  ddr_ras_n,
-  ddr_reset_n,
-  ddr_we_n,
+  inout   [14:0]  ddr_addr,
+  inout   [ 2:0]  ddr_ba,
+  inout           ddr_cas_n,
+  inout           ddr_ck_n,
+  inout           ddr_ck_p,
+  inout           ddr_cke,
+  inout           ddr_cs_n,
+  inout   [ 3:0]  ddr_dm,
+  inout   [31:0]  ddr_dq,
+  inout   [ 3:0]  ddr_dqs_n,
+  inout   [ 3:0]  ddr_dqs_p,
+  inout           ddr_odt,
+  inout           ddr_ras_n,
+  inout           ddr_reset_n,
+  inout           ddr_we_n,
 
-  fixed_io_ddr_vrn,
-  fixed_io_ddr_vrp,
-  fixed_io_mio,
-  fixed_io_ps_clk,
-  fixed_io_ps_porb,
-  fixed_io_ps_srstb,
+  inout           fixed_io_ddr_vrn,
+  inout           fixed_io_ddr_vrp,
+  inout   [53:0]  fixed_io_mio,
+  inout           fixed_io_ps_clk,
+  inout           fixed_io_ps_porb,
+  inout           fixed_io_ps_srstb,
 
-  gpio_bd,
+  inout   [14:0]  gpio_bd,
 
-  usb_fx3_uart_tx,
-  usb_fx3_uart_rx,
+  input           usb_fx3_uart_tx,
+  output          usb_fx3_uart_rx,
 
-  hdmi_out_clk,
-  hdmi_vsync,
-  hdmi_hsync,
-  hdmi_data_e,
-  hdmi_data,
+  input   [ 3:0]  fifo_rdy,
 
-  spdif,
+  inout   [31:0]  data,
+  output  [1:0]   addr,
+  output          pclk,
+  output          slcs_n,
+  output          slrd_n,
+  output          sloe_n,
+  output          slwr_n,
+  output          pktend_n,
 
-  iic_scl,
-  iic_sda);
+  output  [ 1:0]  pmode,
 
-  inout   [14:0]  ddr_addr;
-  inout   [ 2:0]  ddr_ba;
-  inout           ddr_cas_n;
-  inout           ddr_ck_n;
-  inout           ddr_ck_p;
-  inout           ddr_cke;
-  inout           ddr_cs_n;
-  inout   [ 3:0]  ddr_dm;
-  inout   [31:0]  ddr_dq;
-  inout   [ 3:0]  ddr_dqs_n;
-  inout   [ 3:0]  ddr_dqs_p;
-  inout           ddr_odt;
-  inout           ddr_ras_n;
-  inout           ddr_reset_n;
-  inout           ddr_we_n;
+  output          hdmi_out_clk,
+  output          hdmi_vsync,
+  output          hdmi_hsync,
+  output          hdmi_data_e,
+  output  [23:0]  hdmi_data,
 
-  inout           fixed_io_ddr_vrn;
-  inout           fixed_io_ddr_vrp;
-  inout   [53:0]  fixed_io_mio;
-  inout           fixed_io_ps_clk;
-  inout           fixed_io_ps_porb;
-  inout           fixed_io_ps_srstb;
+  output          spdif,
 
-  inout   [14:0]  gpio_bd;
+  inout           iic_scl,
+  inout           iic_sda
 
-  input           usb_fx3_uart_tx;
-  output          usb_fx3_uart_rx;
-
-  output          hdmi_out_clk;
-  output          hdmi_vsync;
-  output          hdmi_hsync;
-  output          hdmi_data_e;
-  output  [23:0]  hdmi_data;
-
-  output          spdif;
-
-  inout           iic_scl;
-  inout           iic_sda;
+);
 
   // internal signals
 
@@ -125,20 +99,8 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  wire            usb_fx3_uart_tx;
-  wire            usb_fx3_uart_rx;
-  wire            dma_rdy;
-  wire            dma_wmk;
-  wire    [10:0]  fifo_rdy;
-  wire            pclk;
-  wire    [31:0]  data;
-  wire    [4:0]   addr;
-  wire            slcs_n;
-  wire            slrd_n;
-  wire            sloe_n;
-  wire            slwr_n;
-  wire            epswitch_n;
-  wire            pktend_n;
+
+  assign pmode = 2'b11;
 
   // instantiations
 
@@ -194,7 +156,7 @@ module system_top (
     .slrd_n(slrd_n),
     .sloe_n(sloe_n),
     .slwr_n(slwr_n),
-    .epswitch_n(epswitch_n),
+  // .epswitch_n(epswitch_n),
     .pktend_n(pktend_n),
     .ps_intr_00 (1'b0),
     .ps_intr_01 (1'b0),
@@ -205,8 +167,6 @@ module system_top (
     .ps_intr_06 (1'b0),
     .ps_intr_07 (1'b0),
     .ps_intr_08 (1'b0),
-    .ps_intr_09 (1'b0),
-    .ps_intr_10 (1'b0),
     .spdif (spdif));
 
 endmodule

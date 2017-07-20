@@ -135,7 +135,7 @@ module axi_ad9671_channel (
     .dfmt_type (adc_dfmt_type_s),
     .dfmt_se (adc_dfmt_se_s));
 
-  up_adc_channel #(.ADC_CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
+  up_adc_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),

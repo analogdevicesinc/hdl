@@ -37,39 +37,39 @@
 // ***************************************************************************
 
 module dmac_dest_fifo_inf (
-	input clk,
-	input resetn,
+  input clk,
+  input resetn,
 
-	input enable,
-	output enabled,
-	input sync_id,
-	output sync_id_ret,
+  input enable,
+  output enabled,
+  input sync_id,
+  output sync_id_ret,
 
-	input [ID_WIDTH-1:0] request_id,
-	output [ID_WIDTH-1:0] response_id,
-	output [ID_WIDTH-1:0] data_id,
-	input data_eot,
-	input response_eot,
+  input [ID_WIDTH-1:0] request_id,
+  output [ID_WIDTH-1:0] response_id,
+  output [ID_WIDTH-1:0] data_id,
+  input data_eot,
+  input response_eot,
 
-	input en,
-	output [DATA_WIDTH-1:0] dout,
-	output valid,
-	output underflow,
+  input en,
+  output [DATA_WIDTH-1:0] dout,
+  output valid,
+  output underflow,
 
         output xfer_req,
 
-	output fifo_ready,
-	input fifo_valid,
-	input [DATA_WIDTH-1:0] fifo_data,
+  output fifo_ready,
+  input fifo_valid,
+  input [DATA_WIDTH-1:0] fifo_data,
 
-	input req_valid,
-	output req_ready,
-	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+  input req_valid,
+  output req_ready,
+  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
-	output response_valid,
-	input response_ready,
-	output response_resp_eot,
-	output [1:0] response_resp
+  output response_valid,
+  input response_ready,
+  output response_resp_eot,
+  output [1:0] response_resp
 );
 
 parameter ID_WIDTH = 3;
@@ -88,11 +88,11 @@ wire data_valid;
 
 always @(posedge clk)
 begin
-	if (resetn == 1'b0) begin
-		en_d1 <= 1'b0;
-	end else begin
-		en_d1 <= en;
-	end
+  if (resetn == 1'b0) begin
+    en_d1 <= 1'b0;
+  end else begin
+    en_d1 <= en;
+  end
 end
 
 assign underflow = en_d1 & (~data_valid | ~enable);
@@ -100,55 +100,55 @@ assign data_ready = en_d1 & (data_valid | ~enable);
 assign valid = en_d1 & data_valid & enable;
 
 dmac_data_mover # (
-	.ID_WIDTH(ID_WIDTH),
-	.DATA_WIDTH(DATA_WIDTH),
-	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
-	.DISABLE_WAIT_FOR_ID(0)
+  .ID_WIDTH(ID_WIDTH),
+  .DATA_WIDTH(DATA_WIDTH),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+  .DISABLE_WAIT_FOR_ID(0)
 ) i_data_mover (
-	.clk(clk),
-	.resetn(resetn),
+  .clk(clk),
+  .resetn(resetn),
 
-	.enable(enable),
-	.enabled(data_enabled),
-	.sync_id(sync_id),
+  .enable(enable),
+  .enabled(data_enabled),
+  .sync_id(sync_id),
         .xfer_req(xfer_req),
 
-	.request_id(request_id),
-	.response_id(data_id),
-	.eot(data_eot),
-	
-	.req_valid(req_valid),
-	.req_ready(req_ready),
-	.req_last_burst_length(req_last_burst_length),
+  .request_id(request_id),
+  .response_id(data_id),
+  .eot(data_eot),
+  
+  .req_valid(req_valid),
+  .req_ready(req_ready),
+  .req_last_burst_length(req_last_burst_length),
 
-	.s_axi_ready(_fifo_ready),
-	.s_axi_valid(fifo_valid),
-	.s_axi_data(fifo_data),
-	.m_axi_ready(data_ready),
-	.m_axi_valid(data_valid),
-	.m_axi_data(dout),
-	.m_axi_last()
+  .s_axi_ready(_fifo_ready),
+  .s_axi_valid(fifo_valid),
+  .s_axi_data(fifo_data),
+  .m_axi_ready(data_ready),
+  .m_axi_valid(data_valid),
+  .m_axi_data(dout),
+  .m_axi_last()
 );
 
 dmac_response_generator # (
-	.ID_WIDTH(ID_WIDTH)
+  .ID_WIDTH(ID_WIDTH)
 ) i_response_generator (
-	.clk(clk),
-	.resetn(resetn),
+  .clk(clk),
+  .resetn(resetn),
 
-	.enable(data_enabled),
-	.enabled(enabled),
-	.sync_id(sync_id),
+  .enable(data_enabled),
+  .enabled(enabled),
+  .sync_id(sync_id),
 
-	.request_id(data_id),
-	.response_id(response_id),
+  .request_id(data_id),
+  .response_id(response_id),
 
-	.eot(response_eot),
+  .eot(response_eot),
 
-	.resp_valid(response_valid),
-	.resp_ready(response_ready),
-	.resp_eot(response_resp_eot),
-	.resp_resp(response_resp)
+  .resp_valid(response_valid),
+  .resp_ready(response_ready),
+  .resp_eot(response_resp_eot),
+  .resp_resp(response_resp)
 );
 
 endmodule

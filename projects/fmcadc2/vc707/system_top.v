@@ -104,10 +104,11 @@ module system_top (
   spi_adc_csn,
   spi_adc_clk,
   spi_adc_sdio,
-  spi_ext_csn_0,
-  spi_ext_csn_1,
-  spi_ext_clk,
-  spi_ext_sdio);
+
+  spi_adf4355_data_or_csn_0,
+  spi_adf4355_clk_or_csn_1,
+  spi_adf4355_le_or_clk,
+  spi_adf4355_ce_or_sdio);
 
   input             sys_rst;
   input             sys_clk_p;
@@ -174,10 +175,11 @@ module system_top (
   output            spi_adc_csn;
   output            spi_adc_clk;
   inout             spi_adc_sdio;
-  output            spi_ext_csn_0;
-  output            spi_ext_csn_1;
-  output            spi_ext_clk;
-  inout             spi_ext_sdio;
+
+  output            spi_adf4355_data_or_csn_0;
+  output            spi_adf4355_clk_or_csn_1;
+  output            spi_adf4355_le_or_clk;
+  inout             spi_adf4355_ce_or_sdio;
 
   // internal signals
 
@@ -188,21 +190,15 @@ module system_top (
   wire              spi_mosi;
   wire              spi_miso;
   wire              rx_ref_clk;
-  wire              rx_sysref;
   wire              rx_sync;
-
-  // spi
-
-  assign spi_adc_csn = spi_csn[0];
-  assign spi_adc_clk = spi_clk;
-  assign spi_ext_csn_0 = spi_csn[1];
-  assign spi_ext_csn_1 = spi_csn[2];
-  assign spi_ext_clk = spi_clk;
+  wire              rx_sysref;
+  wire              rx_clk;
 
   // default logic
 
   assign fan_pwm = 1'b1;
   assign iic_rstn = 1'b1;
+
 
   // instantiations
 
@@ -224,27 +220,36 @@ module system_top (
     .OB (rx_sync_n));
 
   fmcadc2_spi i_fmcadc2_spi (
-    .spi_adc_csn (spi_adc_csn),
-    .spi_ext_csn_0 (spi_ext_csn_0),
-    .spi_ext_csn_1 (spi_ext_csn_1),
+    .spi_adf4355 (gpio_o[36]),
+    .spi_adf4355_ce (gpio_o[37]),
     .spi_clk (spi_clk),
+    .spi_csn (spi_csn),
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
+    .spi_adc_csn (spi_adc_csn),
+    .spi_adc_clk (spi_adc_clk),
     .spi_adc_sdio (spi_adc_sdio),
-    .spi_ext_sdio (spi_ext_sdio));
+    .spi_adf4355_data_or_csn_0 (spi_adf4355_data_or_csn_0),
+    .spi_adf4355_clk_or_csn_1 (spi_adf4355_clk_or_csn_1),
+    .spi_adf4355_le_or_clk (spi_adf4355_le_or_clk),
+    .spi_adf4355_ce_or_sdio (spi_adf4355_ce_or_sdio));
 
-  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf (
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf (
     .dio_t (gpio_t[33:32]),
     .dio_i (gpio_o[33:32]),
     .dio_o (gpio_i[33:32]),
-    .dio_p ({ adc_irq,    // 33
-              adc_fd}));  // 32
+    .dio_p ({adc_irq, adc_fd}));
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
+
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[34]),
+    .sysref_out (rx_sysref));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -288,11 +293,26 @@ module system_top (
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
     .phy_sd (1'b1),
-    .rx_data_n (rx_data_n),
-    .rx_data_p (rx_data_p),
-    .rx_ref_clk (rx_ref_clk),
-    .rx_sync (rx_sync),
-    .rx_sysref (rx_sysref),
+    .rx_data_0_n (rx_data_n[0]),
+    .rx_data_0_p (rx_data_p[0]),
+    .rx_data_1_n (rx_data_n[1]),
+    .rx_data_1_p (rx_data_p[1]),
+    .rx_data_2_n (rx_data_n[2]),
+    .rx_data_2_p (rx_data_p[2]),
+    .rx_data_3_n (rx_data_n[3]),
+    .rx_data_3_p (rx_data_p[3]),
+    .rx_data_4_n (rx_data_n[4]),
+    .rx_data_4_p (rx_data_p[4]),
+    .rx_data_5_n (rx_data_n[5]),
+    .rx_data_5_p (rx_data_p[5]),
+    .rx_data_6_n (rx_data_n[6]),
+    .rx_data_6_p (rx_data_p[6]),
+    .rx_data_7_n (rx_data_n[7]),
+    .rx_data_7_p (rx_data_p[7]),
+    .rx_ref_clk_0 (rx_ref_clk),
+    .rx_sync_0 (rx_sync),
+    .rx_sysref_0 (rx_sysref),
+    .rx_core_clk (rx_clk),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),

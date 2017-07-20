@@ -17,7 +17,7 @@ M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += ../../common/kc705/kc705_system_mig.prj
 M_DEPS += ../../common/kc705/kc705_system_constr.xdc
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
-M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9467/axi_ad9467.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 
@@ -35,6 +35,7 @@ M_FLIST += *.sdk
 M_FLIST += *.hw
 M_FLIST += *.sim
 M_FLIST += .Xil
+M_FLIST += *.ip_user_files
 
 
 
@@ -52,7 +53,7 @@ clean-all:clean
 
 
 ad9467_fmc_kc705.sdk/system_top.hdf: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> ad9467_fmc_kc705_vivado.log 2>&1
 
 

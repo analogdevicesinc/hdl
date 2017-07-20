@@ -436,7 +436,6 @@ ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda)); //
     .sys_hps_spim0_ss_2_n (),
     .sys_hps_spim0_ss_3_n (),
     .sys_hps_spim0_sclk_out_clk (),
-    .axi_ad9361_device_clock_clk (clk),
     .axi_ad9361_device_if_rx_clk_in_p (rx_clk_in),
     .axi_ad9361_device_if_rx_clk_in_n (1'b0),
     .axi_ad9361_device_if_rx_frame_in_p (rx_frame_in),

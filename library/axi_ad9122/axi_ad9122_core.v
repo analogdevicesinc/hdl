@@ -156,8 +156,8 @@ module axi_ad9122_core (
   output          up_drp_sel;
   output          up_drp_wr;
   output  [11:0]  up_drp_addr;
-  output  [15:0]  up_drp_wdata;
-  input   [15:0]  up_drp_rdata;
+  output  [31:0]  up_drp_wdata;
+  input   [31:0]  up_drp_rdata;
   input           up_drp_ready;
   input           up_drp_locked;
 
@@ -278,6 +278,7 @@ module axi_ad9122_core (
     .dac_rst (dac_rst),
     .dac_sync (dac_sync_out),
     .dac_frame (dac_frame_s),
+    .dac_clksel (),
     .dac_par_type (),
     .dac_par_enb (),
     .dac_r1_mode (),

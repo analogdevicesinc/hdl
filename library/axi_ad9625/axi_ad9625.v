@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -45,7 +43,10 @@ module axi_ad9625 (
   // rx_clk is (line-rate/40)
 
   rx_clk,
+  rx_sof,
+  rx_valid,
   rx_data,
+  rx_ready,
 
   // dma interface
 
@@ -80,7 +81,9 @@ module axi_ad9625 (
   s_axi_rvalid,
   s_axi_rresp,
   s_axi_rdata,
-  s_axi_rready);
+  s_axi_rready,
+  s_axi_awprot,
+  s_axi_arprot);
 
   parameter ID = 0;
   parameter DEVICE_TYPE = 0;
@@ -90,7 +93,10 @@ module axi_ad9625 (
   // rx_clk is (line-rate/40)
 
   input           rx_clk;
+  input   [  3:0] rx_sof;
+  input           rx_valid;
   input   [255:0] rx_data;
+  output          rx_ready;
 
   // dma interface
 
@@ -126,6 +132,9 @@ module axi_ad9625 (
   output  [  1:0] s_axi_rresp;
   output  [ 31:0] s_axi_rdata;
   input           s_axi_rready;
+  input   [ 2:0]  s_axi_awprot;
+  input   [ 2:0]  s_axi_arprot;
+
 
   // internal registers
 
@@ -161,6 +170,10 @@ module axi_ad9625 (
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
+  // defaults
+
+  assign rx_ready = 1'b1;
+
   // processor read interface
 
   always @(negedge up_rstn or posedge up_clk) begin
@@ -179,8 +192,12 @@ module axi_ad9625 (
 
   assign adc_valid = 1'b1;
 
-  axi_ad9625_if #(.ID(ID)) i_if (
+  axi_ad9625_if #(
+    .ID (ID),
+    .DEVICE_TYPE (DEVICE_TYPE))
+  i_if (
     .rx_clk (rx_clk),
+    .rx_sof (rx_sof),
     .rx_data (rx_data),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -227,7 +244,7 @@ module axi_ad9625 (
     .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
     .adc_status_unf (adc_dunf),
-    .adc_clk_ratio (32'd1),
+    .adc_clk_ratio (32'd16),
     .adc_start_code (),
     .adc_sync (),
     .up_status_pn_err (up_adc_pn_err_s),
@@ -237,7 +254,7 @@ module axi_ad9625 (
     .up_drp_wr (),
     .up_drp_addr (),
     .up_drp_wdata (),
-    .up_drp_rdata (16'd0),
+    .up_drp_rdata (32'd0),
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
     .up_usr_chanmax (),

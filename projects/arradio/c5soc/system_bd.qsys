@@ -168,9 +168,7 @@
  <instanceScript></instanceScript>
  <interface
    name="axi_ad9361_device_clock"
-   internal="arradio.axi_ad9361_device_clock"
-   type="clock"
-   dir="end" />
+   internal="arradio.axi_ad9361_device_clock" />
  <interface
    name="axi_ad9361_device_if"
    internal="arradio.axi_ad9361_device_if"
@@ -249,9 +247,6 @@
    type="clock"
    dir="start" />
  <module name="arradio" kind="arradio_bd" version="1.0" enabled="1">
-  <parameter name="AUTO_AXI_AD9361_DEVICE_CLOCK_CLOCK_DOMAIN" value="1" />
-  <parameter name="AUTO_AXI_AD9361_DEVICE_CLOCK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_AXI_AD9361_DEVICE_CLOCK_RESET_DOMAIN" value="1" />
   <parameter name="AUTO_AXI_DMAC_ADC_M_DEST_AXI_ADDRESS_MAP"><![CDATA[<address-map><slave name='c5soc_sys_hps_bridges.f2h_sdram1_data' start='0x0' end='0x100000000' /></address-map>]]></parameter>
   <parameter
      name="AUTO_AXI_DMAC_ADC_M_DEST_AXI_ADDRESS_WIDTH"
@@ -264,12 +259,12 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8_H6" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_MEM_CLK_CLOCK_DOMAIN" value="10" />
+  <parameter name="AUTO_MEM_CLK_CLOCK_DOMAIN" value="9" />
   <parameter name="AUTO_MEM_CLK_CLOCK_RATE" value="80000000" />
-  <parameter name="AUTO_MEM_CLK_RESET_DOMAIN" value="10" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="3" />
+  <parameter name="AUTO_MEM_CLK_RESET_DOMAIN" value="9" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="2" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="3" />
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="2" />
   <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_arradio</parameter>
  </module>
  <module name="c5soc" kind="c5soc_system_bd" version="1.0" enabled="1">
@@ -277,20 +272,20 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8_H6" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="3" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="2" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="3" />
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="2" />
   <parameter name="AUTO_SYS_CPU_INTERCONNECT_M0_ADDRESS_MAP"><![CDATA[<address-map><slave name='arradio_axi_dmac_adc.s_axi' start='0x0' end='0x4000' /><slave name='arradio_axi_dmac_dac.s_axi' start='0x4000' end='0x8000' /><slave name='arradio_spi_ad9361.spi_control_port' start='0x8000' end='0x8020' /><slave name='arradio_gpio.s1' start='0x9000' end='0x9010' /><slave name='arradio_axi_ad9361.s_axi' start='0x20000' end='0x30000' /></address-map>]]></parameter>
   <parameter
      name="AUTO_SYS_CPU_INTERCONNECT_M0_ADDRESS_WIDTH"
      value="AddressWidth = 18" />
-  <parameter name="AUTO_SYS_HPS_I2C0_SCL_IN_CLOCK_DOMAIN" value="7" />
+  <parameter name="AUTO_SYS_HPS_I2C0_SCL_IN_CLOCK_DOMAIN" value="6" />
   <parameter name="AUTO_SYS_HPS_I2C0_SCL_IN_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_SYS_HPS_I2C0_SCL_IN_RESET_DOMAIN" value="7" />
+  <parameter name="AUTO_SYS_HPS_I2C0_SCL_IN_RESET_DOMAIN" value="6" />
   <parameter name="AUTO_SYS_INTR_INTERRUPTS_USED" value="7" />
   <parameter name="AUTO_UNIQUE_ID" value="$${FILENAME}_c5soc" />
  </module>
- <module name="sys_clk" kind="clock_source" version="15.1" enabled="1">
+ <module name="sys_clk" kind="clock_source" version="16.0" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
@@ -298,7 +293,7 @@
  </module>
  <connection
    kind="avalon"
-   version="15.1"
+   version="16.0"
    start="arradio.axi_dmac_adc_m_dest_axi"
    end="c5soc.sys_mem_interconnect_axi0_s0">
   <parameter name="arbitrationPriority" value="1" />
@@ -307,7 +302,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="15.1"
+   version="16.0"
    start="arradio.axi_dmac_dac_m_src_axi"
    end="c5soc.sys_mem_interconnect_axi1_s0">
   <parameter name="arbitrationPriority" value="1" />
@@ -316,7 +311,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="15.1"
+   version="16.0"
    start="c5soc.sys_cpu_interconnect_m0"
    end="arradio.axi_ad9361_s_axi">
   <parameter name="arbitrationPriority" value="1" />
@@ -325,7 +320,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="15.1"
+   version="16.0"
    start="c5soc.sys_cpu_interconnect_m0"
    end="arradio.axi_dmac_adc_s_axi">
   <parameter name="arbitrationPriority" value="1" />
@@ -334,7 +329,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="15.1"
+   version="16.0"
    start="c5soc.sys_cpu_interconnect_m0"
    end="arradio.axi_dmac_dac_s_axi">
   <parameter name="arbitrationPriority" value="1" />
@@ -343,7 +338,7 @@
  </connection>
  <connection
    kind="avalon"
-   version="15.1"
+   version="16.0"
    start="c5soc.sys_cpu_interconnect_m0"
    end="arradio.gpio_s1">
   <parameter name="arbitrationPriority" value="1" />
@@ -352,54 +347,54 @@
  </connection>
  <connection
    kind="avalon"
-   version="15.1"
+   version="16.0"
    start="c5soc.sys_cpu_interconnect_m0"
    end="arradio.spi_ad9361_spi_control_port">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x8000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="clock" version="15.1" start="sys_clk.clk" end="c5soc.sys_clk" />
- <connection kind="clock" version="15.1" start="sys_clk.clk" end="arradio.sys_clk" />
+ <connection kind="clock" version="16.0" start="sys_clk.clk" end="c5soc.sys_clk" />
+ <connection kind="clock" version="16.0" start="sys_clk.clk" end="arradio.sys_clk" />
  <connection
    kind="clock"
-   version="15.1"
+   version="16.0"
    start="c5soc.mem_clk"
    end="arradio.mem_clk" />
  <connection
    kind="interrupt"
-   version="15.1"
+   version="16.0"
    start="c5soc.sys_intr"
    end="arradio.axi_dmac_adc_intr">
   <parameter name="irqNumber" value="2" />
  </connection>
  <connection
    kind="interrupt"
-   version="15.1"
+   version="16.0"
    start="c5soc.sys_intr"
    end="arradio.axi_dmac_dac_intr">
   <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="interrupt"
-   version="15.1"
+   version="16.0"
    start="c5soc.sys_intr"
    end="arradio.spi_ad9361_irq">
   <parameter name="irqNumber" value="0" />
  </connection>
  <connection
    kind="reset"
-   version="15.1"
+   version="16.0"
    start="sys_clk.clk_reset"
    end="c5soc.sys_rst" />
  <connection
    kind="reset"
-   version="15.1"
+   version="16.0"
    start="sys_clk.clk_reset"
    end="arradio.sys_rst" />
  <connection
    kind="reset"
-   version="15.1"
+   version="16.0"
    start="c5soc.mem_rst"
    end="arradio.mem_rst" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="FIFO" />

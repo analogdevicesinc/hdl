@@ -37,39 +37,39 @@
 // ***************************************************************************
 
 module dmac_dest_axi_stream (
-	input s_axis_aclk,
-	input s_axis_aresetn,
+  input s_axis_aclk,
+  input s_axis_aresetn,
 
-	input enable,
-	output enabled,
-	input sync_id,
-	output sync_id_ret,
+  input enable,
+  output enabled,
+  input sync_id,
+  output sync_id_ret,
         output xfer_req,
 
-	input [ID_WIDTH-1:0] request_id,
-	output [ID_WIDTH-1:0] response_id,
-	output [ID_WIDTH-1:0] data_id,
-	input data_eot,
-	input response_eot,
+  input [ID_WIDTH-1:0] request_id,
+  output [ID_WIDTH-1:0] response_id,
+  output [ID_WIDTH-1:0] data_id,
+  input data_eot,
+  input response_eot,
 
-	input m_axis_ready,
-	output m_axis_valid,
-	output [S_AXIS_DATA_WIDTH-1:0] m_axis_data,
+  input m_axis_ready,
+  output m_axis_valid,
+  output [S_AXIS_DATA_WIDTH-1:0] m_axis_data,
         output m_axis_last,
 
-	output fifo_ready,
-	input fifo_valid,
-	input [S_AXIS_DATA_WIDTH-1:0] fifo_data,
+  output fifo_ready,
+  input fifo_valid,
+  input [S_AXIS_DATA_WIDTH-1:0] fifo_data,
 
-	input req_valid,
-	output req_ready,
-	input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+  input req_valid,
+  output req_ready,
+  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
         input req_xlast,
 
-	output response_valid,
-	input response_ready,
-	output response_resp_eot,
-	output [1:0] response_resp
+  output response_valid,
+  input response_ready,
+  output response_resp_eot,
+  output [1:0] response_resp
 );
 
 parameter ID_WIDTH = 3;
@@ -97,56 +97,56 @@ end
 assign m_axis_last = (req_xlast_d == 1'b1) ? m_axis_last_s : 1'b0;
 
 dmac_data_mover # (
-	.ID_WIDTH(ID_WIDTH),
-	.DATA_WIDTH(S_AXIS_DATA_WIDTH),
-	.BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
-	.DISABLE_WAIT_FOR_ID(0),
-	.LAST(1)
+  .ID_WIDTH(ID_WIDTH),
+  .DATA_WIDTH(S_AXIS_DATA_WIDTH),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+  .DISABLE_WAIT_FOR_ID(0),
+  .LAST(1)
 ) i_data_mover (
-	.clk(s_axis_aclk),
-	.resetn(s_axis_aresetn),
+  .clk(s_axis_aclk),
+  .resetn(s_axis_aresetn),
 
-	.enable(enable),
-	.enabled(data_enabled),
-	.sync_id(sync_id),
+  .enable(enable),
+  .enabled(data_enabled),
+  .sync_id(sync_id),
         .xfer_req(xfer_req),
 
-	.request_id(request_id),
-	.response_id(data_id),
-	.eot(data_eot),
+  .request_id(request_id),
+  .response_id(data_id),
+  .eot(data_eot),
 
-	.req_valid(req_valid),
-	.req_ready(req_ready),
-	.req_last_burst_length(req_last_burst_length),
+  .req_valid(req_valid),
+  .req_ready(req_ready),
+  .req_last_burst_length(req_last_burst_length),
 
-	.m_axi_ready(m_axis_ready),
-	.m_axi_valid(m_axis_valid),
-	.m_axi_data(m_axis_data),
+  .m_axi_ready(m_axis_ready),
+  .m_axi_valid(m_axis_valid),
+  .m_axi_data(m_axis_data),
         .m_axi_last(m_axis_last_s),
-	.s_axi_ready(_fifo_ready),
-	.s_axi_valid(fifo_valid),
-	.s_axi_data(fifo_data)
+  .s_axi_ready(_fifo_ready),
+  .s_axi_valid(fifo_valid),
+  .s_axi_data(fifo_data)
 );
 
 dmac_response_generator # (
-	.ID_WIDTH(ID_WIDTH)
+  .ID_WIDTH(ID_WIDTH)
 ) i_response_generator (
-	.clk(s_axis_aclk),
-	.resetn(s_axis_aresetn),
+  .clk(s_axis_aclk),
+  .resetn(s_axis_aresetn),
 
-	.enable(data_enabled),
-	.enabled(enabled),
-	.sync_id(sync_id),
+  .enable(data_enabled),
+  .enabled(enabled),
+  .sync_id(sync_id),
 
-	.request_id(data_id),
-	.response_id(response_id),
+  .request_id(data_id),
+  .response_id(response_id),
 
-	.eot(response_eot),
+  .eot(response_eot),
 
-	.resp_valid(response_valid),
-	.resp_ready(response_ready),
-	.resp_eot(response_resp_eot),
-	.resp_resp(response_resp)
+  .resp_valid(response_valid),
+  .resp_ready(response_ready),
+  .resp_eot(response_resp_eot),
+  .resp_resp(response_resp)
 );
 
 assign fifo_ready = _fifo_ready | ~enabled;

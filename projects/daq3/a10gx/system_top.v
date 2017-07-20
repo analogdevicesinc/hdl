@@ -147,8 +147,8 @@ module system_top (
 
   // board gpio
 
-  inout   [ 10:0]   gpio_bd_i;
-  inout   [ 15:0]   gpio_bd_o;
+  input   [ 10:0]   gpio_bd_i;
+  output  [ 15:0]   gpio_bd_o;
 
   // lane interface
 
@@ -209,12 +209,14 @@ module system_top (
 
   // gpio in & out are separate cores
 
-  assign sysref = gpio_o[36];
-  assign adc_pd = gpio_o[35];
-  assign dac_txen = gpio_o[34];
+  assign gpio_i[63:40] = gpio_o[63:40];
+  assign sysref = gpio_o[40];
+  assign gpio_i[39:39] = trig;
 
-  assign gpio_i[63:38] = 26'd0;
-  assign gpio_i[37:37] = trig;
+  assign gpio_i[38:37] = gpio_o[38:37];
+  assign adc_pd = gpio_o[38];
+  assign dac_txen = gpio_o[37];
+
   assign gpio_i[36:36] = adc_fdb;
   assign gpio_i[35:35] = adc_fda;
   assign gpio_i[34:34] = dac_irq;
@@ -235,49 +237,55 @@ module system_top (
   assign gpio_bd_o = gpio_o[15:0];
 
   system_bd i_system_bd (
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_ck_n (ddr3_clk_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_a (ddr3_a[11:0]),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_ba (ddr3_ba),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_cke (ddr3_cke),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_cs_n (ddr3_cs_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_odt (ddr3_odt),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_reset_n (ddr3_reset_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_we_n (ddr3_we_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_ras_n (ddr3_ras_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_cas_n (ddr3_cas_n),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_dqs (ddr3_dqs_p[7:0]),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_dqs_n (ddr3_dqs_n[7:0]),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_dq (ddr3_dq[63:0]),
-    .a10gx_base_sys_ddr3_cntrl_mem_mem_dm (ddr3_dm[7:0]),
-    .a10gx_base_sys_ddr3_cntrl_oct_oct_rzqin (ddr3_rzq),
-    .a10gx_base_sys_ddr3_cntrl_pll_ref_clk_clk (ddr3_ref_clk),
-    .a10gx_base_sys_ethernet_mdio_mdc (eth_mdc),
-    .a10gx_base_sys_ethernet_mdio_mdio_in (eth_mdio_i),
-    .a10gx_base_sys_ethernet_mdio_mdio_out (eth_mdio_o),
-    .a10gx_base_sys_ethernet_mdio_mdio_oen (eth_mdio_t),
-    .a10gx_base_sys_ethernet_ref_clk_clk (eth_ref_clk),
-    .a10gx_base_sys_ethernet_reset_reset (eth_reset),
-    .a10gx_base_sys_ethernet_sgmii_rxp_0 (eth_rxd),
-    .a10gx_base_sys_ethernet_sgmii_txp_0 (eth_txd),
-    .a10gx_base_sys_gpio_in_export (gpio_i[63:32]),
-    .a10gx_base_sys_gpio_out_export (gpio_o[63:32]),
-    .a10gx_base_sys_gpio_bd_in_port (gpio_i[31:0]),
-    .a10gx_base_sys_gpio_bd_out_port (gpio_o[31:0]),
-    .a10gx_base_sys_spi_MISO (spi_miso_s),
-    .a10gx_base_sys_spi_MOSI (spi_mosi_s),
-    .a10gx_base_sys_spi_SCLK (spi_clk),
-    .a10gx_base_sys_spi_SS_n (spi_csn_s),
-    .daq3_rx_data_rx_serial_data (rx_data),
-    .daq3_rx_ref_clk_clk (rx_ref_clk),
-    .daq3_rx_sync_rx_sync (rx_sync),
-    .daq3_rx_sysref_rx_ext_sysref_in (rx_sysref),
-    .daq3_tx_data_tx_serial_data (tx_data),
-    .daq3_tx_ref_clk_clk (tx_ref_clk),
-    .daq3_tx_sync_tx_sync (tx_sync),
-    .daq3_tx_sysref_tx_ext_sysref_in (tx_sysref),
+    .sys_ddr3_cntrl_mem_mem_ck (ddr3_clk_p),
+    .sys_ddr3_cntrl_mem_mem_ck_n (ddr3_clk_n),
+    .sys_ddr3_cntrl_mem_mem_a (ddr3_a[11:0]),
+    .sys_ddr3_cntrl_mem_mem_ba (ddr3_ba),
+    .sys_ddr3_cntrl_mem_mem_cke (ddr3_cke),
+    .sys_ddr3_cntrl_mem_mem_cs_n (ddr3_cs_n),
+    .sys_ddr3_cntrl_mem_mem_odt (ddr3_odt),
+    .sys_ddr3_cntrl_mem_mem_reset_n (ddr3_reset_n),
+    .sys_ddr3_cntrl_mem_mem_we_n (ddr3_we_n),
+    .sys_ddr3_cntrl_mem_mem_ras_n (ddr3_ras_n),
+    .sys_ddr3_cntrl_mem_mem_cas_n (ddr3_cas_n),
+    .sys_ddr3_cntrl_mem_mem_dqs (ddr3_dqs_p[7:0]),
+    .sys_ddr3_cntrl_mem_mem_dqs_n (ddr3_dqs_n[7:0]),
+    .sys_ddr3_cntrl_mem_mem_dq (ddr3_dq[63:0]),
+    .sys_ddr3_cntrl_mem_mem_dm (ddr3_dm[7:0]),
+    .sys_ddr3_cntrl_oct_oct_rzqin (ddr3_rzq),
+    .sys_ddr3_cntrl_pll_ref_clk_clk (ddr3_ref_clk),
+    .sys_ethernet_mdio_mdc (eth_mdc),
+    .sys_ethernet_mdio_mdio_in (eth_mdio_i),
+    .sys_ethernet_mdio_mdio_out (eth_mdio_o),
+    .sys_ethernet_mdio_mdio_oen (eth_mdio_t),
+    .sys_ethernet_ref_clk_clk (eth_ref_clk),
+    .sys_ethernet_reset_reset (eth_reset),
+    .sys_ethernet_sgmii_rxp_0 (eth_rxd),
+    .sys_ethernet_sgmii_txp_0 (eth_txd),
+    .sys_gpio_in_export (gpio_i[63:32]),
+    .sys_gpio_out_export (gpio_o[63:32]),
+    .sys_gpio_bd_in_port (gpio_i[31:0]),
+    .sys_gpio_bd_out_port (gpio_o[31:0]),
+    .sys_spi_MISO (spi_miso_s),
+    .sys_spi_MOSI (spi_mosi_s),
+    .sys_spi_SCLK (spi_clk),
+    .sys_spi_SS_n (spi_csn_s),
+    .rx_data_0_rx_serial_data (rx_data[0]),
+    .rx_data_1_rx_serial_data (rx_data[1]),
+    .rx_data_2_rx_serial_data (rx_data[2]),
+    .rx_data_3_rx_serial_data (rx_data[3]),
+    .rx_ref_clk_clk (rx_ref_clk),
+    .rx_sync_export (rx_sync),
+    .rx_sysref_export (rx_sysref),
+    .tx_data_0_tx_serial_data (tx_data[0]),
+    .tx_data_1_tx_serial_data (tx_data[1]),
+    .tx_data_2_tx_serial_data (tx_data[2]),
+    .tx_data_3_tx_serial_data (tx_data[3]),
+    .tx_ref_clk_clk (tx_ref_clk),
+    .tx_sync_export (tx_sync),
+    .tx_sysref_export (tx_sysref),
     .sys_clk_clk (sys_clk),
-    .sys_reset_reset_n (sys_resetn));
+    .sys_rst_reset_n (sys_resetn));
 
 endmodule
 

@@ -34,9 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
-// This is the LVDS/DDR interface
 
 `timescale 1ns/100ps
 
@@ -46,6 +43,7 @@ module axi_ad9680_if (
   // rx_clk is (line-rate/40)
 
   rx_clk,
+  rx_sof,
   rx_data,
 
   // adc data output
@@ -58,10 +56,15 @@ module axi_ad9680_if (
   adc_or_b,
   adc_status);
 
+  // parameters
+
+  parameter DEVICE_TYPE = 0;
+
   // jesd interface 
   // rx_clk is (line-rate/40)
 
   input           rx_clk;
+  input  [  3:0]  rx_sof;
   input  [127:0]  rx_data;
 
   // adc data output
@@ -88,6 +91,7 @@ module axi_ad9680_if (
   wire    [15:0]  adc_data_b_s2_s;
   wire    [15:0]  adc_data_b_s1_s;
   wire    [15:0]  adc_data_b_s0_s;
+  wire   [127:0]  rx_data_s;
 
   // adc clock is the reference clock
 
@@ -105,15 +109,15 @@ module axi_ad9680_if (
 
   // data multiplex
 
-  assign adc_data_a_s3_s = {rx_data[ 57: 56], rx_data[ 31: 24], rx_data[ 63: 58]};
-  assign adc_data_a_s2_s = {rx_data[ 49: 48], rx_data[ 23: 16], rx_data[ 55: 50]};
-  assign adc_data_a_s1_s = {rx_data[ 41: 40], rx_data[ 15:  8], rx_data[ 47: 42]};
-  assign adc_data_a_s0_s = {rx_data[ 33: 32], rx_data[  7:  0], rx_data[ 39: 34]};
+  assign adc_data_a_s3_s = {rx_data_s[ 57: 56], rx_data_s[ 31: 24], rx_data_s[ 63: 58]};
+  assign adc_data_a_s2_s = {rx_data_s[ 49: 48], rx_data_s[ 23: 16], rx_data_s[ 55: 50]};
+  assign adc_data_a_s1_s = {rx_data_s[ 41: 40], rx_data_s[ 15:  8], rx_data_s[ 47: 42]};
+  assign adc_data_a_s0_s = {rx_data_s[ 33: 32], rx_data_s[  7:  0], rx_data_s[ 39: 34]};
 
-  assign adc_data_b_s3_s = {rx_data[121:120], rx_data[ 95: 88], rx_data[127:122]};
-  assign adc_data_b_s2_s = {rx_data[113:112], rx_data[ 87: 80], rx_data[119:114]};
-  assign adc_data_b_s1_s = {rx_data[105:104], rx_data[ 79: 72], rx_data[111:106]};
-  assign adc_data_b_s0_s = {rx_data[ 97: 96], rx_data[ 71: 64], rx_data[103: 98]};
+  assign adc_data_b_s3_s = {rx_data_s[121:120], rx_data_s[ 95: 88], rx_data_s[127:122]};
+  assign adc_data_b_s2_s = {rx_data_s[113:112], rx_data_s[ 87: 80], rx_data_s[119:114]};
+  assign adc_data_b_s1_s = {rx_data_s[105:104], rx_data_s[ 79: 72], rx_data_s[111:106]};
+  assign adc_data_b_s0_s = {rx_data_s[ 97: 96], rx_data_s[ 71: 64], rx_data_s[103: 98]};
 
   // status
 
@@ -124,6 +128,21 @@ module axi_ad9680_if (
       adc_status <= 1'b1;
     end
   end
+
+  // frame-alignment
+
+  genvar n;
+
+  generate
+  for (n = 0; n < 4; n = n + 1) begin: g_xcvr_if
+  ad_xcvr_rx_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_xcvr_if (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_sof),
+    .rx_ip_data (rx_data[((n*32)+31):(n*32)]),
+    .rx_sof (),
+    .rx_data (rx_data_s[((n*32)+31):(n*32)]));
+  end
+  endgenerate
 
 endmodule
 

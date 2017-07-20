@@ -177,8 +177,9 @@ module system_top (
   wire            spi1_mosi;
   wire            spi1_miso;
   wire            rx_ref_clk;
-  wire            rx_sysref;
   wire            rx_sync;
+  wire            rx_sysref;
+  wire            rx_clk;
 
   // instantiations
 
@@ -225,6 +226,11 @@ module system_top (
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[48]),
+    .sysref_out (rx_sysref));
+
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
@@ -270,11 +276,14 @@ module system_top (
     .ps_intr_10 (1'b0),
     .ps_intr_11 (1'b0),
     .ps_intr_12 (1'b0),
-    .rx_data_n (rx_data_n),
-    .rx_data_p (rx_data_p),
-    .rx_ref_clk (rx_ref_clk),
-    .rx_sync (rx_sync),
-    .rx_sysref (rx_sysref),
+    .rx_data_0_n (rx_data_n[0]),
+    .rx_data_0_p (rx_data_p[0]),
+    .rx_data_1_n (rx_data_n[1]),
+    .rx_data_1_p (rx_data_p[1]),
+    .rx_ref_clk_0 (rx_ref_clk),
+    .rx_sync_0 (rx_sync),
+    .rx_sysref_0 (rx_sysref),
+    .rx_core_clk (rx_clk),
     .spdif (spdif),
     .spi0_clk_i (spi0_clk),
     .spi0_clk_o (spi0_clk),

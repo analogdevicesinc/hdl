@@ -16,7 +16,7 @@ M_DEPS += ../../common/kc705/kc705_system_mig.prj
 M_DEPS += ../../common/kc705/kc705_system_constr.xdc
 M_DEPS += ../../common/kc705/kc705_system_bd.tcl
 M_DEPS += ../../adv7511/common/adv7511_bd.tcl
-M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
@@ -35,6 +35,7 @@ M_FLIST += *.sdk
 M_FLIST += *.hw
 M_FLIST += *.sim
 M_FLIST += .Xil
+M_FLIST += *.ip_user_files
 
 
 
@@ -53,7 +54,7 @@ clean-all:clean
 
 
 adv7511_kc705.sdk/system_top.hdf: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> adv7511_kc705_vivado.log 2>&1
 
 

@@ -200,6 +200,7 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
+  wire            rx_clk;
 
   // default logic
 
@@ -240,11 +241,16 @@ module system_top (
               adc_agc3,
               adc_agc4}));
 
-  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
-    .dio_t (gpio_t[14:0]),
-    .dio_i (gpio_o[14:0]),
-    .dio_o (gpio_i[14:0]),
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
+
+  ad_sysref_gen i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[48]),
+    .sysref_out (rx_sysref));
 
   system_wrapper i_system_wrapper (
     .ddr3_addr (ddr3_addr),
@@ -289,11 +295,14 @@ module system_top (
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
     .phy_sd (1'b1),
-    .rx_data_n (rx_data_n),
-    .rx_data_p (rx_data_p),
-    .rx_ref_clk (rx_ref_clk),
-    .rx_sync (rx_sync),
-    .rx_sysref (rx_sysref),
+    .rx_data_0_n (rx_data_n[0]),
+    .rx_data_0_p (rx_data_p[0]),
+    .rx_data_1_n (rx_data_n[1]),
+    .rx_data_1_p (rx_data_p[1]),
+    .rx_ref_clk_0 (rx_ref_clk),
+    .rx_sync_0 (rx_sync),
+    .rx_sysref_0 (rx_sysref),
+    .rx_core_clk (rx_clk),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),

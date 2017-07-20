@@ -23,10 +23,6 @@ set_property -dict [list CONFIG.AXI_SLICE_DEST {0}] $axi_ad9434_dma
 set_property -dict [list CONFIG.DMA_2D_TRANSFER {0}] $axi_ad9434_dma
 set_property -dict [list CONFIG.DMA_DATA_WIDTH_SRC {64}]  $axi_ad9434_dma
 
-# additions to default configuration
-
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP1 {1}] $sys_ps7
-
 # ad9434 connections
 
 ad_connect  sys_200m_clk axi_ad9434/delay_clk

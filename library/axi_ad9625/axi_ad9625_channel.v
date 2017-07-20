@@ -131,7 +131,7 @@ module axi_ad9625_channel (
   end
   endgenerate
 
-  up_adc_channel #(.ADC_CHANNEL_ID(0)) i_up_adc_channel (
+  up_adc_channel #(.CHANNEL_ID(0)) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),

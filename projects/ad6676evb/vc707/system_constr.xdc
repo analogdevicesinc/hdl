@@ -17,11 +17,11 @@ set_property  -dict {PACKAGE_PIN  H41  IOSTANDARD LVCMOS18} [get_ports spi_clk] 
 set_property  -dict {PACKAGE_PIN  H40  IOSTANDARD LVCMOS18} [get_ports spi_mosi]                   ; ## H10  FMC_HPC_LA04_P
 set_property  -dict {PACKAGE_PIN  M41  IOSTANDARD LVCMOS18} [get_ports spi_miso]                   ; ## D11  FMC_HPC_LA05_P
 
-set_property  -dict {PACKAGE_PIN  J42  IOSTANDARD LVCMOS18} [get_ports adc_oen]                    ; ## C11  FMC_HPC_LA06_N             
-set_property  -dict {PACKAGE_PIN  M37  IOSTANDARD LVCMOS18} [get_ports adc_sela]                   ; ## G12  FMC_HPC_LA08_P             
-set_property  -dict {PACKAGE_PIN  M38  IOSTANDARD LVCMOS18} [get_ports adc_selb]                   ; ## G13  FMC_HPC_LA08_N             
-set_property  -dict {PACKAGE_PIN  G41  IOSTANDARD LVCMOS18} [get_ports adc_s0]                     ; ## H13  FMC_HPC_LA07_P             
-set_property  -dict {PACKAGE_PIN  G42  IOSTANDARD LVCMOS18} [get_ports adc_s1]                     ; ## H14  FMC_HPC_LA07_N             
+set_property  -dict {PACKAGE_PIN  J42  IOSTANDARD LVCMOS18} [get_ports adc_oen]                    ; ## C11  FMC_HPC_LA06_N
+set_property  -dict {PACKAGE_PIN  M37  IOSTANDARD LVCMOS18} [get_ports adc_sela]                   ; ## G12  FMC_HPC_LA08_P
+set_property  -dict {PACKAGE_PIN  M38  IOSTANDARD LVCMOS18} [get_ports adc_selb]                   ; ## G13  FMC_HPC_LA08_N
+set_property  -dict {PACKAGE_PIN  G41  IOSTANDARD LVCMOS18} [get_ports adc_s0]                     ; ## H13  FMC_HPC_LA07_P
+set_property  -dict {PACKAGE_PIN  G42  IOSTANDARD LVCMOS18} [get_ports adc_s1]                     ; ## H14  FMC_HPC_LA07_N
 set_property  -dict {PACKAGE_PIN  K42  IOSTANDARD LVCMOS18} [get_ports adc_resetb]                 ; ## C10  FMC_HPC_LA06_P
 set_property  -dict {PACKAGE_PIN  P41  IOSTANDARD LVCMOS18} [get_ports adc_agc1]                   ; ## H07  FMC_HPC_LA02_P
 set_property  -dict {PACKAGE_PIN  N41  IOSTANDARD LVCMOS18} [get_ports adc_agc2]                   ; ## H08  FMC_HPC_LA02_N
@@ -30,5 +30,11 @@ set_property  -dict {PACKAGE_PIN  L42  IOSTANDARD LVCMOS18} [get_ports adc_agc4]
 
 # clocks
 
-create_clock -name rx_ref_clk   -period  3.30 [get_ports rx_ref_clk_p]
-create_clock -name rx_div_clk   -period  6.60 [get_pins i_system_wrapper/system_i/axi_ad6676_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
+create_clock -name rx_ref_clk   -period   5.00 [get_ports rx_ref_clk_p]
+create_clock -name rx_div_clk   -period  10.00 [get_pins i_system_wrapper/system_i/util_ad6676_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+
+set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad6676_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
+
+set_property shreg_extract no [get_cells -hier -filter {name =~ *sysref_en_m*}]
+set_false_path -to [get_cells -hier -filter {name =~ *sysref_en_m1*  && IS_SEQUENTIAL}]
+

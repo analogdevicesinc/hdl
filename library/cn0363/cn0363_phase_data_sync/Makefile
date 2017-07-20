@@ -5,10 +5,10 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := cn0363_phase_data_sync_ip.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_ip.tcl
 M_DEPS += cn0363_phase_data_sync.v
+M_DEPS += cn0363_phase_data_sync_ip.tcl
 
 M_VIVADO := vivado -mode batch -source
 
@@ -19,6 +19,10 @@ M_FLIST += *.log
 M_FLIST += component.xml
 M_FLIST += *.jou
 M_FLIST +=  xgui
+M_FLIST += *.ip_user_files
+M_FLIST += *.srcs
+M_FLIST += *.hw
+M_FLIST += *.sim
 M_FLIST += .Xil
 
 
@@ -35,7 +39,7 @@ clean-all:
 
 
 cn0363_phase_data_sync.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) cn0363_phase_data_sync_ip.tcl  >> cn0363_phase_data_sync_ip.log 2>&1
 
 ####################################################################################

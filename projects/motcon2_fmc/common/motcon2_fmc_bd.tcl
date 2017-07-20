@@ -162,7 +162,7 @@
   set iic_ee2  [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.0 iic_ee2 ]
 
   # xadc
-  set xadc_core [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.2 xadc_core ]
+  set xadc_core [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.3 xadc_core ]
   set_property -dict [ list CONFIG.XADC_STARUP_SELECTION {simultaneous_sampling} ] $xadc_core
   set_property -dict [ list CONFIG.ENABLE_EXTERNAL_MUX {true} ] $xadc_core
   set_property -dict [ list CONFIG.EXTERNAL_MUX_CHANNEL  {VAUXP0_VAUXN0} ] $xadc_core
@@ -224,6 +224,10 @@
   ad_connect current_monitor_m1_pack/adc_valid current_monitor_m1_dma/fifo_wr_en
   ad_connect current_monitor_m1_dma/fifo_wr_sync  current_monitor_m1_pack/adc_sync
 
+  ad_connect current_monitor_m1_pack/adc_enable_3 GND
+  ad_connect current_monitor_m1_pack/adc_valid_3  GND
+  ad_connect current_monitor_m1_pack/adc_data_3   GND
+
     # motor 2
   ad_connect  sys_cpu_clk current_monitor_m2/ref_clk
 
@@ -250,6 +254,10 @@
   ad_connect current_monitor_m2_pack/adc_data     current_monitor_m2_dma/fifo_wr_din
   ad_connect current_monitor_m2_dma/fifo_wr_sync  current_monitor_m2_pack/adc_sync
 
+  ad_connect current_monitor_m2_pack/adc_enable_3 GND
+  ad_connect current_monitor_m2_pack/adc_valid_3  GND
+  ad_connect current_monitor_m2_pack/adc_data_3   GND
+
   #controller
     # motor 1
   ad_connect sys_cpu_clk controller_m1/ref_clk
@@ -265,6 +273,13 @@
 
   ad_connect controller_m1/sensors_o          speed_detector_m1/hall_bemf_i
   ad_connect controller_m1/position_i         speed_detector_m1/position_o
+
+  ad_connect controller_m1/pwm_a_i GND
+  ad_connect controller_m1/pwm_b_i GND
+  ad_connect controller_m1/pwm_c_i GND
+  ad_connect controller_m2/pwm_a_i GND
+  ad_connect controller_m2/pwm_b_i GND
+  ad_connect controller_m2/pwm_c_i GND
 
     # motor 2
   ad_connect sys_cpu_clk controller_m2/ref_clk

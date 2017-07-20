@@ -5,23 +5,22 @@
 ####################################################################################
 ####################################################################################
 
-M_DEPS := axi_mc_controller_ip.tcl
-M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/ad_rst.v
+M_DEPS += ../common/up_adc_channel.v
+M_DEPS += ../common/up_adc_common.v
+M_DEPS += ../common/up_axi.v
+M_DEPS += ../common/up_clock_mon.v
 M_DEPS += ../common/up_delay_cntrl.v
 M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_xfer_status.v
-M_DEPS += ../common/up_clock_mon.v
-M_DEPS += ../common/up_delay_cntrl.v
-M_DEPS += ../common/up_adc_common.v
-M_DEPS += ../common/up_adc_channel.v
-M_DEPS += motor_driver.v
-M_DEPS += delay.v
-M_DEPS += control_registers.v
-M_DEPS += axi_mc_controller_constr.xdc
+M_DEPS += ../scripts/adi_env.tcl
+M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += axi_mc_controller.v
+M_DEPS += axi_mc_controller_constr.xdc
+M_DEPS += axi_mc_controller_ip.tcl
+M_DEPS += control_registers.v
+M_DEPS += delay.v
+M_DEPS += motor_driver.v
 
 M_VIVADO := vivado -mode batch -source
 
@@ -32,6 +31,10 @@ M_FLIST += *.log
 M_FLIST += component.xml
 M_FLIST += *.jou
 M_FLIST +=  xgui
+M_FLIST += *.ip_user_files
+M_FLIST += *.srcs
+M_FLIST += *.hw
+M_FLIST += *.sim
 M_FLIST += .Xil
 
 
@@ -48,7 +51,7 @@ clean-all:
 
 
 axi_mc_controller.xpr: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) axi_mc_controller_ip.tcl  >> axi_mc_controller_ip.log 2>&1
 
 ####################################################################################

@@ -37,20 +37,20 @@
 // ***************************************************************************
 
 module dmac_request_generator (
-	input req_aclk,
-	input req_aresetn,
+  input req_aclk,
+  input req_aresetn,
 
-	output [ID_WIDTH-1:0] request_id,
-	input [ID_WIDTH-1:0] response_id,
+  output [ID_WIDTH-1:0] request_id,
+  input [ID_WIDTH-1:0] response_id,
 
-	input req_valid,
-	output reg req_ready,
-	input [BURSTS_PER_TRANSFER_WIDTH-1:0] req_burst_count,
+  input req_valid,
+  output reg req_ready,
+  input [BURSTS_PER_TRANSFER_WIDTH-1:0] req_burst_count,
 
-	input enable,
-	input pause,
+  input enable,
+  input pause,
 
-	output eot
+  output eot
 );
 
 parameter ID_WIDTH = 3;
@@ -74,25 +74,25 @@ assign request_id = id;
 
 always @(posedge req_aclk)
 begin
-	if (req_aresetn == 1'b0) begin
-		burst_count <= 'h00;
-		id <= 'h0;
-		req_ready <= 1'b1;
-	end else if (enable == 1'b0) begin
-		req_ready <= 1'b1;
-	end else begin
-		if (req_ready) begin
-			if (req_valid && enable) begin
-				burst_count <= req_burst_count;
-				req_ready <= 1'b0;
-			end
-		end else if (response_id != id_next && ~pause) begin
-			if (eot)
-				req_ready <= 1'b1;
-			burst_count <= burst_count - 1'b1;
-			id <= id_next;
-		end
-	end
+  if (req_aresetn == 1'b0) begin
+    burst_count <= 'h00;
+    id <= 'h0;
+    req_ready <= 1'b1;
+  end else if (enable == 1'b0) begin
+    req_ready <= 1'b1;
+  end else begin
+    if (req_ready) begin
+      if (req_valid && enable) begin
+        burst_count <= req_burst_count;
+        req_ready <= 1'b0;
+      end
+    end else if (response_id != id_next && ~pause) begin
+      if (eot)
+        req_ready <= 1'b1;
+      burst_count <= burst_count - 1'b1;
+      id <= id_next;
+    end
+  end
 end
 
 endmodule

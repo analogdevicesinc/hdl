@@ -27,10 +27,10 @@ set_property  -dict {PACKAGE_PIN  AH24  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_
 set_property  -dict {PACKAGE_PIN  AK18  IOSTANDARD LVCMOS25} [get_ports spi_adc_csn]                  ; ## H08  FMC_HPC_LA02_N
 set_property  -dict {PACKAGE_PIN  AG21  IOSTANDARD LVCMOS25} [get_ports spi_adc_clk]                  ; ## D08  FMC_HPC_LA01_CC_P
 set_property  -dict {PACKAGE_PIN  AH21  IOSTANDARD LVCMOS25} [get_ports spi_adc_sdio]                 ; ## D09  FMC_HPC_LA01_CC_N
-set_property  -dict {PACKAGE_PIN  AK17  IOSTANDARD LVCMOS25} [get_ports spi_ext_csn_0]                ; ## H07  FMC_HPC_LA02_P
-set_property  -dict {PACKAGE_PIN  AG22  IOSTANDARD LVCMOS25} [get_ports spi_ext_csn_1]                ; ## C10  FMC_HPC_LA06_P
-set_property  -dict {PACKAGE_PIN  AF20  IOSTANDARD LVCMOS25} [get_ports spi_ext_clk]                  ; ## G06  FMC_HPC_LA00_CC_P
-set_property  -dict {PACKAGE_PIN  AG20  IOSTANDARD LVCMOS25} [get_ports spi_ext_sdio]                 ; ## G07  FMC_HPC_LA00_CC_N
+set_property  -dict {PACKAGE_PIN  AK17  IOSTANDARD LVCMOS25} [get_ports spi_adf4355_data_or_csn_0]    ; ## H07  FMC_HPC_LA02_P
+set_property  -dict {PACKAGE_PIN  AG22  IOSTANDARD LVCMOS25} [get_ports spi_adf4355_clk_or_csn_1]     ; ## C10  FMC_HPC_LA06_P
+set_property  -dict {PACKAGE_PIN  AF20  IOSTANDARD LVCMOS25} [get_ports spi_adf4355_le_or_clk]        ; ## G06  FMC_HPC_LA00_CC_P
+set_property  -dict {PACKAGE_PIN  AG20  IOSTANDARD LVCMOS25} [get_ports spi_adf4355_ce_or_sdio]       ; ## G07  FMC_HPC_LA00_CC_N
 
 set_property  -dict {PACKAGE_PIN  AH19  IOSTANDARD LVCMOS25} [get_ports adc_irq]                      ; ## G09  FMC_HPC_LA03_P
 set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVCMOS25} [get_ports adc_fd]                       ; ## G10  FMC_HPC_LA03_N
@@ -38,4 +38,10 @@ set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVCMOS25} [get_ports adc_fd] 
 # clocks
 
 create_clock -name rx_ref_clk   -period  1.60 [get_ports rx_ref_clk_p]
-create_clock -name rx_div_clk   -period  6.40 [get_pins i_system_wrapper/system_i/axi_ad9625_gt/inst/g_lane_1[0].i_channel/i_gt/i_gtxe2_channel/RXOUTCLK]
+create_clock -name rx_div_clk   -period  6.40 [get_pins i_system_wrapper/system_i/util_fmcadc2_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+
+set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9625_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
+
+set_property shreg_extract no [get_cells -hier -filter {name =~ *sysref_en_m*}]
+set_false_path -to [get_cells -hier -filter {name =~ *sysref_en_m1*  && IS_SEQUENTIAL}]
+

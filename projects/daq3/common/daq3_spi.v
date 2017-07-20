@@ -103,6 +103,8 @@ module daq3_spi (
   assign spi_miso = spi_sdio;
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
+  assign spi_miso = spi_sdio;
+  assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
 

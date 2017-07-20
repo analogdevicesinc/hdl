@@ -20,6 +20,7 @@ adi_ip_files axi_i2s_adi [list \
 ]
 
 adi_ip_properties axi_i2s_adi
+adi_ip_infer_streaming_interfaces axi_i2s_adi
 adi_ip_constraints axi_spdif_tx axi_i2s_adi_constr.xdc late
 
 adi_add_bus "DMA_ACK_RX" "slave" \
@@ -97,8 +98,16 @@ adi_set_ports_dependency "DMA_REQ_RX_RSTN" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE')) = 1)"
 
 ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXI_ARESETN [ipx::current_core]
-ipx::associate_bus_interfaces -busif I2S -clock i2s_signal_clock [ipx::current_core]
 ipx::associate_bus_interfaces -clock s_axi_aclk -reset S_AXIS_ARESETN -clear [ipx::current_core]
+
+# Tie-off optional inputs to 0
+set_property driver_value 0 [ipx::get_ports -filter "direction==in && enablement_dependency!={}"  -of_objects [ipx::current_core]]
+
+# Incorrectly inferred interfaces
+ipx::remove_bus_interface DMA_REQ_TX_RSTN [ipx::current_core]
+ipx::remove_bus_interface DMA_REQ_RX_RSTN [ipx::current_core]
+ipx::remove_bus_interface DMA_REQ_TX_ACLK [ipx::current_core]
+ipx::remove_bus_interface DMA_REQ_RX_ACLK [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

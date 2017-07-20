@@ -14,5 +14,11 @@ if {$slack > 0} {
 }
 
 if {$slack < 0} {
+  set sof_files [glob *.sof]
+  foreach sof_file $sof_files {
+    set root_sof_file [file rootname $sof_file]
+    set new_sof_file [append root_sof_file "_timing.sof"]
+    file rename -force $sof_file $new_sof_file
+  }
   return -code error [format "ERROR: Timing Constraints NOT met!"]
 }

@@ -38,41 +38,27 @@
 
 `timescale 1ns/100ps
 
-module ad_iqcor (
-
-  // data interface
-
-  clk,
-  valid,
-  data_in,
-  data_iq,
-  valid_out,
-  data_out,
-
-  // control interface
-
-  iqcor_enable,
-  iqcor_coeff_1,
-  iqcor_coeff_2);
+module ad_iqcor #(
 
   // select i/q if disabled
 
-  parameter Q_OR_I_N = 0;
+  parameter   Q_OR_I_N = 0,
+  parameter   DISABLE = 0) (
 
   // data interface
 
-  input           clk;
-  input           valid;
-  input   [15:0]  data_in;
-  input   [15:0]  data_iq;
-  output          valid_out;
-  output  [15:0]  data_out;
+  input           clk,
+  input           valid,
+  input   [15:0]  data_in,
+  input   [15:0]  data_iq,
+  output          valid_out,
+  output  [15:0]  data_out,
 
   // control interface
 
-  input           iqcor_enable;
-  input   [15:0]  iqcor_coeff_1;
-  input   [15:0]  iqcor_coeff_2;
+  input           iqcor_enable,
+  input   [15:0]  iqcor_coeff_1,
+  input   [15:0]  iqcor_coeff_2);
 
   // internal registers
 
@@ -80,8 +66,8 @@ module ad_iqcor (
   reg     [15:0]  p1_data_i = 'd0;
   reg     [15:0]  p1_data_q = 'd0;
   reg     [33:0]  p1_data_p = 'd0;
-  reg             valid_out = 'd0;
-  reg     [15:0]  data_out = 'd0;
+  reg             valid_int = 'd0;
+  reg     [15:0]  data_int = 'd0;
   reg     [15:0]  iqcor_coeff_1_r = 'd0;
   reg     [15:0]  iqcor_coeff_2_r = 'd0;
 
@@ -94,6 +80,18 @@ module ad_iqcor (
   wire    [15:0]  p1_data_i_s;
   wire    [33:0]  p1_data_p_q_s;
   wire    [15:0]  p1_data_q_s;
+
+  // data-path disable
+
+  generate
+  if (DISABLE == 1) begin
+  assign valid_out = valid;
+  assign data_out = data_in;
+  end else begin
+  assign valid_out = valid_int;
+  assign data_out = data_int;
+  end
+  endgenerate
 
   // swap i & q
 
@@ -139,13 +137,13 @@ module ad_iqcor (
   // output registers
 
   always @(posedge clk) begin
-    valid_out <= p1_valid;
+    valid_int <= p1_valid;
     if (iqcor_enable == 1'b1) begin
-      data_out <= p1_data_p[29:14];
+      data_int <= p1_data_p[29:14];
     end else if (Q_OR_I_N == 1) begin
-      data_out <= p1_data_q;
+      data_int <= p1_data_q;
     end else begin
-      data_out <= p1_data_i;
+      data_int <= p1_data_i;
     end
   end
 

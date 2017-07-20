@@ -130,6 +130,7 @@ always @(negedge up_rstn or posedge up_clk)
 begin
    if (up_rstn == 0)
    begin
+       reserved_r1          <= 'd0;
        up_wack              <= 1'b0;
        control_r            <= 'h0;
        reference_speed_r    <= 'd1000;

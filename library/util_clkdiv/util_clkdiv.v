@@ -34,30 +34,71 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
+// Divides the input clock to SEL_0_DIV if clk_sel is 0 or SEL_1_DIV if
+// clk_sel is 1. Provides a glitch free output clock
+// IP uses BUFR/BUFGCE_DIV and BUFGMUX_CTRL primitives
 // ***************************************************************************
 // ***************************************************************************
 
 `timescale 1ns/100ps
 
 module util_clkdiv (
-	clk,
-	clk_out
+  input   clk,
+  input   clk_sel,
+  output  clk_out
  );
 
-  input   clk;
-  output  clk_out;
-  
+parameter SIM_DEVICE = "7SERIES";
+parameter SEL_0_DIV = "4";
+parameter SEL_1_DIV = "2";
+
+  wire clk_div_sel_0_s;
+  wire clk_div_sel_1_s;
+
+generate if (SIM_DEVICE == "7SERIES") begin
+
   BUFR #(
-    .BUFR_DIVIDE("4"),
+    .BUFR_DIVIDE(SEL_0_DIV),
     .SIM_DEVICE("7SERIES")
-  ) clk_divide (
+  ) clk_divide_sel_0 (
     .I(clk),
     .CE(1),
     .CLR(0),
-    .O(clk_div_s));
-   
-  BUFG i_div_clk_gbuf (
-    .I (clk_div_s),
+    .O(clk_div_sel_0_s));
+
+  BUFR #(
+    .BUFR_DIVIDE(SEL_1_DIV),
+    .SIM_DEVICE("7SERIES")
+  ) clk_divide_sel_1 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_sel_1_s));
+
+end else if (SIM_DEVICE == "ULTRASCALE") begin
+
+  BUFGCE_DIV #(
+    .BUFGCE_DIVIDE(SEL_0_DIV)
+  ) clk_divide_sel_0 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_sel_0_s));
+
+  BUFGCE_DIV #(
+    .BUFGCE_DIVIDE(SEL_1_DIV)
+  ) clk_divide_sel_1 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_sel_1_s));
+
+end endgenerate
+
+  BUFGMUX_CTRL i_div_clk_gbuf (
+    .I0(clk_div_sel_0_s), // 1-bit input: Clock input (S=0)
+    .I1(clk_div_sel_1_s), // 1-bit input: Clock input (S=1)
+    .S(clk_sel),
     .O (clk_out));
 
 endmodule  // util_clkdiv

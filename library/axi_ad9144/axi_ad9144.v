@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -45,7 +43,9 @@ module axi_ad9144 (
   // tx_clk is (line-rate/40)
 
   tx_clk,
+  tx_valid,
   tx_data,
+  tx_ready,
 
   // dma interface
 
@@ -92,90 +92,93 @@ module axi_ad9144 (
   // parameters
 
   parameter   ID = 0;
+  parameter   DEVICE_TYPE = 0;
   parameter   QUAD_OR_DUAL_N = 1;
   parameter   DAC_DATAPATH_DISABLE = 0;
 
   // jesd interface
   // tx_clk is (line-rate/40)
 
-  input                                     tx_clk;
-  output  [(128*QUAD_OR_DUAL_N)+127:0]   tx_data;
+  input                                   tx_clk;
+  output                                  tx_valid;
+  output  [(128*QUAD_OR_DUAL_N)+127:0]    tx_data;
+  input                                   tx_ready;
 
   // dma interface
 
-  output                                    dac_clk;
-  output                                    dac_valid_0;
-  output                                    dac_enable_0;
-  input   [63:0]                            dac_ddata_0;
-  output                                    dac_valid_1;
-  output                                    dac_enable_1;
-  input   [63:0]                            dac_ddata_1;
-  output                                    dac_valid_2;
-  output                                    dac_enable_2;
-  input   [63:0]                            dac_ddata_2;
-  output                                    dac_valid_3;
-  output                                    dac_enable_3;
-  input   [63:0]                            dac_ddata_3;
-  input                                     dac_dovf;
-  input                                     dac_dunf;
+  output                                  dac_clk;
+  output                                  dac_valid_0;
+  output                                  dac_enable_0;
+  input   [63:0]                          dac_ddata_0;
+  output                                  dac_valid_1;
+  output                                  dac_enable_1;
+  input   [63:0]                          dac_ddata_1;
+  output                                  dac_valid_2;
+  output                                  dac_enable_2;
+  input   [63:0]                          dac_ddata_2;
+  output                                  dac_valid_3;
+  output                                  dac_enable_3;
+  input   [63:0]                          dac_ddata_3;
+  input                                   dac_dovf;
+  input                                   dac_dunf;
 
   // axi interface
 
-  input                                     s_axi_aclk;
-  input                                     s_axi_aresetn;
-  input                                     s_axi_awvalid;
-  input   [ 31:0]                           s_axi_awaddr;
-  input   [  2:0]                           s_axi_awprot;
-  output                                    s_axi_awready;
-  input                                     s_axi_wvalid;
-  input   [ 31:0]                           s_axi_wdata;
-  input   [  3:0]                           s_axi_wstrb;
-  output                                    s_axi_wready;
-  output                                    s_axi_bvalid;
-  output  [  1:0]                           s_axi_bresp;
-  input                                     s_axi_bready;
-  input                                     s_axi_arvalid;
-  input   [ 31:0]                           s_axi_araddr;
-  input   [  2:0]                           s_axi_arprot;
-  output                                    s_axi_arready;
-  output                                    s_axi_rvalid;
-  output  [ 31:0]                           s_axi_rdata;
-  output  [  1:0]                           s_axi_rresp;
-  input                                     s_axi_rready;
+  input                                   s_axi_aclk;
+  input                                   s_axi_aresetn;
+  input                                   s_axi_awvalid;
+  input   [ 31:0]                         s_axi_awaddr;
+  input   [  2:0]                         s_axi_awprot;
+  output                                  s_axi_awready;
+  input                                   s_axi_wvalid;
+  input   [ 31:0]                         s_axi_wdata;
+  input   [  3:0]                         s_axi_wstrb;
+  output                                  s_axi_wready;
+  output                                  s_axi_bvalid;
+  output  [  1:0]                         s_axi_bresp;
+  input                                   s_axi_bready;
+  input                                   s_axi_arvalid;
+  input   [ 31:0]                         s_axi_araddr;
+  input   [  2:0]                         s_axi_arprot;
+  output                                  s_axi_arready;
+  output                                  s_axi_rvalid;
+  output  [ 31:0]                         s_axi_rdata;
+  output  [  1:0]                         s_axi_rresp;
+  input                                   s_axi_rready;
 
   // internal clocks and resets
 
-  wire                                      dac_rst;
-  wire                                      up_clk;
-  wire                                      up_rstn;
+  wire                                    dac_rst;
+  wire                                    up_clk;
+  wire                                    up_rstn;
 
   // internal signals
 
-  wire    [255:0]                           tx_data_s;
-  wire    [ 15:0]                           dac_data_0_0_s;
-  wire    [ 15:0]                           dac_data_0_1_s;
-  wire    [ 15:0]                           dac_data_0_2_s;
-  wire    [ 15:0]                           dac_data_0_3_s;
-  wire    [ 15:0]                           dac_data_1_0_s;
-  wire    [ 15:0]                           dac_data_1_1_s;
-  wire    [ 15:0]                           dac_data_1_2_s;
-  wire    [ 15:0]                           dac_data_1_3_s;
-  wire    [ 15:0]                           dac_data_2_0_s;
-  wire    [ 15:0]                           dac_data_2_1_s;
-  wire    [ 15:0]                           dac_data_2_2_s;
-  wire    [ 15:0]                           dac_data_2_3_s;
-  wire    [ 15:0]                           dac_data_3_0_s;
-  wire    [ 15:0]                           dac_data_3_1_s;
-  wire    [ 15:0]                           dac_data_3_2_s;
-  wire    [ 15:0]                           dac_data_3_3_s;
-  wire                                      up_wreq_s;
-  wire    [ 13:0]                           up_waddr_s;
-  wire    [ 31:0]                           up_wdata_s;
-  wire                                      up_wack_s;
-  wire                                      up_rreq_s;
-  wire    [ 13:0]                           up_raddr_s;
-  wire    [ 31:0]                           up_rdata_s;
-  wire                                      up_rack_s;
+  wire    [255:0]                         tx_data_s;
+  wire    [ 15:0]                         dac_data_0_0_s;
+  wire    [ 15:0]                         dac_data_0_1_s;
+  wire    [ 15:0]                         dac_data_0_2_s;
+  wire    [ 15:0]                         dac_data_0_3_s;
+  wire    [ 15:0]                         dac_data_1_0_s;
+  wire    [ 15:0]                         dac_data_1_1_s;
+  wire    [ 15:0]                         dac_data_1_2_s;
+  wire    [ 15:0]                         dac_data_1_3_s;
+  wire    [ 15:0]                         dac_data_2_0_s;
+  wire    [ 15:0]                         dac_data_2_1_s;
+  wire    [ 15:0]                         dac_data_2_2_s;
+  wire    [ 15:0]                         dac_data_2_3_s;
+  wire    [ 15:0]                         dac_data_3_0_s;
+  wire    [ 15:0]                         dac_data_3_1_s;
+  wire    [ 15:0]                         dac_data_3_2_s;
+  wire    [ 15:0]                         dac_data_3_3_s;
+  wire                                    up_wreq_s;
+  wire    [ 13:0]                         up_waddr_s;
+  wire    [ 31:0]                         up_wdata_s;
+  wire                                    up_wack_s;
+  wire                                    up_rreq_s;
+  wire    [ 13:0]                         up_raddr_s;
+  wire    [ 31:0]                         up_rdata_s;
+  wire                                    up_rack_s;
 
   // signal name changes
 
@@ -184,11 +187,12 @@ module axi_ad9144 (
 
   // dual/quad cores
 
+  assign tx_valid = 1'b1;
   assign tx_data = (QUAD_OR_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
 
   // device interface
 
-  axi_ad9144_if i_if (
+  axi_ad9144_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
     .tx_clk (tx_clk),
     .tx_data (tx_data_s),
     .dac_clk (dac_clk),

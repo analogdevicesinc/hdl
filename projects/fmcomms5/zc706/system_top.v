@@ -94,8 +94,8 @@ module system_top (
   gpio_en_agc_0,
   mcs_sync,
   gpio_resetb_0,
-  gpio_enable_0,
-  gpio_txnrx_0,
+  enable_0,
+  txnrx_0,
   gpio_debug_1_0,
   gpio_debug_2_0,
   gpio_calsw_1_0,
@@ -119,8 +119,8 @@ module system_top (
   gpio_ctl_1,
   gpio_en_agc_1,
   gpio_resetb_1,
-  gpio_enable_1,
-  gpio_txnrx_1,
+  enable_1,
+  txnrx_1,
   gpio_debug_3_1,
   gpio_debug_4_1,
   gpio_calsw_3_1,
@@ -189,8 +189,8 @@ module system_top (
   inout           gpio_en_agc_0;
   output          mcs_sync;
   inout           gpio_resetb_0;
-  inout           gpio_enable_0;
-  inout           gpio_txnrx_0;
+  output          enable_0;
+  output          txnrx_0;
   inout           gpio_debug_1_0;
   inout           gpio_debug_2_0;
   inout           gpio_calsw_1_0;
@@ -214,8 +214,8 @@ module system_top (
   inout   [  3:0] gpio_ctl_1;
   inout           gpio_en_agc_1;
   inout           gpio_resetb_1;
-  inout           gpio_enable_1;
-  inout           gpio_txnrx_1;
+  output          enable_1;
+  output          txnrx_1;
   inout           gpio_debug_3_1;
   inout           gpio_debug_4_1;
   inout           gpio_calsw_3_1;
@@ -255,6 +255,10 @@ module system_top (
   wire            spi1_clk;
   wire            spi1_mosi;
   wire            spi1_miso;
+  wire            txnrx_0;
+  wire            enable_0;
+  wire            txnrx_1;
+  wire            enable_1;
 
   // multi-chip synchronization
 
@@ -406,7 +410,15 @@ module system_top (
     .tx_frame_out_0_n (tx_frame_out_0_n),
     .tx_frame_out_0_p (tx_frame_out_0_p),
     .tx_frame_out_1_n (tx_frame_out_1_n),
-    .tx_frame_out_1_p (tx_frame_out_1_p));
+    .tx_frame_out_1_p (tx_frame_out_1_p),
+    .txnrx_0 (txnrx_0),
+    .enable_0 (enable_0),
+    .up_enable_0 (gpio_enable_0),
+    .up_txnrx_0 (gpio_txnrx_0),
+    .txnrx_1 (txnrx_1),
+    .enable_1 (enable_1),
+    .up_enable_1 (gpio_enable_1),
+    .up_txnrx_1 (gpio_txnrx_1));
 
 endmodule
 

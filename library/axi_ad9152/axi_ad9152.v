@@ -46,6 +46,8 @@ module axi_ad9152 (
 
   tx_clk,
   tx_data,
+  tx_valid,
+  tx_ready,
 
   // dma interface
 
@@ -87,12 +89,15 @@ module axi_ad9152 (
 
   parameter   ID = 0;
   parameter   DAC_DATAPATH_DISABLE = 0;
+  parameter   DEVICE_TYPE = 0;
 
   // jesd interface
   // tx_clk is (line-rate/40)
 
   input             tx_clk;
   output  [127:0]   tx_data;
+  output            tx_valid;
+  input             tx_ready;
 
   // dma interface
 
@@ -112,7 +117,7 @@ module axi_ad9152 (
   input             s_axi_aresetn;
   input             s_axi_awvalid;
   input   [ 31:0]   s_axi_awaddr;
-  input   [  2:0]                           s_axi_awprot;
+  input   [  2:0]   s_axi_awprot;
   output            s_axi_awready;
   input             s_axi_wvalid;
   input   [ 31:0]   s_axi_wdata;
@@ -123,7 +128,7 @@ module axi_ad9152 (
   input             s_axi_bready;
   input             s_axi_arvalid;
   input   [ 31:0]   s_axi_araddr;
-  input   [  2:0]                           s_axi_arprot;
+  input   [  2:0]   s_axi_arprot;
   output            s_axi_arready;
   output            s_axi_rvalid;
   output  [ 31:0]   s_axi_rdata;
@@ -159,10 +164,11 @@ module axi_ad9152 (
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+  assign tx_valid = 1'b1;
 
   // device interface
 
-  axi_ad9152_if i_if (
+  axi_ad9152_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
     .tx_clk (tx_clk),
     .tx_data (tx_data),
     .dac_clk (dac_clk),

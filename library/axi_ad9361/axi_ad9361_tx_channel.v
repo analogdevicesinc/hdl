@@ -34,90 +34,64 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
-module axi_ad9361_tx_channel (
-
-  // dac interface
-
-  dac_clk,
-  dac_rst,
-  dac_valid,
-  dma_data,
-  adc_data,
-  dac_data,
-  dac_data_out,
-  dac_data_in,
-
-  // processor interface
-
-  dac_enable,
-  dac_data_sync,
-  dac_dds_format,
-
-  // bus interface
-
-  up_rstn,
-  up_clk,
-  up_wreq,
-  up_waddr,
-  up_wdata,
-  up_wack,
-  up_rreq,
-  up_raddr,
-  up_rdata,
-  up_rack);
+module axi_ad9361_tx_channel #(
 
   // parameters
 
-  parameter   CHANNEL_ID = 32'h0;
-  parameter   Q_OR_I_N = 0;
-  parameter   DATAPATH_DISABLE = 0;
+  parameter   Q_OR_I_N = 0,
+  parameter   CHANNEL_ID = 32'h0,
+  parameter   DISABLE = 0,
+  parameter   DDS_DISABLE = 0,
+  parameter   USERPORTS_DISABLE = 0,
+  parameter   IQCORRECTION_DISABLE = 0) (
+
+  // dac interface
+
+  input           dac_clk,
+  input           dac_rst,
+  input           dac_valid,
+  input   [15:0]  dma_data,
+  input   [11:0]  adc_data,
+  output  [11:0]  dac_data,
+  output  [11:0]  dac_data_out,
+  input   [11:0]  dac_data_in,
+
+  // processor interface
+
+  output          dac_enable,
+  input           dac_data_sync,
+  input           dac_dds_format,
+
+  // bus interface
+
+  input           up_rstn,
+  input           up_clk,
+  input           up_wreq,
+  input   [13:0]  up_waddr,
+  input   [31:0]  up_wdata,
+  output          up_wack,
+  input           up_rreq,
+  input   [13:0]  up_raddr,
+  output  [31:0]  up_rdata,
+  output          up_rack);
+
+  // parameters
+
   localparam  PRBS_SEL = CHANNEL_ID;
   localparam  PRBS_P09  = 0;
   localparam  PRBS_P11  = 1;
   localparam  PRBS_P15  = 2;
   localparam  PRBS_P20  = 3;
 
-  // dac interface
-
-  input           dac_clk;
-  input           dac_rst;
-  input           dac_valid;
-  input   [15:0]  dma_data;
-  input   [11:0]  adc_data;
-  output  [11:0]  dac_data;
-  output  [11:0]  dac_data_out;
-  input   [11:0]  dac_data_in;
-
-  // processor interface
-
-  output          dac_enable;
-  input           dac_data_sync;
-  input           dac_dds_format;
-
-  // bus interface
-
-  input           up_rstn;
-  input           up_clk;
-  input           up_wreq;
-  input   [13:0]  up_waddr;
-  input   [31:0]  up_wdata;
-  output          up_wack;
-  input           up_rreq;
-  input   [13:0]  up_raddr;
-  output  [31:0]  up_rdata;
-  output          up_rack;
-
   // internal registers
 
   reg             dac_valid_sel = 'd0;
-  reg             dac_enable = 'd0;
-  reg     [11:0]  dac_data = 'd0;
-  reg     [11:0]  dac_data_out = 'd0;
+  reg             dac_enable_int = 'd0;
+  reg     [11:0]  dac_data_int = 'd0;
+  reg     [11:0]  dac_data_out_int = 'd0;
   reg     [23:0]  dac_pn_seq = 'd0;
   reg     [11:0]  dac_pn_data = 'd0;
   reg     [15:0]  dac_pat_data = 'd0;
@@ -144,6 +118,9 @@ module axi_ad9361_tx_channel (
   wire            dac_iqcor_enb_s;
   wire    [15:0]  dac_iqcor_coeff_1_s;
   wire    [15:0]  dac_iqcor_coeff_2_s;
+  wire            up_wack_s;
+  wire            up_rack_s;
+  wire    [31:0]  up_rdata_s;
 
   // standard prbs functions
 
@@ -273,41 +250,42 @@ module axi_ad9361_tx_channel (
 
   // dac iq correction
 
+  assign dac_enable = (DISABLE == 1) ? 'd0 : dac_enable_int;
+  assign dac_data = (DISABLE == 1) ? 'd0 : dac_data_int;
+
   always @(posedge dac_clk) begin
-    dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
+    dac_enable_int <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
     if (dac_iqcor_valid_s == 1'b1) begin
-      dac_data <= dac_iqcor_data_s[15:4];
+      dac_data_int <= dac_iqcor_data_s[15:4];
     end
   end
 
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign dac_iqcor_valid_s = dac_valid;
-  assign dac_iqcor_data_s = {dac_data_out, 4'd0};
-  end else begin
-  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N),
+    .DISABLE (IQCORRECTION_DISABLE))
+  i_ad_iqcor (
     .clk (dac_clk),
     .valid (dac_valid),
-    .data_in ({dac_data_out, 4'd0}),
+    .data_in ({dac_data_out_int, 4'd0}),
     .data_iq ({dac_data_in, 4'd0}),
     .valid_out (dac_iqcor_valid_s),
     .data_out (dac_iqcor_data_s),
     .iqcor_enable (dac_iqcor_enb_s),
     .iqcor_coeff_1 (dac_iqcor_coeff_1_s),
     .iqcor_coeff_2 (dac_iqcor_coeff_2_s));
-  end
-  endgenerate
 
   // dac mux
 
+  assign dac_data_out = (DISABLE == 1) ? 'd0 : dac_data_out_int;
+
   always @(posedge dac_clk) begin
     case (dac_data_sel_s)
-      4'h9: dac_data_out <= dac_pn_data;
-      4'h8: dac_data_out <= adc_data;
-      4'h3: dac_data_out <= 12'd0;
-      4'h2: dac_data_out <= dma_data[15:4];
-      4'h1: dac_data_out <= dac_pat_data[15:4];
-      default: dac_data_out <= dac_dds_data[15:4];
+      4'h9: dac_data_out_int <= dac_pn_data;
+      4'h8: dac_data_out_int <= adc_data;
+      4'h3: dac_data_out_int <= 12'd0;
+      4'h2: dac_data_out_int <= dma_data[15:4];
+      4'h1: dac_data_out_int <= dac_pat_data[15:4];
+      default: dac_data_out_int <= dac_dds_data[15:4];
     endcase
   end
 
@@ -360,11 +338,9 @@ module axi_ad9361_tx_channel (
 
   // dds
 
-  generate
-  if (DATAPATH_DISABLE == 1) begin
-  assign dac_dds_data_s = 16'd0;
-  end else begin
-  ad_dds i_dds (
+  ad_dds #(
+    .DISABLE (DDS_DISABLE))
+  i_dds (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_0),
@@ -372,12 +348,19 @@ module axi_ad9361_tx_channel (
     .dds_phase_1 (dac_dds_phase_1),
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_s));
-  end
-  endgenerate
 
   // single channel processor
 
-  up_dac_channel #(.DAC_CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
+  assign up_wack = (DISABLE == 1) ? 'd0 : up_wack_s;
+  assign up_rack = (DISABLE == 1) ? 'd0 : up_rack_s;
+  assign up_rdata = (DISABLE == 1) ? 'd0 : up_rdata_s;
+
+  up_dac_channel #(
+    .CHANNEL_ID (CHANNEL_ID),
+    .DDS_DISABLE (DDS_DISABLE),
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
+  i_up_dac_channel (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),
@@ -389,6 +372,7 @@ module axi_ad9361_tx_channel (
     .dac_pat_data_1 (dac_pat_data_1_s),
     .dac_pat_data_2 (dac_pat_data_2_s),
     .dac_data_sel (dac_data_sel_s),
+    .dac_iq_mode (),
     .dac_iqcor_enb (dac_iqcor_enb_s),
     .dac_iqcor_coeff_1 (dac_iqcor_coeff_1_s),
     .dac_iqcor_coeff_2 (dac_iqcor_coeff_2_s),
@@ -411,11 +395,11 @@ module axi_ad9361_tx_channel (
     .up_wreq (up_wreq),
     .up_waddr (up_waddr),
     .up_wdata (up_wdata),
-    .up_wack (up_wack),
+    .up_wack (up_wack_s),
     .up_rreq (up_rreq),
     .up_raddr (up_raddr),
-    .up_rdata (up_rdata),
-    .up_rack (up_rack));
+    .up_rdata (up_rdata_s),
+    .up_rack (up_rack_s));
   
 endmodule
 

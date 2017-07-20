@@ -16,7 +16,7 @@ M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
-M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9265/axi_ad9265.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
@@ -37,6 +37,7 @@ M_FLIST += *.sdk
 M_FLIST += *.hw
 M_FLIST += *.sim
 M_FLIST += .Xil
+M_FLIST += *.ip_user_files
 
 
 
@@ -57,7 +58,7 @@ clean-all:clean
 
 
 ad9265_fmc_zc706.sdk/system_top.hdf: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> ad9265_fmc_zc706_vivado.log 2>&1
 
 

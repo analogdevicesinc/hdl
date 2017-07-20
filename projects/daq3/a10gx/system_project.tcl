@@ -5,12 +5,10 @@ source ../../scripts/adi_env.tcl
 project_new daq3_a10gx -overwrite
 
 source "../../common/a10gx/a10gx_system_assign.tcl"
-set_user_option -name USER_IP_SEARCH_PATHS "../common/;../../common/a10gx/;../../../library/**/*"
-set_global_assignment -name IP_SEARCH_PATHS "../common/;../../common/a10gx;../../../library/**/*"
-set_global_assignment -name QSYS_FILE system_bd.qsys
 
 set_global_assignment -name VERILOG_FILE ../common/daq3_spi.v
 set_global_assignment -name VERILOG_FILE system_top.v
+set_global_assignment -name QSYS_FILE system_bd.qsys
 
 set_global_assignment -name SDC_FILE system_constr.sdc
 set_global_assignment -name TOP_LEVEL_ENTITY system_top
@@ -61,6 +59,16 @@ set_instance_assignment -name IO_STANDARD LVDS -to tx_sync
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to tx_sync
 set_instance_assignment -name IO_STANDARD LVDS -to tx_sysref
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to tx_sysref
+
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_0 -to rx_data[0]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_1 -to rx_data[1]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_2 -to rx_data[2]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_3 -to rx_data[3]
+
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_0 -to tx_data[0]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_1 -to tx_data[1]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_2 -to tx_data[2]
+set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_3 -to tx_data[3]
 
 # gpio
 

@@ -84,6 +84,9 @@ entity axi_spdif_rx is
     S_AXI_BRESP         : out std_logic_vector(1 downto 0);
     S_AXI_BVALID        : out std_logic;
     S_AXI_AWREADY       : out std_logic;
+    S_AXI_AWPROT        : in  std_logic_vector(2 downto 0);
+    S_AXI_ARPROT        : in  std_logic_vector(2 downto 0);
+
 
     --AXI STREAM interface
     M_AXIS_ACLK         : in  std_logic;
@@ -408,7 +411,6 @@ begin
   begin
     if rising_edge(S_AXI_ACLK) then
       if S_AXI_ARESETN = '0' then
-        version_reg <= (others => '0');
         control_reg <= (others => '0');
       else
         if wr_stb = '1' then
@@ -421,7 +423,7 @@ begin
     end if;
   end process;
 
-  process (rd_addr, version_reg, control_reg, chstatus_reg)
+  process (rd_addr, version_reg, control_reg, chstatus_reg, sampled_data)
   begin
     case rd_addr is
       when 0 => rd_data <= version_reg;

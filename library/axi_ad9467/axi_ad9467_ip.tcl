@@ -6,8 +6,8 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_ad9467
 adi_ip_files axi_ad9467 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/common/ad_lvds_clk.v" \
-  "$ad_hdl_dir/library/common/ad_lvds_in.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_lvds_clk.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_lvds_in.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \

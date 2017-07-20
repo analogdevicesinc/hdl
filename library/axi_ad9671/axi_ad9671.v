@@ -34,8 +34,6 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 
 `timescale 1ns/100ps
 
@@ -45,8 +43,10 @@ module axi_ad9671 (
   // rx_clk is (line-rate/40)
 
   rx_clk,
-  rx_data,
   rx_sof,
+  rx_valid,
+  rx_data,
+  rx_ready,
 
   // dma interface
 
@@ -88,14 +88,15 @@ module axi_ad9671 (
   parameter ID = 0;
   parameter DEVICE_TYPE = 0;
   parameter QUAD_OR_DUAL_N = 1;
-  parameter IO_DELAY_GROUP = "adc_if_delay_group";
 
   // jesd interface
   // rx_clk is the jesd clock (ref_clk/2)
 
   input                                 rx_clk;
-  input   [(64*QUAD_OR_DUAL_N)+63:0]     rx_data;
-  input                                 rx_sof;
+  input   [  3:0]                       rx_sof;
+  input                                 rx_valid;
+  input   [(64*QUAD_OR_DUAL_N)+63:0]    rx_data;
+  output                                rx_ready;
 
   // dma interface
 
@@ -172,6 +173,7 @@ module axi_ad9671 (
 
   // signal name changes
 
+  assign rx_ready = 1'b1;
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
@@ -201,9 +203,10 @@ module axi_ad9671 (
   // main (device interface)
 
   axi_ad9671_if #(
-    .QUAD_OR_DUAL_N(QUAD_OR_DUAL_N),
-    .ID(ID)
-  ) i_if (
+    .QUAD_OR_DUAL_N (QUAD_OR_DUAL_N),
+    .ID (ID),
+    .DEVICE_TYPE (DEVICE_TYPE))
+  i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
     .rx_sof (rx_sof),
@@ -232,8 +235,8 @@ module axi_ad9671 (
     .adc_sync_out (adc_sync_out),
     .adc_sync_status (adc_sync_status_s),
     .adc_status (adc_status_s),
-    .adc_raddr_in(adc_raddr_in),
-    .adc_raddr_out(adc_raddr_out));
+    .adc_raddr_in (adc_raddr_in),
+    .adc_raddr_out (adc_raddr_out));
 
   // channels
 
@@ -267,9 +270,7 @@ module axi_ad9671 (
 
   // common processor control
 
-  up_adc_common #(
-    .ID(ID)
-  ) i_up_adc_common (
+  up_adc_common #(.ID (ID)) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -290,7 +291,7 @@ module axi_ad9671 (
     .up_drp_wr (),
     .up_drp_addr (),
     .up_drp_wdata (),
-    .up_drp_rdata (16'd0),
+    .up_drp_rdata (32'd0),
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
     .up_usr_chanmax (),
@@ -310,9 +311,7 @@ module axi_ad9671 (
 
   // up bus interface
 
-  up_axi #(
-    .ADDRESS_WIDTH (14)
-  ) i_up_axi (
+  up_axi i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

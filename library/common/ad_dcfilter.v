@@ -34,44 +34,33 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ***************************************************************************
 // ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
 // dc filter- y(n) = c*x(n) + (1-c)*y(n-1)
 
 `timescale 1ps/1ps
 
-module ad_dcfilter (
+module ad_dcfilter #(
+
+  // data path disable
+
+  parameter   DISABLE = 0) (
 
   // data interface
 
-  clk,
-  valid,
-  data,
-  valid_out,
-  data_out,
+  input           clk,
+  input           valid,
+  input   [15:0]  data,
+  output          valid_out,
+  output  [15:0]  data_out,
 
   // control interface
 
-  dcfilt_enb,
-  dcfilt_coeff,
-  dcfilt_offset);
-
-  // data interface
-
-  input           clk;
-  input           valid;
-  input   [15:0]  data;
-  output          valid_out;
-  output  [15:0]  data_out;
-
-  // control interface
-
-  input           dcfilt_enb;
-  input   [15:0]  dcfilt_coeff;
-  input   [15:0]  dcfilt_offset;
+  input           dcfilt_enb,
+  input   [15:0]  dcfilt_coeff,
+  input   [15:0]  dcfilt_offset);
 
   // internal registers
 
+  reg     [15:0]  dcfilt_coeff_d = 'd0;
   reg     [47:0]  dc_offset = 'd0;
   reg     [47:0]  dc_offset_d = 'd0;
   reg             valid_d = 'd0;
@@ -79,20 +68,32 @@ module ad_dcfilter (
   reg             valid_2d = 'd0;
   reg     [15:0]  data_2d = 'd0;
   reg     [15:0]  data_dcfilt = 'd0;
-  reg             valid_out = 'd0;
-  reg     [15:0]  data_out = 'd0;
-  reg     [15:0]  dcfilt_coeff_r;
+  reg             valid_int = 'd0;
+  reg     [15:0]  data_int = 'd0;
 
   // internal signals
 
   wire    [47:0]  dc_offset_s;
 
-  // cancelling the dc offset
+  // data-path disable
+
+  generate
+  if (DISABLE == 1) begin
+  assign valid_out = valid;
+  assign data_out = data;
+  end else begin
+  assign valid_out = valid_int;
+  assign data_out = data_int;
+  end
+  endgenerate
 
   // dcfilt_coeff is flopped so to remove warnings from vivado
+
   always @(posedge clk) begin
-    dcfilt_coeff_r <= dcfilt_coeff;
+    dcfilt_coeff_d <= dcfilt_coeff;
   end
+
+  // removing dc offset
 
   always @(posedge clk) begin
     dc_offset   <= dc_offset_s;
@@ -105,11 +106,11 @@ module ad_dcfilter (
     data_2d  <= data_d;
     data_dcfilt <= data_d - dc_offset[32:17];
     if (dcfilt_enb == 1'b1) begin
-      valid_out <= valid_2d;
-      data_out  <= data_dcfilt;
+      valid_int <= valid_2d;
+      data_int  <= data_dcfilt;
     end else begin
-      valid_out <= valid_2d;
-      data_out  <= data_2d;
+      valid_int <= valid_2d;
+      data_int  <= data_2d;
     end
   end
 
@@ -144,7 +145,7 @@ module ad_dcfilter (
   i_dsp48e1 (
     .CLK (clk),
     .A ({{14{dc_offset_s[32]}}, dc_offset_s[32:17]}),
-    .B ({{2{dcfilt_coeff_r[15]}}, dcfilt_coeff_r}),
+    .B ({{2{dcfilt_coeff_d[15]}}, dcfilt_coeff_d}),
     .C (dc_offset_d),
     .D ({{9{data_d[15]}}, data_d}),
     .MULTSIGNIN (1'd0),

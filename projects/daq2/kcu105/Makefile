@@ -14,19 +14,19 @@ M_DEPS += ../common/daq2_bd.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
-M_DEPS += ../../common/xilinx/sys_dmafifo.tcl
-M_DEPS += ../../common/kcu105/kcu105_system_mig.tcl
+M_DEPS += ../../common/xilinx/sys_dacfifo.tcl
+M_DEPS += ../../common/xilinx/sys_adcfifo.tcl
 M_DEPS += ../../common/kcu105/kcu105_system_constr.xdc
 M_DEPS += ../../common/kcu105/kcu105_system_bd.tcl
-M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9144/axi_ad9144.xpr
 M_DEPS += ../../../library/axi_ad9680/axi_ad9680.xpr
+M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
-M_DEPS += ../../../library/axi_jesd_gt/axi_jesd_gt.xpr
 M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
+M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_dacfifo/util_dacfifo.xpr
-M_DEPS += ../../../library/util_jesd_gt/util_jesd_gt.xpr
 M_DEPS += ../../../library/util_upack/util_upack.xpr
 
 M_VIVADO := vivado -mode batch -source
@@ -43,6 +43,7 @@ M_FLIST += *.sdk
 M_FLIST += *.hw
 M_FLIST += *.sim
 M_FLIST += .Xil
+M_FLIST += *.ip_user_files
 
 
 
@@ -57,29 +58,29 @@ clean:
 clean-all:clean
 	make -C ../../../library/axi_ad9144 clean
 	make -C ../../../library/axi_ad9680 clean
+	make -C ../../../library/xilinx/axi_adxcvr clean
 	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_jesd_gt clean
 	make -C ../../../library/util_adcfifo clean
+	make -C ../../../library/xilinx/util_adxcvr clean
 	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_dacfifo clean
-	make -C ../../../library/util_jesd_gt clean
 	make -C ../../../library/util_upack clean
 
 
 daq2_kcu105.sdk/system_top.hdf: $(M_DEPS)
-	rm -rf $(M_FLIST)
+	-rm -rf $(M_FLIST)
 	$(M_VIVADO) system_project.tcl >> daq2_kcu105_vivado.log 2>&1
 
 
 lib:
 	make -C ../../../library/axi_ad9144
 	make -C ../../../library/axi_ad9680
+	make -C ../../../library/xilinx/axi_adxcvr
 	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_jesd_gt
 	make -C ../../../library/util_adcfifo
+	make -C ../../../library/xilinx/util_adxcvr
 	make -C ../../../library/util_cpack
 	make -C ../../../library/util_dacfifo
-	make -C ../../../library/util_jesd_gt
 	make -C ../../../library/util_upack
 
 ####################################################################################

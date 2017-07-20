@@ -174,6 +174,8 @@ module system_top (
   wire            spi_miso;
   wire            rx_ref_clk;
   wire    [31:0]  mb_intrs;
+  wire            rx_clk;
+  wire            rx_sysref;
 
   assign ddr3_1_p = 2'b11;
   assign ddr3_1_n = 3'b000;
@@ -202,6 +204,11 @@ module system_top (
     .spi_mosi (spi_mosi),
     .spi_miso (spi_miso),
     .spi_sdio (spi_sdio));
+
+  ad_sysref_gen #(.SYSREF_PERIOD(64)) i_sysref (
+    .core_clk (rx_clk),
+    .sysref_en (gpio_o[32]),
+    .sysref_out (rx_sysref));
 
   // instantiations
 
@@ -256,11 +263,18 @@ module system_top (
     .sys_rst (sys_rst),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
-    .rx_data_n (rx_data_n),
-    .rx_data_p (rx_data_p),
-    .rx_ref_clk (rx_ref_clk),
-    .rx_sync (rx_sync),
-    .rx_sysref (rx_sysref),
+    .rx_data_0_n (rx_data_n[0]),
+    .rx_data_0_p (rx_data_p[0]),
+    .rx_data_1_n (rx_data_n[1]),
+    .rx_data_1_p (rx_data_p[1]),
+    .rx_data_2_n (rx_data_n[2]),
+    .rx_data_2_p (rx_data_p[2]),
+    .rx_data_3_n (rx_data_n[3]),
+    .rx_data_3_p (rx_data_p[3]),
+    .rx_ref_clk_0 (rx_ref_clk),
+    .rx_sync_0 (rx_sync),
+    .rx_sysref_0 (rx_sysref),
+    .rx_core_clk (rx_clk),
     .spi_clk_i (1'b0),
     .spi_clk_o (spi_clk),
     .spi_csn_i (8'hff),
