@@ -77,6 +77,17 @@ module system_top (
   input       [ 10:0]     gpio_bd_i,
   output      [ 15:0]     gpio_bd_o,
 
+  // flash
+
+  output                  flash_oen,
+  output      [  1:0]     flash_cen,
+  output      [ 27:0]     flash_addr,             // drop A0 & A1 for 32 bit data bus
+  inout       [ 31:0]     flash_data,
+  output                  flash_wen,
+  output                  flash_advn,
+  output                  flash_clk,
+  output                  flash_resetn,
+
   // lane interface
 
   input                   rx_ref_clk,
@@ -120,6 +131,12 @@ module system_top (
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
+
+  // User code space at offset 0x0930_0000 per Altera's Board Update Portal
+  // reference design used to program flash
+
+  wire    [23:0]    flash_addr_raw;
+  assign flash_addr = flash_addr_raw + 28'h9300000;
 
   // daq2
 
@@ -170,6 +187,14 @@ module system_top (
 
   assign gpio_bd_o = gpio_o[15:0];
 
+  // Common Flash interface assignments
+
+  assign  flash_resetn = 1'b1;         // user_resetn; flash ready after FPGA is configured, reset during configuration
+  assign  flash_advn   = 1'b0;
+  assign  flash_clk    = 1'b0;
+  assign  flash_cen[1] = flash_cen[0]; // select both flash devices for double-wide 32 bit data width
+
+
   system_bd i_system_bd (
     .rx_serial_data_rx_serial_data (rx_serial_data),
     .rx_ref_clk_clk (rx_ref_clk),
@@ -213,7 +238,12 @@ module system_top (
     .tx_serial_data_tx_serial_data (tx_serial_data),
     .tx_ref_clk_clk (tx_ref_clk),
     .tx_sync_export (tx_sync),
-    .tx_sysref_export (tx_sysref));
+    .tx_sysref_export (tx_sysref),
+    .sys_flash_tcm_address_out (flash_addr_raw),
+    .sys_flash_tcm_read_n_out (flash_oen),
+    .sys_flash_tcm_write_n_out (flash_wen),
+    .sys_flash_tcm_data_out (flash_data),
+    .sys_flash_tcm_chipselect_n_out (flash_cen[0]));
 
 endmodule
 
