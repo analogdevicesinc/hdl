@@ -197,6 +197,8 @@ add_interface_port interrupt_sender irq irq Output 1
 
 proc axi_dmac_elaborate {} {
 
+  set fifo_size [get_parameter_value FIFO_SIZE]
+
   # axi4 destination/source
 
   if {[get_parameter_value DMA_TYPE_DEST] == 0} {
@@ -211,6 +213,9 @@ proc axi_dmac_elaborate {} {
     add_interface m_dest_axi axi4 start
     set_interface_property m_dest_axi associatedClock m_dest_axi_clock
     set_interface_property m_dest_axi associatedReset m_dest_axi_reset
+    set_interface_property m_dest_axi readIssuingCapability 1
+    set_interface_property m_dest_axi writeIssuingCapability $fifo_size
+    set_interface_property m_dest_axi combinedIssuingCapability $fifo_size
     add_interface_port m_dest_axi m_dest_axi_awvalid awvalid Output 1
     add_interface_port m_dest_axi m_dest_axi_awaddr awaddr Output 32
     add_interface_port m_dest_axi m_dest_axi_awready awready Input 1
@@ -253,6 +258,9 @@ proc axi_dmac_elaborate {} {
     add_interface m_src_axi axi4 start
     set_interface_property m_src_axi associatedClock m_src_axi_clock
     set_interface_property m_src_axi associatedReset m_src_axi_reset
+    set_interface_property m_src_axi readIssuingCapability $fifo_size
+    set_interface_property m_src_axi writeIssuingCapability 1
+    set_interface_property m_src_axi combinedIssuingCapability $fifo_size
     add_interface_port m_src_axi m_src_axi_awvalid awvalid Output 1
     add_interface_port m_src_axi m_src_axi_awaddr awaddr Output 32
     add_interface_port m_src_axi m_src_axi_awready awready Input 1
