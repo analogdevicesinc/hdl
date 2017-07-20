@@ -103,6 +103,7 @@ module system_top (
   inout           tsw_a,
   inout           tsw_b,
 
+  inout           rtc_int,
   inout           ltc2955_kill_n,
   inout           ltc2955_int_n,
   inout           mic_present_n,
@@ -158,13 +159,15 @@ module system_top (
 
   assign gpio_i[31:29] = gpio_o[31:29];
   assign gpio_i[28:28] = imu_ready;
-  assign gpio_i[27:24] = gpio_o[27:24];
+  assign gpio_i[27:27] = gpio_o[27:27];
+  assign gpio_i[25:24] = gpio_o[25:24];
 
-  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_misc (
-    .dio_t (gpio_t[23:20]),
-    .dio_i (gpio_o[23:20]),
-    .dio_o (gpio_i[23:20]),
-    .dio_p ({ ltc2955_kill_n,
+  ad_iobuf #(.DATA_WIDTH(5)) i_iobuf_misc (
+    .dio_t ({gpio_t[26], gpio_t[23:20]}),
+    .dio_i ({gpio_o[26], gpio_o[23:20]}),
+    .dio_o ({gpio_i[26], gpio_i[23:20]}),
+    .dio_p ({ rtc_int,
+              ltc2955_kill_n,
               ltc2955_int_n,
               ts3a227_int_n,
               mic_present_n}));

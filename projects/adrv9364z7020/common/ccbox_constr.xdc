@@ -11,8 +11,8 @@ set_property  -dict {PACKAGE_PIN  W14   IOSTANDARD LVCMOS25} [get_ports gpio_rf4
 
 ## push-button
 
-set_property  -dict {PACKAGE_PIN  P14   IOSTANDARD  LVCMOS25} [get_ports  ltc2955_kill_n]   ; ## U1,P14,IO_L06_34_JX4_P,JX4,32,LTC2955_KILL_N
-set_property  -dict {PACKAGE_PIN  T14   IOSTANDARD  LVCMOS25} [get_ports  ltc2955_int_n]    ; ## U1,T14,IO_L05_34_JX4_P,JX4,31,LTC2955_INT_N
+set_property  -dict {PACKAGE_PIN  P14   IOSTANDARD  LVCMOS25} [get_ports  ltc2955_kill_n]   ; ## U1,P14,IO_L06_34_JX4_P,JX4,32,SOM2C_KILL_N
+set_property  -dict {PACKAGE_PIN  T14   IOSTANDARD  LVCMOS25} [get_ports  ltc2955_int_n]    ; ## U1,T14,IO_L05_34_JX4_P,JX4,31,C2SOM_KILL_N
 
 ## oled
 
@@ -79,4 +79,8 @@ set_property  -dict {PACKAGE_PIN  V16   IOSTANDARD  LVCMOS25} [get_ports  tsw_s4
 set_property  -dict {PACKAGE_PIN  Y19   IOSTANDARD  LVCMOS25} [get_ports  tsw_s5]           ; ## U1,Y19,IO_L17_34_JX4_N,JX4,69,P11,10,NAV_SWITCH_S5
 set_property  -dict {PACKAGE_PIN  V20   IOSTANDARD  LVCMOS25} [get_ports  tsw_a]            ; ## U1,V20,IO_L16_34_JX4_P,JX4,58,P11,1,NAV_SWITCH_A
 set_property  -dict {PACKAGE_PIN  U20   IOSTANDARD  LVCMOS25} [get_ports  tsw_b]            ; ## U1,U20,IO_L15_34_JX4_N,JX4,59,P11,3,NAV_SWITCH_B
+
+## misc
+
+set_property  -dict {PACKAGE_PIN  W15   IOSTANDARD  LVCMOS25} [get_ports  rtc_int]          ; ## U1,W15,IO_L10_34_JX4_N,JX4,44,TIMER_INT
 
