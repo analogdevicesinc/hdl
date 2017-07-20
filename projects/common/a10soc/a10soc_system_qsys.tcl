@@ -116,10 +116,16 @@ set_interface_property sys_hps_rstn EXPORT_OF sys_hps.f2h_cold_reset_req
 add_interface sys_hps_out_rstn reset source
 set_interface_property sys_hps_out_rstn EXPORT_OF sys_hps.h2f_reset
 add_connection sys_clk.clk sys_hps.h2f_lw_axi_clock
-add_connection sys_hps.h2f_user0_clock sys_hps.f2sdram0_clock
-add_connection sys_clk.clk_reset sys_hps.f2sdram0_reset
 add_interface sys_hps_io conduit end
 set_interface_property sys_hps_io EXPORT_OF sys_hps.hps_io
+
+# common dma interfaces
+
+add_instance sys_dma_clk clock_source
+add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
+add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
+add_connection sys_dma_clk.clk sys_hps.f2sdram0_clock
+add_connection sys_dma_clk.clk_reset sys_hps.f2sdram0_reset
 
 # ddr4 interface
 
@@ -186,12 +192,6 @@ proc ad_dma_interconnect {m_port} {
   add_connection ${m_port} sys_hps.f2sdram0_data
   set_connection_parameter_value ${m_port}/sys_hps.f2sdram0_data baseAddress {0x0}
 }
-
-# common dma interfaces
-
-add_instance sys_dma_clk clock_source
-add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
-add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 
 # gpio-bd
 
