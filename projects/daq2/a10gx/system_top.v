@@ -78,6 +78,16 @@ module system_top (
 
   gpio_bd_i,
   gpio_bd_o,
+  
+  // flash
+  flash_oen,
+  flash_cen,
+  fm_a, 
+  fm_d,
+  flash_wen,	  
+  flash_advn,
+  flash_clk,
+  flash_resetn,
 
   // lane interface
 
@@ -150,6 +160,16 @@ module system_top (
 
   input   [ 10:0]   gpio_bd_i;
   output  [ 15:0]   gpio_bd_o;
+  
+  // flash
+  output           flash_oen;
+  output  [  1: 0] flash_cen;
+  output  [ 27: 0] fm_a;       // drop A0 & A1 for 32 bit data bus 
+  inout   [ 31: 0] fm_d;
+  output           flash_wen;
+  output           flash_advn;
+  output           flash_clk;
+  output           flash_resetn;
 
   // lane interface
 
@@ -194,6 +214,9 @@ module system_top (
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
+
+  wire    [23:0]    fm_a_raw;
+  assign fm_a = fm_a_raw + 32'h09300000;  // User code space at offset 0x0930_0000 per Altera's Board Update Portal reference design used to program flash  
 
   // daq2
 
@@ -243,6 +266,13 @@ module system_top (
   assign gpio_i[15: 0] = gpio_o[15:0];
 
   assign gpio_bd_o = gpio_o[15:0];
+  
+  // Common Flash interface assignments
+  assign  flash_resetn = 1'b1;//user_resetn; // flash ready after FPGA is configured, reset during configuration
+  assign  flash_advn   = 1'b0;
+  assign  flash_clk    = 1'b0;
+  assign  flash_cen[1] = flash_cen[0]; // select both flash devices for double-wide 32 bit data width
+  
 
   system_bd i_system_bd (
     .rx_data_0_rx_serial_data (rx_data[0]),
@@ -293,7 +323,12 @@ module system_top (
     .tx_data_3_tx_serial_data (tx_data[3]),
     .tx_ref_clk_clk (tx_ref_clk),
     .tx_sync_export (tx_sync),
-    .tx_sysref_export (tx_sysref));
+    .tx_sysref_export (tx_sysref),
+    .cfi_flash_atb_bridge_0_out_tcm_address_out (fm_a_raw),
+    .cfi_flash_atb_bridge_0_out_tcm_read_n_out (flash_oen),
+    .cfi_flash_atb_bridge_0_out_tcm_write_n_out (flash_wen),
+    .cfi_flash_atb_bridge_0_out_tcm_data_out (fm_d),
+    .cfi_flash_atb_bridge_0_out_tcm_chipselect_n_out (flash_cen[0]));
 
 endmodule
 

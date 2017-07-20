@@ -78,6 +78,65 @@ set_interface_property sys_ddr3_cntrl_mem EXPORT_OF sys_ddr3_cntrl.mem
 set_interface_property sys_ddr3_cntrl_oct EXPORT_OF sys_ddr3_cntrl.oct
 set_interface_property sys_ddr3_cntrl_pll_ref_clk EXPORT_OF sys_ddr3_cntrl.pll_ref_clk
 
+# flash bridge
+
+add_instance cfi_flash_atb_bridge_0 altera_tristate_conduit_bridge 16.0
+add_connection sys_clk.clk cfi_flash_atb_bridge_0.clk
+add_connection sys_clk.clk_reset cfi_flash_atb_bridge_0.reset
+
+# flash
+
+add_instance ext_flash altera_generic_tristate_controller 16.0
+set_instance_parameter_value ext_flash {TCM_ADDRESS_W} {24}
+set_instance_parameter_value ext_flash {TCM_DATA_W} {32}
+set_instance_parameter_value ext_flash {TCM_BYTEENABLE_W} {4}
+set_instance_parameter_value ext_flash {TCM_READ_WAIT} {144}
+set_instance_parameter_value ext_flash {TCM_WRITE_WAIT} {144}
+set_instance_parameter_value ext_flash {TCM_SETUP_WAIT} {33}
+set_instance_parameter_value ext_flash {TCM_DATA_HOLD} {33}
+set_instance_parameter_value ext_flash {TCM_MAX_PENDING_READ_TRANSACTIONS} {3}
+set_instance_parameter_value ext_flash {TCM_TURNAROUND_TIME} {2}
+set_instance_parameter_value ext_flash {TCM_TIMING_UNITS} {0}
+set_instance_parameter_value ext_flash {TCM_READLATENCY} {2}
+set_instance_parameter_value ext_flash {TCM_SYMBOLS_PER_WORD} {4}
+set_instance_parameter_value ext_flash {USE_READDATA} {1}
+set_instance_parameter_value ext_flash {USE_WRITEDATA} {1}
+set_instance_parameter_value ext_flash {USE_READ} {1}
+set_instance_parameter_value ext_flash {USE_WRITE} {1}
+set_instance_parameter_value ext_flash {USE_BEGINTRANSFER} {0}
+set_instance_parameter_value ext_flash {USE_BYTEENABLE} {0}
+set_instance_parameter_value ext_flash {USE_CHIPSELECT} {1}
+set_instance_parameter_value ext_flash {USE_LOCK} {0}
+set_instance_parameter_value ext_flash {USE_ADDRESS} {1}
+set_instance_parameter_value ext_flash {USE_WAITREQUEST} {0}
+set_instance_parameter_value ext_flash {USE_WRITEBYTEENABLE} {0}
+set_instance_parameter_value ext_flash {USE_OUTPUTENABLE} {0}
+set_instance_parameter_value ext_flash {USE_RESETREQUEST} {0}
+set_instance_parameter_value ext_flash {USE_IRQ} {0}
+set_instance_parameter_value ext_flash {USE_RESET_OUTPUT} {0}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_READ} {1}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_LOCK} {0}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_WRITE} {1}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_CHIPSELECT} {1}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_BYTEENABLE} {0}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_OUTPUTENABLE} {0}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_WRITEBYTEENABLE} {0}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_WAITREQUEST} {0}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_BEGINTRANSFER} {0}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_RESETREQUEST} {0}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_IRQ} {0}
+set_instance_parameter_value ext_flash {ACTIVE_LOW_RESET_OUTPUT} {0}
+set_instance_parameter_value ext_flash {CHIPSELECT_THROUGH_READLATENCY} {0}
+set_instance_parameter_value ext_flash {IS_MEMORY_DEVICE} {1}
+set_instance_parameter_value ext_flash {MODULE_ASSIGNMENT_KEYS} {embeddedsw.configuration.hwClassnameDriverSupportList embeddedsw.configuration.hwClassnameDriverSupportDefault embeddedsw.CMacro.SETUP_VALUE embeddedsw.CMacro.WAIT_VALUE embeddedsw.CMacro.HOLD_VALUE embeddedsw.CMacro.TIMING_UNITS embeddedsw.CMacro.SIZE embeddedsw.memoryInfo.MEM_INIT_DATA_WIDTH embeddedsw.memoryInfo.HAS_BYTE_LANE embeddedsw.memoryInfo.IS_FLASH embeddedsw.memoryInfo.GENERATE_DAT_SYM embeddedsw.memoryInfo.GENERATE_FLASH embeddedsw.memoryInfo.DAT_SYM_INSTALL_DIR embeddedsw.memoryInfo.FLASH_INSTALL_DIR}
+set_instance_parameter_value ext_flash {MODULE_ASSIGNMENT_VALUES} {altera_avalon_lan91c111:altera_avalon_cfi_flash1616 altera_avalon_cfi_flash1616 33 144 33 ns 134217728u 32 1 1 1 1 SIM_DIR APP_DIR}
+set_instance_parameter_value ext_flash {INTERFACE_ASSIGNMENT_KEYS} {embeddedsw.configuration.isFlash embeddedsw.configuration.isMemoryDevice embeddedsw.configuration.isNonVolatileStorage}
+set_instance_parameter_value ext_flash {INTERFACE_ASSIGNMENT_VALUES} {1 1 1}
+
+add_connection ext_flash.tcm cfi_flash_atb_bridge_0.tcs
+add_connection sys_clk.clk ext_flash.clk
+add_connection sys_clk.clk_reset ext_flash.reset
+
 # cpu
 
 add_instance sys_cpu altera_nios2_gen2 16.0
@@ -85,7 +144,7 @@ set_instance_parameter_value sys_cpu {setting_support31bitdcachebypass} {0}
 set_instance_parameter_value sys_cpu {setting_activateTrace} {1}
 set_instance_parameter_value sys_cpu {mmu_autoAssignTlbPtrSz} {0}
 set_instance_parameter_value sys_cpu {mmu_TLBMissExcOffset} {4096}
-set_instance_parameter_value sys_cpu {resetSlave} {sys_ddr3_cntrl_arch.ctrl_amm_0}
+set_instance_parameter_value sys_cpu {resetSlave} {ext_flash.uas}
 set_instance_parameter_value sys_cpu {mmu_TLBMissExcSlave} {sys_tlb_mem.s2}
 set_instance_parameter_value sys_cpu {exceptionSlave} {sys_ddr3_cntrl_arch.ctrl_amm_0}
 set_instance_parameter_value sys_cpu {breakSlave} {sys_cpu.jtag_debug_module}
@@ -114,6 +173,18 @@ set_connection_parameter_value sys_cpu.instruction_master/sys_cpu.debug_mem_slav
 set_connection_parameter_value sys_cpu.instruction_master/sys_int_mem.s1 baseAddress {0x10140000}
 set_connection_parameter_value sys_cpu.tightly_coupled_instruction_master_0/sys_tlb_mem.s2 baseAddress {0x10200000}
 set_connection_parameter_value sys_cpu.tightly_coupled_data_master_0/sys_tlb_mem.s1 baseAddress {0x10200000}
+
+add_connection sys_cpu.data_master ext_flash.uas
+set_connection_parameter_value sys_cpu.data_master/ext_flash.uas arbitrationPriority {1}
+set_connection_parameter_value sys_cpu.data_master/ext_flash.uas baseAddress {0x11000000}
+set_connection_parameter_value sys_cpu.data_master/ext_flash.uas defaultConnection {0}
+
+add_connection sys_cpu.instruction_master ext_flash.uas
+set_connection_parameter_value sys_cpu.instruction_master/ext_flash.uas arbitrationPriority {1}
+set_connection_parameter_value sys_cpu.instruction_master/ext_flash.uas baseAddress {0x11000000}
+set_connection_parameter_value sys_cpu.instruction_master/ext_flash.uas defaultConnection {0}
+
+
 
 # cpu/hps handling
 
@@ -317,5 +388,9 @@ ad_cpu_interrupt 4 sys_timer_1.irq
 ad_cpu_interrupt 5 sys_gpio_in.irq
 ad_cpu_interrupt 6 sys_gpio_bd.irq
 ad_cpu_interrupt 7 sys_spi.irq
+
+# exported interfaces
+add_interface cfi_flash_atb_bridge_0_out conduit end
+set_interface_property cfi_flash_atb_bridge_0_out EXPORT_OF cfi_flash_atb_bridge_0.out
 
 
