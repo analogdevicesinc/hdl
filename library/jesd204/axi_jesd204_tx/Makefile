@@ -14,6 +14,7 @@ M_DEPS += axi_jesd204_tx.v
 M_DEPS += axi_jesd204_tx_constr.xdc
 M_DEPS += axi_jesd204_tx_ip.tcl
 M_DEPS += jesd204_up_tx.v
+M_DEPS += set_propertyPROCESSING_ORDERLATEipx::get_filesaxi_jesd204_tx_constr.xdc
 
 M_DEPS += ../../jesd204/axi_jesd204_common/axi_jesd204_common.xpr
 M_DEPS += ../../util_cdc/util_cdc.xpr

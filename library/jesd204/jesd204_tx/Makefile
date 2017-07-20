@@ -9,6 +9,7 @@ M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_ip.tcl
 M_DEPS += jesd204_tx_constr.xdc
 M_DEPS += jesd204_tx_ip.tcl
+M_DEPS += set_propertyPROCESSING_ORDERLATEipx::get_filesjesd204_tx_constr.xdc
 M_DEPS += tx.v
 M_DEPS += tx_ctrl.v
 M_DEPS += tx_lane.v
