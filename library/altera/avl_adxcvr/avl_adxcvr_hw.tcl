@@ -21,6 +21,7 @@ ad_ip_parameter FRM_BCNT INTEGER 1 false
 ad_ip_parameter FRM_SCNT INTEGER 1 false
 ad_ip_parameter MF_FCNT INTEGER 32 false
 ad_ip_parameter HD INTEGER 1 false
+ad_ip_parameter TX_LANE_MAP STRING "" false
 
 set_parameter_property LANE_RATE DISPLAY_UNITS "Mbps"
 set_parameter_property SYSCLK_FREQUENCY UNITS Megahertz
@@ -41,6 +42,7 @@ proc p_avl_adxcvr {} {
   set m_frm_scnt [get_parameter_value "FRM_SCNT"]
   set m_mf_fcnt [get_parameter_value "MF_FCNT"]
   set m_hd [get_parameter_value "HD"]
+  set m_tx_lane_map [get_parameter_value "TX_LANE_MAP"]
 
   set m_pllclk_frequency [expr $m_lane_rate / 2]
   set m_coreclk_frequency [expr $m_lane_rate / 40]
@@ -178,6 +180,8 @@ proc p_avl_adxcvr {} {
     add_connection alt_ip.csr_bit_reversal alt_xphy.tx_ip_csr_bit_reversal
     add_connection alt_ip.csr_byte_reversal alt_xphy.tx_ip_csr_byte_reversal
 
+    set lane_map [regexp -all -inline {\S+} $m_tx_lane_map]
+
     for {set n 0} {$n < $m_num_of_lanes} {incr n} {
 
       add_instance alt_phy_${n} altera_jesd204
@@ -198,30 +202,28 @@ proc p_avl_adxcvr {} {
       add_connection alt_xphy.tx_phy${n}_analogreset alt_phy_${n}.tx_analogreset
       add_connection alt_xphy.tx_phy${n}_digitalreset alt_phy_${n}.tx_digitalreset
       add_connection alt_lane_pll.tx_serial_clk alt_phy_${n}.tx_serial_clk0
-      add_interface tx_ip_s_${n} conduit end
-      set_interface_property tx_ip_s_${n} EXPORT_OF alt_xphy.tx_ip_s_${n}
-      add_interface tx_ip_d_${n} conduit end
-      set_interface_property tx_ip_d_${n} EXPORT_OF alt_xphy.tx_ip_d_${n}
-      add_interface tx_phy_s_${n} conduit end
-      set_interface_property tx_phy_s_${n} EXPORT_OF alt_xphy.tx_phy_s_${n}
-      add_interface tx_phy_d_${n} conduit end
-      set_interface_property tx_phy_d_${n} EXPORT_OF alt_xphy.tx_phy_d_${n}
 
       add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
       add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
       add_interface phy_reconfig_${n} avalon slave
       set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
 
-      add_connection alt_phy_${n}.tx_cal_busy alt_xphy.tx_phy${n}_cal_busy
-      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_full alt_xphy.tx_phy${n}_pcfifo_full
-      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_empty alt_xphy.tx_phy${n}_pcfifo_empty
-      add_connection alt_xphy.tx_phy${n}_pcs_data alt_phy_${n}.jesd204_tx_pcs_data
-      add_connection alt_xphy.tx_phy${n}_pcs_kchar_data alt_phy_${n}.jesd204_tx_pcs_kchar_data
-      add_connection alt_xphy.tx_phy${n}_elecidle alt_phy_${n}.phy_tx_elecidle
-      add_connection alt_xphy.tx_phy${n}_csr_lane_polarity alt_phy_${n}.csr_lane_polarity
-      add_connection alt_xphy.tx_phy${n}_csr_lane_powerdown alt_phy_${n}.csr_lane_powerdown
-      add_connection alt_xphy.tx_phy${n}_csr_bit_reversal alt_phy_${n}.csr_bit_reversal
-      add_connection alt_xphy.tx_phy${n}_csr_byte_reversal alt_phy_${n}.csr_byte_reversal
+      if {$lane_map != {}} {
+        set m [lindex $lane_map $n]
+      } else {
+        set m $n
+      }
+
+      add_connection alt_phy_${n}.tx_cal_busy alt_xphy.tx_phy${m}_cal_busy
+      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_full alt_xphy.tx_phy${m}_pcfifo_full
+      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_empty alt_xphy.tx_phy${m}_pcfifo_empty
+      add_connection alt_xphy.tx_phy${m}_pcs_data alt_phy_${n}.jesd204_tx_pcs_data
+      add_connection alt_xphy.tx_phy${m}_pcs_kchar_data alt_phy_${n}.jesd204_tx_pcs_kchar_data
+      add_connection alt_xphy.tx_phy${m}_elecidle alt_phy_${n}.phy_tx_elecidle
+      add_connection alt_xphy.tx_phy${m}_csr_lane_polarity alt_phy_${n}.csr_lane_polarity
+      add_connection alt_xphy.tx_phy${m}_csr_lane_powerdown alt_phy_${n}.csr_lane_powerdown
+      add_connection alt_xphy.tx_phy${m}_csr_bit_reversal alt_phy_${n}.csr_bit_reversal
+      add_connection alt_xphy.tx_phy${m}_csr_byte_reversal alt_phy_${n}.csr_byte_reversal
     }
   }
 

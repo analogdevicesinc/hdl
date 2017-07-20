@@ -13,6 +13,7 @@ set_instance_parameter_value avl_ad9144_xcvr {FRM_BCNT} {1}
 set_instance_parameter_value avl_ad9144_xcvr {FRM_SCNT} {1}
 set_instance_parameter_value avl_ad9144_xcvr {MF_FCNT} {32}
 set_instance_parameter_value avl_ad9144_xcvr {HD} {1}
+set_instance_parameter_value avl_ad9144_xcvr {TX_LANE_MAP} {0 3 1 2}
 
 add_connection sys_clk.clk avl_ad9144_xcvr.sys_clk
 add_connection sys_clk.clk_reset avl_ad9144_xcvr.sys_resetn
@@ -30,14 +31,6 @@ add_interface tx_sysref conduit end
 set_interface_property tx_sysref EXPORT_OF avl_ad9144_xcvr.sysref
 add_interface tx_sync conduit end
 set_interface_property tx_sync EXPORT_OF avl_ad9144_xcvr.sync
-add_connection avl_ad9144_xcvr.tx_phy_s_0 avl_ad9144_xcvr.tx_ip_s_0
-add_connection avl_ad9144_xcvr.tx_phy_s_1 avl_ad9144_xcvr.tx_ip_s_3
-add_connection avl_ad9144_xcvr.tx_phy_s_2 avl_ad9144_xcvr.tx_ip_s_1
-add_connection avl_ad9144_xcvr.tx_phy_s_3 avl_ad9144_xcvr.tx_ip_s_2
-add_connection avl_ad9144_xcvr.tx_ip_d_0 avl_ad9144_xcvr.tx_phy_d_0
-add_connection avl_ad9144_xcvr.tx_ip_d_3 avl_ad9144_xcvr.tx_phy_d_1
-add_connection avl_ad9144_xcvr.tx_ip_d_1 avl_ad9144_xcvr.tx_phy_d_2
-add_connection avl_ad9144_xcvr.tx_ip_d_2 avl_ad9144_xcvr.tx_phy_d_3
 
 # ad9144-xcvr
 

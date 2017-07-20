@@ -13,6 +13,8 @@ set_instance_parameter_value avl_ad9371_tx_xcvr {FRM_BCNT} {2}
 set_instance_parameter_value avl_ad9371_tx_xcvr {FRM_SCNT} {1}
 set_instance_parameter_value avl_ad9371_tx_xcvr {MF_FCNT} {32}
 set_instance_parameter_value avl_ad9371_tx_xcvr {HD} {1}
+set_instance_parameter_value avl_ad9144_xcvr {TX_LANE_MAP} {3 0 1 2}
+
 add_connection sys_clk.clk avl_ad9371_tx_xcvr.sys_clk
 add_connection sys_clk.clk_reset avl_ad9371_tx_xcvr.sys_resetn
 add_interface tx_ref_clk clock sink
@@ -29,14 +31,6 @@ add_interface tx_sysref conduit end
 set_interface_property tx_sysref EXPORT_OF avl_ad9371_tx_xcvr.sysref
 add_interface tx_sync conduit end
 set_interface_property tx_sync EXPORT_OF avl_ad9371_tx_xcvr.sync
-add_connection avl_ad9371_tx_xcvr.tx_phy_s_0 avl_ad9371_tx_xcvr.tx_ip_s_3
-add_connection avl_ad9371_tx_xcvr.tx_phy_s_1 avl_ad9371_tx_xcvr.tx_ip_s_0
-add_connection avl_ad9371_tx_xcvr.tx_phy_s_2 avl_ad9371_tx_xcvr.tx_ip_s_1
-add_connection avl_ad9371_tx_xcvr.tx_phy_s_3 avl_ad9371_tx_xcvr.tx_ip_s_2
-add_connection avl_ad9371_tx_xcvr.tx_ip_d_3 avl_ad9371_tx_xcvr.tx_phy_d_0
-add_connection avl_ad9371_tx_xcvr.tx_ip_d_0 avl_ad9371_tx_xcvr.tx_phy_d_1
-add_connection avl_ad9371_tx_xcvr.tx_ip_d_1 avl_ad9371_tx_xcvr.tx_phy_d_2
-add_connection avl_ad9371_tx_xcvr.tx_ip_d_2 avl_ad9371_tx_xcvr.tx_phy_d_3
 
 # ad9371_tx-xcvr
 

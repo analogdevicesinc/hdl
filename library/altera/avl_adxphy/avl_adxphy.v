@@ -217,47 +217,6 @@ module avl_adxphy #(
   input                               tx_ip_bit_reversal,
   input                               tx_ip_byte_reversal,
 
-  // tx-mux interface
-
-  input   [ 2:0]                      tx_ip_s_0,
-  output  [38:0]                      tx_ip_d_0,
-  output  [ 2:0]                      tx_phy_s_0,
-  input   [38:0]                      tx_phy_d_0,
-
-  input   [ 2:0]                      tx_ip_s_1,
-  output  [38:0]                      tx_ip_d_1,
-  output  [ 2:0]                      tx_phy_s_1,
-  input   [38:0]                      tx_phy_d_1,
-
-  input   [ 2:0]                      tx_ip_s_2,
-  output  [38:0]                      tx_ip_d_2,
-  output  [ 2:0]                      tx_phy_s_2,
-  input   [38:0]                      tx_phy_d_2,
-
-  input   [ 2:0]                      tx_ip_s_3,
-  output  [38:0]                      tx_ip_d_3,
-  output  [ 2:0]                      tx_phy_s_3,
-  input   [38:0]                      tx_phy_d_3,
-
-  input   [ 2:0]                      tx_ip_s_4,
-  output  [38:0]                      tx_ip_d_4,
-  output  [ 2:0]                      tx_phy_s_4,
-  input   [38:0]                      tx_phy_d_4,
-
-  input   [ 2:0]                      tx_ip_s_5,
-  output  [38:0]                      tx_ip_d_5,
-  output  [ 2:0]                      tx_phy_s_5,
-  input   [38:0]                      tx_phy_d_5,
-
-  input   [ 2:0]                      tx_ip_s_6,
-  output  [38:0]                      tx_ip_d_6,
-  output  [ 2:0]                      tx_phy_s_6,
-  input   [38:0]                      tx_phy_d_6,
-
-  input   [ 2:0]                      tx_ip_s_7,
-  output  [38:0]                      tx_ip_d_7,
-  output  [ 2:0]                      tx_phy_s_7,
-  input   [38:0]                      tx_phy_d_7,
 
   // tx-phy interface
 
@@ -657,26 +616,26 @@ module avl_adxphy #(
 
   generate
   if (NUM_OF_LANES > 0) begin
-  assign tx_core_cal_busy[0] = tx_ip_s_0[0];
-  assign tx_ip_cal_busy[0] = tx_ip_s_0[0];
-  assign tx_ip_full[0] = tx_ip_s_0[1];
-  assign tx_ip_empty[0] = tx_ip_s_0[2];
+  assign tx_core_cal_busy[0] = tx_phy_cal_busy_0;
+  assign tx_ip_cal_busy[0] = tx_phy_cal_busy_0;
+  assign tx_ip_full[0] = tx_phy_full_0;
+  assign tx_ip_empty[0] = tx_phy_empty_0;
   end
   endgenerate
 
   generate
   if (NUM_OF_LANES > 0) begin
-  assign tx_ip_d_0[31: 0] = tx_ip_data[((32*1)-1):(32*0)];
-  assign tx_ip_d_0[35:32] = tx_ip_kchar[((4*1)-1):(4*0)];
-  assign tx_ip_d_0[36:36] = tx_ip_elecidle[0];
-  assign tx_ip_d_0[37:37] = tx_ip_lane_polarity[0];
-  assign tx_ip_d_0[38:38] = tx_ip_lane_powerdown[0];
+  assign tx_phy_data_0 = tx_ip_data[((32*1)-1):(32*0)];
+  assign tx_phy_kchar_0 = tx_ip_kchar[((4*1)-1):(4*0)];
+  assign tx_phy_elecidle_0 = tx_ip_elecidle[0];
+  assign tx_phy_lane_polarity_0 = tx_ip_lane_polarity[0];
+  assign tx_phy_lane_powerdown_0 = tx_ip_lane_powerdown[0];
   end else begin
-  assign tx_ip_d_0[31: 0] = 32'd0;
-  assign tx_ip_d_0[35:32] = 4'd0;
-  assign tx_ip_d_0[36:36] = 1'd0;
-  assign tx_ip_d_0[37:37] = 1'd0;
-  assign tx_ip_d_0[38:38] = 1'd0;
+  assign tx_phy_data_0 = 32'd0;
+  assign tx_phy_kchar_0 = 4'd0;
+  assign tx_phy_elecidle_0 = 1'd0;
+  assign tx_phy_lane_polarity_0 = 1'd0;
+  assign tx_phy_lane_powerdown_0 = 1'd0;
   end
   endgenerate
 
@@ -690,39 +649,31 @@ module avl_adxphy #(
   end
   endgenerate
 
-  assign tx_phy_s_0[0] = tx_phy_cal_busy_0;
-  assign tx_phy_s_0[1] = tx_phy_full_0;
-  assign tx_phy_s_0[2] = tx_phy_empty_0;
-  assign tx_phy_data_0 = tx_phy_d_0[31:0];
-  assign tx_phy_kchar_0 = tx_phy_d_0[35:32];
-  assign tx_phy_elecidle_0 = tx_phy_d_0[36];
-  assign tx_phy_lane_polarity_0 = tx_phy_d_0[37];
-  assign tx_phy_lane_powerdown_0 = tx_phy_d_0[38];
   assign tx_phy_bit_reversal_0 = tx_ip_bit_reversal;
   assign tx_phy_byte_reversal_0 = tx_ip_byte_reversal;
 
   generate
   if (NUM_OF_LANES > 1) begin
-  assign tx_core_cal_busy[1] = tx_ip_s_1[0];
-  assign tx_ip_cal_busy[1] = tx_ip_s_1[0];
-  assign tx_ip_full[1] = tx_ip_s_1[1];
-  assign tx_ip_empty[1] = tx_ip_s_1[2];
+  assign tx_core_cal_busy[1] = tx_phy_cal_busy_1;
+  assign tx_ip_cal_busy[1] = tx_phy_cal_busy_1;
+  assign tx_ip_full[1] = tx_phy_full_1;
+  assign tx_ip_empty[1] = tx_phy_empty_1;
   end
   endgenerate
 
   generate
   if (NUM_OF_LANES > 1) begin
-  assign tx_ip_d_1[31: 0] = tx_ip_data[((32*2)-1):(32*1)];
-  assign tx_ip_d_1[35:32] = tx_ip_kchar[((4*2)-1):(4*1)];
-  assign tx_ip_d_1[36:36] = tx_ip_elecidle[1];
-  assign tx_ip_d_1[37:37] = tx_ip_lane_polarity[1];
-  assign tx_ip_d_1[38:38] = tx_ip_lane_powerdown[1];
+  assign tx_phy_data_1 = tx_ip_data[((32*2)-1):(32*1)];
+  assign tx_phy_kchar_1 = tx_ip_kchar[((4*2)-1):(4*1)];
+  assign tx_phy_elecidle_1 = tx_ip_elecidle[1];
+  assign tx_phy_lane_polarity_1 = tx_ip_lane_polarity[1];
+  assign tx_phy_lane_powerdown_1 = tx_ip_lane_powerdown[1];
   end else begin
-  assign tx_ip_d_1[31: 0] = 32'd0;
-  assign tx_ip_d_1[35:32] = 4'd0;
-  assign tx_ip_d_1[36:36] = 1'd0;
-  assign tx_ip_d_1[37:37] = 1'd0;
-  assign tx_ip_d_1[38:38] = 1'd0;
+  assign tx_phy_data_1 = 32'd0;
+  assign tx_phy_kchar_1 = 4'd0;
+  assign tx_phy_elecidle_1 = 1'd0;
+  assign tx_phy_lane_polarity_1 = 1'd0;
+  assign tx_phy_lane_powerdown_1 = 1'd0;
   end
   endgenerate
 
@@ -736,39 +687,31 @@ module avl_adxphy #(
   end
   endgenerate
 
-  assign tx_phy_s_1[0] = tx_phy_cal_busy_1;
-  assign tx_phy_s_1[1] = tx_phy_full_1;
-  assign tx_phy_s_1[2] = tx_phy_empty_1;
-  assign tx_phy_data_1 = tx_phy_d_1[31:0];
-  assign tx_phy_kchar_1 = tx_phy_d_1[35:32];
-  assign tx_phy_elecidle_1 = tx_phy_d_1[36];
-  assign tx_phy_lane_polarity_1 = tx_phy_d_1[37];
-  assign tx_phy_lane_powerdown_1 = tx_phy_d_1[38];
   assign tx_phy_bit_reversal_1 = tx_ip_bit_reversal;
   assign tx_phy_byte_reversal_1 = tx_ip_byte_reversal;
 
   generate
   if (NUM_OF_LANES > 2) begin
-  assign tx_core_cal_busy[2] = tx_ip_s_2[0];
-  assign tx_ip_cal_busy[2] = tx_ip_s_2[0];
-  assign tx_ip_full[2] = tx_ip_s_2[1];
-  assign tx_ip_empty[2] = tx_ip_s_2[2];
+  assign tx_core_cal_busy[2] = tx_phy_cal_busy_2;
+  assign tx_ip_cal_busy[2] = tx_phy_cal_busy_2;
+  assign tx_ip_full[2] = tx_phy_full_2;
+  assign tx_ip_empty[2] = tx_phy_empty_2;
   end
   endgenerate
 
   generate
   if (NUM_OF_LANES > 2) begin
-  assign tx_ip_d_2[31: 0] = tx_ip_data[((32*3)-1):(32*2)];
-  assign tx_ip_d_2[35:32] = tx_ip_kchar[((4*3)-1):(4*2)];
-  assign tx_ip_d_2[36:36] = tx_ip_elecidle[2];
-  assign tx_ip_d_2[37:37] = tx_ip_lane_polarity[2];
-  assign tx_ip_d_2[38:38] = tx_ip_lane_powerdown[2];
+  assign tx_phy_data_2 = tx_ip_data[((32*3)-1):(32*2)];
+  assign tx_phy_kchar_2 = tx_ip_kchar[((4*3)-1):(4*2)];
+  assign tx_phy_elecidle_2 = tx_ip_elecidle[2];
+  assign tx_phy_lane_polarity_2 = tx_ip_lane_polarity[2];
+  assign tx_phy_lane_powerdown_2 = tx_ip_lane_powerdown[2];
   end else begin
-  assign tx_ip_d_2[31: 0] = 32'd0;
-  assign tx_ip_d_2[35:32] = 4'd0;
-  assign tx_ip_d_2[36:36] = 1'd0;
-  assign tx_ip_d_2[37:37] = 1'd0;
-  assign tx_ip_d_2[38:38] = 1'd0;
+  assign tx_phy_data_2 = 32'd0;
+  assign tx_phy_kchar_2 = 4'd0;
+  assign tx_phy_elecidle_2 = 1'd0;
+  assign tx_phy_lane_polarity_2 = 1'd0;
+  assign tx_phy_lane_powerdown_2 = 1'd0;
   end
   endgenerate
 
@@ -782,39 +725,31 @@ module avl_adxphy #(
   end
   endgenerate
 
-  assign tx_phy_s_2[0] = tx_phy_cal_busy_2;
-  assign tx_phy_s_2[1] = tx_phy_full_2;
-  assign tx_phy_s_2[2] = tx_phy_empty_2;
-  assign tx_phy_data_2 = tx_phy_d_2[31:0];
-  assign tx_phy_kchar_2 = tx_phy_d_2[35:32];
-  assign tx_phy_elecidle_2 = tx_phy_d_2[36];
-  assign tx_phy_lane_polarity_2 = tx_phy_d_2[37];
-  assign tx_phy_lane_powerdown_2 = tx_phy_d_2[38];
   assign tx_phy_bit_reversal_2 = tx_ip_bit_reversal;
   assign tx_phy_byte_reversal_2 = tx_ip_byte_reversal;
 
   generate
   if (NUM_OF_LANES > 3) begin
-  assign tx_core_cal_busy[3] = tx_ip_s_3[0];
-  assign tx_ip_cal_busy[3] = tx_ip_s_3[0];
-  assign tx_ip_full[3] = tx_ip_s_3[1];
-  assign tx_ip_empty[3] = tx_ip_s_3[2];
+  assign tx_core_cal_busy[3] = tx_phy_cal_busy_3;
+  assign tx_ip_cal_busy[3] = tx_phy_cal_busy_3;
+  assign tx_ip_full[3] = tx_phy_full_3;
+  assign tx_ip_empty[3] = tx_phy_empty_3;
   end
   endgenerate
 
   generate
   if (NUM_OF_LANES > 3) begin
-  assign tx_ip_d_3[31: 0] = tx_ip_data[((32*4)-1):(32*3)];
-  assign tx_ip_d_3[35:32] = tx_ip_kchar[((4*4)-1):(4*3)];
-  assign tx_ip_d_3[36:36] = tx_ip_elecidle[3];
-  assign tx_ip_d_3[37:37] = tx_ip_lane_polarity[3];
-  assign tx_ip_d_3[38:38] = tx_ip_lane_powerdown[3];
+  assign tx_phy_data_3 = tx_ip_data[((32*4)-1):(32*3)];
+  assign tx_phy_kchar_3 = tx_ip_kchar[((4*4)-1):(4*3)];
+  assign tx_phy_elecidle_3 = tx_ip_elecidle[3];
+  assign tx_phy_lane_polarity_3 = tx_ip_lane_polarity[3];
+  assign tx_phy_lane_powerdown_3 = tx_ip_lane_powerdown[3];
   end else begin
-  assign tx_ip_d_3[31: 0] = 32'd0;
-  assign tx_ip_d_3[35:32] = 4'd0;
-  assign tx_ip_d_3[36:36] = 1'd0;
-  assign tx_ip_d_3[37:37] = 1'd0;
-  assign tx_ip_d_3[38:38] = 1'd0;
+  assign tx_phy_data_3 = 32'd0;
+  assign tx_phy_kchar_3 = 4'd0;
+  assign tx_phy_elecidle_3 = 1'd0;
+  assign tx_phy_lane_polarity_3 = 1'd0;
+  assign tx_phy_lane_powerdown_3 = 1'd0;
   end
   endgenerate
 
@@ -828,39 +763,31 @@ module avl_adxphy #(
   end
   endgenerate
 
-  assign tx_phy_s_3[0] = tx_phy_cal_busy_3;
-  assign tx_phy_s_3[1] = tx_phy_full_3;
-  assign tx_phy_s_3[2] = tx_phy_empty_3;
-  assign tx_phy_data_3 = tx_phy_d_3[31:0];
-  assign tx_phy_kchar_3 = tx_phy_d_3[35:32];
-  assign tx_phy_elecidle_3 = tx_phy_d_3[36];
-  assign tx_phy_lane_polarity_3 = tx_phy_d_3[37];
-  assign tx_phy_lane_powerdown_3 = tx_phy_d_3[38];
   assign tx_phy_bit_reversal_3 = tx_ip_bit_reversal;
   assign tx_phy_byte_reversal_3 = tx_ip_byte_reversal;
 
   generate
   if (NUM_OF_LANES > 4) begin
-  assign tx_core_cal_busy[4] = tx_ip_s_4[0];
-  assign tx_ip_cal_busy[4] = tx_ip_s_4[0];
-  assign tx_ip_full[4] = tx_ip_s_4[1];
-  assign tx_ip_empty[4] = tx_ip_s_4[2];
+  assign tx_core_cal_busy[4] = tx_phy_cal_busy_4;
+  assign tx_ip_cal_busy[4] = tx_phy_cal_busy_4;
+  assign tx_ip_full[4] = tx_phy_full_4;
+  assign tx_ip_empty[4] = tx_phy_empty_4;
   end
   endgenerate
 
   generate
   if (NUM_OF_LANES > 4) begin
-  assign tx_ip_d_4[31: 0] = tx_ip_data[((32*5)-1):(32*4)];
-  assign tx_ip_d_4[35:32] = tx_ip_kchar[((4*5)-1):(4*4)];
-  assign tx_ip_d_4[36:36] = tx_ip_elecidle[4];
-  assign tx_ip_d_4[37:37] = tx_ip_lane_polarity[4];
-  assign tx_ip_d_4[38:38] = tx_ip_lane_powerdown[4];
+  assign tx_phy_data_4 = tx_ip_data[((32*5)-1):(32*4)];
+  assign tx_phy_kchar_4 = tx_ip_kchar[((4*5)-1):(4*4)];
+  assign tx_phy_elecidle_4 = tx_ip_elecidle[4];
+  assign tx_phy_lane_polarity_4 = tx_ip_lane_polarity[4];
+  assign tx_phy_lane_powerdown_4 = tx_ip_lane_powerdown[4];
   end else begin
-  assign tx_ip_d_4[31: 0] = 32'd0;
-  assign tx_ip_d_4[35:32] = 4'd0;
-  assign tx_ip_d_4[36:36] = 1'd0;
-  assign tx_ip_d_4[37:37] = 1'd0;
-  assign tx_ip_d_4[38:38] = 1'd0;
+  assign tx_phy_data_4 = 32'd0;
+  assign tx_phy_kchar_4 = 4'd0;
+  assign tx_phy_elecidle_4 = 1'd0;
+  assign tx_phy_lane_polarity_4 = 1'd0;
+  assign tx_phy_lane_powerdown_4 = 1'd0;
   end
   endgenerate
 
@@ -874,39 +801,31 @@ module avl_adxphy #(
   end
   endgenerate
 
-  assign tx_phy_s_4[0] = tx_phy_cal_busy_4;
-  assign tx_phy_s_4[1] = tx_phy_full_4;
-  assign tx_phy_s_4[2] = tx_phy_empty_4;
-  assign tx_phy_data_4 = tx_phy_d_4[31:0];
-  assign tx_phy_kchar_4 = tx_phy_d_4[35:32];
-  assign tx_phy_elecidle_4 = tx_phy_d_4[36];
-  assign tx_phy_lane_polarity_4 = tx_phy_d_4[37];
-  assign tx_phy_lane_powerdown_4 = tx_phy_d_4[38];
   assign tx_phy_bit_reversal_4 = tx_ip_bit_reversal;
   assign tx_phy_byte_reversal_4 = tx_ip_byte_reversal;
 
   generate
   if (NUM_OF_LANES > 5) begin
-  assign tx_core_cal_busy[5] = tx_ip_s_5[0];
-  assign tx_ip_cal_busy[5] = tx_ip_s_5[0];
-  assign tx_ip_full[5] = tx_ip_s_5[1];
-  assign tx_ip_empty[5] = tx_ip_s_5[2];
+  assign tx_core_cal_busy[5] = tx_phy_cal_busy_5;
+  assign tx_ip_cal_busy[5] = tx_phy_cal_busy_5;
+  assign tx_ip_full[5] = tx_phy_full_5;
+  assign tx_ip_empty[5] = tx_phy_empty_5;
   end
   endgenerate
 
   generate
   if (NUM_OF_LANES > 5) begin
-  assign tx_ip_d_5[31: 0] = tx_ip_data[((32*6)-1):(32*5)];
-  assign tx_ip_d_5[35:32] = tx_ip_kchar[((4*6)-1):(4*5)];
-  assign tx_ip_d_5[36:36] = tx_ip_elecidle[5];
-  assign tx_ip_d_5[37:37] = tx_ip_lane_polarity[5];
-  assign tx_ip_d_5[38:38] = tx_ip_lane_powerdown[5];
+  assign tx_phy_data_5 = tx_ip_data[((32*6)-1):(32*5)];
+  assign tx_phy_kchar_5 = tx_ip_kchar[((4*6)-1):(4*5)];
+  assign tx_phy_elecidle_5 = tx_ip_elecidle[5];
+  assign tx_phy_lane_polarity_5 = tx_ip_lane_polarity[5];
+  assign tx_phy_lane_powerdown_5 = tx_ip_lane_powerdown[5];
   end else begin
-  assign tx_ip_d_5[31: 0] = 32'd0;
-  assign tx_ip_d_5[35:32] = 4'd0;
-  assign tx_ip_d_5[36:36] = 1'd0;
-  assign tx_ip_d_5[37:37] = 1'd0;
-  assign tx_ip_d_5[38:38] = 1'd0;
+  assign tx_phy_data_5 = 32'd0;
+  assign tx_phy_kchar_5 = 4'd0;
+  assign tx_phy_elecidle_5 = 1'd0;
+  assign tx_phy_lane_polarity_5 = 1'd0;
+  assign tx_phy_lane_powerdown_5 = 1'd0;
   end
   endgenerate
 
@@ -920,39 +839,31 @@ module avl_adxphy #(
   end
   endgenerate
 
-  assign tx_phy_s_5[0] = tx_phy_cal_busy_5;
-  assign tx_phy_s_5[1] = tx_phy_full_5;
-  assign tx_phy_s_5[2] = tx_phy_empty_5;
-  assign tx_phy_data_5 = tx_phy_d_5[31:0];
-  assign tx_phy_kchar_5 = tx_phy_d_5[35:32];
-  assign tx_phy_elecidle_5 = tx_phy_d_5[36];
-  assign tx_phy_lane_polarity_5 = tx_phy_d_5[37];
-  assign tx_phy_lane_powerdown_5 = tx_phy_d_5[38];
   assign tx_phy_bit_reversal_5 = tx_ip_bit_reversal;
   assign tx_phy_byte_reversal_5 = tx_ip_byte_reversal;
 
   generate
   if (NUM_OF_LANES > 6) begin
-  assign tx_core_cal_busy[6] = tx_ip_s_6[0];
-  assign tx_ip_cal_busy[6] = tx_ip_s_6[0];
-  assign tx_ip_full[6] = tx_ip_s_6[1];
-  assign tx_ip_empty[6] = tx_ip_s_6[2];
+  assign tx_core_cal_busy[6] = tx_phy_cal_busy_6;
+  assign tx_ip_cal_busy[6] = tx_phy_cal_busy_6;
+  assign tx_ip_full[6] = tx_phy_full_6;
+  assign tx_ip_empty[6] = tx_phy_empty_6;
   end
   endgenerate
 
   generate
   if (NUM_OF_LANES > 6) begin
-  assign tx_ip_d_6[31: 0] = tx_ip_data[((32*7)-1):(32*6)];
-  assign tx_ip_d_6[35:32] = tx_ip_kchar[((4*7)-1):(4*6)];
-  assign tx_ip_d_6[36:36] = tx_ip_elecidle[6];
-  assign tx_ip_d_6[37:37] = tx_ip_lane_polarity[6];
-  assign tx_ip_d_6[38:38] = tx_ip_lane_powerdown[6];
+  assign tx_phy_data_6 = tx_ip_data[((32*7)-1):(32*6)];
+  assign tx_phy_kchar_6 = tx_ip_kchar[((4*7)-1):(4*6)];
+  assign tx_phy_elecidle_6 = tx_ip_elecidle[6];
+  assign tx_phy_lane_polarity_6 = tx_ip_lane_polarity[6];
+  assign tx_phy_lane_powerdown_6 = tx_ip_lane_powerdown[6];
   end else begin
-  assign tx_ip_d_6[31: 0] = 32'd0;
-  assign tx_ip_d_6[35:32] = 4'd0;
-  assign tx_ip_d_6[36:36] = 1'd0;
-  assign tx_ip_d_6[37:37] = 1'd0;
-  assign tx_ip_d_6[38:38] = 1'd0;
+  assign tx_phy_data_6 = 32'd0;
+  assign tx_phy_kchar_6 = 4'd0;
+  assign tx_phy_elecidle_6 = 1'd0;
+  assign tx_phy_lane_polarity_6 = 1'd0;
+  assign tx_phy_lane_powerdown_6 = 1'd0;
   end
   endgenerate
 
@@ -966,39 +877,31 @@ module avl_adxphy #(
   end
   endgenerate
 
-  assign tx_phy_s_6[0] = tx_phy_cal_busy_6;
-  assign tx_phy_s_6[1] = tx_phy_full_6;
-  assign tx_phy_s_6[2] = tx_phy_empty_6;
-  assign tx_phy_data_6 = tx_phy_d_6[31:0];
-  assign tx_phy_kchar_6 = tx_phy_d_6[35:32];
-  assign tx_phy_elecidle_6 = tx_phy_d_6[36];
-  assign tx_phy_lane_polarity_6 = tx_phy_d_6[37];
-  assign tx_phy_lane_powerdown_6 = tx_phy_d_6[38];
   assign tx_phy_bit_reversal_6 = tx_ip_bit_reversal;
   assign tx_phy_byte_reversal_6 = tx_ip_byte_reversal;
 
   generate
   if (NUM_OF_LANES > 7) begin
-  assign tx_core_cal_busy[7] = tx_ip_s_7[0];
-  assign tx_ip_cal_busy[7] = tx_ip_s_7[0];
-  assign tx_ip_full[7] = tx_ip_s_7[1];
-  assign tx_ip_empty[7] = tx_ip_s_7[2];
+  assign tx_core_cal_busy[7] = tx_phy_cal_busy_7;
+  assign tx_ip_cal_busy[7] = tx_phy_cal_busy_7;
+  assign tx_ip_full[7] = tx_phy_full_7;
+  assign tx_ip_empty[7] = tx_phy_empty_7;
   end
   endgenerate
 
   generate
   if (NUM_OF_LANES > 7) begin
-  assign tx_ip_d_7[31: 0] = tx_ip_data[((32*8)-1):(32*7)];
-  assign tx_ip_d_7[35:32] = tx_ip_kchar[((4*8)-1):(4*7)];
-  assign tx_ip_d_7[36:36] = tx_ip_elecidle[7];
-  assign tx_ip_d_7[37:37] = tx_ip_lane_polarity[7];
-  assign tx_ip_d_7[38:38] = tx_ip_lane_powerdown[7];
+  assign tx_phy_data_7 = tx_ip_data[((32*8)-1):(32*7)];
+  assign tx_phy_kchar_7 = tx_ip_kchar[((4*8)-1):(4*7)];
+  assign tx_phy_elecidle_7 = tx_ip_elecidle[7];
+  assign tx_phy_lane_polarity_7 = tx_ip_lane_polarity[7];
+  assign tx_phy_lane_powerdown_7 = tx_ip_lane_powerdown[7];
   end else begin
-  assign tx_ip_d_7[31: 0] = 32'd0;
-  assign tx_ip_d_7[35:32] = 4'd0;
-  assign tx_ip_d_7[36:36] = 1'd0;
-  assign tx_ip_d_7[37:37] = 1'd0;
-  assign tx_ip_d_7[38:38] = 1'd0;
+  assign tx_phy_data_7 = 32'd0;
+  assign tx_phy_kchar_7 = 4'd0;
+  assign tx_phy_elecidle_7 = 1'd0;
+  assign tx_phy_lane_polarity_7 = 1'd0;
+  assign tx_phy_lane_powerdown_7 = 1'd0;
   end
   endgenerate
 
@@ -1012,14 +915,6 @@ module avl_adxphy #(
   end
   endgenerate
 
-  assign tx_phy_s_7[0] = tx_phy_cal_busy_7;
-  assign tx_phy_s_7[1] = tx_phy_full_7;
-  assign tx_phy_s_7[2] = tx_phy_empty_7;
-  assign tx_phy_data_7 = tx_phy_d_7[31:0];
-  assign tx_phy_kchar_7 = tx_phy_d_7[35:32];
-  assign tx_phy_elecidle_7 = tx_phy_d_7[36];
-  assign tx_phy_lane_polarity_7 = tx_phy_d_7[37];
-  assign tx_phy_lane_powerdown_7 = tx_phy_d_7[38];
   assign tx_phy_bit_reversal_7 = tx_ip_bit_reversal;
   assign tx_phy_byte_reversal_7 = tx_ip_byte_reversal;
 
