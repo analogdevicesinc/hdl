@@ -45,110 +45,90 @@ add_fileset_file axi_dmac_constr.sdc      SDC     PATH axi_dmac_constr.sdc
 
 # parameters
 
+set group "General Configuration"
+
 add_parameter ID INTEGER 0
-set_parameter_property ID DEFAULT_VALUE 0
-set_parameter_property ID DISPLAY_NAME ID
-set_parameter_property ID TYPE INTEGER
-set_parameter_property ID UNITS None
+set_parameter_property ID DISPLAY_NAME "Core ID"
 set_parameter_property ID HDL_PARAMETER true
+set_parameter_property ID GROUP $group
 
-add_parameter DMA_DATA_WIDTH_SRC INTEGER 0
-set_parameter_property DMA_DATA_WIDTH_SRC DEFAULT_VALUE 64
-set_parameter_property DMA_DATA_WIDTH_SRC DISPLAY_NAME DMA_DATA_WIDTH_SRC
-set_parameter_property DMA_DATA_WIDTH_SRC TYPE INTEGER
-set_parameter_property DMA_DATA_WIDTH_SRC UNITS None
-set_parameter_property DMA_DATA_WIDTH_SRC HDL_PARAMETER true
-
-add_parameter DMA_DATA_WIDTH_DEST INTEGER 0
-set_parameter_property DMA_DATA_WIDTH_DEST DEFAULT_VALUE 64
-set_parameter_property DMA_DATA_WIDTH_DEST DISPLAY_NAME DMA_DATA_WIDTH_DEST
-set_parameter_property DMA_DATA_WIDTH_DEST TYPE INTEGER
-set_parameter_property DMA_DATA_WIDTH_DEST UNITS None
-set_parameter_property DMA_DATA_WIDTH_DEST HDL_PARAMETER true
-
-add_parameter DMA_LENGTH_WIDTH INTEGER 0
-set_parameter_property DMA_LENGTH_WIDTH DEFAULT_VALUE 24
-set_parameter_property DMA_LENGTH_WIDTH DISPLAY_NAME DMA_LENGTH_WIDTH
-set_parameter_property DMA_LENGTH_WIDTH TYPE INTEGER
-set_parameter_property DMA_LENGTH_WIDTH UNITS None
+add_parameter DMA_LENGTH_WIDTH INTEGER 24
+set_parameter_property DMA_LENGTH_WIDTH DISPLAY_NAME "DMA Transfer Length Register Width"
+set_parameter_property DMA_LENGTH_WIDTH UNITS Bits
 set_parameter_property DMA_LENGTH_WIDTH HDL_PARAMETER true
+set_parameter_property DMA_LENGTH_WIDTH ALLOWED_RANGES {8:32}
+set_parameter_property DMA_LENGTH_WIDTH GROUP $group
 
-add_parameter DMA_2D_TRANSFER INTEGER 0
-set_parameter_property DMA_2D_TRANSFER DEFAULT_VALUE 1
-set_parameter_property DMA_2D_TRANSFER DISPLAY_NAME DMA_2D_TRANSFER
-set_parameter_property DMA_2D_TRANSFER TYPE INTEGER
-set_parameter_property DMA_2D_TRANSFER UNITS None
+add_parameter FIFO_SIZE INTEGER 4
+set_parameter_property FIFO_SIZE DISPLAY_NAME "FIFO Size (In Bursts)"
+set_parameter_property FIFO_SIZE HDL_PARAMETER true
+set_parameter_property FIFO_SIZE GROUP $group
+
+foreach {suffix group} { \
+    "SRC" "Source" \
+    "DEST" "Destination" \
+  } {
+
+  add_display_item "Endpoint Configuration" $group "group"
+
+  add_parameter DMA_TYPE_$suffix INTEGER 0
+  set_parameter_property DMA_TYPE_$suffix DISPLAY_NAME "Type"
+  set_parameter_property DMA_TYPE_$suffix HDL_PARAMETER true
+  set_parameter_property DMA_TYPE_$suffix ALLOWED_RANGES \
+    { "0:Memory-Mapped AXI" "1:Streaming AXI" "2:FIFO Interface" }
+  set_parameter_property DMA_TYPE_$suffix GROUP $group
+
+  add_parameter DMA_DATA_WIDTH_$suffix INTEGER 64
+  set_parameter_property DMA_DATA_WIDTH_$suffix DISPLAY_NAME "Bus Width"
+  set_parameter_property DMA_DATA_WIDTH_$suffix UNITS Bits
+  set_parameter_property DMA_DATA_WIDTH_$suffix HDL_PARAMETER true
+  set_parameter_property DMA_DATA_WIDTH_$suffix ALLOWED_RANGES {16 32 64 128 256 512 1024}
+  set_parameter_property DMA_DATA_WIDTH_$suffix GROUP $group
+
+  add_parameter AXI_SLICE_$suffix INTEGER 0
+  set_parameter_property AXI_SLICE_$suffix DISPLAY_NAME "Insert Register Slice"
+  set_parameter_property AXI_SLICE_$suffix DISPLAY_HINT boolean
+  set_parameter_property AXI_SLICE_$suffix HDL_PARAMETER true
+  set_parameter_property AXI_SLICE_$suffix GROUP $group
+}
+
+# FIFO interface
+set_parameter_property DMA_TYPE_SRC DEFAULT_VALUE 2
+
+set group "Features"
+
+add_parameter CYCLIC INTEGER 1
+set_parameter_property CYCLIC DISPLAY_NAME "Cyclic Transfer Support"
+set_parameter_property CYCLIC DISPLAY_HINT boolean
+set_parameter_property CYCLIC HDL_PARAMETER true
+set_parameter_property CYCLIC GROUP $group
+
+add_parameter DMA_2D_TRANSFER INTEGER 1
+set_parameter_property DMA_2D_TRANSFER DISPLAY_NAME "2D Transfer Support"
+set_parameter_property DMA_2D_TRANSFER DISPLAY_HINT boolean
 set_parameter_property DMA_2D_TRANSFER HDL_PARAMETER true
-
-add_parameter ASYNC_CLK_REQ_SRC INTEGER 0
-set_parameter_property ASYNC_CLK_REQ_SRC DEFAULT_VALUE 1
-set_parameter_property ASYNC_CLK_REQ_SRC DISPLAY_NAME ASYNC_CLK_REQ_SRC
-set_parameter_property ASYNC_CLK_REQ_SRC TYPE INTEGER
-set_parameter_property ASYNC_CLK_REQ_SRC UNITS None
-set_parameter_property ASYNC_CLK_REQ_SRC HDL_PARAMETER true
-
-add_parameter ASYNC_CLK_SRC_DEST INTEGER 0
-set_parameter_property ASYNC_CLK_SRC_DEST DEFAULT_VALUE 1
-set_parameter_property ASYNC_CLK_SRC_DEST DISPLAY_NAME ASYNC_CLK_SRC_DEST
-set_parameter_property ASYNC_CLK_SRC_DEST TYPE INTEGER
-set_parameter_property ASYNC_CLK_SRC_DEST UNITS None
-set_parameter_property ASYNC_CLK_SRC_DEST HDL_PARAMETER true
-
-add_parameter ASYNC_CLK_DEST_REQ INTEGER 0
-set_parameter_property ASYNC_CLK_DEST_REQ DEFAULT_VALUE 1
-set_parameter_property ASYNC_CLK_DEST_REQ DISPLAY_NAME ASYNC_CLK_DEST_REQ
-set_parameter_property ASYNC_CLK_DEST_REQ TYPE INTEGER
-set_parameter_property ASYNC_CLK_DEST_REQ UNITS None
-set_parameter_property ASYNC_CLK_DEST_REQ HDL_PARAMETER true
-
-add_parameter AXI_SLICE_DEST INTEGER 0
-set_parameter_property AXI_SLICE_DEST DEFAULT_VALUE 0
-set_parameter_property AXI_SLICE_DEST DISPLAY_NAME AXI_SLICE_DEST
-set_parameter_property AXI_SLICE_DEST TYPE INTEGER
-set_parameter_property AXI_SLICE_DEST UNITS None
-set_parameter_property AXI_SLICE_DEST HDL_PARAMETER true
-
-add_parameter AXI_SLICE_SRC INTEGER 0
-set_parameter_property AXI_SLICE_SRC DEFAULT_VALUE 0
-set_parameter_property AXI_SLICE_SRC DISPLAY_NAME AXI_SLICE_SRC
-set_parameter_property AXI_SLICE_SRC TYPE INTEGER
-set_parameter_property AXI_SLICE_SRC UNITS None
-set_parameter_property AXI_SLICE_SRC HDL_PARAMETER true
+set_parameter_property DMA_2D_TRANSFER GROUP $group
 
 add_parameter SYNC_TRANSFER_START INTEGER 0
-set_parameter_property SYNC_TRANSFER_START DEFAULT_VALUE 0
-set_parameter_property SYNC_TRANSFER_START DISPLAY_NAME SYNC_TRANSFER_START
-set_parameter_property SYNC_TRANSFER_START TYPE INTEGER
-set_parameter_property SYNC_TRANSFER_START UNITS None
+set_parameter_property SYNC_TRANSFER_START DISPLAY_NAME "Transfer Start Synchronization Support"
+set_parameter_property SYNC_TRANSFER_START DISPLAY_HINT boolean
 set_parameter_property SYNC_TRANSFER_START HDL_PARAMETER true
+set_parameter_property SYNC_TRANSFER_START GROUP $group
 
-add_parameter CYCLIC INTEGER 0
-set_parameter_property CYCLIC DEFAULT_VALUE 1
-set_parameter_property CYCLIC DISPLAY_NAME CYCLIC
-set_parameter_property CYCLIC TYPE INTEGER
-set_parameter_property CYCLIC UNITS None
-set_parameter_property CYCLIC HDL_PARAMETER true
+set group "Clock Domain Configuration"
 
-add_parameter DMA_TYPE_DEST INTEGER 0
-set_parameter_property DMA_TYPE_DEST DEFAULT_VALUE 0
-set_parameter_property DMA_TYPE_DEST DISPLAY_NAME DMA_TYPE_DEST
-set_parameter_property DMA_TYPE_DEST TYPE INTEGER
-set_parameter_property DMA_TYPE_DEST UNITS None
-set_parameter_property DMA_TYPE_DEST HDL_PARAMETER true
+foreach {p name} { \
+    ASYNC_CLK_REQ_SRC "Request and Source" \
+    ASYNC_CLK_SRC_DEST "Source and Destination" \
+    ASYNC_CLK_DEST_REQ "Destination and Request" \
+  } {
 
-add_parameter DMA_TYPE_SRC INTEGER 0
-set_parameter_property DMA_TYPE_SRC DEFAULT_VALUE 2
-set_parameter_property DMA_TYPE_SRC DISPLAY_NAME DMA_TYPE_SRC
-set_parameter_property DMA_TYPE_SRC TYPE INTEGER
-set_parameter_property DMA_TYPE_SRC UNITS None
-set_parameter_property DMA_TYPE_SRC HDL_PARAMETER true
-
-add_parameter FIFO_SIZE INTEGER 0 "In bursts"
-set_parameter_property FIFO_SIZE DEFAULT_VALUE 4
-set_parameter_property FIFO_SIZE DISPLAY_NAME FIFO_SIZE
-set_parameter_property FIFO_SIZE TYPE INTEGER
-set_parameter_property FIFO_SIZE UNITS None
-set_parameter_property FIFO_SIZE HDL_PARAMETER true
+  add_parameter $p INTEGER 1
+  set_parameter_property $p DISPLAY_NAME [concat $name "Clock Asynchronous"]
+  set_parameter_property $p DISPLAY_HINT boolean
+  set_parameter_property $p HDL_PARAMETER true
+  set_parameter_property $p GROUP $group
+}
 
 # axi4 slave
 
