@@ -196,9 +196,6 @@ set_instance_parameter_value axi_ad9371_tx_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_ad9371_tx_dma {ASYNC_CLK_REQ_SRC} {1}
-set_instance_parameter_value axi_ad9371_tx_dma {ASYNC_CLK_SRC_DEST} {1}
-set_instance_parameter_value axi_ad9371_tx_dma {ASYNC_CLK_DEST_REQ} {1}
 set_instance_parameter_value axi_ad9371_tx_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {SYNC_TRANSFER_START} {0}
@@ -225,9 +222,6 @@ set_instance_parameter_value axi_ad9371_rx_dma {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_ad9371_rx_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9371_rx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_ad9371_rx_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_ad9371_rx_dma {ASYNC_CLK_REQ_SRC} {1}
-set_instance_parameter_value axi_ad9371_rx_dma {ASYNC_CLK_SRC_DEST} {1}
-set_instance_parameter_value axi_ad9371_rx_dma {ASYNC_CLK_DEST_REQ} {1}
 set_instance_parameter_value axi_ad9371_rx_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {SYNC_TRANSFER_START} {0}
@@ -251,9 +245,6 @@ set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_DATA_WIDTH_SRC} {64}
 set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_ad9371_rx_os_dma {ASYNC_CLK_REQ_SRC} {1}
-set_instance_parameter_value axi_ad9371_rx_os_dma {ASYNC_CLK_SRC_DEST} {1}
-set_instance_parameter_value axi_ad9371_rx_os_dma {ASYNC_CLK_DEST_REQ} {1}
 set_instance_parameter_value axi_ad9371_rx_os_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {SYNC_TRANSFER_START} {0}

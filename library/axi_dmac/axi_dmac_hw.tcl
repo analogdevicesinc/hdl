@@ -10,6 +10,7 @@ set_module_property VERSION 1.0
 set_module_property GROUP "Analog Devices"
 set_module_property DISPLAY_NAME axi_dmac
 set_module_property ELABORATION_CALLBACK axi_dmac_elaborate
+set_module_property VALIDATION_CALLBACK axi_dmac_validate
 
 # files
 
@@ -117,16 +118,56 @@ set_parameter_property SYNC_TRANSFER_START GROUP $group
 
 set group "Clock Domain Configuration"
 
+add_parameter AUTO_ASYNC_CLK BOOLEAN 1
+set_parameter_property AUTO_ASYNC_CLK DISPLAY_NAME "Automatically Detect Clock Domains"
+set_parameter_property AUTO_ASYNC_CLK HDL_PARAMETER false
+set_parameter_property AUTO_ASYNC_CLK GROUP $group
+
 foreach {p name} { \
     ASYNC_CLK_REQ_SRC "Request and Source" \
     ASYNC_CLK_SRC_DEST "Source and Destination" \
     ASYNC_CLK_DEST_REQ "Destination and Request" \
   } {
 
+  add_parameter ${p}_MANUAL INTEGER 1
+  set_parameter_property ${p}_MANUAL DISPLAY_NAME [concat $name "Clock Asynchronous"]
+  set_parameter_property ${p}_MANUAL DISPLAY_HINT boolean
+  set_parameter_property ${p}_MANUAL HDL_PARAMETER false
+  set_parameter_property ${p}_MANUAL VISIBLE false
+  set_parameter_property ${p}_MANUAL GROUP $group
+
   add_parameter $p INTEGER 1
   set_parameter_property $p DISPLAY_NAME [concat $name "Clock Asynchronous"]
   set_parameter_property $p DISPLAY_HINT boolean
   set_parameter_property $p HDL_PARAMETER true
+  set_parameter_property $p DERIVED true
+  set_parameter_property $p GROUP $group
+}
+
+add_parameter CLK_DOMAIN_REQ INTEGER
+set_parameter_property CLK_DOMAIN_REQ HDL_PARAMETER false
+set_parameter_property CLK_DOMAIN_REQ SYSTEM_INFO {CLOCK_DOMAIN s_axi_clock}
+set_parameter_property CLK_DOMAIN_REQ VISIBLE false
+set_parameter_property CLK_DOMAIN_REQ GROUP $group
+
+set src_clks { \
+  {CLK_DOMAIN_SRC_AXI m_src_axi_clock} \
+  {CLK_DOMAIN_SRC_SAXI if_s_axis_aclk} \
+  {CLK_DOMAIN_SRC_FIFO if_fifo_wr_clk} \
+}
+
+set dest_clks { \
+  {CLK_DOMAIN_DEST_AXI m_dest_axi_clock} \
+  {CLK_DOMAIN_DEST_SAXI if_m_axis_aclk} \
+  {CLK_DOMAIN_DEST_FIFO if_fifo_rd_clk} \
+}
+
+foreach domain [list {*}$src_clks {*}$dest_clks] {
+  lassign $domain p clk
+  add_parameter $p INTEGER
+  set_parameter_property $p HDL_PARAMETER false
+  set_parameter_property $p SYSTEM_INFO [list CLOCK_DOMAIN $clk]
+  set_parameter_property $p VISIBLE false
   set_parameter_property $p GROUP $group
 }
 
@@ -144,6 +185,47 @@ set_interface_property interrupt_sender CMSIS_SVD_VARIABLES ""
 set_interface_property interrupt_sender SVD_ADDRESS_GROUP ""
 
 add_interface_port interrupt_sender irq irq Output 1
+
+proc axi_dmac_validate {} {
+  set auto_clk [get_parameter_value AUTO_ASYNC_CLK]
+  set type_src [get_parameter_value DMA_TYPE_SRC]
+  set type_dest [get_parameter_value DMA_TYPE_DEST]
+
+  if {$auto_clk == true} {
+    global src_clks dest_clks
+
+    set req_domain [get_parameter_value CLK_DOMAIN_REQ]
+    set src_domain [get_parameter_value [lindex $src_clks $type_src 0]]
+    set dest_domain [get_parameter_value [lindex $dest_clks $type_dest 0]]
+
+    if {$req_domain != 0 && $req_domain == $src_domain} {
+      set_parameter_value ASYNC_CLK_REQ_SRC 0
+    } else {
+      set_parameter_value ASYNC_CLK_REQ_SRC 1
+    }
+
+    if {$src_domain != 0 && $src_domain == $dest_domain} {
+      set_parameter_value ASYNC_CLK_SRC_DEST 0
+    } else {
+      set_parameter_value ASYNC_CLK_SRC_DEST 1
+    }
+
+    if {$dest_domain != 0 && $dest_domain == $req_domain} {
+      set_parameter_value ASYNC_CLK_DEST_REQ 0
+    } else {
+      set_parameter_value ASYNC_CLK_DEST_REQ 1
+    }
+  } else {
+    foreach p {ASYNC_CLK_REQ_SRC ASYNC_CLK_SRC_DEST ASYNC_CLK_DEST_REQ} {
+      set_parameter_value $p [get_parameter_value ${p}_MANUAL]
+    }
+  }
+
+  foreach p {ASYNC_CLK_REQ_SRC ASYNC_CLK_SRC_DEST ASYNC_CLK_DEST_REQ} {
+    set_parameter_property ${p}_MANUAL VISIBLE [expr $auto_clk ? false : true]
+    set_parameter_property $p VISIBLE $auto_clk
+  }
+}
 
 # conditional interface
 
