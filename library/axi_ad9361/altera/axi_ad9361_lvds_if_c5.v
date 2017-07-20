@@ -93,7 +93,7 @@ module axi_ad9361_lvds_if_c5 (
 
   // internal registers
 
-  reg                 pll_rst = 'd0;
+  reg                 pll_rst = 1'd1;
   reg                 locked_int = 'd0;
   reg                 tx_core_enable_int = 'd0;
   reg                 tx_core_txnrx_int = 'd0;
