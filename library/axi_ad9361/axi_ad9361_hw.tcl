@@ -26,12 +26,9 @@ ad_ip_files axi_ad9361 [list\
   $ad_hdl_dir/library/common/up_dac_common.v \
   $ad_hdl_dir/library/common/up_dac_channel.v \
   $ad_hdl_dir/library/common/up_tdd_cntrl.v \
-  altera/axi_ad9361_serdes_clk.v \
-  altera/axi_ad9361_serdes_out.v \
-  altera/axi_ad9361_serdes_in.v \
-  altera/axi_ad9361_cmos_out.v \
-  altera/axi_ad9361_lvds_if.v \
+  altera/axi_ad9361_lvds_if_10.v \
   altera/axi_ad9361_lvds_if_c5.v \
+  altera/axi_ad9361_lvds_if.v \
   altera/axi_ad9361_cmos_if.v \
   axi_ad9361_rx_pnmon.v \
   axi_ad9361_rx_channel.v \
@@ -171,33 +168,31 @@ proc axi_ad9361_elab {} {
 
   if {$m_device_family eq "Arria 10"} {
 
-    add_hdl_instance axi_ad9361_serdes_clk_core alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_clk_core {DEVICE_FAMILY} $m_device_family
-    set_instance_parameter_value axi_ad9361_serdes_clk_core {MODE} {CLK}
-    set_instance_parameter_value axi_ad9361_serdes_clk_core {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_clk_core {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_clk_core {CLKIN_FREQUENCY} {250.0}
+    add_hdl_instance axi_ad9361_serdes_clk alt_serdes
+    set_instance_parameter_value axi_ad9361_serdes_clk {DEVICE_FAMILY} $m_device_family
+    set_instance_parameter_value axi_ad9361_serdes_clk {MODE} {CLK}
+    set_instance_parameter_value axi_ad9361_serdes_clk {DDR_OR_SDR_N} {1}
+    set_instance_parameter_value axi_ad9361_serdes_clk {SERDES_FACTOR} {4}
+    set_instance_parameter_value axi_ad9361_serdes_clk {CLKIN_FREQUENCY} {250.0}
  
-    add_hdl_instance axi_ad9361_serdes_in_core alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_in_core {DEVICE_FAMILY} $m_device_family
-    set_instance_parameter_value axi_ad9361_serdes_in_core {MODE} {IN}
-    set_instance_parameter_value axi_ad9361_serdes_in_core {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_in_core {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_in_core {CLKIN_FREQUENCY} {250.0}
+    add_hdl_instance axi_ad9361_serdes_in alt_serdes
+    set_instance_parameter_value axi_ad9361_serdes_in {DEVICE_FAMILY} $m_device_family
+    set_instance_parameter_value axi_ad9361_serdes_in {MODE} {IN}
+    set_instance_parameter_value axi_ad9361_serdes_in {DDR_OR_SDR_N} {1}
+    set_instance_parameter_value axi_ad9361_serdes_in {SERDES_FACTOR} {4}
+    set_instance_parameter_value axi_ad9361_serdes_in {CLKIN_FREQUENCY} {250.0}
  
-    add_hdl_instance axi_ad9361_serdes_out_core alt_serdes
-    set_instance_parameter_value axi_ad9361_serdes_out_core {DEVICE_FAMILY} $m_device_family
-    set_instance_parameter_value axi_ad9361_serdes_out_core {MODE} {OUT}
-    set_instance_parameter_value axi_ad9361_serdes_out_core {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_serdes_out_core {SERDES_FACTOR} {4}
-    set_instance_parameter_value axi_ad9361_serdes_out_core {CLKIN_FREQUENCY} {250.0}
- 
-    add_hdl_instance axi_ad9361_cmos_out_core alt_serdes
-    set_instance_parameter_value axi_ad9361_cmos_out_core {DEVICE_FAMILY} $m_device_family
-    set_instance_parameter_value axi_ad9361_cmos_out_core {MODE} {OUT}
-    set_instance_parameter_value axi_ad9361_cmos_out_core {DDR_OR_SDR_N} {1}
-    set_instance_parameter_value axi_ad9361_cmos_out_core {SERDES_FACTOR} {2}
-    set_instance_parameter_value axi_ad9361_cmos_out_core {CLKIN_FREQUENCY} {250.0}
+    add_hdl_instance axi_ad9361_serdes_out alt_serdes
+    set_instance_parameter_value axi_ad9361_serdes_out {DEVICE_FAMILY} $m_device_family
+    set_instance_parameter_value axi_ad9361_serdes_out {MODE} {OUT}
+    set_instance_parameter_value axi_ad9361_serdes_out {DDR_OR_SDR_N} {1}
+    set_instance_parameter_value axi_ad9361_serdes_out {SERDES_FACTOR} {4}
+    set_instance_parameter_value axi_ad9361_serdes_out {CLKIN_FREQUENCY} {250.0}
+
+    add_hdl_instance axi_ad9361_data_out altera_gpio
+    set_instance_parameter_value axi_ad9361_data_out {PIN_TYPE_GUI} {Output}
+    set_instance_parameter_value axi_ad9361_data_out {SIZE} {1}
+    set_instance_parameter_value axi_ad9361_data_out {gui_io_reg_mode} {DDIO}
   }
 
   add_interface device_if conduit end
