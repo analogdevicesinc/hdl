@@ -17,7 +17,6 @@ M_DEPS += rx.v
 M_DEPS += rx_cgs.v
 M_DEPS += rx_ctrl.v
 M_DEPS += rx_lane.v
-M_DEPS += set_propertyPROCESSING_ORDERLATEipx::get_filesjesd204_rx_constr.xdc
 
 M_DEPS += ../../jesd204/jesd204_common/jesd204_common.xpr
 
