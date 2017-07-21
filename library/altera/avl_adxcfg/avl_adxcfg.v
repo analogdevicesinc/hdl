@@ -111,7 +111,7 @@ module avl_adxcfg (
       rcfg_write_int <= 1'd0;
       rcfg_address_int <= 10'd0;
       rcfg_writedata_int <= 32'd0;
-      rcfg_readdata_int = 32'd0;
+      rcfg_readdata_int <= 32'd0;
       rcfg_waitrequest_int_0 <= 1'b1;
       rcfg_waitrequest_int_1 <= 1'b1;
     end else begin
@@ -123,7 +123,7 @@ module avl_adxcfg (
           rcfg_address_int <= 10'd0;
           rcfg_writedata_int <= 32'd0;
         end
-        rcfg_readdata_int = rcfg_readdata_s;
+        rcfg_readdata_int <= rcfg_readdata_s;
         rcfg_waitrequest_int_0 <= rcfg_waitrequest_s | rcfg_select[0];
         rcfg_waitrequest_int_1 <= rcfg_waitrequest_s | ~rcfg_select[0];
       end else if ((rcfg_in_read_0 == 1'b1) || (rcfg_in_write_0 == 1'b1)) begin
@@ -132,7 +132,7 @@ module avl_adxcfg (
         rcfg_write_int <= rcfg_in_write_0;
         rcfg_address_int <= rcfg_in_address_0;
         rcfg_writedata_int <= rcfg_in_writedata_0;
-        rcfg_readdata_int = 32'd0;
+        rcfg_readdata_int <= 32'd0;
         rcfg_waitrequest_int_0 <= 1'b1;
         rcfg_waitrequest_int_1 <= 1'b1;
       end else if ((rcfg_in_read_1 == 1'b1) || (rcfg_in_write_1 == 1'b1)) begin
@@ -141,7 +141,7 @@ module avl_adxcfg (
         rcfg_write_int <= rcfg_in_write_1;
         rcfg_address_int <= rcfg_in_address_1;
         rcfg_writedata_int <= rcfg_in_writedata_1;
-        rcfg_readdata_int = 32'd0;
+        rcfg_readdata_int <= 32'd0;
         rcfg_waitrequest_int_0 <= 1'b1;
         rcfg_waitrequest_int_1 <= 1'b1;
       end else begin
@@ -150,7 +150,7 @@ module avl_adxcfg (
         rcfg_write_int <= 1'd0;
         rcfg_address_int <= 10'd0;
         rcfg_writedata_int <= 32'd0;
-        rcfg_readdata_int = 32'd0;
+        rcfg_readdata_int <= 32'd0;
         rcfg_waitrequest_int_0 <= 1'b1;
         rcfg_waitrequest_int_1 <= 1'b1;
       end
