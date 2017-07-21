@@ -106,6 +106,7 @@ localparam PCORE_MAGIC = 32'h32303452; // 204R
 reg [31:0] up_rdata = 'h0;
 reg up_wack = 1'b0;
 reg up_rack = 1'b0;
+reg up_rreq_d1 = 1'b0;
 wire up_wreq;
 wire up_rreq;
 wire [31:0] up_wdata;
@@ -243,6 +244,7 @@ jesd204_up_rx #(
   .core_clk(core_clk),
   .core_reset(core_reset),
 
+  .up_rreq(up_rreq),
   .up_raddr(up_raddr),
   .up_rdata(up_rdata_rx),
   .up_wreq(up_wreq),
@@ -266,8 +268,12 @@ jesd204_up_rx #(
 
 always @(posedge s_axi_aclk) begin
   up_wack <= up_wreq;
-  up_rack <= up_rreq;
-  if (up_rreq == 1'b1) begin
+
+  // ILAS memory takes one clock cycle before the data is ready, hence the extra
+  // delay.
+  up_rreq_d1 <= up_rreq;
+  up_rack <= up_rreq_d1;
+  if (up_rreq_d1 == 1'b1) begin
     up_rdata <= up_rdata_common | up_rdata_sysref | up_rdata_rx;
   end
 end

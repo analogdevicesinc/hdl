@@ -49,6 +49,7 @@ module jesd204_up_rx # (
   input up_reset,
   input up_reset_synchronizer,
 
+  input up_rreq,
   input [11:0] up_raddr,
   output reg [31:0] up_rdata,
   input up_wreq,
@@ -148,6 +149,7 @@ generate for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
       .up_clk(up_clk),
       .up_reset_synchronizer(up_reset_synchronizer),
 
+      .up_rreq(up_rreq),
       .up_raddr(up_raddr[2:0]),
       .up_rdata(up_lane_rdata[i]),
 

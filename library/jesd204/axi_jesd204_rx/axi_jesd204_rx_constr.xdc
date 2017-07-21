@@ -96,8 +96,8 @@ set_false_path \
   -to [get_pins {i_up_rx/*i_up_rx_lane/i_ilas_mem/i_cdc_ilas_ready/cdc_sync_stage1_reg[0]/D}]
 
 set_max_delay -datapath_only \
-  -from [get_pins {i_up_rx/*i_up_rx_lane/i_ilas_mem/*mem_reg*/CLK}] \
-  -to [get_pins {up_rdata_reg[*]/D}] \
+ -from [get_pins {i_up_rx/gen_lane[*].i_up_rx_lane/i_ilas_mem/mem_reg_*/*/CLK}] \
+ -to [get_pins {i_up_rx/gen_lane[*].i_up_rx_lane/i_ilas_mem/up_rdata_reg[*]/D}] \
   [get_property -min PERIOD $axi_clk]
 
 set_false_path \
