@@ -86,7 +86,12 @@ ad_connect  gpio_o sys_ps8/emio_gpio_o
 
 # spi
 
-ad_connect  sys_ps8/emio_spi0_ss_o_n spi0_csn
+ad_ip_instance xlconcat spi0_csn_concat
+ad_ip_parameter spi0_csn_concat CONFIG.NUM_PORTS 3
+ad_connect  sys_ps8/emio_spi0_ss_o_n spi0_csn_concat/In0
+ad_connect  sys_ps8/emio_spi0_ss1_o_n spi0_csn_concat/In1
+ad_connect  sys_ps8/emio_spi0_ss2_o_n spi0_csn_concat/In2
+ad_connect  spi0_csn_concat/dout spi0_csn
 ad_connect  sys_ps8/emio_spi0_sclk_o spi0_sclk
 ad_connect  sys_ps8/emio_spi0_m_o spi0_mosi
 ad_connect  sys_ps8/emio_spi0_m_i spi0_miso
@@ -94,7 +99,12 @@ ad_connect  sys_ps8/emio_spi0_ss_i_n VCC
 ad_connect  sys_ps8/emio_spi0_sclk_i GND
 ad_connect  sys_ps8/emio_spi0_s_i GND
 
-ad_connect  sys_ps8/emio_spi1_ss_o_n spi1_csn
+ad_ip_instance xlconcat spi1_csn_concat
+ad_ip_parameter spi1_csn_concat CONFIG.NUM_PORTS 3
+ad_connect  sys_ps8/emio_spi1_ss_o_n spi1_csn_concat/In0
+ad_connect  sys_ps8/emio_spi1_ss1_o_n spi1_csn_concat/In1
+ad_connect  sys_ps8/emio_spi1_ss2_o_n spi1_csn_concat/In2
+ad_connect  spi1_csn_concat/dout spi1_csn
 ad_connect  sys_ps8/emio_spi1_sclk_o spi1_sclk
 ad_connect  sys_ps8/emio_spi1_m_o spi1_mosi
 ad_connect  sys_ps8/emio_spi1_m_i spi1_miso
