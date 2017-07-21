@@ -95,6 +95,7 @@ module axi_ad9361_lvds_if #(
 
   input                   mmcm_rst,
   input                   up_clk,
+  input                   up_rstn,
   input                   up_enable,
   input                   up_txnrx,
   input       [ 6:0]      up_adc_dld,
