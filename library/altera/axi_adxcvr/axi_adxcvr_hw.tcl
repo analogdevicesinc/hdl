@@ -52,7 +52,7 @@ add_interface s_axi axi4lite end
 set_interface_property s_axi associatedClock s_axi_clock
 set_interface_property s_axi associatedReset s_axi_reset
 add_interface_port s_axi s_axi_awvalid awvalid Input 1
-add_interface_port s_axi s_axi_awaddr awaddr Input 16
+add_interface_port s_axi s_axi_awaddr awaddr Input 12
 add_interface_port s_axi s_axi_awprot awprot Input 3
 add_interface_port s_axi s_axi_awready awready Output 1
 add_interface_port s_axi s_axi_wvalid wvalid Input 1
@@ -63,7 +63,7 @@ add_interface_port s_axi s_axi_bvalid bvalid Output 1
 add_interface_port s_axi s_axi_bresp bresp Output 2
 add_interface_port s_axi s_axi_bready bready Input 1
 add_interface_port s_axi s_axi_arvalid arvalid Input 1
-add_interface_port s_axi s_axi_araddr araddr Input 16
+add_interface_port s_axi s_axi_araddr araddr Input 12
 add_interface_port s_axi s_axi_arprot arprot Input 3
 add_interface_port s_axi s_axi_arready arready Output 1
 add_interface_port s_axi s_axi_rvalid rvalid Output 1
