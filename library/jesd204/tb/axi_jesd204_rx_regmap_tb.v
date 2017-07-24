@@ -49,6 +49,9 @@ module axi_jesd204_rx_tb;
   `define TIMEOUT 1000000
   `include "tb_base.v"
 
+  reg core_clk = 1'b0;
+  always @(*) #4 core_clk <= ~core_clk;
+
   wire s_axi_aclk = clk;
   wire s_axi_aresetn = ~reset;
 
@@ -206,6 +209,51 @@ module axi_jesd204_rx_tb;
   end
   endtask
 
+  /* ILAS memory */
+
+  reg core_ilas_config_valid = 1'b0;
+  reg [1:0] core_ilas_config_addr = 2'b00;
+  wire [NUM_LANES*32-1:0] core_ilas_config_data;
+
+  generate
+  genvar l;
+  for (l = 0; l < NUM_LANES; l = l + 1) begin
+    localparam [3:0] l2 = l;
+    assign core_ilas_config_data[32*l+31:32*l] = {
+      l2,core_ilas_config_addr,2'h3,
+      l2,core_ilas_config_addr,2'h2,
+      l2,core_ilas_config_addr,2'h1,
+      l2,core_ilas_config_addr,2'h0
+    };
+  end
+  endgenerate
+
+  task set_ilas_registers;
+  integer i;
+  reg [3:0] lane;
+  begin
+    for (i = 0; i < 4; i = i + 1) begin
+      @(posedge core_clk)
+      core_ilas_config_valid <= 1'b1;
+      core_ilas_config_addr <= i;
+    end
+    @(posedge core_clk)
+    core_ilas_config_valid <= 1'b0;
+    core_ilas_config_addr <= 0;
+    @(posedge core_clk) #0;
+
+    /* Update the expected values */
+    for (i = 0; i < NUM_LANES * 'h20; i = i + 'h20) begin
+      lane = i / 20;;
+      set_reset_reg_value('h300 + i, 'h20);
+      set_reset_reg_value('h310 + i, 'h03020100 | {4{lane,4'h0}});
+      set_reset_reg_value('h314 + i, 'h07060504 | {4{lane,4'h0}});
+      set_reset_reg_value('h318 + i, 'h0b0a0908 | {4{lane,4'h0}});
+      set_reset_reg_value('h31c + i, 'h0f0e0d0c | {4{lane,4'h0}});
+    end
+  end
+  endtask
+
   integer i;
   initial begin
     initialize_expected_reg_mem();
@@ -246,6 +294,10 @@ module axi_jesd204_rx_tb;
 
     check_all_registers();
 
+    /* Check ILAS */
+    set_ilas_registers();
+    check_all_registers();
+
     /* Check that reset works for all registers */
     do_trigger_reset();
     initialize_expected_reg_mem();
@@ -254,9 +306,6 @@ module axi_jesd204_rx_tb;
     do_trigger_reset();
     check_all_registers();
   end
-
-  reg core_clk = 1'b0;
-  always @(*) #4 core_clk <= ~core_clk;
 
   axi_jesd204_rx #(
     .NUM_LANES(NUM_LANES)
@@ -285,9 +334,9 @@ module axi_jesd204_rx_tb;
 
     .core_clk(core_clk),
 
-    .core_ilas_config_valid({NUM_LANES{1'b0}}),
-    .core_ilas_config_addr({NUM_LANES{2'b00}}),
-    .core_ilas_config_data({NUM_LANES{32'h00}}),
+    .core_ilas_config_valid({NUM_LANES{core_ilas_config_valid}}),
+    .core_ilas_config_addr({NUM_LANES{core_ilas_config_addr}}),
+    .core_ilas_config_data(core_ilas_config_data),
 
     .core_event_sysref_alignment_error(1'b0),
     .core_event_sysref_edge(1'b0),
