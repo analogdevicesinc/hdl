@@ -318,7 +318,7 @@ module axi_ad9361_lvds_if #(
     if (rx_frame_d == rx_frame_s) begin
       adc_status_p <= locked_s;
     end else begin
-      adc_status_p <= 1'b1;
+      adc_status_p <= 1'b0;
     end
   end
 

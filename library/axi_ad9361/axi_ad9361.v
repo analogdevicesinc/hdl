@@ -311,10 +311,6 @@ module axi_ad9361 #(
   assign tx_data_out_p = 6'h00;
   assign tx_data_out_n = 6'h3f;
 
-  assign up_drp_rdata = 32'd0;
-  assign up_drp_ready = 1'd0;
-  assign up_drp_locked = 1'd1;
-
   axi_ad9361_cmos_if #(
     .DEVICE_TYPE (DEVICE_TYPE),
     .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
@@ -345,6 +341,7 @@ module axi_ad9361 #(
     .tdd_mode (tdd_mode_s),
     .mmcm_rst (mmcm_rst),
     .up_clk (up_clk),
+    .up_rstn (up_rstn),
     .up_enable (up_enable),
     .up_txnrx (up_txnrx),
     .up_adc_dld (up_adc_dld_s),
@@ -355,7 +352,14 @@ module axi_ad9361 #(
     .up_dac_drdata (up_dac_drdata_s),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
-    .delay_locked (delay_locked_s));
+    .delay_locked (delay_locked_s),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked(up_drp_locked));
   end
   endgenerate
 
