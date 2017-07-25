@@ -11,6 +11,7 @@ SOURCE+=" ../../common/up_clock_mon.v"
 SOURCE+=" ../../common/up_axi.v"
 SOURCE+=" ../../util_cdc/sync_bits.v"
 SOURCE+=" ../../util_cdc/sync_data.v"
+SOURCE+=" ../../util_cdc/sync_event.v"
 
 cd `dirname $0`
 source run_tb.sh
