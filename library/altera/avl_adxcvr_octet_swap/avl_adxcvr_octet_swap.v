@@ -33,48 +33,36 @@
 // ***************************************************************************
 // ***************************************************************************
 
-`timescale 1ns/100ps
+module avl_adxcvr_octet_swap #(
+  parameter NUM_OF_LANES = 1
+) (
+  input clk,
+  input reset,
 
-module ad_xcvr_rx_if (
+  input in_valid,
+  output in_ready,
+  input [NUM_OF_LANES*32-1:0] in_data,
+  input [3:0] in_sof,
 
-  // jesd interface
+  output out_valid,
+  input out_ready,
+  output [NUM_OF_LANES*32-1:0] out_data,
+  output [3:0] out_sof
+);
 
-  input                   rx_clk,
-  input       [ 3:0]      rx_ip_sof,
-  input       [31:0]      rx_ip_data,
-  output  reg             rx_sof,
-  output  reg [31:0]      rx_data);
+assign in_ready = out_ready;
+assign out_valid = in_valid;
 
+generate
+  genvar i;
+  genvar j;
 
-  // internal registers
-
-  reg     [31:0]  rx_ip_data_d = 'd0;
-  reg     [ 3:0]  rx_ip_sof_hold = 'd0;
-  reg             rx_ip_sof_d = 'd0;
-
-  // dword may contain more than one frame per clock
-
-  always @(posedge rx_clk) begin
-    rx_ip_data_d <= rx_ip_data;
-    rx_ip_sof_d <= rx_ip_sof;
-    if (rx_ip_sof != 4'h0) begin
-      rx_ip_sof_hold <= rx_ip_sof;
+  for (j = 0; j < 4; j = j + 1) begin: gen_octet
+    for (i = 0; i < NUM_OF_LANES; i = i + 1) begin: gen_lane
+      assign out_data[i*32+j*8+7:i*32+j*8] = in_data[i*32+(3-j)*8+7:i*32+(3-j)*8];
     end
-    rx_sof <= |rx_ip_sof_d;
-    if (rx_ip_sof_hold[0] == 1'b1) begin
-      rx_data <= rx_ip_data;
-    end else if (rx_ip_sof_hold[1] == 1'b1) begin
-      rx_data <= {rx_ip_data[ 7:0], rx_ip_data_d[31: 8]};
-    end else if (rx_ip_sof_hold[2] == 1'b1) begin
-      rx_data <= {rx_ip_data[15:0], rx_ip_data_d[31:16]};
-    end else if (rx_ip_sof_hold[3] == 1'b1) begin
-      rx_data <= {rx_ip_data[23:0], rx_ip_data_d[31:24]};
-    end else begin
-      rx_data <= 32'd0;
-    end
+    assign out_sof[j] = in_sof[3-j];
   end
+endgenerate
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************

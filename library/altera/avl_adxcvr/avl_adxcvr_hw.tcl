@@ -100,6 +100,12 @@ proc p_avl_adxcvr {} {
   add_interface core_clk clock source
   set_interface_property core_clk EXPORT_OF alt_core_clk.out_clk
 
+  add_instance octet_swap avl_adxcvr_octet_swap
+  set_instance_parameter_value octet_swap NUM_OF_LANES $m_num_of_lanes
+  set_instance_parameter_value octet_swap TX_OR_RX_N m_tx_or_rx_n
+  add_connection alt_core_pll.outclk0 octet_swap.clock
+  add_connection alt_sys_clk.clk_reset octet_swap.reset
+
   if {$m_tx_or_rx_n == 1} {
 
     add_instance alt_rst_cntrol altera_xcvr_reset_control
@@ -151,8 +157,11 @@ proc p_avl_adxcvr {} {
     set_instance_parameter_value alt_ip {HD} $m_hd
     add_connection alt_core_pll.outclk0 alt_ip.txlink_clk
     add_connection alt_sys_clk.clk_reset alt_ip.txlink_rst_n
+
+    add_connection octet_swap.out alt_ip.jesd204_tx_link
     add_interface ip_data avalon_streaming sink
-    set_interface_property ip_data EXPORT_OF alt_ip.jesd204_tx_link
+    set_interface_property ip_data EXPORT_OF octet_swap.in
+
     add_connection alt_sys_clk.clk alt_ip.jesd204_tx_avs_clk
     add_connection alt_sys_clk.clk_reset alt_ip.jesd204_tx_avs_rst_n
     add_interface ip_reconfig avalon slave
@@ -259,10 +268,15 @@ proc p_avl_adxcvr {} {
     set_instance_parameter_value alt_ip {HD} $m_hd
     add_connection alt_core_pll.outclk0 alt_ip.rxlink_clk
     add_connection alt_sys_clk.clk_reset alt_ip.rxlink_rst_n
+
+    add_connection alt_ip.sof octet_swap.in_sof
     add_interface ip_sof conduit end
-    set_interface_property ip_sof EXPORT_OF alt_ip.sof
+    set_interface_property ip_sof EXPORT_OF octet_swap.out_sof
+
+    add_connection alt_ip.jesd204_rx_link octet_swap.in
     add_interface ip_data avalon_streaming source
-    set_interface_property ip_data EXPORT_OF alt_ip.jesd204_rx_link
+    set_interface_property ip_data EXPORT_OF octet_swap.out
+
     add_connection alt_sys_clk.clk alt_ip.jesd204_rx_avs_clk
     add_connection alt_sys_clk.clk_reset alt_ip.jesd204_rx_avs_rst_n
     add_interface ip_reconfig avalon slave

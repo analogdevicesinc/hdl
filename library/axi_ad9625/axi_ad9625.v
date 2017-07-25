@@ -38,7 +38,6 @@
 module axi_ad9625 #(
 
   parameter ID = 0,
-  parameter DEVICE_TYPE = 0,
   parameter IO_DELAY_GROUP = "adc_if_delay_group") (
 
   // jesd interface
@@ -142,7 +141,6 @@ module axi_ad9625 #(
 
   axi_ad9625_if #(
     .ID (ID),
-    .DEVICE_TYPE (DEVICE_TYPE))
   i_if (
     .rx_clk (rx_clk),
     .rx_sof (rx_sof),

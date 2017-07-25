@@ -38,7 +38,6 @@
 module axi_ad9371 #(
 
   parameter   ID = 0,
-  parameter   DEVICE_TYPE = 0,
   parameter   DAC_DATAPATH_DISABLE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0) (
 
@@ -186,9 +185,7 @@ module axi_ad9371 #(
 
   // device interface
 
-  axi_ad9371_if #(
-    .DEVICE_TYPE (DEVICE_TYPE))
-  i_if (
+  axi_ad9371_if i_if (
     .adc_clk (adc_clk),
     .adc_rx_sof (adc_rx_sof),
     .adc_rx_data (adc_rx_data),

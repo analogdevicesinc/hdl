@@ -36,9 +36,8 @@
 `timescale 1ns/100ps
 
 module axi_ad9250 #(
-
-  parameter ID = 0,
-  parameter DEVICE_TYPE = 0) (
+  parameter ID = 0
+) (
 
   // jesd interface
   // rx_clk is (line-rate/40)
@@ -156,7 +155,7 @@ module axi_ad9250 #(
 
   // main (device interface)
 
-  axi_ad9250_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
+  axi_ad9250_if i_if (
     .rx_clk (rx_clk),
     .rx_sof (rx_sof),
     .rx_data (rx_data),

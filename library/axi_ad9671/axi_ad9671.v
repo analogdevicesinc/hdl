@@ -38,7 +38,6 @@
 module axi_ad9671 #(
 
   parameter ID = 0,
-  parameter DEVICE_TYPE = 0,
   parameter QUAD_OR_DUAL_N = 1) (
 
   // jesd interface
@@ -157,8 +156,7 @@ module axi_ad9671 #(
 
   axi_ad9671_if #(
     .QUAD_OR_DUAL_N (QUAD_OR_DUAL_N),
-    .ID (ID),
-    .DEVICE_TYPE (DEVICE_TYPE))
+    .ID (ID)
   i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),

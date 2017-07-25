@@ -38,8 +38,7 @@
 module axi_ad9152 #(
 
   parameter   ID = 0,
-  parameter   DAC_DATAPATH_DISABLE = 0,
-  parameter   DEVICE_TYPE = 0) (
+  parameter   DAC_DATAPATH_DISABLE = 0) (
 
   // jesd interface
   // tx_clk is (line-rate/40)
@@ -119,7 +118,7 @@ module axi_ad9152 #(
 
   // device interface
 
-  axi_ad9152_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
+  axi_ad9152_if i_if (
     .tx_clk (tx_clk),
     .tx_data (tx_data),
     .dac_clk (dac_clk),

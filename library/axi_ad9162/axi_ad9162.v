@@ -38,7 +38,6 @@
 module axi_ad9162 #(
 
   parameter   ID = 0,
-  parameter   DEVICE_TYPE = 0,
   parameter   DAC_DATAPATH_DISABLE = 0) (
 
     // jesd interface
@@ -119,7 +118,7 @@ module axi_ad9162 #(
     
     // device interface
     
-    axi_ad9162_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
+    axi_ad9162_if i_if (
       .tx_clk (tx_clk),
       .tx_data (tx_data),
       .dac_clk (dac_clk),

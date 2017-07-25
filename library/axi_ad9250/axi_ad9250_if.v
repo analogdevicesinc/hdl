@@ -35,9 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad9250_if #(
-
-  parameter DEVICE_TYPE = 0) (
+module axi_ad9250_if (
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -101,7 +99,7 @@ module axi_ad9250_if #(
 
   generate
   for (n = 0; n < 2; n = n + 1) begin: g_xcvr_if
-  ad_xcvr_rx_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_xcvr_if (
+  ad_xcvr_rx_if i_xcvr_if (
     .rx_clk (rx_clk),
     .rx_ip_sof (rx_sof),
     .rx_ip_data (rx_data[((n*32)+31):(n*32)]),

@@ -38,7 +38,6 @@
 module axi_ad9144 #(
 
   parameter   ID = 0,
-  parameter   DEVICE_TYPE = 0,
   parameter   QUAD_OR_DUAL_N = 1,
   parameter   DAC_DATAPATH_DISABLE = 0) (
 
@@ -139,7 +138,7 @@ module axi_ad9144 #(
 
   // device interface
 
-  axi_ad9144_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
+  axi_ad9144_if i_if (
     .tx_clk (tx_clk),
     .tx_data (tx_data_s),
     .dac_clk (dac_clk),
