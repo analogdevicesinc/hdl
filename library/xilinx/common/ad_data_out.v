@@ -91,6 +91,7 @@ module ad_data_out #(
   if (IODELAY_CTRL_ENABLED == 0) begin
   assign delay_locked = 1'b1;
   end else begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
   IDELAYCTRL #(.SIM_DEVICE (IODELAY_CTRL_SIM_DEVICE)) i_delay_ctrl (
     .RST (delay_rst),
     .REFCLK (delay_clk),
