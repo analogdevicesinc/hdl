@@ -170,6 +170,7 @@ module axi_ad9361_lvds_if #(
 
   // internal signals
 
+  wire    [ 3:0]      rx_frame_d_s;
   wire    [ 5:0]      rx_data_1_s;
   wire    [ 5:0]      rx_data_0_s;
   wire    [ 1:0]      rx_frame_s;
@@ -211,12 +212,14 @@ module axi_ad9361_lvds_if #(
 
   // frame check
  
+  assign rx_frame_d_s = {rx_frame_s, rx_frame};
+
   always @(posedge l_clk) begin
     if (rx_valid == 1'd1) begin
       if (rx_r1_mode == 1'd1) begin
-        rx_frame_d <= {rx_frame_s, rx_frame};
+        rx_frame_d <= rx_frame_d_s;
       end else begin
-        rx_frame_d <= {~rx_frame_s, ~rx_frame};
+        rx_frame_d <= ~rx_frame_d_s;
       end
     end
   end
@@ -323,7 +326,7 @@ module axi_ad9361_lvds_if #(
  
   always @(posedge l_clk) begin
     if (rx_valid == 1'b1) begin
-      if (rx_frame_d == rx_frame_s) begin
+      if (rx_frame_d == rx_frame_d_s) begin
         adc_status_p <= rx_locked;
       end else begin
         adc_status_p <= 1'b0;
