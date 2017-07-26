@@ -127,7 +127,7 @@ module axi_ad9467_if #(
 
   generate
   for (l_inst = 0; l_inst <= 7; l_inst = l_inst + 1) begin : g_adc_if
-  ad_lvds_in #(
+  ad_data_in #(
     .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_CTRL (0),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -149,7 +149,7 @@ module axi_ad9467_if #(
 
   // over-range interface
 
-  ad_lvds_in #(
+  ad_data_in #(
     .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_CTRL (1),
     .IODELAY_GROUP (IO_DELAY_GROUP))
@@ -169,7 +169,7 @@ module axi_ad9467_if #(
 
   // clock
 
-  ad_lvds_clk #(
+  ad_data_clk #(
     .DEVICE_TYPE (DEVICE_TYPE))
   i_adc_clk (
     .rst (1'b0),

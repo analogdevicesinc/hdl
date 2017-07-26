@@ -756,7 +756,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   assign rx_sysref = rx_sysref_i;
 
-  ad_lvds_out #(
+  ad_data_out #(
     .DEVICE_TYPE (0),
     .SINGLE_ENDED (0),
     .IODELAY_ENABLE (1),
