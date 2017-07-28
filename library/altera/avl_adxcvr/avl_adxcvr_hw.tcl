@@ -96,7 +96,7 @@ proc p_avl_adxcvr {} {
   set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll.reconfig_avmm0
 
   add_instance alt_core_clk altera_clock_bridge
-  set_instance_parameter_value alt_core_clk {EXPLICIT_CLOCK_RATE} $m_coreclk_frequency
+  set_instance_parameter_value alt_core_clk {EXPLICIT_CLOCK_RATE} [expr $m_coreclk_frequency*1000000]
   add_connection alt_core_pll.outclk0 alt_core_clk.in_clk
   add_interface core_clk clock source
   set_interface_property core_clk EXPORT_OF alt_core_clk.out_clk
