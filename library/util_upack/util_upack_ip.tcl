@@ -15,7 +15,6 @@ adi_ip_properties_lite util_upack
 set_property driver_value 0 [ipx::get_ports *dac_enable* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dac_valid* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dac_data* -of_objects [ipx::current_core]]
-set_property driver_value 0 [ipx::get_ports *dma_xfer_in* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 1} \
   [ipx::get_ports *_1* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 2} \
