@@ -5,6 +5,7 @@ set_location_assignment PIN_AM10  -to sys_clk
 set_location_assignment PIN_AL10  -to "sys_clk(n)"
 set_location_assignment PIN_AV21  -to sys_resetn
 set_instance_assignment -name IO_STANDARD LVDS -to sys_clk
+set_instance_assignment -name IO_STANDARD LVDS -to "sys_clk(n)"
 set_instance_assignment -name IO_STANDARD "1.8 V" -to sys_resetn
 
 # hps-ddr4 (32)
@@ -13,6 +14,7 @@ set_location_assignment PIN_F25   -to hps_ddr_ref_clk
 set_location_assignment PIN_G24   -to "hps_ddr_ref_clk(n)"
 
 set_instance_assignment -name IO_STANDARD LVDS -to hps_ddr_ref_clk
+set_instance_assignment -name IO_STANDARD LVDS -to "hps_ddr_ref_clk(n)"
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to hps_ddr_ref_clk -disable
 
 set_location_assignment PIN_B20   -to hps_ddr_clk_p     
