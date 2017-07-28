@@ -92,6 +92,11 @@ module axi_ad9361_tx #(
   input   [31:0]  up_dac_gpio_in,
   output  [31:0]  up_dac_gpio_out,
 
+  // 1PPS reporting counter and interrupt
+
+  input   [31:0]  up_pps_rcounter,
+  output          up_pps_irq_mask,
+
   // processor interface
 
   input           up_rstn,
@@ -345,6 +350,8 @@ module axi_ad9361_tx #(
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd1),
     .up_dac_ce (),
+    .up_pps_rcounter (up_pps_rcounter),
+    .up_pps_irq_mask (up_pps_irq_mask),
     .up_drp_sel (),
     .up_drp_wr (),
     .up_drp_addr (),

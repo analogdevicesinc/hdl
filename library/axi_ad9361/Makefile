@@ -15,6 +15,7 @@ M_DEPS += ../common/ad_iqcor.v
 M_DEPS += ../common/ad_pnmon.v
 M_DEPS += ../common/ad_rst.v
 M_DEPS += ../common/ad_tdd_control.v
+M_DEPS += ../common/ad_pps_receiver.v
 M_DEPS += ../common/up_adc_channel.v
 M_DEPS += ../common/up_adc_common.v
 M_DEPS += ../common/up_axi.v

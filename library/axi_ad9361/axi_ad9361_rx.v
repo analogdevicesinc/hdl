@@ -94,6 +94,11 @@ module axi_ad9361_rx #(
   input   [31:0]  up_adc_gpio_in,
   output  [31:0]  up_adc_gpio_out,
 
+  // 1PPS reporting counter and interrupt
+
+  input   [31:0]  up_pps_rcounter,
+  output          up_pps_irq_mask,
+
   // processor interface
 
   input           up_rstn,
@@ -343,6 +348,8 @@ module axi_ad9361_rx #(
     .adc_sref_sync (),
     .adc_sync (),
     .up_adc_ce (),
+    .up_pps_rcounter (up_pps_rcounter),
+    .up_pps_irq_mask (up_pps_irq_mask),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),

@@ -67,6 +67,8 @@ module up_dac_common #(
   input               dac_status_unf,
   input       [31:0]  dac_clk_ratio,
   output              up_dac_ce,
+  input       [31:0]  up_pps_rcounter,
+  output  reg         up_pps_irq_mask,
 
   // drp interface
 
@@ -182,6 +184,7 @@ module up_dac_common #(
       up_dac_datarate <= 'd0;
       up_dac_frame <= 'd0;
       up_dac_clksel <= 'd0;
+      up_pps_irq_mask <= 1'b1;
     end else begin
       up_dac_clk_enb_int <= ~up_dac_clk_enb;
       up_core_preset <= ~up_resetn;
@@ -189,6 +192,9 @@ module up_dac_common #(
       up_wack_int <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h04)) begin
+        up_pps_irq_mask <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
         up_dac_clk_enb <= up_wdata[2];
@@ -371,6 +377,7 @@ module up_dac_common #(
           8'h28: up_rdata_int <= {24'd0, dac_usr_chanmax};
           8'h2e: up_rdata_int <= up_dac_gpio_in;
           8'h2f: up_rdata_int <= up_dac_gpio_out_int;
+          8'h30: up_rdata_int <= up_pps_rcounter;
           default: up_rdata_int <= 0;
         endcase
       end else begin

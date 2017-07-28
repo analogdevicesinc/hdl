@@ -103,6 +103,9 @@ module axi_ad9361 #(
   input           tdd_sync,
   output          tdd_sync_cntr,
 
+  input           gps_pps,
+  output          gps_pps_irq,
+
   // delay clock
 
   input           delay_clk,
@@ -279,6 +282,11 @@ module axi_ad9361 #(
   wire    [31:0]  up_drp_rdata;
   wire            up_drp_ready;
   wire            up_drp_locked;
+
+  wire    [31:0]  up_pps_rcounter_s;
+  wire            up_irq_mask_s;
+  wire            adc_up_pps_irq_mask_s;
+  wire            dac_up_pps_irq_mask_s;
 
   // signal name changes
 
@@ -527,6 +535,18 @@ module axi_ad9361 #(
   end
   endgenerate
 
+  // GPS's 1PPS receiver
+  ad_pps_receiver i_pps_receiver (
+    .clk (clk),
+    .rst (rst),
+    .gps_pps (gps_pps),
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_pps_rcounter (up_pps_rcounter_s),
+    .up_irq_mask (up_irq_mask_s),
+    .up_irq (gps_pps_irq));
+  assign up_irq_mask_s = adc_up_pps_irq_mask_s | dac_up_pps_irq_mask_s;
+
   // receive
 
   axi_ad9361_rx #(
@@ -569,6 +589,8 @@ module axi_ad9361 #(
     .adc_dunf (adc_dunf),
     .up_adc_gpio_in (up_adc_gpio_in),
     .up_adc_gpio_out (up_adc_gpio_out),
+    .up_pps_rcounter(up_pps_rcounter_s),
+    .up_pps_irq_mask (adc_up_pps_irq_mask_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
@@ -626,6 +648,8 @@ module axi_ad9361 #(
     .dac_data_q1 (dac_data_q1),
     .dac_dovf(dac_dovf),
     .dac_dunf(dac_dunf),
+    .up_pps_rcounter(up_pps_rcounter_s),
+    .up_pps_irq_mask (dac_up_pps_irq_mask_s),
     .up_dac_gpio_in (up_dac_gpio_in),
     .up_dac_gpio_out (up_dac_gpio_out),
     .up_rstn (up_rstn),
