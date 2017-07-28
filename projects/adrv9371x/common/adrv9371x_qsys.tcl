@@ -6,9 +6,7 @@ set_instance_parameter_value avl_ad9371_tx_xcvr {ID} {0}
 set_instance_parameter_value avl_ad9371_tx_xcvr {TX_OR_RX_N} {1}
 set_instance_parameter_value avl_ad9371_tx_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
 set_instance_parameter_value avl_ad9371_tx_xcvr {LANE_RATE} {4915.2}
-set_instance_parameter_value avl_ad9371_tx_xcvr {PLLCLK_FREQUENCY} {2457.6}
 set_instance_parameter_value avl_ad9371_tx_xcvr {REFCLK_FREQUENCY} {122.88}
-set_instance_parameter_value avl_ad9371_tx_xcvr {CORECLK_FREQUENCY} {122.88}
 set_instance_parameter_value avl_ad9371_tx_xcvr {NUM_OF_LANES} {4}
 set_instance_parameter_value avl_ad9371_tx_xcvr {NUM_OF_CONVS} {4}
 set_instance_parameter_value avl_ad9371_tx_xcvr {FRM_BCNT} {2}
@@ -59,9 +57,7 @@ set_instance_parameter_value avl_ad9371_rx_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9371_rx_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9371_rx_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
 set_instance_parameter_value avl_ad9371_rx_xcvr {LANE_RATE} {4915.2}
-set_instance_parameter_value avl_ad9371_rx_xcvr {PLLCLK_FREQUENCY} {2457.6}
 set_instance_parameter_value avl_ad9371_rx_xcvr {REFCLK_FREQUENCY} {122.88}
-set_instance_parameter_value avl_ad9371_rx_xcvr {CORECLK_FREQUENCY} {122.88}
 set_instance_parameter_value avl_ad9371_rx_xcvr {NUM_OF_LANES} {2}
 set_instance_parameter_value avl_ad9371_rx_xcvr {NUM_OF_CONVS} {4}
 set_instance_parameter_value avl_ad9371_rx_xcvr {FRM_BCNT} {4}
@@ -100,9 +96,7 @@ set_instance_parameter_value avl_ad9371_rx_os_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {LANE_RATE} {4915.2}
-set_instance_parameter_value avl_ad9371_rx_os_xcvr {PLLCLK_FREQUENCY} {2457.6}
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {REFCLK_FREQUENCY} {122.88}
-set_instance_parameter_value avl_ad9371_rx_os_xcvr {CORECLK_FREQUENCY} {122.88}
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {NUM_OF_LANES} {2}
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {NUM_OF_CONVS} {2}
 set_instance_parameter_value avl_ad9371_rx_os_xcvr {FRM_BCNT} {2}

@@ -14,9 +14,7 @@ ad_ip_parameter ID INTEGER 0 false
 ad_ip_parameter PCS_CONFIG STRING "JESD_PCS_CFG2" false
 ad_ip_parameter LANE_RATE FLOAT 10000 false
 ad_ip_parameter SYSCLK_FREQUENCY FLOAT 100.0 false
-ad_ip_parameter PLLCLK_FREQUENCY FLOAT 5000.0 false
 ad_ip_parameter REFCLK_FREQUENCY FLOAT 500.0 false
-ad_ip_parameter CORECLK_FREQUENCY FLOAT 250.0 false
 ad_ip_parameter NUM_OF_LANES INTEGER 4 false
 ad_ip_parameter NUM_OF_CONVS INTEGER 2 false
 ad_ip_parameter FRM_BCNT INTEGER 1 false
@@ -26,9 +24,7 @@ ad_ip_parameter HD INTEGER 1 false
 
 set_parameter_property LANE_RATE DISPLAY_UNITS "Mbps"
 set_parameter_property SYSCLK_FREQUENCY UNITS Megahertz
-set_parameter_property PLLCLK_FREQUENCY UNITS Megahertz
 set_parameter_property REFCLK_FREQUENCY UNITS Megahertz
-set_parameter_property CORECLK_FREQUENCY UNITS Megahertz
 
 proc p_avl_adxcvr {} {
 
@@ -39,14 +35,15 @@ proc p_avl_adxcvr {} {
   set m_num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set m_device_family [get_parameter_value "DEVICE_FAMILY"]
   set m_sysclk_frequency [get_parameter_value "SYSCLK_FREQUENCY"]
-  set m_pllclk_frequency [get_parameter_value "PLLCLK_FREQUENCY"]
   set m_refclk_frequency [get_parameter_value "REFCLK_FREQUENCY"]
-  set m_coreclk_frequency [get_parameter_value "CORECLK_FREQUENCY"]
   set m_num_of_convs [get_parameter_value "NUM_OF_CONVS"]
   set m_frm_bcnt [get_parameter_value "FRM_BCNT"]
   set m_frm_scnt [get_parameter_value "FRM_SCNT"]
   set m_mf_fcnt [get_parameter_value "MF_FCNT"]
   set m_hd [get_parameter_value "HD"]
+
+  set m_pllclk_frequency [expr $m_lane_rate / 2]
+  set m_coreclk_frequency [expr $m_lane_rate / 40]
 
   add_instance alt_sys_clk clock_source
   set_instance_parameter_value alt_sys_clk {clockFrequency} [expr $m_sysclk_frequency*1000000]
