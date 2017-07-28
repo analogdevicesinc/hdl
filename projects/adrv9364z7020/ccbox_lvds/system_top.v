@@ -214,7 +214,7 @@ module system_top (
   assign gpio_i[3:0] = gpio_o[3:0];
 
   // ad9361 gpio - tact-scroll-wheel
-  
+
   assign gpio_i[63] = gpio_o[63];
   assign gpio_i[62] = gpio_o[62];
   assign gpio_i[60] = gpio_o[60];
@@ -297,7 +297,6 @@ module system_top (
     .ps_intr_08 (1'b0),
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
-    .ps_intr_11 (1'b0),
     .ps_intr_15 (1'b0),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
@@ -323,9 +322,10 @@ module system_top (
     .spi1_sdi_i (imu_miso),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (imu_mosi),
-    .tdd_sync_i (gps_pps),
+    .tdd_sync_i (1'b0),
     .tdd_sync_o (),
     .tdd_sync_t (),
+    .gps_pps (gps_pps),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_data_out_n),

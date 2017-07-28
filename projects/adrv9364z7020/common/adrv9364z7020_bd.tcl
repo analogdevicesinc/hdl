@@ -198,6 +198,7 @@ create_bd_port -dir I up_txnrx
 create_bd_port -dir O tdd_sync_o
 create_bd_port -dir I tdd_sync_i
 create_bd_port -dir O tdd_sync_t
+create_bd_port -dir I gps_pps
 
 # ad9361 core
 
@@ -348,6 +349,7 @@ ad_connect  util_ad9361_tdd_sync/sync_mode axi_ad9361/tdd_sync_cntr
 ad_connect  tdd_sync_t axi_ad9361/tdd_sync_cntr
 ad_connect  tdd_sync_o util_ad9361_tdd_sync/sync_out
 ad_connect  tdd_sync_i util_ad9361_tdd_sync/sync_in
+ad_connect  gps_pps axi_ad9361/gps_pps
 
 # interconnects
 
@@ -365,6 +367,7 @@ ad_connect  sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
 ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
+ad_cpu_interrupt ps-11 mb-11 axi_ad9361/gps_pps_irq
 
 ## customization of core to disable data path logic (less resources)
 ## interface type - 1R1T (1) or 2R2T (0) (default is 2R2T)
