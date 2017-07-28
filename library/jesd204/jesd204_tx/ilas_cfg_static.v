@@ -1,21 +1,46 @@
-// ***************************************************************************
-// ***************************************************************************
-// Copyright 2016(c) Analog Devices, Inc.
 //
-// All rights reserved. Confidential and proprietary.
+// The ADI JESD204 Core is released under the following license, which is
+// different than all other HDL cores in this repository.
 //
-// Do not redistribute without explicit permission.
+// Please read this, and understand the freedoms and responsibilities you have
+// by using this source code/core.
 //
-// IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
-// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-// BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
-// THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
-// ***************************************************************************
+// The JESD204 HDL, is copyright © 2016-2017 Analog Devices Inc.
+//
+// This core is free software, you can use run, copy, study, change, ask
+// questions about and improve this core. Distribution of source, or resulting
+// binaries (including those inside an FPGA or ASIC) require you to release the
+// source of the entire project (excluding the system libraries provide by the
+// tools/compiler/FPGA vendor). These are the terms of the GNU General Public
+// License version 2 as published by the Free Software Foundation.
+//
+// This core  is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License version 2
+// along with this source code, and binary.  If not, see
+// <http://www.gnu.org/licenses/>.
+//
+// Commercial licenses (with commercial support) of this JESD204 core are also
+// available under terms different than the General Public License. (e.g. they
+// do not require you to accompany any image (FPGA or ASIC) using the JESD204
+// core with any corresponding source code.) For these alternate terms you must
+// purchase a license from Analog Devices Technology Licensing Office. Users
+// interested in such a license should contact jesd204-licensing@analog.com for
+// more information. This commercial license is sub-licensable (if you purchase
+// chips from Analog Devices, incorporate them into your PCB level product, and
+// purchase a JESD204 license, end users of your product will also have a
+// license to use this core in a commercial setting without releasing their
+// source code).
+//
+// In addition, we kindly ask you to acknowledge ADI in any program, application
+// or publication in which you use this JESD204 HDL core. (You are not required
+// to do so; it is up to your common sense to decide whether you want to comply
+// with this request or not.) For general publications, we suggest referencing :
+// “The design and implementation of the JESD204 HDL Core used in this project
+// is copyright © 2016-2017, Analog Devices, Inc.”
+//
 
 module jesd204_ilas_config_static #(
 	parameter DID = 8'h00,
