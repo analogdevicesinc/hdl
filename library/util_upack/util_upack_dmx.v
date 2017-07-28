@@ -39,24 +39,38 @@ module util_upack_dmx (
 
   // dac interface
 
-  input                   dac_clk,
-  input       [ 7:0]      dac_enable,
-  output  reg [ 15:0]     dac_data_0,
-  output  reg [ 15:0]     dac_data_1,
-  output  reg [ 15:0]     dac_data_2,
-  output  reg [ 15:0]     dac_data_3,
-  output  reg [ 15:0]     dac_data_4,
-  output  reg [ 15:0]     dac_data_5,
-  output  reg [ 15:0]     dac_data_6,
-  output  reg [ 15:0]     dac_data_7,
+  input             dac_clk,
+  input   [  7:0]   dac_enable,
+  output            dac_valid,
+  output  [ 15:0]   dac_data_0,
+  output  [ 15:0]   dac_data_1,
+  output  [ 15:0]   dac_data_2,
+  output  [ 15:0]   dac_data_3,
+  output  [ 15:0]   dac_data_4,
+  output  [ 15:0]   dac_data_5,
+  output  [ 15:0]   dac_data_6,
+  output  [ 15:0]   dac_data_7,
 
   // dmx interface
 
-  output  reg [ 7:0]      dac_dmx_enable,
-  input       [127:0]     dac_dsf_data);
+  output  [  7:0]   dac_dmx_enable,
+  input             dac_dsf_valid,
+  input   [127:0]   dac_dsf_data);
 
   // internal registers
 
+  reg     [  7:0]   dac_dmx_enable_int = 'd0;
+  reg               dac_valid_int = 'd0;
+  reg               dac_valid_d2 = 'd0;
+  reg               dac_valid_d1 = 'd0;
+  reg     [ 15:0]   dac_data_int_0 = 'd0;
+  reg     [ 15:0]   dac_data_int_1 = 'd0;
+  reg     [ 15:0]   dac_data_int_2 = 'd0;
+  reg     [ 15:0]   dac_data_int_3 = 'd0;
+  reg     [ 15:0]   dac_data_int_4 = 'd0;
+  reg     [ 15:0]   dac_data_int_5 = 'd0;
+  reg     [ 15:0]   dac_data_int_6 = 'd0;
+  reg     [ 15:0]   dac_data_int_7 = 'd0;
   reg               dac_dmx_enable_0 = 'd0;
   reg     [ 15:0]   dac_dmx_data_0_0 = 'd0;
   reg     [ 15:0]   dac_dmx_data_1_0 = 'd0;
@@ -312,46 +326,63 @@ module util_upack_dmx (
 
   // simple data or for pipe line registers
 
+  assign dac_dmx_enable = dac_dmx_enable_int;
+  assign dac_valid = dac_valid_int;
+  assign dac_data_0 = dac_data_int_0;
+  assign dac_data_1 = dac_data_int_1;
+  assign dac_data_2 = dac_data_int_2;
+  assign dac_data_3 = dac_data_int_3;
+  assign dac_data_4 = dac_data_int_4;
+  assign dac_data_5 = dac_data_int_5;
+  assign dac_data_6 = dac_data_int_6;
+  assign dac_data_7 = dac_data_int_7;
+
   always @(posedge dac_clk) begin
-    dac_dmx_enable <= { dac_dmx_enable_7, dac_dmx_enable_6,
-                        dac_dmx_enable_5, dac_dmx_enable_4,
-                        dac_dmx_enable_3, dac_dmx_enable_2,
-                        dac_dmx_enable_1, dac_dmx_enable_0};
+    dac_dmx_enable_int <= { dac_dmx_enable_7, dac_dmx_enable_6,
+                            dac_dmx_enable_5, dac_dmx_enable_4,
+                            dac_dmx_enable_3, dac_dmx_enable_2,
+                            dac_dmx_enable_1, dac_dmx_enable_0};
   end
 
   always @(posedge dac_clk) begin
-    dac_data_0 <= dac_dmx_data_0_0 | dac_dmx_data_0_1 |
-                  dac_dmx_data_0_2 | dac_dmx_data_0_3 |
-                  dac_dmx_data_0_4 | dac_dmx_data_0_5 |
-                  dac_dmx_data_0_6 | dac_dmx_data_0_7;
-    dac_data_1 <= dac_dmx_data_1_0 | dac_dmx_data_1_1 |
-                  dac_dmx_data_1_2 | dac_dmx_data_1_3 |
-                  dac_dmx_data_1_4 | dac_dmx_data_1_5 |
-                  dac_dmx_data_1_6 | dac_dmx_data_1_7;
-    dac_data_2 <= dac_dmx_data_2_0 | dac_dmx_data_2_1 |
-                  dac_dmx_data_2_2 | dac_dmx_data_2_3 |
-                  dac_dmx_data_2_4 | dac_dmx_data_2_5 |
-                  dac_dmx_data_2_6 | dac_dmx_data_2_7;
-    dac_data_3 <= dac_dmx_data_3_0 | dac_dmx_data_3_1 |
-                  dac_dmx_data_3_2 | dac_dmx_data_3_3 |
-                  dac_dmx_data_3_4 | dac_dmx_data_3_5 |
-                  dac_dmx_data_3_6 | dac_dmx_data_3_7;
-    dac_data_4 <= dac_dmx_data_4_0 | dac_dmx_data_4_1 |
-                  dac_dmx_data_4_2 | dac_dmx_data_4_3 |
-                  dac_dmx_data_4_4 | dac_dmx_data_4_5 |
-                  dac_dmx_data_4_6 | dac_dmx_data_4_7;
-    dac_data_5 <= dac_dmx_data_5_0 | dac_dmx_data_5_1 |
-                  dac_dmx_data_5_2 | dac_dmx_data_5_3 |
-                  dac_dmx_data_5_4 | dac_dmx_data_5_5 |
-                  dac_dmx_data_5_6 | dac_dmx_data_5_7;
-    dac_data_6 <= dac_dmx_data_6_0 | dac_dmx_data_6_1 |
-                  dac_dmx_data_6_2 | dac_dmx_data_6_3 |
-                  dac_dmx_data_6_4 | dac_dmx_data_6_5 |
-                  dac_dmx_data_6_6 | dac_dmx_data_6_7;
-    dac_data_7 <= dac_dmx_data_7_0 | dac_dmx_data_7_1 |
-                  dac_dmx_data_7_2 | dac_dmx_data_7_3 |
-                  dac_dmx_data_7_4 | dac_dmx_data_7_5 |
-                  dac_dmx_data_7_6 | dac_dmx_data_7_7;
+    dac_valid_int <= dac_valid_d2;
+    dac_valid_d2 <= dac_valid_d1;
+    dac_valid_d1 <= dac_dsf_valid;
+  end
+
+  always @(posedge dac_clk) begin
+    dac_data_int_0 <= dac_dmx_data_0_0 | dac_dmx_data_0_1 |
+                      dac_dmx_data_0_2 | dac_dmx_data_0_3 |
+                      dac_dmx_data_0_4 | dac_dmx_data_0_5 |
+                      dac_dmx_data_0_6 | dac_dmx_data_0_7;
+    dac_data_int_1 <= dac_dmx_data_1_0 | dac_dmx_data_1_1 |
+                      dac_dmx_data_1_2 | dac_dmx_data_1_3 |
+                      dac_dmx_data_1_4 | dac_dmx_data_1_5 |
+                      dac_dmx_data_1_6 | dac_dmx_data_1_7;
+    dac_data_int_2 <= dac_dmx_data_2_0 | dac_dmx_data_2_1 |
+                      dac_dmx_data_2_2 | dac_dmx_data_2_3 |
+                      dac_dmx_data_2_4 | dac_dmx_data_2_5 |
+                      dac_dmx_data_2_6 | dac_dmx_data_2_7;
+    dac_data_int_3 <= dac_dmx_data_3_0 | dac_dmx_data_3_1 |
+                      dac_dmx_data_3_2 | dac_dmx_data_3_3 |
+                      dac_dmx_data_3_4 | dac_dmx_data_3_5 |
+                      dac_dmx_data_3_6 | dac_dmx_data_3_7;
+    dac_data_int_4 <= dac_dmx_data_4_0 | dac_dmx_data_4_1 |
+                      dac_dmx_data_4_2 | dac_dmx_data_4_3 |
+                      dac_dmx_data_4_4 | dac_dmx_data_4_5 |
+                      dac_dmx_data_4_6 | dac_dmx_data_4_7;
+    dac_data_int_5 <= dac_dmx_data_5_0 | dac_dmx_data_5_1 |
+                      dac_dmx_data_5_2 | dac_dmx_data_5_3 |
+                      dac_dmx_data_5_4 | dac_dmx_data_5_5 |
+                      dac_dmx_data_5_6 | dac_dmx_data_5_7;
+    dac_data_int_6 <= dac_dmx_data_6_0 | dac_dmx_data_6_1 |
+                      dac_dmx_data_6_2 | dac_dmx_data_6_3 |
+                      dac_dmx_data_6_4 | dac_dmx_data_6_5 |
+                      dac_dmx_data_6_6 | dac_dmx_data_6_7;
+    dac_data_int_7 <= dac_dmx_data_7_0 | dac_dmx_data_7_1 |
+                      dac_dmx_data_7_2 | dac_dmx_data_7_3 |
+                      dac_dmx_data_7_4 | dac_dmx_data_7_5 |
+                      dac_dmx_data_7_6 | dac_dmx_data_7_7;
   end
 
   always @(posedge dac_clk) begin
