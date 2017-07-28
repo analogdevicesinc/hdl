@@ -24,7 +24,7 @@ ad_alt_intf signal dac_data input NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH data
 add_interface dac_ch_0 conduit end
 add_interface_port dac_ch_0 dac_enable_0 enable Input 1
 add_interface_port dac_ch_0 dac_valid_0 valid Input 1
-add_interface_port dac_ch_0 dac_valid_out_0 valid_out Output 1
+add_interface_port dac_ch_0 dac_valid_out_0 data_valid Output 1
 add_interface_port dac_ch_0 dac_data_0 data Output CHANNEL_DATA_WIDTH
 set_interface_property dac_ch_0 associatedClock if_dac_clk
 set_interface_property dac_ch_0 associatedReset none
@@ -32,11 +32,11 @@ set_interface_property dac_ch_0 associatedReset none
 proc util_upack_elab {} {
 
   for {set n 1} {$n < 8} {incr n} {
-    if {[get_parameter_value NUM_OF_CHANNELS] > n} {
+    if {[get_parameter_value NUM_OF_CHANNELS] > $n} {
       add_interface dac_ch_${n} conduit end
       add_interface_port dac_ch_${n} dac_enable_${n} enable Input 1
       add_interface_port dac_ch_${n} dac_valid_${n} valid Input 1
-      add_interface_port dac_ch_${n} dac_valid_out_${n} valid_out Output 1
+      add_interface_port dac_ch_${n} dac_valid_out_${n} data_valid Output 1
       add_interface_port dac_ch_${n} dac_data_${n} data Output CHANNEL_DATA_WIDTH
       set_interface_property dac_ch_${n} associatedClock if_dac_clk
       set_interface_property dac_ch_${n} associatedReset none
