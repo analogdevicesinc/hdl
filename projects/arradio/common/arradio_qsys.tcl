@@ -124,7 +124,6 @@ add_connection sys_dma_clk.clk_reset axi_dac_dma.m_src_axi_reset
 add_connection sys_dma_clk.clk axi_dac_dma.if_fifo_rd_clk
 add_connection util_dac_upack.if_dac_valid axi_dac_dma.if_fifo_rd_en
 add_connection axi_dac_dma.if_fifo_rd_dout util_dac_upack.if_dac_data
-add_connection axi_dac_dma.if_fifo_rd_xfer_req util_dac_upack.if_dma_xfer_in
 add_connection axi_dac_dma.if_fifo_rd_underflow util_dac_rfifo.if_din_unf
 
 # interrupts
