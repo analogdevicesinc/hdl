@@ -232,10 +232,10 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[2]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[3]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[0]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[1]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[2]
-set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[3]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[4]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[5]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[6]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[7]
 
 # hps-gpio (max-v-u16)
 
