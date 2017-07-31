@@ -16,22 +16,19 @@ M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
+M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/axi_ad9122/axi_ad9122.xpr
 M_DEPS += ../../../library/axi_ad9684/axi_ad9684.xpr
-M_DEPS += ../../../library/xilinx/axi_adcfifo/axi_adcfifo.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_hdmi_tx/axi_hdmi_tx.xpr
 M_DEPS += ../../../library/axi_i2s_adi/axi_i2s_adi.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
-M_DEPS += ../../../library/util_clkdiv/util_clkdiv.xpr
+M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
-M_DEPS += ../../../library/util_rfifo/util_rfifo.xpr
-M_DEPS += ../../../library/util_tdd_sync/util_tdd_sync.xpr
 M_DEPS += ../../../library/util_upack/util_upack.xpr
-M_DEPS += ../../../library/util_wfifo/util_wfifo.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -62,19 +59,15 @@ clean:
 clean-all:clean
 	make -C ../../../library/axi_ad9122 clean
 	make -C ../../../library/axi_ad9684 clean
-	make -C ../../../library/xilinx/axi_adcfifo clean
 	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_hdmi_tx clean
 	make -C ../../../library/axi_i2s_adi clean
 	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/util_clkdiv clean
+	make -C ../../../library/util_adcfifo clean
 	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_i2c_mixer clean
-	make -C ../../../library/util_rfifo clean
-	make -C ../../../library/util_tdd_sync clean
 	make -C ../../../library/util_upack clean
-	make -C ../../../library/util_wfifo clean
 
 
 daq1_zed.sdk/system_top.hdf: $(M_DEPS)
@@ -85,19 +78,15 @@ daq1_zed.sdk/system_top.hdf: $(M_DEPS)
 lib:
 	make -C ../../../library/axi_ad9122
 	make -C ../../../library/axi_ad9684
-	make -C ../../../library/xilinx/axi_adcfifo
 	make -C ../../../library/axi_clkgen
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_hdmi_tx
 	make -C ../../../library/axi_i2s_adi
 	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/util_clkdiv
+	make -C ../../../library/util_adcfifo
 	make -C ../../../library/util_cpack
 	make -C ../../../library/util_i2c_mixer
-	make -C ../../../library/util_rfifo
-	make -C ../../../library/util_tdd_sync
 	make -C ../../../library/util_upack
-	make -C ../../../library/util_wfifo
 
 ####################################################################################
 ####################################################################################
