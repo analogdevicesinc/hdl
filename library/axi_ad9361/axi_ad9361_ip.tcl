@@ -55,6 +55,7 @@ set_property driver_value 0 [ipx::get_ports *dac_sync_in* -of_objects [ipx::curr
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *gpio_in* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *gps_pps* -of_objects [ipx::current_core]]
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CMOS_OR_LVDS_N')) == 0} \
   [ipx::get_ports rx_clk_in_p     -of_objects [ipx::current_core]] \
