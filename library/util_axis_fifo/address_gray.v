@@ -33,7 +33,9 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module fifo_address_gray (
+module fifo_address_gray #(
+  parameter ADDRESS_WIDTH = 4
+) (
   input m_axis_aclk,
   input m_axis_aresetn,
   input m_axis_ready,
@@ -48,8 +50,6 @@ module fifo_address_gray (
   output [ADDRESS_WIDTH-1:0] s_axis_waddr,
   output reg [ADDRESS_WIDTH:0] s_axis_room
 );
-
-parameter ADDRESS_WIDTH = 4;
 
 reg [ADDRESS_WIDTH:0] _s_axis_waddr = 'h00;
 reg [ADDRESS_WIDTH:0] _s_axis_waddr_next;

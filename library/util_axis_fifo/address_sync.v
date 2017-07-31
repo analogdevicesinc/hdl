@@ -33,7 +33,9 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module fifo_address_sync (
+module fifo_address_sync #(
+  parameter ADDRESS_WIDTH = 4
+) (
   input clk,
   input resetn,
 

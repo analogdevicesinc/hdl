@@ -33,7 +33,12 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module util_axis_fifo (
+module util_axis_fifo #(
+  parameter DATA_WIDTH = 64,
+  parameter ASYNC_CLK = 1,
+  parameter ADDRESS_WIDTH = 4,
+  parameter S_AXIS_REGISTERED = 1
+) (
   input m_axis_aclk,
   input m_axis_aresetn,
   input m_axis_ready,
@@ -49,11 +54,6 @@ module util_axis_fifo (
   output s_axis_empty,
   output [ADDRESS_WIDTH:0] s_axis_room
 );
-
-parameter DATA_WIDTH = 64;
-parameter ASYNC_CLK = 1;
-parameter ADDRESS_WIDTH = 4;
-parameter S_AXIS_REGISTERED = 1;
 
 generate if (ADDRESS_WIDTH == 0) begin
 
