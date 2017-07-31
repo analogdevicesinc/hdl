@@ -245,10 +245,12 @@ wire [DMA_ADDRESS_WIDTH_SRC-1:0] src_req_address;
 wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_req_last_burst_length;
 wire src_req_sync_transfer_start;
 
+/* TODO
 wire src_response_valid;
 wire src_response_ready;
 wire src_response_empty;
 wire [1:0] src_response_resp;
+*/
 
 wire [ID_WIDTH-1:0] src_request_id;
 wire [ID_WIDTH-1:0] src_response_id;
@@ -632,9 +634,11 @@ dmac_src_mm_axi #(
   .req_address(src_req_address),
   .req_last_burst_length(src_req_last_burst_length),
 
+/* TODO
   .response_valid(src_response_valid),
   .response_ready(src_response_ready),
   .response_resp(src_response_resp),
+*/
 
   .request_id(src_request_id),
   .response_id(src_response_id),
@@ -685,9 +689,10 @@ wire src_eot = eot_mem[src_response_id];
 assign dbg_src_address_id = 'h00;
 assign dbg_src_data_id = 'h00;
 
-/* TODO */
+/* TODO
 assign src_response_valid = 1'b0;
 assign src_response_resp = 2'b0;
+*/
 
 dmac_src_axi_stream #(
   .ID_WIDTH(ID_WIDTH),
@@ -739,9 +744,10 @@ wire src_eot = eot_mem[src_response_id];
 assign dbg_src_address_id = 'h00;
 assign dbg_src_data_id = 'h00;
 
-/* TODO */
+/* TODO
 assign src_response_valid = 1'b0;
 assign src_response_resp = 2'b0;
+*/
 
 dmac_src_fifo_inf #(
   .ID_WIDTH(ID_WIDTH),
@@ -1048,9 +1054,10 @@ util_axis_fifo #(
   .m_axis_valid(response_src_valid),
   .m_axis_ready(response_src_ready),
   .m_axis_data(response_src_resp)
-);*/
+);
 assign src_response_empty = 1'b1;
 assign src_response_ready = 1'b1;
+*/
 
 dmac_request_generator #(
   .ID_WIDTH(ID_WIDTH),
@@ -1108,7 +1115,7 @@ sync_bits #(
 ) i_sync_status_src (
   .out_clk(req_aclk),
   .out_resetn(req_aresetn),
-  .in({src_enabled | ~src_response_empty, src_sync_id_ret, src_fifo_empty}),
+  .in({src_enabled /* | ~src_response_empty*/, src_sync_id_ret, src_fifo_empty}),
   .out({enabled_src, sync_id_ret_src, fifo_empty})
 );
 
