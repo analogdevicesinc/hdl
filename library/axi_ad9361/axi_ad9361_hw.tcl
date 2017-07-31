@@ -16,6 +16,7 @@ ad_ip_files axi_ad9361 [list\
   $ad_hdl_dir/library/common/ad_iqcor.v \
   $ad_hdl_dir/library/common/ad_addsub.v \
   $ad_hdl_dir/library/common/ad_tdd_control.v \
+  $ad_hdl_dir/library/common/ad_pps_receiver.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/common/up_xfer_cntrl.v \
   $ad_hdl_dir/library/common/up_xfer_status.v \
