@@ -52,6 +52,8 @@ module fifo_address_gray_pipelined #(
   output reg [ADDRESS_WIDTH:0] s_axis_room
 );
 
+localparam MAX_ROOM = {1'b1,{ADDRESS_WIDTH{1'b0}}};
+
 reg [ADDRESS_WIDTH:0] _s_axis_waddr = 'h00;
 reg [ADDRESS_WIDTH:0] _s_axis_waddr_next;
 wire [ADDRESS_WIDTH:0] _s_axis_raddr;
@@ -66,7 +68,7 @@ assign m_axis_raddr = _m_axis_raddr[ADDRESS_WIDTH-1:0];
 always @(*)
 begin
   if (s_axis_ready && s_axis_valid)
-    _s_axis_waddr_next <= _s_axis_waddr + 1;
+    _s_axis_waddr_next <= _s_axis_waddr + 1'b1;
   else
     _s_axis_waddr_next <= _s_axis_waddr;
 end
@@ -83,7 +85,7 @@ end
 always @(*)
 begin
   if (m_axis_ready && m_axis_valid)
-    _m_axis_raddr_next <= _m_axis_raddr + 1;
+    _m_axis_raddr_next <= _m_axis_raddr + 1'b1;
   else
     _m_axis_raddr_next <= _m_axis_raddr;
 end
@@ -124,12 +126,12 @@ begin
   if (s_axis_aresetn == 1'b0) begin
     s_axis_ready <= 1'b1;
     s_axis_empty <= 1'b1;
-    s_axis_room <= 2**ADDRESS_WIDTH;
+    s_axis_room <= MAX_ROOM;
   end else begin
     s_axis_ready <= (_s_axis_raddr[ADDRESS_WIDTH] == _s_axis_waddr_next[ADDRESS_WIDTH] ||
       _s_axis_raddr[ADDRESS_WIDTH-1:0] != _s_axis_waddr_next[ADDRESS_WIDTH-1:0]);
     s_axis_empty <= _s_axis_raddr == _s_axis_waddr_next;
-    s_axis_room <= _s_axis_raddr - _s_axis_waddr_next + 2**ADDRESS_WIDTH;
+    s_axis_room <= _s_axis_raddr - _s_axis_waddr_next + MAX_ROOM;
   end
 end
 

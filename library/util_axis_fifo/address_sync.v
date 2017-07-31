@@ -51,9 +51,9 @@ module fifo_address_sync #(
   output [ADDRESS_WIDTH:0] s_axis_room
 );
 
-parameter ADDRESS_WIDTH = 4;
+localparam MAX_ROOM = {1'b1,{ADDRESS_WIDTH{1'b0}}};
 
-reg [ADDRESS_WIDTH:0] room = 2**ADDRESS_WIDTH;
+reg [ADDRESS_WIDTH:0] room = MAX_ROOM;
 reg [ADDRESS_WIDTH:0] level = 'h00;
 reg [ADDRESS_WIDTH:0] level_next;
 
@@ -92,13 +92,13 @@ begin
     m_axis_valid <= 1'b0;
     s_axis_ready <= 1'b0;
     level <= 'h00;
-    room <= 2**ADDRESS_WIDTH;
+    room <= MAX_ROOM;
     s_axis_empty <= 'h00;
   end else begin
     level <= level_next;
-    room <= 2**ADDRESS_WIDTH - level_next;
+    room <= MAX_ROOM - level_next;
     m_axis_valid <= level_next != 0;
-    s_axis_ready <= level_next != 2**ADDRESS_WIDTH;
+    s_axis_ready <= level_next != MAX_ROOM;
     s_axis_empty <= level_next == 0;
   end
 end
