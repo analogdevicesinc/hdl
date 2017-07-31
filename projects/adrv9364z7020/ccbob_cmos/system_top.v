@@ -180,7 +180,6 @@ module system_top (
     .ps_intr_08 (1'b0),
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
-    .ps_intr_11 (1'b0),
     .ps_intr_15 (1'b0),
     .rx_clk_in (rx_clk_in),
     .rx_data_in (rx_data_in),
