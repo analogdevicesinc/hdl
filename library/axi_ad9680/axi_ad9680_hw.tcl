@@ -68,7 +68,7 @@ set_interface_property if_rx_data dataBitsPerSymbol 128
 
 # dma interface
 
-ad_alt_intf clock   adc_clock     output  1
+ad_alt_intf clock   adc_clk     output  1
 
 add_interface adc_ch_0 conduit end
 add_interface_port adc_ch_0  adc_enable_0  enable   Output  1
