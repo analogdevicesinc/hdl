@@ -117,4 +117,6 @@ adi_add_bus "rx_status" "slave" \
 adi_add_bus_clock "core_clk" "rx_status:rx_event:rx_ilas_config:rx_cfg" \
   "core_reset" "master"
 
+set_property DRIVER_VALUE "0" [ipx::get_ports "core_reset_ext"]
+
 ipx::save_core [ipx::current_core]

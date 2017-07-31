@@ -333,6 +333,7 @@ module axi_jesd204_rx_tb;
     .s_axi_rdata(s_axi_rdata),
 
     .core_clk(core_clk),
+    .core_reset_ext(1'b0),
 
     .core_ilas_config_valid({NUM_LANES{core_ilas_config_valid}}),
     .core_ilas_config_addr({NUM_LANES{core_ilas_config_addr}}),

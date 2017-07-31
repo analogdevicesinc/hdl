@@ -72,6 +72,7 @@ module axi_jesd204_rx #(
   output irq,
 
   input core_clk,
+  input core_reset_ext,
   output core_reset,
 
   output [NUM_LANES-1:0] core_cfg_lanes_disable,
@@ -175,6 +176,7 @@ jesd204_up_common #(
   .up_reset_synchronizer(up_reset_synchronizer),
 
   .core_clk(core_clk),
+  .core_reset_ext(core_reset_ext),
   .core_reset(core_reset),
 
   .up_raddr(up_raddr),

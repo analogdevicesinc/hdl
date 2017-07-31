@@ -122,4 +122,6 @@ adi_add_bus "tx_ctrl" "master" \
 adi_add_bus_clock "core_clk" "tx_status:tx_event:tx_ilas_config:tx_cfg:tx_ctrl" \
   "core_reset" "master"
 
+set_property DRIVER_VALUE "0" [ipx::get_ports "core_reset_ext"]
+
 ipx::save_core [ipx::current_core]

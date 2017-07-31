@@ -53,7 +53,8 @@ set_property ASYNC_REG TRUE \
 set_property ASYNC_REG TRUE \
   [get_cells -hier {up_reset_vector_reg*}] \
   [get_cells -hier {core_reset_vector_reg*}] \
-  [get_cells -hier {up_reset_synchronizer_vector_reg*}]
+  [get_cells -hier {up_reset_synchronizer_vector_reg*}] \
+  [get_cells -hier {up_core_reset_ext_synchronizer_vector_reg*}]
 
 set_false_path \
   -from [get_pins {i_up_rx/i_cdc_status/in_toggle_d1_reg/C}] \
@@ -105,7 +106,10 @@ set_false_path \
 
 set_false_path \
   -from [get_pins {i_up_common/core_reset_vector_reg[0]/C}] \
-  -to [get_pins {i_up_common/up_reset_synchronizer_vector_reg[1]/D}]
+  -to [get_pins {i_up_common/up_reset_synchronizer_vector_reg[*]/PRE}]
+
+set_false_path \
+  -to [get_pins {i_up_common/up_core_reset_ext_synchronizer_vector_reg[*]/PRE}]
 
 set_max_delay -datapath_only \
   -from [get_pins {i_up_common/up_cfg_*_reg*/C}] \
