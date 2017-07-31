@@ -274,7 +274,7 @@ module axi_ad9361_cmos_if #(
   // dac-tx interface
 
   always @(posedge clk) begin
-    tx_clk_p <= {dac_clksel, ~dac_clksel};
+    tx_clk_p <= {~dac_clksel, dac_clksel};
   end
 
   always @(posedge clk) begin
