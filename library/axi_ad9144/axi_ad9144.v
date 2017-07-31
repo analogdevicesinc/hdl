@@ -135,7 +135,7 @@ module axi_ad9144 #(
   // dual/quad cores
 
   assign tx_valid = 1'b1;
-  assign tx_data = (QUAD_OR_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
+  assign tx_data = tx_data_s[(128*QUAD_OR_DUAL_N)+127:0];
 
   // device interface
 
