@@ -44,6 +44,9 @@ add_fileset_file response_generator.v     VERILOG PATH response_generator.v
 add_fileset_file axi_dmac.v               VERILOG PATH axi_dmac.v
 add_fileset_file axi_dmac_constr.sdc      SDC     PATH axi_dmac_constr.sdc
 
+# Disable dual-clock RAM read-during-write behaviour warning.
+set_qip_strings { "set_instance_assignment -name MESSAGE_DISABLE 276027 -entity util_axis_fifo" }
+
 # parameters
 
 set group "General Configuration"

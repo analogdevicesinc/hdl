@@ -436,7 +436,7 @@ module axi_adxcvr #(
   output          up_pll_rst,
 
   input           s_axi_awvalid,
-  input   [31:0]  s_axi_awaddr,
+  input   [15:0]  s_axi_awaddr,
   input   [ 2:0]  s_axi_awprot,
   output          s_axi_awready,
   input           s_axi_wvalid,
@@ -447,7 +447,7 @@ module axi_adxcvr #(
   output  [ 1:0]  s_axi_bresp,
   input           s_axi_bready,
   input           s_axi_arvalid,
-  input   [31:0]  s_axi_araddr,
+  input   [15:0]  s_axi_araddr,
   input   [ 2:0]  s_axi_arprot,
   output          s_axi_arready,
   output          s_axi_rvalid,
