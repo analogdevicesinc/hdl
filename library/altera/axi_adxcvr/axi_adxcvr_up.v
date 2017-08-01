@@ -134,11 +134,11 @@ module axi_adxcvr_up #(
     end
   end
 
-  // altera specific
+  // Specific to Altera
 
   assign up_rparam_s[31:24] = 8'd0;
 
-  // xilinx specific
+  // Specific to Xilinx
 
   assign up_rparam_s[23:16] = 8'd0;
 
