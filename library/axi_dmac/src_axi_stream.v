@@ -115,7 +115,8 @@ dmac_data_mover # (
   .s_axi_data(s_axis_data),
   .m_axi_ready(fifo_ready),
   .m_axi_valid(fifo_valid),
-  .m_axi_data(fifo_data)
+  .m_axi_data(fifo_data),
+  .m_axi_last()
 );
 
 endmodule
