@@ -72,7 +72,7 @@ module jesd204_up_tx # (
   input core_status_sync
 );
 
-reg [31:0] up_cfg_ilas_data[0:4*NUM_LANES-1];
+reg [31:0] up_cfg_ilas_data[0:NUM_LANES-1][0:3];
 reg up_ctrl_manual_sync_request = 1'b0;
 
 wire [1:0] up_status_state;
@@ -131,7 +131,7 @@ always @(*) begin
     if (up_raddr[10:3] >= ('h300/32) &&
         up_raddr[10:3] < (('h300/32) + NUM_LANES) &&
       up_raddr[2] == 1'b1) begin
-      up_rdata <= up_cfg_ilas_data[{up_raddr[5:3],up_raddr[1:0]}];
+      up_rdata <= up_cfg_ilas_data[up_raddr[5:3]][up_raddr[1:0]];
     end else begin
        up_rdata <= 32'h00000000;
     end
@@ -197,13 +197,13 @@ reg [7:0] up_cfg_ilas_data_fchk[0:NUM_LANES-1];
 
 always @(*) begin
   for (i = 0; i < NUM_LANES; i = i + 1) begin
-    up_cfg_ilas_data[0+4*i] <= {
+    up_cfg_ilas_data[i][0] <= {
       4'b0000,
       up_cfg_ilas_data_bid,
       up_cfg_ilas_data_did,
       16'h00
     };
-    up_cfg_ilas_data[1+4*i] <= {
+    up_cfg_ilas_data[i][1] <= {
       3'b000,
       up_cfg_ilas_data_k,
       up_cfg_ilas_data_f,
@@ -213,7 +213,7 @@ always @(*) begin
       3'b000,
       up_cfg_ilas_data_lid[i]
     };
-    up_cfg_ilas_data[2+4*i] <= {
+    up_cfg_ilas_data[i][2] <= {
       up_cfg_ilas_data_jesdv,
       up_cfg_ilas_data_s,
       up_cfg_ilas_data_subclassv,
@@ -223,7 +223,7 @@ always @(*) begin
       up_cfg_ilas_data_n,
       up_cfg_ilas_data_m
     };
-    up_cfg_ilas_data[3+4*i] <= {
+    up_cfg_ilas_data[i][3] <= {
       up_cfg_ilas_data_fchk[i],
       16'h0000,
       up_cfg_ilas_data_hd,
@@ -289,15 +289,12 @@ always @(posedge up_clk) begin
   end
 end
 
-genvar j;
-generate
-for (j = 0; j < NUM_LANES; j = j + 1) begin: gen_lane
-  always @(posedge core_clk) begin
-    if (core_ilas_config_rd == 1'b1) begin
-      core_ilas_config_data[j*32+31:j*32] <= up_cfg_ilas_data[core_ilas_config_addr+4*j];
+always @(posedge core_clk) begin
+  if (core_ilas_config_rd == 1'b1) begin
+    for (i = 0; i < NUM_LANES; i = i + 1) begin
+      core_ilas_config_data[i*32+:32] <= up_cfg_ilas_data[i][core_ilas_config_addr];
     end
   end
 end
-endgenerate
 
 endmodule
