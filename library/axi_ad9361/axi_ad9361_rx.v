@@ -42,6 +42,8 @@ module axi_ad9361_rx #(
 
   parameter   ID = 0,
   parameter   MODE_1R1T = 0,
+  parameter   CMOS_OR_LVDS_N = 0,
+  parameter   PPS_RECEIVER_ENABLE = 0,
   parameter   INIT_DELAY = 0,
   parameter   USERPORTS_DISABLE = 0,
   parameter   DATAFORMAT_DISABLE = 0,
@@ -97,6 +99,7 @@ module axi_ad9361_rx #(
   // 1PPS reporting counter and interrupt
 
   input   [31:0]  up_pps_rcounter,
+  input           up_pps_status,
   output          up_pps_irq_mask,
 
   // processor interface
@@ -124,7 +127,9 @@ module axi_ad9361_rx #(
 
   // configuration settings
 
-  localparam  CONFIG =  (MODE_1R1T * 16) +
+  localparam  CONFIG =  (PPS_RECEIVER_ENABLE * 256) +
+                        (CMOS_OR_LVDS_N * 128) +
+                        (MODE_1R1T * 16) +
                         (USERPORTS_DISABLE * 8) +
                         (DATAFORMAT_DISABLE * 4) +
                         (DCFILTER_DISABLE * 2) +
@@ -349,6 +354,7 @@ module axi_ad9361_rx #(
     .adc_sync (),
     .up_adc_ce (),
     .up_pps_rcounter (up_pps_rcounter),
+    .up_pps_status (up_pps_status),
     .up_pps_irq_mask (up_pps_irq_mask),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),

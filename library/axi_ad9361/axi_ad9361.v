@@ -43,6 +43,7 @@ module axi_ad9361 #(
   parameter   MODE_1R1T = 0,
   parameter   DEVICE_TYPE = 0,
   parameter   TDD_DISABLE = 0,
+  parameter   PPS_RECEIVER_ENABLE = 0,
   parameter   CMOS_OR_LVDS_N = 0,
   parameter   ADC_INIT_DELAY = 0,
   parameter   ADC_DATAPATH_DISABLE = 0,
@@ -284,6 +285,7 @@ module axi_ad9361 #(
   wire            up_drp_locked;
 
   wire    [31:0]  up_pps_rcounter_s;
+  wire            up_pps_status_s;
   wire            up_irq_mask_s;
   wire            adc_up_pps_irq_mask_s;
   wire            dac_up_pps_irq_mask_s;
@@ -535,23 +537,36 @@ module axi_ad9361 #(
   end
   endgenerate
 
-  // GPS's 1PPS receiver
-  ad_pps_receiver i_pps_receiver (
-    .clk (clk),
-    .rst (rst),
-    .gps_pps (gps_pps),
-    .up_clk (up_clk),
-    .up_rstn (up_rstn),
-    .up_pps_rcounter (up_pps_rcounter_s),
-    .up_irq_mask (up_irq_mask_s),
-    .up_irq (gps_pps_irq));
-  assign up_irq_mask_s = adc_up_pps_irq_mask_s | dac_up_pps_irq_mask_s;
+  generate if (PPS_RECEIVER_ENABLE == 1) begin
+    // GPS's PPS receiver
+    ad_pps_receiver i_pps_receiver (
+      .clk (clk),
+      .rst (rst),
+      .gps_pps (gps_pps),
+      .up_clk (up_clk),
+      .up_rstn (up_rstn),
+      .up_pps_rcounter (up_pps_rcounter_s),
+      .up_pps_status (up_pps_status_s),
+      .up_irq_mask (up_irq_mask_s),
+      .up_irq (gps_pps_irq));
+    assign up_irq_mask_s = adc_up_pps_irq_mask_s | dac_up_pps_irq_mask_s;
+  end
+  endgenerate
+
+  generate if (PPS_RECEIVER_ENABLE == 0) begin
+    assign up_pps_rcounter_s = 32'b0;
+    assign up_pps_status_s = 1'b1;
+    assign gps_pps_irq = 1'b0;
+  end
+  endgenerate
 
   // receive
 
   axi_ad9361_rx #(
     .ID (ID),
     .MODE_1R1T (MODE_1R1T),
+    .CMOS_OR_LVDS_N (CMOS_OR_LVDS_N),
+    .PPS_RECEIVER_ENABLE (PPS_RECEIVER_ENABLE),
     .INIT_DELAY (ADC_INIT_DELAY),
     .USERPORTS_DISABLE (ADC_USERPORTS_DISABLE_INT),
     .DATAFORMAT_DISABLE (ADC_DATAFORMAT_DISABLE_INT),
@@ -561,6 +576,7 @@ module axi_ad9361 #(
     .mmcm_rst (mmcm_rst),
     .adc_rst (rst),
     .adc_clk (clk),
+
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
@@ -589,7 +605,8 @@ module axi_ad9361 #(
     .adc_dunf (adc_dunf),
     .up_adc_gpio_in (up_adc_gpio_in),
     .up_adc_gpio_out (up_adc_gpio_out),
-    .up_pps_rcounter(up_pps_rcounter_s),
+    .up_pps_rcounter (up_pps_rcounter_s),
+    .up_pps_status (up_pps_status_s),
     .up_pps_irq_mask (adc_up_pps_irq_mask_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -614,6 +631,8 @@ module axi_ad9361 #(
   axi_ad9361_tx #(
     .ID (ID),
     .MODE_1R1T (MODE_1R1T),
+    .CMOS_OR_LVDS_N (CMOS_OR_LVDS_N),
+    .PPS_RECEIVER_ENABLE (PPS_RECEIVER_ENABLE),
     .INIT_DELAY (DAC_INIT_DELAY),
     .DDS_DISABLE (DAC_DDS_DISABLE_INT),
     .USERPORTS_DISABLE (DAC_USERPORTS_DISABLE_INT),
@@ -648,7 +667,8 @@ module axi_ad9361 #(
     .dac_data_q1 (dac_data_q1),
     .dac_dovf(dac_dovf),
     .dac_dunf(dac_dunf),
-    .up_pps_rcounter(up_pps_rcounter_s),
+    .up_pps_rcounter (up_pps_rcounter_s),
+    .up_pps_status (up_pps_status_s),
     .up_pps_irq_mask (dac_up_pps_irq_mask_s),
     .up_dac_gpio_in (up_dac_gpio_in),
     .up_dac_gpio_out (up_dac_gpio_out),

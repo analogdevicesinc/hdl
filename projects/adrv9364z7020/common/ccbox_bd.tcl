@@ -11,6 +11,10 @@ set_property CONFIG.PCW_UART0_UART0_IO {MIO 14 .. 15} [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_USE_DMA0 1 [get_bd_cells sys_ps7]
 set_property CONFIG.PCW_USE_DMA1 1 [get_bd_cells sys_ps7]
 
+# enable PPS receiver
+
+ad_ip_parameter axi_ad9361 CONFIG.PPS_RECEIVER_ENABLE 1
+
 # i2s
 
 create_bd_port -dir O -type clk i2s_mclk

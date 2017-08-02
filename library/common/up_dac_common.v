@@ -68,6 +68,7 @@ module up_dac_common #(
   input       [31:0]  dac_clk_ratio,
   output              up_dac_ce,
   input       [31:0]  up_pps_rcounter,
+  input               up_pps_status,
   output  reg         up_pps_irq_mask,
 
   // drp interface
@@ -378,6 +379,7 @@ module up_dac_common #(
           8'h2e: up_rdata_int <= up_dac_gpio_in;
           8'h2f: up_rdata_int <= up_dac_gpio_out_int;
           8'h30: up_rdata_int <= up_pps_rcounter;
+          8'h31: up_rdata_int <= up_pps_status;
           default: up_rdata_int <= 0;
         endcase
       end else begin
