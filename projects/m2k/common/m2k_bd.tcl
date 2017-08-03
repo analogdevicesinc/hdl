@@ -139,6 +139,7 @@ ad_ip_instance axi_adc_trigger adc_trigger
 
 ad_ip_instance axi_adc_decimate axi_adc_decimate
 ad_ip_instance axi_dac_interpolate axi_dac_interpolate
+ad_ip_parameter axi_dac_interpolate CONFIG.CORRECTION_DISABLE {0}
 
 ad_ip_instance proc_sys_reset logic_analyzer_reset
 
