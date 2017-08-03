@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module axi_dac_interpolate(
+module axi_dac_interpolate #(
+
+  parameter CORRECTION_DISABLE = 1) (
 
   input                 dac_clk,
   input                 dac_rst,
@@ -94,12 +96,19 @@ module axi_dac_interpolate(
 
   wire              dma_transfer_suspend;
 
+  wire              dac_correction_enable_a;
+  wire              dac_correction_enable_b;
+  wire    [15:0]    dac_correction_coefficient_a;
+  wire    [15:0]    dac_correction_coefficient_b;
+
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  axi_dac_interpolate_filter i_filter_a (
+  axi_dac_interpolate_filter #(
+    .CORRECTION_DISABLE(CORRECTION_DISABLE))
+    i_filter_a (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
 
@@ -111,10 +120,14 @@ module axi_dac_interpolate(
 
     .filter_mask (filter_mask_a),
     .interpolation_ratio (interpolation_ratio_a),
-    .dma_transfer_suspend (dma_transfer_suspend)
+    .dma_transfer_suspend (dma_transfer_suspend),
+    .dac_correction_enable(dac_correction_enable_a),
+    .dac_correction_coefficient(dac_correction_coefficient_a)
   );
 
-  axi_dac_interpolate_filter i_filter_b (
+  axi_dac_interpolate_filter #(
+    .CORRECTION_DISABLE(CORRECTION_DISABLE))
+    i_filter_b (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
 
@@ -126,7 +139,9 @@ module axi_dac_interpolate(
 
     .filter_mask (filter_mask_b),
     .interpolation_ratio (interpolation_ratio_b),
-    .dma_transfer_suspend (dma_transfer_suspend)
+    .dma_transfer_suspend (dma_transfer_suspend),
+    .dac_correction_enable(dac_correction_enable_b),
+    .dac_correction_coefficient(dac_correction_coefficient_b)
   );
 
   axi_dac_interpolate_reg axi_dac_interpolate_reg_inst (
@@ -139,6 +154,10 @@ module axi_dac_interpolate(
     .dac_filter_mask_b (filter_mask_b),
 
     .dma_transfer_suspend (dma_transfer_suspend),
+    .dac_correction_enable_a(dac_correction_enable_a),
+    .dac_correction_enable_b(dac_correction_enable_b),
+    .dac_correction_coefficient_a(dac_correction_coefficient_a),
+    .dac_correction_coefficient_b(dac_correction_coefficient_b),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),

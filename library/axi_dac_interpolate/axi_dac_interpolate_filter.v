@@ -36,7 +36,10 @@
 `timescale 1ns/100ps
 
 
-module axi_dac_interpolate_filter (
+module axi_dac_interpolate_filter #(
+
+  parameter CORRECTION_DISABLE = 1) (
+
   input                 dac_clk,
   input                 dac_rst,
 
@@ -48,6 +51,8 @@ module axi_dac_interpolate_filter (
 
   input       [ 2:0]    filter_mask,
   input       [31:0]    interpolation_ratio,
+  input       [15:0]    dac_correction_coefficient,
+  input                 dac_correction_enable,
   input                 dma_transfer_suspend
 );
 
@@ -61,23 +66,39 @@ module axi_dac_interpolate_filter (
 
   reg               filter_enable = 1'b0;
 
+  wire              dac_valid_corrected;
+  wire    [15:0]    dac_data_corrected;
   wire              dac_fir_valid;
   wire    [35:0]    dac_fir_data;
 
   wire              dac_cic_valid;
   wire    [109:0]   dac_cic_data;
- 
+
+  ad_iqcor #(.Q_OR_I_N (0),
+    .DISABLE(CORRECTION_DISABLE),
+    .SCALE_ONLY(1)) 
+  i_ad_iqcor (
+    .clk (dac_clk),
+    .valid (dac_valid),
+    .data_in (dac_data),
+    .data_iq (16'h0),
+    .valid_out (dac_valid_corrected),
+    .data_out (dac_data_corrected),
+    .iqcor_enable (dac_correction_enable),
+    .iqcor_coeff_1 (dac_correction_coefficient),
+    .iqcor_coeff_2 (16'h0));
+
   fir_interp fir_interpolation (
     .clk (dac_clk),
     .clk_enable (dac_cic_valid),
     .reset (dac_rst | dma_transfer_suspend),
-    .filter_in (dac_data),
+    .filter_in (dac_data_corrected),
     .filter_out (dac_fir_data),
     .ce_out (dac_fir_valid));
 
   cic_interp cic_interpolation (
     .clk (dac_clk),
-    .clk_enable (dac_valid),
+    .clk_enable (dac_valid_corrected),
     .reset (dac_rst | cic_change_rate | dma_transfer_suspend),
     .rate (interp_rate_cic),
     .load_rate (1'b0),
@@ -121,12 +142,12 @@ module axi_dac_interpolate_filter (
 
   always @(*) begin
     case (filter_enable)
-      1'b0: dac_int_data = dac_data;
+      1'b0: dac_int_data = dac_data_corrected;
       default: dac_int_data = dac_cic_data[31:16];
     endcase
 
     case (filter_mask)
-      1'b0: dac_filt_int_valid = dac_valid & !dma_transfer_suspend;
+      1'b0: dac_filt_int_valid = dac_valid_corrected & !dma_transfer_suspend;
       default: dac_filt_int_valid = dac_fir_valid;
     endcase
 
