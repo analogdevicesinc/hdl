@@ -11,7 +11,7 @@ add_interface sys_rstn reset sink
 set_interface_property sys_rstn EXPORT_OF sys_clk.clk_in_reset
 set_instance_parameter_value sys_clk {clockFrequency} {100000000.0}
 set_instance_parameter_value sys_clk {clockFrequencyKnown} {1}
-set_instance_parameter_value sys_clk {resetSynchronousEdges} {DEASSERT}
+set_instance_parameter_value sys_clk {resetSynchronousEdges} {NONE}
 
 # hps
 # round-about way - qsys-script doesn't support {*}?
