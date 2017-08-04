@@ -77,7 +77,6 @@ module axi_dacfifo #(
   output      [ 3:0]      axi_awcache,
   output      [ 2:0]      axi_awprot,
   output      [ 3:0]      axi_awqos,
-  output      [ 3:0]      axi_awuser,
   output      [ 7:0]      axi_awlen,
   output      [ 2:0]      axi_awsize,
   output      [ 31:0]     axi_awaddr,
@@ -86,12 +85,10 @@ module axi_dacfifo #(
   output      [(AXI_DATA_WIDTH-1):0]  axi_wdata,
   output      [(AXI_DATA_WIDTH/8-1):0]  axi_wstrb,
   output                  axi_wlast,
-  output      [ 3:0]      axi_wuser,
   input                   axi_wready,
   input                   axi_bvalid,
   input       [ 3:0]      axi_bid,
   input       [ 1:0]      axi_bresp,
-  input       [ 3:0]      axi_buser,
   output                  axi_bready,
   output                  axi_arvalid,
   output      [ 3:0]      axi_arid,
@@ -100,19 +97,16 @@ module axi_dacfifo #(
   output      [ 3:0]      axi_arcache,
   output      [ 2:0]      axi_arprot,
   output      [ 3:0]      axi_arqos,
-  output      [ 3:0]      axi_aruser,
   output      [ 7:0]      axi_arlen,
   output      [ 2:0]      axi_arsize,
   output      [ 31:0]     axi_araddr,
   input                   axi_arready,
   input                   axi_rvalid,
   input       [ 3:0]      axi_rid,
-  input       [ 3:0]      axi_ruser,
   input       [ 1:0]      axi_rresp,
   input                   axi_rlast,
   input       [(AXI_DATA_WIDTH-1):0]  axi_rdata,
   output                  axi_rready);
-
 
   localparam  FIFO_BYPASS = (DAC_DATA_WIDTH == DMA_DATA_WIDTH) ? 1 : 0;
 
@@ -123,14 +117,12 @@ module axi_dacfifo #(
   reg                                 dac_xfer_out_m1 = 1'b0;
   reg                                 dac_xfer_out_bypass = 1'b0;
 
-  // internal signals
-
   wire    [(AXI_DATA_WIDTH-1):0]      axi_rd_data_s;
   wire                                axi_rd_ready_s;
   wire                                axi_rd_valid_s;
   wire                                axi_xfer_req_s;
-  wire    [31:0]                      axi_last_addr_s;
-  wire    [ 7:0]                      axi_last_beats_s;
+  (* dont_touch = "true" *) wire    [31:0]                      axi_last_addr_s;
+  (* dont_touch = "true" *) wire    [ 7:0]                      axi_last_beats_s;
   wire                                axi_dlast_s;
   wire    [ 3:0]                      dma_last_beats_s;
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_fifo_s;
@@ -147,9 +139,10 @@ module axi_dacfifo #(
     .AXI_LENGTH (AXI_LENGTH),
     .AXI_ADDRESS (AXI_ADDRESS),
     .AXI_ADDRESS_LIMIT (AXI_ADDRESS_LIMIT),
-    .DMA_MEM_ADDRESS_WIDTH (14)
+    .DMA_MEM_ADDRESS_WIDTH (12)
   ) i_wr (
     .dma_clk (dma_clk),
+    .dma_rst (dma_rst),
     .dma_data (dma_data),
     .dma_ready (dma_ready),
     .dma_ready_out (dma_ready_wr_s),
@@ -169,7 +162,6 @@ module axi_dacfifo #(
     .axi_awcache (axi_awcache),
     .axi_awprot (axi_awprot),
     .axi_awqos (axi_awqos),
-    .axi_awuser (axi_awuser),
     .axi_awlen (axi_awlen),
     .axi_awsize (axi_awsize),
     .axi_awaddr (axi_awaddr),
@@ -178,12 +170,10 @@ module axi_dacfifo #(
     .axi_wdata (axi_wdata),
     .axi_wstrb (axi_wstrb),
     .axi_wlast (axi_wlast),
-    .axi_wuser (axi_wuser),
     .axi_wready (axi_wready),
     .axi_bvalid (axi_bvalid),
     .axi_bid (axi_bid),
     .axi_bresp (axi_bresp),
-    .axi_buser (axi_buser),
     .axi_bready (axi_bready),
     .axi_werror (axi_werror));
 
@@ -191,7 +181,9 @@ module axi_dacfifo #(
     .AXI_DATA_WIDTH (AXI_DATA_WIDTH),
     .AXI_SIZE (AXI_SIZE),
     .AXI_LENGTH (AXI_LENGTH),
-    .AXI_ADDRESS (AXI_ADDRESS)
+    .AXI_ADDRESS (AXI_ADDRESS),
+    .DAC_DATA_WIDTH (DAC_DATA_WIDTH),
+    .DAC_MEM_ADDRESS_WIDTH (12)
   ) i_rd (
     .axi_xfer_req (axi_xfer_req_s),
     .axi_last_raddr (axi_last_addr_s),
@@ -205,36 +197,17 @@ module axi_dacfifo #(
     .axi_arcache (axi_arcache),
     .axi_arprot (axi_arprot),
     .axi_arqos (axi_arqos),
-    .axi_aruser (axi_aruser),
     .axi_arlen (axi_arlen),
     .axi_arsize (axi_arsize),
     .axi_araddr (axi_araddr),
     .axi_arready (axi_arready),
     .axi_rvalid (axi_rvalid),
     .axi_rid (axi_rid),
-    .axi_ruser (axi_ruser),
     .axi_rresp (axi_rresp),
     .axi_rlast (axi_rlast),
     .axi_rdata (axi_rdata),
     .axi_rready (axi_rready),
     .axi_rerror (axi_rerror),
-    .axi_dvalid (axi_rd_valid_s),
-    .axi_ddata (axi_rd_data_s),
-    .axi_dready (axi_rd_ready_s),
-    .axi_dlast (axi_dlast_s));
-
-  axi_dacfifo_dac #(
-    .AXI_DATA_WIDTH (AXI_DATA_WIDTH),
-    .AXI_LENGTH(AXI_LENGTH),
-    .DAC_DATA_WIDTH (DAC_DATA_WIDTH),
-    .DAC_MEM_ADDRESS_WIDTH (14)
-  ) i_dac (
-    .axi_clk (axi_clk),
-    .axi_dvalid (axi_rd_valid_s),
-    .axi_ddata (axi_rd_data_s),
-    .axi_dready (axi_rd_ready_s),
-    .axi_dlast (axi_dlast_s),
-    .axi_xfer_req (axi_xfer_req_s),
     .dma_last_beats (dma_last_beats_s),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),

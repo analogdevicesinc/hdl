@@ -9,12 +9,13 @@ adi_ip_files axi_dacfifo [list \
   "$ad_hdl_dir/library/common/ad_g2b.v" \
   "$ad_hdl_dir/library/common/ad_b2g.v" \
   "$ad_hdl_dir/library/common/ad_mem_asym.v" \
+  "$ad_hdl_dir/library/common/ad_mem.v" \
   "$ad_hdl_dir/library/common/ad_axis_inf_rx.v" \
   "$ad_hdl_dir/library/common/util_dacfifo_bypass.v" \
   "axi_dacfifo_constr.xdc" \
-  "axi_dacfifo_dac.v" \
   "axi_dacfifo_wr.v" \
   "axi_dacfifo_rd.v" \
+  "axi_dacfifo_address_buffer.v" \
   "axi_dacfifo.v"]
 
 adi_ip_properties_lite axi_dacfifo
@@ -27,7 +28,6 @@ ipx::infer_bus_interface {\
   axi_awcache \
   axi_awprot \
   axi_awqos \
-  axi_awuser \
   axi_awlen \
   axi_awsize \
   axi_awaddr \
@@ -36,12 +36,10 @@ ipx::infer_bus_interface {\
   axi_wdata \
   axi_wstrb \
   axi_wlast \
-  axi_wuser \
   axi_wready \
   axi_bvalid \
   axi_bid \
   axi_bresp \
-  axi_buser \
   axi_bready \
   axi_arvalid \
   axi_arid \
@@ -50,14 +48,12 @@ ipx::infer_bus_interface {\
   axi_arcache \
   axi_arprot \
   axi_arqos \
-  axi_aruser \
   axi_arlen \
   axi_arsize \
   axi_araddr \
   axi_arready \
   axi_rvalid \
   axi_rid \
-  axi_ruser \
   axi_rresp \
   axi_rlast \
   axi_rdata \
