@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module axi_adc_decimate(
+module axi_adc_decimate #(
+
+  parameter CORRECTION_DISABLE = 1) (
 
   input                 adc_clk,
   input                 adc_rst,
@@ -89,18 +91,28 @@ module axi_adc_decimate(
 
   wire    [31:0]    decimation_ratio;
   wire    [ 2:0]    filter_mask;
+  wire              adc_correction_enable_a;
+  wire              adc_correction_enable_b;
+  wire    [15:0]    adc_correction_coefficient_a;
+  wire    [15:0]    adc_correction_coefficient_b;
 
   // signal name changes
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  axi_adc_decimate_filter axi_adc_decimate_filter (
+  axi_adc_decimate_filter #(
+    .CORRECTION_DISABLE(CORRECTION_DISABLE)
+  ) axi_adc_decimate_filter (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
 
     .decimation_ratio (decimation_ratio),
     .filter_mask (filter_mask),
+    .adc_correction_enable_a(adc_correction_enable_a),
+    .adc_correction_enable_b(adc_correction_enable_b),
+    .adc_correction_coefficient_a(adc_correction_coefficient_a),
+    .adc_correction_coefficient_b(adc_correction_coefficient_b),
 
     .adc_valid_a(adc_valid_a),
     .adc_valid_b(adc_valid_b),
@@ -118,6 +130,11 @@ module axi_adc_decimate(
 
     .adc_decimation_ratio (decimation_ratio),
     .adc_filter_mask (filter_mask),
+
+    .adc_correction_enable_a(adc_correction_enable_a),
+    .adc_correction_enable_b(adc_correction_enable_b),
+    .adc_correction_coefficient_a(adc_correction_coefficient_a),
+    .adc_correction_coefficient_b(adc_correction_coefficient_b),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),
