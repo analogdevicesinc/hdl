@@ -89,7 +89,7 @@ reg ilas_config_rd_d1 = 1'b1;
 reg last_ilas_mframe = 1'b0;
 reg cgs_enable = 1'b1;
 
-sync_bits i_sync_sync (
+sync_bits i_cdc_sync (
   .in(sync),
   .out_clk(clk),
   .out_resetn(1'b1),

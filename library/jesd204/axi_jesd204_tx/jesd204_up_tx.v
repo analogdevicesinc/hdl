@@ -78,7 +78,7 @@ reg up_ctrl_manual_sync_request = 1'b0;
 wire [1:0] up_status_state;
 wire up_status_sync;
 
-sync_bits i_sync_sync (
+sync_bits i_cdc_sync (
   .in(core_status_sync),
   .out_clk(up_clk),
   .out_resetn(1'b1),
@@ -87,7 +87,7 @@ sync_bits i_sync_sync (
 
 sync_data #(
   .NUM_OF_BITS(2)
-) i_sync_state (
+) i_cdc_status (
   .in_clk(core_clk),
   .in_data(core_status_state),
   .out_clk(up_clk),
@@ -97,7 +97,7 @@ sync_data #(
 sync_event #(
   .NUM_OF_EVENTS(1),
   .ASYNC_CLK(1)
-) i_sync_manual_sync_request (
+) i_cdc_manual_sync_request (
   .in_clk(up_clk),
   .in_event(up_ctrl_manual_sync_request),
   .out_clk(core_clk),

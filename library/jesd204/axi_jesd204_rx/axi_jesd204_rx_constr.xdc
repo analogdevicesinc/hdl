@@ -56,34 +56,34 @@ set_property ASYNC_REG TRUE \
   [get_cells -hier {up_reset_synchronizer_vector_reg*}]
 
 set_false_path \
-  -from [get_pins {i_up_rx/i_sync_status/in_toggle_d1_reg/C}] \
-  -to [get_pins {i_up_rx/i_sync_status/i_sync_out/cdc_sync_stage1_reg[0]/D}]
+  -from [get_pins {i_up_rx/i_cdc_status/in_toggle_d1_reg/C}] \
+  -to [get_pins {i_up_rx/i_cdc_status/i_sync_out/cdc_sync_stage1_reg[0]/D}]
 
 set_false_path \
-  -from [get_pins {i_up_rx/i_sync_status/out_toggle_d1_reg/C}] \
-  -to [get_pins {i_up_rx/i_sync_status/i_sync_in/cdc_sync_stage1_reg[0]/D}]
+  -from [get_pins {i_up_rx/i_cdc_status/out_toggle_d1_reg/C}] \
+  -to [get_pins {i_up_rx/i_cdc_status/i_sync_in/cdc_sync_stage1_reg[0]/D}]
 
 set_false_path \
-  -from [get_pins {i_up_sysref/i_sysref_event_sync/in_toggle_d1_reg/C}] \
-  -to [get_pins {i_up_sysref/i_sysref_event_sync/i_sync_out/cdc_sync_stage1_reg[0]/D}]
+  -from [get_pins {i_up_sysref/i_cdc_sysref_event/in_toggle_d1_reg/C}] \
+  -to [get_pins {i_up_sysref/i_cdc_sysref_event/i_sync_out/cdc_sync_stage1_reg[0]/D}]
 
 set_false_path \
-  -from [get_pins {i_up_sysref/i_sysref_event_sync/out_toggle_d1_reg/C}] \
-  -to [get_pins {i_up_sysref/i_sysref_event_sync/i_sync_in/cdc_sync_stage1_reg[0]/D}]
+  -from [get_pins {i_up_sysref/i_cdc_sysref_event/out_toggle_d1_reg/C}] \
+  -to [get_pins {i_up_sysref/i_cdc_sysref_event/i_sync_in/cdc_sync_stage1_reg[0]/D}]
 
 set_false_path \
-  -from [get_pins {i_up_sysref/i_sysref_event_sync/cdc_hold_reg*/C}] \
-  -to [get_pins {i_up_sysref/i_sysref_event_sync/out_event_reg*/D}]
+  -from [get_pins {i_up_sysref/i_cdc_sysref_event/cdc_hold_reg*/C}] \
+  -to [get_pins {i_up_sysref/i_cdc_sysref_event/out_event_reg*/D}]
 
 # Don't place them too far appart
 set_max_delay -datapath_only \
-  -from [get_pins {i_up_rx/i_sync_status/cdc_hold_reg[*]/C}] \
-  -to [get_pins {i_up_rx/i_sync_status/out_data_reg[*]/D}] \
+  -from [get_pins {i_up_rx/i_cdc_status/cdc_hold_reg[*]/C}] \
+  -to [get_pins {i_up_rx/i_cdc_status/out_data_reg[*]/D}] \
   [get_property -min PERIOD $axi_clk]
 
 set_false_path \
   -from $core_clk \
-  -to [get_pins {i_up_rx/*i_up_rx_lane/i_sync_status_ready/cdc_sync_stage1_reg*/D}]
+  -to [get_pins {i_up_rx/*i_up_rx_lane/i_cdc_status_ready/cdc_sync_stage1_reg*/D}]
 
 set_max_delay -datapath_only \
   -from $core_clk \
@@ -92,7 +92,7 @@ set_max_delay -datapath_only \
 
 set_false_path \
   -from $core_clk \
-  -to [get_pins {i_up_rx/*i_up_rx_lane/i_ilas_mem/i_sync_ilas_ready/cdc_sync_stage1_reg[0]/D}]
+  -to [get_pins {i_up_rx/*i_up_rx_lane/i_ilas_mem/i_cdc_ilas_ready/cdc_sync_stage1_reg[0]/D}]
 
 set_max_delay -datapath_only \
   -from [get_pins {i_up_rx/*i_up_rx_lane/i_ilas_mem/*mem_reg*/CLK}] \

@@ -72,7 +72,7 @@ wire up_ilas_ready;
 
 sync_bits #(
   .NUM_OF_BITS(1)
-) i_sync_status_ready (
+) i_cdc_status_ready (
   .in({
     core_status_ifs_ready
   }),

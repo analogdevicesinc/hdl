@@ -61,7 +61,7 @@ module jesd204_up_ilas_mem (
 reg [3:0] mem[0:31];
 reg core_ilas_captured = 1'b0;
 
-sync_bits i_sync_ilas_ready (
+sync_bits i_cdc_ilas_ready (
   .in(core_ilas_captured),
   .out_resetn(1'b1),
   .out_clk(up_clk),

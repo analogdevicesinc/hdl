@@ -80,7 +80,7 @@ wire [31:0] up_lane_rdata[0:NUM_LANES-1];
 
 sync_data #(
   .NUM_OF_BITS(3+NUM_LANES*(2))
-) i_sync_status (
+) i_cdc_status (
   .in_clk(core_clk),
   .in_data({
     core_status_ctrl_state,
