@@ -31,6 +31,7 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
+  "$ad_hdl_dir/library/common/ad_pps_receiver_constr.ttcl" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
@@ -47,6 +48,7 @@ adi_ip_files axi_ad9361 [list \
   "axi_ad9361.v" ]
 
 adi_ip_properties axi_ad9361
+adi_ip_ttcl axi_ad9361 "$ad_hdl_dir/library/common/ad_pps_receiver_constr.ttcl"
 
 set_property driver_value 0 [ipx::get_ports *rx_clk_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *rx_frame_in* -of_objects [ipx::current_core]]
