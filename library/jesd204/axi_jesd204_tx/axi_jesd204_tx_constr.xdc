@@ -82,19 +82,6 @@ set_max_delay -datapath_only \
   [get_property -min PERIOD $axi_clk]
 
 set_false_path \
-  -from [get_pins {i_sync_events/out_toggle_d1_reg/C}]  \
-  -to [get_pins {i_sync_events/i_sync_in/cdc_sync_stage1_reg[0]/D}]
-
-set_false_path \
-  -from [get_pins {i_sync_events/in_toggle_d1_reg/C}] \
-  -to [get_pins {i_sync_events/i_sync_out/cdc_sync_stage1_reg[0]/D}]
-
-set_max_delay -datapath_only \
-  -from [get_pins {i_sync_events/cdc_hold_reg[*]/C}] \
-  -to [get_pins {i_sync_events/out_event_reg[*]/D}] \
-  [get_property -min PERIOD $axi_clk]
-
-set_false_path \
   -from $core_clk \
   -to [get_pins {i_up_tx/i_sync_sync/cdc_sync_stage1_reg[0]/D}]
 
