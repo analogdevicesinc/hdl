@@ -13,22 +13,26 @@ current_bd_instance /spi
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M_AXIS_SAMPLE
 
   ad_ip_instance spi_engine_execution execution
-  ad_ip_instance axi_spi_engine axi
-  ad_ip_instance spi_engine_offload offload
-  ad_ip_instance spi_engine_interconnect interconnect
-  ad_ip_instance util_pulse_gen trigger_gen
-
-  ad_ip_parameter offload CONFIG.DATA_WIDTH 16
-  ad_ip_parameter axi CONFIG.DATA_WIDTH 16
-  ad_ip_parameter interconnect CONFIG.DATA_WIDTH 16
   ad_ip_parameter execution CONFIG.DATA_WIDTH 16
+  ad_ip_parameter execution CONFIG.NUM_OF_CS 1
+  ad_ip_parameter execution CONFIG.NUM_OF_SDI 2
+
+  ad_ip_instance axi_spi_engine axi
+  ad_ip_parameter axi CONFIG.DATA_WIDTH 16
+
+  ad_ip_instance spi_engine_offload offload
+  ad_ip_parameter offload CONFIG.DATA_WIDTH 16
+
+  ad_ip_instance spi_engine_interconnect interconnect
+  ad_ip_parameter interconnect CONFIG.DATA_WIDTH 16
+
+  ad_ip_instance util_pulse_gen trigger_gen
 
   ## to setup the sample rate of the system change the PULSE_PERIOD value
   ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
   ad_ip_parameter trigger_gen CONFIG.PULSE_PERIOD 100
   ad_ip_parameter trigger_gen CONFIG.PULSE_WIDTH 1
 
-  ad_ip_parameter execution CONFIG.NUM_OF_CS 1
   ad_ip_parameter axi CONFIG.NUM_OFFLOAD 1
 
   ad_connect axi/spi_engine_offload_ctrl0 offload/spi_engine_offload_ctrl

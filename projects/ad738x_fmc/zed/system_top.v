@@ -187,8 +187,6 @@ module system_top (
     .spi_sdo_t (),
     .spi_sdi (spi_sdia),
     .spi_sdi_1 (spi_sdib),
-    .spi_sdi_2 (1'b0),
-    .spi_sdi_3 (1'b0),
     .spi_cs (spi_cs),
     .spi_sclk (spi_sclk),
     .otg_vbusoc (otg_vbusoc),
