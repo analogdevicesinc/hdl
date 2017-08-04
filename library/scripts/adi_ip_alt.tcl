@@ -151,6 +151,10 @@ proc ad_ip_addfile {pname pfile} {
     add_fileset_file $pmodule SDC PATH $pfile
     return
   }
+  if {$ptype eq ".tcl"} {
+    add_fileset_file $pmodule OTHER PATH $pfile
+    return
+  }
 }
 
 proc ad_ip_files {pname pfiles {pfunction ""}} {
