@@ -76,7 +76,7 @@ ad_ip_parameter axi_ad9963 CONFIG.DAC_DATAPATH_DISABLE 1
 ad_ip_parameter axi_ad9963 CONFIG.ADC_USERPORTS_DISABLE 1
 ad_ip_parameter axi_ad9963 CONFIG.ADC_DATAFORMAT_DISABLE 1
 ad_ip_parameter axi_ad9963 CONFIG.ADC_DCFILTER_DISABLE 1
-ad_ip_parameter axi_ad9963 CONFIG.ADC_IQCORRECTION_DISABLE 0
+ad_ip_parameter axi_ad9963 CONFIG.ADC_IQCORRECTION_DISABLE 1
 ad_ip_parameter axi_ad9963 CONFIG.ADC_SCALECORRECTION_ONLY 1
 
 ad_ip_instance util_var_fifo adc_trigger_fifo
@@ -138,6 +138,8 @@ ad_ip_parameter ad9963_dac_dmac_b CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_D
 ad_ip_instance axi_adc_trigger adc_trigger
 
 ad_ip_instance axi_adc_decimate axi_adc_decimate
+ad_ip_parameter axi_adc_decimate CONFIG.CORRECTION_DISABLE {0}
+
 ad_ip_instance axi_dac_interpolate axi_dac_interpolate
 ad_ip_parameter axi_dac_interpolate CONFIG.CORRECTION_DISABLE {0}
 
