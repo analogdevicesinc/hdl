@@ -8,6 +8,8 @@ adi_ip_files axi_dmac [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "inc_id.h" \
   "resp.h" \
+  "axi_dmac_regmap.v" \
+  "axi_dmac_regmap_request.v" \
   "address_generator.v" \
   "data_mover.v" \
   "request_arb.v" \
