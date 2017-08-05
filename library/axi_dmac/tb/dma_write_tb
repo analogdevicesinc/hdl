@@ -2,7 +2,7 @@
 
 SOURCE="dma_write_tb.v"
 SOURCE+=" axi_write_slave.v axi_slave.v"
-SOURCE+=" ../request_arb.v ../request_generator.v ../splitter.v"
+SOURCE+=" ../axi_dmac_transfer.v ../2d_transfer.v ../request_arb.v ../request_generator.v ../splitter.v"
 SOURCE+=" ../data_mover.v ../axi_register_slice.v"
 SOURCE+=" ../src_fifo_inf.v"
 SOURCE+=" ../dest_axi_mm.v ../response_handler.v ../address_generator.v"
