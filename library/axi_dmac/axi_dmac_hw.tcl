@@ -26,6 +26,8 @@ add_fileset_file address_gray_pipelined.v VERILOG PATH $ad_hdl_dir/library/util_
 add_fileset_file address_sync.v           VERILOG PATH $ad_hdl_dir/library/util_axis_fifo/address_sync.v
 add_fileset_file inc_id.h                 VERILOG_INCLUDE PATH inc_id.h
 add_fileset_file resp.h                   VERILOG_INCLUDE PATH resp.h
+add_fileset_file regmap.v                 VERILOG PATH regmap.v
+add_fileset_file regmap_request.v         VERILOG PATH regmap_request.v
 add_fileset_file address_generator.v      VERILOG PATH address_generator.v
 add_fileset_file data_mover.v             VERILOG PATH data_mover.v
 add_fileset_file request_arb.v            VERILOG PATH request_arb.v
