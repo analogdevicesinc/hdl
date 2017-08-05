@@ -28,6 +28,7 @@ ad_ip_files axi_dmac [list \
   resp.h \
   axi_dmac_regmap.v \
   axi_dmac_regmap_request.v \
+  axi_dmac_transfer.v \
   address_generator.v \
   data_mover.v \
   request_arb.v \

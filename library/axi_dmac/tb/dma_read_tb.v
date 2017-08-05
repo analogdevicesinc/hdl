@@ -99,14 +99,14 @@ module dmac_dma_read_tb;
   reg fifo_rd_dout_mismatch = 1'b0;
   reg [31:0] fifo_rd_dout_limit = 'h0;
 
-  dmac_request_arb #(
+  axi_dmac_transfer #(
     .DMA_TYPE_SRC(0),
     .DMA_TYPE_DEST(2),
     .DMA_DATA_WIDTH_SRC(32),
     .DMA_DATA_WIDTH_DEST(32),
     .FIFO_SIZE(8)
-  ) request_arb (
-    .m_src_axi_aclk (clk),
+  ) transfer (
+    .m_src_axi_aclk(clk),
     .m_src_axi_aresetn(resetn),
 
     .m_axi_arvalid(arvalid),
@@ -123,19 +123,22 @@ module dmac_dma_read_tb;
     .m_axi_rdata(rdata),
     .m_axi_rresp(rresp),
 
-    .req_aclk(clk),
-    .req_aresetn(resetn),
+    .req_clk(clk),
+    .req_resetn(resetn),
 
     .enable(1'b1),
     .pause(1'b0),
 
-    .eot(eot),
+    .req_eot(eot),
 
     .req_valid(req_valid),
     .req_ready(req_ready),
     .req_dest_address(TRANSFER_ADDR[31:2]),
     .req_src_address(TRANSFER_ADDR[31:2]),
-    .req_length(req_length),
+    .req_x_length(req_length),
+    .req_y_length(24'h00),
+    .req_dest_stride(24'h00),
+    .req_src_stride(24'h00),
     .req_sync_transfer_start(1'b0),
 
     .fifo_rd_clk(clk),

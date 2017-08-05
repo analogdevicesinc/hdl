@@ -315,14 +315,6 @@ assign m_src_axi_wid = 'h0;
 assign m_src_axi_arid = 'h0;
 assign m_src_axi_arlock = 'h0;
 
-wire dma_req_valid;
-wire dma_req_ready;
-wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
-wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
-wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
-wire dma_req_eot;
-wire dma_req_sync_transfer_start;
-wire dma_req_last;
 wire up_req_eot;
 
 wire ctrl_enable;
@@ -417,53 +409,7 @@ axi_dmac_regmap #(
   .dbg_ids1(dbg_ids1)
 );
 
-generate if (DMA_2D_TRANSFER == 1) begin
-
-dmac_2d_transfer #(
-  .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
-  .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
-  .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC)
-) i_2d_transfer (
-  .req_aclk(s_axi_aclk),
-  .req_aresetn(s_axi_aresetn),
-
-  .req_eot(up_req_eot),
-
-  .req_valid(up_dma_req_valid),
-  .req_ready(up_dma_req_ready),
-  .req_dest_address(up_dma_req_dest_address),
-  .req_src_address(up_dma_req_src_address),
-  .req_x_length(up_dma_req_x_length),
-  .req_y_length(up_dma_req_y_length),
-  .req_dest_stride(up_dma_req_dest_stride),
-  .req_src_stride(up_dma_req_src_stride),
-  .req_sync_transfer_start(up_dma_req_sync_transfer_start),
-
-  .out_req_valid(dma_req_valid),
-  .out_req_ready(dma_req_ready),
-  .out_req_dest_address(dma_req_dest_address),
-  .out_req_src_address(dma_req_src_address),
-  .out_req_length(dma_req_length),
-  .out_req_sync_transfer_start(dma_req_sync_transfer_start),
-  .out_eot(dma_req_eot)
-);
-
-assign dma_req_last = 1'b0;
-
-end else begin
-
-assign dma_req_valid = up_dma_req_valid;
-assign up_dma_req_ready = dma_req_ready;
-assign dma_req_dest_address = up_dma_req_dest_address;
-assign dma_req_src_address = up_dma_req_src_address;
-assign dma_req_length = up_dma_req_x_length;
-assign dma_req_sync_transfer_start = up_dma_req_sync_transfer_start;
-assign dma_req_last = up_dma_req_last;
-assign up_req_eot = dma_req_eot;
-
-end endgenerate
-
-dmac_request_arb #(
+axi_dmac_transfer #(
   .DMA_DATA_WIDTH_SRC(DMA_DATA_WIDTH_SRC),
   .DMA_DATA_WIDTH_DEST(DMA_DATA_WIDTH_DEST),
   .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
@@ -472,6 +418,7 @@ dmac_request_arb #(
   .DMA_TYPE_DEST(DMA_TYPE_DEST),
   .DMA_TYPE_SRC(DMA_TYPE_SRC),
   .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+  .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
   .ASYNC_CLK_REQ_SRC(ASYNC_CLK_REQ_SRC),
   .ASYNC_CLK_SRC_DEST(ASYNC_CLK_SRC_DEST),
   .ASYNC_CLK_DEST_REQ(ASYNC_CLK_DEST_REQ),
@@ -482,22 +429,25 @@ dmac_request_arb #(
   .ID_WIDTH(ID_WIDTH),
   .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
   .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST))
-) i_request_arb (
-  .req_aclk(s_axi_aclk),
-  .req_aresetn(s_axi_aresetn),
+) i_transfer (
+  .req_clk(s_axi_aclk),
+  .req_resetn(s_axi_aresetn),
 
   .enable(ctrl_enable),
   .pause(ctrl_pause),
 
-  .req_valid(dma_req_valid),
-  .req_ready(dma_req_ready),
-  .req_dest_address(dma_req_dest_address),
-  .req_src_address(dma_req_src_address),
-  .req_length(dma_req_length),
-  .req_xlast(dma_req_last),
-  .req_sync_transfer_start(dma_req_sync_transfer_start),
+  .req_valid(up_dma_req_valid),
+  .req_ready(up_dma_req_ready),
+  .req_dest_address(up_dma_req_dest_address),
+  .req_src_address(up_dma_req_src_address),
+  .req_x_length(up_dma_req_x_length),
+  .req_y_length(up_dma_req_y_length),
+  .req_dest_stride(up_dma_req_dest_stride),
+  .req_src_stride(up_dma_req_src_stride),
+  .req_sync_transfer_start(up_dma_req_sync_transfer_start),
+  .req_last(up_dma_req_last),
 
-  .eot(dma_req_eot),
+  .req_eot(up_req_eot),
 
   .m_dest_axi_aclk(m_dest_axi_aclk),
   .m_dest_axi_aresetn(m_dest_axi_aresetn),

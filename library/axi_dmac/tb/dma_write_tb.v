@@ -99,10 +99,10 @@ module dmac_dma_write_tb;
     .bresp(bresp)
   );
 
-  dmac_request_arb #(
+  axi_dmac_transfer #(
     .DMA_DATA_WIDTH_SRC(32),
     .DMA_DATA_WIDTH_DEST(32)
-  ) request_arb (
+  ) i_transfer (
     .m_dest_axi_aclk (clk),
     .m_dest_axi_aresetn(resetn),
 
@@ -125,18 +125,21 @@ module dmac_dma_write_tb;
     .m_axi_bready(bready),
     .m_axi_bresp(bresp),
 
-    .req_aclk(clk),
-    .req_aresetn(resetn),
+    .req_clk(clk),
+    .req_resetn(resetn),
 
     .enable(1'b1),
     .pause(1'b0),
 
-    .eot(eot),
+    .req_eot(eot),
 
     .req_valid(req_valid),
     .req_ready(req_ready),
     .req_dest_address(30'h7e09000),
-    .req_length(req_length),
+    .req_x_length(req_length),
+    .req_y_length(24'h00),
+    .req_dest_stride(24'h00),
+    .req_src_stride(24'h00),
     .req_sync_transfer_start(1'b0),
 
     .fifo_wr_clk(clk),
