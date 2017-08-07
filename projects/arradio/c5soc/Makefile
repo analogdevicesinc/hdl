@@ -69,6 +69,7 @@ M_DEPS += ../../../library/common/ad_dds_sine.v
 M_DEPS += ../../../library/common/ad_iqcor.v
 M_DEPS += ../../../library/common/ad_mem.v
 M_DEPS += ../../../library/common/ad_pnmon.v
+M_DEPS += ../../../library/common/ad_pps_receiver.v
 M_DEPS += ../../../library/common/ad_rst.v
 M_DEPS += ../../../library/common/ad_tdd_control.v
 M_DEPS += ../../../library/common/up_adc_channel.v

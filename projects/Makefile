@@ -9,6 +9,7 @@
 all:
 	-make -C ad5766_sdz all
 	-make -C ad6676evb all
+	-make -C ad738x_fmc all
 	-make -C ad7616_sdz all
 	-make -C ad77681evb all
 	-make -C ad7768evb all
@@ -48,6 +49,7 @@ all:
 clean:
 	make -C ad5766_sdz clean
 	make -C ad6676evb clean
+	make -C ad738x_fmc clean
 	make -C ad7616_sdz clean
 	make -C ad77681evb clean
 	make -C ad7768evb clean
@@ -87,6 +89,7 @@ clean:
 clean-all:
 	make -C ad5766_sdz clean-all
 	make -C ad6676evb clean-all
+	make -C ad738x_fmc clean-all
 	make -C ad7616_sdz clean-all
 	make -C ad77681evb clean-all
 	make -C ad7768evb clean-all

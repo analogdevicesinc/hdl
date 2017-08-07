@@ -26,7 +26,6 @@ M_DEPS += ../common/up_delay_cntrl.v
 M_DEPS += ../common/up_tdd_cntrl.v
 M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_xfer_status.v
-M_DEPS += ../common/ad_pps_receiver_constr.ttcl
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += ../xilinx/common/ad_data_clk.v
