@@ -156,7 +156,7 @@ module axi_ad9671 #(
 
   axi_ad9671_if #(
     .QUAD_OR_DUAL_N (QUAD_OR_DUAL_N),
-    .ID (ID)
+    .ID (ID))
   i_if (
     .rx_clk (rx_clk),
     .rx_data (rx_data),
