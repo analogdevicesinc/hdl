@@ -146,7 +146,7 @@ module axi_adxcvr_up #(
 
   assign up_rparam_s[15: 9] = 7'd0;
   assign up_rparam_s[ 8: 8] = (TX_OR_RX_N == 0) ? 1'b0 : 1'b1;
-  assign up_rparam_s[ 7: 0] = NUM_OF_LANES;
+  assign up_rparam_s[ 7: 0] = NUM_OF_LANES[7:0];
 
   // read interface
 
