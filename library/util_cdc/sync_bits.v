@@ -40,19 +40,18 @@
  * only able to synchronize multi-bit signals where at max one bit changes per
  * clock cycle (e.g. a gray counter).
  */
-module sync_bits
-(
+module sync_bits #(
+
+  // Number of bits to synchronize
+  parameter NUM_OF_BITS = 1,
+  // Whether input and output clocks are asynchronous, if 0 the synchronizer will
+  // be bypassed and the output signal equals the input signal.
+  parameter ASYNC_CLK = 1)(
+
   input [NUM_OF_BITS-1:0] in,
   input out_resetn,
   input out_clk,
-  output [NUM_OF_BITS-1:0] out
-);
-
-// Number of bits to synchronize
-parameter NUM_OF_BITS = 1;
-// Whether input and output clocks are asynchronous, if 0 the synchronizer will
-// be bypassed and the output signal equals the input signal.
-parameter ASYNC_CLK = 1;
+  output [NUM_OF_BITS-1:0] out);
 
 reg [NUM_OF_BITS-1:0] cdc_sync_stage1 = 'h0;
 reg [NUM_OF_BITS-1:0] cdc_sync_stage2 = 'h0;
