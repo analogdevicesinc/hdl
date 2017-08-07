@@ -56,7 +56,7 @@ ad_connect  sys_cpu_clk util_fmcadc2_xcvr/up_clk
 
 ad_xcvrcon  util_fmcadc2_xcvr axi_ad9625_xcvr axi_ad9625_jesd
 ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 axi_ad9625_core/rx_clk
-ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 rx_core_clk
+ad_connect  rx_core_clk util_fmcadc2_xcvr/rx_out_clk_0
 ad_connect  axi_ad9625_jesd/rx_data_tdata axi_ad9625_core/rx_data
 ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/rx_sof
 ad_connect  sys_cpu_clk axi_ad9625_fifo/dma_clk
