@@ -140,7 +140,7 @@ module axi_ad9625 #(
   assign adc_valid = 1'b1;
 
   axi_ad9625_if #(
-    .ID (ID),
+    .ID (ID))
   i_if (
     .rx_clk (rx_clk),
     .rx_sof (rx_sof),
