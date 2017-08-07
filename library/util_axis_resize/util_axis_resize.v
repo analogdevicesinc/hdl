@@ -33,7 +33,12 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module util_axis_resize (
+module util_axis_resize # (
+
+  parameter MASTER_DATA_WIDTH = 64,
+  parameter SLAVE_DATA_WIDTH = 64,
+  parameter BIG_ENDIAN = 0)(
+
   input                       clk,
   input                       resetn,
 
@@ -46,9 +51,18 @@ module util_axis_resize (
   output [MASTER_DATA_WIDTH-1:0] m_data
 );
 
-parameter MASTER_DATA_WIDTH = 64;
-parameter SLAVE_DATA_WIDTH = 64;
-parameter BIG_ENDIAN = 0;
+localparam RATIO = (SLAVE_DATA_WIDTH < MASTER_DATA_WIDTH) ?
+                            MASTER_DATA_WIDTH / SLAVE_DATA_WIDTH :
+                            SLAVE_DATA_WIDTH / MASTER_DATA_WIDTH;
+
+function integer clog2;
+  input integer value;
+  begin
+    value = value-1;
+  for (clog2=0; value>0; clog2=clog2+1)
+    value = value>>1;
+  end
+endfunction
 
 generate if (SLAVE_DATA_WIDTH == MASTER_DATA_WIDTH) begin
 
@@ -58,10 +72,8 @@ assign m_data = s_data;
 
 end else if (SLAVE_DATA_WIDTH < MASTER_DATA_WIDTH) begin
 
-localparam RATIO = MASTER_DATA_WIDTH / SLAVE_DATA_WIDTH;
-
 reg [MASTER_DATA_WIDTH-1:0] data;
-reg [$clog2(RATIO)-1:0] count;
+reg [clog2(RATIO)-1:0] count;
 reg valid;
 
 always @(posedge clk)
@@ -100,10 +112,8 @@ assign m_data = data;
 
 end else begin
 
-localparam RATIO = SLAVE_DATA_WIDTH / MASTER_DATA_WIDTH;
-
 reg [SLAVE_DATA_WIDTH-1:0] data;
-reg [$clog2(RATIO)-1:0] count;
+reg [clog2(RATIO)-1:0] count;
 reg valid;
 
 always @(posedge clk)
