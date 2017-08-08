@@ -44,18 +44,18 @@ FMC & BOB carrier designs includes loopback daughtercards for connectivity testi
 ## Building, Generating Bit Files (easy & efficient method)
 ```
 [some-directory]> git clone -b dev git@github.com:analogdevicesinc/hdl.git
-[some-directory]> make -C hdl/projects/adrv9361z7035/ccbob\_cmos
+[some-directory]> make -C hdl/projects/adrv9361z7035/ccbob_cmos
 ```
 
 ## Building, Generating Elf Files (easy & efficient method)
 ```
 [some-directory]> git clone -b dev git@github.com:analogdevicesinc/no-OS.git
-[some-directory]> make -C no-OS/adrv9361z7035/ccbob\_cmos
+[some-directory]> make -C no-OS/adrv9361z7035/ccbob_cmos
 ```
 
 ## Running, a quick test (easy & efficient method)
 ```
-[some-directory]> make -C no-OS/adrv9361z7035/ccbob\_cmos run
+[some-directory]> make -C no-OS/adrv9361z7035/ccbob_cmos run
 ```
 
 ## Documentation
