@@ -1,32 +1,28 @@
-# ADRV4CRR SDR SOM 
+# ADRV9364Z7020 SDR SOM 
 
-This folder contains the ADRV4CRR SOM projects for each of the carrier boards.
+This folder contains the ADRV9364Z7020 SOM projects for each of the carrier boards.
 
 ## Board Design Files
 
 | Directory/File              | Description                            |
 |-----------------------------|----------------------------------------|
-| common/adrv9364z7020_bd.tcl | ADRV4CRR SOM module board design file. |
+| common/adrv9364z7020_bd.tcl | ADRV9364Z7020 SOM module board design file. |
 | common/ccbob_bd.tcl         | carrier, break out board design file.  |
-| common/ccfmc_bd.tcl         | carrier, fmc board design file.        |
-| common/ccpci_bd.tcl         | carrier, pci-e board design file.      |
 | common/ccusb_bd.tcl         | carrier, usb board design file.        |
 
-FMC & BOB carrier designs includes loopback daughtercards for connectivity testing.
+BOB carrier design includes loopback daughtercards for connectivity testing.
 
 ## Board Constraint Files
 
 | Directory/File                       | Description                                   |
 |--------------------------------------|-----------------------------------------------|
-| common/adrv9364z7020_constr.xdc      | ADRV4CRR SOM base constraints file.           |
-| common/adrv9364z7020_constr_cmos.xdc | ADRV4CRR SOM CMOS mode constraints file.      |
-| common/adrv9364z7020_constr_lvds.xdc | ADRV4CRR SOM LVDS mode constraints file.      |
+| common/adrv9364z7020_constr.xdc      | ADRV9364Z7020 SOM base constraints file.           |
+| common/adrv9364z7020_constr_cmos.xdc | ADRV9364Z7020 SOM CMOS mode constraints file.      |
+| common/adrv9364z7020_constr_lvds.xdc | ADRV9364Z7020 SOM LVDS mode constraints file.      |
 | common/ccbob_constr.xdc              | carrier, break out board constraints file.    |
-| common/ccfmc_constr.xdc              | carrier, fmc board constraints file.          |
-| common/ccpci_constr.xdc              | carrier, pci-e board constraints file.        |
-| common/ccusb_constr.xdc              | carrier, usb board constraints file.          |
+| common/ccbox_constr.xdc              | carrier, box board constraints file.          |
+| common/ccusb_constr.xdc              | carrier, usb board constraints file.          |
 
-FMC & BRK carrier designs includes loopback daughtercards for connectivity testing.
 
 ## Building, Generating Bit Files
 
