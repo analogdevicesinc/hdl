@@ -60,7 +60,7 @@ module system_top (
   inout                   fixed_io_ps_porb,
   inout                   fixed_io_ps_srstb,
 
-  inout       [15:0]      gpio_bd,
+  inout       [11:0]      gpio_bd,
 
   output                  hdmi_out_clk,
   output                  hdmi_vsync,
@@ -119,19 +119,23 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(.DATA_WIDTH(25)) i_iobuf (
-    .dio_t ({gpio_t[50:49],gpio_t[46:32],gpio_t[15:12], gpio_t[3:0]}),
-    .dio_i ({gpio_o[50:49],gpio_o[46:32],gpio_o[15:12], gpio_o[3:0]}),
-    .dio_o ({gpio_i[50:49],gpio_i[46:32],gpio_i[15:12], gpio_i[3:0]}),
-    .dio_p ({ gpio_muxout_tx,
-              gpio_muxout_rx,
-              gpio_resetb,
-              gpio_sync,
-              gpio_en_agc,
-              gpio_ctl,
-              gpio_status,
-              gpio_bd[15:12],
-              gpio_bd[3:0]}));
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+    .dio_t ({gpio_t[50:49],gpio_t[46:32]}),
+    .dio_i ({gpio_o[50:49],gpio_o[46:32]}),
+    .dio_o ({gpio_i[50:49],gpio_i[46:32]}),
+    .dio_p ({ gpio_muxout_tx, // 50:50
+              gpio_muxout_rx, // 49:49
+              gpio_resetb,    // 46:46
+              gpio_sync,      // 45:45
+              gpio_en_agc,    // 44:44
+              gpio_ctl,       // 43:40
+              gpio_status})); // 39:32
+
+  ad_iobuf #(.DATA_WIDTH(12)) i_gpio_bd (
+    .dio_t ({gpio_t[15:12], gpio_t[7:0]}),
+    .dio_i ({gpio_o[15:12], gpio_o[7:0]}),
+    .dio_o ({gpio_i[15:12], gpio_i[7:0]}),
+    .dio_p ({gpio_bd[7:4], gpio_bd[11:8], gpio_bd[3:0]}));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
