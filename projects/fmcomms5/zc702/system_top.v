@@ -184,10 +184,10 @@ module system_top (
     .I (ref_clk_s),
     .O (ref_clk));
 
-  ad_iobuf #(.DATA_WIDTH(60)) i_iobuf (
-    .dio_t (gpio_t[59:0]),
-    .dio_i (gpio_o[59:0]),
-    .dio_o (gpio_i[59:0]),
+  ad_iobuf #(.DATA_WIDTH(44)) i_iobuf (
+    .dio_t (gpio_t[59:16]),
+    .dio_i (gpio_o[59:16]),
+    .dio_o (gpio_i[59:16]),
     .dio_p ({ gpio_resetb_1,    // 59
               gpio_ad5355_lock, // 58
               gpio_ad5355_rfen, // 57
@@ -211,8 +211,13 @@ module system_top (
               gpio_ctl_1,       // 36
               gpio_ctl_0,       // 32
               gpio_status_1,    // 24
-              gpio_status_0,    // 16
-              gpio_bd}));       //  0
+              gpio_status_0})); // 16
+
+  ad_iobuf #(.DATA_WIDTH(16)) i_gpio_bd (
+    .dio_t (gpio_t[15:0]),
+    .dio_i (gpio_o[15:0]),
+    .dio_o (gpio_i[15:0]),
+    .dio_p ({gpio_bd[7:4], gpio_bd[15:8], gpio_bd[3:0]}));
 
   assign spi_ad9361_0 = spi0_csn[0];
   assign spi_ad9361_1 = spi0_csn[1];
