@@ -81,13 +81,11 @@ module system_top (
 
   // instantiations
 
-  ad_iobuf #(
-    .DATA_WIDTH(16)
-  ) i_gpio_bd (
-    .dio_t(gpio_t[15:0]),
-    .dio_i(gpio_o[15:0]),
-    .dio_o(gpio_i[15:0]),
-    .dio_p(gpio_bd));
+  ad_iobuf #(.DATA_WIDTH(16)) i_gpio_bd (
+    .dio_t (gpio_t[15:0]),
+    .dio_i (gpio_o[15:0]),
+    .dio_o (gpio_i[15:0]),
+    .dio_p ({gpio_bd[7:4], gpio_bd[15:8], gpio_bd[3:0]}));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
