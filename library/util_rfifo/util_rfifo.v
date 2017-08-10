@@ -141,6 +141,7 @@ module util_rfifo #(
   reg                                     din_req = 'd0;
   reg                                     din_init = 'd0;
   reg                                     din_unf_d = 'd0;
+  reg         [ 7:0]                      dout_valid = 'd0;
   reg         [(T_DOUT_DATA_WIDTH+1):0]   dout_data = 'd0;
   reg         [(DATA_WIDTH-1):0]          dout_rdata = 'd0;
   reg         [ 7:0]                      dout_enable = 'd0;
@@ -294,6 +295,15 @@ module util_rfifo #(
   end
   endgenerate
 
+  assign dout_valid_out_7 = dout_valid[7];
+  assign dout_valid_out_6 = dout_valid[6];
+  assign dout_valid_out_5 = dout_valid[5];
+  assign dout_valid_out_4 = dout_valid[4];
+  assign dout_valid_out_3 = dout_valid[3];
+  assign dout_valid_out_2 = dout_valid[2];
+  assign dout_valid_out_1 = dout_valid[1];
+  assign dout_valid_out_0 = dout_valid[0];
+
   assign dout_data_7 = dout_data[((DOUT_DATA_WIDTH*8)-1):(DOUT_DATA_WIDTH*7)];
   assign dout_data_6 = dout_data[((DOUT_DATA_WIDTH*7)-1):(DOUT_DATA_WIDTH*6)];
   assign dout_data_5 = dout_data[((DOUT_DATA_WIDTH*6)-1):(DOUT_DATA_WIDTH*5)];
@@ -302,6 +312,14 @@ module util_rfifo #(
   assign dout_data_2 = dout_data[((DOUT_DATA_WIDTH*3)-1):(DOUT_DATA_WIDTH*2)];
   assign dout_data_1 = dout_data[((DOUT_DATA_WIDTH*2)-1):(DOUT_DATA_WIDTH*1)];
   assign dout_data_0 = dout_data[((DOUT_DATA_WIDTH*1)-1):(DOUT_DATA_WIDTH*0)];
+
+  always @(posedge dout_clk) begin
+    if (dout_rst == 1'b1) begin
+      dout_valid <= 8'd0;
+    end else begin
+      dout_valid <= dout_valid_s;
+    end
+  end
 
   generate
   for (n = 0; n < NUM_OF_CHANNELS; n = n + 1) begin: g_out
