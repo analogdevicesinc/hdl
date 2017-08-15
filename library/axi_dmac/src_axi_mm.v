@@ -52,7 +52,6 @@ module dmac_src_mm_axi #(
 
   input                           enable,
   output                          enabled,
-  input                           pause,
   input                           sync_id,
   output                          sync_id_ret,
 
@@ -131,7 +130,6 @@ dmac_address_generator #(
 
   .enable(enable),
   .enabled(address_enabled),
-  .pause(pause),
   .sync_id(sync_id),
 
   .request_id(request_id),
