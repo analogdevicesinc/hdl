@@ -57,7 +57,6 @@ module dmac_address_generator #(
   input                        eot,
 
   input                        enable,
-  input                        pause,
   output reg                   enabled,
 
   input                           addr_ready,

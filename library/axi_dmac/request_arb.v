@@ -192,12 +192,10 @@ wire sync_id_ret_src;
 
 wire dest_enable;
 wire dest_enabled;
-wire dest_pause;
 wire dest_sync_id;
 wire dest_sync_id_ret;
 wire src_enable;
 wire src_enabled;
-wire src_pause;
 wire src_sync_id;
 wire src_sync_id_ret;
 
@@ -411,7 +409,6 @@ dmac_dest_mm_axi #(
 
   .enable(dest_enable),
   .enabled(dest_enabled),
-  .pause(dest_pause),
 
   .req_valid(dest_req_valid),
   .req_ready(dest_req_ready),
@@ -623,7 +620,6 @@ dmac_src_mm_axi #(
   .m_axi_aclk(m_src_axi_aclk),
   .m_axi_aresetn(src_resetn),
 
-  .pause(src_pause),
   .enable(src_enable),
   .enabled(src_enabled),
   .sync_id(src_sync_id),
@@ -1082,13 +1078,13 @@ dmac_request_generator #(
 );
 
 sync_bits #(
-  .NUM_OF_BITS(3),
+  .NUM_OF_BITS(2),
   .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_sync_control_dest (
   .out_clk(dest_clk),
   .out_resetn(dest_resetn),
-  .in({do_enable, pause, sync_id}),
-  .out({dest_enable, dest_pause, dest_sync_id})
+  .in({do_enable, sync_id}),
+  .out({dest_enable, dest_sync_id})
 );
 
 sync_bits #(
@@ -1102,13 +1098,13 @@ sync_bits #(
 );
 
 sync_bits #(
-  .NUM_OF_BITS(3),
+  .NUM_OF_BITS(2),
   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_sync_control_src (
   .out_clk(src_clk),
   .out_resetn(src_resetn),
-  .in({do_enable, pause, sync_id}),
-  .out({src_enable, src_pause, src_sync_id})
+  .in({do_enable, sync_id}),
+  .out({src_enable, src_sync_id})
 );
 
 sync_bits #(
