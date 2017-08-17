@@ -184,9 +184,7 @@ module util_adcfifo #(
       dma_rd_d <= dma_rd;
       dma_rdata_d <= dma_rdata_s;
       if (dma_rd_s == 1'b1) begin
-        if (dma_raddr < DMA_ADDR_LIMIT) begin
-          dma_raddr <= dma_raddr + 1'b1;
-        end
+        dma_raddr <= dma_raddr + 1'b1;
       end
     end
   end
