@@ -113,7 +113,7 @@ proc ad_ip_create {pname pdesc {pelabfunction ""} {pcomposefunction ""}} {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_ip_parameter {pname ptype pdefault {phdl true}} {
+proc ad_ip_parameter {pname ptype pdefault {phdl true} {properties {}}} {
 
   if {$pname eq "DEVICE_FAMILY"} {
     add_parameter DEVICE_FAMILY STRING
@@ -121,12 +121,15 @@ proc ad_ip_parameter {pname ptype pdefault {phdl true}} {
     set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
     set_parameter_property DEVICE_FAMILY HDL_PARAMETER false
     set_parameter_property DEVICE_FAMILY ENABLED true
-    return
+  } else {
+    add_parameter $pname $ptype $pdefault
+    set_parameter_property $pname HDL_PARAMETER $phdl
+    set_parameter_property $pname ENABLED true
   }
 
-  add_parameter $pname $ptype $pdefault
-  set_parameter_property $pname HDL_PARAMETER $phdl
-  set_parameter_property $pname ENABLED true
+  foreach {key value} $properties {
+    set_parameter_property $pname $key $value
+  }
 }
 
 ###################################################################################################
