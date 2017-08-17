@@ -155,13 +155,15 @@ module util_adcfifo #(
   assign dma_waddr_rel_s =  {dma_waddr_rel,{ADDRESS_PADDING_WIDTH{1'b0}}};
 
   always @(posedge dma_clk) begin
+    dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
+  end
+
+  always @(posedge dma_clk) begin
     if (dma_xfer_req == 1'b0) begin
       dma_rst <= 1'b1;
-      dma_waddr_rel_t_m <= 'd0;
       dma_waddr_rel <= 'd0;
     end else begin
       dma_rst <= 1'b0;
-      dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
       if (dma_waddr_rel_t_s == 1'b1) begin
         dma_waddr_rel <= adc_waddr_rel;
       end
