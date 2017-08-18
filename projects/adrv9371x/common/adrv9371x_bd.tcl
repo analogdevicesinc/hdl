@@ -164,14 +164,10 @@ ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd_rstgen/slowest_s
 
 # dma clock & reset
 
- ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 150
-
 ad_ip_instance proc_sys_reset sys_dma_rstgen
 ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
-ad_connect  sys_dma_clk sys_ps7/FCLK_CLK2
 ad_connect  sys_dma_clk sys_dma_rstgen/slowest_sync_clk
-ad_connect  sys_ps7/FCLK_RESET2_N sys_dma_rstgen/ext_reset_in
 ad_connect  sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
 ad_connect  sys_dma_reset sys_dma_rstgen/peripheral_reset
 ad_connect  sys_dma_reset axi_ad9371_dacfifo/dma_rst
@@ -265,7 +261,7 @@ ad_cpu_interconnect 0x44A60000 axi_ad9371_rx_xcvr
 ad_cpu_interconnect 0x43C10000 axi_ad9371_rx_clkgen
 ad_cpu_interconnect 0x44AA0000 axi_ad9371_rx_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9371_rx_dma
-ad_cpu_interconnect 0x44A70000 axi_ad9371_rx_os_xcvr
+ad_cpu_interconnect 0x44A50000 axi_ad9371_rx_os_xcvr
 ad_cpu_interconnect 0x43C20000 axi_ad9371_rx_os_clkgen
 ad_cpu_interconnect 0x44AB0000 axi_ad9371_rx_os_jesd
 ad_cpu_interconnect 0x7c440000 axi_ad9371_rx_os_dma
