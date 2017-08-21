@@ -156,7 +156,7 @@ proc jesd204_phy_composition_callback {} {
 
     if {$soft_pcs} {
       add_connection phy_glue.phy_tx_enh_data_valid native_phy.tx_enh_data_valid
-	}
+    }
 
     foreach x {reconfig_clk reconfig_reset reconfig_avmm tx_coreclkin \
       tx_clkout tx_serial_clk0 tx_parallel_data unused_tx_parallel_data} {
@@ -168,9 +168,9 @@ proc jesd204_phy_composition_callback {} {
       set_interface_property ${x} EXPORT_OF native_phy.tx_${x}
     }
 
-	if {$soft_pcs == false} {
+    if {$soft_pcs == false} {
       add_connection phy_glue.phy_tx_datak native_phy.tx_datak
-	}
+    }
   } else {
     add_interface ref_clk clock sink
     set_interface_property ref_clk EXPORT_OF phy_glue.rx_cdr_refclk0
@@ -187,11 +187,11 @@ proc jesd204_phy_composition_callback {} {
       add_connection phy_glue.phy_${x} native_phy.${x}
     }
 
-	if {$soft_pcs == false} {
+    if {$soft_pcs == false} {
       foreach x {rx_datak rx_disperr rx_errdetect rx_std_wa_patternalign} {
         add_connection phy_glue.phy_${x} native_phy.${x}
       }
-	}
+    }
   }
 
   for {set i 0} {$i < $num_of_lanes} {incr i} {
@@ -212,7 +212,6 @@ proc jesd204_phy_composition_callback {} {
         set_interface_property phy_${i} EXPORT_OF phy_glue.tx_phy_${i}
       }
     } else {
-
       if {$soft_pcs} {
         add_instance soft_pcs_${i} jesd204_soft_pcs_rx
         add_connection link_clock.clk soft_pcs_${i}.clock
@@ -223,6 +222,6 @@ proc jesd204_phy_composition_callback {} {
       } else {
         set_interface_property phy_${i} EXPORT_OF phy_glue.rx_phy_${i}
       }
-	}
+    }
   }
 }

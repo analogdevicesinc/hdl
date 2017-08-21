@@ -80,7 +80,7 @@ proc glue_add_if {num name type dir {bcast false}} {
   } else {
     for {set i 0} {$i < $num} {incr i} {
       add_interface ${name}_${i} $type $dir
-	}
+    }
   }
   add_interface phy_${name} conduit end
 }
@@ -90,13 +90,13 @@ proc glue_add_if_port {num ifname port role dir width {bcast false}} {
 
   set phy_width [expr $num * $width]
   if {$dir == "Input"} {
-	set sig "in"
+    set sig "in"
     set phy_dir "Output"
-	set phy_sig "out"
+    set phy_sig "out"
   } else {
-	set sig "out"
+    set sig "out"
     set phy_dir "Input"
-	set phy_sig "in"
+    set phy_sig "in"
   }
 
   if {$bcast} {
@@ -110,7 +110,7 @@ proc glue_add_if_port {num ifname port role dir width {bcast false}} {
       add_interface_port ${ifname}_${i} ${port}_${i} $role $dir $width
       set_port_property ${port}_${i} fragment_list \
         [format "%s(%d:%d)" $sig [expr $base + $width - 1] $base]
-	}
+    }
   }
 
   add_interface_port phy_${ifname} phy_${port} $role $phy_dir $phy_width
@@ -118,10 +118,10 @@ proc glue_add_if_port {num ifname port role dir width {bcast false}} {
   if {$bcast} {
     set _frag [format "%s(%d:%d)" $phy_sig [expr $sig_offset + $width - 1] $sig_offset]
     set sig_offset [expr $sig_offset + $width]
-	set frag "${_frag}"
+    set frag "${_frag}"
     for {set i 1} {$i < $num} {incr i} {
-	  set frag [concat ${frag} ${_frag}]
-	}
+      set frag [concat ${frag} ${_frag}]
+    }
   } else {
     set frag [format "%s(%d:%d)" $phy_sig [expr $sig_offset + $phy_width - 1] $sig_offset]
     set sig_offset [expr $sig_offset + $phy_width]
@@ -135,13 +135,13 @@ proc glue_add_if_port_conduit {num ifname port phy_port dir width} {
 
   set phy_width [expr $num * $width]
   if {$dir == "Input"} {
-	set sig "in"
+    set sig "in"
     set phy_dir "Output"
-	set phy_sig "out"
+    set phy_sig "out"
   } else {
-	set sig "out"
+    set sig "out"
     set phy_dir "Input"
-	set phy_sig "in"
+    set phy_sig "in"
   }
   
   for {set i 0} {$i < $num} {incr i} {
@@ -168,7 +168,7 @@ proc glue_add_const_conduit {port width} {
   add_interface $ifname conduit end
   add_interface_port $ifname $ifname $port Output $width 
   set_port_property $ifname fragment_list [format "const_out(%d:%d)" \
-	[expr $const_offset + $width - 1] $const_offset]
+    [expr $const_offset + $width - 1] $const_offset]
 
   set const_offset [expr $const_offset + $width]
 }
@@ -212,20 +212,20 @@ proc jesd204_phy_glue_elab {} {
     glue_add_if_port $num_of_lanes tx_serial_clk0 tx_serial_clk0 clk Input 1 true
   
     if {$soft_pcs} {
-	  set unused_width [expr $num_of_lanes * 88]
+      set unused_width [expr $num_of_lanes * 88]
 
       glue_add_const_conduit tx_enh_data_valid $num_of_lanes
 
       for {set i 0} {$i < $num_of_lanes} {incr i} {
         add_interface tx_raw_data_${i} conduit start
-	  }
+      }
       glue_add_if_port_conduit $num_of_lanes tx_raw_data raw_data tx_parallel_data Input 40
     } else {
-	  set unused_width [expr $num_of_lanes * 92]
+      set unused_width [expr $num_of_lanes * 92]
 
       for {set i 0} {$i < $num_of_lanes} {incr i} {
         add_interface tx_phy_${i} conduit start
-	  }
+      }
       glue_add_if_port_conduit $num_of_lanes tx_phy char tx_parallel_data Input 32
       glue_add_if_port_conduit $num_of_lanes tx_phy charisk tx_datak Input 4
     }
@@ -244,12 +244,12 @@ proc jesd204_phy_glue_elab {} {
     if {$soft_pcs} {
       for {set i 0} {$i < $num_of_lanes} {incr i} {
         add_interface rx_raw_data_${i} conduit start
-	  }
+      }
       glue_add_if_port_conduit $num_of_lanes rx_raw_data raw_data rx_parallel_data Output 40
     } else {
       for {set i 0} {$i < $num_of_lanes} {incr i} {
         add_interface rx_phy_${i} conduit start
-	  }
+      }
       glue_add_if_port_conduit $num_of_lanes rx_phy char rx_parallel_data Output 32
       glue_add_if_port_conduit $num_of_lanes rx_phy charisk rx_datak Output 4
       glue_add_if_port_conduit $num_of_lanes rx_phy disperr rx_disperr Output 4
@@ -260,7 +260,7 @@ proc jesd204_phy_glue_elab {} {
     add_interface const_out conduit end
     add_interface_port const_out const_out const_out Output 1
     set_port_property const_out TERMINATION true
-	set const_offset 1
+    set const_offset 1
   }
 
   set_interface_property reconfig_reset associatedClock reconfig_clk
