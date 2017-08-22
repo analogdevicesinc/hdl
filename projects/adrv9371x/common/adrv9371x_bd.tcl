@@ -190,7 +190,7 @@ ad_connect  axi_ad9371_core/dac_valid_q1 util_ad9371_tx_upack/dac_valid_3
 ad_connect  axi_ad9371_core/dac_enable_q1 util_ad9371_tx_upack/dac_enable_3
 ad_connect  axi_ad9371_core/dac_data_q1 util_ad9371_tx_upack/dac_data_3
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_dacfifo/dac_clk
-ad_connect  axi_ad9371_rx_jesd_rstgen/peripheral_reset axi_ad9371_dacfifo/dac_rst
+ad_connect  axi_ad9371_tx_jesd_rstgen/peripheral_reset axi_ad9371_dacfifo/dac_rst
 ad_connect  util_ad9371_tx_upack/dac_valid axi_ad9371_dacfifo/dac_valid
 ad_connect  util_ad9371_tx_upack/dac_data axi_ad9371_dacfifo/dac_data
 ad_connect  sys_dma_clk axi_ad9371_dacfifo/dma_clk
