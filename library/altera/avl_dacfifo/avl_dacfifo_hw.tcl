@@ -4,8 +4,8 @@ source ../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_alt.tcl
 
 ad_ip_create avl_dacfifo {Avalon DDR DAC Fifo}
+set_module_property ELABORATION_CALLBACK p_avl_dacfifo
 ad_ip_files avl_dacfifo [list\
-  $ad_hdl_dir/library/altera/common/ad_mem_asym.v \
   $ad_hdl_dir/library/common/util_dacfifo_bypass.v \
   $ad_hdl_dir/library/common/util_delay.v \
   $ad_hdl_dir/library/common/ad_b2g.v \
@@ -19,8 +19,11 @@ ad_ip_files avl_dacfifo [list\
 
 # parameters
 
+ad_ip_parameter DEVICE_FAMILY STRING {Arria 10}
 ad_ip_parameter DAC_DATA_WIDTH INTEGER 64
+ad_ip_parameter DAC_MEM_ADDRESS_WIDTH INTEGER 8
 ad_ip_parameter DMA_DATA_WIDTH INTEGER 64
+ad_ip_parameter DMA_MEM_ADDRESS_WIDTH INTEGER 8
 ad_ip_parameter AVL_DATA_WIDTH INTEGER 512
 ad_ip_parameter AVL_ADDRESS_WIDTH INTEGER 25
 ad_ip_parameter AVL_BASE_ADDRESS INTEGER 0
@@ -66,4 +69,37 @@ add_interface_port amm_ddr avl_writedata writedata output 512
 set_interface_property amm_ddr associatedClock avl_clock
 set_interface_property amm_ddr associatedReset avl_reset
 set_interface_property amm_ddr addressUnits WORDS
+
+# elaborate
+
+proc p_avl_dacfifo {} {
+
+  # read parameters
+
+  set m_device_family [get_parameter_value "DEVICE_FAMILY"]
+  set m_dma_data_width [get_parameter_value "DMA_DATA_WIDTH"]
+  set m_dma_mem_addr_width [get_parameter_value "DMA_MEM_ADDRESS_WIDTH"]
+  set m_avl_data_width [get_parameter_value "AVL_DATA_WIDTH"]
+  set m_avl_addr_width [get_parameter_value "AVL_ADDRESS_WIDTH"]
+  set m_dac_data_width [get_parameter_value "DAC_DATA_WIDTH"]
+  set m_dac_mem_addr_width [get_parameter_value "DAC_MEM_ADDRESS_WIDTH"]
+
+  # altera memory for WRITE side
+
+  add_hdl_instance alt_mem_asym_wr alt_mem_asym
+  set_instance_parameter_value alt_mem_asym_wr DEVICE_FAMILY $m_device_family
+  set_instance_parameter_value alt_mem_asym_wr A_ADDRESS_WIDTH $m_dma_mem_addr_width
+  set_instance_parameter_value alt_mem_asym_wr A_DATA_WIDTH $m_dma_data_width
+  set_instance_parameter_value alt_mem_asym_wr B_DATA_WIDTH $m_avl_data_width
+
+  # altera memory for READ side
+
+  add_hdl_instance alt_mem_asym_rd alt_mem_asym
+  set_instance_parameter_value alt_mem_asym_rd DEVICE_FAMILY $m_device_family
+  set_instance_parameter_value alt_mem_asym_rd A_ADDRESS_WIDTH 0
+  set_instance_parameter_value alt_mem_asym_rd A_DATA_WIDTH $m_avl_data_width
+  set_instance_parameter_value alt_mem_asym_rd B_ADDRESS_WIDTH $m_dac_mem_addr_width
+  set_instance_parameter_value alt_mem_asym_rd B_DATA_WIDTH $m_dac_data_width
+
+}
 

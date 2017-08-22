@@ -135,19 +135,14 @@ module avl_dacfifo_wr #(
   // An asymmetric memory to transfer data from DMAC interface to AXI Memory Map
   // interface
 
-  ad_mem_asym #(
-    .A_ADDRESS_WIDTH (DMA_MEM_ADDRESS_WIDTH),
-    .A_DATA_WIDTH (DMA_DATA_WIDTH),
-    .B_ADDRESS_WIDTH (AVL_MEM_ADDRESS_WIDTH),
-    .B_DATA_WIDTH (AVL_DATA_WIDTH))
-  i_mem_asym (
-    .clka (dma_clk),
-    .wea (dma_mem_wea_s),
-    .addra (dma_mem_wr_address),
-    .dina (dma_data),
-    .clkb (avl_clk),
-    .addrb (avl_mem_rd_address),
-    .doutb (avl_mem_rdata_s));
+  alt_mem_asym_wr i_mem_asym (
+    .mem_i_wrclock (dma_clk),
+    .mem_i_wren (dma_mem_wea_s),
+    .mem_i_wraddress (dma_mem_wr_address),
+    .mem_i_datain (dma_data),
+    .mem_i_rdclock (avl_clk),
+    .mem_i_rdaddress (avl_mem_rd_address),
+    .mem_o_dataout (avl_mem_rdata_s));
 
   // the fifo reset is the dma_xfer_req
 

@@ -38,7 +38,9 @@
 module avl_dacfifo #(
 
   parameter   DAC_DATA_WIDTH = 64,
+  parameter   DAC_MEM_ADDRESS_WIDTH = 8,
   parameter   DMA_DATA_WIDTH = 64,
+  parameter   DMA_MEM_ADDRESS_WIDTH = 8,
   parameter   AVL_DATA_WIDTH = 512,
   parameter   AVL_ADDRESS_WIDTH = 25,
   parameter   AVL_BASE_ADDRESS = 32'h00000000,
@@ -121,7 +123,7 @@ module avl_dacfifo #(
     .AVL_DATA_WIDTH (AVL_DATA_WIDTH),
     .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
     .AVL_DDR_BASE_ADDRESS (AVL_BASE_ADDRESS),
-    .DMA_MEM_ADDRESS_WIDTH(8)
+    .DMA_MEM_ADDRESS_WIDTH(DMA_MEM_ADDRESS_WIDTH)
   ) i_wr (
     .dma_clk (dma_clk),
     .dma_data (dma_data),
@@ -148,7 +150,7 @@ module avl_dacfifo #(
     .DAC_DATA_WIDTH(DAC_DATA_WIDTH),
     .AVL_DDR_BASE_ADDRESS(AVL_BASE_ADDRESS),
     .AVL_DDR_ADDRESS_LIMIT(AVL_ADDRESS_LIMIT),
-    .DAC_MEM_ADDRESS_WIDTH(8)
+    .DAC_MEM_ADDRESS_WIDTH(DAC_MEM_ADDRESS_WIDTH)
   ) i_rd (
     .dac_clk(dac_clk),
     .dac_reset(dac_rst),
