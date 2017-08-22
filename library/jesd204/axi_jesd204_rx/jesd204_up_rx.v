@@ -63,7 +63,7 @@ module jesd204_up_rx # (
   input [2*NUM_LANES-1:0] core_ilas_config_addr,
   input [32*NUM_LANES-1:0] core_ilas_config_data,
 
-  input [2:0] core_status_ctrl_state,
+  input [1:0] core_status_ctrl_state,
   input [2*NUM_LANES-1:0] core_status_lane_cgs_state,
   input [NUM_LANES-1:0] core_status_lane_ifs_ready,
   input [14*NUM_LANES-1:0] core_status_lane_latency,
@@ -75,12 +75,12 @@ module jesd204_up_rx # (
 
 localparam ELASTIC_BUFFER_SIZE = 256;
 
-wire [2:0] up_status_ctrl_state;
+wire [1:0] up_status_ctrl_state;
 wire [2*NUM_LANES-1:0] up_status_lane_cgs_state;
 wire [31:0] up_lane_rdata[0:NUM_LANES-1];
 
 sync_data #(
-  .NUM_OF_BITS(3+NUM_LANES*(2))
+  .NUM_OF_BITS(2+NUM_LANES*(2))
 ) i_cdc_status (
   .in_clk(core_clk),
   .in_data({
@@ -114,8 +114,8 @@ always @(*) begin
   /* JESD RX status */
   12'ha0: up_rdata <= {
     /* 04-31 */ 28'h00, /* Reserved for future additions */
-    /*    03 */ 1'b0, /* Reserved for future extensions of ctrl_state */
-    /* 00-02 */ up_status_ctrl_state /* State of the internal state machine */
+    /* 02-03 */ 2'b00, /* Reserved for future extensions of ctrl_state */
+    /* 00-01 */ up_status_ctrl_state /* State of the internal state machine */
   };
   default: begin
     if (up_raddr[11:3] >= LANE_BASE_ADDR &&

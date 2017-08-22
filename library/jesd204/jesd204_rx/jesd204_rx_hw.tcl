@@ -130,7 +130,7 @@ add_interface status conduit end
 set_interface_property status associatedClock clock
 set_interface_property status associatedReset reset
 
-add_interface_port status status_ctrl_state ctrl_state Output 3
+add_interface_port status status_ctrl_state ctrl_state Output 2
 add_interface_port status status_lane_cgs_state lane_cgs_state Output 2*NUM_LANES
 add_interface_port status status_lane_ifs_ready lane_ifs_ready Output NUM_LANES
 add_interface_port status status_lane_latency lane_latency Output 14*NUM_LANES

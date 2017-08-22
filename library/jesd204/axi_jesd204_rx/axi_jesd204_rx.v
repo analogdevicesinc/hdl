@@ -93,7 +93,7 @@ module axi_jesd204_rx #(
   input core_event_sysref_alignment_error,
   input core_event_sysref_edge,
 
-  input [2:0] core_status_ctrl_state,
+  input [1:0] core_status_ctrl_state,
   input [2*NUM_LANES-1:0] core_status_lane_cgs_state,
   input [NUM_LANES-1:0] core_status_lane_ifs_ready,
   input [14*NUM_LANES-1:0] core_status_lane_latency

@@ -84,7 +84,7 @@ module jesd204_rx #(
   output [NUM_LANES*2-1:0] ilas_config_addr,
   output [NUM_LANES*32-1:0] ilas_config_data,
 
-  output [2:0] status_ctrl_state,
+  output [1:0] status_ctrl_state,
   output [2*NUM_LANES-1:0] status_lane_cgs_state,
   output [NUM_LANES-1:0] status_lane_ifs_ready,
   output [14*NUM_LANES-1:0] status_lane_latency

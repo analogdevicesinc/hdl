@@ -64,8 +64,13 @@ module jesd204_rx_ctrl #(
   output sync,
   output reg latency_monitor_reset,
 
-  output [2:0] status_state
+  output reg [1:0] status_state
 );
+
+localparam STATUS_STATE_RESET = 2'h1;
+localparam STATUS_STATE_WAIT_FOR_PHY = 2'h1;
+localparam STATUS_STATE_CGS = 2'h2;
+localparam STATUS_STATE_SYNCHRONIZED = 2'h3;
 
 localparam STATE_RESET = 0;
 localparam STATE_WAIT_FOR_PHY = 1;
@@ -90,7 +95,16 @@ assign ifs_reset = ifs_rst;
 assign sync = sync_n;
 assign phy_en_char_align = en_align;
 
-assign status_state = state;
+always @(posedge clk) begin
+  case (state)
+  STATE_RESET: status_state <= STATUS_STATE_RESET;
+  STATE_WAIT_FOR_PHY: status_state <= STATUS_STATE_WAIT_FOR_PHY;
+  STATE_CGS: status_state <= STATUS_STATE_CGS;
+  STATE_DEGLITCH: status_state <= STATUS_STATE_CGS;
+  STATE_SYNCHRONIZED: status_state <= STATUS_STATE_SYNCHRONIZED;
+  default: state <= STATUS_STATE_RESET;
+  endcase
+end
 
 always @(posedge clk) begin
   case (state)
