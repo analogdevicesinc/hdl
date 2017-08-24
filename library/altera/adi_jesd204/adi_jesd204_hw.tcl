@@ -250,16 +250,17 @@ proc jesd204_compose {} {
   add_interface ref_clk clock sink
   set_interface_property ref_clk EXPORT_OF ref_clock.in_clk
 
+  # FIXME: In phase alignment mode manual re-calibration fails
   add_instance link_pll altera_xcvr_fpll_a10
   set_instance_property link_pll SUPPRESS_ALL_WARNINGS true
   set_instance_property link_pll SUPPRESS_ALL_INFO_MESSAGES true
   set_instance_parameter_value link_pll {gui_fpll_mode} {0}
   set_instance_parameter_value link_pll {gui_reference_clock_frequency} $refclk_frequency
-  set_instance_parameter_value link_pll {gui_number_of_output_clocks} 2
-  set_instance_parameter_value link_pll {gui_enable_phase_alignment} 1
+  set_instance_parameter_value link_pll {gui_number_of_output_clocks} 1
+#  set_instance_parameter_value link_pll {gui_enable_phase_alignment} 1
   set_instance_parameter_value link_pll {gui_desired_outclk0_frequency} $linkclk_frequency
-  set pfdclk_frequency [get_instance_parameter_value link_pll gui_pfd_frequency]
-  set_instance_parameter_value link_pll {gui_desired_outclk1_frequency} $pfdclk_frequency
+#  set pfdclk_frequency [get_instance_parameter_value link_pll gui_pfd_frequency]
+#  set_instance_parameter_value link_pll {gui_desired_outclk1_frequency} $pfdclk_frequency
   set_instance_parameter_value link_pll {enable_pll_reconfig} {1}
   set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
   set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
