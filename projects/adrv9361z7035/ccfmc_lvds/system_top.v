@@ -138,9 +138,9 @@ module system_top (
   inout           tdd_sync,
 
   inout           gpio_rf0,
-  inout           gpio_rf1,
+  output          gpio_rf1,
   output          gpio_rf2,
-  inout           gpio_rf3,
+  input           gpio_rf3,
   input           gpio_rf4,
   inout           gpio_rfpwr_enable,
   inout           gpio_clksel,
@@ -154,13 +154,6 @@ module system_top (
   output          spi_clk,
   output          spi_mosi,
   input           spi_miso);
-
-  // internal registers
-
-  reg             rf_peak_det_n_d = 'd0;
-  reg             rf_peak_det_enb_d = 'd0;
-  reg             rf_peak_rst_enb = 'd0;
-  reg             rf_peak_rst = 'd0;
 
   // internal signals
 
@@ -181,10 +174,6 @@ module system_top (
   wire            tdd_sync_i;
   wire            tdd_sync_o;
   wire            tdd_sync_t;
-  wire            rf_peak_det_n;
-  wire            rf_peak_det_enb;
-  wire            rf_peak_rst_1;
-  wire            rf_peak_rst_0;
 
   // assignments
 
@@ -246,41 +235,20 @@ module system_top (
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
 
-  // ad9361 input protection
-
-  assign gpio_rf2 = rf_peak_rst;
-  assign rf_peak_det_n = gpio_rf4;
-  assign rf_peak_det_enb = ~(rf_peak_det_n_d & rf_peak_det_n);
-  assign rf_peak_rst_1 = ~rf_peak_det_enb_d & rf_peak_det_enb;
-  assign rf_peak_rst_0 = rf_peak_det_enb_d & ~rf_peak_det_enb;
-
-  always @(posedge sys_cpu_clk) begin
-    rf_peak_det_n_d <= rf_peak_det_n;
-    rf_peak_det_enb_d <= rf_peak_det_enb;
-    if (rf_peak_rst_1 == 1'b1) begin
-      rf_peak_rst_enb <= 1'b1;
-    end else if (rf_peak_rst_0 == 1'b1) begin
-      rf_peak_rst_enb <= 1'b0;
-    end
-    rf_peak_rst = ~rf_peak_rst & rf_peak_rst_enb;
-  end
-
   // ad9361 gpio - 63-32
 
   assign gpio_i[63:62] = gpio_o[63:62];
   assign gpio_i[50:47] = gpio_o[50:47];
 
-  ad_iobuf #(.DATA_WIDTH(24)) i_iobuf (
-    .dio_t ({gpio_t[60:55], gpio_t[53:51], gpio_t[46:32]}),
-    .dio_i ({gpio_o[60:55], gpio_o[53:51], gpio_o[46:32]}),
-    .dio_o ({gpio_i[60:55], gpio_i[53:51], gpio_i[46:32]}),
+  ad_iobuf #(.DATA_WIDTH(22)) i_iobuf (
+    .dio_t ({gpio_t[60:56], gpio_t[52:51], gpio_t[46:32]}),
+    .dio_i ({gpio_o[60:56], gpio_o[52:51], gpio_o[46:32]}),
+    .dio_o ({gpio_i[60:56], gpio_i[52:51], gpio_i[46:32]}),
     .dio_p ({ ad9517_pdn,         // 60:60
               ad9517_ref_sel,     // 59:59
               ad9517_ld,          // 58:58
               ad9517_status,      // 57:57
               gpio_rf0,           // 56:56
-              gpio_rf1,           // 55:55
-              gpio_rf3,           // 53:53
               gpio_rfpwr_enable,  // 52:52
               gpio_clksel,        // 51:51
               gpio_resetb,        // 46:46
@@ -288,6 +256,18 @@ module system_top (
               gpio_en_agc,        // 44:44
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
+
+  // ad9361 input protection
+
+  ad_adl5904_rst i_adl5904_rst_a (
+    .sys_cpu_clk (sys_cpu_clk),
+    .rf_peak_det_n (gpio_rf4),
+    .rf_peak_rst (gpio_rf2));
+
+  ad_adl5904_rst i_adl5904_rst_b (
+    .sys_cpu_clk (sys_cpu_clk),
+    .rf_peak_det_n (gpio_rf3),
+    .rf_peak_rst (gpio_rf1));
 
   // instantiations
 
