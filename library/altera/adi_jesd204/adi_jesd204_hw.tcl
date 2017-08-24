@@ -275,7 +275,10 @@ proc jesd204_compose {} {
   set_interface_property link_clk EXPORT_OF link_clock.out_clk
 
   add_instance link_reset altera_reset_bridge
+  set_instance_parameter_value link_reset {NUM_RESET_OUTPUTS} 2
   add_connection sys_clock.clk link_reset.clk
+  add_interface link_reset reset source
+  set_interface_property link_reset EXPORT_OF link_reset.out_reset_1
 
   add_connection sys_clock.clk_reset link_pll.reconfig_reset0
   add_connection sys_clock.clk link_pll.reconfig_clk0
