@@ -263,6 +263,7 @@ proc jesd204_compose {} {
   set_instance_parameter_value link_pll {enable_pll_reconfig} {1}
   set_instance_parameter_value link_pll {set_capability_reg_enable} {1}
   set_instance_parameter_value link_pll {set_csr_soft_logic_enable} {1}
+  set_instance_parameter_value link_pll {rcfg_separate_avmm_busy} {1}
   add_connection ref_clock.out_clk link_pll.pll_refclk0
 
   add_instance link_clock altera_clock_bridge
