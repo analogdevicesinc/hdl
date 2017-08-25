@@ -134,6 +134,7 @@ module up_dac_common #(
   reg             up_status_unf = 'd0;
   reg     [ 7:0]  up_usr_chanmax_int = 'd0;
   reg     [31:0]  up_dac_gpio_out_int = 'd0;
+  reg     [31:0]  up_timer = 'd0;
   reg             up_rack_int = 'd0;
   reg     [31:0]  up_rdata_int = 'd0;
   reg             dac_sync_d = 'd0;
@@ -343,6 +344,20 @@ module up_dac_common #(
   end
   endgenerate
 
+  // timer with premature termination
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_timer <= 32'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h40)) begin
+        up_timer <= up_wdata;
+      end else if (up_timer > 0) begin
+        up_timer <= up_timer - 1'b1;
+      end
+    end
+  end
+
   // processor read interface
 
   assign up_rack = up_rack_int;
@@ -380,6 +395,7 @@ module up_dac_common #(
           8'h2f: up_rdata_int <= up_dac_gpio_out_int;
           8'h30: up_rdata_int <= up_pps_rcounter;
           8'h31: up_rdata_int <= up_pps_status;
+          8'h40: up_rdata_int <= up_timer;
           default: up_rdata_int <= 0;
         endcase
       end else begin
