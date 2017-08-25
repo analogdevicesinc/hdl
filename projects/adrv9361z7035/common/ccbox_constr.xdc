@@ -2,12 +2,12 @@
 ## constraints (ccbox.a)
 ## rf-gpio
 
-set_property  -dict {PACKAGE_PIN  F5    IOSTANDARD LVCMOS18} [get_ports gpio_rfpwr_enable]  ; ## U1,F5,IO_L07_34_JX4_P,JX4,35,RF_GPIO4_BANK34
 set_property  -dict {PACKAGE_PIN  G5    IOSTANDARD LVCMOS18} [get_ports gpio_rf0]           ; ## U1,G5,IO_L02_34_JX4_N,JX4,22,RF_GPIO0_BANK34
 set_property  -dict {PACKAGE_PIN  H9    IOSTANDARD LVCMOS18} [get_ports gpio_rf1]           ; ## U1,H9,IO_L03_34_JX4_P,JX4,25,RF_GPIO1_BANK34
 set_property  -dict {PACKAGE_PIN  J9    IOSTANDARD LVCMOS18} [get_ports gpio_rf2]           ; ## U1,J9,IO_L05_34_JX4_N,JX4,33,RF_GPIO2_BANK34
 set_property  -dict {PACKAGE_PIN  H8    IOSTANDARD LVCMOS18} [get_ports gpio_rf3]           ; ## U1,H8,IO_L06_34_JX4_N,JX4,34,RF_GPIO3_BANK34
-set_property  -dict {PACKAGE_PIN  D9    IOSTANDARD LVCMOS18} [get_ports gpio_rf4]           ; ## U1,D9,IO_L08_34_JX4_P,JX4,36,RF_GPIO5_BANK34
+set_property  -dict {PACKAGE_PIN  F5    IOSTANDARD LVCMOS18} [get_ports gpio_rf4]  	    ; ## U1,F5,IO_L07_34_JX4_P,JX4,35,RF_GPIO4_BANK34
+set_property  -dict {PACKAGE_PIN  D9    IOSTANDARD LVCMOS18} [get_ports gpio_rf5]           ; ## U1,D9,IO_L08_34_JX4_P,JX4,36,RF_GPIO5_BANK34
 
 ## push-button
 

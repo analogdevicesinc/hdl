@@ -142,7 +142,7 @@ module system_top (
   output          gpio_rf2,
   input           gpio_rf3,
   input           gpio_rf4,
-  inout           gpio_rfpwr_enable,
+  inout           gpio_rf5,
   inout           gpio_clksel,
   inout           gpio_resetb,
   inout           gpio_sync,
@@ -235,23 +235,46 @@ module system_top (
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
 
-  // ad9361 gpio - 63-32
+  // unused gpio - 63-61
 
-  assign gpio_i[63:62] = gpio_o[63:62];
-  assign gpio_i[50:47] = gpio_o[50:47];
+  assign gpio_i[63:61] = gpio_o[63:61];
 
-  ad_iobuf #(.DATA_WIDTH(22)) i_iobuf (
-    .dio_t ({gpio_t[60:56], gpio_t[52:51], gpio_t[46:32]}),
-    .dio_i ({gpio_o[60:56], gpio_o[52:51], gpio_o[46:32]}),
-    .dio_o ({gpio_i[60:56], gpio_i[52:51], gpio_i[46:32]}),
+  // rf & ad9517 gpio - 60:56
+ 
+  ad_iobuf #(.DATA_WIDTH(5)) i_iobuf (
+    .dio_t (gpio_t[60:56]),
+    .dio_i (gpio_o[60:56]),
+    .dio_o (gpio_i[60:56]),
     .dio_p ({ ad9517_pdn,         // 60:60
               ad9517_ref_sel,     // 59:59
               ad9517_ld,          // 58:58
               ad9517_status,      // 57:57
-              gpio_rf0,           // 56:56
-              gpio_rfpwr_enable,  // 52:52
-              gpio_clksel,        // 51:51
-              gpio_resetb,        // 46:46
+              gpio_rf0}));        // 56:56
+
+  // unused gpio - 55:53
+ 
+  assign gpio_i[55:53] = gpio_o[55:53];
+
+  // rf & clock-select gpio - 52:51
+ 
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_rf_1 (
+    .dio_t (gpio_t[52:51]),
+    .dio_i (gpio_o[52:51]),
+    .dio_o (gpio_i[52:51]),
+    .dio_p ({ gpio_rf5,           // 52:52
+              gpio_clksel}));     // 51:51
+
+  // unused gpio - 50:47
+ 
+  assign gpio_i[50:47] = gpio_o[50:47];
+
+  // ad9361 gpio - 46:32
+ 
+  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_ad9361 (
+    .dio_t (gpio_t[46:32]),
+    .dio_i (gpio_o[46:32]),
+    .dio_o (gpio_i[46:32]),
+    .dio_p ({ gpio_resetb,        // 46:46
               gpio_sync,          // 45:45
               gpio_en_agc,        // 44:44
               gpio_ctl,           // 43:40
