@@ -102,7 +102,7 @@ always @(posedge clk) begin
   STATE_CGS: status_state <= STATUS_STATE_CGS;
   STATE_DEGLITCH: status_state <= STATUS_STATE_CGS;
   STATE_SYNCHRONIZED: status_state <= STATUS_STATE_SYNCHRONIZED;
-  default: state <= STATUS_STATE_RESET;
+  default: status_state <= STATUS_STATE_RESET;
   endcase
 end
 
