@@ -6,10 +6,10 @@ source ../../scripts/adi_ip_alt.tcl
 ad_ip_create avl_dacfifo {Avalon DDR DAC Fifo}
 set_module_property ELABORATION_CALLBACK p_avl_dacfifo
 ad_ip_files avl_dacfifo [list\
-  $ad_hdl_dir/library/common/util_dacfifo_bypass.v \
   $ad_hdl_dir/library/common/util_delay.v \
   $ad_hdl_dir/library/common/ad_b2g.v \
   $ad_hdl_dir/library/common/ad_g2b.v \
+  util_dacfifo_bypass.v \
   avl_dacfifo_byteenable_coder.v \
   avl_dacfifo_byteenable_decoder.v \
   avl_dacfifo_wr.v \
@@ -83,6 +83,28 @@ proc p_avl_dacfifo {} {
   set m_avl_addr_width [get_parameter_value "AVL_ADDRESS_WIDTH"]
   set m_dac_data_width [get_parameter_value "DAC_DATA_WIDTH"]
   set m_dac_mem_addr_width [get_parameter_value "DAC_MEM_ADDRESS_WIDTH"]
+  set m_dac_mem_addr_width_bypass 10
+  if {$m_dma_data_width > $m_dac_data_width} {
+    set m_dma_to_dac_ratio [expr $m_dma_data_width/$m_dac_data_width]
+    if {$m_dma_to_dac_ratio eq 2} {
+      set m_dma_mem_addr_width_bypass [expr $m_dac_mem_addr_width_bypass - 1]
+    } elseif {$m_dma_to_dac_ratio eq 4} {
+      set m_dma_mem_addr_width_bypass [expr $m_dac_mem_addr_width_bypass - 2]
+    } else {
+      set m_dma_mem_addr_width_bypass [expr $m_dac_mem_addr_width_bypass - 3]
+    }
+  } else {
+    set m_dma_to_dac_ratio [expr $m_dac_data_width/$m_dma_data_width]
+    if {$m_dma_to_dac_ratio eq 1} {
+      set m_dma_mem_addr_width_bypass $m_dac_mem_addr_width_bypass
+    } elseif {$m_dma_to_dac_ratio eq 2} {
+      set m_dma_mem_addr_width_bypass [expr $m_dac_mem_addr_width_bypass - 1]
+    } elseif {$m_dma_to_dac_ratio eq 4} {
+      set m_dma_mem_addr_width_bypass [expr $m_dac_mem_addr_width_bypass - 2]
+    } else {
+      set m_dma_mem_addr_width_bypass [expr $m_dac_mem_addr_width_bypass - 3]
+    }
+  }
 
   # altera memory for WRITE side
 
@@ -100,6 +122,15 @@ proc p_avl_dacfifo {} {
   set_instance_parameter_value alt_mem_asym_rd A_DATA_WIDTH $m_avl_data_width
   set_instance_parameter_value alt_mem_asym_rd B_ADDRESS_WIDTH $m_dac_mem_addr_width
   set_instance_parameter_value alt_mem_asym_rd B_DATA_WIDTH $m_dac_data_width
+
+  # altera memory for bypass logic
+
+  add_hdl_instance alt_mem_asym_bypass alt_mem_asym
+  set_instance_parameter_value alt_mem_asym_bypass DEVICE_FAMILY $m_device_family
+  set_instance_parameter_value alt_mem_asym_bypass A_ADDRESS_WIDTH $m_dma_mem_addr_width_bypass
+  set_instance_parameter_value alt_mem_asym_bypass A_DATA_WIDTH $m_dma_data_width
+  set_instance_parameter_value alt_mem_asym_bypass B_ADDRESS_WIDTH $m_dac_mem_addr_width_bypass
+  set_instance_parameter_value alt_mem_asym_bypass B_DATA_WIDTH $m_dac_data_width
 
 }
 
