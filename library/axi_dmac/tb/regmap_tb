@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SOURCE="regmap_tb.v"
+SOURCE+=" ../regmap.v ../regmap_request.v"
+SOURCE+=" ../../common/up_axi.v"
+
+cd `dirname $0`
+source run_tb.sh
