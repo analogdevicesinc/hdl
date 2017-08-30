@@ -63,9 +63,15 @@ module axi_logic_analyzer_trigger (
   reg     [ 31:0]   delay_count = 'd0;
 
   reg              trigger_active;
+  reg              trigger_active_d1;
+  reg              trigger_active_d2;
 
   always @(posedge clk) begin
-    trigger_out <= trigger_active;
+    if (data_valid == 1'b1) begin
+      trigger_active_d1 <= trigger_active;
+      trigger_active_d2 <= trigger_active_d1;
+      trigger_out <= trigger_active_d2;
+    end
   end
 
   // trigger logic:
