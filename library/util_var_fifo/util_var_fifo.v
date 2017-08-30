@@ -72,8 +72,20 @@ module util_var_fifo #(
   reg [31:0]            depth_d1 = 'd0;
   reg [DATA_WIDTH-1:0]  data_in_d1 = 'd0;
   reg [DATA_WIDTH-1:0]  data_in_d2 = 'd0;
+  reg [DATA_WIDTH-1:0]  data_in_d3 = 'd0;
+  reg [DATA_WIDTH-1:0]  data_in_d4 = 'd0;
   reg                   data_active = 'd0;
   reg                   fifo_active = 'd0;
+
+  reg                   data_in_valid_d1 = 'd0;
+  reg                   data_in_valid_d2 = 'd0;
+  reg                   interpolation_on = 'd0;
+  reg                   interpolation_on_d1 = 'd0;
+  reg                   interpolation_by_2 = 'd0;
+  reg                   interpolation_by_2_d1 = 'd0;
+  reg [DATA_WIDTH-1:0]  data_out_d1 = 'd0;
+  reg [DATA_WIDTH-1:0]  data_out_d2 = 'd0;
+  reg [DATA_WIDTH-1:0]  data_out_d3 = 'd0;
 
   // internal signals
 
@@ -81,9 +93,9 @@ module util_var_fifo #(
   wire  [DATA_WIDTH-1:0]  data_out_s;
   wire                    data_out_valid_s;
 
-  assign reset = ((rst == 1'b1) || (depth != depth_d1)) ? 1 : 0;
+  assign reset = ((rst == 1'b1) || (depth != depth_d1) || (interpolation_on != interpolation_on_d1) || (interpolation_by_2 != interpolation_by_2_d1)) ? 1 : 0;
 
-  assign data_out = fifo_active ? data_out_s : data_in_d2;
+  assign data_out = fifo_active ? data_out_s : data_in_d4;
   assign data_out_valid_s = data_active & data_in_valid;
   assign data_out_valid = fifo_active ? data_out_valid_s : data_in_valid;
 
@@ -93,7 +105,34 @@ module util_var_fifo #(
   assign din_w = data_in;
   assign en_r = fifo_active;
   assign addr_r = addrb;
-  assign data_out_s = dout_r;
+  assign data_out_s = interpolation_on ? (interpolation_by_2 ? data_out_d2 : data_out_d3) : dout_r;
+
+  // in case the interpolation is on, the data is available with one sample
+  // delay. If interpolation is off, the data is available with two or three
+  // sample delay. Add an extra delay if interpolation is on.
+  always @(posedge clk) begin
+    data_in_valid_d1 <= data_in_valid;
+    data_in_valid_d2 <= data_in_valid_d1;
+    interpolation_on_d1 = interpolation_on;
+    interpolation_by_2_d1 = interpolation_by_2;
+    if  (data_in_valid == 1'b1) begin
+      if (data_in_valid_d1 == 1'b1) begin
+        interpolation_on <= 1'b0;
+      end else begin
+        interpolation_on <= 1'b1;
+        if (data_in_valid_d2 == 1'b1) begin
+          interpolation_by_2 <= 1'b1;
+        end else begin
+          interpolation_by_2 <= 1'b0;
+        end
+      end
+    end
+    if(data_out_valid == 1'b1) begin
+      data_out_d1 <= dout_r;
+      data_out_d2 <= data_out_d1;
+      data_out_d3 <= data_out_d2;
+    end
+  end
 
   always @(posedge clk) begin
     depth_d1 <= depth;
@@ -105,6 +144,8 @@ module util_var_fifo #(
     if (data_in_valid == 1'b1 && fifo_active == 1'b0) begin
       data_in_d1 <= data_in;
       data_in_d2 <= data_in_d1;
+      data_in_d3 <= data_in_d2;
+      data_in_d4 <= data_in_d3;
     end
   end
 
@@ -120,7 +161,7 @@ module util_var_fifo #(
           addrb <= addrb + 1;
         end
       end
-      if (addra >= depth || addra > MAX_DEPTH - 2) begin
+      if (addra > depth || addra > MAX_DEPTH - 2) begin
         data_active <= 1'b1;
       end
     end
