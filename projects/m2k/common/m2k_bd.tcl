@@ -239,7 +239,7 @@ ad_connect adc_trigger_fifo/data_out_valid adc_trigger_extract/data_valid
 
 ad_connect adc_trigger_extract/data_out     ad9963_adc_dmac/fifo_wr_din
 ad_connect adc_trigger_extract/trigger_out  ad9963_adc_dmac/fifo_wr_sync
-ad_connect adc_trigger_fifo/data_out_valid  ad9963_adc_dmac/fifo_wr_en
+ad_connect adc_trigger_extract/valid_out    ad9963_adc_dmac/fifo_wr_en
 
 ad_connect axi_dac_interpolate/dac_clk      axi_ad9963/dac_clk
 ad_connect axi_dac_interpolate/dac_rst      axi_ad9963/dac_rst
