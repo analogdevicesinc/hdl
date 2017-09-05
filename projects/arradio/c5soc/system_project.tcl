@@ -83,6 +83,14 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_status[4]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_status[5]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_status[6]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_status[7]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_status[0]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_status[1]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_status[2]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_status[3]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_status[4]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_status[5]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_status[6]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_status[7]
 
 set_location_assignment PIN_E8  -to gpio_ctl[0]             ; ##  HSMC_TX_p1      P201.53
 set_location_assignment PIN_D7  -to gpio_ctl[1]             ; ##  HSMC_TX_n1      P201.55
@@ -92,11 +100,17 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_ctl[0]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_ctl[1]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_ctl[2]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to gpio_ctl[3]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_ctl[0]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_ctl[1]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_ctl[2]
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to gpio_ctl[3]
 
 set_location_assignment PIN_B11 -to enable                  ; ##  HSMC_TX_n15     P201.145
 set_location_assignment PIN_C12 -to txnrx                   ; ##  HSMC_TX_p15     P201.143
 set_instance_assignment -name IO_STANDARD "2.5 V" -to enable
 set_instance_assignment -name IO_STANDARD "2.5 V" -to txnrx
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to enable
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to txnrx
 
 set_location_assignment PIN_AA26  -to ad9361_clk_out        ; ##  HSMC_CLKIN_p1   P201.96
 set_location_assignment PIN_C4    -to ad9361_resetb         ; ##  HSMC_TX_n3      P201.67
@@ -105,6 +119,9 @@ set_location_assignment PIN_D5    -to ad9361_sync           ; ##  HSMC_TX_n4    
 set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_resetb
 set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_en_agc
 set_instance_assignment -name IO_STANDARD "2.5 V" -to ad9361_sync
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to ad9361_resetb
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to ad9361_en_agc
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to ad9361_sync
 
 set_location_assignment PIN_A8  -to spi_csn                 ; ##  HSMC_TX_n0      P201.49
 set_location_assignment PIN_H12 -to spi_clk                 ; ##  HSMC_D3         P201.44
@@ -114,6 +131,10 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_csn
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_mosi
 set_instance_assignment -name IO_STANDARD "2.5 V" -to spi_miso
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to spi_csn
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to spi_clk
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to spi_mosi
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to spi_miso
 
 set_location_assignment PIN_F15 -to scl                     ; ##  HSMC_RX_p16     P201.150
 set_location_assignment PIN_G13 -to sda                     ; ##  HSMC_RX_n15     P201.146
@@ -123,6 +144,10 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to scl
 set_instance_assignment -name IO_STANDARD "2.5 V" -to sda
 set_instance_assignment -name IO_STANDARD "2.5 V" -to ga0
 set_instance_assignment -name IO_STANDARD "2.5 V" -to ga1
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to scl
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to sda
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to ga0
+set_instance_assignment -name IO_MAXIMUM_TOGGLE_RATE "40 MHz" -to ga1
 
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to scl
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to sda
