@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SOURCE="dma_write_tb.v"
+SOURCE+=" axi_write_slave.v axi_slave.v"
+SOURCE+=" ../request_arb.v ../request_generator.v ../splitter.v"
+SOURCE+=" ../data_mover.v ../axi_register_slice.v"
+SOURCE+=" ../src_fifo_inf.v"
+SOURCE+=" ../dest_axi_mm.v ../response_handler.v ../address_generator.v"
+SOURCE+=" ../../util_axis_fifo/util_axis_fifo.v ../../util_axis_fifo/address_gray_pipelined.v"
+SOURCE+=" ../../common/ad_mem.v"
+SOURCE+=" ../../util_cdc/sync_bits.v ../../util_cdc/sync_gray.v"
+SOURCE+=" ../../util_axis_resize/util_axis_resize.v"
+
+cd `dirname $0`
+source run_tb.sh
