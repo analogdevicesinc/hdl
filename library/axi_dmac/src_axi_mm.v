@@ -51,7 +51,7 @@ module dmac_src_mm_axi #(
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
 
   input                           enable,
-  output                          enabled,
+  output reg                      enabled = 1'b0,
 
 /*
   output                          response_valid,
@@ -64,7 +64,6 @@ module dmac_src_mm_axi #(
 
   output [ID_WIDTH-1:0]         data_id,
   output [ID_WIDTH-1:0]         address_id,
-  input                           data_eot,
   input                           address_eot,
 
   output                          fifo_valid,
@@ -85,34 +84,18 @@ module dmac_src_mm_axi #(
   input  [DMA_DATA_WIDTH-1:0]    m_axi_rdata,
   output                           m_axi_rready,
   input                            m_axi_rvalid,
+  input                            m_axi_rlast,
   input  [ 1:0]                    m_axi_rresp
 );
 
+`include "inc_id.h"
+
+reg [ID_WIDTH-1:0] id = 'h00;
+
 wire address_enabled;
 
-wire address_req_valid;
-wire address_req_ready;
-wire data_req_valid;
-wire data_req_ready;
-
-assign response_id = data_id;
-
-splitter #(
-  .NUM_M(2)
-) i_req_splitter (
-  .clk(m_axi_aclk),
-  .resetn(m_axi_aresetn),
-  .s_valid(req_valid),
-  .s_ready(req_ready),
-  .m_valid({
-    address_req_valid,
-    data_req_valid
-  }),
-  .m_ready({
-    address_req_ready,
-    data_req_ready
-  })
-);
+assign data_id = id;
+assign response_id = id;
 
 dmac_address_generator #(
   .ID_WIDTH(ID_WIDTH),
@@ -131,8 +114,8 @@ dmac_address_generator #(
   .request_id(request_id),
   .id(address_id),
 
-  .req_valid(address_req_valid),
-  .req_ready(address_req_ready),
+  .req_valid(req_valid),
+  .req_ready(req_ready),
   .req_address(req_address),
   .req_last_burst_length(req_last_burst_length),
 
@@ -148,35 +131,38 @@ dmac_address_generator #(
   .cache(m_axi_arcache)
 );
 
-dmac_data_mover # (
-  .ID_WIDTH(ID_WIDTH),
-  .DATA_WIDTH(DMA_DATA_WIDTH),
-  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
-) i_data_mover (
-  .clk(m_axi_aclk),
-  .resetn(m_axi_aresetn),
+assign fifo_valid = m_axi_rvalid;
+assign m_axi_rready = fifo_ready;
+assign fifo_data = m_axi_rdata;
 
-  .enable(address_enabled),
-  .enabled(enabled),
+/*
+ * There is a requirement that data_id <= address_id (modulo 2**ID_WIDTH).  We
+ * know that we will never receive data before we have requested it so there is
+ * an implicit dependency between data_id and address_id and no need to
+ * explicitly track it.
+ */
+always @(posedge m_axi_aclk) begin
+  if (m_axi_aresetn == 1'b0) begin
+    id <= 'h00;
+  end else if (m_axi_rvalid == 1'b1 && m_axi_rready == 1'b1 &&
+               m_axi_rlast == 1'b1) begin
+    id <= inc_id(id);
+  end
+end
 
-  .xfer_req(),
-
-  .request_id(address_id),
-  .response_id(data_id),
-  .eot(data_eot),
-
-  .req_valid(data_req_valid),
-  .req_ready(data_req_ready),
-  .req_last_burst_length(req_last_burst_length),
-
-  .s_axi_valid(m_axi_rvalid),
-  .s_axi_ready(m_axi_rready),
-  .s_axi_data(m_axi_rdata),
-  .m_axi_valid(fifo_valid),
-  .m_axi_ready(fifo_ready),
-  .m_axi_data(fifo_data),
-  .m_axi_last()
-);
+/*
+ * We need to complete all bursts for which an address has been put onto the
+ * AXI-MM interface.
+ */
+always @(posedge m_axi_aclk) begin
+  if (m_axi_aresetn == 1'b0) begin
+    enabled <= 1'b0;
+  end else if (address_enabled == 1'b1) begin
+    enabled <= 1'b1;
+  end else if (id == address_id) begin
+    enabled <= 1'b0;
+  end
+end
 
 /* TODO
 `include "resp.h"

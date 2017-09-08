@@ -128,6 +128,7 @@ module dmac_dma_read_shutdown_tb;
     .m_axi_rready(rready),
     .m_axi_rvalid(rvalid),
     .m_axi_rdata(rdata),
+    .m_axi_rlast(rlast),
     .m_axi_rresp(rresp),
 
     .ctrl_clk(clk),

@@ -485,6 +485,7 @@ axi_dmac_transfer #(
   .m_axi_rdata(m_src_axi_rdata),
   .m_axi_rready(m_src_axi_rready),
   .m_axi_rvalid(m_src_axi_rvalid),
+  .m_axi_rlast(m_src_axi_rlast),
   .m_axi_rresp(m_src_axi_rresp),
 
   .s_axis_aclk(s_axis_aclk),
