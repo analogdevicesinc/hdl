@@ -370,7 +370,9 @@ proc add_axi_master_interface {axi_type port suffix} {
     set_port_property ${port}_arlock TERMINATION true
     set_port_property ${port}_rid TERMINATION true
     set_port_property ${port}_bid TERMINATION true
-    set_port_property ${port}_rlast TERMINATION true
+    if {$port == "m_dest_axi"} {
+      set_port_property ${port}_rlast TERMINATION true
+    }
   }
 }
 proc axi_dmac_elaborate {} {

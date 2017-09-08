@@ -114,6 +114,7 @@ module axi_dmac_transfer #(
 
   // Read data and response
   input [DMA_DATA_WIDTH_SRC-1:0] m_axi_rdata,
+  input m_axi_rlast,
   output m_axi_rready,
   input m_axi_rvalid,
   input [1:0] m_axi_rresp,
@@ -363,6 +364,7 @@ dmac_request_arb #(
   .m_axi_rready (m_axi_rready),
   .m_axi_rvalid (m_axi_rvalid),
   .m_axi_rdata (m_axi_rdata),
+  .m_axi_rlast (m_axi_rlast),
   .m_axi_rresp (m_axi_rresp),
 
   .s_axis_aclk (s_axis_aclk),

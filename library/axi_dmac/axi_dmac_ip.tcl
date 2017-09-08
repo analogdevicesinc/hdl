@@ -125,7 +125,6 @@ lappend dummy_axi_ports \
 	"m_src_axi_arid" \
 	"m_src_axi_arlock" \
 	"m_src_axi_rid" \
-	"m_src_axi_rlast" \
 	"m_src_axi_awid" \
 	"m_src_axi_awlock" \
 	"m_src_axi_wid" \

@@ -108,6 +108,7 @@ module dmac_request_arb #(
   input  [DMA_DATA_WIDTH_SRC-1:0]     m_axi_rdata,
   output                              m_axi_rready,
   input                               m_axi_rvalid,
+  input                               m_axi_rlast,
   input  [ 1:0]                       m_axi_rresp,
 
   // Slave streaming AXI interface
@@ -515,7 +516,6 @@ assign src_ext_resetn = m_src_axi_aresetn;
 wire [ID_WIDTH-1:0] src_data_id;
 wire [ID_WIDTH-1:0] src_address_id;
 wire src_address_eot = eot_mem[src_address_id];
-wire src_data_eot = eot_mem[src_data_id];
 
 assign dbg_src_address_id = src_address_id;
 assign dbg_src_data_id = src_data_id;
@@ -551,7 +551,6 @@ dmac_src_mm_axi #(
   .data_id(src_data_id),
 
   .address_eot(src_address_eot),
-  .data_eot(src_data_eot),
 
   .fifo_valid(src_valid),
   .fifo_ready(src_ready),
@@ -569,6 +568,7 @@ dmac_src_mm_axi #(
   .m_axi_rready(m_axi_rready),
   .m_axi_rvalid(m_axi_rvalid),
   .m_axi_rdata(m_axi_rdata),
+  .m_axi_rlast(m_axi_rlast),
   .m_axi_rresp(m_axi_rresp)
 );
 
