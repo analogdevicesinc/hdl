@@ -20,7 +20,10 @@ adi_ip_files axi_ad9643 [list \
   "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
-  "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_ad9643_pnmon.v" \
   "axi_ad9643_channel.v" \
   "axi_ad9643_if.v" \
@@ -30,7 +33,10 @@ adi_ip_files axi_ad9643 [list \
 adi_ip_properties axi_ad9643
 
 adi_ip_constraints axi_ad9643 [list \
-  "$ad_hdl_dir/library/common/ad_axi_ip_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_ad9643_constr.xdc" ]
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
