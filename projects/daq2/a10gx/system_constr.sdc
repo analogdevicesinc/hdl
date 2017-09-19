@@ -41,3 +41,13 @@ set_false_path -from [get_clocks {i_system_bd|avl_ad9680_xcvr|alt_core_pll|outcl
   -through [get_nets *altera_jesd204_rx_csr_inst*]\
   -to [get_clocks {sys_clk_100mhz}]
 
+# flash interface
+set_output_delay  -clock [ get_clocks clkin_50 ] 2   [ get_ports {fm_a[*]} ]
+set_input_delay   -clock [ get_clocks clkin_50 ] 2   [ get_ports {fm_d[*]} ]
+set_output_delay  -clock [ get_clocks clkin_50 ] 2   [ get_ports {fm_d[*]} ]
+set_output_delay  -clock [ get_clocks clkin_50 ] 2   [ get_ports {flash_cen[*]} ]
+set_output_delay  -clock [ get_clocks clkin_50 ] 2   [ get_ports {flash_oen} ]
+set_output_delay  -clock [ get_clocks clkin_50 ] 2   [ get_ports {flash_resetn} ]
+set_output_delay  -clock [ get_clocks clkin_50 ] 2   [ get_ports {flash_wen} ]
+set_false_path -from * -to [get_ports {flash_resetn}]  
+
