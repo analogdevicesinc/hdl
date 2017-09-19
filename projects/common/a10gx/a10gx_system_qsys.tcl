@@ -277,7 +277,7 @@ set_instance_parameter_value sys_spi {clockPolarity} {0}
 set_instance_parameter_value sys_spi {dataWidth} {8}
 set_instance_parameter_value sys_spi {masterSPI} {1}
 set_instance_parameter_value sys_spi {numberOfSlaves} {8}
-set_instance_parameter_value sys_spi {targetClockRate} {128000.0}
+set_instance_parameter_value sys_spi {targetClockRate} {10000000.0}
 add_connection sys_clk.clk_reset sys_spi.reset
 add_connection sys_clk.clk sys_spi.clk
 add_interface sys_spi conduit end
