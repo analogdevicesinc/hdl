@@ -123,11 +123,11 @@ module dmac_dma_read_tb;
     .m_axi_rdata(rdata),
     .m_axi_rresp(rresp),
 
-    .req_clk(clk),
-    .req_resetn(resetn),
+    .ctrl_clk(clk),
+    .ctrl_resetn(resetn),
 
-    .enable(1'b1),
-    .pause(1'b0),
+    .ctrl_enable(1'b1),
+    .ctrl_pause(1'b0),
 
     .req_eot(eot),
 

@@ -44,8 +44,6 @@ module dmac_src_fifo_inf #(
 
   input enable,
   output enabled,
-  input sync_id,
-  output sync_id_ret,
 
   input [ID_WIDTH-1:0] request_id,
   output [ID_WIDTH-1:0] response_id,
@@ -75,31 +73,21 @@ wire sync_valid = en & ready & has_sync;
 
 always @(posedge clk)
 begin
-  if (resetn == 1'b0) begin
+  if (ready && en && sync) begin
     needs_sync <= 1'b0;
-  end else begin
-    if (ready && en && sync) begin
-      needs_sync <= 1'b0;
-    end else if (req_valid && req_ready) begin
-      needs_sync <= req_sync_transfer_start;
-    end
+  end else if (req_valid && req_ready) begin
+    needs_sync <= req_sync_transfer_start;
   end
 end
 
 always @(posedge clk)
 begin
-  if (resetn == 1'b0) begin
-    overflow <= 1'b0;
+  if (enable) begin
+    overflow <= en & ~ready;
   end else begin
-    if (enable) begin
-      overflow <= en & ~ready;
-    end else begin
-      overflow <= en;
-    end
+    overflow <= en;
   end
 end
-
-assign sync_id_ret = sync_id;
 
 dmac_data_mover # (
   .ID_WIDTH(ID_WIDTH),
@@ -112,7 +100,6 @@ dmac_data_mover # (
 
   .enable(enable),
   .enabled(enabled),
-  .sync_id(sync_id),
 
   .xfer_req(xfer_req),
 

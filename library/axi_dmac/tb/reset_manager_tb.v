@@ -33,62 +33,87 @@
 // ***************************************************************************
 // ***************************************************************************
 
-module dmac_request_generator #(
+module dmac_reset_manager_tb;
+  parameter VCD_FILE = {`__FILE__,"cd"};
 
-  parameter ID_WIDTH = 3,
-  parameter BURSTS_PER_TRANSFER_WIDTH = 17)(
+  `define TIMEOUT 1000000
+  `include "tb_base.v"
 
-  input clk,
-  input resetn,
 
-  output [ID_WIDTH-1:0] request_id,
-  input [ID_WIDTH-1:0] response_id,
+  reg clk_a = 1'b0;
+  reg clk_b = 1'b0;
+  reg clk_c = 1'b0;
 
-  input req_valid,
-  output reg req_ready,
-  input [BURSTS_PER_TRANSFER_WIDTH-1:0] req_burst_count,
+  reg [5:0] resetn_shift = 'h0;
 
-  input enable,
+  reg [10:0] counter = 'h00;
 
-  output eot
-);
+  reg ctrl_enable = 1'b0;
+  reg ctrl_pause = 1'b0;
 
-`include "inc_id.h"
+  always #10 clk_a <= ~clk_a;
+  always #3 clk_b <= ~clk_b;
+  always #7 clk_c <= ~clk_c;
 
-/*
- * Here we only need to count the number of bursts, which means we can ignore
- * the lower bits of the byte count. The last last burst may not contain the
- * maximum number of bytes, but the address_generator and data_mover will take
- * care that only the requested ammount of bytes is transfered.
- */
-
-reg [BURSTS_PER_TRANSFER_WIDTH-1:0] burst_count = 'h00;
-reg [ID_WIDTH-1:0] id;
-wire [ID_WIDTH-1:0] id_next = inc_id(id);
-
-assign eot = burst_count == 'h00;
-assign request_id = id;
-
-always @(posedge clk) begin
-  if (req_ready == 1'b1) begin
-    burst_count <= req_burst_count;
-  end else if (response_id != id_next && enable == 1'b1) begin
-    burst_count <= burst_count - 1'b1;
-  end
-end
-
-always @(posedge clk) begin
-  if (resetn == 1'b0) begin
-    id <= 'h0;
-    req_ready <= 1'b1;
-  end else if (req_ready == 1'b1) begin
-    req_ready <= ~req_valid;
-  end else if (response_id != id_next && enable == 1'b1) begin
-    if (eot == 1'b1) begin
-      req_ready <= 1'b1;
+  always @(posedge clk_a) begin
+    counter <= counter + 1'b1;
+    if (counter == 'h60 || counter == 'h150 || counter == 'h185) begin
+      ctrl_enable <= 1'b1;
+    end else if (counter == 'h100 || counter == 'h110 || counter == 'h180) begin
+      ctrl_enable <= 1'b0;
     end
-    id <= id_next;
+
+    if (counter == 'h160) begin
+      ctrl_pause = 1'b1;
+    end else if (counter == 'h190) begin
+      ctrl_pause = 1'b0;
+    end
   end
-end
+
+  reg [15:0] req_enabled_shift;
+  wire req_enable;
+  wire req_enabled = req_enabled_shift[15];
+
+  reg [15:0] dest_enabled_shift;
+  wire dest_enable;
+  wire dest_enabled = dest_enabled_shift[15];
+
+  reg [15:0] src_enabled_shift;
+  wire src_enable;
+  wire src_enabled = src_enabled_shift[15];
+
+
+  always @(posedge clk_a) begin
+    req_enabled_shift <= {req_enabled_shift[14:0],req_enable};
+  end
+
+  always @(posedge clk_b) begin
+    dest_enabled_shift <= {dest_enabled_shift[14:0],dest_enable};
+  end
+
+  always @(posedge clk_c) begin
+    src_enabled_shift <= {src_enabled_shift[14:0],src_enable};
+  end
+
+  axi_dmac_reset_manager i_reset_manager (
+    .clk(clk_a),
+    .resetn(resetn),
+
+    .ctrl_pause(ctrl_pause),
+    .ctrl_enable(ctrl_enable),
+
+    .req_enable(req_enable),
+    .req_enabled(req_enabled),
+
+    .dest_clk(clk_b),
+    .dest_ext_resetn(1'b0),
+    .dest_enable(dest_enable),
+    .dest_enabled(dest_enabled),
+
+    .src_clk(clk_c),
+    .src_ext_resetn(1'b0),
+    .src_enable(src_enable),
+    .src_enabled(src_enabled)
+  );
 
 endmodule

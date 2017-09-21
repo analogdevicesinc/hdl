@@ -52,8 +52,6 @@ module dmac_src_mm_axi #(
 
   input                           enable,
   output                          enabled,
-  input                           sync_id,
-  output                          sync_id_ret,
 
 /*
   output                          response_valid,
@@ -97,7 +95,6 @@ wire address_req_ready;
 wire data_req_valid;
 wire data_req_ready;
 
-assign sync_id_ret = sync_id;
 assign response_id = data_id;
 
 splitter #(
@@ -130,7 +127,6 @@ dmac_address_generator #(
 
   .enable(enable),
   .enabled(address_enabled),
-  .sync_id(sync_id),
 
   .request_id(request_id),
   .id(address_id),
@@ -162,7 +158,6 @@ dmac_data_mover # (
 
   .enable(address_enabled),
   .enabled(enabled),
-  .sync_id(sync_id),
 
   .xfer_req(),
 

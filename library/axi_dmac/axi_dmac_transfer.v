@@ -54,8 +54,11 @@ module axi_dmac_transfer #(
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8
 ) (
-  input req_clk,
-  input req_resetn,
+  input ctrl_clk,
+  input ctrl_resetn,
+
+  input ctrl_enable,
+  input ctrl_pause,
 
   input req_valid,
   output req_ready,
@@ -70,9 +73,6 @@ module axi_dmac_transfer #(
   input req_last,
 
   output req_eot,
-
-  input enable,
-  input pause,
 
   // Master AXI interface
   input m_dest_axi_aclk,
@@ -124,6 +124,7 @@ module axi_dmac_transfer #(
   input s_axis_valid,
   input [DMA_DATA_WIDTH_SRC-1:0] s_axis_data,
   input [0:0] s_axis_user,
+  input s_axis_last,
   output s_axis_xfer_req,
 
   // Master streaming AXI interface
@@ -158,7 +159,7 @@ module axi_dmac_transfer #(
   output [ID_WIDTH-1:0] dbg_src_address_id,
   output [ID_WIDTH-1:0] dbg_src_data_id,
   output [ID_WIDTH-1:0] dbg_src_response_id,
-  output [7:0] dbg_status
+  output [11:0] dbg_status
 );
 
 wire dma_req_valid;
@@ -169,6 +170,65 @@ wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
 wire dma_req_eot;
 wire dma_req_sync_transfer_start;
 wire dma_req_last;
+
+wire req_clk = ctrl_clk;
+wire req_resetn;
+
+wire req_enable;
+
+wire dest_clk;
+wire dest_ext_resetn;
+wire dest_resetn;
+wire dest_enable;
+wire dest_enabled;
+
+wire src_clk;
+wire src_ext_resetn;
+wire src_resetn;
+wire src_enable;
+wire src_enabled;
+
+wire req_valid_gated;
+wire req_ready_gated;
+
+axi_dmac_reset_manager #(
+  .ASYNC_CLK_REQ_SRC (ASYNC_CLK_REQ_SRC),
+  .ASYNC_CLK_SRC_DEST (ASYNC_CLK_SRC_DEST),
+  .ASYNC_CLK_DEST_REQ (ASYNC_CLK_DEST_REQ)
+) i_reset_manager (
+  .clk (ctrl_clk),
+  .resetn (ctrl_resetn),
+
+  .ctrl_enable (ctrl_enable),
+  .ctrl_pause (ctrl_pause),
+
+  .req_resetn (req_resetn),
+  .req_enable (req_enable),
+  .req_enabled (req_enable),
+
+  .dest_clk (dest_clk),
+  .dest_ext_resetn (dest_ext_resetn),
+  .dest_resetn (dest_resetn),
+  .dest_enable (dest_enable),
+  .dest_enabled (dest_enabled),
+
+  .src_clk (src_clk),
+  .src_ext_resetn (src_ext_resetn),
+  .src_resetn (src_resetn),
+  .src_enable (src_enable),
+  .src_enabled (src_enabled),
+
+  .dbg_status (dbg_status)
+);
+
+/*
+ * Things become a lot easier if we gate incoming requests in a central place
+ * before they are propagated downstream. Otherwise we'd need to take special
+ * care to not accidentally accept requests while the DMA is going through a
+ * shutdown and reset phase.
+ */
+assign req_valid_gated = req_enable & req_valid;
+assign req_ready = req_enable & req_ready_gated;
 
 generate if (DMA_2D_TRANSFER == 1) begin
 
@@ -182,8 +242,8 @@ dmac_2d_transfer #(
 
   .req_eot (req_eot),
 
-  .req_valid (req_valid),
-  .req_ready (req_ready),
+  .req_valid (req_valid_gated),
+  .req_ready (req_ready_gated),
   .req_dest_address (req_dest_address),
   .req_src_address (req_src_address),
   .req_x_length (req_x_length),
@@ -205,13 +265,17 @@ assign dma_req_last = 1'b0;
 
 end else begin
 
-assign dma_req_valid = req_valid;
-assign req_ready = dma_req_ready;
+/* Request */
+assign dma_req_valid = req_valid_gated;
+assign req_ready_gated = dma_req_ready;
+
 assign dma_req_dest_address = req_dest_address;
 assign dma_req_src_address = req_src_address;
 assign dma_req_length = req_x_length;
 assign dma_req_sync_transfer_start = req_sync_transfer_start;
 assign dma_req_last = req_last;
+
+/* Response */
 assign req_eot = dma_req_eot;
 
 end endgenerate
@@ -236,11 +300,8 @@ dmac_request_arb #(
   .AXI_LENGTH_WIDTH_DEST (AXI_LENGTH_WIDTH_DEST),
   .AXI_LENGTH_WIDTH_SRC (AXI_LENGTH_WIDTH_SRC)
 ) i_request_arb (
-  .req_aclk (req_clk),
-  .req_aresetn (req_resetn),
-
-  .enable (enable),
-  .pause (pause),
+  .req_clk (req_clk),
+  .req_resetn (req_resetn),
 
   .req_valid (dma_req_valid),
   .req_ready (dma_req_ready),
@@ -252,32 +313,46 @@ dmac_request_arb #(
 
   .eot (dma_req_eot),
 
+  .req_enable (req_enable),
+
+  .dest_clk (dest_clk),
+  .dest_ext_resetn (dest_ext_resetn),
+  .dest_resetn (dest_resetn),
+  .dest_enable (dest_enable),
+  .dest_enabled (dest_enabled),
+
+  .src_clk (src_clk),
+  .src_ext_resetn (src_ext_resetn),
+  .src_resetn (src_resetn),
+  .src_enable (src_enable),
+  .src_enabled (src_enabled),
+
   .m_dest_axi_aclk (m_dest_axi_aclk),
   .m_dest_axi_aresetn (m_dest_axi_aresetn),
   .m_src_axi_aclk (m_src_axi_aclk),
   .m_src_axi_aresetn (m_src_axi_aresetn),
 
+  .m_axi_awvalid (m_axi_awvalid),
+  .m_axi_awready (m_axi_awready),
   .m_axi_awaddr (m_axi_awaddr),
   .m_axi_awlen (m_axi_awlen),
   .m_axi_awsize (m_axi_awsize),
   .m_axi_awburst (m_axi_awburst),
   .m_axi_awprot (m_axi_awprot),
   .m_axi_awcache (m_axi_awcache),
-  .m_axi_awvalid (m_axi_awvalid),
-  .m_axi_awready (m_axi_awready),
 
+  .m_axi_wvalid (m_axi_wvalid),
+  .m_axi_wready (m_axi_wready),
   .m_axi_wdata (m_axi_wdata),
   .m_axi_wstrb (m_axi_wstrb),
-  .m_axi_wready (m_axi_wready),
-  .m_axi_wvalid (m_axi_wvalid),
   .m_axi_wlast (m_axi_wlast),
 
   .m_axi_bvalid (m_axi_bvalid),
-  .m_axi_bresp (m_axi_bresp),
   .m_axi_bready (m_axi_bready),
+  .m_axi_bresp (m_axi_bresp),
 
-  .m_axi_arready (m_axi_arready),
   .m_axi_arvalid (m_axi_arvalid),
+  .m_axi_arready (m_axi_arready),
   .m_axi_araddr (m_axi_araddr),
   .m_axi_arlen (m_axi_arlen),
   .m_axi_arsize (m_axi_arsize),
@@ -285,9 +360,9 @@ dmac_request_arb #(
   .m_axi_arprot (m_axi_arprot),
   .m_axi_arcache (m_axi_arcache),
 
-  .m_axi_rdata (m_axi_rdata),
   .m_axi_rready (m_axi_rready),
   .m_axi_rvalid (m_axi_rvalid),
+  .m_axi_rdata (m_axi_rdata),
   .m_axi_rresp (m_axi_rresp),
 
   .s_axis_aclk (s_axis_aclk),
@@ -295,6 +370,7 @@ dmac_request_arb #(
   .s_axis_valid (s_axis_valid),
   .s_axis_data (s_axis_data),
   .s_axis_user (s_axis_user),
+  .s_axis_last (s_axis_last),
   .s_axis_xfer_req (s_axis_xfer_req),
 
   .m_axis_aclk (m_axis_aclk),
@@ -325,8 +401,7 @@ dmac_request_arb #(
   .dbg_src_request_id (dbg_src_request_id),
   .dbg_src_address_id (dbg_src_address_id),
   .dbg_src_data_id (dbg_src_data_id),
-  .dbg_src_response_id (dbg_src_response_id),
-  .dbg_status (dbg_status)
+  .dbg_src_response_id (dbg_src_response_id)
 );
 
 endmodule

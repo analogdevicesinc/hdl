@@ -285,7 +285,7 @@ wire [ID_WIDTH-1:0] src_request_id;
 wire [ID_WIDTH-1:0] src_data_id;
 wire [ID_WIDTH-1:0] src_address_id;
 wire [ID_WIDTH-1:0] src_response_id;
-wire [7:0] dbg_status;
+wire [11:0] dbg_status;
 wire [31:0] dbg_ids0;
 wire [31:0] dbg_ids1;
 
@@ -430,11 +430,11 @@ axi_dmac_transfer #(
   .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
   .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST))
 ) i_transfer (
-  .req_clk(s_axi_aclk),
-  .req_resetn(s_axi_aresetn),
+  .ctrl_clk(s_axi_aclk),
+  .ctrl_resetn(s_axi_aresetn),
 
-  .enable(ctrl_enable),
-  .pause(ctrl_pause),
+  .ctrl_enable(ctrl_enable),
+  .ctrl_pause(ctrl_pause),
 
   .req_valid(up_dma_req_valid),
   .req_ready(up_dma_req_ready),

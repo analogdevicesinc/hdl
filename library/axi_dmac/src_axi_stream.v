@@ -45,8 +45,6 @@ module dmac_src_axi_stream #(
 
   input enable,
   output enabled,
-  input sync_id,
-  output sync_id_ret,
 
   input [ID_WIDTH-1:0] request_id,
   output [ID_WIDTH-1:0] response_id,
@@ -81,21 +79,16 @@ wire data_valid;
 wire data_ready;
 wire fifo_last;
 
-assign sync_id_ret = sync_id;
 assign data = transfer_abort == 1'b1 ? {S_AXIS_DATA_WIDTH{1'b0}} : s_axis_data;
 assign data_valid = (s_axis_valid & has_sync) | transfer_abort;
 assign s_axis_ready = data_ready & ~transfer_abort;
 
 always @(posedge s_axis_aclk)
 begin
-  if (s_axis_aresetn == 1'b0) begin
+  if (s_axis_valid && s_axis_ready && sync) begin
     needs_sync <= 1'b0;
-  end else begin
-    if (s_axis_valid && s_axis_ready && sync) begin
-      needs_sync <= 1'b0;
-    end else if (req_valid && req_ready) begin
-      needs_sync <= req_sync_transfer_start;
-    end
+  end else if (req_valid && req_ready) begin
+    needs_sync <= req_sync_transfer_start;
   end
 end
 
@@ -135,7 +128,6 @@ dmac_data_mover # (
 
   .enable(enable),
   .enabled(enabled),
-  .sync_id(sync_id),
 
   .xfer_req(s_axis_xfer_req),
 

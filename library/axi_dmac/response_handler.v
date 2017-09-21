@@ -46,7 +46,6 @@ module dmac_response_handler #(
 
   output reg [ID_WIDTH-1:0] id,
   input [ID_WIDTH-1:0] request_id,
-  input sync_id,
 
   input enable,
   output reg enabled,
@@ -65,7 +64,7 @@ module dmac_response_handler #(
 assign resp_resp = bresp;
 assign resp_eot = eot;
 
-wire active = id != request_id && enabled;
+wire active = id != request_id;
 
 assign bready = active && resp_ready;
 assign resp_valid = active && bvalid;
@@ -74,10 +73,9 @@ assign resp_valid = active && bvalid;
 always @(posedge clk) begin
   if (resetn == 1'b0) begin
     enabled <= 1'b0;
-  end else begin
-  if (enable)
+  end else if (enable == 1'b1) begin
       enabled <= 1'b1;
-  else if (request_id == id)
+  end else if (request_id == id) begin
       enabled <= 1'b0;
   end
 end
@@ -85,10 +83,8 @@ end
 always @(posedge clk) begin
   if (resetn == 1'b0) begin
     id <= 'h0;
-  end else begin
-    if ((bready && bvalid) ||
-        (sync_id && id != request_id))
-      id <= inc_id(id);
+  end else if (bready == 1'b1 && bvalid == 1'b1) begin
+    id <= inc_id(id);
   end
 end
 
