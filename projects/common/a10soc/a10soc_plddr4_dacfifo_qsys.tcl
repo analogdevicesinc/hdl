@@ -18,9 +18,9 @@ set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_DM_EN} {1}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_ALERT_N_PLACEMENT_ENUM} {DDR4_ALERT_N_PLACEMENT_AC_LANES}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_ALERT_N_AC_LANE} {3}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_ALERT_N_AC_PIN} {0}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TCL} {20}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_WTCL} {18}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_RTT_NOM_ENUM} {DDR4_RTT_NOM_RZQ_6}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TCL} {18}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_WTCL} {14}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_RTT_NOM_ENUM} {DDR4_RTT_NOM_RZQ_4}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_IO_VOLTAGE} {1.2}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_DEFAULT_IO} {0}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_AC_IO_STD_ENUM} {IO_STD_SSTL_12}
@@ -28,27 +28,27 @@ set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_AC_MODE_ENUM} {OUT_OC
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_CK_IO_STD_ENUM} {IO_STD_SSTL_12}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_CK_MODE_ENUM} {OUT_OCT_40_CAL}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_DATA_IO_STD_ENUM} {IO_STD_POD_12}
-set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_DATA_OUT_MODE_ENUM} {OUT_OCT_34_CAL}
+set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_DATA_OUT_MODE_ENUM} {OUT_OCT_48_CAL}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_DATA_IN_MODE_ENUM} {IN_OCT_60_CAL}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_PLL_REF_CLK_IO_STD_ENUM} {IO_STD_LVDS}
 set_instance_parameter_value sys_ddr4_cntrl {PHY_DDR4_USER_RZQ_IO_STD_ENUM} {IO_STD_CMOS_12}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_SPEEDBIN_ENUM} {DDR4_SPEEDBIN_2666}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_SPEEDBIN_ENUM} {DDR4_SPEEDBIN_2400}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TDQSQ_UI} {0.16}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TDQSCK_PS} {165}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TWLS_PS} {130.0}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TWLH_PS} {130.0}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TWLS_PS} {108.0}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TWLH_PS} {108.0}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TINIT_US} {500}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TRAS_NS} {35.0}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TRAS_NS} {32.0}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TRCD_NS} {15.0}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TRP_NS} {15.0}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TWR_NS} {15.0}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TRRD_S_CYC} {8}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TRRD_L_CYC} {9}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TRRD_S_CYC} {7}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TRRD_L_CYC} {8}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TFAW_NS} {30.0}
 set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TCCD_S_CYC} {4}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TCCD_L_CYC} {7}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TWTR_S_CYC} {5}
-set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TWTR_L_CYC} {11}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TCCD_L_CYC} {6}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TWTR_S_CYC} {3}
+set_instance_parameter_value sys_ddr4_cntrl {MEM_DDR4_TWTR_L_CYC} {9}
 set_instance_parameter_value sys_ddr4_cntrl {CTRL_DDR4_ECC_EN} {0}
 
 add_interface sys_ddr_ref_clk clock sink
@@ -64,8 +64,9 @@ add_instance $dac_fifo_name avl_dacfifo
 set_instance_parameter_value $dac_fifo_name {DAC_DATA_WIDTH} $dac_data_width
 set_instance_parameter_value $dac_fifo_name {DMA_DATA_WIDTH} $dac_dma_data_width
 set_instance_parameter_value $dac_fifo_name {AVL_DATA_WIDTH} {512}
+set_instance_parameter_value $dac_fifo_name {AVL_ADDRESS_WIDTH} {25}
 set_instance_parameter_value $dac_fifo_name {AVL_BASE_ADDRESS} {0}
-set_instance_parameter_value $dac_fifo_name {AVL_ADDRESS_LIMIT} {0x1fffffff}
+set_instance_parameter_value $dac_fifo_name {AVL_ADDRESS_LIMIT} {0x8fffffff}
 
 add_connection sys_clk.clk_reset sys_ddr4_cntrl.global_reset_reset_sink
 add_connection sys_ddr4_cntrl.emif_usr_reset_reset_source $dac_fifo_name.avl_reset
