@@ -45,7 +45,10 @@ module dmac_regmap_tb;
   localparam BYTES_PER_BEAT = 1;
   localparam DMA_AXI_ADDR_WIDTH = 32;
 
+  localparam LENGTH_ALIGN = 2;
   localparam LENGTH_MASK = {DMA_LENGTH_WIDTH{1'b1}};
+  localparam LENGTH_ALIGN_MASK = {LENGTH_ALIGN{1'b1}};
+  localparam STRIDE_MASK = {{DMA_LENGTH_WIDTH-BYTES_PER_BEAT{1'b1}},{BYTES_PER_BEAT{1'b0}}}
   localparam ADDR_MASK = {{DMA_AXI_ADDR_WIDTH-BYTES_PER_BEAT{1'b1}},{BYTES_PER_BEAT{1'b0}}};
 
   localparam VAL_DBG_SRC_ADDR = 32'h76543210;
@@ -167,11 +170,12 @@ module dmac_regmap_tb;
     for (i = 0; i < NUM_REGS; i = i + 1)
       expected_reg_mem[i] <= 'h00;
     /* Non zero power-on-reset values */
-    set_reset_reg_value('h00, 32'h00040062); /* PCORE version register */
+    set_reset_reg_value('h00, 32'h00040161); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h444d4143); /* PCORE magic register */
     set_reset_reg_value('h80, 'h3); /* IRQ mask */
 
-    set_reset_reg_value('h40c, 'h1); /* Flags */
+    set_reset_reg_value('h40c, 'h3); /* Flags */
+    set_reset_reg_value('h418, LENGTH_ALIGN_MASK); /* Length alignment */
 
     set_reset_reg_value('h434, VAL_DBG_DEST_ADDR);
     set_reset_reg_value('h438, VAL_DBG_SRC_ADDR);
@@ -250,8 +254,8 @@ module dmac_regmap_tb;
     write_reg_and_update('h414, ADDR_MASK);
     write_reg_and_update('h418, LENGTH_MASK);
     write_reg_and_update('h41c, LENGTH_MASK);
-    write_reg_and_update('h420, LENGTH_MASK);
-    write_reg_and_update('h424, LENGTH_MASK);
+    write_reg_and_update('h420, STRIDE_MASK);
+    write_reg_and_update('h424, STRIDE_MASK);
 
     check_all_registers("Transfer setup 1");
 
@@ -259,10 +263,10 @@ module dmac_regmap_tb;
     write_reg_and_update('h40c, {$random} & 'h3);
     write_reg_and_update('h410, {$random} & ADDR_MASK);
     write_reg_and_update('h414, {$random} & ADDR_MASK);
-    write_reg_and_update('h418, {$random} & LENGTH_MASK);
+    write_reg_and_update('h418, {$random} & LENGTH_MASK | LENGTH_ALIGN_MASK);
     write_reg_and_update('h41c, {$random} & LENGTH_MASK);
-    write_reg_and_update('h420, {$random} & LENGTH_MASK);
-    write_reg_and_update('h424, {$random} & LENGTH_MASK);
+    write_reg_and_update('h420, {$random} & STRIDE_MASK);
+    write_reg_and_update('h424, {$random} & STRIDE_MASK);
 
     check_all_registers("Transfer setup 2");
 
@@ -329,6 +333,7 @@ module dmac_regmap_tb;
     .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT),
     .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
     .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
+    .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
     .DMA_CYCLIC(1),
     .HAS_DEST_ADDR(1),
     .HAS_SRC_ADDR(1),
