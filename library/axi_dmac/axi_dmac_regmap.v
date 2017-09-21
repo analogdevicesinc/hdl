@@ -98,7 +98,7 @@ module axi_dmac_regmap #(
   // Debug interface
   input [DMA_AXI_ADDR_WIDTH-1:0] dbg_src_addr,
   input [DMA_AXI_ADDR_WIDTH-1:0] dbg_dest_addr,
-  input [7:0] dbg_status,
+  input [11:0] dbg_status,
   input [31:0] dbg_ids0,
   input [31:0] dbg_ids1
 );

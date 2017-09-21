@@ -125,11 +125,11 @@ module dmac_dma_write_tb;
     .m_axi_bready(bready),
     .m_axi_bresp(bresp),
 
-    .req_clk(clk),
-    .req_resetn(resetn),
+    .ctrl_clk(clk),
+    .ctrl_resetn(resetn),
 
-    .enable(1'b1),
-    .pause(1'b0),
+    .ctrl_enable(1'b1),
+    .ctrl_pause(1'b0),
 
     .req_eot(eot),
 

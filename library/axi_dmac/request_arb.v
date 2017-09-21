@@ -34,7 +34,6 @@
 // ***************************************************************************
 
 module dmac_request_arb #(
-
   parameter DMA_DATA_WIDTH_SRC = 64,
   parameter DMA_DATA_WIDTH_DEST = 64,
   parameter DMA_LENGTH_WIDTH = 24,
@@ -54,8 +53,8 @@ module dmac_request_arb #(
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8)(
 
-  input req_aclk,
-  input req_aresetn,
+  input req_clk,
+  input req_resetn,
 
   input req_valid,
   output req_ready,
@@ -66,9 +65,6 @@ module dmac_request_arb #(
   input req_sync_transfer_start,
 
   output reg eot,
-
-  input                               enable,
-  input                               pause,
 
   // Master AXI interface
   input                               m_dest_axi_aclk,
@@ -155,7 +151,20 @@ module dmac_request_arb #(
   output [ID_WIDTH-1:0]               dbg_src_address_id,
   output [ID_WIDTH-1:0]               dbg_src_data_id,
   output [ID_WIDTH-1:0]               dbg_src_response_id,
-  output [7:0]                        dbg_status
+
+  input req_enable,
+
+  output dest_clk,
+  input dest_resetn,
+  output dest_ext_resetn,
+  input dest_enable,
+  output dest_enabled,
+
+  output src_clk,
+  input src_resetn,
+  output src_ext_resetn,
+  input src_enable,
+  output src_enabled
 );
 
 localparam DMA_TYPE_MM_AXI = 0;
@@ -197,30 +206,14 @@ wire [ID_WIDTH-1:0] response_id;
 
 wire enabled_src;
 wire enabled_dest;
-wire sync_id;
-wire sync_id_ret_dest;
-wire sync_id_ret_src;
-
-wire dest_enable;
-wire dest_enabled;
-wire dest_sync_id;
-wire dest_sync_id_ret;
-wire src_enable;
-wire src_enabled;
-wire src_sync_id;
-wire src_sync_id_ret;
 
 wire req_gen_valid;
 wire req_gen_ready;
 wire req_dest_valid;
 wire req_dest_ready;
-wire req_dest_empty;
 wire req_src_valid;
 wire req_src_ready;
-wire req_src_empty;
 
-wire dest_clk;
-wire dest_resetn;
 wire dest_req_valid;
 wire dest_req_ready;
 wire [DMA_ADDRESS_WIDTH_DEST-1:0] dest_req_address;
@@ -246,8 +239,6 @@ wire dest_fifo_valid;
 wire dest_fifo_ready;
 wire [DMA_DATA_WIDTH-1:0] dest_fifo_data;
 
-wire src_clk;
-wire src_resetn;
 wire src_req_valid;
 wire src_req_ready;
 wire [DMA_ADDRESS_WIDTH_SRC-1:0] src_req_address;
@@ -274,9 +265,6 @@ wire [DMA_DATA_WIDTH_SRC-1:0] src_fifo_data;
 wire src_fifo_repacked_valid;
 wire src_fifo_repacked_ready;
 wire [DMA_DATA_WIDTH-1:0] src_fifo_repacked_data;
-wire src_fifo_empty;
-
-wire fifo_empty;
 
 wire response_dest_valid;
 wire response_dest_ready = 1'b1;
@@ -294,109 +282,24 @@ assign dbg_dest_response_id = dest_response_id;
 assign dbg_src_request_id = src_request_id;
 assign dbg_src_response_id = src_response_id;
 
-assign sync_id = ~enabled_dest && ~enabled_src && request_id != response_id;
-
-reg enabled;
-reg do_enable;
-
-// Enable src and dest if we are in sync
-always @(posedge req_aclk)
-begin
-  if (req_aresetn == 1'b0) begin
-    do_enable <= 1'b0;
-  end else begin
-    if (enable) begin
-      // First make sure we are fully disabled
-      if (~sync_id_ret_dest && ~sync_id_ret_src &&
-        response_id == request_id && ~enabled_dest && ~enabled_src &&
-        req_dest_empty && req_src_empty && fifo_empty)
-        do_enable <= 1'b1;
-    end else begin
-      do_enable <= 1'b0;
-    end
-  end
-end
-
-// Flag enabled once both src and dest are enabled
-always @(posedge req_aclk)
-begin
-  if (req_aresetn == 1'b0) begin
-    enabled <= 1'b0;
-  end else begin
-    if (do_enable == 1'b0)
-      enabled <= 1'b0;
-    else if (enabled_dest && enabled_src)
-      enabled <= 1'b1;
-  end
-end
-
-assign dbg_status = {do_enable, enabled, enabled_dest, enabled_src, fifo_empty,
-  sync_id, sync_id_ret_dest, sync_id_ret_src};
-
-always @(posedge req_aclk)
+always @(posedge req_clk)
 begin
   eot_mem[request_id] <= request_eot;
 end
 
-always @(posedge req_aclk)
+always @(posedge req_clk)
 begin
-  if (req_aresetn == 1'b0) begin
+  if (req_resetn == 1'b0) begin
     eot <= 1'b0;
   end else begin
     eot <= response_dest_valid & response_dest_ready & response_dest_resp_eot;
   end
 end
 
-generate if (ASYNC_CLK_REQ_SRC) begin
-
-wire src_async_resetn_source;
-
-if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
-assign src_async_resetn_source = m_src_axi_aresetn;
-end else begin
-assign src_async_resetn_source = req_aresetn;
-end
-
-reg [2:0] src_reset_shift = 3'b111;
-assign src_resetn = ~src_reset_shift[2];
-
-always @(negedge src_async_resetn_source or posedge src_clk) begin
-  if (src_async_resetn_source == 1'b0)
-    src_reset_shift <= 3'b111;
-  else
-    src_reset_shift <= {src_reset_shift[1:0], 1'b0};
-end
-
-end else begin
-assign src_resetn = req_aresetn;
-end endgenerate
-
-generate if (ASYNC_CLK_DEST_REQ) begin
-wire dest_async_resetn_source;
-
-if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
-assign dest_async_resetn_source = m_dest_axi_aresetn;
-end else begin
-assign dest_async_resetn_source = req_aresetn;
-end
-
-reg [2:0] dest_reset_shift = 3'b111;
-assign dest_resetn = ~dest_reset_shift[2];
-
-always @(negedge dest_async_resetn_source or posedge dest_clk) begin
-  if (dest_async_resetn_source == 1'b0)
-    dest_reset_shift <= 3'b111;
-  else
-    dest_reset_shift <= {dest_reset_shift[1:0], 1'b0};
-end
-
-end else begin
-assign dest_resetn = req_aresetn;
-end endgenerate
-
 generate if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
 
 assign dest_clk = m_dest_axi_aclk;
+assign dest_ext_resetn = m_dest_axi_aresetn;
 
 wire [ID_WIDTH-1:0] dest_data_id;
 wire [ID_WIDTH-1:0] dest_address_id;
@@ -433,8 +336,6 @@ dmac_dest_mm_axi #(
 
   .request_id(dest_request_id),
   .response_id(dest_response_id),
-  .sync_id(dest_sync_id),
-  .sync_id_ret(dest_sync_id_ret),
 
   .data_id(dest_data_id),
   .address_id(dest_address_id),
@@ -488,6 +389,7 @@ end
 if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
 
 assign dest_clk = m_axis_aclk;
+assign dest_ext_resetn = 1'b1;
 
 wire [ID_WIDTH-1:0] data_id;
 
@@ -521,8 +423,6 @@ dmac_dest_axi_stream #(
   .request_id(dest_request_id),
   .response_id(dest_response_id),
   .data_id(data_id),
-  .sync_id(dest_sync_id),
-  .sync_id_ret(dest_sync_id_ret),
   .xfer_req(m_axis_xfer_req),
 
   .data_eot(data_eot),
@@ -550,6 +450,7 @@ end
 if (DMA_TYPE_DEST == DMA_TYPE_FIFO) begin
 
 assign dest_clk = fifo_rd_clk;
+assign dest_ext_resetn = 1'b1;
 
 wire [ID_WIDTH-1:0] data_id;
 
@@ -582,8 +483,6 @@ dmac_dest_fifo_inf #(
   .request_id(dest_request_id),
   .response_id(dest_response_id),
   .data_id(data_id),
-  .sync_id(dest_sync_id),
-  .sync_id_ret(dest_sync_id_ret),
 
   .data_eot(data_eot),
   .response_eot(response_eot),
@@ -611,6 +510,7 @@ end endgenerate
 generate if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
 
 assign src_clk = m_src_axi_aclk;
+assign src_ext_resetn = m_src_axi_aresetn;
 
 wire [ID_WIDTH-1:0] src_data_id;
 wire [ID_WIDTH-1:0] src_address_id;
@@ -633,8 +533,6 @@ dmac_src_mm_axi #(
 
   .enable(src_enable),
   .enabled(src_enabled),
-  .sync_id(src_sync_id),
-  .sync_id_ret(src_sync_id_ret),
 
   .req_valid(src_req_valid),
   .req_ready(src_req_ready),
@@ -690,6 +588,7 @@ end
 if (DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
 
 assign src_clk = s_axis_aclk;
+assign src_ext_resetn = 1'b1;
 
 wire src_eot = eot_mem[src_response_id];
 
@@ -711,8 +610,6 @@ dmac_src_axi_stream #(
 
   .enable(src_enable),
   .enabled(src_enabled),
-  .sync_id(src_sync_id),
-  .sync_id_ret(src_sync_id_ret),
 
   .req_valid(src_req_valid),
   .req_ready(src_req_ready),
@@ -747,6 +644,7 @@ end
 if (DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
 
 assign src_clk = fifo_wr_clk;
+assign src_ext_resetn = 1'b1;
 
 wire src_eot = eot_mem[src_response_id];
 
@@ -768,8 +666,6 @@ dmac_src_fifo_inf #(
 
   .enable(src_enable),
   .enabled(src_enabled),
-  .sync_id(src_sync_id),
-  .sync_id_ret(src_sync_id_ret),
 
   .req_valid(src_req_valid),
   .req_ready(src_req_ready),
@@ -804,7 +700,7 @@ sync_bits #(
   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_sync_src_request_id (
   .out_clk(src_clk),
-  .out_resetn(src_resetn),
+  .out_resetn(1'b1),
   .in(request_id),
   .out(src_request_id)
 );
@@ -814,7 +710,7 @@ sync_bits #(
   .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
 ) i_sync_dest_request_id (
   .out_clk(dest_clk),
-  .out_resetn(dest_resetn),
+  .out_resetn(1'b1),
   .in(src_response_id),
   .out(dest_request_id)
 );
@@ -823,8 +719,8 @@ sync_bits #(
   .NUM_OF_BITS(ID_WIDTH),
   .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_sync_req_response_id (
-  .out_clk(req_aclk),
-  .out_resetn(req_aresetn),
+  .out_clk(req_clk),
+  .out_resetn(1'b1),
   .in(dest_response_id),
   .out(response_id)
 );
@@ -849,7 +745,7 @@ util_axis_resize #(
   .MASTER_DATA_WIDTH(DMA_DATA_WIDTH)
 ) i_src_repack (
   .clk(src_clk),
-  .resetn(src_resetn & ~src_sync_id),
+  .resetn(src_resetn),
   .s_valid(src_fifo_valid),
   .s_ready(src_fifo_ready),
   .s_data(src_fifo_data),
@@ -868,7 +764,7 @@ util_axis_fifo #(
   .s_axis_valid(src_fifo_repacked_valid),
   .s_axis_ready(src_fifo_repacked_ready),
   .s_axis_data(src_fifo_repacked_data),
-  .s_axis_empty(src_fifo_empty),
+  .s_axis_empty(),
   .s_axis_room(),
 
   .m_axis_aclk(dest_clk),
@@ -884,7 +780,7 @@ util_axis_resize #(
   .MASTER_DATA_WIDTH(DMA_DATA_WIDTH_DEST)
 ) i_dest_repack (
   .clk(dest_clk),
-  .resetn(dest_resetn & ~dest_sync_id),
+  .resetn(dest_resetn),
   .s_valid(dest_fifo_valid),
   .s_ready(dest_fifo_ready),
   .s_data(dest_fifo_data),
@@ -926,33 +822,13 @@ axi_register_slice #(
   .m_axi_data(dest_data)
 );
 
-
-// We do not accept any requests until all components are enabled
-reg _req_valid = 1'b0;
-wire _req_ready;
-
-always @(posedge req_aclk)
-begin
-  if (req_aresetn == 1'b0) begin
-    _req_valid <= 1'b0;
-  end else begin
-    if (_req_valid == 1'b1 && _req_ready == 1'b1) begin
-      _req_valid <= 1'b0;
-    end else if (req_valid == 1'b1 && enabled == 1'b1) begin
-      _req_valid <= 1'b1;
-    end
-  end
-end
-
-assign req_ready = _req_ready & _req_valid & enable;
-
 splitter #(
   .NUM_M(3)
 ) i_req_splitter (
-  .clk(req_aclk),
-  .resetn(req_aresetn),
-  .s_valid(_req_valid),
-  .s_ready(_req_ready),
+  .clk(req_clk),
+  .resetn(req_resetn),
+  .s_valid(req_valid),
+  .s_ready(req_ready),
   .m_valid({
     req_gen_valid,
     req_dest_valid,
@@ -970,11 +846,11 @@ util_axis_fifo #(
   .ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_dest_req_fifo (
-  .s_axis_aclk(req_aclk),
-  .s_axis_aresetn(req_aresetn),
+  .s_axis_aclk(req_clk),
+  .s_axis_aresetn(req_resetn),
   .s_axis_valid(req_dest_valid),
   .s_axis_ready(req_dest_ready),
-  .s_axis_empty(req_dest_empty),
+  .s_axis_empty(),
   .s_axis_data({
     req_dest_address,
     req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST],
@@ -999,11 +875,11 @@ util_axis_fifo #(
   .ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_src_req_fifo (
-  .s_axis_aclk(req_aclk),
-  .s_axis_aresetn(req_aresetn),
+  .s_axis_aclk(req_clk),
+  .s_axis_aresetn(req_resetn),
   .s_axis_valid(req_src_valid),
   .s_axis_ready(req_src_ready),
-  .s_axis_empty(req_src_empty),
+  .s_axis_empty(),
   .s_axis_data({
     req_src_address,
     req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC],
@@ -1038,8 +914,8 @@ util_axis_fifo #(
   .s_axis_data(dest_response_resp_eot),
   .s_axis_room(),
 
-  .m_axis_aclk(req_aclk),
-  .m_axis_aresetn(req_aresetn),
+  .m_axis_aclk(req_clk),
+  .m_axis_aresetn(req_resetn),
   .m_axis_valid(response_dest_valid),
   .m_axis_ready(response_dest_ready),
   .m_axis_data(response_dest_resp_eot),
@@ -1058,8 +934,8 @@ util_axis_fifo #(
   .s_axis_ready(src_response_ready),
   .s_axis_empty(src_response_empty),
   .s_axis_data(src_response_resp),
-  .m_axis_aclk(req_aclk),
-  .m_axis_aresetn(req_aresetn),
+  .m_axis_aclk(req_clk),
+  .m_axis_aresetn(req_resetn),
   .m_axis_valid(response_src_valid),
   .m_axis_ready(response_src_ready),
   .m_axis_data(response_src_resp)
@@ -1072,8 +948,8 @@ dmac_request_generator #(
   .ID_WIDTH(ID_WIDTH),
   .BURSTS_PER_TRANSFER_WIDTH(BURSTS_PER_TRANSFER_WIDTH)
 ) i_req_gen (
-  .req_aclk(req_aclk),
-  .req_aresetn(req_aresetn),
+  .clk(req_clk),
+  .resetn(req_resetn),
 
   .request_id(request_id),
   .response_id(response_id),
@@ -1082,50 +958,9 @@ dmac_request_generator #(
   .req_ready(req_gen_ready),
   .req_burst_count(req_length[DMA_LENGTH_WIDTH-1:BYTES_PER_BURST_WIDTH]),
 
-  .enable(do_enable),
-  .pause(pause),
+  .enable(req_enable),
 
   .eot(request_eot)
-);
-
-sync_bits #(
-  .NUM_OF_BITS(2),
-  .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
-) i_sync_control_dest (
-  .out_clk(dest_clk),
-  .out_resetn(dest_resetn),
-  .in({do_enable, sync_id}),
-  .out({dest_enable, dest_sync_id})
-);
-
-sync_bits #(
-  .NUM_OF_BITS(2),
-  .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
-) i_sync_status_dest (
-  .out_clk(req_aclk),
-  .out_resetn(req_aresetn),
-  .in({dest_enabled | ~dest_response_empty, dest_sync_id_ret}),
-  .out({enabled_dest, sync_id_ret_dest})
-);
-
-sync_bits #(
-  .NUM_OF_BITS(2),
-  .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
-) i_sync_control_src (
-  .out_clk(src_clk),
-  .out_resetn(src_resetn),
-  .in({do_enable, sync_id}),
-  .out({src_enable, src_sync_id})
-);
-
-sync_bits #(
-  .NUM_OF_BITS(3),
-  .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
-) i_sync_status_src (
-  .out_clk(req_aclk),
-  .out_resetn(req_aresetn),
-  .in({src_enabled /* | ~src_response_empty*/, src_sync_id_ret, src_fifo_empty}),
-  .out({enabled_src, sync_id_ret_src, fifo_empty})
 );
 
 endmodule

@@ -44,8 +44,6 @@ module dmac_dest_fifo_inf #(
 
   input enable,
   output enabled,
-  input sync_id,
-  output sync_id_ret,
 
   input [ID_WIDTH-1:0] request_id,
   output [ID_WIDTH-1:0] response_id,
@@ -74,11 +72,7 @@ module dmac_dest_fifo_inf #(
   output [1:0] response_resp
 );
 
-assign sync_id_ret = sync_id;
 wire data_enabled;
-
-wire _fifo_ready;
-assign fifo_ready = _fifo_ready | ~enabled;
 
 wire [DATA_WIDTH-1:0]  dout_s;
 wire data_ready;
@@ -97,7 +91,6 @@ dmac_data_mover # (
 
   .enable(enable),
   .enabled(data_enabled),
-  .sync_id(sync_id),
   .xfer_req(xfer_req),
 
   .request_id(request_id),
@@ -108,7 +101,7 @@ dmac_data_mover # (
   .req_ready(req_ready),
   .req_last_burst_length(req_last_burst_length),
 
-  .s_axi_ready(_fifo_ready),
+  .s_axi_ready(fifo_ready),
   .s_axi_valid(fifo_valid),
   .s_axi_data(fifo_data),
   .m_axi_ready(data_ready),
@@ -136,7 +129,6 @@ dmac_response_generator # (
 
   .enable(data_enabled),
   .enabled(enabled),
-  .sync_id(sync_id),
 
   .request_id(data_id),
   .response_id(response_id),

@@ -11,6 +11,7 @@ GENERIC_DEPS += address_generator.v
 GENERIC_DEPS += axi_dmac.v
 GENERIC_DEPS += axi_dmac_regmap.v
 GENERIC_DEPS += axi_dmac_regmap_request.v
+GENERIC_DEPS += axi_dmac_reset_manager.v
 GENERIC_DEPS += axi_dmac_transfer.v
 GENERIC_DEPS += axi_register_slice.v
 GENERIC_DEPS += data_mover.v

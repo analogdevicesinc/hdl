@@ -44,8 +44,6 @@ module dmac_dest_axi_stream #(
 
   input enable,
   output enabled,
-  input sync_id,
-  output sync_id_ret,
   output xfer_req,
 
   input [ID_WIDTH-1:0] request_id,
@@ -77,9 +75,7 @@ module dmac_dest_axi_stream #(
 
 reg req_xlast_d = 1'b0;
 
-assign sync_id_ret = sync_id;
 wire data_enabled;
-wire _fifo_ready;
 wire m_axis_last_s;
 
 always @(posedge s_axis_aclk) begin
@@ -102,7 +98,6 @@ dmac_data_mover # (
 
   .enable(enable),
   .enabled(data_enabled),
-  .sync_id(sync_id),
   .xfer_req(xfer_req),
 
   .request_id(request_id),
@@ -117,7 +112,7 @@ dmac_data_mover # (
   .m_axi_valid(m_axis_valid),
   .m_axi_data(m_axis_data),
   .m_axi_last(m_axis_last_s),
-  .s_axi_ready(_fifo_ready),
+  .s_axi_ready(fifo_ready),
   .s_axi_valid(fifo_valid),
   .s_axi_data(fifo_data)
 );
@@ -130,7 +125,6 @@ dmac_response_generator # (
 
   .enable(data_enabled),
   .enabled(enabled),
-  .sync_id(sync_id),
 
   .request_id(data_id),
   .response_id(response_id),
@@ -142,7 +136,5 @@ dmac_response_generator # (
   .resp_eot(response_resp_eot),
   .resp_resp(response_resp)
 );
-
-assign fifo_ready = _fifo_ready | ~enabled;
 
 endmodule

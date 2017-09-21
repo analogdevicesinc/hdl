@@ -46,7 +46,6 @@ module dmac_data_mover #(
 
   input [ID_WIDTH-1:0] request_id,
   output [ID_WIDTH-1:0] response_id,
-  input sync_id,
   input eot,
 
   input enable,
@@ -141,19 +140,18 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-  if (enabled == 1'b0 || resetn == 1'b0) begin
+  if (resetn == 1'b0) begin
     active <= 1'b0;
-  end else if (req_valid) begin
+  end else if (req_valid == 1'b1) begin
     active <= 1'b1;
-  end else if (last_load) begin
+  end else if (last_load == 1'b1) begin
     active <= 1'b0;
   end
 end
 
 always @(*)
 begin
-  if ((s_axi_ready && s_axi_valid && last) ||
-    (sync_id && pending_burst))
+  if (s_axi_ready == 1'b1 && s_axi_valid == 1'b1 && last == 1'b1)
     id_next <= inc_id(id);
   else
     id_next <= id;

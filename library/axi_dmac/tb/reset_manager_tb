@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SOURCE="$0.v"
+SOURCE+=" ../axi_dmac_reset_manager.v"
+SOURCE+=" ../../util_cdc/sync_bits.v"
+
+cd `dirname $0`
+source run_tb.sh

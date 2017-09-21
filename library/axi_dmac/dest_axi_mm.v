@@ -52,8 +52,6 @@ module dmac_dest_mm_axi #(
 
   input                               enable,
   output                              enabled,
-  input                               sync_id,
-  output                              sync_id_ret,
 
   output                              response_valid,
   input                               response_ready,
@@ -103,10 +101,6 @@ wire data_req_ready;
 
 wire address_enabled;
 wire data_enabled;
-assign sync_id_ret = sync_id;
-
-wire _fifo_ready;
-assign fifo_ready = _fifo_ready | ~enabled;
 
 splitter #(
   .NUM_M(2)
@@ -141,7 +135,6 @@ dmac_address_generator #(
 
   .id(address_id),
   .request_id(request_id),
-  .sync_id(sync_id),
 
   .req_valid(address_req_valid),
   .req_ready(address_req_ready),
@@ -175,7 +168,6 @@ dmac_data_mover # (
 
   .request_id(address_id),
   .response_id(data_id),
-  .sync_id(sync_id),
   .eot(data_eot),
 
   .req_valid(data_req_valid),
@@ -183,7 +175,7 @@ dmac_data_mover # (
   .req_last_burst_length(req_last_burst_length),
 
   .s_axi_valid(fifo_valid),
-  .s_axi_ready(_fifo_ready),
+  .s_axi_ready(fifo_ready),
   .s_axi_data(fifo_data),
   .m_axi_valid(m_axi_wvalid),
   .m_axi_ready(m_axi_wready),
@@ -207,7 +199,6 @@ dmac_response_handler #(
 
   .id(response_id),
   .request_id(data_id),
-  .sync_id(sync_id),
 
   .eot(response_eot),
 
