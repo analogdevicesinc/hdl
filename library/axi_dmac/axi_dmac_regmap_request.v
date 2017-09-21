@@ -39,6 +39,7 @@ module axi_dmac_regmap_request #(
   parameter BYTES_PER_BEAT_WIDTH_SRC = 1,
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_LENGTH_WIDTH = 24,
+  parameter DMA_LENGTH_ALIGN = 3,
   parameter DMA_CYCLIC = 0,
   parameter HAS_DEST_ADDR = 1,
   parameter HAS_SRC_ADDR = 1,
@@ -88,7 +89,7 @@ reg [3:0] up_transfer_done_bitmap = 4'b0;
 
 reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_dest_address = 'h00;
 reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC]  up_dma_src_address = 'h00;
-reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = 'h00;
+reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = {DMA_LENGTH_ALIGN{1'b1}};
 reg up_dma_cyclic = DMA_CYCLIC ? 1'b1 : 1'b0;
 reg up_dma_last = 1'b1;
 
@@ -102,7 +103,7 @@ always @(posedge clk) begin
   if (reset == 1'b1) begin
     up_dma_src_address <= 'h00;
     up_dma_dest_address <= 'h00;
-    up_dma_x_length <= 'h00;
+    up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= 'h00;
     up_dma_req_valid <= 1'b0;
     up_dma_cyclic <= DMA_CYCLIC ? 1'b1 : 1'b0;
     up_dma_last <= 1'b1;
@@ -125,7 +126,7 @@ always @(posedge clk) begin
       end
       9'h104: up_dma_dest_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
       9'h105: up_dma_src_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
-      9'h106: up_dma_x_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      9'h106: up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= up_wdata[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN];
       endcase
     end
   end
@@ -157,13 +158,13 @@ if (DMA_2D_TRANSFER == 1) begin
   always @(posedge clk) begin
     if (reset == 1'b1) begin
       up_dma_y_length <= 'h00;
-      up_dma_dest_stride <= 'h00;
-      up_dma_src_stride <= 'h00;
+      up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= 'h00;
+      up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= 'h00;
     end else if (up_wreq == 1'b1) begin
       case (up_waddr)
       9'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-      9'h108: up_dma_dest_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-      9'h109: up_dma_src_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      9'h108: up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= up_wdata[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
+      9'h109: up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= up_wdata[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
       endcase
     end
   end
