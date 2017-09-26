@@ -78,6 +78,6 @@ set_property  -dict {PACKAGE_PIN  K21  IOSTANDARD LVCMOS25} [get_ports spi_int] 
 
 # clocks
 
-create_clock -name dac_clk_in   -period  2.00 [get_ports dac_clk_in_p]
-create_clock -name adc_clk_in   -period  2.00 [get_ports adc_clk_in_p]
+create_clock -name dac_clk_in   -period  2.222 [get_ports dac_clk_in_p]
+create_clock -name adc_clk_in   -period  2.222 [get_ports adc_clk_in_p]
 
