@@ -8,52 +8,40 @@ source $ad_hdl_dir/projects/common/a10gx/a10gx_system_assign.tcl
 
 # lane interface
 
-set_location_assignment PIN_AL8   -to ref_clk0            ; ## D04  FMCA_GBTCLK0_M2C_P
-set_location_assignment PIN_AL7   -to "ref_clk0(n)"       ; ## D05  FMCA_GBTCLK0_M2C_N
-set_location_assignment PIN_AJ8   -to ref_clk1            ; ## B20  FMCA_GBTCLK1_M2C_P
-set_location_assignment PIN_AJ7   -to "ref_clk1(n)"       ; ## B21  FMCA_GBTCLK1_M2C_N
-set_location_assignment PIN_BA7   -to rx_data[0]          ; ## A02  FMCA_DP1_M2C_P
-set_location_assignment PIN_BA8   -to "rx_data[0](n)"     ; ## A03  FMCA_DP1_M2C_N
-set_location_assignment PIN_AY5   -to rx_data[1]          ; ## A06  FMCA_DP2_M2C_P
-set_location_assignment PIN_AY6   -to "rx_data[1](n)"     ; ## A07  FMCA_DP2_M2C_N
-set_location_assignment PIN_AW7   -to rx_data[2]          ; ## C06  FMCA_DP0_M2C_P
-set_location_assignment PIN_AW8   -to "rx_data[2](n)"     ; ## C07  FMCA_DP0_M2C_N
-set_location_assignment PIN_AV5   -to rx_data[3]          ; ## A10  FMCA_DP3_M2C_P
-set_location_assignment PIN_AV6   -to "rx_data[3](n)"     ; ## A11  FMCA_DP3_M2C_N
-set_location_assignment PIN_BD5   -to tx_data[0]          ; ## A22  FMCA_DP1_C2M_P (tx_data_p[0])
-set_location_assignment PIN_BD6   -to "tx_data[0](n)"     ; ## A23  FMCA_DP1_C2M_N (tx_data_n[0])
-set_location_assignment PIN_BB5   -to tx_data[1]          ; ## A26  FMCA_DP2_C2M_P (tx_data_p[1])
-set_location_assignment PIN_BB6   -to "tx_data[1](n)"     ; ## A27  FMCA_DP2_C2M_N (tx_data_n[1])
-set_location_assignment PIN_BC7   -to tx_data[2]          ; ## C02  FMCA_DP0_C2M_P (tx_data_p[2])
-set_location_assignment PIN_BC8   -to "tx_data[2](n)"     ; ## C03  FMCA_DP0_C2M_N (tx_data_n[2])
-set_location_assignment PIN_BC3   -to tx_data[3]          ; ## A30  FMCA_DP3_C2M_P (tx_data_p[3])
-set_location_assignment PIN_BC4   -to "tx_data[3](n)"     ; ## A31  FMCA_DP3_C2M_N (tx_data_n[3])
+set_location_assignment PIN_AL8   -to ref_clk0               ; ## D04  FMCA_GBTCLK0_M2C_P
+set_location_assignment PIN_AL7   -to "ref_clk0(n)"          ; ## D05  FMCA_GBTCLK0_M2C_N
+set_location_assignment PIN_AJ8   -to ref_clk1               ; ## B20  FMCA_GBTCLK1_M2C_P
+set_location_assignment PIN_AJ7   -to "ref_clk1(n)"          ; ## B21  FMCA_GBTCLK1_M2C_N
+set_location_assignment PIN_BA7   -to rx_serial_data[0]      ; ## A02  FMCA_DP1_M2C_P
+set_location_assignment PIN_BA8   -to "rx_serial_data[0](n)" ; ## A03  FMCA_DP1_M2C_N
+set_location_assignment PIN_AY5   -to rx_serial_data[1]      ; ## A06  FMCA_DP2_M2C_P
+set_location_assignment PIN_AY6   -to "rx_serial_data[1](n)" ; ## A07  FMCA_DP2_M2C_N
+set_location_assignment PIN_AW7   -to rx_serial_data[2]      ; ## C06  FMCA_DP0_M2C_P
+set_location_assignment PIN_AW8   -to "rx_serial_data[2](n)" ; ## C07  FMCA_DP0_M2C_N
+set_location_assignment PIN_AV5   -to rx_serial_data[3]      ; ## A10  FMCA_DP3_M2C_P
+set_location_assignment PIN_AV6   -to "rx_serial_data[3](n)" ; ## A11  FMCA_DP3_M2C_N
+set_location_assignment PIN_BD5   -to tx_serial_data[0]      ; ## A22  FMCA_DP1_C2M_P (tx_serial_data_p[0])
+set_location_assignment PIN_BD6   -to "tx_serial_data[0](n)" ; ## A23  FMCA_DP1_C2M_N (tx_serial_data_n[0])
+set_location_assignment PIN_BB5   -to tx_serial_data[1]      ; ## A26  FMCA_DP2_C2M_P (tx_serial_data_p[1])
+set_location_assignment PIN_BB6   -to "tx_serial_data[1](n)" ; ## A27  FMCA_DP2_C2M_N (tx_serial_data_n[1])
+set_location_assignment PIN_BC7   -to tx_serial_data[2]      ; ## C02  FMCA_DP0_C2M_P (tx_serial_data_p[2])
+set_location_assignment PIN_BC8   -to "tx_serial_data[2](n)" ; ## C03  FMCA_DP0_C2M_N (tx_serial_data_n[2])
+set_location_assignment PIN_BC3   -to tx_serial_data[3]      ; ## A30  FMCA_DP3_C2M_P (tx_serial_data_p[3])
+set_location_assignment PIN_BC4   -to "tx_serial_data[3](n)" ; ## A31  FMCA_DP3_C2M_N (tx_serial_data_n[3])
 
-set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to ref_clk0
-set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to ref_clk1
-set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_data
-set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_data
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_serial_data
+set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_serial_data
 
 set_instance_assignment -name IO_STANDARD LVDS -to ref_clk0
 set_instance_assignment -name IO_STANDARD LVDS -to ref_clk1
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[0]
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[1]
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[2]
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[3]
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[0]
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[1]
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[2]
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[3]
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_serial_data
+set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_serial_data
 
-set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_0 -to rx_data[0]
-set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_1 -to rx_data[1]
-set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_2 -to rx_data[2]
-set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_3 -to rx_data[3]
-
-set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_0 -to tx_data[0]
-set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_1 -to tx_data[1]
-set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_2 -to tx_data[2]
-set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_3 -to tx_data[3]
+# Merge RX and TX into single transceiver
+for {set i 0} {$i < 4} {incr i} {
+  set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to rx_serial_data[${i}]
+  set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to tx_serial_data[${i}]
+}
 
 set_location_assignment PIN_AR20  -to rx_sync               ; ## G09  FMCA_HPC_LA03_P
 set_location_assignment PIN_AR19  -to rx_sync(n)            ; ## G10  FMCA_HPC_LA03_N
@@ -146,4 +134,3 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[17]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[18]
 
 execute_flow -compile
-

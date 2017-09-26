@@ -6,15 +6,14 @@ set_instance_parameter_value avl_ad9152_xcvr {ID} {0}
 set_instance_parameter_value avl_ad9152_xcvr {TX_OR_RX_N} {1}
 set_instance_parameter_value avl_ad9152_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
 set_instance_parameter_value avl_ad9152_xcvr {LANE_RATE} {12500.0}
-set_instance_parameter_value avl_ad9152_xcvr {PLLCLK_FREQUENCY} {6250.0}
 set_instance_parameter_value avl_ad9152_xcvr {REFCLK_FREQUENCY} {625.0}
-set_instance_parameter_value avl_ad9152_xcvr {CORECLK_FREQUENCY} {312.5}
 set_instance_parameter_value avl_ad9152_xcvr {NUM_OF_LANES} {4}
 set_instance_parameter_value avl_ad9152_xcvr {NUM_OF_CONVS} {2}
 set_instance_parameter_value avl_ad9152_xcvr {FRM_BCNT} {1}
 set_instance_parameter_value avl_ad9152_xcvr {FRM_SCNT} {1}
 set_instance_parameter_value avl_ad9152_xcvr {MF_FCNT} {32}
 set_instance_parameter_value avl_ad9152_xcvr {HD} {1}
+set_instance_parameter_value avl_ad9152_xcvr {TX_LANE_MAP} {0 3 1 2}
 
 add_connection sys_clk.clk avl_ad9152_xcvr.sys_clk
 add_connection sys_clk.clk_reset avl_ad9152_xcvr.sys_resetn
@@ -32,14 +31,6 @@ add_interface tx_sysref conduit end
 set_interface_property tx_sysref EXPORT_OF avl_ad9152_xcvr.sysref
 add_interface tx_sync conduit end
 set_interface_property tx_sync EXPORT_OF avl_ad9152_xcvr.sync
-add_connection avl_ad9152_xcvr.tx_phy_s_0 avl_ad9152_xcvr.tx_ip_s_0
-add_connection avl_ad9152_xcvr.tx_phy_s_1 avl_ad9152_xcvr.tx_ip_s_3
-add_connection avl_ad9152_xcvr.tx_phy_s_2 avl_ad9152_xcvr.tx_ip_s_1
-add_connection avl_ad9152_xcvr.tx_phy_s_3 avl_ad9152_xcvr.tx_ip_s_2
-add_connection avl_ad9152_xcvr.tx_ip_d_0 avl_ad9152_xcvr.tx_phy_d_0
-add_connection avl_ad9152_xcvr.tx_ip_d_3 avl_ad9152_xcvr.tx_phy_d_1
-add_connection avl_ad9152_xcvr.tx_ip_d_1 avl_ad9152_xcvr.tx_phy_d_2
-add_connection avl_ad9152_xcvr.tx_ip_d_2 avl_ad9152_xcvr.tx_phy_d_3
 
 # ad9152-xcvr
 
@@ -98,9 +89,7 @@ set_instance_parameter_value avl_ad9680_xcvr {ID} {1}
 set_instance_parameter_value avl_ad9680_xcvr {TX_OR_RX_N} {0}
 set_instance_parameter_value avl_ad9680_xcvr {PCS_CONFIG} {JESD_PCS_CFG2}
 set_instance_parameter_value avl_ad9680_xcvr {LANE_RATE} {12500.0}
-set_instance_parameter_value avl_ad9680_xcvr {PLLCLK_FREQUENCY} {6250.0}
 set_instance_parameter_value avl_ad9680_xcvr {REFCLK_FREQUENCY} {625.0}
-set_instance_parameter_value avl_ad9680_xcvr {CORECLK_FREQUENCY} {312.5}
 set_instance_parameter_value avl_ad9680_xcvr {NUM_OF_LANES} {4}
 set_instance_parameter_value avl_ad9680_xcvr {NUM_OF_CONVS} {2}
 set_instance_parameter_value avl_ad9680_xcvr {FRM_BCNT} {1}

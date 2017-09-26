@@ -14,21 +14,18 @@ ad_ip_parameter ID INTEGER 0 false
 ad_ip_parameter PCS_CONFIG STRING "JESD_PCS_CFG2" false
 ad_ip_parameter LANE_RATE FLOAT 10000 false
 ad_ip_parameter SYSCLK_FREQUENCY FLOAT 100.0 false
-ad_ip_parameter PLLCLK_FREQUENCY FLOAT 5000.0 false
 ad_ip_parameter REFCLK_FREQUENCY FLOAT 500.0 false
-ad_ip_parameter CORECLK_FREQUENCY FLOAT 250.0 false
 ad_ip_parameter NUM_OF_LANES INTEGER 4 false
 ad_ip_parameter NUM_OF_CONVS INTEGER 2 false
 ad_ip_parameter FRM_BCNT INTEGER 1 false
 ad_ip_parameter FRM_SCNT INTEGER 1 false
 ad_ip_parameter MF_FCNT INTEGER 32 false
 ad_ip_parameter HD INTEGER 1 false
+ad_ip_parameter TX_LANE_MAP STRING "" false
 
 set_parameter_property LANE_RATE DISPLAY_UNITS "Mbps"
 set_parameter_property SYSCLK_FREQUENCY UNITS Megahertz
-set_parameter_property PLLCLK_FREQUENCY UNITS Megahertz
 set_parameter_property REFCLK_FREQUENCY UNITS Megahertz
-set_parameter_property CORECLK_FREQUENCY UNITS Megahertz
 
 proc p_avl_adxcvr {} {
 
@@ -39,14 +36,16 @@ proc p_avl_adxcvr {} {
   set m_num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set m_device_family [get_parameter_value "DEVICE_FAMILY"]
   set m_sysclk_frequency [get_parameter_value "SYSCLK_FREQUENCY"]
-  set m_pllclk_frequency [get_parameter_value "PLLCLK_FREQUENCY"]
   set m_refclk_frequency [get_parameter_value "REFCLK_FREQUENCY"]
-  set m_coreclk_frequency [get_parameter_value "CORECLK_FREQUENCY"]
   set m_num_of_convs [get_parameter_value "NUM_OF_CONVS"]
   set m_frm_bcnt [get_parameter_value "FRM_BCNT"]
   set m_frm_scnt [get_parameter_value "FRM_SCNT"]
   set m_mf_fcnt [get_parameter_value "MF_FCNT"]
   set m_hd [get_parameter_value "HD"]
+  set m_tx_lane_map [get_parameter_value "TX_LANE_MAP"]
+
+  set m_pllclk_frequency [expr $m_lane_rate / 2]
+  set m_coreclk_frequency [expr $m_lane_rate / 40]
 
   add_instance alt_sys_clk clock_source
   set_instance_parameter_value alt_sys_clk {clockFrequency} [expr $m_sysclk_frequency*1000000]
@@ -96,10 +95,16 @@ proc p_avl_adxcvr {} {
   set_interface_property core_pll_reconfig EXPORT_OF alt_core_pll.reconfig_avmm0
 
   add_instance alt_core_clk altera_clock_bridge
-  set_instance_parameter_value alt_core_clk {EXPLICIT_CLOCK_RATE} $m_coreclk_frequency
+  set_instance_parameter_value alt_core_clk {EXPLICIT_CLOCK_RATE} [expr $m_coreclk_frequency*1000000]
   add_connection alt_core_pll.outclk0 alt_core_clk.in_clk
   add_interface core_clk clock source
   set_interface_property core_clk EXPORT_OF alt_core_clk.out_clk
+
+  add_instance octet_swap avl_adxcvr_octet_swap
+  set_instance_parameter_value octet_swap NUM_OF_LANES $m_num_of_lanes
+  set_instance_parameter_value octet_swap TX_OR_RX_N m_tx_or_rx_n
+  add_connection alt_core_pll.outclk0 octet_swap.clock
+  add_connection alt_sys_clk.clk_reset octet_swap.reset
 
   if {$m_tx_or_rx_n == 1} {
 
@@ -152,8 +157,11 @@ proc p_avl_adxcvr {} {
     set_instance_parameter_value alt_ip {HD} $m_hd
     add_connection alt_core_pll.outclk0 alt_ip.txlink_clk
     add_connection alt_sys_clk.clk_reset alt_ip.txlink_rst_n
+
+    add_connection octet_swap.out alt_ip.jesd204_tx_link
     add_interface ip_data avalon_streaming sink
-    set_interface_property ip_data EXPORT_OF alt_ip.jesd204_tx_link
+    set_interface_property ip_data EXPORT_OF octet_swap.in
+
     add_connection alt_sys_clk.clk alt_ip.jesd204_tx_avs_clk
     add_connection alt_sys_clk.clk_reset alt_ip.jesd204_tx_avs_rst_n
     add_interface ip_reconfig avalon slave
@@ -181,6 +189,8 @@ proc p_avl_adxcvr {} {
     add_connection alt_ip.csr_bit_reversal alt_xphy.tx_ip_csr_bit_reversal
     add_connection alt_ip.csr_byte_reversal alt_xphy.tx_ip_csr_byte_reversal
 
+    set lane_map [regexp -all -inline {\S+} $m_tx_lane_map]
+
     for {set n 0} {$n < $m_num_of_lanes} {incr n} {
 
       add_instance alt_phy_${n} altera_jesd204
@@ -201,30 +211,28 @@ proc p_avl_adxcvr {} {
       add_connection alt_xphy.tx_phy${n}_analogreset alt_phy_${n}.tx_analogreset
       add_connection alt_xphy.tx_phy${n}_digitalreset alt_phy_${n}.tx_digitalreset
       add_connection alt_lane_pll.tx_serial_clk alt_phy_${n}.tx_serial_clk0
-      add_interface tx_ip_s_${n} conduit end
-      set_interface_property tx_ip_s_${n} EXPORT_OF alt_xphy.tx_ip_s_${n}
-      add_interface tx_ip_d_${n} conduit end
-      set_interface_property tx_ip_d_${n} EXPORT_OF alt_xphy.tx_ip_d_${n}
-      add_interface tx_phy_s_${n} conduit end
-      set_interface_property tx_phy_s_${n} EXPORT_OF alt_xphy.tx_phy_s_${n}
-      add_interface tx_phy_d_${n} conduit end
-      set_interface_property tx_phy_d_${n} EXPORT_OF alt_xphy.tx_phy_d_${n}
 
       add_connection alt_sys_clk.clk alt_phy_${n}.reconfig_clk
       add_connection alt_sys_clk.clk_reset alt_phy_${n}.reconfig_reset
       add_interface phy_reconfig_${n} avalon slave
       set_interface_property phy_reconfig_${n} EXPORT_OF alt_phy_${n}.reconfig_avmm
 
-      add_connection alt_phy_${n}.tx_cal_busy alt_xphy.tx_phy${n}_cal_busy
-      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_full alt_xphy.tx_phy${n}_pcfifo_full
-      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_empty alt_xphy.tx_phy${n}_pcfifo_empty
-      add_connection alt_xphy.tx_phy${n}_pcs_data alt_phy_${n}.jesd204_tx_pcs_data
-      add_connection alt_xphy.tx_phy${n}_pcs_kchar_data alt_phy_${n}.jesd204_tx_pcs_kchar_data
-      add_connection alt_xphy.tx_phy${n}_elecidle alt_phy_${n}.phy_tx_elecidle
-      add_connection alt_xphy.tx_phy${n}_csr_lane_polarity alt_phy_${n}.csr_lane_polarity
-      add_connection alt_xphy.tx_phy${n}_csr_lane_powerdown alt_phy_${n}.csr_lane_powerdown
-      add_connection alt_xphy.tx_phy${n}_csr_bit_reversal alt_phy_${n}.csr_bit_reversal
-      add_connection alt_xphy.tx_phy${n}_csr_byte_reversal alt_phy_${n}.csr_byte_reversal
+      if {$lane_map != {}} {
+        set m [lindex $lane_map $n]
+      } else {
+        set m $n
+      }
+
+      add_connection alt_phy_${n}.tx_cal_busy alt_xphy.tx_phy${m}_cal_busy
+      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_full alt_xphy.tx_phy${m}_pcfifo_full
+      add_connection alt_phy_${n}.phy_csr_tx_pcfifo_empty alt_xphy.tx_phy${m}_pcfifo_empty
+      add_connection alt_xphy.tx_phy${m}_pcs_data alt_phy_${n}.jesd204_tx_pcs_data
+      add_connection alt_xphy.tx_phy${m}_pcs_kchar_data alt_phy_${n}.jesd204_tx_pcs_kchar_data
+      add_connection alt_xphy.tx_phy${m}_elecidle alt_phy_${n}.phy_tx_elecidle
+      add_connection alt_xphy.tx_phy${m}_csr_lane_polarity alt_phy_${n}.csr_lane_polarity
+      add_connection alt_xphy.tx_phy${m}_csr_lane_powerdown alt_phy_${n}.csr_lane_powerdown
+      add_connection alt_xphy.tx_phy${m}_csr_bit_reversal alt_phy_${n}.csr_bit_reversal
+      add_connection alt_xphy.tx_phy${m}_csr_byte_reversal alt_phy_${n}.csr_byte_reversal
     }
   }
 
@@ -260,10 +268,15 @@ proc p_avl_adxcvr {} {
     set_instance_parameter_value alt_ip {HD} $m_hd
     add_connection alt_core_pll.outclk0 alt_ip.rxlink_clk
     add_connection alt_sys_clk.clk_reset alt_ip.rxlink_rst_n
+
+    add_connection alt_ip.sof octet_swap.in_sof
     add_interface ip_sof conduit end
-    set_interface_property ip_sof EXPORT_OF alt_ip.sof
+    set_interface_property ip_sof EXPORT_OF octet_swap.out_sof
+
+    add_connection alt_ip.jesd204_rx_link octet_swap.in
     add_interface ip_data avalon_streaming source
-    set_interface_property ip_data EXPORT_OF alt_ip.jesd204_rx_link
+    set_interface_property ip_data EXPORT_OF octet_swap.out
+
     add_connection alt_sys_clk.clk alt_ip.jesd204_rx_avs_clk
     add_connection alt_sys_clk.clk_reset alt_ip.jesd204_rx_avs_rst_n
     add_interface ip_reconfig avalon slave

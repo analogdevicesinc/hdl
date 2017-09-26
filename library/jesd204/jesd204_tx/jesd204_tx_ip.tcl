@@ -61,6 +61,7 @@ set_property PROCESSING_ORDER LATE [ipx::get_files jesd204_tx_constr.xdc \
 
 adi_ip_add_core_dependencies { \
   analog.com:user:jesd204_common:1.0 \
+  analog.com:user:util_cdc:1.0 \
 }
 
 set_property display_name "ADI JESD204 Transmit" [ipx::current_core]
@@ -70,6 +71,7 @@ adi_add_bus "tx_data" "slave" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
   { \
+    { "tx_valid" "TVALID" } \
     { "tx_ready" "TREADY" } \
     { "tx_data" "TDATA" } \
   }

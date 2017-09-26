@@ -340,6 +340,7 @@ module axi_jesd204_tx_tb;
     .s_axi_rdata(s_axi_rdata),
 
     .core_clk(core_clk),
+    .core_reset_ext(1'b0),
 
     .core_ilas_config_rd(1'b1),
     .core_ilas_config_addr(2'b00),

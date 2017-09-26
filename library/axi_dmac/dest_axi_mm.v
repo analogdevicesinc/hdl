@@ -49,7 +49,6 @@ module dmac_dest_mm_axi #(
   output                              req_ready,
   input [DMA_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH] req_address,
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
-  input [BYTES_PER_BEAT_WIDTH-1:0]  req_last_beat_bytes,
 
   input                               enable,
   output                              enabled,
@@ -97,8 +96,6 @@ module dmac_dest_mm_axi #(
   input  [ 1:0]                       m_axi_bresp,
   output                              m_axi_bready
 );
-
-reg [(DMA_DATA_WIDTH/8)-1:0] wstrb;
 
 wire address_req_valid;
 wire address_req_ready;
@@ -196,16 +193,7 @@ dmac_data_mover # (
   .m_axi_last(m_axi_wlast)
 );
 
-always @(*)
-begin
-  if (data_eot & m_axi_wlast) begin
-    wstrb <= (1 << (req_last_beat_bytes + 1)) - 1;
-  end else begin
-    wstrb <= {(DMA_DATA_WIDTH/8){1'b1}};
-  end
-end
-
-assign m_axi_wstrb = wstrb;
+assign m_axi_wstrb = {(DMA_DATA_WIDTH/8){1'b1}};
 
 dmac_response_handler #(
   .ID_WIDTH(ID_WIDTH)

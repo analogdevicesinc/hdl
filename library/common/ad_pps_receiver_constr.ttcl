@@ -1,0 +1,20 @@
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_pps_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set pps_enable [getBooleanValue "PPS_RECEIVER_ENABLE"] :>
+
+<: if {$pps_enable} { :>
+
+  set_property ASYNC_REG TRUE \
+    [get_cells -hier *_pps_m*] \
+    [get_cells -hier *_pps_status_m*]
+  
+  set_false_path -to [get_cells -hier -filter {name =~ *_pps_m_reg[0]  && IS_SEQUENTIAL}]
+  set_false_path -from [get_cells -hier -filter {name =~ *pps_status_reg  && IS_SEQUENTIAL}] \
+                 -to   [get_cells -hier -filter {name =~ *up_pps_status_m_reg  && IS_SEQUENTIAL}]
+  set_false_path -to [get_cells -hier -filter {name =~ *up_pps_rcounter_reg*  && IS_SEQUENTIAL}]
+
+<: } :>
+

@@ -38,7 +38,6 @@
 module axi_ad9144 #(
 
   parameter   ID = 0,
-  parameter   DEVICE_TYPE = 0,
   parameter   QUAD_OR_DUAL_N = 1,
   parameter   DAC_DATAPATH_DISABLE = 0) (
 
@@ -73,7 +72,7 @@ module axi_ad9144 #(
   input                   s_axi_aclk,
   input                   s_axi_aresetn,
   input                   s_axi_awvalid,
-  input       [ 31:0]     s_axi_awaddr,
+  input       [ 15:0]     s_axi_awaddr,
   input       [ 2:0]      s_axi_awprot,
   output                  s_axi_awready,
   input                   s_axi_wvalid,
@@ -84,7 +83,7 @@ module axi_ad9144 #(
   output      [ 1:0]      s_axi_bresp,
   input                   s_axi_bready,
   input                   s_axi_arvalid,
-  input       [ 31:0]     s_axi_araddr,
+  input       [ 15:0]     s_axi_araddr,
   input       [ 2:0]      s_axi_arprot,
   output                  s_axi_arready,
   output                  s_axi_rvalid,
@@ -135,11 +134,11 @@ module axi_ad9144 #(
   // dual/quad cores
 
   assign tx_valid = 1'b1;
-  assign tx_data = (QUAD_OR_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
+  assign tx_data = tx_data_s[(128*QUAD_OR_DUAL_N)+127:0];
 
   // device interface
 
-  axi_ad9144_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
+  axi_ad9144_if i_if (
     .tx_clk (tx_clk),
     .tx_data (tx_data_s),
     .dac_clk (dac_clk),

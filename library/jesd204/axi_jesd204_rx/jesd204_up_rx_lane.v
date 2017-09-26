@@ -46,6 +46,7 @@ module jesd204_up_rx_lane (
   input up_clk,
   input up_reset_synchronizer,
 
+  input up_rreq,
   input [2:0] up_raddr,
   output reg [31:0] up_rdata,
 
@@ -72,7 +73,7 @@ wire up_ilas_ready;
 
 sync_bits #(
   .NUM_OF_BITS(1)
-) i_sync_status_ready (
+) i_cdc_status_ready (
   .in({
     core_status_ifs_ready
   }),
@@ -121,6 +122,7 @@ end
 jesd204_up_ilas_mem i_ilas_mem (
   .up_clk(up_clk),
 
+  .up_rreq(up_rreq),
   .up_raddr(up_raddr[1:0]),
   .up_rdata(up_ilas_rdata),
   .up_ilas_ready(up_ilas_ready),

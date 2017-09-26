@@ -6,6 +6,7 @@ derive_pll_clocks
 derive_clock_uncertainty
 
 create_clock -period 4.0 -name v_rx_clk
+create_generated_clock -name v_tx_clk -source [get_ports {rx_clk_in}] [get_ports {tx_clk_out}]
 
 set_input_delay -add_delay -rise -max  1.2  -clock {v_rx_clk} [get_ports {rx_frame_in}]
 set_input_delay -add_delay -rise -max  1.2  -clock {v_rx_clk} [get_ports {rx_data_in[0]}]
@@ -36,14 +37,6 @@ set_input_delay -add_delay -fall -min  0.2  -clock {v_rx_clk} [get_ports {rx_dat
 set_input_delay -add_delay -fall -min  0.2  -clock {v_rx_clk} [get_ports {rx_data_in[4]}]
 set_input_delay -add_delay -fall -min  0.2  -clock {v_rx_clk} [get_ports {rx_data_in[5]}]
 
-create_generated_clock -name v_tx_clk_reg \
-  -source [get_pins -hierarchical *counter\[0\]*divclk*] \
-  [get_registers *ad_serdes_tx_clock_out*TX_OUTPUT_DFF*]
-
-create_generated_clock -name v_tx_clk \
-  -source [get_registers *ad_serdes_tx_clock_out*TX_OUTPUT_DFF*] \
-  [get_ports {tx_clk_out}]
-
 set_output_delay -add_delay -rise -max  1.2 -clock {v_tx_clk} [get_ports {tx_frame_out}]
 set_output_delay -add_delay -rise -max  1.2 -clock {v_tx_clk} [get_ports {tx_data_out[0]}]
 set_output_delay -add_delay -rise -max  1.2 -clock {v_tx_clk} [get_ports {tx_data_out[1]}]
@@ -73,6 +66,11 @@ set_output_delay -add_delay -fall -min  0.2 -clock {v_tx_clk} [get_ports {tx_dat
 set_output_delay -add_delay -fall -min  0.2 -clock {v_tx_clk} [get_ports {tx_data_out[4]}]
 set_output_delay -add_delay -fall -min  0.2 -clock {v_tx_clk} [get_ports {tx_data_out[5]}]
 
+# locked is async- most likely clock won't be running when deasserted
+
+set_false_path  -to [get_registers *axi_ad9361_lvds_if:i_dev_if|up_drp_locked_m1*]
+
 # frame reader seems to use the wrong reset!
 
 set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out*]
+

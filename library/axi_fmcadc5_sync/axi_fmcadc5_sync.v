@@ -88,7 +88,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   input             s_axi_aclk,
   input             s_axi_aresetn,
   input             s_axi_awvalid,
-  input   [ 31:0]   s_axi_awaddr,
+  input   [ 15:0]   s_axi_awaddr,
   output            s_axi_awready,
   input             s_axi_wvalid,
   input   [ 31:0]   s_axi_wdata,
@@ -98,7 +98,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
   output  [  1:0]   s_axi_bresp,
   input             s_axi_bready,
   input             s_axi_arvalid,
-  input   [ 31:0]   s_axi_araddr,
+  input   [ 15:0]   s_axi_araddr,
   output            s_axi_arready,
   output            s_axi_rvalid,
   output  [ 31:0]   s_axi_rdata,
@@ -756,7 +756,7 @@ module axi_fmcadc5_sync #(parameter integer ID = 0) (
 
   assign rx_sysref = rx_sysref_i;
 
-  ad_lvds_out #(
+  ad_data_out #(
     .DEVICE_TYPE (0),
     .SINGLE_ENDED (0),
     .IODELAY_ENABLE (1),

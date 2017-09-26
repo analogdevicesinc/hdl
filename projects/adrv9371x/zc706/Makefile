@@ -31,7 +31,6 @@ M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/jesd204/jesd204_rx/jesd204_rx.xpr
 M_DEPS += ../../../library/jesd204/jesd204_tx/jesd204_tx.xpr
 M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
-M_DEPS += ../../../library/util_bsplit/util_bsplit.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_upack/util_upack.xpr
 
@@ -74,7 +73,6 @@ clean-all:clean
 	make -C ../../../library/jesd204/jesd204_rx clean
 	make -C ../../../library/jesd204/jesd204_tx clean
 	make -C ../../../library/xilinx/util_adxcvr clean
-	make -C ../../../library/util_bsplit clean
 	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_upack clean
 
@@ -97,7 +95,6 @@ lib:
 	make -C ../../../library/jesd204/jesd204_rx
 	make -C ../../../library/jesd204/jesd204_tx
 	make -C ../../../library/xilinx/util_adxcvr
-	make -C ../../../library/util_bsplit
 	make -C ../../../library/util_cpack
 	make -C ../../../library/util_upack
 

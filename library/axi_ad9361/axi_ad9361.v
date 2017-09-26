@@ -43,6 +43,7 @@ module axi_ad9361 #(
   parameter   MODE_1R1T = 0,
   parameter   DEVICE_TYPE = 0,
   parameter   TDD_DISABLE = 0,
+  parameter   PPS_RECEIVER_ENABLE = 0,
   parameter   CMOS_OR_LVDS_N = 0,
   parameter   ADC_INIT_DELAY = 0,
   parameter   ADC_DATAPATH_DISABLE = 0,
@@ -103,6 +104,9 @@ module axi_ad9361 #(
   input           tdd_sync,
   output          tdd_sync_cntr,
 
+  input           gps_pps,
+  output          gps_pps_irq,
+
   // delay clock
 
   input           delay_clk,
@@ -152,7 +156,7 @@ module axi_ad9361 #(
   input           s_axi_aclk,
   input           s_axi_aresetn,
   input           s_axi_awvalid,
-  input   [31:0]  s_axi_awaddr,
+  input   [15:0]  s_axi_awaddr,
   input   [ 2:0]  s_axi_awprot,
   output          s_axi_awready,
   input           s_axi_wvalid,
@@ -163,7 +167,7 @@ module axi_ad9361 #(
   output  [ 1:0]  s_axi_bresp,
   input           s_axi_bready,
   input           s_axi_arvalid,
-  input   [31:0]  s_axi_araddr,
+  input   [15:0]  s_axi_araddr,
   input   [ 2:0]  s_axi_arprot,
   output          s_axi_arready,
   output          s_axi_rvalid,
@@ -280,6 +284,12 @@ module axi_ad9361 #(
   wire            up_drp_ready;
   wire            up_drp_locked;
 
+  wire    [31:0]  up_pps_rcounter_s;
+  wire            up_pps_status_s;
+  wire            up_irq_mask_s;
+  wire            adc_up_pps_irq_mask_s;
+  wire            dac_up_pps_irq_mask_s;
+
   // signal name changes
 
   assign up_clk = s_axi_aclk;
@@ -311,10 +321,6 @@ module axi_ad9361 #(
   assign tx_data_out_p = 6'h00;
   assign tx_data_out_n = 6'h3f;
 
-  assign up_drp_rdata = 32'd0;
-  assign up_drp_ready = 1'd0;
-  assign up_drp_locked = 1'd1;
-
   axi_ad9361_cmos_if #(
     .DEVICE_TYPE (DEVICE_TYPE),
     .DAC_IODELAY_ENABLE (DAC_IODELAY_ENABLE),
@@ -345,6 +351,7 @@ module axi_ad9361 #(
     .tdd_mode (tdd_mode_s),
     .mmcm_rst (mmcm_rst),
     .up_clk (up_clk),
+    .up_rstn (up_rstn),
     .up_enable (up_enable),
     .up_txnrx (up_txnrx),
     .up_adc_dld (up_adc_dld_s),
@@ -355,7 +362,14 @@ module axi_ad9361 #(
     .up_dac_drdata (up_dac_drdata_s),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
-    .delay_locked (delay_locked_s));
+    .delay_locked (delay_locked_s),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked(up_drp_locked));
   end
   endgenerate
 
@@ -523,11 +537,36 @@ module axi_ad9361 #(
   end
   endgenerate
 
+  generate if (PPS_RECEIVER_ENABLE == 1) begin
+    // GPS's PPS receiver
+    ad_pps_receiver i_pps_receiver (
+      .clk (clk),
+      .rst (rst),
+      .gps_pps (gps_pps),
+      .up_clk (up_clk),
+      .up_rstn (up_rstn),
+      .up_pps_rcounter (up_pps_rcounter_s),
+      .up_pps_status (up_pps_status_s),
+      .up_irq_mask (up_irq_mask_s),
+      .up_irq (gps_pps_irq));
+    assign up_irq_mask_s = adc_up_pps_irq_mask_s | dac_up_pps_irq_mask_s;
+  end
+  endgenerate
+
+  generate if (PPS_RECEIVER_ENABLE == 0) begin
+    assign up_pps_rcounter_s = 32'b0;
+    assign up_pps_status_s = 1'b1;
+    assign gps_pps_irq = 1'b0;
+  end
+  endgenerate
+
   // receive
 
   axi_ad9361_rx #(
     .ID (ID),
     .MODE_1R1T (MODE_1R1T),
+    .CMOS_OR_LVDS_N (CMOS_OR_LVDS_N),
+    .PPS_RECEIVER_ENABLE (PPS_RECEIVER_ENABLE),
     .INIT_DELAY (ADC_INIT_DELAY),
     .USERPORTS_DISABLE (ADC_USERPORTS_DISABLE_INT),
     .DATAFORMAT_DISABLE (ADC_DATAFORMAT_DISABLE_INT),
@@ -537,6 +576,7 @@ module axi_ad9361 #(
     .mmcm_rst (mmcm_rst),
     .adc_rst (rst),
     .adc_clk (clk),
+
     .adc_valid (adc_valid_s),
     .adc_data (adc_data_s),
     .adc_status (adc_status_s),
@@ -565,6 +605,9 @@ module axi_ad9361 #(
     .adc_dunf (adc_dunf),
     .up_adc_gpio_in (up_adc_gpio_in),
     .up_adc_gpio_out (up_adc_gpio_out),
+    .up_pps_rcounter (up_pps_rcounter_s),
+    .up_pps_status (up_pps_status_s),
+    .up_pps_irq_mask (adc_up_pps_irq_mask_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
@@ -588,6 +631,8 @@ module axi_ad9361 #(
   axi_ad9361_tx #(
     .ID (ID),
     .MODE_1R1T (MODE_1R1T),
+    .CMOS_OR_LVDS_N (CMOS_OR_LVDS_N),
+    .PPS_RECEIVER_ENABLE (PPS_RECEIVER_ENABLE),
     .INIT_DELAY (DAC_INIT_DELAY),
     .DDS_DISABLE (DAC_DDS_DISABLE_INT),
     .USERPORTS_DISABLE (DAC_USERPORTS_DISABLE_INT),
@@ -622,6 +667,9 @@ module axi_ad9361 #(
     .dac_data_q1 (dac_data_q1),
     .dac_dovf(dac_dovf),
     .dac_dunf(dac_dunf),
+    .up_pps_rcounter (up_pps_rcounter_s),
+    .up_pps_status (up_pps_status_s),
+    .up_pps_irq_mask (dac_up_pps_irq_mask_s),
     .up_dac_gpio_in (up_dac_gpio_in),
     .up_dac_gpio_out (up_dac_gpio_out),
     .up_rstn (up_rstn),

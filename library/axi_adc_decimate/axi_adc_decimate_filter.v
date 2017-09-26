@@ -36,22 +36,30 @@
 `timescale 1ns/100ps
 
 
-module axi_adc_decimate_filter (
+module axi_adc_decimate_filter #(
+
+  parameter CORRECTION_DISABLE = 1) (
+
   input                 adc_clk,
   input                 adc_rst,
 
   input       [31:0]    decimation_ratio,
   input       [ 2:0]    filter_mask,
 
+  input                 adc_correction_enable_a,
+  input                 adc_correction_enable_b,
+  input       [15:0]    adc_correction_coefficient_a,
+  input       [15:0]    adc_correction_coefficient_b,
+
   input                 adc_valid_a,
   input                 adc_valid_b,
   input       [11:0]    adc_data_a,
   input       [11:0]    adc_data_b,
 
-  output reg  [15:0]    adc_dec_data_a,
-  output reg  [15:0]    adc_dec_data_b,
-  output reg            adc_dec_valid_a,
-  output reg            adc_dec_valid_b
+  output      [15:0]    adc_dec_data_a,
+  output      [15:0]    adc_dec_data_b,
+  output                adc_dec_valid_a,
+  output                adc_dec_valid_b
 );
 
   // internal signals
@@ -62,6 +70,11 @@ module axi_adc_decimate_filter (
   reg               adc_dec_valid_b_filter;
 
   reg     [4:0]     filter_enable = 5'h00;
+
+  reg     [15:0]    adc_dec_data_a_r;
+  reg     [15:0]    adc_dec_data_b_r;
+  reg               adc_dec_valid_a_r;
+  reg               adc_dec_valid_b_r;
 
   wire    [25:0]    adc_fir_data_a;
   wire              adc_fir_valid_a;
@@ -109,6 +122,34 @@ module axi_adc_decimate_filter (
     .filter_out(adc_fir_data_b),
     .ce_out(adc_fir_valid_b));
 
+  ad_iqcor #(.Q_OR_I_N (0),
+    .DISABLE(CORRECTION_DISABLE),
+    .SCALE_ONLY(1)
+  ) i_scale_correction_a (
+    .clk (adc_clk),
+    .valid (adc_dec_valid_a_r),
+    .data_in (adc_dec_data_a_r),
+    .data_iq (16'h0),
+    .valid_out (adc_dec_valid_a),
+    .data_out (adc_dec_data_a),
+    .iqcor_enable (adc_correction_enable_a),
+    .iqcor_coeff_1 (adc_correction_coefficient_a),
+    .iqcor_coeff_2 (16'h0));
+
+  ad_iqcor #(.Q_OR_I_N (0),
+    .DISABLE(CORRECTION_DISABLE),
+    .SCALE_ONLY(1)
+  ) i_scale_correction_b (
+    .clk (adc_clk),
+    .valid (adc_dec_valid_b_r),
+    .data_in (adc_dec_data_b_r),
+    .data_iq (16'h0),
+    .valid_out (adc_dec_valid_b),
+    .data_out (adc_dec_data_b),
+    .iqcor_enable (adc_correction_enable_b),
+    .iqcor_coeff_1 (adc_correction_coefficient_b),
+    .iqcor_coeff_2 (16'h0));
+
   always @(posedge adc_clk) begin
     case (filter_mask)
       3'h1: filter_enable <= 5'b00001;
@@ -122,8 +163,8 @@ module axi_adc_decimate_filter (
 
   always @(*) begin
     case (filter_enable[0])
-      1'b0: adc_dec_data_a = {{4{adc_data_a[11]}},adc_data_a};
-      default: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
+      1'b0: adc_dec_data_a_r = {{4{adc_data_a[11]}},adc_data_a};
+      default: adc_dec_data_a_r = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
     endcase
 
     case (filter_enable[0])
@@ -132,8 +173,8 @@ module axi_adc_decimate_filter (
     endcase
 
      case (filter_enable[0])
-      1'b0: adc_dec_data_b = {{4{adc_data_b[11]}},adc_data_b};
-      default adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
+      1'b0: adc_dec_data_b_r = {{4{adc_data_b[11]}},adc_data_b};
+      default adc_dec_data_b_r = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
     endcase
 
     case (filter_enable[0])
@@ -145,25 +186,24 @@ module axi_adc_decimate_filter (
   always @(posedge adc_clk) begin
     if (adc_rst == 1'b1) begin
       decimation_counter <= 32'b0;
-      adc_dec_valid_a <= 1'b0;
-      adc_dec_valid_b <= 1'b0;
+      adc_dec_valid_a_r <= 1'b0;
+      adc_dec_valid_b_r <= 1'b0;
     end else begin
       if (adc_dec_valid_a_filter == 1'b1) begin
         if (decimation_counter < decimation_ratio) begin
           decimation_counter <= decimation_counter + 1;
-          adc_dec_valid_a <= 1'b0;
-          adc_dec_valid_b <= 1'b0;
+          adc_dec_valid_a_r <= 1'b0;
+          adc_dec_valid_b_r <= 1'b0;
         end else begin
           decimation_counter <= 0;
-          adc_dec_valid_a <= 1'b1;
-          adc_dec_valid_b <= 1'b1;
+          adc_dec_valid_a_r <= 1'b1;
+          adc_dec_valid_b_r <= 1'b1;
         end
       end else begin
-          adc_dec_valid_a <= 1'b0;
-          adc_dec_valid_b <= 1'b0;
+          adc_dec_valid_a_r <= 1'b0;
+          adc_dec_valid_b_r <= 1'b0;
       end
     end
   end
-
 
 endmodule

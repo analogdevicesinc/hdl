@@ -62,10 +62,10 @@ module util_adcfifo #(
 
 
   localparam  DMA_MEM_RATIO = ADC_DATA_WIDTH/DMA_DATA_WIDTH;
-  localparam  ADC_ADDRESS_WIDTH = (DMA_MEM_RATIO == 1) ? (DMA_ADDRESS_WIDTH) :
-                                  (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
-                                  ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) :
-                                  (DMA_ADDRESS_WIDTH - 3));
+  localparam  ADDRESS_PADDING_WIDTH = (DMA_MEM_RATIO == 1) ? 0 :
+                                      (DMA_MEM_RATIO == 2) ? 1 :
+                                      (DMA_MEM_RATIO == 4) ? 2 : 3;
+  localparam  ADC_ADDRESS_WIDTH = DMA_ADDRESS_WIDTH - ADDRESS_PADDING_WIDTH;
   localparam  ADC_ADDR_LIMIT = (2**ADC_ADDRESS_WIDTH)-1;
   localparam  DMA_ADDR_LIMIT = (2**DMA_ADDRESS_WIDTH)-1;
 
@@ -152,19 +152,18 @@ module util_adcfifo #(
 
   assign dma_xfer_status = 4'd0;
   assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
-  assign dma_waddr_rel_s =  (DMA_MEM_RATIO == 1) ? dma_waddr_rel :
-                            (DMA_MEM_RATIO == 2) ? {dma_waddr_rel, 1'd0} :
-                            ((DMA_MEM_RATIO == 4) ? {dma_waddr_rel, 2'd0} :
-                            {dma_waddr_rel, 3'd0});
+  assign dma_waddr_rel_s =  {dma_waddr_rel,{ADDRESS_PADDING_WIDTH{1'b0}}};
+
+  always @(posedge dma_clk) begin
+    dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
+  end
 
   always @(posedge dma_clk) begin
     if (dma_xfer_req == 1'b0) begin
       dma_rst <= 1'b1;
-      dma_waddr_rel_t_m <= 'd0;
       dma_waddr_rel <= 'd0;
     end else begin
       dma_rst <= 1'b0;
-      dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
       if (dma_waddr_rel_t_s == 1'b1) begin
         dma_waddr_rel <= adc_waddr_rel;
       end
@@ -185,9 +184,7 @@ module util_adcfifo #(
       dma_rd_d <= dma_rd;
       dma_rdata_d <= dma_rdata_s;
       if (dma_rd_s == 1'b1) begin
-        if (dma_raddr < DMA_ADDR_LIMIT) begin
-          dma_raddr <= dma_raddr + 1'b1;
-        end
+        dma_raddr <= dma_raddr + 1'b1;
       end
     end
   end

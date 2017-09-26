@@ -47,7 +47,8 @@ module util_extract #(
   input                         data_valid,
 
   output      [DATA_WIDTH-1:0]  data_out,
-  output  reg                   trigger_out
+  output reg                    valid_out,
+  output reg                    trigger_out
 );
 
   // loop variables
@@ -55,6 +56,9 @@ module util_extract #(
   genvar  n;
 
   reg trigger_d1;
+  reg trigger_d2;
+  reg trigger_d3;
+  reg trigger_d4;
 
   wire [15:0] trigger; // 16 maximum channels
 
@@ -70,9 +74,12 @@ module util_extract #(
 
   // compensate delay in the FIFO
   always @(posedge clk) begin
+    valid_out  <= data_valid;
     if (data_valid == 1'b1) begin
       trigger_d1  <= |trigger;
-      trigger_out <= trigger_d1;
+      trigger_d2  <= trigger_d1;
+      trigger_d3  <= trigger_d2;
+      trigger_out <= trigger_d3;
     end
   end
 

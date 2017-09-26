@@ -68,7 +68,7 @@ module dmac_data_mover #(
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length
 );
 
-localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
+localparam BEAT_COUNTER_MAX = {BEATS_PER_BURST_WIDTH{1'b1}};
 
 `include "inc_id.h"
 
@@ -130,8 +130,8 @@ always @(posedge clk) begin
     beat_counter <= 'h1;
   end else if (s_axi_ready && s_axi_valid) begin
     last_eot <= beat_counter == last_burst_length;
-    last_non_eot <= beat_counter == MAX_BEATS_PER_BURST - 1;
-    beat_counter <= beat_counter + 1;
+    last_non_eot <= beat_counter == BEAT_COUNTER_MAX;
+    beat_counter <= beat_counter + 1'b1;
   end
 end
 

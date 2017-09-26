@@ -45,8 +45,9 @@
 module jesd204_up_ilas_mem (
   input up_clk,
 
+  input up_rreq,
   input [1:0] up_raddr,
-  output [31:0] up_rdata,
+  output reg [31:0] up_rdata,
 
   input core_clk,
   input core_reset,
@@ -58,15 +59,49 @@ module jesd204_up_ilas_mem (
   output up_ilas_ready
 );
 
-reg [3:0] mem[0:31];
+reg [31:0] mem[0:3];
 reg core_ilas_captured = 1'b0;
 
-sync_bits i_sync_ilas_ready (
+sync_bits i_cdc_ilas_ready (
   .in(core_ilas_captured),
   .out_resetn(1'b1),
   .out_clk(up_clk),
   .out(up_ilas_ready)
 );
+
+always @(posedge core_clk) begin
+  if (core_reset == 1'b1) begin
+    core_ilas_captured <= 1'b0;
+  end else begin
+    if (core_ilas_config_valid == 1'b1 && core_ilas_config_addr == 'h3) begin
+      core_ilas_captured <= 1'b1;
+    end
+  end
+end
+
+always @(posedge up_clk) begin
+  if (up_rreq == 1'b1) begin
+    up_rdata <= mem[up_raddr];
+  end
+end
+
+always @(posedge core_clk) begin
+  if (core_ilas_config_valid == 1'b1) begin
+    mem[core_ilas_config_addr] <= core_ilas_config_data;
+  end
+end
+
+/*
+ * Shift register with variable tap for accessing the stored data.
+ *
+ * This has slightly better utilization on Xilinx based platforms than the dual
+ * port RAM approach, but there is no equivalent primitive on Altera resulting
+ * in increased utilization since it needs to be implemented used registers and
+ * muxes.
+ *
+ * We might make this a device dependent configuration option at some point.
+
+reg [3:0] mem[0:31];
 
 generate
 genvar i;
@@ -80,15 +115,6 @@ for (i = 0; i < 32; i = i + 1) begin: gen_ilas_mem
   end
 end
 endgenerate
-
-always @(posedge core_clk) begin
-  if (core_reset == 1'b1) begin
-    core_ilas_captured <= 1'b0;
-  end else begin
-    if (core_ilas_config_valid == 1'b1 && core_ilas_config_addr == 'h3) begin
-      core_ilas_captured <= 1'b1;
-    end
-  end
-end
+*/
 
 endmodule

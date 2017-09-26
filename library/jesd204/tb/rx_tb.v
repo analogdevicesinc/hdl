@@ -139,8 +139,8 @@ module rx_tb;
   wire [7:0] cfg_lmfc_offset;
   wire cfg_sysref_oneshot;
   wire cfg_sysref_disable;
-  wire cfg_buffer_early_release;
   wire cfg_disable_scrambler;
+  wire cfg_buffer_early_release;
 
   jesd204_rx_static_config #(
     .NUM_LANES(NUM_LANES),
@@ -155,8 +155,8 @@ module rx_tb;
     .cfg_lmfc_offset(cfg_lmfc_offset),
     .cfg_sysref_oneshot(cfg_sysref_oneshot),
     .cfg_sysref_disable(cfg_sysref_disable),
-    .cfg_disable_scrambler(tx_cfg_disable_scrambler),
-    .cfg_buffer_early_release(rx_buffer_early_release)
+    .cfg_disable_scrambler(cfg_disable_scrambler),
+    .cfg_buffer_early_release(cfg_buffer_early_release)
   );
 
   jesd204_rx #(
@@ -171,10 +171,9 @@ module rx_tb;
     .cfg_lmfc_offset(cfg_lmfc_offset),
     .cfg_sysref_oneshot(cfg_sysref_oneshot),
     .cfg_sysref_disable(cfg_sysref_disable),
-    .cfg_disable_scrambler(tx_cfg_disable_scrambler),
-    .cfg_buffer_early_release(rx_buffer_early_release),
+    .cfg_disable_scrambler(cfg_disable_scrambler),
+    .cfg_buffer_early_release(cfg_buffer_early_release),
 
-    .phy_ready(1'b1),
     .phy_en_char_align(en_align),
 
     .phy_data({NUM_LANES{data}}),

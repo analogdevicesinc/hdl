@@ -5,10 +5,12 @@
 ####################################################################################
 ####################################################################################
 
+M_DEPS += ../common/ad_iqcor.v
 M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += ../xilinx/common/ad_mul.v
 M_DEPS += axi_dac_interpolate.v
 M_DEPS += axi_dac_interpolate_constr.xdc
 M_DEPS += axi_dac_interpolate_filter.v

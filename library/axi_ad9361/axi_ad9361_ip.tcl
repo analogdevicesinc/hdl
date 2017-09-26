@@ -6,12 +6,9 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_ad9361
 adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_lvds_clk.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_lvds_in.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_lvds_out.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_cmos_clk.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_cmos_in.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_cmos_out.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_data_out.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
@@ -22,6 +19,7 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/ad_iqcor.v" \
   "$ad_hdl_dir/library/common/ad_addsub.v" \
   "$ad_hdl_dir/library/common/ad_tdd_control.v" \
+  "$ad_hdl_dir/library/common/ad_pps_receiver.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
@@ -33,6 +31,7 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
+  "$ad_hdl_dir/library/common/ad_pps_receiver_constr.ttcl" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
@@ -49,6 +48,7 @@ adi_ip_files axi_ad9361 [list \
   "axi_ad9361.v" ]
 
 adi_ip_properties axi_ad9361
+adi_ip_ttcl axi_ad9361 "$ad_hdl_dir/library/common/ad_pps_receiver_constr.ttcl"
 
 set_property driver_value 0 [ipx::get_ports *rx_clk_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *rx_frame_in* -of_objects [ipx::current_core]]
@@ -57,6 +57,7 @@ set_property driver_value 0 [ipx::get_ports *dac_sync_in* -of_objects [ipx::curr
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *gpio_in* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *gps_pps* -of_objects [ipx::current_core]]
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CMOS_OR_LVDS_N')) == 0} \
   [ipx::get_ports rx_clk_in_p     -of_objects [ipx::current_core]] \

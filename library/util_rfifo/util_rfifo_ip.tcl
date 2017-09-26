@@ -14,6 +14,7 @@ adi_ip_properties_lite util_rfifo
 ipx::remove_all_bus_interface [ipx::current_core]
 set_property driver_value 0 [ipx::get_ports *dout_enable* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dout_valid* -of_objects [ipx::current_core]]
+set_property driver_value 0 [ipx::get_ports *din_valid_in* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *din_data* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *din_unf* -of_objects [ipx::current_core]]
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > 1} \

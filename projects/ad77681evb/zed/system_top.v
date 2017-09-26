@@ -126,16 +126,18 @@ module system_top (
 
   // instantiations
 
-  ad_cmos_clk i_ad7768_0_mclk_receiver(
+  ad_data_clk #(.SINGLE_ENDED (1)) i_ad7768_0_mclk_receiver(
     .rst (1'b1),
     .locked (),
-    .clk_in (ad7768_0_mclk),
+    .clk_in_p (ad7768_0_mclk),
+    .clk_in_n (1'd0),
     .clk(ad7768_0_mclk_s));
 
-  ad_cmos_clk i_ad7768_1_mclk_receiver(
+  ad_data_clk #(.SINGLE_ENDED (1)) i_ad7768_1_mclk_receiver(
     .rst (1'b1),
     .locked (),
-    .clk_in (ad7768_1_mclk),
+    .clk_in_p (ad7768_1_mclk),
+    .clk_in_n (1'd0),
     .clk(ad7768_1_mclk_s));
 
   assign ad7768_mclk_return = ad7768_0_mclk_s;

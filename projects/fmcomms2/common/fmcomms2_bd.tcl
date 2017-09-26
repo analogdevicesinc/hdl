@@ -28,64 +28,8 @@ create_bd_port -dir O tdd_sync_t
 
 ad_ip_instance axi_ad9361 axi_ad9361
 ad_ip_parameter axi_ad9361 CONFIG.ID 0
-
-ad_ip_instance axi_dmac axi_ad9361_dac_dma
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_DEST 2
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.CYCLIC 1
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_DEST 1
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
-
-ad_ip_instance util_upack util_ad9361_dac_upack
-ad_ip_parameter util_ad9361_dac_upack CONFIG.NUM_OF_CHANNELS 4
-ad_ip_parameter util_ad9361_dac_upack CONFIG.CHANNEL_DATA_WIDTH 16
-
-ad_ip_instance axi_dmac axi_ad9361_adc_dma
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_TYPE_SRC 2
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-
-ad_ip_instance util_cpack util_ad9361_adc_pack
-ad_ip_parameter util_ad9361_adc_pack CONFIG.NUM_OF_CHANNELS 4
-ad_ip_parameter util_ad9361_adc_pack CONFIG.CHANNEL_DATA_WIDTH 16
-
-ad_ip_instance util_wfifo util_ad9361_adc_fifo
-ad_ip_parameter util_ad9361_adc_fifo CONFIG.NUM_OF_CHANNELS 4
-ad_ip_parameter util_ad9361_adc_fifo CONFIG.DIN_ADDRESS_WIDTH 4
-ad_ip_parameter util_ad9361_adc_fifo CONFIG.DIN_DATA_WIDTH 16
-ad_ip_parameter util_ad9361_adc_fifo CONFIG.DOUT_DATA_WIDTH 16
-
-ad_ip_instance util_tdd_sync util_ad9361_tdd_sync
-ad_ip_parameter util_ad9361_tdd_sync CONFIG.TDD_SYNC_PERIOD 10000000
-
-ad_ip_instance util_clkdiv clkdiv
-
-ad_ip_instance proc_sys_reset clkdiv_reset
-
-ad_ip_instance util_rfifo dac_fifo
-ad_ip_parameter dac_fifo CONFIG.DIN_DATA_WIDTH 16
-ad_ip_parameter dac_fifo CONFIG.DOUT_DATA_WIDTH 16
-ad_ip_parameter dac_fifo CONFIG.DIN_ADDRESS_WIDTH 4
-
-ad_ip_instance util_reduced_logic clkdiv_sel_logic
-ad_ip_parameter clkdiv_sel_logic CONFIG.C_SIZE 2
-
-ad_ip_instance xlconcat concat_logic
-ad_ip_parameter concat_logic CONFIG.NUM_PORTS 2
-
-# connections
-
 ad_connect sys_200m_clk axi_ad9361/delay_clk
-ad_connect axi_ad9361_clk axi_ad9361/l_clk
-ad_connect axi_ad9361_clk axi_ad9361/clk
+ad_connect axi_ad9361/l_clk axi_ad9361/clk
 ad_connect rx_clk_in_p axi_ad9361/rx_clk_in_p
 ad_connect rx_clk_in_n axi_ad9361/rx_clk_in_n
 ad_connect rx_frame_in_p axi_ad9361/rx_frame_in_p
@@ -102,8 +46,52 @@ ad_connect enable axi_ad9361/enable
 ad_connect txnrx axi_ad9361/txnrx
 ad_connect up_enable axi_ad9361/up_enable
 ad_connect up_txnrx axi_ad9361/up_txnrx
-ad_connect axi_ad9361_clk util_ad9361_adc_fifo/din_clk
+
+# tdd-sync
+
+ad_ip_instance util_tdd_sync util_ad9361_tdd_sync
+ad_ip_parameter util_ad9361_tdd_sync CONFIG.TDD_SYNC_PERIOD 10000000
+ad_connect sys_cpu_clk util_ad9361_tdd_sync/clk
+ad_connect sys_cpu_resetn util_ad9361_tdd_sync/rstn
+ad_connect util_ad9361_tdd_sync/sync_out axi_ad9361/tdd_sync
+ad_connect util_ad9361_tdd_sync/sync_mode axi_ad9361/tdd_sync_cntr
+ad_connect tdd_sync_t axi_ad9361/tdd_sync_cntr
+ad_connect tdd_sync_o util_ad9361_tdd_sync/sync_out
+ad_connect tdd_sync_i util_ad9361_tdd_sync/sync_in
+
+# interface clock divider to generate sampling clock
+# interface runs at 4x in 2r2t mode, and 2x in 1r1t mode
+
+ad_ip_instance xlconcat util_ad9361_divclk_sel_concat
+ad_ip_parameter util_ad9361_divclk_sel_concat CONFIG.NUM_PORTS 2
+ad_connect axi_ad9361/adc_r1_mode util_ad9361_divclk_sel_concat/In0
+ad_connect axi_ad9361/dac_r1_mode util_ad9361_divclk_sel_concat/In1
+
+ad_ip_instance util_reduced_logic util_ad9361_divclk_sel
+ad_ip_parameter util_ad9361_divclk_sel CONFIG.C_SIZE 2
+ad_connect util_ad9361_divclk_sel_concat/dout util_ad9361_divclk_sel/Op1
+
+ad_ip_instance util_clkdiv util_ad9361_divclk
+ad_connect util_ad9361_divclk_sel/Res util_ad9361_divclk/clk_sel 
+ad_connect axi_ad9361/l_clk util_ad9361_divclk/clk
+
+# resets at divided clock
+
+ad_ip_instance proc_sys_reset util_ad9361_divclk_reset
+ad_connect sys_rstgen/peripheral_aresetn util_ad9361_divclk_reset/ext_reset_in 
+ad_connect util_ad9361_divclk/clk_out util_ad9361_divclk_reset/slowest_sync_clk
+
+# adc-path wfifo
+
+ad_ip_instance util_wfifo util_ad9361_adc_fifo
+ad_ip_parameter util_ad9361_adc_fifo CONFIG.NUM_OF_CHANNELS 4
+ad_ip_parameter util_ad9361_adc_fifo CONFIG.DIN_ADDRESS_WIDTH 4
+ad_ip_parameter util_ad9361_adc_fifo CONFIG.DIN_DATA_WIDTH 16
+ad_ip_parameter util_ad9361_adc_fifo CONFIG.DOUT_DATA_WIDTH 16
+ad_connect axi_ad9361/l_clk util_ad9361_adc_fifo/din_clk
 ad_connect axi_ad9361/rst util_ad9361_adc_fifo/din_rst
+ad_connect util_ad9361_divclk/clk_out util_ad9361_adc_fifo/dout_clk
+ad_connect util_ad9361_divclk_reset/peripheral_aresetn util_ad9361_adc_fifo/dout_rstn
 ad_connect axi_ad9361/adc_enable_i0 util_ad9361_adc_fifo/din_enable_0
 ad_connect axi_ad9361/adc_valid_i0 util_ad9361_adc_fifo/din_valid_0
 ad_connect axi_ad9361/adc_data_i0 util_ad9361_adc_fifo/din_data_0
@@ -116,6 +104,15 @@ ad_connect axi_ad9361/adc_data_i1 util_ad9361_adc_fifo/din_data_2
 ad_connect axi_ad9361/adc_enable_q1 util_ad9361_adc_fifo/din_enable_3
 ad_connect axi_ad9361/adc_valid_q1 util_ad9361_adc_fifo/din_valid_3
 ad_connect axi_ad9361/adc_data_q1 util_ad9361_adc_fifo/din_data_3
+ad_connect util_ad9361_adc_fifo/din_ovf axi_ad9361/adc_dovf
+
+# adc-path channel pack
+
+ad_ip_instance util_cpack util_ad9361_adc_pack
+ad_ip_parameter util_ad9361_adc_pack CONFIG.NUM_OF_CHANNELS 4
+ad_ip_parameter util_ad9361_adc_pack CONFIG.CHANNEL_DATA_WIDTH 16
+ad_connect util_ad9361_divclk/clk_out util_ad9361_adc_pack/adc_clk
+ad_connect util_ad9361_divclk_reset/peripheral_reset util_ad9361_adc_pack/adc_rst
 ad_connect util_ad9361_adc_fifo/dout_enable_0 util_ad9361_adc_pack/adc_enable_0
 ad_connect util_ad9361_adc_fifo/dout_valid_0 util_ad9361_adc_pack/adc_valid_0
 ad_connect util_ad9361_adc_fifo/dout_data_0 util_ad9361_adc_pack/adc_data_0
@@ -128,65 +125,87 @@ ad_connect util_ad9361_adc_fifo/dout_data_2 util_ad9361_adc_pack/adc_data_2
 ad_connect util_ad9361_adc_fifo/dout_enable_3 util_ad9361_adc_pack/adc_enable_3
 ad_connect util_ad9361_adc_fifo/dout_valid_3 util_ad9361_adc_pack/adc_valid_3
 ad_connect util_ad9361_adc_fifo/dout_data_3 util_ad9361_adc_pack/adc_data_3
+
+# adc-path dma
+
+ad_ip_instance axi_dmac axi_ad9361_adc_dma
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_connect util_ad9361_divclk/clk_out axi_ad9361_adc_dma/fifo_wr_clk
 ad_connect util_ad9361_adc_pack/adc_valid axi_ad9361_adc_dma/fifo_wr_en
 ad_connect util_ad9361_adc_pack/adc_sync axi_ad9361_adc_dma/fifo_wr_sync
 ad_connect util_ad9361_adc_pack/adc_data axi_ad9361_adc_dma/fifo_wr_din
 ad_connect axi_ad9361_adc_dma/fifo_wr_overflow util_ad9361_adc_fifo/dout_ovf
-ad_connect util_ad9361_adc_fifo/din_ovf axi_ad9361/adc_dovf
-ad_connect axi_ad9361_clk clkdiv/clk
+ad_connect sys_cpu_resetn axi_ad9361_adc_dma/m_dest_axi_aresetn
 
-ad_connect axi_ad9361/adc_r1_mode concat_logic/In0
-ad_connect axi_ad9361/dac_r1_mode concat_logic/In1
-ad_connect concat_logic/dout clkdiv_sel_logic/Op1
-ad_connect clkdiv/clk_sel clkdiv_sel_logic/Res
+# dac-path rfifo
 
-ad_connect clkdiv/clk_out axi_ad9361_adc_dma/fifo_wr_clk
-ad_connect clkdiv/clk_out util_ad9361_adc_fifo/dout_clk
-ad_connect clkdiv/clk_out util_ad9361_adc_pack/adc_clk
-ad_connect clkdiv_reset/ext_reset_in sys_rstgen/peripheral_aresetn
-ad_connect clkdiv_reset/slowest_sync_clk clkdiv/clk_out
-ad_connect util_ad9361_adc_pack/adc_rst clkdiv_reset/peripheral_reset
-ad_connect util_ad9361_adc_fifo/dout_rstn clkdiv_reset/peripheral_aresetn
-ad_connect util_ad9361_dac_upack/dac_valid axi_ad9361_dac_dma/fifo_rd_en
-ad_connect util_ad9361_dac_upack/dac_data axi_ad9361_dac_dma/fifo_rd_dout
-ad_connect clkdiv/clk_out axi_ad9361_dac_dma/fifo_rd_clk
-ad_connect axi_ad9361/dac_dunf dac_fifo/dout_unf
-ad_connect dac_fifo/din_clk clkdiv/clk_out
-ad_connect dac_fifo/din_rstn clkdiv_reset/peripheral_aresetn
-ad_connect axi_ad9361_clk dac_fifo/dout_clk
-ad_connect dac_fifo/dout_rst axi_ad9361/rst
-ad_connect util_ad9361_dac_upack/dac_clk clkdiv/clk_out
-ad_connect dac_fifo/din_enable_0 util_ad9361_dac_upack/dac_enable_0
-ad_connect dac_fifo/din_valid_0 util_ad9361_dac_upack/dac_valid_0
-ad_connect dac_fifo/din_enable_1 util_ad9361_dac_upack/dac_enable_1
-ad_connect dac_fifo/din_valid_1 util_ad9361_dac_upack/dac_valid_1
-ad_connect dac_fifo/din_enable_2 util_ad9361_dac_upack/dac_enable_2
-ad_connect dac_fifo/din_valid_2 util_ad9361_dac_upack/dac_valid_2
-ad_connect dac_fifo/din_enable_3 util_ad9361_dac_upack/dac_enable_3
-ad_connect dac_fifo/din_valid_3 util_ad9361_dac_upack/dac_valid_3
-ad_connect util_ad9361_dac_upack/dac_data_0 dac_fifo/din_data_0
-ad_connect util_ad9361_dac_upack/dac_data_1 dac_fifo/din_data_1
-ad_connect util_ad9361_dac_upack/dac_data_2 dac_fifo/din_data_2
-ad_connect util_ad9361_dac_upack/dac_data_3 dac_fifo/din_data_3
-ad_connect axi_ad9361/dac_enable_i0 dac_fifo/dout_enable_0
-ad_connect axi_ad9361/dac_valid_i0 dac_fifo/dout_valid_0
-ad_connect axi_ad9361/dac_enable_q0 dac_fifo/dout_enable_1
-ad_connect axi_ad9361/dac_valid_q0 dac_fifo/dout_valid_1
-ad_connect axi_ad9361/dac_enable_i1 dac_fifo/dout_enable_2
-ad_connect axi_ad9361/dac_valid_i1 dac_fifo/dout_valid_2
-ad_connect axi_ad9361/dac_enable_q1 dac_fifo/dout_enable_3
-ad_connect axi_ad9361/dac_valid_q1 dac_fifo/dout_valid_3
-ad_connect dac_fifo/dout_data_0 axi_ad9361/dac_data_i0
-ad_connect dac_fifo/dout_data_1 axi_ad9361/dac_data_q0
-ad_connect dac_fifo/dout_data_2 axi_ad9361/dac_data_i1
-ad_connect dac_fifo/dout_data_3 axi_ad9361/dac_data_q1
-ad_connect sys_cpu_clk util_ad9361_tdd_sync/clk
-ad_connect sys_cpu_resetn util_ad9361_tdd_sync/rstn
-ad_connect util_ad9361_tdd_sync/sync_out axi_ad9361/tdd_sync
-ad_connect util_ad9361_tdd_sync/sync_mode axi_ad9361/tdd_sync_cntr
-ad_connect tdd_sync_t axi_ad9361/tdd_sync_cntr
-ad_connect tdd_sync_o util_ad9361_tdd_sync/sync_out
-ad_connect tdd_sync_i util_ad9361_tdd_sync/sync_in
+ad_ip_instance util_rfifo axi_ad9361_dac_fifo
+ad_ip_parameter axi_ad9361_dac_fifo CONFIG.DIN_DATA_WIDTH 16
+ad_ip_parameter axi_ad9361_dac_fifo CONFIG.DOUT_DATA_WIDTH 16
+ad_ip_parameter axi_ad9361_dac_fifo CONFIG.DIN_ADDRESS_WIDTH 4
+ad_connect axi_ad9361/l_clk axi_ad9361_dac_fifo/dout_clk
+ad_connect axi_ad9361/rst axi_ad9361_dac_fifo/dout_rst
+ad_connect util_ad9361_divclk/clk_out axi_ad9361_dac_fifo/din_clk
+ad_connect util_ad9361_divclk_reset/peripheral_aresetn axi_ad9361_dac_fifo/din_rstn
+ad_connect axi_ad9361_dac_fifo/dout_enable_0 axi_ad9361/dac_enable_i0
+ad_connect axi_ad9361_dac_fifo/dout_valid_0 axi_ad9361/dac_valid_i0
+ad_connect axi_ad9361_dac_fifo/dout_data_0 axi_ad9361/dac_data_i0
+ad_connect axi_ad9361_dac_fifo/dout_enable_1 axi_ad9361/dac_enable_q0
+ad_connect axi_ad9361_dac_fifo/dout_valid_1 axi_ad9361/dac_valid_q0
+ad_connect axi_ad9361_dac_fifo/dout_data_1 axi_ad9361/dac_data_q0
+ad_connect axi_ad9361_dac_fifo/dout_enable_2 axi_ad9361/dac_enable_i1
+ad_connect axi_ad9361_dac_fifo/dout_valid_2 axi_ad9361/dac_valid_i1
+ad_connect axi_ad9361_dac_fifo/dout_data_2 axi_ad9361/dac_data_i1
+ad_connect axi_ad9361_dac_fifo/dout_enable_3 axi_ad9361/dac_enable_q1
+ad_connect axi_ad9361_dac_fifo/dout_valid_3 axi_ad9361/dac_valid_q1
+ad_connect axi_ad9361_dac_fifo/dout_data_3 axi_ad9361/dac_data_q1
+ad_connect axi_ad9361_dac_fifo/dout_unf axi_ad9361/dac_dunf
+
+# dac-path channel unpack
+
+ad_ip_instance util_upack util_ad9361_dac_upack
+ad_ip_parameter util_ad9361_dac_upack CONFIG.NUM_OF_CHANNELS 4
+ad_ip_parameter util_ad9361_dac_upack CONFIG.CHANNEL_DATA_WIDTH 16
+ad_connect util_ad9361_divclk/clk_out util_ad9361_dac_upack/dac_clk
+ad_connect util_ad9361_dac_upack/dac_enable_0 axi_ad9361_dac_fifo/din_enable_0
+ad_connect util_ad9361_dac_upack/dac_valid_0 axi_ad9361_dac_fifo/din_valid_0
+ad_connect util_ad9361_dac_upack/dac_valid_out_0 axi_ad9361_dac_fifo/din_valid_in_0
+ad_connect util_ad9361_dac_upack/dac_data_0 axi_ad9361_dac_fifo/din_data_0
+ad_connect util_ad9361_dac_upack/dac_enable_1 axi_ad9361_dac_fifo/din_enable_1
+ad_connect util_ad9361_dac_upack/dac_valid_1 axi_ad9361_dac_fifo/din_valid_1
+ad_connect util_ad9361_dac_upack/dac_valid_out_1 axi_ad9361_dac_fifo/din_valid_in_1
+ad_connect util_ad9361_dac_upack/dac_data_1 axi_ad9361_dac_fifo/din_data_1
+ad_connect util_ad9361_dac_upack/dac_enable_2 axi_ad9361_dac_fifo/din_enable_2
+ad_connect util_ad9361_dac_upack/dac_valid_2 axi_ad9361_dac_fifo/din_valid_2
+ad_connect util_ad9361_dac_upack/dac_valid_out_2 axi_ad9361_dac_fifo/din_valid_in_2
+ad_connect util_ad9361_dac_upack/dac_data_2 axi_ad9361_dac_fifo/din_data_2
+ad_connect util_ad9361_dac_upack/dac_enable_3 axi_ad9361_dac_fifo/din_enable_3
+ad_connect util_ad9361_dac_upack/dac_valid_3 axi_ad9361_dac_fifo/din_valid_3
+ad_connect util_ad9361_dac_upack/dac_valid_out_3 axi_ad9361_dac_fifo/din_valid_in_3
+ad_connect util_ad9361_dac_upack/dac_data_3 axi_ad9361_dac_fifo/din_data_3
+
+# dac-path dma
+
+ad_ip_instance axi_dmac axi_ad9361_dac_dma
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_DEST 2
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_connect util_ad9361_divclk/clk_out axi_ad9361_dac_dma/fifo_rd_clk
+ad_connect axi_ad9361_dac_dma/fifo_rd_en util_ad9361_dac_upack/dac_valid
+ad_connect axi_ad9361_dac_dma/fifo_rd_dout util_ad9361_dac_upack/dac_data
+ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
 # interconnects
 
@@ -197,8 +216,6 @@ ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
 ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
-ad_connect  sys_cpu_resetn axi_ad9361_adc_dma/m_dest_axi_aresetn
-ad_connect  sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
 # interrupts
 

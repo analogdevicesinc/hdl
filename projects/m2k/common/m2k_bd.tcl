@@ -76,7 +76,7 @@ ad_ip_parameter axi_ad9963 CONFIG.DAC_DATAPATH_DISABLE 1
 ad_ip_parameter axi_ad9963 CONFIG.ADC_USERPORTS_DISABLE 1
 ad_ip_parameter axi_ad9963 CONFIG.ADC_DATAFORMAT_DISABLE 1
 ad_ip_parameter axi_ad9963 CONFIG.ADC_DCFILTER_DISABLE 1
-ad_ip_parameter axi_ad9963 CONFIG.ADC_IQCORRECTION_DISABLE 0
+ad_ip_parameter axi_ad9963 CONFIG.ADC_IQCORRECTION_DISABLE 1
 ad_ip_parameter axi_ad9963 CONFIG.ADC_SCALECORRECTION_ONLY 1
 
 ad_ip_instance util_var_fifo adc_trigger_fifo
@@ -138,7 +138,10 @@ ad_ip_parameter ad9963_dac_dmac_b CONFIG.DISABLE_DEBUG_REGISTERS $DISABLE_DMAC_D
 ad_ip_instance axi_adc_trigger adc_trigger
 
 ad_ip_instance axi_adc_decimate axi_adc_decimate
+ad_ip_parameter axi_adc_decimate CONFIG.CORRECTION_DISABLE {0}
+
 ad_ip_instance axi_dac_interpolate axi_dac_interpolate
+ad_ip_parameter axi_dac_interpolate CONFIG.CORRECTION_DISABLE {0}
 
 ad_ip_instance proc_sys_reset logic_analyzer_reset
 
@@ -236,7 +239,7 @@ ad_connect adc_trigger_fifo/data_out_valid adc_trigger_extract/data_valid
 
 ad_connect adc_trigger_extract/data_out     ad9963_adc_dmac/fifo_wr_din
 ad_connect adc_trigger_extract/trigger_out  ad9963_adc_dmac/fifo_wr_sync
-ad_connect adc_trigger_fifo/data_out_valid  ad9963_adc_dmac/fifo_wr_en
+ad_connect adc_trigger_extract/valid_out    ad9963_adc_dmac/fifo_wr_en
 
 ad_connect axi_dac_interpolate/dac_clk      axi_ad9963/dac_clk
 ad_connect axi_dac_interpolate/dac_rst      axi_ad9963/dac_rst

@@ -107,6 +107,17 @@ proc adi_project_altera {project_name} {
 
   set_global_assignment -name MESSAGE_DISABLE 17951 ; ## unused RX channels
   set_global_assignment -name MESSAGE_DISABLE 18655 ; ## unused TX channels
+  set_global_assignment -name MESSAGE_DISABLE 114001 ; ## Time value $x truncated to $y
+
+  # The Merlin cores are especially spammy, lets hope non of these warnings is
+  # an actual issue...
+  foreach entity {altera_merlin_axi_master_ni altera_merlin_axi_slave_ni \
+                  altera_merlin_traffic_limiter altera_merlin_burst_adapter_new} {
+    ## truncated value
+    set_instance_assignment -name MESSAGE_DISABLE 10230 -entity $entity
+  }
+  ## assigned a value but never read
+  set_instance_assignment -name MESSAGE_DISABLE 10036 -entity altera_merlin_burst_adapter_new
 
   # default assignments
  

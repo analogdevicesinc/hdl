@@ -38,7 +38,6 @@
 module axi_ad9371 #(
 
   parameter   ID = 0,
-  parameter   DEVICE_TYPE = 0,
   parameter   DAC_DATAPATH_DISABLE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0) (
 
@@ -113,7 +112,7 @@ module axi_ad9371 #(
   input                   s_axi_aclk,
   input                   s_axi_aresetn,
   input                   s_axi_awvalid,
-  input       [ 31:0]     s_axi_awaddr,
+  input       [ 15:0]     s_axi_awaddr,
   input       [ 2:0]      s_axi_awprot,
   output                  s_axi_awready,
   input                   s_axi_wvalid,
@@ -124,7 +123,7 @@ module axi_ad9371 #(
   output      [ 1:0]      s_axi_bresp,
   input                   s_axi_bready,
   input                   s_axi_arvalid,
-  input       [ 31:0]     s_axi_araddr,
+  input       [ 15:0]     s_axi_araddr,
   input       [ 2:0]      s_axi_arprot,
   output                  s_axi_arready,
   output                  s_axi_rvalid,
@@ -186,9 +185,7 @@ module axi_ad9371 #(
 
   // device interface
 
-  axi_ad9371_if #(
-    .DEVICE_TYPE (DEVICE_TYPE))
-  i_if (
+  axi_ad9371_if i_if (
     .adc_clk (adc_clk),
     .adc_rx_sof (adc_rx_sof),
     .adc_rx_data (adc_rx_data),

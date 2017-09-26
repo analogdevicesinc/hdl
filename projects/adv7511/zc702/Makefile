@@ -7,6 +7,7 @@
 
 M_DEPS += system_top.v
 M_DEPS += system_project.tcl
+M_DEPS += system_constr.xdc
 M_DEPS += system_bd.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl

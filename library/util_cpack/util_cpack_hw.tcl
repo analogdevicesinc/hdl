@@ -45,91 +45,24 @@ ad_alt_intf signal  adc_valid       output  1  valid
 ad_alt_intf signal  adc_sync        output  1  sync
 ad_alt_intf signal  adc_data        output  NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH  data
 
-add_interface adc_ch_0 conduit end
-add_interface_port adc_ch_0  adc_enable_0  enable   Input  1
-add_interface_port adc_ch_0  adc_valid_0   valid    Input  1
-add_interface_port adc_ch_0  adc_data_0    data     Input  CHANNEL_DATA_WIDTH
+for {set n 0} {$n < 8} {incr n} {
+  add_interface adc_ch_${n} conduit end
+  add_interface_port adc_ch_${n}  adc_enable_${n}  enable   Input  1
+  add_interface_port adc_ch_${n}  adc_valid_${n}   valid    Input  1
+  add_interface_port adc_ch_${n}  adc_data_${n}    data     Input  CHANNEL_DATA_WIDTH
 
-set_interface_property adc_ch_0  associatedClock if_adc_clk
-set_interface_property adc_ch_0  associatedReset none
+  set_interface_property adc_ch_${n}  associatedClock if_adc_clk
+  set_interface_property adc_ch_${n}  associatedReset none
+}
 
 proc p_util_cpack {} {
+  set num_channels [get_parameter_value NUM_OF_CHANNELS]
 
-  if {[get_parameter_value NUM_OF_CHANNELS] > 1} {
-
-    add_interface adc_ch_1 conduit end
-    add_interface_port adc_ch_1  adc_enable_1 enable   Input  1
-    add_interface_port adc_ch_1  adc_valid_1  valid    Input  1
-    add_interface_port adc_ch_1  adc_data_1   data     Input  CHANNEL_DATA_WIDTH
-
-    set_interface_property adc_ch_1  associatedClock if_adc_clk
-    set_interface_property adc_ch_1  associatedReset none
+  for {set n 1} {$n < 8} {incr n} {
+    if {$n >= $num_channels} {
+      set_interface_property adc_ch_${n} ENABLED false
+    }
   }
 
-  if {[get_parameter_value NUM_OF_CHANNELS] > 2} {
-
-    add_interface adc_ch_2 conduit end
-    add_interface_port adc_ch_2  adc_enable_2 enable   Input  1
-    add_interface_port adc_ch_2  adc_valid_2  valid    Input  1
-    add_interface_port adc_ch_2  adc_data_2   data     Input  CHANNEL_DATA_WIDTH
-
-    set_interface_property adc_ch_2  associatedClock if_adc_clk
-    set_interface_property adc_ch_2  associatedReset none
-  }
-
-  if {[get_parameter_value NUM_OF_CHANNELS] > 3} {
-
-    add_interface adc_ch_3 conduit end
-    add_interface_port adc_ch_3  adc_enable_3 enable   Input  1
-    add_interface_port adc_ch_3  adc_valid_3  valid    Input  1
-    add_interface_port adc_ch_3  adc_data_3   data     Input  CHANNEL_DATA_WIDTH
-
-    set_interface_property adc_ch_3  associatedClock if_adc_clk
-    set_interface_property adc_ch_3  associatedReset none
-  }
-
-  if {[get_parameter_value NUM_OF_CHANNELS] > 4} {
-
-    add_interface adc_ch_4 conduit end
-    add_interface_port adc_ch_4  adc_enable_4 enable   Input  1
-    add_interface_port adc_ch_4  adc_valid_4  valid    Input  1
-    add_interface_port adc_ch_4  adc_data_4   data     Input  CHANNEL_DATA_WIDTH
-
-    set_interface_property adc_ch_4  associatedClock if_adc_clk
-    set_interface_property adc_ch_4  associatedReset none
-  }
-
-  if {[get_parameter_value NUM_OF_CHANNELS] > 5} {
-
-    add_interface adc_ch_5 conduit end
-    add_interface_port adc_ch_5  adc_enable_5 enable   Input  1
-    add_interface_port adc_ch_5  adc_valid_5  valid    Input  1
-    add_interface_port adc_ch_5  adc_data_5   data     Input  CHANNEL_DATA_WIDTH
-
-    set_interface_property adc_ch_5  associatedClock if_adc_clk
-    set_interface_property adc_ch_5  associatedReset none
-  }
-
-  if {[get_parameter_value NUM_OF_CHANNELS] > 6} {
-
-    add_interface adc_ch_6 conduit end
-    add_interface_port adc_ch_6  adc_enable_6 enable   Input  1
-    add_interface_port adc_ch_6  adc_valid_6  valid    Input  1
-    add_interface_port adc_ch_6  adc_data_6   data     Input  CHANNEL_DATA_WIDTH
-
-    set_interface_property adc_ch_6  associatedClock if_adc_clk
-    set_interface_property adc_ch_6  associatedReset none
-  }
-
-  if {[get_parameter_value NUM_OF_CHANNELS] > 7} {
-
-    add_interface adc_ch_7 conduit end
-    add_interface_port adc_ch_7  adc_enable_7 enable   Input  1
-    add_interface_port adc_ch_7  adc_valid_7  valid    Input  1
-    add_interface_port adc_ch_7  adc_data_7   data     Input  CHANNEL_DATA_WIDTH
-
-    set_interface_property adc_ch_7  associatedClock if_adc_clk
-    set_interface_property adc_ch_7  associatedReset none
-  }
 }
 

@@ -61,7 +61,7 @@ module axi_dmac #(
   input s_axi_aresetn,
 
   input         s_axi_awvalid,
-  input  [10:0] s_axi_awaddr,
+  input  [11:0] s_axi_awaddr,
   output        s_axi_awready,
   input   [2:0] s_axi_awprot,
   input         s_axi_wvalid,
@@ -72,7 +72,7 @@ module axi_dmac #(
   output [ 1:0] s_axi_bresp,
   input         s_axi_bready,
   input         s_axi_arvalid,
-  input  [10:0] s_axi_araddr,
+  input  [11:0] s_axi_araddr,
   output        s_axi_arready,
   input   [2:0] s_axi_arprot,
   output        s_axi_rvalid,
@@ -228,6 +228,7 @@ localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
   (FIFO_SIZE) > 4 ? 4 :
   (FIFO_SIZE) > 2 ? 3 :
   (FIFO_SIZE) > 1 ? 2 : 1;
+localparam DBG_ID_PADDING = ID_WIDTH > 8 ? 0 : 8 - ID_WIDTH;
 
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
@@ -272,7 +273,7 @@ reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
-reg up_dma_cyclic = CYCLIC;
+reg up_dma_cyclic = CYCLIC ? 1'b1 : 1'b0;
 wire up_dma_sync_transfer_start = SYNC_TRANSFER_START ? 1'b1 : 1'b0;
 
 // ID signals from the DMAC, just for debugging
@@ -285,7 +286,8 @@ wire [ID_WIDTH-1:0] src_data_id;
 wire [ID_WIDTH-1:0] src_address_id;
 wire [ID_WIDTH-1:0] src_response_id;
 wire [7:0] dbg_status;
-wire [31:0] dbg_ids;
+wire [31:0] dbg_ids0;
+wire [31:0] dbg_ids1;
 
 assign m_dest_axi_araddr = 'd0;
 assign m_dest_axi_arlen = 'd0;
@@ -304,7 +306,7 @@ assign m_src_axi_wstrb = 'd0;
 assign m_src_axi_wlast = 'd0;
 
 up_axi #(
-  .AXI_ADDRESS_WIDTH (11),
+  .AXI_ADDRESS_WIDTH (12),
   .ADDRESS_WIDTH (9)
 ) i_up_axi (
   .up_rstn(s_axi_aresetn),
@@ -339,7 +341,7 @@ up_axi #(
 // IRQ handling
 assign up_irq_pending = ~up_irq_mask & up_irq_source;
 assign up_irq_trigger  = {up_eot, up_sot};
-assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 0;
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 2'b00;
 
 always @(posedge s_axi_aclk)
 begin
@@ -371,7 +373,7 @@ begin
     up_dma_x_length <= 'h00;
     up_dma_dest_stride <= 'h00;
     up_dma_src_stride <= 'h00;
-    up_irq_mask <= 3'b11;
+    up_irq_mask <= 2'b11;
     up_dma_req_valid <= 1'b0;
     up_scratch <= 'h00;
     up_dma_cyclic <= 1'b0;
@@ -392,7 +394,7 @@ begin
     if (up_wreq) begin
       case (up_waddr)
       9'h002: up_scratch <= up_wdata;
-      9'h020: up_irq_mask <= up_wdata;
+      9'h020: up_irq_mask <= up_wdata[1:0];
       9'h100: {up_pause, up_enable} <= up_wdata[1:0];
                         9'h103: begin
                           if (CYCLIC) up_dma_cyclic <= up_wdata[0];
@@ -409,10 +411,18 @@ begin
   end
 end
 
-assign dbg_ids = {
-  src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0,
-  src_request_id, 1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0,
-  dest_address_id, 1'b0, dest_request_id
+assign dbg_ids0 = {
+  {DBG_ID_PADDING{1'b0}}, dest_data_id,
+  {DBG_ID_PADDING{1'b0}}, dest_response_id,
+  {DBG_ID_PADDING{1'b0}}, dest_address_id,
+  {DBG_ID_PADDING{1'b0}}, dest_request_id
+};
+
+assign dbg_ids1 = {
+  {DBG_ID_PADDING{1'b0}}, src_data_id,
+  {DBG_ID_PADDING{1'b0}}, src_response_id,
+  {DBG_ID_PADDING{1'b0}}, src_address_id,
+  {DBG_ID_PADDING{1'b0}}, src_request_id
 };
 
 always @(posedge s_axi_aclk)
@@ -450,8 +460,9 @@ begin
     9'h10c: up_rdata <= 'h00; // Status
     9'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : m_dest_axi_awaddr; //HAS_DEST_ADDR ? 'h00 : 'h00; // Current dest address
     9'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : m_src_axi_araddr; //HAS_SRC_ADDR ? 'h00 : 'h00; // Current src address
-    9'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids;
-    9'h110: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
+    9'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
+    9'h110: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids0;
+    9'h111: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids1;
     default: up_rdata <= 'h00;
     endcase
   end
@@ -645,12 +656,12 @@ dmac_request_arb #(
 
   // DBG
   .dbg_dest_request_id(dest_request_id),
-  .dbg_dest_address_id(dest_address_id),
-  .dbg_dest_data_id(dest_data_id),
+  .dbg_dest_address_id(dest_data_id),
+  .dbg_dest_data_id(dest_address_id),
   .dbg_dest_response_id(dest_response_id),
   .dbg_src_request_id(src_request_id),
-  .dbg_src_address_id(src_address_id),
-  .dbg_src_data_id(src_data_id),
+  .dbg_src_address_id(src_data_id),
+  .dbg_src_data_id(src_address_id),
   .dbg_src_response_id(src_response_id),
   .dbg_status(dbg_status)
 );

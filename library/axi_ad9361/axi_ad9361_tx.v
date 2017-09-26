@@ -41,6 +41,8 @@ module axi_ad9361_tx #(
 
   parameter   ID = 0,
   parameter   MODE_1R1T = 0,
+  parameter   CMOS_OR_LVDS_N = 0,
+  parameter   PPS_RECEIVER_ENABLE = 0,
   parameter   INIT_DELAY = 0,
   parameter   DDS_DISABLE = 0,
   parameter   USERPORTS_DISABLE = 0,
@@ -92,6 +94,12 @@ module axi_ad9361_tx #(
   input   [31:0]  up_dac_gpio_in,
   output  [31:0]  up_dac_gpio_out,
 
+  // 1PPS reporting counter and interrupt
+
+  input   [31:0]  up_pps_rcounter,
+  input           up_pps_status,
+  output          up_pps_irq_mask,
+
   // processor interface
 
   input           up_rstn,
@@ -107,7 +115,9 @@ module axi_ad9361_tx #(
 
   // configuration settings
 
-  localparam  CONFIG =  (DDS_DISABLE * 64) +
+  localparam  CONFIG =  (PPS_RECEIVER_ENABLE * 256) +
+                        (CMOS_OR_LVDS_N * 128) +
+                        (DDS_DISABLE * 64) +
                         (DELAYCNTRL_DISABLE * 32) +
                         (MODE_1R1T * 16) +
                         (USERPORTS_DISABLE * 8) +
@@ -345,6 +355,9 @@ module axi_ad9361_tx #(
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd1),
     .up_dac_ce (),
+    .up_pps_rcounter (up_pps_rcounter),
+    .up_pps_status (up_pps_status),
+    .up_pps_irq_mask (up_pps_irq_mask),
     .up_drp_sel (),
     .up_drp_wr (),
     .up_drp_addr (),

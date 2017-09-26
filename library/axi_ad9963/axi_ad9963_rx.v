@@ -92,7 +92,7 @@ module axi_ad9963_rx #(
 
  // configuration settings
 
-  localparam  CONFIG =  (SCALECORRECTION_ONLY * 32) +
+  localparam  CONFIG =  (SCALECORRECTION_ONLY * 512) +
                         (0 * 16) +
                         (USERPORTS_DISABLE * 8) +
                         (DATAFORMAT_DISABLE * 4) +

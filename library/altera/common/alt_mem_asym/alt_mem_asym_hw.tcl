@@ -37,6 +37,7 @@ proc p_alt_mem_asym {} {
   set_instance_parameter_value alt_mem {GUI_QA_WIDTH} $m_data_width_a
   set_instance_parameter_value alt_mem {GUI_DATAA_WIDTH} $m_data_width_a
   set_instance_parameter_value alt_mem {GUI_QB_WIDTH} $m_data_width_b
+  set_instance_parameter_value alt_mem {GUI_READ_OUTPUT_QB} {false}
   set_instance_parameter_value alt_mem {GUI_RAM_BLOCK_TYPE} {M20K}
   set_instance_parameter_value alt_mem {GUI_CLOCK_TYPE} 1
 

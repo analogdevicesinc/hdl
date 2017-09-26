@@ -51,44 +51,9 @@ set_parameter_property QUAD_OR_DUAL_N TYPE INTEGER
 set_parameter_property QUAD_OR_DUAL_N UNITS None
 set_parameter_property QUAD_OR_DUAL_N HDL_PARAMETER true
 
-add_parameter DEVICE_TYPE INTEGER 0
-set_parameter_property DEVICE_TYPE DEFAULT_VALUE 1
-set_parameter_property DEVICE_TYPE DISPLAY_NAME DEVICE_TYPE
-set_parameter_property DEVICE_TYPE TYPE INTEGER
-set_parameter_property DEVICE_TYPE UNITS None
-set_parameter_property DEVICE_TYPE HDL_PARAMETER true
-
 # axi4 slave
 
-add_interface s_axi_clock clock end
-add_interface_port s_axi_clock s_axi_aclk clk Input 1
-
-add_interface s_axi_reset reset end
-set_interface_property s_axi_reset associatedClock s_axi_clock
-add_interface_port s_axi_reset s_axi_aresetn reset_n Input 1
-
-add_interface s_axi axi4lite end
-set_interface_property s_axi associatedClock s_axi_clock
-set_interface_property s_axi associatedReset s_axi_reset
-add_interface_port s_axi s_axi_awvalid awvalid Input 1
-add_interface_port s_axi s_axi_awaddr awaddr Input 16
-add_interface_port s_axi s_axi_awprot awprot Input 3
-add_interface_port s_axi s_axi_awready awready Output 1
-add_interface_port s_axi s_axi_wvalid wvalid Input 1
-add_interface_port s_axi s_axi_wdata wdata Input 32
-add_interface_port s_axi s_axi_wstrb wstrb Input 4
-add_interface_port s_axi s_axi_wready wready Output 1
-add_interface_port s_axi s_axi_bvalid bvalid Output 1
-add_interface_port s_axi s_axi_bresp bresp Output 2
-add_interface_port s_axi s_axi_bready bready Input 1
-add_interface_port s_axi s_axi_arvalid arvalid Input 1
-add_interface_port s_axi s_axi_araddr araddr Input 16
-add_interface_port s_axi s_axi_arprot arprot Input 3
-add_interface_port s_axi s_axi_arready arready Output 1
-add_interface_port s_axi s_axi_rvalid rvalid Output 1
-add_interface_port s_axi s_axi_rresp rresp Output 2
-add_interface_port s_axi s_axi_rdata rdata Output 32
-add_interface_port s_axi s_axi_rready rready Input 1
+ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 
 # transceiver interface
 
@@ -105,45 +70,23 @@ set_interface_property if_tx_data dataBitsPerSymbol 128
 
 ad_alt_intf clock   dac_clk       output  1
 
-add_interface dac_ch_0 conduit end
-add_interface_port dac_ch_0  dac_enable_0  enable   Output  1
-add_interface_port dac_ch_0  dac_valid_0   valid    Output  1
-add_interface_port dac_ch_0  dac_ddata_0   data     Input   64
+for {set i 0} {$i < 4} {incr i} {
+  add_interface dac_ch_${i} conduit end
+  add_interface_port dac_ch_${i}  dac_enable_${i}  enable   Output  1
+  add_interface_port dac_ch_${i}  dac_valid_${i}   valid    Output  1
+  add_interface_port dac_ch_${i}  dac_ddata_${i}   data     Input   64
 
-set_interface_property dac_ch_0 associatedClock if_tx_clk
-set_interface_property dac_ch_0 associatedReset none
-
-add_interface dac_ch_1 conduit end
-add_interface_port dac_ch_1  dac_enable_1  enable   Output  1
-add_interface_port dac_ch_1  dac_valid_1   valid    Output  1
-add_interface_port dac_ch_1  dac_ddata_1   data     Input   64
-
-set_interface_property dac_ch_1 associatedClock if_tx_clk
-set_interface_property dac_ch_1 associatedReset none
+  set_interface_property dac_ch_${i} associatedClock if_tx_clk
+  set_interface_property dac_ch_${i} associatedReset none
+}
 
 ad_alt_intf signal  dac_dovf      input   1 ovf
 ad_alt_intf signal  dac_dunf      input   1 unf
 
 proc p_axi_ad9144 {} {
 
-  set p_pcore_quad_dual_n [get_parameter_value "QUAD_OR_DUAL_N"]
-
-  if {[get_parameter_value QUAD_OR_DUAL_N] == 1} {
-
-    add_interface dac_ch_2 conduit end
-    add_interface_port dac_ch_2  dac_enable_2  enable   Output  1
-    add_interface_port dac_ch_2  dac_valid_2   valid    Output  1
-    add_interface_port dac_ch_2  dac_ddata_2   data     Input   64
-
-    set_interface_property dac_ch_2 associatedClock if_tx_clk
-    set_interface_property dac_ch_2 associatedReset none
-
-    add_interface dac_ch_3 conduit end
-    add_interface_port dac_ch_3  dac_enable_3  enable   Output  1
-    add_interface_port dac_ch_3  dac_valid_3   valid    Output  1
-    add_interface_port dac_ch_3  dac_ddata_3   data     Input   64
-
-    set_interface_property dac_ch_3 associatedClock if_tx_clk
-    set_interface_property dac_ch_3 associatedReset none
+  if {[get_parameter_value QUAD_OR_DUAL_N] != 1} {
+    set_interface_property dac_ch_2 ENABLED false
+    set_interface_property dac_ch_3 ENABLED false
   }
 }

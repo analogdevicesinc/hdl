@@ -129,11 +129,11 @@ module system_top (
   input           clkout_in,
 
   inout           gpio_rf0,
-  inout           gpio_rf1,
-  inout           gpio_rf2,
-  inout           gpio_rf3,
-  inout           gpio_rf4,
-  inout           gpio_rfpwr_enable,
+  output          gpio_rf1,
+  output          gpio_rf2,
+  input           gpio_rf3,
+  input           gpio_rf4,
+  inout           gpio_rf5,
   inout           gpio_clksel,
   inout           gpio_resetb,
   inout           gpio_sync,
@@ -163,14 +163,30 @@ module system_top (
   assign gpio_i[28:28] = imu_ready;
   assign gpio_i[27:27] = gpio_o[27:27];
 
-  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf_misc (
-    .dio_t (gpio_t[26:20]),
-    .dio_i (gpio_o[26:20]),
-    .dio_o (gpio_i[26:20]),
-    .dio_p ({ rtc_int,
-              adp1614_en,
-              otg_ctrl,
-              ltc2955_kill_n,
+  // rtc int gpio - 26
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_rtc (
+    .dio_t (gpio_t[26]),
+    .dio_i (gpio_o[26]),
+    .dio_o (gpio_i[26]),
+    .dio_p (rtc_int));
+
+  // misc gpio part 2 - 25:24
+
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_misc_2 (
+    .dio_t (gpio_t[25:24]),
+    .dio_i (gpio_o[25:24]),
+    .dio_o (gpio_i[25:24]),
+    .dio_p ({ adp1614_en,
+              otg_ctrl}));
+
+  // misc gpio - 23:20
+
+  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_misc (
+    .dio_t (gpio_t[23:20]),
+    .dio_i (gpio_o[23:20]),
+    .dio_o (gpio_i[23:20]),
+    .dio_p ({ ltc2955_kill_n,
               ltc2955_int_n,
               ts3a227_int_n,
               mic_present_n}));
@@ -216,42 +232,78 @@ module system_top (
   assign switch_led_b = gpio_o[0];
   assign gpio_i[3:0] = gpio_o[3:0];
 
-  // ad9361 gpio - tact-scroll-wheel
- 
+  // unused gpio - 63:30
+
   assign gpio_i[63] = gpio_o[63];
   assign gpio_i[62] = gpio_o[62];
+  assign gpio_i[61] = gpio_o[61];
   assign gpio_i[60] = gpio_o[60];
 
-  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf_tsw (
-    .dio_t ({gpio_t[59:57], gpio_t[50:47]}),
-    .dio_i ({gpio_o[59:57], gpio_o[50:47]}),
-    .dio_o ({gpio_i[59:57], gpio_i[50:47]}),
-    .dio_p ({ tsw_a,          // 59
-              tsw_b,          // 58
-              tsw_s1,         // 57
-              tsw_s2,         // 50
-              tsw_s3,         // 49
-              tsw_s4,         // 48
-              tsw_s5}));      // 47
+  // tsw-part-2 gpio - 59:57
 
-  // ad9361 gpio - 63-32
+  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf_tsw_2 (
+    .dio_t (gpio_t[59:57]),
+    .dio_i (gpio_o[59:57]),
+    .dio_o (gpio_i[59:57]),
+    .dio_p ({ tsw_a,              // 59
+              tsw_b,              // 58
+              tsw_s1}));          // 57
 
-  ad_iobuf #(.DATA_WIDTH(22)) i_iobuf (
-    .dio_t ({gpio_t[61:61], gpio_t[56:51], gpio_t[46:32]}),
-    .dio_i ({gpio_o[61:61], gpio_o[56:51], gpio_o[46:32]}),
-    .dio_o ({gpio_i[61:61], gpio_i[56:51], gpio_i[46:32]}),
-    .dio_p ({ gpio_rf4,           // 61:61
-              gpio_rf0,           // 56:56
-              gpio_rf1,           // 55:55
-              gpio_rf2,           // 54:54
-              gpio_rf3,           // 53:53
-              gpio_rfpwr_enable,  // 52:52
-              gpio_clksel,        // 51:51
-              gpio_resetb,        // 46:46
+  // rf gpio - 56
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_rf_2 (
+    .dio_t (gpio_t[56]),
+    .dio_i (gpio_o[56]),
+    .dio_o (gpio_i[56]),
+    .dio_p (gpio_rf0));           // 56:56
+
+  // unused gpio - 55:53
+
+  assign gpio_i[55:53] = gpio_o[55:53];
+
+  // rf & clock-select gpio - 52:51
+ 
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_rf_1 (
+    .dio_t (gpio_t[52:51]),
+    .dio_i (gpio_o[52:51]),
+    .dio_o (gpio_i[52:51]),
+    .dio_p ({ gpio_rf5,           // 52:52
+              gpio_clksel}));     // 51:51
+
+  // tact-scroll-wheel gpio - 50:47
+ 
+  ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_tsw_1 (
+    .dio_t (gpio_t[50:47]),
+    .dio_i (gpio_o[50:47]),
+    .dio_o (gpio_i[50:47]),
+    .dio_p ({ tsw_s2,             // 50
+              tsw_s3,             // 49
+              tsw_s4,             // 48
+              tsw_s5}));          // 47
+
+  // ad9361 gpio - 46:32
+ 
+  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_ad9361 (
+    .dio_t (gpio_t[46:32]),
+    .dio_i (gpio_o[46:32]),
+    .dio_o (gpio_i[46:32]),
+    .dio_p ({ gpio_resetb,        // 46:46
               gpio_sync,          // 45:45
               gpio_en_agc,        // 44:44
               gpio_ctl,           // 43:40
               gpio_status}));     // 39:32
+
+  // ad9361 input protection
+
+  ad_adl5904_rst i_adl5904_rst_a (
+    .sys_cpu_clk (sys_cpu_clk),
+    .rf_peak_det_n (gpio_rf4),
+    .rf_peak_rst (gpio_rf2));
+
+  ad_adl5904_rst i_adl5904_rst_b (
+    .sys_cpu_clk (sys_cpu_clk),
+    .rf_peak_det_n (gpio_rf3),
+    .rf_peak_rst (gpio_rf1));
 
   // instantiations
 
@@ -300,7 +352,6 @@ module system_top (
     .ps_intr_08 (1'b0),
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
-    .ps_intr_11 (1'b0),
     .ps_intr_15 (1'b0),
     .rx_clk_in_n (rx_clk_in_n),
     .rx_clk_in_p (rx_clk_in_p),
@@ -326,9 +377,10 @@ module system_top (
     .spi1_sdi_i (imu_miso),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (imu_mosi),
-    .tdd_sync_i (gps_pps),
+    .tdd_sync_i (1'b0),
     .tdd_sync_o (),
     .tdd_sync_t (),
+    .gps_pps (gps_pps),
     .tx_clk_out_n (tx_clk_out_n),
     .tx_clk_out_p (tx_clk_out_p),
     .tx_data_out_n (tx_data_out_n),

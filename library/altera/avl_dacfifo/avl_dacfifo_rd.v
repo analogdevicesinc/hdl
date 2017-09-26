@@ -140,19 +140,14 @@ module avl_dacfifo_rd #(
   // interface
   // ==========================================================================
 
-  ad_mem_asym #(
-    .A_ADDRESS_WIDTH (AVL_MEM_ADDRESS_WIDTH),
-    .A_DATA_WIDTH (AVL_DATA_WIDTH),
-    .B_ADDRESS_WIDTH (DAC_MEM_ADDRESS_WIDTH),
-    .B_DATA_WIDTH (DAC_DATA_WIDTH))
-  i_mem_asym (
-    .clka (avl_clk),
-    .wea (avl_mem_wr_enable),
-    .addra (avl_mem_wr_address),
-    .dina (avl_mem_data),
-    .clkb (dac_clk),
-    .addrb (dac_mem_rd_address),
-    .doutb (dac_mem_data_s));
+  alt_mem_asym_rd i_mem_asym (
+    .mem_i_wrclock (avl_clk),
+    .mem_i_wren (avl_mem_wr_enable),
+    .mem_i_wraddress (avl_mem_wr_address),
+    .mem_i_datain (avl_mem_data),
+    .mem_i_rdclock (dac_clk),
+    .mem_i_rdaddress (dac_mem_rd_address),
+    .mem_o_dataout (dac_mem_data_s));
 
   // ==========================================================================
   // Avalon Memory Mapped interface access
@@ -230,7 +225,7 @@ module avl_dacfifo_rd #(
     .dout (avl_mem_wr_address_b2g_s));
 
   // ==========================================================================
-  // control the FIFO to prevent overflow, underfloq is monitored
+  // control the FIFO to prevent overflow, underflow is monitored
   // ==========================================================================
 
   assign avl_mem_rd_address_s = (MEM_RATIO ==  1) ? avl_mem_rd_address :

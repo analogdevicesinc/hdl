@@ -14,6 +14,7 @@ create_bd_port -dir I spi1_miso
 
 create_bd_port -dir I -from 94 -to 0 gpio_i
 create_bd_port -dir O -from 94 -to 0 gpio_o
+create_bd_port -dir O -from 94 -to 0 gpio_t
 
 # interrupts
 
@@ -46,7 +47,7 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__USE__M_AXI_GP2 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__MAXIGP2__DATA_WIDTH 32
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL0_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__SRCSEL {IOPLL}
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 100
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ 100
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL1_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 200
@@ -83,6 +84,7 @@ ad_connect  sys_ps8/pl_resetn0 sys_rstgen/ext_reset_in
 
 ad_connect  gpio_i sys_ps8/emio_gpio_i
 ad_connect  gpio_o sys_ps8/emio_gpio_o
+ad_connect  gpio_t sys_ps8/emio_gpio_t
 
 # spi
 

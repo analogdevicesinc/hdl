@@ -37,23 +37,20 @@
 
 module ad_mem #(
 
-  parameter       DATA_WIDTH = 16,
-  parameter       ADDRESS_WIDTH =  5) (
+  parameter  DATA_WIDTH = 16,
+  parameter  ADDRESS_WIDTH = 5) (
 
-  input                   clka,
-  input                   wea,
-  input       [AW:0]      addra,
-  input       [DW:0]      dina,
+  input                               clka,
+  input                               wea,
+  input       [(ADDRESS_WIDTH-1):0]   addra,
+  input       [(DATA_WIDTH-1):0]      dina,
 
-  input                   clkb,
-  input       [AW:0]      addrb,
-  output  reg [DW:0]      doutb);
-
-  localparam      DW = DATA_WIDTH - 1;
-  localparam      AW = ADDRESS_WIDTH - 1;
+  input                               clkb,
+  input       [(ADDRESS_WIDTH-1):0]   addrb,
+  output  reg [(DATA_WIDTH-1):0]      doutb);
 
   (* ram_style = "block" *)
-  reg     [DW:0]  m_ram[0:((2**ADDRESS_WIDTH)-1)];
+  reg         [(DATA_WIDTH-1):0]      m_ram[0:((2**ADDRESS_WIDTH)-1)];
 
   always @(posedge clka) begin
     if (wea == 1'b1) begin

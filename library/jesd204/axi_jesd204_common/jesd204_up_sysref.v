@@ -71,7 +71,7 @@ wire [1:0] up_sysref_event;
 
 sync_event #(
   .NUM_OF_EVENTS(2)
-) i_sysref_event_sync (
+) i_cdc_sysref_event (
   .in_clk(core_clk),
   .in_event({
     core_event_sysref_alignment_error,

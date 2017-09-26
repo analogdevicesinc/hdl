@@ -56,9 +56,11 @@ module dmac_src_mm_axi #(
   input                           sync_id,
   output                          sync_id_ret,
 
+/*
   output                          response_valid,
   input                           response_ready,
   output [1:0]                    response_resp,
+*/
 
   input  [ID_WIDTH-1:0]         request_id,
   output [ID_WIDTH-1:0]         response_id,
@@ -89,8 +91,6 @@ module dmac_src_mm_axi #(
   input  [ 1:0]                    m_axi_rresp
 );
 
-`include "resp.h"
-
 wire address_enabled;
 
 wire address_req_valid;
@@ -100,9 +100,6 @@ wire data_req_ready;
 
 assign sync_id_ret = sync_id;
 assign response_id = data_id;
-
-assign response_valid = 1'b0;
-assign response_resp = RESP_OKAY;
 
 splitter #(
   .NUM_M(2)
@@ -188,6 +185,12 @@ dmac_data_mover # (
   .m_axi_last()
 );
 
+/* TODO
+`include "resp.h"
+
+assign response_valid = 1'b0;
+assign response_resp = RESP_OKAY;
+
 reg [1:0] rresp;
 
 always @(posedge m_axi_aclk)
@@ -197,5 +200,6 @@ begin
       rresp <= m_axi_rresp;
   end
 end
+*/
 
 endmodule

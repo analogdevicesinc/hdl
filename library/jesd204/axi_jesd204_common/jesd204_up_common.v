@@ -60,6 +60,7 @@ module jesd204_up_common # (
   output up_reset_synchronizer,
 
   input core_clk,
+  input core_reset_ext,
   output core_reset,
 
   input [11:0] up_raddr,
@@ -102,6 +103,15 @@ assign core_reset = core_reset_vector[0];
 reg [1:0] up_reset_synchronizer_vector = 2'b11;
 assign up_reset_synchronizer = up_reset_synchronizer_vector[0];
 
+/*
+ * Synchronize the external core reset to the register map domain so the status
+ * can be shown in the register map. This is useful for debugging.
+ */
+reg [1:0] up_core_reset_ext_synchronizer_vector = 2'b11;
+wire up_core_reset_ext;
+
+assign up_core_reset_ext = up_core_reset_ext_synchronizer_vector[0];
+
 /* Transfer two cycles before the core comes out of reset */
 wire core_cfg_transfer_en;
 assign core_cfg_transfer_en = core_reset_vector[2] ^ core_reset_vector[1];
@@ -118,19 +128,29 @@ always @(posedge up_clk or negedge ext_resetn) begin
   end
 end
 
-always @(posedge core_clk or posedge up_reset_core) begin
-  if (up_reset_core == 1'b1) begin
+wire core_reset_all = up_reset_core | core_reset_ext;
+
+always @(posedge core_clk or posedge core_reset_all) begin
+  if (core_reset_all == 1'b1) begin
     core_reset_vector <= 5'b11111;
   end else begin
     core_reset_vector <= {1'b0,core_reset_vector[4:1]};
   end
 end
 
-always @(posedge up_clk or posedge up_reset_core) begin
-  if (up_reset_core == 1'b1) begin
+always @(posedge up_clk or posedge core_reset) begin
+  if (core_reset == 1'b1) begin
     up_reset_synchronizer_vector <= 2'b11;
   end else begin
-    up_reset_synchronizer_vector <= {core_reset,up_reset_synchronizer_vector[1]};
+    up_reset_synchronizer_vector <= {1'b0,up_reset_synchronizer_vector[1]};
+  end
+end
+
+always @(posedge up_clk or posedge core_reset_ext) begin
+  if (core_reset_ext == 1'b1) begin
+    up_core_reset_ext_synchronizer_vector <= 2'b11;
+  end else begin
+    up_core_reset_ext_synchronizer_vector <= {1'b0,up_core_reset_ext_synchronizer_vector[1]};
   end
 end
 
@@ -199,7 +219,7 @@ always @(*) begin
 
   /* JESD common control */
   12'h030: up_rdata <= up_reset_core;
-  12'h031: up_rdata <= up_reset_synchronizer; /* core ready */
+  12'h031: up_rdata <= {up_core_reset_ext, up_reset_synchronizer}; /* core ready */
   12'h032: up_rdata <= {11'h00, clk_mon_count}; /* Make it 16.16 */
   /* 0x32-0x34 reserver for future use */
 

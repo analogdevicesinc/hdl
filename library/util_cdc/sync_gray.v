@@ -39,20 +39,20 @@
  * more than one in one clock cycle in the source domain. I.e. the value may
  * change by either -1, 0 or +1.
  */
-module sync_gray (
+module sync_gray #(
+
+  // Bit-width of the counter
+  parameter DATA_WIDTH = 1,
+  // Whether the input and output clock are asynchronous, if set to 0 the
+  // synchronizer will be bypassed and out_count will be in_count.
+  parameter ASYNC_CLK = 1)(
+
   input in_clk,
   input in_resetn,
   input [DATA_WIDTH-1:0] in_count,
   input out_resetn,
   input out_clk,
-  output [DATA_WIDTH-1:0] out_count
-);
-
-// Bit-width of the counter
-parameter DATA_WIDTH = 1;
-// Whether the input and output clock are asynchronous, if set to 0 the
-// synchronizer will be bypassed and out_count will be in_count.
-parameter ASYNC_CLK = 1;
+  output [DATA_WIDTH-1:0] out_count);
 
 reg [DATA_WIDTH-1:0] cdc_sync_stage0 = 'h0;
 reg [DATA_WIDTH-1:0] cdc_sync_stage1 = 'h0;

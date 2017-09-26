@@ -7,6 +7,7 @@ adi_ip_create axi_adc_decimate
 adi_ip_files axi_adc_decimate [list \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/common/ad_iqcor.v" \
   "axi_adc_decimate_constr.xdc" \
   "fir_decim.v" \
   "cic_decim.v" \

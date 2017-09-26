@@ -113,7 +113,7 @@ proc ad_ip_create {pname pdesc {pelabfunction ""} {pcomposefunction ""}} {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_ip_parameter {pname ptype pdefault {phdl true}} {
+proc ad_ip_parameter {pname ptype pdefault {phdl true} {properties {}}} {
 
   if {$pname eq "DEVICE_FAMILY"} {
     add_parameter DEVICE_FAMILY STRING
@@ -121,12 +121,15 @@ proc ad_ip_parameter {pname ptype pdefault {phdl true}} {
     set_parameter_property DEVICE_FAMILY AFFECTS_GENERATION true
     set_parameter_property DEVICE_FAMILY HDL_PARAMETER false
     set_parameter_property DEVICE_FAMILY ENABLED true
-    return
+  } else {
+    add_parameter $pname $ptype $pdefault
+    set_parameter_property $pname HDL_PARAMETER $phdl
+    set_parameter_property $pname ENABLED true
   }
 
-  add_parameter $pname $ptype $pdefault
-  set_parameter_property $pname HDL_PARAMETER $phdl
-  set_parameter_property $pname ENABLED true
+  foreach {key value} $properties {
+    set_parameter_property $pname $key $value
+  }
 }
 
 ###################################################################################################
@@ -151,6 +154,10 @@ proc ad_ip_addfile {pname pfile} {
     add_fileset_file $pmodule SDC PATH $pfile
     return
   }
+  if {$ptype eq ".tcl"} {
+    add_fileset_file $pmodule OTHER PATH $pfile
+    return
+  }
 }
 
 proc ad_ip_files {pname pfiles {pfunction ""}} {
@@ -171,7 +178,7 @@ proc ad_ip_files {pname pfiles {pfunction ""}} {
 ###################################################################################################
 ###################################################################################################
 
-proc ad_ip_intf_s_axi {aclk arstn} {
+proc ad_ip_intf_s_axi {aclk arstn {addr_width 16}} {
 
   add_interface s_axi_clock clock end
   add_interface_port s_axi_clock ${aclk} clk Input 1
@@ -184,7 +191,7 @@ proc ad_ip_intf_s_axi {aclk arstn} {
   set_interface_property s_axi associatedClock s_axi_clock
   set_interface_property s_axi associatedReset s_axi_reset
   add_interface_port s_axi s_axi_awvalid awvalid Input 1
-  add_interface_port s_axi s_axi_awaddr awaddr Input 16
+  add_interface_port s_axi s_axi_awaddr awaddr Input $addr_width
   add_interface_port s_axi s_axi_awprot awprot Input 3
   add_interface_port s_axi s_axi_awready awready Output 1
   add_interface_port s_axi s_axi_wvalid wvalid Input 1
@@ -195,7 +202,7 @@ proc ad_ip_intf_s_axi {aclk arstn} {
   add_interface_port s_axi s_axi_bresp bresp Output 2
   add_interface_port s_axi s_axi_bready bready Input 1
   add_interface_port s_axi s_axi_arvalid arvalid Input 1
-  add_interface_port s_axi s_axi_araddr araddr Input 16
+  add_interface_port s_axi s_axi_araddr araddr Input $addr_width
   add_interface_port s_axi s_axi_arprot arprot Input 3
   add_interface_port s_axi s_axi_arready arready Output 1
   add_interface_port s_axi s_axi_rvalid rvalid Output 1

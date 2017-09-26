@@ -97,7 +97,9 @@ begin
 			else
 				if s_axis_tlast = '1' then
 					drain_dma <= False;
-				elsif enable_d1 and enable then
+				elsif not enable_d1 and enable then
+					drain_dma <= False;
+				elsif enable_d1 and not enable then
 					drain_dma <= True;
 				end if;
 				enable_d1 := enable;

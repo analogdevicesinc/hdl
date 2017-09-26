@@ -66,6 +66,9 @@ module up_adc_common #(
   output      [31:0]  adc_start_code,
   output              adc_sref_sync,
   output              adc_sync,
+  input       [31:0]  up_pps_rcounter,
+  input               up_pps_status,
+  output  reg         up_pps_irq_mask,
 
   // channel interface
 
@@ -135,6 +138,7 @@ module up_adc_common #(
   reg         [ 7:0]  up_usr_chanmax_int = 'd0;
   reg         [31:0]  up_adc_start_code = 'd0;
   reg         [31:0]  up_adc_gpio_out_int = 'd0;
+  reg         [31:0]  up_timer = 'd0;
   reg                 up_rack_int = 'd0;
   reg         [31:0]  up_rdata_int = 'd0;
 
@@ -174,6 +178,7 @@ module up_adc_common #(
       up_adc_r1_mode <= 'd0;
       up_adc_ddr_edgesel <= 'd0;
       up_adc_pin_mode <= 'd0;
+      up_pps_irq_mask <= 1'b1;
     end else begin
       up_adc_clk_enb_int <= ~up_adc_clk_enb;
       up_core_preset <= ~up_resetn;
@@ -181,6 +186,9 @@ module up_adc_common #(
       up_wack_int <= up_wreq_s;
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
         up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h04)) begin
+        up_pps_irq_mask <= up_wdata[0];
       end
       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
         up_adc_clk_enb <= up_wdata[2];
@@ -333,6 +341,20 @@ module up_adc_common #(
   end
   endgenerate
 
+  // timer with premature termination
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_timer <= 32'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h40)) begin
+        up_timer <= up_wdata;
+      end else if (up_timer > 0) begin
+        up_timer <= up_timer - 1'b1;
+      end
+    end
+  end
+
   // processor read interface
 
   assign up_rack = up_rack_int;
@@ -350,6 +372,7 @@ module up_adc_common #(
           8'h01: up_rdata_int <= ID;
           8'h02: up_rdata_int <= up_scratch;
           8'h03: up_rdata_int <= CONFIG;
+          8'h04: up_rdata_int <= {31'b0, up_pps_irq_mask};
           8'h10: up_rdata_int <= {29'd0, up_adc_clk_enb, up_mmcm_resetn, up_resetn};
           8'h11: up_rdata_int <= {27'd0, up_adc_sref_sync, up_adc_sync, up_adc_r1_mode,
                                   up_adc_ddr_edgesel, up_adc_pin_mode};
@@ -367,6 +390,9 @@ module up_adc_common #(
           8'h29: up_rdata_int <= up_adc_start_code;
           8'h2e: up_rdata_int <= up_adc_gpio_in;
           8'h2f: up_rdata_int <= up_adc_gpio_out_int;
+          8'h30: up_rdata_int <= up_pps_rcounter;
+          8'h31: up_rdata_int <= {31'b0, up_pps_status};
+          8'h40: up_rdata_int <= up_timer;
           default: up_rdata_int <= 0;
         endcase
       end else begin

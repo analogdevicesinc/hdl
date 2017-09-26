@@ -132,6 +132,9 @@ module system_top (
 
   // gpio interface
 
+  output  [  3:0]   gpio_ctl,
+  input   [  7:0]   gpio_status,
+  input             ad9361_clk_out,
   output            ad9361_resetb,
   output            ad9361_en_agc,
   output            ad9361_sync,
@@ -172,7 +175,12 @@ module system_top (
 
   assign sys_gpio_bd_i[31:8] = sys_gpio_bd_o[31:8];
   assign sys_gpio_bd_i[ 7:0] = gpio_bd_i;
-  
+
+  assign sys_gpio_i[31:24] = sys_gpio_o[31:24];
+  assign sys_gpio_i[23:16] = gpio_status;
+  assign sys_gpio_i[15: 0] = sys_gpio_o[15:0];
+
+  assign gpio_ctl = sys_gpio_o[11:8];
   assign ad9361_resetb = sys_gpio_o[4];
   assign ad9361_en_agc = sys_gpio_o[3];
   assign ad9361_sync = sys_gpio_o[2];
@@ -180,8 +188,8 @@ module system_top (
   assign ga0 = 1'b0;
   assign ga1 = 1'b0;
 
- ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
- ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
+  ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
+  ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
 
   // instantiations
 

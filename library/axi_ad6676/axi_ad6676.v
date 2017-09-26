@@ -38,7 +38,6 @@
 module axi_ad6676 #(
 
   parameter ID = 0,
-  parameter DEVICE_TYPE = 0,
   parameter IO_DELAY_GROUP = "adc_if_delay_group") (
 
   // jesd interface
@@ -68,7 +67,7 @@ module axi_ad6676 #(
   input                   s_axi_aclk,
   input                   s_axi_aresetn,
   input                   s_axi_awvalid,
-  input       [31:0]      s_axi_awaddr,
+  input       [15:0]      s_axi_awaddr,
   output                  s_axi_awready,
   input                   s_axi_wvalid,
   input       [31:0]      s_axi_wdata,
@@ -78,7 +77,7 @@ module axi_ad6676 #(
   output      [ 1:0]      s_axi_bresp,
   input                   s_axi_bready,
   input                   s_axi_arvalid,
-  input       [31:0]      s_axi_araddr,
+  input       [15:0]      s_axi_araddr,
   output                  s_axi_arready,
   output                  s_axi_rvalid,
   output      [ 1:0]      s_axi_rresp,
@@ -155,7 +154,7 @@ module axi_ad6676 #(
 
   // main (device interface)
 
-  axi_ad6676_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_if (
+  axi_ad6676_if i_if (
     .rx_clk (rx_clk),
     .rx_sof (rx_sof),
     .rx_data (rx_data),

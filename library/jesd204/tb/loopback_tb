@@ -10,6 +10,7 @@ SOURCE+=" ../jesd204_rx_static_config/rx_static_config.v"
 SOURCE+=" ../jesd204_tx/tx.v ../jesd204_tx/tx_ctrl.v ../jesd204_tx/tx_lane.v"
 SOURCE+=" ../jesd204_tx_static_config/tx_static_config.v"
 SOURCE+=" ../jesd204_tx_static_config/ilas_cfg_static.v"
+SOURCE+=" ../../util_cdc/sync_bits.v"
 
 cd `dirname $0`
 source run_tb.sh

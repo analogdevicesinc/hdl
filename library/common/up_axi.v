@@ -38,7 +38,7 @@
 module up_axi #(
 
   parameter   ADDRESS_WIDTH = 14,
-  parameter   AXI_ADDRESS_WIDTH = 32) (
+  parameter   AXI_ADDRESS_WIDTH = 16) (
 
   // reset and clocks
 

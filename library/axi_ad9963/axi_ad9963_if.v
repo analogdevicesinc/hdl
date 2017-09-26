@@ -151,7 +151,7 @@ module axi_ad9963_if #(
 
   generate
   for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin: g_rx_data
-  ad_lvds_in #(
+  ad_data_in #(
     .SINGLE_ENDED (1),
     .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_ENABLE (ADC_IODELAY_ENABLE),
@@ -175,7 +175,7 @@ module axi_ad9963_if #(
 
   // receive iq interface, ibuf -> idelay -> iddr
 
-  ad_lvds_in #(
+  ad_data_in #(
     .SINGLE_ENDED (1),
     .DEVICE_TYPE (DEVICE_TYPE),
     .IODELAY_ENABLE (ADC_IODELAY_ENABLE),

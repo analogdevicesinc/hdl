@@ -73,6 +73,7 @@ module axi_jesd204_tx #(
   output irq,
 
   input core_clk,
+  input core_reset_ext,
   output core_reset,
 
   output [NUM_LANES-1:0] core_cfg_lanes_disable,
@@ -130,19 +131,7 @@ wire up_cfg_is_writeable;
 
 wire [4:0] up_irq_trigger;
 
-sync_event #(
-  .NUM_OF_EVENTS(2)
-) i_sync_events (
-  .in_clk(core_clk),
-  .in_event({
-    core_event_sysref_alignment_error,
-    core_event_sysref_edge
-  }),
-  .out_clk(s_axi_aclk),
-  .out_event(up_irq_trigger[1:0])
-);
-
-assign up_irq_trigger[4:2] = 3'b000;
+assign up_irq_trigger[4:0] = 5'b00000;
 
 up_axi #(
   .AXI_ADDRESS_WIDTH (14),
@@ -195,6 +184,7 @@ jesd204_up_common #(
   .up_reset_synchronizer(),
 
   .core_clk(core_clk),
+  .core_reset_ext(core_reset_ext),
   .core_reset(core_reset),
 
   .up_raddr(up_raddr),

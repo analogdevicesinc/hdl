@@ -35,9 +35,7 @@
 
 `timescale 1ns/100ps
 
-module ad_xcvr_rx_if #(
-
-  parameter DEVICE_TYPE = 0) (
+module ad_xcvr_rx_if (
 
   // jesd interface
 
@@ -54,52 +52,23 @@ module ad_xcvr_rx_if #(
   reg     [ 3:0]  rx_ip_sof_hold = 'd0;
   reg             rx_ip_sof_d = 'd0;
 
-  // internal signals
-
-  wire    [ 3:0]  rx_ip_sof_s;
-  wire    [31:0]  rx_ip_data_s;
-
-  // altera/xilinx
-
-  generate
-  if (DEVICE_TYPE == 1) begin
-  assign rx_ip_sof_s[3] = rx_ip_sof[0];
-  assign rx_ip_sof_s[2] = rx_ip_sof[1];
-  assign rx_ip_sof_s[1] = rx_ip_sof[2];
-  assign rx_ip_sof_s[0] = rx_ip_sof[3];
-  assign rx_ip_data_s[31:24] = rx_ip_data[ 7: 0];
-  assign rx_ip_data_s[23:16] = rx_ip_data[15: 8];
-  assign rx_ip_data_s[15: 8] = rx_ip_data[23:16];
-  assign rx_ip_data_s[ 7: 0] = rx_ip_data[31:24];
-  end else begin
-  assign rx_ip_sof_s[3] = rx_ip_sof[3];
-  assign rx_ip_sof_s[2] = rx_ip_sof[2];
-  assign rx_ip_sof_s[1] = rx_ip_sof[1];
-  assign rx_ip_sof_s[0] = rx_ip_sof[0];
-  assign rx_ip_data_s[31:24] = rx_ip_data[31:24];
-  assign rx_ip_data_s[23:16] = rx_ip_data[23:16];
-  assign rx_ip_data_s[15: 8] = rx_ip_data[15: 8];
-  assign rx_ip_data_s[ 7: 0] = rx_ip_data[ 7: 0];
-  end
-  endgenerate
-
   // dword may contain more than one frame per clock
 
   always @(posedge rx_clk) begin
-    rx_ip_data_d <= rx_ip_data_s;
-    rx_ip_sof_d <= rx_ip_sof_s;
-    if (rx_ip_sof_s != 4'h0) begin
-      rx_ip_sof_hold <= rx_ip_sof_s;
+    rx_ip_data_d <= rx_ip_data;
+    rx_ip_sof_d <= rx_ip_sof;
+    if (rx_ip_sof != 4'h0) begin
+      rx_ip_sof_hold <= rx_ip_sof;
     end
     rx_sof <= |rx_ip_sof_d;
     if (rx_ip_sof_hold[0] == 1'b1) begin
-      rx_data <= rx_ip_data_s;
+      rx_data <= rx_ip_data;
     end else if (rx_ip_sof_hold[1] == 1'b1) begin
-      rx_data <= {rx_ip_data_s[ 7:0], rx_ip_data_d[31: 8]};
+      rx_data <= {rx_ip_data[ 7:0], rx_ip_data_d[31: 8]};
     end else if (rx_ip_sof_hold[2] == 1'b1) begin
-      rx_data <= {rx_ip_data_s[15:0], rx_ip_data_d[31:16]};
+      rx_data <= {rx_ip_data[15:0], rx_ip_data_d[31:16]};
     end else if (rx_ip_sof_hold[3] == 1'b1) begin
-      rx_data <= {rx_ip_data_s[23:0], rx_ip_data_d[31:24]};
+      rx_data <= {rx_ip_data[23:0], rx_ip_data_d[31:24]};
     end else begin
       rx_data <= 32'd0;
     end

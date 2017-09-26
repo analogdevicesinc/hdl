@@ -14,6 +14,7 @@ M_DEPS += tx_ctrl.v
 M_DEPS += tx_lane.v
 
 M_DEPS += ../../jesd204/jesd204_common/jesd204_common.xpr
+M_DEPS += ../../util_cdc/util_cdc.xpr
 
 M_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg.xml
 M_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg_rtl.xml
@@ -60,6 +61,7 @@ jesd204_tx.xpr: $(M_DEPS)
 
 dep:
 	make -C ../../jesd204/jesd204_common/
+	make -C ../../util_cdc/
 	make -C ../../jesd204/interfaces/
 ####################################################################################
 ####################################################################################

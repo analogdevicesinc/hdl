@@ -55,11 +55,6 @@ proc p_avl_adxphy {} {
 
     for {set n 0} {$n < $m_num_of_lanes} {incr n} {
 
-      ad_conduit tx_ip_s_${n} export tx_ip_s_${n} input 3
-      ad_conduit tx_ip_d_${n} export tx_ip_d_${n} output 39
-      ad_conduit tx_phy_s_${n} export tx_phy_s_${n} output 3
-      ad_conduit tx_phy_d_${n} export tx_phy_d_${n} input 39
-
       ad_conduit tx_phy${n}_cal_busy tx_cal_busy tx_phy_cal_busy_${n} input 1
       ad_conduit tx_phy${n}_pcfifo_full export tx_phy_full_${n} input 1
       ad_conduit tx_phy${n}_pcfifo_empty export tx_phy_empty_${n} input 1

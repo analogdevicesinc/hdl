@@ -164,16 +164,13 @@ ad_connect  axi_ad9371_rx_os_clkgen/clk_0 axi_ad9371_rx_os_jesd_rstgen/slowest_s
 
 # dma clock & reset
 
- ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 150
-
 ad_ip_instance proc_sys_reset sys_dma_rstgen
 ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
-ad_connect  sys_dma_clk sys_ps7/FCLK_CLK2
 ad_connect  sys_dma_clk sys_dma_rstgen/slowest_sync_clk
-ad_connect  sys_ps7/FCLK_RESET2_N sys_dma_rstgen/ext_reset_in
 ad_connect  sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
-ad_connect  sys_cpu_reset axi_ad9371_dacfifo/dma_rst
+ad_connect  sys_dma_reset sys_dma_rstgen/peripheral_reset
+ad_connect  sys_dma_reset axi_ad9371_dacfifo/dma_rst
 
 # connections (dac)
 
@@ -193,10 +190,9 @@ ad_connect  axi_ad9371_core/dac_valid_q1 util_ad9371_tx_upack/dac_valid_3
 ad_connect  axi_ad9371_core/dac_enable_q1 util_ad9371_tx_upack/dac_enable_3
 ad_connect  axi_ad9371_core/dac_data_q1 util_ad9371_tx_upack/dac_data_3
 ad_connect  axi_ad9371_tx_clkgen/clk_0 axi_ad9371_dacfifo/dac_clk
-ad_connect  axi_ad9371_rx_jesd_rstgen/peripheral_reset axi_ad9371_dacfifo/dac_rst
+ad_connect  axi_ad9371_tx_jesd_rstgen/peripheral_reset axi_ad9371_dacfifo/dac_rst
 ad_connect  util_ad9371_tx_upack/dac_valid axi_ad9371_dacfifo/dac_valid
 ad_connect  util_ad9371_tx_upack/dac_data axi_ad9371_dacfifo/dac_data
-ad_connect  util_ad9371_tx_upack/dma_xfer_in axi_ad9371_dacfifo/dac_xfer_out
 ad_connect  sys_dma_clk axi_ad9371_dacfifo/dma_clk
 ad_connect  sys_dma_clk axi_ad9371_tx_dma/m_axis_aclk
 ad_connect  axi_ad9371_dacfifo/dma_valid axi_ad9371_tx_dma/m_axis_valid
@@ -265,7 +261,7 @@ ad_cpu_interconnect 0x44A60000 axi_ad9371_rx_xcvr
 ad_cpu_interconnect 0x43C10000 axi_ad9371_rx_clkgen
 ad_cpu_interconnect 0x44AA0000 axi_ad9371_rx_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9371_rx_dma
-ad_cpu_interconnect 0x44A70000 axi_ad9371_rx_os_xcvr
+ad_cpu_interconnect 0x44A50000 axi_ad9371_rx_os_xcvr
 ad_cpu_interconnect 0x43C20000 axi_ad9371_rx_os_clkgen
 ad_cpu_interconnect 0x44AB0000 axi_ad9371_rx_os_jesd
 ad_cpu_interconnect 0x7c440000 axi_ad9371_rx_os_dma
@@ -292,52 +288,3 @@ ad_cpu_interrupt ps-10 mb-15 axi_ad9371_rx_jesd/irq
 ad_cpu_interrupt ps-11 mb-14 axi_ad9371_rx_os_dma/irq
 ad_cpu_interrupt ps-12 mb-13- axi_ad9371_tx_dma/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9371_rx_dma/irq
-
-# ila
-
-ad_ip_instance ila ila_adc
-ad_ip_parameter ila_adc CONFIG.C_MONITOR_TYPE Native
-ad_ip_parameter ila_adc CONFIG.C_NUM_OF_PROBES 4
-ad_ip_parameter ila_adc CONFIG.C_PROBE0_WIDTH 16
-ad_ip_parameter ila_adc CONFIG.C_PROBE1_WIDTH 16
-ad_ip_parameter ila_adc CONFIG.C_PROBE2_WIDTH 16
-ad_ip_parameter ila_adc CONFIG.C_PROBE3_WIDTH 16
-ad_ip_parameter ila_adc CONFIG.C_EN_STRG_QUAL 1
-ad_ip_parameter ila_adc CONFIG.C_TRIGIN_EN false
-
-ad_connect  axi_ad9371_rx_clkgen/clk_0 ila_adc/clk
-ad_connect  axi_ad9371_core/adc_data_i0 ila_adc/probe0
-ad_connect  axi_ad9371_core/adc_data_q0 ila_adc/probe1
-ad_connect  axi_ad9371_core/adc_data_i1 ila_adc/probe2
-ad_connect  axi_ad9371_core/adc_data_q1 ila_adc/probe3
-
-ad_ip_instance util_bsplit bsplit_os_adc_0
-ad_ip_parameter bsplit_os_adc_0 CONFIG.CHANNEL_DATA_WIDTH 16
-ad_ip_parameter bsplit_os_adc_0 CONFIG.NUM_OF_CHANNELS 2
-
-ad_ip_instance util_bsplit bsplit_os_adc_1
-ad_ip_parameter bsplit_os_adc_1 CONFIG.CHANNEL_DATA_WIDTH 16
-ad_ip_parameter bsplit_os_adc_1 CONFIG.NUM_OF_CHANNELS 2
-
-ad_ip_instance ila ila_os_adc
-ad_ip_parameter ila_os_adc CONFIG.C_MONITOR_TYPE Native
-ad_ip_parameter ila_os_adc CONFIG.C_NUM_OF_PROBES 6
-ad_ip_parameter ila_os_adc CONFIG.C_PROBE0_WIDTH 1
-ad_ip_parameter ila_os_adc CONFIG.C_PROBE1_WIDTH 16
-ad_ip_parameter ila_os_adc CONFIG.C_PROBE2_WIDTH 16
-ad_ip_parameter ila_os_adc CONFIG.C_PROBE3_WIDTH 1
-ad_ip_parameter ila_os_adc CONFIG.C_PROBE4_WIDTH 16
-ad_ip_parameter ila_os_adc CONFIG.C_PROBE5_WIDTH 16
-ad_ip_parameter ila_os_adc CONFIG.C_EN_STRG_QUAL 1
-ad_ip_parameter ila_os_adc CONFIG.C_TRIGIN_EN false
-
-ad_connect  axi_ad9371_core/adc_os_data_i0 bsplit_os_adc_0/data
-ad_connect  axi_ad9371_core/adc_os_data_q0 bsplit_os_adc_1/data
-ad_connect  axi_ad9371_rx_os_clkgen/clk_0 ila_os_adc/clk
-ad_connect  axi_ad9371_core/adc_os_valid_i0 ila_os_adc/probe0
-ad_connect  bsplit_os_adc_0/split_data_0 ila_os_adc/probe1
-ad_connect  bsplit_os_adc_0/split_data_1 ila_os_adc/probe2
-ad_connect  axi_ad9371_core/adc_os_valid_q0 ila_os_adc/probe3
-ad_connect  bsplit_os_adc_1/split_data_0 ila_os_adc/probe4
-ad_connect  bsplit_os_adc_1/split_data_1 ila_os_adc/probe5
-

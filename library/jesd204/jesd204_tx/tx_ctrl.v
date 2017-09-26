@@ -83,18 +83,18 @@ reg ilas_reset = 1'b1;
 reg ilas_data_reset = 1'b1;
 reg sync_request = 1'b0;
 reg sync_request_received = 1'b0;
-reg [1:0] sync_sync = 2'b11;
 reg [7:0] mframe_counter = 'h00;
 reg [5:0] ilas_counter = 'h00;
 reg ilas_config_rd_d1 = 1'b1;
 reg last_ilas_mframe = 1'b0;
 reg cgs_enable = 1'b1;
 
-always @(posedge clk) begin
-  sync_sync <= {sync_sync[0],sync};
-end
-
-assign status_sync = sync_sync[1];
+sync_bits i_cdc_sync (
+  .in(sync),
+  .out_clk(clk),
+  .out_resetn(1'b1),
+  .out(status_sync)
+);
 
 always @(posedge clk) begin
   if (reset == 1'b1) begin
@@ -106,7 +106,7 @@ always @(posedge clk) begin
     if (cfg_continuous_cgs == 1'b1) begin
       sync_request <= 1'b1;
     end else begin
-      sync_request <= ~sync_sync[1] | ctrl_manual_sync_request;
+      sync_request <= ~status_sync | ctrl_manual_sync_request;
     end
   end
 end
