@@ -28,9 +28,5 @@ adi_ip_files axi_hdmi_tx [list \
   "axi_hdmi_tx.v" ]
 
 adi_ip_properties axi_hdmi_tx
-
-ipx::remove_bus_interface hdmi_clk [ipx::current_core]
-ipx::remove_bus_interface hdmi_out_clk [ipx::current_core]
-ipx::remove_bus_interface vdma_clk [ipx::current_core]
 ipx::save_core [ipx::current_core]
 
