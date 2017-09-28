@@ -23,8 +23,6 @@ all:
 	-make -C adrv9371x all
 	-make -C adv7511 all
 	-make -C arradio all
-	-make -C cftl_cip all
-	-make -C cftl_std all
 	-make -C cn0363 all
 	-make -C daq1 all
 	-make -C daq2 all
@@ -63,8 +61,6 @@ clean:
 	make -C adrv9371x clean
 	make -C adv7511 clean
 	make -C arradio clean
-	make -C cftl_cip clean
-	make -C cftl_std clean
 	make -C cn0363 clean
 	make -C daq1 clean
 	make -C daq2 clean
@@ -103,8 +99,6 @@ clean-all:
 	make -C adrv9371x clean-all
 	make -C adv7511 clean-all
 	make -C arradio clean-all
-	make -C cftl_cip clean-all
-	make -C cftl_std clean-all
 	make -C cn0363 clean-all
 	make -C daq1 clean-all
 	make -C daq2 clean-all
