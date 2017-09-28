@@ -52,6 +52,7 @@ module axi_ad9361 #(
   parameter   ADC_DCFILTER_DISABLE = 0,
   parameter   ADC_IQCORRECTION_DISABLE = 0,
   parameter   DAC_INIT_DELAY = 0,
+  parameter   DAC_CLK_EDGE_SEL = 0,
   parameter   DAC_IODELAY_ENABLE = 0,
   parameter   DAC_DATAPATH_DISABLE = 0,
   parameter   DAC_DDS_DISABLE = 0,
@@ -631,6 +632,7 @@ module axi_ad9361 #(
   axi_ad9361_tx #(
     .ID (ID),
     .MODE_1R1T (MODE_1R1T),
+    .CLK_EDGE_SEL (DAC_CLK_EDGE_SEL),
     .CMOS_OR_LVDS_N (CMOS_OR_LVDS_N),
     .PPS_RECEIVER_ENABLE (PPS_RECEIVER_ENABLE),
     .INIT_DELAY (DAC_INIT_DELAY),

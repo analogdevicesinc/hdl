@@ -41,6 +41,7 @@ module axi_ad9361_tx #(
 
   parameter   ID = 0,
   parameter   MODE_1R1T = 0,
+  parameter   CLK_EDGE_SEL = 0,
   parameter   CMOS_OR_LVDS_N = 0,
   parameter   PPS_RECEIVER_ENABLE = 0,
   parameter   INIT_DELAY = 0,
@@ -336,6 +337,7 @@ module axi_ad9361_tx #(
   up_dac_common #(
     .ID (ID),
     .CONFIG (CONFIG),
+    .CLK_EDGE_SEL (CLK_EDGE_SEL),
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (USERPORTS_DISABLE))
   i_up_dac_common (
