@@ -81,8 +81,6 @@ clean:
 	make -C util_gmii_to_rgmii clean
 	make -C util_i2c_mixer clean
 	make -C util_mfifo clean
-	make -C util_pmod_adc clean
-	make -C util_pmod_fmeter clean
 	make -C util_pulse_gen clean
 	make -C util_rfifo clean
 	make -C util_sigma_delta_spi clean
@@ -174,8 +172,6 @@ lib:
 	make -C util_gmii_to_rgmii
 	make -C util_i2c_mixer
 	make -C util_mfifo
-	make -C util_pmod_adc
-	make -C util_pmod_fmeter
 	make -C util_pulse_gen
 	make -C util_rfifo
 	make -C util_sigma_delta_spi
