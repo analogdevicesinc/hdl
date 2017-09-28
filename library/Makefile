@@ -81,8 +81,6 @@ clean:
 	$(MAKE) -C util_gmii_to_rgmii clean
 	$(MAKE) -C util_i2c_mixer clean
 	$(MAKE) -C util_mfifo clean
-	$(MAKE) -C util_pmod_adc clean
-	$(MAKE) -C util_pmod_fmeter clean
 	$(MAKE) -C util_pulse_gen clean
 	$(MAKE) -C util_rfifo clean
 	$(MAKE) -C util_sigma_delta_spi clean
@@ -174,8 +172,6 @@ lib:
 	$(MAKE) -C util_gmii_to_rgmii
 	$(MAKE) -C util_i2c_mixer
 	$(MAKE) -C util_mfifo
-	$(MAKE) -C util_pmod_adc
-	$(MAKE) -C util_pmod_fmeter
 	$(MAKE) -C util_pulse_gen
 	$(MAKE) -C util_rfifo
 	$(MAKE) -C util_sigma_delta_spi

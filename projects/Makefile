@@ -24,8 +24,6 @@ all:
 	-$(MAKE) -C adrv9379 all
 	-$(MAKE) -C adv7511 all
 	-$(MAKE) -C arradio all
-	-$(MAKE) -C cftl_cip all
-	-$(MAKE) -C cftl_std all
 	-$(MAKE) -C cn0363 all
 	-$(MAKE) -C daq1 all
 	-$(MAKE) -C daq2 all
@@ -65,8 +63,6 @@ clean:
 	$(MAKE) -C adrv9379 clean
 	$(MAKE) -C adv7511 clean
 	$(MAKE) -C arradio clean
-	$(MAKE) -C cftl_cip clean
-	$(MAKE) -C cftl_std clean
 	$(MAKE) -C cn0363 clean
 	$(MAKE) -C daq1 clean
 	$(MAKE) -C daq2 clean
@@ -106,8 +102,6 @@ clean-all:
 	$(MAKE) -C adrv9379 clean-all
 	$(MAKE) -C adv7511 clean-all
 	$(MAKE) -C arradio clean-all
-	$(MAKE) -C cftl_cip clean-all
-	$(MAKE) -C cftl_std clean-all
 	$(MAKE) -C cn0363 clean-all
 	$(MAKE) -C daq1 clean-all
 	$(MAKE) -C daq2 clean-all
