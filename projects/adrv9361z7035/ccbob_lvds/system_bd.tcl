@@ -5,4 +5,5 @@ source ../common/ccbob_bd.tcl
 cfg_ad9361_interface LVDS
 
 ad_ip_parameter axi_ad9361 CONFIG.ADC_INIT_DELAY 29
+ad_ip_parameter axi_ad9361 CONFIG.DAC_CLK_EDGE_SEL 1
 
