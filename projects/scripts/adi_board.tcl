@@ -7,11 +7,7 @@ variable sys_hp1_interconnect_index
 variable sys_hp2_interconnect_index
 variable sys_hp3_interconnect_index
 variable sys_mem_interconnect_index
-
-variable xcvr_index
-variable xcvr_tx_index
-variable xcvr_rx_index
-variable xcvr_instance
+variable xcvr_parameter_list
 
 ###################################################################################################
 ###################################################################################################
@@ -22,11 +18,7 @@ set sys_hp1_interconnect_index -1
 set sys_hp2_interconnect_index -1
 set sys_hp3_interconnect_index -1
 set sys_mem_interconnect_index -1
-
-set xcvr_index -1
-set xcvr_tx_index 0
-set xcvr_rx_index 0
-set xcvr_instance NONE
+set xcvr_parameter_list {}
 
 ###################################################################################################
 ###################################################################################################
@@ -142,7 +134,7 @@ proc ad_disconnect {p_name_1 p_name_2} {
   }
 }
 
-proc ad_reconct {p_name_1 p_name_2} {
+proc ad_reconnect {p_name_1 p_name_2} {
 
   set m_name_1 [ad_connect_type $p_name_1]
   set m_name_2 [ad_connect_type $p_name_2]
@@ -167,143 +159,75 @@ proc ad_reconct {p_name_1 p_name_2} {
 ###################################################################################################
 ###################################################################################################
 
-#
-# lane_map maps the logical lane $n onto the physical lane $lane_map[$n]. If no
-# lane map is provided logical lane $n is mapped onto physical lane $n.
-#
-proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}}} {
-  
-  global xcvr_index
-  global xcvr_tx_index
-  global xcvr_rx_index
-  global xcvr_instance
+proc ad_xcvr_parameter {i_type i_value} {
 
-  set no_of_lanes [get_property CONFIG.NUM_OF_LANES [get_bd_cells $a_xcvr]]
-  set qpll_enable [get_property CONFIG.QPLL_ENABLE [get_bd_cells $a_xcvr]]
-  set tx_or_rx_n [get_property CONFIG.TX_OR_RX_N [get_bd_cells $a_xcvr]]
+  global xcvr_parameter_list
 
-#  set jesd204_vlnv [get_property VLNV $a_jesd]
-#
-#  if {[string first "analog.com" $jesd204_vlnv] == 0} {
-#    set jesd204_type 0
-#  } elseif {[string first "xilinx.com" $jesd204_vlnv] == 0} {
-#    set jesd204_type 1
-#  } else {
-#    return -code 1 "Unsupported JESD204 core type."
-#  }
-
-  set jesd204_bd_type [get_property TYPE [get_bd_cells $a_jesd]]
-
-  if {$jesd204_bd_type == "hier"} {
-    set jesd204_type 0
-  } else {
-    set jesd204_type 1
+  if {$i_type eq "number_of_lanes"} {
+    lappend xcvr_parameter_list CONFIG.C_LANES $i_value
+    return
+  }
+  if {$i_type eq "rx_ref_clk_frequency"} {
+    lappend xcvr_parameter_list CONFIG.RX_GT_REFCLK_FREQ $i_value
+    return
+  }
+  if {$i_type eq "rx_lane_rate"} {
+    lappend xcvr_parameter_list CONFIG.RX_GT_Line_Rate $i_value
+    return
+  }
+  if {$i_type eq "rx_pll_type"} {
+    lappend xcvr_parameter_list CONFIG.RX_PLL_SELECTION $i_value
+    return
+  }
+  if {$i_type eq "tx_ref_clk_frequency"} {
+    lappend xcvr_parameter_list CONFIG.GT_REFCLK_FREQ $i_value
+    return
+  }
+  if {$i_type eq "tx_lane_rate"} {
+    lappend xcvr_parameter_list CONFIG.GT_Line_Rate $i_value
+    return
+  }
+  if {$i_type eq "tx_pll_type"} {
+    lappend xcvr_parameter_list CONFIG.C_PLL_SELECTION $i_value
+    return
   }
 
-  if {$xcvr_instance ne $u_xcvr} {
-    set xcvr_index [expr ($xcvr_index + 1)]
-    set xcvr_tx_index 0
-    set xcvr_rx_index 0
-    set xcvr_instance $u_xcvr
-  }
-
-  set txrx "rx"
-  set data_dir "I"
-  set ctrl_dir "O"
-  set index $xcvr_rx_index
-
-  if {$tx_or_rx_n == 1} {
-
-    set txrx "tx"
-    set data_dir "O"
-    set ctrl_dir "I"
-    set index $xcvr_tx_index
-  }
-
-  set m_sysref ${txrx}_sysref_${index}
-  set m_sync ${txrx}_sync_${index}
-  set m_data ${txrx}_data
-
-  if {$xcvr_index >= 1} {
-
-    set m_sysref ${txrx}_sysref_${xcvr_index}_${index}
-    set m_sync ${txrx}_sync_${xcvr_index}_${index}
-    set m_data ${txrx}_data_${xcvr_index}
-  }
-
-  create_bd_port -dir I $m_sysref
-  create_bd_port -dir ${ctrl_dir} $m_sync
-  ad_ip_instance proc_sys_reset ${a_jesd}_rstgen
-
-  for {set n 0} {$n < $no_of_lanes} {incr n} {
-
-    set m [expr ($n + $index)]
-
-    if {$tx_or_rx_n == 0} {
-      ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${m}
-      if {$jesd204_type == 0} {
-        ad_connect  ${a_jesd}/phy_en_char_align ${u_xcvr}/${txrx}_calign_${m}
-      } else {
-        ad_connect  ${a_jesd}/rxencommaalign_out ${u_xcvr}/${txrx}_calign_${m}
-      }
-    }
-
-    if {(($m%4) == 0) && ($qpll_enable == 1)} {
-      ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${m}
-    }
-
-    if {$lane_map != {}} {
-      set phys_lane [expr [lindex $lane_map $n] + $index]
-    } else {
-      set phys_lane $m
-    }
-
-    ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${m}
-    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${u_xcvr}/${txrx}_clk_${m}
-    if {$jesd204_type == 0} {
-      ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/${txrx}_phy${n}
-    } else {
-      ad_connect  ${u_xcvr}/${txrx}_${phys_lane} ${a_jesd}/gt${n}_${txrx}
-    }
-
-    create_bd_port -dir ${data_dir} ${m_data}_${m}_p
-    create_bd_port -dir ${data_dir} ${m_data}_${m}_n
-    ad_connect  ${u_xcvr}/${txrx}_${m}_p ${m_data}_${m}_p
-    ad_connect  ${u_xcvr}/${txrx}_${m}_n ${m_data}_${m}_n
-  }
-
-  if {$jesd204_type == 0} {
-    ad_connect  ${a_jesd}/sysref $m_sysref
-    ad_connect  ${a_jesd}/sync $m_sync
-    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/device_clk
-#    if {$tx_or_rx_n == 0} {
-#      ad_connect  ${a_xcvr}/up_status ${a_jesd}/phy_ready
-#    }
-  } else {
-    ad_connect  ${a_jesd}/${txrx}_sysref $m_sysref
-    ad_connect  ${a_jesd}/${txrx}_sync $m_sync
-    ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}/${txrx}_core_clk
-    ad_connect  ${a_xcvr}/up_status ${a_jesd}/${txrx}_reset_done
-    ad_connect  ${a_jesd}_rstgen/peripheral_reset ${a_jesd}/${txrx}_reset
-  }
-
-  ad_connect  ${u_xcvr}/${txrx}_out_clk_${index} ${a_jesd}_rstgen/slowest_sync_clk
-  ad_connect  sys_cpu_resetn ${a_jesd}_rstgen/ext_reset_in
-
-  if {$tx_or_rx_n == 0} {
-    set xcvr_rx_index [expr ($xcvr_rx_index + $no_of_lanes)]
-  }
-
-  if {$tx_or_rx_n == 1} {
-    set xcvr_tx_index [expr ($xcvr_tx_index + $no_of_lanes)]
-  }
+  lappend xcvr_parameter_list $i_type $i_value
 }
 
-proc ad_xcvrpll {m_src m_dst} {
+proc ad_xcvr_instance {i_name} {
 
-  foreach p_dst [get_bd_pins -quiet $m_dst] {
-    connect_bd_net [ad_connect_type $m_src] $p_dst
+  global xcvr_parameter_list
+
+  ad_ip_instance jesd204_phy $i_name
+  set xcvr_type [get_property CONFIG.Transceiver [get_bd_cells $i_name]]
+
+  ad_ip_parameter $i_name CONFIG.Config_Type 1
+
+  if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
+    ad_ip_parameter $i_name CONFIG.Min_Line_Rate 4
+    ad_ip_parameter $i_name CONFIG.Max_Line_Rate 16
+  } else {
+    ad_ip_parameter $i_name CONFIG.Min_Line_Rate 1
+    ad_ip_parameter $i_name CONFIG.Max_Line_Rate 12
   }
+
+  set_property -dict $xcvr_parameter_list [get_bd_cells $i_name]
+  set xcvr_parameter_list {}
+
+  if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
+    create_bd_port -dir I -type clk ${i_name}_qpll0_ref_clk
+    create_bd_port -dir I -type clk ${i_name}_qpll1_ref_clk
+    ad_connect ${i_name}_qpll0_ref_clk $i_name/qpll0_refclk
+    ad_connect ${i_name}_qpll1_ref_clk $i_name/qpll1_refclk
+  } else {
+    create_bd_port -dir I -type clk ${i_name}_qpll_ref_clk
+    ad_connect ${i_name}_qpll_ref_clk $i_name/qpll_refclk
+  }
+
+  create_bd_port -dir I -type clk ${i_name}_cpll_ref_clk
+  ad_connect ${i_name}_cpll_ref_clk $i_name/cpll_refclk
+  ad_connect sys_cpu_clk $i_name/drpclk
 }
 
 ###################################################################################################
