@@ -333,9 +333,6 @@ ad_alt_intf signal  s_axis_ready      output  1                       ready
 ad_alt_intf signal  s_axis_xfer_req   output  1                       xfer_req
 ad_alt_intf signal  s_axis_user       input   1                       user
 
-set_port_property s_axis_user termination true
-set_port_property s_axis_user termination_value 1
-
 # fifo destination/source
 
 ad_alt_intf clock   fifo_rd_clk       input   1                       clk
@@ -386,6 +383,12 @@ proc axi_dmac_elaborate {} {
 	  if_s_axis_xfer_req if_s_axis_user
   }
 
+  if {[get_parameter_value DMA_TYPE_SRC] == 1 &&
+      [get_parameter_value SYNC_TRANSFER_START] == 0} {
+    set_port_property s_axis_user termination true
+    set_port_property s_axis_user termination_value 1
+  }
+
   # fifo destination/source
 
   if {[get_parameter_value DMA_TYPE_DEST] != 2} {
@@ -398,6 +401,12 @@ proc axi_dmac_elaborate {} {
     lappend disabled_intfs \
       if_fifo_wr_clk if_fifo_wr_en if_fifo_wr_din if_fifo_wr_overflow \
       if_fifo_wr_sync if_fifo_wr_xfer_req
+  }
+
+  if {[get_parameter_value DMA_TYPE_SRC] == 2 &&
+      [get_parameter_value SYNC_TRANSFER_START] == 0} {
+    set_port_property fifo_wr_sync termination true
+    set_port_property fifo_wr_sync termination_value 1
   }
 
   foreach intf $disabled_intfs {
