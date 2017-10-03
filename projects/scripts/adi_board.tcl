@@ -8,6 +8,12 @@ variable sys_hp2_interconnect_index
 variable sys_hp3_interconnect_index
 variable sys_mem_interconnect_index
 variable xcvr_parameter_list
+variable xcvr_rx_bufg_enable
+variable xcvr_rx_ref_clk
+variable xcvr_rx_lane_rate
+variable xcvr_tx_bufg_enable
+variable xcvr_tx_ref_clk
+variable xcvr_tx_lane_rate
 
 ###################################################################################################
 ###################################################################################################
@@ -19,6 +25,12 @@ set sys_hp2_interconnect_index -1
 set sys_hp3_interconnect_index -1
 set sys_mem_interconnect_index -1
 set xcvr_parameter_list {}
+set xcvr_rx_bufg_enable 1
+set xcvr_rx_ref_clk 0
+set xcvr_rx_lane_rate 0
+set xcvr_tx_bufg_enable 1
+set xcvr_tx_ref_clk 0
+set xcvr_tx_lane_rate 0
 
 ###################################################################################################
 ###################################################################################################
@@ -162,33 +174,49 @@ proc ad_reconnect {p_name_1 p_name_2} {
 proc ad_xcvr_parameter {i_type i_value} {
 
   global xcvr_parameter_list
+  global xcvr_rx_bufg_enable
+  global xcvr_rx_ref_clk
+  global xcvr_rx_lane_rate
+  global xcvr_tx_bufg_enable
+  global xcvr_tx_ref_clk
+  global xcvr_tx_lane_rate
 
   if {$i_type eq "number_of_lanes"} {
     lappend xcvr_parameter_list CONFIG.C_LANES $i_value
     return
   }
+
+  if {$i_type eq "rx_bufg_enable"} {
+    set xcvr_rx_bufg_enable $i_value
+    return
+  }
+
   if {$i_type eq "rx_ref_clk_frequency"} {
-    lappend xcvr_parameter_list CONFIG.RX_GT_REFCLK_FREQ $i_value
+    set i_value [regsub -all {[^0-9\.]} $i_value ""]
+    set xcvr_rx_ref_clk $i_value
     return
   }
+
   if {$i_type eq "rx_lane_rate"} {
-    lappend xcvr_parameter_list CONFIG.RX_GT_Line_Rate $i_value
+    set i_value [regsub -all {[^0-9\.]} $i_value ""]
+    set xcvr_rx_lane_rate $i_value
     return
   }
-  if {$i_type eq "rx_pll_type"} {
-    lappend xcvr_parameter_list CONFIG.RX_PLL_SELECTION $i_value
+
+  if {$i_type eq "tx_bufg_enable"} {
+    set xcvr_tx_bufg_enable $i_value
     return
   }
+
   if {$i_type eq "tx_ref_clk_frequency"} {
-    lappend xcvr_parameter_list CONFIG.GT_REFCLK_FREQ $i_value
+    set i_value [regsub -all {[^0-9\.]} $i_value ""]
+    set xcvr_tx_ref_clk $i_value
     return
   }
+
   if {$i_type eq "tx_lane_rate"} {
-    lappend xcvr_parameter_list CONFIG.GT_Line_Rate $i_value
-    return
-  }
-  if {$i_type eq "tx_pll_type"} {
-    lappend xcvr_parameter_list CONFIG.C_PLL_SELECTION $i_value
+    set i_value [regsub -all {[^0-9\.]} $i_value ""]
+    set xcvr_tx_lane_rate $i_value
     return
   }
 
@@ -198,6 +226,12 @@ proc ad_xcvr_parameter {i_type i_value} {
 proc ad_xcvr_instance {i_name} {
 
   global xcvr_parameter_list
+  global xcvr_rx_bufg_enable
+  global xcvr_rx_ref_clk
+  global xcvr_rx_lane_rate
+  global xcvr_tx_bufg_enable
+  global xcvr_tx_ref_clk
+  global xcvr_tx_lane_rate
 
   ad_ip_instance jesd204_phy $i_name
   set xcvr_type [get_property CONFIG.Transceiver [get_bd_cells $i_name]]
@@ -211,6 +245,34 @@ proc ad_xcvr_instance {i_name} {
     ad_ip_parameter $i_name CONFIG.Min_Line_Rate 1
     ad_ip_parameter $i_name CONFIG.Max_Line_Rate 12
   }
+
+  set xcvr_rx_pll 3
+  set xcvr_rx_lane_rate [regsub {\.0*$} $xcvr_rx_lane_rate ""]
+  if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
+    set xcvr_rx_pll 1
+    set xcvr_rx_ref_clk [regsub {\.0*$} $xcvr_rx_ref_clk ""]
+  }
+  if {$xcvr_rx_lane_rate < 6.25} {
+    set xcvr_rx_pll 0
+  }
+
+  lappend xcvr_parameter_list CONFIG.RX_GT_REFCLK_FREQ $xcvr_rx_ref_clk
+  lappend xcvr_parameter_list CONFIG.RX_GT_Line_Rate $xcvr_rx_lane_rate
+  lappend xcvr_parameter_list CONFIG.RX_PLL_SELECTION $xcvr_rx_pll
+
+  set xcvr_tx_pll 3
+  set xcvr_tx_lane_rate [regsub {\.0*$} $xcvr_rx_lane_rate ""]
+  if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
+    set xcvr_tx_pll 1
+    set xcvr_tx_ref_clk [regsub {\.0*$} $xcvr_tx_ref_clk ""]
+  }
+  if {$xcvr_tx_lane_rate < 6.25} {
+    set xcvr_tx_pll 0
+  }
+
+  lappend xcvr_parameter_list CONFIG.GT_REFCLK_FREQ $xcvr_tx_ref_clk
+  lappend xcvr_parameter_list CONFIG.GT_Line_Rate $xcvr_tx_lane_rate
+  lappend xcvr_parameter_list CONFIG.C_PLL_SELECTION $xcvr_tx_pll
 
   set_property -dict $xcvr_parameter_list [get_bd_cells $i_name]
   set xcvr_parameter_list {}
@@ -228,6 +290,63 @@ proc ad_xcvr_instance {i_name} {
   create_bd_port -dir I -type clk ${i_name}_cpll_ref_clk
   ad_connect ${i_name}_cpll_ref_clk $i_name/cpll_refclk
   ad_connect sys_cpu_clk $i_name/drpclk
+
+  ad_connect sys_cpu_reset $i_name/rx_sys_reset
+  ad_connect sys_cpu_reset $i_name/rx_reset_gt
+  if {$xcvr_rx_bufg_enable == 1} {
+    ad_connect ${i_name}_rx_core_clk $i_name/rx_core_clk
+    if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
+      ad_ip_instance util_ds_buf ${i_name}_rx_bufg
+      ad_ip_parameter ${i_name}_rx_bufg CONFIG.C_BUF_TYPE {BUFG_GT}
+      ad_connect ${i_name}_rx_core_clk ${i_name}_rx_bufg/BUFG_GT_O
+      ad_connect $i_name/rxoutclk ${i_name}_rx_bufg/BUFG_GT_I
+      ad_connect ${i_name}_rx_bufg/BUFG_GT_CE VCC
+      ad_connect ${i_name}_rx_bufg/BUFG_GT_CLR GND
+      ad_connect ${i_name}_rx_bufg/BUFG_GT_DIV GND
+      ad_connect ${i_name}_rx_bufg/BUFG_GT_CEMASK GND
+      ad_connect ${i_name}_rx_bufg/BUFG_GT_CLRMASK GND
+    } else {
+      ad_ip_instance util_ds_buf ${i_name}_rx_bufg
+      ad_ip_parameter ${i_name}_rx_bufg CONFIG.C_BUF_TYPE {BUFG}
+      ad_connect ${i_name}_rx_core_clk ${i_name}_rx_bufg/BUFG_O
+      ad_connect $i_name/rxoutclk ${i_name}_rx_bufg/BUFG_I
+    }
+  }
+
+  ad_connect sys_cpu_reset $i_name/tx_sys_reset
+  ad_connect sys_cpu_reset $i_name/tx_reset_gt
+  if {$xcvr_tx_bufg_enable == 1} {
+    ad_connect ${i_name}_tx_core_clk $i_name/tx_core_clk
+    if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
+      ad_ip_instance util_ds_buf ${i_name}_tx_bufg
+      ad_ip_parameter ${i_name}_tx_bufg CONFIG.C_BUF_TYPE {BUFG_GT}
+      ad_connect ${i_name}_tx_core_clk ${i_name}_tx_bufg/BUFG_GT_O
+      ad_connect $i_name/txoutclk ${i_name}_tx_bufg/BUFG_GT_I
+      ad_connect ${i_name}_tx_bufg/BUFG_GT_CE VCC
+      ad_connect ${i_name}_tx_bufg/BUFG_GT_CLR GND
+      ad_connect ${i_name}_tx_bufg/BUFG_GT_DIV GND
+      ad_connect ${i_name}_tx_bufg/BUFG_GT_CEMASK GND
+      ad_connect ${i_name}_tx_bufg/BUFG_GT_CLRMASK GND
+    } else {
+      ad_ip_instance util_ds_buf ${i_name}_tx_bufg
+      ad_ip_parameter ${i_name}_tx_bufg CONFIG.C_BUF_TYPE {BUFG}
+      ad_connect ${i_name}_tx_core_clk ${i_name}_tx_bufg/BUFG_O
+      ad_connect $i_name/txoutclk ${i_name}_tx_bufg/BUFG_I
+    }
+  }
+
+  set xcvr_no_of_lanes [get_property CONFIG.C_LANES [get_bd_cells $i_name]]
+  set xcvr_no_of_lanes [expr $xcvr_no_of_lanes - 1]
+
+  create_bd_port -dir I -from $xcvr_no_of_lanes -to 0 ${i_name}_rx_data_p
+  create_bd_port -dir I -from $xcvr_no_of_lanes -to 0 ${i_name}_rx_data_n
+  ad_connect ${i_name}_rx_data_p ${i_name}/rxp_in
+  ad_connect ${i_name}_rx_data_n ${i_name}/rxn_in
+
+  create_bd_port -dir O -from $xcvr_no_of_lanes -to 0 ${i_name}_tx_data_p
+  create_bd_port -dir O -from $xcvr_no_of_lanes -to 0 ${i_name}_tx_data_n
+  ad_connect ${i_name}/txp_out ${i_name}_tx_data_p
+  ad_connect ${i_name}/txn_out ${i_name}_tx_data_n
 }
 
 ###################################################################################################
