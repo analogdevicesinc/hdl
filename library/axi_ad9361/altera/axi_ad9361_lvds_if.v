@@ -181,16 +181,11 @@ module axi_ad9361_lvds_if #(
   localparam ARRIA10 = 0;
   localparam CYCLONE5 = 1;
 
-  // tdd support-
+  // unused interface signals
 
-  assign enable = up_enable;
-  assign txnrx = up_txnrx;
-
-  // defaults
-
-  assign delay_locked = 1'd1;
-
-  // receive data path interface
+  assign up_adc_drdata = 35'b0;
+  assign up_dac_drdata = 50'b0;
+  assign delay_locked = 1'b1;
 
   // drp locked must be on up-clock
 
@@ -420,11 +415,8 @@ module axi_ad9361_lvds_if #(
       enable_int <= tdd_enable;
       txnrx_int <= tdd_txnrx;
     end else begin
-      tx_frame <= 4'b0000;
-      tx_data_0 <= tx_data[35:30];
-      tx_data_1 <= tx_data[47:42];
-      tx_data_2 <= tx_data[29:24];
-      tx_data_3 <= tx_data[41:36];
+      enable_int <= enable_up;
+      txnrx_int <= txnrx_up;
     end
   end
 
