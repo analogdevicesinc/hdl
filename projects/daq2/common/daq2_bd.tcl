@@ -4,37 +4,11 @@ source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 # shared transceiver core
 
 ad_xcvr_parameter number_of_lanes 4
-ad_xcvr_parameter rx_ref_clk_frequency 500.000
-ad_xcvr_parameter rx_lane_rate 10
-ad_xcvr_parameter rx_pll_type 3
-ad_xcvr_parameter tx_ref_clk_frequency 500.000
-ad_xcvr_parameter tx_lane_rate 10
-ad_xcvr_parameter tx_pll_type 3
+ad_xcvr_parameter rx_lane_rate {10.0 Gbps}
+ad_xcvr_parameter tx_lane_rate {10.0 Gbps}
+ad_xcvr_parameter rx_ref_clk_frequency {500.000 MHz}
+ad_xcvr_parameter tx_ref_clk_frequency {500.000 MHz}
 ad_xcvr_instance axi_daq2_xcvr
-
-create_bd_port -dir I -from 3 -to 0 rx_data_p
-create_bd_port -dir I -from 3 -to 0 rx_data_n
-ad_connect rx_data_p axi_daq2_xcvr/rxp_in
-ad_connect rx_data_n axi_daq2_xcvr/rxn_in
-
-create_bd_port -dir O -from 3 -to 0 tx_data_p
-create_bd_port -dir O -from 3 -to 0 tx_data_n
-ad_connect axi_daq2_xcvr/txp_out tx_data_p
-ad_connect axi_daq2_xcvr/txn_out tx_data_n
-
-ad_ip_instance util_ds_buf util_ad9680_clk
-ad_ip_parameter util_ad9680_clk CONFIG.C_BUF_TYPE {BUFG}
-ad_connect sys_cpu_reset axi_daq2_xcvr/rx_sys_reset
-ad_connect sys_cpu_reset axi_daq2_xcvr/rx_reset_gt
-ad_connect axi_daq2_xcvr/rxoutclk util_ad9680_clk/BUFG_I
-ad_connect util_ad9680_clk/BUFG_O axi_daq2_xcvr/rx_core_clk
-
-ad_ip_instance util_ds_buf util_ad9144_clk
-ad_ip_parameter util_ad9144_clk CONFIG.C_BUF_TYPE {BUFG}
-ad_connect sys_cpu_reset axi_daq2_xcvr/tx_sys_reset
-ad_connect sys_cpu_reset axi_daq2_xcvr/tx_reset_gt
-ad_connect axi_daq2_xcvr/txoutclk util_ad9144_clk/BUFG_I
-ad_connect util_ad9144_clk/BUFG_O axi_daq2_xcvr/tx_core_clk
 
 # dac peripherals (jesd)
 
@@ -43,17 +17,17 @@ create_bd_port -dir I tx_sysref
 create_bd_port -dir I tx_sync
 ad_connect tx_sysref axi_ad9144_jesd/sysref
 ad_connect tx_sync axi_ad9144_jesd/sync
-ad_connect util_ad9144_clk/BUFG_O axi_ad9144_jesd/device_clk
+ad_connect axi_daq2_xcvr_tx_core_clk axi_ad9144_jesd/device_clk
 ad_connect axi_ad9144_jesd/tx_phy0 axi_daq2_xcvr/gt0_tx
-ad_connect axi_ad9144_jesd/tx_phy1 axi_daq2_xcvr/gt2_tx
-ad_connect axi_ad9144_jesd/tx_phy2 axi_daq2_xcvr/gt3_tx
-ad_connect axi_ad9144_jesd/tx_phy3 axi_daq2_xcvr/gt1_tx
+ad_connect axi_ad9144_jesd/tx_phy1 axi_daq2_xcvr/gt3_tx
+ad_connect axi_ad9144_jesd/tx_phy2 axi_daq2_xcvr/gt1_tx
+ad_connect axi_ad9144_jesd/tx_phy3 axi_daq2_xcvr/gt2_tx
 
 # dac peripherals (ad9144 core)
 
 ad_ip_instance axi_ad9144 axi_ad9144_core
 ad_ip_parameter axi_ad9144_core CONFIG.QUAD_OR_DUAL_N 0
-ad_connect util_ad9144_clk/BUFG_O axi_ad9144_core/tx_clk
+ad_connect axi_daq2_xcvr_tx_core_clk axi_ad9144_core/tx_clk
 ad_connect axi_ad9144_core/tx_data axi_ad9144_jesd/tx_data_tdata
 ad_connect axi_ad9144_core/dac_ddata_2 GND
 ad_connect axi_ad9144_core/dac_ddata_3 GND
@@ -63,7 +37,7 @@ ad_connect axi_ad9144_core/dac_ddata_3 GND
 ad_ip_instance util_upack axi_ad9144_upack
 ad_ip_parameter axi_ad9144_upack CONFIG.CHANNEL_DATA_WIDTH 64
 ad_ip_parameter axi_ad9144_upack CONFIG.NUM_OF_CHANNELS 2
-ad_connect util_ad9144_clk/BUFG_O axi_ad9144_upack/dac_clk
+ad_connect axi_daq2_xcvr_tx_core_clk axi_ad9144_upack/dac_clk
 ad_connect axi_ad9144_core/dac_enable_0 axi_ad9144_upack/dac_enable_0
 ad_connect axi_ad9144_core/dac_valid_0 axi_ad9144_upack/dac_valid_0
 ad_connect axi_ad9144_upack/dac_data_0 axi_ad9144_core/dac_ddata_0
@@ -73,7 +47,7 @@ ad_connect axi_ad9144_upack/dac_data_1 axi_ad9144_core/dac_ddata_1
 
 # dac peripherals (fifo, see system_bd.tcl)
 
-ad_connect util_ad9144_clk/BUFG_O axi_ad9144_fifo/dac_clk
+ad_connect axi_daq2_xcvr_tx_core_clk axi_ad9144_fifo/dac_clk
 ad_connect axi_ad9144_upack/dac_valid axi_ad9144_fifo/dac_valid
 ad_connect axi_ad9144_upack/dac_data axi_ad9144_fifo/dac_data
 ad_connect axi_ad9144_fifo/dac_rst GND
@@ -109,17 +83,17 @@ create_bd_port -dir I rx_sysref
 create_bd_port -dir O rx_sync
 ad_connect rx_sysref axi_ad9680_jesd/sysref
 ad_connect axi_ad9680_jesd/sync rx_sync
-ad_connect util_ad9680_clk/BUFG_O axi_ad9680_jesd/device_clk
+ad_connect axi_daq2_xcvr_rx_core_clk axi_ad9680_jesd/device_clk
 ad_connect axi_daq2_xcvr/gt0_rx axi_ad9680_jesd/rx_phy0
-ad_connect axi_daq2_xcvr/gt1_rx axi_ad9680_jesd/rx_phy1
-ad_connect axi_daq2_xcvr/gt2_rx axi_ad9680_jesd/rx_phy2
-ad_connect axi_daq2_xcvr/gt3_rx axi_ad9680_jesd/rx_phy3
+ad_connect axi_daq2_xcvr/gt1_rx axi_ad9680_jesd/rx_phy3
+ad_connect axi_daq2_xcvr/gt2_rx axi_ad9680_jesd/rx_phy1
+ad_connect axi_daq2_xcvr/gt3_rx axi_ad9680_jesd/rx_phy2
 ad_connect axi_ad9680_jesd/phy_en_char_align axi_daq2_xcvr/rxencommaalign
 
 # adc peripherals (ad9680 core)
 
 ad_ip_instance axi_ad9680 axi_ad9680_core
-ad_connect util_ad9680_clk/BUFG_O axi_ad9680_core/rx_clk
+ad_connect axi_daq2_xcvr_rx_core_clk axi_ad9680_core/rx_clk
 ad_connect axi_ad9680_jesd/rx_sof axi_ad9680_core/rx_sof
 ad_connect axi_ad9680_jesd/rx_data_tdata axi_ad9680_core/rx_data
 
@@ -128,7 +102,7 @@ ad_connect axi_ad9680_jesd/rx_data_tdata axi_ad9680_core/rx_data
 ad_ip_instance util_cpack axi_ad9680_cpack
 ad_ip_parameter axi_ad9680_cpack CONFIG.CHANNEL_DATA_WIDTH 64
 ad_ip_parameter axi_ad9680_cpack CONFIG.NUM_OF_CHANNELS 2
-ad_connect util_ad9680_clk/BUFG_O axi_ad9680_cpack/adc_clk
+ad_connect axi_daq2_xcvr_rx_core_clk axi_ad9680_cpack/adc_clk
 ad_connect axi_ad9680_core/adc_enable_0 axi_ad9680_cpack/adc_enable_0
 ad_connect axi_ad9680_core/adc_valid_0 axi_ad9680_cpack/adc_valid_0
 ad_connect axi_ad9680_core/adc_data_0 axi_ad9680_cpack/adc_data_0
@@ -139,7 +113,7 @@ ad_connect axi_ad9680_cpack/adc_rst GND
 
 # adc peripherals (fifo, system_bd.tcl)
 
-ad_connect util_ad9680_clk/BUFG_O axi_ad9680_fifo/adc_clk
+ad_connect axi_daq2_xcvr_rx_core_clk axi_ad9680_fifo/adc_clk
 ad_connect axi_ad9680_cpack/adc_valid axi_ad9680_fifo/adc_wr
 ad_connect axi_ad9680_cpack/adc_data axi_ad9680_fifo/adc_wdata
 ad_connect sys_cpu_clk axi_ad9680_fifo/dma_clk
