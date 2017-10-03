@@ -250,6 +250,10 @@ module system_top (
   system_wrapper i_system_wrapper (
     .axi_daq2_xcvr_cpll_ref_clk (rx_ref_clk),
     .axi_daq2_xcvr_qpll_ref_clk (tx_ref_clk),
+    .axi_daq2_xcvr_rx_data_n (rx_data_n),
+    .axi_daq2_xcvr_rx_data_p (rx_data_p),
+    .axi_daq2_xcvr_tx_data_n (tx_data_n),
+    .axi_daq2_xcvr_tx_data_p (tx_data_p),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -306,8 +310,6 @@ module system_top (
     .ps_intr_07 (1'b0),
     .ps_intr_08 (1'b0),
     .ps_intr_09 (1'b0),
-    .rx_data_n (rx_data_n),
-    .rx_data_p (rx_data_p),
     .rx_sync (rx_sync),
     .rx_sysref (rx_sysref),
     .spdif (spdif),
@@ -332,8 +334,6 @@ module system_top (
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
-    .tx_data_n (tx_data_n),
-    .tx_data_p (tx_data_p),
     .tx_sync (tx_sync),
     .tx_sysref (tx_sysref));
 
