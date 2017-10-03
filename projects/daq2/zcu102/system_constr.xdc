@@ -36,8 +36,8 @@ set_property  -dict {PACKAGE_PIN  U4  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [g
 
 create_clock -name tx_ref_clk   -period  2.00 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  2.00 [get_ports rx_ref_clk_p]
-create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_daq2_xcvr_rx_bufg/BUFG_GT_O[0]]
-create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_daq2_xcvr_tx_bufg/BUFG_GT_O[0]]
+create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_daq2_xcvr_tx_bufg/BUFG_GT_O[0]]
+create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_daq2_xcvr_rx_bufg/BUFG_GT_O[0]]
 
 # reference clocks
 
