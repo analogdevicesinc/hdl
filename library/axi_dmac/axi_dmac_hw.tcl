@@ -356,8 +356,6 @@ proc axi_dmac_elaborate {} {
   set fifo_size [get_parameter_value FIFO_SIZE]
   set disabled_intfs {}
 
-  set fifo_size [get_parameter_value FIFO_SIZE]
-
   # axi4 destination/source
 
   if {[get_parameter_value DMA_TYPE_DEST] == 0} {
