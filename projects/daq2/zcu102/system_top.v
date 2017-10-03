@@ -93,12 +93,6 @@ module system_top (
   wire            tx_sysref;
   wire            tx_sync;
 
-  // spi
-
-  assign spi_csn_adc = spi_csn[2];
-  assign spi_csn_dac = spi_csn[1];
-  assign spi_csn_clk = spi_csn[0];
-
   // instantiations
 
   IBUFDS_GTE4 i_ibufds_rx_ref_clk (
@@ -135,6 +129,17 @@ module system_top (
     .IB (tx_sync_n),
     .O (tx_sync));
 
+  IBUFDS i_ibufds_trig (
+    .I (trig_p),
+    .IB (trig_n),
+    .O (trig));
+
+  // spi
+
+  assign spi_csn_adc = spi_csn[2];
+  assign spi_csn_dac = spi_csn[1];
+  assign spi_csn_clk = spi_csn[0];
+
   daq2_spi i_spi (
     .spi_csn (spi_csn),
     .spi_clk (spi_clk),
@@ -143,10 +148,6 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
-  IBUFDS i_ibufds_trig (
-    .I (trig_p),
-    .IB (trig_n),
-    .O (trig));
 
   assign adc_pd = gpio_o[42];
   assign dac_txen = gpio_o[41];
@@ -166,6 +167,13 @@ module system_top (
   assign gpio_i[ 7: 0] = gpio_o[7:0];
 
   system_wrapper i_system_wrapper (
+    .axi_daq2_xcvr_cpll_ref_clk (rx_ref_clk),
+    .axi_daq2_xcvr_qpll0_ref_clk (tx_ref_clk),
+    .axi_daq2_xcvr_qpll1_ref_clk (rx_ref_clk),
+    .axi_daq2_xcvr_rx_data_n (rx_data_n),
+    .axi_daq2_xcvr_rx_data_p (rx_data_p),
+    .axi_daq2_xcvr_tx_data_n (tx_data_n),
+    .axi_daq2_xcvr_tx_data_p (tx_data_p),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .ps_intr_00 (1'd0),
@@ -180,17 +188,8 @@ module system_top (
     .ps_intr_09 (1'd0),
     .ps_intr_14 (1'd0),
     .ps_intr_15 (1'd0),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_data_2_n (rx_data_n[2]),
-    .rx_data_2_p (rx_data_p[2]),
-    .rx_data_3_n (rx_data_n[3]),
-    .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk_0 (rx_ref_clk),
-    .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (rx_sysref),
+    .rx_sync (rx_sync),
+    .rx_sysref (rx_sysref),
     .spi0_csn (spi_csn),
     .spi0_miso (spi_miso),
     .spi0_mosi (spi_mosi),
@@ -199,17 +198,8 @@ module system_top (
     .spi1_miso (1'd0),
     .spi1_mosi (),
     .spi1_sclk (),
-    .tx_data_0_n (tx_data_n[0]),
-    .tx_data_0_p (tx_data_p[0]),
-    .tx_data_1_n (tx_data_n[1]),
-    .tx_data_1_p (tx_data_p[1]),
-    .tx_data_2_n (tx_data_n[2]),
-    .tx_data_2_p (tx_data_p[2]),
-    .tx_data_3_n (tx_data_n[3]),
-    .tx_data_3_p (tx_data_p[3]),
-    .tx_ref_clk_0 (tx_ref_clk),
-    .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (tx_sysref));
+    .tx_sync (tx_sync),
+    .tx_sysref (tx_sysref));
 
 endmodule
 
