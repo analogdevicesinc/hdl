@@ -41,6 +41,7 @@ module up_dac_common #(
 
   parameter   ID = 0,
   parameter   CONFIG = 0,
+  parameter   CLK_EDGE_SEL = 0,
   parameter   COMMON_ID = 6'h10,
   parameter   DRP_DISABLE = 6'h00,
   parameter   USERPORTS_DISABLE = 0,
@@ -122,7 +123,7 @@ module up_dac_common #(
   reg             up_dac_datafmt = 'd0;
   reg     [15:0]  up_dac_datarate = 'd0;
   reg             up_dac_frame = 'd0;
-  reg             up_dac_clksel = 'd0;
+  reg             up_dac_clksel = CLK_EDGE_SEL;
   reg             up_drp_sel_int = 'd0;
   reg             up_drp_wr_int = 'd0;
   reg             up_drp_status = 'd0;
@@ -185,7 +186,7 @@ module up_dac_common #(
       up_dac_datafmt <= 'd0;
       up_dac_datarate <= 'd0;
       up_dac_frame <= 'd0;
-      up_dac_clksel <= 'd0;
+      up_dac_clksel <= CLK_EDGE_SEL;
       up_pps_irq_mask <= 1'b1;
     end else begin
       up_dac_clk_enb_int <= ~up_dac_clk_enb;
