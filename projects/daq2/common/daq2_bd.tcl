@@ -18,10 +18,6 @@ create_bd_port -dir I tx_sync
 ad_connect tx_sysref axi_ad9144_jesd/sysref
 ad_connect tx_sync axi_ad9144_jesd/sync
 ad_connect axi_daq2_xcvr_tx_core_clk axi_ad9144_jesd/device_clk
-ad_connect axi_ad9144_jesd/tx_phy0 axi_daq2_xcvr/gt0_tx
-ad_connect axi_ad9144_jesd/tx_phy1 axi_daq2_xcvr/gt3_tx
-ad_connect axi_ad9144_jesd/tx_phy2 axi_daq2_xcvr/gt1_tx
-ad_connect axi_ad9144_jesd/tx_phy3 axi_daq2_xcvr/gt2_tx
 
 # dac peripherals (ad9144 core)
 
@@ -84,10 +80,6 @@ create_bd_port -dir O rx_sync
 ad_connect rx_sysref axi_ad9680_jesd/sysref
 ad_connect axi_ad9680_jesd/sync rx_sync
 ad_connect axi_daq2_xcvr_rx_core_clk axi_ad9680_jesd/device_clk
-ad_connect axi_daq2_xcvr/gt0_rx axi_ad9680_jesd/rx_phy0
-ad_connect axi_daq2_xcvr/gt1_rx axi_ad9680_jesd/rx_phy3
-ad_connect axi_daq2_xcvr/gt2_rx axi_ad9680_jesd/rx_phy1
-ad_connect axi_daq2_xcvr/gt3_rx axi_ad9680_jesd/rx_phy2
 ad_connect axi_ad9680_jesd/phy_en_char_align axi_daq2_xcvr/rxencommaalign
 
 # adc peripherals (ad9680 core)
