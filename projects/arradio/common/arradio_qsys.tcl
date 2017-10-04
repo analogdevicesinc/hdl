@@ -82,7 +82,7 @@ add_connection util_dac_upack.dac_ch_3 util_dac_rfifo.din_3
 add_instance axi_adc_dma axi_dmac
 set_instance_parameter_value axi_adc_dma {ID} {0}
 set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_SRC} {64}
-set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_DEST} {64}
+set_instance_parameter_value axi_adc_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_adc_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_adc_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_adc_dma {AXI_SLICE_DEST} {0}
@@ -138,7 +138,8 @@ ad_cpu_interconnect 0x00100000 axi_adc_dma.s_axi
 ad_cpu_interconnect 0x00104000 axi_dac_dma.s_axi
 
 # mem interconnects
+set_instance_parameter_value sys_hps {F2SDRAM_Width} {64 128 64}
 
-ad_dma_interconnect axi_adc_dma.m_dest_axi 0
-ad_dma_interconnect axi_dac_dma.m_src_axi 1
+ad_dma_interconnect axi_adc_dma.m_dest_axi 1
+ad_dma_interconnect axi_dac_dma.m_src_axi 2
 
