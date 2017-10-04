@@ -54,11 +54,11 @@ module dmac_dest_fifo_inf #(
   input response_eot,
 
   input en,
-  output [DATA_WIDTH-1:0] dout,
-  output valid,
-  output underflow,
+  output reg [DATA_WIDTH-1:0] dout,
+  output reg valid,
+  output reg underflow,
 
-        output xfer_req,
+  output reg xfer_req,
 
   output fifo_ready,
   input fifo_valid,
@@ -80,6 +80,10 @@ wire data_enabled;
 wire _fifo_ready;
 assign fifo_ready = _fifo_ready | ~enabled;
 
+wire [DATA_WIDTH-1:0]  dout_s;
+wire                   valid_s;
+wire                   underflow_s;
+wire                   xfer_req_s;
 reg en_d1;
 wire data_ready;
 wire data_valid;
@@ -93,9 +97,9 @@ begin
   end
 end
 
-assign underflow = en_d1 & (~data_valid | ~enable);
+assign underflow_s = en_d1 & (~data_valid | ~enable);
 assign data_ready = en_d1 & (data_valid | ~enable);
-assign valid = en_d1 & data_valid & enable;
+assign valid_s = en_d1 & data_valid & enable;
 
 dmac_data_mover # (
   .ID_WIDTH(ID_WIDTH),
@@ -109,7 +113,7 @@ dmac_data_mover # (
   .enable(enable),
   .enabled(data_enabled),
   .sync_id(sync_id),
-        .xfer_req(xfer_req),
+        .xfer_req(xfer_req_s),
 
   .request_id(request_id),
   .response_id(data_id),
@@ -124,9 +128,29 @@ dmac_data_mover # (
   .s_axi_data(fifo_data),
   .m_axi_ready(data_ready),
   .m_axi_valid(data_valid),
-  .m_axi_data(dout),
+  .m_axi_data(dout_s),
   .m_axi_last()
 );
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    valid <= 1'b0;
+    underflow <= 1'b0;
+    xfer_req <= 1'b0;
+  end else begin
+    valid <= valid_s;
+    underflow <= underflow_s;
+    xfer_req <= xfer_req_s;
+  end
+end
+
+always @(posedge clk) begin
+  if ((resetn == 1'b0) || (valid_s == 1'b0)) begin
+    dout <= {DATA_WIDTH{1'b0}};
+  end else begin
+    dout <= dout_s;
+  end
+end
 
 dmac_response_generator # (
   .ID_WIDTH(ID_WIDTH)
