@@ -16,3 +16,13 @@ source ../common/daq2_bd.tcl
 
 ad_ip_parameter axi_daq2_xcvr CONFIG.GT_Location {X1Y8}
 
+ad_connect axi_daq2_xcvr/gt0_rx axi_ad9680_jesd/rx_phy0
+ad_connect axi_daq2_xcvr/gt1_rx axi_ad9680_jesd/rx_phy3
+ad_connect axi_daq2_xcvr/gt2_rx axi_ad9680_jesd/rx_phy1
+ad_connect axi_daq2_xcvr/gt3_rx axi_ad9680_jesd/rx_phy2
+
+ad_connect axi_ad9144_jesd/tx_phy0 axi_daq2_xcvr/gt0_tx
+ad_connect axi_ad9144_jesd/tx_phy2 axi_daq2_xcvr/gt1_tx
+ad_connect axi_ad9144_jesd/tx_phy3 axi_daq2_xcvr/gt2_tx
+ad_connect axi_ad9144_jesd/tx_phy1 axi_daq2_xcvr/gt3_tx
+
