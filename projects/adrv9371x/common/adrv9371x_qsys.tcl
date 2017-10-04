@@ -153,7 +153,7 @@ set_instance_parameter_value axi_ad9371_rx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_ad9371_rx_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {AXI_SLICE_SRC} {0}
-set_instance_parameter_value axi_ad9371_rx_dma {SYNC_TRANSFER_START} {0}
+set_instance_parameter_value axi_ad9371_rx_dma {SYNC_TRANSFER_START} {1}
 set_instance_parameter_value axi_ad9371_rx_dma {CYCLIC} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_ad9371_rx_dma {DMA_TYPE_SRC} {2}
@@ -176,7 +176,7 @@ set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {AXI_SLICE_SRC} {0}
-set_instance_parameter_value axi_ad9371_rx_os_dma {SYNC_TRANSFER_START} {0}
+set_instance_parameter_value axi_ad9371_rx_os_dma {SYNC_TRANSFER_START} {1}
 set_instance_parameter_value axi_ad9371_rx_os_dma {CYCLIC} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_TYPE_SRC} {2}
