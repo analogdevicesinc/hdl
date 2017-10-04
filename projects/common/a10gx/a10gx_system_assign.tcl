@@ -6,6 +6,7 @@ set_location_assignment PIN_AR37  -to "sys_clk(n)"
 set_location_assignment PIN_BD27  -to sys_resetn
 set_instance_assignment -name IO_STANDARD LVDS -to sys_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to sys_resetn
+set_global_assignment -name PROGRAMMABLE_POWER_TECHNOLOGY_SETTING "FORCE ALL USED TILES TO HIGH SPEED"
 
 # ddr3
 
