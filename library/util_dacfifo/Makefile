@@ -6,6 +6,8 @@
 ####################################################################################
 
 M_DEPS += ../common/ad_mem.v
+M_DEPS += ../common/ad_b2g.v
+M_DEPS += ../common/ad_g2b.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
 M_DEPS += util_dacfifo.v

@@ -101,48 +101,13 @@ module util_dacfifo #(
 
   wire                                dma_wren_s;
   wire    [(DATA_WIDTH-1):0]          dac_data_s;
-  wire    [(ADDRESS_WIDTH):0]         dma_addr_diff_s;
-  wire    [(ADDRESS_WIDTH):0]         dac_addr_diff_s;
-
-  // binary to grey conversion
-
-  function [9:0] b2g;
-    input [9:0] b;
-    reg   [9:0] g;
-    begin
-      g[9] = b[9];
-      g[8] = b[9] ^ b[8];
-      g[7] = b[8] ^ b[7];
-      g[6] = b[7] ^ b[6];
-      g[5] = b[6] ^ b[5];
-      g[4] = b[5] ^ b[4];
-      g[3] = b[4] ^ b[3];
-      g[2] = b[3] ^ b[2];
-      g[1] = b[2] ^ b[1];
-      g[0] = b[1] ^ b[0];
-      b2g = g;
-    end
-  endfunction
-
-  // grey to binary conversion
-
-  function [9:0] g2b;
-    input [9:0] g;
-    reg   [9:0] b;
-    begin
-      b[9] = g[9];
-      b[8] = b[9] ^ g[8];
-      b[7] = b[8] ^ g[7];
-      b[6] = b[7] ^ g[6];
-      b[5] = b[6] ^ g[5];
-      b[4] = b[5] ^ g[4];
-      b[3] = b[4] ^ g[3];
-      b[2] = b[3] ^ g[2];
-      b[1] = b[2] ^ g[1];
-      b[0] = b[1] ^ g[0];
-      g2b = b;
-    end
-  endfunction
+  wire    [ADDRESS_WIDTH:0]           dma_addr_diff_s;
+  wire    [ADDRESS_WIDTH:0]           dac_addr_diff_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_waddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_raddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_raddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_g2b_s;
 
   // DMA / Write interface
 
@@ -170,7 +135,7 @@ module util_dacfifo #(
     end else begin
       dma_raddr_m1 <= dac_raddr_g;
       dma_raddr_m2 <= dma_raddr_m1;
-      dma_raddr <= g2b(dma_raddr_m2);
+      dma_raddr <= dma_raddr_g2b_s;
       dma_addr_diff <= dma_addr_diff_s[ADDRESS_WIDTH-1:0];
       if (dma_addr_diff >= FIFO_THRESHOLD_HI) begin
         dma_ready_bypass <= 1'b0;
@@ -179,6 +144,12 @@ module util_dacfifo #(
       end
     end
   end
+
+  ad_g2b #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dma_raddr_g2b (
+    .din (dma_raddr_m2),
+    .dout (dma_raddr_g2b_s));
 
   // write address generation
 
@@ -199,10 +170,16 @@ module util_dacfifo #(
         dma_waddr <= 'b0;
         dma_xfer_out_fifo <= 1'b1;
       end
-      dma_waddr_g <= b2g(dma_waddr);
+      dma_waddr_g <= dma_waddr_b2g_s;
       dma_xfer_out_bypass <= dma_xfer_req;
     end
   end
+
+  ad_b2g #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dma_waddr_b2g (
+    .din (dma_waddr),
+    .dout (dma_waddr_b2g_s));
 
   // save the last write address
 
@@ -211,7 +188,7 @@ module util_dacfifo #(
       dma_lastaddr_g <= 'b0;
     end else begin
       if (dma_bypass == 1'b0) begin
-        dma_lastaddr_g <= (dma_xfer_last == 1'b1)? b2g(dma_waddr) : dma_lastaddr_g;
+        dma_lastaddr_g <= (dma_xfer_last == 1'b1)? dma_waddr_b2g_s : dma_lastaddr_g;
       end
     end
   end
@@ -232,7 +209,7 @@ module util_dacfifo #(
     end else begin
       dac_waddr_m1 <= dma_waddr_g;
       dac_waddr_m2 <= dac_waddr_m1;
-      dac_waddr <= g2b(dac_waddr_m2);
+      dac_waddr <= dac_waddr_g2b_s;
       dac_addr_diff <= dac_addr_diff_s[ADDRESS_WIDTH-1:0];
       if (dac_addr_diff > 0) begin
         dac_mem_ready <= 1'b1;
@@ -241,6 +218,12 @@ module util_dacfifo #(
       end
     end
   end
+
+  ad_g2b #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dac_waddr_g2b (
+    .din (dac_waddr_m2),
+    .dout (dac_waddr_g2b_s));
 
   // sync lastaddr to dac clock domain
 
@@ -255,13 +238,19 @@ module util_dacfifo #(
     end else begin
       dac_lastaddr_m1 <= dma_lastaddr_g;
       dac_lastaddr_m2 <= dac_lastaddr_m1;
-      dac_lastaddr <= g2b(dac_lastaddr_m2);
+      dac_lastaddr <= dac_lastaddr_g2b_s;
       dac_xfer_out_fifo_m1 <= dma_xfer_out_fifo;
       dac_xfer_out_fifo <= dac_xfer_out_fifo_m1;
       dac_xfer_out_bypass_m1 <= dma_xfer_out_bypass;
       dac_xfer_out_bypass <= dac_xfer_out_bypass_m1;
     end
   end
+
+  ad_g2b #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dac_lastaddr_g2b (
+    .din (dac_lastaddr_m2),
+    .dout (dac_lastaddr_g2b_s));
 
   // generate dac read address
 
@@ -279,9 +268,15 @@ module util_dacfifo #(
           dac_raddr <= (dac_raddr < dac_lastaddr) ? (dac_raddr + 1) : 'b0;
         end
       end
-      dac_raddr_g <= b2g(dac_raddr);
+      dac_raddr_g <= dac_raddr_b2g_s;
     end
   end
+
+  ad_b2g #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dac_raddr_b2g (
+    .din (dac_raddr),
+    .dout (dac_raddr_b2g_s));
 
   // memory instantiation
 
