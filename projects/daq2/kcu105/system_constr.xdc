@@ -40,10 +40,10 @@ create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_
 
 # reference clocks
 
-set_property  -dict {PACKAGE_PIN  K6} [get_ports tx_ref_clk_p] ; ## D04  FMC_HPC_GBTCLK0_M2C_P (GTHE3_COMMON_X0Y4)
-set_property  -dict {PACKAGE_PIN  K5} [get_ports tx_ref_clk_n] ; ## D05  FMC_HPC_GBTCLK0_M2C_N (GTHE3_COMMON_X0Y4)
-set_property  -dict {PACKAGE_PIN  H6} [get_ports rx_ref_clk_p] ; ## B20  FMC_HPC_GBTCLK1_M2C_P (GTHE3_COMMON_X0Y4)
-set_property  -dict {PACKAGE_PIN  H5} [get_ports rx_ref_clk_n] ; ## B21  FMC_HPC_GBTCLK1_M2C_N (GTHE3_COMMON_X0Y4)
+set_property LOC GTHE3_COMMON_X0Y4 [get_cells i_ibufds_tx_ref_clk]
+set_property LOC GTHE3_COMMON_X0Y4 [get_cells i_ibufds_rx_ref_clk]
+set_property BEL GTHE3_COMMON.IBUFDS0_GTE3 [get_cells i_ibufds_tx_ref_clk] ; ## K6/K5 D04/D05 FMC_HPC_GBTCLK0_M2C
+set_property BEL GTHE3_COMMON.IBUFDS1_GTE3 [get_cells i_ibufds_rx_ref_clk] ; ## H6/H5 B20/B21 FMC_HPC_GBTCLK1_M2C
 
 # lanes
 # device        fmc                         xcvr              location
