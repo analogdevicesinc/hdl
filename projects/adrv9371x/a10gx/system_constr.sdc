@@ -13,3 +13,14 @@ if {[string equal "quartus_fit" $::TimeQuestInfo(nameofexecutable)]} {
   set_min_delay -from [get_clocks *sys_ddr3_cntrl_phy_clk_l*] -to [get_clocks *sys_ddr3_cntrl_core_usr_clk*] 0.000
 }
 
+# flash interface
+
+set_output_delay  -clock [ get_clocks sys_clk_100mhz ] 2   [ get_ports {flash_addr[*]} ]
+set_input_delay   -clock [ get_clocks sys_clk_100mhz ] 2   [ get_ports {flash_data[*]} ]
+set_output_delay  -clock [ get_clocks sys_clk_100mhz ] 2   [ get_ports {flash_data[*]} ]
+set_output_delay  -clock [ get_clocks sys_clk_100mhz ] 2   [ get_ports {flash_cen[*]} ]
+set_output_delay  -clock [ get_clocks sys_clk_100mhz ] 2   [ get_ports {flash_oen} ]
+set_output_delay  -clock [ get_clocks sys_clk_100mhz ] 2   [ get_ports {flash_resetn} ]
+set_output_delay  -clock [ get_clocks sys_clk_100mhz ] 2   [ get_ports {flash_wen} ]
+set_false_path    -from * -to [get_ports {flash_resetn}]
+
