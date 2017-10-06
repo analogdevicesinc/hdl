@@ -113,6 +113,14 @@ proc adi_project_xilinx {project_name {mode 0}} {
   set_property ip_repo_paths $lib_dirs [current_fileset]
   update_ip_catalog
 
+  ## PSU-1 demoted to just a note
+  ## vivado 2017.2 considers negative values set to DQS to Clock delay as bad.
+  ## we are not changing anything in hardware, so ignore the tool.
+  ## while it may have some effect in the future boards, most likely this is
+  ## another 'patch' without much thought behind it.
+  ## will anyone change their hardware because the tool changed its mind?
+ 
+  set_msg_config -id {PSU-1} -new_severity info
   set_msg_config -id {BD 41-1348} -new_severity info
   set_msg_config -id {BD 41-1343} -new_severity info
   set_msg_config -id {BD 41-1306} -new_severity info
