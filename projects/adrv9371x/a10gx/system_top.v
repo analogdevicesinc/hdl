@@ -77,6 +77,17 @@ module system_top (
   input   [ 10:0]   gpio_bd_i,
   output  [ 15:0]   gpio_bd_o,
 
+  // flash
+
+  output            flash_oen,
+  output  [  1:0]   flash_cen,
+  output  [ 27:0]   flash_addr,
+  inout   [ 31:0]   flash_data,
+  output            flash_wen,
+  output            flash_advn,
+  output            flash_clk,
+  output            flash_resetn,
+
   // lane interface
 
   input             ref_clk0,
@@ -116,6 +127,7 @@ module system_top (
   wire    [ 63:0]   gpio_o;
   wire    [  7:0]   spi_csn_s;
   wire              dac_fifo_bypass;
+  wire    [23:0]    flash_addr_raw;
 
   // assignments
 
@@ -156,6 +168,18 @@ module system_top (
   assign gpio_i[15: 0] = gpio_o[15:0];
 
   assign gpio_bd_o = gpio_o[15:0];
+
+  // User code space at offset 0x0930_0000 per Altera's Board Update Portal
+  // reference design used to program flash
+
+  assign flash_addr = flash_addr_raw + 28'h9300000;
+
+  // Common Flash interface assignments
+
+  assign  flash_resetn = 1'b1;
+  assign  flash_advn   = 1'b0;
+  assign  flash_clk    = 1'b0;
+  assign  flash_cen[1] = flash_cen[0];
 
   system_bd i_system_bd (
     .ad9371_gpio_export (ad9371_gpio),
@@ -206,7 +230,12 @@ module system_top (
     .rx_os_sysref_export (sysref),
     .rx_ref_clk_clk (ref_clk1),
     .rx_sync_export (rx_sync),
-    .rx_sysref_export (sysref));
+    .rx_sysref_export (sysref),
+    .sys_flash_tcm_address_out (flash_addr_raw),
+    .sys_flash_tcm_read_n_out (flash_oen),
+    .sys_flash_tcm_write_n_out (flash_wen),
+    .sys_flash_tcm_data_out (flash_data),
+    .sys_flash_tcm_chipselect_n_out (flash_cen[0]));
 
 endmodule
 
