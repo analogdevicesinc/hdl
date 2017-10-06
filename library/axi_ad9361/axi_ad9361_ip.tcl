@@ -81,11 +81,6 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.CMOS_OR_L
   [ipx::get_ports tx_frame_out    -of_objects [ipx::current_core]] \
   [ipx::get_ports tx_data_out     -of_objects [ipx::current_core]]
 
-ipx::remove_bus_interface rst [ipx::current_core]
-ipx::remove_bus_interface clk [ipx::current_core]
-ipx::remove_bus_interface l_clk [ipx::current_core]
-ipx::remove_bus_interface delay_clk [ipx::current_core]
-
 ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces s_axi_aclk \
   -of_objects [ipx::current_core]]
 set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
