@@ -1,8 +1,8 @@
 
 # daq2
 
-set_property  -dict {PACKAGE_PIN  W2  IOSTANDARD LVDS} [get_ports rx_sync_p]                                ; ## D08  FMC_HPC_LA01_CC_P
-set_property  -dict {PACKAGE_PIN  W1  IOSTANDARD LVDS} [get_ports rx_sync_n]                                ; ## D09  FMC_HPC_LA01_CC_N
+set_property  -dict {PACKAGE_PIN  AB4 IOSTANDARD LVDS} [get_ports rx_sync_p]                                ; ## D08  FMC_HPC_LA01_CC_P
+set_property  -dict {PACKAGE_PIN  AC4 IOSTANDARD LVDS} [get_ports rx_sync_n]                                ; ## D09  FMC_HPC_LA01_CC_N
 set_property  -dict {PACKAGE_PIN  Y2  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports rx_sysref_p]       ; ## G09  FMC_HPC_LA03_P
 set_property  -dict {PACKAGE_PIN  Y1  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports rx_sysref_n]       ; ## G10  FMC_HPC_LA03_N
 
@@ -13,9 +13,9 @@ set_property  -dict {PACKAGE_PIN  AA1 IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [g
 
 set_property  -dict {PACKAGE_PIN  AB3 IOSTANDARD LVCMOS18} [get_ports spi_csn_clk]                          ; ## D11  FMC_HPC_LA05_P
 set_property  -dict {PACKAGE_PIN  W5  IOSTANDARD LVCMOS18} [get_ports spi_csn_dac]                          ; ## C14  FMC_HPC_LA10_P
-set_property  -dict {PACKAGE_PIN  AC4 IOSTANDARD LVCMOS18} [get_ports spi_csn_adc]                          ; ## D15  FMC_HPC_LA09_N
+set_property  -dict {PACKAGE_PIN  W1  IOSTANDARD LVCMOS18} [get_ports spi_csn_adc]                          ; ## D15  FMC_HPC_LA09_N
 set_property  -dict {PACKAGE_PIN  AC3 IOSTANDARD LVCMOS18} [get_ports spi_clk]                              ; ## D12  FMC_HPC_LA05_N
-set_property  -dict {PACKAGE_PIN  AB4 IOSTANDARD LVCMOS18} [get_ports spi_sdio]                             ; ## D14  FMC_HPC_LA09_P
+set_property  -dict {PACKAGE_PIN  W2  IOSTANDARD LVCMOS18} [get_ports spi_sdio]                             ; ## D14  FMC_HPC_LA09_P
 set_property  -dict {PACKAGE_PIN  V3  IOSTANDARD LVCMOS18} [get_ports spi_dir]                              ; ## G13  FMC_HPC_LA08_N
 
 set_property  -dict {PACKAGE_PIN  V4  IOSTANDARD LVCMOS18} [get_ports clkd_sync]                            ; ## G12  FMC_HPC_LA08_P
