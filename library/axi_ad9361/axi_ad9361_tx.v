@@ -162,10 +162,14 @@ module axi_ad9361_tx #(
   // rate counters and data sync signals
 
   always @(posedge dac_clk) begin
-    if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 16'd0)) begin
-      dac_rate_cnt <= dac_datarate_s;
+    if (dac_rst == 1'b1) begin
+      dac_rate_cnt <= 16'b0;
     end else begin
-      dac_rate_cnt <= dac_rate_cnt - 1;
+      if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 16'd0)) begin
+        dac_rate_cnt <= dac_datarate_s;
+      end else begin
+        dac_rate_cnt <= dac_rate_cnt - 1'b1;
+      end
     end
   end
 
