@@ -40,19 +40,40 @@ add_connection ad9144_jesd204.link_clk util_ad9144_upack.if_dac_clk
 add_connection axi_ad9144_core.dac_ch_0 util_ad9144_upack.dac_ch_0
 add_connection axi_ad9144_core.dac_ch_1 util_ad9144_upack.dac_ch_1
 
+# dac fifo
+
+add_interface tx_fifo_bypass conduit end
+set_interface_property tx_fifo_bypass EXPORT_OF avl_ad9144_fifo.if_bypass
+
+add_connection ad9144_jesd204.link_clk avl_ad9144_fifo.if_dac_clk
+add_connection ad9144_jesd204.link_reset avl_ad9144_fifo.if_dac_rst
+add_connection util_ad9144_upack.if_dac_valid avl_ad9144_fifo.if_dac_valid
+add_connection avl_ad9144_fifo.if_dac_data util_ad9144_upack.if_dac_data
+#add_connection avl_ad9144_fifo.if_dac_dunf util_ad9144_upack.if_dac_dunf
+
 # ad9144-dma
 
 add_instance axi_ad9144_dma axi_dmac
 set_instance_parameter_value axi_ad9144_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_ad9144_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9144_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_ad9144_dma {DMA_TYPE_DEST} {2}
+set_instance_parameter_value axi_ad9144_dma {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value axi_ad9144_dma {AXI_SLICE_DEST} {0}
+set_instance_parameter_value axi_ad9144_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value axi_ad9144_dma {SYNC_TRANSFER_START} {0}
+set_instance_parameter_value axi_ad9144_dma {CYCLIC} {1}
+set_instance_parameter_value axi_ad9144_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9144_dma {DMA_TYPE_SRC} {0}
+set_instance_parameter_value axi_ad9144_dma {FIFO_SIZE} {16}
 
-add_connection ad9144_jesd204.link_clk axi_ad9144_dma.if_fifo_rd_clk
-add_connection util_ad9144_upack.if_dac_valid axi_ad9144_dma.if_fifo_rd_en
-add_connection util_ad9144_upack.if_dac_data axi_ad9144_dma.if_fifo_rd_dout
-add_connection axi_ad9144_dma.if_fifo_rd_underflow axi_ad9144_core.if_dac_dunf
+add_connection sys_dma_clk.clk avl_ad9144_fifo.if_dma_clk
+add_connection sys_dma_clk.clk_reset avl_ad9144_fifo.if_dma_rst
+add_connection sys_dma_clk.clk axi_ad9144_dma.if_m_axis_aclk
+add_connection axi_ad9144_dma.if_m_axis_valid avl_ad9144_fifo.if_dma_valid
+add_connection axi_ad9144_dma.if_m_axis_data avl_ad9144_fifo.if_dma_data
+add_connection axi_ad9144_dma.if_m_axis_last avl_ad9144_fifo.if_dma_xfer_last
+add_connection axi_ad9144_dma.if_m_axis_xfer_req avl_ad9144_fifo.if_dma_xfer_req
+add_connection avl_ad9144_fifo.if_dma_ready axi_ad9144_dma.if_m_axis_ready
 add_connection sys_clk.clk_reset axi_ad9144_dma.s_axi_reset
 add_connection sys_clk.clk axi_ad9144_dma.s_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9144_dma.m_src_axi_reset
