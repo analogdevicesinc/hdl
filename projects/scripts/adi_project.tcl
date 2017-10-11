@@ -121,6 +121,7 @@ proc adi_project_xilinx {project_name {mode 0}} {
   ## will anyone change their hardware because the tool changed its mind?
  
   set_msg_config -id {PSU-1} -new_severity info
+  set_msg_config -id {PSU-2} -new_severity info
   set_msg_config -id {BD 41-1348} -new_severity info
   set_msg_config -id {BD 41-1343} -new_severity info
   set_msg_config -id {BD 41-1306} -new_severity info
