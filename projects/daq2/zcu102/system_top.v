@@ -37,8 +37,7 @@
 
 module system_top (
 
-  input   [12:0]  gpio_bd_i,
-  output  [ 7:0]  gpio_bd_o,
+  inout   [20:0]  gpio_bd,
 
   input           rx_ref_clk_p,
   input           rx_ref_clk_n,
@@ -61,15 +60,15 @@ module system_top (
   input           trig_p,
   input           trig_n,
 
-  input           adc_fdb,
-  input           adc_fda,
-  input           dac_irq,
-  input   [ 1:0]  clkd_status,
+  inout           adc_fdb,
+  inout           adc_fda,
+  inout           dac_irq,
+  inout   [ 1:0]  clkd_status,
 
-  output          adc_pd,
-  output          dac_txen,
-  output          dac_reset,
-  output          clkd_sync,
+  inout           adc_pd,
+  inout           dac_txen,
+  inout           dac_reset,
+  inout           clkd_sync,
 
   output          spi_csn_clk,
   output          spi_csn_dac,
@@ -82,6 +81,7 @@ module system_top (
 
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
+  wire    [94:0]  gpio_t;
   wire    [ 2:0]  spi_csn;
   wire            spi_mosi;
   wire            spi_miso;
@@ -148,23 +148,44 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
+  // daq2 gpio
+ 
+  assign gpio_i[63:44] = gpio_o[63:44];
+  assign gpio_i[43] = trig;
 
-  assign adc_pd = gpio_o[42];
-  assign dac_txen = gpio_o[41];
-  assign dac_reset = gpio_o[40];
-  assign clkd_sync = gpio_o[38];
-  assign gpio_bd_o = gpio_o[7:0];
+  ad_iobuf #(.DATA_WIDTH(3)) i_iobuf_2 (
+    .dio_t (gpio_t[42:40]),
+    .dio_i (gpio_o[42:40]),
+    .dio_o (gpio_i[42:40]),
+    .dio_p ({adc_pd, dac_txen, dac_reset}));
 
-  assign gpio_i[94:44] = gpio_o[94:44];
-  assign gpio_i[43:43] = trig;
-  assign gpio_i[42:37] = gpio_o[42:37];
-  assign gpio_i[36:36] = adc_fdb;
-  assign gpio_i[35:35] = adc_fda;
-  assign gpio_i[34:34] = dac_irq;
-  assign gpio_i[33:32] = clkd_status;
+  assign gpio_i[39] = gpio_o[39];
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iobuf_1 (
+    .dio_t (gpio_t[38]),
+    .dio_i (gpio_o[38]),
+    .dio_o (gpio_i[38]),
+    .dio_p (clkd_sync));
+
+  assign gpio_i[37] = gpio_o[37];
+
+  ad_iobuf #(.DATA_WIDTH(5)) i_iobuf_0 (
+    .dio_t (gpio_t[36:32]),
+    .dio_i (gpio_o[36:32]),
+    .dio_o (gpio_i[36:32]),
+    .dio_p ({adc_fdb, adc_fda, dac_irq, clkd_status}));
+
+  // zcu102 gpio
+
   assign gpio_i[31:21] = gpio_o[31:21];
-  assign gpio_i[20: 8] = gpio_bd_i;
-  assign gpio_i[ 7: 0] = gpio_o[7:0];
+
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
+
+  // ipi-system
 
   system_wrapper i_system_wrapper (
     .axi_daq2_xcvr_cpll_ref_clk (rx_ref_clk),
