@@ -47,45 +47,28 @@ set_property  -dict {PACKAGE_PIN  W7   IOSTANDARD LVCMOS18} [get_ports ad9371_gp
 set_property  -dict {PACKAGE_PIN  W6   IOSTANDARD LVCMOS18} [get_ports ad9371_gpio_16]                ; ## G16  FMC_HPC0_LA12_N
 set_property  -dict {PACKAGE_PIN  AC3  IOSTANDARD LVCMOS18} [get_ports ad9371_gpio_18]                ; ## D12  FMC_HPC0_LA05_N
 
-set_property LOC GTHE4_COMMON_X1Y2 [get_cells -hierarchical -filter {NAME =~ *i_ibufds_ref_clk1}]
-
-set_property LOC GTHE4_CHANNEL_X1Y8  [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_0/i_gthe4_channel}]
-set_property LOC GTHE4_CHANNEL_X1Y10 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_1/i_gthe4_channel}]
-set_property LOC GTHE4_CHANNEL_X1Y11 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_2/i_gthe4_channel}]
-set_property LOC GTHE4_CHANNEL_X1Y9  [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_3/i_gthe4_channel}]
-
 # clocks
 
-create_clock -name tx_ref_clk     -period  8.00 [get_ports ref_clk0_p]
-create_clock -name rx_ref_clk     -period  8.00 [get_ports ref_clk1_p]
-create_clock -name tx_div_clk     -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_0/i_gthe4_channel/TXOUTCLK]
-create_clock -name rx_div_clk     -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_1/i_gthe4_channel/RXOUTCLK]
-create_clock -name rx_os_div_clk  -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_2/i_gthe4_channel/RXOUTCLK]
+create_clock -name ref_clk        -period  8.00 [get_ports ref_clk_p]
+create_clock -name tx_div_clk     -period  8.00 [get_pins i_system_wrapper/system_i/axi_ad9371_tx_clkgen/clk_0]
+create_clock -name rx_div_clk     -period  8.00 [get_pins i_system_wrapper/system_i/axi_ad9371_rx_clkgen/clk_0]
+create_clock -name rx_os_div_clk  -period  8.00 [get_pins i_system_wrapper/system_i/axi_ad9371_rx_os_clkgen/clk_0]
 
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9371_rx_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9371_tx_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9371_rx_os_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
+# reference clocks
 
-# pin assignments below are for reference only and are ignored by the tool!
+set_property LOC GTHE4_COMMON_X1Y2 [get_cells -hierarchical -filter {NAME =~ *i_ibufds_ref_clk}] ; ## B20/B21  FMC_HPC_GBTCLK1_M2C (L8/L7)
 
-# set_property  -dict {PACKAGE_PIN  G8   } [get_ports ref_clk0_p]                                       ; ## D04  FMC_HPC0_GBTCLK0_M2C_C_P
-# set_property  -dict {PACKAGE_PIN  G7   } [get_ports ref_clk0_n]                                       ; ## D05  FMC_HPC0_GBTCLK0_M2C_C_N
-# set_property  -dict {PACKAGE_PIN  L8   } [get_ports ref_clk1_p]                                       ; ## B20  FMC_HPC0_GBTCLK1_M2C_C_P
-# set_property  -dict {PACKAGE_PIN  L7   } [get_ports ref_clk1_n]                                       ; ## B21  FMC_HPC0_GBTCLK1_M2C_C_N
+# lanes
+# device        fmc                         xcvr              location
+# --------------------------------------------------------------------------------
+# rx_data[3]    A10/A11   FMC_HPC_DP3_M2C   K2/K1 rx_data[0]  GTHE4_CHANNEL_X1Y8
+# rx_data[0]    A02/A03   FMC_HPC_DP1_M2C   J4/J3 rx_data[1]  GTHE4_CHANNEL_X1Y9
+# rx_data[2]    C06/C07   FMC_HPC_DP0_M2C   H2/H1 rx_data[2]  GTHE4_CHANNEL_X1Y10
+# rx_data[1]    A06/A07   FMC_HPC_DP2_M2C   F2/F1 rx_data[3]  GTHE4_CHANNEL_X1Y11
+# --------------------------------------------------------------------------------
+# tx_data[2]    A30/A31   FMC_HPC_DP3_C2M   K6/K5 tx_data[0]  GTHE4_CHANNEL_X1Y8
+# tx_data[3]    A22/A23   FMC_HPC_DP1_C2M   H6/H5 tx_data[1]  GTHE4_CHANNEL_X1Y9
+# tx_data[1]    C02/C03   FMC_HPC_DP0_C2M   G4/G3 tx_data[2]  GTHE4_CHANNEL_X1Y10
+# tx_data[0]    A26/A27   FMC_HPC_DP2_C2M   F6/F5 tx_data[3]  GTHE4_CHANNEL_X1Y11
+# --------------------------------------------------------------------------------
 
-# set_property  -dict {PACKAGE_PIN  J4   } [get_ports rx_data_p[0]]                                      ; ## A02  FMC_HPC0_DP1_M2C_P
-# set_property  -dict {PACKAGE_PIN  J3   } [get_ports rx_data_n[0]]                                      ; ## A03  FMC_HPC0_DP1_M2C_N
-# set_property  -dict {PACKAGE_PIN  F2   } [get_ports rx_data_p[1]]                                      ; ## A06  FMC_HPC0_DP2_M2C_P
-# set_property  -dict {PACKAGE_PIN  F1   } [get_ports rx_data_n[1]]                                      ; ## A07  FMC_HPC0_DP2_M2C_N
-# set_property  -dict {PACKAGE_PIN  H2   } [get_ports rx_data_p[2]]                                      ; ## C06  FMC_HPC0_DP0_M2C_P
-# set_property  -dict {PACKAGE_PIN  H1   } [get_ports rx_data_n[2]]                                      ; ## C07  FMC_HPC0_DP0_M2C_N
-# set_property  -dict {PACKAGE_PIN  K2   } [get_ports rx_data_p[3]]                                      ; ## A10  FMC_HPC0_DP3_M2C_P
-# set_property  -dict {PACKAGE_PIN  K1   } [get_ports rx_data_n[3]]                                      ; ## A11  FMC_HPC0_DP3_M2C_N
-# set_property  -dict {PACKAGE_PIN  H6   } [get_ports tx_data_p[0]]                                      ; ## A22  FMC_HPC0_DP1_C2M_P (tx_data_p[3])
-# set_property  -dict {PACKAGE_PIN  H5   } [get_ports tx_data_n[0]]                                      ; ## A23  FMC_HPC0_DP1_C2M_N (tx_data_n[3])
-# set_property  -dict {PACKAGE_PIN  F6   } [get_ports tx_data_p[1]]                                      ; ## A26  FMC_HPC0_DP2_C2M_P (tx_data_p[0])
-# set_property  -dict {PACKAGE_PIN  F5   } [get_ports tx_data_n[1]]                                      ; ## A27  FMC_HPC0_DP2_C2M_N (tx_data_n[0])
-# set_property  -dict {PACKAGE_PIN  G4   } [get_ports tx_data_p[2]]                                      ; ## C02  FMC_HPC0_DP0_C2M_P (tx_data_p[1])
-# set_property  -dict {PACKAGE_PIN  G3   } [get_ports tx_data_n[2]]                                      ; ## C03  FMC_HPC0_DP0_C2M_N (tx_data_n[1])
-# set_property  -dict {PACKAGE_PIN  K6   } [get_ports tx_data_p[3]]                                      ; ## A30  FMC_HPC0_DP3_C2M_P (tx_data_p[2])
-# set_property  -dict {PACKAGE_PIN  K5   } [get_ports tx_data_n[3]]                                      ; ## A31  FMC_HPC0_DP3_C2M_N (tx_data_n[2])
