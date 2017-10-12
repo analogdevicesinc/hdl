@@ -14,6 +14,8 @@ variable xcvr_rx_lane_rate
 variable xcvr_tx_bufg_enable
 variable xcvr_tx_ref_clk
 variable xcvr_tx_lane_rate
+variable xcvr_master_or_slave_n
+variable xcvr_master_instance
 
 ###################################################################################################
 ###################################################################################################
@@ -31,6 +33,8 @@ set xcvr_rx_lane_rate 0
 set xcvr_tx_bufg_enable 1
 set xcvr_tx_ref_clk 0
 set xcvr_tx_lane_rate 0
+set xcvr_master_or_slave_n 1
+set xcvr_master_instance {NONE}
 
 ###################################################################################################
 ###################################################################################################
@@ -180,6 +184,8 @@ proc ad_xcvr_parameter {i_type i_value} {
   global xcvr_tx_bufg_enable
   global xcvr_tx_ref_clk
   global xcvr_tx_lane_rate
+  global xcvr_master_or_slave_n
+  global xcvr_master_instance
 
   if {$i_type eq "number_of_lanes"} {
     lappend xcvr_parameter_list CONFIG.C_LANES $i_value
@@ -220,6 +226,11 @@ proc ad_xcvr_parameter {i_type i_value} {
     return
   }
 
+  if {$i_type eq "master_or_slave_n"} {
+    set xcvr_master_or_slave_n $i_value
+    return
+  }
+
   lappend xcvr_parameter_list $i_type $i_value
 }
 
@@ -232,25 +243,34 @@ proc ad_xcvr_instance {i_name} {
   global xcvr_tx_bufg_enable
   global xcvr_tx_ref_clk
   global xcvr_tx_lane_rate
+  global xcvr_master_or_slave_n
+  global xcvr_master_instance
+
+  if {$xcvr_master_or_slave_n == 1} {
+    set xcvr_master_instance $i_name
+  }
 
   ad_ip_instance jesd204_phy $i_name
   set xcvr_type [get_property CONFIG.Transceiver [get_bd_cells $i_name]]
 
-  ad_ip_parameter $i_name CONFIG.Config_Type 1
+  lappend xcvr_parameter_list CONFIG.Config_Type 1
+  lappend xcvr_parameter_list CONFIG.SupportLevel $xcvr_master_or_slave_n
 
   if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
-    ad_ip_parameter $i_name CONFIG.Min_Line_Rate 4
-    ad_ip_parameter $i_name CONFIG.Max_Line_Rate 16
+    lappend xcvr_parameter_list CONFIG.Min_Line_Rate 4
+    lappend xcvr_parameter_list CONFIG.Max_Line_Rate 16
   } else {
-    ad_ip_parameter $i_name CONFIG.Min_Line_Rate 1
-    ad_ip_parameter $i_name CONFIG.Max_Line_Rate 12
+    lappend xcvr_parameter_list CONFIG.Min_Line_Rate 1
+    lappend xcvr_parameter_list CONFIG.Max_Line_Rate 12
   }
 
   set xcvr_rx_pll 3
-  set xcvr_rx_lane_rate [regsub {\.0*$} $xcvr_rx_lane_rate ""]
+  set xcvr_rx_lane_rate [regsub {0*$} $xcvr_rx_lane_rate ""]
+  set xcvr_rx_lane_rate [regsub {\.$} $xcvr_rx_lane_rate ""]
   if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
     set xcvr_rx_pll 1
-    set xcvr_rx_ref_clk [regsub {\.0*$} $xcvr_rx_ref_clk ""]
+    set xcvr_rx_ref_clk [regsub {0*$} $xcvr_rx_ref_clk ""]
+    set xcvr_rx_ref_clk [regsub {\.$} $xcvr_rx_ref_clk ""]
   }
   if {$xcvr_rx_lane_rate < 6.25} {
     set xcvr_rx_pll 0
@@ -261,12 +281,14 @@ proc ad_xcvr_instance {i_name} {
   lappend xcvr_parameter_list CONFIG.RX_PLL_SELECTION $xcvr_rx_pll
 
   set xcvr_tx_pll 3
-  set xcvr_tx_lane_rate [regsub {\.0*$} $xcvr_rx_lane_rate ""]
+  set xcvr_tx_lane_rate [regsub {0*$} $xcvr_rx_lane_rate ""]
+  set xcvr_tx_lane_rate [regsub {\.$} $xcvr_rx_lane_rate ""]
   if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
     set xcvr_tx_pll 1
-    set xcvr_tx_ref_clk [regsub {\.0*$} $xcvr_tx_ref_clk ""]
+    set xcvr_tx_ref_clk [regsub {0*$} $xcvr_tx_ref_clk ""]
+    set xcvr_tx_ref_clk [regsub {\.$} $xcvr_tx_ref_clk ""]
   }
-  if {$xcvr_tx_lane_rate < 6.25} {
+  if {($xcvr_tx_lane_rate < 6.25) && ($xcvr_rx_pll > 0)} {
     set xcvr_tx_pll 0
   }
 
@@ -277,14 +299,23 @@ proc ad_xcvr_instance {i_name} {
   set_property -dict $xcvr_parameter_list [get_bd_cells $i_name]
   set xcvr_parameter_list {}
 
-  if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
-    create_bd_port -dir I -type clk ${i_name}_qpll0_ref_clk
-    create_bd_port -dir I -type clk ${i_name}_qpll1_ref_clk
-    ad_connect ${i_name}_qpll0_ref_clk $i_name/qpll0_refclk
-    ad_connect ${i_name}_qpll1_ref_clk $i_name/qpll1_refclk
+  if {$xcvr_master_or_slave_n == 1} {
+    if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
+      create_bd_port -dir I -type clk ${i_name}_qpll0_ref_clk
+      create_bd_port -dir I -type clk ${i_name}_qpll1_ref_clk
+      ad_connect ${i_name}_qpll0_ref_clk $i_name/qpll0_refclk
+      ad_connect ${i_name}_qpll1_ref_clk $i_name/qpll1_refclk
+    } else {
+      create_bd_port -dir I -type clk ${i_name}_qpll_ref_clk
+      ad_connect ${i_name}_qpll_ref_clk $i_name/qpll_refclk
+    }
   } else {
-    create_bd_port -dir I -type clk ${i_name}_qpll_ref_clk
-    ad_connect ${i_name}_qpll_ref_clk $i_name/qpll_refclk
+    if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
+      ad_connect $xcvr_master_instance/common0_qpll0_out $i_name/common0_qpll0_in
+      ad_connect $xcvr_master_instance/common0_qpll1_out $i_name/common0_qpll1_in
+    } else {
+      ad_connect $xcvr_master_instance/common0_qpll_out $i_name/common0_qpll_in
+    }
   }
 
   create_bd_port -dir I -type clk ${i_name}_cpll_ref_clk
