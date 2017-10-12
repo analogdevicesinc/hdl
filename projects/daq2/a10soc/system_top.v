@@ -63,6 +63,27 @@ module system_top (
   inout   [  3:0]   hps_ddr_dbi_n,
   input             hps_ddr_rzq,
 
+  // pl-ddr4
+
+  input             sys_ddr_ref_clk,
+  output  [  0:0]   sys_ddr_clk_p,
+  output  [  0:0]   sys_ddr_clk_n,
+  output  [ 16:0]   sys_ddr_a,
+  output  [  1:0]   sys_ddr_ba,
+  output  [  0:0]   sys_ddr_bg,
+  output  [  0:0]   sys_ddr_cke,
+  output  [  0:0]   sys_ddr_cs_n,
+  output  [  0:0]   sys_ddr_odt,
+  output  [  0:0]   sys_ddr_reset_n,
+  output  [  0:0]   sys_ddr_act_n,
+  output  [  0:0]   sys_ddr_par,
+  input   [  0:0]   sys_ddr_alert_n,
+  inout   [  7:0]   sys_ddr_dqs_p,
+  inout   [  7:0]   sys_ddr_dqs_n,
+  inout   [ 63:0]   sys_ddr_dq,
+  inout   [  7:0]   sys_ddr_dbi_n,
+  input             sys_ddr_rzq,
+
   // hps-ethernet
 
   input   [  0:0]   hps_eth_rxclk,
@@ -141,6 +162,8 @@ module system_top (
 
   // internal signals
 
+  wire              sys_ddr_cal_success;
+  wire              sys_ddr_cal_fail;
   wire              sys_hps_resetn;
   wire              sys_resetn_s;
   wire    [ 63:0]   gpio_i;
@@ -148,12 +171,14 @@ module system_top (
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
+  wire              dac_fifo_bypass;
 
   // assignments
 
   assign spi_csn_adc = spi_csn_s[2];
   assign spi_csn_dac = spi_csn_s[1];
   assign spi_csn_clk = spi_csn_s[0];
+
 
   daq2_spi i_daq2_spi (
     .spi_csn (spi_csn_s[2:0]),
@@ -165,7 +190,9 @@ module system_top (
 
   // gpio in & out are separate cores
 
-  assign gpio_i[63:44] = gpio_o[63:44];
+  assign gpio_i[63:45] = gpio_o[63:45];
+  assign dac_fifo_bypass = gpio_o[44];
+  assign gpio_i[44:44] = gpio_o[44];
   assign gpio_i[43:43] = trig;
 
   assign gpio_i[42:40] = gpio_o[42:40];
@@ -200,6 +227,26 @@ module system_top (
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
+    .sys_ddr_mem_mem_ck (sys_ddr_clk_p),
+    .sys_ddr_mem_mem_ck_n (sys_ddr_clk_n),
+    .sys_ddr_mem_mem_a (sys_ddr_a),
+    .sys_ddr_mem_mem_act_n (sys_ddr_act_n),
+    .sys_ddr_mem_mem_ba (sys_ddr_ba),
+    .sys_ddr_mem_mem_bg (sys_ddr_bg),
+    .sys_ddr_mem_mem_cke (sys_ddr_cke),
+    .sys_ddr_mem_mem_cs_n (sys_ddr_cs_n),
+    .sys_ddr_mem_mem_odt (sys_ddr_odt),
+    .sys_ddr_mem_mem_reset_n (sys_ddr_reset_n),
+    .sys_ddr_mem_mem_par (sys_ddr_par),
+    .sys_ddr_mem_mem_alert_n (sys_ddr_alert_n),
+    .sys_ddr_mem_mem_dqs (sys_ddr_dqs_p),
+    .sys_ddr_mem_mem_dqs_n (sys_ddr_dqs_n),
+    .sys_ddr_mem_mem_dq (sys_ddr_dq),
+    .sys_ddr_mem_mem_dbi_n (sys_ddr_dbi_n),
+    .sys_ddr_oct_oct_rzqin (sys_ddr_rzq),
+    .sys_ddr_ref_clk_clk (sys_ddr_ref_clk),
+    .sys_ddr_status_local_cal_success (sys_ddr_cal_success),
+    .sys_ddr_status_local_cal_fail (sys_ddr_cal_fail),
     .sys_gpio_bd_in_port (gpio_i[31:0]),
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
@@ -275,6 +322,7 @@ module system_top (
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
     .tx_serial_data_tx_serial_data (tx_serial_data),
+    .tx_fifo_bypass_bypass (dac_fifo_bypass),
     .tx_ref_clk_clk (tx_ref_clk),
     .tx_sync_export (tx_sync),
     .tx_sysref_export (tx_sysref),

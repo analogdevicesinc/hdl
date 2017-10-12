@@ -12,11 +12,7 @@ foreach async_input {adc_fda adc_fdb clkd_status[*] dac_irq gpio_bd_i[*] trig} {
 foreach async_output {adc_pd clkd_sync dac_reset dac_txen gpio_bd_o[*]} {
    set_false_path -to [get_ports $async_output]
 }
-
-# We really only want to constrain the known good reset paths that are properly
-# synchronized here to be able to spot bad paths when they get added.
-set_false_path -from [get_ports sys_resetn] -to [get_registers *altera_reset_synchronizer_int_chain*]
-set_false_path -from [get_ports sys_resetn] -to [get_keepers *altera_emif*]
-
 derive_pll_clocks
 derive_clock_uncertainty
+
+set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out*]

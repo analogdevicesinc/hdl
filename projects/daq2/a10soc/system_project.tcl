@@ -5,6 +5,7 @@ source ../../scripts/adi_project_alt.tcl
 adi_project_altera daq2_a10soc
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
+source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
 
 # files
 
