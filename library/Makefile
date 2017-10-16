@@ -68,6 +68,7 @@ clean:
 	$(MAKE) -C util_adcfifo clean
 	$(MAKE) -C util_axis_fifo clean
 	$(MAKE) -C util_axis_resize clean
+	$(MAKE) -C util_axis_upscale clean
 	$(MAKE) -C util_bsplit clean
 	$(MAKE) -C util_cdc clean
 	$(MAKE) -C util_cic clean
@@ -159,6 +160,7 @@ lib:
 	$(MAKE) -C util_adcfifo
 	$(MAKE) -C util_axis_fifo
 	$(MAKE) -C util_axis_resize
+	$(MAKE) -C util_axis_upscale
 	$(MAKE) -C util_bsplit
 	$(MAKE) -C util_cdc
 	$(MAKE) -C util_cic
