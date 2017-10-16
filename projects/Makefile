@@ -9,6 +9,7 @@
 all:
 	-$(MAKE) -C ad5766_sdz all
 	-$(MAKE) -C ad6676evb all
+	-$(MAKE) -C ad7134_fmc all
 	-$(MAKE) -C ad738x_fmc all
 	-$(MAKE) -C ad7616_sdz all
 	-$(MAKE) -C ad77681evb all
@@ -47,6 +48,7 @@ all:
 clean:
 	$(MAKE) -C ad5766_sdz clean
 	$(MAKE) -C ad6676evb clean
+	$(MAKE) -C ad7134_fmc clean
 	$(MAKE) -C ad738x_fmc clean
 	$(MAKE) -C ad7616_sdz clean
 	$(MAKE) -C ad77681evb clean
@@ -85,6 +87,7 @@ clean:
 clean-all:
 	$(MAKE) -C ad5766_sdz clean-all
 	$(MAKE) -C ad6676evb clean-all
+	$(MAKE) -C ad7134_fmc clean-all
 	$(MAKE) -C ad738x_fmc clean-all
 	$(MAKE) -C ad7616_sdz clean-all
 	$(MAKE) -C ad77681evb clean-all
