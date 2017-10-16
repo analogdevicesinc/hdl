@@ -77,6 +77,58 @@
 				</spirit:onSlave>
 			</spirit:wire>
 		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>SDI_4</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:width>1</spirit:width>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>SDI_5</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:width>1</spirit:width>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>SDI_6</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:width>1</spirit:width>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
+		<spirit:port>
+			<spirit:logicalName>SDI_7</spirit:logicalName>
+			<spirit:wire>
+				<spirit:onMaster>
+					<spirit:presence>required</spirit:presence>
+					<spirit:width>1</spirit:width>
+					<spirit:direction>in</spirit:direction>
+				</spirit:onMaster>
+				<spirit:onSlave>
+					<spirit:width>1</spirit:width>
+				</spirit:onSlave>
+			</spirit:wire>
+		</spirit:port>
 		<spirit:port>	
 			<spirit:logicalName>SDO</spirit:logicalName>
 			<spirit:wire>

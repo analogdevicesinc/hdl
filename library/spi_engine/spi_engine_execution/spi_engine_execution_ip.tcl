@@ -39,6 +39,10 @@ adi_add_bus "spi" "master" \
 		{"sdi_1" "SDI_1"} \
 		{"sdi_2" "SDI_2"} \
 		{"sdi_3" "SDI_3"} \
+		{"sdi_4" "SDI_4"} \
+		{"sdi_5" "SDI_5"} \
+		{"sdi_6" "SDI_6"} \
+		{"sdi_7" "SDI_7"} \
 		{"sdo" "SDO"} \
 		{"sdo_t" "SDO_T"} \
 		{"three_wire" "THREE_WIRE"} \

@@ -70,6 +70,10 @@ module spi_engine_execution #(
   input sdi_1,
   input sdi_2,
   input sdi_3,
+  input sdi_4,
+  input sdi_5,
+  input sdi_6,
+  input sdi_7,
   output reg [NUM_OF_CS-1:0] cs,
   output reg three_wire
 );
@@ -126,10 +130,15 @@ reg [7:0] clk_div = DEFAULT_CLK_DIV;
 wire sdo_enabled = cmd_d1[8];
 wire sdi_enabled = cmd_d1[9];
 
+// supporting max 8 SDI channel
 reg [(DATA_WIDTH):0] data_shift = 'h0;
 reg [(DATA_WIDTH):0] data_shift_1 = 'h0;
 reg [(DATA_WIDTH):0] data_shift_2 = 'h0;
 reg [(DATA_WIDTH):0] data_shift_3 = 'h0;
+reg [(DATA_WIDTH):0] data_shift_4 = 'h0;
+reg [(DATA_WIDTH):0] data_shift_5 = 'h0;
+reg [(DATA_WIDTH):0] data_shift_6 = 'h0;
+reg [(DATA_WIDTH):0] data_shift_7 = 'h0;
 
 wire [1:0] inst = cmd[13:12];
 wire [1:0] inst_d1 = cmd_d1[13:12];
@@ -340,14 +349,34 @@ always @(posedge clk) begin
                   data_shift_1[DATA_WIDTH:1] <= data_shift_1[(DATA_WIDTH-1):0];
                   data_shift_2[DATA_WIDTH:1] <= data_shift_2[(DATA_WIDTH-1):0];
                   data_shift_3[DATA_WIDTH:1] <= data_shift_3[(DATA_WIDTH-1):0];
+                  data_shift_4[DATA_WIDTH:1] <= data_shift_4[(DATA_WIDTH-1):0];
+                  data_shift_5[DATA_WIDTH:1] <= data_shift_5[(DATA_WIDTH-1):0];
+                  data_shift_6[DATA_WIDTH:1] <= data_shift_6[(DATA_WIDTH-1):0];
+                  data_shift_7[DATA_WIDTH:1] <= data_shift_7[(DATA_WIDTH-1):0];
         end
 end
 
 assign sdo = data_shift[DATA_WIDTH];
 assign sdi_data = (NUM_OF_SDI == 1) ? data_shift[(DATA_WIDTH-1):0] :
                   (NUM_OF_SDI == 2) ? {data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
-                  (NUM_OF_SDI == 3) ? {data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
-                  (NUM_OF_SDI == 4) ? {data_shift_3[(DATA_WIDTH-1):0], data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
+                  (NUM_OF_SDI == 3) ? {data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0],
+                                                                       data_shift[(DATA_WIDTH-1):0]} :
+                  (NUM_OF_SDI == 4) ? {data_shift_3[(DATA_WIDTH-1):0], data_shift_2[(DATA_WIDTH-1):0],
+                                       data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
+                  (NUM_OF_SDI == 5) ? {data_shift_4[(DATA_WIDTH-1):0], data_shift_3[(DATA_WIDTH-1):0],
+                                       data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0],
+                                                                       data_shift[(DATA_WIDTH-1):0]} :
+                  (NUM_OF_SDI == 6) ? {data_shift_5[(DATA_WIDTH-1):0], data_shift_4[(DATA_WIDTH-1):0],
+                                       data_shift_3[(DATA_WIDTH-1):0], data_shift_2[(DATA_WIDTH-1):0],
+                                       data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
+                  (NUM_OF_SDI == 7) ? {data_shift_6[(DATA_WIDTH-1):0], data_shift_5[(DATA_WIDTH-1):0],
+                                       data_shift_4[(DATA_WIDTH-1):0], data_shift_3[(DATA_WIDTH-1):0],
+                                       data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0],
+                                                                       data_shift[(DATA_WIDTH-1):0]} :
+                  (NUM_OF_SDI == 8) ? {data_shift_7[(DATA_WIDTH-1):0], data_shift_6[(DATA_WIDTH-1):0],
+                                       data_shift_5[(DATA_WIDTH-1):0], data_shift_4[(DATA_WIDTH-1):0],
+                                       data_shift_3[(DATA_WIDTH-1):0], data_shift_2[(DATA_WIDTH-1):0],
+                                       data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
                   data_shift[7:0];
 
 always @(posedge clk) begin
@@ -356,6 +385,10 @@ always @(posedge clk) begin
           data_shift_1[0] <= sdi_1;
           data_shift_2[0] <= sdi_2;
           data_shift_3[0] <= sdi_3;
+          data_shift_4[0] <= sdi_4;
+          data_shift_5[0] <= sdi_5;
+          data_shift_6[0] <= sdi_6;
+          data_shift_7[0] <= sdi_7;
         end
 end
 
