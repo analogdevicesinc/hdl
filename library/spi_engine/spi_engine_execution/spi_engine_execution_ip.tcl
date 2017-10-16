@@ -39,6 +39,10 @@ adi_add_bus "spi" "master" \
 		{"sdi_1" "SDI_1"} \
 		{"sdi_2" "SDI_2"} \
 		{"sdi_3" "SDI_3"} \
+		{"sdi_4" "SDI_4"} \
+		{"sdi_5" "SDI_5"} \
+		{"sdi_6" "SDI_6"} \
+		{"sdi_7" "SDI_7"} \
 		{"sdo" "SDO"} \
 		{"sdo_t" "SDO_T"} \
 		{"three_wire" "THREE_WIRE"} \
@@ -55,5 +59,13 @@ adi_set_ports_dependency "sdi_2" \
       "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 2)"
 adi_set_ports_dependency "sdi_3" \
       "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 3)"
+adi_set_ports_dependency "sdi_4" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 4)"
+adi_set_ports_dependency "sdi_5" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 5)"
+adi_set_ports_dependency "sdi_6" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 6)"
+adi_set_ports_dependency "sdi_7" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 7)"
 
 ipx::save_core [ipx::current_core]
