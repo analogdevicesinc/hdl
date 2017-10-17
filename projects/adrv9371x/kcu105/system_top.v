@@ -76,10 +76,8 @@ module system_top (
   inout                   iic_scl,
   inout                   iic_sda,
 
-  input                   ref_clk0_p,
-  input                   ref_clk0_n,
-  input                   ref_clk1_p,
-  input                   ref_clk1_n,
+  input                   ref_clk_p,
+  input                   ref_clk_n,
   input       [ 3:0]      rx_data_p,
   input       [ 3:0]      rx_data_n,
   output      [ 3:0]      tx_data_p,
@@ -135,34 +133,23 @@ module system_top (
   wire       [63:0]       gpio_o;
   wire       [63:0]       gpio_t;
   wire       [ 7:0]       spi_csn;
-  wire                    ref_clk0;
-  wire                    ref_clk1;
+  wire                    ref_clk;
   wire                    rx_sync;
   wire                    rx_os_sync;
   wire                    tx_sync;
   wire                    sysref;
 
-  assign spi_csn_ad9528 =  spi_csn[1];
-  assign spi_csn_ad9371 =  spi_csn[0];
-
-  // default logic
+  // defaults
 
   assign fan_pwm = 1'b1;
 
   // instantiations
 
-  IBUFDS_GTE3 i_ibufds_rx_ref_clk (
+  IBUFDS_GTE3 i_ibufds_ref_clk (
     .CEB (1'd0),
-    .I (ref_clk0_p),
-    .IB (ref_clk0_n),
-    .O (ref_clk0),
-    .ODIV2 ());
-
-  IBUFDS_GTE3 i_ibufds_ref_clk1 (
-    .CEB (1'd0),
-    .I (ref_clk1_p),
-    .IB (ref_clk1_n),
-    .O (ref_clk1),
+    .I (ref_clk_p),
+    .IB (ref_clk_n),
+    .O (ref_clk),
     .ODIV2 ());
 
   OBUFDS i_obufds_rx_sync (
@@ -184,6 +171,8 @@ module system_top (
     .I (sysref_p),
     .IB (sysref_n),
     .O (sysref));
+
+  assign gpio_i[63:60] = gpio_o[63:60];
 
   ad_iobuf #(.DATA_WIDTH(28)) i_iobuf (
     .dio_t ({gpio_t[59:32]}),
@@ -218,13 +207,30 @@ module system_top (
               ad9371_gpio_16,       // 33
               ad9371_gpio_18}));    // 32
 
+  assign gpio_i[31:17] = gpio_o[31:17];
+
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
     .dio_t (gpio_t[16:0]),
     .dio_i (gpio_o[16:0]),
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
 
+  assign spi_csn_ad9528 =  spi_csn[1];
+  assign spi_csn_ad9371 =  spi_csn[0];
+
   system_wrapper i_system_wrapper (
+    .axi_adrv9371x_xcvr_0_cpll_ref_clk (ref_clk),
+    .axi_adrv9371x_xcvr_0_qpll0_ref_clk (ref_clk),
+    .axi_adrv9371x_xcvr_0_qpll1_ref_clk (ref_clk),
+    .axi_adrv9371x_xcvr_0_rx_data_n (rx_data_n[1:0]),
+    .axi_adrv9371x_xcvr_0_rx_data_p (rx_data_p[1:0]),
+    .axi_adrv9371x_xcvr_0_tx_data_n (tx_data_n[1:0]),
+    .axi_adrv9371x_xcvr_0_tx_data_p (tx_data_p[1:0]),
+    .axi_adrv9371x_xcvr_1_cpll_ref_clk (ref_clk),
+    .axi_adrv9371x_xcvr_1_rx_data_n (rx_data_n[3:2]),
+    .axi_adrv9371x_xcvr_1_rx_data_p (rx_data_p[3:2]),
+    .axi_adrv9371x_xcvr_1_tx_data_n (tx_data_n[3:2]),
+    .axi_adrv9371x_xcvr_1_tx_data_p (tx_data_p[3:2]),
     .dac_fifo_bypass (gpio_o[60]),
     .c0_ddr4_act_n (ddr4_act_n),
     .c0_ddr4_adr (ddr4_addr),
@@ -260,20 +266,10 @@ module system_top (
     .sgmii_rxp (phy_rx_p),
     .sgmii_txn (phy_tx_n),
     .sgmii_txp (phy_tx_p),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_data_2_n (rx_data_n[2]),
-    .rx_data_2_p (rx_data_p[2]),
-    .rx_data_3_n (rx_data_n[3]),
-    .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk_0 (ref_clk1),
-    .rx_ref_clk_2 (ref_clk1),
-    .rx_sync_0 (rx_sync),
-    .rx_sync_2 (rx_os_sync),
-    .rx_sysref_0 (sysref),
-    .rx_sysref_2 (sysref),
+    .rx_os_sync (rx_os_sync),
+    .rx_os_sysref (sysref),
+    .rx_sync (rx_sync),
+    .rx_sysref (sysref),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
     .spi_csn_i (spi_csn),
@@ -283,18 +279,9 @@ module system_top (
     .spi_sdo_o (spi_mosi),
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
-    .sys_rst(sys_rst),
-    .tx_data_0_n (tx_data_n[0]),
-    .tx_data_0_p (tx_data_p[0]),
-    .tx_data_1_n (tx_data_n[1]),
-    .tx_data_1_p (tx_data_p[1]),
-    .tx_data_2_n (tx_data_n[2]),
-    .tx_data_2_p (tx_data_p[2]),
-    .tx_data_3_n (tx_data_n[3]),
-    .tx_data_3_p (tx_data_p[3]),
-    .tx_ref_clk_0 (ref_clk1),
-    .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (sysref),
+    .sys_rst (sys_rst),
+    .tx_sync (tx_sync),
+    .tx_sysref (sysref),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout));
 

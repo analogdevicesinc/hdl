@@ -12,12 +12,7 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 150
 ad_connect sys_dma_clk sys_ps8/pl_clk2
-ad_ip_instance proc_sys_reset sys_dma_rstgen
-ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_connect sys_rstgen/peripheral_reset sys_dma_rstgen/ext_reset_in
-ad_connect sys_dma_clk sys_dma_rstgen/slowest_sync_clk
-ad_connect sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
-ad_connect sys_dma_reset sys_dma_rstgen/peripheral_reset
 
 ad_ip_instance util_ds_buf axi_ad9371_tx_bufg
 ad_ip_parameter axi_ad9371_tx_bufg CONFIG.C_BUF_TYPE {BUFG_GT}

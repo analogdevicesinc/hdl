@@ -214,6 +214,14 @@ ad_connect util_ad9371_rx_os_cpack/adc_data axi_ad9371_rx_os_dma/fifo_wr_din
 ad_connect axi_ad9371_rx_os_dma/fifo_wr_overflow axi_ad9371_core/adc_os_dovf
 ad_connect sys_dma_resetn axi_ad9371_rx_os_dma/m_dest_axi_aresetn
 
+# dma clock & reset
+
+ad_ip_instance proc_sys_reset sys_dma_rstgen
+ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_connect sys_dma_clk sys_dma_rstgen/slowest_sync_clk
+ad_connect sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
+ad_connect sys_dma_reset sys_dma_rstgen/peripheral_reset
+
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A00000 axi_ad9371_core
