@@ -1,25 +1,20 @@
 
 variable p_board
 variable p_device
-variable sys_zynq
 variable p_prcfg_init
 variable p_prcfg_list
 variable p_prcfg_status
+variable sys_zynq
+
+set ADI_POWER_OPTIMIZATION 0
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
   set REQUIRED_VIVADO_VERSION "2017.2.1"
 }
 
-if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
-  set IGNORE_VERSION_CHECK 1
-} elseif {![info exists IGNORE_VERSION_CHECK]} {
-  set IGNORE_VERSION_CHECK 0
-}
-
 set p_board "not-applicable"
 set p_device "none"
 set sys_zynq 1
-set ADI_POWER_OPTIMIZATION 0
 
 proc adi_project_xilinx {project_name {mode 0}} {
 
@@ -29,54 +24,58 @@ proc adi_project_xilinx {project_name {mode 0}} {
   global p_device
   global sys_zynq
   global REQUIRED_VIVADO_VERSION
-  global IGNORE_VERSION_CHECK
 
-  if [regexp "_ac701$" $project_name] {
+  set p_defaults 1
+  if {($p_device ne "none") || ($p_board ne "not-applicable")} {
+    set p_defaults 0
+  }
+
+  if {($p_defaults == 1) && ([regexp "_ac701$" $project_name])} {
     set p_device "xc7a200tfbg676-2"
     set p_board "xilinx.com:ac701:part0:1.0"
     set sys_zynq 0
   }
-  if [regexp "_kc705$" $project_name] {
+  if {($p_defaults == 1) && ([regexp "_kc705$" $project_name])} {
     set p_device "xc7k325tffg900-2"
     set p_board "xilinx.com:kc705:part0:1.1"
     set sys_zynq 0
   }
-  if [regexp "_vc707$" $project_name] {
+  if {($p_defaults == 1) && ([regexp "_vc707$" $project_name])} {
     set p_device "xc7vx485tffg1761-2"
     set p_board "xilinx.com:vc707:part0:1.1"
     set sys_zynq 0
   }
-  if [regexp "_kcu105$" $project_name] {
+  if {($p_defaults == 1) && ([regexp "_kcu105$" $project_name])} {
     set p_device "xcku040-ffva1156-2-e"
     set p_board "xilinx.com:kcu105:part0:1.1"
     set sys_zynq 0
   }
-  if [regexp "_zed$" $project_name] {
+  if {($p_defaults == 1) && ([regexp "_zed$" $project_name])} {
     set p_device "xc7z020clg484-1"
     set p_board "em.avnet.com:zed:part0:1.3"
     set sys_zynq 1
   }
-  if [regexp "_microzed$" $project_name] {
+  if {($p_defaults == 1) && ([regexp "_microzed$" $project_name])} {
     set p_device "xc7z010clg400-1"
     set p_board "not-applicable"
     set sys_zynq 1
   }
-  if [regexp "_zc702$" $project_name] {
+  if {($p_defaults == 1) && ([regexp "_zc702$" $project_name])} {
     set p_device "xc7z020clg484-1"
     set p_board "xilinx.com:zc702:part0:1.2"
     set sys_zynq 1
   }
-  if [regexp "_zc706$" $project_name] {
+  if {($p_defaults == 1) && ([regexp "_zc706$" $project_name])} {
     set p_device "xc7z045ffg900-2"
     set p_board "xilinx.com:zc706:part0:1.2"
     set sys_zynq 1
   }
-  if [regexp "_mitx045$" $project_name] {
+  if {($p_defaults == 1) && ([regexp "_mitx045$" $project_name])} {
     set p_device "xc7z045ffg900-2"
     set p_board "not-applicable"
     set sys_zynq 1
   }
-  if [regexp "_zcu102$" $project_name] {
+  if {($p_defaults == 1) && ([regexp "_zcu102$" $project_name])} {
     set p_device "xczu9eg-ffvb1156-2-i"
     set p_board "xilinx.com:zcu102:part0:3.0"
     set sys_zynq 2

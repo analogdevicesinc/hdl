@@ -261,7 +261,7 @@ proc ad_xcvr_instance {i_name} {
     lappend xcvr_parameter_list CONFIG.Max_Line_Rate 16
   } else {
     lappend xcvr_parameter_list CONFIG.Min_Line_Rate 1
-    lappend xcvr_parameter_list CONFIG.Max_Line_Rate 12
+    lappend xcvr_parameter_list CONFIG.Max_Line_Rate 16
   }
 
   set xcvr_rx_pll 3
