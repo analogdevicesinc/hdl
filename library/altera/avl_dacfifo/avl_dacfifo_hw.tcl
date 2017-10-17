@@ -3,12 +3,12 @@ package require qsys
 source ../../scripts/adi_env.tcl
 source ../../scripts/adi_ip_alt.tcl
 
-ad_ip_create avl_dacfifo {Avalon DDR DAC Fifo}
-set_module_property ELABORATION_CALLBACK p_avl_dacfifo
+ad_ip_create avl_dacfifo {Avalon DDR DAC Fifo} p_avl_dacfifo_elab
 ad_ip_files avl_dacfifo [list\
   $ad_hdl_dir/library/common/util_delay.v \
   $ad_hdl_dir/library/common/ad_b2g.v \
   $ad_hdl_dir/library/common/ad_g2b.v \
+  $ad_hdl_dir/library/common/ad_mem.v \
   util_dacfifo_bypass.v \
   avl_dacfifo_byteenable_coder.v \
   avl_dacfifo_byteenable_decoder.v \
@@ -26,6 +26,7 @@ ad_ip_parameter DMA_DATA_WIDTH INTEGER 64
 ad_ip_parameter DMA_MEM_ADDRESS_WIDTH INTEGER 8
 ad_ip_parameter AVL_DATA_WIDTH INTEGER 512
 ad_ip_parameter AVL_ADDRESS_WIDTH INTEGER 25
+ad_ip_parameter AVL_BURST_LENGTH INTEGER 127
 ad_ip_parameter AVL_BASE_ADDRESS INTEGER 0
 ad_ip_parameter AVL_ADDRESS_LIMIT INTEGER 0x800000
 
@@ -72,7 +73,7 @@ set_interface_property amm_ddr addressUnits WORDS
 
 # elaborate
 
-proc p_avl_dacfifo {} {
+proc p_avl_dacfifo_elab {} {
 
   # read parameters
 

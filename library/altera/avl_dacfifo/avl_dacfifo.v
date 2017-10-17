@@ -40,9 +40,10 @@ module avl_dacfifo #(
   parameter   DAC_DATA_WIDTH = 64,
   parameter   DAC_MEM_ADDRESS_WIDTH = 8,
   parameter   DMA_DATA_WIDTH = 64,
-  parameter   DMA_MEM_ADDRESS_WIDTH = 8,
+  parameter   DMA_MEM_ADDRESS_WIDTH = 10,
   parameter   AVL_DATA_WIDTH = 512,
   parameter   AVL_ADDRESS_WIDTH = 25,
+  parameter   AVL_BURST_LENGTH = 127,
   parameter   AVL_BASE_ADDRESS = 32'h00000000,
   parameter   AVL_ADDRESS_LIMIT = 32'h1fffffff) (
 
@@ -63,7 +64,7 @@ module avl_dacfifo #(
   input                                 dac_valid,
   output  reg [(DAC_DATA_WIDTH-1):0]    dac_data,
   output  reg                           dac_dunf,
-  output                                dac_xfer_out,
+  output  reg                           dac_xfer_out,
 
   input                                 bypass,
 
@@ -75,12 +76,12 @@ module avl_dacfifo #(
   output  reg [(AVL_ADDRESS_WIDTH-1):0] avl_address,
   output  reg [  6:0]                   avl_burstcount,
   output  reg [ 63:0]                   avl_byteenable,
-  output  reg                           avl_read,
+  output                                avl_read,
   input       [(AVL_DATA_WIDTH-1):0]    avl_readdata,
   input                                 avl_readdata_valid,
   input                                 avl_ready,
-  output  reg                           avl_write,
-  output  reg [(AVL_DATA_WIDTH-1):0]    avl_writedata);
+  output                                avl_write,
+  output      [(AVL_DATA_WIDTH-1):0]    avl_writedata);
 
   localparam  FIFO_BYPASS = (DAC_DATA_WIDTH == DMA_DATA_WIDTH) ? 1 : 0;
 
@@ -91,11 +92,7 @@ module avl_dacfifo #(
   reg                                   dac_bypass_m1 = 1'b0;
   reg                                   dac_bypass = 1'b0;
   reg                                   dac_xfer_out_m1 = 1'b0;
-  reg                                   dac_xfer_out_int = 1'b0;
   reg                                   dac_xfer_out_bypass = 1'b0;
-  reg                                   avl_xfer_wren = 1'b0;
-  reg                                   avl_dma_xfer_req = 1'b0;
-  reg                                   avl_dma_xfer_req_m1 = 1'b0;
 
   // internal signals
 
@@ -103,16 +100,18 @@ module avl_dacfifo #(
   wire                                  dma_ready_bypass_s;
   wire                                  avl_read_s;
   wire                                  avl_write_s;
-  wire   [(AVL_DATA_WIDTH-1):0]         avl_writedata_s;
   wire        [ 24:0]                   avl_wr_address_s;
   wire        [ 24:0]                   avl_rd_address_s;
   wire        [ 24:0]                   avl_last_address_s;
-  wire        [ 63:0]                   avl_last_byteenable_s;
-  wire        [  5:0]                   avl_wr_burstcount_s;
-  wire        [  5:0]                   avl_rd_burstcount_s;
+  wire        [  6:0]                   avl_last_burstcount_s;
+  wire        [  7:0]                   dma_last_beats_s;
+  wire        [  6:0]                   avl_wr_burstcount_s;
+  wire        [  6:0]                   avl_rd_burstcount_s;
   wire        [ 63:0]                   avl_wr_byteenable_s;
   wire        [ 63:0]                   avl_rd_byteenable_s;
+  wire                                  avl_xfer_wren_s;
   wire                                  avl_xfer_out_s;
+  wire                                  avl_xfer_in_s;
   wire    [(DAC_DATA_WIDTH-1):0]        dac_data_fifo_s;
   wire    [(DAC_DATA_WIDTH-1):0]        dac_data_bypass_s;
   wire                                  dac_xfer_fifo_out_s;
@@ -123,7 +122,8 @@ module avl_dacfifo #(
     .AVL_DATA_WIDTH (AVL_DATA_WIDTH),
     .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
     .AVL_DDR_BASE_ADDRESS (AVL_BASE_ADDRESS),
-    .DMA_MEM_ADDRESS_WIDTH(DMA_MEM_ADDRESS_WIDTH)
+    .DMA_MEM_ADDRESS_WIDTH(DMA_MEM_ADDRESS_WIDTH),
+    .AVL_BURST_LENGTH (AVL_BURST_LENGTH)
   ) i_wr (
     .dma_clk (dma_clk),
     .dma_data (dma_data),
@@ -132,25 +132,27 @@ module avl_dacfifo #(
     .dma_valid (dma_valid),
     .dma_xfer_req (dma_xfer_req),
     .dma_xfer_last (dma_xfer_last),
+    .dma_last_beats (dma_last_beats_s),
     .avl_last_address (avl_last_address_s),
-    .avl_last_byteenable (avl_last_byteenable_s),
+    .avl_last_burstcount (avl_last_burstcount_s),
     .avl_clk (avl_clk),
     .avl_reset (avl_reset),
     .avl_address (avl_wr_address_s),
     .avl_burstcount (avl_wr_burstcount_s),
     .avl_byteenable (avl_wr_byteenable_s),
-    .avl_ready (avl_ready),
-    .avl_write (avl_write_s),
-    .avl_data (avl_writedata_s),
-    .avl_xfer_req (avl_xfer_out_s)
-    );
+    .avl_waitrequest (~avl_ready),
+    .avl_write (avl_write),
+    .avl_data (avl_writedata),
+    .avl_xfer_req_out (avl_xfer_out_s),
+    .avl_xfer_req_in (avl_xfer_in_s));
 
   avl_dacfifo_rd #(
     .AVL_DATA_WIDTH(AVL_DATA_WIDTH),
     .DAC_DATA_WIDTH(DAC_DATA_WIDTH),
     .AVL_DDR_BASE_ADDRESS(AVL_BASE_ADDRESS),
     .AVL_DDR_ADDRESS_LIMIT(AVL_ADDRESS_LIMIT),
-    .DAC_MEM_ADDRESS_WIDTH(DAC_MEM_ADDRESS_WIDTH)
+    .DAC_MEM_ADDRESS_WIDTH(DAC_MEM_ADDRESS_WIDTH),
+    .AVL_BURST_LENGTH (AVL_BURST_LENGTH)
   ) i_rd (
     .dac_clk(dac_clk),
     .dac_reset(dac_rst),
@@ -163,49 +165,29 @@ module avl_dacfifo #(
     .avl_address(avl_rd_address_s),
     .avl_burstcount(avl_rd_burstcount_s),
     .avl_byteenable(avl_rd_byteenable_s),
-    .avl_ready(avl_ready),
+    .avl_waitrequest(~avl_ready),
     .avl_readdatavalid(avl_readdata_valid),
-    .avl_read(avl_read_s),
+    .avl_read(avl_read),
     .avl_data(avl_readdata),
     .avl_last_address(avl_last_address_s),
-    .avl_last_byteenable(avl_last_byteenable_s),
-    .avl_xfer_req(avl_xfer_out_s));
+    .avl_last_burstcount(avl_last_burstcount_s),
+    .dma_last_beats(dma_last_beats_s),
+    .avl_xfer_req_in(avl_xfer_out_s),
+    .avl_xfer_req_out(avl_xfer_in_s));
 
   // avalon address multiplexer and output registers
 
-  always @(posedge avl_clk) begin
-    avl_dma_xfer_req_m1 <= dma_xfer_req;
-    avl_dma_xfer_req <= avl_dma_xfer_req_m1;
-  end
-
-  always @(posedge avl_clk) begin
-    if (avl_reset == 1'b1) begin
-      avl_xfer_wren <= 1'b0;
-    end else begin
-      if (avl_dma_xfer_req == 1'b1) begin
-        avl_xfer_wren <= 1'b1;
-      end
-      if (avl_xfer_out_s == 1'b1) begin
-        avl_xfer_wren <= 1'b0;
-      end
-    end
-  end
+  assign avl_xfer_wren_s = ~avl_xfer_in_s;
 
   always @(posedge avl_clk) begin
     if (avl_reset == 1'b1) begin
       avl_address <= 0;
       avl_burstcount <= 0;
       avl_byteenable <= 0;
-      avl_read <= 0;
-      avl_write <= 0;
-      avl_writedata <= 0;
-    end else begin
-      avl_address <= (avl_xfer_wren == 1'b1) ? avl_wr_address_s : avl_rd_address_s;
-      avl_burstcount <= (avl_xfer_wren == 1'b1) ? avl_wr_burstcount_s : avl_rd_burstcount_s;
-      avl_byteenable <= (avl_xfer_wren == 1'b1) ? avl_wr_byteenable_s : avl_rd_byteenable_s;
-      avl_read <= avl_read_s;
-      avl_write <= avl_write_s;
-      avl_writedata <= avl_writedata_s;
+    end else if (avl_ready) begin
+      avl_address <= (avl_xfer_wren_s == 1'b1) ? avl_wr_address_s : avl_rd_address_s;
+      avl_burstcount <= (avl_xfer_wren_s == 1'b1) ? avl_wr_burstcount_s : avl_rd_burstcount_s;
+      avl_byteenable <= (avl_xfer_wren_s == 1'b1) ? avl_wr_byteenable_s : avl_rd_byteenable_s;
     end
   end
 
@@ -255,7 +237,7 @@ module avl_dacfifo #(
       if (dac_valid) begin
         dac_data <= (dac_bypass) ? dac_data_bypass_s : dac_data_fifo_s;
       end
-      dac_xfer_out_int <= (dac_bypass) ? dac_xfer_out_bypass : dac_xfer_fifo_out_s;
+      dac_xfer_out <= (dac_bypass) ? dac_xfer_out_bypass : dac_xfer_fifo_out_s;
       dac_dunf <= (dac_bypass) ? dac_dunf_bypass_s : dac_dunf_fifo_s;
     end
 
@@ -268,28 +250,12 @@ module avl_dacfifo #(
       if (dac_valid) begin
         dac_data <= dac_data_fifo_s;
       end
-      dac_xfer_out_int <= dac_xfer_fifo_out_s;
+      dac_xfer_out <= dac_xfer_fifo_out_s;
       dac_dunf <= dac_dunf_fifo_s;
     end
 
   end
   endgenerate
-
-  // the ad_mem_asym memory read interface has a 3 clock cycle delay, from the
-  // moment of the address change until a valid data arrives on the bus;
-  // because the dac_xfer_out is going to validate the outgoing samples (in conjunction
-  // with the DAC VALID, which is free a running signal), this module will compensate
-  // this delay, to prevent duplicated samples in the beginning of the
-  // transaction
-
-  util_delay #(
-    .DATA_WIDTH(1),
-    .DELAY_CYCLES(3)
-  ) i_delay (
-    .clk(dac_clk),
-    .reset(dac_rst),
-    .din(dac_xfer_out_int),
-    .dout(dac_xfer_out));
 
 endmodule
 
