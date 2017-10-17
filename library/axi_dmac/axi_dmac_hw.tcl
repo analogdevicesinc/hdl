@@ -112,7 +112,7 @@ set_parameter_property CYCLIC DISPLAY_HINT boolean
 set_parameter_property CYCLIC HDL_PARAMETER true
 set_parameter_property CYCLIC GROUP $group
 
-add_parameter DMA_2D_TRANSFER INTEGER 1
+add_parameter DMA_2D_TRANSFER INTEGER 0
 set_parameter_property DMA_2D_TRANSFER DISPLAY_NAME "2D Transfer Support"
 set_parameter_property DMA_2D_TRANSFER DISPLAY_HINT boolean
 set_parameter_property DMA_2D_TRANSFER HDL_PARAMETER true
