@@ -129,6 +129,11 @@ proc adi_project_xilinx {project_name {mode 0}} {
   set_msg_config -id {filemgmt 20-1763} -new_severity info
   set_msg_config -severity {CRITICAL WARNING} -quiet -id {BD 41-1276} -new_severity error
 
+  ## critical warning on evaluation licenses (temac-avb & others)
+  ## bitgen will fail anyway without an evaluation license
+ 
+  set_msg_config -id {Vivado 12-1790} -new_severity warning
+
   create_bd_design "system"
   source system_bd.tcl
 
@@ -153,6 +158,7 @@ proc adi_project_files {project_name project_files} {
 }
 
 proc adi_project_run {project_name} {
+
   global ADI_POWER_OPTIMIZATION
 
   set_property strategy Flow_PerfOptimized_high [get_runs synth_1]
