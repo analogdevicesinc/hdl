@@ -39,6 +39,7 @@ module avl_dacfifo_rd #(
 
   parameter     AVL_DATA_WIDTH = 512,
   parameter     DAC_DATA_WIDTH = 64,
+  parameter     AVL_BURST_LENGTH = 127,
   parameter     AVL_DDR_BASE_ADDRESS = 0,
   parameter     AVL_DDR_ADDRESS_LIMIT = 1048576,
   parameter     DAC_MEM_ADDRESS_WIDTH = 8)(
@@ -53,16 +54,18 @@ module avl_dacfifo_rd #(
   input                                     avl_clk,
   input                                     avl_reset,
   output  reg [24:0]                        avl_address,
-  output  reg [ 5:0]                        avl_burstcount,
-  output  reg [63:0]                        avl_byteenable,
-  input                                     avl_ready,
+  output  reg [ 6:0]                        avl_burstcount,
+  output      [63:0]                        avl_byteenable,
+  input                                     avl_waitrequest,
   input                                     avl_readdatavalid,
   output  reg                               avl_read,
   input       [AVL_DATA_WIDTH-1:0]          avl_data,
 
   input       [24:0]                        avl_last_address,
-  input       [63:0]                        avl_last_byteenable,
-  input                                     avl_xfer_req);
+  input       [ 6:0]                        avl_last_burstcount,
+  input       [ 7:0]                        dma_last_beats,
+  input                                     avl_xfer_req_in,
+  output  reg                               avl_xfer_req_out);
 
   // Max supported MEM_RATIO is 16
   localparam  MEM_RATIO = AVL_DATA_WIDTH/DAC_DATA_WIDTH;
@@ -72,186 +75,296 @@ module avl_dacfifo_rd #(
                                       (MEM_RATIO ==  8) ? (DAC_MEM_ADDRESS_WIDTH - 3) :
                                       (MEM_RATIO == 16) ? (DAC_MEM_ADDRESS_WIDTH - 4) :
                                                           (DAC_MEM_ADDRESS_WIDTH - 5);
-  localparam  AVL_MEM_THRESHOLD_LO = 8;
-  localparam  AVL_MEM_THRESHOLD_HI = {(AVL_MEM_ADDRESS_WIDTH){1'b1}} - 7;
+  localparam  AVL_MEM_THRESHOLD_LO = AVL_BURST_LENGTH;
+  localparam  AVL_MEM_THRESHOLD_HI = {(AVL_MEM_ADDRESS_WIDTH){1'b1}} - AVL_BURST_LENGTH;
+  localparam  DAC_MEM_THRESHOLD = 2 * (AVL_BURST_LENGTH * MEM_RATIO);
 
   localparam  MEM_WIDTH_DIFF = (MEM_RATIO > 16) ? 5 :
                                (MEM_RATIO >  8) ? 4 :
                                (MEM_RATIO >  4) ? 3 :
                                (MEM_RATIO >  2) ? 2 :
                                (MEM_RATIO >  1) ? 1 : 1;
+  localparam  AVL_BYTE_DATA_WIDTH = AVL_DATA_WIDTH/8;
+  localparam  AVL_ARINCR = AVL_BURST_LENGTH * AVL_BYTE_DATA_WIDTH;
+
+  // FSM state definition
+
+  localparam      IDLE               = 5'b00001;
+  localparam      XFER_STAGING       = 5'b00010;
+  localparam      XFER_FULL_BURST    = 5'b00100;
+  localparam      XFER_PARTIAL_BURST = 5'b01000;
+  localparam      XFER_END           = 5'b10000;
+
   // internal register
 
-  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_wr_address;
-  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_wr_address_g;
-  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address;
-  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_m1;
-  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_m2;
-  reg                                       avl_mem_wr_enable;
+  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_waddr;
+  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_laddr;
+  reg                                       avl_mem_laddr_toggle;
+  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_waddr_g;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_raddr;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_raddr_m1;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_raddr_m2;
   reg                                       avl_mem_request_data;
-  reg         [AVL_DATA_WIDTH-1:0]          avl_mem_data;
-  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_address_diff;
-  reg                                       avl_read_inprogress;
-  reg                                       avl_last_transfer;
+  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_addr_diff;
+  reg         [ 4:0]                        avl_read_state;
+  reg         [ 7:0]                        avl_burstcounter;
+  reg                                       avl_read_int;
+  reg                                       avl_inread;
 
-  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address;
-  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address_m1;
-  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address_m2;
-  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_last_address;
-  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_rd_address;
-  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_rd_address_g;
-  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_address_diff;
-  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_rd_last_address;
-  reg                                       dac_mem_last_transfer_active;
+  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_waddr;
+  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_waddr_m1;
+  reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_waddr_m2;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_laddr;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_raddr;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_raddr_g;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_addr_diff;
+  reg         [ 7:0]                        dac_mem_laddr_waddr;
+  reg         [ 7:0]                        dac_mem_laddr_raddr;
+
 
   reg                                       dac_avl_xfer_req;
   reg                                       dac_avl_xfer_req_m1;
   reg                                       dac_avl_xfer_req_m2;
 
-  reg                                       dac_avl_last_transfer_m1;
-  reg                                       dac_avl_last_transfer_m2;
-  reg                                       dac_avl_last_transfer;
-  reg         [MEM_WIDTH_DIFF-1:0]          dac_avl_last_beats_m1;
-  reg         [MEM_WIDTH_DIFF-1:0]          dac_avl_last_beats_m2;
-  reg         [MEM_WIDTH_DIFF-1:0]          dac_avl_last_beats;
+  reg         [ 7:0]                        dac_dma_last_beats_m1;
+  reg         [ 7:0]                        dac_dma_last_beats_m2;
+  reg         [ 7:0]                        dac_dma_last_beats;
+  reg         [ 3:0]                        dac_mem_laddr_toggle_m;
+  reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_laddr_b;
+  reg                                       dac_mem_renable;
+  reg                                       dac_mem_valid;
+  reg                                       dac_xfer_req_b;
 
   // internal signals
 
-  wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_s;
-  wire        [AVL_MEM_ADDRESS_WIDTH:0]     avl_mem_address_diff_s;
-  wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_address_diff_s;
+  wire                                      avl_fifo_reset_s;
+  wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_raddr_s;
+  wire        [AVL_MEM_ADDRESS_WIDTH:0]     avl_mem_addr_diff_s;
+  wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_waddr_b2g_s;
+  wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_raddr_g2b_s;
+  wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_laddr_s;
+  wire                                      avl_read_int_s;
 
-  wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_wr_address_s;
-  wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_wr_address_g2b_s;
-  wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_wr_address_b2g_s;
-  wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_rd_address_g2b_s;
-  wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_rd_address_b2g_s;
-  wire                                      dac_mem_rd_enable_s;
+  wire                                      dac_fifo_reset_s;
+  wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_addr_diff_s;
+  wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_waddr_s;
+  wire        [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_waddr_g2b_s;
+  wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_raddr_b2g_s;
   wire        [DAC_DATA_WIDTH-1:0]          dac_mem_data_s;
+  wire                                      dac_mem_laddr_wea_s;
+  wire                                      dac_mem_laddr_rea_s;
+  wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_laddr_s;
+  wire                                      dac_mem_dunf_s;
+  wire                                      dac_xfer_req_s;
 
-  wire        [MEM_WIDTH_DIFF-1:0]          avl_last_beats_s;
-  wire                                      avl_last_transfer_s;
-  wire                                      avl_read_en_s;
-  wire                                      avl_mem_wr_enable_s;
-  wire                                      avl_last_readdatavalid_s;
-
-  // ==========================================================================
   // An asymmetric memory to transfer data from Avalon interface to DAC
   // interface
-  // ==========================================================================
 
   alt_mem_asym_rd i_mem_asym (
     .mem_i_wrclock (avl_clk),
-    .mem_i_wren (avl_mem_wr_enable),
-    .mem_i_wraddress (avl_mem_wr_address),
-    .mem_i_datain (avl_mem_data),
+    .mem_i_wren (avl_readdatavalid),
+    .mem_i_wraddress (avl_mem_waddr),
+    .mem_i_datain (avl_data),
     .mem_i_rdclock (dac_clk),
-    .mem_i_rdaddress (dac_mem_rd_address),
+    .mem_i_rdaddress (dac_mem_raddr),
     .mem_o_dataout (dac_mem_data_s));
 
-  // ==========================================================================
-  // Avalon Memory Mapped interface access
-  // ==========================================================================
+  // the fifo reset is the dma_xfer_req
+
+  assign avl_fifo_reset_s = avl_reset || ~avl_xfer_req_out;
+  assign dac_fifo_reset_s = dac_reset || ~dac_avl_xfer_req;
+
+  // loop back the avl_xfer_req to the WRITE module -- this way we can make
+  // sure, that in case of a new DMA transfer, the last avalon read burst is
+  // finished, so the upcomming avalon writes will not block the interface
+
+  always @(posedge avl_clk) begin
+    if (avl_reset == 1'b1) begin
+      avl_xfer_req_out <= 1'b0;
+    end else begin
+      if ((avl_read_state == IDLE) || (avl_read_state == XFER_STAGING)) begin
+        avl_xfer_req_out <= avl_xfer_req_in;
+      end
+    end
+  end
+
+  // FSM to generate the necessary Avalon Write transactions
+
+  always @(posedge avl_clk) begin
+    if (avl_fifo_reset_s == 1'b1) begin
+       avl_read_state <= IDLE;
+    end else begin
+      case (avl_read_state)
+        IDLE : begin
+          if (avl_xfer_req_in == 1'b1) begin
+            avl_read_state <= XFER_STAGING;
+          end else begin
+            avl_read_state <= IDLE;
+          end
+        end
+        XFER_STAGING : begin
+          if (avl_mem_request_data == 1'b1) begin
+            if (avl_address + AVL_ARINCR <= avl_last_address) begin
+              avl_read_state <= XFER_FULL_BURST;
+            end else begin
+              avl_read_state <= XFER_PARTIAL_BURST;
+            end
+          end
+        end
+        // Avalon transaction with full burst length
+        XFER_FULL_BURST : begin
+          if (avl_burstcounter < avl_burstcount) begin
+            avl_read_state <= XFER_FULL_BURST;
+          end else begin
+            avl_read_state <= XFER_END;
+          end
+        end
+        // Avalon transaction with the remaining data, burst length is less than
+        // the maximum supported burst length
+        XFER_PARTIAL_BURST : begin
+          if (avl_burstcounter < avl_burstcount) begin
+            avl_read_state <= XFER_PARTIAL_BURST;
+          end else begin
+            avl_read_state <= XFER_END;
+          end
+        end
+        XFER_END : begin
+          avl_read_state <= IDLE;
+        end
+        default : begin
+            avl_read_state <= IDLE;
+        end
+      endcase
+    end
+  end
+
+  // FSM outputs
+
+  assign avl_read_int_s = ((avl_read_state == XFER_FULL_BURST)    ||
+                           (avl_read_state == XFER_PARTIAL_BURST)) ? 1 : 0;
 
   // Avalon address generation and read control signaling
 
   always @(posedge avl_clk) begin
-    if ((avl_reset == 1'b1) || (avl_xfer_req == 1'b0)) begin
+    if (avl_fifo_reset_s == 1'b1) begin
       avl_address <= AVL_DDR_BASE_ADDRESS;
     end else begin
-      if (avl_readdatavalid == 1'b1) begin
-        avl_address <= (avl_address < avl_last_address) ? avl_address + 1 : 0;
+      if (avl_read_state == XFER_END) begin
+        avl_address <= (avl_address < avl_last_address) ? avl_address + (avl_burstcount * AVL_BYTE_DATA_WIDTH) : AVL_DDR_BASE_ADDRESS;
       end
     end
   end
-
-  assign avl_read_en_s = avl_xfer_req & avl_mem_request_data;
 
   always @(posedge avl_clk) begin
     if (avl_reset == 1'b1) begin
       avl_read <= 1'b0;
-      avl_read_inprogress <= 1'b0;
+      avl_inread <= 1'b0;
+      avl_read_int <= 1'b0;
     end else begin
-      if ((avl_read_inprogress == 1'b0) && (avl_read_en_s == 1'b1)) begin
-        avl_read <= 1'b1;
-        avl_read_inprogress <= 1'b1;
-      end else if (avl_read_inprogress == 1'b1) begin
-        avl_read <= 1'b0;
-        if (avl_readdatavalid == 1'b1) begin
-          avl_read_inprogress <= 1'b0;
+      avl_read_int <= avl_read_int_s;
+      if (avl_read == 1'b0) begin
+        if ((avl_waitrequest == 1'b0) && (avl_read_int == 1'b1) && (avl_inread == 1'b0)) begin
+          avl_read <= 1'b1;
+          avl_inread <= 1'b1;
         end
+      end else if ((avl_read == 1'b1) && (avl_waitrequest == 1'b0)) begin
+        avl_read <= 1'b0;
+      end
+      if (avl_read_state == XFER_END) begin
+        avl_inread <= 1'b0;
       end
     end
   end
 
-  assign avl_last_transfer_s = (avl_address == avl_last_address) ? 1'b1 : 1'b0;
+  // Avalon burstcount
+
   always @(posedge avl_clk) begin
-    avl_burstcount <= 1'b1;
-    avl_byteenable <= (avl_last_transfer_s) ? avl_last_byteenable : {64{1'b1}};
-    avl_last_transfer <= avl_last_transfer_s;
+    if (avl_fifo_reset_s == 1'b1) begin
+      avl_burstcounter <= 8'b0;
+    end else begin
+      if ((avl_read_int == 1'b1) && (avl_readdatavalid == 1'b1)) begin
+        avl_burstcounter <= (avl_burstcounter < avl_burstcount) ? avl_burstcounter + 1'b1 : 1'b0;
+      end else if (avl_read_state == XFER_END) begin
+        avl_burstcounter <= 8'b0;
+      end
+    end
   end
+
+  always @(posedge avl_clk) begin
+    if (avl_fifo_reset_s) begin
+      avl_burstcount <= 'b0;
+    end else begin
+      if (avl_read_state == XFER_PARTIAL_BURST) begin
+        avl_burstcount <= avl_last_burstcount;
+      end else begin
+        avl_burstcount <= AVL_BURST_LENGTH;
+      end
+    end
+  end
+
+  assign avl_byteenable = {64{1'b1}};
 
   // write data from Avalon interface into the async FIFO
 
-  assign avl_mem_wr_enable_s = avl_readdatavalid & avl_ready;
   always @(posedge avl_clk) begin
-    if (avl_reset == 1'b1) begin
-      avl_mem_data <= 0;
-      avl_mem_wr_enable <= 0;
+    if (avl_fifo_reset_s == 1'b1) begin
+        avl_mem_waddr <= 'b0;
+        avl_mem_waddr_g <= 'b0;
+        avl_mem_laddr <= 'b0;
+        avl_mem_laddr_toggle <= 1'b0;
     end else begin
-      avl_mem_wr_enable <= avl_mem_wr_enable_s;
-      if (avl_mem_wr_enable_s == 1'b1) begin
-        avl_mem_data <= avl_data;
+      if (avl_readdatavalid == 1'b1) begin
+        avl_mem_waddr <= avl_mem_waddr + 1'b1;
       end
-    end
-  end
-
-  always @(posedge avl_clk) begin
-    if ((avl_reset == 1'b1) || (avl_xfer_req == 1'b0)) begin
-      avl_mem_wr_address <= 0;
-      avl_mem_wr_address_g <= 0;
-    end else begin
-      if (avl_mem_wr_enable == 1'b1) begin
-        avl_mem_wr_address <= avl_mem_wr_address + 1;
+      if (avl_read_state == XFER_END) begin
+        avl_mem_laddr <= avl_mem_waddr - 1'b1;
+        avl_mem_laddr_toggle <= ~avl_mem_laddr_toggle;
       end
-      avl_mem_wr_address_g <= avl_mem_wr_address_b2g_s;
+      avl_mem_waddr_g <= avl_mem_waddr_b2g_s;
     end
   end
 
   ad_b2g #(
     .DATA_WIDTH(AVL_MEM_ADDRESS_WIDTH)
-  ) i_avl_mem_wr_address_b2g (
-    .din (avl_mem_wr_address),
-    .dout (avl_mem_wr_address_b2g_s));
+  ) i_avl_mem_wr_addr_b2g (
+    .din (avl_mem_waddr),
+    .dout (avl_mem_waddr_b2g_s));
 
-  // ==========================================================================
   // control the FIFO to prevent overflow, underflow is monitored
-  // ==========================================================================
 
-  assign avl_mem_rd_address_s = (MEM_RATIO ==  1) ? avl_mem_rd_address :
-                                (MEM_RATIO ==  2) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):1] :
-                                (MEM_RATIO ==  4) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):2] :
-                                (MEM_RATIO ==  8) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):3] :
-                                (MEM_RATIO == 16) ? avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):4] :
-                                                    avl_mem_rd_address[(DAC_MEM_ADDRESS_WIDTH-1):5];
+  assign avl_mem_raddr_s = (MEM_RATIO ==  1) ? avl_mem_raddr :
+                           (MEM_RATIO ==  2) ? avl_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):1] :
+                           (MEM_RATIO ==  4) ? avl_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):2] :
+                           (MEM_RATIO ==  8) ? avl_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):3] :
+                           (MEM_RATIO == 16) ? avl_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):4] :
+                                               avl_mem_raddr[(DAC_MEM_ADDRESS_WIDTH-1):5];
 
-  assign avl_mem_address_diff_s = {1'b1, avl_mem_wr_address} - avl_mem_rd_address_s;
+  assign avl_mem_laddr_s = (MEM_RATIO ==  1) ? avl_mem_laddr :
+                           (MEM_RATIO ==  2) ? {avl_mem_laddr, 1'b0} :
+                           (MEM_RATIO ==  4) ? {avl_mem_laddr, 2'b0} :
+                           (MEM_RATIO ==  8) ? {avl_mem_laddr, 3'b0} :
+                           (MEM_RATIO == 16) ? {avl_mem_laddr, 4'b0} :
+                                               {avl_mem_laddr, 5'b0};
+
+  assign avl_mem_addr_diff_s = {1'b1, avl_mem_waddr} - avl_mem_raddr_s;
 
   always @(posedge avl_clk) begin
-    if (avl_xfer_req == 1'b0) begin
-      avl_mem_address_diff <= 'd0;
-      avl_mem_rd_address <= 'd0;
-      avl_mem_rd_address_m1 <= 'd0;
-      avl_mem_rd_address_m2 <= 'd0;
+    if (avl_fifo_reset_s == 1'b1) begin
+      avl_mem_addr_diff <= 'd0;
+      avl_mem_raddr <= 'd0;
+      avl_mem_raddr_m1 <= 'd0;
+      avl_mem_raddr_m2 <= 'd0;
       avl_mem_request_data <= 'd0;
     end else begin
-      avl_mem_rd_address_m1 <= dac_mem_rd_address_g;
-      avl_mem_rd_address_m2 <= avl_mem_rd_address_m1;
-      avl_mem_rd_address <= avl_mem_rd_address_g2b_s;
-      avl_mem_address_diff <= avl_mem_address_diff_s[AVL_MEM_ADDRESS_WIDTH-1:0];
-      if (avl_mem_address_diff >= AVL_MEM_THRESHOLD_HI) begin
+      avl_mem_raddr_m1 <= dac_mem_raddr_g;
+      avl_mem_raddr_m2 <= avl_mem_raddr_m1;
+      avl_mem_raddr <= avl_mem_raddr_g2b_s;
+      avl_mem_addr_diff <= avl_mem_addr_diff_s[AVL_MEM_ADDRESS_WIDTH-1:0];
+      if (avl_xfer_req_out == 1'b0) begin
         avl_mem_request_data <= 1'b0;
-      end else if (avl_mem_address_diff <= AVL_MEM_THRESHOLD_LO) begin
+      end else if (avl_mem_addr_diff >= AVL_MEM_THRESHOLD_HI) begin
+        avl_mem_request_data <= 1'b0;
+      end else if (avl_mem_addr_diff <= AVL_MEM_THRESHOLD_LO) begin
         avl_mem_request_data <= 1'b1;
       end
     end
@@ -259,75 +372,91 @@ module avl_dacfifo_rd #(
 
   ad_g2b #(
     .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
-  ) i_avl_mem_rd_address_g2b (
-    .din (avl_mem_rd_address_m2),
-    .dout (avl_mem_rd_address_g2b_s));
+  ) i_avl_mem_rd_addr_g2b (
+    .din (avl_mem_raddr_m2),
+    .dout (avl_mem_raddr_g2b_s));
 
-  avl_dacfifo_byteenable_decoder #(
-    .MEM_RATIO (MEM_RATIO),
-    .LAST_BEATS_WIDTH (MEM_WIDTH_DIFF)
-  ) i_byteenable_decoder (
-    .avl_clk (avl_clk),
-    .avl_byteenable (avl_last_byteenable),
-    .avl_enable (1'b1),
-    .avl_last_beats (avl_last_beats_s)
-  );
-
-  // ==========================================================================
   // Push data from the async FIFO to the DAC
   // Data flow is controlled by the DAC, no back-pressure. If FIFO is not
   // ready, data will be dropped
-  // ==========================================================================
 
-  assign dac_mem_wr_address_s = (MEM_RATIO ==  1) ?  dac_mem_wr_address :
-                                (MEM_RATIO ==  2) ? {dac_mem_wr_address, 1'b0} :
-                                (MEM_RATIO ==  4) ? {dac_mem_wr_address, 2'b0} :
-                                (MEM_RATIO ==  8) ? {dac_mem_wr_address, 3'b0} :
-                                (MEM_RATIO == 16) ? {dac_mem_wr_address, 4'b0} :
-                                                    {dac_mem_wr_address, 5'b0};
+  assign dac_mem_waddr_s = (MEM_RATIO ==  1) ?  dac_mem_waddr :
+                           (MEM_RATIO ==  2) ? {dac_mem_waddr, 1'b0} :
+                           (MEM_RATIO ==  4) ? {dac_mem_waddr, 2'b0} :
+                           (MEM_RATIO ==  8) ? {dac_mem_waddr, 3'b0} :
+                           (MEM_RATIO == 16) ? {dac_mem_waddr, 4'b0} :
+                                               {dac_mem_waddr, 5'b0};
 
-  assign dac_mem_address_diff_s = {1'b1, dac_mem_wr_address_s} - dac_mem_rd_address;
+  assign dac_mem_addr_diff_s = {1'b1, dac_mem_waddr_s} - dac_mem_raddr;
 
   always @(posedge dac_clk) begin
     if (dac_reset == 1'b1) begin
-      dac_mem_wr_address_m2 <= 0;
-      dac_mem_wr_address_m1 <= 0;
-      dac_mem_wr_address <= 0;
-      dac_mem_wr_last_address <= 0;
+      dac_mem_waddr_m2 <= 0;
+      dac_mem_waddr_m1 <= 0;
+      dac_mem_waddr <= 0;
+      dac_mem_laddr <= 0;
+      dac_mem_laddr_toggle_m <= 4'b0;
     end else begin
-      dac_mem_wr_address_m1 <= avl_mem_wr_address_g;
-      dac_mem_wr_address_m2 <= dac_mem_wr_address_m1;
-      dac_mem_wr_address <= dac_mem_wr_address_g2b_s;
-      dac_mem_wr_last_address <= (dac_avl_last_transfer == 1'b1) ? dac_mem_wr_address_s : dac_mem_wr_last_address;
+      dac_mem_waddr_m1 <= avl_mem_waddr_g;
+      dac_mem_waddr_m2 <= dac_mem_waddr_m1;
+      dac_mem_waddr <= dac_mem_waddr_g2b_s;
+      dac_mem_laddr_toggle_m <= {dac_mem_laddr_toggle_m[2:0], avl_mem_laddr_toggle};
+      dac_mem_laddr <= (dac_mem_laddr_toggle_m[2] ^ dac_mem_laddr_toggle_m[1]) ?
+                        avl_mem_laddr_s :
+                        dac_mem_laddr;
     end
   end
+
+  // A buffer for storing the dac_mem_laddr (the address of the last avalon
+  // beat inside the CDC fifo)
+  // If the stored data sequence is smaller, it can happen that multiple
+  // dac_mem_laddr values exist in the same time. This buffers stores this
+  // values and make sure that they are feeded to the read logic in order.
+
+  assign dac_mem_laddr_wea_s = dac_mem_laddr_toggle_m[3] ^ dac_mem_laddr_toggle_m[2];
+  assign dac_mem_laddr_rea_s = ((dac_mem_raddr == dac_mem_laddr_b) &&
+                                (dac_xfer_req == 1'b1)) ? 1'b1 :1'b0;
+
+  always @(posedge dac_clk) begin
+    if (dac_fifo_reset_s == 1'b1) begin
+      dac_mem_laddr_waddr <= 0;
+      dac_mem_laddr_raddr <= 0;
+    end else begin
+      dac_mem_laddr_waddr <= (dac_mem_laddr_wea_s == 1'b1) ? dac_mem_laddr_waddr + 1 : dac_mem_laddr_waddr;
+      dac_mem_laddr_raddr <= (dac_mem_laddr_rea_s == 1'b1) ? dac_mem_laddr_raddr + 1 : dac_mem_laddr_raddr;
+    end
+  end
+
+  ad_mem #(
+    .DATA_WIDTH (DAC_MEM_ADDRESS_WIDTH),
+    .ADDRESS_WIDTH (8))
+  i_mem (
+    .clka (dac_clk),
+    .wea (dac_mem_laddr_wea_s),
+    .addra (dac_mem_laddr_waddr),
+    .dina (dac_mem_laddr),
+    .clkb (dac_clk),
+    .addrb (dac_mem_laddr_raddr),
+    .doutb (dac_mem_laddr_s));
 
   ad_g2b #(
     .DATA_WIDTH(AVL_MEM_ADDRESS_WIDTH)
-  ) i_dac_mem_wr_address_g2b (
-    .din (dac_mem_wr_address_m2),
-    .dout (dac_mem_wr_address_g2b_s));
+  ) i_dac_mem_wr_addr_g2b (
+    .din (dac_mem_waddr_m2),
+    .dout (dac_mem_waddr_g2b_s));
 
-  assign avl_last_readdatavalid_s = (avl_last_transfer & avl_readdatavalid);
-  always @(posedge dac_clk) begin
-    if (dac_reset == 1'b1) begin
-      dac_avl_last_transfer_m1 <= 0;
-      dac_avl_last_transfer_m2 <= 0;
-      dac_avl_last_transfer <= 0;
-    end else begin
-      dac_avl_last_transfer_m1 <= avl_last_readdatavalid_s;
-      dac_avl_last_transfer_m2 <= dac_avl_last_transfer_m1;
-      dac_avl_last_transfer <= dac_avl_last_transfer_m2;
-    end
-  end
-
+  assign dac_xfer_req_s = dac_avl_xfer_req & dac_mem_valid;
   always @(posedge dac_clk) begin
     if (dac_reset == 1'b1) begin
       dac_avl_xfer_req_m2 <= 0;
       dac_avl_xfer_req_m1 <= 0;
       dac_avl_xfer_req <= 0;
+      dac_xfer_req_b <= 1'b0;
+      dac_xfer_req <= 1'b0;
     end else begin
-      dac_avl_xfer_req_m1 <= avl_xfer_req;
+      dac_xfer_req_b <= dac_xfer_req_s;
+      dac_xfer_req <= dac_xfer_req_b;
+      dac_avl_xfer_req_m1 <= avl_xfer_req_out;
       dac_avl_xfer_req_m2 <= dac_avl_xfer_req_m1;
       dac_avl_xfer_req <= dac_avl_xfer_req_m2;
     end
@@ -335,67 +464,60 @@ module avl_dacfifo_rd #(
 
   always @(posedge dac_clk) begin
     if (dac_reset == 1'b1) begin
-      dac_mem_last_transfer_active <= 1'b0;
+      dac_dma_last_beats_m2 <= 0;
+      dac_dma_last_beats_m1 <= 0;
+      dac_dma_last_beats <= 0;
     end else begin
-      if (dac_avl_last_transfer == 1'b1) begin
-        dac_mem_last_transfer_active <= 1'b1;
-      end else if (dac_mem_rd_address == dac_mem_rd_last_address) begin
-        dac_mem_last_transfer_active <= 1'b0;
-      end
+      dac_dma_last_beats_m1 <= dma_last_beats;
+      dac_dma_last_beats_m2 <= dac_dma_last_beats_m1;
+      dac_dma_last_beats <= dac_dma_last_beats_m2;
     end
   end
 
   always @(posedge dac_clk) begin
-    if (dac_reset == 1'b1) begin
-      dac_avl_last_beats_m2 <= 0;
-      dac_avl_last_beats_m1 <= 0;
-      dac_avl_last_beats <= 0;
+    if (dac_fifo_reset_s == 1'b1) begin
+        dac_mem_renable = 1'b0;
+        dac_mem_valid = 1'b0;
     end else begin
-      dac_avl_last_beats_m1 <= avl_last_beats_s;
-      dac_avl_last_beats_m2 <= dac_avl_last_beats_m1;
-      dac_avl_last_beats <= dac_avl_last_beats_m2;
+      if (dac_mem_dunf_s == 1'b1) begin
+        dac_mem_renable = 1'b0;
+      end else if (dac_mem_addr_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0] >= DAC_MEM_THRESHOLD) begin
+        dac_mem_renable = 1'b1;
+      end
+      dac_mem_valid <= (dac_mem_renable) ? dac_valid : 1'b0;
     end
   end
 
-  assign dac_mem_rd_enable_s = (dac_mem_address_diff[DAC_MEM_ADDRESS_WIDTH-1:0] == 1'b0) ? 0 : (dac_xfer_req & dac_valid);
+  assign dac_mem_dunf_s = (dac_mem_addr_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0] == {DAC_MEM_ADDRESS_WIDTH{1'b0}}) ? 1'b1 : 1'b0;
   always @(posedge dac_clk) begin
-    if ((dac_reset == 1'b1) || ((dac_avl_xfer_req == 1'b0) && (dac_xfer_req == 1'b0))) begin
-      dac_mem_rd_address <= 0;
-      dac_mem_rd_address_g <= 0;
-      dac_mem_address_diff <= 0;
-      dac_mem_rd_last_address <= 0;
+    if (dac_fifo_reset_s == 1'b1) begin
+      dac_mem_raddr <= 0;
+      dac_mem_raddr_g <= 0;
+      dac_mem_addr_diff <= 0;
+      dac_mem_laddr_b <= 0;
     end else begin
-      dac_mem_address_diff <= dac_mem_address_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0];
-      dac_mem_rd_last_address <= dac_mem_wr_last_address + dac_avl_last_beats;
-      if (dac_mem_rd_enable_s == 1'b1) begin
-        dac_mem_rd_address <= ((dac_mem_rd_address == dac_mem_rd_last_address) && (dac_mem_last_transfer_active == 1'b1)) ?
-                                                            (dac_mem_wr_last_address + {MEM_WIDTH_DIFF{1'b1}} + 1) :
-                                                            (dac_mem_rd_address + 1);
+      dac_mem_laddr_b <= dac_mem_laddr_s;
+      dac_mem_addr_diff <= dac_mem_addr_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0];
+      if (dac_mem_valid) begin
+        if ((dac_dma_last_beats != {MEM_WIDTH_DIFF{1'b1}}) &&
+            (dac_mem_raddr == (dac_mem_laddr_b + dac_dma_last_beats))) begin
+          dac_mem_raddr <= dac_mem_raddr + (MEM_RATIO - dac_dma_last_beats);
+        end else begin
+          dac_mem_raddr <= dac_mem_raddr + 1'b1;
+        end
       end
-      dac_mem_rd_address_g <= dac_mem_rd_address_b2g_s;
+      dac_mem_raddr_g <= dac_mem_raddr_b2g_s;
     end
   end
 
   ad_b2g #(
     .DATA_WIDTH(DAC_MEM_ADDRESS_WIDTH)
-  ) i_dac_mem_rd_address_b2g (
-    .din (dac_mem_rd_address),
-    .dout (dac_mem_rd_address_b2g_s));
+  ) i_dac_mem_rd_addr_b2g (
+    .din (dac_mem_raddr),
+    .dout (dac_mem_raddr_b2g_s));
 
   always @(posedge dac_clk) begin
-    if (dac_reset == 1'b1) begin
-      dac_xfer_req <= 0;
-    end else begin
-      if ((dac_avl_xfer_req == 1'b1) && (dac_mem_address_diff > 0)) begin
-        dac_xfer_req <= 1'b1;
-      end else if ((dac_avl_xfer_req == 1'b0) && (dac_mem_address_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0] == 0)) begin
-        dac_xfer_req <= 1'b0;
-      end
-    end
-  end
-
-  always @(posedge dac_clk) begin
-    if ((dac_reset == 1'b1) || (dac_xfer_req == 1'b0)) begin
+    if ((dac_fifo_reset_s == 1'b1) || (dac_xfer_req_b == 1'b0)) begin
       dac_data <= 0;
     end else begin
       dac_data <= dac_mem_data_s;
@@ -403,10 +525,10 @@ module avl_dacfifo_rd #(
   end
 
   always @(posedge dac_clk) begin
-    if ((dac_reset == 1'b1) || (dac_xfer_req == 1'b0)) begin
+    if (dac_fifo_reset_s == 1'b1) begin
       dac_dunf <= 1'b0;
     end else begin
-      dac_dunf <= (dac_mem_address_diff == 0) ? 1'b1 : 1'b0;
+      dac_dunf <= (dac_mem_addr_diff == 0) ? 1'b1 : 1'b0;
     end
   end
 

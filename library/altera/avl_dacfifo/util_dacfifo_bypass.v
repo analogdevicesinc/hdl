@@ -168,7 +168,7 @@ module util_dacfifo_bypass #(
       dma_mem_waddr_g <= 'h0;
     end else begin
       if (dma_mem_wea_s == 1'b1) begin
-        dma_mem_waddr <= dma_mem_waddr + 1;
+        dma_mem_waddr <= dma_mem_waddr + 1'b1;
       end
       dma_mem_waddr_g <= b2g(dma_mem_waddr);
     end
@@ -227,7 +227,7 @@ module util_dacfifo_bypass #(
       dac_mem_raddr_g <= 'h0;
     end else begin
       if (dac_mem_rea_s == 1'b1) begin
-        dac_mem_raddr <= dac_mem_raddr + 1;
+        dac_mem_raddr <= dac_mem_raddr + 1'b1;
       end
       dac_mem_raddr_g <= b2g(dac_mem_raddr);
     end
