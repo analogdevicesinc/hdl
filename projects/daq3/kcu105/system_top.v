@@ -116,25 +116,19 @@ module system_top (
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 7:0]  spi_csn;
-  wire            spi_mosi;
-  wire            spi_miso;
-  wire            trig;
-  wire            rx_ref_clk;
-  wire            rx_sysref;
-  wire            rx_sync;
-  wire            tx_ref_clk;
-  wire            tx_sysref;
-  wire            tx_sync;
-
-  // spi
-
-  assign spi_csn_adc = spi_csn[2];
-  assign spi_csn_dac = spi_csn[1];
-  assign spi_csn_clk = spi_csn[0];
+  wire        [63:0]      gpio_i;
+  wire        [63:0]      gpio_o;
+  wire        [63:0]      gpio_t;
+  wire        [ 7:0]      spi_csn;
+  wire                    spi_mosi;
+  wire                    spi_miso;
+  wire                    trig;
+  wire                    rx_ref_clk;
+  wire                    rx_sysref;
+  wire                    rx_sync;
+  wire                    tx_ref_clk;
+  wire                    tx_sysref;
+  wire                    tx_sync;
 
   // default logic
 
@@ -176,14 +170,6 @@ module system_top (
     .IB (tx_sync_n),
     .O (tx_sync));
 
-  daq3_spi i_spi (
-    .spi_csn (spi_csn[2:0]),
-    .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi),
-    .spi_miso (spi_miso),
-    .spi_sdio (spi_sdio),
-    .spi_dir (spi_dir));
-
   OBUFDS i_obufds_sysref (
     .I (gpio_o[40]),
     .O (sysref_p),
@@ -194,18 +180,34 @@ module system_top (
     .IB (trig_n),
     .O (trig));
 
+  // spi
+
+  assign spi_csn_adc = spi_csn[2];
+  assign spi_csn_dac = spi_csn[1];
+  assign spi_csn_clk = spi_csn[0];
+
+  daq3_spi i_spi (
+    .spi_csn (spi_csn[2:0]),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (spi_miso),
+    .spi_sdio (spi_sdio),
+    .spi_dir (spi_dir));
+
+  // daq3 gpio
+ 
+  assign gpio_i[63:40] = gpio_o[63:40];
   assign gpio_i[39] = trig;
 
-  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf (
+  ad_iobuf #(.DATA_WIDTH(7)) i_iobuf_0 (
     .dio_t (gpio_t[38:32]),
     .dio_i (gpio_o[38:32]),
     .dio_o (gpio_i[38:32]),
-    .dio_p ({ adc_pd,           // 38
-              dac_txen,         // 37
-              adc_fdb,          // 36
-              adc_fda,          // 35
-              dac_irq,          // 34
-              clkd_status}));   // 32
+    .dio_p ({adc_pd, dac_txen, adc_fdb, adc_fda, dac_irq, clkd_status}));
+
+  // kcu105 gpio
+
+  assign gpio_i[31:17] = gpio_o[31:17];
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
     .dio_t (gpio_t[16:0]),
@@ -213,7 +215,16 @@ module system_top (
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
 
+  // ipi-system
+
   system_wrapper i_system_wrapper (
+    .axi_daq3_xcvr_cpll_ref_clk (rx_ref_clk),
+    .axi_daq3_xcvr_qpll0_ref_clk (tx_ref_clk),
+    .axi_daq3_xcvr_qpll1_ref_clk (rx_ref_clk),
+    .axi_daq3_xcvr_rx_data_n (rx_data_n),
+    .axi_daq3_xcvr_rx_data_p (rx_data_p),
+    .axi_daq3_xcvr_tx_data_n (tx_data_n),
+    .axi_daq3_xcvr_tx_data_p (tx_data_p),
     .c0_ddr4_act_n (ddr4_act_n),
     .c0_ddr4_adr (ddr4_addr),
     .c0_ddr4_ba (ddr4_ba),
@@ -246,17 +257,8 @@ module system_top (
     .phy_clk_clk_p (phy_clk_p),
     .phy_rst_n (phy_rst_n),
     .phy_sd (1'b1),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_data_2_n (rx_data_n[2]),
-    .rx_data_2_p (rx_data_p[2]),
-    .rx_data_3_n (rx_data_n[3]),
-    .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk_0 (rx_ref_clk),
-    .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (rx_sysref),
+    .rx_sync (rx_sync),
+    .rx_sysref (rx_sysref),
     .sgmii_rxn (phy_rx_n),
     .sgmii_rxp (phy_rx_p),
     .sgmii_txn (phy_tx_n),
@@ -271,17 +273,8 @@ module system_top (
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
-    .tx_data_0_n (tx_data_n[0]),
-    .tx_data_0_p (tx_data_p[0]),
-    .tx_data_1_n (tx_data_n[1]),
-    .tx_data_1_p (tx_data_p[1]),
-    .tx_data_2_n (tx_data_n[2]),
-    .tx_data_2_p (tx_data_p[2]),
-    .tx_data_3_n (tx_data_n[3]),
-    .tx_data_3_p (tx_data_p[3]),
-    .tx_ref_clk_0 (tx_ref_clk),
-    .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (tx_sysref),
+    .tx_sync (tx_sync),
+    .tx_sysref (tx_sysref),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout));
 

@@ -1,11 +1,6 @@
 
 # daq3
 
-set_property  -dict {PACKAGE_PIN  K6} [get_ports tx_ref_clk_p]                                              ; ## D04  FMC_HPC_GBTCLK0_M2C_P
-set_property  -dict {PACKAGE_PIN  K5} [get_ports tx_ref_clk_n]                                              ; ## D05  FMC_HPC_GBTCLK0_M2C_N
-set_property  -dict {PACKAGE_PIN  H6} [get_ports rx_ref_clk_p]                                              ; ## B20  FMC_HPC_GBTCLK1_M2C_P
-set_property  -dict {PACKAGE_PIN  H5} [get_ports rx_ref_clk_n]                                              ; ## B21  FMC_HPC_GBTCLK1_M2C_N
-
 set_property  -dict {PACKAGE_PIN  G9  IOSTANDARD LVDS} [get_ports rx_sync_p]                                ; ## D08  FMC_HPC_LA01_CC_P
 set_property  -dict {PACKAGE_PIN  F9  IOSTANDARD LVDS} [get_ports rx_sync_n]                                ; ## D09  FMC_HPC_LA01_CC_N
 set_property  -dict {PACKAGE_PIN  A13 IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports rx_sysref_p]       ; ## G09  FMC_HPC_LA03_P
@@ -40,33 +35,27 @@ set_property  -dict {PACKAGE_PIN  E8  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [g
 
 create_clock -name tx_ref_clk   -period  1.60 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  1.60 [get_ports rx_ref_clk_p]
-create_clock -name tx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe3_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe3_channel/RXOUTCLK]
+create_clock -name tx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/axi_daq3_xcvr_tx_bufg/BUFG_GT_O[0]]
+create_clock -name rx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/axi_daq3_xcvr_rx_bufg/BUFG_GT_O[0]]
 
-# gt pin assignments below are for reference only and are ignored by the tool!
+# reference clocks
 
-##  set_property  -dict {PACKAGE_PIN  A4} [get_ports rx_data_p[0]] ; ## A10  FMC_HPC_DP3_M2C_P
-##  set_property  -dict {PACKAGE_PIN  A3} [get_ports rx_data_n[0]] ; ## A11  FMC_HPC_DP3_M2C_N
-##  set_property  -dict {PACKAGE_PIN  E4} [get_ports rx_data_p[1]] ; ## C06  FMC_HPC_DP0_M2C_P
-##  set_property  -dict {PACKAGE_PIN  E3} [get_ports rx_data_n[1]] ; ## C07  FMC_HPC_DP0_M2C_N
-##  set_property  -dict {PACKAGE_PIN  B2} [get_ports rx_data_p[2]] ; ## A06  FMC_HPC_DP2_M2C_P
-##  set_property  -dict {PACKAGE_PIN  B1} [get_ports rx_data_n[2]] ; ## A07  FMC_HPC_DP2_M2C_N
-##  set_property  -dict {PACKAGE_PIN  D2} [get_ports rx_data_p[3]] ; ## A02  FMC_HPC_DP1_M2C_P
-##  set_property  -dict {PACKAGE_PIN  D1} [get_ports rx_data_n[3]] ; ## A03  FMC_HPC_DP1_M2C_N
-##  set_property  -dict {PACKAGE_PIN  B6} [get_ports tx_data_p[0]] ; ## A30  FMC_HPC_DP3_C2M_P (tx_data_p[0])
-##  set_property  -dict {PACKAGE_PIN  B5} [get_ports tx_data_n[0]] ; ## A31  FMC_HPC_DP3_C2M_N (tx_data_n[0])
-##  set_property  -dict {PACKAGE_PIN  F6} [get_ports tx_data_p[1]] ; ## C02  FMC_HPC_DP0_C2M_P (tx_data_p[3])
-##  set_property  -dict {PACKAGE_PIN  F5} [get_ports tx_data_n[1]] ; ## C03  FMC_HPC_DP0_C2M_N (tx_data_n[3])
-##  set_property  -dict {PACKAGE_PIN  C4} [get_ports tx_data_p[2]] ; ## A26  FMC_HPC_DP2_C2M_P (tx_data_p[1])
-##  set_property  -dict {PACKAGE_PIN  C3} [get_ports tx_data_n[2]] ; ## A27  FMC_HPC_DP2_C2M_N (tx_data_n[1])
-##  set_property  -dict {PACKAGE_PIN  D6} [get_ports tx_data_p[3]] ; ## A22  FMC_HPC_DP1_C2M_P (tx_data_p[2])
-##  set_property  -dict {PACKAGE_PIN  D5} [get_ports tx_data_n[3]] ; ## A23  FMC_HPC_DP1_C2M_N (tx_data_n[2])
+set_property LOC GTHE3_COMMON_X0Y4 [get_cells i_ibufds_tx_ref_clk]
+set_property LOC GTHE3_COMMON_X0Y4 [get_cells i_ibufds_rx_ref_clk]
+set_property BEL GTHE3_COMMON.IBUFDS0_GTE3 [get_cells i_ibufds_tx_ref_clk] ; ## K6/K5 D04/D05 FMC_HPC_GBTCLK0_M2C
+set_property BEL GTHE3_COMMON.IBUFDS1_GTE3 [get_cells i_ibufds_rx_ref_clk] ; ## H6/H5 B20/B21 FMC_HPC_GBTCLK1_M2C
 
-set_property LOC GTHE3_CHANNEL_X0Y19 [get_cells -hierarchical -filter {NAME =~ *util_daq3_xcvr/inst/i_xch_0/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y16 [get_cells -hierarchical -filter {NAME =~ *util_daq3_xcvr/inst/i_xch_1/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y18 [get_cells -hierarchical -filter {NAME =~ *util_daq3_xcvr/inst/i_xch_2/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y17 [get_cells -hierarchical -filter {NAME =~ *util_daq3_xcvr/inst/i_xch_3/i_gthe3_channel}]
-
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9680_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]*]
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9152_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]*]
+# lanes
+# device        fmc                         xcvr              location
+# --------------------------------------------------------------------------------
+# rx_data[1]    C06/C07   FMC_HPC_DP0_M2C   E4/E3 rx_data[0]  GTHE3_CHANNEL_X0Y16 
+# rx_data[3]    A02/A03   FMC_HPC_DP1_M2C   D2/D1 rx_data[1]  GTHE3_CHANNEL_X0Y17 
+# rx_data[2]    A06/A07   FMC_HPC_DP2_M2C   B2/B1 rx_data[2]  GTHE3_CHANNEL_X0Y18 
+# rx_data[0]    A10/A11   FMC_HPC_DP3_M2C   A4/A3 rx_data[3]  GTHE3_CHANNEL_X0Y19 
+# --------------------------------------------------------------------------------
+# tx_data[3]    C02/C03   FMC_HPC_DP0_C2M   F6/F5 tx_data[0]  GTHE3_CHANNEL_X0Y16 
+# tx_data[2]    A22/A23   FMC_HPC_DP1_C2M   D6/D5 tx_data[1]  GTHE3_CHANNEL_X0Y17 
+# tx_data[1]    A26/A27   FMC_HPC_DP2_C2M   C4/C3 tx_data[2]  GTHE3_CHANNEL_X0Y18 
+# tx_data[0]    A30/A31   FMC_HPC_DP3_C2M   B6/B5 tx_data[3]  GTHE3_CHANNEL_X0Y19 
+# --------------------------------------------------------------------------------
 
