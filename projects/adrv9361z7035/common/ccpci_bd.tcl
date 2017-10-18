@@ -1,8 +1,8 @@
 
 # pci-express
 
-ad_connect  sys_ps7/ENET1_GMII_RX_CLK GND
-ad_connect  sys_ps7/ENET1_GMII_TX_CLK GND
+ad_connect sys_ps7/ENET1_GMII_RX_CLK GND
+ad_connect sys_ps7/ENET1_GMII_TX_CLK GND
 
 # peripherals in pl
 
@@ -19,13 +19,13 @@ create_bd_port -dir I pl_spi_sdo_i
 create_bd_port -dir O pl_spi_sdo_o
 create_bd_port -dir I pl_spi_sdi_i
 
-ad_connect  pl_spi_csn_i axi_spi/ss_i
-ad_connect  pl_spi_csn_o axi_spi/ss_o
-ad_connect  pl_spi_clk_i axi_spi/sck_i
-ad_connect  pl_spi_clk_o axi_spi/sck_o
-ad_connect  pl_spi_sdo_i axi_spi/io0_i
-ad_connect  pl_spi_sdo_o axi_spi/io0_o
-ad_connect  pl_spi_sdi_i axi_spi/io1_i
+ad_connect pl_spi_csn_i axi_spi/ss_i
+ad_connect pl_spi_csn_o axi_spi/ss_o
+ad_connect pl_spi_clk_i axi_spi/sck_i
+ad_connect pl_spi_clk_o axi_spi/sck_o
+ad_connect pl_spi_sdo_i axi_spi/io0_i
+ad_connect pl_spi_sdo_o axi_spi/io0_o
+ad_connect pl_spi_sdi_i axi_spi/io1_i
 
 ad_ip_instance axi_gpio axi_gpio
 ad_ip_parameter axi_gpio CONFIG.C_IS_DUAL 1
@@ -40,12 +40,12 @@ create_bd_port -dir I -from 31 -to 0 pl_gpio1_i
 create_bd_port -dir O -from 31 -to 0 pl_gpio1_o
 create_bd_port -dir O -from 31 -to 0 pl_gpio1_t
 
-ad_connect  pl_gpio0_i axi_gpio/gpio_io_i
-ad_connect  pl_gpio0_o axi_gpio/gpio_io_o
-ad_connect  pl_gpio0_t axi_gpio/gpio_io_t
-ad_connect  pl_gpio1_i axi_gpio/gpio2_io_i
-ad_connect  pl_gpio1_o axi_gpio/gpio2_io_o
-ad_connect  pl_gpio1_t axi_gpio/gpio2_io_t
+ad_connect pl_gpio0_i axi_gpio/gpio_io_i
+ad_connect pl_gpio0_o axi_gpio/gpio_io_o
+ad_connect pl_gpio0_t axi_gpio/gpio_io_t
+ad_connect pl_gpio1_i axi_gpio/gpio2_io_i
+ad_connect pl_gpio1_o axi_gpio/gpio2_io_o
+ad_connect pl_gpio1_t axi_gpio/gpio2_io_t
 
 # pci-express
 
@@ -79,38 +79,38 @@ create_bd_port -dir I -type rst pcie_rstn
 create_bd_port -dir I -type clk pcie_ref_clk
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:pcie_7x_mgt_rtl:1.0 pcie_data
 
-ad_connect  pcie_rstn axi_pcie_x4_rstgen/ext_reset_in
-ad_connect  pcie_ref_clk axi_pcie_x4/REFCLK
-ad_connect  pcie_data axi_pcie_x4/pcie_7x_mgt
-ad_connect  pcie_axi_clk axi_pcie_x4/axi_aclk_out
-ad_connect  pcie_axi_resetn axi_pcie_x4_rstgen/interconnect_aresetn
-ad_connect  sys_cpu_resetn axi_pcie_x4_rstgen/aux_reset_in
-ad_connect  axi_pcie_x4/mmcm_lock axi_pcie_x4_rstgen/dcm_locked
-ad_connect  axi_pcie_x4/axi_ctl_aclk_out axi_pcie_x4_rstgen/slowest_sync_clk
-ad_connect  pcie_axi_resetn axi_pcie_x4/axi_aresetn
+ad_connect pcie_rstn axi_pcie_x4_rstgen/ext_reset_in
+ad_connect pcie_ref_clk axi_pcie_x4/REFCLK
+ad_connect pcie_data axi_pcie_x4/pcie_7x_mgt
+ad_connect pcie_axi_clk axi_pcie_x4/axi_aclk_out
+ad_connect pcie_axi_resetn axi_pcie_x4_rstgen/interconnect_aresetn
+ad_connect sys_cpu_resetn axi_pcie_x4_rstgen/aux_reset_in
+ad_connect axi_pcie_x4/mmcm_lock axi_pcie_x4_rstgen/dcm_locked
+ad_connect axi_pcie_x4/axi_ctl_aclk_out axi_pcie_x4_rstgen/slowest_sync_clk
+ad_connect pcie_axi_resetn axi_pcie_x4/axi_aresetn
 
 create_bd_port -dir O pcie_rst
 create_bd_port -dir O pcie_clk
 
-ad_connect  axi_pcie_x4_rstgen/bus_struct_reset pcie_rst
-ad_connect  axi_pcie_x4/axi_ctl_aclk_out pcie_clk
+ad_connect axi_pcie_x4_rstgen/bus_struct_reset pcie_rst
+ad_connect axi_pcie_x4/axi_ctl_aclk_out pcie_clk
 
 # interrupts
 
-ad_connect  axi_pcie_intc/irq axi_pcie_x4/INTX_MSI_Request
-ad_connect  pcie_concat_intc/dout axi_pcie_intc/intr
-ad_connect  pcie_concat_intc/In0 axi_iic_main/iic2intc_irpt
-ad_connect  pcie_concat_intc/In1 axi_ad9361_adc_dma/irq
-ad_connect  pcie_concat_intc/In2 axi_ad9361_dac_dma/irq
-ad_connect  pcie_concat_intc/In3 axi_gpio/ip2intc_irpt
-ad_connect  pcie_concat_intc/In4 axi_spi/ip2intc_irpt
+ad_connect axi_pcie_intc/irq axi_pcie_x4/INTX_MSI_Request
+ad_connect pcie_concat_intc/dout axi_pcie_intc/intr
+ad_connect pcie_concat_intc/In0 axi_iic_main/iic2intc_irpt
+ad_connect pcie_concat_intc/In1 axi_ad9361_adc_dma/irq
+ad_connect pcie_concat_intc/In2 axi_ad9361_dac_dma/irq
+ad_connect pcie_concat_intc/In3 axi_gpio/ip2intc_irpt
+ad_connect pcie_concat_intc/In4 axi_spi/ip2intc_irpt
 
 # cpu interconnect
 
-delete_bd_objs [get_bd_addr_segs sys_ps7/Data/SEG_axi_iic_main_Reg]
-delete_bd_objs [get_bd_addr_segs sys_ps7/Data/SEG_axi_ad9361_axi_lite]
-delete_bd_objs [get_bd_addr_segs sys_ps7/Data/SEG_axi_ad9361_dac_dma_axi_lite]
-delete_bd_objs [get_bd_addr_segs sys_ps7/Data/SEG_axi_ad9361_adc_dma_axi_lite]
+delete_bd_objs [get_bd_addr_segs sys_ps7/Data/SEG_data_axi_iic_main]
+delete_bd_objs [get_bd_addr_segs sys_ps7/Data/SEG_data_axi_ad9361]
+delete_bd_objs [get_bd_addr_segs sys_ps7/Data/SEG_data_axi_ad9361_dac_dma]
+delete_bd_objs [get_bd_addr_segs sys_ps7/Data/SEG_data_axi_ad9361_adc_dma]
 
 delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_to [get_bd_intf_pins axi_cpu_interconnect/M00_AXI]]]
 delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_to [get_bd_intf_pins axi_cpu_interconnect/M01_AXI]]]
@@ -120,24 +120,24 @@ delete_bd_objs [get_bd_intf_nets -of_objects [find_bd_objs -relation connected_t
 ad_ip_parameter axi_cpu_interconnect CONFIG.NUM_MI 8
 ad_ip_parameter axi_cpu_interconnect CONFIG.NUM_SI 2
 
-ad_connect  axi_pcie_x4/axi_ctl_aclk_out axi_cpu_interconnect/M04_ACLK
-ad_connect  pcie_axi_resetn axi_cpu_interconnect/M04_ARESETN
-ad_connect  pcie_axi_clk axi_cpu_interconnect/S01_ACLK
-ad_connect  pcie_axi_resetn axi_cpu_interconnect/S01_ARESETN
-ad_connect  axi_pcie_x4/M_AXI axi_cpu_interconnect/S01_AXI
-ad_connect  pcie_axi_clk axi_pcie_intc/s_axi_aclk
-ad_connect  pcie_axi_resetn axi_pcie_intc/s_axi_aresetn
-ad_connect  pcie_axi_clk axi_cpu_interconnect/M05_ACLK
-ad_connect  pcie_axi_resetn axi_cpu_interconnect/M05_ARESETN
-ad_connect  sys_cpu_clk axi_gpio/s_axi_aclk
-ad_connect  sys_cpu_resetn axi_gpio/s_axi_aresetn
-ad_connect  sys_cpu_clk axi_cpu_interconnect/M06_ACLK
-ad_connect  sys_cpu_resetn axi_cpu_interconnect/M06_ARESETN
-ad_connect  sys_cpu_clk axi_spi/ext_spi_clk
-ad_connect  sys_cpu_clk axi_spi/s_axi_aclk
-ad_connect  sys_cpu_resetn axi_spi/s_axi_aresetn
-ad_connect  sys_cpu_clk axi_cpu_interconnect/M07_ACLK
-ad_connect  sys_cpu_resetn axi_cpu_interconnect/M07_ARESETN
+ad_connect axi_pcie_x4/axi_ctl_aclk_out axi_cpu_interconnect/M04_ACLK
+ad_connect pcie_axi_resetn axi_cpu_interconnect/M04_ARESETN
+ad_connect pcie_axi_clk axi_cpu_interconnect/S01_ACLK
+ad_connect pcie_axi_resetn axi_cpu_interconnect/S01_ARESETN
+ad_connect axi_pcie_x4/M_AXI axi_cpu_interconnect/S01_AXI
+ad_connect pcie_axi_clk axi_pcie_intc/s_axi_aclk
+ad_connect pcie_axi_resetn axi_pcie_intc/s_axi_aresetn
+ad_connect pcie_axi_clk axi_cpu_interconnect/M05_ACLK
+ad_connect pcie_axi_resetn axi_cpu_interconnect/M05_ARESETN
+ad_connect sys_cpu_clk axi_gpio/s_axi_aclk
+ad_connect sys_cpu_resetn axi_gpio/s_axi_aresetn
+ad_connect sys_cpu_clk axi_cpu_interconnect/M06_ACLK
+ad_connect sys_cpu_resetn axi_cpu_interconnect/M06_ARESETN
+ad_connect sys_cpu_clk axi_spi/ext_spi_clk
+ad_connect sys_cpu_clk axi_spi/s_axi_aclk
+ad_connect sys_cpu_resetn axi_spi/s_axi_aresetn
+ad_connect sys_cpu_clk axi_cpu_interconnect/M07_ACLK
+ad_connect sys_cpu_resetn axi_cpu_interconnect/M07_ARESETN
 ad_connect  axi_cpu_interconnect/M00_AXI axi_iic_main/S_AXI
 ad_connect  axi_cpu_interconnect/M01_AXI axi_ad9361/s_axi
 ad_connect  axi_cpu_interconnect/M02_AXI axi_ad9361_dac_dma/s_axi
@@ -164,19 +164,19 @@ ad_ip_parameter axi_pcie_s_interconnect CONFIG.NUM_SI 2
 ad_ip_parameter axi_pcie_s_interconnect CONFIG.NUM_MI 1
 ad_ip_parameter axi_pcie_s_interconnect CONFIG.STRATEGY 2
 
-ad_connect  pcie_axi_clk axi_pcie_s_interconnect/ACLK
-ad_connect  pcie_axi_clk axi_pcie_s_interconnect/M00_ACLK
-ad_connect  sys_cpu_clk axi_pcie_s_interconnect/S00_ACLK
-ad_connect  sys_cpu_clk axi_pcie_s_interconnect/S01_ACLK
-ad_connect  pcie_axi_resetn axi_pcie_s_interconnect/ARESETN
-ad_connect  pcie_axi_resetn axi_pcie_s_interconnect/M00_ARESETN
-ad_connect  sys_cpu_resetn axi_pcie_s_interconnect/S00_ARESETN
-ad_connect  sys_cpu_resetn axi_pcie_s_interconnect/S01_ARESETN
-ad_connect  axi_ad9361_adc_dma/m_dest_axi axi_pcie_s_interconnect/S00_AXI
-ad_connect  axi_ad9361_dac_dma/m_src_axi axi_pcie_s_interconnect/S01_AXI
-ad_connect  axi_pcie_s_interconnect/M00_AXI axi_pcie_x4/S_AXI
+ad_connect pcie_axi_clk axi_pcie_s_interconnect/ACLK
+ad_connect pcie_axi_clk axi_pcie_s_interconnect/M00_ACLK
+ad_connect sys_cpu_clk axi_pcie_s_interconnect/S00_ACLK
+ad_connect sys_cpu_clk axi_pcie_s_interconnect/S01_ACLK
+ad_connect pcie_axi_resetn axi_pcie_s_interconnect/ARESETN
+ad_connect pcie_axi_resetn axi_pcie_s_interconnect/M00_ARESETN
+ad_connect sys_cpu_resetn axi_pcie_s_interconnect/S00_ARESETN
+ad_connect sys_cpu_resetn axi_pcie_s_interconnect/S01_ARESETN
+ad_connect axi_ad9361_adc_dma/m_dest_axi axi_pcie_s_interconnect/S00_AXI
+ad_connect axi_ad9361_dac_dma/m_src_axi axi_pcie_s_interconnect/S01_AXI
+ad_connect axi_pcie_s_interconnect/M00_AXI axi_pcie_x4/S_AXI
 
-# hps7  slave
+# hps7 slave
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP0 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 0
