@@ -20,7 +20,6 @@ M_DEPS += ../../common/zc706/zc706_plddr3_constr.xdc
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/axi_ad9371/axi_ad9371.xpr
-M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
 M_DEPS += ../../../library/xilinx/axi_dacfifo/axi_dacfifo.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
@@ -30,7 +29,6 @@ M_DEPS += ../../../library/jesd204/axi_jesd204_tx/axi_jesd204_tx.xpr
 M_DEPS += ../../../library/axi_spdif_tx/axi_spdif_tx.xpr
 M_DEPS += ../../../library/jesd204/jesd204_rx/jesd204_rx.xpr
 M_DEPS += ../../../library/jesd204/jesd204_tx/jesd204_tx.xpr
-M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
 M_DEPS += ../../../library/util_cpack/util_cpack.xpr
 M_DEPS += ../../../library/util_upack/util_upack.xpr
 
@@ -62,7 +60,6 @@ clean:
 
 clean-all:clean
 	make -C ../../../library/axi_ad9371 clean
-	make -C ../../../library/xilinx/axi_adxcvr clean
 	make -C ../../../library/axi_clkgen clean
 	make -C ../../../library/xilinx/axi_dacfifo clean
 	make -C ../../../library/axi_dmac clean
@@ -72,7 +69,6 @@ clean-all:clean
 	make -C ../../../library/axi_spdif_tx clean
 	make -C ../../../library/jesd204/jesd204_rx clean
 	make -C ../../../library/jesd204/jesd204_tx clean
-	make -C ../../../library/xilinx/util_adxcvr clean
 	make -C ../../../library/util_cpack clean
 	make -C ../../../library/util_upack clean
 
@@ -84,7 +80,6 @@ adrv9371x_zc706.sdk/system_top.hdf: $(M_DEPS)
 
 lib:
 	make -C ../../../library/axi_ad9371
-	make -C ../../../library/xilinx/axi_adxcvr
 	make -C ../../../library/axi_clkgen
 	make -C ../../../library/xilinx/axi_dacfifo
 	make -C ../../../library/axi_dmac
@@ -94,7 +89,6 @@ lib:
 	make -C ../../../library/axi_spdif_tx
 	make -C ../../../library/jesd204/jesd204_rx
 	make -C ../../../library/jesd204/jesd204_tx
-	make -C ../../../library/xilinx/util_adxcvr
 	make -C ../../../library/util_cpack
 	make -C ../../../library/util_upack
 

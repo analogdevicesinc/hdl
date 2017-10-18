@@ -9,6 +9,7 @@
 all:
 	-make -C ad5766_sdz all
 	-make -C ad6676evb all
+	-make -C ad7134_fmc all
 	-make -C ad738x_fmc all
 	-make -C ad7616_sdz all
 	-make -C ad77681evb all
@@ -21,6 +22,7 @@ all:
 	-make -C adrv9361z7035 all
 	-make -C adrv9364z7020 all
 	-make -C adrv9371x all
+	-make -C adrv9379 all
 	-make -C adv7511 all
 	-make -C arradio all
 	-make -C cn0363 all
@@ -47,6 +49,7 @@ all:
 clean:
 	make -C ad5766_sdz clean
 	make -C ad6676evb clean
+	make -C ad7134_fmc clean
 	make -C ad738x_fmc clean
 	make -C ad7616_sdz clean
 	make -C ad77681evb clean
@@ -59,6 +62,7 @@ clean:
 	make -C adrv9361z7035 clean
 	make -C adrv9364z7020 clean
 	make -C adrv9371x clean
+	make -C adrv9379 clean
 	make -C adv7511 clean
 	make -C arradio clean
 	make -C cn0363 clean
@@ -85,6 +89,7 @@ clean:
 clean-all:
 	make -C ad5766_sdz clean-all
 	make -C ad6676evb clean-all
+	make -C ad7134_fmc clean-all
 	make -C ad738x_fmc clean-all
 	make -C ad7616_sdz clean-all
 	make -C ad77681evb clean-all
@@ -97,6 +102,7 @@ clean-all:
 	make -C adrv9361z7035 clean-all
 	make -C adrv9364z7020 clean-all
 	make -C adrv9371x clean-all
+	make -C adrv9379 clean-all
 	make -C adv7511 clean-all
 	make -C arradio clean-all
 	make -C cn0363 clean-all

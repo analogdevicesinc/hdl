@@ -21,6 +21,7 @@ clean:
 	make -C axi_ad9265 clean
 	make -C axi_ad9361 clean
 	make -C axi_ad9371 clean
+	make -C axi_ad9379 clean
 	make -C axi_ad9434 clean
 	make -C axi_ad9467 clean
 	make -C axi_ad9625 clean
@@ -112,6 +113,7 @@ lib:
 	make -C axi_ad9265
 	make -C axi_ad9361
 	make -C axi_ad9371
+	make -C axi_ad9379
 	make -C axi_ad9434
 	make -C axi_ad9467
 	make -C axi_ad9625
@@ -158,7 +160,7 @@ lib:
 	make -C util_adcfifo
 	make -C util_axis_fifo
 	make -C util_axis_resize
-	make -C util_axis_upscale clean
+	make -C util_axis_upscale
 	make -C util_bsplit
 	make -C util_cdc
 	make -C util_cic

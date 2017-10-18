@@ -25,8 +25,8 @@ M_DEPS += ../../../library/spi_engine/axi_spi_engine/axi_spi_engine.xpr
 M_DEPS += ../../../library/spi_engine/spi_engine_execution/spi_engine_execution.xpr
 M_DEPS += ../../../library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.xpr
 M_DEPS += ../../../library/spi_engine/spi_engine_offload/spi_engine_offload.xpr
+M_DEPS += ../../../library/util_axis_upscale/util_axis_upscale.xpr
 M_DEPS += ../../../library/util_i2c_mixer/util_i2c_mixer.xpr
-M_DEPS += ../../../library/util_pulse_gen/util_pulse_gen.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -64,8 +64,8 @@ clean-all:clean
 	make -C ../../../library/spi_engine/spi_engine_execution clean
 	make -C ../../../library/spi_engine/spi_engine_interconnect clean
 	make -C ../../../library/spi_engine/spi_engine_offload clean
+	make -C ../../../library/util_axis_upscale clean
 	make -C ../../../library/util_i2c_mixer clean
-	make -C ../../../library/util_pulse_gen clean
 
 
 ad7134_fmc_zed.sdk/system_top.hdf: $(M_DEPS)
@@ -83,8 +83,8 @@ lib:
 	make -C ../../../library/spi_engine/spi_engine_execution
 	make -C ../../../library/spi_engine/spi_engine_interconnect
 	make -C ../../../library/spi_engine/spi_engine_offload
+	make -C ../../../library/util_axis_upscale
 	make -C ../../../library/util_i2c_mixer
-	make -C ../../../library/util_pulse_gen
 
 ####################################################################################
 ####################################################################################
