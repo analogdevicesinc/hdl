@@ -21,7 +21,7 @@ set_property  -dict {PACKAGE_PIN  U4    IOSTANDARD LVDS DIFF_TERM TRUE} [get_por
 set_property  -dict {PACKAGE_PIN  V4    IOSTANDARD LVDS} [get_ports tx_clk_out_p]                         ; ## G12  FMC_LPC_LA08_P
 set_property  -dict {PACKAGE_PIN  V3    IOSTANDARD LVDS} [get_ports tx_clk_out_n]                         ; ## G13  FMC_LPC_LA08_N
 set_property  -dict {PACKAGE_PIN  AB4   IOSTANDARD LVDS} [get_ports tx_frame_out_p]                       ; ## D14  FMC_LPC_LA09_P
-set_property  -dict {PACKAGE_PIN  AC4   IOSTANDARD LVDS} [get_ports tx_frame_out_n]                       ; ## D15  FMC_LPC_LA09_N
+set_property  -dict {PACKAGE_PIN  Ac4   IOSTANDARD LVDS} [get_ports tx_frame_out_n]                       ; ## D15  FMC_LPC_LA09_N
 set_property  -dict {PACKAGE_PIN  AB6   IOSTANDARD LVDS} [get_ports tx_data_out_p[0]]                     ; ## H16  FMC_LPC_LA11_P
 set_property  -dict {PACKAGE_PIN  AB5   IOSTANDARD LVDS} [get_ports tx_data_out_n[0]]                     ; ## H17  FMC_LPC_LA11_N
 set_property  -dict {PACKAGE_PIN  W7    IOSTANDARD LVDS} [get_ports tx_data_out_p[1]]                     ; ## G15  FMC_LPC_LA12_P
@@ -53,8 +53,8 @@ set_property  -dict {PACKAGE_PIN  L13   IOSTANDARD LVCMOS18} [get_ports gpio_en_
 set_property  -dict {PACKAGE_PIN  K13   IOSTANDARD LVCMOS18} [get_ports gpio_sync]                        ; ## H23  FMC_LPC_LA19_N
 set_property  -dict {PACKAGE_PIN  T7    IOSTANDARD LVCMOS18} [get_ports gpio_resetb]                      ; ## H31  FMC_LPC_LA28_P
 
-set_property  -dict {PACKAGE_PIN  N9    IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_csn]         ; ## D26  FMC_LPC_LA26_P
-set_property  -dict {PACKAGE_PIN  N8    IOSTANDARD LVCMOS18} [get_ports spi_clk]                          ; ## D27  FMC_LPC_LA26_N
+set_property  -dict {PACKAGE_PIN  L15    IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_csn]         ; ## D26  FMC_LPC_LA26_P
+set_property  -dict {PACKAGE_PIN  K15    IOSTANDARD LVCMOS18} [get_ports spi_clk]                          ; ## D27  FMC_LPC_LA26_N
 set_property  -dict {PACKAGE_PIN  M10   IOSTANDARD LVCMOS18} [get_ports spi_mosi]                         ; ## C26  FMC_LPC_LA27_P
 set_property  -dict {PACKAGE_PIN  L10   IOSTANDARD LVCMOS18} [get_ports spi_miso]                         ; ## C27  FMC_LPC_LA27_N
 
