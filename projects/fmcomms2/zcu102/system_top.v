@@ -37,8 +37,7 @@
 
 module system_top (
 
-  input   [12:0]  gpio_bd_i,
-  output  [ 7:0]  gpio_bd_o,
+  inout   [20:0]  gpio_bd,
 
   input           rx_clk_in_p,
   input           rx_clk_in_n,
@@ -71,20 +70,30 @@ module system_top (
 
   wire    [95:0]  gpio_i;
   wire    [95:0]  gpio_o;
+  wire    [95:0]  gpio_t;
   wire    [ 2:0]  spi0_csn;
 
   // defaults
 
-  assign gpio_resetb = gpio_o[46:46];
-  assign gpio_sync = gpio_o[45:45];
-  assign gpio_en_agc = gpio_o[44:44];
-  assign gpio_ctl = gpio_o[43:40];
-  assign gpio_bd_o = gpio_o[20:13];
+  assign gpio_i[95:47] = gpio_o[95:47];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  // assign gpio_i[31:13] = gpio_o[31:13]; //led
 
-  assign gpio_i[95:40] = gpio_o[95:40];
-  assign gpio_i[39:32] = gpio_status;
-  assign gpio_i[31:13] = gpio_o[31:13];
-  assign gpio_i[12: 0] = gpio_bd_i;
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+    .dio_p (gpio_bd));
+
+  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_gpio (
+    .dio_t (gpio_t[46:32]),
+    .dio_i (gpio_o[46:32]),
+    .dio_o (gpio_i[46:32]),
+    .dio_p ({gpio_resetb,     // 46
+             gpio_sync,       // 45
+             gpio_en_agc,     // 44
+             gpio_ctl,        // 43-40
+             gpio_status}));  // 39-32
 
   assign spi_csn = spi0_csn[0];
 
@@ -94,6 +103,7 @@ module system_top (
     .enable (enable),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
+    .gpio_t (gpio_t),
     .ps_intr_00 (1'b0),
     .ps_intr_01 (1'b0),
     .ps_intr_02 (1'b0),
