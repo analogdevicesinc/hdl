@@ -28,11 +28,11 @@ set sys_hp3_interconnect_index -1
 set sys_mem_interconnect_index -1
 set xcvr_parameter_list {}
 set xcvr_rx_bufg_enable 1
-set xcvr_rx_ref_clk 500.000
-set xcvr_rx_lane_rate 10.000
+set xcvr_rx_ref_clk -1.0
+set xcvr_rx_lane_rate -1.0
 set xcvr_tx_bufg_enable 1
-set xcvr_tx_ref_clk 500.000
-set xcvr_tx_lane_rate 10.000
+set xcvr_tx_ref_clk -1.0
+set xcvr_tx_lane_rate -1.0
 set xcvr_master_or_slave_n 1
 set xcvr_master_instance {NONE}
 
@@ -264,6 +264,11 @@ proc ad_xcvr_instance {i_name} {
     lappend xcvr_parameter_list CONFIG.Max_Line_Rate 16
   }
 
+  if {$xcvr_rx_lane_rate <= 0} {set xcvr_rx_lane_rate $xcvr_tx_lane_rate}
+  if {$xcvr_rx_ref_clk <= 0} {set xcvr_rx_ref_clk $xcvr_tx_ref_clk}
+  if {$xcvr_tx_lane_rate <= 0} {set xcvr_tx_lane_rate $xcvr_rx_lane_rate}
+  if {$xcvr_tx_ref_clk <= 0} {set xcvr_tx_ref_clk $xcvr_rx_ref_clk}
+
   set xcvr_rx_pll 3
   set xcvr_rx_lane_rate [regsub {0*$} $xcvr_rx_lane_rate ""]
   set xcvr_rx_lane_rate [regsub {\.$} $xcvr_rx_lane_rate ""]
@@ -272,7 +277,7 @@ proc ad_xcvr_instance {i_name} {
     set xcvr_rx_ref_clk [regsub {0*$} $xcvr_rx_ref_clk ""]
     set xcvr_rx_ref_clk [regsub {\.$} $xcvr_rx_ref_clk ""]
   }
-  if {$xcvr_rx_lane_rate < 6.25} {
+  if {$xcvr_rx_lane_rate <= 6.25} {
     set xcvr_rx_pll 0
   }
 
@@ -288,7 +293,7 @@ proc ad_xcvr_instance {i_name} {
     set xcvr_tx_ref_clk [regsub {0*$} $xcvr_tx_ref_clk ""]
     set xcvr_tx_ref_clk [regsub {\.$} $xcvr_tx_ref_clk ""]
   }
-  if {($xcvr_tx_lane_rate < 6.25) && ($xcvr_rx_pll > 0)} {
+  if {($xcvr_tx_lane_rate <= 6.25) && ($xcvr_rx_pll > 0)} {
     set xcvr_tx_pll 0
   }
 
