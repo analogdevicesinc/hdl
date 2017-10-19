@@ -123,31 +123,20 @@ module system_top (
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 2:0]  spi0_csn;
-  wire            spi0_clk;
-  wire            spi0_mosi;
-  wire            spi0_miso;
-  wire    [ 2:0]  spi1_csn;
-  wire            spi1_clk;
-  wire            spi1_mosi;
-  wire            spi1_miso;
-  wire            rx_ref_clk;
-  wire            rx_sysref;
-  wire            rx_sync;
-
-  // spi
-
-  assign spi_clk = spi0_clk;
-  assign ad9528_csn = (spi0_csn == 3'b000) ? 1'b0 : 1'b1;
-  assign ad9680_1_csn = (spi0_csn == 3'b001) ? 1'b0 : 1'b1;
-  assign ad9680_2_csn = (spi0_csn == 3'b010) ? 1'b0 : 1'b1;
-  assign ada4961_1a_csn = (spi0_csn == 3'b011) ? 1'b0 : 1'b1;
-  assign ada4961_1b_csn = (spi0_csn == 3'b100) ? 1'b0 : 1'b1;
-  assign ada4961_1c_csn = (spi0_csn == 3'b101) ? 1'b0 : 1'b1;
-  assign ada4961_1d_csn = (spi0_csn == 3'b110) ? 1'b0 : 1'b1;
+  wire        [63:0]      gpio_i;
+  wire        [63:0]      gpio_o;
+  wire        [63:0]      gpio_t;
+  wire        [ 2:0]      spi0_csn;
+  wire                    spi0_clk;
+  wire                    spi0_mosi;
+  wire                    spi0_miso;
+  wire        [ 2:0]      spi1_csn;
+  wire                    spi1_clk;
+  wire                    spi1_mosi;
+  wire                    spi1_miso;
+  wire                    rx_ref_clk;
+  wire                    rx_sysref;
+  wire                    rx_sync;
 
   // instantiations
 
@@ -173,12 +162,27 @@ module system_top (
     .O (rx_sync_1_p),
     .OB (rx_sync_1_n));
 
+  // spi
+
+  assign spi_clk = spi0_clk;
+  assign ad9528_csn = (spi0_csn == 3'b000) ? 1'b0 : 1'b1;
+  assign ad9680_1_csn = (spi0_csn == 3'b001) ? 1'b0 : 1'b1;
+  assign ad9680_2_csn = (spi0_csn == 3'b010) ? 1'b0 : 1'b1;
+  assign ada4961_1a_csn = (spi0_csn == 3'b011) ? 1'b0 : 1'b1;
+  assign ada4961_1b_csn = (spi0_csn == 3'b100) ? 1'b0 : 1'b1;
+  assign ada4961_1c_csn = (spi0_csn == 3'b101) ? 1'b0 : 1'b1;
+  assign ada4961_1d_csn = (spi0_csn == 3'b110) ? 1'b0 : 1'b1;
+
   fmcadc4_spi i_spi (
     .spi_csn (spi0_csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi0_mosi),
     .spi_miso (spi0_miso),
     .spi_sdio (spi_sdio));
+
+  // gpio
+ 
+  assign gpio_i[63:38] = gpio_o[63:38];
 
   ad_iobuf #(.DATA_WIDTH(6)) i_iobuf (
     .dio_t (gpio_t[37:32]),
@@ -191,13 +195,23 @@ module system_top (
               ad9528_status,    // 33
               ad9528_rstn}));   // 32
 
+  assign gpio_i[31:15] = gpio_o[31:15];
+
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
+  // ipi-system
+ 
   system_wrapper i_system_wrapper (
+    .axi_fmcadc4_xcvr_cpll_ref_clk (rx_ref_clk),
+    .axi_fmcadc4_xcvr_qpll_ref_clk (rx_ref_clk),
+    .axi_fmcadc4_xcvr_rx_data_n (rx_data_n),
+    .axi_fmcadc4_xcvr_rx_data_p (rx_data_p),
+    .axi_fmcadc4_xcvr_tx_data_n (),
+    .axi_fmcadc4_xcvr_tx_data_p (),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -256,25 +270,8 @@ module system_top (
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
     .ps_intr_11 (1'b0),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_data_2_n (rx_data_n[2]),
-    .rx_data_2_p (rx_data_p[2]),
-    .rx_data_3_n (rx_data_n[3]),
-    .rx_data_3_p (rx_data_p[3]),
-    .rx_data_4_n (rx_data_n[4]),
-    .rx_data_4_p (rx_data_p[4]),
-    .rx_data_5_n (rx_data_n[5]),
-    .rx_data_5_p (rx_data_p[5]),
-    .rx_data_6_n (rx_data_n[6]),
-    .rx_data_6_p (rx_data_p[6]),
-    .rx_data_7_n (rx_data_n[7]),
-    .rx_data_7_p (rx_data_p[7]),
-    .rx_ref_clk_0 (rx_ref_clk),
-    .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (rx_sysref),
+    .rx_sync (rx_sync),
+    .rx_sysref (rx_sysref),
     .spdif (spdif),
     .spi0_clk_i (spi0_clk),
     .spi0_clk_o (spi0_clk),
