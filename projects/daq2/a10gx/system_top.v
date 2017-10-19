@@ -131,6 +131,7 @@ module system_top (
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
+  wire              dac_fifo_bypass;
 
   // User code space at offset 0x0930_0000 per Altera's Board Update Portal
   // reference design used to program flash
@@ -155,6 +156,7 @@ module system_top (
   // gpio in & out are separate cores
 
   assign gpio_i[63:44] = gpio_o[63:44];
+  assign dac_fifo_bypass = gpio_o[44];
   assign gpio_i[43:43] = trig;
 
   assign gpio_i[42:40] = gpio_o[42:40];
@@ -236,6 +238,7 @@ module system_top (
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
     .tx_serial_data_tx_serial_data (tx_serial_data),
+    .tx_fifo_bypass_bypass (dac_fifo_bypass),
     .tx_ref_clk_clk (tx_ref_clk),
     .tx_sync_export (tx_sync),
     .tx_sysref_export (tx_sysref),
