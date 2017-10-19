@@ -100,21 +100,21 @@ module system_top (
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 2:0]  spi0_csn;
-  wire            spi0_clk;
-  wire            spi0_mosi;
-  wire            spi0_miso;
-  wire    [ 2:0]  spi1_csn;
-  wire            spi1_clk;
-  wire            spi1_mosi;
-  wire            spi1_miso;
-  wire            rx_ref_clk;
-  wire            rx_sync;
-  wire            rx_sysref;
-  wire            rx_clk;
+  wire        [63:0]      gpio_i;
+  wire        [63:0]      gpio_o;
+  wire        [63:0]      gpio_t;
+  wire                    rx_ref_clk;
+  wire        [ 2:0]      spi0_csn;
+  wire                    spi0_clk;
+  wire                    spi0_mosi;
+  wire                    spi0_miso;
+  wire        [ 2:0]      spi1_csn;
+  wire                    spi1_clk;
+  wire                    spi1_mosi;
+  wire                    spi1_miso;
+  wire                    rx_clk;
+  wire                    rx_sync;
+  wire                    rx_sysref;
 
   // instantiations
 
@@ -135,10 +135,16 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
+  // spi
+
   assign spi_csn = spi0_csn[0];
   assign spi_clk = spi0_clk;
   assign spi_mosi = spi0_mosi;
   assign spi0_miso = spi_miso;
+
+  // gpio
+
+  assign gpio_i[63:42] = gpio_o[63:42];
 
   ad_iobuf #(.DATA_WIDTH(10)) i_iobuf (
     .dio_t (gpio_t[41:32]),
@@ -155,18 +161,30 @@ module system_top (
               adc_agc3,
               adc_agc4}));
 
+  assign gpio_i[31:15] = gpio_o[31:15];
+
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
+  // sysref
+
   ad_sysref_gen i_sysref (
     .core_clk (rx_clk),
     .sysref_en (gpio_o[48]),
     .sysref_out (rx_sysref));
 
+  // ipi-system
+ 
   system_wrapper i_system_wrapper (
+    .axi_ad6676_xcvr_cpll_ref_clk (rx_ref_clk),
+    .axi_ad6676_xcvr_qpll_ref_clk (rx_ref_clk),
+    .axi_ad6676_xcvr_rx_data_n (rx_data_n),
+    .axi_ad6676_xcvr_rx_data_p (rx_data_p),
+    .axi_ad6676_xcvr_tx_data_n (),
+    .axi_ad6676_xcvr_tx_data_p (),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
@@ -210,14 +228,9 @@ module system_top (
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
     .ps_intr_11 (1'b0),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_ref_clk_0 (rx_ref_clk),
-    .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (rx_sysref),
     .rx_core_clk (rx_clk),
+    .rx_sync (rx_sync),
+    .rx_sysref (rx_sysref),
     .spdif (spdif),
     .spi0_clk_i (spi0_clk),
     .spi0_clk_o (spi0_clk),

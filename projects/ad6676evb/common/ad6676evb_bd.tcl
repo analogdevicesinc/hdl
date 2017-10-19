@@ -1,22 +1,44 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
-# adc peripherals
+# transceiver core
 
-ad_ip_instance axi_adxcvr axi_ad6676_xcvr
-ad_ip_parameter axi_ad6676_xcvr CONFIG.NUM_OF_LANES 2
-ad_ip_parameter axi_ad6676_xcvr CONFIG.QPLL_ENABLE 0
-ad_ip_parameter axi_ad6676_xcvr CONFIG.TX_OR_RX_N 0
-ad_ip_parameter axi_ad6676_xcvr CONFIG.LPM_OR_DFE_N 0
-ad_ip_parameter axi_ad6676_xcvr CONFIG.SYS_CLK_SEL "00"
-ad_ip_parameter axi_ad6676_xcvr CONFIG.OUT_CLK_SEL "100"
+ad_xcvr_parameter number_of_lanes 2
+ad_xcvr_parameter rx_lane_rate {4.000 Gbps}
+ad_xcvr_parameter rx_ref_clk_frequency {200.000 MHz}
+ad_xcvr_instance axi_ad6676_xcvr
+
+# adc peripherals (jesd)
 
 adi_axi_jesd204_rx_create axi_ad6676_jesd 2
+create_bd_port -dir I rx_sysref
+create_bd_port -dir O rx_sync
+ad_connect rx_sysref axi_ad6676_jesd/sysref
+ad_connect axi_ad6676_jesd/sync rx_sync
+ad_connect axi_ad6676_xcvr_rx_core_clk axi_ad6676_jesd/device_clk
+ad_connect axi_ad6676_jesd/phy_en_char_align axi_ad6676_xcvr/rxencommaalign
+
+# adc peripherals (ad6676-core)
 
 ad_ip_instance axi_ad6676 axi_ad6676_core
+ad_connect axi_ad6676_xcvr_rx_core_clk axi_ad6676_core/rx_clk
+ad_connect axi_ad6676_jesd/rx_sof axi_ad6676_core/rx_sof
+ad_connect axi_ad6676_jesd/rx_data_tdata axi_ad6676_core/rx_data
+
+# adc peripherals (cpack)
 
 ad_ip_instance util_cpack axi_ad6676_cpack
 ad_ip_parameter axi_ad6676_cpack CONFIG.NUM_OF_CHANNELS 2
+ad_connect axi_ad6676_xcvr_rx_core_clk axi_ad6676_cpack/adc_clk
+ad_connect axi_ad6676_core/adc_enable_0 axi_ad6676_cpack/adc_enable_0
+ad_connect axi_ad6676_core/adc_valid_0 axi_ad6676_cpack/adc_valid_0
+ad_connect axi_ad6676_core/adc_data_0 axi_ad6676_cpack/adc_data_0
+ad_connect axi_ad6676_core/adc_enable_1 axi_ad6676_cpack/adc_enable_1
+ad_connect axi_ad6676_core/adc_valid_1 axi_ad6676_cpack/adc_valid_1
+ad_connect axi_ad6676_core/adc_data_1 axi_ad6676_cpack/adc_data_1
+ad_connect axi_ad6676_cpack/adc_rst GND
+
+# adc peripherals (dma)
 
 ad_ip_instance axi_dmac axi_ad6676_dma
 ad_ip_parameter axi_ad6676_dma CONFIG.DMA_TYPE_SRC 2
@@ -30,70 +52,29 @@ ad_ip_parameter axi_ad6676_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad6676_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad6676_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad6676_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_connect axi_ad6676_xcvr_rx_core_clk axi_ad6676_dma/fifo_wr_clk
+ad_connect axi_ad6676_dma/fifo_wr_en axi_ad6676_cpack/adc_valid
+ad_connect axi_ad6676_dma/fifo_wr_sync axi_ad6676_cpack/adc_sync
+ad_connect axi_ad6676_dma/fifo_wr_din axi_ad6676_cpack/adc_data
+ad_connect axi_ad6676_dma/fifo_wr_overflow axi_ad6676_core/adc_dovf
+ad_connect sys_cpu_resetn axi_ad6676_dma/m_dest_axi_aresetn
 
-# transceiver core
+# core clock port
 
-ad_ip_instance util_adxcvr util_ad6676_xcvr
-ad_ip_parameter util_ad6676_xcvr CONFIG.QPLL_FBDIV 0x80
-ad_ip_parameter util_ad6676_xcvr CONFIG.CPLL_FBDIV 2
-ad_ip_parameter util_ad6676_xcvr CONFIG.CPLL_FBDIV_4_5 5
-ad_ip_parameter util_ad6676_xcvr CONFIG.TX_NUM_OF_LANES 0
-ad_ip_parameter util_ad6676_xcvr CONFIG.RX_NUM_OF_LANES 2
-ad_ip_parameter util_ad6676_xcvr CONFIG.RX_OUT_DIV 1
-ad_ip_parameter util_ad6676_xcvr CONFIG.RX_CLK25_DIV 8
-ad_ip_parameter util_ad6676_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
-ad_ip_parameter util_ad6676_xcvr CONFIG.RX_CDR_CFG 0x03000023ff20400020
-
-# reference clocks & resets
-
-create_bd_port -dir I rx_ref_clk_0
 create_bd_port -dir O rx_core_clk
-
-ad_xcvrpll  rx_ref_clk_0 util_ad6676_xcvr/qpll_ref_clk_*
-ad_xcvrpll  rx_ref_clk_0 util_ad6676_xcvr/cpll_ref_clk_*
-ad_xcvrpll  axi_ad6676_xcvr/up_pll_rst util_ad6676_xcvr/up_qpll_rst_*
-ad_xcvrpll  axi_ad6676_xcvr/up_pll_rst util_ad6676_xcvr/up_cpll_rst_*
-ad_connect  sys_cpu_resetn util_ad6676_xcvr/up_rstn
-ad_connect  sys_cpu_clk util_ad6676_xcvr/up_clk
-
-# connections (adc)
-
-ad_xcvrcon  util_ad6676_xcvr axi_ad6676_xcvr axi_ad6676_jesd
-ad_connect  util_ad6676_xcvr/rx_out_clk_0 axi_ad6676_core/rx_clk
-ad_connect  util_ad6676_xcvr/rx_out_clk_0 rx_core_clk
-ad_connect  axi_ad6676_jesd/rx_sof axi_ad6676_core/rx_sof
-ad_connect  axi_ad6676_jesd/rx_data_tdata axi_ad6676_core/rx_data
-ad_connect  util_ad6676_xcvr/rx_out_clk_0 axi_ad6676_cpack/adc_clk
-ad_connect  axi_ad6676_jesd_rstgen/peripheral_reset axi_ad6676_cpack/adc_rst
-ad_connect  axi_ad6676_core/adc_enable_0 axi_ad6676_cpack/adc_enable_0
-ad_connect  axi_ad6676_core/adc_valid_0 axi_ad6676_cpack/adc_valid_0
-ad_connect  axi_ad6676_core/adc_data_0 axi_ad6676_cpack/adc_data_0
-ad_connect  axi_ad6676_core/adc_enable_1 axi_ad6676_cpack/adc_enable_1
-ad_connect  axi_ad6676_core/adc_valid_1 axi_ad6676_cpack/adc_valid_1
-ad_connect  axi_ad6676_core/adc_data_1 axi_ad6676_cpack/adc_data_1
-ad_connect  axi_ad6676_core/adc_clk axi_ad6676_dma/fifo_wr_clk
-ad_connect  axi_ad6676_dma/fifo_wr_en axi_ad6676_cpack/adc_valid
-ad_connect  axi_ad6676_dma/fifo_wr_sync axi_ad6676_cpack/adc_sync
-ad_connect  axi_ad6676_dma/fifo_wr_din axi_ad6676_cpack/adc_data
-ad_connect  axi_ad6676_core/adc_dovf axi_ad6676_dma/fifo_wr_overflow
+ad_connect axi_ad6676_xcvr_rx_core_clk rx_core_clk
 
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A60000 axi_ad6676_xcvr
-ad_cpu_interconnect 0x44A10000 axi_ad6676_core
 ad_cpu_interconnect 0x44AA0000 axi_ad6676_jesd
+ad_cpu_interconnect 0x44A10000 axi_ad6676_core
 ad_cpu_interconnect 0x7c420000 axi_ad6676_dma
-
-# xcvr uses hp3, and 100MHz clock for both DRP and AXI4
-
-ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_cpu_clk axi_ad6676_xcvr/m_axi
 
 # interconnect (adc)
 
 ad_mem_hp2_interconnect sys_200m_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_200m_clk axi_ad6676_dma/m_dest_axi
-ad_connect  sys_cpu_resetn axi_ad6676_dma/m_dest_axi_aresetn
 
 # interrupts
 
