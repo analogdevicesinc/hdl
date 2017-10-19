@@ -28,11 +28,11 @@ set sys_hp3_interconnect_index -1
 set sys_mem_interconnect_index -1
 set xcvr_parameter_list {}
 set xcvr_rx_bufg_enable 1
-set xcvr_rx_ref_clk 0
-set xcvr_rx_lane_rate 0
+set xcvr_rx_ref_clk 500.000
+set xcvr_rx_lane_rate 10.000
 set xcvr_tx_bufg_enable 1
-set xcvr_tx_ref_clk 0
-set xcvr_tx_lane_rate 0
+set xcvr_tx_ref_clk 500.000
+set xcvr_tx_lane_rate 10.000
 set xcvr_master_or_slave_n 1
 set xcvr_master_instance {NONE}
 
