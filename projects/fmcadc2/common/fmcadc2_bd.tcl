@@ -1,19 +1,40 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
-# adc peripherals
+# transceiver core
 
-ad_ip_instance axi_ad9625 axi_ad9625_core
+ad_xcvr_parameter number_of_lanes 8
+ad_xcvr_parameter rx_lane_rate {6.250 Gbps}
+ad_xcvr_parameter rx_ref_clk_frequency {625.000 MHz}
+ad_xcvr_instance axi_ad9625_xcvr
+
+# adc peripherals (jesd)
 
 adi_axi_jesd204_rx_create axi_ad9625_jesd 8
+create_bd_port -dir I rx_sysref
+create_bd_port -dir O rx_sync
+ad_connect rx_sysref axi_ad9625_jesd/sysref
+ad_connect axi_ad9625_jesd/sync rx_sync
+ad_connect axi_ad9625_xcvr_rx_core_clk axi_ad9625_jesd/device_clk
+ad_connect axi_ad9625_jesd/phy_en_char_align axi_ad9625_xcvr/rxencommaalign
 
-ad_ip_instance axi_adxcvr axi_ad9625_xcvr
-ad_ip_parameter axi_ad9625_xcvr CONFIG.NUM_OF_LANES 8
-ad_ip_parameter axi_ad9625_xcvr CONFIG.QPLL_ENABLE 0
-ad_ip_parameter axi_ad9625_xcvr CONFIG.TX_OR_RX_N 0
-ad_ip_parameter axi_ad9625_xcvr CONFIG.LPM_OR_DFE_N 1
-ad_ip_parameter axi_ad9625_xcvr CONFIG.SYS_CLK_SEL 0
-ad_ip_parameter axi_ad9625_xcvr CONFIG.OUT_CLK_SEL 2
+# adc peripherals (ad9625-core)
+
+ad_ip_instance axi_ad9625 axi_ad9625_core
+ad_connect axi_ad9625_xcvr_rx_core_clk axi_ad9625_core/rx_clk
+ad_connect axi_ad9625_jesd/rx_sof axi_ad9625_core/rx_sof
+ad_connect axi_ad9625_jesd/rx_data_tdata axi_ad9625_core/rx_data
+
+# adc peripherals (fifo, see system_bd.tcl)
+
+ad_connect axi_ad9625_xcvr_rx_core_clk axi_ad9625_fifo/adc_clk
+ad_connect axi_ad9625_core/adc_enable axi_ad9625_fifo/adc_wr
+ad_connect axi_ad9625_core/adc_data axi_ad9625_fifo/adc_wdata
+ad_connect axi_ad9625_fifo/adc_wovf axi_ad9625_core/adc_dovf
+ad_connect sys_cpu_clk axi_ad9625_fifo/dma_clk
+ad_connect axi_ad9625_fifo/adc_rst GND
+
+# adc peripherals (dma)
 
 ad_ip_instance axi_dmac axi_ad9625_dma
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_TYPE_SRC 1
@@ -27,50 +48,17 @@ ad_ip_parameter axi_ad9625_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9625_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_connect sys_cpu_clk axi_ad9625_dma/s_axis_aclk
+ad_connect sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
+ad_connect axi_ad9625_fifo/dma_wr axi_ad9625_dma/s_axis_valid
+ad_connect axi_ad9625_fifo/dma_wdata axi_ad9625_dma/s_axis_data
+ad_connect axi_ad9625_dma/s_axis_ready axi_ad9625_fifo/dma_wready
+ad_connect axi_ad9625_dma/s_axis_xfer_req axi_ad9625_fifo/dma_xfer_req
 
-ad_ip_instance util_adxcvr util_fmcadc2_xcvr
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.QPLL_FBDIV 0x80 ;# N = 40
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.CPLL_FBDIV 1
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.TX_NUM_OF_LANES 0
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.TX_OUT_DIV 1
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.TX_CLK25_DIV 25
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_NUM_OF_LANES 8
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_OUT_DIV 1
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_CLK25_DIV 25
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
-ad_ip_parameter util_fmcadc2_xcvr CONFIG.RX_CDR_CFG 0x03000023ff20400020 ;# DFE mode refclk +-200
+# core clock port
 
-# reference clocks & resets
-
-create_bd_port -dir I rx_ref_clk_0
 create_bd_port -dir O rx_core_clk
-
-ad_xcvrpll  rx_ref_clk_0 util_fmcadc2_xcvr/qpll_ref_clk_*
-ad_xcvrpll  rx_ref_clk_0 util_fmcadc2_xcvr/cpll_ref_clk_*
-ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcadc2_xcvr/up_qpll_rst_*
-ad_xcvrpll  axi_ad9625_xcvr/up_pll_rst util_fmcadc2_xcvr/up_cpll_rst_*
-ad_connect  sys_cpu_resetn util_fmcadc2_xcvr/up_rstn
-ad_connect  sys_cpu_clk util_fmcadc2_xcvr/up_clk
-
-# connections (adc)
-
-ad_xcvrcon  util_fmcadc2_xcvr axi_ad9625_xcvr axi_ad9625_jesd
-ad_connect  util_fmcadc2_xcvr/rx_out_clk_0 axi_ad9625_core/rx_clk
-ad_connect  rx_core_clk util_fmcadc2_xcvr/rx_out_clk_0
-ad_connect  axi_ad9625_jesd/rx_data_tdata axi_ad9625_core/rx_data
-ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/rx_sof
-ad_connect  sys_cpu_clk axi_ad9625_fifo/dma_clk
-ad_connect  sys_cpu_clk axi_ad9625_dma/s_axis_aclk
-ad_connect  sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
-ad_connect  axi_ad9625_core/adc_clk axi_ad9625_fifo/adc_clk
-ad_connect  axi_ad9625_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
-ad_connect  axi_ad9625_core/adc_enable axi_ad9625_fifo/adc_wr
-ad_connect  axi_ad9625_core/adc_data axi_ad9625_fifo/adc_wdata
-ad_connect  axi_ad9625_core/adc_dovf axi_ad9625_fifo/adc_wovf
-ad_connect  axi_ad9625_fifo/dma_wr axi_ad9625_dma/s_axis_valid
-ad_connect  axi_ad9625_fifo/dma_wdata axi_ad9625_dma/s_axis_data
-ad_connect  axi_ad9625_fifo/dma_wready axi_ad9625_dma/s_axis_ready
-ad_connect  axi_ad9625_fifo/dma_xfer_req axi_ad9625_dma/s_axis_xfer_req
+ad_connect axi_ad9625_xcvr_rx_core_clk rx_core_clk
 
 # interconnect (cpu)
 
@@ -78,11 +66,6 @@ ad_cpu_interconnect 0x44A60000 axi_ad9625_xcvr
 ad_cpu_interconnect 0x44A10000 axi_ad9625_core
 ad_cpu_interconnect 0x44AA0000 axi_ad9625_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9625_dma
-
-# gt uses hp3, and 100MHz clock for both DRP and AXI4
-
-ad_mem_hp3_interconnect sys_cpu_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_cpu_clk axi_ad9625_xcvr/m_axi
 
 # interconnect (mem/adc)
 
