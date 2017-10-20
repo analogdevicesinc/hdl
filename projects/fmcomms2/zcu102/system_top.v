@@ -77,7 +77,6 @@ module system_top (
 
   assign gpio_i[95:47] = gpio_o[95:47];
   assign gpio_i[31:21] = gpio_o[31:21];
-  // assign gpio_i[31:13] = gpio_o[31:13]; //led
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
