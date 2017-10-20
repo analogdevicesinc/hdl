@@ -14,3 +14,21 @@ source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/fmcomms11_bd.tcl
 
+ad_connect axi_fmcomms11_xcvr/gt0_rx axi_ad9625_jesd/rx_phy0
+ad_connect axi_fmcomms11_xcvr/gt1_rx axi_ad9625_jesd/rx_phy1
+ad_connect axi_fmcomms11_xcvr/gt2_rx axi_ad9625_jesd/rx_phy2
+ad_connect axi_fmcomms11_xcvr/gt3_rx axi_ad9625_jesd/rx_phy3
+ad_connect axi_fmcomms11_xcvr/gt4_rx axi_ad9625_jesd/rx_phy5
+ad_connect axi_fmcomms11_xcvr/gt5_rx axi_ad9625_jesd/rx_phy7
+ad_connect axi_fmcomms11_xcvr/gt6_rx axi_ad9625_jesd/rx_phy6
+ad_connect axi_fmcomms11_xcvr/gt7_rx axi_ad9625_jesd/rx_phy4
+
+ad_connect axi_ad9162_jesd/tx_phy0 axi_fmcomms11_xcvr/gt0_tx
+ad_connect axi_ad9162_jesd/tx_phy1 axi_fmcomms11_xcvr/gt1_tx
+ad_connect axi_ad9162_jesd/tx_phy2 axi_fmcomms11_xcvr/gt2_tx
+ad_connect axi_ad9162_jesd/tx_phy3 axi_fmcomms11_xcvr/gt3_tx
+ad_connect axi_ad9162_jesd/tx_phy5 axi_fmcomms11_xcvr/gt4_tx
+ad_connect axi_ad9162_jesd/tx_phy7 axi_fmcomms11_xcvr/gt5_tx
+ad_connect axi_ad9162_jesd/tx_phy6 axi_fmcomms11_xcvr/gt6_tx
+ad_connect axi_ad9162_jesd/tx_phy4 axi_fmcomms11_xcvr/gt7_tx
+

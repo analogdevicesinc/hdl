@@ -183,6 +183,8 @@ module system_top (
     .IB (usr_clk_n),
     .O (usr_clk));
 
+  // spi
+
   fmcomms11_spi i_spi (
     .spi_csn (spi0_csn),
     .spi_clk (spi_clk),
@@ -199,16 +201,17 @@ module system_top (
 
   assign spi_clk = spi0_clk;
 
+  // gpio fmcomms11
+
   assign gpio_i[63:36] = gpio_o[63:36];
 
   ad_iobuf #(.DATA_WIDTH(4)) i_iobuf (
     .dio_t ({gpio_t[35:32]}),
     .dio_i ({gpio_o[35:32]}),
     .dio_o ({gpio_i[35:32]}),
-    .dio_p ({ adf4355_muxout,   // 35
-              ad9162_txen,      // 34
-              ad9625_irq,       // 33
-              ad9162_irq}));    // 32
+    .dio_p ({adf4355_muxout, ad9162_txen, ad9625_irq, ad9162_irq}));
+
+  // gpio zc706
 
   assign gpio_i[31:15] = gpio_o[31:15];
 
@@ -218,7 +221,15 @@ module system_top (
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
+  // ipi-system
+
   system_wrapper i_system_wrapper (
+    .axi_fmcomms11_xcvr_cpll_ref_clk (rx_ref_clk),
+    .axi_fmcomms11_xcvr_qpll_ref_clk (tx_ref_clk),
+    .axi_fmcomms11_xcvr_rx_data_n (rx_data_n),
+    .axi_fmcomms11_xcvr_rx_data_p (rx_data_p),
+    .axi_fmcomms11_xcvr_tx_data_n (tx_data_n),
+    .axi_fmcomms11_xcvr_tx_data_p (tx_data_p),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -275,25 +286,8 @@ module system_top (
     .ps_intr_07 (1'b0),
     .ps_intr_08 (1'b0),
     .ps_intr_09 (1'b0),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_data_2_n (rx_data_n[2]),
-    .rx_data_2_p (rx_data_p[2]),
-    .rx_data_3_n (rx_data_n[3]),
-    .rx_data_3_p (rx_data_p[3]),
-    .rx_data_4_n (rx_data_n[4]),
-    .rx_data_4_p (rx_data_p[4]),
-    .rx_data_5_n (rx_data_n[5]),
-    .rx_data_5_p (rx_data_p[5]),
-    .rx_data_6_n (rx_data_n[6]),
-    .rx_data_6_p (rx_data_p[6]),
-    .rx_data_7_n (rx_data_n[7]),
-    .rx_data_7_p (rx_data_p[7]),
-    .rx_ref_clk_0 (tx_ref_clk),
-    .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (sysref),
+    .rx_sync (rx_sync),
+    .rx_sysref (sysref),
     .spdif (spdif),
     .spi0_clk_i (spi0_clk),
     .spi0_clk_o (spi0_clk),
@@ -316,25 +310,8 @@ module system_top (
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
-    .tx_data_0_n (tx_data_n[0]),
-    .tx_data_0_p (tx_data_p[0]),
-    .tx_data_1_n (tx_data_n[1]),
-    .tx_data_1_p (tx_data_p[1]),
-    .tx_data_2_n (tx_data_n[2]),
-    .tx_data_2_p (tx_data_p[2]),
-    .tx_data_3_n (tx_data_n[3]),
-    .tx_data_3_p (tx_data_p[3]),
-    .tx_data_4_n (tx_data_n[4]),
-    .tx_data_4_p (tx_data_p[4]),
-    .tx_data_5_n (tx_data_n[5]),
-    .tx_data_5_p (tx_data_p[5]),
-    .tx_data_6_n (tx_data_n[6]),
-    .tx_data_6_p (tx_data_p[6]),
-    .tx_data_7_n (tx_data_n[7]),
-    .tx_data_7_p (tx_data_p[7]),
-    .tx_ref_clk_0 (tx_ref_clk),
-    .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (sysref));
+    .tx_sync (tx_sync),
+    .tx_sysref (sysref));
 
 endmodule
 
