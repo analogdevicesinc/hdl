@@ -8,28 +8,21 @@ source $ad_hdl_dir/projects/common/vc707/vc707_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source ../common/fmcadc5_bd.tcl
 
-# ila 
+ad_connect axi_ad9625_0_xcvr/gt0_rx axi_ad9625_0_jesd/rx_phy2
+ad_connect axi_ad9625_0_xcvr/gt1_rx axi_ad9625_0_jesd/rx_phy0
+ad_connect axi_ad9625_0_xcvr/gt2_rx axi_ad9625_0_jesd/rx_phy1
+ad_connect axi_ad9625_0_xcvr/gt3_rx axi_ad9625_0_jesd/rx_phy3
+ad_connect axi_ad9625_0_xcvr/gt4_rx axi_ad9625_0_jesd/rx_phy6
+ad_connect axi_ad9625_0_xcvr/gt5_rx axi_ad9625_0_jesd/rx_phy7
+ad_connect axi_ad9625_0_xcvr/gt6_rx axi_ad9625_0_jesd/rx_phy5
+ad_connect axi_ad9625_0_xcvr/gt7_rx axi_ad9625_0_jesd/rx_phy4
 
-ad_ip_instance util_mfifo mfifo_adc
-ad_ip_parameter mfifo_adc CONFIG.NUM_OF_CHANNELS 1
-ad_ip_parameter mfifo_adc CONFIG.DIN_DATA_WIDTH 512
-ad_ip_parameter mfifo_adc CONFIG.ADDRESS_WIDTH 6
-
-ad_ip_instance ila ila_adc
-ad_ip_parameter ila_adc CONFIG.C_MONITOR_TYPE Native
-ad_ip_parameter ila_adc CONFIG.C_TRIGIN_EN false
-ad_ip_parameter ila_adc CONFIG.C_EN_STRG_QUAL 1
-ad_ip_parameter ila_adc CONFIG.C_NUM_OF_PROBES 2
-ad_ip_parameter ila_adc CONFIG.C_PROBE0_WIDTH 1
-ad_ip_parameter ila_adc CONFIG.C_PROBE1_WIDTH 16
-
-ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 mfifo_adc/din_clk
-ad_connect  axi_ad9625_0_jesd_rstgen/peripheral_reset mfifo_adc/din_rst
-ad_connect  axi_fmcadc5_sync/rx_enable mfifo_adc/din_valid
-ad_connect  axi_fmcadc5_sync/rx_data mfifo_adc/din_data_0
-ad_connect  axi_ad9625_0_jesd_rstgen/peripheral_reset mfifo_adc/dout_rst
-ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 mfifo_adc/dout_clk
-ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 ila_adc/clk
-ad_connect  mfifo_adc/dout_valid ila_adc/probe0
-ad_connect  mfifo_adc/dout_data_0 ila_adc/probe1
+ad_connect axi_ad9625_1_xcvr/gt0_rx axi_ad9625_1_jesd/rx_phy2
+ad_connect axi_ad9625_1_xcvr/gt1_rx axi_ad9625_1_jesd/rx_phy0
+ad_connect axi_ad9625_1_xcvr/gt2_rx axi_ad9625_1_jesd/rx_phy1
+ad_connect axi_ad9625_1_xcvr/gt3_rx axi_ad9625_1_jesd/rx_phy3
+ad_connect axi_ad9625_1_xcvr/gt4_rx axi_ad9625_1_jesd/rx_phy6
+ad_connect axi_ad9625_1_xcvr/gt5_rx axi_ad9625_1_jesd/rx_phy7
+ad_connect axi_ad9625_1_xcvr/gt6_rx axi_ad9625_1_jesd/rx_phy5
+ad_connect axi_ad9625_1_xcvr/gt7_rx axi_ad9625_1_jesd/rx_phy4
 

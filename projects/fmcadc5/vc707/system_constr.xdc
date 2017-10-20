@@ -1,45 +1,6 @@
 
 # ad9625
 
-set_property  -dict {PACKAGE_PIN  A10 } [get_ports rx_ref_clk_0_p]                                ; ## D04  FMC1_HPC_GBTCLK0_M2C_P
-set_property  -dict {PACKAGE_PIN  A9  } [get_ports rx_ref_clk_0_n]                                ; ## D05  FMC1_HPC_GBTCLK0_M2C_N
-set_property  -dict {PACKAGE_PIN  G6  } [get_ports rx_data_0_p[0]]                                ; ## A18  FMC1_HPC_DP5_M2C_P
-set_property  -dict {PACKAGE_PIN  G5  } [get_ports rx_data_0_n[0]]                                ; ## A19  FMC1_HPC_DP5_M2C_N
-set_property  -dict {PACKAGE_PIN  F8  } [get_ports rx_data_0_p[1]]                                ; ## B16  FMC1_HPC_DP6_M2C_P
-set_property  -dict {PACKAGE_PIN  F7  } [get_ports rx_data_0_n[1]]                                ; ## B17  FMC1_HPC_DP6_M2C_N
-set_property  -dict {PACKAGE_PIN  H8  } [get_ports rx_data_0_p[2]]                                ; ## A14  FMC1_HPC_DP4_M2C_P
-set_property  -dict {PACKAGE_PIN  H7  } [get_ports rx_data_0_n[2]]                                ; ## A15  FMC1_HPC_DP4_M2C_N
-set_property  -dict {PACKAGE_PIN  E6  } [get_ports rx_data_0_p[3]]                                ; ## B12  FMC1_HPC_DP7_M2C_P
-set_property  -dict {PACKAGE_PIN  E5  } [get_ports rx_data_0_n[3]]                                ; ## B13  FMC1_HPC_DP7_M2C_N
-set_property  -dict {PACKAGE_PIN  A6  } [get_ports rx_data_0_p[4]]                                ; ## A10  FMC1_HPC_DP3_M2C_P
-set_property  -dict {PACKAGE_PIN  A5  } [get_ports rx_data_0_n[4]]                                ; ## A11  FMC1_HPC_DP3_M2C_N
-set_property  -dict {PACKAGE_PIN  B8  } [get_ports rx_data_0_p[5]]                                ; ## A06  FMC1_HPC_DP2_M2C_P
-set_property  -dict {PACKAGE_PIN  B7  } [get_ports rx_data_0_n[5]]                                ; ## A07  FMC1_HPC_DP2_M2C_N
-set_property  -dict {PACKAGE_PIN  D8  } [get_ports rx_data_0_p[6]]                                ; ## C06  FMC1_HPC_DP0_M2C_P
-set_property  -dict {PACKAGE_PIN  D7  } [get_ports rx_data_0_n[6]]                                ; ## C07  FMC1_HPC_DP0_M2C_N
-set_property  -dict {PACKAGE_PIN  C6  } [get_ports rx_data_0_p[7]]                                ; ## A02  FMC1_HPC_DP1_M2C_P
-set_property  -dict {PACKAGE_PIN  C5  } [get_ports rx_data_0_n[7]]                                ; ## A03  FMC1_HPC_DP1_M2C_N
-
-set_property  -dict {PACKAGE_PIN  K8  } [get_ports rx_ref_clk_1_p]                                ; ## D04  FMC2_HPC_GBTCLK0_M2C_P
-set_property  -dict {PACKAGE_PIN  K7  } [get_ports rx_ref_clk_1_n]                                ; ## D05  FMC2_HPC_GBTCLK0_M2C_N
-set_property  -dict {PACKAGE_PIN  V4  } [get_ports rx_data_1_p[0]]                                ; ## A18  FMC2_HPC_DP5_M2C_P    
-set_property  -dict {PACKAGE_PIN  V3  } [get_ports rx_data_1_n[0]]                                ; ## A19  FMC2_HPC_DP5_M2C_N    
-set_property  -dict {PACKAGE_PIN  U6  } [get_ports rx_data_1_p[1]]                                ; ## B16  FMC2_HPC_DP6_M2C_P    
-set_property  -dict {PACKAGE_PIN  U5  } [get_ports rx_data_1_n[1]]                                ; ## B17  FMC2_HPC_DP6_M2C_N    
-set_property  -dict {PACKAGE_PIN  W6  } [get_ports rx_data_1_p[2]]                                ; ## A14  FMC2_HPC_DP4_M2C_P    
-set_property  -dict {PACKAGE_PIN  W5  } [get_ports rx_data_1_n[2]]                                ; ## A15  FMC2_HPC_DP4_M2C_N    
-set_property  -dict {PACKAGE_PIN  R6  } [get_ports rx_data_1_p[3]]                                ; ## B12  FMC2_HPC_DP7_M2C_P    
-set_property  -dict {PACKAGE_PIN  R5  } [get_ports rx_data_1_n[3]]                                ; ## B13  FMC2_HPC_DP7_M2C_N    
-set_property  -dict {PACKAGE_PIN  J6  } [get_ports rx_data_1_p[4]]                                ; ## A10  FMC2_HPC_DP3_M2C_P    
-set_property  -dict {PACKAGE_PIN  J5  } [get_ports rx_data_1_n[4]]                                ; ## A11  FMC2_HPC_DP3_M2C_N    
-set_property  -dict {PACKAGE_PIN  L6  } [get_ports rx_data_1_p[5]]                                ; ## A06  FMC2_HPC_DP2_M2C_P    
-set_property  -dict {PACKAGE_PIN  L5  } [get_ports rx_data_1_n[5]]                                ; ## A07  FMC2_HPC_DP2_M2C_N    
-set_property  -dict {PACKAGE_PIN  P8  } [get_ports rx_data_1_p[6]]                                ; ## C06  FMC2_HPC_DP0_M2C_P    
-set_property  -dict {PACKAGE_PIN  P7  } [get_ports rx_data_1_n[6]]                                ; ## C07  FMC2_HPC_DP0_M2C_N    
-set_property  -dict {PACKAGE_PIN  N6  } [get_ports rx_data_1_p[7]]                                ; ## A02  FMC2_HPC_DP1_M2C_P    
-set_property  -dict {PACKAGE_PIN  N5  } [get_ports rx_data_1_n[7]]                                ; ## A03  FMC2_HPC_DP1_M2C_N    
-
-
 set_property  -dict {PACKAGE_PIN  K39   IOSTANDARD LVDS} [get_ports rx_sysref_p]                  ; ## G06  FMC1_HPC_LA00_CC_P       
 set_property  -dict {PACKAGE_PIN  K40   IOSTANDARD LVDS} [get_ports rx_sysref_n]                  ; ## G07  FMC1_HPC_LA00_CC_N       
 set_property  -dict {PACKAGE_PIN  J40   IOSTANDARD LVDS} [get_ports rx_sync_0_p]                  ; ## D08  FMC1_HPC_LA01_CC_P
@@ -84,9 +45,60 @@ set_property  -dict {PACKAGE_PIN  P40   IOSTANDARD LVCMOS18} [get_ports psync_1]
 
 create_clock -name rx_ref_clk_0   -period  1.60 [get_ports rx_ref_clk_0_p]
 create_clock -name rx_ref_clk_1   -period  1.60 [get_ports rx_ref_clk_1_p]
-create_clock -name rx_div_clk     -period  6.40 [get_pins i_system_wrapper/system_i/util_fmcadc5_0_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+create_clock -name rx_div_clk     -period  6.40 [get_pins i_system_wrapper/system_i/axi_ad9625_0_xcvr_rx_bufg/U0/BUFG_O]
 
-set_false_path -from  [get_cells i_system_wrapper/system_i/axi_ad9625_0_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]*]
+# reference clocks
+
+set_property  -dict {PACKAGE_PIN  A10} [get_ports rx_ref_clk_0_p] ; ## D04  FMC1_HPC_GBTCLK0_M2C_P
+set_property  -dict {PACKAGE_PIN  A9 } [get_ports rx_ref_clk_0_n] ; ## D05  FMC1_HPC_GBTCLK0_M2C_N
+set_property  -dict {PACKAGE_PIN  K8 } [get_ports rx_ref_clk_1_p] ; ## D04  FMC2_HPC_GBTCLK0_M2C_P
+set_property  -dict {PACKAGE_PIN  K7 } [get_ports rx_ref_clk_1_n] ; ## D05  FMC2_HPC_GBTCLK0_M2C_N
+
 set_property IOB false [get_cells -hierarchical -filter {name =~ *SCK_O_NE_4_FDRE_INST}]
 
+# xcvr channels
+
+set_property LOC GTXE2_CHANNEL_X1Y20 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_0_xcvr*gt0*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y21 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_0_xcvr*gt1*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y22 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_0_xcvr*gt2*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y23 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_0_xcvr*gt3*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y24 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_0_xcvr*gt4*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y25 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_0_xcvr*gt5*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y26 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_0_xcvr*gt6*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y27 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_0_xcvr*gt7*gtxe2_i}]
+
+# lanes
+# device        fmc                         xcvr                  location
+# -----------------------------------------------------------------------------------
+# rx_data[2]    A14/A15   FMC_HPC_DP4_M2C   H8/H7    rx_data[0]   GTXE2_CHANNEL_X1Y20
+# rx_data[0]    A18/A19   FMC_HPC_DP5_M2C   G6/G5    rx_data[1]   GTXE2_CHANNEL_X1Y21
+# rx_data[1]    B16/B17   FMC_HPC_DP6_M2C   F8/F7    rx_data[2]   GTXE2_CHANNEL_X1Y22
+# rx_data[3]    B12/B13   FMC_HPC_DP7_M2C   E6/E5    rx_data[3]   GTXE2_CHANNEL_X1Y23
+# rx_data[6]    C06/C07   FMC_HPC_DP0_M2C   D8/D7    rx_data[4]   GTXE2_CHANNEL_X1Y24
+# rx_data[7]    A02/A03   FMC_HPC_DP1_M2C   C6/C5    rx_data[5]   GTXE2_CHANNEL_X1Y25
+# rx_data[5]    A06/A07   FMC_HPC_DP2_M2C   B8/B7    rx_data[6]   GTXE2_CHANNEL_X1Y26
+# rx_data[4]    A10/A11   FMC_HPC_DP3_M2C   A6/A5    rx_data[7]   GTXE2_CHANNEL_X1Y27
+# -----------------------------------------------------------------------------------
+
+set_property LOC GTXE2_CHANNEL_X1Y12 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_1_xcvr*gt0*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y13 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_1_xcvr*gt1*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y14 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_1_xcvr*gt2*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y15 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_1_xcvr*gt3*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y16 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_1_xcvr*gt4*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y17 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_1_xcvr*gt5*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y18 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_1_xcvr*gt6*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X1Y19 [get_cells -hierarchical -filter {NAME =~ *axi_ad9625_1_xcvr*gt7*gtxe2_i}]
+
+# lanes
+# device        fmc                         xcvr                  location
+# -----------------------------------------------------------------------------------
+# rx_data[2]    A14/A15   FMC_HPC_DP4_M2C   W6/W5    rx_data[0]   GTXE2_CHANNEL_X1Y12
+# rx_data[0]    A18/A19   FMC_HPC_DP5_M2C   V4/V3    rx_data[1]   GTXE2_CHANNEL_X1Y13
+# rx_data[1]    B16/B17   FMC_HPC_DP6_M2C   U6/U5    rx_data[2]   GTXE2_CHANNEL_X1Y14
+# rx_data[3]    B12/B13   FMC_HPC_DP7_M2C   R6/R5    rx_data[3]   GTXE2_CHANNEL_X1Y15
+# rx_data[6]    C06/C07   FMC_HPC_DP0_M2C   P8/P7    rx_data[4]   GTXE2_CHANNEL_X1Y16
+# rx_data[7]    A02/A03   FMC_HPC_DP1_M2C   N6/N5    rx_data[5]   GTXE2_CHANNEL_X1Y17
+# rx_data[5]    A06/A07   FMC_HPC_DP2_M2C   L6/L5    rx_data[6]   GTXE2_CHANNEL_X1Y18
+# rx_data[4]    A10/A11   FMC_HPC_DP3_M2C   J6/J5    rx_data[7]   GTXE2_CHANNEL_X1Y19
+# -----------------------------------------------------------------------------------
 

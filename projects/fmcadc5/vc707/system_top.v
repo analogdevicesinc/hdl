@@ -202,6 +202,9 @@ module system_top (
 
   // fmcadc5 board controls
 
+  assign gpio_i[63:47] = gpio_o[63:47];
+  assign gpio_i[45] = gpio_o[45];
+
   ad_iobuf #(.DATA_WIDTH(5)) i_iobuf_fmcadc5 (
     .dio_t (gpio_t[44:40]),
     .dio_i (gpio_o[44:40]),
@@ -214,6 +217,8 @@ module system_top (
     .dio_o (gpio_i[39:38]),
     .dio_p ({pwdn_1, rst_1}));
 
+  assign gpio_i[37:36] = gpio_o[37:36];
+
   ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_ad9625_0 (
     .dio_t (gpio_t[35:34]),
     .dio_i (gpio_o[35:34]),
@@ -221,6 +226,8 @@ module system_top (
     .dio_p ({pwdn_0, rst_0}));
 
   // vc707 board controls
+
+  assign gpio_i[31:21] = gpio_o[31:21];
 
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
@@ -231,6 +238,18 @@ module system_top (
   // ipi design
 
   system_wrapper i_system_wrapper (
+    .axi_ad9625_0_xcvr_cpll_ref_clk (rx_ref_clk_0),
+    .axi_ad9625_0_xcvr_qpll_ref_clk (rx_ref_clk_0),
+    .axi_ad9625_0_xcvr_rx_data_n (rx_data_0_n),
+    .axi_ad9625_0_xcvr_rx_data_p (rx_data_0_p),
+    .axi_ad9625_0_xcvr_tx_data_n (),
+    .axi_ad9625_0_xcvr_tx_data_p (),
+    .axi_ad9625_1_xcvr_cpll_ref_clk (rx_ref_clk_1),
+    .axi_ad9625_1_xcvr_qpll_ref_clk (rx_ref_clk_1),
+    .axi_ad9625_1_xcvr_rx_data_n (rx_data_1_n),
+    .axi_ad9625_1_xcvr_rx_data_p (rx_data_1_p),
+    .axi_ad9625_1_xcvr_tx_data_n (),
+    .axi_ad9625_1_xcvr_tx_data_p (),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -274,40 +293,6 @@ module system_top (
     .phy_rstn (phy_rstn),
     .phy_sd (1'b1),
     .psync (psync),
-    .rx_data_0_n (rx_data_0_n[0]),
-    .rx_data_0_p (rx_data_0_p[0]),
-    .rx_data_1_0_n (rx_data_1_n[0]),
-    .rx_data_1_0_p (rx_data_1_p[0]),
-    .rx_data_1_1_n (rx_data_1_n[1]),
-    .rx_data_1_1_p (rx_data_1_p[1]),
-    .rx_data_1_2_n (rx_data_1_n[2]),
-    .rx_data_1_2_p (rx_data_1_p[2]),
-    .rx_data_1_3_n (rx_data_1_n[3]),
-    .rx_data_1_3_p (rx_data_1_p[3]),
-    .rx_data_1_4_n (rx_data_1_n[4]),
-    .rx_data_1_4_p (rx_data_1_p[4]),
-    .rx_data_1_5_n (rx_data_1_n[5]),
-    .rx_data_1_5_p (rx_data_1_p[5]),
-    .rx_data_1_6_n (rx_data_1_n[6]),
-    .rx_data_1_6_p (rx_data_1_p[6]),
-    .rx_data_1_7_n (rx_data_1_n[7]),
-    .rx_data_1_7_p (rx_data_1_p[7]),
-    .rx_data_1_n (rx_data_0_n[1]),
-    .rx_data_1_p (rx_data_0_p[1]),
-    .rx_data_2_n (rx_data_0_n[2]),
-    .rx_data_2_p (rx_data_0_p[2]),
-    .rx_data_3_n (rx_data_0_n[3]),
-    .rx_data_3_p (rx_data_0_p[3]),
-    .rx_data_4_n (rx_data_0_n[4]),
-    .rx_data_4_p (rx_data_0_p[4]),
-    .rx_data_5_n (rx_data_0_n[5]),
-    .rx_data_5_p (rx_data_0_p[5]),
-    .rx_data_6_n (rx_data_0_n[6]),
-    .rx_data_6_p (rx_data_0_p[6]),
-    .rx_data_7_n (rx_data_0_n[7]),
-    .rx_data_7_p (rx_data_0_p[7]),
-    .rx_ref_clk_0 (rx_ref_clk_0),
-    .rx_ref_clk_1 (rx_ref_clk_1),
     .rx_sync_0_n (rx_sync_0_n),
     .rx_sync_0_p (rx_sync_0_p),
     .rx_sync_1_n (rx_sync_1_n),
