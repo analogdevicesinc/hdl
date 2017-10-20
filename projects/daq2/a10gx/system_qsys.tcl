@@ -8,4 +8,13 @@ source $ad_hdl_dir/projects/common/a10gx/a10gx_system_qsys.tcl
 source $ad_hdl_dir/projects/common/altera/dacfifo_qsys.tcl
 source ../common/daq2_qsys.tcl
 
+set_interconnect_requirement {mm_interconnect_0|rsp_demux_021.src7/sys_ddr3_cntrl_ctrl_amm_0_to_sys_ethernet_dma_rx_mm_write_rsp_width_adapter.sink} {qsys_mm.postTransform.pipelineCount} {1}
+set_interconnect_requirement {mm_interconnect_0|rsp_demux_021.src6/sys_ddr3_cntrl_ctrl_amm_0_to_sys_ethernet_dma_tx_mm_read_rsp_width_adapter.sink} {qsys_mm.postTransform.pipelineCount} {1}
+set_interconnect_requirement {mm_interconnect_0|rsp_demux_021.src3/sys_ddr3_cntrl_ctrl_amm_0_to_axi_ad9680_dma_m_dest_axi_rd_rsp_width_adapter.sink} {qsys_mm.postTransform.pipelineCount} {1}
+set_interconnect_requirement {mm_interconnect_0|rsp_demux_021.src0/sys_ddr3_cntrl_ctrl_amm_0_to_sys_cpu_data_master_rsp_width_adapter.sink} {qsys_mm.postTransform.pipelineCount} {1}
+set_interconnect_requirement {mm_interconnect_0|rsp_demux_021.src1/sys_ddr3_cntrl_ctrl_amm_0_to_sys_cpu_instruction_master_rsp_width_adapter.sink} {qsys_mm.postTransform.pipelineCount} {1}
+set_interconnect_requirement {mm_interconnect_0|rsp_demux_021.src2/sys_ddr3_cntrl_ctrl_amm_0_to_axi_ad9680_dma_m_dest_axi_wr_rsp_width_adapter.sink} {qsys_mm.postTransform.pipelineCount} {1}
+set_interconnect_requirement {mm_interconnect_0|rsp_demux_021.src5/sys_ddr3_cntrl_ctrl_amm_0_to_axi_ad9144_dma_m_src_axi_rd_rsp_width_adapter.sink} {qsys_mm.postTransform.pipelineCount} {1}
+set_interconnect_requirement {mm_interconnect_0|sys_ddr3_cntrl_ctrl_amm_0_to_sys_ethernet_dma_rx_mm_write_rsp_width_adapter.src/async_fifo_011.in} {qsys_mm.postTransform.pipelineCount} {1}
+set_interconnect_requirement {mm_interconnect_0|rsp_demux_021.src4/sys_ddr3_cntrl_ctrl_amm_0_to_axi_ad9144_dma_m_src_axi_wr_rsp_width_adapter.sink} {qsys_mm.postTransform.pipelineCount} {1}
 
