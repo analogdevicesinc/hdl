@@ -1,38 +1,10 @@
 # fmcomms7
 
-set_property  -dict {PACKAGE_PIN  AA8 } [get_ports rx_ref_clk_p]                                      ; ## B20  FMC_HPC_GBTCLK1_M2C_P
-set_property  -dict {PACKAGE_PIN  AA7 } [get_ports rx_ref_clk_n]                                      ; ## B21  FMC_HPC_GBTCLK1_M2C_N
-set_property  -dict {PACKAGE_PIN  AE8 } [get_ports rx_data_p[0]]                                      ; ## A10  FMC_HPC_DP3_M2C_P
-set_property  -dict {PACKAGE_PIN  AE7 } [get_ports rx_data_n[0]]                                      ; ## A11  FMC_HPC_DP3_M2C_N
-set_property  -dict {PACKAGE_PIN  AH10} [get_ports rx_data_p[1]]                                      ; ## C06  FMC_HPC_DP0_M2C_P
-set_property  -dict {PACKAGE_PIN  AH9 } [get_ports rx_data_n[1]]                                      ; ## C07  FMC_HPC_DP0_M2C_N
-set_property  -dict {PACKAGE_PIN  AG8 } [get_ports rx_data_p[2]]                                      ; ## A06  FMC_HPC_DP2_M2C_P
-set_property  -dict {PACKAGE_PIN  AG7 } [get_ports rx_data_n[2]]                                      ; ## A07  FMC_HPC_DP2_M2C_N
-set_property  -dict {PACKAGE_PIN  AJ8 } [get_ports rx_data_p[3]]                                      ; ## A02  FMC_HPC_DP1_M2C_P
-set_property  -dict {PACKAGE_PIN  AJ7 } [get_ports rx_data_n[3]]                                      ; ## A03  FMC_HPC_DP1_M2C_N
 set_property  -dict {PACKAGE_PIN  AG21  IOSTANDARD LVDS_25} [get_ports rx_sync_p]                     ; ## D08  FMC_HPC_LA01_CC_P
 set_property  -dict {PACKAGE_PIN  AH21  IOSTANDARD LVDS_25} [get_ports rx_sync_n]                     ; ## D09  FMC_HPC_LA01_CC_N
 set_property  -dict {PACKAGE_PIN  AH19  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports rx_sysref_p]    ; ## G09  FMC_HPC_LA03_P
 set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports rx_sysref_n]    ; ## G10  FMC_HPC_LA03_N
 
-set_property  -dict {PACKAGE_PIN  AD10} [get_ports tx_ref_clk_p]                                      ; ## D04  FMC_HPC_GBTCLK0_M2C_P
-set_property  -dict {PACKAGE_PIN  AD9 } [get_ports tx_ref_clk_n]                                      ; ## D05  FMC_HPC_GBTCLK0_M2C_N
-set_property  -dict {PACKAGE_PIN  AK2 } [get_ports tx_data_p[0]]                                      ; ## A30  FMC_HPC_DP3_C2M_P      (tx_data_p[5])
-set_property  -dict {PACKAGE_PIN  AK1 } [get_ports tx_data_n[0]]                                      ; ## A31  FMC_HPC_DP3_C2M_N      (tx_data_n[5])
-set_property  -dict {PACKAGE_PIN  AK10} [get_ports tx_data_p[1]]                                      ; ## C02  FMC_HPC_DP0_C2M_P      (tx_data_p[3])
-set_property  -dict {PACKAGE_PIN  AK9 } [get_ports tx_data_n[1]]                                      ; ## C03  FMC_HPC_DP0_C2M_N      (tx_data_n[3])
-set_property  -dict {PACKAGE_PIN  AJ4 } [get_ports tx_data_p[2]]                                      ; ## A26  FMC_HPC_DP2_C2M_P      (tx_data_p[6])
-set_property  -dict {PACKAGE_PIN  AJ3 } [get_ports tx_data_n[2]]                                      ; ## A27  FMC_HPC_DP2_C2M_N      (tx_data_n[6])
-set_property  -dict {PACKAGE_PIN  AK6 } [get_ports tx_data_p[3]]                                      ; ## A22  FMC_HPC_DP1_C2M_P      (tx_data_p[7])
-set_property  -dict {PACKAGE_PIN  AK5 } [get_ports tx_data_n[3]]                                      ; ## A23  FMC_HPC_DP1_C2M_N      (tx_data_n[7])
-set_property  -dict {PACKAGE_PIN  AH2 } [get_ports tx_data_p[4]]                                      ; ## A34  FMC_HPC_DP4_C2M_P      (tx_data_p[2])
-set_property  -dict {PACKAGE_PIN  AH1 } [get_ports tx_data_n[4]]                                      ; ## A35  FMC_HPC_DP4_C2M_N      (tx_data_n[2])
-set_property  -dict {PACKAGE_PIN  AF2 } [get_ports tx_data_p[5]]                                      ; ## A38  FMC_HPC_DP5_C2M_P      (tx_data_p[0])
-set_property  -dict {PACKAGE_PIN  AF1 } [get_ports tx_data_n[5]]                                      ; ## A39  FMC_HPC_DP5_C2M_N      (tx_data_n[0])
-set_property  -dict {PACKAGE_PIN  AE4 } [get_ports tx_data_p[6]]                                      ; ## B36  FMC_HPC_DP6_C2M_P      (tx_data_p[1])
-set_property  -dict {PACKAGE_PIN  AE3 } [get_ports tx_data_n[6]]                                      ; ## B37  FMC_HPC_DP6_C2M_N      (tx_data_n[1])
-set_property  -dict {PACKAGE_PIN  AD2 } [get_ports tx_data_p[7]]                                      ; ## B32  FMC_HPC_DP7_C2M_P      (tx_data_p[4])
-set_property  -dict {PACKAGE_PIN  AD1 } [get_ports tx_data_n[7]]                                      ; ## B33  FMC_HPC_DP7_C2M_N      (tx_data_n[4])
 set_property  -dict {PACKAGE_PIN  AK17  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync0_p]     ; ## H07  FMC_HPC_LA02_P
 set_property  -dict {PACKAGE_PIN  AK18  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync0_n]     ; ## H08  FMC_HPC_LA02_N
 set_property  -dict {PACKAGE_PIN  Y22   IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync1_p]     ; ## H19  FMC_HPC_LA15_P
@@ -102,6 +74,42 @@ set_property  -dict {PACKAGE_PIN  P26   IOSTANDARD LVCMOS25} [get_ports hmc922_b
 
 create_clock -name tx_ref_clk   -period  2.00 [get_ports tx_ref_clk_p]
 create_clock -name rx_ref_clk   -period  2.00 [get_ports rx_ref_clk_p]
-create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_fmcomms7_xcvr/inst/i_xch_0/i_gtxe2_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/util_fmcomms7_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+create_clock -name tx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_fmcomms7_xcvr_tx_bufg/U0/BUFG_O]
+create_clock -name rx_div_clk   -period  4.00 [get_pins i_system_wrapper/system_i/axi_fmcomms7_xcvr_rx_bufg/U0/BUFG_O]
+
+# reference clocks
+
+set_property  -dict {PACKAGE_PIN  AA8 } [get_ports rx_ref_clk_p] ; ## B20  FMC_HPC_GBTCLK1_M2C_P
+set_property  -dict {PACKAGE_PIN  AA7 } [get_ports rx_ref_clk_n] ; ## B21  FMC_HPC_GBTCLK1_M2C_N
+set_property  -dict {PACKAGE_PIN  AD10} [get_ports tx_ref_clk_p] ; ## D04  FMC_HPC_GBTCLK0_M2C_P
+set_property  -dict {PACKAGE_PIN  AD9 } [get_ports tx_ref_clk_n] ; ## D05  FMC_HPC_GBTCLK0_M2C_N
+
+# xcvr channels
+
+set_property LOC GTXE2_CHANNEL_X0Y0 [get_cells -hierarchical -filter {NAME =~ *axi_fmcomms7_xcvr*gt0*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X0Y1 [get_cells -hierarchical -filter {NAME =~ *axi_fmcomms7_xcvr*gt1*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X0Y2 [get_cells -hierarchical -filter {NAME =~ *axi_fmcomms7_xcvr*gt2*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X0Y3 [get_cells -hierarchical -filter {NAME =~ *axi_fmcomms7_xcvr*gt3*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X0Y4 [get_cells -hierarchical -filter {NAME =~ *axi_fmcomms7_xcvr*gt4*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X0Y5 [get_cells -hierarchical -filter {NAME =~ *axi_fmcomms7_xcvr*gt5*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X0Y6 [get_cells -hierarchical -filter {NAME =~ *axi_fmcomms7_xcvr*gt6*gtxe2_i}]
+set_property LOC GTXE2_CHANNEL_X0Y7 [get_cells -hierarchical -filter {NAME =~ *axi_fmcomms7_xcvr*gt7*gtxe2_i}]
+
+# lanes
+# device        fmc                         xcvr                  location
+# -----------------------------------------------------------------------------------
+# rx_data[1]    C06/C07   FMC_HPC_DP0_M2C   AH10/AH9  rx_data[0]  GTXE2_CHANNEL_X0Y0
+# rx_data[3]    A02/A03   FMC_HPC_DP1_M2C   AJ8/AJ7   rx_data[1]  GTXE2_CHANNEL_X0Y1
+# rx_data[2]    A06/A07   FMC_HPC_DP2_M2C   AG8/AG7   rx_data[2]  GTXE2_CHANNEL_X0Y2
+# rx_data[0]    A10/A11   FMC_HPC_DP3_M2C   AE8/AE7   rx_data[3]  GTXE2_CHANNEL_X0Y3
+# -----------------------------------------------------------------------------------
+# tx_data[3]    C02/C03   FMC_HPC_DP0_C2M   AK10/AK9  tx_data[0]  GTXE2_CHANNEL_X0Y0
+# tx_data[7]    A22/A23   FMC_HPC_DP1_C2M   AK6/AK5   tx_data[1]  GTXE2_CHANNEL_X0Y1
+# tx_data[6]    A26/A27   FMC_HPC_DP2_C2M   AJ4/AJ3   tx_data[2]  GTXE2_CHANNEL_X0Y2
+# tx_data[5]    A30/A31   FMC_HPC_DP3_C2M   AK2/AK1   tx_data[3]  GTXE2_CHANNEL_X0Y3
+# tx_data[2]    A34/A35   FMC_HPC_DP4_C2M   AH2/AH1   tx_data[4]  GTXE2_CHANNEL_X0Y4
+# tx_data[0]    A38/A39   FMC_HPC_DP5_C2M   AF2/AF1   tx_data[5]  GTXE2_CHANNEL_X0Y5
+# tx_data[1]    B36/B37   FMC_HPC_DP6_C2M   AE4/AE3   tx_data[6]  GTXE2_CHANNEL_X0Y6
+# tx_data[4]    B32/B33   FMC_HPC_DP7_C2M   AD2/AD1   tx_data[7]  GTXE2_CHANNEL_X0Y7
+# -----------------------------------------------------------------------------------
 
