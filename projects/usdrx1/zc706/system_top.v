@@ -139,6 +139,8 @@ module system_top (
 
   // internal signals
 
+  wire                    afe_trig;
+  wire                    afe_rst;
   wire        [ 4:0]      spi_csn;
   wire                    spi_clk;
   wire                    spi_mosi;
@@ -152,20 +154,7 @@ module system_top (
   wire        [15:0]      ps_intrs;
   wire                    rx_clk;
 
-  // spi assignments
-
-  assign spi_fout_enb_clk     = 1'b0;
-  assign spi_fout_enb_mlo     = 1'b0;
-  assign spi_fout_enb_rst     = 1'b0;
-  assign spi_fout_enb_sync    = 1'b0;
-  assign spi_fout_enb_sysref  = 1'b0;
-  assign spi_fout_enb_trig    = 1'b0;
-  assign spi_fout_sdio        = 1'b0;
-  assign spi_afe_csn          = spi_csn[ 4: 1];
-  assign spi_clk_csn          = spi_csn[ 0: 0];
-  assign spi_fout_clk         = 1'b0;
-  assign spi_afe_clk          = spi_clk;
-  assign spi_clk_clk          = spi_clk;
+  // instantiations
 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk (
     .CEB (1'd0),
@@ -185,12 +174,12 @@ module system_top (
     .OB (rx_sync_n));
 
   OBUFDS i_obufds_gpio_afe_trig (
-    .I (gpio_o[33]),
+    .I (afe_trig),
     .O (afe_trig_p),
     .OB (afe_trig_n));
 
   OBUFDS i_obufds_gpio_afe_rst (
-    .I (gpio_o[32]),
+    .I (afe_rst),
     .O (afe_rst_p),
     .OB (afe_rst_n));
 
@@ -199,30 +188,56 @@ module system_top (
     .O (afe_mlo_p),
     .OB (afe_mlo_n));
 
-  assign dac_sleep  = gpio_o[44];
-  assign amp_disbn  = gpio_o[39];
-  assign gpio_i[38] = clk_status;
-  assign clk_syncn  = gpio_o[37];
-  assign clk_resetn = gpio_o[36];
-  assign afe_stby   = gpio_o[35];
-  assign afe_pdn    = gpio_o[34];
+  // gpio usdrx1
 
-  assign dac_data   = gpio_o[59:45];
+  assign gpio_i[59:45] = gpio_o[59:45];
+  assign dac_data = gpio_o[59:45];
+  assign dac_sleep = gpio_o[44];
 
   ad_iobuf #(.DATA_WIDTH(4)) i_iobuf_prc (
     .dio_t (gpio_t[43:40]),
     .dio_i (gpio_o[43:40]),
     .dio_o (gpio_i[43:40]),
-    .dio_p ({prc_sdo_q,
-            prc_sdo_i,
-            prc_cnv,
-            prc_sck}));
+    .dio_p ({prc_sdo_q, prc_sdo_i, prc_cnv, prc_sck}));
+
+  assign gpio_i[39] = gpio_o[39];
+  assign amp_disbn  = gpio_o[39];
+
+  assign gpio_i[38] = clk_status;
+
+  assign gpio_i[37:32] = gpio_o[37:32];
+  assign clk_syncn  = gpio_o[37];
+  assign clk_resetn = gpio_o[36];
+  assign afe_stby = gpio_o[35];
+  assign afe_pdn = gpio_o[34];
+  assign afe_trig = gpio_o[33];
+  assign afe_rst = gpio_o[32];
+
+  // gpio zc706
+
+  assign gpio_i[31:15] = gpio_o[31:15];
 
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
+
+  // spi
+
+  assign spi_fout_enb_clk = 1'b0;
+  assign spi_fout_enb_mlo = 1'b0;
+  assign spi_fout_enb_rst = 1'b0;
+  assign spi_fout_enb_sync = 1'b0;
+  assign spi_fout_enb_sysref = 1'b0;
+  assign spi_fout_enb_trig = 1'b0;
+  assign spi_fout_sdio = 1'b0;
+  assign spi_fout_clk = 1'b0;
+
+  assign spi_afe_csn = spi_csn[4:1];
+  assign spi_clk_csn = spi_csn[0];
+  assign spi_afe_clk = spi_clk;
+  assign spi_clk_clk = spi_clk;
 
   usdrx1_spi i_spi (
     .spi_afe_csn (spi_csn[4:1]),
@@ -233,15 +248,22 @@ module system_top (
     .spi_afe_sdio (spi_afe_sdio),
     .spi_clk_sdio (spi_clk_sdio));
 
+  // sysref
+ 
   ad_sysref_gen i_sysref (
     .core_clk (rx_clk),
     .sysref_en (gpio_o[60]),
     .sysref_out (rx_sysref));
 
+  // ipi-system
+
   system_wrapper i_system_wrapper (
-    .sys_clk_clk_n (sys_clk_n),
-    .sys_clk_clk_p (sys_clk_p),
-    .sys_rst (sys_rst),
+    .axi_usdrx1_xcvr_cpll_ref_clk (rx_ref_clk),
+    .axi_usdrx1_xcvr_qpll_ref_clk (rx_ref_clk),
+    .axi_usdrx1_xcvr_rx_data_n (rx_data_n),
+    .axi_usdrx1_xcvr_rx_data_p (rx_data_p),
+    .axi_usdrx1_xcvr_tx_data_n (),
+    .axi_usdrx1_xcvr_tx_data_p (),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -300,34 +322,37 @@ module system_top (
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
     .ps_intr_11 (1'b0),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_data_2_n (rx_data_n[2]),
-    .rx_data_2_p (rx_data_p[2]),
-    .rx_data_3_n (rx_data_n[3]),
-    .rx_data_3_p (rx_data_p[3]),
-    .rx_data_4_n (rx_data_n[4]),
-    .rx_data_4_p (rx_data_p[4]),
-    .rx_data_5_n (rx_data_n[5]),
-    .rx_data_5_p (rx_data_p[5]),
-    .rx_data_6_n (rx_data_n[6]),
-    .rx_data_6_p (rx_data_p[6]),
-    .rx_data_7_n (rx_data_n[7]),
-    .rx_data_7_p (rx_data_p[7]),
-    .rx_ref_clk_0 (rx_ref_clk),
-    .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (rx_sysref),
+    .ps_intr_12 (1'b0),
+    .ps_intr_13 (1'b0),
     .rx_core_clk (rx_clk),
+    .rx_sync (rx_sync),
+    .rx_sysref (rx_sysref),
     .spdif (spdif),
-    .spi_clk_i (spi_clk),
-    .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
-    .spi_sdi_i (spi_miso),
-    .spi_sdo_i (spi_mosi),
-    .spi_sdo_o (spi_mosi));
+    .spi0_clk_i (1'd0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
+    .spi0_csn_1_o (),
+    .spi0_csn_2_o (),
+    .spi0_csn_i (1'd0),
+    .spi0_sdi_i (1'd0),
+    .spi0_sdo_i (1'd0),
+    .spi0_sdo_o (),
+    .spi1_clk_i (1'd0),
+    .spi1_clk_o (),
+    .spi1_csn_0_o (),
+    .spi1_csn_1_o (),
+    .spi1_csn_2_o (),
+    .spi1_csn_i (1'd0),
+    .spi1_sdi_i (1'd0),
+    .spi1_sdo_i (1'd0),
+    .spi1_sdo_o (),
+    .spi_clk (spi_clk),
+    .spi_csn (spi_csn),
+    .spi_miso (spi_miso),
+    .spi_mosi (spi_mosi),
+    .sys_clk_clk_n (sys_clk_n),
+    .sys_clk_clk_p (sys_clk_p),
+    .sys_rst (sys_rst));
 
 endmodule
 
