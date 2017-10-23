@@ -8,7 +8,6 @@
     <DataDepth_En>1024</DataDepth_En>
     <LowPower_En>ON</LowPower_En>
     <XADC_En>Disabled</XADC_En>
-    <TargetFPGA>xc7z045-ffg900/-2</TargetFPGA>
     <Version>4.0</Version>
     <SystemClock>Differential</SystemClock>
     <ReferenceClock>Use System Clock</ReferenceClock>
