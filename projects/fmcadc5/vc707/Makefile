@@ -19,14 +19,14 @@ M_DEPS += ../../common/vc707/vc707_system_mig.prj
 M_DEPS += ../../common/vc707/vc707_system_constr.xdc
 M_DEPS += ../../common/vc707/vc707_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_sysref_gen.v
 M_DEPS += ../../../library/axi_ad9625/axi_ad9625.xpr
-M_DEPS += ../../../library/xilinx/axi_adxcvr/axi_adxcvr.xpr
 M_DEPS += ../../../library/axi_dmac/axi_dmac.xpr
 M_DEPS += ../../../library/axi_fmcadc5_sync/axi_fmcadc5_sync.xpr
+M_DEPS += ../../../library/jesd204/axi_jesd204_rx/axi_jesd204_rx.xpr
+M_DEPS += ../../../library/jesd204/jesd204_rx/jesd204_rx.xpr
 M_DEPS += ../../../library/util_adcfifo/util_adcfifo.xpr
-M_DEPS += ../../../library/xilinx/util_adxcvr/util_adxcvr.xpr
-M_DEPS += ../../../library/util_mfifo/util_mfifo.xpr
 
 M_VIVADO := vivado -mode batch -source
 
@@ -56,12 +56,11 @@ clean:
 
 clean-all:clean
 	make -C ../../../library/axi_ad9625 clean
-	make -C ../../../library/xilinx/axi_adxcvr clean
 	make -C ../../../library/axi_dmac clean
 	make -C ../../../library/axi_fmcadc5_sync clean
+	make -C ../../../library/jesd204/axi_jesd204_rx clean
+	make -C ../../../library/jesd204/jesd204_rx clean
 	make -C ../../../library/util_adcfifo clean
-	make -C ../../../library/xilinx/util_adxcvr clean
-	make -C ../../../library/util_mfifo clean
 
 
 fmcadc5_vc707.sdk/system_top.hdf: $(M_DEPS)
@@ -71,12 +70,11 @@ fmcadc5_vc707.sdk/system_top.hdf: $(M_DEPS)
 
 lib:
 	make -C ../../../library/axi_ad9625
-	make -C ../../../library/xilinx/axi_adxcvr
 	make -C ../../../library/axi_dmac
 	make -C ../../../library/axi_fmcadc5_sync
+	make -C ../../../library/jesd204/axi_jesd204_rx
+	make -C ../../../library/jesd204/jesd204_rx
 	make -C ../../../library/util_adcfifo
-	make -C ../../../library/xilinx/util_adxcvr
-	make -C ../../../library/util_mfifo
 
 ####################################################################################
 ####################################################################################
