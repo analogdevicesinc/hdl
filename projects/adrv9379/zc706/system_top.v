@@ -73,10 +73,8 @@ module system_top (
   inout                   iic_scl,
   inout                   iic_sda,
 
-  input                   ref_clk0_p,
-  input                   ref_clk0_n,
-  input                   ref_clk1_p,
-  input                   ref_clk1_n,
+  input                   ref_clk_p,
+  input                   ref_clk_n,
   input       [ 3:0]      rx_data_p,
   input       [ 3:0]      rx_data_n,
   output      [ 3:0]      tx_data_p,
@@ -153,34 +151,23 @@ module system_top (
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire            ref_clk0;
-  wire            ref_clk1;
-  wire            rx_sync;
-  wire            rx_os_sync;
-  wire            tx_sync;
-  wire            tx_sync_1;
-  wire            sysref;
-//  wire            sysref_out;
-
-  assign sysref_out = 0;
+  wire        [63:0]      gpio_i;
+  wire        [63:0]      gpio_o;
+  wire        [63:0]      gpio_t;
+  wire                    ref_clk;
+  wire                    rx_sync;
+  wire                    rx_os_sync;
+  wire                    tx_sync;
+  wire                    tx_sync_1;
+  wire                    sysref;
 
   // instantiations
 
-  IBUFDS_GTE2 i_ibufds_rx_ref_clk (
+  IBUFDS_GTE2 i_ibufds_ref_clk (
     .CEB (1'd0),
-    .I (ref_clk0_p),
-    .IB (ref_clk0_n),
-    .O (ref_clk0),
-    .ODIV2 ());
-
-  IBUFDS_GTE2 i_ibufds_ref_clk1 (
-    .CEB (1'd0),
-    .I (ref_clk1_p),
-    .IB (ref_clk1_n),
-    .O (ref_clk1),
+    .I (ref_clk_p),
+    .IB (ref_clk_n),
+    .O (ref_clk),
     .ODIV2 ());
 
   OBUFDS i_obufds_rx_sync (
@@ -194,7 +181,7 @@ module system_top (
     .OB (rx_os_sync_n));
 
   OBUFDS i_obufds_sysref_out (
-    .I (sysref_out),
+    .I (sysref),
     .O (sysref_out_p),
     .OB (sysref_out_n));
 
@@ -212,6 +199,10 @@ module system_top (
     .I (sysref_p),
     .IB (sysref_n),
     .O (sysref));
+
+  // gpio ad9379
+ 
+  assign gpio_i[63:60] = gpio_o[63:60];
 
   ad_iobuf #(.DATA_WIDTH(28)) i_iobuf (
     .dio_t ({gpio_t[59:32]}),
@@ -246,13 +237,30 @@ module system_top (
               ad9379_gpio_16,       // 33
               ad9379_gpio_18}));    // 32
 
+  // gpio zc706
+
+  assign gpio_i[31:15] = gpio_o[31:15];
+
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
 
+  // ipi-system
+ 
   system_wrapper i_system_wrapper (
+    .axi_ad9379_xcvr_0_cpll_ref_clk (ref_clk),
+    .axi_ad9379_xcvr_0_qpll_ref_clk (ref_clk),
+    .axi_ad9379_xcvr_0_rx_data_n (rx_data_n[1:0]),
+    .axi_ad9379_xcvr_0_rx_data_p (rx_data_p[1:0]),
+    .axi_ad9379_xcvr_0_tx_data_n (tx_data_n[1:0]),
+    .axi_ad9379_xcvr_0_tx_data_p (tx_data_p[1:0]),
+    .axi_ad9379_xcvr_1_cpll_ref_clk (ref_clk),
+    .axi_ad9379_xcvr_1_rx_data_n (rx_data_n[3:2]),
+    .axi_ad9379_xcvr_1_rx_data_p (rx_data_p[3:2]),
+    .axi_ad9379_xcvr_1_tx_data_n (tx_data_n[3:2]),
+    .axi_ad9379_xcvr_1_tx_data_p (tx_data_p[3:2]),
     .dac_fifo_bypass (gpio_o[60]),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
@@ -308,20 +316,10 @@ module system_top (
     .ps_intr_05 (1'b0),
     .ps_intr_06 (1'b0),
     .ps_intr_07 (1'b0),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_data_2_n (rx_data_n[2]),
-    .rx_data_2_p (rx_data_p[2]),
-    .rx_data_3_n (rx_data_n[3]),
-    .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk_0 (ref_clk1),
-    .rx_ref_clk_2 (ref_clk1),
-    .rx_sync_0 (rx_sync),
-    .rx_sync_2 (rx_os_sync),
-    .rx_sysref_0 (sysref),
-    .rx_sysref_2 (sysref),
+    .rx_os_sync (rx_os_sync),
+    .rx_os_sysref (sysref),
+    .rx_sync (rx_sync),
+    .rx_sysref (sysref),
     .spdif (spdif),
     .spi0_clk_i (spi_clk),
     .spi0_clk_o (spi_clk),
@@ -344,17 +342,8 @@ module system_top (
     .sys_clk_clk_n (sys_clk_n),
     .sys_clk_clk_p (sys_clk_p),
     .sys_rst(sys_rst),
-    .tx_data_0_n (tx_data_n[0]),
-    .tx_data_0_p (tx_data_p[0]),
-    .tx_data_1_n (tx_data_n[1]),
-    .tx_data_1_p (tx_data_p[1]),
-    .tx_data_2_n (tx_data_n[2]),
-    .tx_data_2_p (tx_data_p[2]),
-    .tx_data_3_n (tx_data_n[3]),
-    .tx_data_3_p (tx_data_p[3]),
-    .tx_ref_clk_0 (ref_clk1),
-    .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (sysref));
+    .tx_sync (tx_sync),
+    .tx_sysref (sysref));
 
 endmodule
 
