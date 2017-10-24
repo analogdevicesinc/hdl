@@ -17,7 +17,7 @@ ad_xcvr_parameter number_of_lanes 2
 ad_xcvr_parameter master_or_slave_n 0
 ad_xcvr_parameter rx_bufg_enable 0
 ad_xcvr_parameter tx_bufg_enable 0
-ad_xcvr_parameter rx_lane_rate {9.8384 Gbps}
+ad_xcvr_parameter rx_lane_rate {9.8304 Gbps}
 ad_xcvr_parameter tx_lane_rate {9.8304 Gbps}
 ad_xcvr_parameter rx_ref_clk_frequency {245.760 MHz}
 ad_xcvr_parameter tx_ref_clk_frequency {245.760 MHz}
