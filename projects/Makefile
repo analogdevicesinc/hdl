@@ -29,6 +29,7 @@ all:
 	-make -C daq1 all
 	-make -C daq2 all
 	-make -C daq3 all
+	-make -C de10 all
 	-make -C fmcadc2 all
 	-make -C fmcadc4 all
 	-make -C fmcadc5 all
@@ -69,6 +70,7 @@ clean:
 	make -C daq1 clean
 	make -C daq2 clean
 	make -C daq3 clean
+	make -C de10 clean
 	make -C fmcadc2 clean
 	make -C fmcadc4 clean
 	make -C fmcadc5 clean
@@ -109,6 +111,7 @@ clean-all:
 	make -C daq1 clean-all
 	make -C daq2 clean-all
 	make -C daq3 clean-all
+	make -C de10 clean-all
 	make -C fmcadc2 clean-all
 	make -C fmcadc4 clean-all
 	make -C fmcadc5 clean-all
