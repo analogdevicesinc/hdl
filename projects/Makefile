@@ -29,6 +29,7 @@ all:
 	-$(MAKE) -C daq1 all
 	-$(MAKE) -C daq2 all
 	-$(MAKE) -C daq3 all
+	-$(MAKE) -C de10 all
 	-$(MAKE) -C fmcadc2 all
 	-$(MAKE) -C fmcadc4 all
 	-$(MAKE) -C fmcadc5 all
@@ -69,6 +70,7 @@ clean:
 	$(MAKE) -C daq1 clean
 	$(MAKE) -C daq2 clean
 	$(MAKE) -C daq3 clean
+	$(MAKE) -C de10 clean
 	$(MAKE) -C fmcadc2 clean
 	$(MAKE) -C fmcadc4 clean
 	$(MAKE) -C fmcadc5 clean
@@ -109,6 +111,7 @@ clean-all:
 	$(MAKE) -C daq1 clean-all
 	$(MAKE) -C daq2 clean-all
 	$(MAKE) -C daq3 clean-all
+	$(MAKE) -C de10 clean-all
 	$(MAKE) -C fmcadc2 clean-all
 	$(MAKE) -C fmcadc4 clean-all
 	$(MAKE) -C fmcadc5 clean-all
