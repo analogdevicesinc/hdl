@@ -130,6 +130,7 @@ module system_top (
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
+  wire              dac_fifo_bypass;
   wire    [ 23:0]   flash_addr_raw;
 
   // daq3
@@ -149,6 +150,7 @@ module system_top (
   // gpio in & out are separate cores
 
   assign gpio_i[63:40] = gpio_o[63:40];
+  assign dac_fifo_bypass = gpio_o[41];
   assign sysref = gpio_o[40];
   assign gpio_i[39:39] = trig;
 
@@ -221,17 +223,12 @@ module system_top (
     .sys_spi_MOSI (spi_mosi_s),
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
-    .rx_data_0_rx_serial_data (rx_data[0]),
-    .rx_data_1_rx_serial_data (rx_data[1]),
-    .rx_data_2_rx_serial_data (rx_data[2]),
-    .rx_data_3_rx_serial_data (rx_data[3]),
+    .rx_serial_data_rx_serial_data (rx_data),
     .rx_ref_clk_clk (rx_ref_clk),
     .rx_sync_export (rx_sync),
     .rx_sysref_export (rx_sysref),
-    .tx_data_0_tx_serial_data (tx_data[0]),
-    .tx_data_1_tx_serial_data (tx_data[1]),
-    .tx_data_2_tx_serial_data (tx_data[2]),
-    .tx_data_3_tx_serial_data (tx_data[3]),
+    .tx_serial_data_tx_serial_data (tx_data),
+    .tx_fifo_bypass_bypass (dac_fifo_bypass),
     .tx_ref_clk_clk (tx_ref_clk),
     .tx_sync_export (tx_sync),
     .tx_sysref_export (tx_sysref),
