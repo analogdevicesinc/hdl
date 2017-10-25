@@ -67,6 +67,7 @@ ad_ip_parameter TX_OR_RX_N BOOLEAN false false
 ad_ip_parameter LANE_RATE FLOAT 10000 false
 ad_ip_parameter REFCLK_FREQUENCY FLOAT 500.0 false
 ad_ip_parameter NUM_OF_LANES POSITIVE 4 false
+ad_ip_parameter REGISTER_INPUTS INTEGER 0 false
 
 proc jesd204_phy_composition_callback {} {
   set soft_pcs [get_parameter_value "SOFT_PCS"]
@@ -75,6 +76,7 @@ proc jesd204_phy_composition_callback {} {
   set refclk_frequency [get_parameter_value "REFCLK_FREQUENCY"]
   set id [get_parameter_value "ID"]
   set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
+  set register_inputs [get_parameter_value "REGISTER_INPUTS"]
 
   set link_clk_frequency [expr $lane_rate / 40]
 
@@ -214,6 +216,7 @@ proc jesd204_phy_composition_callback {} {
     } else {
       if {$soft_pcs} {
         add_instance soft_pcs_${i} jesd204_soft_pcs_rx
+		set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
         add_connection link_clock.clk soft_pcs_${i}.clock
         add_connection link_clock.clk_reset soft_pcs_${i}.reset
         add_connection phy_glue.rx_raw_data_${i} soft_pcs_${i}.rx_raw_data

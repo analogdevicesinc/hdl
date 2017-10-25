@@ -237,6 +237,12 @@ proc jesd204_compose {} {
     return
   }
 
+  if {$lane_rate > 10000} {
+	  set register_inputs 1;
+  } else {
+	  set register_inputs 0;
+  }
+
   add_instance sys_clock clock_source
   set_instance_parameter_value sys_clock {clockFrequency} [expr $sysclk_frequency*1000000]
   set_instance_parameter_value sys_clock {resetSynchronousEdges} {deassert}
@@ -320,6 +326,7 @@ proc jesd204_compose {} {
   set_instance_parameter_value phy LANE_RATE $lane_rate
   set_instance_parameter_value phy REFCLK_FREQUENCY $refclk_frequency
   set_instance_parameter_value phy NUM_OF_LANES $num_of_lanes
+  set_instance_parameter_value phy REGISTER_INPUTS $register_inputs
 
   add_connection link_clock.out_clk_1 phy.link_clk
   add_connection link_reset.out_reset phy.link_reset

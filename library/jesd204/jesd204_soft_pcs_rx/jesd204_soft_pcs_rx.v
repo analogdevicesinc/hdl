@@ -44,7 +44,8 @@
 
 module jesd204_soft_pcs_rx #(
   parameter NUM_LANES = 1,
-  parameter DATA_PATH_WIDTH = 4
+  parameter DATA_PATH_WIDTH = 4,
+  parameter REGISTER_INPUTS = 0
 ) (
    input clk,
    input reset,
@@ -71,6 +72,9 @@ wire [NUM_LANES*DATA_PATH_WIDTH-1:0] disperr_s;
 reg [NUM_LANES-1:0] disparity = {NUM_LANES{1'b0}};
 wire [DATA_PATH_WIDTH:0] disparity_chain[0:NUM_LANES-1];
 
+wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_s;
+wire patternalign_en_s;
+
 always @(posedge clk) begin
   char <= char_s;
   charisk <= charisk_s;
@@ -81,6 +85,21 @@ end
 generate
 genvar lane;
 genvar i;
+if (REGISTER_INPUTS == 1) begin
+  reg                                     patternalign_en_r;
+  reg [NUM_LANES*DATA_PATH_WIDTH*10-1:0]  data_r;
+  always @(posedge clk) begin
+    patternalign_en_r <= patternalign_en;
+    data_r  <= data;
+  end
+  assign patternalign_en_s = patternalign_en_r;
+  assign data_s = data_r;
+
+end else begin
+  assign patternalign_en_s = patternalign_en;
+  assign data_s = data;
+end
+
 for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
 
   jesd204_pattern_align #(
@@ -89,8 +108,8 @@ for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
     .clk(clk),
     .reset(reset),
 
-    .patternalign_en(patternalign_en),
-    .in_data(data[LANE_DATA_WIDTH*lane+:LANE_DATA_WIDTH]),
+    .patternalign_en(patternalign_en_s),
+    .in_data(data_s[LANE_DATA_WIDTH*lane+:LANE_DATA_WIDTH]),
     .out_data(data_aligned[LANE_DATA_WIDTH*lane+:LANE_DATA_WIDTH])
   );
 
