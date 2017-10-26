@@ -91,13 +91,6 @@ module system_top (
   input             usb1_nxt,
   inout   [  7:0]   usb1_d,
 
-  // hps-spim1-lcd
-
-  output            spim1_ss0,
-  output            spim1_clk,
-  output            spim1_mosi,
-  input             spim1_miso,
-
   // hps-uart
 
   input             uart0_rx,
@@ -105,116 +98,69 @@ module system_top (
 
   // board gpio
 
-  output  [  3:0]   gpio_bd_o,
-  input   [  7:0]   gpio_bd_i,
+  inout   [ 35:0]   gpio_0,
+  inout   [ 35:0]   gpio_1,
+  inout   [ 13:0]   gpio_bd,
+  inout             hps_gpio_led,
+  inout             hps_gpio_pb,
 
-  // display
+  // adxl345 iic interface
 
-  output            vga_clk,
-  output            vga_blank_n,
-  output            vga_sync_n,
-  output            vga_hsync,
-  output            vga_vsync,
-  output  [  7:0]   vga_red,
-  output  [  7:0]   vga_grn,
-  output  [  7:0]   vga_blu,
+  inout             adxl345_scl,
+  inout             adxl345_sda,
+  inout             adxl345_int,
 
-  // ad9361
+  // ltc connector iic/spi interface
+ 
+  inout             ltc_i2c_spi_sel,
+  inout             ltc_i2c_scl,
+  inout             ltc_i2c_sda,
+  output            ltc_spi_csn,
+  output            ltc_spi_clk,
+  output            ltc_spi_mosi,
+  input             ltc_spi_miso,
 
-  input             rx_clk_in,
-  input             rx_frame_in,
-  input   [  5:0]   rx_data_in,
-  output            tx_clk_out,
-  output            tx_frame_out,
-  output  [  5:0]   tx_data_out,
-  output            enable,
-  output            txnrx,
+  // arduino interface
 
-  // gpio interface
-
-  output  [  3:0]   gpio_ctl,
-  input   [  7:0]   gpio_status,
-  input             ad9361_clk_out,
-  output            ad9361_resetb,
-  output            ad9361_en_agc,
-  output            ad9361_sync,
-
-  // iic interface
-
-  inout             scl,
-  inout             sda,
-  output            ga0,
-  output            ga1,
-
-  // spi interface
-
-  output            spi_csn,
-  output            spi_clk,
-  output            spi_mosi,
-  input             spi_miso);
+  inout             arduino_i2c_scl,
+  inout             arduino_i2c_sda,
+  output  [  3:0]   arduino_spi_csn,
+  output            arduino_spi_clk,
+  output            arduino_spi_mosi,
+  input             arduino_spi_miso,
+  inout             arduino_reset_n,
+  inout   [  6:0]   arduino_gpio);
 
   // internal signals
 
   wire              sys_resetn;
-  wire    [ 31:0]   sys_gpio_bd_i;
-  wire    [ 31:0]   sys_gpio_bd_o;
-  wire    [ 31:0]   sys_gpio_i;
-  wire    [ 31:0]   sys_gpio_o;
-
-  wire              i2c0_out_data;
-  wire              i2c0_sda;
-  wire              i2c0_out_clk;
-  wire              i2c0_scl_in_clk;
-
-  // defaults
-
-  assign vga_blank_n = 1'b1;
-  assign vga_sync_n = 1'b0;
-
-  assign gpio_bd_o = sys_gpio_bd_o[3:0];
-
-  assign sys_gpio_bd_i[31:8] = sys_gpio_bd_o[31:8];
-  assign sys_gpio_bd_i[ 7:0] = gpio_bd_i;
-
-  assign sys_gpio_i[31:24] = sys_gpio_o[31:24];
-  assign sys_gpio_i[23:16] = gpio_status;
-  assign sys_gpio_i[15: 0] = sys_gpio_o[15:0];
-
-  assign gpio_ctl = sys_gpio_o[11:8];
-  assign ad9361_resetb = sys_gpio_o[4];
-  assign ad9361_en_agc = sys_gpio_o[3];
-  assign ad9361_sync = sys_gpio_o[2];
-
-  assign ga0 = 1'b0;
-  assign ga1 = 1'b0;
-
-  ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
-  ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
+  wire              i2c2_scl_oe;
+  wire              i2c2_scl;
+  wire              i2c2_sda_oe;
+  wire              i2c2_sda;
 
   // instantiations
 
+  ALT_IOBUF iobuf_i2c2_scl (
+    .i (1'b0),
+    .oe (i2c2_scl_oe),
+    .o (i2c0_scl),
+    .io (arduino_i2c_scl));
+
+  ALT_IOBUF iobuf_i2c2_sda (
+    .i (1'b0),
+    .oe (i2c2_sda_oe),
+    .o (i2c0_sda),
+    .io (arduino_i2c_sda));
+
   system_bd i_system_bd (
-    .axi_ad9361_device_if_rx_clk_in_p (rx_clk_in),
-    .axi_ad9361_device_if_rx_clk_in_n (1'd0),
-    .axi_ad9361_device_if_rx_frame_in_p (rx_frame_in),
-    .axi_ad9361_device_if_rx_frame_in_n (1'd0),
-    .axi_ad9361_device_if_rx_data_in_p (rx_data_in),
-    .axi_ad9361_device_if_rx_data_in_n (6'd0),
-    .axi_ad9361_device_if_tx_clk_out_p (tx_clk_out),
-    .axi_ad9361_device_if_tx_clk_out_n (),
-    .axi_ad9361_device_if_tx_frame_out_p (tx_frame_out),
-    .axi_ad9361_device_if_tx_frame_out_n (),
-    .axi_ad9361_device_if_tx_data_out_p (tx_data_out),
-    .axi_ad9361_device_if_tx_data_out_n (),
-    .axi_ad9361_device_if_enable (enable),
-    .axi_ad9361_device_if_txnrx (txnrx),
-    .axi_ad9361_up_enable_up_enable (sys_gpio_o[1]),
-    .axi_ad9361_up_txnrx_up_txnrx (sys_gpio_o[0]),
     .sys_clk_clk (sys_clk),
-    .sys_gpio_bd_in_port (sys_gpio_bd_i),
-    .sys_gpio_bd_out_port (sys_gpio_bd_o),
-    .sys_gpio_in_export (sys_gpio_i),
-    .sys_gpio_out_export (sys_gpio_o),
+    .sys_gpio_0_0_export (gpio_0[31:0]),
+    .sys_gpio_0_1_export (gpio_0[35:32]),
+    .sys_gpio_1_0_export (gpio_1[31:0]),
+    .sys_gpio_1_1_export (gpio_1[35:32]),
+    .sys_gpio_arduino_export ({arduino_reset_n, arduino_gpio}),
+    .sys_gpio_bd_export (gpio_bd),
     .sys_hps_h2f_reset_reset_n (sys_resetn),
     .sys_hps_hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
     .sys_hps_hps_io_hps_io_emac1_inst_TXD0 (eth1_tx_d[0]),
@@ -254,16 +200,25 @@ module system_top (
     .sys_hps_hps_io_hps_io_usb1_inst_STP (usb1_stp),
     .sys_hps_hps_io_hps_io_usb1_inst_DIR (usb1_dir),
     .sys_hps_hps_io_hps_io_usb1_inst_NXT (usb1_nxt),
-    .sys_hps_hps_io_hps_io_spim1_inst_CLK (spim1_clk),
-    .sys_hps_hps_io_hps_io_spim1_inst_MOSI (spim1_mosi),
-    .sys_hps_hps_io_hps_io_spim1_inst_MISO (spim1_miso),
-    .sys_hps_hps_io_hps_io_spim1_inst_SS0 (spim1_ss0),
+    .sys_hps_hps_io_hps_io_spim1_inst_CLK (ltc_spi_clk),
+    .sys_hps_hps_io_hps_io_spim1_inst_MOSI (ltc_spi_mosi),
+    .sys_hps_hps_io_hps_io_spim1_inst_MISO (ltc_spi_miso),
+    .sys_hps_hps_io_hps_io_spim1_inst_SS0 (ltc_spi_csn),
     .sys_hps_hps_io_hps_io_uart0_inst_RX (uart0_rx),
     .sys_hps_hps_io_hps_io_uart0_inst_TX (uart0_tx),
-    .sys_hps_i2c0_out_data(i2c0_out_data),
-    .sys_hps_i2c0_sda(i2c0_sda),
-    .sys_hps_i2c0_clk_clk(i2c0_out_clk),
-    .sys_hps_i2c0_scl_in_clk(i2c0_scl_in_clk),
+    .sys_hps_hps_io_hps_io_i2c0_inst_SDA (adxl345_sda),
+    .sys_hps_hps_io_hps_io_i2c0_inst_SCL (adxl345_scl),
+    .sys_hps_hps_io_hps_io_i2c1_inst_SDA (ltc_i2c_sda),
+    .sys_hps_hps_io_hps_io_i2c1_inst_SCL (ltc_i2c_scl),
+    .sys_hps_hps_io_hps_io_gpio_inst_GPIO40 (ltc_i2c_spi_sel),
+    .sys_hps_hps_io_hps_io_gpio_inst_GPIO53 (hps_gpio_led),
+    .sys_hps_hps_io_hps_io_gpio_inst_GPIO54 (hps_gpio_pb),
+    .sys_hps_hps_io_hps_io_gpio_inst_GPIO61 (adxl345_int),
+    .sys_hps_i2c2_out_data(i2c2_sda_oe),
+    .sys_hps_i2c2_sda(i2c2_sda),
+    .sys_hps_i2c2_clk_clk(i2c2_scl_oe),
+    .sys_hps_i2c2_scl_in_clk(i2c2_scl),
+    .sys_hps_irq_in_irq (1'd0),
     .sys_hps_memory_mem_a (ddr3_a),
     .sys_hps_memory_mem_ba (ddr3_ba),
     .sys_hps_memory_mem_ck (ddr3_ck_p),
@@ -280,21 +235,16 @@ module system_top (
     .sys_hps_memory_mem_odt (ddr3_odt),
     .sys_hps_memory_mem_dm (ddr3_dm),
     .sys_hps_memory_oct_rzqin (ddr3_rzq),
-    .sys_rst_reset_n (sys_resetn),
-    .sys_spi_MISO (spi_miso),
-    .sys_spi_MOSI (spi_mosi),
-    .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn),
-    .vga_out_clk_clk (vga_clk),
-    .vga_out_data_vid_clk (vga_clk),
-    .vga_out_data_vid_data ({vga_red, vga_grn, vga_blu}),
-    .vga_out_data_underflow (),
-    .vga_out_data_vid_datavalid (),
-    .vga_out_data_vid_v_sync (vga_vsync),
-    .vga_out_data_vid_h_sync (vga_hsync),
-    .vga_out_data_vid_f (),
-    .vga_out_data_vid_h (),
-    .vga_out_data_vid_v ());
+    .sys_hps_spim0_txd (arduino_spi_mosi),
+    .sys_hps_spim0_rxd (arduino_spi_miso),
+    .sys_hps_spim0_ss_in_n (1'b1),
+    .sys_hps_spim0_ssi_oe_n (),
+    .sys_hps_spim0_ss_0_n (arduino_spi_csn[0]),
+    .sys_hps_spim0_ss_1_n (arduino_spi_csn[1]),
+    .sys_hps_spim0_ss_2_n (arduino_spi_csn[2]),
+    .sys_hps_spim0_ss_3_n (arduino_spi_csn[3]),
+    .sys_hps_spim0_clk_clk (arduino_spi_clk),
+    .sys_rst_reset_n (sys_resetn));
 
 endmodule
 
