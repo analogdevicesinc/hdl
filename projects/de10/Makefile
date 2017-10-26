@@ -18,8 +18,6 @@ M_DEPS += system_constr.sdc
 M_DEPS += ../scripts/adi_tquest.tcl
 M_DEPS += ../scripts/adi_project_alt.tcl
 M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../common/de10/de10_system_qsys.tcl
-M_DEPS += ../common/de10/de10_system_assign.tcl
 
 
 M_ALTERA := quartus_sh --64bit -t 
@@ -58,7 +56,7 @@ M_FLIST += *.dpf
 
 
 .PHONY: all clean clean-all
-all: generic_de10.sof
+all: de10nano.sof
 
 
 
@@ -69,9 +67,9 @@ clean-all:
 	rm -rf $(M_FLIST)
 
 
-generic_de10.sof: $(M_DEPS)
+de10nano.sof: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_ALTERA) system_project.tcl  >> generic_de10_quartus.log 2>&1
+	$(M_ALTERA) system_project.tcl  >> de10nano_quartus.log 2>&1
 
 ####################################################################################
 ####################################################################################
