@@ -37,8 +37,7 @@
 
 module system_top (
 
-  input       [12:0]      gpio_bd_i,
-  output      [ 7:0]      gpio_bd_o,
+  inout       [20:0]      gpio_bd,
 
   input                   rx_clk_in_0_p,
   input                   rx_clk_in_0_n,
@@ -52,19 +51,19 @@ module system_top (
   output                  tx_frame_out_0_n,
   output      [ 5:0]      tx_data_out_0_p,
   output      [ 5:0]      tx_data_out_0_n,
-  input       [ 7:0]      gpio_status_0,
-  output      [ 3:0]      gpio_ctl_0,
-  output                  gpio_en_agc_0,
+  inout       [ 7:0]      gpio_status_0,
+  inout       [ 3:0]      gpio_ctl_0,
+  inout                   gpio_en_agc_0,
   output  reg             mcs_sync,
-  output                  gpio_resetb_0,
+  inout                   gpio_resetb_0,
   output                  enable_0,
   output                  txnrx_0,
-  output                  gpio_debug_1_0,
-  output                  gpio_debug_2_0,
-  output                  gpio_calsw_1_0,
-  output                  gpio_calsw_2_0,
-  output                  gpio_ad5355_rfen,
-  input                   gpio_ad5355_lock,
+  inout                   gpio_debug_1_0,
+  inout                   gpio_debug_2_0,
+  inout                   gpio_calsw_1_0,
+  inout                   gpio_calsw_2_0,
+  inout                   gpio_ad5355_rfen,
+  inout                   gpio_ad5355_lock,
 
   input                   rx_clk_in_1_p,
   input                   rx_clk_in_1_n,
@@ -78,16 +77,16 @@ module system_top (
   output                  tx_frame_out_1_n,
   output      [ 5:0]      tx_data_out_1_p,
   output      [ 5:0]      tx_data_out_1_n,
-  input       [ 7:0]      gpio_status_1,
-  output      [ 3:0]      gpio_ctl_1,
-  output                  gpio_en_agc_1,
-  output                  gpio_resetb_1,
+  inout       [ 7:0]      gpio_status_1,
+  inout       [ 3:0]      gpio_ctl_1,
+  inout                   gpio_en_agc_1,
+  inout                   gpio_resetb_1,
   output                  enable_1,
   output                  txnrx_1,
-  output                  gpio_debug_3_1,
-  output                  gpio_debug_4_1,
-  output                  gpio_calsw_3_1,
-  output                  gpio_calsw_4_1,
+  inout                   gpio_debug_3_1,
+  inout                   gpio_debug_4_1,
+  inout                   gpio_calsw_3_1,
+  inout                   gpio_calsw_4_1,
 
   output                  spi_ad9361_0,
   output                  spi_ad9361_1,
@@ -101,30 +100,31 @@ module system_top (
 
   // internal registers
 
-  reg     [  2:0] mcs_sync_m = 'd0;
+  reg         [ 2:0]      mcs_sync_m = 'd0;
 
   // internal signals
 
-  wire            sys_100m_resetn;
-  wire            ref_clk_s;
-  wire            ref_clk;
-  wire    [ 94:0] gpio_i;
-  wire    [ 94:0] gpio_o;
-  wire            gpio_sync;
-  wire            gpio_open_44_44;
-  wire            gpio_open_15_15;
-  wire    [ 2:0]  spi0_csn;
-  wire            spi0_clk;
-  wire            spi0_mosi;
-  wire            spi0_miso;
-  wire    [ 2:0]  spi1_csn;
-  wire            spi1_clk;
-  wire            spi1_mosi;
-  wire            spi1_miso;
-  wire            txnrx_0;
-  wire            enable_0;
-  wire            txnrx_1;
-  wire            enable_1;
+  wire                    sys_100m_resetn;
+  wire                    ref_clk_s;
+  wire                    ref_clk;
+  wire        [94:0]      gpio_i;
+  wire        [94:0]      gpio_o;
+  wire        [94:0]      gpio_t;
+  wire                    gpio_sync;
+  wire                    gpio_open_44_44;
+  wire                    gpio_open_15_15;
+  wire        [2:0]       spi0_csn;
+  wire                    spi0_clk;
+  wire                    spi0_mosi;
+  wire                    spi0_miso;
+  wire        [2:0]       spi1_csn;
+  wire                    spi1_clk;
+  wire                    spi1_mosi;
+  wire                    spi1_miso;
+  wire                    txnrx_0;
+  wire                    enable_0;
+  wire                    txnrx_1;
+  wire                    enable_1;
 
   // multi-chip synchronization
 
@@ -151,37 +151,43 @@ module system_top (
     .I (ref_clk_s),
     .O (ref_clk));
 
-  assign gpio_resetb_1 = gpio_o[65];
-  assign gpio_i[64] = gpio_ad5355_lock;
-  assign gpio_ad5355_rfen = gpio_o[63];
-  assign gpio_calsw_4_1 = gpio_o[62];
-  assign gpio_calsw_3_1 = gpio_o[61];
-  assign gpio_calsw_2_0 = gpio_o[60];
-  assign gpio_calsw_1_0 = gpio_o[59];
-  assign gpio_txnrx_1 = gpio_o[58];
-  assign gpio_enable_1 = gpio_o[57];
-  assign gpio_en_agc_1 = gpio_o[56];
-  assign gpio_txnrx_0 = gpio_o[55];
-  assign gpio_enable_0 = gpio_o[54];
-  assign gpio_en_agc_0 = gpio_o[53];
-  assign gpio_resetb_0 = gpio_o[52];
-  assign gpio_sync = gpio_o[51];
-  assign gpio_open_44_44 = gpio_o[50];
-  assign gpio_debug_4_0 = gpio_o[49];
-  assign gpio_debug_3_0 = gpio_o[48];
-  assign gpio_debug_2_0 = gpio_o[47];
-  assign gpio_debug_1_0 = gpio_o[46];
-  assign gpio_ctl_1 = gpio_o[45:42];
-  assign gpio_ctl_0 = gpio_o[41:38];
-  assign gpio_i[37:30] = gpio_status_1;
-  assign gpio_i[29:22] = gpio_status_0;
-  assign gpio_open_15_15 = gpio_o[21];
-  assign gpio_bd_o = gpio_o[20:13];
-  assign gpio_i[12: 0] = gpio_bd_i;
+  ad_iobuf #(.DATA_WIDTH(44)) i_iobuf (
+    .dio_t (gpio_t[59:16]),
+    .dio_i (gpio_o[59:16]),
+    .dio_o (gpio_i[59:16]),
+    .dio_p ({ gpio_resetb_1,    // 59
+              gpio_ad5355_lock, // 58
+              gpio_ad5355_rfen, // 57
+              gpio_calsw_4_1,   // 56
+              gpio_calsw_3_1,   // 55
+              gpio_calsw_2_0,   // 54
+              gpio_calsw_1_0,   // 53
+              gpio_txnrx_1,     // 52
+              gpio_enable_1,    // 51
+              gpio_en_agc_1,    // 50
+              gpio_txnrx_0,     // 49
+              gpio_enable_0,    // 48
+              gpio_en_agc_0,    // 47
+              gpio_resetb_0,    // 46
+              gpio_open_45_45,  // 45
+              gpio_open_44_44,  // 44
+              gpio_debug_4_1,   // 43
+              gpio_debug_3_1,   // 42
+              gpio_debug_2_0,   // 41
+              gpio_debug_1_0,   // 40
+              gpio_ctl_1,       // 36
+              gpio_ctl_0,       // 32
+              gpio_status_1,    // 24
+              gpio_status_0})); // 16
 
-  assign gpio_i[94:65] = gpio_o[94:65];
-  assign gpio_i[63:38] = gpio_o[63:38];
-  assign gpio_i[21:14] = gpio_o[21:14];
+  assign gpio_i[94:69] = gpio_o[94:69];
+  assign gpio_i[63:60] = gpio_o[63:60];
+
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
+    .dio_t ({gpio_t[68:64], gpio_t[15:0]}),
+    .dio_i ({gpio_o[68:64], gpio_o[15:0]}),
+    .dio_o ({gpio_i[68:64], gpio_i[15:0]}),
+    .dio_p (gpio_bd));
 
   assign spi_ad9361_0 = spi0_csn[0];
   assign spi_ad9361_1 = spi0_csn[1];
@@ -192,8 +198,11 @@ module system_top (
   assign spi1_miso = 1'b0;
 
   system_wrapper i_system_wrapper (
+    .enable_0 (enable_0),
+    .enable_1 (enable_1),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
+    .gpio_t (gpio_t),
     .ps_intr_00 (1'b0),
     .ps_intr_01 (1'b0),
     .ps_intr_02 (1'b0),
@@ -242,12 +251,10 @@ module system_top (
     .tx_frame_out_1_n (tx_frame_out_1_n),
     .tx_frame_out_1_p (tx_frame_out_1_p),
     .txnrx_0 (txnrx_0),
-    .enable_0 (enable_0),
-    .up_enable_0 (gpio_enable_0),
-    .up_txnrx_0 (gpio_txnrx_0),
     .txnrx_1 (txnrx_1),
-    .enable_1 (enable_1),
+    .up_enable_0 (gpio_enable_0),
     .up_enable_1 (gpio_enable_1),
+    .up_txnrx_0 (gpio_txnrx_0),
     .up_txnrx_1 (gpio_txnrx_1));
 
 endmodule
