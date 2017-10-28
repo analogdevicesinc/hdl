@@ -98,5 +98,8 @@ set_location_assignment PIN_AW11  -to spi_clk               ; ## D12  FMCA_LA05_
 set_location_assignment PIN_AW13  -to spi_sdio              ; ## D14  FMCA_LA09_P
 set_location_assignment PIN_AW14  -to spi_dir               ; ## C11  FMCA_LA06_N
 
+set_instance_assignment -name REMOVE_DUPLICATE_REGISTERS OFF -to "system_bd:i_system_bd|util_adcfifo:ad9680_adcfifo"
+set_instance_assignment -name REMOVE_DUPLICATE_REGISTERS OFF -to "system_bd:i_system_bd|system_bd_altera_mm_interconnect_161_mcfxx2a:mm_interconnect_0"
+
 execute_flow -compile
 
