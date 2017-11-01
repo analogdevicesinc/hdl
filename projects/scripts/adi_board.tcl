@@ -327,8 +327,9 @@ proc ad_xcvr_instance {i_name} {
   ad_connect ${i_name}_cpll_ref_clk $i_name/cpll_refclk
   ad_connect sys_cpu_clk $i_name/drpclk
 
-  ad_connect sys_cpu_reset $i_name/rx_sys_reset
-  ad_connect sys_cpu_reset $i_name/rx_reset_gt
+  create_bd_port -dir I -type rst ${i_name}_rx_reset
+  ad_connect ${i_name}_rx_reset $i_name/rx_sys_reset
+  ad_connect ${i_name}_rx_reset $i_name/rx_reset_gt
   if {$xcvr_rx_bufg_enable == 1} {
     ad_connect ${i_name}_rx_core_clk $i_name/rx_core_clk
     if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
@@ -349,8 +350,9 @@ proc ad_xcvr_instance {i_name} {
     }
   }
 
-  ad_connect sys_cpu_reset $i_name/tx_sys_reset
-  ad_connect sys_cpu_reset $i_name/tx_reset_gt
+  create_bd_port -dir I -type rst ${i_name}_tx_reset
+  ad_connect ${i_name}_tx_reset $i_name/tx_sys_reset
+  ad_connect ${i_name}_tx_reset $i_name/tx_reset_gt
   if {$xcvr_tx_bufg_enable == 1} {
     ad_connect ${i_name}_tx_core_clk $i_name/tx_core_clk
     if {($xcvr_type eq "GTHE4") || ($xcvr_type eq "GTHE3")} {
