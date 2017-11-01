@@ -135,7 +135,7 @@ set_instance_parameter_value axi_ad9680_dma {DMA_DATA_WIDTH_SRC} {128}
 set_instance_parameter_value axi_ad9680_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9680_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_ad9680_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value axi_ad9680_dma {SYNC_TRANSFER_START} {1}
+set_instance_parameter_value axi_ad9680_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value axi_ad9680_dma {CYCLIC} {0}
 set_instance_parameter_value axi_ad9680_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_ad9680_dma {DMA_TYPE_SRC} {1}
