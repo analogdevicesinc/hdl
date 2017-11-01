@@ -189,7 +189,7 @@ module avl_dacfifo_wr #(
 
   // write address generation
 
-  assign dma_mem_wea_s = dma_ready & dma_valid & dma_xfer_req_lp;
+  assign dma_mem_wea_s = dma_ready & dma_valid;
 
   always @(posedge dma_clk) begin
     if ((dma_fifo_reset_s == 1'b1) || (dma_avl_xfer_req_out == 1'b1)) begin
