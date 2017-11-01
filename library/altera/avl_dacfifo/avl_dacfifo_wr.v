@@ -192,19 +192,25 @@ module avl_dacfifo_wr #(
   assign dma_mem_wea_s = dma_ready & dma_valid & dma_xfer_req_lp;
 
   always @(posedge dma_clk) begin
-    if (dma_fifo_reset_s == 1'b1) begin
+    if ((dma_fifo_reset_s == 1'b1) || (dma_avl_xfer_req_out == 1'b1)) begin
       dma_mem_waddr <= 0;
       dma_mem_waddr_g <= 0;
-      dma_last_beats <= 0;
     end else begin
       if (dma_mem_wea_s == 1'b1) begin
         dma_mem_waddr <= dma_mem_waddr + 1'b1;
       end
     end
-    if ((dma_xfer_last == 1'b1) && (dma_mem_wea_s == 1'b1)) begin
-      dma_last_beats <= dma_mem_waddr[MEM_WIDTH_DIFF-1:0];
-    end
     dma_mem_waddr_g <= dma_mem_waddr_b2g_s;
+  end
+
+  always @(posedge dma_clk) begin
+    if (dma_fifo_reset_s == 1'b1) begin
+      dma_last_beats <= 0;
+    end else begin
+      if ((dma_xfer_last == 1'b1) && (dma_mem_wea_s == 1'b1)) begin
+        dma_last_beats <= dma_mem_waddr[MEM_WIDTH_DIFF-1:0];
+      end
+    end
   end
 
   ad_b2g # (
