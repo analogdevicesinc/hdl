@@ -182,7 +182,9 @@ module avl_dacfifo_rd #(
     if (avl_reset == 1'b1) begin
       avl_xfer_req_out <= 1'b0;
     end else begin
-      if ((avl_read_state == IDLE) || (avl_read_state == XFER_STAGING)) begin
+      if ((avl_read_state == IDLE) ||
+          (avl_read_state == XFER_STAGING) ||
+          (avl_read_state == XFER_END)) begin
         avl_xfer_req_out <= avl_xfer_req_in;
       end
     end
@@ -203,12 +205,16 @@ module avl_dacfifo_rd #(
           end
         end
         XFER_STAGING : begin
-          if (avl_mem_request_data == 1'b1) begin
-            if (avl_address + AVL_ARINCR <= avl_last_address) begin
-              avl_read_state <= XFER_FULL_BURST;
-            end else begin
-              avl_read_state <= XFER_PARTIAL_BURST;
+          if (avl_xfer_req_in == 1'b1) begin
+            if (avl_mem_request_data == 1'b1) begin
+              if (avl_address + AVL_ARINCR <= avl_last_address) begin
+                avl_read_state <= XFER_FULL_BURST;
+              end else begin
+                avl_read_state <= XFER_PARTIAL_BURST;
+              end
             end
+          end else begin
+            avl_read_state <= IDLE;
           end
         end
         // Avalon transaction with full burst length
