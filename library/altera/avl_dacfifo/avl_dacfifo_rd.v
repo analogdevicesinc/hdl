@@ -396,7 +396,7 @@ module avl_dacfifo_rd #(
   assign dac_mem_addr_diff_s = {1'b1, dac_mem_waddr_s} - dac_mem_raddr;
 
   always @(posedge dac_clk) begin
-    if (dac_reset == 1'b1) begin
+    if (dac_fifo_reset_s == 1'b1) begin
       dac_mem_waddr_m2 <= 0;
       dac_mem_waddr_m1 <= 0;
       dac_mem_waddr <= 0;
@@ -523,7 +523,7 @@ module avl_dacfifo_rd #(
     .dout (dac_mem_raddr_b2g_s));
 
   always @(posedge dac_clk) begin
-    if ((dac_fifo_reset_s == 1'b1) || (dac_xfer_req_b == 1'b0)) begin
+    if (dac_fifo_reset_s == 1'b1) begin
       dac_data <= 0;
     end else begin
       dac_data <= dac_mem_data_s;
