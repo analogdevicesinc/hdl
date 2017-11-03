@@ -130,13 +130,8 @@ dmac_data_mover # (
 );
 
 always @(posedge clk) begin
-  if ((resetn == 1'b0) || (data_enabled == 1'b0)) begin
-    dout <= {DATA_WIDTH{1'b0}};
-  end else begin
-    if (data_valid) begin
-      dout <= dout_s;
-    end
-  end
+  if (en)
+    dout <= (data_valid) ? dout_s : {DATA_WIDTH{1'b0}};
 end
 
 dmac_response_generator # (
