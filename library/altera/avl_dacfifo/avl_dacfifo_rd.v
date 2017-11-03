@@ -48,7 +48,7 @@ module avl_dacfifo_rd #(
   input                                     dac_reset,
   input                                     dac_valid,
   output  reg [(DAC_DATA_WIDTH-1):0]        dac_data,
-  output  reg                               dac_xfer_req,
+  output                                    dac_xfer_req,
   output  reg                               dac_dunf,
 
   input                                     avl_clk,
@@ -133,7 +133,6 @@ module avl_dacfifo_rd #(
   reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_laddr_b;
   reg                                       dac_mem_renable;
   reg                                       dac_mem_valid;
-  reg                                       dac_xfer_req_b;
 
   // internal signals
 
@@ -155,7 +154,6 @@ module avl_dacfifo_rd #(
   wire                                      dac_mem_laddr_rea_s;
   wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_laddr_s;
   wire                                      dac_mem_dunf_s;
-  wire                                      dac_xfer_req_s;
 
   // An asymmetric memory to transfer data from Avalon interface to DAC
   // interface
@@ -451,17 +449,13 @@ module avl_dacfifo_rd #(
     .din (dac_mem_waddr_m2),
     .dout (dac_mem_waddr_g2b_s));
 
-  assign dac_xfer_req_s = dac_avl_xfer_req & dac_mem_valid;
+  assign dac_xfer_req = dac_mem_renable;
   always @(posedge dac_clk) begin
     if (dac_reset == 1'b1) begin
       dac_avl_xfer_req_m2 <= 0;
       dac_avl_xfer_req_m1 <= 0;
       dac_avl_xfer_req <= 0;
-      dac_xfer_req_b <= 1'b0;
-      dac_xfer_req <= 1'b0;
     end else begin
-      dac_xfer_req_b <= dac_xfer_req_s;
-      dac_xfer_req <= dac_xfer_req_b;
       dac_avl_xfer_req_m1 <= avl_xfer_req_out;
       dac_avl_xfer_req_m2 <= dac_avl_xfer_req_m1;
       dac_avl_xfer_req <= dac_avl_xfer_req_m2;
