@@ -205,6 +205,7 @@ ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_dac_dma/fifo_rd_clk
 ad_connect axi_ad9361_dac_dma/fifo_rd_en util_ad9361_dac_upack/dac_valid
 ad_connect axi_ad9361_dac_dma/fifo_rd_dout util_ad9361_dac_upack/dac_data
+ad_connect axi_ad9361_dac_dma/fifo_rd_underflow axi_ad9361_dac_fifo/din_unf
 ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
 # interconnects
