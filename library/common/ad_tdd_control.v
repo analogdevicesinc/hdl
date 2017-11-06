@@ -230,10 +230,14 @@ module ad_tdd_control#(
 
   // tdd burst counter
   always @(posedge clk) begin
-    if (tdd_cstate == ON) begin
-      tdd_burst_counter <= ((tdd_burst_counter > 0) && (tdd_endof_frame == 1'b1)) ? tdd_burst_counter - 1 : tdd_burst_counter;
+    if (rst == 1'b1) begin
+        tdd_burst_counter <= 6'b0;
     end else begin
-      tdd_burst_counter <= tdd_burst_count;
+      if (tdd_cstate == OFF) begin
+        tdd_burst_counter <= tdd_burst_count;
+      end else if ((tdd_burst_counter > 0) && (tdd_endof_frame == 1'b1)) begin
+        tdd_burst_counter <= tdd_burst_counter - 1'b1;
+      end
     end
   end
 
