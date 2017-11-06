@@ -42,7 +42,6 @@ all:
 	-make -C m2k all
 	-make -C motcon2_fmc all
 	-make -C pluto all
-	-make -C usb_fx3 all
 	-make -C usdrx1 all
 	-make -C usrpe31x all
 
@@ -83,7 +82,6 @@ clean:
 	make -C m2k clean
 	make -C motcon2_fmc clean
 	make -C pluto clean
-	make -C usb_fx3 clean
 	make -C usdrx1 clean
 	make -C usrpe31x clean
 
@@ -124,7 +122,6 @@ clean-all:
 	make -C m2k clean-all
 	make -C motcon2_fmc clean-all
 	make -C pluto clean-all
-	make -C usb_fx3 clean-all
 	make -C usdrx1 clean-all
 	make -C usrpe31x clean-all
 
