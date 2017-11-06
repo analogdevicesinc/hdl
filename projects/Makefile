@@ -40,7 +40,6 @@ all:
 	-$(MAKE) -C m2k all
 	-$(MAKE) -C motcon2_fmc all
 	-$(MAKE) -C pluto all
-	-$(MAKE) -C usb_fx3 all
 	-$(MAKE) -C usdrx1 all
 	-$(MAKE) -C usrpe31x all
 
@@ -79,7 +78,6 @@ clean:
 	$(MAKE) -C m2k clean
 	$(MAKE) -C motcon2_fmc clean
 	$(MAKE) -C pluto clean
-	$(MAKE) -C usb_fx3 clean
 	$(MAKE) -C usdrx1 clean
 	$(MAKE) -C usrpe31x clean
 
@@ -118,7 +116,6 @@ clean-all:
 	$(MAKE) -C m2k clean-all
 	$(MAKE) -C motcon2_fmc clean-all
 	$(MAKE) -C pluto clean-all
-	$(MAKE) -C usb_fx3 clean-all
 	$(MAKE) -C usdrx1 clean-all
 	$(MAKE) -C usrpe31x clean-all
 
