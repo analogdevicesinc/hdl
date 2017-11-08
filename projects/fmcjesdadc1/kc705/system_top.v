@@ -104,16 +104,18 @@ module system_top (
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 7:0]  spi_csn;
-  wire            spi_mosi;
-  wire            spi_miso;
-  wire            rx_ref_clk;
-  wire            rx_clk;
-  wire            rx_sysref;
+  wire        [63:0]      gpio_i;
+  wire        [63:0]      gpio_o;
+  wire        [63:0]      gpio_t;
+  wire        [ 7:0]      spi_csn;
+  wire                    spi_mosi;
+  wire                    spi_miso;
+  wire                    rx_ref_clk;
+  wire                    rx_clk;
+  wire                    rx_sysref;
 
+  // board defaults
+ 
   assign ddr3_1_p = 2'b11;
   assign ddr3_1_n = 3'b000;
   assign fan_pwm = 1'b1;
@@ -128,6 +130,8 @@ module system_top (
     .IB (rx_ref_clk_n),
     .O (rx_ref_clk),
     .ODIV2 ());
+
+  assign gpio_i[63:17] = gpio_o[63:17];
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
     .dio_t (gpio_t[16:0]),
@@ -150,6 +154,14 @@ module system_top (
   // instantiations
 
   system_wrapper i_system_wrapper (
+    .axi_fmcadc1_xcvr_cpll_ref_clk (rx_ref_clk),
+    .axi_fmcadc1_xcvr_qpll_ref_clk (rx_ref_clk),
+    .axi_fmcadc1_xcvr_rx_data_n (rx_data_n),
+    .axi_fmcadc1_xcvr_rx_data_p (rx_data_p),
+    .axi_fmcadc1_xcvr_rx_reset (gpio_o[33]),
+    .axi_fmcadc1_xcvr_tx_data_n (),
+    .axi_fmcadc1_xcvr_tx_data_p (),
+    .axi_fmcadc1_xcvr_tx_reset (1'b1),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -174,6 +186,12 @@ module system_top (
     .gpio_lcd_tri_io (gpio_lcd),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
+    .linear_flash_addr (linear_flash_addr),
+    .linear_flash_adv_ldn (linear_flash_adv_ldn),
+    .linear_flash_ce_n (linear_flash_ce_n),
+    .linear_flash_dq_io (linear_flash_dq_io),
+    .linear_flash_oen (linear_flash_oen),
+    .linear_flash_wen (linear_flash_wen),
     .mb_intr_02 (1'd0),
     .mb_intr_03 (1'd0),
     .mb_intr_06 (1'd0),
@@ -192,36 +210,21 @@ module system_top (
     .mii_tx_clk (mii_tx_clk),
     .mii_tx_en (mii_tx_en),
     .mii_txd (mii_txd),
-    .linear_flash_addr (linear_flash_addr),
-    .linear_flash_adv_ldn (linear_flash_adv_ldn),
-    .linear_flash_ce_n (linear_flash_ce_n),
-    .linear_flash_dq_io (linear_flash_dq_io),
-    .linear_flash_oen (linear_flash_oen),
-    .linear_flash_wen (linear_flash_wen),
-    .sys_clk_n (sys_clk_n),
-    .sys_clk_p (sys_clk_p),
-    .sys_rst (sys_rst),
-    .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_data_2_n (rx_data_n[2]),
-    .rx_data_2_p (rx_data_p[2]),
-    .rx_data_3_n (rx_data_n[3]),
-    .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk_0 (rx_ref_clk),
-    .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (rx_sysref),
     .rx_core_clk (rx_clk),
+    .rx_sync (rx_sync),
+    .rx_sysref (rx_sysref),
     .spi_clk_i (spi_clk),
     .spi_clk_o (spi_clk),
     .spi_csn_i (spi_csn),
     .spi_csn_o (spi_csn),
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
-    .spi_sdo_o (spi_mosi));
+    .spi_sdo_o (spi_mosi),
+    .sys_clk_n (sys_clk_n),
+    .sys_clk_p (sys_clk_p),
+    .sys_rst (sys_rst),
+    .uart_sin (uart_sin),
+    .uart_sout (uart_sout));
 
 endmodule
 

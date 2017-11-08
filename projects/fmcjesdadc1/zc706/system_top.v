@@ -110,6 +110,8 @@ module system_top (
     .O (rx_ref_clk),
     .ODIV2 ());
 
+  assign gpio_i[63:15] = gpio_o[63:15];
+
   ad_iobuf #(.DATA_WIDTH(15)) i_iobuf (
     .dio_t (gpio_t[14:0]),
     .dio_i (gpio_o[14:0]),
@@ -144,8 +146,10 @@ module system_top (
     .axi_fmcadc1_xcvr_qpll_ref_clk (rx_ref_clk),
     .axi_fmcadc1_xcvr_rx_data_n (rx_data_n),
     .axi_fmcadc1_xcvr_rx_data_p (rx_data_p),
+    .axi_fmcadc1_xcvr_rx_reset (gpio_o[33]),
     .axi_fmcadc1_xcvr_tx_data_n (),
     .axi_fmcadc1_xcvr_tx_data_p (),
+    .axi_fmcadc1_xcvr_tx_reset (1'b1),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
