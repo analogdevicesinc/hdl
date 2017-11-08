@@ -161,13 +161,9 @@ module system_top (
 
   system_bd i_system_bd (
     .rx_core_clk_clk (rx_clk),
-    .rx_data_0_rx_serial_data (rx_data[0]),
-    .rx_data_1_rx_serial_data (rx_data[1]),
-    .rx_data_2_rx_serial_data (rx_data[2]),
-    .rx_data_3_rx_serial_data (rx_data[3]),
+    .rx_serial_data_rx_serial_data (rx_data),
     .rx_ip_data_data (rx_ip_data),
     .rx_ip_data_valid (),
-    .rx_ip_data_ready (1'b1),
     .rx_ip_data_0_data (rx_ip_data[63:0]),
     .rx_ip_data_0_valid (1'b1),
     .rx_ip_data_0_ready (),
