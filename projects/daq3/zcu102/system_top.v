@@ -154,7 +154,7 @@ module system_top (
     .spi_dir (spi_dir));
 
   // daq3 gpio
- 
+
   assign gpio_i[63:40] = gpio_o[63:40];
   assign gpio_i[39] = trig;
 
@@ -182,10 +182,10 @@ module system_top (
     .axi_daq3_xcvr_qpll1_ref_clk (rx_ref_clk),
     .axi_daq3_xcvr_rx_data_n (rx_data_n),
     .axi_daq3_xcvr_rx_data_p (rx_data_p),
-    .axi_daq3_xcvr_rx_reset (gpio_o[40]),
+    .axi_daq3_xcvr_rx_reset (gpio_o[41]),
     .axi_daq3_xcvr_tx_data_n (tx_data_n),
     .axi_daq3_xcvr_tx_data_p (tx_data_p),
-    .axi_daq3_xcvr_tx_reset (gpio_o[41]),
+    .axi_daq3_xcvr_tx_reset (gpio_o[42]),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .ps_intr_00 (1'd0),
