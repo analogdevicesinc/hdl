@@ -49,28 +49,27 @@ module util_clkdiv_alt #(
   input   clk,
   input   reset,
   output  clk_out,
-  output  reset_out
+  output reg reset_out
  );
 
 reg enable;
 reg reset_d1;
 
-assign reset_out = reset | reset_d1;
-
-always @(posedge clk) begin
+always @(posedge clk_out) begin
   reset_d1 <= reset;
+  reset_out <= reset_d1;
 end
 
 always @(posedge clk) begin
   enable <= ~enable;
 end
-  
+
 generate if (SIM_DEVICE == "CYCLONE5") begin
 	cyclonev_clkena #(
 		.clock_type ("Global Clock"),
 		.ena_register_mode ("falling edge"),
 		.lpm_type ("cyclonev_clkena")
-  ) clock_divider_by_2 ( 
+  ) clock_divider_by_2 (
 	.ena(enable),
 	.enaout(),
 	.inclk(clk),
