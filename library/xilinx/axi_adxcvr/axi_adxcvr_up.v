@@ -41,7 +41,7 @@ module axi_adxcvr_up #(
 
   parameter   integer ID = 0,
   parameter   integer NUM_OF_LANES = 8,
-  parameter   integer GTH_OR_GTX_N = 0,
+  parameter   integer XCVR_TYPE = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer QPLL_ENABLE = 1,
   parameter           LPM_OR_DFE_N = 1,
@@ -450,7 +450,7 @@ module axi_adxcvr_up #(
  
   assign up_rparam_s[23:21] = 3'd0;
   assign up_rparam_s[20:20] = (QPLL_ENABLE == 0) ? 1'b0 : 1'b1;
-  assign up_rparam_s[19:16] = (GTH_OR_GTX_N == 0) ? 1'b0 : 1'b1;
+  assign up_rparam_s[19:16] = XCVR_TYPE[3:0];
 
   // generic
 
