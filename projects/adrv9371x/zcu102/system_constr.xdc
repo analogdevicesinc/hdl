@@ -49,10 +49,10 @@ set_property  -dict {PACKAGE_PIN  AC3  IOSTANDARD LVCMOS18} [get_ports ad9371_gp
 
 set_property LOC GTHE4_COMMON_X1Y2 [get_cells -hierarchical -filter {NAME =~ *i_ibufds_ref_clk1}]
 
-set_property LOC GTHE4_CHANNEL_X1Y8  [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_0/i_gthe4_channel}]
-set_property LOC GTHE4_CHANNEL_X1Y10 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_1/i_gthe4_channel}]
-set_property LOC GTHE4_CHANNEL_X1Y11 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_2/i_gthe4_channel}]
-set_property LOC GTHE4_CHANNEL_X1Y9  [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_3/i_gthe4_channel}]
+set_property LOC GTHE4_CHANNEL_X1Y9  [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_0/i_gthe4_channel}]
+set_property LOC GTHE4_CHANNEL_X1Y11 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_1/i_gthe4_channel}]
+set_property LOC GTHE4_CHANNEL_X1Y10 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_2/i_gthe4_channel}]
+set_property LOC GTHE4_CHANNEL_X1Y8  [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_3/i_gthe4_channel}]
 
 # clocks
 
