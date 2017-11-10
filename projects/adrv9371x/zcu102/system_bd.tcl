@@ -17,5 +17,5 @@ ad_connect sys_dma_clk sys_ps8/pl_clk2
 ad_connect sys_dma_rstgen/ext_reset_in sys_rstgen/peripheral_reset
 
 ad_ip_parameter util_ad9371_xcvr CONFIG.XCVR_TYPE 2
-ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_FBDIV 20
+ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_FBDIV 80
 ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_REFCLK_DIV 1
