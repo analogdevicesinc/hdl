@@ -42,7 +42,7 @@ module axi_adxcvr #(
 
   parameter   integer ID = 0,
   parameter   integer NUM_OF_LANES = 8,
-  parameter   integer GTH_OR_GTX_N = 0,
+  parameter   integer XCVR_TYPE = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer QPLL_ENABLE = 1,
   parameter           LPM_OR_DFE_N = 1,
@@ -1671,7 +1671,7 @@ module axi_adxcvr #(
     .up_ready_out (up_ch_ready_15_s));
 
   axi_adxcvr_es #(
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .TX_OR_RX_N (TX_OR_RX_N))
   i_es (
     .up_rstn (up_rstn),
@@ -1718,7 +1718,7 @@ module axi_adxcvr #(
   axi_adxcvr_up #(
     .ID (ID),
     .NUM_OF_LANES (NUM_OF_LANES),
-    .GTH_OR_GTX_N (GTH_OR_GTX_N),
+    .XCVR_TYPE (XCVR_TYPE),
     .TX_OR_RX_N (TX_OR_RX_N),
     .QPLL_ENABLE (QPLL_ENABLE),
     .LPM_OR_DFE_N (LPM_OR_DFE_N),
