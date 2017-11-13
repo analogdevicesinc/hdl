@@ -41,6 +41,7 @@ module ad_datafmt #(
   // data bus width
 
   parameter   DATA_WIDTH = 16,
+  parameter   OCTETS_PER_SAMPLE = 2,
   parameter   DISABLE = 0) (
 
   // data path
@@ -49,7 +50,7 @@ module ad_datafmt #(
   input                       valid,
   input   [(DATA_WIDTH-1):0]  data,
   output                      valid_out,
-  output  [15:0]              data_out,
+  output  [(8*OCTETS_PER_SAMPLE-1):0]  data_out,
 
   // control signals
 
@@ -60,12 +61,12 @@ module ad_datafmt #(
   // internal registers
 
   reg                         valid_int = 'd0;
-  reg     [15:0]              data_int = 'd0;
+  reg     [(8*OCTETS_PER_SAMPLE-1):0]  data_int = 'd0;
 
   // internal signals
 
   wire                        type_s;
-  wire    [15:0]              data_out_s;
+  wire    [(8*OCTETS_PER_SAMPLE-1):0]  data_out_s;
 
   // data-path disable
 
@@ -84,13 +85,13 @@ module ad_datafmt #(
   assign type_s = dfmt_enable & dfmt_type;
 
   generate
-  if (DATA_WIDTH < 16) begin
+  if (DATA_WIDTH < 8*OCTETS_PER_SAMPLE) begin
     wire signext_s;
     wire sign_s;
 
     assign signext_s = dfmt_enable & dfmt_se;
     assign sign_s = signext_s & (type_s ^ data[(DATA_WIDTH-1)]);
-    assign data_out_s[15:DATA_WIDTH] = {(16-DATA_WIDTH){sign_s}};
+    assign data_out_s[(8*OCTETS_PER_SAMPLE-1):DATA_WIDTH] = {((8*OCTETS_PER_SAMPLE)-DATA_WIDTH){sign_s}};
   end
   endgenerate
 
@@ -99,7 +100,7 @@ module ad_datafmt #(
 
   always @(posedge clk) begin
     valid_int <= valid;
-    data_int <= data_out_s[15:0];
+    data_int <= data_out_s;
   end
 
 endmodule
