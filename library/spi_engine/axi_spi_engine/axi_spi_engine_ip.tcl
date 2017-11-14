@@ -11,10 +11,6 @@ adi_ip_files axi_spi_engine [list \
 ]
 
 adi_ip_properties axi_spi_engine
-# Remove auto inferred interfaces
-ipx::remove_bus_interface offload0_mem_signal_reset [ipx::current_core]
-ipx::remove_bus_interface spi_signal_clock [ipx::current_core]
-ipx::remove_bus_interface spi_signal_reset [ipx::current_core]
 
 adi_ip_add_core_dependencies { \
 	analog.com:user:util_axis_fifo:1.0 \
