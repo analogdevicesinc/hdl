@@ -42,7 +42,8 @@ module spi_engine_execution #(
   parameter DEFAULT_CLK_DIV = 0,
   parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
   parameter NUM_OF_SDI = 1,
-  parameter [0:0] SDO_DEFAULT = 1'b0) (
+  parameter [0:0] SDO_DEFAULT = 1'b0,
+  parameter [1:0] SDI_DELAY = 2'b00) (
 
   input clk,
   input resetn,
@@ -123,6 +124,8 @@ reg [7:0] word_length = DATA_WIDTH;
 reg [7:0] left_aligned = 8'b0;
 wire end_of_word;
 
+reg [7:0] sdi_counter = 8'b0;
+
 assign first_bit = bit_counter == 'h0;
 assign last_bit = bit_counter == word_length - 1;
 assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
@@ -137,14 +140,15 @@ wire sdo_enabled = cmd_d1[8];
 wire sdi_enabled = cmd_d1[9];
 
 // supporting max 8 SDI channel
-reg [(DATA_WIDTH):0] data_shift = 'h0;
-reg [(DATA_WIDTH):0] data_shift_1 = 'h0;
-reg [(DATA_WIDTH):0] data_shift_2 = 'h0;
-reg [(DATA_WIDTH):0] data_shift_3 = 'h0;
-reg [(DATA_WIDTH):0] data_shift_4 = 'h0;
-reg [(DATA_WIDTH):0] data_shift_5 = 'h0;
-reg [(DATA_WIDTH):0] data_shift_6 = 'h0;
-reg [(DATA_WIDTH):0] data_shift_7 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_1 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_2 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_3 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_4 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_5 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_6 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_7 = 'h0;
 
 wire [1:0] inst = cmd[13:12];
 wire [1:0] inst_d1 = cmd_d1[13:12];
@@ -300,8 +304,7 @@ end
 always @(posedge clk) begin
         if (resetn == 1'b0)
                 sdi_data_valid <= 1'b0;
-        else if (sdi_enabled == 1'b1 && last_bit == 1'b1 && trigger_rx == 1'b1 &&
-                transfer_active == 1'b1)
+        else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1)
                 sdi_data_valid <= 1'b1;
         else if (sdi_data_ready == 1'b1)
                 sdi_data_valid <= 1'b0;
@@ -362,52 +365,74 @@ always @(posedge clk) begin
                 if (first_bit == 1'b1)
                   data_sdo_shift <= sdo_data << left_aligned;
                 else
-                  data_shift[DATA_WIDTH:1] <= data_shift[(DATA_WIDTH-1):0];
-                  data_shift_1[DATA_WIDTH:1] <= data_shift_1[(DATA_WIDTH-1):0];
-                  data_shift_2[DATA_WIDTH:1] <= data_shift_2[(DATA_WIDTH-1):0];
-                  data_shift_3[DATA_WIDTH:1] <= data_shift_3[(DATA_WIDTH-1):0];
-                  data_shift_4[DATA_WIDTH:1] <= data_shift_4[(DATA_WIDTH-1):0];
-                  data_shift_5[DATA_WIDTH:1] <= data_shift_5[(DATA_WIDTH-1):0];
-                  data_shift_6[DATA_WIDTH:1] <= data_shift_6[(DATA_WIDTH-1):0];
-                  data_shift_7[DATA_WIDTH:1] <= data_shift_7[(DATA_WIDTH-1):0];
+                  data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
         end
 end
 
-assign sdo = ((inst_d1 == CMD_TRANSFER) && (sdo_enabled)) ? data_shift[DATA_WIDTH] : SDO_DEFAULT;
+assign sdo = ((inst_d1 == CMD_TRANSFER) && (sdo_enabled)) ? data_sdo_shift[DATA_WIDTH-1] : SDO_DEFAULT;
 
-assign sdi_data = (NUM_OF_SDI == 1) ? data_shift[(DATA_WIDTH-1):0] :
-                  (NUM_OF_SDI == 2) ? {data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
-                  (NUM_OF_SDI == 3) ? {data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0],
-                                                                       data_shift[(DATA_WIDTH-1):0]} :
-                  (NUM_OF_SDI == 4) ? {data_shift_3[(DATA_WIDTH-1):0], data_shift_2[(DATA_WIDTH-1):0],
-                                       data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
-                  (NUM_OF_SDI == 5) ? {data_shift_4[(DATA_WIDTH-1):0], data_shift_3[(DATA_WIDTH-1):0],
-                                       data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0],
-                                                                       data_shift[(DATA_WIDTH-1):0]} :
-                  (NUM_OF_SDI == 6) ? {data_shift_5[(DATA_WIDTH-1):0], data_shift_4[(DATA_WIDTH-1):0],
-                                       data_shift_3[(DATA_WIDTH-1):0], data_shift_2[(DATA_WIDTH-1):0],
-                                       data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
-                  (NUM_OF_SDI == 7) ? {data_shift_6[(DATA_WIDTH-1):0], data_shift_5[(DATA_WIDTH-1):0],
-                                       data_shift_4[(DATA_WIDTH-1):0], data_shift_3[(DATA_WIDTH-1):0],
-                                       data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0],
-                                                                       data_shift[(DATA_WIDTH-1):0]} :
-                  (NUM_OF_SDI == 8) ? {data_shift_7[(DATA_WIDTH-1):0], data_shift_6[(DATA_WIDTH-1):0],
-                                       data_shift_5[(DATA_WIDTH-1):0], data_shift_4[(DATA_WIDTH-1):0],
-                                       data_shift_3[(DATA_WIDTH-1):0], data_shift_2[(DATA_WIDTH-1):0],
-                                       data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
-                  data_shift[7:0];
+// In case of an interface with high clock rate (SCLK > 50MHz), one of the
+// next SCLK edge must be used to flop the SDI line, to compensate the overall
+// delay of the read path
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
 
 always @(posedge clk) begin
-        if (trigger_rx == 1'b1) begin
-          data_shift[0] <= sdi;
-          data_shift_1[0] <= sdi_1;
-          data_shift_2[0] <= sdi_2;
-          data_shift_3[0] <= sdi_3;
-          data_shift_4[0] <= sdi_4;
-          data_shift_5[0] <= sdi_5;
-          data_shift_6[0] <= sdi_6;
-          data_shift_7[0] <= sdi_7;
-        end
+  trigger_rx_d1 <= trigger_rx;
+  trigger_rx_d2 <= trigger_rx_d1;
+  trigger_rx_d3 <= trigger_rx_d2;
+end
+
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+
+always @(posedge clk) begin
+  if (trigger_rx_s == 1'b1) begin
+    data_sdi_shift <= {data_sdi_shift[(DATA_WIDTH-2):0], sdi};
+    data_sdi_shift_1 <= {data_sdi_shift_1[(DATA_WIDTH-2):0], sdi_1};
+    data_sdi_shift_2 <= {data_sdi_shift_2[(DATA_WIDTH-2):0], sdi_2};
+    data_sdi_shift_3 <= {data_sdi_shift_3[(DATA_WIDTH-2):0], sdi_3};
+    data_sdi_shift_4 <= {data_sdi_shift_4[(DATA_WIDTH-2):0], sdi_4};
+    data_sdi_shift_5 <= {data_sdi_shift_5[(DATA_WIDTH-2):0], sdi_5};
+    data_sdi_shift_6 <= {data_sdi_shift_6[(DATA_WIDTH-2):0], sdi_6};
+    data_sdi_shift_7 <= {data_sdi_shift_7[(DATA_WIDTH-2):0], sdi_7};
+  end
+end
+
+assign sdi_data = (NUM_OF_SDI == 1) ? data_sdi_shift :
+                  (NUM_OF_SDI == 2) ? {data_sdi_shift_1, data_sdi_shift} :
+                  (NUM_OF_SDI == 3) ? {data_sdi_shift_2, data_sdi_shift_1,
+                                                         data_sdi_shift} :
+                  (NUM_OF_SDI == 4) ? {data_sdi_shift_3, data_sdi_shift_2,
+                                       data_sdi_shift_1, data_sdi_shift} :
+                  (NUM_OF_SDI == 5) ? {data_sdi_shift_4, data_sdi_shift_3,
+                                       data_sdi_shift_2, data_sdi_shift_1,
+                                                         data_sdi_shift} :
+                  (NUM_OF_SDI == 6) ? {data_sdi_shift_5, data_sdi_shift_4,
+                                       data_sdi_shift_3, data_sdi_shift_2,
+                                       data_sdi_shift_1, data_sdi_shift} :
+                  (NUM_OF_SDI == 7) ? {data_sdi_shift_6, data_sdi_shift_5,
+                                       data_sdi_shift_4, data_sdi_shift_3,
+                                       data_sdi_shift_2, data_sdi_shift_1,
+                                                         data_sdi_shift} :
+                  (NUM_OF_SDI == 8) ? {data_sdi_shift_7, data_sdi_shift_6,
+                                       data_sdi_shift_5, data_sdi_shift_4,
+                                       data_sdi_shift_3, data_sdi_shift_2,
+                                       data_sdi_shift_1, data_sdi_shift} : data_sdi_shift;
+
+wire last_sdi_bit = (sdi_counter == word_length-1);
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    sdi_counter <= 8'b0;
+  end else begin
+    if (trigger_rx_s == 1'b1) begin
+      sdi_counter <= last_sdi_bit ? 8'b0 : sdi_counter + 1'b1;
+    end
+  end
 end
 
 always @(posedge clk) begin
