@@ -59,6 +59,7 @@ adi_set_bus_dependency "spi_engine_offload_ctrl0" "spi_engine_offload_ctrl0" \
 
 adi_set_bus_dependency "s_axi" "s_axi" \
       "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 0)"
+set_property DRIVER_VALUE 1 [ipx::get_ports s_axi_aresetn]
 
 adi_set_ports_dependency "up_clk" \
       "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 1)"
