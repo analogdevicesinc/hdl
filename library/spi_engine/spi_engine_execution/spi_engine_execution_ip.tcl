@@ -59,5 +59,13 @@ adi_set_ports_dependency "sdi_2" \
       "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 2)"
 adi_set_ports_dependency "sdi_3" \
       "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 3)"
+adi_set_ports_dependency "sdi_4" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 4)"
+adi_set_ports_dependency "sdi_5" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 5)"
+adi_set_ports_dependency "sdi_6" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 6)"
+adi_set_ports_dependency "sdi_7" \
+      "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_SDI')) > 7)"
 
 ipx::save_core [ipx::current_core]
