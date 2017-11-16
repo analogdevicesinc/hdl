@@ -97,7 +97,7 @@ ad_ip_parameter axi_ad400x_dma CONFIG.DMA_2D_TRANSFER 0
 if {$adc_resolution != 16} {
   ad_ip_parameter axi_ad400x_dma CONFIG.DMA_DATA_WIDTH_SRC 32
 } else {
-  ad_ip_parameter axi_ad400x_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $adc_resolution * 4]
+  ad_ip_parameter axi_ad400x_dma CONFIG.DMA_DATA_WIDTH_SRC 16
 }
 ad_ip_parameter axi_ad400x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
