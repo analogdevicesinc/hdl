@@ -31,8 +31,9 @@ current_bd_instance /spi_ad400x
   ## to setup the sample rate of the system change the PULSE_PERIOD value
   ## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
   ## fsys_cpu_clk must be 100 MHz
-  ## Default tCYC = 560 ns
-  ad_ip_parameter trigger_gen CONFIG.PULSE_PERIOD 56
+  set cycle_per_sec_100mhz 100000000
+  set sampling_cycle [expr $cycle_per_sec_100mhz / $adc_sampling_rate]
+  ad_ip_parameter trigger_gen CONFIG.PULSE_PERIOD $sampling_cycle
   ad_ip_parameter trigger_gen CONFIG.PULSE_WIDTH 1
 
   if {$adc_resolution != 16} {
