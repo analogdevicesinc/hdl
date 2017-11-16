@@ -1,3 +1,7 @@
+
+
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+
 # adc peripherals
 
 ad_ip_instance util_adxcvr util_fmcadc5_0_xcvr
@@ -52,13 +56,9 @@ ad_ip_parameter axi_ad9625_1_xcvr CONFIG.LPM_OR_DFE_N 1
 ad_ip_parameter axi_ad9625_1_xcvr CONFIG.SYS_CLK_SEL 0x0
 ad_ip_parameter axi_ad9625_1_xcvr CONFIG.OUT_CLK_SEL 0x2
 
-ad_ip_instance jesd204 axi_ad9625_0_jesd
-ad_ip_parameter axi_ad9625_0_jesd CONFIG.C_NODE_IS_TRANSMIT 0
-ad_ip_parameter axi_ad9625_0_jesd CONFIG.C_LANES 8
+adi_axi_jesd204_rx_create axi_ad9625_0_jesd 8
 
-ad_ip_instance jesd204 axi_ad9625_1_jesd
-ad_ip_parameter axi_ad9625_1_jesd CONFIG.C_NODE_IS_TRANSMIT 0
-ad_ip_parameter axi_ad9625_1_jesd CONFIG.C_LANES 8
+adi_axi_jesd204_rx_create axi_ad9625_1_jesd 8
 
 ad_ip_instance axi_ad9625 axi_ad9625_0_core
 ad_ip_parameter axi_ad9625_0_core CONFIG.ID 0
@@ -107,14 +107,13 @@ delete_bd_objs [get_bd_nets -of_objects [get_bd_pins axi_ad9625_1_jesd_rstgen/pe
 delete_bd_objs [get_bd_cells axi_ad9625_1_jesd_rstgen]
 
 ad_xcvrpll  util_fmcadc5_0_xcvr/rx_out_clk_0 util_fmcadc5_1_xcvr/rx_clk_*
-ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_1_jesd/rx_core_clk
-ad_connect  axi_ad9625_0_jesd_rstgen/peripheral_reset axi_ad9625_1_jesd/rx_reset
+ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_1_jesd/device_clk
 ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_0_core/rx_clk
-ad_connect  axi_ad9625_0_jesd/rx_start_of_frame axi_ad9625_0_core/rx_sof
-ad_connect  axi_ad9625_0_jesd/rx_tdata axi_ad9625_0_core/rx_data
+ad_connect  axi_ad9625_0_jesd/rx_sof axi_ad9625_0_core/rx_sof
+ad_connect  axi_ad9625_0_jesd/rx_data_tdata axi_ad9625_0_core/rx_data
 ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_1_core/rx_clk
-ad_connect  axi_ad9625_0_jesd/rx_start_of_frame axi_ad9625_1_core/rx_sof
-ad_connect  axi_ad9625_1_jesd/rx_tdata axi_ad9625_1_core/rx_data
+ad_connect  axi_ad9625_0_jesd/rx_sof axi_ad9625_1_core/rx_sof
+ad_connect  axi_ad9625_1_jesd/rx_data_tdata axi_ad9625_1_core/rx_data
 ad_connect  axi_ad9625_0_core/adc_raddr_out axi_ad9625_0_core/adc_raddr_in
 ad_connect  axi_ad9625_0_core/adc_raddr_out axi_ad9625_1_core/adc_raddr_in
 ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_fifo/adc_clk
@@ -135,8 +134,8 @@ ad_cpu_interconnect 0x44a60000 axi_ad9625_0_xcvr
 ad_cpu_interconnect 0x44b60000 axi_ad9625_1_xcvr
 ad_cpu_interconnect 0x44a10000 axi_ad9625_0_core
 ad_cpu_interconnect 0x44b10000 axi_ad9625_1_core
-ad_cpu_interconnect 0x44a91000 axi_ad9625_0_jesd
-ad_cpu_interconnect 0x44b91000 axi_ad9625_1_jesd
+ad_cpu_interconnect 0x44a90000 axi_ad9625_0_jesd
+ad_cpu_interconnect 0x44b90000 axi_ad9625_1_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9625_dma
 
 # interconnect (gt/adc)
@@ -148,13 +147,15 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_ad9625_dma/m_dest_axi
 # interrupts
 
 ad_cpu_interrupt ps-12 mb-12 axi_ad9625_dma/irq
+ad_cpu_interrupt ps-11 mb-13 axi_ad9625_0_jesd/irq
+ad_cpu_interrupt ps-10 mb-14 axi_ad9625_1_jesd/irq
 
 # interleave-sync
 
-ad_disconnect  rx_sysref_0 axi_ad9625_0_jesd/rx_sysref
-ad_disconnect  rx_sync_0 axi_ad9625_0_jesd/rx_sync
-ad_disconnect  rx_sysref_1_0 axi_ad9625_1_jesd/rx_sysref
-ad_disconnect  rx_sync_1_0 axi_ad9625_1_jesd/rx_sync
+ad_disconnect  rx_sysref_0 axi_ad9625_0_jesd/sysref
+ad_disconnect  rx_sync_0 axi_ad9625_0_jesd/sync
+ad_disconnect  rx_sysref_1_0 axi_ad9625_1_jesd/sysref
+ad_disconnect  rx_sync_1_0 axi_ad9625_1_jesd/sync
 ad_disconnect  spi_csn_o axi_spi/ss_o
 ad_disconnect  spi_csn_i axi_spi/ss_i
 ad_disconnect  spi_clk_i axi_spi/sck_i
@@ -174,10 +175,10 @@ ad_connect  axi_ad9625_1_core/adc_enable axi_fmcadc5_sync/rx_enable_1
 ad_connect  axi_ad9625_1_core/adc_data axi_fmcadc5_sync/rx_data_1
 ad_connect  axi_fmcadc5_sync/rx_enable axi_ad9625_fifo/adc_wr
 ad_connect  axi_fmcadc5_sync/rx_data axi_ad9625_fifo/adc_wdata
-ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_0_jesd/rx_sysref
-ad_connect  axi_ad9625_0_jesd/rx_sync axi_fmcadc5_sync/rx_sync_0
-ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_1_jesd/rx_sysref
-ad_connect  axi_ad9625_1_jesd/rx_sync axi_fmcadc5_sync/rx_sync_1
+ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_0_jesd/sysref
+ad_connect  axi_ad9625_0_jesd/sync axi_fmcadc5_sync/rx_sync_0
+ad_connect  axi_fmcadc5_sync/rx_sysref axi_ad9625_1_jesd/sysref
+ad_connect  axi_ad9625_1_jesd/sync axi_fmcadc5_sync/rx_sync_1
 ad_connect  axi_spi/ss_o axi_fmcadc5_sync/spi_csn_o
 ad_connect  axi_spi/sck_o axi_fmcadc5_sync/spi_clk_o
 ad_connect  axi_spi/io0_o axi_fmcadc5_sync/spi_sdo_o
