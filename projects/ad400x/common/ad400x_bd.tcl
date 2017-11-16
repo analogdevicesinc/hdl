@@ -38,7 +38,7 @@ current_bd_instance /spi_ad400x
   if {$adc_resolution != 16} {
     ad_ip_instance util_axis_upscale axis_upscaler
     ad_ip_parameter axis_upscaler CONFIG.NUM_OF_CHANNELS 1
-    ad_ip_parameter axis_upscaler CONFIG.DATA_WIDTH 20
+    ad_ip_parameter axis_upscaler CONFIG.DATA_WIDTH $adc_resolution
     ad_ip_parameter axis_upscaler CONFIG.UDATA_WIDTH 32
     ad_connect axis_upscaler/dfmt_enable GND
     ad_connect axis_upscaler/dfmt_type GND
