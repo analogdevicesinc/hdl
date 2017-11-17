@@ -114,16 +114,16 @@ module system_top (
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 6:0]  spi_csn_open;
-  wire            spi_mosi;
-  wire            spi_miso;
-  wire            rx_ref_clk;
-  wire            rx_sysref;
-  wire            rx_sync;
-  wire            rx_clk;
+  wire        [63:0]      gpio_i;
+  wire        [63:0]      gpio_o;
+  wire        [63:0]      gpio_t;
+  wire        [ 6:0]      spi_csn_open;
+  wire                    spi_mosi;
+  wire                    spi_miso;
+  wire                    rx_ref_clk;
+  wire                    rx_sysref;
+  wire                    rx_sync;
+  wire                    rx_clk;
 
   // default logic
 
@@ -149,6 +149,10 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
+  // gpio
+ 
+  assign gpio_i[63:42] = gpio_o[63:42];
+
   ad_iobuf #(.DATA_WIDTH(10)) i_iobuf (
     .dio_t (gpio_t[41:32]),
     .dio_i (gpio_o[41:32]),
@@ -164,18 +168,30 @@ module system_top (
               adc_agc3,
               adc_agc4}));
 
+  assign gpio_i[31:21] = gpio_o[31:21];
+
   ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_bd (
     .dio_t (gpio_t[20:0]),
     .dio_i (gpio_o[20:0]),
     .dio_o (gpio_i[20:0]),
     .dio_p (gpio_bd));
 
+  // sysref
+
   ad_sysref_gen i_sysref (
     .core_clk (rx_clk),
     .sysref_en (gpio_o[48]),
     .sysref_out (rx_sysref));
 
+  // ipi-system
+ 
   system_wrapper i_system_wrapper (
+    .axi_ad6676_xcvr_cpll_ref_clk (rx_ref_clk),
+    .axi_ad6676_xcvr_qpll_ref_clk (rx_ref_clk),
+    .axi_ad6676_xcvr_rx_data_n (rx_data_n),
+    .axi_ad6676_xcvr_rx_data_p (rx_data_p),
+    .axi_ad6676_xcvr_tx_data_n (),
+    .axi_ad6676_xcvr_tx_data_p (),
     .ddr3_addr (ddr3_addr),
     .ddr3_ba (ddr3_ba),
     .ddr3_cas_n (ddr3_cas_n),
@@ -217,14 +233,9 @@ module system_top (
     .mgt_clk_clk_p (mgt_clk_p),
     .phy_rstn (phy_rstn),
     .phy_sd (1'b1),
-    .rx_data_0_n (rx_data_n[0]),
-    .rx_data_0_p (rx_data_p[0]),
-    .rx_data_1_n (rx_data_n[1]),
-    .rx_data_1_p (rx_data_p[1]),
-    .rx_ref_clk_0 (rx_ref_clk),
-    .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (rx_sysref),
     .rx_core_clk (rx_clk),
+    .rx_sync (rx_sync),
+    .rx_sysref (rx_sysref),
     .sgmii_rxn (sgmii_rxn),
     .sgmii_rxp (sgmii_rxp),
     .sgmii_txn (sgmii_txn),
