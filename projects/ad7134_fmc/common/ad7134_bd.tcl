@@ -4,6 +4,7 @@ create_bd_port -dir I ad713x_odr
 create_bd_port -dir O ad713x_sdpclk
 
 # create a SPI Engine architecture for the parallel data interface of AD713x
+# this design supports AD7132/AD7134/AD7136
 
 create_bd_cell -type hier dual_ad7134
 current_bd_instance /dual_ad7134
@@ -18,22 +19,25 @@ current_bd_instance /dual_ad7134
   ad_ip_instance spi_engine_execution execution
   ad_ip_parameter execution CONFIG.DATA_WIDTH $adc_resolution
   ad_ip_parameter execution CONFIG.NUM_OF_CS 1
-  ad_ip_parameter execution CONFIG.NUM_OF_SDI 8
+  ad_ip_parameter execution CONFIG.NUM_OF_SDI $adc_num_of_channels
 
   ad_ip_instance axi_spi_engine axi
   ad_ip_parameter axi CONFIG.DATA_WIDTH $adc_resolution
+  ad_ip_parameter axi CONFIG.NUM_OF_SDI $adc_num_of_channels
   ad_ip_parameter axi CONFIG.NUM_OFFLOAD 1
 
   ad_ip_instance spi_engine_offload offload
   ad_ip_parameter offload CONFIG.DATA_WIDTH $adc_resolution
+  ad_ip_parameter offload CONFIG.NUM_OF_SDI $adc_num_of_channels
   ad_ip_parameter offload CONFIG.ASYNC_TRIG 1
 
   ad_ip_instance spi_engine_interconnect interconnect
   ad_ip_parameter interconnect CONFIG.DATA_WIDTH $adc_resolution
+  ad_ip_parameter interconnect CONFIG.NUM_OF_SDI $adc_num_of_channels
 
   if {$adc_resolution == 24} {
     ad_ip_instance util_axis_upscale axis_upscaler
-    ad_ip_parameter axis_upscaler CONFIG.NUM_OF_CHANNELS 8
+    ad_ip_parameter axis_upscaler CONFIG.NUM_OF_CHANNELS $adc_num_of_channels
     ad_ip_parameter axis_upscaler CONFIG.DATA_WIDTH 24
     ad_ip_parameter axis_upscaler CONFIG.UDATA_WIDTH 32
   }
@@ -83,11 +87,11 @@ ad_ip_parameter axi_ad7134_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad7134_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_2D_TRANSFER 0
 if {$adc_resolution == 24} {
-  ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+  ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32 * $adc_num_of_channels]
 } else {
-  ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $adc_resolution * 4]
+  ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $adc_resolution * $adc_num_of_channels]
 }
-ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 # sdpclk clock generator - default clk0_out is 50 MHz
 
