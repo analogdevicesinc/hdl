@@ -26,7 +26,7 @@ adi_add_bus "m_axis" "master" \
 		{"m_axis_ready" "TREADY"} \
 		{"m_axis_data" "TDATA"} \
 	}
-adi_add_bus_clock "clk" "m_axis"
+ipx::associate_bus_interfaces -busif m_axis -clock s_axis_signal_clock [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 
