@@ -16,7 +16,7 @@ adi_add_bus "s_axis" "slave" \
 		{"s_axis_ready" "TREADY"} \
 		{"s_axis_data" "TDATA"} \
 	}
-adi_add_bus_clock "clk" "s_axis"
+adi_add_bus_clock "clk" "s_axis" "resetn"
 
 adi_add_bus "m_axis" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
