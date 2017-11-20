@@ -21,6 +21,7 @@ all:
 	-make -C adrv9361z7035 all
 	-make -C adrv9364z7020 all
 	-make -C adrv9371x all
+	-make -C adrv9379 all
 	-make -C adv7511 all
 	-make -C arradio all
 	-make -C cftl_cip all
@@ -61,6 +62,7 @@ clean:
 	make -C adrv9361z7035 clean
 	make -C adrv9364z7020 clean
 	make -C adrv9371x clean
+	make -C adrv9379 clean
 	make -C adv7511 clean
 	make -C arradio clean
 	make -C cftl_cip clean
@@ -101,6 +103,7 @@ clean-all:
 	make -C adrv9361z7035 clean-all
 	make -C adrv9364z7020 clean-all
 	make -C adrv9371x clean-all
+	make -C adrv9379 clean-all
 	make -C adv7511 clean-all
 	make -C arradio clean-all
 	make -C cftl_cip clean-all

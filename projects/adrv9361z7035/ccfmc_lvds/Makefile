@@ -17,6 +17,7 @@ M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
 M_DEPS += ../../../library/xilinx/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_adl5904_rst.v
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361_delay.tcl
 M_DEPS += ../../../library/axi_ad9361/axi_ad9361.xpr
 M_DEPS += ../../../library/axi_clkgen/axi_clkgen.xpr
