@@ -55,8 +55,8 @@ module dmac_dest_fifo_inf #(
 
   input en,
   output reg [DATA_WIDTH-1:0] dout,
-  output valid,
-  output underflow,
+  output reg valid,
+  output reg underflow,
 
   output xfer_req,
 
@@ -81,22 +81,10 @@ wire _fifo_ready;
 assign fifo_ready = _fifo_ready | ~enabled;
 
 wire [DATA_WIDTH-1:0]  dout_s;
-reg en_d1;
 wire data_ready;
 wire data_valid;
 
-always @(posedge clk)
-begin
-  if (resetn == 1'b0) begin
-    en_d1 <= 1'b0;
-  end else begin
-    en_d1 <= en;
-  end
-end
-
-assign underflow = en_d1 & (~data_valid | ~enable);
-assign data_ready = en_d1 & (data_valid | ~enable);
-assign valid = en_d1 & data_valid & enable;
+assign data_ready = en & (data_valid | ~enable);
 
 dmac_data_mover # (
   .ID_WIDTH(ID_WIDTH),
@@ -130,8 +118,14 @@ dmac_data_mover # (
 );
 
 always @(posedge clk) begin
-  if (en)
+  if (en) begin
     dout <= (data_valid) ? dout_s : {DATA_WIDTH{1'b0}};
+    valid <= data_valid & enable;
+    underflow <= ~(data_valid & enable);
+  end else begin
+    valid <= 1'b0;
+    underflow <= 1'b0;
+  end
 end
 
 dmac_response_generator # (
