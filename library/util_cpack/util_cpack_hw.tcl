@@ -29,6 +29,13 @@ set_parameter_property CHANNEL_DATA_WIDTH TYPE INTEGER
 set_parameter_property CHANNEL_DATA_WIDTH UNITS None
 set_parameter_property CHANNEL_DATA_WIDTH HDL_PARAMETER true
 
+add_parameter SAMPLE_WIDTH INTEGER 0
+set_parameter_property SAMPLE_WIDTH DEFAULT_VALUE 16
+set_parameter_property SAMPLE_WIDTH DISPLAY_NAME SAMPLE_WIDTH
+set_parameter_property SAMPLE_WIDTH TYPE INTEGER
+set_parameter_property SAMPLE_WIDTH UNITS None
+set_parameter_property SAMPLE_WIDTH HDL_PARAMETER true
+
 add_parameter NUM_OF_CHANNELS INTEGER 0
 set_parameter_property NUM_OF_CHANNELS DEFAULT_VALUE 8
 set_parameter_property NUM_OF_CHANNELS DISPLAY_NAME NUM_OF_CHANNELS

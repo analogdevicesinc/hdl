@@ -38,6 +38,7 @@
 module util_cpack #(
 
   parameter   CHANNEL_DATA_WIDTH  = 32,
+  parameter   SAMPLE_WIDTH        = 16,
   parameter   NUM_OF_CHANNELS     = 8) (
 
   // adc interface
@@ -76,7 +77,7 @@ module util_cpack #(
   output  reg [((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0]  adc_data);
 
 
-  localparam  SAMPLES_PCHANNEL    = CHANNEL_DATA_WIDTH/16;
+  localparam  SAMPLES_PCHANNEL    = CHANNEL_DATA_WIDTH/SAMPLE_WIDTH;
   localparam  NUM_OF_CHANNELS_M   = 8;
   localparam  BUS_DATA_WIDTH      = NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH;
   localparam  NUM_OF_CHANNELS_P   = NUM_OF_CHANNELS;
@@ -87,7 +88,7 @@ module util_cpack #(
   reg     [((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):0]  adc_data_d = 'd0;
   reg                                                     adc_mux_valid = 'd0;
   reg     [(NUM_OF_CHANNELS_M-1):0]                       adc_mux_enable = 'd0;
-  reg     [((SAMPLES_PCHANNEL*16*79)-1):0]                         adc_mux_data = 'd0;
+  reg     [((SAMPLES_PCHANNEL*SAMPLE_WIDTH*79)-1):0]      adc_mux_data = 'd0;
 
   // internal signals
 
@@ -104,14 +105,14 @@ module util_cpack #(
   wire    [(SAMPLES_PCHANNEL-1):0]                                 adc_mux_enable_5_s;
   wire    [(SAMPLES_PCHANNEL-1):0]                                 adc_mux_enable_6_s;
   wire    [(SAMPLES_PCHANNEL-1):0]                                 adc_mux_enable_7_s;
-  wire    [((SAMPLES_PCHANNEL*16*1)-1):0]                          adc_mux_data_0_s;
-  wire    [((SAMPLES_PCHANNEL*16*2)-1):0]                          adc_mux_data_1_s;
-  wire    [((SAMPLES_PCHANNEL*16*3)-1):0]                          adc_mux_data_2_s;
-  wire    [((SAMPLES_PCHANNEL*16*4)-1):0]                          adc_mux_data_3_s;
-  wire    [((SAMPLES_PCHANNEL*16*5)-1):0]                          adc_mux_data_4_s;
-  wire    [((SAMPLES_PCHANNEL*16*6)-1):0]                          adc_mux_data_5_s;
-  wire    [((SAMPLES_PCHANNEL*16*7)-1):0]                          adc_mux_data_6_s;
-  wire    [((SAMPLES_PCHANNEL*16*8)-1):0]                          adc_mux_data_7_s;
+  wire    [((SAMPLES_PCHANNEL*SAMPLE_WIDTH*1)-1):0]                adc_mux_data_0_s;
+  wire    [((SAMPLES_PCHANNEL*SAMPLE_WIDTH*2)-1):0]                adc_mux_data_1_s;
+  wire    [((SAMPLES_PCHANNEL*SAMPLE_WIDTH*3)-1):0]                adc_mux_data_2_s;
+  wire    [((SAMPLES_PCHANNEL*SAMPLE_WIDTH*4)-1):0]                adc_mux_data_3_s;
+  wire    [((SAMPLES_PCHANNEL*SAMPLE_WIDTH*5)-1):0]                adc_mux_data_4_s;
+  wire    [((SAMPLES_PCHANNEL*SAMPLE_WIDTH*6)-1):0]                adc_mux_data_5_s;
+  wire    [((SAMPLES_PCHANNEL*SAMPLE_WIDTH*7)-1):0]                adc_mux_data_6_s;
+  wire    [((SAMPLES_PCHANNEL*SAMPLE_WIDTH*8)-1):0]                adc_mux_data_7_s;
   wire    [(NUM_OF_CHANNELS_M-1):0]                       adc_dsf_valid_s;
   wire    [(NUM_OF_CHANNELS_M-1):0]                       adc_dsf_sync_s;
   wire    [(BUS_DATA_WIDTH-1):0]                                    adc_dsf_data_s[(NUM_OF_CHANNELS_M-1):0];
@@ -158,15 +159,15 @@ module util_cpack #(
 
   generate
   for (n = 0; n < SAMPLES_PCHANNEL; n = n + 1) begin: g_intlv
-  assign adc_data_intlv_s[((16*NUM_OF_CHANNELS_M*(n+1))-1):(16*NUM_OF_CHANNELS_M*n)] =
-          { adc_data_d[(((CHANNEL_DATA_WIDTH*7)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*7)+(16*n))],
-            adc_data_d[(((CHANNEL_DATA_WIDTH*6)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*6)+(16*n))],
-            adc_data_d[(((CHANNEL_DATA_WIDTH*5)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*5)+(16*n))],
-            adc_data_d[(((CHANNEL_DATA_WIDTH*4)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*4)+(16*n))],
-            adc_data_d[(((CHANNEL_DATA_WIDTH*3)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*3)+(16*n))],
-            adc_data_d[(((CHANNEL_DATA_WIDTH*2)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*2)+(16*n))],
-            adc_data_d[(((CHANNEL_DATA_WIDTH*1)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*1)+(16*n))],
-            adc_data_d[(((CHANNEL_DATA_WIDTH*0)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*0)+(16*n))]};
+  assign adc_data_intlv_s[((SAMPLE_WIDTH*NUM_OF_CHANNELS_M*(n+1))-1):(SAMPLE_WIDTH*NUM_OF_CHANNELS_M*n)] =
+          { adc_data_d[(((CHANNEL_DATA_WIDTH*7)+(SAMPLE_WIDTH*(n+1)))-1):((CHANNEL_DATA_WIDTH*7)+(SAMPLE_WIDTH*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*6)+(SAMPLE_WIDTH*(n+1)))-1):((CHANNEL_DATA_WIDTH*6)+(SAMPLE_WIDTH*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*5)+(SAMPLE_WIDTH*(n+1)))-1):((CHANNEL_DATA_WIDTH*5)+(SAMPLE_WIDTH*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*4)+(SAMPLE_WIDTH*(n+1)))-1):((CHANNEL_DATA_WIDTH*4)+(SAMPLE_WIDTH*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*3)+(SAMPLE_WIDTH*(n+1)))-1):((CHANNEL_DATA_WIDTH*3)+(SAMPLE_WIDTH*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*2)+(SAMPLE_WIDTH*(n+1)))-1):((CHANNEL_DATA_WIDTH*2)+(SAMPLE_WIDTH*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*1)+(SAMPLE_WIDTH*(n+1)))-1):((CHANNEL_DATA_WIDTH*1)+(SAMPLE_WIDTH*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*0)+(SAMPLE_WIDTH*(n+1)))-1):((CHANNEL_DATA_WIDTH*0)+(SAMPLE_WIDTH*n))]};
   end
   endgenerate
 
@@ -174,28 +175,30 @@ module util_cpack #(
 
   generate
   for (n = 0; n < SAMPLES_PCHANNEL; n = n + 1) begin: g_mux
-  util_cpack_mux i_mux (
+  util_cpack_mux #(
+    .SW(SAMPLE_WIDTH)
+  ) i_mux (
     .adc_clk (adc_clk),
     .adc_valid (adc_valid_d),
     .adc_enable (adc_enable_s),
-    .adc_data (adc_data_intlv_s[((16*NUM_OF_CHANNELS_M*(n+1))-1):(16*NUM_OF_CHANNELS_M*n)]),
+    .adc_data (adc_data_intlv_s[((SAMPLE_WIDTH*NUM_OF_CHANNELS_M*(n+1))-1):(SAMPLE_WIDTH*NUM_OF_CHANNELS_M*n)]),
     .adc_mux_valid (adc_mux_valid_s[n]),
     .adc_mux_enable_0 (adc_mux_enable_0_s[n]),
-    .adc_mux_data_0 (adc_mux_data_0_s[(((n+1)*16*1)-1):(n*16*1)]),
+    .adc_mux_data_0 (adc_mux_data_0_s[(((n+1)*SAMPLE_WIDTH*1)-1):(n*SAMPLE_WIDTH*1)]),
     .adc_mux_enable_1 (adc_mux_enable_1_s[n]),
-    .adc_mux_data_1 (adc_mux_data_1_s[(((n+1)*16*2)-1):(n*16*2)]),
+    .adc_mux_data_1 (adc_mux_data_1_s[(((n+1)*SAMPLE_WIDTH*2)-1):(n*SAMPLE_WIDTH*2)]),
     .adc_mux_enable_2 (adc_mux_enable_2_s[n]),
-    .adc_mux_data_2 (adc_mux_data_2_s[(((n+1)*16*3)-1):(n*16*3)]),
+    .adc_mux_data_2 (adc_mux_data_2_s[(((n+1)*SAMPLE_WIDTH*3)-1):(n*SAMPLE_WIDTH*3)]),
     .adc_mux_enable_3 (adc_mux_enable_3_s[n]),
-    .adc_mux_data_3 (adc_mux_data_3_s[(((n+1)*16*4)-1):(n*16*4)]),
+    .adc_mux_data_3 (adc_mux_data_3_s[(((n+1)*SAMPLE_WIDTH*4)-1):(n*SAMPLE_WIDTH*4)]),
     .adc_mux_enable_4 (adc_mux_enable_4_s[n]),
-    .adc_mux_data_4 (adc_mux_data_4_s[(((n+1)*16*5)-1):(n*16*5)]),
+    .adc_mux_data_4 (adc_mux_data_4_s[(((n+1)*SAMPLE_WIDTH*5)-1):(n*SAMPLE_WIDTH*5)]),
     .adc_mux_enable_5 (adc_mux_enable_5_s[n]),
-    .adc_mux_data_5 (adc_mux_data_5_s[(((n+1)*16*6)-1):(n*16*6)]),
+    .adc_mux_data_5 (adc_mux_data_5_s[(((n+1)*SAMPLE_WIDTH*6)-1):(n*SAMPLE_WIDTH*6)]),
     .adc_mux_enable_6 (adc_mux_enable_6_s[n]),
-    .adc_mux_data_6 (adc_mux_data_6_s[(((n+1)*16*7)-1):(n*16*7)]),
+    .adc_mux_data_6 (adc_mux_data_6_s[(((n+1)*SAMPLE_WIDTH*7)-1):(n*SAMPLE_WIDTH*7)]),
     .adc_mux_enable_7 (adc_mux_enable_7_s[n]),
-    .adc_mux_data_7 (adc_mux_data_7_s[(((n+1)*16*8)-1):(n*16*8)]));
+    .adc_mux_data_7 (adc_mux_data_7_s[(((n+1)*SAMPLE_WIDTH*8)-1):(n*SAMPLE_WIDTH*8)]));
   end
   endgenerate
 
@@ -211,22 +214,22 @@ module util_cpack #(
     adc_mux_enable[5] <= & adc_mux_enable_5_s;
     adc_mux_enable[6] <= & adc_mux_enable_6_s;
     adc_mux_enable[7] <= & adc_mux_enable_7_s;
-    adc_mux_data[((SAMPLES_PCHANNEL*16* 9)-1):(SAMPLES_PCHANNEL*16* 1)] <= 'd0;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*19)-1):(SAMPLES_PCHANNEL*16*12)] <= 'd0;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*29)-1):(SAMPLES_PCHANNEL*16*23)] <= 'd0;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*39)-1):(SAMPLES_PCHANNEL*16*34)] <= 'd0;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*49)-1):(SAMPLES_PCHANNEL*16*45)] <= 'd0;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*59)-1):(SAMPLES_PCHANNEL*16*56)] <= 'd0;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*69)-1):(SAMPLES_PCHANNEL*16*67)] <= 'd0;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*79)-1):(SAMPLES_PCHANNEL*16*78)] <= 'd0;
-    adc_mux_data[((SAMPLES_PCHANNEL*16* 1)-1):(SAMPLES_PCHANNEL*16* 0)] <= adc_mux_data_0_s;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*12)-1):(SAMPLES_PCHANNEL*16*10)] <= adc_mux_data_1_s;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*23)-1):(SAMPLES_PCHANNEL*16*20)] <= adc_mux_data_2_s;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*34)-1):(SAMPLES_PCHANNEL*16*30)] <= adc_mux_data_3_s;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*45)-1):(SAMPLES_PCHANNEL*16*40)] <= adc_mux_data_4_s;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*56)-1):(SAMPLES_PCHANNEL*16*50)] <= adc_mux_data_5_s;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*67)-1):(SAMPLES_PCHANNEL*16*60)] <= adc_mux_data_6_s;
-    adc_mux_data[((SAMPLES_PCHANNEL*16*78)-1):(SAMPLES_PCHANNEL*16*70)] <= adc_mux_data_7_s;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH* 9)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH* 1)] <= 'd0;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*19)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*12)] <= 'd0;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*29)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*23)] <= 'd0;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*39)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*34)] <= 'd0;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*49)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*45)] <= 'd0;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*59)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*56)] <= 'd0;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*69)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*67)] <= 'd0;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*79)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*78)] <= 'd0;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH* 1)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH* 0)] <= adc_mux_data_0_s;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*12)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*10)] <= adc_mux_data_1_s;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*23)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*20)] <= adc_mux_data_2_s;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*34)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*30)] <= adc_mux_data_3_s;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*45)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*40)] <= adc_mux_data_4_s;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*56)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*50)] <= adc_mux_data_5_s;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*67)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*60)] <= adc_mux_data_6_s;
+    adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*78)-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*70)] <= adc_mux_data_7_s;
   end
 
   // store & fwd
@@ -242,7 +245,7 @@ module util_cpack #(
     .adc_clk (adc_clk),
     .adc_valid (adc_mux_valid),
     .adc_enable (adc_mux_enable[n]),
-    .adc_data (adc_mux_data[((SAMPLES_PCHANNEL*16*((11*n)+1))-1):(SAMPLES_PCHANNEL*16*10*n)]),
+    .adc_data (adc_mux_data[((SAMPLES_PCHANNEL*SAMPLE_WIDTH*((11*n)+1))-1):(SAMPLES_PCHANNEL*SAMPLE_WIDTH*10*n)]),
     .adc_dsf_valid (adc_dsf_valid_s[n]),
     .adc_dsf_sync (adc_dsf_sync_s[n]),
     .adc_dsf_data (adc_dsf_data_s[n]));
