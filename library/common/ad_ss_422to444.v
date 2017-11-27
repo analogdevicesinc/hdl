@@ -41,33 +41,34 @@ module ad_ss_422to444 #(
 
   // 422 inputs
 
-  input                   clk,
-  input                   s422_de,
-  input       [DW:0]      s422_sync,
-  input       [15:0]      s422_data,
+  input                             clk,
+  input                             s422_de,
+  input   [(DELAY_DATA_WIDTH-1):0]  s422_sync,
+  input   [15:0]                    s422_data,
 
   // 444 outputs
 
-  output  reg [DW:0]      s444_sync,
-  output  reg [23:0]      s444_data);
-
-  localparam  DW = DELAY_DATA_WIDTH - 1;
+  output  [(DELAY_DATA_WIDTH-1):0]  s444_sync,
+  output  [23:0]                    s444_data);
 
   // internal registers
 
-  reg             cr_cb_sel = 'd0;
-  reg             s422_de_d = 'd0;
-  reg     [DW:0]  s422_sync_d = 'd0;
-  reg             s422_de_2d = 'd0;
-  reg      [7:0]  s422_Y_d;
-  reg      [7:0]  s422_CbCr_d;
-  reg      [7:0]  s422_CbCr_2d;
-  reg     [ 8:0]  s422_CbCr_avg;
+  reg                               s422_cbcr_sel = 'd0;
+  reg                               s422_de_d = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  s422_sync_d = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  s422_sync_2d = 'd0;
+  reg                               s422_de_2d = 'd0;
+  reg     [ 7:0]                    s422_y_d = 'd0;
+  reg     [ 7:0]                    s422_cbcr_d = 'd0;
+  reg     [ 7:0]                    s422_cbcr_2d = 'd0;
+  reg     [23:0]                    s422_ycbcr_2d = 'd0;
 
   // internal wires
 
-  wire    [ 7:0]  s422_Y;
-  wire    [ 7:0]  s422_CbCr;
+  wire    [ 7:0]                    s422_y_s;
+  wire    [ 7:0]                    s422_cbcr_s;
+  wire    [ 8:0]                    s422_cbcr_sum_s;
+  wire    [ 7:0]                    s422_cbcr_avg_s;
 
   // Input format is
   // [15:8] Cb/Cr
@@ -78,17 +79,17 @@ module ad_ss_422to444 #(
   // [16: 8] Y
   // [ 7: 0] Cb
 
-  assign s422_Y = s422_data[7:0];
-  assign s422_CbCr = s422_data[15:8];
+  assign s422_y_s = s422_data[7:0];
+  assign s422_cbcr_s = s422_data[15:8];
 
   // first data on de assertion is cb (0x0), then cr (0x1).
   // previous data is held when not current
 
   always @(posedge clk) begin
     if (s422_de_d == 1'b1) begin
-      cr_cb_sel <= ~cr_cb_sel;
+      s422_cbcr_sel <= ~s422_cbcr_sel;
     end else begin
-      cr_cb_sel <= CR_CB_N;
+      s422_cbcr_sel <= CR_CB_N;
     end
   end
 
@@ -98,35 +99,31 @@ module ad_ss_422to444 #(
     s422_de_d <= s422_de;
     s422_sync_d <= s422_sync;
     s422_de_2d <= s422_de_d;
-    s422_Y_d <= s422_Y;
-
-    s422_CbCr_d <= s422_CbCr;
-    s422_CbCr_2d <= s422_CbCr_d;
+    s422_y_d <= s422_y_s;
+    s422_cbcr_d <= s422_cbcr_s;
+    s422_cbcr_2d <= s422_cbcr_d;
   end
 
-  // If both the left and the right sample are valid do the average, otherwise
-  // use the only valid.
-  always @(s422_de_2d, s422_de, s422_CbCr, s422_CbCr_2d)
-  begin
-    if (s422_de == 1'b1 && s422_de_2d)
-      s422_CbCr_avg <= s422_CbCr + s422_CbCr_2d;
-    else if (s422_de == 1'b1)
-      s422_CbCr_avg <= {s422_CbCr, 1'b0};
-    else
-      s422_CbCr_avg <= {s422_CbCr_2d, 1'b0};
-  end
+  // valid samples only-
+
+  assign s422_cbcr_sum_s = {1'b0, s422_cbcr_s} + {1'b0, s422_cbcr_2d};
+  assign s422_cbcr_avg_s = ((s422_de == 1'b1) && (s422_de_2d == 1'b1)) ?
+    s422_cbcr_sum_s[8:1] : ((s422_de == 1'b1) ? s422_cbcr_s : s422_cbcr_2d);
 
   // 444 outputs
 
+  assign s444_sync = s422_sync_2d;
+  assign s444_data = s422_ycbcr_2d;
+
   always @(posedge clk) begin
-    s444_sync <= s422_sync_d;
-    s444_data[15:8] <= s422_Y_d;
-    if (cr_cb_sel) begin
-      s444_data[23:16] <= s422_CbCr_d;
-      s444_data[ 7: 0] <= s422_CbCr_avg[8:1];
+    s422_sync_2d <= s422_sync_d;
+    s422_ycbcr_2d[15:8] <= s422_y_d;
+    if (s422_cbcr_sel == 1'b1) begin
+      s422_ycbcr_2d[23:16] <= s422_cbcr_d;
+      s422_ycbcr_2d[ 7: 0] <= s422_cbcr_avg_s;
     end else begin
-      s444_data[23:16] <= s422_CbCr_avg[8:1];
-      s444_data[ 7: 0] <= s422_CbCr_d;
+      s422_ycbcr_2d[23:16] <= s422_cbcr_avg_s;
+      s422_ycbcr_2d[ 7: 0] <= s422_cbcr_d;
     end
   end
 

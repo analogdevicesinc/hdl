@@ -39,42 +39,43 @@ module up_hdmi_rx #(
 
   // hdmi interface
 
-  input                   hdmi_clk,
-  output                  hdmi_rst,
-  output                  hdmi_edge_sel,
-  output                  hdmi_bgr,
-  output                  hdmi_packed,
-  output                  hdmi_csc_bypass,
-  output      [15:0]      hdmi_vs_count,
-  output      [15:0]      hdmi_hs_count,
-  input                   hdmi_dma_ovf,
-  input                   hdmi_dma_unf,
-  input                   hdmi_tpm_oos,
-  input                   hdmi_vs_oos,
-  input                   hdmi_hs_oos,
-  input                   hdmi_vs_mismatch,
-  input                   hdmi_hs_mismatch,
-  input       [15:0]      hdmi_vs,
-  input       [15:0]      hdmi_hs,
-  input       [31:0]      hdmi_clk_ratio,
+  input           hdmi_clk,
+  output          hdmi_rst,
+  output          hdmi_edge_sel,
+  output          hdmi_bgr,
+  output          hdmi_packed,
+  output          hdmi_csc_bypass,
+  output  [15:0]  hdmi_vs_count,
+  output  [15:0]  hdmi_hs_count,
+  input           hdmi_dma_ovf,
+  input           hdmi_dma_unf,
+  input           hdmi_tpm_oos,
+  input           hdmi_vs_oos,
+  input           hdmi_hs_oos,
+  input           hdmi_vs_mismatch,
+  input           hdmi_hs_mismatch,
+  input   [15:0]  hdmi_vs,
+  input   [15:0]  hdmi_hs,
+  input   [31:0]  hdmi_clk_ratio,
 
   // bus interface
 
-  input                   up_rstn,
-  input                   up_clk,
-  input                   up_wreq,
-  input       [13:0]      up_waddr,
-  input       [31:0]      up_wdata,
-  output  reg             up_wack,
-  input                   up_rreq,
-  input       [13:0]      up_raddr,
-  output  reg [31:0]      up_rdata,
-  output  reg             up_rack);
+  input           up_rstn,
+  input           up_clk,
+  input           up_wreq,
+  input   [13:0]  up_waddr,
+  input   [31:0]  up_wdata,
+  output          up_wack,
+  input           up_rreq,
+  input   [13:0]  up_raddr,
+  output  [31:0]  up_rdata,
+  output          up_rack);
 
   localparam  PCORE_VERSION = 32'h00040063;
 
   // internal registers
 
+  reg             up_wack_int = 'd0;
   reg             up_core_preset = 'd0;
   reg             up_resetn = 'd0;
   reg     [31:0]  up_scratch = 'd0;
@@ -91,6 +92,8 @@ module up_hdmi_rx #(
   reg             up_hs_mismatch = 'd0;
   reg     [15:0]  up_vs_count = 'd0;
   reg     [15:0]  up_hs_count = 'd0;
+  reg     [31:0]  up_rdata_int = 'd0;
+  reg             up_rack_int = 'd0;
 
   // internal signals
 
@@ -98,6 +101,7 @@ module up_hdmi_rx #(
   wire            up_rreq_s;
   wire            up_dma_ovf_s;
   wire            up_dma_unf_s;
+  wire            up_tpm_oos_s;
   wire            up_vs_oos_s;
   wire            up_hs_oos_s;
   wire            up_vs_mismatch_s;
@@ -113,11 +117,13 @@ module up_hdmi_rx #(
 
   // processor write interface
 
+  assign up_wack = up_wack_int;
+
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_core_preset <= 1'd1;
       up_resetn <= 'd0;
-      up_wack <= 'd0;
+      up_wack_int <= 'd0;
       up_scratch <= 'd0;
       up_edge_sel <= 'd0;
       up_bgr <= 'd0;
@@ -133,7 +139,7 @@ module up_hdmi_rx #(
       up_vs_count <= 'd0;
       up_hs_count <= 'd0;
     end else begin
-      up_wack <= up_wreq_s;
+      up_wack_int <= up_wreq_s;
       up_core_preset <= ~up_resetn;
       if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h002)) begin
         up_scratch <= up_wdata;
@@ -193,26 +199,26 @@ module up_hdmi_rx #(
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 1'b0) begin
-      up_rack <= 'd0;
-      up_rdata <= 'd0;
+      up_rack_int <= 'd0;
+      up_rdata_int <= 'd0;
     end else begin
-      up_rack <= up_rreq_s;
+      up_rack_int <= up_rreq_s;
       if(up_rreq_s == 1'b1) begin
         case (up_raddr[11:0])
-          12'h000: up_rdata <= PCORE_VERSION;
-          12'h001: up_rdata <= ID;
-          12'h002: up_rdata <= up_scratch;
-          12'h010: up_rdata <= {31'h0, up_resetn};
-          12'h011: up_rdata <= {28'h0, up_edge_sel, up_bgr, up_packed, up_csc_bypass};
-          12'h015: up_rdata <= up_clk_count_s;
-          12'h016: up_rdata <= hdmi_clk_ratio;
-          12'h018: up_rdata <= {30'h0, up_dma_ovf, up_dma_unf};
-          12'h019: up_rdata <= {30'h0, up_tpm_oos, 1'b0};
-          12'h020: up_rdata <= {28'h0, up_vs_oos, up_hs_oos,
-                                up_vs_mismatch, up_hs_mismatch};
-          12'h100: up_rdata <= {up_vs_count, up_hs_count};
-          12'h101: up_rdata <= {up_vs_s, up_hs_s};
-          default: up_rdata <= 0;
+          12'h000: up_rdata_int <= PCORE_VERSION;
+          12'h001: up_rdata_int <= ID;
+          12'h002: up_rdata_int <= up_scratch;
+          12'h010: up_rdata_int <= {31'h0, up_resetn};
+          12'h011: up_rdata_int <= {28'h0, up_edge_sel, up_bgr, up_packed, up_csc_bypass};
+          12'h015: up_rdata_int <= up_clk_count_s;
+          12'h016: up_rdata_int <= hdmi_clk_ratio;
+          12'h018: up_rdata_int <= {30'h0, up_dma_ovf, up_dma_unf};
+          12'h019: up_rdata_int <= {30'h0, up_tpm_oos, 1'b0};
+          12'h020: up_rdata_int <= {28'h0, up_vs_oos, up_hs_oos,
+                                    up_vs_mismatch, up_hs_mismatch};
+          12'h100: up_rdata_int <= {up_vs_count, up_hs_count};
+          12'h101: up_rdata_int <= {up_vs_s, up_hs_s};
+          default: up_rdata_int <= 0;
         endcase
       end
     end
