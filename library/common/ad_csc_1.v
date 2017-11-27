@@ -40,30 +40,28 @@ module ad_csc_1 #(
 
   // data
 
-  input                   clk,
-  input       [DW:0]      sync,
-  input       [23:0]      data,
+  input                                 clk,
+  input       [(DELAY_DATA_WIDTH-1):0]  sync,
+  input       [23:0]                    data,
 
   // constants
 
-  input       [16:0]      C1,
-  input       [16:0]      C2,
-  input       [16:0]      C3,
-  input       [24:0]      C4,
+  input       [16:0]                    C1,
+  input       [16:0]                    C2,
+  input       [16:0]                    C3,
+  input       [24:0]                    C4,
 
   // sync is delay matched
 
-  output      [DW:0]      csc_sync_1,
-  output      [ 7:0]      csc_data_1);
-
-  localparam  DW = DELAY_DATA_WIDTH - 1;
+  output      [(DELAY_DATA_WIDTH-1):0]  csc_sync_1,
+  output      [ 7:0]                    csc_data_1);
 
   // internal wires
 
   wire    [24:0]  data_1_m_s;
   wire    [24:0]  data_2_m_s;
   wire    [24:0]  data_3_m_s;
-  wire    [DW:0]  sync_3_m_s;
+  wire    [(DELAY_DATA_WIDTH-1):0]  sync_3_m_s;
 
   // c1*R
 

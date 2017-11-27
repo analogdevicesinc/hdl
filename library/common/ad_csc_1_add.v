@@ -44,47 +44,47 @@ module ad_csc_1_add #(
 
   // all signed
 
-  input                   clk,
-  input       [24:0]      data_1,
-  input       [24:0]      data_2,
-  input       [24:0]      data_3,
-  input       [24:0]      data_4,
-  output  reg [ 7:0]      data_p,
+  input                             clk,
+  input   [24:0]                    data_1,
+  input   [24:0]                    data_2,
+  input   [24:0]                    data_3,
+  input   [24:0]                    data_4,
+  output  [ 7:0]                    data_p,
 
   // delay match
 
-  input       [DW:0]      ddata_in,
-  output  reg [DW:0]      ddata_out);
-
-  localparam  DW = DELAY_DATA_WIDTH - 1;
+  input   [(DELAY_DATA_WIDTH-1):0]  ddata_in,
+  output  [(DELAY_DATA_WIDTH-1):0]  ddata_out);
 
   // internal registers
 
-  reg     [DW:0]  p1_ddata = 'd0;
-  reg     [24:0]  p1_data_1 = 'd0;
-  reg     [24:0]  p1_data_2 = 'd0;
-  reg     [24:0]  p1_data_3 = 'd0;
-  reg     [24:0]  p1_data_4 = 'd0;
-  reg     [DW:0]  p2_ddata = 'd0;
-  reg     [24:0]  p2_data_0 = 'd0;
-  reg     [24:0]  p2_data_1 = 'd0;
-  reg     [DW:0]  p3_ddata = 'd0;
-  reg     [24:0]  p3_data = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  p1_ddata = 'd0;
+  reg     [24:0]                    p1_data_1 = 'd0;
+  reg     [24:0]                    p1_data_2 = 'd0;
+  reg     [24:0]                    p1_data_3 = 'd0;
+  reg     [24:0]                    p1_data_4 = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  p2_ddata = 'd0;
+  reg     [24:0]                    p2_data_0 = 'd0;
+  reg     [24:0]                    p2_data_1 = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  p3_ddata = 'd0;
+  reg     [24:0]                    p3_data = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  p4_ddata = 'd0;
+  reg     [ 7:0]                    p4_data = 'd0;
 
   // internal signals
 
-  wire    [24:0]  p1_data_1_p_s;
-  wire    [24:0]  p1_data_1_n_s;
-  wire    [24:0]  p1_data_1_s;
-  wire    [24:0]  p1_data_2_p_s;
-  wire    [24:0]  p1_data_2_n_s;
-  wire    [24:0]  p1_data_2_s;
-  wire    [24:0]  p1_data_3_p_s;
-  wire    [24:0]  p1_data_3_n_s;
-  wire    [24:0]  p1_data_3_s;
-  wire    [24:0]  p1_data_4_p_s;
-  wire    [24:0]  p1_data_4_n_s;
-  wire    [24:0]  p1_data_4_s;
+  wire    [24:0]                    p1_data_1_p_s;
+  wire    [24:0]                    p1_data_1_n_s;
+  wire    [24:0]                    p1_data_1_s;
+  wire    [24:0]                    p1_data_2_p_s;
+  wire    [24:0]                    p1_data_2_n_s;
+  wire    [24:0]                    p1_data_2_s;
+  wire    [24:0]                    p1_data_3_p_s;
+  wire    [24:0]                    p1_data_3_n_s;
+  wire    [24:0]                    p1_data_3_s;
+  wire    [24:0]                    p1_data_4_p_s;
+  wire    [24:0]                    p1_data_4_n_s;
+  wire    [24:0]                    p1_data_4_s;
 
   // pipe line stage 1, get the two's complement versions
 
@@ -130,14 +130,17 @@ module ad_csc_1_add #(
   // output registers, output is unsigned (0 if sum is < 0) and saturated.
   // the inputs are expected to be 1.4.20 format (output is 8bits).
 
+  assign ddata_out = p4_ddata;
+  assign data_p = p4_data;
+
   always @(posedge clk) begin
-    ddata_out <= p3_ddata;
+    p4_ddata <= p3_ddata;
     if (p3_data[24] == 1'b1) begin
-      data_p <= 8'h00;
+      p4_data <= 8'h00;
     end else if (p3_data[23:20] == 'd0) begin
-      data_p <= p3_data[19:12];
+      p4_data <= p3_data[19:12];
     end else begin
-      data_p <= 8'hff;
+      p4_data <= 8'hff;
     end
   end
 
