@@ -16,8 +16,5 @@ adi_ip_files axi_logic_analyzer [list \
 
 adi_ip_properties axi_logic_analyzer
 
-ipx::remove_bus_interface {clk} [ipx::current_core]
-ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]
-
 ipx::save_core [ipx::current_core]
 
