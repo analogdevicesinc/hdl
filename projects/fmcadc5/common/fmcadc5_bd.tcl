@@ -213,3 +213,11 @@ ad_connect  axi_fmcadc5_sync/spi_mosi spi_mosi
 ad_connect  spi_miso axi_fmcadc5_sync/spi_miso
 ad_connect  spi_miso axi_spi/io1_i
 
+# Connect core_reset_ext to be used for synchronization
+create_bd_pin -dir I axi_ad9625_0_jesd/core_reset_ext
+create_bd_pin -dir I axi_ad9625_1_jesd/core_reset_ext
+
+ad_connect axi_ad9625_0_jesd/core_reset_ext axi_ad9625_0_jesd/rx_axi/core_reset_ext
+ad_connect axi_ad9625_1_jesd/core_reset_ext axi_ad9625_1_jesd/rx_axi/core_reset_ext
+ad_connect axi_ad9625_0_core/adc_rst axi_ad9625_0_jesd/core_reset_ext
+ad_connect axi_ad9625_0_core/adc_rst axi_ad9625_1_jesd/core_reset_ext
