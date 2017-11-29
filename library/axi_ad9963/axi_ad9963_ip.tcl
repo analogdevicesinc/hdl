@@ -43,16 +43,6 @@ set_property driver_value 0 [ipx::get_ports *dac_sync_in* -of_objects [ipx::curr
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
 
-ipx::remove_bus_interface rst [ipx::current_core]
-ipx::remove_bus_interface clk [ipx::current_core]
-ipx::remove_bus_interface delay_clk [ipx::current_core]
-
-ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces s_axi_aclk \
-  -of_objects [ipx::current_core]]
-set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
-  -of_objects [ipx::get_bus_interfaces s_axi_aclk \
-  -of_objects [ipx::current_core]]]
-
 adi_set_ports_dependency "delay_clk" \
   "(spirit:decode(id('MODELPARAM_VALUE.ADC_IODELAY_ENABLE')) = 1)" 0
 
