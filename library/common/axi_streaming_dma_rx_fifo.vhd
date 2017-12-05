@@ -100,14 +100,16 @@ begin
 
 	period_counter: process(m_axis_aclk) is
 	begin
-		if resetn = '0' then
-			period_count <= period_len;
-		else
-			if out_stb = '1' and m_axis_tready = '1' then
-				if period_count = 0 then
-					period_count <= period_len;
-				else
-					period_count <= period_count - 1;
+		if rising_edge(m_axis_aclk) then
+			if resetn = '0' then
+				period_count <= period_len;
+			else
+				if out_stb = '1' and m_axis_tready = '1' then
+					if period_count = 0 then
+						period_count <= period_len;
+					else
+						period_count <= period_count - 1;
+					end if;
 				end if;
 			end if;
 		end if;
