@@ -88,6 +88,7 @@ clean:
 	make -C util_sigma_delta_spi clean
 	make -C util_tdd_sync clean
 	make -C util_upack clean
+	make -C util_upack2 clean
 	make -C util_var_fifo clean
 	make -C util_wfifo clean
 	make -C xilinx/axi_adcfifo clean
@@ -181,6 +182,7 @@ lib:
 	make -C util_sigma_delta_spi
 	make -C util_tdd_sync
 	make -C util_upack
+	make -C util_upack2
 	make -C util_var_fifo
 	make -C util_wfifo
 	make -C xilinx/axi_adcfifo
