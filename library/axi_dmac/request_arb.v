@@ -118,6 +118,7 @@ module dmac_request_arb #(
   output                              s_axis_ready,
   input                               s_axis_valid,
   input  [DMA_DATA_WIDTH_SRC-1:0]   s_axis_data,
+  input                               s_axis_last,
   input  [0:0]                        s_axis_user,
   output                              s_axis_xfer_req,
 
@@ -243,6 +244,7 @@ wire src_req_ready;
 wire [DMA_ADDRESS_WIDTH_SRC-1:0] src_req_address;
 wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_req_last_burst_length;
 wire src_req_sync_transfer_start;
+wire src_req_xlast;
 
 /* TODO
 wire src_response_valid;
@@ -709,6 +711,7 @@ dmac_src_axi_stream #(
   .req_ready(src_req_ready),
   .req_last_burst_length(src_req_last_burst_length),
   .req_sync_transfer_start(src_req_sync_transfer_start),
+  .req_xlast(src_req_xlast),
 
   .request_id(src_request_id),
   .response_id(src_response_id),
@@ -722,6 +725,7 @@ dmac_src_axi_stream #(
   .s_axis_valid(s_axis_valid),
   .s_axis_ready(s_axis_ready),
   .s_axis_data(s_axis_data),
+  .s_axis_last(s_axis_last),
   .s_axis_user(s_axis_user),
   .s_axis_xfer_req(s_axis_xfer_req)
 );
@@ -984,7 +988,7 @@ util_axis_fifo #(
 );
 
 util_axis_fifo #(
-  .DATA_WIDTH(DMA_ADDRESS_WIDTH_SRC + BEATS_PER_BURST_WIDTH_SRC + 1),
+  .DATA_WIDTH(DMA_ADDRESS_WIDTH_SRC + BEATS_PER_BURST_WIDTH_SRC + 2),
   .ADDRESS_WIDTH(0),
   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_src_req_fifo (
@@ -996,7 +1000,8 @@ util_axis_fifo #(
   .s_axis_data({
     req_src_address,
     req_length[BYTES_PER_BURST_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC],
-    req_sync_transfer_start
+    req_sync_transfer_start,
+    req_xlast
   }),
   .s_axis_room(),
 
@@ -1007,7 +1012,8 @@ util_axis_fifo #(
   .m_axis_data({
     src_req_address,
     src_req_last_burst_length,
-    src_req_sync_transfer_start
+    src_req_sync_transfer_start,
+    src_req_xlast
   }),
   .m_axis_level()
 );

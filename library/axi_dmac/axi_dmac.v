@@ -167,6 +167,7 @@ module axi_dmac #(
   input                                    s_axis_valid,
   input  [DMA_DATA_WIDTH_SRC-1:0]        s_axis_data,
   input  [0:0]                             s_axis_user,
+  input                                    s_axis_last,
   output                                   s_axis_xfer_req,
 
   // Master streaming AXI interface
@@ -377,7 +378,7 @@ begin
     up_dma_req_valid <= 1'b0;
     up_scratch <= 'h00;
     up_dma_cyclic <= 1'b0;
-    up_axis_xlast <= 1'b0;
+    up_axis_xlast <= 1'b1;
     up_wack <= 1'b0;
   end else begin
     up_wack <= up_wreq;
@@ -628,6 +629,7 @@ dmac_request_arb #(
   .s_axis_valid(s_axis_valid),
   .s_axis_data(s_axis_data),
   .s_axis_user(s_axis_user),
+  .s_axis_last(s_axis_last),
   .s_axis_xfer_req(s_axis_xfer_req),
 
 

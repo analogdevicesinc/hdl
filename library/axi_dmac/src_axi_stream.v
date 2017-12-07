@@ -56,6 +56,7 @@ module dmac_src_axi_stream #(
   input s_axis_valid,
   input [S_AXIS_DATA_WIDTH-1:0] s_axis_data,
   input [0:0] s_axis_user,
+  input s_axis_last,
   output s_axis_xfer_req,
 
   input fifo_ready,
@@ -65,14 +66,25 @@ module dmac_src_axi_stream #(
   input req_valid,
   output req_ready,
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
-  input req_sync_transfer_start
+  input req_sync_transfer_start,
+  input req_xlast
 );
 
 reg needs_sync = 1'b0;
+reg transfer_abort = 1'b0;
+reg req_xlast_d = 1'b0;
+
+wire [S_AXIS_DATA_WIDTH-1:0] data;
 wire sync = s_axis_user[0];
 wire has_sync = ~needs_sync | sync;
-wire sync_valid = s_axis_valid & has_sync;
+wire data_valid;
+wire data_ready;
+wire fifo_last;
+
 assign sync_id_ret = sync_id;
+assign data = transfer_abort == 1'b1 ? {S_AXIS_DATA_WIDTH{1'b0}} : s_axis_data;
+assign data_valid = (s_axis_valid & has_sync) | transfer_abort;
+assign s_axis_ready = data_ready & ~transfer_abort;
 
 always @(posedge s_axis_aclk)
 begin
@@ -87,11 +99,36 @@ begin
   end
 end
 
+/*
+ * A 'last' on the external interface indicates the end of an packet. If such a
+ * 'last' indicator is observed before the end of the current transfer stop
+ * accepting data on the external interface and complete the current transfer by
+ * writing zeros to the buffer.
+ */
+always @(posedge s_axis_aclk) begin
+  if (s_axis_aresetn == 1'b0) begin
+    transfer_abort <= 1'b0;
+  end else if (data_ready == 1'b1 && data_valid == 1'b1) begin
+    if (fifo_last == 1'b1 && req_xlast_d == 1'b1) begin
+      transfer_abort <= 1'b0;
+    end else if (s_axis_last == 1'b1) begin
+      transfer_abort <= 1'b1;
+    end
+  end
+end
+
+always @(posedge s_axis_aclk) begin
+  if(req_ready == 1'b1) begin
+    req_xlast_d <= req_xlast;
+  end
+end
+
 dmac_data_mover # (
   .ID_WIDTH(ID_WIDTH),
   .DATA_WIDTH(S_AXIS_DATA_WIDTH),
   .DISABLE_WAIT_FOR_ID(0),
-  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+  .LAST(1)
 ) i_data_mover (
   .clk(s_axis_aclk),
   .resetn(s_axis_aresetn),
@@ -110,13 +147,13 @@ dmac_data_mover # (
   .req_ready(req_ready),
   .req_last_burst_length(req_last_burst_length),
 
-  .s_axi_ready(s_axis_ready),
-  .s_axi_valid(sync_valid),
-  .s_axi_data(s_axis_data),
+  .s_axi_ready(data_ready),
+  .s_axi_valid(data_valid),
+  .s_axi_data(data),
   .m_axi_ready(fifo_ready),
   .m_axi_valid(fifo_valid),
   .m_axi_data(fifo_data),
-  .m_axi_last()
+  .m_axi_last(fifo_last)
 );
 
 endmodule
