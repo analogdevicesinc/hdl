@@ -220,7 +220,7 @@ module avl_dacfifo_rd #(
           if (avl_burstcounter < avl_burstcount) begin
             avl_read_state <= XFER_FULL_BURST;
           end else begin
-            avl_read_state <= XFER_END;
+            avl_read_state <= XFER_STAGING;
           end
         end
         // Avalon transaction with the remaining data, burst length is less than
@@ -246,6 +246,7 @@ module avl_dacfifo_rd #(
 
   assign avl_read_int_s = ((avl_read_state == XFER_FULL_BURST)    ||
                            (avl_read_state == XFER_PARTIAL_BURST)) ? 1 : 0;
+  assign avl_end_of_burst_s = (avl_burstcount == avl_burstcounter) ? 1 : 0;
 
   // Avalon address generation and read control signaling
 
@@ -253,7 +254,7 @@ module avl_dacfifo_rd #(
     if (avl_fifo_reset_s == 1'b1) begin
       avl_address <= AVL_DDR_BASE_ADDRESS;
     end else begin
-      if (avl_read_state == XFER_END) begin
+      if (avl_end_of_burst_s == 1'b1) begin
         avl_address <= (avl_address < avl_last_address) ? avl_address + (avl_burstcount * AVL_BYTE_DATA_WIDTH) : AVL_DDR_BASE_ADDRESS;
       end
     end
@@ -274,7 +275,7 @@ module avl_dacfifo_rd #(
       end else if ((avl_read == 1'b1) && (avl_waitrequest == 1'b0)) begin
         avl_read <= 1'b0;
       end
-      if (avl_read_state == XFER_END) begin
+      if (avl_end_of_burst_s == 1'b1) begin
         avl_inread <= 1'b0;
       end
     end
@@ -288,7 +289,7 @@ module avl_dacfifo_rd #(
     end else begin
       if ((avl_read_int == 1'b1) && (avl_readdatavalid == 1'b1)) begin
         avl_burstcounter <= (avl_burstcounter < avl_burstcount) ? avl_burstcounter + 1'b1 : 1'b0;
-      end else if (avl_read_state == XFER_END) begin
+      end else if (avl_end_of_burst_s == 1'b1) begin
         avl_burstcounter <= 8'b0;
       end
     end
