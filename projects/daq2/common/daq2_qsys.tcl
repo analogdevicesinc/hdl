@@ -49,7 +49,7 @@ add_connection ad9144_jesd204.link_clk avl_ad9144_fifo.if_dac_clk
 add_connection ad9144_jesd204.link_reset avl_ad9144_fifo.if_dac_rst
 add_connection util_ad9144_upack.if_dac_valid avl_ad9144_fifo.if_dac_valid
 add_connection avl_ad9144_fifo.if_dac_data util_ad9144_upack.if_dac_data
-#add_connection avl_ad9144_fifo.if_dac_dunf util_ad9144_upack.if_dac_dunf
+add_connection avl_ad9144_fifo.if_dac_dunf axi_ad9144_core.if_dac_dunf
 
 # ad9144-dma
 
