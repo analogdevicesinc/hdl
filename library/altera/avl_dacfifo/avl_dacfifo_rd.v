@@ -48,7 +48,7 @@ module avl_dacfifo_rd #(
   input                                     dac_reset,
   input                                     dac_valid,
   output  reg [(DAC_DATA_WIDTH-1):0]        dac_data,
-  output                                    dac_xfer_req,
+  output  reg                               dac_xfer_req,
   output  reg                               dac_dunf,
 
   input                                     avl_clk,
@@ -108,7 +108,6 @@ module avl_dacfifo_rd #(
   reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   avl_mem_addr_diff;
   reg         [ 4:0]                        avl_read_state;
   reg         [ 7:0]                        avl_burstcounter;
-  reg                                       avl_read_int;
   reg                                       avl_inread;
 
   reg         [AVL_MEM_ADDRESS_WIDTH-1:0]   dac_mem_waddr;
@@ -120,7 +119,7 @@ module avl_dacfifo_rd #(
   reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_addr_diff;
   reg         [ 7:0]                        dac_mem_laddr_waddr;
   reg         [ 7:0]                        dac_mem_laddr_raddr;
-
+  reg                                       dac_mem_laddr_valid;
 
   reg                                       dac_avl_xfer_req;
   reg                                       dac_avl_xfer_req_m1;
@@ -133,6 +132,7 @@ module avl_dacfifo_rd #(
   reg         [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_laddr_b;
   reg                                       dac_mem_renable;
   reg                                       dac_mem_valid;
+  reg                                       dac_xfer_req_d;
 
   // internal signals
 
@@ -152,6 +152,7 @@ module avl_dacfifo_rd #(
   wire        [DAC_DATA_WIDTH-1:0]          dac_mem_data_s;
   wire                                      dac_mem_laddr_wea_s;
   wire                                      dac_mem_laddr_rea_s;
+  wire                                      dac_mem_laddr_unf_s;
   wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   dac_mem_laddr_s;
   wire                                      dac_mem_dunf_s;
 
@@ -264,11 +265,9 @@ module avl_dacfifo_rd #(
     if (avl_reset == 1'b1) begin
       avl_read <= 1'b0;
       avl_inread <= 1'b0;
-      avl_read_int <= 1'b0;
     end else begin
-      avl_read_int <= avl_read_int_s;
       if (avl_read == 1'b0) begin
-        if ((avl_waitrequest == 1'b0) && (avl_read_int == 1'b1) && (avl_inread == 1'b0)) begin
+        if ((avl_waitrequest == 1'b0) && (avl_read_int_s == 1'b1) && (avl_inread == 1'b0)) begin
           avl_read <= 1'b1;
           avl_inread <= 1'b1;
         end
@@ -287,7 +286,7 @@ module avl_dacfifo_rd #(
     if (avl_fifo_reset_s == 1'b1) begin
       avl_burstcounter <= 8'b0;
     end else begin
-      if ((avl_read_int == 1'b1) && (avl_readdatavalid == 1'b1)) begin
+      if ((avl_read_int_s == 1'b1) && (avl_readdatavalid == 1'b1)) begin
         avl_burstcounter <= (avl_burstcounter < avl_burstcount) ? avl_burstcounter + 1'b1 : 1'b0;
       end else if (avl_end_of_burst_s == 1'b1) begin
         avl_burstcounter <= 8'b0;
@@ -420,7 +419,7 @@ module avl_dacfifo_rd #(
 
   assign dac_mem_laddr_wea_s = dac_mem_laddr_toggle_m[3] ^ dac_mem_laddr_toggle_m[2];
   assign dac_mem_laddr_rea_s = ((dac_mem_raddr == dac_mem_laddr_b) &&
-                                (dac_xfer_req == 1'b1)) ? 1'b1 :1'b0;
+                                (dac_mem_laddr_unf_s == 1'b0)) ? 1'b1 :1'b0;
 
   always @(posedge dac_clk) begin
     if (dac_fifo_reset_s == 1'b1) begin
@@ -431,7 +430,16 @@ module avl_dacfifo_rd #(
       dac_mem_laddr_raddr <= (dac_mem_laddr_rea_s == 1'b1) ? dac_mem_laddr_raddr + 1 : dac_mem_laddr_raddr;
     end
   end
+  assign dac_mem_laddr_unf_s = (dac_mem_laddr_waddr == dac_mem_laddr_raddr) ? 1'b1 : 1'b0;
 
+  always @(posedge dac_clk) begin
+    if (dac_fifo_reset_s == 1'b1) begin
+      dac_mem_laddr_valid <= 1'b0;
+    end else begin
+      if (dac_mem_laddr_wea_s == 1'b1)
+        dac_mem_laddr_valid <= 1'b1;
+    end
+  end
   ad_mem #(
     .DATA_WIDTH (DAC_MEM_ADDRESS_WIDTH),
     .ADDRESS_WIDTH (8))
@@ -450,7 +458,6 @@ module avl_dacfifo_rd #(
     .din (dac_mem_waddr_m2),
     .dout (dac_mem_waddr_g2b_s));
 
-  assign dac_xfer_req = dac_mem_renable;
   always @(posedge dac_clk) begin
     if (dac_reset == 1'b1) begin
       dac_avl_xfer_req_m2 <= 0;
@@ -477,12 +484,12 @@ module avl_dacfifo_rd #(
 
   always @(posedge dac_clk) begin
     if (dac_fifo_reset_s == 1'b1) begin
-        dac_mem_renable = 1'b0;
-        dac_mem_valid = 1'b0;
+        dac_mem_renable <= 1'b0;
+        dac_mem_valid <= 1'b0;
     end else begin
       if (dac_mem_dunf_s == 1'b1) begin
         dac_mem_renable = 1'b0;
-      end else if (dac_mem_addr_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0] >= DAC_MEM_THRESHOLD) begin
+      end else if (dac_mem_addr_diff >= DAC_MEM_THRESHOLD) begin
         dac_mem_renable = 1'b1;
       end
       dac_mem_valid <= (dac_mem_renable) ? dac_valid : 1'b0;
@@ -497,11 +504,12 @@ module avl_dacfifo_rd #(
       dac_mem_addr_diff <= 0;
       dac_mem_laddr_b <= 0;
     end else begin
-      dac_mem_laddr_b <= dac_mem_laddr_s;
+      dac_mem_laddr_b <= (!dac_mem_laddr_unf_s) ? dac_mem_laddr_s : dac_mem_laddr_b;
       dac_mem_addr_diff <= dac_mem_addr_diff_s[DAC_MEM_ADDRESS_WIDTH-1:0];
       if (dac_mem_valid) begin
         if ((dac_dma_last_beats != {MEM_WIDTH_DIFF{1'b1}}) &&
-            (dac_mem_raddr == (dac_mem_laddr_b + dac_dma_last_beats))) begin
+            (dac_mem_raddr == (dac_mem_laddr_b + dac_dma_last_beats)) &&
+            (dac_mem_laddr_valid == 1'b1)) begin
           dac_mem_raddr <= dac_mem_raddr + (MEM_RATIO - dac_dma_last_beats);
         end else begin
           dac_mem_raddr <= dac_mem_raddr + 1'b1;
@@ -519,9 +527,13 @@ module avl_dacfifo_rd #(
 
   always @(posedge dac_clk) begin
     if (dac_fifo_reset_s == 1'b1) begin
-      dac_data <= 0;
+      dac_xfer_req <= 1'b0;
+      dac_xfer_req_d <= 1'b0;
+      dac_data <= {DAC_DATA_WIDTH{1'b0}};
     end else begin
-      dac_data <= dac_mem_data_s;
+      dac_xfer_req_d <= dac_mem_renable;
+      dac_xfer_req <= dac_xfer_req_d;
+      dac_data <= (dac_xfer_req_d == 1'b1) ? dac_mem_data_s : {DAC_DATA_WIDTH{1'b0}};
     end
   end
 
