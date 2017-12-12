@@ -483,7 +483,7 @@ module avl_dacfifo_wr #(
     end else begin
       avl_dma_last_beats_m1 <= dma_last_beats;
       avl_dma_last_beats_m2 <= avl_dma_last_beats_m1;
-      avl_dma_last_beats <= (avl_write_int_s) ? avl_dma_last_beats_m2 : avl_dma_last_beats;
+      avl_dma_last_beats <= avl_dma_last_beats_m2;
     end
   end
 
