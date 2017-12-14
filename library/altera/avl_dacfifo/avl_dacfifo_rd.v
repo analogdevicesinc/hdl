@@ -194,6 +194,7 @@ module avl_dacfifo_rd #(
   always @(posedge avl_clk) begin
     if (avl_fifo_reset_s == 1'b1) begin
        avl_read_state <= IDLE;
+       avl_burstcount <= AVL_BURST_LENGTH;
     end else begin
       case (avl_read_state)
         IDLE : begin
@@ -208,8 +209,10 @@ module avl_dacfifo_rd #(
             if (avl_mem_request_data == 1'b1) begin
               if (avl_address + AVL_ARINCR <= avl_last_address) begin
                 avl_read_state <= XFER_FULL_BURST;
+                avl_burstcount <= AVL_BURST_LENGTH;
               end else begin
                 avl_read_state <= XFER_PARTIAL_BURST;
+                avl_burstcount <= avl_last_burstcount;
               end
             end
           end else begin
@@ -280,7 +283,7 @@ module avl_dacfifo_rd #(
     end
   end
 
-  // Avalon burstcount
+  // Avalon burstcounter
 
   always @(posedge avl_clk) begin
     if (avl_fifo_reset_s == 1'b1) begin
@@ -290,18 +293,6 @@ module avl_dacfifo_rd #(
         avl_burstcounter <= (avl_burstcounter < avl_burstcount) ? avl_burstcounter + 1'b1 : 1'b0;
       end else if (avl_end_of_burst_s == 1'b1) begin
         avl_burstcounter <= 8'b0;
-      end
-    end
-  end
-
-  always @(posedge avl_clk) begin
-    if (avl_fifo_reset_s) begin
-      avl_burstcount <= 'b0;
-    end else begin
-      if (avl_read_state == XFER_PARTIAL_BURST) begin
-        avl_burstcount <= avl_last_burstcount;
-      end else begin
-        avl_burstcount <= AVL_BURST_LENGTH;
       end
     end
   end
