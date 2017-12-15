@@ -41,7 +41,7 @@ module avl_dacfifo_rd #(
   parameter     DAC_DATA_WIDTH = 64,
   parameter     AVL_BURST_LENGTH = 127,
   parameter     AVL_DDR_BASE_ADDRESS = 0,
-  parameter     AVL_DDR_ADDRESS_LIMIT = 1048576,
+  parameter     AVL_DDR_ADDRESS_LIMIT = 33554432,
   parameter     DAC_MEM_ADDRESS_WIDTH = 8)(
 
   input                                     dac_clk,
@@ -84,8 +84,6 @@ module avl_dacfifo_rd #(
                                (MEM_RATIO >  4) ? 3 :
                                (MEM_RATIO >  2) ? 2 :
                                (MEM_RATIO >  1) ? 1 : 1;
-  localparam  AVL_BYTE_DATA_WIDTH = AVL_DATA_WIDTH/8;
-  localparam  AVL_ARINCR = AVL_BURST_LENGTH * AVL_BYTE_DATA_WIDTH;
 
   // FSM state definition
 
@@ -207,7 +205,7 @@ module avl_dacfifo_rd #(
         XFER_STAGING : begin
           if (avl_xfer_req_in == 1'b1) begin
             if (avl_mem_request_data == 1'b1) begin
-              if (avl_address + AVL_ARINCR <= avl_last_address) begin
+              if (avl_address + AVL_BURST_LENGTH <= avl_last_address) begin
                 avl_read_state <= XFER_FULL_BURST;
                 avl_burstcount <= AVL_BURST_LENGTH;
               end else begin
@@ -259,7 +257,7 @@ module avl_dacfifo_rd #(
       avl_address <= AVL_DDR_BASE_ADDRESS;
     end else begin
       if (avl_end_of_burst_s == 1'b1) begin
-        avl_address <= (avl_address < avl_last_address) ? avl_address + (avl_burstcount * AVL_BYTE_DATA_WIDTH) : AVL_DDR_BASE_ADDRESS;
+        avl_address <= (avl_address < avl_last_address) ? avl_address + avl_burstcount : AVL_DDR_BASE_ADDRESS;
       end
     end
   end

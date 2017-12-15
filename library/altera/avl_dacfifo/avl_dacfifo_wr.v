@@ -41,7 +41,7 @@ module avl_dacfifo_wr #(
   parameter     DMA_DATA_WIDTH = 64,
   parameter     AVL_BURST_LENGTH = 128,
   parameter     AVL_DDR_BASE_ADDRESS = 0,
-  parameter     AVL_DDR_ADDRESS_LIMIT = 1048576,
+  parameter     AVL_DDR_ADDRESS_LIMIT = 33554432,
   parameter     DMA_MEM_ADDRESS_WIDTH = 10)(
 
   input                                 dma_clk,
@@ -82,8 +82,6 @@ module avl_dacfifo_wr #(
                                (MEM_RATIO >  1) ? 1 : 1;
 
   localparam  DMA_BUF_THRESHOLD_HI = {(DMA_MEM_ADDRESS_WIDTH){1'b1}} - AVL_BURST_LENGTH;
-  localparam  DMA_BYTE_DATA_WIDTH = DMA_DATA_WIDTH/8;
-  localparam  AVL_BYTE_DATA_WIDTH = AVL_DATA_WIDTH/8;
 
   // FSM state definition
 
@@ -427,7 +425,7 @@ module avl_dacfifo_wr #(
       avl_address <= AVL_DDR_BASE_ADDRESS;
     end else begin
       if (avl_endof_burst == 1'b1) begin
-          avl_address <= (avl_address < AVL_DDR_ADDRESS_LIMIT) ? avl_address + (AVL_BURST_LENGTH * AVL_BYTE_DATA_WIDTH) : AVL_DDR_BASE_ADDRESS;
+          avl_address <= (avl_address < AVL_DDR_ADDRESS_LIMIT) ? avl_address + AVL_BURST_LENGTH : AVL_DDR_BASE_ADDRESS;
       end
     end
   end
