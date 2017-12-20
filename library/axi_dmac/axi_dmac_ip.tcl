@@ -54,7 +54,8 @@ adi_add_bus "m_axis" "master" \
 	"xilinx.com:interface:axis:1.0" \
 	[list {"m_axis_ready" "TREADY"} \
 	  {"m_axis_valid" "TVALID"} \
-	  {"m_axis_data" "TDATA"} ]
+	  {"m_axis_data" "TDATA"} \
+	  {"m_axis_last" "TLAST"} ]
 adi_add_bus_clock "m_axis_aclk" "m_axis"
 
 adi_set_bus_dependency "m_src_axi" "m_src_axi" \
