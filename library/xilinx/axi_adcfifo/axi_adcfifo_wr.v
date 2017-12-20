@@ -77,7 +77,7 @@ module axi_adcfifo_wr #(
   input                   axi_awready,
   output                  axi_wvalid,
   output      [AXI_DATA_WIDTH-1:0]  axi_wdata,
-  output      [AXI_BYTE_WIDTH-1:0]  axi_wstrb,
+  output      [AXI_DATA_WIDTH/8-1:0]  axi_wstrb,
   output                  axi_wlast,
   output      [ 3:0]      axi_wuser,
   input                   axi_wready,
@@ -93,8 +93,7 @@ module axi_adcfifo_wr #(
   output  reg             axi_dwunf,
   output  reg             axi_werror);
 
-  localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
-  localparam  AXI_AWINCR = AXI_LENGTH * AXI_BYTE_WIDTH;
+  localparam  AXI_AWINCR = AXI_LENGTH * AXI_DATA_WIDTH/8;
   localparam  BUF_THRESHOLD_LO = 8'd6;
   localparam  BUF_THRESHOLD_HI = 8'd250;
 

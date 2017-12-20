@@ -87,8 +87,7 @@ module axi_adcfifo_rd #(
   output  reg [AXI_DATA_WIDTH-1:0]  axi_ddata,
   input                   axi_dready);
 
-  localparam  AXI_BYTE_WIDTH = AXI_DATA_WIDTH/8;
-  localparam  AXI_AWINCR = AXI_LENGTH * AXI_BYTE_WIDTH;
+  localparam  AXI_AWINCR = AXI_LENGTH * AXI_DATA_WIDTH/8;
   localparam  BUF_THRESHOLD_LO = 6'd3;
   localparam  BUF_THRESHOLD_HI = 6'd60;
 
@@ -105,7 +104,7 @@ module axi_adcfifo_rd #(
 
   wire                            axi_ready_s;
 
-  // read is way too slow- buffer mode 
+  // read is way too slow- buffer mode
 
   assign axi_ready_s = (~axi_arvalid | axi_arready) & axi_dready;
 
