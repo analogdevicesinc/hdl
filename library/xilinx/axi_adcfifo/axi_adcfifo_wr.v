@@ -361,7 +361,7 @@ module axi_adcfifo_wr #(
 
   // write channel
 
-  assign axi_wstrb = {AXI_BYTE_WIDTH{1'b1}};
+  assign axi_wstrb = {(AXI_DATA_WIDTH/8){1'b1}};
   assign axi_wuser = 4'b0000;
 
   // response channel
