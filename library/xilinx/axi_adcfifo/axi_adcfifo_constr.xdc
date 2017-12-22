@@ -2,7 +2,7 @@
 set_property ASYNC_REG TRUE \
   [get_cells -hier *axi_waddr_m1_reg*] \
   [get_cells -hier *axi_waddr_m2_reg*] \
-  [get_cells -hier *adc_xfer_req_m_reg[0]*]
+  [get_cells -hier *adc_xfer_req_m_reg[0]*] \
   [get_cells -hier *axi_xfer_req_m_reg[0]*]
 
 set_false_path -from [get_cells  -hier -filter {name =~ *dma_raddr_rel_t* && IS_SEQUENTIAL}] \
