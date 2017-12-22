@@ -96,6 +96,7 @@ module axi_adcfifo_wr #(
   localparam  AXI_AWINCR = AXI_LENGTH * AXI_DATA_WIDTH/8;
   localparam  BUF_THRESHOLD_LO = 8'd6;
   localparam  BUF_THRESHOLD_HI = 8'd250;
+  localparam  BUF_ADDRESS_WIDTH = 8;
 
   // internal registers
 
@@ -104,22 +105,22 @@ module axi_adcfifo_wr #(
   reg                             adc_xfer_limit = 'd0;
   reg                             adc_xfer_enable = 'd0;
   reg     [ 31:0]                 adc_xfer_addr = 'd0;
-  reg     [  7:0]                 adc_waddr = 'd0;
-  reg     [  7:0]                 adc_waddr_g = 'd0;
+  reg     [BUF_ADDRESS_WIDTH-1:0]  adc_waddr = 'd0;
+  reg     [BUF_ADDRESS_WIDTH-1:0]  adc_waddr_g = 'd0;
   reg                             adc_rel_enable = 'd0;
   reg                             adc_rel_toggle = 'd0;
-  reg     [  7:0]                 adc_rel_waddr = 'd0;
+  reg     [BUF_ADDRESS_WIDTH-1:0]  adc_rel_waddr = 'd0;
   reg     [  2:0]                 axi_rel_toggle_m = 'd0;
-  reg     [  7:0]                 axi_rel_waddr = 'd0;
-  reg     [  7:0]                 axi_waddr_m1 = 'd0;
-  reg     [  7:0]                 axi_waddr_m2 = 'd0;
-  reg     [  7:0]                 axi_waddr = 'd0;
-  reg     [  7:0]                 axi_addr_diff = 'd0;
+  reg     [BUF_ADDRESS_WIDTH-1:0]  axi_rel_waddr = 'd0;
+  reg     [BUF_ADDRESS_WIDTH-1:0]  axi_waddr_m1 = 'd0;
+  reg     [BUF_ADDRESS_WIDTH-1:0]  axi_waddr_m2 = 'd0;
+  reg     [BUF_ADDRESS_WIDTH-1:0]  axi_waddr = 'd0;
+  reg     [BUF_ADDRESS_WIDTH-1:0]  axi_addr_diff = 'd0;
   reg                             axi_almost_full = 'd0;
   reg                             axi_almost_empty = 'd0;
   reg     [  2:0]                 axi_xfer_req_m = 'd0;
   reg                             axi_xfer_init = 'd0;
-  reg     [  7:0]                 axi_raddr = 'd0;
+  reg     [BUF_ADDRESS_WIDTH-1:0]  axi_raddr = 'd0;
   reg                             axi_rd = 'd0;
   reg                             axi_rlast = 'd0;
   reg                             axi_rd_d = 'd0;
@@ -130,14 +131,14 @@ module axi_adcfifo_wr #(
   // internal signals
 
   wire                            axi_rel_toggle_s;
-  wire    [  8:0]                 axi_addr_diff_s;
+  wire    [BUF_ADDRESS_WIDTH:0]   axi_addr_diff_s;
   wire                            axi_wready_s;
   wire                            axi_rd_s;
   wire                            axi_req_s;
   wire                            axi_rlast_s;
   wire    [AXI_DATA_WIDTH-1:0]    axi_rdata_s;
-  wire    [  7:0]                 adc_waddr_g_s;
-  wire    [  7:0]                 axi_waddr_g_s;
+  wire    [BUF_ADDRESS_WIDTH-1:0] adc_waddr_g_s;
+  wire    [BUF_ADDRESS_WIDTH-1:0] axi_waddr_g_s;
 
   // fifo interface
 
@@ -185,7 +186,7 @@ module axi_adcfifo_wr #(
   end
 
   ad_b2g # (
-    .DATA_WIDTH(8)
+    .DATA_WIDTH(BUF_ADDRESS_WIDTH)
   ) i_adc_waddr_b2g (
     .din (adc_waddr),
     .dout (adc_waddr_g_s));
@@ -213,7 +214,7 @@ module axi_adcfifo_wr #(
   end
 
   ad_g2b # (
-    .DATA_WIDTH(8)
+    .DATA_WIDTH(BUF_ADDRESS_WIDTH)
   ) i_adc_waddr_g2b (
     .din (axi_waddr_m2),
     .dout (axi_waddr_g_s));
@@ -230,7 +231,7 @@ module axi_adcfifo_wr #(
       axi_almost_empty <= 'd0;
       axi_dwovf <= 'd0;
     end else begin
-      axi_addr_diff <= axi_addr_diff_s[7:0];
+      axi_addr_diff <= axi_addr_diff_s[BUF_ADDRESS_WIDTH-1:0];
       if (axi_addr_diff > BUF_THRESHOLD_HI) begin
         axi_almost_full <= 1'b1;
         axi_dwunf <= axi_almost_empty;
@@ -379,7 +380,7 @@ module axi_adcfifo_wr #(
 
   // buffer
 
-  ad_mem #(.DATA_WIDTH(AXI_DATA_WIDTH), .ADDRESS_WIDTH(8)) i_mem (
+  ad_mem #(.DATA_WIDTH(AXI_DATA_WIDTH), .ADDRESS_WIDTH(BUF_ADDRESS_WIDTH)) i_mem (
     .clka (adc_clk),
     .wea (adc_wr),
     .addra (adc_waddr),
