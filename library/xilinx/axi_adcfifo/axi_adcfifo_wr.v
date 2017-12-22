@@ -136,42 +136,8 @@ module axi_adcfifo_wr #(
   wire                            axi_req_s;
   wire                            axi_rlast_s;
   wire    [AXI_DATA_WIDTH-1:0]    axi_rdata_s;
-
-  // binary to grey conversion
-
-  function [7:0] b2g;
-    input [7:0] b;
-    reg   [7:0] g;
-    begin
-      g[7] = b[7];
-      g[6] = b[7] ^ b[6];
-      g[5] = b[6] ^ b[5];
-      g[4] = b[5] ^ b[4];
-      g[3] = b[4] ^ b[3];
-      g[2] = b[3] ^ b[2];
-      g[1] = b[2] ^ b[1];
-      g[0] = b[1] ^ b[0];
-      b2g = g;
-    end
-  endfunction
-
-  // grey to binary conversion
-
-  function [7:0] g2b;
-    input [7:0] g;
-    reg   [7:0] b;
-    begin
-      b[7] = g[7];
-      b[6] = b[7] ^ g[6];
-      b[5] = b[6] ^ g[5];
-      b[4] = b[5] ^ g[4];
-      b[3] = b[4] ^ g[3];
-      b[2] = b[3] ^ g[2];
-      b[1] = b[2] ^ g[1];
-      b[0] = b[1] ^ g[0];
-      g2b = b;
-    end
-  endfunction
+  wire    [  7:0]                 adc_waddr_g_s;
+  wire    [  7:0]                 axi_waddr_g_s;
 
   // fifo interface
 
@@ -191,7 +157,7 @@ module axi_adcfifo_wr #(
       if ((adc_wr == 1'b1) && (adc_xfer_enable == 1'b1)) begin
         adc_waddr <= adc_waddr + 1'b1;
       end
-      adc_waddr_g <= b2g(adc_waddr);
+      adc_waddr_g <= adc_waddr_g_s;
       adc_xfer_req_m <= {adc_xfer_req_m[1:0], dma_xfer_req};
       adc_xfer_init <= adc_xfer_req_m[1] & ~adc_xfer_req_m[2];
       if (adc_xfer_init == 1'b1) begin
@@ -218,6 +184,12 @@ module axi_adcfifo_wr #(
     end
   end
 
+  ad_b2g # (
+    .DATA_WIDTH(8)
+  ) i_adc_waddr_b2g (
+    .din (adc_waddr),
+    .dout (adc_waddr_g_s));
+
   // fifo signals on axi side
 
   assign axi_rel_toggle_s = axi_rel_toggle_m[2] ^ axi_rel_toggle_m[1];
@@ -236,9 +208,15 @@ module axi_adcfifo_wr #(
       end
       axi_waddr_m1 <= adc_waddr_g;
       axi_waddr_m2 <= axi_waddr_m1;
-      axi_waddr <= g2b(axi_waddr_m2);
+      axi_waddr <= axi_waddr_g_s;
     end
   end
+
+  ad_g2b # (
+    .DATA_WIDTH(8)
+  ) i_adc_waddr_g2b (
+    .din (axi_waddr_m2),
+    .dout (axi_waddr_g_s));
 
   // overflow (no underflow possible)
 

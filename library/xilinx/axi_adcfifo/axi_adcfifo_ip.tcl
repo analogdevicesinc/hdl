@@ -5,6 +5,8 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 
 adi_ip_create axi_adcfifo
 adi_ip_files axi_adcfifo [list \
+  "$ad_hdl_dir/library/common/ad_g2b.v" \
+  "$ad_hdl_dir/library/common/ad_b2g.v" \
   "$ad_hdl_dir/library/common/ad_mem.v" \
   "$ad_hdl_dir/library/common/ad_mem_asym.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
