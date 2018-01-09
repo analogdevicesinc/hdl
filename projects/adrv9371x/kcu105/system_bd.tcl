@@ -8,7 +8,7 @@ source $ad_hdl_dir/projects/common/kcu105/kcu105_system_bd.tcl
 source $ad_hdl_dir/projects/common/kcu105/kcu105_system_mig.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
-ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT3_FREQ_HZ 150
+ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT3_FREQ_HZ 200
 
 source ../common/adrv9371x_bd.tcl
 
