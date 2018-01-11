@@ -57,7 +57,7 @@ module util_dec256sinc24b (
   reg [36:0]  diff1_d = 37'h0;
   reg [36:0]  diff2_d = 37'h0;
   reg [15:0]  word_count = 16'h0;
-  reg         word_clk = 1'b0;
+  reg         word_en = 1'b0;
   reg         enable = 1'b0;
 
   /* Perform the Sinc action */
@@ -88,6 +88,7 @@ module util_dec256sinc24b (
   end
 
   /* decimation stage (MCLKOUT/WORD_CLK) */
+
   always @(posedge clk) begin
     if (reset == 1'b1) begin
       word_count <= 16'd0;
@@ -101,20 +102,20 @@ module util_dec256sinc24b (
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin
-      word_clk <= 1'b0;
+      word_en <= 1'b0;
     end else begin
       if (word_count == (dec_rate/2 - 1))
-        word_clk <= 1'b1;
-      else if (word_count == (dec_rate - 1))
-        word_clk <= 1'b0;
+        word_en <= 1'b1;
+      else
+        word_en <= 1'b0;
     end
   end
 
   /* Differentiator (including decimation stage)
    * Perform the differentiation stage (FIR) at a lower speed.
-   * Z = one sample delay WORD_CLK = output word rate */
+   * Z = one sample delay WORD_EN = output word rate */
 
-  always @(posedge word_clk) begin
+  always @(posedge clk) begin
     if (reset == 1'b1) begin
       acc3_d <= 37'd0;
       diff1_d <= 37'd0;
@@ -122,7 +123,7 @@ module util_dec256sinc24b (
       diff1   <= 37'd0;
       diff2   <= 37'd0;
       diff3   <= 37'd0;
-    end else begin
+    end else if (word_en == 1'b1) begin
       diff1   <= acc3 - acc3_d;
       diff2   <= diff1 - diff1_d;
       diff3   <= diff2 - diff2_d;
@@ -133,47 +134,49 @@ module util_dec256sinc24b (
   end
 
   /* Clock the Sinc output into an output register
-   * WORD_CLK = output word rate */
+   * WORD_EN = output word rate */
 
-  always @(posedge word_clk) begin
-    case (dec_rate)
+  always @(posedge clk) begin
+    if (word_en == 1'b1) begin
+      case (dec_rate)
 
-      16'd32: begin
-        data_out <= (diff3[15:0] == 16'h8000) ? 16'hFFFF : {diff3[14:0], 1'b0};
-      end
+        16'd32: begin
+          data_out <= (diff3[15:0] == 16'h8000) ? 16'hFFFF : {diff3[14:0], 1'b0};
+        end
 
-      16'd64: begin
-        data_out <= (diff3[18:2] == 17'h10000) ? 16'hFFFF : diff3[17:2];
-      end
+        16'd64: begin
+          data_out <= (diff3[18:2] == 17'h10000) ? 16'hFFFF : diff3[17:2];
+        end
 
-      16'd128: begin
-        data_out <= (diff3[21:5] == 17'h10000) ? 16'hFFFF : diff3[20:5];
-      end
+        16'd128: begin
+          data_out <= (diff3[21:5] == 17'h10000) ? 16'hFFFF : diff3[20:5];
+        end
 
-      16'd256: begin
-        data_out <= (diff3[24:8] == 17'h10000) ? 16'hFFFF : diff3[23:8];
-      end
+        16'd256: begin
+          data_out <= (diff3[24:8] == 17'h10000) ? 16'hFFFF : diff3[23:8];
+        end
 
-      16'd512: begin
-        data_out <= (diff3[27:11] == 17'h10000) ? 16'hFFFF : diff3[26:11];
-      end
+        16'd512: begin
+          data_out <= (diff3[27:11] == 17'h10000) ? 16'hFFFF : diff3[26:11];
+        end
 
-      16'd1024: begin
-        data_out <= (diff3[30:14] == 17'h10000) ? 16'hFFFF : diff3[29:14];
-      end
+        16'd1024: begin
+          data_out <= (diff3[30:14] == 17'h10000) ? 16'hFFFF : diff3[29:14];
+        end
 
-      16'd2048: begin
-        data_out <= (diff3[33:17] == 17'h10000) ? 16'hFFFF : diff3[32:17];
-      end
+        16'd2048: begin
+          data_out <= (diff3[33:17] == 17'h10000) ? 16'hFFFF : diff3[32:17];
+        end
 
-      16'd4096: begin
-        data_out <= (diff3[36:20] == 17'h10000) ? 16'hFFFF : diff3[35:20];
-      end
+        16'd4096: begin
+          data_out <= (diff3[36:20] == 17'h10000) ? 16'hFFFF : diff3[35:20];
+        end
 
-      default:begin
-        data_out <= (diff3[24:8] == 17'h10000) ? 16'hFFFF : diff3[23:8];
-      end
-    endcase
+        default:begin
+          data_out <= (diff3[24:8] == 17'h10000) ? 16'hFFFF : diff3[23:8];
+        end
+      endcase
+    end
   end
 
   /* Synchronize Data Output */
