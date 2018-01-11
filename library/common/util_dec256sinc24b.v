@@ -74,7 +74,7 @@ module util_dec256sinc24b (
    * bit rate */
 
   always @(negedge clk) begin
-    if (reset == 1'b0) begin
+    if (reset == 1'b1) begin
       /* initialize acc registers on reset */
       acc1 <= 37'd0;
       acc2 <= 37'd0;
@@ -100,7 +100,7 @@ module util_dec256sinc24b (
   end
 
   always @(posedge clk) begin
-    if (reset == 1'b0) begin
+    if (reset == 1'b1) begin
       word_clk <= 1'b0;
     end else begin
       if (word_count == (dec_rate/2 - 1))
