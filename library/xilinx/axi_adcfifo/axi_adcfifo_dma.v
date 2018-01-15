@@ -71,7 +71,6 @@ module axi_adcfifo_dma #(
   reg     [  2:0]                 axi_raddr_rel_t_m = 'd0;
   reg     [DMA_ADDRESS_WIDTH-1:0]    axi_raddr_rel = 'd0;
   reg     [DMA_ADDRESS_WIDTH-1:0]    axi_addr_diff = 'd0;
-  reg                             dma_rst = 'd0;
   reg     [  2:0]                 dma_waddr_rel_t_m = 'd0;
   reg     [AXI_ADDRESS_WIDTH-1:0]    dma_waddr_rel = 'd0;
   reg                             dma_rd = 'd0;
@@ -146,11 +145,9 @@ module axi_adcfifo_dma #(
 
   always @(posedge dma_clk) begin
     if (dma_xfer_req == 1'b0) begin
-      dma_rst <= 1'b1;
       dma_waddr_rel_t_m <= 'd0;
       dma_waddr_rel <= 'd0;
     end else begin
-      dma_rst <= 1'b0;
       dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], axi_waddr_rel_t};
       if (dma_waddr_rel_t_s == 1'b1) begin
         dma_waddr_rel <= axi_waddr_rel;
@@ -203,7 +200,7 @@ module axi_adcfifo_dma #(
 
   ad_axis_inf_rx #(.DATA_WIDTH(DMA_DATA_WIDTH)) i_axis_inf (
     .clk (dma_clk),
-    .rst (dma_rst),
+    .rst (~dma_xfer_req),
     .valid (dma_rd_d),
     .last (1'd0),
     .data (dma_rdata_d),
@@ -213,7 +210,7 @@ module axi_adcfifo_dma #(
     .inf_ready (dma_wready));
 
   up_xfer_status #(.DATA_WIDTH(4)) i_xfer_status (
-    .up_rstn (~dma_rst),
+    .up_rstn (dma_xfer_req),
     .up_clk (dma_clk),
     .up_data_status (dma_xfer_status),
     .d_rst (axi_drst),
