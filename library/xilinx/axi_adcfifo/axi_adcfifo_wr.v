@@ -96,7 +96,7 @@ module axi_adcfifo_wr #(
   localparam  AXI_AWINCR = AXI_LENGTH * AXI_DATA_WIDTH/8;
   localparam  BUF_THRESHOLD_LO = 8'd6;
   localparam  BUF_THRESHOLD_HI = 8'd250;
-  localparam  BUF_ADDRESS_WIDTH = 8;
+  localparam  BUF_ADDRESS_WIDTH = 3;
 
   // internal registers
 

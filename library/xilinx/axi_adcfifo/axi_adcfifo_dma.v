@@ -57,7 +57,7 @@ module axi_adcfifo_dma #(
 
 
   localparam  DMA_MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;
-  localparam  DMA_ADDRESS_WIDTH = 8;
+  localparam  DMA_ADDRESS_WIDTH = 4;
   localparam  AXI_ADDRESS_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
     ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) : (DMA_ADDRESS_WIDTH - 3));
  
