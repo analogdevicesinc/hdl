@@ -37,7 +37,7 @@
 
 module axi_adcfifo_adc #(
 
-  parameter   ADC_DATA_WIDTH = 128,
+  parameter   ADC_DATA_WIDTH = 64,
   parameter   AXI_DATA_WIDTH = 512) (
 
   // fifo interface
@@ -82,29 +82,9 @@ module axi_adcfifo_adc #(
                  (ADC_MEM_RATIO == 1) ? adc_wr : 'd0;
       if (adc_wr == 1'b1) begin
         adc_wcnt_int <= adc_wcnt_int + 1'b1;
-        case (ADC_MEM_RATIO)
-          8: begin
-            adc_ddata[((ADC_DATA_WIDTH*8)-1):(ADC_DATA_WIDTH*7)] <= adc_wdata;
-            adc_ddata[((ADC_DATA_WIDTH*7)-1):(ADC_DATA_WIDTH*0)] <=
-              adc_ddata[((ADC_DATA_WIDTH*8)-1):(ADC_DATA_WIDTH*1)];
-          end
-          4: begin
-            adc_ddata[((ADC_DATA_WIDTH*4)-1):(ADC_DATA_WIDTH*3)] <= adc_wdata;
-            adc_ddata[((ADC_DATA_WIDTH*3)-1):(ADC_DATA_WIDTH*0)] <=
-              adc_ddata[((ADC_DATA_WIDTH*4)-1):(ADC_DATA_WIDTH*1)];
-          end
-          2: begin
-            adc_ddata[((ADC_DATA_WIDTH*2)-1):(ADC_DATA_WIDTH*1)] <= adc_wdata;
-            adc_ddata[((ADC_DATA_WIDTH*1)-1):(ADC_DATA_WIDTH*0)] <=
-              adc_ddata[((ADC_DATA_WIDTH*2)-1):(ADC_DATA_WIDTH*1)];
-          end
-          1: begin
-            adc_ddata <= adc_wdata;
-          end
-          default: begin
-            adc_ddata <= 'd0;
-          end
-        endcase
+        adc_ddata[((ADC_DATA_WIDTH*ADC_MEM_RATIO)-1):(ADC_DATA_WIDTH*(ADC_MEM_RATIO-1))] <= adc_wdata;
+        adc_ddata[((ADC_DATA_WIDTH*(ADC_MEM_RATIO-1))-1):(ADC_DATA_WIDTH*0)] <=
+              adc_ddata[((ADC_DATA_WIDTH*ADC_MEM_RATIO)-1):(ADC_DATA_WIDTH*1)];
       end
     end
   end
