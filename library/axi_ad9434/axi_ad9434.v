@@ -38,7 +38,7 @@
 module axi_ad9434 #(
 
   parameter ID = 0,
-  parameter DEVICE_TYPE = SERIES7,
+  parameter DEVICE_TYPE = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // physical interface
@@ -81,9 +81,6 @@ module axi_ad9434 #(
   input                   s_axi_rready,
   input       [ 2:0]      s_axi_awprot,
   input       [ 2:0]      s_axi_arprot);
-
-  localparam SERIES7 = 0;
-  localparam SERIES6 = 1;
 
 
   // internal clocks & resets
