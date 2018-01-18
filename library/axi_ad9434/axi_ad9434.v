@@ -38,7 +38,7 @@
 module axi_ad9434 #(
 
   parameter ID = 0,
-  parameter DEVICE_TYPE = 0,
+  parameter DEVICE_TYPE = 0, // Xilinx 7 Series
   parameter IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // physical interface
