@@ -38,6 +38,8 @@
 module axi_ad9434 #(
 
   parameter ID = 0,
+  
+  // set to 0 for Xilinx 7 Series or 1 for 6 Series
   parameter DEVICE_TYPE = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group") (
 
