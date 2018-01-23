@@ -94,7 +94,7 @@ module ad_mmcm_drp #(
 
   // drp read and locked
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_drp_rdata <= 'd0;
       up_drp_ready <= 'd0;

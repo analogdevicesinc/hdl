@@ -110,7 +110,7 @@ module up_axi #(
   assign up_axi_bvalid = up_axi_bvalid_int;
   assign up_axi_bresp = 2'd0;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_axi_awready_int <= 'd0;
       up_axi_wready_int <= 'd0;
@@ -139,7 +139,7 @@ module up_axi #(
   assign up_wdata = up_wdata_int;
   assign up_wack_s = (up_wcount == 5'h1f) ? 1'b1 : (up_wcount[4] & up_wack);
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_wack_d <= 'd0;
       up_wsel <= 'd0;
@@ -179,7 +179,7 @@ module up_axi #(
   assign up_axi_rdata = up_axi_rdata_int;
   assign up_axi_rresp = 2'd0;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_axi_arready_int <= 'd0;
       up_axi_rvalid_int <= 'd0;
@@ -205,7 +205,7 @@ module up_axi #(
   assign up_rack_s = (up_rcount == 5'h1f) ? 1'b1 : (up_rcount[4] & up_rack);
   assign up_rdata_s = (up_rcount == 5'h1f) ? {2{16'hdead}} : up_rdata;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_rack_d <= 'd0;
       up_rdata_d <= 'd0;

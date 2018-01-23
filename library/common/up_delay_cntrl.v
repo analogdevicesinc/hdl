@@ -70,7 +70,7 @@ module up_delay_cntrl #(
   output                          up_rack);
 
   // internal registers
-  
+
   reg                             up_preset = 'd0;
   reg                             up_wack_int = 'd0;
   reg                             up_rack_int = 'd0;
@@ -128,7 +128,7 @@ module up_delay_cntrl #(
   assign up_rack = (DISABLE == 1) ? 1'd0 : up_rack_int;
   assign up_rdata = (DISABLE == 1) ? 32'd0 : up_rdata_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_preset <= 1'd1;
       up_wack_int <= 'd0;
@@ -167,7 +167,7 @@ module up_delay_cntrl #(
   end
   endgenerate
 
-  // write does not hold- read back what goes into effect. 
+  // write does not hold- read back what goes into effect.
 
   generate
   for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_dwr
@@ -180,7 +180,7 @@ module up_delay_cntrl #(
   assign up_dld = (DISABLE == 1) ? 'd0 : up_dld_int;
   assign up_dwdata = (DISABLE == 1) ? 'd0 : up_dwdata_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dld_int <= 'd0;
       up_dwdata_int <= 'd0;

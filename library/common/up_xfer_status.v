@@ -104,7 +104,7 @@ module up_xfer_status #(
   assign up_data_status = up_data_status_int;
   assign up_xfer_toggle_s = up_xfer_toggle_m3 ^ up_xfer_toggle_m2;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_xfer_toggle_m1 <= 'd0;
       up_xfer_toggle_m2 <= 'd0;
