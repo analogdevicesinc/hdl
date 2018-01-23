@@ -109,6 +109,8 @@ module axi_ad9434_core #(
   wire    [31:0]  up_rdata_s[0:2];
   wire            up_rack_s[0:2];
 
+  wire    [ 3:0]  dma_dvalid_s;
+
   // instantiations
   axi_ad9434_pnmon i_pnmon (
     .adc_clk (adc_clk),
@@ -126,13 +128,14 @@ module axi_ad9434_core #(
     .clk (adc_clk),
     .valid (1'b1),
     .data (adc_data[n*12+11:n*12]),
-    .valid_out (dma_dvalid),
+    .valid_out (dma_dvalid_s[n]),
     .data_out (dma_data[n*16+15:n*16]),
     .dfmt_enable (adc_dfmt_enable_s),
     .dfmt_type (adc_dfmt_type_s),
     .dfmt_se (adc_dfmt_se_s));
   end
   endgenerate
+  assign dma_dvalid = |(dma_dvalid_s);
 
   // processor read interface
 
