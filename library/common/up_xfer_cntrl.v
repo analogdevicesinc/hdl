@@ -77,7 +77,7 @@ module up_xfer_cntrl #(
   assign up_xfer_done = up_xfer_done_int;
   assign up_xfer_enable_s = up_xfer_state ^ up_xfer_toggle;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_xfer_state_m1 <= 'd0;
       up_xfer_state_m2 <= 'd0;

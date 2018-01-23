@@ -163,7 +163,7 @@ module up_adc_common #(
   assign up_wack = up_wack_int;
   assign up_adc_ce = up_adc_clk_enb_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_clk_enb_int <= 1'd1;
       up_core_preset <= 1'd1;
@@ -228,7 +228,7 @@ module up_adc_common #(
     up_drp_rdata_hold <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_drp_sel_int <= 'd0;
       up_drp_wr_int <= 'd0;
@@ -265,7 +265,7 @@ module up_adc_common #(
   end
   endgenerate
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_status_ovf <= 'd0;
       up_status_unf <= 'd0;
@@ -291,7 +291,7 @@ module up_adc_common #(
     up_usr_chanmax_int <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_usr_chanmax_int <= 'd0;
     end else begin
@@ -311,7 +311,7 @@ module up_adc_common #(
     up_adc_gpio_out_int <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_gpio_out_int <= 'd0;
     end else begin
@@ -329,7 +329,7 @@ module up_adc_common #(
     up_adc_start_code <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_start_code <= 'd0;
     end else begin
@@ -343,7 +343,7 @@ module up_adc_common #(
 
   // timer with premature termination
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_timer <= 32'd0;
     end else begin
@@ -360,7 +360,7 @@ module up_adc_common #(
   assign up_rack = up_rack_int;
   assign up_rdata = up_rdata_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack_int <= 'd0;
       up_rdata_int <= 'd0;

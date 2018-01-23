@@ -179,7 +179,7 @@ module up_adc_channel #(
 
   assign up_wack = up_wack_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack_int <= 'd0;
       up_adc_lb_enb <= 'd0;
@@ -199,7 +199,7 @@ module up_adc_channel #(
     up_adc_iqcor_enb <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_iqcor_enb <= 'd0;
     end else begin
@@ -217,7 +217,7 @@ module up_adc_channel #(
     up_adc_dcfilt_enb <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_dcfilt_enb <= 'd0;
     end else begin
@@ -237,7 +237,7 @@ module up_adc_channel #(
     up_adc_dfmt_enable <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_dfmt_se <= 'd0;
       up_adc_dfmt_type <= 'd0;
@@ -253,7 +253,7 @@ module up_adc_channel #(
   end
   endgenerate
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_pn_type <= 'd0;
       up_adc_enable <= 'd0;
@@ -290,7 +290,7 @@ module up_adc_channel #(
     up_adc_dcfilt_coeff <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_dcfilt_offset <= 'd0;
       up_adc_dcfilt_coeff <= 'd0;
@@ -311,7 +311,7 @@ module up_adc_channel #(
     up_adc_iqcor_coeff_2 <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_iqcor_coeff_1 <= 'd0;
       up_adc_iqcor_coeff_2 <= 'd0;
@@ -325,7 +325,7 @@ module up_adc_channel #(
   end
   endgenerate
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_pnseq_sel <= 'd0;
       up_adc_data_sel <= 'd0;
@@ -349,7 +349,7 @@ module up_adc_channel #(
     up_usr_decimation_n_int <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_usr_datatype_be_int <= 'd0;
       up_usr_datatype_signed_int <= 'd0;
@@ -380,7 +380,7 @@ module up_adc_channel #(
   assign up_rack = up_rack_int;
   assign up_rdata = up_rdata_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack_int <= 'd0;
       up_rdata_int <= 'd0;
@@ -410,7 +410,7 @@ module up_adc_channel #(
 
   // change coefficients to 2's complements
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_iqcor_coeff_tc_1 <= 16'd0;
       up_adc_iqcor_coeff_tc_2 <= 16'd0;
@@ -422,7 +422,7 @@ module up_adc_channel #(
 
   // data/pn sources
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_adc_pnseq_sel_m <= 4'd0;
       up_adc_data_sel_m <= 4'd0;
