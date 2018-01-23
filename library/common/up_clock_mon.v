@@ -72,7 +72,7 @@ module up_clock_mon #(
   // Capture on the falling edge of running
   assign up_count_capture_s = up_count_running_m3 == 1'b1 && up_count_running_m2 == 1'b0;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_count_running_m1 <= 1'b0;
       up_count_running_m2 <= 1'b0;
@@ -84,7 +84,7 @@ module up_clock_mon #(
     end
   end
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_d_count <= 'd0;
       up_count_run <= 1'b0;
