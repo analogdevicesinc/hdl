@@ -155,7 +155,6 @@ module axi_ad9434_core #(
     .ID(ID))
   i_adc_common(
     .mmcm_rst (mmcm_rst),
-
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_r1_mode (),
@@ -169,12 +168,13 @@ module axi_ad9434_core #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
-
+    .up_pps_rcounter (32'd0),
+    .up_pps_status (1'd0),
+    .up_pps_irq_mask (),
     .up_adc_ce (),
     .up_status_pn_err (up_status_pn_err_s),
     .up_status_pn_oos (up_status_pn_oos_s),
     .up_status_or (up_status_or_s),
-
     .up_drp_sel (up_drp_sel),
     .up_drp_wr (up_drp_wr),
     .up_drp_addr (up_drp_addr),
@@ -182,12 +182,10 @@ module axi_ad9434_core #(
     .up_drp_rdata (up_drp_rdata),
     .up_drp_ready (up_drp_ready),
     .up_drp_locked (up_drp_locked),
-
     .up_usr_chanmax_out (),
     .up_usr_chanmax_in (8'd0),
     .up_adc_gpio_in (32'd0),
     .up_adc_gpio_out (),
-
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),
