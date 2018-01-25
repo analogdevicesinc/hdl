@@ -43,57 +43,53 @@ module ad_csc_1_mul #(
 
   // data_a is signed
 
-  input                   clk,
-  input       [16:0]      data_a,
-  input       [ 7:0]      data_b,
-  output      [24:0]      data_p,
+  input                             clk,
+  input   [16:0]                    data_a,
+  input   [ 7:0]                    data_b,
+  output  [24:0]                    data_p,
 
   // delay match
 
-  input       [DW:0]      ddata_in,
-  output  reg [DW:0]      ddata_out);
-
-  localparam  DW = DELAY_DATA_WIDTH - 1;
+  input   [(DELAY_DATA_WIDTH-1):0]  ddata_in,
+  output  [(DELAY_DATA_WIDTH-1):0]  ddata_out);
 
   // internal registers
 
-  reg     [DW:0]  p1_ddata = 'd0;
-  reg     [DW:0]  p2_ddata = 'd0;
-  reg             p1_sign = 'd0;
-  reg             p2_sign = 'd0;
-  reg             sign_p = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  p1_ddata = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  p2_ddata = 'd0;
+  reg     [(DELAY_DATA_WIDTH-1):0]  p3_ddata = 'd0;
+  reg                               p1_sign = 'd0;
+  reg                               p2_sign = 'd0;
+  reg                               p3_sign = 'd0;
 
   // internal signals
 
-  wire    [25:0]  data_p_s;
+  wire    [33:0]                    p3_data_s;
 
   // a/b reg, m-reg, p-reg delay match
 
   always @(posedge clk) begin
     p1_ddata <= ddata_in;
     p2_ddata <= p1_ddata;
-    ddata_out <= p2_ddata;
+    p3_ddata <= p2_ddata;
   end
 
   always @(posedge clk) begin
     p1_sign <= data_a[16];
     p2_sign <= p1_sign;
-    sign_p <= p2_sign;
+    p3_sign <= p2_sign;
   end
 
-  assign data_p = {sign_p, data_p_s[23:0]};
+  assign ddata_out = p3_ddata;
+  assign data_p = {p3_sign, p3_data_s[23:0]};
 
-  MULT_MACRO #(
-    .LATENCY (3),
-    .WIDTH_A (17),
-    .WIDTH_B (9))
-  i_mult_macro (
-    .CE (1'b1),
-    .RST (1'b0),
-    .CLK (clk),
-    .A ({1'b0, data_a[15:0]}),
-    .B ({1'b0, data_b}),
-    .P (data_p_s));
+  ad_mul ad_mul_1 (
+  .clk(clk),
+  .data_a({1'b0, data_a[15:0]}),
+  .data_b({9'b0, data_b}),
+  .data_p(p3_data_s),
+  .ddata_in(16'h0),
+  .ddata_out());
 
 endmodule
 
