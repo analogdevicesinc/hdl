@@ -61,12 +61,15 @@ set_instance_parameter_value sys_hps {I2C1_PinMuxing} {HPS I/O Set 0}
 set_instance_parameter_value sys_hps {I2C1_Mode} {I2C}
 set_instance_parameter_value sys_hps {I2C2_PinMuxing} {FPGA}
 set_instance_parameter_value sys_hps {I2C2_Mode} {Full}
+set_instance_parameter_value sys_hps {I2C3_Mode} {Full}
+set_instance_parameter_value sys_hps {I2C3_PinMuxing} {FPGA}
 set_instance_parameter_value sys_hps {GPIO_Enable} $hps_gpio_list
 set_instance_parameter_value sys_hps {desired_cfg_clk_mhz} {80.0}
 set_instance_parameter_value sys_hps {S2FCLK_USER0CLK_Enable} {0}
 set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_Enable} {0}
+set_instance_parameter_value sys_hps {S2FCLK_USER2CLK_Enable} {1}
 set_instance_parameter_value sys_hps {S2FCLK_USER1CLK_FREQ} {100.0}
-set_instance_parameter_value sys_hps {S2FCLK_USER2CLK_FREQ} {100.0}
+set_instance_parameter_value sys_hps {S2FCLK_USER2CLK_FREQ} {133.3}
 set_instance_parameter_value sys_hps {HPS_PROTOCOL} {DDR3}
 set_instance_parameter_value sys_hps {MEM_CLK_FREQ} {400.0}
 set_instance_parameter_value sys_hps {REF_CLK_FREQ} {25.0}
@@ -228,6 +231,123 @@ add_connection sys_clk.clk_reset sys_gpio_arduino.reset
 add_interface sys_gpio_arduino conduit end
 set_interface_property sys_gpio_arduino EXPORT_OF sys_gpio_arduino.external_connection
 
+# HDMI
+
+add_instance axi_hdmi_tx_0 axi_hdmi_tx 1.0
+set_instance_parameter_value axi_hdmi_tx_0 {CR_CB_N} {0}
+set_instance_parameter_value axi_hdmi_tx_0 {DEVICE_TYPE} {16}
+set_instance_parameter_value axi_hdmi_tx_0 {EMBEDDED_SYNC} {0}
+set_instance_parameter_value axi_hdmi_tx_0 {ID} {0}
+
+add_instance pixel_clk_pll altera_pll 17.0
+set_instance_parameter_value pixel_clk_pll {gui_operation_mode} {direct}
+set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {108.0}
+set_instance_parameter_value pixel_clk_pll {gui_phase_shift0} {0}
+set_instance_parameter_value pixel_clk_pll {gui_phase_shift_deg0} {0.0}
+set_instance_parameter_value pixel_clk_pll {gui_phout_division} {1}
+set_instance_parameter_value pixel_clk_pll {gui_pll_auto_reset} {Off}
+set_instance_parameter_value pixel_clk_pll {gui_pll_bandwidth_preset} {Auto}
+set_instance_parameter_value pixel_clk_pll {gui_pll_cascading_mode} {Create an adjpllin signal to connect with an upstream PLL}
+set_instance_parameter_value pixel_clk_pll {gui_pll_mode} {Integer-N PLL}
+set_instance_parameter_value pixel_clk_pll {gui_ps_units0} {ps}
+set_instance_parameter_value pixel_clk_pll {gui_refclk1_frequency} {100.0}
+set_instance_parameter_value pixel_clk_pll {gui_refclk_switch} {0}
+set_instance_parameter_value pixel_clk_pll {gui_reference_clock_frequency} {50.0}
+set_instance_parameter_value pixel_clk_pll {gui_switchover_delay} {0}
+set_instance_parameter_value pixel_clk_pll {gui_en_reconf} {1}
+
+add_instance pixel_clk_pll_reconfig altera_pll_reconfig 17.0
+set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_BYTEENABLE} {0}
+set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_MIF} {0}
+set_instance_parameter_value pixel_clk_pll_reconfig {MIF_FILE_NAME} {}
+
+add_instance video_dmac axi_dmac 1.0
+set_instance_parameter_value video_dmac {ASYNC_CLK_DEST_REQ_MANUAL} {1}
+set_instance_parameter_value video_dmac {ASYNC_CLK_REQ_SRC_MANUAL} {1}
+set_instance_parameter_value video_dmac {ASYNC_CLK_SRC_DEST_MANUAL} {1}
+set_instance_parameter_value video_dmac {AUTO_ASYNC_CLK} {1}
+set_instance_parameter_value video_dmac {AXI_SLICE_DEST} {0}
+set_instance_parameter_value video_dmac {AXI_SLICE_SRC} {0}
+set_instance_parameter_value video_dmac {CYCLIC} {1}
+set_instance_parameter_value video_dmac {DMA_2D_TRANSFER} {1}
+set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_DEST} {64}
+set_instance_parameter_value video_dmac {DMA_DATA_WIDTH_SRC} {64}
+set_instance_parameter_value video_dmac {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value video_dmac {DMA_TYPE_DEST} {1}
+set_instance_parameter_value video_dmac {DMA_TYPE_SRC} {0}
+set_instance_parameter_value video_dmac {FIFO_SIZE} {4}
+set_instance_parameter_value video_dmac {ID} {0}
+set_instance_parameter_value video_dmac {SYNC_TRANSFER_START} {0}
+
+add_interface axi_dmac_0_if_m_axis_data conduit end
+set_interface_property axi_dmac_0_if_m_axis_data EXPORT_OF video_dmac.if_m_axis_data
+add_interface axi_dmac_0_if_m_axis_ready conduit end
+set_interface_property axi_dmac_0_if_m_axis_ready EXPORT_OF video_dmac.if_m_axis_ready
+add_interface axi_dmac_0_if_m_axis_valid conduit end
+set_interface_property axi_dmac_0_if_m_axis_valid EXPORT_OF video_dmac.if_m_axis_valid
+add_interface axi_hdmi_tx_0_hdmi_if conduit end
+set_interface_property axi_hdmi_tx_0_hdmi_if EXPORT_OF axi_hdmi_tx_0.hdmi_if
+add_interface axi_hdmi_tx_0_if_vdma_fs conduit end
+set_interface_property axi_hdmi_tx_0_if_vdma_fs EXPORT_OF axi_hdmi_tx_0.if_vdma_fs
+add_interface axi_hdmi_tx_0_if_vdma_fs_ret conduit end
+set_interface_property axi_hdmi_tx_0_if_vdma_fs_ret EXPORT_OF axi_hdmi_tx_0.if_vdma_fs_ret
+add_interface axi_hdmi_tx_0_vdma_if avalon_streaming sink
+set_interface_property axi_hdmi_tx_0_vdma_if EXPORT_OF axi_hdmi_tx_0.vdma_if
+
+add_connection pixel_clk_pll.outclk0 axi_hdmi_tx_0.hdmi_clock
+
+add_connection pixel_clk_pll.reconfig_from_pll pixel_clk_pll_reconfig.reconfig_from_pll
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPort {}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll endPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPort {}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll startPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_from_pll/pixel_clk_pll_reconfig.reconfig_from_pll width {0}
+
+add_connection pixel_clk_pll.reconfig_to_pll pixel_clk_pll_reconfig.reconfig_to_pll
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPort {}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll endPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPort {}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll startPortLSB {0}
+set_connection_parameter_value pixel_clk_pll.reconfig_to_pll/pixel_clk_pll_reconfig.reconfig_to_pll width {0}
+
+add_connection sys_clk.clk axi_hdmi_tx_0.s_axi_clock
+
+add_connection sys_clk.clk pixel_clk_pll.refclk
+
+add_connection sys_clk.clk pixel_clk_pll_reconfig.mgmt_clk
+
+add_connection sys_clk.clk video_dmac.s_axi_clock
+
+add_connection sys_clk.clk_reset axi_hdmi_tx_0.s_axi_reset
+
+add_connection sys_clk.clk_reset pixel_clk_pll.reset
+
+add_connection sys_clk.clk_reset pixel_clk_pll_reconfig.mgmt_reset
+
+add_connection sys_clk.clk_reset video_dmac.m_src_axi_reset
+
+add_connection sys_clk.clk_reset video_dmac.s_axi_reset
+
+add_connection sys_hps.h2f_user2_clock axi_hdmi_tx_0.vdma_clock
+
+add_connection sys_hps.h2f_user2_clock sys_hps.f2h_axi_clock
+
+add_connection sys_hps.h2f_user2_clock video_dmac.if_m_axis_aclk
+
+add_connection sys_hps.h2f_user2_clock video_dmac.m_src_axi_clock
+
+add_connection video_dmac.m_src_axi sys_hps.f2h_axi_slave
+set_connection_parameter_value video_dmac.m_src_axi/sys_hps.f2h_axi_slave arbitrationPriority {1}
+set_connection_parameter_value video_dmac.m_src_axi/sys_hps.f2h_axi_slave baseAddress {0x0000}
+set_connection_parameter_value video_dmac.m_src_axi/sys_hps.f2h_axi_slave defaultConnection {0}
+
+add_interface sys_hps_i2c3 conduit end
+set_interface_property sys_hps_i2c3 EXPORT_OF sys_hps.i2c3
+add_interface sys_hps_i2c3_clk clock source
+set_interface_property sys_hps_i2c3_clk EXPORT_OF sys_hps.i2c3_clk
+add_interface sys_hps_i2c3_scl_in clock sink
+set_interface_property sys_hps_i2c3_scl_in EXPORT_OF sys_hps.i2c3_scl_in
+
 # io-interrupts
 
 add_instance sys_hps_irq altera_irq_bridge
@@ -247,6 +367,7 @@ ad_cpu_interrupt 3 sys_gpio_1_0.irq
 ad_cpu_interrupt 4 sys_gpio_1_1.irq
 ad_cpu_interrupt 5 sys_gpio_arduino.irq
 ad_cpu_interrupt 6 sys_hps_irq.sender0_irq
+ad_cpu_interrupt 7 video_dmac.interrupt_sender 
 
 # cpu interconnects
 
@@ -257,4 +378,6 @@ ad_cpu_interconnect 0x00010200 sys_gpio_0_1.s1
 ad_cpu_interconnect 0x00010300 sys_gpio_1_0.s1
 ad_cpu_interconnect 0x00010400 sys_gpio_1_1.s1
 ad_cpu_interconnect 0x00010500 sys_gpio_arduino.s1
+ad_cpu_interconnect 0x00080000 video_dmac.s_axi
+ad_cpu_interconnect 0x00090000 axi_hdmi_tx_0.s_axi
 

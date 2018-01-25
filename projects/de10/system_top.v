@@ -111,7 +111,7 @@ module system_top (
   inout             adxl345_int,
 
   // ltc connector iic/spi interface
- 
+
   inout             ltc_i2c_spi_sel,
   inout             ltc_i2c_scl,
   inout             ltc_i2c_sda,
@@ -119,6 +119,19 @@ module system_top (
   output            ltc_spi_clk,
   output            ltc_spi_mosi,
   input             ltc_spi_miso,
+
+  output            hdmi_out_clk,
+  output            hdmi_vsync,
+  output            hdmi_hsync,
+  output            hdmi_data_e,
+  output  [ 23:0]   hdmi_data,
+
+  inout             hdmi_i2c_scl,
+  inout             hdmi_i2c_sda,
+  inout             hdmi_i2s,
+  inout             hdmi_lrclk,
+  inout             hdmi_mclk,
+  inout             hdmi_sclk,
 
   // arduino interface
 
@@ -139,19 +152,41 @@ module system_top (
   wire              i2c2_sda_oe;
   wire              i2c2_sda;
 
+  wire              i2c3_scl_oe;
+  wire              i2c3_scl;
+  wire              i2c3_sda_oe;
+  wire              i2c3_sda;
+
+  wire              hdmi_valid_s;
+  wire              hdmi_ready_s;
+  wire  [ 63:0]     hdmi_data_s;
+  wire              hdmi_fs;
+
   // instantiations
 
   ALT_IOBUF iobuf_i2c2_scl (
     .i (1'b0),
     .oe (i2c2_scl_oe),
-    .o (i2c0_scl),
+    .o (i2c2_scl),
     .io (arduino_i2c_scl));
 
   ALT_IOBUF iobuf_i2c2_sda (
     .i (1'b0),
     .oe (i2c2_sda_oe),
-    .o (i2c0_sda),
+    .o (i2c2_sda),
     .io (arduino_i2c_sda));
+
+  ALT_IOBUF iobuf_i2c3_scl (
+    .i (1'b0),
+    .oe (i2c3_scl_oe),
+    .o (i2c3_scl),
+    .io (hdmi_i2c_scl));
+
+  ALT_IOBUF iobuf_i2c3_sda (
+    .i (1'b0),
+    .oe (i2c3_sda_oe),
+    .o (i2c3_sda),
+    .io (hdmi_i2c_sda));
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
@@ -244,7 +279,34 @@ module system_top (
     .sys_hps_spim0_ss_2_n (arduino_spi_csn[2]),
     .sys_hps_spim0_ss_3_n (arduino_spi_csn[3]),
     .sys_hps_spim0_clk_clk (arduino_spi_clk),
-    .sys_rst_reset_n (sys_resetn));
+    .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
+    .axi_hdmi_tx_0_hdmi_if_h16_hsync (),
+    .axi_hdmi_tx_0_hdmi_if_h16_vsync (),
+    .axi_hdmi_tx_0_hdmi_if_h16_data_e (),
+    .axi_hdmi_tx_0_hdmi_if_h16_data (),
+    .axi_hdmi_tx_0_hdmi_if_h16_es_data (),
+    .axi_hdmi_tx_0_hdmi_if_h24_hsync (hdmi_hsync),
+    .axi_hdmi_tx_0_hdmi_if_h24_vsync (hdmi_vsync),
+    .axi_hdmi_tx_0_hdmi_if_h24_data_e (hdmi_data_e),
+    .axi_hdmi_tx_0_hdmi_if_h24_data (hdmi_data),
+    .axi_hdmi_tx_0_hdmi_if_h36_hsync (),
+    .axi_hdmi_tx_0_hdmi_if_h36_vsync (),
+    .axi_hdmi_tx_0_hdmi_if_h36_data_e (),
+    .axi_hdmi_tx_0_hdmi_if_h36_data (),
+    .axi_hdmi_tx_0_vdma_if_valid (hdmi_valid_s),
+    .axi_hdmi_tx_0_vdma_if_data (hdmi_data_s),
+    .axi_hdmi_tx_0_vdma_if_ready (hdmi_ready_s),
+    .axi_hdmi_tx_0_if_vdma_fs_vdma_fs (hdmi_fs),
+    .axi_hdmi_tx_0_if_vdma_fs_ret_vdma_fs_ret (hdmi_fs),
+    .axi_dmac_0_if_m_axis_valid_valid (hdmi_valid_s),
+    .axi_dmac_0_if_m_axis_data_data (hdmi_data_s),
+    .axi_dmac_0_if_m_axis_ready_ready (hdmi_ready_s),
+    .sys_hps_i2c3_scl_in_clk (i2c3_scl),
+    .sys_hps_i2c3_clk_clk (i2c3_scl_oe),
+    .sys_hps_i2c3_out_data (i2c3_sda_oe),
+    .sys_hps_i2c3_sda (i2c3_sda),
+    .sys_rst_reset_n (sys_resetn)
+  );
 
 endmodule
 
