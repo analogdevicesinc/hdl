@@ -19,6 +19,7 @@ M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../common/up_xfer_status.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += ../xilinx/common/ad_mul.v
 M_DEPS += ../xilinx/common/ad_rst_constr.xdc
 M_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
 M_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
