@@ -247,7 +247,11 @@ module axi_ad9434_core #(
 
   // adc delay control
 
-  up_delay_cntrl #(.DATA_WIDTH(13), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(
+    .DISABLE (0),
+    .DATA_WIDTH(13),
+    .BASE_ADDRESS(6'h02))
+  i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),

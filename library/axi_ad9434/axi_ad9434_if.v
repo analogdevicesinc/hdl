@@ -55,7 +55,7 @@ module axi_ad9434_if #(
   // internl reset and clocks
   output                  adc_clk,
   input                   adc_rst,
-  output  reg             adc_status,
+  output                  adc_status,
 
   // delay interface (for IDELAY macros)
   input                   up_clk,
@@ -83,8 +83,10 @@ module axi_ad9434_if #(
   localparam SDR = 0;
 
   // internal registers
-
-  reg             adc_status_m1 = 'd0;
+  reg             adc_drp_locked_m1 = 1'd0;
+  reg             adc_drp_locked = 1'd0;
+  reg             adc_delay_locked_m1 = 1'd0;
+  reg             adc_delay_locked = 1'd0;
 
   // internal signals
 
@@ -198,14 +200,26 @@ module axi_ad9434_if #(
   assign adc_or = adc_or_s[0] | adc_or_s[1] | adc_or_s[2] | adc_or_s[3];
 
   // adc status: adc is up, if both the MMCM_OR_BUFR_N and DELAY blocks are up
-  always @(posedge adc_div_clk) begin
+
+  always @(posedge adc_clk) begin
     if(adc_rst == 1'b1) begin
-      adc_status_m1 <= 1'b0;
-      adc_status <= 1'b0;
+      adc_drp_locked_m1 <= 1'b0;
+      adc_drp_locked <= 1'b0;
     end else begin
-      adc_status_m1 <= up_drp_locked & delay_locked;
-      adc_status <= adc_status_m1;
+      adc_drp_locked_m1 <= up_drp_locked;
+      adc_drp_locked <= adc_drp_locked_m1;
     end
   end
+
+  always @(posedge adc_clk) begin
+    if(adc_rst == 1'b1) begin
+      adc_delay_locked_m1 <= 1'b0;
+      adc_delay_locked <= 1'b0;
+    end else begin
+      adc_delay_locked_m1 <= delay_locked;
+      adc_delay_locked <= adc_delay_locked_m1;
+    end
+  end
+  assign adc_status = adc_drp_locked & adc_delay_locked;
 
 endmodule

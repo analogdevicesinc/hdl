@@ -45,15 +45,21 @@ module ad_rst (
 
   // internal registers
 
-  reg             ad_rst_sync_m1 = 'd0 /* synthesis preserve */;
-  reg             ad_rst_sync = 'd0 /* synthesis preserve */;
+  reg             ad_rst_sync_m1 = 'd1 /* synthesis preserve */;
+  reg             ad_rst_sync = 'd1 /* synthesis preserve */;
 
   // simple reset gen
 
-  always @(posedge clk) begin
-    ad_rst_sync_m1 <= preset;
-    ad_rst_sync <= ad_rst_sync_m1;
-    rst <= ad_rst_sync;
+  always @(posedge preset or posedge clk) begin
+    if (preset == 1'b1) begin
+      ad_rst_sync_m1 <= 1'b1;
+      ad_rst_sync <= 1'b1;
+      rst <= 1'b1;
+    end else begin
+      ad_rst_sync_m1 <= 1'b0;
+      ad_rst_sync <= ad_rst_sync_m1;
+      rst <= ad_rst_sync;
+    end
   end
 
 endmodule
