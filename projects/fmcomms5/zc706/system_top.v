@@ -155,10 +155,6 @@ module system_top (
   wire            spi1_clk;
   wire            spi1_mosi;
   wire            spi1_miso;
-  wire            txnrx_0;
-  wire            enable_0;
-  wire            txnrx_1;
-  wire            enable_1;
 
   // multi-chip synchronization
 
