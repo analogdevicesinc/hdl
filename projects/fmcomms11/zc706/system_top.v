@@ -93,22 +93,18 @@ module system_top (
   inout           iic_scl,
   inout           iic_sda,
 
-  input           rx_ref_clk_p,
-  input           rx_ref_clk_n,
   output          rx_sync_p,
   output          rx_sync_n,
   input   [ 7:0]  rx_data_p,
   input   [ 7:0]  rx_data_n,
 
-  input           tx_ref_clk_p,
-  input           tx_ref_clk_n,
+  input           trx_ref_clk_p,
+  input           trx_ref_clk_n,
   input           tx_sync_p,
   input           tx_sync_n,
   output  [ 7:0]  tx_data_p,
   output  [ 7:0]  tx_data_n,
 
-  input           sysref_p,
-  input           sysref_n,
   input           usr_clk_p,
   input           usr_clk_n,
 
@@ -140,21 +136,12 @@ module system_top (
   wire            spi1_clk;
   wire            spi1_mosi;
   wire            spi1_miso;
-  wire            rx_ref_clk;
   wire            rx_sync;
-  wire            tx_ref_clk;
+  wire            trx_ref_clk;
   wire            tx_sync;
-  wire            sysref;
   wire            usr_clk;
 
   // instantiations
-
-  IBUFDS_GTE2 i_ibufds_rx_ref_clk (
-    .CEB (1'd0),
-    .I (rx_ref_clk_p),
-    .IB (rx_ref_clk_n),
-    .O (rx_ref_clk),
-    .ODIV2 ());
 
   OBUFDS i_obufds_rx_sync (
     .I (rx_sync),
@@ -163,20 +150,15 @@ module system_top (
 
   IBUFDS_GTE2 i_ibufds_tx_ref_clk (
     .CEB (1'd0),
-    .I (tx_ref_clk_p),
-    .IB (tx_ref_clk_n),
-    .O (tx_ref_clk),
+    .I (trx_ref_clk_p),
+    .IB (trx_ref_clk_n),
+    .O (trx_ref_clk),
     .ODIV2 ());
 
   IBUFDS i_ibufds_tx_sync (
     .I (tx_sync_p),
     .IB (tx_sync_n),
     .O (tx_sync));
-
-  IBUFDS i_ibufds_sysref (
-    .I (sysref_p),
-    .IB (sysref_n),
-    .O (sysref));
 
   IBUFDS i_ibufds_usr_clk (
     .I (usr_clk_p),
@@ -291,9 +273,9 @@ module system_top (
     .rx_data_6_p (rx_data_p[6]),
     .rx_data_7_n (rx_data_n[7]),
     .rx_data_7_p (rx_data_p[7]),
-    .rx_ref_clk_0 (tx_ref_clk),
+    .rx_ref_clk_0 (trx_ref_clk),
     .rx_sync_0 (rx_sync),
-    .rx_sysref_0 (sysref),
+    .rx_sysref_0 (1'b0),
     .spdif (spdif),
     .spi0_clk_i (spi0_clk),
     .spi0_clk_o (spi0_clk),
@@ -332,9 +314,9 @@ module system_top (
     .tx_data_6_p (tx_data_p[6]),
     .tx_data_7_n (tx_data_n[7]),
     .tx_data_7_p (tx_data_p[7]),
-    .tx_ref_clk_0 (tx_ref_clk),
+    .tx_ref_clk_0 (trx_ref_clk),
     .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (sysref));
+    .tx_sysref_0 (1'b0));
 
 endmodule
 
