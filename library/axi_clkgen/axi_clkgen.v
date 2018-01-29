@@ -142,7 +142,9 @@ module axi_clkgen #(
 
   // processor interface
 
-  up_clkgen i_up_clkgen (
+  up_clkgen #(
+    .ID(ID)
+  ) i_up_clkgen (
     .mmcm_rst (mmcm_rst),
     .clk_sel (clk_sel),
     .up_drp_sel (up_drp_sel_s),
