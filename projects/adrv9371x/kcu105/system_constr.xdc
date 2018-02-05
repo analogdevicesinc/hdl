@@ -80,11 +80,12 @@ create_clock -name rx_os_div_clk  -period  8.00 [get_pins i_system_wrapper/syste
 
 # set_property LOC GTHE3_COMMON_X0Y2 [get_cells -hierarchical -filter {NAME =~ *i_ibufds_rx_ref_clk}]
 set_property LOC GTHE3_COMMON_X0Y4 [get_cells -hierarchical -filter {NAME =~ *i_ibufds_ref_clk1}]
+set_property BEL GTHE3_COMMON.IBUFDS1_GTE3 [get_cells -hierarchical -filter {NAME =~ *i_ibufds_ref_clk1}]
 
-set_property LOC GTHE3_CHANNEL_X0Y19 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_0/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y16 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_1/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y18 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_2/i_gthe3_channel}]
-set_property LOC GTHE3_CHANNEL_X0Y17 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_3/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y17 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_0/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y18 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_1/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y16 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_2/i_gthe3_channel}]
+set_property LOC GTHE3_CHANNEL_X0Y19 [get_cells -hierarchical -filter {NAME =~ *util_ad9371_xcvr/inst/i_xch_3/i_gthe3_channel}]
 
 set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9371_rx_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
 set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9371_tx_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
