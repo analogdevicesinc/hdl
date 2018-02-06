@@ -617,7 +617,8 @@ dmac_request_arb #(
   .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
   .FIFO_SIZE(FIFO_SIZE),
   .ID_WIDTH(ID_WIDTH),
-  .AXI_LENGTH_WIDTH(8-(4*DMA_AXI_PROTOCOL_SRC))
+  .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
+  .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST))
 ) i_request_arb (
   .req_aclk(s_axi_aclk),
   .req_aresetn(s_axi_aresetn),
