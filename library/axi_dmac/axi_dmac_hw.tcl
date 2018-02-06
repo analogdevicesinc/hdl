@@ -242,12 +242,12 @@ proc axi_dmac_validate {} {
     set_parameter_property $p VISIBLE $auto_clk
   }
   foreach suffix {SRC DEST} {
-   if {[get_parameter_value DMA_TYPE_$suffix] == 0} {
-     set show_axi_protocol true
-   } else {
-     set show_axi_protocol false
-   }
-   set_parameter_property DMA_AXI_PROTOCOL_$suffix VISIBLE $show_axi_protocol
+    if {[get_parameter_value DMA_TYPE_$suffix] == 0} {
+      set show_axi_protocol true
+    } else {
+      set show_axi_protocol false
+    }
+    set_parameter_property DMA_AXI_PROTOCOL_$suffix VISIBLE $show_axi_protocol
   }
 }
 
