@@ -47,6 +47,8 @@ module axi_ad9122 #(
   parameter   MMCM_CLK0_DIV = 2,
   parameter   MMCM_CLK1_DIV = 8,
   parameter   DAC_DATAPATH_DISABLE = 0,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // dac interface
@@ -201,7 +203,12 @@ module axi_ad9122 #(
 
   // core
 
-  axi_ad9122_core #(.ID(ID), .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)) i_core (
+  axi_ad9122_core #(
+    .ID(ID),
+    .DDS_TYPE (DAC_DDS_TYPE),
+    .DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE))
+  i_core (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
     .dac_frame_i0 (dac_frame_i0_s),
