@@ -37,8 +37,10 @@
 
 module axi_ad9371_tx #(
 
-  parameter   DATAPATH_DISABLE = 0,
-  parameter   ID = 0) (
+  parameter   ID = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 16,
+  parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface
 
@@ -129,6 +131,8 @@ module axi_ad9371_tx #(
   axi_ad9371_tx_channel #(
     .CHANNEL_ID (0),
     .Q_OR_I_N (0),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DDS_TYPE (DDS_TYPE),
     .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_tx_channel_0 (
     .dac_clk (dac_clk),
@@ -158,6 +162,8 @@ module axi_ad9371_tx #(
   axi_ad9371_tx_channel #(
     .CHANNEL_ID (1),
     .Q_OR_I_N (1),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DDS_TYPE (DDS_TYPE),
     .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_tx_channel_1 (
     .dac_clk (dac_clk),
@@ -187,6 +193,8 @@ module axi_ad9371_tx #(
   axi_ad9371_tx_channel #(
     .CHANNEL_ID (2),
     .Q_OR_I_N (0),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DDS_TYPE (DDS_TYPE),
     .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_tx_channel_2 (
     .dac_clk (dac_clk),
@@ -216,6 +224,8 @@ module axi_ad9371_tx #(
   axi_ad9371_tx_channel #(
     .CHANNEL_ID (3),
     .Q_OR_I_N (1),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DDS_TYPE (DDS_TYPE),
     .DATAPATH_DISABLE (DATAPATH_DISABLE))
   i_tx_channel_3 (
     .dac_clk (dac_clk),

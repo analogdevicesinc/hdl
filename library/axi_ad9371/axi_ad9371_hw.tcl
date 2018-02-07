@@ -16,6 +16,8 @@ add_fileset quartus_synth QUARTUS_SYNTH "" "Quartus Synthesis"
 set_fileset_property quartus_synth TOP_LEVEL axi_ad9371
 add_fileset_file ad_rst.v                   VERILOG PATH $ad_hdl_dir/library/common/ad_rst.v
 add_fileset_file ad_mul.v                   VERILOG PATH $ad_hdl_dir/library/altera/common/ad_mul.v
+add_fileset_file ad_dds_cordic_pipe.v       VERILOG PATH $ad_hdl_dir/library/common/ad_dds_cordic_pipe.v
+add_fileset_file ad_dds_sine_cordic.v       VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine_cordic.v
 add_fileset_file ad_dds_sine.v              VERILOG PATH $ad_hdl_dir/library/common/ad_dds_sine.v
 add_fileset_file ad_dds_1.v                 VERILOG PATH $ad_hdl_dir/library/common/ad_dds_1.v
 add_fileset_file ad_dds.v                   VERILOG PATH $ad_hdl_dir/library/common/ad_dds.v
