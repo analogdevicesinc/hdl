@@ -44,6 +44,8 @@ module axi_ad9963 #(
   parameter   ADC_IODELAY_ENABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
   parameter   IODELAY_ENABLE = 0,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DATAPATH_DISABLE = 0,
   parameter   ADC_USERPORTS_DISABLE = 0,
   parameter   ADC_DATAFORMAT_DISABLE = 0,
@@ -248,6 +250,8 @@ module axi_ad9963 #(
 
   axi_ad9963_tx #(
     .ID (ID),
+    .DDS_TYPE (DAC_DDS_TYPE),
+    .DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
   i_tx (
     .dac_clk (dac_clk),

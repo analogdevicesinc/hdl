@@ -41,8 +41,9 @@ module axi_ad9963_tx_channel #(
 
   parameter   CHANNEL_ID = 32'h0,
   parameter   Q_OR_I_N = 0,
-  parameter   DATAPATH_DISABLE = 0
-) (
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 16,
+  parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface
 
@@ -214,7 +215,11 @@ module axi_ad9963_tx_channel #(
     end
   end
 
-  ad_dds i_dds (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_0),
