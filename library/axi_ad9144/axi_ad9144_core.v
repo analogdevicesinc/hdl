@@ -38,6 +38,8 @@
 module axi_ad9144_core #(
 
   parameter   ID = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 16,
   parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface
@@ -137,7 +139,12 @@ module axi_ad9144_core #(
 
   // dac channel
   
-  axi_ad9144_channel #(.CHANNEL_ID(0), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_0 (
+  axi_ad9144_channel #(
+    .CHANNEL_ID(0),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
+  i_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_0),
@@ -158,7 +165,12 @@ module axi_ad9144_core #(
 
   // dac channel
   
-  axi_ad9144_channel #(.CHANNEL_ID(1), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_1 (
+  axi_ad9144_channel #(
+    .CHANNEL_ID(1),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
+  i_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_1),
@@ -179,7 +191,12 @@ module axi_ad9144_core #(
 
   // dac channel
   
-  axi_ad9144_channel #(.CHANNEL_ID(2), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_2 (
+  axi_ad9144_channel #(
+    .CHANNEL_ID(2),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
+  i_channel_2 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_2),
@@ -200,7 +217,12 @@ module axi_ad9144_core #(
 
   // dac channel
   
-  axi_ad9144_channel #(.CHANNEL_ID(3), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_3 (
+  axi_ad9144_channel #(
+    .CHANNEL_ID(3),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
+  i_channel_3 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_3),

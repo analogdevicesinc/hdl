@@ -39,6 +39,8 @@ module axi_ad9144 #(
 
   parameter   ID = 0,
   parameter   QUAD_OR_DUAL_N = 1,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DATAPATH_DISABLE = 0) (
 
   // jesd interface
@@ -162,7 +164,12 @@ module axi_ad9144 #(
 
   // core
 
-  axi_ad9144_core #(.ID(ID), .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)) i_core (
+  axi_ad9144_core #(
+    .ID(ID),
+    .DDS_TYPE (DAC_DDS_TYPE),
+    .DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE))
+  i_core (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_data_0_0 (dac_data_0_0_s),
