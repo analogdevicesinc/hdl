@@ -35,7 +35,12 @@
 
 `timescale 1ns/100ps
 
-module ad_dds_1 (
+module ad_dds_1 #(
+
+  // parameters
+
+  parameter   DDS_TYPE = 1,
+  parameter   CORDIC_DW = 16) (
 
   // interface
 
@@ -44,27 +49,63 @@ module ad_dds_1 (
   input       [15:0]      scale,
   output  reg [15:0]      dds_data);
 
-  // internal registers
+  // local parameters
+
+  localparam DDS_CORDIC_TYPE = 1;
+  localparam DDS_POLINOMIAL_TYPE = 2;
 
   // internal signals
 
-  wire    [15:0]  sine_s;
-  wire    [33:0]  s1_data_s;
+  wire    [CORDIC_DW-1:0] sine_s;
+  wire    [         15:0] sine16_s;
+  wire    [          3:0] zeros;
+  wire    [         33:0] s1_data_s;
+
+  assign zeros = 0;
 
   // sine
 
-  ad_dds_sine #(.DELAY_DATA_WIDTH(1)) i_dds_sine (
-    .clk (clk),
-    .angle (angle),
-    .sine (sine_s),
-    .ddata_in (1'b0),
-    .ddata_out ());
+  generate
+    if (DDS_TYPE == DDS_CORDIC_TYPE) begin
 
-  // scale
+      // the cordic module input angle width must be equal with it's width
+      wire    [CORDIC_DW-1:0] angle_s;
+
+      if (CORDIC_DW >= 16) begin
+        assign angle_s = {angle,zeros[CORDIC_DW-16:0]};
+        assign sine16_s = sine_s[CORDIC_DW-1:CORDIC_DW-16];
+      end else begin
+        assign angle_s = angle[15:16-CORDIC_DW];
+        assign sine16_s = {sine_s,zeros[15-CORDIC_DW:0]};
+      end
+
+      ad_dds_sine_cordic #(
+        .CORDIC_DW(CORDIC_DW),
+        .DELAY_DW(1))
+      i_dds_sine (
+        .clk (clk),
+        .angle (angle_s),
+        .sine (sine_s),
+        .ddata_in (1'b0),
+        .ddata_out ());
+
+    end else begin
+
+      assign sine16_s = sine_s;
+      ad_dds_sine i_dds_sine (
+        .clk (clk),
+        .angle (angle),
+        .sine (sine_s),
+        .ddata_in (1'b0),
+        .ddata_out ());
+    end
+  endgenerate
+
+  // scale for a 16 bit sine generator
 
   ad_mul #(.DELAY_DATA_WIDTH(1)) i_dds_scale (
     .clk (clk),
-    .data_a ({sine_s[15], sine_s}),
+    .data_a ({sine16_s[15], sine16_s}),
     .data_b ({scale[15], scale}),
     .data_p (s1_data_s),
     .ddata_in (1'b0),
