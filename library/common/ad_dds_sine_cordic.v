@@ -198,7 +198,7 @@ module ad_dds_sine_cordic #(
   genvar i;
 
   generate
-  for (i=0; i < CORDIC_DW-1; i=i+1)
+  for (i=0; i < CORDIC_DW-1; i=i+1) begin: rotation
       ad_dds_cordic_pipe #(
         .DW (CORDIC_DW),
         .DELAY_DW (DELAY_DW),
@@ -220,6 +220,7 @@ module ad_dds_sine_cordic #(
         .data_delay_in (data_in_d[i]),
         .data_delay_out (data_in_d[i+1])
       );
+    end
   endgenerate
 
   // x and y are cos(angle) and sin(angle)
