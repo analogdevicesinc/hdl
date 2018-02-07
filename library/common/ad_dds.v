@@ -39,8 +39,9 @@ module ad_dds #(
 
   // data path disable
 
-  parameter   DISABLE = 0) (
-
+  parameter   DISABLE = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   CORDIC_DW = 14) (
   // interface
 
   input           clk,
@@ -65,35 +66,49 @@ module ad_dds #(
 
   // disable
 
-  assign dds_data = (DISABLE == 1) ? 16'd0 : dds_data_out;
+  generate
+    if (DISABLE == 1) begin
+      assign dds_data = 16'd0;
+    end else begin
 
-  // dds channel output
+      assign dds_data = dds_data_out;
 
-  always @(posedge clk) begin
-    dds_data_int <= dds_data_0_s + dds_data_1_s;
-    dds_data_out[15:15] <= dds_data_int[15] ^ dds_format;
-    dds_data_out[14: 0] <= dds_data_int[14:0];
-  end
+       // dds channel output
 
-  always @(posedge clk) begin
-    dds_scale_0_d <= dds_scale_0;
-    dds_scale_1_d <= dds_scale_1;
-  end
-  // dds-1
+       always @(posedge clk) begin
+         dds_data_int <= dds_data_0_s + dds_data_1_s;
+         dds_data_out[15:15] <= dds_data_int[15] ^ dds_format;
+         dds_data_out[14: 0] <= dds_data_int[14:0];
+       end
 
-  ad_dds_1 i_dds_1_0 (
-    .clk (clk),
-    .angle (dds_phase_0),
-    .scale (dds_scale_0_d),
-    .dds_data (dds_data_0_s));
+       always @(posedge clk) begin
+         dds_scale_0_d <= dds_scale_0;
+         dds_scale_1_d <= dds_scale_1;
+       end
 
-  // dds-2
+       // dds-1
 
-  ad_dds_1 i_dds_1_1 (
-    .clk (clk),
-    .angle (dds_phase_1),
-    .scale (dds_scale_1_d),
-    .dds_data (dds_data_1_s));
+       ad_dds_1 #(
+         .CORDIC_DW(CORDIC_DW),
+         .DDS_TYPE(DDS_TYPE))
+       i_dds_1_0 (
+         .clk (clk),
+         .angle (dds_phase_0),
+         .scale (dds_scale_0_d),
+         .dds_data (dds_data_0_s));
+
+       // dds-2
+
+       ad_dds_1 #(
+         .CORDIC_DW(CORDIC_DW),
+         .DDS_TYPE(DDS_TYPE))
+       i_dds_1_1 (
+         .clk (clk),
+         .angle (dds_phase_1),
+         .scale (dds_scale_1_d),
+         .dds_data (dds_data_1_s));
+    end
+  endgenerate
 
 endmodule
 
