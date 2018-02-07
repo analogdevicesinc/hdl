@@ -55,7 +55,6 @@ module ad_dds_sine_cordic #(
   localparam [17:0] X_VALUE_18 =  79582; // ((18^2)/2)/1.647
   localparam [15:0] X_VALUE_16 =  19883; // ((16^2)/2)/1.647
   localparam [13:0] X_VALUE_14 =   4970; // ((14^2)/2)/1.647
-  localparam Y_VALUE = 0;
 
   // internal registers
 
@@ -166,20 +165,20 @@ module ad_dds_sine_cordic #(
        2'b11:
        begin
           x0 <= x_value;
-          y0 <= Y_VALUE;
+          y0 <= 0;
           z0 <= angle;
        end
 
        2'b01:
        begin
-          x0 <= Y_VALUE;
+          x0 <= 0;
           y0 <= x_value;
           z0 <= {2'b00, angle[CORDIC_DW-3:0]};
        end
 
        2'b10:
        begin
-          x0 <= Y_VALUE;
+          x0 <= 0;
           y0 <= -x_value;
           z0 <= {2'b11 ,angle[CORDIC_DW-3:0]};
        end
