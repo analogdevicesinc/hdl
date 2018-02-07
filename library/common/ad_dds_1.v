@@ -69,13 +69,13 @@ module ad_dds_1 #(
     if (DDS_TYPE == DDS_CORDIC_TYPE) begin
 
       // the cordic module input angle width must be equal with it's width
-      wire    [CORDIC_DW-1:0] angle_s;
+      wire    [CORDIC_DW:0] angle_s;
 
       if (CORDIC_DW >= 16) begin
         assign angle_s = {angle,zeros[CORDIC_DW-16:0]};
         assign sine16_s = sine_s[CORDIC_DW-1:CORDIC_DW-16];
       end else begin
-        assign angle_s = angle[15:16-CORDIC_DW];
+        assign angle_s = {angle[15:16-CORDIC_DW],1'b0};
         assign sine16_s = {sine_s,zeros[15-CORDIC_DW:0]};
       end
 
@@ -84,7 +84,7 @@ module ad_dds_1 #(
         .DELAY_DW(1))
       i_dds_sine (
         .clk (clk),
-        .angle (angle_s),
+        .angle (angle_s[CORDIC_DW:1]),
         .sine (sine_s),
         .ddata_in (1'b0),
         .ddata_out ());
