@@ -41,7 +41,9 @@ module axi_adrv9009_tx_channel #(
   parameter   Q_OR_I_N = 0,
   parameter   DISABLE = 0,
   parameter   DDS_DISABLE = 0,
-  parameter   IQCORRECTION_DISABLE = 0) (
+  parameter   IQCORRECTION_DISABLE = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 16) (
 
   // dac interface
 
@@ -183,7 +185,11 @@ module axi_adrv9009_tx_channel #(
 
   end else begin
 
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_0 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_0_0),
@@ -192,7 +198,11 @@ module axi_adrv9009_tx_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_0_s));
 
-  ad_dds i_dds_1 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_1 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_1_0),

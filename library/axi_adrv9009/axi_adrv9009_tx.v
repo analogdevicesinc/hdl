@@ -38,8 +38,11 @@
 module axi_adrv9009_tx #(
 
   parameter   ID = 0,
+  parameter   DISABLE = 0,
   parameter   DDS_DISABLE = 0,
-  parameter   IQCORRECTION_DISABLE = 0) (
+  parameter   IQCORRECTION_DISABLE = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 16) (
 
   // dac interface
 
@@ -132,9 +135,11 @@ module axi_adrv9009_tx #(
   axi_adrv9009_tx_channel #(
     .CHANNEL_ID (0),
     .Q_OR_I_N (0),
-    .DISABLE (0),
+    .DISABLE (DISABLE),
     .DDS_DISABLE (DDS_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW))
   i_tx_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -163,9 +168,11 @@ module axi_adrv9009_tx #(
   axi_adrv9009_tx_channel #(
     .CHANNEL_ID (1),
     .Q_OR_I_N (1),
-    .DISABLE (0),
+    .DISABLE (DISABLE),
     .DDS_DISABLE (DDS_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW))
   i_tx_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -194,9 +201,11 @@ module axi_adrv9009_tx #(
   axi_adrv9009_tx_channel #(
     .CHANNEL_ID (2),
     .Q_OR_I_N (0),
-    .DISABLE (0),
+    .DISABLE (DISABLE),
     .DDS_DISABLE (DDS_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW))
   i_tx_channel_2 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
@@ -225,9 +234,11 @@ module axi_adrv9009_tx #(
   axi_adrv9009_tx_channel #(
     .CHANNEL_ID (3),
     .Q_OR_I_N (1),
-    .DISABLE (0),
+    .DISABLE (DISABLE),
     .DDS_DISABLE (DDS_DISABLE),
-    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW))
   i_tx_channel_3 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
