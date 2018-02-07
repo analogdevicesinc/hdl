@@ -38,6 +38,8 @@
 module axi_ad9152 #(
 
   parameter   ID = 0,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DATAPATH_DISABLE = 0) (
 
   // jesd interface
