@@ -11,6 +11,8 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_data_out.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
+  "$ad_hdl_dir/library/common/ad_dds_cordic_pipe.v" \
+  "$ad_hdl_dir/library/common/ad_dds_sine_cordic.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \

@@ -43,6 +43,8 @@ module axi_ad9361_tx_channel #(
   parameter   CHANNEL_ID = 32'h0,
   parameter   DISABLE = 0,
   parameter   DDS_DISABLE = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   CORDIC_DW = 16,
   parameter   USERPORTS_DISABLE = 0,
   parameter   IQCORRECTION_DISABLE = 0) (
 
@@ -337,6 +339,8 @@ module axi_ad9361_tx_channel #(
   // dds
 
   ad_dds #(
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (CORDIC_DW),
     .DISABLE (DDS_DISABLE))
   i_dds (
     .clk (dac_clk),
