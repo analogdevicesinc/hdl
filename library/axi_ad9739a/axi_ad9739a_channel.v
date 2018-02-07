@@ -38,6 +38,8 @@
 module axi_ad9739a_channel #(
 
   parameter CHANNEL_ID = 32'h0,
+  parameter DDS_TYPE = 1,
+  parameter DDS_CORDIC_DW = 16,
   parameter DATAPATH_DISABLE = 0) (
 
   // dac interface
@@ -337,7 +339,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_00_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_0 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_00_0),
@@ -352,7 +358,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_01_s = 16'd0;
   end else begin
-  ad_dds i_dds_1 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_1 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_01_0),
@@ -367,7 +377,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_02_s = 16'd0;
   end else begin
-  ad_dds i_dds_2 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_2 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_02_0),
@@ -382,7 +396,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_03_s = 16'd0;
   end else begin
-  ad_dds i_dds_3 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_3 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_03_0),
@@ -397,7 +415,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_04_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_4 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_04_0),
@@ -412,7 +434,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_05_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_5 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_05_0),
@@ -427,7 +453,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_06_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_6 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_06_0),
@@ -442,7 +472,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_07_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_7 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_07_0),
@@ -457,7 +491,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_08_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_8 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_08_0),
@@ -472,7 +510,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_09_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_9 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_09_0),
@@ -487,7 +529,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_10_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_10 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_10_0),
@@ -502,7 +548,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_11_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_11 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_11_0),
@@ -517,7 +567,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_12_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_12 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_12_0),
@@ -532,7 +586,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_13_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_13 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_13_0),
@@ -547,7 +605,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_14_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_14 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_14_0),
@@ -562,7 +624,11 @@ module axi_ad9739a_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_15_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_15 (
     .clk (dac_div_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_15_0),

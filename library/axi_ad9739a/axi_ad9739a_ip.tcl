@@ -6,6 +6,8 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_ad9739a
 adi_ip_files axi_ad9739a [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
+  "$ad_hdl_dir/library/common/ad_dds_cordic_pipe.v" \
+  "$ad_hdl_dir/library/common/ad_dds_sine_cordic.v" \
   "$ad_hdl_dir/library/common/ad_dds_sine.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \
