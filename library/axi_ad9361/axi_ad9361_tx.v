@@ -46,6 +46,8 @@ module axi_ad9361_tx #(
   parameter   PPS_RECEIVER_ENABLE = 0,
   parameter   INIT_DELAY = 0,
   parameter   DDS_DISABLE = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   CORDIC_DW = 16,
   parameter   USERPORTS_DISABLE = 0,
   parameter   DELAYCNTRL_DISABLE = 0,
   parameter   IQCORRECTION_DISABLE = 0) (
@@ -214,6 +216,8 @@ module axi_ad9361_tx #(
     .Q_OR_I_N (0),
     .DISABLE (0),
     .DDS_DISABLE (DDS_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (CORDIC_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_0 (
@@ -246,6 +250,8 @@ module axi_ad9361_tx #(
     .Q_OR_I_N (1),
     .DISABLE (0),
     .DDS_DISABLE (DDS_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (CORDIC_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_1 (
@@ -278,6 +284,8 @@ module axi_ad9361_tx #(
     .Q_OR_I_N (0),
     .DISABLE (MODE_1R1T),
     .DDS_DISABLE (DDS_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (CORDIC_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_2 (
@@ -310,6 +318,8 @@ module axi_ad9361_tx #(
     .Q_OR_I_N (1),
     .DISABLE (MODE_1R1T),
     .DDS_DISABLE (DDS_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (CORDIC_DW),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
   i_tx_channel_3 (
