@@ -38,6 +38,8 @@
 module axi_ad9162_core #(
 
   parameter   ID = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 16,
   parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface

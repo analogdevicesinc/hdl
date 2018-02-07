@@ -38,6 +38,8 @@
 module axi_ad9162_channel #(
 
   parameter CHANNEL_ID = 32'h0,
+  parameter DDS_TYPE = 1,
+  parameter DDS_CORDIC_DW = 16,
   parameter DATAPATH_DISABLE = 0) (
 
   // dac interface
@@ -301,7 +303,11 @@ module axi_ad9162_channel #(
   assign dac_dds_data_s[ 31: 16] = (dac_iq_mode_s == 2'b11) ? dac_dds_data_i_s[ 15:  0] : dac_dds_data_i_s[ 31: 16];
   assign dac_dds_data_s[ 15:  0] = (dac_iq_mode_s == 2'b11) ? dac_dds_data_i_s[ 31: 16] : dac_dds_data_i_s[ 15:  0];
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_00 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_00 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_00_0),
@@ -310,7 +316,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[15:0]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_01 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_01 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_01_0),
@@ -319,7 +329,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[31:16]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_02 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_02 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_02_0),
@@ -328,7 +342,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[47:32]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_03 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_03 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_03_0),
@@ -337,7 +355,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[63:48]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_04 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_04 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_04_0),
@@ -346,7 +368,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[79:64]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_05 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_05 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_05_0),
@@ -355,7 +381,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[95:80]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_06 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_06 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_06_0),
@@ -364,7 +394,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[111:96]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_07 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_07 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_07_0),
@@ -373,7 +407,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[127:112]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_08 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_08 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_08_0),
@@ -382,7 +420,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[143:128]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_09 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_09 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_09_0),
@@ -391,7 +433,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[159:144]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_10 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_10 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_10_0),
@@ -400,7 +446,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[175:160]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_11 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_11 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_11_0),
@@ -409,7 +459,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[191:176]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_12 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_12 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_12_0),
@@ -418,7 +472,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[207:192]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_13 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_13 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_13_0),
@@ -427,7 +485,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[223:208]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_14 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_14 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_14_0),
@@ -436,7 +498,11 @@ module axi_ad9162_channel #(
     .dds_scale_1 (dac_dds_scale_2_s),
     .dds_data (dac_dds_data_i_s[239:224]));
   
-  ad_dds #(.DISABLE (DATAPATH_DISABLE)) i_dds_15 (
+  ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_15 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_15_0),
