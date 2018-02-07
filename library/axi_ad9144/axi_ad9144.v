@@ -39,6 +39,8 @@ module axi_ad9144 #(
 
   parameter   ID = 0,
   parameter   QUAD_OR_DUAL_N = 1,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DATAPATH_DISABLE = 0) (
 
   // jesd interface
