@@ -41,6 +41,8 @@ module axi_ad9739a #(
   parameter   DEVICE_TYPE = 0,
   parameter   SERDES_OR_DDR_N = 1,
   parameter   MMCM_OR_BUFIO_N = 1,
+  parameter   DAC_DDS_TYPE = 1,
+  parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DATAPATH_DISABLE = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group") (
 
@@ -161,7 +163,12 @@ module axi_ad9739a #(
 
   // core
 
-  axi_ad9739a_core #(.ID(ID), .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)) i_core (
+  axi_ad9739a_core #(
+    .ID(ID),
+    .DDS_TYPE (DAC_DDS_TYPE),
+    .DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE))
+  i_core (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
     .dac_data_00 (dac_data_00_s),
