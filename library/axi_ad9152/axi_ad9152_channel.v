@@ -38,6 +38,8 @@
 module axi_ad9152_channel #(
 
   parameter CHANNEL_ID = 32'h0,
+  parameter DDS_TYPE = 1,
+  parameter DDS_CORDIC_DW = 16,
   parameter DATAPATH_DISABLE = 0) (
 
   // dac interface
@@ -321,7 +323,11 @@ module axi_ad9152_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_0_s = 16'd0;
   end else begin
-  ad_dds i_dds_0 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_0 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_0_0),
@@ -336,7 +342,11 @@ module axi_ad9152_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_1_s = 16'd0;
   end else begin
-  ad_dds i_dds_1 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_1 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_1_0),
@@ -351,7 +361,11 @@ module axi_ad9152_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_2_s = 16'd0;
   end else begin
-  ad_dds i_dds_2 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_2 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_2_0),
@@ -366,7 +380,11 @@ module axi_ad9152_channel #(
   if (DATAPATH_DISABLE == 1) begin
   assign dac_dds_data_3_s = 16'd0;
   end else begin
-  ad_dds i_dds_3 (
+  ad_dds #(
+    .DISABLE (0),
+    .DDS_TYPE (DDS_TYPE),
+    .CORDIC_DW (DDS_CORDIC_DW))
+  i_dds_3 (
     .clk (dac_clk),
     .dds_format (dac_dds_format),
     .dds_phase_0 (dac_dds_phase_3_0),

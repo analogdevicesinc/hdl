@@ -38,6 +38,8 @@
 module axi_ad9152_core #(
 
   parameter   ID = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 16,
   parameter   DATAPATH_DISABLE = 0) (
 
   // dac interface
@@ -117,7 +119,12 @@ module axi_ad9152_core #(
 
   // dac channel
   
-  axi_ad9152_channel #(.CHANNEL_ID(0), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_0 (
+  axi_ad9152_channel #(
+    .CHANNEL_ID(0),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
+  i_channel_0 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_0),
@@ -138,7 +145,12 @@ module axi_ad9152_core #(
 
   // dac channel
   
-  axi_ad9152_channel #(.CHANNEL_ID(1), .DATAPATH_DISABLE(DATAPATH_DISABLE)) i_channel_1 (
+  axi_ad9152_channel #(
+    .CHANNEL_ID(1),
+    .DDS_TYPE (DDS_TYPE),
+    .DDS_CORDIC_DW (DDS_CORDIC_DW),
+    .DATAPATH_DISABLE(DATAPATH_DISABLE))
+  i_channel_1 (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_enable (dac_enable_1),
