@@ -55,7 +55,7 @@ set_interface_property avl_reset associatedclock avl_clock
 add_interface_port avl_reset avl_reset reset input 1
 
 add_interface amm_ddr avalon master
-add_interface_port amm_ddr avl_address address output 25
+add_interface_port amm_ddr avl_address address output AVL_ADDRESS_WIDTH
 add_interface_port amm_ddr avl_burstcount burstcount output 7
 add_interface_port amm_ddr avl_byteenable byteenable output 64
 add_interface_port amm_ddr avl_read read output 1
