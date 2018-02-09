@@ -5,6 +5,7 @@ source ../../scripts/adi_project_alt.tcl
 adi_project_altera daq2_iwg24d
 
 source $ad_hdl_dir/projects/common/iwg24d/iwg24d_system_assign.tcl
+source $ad_hdl_dir/projects/common/iwg24d/iwg24d_fpga_ddr4_assign.tcl
 
 # files
 
