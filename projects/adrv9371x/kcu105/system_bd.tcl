@@ -20,5 +20,5 @@ ad_ip_parameter axi_ad9371_rx_xcvr CONFIG.XCVR_TYPE 1
 ad_ip_parameter axi_ad9371_rx_os_xcvr CONFIG.XCVR_TYPE 1
 
 ad_ip_parameter util_ad9371_xcvr CONFIG.XCVR_TYPE 1
-ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_FBDIV 20
+ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_FBDIV 80
 ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_REFCLK_DIV 1
