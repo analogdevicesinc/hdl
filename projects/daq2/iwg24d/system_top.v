@@ -63,6 +63,27 @@ module system_top (
   inout   [  4:0]   hps_ddr_dbi_n,
   input             hps_ddr_rzq,
 
+  // pl-ddr4
+
+  input             sys_ddr_ref_clk,
+  output  [  0:0]   sys_ddr_ck_p,
+  output  [  0:0]   sys_ddr_ck_n,
+  output  [ 16:0]   sys_ddr_a,
+  output  [  1:0]   sys_ddr_ba,
+  output  [  0:0]   sys_ddr_bg,
+  output  [  0:0]   sys_ddr_cke,
+  output  [  0:0]   sys_ddr_cs_n,
+  output  [  0:0]   sys_ddr_odt,
+  output  [  0:0]   sys_ddr_reset_n,
+  output  [  0:0]   sys_ddr_act_n,
+  output  [  0:0]   sys_ddr_par,
+  input   [  0:0]   sys_ddr_alert_n,
+  inout   [  7:0]   sys_ddr_dqs_p,
+  inout   [  7:0]   sys_ddr_dqs_n,
+  inout   [ 63:0]   sys_ddr_dq,
+  inout   [  7:0]   sys_ddr_dbi_n,
+  input             sys_ddr_oct_rzq,
+
   // hps-ethernet
 
   input   [  0:0]   hps_eth_rxclk,
@@ -151,10 +172,12 @@ module system_top (
   wire    [  7:0]   spi_csn_s;
   wire              dac_fifo_bypass;
 
-  wire        hps_i2c1_scl;
-  wire        hps_i2c1_scl_oe;
-  wire        hps_i2c1_sda;
-  wire        hps_i2c1_sda_oe;
+  wire              rx_sync_s;
+
+  wire              hps_i2c1_scl;
+  wire              hps_i2c1_scl_oe;
+  wire              hps_i2c1_sda;
+  wire              hps_i2c1_sda_oe;
 
   // assignments
 
@@ -209,6 +232,26 @@ module system_top (
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
+    .sys_ddr4_mem_mem_ck (sys_ddr_ck_p),
+    .sys_ddr4_mem_mem_ck_n (sys_ddr_ck_n),
+    .sys_ddr4_mem_mem_a (sys_ddr_a),
+    .sys_ddr4_mem_mem_act_n (sys_ddr_act_n),
+    .sys_ddr4_mem_mem_ba (sys_ddr_ba),
+    .sys_ddr4_mem_mem_bg (sys_ddr_bg),
+    .sys_ddr4_mem_mem_cke (sys_ddr_cke),
+    .sys_ddr4_mem_mem_cs_n (sys_ddr_cs_n),
+    .sys_ddr4_mem_mem_odt (sys_ddr_odt),
+    .sys_ddr4_mem_mem_reset_n (sys_ddr_reset_n),
+    .sys_ddr4_mem_mem_par (sys_ddr_par),
+    .sys_ddr4_mem_mem_alert_n (sys_ddr_alert_n),
+    .sys_ddr4_mem_mem_dqs (sys_ddr_dqs_p),
+    .sys_ddr4_mem_mem_dqs_n (sys_ddr_dqs_n),
+    .sys_ddr4_mem_mem_dq (sys_ddr_dq),
+    .sys_ddr4_mem_mem_dbi_n (sys_ddr_dbi_n),
+    .sys_ddr4_oct_oct_rzqin (sys_ddr_oct_rzq),
+    .sys_ddr4_ref_clk_clk (sys_ddr_ref_clk),
+    .sys_ddr4_status_local_cal_success (sys_ddr_cal_success),
+    .sys_ddr4_status_local_cal_fail (sys_ddr_cal_fail),
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
     .sys_hps_ddr_mem_ck (hps_ddr_clk_p),
