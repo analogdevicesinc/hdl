@@ -5,6 +5,6 @@ set dac_data_width 128
 set dac_dma_data_width 128
 
 source $ad_hdl_dir/projects/common/iwg24d/iwg24d_system_qsys.tcl
-source $ad_hdl_dir/projects/common/altera/dacfifo_qsys.tcl
+source $ad_hdl_dir/projects/common/iwg24d/iwg24d_fpga_ddr4_qsys.tcl
 source ../common/daq2_qsys.tcl
 
