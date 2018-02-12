@@ -30,9 +30,11 @@ ad_ip_parameter axi_ad9680_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-ad_ip_instance util_cpack axi_ad9680_cpack
-ad_ip_parameter axi_ad9680_cpack CONFIG.CHANNEL_DATA_WIDTH 64
-ad_ip_parameter axi_ad9680_cpack CONFIG.NUM_OF_CHANNELS 4
+ad_ip_instance util_cpack2 axi_ad9680_cpack { \
+  NUM_OF_CHANNELS 4 \
+  SAMPLES_PER_CHANNEL 4 \
+  SAMPLE_DATA_WIDTH 16 \
+}
 
 # adc common gt
 
@@ -56,34 +58,29 @@ ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_fmcadc4_xcvr/up_cpll_rst_*
 # connections (gt)
 
 ad_xcvrcon  util_fmcadc4_xcvr axi_ad9680_xcvr axi_ad9680_jesd
-ad_connect  util_fmcadc4_xcvr/rx_out_clk_0 axi_ad9680_cpack/adc_clk
-ad_connect  util_fmcadc4_xcvr/rx_out_clk_0 axi_ad9680_core_0/rx_clk
-ad_connect  util_fmcadc4_xcvr/rx_out_clk_0 axi_ad9680_core_1/rx_clk
-ad_connect  axi_ad9680_jesd/rx_sof axi_ad9680_core_0/rx_sof
-ad_connect  axi_ad9680_jesd/rx_sof axi_ad9680_core_1/rx_sof
+ad_connect  util_fmcadc4_xcvr/rx_out_clk_0 axi_ad9680_cpack/clk
 ad_connect  axi_ad9680_jesd/rx_data_tdata util_bsplit_rx_data/data
-ad_connect  axi_ad9680_jesd_rstgen/peripheral_reset axi_ad9680_cpack/adc_rst
+ad_connect  axi_ad9680_jesd_rstgen/peripheral_reset axi_ad9680_cpack/reset
 
 # connections (adc)
 
-ad_connect  util_bsplit_rx_data/split_data_0 axi_ad9680_core_0/rx_data
-ad_connect  util_bsplit_rx_data/split_data_1 axi_ad9680_core_1/rx_data
-ad_connect  axi_ad9680_core_0/adc_enable_0 axi_ad9680_cpack/adc_enable_0
-ad_connect  axi_ad9680_core_0/adc_valid_0 axi_ad9680_cpack/adc_valid_0
-ad_connect  axi_ad9680_core_0/adc_data_0 axi_ad9680_cpack/adc_data_0
-ad_connect  axi_ad9680_core_0/adc_enable_1 axi_ad9680_cpack/adc_enable_1
-ad_connect  axi_ad9680_core_0/adc_valid_1 axi_ad9680_cpack/adc_valid_1
-ad_connect  axi_ad9680_core_0/adc_data_1 axi_ad9680_cpack/adc_data_1
-ad_connect  axi_ad9680_core_1/adc_enable_0 axi_ad9680_cpack/adc_enable_2
-ad_connect  axi_ad9680_core_1/adc_valid_0 axi_ad9680_cpack/adc_valid_2
-ad_connect  axi_ad9680_core_1/adc_data_0 axi_ad9680_cpack/adc_data_2
-ad_connect  axi_ad9680_core_1/adc_enable_1 axi_ad9680_cpack/adc_enable_3
-ad_connect  axi_ad9680_core_1/adc_valid_1 axi_ad9680_cpack/adc_valid_3
-ad_connect  axi_ad9680_core_1/adc_data_1 axi_ad9680_cpack/adc_data_3
+ad_connect  axi_ad9680_core_0/adc_valid_0 axi_ad9680_cpack/fifo_wr_en
+
+for {set i 0} {$i < 2} {incr i} {
+  ad_connect  util_fmcadc4_xcvr/rx_out_clk_0 axi_ad9680_core_${i}/rx_clk
+  ad_connect  util_bsplit_rx_data/split_data_${i} axi_ad9680_core_${i}/rx_data
+  ad_connect  axi_ad9680_jesd/rx_sof axi_ad9680_core_${i}/rx_sof
+  for {set j 0} {$j < 2} {incr j} {
+    set k [expr $i * 2 + $j]
+    ad_connect  axi_ad9680_core_${i}/adc_enable_${j} axi_ad9680_cpack/enable_${k}
+    ad_connect  axi_ad9680_core_${i}/adc_data_${j} axi_ad9680_cpack/fifo_wr_data_${k}
+  }
+}
+
 ad_connect  util_fmcadc4_xcvr/rx_out_clk_0 axi_ad9680_fifo/adc_clk
 ad_connect  axi_ad9680_jesd_rstgen/peripheral_reset axi_ad9680_fifo/adc_rst
-ad_connect  axi_ad9680_cpack/adc_valid axi_ad9680_fifo/adc_wr
-ad_connect  axi_ad9680_cpack/adc_data axi_ad9680_fifo/adc_wdata
+ad_connect  axi_ad9680_cpack/packed_fifo_wr_en axi_ad9680_fifo/adc_wr
+ad_connect  axi_ad9680_cpack/packed_fifo_wr_data axi_ad9680_fifo/adc_wdata
 ad_connect  sys_cpu_clk axi_ad9680_fifo/dma_clk
 ad_connect  sys_cpu_clk axi_ad9680_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn axi_ad9680_dma/m_dest_axi_aresetn
