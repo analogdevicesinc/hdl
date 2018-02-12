@@ -8,8 +8,8 @@ ad_ip_parameter axi_ad6676_xcvr CONFIG.NUM_OF_LANES 2
 ad_ip_parameter axi_ad6676_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad6676_xcvr CONFIG.TX_OR_RX_N 0
 ad_ip_parameter axi_ad6676_xcvr CONFIG.LPM_OR_DFE_N 0
-ad_ip_parameter axi_ad6676_xcvr CONFIG.SYS_CLK_SEL "00"
-ad_ip_parameter axi_ad6676_xcvr CONFIG.OUT_CLK_SEL "100"
+ad_ip_parameter axi_ad6676_xcvr CONFIG.SYS_CLK_SEL 0x0
+ad_ip_parameter axi_ad6676_xcvr CONFIG.OUT_CLK_SEL 0x4
 
 adi_axi_jesd204_rx_create axi_ad6676_jesd 2
 
