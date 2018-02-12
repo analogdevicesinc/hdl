@@ -109,7 +109,6 @@ module system_top (
   wire            spi_miso;
   wire            rx_ref_clk;
   wire            rx_clk;
-  wire            rx_sysref;
 
   assign ddr3_1_p = 2'b11;
   assign ddr3_1_n = 3'b000;
