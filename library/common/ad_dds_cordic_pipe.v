@@ -45,17 +45,17 @@ module ad_dds_cordic_pipe#(
 
   // interface
 
-                      input                            clk,
-  (* keep = "TRUE" *) input                            dir,
-  (* keep = "TRUE" *) input      signed [    DW-1:0] dataa_x,
-  (* keep = "TRUE" *) input      signed [    DW-1:0] dataa_y,
-  (* keep = "TRUE" *) input      signed [    DW-1:0] dataa_z,
-  (* keep = "TRUE" *) input      signed [    DW-1:0] datab_x,
-  (* keep = "TRUE" *) input      signed [    DW-1:0] datab_y,
-  (* keep = "TRUE" *) input      signed [    DW-1:0] datab_z,
-  (* keep = "TRUE" *) output reg signed [    DW-1:0] result_x,
-  (* keep = "TRUE" *) output reg signed [    DW-1:0] result_y,
-  (* keep = "TRUE" *) output reg signed [    DW-1:0] result_z,
+                      input                          clk,
+  (* keep = "TRUE" *) input                          dir,
+  (* keep = "TRUE" *) input             [    DW-1:0] dataa_x,
+  (* keep = "TRUE" *) input             [    DW-1:0] dataa_y,
+  (* keep = "TRUE" *) input             [    DW-1:0] dataa_z,
+  (* keep = "TRUE" *) input             [    DW-1:0] datab_x,
+  (* keep = "TRUE" *) input             [    DW-1:0] datab_y,
+  (* keep = "TRUE" *) input             [    DW-1:0] datab_z,
+  (* keep = "TRUE" *) output reg        [    DW-1:0] result_x,
+  (* keep = "TRUE" *) output reg        [    DW-1:0] result_y,
+  (* keep = "TRUE" *) output reg        [    DW-1:0] result_z,
                       output     signed [    DW-1:0] sgn_shift_x,
                       output     signed [    DW-1:0] sgn_shift_y,
                       input             [DELAY_DW:1] data_delay_in,
@@ -66,22 +66,15 @@ module ad_dds_cordic_pipe#(
 
   reg   [DELAY_DW:1] data_delay = 'd0;
 
+  wire dir_inv = ~dir;
+
   // stage rotation
 
   always @(posedge clk)
     begin
-    case(dir)
-      1'b0: begin
-        result_x <= dataa_x - datab_y;
-        result_y <= dataa_y + datab_x;
-        result_z <= dataa_z - datab_z;
-      end
-      1'b1: begin
-        result_x <= dataa_x + datab_y;
-        result_y <= dataa_y - datab_x;
-        result_z <= dataa_z + datab_z;
-      end
-    endcase
+      result_x <= dataa_x + ({DW{dir_inv}} ^ datab_y) + dir_inv;
+      result_y <= dataa_y + ({DW{dir}}     ^ datab_x) + dir;
+      result_z <= dataa_z + ({DW{dir_inv}} ^ datab_z) + dir_inv;
   end
 
   // stage shift
