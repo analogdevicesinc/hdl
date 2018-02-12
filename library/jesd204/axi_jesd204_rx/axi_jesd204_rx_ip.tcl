@@ -114,6 +114,8 @@ adi_add_bus "rx_status" "slave" \
     { "core_status_lane_latency" "lane_latency" } \
   }
 
+ipx::infer_bus_interface irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
+
 adi_add_bus_clock "core_clk" "rx_status:rx_event:rx_ilas_config:rx_cfg" \
   "core_reset" "master"
 
