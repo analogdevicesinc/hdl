@@ -123,9 +123,10 @@
   ad_ip_parameter current_monitor_m1_dma CONFIG.SYNC_TRANSFER_START true
     # data packer motor 1
   #
-  ad_ip_instance util_cpack current_monitor_m1_pack
-  ad_ip_parameter current_monitor_m1_pack CONFIG.NUM_OF_CHANNELS 4
-  ad_ip_parameter current_monitor_m1_pack CONFIG.CHANNEL_DATA_WIDTH 16
+  ad_ip_instance util_cpack2 current_monitor_m1_pack { \
+    NUM_OF_CHANNELS 3 \
+    SAMPLE_DATA_WIDTH 16 \
+  }
 
     # current monitor core motor 2
   ad_ip_instance axi_mc_current_monitor current_monitor_m2
@@ -137,9 +138,10 @@
   ad_ip_parameter current_monitor_m2_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
   ad_ip_parameter current_monitor_m2_dma CONFIG.SYNC_TRANSFER_START true
     # data packer motor 2
-  ad_ip_instance util_cpack current_monitor_m2_pack
-  ad_ip_parameter current_monitor_m2_pack CONFIG.NUM_OF_CHANNELS 4
-  ad_ip_parameter current_monitor_m2_pack CONFIG.CHANNEL_DATA_WIDTH 16
+  ad_ip_instance util_cpack2 current_monitor_m2_pack { \
+    NUM_OF_CHANNELS 3 \
+    SAMPLE_DATA_WIDTH 16 \
+  }
 
   #controller
     # controller core motor 1
@@ -207,27 +209,20 @@
   ad_connect adc_m1_vbus_dat_i current_monitor_m1/adc_vbus_dat_i
 
 
-  ad_connect sys_cpu_clk   current_monitor_m1_pack/adc_clk
-  ad_connect sys_cpu_reset current_monitor_m1_pack/adc_rst
+  ad_connect sys_cpu_clk   current_monitor_m1_pack/clk
+  ad_connect sys_cpu_reset current_monitor_m1_pack/reset
 
-  ad_connect current_monitor_m1/adc_enable_ia     current_monitor_m1_pack/adc_enable_0
-  ad_connect current_monitor_m1/adc_enable_ib     current_monitor_m1_pack/adc_enable_1
-  ad_connect current_monitor_m1/adc_enable_vbus   current_monitor_m1_pack/adc_enable_2
-  ad_connect current_monitor_m1_pack/adc_valid_0 current_monitor_m1/i_ready_o
-  ad_connect current_monitor_m1_pack/adc_valid_1 current_monitor_m1/i_ready_o
-  ad_connect current_monitor_m1_pack/adc_valid_2 current_monitor_m1/i_ready_o
-  ad_connect current_monitor_m1/ia_o current_monitor_m1_pack/adc_data_0
-  ad_connect current_monitor_m1/ib_o current_monitor_m1_pack/adc_data_1
-  ad_connect current_monitor_m1/vbus_o current_monitor_m1_pack/adc_data_2
-  ad_connect current_monitor_m1_pack/adc_data current_monitor_m1_dma/fifo_wr_din
-  ad_connect current_monitor_m1_pack/adc_valid current_monitor_m1_dma/fifo_wr_en
-  ad_connect current_monitor_m1_pack/adc_sync current_monitor_m1_dma/fifo_wr_sync
+  ad_connect current_monitor_m1/adc_enable_ia     current_monitor_m1_pack/enable_0
+  ad_connect current_monitor_m1/adc_enable_ib     current_monitor_m1_pack/enable_1
+  ad_connect current_monitor_m1/adc_enable_vbus   current_monitor_m1_pack/enable_2
+  ad_connect current_monitor_m1/i_ready_o         current_monitor_m1_pack/fifo_wr_en
+  ad_connect current_monitor_m1/ia_o              current_monitor_m1_pack/fifo_wr_data_0
+  ad_connect current_monitor_m1/ib_o              current_monitor_m1_pack/fifo_wr_data_1
+  ad_connect current_monitor_m1/vbus_o            current_monitor_m1_pack/fifo_wr_data_2
 
-  ad_connect current_monitor_m1_pack/adc_enable_3 GND
-  ad_connect current_monitor_m1_pack/adc_valid_3  GND
-  ad_connect current_monitor_m1_pack/adc_data_3   GND
+  ad_connect current_monitor_m1_pack/packed_fifo_wr current_monitor_m1_dma/fifo_wr
 
-    # motor 2
+  # motor 2
   ad_connect  sys_cpu_clk current_monitor_m2/ref_clk
 
   ad_connect  sys_cpu_clk current_monitor_m2_dma/fifo_wr_clk
@@ -237,25 +232,18 @@
   ad_connect  adc_m2_ib_dat_i  current_monitor_m2/adc_ib_dat_i
   ad_connect  adc_m2_vbus_dat_i current_monitor_m2/adc_vbus_dat_i
 
-  ad_connect sys_cpu_clk current_monitor_m2_pack/adc_clk
-  ad_connect sys_cpu_reset current_monitor_m2_pack/adc_rst
+  ad_connect sys_cpu_clk current_monitor_m2_pack/clk
+  ad_connect sys_cpu_reset current_monitor_m2_pack/reset
 
-  ad_connect current_monitor_m2/adc_enable_ia     current_monitor_m2_pack/adc_enable_0
-  ad_connect current_monitor_m2/adc_enable_ib     current_monitor_m2_pack/adc_enable_1
-  ad_connect current_monitor_m2/adc_enable_vbus   current_monitor_m2_pack/adc_enable_2
-  ad_connect current_monitor_m2_pack/adc_valid_0  current_monitor_m2/i_ready_o
-  ad_connect current_monitor_m2_pack/adc_valid_1  current_monitor_m2/i_ready_o
-  ad_connect current_monitor_m2_pack/adc_valid_2  current_monitor_m2/i_ready_o
-  ad_connect current_monitor_m2/ia_o              current_monitor_m2_pack/adc_data_0
-  ad_connect current_monitor_m2/ib_o              current_monitor_m2_pack/adc_data_1
-  ad_connect current_monitor_m2/vbus_o            current_monitor_m2_pack/adc_data_2
-  ad_connect current_monitor_m2_pack/adc_valid    current_monitor_m2_dma/fifo_wr_en
-  ad_connect current_monitor_m2_pack/adc_data     current_monitor_m2_dma/fifo_wr_din
-  ad_connect current_monitor_m2_pack/adc_sync     current_monitor_m2_dma/fifo_wr_sync
+  ad_connect current_monitor_m2/adc_enable_ia     current_monitor_m2_pack/enable_0
+  ad_connect current_monitor_m2/adc_enable_ib     current_monitor_m2_pack/enable_1
+  ad_connect current_monitor_m2/adc_enable_vbus   current_monitor_m2_pack/enable_2
+  ad_connect current_monitor_m2/i_ready_o         current_monitor_m2_pack/fifo_wr_en
+  ad_connect current_monitor_m2/ia_o              current_monitor_m2_pack/fifo_wr_data_0
+  ad_connect current_monitor_m2/ib_o              current_monitor_m2_pack/fifo_wr_data_1
+  ad_connect current_monitor_m2/vbus_o            current_monitor_m2_pack/fifo_wr_data_2
 
-  ad_connect current_monitor_m2_pack/adc_enable_3 GND
-  ad_connect current_monitor_m2_pack/adc_valid_3  GND
-  ad_connect current_monitor_m2_pack/adc_data_3   GND
+  ad_connect current_monitor_m2_pack/packed_fifo_wr current_monitor_m2_dma/fifo_wr
 
   #controller
     # motor 1

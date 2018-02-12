@@ -18,8 +18,8 @@ LIB_DEPS += axi_mc_controller
 LIB_DEPS += axi_mc_current_monitor
 LIB_DEPS += axi_mc_speed
 LIB_DEPS += axi_spdif_tx
-LIB_DEPS += util_cpack
 LIB_DEPS += util_gmii_to_rgmii
 LIB_DEPS += util_i2c_mixer
+LIB_DEPS += util_pack/util_cpack2
 
 include ../../scripts/project-xilinx.mk
