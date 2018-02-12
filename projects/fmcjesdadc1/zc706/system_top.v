@@ -99,7 +99,6 @@ module system_top (
   wire            spi1_mosi;
   wire            spi1_miso;
   wire            rx_clk;
-  wire            rx_sysref;
 
   assign spi_csn = spi0_csn[0];
   assign spi_clk = spi0_clk;
