@@ -20,10 +20,17 @@ ad_ip_parameter data_bsplit CONFIG.NUM_OF_CHANNELS 2
 ad_ip_instance axi_ad9250 axi_ad9250_0_core
 ad_ip_instance axi_ad9250 axi_ad9250_1_core
 
-ad_ip_instance util_cpack axi_ad9250_0_cpack
-ad_ip_parameter axi_ad9250_0_cpack CONFIG.NUM_OF_CHANNELS 2
-ad_ip_instance util_cpack axi_ad9250_1_cpack
-ad_ip_parameter axi_ad9250_1_cpack CONFIG.NUM_OF_CHANNELS 2
+ad_ip_instance util_cpack2 axi_ad9250_0_cpack { \
+  NUM_OF_CHANNELS 2 \
+  SAMPLES_PER_CHANNEL 2 \
+  SAMPLE_DATA_WIDTH 16 \
+}
+
+ad_ip_instance util_cpack2 axi_ad9250_1_cpack { \
+  NUM_OF_CHANNELS 2 \
+  SAMPLES_PER_CHANNEL 2 \
+  SAMPLE_DATA_WIDTH 16 \
+}
 
 ad_ip_instance axi_dmac axi_ad9250_0_dma
 ad_ip_parameter axi_ad9250_0_dma CONFIG.DMA_TYPE_SRC 2
@@ -84,44 +91,28 @@ create_bd_port -dir O rx_core_clk
 # connections (adc)
 
 ad_xcvrcon  util_fmcjesdadc1_xcvr axi_ad9250_xcvr axi_ad9250_jesd
-ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_0_core/rx_clk
 ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 rx_core_clk
-ad_connect  axi_ad9250_jesd/rx_sof axi_ad9250_0_core/rx_sof
-ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_1_core/rx_clk
-ad_connect  axi_ad9250_jesd/rx_sof axi_ad9250_1_core/rx_sof
 
 ad_connect  axi_ad9250_jesd/rx_data_tdata data_bsplit/data
-ad_connect  axi_ad9250_0_core/rx_data data_bsplit/split_data_0
-ad_connect  axi_ad9250_1_core/rx_data data_bsplit/split_data_1
 
-ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_0_cpack/adc_clk
-ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_1_cpack/adc_clk
-ad_connect  axi_ad9250_jesd_rstgen/peripheral_reset axi_ad9250_0_cpack/adc_rst
-ad_connect  axi_ad9250_jesd_rstgen/peripheral_reset axi_ad9250_1_cpack/adc_rst
+for {set i 0} {$i < 2} {incr i} {
+  ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_${i}_core/rx_clk
+  ad_connect  axi_ad9250_jesd/rx_sof axi_ad9250_${i}_core/rx_sof
+  ad_connect  axi_ad9250_${i}_core/rx_data data_bsplit/split_data_${i}
 
-ad_connect  axi_ad9250_0_core/adc_enable_a axi_ad9250_0_cpack/adc_enable_0
-ad_connect  axi_ad9250_0_core/adc_valid_a axi_ad9250_0_cpack/adc_valid_0
-ad_connect  axi_ad9250_0_core/adc_data_a axi_ad9250_0_cpack/adc_data_0
-ad_connect  axi_ad9250_0_core/adc_enable_b axi_ad9250_0_cpack/adc_enable_1
-ad_connect  axi_ad9250_0_core/adc_valid_b axi_ad9250_0_cpack/adc_valid_1
-ad_connect  axi_ad9250_0_core/adc_data_b axi_ad9250_0_cpack/adc_data_1
-ad_connect  axi_ad9250_1_core/adc_enable_a axi_ad9250_1_cpack/adc_enable_0
-ad_connect  axi_ad9250_1_core/adc_valid_a axi_ad9250_1_cpack/adc_valid_0
-ad_connect  axi_ad9250_1_core/adc_data_a axi_ad9250_1_cpack/adc_data_0
-ad_connect  axi_ad9250_1_core/adc_enable_b axi_ad9250_1_cpack/adc_enable_1
-ad_connect  axi_ad9250_1_core/adc_valid_b axi_ad9250_1_cpack/adc_valid_1
-ad_connect  axi_ad9250_1_core/adc_data_b axi_ad9250_1_cpack/adc_data_1
+  ad_connect  util_fmcjesdadc1_xcvr/rx_out_clk_0 axi_ad9250_${i}_cpack/clk
+  ad_connect  axi_ad9250_jesd_rstgen/peripheral_reset axi_ad9250_${i}_cpack/reset
 
-ad_connect  axi_ad9250_0_core/adc_clk axi_ad9250_0_dma/fifo_wr_clk
-ad_connect  axi_ad9250_0_dma/fifo_wr_en axi_ad9250_0_cpack/adc_valid
-ad_connect  axi_ad9250_0_dma/fifo_wr_sync axi_ad9250_0_cpack/adc_sync
-ad_connect  axi_ad9250_0_dma/fifo_wr_din axi_ad9250_0_cpack/adc_data
-ad_connect  axi_ad9250_0_core/adc_dovf axi_ad9250_0_dma/fifo_wr_overflow
-ad_connect  axi_ad9250_1_core/adc_clk axi_ad9250_1_dma/fifo_wr_clk
-ad_connect  axi_ad9250_1_dma/fifo_wr_en axi_ad9250_1_cpack/adc_valid
-ad_connect  axi_ad9250_1_dma/fifo_wr_sync axi_ad9250_1_cpack/adc_sync
-ad_connect  axi_ad9250_1_dma/fifo_wr_din axi_ad9250_1_cpack/adc_data
-ad_connect  axi_ad9250_1_core/adc_dovf axi_ad9250_1_dma/fifo_wr_overflow
+  ad_connect  axi_ad9250_${i}_core/adc_dovf axi_ad9250_${i}_cpack/fifo_wr_overflow
+  ad_connect  axi_ad9250_${i}_core/adc_valid_a axi_ad9250_${i}_cpack/fifo_wr_en
+  ad_connect  axi_ad9250_${i}_core/adc_enable_a axi_ad9250_${i}_cpack/enable_0
+  ad_connect  axi_ad9250_${i}_core/adc_data_a axi_ad9250_${i}_cpack/fifo_wr_data_0
+  ad_connect  axi_ad9250_${i}_core/adc_enable_b axi_ad9250_${i}_cpack/enable_1
+  ad_connect  axi_ad9250_${i}_core/adc_data_b axi_ad9250_${i}_cpack/fifo_wr_data_1
+
+  ad_connect  axi_ad9250_${i}_core/adc_clk axi_ad9250_${i}_dma/fifo_wr_clk
+  ad_connect  axi_ad9250_${i}_dma/fifo_wr axi_ad9250_${i}_cpack/packed_fifo_wr
+}
 
 # interconnect (cpu)
 
