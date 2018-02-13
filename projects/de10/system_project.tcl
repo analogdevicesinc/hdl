@@ -2,66 +2,15 @@
 source ../scripts/adi_env.tcl
 source ../scripts/adi_project_alt.tcl
 
-load_package flow
-
-project_new de10nano -overwrite
-
-set family "Cyclone V"
-set device 5CSEBA6U23I7DK
-
-set_global_assignment -name FAMILY $family
-set_global_assignment -name DEVICE $device
-
-set QFILE [open "system_qsys_script.tcl" "w"]
-puts $QFILE "set ad_hdl_dir $ad_hdl_dir"
-puts $QFILE "set ad_phdl_dir $ad_phdl_dir"
-puts $QFILE "package require qsys"
-puts $QFILE "set_module_property NAME {system_bd}"
-puts $QFILE "set_project_property DEVICE_FAMILY {$family}"
-puts $QFILE "set_project_property DEVICE $device"
-puts $QFILE "source system_qsys.tcl"
-puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.clockCrossingAdapter} {AUTO}"
-puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.burstAdapterImplementation} {PER_BURST_TYPE_CONVERTER}"
-puts $QFILE "set_interconnect_requirement {\$system} {qsys_mm.maxAdditionalLatency} {4}"
-puts $QFILE "save_system {system_bd.qsys}"
-close $QFILE
-
-exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
-  --script=system_qsys_script.tcl
-exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
-  system_bd.qsys --synthesis=VERILOG --output-directory=system_bd \
-  --family=$family --part=$device
-
-# ignored warnings and such
-
-set_global_assignment -name MESSAGE_DISABLE 17951 ; ## unused RX channels
-set_global_assignment -name MESSAGE_DISABLE 18655 ; ## unused TX channels
-set_global_assignment -name MESSAGE_DISABLE 114001 ; ## time value $x truncated to $y
-
-# default assignments
- 
-set_global_assignment -name QIP_FILE system_bd/synthesis/system_bd.qip
-set_global_assignment -name VERILOG_FILE system_top.v
-set_global_assignment -name SDC_FILE system_constr.sdc
-set_global_assignment -name TOP_LEVEL_ENTITY system_top
+adi_project_altera de10nano
 
 # globals
 
-set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
-set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
-set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
-set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
-set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
-set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
-set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
-set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
 set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name ECO_REGENERATE_REPORT ON
 set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON
-set_global_assignment -name TIMEQUEST_REPORT_SCRIPT $ad_hdl_dir/projects/scripts/adi_tquest.tcl
-set_global_assignment -name ON_CHIP_BITSTREAM_DECOMPRESSION OFF
 
 # clocks (V11, Y13, E11 - PL 50MHz)
 # clocks (E20, D20 - HPS 25MHz)

@@ -239,7 +239,7 @@ set_instance_parameter_value axi_hdmi_tx_0 {DEVICE_TYPE} {16}
 set_instance_parameter_value axi_hdmi_tx_0 {EMBEDDED_SYNC} {0}
 set_instance_parameter_value axi_hdmi_tx_0 {ID} {0}
 
-add_instance pixel_clk_pll altera_pll 17.0
+add_instance pixel_clk_pll altera_pll 17.1
 set_instance_parameter_value pixel_clk_pll {gui_operation_mode} {direct}
 set_instance_parameter_value pixel_clk_pll {gui_output_clock_frequency0} {108.0}
 set_instance_parameter_value pixel_clk_pll {gui_phase_shift0} {0}
@@ -256,7 +256,7 @@ set_instance_parameter_value pixel_clk_pll {gui_reference_clock_frequency} {50.0
 set_instance_parameter_value pixel_clk_pll {gui_switchover_delay} {0}
 set_instance_parameter_value pixel_clk_pll {gui_en_reconf} {1}
 
-add_instance pixel_clk_pll_reconfig altera_pll_reconfig 17.0
+add_instance pixel_clk_pll_reconfig altera_pll_reconfig 17.1
 set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_BYTEENABLE} {0}
 set_instance_parameter_value pixel_clk_pll_reconfig {ENABLE_MIF} {0}
 set_instance_parameter_value pixel_clk_pll_reconfig {MIF_FILE_NAME} {}
