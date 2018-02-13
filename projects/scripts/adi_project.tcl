@@ -146,9 +146,6 @@ proc adi_project_files {project_name project_files} {
 proc adi_project_run {project_name} {
   global ADI_POWER_OPTIMIZATION
 
-  set_property strategy Flow_PerfOptimized_high [get_runs synth_1]
-  set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
-
   launch_runs synth_1
   wait_on_run synth_1
   open_run synth_1
