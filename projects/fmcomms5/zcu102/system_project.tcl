@@ -1,5 +1,4 @@
 
-set REQUIRED_VIVADO_VERSION "2017.2.1"
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
