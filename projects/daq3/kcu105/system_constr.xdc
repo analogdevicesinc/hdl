@@ -67,6 +67,3 @@ set_property LOC GTHE3_CHANNEL_X0Y16 [get_cells -hierarchical -filter {NAME =~ *
 set_property LOC GTHE3_CHANNEL_X0Y18 [get_cells -hierarchical -filter {NAME =~ *util_daq3_xcvr/inst/i_xch_2/i_gthe3_channel}]
 set_property LOC GTHE3_CHANNEL_X0Y17 [get_cells -hierarchical -filter {NAME =~ *util_daq3_xcvr/inst/i_xch_3/i_gthe3_channel}]
 
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9680_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]*]
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9152_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]*]
-
