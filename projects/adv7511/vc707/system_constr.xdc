@@ -46,3 +46,9 @@ set_property -dict  {PACKAGE_PIN  AV23  IOSTANDARD  LVCMOS18} [get_ports hdmi_da
 
 set_property -dict  {PACKAGE_PIN  AR23  IOSTANDARD  LVCMOS18} [get_ports spdif]
 
+# spi -- because the interface is not used, the leaf registers of the output lines
+# should be set to IOB FALSE to prevent a CRITICAL WARNING
+
+set_property IOB FALSE [get_cells i_system_wrapper/system_i/axi_spi/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/IO0_I_REG]
+set_property IOB FALSE [get_cells i_system_wrapper/system_i/axi_spi/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/IO1_I_REG]
+
