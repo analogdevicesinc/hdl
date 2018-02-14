@@ -48,9 +48,6 @@ create_clock -name rx_ref_clk   -period  1.60 [get_ports rx_ref_clk_p]
 create_clock -name tx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe4_channel/TXOUTCLK]
 create_clock -name rx_div_clk   -period  3.20 [get_pins i_system_wrapper/system_i/util_daq3_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
 
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9680_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]*]
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9152_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]*]
-
 # pin assignments below are for reference only and are ignored by the tool!
 
 # set_property  -dict {PACKAGE_PIN  L8  } [get_ports rx_ref_clk_p]                                      ; ## B20  FMC_HPC0_GBTCLK1_M2C_C_P

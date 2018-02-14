@@ -74,7 +74,3 @@ create_clock -name tx_div_clk     -period  8.00 [get_pins i_system_wrapper/syste
 create_clock -name rx_div_clk     -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
 create_clock -name rx_os_div_clk  -period  8.00 [get_pins i_system_wrapper/system_i/util_ad9371_xcvr/inst/i_xch_2/i_gtxe2_channel/RXOUTCLK]
 
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9371_rx_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9371_tx_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
-set_false_path -from [get_cells i_system_wrapper/system_i/axi_ad9371_rx_os_jesd_rstgen/U0/PR_OUT_DFF[0].peripheral_reset_reg[0]]
-
