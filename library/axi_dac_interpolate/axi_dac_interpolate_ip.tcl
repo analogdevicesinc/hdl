@@ -18,7 +18,8 @@ adi_ip_files axi_dac_interpolate [list \
 
 adi_ip_properties axi_dac_interpolate
 
-ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]
+ipx::infer_bus_interface dac_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface dac_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

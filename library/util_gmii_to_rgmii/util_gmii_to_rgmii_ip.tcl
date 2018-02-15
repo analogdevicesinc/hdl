@@ -18,4 +18,10 @@ ipx::infer_bus_interface {rgmii_td rgmii_tx_ctl rgmii_txc rgmii_rd rgmii_rx_ctl 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.IODELAY_CTRL')) = 1} \
   [ipx::get_ports idelayctrl_clk -of_objects [ipx::current_core]]
 
+ipx::infer_bus_interface clk_20m xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface clk_25m xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface clk_125m xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface idelayctrl_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface reset xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
 ipx::save_core [ipx::current_core]

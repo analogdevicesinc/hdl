@@ -87,5 +87,12 @@ set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
   -of_objects [ipx::get_bus_interfaces s_axi_aclk \
   -of_objects [ipx::current_core]]]
 
+ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface l_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface delay_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
+ipx::infer_bus_interface gps_pps_irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 

@@ -13,5 +13,11 @@ adi_ip_files axi_fmcadc5_sync [list \
   "axi_fmcadc5_sync.v" ]
 
 adi_ip_properties axi_fmcadc5_sync
+
+ipx::infer_bus_interface rx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
+ipx::infer_bus_interface delay_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface delay_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 
