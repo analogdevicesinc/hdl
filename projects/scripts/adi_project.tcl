@@ -113,12 +113,8 @@ proc adi_project_xilinx {project_name {mode 0}} {
   set_property ip_repo_paths $lib_dirs [current_fileset]
   update_ip_catalog
 
-  set_msg_config -id {BD 41-1348} -new_severity info
-  set_msg_config -id {BD 41-1343} -new_severity info
-  set_msg_config -id {BD 41-1306} -new_severity info
-  set_msg_config -id {IP_Flow 19-1687} -new_severity info
-  set_msg_config -id {filemgmt 20-1763} -new_severity info
-  set_msg_config -severity {CRITICAL WARNING} -quiet -id {BD 41-1276} -new_severity error
+  ## Load custom message severity definitions
+  source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
 
   create_bd_design "system"
   source system_bd.tcl
