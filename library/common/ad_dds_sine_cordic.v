@@ -37,18 +37,21 @@
 
 module ad_dds_sine_cordic #(
 
-  // parameters
-
+  // Range = 14, 16, 18 and 20
   parameter   CORDIC_DW = 16,
-  parameter   DELAY_DW = 1) (
+  // Range = N/A
+  parameter   DELAY_DW  = 1) (
 
   // interface
 
   input                        clk,
   input      [CORDIC_DW-1:0]   angle,
   output reg [CORDIC_DW-1:0]   sine,
+  output reg [CORDIC_DW-1:0]   cosine,
   input      [ DELAY_DW-1:0]   ddata_in,
   output reg [ DELAY_DW-1:0]   ddata_out);
+
+  // Local Parameters
 
   // 1.647 = gain of the system
   localparam [19:0] X_VALUE_20 = 318327; // ((20^2)/2)/1.647
@@ -56,13 +59,13 @@ module ad_dds_sine_cordic #(
   localparam [15:0] X_VALUE_16 =  19883; // ((16^2)/2)/1.647
   localparam [13:0] X_VALUE_14 =   4970; // ((14^2)/2)/1.647
 
-  // internal registers
+  // Registers Declarations
 
   reg signed  [CORDIC_DW-1:0] x0  = 'd0;
   reg signed  [CORDIC_DW-1:0] y0  = 'd0;
   reg signed  [CORDIC_DW-1:0] z0  = 'd0;
 
-  // internal signals
+  // Wires Declarations
 
   wire        [CORDIC_DW-1:0] x_value;
   wire signed [CORDIC_DW-1:0] x_s       [0:CORDIC_DW-1];
@@ -157,31 +160,26 @@ module ad_dds_sine_cordic #(
   // first two bits represent the quadrant in the unit circle
   assign   quadrant = angle[CORDIC_DW-1:CORDIC_DW-2];
 
-  always @(posedge clk)
-  begin
-
+  always @(posedge clk) begin
     case (quadrant)
-       2'b00,
-       2'b11:
-       begin
-          x0 <= x_value;
-          y0 <= 0;
-          z0 <= angle;
-       end
+      2'b00,
+      2'b11: begin
+         x0 <= x_value;
+         y0 <= 0;
+         z0 <= angle;
+      end
 
-       2'b01:
-       begin
-          x0 <= 0;
-          y0 <= x_value;
-          z0 <= {2'b00, angle[CORDIC_DW-3:0]};
-       end
+      2'b01: begin
+         x0 <= 0;
+         y0 <= x_value;
+         z0 <= {2'b00, angle[CORDIC_DW-3:0]};
+      end
 
-       2'b10:
-       begin
-          x0 <= 0;
-          y0 <= -x_value;
-          z0 <= {2'b11 ,angle[CORDIC_DW-3:0]};
-       end
+      2'b10: begin
+         x0 <= 0;
+         y0 <= -x_value;
+         z0 <= {2'b11, angle[CORDIC_DW-3:0]};
+      end
     endcase
   end
 
@@ -227,6 +225,7 @@ module ad_dds_sine_cordic #(
   always @(posedge clk) begin
     ddata_out <= data_in_d[CORDIC_DW-1];
     sine <= y_s[CORDIC_DW-1];
+    cosine <= x_s[CORDIC_DW-1];
   end
 
 endmodule

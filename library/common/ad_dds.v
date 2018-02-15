@@ -42,6 +42,7 @@ module ad_dds #(
   parameter   DISABLE = 0,
   parameter   DDS_TYPE = 1,
   parameter   CORDIC_DW = 14) (
+
   // interface
 
   input           clk,
