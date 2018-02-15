@@ -39,11 +39,14 @@ module ad_dds_cordic_pipe#(
 
   // parameters
 
+  // Range = N/A
   parameter DW = 16,
+  // Range = N/A
   parameter DELAY_DW = 1,
+  // Range = 0-(DW - 1)
   parameter SHIFT = 0) (
 
-  // interface
+  // Interface
 
                       input                          clk,
   (* keep = "TRUE" *) input                          dir,
@@ -59,33 +62,34 @@ module ad_dds_cordic_pipe#(
                       output     signed [    DW-1:0] sgn_shift_x,
                       output     signed [    DW-1:0] sgn_shift_y,
                       input             [DELAY_DW:1] data_delay_in,
-                      output            [DELAY_DW:1] data_delay_out
-  );
+                      output            [DELAY_DW:1] data_delay_out);
 
-  // internal registers
+  // Registers Declarations
 
   reg   [DELAY_DW:1] data_delay = 'd0;
 
+  // Wires Declarations
+
   wire dir_inv = ~dir;
 
-  // stage rotation
+  // Stage rotation
 
-  always @(posedge clk)
-    begin
-      result_x <= dataa_x + ({DW{dir_inv}} ^ datab_y) + dir_inv;
-      result_y <= dataa_y + ({DW{dir}}     ^ datab_x) + dir;
-      result_z <= dataa_z + ({DW{dir_inv}} ^ datab_z) + dir_inv;
+  always @(posedge clk) begin
+    result_x <= dataa_x + ({DW{dir_inv}} ^ datab_y) + dir_inv;
+    result_y <= dataa_y + ({DW{dir}}     ^ datab_x) + dir;
+    result_z <= dataa_z + ({DW{dir_inv}} ^ datab_z) + dir_inv;
   end
 
-  // stage shift
+  // Stage shift
 
-  assign sgn_shift_x = result_x >>> SHIFT + 1;
-  assign sgn_shift_y = result_y >>> SHIFT + 1;
+  assign sgn_shift_x = {{SHIFT{result_x[DW-1]}}, result_x[DW-1:SHIFT]};
+  assign sgn_shift_y = {{SHIFT{result_y[DW-1]}}, result_y[DW-1:SHIFT]};
+
+  // Delay data (if used)
 
   generate
     if (DELAY_DW > 1) begin
-      always @(posedge clk)
-      begin
+      always @(posedge clk) begin
         data_delay <= data_delay_in;
       end
     end

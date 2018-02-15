@@ -86,6 +86,7 @@ module ad_dds_1 #(
         .clk (clk),
         .angle (angle_s[CORDIC_DW:1]),
         .sine (sine_s),
+        .cosine (),
         .ddata_in (1'b0),
         .ddata_out ());
 
