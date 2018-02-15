@@ -21,7 +21,8 @@ adi_ip_add_core_dependencies { \
   analog.com:user:util_cic:1.0 \
 }
 
-ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]
+ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface adc_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

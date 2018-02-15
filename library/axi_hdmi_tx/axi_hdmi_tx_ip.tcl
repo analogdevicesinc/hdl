@@ -29,5 +29,9 @@ adi_ip_files axi_hdmi_tx [list \
 
 adi_ip_properties axi_hdmi_tx
 
+ipx::infer_bus_interface hdmi_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface hdmi_out_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface vdma_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 

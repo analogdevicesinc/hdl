@@ -119,6 +119,8 @@ adi_add_bus "tx_ctrl" "master" \
     { "core_ctrl_manual_sync_request" "manual_sync_request" } \
   }
 
+ipx::infer_bus_interface irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
+
 adi_add_bus_clock "core_clk" "tx_status:tx_event:tx_ilas_config:tx_cfg:tx_ctrl" \
   "core_reset" "master"
 

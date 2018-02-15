@@ -28,6 +28,10 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CH
   [ipx::get_ports *_7* -of_objects [ipx::current_core]]
 
 ipx::remove_all_bus_interface [ipx::current_core]
+
+ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface adc_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 
 
