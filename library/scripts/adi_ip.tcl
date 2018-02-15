@@ -171,11 +171,8 @@ proc adi_ip_create {ip_name} {
 
   create_project $ip_name . -force
 
-  set_msg_config -id {IP_Flow 19-3656} -new_severity INFO
-  set_msg_config -id {IP_Flow 19-2999} -new_severity INFO 
-  set_msg_config -id {IP_Flow 19-1654} -new_severity INFO 
-  set_msg_config -id {IP_Flow 19-4623} -new_severity INFO 
-  set_msg_config -id {IP_Flow 19-459} -new_severity INFO 
+  ## Load custom message severity definitions
+  source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
 
   set ip_constr_files ""
   set lib_dirs $ad_hdl_dir/library
