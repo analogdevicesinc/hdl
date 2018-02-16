@@ -53,14 +53,10 @@ module ad_dds_cordic_pipe#(
   (* keep = "TRUE" *) input             [    DW-1:0] dataa_x,
   (* keep = "TRUE" *) input             [    DW-1:0] dataa_y,
   (* keep = "TRUE" *) input             [    DW-1:0] dataa_z,
-  (* keep = "TRUE" *) input             [    DW-1:0] datab_x,
-  (* keep = "TRUE" *) input             [    DW-1:0] datab_y,
   (* keep = "TRUE" *) input             [    DW-1:0] datab_z,
   (* keep = "TRUE" *) output reg        [    DW-1:0] result_x,
   (* keep = "TRUE" *) output reg        [    DW-1:0] result_y,
   (* keep = "TRUE" *) output reg        [    DW-1:0] result_z,
-                      output     signed [    DW-1:0] sgn_shift_x,
-                      output     signed [    DW-1:0] sgn_shift_y,
                       input             [DELAY_DW:1] data_delay_in,
                       output            [DELAY_DW:1] data_delay_out);
 
@@ -70,20 +66,22 @@ module ad_dds_cordic_pipe#(
 
   // Wires Declarations
 
-  wire dir_inv = ~dir;
+  wire  [    DW-1:0]  sgn_shift_x;
+  wire  [    DW-1:0]  sgn_shift_y;
+  wire                dir_inv = ~dir;
+
+  // Previous stage shift
+
+  assign sgn_shift_x = {{SHIFT{dataa_x[DW-1]}}, dataa_x[DW-1:SHIFT]};
+  assign sgn_shift_y = {{SHIFT{dataa_y[DW-1]}}, dataa_y[DW-1:SHIFT]};
 
   // Stage rotation
 
   always @(posedge clk) begin
-    result_x <= dataa_x + ({DW{dir_inv}} ^ datab_y) + dir_inv;
-    result_y <= dataa_y + ({DW{dir}}     ^ datab_x) + dir;
-    result_z <= dataa_z + ({DW{dir_inv}} ^ datab_z) + dir_inv;
+    result_x <= dataa_x + ({DW{dir_inv}} ^ sgn_shift_y) + dir_inv;
+    result_y <= dataa_y + ({DW{dir}}     ^ sgn_shift_x) + dir;
+    result_z <= dataa_z + ({DW{dir_inv}} ^     datab_z) + dir_inv;
   end
-
-  // Stage shift
-
-  assign sgn_shift_x = {{SHIFT{result_x[DW-1]}}, result_x[DW-1:SHIFT]};
-  assign sgn_shift_y = {{SHIFT{result_y[DW-1]}}, result_y[DW-1:SHIFT]};
 
   // Delay data (if used)
 
