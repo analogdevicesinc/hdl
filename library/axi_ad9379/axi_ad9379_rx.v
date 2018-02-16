@@ -254,8 +254,13 @@ module axi_ad9379_rx #(
   // common processor control
 
   up_adc_common #(
-    .COMMON_ID ('h00),
-    .ID (ID))
+    .COMMON_ID (6'h00),
+    .ID (ID),
+    .CONFIG(0),
+    .DRP_DISABLE(1),
+    .USERPORTS_DISABLE(1),
+    .GPIO_DISABLE(1),
+    .START_CODE_DISABLE(1))
   i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),

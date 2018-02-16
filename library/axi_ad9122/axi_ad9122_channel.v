@@ -209,7 +209,13 @@ module axi_ad9122_channel #(
 
   // single channel processor
 
-  up_dac_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
+  up_dac_channel #(
+    .COMMON_ID (6'h11),
+    .CHANNEL_ID(CHANNEL_ID),
+    .DDS_DISABLE (0),
+    .USERPORTS_DISABLE (0),
+    .IQCORRECTION_DISABLE (0))
+  i_up_dac_channel (
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),

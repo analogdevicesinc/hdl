@@ -241,7 +241,15 @@ module axi_ad9379_tx #(
 
   // dac common processor interface
 
-  up_dac_common #(.ID (ID)) i_up_dac_common (
+  up_dac_common #(
+    .ID (ID),
+    .CONFIG(0),
+    .CLK_EDGE_SEL(0),
+    .COMMON_ID(6'h10),
+    .DRP_DISABLE(1),
+    .USERPORTS_DISABLE(1),
+    .GPIO_DISABLE(1))
+  i_up_dac_common (
     .mmcm_rst (),
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),

@@ -89,9 +89,6 @@ module axi_ad9434_core #(
   output                  adc_rst,
   input                   adc_status);
 
-
-  // internal registers
-
   // internal signals
   wire            up_status_pn_err_s;
   wire            up_status_pn_oos_s;
@@ -149,7 +146,13 @@ module axi_ad9434_core #(
   end
 
   up_adc_common #(
-    .ID(ID))
+    .ID(ID),
+    .CONFIG(0),
+    .COMMON_ID(0),
+    .DRP_DISABLE(0),
+    .USERPORTS_DISABLE(1),
+    .GPIO_DISABLE(1),
+    .START_CODE_DISABLE(1))
   i_adc_common(
     .mmcm_rst (mmcm_rst),
 
@@ -166,6 +169,10 @@ module axi_ad9434_core #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
+
+    .up_pps_rcounter(32'h0),
+    .up_pps_status(1'b0),
+    .up_pps_irq_mask(),
 
     .up_adc_ce (),
     .up_status_pn_err (up_status_pn_err_s),
@@ -197,7 +204,11 @@ module axi_ad9434_core #(
     .up_rack (up_rack_s[0]));
 
   up_adc_channel #(
-    .CHANNEL_ID(0))
+    .CHANNEL_ID(0),
+    .USERPORTS_DISABLE(1),
+    .DATAFORMAT_DISABLE(0),
+    .DCFILTER_DISABLE(1),
+    .IQCORRECTION_DISABLE(1))
   i_adc_channel(
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

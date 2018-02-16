@@ -168,7 +168,11 @@ module axi_ad9379_rx_channel #(
 
   up_adc_channel #(
     .COMMON_ID (COMMON_ID),
-    .CHANNEL_ID (CHANNEL_ID))
+    .CHANNEL_ID (CHANNEL_ID),
+    .USERPORTS_DISABLE(1),
+    .DATAFORMAT_DISABLE(DATAPATH_DISABLE),
+    .DCFILTER_DISABLE(DATAPATH_DISABLE),
+    .IQCORRECTION_DISABLE(DATAPATH_DISABLE))
   i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),

@@ -160,6 +160,7 @@ module axi_ad9963_rx_channel #(
     .iqcor_coeff_2 (adc_iqcor_coeff_2_s));
 
   up_adc_channel #(
+    .COMMON_ID (6'h01),
     .CHANNEL_ID (CHANNEL_ID),
     .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
     .DCFILTER_DISABLE (DCFILTER_DISABLE),

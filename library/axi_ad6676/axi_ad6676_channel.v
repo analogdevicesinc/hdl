@@ -86,7 +86,14 @@ module axi_ad6676_channel #(
 
   assign adc_dfmt_data = adc_data;
 
-  up_adc_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_adc_channel (
+  up_adc_channel #(
+    .CHANNEL_ID(CHANNEL_ID),
+    .COMMON_ID(6'h01),
+    .USERPORTS_DISABLE(1),
+    .DATAFORMAT_DISABLE(1),
+    .DCFILTER_DISABLE(1),
+    .IQCORRECTION_DISABLE(1))
+  i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),

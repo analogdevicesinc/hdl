@@ -342,7 +342,12 @@ module axi_ad5766 #(
     .up_rack (up_rack_s[1]));
 
   up_dac_common #(
-    .COMMON_ID (0)
+    .COMMON_ID (0),
+    .CONFIG (0),
+    .CLK_EDGE_SEL (0),
+    .DRP_DISABLE (6'h00),
+    .USERPORTS_DISABLE (0),
+    .GPIO_DISABLE (0)
   ) i_dac_common (
     .mmcm_rst (),
     .dac_clk (spi_clk),
@@ -355,11 +360,14 @@ module axi_ad5766 #(
     .dac_r1_mode (),
     .dac_datafmt (dac_datafmt),
     .dac_datarate (dac_datarate_s),
-    .dac_status (),
-    .dac_status_ovf (),
+    .dac_status (1'b0),
+    .dac_status_ovf (1'b0),
     .dac_status_unf (dma_underflow),
     .dac_clk_ratio (32'b0),
     .up_dac_ce (),
+    .up_pps_rcounter (32'b0),
+    .up_pps_status (1'b0),
+    .up_pps_irq_mask (),
     .up_drp_sel (),
     .up_drp_wr (),
     .up_drp_addr (),
