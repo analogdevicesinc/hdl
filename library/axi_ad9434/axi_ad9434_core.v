@@ -87,6 +87,7 @@ module axi_ad9434_core #(
 
   output                  mmcm_rst,
   output                  adc_rst,
+  output                  adc_enable,
   input                   adc_status);
 
   // internal signals
@@ -212,7 +213,7 @@ module axi_ad9434_core #(
   i_adc_channel(
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_enable (),
+    .adc_enable (adc_enable),
     .adc_iqcor_enb (),
     .adc_dcfilt_enb (),
     .adc_dfmt_se (adc_dfmt_se_s),
