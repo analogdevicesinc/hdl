@@ -92,6 +92,14 @@ module system_top (
   wire    [63:0]  gpio_t;
   wire            spi_miso;
   wire            spi_mosi;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // assignments
+
+  assign gpio_i[63:15] = gpio_o[63:15];
 
   // instantiations
 
@@ -169,7 +177,17 @@ module system_top (
     .spi0_csn_i (1'b1),
     .spi0_sdi_i (spi_miso),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_mosi));
+    .spi0_sdo_o (spi_mosi),
+    .spi1_clk_i (spi1_clk),
+    .spi1_clk_o (spi1_clk),
+    .spi1_csn_0_o (spi1_csn[0]),
+    .spi1_csn_1_o (spi1_csn[1]),
+    .spi1_csn_2_o (spi1_csn[2]),
+    .spi1_csn_i (1'b1),
+    .spi1_sdi_i (1'b1),
+    .spi1_sdo_i (spi1_mosi),
+    .spi1_sdo_o (spi1_mosi));
+
 
 endmodule
 

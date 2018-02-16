@@ -164,6 +164,9 @@ module system_top (
             ad7768_0_sync_out,
             ad7768_0_reset}));
 
+  assign gpio_i[47:39] = gpio_o[47:39];
+  assign gpio_i[63:55] = gpio_o[63:55];
+
   ad_iobuf #(
     .DATA_WIDTH(32)
   ) i_iobuf (
@@ -171,6 +174,9 @@ module system_top (
     .dio_i(gpio_o[31:0]),
     .dio_o(gpio_i[31:0]),
     .dio_p(gpio_bd));
+
+  assign gpio_i[47:39] = gpio_o[47:39];
+  assign gpio_i[63:55] = gpio_o[63:55];
 
   ad_iobuf #(
     .DATA_WIDTH(2)

@@ -221,6 +221,7 @@ module system_top (
   assign spi_clk = spi0_clk;
   assign spi_mosi = spi0_mosi;
   assign spi0_miso = spi_miso;
+  assign gpio_i[63:60] = gpio_o[63:60];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
