@@ -124,6 +124,10 @@ module system_top (
              adc_seq_en,         // 37
              adc_chsel}));       // 35:33
 
+  assign gpio_i[63:44] = gpio_o[63:44];
+  assign gpio_i[40:38] = gpio_o[40:38];
+  assign gpio_i[36] = gpio_o[36];
+
   generate
     for (i = 0; i < 16; i = i + 1) begin: adc_db_io
       ad_iobuf i_iobuf_adc_db (

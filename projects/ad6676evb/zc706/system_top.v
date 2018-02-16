@@ -116,6 +116,9 @@ module system_top (
   wire            rx_sysref;
   wire            rx_clk;
 
+  assign gpio_i[63:42]= gpio_o[63:42];
+  assign gpio_i[31:15]= gpio_o[31:15];
+
   // instantiations
 
   IBUFDS_GTE2 i_ibufds_rx_ref_clk (

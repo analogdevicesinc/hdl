@@ -163,9 +163,11 @@ module system_top (
   wire            tx_sync;
   wire            tx_sync_1;
   wire            sysref;
-//  wire            sysref_out;
+  wire            sysref_out;
 
   assign sysref_out = 0;
+  assign gpio_i[63:60] = gpio_o[63:60];
+  assign gpio_i[31:15] = gpio_o[31:15];
 
   // instantiations
 

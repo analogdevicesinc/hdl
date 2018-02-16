@@ -113,6 +113,8 @@ ad_iobuf #(.DATA_WIDTH(15)) iobuf_gpio_bd (
   .dio_t (gpio_t[14:0]),
   .dio_p (gpio_bd));
 
+assign gpio_i[63:15] = gpio_o[63:15];
+
 ad9265_spi i_spi (
     .spi_csn(spi0_csn[1:0]),
     .spi_clk(spi_clk),
