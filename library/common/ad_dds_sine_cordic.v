@@ -54,10 +54,10 @@ module ad_dds_sine_cordic #(
   // Local Parameters
 
   // 1.647 = gain of the system
-  localparam [19:0] X_VALUE_20 = 318327; // ((20^2)/2)/1.647
-  localparam [17:0] X_VALUE_18 =  79582; // ((18^2)/2)/1.647
-  localparam [15:0] X_VALUE_16 =  19883; // ((16^2)/2)/1.647
-  localparam [13:0] X_VALUE_14 =   4970; // ((14^2)/2)/1.647
+  localparam [19:0] X_VALUE_20 = 318327; // ((2^20)/2)/1.647
+  localparam [17:0] X_VALUE_18 =  79582; // ((2^18)/2)/1.647
+  localparam [15:0] X_VALUE_16 =  19891; // ((2^16)/2)/1.647
+  localparam [13:0] X_VALUE_14 =   4972; // ((2^14)/2)/1.647
 
   // Registers Declarations
 
