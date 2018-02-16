@@ -213,7 +213,15 @@ module axi_ad6676 #(
 
   // common processor control
 
-  up_adc_common #(.ID(ID)) i_up_adc_common (
+  up_adc_common #(
+    .ID(ID),
+    .CONFIG(0),
+    .COMMON_ID(6'h00),
+    .DRP_DISABLE(1),
+    .USERPORTS_DISABLE(1),
+    .GPIO_DISABLE(1),
+    .START_CODE_DISABLE(1))
+  i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -228,6 +236,9 @@ module axi_ad6676 #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
+    .up_pps_rcounter(32'h0),
+    .up_pps_status(1'b0),
+    .up_pps_irq_mask(),
     .up_adc_ce (),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),

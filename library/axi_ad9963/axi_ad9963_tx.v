@@ -178,6 +178,9 @@ module axi_ad9963_tx #(
 
   up_dac_common #(
     .ID (ID),
+    .CONFIG(0),
+    .CLK_EDGE_SEL(0),
+    .COMMON_ID(6'h10),
     .DRP_DISABLE (1),
     .USERPORTS_DISABLE (1),
     .GPIO_DISABLE(1)
@@ -198,6 +201,9 @@ module axi_ad9963_tx #(
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd1),
     .up_dac_ce(up_dac_ce),
+    .up_pps_rcounter(32'h0),
+    .up_pps_status(1'b0),
+    .up_pps_irq_mask(),
     .up_drp_sel (),
     .up_drp_wr (),
     .up_drp_addr (),

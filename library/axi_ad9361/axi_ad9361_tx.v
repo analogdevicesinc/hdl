@@ -343,7 +343,8 @@ module axi_ad9361_tx #(
     .CONFIG (CONFIG),
     .CLK_EDGE_SEL (CLK_EDGE_SEL),
     .DRP_DISABLE (1),
-    .USERPORTS_DISABLE (USERPORTS_DISABLE))
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .GPIO_DISABLE (0))
   i_up_dac_common (
     .mmcm_rst (),
     .dac_clk (dac_clk),

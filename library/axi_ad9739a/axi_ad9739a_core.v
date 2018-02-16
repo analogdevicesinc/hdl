@@ -116,7 +116,7 @@ module axi_ad9739a_core #(
   end
 
   // dac channel
-  
+
   axi_ad9739a_channel #(
     .CHANNEL_ID(0),
     .DATAPATH_DISABLE(DATAPATH_DISABLE))
@@ -173,6 +173,9 @@ module axi_ad9739a_core #(
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd16),
     .up_dac_ce (),
+    .up_pps_rcounter (31'd0),
+    .up_pps_status (1'd0),
+    .up_pps_irq_mask (),
     .up_drp_sel (),
     .up_drp_wr (),
     .up_drp_addr (),
@@ -194,7 +197,7 @@ module axi_ad9739a_core #(
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
-  
+
 endmodule
 
 // ***************************************************************************

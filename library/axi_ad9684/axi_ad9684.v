@@ -205,7 +205,13 @@ module axi_ad9684 #(
   assign up_status_or_s = up_adc_or_s[0] | up_adc_or_s[1];
 
   up_adc_common #(
-    .ID(ID))
+    .ID(ID),
+    .CONFIG (0),
+    .COMMON_ID (6'h00),
+    .DRP_DISABLE (6'h00),
+    .USERPORTS_DISABLE (0),
+    .GPIO_DISABLE (0),
+    .START_CODE_DISABLE(0))
   i_up_adc_common (
     .mmcm_rst (rst_s),
     .adc_clk (adc_clk),
@@ -221,6 +227,9 @@ module axi_ad9684 #(
     .adc_start_code (),
     .adc_sref_sync(),
     .adc_sync (),
+    .up_pps_rcounter(32'd0),
+    .up_pps_status(1'd0),
+    .up_pps_irq_mask(),
     .up_adc_ce(),
     .up_status_pn_err (up_status_pn_err_s),
     .up_status_pn_oos (up_status_pn_oos_s),

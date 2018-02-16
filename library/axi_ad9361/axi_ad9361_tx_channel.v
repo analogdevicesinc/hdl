@@ -354,6 +354,7 @@ module axi_ad9361_tx_channel #(
   assign up_rdata = (DISABLE == 1) ? 32'd0 : up_rdata_s;
 
   up_dac_channel #(
+    .COMMON_ID (6'h11),
     .CHANNEL_ID (CHANNEL_ID),
     .DDS_DISABLE (DDS_DISABLE),
     .USERPORTS_DISABLE (USERPORTS_DISABLE),

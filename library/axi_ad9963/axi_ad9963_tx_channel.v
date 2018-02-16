@@ -228,6 +228,7 @@ module axi_ad9963_tx_channel #(
   // single channel processor
 
   up_dac_channel #(
+    .COMMON_ID (6'h11),
     .CHANNEL_ID(CHANNEL_ID),
     .DDS_DISABLE(DATAPATH_DISABLE),
     .IQCORRECTION_DISABLE(DATAPATH_DISABLE),

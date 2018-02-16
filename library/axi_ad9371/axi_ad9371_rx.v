@@ -255,7 +255,12 @@ module axi_ad9371_rx #(
 
   up_adc_common #(
     .COMMON_ID ('h00),
-    .ID (ID))
+    .ID (ID),
+    .CONFIG (0),
+    .DRP_DISABLE (0),
+    .USERPORTS_DISABLE (0),
+    .GPIO_DISABLE (0),
+    .START_CODE_DISABLE (0))
   i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
@@ -271,6 +276,9 @@ module axi_ad9371_rx #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
+    .up_pps_rcounter (31'b0),
+    .up_pps_status (1'b1),
+    .up_pps_irq_mask (),
     .up_adc_ce (),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
