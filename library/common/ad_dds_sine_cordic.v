@@ -61,21 +61,19 @@ module ad_dds_sine_cordic #(
 
   // Registers Declarations
 
-  reg signed  [CORDIC_DW-1:0] x0  = 'd0;
-  reg signed  [CORDIC_DW-1:0] y0  = 'd0;
-  reg signed  [CORDIC_DW-1:0] z0  = 'd0;
+  reg  [CORDIC_DW-1:0] x0  = 'd0;
+  reg  [CORDIC_DW-1:0] y0  = 'd0;
+  reg  [CORDIC_DW-1:0] z0  = 'd0;
 
   // Wires Declarations
 
-  wire        [CORDIC_DW-1:0] x_value;
-  wire signed [CORDIC_DW-1:0] x_s       [0:CORDIC_DW-1];
-  wire signed [CORDIC_DW-1:0] y_s       [0:CORDIC_DW-1];
-  wire signed [CORDIC_DW-1:0] z_s       [0:CORDIC_DW-1];
-  wire signed [CORDIC_DW-1:0] x_shr_s   [0:CORDIC_DW-1];
-  wire signed [CORDIC_DW-1:0] y_shr_s   [0:CORDIC_DW-1];
-  wire        [ DELAY_DW-1:0] data_in_d [0:CORDIC_DW-1];
-  wire        [CORDIC_DW-1:0] atan_table[0:CORDIC_DW-2];
-  wire        [          1:0] quadrant;
+  wire [CORDIC_DW-1:0] x_value;
+  wire [CORDIC_DW-1:0] x_s       [0:CORDIC_DW-1];
+  wire [CORDIC_DW-1:0] y_s       [0:CORDIC_DW-1];
+  wire [CORDIC_DW-1:0] z_s       [0:CORDIC_DW-1];
+  wire [ DELAY_DW-1:0] data_in_d [0:CORDIC_DW-1];
+  wire [CORDIC_DW-1:0] atan_table[0:CORDIC_DW-2];
+  wire [          1:0] quadrant;
 
   // arc tangent LUT
 
@@ -186,8 +184,6 @@ module ad_dds_sine_cordic #(
   assign x_s[0] = x0;
   assign y_s[0] = y0;
   assign z_s[0] = z0;
-  assign x_shr_s[0] = x0;
-  assign y_shr_s[0] = y0;
   assign data_in_d[0] = ddata_in;
 
   // cordic pipeline
@@ -205,15 +201,11 @@ module ad_dds_sine_cordic #(
         .dataa_x (x_s[i]),
         .dataa_y (y_s[i]),
         .dataa_z (z_s[i]),
-        .datab_x (x_shr_s[i]),
-        .datab_y (y_shr_s[i]),
         .datab_z (atan_table[i]),
         .dir (z_s[i][CORDIC_DW-1]),
         .result_x (x_s[i+1]),
         .result_y (y_s[i+1]),
         .result_z (z_s[i+1]),
-        .sgn_shift_x (x_shr_s[i+1]),
-        .sgn_shift_y (y_shr_s[i+1]),
         .data_delay_in (data_in_d[i]),
         .data_delay_out (data_in_d[i+1])
       );
