@@ -84,7 +84,6 @@ module axi_ad9434 #(
   input       [ 2:0]      s_axi_awprot,
   input       [ 2:0]      s_axi_arprot);
 
-
   // internal clocks & resets
   wire            adc_rst;
   wire            up_rstn;
@@ -128,9 +127,6 @@ module axi_ad9434 #(
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  // single channel always enable
-  assign adc_enable = 1'b1;
-
   axi_ad9434_if #(
     .DEVICE_TYPE(DEVICE_TYPE),
     .IO_DELAY_GROUP(IO_DELAY_GROUP))
@@ -171,6 +167,7 @@ module axi_ad9434 #(
     .adc_or(adc_or_if_s),
     .mmcm_rst (mmcm_rst),
     .adc_rst (adc_rst),
+    .adc_enable(adc_enable),
     .adc_status (adc_status_s),
     .dma_dvalid (adc_valid),
     .dma_data (adc_data),
