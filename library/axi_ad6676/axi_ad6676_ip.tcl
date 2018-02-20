@@ -21,7 +21,6 @@ adi_ip_files axi_ad6676 [list \
   "axi_ad6676_pnmon.v" \
   "axi_ad6676_channel.v" \
   "axi_ad6676_if.v" \
-  "axi_ad6676_constr.xdc" \
   "axi_ad6676.v" ]
 
 adi_ip_properties axi_ad6676
