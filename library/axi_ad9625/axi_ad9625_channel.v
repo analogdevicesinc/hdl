@@ -98,7 +98,14 @@ module axi_ad9625_channel (
   end
   endgenerate
 
-  up_adc_channel #(.CHANNEL_ID(0)) i_up_adc_channel (
+  up_adc_channel #(
+    .COMMON_ID(6'h1),
+    .CHANNEL_ID(0),
+    .USERPORTS_DISABLE(1),
+    .DATAFORMAT_DISABLE(0),
+    .DCFILTER_DISABLE(1),
+    .IQCORRECTION_DISABLE(1))
+  i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),
