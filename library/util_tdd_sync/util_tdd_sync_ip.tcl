@@ -12,5 +12,8 @@ adi_ip_files util_tdd_sync [list \
 
 adi_ip_properties_lite util_tdd_sync
 
+ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface rstn xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 
