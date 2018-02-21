@@ -336,7 +336,9 @@ module axi_ad9361_rx #(
     .ID (ID),
     .CONFIG (CONFIG),
     .DRP_DISABLE (1),
-    .USERPORTS_DISABLE (USERPORTS_DISABLE))
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .GPIO_DISABLE (0),
+    .START_CODE_DISABLE (0))
   i_up_adc_common (
     .mmcm_rst (mmcm_rst),
     .adc_clk (adc_clk),
