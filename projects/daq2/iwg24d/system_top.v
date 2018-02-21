@@ -187,6 +187,7 @@ module system_top (
   assign spi_csn_dac = spi_csn_s[1];
   assign spi_csn_clk = spi_csn_s[0];
 
+  assign rx_sync = ~rx_sync_s;
 
   daq2_spi i_daq2_spi (
     .spi_csn (spi_csn_s[2:0]),
@@ -329,7 +330,7 @@ module system_top (
     .tx_sysref_export (tx_sysref),
     .rx_serial_data_rx_serial_data (rx_serial_data),
     .rx_ref_clk_clk (rx_ref_clk),
-    .rx_sync_export (rx_sync),
+    .rx_sync_export (rx_sync_s),
     .rx_sysref_export (rx_sysref));
 
 endmodule
