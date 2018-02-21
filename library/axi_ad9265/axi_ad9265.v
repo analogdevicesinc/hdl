@@ -224,7 +224,15 @@ module axi_ad9265 #(
 
   // common processor control
 
-  up_adc_common #(.ID(ID)) i_up_adc_common (
+  up_adc_common #(
+    .ID(ID),
+    .CONFIG (0),
+    .COMMON_ID (6'h00),
+    .DRP_DISABLE (6'h00),
+    .USERPORTS_DISABLE (0),
+    .GPIO_DISABLE (0),
+    .START_CODE_DISABLE(0))
+  i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
