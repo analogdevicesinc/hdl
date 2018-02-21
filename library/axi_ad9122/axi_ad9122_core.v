@@ -200,7 +200,15 @@ module axi_ad9122_core #(
 
   // dac common processor interface
 
-  up_dac_common #(.ID(ID)) i_up_dac_common (
+  up_dac_common #(
+    .ID(ID),
+    .CONFIG (0),
+    .CLK_EDGE_SEL (0),
+    .COMMON_ID (6'h10),
+    .DRP_DISABLE (6'h00),
+    .USERPORTS_DISABLE (0),
+    .GPIO_DISABLE (0))
+  i_up_dac_common (
     .mmcm_rst (mmcm_rst),
     .dac_clk (dac_div_clk),
     .dac_rst (dac_rst),
@@ -217,6 +225,9 @@ module axi_ad9122_core #(
     .dac_status_unf (dac_dunf),
     .dac_clk_ratio (32'd4),
     .up_dac_ce (),
+    .up_pps_rcounter(32'd0),
+    .up_pps_status(1'd0),
+    .up_pps_irq_mask(),
     .up_drp_sel (up_drp_sel),
     .up_drp_wr (up_drp_wr),
     .up_drp_addr (up_drp_addr),
