@@ -61,7 +61,7 @@ set_instance_parameter_value axi_ad9144_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_ad9144_dma {AXI_SLICE_DEST} {0}
 set_instance_parameter_value axi_ad9144_dma {AXI_SLICE_SRC} {0}
 set_instance_parameter_value axi_ad9144_dma {SYNC_TRANSFER_START} {0}
-set_instance_parameter_value axi_ad9144_dma {CYCLIC} {1}
+set_instance_parameter_value axi_ad9144_dma {CYCLIC} {0}
 set_instance_parameter_value axi_ad9144_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9144_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9144_dma {FIFO_SIZE} {16}
