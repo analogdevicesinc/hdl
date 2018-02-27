@@ -5,15 +5,9 @@ source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 # adc peripherals
 
 ad_ip_instance util_adxcvr util_fmcadc5_0_xcvr
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.QPLL_REFCLK_DIV 1
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.QPLL_FBDIV_RATIO 1
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.QPLL_CFG 0x06801c1
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.QPLL_FBDIV 0x080
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.CPLL_FBDIV 1
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.CPLL_FBDIV_4_5 5
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.TX_NUM_OF_LANES 0
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.TX_OUT_DIV 1
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.TX_CLK25_DIV 25
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_NUM_OF_LANES 8
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_CLK25_DIV 25
@@ -22,15 +16,9 @@ ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_PMA_CFG 0x00018480
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10400020
 
 ad_ip_instance util_adxcvr util_fmcadc5_1_xcvr
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.QPLL_REFCLK_DIV 1
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.QPLL_FBDIV_RATIO 1
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.QPLL_CFG 0x06801c1
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.QPLL_FBDIV 0x080
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.CPLL_FBDIV 1
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.CPLL_FBDIV_4_5 5
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.TX_NUM_OF_LANES 0
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.TX_OUT_DIV 1
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.TX_CLK25_DIV 25
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_NUM_OF_LANES 8
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_CLK25_DIV 25
