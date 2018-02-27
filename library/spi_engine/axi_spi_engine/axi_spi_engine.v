@@ -364,7 +364,7 @@ util_axis_fifo #(
         .s_axis_valid(cmd_fifo_in_valid),
         .s_axis_data(cmd_fifo_in_data),
         .s_axis_room(cmd_fifo_room),
-
+        .s_axis_empty(),
         .m_axis_aclk(spi_clk),
         .m_axis_aresetn(spi_resetn),
         .m_axis_ready(cmd_ready),
@@ -389,7 +389,7 @@ util_axis_fifo #(
         .s_axis_valid(sdo_fifo_in_valid),
         .s_axis_data(sdo_fifo_in_data),
         .s_axis_room(sdo_fifo_room),
-
+        .s_axis_empty(),
         .m_axis_aclk(spi_clk),
         .m_axis_aresetn(spi_resetn),
         .m_axis_ready(sdo_data_ready),
@@ -412,7 +412,7 @@ util_axis_fifo #(
         .s_axis_ready(sdi_data_ready),
         .s_axis_valid(sdi_data_valid),
         .s_axis_data(sdi_data),
-
+        .s_axis_empty(),
         .m_axis_aclk(clk),
         .m_axis_aresetn(up_sw_resetn),
         .m_axis_ready(sdi_fifo_out_ready),
