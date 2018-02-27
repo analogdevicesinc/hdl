@@ -13,7 +13,7 @@ ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_CLK25_DIV 25
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
 ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_PMA_CFG 0x00018480
-ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10400020
+ad_ip_parameter util_fmcadc5_0_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10200020
 
 ad_ip_instance util_adxcvr util_fmcadc5_1_xcvr
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.CPLL_FBDIV 1
@@ -24,7 +24,7 @@ ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_CLK25_DIV 25
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
 ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_PMA_CFG 0x00018480
-ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10400020
+ad_ip_parameter util_fmcadc5_1_xcvr CONFIG.RX_CDR_CFG 0x03000023ff10200020
 
 ad_ip_instance axi_adxcvr axi_ad9625_0_xcvr
 ad_ip_parameter axi_ad9625_0_xcvr CONFIG.ID 0
