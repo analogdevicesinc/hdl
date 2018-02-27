@@ -138,13 +138,6 @@ set_max_delay -quiet -datapath_only \
 		-filter {NAME =~ *i_fifo/i_address_gray/i_raddr_sync* && IS_SEQUENTIAL}] \
 	[get_property -min PERIOD $dest_clk]
 
-# In SDP mode REGCEB should not be connected. When inferring the BRAM the tools
-# do it anyway. The signal is not used by the BRAM though. But since the clock
-# associated with REGCEB is the write clock and not the read clock we get a
-# timing problem. Mark the path as a false path so it is not timed.
-set_false_path -quiet \
-	-to [get_pins -hier *ram_reg*/REGCEB -filter {NAME =~ *i_fifo*}]
-
 <: } :>
 # Reset signals
 set_false_path -quiet \
