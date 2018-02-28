@@ -9,6 +9,7 @@ M_DEPS += ../common/up_axi.v
 M_DEPS += ../common/up_xfer_cntrl.v
 M_DEPS += ../scripts/adi_env.tcl
 M_DEPS += ../scripts/adi_ip.tcl
+M_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
 M_DEPS += axi_adc_trigger.v
 M_DEPS += axi_adc_trigger_constr.xdc
 M_DEPS += axi_adc_trigger_ip.tcl
