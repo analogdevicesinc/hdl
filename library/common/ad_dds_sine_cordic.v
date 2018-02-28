@@ -37,7 +37,9 @@
 
 module ad_dds_sine_cordic #(
 
-  // Range = 14, 16, 18 and 20
+  // Range = 8-24
+  parameter   PHASE_DW = 16,
+  // Range = 8-24
   parameter   CORDIC_DW = 16,
   // Range = N/A
   parameter   DELAY_DW  = 1) (
@@ -45,7 +47,7 @@ module ad_dds_sine_cordic #(
   // interface
 
   input                        clk,
-  input      [CORDIC_DW-1:0]   angle,
+  input      [ PHASE_DW-1:0]   angle,
   output reg [CORDIC_DW-1:0]   sine,
   output reg [CORDIC_DW-1:0]   cosine,
   input      [ DELAY_DW-1:0]   ddata_in,
@@ -53,130 +55,137 @@ module ad_dds_sine_cordic #(
 
   // Local Parameters
 
-  // 1.647 = gain of the system
-  localparam [19:0] X_VALUE_20 = 318327; // ((2^20)/2)/1.647
-  localparam [17:0] X_VALUE_18 =  79582; // ((2^18)/2)/1.647
-  localparam [15:0] X_VALUE_16 =  19891; // ((2^16)/2)/1.647
-  localparam [13:0] X_VALUE_14 =   4972; // ((2^14)/2)/1.647
+  // angle rotation values
+  localparam LUT_FSCALE = 1 << (PHASE_DW);
+  localparam ANGLE_ROT_VAL_0  = 45.000000000000000;
+  localparam ANGLE_ROT_VAL_1  = 26.565051177078000;
+  localparam ANGLE_ROT_VAL_2  = 14.036243467926500;
+  localparam ANGLE_ROT_VAL_3  = 7.1250163489018000;
+  localparam ANGLE_ROT_VAL_4  = 3.5763343749973500;
+  localparam ANGLE_ROT_VAL_5  = 1.7899106082460700;
+  localparam ANGLE_ROT_VAL_6  = 0.8951737102110740;
+  localparam ANGLE_ROT_VAL_7  = 0.4476141708605530;
+  localparam ANGLE_ROT_VAL_8  = 0.2238105003685380;
+  localparam ANGLE_ROT_VAL_9  = 0.1119056770662070;
+  localparam ANGLE_ROT_VAL_10 = 0.0559528918938037;
+  localparam ANGLE_ROT_VAL_11 = 0.0279764526170037;
+  localparam ANGLE_ROT_VAL_12 = 0.0139882271422650;
+  localparam ANGLE_ROT_VAL_13 = 0.0069941136753529;
+  localparam ANGLE_ROT_VAL_14 = 0.0034970568507040;
+  localparam ANGLE_ROT_VAL_15 = 0.0017485284269805;
+  localparam ANGLE_ROT_VAL_16 = 0.0008742642136938;
+  localparam ANGLE_ROT_VAL_17 = 0.0004371321068723;
+  localparam ANGLE_ROT_VAL_18 = 0.0002185660534393;
+  localparam ANGLE_ROT_VAL_19 = 0.0001092830267201;
+  localparam ANGLE_ROT_VAL_20 = 0.0000546415133601;
+  localparam ANGLE_ROT_VAL_21 = 0.0000273207566800;
+  localparam ANGLE_ROT_VAL_22 = 0.0000136603783400;
+  localparam ANGLE_ROT_VAL_23 = 0.0000068301891700;
+
+  // 1.64676025812 = system gain
+
+  localparam X_FSCALE = 1 << (CORDIC_DW);
+  localparam [CORDIC_DW-1:0] X_VALUE = ((X_FSCALE/2)/1.64676025812)-3; // ((2^N)/2)/1.647...
 
   // Registers Declarations
 
   reg  [CORDIC_DW-1:0] x0  = 'd0;
   reg  [CORDIC_DW-1:0] y0  = 'd0;
-  reg  [CORDIC_DW-1:0] z0  = 'd0;
+  reg  [ PHASE_DW-1:0] z0  = 'd0;
 
   // Wires Declarations
 
-  wire [CORDIC_DW-1:0] x_value;
   wire [CORDIC_DW-1:0] x_s       [0:CORDIC_DW-1];
   wire [CORDIC_DW-1:0] y_s       [0:CORDIC_DW-1];
-  wire [CORDIC_DW-1:0] z_s       [0:CORDIC_DW-1];
+  wire [ PHASE_DW-1:0] z_s       [0:CORDIC_DW-1];
   wire [ DELAY_DW-1:0] data_in_d [0:CORDIC_DW-1];
-  wire [CORDIC_DW-1:0] atan_table[0:CORDIC_DW-2];
+  wire [ PHASE_DW-1:0] atan_table[0:CORDIC_DW-2];
   wire [          1:0] quadrant;
 
   // arc tangent LUT
-
   generate
-    if (CORDIC_DW == 20) begin
-      assign x_value = X_VALUE_20;
-      assign atan_table[ 0] = 20'b00100000000000000000; // 45
-      assign atan_table[ 1] = 20'b00010010111001000000; // 26.56505118
-      assign atan_table[ 2] = 20'b00001001111110110100; // 14.03624347
-      assign atan_table[ 3] = 20'b00000101000100010001; // 7.125016349
-      assign atan_table[ 4] = 20'b00000010100010110001; // 3.576334375
-      assign atan_table[ 5] = 20'b00000001010001011101; // 1.789910608
-      assign atan_table[ 6] = 20'b00000000101000101111; // 0.895173710
-      assign atan_table[ 7] = 20'b00000000010100011000; // 0.447614171
-      assign atan_table[ 8] = 20'b00000000001010001100; // 0.223810500
-      assign atan_table[ 9] = 20'b00000000000101000110; // 0.111905677
-      assign atan_table[10] = 20'b00000000000010100011; // 0.055952892
-      assign atan_table[11] = 20'b00000000000001010001; // 0.027976453
-      assign atan_table[12] = 20'b00000000000000101001; // 0.013988227
-      assign atan_table[13] = 20'b00000000000000010100; // 0.006994114
-      assign atan_table[14] = 20'b00000000000000001010; // 0.003497057
-      assign atan_table[15] = 20'b00000000000000000101; // 0.001748528
-      assign atan_table[16] = 20'b00000000000000000011; // 0.000874264
-      assign atan_table[17] = 20'b00000000000000000001; // 0.000437132
-      assign atan_table[18] = 20'b00000000000000000001; // 0.000218566
-    end else if (CORDIC_DW == 18) begin
-      assign x_value = X_VALUE_18;
-      assign atan_table[ 0] = 18'b001000000000000000; // 45
-      assign atan_table[ 1] = 18'b000100101110010000; // 26.56505118
-      assign atan_table[ 2] = 18'b000010011111101101; // 14.03624347
-      assign atan_table[ 3] = 18'b000001010001000100; // 7.125016349
-      assign atan_table[ 4] = 18'b000000101000101100; // 3.576334375
-      assign atan_table[ 5] = 18'b000000010100010111; // 1.789910608
-      assign atan_table[ 6] = 18'b000000001010001100; // 0.895173710
-      assign atan_table[ 7] = 18'b000000000101000110; // 0.447614171
-      assign atan_table[ 8] = 18'b000000000010100011; // 0.223810500
-      assign atan_table[ 9] = 18'b000000000001010001; // 0.111905677
-      assign atan_table[10] = 18'b000000000000101001; // 0.055952892
-      assign atan_table[11] = 18'b000000000000010100; // 0.027976453
-      assign atan_table[12] = 18'b000000000000001010; // 0.013988227
-      assign atan_table[13] = 18'b000000000000000101; // 0.006994114
-      assign atan_table[14] = 18'b000000000000000011; // 0.003497057
-      assign atan_table[15] = 18'b000000000000000001; // 0.001748528
-      assign atan_table[16] = 18'b000000000000000001; // 0.000874264
-    end else if (CORDIC_DW == 16) begin
-      assign x_value = X_VALUE_16;
-      assign atan_table[ 0] = 15'b0010000000000000; // 45
-      assign atan_table[ 1] = 15'b0001001011100100; // 26.56505118
-      assign atan_table[ 2] = 15'b0000100111111011; // 14.03624347
-      assign atan_table[ 3] = 15'b0000010100010001; // 7.125016349
-      assign atan_table[ 4] = 15'b0000001010001011; // 3.576334375
-      assign atan_table[ 5] = 15'b0000000101000110; // 1.789910608
-      assign atan_table[ 6] = 15'b0000000010100011; // 0.895173710
-      assign atan_table[ 7] = 15'b0000000001010001; // 0.447614171
-      assign atan_table[ 8] = 15'b0000000000101001; // 0.223810500
-      assign atan_table[ 9] = 15'b0000000000010100; // 0.111905677
-      assign atan_table[10] = 15'b0000000000001010; // 0.055952892
-      assign atan_table[11] = 15'b0000000000000101; // 0.027976453
-      assign atan_table[12] = 15'b0000000000000011; // 0.013988227
-      assign atan_table[13] = 15'b0000000000000001; // 0.006994114
-      assign atan_table[14] = 15'b0000000000000001; // 0.003497057
-    end else if (CORDIC_DW == 14) begin
-      assign x_value = X_VALUE_14;
-      assign atan_table[ 0] = 13'b00100000000000; // 45
-      assign atan_table[ 1] = 13'b00010010111001; // 26.56505118
-      assign atan_table[ 2] = 13'b00001001111111; // 14.03624347
-      assign atan_table[ 3] = 13'b00000101000100; // 7.125016349
-      assign atan_table[ 4] = 13'b00000010100011; // 3.576334375
-      assign atan_table[ 5] = 13'b00000001010001; // 1.789910608
-      assign atan_table[ 6] = 13'b00000000101001; // 0.895173710
-      assign atan_table[ 7] = 13'b00000000010100; // 0.447614171
-      assign atan_table[ 8] = 13'b00000000001010; // 0.223810500
-      assign atan_table[ 9] = 13'b00000000000101; // 0.111905677
-      assign atan_table[10] = 13'b00000000000011; // 0.055952892
-      assign atan_table[11] = 13'b00000000000001; // 0.027976453
-      assign atan_table[12] = 13'b00000000000001; // 0.013988227
+      assign atan_table[0 ] = (LUT_FSCALE * ANGLE_ROT_VAL_0 )/360;
+      assign atan_table[1 ] = (LUT_FSCALE * ANGLE_ROT_VAL_1 )/360;
+      assign atan_table[2 ] = (LUT_FSCALE * ANGLE_ROT_VAL_2 )/360;
+      assign atan_table[3 ] = (LUT_FSCALE * ANGLE_ROT_VAL_3 )/360;
+      assign atan_table[4 ] = (LUT_FSCALE * ANGLE_ROT_VAL_4 )/360;
+      assign atan_table[5 ] = (LUT_FSCALE * ANGLE_ROT_VAL_5 )/360;
+      assign atan_table[6 ] = (LUT_FSCALE * ANGLE_ROT_VAL_6 )/360;
+      assign atan_table[7 ] = (LUT_FSCALE * ANGLE_ROT_VAL_7 )/360;
+    if (PHASE_DW >= 9) begin
+      assign atan_table[8 ] = (LUT_FSCALE * ANGLE_ROT_VAL_8 )/360;
+    end
+    if (PHASE_DW >= 10) begin
+      assign atan_table[9 ] = (LUT_FSCALE * ANGLE_ROT_VAL_9 )/360;
+    end
+    if (PHASE_DW >= 11) begin
+      assign atan_table[10] = (LUT_FSCALE * ANGLE_ROT_VAL_10)/360;
+    end
+    if (PHASE_DW >= 12) begin
+      assign atan_table[11] = (LUT_FSCALE * ANGLE_ROT_VAL_11)/360;
+    end
+    if (PHASE_DW >= 13) begin
+      assign atan_table[12] = (LUT_FSCALE * ANGLE_ROT_VAL_12)/360;
+    end
+    if (PHASE_DW >= 14) begin
+      assign atan_table[13] = (LUT_FSCALE * ANGLE_ROT_VAL_13)/360;
+    end
+    if (PHASE_DW >= 15) begin
+      assign atan_table[14] = (LUT_FSCALE * ANGLE_ROT_VAL_14)/360;
+    end
+    if (PHASE_DW >= 16) begin
+      assign atan_table[15] = (LUT_FSCALE * ANGLE_ROT_VAL_15)/360;
+    end
+    if (PHASE_DW >= 17) begin
+      assign atan_table[16] = (LUT_FSCALE * ANGLE_ROT_VAL_16)/360;
+    end
+    if (PHASE_DW >= 18) begin
+      assign atan_table[17] = (LUT_FSCALE * ANGLE_ROT_VAL_17)/360;
+    end
+    if (PHASE_DW >= 19) begin
+      assign atan_table[18] = (LUT_FSCALE * ANGLE_ROT_VAL_18)/360;
+    end
+    if (PHASE_DW >= 20) begin
+      assign atan_table[19] = (LUT_FSCALE * ANGLE_ROT_VAL_19)/360;
+    end
+    if (PHASE_DW >= 21) begin
+      assign atan_table[20] = (LUT_FSCALE * ANGLE_ROT_VAL_20)/360;
+    end
+    if (PHASE_DW >= 22) begin
+      assign atan_table[21] = (LUT_FSCALE * ANGLE_ROT_VAL_21)/360;
+    end
+    if (PHASE_DW >= 23) begin
+      assign atan_table[22] = (LUT_FSCALE * ANGLE_ROT_VAL_22)/360;
+    end
+    if (PHASE_DW == 24) begin
+      assign atan_table[23] = (LUT_FSCALE * ANGLE_ROT_VAL_23)/360;
     end
   endgenerate
 
   // pre-rotating
 
   // first two bits represent the quadrant in the unit circle
-  assign   quadrant = angle[CORDIC_DW-1:CORDIC_DW-2];
+  assign   quadrant = angle[PHASE_DW-1:PHASE_DW-2];
 
   always @(posedge clk) begin
     case (quadrant)
       2'b00,
       2'b11: begin
-         x0 <= x_value;
+         x0 <= X_VALUE;
          y0 <= 0;
          z0 <= angle;
       end
 
       2'b01: begin
          x0 <= 0;
-         y0 <= x_value;
-         z0 <= {2'b00, angle[CORDIC_DW-3:0]};
+         y0 <= X_VALUE;
+         z0 <= {2'b00, angle[PHASE_DW-3:0]};
       end
 
       2'b10: begin
          x0 <= 0;
-         y0 <= -x_value;
-         z0 <= {2'b11, angle[CORDIC_DW-3:0]};
+         y0 <= -X_VALUE;
+         z0 <= {2'b11, angle[PHASE_DW-3:0]};
       end
     endcase
   end
@@ -191,9 +200,10 @@ module ad_dds_sine_cordic #(
   genvar i;
 
   generate
-  for (i=0; i < CORDIC_DW-1; i=i+1) begin: rotation
+  for (i=0; i < PHASE_DW-1; i=i+1) begin: rotation
       ad_dds_cordic_pipe #(
-        .DW (CORDIC_DW),
+        .P_DW (PHASE_DW),
+        .D_DW (CORDIC_DW),
         .DELAY_DW (DELAY_DW),
         .SHIFT(i))
       pipe (
@@ -202,7 +212,7 @@ module ad_dds_sine_cordic #(
         .dataa_y (y_s[i]),
         .dataa_z (z_s[i]),
         .datab_z (atan_table[i]),
-        .dir (z_s[i][CORDIC_DW-1]),
+        .dir (z_s[i][PHASE_DW-1]),
         .result_x (x_s[i+1]),
         .result_y (y_s[i+1]),
         .result_z (z_s[i+1]),
@@ -215,9 +225,9 @@ module ad_dds_sine_cordic #(
   // x and y are cos(angle) and sin(angle)
 
   always @(posedge clk) begin
-    ddata_out <= data_in_d[CORDIC_DW-1];
-    sine <= y_s[CORDIC_DW-1];
-    cosine <= x_s[CORDIC_DW-1];
+    ddata_out <= data_in_d[PHASE_DW-1];
+    sine <= y_s[PHASE_DW-1];
+    cosine <= x_s[PHASE_DW-1];
   end
 
 endmodule
