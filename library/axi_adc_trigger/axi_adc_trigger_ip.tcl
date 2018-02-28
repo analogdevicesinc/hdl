@@ -7,6 +7,7 @@ adi_ip_create axi_adc_trigger
 adi_ip_files axi_adc_trigger [list \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "axi_adc_trigger_constr.xdc" \
   "axi_adc_trigger_reg.v" \
   "axi_adc_trigger.v" ]
