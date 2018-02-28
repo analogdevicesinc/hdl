@@ -42,7 +42,7 @@ module up_adc_common #(
   parameter   ID = 0,
   parameter   CONFIG = 0,
   parameter   COMMON_ID = 6'h00,
-  parameter   DRP_DISABLE = 6'h00,
+  parameter   DRP_DISABLE = 0,
   parameter   USERPORTS_DISABLE = 0,
   parameter   GPIO_DISABLE = 0,
   parameter   START_CODE_DISABLE = 0) (
