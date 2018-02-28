@@ -40,7 +40,9 @@ module ad_dds_cordic_pipe#(
   // parameters
 
   // Range = N/A
-  parameter DW = 16,
+  parameter P_DW = 16,
+  // Range = N/A
+  parameter D_DW = 16,
   // Range = N/A
   parameter DELAY_DW = 1,
   // Range = 0-(DW - 1)
@@ -50,13 +52,13 @@ module ad_dds_cordic_pipe#(
 
                       input                          clk,
   (* keep = "TRUE" *) input                          dir,
-  (* keep = "TRUE" *) input             [    DW-1:0] dataa_x,
-  (* keep = "TRUE" *) input             [    DW-1:0] dataa_y,
-  (* keep = "TRUE" *) input             [    DW-1:0] dataa_z,
-  (* keep = "TRUE" *) input             [    DW-1:0] datab_z,
-  (* keep = "TRUE" *) output reg        [    DW-1:0] result_x,
-  (* keep = "TRUE" *) output reg        [    DW-1:0] result_y,
-  (* keep = "TRUE" *) output reg        [    DW-1:0] result_z,
+  (* keep = "TRUE" *) input             [  D_DW-1:0] dataa_x,
+  (* keep = "TRUE" *) input             [  D_DW-1:0] dataa_y,
+  (* keep = "TRUE" *) input             [  P_DW-1:0] dataa_z,
+  (* keep = "TRUE" *) input             [  P_DW-1:0] datab_z,
+  (* keep = "TRUE" *) output reg        [  D_DW-1:0] result_x,
+  (* keep = "TRUE" *) output reg        [  D_DW-1:0] result_y,
+  (* keep = "TRUE" *) output reg        [  P_DW-1:0] result_z,
                       input             [DELAY_DW:1] data_delay_in,
                       output            [DELAY_DW:1] data_delay_out);
 
@@ -66,21 +68,21 @@ module ad_dds_cordic_pipe#(
 
   // Wires Declarations
 
-  wire  [    DW-1:0]  sgn_shift_x;
-  wire  [    DW-1:0]  sgn_shift_y;
+  wire  [  D_DW-1:0]  sgn_shift_x;
+  wire  [  D_DW-1:0]  sgn_shift_y;
   wire                dir_inv = ~dir;
 
-  // Previous stage shift
+  // Sign shift
 
-  assign sgn_shift_x = {{SHIFT{dataa_x[DW-1]}}, dataa_x[DW-1:SHIFT]};
-  assign sgn_shift_y = {{SHIFT{dataa_y[DW-1]}}, dataa_y[DW-1:SHIFT]};
+  assign sgn_shift_x = {{SHIFT{dataa_x[D_DW-1]}}, dataa_x[D_DW-1:SHIFT]};
+  assign sgn_shift_y = {{SHIFT{dataa_y[D_DW-1]}}, dataa_y[D_DW-1:SHIFT]};
 
   // Stage rotation
 
   always @(posedge clk) begin
-    result_x <= dataa_x + ({DW{dir_inv}} ^ sgn_shift_y) + dir_inv;
-    result_y <= dataa_y + ({DW{dir}}     ^ sgn_shift_x) + dir;
-    result_z <= dataa_z + ({DW{dir_inv}} ^     datab_z) + dir_inv;
+    result_x <= dataa_x + ({D_DW{dir_inv}} ^ sgn_shift_y) + dir_inv;
+    result_y <= dataa_y + ({D_DW{dir}}     ^ sgn_shift_x) + dir;
+    result_z <= dataa_z + ({P_DW{dir_inv}} ^     datab_z) + dir_inv;
   end
 
   // Delay data (if used)
