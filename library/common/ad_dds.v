@@ -41,7 +41,8 @@ module ad_dds #(
 
   parameter   DISABLE = 0,
   parameter   DDS_TYPE = 1,
-  parameter   CORDIC_DW = 14) (
+  parameter   CORDIC_DW = 16,
+  parameter   CORDIC_PHASE_DW = 16) (
 
   // interface
 
@@ -90,8 +91,9 @@ module ad_dds #(
        // dds-1
 
        ad_dds_1 #(
+         .DDS_TYPE(DDS_TYPE),
          .CORDIC_DW(CORDIC_DW),
-         .DDS_TYPE(DDS_TYPE))
+         .CORDIC_PHASE_DW(CORDIC_PHASE_DW))
        i_dds_1_0 (
          .clk (clk),
          .angle (dds_phase_0),
@@ -101,8 +103,9 @@ module ad_dds #(
        // dds-2
 
        ad_dds_1 #(
+         .DDS_TYPE(DDS_TYPE),
          .CORDIC_DW(CORDIC_DW),
-         .DDS_TYPE(DDS_TYPE))
+         .CORDIC_PHASE_DW(CORDIC_PHASE_DW))
        i_dds_1_1 (
          .clk (clk),
          .angle (dds_phase_1),
