@@ -10,6 +10,9 @@ adi_project_files fmcomms2_zc702 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zc702/zc702_system_constr.xdc" ]
 
+set_property strategy Flow_PerfOptimized_high [get_runs synth_1]
+set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
+
 adi_project_run fmcomms2_zc702
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 
