@@ -23,7 +23,7 @@ ad_ip_parameter axi_ad9680_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ad9680_dma CONFIG.ID 0
 ad_ip_parameter axi_ad9680_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9680_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ad9680_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9680_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9680_dma CONFIG.CYCLIC 0
