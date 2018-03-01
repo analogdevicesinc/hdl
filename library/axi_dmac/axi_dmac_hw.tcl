@@ -68,6 +68,11 @@ set_parameter_property FIFO_SIZE DISPLAY_NAME "FIFO Size (In Bursts)"
 set_parameter_property FIFO_SIZE HDL_PARAMETER true
 set_parameter_property FIFO_SIZE GROUP $group
 
+add_parameter MAX_BYTES_PER_BURST INTEGER 128
+set_parameter_property MAX_BYTES_PER_BURST DISPLAY_NAME "Maximum bytes per burst"
+set_parameter_property MAX_BYTES_PER_BURST HDL_PARAMETER true
+set_parameter_property MAX_BYTES_PER_BURST GROUP $group
+
 foreach {suffix group} { \
     "SRC" "Source" \
     "DEST" "Destination" \
@@ -414,3 +419,10 @@ proc axi_dmac_elaborate {} {
   }
 }
 
+set group "Debug"
+
+add_parameter DISABLE_DEBUG_REGISTERS INTEGER 0
+set_parameter_property DISABLE_DEBUG_REGISTERS DISPLAY_NAME "Disable debug registers"
+set_parameter_property DISABLE_DEBUG_REGISTERS DISPLAY_HINT boolean
+set_parameter_property DISABLE_DEBUG_REGISTERS HDL_PARAMETER false
+set_parameter_property DISABLE_DEBUG_REGISTERS GROUP $group
