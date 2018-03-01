@@ -1,11 +1,11 @@
+
 # HDL Reference Designs
 
 [Analog Devices Inc.](http://www.analog.com/en/index.html) HDL libraries and projects.
 
 ## Getting started
 
-These projects currently supporting several different [FPGA development boards](https://github.com/analogdevicesinc/hdl/tree/master/projects) and [FMC boards](https://github.com/analogdevicesinc/hdl/tree/master/projects/common). 
-First make sure that the current state of the repository support's your hardware.
+This repository supports reference designs for different [Analog Devices boards](../master/projects) based on [Intel and Xilinx FPGA development boards](../master/projects/common) or standalone.
 
 ### Prerequisites
 
@@ -19,8 +19,8 @@ Please make sure that you have the [required](https://github.com/analogdevicesin
 
 ### How to build a project
 
-For building a projects, you have to use the GNU Make tool. If you're a 
-Windows user please checkout this page, to see how you can install this tool.
+For building a projects, you have to use the [GNU Make tool](https://www.gnu.org/software/make/). If you're a 
+Windows user please checkout [this page](https://wiki.analog.com/resources/fpga/docs/build#windows_environment_setup), to see how you can install this tool.
 
 To build a project, checkout the [latest release](https://github.com/analogdevicesinc/hdl/releases), after that just **cd** to the 
 project that you want to build and run make:
@@ -32,21 +32,16 @@ project that you want to build and run make:
 A more comprehensive build guide can be found under the following link: 
 <https://wiki.analog.com/resources/fpga/docs/build>
 
-## Development workflow
+## Software
 
-The main branch is the master branch, which get's the latest features and updates 
-first.
+In general all the projects have no-OS (baremetal) and a Linux support. See [no-OS](https://github.com/analogdevicesinc/no-OS) or [Linux](https://github.com/analogdevicesinc/Linux) for
+more information.
 
-Releases are done two times a year. Each release has a unique branch. After the
-release branch is created it will not get any additional new features. Until the
-release branch is not fully tested, it stay's in a pre-released state.
+## Which branch should I use?
 
-Each feature has a topic or feature branch, which will be merged into master, as
-soon as the feature is stable.
+  * If you want to use the most stable code base, always use the [latest release branch](https://github.com/analogdevicesinc/hdl/releases).
 
-If you want to use the most stable code base, always use the latest release branch.
-
-If you want to use the greatest and latest, check out the master branch.
+  * If you want to use the greatest and latest, check out the master branch.
 
 ## License
 
@@ -69,8 +64,11 @@ cab be found here:
 
 ## Comprehensive user guide
 
-See [HDL User Guide](https://wiki.analog.com/resources/fpga/docs/hdl) for a more
-detailed guide.
+See [HDL User Guide](https://wiki.analog.com/resources/fpga/docs/hdl) for a more detailed guide.
+
+## Documentation
+
+See the [FPGA Reference Designs](https://wiki.analog.com/resources/fpga) on wiki.analog.com. 
 
 ## Support
 
