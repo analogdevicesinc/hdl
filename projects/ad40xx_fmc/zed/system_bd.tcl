@@ -7,5 +7,5 @@ set adc_resolution 20
 # specify ADC sampling rate in samples/seconds -- default is 1.8 MSPS
 set adc_sampling_rate 1800000
 
-source ../common/ad400x_bd.tcl
+source ../common/ad40xx_bd.tcl
 

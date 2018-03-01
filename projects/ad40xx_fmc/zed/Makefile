@@ -9,7 +9,7 @@ M_DEPS += system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += system_constr.xdc
 M_DEPS += system_bd.tcl
-M_DEPS += ../common/ad400x_bd.tcl
+M_DEPS += ../common/ad40xx_bd.tcl
 M_DEPS += ../../scripts/adi_project.tcl
 M_DEPS += ../../scripts/adi_env.tcl
 M_DEPS += ../../scripts/adi_board.tcl
@@ -48,7 +48,7 @@ M_FLIST += *.ip_user_files
 
 
 .PHONY: all lib clean clean-all
-all: lib ad400x_zed.sdk/system_top.hdf
+all: lib ad40xx_zed.sdk/system_top.hdf
 
 
 clean: 
@@ -70,9 +70,9 @@ clean-all:clean
 	make -C ../../../library/util_pulse_gen clean
 
 
-ad400x_zed.sdk/system_top.hdf: $(M_DEPS)
+ad40xx_zed.sdk/system_top.hdf: $(M_DEPS)
 	-rm -rf $(M_FLIST)
-	$(M_VIVADO) system_project.tcl >> ad400x_zed_vivado.log 2>&1
+	$(M_VIVADO) system_project.tcl >> ad40xx_zed_vivado.log 2>&1
 
 
 lib:

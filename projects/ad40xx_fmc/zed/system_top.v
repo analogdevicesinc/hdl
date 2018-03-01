@@ -86,12 +86,12 @@ module system_top (
 
   // ad400x SPI configuration interface
 
-  input           ad400x_spi_sdi,
-  output          ad400x_spi_sdo,
-  output          ad400x_spi_sclk,
-  output          ad400x_spi_cs,
+  input           ad40xx_spi_sdi,
+  output          ad40xx_spi_sdo,
+  output          ad40xx_spi_sclk,
+  output          ad40xx_spi_cs,
 
-  inout           ad400x_amp_pd);
+  inout           ad40xx_amp_pd);
 
   // internal signals
 
@@ -115,7 +115,7 @@ module system_top (
     .dio_t(gpio_t[32]),
     .dio_i(gpio_o[32]),
     .dio_o(gpio_i[32]),
-    .dio_p(ad400x_amp_pd));
+    .dio_p(ad40xx_amp_pd));
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -196,11 +196,11 @@ module system_top (
     .ps_intr_09 (1'b0),
     .ps_intr_10 (1'b0),
     .ps_intr_12 (1'b0),
-    .ad400x_spi_sdo (ad400x_spi_sdo),
-    .ad400x_spi_sdo_t (),
-    .ad400x_spi_sdi (ad400x_spi_sdi),
-    .ad400x_spi_cs (ad400x_spi_cs),
-    .ad400x_spi_sclk (ad400x_spi_sclk),
+    .ad40xx_spi_sdo (ad40xx_spi_sdo),
+    .ad40xx_spi_sdo_t (),
+    .ad40xx_spi_sdi (ad40xx_spi_sdi),
+    .ad40xx_spi_cs (ad40xx_spi_cs),
+    .ad40xx_spi_sclk (ad40xx_spi_sclk),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
