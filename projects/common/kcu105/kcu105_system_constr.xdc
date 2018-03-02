@@ -52,3 +52,6 @@ set_property -dict  {INTERNAL_VREF {0.84}}  [get_iobanks 46]
 
 create_clock -name phy_clk      -period  1.60 [get_ports phy_clk_p]
 
+#Setting the Configuration Bank Voltage Select
+set_property CFGBVS GND [current_design]
+set_property CONFIG_VOLTAGE 1.8 [current_design]
