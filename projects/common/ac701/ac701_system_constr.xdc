@@ -67,3 +67,7 @@ set_property -dict  {PACKAGE_PIN  R17   IOSTANDARD  LVCMOS33} [get_ports iic_rst
 set_property -dict  {PACKAGE_PIN  N18   IOSTANDARD  LVCMOS33  DRIVE 8 SLEW SLOW} [get_ports iic_scl]
 set_property -dict  {PACKAGE_PIN  K25   IOSTANDARD  LVCMOS33  DRIVE 8 SLEW SLOW} [get_ports iic_sda]
 
+# setting the vonfiguration bank voltage select
+
+set_property CFGBVS VCCO [current_design]
+set_property CONFIG_VOLTAGE 3.3 [current_design]
