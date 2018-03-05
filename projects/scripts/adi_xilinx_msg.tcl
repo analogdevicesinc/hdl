@@ -18,6 +18,16 @@
 ################################################################################
 
 ################################################################################
+## Tool related messages
+## IDs : [Vivado 12-xxxx]
+################################################################################
+
+## For all projects which has SGMII, the tool presumes that we want ot use the
+## eth_avb IP too, and because we don't have any license for it, thoughs out a
+## CRITICAL WARNING. Downgrade this critical warning to a simple warning.
+set_msg_config -id {Vivado 12-1790} -string "Evaluation features should NOT be used in production systems." -new_severity WARNING
+
+################################################################################
 ## Block Design related messages
 ## IDs : [BD 41-xxxx]
 ################################################################################
