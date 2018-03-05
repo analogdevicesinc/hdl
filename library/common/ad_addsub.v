@@ -59,7 +59,6 @@ module ad_addsub #(
   reg     [A_DATA_WIDTH:0]       out_d = 'b0;
   reg     [A_DATA_WIDTH:0]       out_d2 = 'b0;
   reg     [(A_DATA_WIDTH-1):0]   A_d = 'b0;
-  reg     [(A_DATA_WIDTH-1):0]   A_d2 = 'b0;
   reg     [(A_DATA_WIDTH-1):0]   Amax_d = 'b0;
   reg     [(A_DATA_WIDTH-1):0]   Amax_d2 = 'b0;
 
@@ -71,7 +70,6 @@ module ad_addsub #(
 
   always @(posedge clk) begin
       A_d <= A;
-      A_d2 <= A_d;
       Amax_d <= Amax;
       Amax_d2 <= Amax_d;
   end

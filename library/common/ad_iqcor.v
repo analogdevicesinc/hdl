@@ -64,8 +64,6 @@ module ad_iqcor #(
   // internal registers
 
   reg             p1_valid = 'd0;
-  reg     [15:0]  p1_data_i = 'd0;
-  reg     [15:0]  p1_data_q = 'd0;
   reg     [33:0]  p1_data_p = 'd0;
   reg             valid_int = 'd0;
   reg     [15:0]  data_int = 'd0;
@@ -81,16 +79,18 @@ module ad_iqcor #(
   wire    [15:0]  p1_data_i_s;
   wire    [33:0]  p1_data_p_q_s;
   wire    [15:0]  p1_data_q_s;
+  wire    [15:0]  p1_data_i_int;
+  wire    [15:0]  p1_data_q_int;
 
   // data-path disable
 
   generate
   if (DISABLE == 1) begin
-  assign valid_out = valid;
-  assign data_out = data_in;
+    assign valid_out = valid;
+    assign data_out = data_in;
   end else begin
-  assign valid_out = valid_int;
-  assign data_out = data_int;
+    assign valid_out = valid_int;
+    assign data_out = data_int;
   end
   endgenerate
 
@@ -116,29 +116,51 @@ module ad_iqcor #(
     .ddata_in ({valid, data_i_s}),
     .ddata_out ({p1_valid_s, p1_data_i_s}));
 
-  generate 
+  generate
   if (SCALE_ONLY == 0) begin
-  // scaling functions - q
+    // scaling functions - q
 
-  ad_mul #(.DELAY_DATA_WIDTH(16)) i_mul_q (
-    .clk (clk),
-    .data_a ({data_q_s[15], data_q_s}),
-    .data_b ({iqcor_coeff_2_r[15], iqcor_coeff_2_r}),
-    .data_p (p1_data_p_q_s),
-    .ddata_in (data_q_s),
-    .ddata_out (p1_data_q_s));
+    ad_mul #(.DELAY_DATA_WIDTH(16)) i_mul_q (
+      .clk (clk),
+      .data_a ({data_q_s[15], data_q_s}),
+      .data_b ({iqcor_coeff_2_r[15], iqcor_coeff_2_r}),
+      .data_p (p1_data_p_q_s),
+      .ddata_in (data_q_s),
+      .ddata_out (p1_data_q_s));
 
   // sum
   end else begin
-  assign p1_data_p_q_s = 34'h0;
-  assign p1_data_q_s = 16'h0;
+    assign p1_data_p_q_s = 34'h0;
+    assign p1_data_q_s = 16'h0;
+  end
+
+  endgenerate
+  generate
+  if (Q_OR_I_N == 1 && SCALE_ONLY == 0) begin
+    reg [15:0]  p1_data_q = 'd0;
+
+    always @(posedge clk) begin
+      p1_data_q <= p1_data_q_s;
+    end
+
+    assign p1_data_i_int = 16'h0;
+    assign p1_data_q_int = p1_data_q;
+
+  // sum
+  end else begin
+    reg [15:0]  p1_data_i = 'd0;
+
+    always @(posedge clk) begin
+      p1_data_i <= p1_data_i_s;
+    end
+
+    assign p1_data_i_int = p1_data_i;
+    assign p1_data_q_int = 16'h0;
   end
   endgenerate
 
   always @(posedge clk) begin
     p1_valid <= p1_valid_s;
-    p1_data_i <= p1_data_i_s;
-    p1_data_q <= p1_data_q_s;
     p1_data_p <= p1_data_p_i_s + p1_data_p_q_s;
   end
   // output registers
@@ -148,9 +170,9 @@ module ad_iqcor #(
     if (iqcor_enable == 1'b1) begin
       data_int <= p1_data_p[29:14];
     end else if (Q_OR_I_N == 1 && SCALE_ONLY == 0) begin
-      data_int <= p1_data_q;
+      data_int <= p1_data_q_int;
     end else begin
-      data_int <= p1_data_i;
+      data_int <= p1_data_i_int;
     end
   end
 
