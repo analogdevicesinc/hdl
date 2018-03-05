@@ -38,6 +38,7 @@ module axi_clkgen #(
 
   parameter         ID = 0,
   parameter         DEVICE_TYPE = 0,
+  parameter         CLKSEL_EN = 0,
   parameter real    CLKIN_PERIOD  = 5.000,
   parameter real    CLKIN2_PERIOD  = 5.000,
   parameter integer VCO_DIV = 11,
@@ -82,7 +83,8 @@ module axi_clkgen #(
   // reset and clocks
 
   wire            mmcm_rst;
-  wire            clk_sel;
+  wire            clk_sel_s;
+  wire            up_clk_sel_s;
   wire            up_rstn;
   wire            up_clk;
 
@@ -146,7 +148,7 @@ module axi_clkgen #(
     .ID(ID)
   ) i_up_clkgen (
     .mmcm_rst (mmcm_rst),
-    .clk_sel (clk_sel),
+    .clk_sel (up_clk_sel_s),
     .up_drp_sel (up_drp_sel_s),
     .up_drp_wr (up_drp_wr_s),
     .up_drp_addr (up_drp_addr_s),
@@ -165,6 +167,16 @@ module axi_clkgen #(
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
 
+  // If CLKSEL_EN is not active, the clk0 port of the MMCM is used, this
+  // should be used when the MMCM has only one active clock source
+
+  generate if (CLKSEL_EN == 1) begin
+    assign clk_sel_s = up_clk_sel_s;
+  end else begin
+    assign clk_sel_s = 1'b1;
+  end
+  endgenerate
+
   // mmcm instantiations
 
   ad_mmcm_drp #(
@@ -180,7 +192,7 @@ module axi_clkgen #(
   i_mmcm_drp (
     .clk (clk),
     .clk2 (clk2),
-    .clk_sel(clk_sel),
+    .clk_sel(clk_sel_s),
     .mmcm_rst (mmcm_rst),
     .mmcm_clk_0 (clk_0),
     .mmcm_clk_1 (clk_1),
