@@ -66,8 +66,6 @@ module axi_ad9361_tdd_if#(
 
   // internal registers
 
-  reg             tdd_rx_rf_en_d = 1'b0;
-  reg             tdd_tx_rf_en_d = 1'b0;
 
   reg             tdd_vco_overlap = 1'b0;
   reg             tdd_rf_overlap = 1'b0;
@@ -78,15 +76,19 @@ module axi_ad9361_tdd_if#(
   // just one VCO can be enabled at a time
   assign ad9361_txnrx_s = tdd_tx_vco_en & ~tdd_rx_vco_en;
 
-  always @(posedge clk) begin
-    tdd_rx_rf_en_d <= tdd_rx_rf_en;
-    tdd_tx_rf_en_d <= tdd_tx_rf_en;
-  end
-
-  assign ad9361_enable_s = (LEVEL_OR_PULSE_N == PULSE_MODE) ?
-                          ((~tdd_rx_rf_en_d & tdd_rx_rf_en) | (tdd_rx_rf_en_d & ~tdd_rx_rf_en) |
-                           (~tdd_tx_rf_en_d & tdd_tx_rf_en) | (tdd_tx_rf_en_d & ~tdd_tx_rf_en)) :
-                           (tdd_rx_rf_en | tdd_tx_rf_en);
+  generate
+  if (LEVEL_OR_PULSE_N == PULSE_MODE) begin
+    reg  tdd_rx_rf_en_d = 1'b0;
+    reg  tdd_tx_rf_en_d = 1'b0;
+    always @(posedge clk) begin
+      tdd_rx_rf_en_d <= tdd_rx_rf_en;
+      tdd_tx_rf_en_d <= tdd_tx_rf_en;
+    end
+    assign ad9361_enable_s = (tdd_rx_rf_en_d ^ tdd_rx_rf_en) ||
+                             (tdd_tx_rf_en_d ^ tdd_tx_rf_en);
+  end else
+    assign ad9361_enable_s = (tdd_rx_rf_en | tdd_tx_rf_en);
+  endgenerate
 
   always @(posedge clk) begin
     if(rst == 1'b1) begin
