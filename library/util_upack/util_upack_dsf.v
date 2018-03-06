@@ -68,13 +68,8 @@ module util_upack_dsf #(
   reg                                                   dac_valid_d1 = 'd0;
   reg                                                   dac_dsf_req_d1 = 'd0;
   reg                                                   dac_dsf_sync_d1 = 'd0;
-  reg     [  2:0]                                       dac_samples_d1 = 'd0;
   reg                                                   dac_valid_d2 = 'd0;
-  reg                                                   dac_dsf_req_d2 = 'd0;
-  reg     [  2:0]                                       dac_samples_d2 = 'd0;
-  reg                                                   dac_valid_d3 = 'd0;
-  reg     [(MAX_WIDTH-1):0]                             dac_data_i_d3 = 'd0;
-  reg     [(MAX_WIDTH-1):0]                             dac_data_d3 = 'd0;
+
   reg                                                   dac_valid_d4 = 'd0;
   reg     [(MAX_WIDTH-1):0]                             dac_data_d4 = 'd0;
 
@@ -105,7 +100,6 @@ module util_upack_dsf #(
     dac_valid_d1 <= dac_valid & dac_dmx_enable;
     dac_dsf_req_d1 <= dac_valid & dac_dmx_enable;
     dac_dsf_sync_d1 <= dac_valid & dac_dmx_enable;
-    dac_samples_d1 <= 'd0;
   end
 
   assign dac_data_d2_s = 'd0;
@@ -114,14 +108,6 @@ module util_upack_dsf #(
 
   always @(posedge dac_clk) begin
     dac_valid_d2 <= dac_valid_d1;
-    dac_dsf_req_d2 <= 'd0;
-    dac_samples_d2 <= 'd0;
-  end
-
-  always @(posedge dac_clk) begin
-    dac_valid_d3 <= 'd0;
-    dac_data_i_d3 <= 'd0;
-    dac_data_d3 <= 'd0;
   end
 
   for (i = 0; i < (CHANNEL_DATA_WIDTH/16); i = i +1) begin: g_dsf_data_0
@@ -146,6 +132,12 @@ module util_upack_dsf #(
 
   generate
   if (NUM_OF_CHANNELS > SEL_CHANNELS) begin
+  reg [  2:0]           dac_samples_d1 = 'd0;
+  reg                   dac_dsf_req_d2 = 'd0;
+  reg [  2:0]           dac_samples_d2 = 'd0;
+  reg                   dac_valid_d3 = 'd0;
+  reg [(MAX_WIDTH-1):0] dac_data_i_d3 = 'd0;
+  reg [(MAX_WIDTH-1):0] dac_data_d3 = 'd0;
 
   assign dac_dsf_req = dac_dsf_req_d1;
   assign dac_dsf_sync = dac_dsf_sync_d1;
