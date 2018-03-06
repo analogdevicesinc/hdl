@@ -69,6 +69,18 @@ module up_delay_cntrl #(
   output  [31:0]                  up_rdata,
   output                          up_rack);
 
+  generate
+  if (DISABLE == 1) begin
+  assign up_wack = 1'd0;
+  assign up_rack = 1'd0;
+  assign up_rdata = 32'd0;
+
+  assign up_dld = 'd0;
+  assign up_dwdata = 'd0;
+
+  assign delay_rst = 1'd0;
+
+  end else begin
   // internal registers
 
   reg                             up_preset = 'd0;
@@ -112,7 +124,6 @@ module up_delay_cntrl #(
   assign up_rdata_s[1] = | up_drdata1_s;
   assign up_rdata_s[0] = | up_drdata0_s;
 
-  generate
   for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_drd
   assign up_drdata4_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+4)] : 1'd0;
   assign up_drdata3_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+3)] : 1'd0;
@@ -120,13 +131,12 @@ module up_delay_cntrl #(
   assign up_drdata1_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+1)] : 1'd0;
   assign up_drdata0_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+0)] : 1'd0;
   end
-  endgenerate
 
   // processor interface
 
-  assign up_wack = (DISABLE == 1) ? 1'd0 : up_wack_int;
-  assign up_rack = (DISABLE == 1) ? 1'd0 : up_rack_int;
-  assign up_rdata = (DISABLE == 1) ? 32'd0 : up_rdata_int;
+  assign up_wack = up_wack_int;
+  assign up_rack = up_rack_int;
+  assign up_rdata = up_rdata_int;
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -160,25 +170,21 @@ module up_delay_cntrl #(
 
   // init delay values (after delay locked)
 
-  generate
   for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_dinit
   assign up_dinit_s[n] = up_dlocked_m2 & ~up_dlocked_m3;
   assign up_dinitdata_s[((n*5)+4):(n*5)] = INIT_DELAY;
   end
-  endgenerate
 
   // write does not hold- read back what goes into effect.
 
-  generate
   for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_dwr
   assign up_dld_s[n] = (up_waddr[7:0] == n) ? up_wreq_s : 1'b0;
   assign up_dwdata_s[((n*5)+4):(n*5)] = (up_waddr[7:0] == n) ?
     up_wdata[4:0] : up_dwdata_int[((n*5)+4):(n*5)];
   end
-  endgenerate
 
-  assign up_dld = (DISABLE == 1) ? 'd0 : up_dld_int;
-  assign up_dwdata = (DISABLE == 1) ? 'd0 : up_dwdata_int;
+  assign up_dld = up_dld_int;
+  assign up_dwdata = up_dwdata_int;
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -196,12 +202,14 @@ module up_delay_cntrl #(
 
   // resets
 
-  assign delay_rst = (DISABLE == 1) ? 1'd0 : delay_rst_s;
+  assign delay_rst = delay_rst_s;
 
   ad_rst i_delay_rst_reg (
     .preset (up_preset),
     .clk (delay_clk),
     .rst (delay_rst_s));
+  end
+  endgenerate
 
 endmodule
 
