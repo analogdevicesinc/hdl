@@ -62,8 +62,8 @@ axi_jesd204_tx.xpr: $(M_DEPS)
 	$(M_VIVADO) axi_jesd204_tx_ip.tcl  >> axi_jesd204_tx_ip.log 2>&1
 
 dep:
-	make -C ../../jesd204/axi_jesd204_common/
-	make -C ../../util_cdc/
-	make -C ../../jesd204/interfaces/
+	$(MAKE) -C ../../jesd204/axi_jesd204_common/
+	$(MAKE) -C ../../util_cdc/
+	$(MAKE) -C ../../jesd204/interfaces/
 ####################################################################################
 ####################################################################################

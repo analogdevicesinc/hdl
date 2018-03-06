@@ -7,15 +7,15 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C c5soc all
+	-$(MAKE) -C c5soc all
 
 
 clean: 
-	make -C c5soc clean
+	$(MAKE) -C c5soc clean
 
 
 clean-all:
-	make -C c5soc clean-all
+	$(MAKE) -C c5soc clean-all
 
 ####################################################################################
 ####################################################################################

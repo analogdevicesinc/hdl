@@ -7,15 +7,15 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C vc707 all
+	-$(MAKE) -C vc707 all
 
 
 clean: 
-	make -C vc707 clean
+	$(MAKE) -C vc707 clean
 
 
 clean-all:
-	make -C vc707 clean-all
+	$(MAKE) -C vc707 clean-all
 
 ####################################################################################
 ####################################################################################

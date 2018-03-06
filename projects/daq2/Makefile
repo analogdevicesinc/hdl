@@ -7,33 +7,33 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C a10gx all
-	-make -C a10soc all
-	-make -C kc705 all
-	-make -C kcu105 all
-	-make -C vc707 all
-	-make -C zc706 all
-	-make -C zcu102 all
+	-$(MAKE) -C a10gx all
+	-$(MAKE) -C a10soc all
+	-$(MAKE) -C kc705 all
+	-$(MAKE) -C kcu105 all
+	-$(MAKE) -C vc707 all
+	-$(MAKE) -C zc706 all
+	-$(MAKE) -C zcu102 all
 
 
 clean: 
-	make -C a10gx clean
-	make -C a10soc clean
-	make -C kc705 clean
-	make -C kcu105 clean
-	make -C vc707 clean
-	make -C zc706 clean
-	make -C zcu102 clean
+	$(MAKE) -C a10gx clean
+	$(MAKE) -C a10soc clean
+	$(MAKE) -C kc705 clean
+	$(MAKE) -C kcu105 clean
+	$(MAKE) -C vc707 clean
+	$(MAKE) -C zc706 clean
+	$(MAKE) -C zcu102 clean
 
 
 clean-all:
-	make -C a10gx clean-all
-	make -C a10soc clean-all
-	make -C kc705 clean-all
-	make -C kcu105 clean-all
-	make -C vc707 clean-all
-	make -C zc706 clean-all
-	make -C zcu102 clean-all
+	$(MAKE) -C a10gx clean-all
+	$(MAKE) -C a10soc clean-all
+	$(MAKE) -C kc705 clean-all
+	$(MAKE) -C kcu105 clean-all
+	$(MAKE) -C vc707 clean-all
+	$(MAKE) -C zc706 clean-all
+	$(MAKE) -C zcu102 clean-all
 
 ####################################################################################
 ####################################################################################

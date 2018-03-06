@@ -53,9 +53,9 @@ axi_ad7616.xpr: $(M_DEPS)
 	$(M_VIVADO) axi_ad7616_ip.tcl  >> axi_ad7616_ip.log 2>&1
 
 dep:
-	make -C ../spi_engine/axi_spi_engine/
-	make -C ../spi_engine/spi_engine_execution/
-	make -C ../spi_engine/spi_engine_interconnect/
-	make -C ../spi_engine/spi_engine_offload/
+	$(MAKE) -C ../spi_engine/axi_spi_engine/
+	$(MAKE) -C ../spi_engine/spi_engine_execution/
+	$(MAKE) -C ../spi_engine/spi_engine_interconnect/
+	$(MAKE) -C ../spi_engine/spi_engine_offload/
 ####################################################################################
 ####################################################################################

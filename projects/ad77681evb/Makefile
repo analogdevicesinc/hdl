@@ -7,15 +7,15 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C zed all
+	-$(MAKE) -C zed all
 
 
 clean: 
-	make -C zed clean
+	$(MAKE) -C zed clean
 
 
 clean-all:
-	make -C zed clean-all
+	$(MAKE) -C zed clean-all
 
 ####################################################################################
 ####################################################################################

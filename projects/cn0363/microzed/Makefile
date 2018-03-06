@@ -56,17 +56,17 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_generic_adc clean
-	make -C ../../../library/spi_engine/axi_spi_engine clean
-	make -C ../../../library/cn0363/cn0363_dma_sequencer clean
-	make -C ../../../library/cn0363/cn0363_phase_data_sync clean
-	make -C ../../../library/cordic_demod clean
-	make -C ../../../library/spi_engine/spi_engine_execution clean
-	make -C ../../../library/spi_engine/spi_engine_interconnect clean
-	make -C ../../../library/spi_engine/spi_engine_offload clean
-	make -C ../../../library/util_axis_resize clean
-	make -C ../../../library/util_sigma_delta_spi clean
+	$(MAKE) -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/axi_generic_adc clean
+	$(MAKE) -C ../../../library/spi_engine/axi_spi_engine clean
+	$(MAKE) -C ../../../library/cn0363/cn0363_dma_sequencer clean
+	$(MAKE) -C ../../../library/cn0363/cn0363_phase_data_sync clean
+	$(MAKE) -C ../../../library/cordic_demod clean
+	$(MAKE) -C ../../../library/spi_engine/spi_engine_execution clean
+	$(MAKE) -C ../../../library/spi_engine/spi_engine_interconnect clean
+	$(MAKE) -C ../../../library/spi_engine/spi_engine_offload clean
+	$(MAKE) -C ../../../library/util_axis_resize clean
+	$(MAKE) -C ../../../library/util_sigma_delta_spi clean
 
 
 cn0363_microzed.sdk/system_top.hdf: $(M_DEPS)
@@ -75,17 +75,17 @@ cn0363_microzed.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_generic_adc
-	make -C ../../../library/spi_engine/axi_spi_engine
-	make -C ../../../library/cn0363/cn0363_dma_sequencer
-	make -C ../../../library/cn0363/cn0363_phase_data_sync
-	make -C ../../../library/cordic_demod
-	make -C ../../../library/spi_engine/spi_engine_execution
-	make -C ../../../library/spi_engine/spi_engine_interconnect
-	make -C ../../../library/spi_engine/spi_engine_offload
-	make -C ../../../library/util_axis_resize
-	make -C ../../../library/util_sigma_delta_spi
+	$(MAKE) -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/axi_generic_adc
+	$(MAKE) -C ../../../library/spi_engine/axi_spi_engine
+	$(MAKE) -C ../../../library/cn0363/cn0363_dma_sequencer
+	$(MAKE) -C ../../../library/cn0363/cn0363_phase_data_sync
+	$(MAKE) -C ../../../library/cordic_demod
+	$(MAKE) -C ../../../library/spi_engine/spi_engine_execution
+	$(MAKE) -C ../../../library/spi_engine/spi_engine_interconnect
+	$(MAKE) -C ../../../library/spi_engine/spi_engine_offload
+	$(MAKE) -C ../../../library/util_axis_resize
+	$(MAKE) -C ../../../library/util_sigma_delta_spi
 
 ####################################################################################
 ####################################################################################

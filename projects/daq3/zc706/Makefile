@@ -65,22 +65,22 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_ad9152 clean
-	make -C ../../../library/axi_ad9680 clean
-	make -C ../../../library/xilinx/axi_adcfifo clean
-	make -C ../../../library/xilinx/axi_adxcvr clean
-	make -C ../../../library/axi_clkgen clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_hdmi_tx clean
-	make -C ../../../library/jesd204/axi_jesd204_rx clean
-	make -C ../../../library/jesd204/axi_jesd204_tx clean
-	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/jesd204/jesd204_rx clean
-	make -C ../../../library/jesd204/jesd204_tx clean
-	make -C ../../../library/xilinx/util_adxcvr clean
-	make -C ../../../library/util_cpack clean
-	make -C ../../../library/util_dacfifo clean
-	make -C ../../../library/util_upack clean
+	$(MAKE) -C ../../../library/axi_ad9152 clean
+	$(MAKE) -C ../../../library/axi_ad9680 clean
+	$(MAKE) -C ../../../library/xilinx/axi_adcfifo clean
+	$(MAKE) -C ../../../library/xilinx/axi_adxcvr clean
+	$(MAKE) -C ../../../library/axi_clkgen clean
+	$(MAKE) -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/axi_hdmi_tx clean
+	$(MAKE) -C ../../../library/jesd204/axi_jesd204_rx clean
+	$(MAKE) -C ../../../library/jesd204/axi_jesd204_tx clean
+	$(MAKE) -C ../../../library/axi_spdif_tx clean
+	$(MAKE) -C ../../../library/jesd204/jesd204_rx clean
+	$(MAKE) -C ../../../library/jesd204/jesd204_tx clean
+	$(MAKE) -C ../../../library/xilinx/util_adxcvr clean
+	$(MAKE) -C ../../../library/util_cpack clean
+	$(MAKE) -C ../../../library/util_dacfifo clean
+	$(MAKE) -C ../../../library/util_upack clean
 
 
 daq3_zc706.sdk/system_top.hdf: $(M_DEPS)
@@ -89,22 +89,22 @@ daq3_zc706.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_ad9152
-	make -C ../../../library/axi_ad9680
-	make -C ../../../library/xilinx/axi_adcfifo
-	make -C ../../../library/xilinx/axi_adxcvr
-	make -C ../../../library/axi_clkgen
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_hdmi_tx
-	make -C ../../../library/jesd204/axi_jesd204_rx
-	make -C ../../../library/jesd204/axi_jesd204_tx
-	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/jesd204/jesd204_rx
-	make -C ../../../library/jesd204/jesd204_tx
-	make -C ../../../library/xilinx/util_adxcvr
-	make -C ../../../library/util_cpack
-	make -C ../../../library/util_dacfifo
-	make -C ../../../library/util_upack
+	$(MAKE) -C ../../../library/axi_ad9152
+	$(MAKE) -C ../../../library/axi_ad9680
+	$(MAKE) -C ../../../library/xilinx/axi_adcfifo
+	$(MAKE) -C ../../../library/xilinx/axi_adxcvr
+	$(MAKE) -C ../../../library/axi_clkgen
+	$(MAKE) -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/axi_hdmi_tx
+	$(MAKE) -C ../../../library/jesd204/axi_jesd204_rx
+	$(MAKE) -C ../../../library/jesd204/axi_jesd204_tx
+	$(MAKE) -C ../../../library/axi_spdif_tx
+	$(MAKE) -C ../../../library/jesd204/jesd204_rx
+	$(MAKE) -C ../../../library/jesd204/jesd204_tx
+	$(MAKE) -C ../../../library/xilinx/util_adxcvr
+	$(MAKE) -C ../../../library/util_cpack
+	$(MAKE) -C ../../../library/util_dacfifo
+	$(MAKE) -C ../../../library/util_upack
 
 ####################################################################################
 ####################################################################################

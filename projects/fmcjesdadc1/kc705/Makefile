@@ -56,14 +56,14 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_ad9250 clean
-	make -C ../../../library/xilinx/axi_adxcvr clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/jesd204/axi_jesd204_rx clean
-	make -C ../../../library/jesd204/jesd204_rx clean
-	make -C ../../../library/xilinx/util_adxcvr clean
-	make -C ../../../library/util_bsplit clean
-	make -C ../../../library/util_cpack clean
+	$(MAKE) -C ../../../library/axi_ad9250 clean
+	$(MAKE) -C ../../../library/xilinx/axi_adxcvr clean
+	$(MAKE) -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/jesd204/axi_jesd204_rx clean
+	$(MAKE) -C ../../../library/jesd204/jesd204_rx clean
+	$(MAKE) -C ../../../library/xilinx/util_adxcvr clean
+	$(MAKE) -C ../../../library/util_bsplit clean
+	$(MAKE) -C ../../../library/util_cpack clean
 
 
 fmcjesdadc1_kc705.sdk/system_top.hdf: $(M_DEPS)
@@ -72,14 +72,14 @@ fmcjesdadc1_kc705.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_ad9250
-	make -C ../../../library/xilinx/axi_adxcvr
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/jesd204/axi_jesd204_rx
-	make -C ../../../library/jesd204/jesd204_rx
-	make -C ../../../library/xilinx/util_adxcvr
-	make -C ../../../library/util_bsplit
-	make -C ../../../library/util_cpack
+	$(MAKE) -C ../../../library/axi_ad9250
+	$(MAKE) -C ../../../library/xilinx/axi_adxcvr
+	$(MAKE) -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/jesd204/axi_jesd204_rx
+	$(MAKE) -C ../../../library/jesd204/jesd204_rx
+	$(MAKE) -C ../../../library/xilinx/util_adxcvr
+	$(MAKE) -C ../../../library/util_bsplit
+	$(MAKE) -C ../../../library/util_cpack
 
 ####################################################################################
 ####################################################################################

@@ -7,18 +7,18 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C standalone all
-	-make -C zed all
+	-$(MAKE) -C standalone all
+	-$(MAKE) -C zed all
 
 
 clean: 
-	make -C standalone clean
-	make -C zed clean
+	$(MAKE) -C standalone clean
+	$(MAKE) -C zed clean
 
 
 clean-all:
-	make -C standalone clean-all
-	make -C zed clean-all
+	$(MAKE) -C standalone clean-all
+	$(MAKE) -C zed clean-all
 
 ####################################################################################
 ####################################################################################

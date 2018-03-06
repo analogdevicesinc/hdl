@@ -48,8 +48,8 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_ad9467 clean
-	make -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/axi_ad9467 clean
+	$(MAKE) -C ../../../library/axi_dmac clean
 
 
 ad9467_fmc_kc705.sdk/system_top.hdf: $(M_DEPS)
@@ -58,8 +58,8 @@ ad9467_fmc_kc705.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_ad9467
-	make -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/axi_ad9467
+	$(MAKE) -C ../../../library/axi_dmac
 
 ####################################################################################
 ####################################################################################

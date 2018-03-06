@@ -47,11 +47,11 @@ clean:
 
 
 clean-all:clean
-	make -C ../../library/axi_ad9361 clean
-	make -C ../../library/axi_dmac clean
-	make -C ../../library/util_cpack clean
-	make -C ../../library/util_tdd_sync clean
-	make -C ../../library/util_upack clean
+	$(MAKE) -C ../../library/axi_ad9361 clean
+	$(MAKE) -C ../../library/axi_dmac clean
+	$(MAKE) -C ../../library/util_cpack clean
+	$(MAKE) -C ../../library/util_tdd_sync clean
+	$(MAKE) -C ../../library/util_upack clean
 
 
 usrpe31x.sdk/system_top.hdf: $(M_DEPS)
@@ -60,11 +60,11 @@ usrpe31x.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../library/axi_ad9361
-	make -C ../../library/axi_dmac
-	make -C ../../library/util_cpack
-	make -C ../../library/util_tdd_sync
-	make -C ../../library/util_upack
+	$(MAKE) -C ../../library/axi_ad9361
+	$(MAKE) -C ../../library/axi_dmac
+	$(MAKE) -C ../../library/util_cpack
+	$(MAKE) -C ../../library/util_tdd_sync
+	$(MAKE) -C ../../library/util_upack
 
 ####################################################################################
 ####################################################################################

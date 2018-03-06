@@ -51,11 +51,11 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_ad7616 clean
-	make -C ../../../library/axi_clkgen clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_hdmi_tx clean
-	make -C ../../../library/axi_spdif_tx clean
+	$(MAKE) -C ../../../library/axi_ad7616 clean
+	$(MAKE) -C ../../../library/axi_clkgen clean
+	$(MAKE) -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/axi_hdmi_tx clean
+	$(MAKE) -C ../../../library/axi_spdif_tx clean
 
 
 ad7616_sdz_zc706.sdk/system_top.hdf: $(M_DEPS)
@@ -64,11 +64,11 @@ ad7616_sdz_zc706.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_ad7616
-	make -C ../../../library/axi_clkgen
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_hdmi_tx
-	make -C ../../../library/axi_spdif_tx
+	$(MAKE) -C ../../../library/axi_ad7616
+	$(MAKE) -C ../../../library/axi_clkgen
+	$(MAKE) -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/axi_hdmi_tx
+	$(MAKE) -C ../../../library/axi_spdif_tx
 
 ####################################################################################
 ####################################################################################

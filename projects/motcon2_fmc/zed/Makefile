@@ -55,17 +55,17 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_clkgen clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_hdmi_tx clean
-	make -C ../../../library/axi_i2s_adi clean
-	make -C ../../../library/axi_mc_controller clean
-	make -C ../../../library/axi_mc_current_monitor clean
-	make -C ../../../library/axi_mc_speed clean
-	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/util_cpack clean
-	make -C ../../../library/util_gmii_to_rgmii clean
-	make -C ../../../library/util_i2c_mixer clean
+	$(MAKE) -C ../../../library/axi_clkgen clean
+	$(MAKE) -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/axi_hdmi_tx clean
+	$(MAKE) -C ../../../library/axi_i2s_adi clean
+	$(MAKE) -C ../../../library/axi_mc_controller clean
+	$(MAKE) -C ../../../library/axi_mc_current_monitor clean
+	$(MAKE) -C ../../../library/axi_mc_speed clean
+	$(MAKE) -C ../../../library/axi_spdif_tx clean
+	$(MAKE) -C ../../../library/util_cpack clean
+	$(MAKE) -C ../../../library/util_gmii_to_rgmii clean
+	$(MAKE) -C ../../../library/util_i2c_mixer clean
 
 
 motcon2_fmc_zed.sdk/system_top.hdf: $(M_DEPS)
@@ -74,17 +74,17 @@ motcon2_fmc_zed.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_clkgen
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_hdmi_tx
-	make -C ../../../library/axi_i2s_adi
-	make -C ../../../library/axi_mc_controller
-	make -C ../../../library/axi_mc_current_monitor
-	make -C ../../../library/axi_mc_speed
-	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/util_cpack
-	make -C ../../../library/util_gmii_to_rgmii
-	make -C ../../../library/util_i2c_mixer
+	$(MAKE) -C ../../../library/axi_clkgen
+	$(MAKE) -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/axi_hdmi_tx
+	$(MAKE) -C ../../../library/axi_i2s_adi
+	$(MAKE) -C ../../../library/axi_mc_controller
+	$(MAKE) -C ../../../library/axi_mc_current_monitor
+	$(MAKE) -C ../../../library/axi_mc_speed
+	$(MAKE) -C ../../../library/axi_spdif_tx
+	$(MAKE) -C ../../../library/util_cpack
+	$(MAKE) -C ../../../library/util_gmii_to_rgmii
+	$(MAKE) -C ../../../library/util_i2c_mixer
 
 ####################################################################################
 ####################################################################################

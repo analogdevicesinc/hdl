@@ -20,7 +20,7 @@ help:
 PROJECTS := $(filter-out $(NO_PROJ), $(shell ls projects))
 define PROJECT_RULE
 $1.$2:
-	cd projects/$1/$2; make
+	cd projects/$1/$2; $(MAKE)
 endef
 define APROJECT_RULE
 	$(foreach archname,$(shell ls projects/$1), $(eval $(call PROJECT_RULE,$1,$(archname))))
@@ -31,20 +31,20 @@ $(foreach projname,$(PROJECTS), $(eval $(call APROJECT_RULE,$(projname))))
 .PHONY: lib all clean clean-all
 
 lib:
-	make -C library/ all
+	$(MAKE) -C library/ all
 
 
 all:
-	make -C projects/ all
+	$(MAKE) -C projects/ all
 
 
 clean:
-	make -C projects/ clean
+	$(MAKE) -C projects/ clean
 
 
 clean-all:clean
-	make -C projects/ clean
-	make -C library/ clean
+	$(MAKE) -C projects/ clean
+	$(MAKE) -C library/ clean
 
 ####################################################################################
 ####################################################################################

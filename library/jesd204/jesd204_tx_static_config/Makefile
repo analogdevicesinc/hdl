@@ -49,6 +49,6 @@ jesd204_tx_static_config.xpr: $(M_DEPS)
 	$(M_VIVADO) jesd204_tx_static_config_ip.tcl  >> jesd204_tx_static_config_ip.log 2>&1
 
 dep:
-	make -C ../../jesd204/interfaces/
+	$(MAKE) -C ../../jesd204/interfaces/
 ####################################################################################
 ####################################################################################

@@ -59,20 +59,20 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_ad9963 clean
-	make -C ../../../library/axi_adc_decimate clean
-	make -C ../../../library/axi_adc_trigger clean
-	make -C ../../../library/axi_clkgen clean
-	make -C ../../../library/axi_dac_interpolate clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_hdmi_tx clean
-	make -C ../../../library/axi_i2s_adi clean
-	make -C ../../../library/axi_logic_analyzer clean
-	make -C ../../../library/axi_rd_wr_combiner clean
-	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/util_extract clean
-	make -C ../../../library/util_i2c_mixer clean
-	make -C ../../../library/util_var_fifo clean
+	$(MAKE) -C ../../../library/axi_ad9963 clean
+	$(MAKE) -C ../../../library/axi_adc_decimate clean
+	$(MAKE) -C ../../../library/axi_adc_trigger clean
+	$(MAKE) -C ../../../library/axi_clkgen clean
+	$(MAKE) -C ../../../library/axi_dac_interpolate clean
+	$(MAKE) -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/axi_hdmi_tx clean
+	$(MAKE) -C ../../../library/axi_i2s_adi clean
+	$(MAKE) -C ../../../library/axi_logic_analyzer clean
+	$(MAKE) -C ../../../library/axi_rd_wr_combiner clean
+	$(MAKE) -C ../../../library/axi_spdif_tx clean
+	$(MAKE) -C ../../../library/util_extract clean
+	$(MAKE) -C ../../../library/util_i2c_mixer clean
+	$(MAKE) -C ../../../library/util_var_fifo clean
 
 
 m2k_fmc_zed.sdk/system_top.hdf: $(M_DEPS)
@@ -81,20 +81,20 @@ m2k_fmc_zed.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_ad9963
-	make -C ../../../library/axi_adc_decimate
-	make -C ../../../library/axi_adc_trigger
-	make -C ../../../library/axi_clkgen
-	make -C ../../../library/axi_dac_interpolate
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_hdmi_tx
-	make -C ../../../library/axi_i2s_adi
-	make -C ../../../library/axi_logic_analyzer
-	make -C ../../../library/axi_rd_wr_combiner
-	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/util_extract
-	make -C ../../../library/util_i2c_mixer
-	make -C ../../../library/util_var_fifo
+	$(MAKE) -C ../../../library/axi_ad9963
+	$(MAKE) -C ../../../library/axi_adc_decimate
+	$(MAKE) -C ../../../library/axi_adc_trigger
+	$(MAKE) -C ../../../library/axi_clkgen
+	$(MAKE) -C ../../../library/axi_dac_interpolate
+	$(MAKE) -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/axi_hdmi_tx
+	$(MAKE) -C ../../../library/axi_i2s_adi
+	$(MAKE) -C ../../../library/axi_logic_analyzer
+	$(MAKE) -C ../../../library/axi_rd_wr_combiner
+	$(MAKE) -C ../../../library/axi_spdif_tx
+	$(MAKE) -C ../../../library/util_extract
+	$(MAKE) -C ../../../library/util_i2c_mixer
+	$(MAKE) -C ../../../library/util_var_fifo
 
 ####################################################################################
 ####################################################################################
