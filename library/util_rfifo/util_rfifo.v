@@ -129,7 +129,6 @@ module util_rfifo #(
 
   reg         [(DATA_WIDTH-1):0]          din_wdata = 'd0;
   reg         [(ADDRESS_WIDTH-1):0]       din_waddr = 'hc;
-  reg         [ 2:0]                      din_wcnt = 'd0;
   reg                                     din_wr = 'd0;
   reg                                     din_valid = 'd0;
   reg         [ 6:0]                      din_req_cnt = 'd0;
@@ -159,6 +158,7 @@ module util_rfifo #(
   wire        [(T_DOUT_DATA_WIDTH+1):0]   dout_data_s;
   wire                                    dout_init_s;
   wire        [(DATA_WIDTH-1):0]          dout_rdata_s;
+  wire        [ 2:0]                      din_wcnt_s;
 
   // variables
 
@@ -211,10 +211,28 @@ module util_rfifo #(
   end
   endgenerate
 
+  generate
+  if (M_MEM_RATIO == 1) begin
+    assign din_wcnt_s = 'b0;
+  end else begin
+    reg [ 2:0] din_wcnt = 'd0;
+
+    always @(posedge din_clk or negedge din_rstn)
+    if (din_rstn == 1'b0) begin
+      din_wcnt <= 'd0;
+    end else begin
+      if (din_valid_in_0 == 1'b1) begin
+        din_wcnt <= din_wcnt + 1'b1;
+      end
+    end
+
+    assign din_wcnt_s = din_wcnt;
+  end
+  endgenerate
+
   always @(posedge din_clk or negedge din_rstn) begin
     if (din_rstn == 1'b0) begin
       din_waddr <= 'hc;
-      din_wcnt <= 'd0;
       din_wr <= 1'd0;
     end else begin
       if ((din_req == 1'b1) && (din_init == 1'b1)) begin
@@ -222,13 +240,10 @@ module util_rfifo #(
       end else if (din_wr == 1'b1) begin
         din_waddr <= din_waddr + 1'b1;
       end
-      if (din_valid_in_0 == 1'b1) begin
-        din_wcnt <= din_wcnt + 1'b1;
-      end
-      case (M_MEM_RATIO)
-        8: din_wr <= din_valid_in_0 & din_wcnt[2] & din_wcnt[1] & din_wcnt[0];
-        4: din_wr <= din_valid_in_0 & din_wcnt[1] & din_wcnt[0];
-        2: din_wr <= din_valid_in_0 & din_wcnt[0];
+     case (M_MEM_RATIO)
+        8: din_wr <= din_valid_in_0 & din_wcnt_s[2] & din_wcnt_s[1] & din_wcnt_s[0];
+        4: din_wr <= din_valid_in_0 & din_wcnt_s[1] & din_wcnt_s[0];
+        2: din_wr <= din_valid_in_0 & din_wcnt_s[0];
         default: din_wr <= din_valid_in_0;
       endcase
     end

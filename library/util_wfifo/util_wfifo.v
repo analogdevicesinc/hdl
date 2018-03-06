@@ -113,7 +113,6 @@ module util_wfifo #(
 
   reg     [(DATA_WIDTH-1):0]          din_wdata = 'd0;
   reg     [ 7:0]                      din_enable = 'd0;
-  reg     [ 2:0]                      din_dcnt = 'd0;
   reg                                 din_wr = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       din_waddr = 'd0;
   reg                                 din_req_t = 'd0;
@@ -141,6 +140,7 @@ module util_wfifo #(
   wire                                dout_req_t_s;
   wire    [(DATA_WIDTH-1):0]          dout_rdata_s;
   wire    [(T_DOUT_DATA_WIDTH+1):0]   dout_data_s;
+  wire    [ 2:0]                      din_dcnt_s;
 
   // variables
 
@@ -179,10 +179,27 @@ module util_wfifo #(
   end
   endgenerate
 
+  generate
+  if (M_MEM_RATIO == 1) begin
+    assign din_dcnt_s = 'b0;
+  end else begin
+    reg [ 2:0] din_dcnt = 'd0;
+
+    always @(posedge din_clk)
+    if (din_rst == 1'b1) begin
+      din_dcnt <= 'd0;
+    end else begin
+      if (din_valid_s[0] == 1'b1) begin
+        din_dcnt <= din_dcnt + 1'b1;
+      end
+    end
+
+    assign din_dcnt_s = din_dcnt;
+  end
+  endgenerate
   always @(posedge din_clk) begin
     if (din_rst == 1'b1) begin
       din_enable <= 8'd0;
-      din_dcnt <= 3'd0;
       din_wr <= 1'd0;
       din_waddr <= 'd0;
       din_req_t <= 1'd0;
@@ -191,13 +208,10 @@ module util_wfifo #(
       din_ovf <= 'd0;
     end else begin
       din_enable <= din_enable_s;
-      if (din_valid_s[0] == 1'b1) begin
-        din_dcnt <= din_dcnt + 1'b1;
-      end
-      case (M_MEM_RATIO)
-        8: din_wr <= din_valid_s[0] & din_dcnt[0] & din_dcnt[1] & din_dcnt[2];
-        4: din_wr <= din_valid_s[0] & din_dcnt[0] & din_dcnt[1];
-        2: din_wr <= din_valid_s[0] & din_dcnt[0];
+     case (M_MEM_RATIO)
+        8: din_wr <= din_valid_s[0] & din_dcnt_s[0] & din_dcnt_s[1] & din_dcnt_s[2];
+        4: din_wr <= din_valid_s[0] & din_dcnt_s[0] & din_dcnt_s[1];
+        2: din_wr <= din_valid_s[0] & din_dcnt_s[0];
         default: din_wr <= din_valid_s[0];
       endcase
       if (din_wr == 1'b1) begin
