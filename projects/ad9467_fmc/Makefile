@@ -7,18 +7,18 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C kc705 all
-	-make -C zed all
+	-$(MAKE) -C kc705 all
+	-$(MAKE) -C zed all
 
 
 clean: 
-	make -C kc705 clean
-	make -C zed clean
+	$(MAKE) -C kc705 clean
+	$(MAKE) -C zed clean
 
 
 clean-all:
-	make -C kc705 clean-all
-	make -C zed clean-all
+	$(MAKE) -C kc705 clean-all
+	$(MAKE) -C zed clean-all
 
 ####################################################################################
 ####################################################################################

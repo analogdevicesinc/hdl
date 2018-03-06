@@ -7,15 +7,15 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C zc706 all
+	-$(MAKE) -C zc706 all
 
 
 clean: 
-	make -C zc706 clean
+	$(MAKE) -C zc706 clean
 
 
 clean-all:
-	make -C zc706 clean-all
+	$(MAKE) -C zc706 clean-all
 
 ####################################################################################
 ####################################################################################

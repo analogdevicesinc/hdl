@@ -46,10 +46,10 @@ clean:
 
 
 clean-all:clean
-	make -C ../../library/axi_ad9361 clean
-	make -C ../../library/axi_dmac clean
-	make -C ../../library/util_fir_dec clean
-	make -C ../../library/util_fir_int clean
+	$(MAKE) -C ../../library/axi_ad9361 clean
+	$(MAKE) -C ../../library/axi_dmac clean
+	$(MAKE) -C ../../library/util_fir_dec clean
+	$(MAKE) -C ../../library/util_fir_int clean
 
 
 pluto.sdk/system_top.hdf: $(M_DEPS)
@@ -58,10 +58,10 @@ pluto.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../library/axi_ad9361
-	make -C ../../library/axi_dmac
-	make -C ../../library/util_fir_dec
-	make -C ../../library/util_fir_int
+	$(MAKE) -C ../../library/axi_ad9361
+	$(MAKE) -C ../../library/axi_dmac
+	$(MAKE) -C ../../library/util_fir_dec
+	$(MAKE) -C ../../library/util_fir_int
 
 ####################################################################################
 ####################################################################################

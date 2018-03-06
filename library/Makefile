@@ -10,186 +10,186 @@ all: lib
 
 
 clean:
-	make -C axi_ad5766 clean
-	make -C axi_ad6676 clean
-	make -C axi_ad7616 clean
-	make -C axi_ad9122 clean
-	make -C axi_ad9144 clean
-	make -C axi_ad9152 clean
-	make -C axi_ad9162 clean
-	make -C axi_ad9250 clean
-	make -C axi_ad9265 clean
-	make -C axi_ad9361 clean
-	make -C axi_ad9371 clean
-	make -C axi_ad9379 clean
-	make -C axi_ad9434 clean
-	make -C axi_ad9467 clean
-	make -C axi_ad9625 clean
-	make -C axi_ad9671 clean
-	make -C axi_ad9680 clean
-	make -C axi_ad9684 clean
-	make -C axi_ad9739a clean
-	make -C axi_ad9963 clean
-	make -C axi_adc_decimate clean
-	make -C axi_adc_trigger clean
-	make -C axi_clkgen clean
-	make -C axi_dac_interpolate clean
-	make -C axi_dmac clean
-	make -C axi_fmcadc5_sync clean
-	make -C axi_generic_adc clean
-	make -C axi_gpreg clean
-	make -C axi_hdmi_rx clean
-	make -C axi_hdmi_tx clean
-	make -C axi_i2s_adi clean
-	make -C axi_intr_monitor clean
-	make -C axi_logic_analyzer clean
-	make -C axi_mc_controller clean
-	make -C axi_mc_current_monitor clean
-	make -C axi_mc_speed clean
-	make -C axi_rd_wr_combiner clean
-	make -C axi_spdif_rx clean
-	make -C axi_spdif_tx clean
-	make -C axi_usb_fx3 clean
-	make -C cn0363/cn0363_dma_sequencer clean
-	make -C cn0363/cn0363_phase_data_sync clean
-	make -C cordic_demod clean
-	make -C jesd204/axi_jesd204_common clean
-	make -C jesd204/axi_jesd204_rx clean
-	make -C jesd204/axi_jesd204_tx clean
-	make -C jesd204/jesd204_common clean
-	make -C jesd204/jesd204_rx clean
-	make -C jesd204/jesd204_rx_static_config clean
-	make -C jesd204/jesd204_tx clean
-	make -C jesd204/jesd204_tx_static_config clean
-	make -C spi_engine/axi_spi_engine clean
-	make -C spi_engine/spi_engine_execution clean
-	make -C spi_engine/spi_engine_interconnect clean
-	make -C spi_engine/spi_engine_offload clean
-	make -C util_adcfifo clean
-	make -C util_axis_fifo clean
-	make -C util_axis_resize clean
-	make -C util_bsplit clean
-	make -C util_cdc clean
-	make -C util_cic clean
-	make -C util_clkdiv clean
-	make -C util_cpack clean
-	make -C util_dacfifo clean
-	make -C util_delay clean
-	make -C util_extract clean
-	make -C util_fir_dec clean
-	make -C util_fir_int clean
-	make -C util_gmii_to_rgmii clean
-	make -C util_i2c_mixer clean
-	make -C util_mfifo clean
-	make -C util_pmod_adc clean
-	make -C util_pmod_fmeter clean
-	make -C util_pulse_gen clean
-	make -C util_rfifo clean
-	make -C util_sigma_delta_spi clean
-	make -C util_tdd_sync clean
-	make -C util_upack clean
-	make -C util_var_fifo clean
-	make -C util_wfifo clean
-	make -C xilinx/axi_adcfifo clean
-	make -C xilinx/axi_adxcvr clean
-	make -C xilinx/axi_dacfifo clean
-	make -C xilinx/axi_xcvrlb clean
-	make -C xilinx/util_adxcvr clean
+	$(MAKE) -C axi_ad5766 clean
+	$(MAKE) -C axi_ad6676 clean
+	$(MAKE) -C axi_ad7616 clean
+	$(MAKE) -C axi_ad9122 clean
+	$(MAKE) -C axi_ad9144 clean
+	$(MAKE) -C axi_ad9152 clean
+	$(MAKE) -C axi_ad9162 clean
+	$(MAKE) -C axi_ad9250 clean
+	$(MAKE) -C axi_ad9265 clean
+	$(MAKE) -C axi_ad9361 clean
+	$(MAKE) -C axi_ad9371 clean
+	$(MAKE) -C axi_ad9379 clean
+	$(MAKE) -C axi_ad9434 clean
+	$(MAKE) -C axi_ad9467 clean
+	$(MAKE) -C axi_ad9625 clean
+	$(MAKE) -C axi_ad9671 clean
+	$(MAKE) -C axi_ad9680 clean
+	$(MAKE) -C axi_ad9684 clean
+	$(MAKE) -C axi_ad9739a clean
+	$(MAKE) -C axi_ad9963 clean
+	$(MAKE) -C axi_adc_decimate clean
+	$(MAKE) -C axi_adc_trigger clean
+	$(MAKE) -C axi_clkgen clean
+	$(MAKE) -C axi_dac_interpolate clean
+	$(MAKE) -C axi_dmac clean
+	$(MAKE) -C axi_fmcadc5_sync clean
+	$(MAKE) -C axi_generic_adc clean
+	$(MAKE) -C axi_gpreg clean
+	$(MAKE) -C axi_hdmi_rx clean
+	$(MAKE) -C axi_hdmi_tx clean
+	$(MAKE) -C axi_i2s_adi clean
+	$(MAKE) -C axi_intr_monitor clean
+	$(MAKE) -C axi_logic_analyzer clean
+	$(MAKE) -C axi_mc_controller clean
+	$(MAKE) -C axi_mc_current_monitor clean
+	$(MAKE) -C axi_mc_speed clean
+	$(MAKE) -C axi_rd_wr_combiner clean
+	$(MAKE) -C axi_spdif_rx clean
+	$(MAKE) -C axi_spdif_tx clean
+	$(MAKE) -C axi_usb_fx3 clean
+	$(MAKE) -C cn0363/cn0363_dma_sequencer clean
+	$(MAKE) -C cn0363/cn0363_phase_data_sync clean
+	$(MAKE) -C cordic_demod clean
+	$(MAKE) -C jesd204/axi_jesd204_common clean
+	$(MAKE) -C jesd204/axi_jesd204_rx clean
+	$(MAKE) -C jesd204/axi_jesd204_tx clean
+	$(MAKE) -C jesd204/jesd204_common clean
+	$(MAKE) -C jesd204/jesd204_rx clean
+	$(MAKE) -C jesd204/jesd204_rx_static_config clean
+	$(MAKE) -C jesd204/jesd204_tx clean
+	$(MAKE) -C jesd204/jesd204_tx_static_config clean
+	$(MAKE) -C spi_engine/axi_spi_engine clean
+	$(MAKE) -C spi_engine/spi_engine_execution clean
+	$(MAKE) -C spi_engine/spi_engine_interconnect clean
+	$(MAKE) -C spi_engine/spi_engine_offload clean
+	$(MAKE) -C util_adcfifo clean
+	$(MAKE) -C util_axis_fifo clean
+	$(MAKE) -C util_axis_resize clean
+	$(MAKE) -C util_bsplit clean
+	$(MAKE) -C util_cdc clean
+	$(MAKE) -C util_cic clean
+	$(MAKE) -C util_clkdiv clean
+	$(MAKE) -C util_cpack clean
+	$(MAKE) -C util_dacfifo clean
+	$(MAKE) -C util_delay clean
+	$(MAKE) -C util_extract clean
+	$(MAKE) -C util_fir_dec clean
+	$(MAKE) -C util_fir_int clean
+	$(MAKE) -C util_gmii_to_rgmii clean
+	$(MAKE) -C util_i2c_mixer clean
+	$(MAKE) -C util_mfifo clean
+	$(MAKE) -C util_pmod_adc clean
+	$(MAKE) -C util_pmod_fmeter clean
+	$(MAKE) -C util_pulse_gen clean
+	$(MAKE) -C util_rfifo clean
+	$(MAKE) -C util_sigma_delta_spi clean
+	$(MAKE) -C util_tdd_sync clean
+	$(MAKE) -C util_upack clean
+	$(MAKE) -C util_var_fifo clean
+	$(MAKE) -C util_wfifo clean
+	$(MAKE) -C xilinx/axi_adcfifo clean
+	$(MAKE) -C xilinx/axi_adxcvr clean
+	$(MAKE) -C xilinx/axi_dacfifo clean
+	$(MAKE) -C xilinx/axi_xcvrlb clean
+	$(MAKE) -C xilinx/util_adxcvr clean
 
-	make -C interfaces clean
+	$(MAKE) -C interfaces clean
 
 
 clean-all:clean
 
 
 lib:
-	make -C axi_ad5766
-	make -C axi_ad6676
-	make -C axi_ad7616
-	make -C axi_ad9122
-	make -C axi_ad9144
-	make -C axi_ad9152
-	make -C axi_ad9162
-	make -C axi_ad9250
-	make -C axi_ad9265
-	make -C axi_ad9361
-	make -C axi_ad9371
-	make -C axi_ad9379
-	make -C axi_ad9434
-	make -C axi_ad9467
-	make -C axi_ad9625
-	make -C axi_ad9671
-	make -C axi_ad9680
-	make -C axi_ad9684
-	make -C axi_ad9739a
-	make -C axi_ad9963
-	make -C axi_adc_decimate
-	make -C axi_adc_trigger
-	make -C axi_clkgen
-	make -C axi_dac_interpolate
-	make -C axi_dmac
-	make -C axi_fmcadc5_sync
-	make -C axi_generic_adc
-	make -C axi_gpreg
-	make -C axi_hdmi_rx
-	make -C axi_hdmi_tx
-	make -C axi_i2s_adi
-	make -C axi_intr_monitor
-	make -C axi_logic_analyzer
-	make -C axi_mc_controller
-	make -C axi_mc_current_monitor
-	make -C axi_mc_speed
-	make -C axi_rd_wr_combiner
-	make -C axi_spdif_rx
-	make -C axi_spdif_tx
-	make -C axi_usb_fx3
-	make -C cn0363/cn0363_dma_sequencer
-	make -C cn0363/cn0363_phase_data_sync
-	make -C cordic_demod
-	make -C jesd204/axi_jesd204_common
-	make -C jesd204/axi_jesd204_rx
-	make -C jesd204/axi_jesd204_tx
-	make -C jesd204/jesd204_common
-	make -C jesd204/jesd204_rx
-	make -C jesd204/jesd204_rx_static_config
-	make -C jesd204/jesd204_tx
-	make -C jesd204/jesd204_tx_static_config
-	make -C spi_engine/axi_spi_engine
-	make -C spi_engine/spi_engine_execution
-	make -C spi_engine/spi_engine_interconnect
-	make -C spi_engine/spi_engine_offload
-	make -C util_adcfifo
-	make -C util_axis_fifo
-	make -C util_axis_resize
-	make -C util_bsplit
-	make -C util_cdc
-	make -C util_cic
-	make -C util_clkdiv
-	make -C util_cpack
-	make -C util_dacfifo
-	make -C util_delay
-	make -C util_extract
-	make -C util_fir_dec
-	make -C util_fir_int
-	make -C util_gmii_to_rgmii
-	make -C util_i2c_mixer
-	make -C util_mfifo
-	make -C util_pmod_adc
-	make -C util_pmod_fmeter
-	make -C util_pulse_gen
-	make -C util_rfifo
-	make -C util_sigma_delta_spi
-	make -C util_tdd_sync
-	make -C util_upack
-	make -C util_var_fifo
-	make -C util_wfifo
-	make -C xilinx/axi_adcfifo
-	make -C xilinx/axi_adxcvr
-	make -C xilinx/axi_dacfifo
-	make -C xilinx/axi_xcvrlb
-	make -C xilinx/util_adxcvr
+	$(MAKE) -C axi_ad5766
+	$(MAKE) -C axi_ad6676
+	$(MAKE) -C axi_ad7616
+	$(MAKE) -C axi_ad9122
+	$(MAKE) -C axi_ad9144
+	$(MAKE) -C axi_ad9152
+	$(MAKE) -C axi_ad9162
+	$(MAKE) -C axi_ad9250
+	$(MAKE) -C axi_ad9265
+	$(MAKE) -C axi_ad9361
+	$(MAKE) -C axi_ad9371
+	$(MAKE) -C axi_ad9379
+	$(MAKE) -C axi_ad9434
+	$(MAKE) -C axi_ad9467
+	$(MAKE) -C axi_ad9625
+	$(MAKE) -C axi_ad9671
+	$(MAKE) -C axi_ad9680
+	$(MAKE) -C axi_ad9684
+	$(MAKE) -C axi_ad9739a
+	$(MAKE) -C axi_ad9963
+	$(MAKE) -C axi_adc_decimate
+	$(MAKE) -C axi_adc_trigger
+	$(MAKE) -C axi_clkgen
+	$(MAKE) -C axi_dac_interpolate
+	$(MAKE) -C axi_dmac
+	$(MAKE) -C axi_fmcadc5_sync
+	$(MAKE) -C axi_generic_adc
+	$(MAKE) -C axi_gpreg
+	$(MAKE) -C axi_hdmi_rx
+	$(MAKE) -C axi_hdmi_tx
+	$(MAKE) -C axi_i2s_adi
+	$(MAKE) -C axi_intr_monitor
+	$(MAKE) -C axi_logic_analyzer
+	$(MAKE) -C axi_mc_controller
+	$(MAKE) -C axi_mc_current_monitor
+	$(MAKE) -C axi_mc_speed
+	$(MAKE) -C axi_rd_wr_combiner
+	$(MAKE) -C axi_spdif_rx
+	$(MAKE) -C axi_spdif_tx
+	$(MAKE) -C axi_usb_fx3
+	$(MAKE) -C cn0363/cn0363_dma_sequencer
+	$(MAKE) -C cn0363/cn0363_phase_data_sync
+	$(MAKE) -C cordic_demod
+	$(MAKE) -C jesd204/axi_jesd204_common
+	$(MAKE) -C jesd204/axi_jesd204_rx
+	$(MAKE) -C jesd204/axi_jesd204_tx
+	$(MAKE) -C jesd204/jesd204_common
+	$(MAKE) -C jesd204/jesd204_rx
+	$(MAKE) -C jesd204/jesd204_rx_static_config
+	$(MAKE) -C jesd204/jesd204_tx
+	$(MAKE) -C jesd204/jesd204_tx_static_config
+	$(MAKE) -C spi_engine/axi_spi_engine
+	$(MAKE) -C spi_engine/spi_engine_execution
+	$(MAKE) -C spi_engine/spi_engine_interconnect
+	$(MAKE) -C spi_engine/spi_engine_offload
+	$(MAKE) -C util_adcfifo
+	$(MAKE) -C util_axis_fifo
+	$(MAKE) -C util_axis_resize
+	$(MAKE) -C util_bsplit
+	$(MAKE) -C util_cdc
+	$(MAKE) -C util_cic
+	$(MAKE) -C util_clkdiv
+	$(MAKE) -C util_cpack
+	$(MAKE) -C util_dacfifo
+	$(MAKE) -C util_delay
+	$(MAKE) -C util_extract
+	$(MAKE) -C util_fir_dec
+	$(MAKE) -C util_fir_int
+	$(MAKE) -C util_gmii_to_rgmii
+	$(MAKE) -C util_i2c_mixer
+	$(MAKE) -C util_mfifo
+	$(MAKE) -C util_pmod_adc
+	$(MAKE) -C util_pmod_fmeter
+	$(MAKE) -C util_pulse_gen
+	$(MAKE) -C util_rfifo
+	$(MAKE) -C util_sigma_delta_spi
+	$(MAKE) -C util_tdd_sync
+	$(MAKE) -C util_upack
+	$(MAKE) -C util_var_fifo
+	$(MAKE) -C util_wfifo
+	$(MAKE) -C xilinx/axi_adcfifo
+	$(MAKE) -C xilinx/axi_adxcvr
+	$(MAKE) -C xilinx/axi_dacfifo
+	$(MAKE) -C xilinx/axi_xcvrlb
+	$(MAKE) -C xilinx/util_adxcvr
 
-	make -C interfaces
+	$(MAKE) -C interfaces
 
 ####################################################################################
 ####################################################################################

@@ -50,6 +50,6 @@ spi_engine_offload.xpr: $(M_DEPS)
 	$(M_VIVADO) spi_engine_offload_ip.tcl  >> spi_engine_offload_ip.log 2>&1
 
 dep:
-	make -C ../../util_cdc/
+	$(MAKE) -C ../../util_cdc/
 ####################################################################################
 ####################################################################################

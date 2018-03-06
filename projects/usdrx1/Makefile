@@ -7,18 +7,18 @@
 
 .PHONY: all clean clean-all 
 all:
-	-make -C a10gx all
-	-make -C zc706 all
+	-$(MAKE) -C a10gx all
+	-$(MAKE) -C zc706 all
 
 
 clean: 
-	make -C a10gx clean
-	make -C zc706 clean
+	$(MAKE) -C a10gx clean
+	$(MAKE) -C zc706 clean
 
 
 clean-all:
-	make -C a10gx clean-all
-	make -C zc706 clean-all
+	$(MAKE) -C a10gx clean-all
+	$(MAKE) -C zc706 clean-all
 
 ####################################################################################
 ####################################################################################

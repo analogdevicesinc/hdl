@@ -49,11 +49,11 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_clkgen clean
-	make -C ../../../library/axi_hdmi_tx clean
-	make -C ../../../library/axi_intr_monitor clean
-	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/axi_usb_fx3 clean
+	$(MAKE) -C ../../../library/axi_clkgen clean
+	$(MAKE) -C ../../../library/axi_hdmi_tx clean
+	$(MAKE) -C ../../../library/axi_intr_monitor clean
+	$(MAKE) -C ../../../library/axi_spdif_tx clean
+	$(MAKE) -C ../../../library/axi_usb_fx3 clean
 
 
 usb_fx3_zc706.sdk/system_top.hdf: $(M_DEPS)
@@ -62,11 +62,11 @@ usb_fx3_zc706.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_clkgen
-	make -C ../../../library/axi_hdmi_tx
-	make -C ../../../library/axi_intr_monitor
-	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/axi_usb_fx3
+	$(MAKE) -C ../../../library/axi_clkgen
+	$(MAKE) -C ../../../library/axi_hdmi_tx
+	$(MAKE) -C ../../../library/axi_intr_monitor
+	$(MAKE) -C ../../../library/axi_spdif_tx
+	$(MAKE) -C ../../../library/axi_usb_fx3
 
 ####################################################################################
 ####################################################################################

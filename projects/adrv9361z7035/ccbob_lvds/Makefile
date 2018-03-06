@@ -56,16 +56,16 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_ad9361 clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_gpreg clean
-	make -C ../../../library/xilinx/axi_xcvrlb clean
-	make -C ../../../library/util_clkdiv clean
-	make -C ../../../library/util_cpack clean
-	make -C ../../../library/util_rfifo clean
-	make -C ../../../library/util_tdd_sync clean
-	make -C ../../../library/util_upack clean
-	make -C ../../../library/util_wfifo clean
+	$(MAKE) -C ../../../library/axi_ad9361 clean
+	$(MAKE) -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/axi_gpreg clean
+	$(MAKE) -C ../../../library/xilinx/axi_xcvrlb clean
+	$(MAKE) -C ../../../library/util_clkdiv clean
+	$(MAKE) -C ../../../library/util_cpack clean
+	$(MAKE) -C ../../../library/util_rfifo clean
+	$(MAKE) -C ../../../library/util_tdd_sync clean
+	$(MAKE) -C ../../../library/util_upack clean
+	$(MAKE) -C ../../../library/util_wfifo clean
 
 
 adrv9361z7035_ccbob_lvds.sdk/system_top.hdf: $(M_DEPS)
@@ -74,16 +74,16 @@ adrv9361z7035_ccbob_lvds.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_ad9361
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_gpreg
-	make -C ../../../library/xilinx/axi_xcvrlb
-	make -C ../../../library/util_clkdiv
-	make -C ../../../library/util_cpack
-	make -C ../../../library/util_rfifo
-	make -C ../../../library/util_tdd_sync
-	make -C ../../../library/util_upack
-	make -C ../../../library/util_wfifo
+	$(MAKE) -C ../../../library/axi_ad9361
+	$(MAKE) -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/axi_gpreg
+	$(MAKE) -C ../../../library/xilinx/axi_xcvrlb
+	$(MAKE) -C ../../../library/util_clkdiv
+	$(MAKE) -C ../../../library/util_cpack
+	$(MAKE) -C ../../../library/util_rfifo
+	$(MAKE) -C ../../../library/util_tdd_sync
+	$(MAKE) -C ../../../library/util_upack
+	$(MAKE) -C ../../../library/util_wfifo
 
 ####################################################################################
 ####################################################################################

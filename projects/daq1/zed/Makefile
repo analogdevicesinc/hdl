@@ -57,17 +57,17 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_ad9122 clean
-	make -C ../../../library/axi_ad9684 clean
-	make -C ../../../library/axi_clkgen clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/axi_hdmi_tx clean
-	make -C ../../../library/axi_i2s_adi clean
-	make -C ../../../library/axi_spdif_tx clean
-	make -C ../../../library/util_adcfifo clean
-	make -C ../../../library/util_cpack clean
-	make -C ../../../library/util_i2c_mixer clean
-	make -C ../../../library/util_upack clean
+	$(MAKE) -C ../../../library/axi_ad9122 clean
+	$(MAKE) -C ../../../library/axi_ad9684 clean
+	$(MAKE) -C ../../../library/axi_clkgen clean
+	$(MAKE) -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/axi_hdmi_tx clean
+	$(MAKE) -C ../../../library/axi_i2s_adi clean
+	$(MAKE) -C ../../../library/axi_spdif_tx clean
+	$(MAKE) -C ../../../library/util_adcfifo clean
+	$(MAKE) -C ../../../library/util_cpack clean
+	$(MAKE) -C ../../../library/util_i2c_mixer clean
+	$(MAKE) -C ../../../library/util_upack clean
 
 
 daq1_zed.sdk/system_top.hdf: $(M_DEPS)
@@ -76,17 +76,17 @@ daq1_zed.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_ad9122
-	make -C ../../../library/axi_ad9684
-	make -C ../../../library/axi_clkgen
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/axi_hdmi_tx
-	make -C ../../../library/axi_i2s_adi
-	make -C ../../../library/axi_spdif_tx
-	make -C ../../../library/util_adcfifo
-	make -C ../../../library/util_cpack
-	make -C ../../../library/util_i2c_mixer
-	make -C ../../../library/util_upack
+	$(MAKE) -C ../../../library/axi_ad9122
+	$(MAKE) -C ../../../library/axi_ad9684
+	$(MAKE) -C ../../../library/axi_clkgen
+	$(MAKE) -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/axi_hdmi_tx
+	$(MAKE) -C ../../../library/axi_i2s_adi
+	$(MAKE) -C ../../../library/axi_spdif_tx
+	$(MAKE) -C ../../../library/util_adcfifo
+	$(MAKE) -C ../../../library/util_cpack
+	$(MAKE) -C ../../../library/util_i2c_mixer
+	$(MAKE) -C ../../../library/util_upack
 
 ####################################################################################
 ####################################################################################

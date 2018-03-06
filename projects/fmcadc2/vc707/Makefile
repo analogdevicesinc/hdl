@@ -56,13 +56,13 @@ clean:
 
 
 clean-all:clean
-	make -C ../../../library/axi_ad9625 clean
-	make -C ../../../library/xilinx/axi_adxcvr clean
-	make -C ../../../library/axi_dmac clean
-	make -C ../../../library/jesd204/axi_jesd204_rx clean
-	make -C ../../../library/jesd204/jesd204_rx clean
-	make -C ../../../library/util_adcfifo clean
-	make -C ../../../library/xilinx/util_adxcvr clean
+	$(MAKE) -C ../../../library/axi_ad9625 clean
+	$(MAKE) -C ../../../library/xilinx/axi_adxcvr clean
+	$(MAKE) -C ../../../library/axi_dmac clean
+	$(MAKE) -C ../../../library/jesd204/axi_jesd204_rx clean
+	$(MAKE) -C ../../../library/jesd204/jesd204_rx clean
+	$(MAKE) -C ../../../library/util_adcfifo clean
+	$(MAKE) -C ../../../library/xilinx/util_adxcvr clean
 
 
 fmcadc2_vc707.sdk/system_top.hdf: $(M_DEPS)
@@ -71,13 +71,13 @@ fmcadc2_vc707.sdk/system_top.hdf: $(M_DEPS)
 
 
 lib:
-	make -C ../../../library/axi_ad9625
-	make -C ../../../library/xilinx/axi_adxcvr
-	make -C ../../../library/axi_dmac
-	make -C ../../../library/jesd204/axi_jesd204_rx
-	make -C ../../../library/jesd204/jesd204_rx
-	make -C ../../../library/util_adcfifo
-	make -C ../../../library/xilinx/util_adxcvr
+	$(MAKE) -C ../../../library/axi_ad9625
+	$(MAKE) -C ../../../library/xilinx/axi_adxcvr
+	$(MAKE) -C ../../../library/axi_dmac
+	$(MAKE) -C ../../../library/jesd204/axi_jesd204_rx
+	$(MAKE) -C ../../../library/jesd204/jesd204_rx
+	$(MAKE) -C ../../../library/util_adcfifo
+	$(MAKE) -C ../../../library/xilinx/util_adxcvr
 
 ####################################################################################
 ####################################################################################

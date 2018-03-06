@@ -62,7 +62,7 @@ jesd204_rx.xpr: $(M_DEPS)
 	$(M_VIVADO) jesd204_rx_ip.tcl  >> jesd204_rx_ip.log 2>&1
 
 dep:
-	make -C ../../jesd204/jesd204_common/
-	make -C ../../jesd204/interfaces/
+	$(MAKE) -C ../../jesd204/jesd204_common/
+	$(MAKE) -C ../../jesd204/interfaces/
 ####################################################################################
 ####################################################################################
