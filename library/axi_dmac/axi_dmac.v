@@ -271,9 +271,9 @@ reg       up_axis_xlast = 1'b1;
 reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_dest_address = 'h00;
 reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC]  up_dma_src_address = 'h00;
 reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = 'h00;
-reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
-reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
-reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
+wire [DMA_LENGTH_WIDTH-1:0] up_dma_y_length_s;
+wire [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride_s;
+wire [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride_s;
 reg up_dma_cyclic = CYCLIC ? 1'b1 : 1'b0;
 wire up_dma_sync_transfer_start = SYNC_TRANSFER_START ? 1'b1 : 1'b0;
 
@@ -370,10 +370,7 @@ begin
     up_pause <= 'h00;
     up_dma_src_address <= 'h00;
     up_dma_dest_address <= 'h00;
-    up_dma_y_length <= 'h00;
     up_dma_x_length <= 'h00;
-    up_dma_dest_stride <= 'h00;
-    up_dma_src_stride <= 'h00;
     up_irq_mask <= 2'b11;
     up_dma_req_valid <= 1'b0;
     up_scratch <= 'h00;
@@ -404,13 +401,43 @@ begin
       9'h104: up_dma_dest_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
       9'h105: up_dma_src_address <= up_wdata[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
       9'h106: up_dma_x_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-      9'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-      9'h108: up_dma_dest_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
-      9'h109: up_dma_src_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
       endcase
     end
   end
 end
+
+generate
+if (DMA_2D_TRANSFER == 1) begin
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
+
+  always @(posedge s_axi_aclk)
+  begin
+    if (s_axi_aresetn == 1'b0) begin
+      up_dma_y_length <= 'h00;
+      up_dma_dest_stride <= 'h00;
+      up_dma_src_stride <= 'h00;
+    end else begin
+      if (up_wreq) begin
+        case (up_waddr)
+        9'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+        9'h108: up_dma_dest_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+        9'h109: up_dma_src_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+        endcase
+      end
+    end
+  end
+  assign up_dma_y_length_s = up_dma_y_length;
+  assign up_dma_dest_stride_s = up_dma_dest_stride;
+  assign up_dma_src_stride_s = up_dma_src_stride;
+
+end else begin
+  assign up_dma_y_length_s = 'h0;
+  assign up_dma_dest_stride_s = 'h0;
+  assign up_dma_src_stride_s = 'h0;
+end
+endgenerate
 
 assign dbg_ids0 = {
   {DBG_ID_PADDING{1'b0}}, dest_data_id,
@@ -453,9 +480,9 @@ begin
     9'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
     9'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
     9'h106: up_rdata <= up_dma_x_length;
-    9'h107: up_rdata <= DMA_2D_TRANSFER ? up_dma_y_length : 'h00;
-    9'h108: up_rdata <= DMA_2D_TRANSFER ? up_dma_dest_stride : 'h00;
-    9'h109: up_rdata <= DMA_2D_TRANSFER ? up_dma_src_stride : 'h00;
+    9'h107: up_rdata <= DMA_2D_TRANSFER ? up_dma_y_length_s : 'h00;
+    9'h108: up_rdata <= DMA_2D_TRANSFER ? up_dma_dest_stride_s : 'h00;
+    9'h109: up_rdata <= DMA_2D_TRANSFER ? up_dma_src_stride_s : 'h00;
     9'h10a: up_rdata <= up_transfer_done_bitmap;
     9'h10b: up_rdata <= up_transfer_id_eot;
     9'h10c: up_rdata <= 'h00; // Status
@@ -518,9 +545,9 @@ dmac_2d_transfer #(
   .req_dest_address(up_dma_dest_address),
   .req_src_address(up_dma_src_address),
   .req_x_length(up_dma_x_length),
-  .req_y_length(up_dma_y_length),
-  .req_dest_stride(up_dma_dest_stride),
-  .req_src_stride(up_dma_src_stride),
+  .req_y_length(up_dma_y_length_s),
+  .req_dest_stride(up_dma_dest_stride_s),
+  .req_src_stride(up_dma_src_stride_s),
   .req_sync_transfer_start(up_dma_sync_transfer_start),
 
   .out_req_valid(dma_req_valid),
