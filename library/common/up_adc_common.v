@@ -126,13 +126,6 @@ module up_adc_common #(
   reg                 up_adc_r1_mode = 'd0;
   reg                 up_adc_ddr_edgesel = 'd0;
   reg                 up_adc_pin_mode = 'd0;
-  reg                 up_drp_sel_int = 'd0;
-  reg                 up_drp_wr_int = 'd0;
-  reg                 up_drp_status = 'd0;
-  reg                 up_drp_rwn = 'd0;
-  reg         [11:0]  up_drp_addr_int = 'd0;
-  reg         [31:0]  up_drp_wdata_int = 'd0;
-  reg         [31:0]  up_drp_rdata_hold = 'd0;
   reg                 up_status_ovf = 'd0;
   reg                 up_status_unf = 'd0;
   reg         [ 7:0]  up_usr_chanmax_int = 'd0;
@@ -152,6 +145,9 @@ module up_adc_common #(
   wire                up_status_unf_s;
   wire                up_cntrl_xfer_done_s;
   wire        [31:0]  up_adc_clk_count_s;
+  wire                up_drp_status_s;
+  wire                up_drp_rwn_s;
+  wire        [31:0]  up_drp_rdata_hold_s;
 
   // decode block select
 
@@ -211,57 +207,70 @@ module up_adc_common #(
     end
   end
 
-  assign up_drp_sel = up_drp_sel_int;
-  assign up_drp_wr = up_drp_wr_int;
-  assign up_drp_addr = up_drp_addr_int;
-  assign up_drp_wdata = up_drp_wdata_int;
-
   generate
   if (DRP_DISABLE == 1) begin
-  always @(posedge up_clk) begin
-    up_drp_sel_int <= 'd0;
-    up_drp_wr_int <= 'd0;
-    up_drp_status <= 'd0;
-    up_drp_rwn <= 'd0;
-    up_drp_addr_int <= 'd0;
-    up_drp_wdata_int <= 'd0;
-    up_drp_rdata_hold <= 'd0;
-  end
+
+    assign up_drp_sel = 'd0;
+    assign up_drp_wr = 'd0;
+    assign up_drp_status_s = 'd0;
+    assign up_drp_rwn_s = 'd0;
+    assign up_drp_addr = 'd0;
+    assign up_drp_wdata = 'd0;
+    assign up_drp_rdata_hold_s = 'd0;
+
   end else begin
-  always @(posedge up_clk) begin
-    if (up_rstn == 0) begin
-      up_drp_sel_int <= 'd0;
-      up_drp_wr_int <= 'd0;
-      up_drp_status <= 'd0;
-      up_drp_rwn <= 'd0;
-      up_drp_addr_int <= 'd0;
-      up_drp_wdata_int <= 'd0;
-      up_drp_rdata_hold <= 'd0;
-    end else begin
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
-        up_drp_sel_int <= 1'b1;
-        up_drp_wr_int <= ~up_wdata[28];
+
+    reg          up_drp_sel_int = 'd0;
+    reg          up_drp_wr_int = 'd0;
+    reg          up_drp_status_int = 'd0;
+    reg          up_drp_rwn_int = 'd0;
+    reg  [11:0]  up_drp_addr_int = 'd0;
+    reg  [31:0]  up_drp_wdata_int = 'd0;
+    reg  [31:0]  up_drp_rdata_hold_int = 'd0;
+
+    always @(posedge up_clk) begin
+      if (up_rstn == 0) begin
+        up_drp_sel_int <= 'd0;
+        up_drp_wr_int <= 'd0;
+        up_drp_status_int <= 'd0;
+        up_drp_rwn_int <= 'd0;
+        up_drp_addr_int <= 'd0;
+        up_drp_wdata_int <= 'd0;
+        up_drp_rdata_hold_int <= 'd0;
       end else begin
-        up_drp_sel_int <= 1'b0;
-        up_drp_wr_int <= 1'b0;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
-        up_drp_status <= 1'b1;
-      end else if (up_drp_ready == 1'b1) begin
-        up_drp_status <= 1'b0;
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
-        up_drp_rwn <= up_wdata[28];
-        up_drp_addr_int <= up_wdata[27:16];
-      end
-      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1e)) begin
-        up_drp_wdata_int <= up_wdata;
-      end
-      if (up_drp_ready == 1'b1) begin
-        up_drp_rdata_hold <= up_drp_rdata;
+        if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+          up_drp_sel_int <= 1'b1;
+          up_drp_wr_int <= ~up_wdata[28];
+        end else begin
+          up_drp_sel_int <= 1'b0;
+          up_drp_wr_int <= 1'b0;
+        end
+        if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+          up_drp_status_int <= 1'b1;
+        end else if (up_drp_ready == 1'b1) begin
+          up_drp_status_int <= 1'b0;
+        end
+        if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+          up_drp_rwn_int <= up_wdata[28];
+          up_drp_addr_int <= up_wdata[27:16];
+        end
+        if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1e)) begin
+          up_drp_wdata_int <= up_wdata;
+        end
+        if (up_drp_ready == 1'b1) begin
+          up_drp_rdata_hold_int <= up_drp_rdata;
+        end
       end
     end
-  end
+
+    assign up_drp_sel = up_drp_sel_int;
+    assign up_drp_wr = up_drp_wr_int;
+    assign up_drp_status_s = up_drp_status_int;
+    assign up_drp_rwn_s = up_drp_rwn_int;
+    assign up_drp_addr = up_drp_addr_int;
+    assign up_drp_wdata = up_drp_wdata_int;
+    assign up_drp_rdata_hold_s = up_drp_rdata_hold_int;
+
   end
   endgenerate
 
@@ -380,10 +389,10 @@ module up_adc_common #(
           8'h16: up_rdata_int <= adc_clk_ratio;
           8'h17: up_rdata_int <= {28'd0, up_status_pn_err, up_status_pn_oos, up_status_or, up_status_s};
           8'h1a: up_rdata_int <= {31'd0, up_sync_status_s};
-          8'h1c: up_rdata_int <= {3'd0, up_drp_rwn, up_drp_addr_int, 16'b0};
-          8'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status, 16'b0};
-          8'h1e: up_rdata_int <= up_drp_wdata_int;
-          8'h1f: up_rdata_int <= up_drp_rdata_hold;
+          8'h1c: up_rdata_int <= {3'd0, up_drp_rwn_s, up_drp_addr, 16'b0};
+          8'h1d: up_rdata_int <= {14'd0, up_drp_locked, up_drp_status_s, 16'b0};
+          8'h1e: up_rdata_int <= up_drp_wdata;
+          8'h1f: up_rdata_int <= up_drp_rdata_hold_s;
           8'h22: up_rdata_int <= {29'd0, up_status_ovf, up_status_unf, 1'b0};
           8'h23: up_rdata_int <= 32'd8;
           8'h28: up_rdata_int <= {24'd0, up_usr_chanmax_in};
