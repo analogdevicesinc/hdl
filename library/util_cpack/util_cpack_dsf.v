@@ -47,13 +47,13 @@ module util_cpack_dsf #(
   input                   adc_clk,
   input                   adc_valid,
   input                   adc_enable,
-  input       [(I_WIDTH-1):0]  adc_data,
+  input       [(CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_I-1):0]  adc_data,
 
   // dma interface
 
   output  reg             adc_dsf_valid,
   output  reg             adc_dsf_sync,
-  output  reg [(P_WIDTH-1):0]  adc_dsf_data);
+  output  reg [(CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_P-1):0]  adc_dsf_data);
 
 
   localparam  CH_DCNT = NUM_OF_CHANNELS_P - NUM_OF_CHANNELS_I;
@@ -65,11 +65,6 @@ module util_cpack_dsf #(
 
   reg     [  2:0]           adc_samples_int = 'd0;
   reg     [(M_WIDTH-1):0]   adc_data_int = 'd0;
-  reg                       adc_dsf_enable = 'd0;
-  reg                       adc_dsf_valid_int = 'd0;
-  reg                       adc_dsf_sync_int = 'd0;
-  reg     [(P_WIDTH-1):0]   adc_dsf_data_int = 'd0;
-
   // internal signals
 
   wire    [(M_WIDTH-1):0]   adc_data_s;
@@ -83,10 +78,6 @@ module util_cpack_dsf #(
   always @(posedge adc_clk) begin
     adc_samples_int <= 'd0;
     adc_data_int <= 'd0;
-    adc_dsf_enable <= 'd0;
-    adc_dsf_valid_int <= 'd0;
-    adc_dsf_sync_int <= 'd0;
-    adc_dsf_data_int <= 'd0;
     if (adc_enable == 1'b1) begin
       adc_dsf_valid <= adc_valid;
       adc_dsf_sync <= 1'b1;
@@ -104,6 +95,9 @@ module util_cpack_dsf #(
 
   generate
   if (NUM_OF_CHANNELS_P > NUM_OF_CHANNELS_I) begin
+  reg                       adc_dsf_valid_int = 'd0;
+  reg                       adc_dsf_sync_int = 'd0;
+  reg     [(P_WIDTH-1):0]   adc_dsf_data_int = 'd0;
   assign adc_data_s[(M_WIDTH-1):I_WIDTH] = 'd0;
   assign adc_data_s[(I_WIDTH-1):0] = adc_data;
 
@@ -120,7 +114,6 @@ module util_cpack_dsf #(
   end
 
   always @(posedge adc_clk) begin
-    adc_dsf_enable <= adc_enable;
     if (adc_samples_int >= CH_DCNT) begin
       adc_dsf_valid_int <= adc_valid;
     end else begin
