@@ -66,10 +66,6 @@ cab be found here:
 
 See [HDL User Guide](https://wiki.analog.com/resources/fpga/docs/hdl) for a more detailed guide.
 
-## Documentation
-
-See the [FPGA Reference Designs](https://wiki.analog.com/resources/fpga) on wiki.analog.com. 
-
 ## Support
 
 Feel free to ask any question at [EngineerZone](https://ez.analog.com/community/fpga).
