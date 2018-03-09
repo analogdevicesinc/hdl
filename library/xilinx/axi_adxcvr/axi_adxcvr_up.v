@@ -124,10 +124,10 @@ module axi_adxcvr_up #(
   reg     [ 3:0]  up_rst_cnt = 'd0;
   reg     [ 6:0]  up_user_ready_cnt = 'd0;
   reg             up_status_int = 'd0;
-  reg             up_lpm_dfe_n = 'd0;
-  reg     [ 2:0]  up_rate = 'd0;
-  reg     [ 1:0]  up_sys_clk_sel = 'd0;
-  reg     [ 2:0]  up_out_clk_sel = 'd0;
+  reg             up_lpm_dfe_n = LPM_OR_DFE_N;
+  reg     [ 2:0]  up_rate = RATE;
+  reg     [ 1:0]  up_sys_clk_sel = SYS_CLK_SEL;
+  reg     [ 2:0]  up_out_clk_sel = OUT_CLK_SEL;
   reg     [ 7:0]  up_icm_sel = 'd0;
   reg             up_icm_enb = 'd0;
   reg             up_icm_wr = 'd0;
