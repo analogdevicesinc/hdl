@@ -9,7 +9,6 @@ set_false_path  -from [get_registers *avl_dacfifo_rd:i_rd|avl_xfer_req_out*] \
 set_false_path  -from [get_registers *avl_dacfifo_rd:i_rd|avl_mem_laddr_toggle*] \
                 -to   [get_registers *avl_dacfifo_rd:i_rd|dac_mem_laddr_toggle_m[0]]
 set_false_path  -to   [get_registers *avl_dacfifo_rd:i_rd|dac_mem_laddr*]
-set_false_path  -to   [get_registers *avl_dacfifo_rd:i_rd|dac_avl_last_transfer_m1*]
 set_false_path  -to   [get_registers *avl_dacfifo_rd:i_rd|dac_dma_last_beats_m1*]
 
 set_false_path  -from [get_registers *avl_dacfifo_wr:i_wr|avl_xfer_req_lp*] \
