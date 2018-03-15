@@ -50,7 +50,7 @@ module ad_xcvr_rx_if (
 
   reg     [31:0]  rx_ip_data_d = 'd0;
   reg     [ 3:0]  rx_ip_sof_hold = 'd0;
-  reg             rx_ip_sof_d = 'd0;
+  reg     [ 3:0]  rx_ip_sof_d = 'd0;
 
   // dword may contain more than one frame per clock
 
