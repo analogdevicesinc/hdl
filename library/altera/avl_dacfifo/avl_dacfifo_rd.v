@@ -141,6 +141,7 @@ module avl_dacfifo_rd #(
   wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_raddr_g2b_s;
   wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_laddr_s;
   wire                                      avl_read_int_s;
+  wire                                      avl_end_of_burst_s;
 
   wire                                      dac_fifo_reset_s;
   wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_addr_diff_s;
