@@ -142,8 +142,8 @@ module system_top (
   wire                    tx_sync;
   wire                    sysref;
 
-  assign spi_csn_ad9528 =  spi_csn[1];
-  assign spi_csn_ad9371 =  spi_csn[0];
+  assign spi_csn_ad9528 =  spi_csn[0];
+  assign spi_csn_ad9371 =  spi_csn[1];
 
   // default logic
 

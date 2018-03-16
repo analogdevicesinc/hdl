@@ -188,8 +188,8 @@ module system_top (
   assign gpio_bd_i = gpio_bd[20:8];
   assign gpio_bd_o = gpio_bd[ 7:0];
 
-  assign spi_csn_ad9528 =  spi_csn[1];
-  assign spi_csn_ad9371 =  spi_csn[0];
+  assign spi_csn_ad9528 =  spi_csn[0];
+  assign spi_csn_ad9371 =  spi_csn[1];
 
   system_wrapper i_system_wrapper (
     .dac_fifo_bypass (gpio_o[60]),
