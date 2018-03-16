@@ -133,7 +133,7 @@ module ad_dcfilter #(
     .MREG (1),
     .OPMODEREG (0),
     .PATTERN (48'h000000000000),
-    .PREG (0),
+    .PREG (1),
     .SEL_MASK ("MASK"),
     .SEL_PATTERN ("PATTERN"),
     .USE_DPORT ("TRUE"),
