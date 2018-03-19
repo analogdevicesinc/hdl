@@ -57,153 +57,184 @@ module util_axis_fifo #(
 
 generate if (ADDRESS_WIDTH == 0) begin
 
-reg [DATA_WIDTH-1:0] cdc_sync_fifo_ram;
-reg s_axis_waddr = 1'b0;
-reg m_axis_raddr = 1'b0;
+  reg [DATA_WIDTH-1:0] cdc_sync_fifo_ram;
+  reg s_axis_waddr = 1'b0;
+  reg m_axis_raddr = 1'b0;
 
-wire m_axis_waddr;
-wire s_axis_raddr;
+  wire m_axis_waddr;
+  wire s_axis_raddr;
 
-sync_bits #(
-  .NUM_OF_BITS(1),
-  .ASYNC_CLK(ASYNC_CLK)
-) i_waddr_sync (
-  .out_clk(m_axis_aclk),
-  .out_resetn(m_axis_aresetn),
-  .in(s_axis_waddr),
-  .out(m_axis_waddr)
-);
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK)
+  ) i_waddr_sync (
+    .out_clk(m_axis_aclk),
+    .out_resetn(m_axis_aresetn),
+    .in(s_axis_waddr),
+    .out(m_axis_waddr)
+  );
 
-sync_bits #(
-  .NUM_OF_BITS(1),
-  .ASYNC_CLK(ASYNC_CLK)
-) i_raddr_sync (
-  .out_clk(s_axis_aclk),
-  .out_resetn(s_axis_aresetn),
-  .in(m_axis_raddr),
-  .out(s_axis_raddr)
-);
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK)
+  ) i_raddr_sync (
+    .out_clk(s_axis_aclk),
+    .out_resetn(s_axis_aresetn),
+    .in(m_axis_raddr),
+    .out(s_axis_raddr)
+  );
 
-assign m_axis_valid = m_axis_raddr != m_axis_waddr;
-assign m_axis_level = m_axis_valid;
-assign s_axis_ready = s_axis_raddr == s_axis_waddr;
-assign s_axis_empty = s_axis_ready;
-assign s_axis_room = s_axis_ready;
+  assign m_axis_valid = m_axis_raddr != m_axis_waddr;
+  assign m_axis_level = m_axis_valid;
+  assign s_axis_ready = s_axis_raddr == s_axis_waddr;
+  assign s_axis_empty = s_axis_ready;
+  assign s_axis_room = s_axis_ready;
 
-always @(posedge s_axis_aclk) begin
-  if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
-    cdc_sync_fifo_ram <= s_axis_data;
-end
+  always @(posedge s_axis_aclk) begin
+    if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
+      cdc_sync_fifo_ram <= s_axis_data;
+  end
 
-always @(posedge s_axis_aclk) begin
-  if (s_axis_aresetn == 1'b0) begin
-    s_axis_waddr <= 1'b0;
-  end else begin
-    if (s_axis_ready & s_axis_valid) begin
-      s_axis_waddr <= s_axis_waddr + 1'b1;
+  always @(posedge s_axis_aclk) begin
+    if (s_axis_aresetn == 1'b0) begin
+      s_axis_waddr <= 1'b0;
+    end else begin
+      if (s_axis_ready & s_axis_valid) begin
+        s_axis_waddr <= s_axis_waddr + 1'b1;
+      end
     end
   end
-end
 
-always @(posedge m_axis_aclk) begin
-  if (m_axis_aresetn == 1'b0) begin
-    m_axis_raddr <= 1'b0;
-  end else begin
-    if (m_axis_valid & m_axis_ready)
-      m_axis_raddr <= m_axis_raddr + 1'b1;
+  always @(posedge m_axis_aclk) begin
+    if (m_axis_aresetn == 1'b0) begin
+      m_axis_raddr <= 1'b0;
+    end else begin
+      if (m_axis_valid & m_axis_ready)
+        m_axis_raddr <= m_axis_raddr + 1'b1;
+    end
   end
-end
 
-assign m_axis_data = cdc_sync_fifo_ram;
-
-end else begin
-
-reg [DATA_WIDTH-1:0] ram[0:2**ADDRESS_WIDTH-1];
-
-wire [ADDRESS_WIDTH-1:0] s_axis_waddr;
-wire [ADDRESS_WIDTH-1:0] m_axis_raddr;
-wire _m_axis_ready;
-wire _m_axis_valid;
-
-if (ASYNC_CLK == 1) begin
-
-fifo_address_gray_pipelined #(
-  .ADDRESS_WIDTH(ADDRESS_WIDTH)
-) i_address_gray (
-  .m_axis_aclk(m_axis_aclk),
-  .m_axis_aresetn(m_axis_aresetn),
-  .m_axis_ready(_m_axis_ready),
-  .m_axis_valid(_m_axis_valid),
-  .m_axis_raddr(m_axis_raddr),
-  .m_axis_level(m_axis_level),
-
-  .s_axis_aclk(s_axis_aclk),
-  .s_axis_aresetn(s_axis_aresetn),
-  .s_axis_ready(s_axis_ready),
-  .s_axis_valid(s_axis_valid),
-  .s_axis_empty(s_axis_empty),
-  .s_axis_waddr(s_axis_waddr),
-  .s_axis_room(s_axis_room)
-);
+  assign m_axis_data = cdc_sync_fifo_ram;
 
 end else begin
 
-fifo_address_sync #(
-  .ADDRESS_WIDTH(ADDRESS_WIDTH)
-) i_address_sync (
-  .clk(m_axis_aclk),
-  .resetn(m_axis_aresetn),
-  .m_axis_ready(_m_axis_ready),
-  .m_axis_valid(_m_axis_valid),
-  .m_axis_raddr(m_axis_raddr),
-  .m_axis_level(m_axis_level),
+  reg [DATA_WIDTH-1:0] ram[0:2**ADDRESS_WIDTH-1];
 
-  .s_axis_ready(s_axis_ready),
-  .s_axis_valid(s_axis_valid),
-  .s_axis_empty(s_axis_empty),
-  .s_axis_waddr(s_axis_waddr),
-  .s_axis_room(s_axis_room)
-);
+  wire [ADDRESS_WIDTH-1:0] s_axis_waddr;
+  wire [ADDRESS_WIDTH-1:0] m_axis_raddr;
+  wire _m_axis_ready;
+  wire _m_axis_valid;
 
-end
+  wire s_mem_write;
+  wire m_mem_read;
 
-always @(posedge s_axis_aclk) begin
-  if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
-    ram[s_axis_waddr] <= s_axis_data;
-end
+  reg valid;
 
-if (S_AXIS_REGISTERED == 1) begin
-
-reg [DATA_WIDTH-1:0] data;
-reg valid;
-
-always @(posedge m_axis_aclk) begin
-  if (m_axis_aresetn == 1'b0) begin
-    valid <= 1'b0;
-  end else begin
-    if (_m_axis_valid)
-      valid <= 1'b1;
-    else if (m_axis_ready)
+  always @(posedge m_axis_aclk) begin
+    if (m_axis_aresetn == 1'b0) begin
       valid <= 1'b0;
+    end else begin
+      if (_m_axis_valid)
+        valid <= 1'b1;
+      else if (m_axis_ready)
+        valid <= 1'b0;
+    end
   end
-end
 
-always @(posedge m_axis_aclk) begin
-  if ((~valid || m_axis_ready) && _m_axis_valid)
-    data <= ram[m_axis_raddr];
-end
+  assign s_mem_write = s_axis_ready & s_axis_valid;
+  assign m_mem_read = (~valid || m_axis_ready) && _m_axis_valid;
 
-assign _m_axis_ready = ~valid || m_axis_ready;
-assign m_axis_data = data;
-assign m_axis_valid = valid;
+  if (ASYNC_CLK == 1) begin
 
-end else begin
+    // The assumption is that in this mode the S_AXIS_REGISTERED is 1
 
-assign _m_axis_ready = m_axis_ready;
-assign m_axis_valid = _m_axis_valid;
-assign m_axis_data = ram[m_axis_raddr];
+    fifo_address_gray_pipelined #(
+      .ADDRESS_WIDTH(ADDRESS_WIDTH)
+    ) i_address_gray (
+      .m_axis_aclk(m_axis_aclk),
+      .m_axis_aresetn(m_axis_aresetn),
+      .m_axis_ready(_m_axis_ready),
+      .m_axis_valid(_m_axis_valid),
+      .m_axis_raddr(m_axis_raddr),
+      .m_axis_level(m_axis_level),
 
-end
+      .s_axis_aclk(s_axis_aclk),
+      .s_axis_aresetn(s_axis_aresetn),
+      .s_axis_ready(s_axis_ready),
+      .s_axis_valid(s_axis_valid),
+      .s_axis_empty(s_axis_empty),
+      .s_axis_waddr(s_axis_waddr),
+      .s_axis_room(s_axis_room)
+    );
+
+    // When the clocks are asynchronous instantiate a block RAM
+    // regardless of the requested size to make sure we threat the 
+    // clock crossing correctly
+    ad_mem #(
+      .DATA_WIDTH (DATA_WIDTH),
+      .ADDRESS_WIDTH (ADDRESS_WIDTH))
+    i_mem (
+      .clka(s_axis_aclk),
+      .wea(s_mem_write),
+      .addra(s_axis_waddr),
+      .dina(s_axis_data),
+      .clkb(m_axis_aclk),
+      .reb(m_mem_read),
+      .addrb(m_axis_raddr),
+      .doutb(m_axis_data)
+    );
+
+    assign _m_axis_ready = ~valid || m_axis_ready;
+    assign m_axis_valid = valid;
+
+  end else begin
+
+    fifo_address_sync #(
+      .ADDRESS_WIDTH(ADDRESS_WIDTH)
+    ) i_address_sync (
+      .clk(m_axis_aclk),
+      .resetn(m_axis_aresetn),
+      .m_axis_ready(_m_axis_ready),
+      .m_axis_valid(_m_axis_valid),
+      .m_axis_raddr(m_axis_raddr),
+      .m_axis_level(m_axis_level),
+
+      .s_axis_ready(s_axis_ready),
+      .s_axis_valid(s_axis_valid),
+      .s_axis_empty(s_axis_empty),
+      .s_axis_waddr(s_axis_waddr),
+      .s_axis_room(s_axis_room)
+    );
+
+    // When the clocks are synchronous use behavioral modeling for the SDP RAM
+    // Let the synthesizer decide what to infer (distributed or block RAM)
+    always @(posedge s_axis_aclk) begin
+      if (s_mem_write)
+        ram[s_axis_waddr] <= s_axis_data;
+    end
+
+    if (S_AXIS_REGISTERED == 1) begin
+
+      reg [DATA_WIDTH-1:0] data;
+
+      always @(posedge m_axis_aclk) begin
+        if (m_mem_read)
+          data <= ram[m_axis_raddr];
+      end
+
+      assign _m_axis_ready = ~valid || m_axis_ready;
+      assign m_axis_data = data;
+      assign m_axis_valid = valid;
+
+    end else begin
+
+      assign _m_axis_ready = m_axis_ready;
+      assign m_axis_valid = _m_axis_valid;
+      assign m_axis_data = ram[m_axis_raddr];
+
+    end
+
+  end
 
 end endgenerate
 

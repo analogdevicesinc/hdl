@@ -289,6 +289,7 @@ module util_dacfifo #(
     .addra (dma_waddr),
     .dina (dma_data),
     .clkb (dac_clk),
+    .reb (1'b1),
     .addrb (dac_raddr),
     .doutb (dac_data_s));
 
