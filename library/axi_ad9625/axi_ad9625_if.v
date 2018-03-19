@@ -213,6 +213,7 @@ module axi_ad9625_if #(
     .addra (adc_waddr),
     .dina (adc_wdata),
     .clkb (rx_clk),
+    .reb (1'b1),
     .addrb (adc_raddr_s),
     .doutb (adc_rdata_s));
 

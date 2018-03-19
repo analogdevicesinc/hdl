@@ -439,6 +439,7 @@ module avl_dacfifo_rd #(
     .addra (dac_mem_laddr_waddr),
     .dina (dac_mem_laddr),
     .clkb (dac_clk),
+    .reb (1'b1),
     .addrb (dac_mem_laddr_raddr),
     .doutb (dac_mem_laddr_s));
 

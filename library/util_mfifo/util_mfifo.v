@@ -261,6 +261,7 @@ module util_mfifo #(
     .addra (din_waddr),
     .dina (din_wdata_s[n]),
     .clkb (dout_clk),
+    .reb (1'b1),
     .addrb (dout_raddr),
     .doutb (dout_rdata_s[n]));
   end

@@ -332,6 +332,7 @@ module util_wfifo #(
     .addra (din_waddr),
     .dina (din_wdata),
     .clkb (dout_clk),
+    .reb (1'b1),
     .addrb (dout_raddr),
     .doutb (dout_rdata_s));
 

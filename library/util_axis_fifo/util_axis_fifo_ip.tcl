@@ -7,6 +7,7 @@ adi_ip_files util_axis_fifo [list \
 	"address_gray.v" \
 	"address_gray_pipelined.v" \
 	"address_sync.v" \
+	"../common/ad_mem.v" \
 	"util_axis_fifo.v" \
 ]
 

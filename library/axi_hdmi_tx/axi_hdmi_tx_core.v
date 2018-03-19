@@ -513,6 +513,7 @@ module axi_hdmi_tx_core #(
     .addra (vdma_waddr),
     .dina (vdma_wdata),
     .clkb (hdmi_clk),
+    .reb (1'b1),
     .addrb (hdmi_raddr[9:1]),
     .doutb (hdmi_rdata_s));
 
