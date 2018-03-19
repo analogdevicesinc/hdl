@@ -5,6 +5,8 @@
 
 LIBRARY_NAME := adi_jesd204
 
+ALTERA_DEPS += adi_jesd204_glue.v
+ALTERA_DEPS += adi_jesd204_glue_hw.tcl
 ALTERA_DEPS += adi_jesd204_hw.tcl
 
 ALTERA_LIB_DEPS += altera/axi_adxcvr
